@@ -324,15 +324,10 @@ function cot_default_html_construction($type)
 function cot_extrafield_add($location, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="", $noalter = false)
 {
 	global $db, $db_extra_fields;
-	if ($db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0)
-		;
+	if ($db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
+		($db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0 && !$noalter))
 	{
-		return false; // No adding - fields already exist
-	}
-	// Check table cot_$sql_table - if field with same name exists - exit.
-	if ($db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0 && !$noalter)
-	{
-		return false;
+		return false; // No adding - fields already exist // Check table cot_$sql_table - if field with same name exists - exit.
 	}
 	$fieldsres = $db->query("SHOW COLUMNS FROM $location");
 	while ($fieldrow = $fieldsres->fetch())
@@ -387,7 +382,7 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 	}
 	$step2 = $db->query("ALTER TABLE $location ADD " . $column_prefix . "_$name $sqltype ");
 
-	return $step1 && $step2 && $step3;
+	return $step1 && $step2;
 }
 
 /**
@@ -473,7 +468,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 	$sql = "ALTER TABLE $location CHANGE " . $column_prefix . "_$oldname " . $column_prefix . "_$name $sqltype ";
 	$step2 = $db->query($sql);
 
-	return $step1 && $step2 && $step3;
+	return $step1 && $step2;
 }
 
 /**
@@ -499,7 +494,7 @@ function cot_extrafield_remove($location, $name)
 	$step1 = $db->delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;
 	$step2 = $db->query("ALTER TABLE $location DROP " . $column_prefix . "_" . $name);
 
-	return $step1 && $step2 && $step3;
+	return $step1 && $step2;
 }
 
 /**
