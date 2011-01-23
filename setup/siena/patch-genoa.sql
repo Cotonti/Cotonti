@@ -499,3 +499,6 @@ DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'perfo
 /* 0.8.3 (r1686) Forums stats change primary key */
 ALTER TABLE `cot_forum_stats` DROP `fs_id`;
 ALTER TABLE `cot_forum_stats` ADD PRIMARY KEY (`fs_cat`);
+
+/* r1773 Correct movedto value for forum topics */
+UPDATE `cot_forum_topics` SET `ft_movedto` = '' WHERE `ft_movedto` = '0';
