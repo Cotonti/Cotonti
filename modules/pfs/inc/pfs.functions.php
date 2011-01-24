@@ -12,6 +12,7 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
+if($lang == 'ru') require_once cot_langfile('translit','core','ru');
 require_once cot_langfile('pfs', 'module');
 require_once cot_incfile('pfs', 'module', 'resources');
 
@@ -506,7 +507,7 @@ function cot_pfs_upload($userid, $folderid='')
 								'pfs_size' => (int)$u_size,
 								'pfs_count' => 0
 								));
-							
+
 							$db->update($db_pfs_folders, array('pff_updated' => $sys['now']), 'pff_id="'.$folderid.'"');
 
 							$disp_errors .= $L['Yes'];
@@ -611,7 +612,7 @@ function cot_selectbox_folders($user, $skip, $check, $name = 'folderid')
 	{
 		$result_arr[0] = '/';
 	}
-	
+
 	while ($row = $sql->fetch())
 	{
 		if ($skip != $row['pff_id'])

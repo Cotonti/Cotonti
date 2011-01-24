@@ -17,7 +17,7 @@ Tags=users.profile.tpl:
  */
 
 defined('COT_CODE') or die('Wrong URL');
-
+if($lang == 'ru') require_once cot_langfile('translit','core','ru');
 require_once cot_incfile('userimages', 'plug');
 $userimages = cot_userimages_config_get();
 
@@ -35,6 +35,7 @@ if($_FILES)
 			$fcheck = cot_file_check($file['tmp_name'], $file['name'], $file_ext);
 			if(in_array($file_ext, $gd_supported) && $fcheck == 1)
 			{
+			    $file['name']= cot_safename($file['name'], true);
 				$filename_full = $usr['id'].'-'.strtolower($file['name']);
 				$filepath = ($code == 'avatar') ?
 					$cfg['av_dir'].$filename_full:
