@@ -418,7 +418,7 @@ while ($row = $sql_pfs->fetch())
 		{
 			$th_colortext = array(hexdec(mb_substr($cfg['pfs']['th_colortext'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],4,2)));
 			$th_colorbg = array(hexdec(mb_substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],4,2)));
-			cot_imageresize($cfg['pfs_dir_user'] . $pfs_file, $cfg['pfs']['th_dir_user'] . $pfs_file,
+			cot_imageresize($cfg['pfs_dir_user'] . $pfs_file, $cfg['th_dir_user'] . $pfs_file,
 				$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
 				$cfg['pfs']['th_jpeg_quality'], true);
 		}

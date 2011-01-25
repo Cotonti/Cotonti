@@ -16,6 +16,7 @@ defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
 
 require_once cot_incfile('bbcode', 'plug');
 
+// Pages
 global $db_pages;
 require_once cot_incfile('page', 'module');
 // Attempt to override from HTML cache
@@ -32,6 +33,7 @@ $res->closeCursor();
 $db->query("ALTER TABLE $db_pages DROP COLUMN page_html");
 $db->query("ALTER TABLE $db_pages DROP COLUMN page_type");
 
+// Forums
 global $db_forum_posts;
 require_once cot_incfile('forums', 'module');
 // Attempt to override from HTML cache
@@ -47,6 +49,7 @@ $res->closeCursor();
 // Drop HTML cache
 $db->query("ALTER TABLE $db_forum_posts DROP COLUMN fp_html");
 
+// PMs
 global $db_pm;
 require_once cot_incfile('pm', 'module');
 // Attempt to override from HTML cache
@@ -62,6 +65,7 @@ $res->closeCursor();
 // Drop HTML cache
 $db->query("ALTER TABLE $db_pm DROP COLUMN pm_html");
 
+// Comments
 global $db_com;
 require_once cot_incfile('comments', 'plug');
 // Attempt to override from HTML cache
@@ -76,5 +80,16 @@ while ($row = $res->fetch())
 $res->closeCursor();
 // Drop HTML cache
 $db->query("ALTER TABLE $db_com DROP COLUMN com_html");
+
+// User signatures
+global $db_users;
+// Update manually
+$res = $db->query("SELECT user_text, user_id FROM $db_users");
+while ($row = $res->fetch())
+{
+	$html = cot_bbcode_parse($row['user_text']);
+	$db->update($db_users, array('user_text' => $html), 'user_id = ' . $row['user_id']);
+}
+$res->closeCursor();
 
 ?>

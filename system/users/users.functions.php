@@ -196,7 +196,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 		{
 
 			$user_data['user_birthdate'] = cot_date2stamp($user_data['user_birthdate']);
-			$user_data['user_text'] = cot_build_usertext($user_data['user_text']);
+			$user_data['user_text'] = cot_parse($user_data['user_text'], $cfg['usertextimg']);
 			
 			$temp_array = array(
 				'ID' => $user_data['user_id'],
@@ -209,7 +209,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'MAINGRPICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
 				'COUNTRY' => cot_build_country($user_data['user_country']),
 				'COUNTRYFLAG' => cot_build_flag($user_data['user_country']),
-				'TEXT' => $cfg['parsebbcodeusertext'] ? cot_parse($user_data['user_text'], true) : $user_data['user_text'],
+				'TEXT' => $user_data['user_text'],
 				'EMAIL' => cot_build_email($user_data['user_email'], $user_data['user_hideemail']),
 				'THEME' => $user_data['user_theme'],
 				'SCHEME' => $user_data['user_scheme'],

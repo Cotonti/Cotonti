@@ -208,9 +208,9 @@ if (defined('COT_UPGRADE'))
 		// Update config theme and scheme
 		$config_contents = file_get_contents($file['config']);
 		$config_contents = preg_replace('#^\$cfg\[\'defaultscheme\'\]\s*=\s*\'.*?\';\n?#m', '', $config_contents);
-		$config_contents = preg_replace('#^\$cfg\[\'defaulttheme\'\]\s*=\s*\'.*?\';#m',
+		$config_contents = preg_replace('#^\$cfg\[\'defaulttheme\'\]\s*=.*?;#m',
 			"\$cfg['defaultscheme'] = 'default';", $config_contents);
-		$config_contents = preg_replace('#^\$cfg\[\'defaultskin\'\]\s*=\s*\'.*?\';#m',
+		$config_contents = preg_replace('#^\$cfg\[\'defaultskin\'\]\s*=.*?;#m',
 			"\$cfg['defaulttheme'] = 'nemesis';", $config_contents);
 		file_put_contents($file['config'], $config_contents);
 
