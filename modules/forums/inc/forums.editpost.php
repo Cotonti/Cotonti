@@ -91,7 +91,7 @@ if ($a == 'update')
 				$rtopictitle = str_replace('#', '', $rtopictitle);
 			}
 			$rtopicpreview = mb_substr(htmlspecialchars($rtext), 0, 128);
-			$db->update($db_forum_topics, array("ft_title" => $rtopictitle, "ft_desc" => $rtopicdesc, "ft_preview" => $rtopicpreview), "ft_id = $p");
+			$db->update($db_forum_topics, array("ft_title" => $rtopictitle, "ft_desc" => $rtopicdesc, "ft_preview" => $rtopicpreview), "ft_id = $q");
 		}
 	}
 

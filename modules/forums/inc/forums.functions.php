@@ -160,29 +160,29 @@ function cot_forums_resynctopic($id)
  *
  * @param string $cat Section cat
  * @param string $postcount Post count
- * @param string $topiccount Topic count 
- * @param string $viewcount View count  
+ * @param string $topiccount Topic count
+ * @param string $viewcount View count
  */
 function cot_forums_sectionsetlast($cat, $postcount = '', $topiccount='', $viewcount='')
 {
 	global $db, $db_forum_topics, $db_forum_stats;
 	$row = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics
 		WHERE ft_cat='".$db->prep($cat)."' AND ft_movedto='' AND ft_mode='0' ORDER BY ft_updated DESC LIMIT 1")->fetch();
-	
+
 	$i_postcount = ($postcount != '' && is_int($postcount)) ? $postcount : 1;
 	$i_topiccount = ($topiccount != '' && is_int($topiccount)) ? $topiccount : 1;
-	
+
 	$postcount = (!empty($postcount)) ? ", fs_postcount = ".$postcount : '';
 	$topiccount = (!empty($topiccount)) ? ", fs_topiccount = ".$topiccount : '';
 	$viewcount = (!empty($viewcount)) ? ", fs_viewcount = ".$viewcount : '';
-	
-	$db->query("INSERT INTO $db_forum_stats 
+
+	$db->query("INSERT INTO $db_forum_stats
 		(fs_cat, fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername, fs_topiccount, fs_postcount,
 			fs_viewcount)
 		VALUES (".$db->quote($cat).", ".(int)$row['ft_id'].", ".$db->quote($row['ft_title']).", "
 			.(int)$row['ft_updated'].", ".(int)$row['ft_lastposterid'].", ".$db->quote($row['ft_lastpostername'])
 			.",$i_topiccount, $i_postcount, 0)
-		ON DUPLICATE KEY UPDATE 
+		ON DUPLICATE KEY UPDATE
 			fs_lt_id = ".(int)$row['ft_id'].",  fs_lt_title = ".$db->quote($row['ft_title']).",
 			fs_lt_date = ".(int)$row['ft_updated'].", fs_lt_posterid = ".(int)$row['ft_lastposterid'].",
 			fs_lt_postername = ".$db->quote($row['ft_lastpostername'])." $postcount $topiccount $viewcount");
@@ -201,7 +201,7 @@ function cot_forums_sectionsetlast($cat, $postcount = '', $topiccount='', $viewc
  */
 function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 {
-	global $cfg, $structure, $cot_extrafields, $usr, $sys;
+	global $cfg, $structure, $cot_extrafields, $usr, $sys, $L;
 
 	$new_elems = ($usr['id'] > 0 && $stat['fs_lt_date'] > $usr['lastvisit'] && $stat['fs_lt_posterid'] != $usr['id']);
 
@@ -209,7 +209,7 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 		$tag_prefix . 'CAT' => $cat,
 		$tag_prefix . 'LOCKED' => $structure['forums'][$cat]['locked'],
 		$tag_prefix . 'TITLE' => $structure['forums'][$cat]['title'],
-		$tag_prefix . 'DESC' => cot_parse_autourls($structure['forums'][$cat]['desc']) . ($structure['forums'][$cat]['locked']) ? ' ' . $L['Locked'] : '',
+		$tag_prefix . 'DESC' => cot_parse_autourls($structure['forums'][$cat]['desc']).(($structure['forums'][$cat]['locked'])? ' '.$L['Locked'] : ''),
 		$tag_prefix . 'ICON' => empty($structure['forums'][$cat]['icon']) ? '' : cot_rc('img_structure_cat', array(
 				'icon' => $structure['forums'][$cat]['icon'],
 				'title' => htmlspecialchars($structure['forums'][$cat]['title']),
@@ -220,7 +220,7 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 		$tag_prefix . 'NEWPOSTS' => $new_elems,
 		$tag_prefix . 'CAT_DEFSTATE' => htmlspecialchars($cfg['forums'][$cat]['defstate']),
 	);
-	
+
 	if (is_array($stat))
 	{
 		if ($stat['fs_lt_date'] > 0)
