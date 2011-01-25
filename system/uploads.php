@@ -102,4 +102,32 @@ function cot_get_uploadmax()
 	return floor(min($val_a) / 1024); // KB
 }
 
+/**
+ * Strips all unsafe characters from file base name and converts it to latin
+ *
+ * @param string $basename File base name
+ * @param bool $underscore Convert spaces to underscores
+ * @param string $postfix Postfix appended to filename
+ * @return string
+ */
+function cot_safename($basename, $underscore = true, $postfix = '')
+{
+	global $lang, $cot_translit;
+	if(!$cot_translit && $lang != 'en' && file_exists(cot_langfile('translit', 'core')))
+	{
+		require_once cot_langfile('translit','core');
+	}
+
+	$fname = mb_substr($basename, 0, mb_strrpos($basename, '.'));
+	$ext = mb_substr($basename, mb_strrpos($basename, '.') + 1);
+	if($lang != 'en' && is_array($cot_translit))
+	{
+		$fname = strtr($fname, $cot_translit);
+	}
+	if($underscore) $fname = str_replace(' ', '_', $fname);
+	$fname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
+	$fname = str_replace('..', '.', $fname);
+	if(empty($fname)) $fname = cot_unique();
+	return $fname . $postfix . '.' . mb_strtolower($ext);
+}
 ?>

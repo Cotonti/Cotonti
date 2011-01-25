@@ -12,7 +12,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-require_once cot_incfile('pfs', 'module'); // FIXME hard PFS dependency
+require_once cot_incfile('uploads');
 
 @clearstatcache();
 

@@ -17,7 +17,6 @@ Tags=users.profile.tpl:
  */
 
 defined('COT_CODE') or die('Wrong URL');
-if($lang == 'ru') require_once cot_langfile('translit','core','ru');
 require_once cot_incfile('userimages', 'plug');
 $userimages = cot_userimages_config_get();
 

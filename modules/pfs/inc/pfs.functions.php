@@ -12,7 +12,6 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
-if($lang == 'ru') require_once cot_langfile('translit','core','ru');
 require_once cot_langfile('pfs', 'module');
 require_once cot_incfile('pfs', 'module', 'resources');
 
@@ -562,30 +561,6 @@ function cot_pfs_upload($userid, $folderid='')
 		}
 	}
 	return $folderid;
-}
-
-/**
- * Strips all unsafe characters from file base name and converts it to latin
- *
- * @param string $basename File base name
- * @param bool $underscore Convert spaces to underscores
- * @param string $postfix Postfix appended to filename
- * @return string
- */
-function cot_safename($basename, $underscore = true, $postfix = '')
-{
-	global $lang, $cot_translit;
-	$fname = mb_substr($basename, 0, mb_strrpos($basename, '.'));
-	$ext = mb_substr($basename, mb_strrpos($basename, '.') + 1);
-	if($lang != 'en' && is_array($cot_translit))
-	{
-		$fname = strtr($fname, $cot_translit);
-	}
-	if($underscore) $fname = str_replace(' ', '_', $fname);
-	$fname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
-	$fname = str_replace('..', '.', $fname);
-	if(empty($fname)) $fname = cot_unique();
-	return $fname . $postfix . '.' . mb_strtolower($ext);
 }
 
 /**
