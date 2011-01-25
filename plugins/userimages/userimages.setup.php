@@ -4,14 +4,14 @@
 Code=userimages
 Name=User Images
 Description=Avatar and photo for users
-Version=1.1
+Version=1.2
 Date=2010-nov-08
 Author=Koradhil, Cotonti Team
 Copyright=Copyright (c) Cotonti Team 2008-2011
 Notes=BSD License
 SQL=
-Auth_guests=
-Lock_guests=RW12345A
+Auth_guests=R
+Lock_guests=W12345A
 Auth_members=RW
 Lock_members=12345
 [END_COT_EXT]
@@ -21,7 +21,7 @@ Lock_members=12345
  * Avatar and photo for users
  *
  * @package userimages
- * @version 1.1
+ * @version 1.2
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
