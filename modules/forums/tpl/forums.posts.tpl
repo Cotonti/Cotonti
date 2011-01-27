@@ -69,7 +69,7 @@
 		</tr>
 		<tr>
 			<td class="small {FORUMS_POSTS_ROW_ODDEVEN}">
-						{PHP.L.forums_posts}: {FORUMS_POSTS_ROW_POSTCOUNT}
+						{PHP.L.forums_posts}: {FORUMS_POSTS_ROW_USERPOSTCOUNT}
 			</td>
 			<td class="small {FORUMS_POSTS_ROW_ODDEVEN}">
 						{FORUMS_POSTS_ROW_USERTEXT}
