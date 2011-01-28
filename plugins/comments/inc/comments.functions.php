@@ -173,6 +173,7 @@ function cot_comments_display($ext_name, $code, $cat = '')
 				'COMMENTS_ROW_AUTHORID' => $row['com_authorid'],
 				'COMMENTS_ROW_TEXT' => $com_text,
 				'COMMENTS_ROW_DATE' => @date($cfg['dateformat'], $row['com_date'] + $usr['timezone'] * 3600),
+				'COMMENTS_ROW_DATE_STAMP' => $row['com_date'] + $usr['timezone'] * 3600,
 				'COMMENTS_ROW_ADMIN' => $com_admin,
 				'COMMENTS_ROW_EDIT' => $com_edit
 			));

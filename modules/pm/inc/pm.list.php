@@ -159,6 +159,7 @@ while ($row = $pm_sql->fetch())
 		'PM_ROW_STATE' => $row['pm_tostate'],
 		'PM_ROW_STAR' => cot_rc($star_class ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d))),
 		'PM_ROW_DATE' => @date($cfg['dateformat'], $row['pm_date'] + $usr['timezone'] * 3600),
+		'PM_ROW_DATE_STAMP' => $row['pm_date'] + $usr['timezone'] * 3600,
 		'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), htmlspecialchars($row['pm_title']), array('class'=>'ajax')),
 		'PM_ROW_TEXT' => $pm_data,
 		'PM_ROW_ICON_STATUS' => $row['pm_icon_readstatus'],

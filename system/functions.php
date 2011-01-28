@@ -1344,48 +1344,58 @@ function cot_build_stars($level)
 }
 
 /**
- * Returns time gap between 2 dates
+ * Returns time gap between two timestamps
  *
- * @param int $t1 Stamp 1
- * @param int $t2 Stamp2
+ * @param int $t1 Timestamp 1 (oldest)
+ * @param int $t2 Timestamp 2 (latest)
  * @return string
  */
-function cot_build_timegap($t1,$t2)
+function cot_build_timegap($t1, $t2=null)
 {
-	global $Ls;
+	global $Ls, $sys;
+
+	if ($t2 === null) $t2 = $sys['now_offset'];
 
 	$gap = $t2 - $t1;
 
-	if ($gap<=0 || !$t2 || $gap>94608000)
+	if ($gap <= 0 || $gap > 94608000)
 	{
-		$result = '';
+		return '';
 	}
-	elseif ($gap<60)
+	elseif ($gap < 60)
 	{
-		$result = cot_declension($gap,$Ls['Seconds']);
+		return cot_declension($gap, $Ls['Seconds']);
 	}
-	elseif ($gap<3600)
+	elseif ($gap < 3600)
 	{
-		$gap = floor($gap/60);
-		$result = cot_declension($gap,$Ls['Minutes']);
+		$gap = floor($gap / 60);
+		return cot_declension($gap, $Ls['Minutes']);
 	}
-	elseif ($gap<86400)
+	elseif ($gap < 86400)
 	{
-		$gap1 = floor($gap/3600);
-		$gap2 = floor(($gap-$gap1*3600)/60);
-		$result = cot_declension($gap1,$Ls['Hours']).' ';
-		if ($gap2>0)
-		{
-			$result .= cot_declension($gap2,$Ls['Minutes']);
-		}
+		$gap = floor($gap / 3600);
+		return cot_declension($gap, $Ls['Hours']).' ';
+	}
+	elseif ($gap < 604800)
+	{
+		$gap = floor($gap / 86400);
+		return cot_declension($gap, $Ls['Days']);
+	}
+	elseif ($gap < 2592000)
+	{
+		$gap = floor($gap / 604800);
+		return cot_declension($gap, $Ls['Weeks']);
+	}
+	elseif ($gap < 31536000)
+	{
+		$gap = floor($gap / 2592000);
+		return cot_declension($gap, $Ls['Months']);
 	}
 	else
 	{
-		$gap = floor($gap/86400);
-		$result = cot_declension($gap,$Ls['Days']);
+		$gap = floor($gap / 31536000);
+		return cot_declension($gap, $Ls['Years']);
 	}
-
-	return $result;
 }
 
 /**
