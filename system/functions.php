@@ -1350,7 +1350,7 @@ function cot_build_stars($level)
  * @param int $t2 Timestamp 2 (latest)
  * @return string
  */
-function cot_build_timegap($t1, $t2=null)
+function cot_build_timegap($t1, $t2 = null)
 {
 	global $Ls, $sys;
 
@@ -2427,6 +2427,48 @@ function cot_tplfile($base, $type = 'module')
 /*
  * ============================ Date and Time Functions =======================
 */
+
+/**
+ * Localized version of PHP date()
+ *
+ * @see http://php.net/manual/en/function.date.php
+ * @param string $format Date/time format, see PHP date function
+ * @param int $timestamp Unix timestamp
+ * @return string
+ */
+function cot_date($format, $timestamp = null)
+{
+	global $L;
+	$search = array(
+		'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+		'Friday', 'Saturday', 'Sunday',
+		'Mon', 'Tue', 'Wed', 'Thu',
+		'Fri', 'Sat', 'Sun',
+		'January', 'February', 'March',
+		'April', 'May', 'June',
+		'July', 'August', 'September',
+		'October', 'November', 'December',
+		'Jan', 'Feb', 'Mar',
+		'Apr', 'May', 'Jun',
+		'Jul', 'Aug', 'Sep',
+		'Oct', 'Nov', 'Dec'
+	);
+	$replace = array(
+		$L['Monday'], $L['Tuesday'], $L['Wednesday'], $L['Thursday'],
+		$L['Friday'], $L['Saturday'], $L['Sunday'],
+		$L['Monday_s'], $L['Tuesday_s'], $L['Wednesday_s'], $L['Thursday_s'],
+		$L['Friday_s'], $L['Saturday_s'], $L['Sunday_s'],
+		$L['January'], $L['February'], $L['March'],
+		$L['April'], $L['May'], $L['June'],
+		$L['July'], $L['August'], $L['September'],
+		$L['October'], $L['November'], $L['December'],
+		$L['January_s'], $L['February_s'], $L['March_s'],
+		$L['April_s'], $L['May_s'], $L['June_s'],
+		$L['July_s'], $L['August_s'], $L['September_s'],
+		$L['October_s'], $L['November_s'], $L['December_s']
+	);
+	return str_replace($search, $replace, date($format, $timestamp));
+}
 
 /**
  * Creates UNIX timestamp out of a date

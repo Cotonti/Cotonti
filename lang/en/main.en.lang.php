@@ -348,6 +348,25 @@ $Ls['Weeks'] = array('weeks','week');
 $Ls['Years'] = array('years','year');
 
 /**
+ * Days of the week
+ */
+
+$L['Monday'] = 'Monday';
+$L['Tuesday'] = 'Tuesday';
+$L['Wednesday'] = 'Wednesday';
+$L['Thursday'] = 'Thursday';
+$L['Friday'] = 'Friday';
+$L['Saturday'] = 'Saturday';
+$L['Sunday'] = 'Sunday';
+$L['Monday_s'] = 'Mon';
+$L['Tuesday_s'] = 'Tue';
+$L['Wednesday_s'] = 'Wed';
+$L['Thursdayv'] = 'Thu';
+$L['Friday_s'] = 'Fri';
+$L['Saturday_s'] = 'Sat';
+$L['Sunday_s'] = 'Sun';
+
+/**
  * Months
  */
 
@@ -363,6 +382,18 @@ $L['September'] = 'September';
 $L['October'] = 'October';
 $L['November'] = 'November';
 $L['December'] = 'December';
+$L['January_s'] = 'Jan';
+$L['February_s'] = 'Feb';
+$L['March_s'] = 'Mar';
+$L['April_s'] = 'Apr';
+$L['May_s'] = 'May';
+$L['June_s'] = 'Jun';
+$L['July_s'] = 'Jul';
+$L['August_s'] = 'Aug';
+$L['September_s'] = 'Sep';
+$L['October_s'] = 'Oct';
+$L['November_s'] = 'Nov';
+$L['December_s'] = 'Dec';
 
 /**
  * Gender
