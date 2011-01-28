@@ -340,9 +340,12 @@ $Ls['Guests'] = array('гость','гостя','гостей');
 $Ls['Hours'] = array('час','часа','часов');
 $Ls['Members'] = array('пользователь','пользователя','пользователей');
 $Ls['Minutes'] = array('минута','минуты','минут');
+$Ls['Months'] = array('months','month');
 $Ls['Pages'] = array('страница','страницы','страниц');
 $Ls['Seconds'] = array('секунда','секунды','секунд');
 $Ls['Times'] = array('раз','раза','раз');
+$Ls['Weeks'] = array('weeks','week');
+$Ls['Years'] = array('years','year');
 
 /**
  * Months

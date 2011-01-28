@@ -113,9 +113,6 @@ if ($a=='update' && !empty($f))
 	cot_redirect(cot_url('pfs', $more, '', true));
 }
 
-$row['pff_date'] = @date($cfg['dateformat'], $row['pff_date'] + $usr['timezone'] * 3600);
-$row['pff_updated'] = @date($cfg['dateformat'], $row['pff_updated'] + $usr['timezone'] * 3600);
-
 /* ============= */
 
 if (!$standalone)
@@ -142,10 +139,12 @@ $t->assign(array(
 //	'PFF_FOLDER' => cot_selectbox_folders($userid, '', $row['pff_parentid'], 'rparentid'),
 	'PFF_TITLE' => cot_inputbox('text', 'rtitle', htmlspecialchars($pff_title), 'size="56" maxlength="255"'),
 	'PFF_DESC' => cot_inputbox('text', 'rdesc',  htmlspecialchars($pff_desc), 'size="56" maxlength="255"'),
-	'PFF_DATE' => $row['pff_date'],
+	'PFF_DATE' => @date($cfg['dateformat'], $row['pff_date'] + $usr['timezone'] * 3600),
+	'PFF_DATE_STAMP' => $row['pff_date'] + $usr['timezone'] * 3600,
 	'PFF_ISGALLERY' => cot_radiobox($pff_isgallery, 'risgallery', array('1', '0'), array($L['Yes'], $L['No']), '', ' '),
 	'PFF_ISPUBLIC' => cot_radiobox($pff_ispublic, 'rispublic', array('1', '0'), array($L['Yes'], $L['No']), '', ' '),
-	'PFF_UPDATED' => $row['pff_updated']
+	'PFF_UPDATED' => @date($cfg['dateformat'], $row['pff_updated'] + $usr['timezone'] * 3600),
+	'PFF_UPDATED_STAMP' => $row['pff_updated'] + $usr['timezone'] * 3600
 ));
 
 cot_display_messages($t);

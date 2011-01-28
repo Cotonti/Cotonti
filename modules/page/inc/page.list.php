@@ -234,7 +234,7 @@ foreach ($cot_extrafields['pages'] as $row_p)
 
 $kk = 0;
 $allsub = cot_structure_children('page', $c, false, false, true, false);
-$subcat =  array_slice($allsub, $dc, $cfg['page']['maxlistsperpage']);
+$subcat = array_slice($allsub, $dc, $cfg['page']['maxlistsperpage']);
 
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.list.rowcat.loop');

@@ -123,8 +123,6 @@ if ($m == 'edit' && $id > 0)
 	$usr['allow_write'] = ($usr['isadmin'] || $usr['isowner']);
 	cot_block($usr['allow_write']);
 
-	$com_date = @date($cfg['dateformat'], $com['com_date'] + $usr['timezone'] * 3600);
-
 	$t->assign(array(
 		'COMMENTS_FORM_POST' => cot_url('plug', 'e=comments&m=edit&a=update&area='.$area.'&cat='.$cat.'&item='.$com['com_code'].'&id='.$com['com_id']),
 		'COMMENTS_POSTER_TITLE' => $L['Poster'],
@@ -132,7 +130,8 @@ if ($m == 'edit' && $id > 0)
 		'COMMENTS_IP_TITLE' => $L['Ip'],
 		'COMMENTS_IP' => $com['com_authorip'],
 		'COMMENTS_DATE_TITLE' => $L['Date'],
-		'COMMENTS_DATE' => $com_date,
+		'COMMENTS_DATE' => @date($cfg['dateformat'], $com['com_date'] + $usr['timezone'] * 3600),
+		'COMMENTS_DATE_STAMP' => $com['com_date'] + $usr['timezone'] * 3600,
 		'COMMENTS_FORM_UPDATE_BUTTON' => $L['Update'],
 		'COMMENTS_FORM_TEXT' => cot_textarea('comtext', $com['com_text'], 8, 64, '', 'input_textarea_minieditor')
 	));

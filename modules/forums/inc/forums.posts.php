@@ -317,7 +317,6 @@ $extp = cot_getextplugins('forums.posts.loop');
 $fp_num = 0;
 while ($row = $sql_forums->fetch())
 {
-	$row['fp_updated'] = @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600);
 	$row['user_text'] = ($cfg['forums'][$s]['allowusertext']) ? $row['user_text'] : '';
 	$fp_num++;
 
@@ -337,7 +336,9 @@ while ($row = $sql_forums->fetch())
 		'FORUMS_POSTS_ROW_IDURL' => cot_url('forums', 'm=posts&id=' . $row['fp_id']),
 		'FORUMS_POSTS_ROW_URL' => cot_url('forums', 'm=posts&p=' . $row['fp_id'], "#" . $row['fp_id']),
 		'FORUMS_POSTS_ROW_CREATION' => @date($cfg['dateformat'], $row['fp_creation'] + $usr['timezone'] * 3600),
-		'FORUMS_POSTS_ROW_UPDATED' => $row['fp_updated'],
+		'FORUMS_POSTS_ROW_CREATION_STAMP' => $row['fp_creation'] + $usr['timezone'] * 3600,
+		'FORUMS_POSTS_ROW_UPDATED' => @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600),
+		'FORUMS_POSTS_ROW_UPDATED_STAMP' => $row['fp_updated'] + $usr['timezone'] * 3600,
 		'FORUMS_POSTS_ROW_UPDATER' => htmlspecialchars($row['fp_updater']),
 		'FORUMS_POSTS_ROW_UPDATEDBY' => $row['fp_updatedby'],
 		'FORUMS_POSTS_ROW_TEXT' => cot_parse($row['fp_text'], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes'])),

@@ -269,6 +269,7 @@ if (!empty($sq))
 				'PLUGIN_PR_TITLE' => cot_rc_link($page_url, htmlspecialchars($row['page_title'])),
 				'PLUGIN_PR_TEXT' => cot_clear_mark($row['page_text'], $row['page_type'], $words),
 				'PLUGIN_PR_TIME' => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
+				'PLUGIN_PR_TIMESTAMP' => $row['page_date'] + $usr['timezone'] * 3600,
 				'PLUGIN_PR_ODDEVEN' => cot_build_oddeven($jj),
 				'PLUGIN_PR_NUM' => $jj
 			));
@@ -325,6 +326,7 @@ if (!empty($sq))
 					'PLUGIN_FR_TITLE' => cot_rc_link($post_url, htmlspecialchars($row['ft_title'])),
 					'PLUGIN_FR_TEXT' => cot_clear_mark($row['fp_text'], 0, $words),
 					'PLUGIN_FR_TIME' => $row['ft_updated'] > 0 ? @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600) : @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600),
+					'PLUGIN_FR_TIMESTAMP' => $row['ft_updated'] > 0 ? $row['ft_updated'] + $usr['timezone'] * 3600 : $row['fp_updated'] + $usr['timezone'] * 3600,
 					'PLUGIN_FR_ODDEVEN' => cot_build_oddeven($jj),
 					'PLUGIN_FR_NUM' => $jj,
 				));

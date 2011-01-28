@@ -134,6 +134,7 @@ if ($history)
 			'PM_ROW_STATE' => $row2['pm_tostate'],
 			'PM_ROW_STAR' => cot_rc($star_class2 ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d))),
 			'PM_ROW_DATE' => @date($cfg['dateformat'], $row2['pm_date'] + $usr['timezone'] * 3600),
+			'PM_ROW_DATE_STAMP' => $row2['pm_date'] + $usr['timezone'] * 3600,
 			'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), htmlspecialchars($row2['pm_title']), array('class'=>'ajax')),
 			'PM_ROW_TEXT' => $pm_data,
 			'PM_ROW_ICON_STATUS' => $row2['pm_icon_readstatus'],

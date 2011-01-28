@@ -198,6 +198,9 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'DATE' => @date($date_format, $page_data['page_date'] + $usr['timezone'] * 3600),
 				'BEGIN' => @date($date_format, $page_data['page_begin'] + $usr['timezone'] * 3600),
 				'EXPIRE' => @date($date_format, $page_data['page_expire'] + $usr['timezone'] * 3600),
+				'DATE_STAMP' => $page_data['page_date'] + $usr['timezone'] * 3600,
+				'BEGIN_STAMP' => $page_data['page_begin'] + $usr['timezone'] * 3600,
+				'EXPIRE_STAMP' => $page_data['page_expire'] + $usr['timezone'] * 3600,
 				'FILE' => $cot_yesno[$page_data['page_file']],
 				'FILE_URL' => empty($page_data['page_url']) ? '' : cot_url('page', 'id='.$page_data['page_id'].'&a=dl'),
 				'FILE_SIZE' => $page_data['page_size'],
@@ -207,8 +210,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'FILE_NAME' => basename($page_data['page_url']),
 				'COUNT' => $page_data['page_count'],
 				'ADMIN' => $admin_rights ? cot_rc('list_row_admin', array('unvalidate_url' => cot_url('admin', "m=page&a=unvalidate&id=".$page_data['page_id']."&".cot_xg()),'edit_url' => cot_url('page', "m=edit&id=".$page_data['page_id']))) : '',
-				'NOTAVAILABLE' => ($page_data['page_date'] > $sys['now_offset']) ? $L['page_notavailable'].cot_build_timegap($sys['now_offset'], $pag['page_date']) : '',
-
+				'NOTAVAILABLE' => ($page_data['page_date'] > $sys['now_offset']) ? $L['page_notavailable'].cot_build_timegap($sys['now_offset'], $pag['page_date']) : ''
 			);
 
 			// Admin tags

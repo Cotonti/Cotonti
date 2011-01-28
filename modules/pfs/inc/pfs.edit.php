@@ -79,7 +79,7 @@ if ($row = $sql_pfs->fetch())
 {
 	$pfs_id = $row['pfs_id'];
 	$pfs_file = $row['pfs_file'];
-	$pfs_date = @date($cfg['dateformat'], $row['pfs_date'] + $usr['timezone'] * 3600);
+	$pfs_date = $row['pfs_date'] + $usr['timezone'] * 3600;
 	$pfs_folderid = $row['pfs_folderid'];
 	$pfs_extension = $row['pfs_extension'];
 	$pfs_desc = htmlspecialchars($row['pfs_desc']);
@@ -136,7 +136,8 @@ $t->assign(array(
 	'PFS_TITLE' => $title,
 	'PFS_ACTION'=> cot_url('pfs', 'm=edit&a=update&id='.$pfs_id.'&'.$more),
 	'PFS_FILE' => $pfs_file,
-	'PFS_DATE' => $pfs_date,
+	'PFS_DATE' => @date($cfg['dateformat'], $pfs_date),
+	'PFS_DATE_STAMP' => $pfs_date,
 	'PFS_FOLDER' => cot_selectbox_folders($userid, '', $pfs_folderid),
 	'PFS_URL' => $ff,
 	'PFS_DESC' => cot_inputbox('text', 'rdesc', $pfs_desc, 'size="56" maxlength="255"')
