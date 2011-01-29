@@ -1491,7 +1491,8 @@ function sed_sql_error()
 {
 	global $db;
 
-	return $db->error;
+	$error_info = $db->errorInfo();
+	return $error_info[2];
 }
 
 /**

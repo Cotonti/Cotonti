@@ -22,8 +22,6 @@ defined('COT_CODE') or die('Wrong URL');
  *
  * @property-read int $affectedRows Number of rows affected by the most recent query
  * @property-read int $count Total query count
- * @property-read int $errno Most recent error code
- * @property-read int $error Most recent error message
  * @property-read int $timeCount Total query execution time
  */
 class CotDB extends PDO {
@@ -82,14 +80,6 @@ class CotDB extends PDO {
 				break;
 			case 'count':
 				return $this->_count;
-				break;
-			case 'errno':
-				$info = $this->errorInfo();
-				return $info[1];
-				break;
-			case 'error':
-				$info = $this->errorInfo();
-				return $info[2];
 				break;
 			case 'timeCount':
 				return $this->_tcount;
@@ -182,7 +172,8 @@ class CotDB extends PDO {
 			$res = $this->exec($query);
 			if ($res === false)
 			{
-				cot_diefatal('SQL error: '.$this->error);
+				$error_info = $this->errorInfo();
+				cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
 			}
 		}
 		$this->_stopTimer($query);
@@ -268,7 +259,8 @@ class CotDB extends PDO {
 			$res = $this->exec($query);
 			if ($res === false)
 			{
-				cot_diefatal('SQL error: '.$this->error);
+				$error_info = $this->errorInfo();
+				cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
 			}
 			$this->_stopTimer($query);
 			return $res;
@@ -335,18 +327,28 @@ class CotDB extends PDO {
 		if (count($parameters) > 0)
 		{
 			$result = parent::prepare($query);
-			$this->_bindParams($result, $parameters);
-			if ($result->execute() === false && $this->errorCode() > 0)
+			if (!$result)
 			{
-				cot_diefatal('SQL error: '.$this->error);
+				cot_diefatal('SQL error, could not prepare statement: ' . $query);
+			}
+			$this->_bindParams($result, $parameters);
+			if ($result->execute() === false)
+			{
+				$error_info = $result->errorInfo();
+				cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
 			}
 		}
 		else
 		{
 			$result = parent::query($query);
-			if ($result === false && $this->errorCode() > 0)
+			if ($result === false)
 			{
-				cot_diefatal('SQL error: '.$this->error);
+				cot_diefatal('SQL error: ' . $this->error);
+			}
+			elseif ($result->errorCode() > '02')
+			{
+				$error_info = $result->errorInfo();
+				cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
 			}
 		}
 		$this->_stopTimer($query);
@@ -414,14 +416,23 @@ class CotDB extends PDO {
 				$stmt = $this->prepare($query);
 				$this->_bindParams($stmt, $parameters);
 				$res = $stmt->execute();
-				$res === false ? cot_diefatal('SQL error: '.$this->error) : $res = $stmt->rowCount();
+				if ($res === false)
+				{
+					$error_info = $stmt->errorInfo();
+					cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
+				}
+				else
+				{
+					$res = $stmt->rowCount();
+				}
 			}
 			else
 			{
 				$res = $this->exec($query);
 				if ($res === false)
 				{
-					cot_diefatal('SQL error: '.$this->error);
+					$error_info = $this->errorInfo();
+					cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
 				}
 			}
 			$this->_stopTimer($query);
