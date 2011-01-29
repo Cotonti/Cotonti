@@ -255,7 +255,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				}
 				else
 				{
-					cot_error(cot_rc('install_error_sql_script', array('msg' => $db->error)));
+					$error_info = $db->errorInfo();
+					cot_error(cot_rc('install_error_sql_script', array('msg' => $error_info[2])));
 				}
 			}
 
