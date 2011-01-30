@@ -38,7 +38,7 @@
 					<!-- ENDIF -->
 					<ul class="subforums">
 						<!-- BEGIN: SUBSECTION -->
-						<li>{PHP.R.forums_icon_subforum}{FORUMS_SECTIONS_ROW_TITLE}</li>
+						<li>{PHP.R.forums_icon_subforum}<a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></li>
 						<!-- END: SUBSECTION -->
 					</ul>
 				</td>

@@ -122,7 +122,7 @@ function cot_config_add($name, $options, $is_module = false, $category = '')
 			'config_text' => $opt['text']
 		);
 	}
-   
+
     $ins_cnt = $db->insert($db_config, $option_set);
     return $ins_cnt == $cnt;
 }
@@ -160,7 +160,7 @@ function cot_config_implant($module_name, $options, $into_struct = false)
 
 /**
  * Loads config structure from database into an array
- * 
+ *
  * @param string $name Extension code
  * @param bool $is_module TRUE if module, FALSE if plugin
  * @param string $category Structure category code. Only for per-category config options
@@ -178,7 +178,11 @@ function cot_config_load($name, $is_module = false, $category = '')
 		FROM $db_config WHERE config_owner = ? AND config_cat = ?";
 	$params = array($type, $name);
 
-	if (!empty($category))
+	if (empty($category))
+	{
+		$query .= " AND config_subcat = ''";
+	}
+	else
 	{
 		$query .= " AND config_subcat = ?";
 		$params[] = $category;
@@ -317,7 +321,7 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
 	{
 		$where .= " AND config_subcat = " . $db->quote($category);
 	}
-	
+
     if (is_array($option))
     {
         $cnt = count($option);
@@ -388,7 +392,7 @@ function cot_config_set($name, $options, $is_module = false, $category = '')
 			$upd_cnt += $db->update($db_config, array('config_value' => $val), $where, $params);
 		}
 	}
-	
+
     return $upd_cnt;
 }
 
