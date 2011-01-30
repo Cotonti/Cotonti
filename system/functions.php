@@ -2439,10 +2439,7 @@ function cot_tplfile($base, $type = 'module')
 function cot_date($format, $timestamp = null)
 {
 	global $L, $Ldt;
-	if ($Ldt[$format])
-	{
-		$format = $Ldt[$format];
-	}
+	$datetime = ($Ldt[$format]) ? date($Ldt[$format], $timestamp) : date($format, $timestamp);
 	$search = array(
 		'Monday', 'Tuesday', 'Wednesday', 'Thursday',
 		'Friday', 'Saturday', 'Sunday',
@@ -2471,7 +2468,7 @@ function cot_date($format, $timestamp = null)
 		$L['July_s'], $L['August_s'], $L['September_s'],
 		$L['October_s'], $L['November_s'], $L['December_s']
 	);
-	return str_replace($search, $replace, date($format, $timestamp));
+	return ($lang == 'en') ? $datetime : str_replace($search, $replace, $datetime);
 }
 
 /**
