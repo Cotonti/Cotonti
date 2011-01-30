@@ -729,6 +729,7 @@ class MySQL_cache extends Db_cache_driver
 			${$row['c_name']} = unserialize($row['c_value']);
 			$i++;
 		}
+		$sql->closeCursor();
 		return $i;
 	}
 

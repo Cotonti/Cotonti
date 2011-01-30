@@ -58,7 +58,7 @@ $jj = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.ratings.loop');
 /* ===== */
-while($row = $sql->fetch())
+foreach ($sql->fetchAll() as $row)
 {
 	$id2 = $row['rating_code'];
 	$sql1 = $db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_code=" . $db->quote($id2));

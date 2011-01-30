@@ -208,6 +208,7 @@ if (!empty($sq))
 		{
 			$touser_ids[] = $row['user_id'];
 		}
+		$sql->closeCursor();
 		if ($totalusers == 0)
 		{
 			cot_error($L['plu_usernotexist'].$R['code_error_separator'], 'rsuser');
@@ -261,7 +262,7 @@ if (!empty($sq))
 		/* === Hook - Part 1 === */
 		$extp = cot_getextplugins('search.page.loop');
 		/* ===== */
-		while ($row = $sql->fetch())
+		foreach ($sql->fetchAll() as $row)
 		{
 			$page_url = empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id'].'&highlight='.$hl) : cot_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
 			$t->assign(array(
@@ -334,6 +335,7 @@ if (!empty($sq))
 			}
 			$jj++;
 		}
+		$sql->closeCursor();
 		if ($jj > 0)
 		{
 			$t->parse('MAIN.RESULTS.FORUMS');

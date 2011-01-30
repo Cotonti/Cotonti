@@ -101,6 +101,7 @@ function cot_remove_pm($message_id)
 				$sql2 = $db->update($db_pm, array('pm_tostate' => '3'), "pm_id = $id");
 			}
 		}
+		$sql->closeCursor();
 	}
 	return true;
 }
@@ -149,6 +150,7 @@ function cot_star_pm($message_id)
 				$sql2 = $db->update($db_pm, array('pm_fromstate' => (int)$fromstate), "pm_id = $id");
 			}
 		}
+		$sql->closeCursor();
 	}
 	return true;
 }

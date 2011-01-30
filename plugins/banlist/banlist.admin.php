@@ -99,7 +99,7 @@ $extp = cot_getextplugins('banlist.admin.loop');
 
 
 
-while ($row = $sql->fetch())
+foreach ($sql->fetchAll() as $row)
 {
 	$tt->assign(array(
 		'ADMIN_BANLIST_ROW_ID' => $row['banlist_id'],

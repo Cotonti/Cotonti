@@ -175,7 +175,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.extrafields.loop');
 /* ===== */
-while ($row = $res->fetch())
+foreach ($res->fetchAll() as $row)
 {
 	$t->assign(array(
 		'ADMIN_EXTRAFIELDS_ROW_NAME' => cot_inputbox('text', 'field_name['.$row['field_name'].']', $row['field_name']),

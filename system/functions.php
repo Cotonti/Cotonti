@@ -867,7 +867,7 @@ function cot_load_structure()
 	$tpath = array(); // title path tree
 	$parent_tpl = '';
 
-	while ($row = $sql->fetch())
+	foreach ($sql->fetchAll() as $row)
 	{
 		$last_dot = mb_strrpos($row['structure_path'], '.');
 
@@ -1107,6 +1107,7 @@ function cot_auth_build($userid, $maingrp = 0)
 		{
 			$groups[] = $row['gru_groupid'];
 		}
+		$sql->closeCursor();
 	}
 
 	$sql_groups = implode(',', $groups);
@@ -1116,6 +1117,7 @@ function cot_auth_build($userid, $maingrp = 0)
 	{
 		$authgrid[$row['auth_code']][$row['auth_option']] |= $row['auth_rights'];
 	}
+	$sql->closeCursor();
 
 	return $authgrid;
 }

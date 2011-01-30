@@ -284,7 +284,7 @@ $jj = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.list.loop');
 /* ===== */
-while ($pag = $sqllist->fetch())
+foreach ($sqllist->fetchAll() as $pag)
 {
 	$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', 0, $usr['isadmin']));
 	$t->assign(array(

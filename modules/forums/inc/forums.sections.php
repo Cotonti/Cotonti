@@ -44,6 +44,7 @@ if (!$cot_sections_act)
 	{
 		$cot_sections_act[$tmprow['fp_cat']] = $tmprow['COUNT(*)'];
 	}
+	$sqltmp->closeCursor();
 	$cache && $cache->db->store('cot_sections_act', $cot_sections_act, 'system', 7200);
 }
 
@@ -55,11 +56,12 @@ if (!$cot_sections_vw)
 	{
 		$cot_sections_vw[$tmprow['online_subloc']] = $tmprow['COUNT(*)'];
 	}
+	$sqltmp->closeCursor();
 	$cache && $cache->mem && $cache->mem->store('sections_vw', $cot_sections_vw, 'forums', 120);
 }
 
 $sql_forums = $db->query("SELECT * FROM $db_forum_stats WHERE 1 ORDER by fs_cat DESC");
-while ($row = $sql_forums->fetch())
+foreach ($sql_forums->fetchAll() as $row)
 {
 	if (!$cat_top[$row['fs_cat']]['fs_lt_id'])
 	{

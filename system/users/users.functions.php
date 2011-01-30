@@ -63,6 +63,7 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 	{
 		$member[$row['gru_groupid']] = TRUE;
 	}
+	$sql->closeCursor();
 
 	$res = $R['users_code_grplist_begin'];
 	foreach ($cot_groups as $k => $i)

@@ -55,7 +55,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.comments.loop');
 /* ===== */
-while ($row = $sql->fetch())
+foreach ($sql->fetchAll() as $row)
 {
 	$row['com_text'] = htmlspecialchars(cot_cutstring($row['com_text'], 40));
 	$row['com_type'] = mb_substr($row['com_code'], 0, 1);

@@ -387,6 +387,7 @@ function sed_cache_get($name)
 	$sql = $db->query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
 	if ($row = $sql->fetch())
 	{
+		$sql->closeCursor();
 		return(unserialize($row['c_value']));
 	}
 	else

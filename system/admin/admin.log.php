@@ -86,7 +86,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.log.loop');
 /* ===== */
-while($row = $sql->fetch())
+foreach ($sql->fetchAll() as $row)
 {
 	$t->assign(array(
 		'ADMIN_LOG_ROW_LOG_ID' => $row['log_id'],

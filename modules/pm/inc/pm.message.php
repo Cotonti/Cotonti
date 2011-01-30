@@ -105,7 +105,7 @@ if ($history)
 	$extp = cot_getextplugins('pm.history.loop');
 	/* ===== */
 	$jj = 0;
-	while ($row2 = $sql_pm_history->fetch())
+	foreach ($sql_pm_history->fetchAll() as $row2)
 	{
 		$jj++;
 		$row2['pm_icon_readstatus'] = ($row2['pm_tostate'] == '0') ?

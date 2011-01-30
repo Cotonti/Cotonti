@@ -186,7 +186,7 @@ elseif ($a == 'resyncall')
 	$res = TRUE;
 	$area_sync = 'cot_'.$n.'_sync';
 	$sql = $db->query("SELECT structure_code FROM $db_structure WHERE structure_area='".$db->prep($n)."'");
-	while ($row = $sql->fetch())
+	foreach ($sql->fetchAll() as $row)
 	{
 		if(function_exists($area_sync))
 		{
@@ -231,7 +231,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.structure.loop');
 /* ===== */
-while ($row = $sql->fetch())
+foreach ($sql->fetchAll() as $row)
 {
 	($id) && $adminpath[] = array (cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&id='.$id), htmlspecialchars($row['structure_title']));
 
@@ -314,7 +314,8 @@ while ($row = $sql->fetch())
 
 	$t->parse(($id) ? 'MAIN.OPTIONS' : 'MAIN.DEFAULT.ROW');
 }
-if(!$id)
+
+if (!$id)
 {
 	$t->assign(array(
 		'ADMIN_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],

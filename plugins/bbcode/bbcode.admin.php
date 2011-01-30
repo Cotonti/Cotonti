@@ -103,7 +103,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('bbcode.admin.loop');
 /* ===== */
-while ($row = $res->fetch())
+foreach ($res->fetchAll() as $row)
 {
 
 	$bb_t->assign(array(

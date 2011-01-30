@@ -59,6 +59,7 @@ while ($row = $sql->fetch())
 		$t->parse('MAIN.FORUMSTATS_REPLIEDTOP_NO_USER');
 	}
 }
+$sql->closeCursor();
 
 $sql = $db->query("SELECT * FROM $db_forum_topics WHERE 1 ORDER BY ft_viewcount DESC LIMIT 10");
 
@@ -93,6 +94,7 @@ while ($row = $sql->fetch())
 		$t->parse('MAIN.FORUMSTATS_VIEWEDTOP_NO_USER');
 	}
 }
+$sql->closeCursor();
 
 $ii = 0;
 $tmpstats = '';
@@ -111,6 +113,7 @@ while ($row = $sql->fetch())
 	));
 	$t->parse('MAIN.POSTERSTOP');
 }
+$sql->closeCursor();
 
 $t->assign(array(
 	'FORUMSTATS_TOTALSECTIONS' => $totalsections,

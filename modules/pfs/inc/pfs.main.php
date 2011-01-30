@@ -333,6 +333,7 @@ else
 		$pff_filescount[$pfs_filesinfo['pfs_folderid']] = $pfs_filesinfo['COUNT(*)'];
 		$pff_filessize[$pfs_filesinfo['pfs_folderid']] = $pfs_filesinfo['SUM(pfs_size)'];
 	}
+	$sql_pfs_filesinfo->closeCursor();
 
 	$sql_pfs_folders_all = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid=$userid ORDER BY pff_isgallery ASC, pff_title ASC");
 	$folders_count = $sql_pfs_folders_all->rowCount();
@@ -380,6 +381,7 @@ else
 		$iki++;
 		$subfiles_count_on_page+=$pff_fcount;
 	}
+	$sql_pfs_folders->closeCursor();
 
 }
 
@@ -390,7 +392,7 @@ $th_colorbg = array(hexdec(mb_substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(mb_
 
 $iji=0;
 
-while ($row = $sql_pfs->fetch())
+foreach ($sql_pfs->fetchAll() as $row)
 {
 	$pfs_id = $row['pfs_id'];
 	$pfs_file = $row['pfs_file'];

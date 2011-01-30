@@ -104,7 +104,7 @@ function cot_forums_prunetopics($mode, $section, $param)
 
 	if ($sql1->rowCount() > 0)
 	{
-		while ($row1 = $sql1->fetch())
+		foreach ($sql1->fetchAll() as $row1)
 		{
 			$q = $row1['ft_id'];
 

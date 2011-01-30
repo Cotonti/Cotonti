@@ -96,7 +96,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('trashcan.admin.loop');
 /* ===== */
-while($row = $sql->fetch())
+foreach ($sql->fetchAll() as $row)
 {
 	$ii++;
 	switch($row['tr_type'])

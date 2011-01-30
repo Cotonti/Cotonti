@@ -21,14 +21,16 @@ if ($cfg['plugin']['cleaner']['userprune'] > 0)
 {
 	$timeago = $sys['now_offset'] - ($cfg['plugin']['cleaner']['userprune'] * 86400);
 	$sqltmp1 = $db->query("SELECT user_id FROM $db_users WHERE user_maingrp = '2' AND user_lastlog = '0' AND user_regdate < $timeago");
-	$db->delete($db_users, "user_maingrp = '2' AND user_lastlog = '0' AND user_regdate < $timeago");
-	$deleted = $db->affectedRows;
 
 	while ($row = $sqltmp1->fetch())
 	{
 		$db->delete($db_users, "user_id='".$row['user_id']."'");
 		$db->delete($db_groups_users, "gru_userid='".$row['user_id']."'");
 	}
+	$sqltmp1->closeCursor();
+
+	$db->delete($db_users, "user_maingrp = '2' AND user_lastlog = '0' AND user_regdate < $timeago");
+	$deleted = $db->affectedRows;
 
 	if ($deleted > 0)
 	{

@@ -104,6 +104,7 @@ if ($a == 'send')
 				$touser_ids[] = (int) $row['user_id'];
 				$touser_names[] = htmlspecialchars($row['user_name']);
 			}
+			$sql_pm_users->closeCursor();
 			if ($totalrecipients < $touser_req )
 			{
 				cot_error('pm_wrongname', 'newpmrecipient');
@@ -205,6 +206,7 @@ if (!empty($to))
 			$touser_ids[] = $row['user_id'];
 			$touser_names[] = htmlspecialchars($row['user_name']);
 		}
+		$sql_pm_users->closeCursor();
 		$touser = implode(", ", $touser_names);
 		if ($totalrecipients < $touser_req)
 		{

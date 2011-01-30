@@ -180,7 +180,7 @@ function cot_tag_search_pages($query)
 	/* == Hook : Part 1 == */
 	$extp = cot_getextplugins('tags.search.pages.loop');
 	/* ===== */
-	while ($row = $sql->fetch())
+	foreach ($sql->fetchAll() as $row)
 	{
 		$tags = cot_tag_list($row['page_id']);
 		$tag_list = '';

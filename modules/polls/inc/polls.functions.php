@@ -71,6 +71,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 				$t->assign('EDIT_POLL_OPTION_TEXT', cot_inputbox('text', 'poll_option[id'.$row1['po_id'].']', htmlspecialchars($row1['po_text']), 'size="40" maxlength="128"'));
 				$t->parse($block.".OPTIONS");
 			}
+			$sql1->closeCursor();
 		}
 	}
 
@@ -350,6 +351,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 		));
 		$t->parse($poll_block.".POLLTABLE");
 	}
+	$sql1->closeCursor();
 
 	$t->assign(array(
 		'POLL_VOTERS' => $totalvotes,

@@ -60,6 +60,7 @@ if ($a == 'search')
 		));
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK1');
 	}
+	$sql->closeCursor();
 
 	$sql = $db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask2.%' ");
 	$totalmatches2 = $sql->rowCount();
@@ -72,6 +73,7 @@ if ($a == 'search')
 		));
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK2');
 	}
+	$sql->closeCursor();
 
 	$sql = $db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask3.%.%' ");
 	$totalmatches3 = $sql->rowCount();
@@ -84,6 +86,7 @@ if ($a == 'search')
 		));
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK3');
 	}
+	$sql->closeCursor();
 
 	$t->assign(array(
 		'IPSEARCH_RES_DNS' => $res_dns,

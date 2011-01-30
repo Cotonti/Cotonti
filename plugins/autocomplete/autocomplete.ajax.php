@@ -27,6 +27,7 @@ if (!empty($q))
 	{
 		$res[] = $row['user_name'];
 	}
+	$sql_pm_users->closeCursor();
 	$userlist = implode("\n", $res);
 	cot_sendheaders();
 }

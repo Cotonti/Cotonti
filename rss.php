@@ -121,6 +121,7 @@ if ($c == "topics")
 			$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 			$i++;
 		}
+		$res->closeCursor();
 	}
 }
 elseif ($c == "section")
@@ -142,7 +143,7 @@ elseif ($c == "section")
 		$res = $db->query($sql);
 		$i = 0;
 
-		while ($row = $res->fetch())
+		foreach ($res->fetchAll() as $row)
 		{
 			$post_id = $row['fp_id'];
 			$topic_id = $row['fp_topicid'];
@@ -182,7 +183,7 @@ elseif ($c == "forums")
 	$sql = "SELECT * FROM $db_forum_posts ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
 	$res = $db->query($sql);
 	$i = 0;
-	while ($row = $res->fetch())
+	foreach ($res->fetchAll() as $row)
 	{
 		$post_id = $row['fp_id'];
 		$topic_id = $row['fp_topicid'];
@@ -246,6 +247,7 @@ elseif ($defult_c)
 
 		$i++;
 	}
+	$sql->closeCursor();
 }
 
 $t = new XTemplate(cot_tplfile('rss'));

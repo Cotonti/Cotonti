@@ -254,7 +254,7 @@ $jj = 0;
 $extp = cot_getextplugins('users.loop');
 /* ===== */
 
-while($urr = $sqlusers->fetch())
+foreach ($sqlusers->fetchAll() as $urr)
 {
 	$jj++;
 	$t->assign(array(
@@ -270,7 +270,7 @@ while($urr = $sqlusers->fetch())
 	}
 	/* ===== */
 
-	$t -> parse('MAIN.USERS_ROW');
+	$t->parse('MAIN.USERS_ROW');
 }
 
 /* === Hook === */

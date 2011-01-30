@@ -228,6 +228,7 @@ if (!$cot_groups )
 				'ownerid' => $row['grp_ownerid']
 			);
 		}
+		$sql->closeCursor();
 	}
 	else
 	{
@@ -419,6 +420,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 		if ($row = $sql->fetch())
 		{
+			$sql->closeCursor();
 			$online_count = 1;
 			$sys['online_location'] = $row['online_location'];
 			$sys['online_subloc'] = $row['online_subloc'];
@@ -433,7 +435,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 	}
 	else
 	{
-		$sql = $db->query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."'");
+		$sql = $db->query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."' LIMIT 1");
 		$online_count = $sql->rowCount();
 
 		if ($online_count > 0)
@@ -450,6 +452,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 					$sys['online_hammer'] = $shield_hammer;
 				}
 			}
+			$sql->closeCursor();
 		}
 	}
 }

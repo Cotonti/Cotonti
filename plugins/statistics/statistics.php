@@ -116,6 +116,7 @@ while ($row = $sql->fetch())
 		$t->parse('MAIN.ROW_COUNTRY');
 	}
 }
+$sql->closeCursor();
 
 $t->assign(array(
 	'STATISTICS_PLU_URL' => cot_url('plug', 'e=statistics'),

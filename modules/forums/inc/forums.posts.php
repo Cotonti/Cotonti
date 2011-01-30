@@ -315,7 +315,7 @@ $sql_forums = $db->query("SELECT p.*, u.* $join_columns
 $extp = cot_getextplugins('forums.posts.loop');
 /* ===== */
 $fp_num = 0;
-while ($row = $sql_forums->fetch())
+foreach ($sql_forums->fetchAll() as $row)
 {
 	$row['user_text'] = ($cfg['forums'][$s]['allowusertext']) ? $row['user_text'] : '';
 	$fp_num++;

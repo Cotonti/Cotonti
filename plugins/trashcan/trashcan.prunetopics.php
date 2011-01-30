@@ -30,5 +30,6 @@ if ($cfg['plugin']['trashcan']['trash_forum'])
 		$parenttrashid = cot_trash_put('forumtopic', $L['Topic']." #".$q, $q, $row);
 		cot_trash_put('forumpost', 'Posts topic #'.$q, 0, "fp_topicid=$q", $parenttrashid);
 	}
+	$sql->closeCursor();
 }
 ?>
