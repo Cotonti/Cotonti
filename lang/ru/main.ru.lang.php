@@ -344,28 +344,28 @@ $Ls['Months'] = array('months','month');
 $Ls['Pages'] = array('страница','страницы','страниц');
 $Ls['Seconds'] = array('секунда','секунды','секунд');
 $Ls['Times'] = array('раз','раза','раз');
-$Ls['Weeks'] = array('weeks','week');
-$Ls['Years'] = array('years','year');
+$Ls['Weeks'] = array('неделя','недели', 'недель');
+$Ls['Years'] = array('год','года', 'лет');
 
 /**
  * Date / Time formats
  */
 
-$Ldt['date_full'] = 'Y-m-d';
-$Ldt['date_medium'] = 'Y-m';
-$Ldt['date_short'] = 'm-d';
-$Ldt['date_text'] = 'F d, Y';
-$Ldt['date_fulltext'] = 'l, F d, Y';
+$Ldt['date_full'] = 'd.m.Y';
+$Ldt['date_medium'] = 'm.Y';
+$Ldt['date_short'] = 'd.m';
+$Ldt['date_text'] = 'd F, Y';
+$Ldt['date_fulltext'] = 'l, d F, Y';
 $Ldt['time_full'] = 'H:i:s';
 $Ldt['time_medium'] = 'G:i';
 $Ldt['time_short'] = 'i:s';
 $Ldt['time_text'] = 'g:i A';
 $Ldt['time_fulltext'] = 'g:i:s A';
-$Ldt['datetime_full'] = 'Y-m-d H:i:s';
-$Ldt['datetime_medium'] = 'Y-m-d H:i';
-$Ldt['datetime_short'] = 'm-d H:i';
-$Ldt['datetime_text'] = 'F d, Y H:i';
-$Ldt['datetime_fulltext'] = 'l, F d, Y H:i';
+$Ldt['datetime_full'] = 'd.m.Y H:i:s';
+$Ldt['datetime_medium'] = 'd.m.Y H:i';
+$Ldt['datetime_short'] = 'd.m H:i';
+$Ldt['datetime_text'] = 'd F, Y H:i';
+$Ldt['datetime_fulltext'] = 'l, d F, Y H:i';
 $Ldt['week_full'] = 'o-\WW';
 $Ldt['week_medium'] = '\WW';
 $Ldt['week_short'] = '\WW-N';
@@ -376,49 +376,49 @@ $Ldt['week_fulltext'] = 'o-\WW, l';
  * Days of the week
  */
 
-$L['Monday'] = 'Monday';
-$L['Tuesday'] = 'Tuesday';
-$L['Wednesday'] = 'Wednesday';
-$L['Thursday'] = 'Thursday';
-$L['Friday'] = 'Friday';
-$L['Saturday'] = 'Saturday';
-$L['Sunday'] = 'Sunday';
-$L['Monday_s'] = 'Mon';
-$L['Tuesday_s'] = 'Tue';
-$L['Wednesday_s'] = 'Wed';
-$L['Thursdayv'] = 'Thu';
-$L['Friday_s'] = 'Fri';
-$L['Saturday_s'] = 'Sat';
-$L['Sunday_s'] = 'Sun';
+$L['Monday'] = 'Понедельник';
+$L['Tuesday'] = 'Вторник';
+$L['Wednesday'] = 'Среда';
+$L['Thursday'] = 'Четверг';
+$L['Friday'] = 'Пятница';
+$L['Saturday'] = 'Суббота';
+$L['Sunday'] = 'Воскресенье';
+$L['Monday_s'] = 'пн';
+$L['Tuesday_s'] = 'вт';
+$L['Wednesday_s'] = 'ср';
+$L['Thursdayv'] = 'чт';
+$L['Friday_s'] = 'пт';
+$L['Saturday_s'] = 'сб';
+$L['Sunday_s'] = 'вс';
 
 /**
  * Months
  */
 
-$L['January'] = 'Январь';
-$L['February'] = 'Февраль';
-$L['March'] = 'Март';
-$L['April'] = 'Апрель';
-$L['May'] = 'Май';
-$L['June'] = 'Июнь';
-$L['July'] = 'Июль';
-$L['August'] = 'Август';
-$L['September'] = 'Сентябрь';
-$L['October'] = 'Октябрь';
-$L['November'] = 'Ноябрь';
-$L['December'] = 'Декабрь';
-$L['January_s'] = 'Jan';
-$L['February_s'] = 'Feb';
-$L['March_s'] = 'Mar';
-$L['April_s'] = 'Apr';
-$L['May_s'] = 'May';
-$L['June_s'] = 'Jun';
-$L['July_s'] = 'Jul';
-$L['August_s'] = 'Aug';
-$L['September_s'] = 'Sep';
-$L['October_s'] = 'Oct';
-$L['November_s'] = 'Nov';
-$L['December_s'] = 'Dec';
+$L['January'] = 'января';
+$L['February'] = 'февраля';
+$L['March'] = 'марта';
+$L['April'] = 'апреля';
+$L['May'] = 'мая';
+$L['June'] = 'июня';
+$L['July'] = 'июля';
+$L['August'] = 'августа';
+$L['September'] = 'сентября';
+$L['October'] = 'октября';
+$L['November'] = 'ноября';
+$L['December'] = 'декабря';
+$L['January_s'] = 'янв';
+$L['February_s'] = 'фев';
+$L['March_s'] = 'мар';
+$L['April_s'] = 'апр';
+$L['May_s'] = 'май';
+$L['June_s'] = 'июн';
+$L['July_s'] = 'июл';
+$L['August_s'] = 'авг';
+$L['September_s'] = 'сен';
+$L['October_s'] = 'окт';
+$L['November_s'] = 'ноя';
+$L['December_s'] = 'дек';
 
 /**
  * Gender
