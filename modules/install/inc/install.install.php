@@ -232,7 +232,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 				file_put_contents($file['config'], $config_contents);
 
-				if ($db->insert($db_x . 'users', array(
+				try
+				{
+					$db->insert($db_x . 'users', array(
 						'user_name' => $user['name'],
 						'user_password' => md5($user['pass']),
 						'user_maingrp' => COT_GROUP_SUPERADMINS,
@@ -243,8 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 						'user_lang' => $rlang,
 						'user_regdate' => time(),
 						'user_lastip' => $_SERVER['REMOTE_ADDR']
-					)) == 1)
-				{
+					));
 
 					$user['id'] = $db->lastInsertId();
 
@@ -253,10 +254,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 						'gru_groupid' => COT_GROUP_SUPERADMINS
 					));
 				}
-				else
+				catch (PDOException $err)
 				{
-					$error_info = $db->errorInfo();
-					cot_error(cot_rc('install_error_sql_script', array('msg' => $error_info[2])));
+					cot_error(cot_rc('install_error_sql_script', array('msg' => $err->getMessage())));
 				}
 			}
 
