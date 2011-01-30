@@ -93,6 +93,7 @@ if ($m == 'edit' && $id > 0)
 				{
 					cot_mail($adm['user_email'], $email_title, $email_body);
 				}
+				$sql2->closeCursor();
 			}
 			/* == Hook == */
 			foreach (cot_getextplugins('comments.edit.update.done') as $pl)
@@ -192,6 +193,7 @@ if ($a == 'send' && $usr['auth_write'])
 			{
 				cot_mail($adm['user_email'], $email_title, $email_body);
 			}
+			$sql->closeCursor();
 		}
 
 		/* == Hook == */
@@ -215,6 +217,7 @@ elseif ($a == 'delete' && $usr['isadmin'])
 
 	if ($row = $sql->fetch())
 	{
+		$sql->closeCursor();
 		$sql = $db->delete($db_com, "com_id=$id");
 
 		/* == Hook == */

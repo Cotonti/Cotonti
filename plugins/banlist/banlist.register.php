@@ -25,8 +25,9 @@ $ruser['user_email'] = mb_strtolower($ruser['user_email']);
 $sql = $db->query("SELECT banlist_reason, banlist_email FROM $db_banlist WHERE banlist_email LIKE'%".$ruser['user_email']."%'");
 if ($row = $sql->fetch())
 {
-		cot_error($L['aut_emailbanned'].$bannedreason);
+	cot_error($L['aut_emailbanned'].$bannedreason);
 }
+$sql->closeCursor();
 
 
 ?>

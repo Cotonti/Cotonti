@@ -32,7 +32,7 @@ if ($cfg['polls']['maxpolls'] > 0)
 	/* === Hook - Part1 === */
 	$extp = cot_getextplugins('polls.index.tags');
 	/* ===== */
-	while ($row_p = $sql_polls->fetch())
+	foreach ($sql_polls->fetchAll() as $row_p)
 	{
 		$res++;
 		$poll_form = cot_poll_form($row_p, cot_url('index', ''), 'index');

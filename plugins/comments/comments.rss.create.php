@@ -55,6 +55,7 @@ if ($c == 'comments')
 			$items[$i]['pubDate'] = date('r', $row['com_date']);
 			$i++;
 		}
+		$sql->closeCursor();
 	}
 	else
 	{
@@ -91,6 +92,7 @@ if ($c == 'comments')
 					$items[$i]['pubDate'] = date('r', $row['com_date']);
 					$i++;
 				}
+				$sql->closeCursor();
 				// Attach original page text as last item
 				$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'id='.$row['page_id']) : cot_url('page', 'al='.$row['page_alias']);
 				$items[$i]['title'] = $L['rss_original'];

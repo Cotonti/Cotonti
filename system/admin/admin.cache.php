@@ -70,7 +70,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.cache.loop');
 /* ===== */
-while ($row = $sql->fetch())
+foreach ($sql->fetchAll() as $row)
 {
 	$row['c_value'] = htmlspecialchars($row['c_value']);
 	$row['size'] = mb_strlen($row['c_value']);

@@ -142,7 +142,7 @@ function cot_comments_display($ext_name, $code, $cat = '')
 		$extp = cot_getextplugins('comments.loop');
 		/* ===== */
 
-		while ($row = $sql->fetch())
+		foreach ($sql->fetchAll() as $row)
 		{
 			$i++;
 

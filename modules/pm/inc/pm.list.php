@@ -132,7 +132,7 @@ $jj = 0;
 $extp = cot_getextplugins('pm.list.loop');
 /* ===== */
 
-while ($row = $pm_sql->fetch())
+foreach ($pm_sql->fetchAll() as $row)
 {
 	$jj++;
 	$row['pm_icon_readstatus'] = ($row['pm_tostate'] == '0') ?

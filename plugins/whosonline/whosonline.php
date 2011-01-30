@@ -20,18 +20,6 @@ Hooks=standalone
 require_once cot_incfile('users', 'module');
 require_once cot_incfile('hits', 'plug');
 
-$sql_users = $db->query("
-	SELECT DISTINCT u.*, o.*
-	FROM $db_online AS o
-	INNER JOIN $db_users AS u ON u.user_id=o.online_userid
-	ORDER BY online_lastseen DESC
-");
-$sql_guests = $db->query("
-	SELECT online_ip, online_lastseen, online_location, online_subloc
-	FROM $db_online
-	WHERE online_userid = -1
-	ORDER BY online_lastseen DESC
-");
 $sql_stats = $db->query("
 	SELECT stat_value
 	FROM $db_stats
@@ -50,6 +38,12 @@ if(cot_plugin_active('hiddengroups'))
 }
 $ipsearch = cot_plugin_active('ipsearch');
 
+$sql_users = $db->query("
+	SELECT DISTINCT u.*, o.*
+	FROM $db_online AS o
+	INNER JOIN $db_users AS u ON u.user_id=o.online_userid
+	ORDER BY online_lastseen DESC
+");
 while ($row = $sql_users->fetch())
 {
 	if($hiddenusers && in_array($row['user_id'], $hiddenusers))
@@ -73,7 +67,14 @@ while ($row = $sql_users->fetch())
 	$t->assign(cot_generate_usertags($row, 'USER_'));
 	$t->parse('MAIN.USERS');
 }
+$sql_users->closeCursor();
 
+$sql_guests = $db->query("
+	SELECT online_ip, online_lastseen, online_location, online_subloc
+	FROM $db_online
+	WHERE online_userid = -1
+	ORDER BY online_lastseen DESC
+");
 while ($row = $sql_guests->fetch())
 {
 	$count_guests++;
@@ -88,6 +89,7 @@ while ($row = $sql_guests->fetch())
 	));
 	$t->parse('MAIN.GUESTS');
 }
+$sql_guests->closeCursor();
 
 $t->assign(array(
 	'STAT_MAXUSERS' => $maxusers,

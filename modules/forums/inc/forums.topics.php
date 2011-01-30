@@ -174,6 +174,7 @@ if ($cfg['forums'][$s]['allowviewers'])
 			$v++;
 		}
 	}
+	$sql_forums_view->closeCursor();
 	$fs_viewers = $v;
 	
 	$t->assign(array(
@@ -200,7 +201,7 @@ if (count($arraychilds) > 0)
 				WHERE fs_cat IN (\"".implode('", "', $all)."\") ORDER BY fs_lt_date DESC LIMIT 1")->fetch();
 		$stat = $db->query("SELECT SUM(fs_topiccount) AS topiccount, SUM(fs_postcount) AS postcount, SUM(fs_viewcount) AS viewcount
 				FROM $db_forum_stats
-				WHERE fs_cat IN (\"".implode('", "', $all)."\") ORDER BY fs_lt_date DESC")->fetch();	
+				WHERE fs_cat IN (\"".implode('", "', $all)."\") ORDER BY fs_lt_date DESC LIMIT 1")->fetch();
 		$last = (is_array($last) && is_array($stat)) ? $stat + $last : '';
 
 		$t->assign(cot_generate_sectiontags($cat, 'FORUMS_SECTIONS_ROW_', $last));
@@ -245,7 +246,7 @@ $extp = cot_getextplugins('forums.topics.loop');
 /* ===== */
 
 $ft_num = 0;
-while ($row = $sql_forums->fetch())
+foreach ($sql_forums->fetchAll() as $row)
 {
 	$row['ft_icon'] = 'posts';
 	$row['ft_postisnew'] = FALSE;

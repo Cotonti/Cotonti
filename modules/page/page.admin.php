@@ -356,7 +356,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.admin.loop');
 /* ===== */
-while ($row = $sql_page->fetch())
+foreach ($sql_page->fetchAll() as $row)
 {
 	if ($row['page_type'] == 0)
 	{

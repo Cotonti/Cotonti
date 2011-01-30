@@ -49,6 +49,7 @@ while ($row = $sql_forums->fetch())
 	));
 	$t->parse('MAIN.ADMIN_FORUMS_ROW_USER');
 }
+$sql_forums->closeCursor();
 
 $t->assign(array(
 	'ADMIN_FORUMS_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=module&p=forums'),

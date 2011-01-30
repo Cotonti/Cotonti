@@ -22,5 +22,6 @@ while ($row = $sql->fetch())
 {
 	$cot_groups[$row['grp_id']]['hidden'] = $row['grp_hidden'];
 }
+$sql->closeCursor();
 
 ?>

@@ -417,6 +417,7 @@ switch($a)
 			));
 			$t->parse('MAIN.HOOKS.HOOKS_ROW');
 		}
+		$sql->closeCursor();
 
 		$t->assign(array(
 			'ADMIN_EXTENSIONS_CNT_HOOK' => $sql->rowCount()

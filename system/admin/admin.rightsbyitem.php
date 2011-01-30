@@ -111,6 +111,7 @@ while ($row = $sql->fetch())
 	$title = htmlspecialchars($row['grp_title']);
 	cot_rights_parseline($row, $title, $link);
 }
+$sql->closeCursor();
 
 $is_adminwarnings = isset($adminwarnings);
 $adv_for_url = ($advanced) ? '&advanced=1' : '';

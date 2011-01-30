@@ -134,7 +134,7 @@ else
 	/* === Hook - Part1 === */
 	$extp = cot_getextplugins('polls.viewall.tags');
 	/* ===== */
-	while ($row = $sql->fetch())
+	foreach ($sql->fetchAll() as $row)
 	{
 		$jj++;
 		$t->assign(array(

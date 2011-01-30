@@ -35,6 +35,7 @@ if (!$cfg['plugin']['hits']['disablehitstats'])
 		$dat = @date('d D', mktime(0, 0, 0, $mons, $day, $year));
 		$hits_d[$dat] = $row['stat_value'];
 	}
+	$sql->closeCursor();
 
 	if (is_array($hits_d))
 	{
@@ -113,11 +114,12 @@ if (!$cfg['plugin']['hits']['disabledbstats'])
 {
 	$sql = $db->query("SHOW TABLES");
 
-	while ($row = $sql->fetch(PDO::FETCH_NUM))
+	foreach ($sql->fetchAll(PDO::FETCH_NUM) as $row)
 	{
 		$table_name = $row[0];
 		$status = $db->query("SHOW TABLE STATUS LIKE '$table_name'");
 		$status1 = $status->fetch();
+		$status->closeCursor();
 		$tables[] = $status1;
 	}
 

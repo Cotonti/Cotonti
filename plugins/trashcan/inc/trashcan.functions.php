@@ -51,6 +51,7 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 			$trash['tr_datas'] = serialize($row_s);
 			$sql = $db->insert($db_trash, $trash);
 		}
+		$sql_s->closeCursor();
 	}
 
 	$id = ($i) ? $db->lastInsertId() : false;
@@ -113,6 +114,7 @@ function cot_trash_restore($id)
 				{
 					cot_trash_restore($row2['tr_id']);
 				}
+				$sql2->closeCursor();
 			}
 		}
 		return $sql;
@@ -139,6 +141,7 @@ function cot_trash_delete($id)
 		{
 			cot_trash_delete($row2['tr_id']);
 		}
+		$sql2->closeCursor();
 	}
 	return true;
 }

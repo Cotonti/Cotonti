@@ -157,9 +157,11 @@ function cot_pfs_deletefolder($userid, $folderid)
 		{
 			cot_pfs_deletefile($row['pfs_id']);
 		}
+		$sql->closeCursor();
 
 		// Remove folders
 		$sql = $db->query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%' ORDER BY CHAR_LENGTH(pff_path) DESC");
+		$count = $sql->rowCount();
 		while($row = $sql->fetch())
 		{
 			if($cfg['pfs']['pfsuserfolder'])
@@ -167,9 +169,10 @@ function cot_pfs_deletefolder($userid, $folderid)
 				@rmdir($cfg['pfs_dir'].$row['pff_path']);
 				@rmdir($cfg['pfs_thumbpath'].$row['pff_path']);
 			}
-			$sql = $db->delete($db_pfs_folders, "pff_id='".(int)$row['pff_id']."'");
+			$db->delete($db_pfs_folders, "pff_id='".(int)$row['pff_id']."'");
 		}
-		if($sql->rowCount()>0)
+		$sql->closeCursor();
+		if($count > 0)
 		{
 			return TRUE;
 		}
@@ -216,10 +219,9 @@ function cot_pfs_deleteall($userid)
 			}
 		}
 	}
-	$sql = $db->delete($db_pfs_folders, "pff_userid='".(int)$userid."'");
-	$num = $num + $db->affectedRows;
-	$sql = $db->delete($db_pfs, "pfs_userid='".(int)$userid."'");
-	$num = $num + $db->affectedRows;
+	$sql->closeCursor();
+	$num += $db->delete($db_pfs_folders, "pff_userid='".(int)$userid."'");
+	$num += $db->delete($db_pfs, "pfs_userid='".(int)$userid."'");
 
 	if ($cfg['pfs']['pfsuserfolder'] && $userid>0)
 	{
@@ -296,7 +298,7 @@ function cot_pfs_limits($userid)
 	$maxfile = 0;
 	$maxtotal = 0;
 	$sql = $db->query("SELECT MAX(grp_pfs_maxfile) AS maxfile, MAX(grp_pfs_maxtotal) AS maxtotal
-	FROM $db_groups	WHERE grp_id IN (SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=".(int)$userid.")");
+	FROM $db_groups	WHERE grp_id IN (SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=".(int)$userid.") LIMIT 1");
 	if ($row = $sql->fetch())
 	{
 		$maxfile = min($row['maxfile'], cot_get_uploadmax());
@@ -595,6 +597,7 @@ function cot_selectbox_folders($user, $skip, $check, $name = 'folderid')
 			$result_arr[$row['pff_id']] = htmlspecialchars($row['pff_title']);
 		}
 	}
+	$sql->closeCursor();
 
 	$result = cot_selectbox($check, $name, array_keys($result_arr), array_values($result_arr), false);
 

@@ -100,7 +100,7 @@ if (count($cats) > 0)
 		$news = new XTemplate(cot_tplfile(($catn == 0) ? "news" : "news." . $v[0], 'plug'));
 
 		$jj = 0;
-		while ($pag = $sql->fetch())
+		foreach ($sql->fetchAll() as $pag)
 		{
 			$jj++;
 			$news->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $v[2]));

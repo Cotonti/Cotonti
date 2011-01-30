@@ -66,6 +66,7 @@ function cot_hiddengroups_get($mode, $type='groups')
 		{
 			$hiddenusers[] = (int)$row['user_id'];
 		}
+		$sql->closeCursor();
 		$cache && $cache->db->store('cot_hiddenusers', $hiddenusers, 'system');
 		return $hiddenusers;
 	}

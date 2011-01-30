@@ -40,7 +40,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.pfs.allpfs.loop');
 /* ===== */
-while($row = $sql_pfs->fetch())
+foreach ($sql_pfs->fetchAll() as $row)
 {
 	$row['user_name'] = ($row['user_id'] == 0) ? $L['SFS'] : $row['user_name'];
 	$row['user_id'] = ($row['user_id'] == 0) ? '0' : $row['user_id'];

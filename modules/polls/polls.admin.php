@@ -114,7 +114,7 @@ $ii = 0;
 $extp = cot_getextplugins('polls.admin.loop');
 /* ===== */
 
-while($row = $sql_polls->fetch())
+foreach ($sql_polls->fetchAll() as $row)
 {
 	$ii++;
 	$id = $row['poll_id'];

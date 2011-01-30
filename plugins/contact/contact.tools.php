@@ -83,6 +83,7 @@ while ($row = $sql->fetch())
     ));
     $tuman->parse('MAIN.DATA');
 }
+$sql->closeCursor();
 
 if(($a == '') && !empty($id))
 {

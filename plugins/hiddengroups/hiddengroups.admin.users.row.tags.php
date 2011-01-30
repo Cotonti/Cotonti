@@ -22,5 +22,6 @@ if($res = $sql2->fetch())
 {
 	$t->assign('ADMIN_USERS_ROW_GRP_HIDDEN', $cot_yesno[$res['grp_hidden']]);
 }
+$sql2->closeCursor();
 
 ?>

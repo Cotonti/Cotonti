@@ -48,6 +48,7 @@ if($f == 'year' || $f == 'month')
         $dat = @date($cfg['formatyearmonthday'], mktime(0, 0, 0, $m, $d, $y));
         $hits_d[$dat] = $row['stat_value'];
     }
+	$sql->closeCursor();
 
     $hits_d_max = max($hits_d);
     $ii = 0;
@@ -79,11 +80,16 @@ if($f == 'year' || $f == 'month')
 }
 else
 {
-    $sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC");
-    $sqlmax = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
-	if ($sql->rowCount() > 0 && $sqlmax->rowCount() > 0)
+	$sqlmax = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
+	if ($sqlmax->rowCount() > 0)
 	{
 		$rowmax = $sqlmax->fetch();
+		$sqlmax->closeCursor();
+	}
+    $sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC");
+    
+	if ($sql->rowCount() > 0 && $rowmax)
+	{
 		$max_date = $rowmax['stat_name'];
 		$max_hits = $rowmax['stat_value'];
 
@@ -101,6 +107,7 @@ else
 			$hits_m[$y . '-' . $m] += $row['stat_value'];
 			$hits_y[$y] += $row['stat_value'];
 		}
+		$sql->closeCursor();
 
 		$hits_w_max = max($hits_w);
 		$hits_m_max = max($hits_m);

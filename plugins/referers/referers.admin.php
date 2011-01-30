@@ -56,6 +56,7 @@ if($sql->rowCount() > 0)
 		$host = preg_replace('#^www\.#i', '', $a[1]);
 		$referers[$host][$row['ref_url']] = $row['ref_count'];
 	}
+	$sql->closeCursor();
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */

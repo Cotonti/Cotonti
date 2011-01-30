@@ -160,6 +160,7 @@ if(!isset($showdefault) || $showdefault == true)
 	{
 		$members[$row['gru_groupid']] = $row['COUNT(*)'];
 	}
+	$sql->closeCursor();
 
 	$sql = $db->query("SELECT grp_id, grp_title, grp_disabled FROM $db_groups WHERE 1 ORDER BY grp_level DESC, grp_id DESC");
 
@@ -168,7 +169,7 @@ if(!isset($showdefault) || $showdefault == true)
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('admin.users.row.tags');
 		/* ===== */
-		while($row = $sql->fetch())
+		foreach ($sql->fetchAll() as $row)
 		{
 			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
 			$t->assign(array(

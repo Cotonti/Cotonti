@@ -141,6 +141,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		));
 		$recentitems->parse('MAIN.TOPICS_ROW');
 	}
+	$sql->closeCursor();
 
 	if ($d == 0 && $ft_num == 0)
 	{
@@ -182,7 +183,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	/* === Hook - Part1 === */
 	$extp = cot_getextplugins('recentitems.recentpages.tags');
 	/* ===== */
-	while ($pag = $sql->fetch())
+	foreach ($sql->fetchAll() as $pag)
 	{
 		$jj++;
 		$catpath = cot_structure_buildpath('page', $pag['page_cat']);

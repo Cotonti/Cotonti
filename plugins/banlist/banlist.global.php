@@ -27,6 +27,7 @@ $sql = $db->query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire
 if ($sql->rowCount() > 0)
 {
 	$row = $sql->fetch();
+	$sql->closeCursor();
 	if ($sys['now'] > $row['banlist_expire'] && $row['banlist_expire'] > 0)
 	{
 		$sql = $db->delete($db_banlist, "banlist_id='".$row['banlist_id']."' LIMIT 1");

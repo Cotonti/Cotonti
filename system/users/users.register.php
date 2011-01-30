@@ -158,7 +158,7 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 	/* ===== */
 
 	cot_shield_protect();
-	$sql = $db->query("SELECT user_id, user_maingrp, user_sid FROM $db_users WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') ");
+	$sql = $db->query("SELECT user_id, user_maingrp, user_sid FROM $db_users WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') LIMIT 1");
 
 	if ($row = $sql->fetch())
 	{

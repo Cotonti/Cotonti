@@ -341,6 +341,7 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 			return false; // No adding - fields already exist
 		$i++;
 	}
+	$fieldsres->closeCursor();
 
 	$extf['field_location'] = $location;
 	$extf['field_name'] = $name;
@@ -412,8 +413,10 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 		return false;
 	}
 	$field = $fieldsres->fetch();
+	$fieldsres->closeCursor();
 	$fieldsres = $db->query("SHOW COLUMNS FROM $location");
 	$fieldrow = $fieldsres->fetch();
+	$fieldsres->closeCursor();
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
 	$alter = false;
@@ -489,6 +492,7 @@ function cot_extrafield_remove($location, $name)
 	}
 	$fieldsres = $db->query("SHOW COLUMNS FROM $location");
 	$fieldrow = $fieldsres->fetch();
+	$fieldsres->closeCursor();
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
 	$step1 = $db->delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;

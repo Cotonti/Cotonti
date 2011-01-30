@@ -67,6 +67,7 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 
 	if ($row = $sql->fetch())
 	{
+		$sql->closeCursor();
 		$rmdpass  = $row['user_password'];
 		$rusername = $row['user_name'];
 		$ruserid = $row['user_id'];
