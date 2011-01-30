@@ -2432,13 +2432,17 @@ function cot_tplfile($base, $type = 'module')
  * Localized version of PHP date()
  *
  * @see http://php.net/manual/en/function.date.php
- * @param string $format Date/time format, see PHP date function
+ * @param string $format Date/time format as defined in $Ldt or according to PHP date() format
  * @param int $timestamp Unix timestamp
  * @return string
  */
 function cot_date($format, $timestamp = null)
 {
-	global $L;
+	global $L, $Ldt;
+	if ($Ldt[$format])
+	{
+		$format = $Ldt[$format];
+	}
 	$search = array(
 		'Monday', 'Tuesday', 'Wednesday', 'Thursday',
 		'Friday', 'Saturday', 'Sunday',
