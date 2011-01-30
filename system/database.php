@@ -64,6 +64,7 @@ class CotDB extends PDO {
 			$options[PDO::MYSQL_ATTR_INIT_COMMAND] = $collation_query;
 		}
 		parent::__construct($dsn, $username, $passwd, $options);
+		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 
 	/**
@@ -103,6 +104,30 @@ class CotDB extends PDO {
 			$type = is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR;
 			$is_numeric ? $statement->bindValue($key + 1, $val, $type) : $statement->bindValue($key, $val, $type);
 		}
+	}
+
+	/**
+	 * Parses PDO exception message and returns its components and status
+	 *
+	 * @param PDOException $e PDO Exception
+	 * @param string $err_code Output error code parameter
+	 * @param string $err_message Output error message parameter
+	 * @return bool TRUE for error cases, FALSE for notifications and warnings
+	 */
+	private function _parseError(PDOException $e, &$err_code, &$err_message)
+	{
+		$pdo_message = $e->getMessage();
+		if (preg_match('#SQLSTATE\[(\w+)\].*?: (.*)#', $pdo_message, $matches))
+		{
+            $err_code = $matches[1];
+            $err_message = $matches[2];
+        }
+		else
+		{
+			$err_code = $e->getCode();
+			$err_message = $pdo_message;
+		}
+		return $err_code > '02';
 	}
 
 	/**
@@ -160,20 +185,25 @@ class CotDB extends PDO {
 	{
 		$query = empty($condition) ? "DELETE FROM `$table_name`" : "DELETE FROM `$table_name` WHERE $condition";
 		$this->_startTimer();
-		if (count($parameters) > 0)
+		try
 		{
-			$stmt = $this->prepare($query);
-			$this->_bindParams($stmt, $parameters);
-			$res = $stmt->execute();
-			$res === false ? cot_diefatal('SQL error: '.$this->error) : $res = $stmt->rowCount();
-		}
-		else
-		{
-			$res = $this->exec($query);
-			if ($res === false)
+			if (count($parameters) > 0)
 			{
-				$error_info = $this->errorInfo();
-				cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
+				$stmt = $this->prepare($query);
+				$this->_bindParams($stmt, $parameters);
+				$res = $stmt->execute();
+				$res = $stmt->rowCount();
+			}
+			else
+			{
+				$res = $this->exec($query);
+			}
+		}
+		catch (PDOException $err)
+		{
+			if ($this->_parseError($err, $err_code, $err_message))
+			{
+				cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
 			}
 		}
 		$this->_stopTimer($query);
@@ -256,11 +286,16 @@ class CotDB extends PDO {
 		{
 			$query = "INSERT INTO `$table_name` ($keys) VALUES $vals";
 			$this->_startTimer();
-			$res = $this->exec($query);
-			if ($res === false)
+			try
 			{
-				$error_info = $this->errorInfo();
-				cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
+				$res = $this->exec($query);
+			}
+			catch (PDOException $err)
+			{
+				if ($this->_parseError($err, $err_code, $err_message))
+				{
+					cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
+				}
 			}
 			$this->_stopTimer($query);
 			return $res;
@@ -324,31 +359,23 @@ class CotDB extends PDO {
 	public function query($query, $parameters = array())
 	{
 		$this->_startTimer();
-		if (count($parameters) > 0)
+		try
 		{
-			$result = parent::prepare($query);
-			if (!$result)
+			if (count($parameters) > 0)
 			{
-				cot_diefatal('SQL error, could not prepare statement: ' . $query);
+				$result = parent::prepare($query);
+				$this->_bindParams($result, $parameters);
 			}
-			$this->_bindParams($result, $parameters);
-			if ($result->execute() === false)
+			else
 			{
-				$error_info = $result->errorInfo();
-				cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
+				$result = parent::query($query);
 			}
 		}
-		else
+		catch (PDOException $err)
 		{
-			$result = parent::query($query);
-			if ($result === false)
+			if ($this->_parseError($err, $err_code, $err_message))
 			{
-				cot_diefatal('SQL error: ' . $this->error);
-			}
-			elseif ($result->errorCode() > '02')
-			{
-				$error_info = $result->errorInfo();
-				cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
+				cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
 			}
 		}
 		$this->_stopTimer($query);
@@ -411,28 +438,25 @@ class CotDB extends PDO {
 			$upd = mb_substr($upd, 0, -1);
 			$query = "UPDATE `$table_name` SET $upd $condition";
 			$this->_startTimer();
-			if (count($parameters) > 0)
+			try
 			{
-				$stmt = $this->prepare($query);
-				$this->_bindParams($stmt, $parameters);
-				$res = $stmt->execute();
-				if ($res === false)
+				if (count($parameters) > 0)
 				{
-					$error_info = $stmt->errorInfo();
-					cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
+					$stmt = $this->prepare($query);
+					$this->_bindParams($stmt, $parameters);
+					$res = $stmt->execute();
+					$res = $stmt->rowCount();
 				}
 				else
 				{
-					$res = $stmt->rowCount();
+					$res = $this->exec($query);
 				}
 			}
-			else
+			catch (PDOException $err)
 			{
-				$res = $this->exec($query);
-				if ($res === false)
+				if ($this->_parseError($err, $err_code, $err_message))
 				{
-					$error_info = $this->errorInfo();
-					cot_diefatal('SQL error ' . $error_info[0] . ': ' . $error_info[2]);
+					cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
 				}
 			}
 			$this->_stopTimer($query);

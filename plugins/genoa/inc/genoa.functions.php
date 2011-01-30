@@ -1479,7 +1479,8 @@ function sed_sql_errno()
 {
 	global $db;
 
-	return $db->errno;
+	$error_info = $db->errorInfo();
+	return $error_info[1];
 }
 
 /**
