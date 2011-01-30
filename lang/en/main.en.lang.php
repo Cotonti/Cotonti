@@ -348,6 +348,31 @@ $Ls['Weeks'] = array('weeks','week');
 $Ls['Years'] = array('years','year');
 
 /**
+ * Date / Time formats
+ */
+
+$Ldt['date_full'] = 'Y-m-d';
+$Ldt['date_medium'] = 'Y-m';
+$Ldt['date_short'] = 'm-d';
+$Ldt['date_text'] = 'F d, Y';
+$Ldt['date_fulltext'] = 'l, F d, Y';
+$Ldt['time_full'] = 'H:i:s';
+$Ldt['time_medium'] = 'G:i';
+$Ldt['time_short'] = 'i:s';
+$Ldt['time_text'] = 'g:i A';
+$Ldt['time_fulltext'] = 'g:i:s A';
+$Ldt['datetime_full'] = 'Y-m-d H:i:s';
+$Ldt['datetime_medium'] = 'Y-m-d H:i';
+$Ldt['datetime_short'] = 'm-d H:i';
+$Ldt['datetime_text'] = 'F d, Y H:i';
+$Ldt['datetime_fulltext'] = 'l, F d, Y H:i';
+$Ldt['week_full'] = 'o-\WW';
+$Ldt['week_medium'] = '\WW';
+$Ldt['week_short'] = '\WW-N';
+$Ldt['week_text'] = '\WW, l';
+$Ldt['week_fulltext'] = 'o-\WW, l';
+
+/**
  * Days of the week
  */
 
