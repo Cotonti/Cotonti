@@ -26,19 +26,32 @@ defined('COT_CODE') or die('Wrong URL');
  */
 class CotDB extends PDO {
 	/**
-	 * @var int Number of rows affected by the most recent query
+	 * Number of rows affected by the most recent query
+	 * @var int
 	 */
 	private $_affected_rows = 0;
+
 	/**
-	 * @var int Total query count
+	 * Total query count
+	 * @var int
 	 */
 	private $_count = 0;
+
 	/**
-	 * @var int Total query execution time
+	 * Prepare statements by itself. Used with MySQL client API versions prior to 5.1
+	 * @var bool
+	 */
+	private $_prepare_itself = false;
+
+	/**
+	 * Total query execution time
+	 * @var int
 	 */
 	private $_tcount = 0;
+
 	/**
-	 * @var string Timer start microtime
+	 * Timer start microtime
+	 * @var string
 	 */
 	private $_xtime = 0;
 
@@ -65,6 +78,11 @@ class CotDB extends PDO {
 		}
 		parent::__construct($dsn, $username, $passwd, $options);
 		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+		if (version_compare($this->getAttribute(PDO::ATTR_CLIENT_VERSION), '5.1.0', '<'))
+		{
+			$this->_prepare_itself = true;
+		}
 	}
 
 	/**
@@ -131,6 +149,27 @@ class CotDB extends PDO {
 	}
 
 	/**
+	 * Prepares a parametrized query on client side
+	 * 
+	 * @param string $query Query being prepared
+	 * @param array $parameters Associative or numeric array of parameters
+	 * @return string Array with placeholders substituted
+	 */
+	private function _prepare($query, $parameters = array())
+	{
+		if (count($parameters) > 0)
+		{
+			foreach ($parameters as $key => $val)
+			{
+				$placeholder = is_int($key) ? '?' : ':' . $key;
+				$value = is_int($val) ? $val : $this->quote($val);
+				$query = preg_replace('`' . preg_quote($placeholder) . '`', $value, $query, 1);
+			}
+		}
+		return $query;
+	}
+
+	/**
 	 * Starts query execution timer
 	 */
 	private function _startTimer()
@@ -189,10 +228,17 @@ class CotDB extends PDO {
 		{
 			if (count($parameters) > 0)
 			{
-				$stmt = $this->prepare($query);
-				$this->_bindParams($stmt, $parameters);
-				$res = $stmt->execute();
-				$res = $stmt->rowCount();
+				if ($this->_prepare_itself)
+				{
+					$res = $this->exec($this->_prepare($query, $parameters));
+				}
+				else
+				{
+					$stmt = $this->prepare($query);
+					$this->_bindParams($stmt, $parameters);
+					$stmt->execute();
+					$res = $stmt->rowCount();
+				}
 			}
 			else
 			{
@@ -363,8 +409,16 @@ class CotDB extends PDO {
 		{
 			if (count($parameters) > 0)
 			{
-				$result = parent::prepare($query);
-				$this->_bindParams($result, $parameters);
+				if ($this->_prepare_itself)
+				{
+					$result = parent::query($this->_prepare($query, $parameters));
+				}
+				else
+				{
+					$result = parent::prepare($query);
+					$this->_bindParams($result, $parameters);
+					$result->execute();
+				}
 			}
 			else
 			{
@@ -442,10 +496,17 @@ class CotDB extends PDO {
 			{
 				if (count($parameters) > 0)
 				{
-					$stmt = $this->prepare($query);
-					$this->_bindParams($stmt, $parameters);
-					$res = $stmt->execute();
-					$res = $stmt->rowCount();
+					if ($this->_prepare_itself)
+					{
+						$res = $this->exec($this->_prepare($query, $parameters));
+					}
+					else
+					{
+						$stmt = $this->prepare($query);
+						$this->_bindParams($stmt, $parameters);
+						$stmt->execute();
+						$res = $stmt->rowCount();
+					}
 				}
 				else
 				{
