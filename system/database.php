@@ -461,6 +461,11 @@ class CotDB extends PDO {
 			return 0;
 		}
 		$upd = '';
+		if ($this->_prepare_itself && !empty($condition) && count($parameters) > 0)
+		{
+			$condition = $this->_prepare($condition, $parameters);
+			$parameters = array();
+		}
 		$condition = empty($condition) ? '' : 'WHERE '.$condition;
 		foreach ($data as $key => $val)
 		{
@@ -496,17 +501,10 @@ class CotDB extends PDO {
 			{
 				if (count($parameters) > 0)
 				{
-					if ($this->_prepare_itself)
-					{
-						$res = $this->exec($this->_prepare($query, $parameters));
-					}
-					else
-					{
-						$stmt = $this->prepare($query);
-						$this->_bindParams($stmt, $parameters);
-						$stmt->execute();
-						$res = $stmt->rowCount();
-					}
+					$stmt = $this->prepare($query);
+					$this->_bindParams($stmt, $parameters);
+					$stmt->execute();
+					$res = $stmt->rowCount();
 				}
 				else
 				{
