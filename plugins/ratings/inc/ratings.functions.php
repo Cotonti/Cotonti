@@ -201,4 +201,18 @@ function cot_ratings_enabled($ext_name, $cat = '', $item = '')
 	}
 }
 
+/**
+ * Removes ratings associated with an item
+ *
+ * @param string $area Item area code
+ * @param string $code Item identifier
+ */
+function cot_ratings_remove($area, $code)
+{
+	global $db, $db_ratings, $db_rated;
+
+	$db->delete($db_rated, 'rated_area = ? AND rated_code = ?', array($area, $code));
+	$db->delete($db_ratings, 'rating_area = ? AND rating_code = ?', array($area, $code));
+}
+
 ?>
