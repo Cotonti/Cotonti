@@ -143,7 +143,7 @@ function cot_tag_search_pages($query)
 		return;
 	}
 
-	$totalitems = $db->query("SELECT COUNT(*)
+	$totalitems = $db->query("SELECT DISTINCT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
 		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0")->fetchColumn();
@@ -169,7 +169,7 @@ function cot_tag_search_pages($query)
 	}
 	/* ===== */
 
-	$sql = $db->query("SELECT p.page_id, p.page_alias, p.page_title, p.page_cat $join_columns
+	$sql = $db->query("SELECT DISTINCT p.page_id, p.page_alias, p.page_title, p.page_cat $join_columns
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id $join_tables
 		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0 $join_where
@@ -240,7 +240,7 @@ function cot_tag_search_forums($query)
 		return;
 	}
 
-	$totalitems = $db->query("SELECT COUNT(*)
+	$totalitems = $db->query("SELECT DISTINCT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
 		WHERE r.tag_area = 'forums' AND ($query)")->fetchColumn();
@@ -258,7 +258,7 @@ function cot_tag_search_forums($query)
 		default:
 			$order = '';
 	}
-	$sql = $db->query("SELECT t.ft_id, t.ft_cat, t.ft_title
+	$sql = $db->query("SELECT DISTINCT t.ft_id, t.ft_cat, t.ft_title
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
 		WHERE r.tag_area = 'forums' AND ($query) AND t.ft_id IS NOT NULL
