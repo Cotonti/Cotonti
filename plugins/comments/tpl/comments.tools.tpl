@@ -1,5 +1,5 @@
 <!-- BEGIN: MAIN -->
-		<h2>{PHP.L.ñomments_comments}</h2>
+		<h2>{PHP.L.comments_comments}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 			<ul class="follow">
 				<li><a title="{PHP.L.Configuration}" href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration}</a></li>
@@ -11,7 +11,7 @@
 					<td class="coltop width10">{PHP.L.Code}</td>
 					<td class="coltop width15">{PHP.L.Author}</td>
 					<td class="coltop width15">{PHP.L.Date}</td>
-					<td class="coltop width35">{PHP.L.ñomments_comment}</td>
+					<td class="coltop width35">{PHP.L.comments_comment}</td>
 					<td class="coltop width20">{PHP.L.Action}</td>
 				</tr>
 <!-- BEGIN: ADMIN_COMMENTS_ROW -->

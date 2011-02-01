@@ -14,6 +14,7 @@ defined('COT_CODE') or die('Wrong URL.');
 /**
  * Plugin Config
  */
+
 $L['cfg_enable_comments'] = array('Enable comments');
 $L['cfg_mail'] = array('Notify about new comments by email');
 $L['cfg_markitup'] = array('Use markitup');
@@ -33,8 +34,8 @@ $L['info_desc'] = 'Comments system for Cotonti with API and integration with pag
  * Plugin Body
  */
 
-$L['Comment'] = 'Comment';
-$L['Comments'] = 'Comments';
+$L['comments_comment'] = 'Comment';
+$L['comments_comments'] = 'Comments';
 $L['Newcomment'] = 'New comment';
 
 $L['comm_on_page'] = 'on page';
