@@ -25,10 +25,10 @@ require_once $cfg['system_dir'] . '/functions.php';
 require_once $cfg['system_dir'] . '/common.php';
 require_once $cfg['system_dir'] . '/cotemplate.php';
 
-require_once cot_incfile('users', 'module');
-
 require_once cot_incfile('extrafields');
 require_once cot_incfile('uploads');
+
+require_once cot_incfile('users', 'module');
 
 if (!in_array($m, array('auth', 'details', 'edit', 'logout', 'passrecover', 'profile', 'register')))
 {

@@ -557,8 +557,8 @@ function cot_extrafield_movefiles()
  */
 function cot_load_extrafields()
 {
-	global $db, $cot_dbc, $cot_extrafields, $db_extra_fields, $cache;
-	if (!$cot_extrafields && $db)
+	global $db, $cot_extrafields, $db_extra_fields, $cache;
+	if (!isset($cot_extrafields))
 	{
 		$cot_extrafields = array();
 		$fieldsres = $db->query("SELECT * FROM $db_extra_fields WHERE 1");
