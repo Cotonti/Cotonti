@@ -1350,54 +1350,73 @@ function cot_build_stars($level)
  *
  * @param int $t1 Timestamp 1 (oldest)
  * @param int $t2 Timestamp 2 (latest)
+ * @param int $levels Number of concatenated units to return
  * @return string
  */
-function cot_build_timegap($t1, $t2 = null)
+function cot_build_timegap($t1, $t2 = null, $levels = 1)
 {
 	global $Ls, $sys;
 
 	if ($t2 === null) $t2 = $sys['now_offset'];
 
 	$gap = $t2 - $t1;
+	$result = '';
 
-	if ($gap <= 0 || $gap > 94608000)
+	if ($gap >= 31536000)
 	{
-		return '';
+		$num = floor($gap / 31536000);
+		$gap -= $num * 31536000;
+		$result .= cot_declension($num, $Ls['Years']).' ';
+		$levels--; if (!$levels) return trim($result);
 	}
-	elseif ($gap < 60)
+	if ($gap >= 2592000)
 	{
-		return cot_declension($gap, $Ls['Seconds']);
+		$num = floor($gap / 2592000);
+		$gap -= $num * 2592000;
+		$result .= cot_declension($num, $Ls['Months']).' ';
+		$levels--; if (!$levels) return trim($result);
 	}
-	elseif ($gap < 3600)
+	if ($gap >= 604800)
 	{
-		$gap = floor($gap / 60);
-		return cot_declension($gap, $Ls['Minutes']);
+		$num = floor($gap / 604800);
+		$gap -= $num * 604800;
+		$result .= cot_declension($num, $Ls['Weeks']).' ';
+		$levels--; if (!$levels) return trim($result);
 	}
-	elseif ($gap < 86400)
+	if ($gap >= 86400)
 	{
-		$gap = floor($gap / 3600);
-		return cot_declension($gap, $Ls['Hours']).' ';
+		$num = floor($gap / 86400);
+		$gap -= $num * 86400;
+		$result .= cot_declension($num, $Ls['Days']).' ';
+		$levels--; if (!$levels) return trim($result);
 	}
-	elseif ($gap < 604800)
+	if ($gap >= 3600)
 	{
-		$gap = floor($gap / 86400);
-		return cot_declension($gap, $Ls['Days']);
+		$num = floor($gap / 3600);
+		$gap -= $num * 3600;
+		$result .= cot_declension($num, $Ls['Hours']).' ';
+		$levels--; if (!$levels) return trim($result);
 	}
-	elseif ($gap < 2592000)
+	if ($gap >= 60)
 	{
-		$gap = floor($gap / 604800);
-		return cot_declension($gap, $Ls['Weeks']);
+		$num = floor($gap / 60);
+		$gap -= $num * 60;
+		$result .= cot_declension($num, $Ls['Minutes']).' ';
+		$levels--; if (!$levels) return trim($result);
 	}
-	elseif ($gap < 31536000)
+	if ($gap >= 1)
 	{
-		$gap = floor($gap / 2592000);
-		return cot_declension($gap, $Ls['Months']);
+		$levels--;
+		$num = $levels ? $gap : floor($gap);
+		$gap -= $num;
+		$num = intval($num * 1000)/1000;
+		$result .= cot_declension($num, $Ls['Seconds'], false, true).' ';
 	}
-	else
+	if ($gap > 0)
 	{
-		$gap = floor($gap / 31536000);
-		return cot_declension($gap, $Ls['Years']);
+		$result .= floor($gap * 1000) . ' ms';
 	}
+	return trim($result);
 }
 
 /**
