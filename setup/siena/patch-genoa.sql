@@ -501,3 +501,34 @@ ALTER TABLE `cot_forum_stats` ADD PRIMARY KEY (`fs_cat`);
 
 /* r1773 Correct movedto value for forum topics */
 UPDATE `cot_forum_topics` SET `ft_movedto` = '' WHERE `ft_movedto` = '0';
+
+/* r1776 Comments and ratings migration */
+ALTER TABLE `cot_com` ADD COLUMN `com_area` varchar(64) collate utf8_unicode_ci NOT NULL default '';
+ALTER TABLE `cot_com` MODIFY `com_code` varchar(255) collate utf8_unicode_ci NOT NULL default '';
+
+UPDATE `cot_com` SET `com_area` = 'page' WHERE `com_code` LIKE 'p%';
+UPDATE `cot_com` SET `com_area` = 'polls' WHERE `com_code` LIKE 'v%';
+UPDATE `cot_com` SET `com_area` = 'gal' WHERE `com_code` LIKE 'g%';
+UPDATE `cot_com` SET `com_area` = 'users' WHERE `com_code` LIKE 'u%';
+UPDATE `cot_com` SET `com_area` = 'showcase' WHERE `com_code` LIKE 'sc%';
+
+UPDATE `cot_com` SET `com_code` = SUBSTRING(`com_code`, 3) WHERE `com_area` = 'showcase';
+UPDATE `cot_com` SET `com_code` = SUBSTRING(`com_code`, 2) WHERE `com_area` != '';
+
+UPDATE `cot_ratings` SET `rating_area` = 'page' WHERE `rating_code` LIKE 'p%';
+UPDATE `cot_ratings` SET `rating_area` = 'polls' WHERE `rating_code` LIKE 'v%';
+UPDATE `cot_ratings` SET `rating_area` = 'gal' WHERE `rating_code` LIKE 'g%';
+UPDATE `cot_ratings` SET `rating_area` = 'users' WHERE `rating_code` LIKE 'u%';
+UPDATE `cot_ratings` SET `rating_area` = 'showcase' WHERE `rating_code` LIKE 'sc%';
+
+UPDATE `cot_ratings` SET `rating_code` = SUBSTRING(`rating_code`, 3) WHERE `rating_area` = 'showcase';
+UPDATE `cot_ratings` SET `rating_code` = SUBSTRING(`rating_code`, 2) WHERE `rating_area` != '';
+
+UPDATE `cot_rated` SET `rated_area` = 'page' WHERE `rated_code` LIKE 'p%';
+UPDATE `cot_rated` SET `rated_area` = 'polls' WHERE `rated_code` LIKE 'v%';
+UPDATE `cot_rated` SET `rated_area` = 'gal' WHERE `rated_code` LIKE 'g%';
+UPDATE `cot_rated` SET `rated_area` = 'users' WHERE `rated_code` LIKE 'u%';
+UPDATE `cot_rated` SET `rated_area` = 'showcase' WHERE `rated_code` LIKE 'sc%';
+
+UPDATE `cot_rated` SET `rated_code` = SUBSTRING(`rated_code`, 3) WHERE `rated_area` = 'showcase';
+UPDATE `cot_rated` SET `rated_code` = SUBSTRING(`rated_code`, 2) WHERE `rated_area` != '';
