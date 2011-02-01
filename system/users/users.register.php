@@ -72,6 +72,13 @@ if ($a=='add')
 	if ($res2>0) cot_error('aut_emailalreadyindb', 'ruseremail');
 	if ($rpassword1 != $rpassword2) cot_error('aut_passwordmismatch', 'rpassword2');
 
+	/* === Hook for the plugins === */
+	foreach (cot_getextplugins('users.register.add.validate') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
 	if (!cot_error_found())
 	{
 		if ($db->countRows($db_users)==0)
