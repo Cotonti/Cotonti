@@ -502,7 +502,7 @@ ALTER TABLE `cot_forum_stats` ADD PRIMARY KEY (`fs_cat`);
 /* r1773 Correct movedto value for forum topics */
 UPDATE `cot_forum_topics` SET `ft_movedto` = '' WHERE `ft_movedto` = '0';
 
-/* r1776 Comments and ratings migration */
+/* r1796 Comments and ratings migration */
 ALTER TABLE `cot_com` ADD COLUMN `com_area` varchar(64) collate utf8_unicode_ci NOT NULL default '';
 ALTER TABLE `cot_com` MODIFY `com_code` varchar(255) collate utf8_unicode_ci NOT NULL default '';
 
