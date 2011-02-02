@@ -1314,6 +1314,19 @@ function cot_build_ipsearch($ip)
 }
 
 /**
+ * Wrapper for number_format() using locale number formatting
+ *
+ * @param float $number
+ * @param int $decimals
+ * @return string Formatted version of $number
+ */
+function cot_build_number($number, $decimals = 0)
+{
+	global $Ln;
+	return number_format($number, $decimals, $Ln['decimal_point'], $Ln['thousands_seperator']);
+}
+
+/**
  * Odd/even class choser for row
  *
  * @param int $number Row number
@@ -1364,53 +1377,64 @@ function cot_build_timegap($t1, $t2 = null, $levels = 1)
 
 	if ($gap >= 31536000)
 	{
+		$levels--;
 		$num = floor($gap / 31536000);
 		$gap -= $num * 31536000;
 		$result .= cot_declension($num, $Ls['Years']).' ';
-		$levels--; if (!$levels) return trim($result);
+		if (!$levels) return trim($result);
 	}
 	if ($gap >= 2592000)
 	{
+		$levels--;
 		$num = floor($gap / 2592000);
 		$gap -= $num * 2592000;
 		$result .= cot_declension($num, $Ls['Months']).' ';
-		$levels--; if (!$levels) return trim($result);
+		if (!$levels) return trim($result);
 	}
 	if ($gap >= 604800)
 	{
+		$levels--;
 		$num = floor($gap / 604800);
 		$gap -= $num * 604800;
 		$result .= cot_declension($num, $Ls['Weeks']).' ';
-		$levels--; if (!$levels) return trim($result);
+		if (!$levels) return trim($result);
 	}
 	if ($gap >= 86400)
 	{
 		$num = floor($gap / 86400);
 		$gap -= $num * 86400;
 		$result .= cot_declension($num, $Ls['Days']).' ';
-		$levels--; if (!$levels) return trim($result);
+		if (!$levels) return trim($result);
 	}
 	if ($gap >= 3600)
 	{
+		$levels--;
 		$num = floor($gap / 3600);
 		$gap -= $num * 3600;
 		$result .= cot_declension($num, $Ls['Hours']).' ';
-		$levels--; if (!$levels) return trim($result);
+		if (!$levels) return trim($result);
 	}
 	if ($gap >= 60)
 	{
+		$levels--;
 		$num = floor($gap / 60);
 		$gap -= $num * 60;
 		$result .= cot_declension($num, $Ls['Minutes']).' ';
-		$levels--; if (!$levels) return trim($result);
+		if (!$levels) return trim($result);
 	}
 	if ($gap >= 1)
 	{
 		$levels--;
-		$num = $levels ? $gap : floor($gap);
-		$gap -= $num;
-		$num = intval($num * 1000)/1000;
-		$result .= cot_declension($num, $Ls['Seconds'], false, true).' ';
+		if ($levels) // use decimals
+		{
+			$result .= cot_build_number($gap, 3). ' ' . cot_declension($gap, $Ls['Seconds'], true, true);
+		}
+		else
+		{
+			$num = floor($gap);
+			$result .= cot_declension($num, $Ls['Seconds']);
+		}
+		return trim($result);
 	}
 	if ($gap > 0)
 	{
@@ -1431,7 +1455,7 @@ function cot_build_timezone($tz)
 
 	$result = 'GMT';
 
-	$result .= cot_declension($tz,$Ls['Hours']);
+	$result .= cot_declension($tz, $Ls['Hours']);
 
 	return $result;
 }
