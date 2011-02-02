@@ -421,6 +421,13 @@ $L['November_s'] = 'ноя';
 $L['December_s'] = 'дек';
 
 /**
+ * Number formatting
+ */
+
+$Ln['decimal_point'] = '.';
+$Ln['thousands_seperator'] = ',';
+
+/**
  * Gender
  */
 
