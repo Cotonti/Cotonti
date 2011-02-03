@@ -1474,7 +1474,7 @@ function cot_build_stars($level)
  */
 function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round = null)
 {
-	global $Ls;
+	global $Ls, $sys;
 	$units = array(
 		'31536000' => $Ls['Years'],
 		'2592000' => $Ls['Months'],
