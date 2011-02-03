@@ -335,17 +335,25 @@ $L['YIM'] = 'Yahoo Messenger';
  * cot_declension arrays
  */
 
-$Ls['Days'] = array('days','day');
 $Ls['Guests'] = array('guests','guest');
-$Ls['Hours'] = array('hours','hour');
 $Ls['Members'] = array('members','member');
-$Ls['Minutes'] = array('minutes','minute');
-$Ls['Months'] = array('months','month');
 $Ls['Pages'] = array('pages','page');
-$Ls['Seconds'] = array('seconds','second');
 $Ls['Times'] = array('times','time');
+
+$Ls['Milliseconds'] = array('ms', 'ms');
+$Ls['Seconds'] = array('seconds','second');
+$Ls['Minutes'] = array('minutes','minute');
+$Ls['Hours'] = array('hours','hour');
+$Ls['Days'] = array('days','day');
 $Ls['Weeks'] = array('weeks','week');
+$Ls['Months'] = array('months','month');
 $Ls['Years'] = array('years','year');
+
+$Ls['Bytes'] = array('B', 'B');
+$Ls['Kibibytes'] = array('KiB', 'KiB');
+$Ls['Mebibytes'] = array('MiB', 'MiB');
+$Ls['Gibibytes'] = array('GiB', 'GiB');
+$Ls['Tebibytes'] = array('TiB', 'TiB');
 
 /**
  * Date / Time formats

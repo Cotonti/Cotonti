@@ -1274,6 +1274,31 @@ function cot_build_email($email, $hide = false)
 }
 
 /**
+ * Generate human-readable filesize.
+ *
+ * @param float $kib
+ *	Filesize in KiB (1 KiB = 1024 bytes)
+ * @param int $decimals
+ *	Number of decimals to show.
+ * @param mixed $round 
+ *	Round up to this number of decimals.
+ *	Set false to disable or null to inherit from $decimals.
+ * @return string
+ */
+function cot_build_filesize($kib, $decimals = 0, $round = null)
+{
+	global $Ls;
+	$units = array(
+		'1073741824' => $Ls['Tebibytes'],
+		'1048576' => $Ls['Gibibytes'],
+		'1024' => $Ls['Mebibytes'],
+		'1' => $Ls['Kibibytes'],
+		'0.0009765625' => $Ls['Bytes']
+	);
+	return cot_build_friendlynumber($kib, $units, 1, $decimals, $round);
+}
+
+/**
  * Returns country flag button
  *
  * @param string $flag Country code
@@ -1288,6 +1313,69 @@ function cot_build_flag($flag)
 		cot_rc('icon_flag', array('code' => $flag, 'alt' => $flag)),
 		array('title' => $cot_countries[$flag])
 	);
+}
+
+/**
+ * Generic function for generating a human-readable number with localized units.
+ *
+ * @param float $number
+ *	Input number to convert, based on the smallest unit given.
+ * @param array $units
+ *	Array of units as $relativesize => $unit.
+ *  Example: array('3600' => 'hours', '60' => 'minutes', '1' => 'seconds').
+ *	Where 'seconds' is the base unit, since it has a value of 1. Hours has a value of
+ *	3600, since one hour contains 3600 seconds. Values can be given as strings or integers.
+ * @param int $levels
+ *	Number of levels to return.
+ *	"3 hours 45 minutes" = 2 levels.
+ * @param int $decimals
+ *	Number of decimals to show in last level.
+ *	"2 minutes 20.5 seconds" = 2 levels, 1 decimals.
+ * @param mixed $round
+ *	Number of decimals to round the last level up to, can also be negative, see round().
+ *	Set false to disable or null to inherit from $decimals.
+ * @return string
+ */
+function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $round = null)
+{
+	global $Ln, $Ls;
+	if (!is_array($units)) return '';
+	$pieces = array();
+
+	// First sort from big to small
+	ksort($units, SORT_NUMERIC);
+	$units = array_reverse($units, true);
+
+	foreach ($units as $size => $expr)
+	{
+		$size = floatval($size);
+		if ($number >= $size && $number != 0)
+		{
+			$levels--;
+			$num = $number / $size;
+			$number -= floor($num) * $size;
+			if ($levels && $number > 0)
+			{
+				// There's more to come, so no decimals yet.
+				$pieces[] = cot_declension(floor($num), $expr);
+			}
+			else
+			{
+				// Last item gets decimals and rounding.
+				$pieces[] = cot_build_number($num, $decimals, $round). ' ' .
+							cot_declension($num, $expr, true, true);
+				break;
+			}
+		}
+	}
+	if (count($pieces) == 0)
+	{
+		// Return smallest possible unit
+		$expr = array_reverse(array_values($units));
+		return	cot_build_number($number, $decimals, $round). ' ' .
+				cot_declension($number, $expr[0], true, true);
+	}
+	return implode(' ', $pieces);
 }
 
 /**
@@ -1314,15 +1402,25 @@ function cot_build_ipsearch($ip)
 }
 
 /**
- * Wrapper for number_format() using locale number formatting
+ * Wrapper for number_format() using locale number formatting and optional rounding.
  *
  * @param float $number
+ *	Number to format
  * @param int $decimals
- * @return string Formatted version of $number
+ *	Number of decimals to return
+ * @param mixed $round
+ *	Round up to this number of decimals.
+ *	Set false to disable or null to inherit from $decimals.
+ * @return string
  */
-function cot_build_number($number, $decimals = 0)
+function cot_build_number($number, $decimals = 0, $round = null)
 {
 	global $Ln;
+	if ($round === null) $round = $decimals;
+	if ($round !== false)
+	{
+		$number = round($number, $round);
+	}
 	return number_format($number, $decimals, $Ln['decimal_point'], $Ln['thousands_seperator']);
 }
 
@@ -1361,86 +1459,35 @@ function cot_build_stars($level)
 /**
  * Returns time gap between two timestamps
  *
- * @param int $t1 Timestamp 1 (oldest)
- * @param int $t2 Timestamp 2 (latest)
- * @param int $levels Number of concatenated units to return
+ * @param int $t1
+ *	Timestamp 1 (oldest, smallest value).
+ * @param int $t2
+ *	Timestamp 2 (latest, largest value).
+ * @param int $levels
+ *	Number of concatenated units to return.
+ * @param int $decimals
+ *	Number of decimals to show on last level.
+ * @param mixed $round
+ *	Round up last level to this number of decimals.
+ *	Set false to disable or null to inherit from $decimals.
  * @return string
  */
-function cot_build_timegap($t1, $t2 = null, $levels = 1)
+function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round = null)
 {
-	global $Ls, $sys;
-
+	global $Ls;
+	$units = array(
+		'31536000' => $Ls['Years'],
+		'2592000' => $Ls['Months'],
+		'604800' => $Ls['Weeks'],
+		'86400' => $Ls['Days'],
+		'3600' => $Ls['Hours'],
+		'60' => $Ls['Minutes'],
+		'1' => $Ls['Seconds'],
+		'0.001' => $Ls['Milliseconds']
+	);
 	if ($t2 === null) $t2 = $sys['now_offset'];
-
 	$gap = $t2 - $t1;
-	$result = '';
-
-	if ($gap >= 31536000)
-	{
-		$levels--;
-		$num = floor($gap / 31536000);
-		$gap -= $num * 31536000;
-		$result .= cot_declension($num, $Ls['Years']).' ';
-		if (!$levels) return trim($result);
-	}
-	if ($gap >= 2592000)
-	{
-		$levels--;
-		$num = floor($gap / 2592000);
-		$gap -= $num * 2592000;
-		$result .= cot_declension($num, $Ls['Months']).' ';
-		if (!$levels) return trim($result);
-	}
-	if ($gap >= 604800)
-	{
-		$levels--;
-		$num = floor($gap / 604800);
-		$gap -= $num * 604800;
-		$result .= cot_declension($num, $Ls['Weeks']).' ';
-		if (!$levels) return trim($result);
-	}
-	if ($gap >= 86400)
-	{
-		$num = floor($gap / 86400);
-		$gap -= $num * 86400;
-		$result .= cot_declension($num, $Ls['Days']).' ';
-		if (!$levels) return trim($result);
-	}
-	if ($gap >= 3600)
-	{
-		$levels--;
-		$num = floor($gap / 3600);
-		$gap -= $num * 3600;
-		$result .= cot_declension($num, $Ls['Hours']).' ';
-		if (!$levels) return trim($result);
-	}
-	if ($gap >= 60)
-	{
-		$levels--;
-		$num = floor($gap / 60);
-		$gap -= $num * 60;
-		$result .= cot_declension($num, $Ls['Minutes']).' ';
-		if (!$levels) return trim($result);
-	}
-	if ($gap >= 1)
-	{
-		$levels--;
-		if ($levels) // use decimals
-		{
-			$result .= cot_build_number($gap, 3). ' ' . cot_declension($gap, $Ls['Seconds'], true, true);
-		}
-		else
-		{
-			$num = floor($gap);
-			$result .= cot_declension($num, $Ls['Seconds']);
-		}
-		return trim($result);
-	}
-	if ($gap > 0)
-	{
-		$result .= floor($gap * 1000) . ' ms';
-	}
-	return trim($result);
+	return cot_build_friendlynumber($gap, $units, $levels, $decimals, $round);
 }
 
 /**
