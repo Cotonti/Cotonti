@@ -3905,13 +3905,10 @@ function cot_uriredir_store()
 {
 	global $sys;
 
-	$script = basename($_SERVER['SCRIPT_NAME']);
-
 	if ($_SERVER['REQUEST_METHOD'] != 'POST' // not form action/POST
 		&& empty($_GET['x']) // not xg, hence not form action/GET and not command from GET
-		&& !empty($script)
-		&& $script != 'message.php' // not message location
-		&& ($script != 'users.php' // not login/logout location
+		&& !defined('COT_MESSAGE') // not message location
+		&& (!defined('COT_USERS') // not login/logout location
 			|| empty($_GET['m'])
 			|| !in_array($_GET['m'], array('auth', 'logout', 'register'))
 	)
