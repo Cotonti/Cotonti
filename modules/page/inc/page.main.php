@@ -30,7 +30,7 @@ $where = (!empty($al)) ? "page_alias='".$al."'" : 'page_id='.$id;
 $sql_page = $db->query("SELECT p.*, u.* FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE $where LIMIT 1");
-	
+
 if($sql_page->rowCount() == 0)
 {
 	$env['status'] = '404 Not Found';
@@ -225,7 +225,7 @@ if ($pag['page_totaltabs'] > 1)
 			$pag['page_tabtitle'][$i] = $i == 1 ? $pag['page_title'] : $L['Page'] . ' ' . ($i + 1);
 		}
 		$tab_url = empty($al) ? cot_url('page', 'id='.$id.'&pg='.$i) : cot_url('page', 'al='.$al.'&pg='.$i);
-		$pag['page_tabtitles'][] .= cot_rc_link(cot_url($tab_url), ($i+1).'. '.$pag['page_tabtitle'][$i],
+		$pag['page_tabtitles'][] .= cot_rc_link($tab_url, ($i+1).'. '.$pag['page_tabtitle'][$i],
 			array('class' => 'page_tabtitle'));
 		$pn = cot_pagenav('page', (empty($al) ? 'id='.$id : 'al='.$al), $pag['page_tab'], $pag['page_totaltabs'], 1, 'pg');
 		$pag['page_tabnav'] = $pn['main'];
