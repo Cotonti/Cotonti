@@ -19,8 +19,6 @@ defined('COT_CODE') or die('Wrong URL');
 
 require cot_incfile('comments', 'plug', 'enablement');
 
-cot_watch($is_module, $code, $com_modules_list, $com_modules_struct_list);
-
 if ($is_module && in_array($code, $com_modules_list))
 {
 	cot_config_implant($code, $com_options);

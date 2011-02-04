@@ -30,7 +30,6 @@ if (empty($mod))
 	{
 		if (!empty($a) && $a != 'hooks')
 		{
-			cot_print($m, $a, $mod, $pl, $part);
 			cot_die();
 		}
 	}
