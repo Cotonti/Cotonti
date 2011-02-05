@@ -241,46 +241,52 @@ span.invalid {color: #EA0000;}
 	text-decoration: underline;
 }
 
-div.message {
-	margin: 6px 4px 0;
-	padding: 8px;
-	background: #22EE99;
+
+#content div.done, #content div.error {
+	padding: 5px;
+	background: #63F39E;
 	border: 1px solid #00CC33;
+	max-height: 300px;
+	overflow: auto;
+	margin: 10px;
+	text-shadow: none;
 }
 
-div.message p {
-	padding-left: 21px;
-	margin: 0 !important;
-	text-align: left !important;
+#content div.done h4, #content div.error h4 {
+	font-size: 16px;
+	color: #777;
+}
+
+#content div.done ul li, #content div.error ul li {
+	margin: 5px 0 0 10px;
 	font-size: 11px;
+	list-style: none;
+	line-height: 1.3;
+	padding: 5px !important;
+	border: none !important;
+	font-weight: normal;
+	color: #555;
 }
 
-div.message ul li {
-	margin: 5px 0 0 25px;
-	font-size: 11px;
-	list-style: disc inside none;
-	padding: 0px !important;
-	background: none !important;
-	text-shadow: none !important;
-}
-
-div.message ul li span {
+#content div.done ul li span, #content div.error ul li span {
 	text-shadow: none;
 	color: #333;
 }
 
 div.error {
-	background: #F7AEA3 !important;
+	background: #FCB3A8 !important;
 	border: 1px solid #F27A68 !important;
 }
 
-div.error p {
+div.error h4 {
+	padding-left: 21px;
 	background: url(../img/icons.png) no-repeat 0 -174px;
 	color: #BC3B29 !important;
 }
 
 div.error ul li {
-	color: #BC3B29 !important;
+	text-shadow: none !important;
+	color: #B73622 !important;
 }
 
 div.error ul li span {

@@ -23,7 +23,7 @@
 			</div>
 
 			<div id="content">
-				{FILE ./themes/nemesis/warnings.tpl}
+					{FILE ./themes/nemesis/warnings.tpl}
 
 				<form action="install.php" method="post">
 
@@ -76,6 +76,9 @@
 						<li><label>{PHP.L.install_db_name}</label>  <input type="text" name="db_name" value="{INSTALL_DB_NAME}" size="32" /></li>
 						<li><label>{PHP.L.install_db_x}</label> <input type="text" name="db_x" value="{INSTALL_DB_X}" size="32" /></li>
 					</ul>
+
+					<p>{PHP.L.install_body_message3}</p>
+
 					<div style="text-align: center;"><input type="submit" name="submit" value="{PHP.L.Next}" /></div>
 
 				<!-- END: STEP_2 -->
