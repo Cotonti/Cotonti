@@ -59,7 +59,7 @@ switch( $msg )
 	case '153':
 		if ($num > 0)
 		{
-			$body .= cot_rc('msg_code_153_date', array('date' => date($cfg['dateformat'], $num)));
+			$body .= cot_rc('msg_code_153_date', array('date' => cot_date('datetime_medium', $num)));
 		}
 	break;
 

@@ -113,13 +113,15 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 			WHERE rated_area = ? AND rated_code = ?",
 			array($ext_name, $code));
 		$rating_voters = $sql->fetchColumn();
-		$rating_since = $L['rat_since'] . ' ' . date($cfg['dateformat'], $row['rating_creationdate'] + $usr['timezone'] * 3600);
+		$rating_since = $L['rat_since'] . ' ' . cot_date('datetime_medium', $row['rating_creationdate'] + $usr['timezone'] * 3600);
+		$rating_since_stamp = $row['rating_creationdate'] + $usr['timezone'] * 3600;
 		$rating_averageimg = cot_rc('icon_rating_stars', array('val' => $rating_cntround));
 	}
 	else
 	{
 		$rating_voters = 0;
 		$rating_since = '';
+		$rating_since_stamp = '';
 		$rating_averageimg = '';
 	}
 
@@ -130,6 +132,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 		'RATINGS_AVERAGEIMG' => $rating_averageimg,
 		'RATINGS_VOTERS' => $rating_voters,
 		'RATINGS_SINCE' => $rating_since,
+		'RATINGS_SINCE_STAMP' => $rating_since_stamp,
 		'RATINGS_FANCYIMG' => $rating_fancy,
 		'RATINGS_USERVOTE' => $rating_uservote
 	));

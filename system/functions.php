@@ -1319,7 +1319,7 @@ function cot_build_flag($flag)
  * Generic function for generating a human-readable number with localized units.
  *
  * @param float $number
- *	Input number to convert, based on the smallest unit given.
+ *	Input number to convert, based on the unit with size (key) 1.
  * @param array $units
  *	Array of units as $relativesize => $unit.
  *  Example: array('3600' => 'hours', '60' => 'minutes', '1' => 'seconds').
@@ -2529,7 +2529,7 @@ function cot_tplfile($base, $type = 'module')
 function cot_date($format, $timestamp = null)
 {
 	global $L, $Ldt;
-	$datetime = ($Ldt[$format]) ? date($Ldt[$format], $timestamp) : date($format, $timestamp);
+	$datetime = ($Ldt[$format]) ? @date($Ldt[$format], $timestamp) : @date($format, $timestamp);
 	$search = array(
 		'Monday', 'Tuesday', 'Wednesday', 'Thursday',
 		'Friday', 'Saturday', 'Sunday',

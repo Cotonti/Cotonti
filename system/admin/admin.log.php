@@ -90,7 +90,8 @@ foreach ($sql->fetchAll() as $row)
 {
 	$t->assign(array(
 		'ADMIN_LOG_ROW_LOG_ID' => $row['log_id'],
-		'ADMIN_LOG_ROW_DATE' => date($cfg['dateformat'], $row['log_date']),
+		'ADMIN_LOG_ROW_DATE' => cot_date('datetime_medium', $row['log_date']),
+		'ADMIN_LOG_ROW_DATE_STAMP' => $row['log_date'],
 		'ADMIN_LOG_ROW_URL_IP_SEARCH' => cot_plugin_active('ipsearch') ?
 			cot_url('admin', 'm=other&p=ipsearch&a=search&id='.$row['log_ip'].'&'.cot_xg()) : '',
 		'ADMIN_LOG_ROW_LOG_IP' => $row['log_ip'],

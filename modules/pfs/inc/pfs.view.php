@@ -58,7 +58,7 @@ $t->assign(array(
 	'PFSVIEW_HEADER2' => $pfs_header2,
 	'PFSVIEW_FOOTER' => $pfs_footer,
 	'PFSVIEW_FILE_NAME' => $id,
-	'PFSVIEW_FILE_DATE' => @date($cfg['dateformat'], $row['pfs_date'] + $usr['timezone'] * 3600),
+	'PFSVIEW_FILE_DATE' => cot_date('datetime_medium', $row['pfs_date'] + $usr['timezone'] * 3600),
 	'PFSVIEW_FILE_DATE_STAMP' => $row['pfs_date'] + $usr['timezone'] * 3600,
 	'PFSVIEW_FILE_ID' => $row['pfs_id'],
 	'PFSVIEW_FILE_USERID' => $row['pfs_userid'],

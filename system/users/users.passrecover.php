@@ -42,7 +42,7 @@ if ($a == 'request' && $email != '')
 
 		cot_shield_update(60, "Password recovery email sent");
 
-		$rinfo = sprintf($L['pasrec_email1b'], $usr['ip'], date("Y-m-d H:i"));
+		$rinfo = sprintf($L['pasrec_email1b'], $usr['ip'], cot_date('datetime_medium'));
 
 		$rsubject = $cfg['maintitle']." - ".$L['pasrec_title'];
 		$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=passrecover&a=auth&v='.$validationkey, '', true);

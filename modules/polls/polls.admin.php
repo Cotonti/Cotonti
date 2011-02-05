@@ -121,7 +121,8 @@ foreach ($sql_polls->fetchAll() as $row)
     $totalvotes = $db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid=$id")->fetchColumn();
 
 	$t->assign(array(
-		'ADMIN_POLLS_ROW_POLL_CREATIONDATE' => date($cfg['formatyearmonthday'], $row['poll_creationdate']),
+		'ADMIN_POLLS_ROW_POLL_CREATIONDATE' => cot_date('date_full', $row['poll_creationdate']),
+		'ADMIN_POLLS_ROW_POLL_CREATIONDATE_STAMP' => $row['poll_creationdate'],
 		'ADMIN_POLLS_ROW_POLL_TYPE' => $variants[htmlspecialchars($row['poll_type'])][0],
 		'ADMIN_POLLS_ROW_POLL_URL' => cot_url('admin', 'm=polls'.$poll_filter.'&n=options&d='.$d.'&id='.$row['poll_id']),
 		'ADMIN_POLLS_ROW_POLL_TEXT' => htmlspecialchars($row['poll_text']),

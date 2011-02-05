@@ -270,7 +270,7 @@ foreach ($sql_forums->fetchAll() as $row)
 	{
 		$row['ft_url'] = cot_url('forums', "m=posts&q=".$row['ft_id']);
 		$row['ft_lastposturl'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ? cot_rc_link(cot_url('forums', "m=posts&q=".$row['ft_id']."&n=unread", "#unread"), $R['icon_unread'], 'rel="nofollow"') : cot_rc_link(cot_url('forums', "m=posts&q=".$row['ft_id']."&n=last", "#bottom"), $R['icon_follow'], 'rel="nofollow"');
-		$row['ft_lastposturl'] .= @date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600);
+		$row['ft_lastposturl'] .= cot_date('datetime_short', $row['ft_updated'] + $usr['timezone'] * 3600);
 		$row['ft_replycount'] = $row['ft_postcount'] - 1;
 		
 		if ($row['ft_updated'] > $usr['lastvisit'] && $usr['id']>0)
@@ -306,7 +306,7 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_TOPICS_ROW_ICON' => $row['ft_icon'],
 		'FORUMS_TOPICS_ROW_TITLE' => htmlspecialchars($row['ft_title']),
 		'FORUMS_TOPICS_ROW_DESC' => htmlspecialchars($row['ft_desc']),
-		'FORUMS_TOPICS_ROW_CREATIONDATE' => @date($cfg['formatmonthdayhourmin'], $row['ft_creationdate'] + $usr['timezone'] * 3600),
+		'FORUMS_TOPICS_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate'] + $usr['timezone'] * 3600),
 		'FORUMS_TOPICS_ROW_CREATIONDATE_STAMP' => $row['ft_creationdate'] + $usr['timezone'] * 3600,
 		'FORUMS_TOPICS_ROW_UPDATED' => $row['ft_lastposturl'],
 		'FORUMS_TOPICS_ROW_UPDATED_STAMP' => $row['ft_updated'] + $usr['timezone'] * 3600,

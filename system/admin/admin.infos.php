@@ -35,10 +35,10 @@ $t->assign(array(
 	'ADMIN_INFOS_INTERFACE' => (function_exists('php_sapi_name')) ? php_sapi_name() : $L['adm_help_config'],
 	'ADMIN_INFOS_CACHEDRIVERS' => implode(', ', $cot_cache_drivers),
 	'ADMIN_INFOS_OS' => (function_exists('php_uname')) ? php_uname() : $L['adm_help_config'],
-	'ADMIN_INFOS_DATE' => date('Y-m-d H:i'),
+	'ADMIN_INFOS_DATE' => cot_date('datetime_medium', time()),
 	'ADMIN_INFOS_GMDATE' => gmdate('Y-m-d H:i'),
 	'ADMIN_INFOS_GMTTIME' => $usr['gmttime'],
-	'ADMIN_INFOS_USRTIME' => date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone'] * 3600),
+	'ADMIN_INFOS_USRTIME' => cot_date('datetime_medium', $sys['now_offset'] + $usr['timezone'] * 3600),
 	'ADMIN_INFOS_TIMETEXT' => $usr['timetext']
 ));
 
