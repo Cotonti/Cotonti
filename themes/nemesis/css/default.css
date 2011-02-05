@@ -92,6 +92,7 @@ form							{ }
 input, select, textarea, button	{ font:normal 11px Georgia; }
 input, select, button			{ padding:2px; }
 label input						{ vertical-align:middle; }
+button::-moz-focus-inner		{ padding:0; border:none; }
 
 /* 6. Misc
 -------------------------------------------------- */
