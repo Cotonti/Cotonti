@@ -55,9 +55,9 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 			}
 		}
 	}
-	elseif (is_int($id))
+	elseif ((int)$id > 0)
 	{
-		$where = (!$type) ? "poll_id = $id" : "poll_type = '".$db->prep($type)."' AND poll_code = '$id'";
+		$where = (!$type) ? "poll_id = ".(int)$id : "poll_type = '".$db->prep($type)."' AND poll_code = '$id'";
 		$sql = $db->query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
 		if ($row = $sql->fetch())
 		{

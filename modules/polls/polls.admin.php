@@ -153,8 +153,8 @@ if ($ii == 0)
 
 if ($n == 'options')
 {
-	$poll_id = cot_import('id', 'G', 'TXT');
-	$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$d), $L['Options']." (#$id)");
+	$poll_id = cot_import('id', 'G', 'INT');
+	$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$d), $L['Options']." (#$poll_id)");
 	$formname = $L['editdeleteentries'];
 	$send_button = $L['Update'];
 }
@@ -162,7 +162,7 @@ elseif (cot_error_found())
 {
 	if ($poll_id != 'new')
 	{
-		$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$d), $L['Options']." (#$id)");
+		$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$d), $L['Options']." (#$poll_id)");
 		$formname = $L['editdeleteentries'];
 		$send_button = $L['Update'];
 	}
