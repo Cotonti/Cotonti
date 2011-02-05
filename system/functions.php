@@ -1535,23 +1535,21 @@ function cot_build_url($text, $maxlen=64)
  *
  * @param int $id User ID
  * @param string $user User name
+ * @param mixed $extra_attrs Extra link tag attributes as a string or associative array,
+ *		e.g. array('class' => 'usergrp_admin')
  * @return string
  */
-function cot_build_user($id, $user)
+function cot_build_user($id, $user, $extra_attrs = '')
 {
 	global $cfg;
 
-	if ($id == 0 && !empty($user))
+	if (!$id)
 	{
-		return $user;
-	}
-	elseif ($id == 0)
-	{
-		return '';
+		return empty($user) ? '' : $user;
 	}
 	else
 	{
-		return (!empty($user)) ? cot_rc_link(cot_url('users', 'm=details&id='.$id.'&u='.$user), $user) : '?';
+		return empty($user) ? '?' : cot_rc_link(cot_url('users', 'm=details&id='.$id.'&u='.$user), $user, $extra_attrs);
 	}
 }
 
