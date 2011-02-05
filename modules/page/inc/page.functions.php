@@ -167,7 +167,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				$page_data['page_fileicon'] = '';
 			}
 
-			$date_format = (!empty($date_format)) ? $date_format : $cfg['dateformat'];
+			$date_format = (!empty($date_format)) ? $date_format : 'datetime_medium';
 
 			$text = cot_parse($page_data['page_text'], $cfg['page']['markup']);
 			$text_cut = ((int)$textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
@@ -195,9 +195,9 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'DESC_OR_TEXT' => (!empty($page_data['page_desc'])) ? htmlspecialchars($page_data['page_desc']) : $text,
 				'MORE' => ($cutted) ? cot_rc_link($page_data['page_pageurl'], $L['ReadMore']) : "",
 				'AUTHOR' => htmlspecialchars($page_data['page_author']),
-				'DATE' => @date($date_format, $page_data['page_date'] + $usr['timezone'] * 3600),
-				'BEGIN' => @date($date_format, $page_data['page_begin'] + $usr['timezone'] * 3600),
-				'EXPIRE' => @date($date_format, $page_data['page_expire'] + $usr['timezone'] * 3600),
+				'DATE' => cot_date($date_format, $page_data['page_date'] + $usr['timezone'] * 3600),
+				'BEGIN' => cot_date($date_format, $page_data['page_begin'] + $usr['timezone'] * 3600),
+				'EXPIRE' => cot_date($date_format, $page_data['page_expire'] + $usr['timezone'] * 3600),
 				'DATE_STAMP' => $page_data['page_date'] + $usr['timezone'] * 3600,
 				'BEGIN_STAMP' => $page_data['page_begin'] + $usr['timezone'] * 3600,
 				'EXPIRE_STAMP' => $page_data['page_expire'] + $usr['timezone'] * 3600,

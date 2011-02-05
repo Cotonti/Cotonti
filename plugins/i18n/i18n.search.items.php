@@ -26,7 +26,7 @@ if (!empty($row['ipage_title']))
 		'PLUGIN_PR_CATEGORY' => cot_i18n_build_catpath('page', $row['page_cat'], $row['ipage_locale']),
 		'PLUGIN_PR_TITLE' => cot_rc_link($page_url, htmlspecialchars($row['ipage_title'])),
 		'PLUGIN_PR_TEXT' => cot_clear_mark($row['ipage_text'], $row['page_type'], $words),
-		'PLUGIN_PR_TIME' => @date($cfg['dateformat'], $row['ipage_date'] + $usr['timezone'] * 3600),
+		'PLUGIN_PR_TIME' => cot_date('datetime_medium', $row['ipage_date'] + $usr['timezone'] * 3600),
 		'PLUGIN_PR_TIMESTAMP' => $row['ipage_date'] + $usr['timezone'] * 3600
 	));
 }

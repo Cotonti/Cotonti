@@ -45,7 +45,7 @@ if($f == 'year' || $f == 'month')
         $y = mb_substr($row['stat_name'], 0, 4);
         $m = mb_substr($row['stat_name'], 5, 2);
         $d = mb_substr($row['stat_name'], 8, 2);
-        $dat = @date($cfg['formatyearmonthday'], mktime(0, 0, 0, $m, $d, $y));
+        $dat = cot_date('date_full', mktime(0, 0, 0, $m, $d, $y));
         $hits_d[$dat] = $row['stat_value'];
     }
 	$sql->closeCursor();
@@ -102,7 +102,7 @@ else
 			$y = mb_substr($row['stat_name'], 0, 4);
 			$m = mb_substr($row['stat_name'], 5, 2);
 			$d = mb_substr($row['stat_name'], 8, 2);
-			$w = @date('W', mktime(0, 0, 0, $m, $d, $y));
+			$w = cot_date('W', mktime(0, 0, 0, $m, $d, $y));
 			$hits_w[$y . '-W' . $w] += $row['stat_value'];
 			$hits_m[$y . '-' . $m] += $row['stat_value'];
 			$hits_y[$y] += $row['stat_value'];

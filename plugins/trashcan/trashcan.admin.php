@@ -139,7 +139,8 @@ foreach ($sql->fetchAll() as $row)
 	}
 
 	$tr_t->assign(array(
-		'ADMIN_TRASHCAN_DATE' => date($cfg['dateformat'], $row['tr_date'] + $usr['timezone'] * 3600),
+		'ADMIN_TRASHCAN_DATE' => cot_date('datetime_medium', $row['tr_date'] + $usr['timezone'] * 3600),
+		'ADMIN_TRASHCAN_DATE_STAMP' => $row['tr_date'] + $usr['timezone'] * 3600,
 		'ADMIN_TRASHCAN_TYPESTR_ICON' => $icon,
 		'ADMIN_TRASHCAN_TYPESTR' => $typestr,
 		'ADMIN_TRASHCAN_TITLE' => htmlspecialchars($row['tr_title']),

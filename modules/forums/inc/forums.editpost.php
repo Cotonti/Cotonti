@@ -153,7 +153,9 @@ if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY
 
 $t->assign(array(
 	'FORUMS_EDITPOST_PAGETITLE' => $toptitle,
-	'FORUMS_EDITPOST_SUBTITLE' => $L['forums_postedby'] . ": <a href=\"users.php?m=details&id=" . $row['fp_posterid'] . "\">" . $row['fp_postername'] . "</a> @ " . date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
+	'FORUMS_EDITPOST_SUBTITLE' => $L['forums_postedby'] . ": <a href=\"users.php?m=details&id=" . $row['fp_posterid'] . "\">" . $row['fp_postername'] . "</a> @ " . cot_date('datetime_medium', $fp_updated + $usr['timezone'] * 3600),
+	'FORUMS_EDITPOST_UPDATED' => cot_date('datetime_medium', $fp_updated + $usr['timezone'] * 3600),
+	'FORUMS_EDITPOST_UPDATED_STAMP' => $fp_updated + $usr['timezone'] * 3600,
 	'FORUMS_EDITPOST_SEND' => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . cot_xg()),
 	'FORUMS_EDITPOST_TEXT' => cot_textarea('rtext', $row['fp_text'], 20, 56, '', 'input_textarea_editor')
 ));

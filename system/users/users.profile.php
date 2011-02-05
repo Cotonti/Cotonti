@@ -177,10 +177,10 @@ require_once cot_incfile('forms');
 $timezonelist = array('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 foreach($timezonelist as $x)
 {
-	$timezonename[] = 'GMT '.$x.', '.date($cfg['dateformat'], $sys['now_offset'] + $x*3600);
+	$timezonename[] = 'GMT '.$x.', '.cot_date('datetime_medium', $sys['now_offset'] + $x*3600);
 }
 $profile_form_timezone = cot_selectbox($urr['user_timezone'], 'rusertimezone', $timezonelist, $timezonename, false);
-$profile_form_timezone .= ' '.$usr['gmttime'].' / '.date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600).' '.$usr['timetext'];
+$profile_form_timezone .= ' '.$usr['gmttime'].' / '.cot_date('datetime_medium', $sys['now_offset'] + $usr['timezone']*3600).' '.$usr['timetext'];
 
 $protected = !$cfg['useremailchange'] ? array('disabled' => 'disabled') : array();
 $profile_form_email = cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)
@@ -205,11 +205,11 @@ $useredit_array = array(
 	'USERS_PROFILE_THEME' => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
 	'USERS_PROFILE_LANG' => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	'USERS_PROFILE_GENDER' => cot_selectbox_gender($urr['user_gender'] ,'rusergender'),
-	'USERS_PROFILE_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), date('Y', $sys['now_offset']) - 100, false),
+	'USERS_PROFILE_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', $sys['now_offset']), cot_date('Y', $sys['now_offset']) - 100, false),
 	'USERS_PROFILE_TIMEZONE' => $profile_form_timezone,
-	'USERS_PROFILE_REGDATE' => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600),
+	'USERS_PROFILE_REGDATE' => cot_date('datetime_medium', $urr['user_regdate'] + $usr['timezone'] * 3600),
 	'USERS_PROFILE_REGDATE_STAMP' => $urr['user_regdate'] + $usr['timezone'] * 3600,
-	'USERS_PROFILE_LASTLOG' => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600),
+	'USERS_PROFILE_LASTLOG' => cot_date('datetime_medium', $urr['user_lastlog'] + $usr['timezone'] * 3600),
 	'USERS_PROFILE_LASTLOG_STAMP' => $urr['user_lastlog'] + $usr['timezone'] * 3600,
 	'USERS_PROFILE_LOGCOUNT' => $urr['user_logcount'],
 	'USERS_PROFILE_ADMINRIGHTS' => '',

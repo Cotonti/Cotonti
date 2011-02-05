@@ -136,7 +136,7 @@ $t->assign(array(
 	'PFS_TITLE' => $title,
 	'PFS_ACTION'=> cot_url('pfs', 'm=edit&a=update&id='.$pfs_id.'&'.$more),
 	'PFS_FILE' => $pfs_file,
-	'PFS_DATE' => @date($cfg['dateformat'], $pfs_date),
+	'PFS_DATE' => cot_date('datetime_medium', $pfs_date),
 	'PFS_DATE_STAMP' => $pfs_date,
 	'PFS_FOLDER' => cot_selectbox_folders($userid, '', $pfs_folderid),
 	'PFS_URL' => $ff,

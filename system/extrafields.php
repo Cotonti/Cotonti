@@ -249,7 +249,7 @@ function cot_build_extrafields_data($name, $extrafield, $value)
 			break;
 
 		case 'datetime':
-			return @date($cfg['dateformat'], $value + $usr['timezone'] * 3600);
+			return cot_date('datetime_medium', $value + $usr['timezone'] * 3600);
 			break;
 	}
 }

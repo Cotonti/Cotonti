@@ -36,7 +36,7 @@ if ($sql->rowCount() > 0)
 	{
 		// TODO internationalize this
 		$disp = 'Your IP is banned.<br />Reason: '.$row['banlist_reason'].'<br />Until: ';
-		$disp .= ($row['banlist_expire'] > 0) ? @date($cfg['dateformat'], $row['banlist_expire']).' GMT' : 'Never expire.';
+		$disp .= ($row['banlist_expire'] > 0) ? cot_date('datetime_medium', $row['banlist_expire']) : 'Never expire.';
 		cot_diefatal($disp);
 	}
 }

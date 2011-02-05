@@ -97,7 +97,8 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_COMMENTS_ITEM_ID' => $row['com_id'],
 		'ADMIN_COMMENTS_CODE' => $row['com_code'],
 		'ADMIN_COMMENTS_AUTHOR' => $row['com_author'],
-		'ADMIN_COMMENTS_DATE' => date($cfg['dateformat'], $row['com_date']),
+		'ADMIN_COMMENTS_DATE' => cot_date('datetime_medium', $row['com_date']),
+		'ADMIN_COMMENTS_DATE_STAMP' => $row['com_date'],
 		'ADMIN_COMMENTS_TEXT' => $row['com_text'],
 		'ADMIN_COMMENTS_URL' => $row['com_url'],
 		'ADMIN_COMMENTS_ODDEVEN' => cot_build_oddeven($ii)

@@ -517,7 +517,7 @@ $cot_yesno[1] = $L['Yes'];
 /* ======== Local/GMT time ======== */
 
 $usr['timetext'] = cot_build_timezone($usr['timezone']);
-$usr['gmttime'] = @date($cfg['dateformat'], $sys['now_offset']).' GMT';
+$usr['gmttime'] = cot_date('datetime_medium', $sys['now_offset']).' GMT';
 
 /* ======== Anti-XSS protection ======== */
 

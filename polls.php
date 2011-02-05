@@ -138,7 +138,8 @@ else
 	{
 		$jj++;
 		$t->assign(array(
-			'POLL_DATE' => date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
+			'POLL_DATE' => cot_date('date_full', $row['poll_creationdate'] + $usr['timezone'] * 3600),
+			'POLL_DATE' => $row['poll_creationdate'] + $usr['timezone'] * 3600,
 			'POLL_HREF' => cot_url('polls', 'id='.$row['poll_id']),
 			'POLL_TEXT' => cot_parse($row['poll_text'], $cfg['polls']['markup']),
 			'POLL_NUM' => $jj,
