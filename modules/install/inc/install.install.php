@@ -161,7 +161,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			}
 			catch (PDOException $e)
 			{
-				cot_error('install_error_sql', 'db_host');
+				if ($e->getCode() == 1049)
+				{
+					// Attempt to create a new database
+					try
+					{
+						$db = new CotDB('mysql:host='.$db_host, $db_user, $db_pass);
+						$db->query("CREATE DATABASE `$db_name`");
+						$db->query("USE `$db_name`");
+					}
+					catch (PDOException $e)
+					{
+						cot_error('install_error_sql_db', 'db_name');
+					}
+				}
+				else
+				{
+					cot_error('install_error_sql', 'db_host');
+				}
 			}
 
 			if (!cot_error_found() && function_exists('version_compare')
