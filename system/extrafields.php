@@ -204,7 +204,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			$import = $exfldsize[$extrafield['field_variants']];
 			break;
 	}
-	if (is_null($import) && $extrafield['field_required'])
+	if (empty($import) && $extrafield['field_required'])
 	{
 		$L['field_required_' . $extrafield['field_name']] = (isset($L['field_required_' . $extrafield['field_name']])) ? $L['field_required_' . $extrafield['field_name']] : $L['field_required'];
 		cot_error('field_required_' . $extrafield['field_name'], $name);
