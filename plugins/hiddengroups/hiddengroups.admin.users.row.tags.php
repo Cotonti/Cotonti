@@ -17,6 +17,8 @@ Hooks=admin.users.row.tags
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
+$hidden_groups = true;
+
 $sql2 = $db->query("SELECT grp_hidden FROM $db_groups WHERE grp_id = ".(int)$row['grp_id']);
 if($res = $sql2->fetch())
 {
