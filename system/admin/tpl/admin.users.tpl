@@ -21,7 +21,9 @@
 				<td><a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}" class="ajax">{ADMIN_USERS_ROW_GRP_TITLE}</a></td>
 				<td class="centerall">{ADMIN_USERS_ROW_GRP_COUNT_MEMBERS}</td>
 				<td class="centerall">{ADMIN_USERS_ROW_GRP_DISABLED}</td>
+				<!-- IF {PHP.hidden_groups} -->
 				<td class="centerall">{ADMIN_USERS_ROW_GRP_HIDDEN}</td>
+				<!-- ENDIF -->
 				<td class="centerall action">
 					<a title="{PHP.L.Rights}" href="{ADMIN_USERS_ROW_GRP_RIGHTS_URL}">{PHP.R.admin_icon_rights}</a>
 					<a title="{PHP.L.Open}" href="{ADMIN_USERS_ROW_GRP_JUMPTO_URL}">{PHP.R.admin_icon_jumpto}</a>
@@ -48,6 +50,7 @@
 					<td>{PHP.L.Alias}:</td>
 					<td>{ADMIN_USERS_NGRP_ALIAS}</td>
 				</tr>
+				<!-- IF {PHP.pfs_is_active} -->
 				<tr>
 					<td>{PHP.L.adm_maxsizesingle}:</td>
 					<td>{ADMIN_USERS_NGRP_PFS_MAXFILE}</td>
@@ -56,6 +59,7 @@
 					<td>{PHP.L.adm_maxsizeallpfs}:</td>
 					<td>{ADMIN_USERS_NGRP_PFS_MAXTOTAL}</td>
 				</tr>
+				<!-- ENDIF -->
 				<tr>
 					<td>{PHP.L.adm_copyrightsfrom}:</td>
 					<td>{ADMIN_USERS_FORM_SELECTBOX_GROUPS} {PHP.L.adm_required}</td>
@@ -68,10 +72,12 @@
 					<td>{PHP.L.Disabled}:</td>
 					<td>{ADMIN_USERS_NGRP_DISABLED}</td>
 				</tr>
+				<!-- IF {PHP.hidden_groups} -->
 				<tr>
 					<td>{PHP.L.Hidden}:</td>
 					<td>{ADMIN_USERS_NGRP_HIDDEN}</td>
 				</tr>
+				<!-- ENDIF -->
 				<tr>
 					<td>{PHP.L.adm_rights_maintenance}:</td>
 					<td>{ADMIN_USERS_NGRP_MAINTENANCE}</td>
@@ -101,6 +107,7 @@
 						<td>{PHP.L.Alias}:</td>
 						<td>{ADMIN_USERS_EDITFORM_GRP_ALIAS}</td>
 					</tr>
+					<!-- IF {PHP.pfs_is_active} -->
 					<tr>
 						<td>{PHP.L.adm_maxsizesingle}:</td>
 						<td>{ADMIN_USERS_EDITFORM_GRP_PFS_MAXFILE}</td>
@@ -109,14 +116,17 @@
 						<td>{PHP.L.adm_maxsizeallpfs}:</td>
 						<td>{ADMIN_USERS_EDITFORM_GRP_PFS_MAXTOTAL}</td>
 					</tr>
+					<!-- ENDIF -->
 					<tr>
 						<td>{PHP.L.Disabled}:</td>
 						<td>{ADMIN_USERS_EDITFORM_GRP_DISABLED}</td>
 					</tr>
+					<!-- IF {PHP.hidden_groups} -->
 					<tr>
 						<td>{PHP.L.Hidden}:</td>
 						<td>{ADMIN_USERS_EDITFORM_GRP_HIDDEN}</td>
 					</tr>
+					<!-- ENDIF -->
 					<tr>
 						<td>{PHP.L.Level}:</td>
 						<td>{ADMIN_USERS_EDITFORM_GRP_RLEVEL}</td>
