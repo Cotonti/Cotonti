@@ -423,27 +423,39 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
 	$hour = cot_import($date['hour'], 'D', 'INT');
 	$minute = cot_import($date['minute'], 'D', 'INT');
 
-	if (((int)($month) > 0 && (int)($day) > 0 && (int)($year) > 0) || ((int)($day) > 0 && (int)($minute) > 0))
+	if (($month && $day && $year) || ($day && $minute))
 	{
-		$result = cot_mktime($hour, $minute, 0, $month, $day, $year);
-		$result = ($usertimezone) ? ($result - $usr['timezone'] * 3600) : $result;
+		$timestamp = cot_mktime($hour, $minute, 0, $month, $day, $year);
 	}
 	else
 	{
-		$result = 0;
+		$string = cot_import($date['string'], 'D', 'TXT');
+		$format = cot_import($date['format'], 'D', 'TXT');
+		if ($string && $format)
+		{
+			$timestamp = cot_date2stamp($string, $format);
+		}
+		else
+		{
+			return 0;
+		}
 	}
-
-	if($returnarray)
+	if ($usertimezone)
 	{
-		$result['stamp'] = $result;
-		$result['year'] = $year;
-		$result['month'] = $month;
-		$result['day'] = $day;
-		$result['hour'] = $hour;
-		$result['minute'] = $minute;
+		$timestamp -= $usr['timezone'] * 3600;
 	}
-
-	return $result;
+	if ($returnarray)
+	{
+		$result = array();
+		$result['stamp'] = $timestamp;
+		$result['year'] = (int)date('Y', $timestamp);
+		$result['month'] = (int)date('m', $timestamp);
+		$result['day'] = (int)date('d', $timestamp);
+		$result['hour'] = (int)date('H', $timestamp);
+		$result['minute'] = (int)date('i', $timestamp);
+		return $result;
+	}
+	return $timestamp;
 }
 
 /**
@@ -2585,16 +2597,36 @@ function cot_mktime($hour = false, $minute = false, $second = false, $month = fa
 }
 
 /**
- * Converts MySQL date into UNIX timestamp
+ * Converts date into UNIX timestamp.
+ * Like strptime() but using formatting as specified for date().
  *
- * @param string $date Date in MySQL format
+ * @param string $date
+ *	Formatted date as a string.
+ * @param string $format
+ *	Format on which to base the conversion.
+ *	Defaults to MySQL date format.
+ *	Can also be set to 'auto', in which case 
+ *	it will rely on strtotime for parsing.
  * @return int UNIX timestamp
  */
-function cot_date2stamp($date)
+function cot_date2stamp($date, $format = null)
 {
 	if ($date == '0000-00-00') return 0;
-	preg_match('#(\d{4})-(\d{2})-(\d{2})#', $date, $m);
-	return mktime(0, 0, 0, (int) $m[2], (int) $m[3], (int) $m[1]);
+	if (!$format)
+	{
+		preg_match('#(\d{4})-(\d{2})-(\d{2})#', $date, $m);
+		return mktime(0, 0, 0, (int) $m[2], (int) $m[3], (int) $m[1]);
+	}
+	if ($format == 'auto')
+	{
+		return strtotime($date);
+	}
+	$format = cot_date2strftime($format);
+	$m = strptime($date, $format);
+	return mktime(
+		(int)$m['tm_hour'], (int)$m['tm_min'], (int)$m['tm_sec'],
+		(int)$m['tm_mon']+1, (int)$m['tm_mday'], (int)$m['tm_year']+1900
+	);
 }
 
 /**
@@ -2606,6 +2638,30 @@ function cot_date2stamp($date)
 function cot_stamp2date($stamp)
 {
 	return date('Y-m-d', $stamp);
+}
+
+/**
+ * Convert a date format to a strftime format.
+ * Timezone conversion is done for unix. Windows users must exchange %z and %Z.
+ * Unsupported date formats : S, n, t, L, B, G, u, e, I, P, Z, c, r
+ * Unsupported strftime formats : %U, %W, %C, %g, %r, %R, %T, %X, %c, %D, %F, %x
+ *
+ * @author baptiste dot place at utopiaweb dot fr (php.net comment)
+ * @see http://php.net/manual/en/function.strftime.php
+ * @param string $format A format for date().
+ * @return string Format usable for strftime().
+ */
+function cot_date2strftime($format) {
+
+    $chars = array(
+        'd' => '%d', 'D' => '%a', 'j' => '%e', 'l' => '%A',
+		'N' => '%u', 'w' => '%w', 'z' => '%j', 'W' => '%V',
+		'F' => '%B', 'm' => '%m', 'M' => '%b', 'o' => '%G',
+		'Y' => '%Y', 'y' => '%y', 'a' => '%P', 'A' => '%p',
+		'g' => '%l', 'h' => '%I', 'H' => '%H', 'i' => '%M',
+		's' => '%S', 'O' => '%z', 'T' => '%Z', 'U' => '%s'
+    );
+    return strtr((string)$format, $chars);
 }
 
 /*
