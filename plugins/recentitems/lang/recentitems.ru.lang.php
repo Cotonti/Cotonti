@@ -15,6 +15,7 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
+$L['cfg_hook'] = array('Использовать этот хук для новых элементов');
 $L['cfg_recentpages'] = array('Отображать новые страницы на главной странице');
 $L['cfg_maxpages'] = array('Количество новых страниц на главной странице');
 $L['cfg_recentforums'] = array('Отображать новые сообщения на форумах на главной странице');

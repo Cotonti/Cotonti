@@ -164,7 +164,7 @@ if (!$cot_plugins && !defined('COT_INSTALL'))
 		while ($row = $sql->fetch())
 		{
 			$cot_plugins[$row['pl_hook']][] = $row;
-			$cot_plugins_active[] = $row['pl_code'];
+			$cot_plugins_active[$row['pl_code']] = true;
 		}
         $sql->closeCursor();
 	}
