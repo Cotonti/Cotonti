@@ -482,7 +482,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 			}
 		}
 
-		$install_handler = $old_ext_format ? $setup_file : $path . "/$name.install.php";
+		$install_handler = $old_ext_format ? $setup_file : $path . "/setup/$name.install.php";
 
 		if ($old_ext_format)
 		{
@@ -604,7 +604,7 @@ function cot_extension_uninstall($name, $is_module = false)
 	}
 	else
 	{
-		$uninstall_handler = $path . "/$name.uninstall.php";
+		$uninstall_handler = $path . "/setup/$name.uninstall.php";
 	}
 
     if (file_exists($uninstall_handler))
