@@ -113,6 +113,17 @@ switch($n)
 					}
 				}
 			}
+
+			// Run configure extension part if present
+			if ($o == 'module' && file_exists($cfg['modules_dir'] . "/$p/setup/$p.configure.php"))
+			{
+				include $cfg['modules_dir'] . "/$p/setup/$p.configure.php";
+			}
+			elseif ($o == 'plug' && file_exists($cfg['plugins_dir'] . "/$p/setup/$p.configure.php"))
+			{
+				include $cfg['plugins_dir'] . "/$p/setup/$p.configure.php";
+			}
+
 			/* === Hook  === */
 			foreach (cot_getextplugins('admin.config.edit.update.done') as $pl)
 			{
