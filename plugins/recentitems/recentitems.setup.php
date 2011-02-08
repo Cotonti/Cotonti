@@ -4,8 +4,8 @@
 Code=recentitems
 Name=Recent items
 Description=Recent pages, topics in forums, users, comments
-Version=0.7.1
-Date=2010-jan-03
+Version=0.9.0
+Date=2010-02-08
 Author=esclkm & Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2011
 Notes=BSD License
@@ -19,6 +19,7 @@ Recommends_plugins=comments
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
+hook=10:select:index.tags,header.tags:index.tags:Hook to plug recent items into
 recentpages=11:radio::1:Recent pages on index
 maxpages=12:string::5:Recent pages displayed
 recentpagestitle=13:string:::Recent pages title length limit

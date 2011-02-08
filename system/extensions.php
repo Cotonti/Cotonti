@@ -285,16 +285,28 @@ function cot_extension_install($name, $is_module = false, $update = false)
                     $hooks = explode(',', $part_info['Hooks']);
 					$hooks = is_array($hooks) ? array_map('trim', $hooks) : array();
                 }
+				if (empty($part_info['Order']))
+				{
+					$order = COT_PLUGIN_DEFAULT_ORDER;
+				}
+				else
+				{
+					$order = array_map('trim', explode(',', $part_info['Order']));
+					if (count($order) == 1)
+					{
+						$order = (int) $order[0];
+					}
+				}
+				$i = 0;
                 foreach ($hooks as $hook)
                 {
                     $hook_bindings[] = array(
                         'part' => empty($mt[2]) ? 'main' : $mt[2],
 						'file' => $f,
                         'hook' => $hook,
-                        'order' => isset($part_info['Order'])
-							? (int) $part_info['Order']
-							: COT_PLUGIN_DEFAULT_ORDER
+                        'order' => isset($order[$i]) ? (int) $order[$i] : $order
                     );
+					++$i;
                 }
             }
         }

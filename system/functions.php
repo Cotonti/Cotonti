@@ -698,7 +698,7 @@ function cot_outputfilters($output)
 function cot_plugin_active($name)
 {
 	global $cot_plugins_active;
-	return is_array($cot_plugins_active) && in_array($name, $cot_plugins_active);
+	return is_array($cot_plugins_active) && isset($cot_plugins_active[$name]);
 }
 
 /**

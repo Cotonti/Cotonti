@@ -15,6 +15,7 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
+$L['cfg_hook'] = array('Hook to plug recent items into');
 $L['cfg_recentpages'] = array('Recent pages on index');
 $L['cfg_maxpages'] = array('Recent pages displayed');
 $L['cfg_recentforums'] = array('Recent forums on index');
