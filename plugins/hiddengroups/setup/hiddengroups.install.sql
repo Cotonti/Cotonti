@@ -1,1 +1,0 @@
-ALTER TABLE `cot_groups` ADD COLUMN `grp_hidden` TINYINT NOT NULL DEFAULT '0' AFTER `grp_disabled`;
