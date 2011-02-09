@@ -1,1 +1,0 @@
-ALTER TABLE `cot_groups` DROP COLUMN `grp_hidden`;
