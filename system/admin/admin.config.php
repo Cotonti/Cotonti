@@ -392,8 +392,12 @@ switch($n)
 		break;
 	
 	default:
-		$sql = $db->query("SELECT DISTINCT(config_cat) FROM $db_config
-			WHERE config_owner='core' ORDER BY config_cat ASC");
+		$sql = $db->query("
+			SELECT DISTINCT(config_cat) FROM $db_config
+			WHERE config_owner='core'
+			AND config_type != '".COT_CONFIG_TYPE_HIDDEN."'
+			ORDER BY config_cat ASC
+		");
 		while ($row = $sql->fetch())
 		{
 			if($L['core_'.$row['config_cat']])
@@ -407,8 +411,12 @@ switch($n)
 		}
 		$sql->closeCursor();
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
-		$sql = $db->query("SELECT DISTINCT(config_cat) FROM $db_config
-			WHERE config_owner='module' ORDER BY config_cat ASC");
+		$sql = $db->query("
+			SELECT DISTINCT(config_cat) FROM $db_config
+			WHERE config_owner = 'module'
+			AND config_type != '".COT_CONFIG_TYPE_HIDDEN."'
+			ORDER BY config_cat ASC
+		");
 		while ($row = $sql->fetch())
 		{
 			$t->assign(array(
@@ -419,8 +427,12 @@ switch($n)
 		}
 		$sql->closeCursor();
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
-		$sql = $db->query("SELECT DISTINCT(config_cat) FROM $db_config
-			WHERE config_owner='plug' ORDER BY config_cat ASC");
+		$sql = $db->query("
+			SELECT DISTINCT(config_cat) FROM $db_config
+			WHERE config_owner = 'plug'
+			AND config_type != '".COT_CONFIG_TYPE_HIDDEN."'
+			ORDER BY config_cat ASC
+		");
 		while ($row = $sql->fetch())
 		{
 			$t->assign(array(
