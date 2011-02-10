@@ -984,8 +984,9 @@ class Cotpl_logical extends Cotpl_block
 
 	/**
 	 * Overloads reset()
+	 * @param mixed $dummy A stub to match Cotpl_block::reset() declaration (Strict mode)
 	 */
-	public function reset()
+	public function reset($dummy = null)
 	{
 		throw new Exception('Calling reset() on logical block');
 	}

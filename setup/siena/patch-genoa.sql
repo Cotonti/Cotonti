@@ -477,8 +477,6 @@ DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'sig_m
 /* r1572 Remove SMTP email settings and leave it up to plugins and remove index module from registry*/
 DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'email';
 
-DELETE FROM `cot_core` WHERE `ct_code` = 'index';
-
 /* r1592 Ratings tables update */
 ALTER TABLE `cot_ratings` ADD COLUMN `rating_area` varchar(64) collate utf8_unicode_ci NOT NULL default '';
 ALTER TABLE `cot_ratings` MODIFY `rating_code` varchar(255) collate utf8_unicode_ci NOT NULL default '';
