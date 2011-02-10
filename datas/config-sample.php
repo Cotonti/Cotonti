@@ -28,6 +28,7 @@ $cfg['mysqlcollate'] = 'utf8_unicode_ci';
 
 $cfg['mainurl'] = 'http://localhost';
 $cfg['site_id'] = 'Some unique string specific to your site';
+$cfg['secret_key'] = 'Secret key used for authentication, make it unique and keep in secret!';
 
 // ========================
 // Default theme, color scheme and default language

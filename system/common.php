@@ -257,12 +257,12 @@ if (!defined('COT_MESSAGE'))
 
 if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
-	$u = empty($_SESSION[$site_id]) ? explode(':', $_COOKIE[$site_id]) : explode(':', $_SESSION[$site_id]);
+	$u = empty($_SESSION[$site_id]) ? explode(':', base64_decode($_COOKIE[$site_id])) : explode(':', base64_decode($_SESSION[$site_id]));
 	$u_id = (int) cot_import($u[0], 'D', 'INT');
-	$u_sid = cot_import($u[1], 'D', 'ALP');
+	$u_sid = $db->quote(base64_decode($u[1]));
 	if ($u_id > 0)
 	{
-		$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = '$u_sid'");
+		$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = $u_sid");
 
 		if ($row = $sql->fetch())
 		{
@@ -320,12 +320,6 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 			}
 		}
 	}
-	else
-	{
-		$usr['theme'] = cot_import($u[0], 'D', 'ALP');
-		$usr['scheme'] = cot_import($u[1], 'D', 'ALP');
-		$usr['lang'] = cot_import($u[2], 'D', 'ALP');
-	}
 }
 
 if ($usr['id'] == 0)
@@ -337,9 +331,9 @@ if ($usr['id'] == 0)
 	}
 	$usr['auth'] = $cot_guest_auth;
 	unset($cot_guest_auth);
-	$usr['theme'] = empty($usr['theme']) ? $cfg['defaulttheme'] : $usr['theme'];
-	$usr['scheme'] = empty($usr['scheme']) ? $cfg['defaultscheme'] : $usr['scheme'];
-	$usr['lang'] = empty($usr['lang']) ? $cfg['defaultlang'] : $usr['lang'];
+	$usr['theme'] = $cfg['defaulttheme'];
+	$usr['scheme'] = $cfg['defaultscheme'];
+	$usr['lang'] = $cfg['defaultlang'];
 	$sys['xk'] = mb_strtoupper(dechex(crc32($site_id))); // Site related key for guests
 }
 
