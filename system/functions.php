@@ -437,7 +437,7 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
 		}
 		else
 		{
-			return 0;
+			return NULL;
 		}
 	}
 	if ($usertimezone)
