@@ -43,6 +43,7 @@ foreach (cot_getextplugins('index.first') as $pl)
 /* ===== */
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('index', 'a');
+cot_block($usr['auth_read']);
 
 /* === Hook === */
 foreach (cot_getextplugins('index.main') as $pl)
@@ -53,8 +54,7 @@ foreach (cot_getextplugins('index.main') as $pl)
 
 require_once $cfg['system_dir'].'/header.php';
 
-$mskin = cot_tplfile('index');
-$t = new XTemplate($mskin);
+$t = new XTemplate(cot_tplfile('index'));
 
 /* === Hook === */
 foreach (cot_getextplugins('index.tags') as $pl)
