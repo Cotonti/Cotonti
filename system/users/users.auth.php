@@ -57,7 +57,7 @@ if ($a=='check')
 	}
 	/* ===== */
 
-	$sql = $db->query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang FROM $db_users WHERE $user_select_condition");
+	$sql = $db->query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid FROM $db_users WHERE $user_select_condition");
 
 	if ($row = $sql->fetch())
 	{
@@ -93,11 +93,22 @@ if ($a=='check')
 		$rdefscheme = $row['user_scheme'];
 
 		$token = cot_unique(16);
-		$sid = cot_unique(32);
 
-		$db->query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_logcount = user_logcount + 1, user_token = '$token', user_sid = '$sid' WHERE user_id={$row['user_id']}");
+		$sid = hash_hmac('sha256', $rmdpass, $cfg['secret_key'], true);
 
-		$u = $ruserid.':'.$sid;
+		if (empty($row['user_sid']) || $row['user_sid'] != $sid)
+		{
+			// Generate new session identifier
+			$update_sid = ", user_sid = " . $db->quote($sid);
+		}
+		else
+		{
+			$update_sid = '';
+		}
+
+		$db->query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_logcount = user_logcount + 1, user_token = '$token' $update_sid WHERE user_id={$row['user_id']}");
+
+		$u = base64_encode($ruserid.':'.base64_encode($sid));
 
 		if($rremember)
 		{

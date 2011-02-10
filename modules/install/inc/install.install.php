@@ -246,6 +246,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 				$new_site_id = cot_unique(32);
 				cot_install_config_replace($config_contents, 'site_id', $new_site_id);
+				$new_secret_key = cot_unique(32);
+				cot_install_config_replace($config_contents, 'secret_key', $new_secret_key);
 
 				file_put_contents($file['config'], $config_contents);
 
@@ -503,6 +505,8 @@ switch ($step)
 				cot_rc('install_ver_invalid', array('ver' => PHP_VERSION))));
 		$status['mbstring'] = (extension_loaded('mbstring'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
+		$status['hash'] = (extension_loaded('hash') && function_exists('hash_hmac'))
+			? $R['install_code_available'] : $R['install_code_not_available'];
 		$status['mysql'] = (extension_loaded('pdo_mysql'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
 
@@ -547,6 +551,7 @@ switch ($step)
 			'INSTALL_SQL_FILE' => $status['sql_file'],
 			'INSTALL_PHP_VER' => $status['php_ver'],
 			'INSTALL_MBSTRING' => $status['mbstring'],
+			'INSTALL_HASH' => $status['hash'],
 			'INSTALL_MYSQL' => $status['mysql'],
 			'INSTALL_MYSQL_VER' => $status['mysql_ver']
 		));

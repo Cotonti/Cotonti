@@ -46,7 +46,7 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 					{
 						$val = false;
 					}
-                    elseif ($key == 'site_id')
+                    elseif ($key == 'site_id' || $key == 'secret_key')
                     {
                         $val = cot_unique(32);
                     }
