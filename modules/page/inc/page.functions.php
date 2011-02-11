@@ -110,7 +110,7 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
  * @param bool $cacheitem Cache tags
  * @return array
  */
-function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = 0, $dateformat='', $emptytitle='', $cacheitem = true)
+function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = 0, $dateformat = '', $emptytitle = '', $cacheitem = true)
 {
 	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $pag_cache, $db_pages, $usr, $sys, $cot_yesno, $cot_cat;
 	
@@ -173,6 +173,11 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			$text_cut = ((int)$textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
 			$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;
 
+			$cat_url = cot_url('page', 'c=' . $page_data['page_cat']);
+			$validate_url = cot_url('admin', "m=page&a=validate&id={$page_data['page_id']}&x={$sys['xk']}");
+			$unvalidate_url = cot_url('admin', "m=page&a=unvalidate&id={$page_data['page_id']}&x={$sys['xk']}");
+			$edit_url = cot_url('page', "m=edit&id={$page_data['page_id']}");
+
 			$temp_array = array(
 				'URL' => $page_data['page_pageurl'],
 				'ID' => $page_data['page_id'],
@@ -181,10 +186,10 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'STATE' => $page_data['page_state'],
 				'SHORTTITLE' => htmlspecialchars($page_data['page_title']),
 				'CAT' => $page_data['page_cat'],
-				'CATURL' => cot_url('page', 'c=' . $page_data['page_cat']),
+				'CATURL' => $cat_url,
 				'CATTITLE' => htmlspecialchars($cot_cat[$page_data['page_cat']]['title']),
 				'CATPATH' => $catpath,
-				'CATPATH_SHORT' => cot_rc_link(cot_url('page', 'c='.$page_data['page_cat']), htmlspecialchars($cot_cat[$page_data['page_cat']]['title'])),
+				'CATPATH_SHORT' => cot_rc_link($cat_url, htmlspecialchars($cot_cat[$page_data['page_cat']]['title'])),
 				'CATDESC' => htmlspecialchars($cot_cat[$page_data['page_cat']]['desc']),
 				'CATICON' => $cot_cat[$page_data['page_cat']]['icon'],
 				'KEY' => htmlspecialchars($page_data['page_key']),
@@ -204,39 +209,31 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'FILE' => $cot_yesno[$page_data['page_file']],
 				'FILE_URL' => empty($page_data['page_url']) ? '' : cot_url('page', 'id='.$page_data['page_id'].'&a=dl'),
 				'FILE_SIZE' => $page_data['page_size'],
+				'FILE_SIZE_READABLE' => cot_build_filesize($page_data['page_size']),
 				'FILE_ICON' => $page_data['page_fileicon'],
 				'FILE_COUNT' => $page_data['page_filecount'],
 				'FILE_COUNTTIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
 				'FILE_NAME' => basename($page_data['page_url']),
 				'COUNT' => $page_data['page_count'],
-				'ADMIN' => $admin_rights ? cot_rc('list_row_admin', array('unvalidate_url' => cot_url('admin', "m=page&a=unvalidate&id=".$page_data['page_id']."&".cot_xg()),'edit_url' => cot_url('page', "m=edit&id=".$page_data['page_id']))) : '',
+				'ADMIN' => $admin_rights ? cot_rc('list_row_admin', array('unvalidate_url' => $unvalidate_url, 'edit_url' => $edit_url)) : '',
 				'NOTAVAILABLE' => ($page_data['page_date'] > $sys['now_offset']) ? $L['page_notavailable'].cot_build_timegap($sys['now_offset'], $pag['page_date']) : ''
 			);
 
 			// Admin tags
-			if ($usr['isadmin'] || $usr['id'] == $page_data['page_ownerid'])
+			if ($admin_rights)
 			{
-				$temp_array['ADMIN_EDIT'] = cot_rc_link(cot_url('page', 'm=edit&id='.$page_data['page_id']), $L['Edit']);
+				$temp_array['ADMIN_EDIT'] = cot_rc_link($edit_url, $L['Edit']);
+				$temp_array['ADMIN_EDIT_URL'] = $edit_url;
+				$temp_array['ADMIN_UNVALIDATE'] = $page_data['page_state'] == 1 ?
+					cot_rc_link($validate_url, $L['Validate']) :
+					cot_rc_link($unvalidate_url, $L['Putinvalidationqueue']);
+				$temp_array['ADMIN_UNVALIDATE_URL'] = $page_data['page_state'] == 1 ?
+					$validate_url : $unvalidate_url;
 			}
-			else
+			else if ($usr['id'] == $page_data['page_ownerid'])
 			{
-				$temp_array['ADMIN_EDIT'] = '';
-			}
-
-			if ($usr['isadmin'])
-			{
-				if ($page_data['page_state'] == 1)
-				{
-					$temp_array['ADMIN_UNVALIDATE'] = cot_rc_link(cot_url('admin', 'm=page&a=validate&id='.$page_data['page_id'].'&x='.$sys['xk']), $L['Validate']);
-				}
-				else
-				{
-					$temp_array['ADMIN_UNVALIDATE'] = cot_rc_link(cot_url('admin', 'm=page&a=unvalidate&id='.$page_data['page_id'].'&x='.$sys['xk']), $L['Putinvalidationqueue']);
-				}
-			}
-			else
-			{
-				$temp_array['ADMIN_UNVALIDATE'] = '';
+				$temp_array['ADMIN_EDIT'] = cot_rc_link($edit_url, $L['Edit']);
+				$temp_array['ADMIN_EDIT_URL'] = $edit_url;
 			}
 
 			// Extrafields

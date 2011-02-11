@@ -265,12 +265,19 @@ $bhome = $cfg['homebreadcrumb'] ? cot_rc_link($cfg['mainurl'], htmlspecialchars(
 $title = $bhome . cot_rc_link(cot_url('pm'), $L['Private_Messages']).' '.$cfg['separator'].' ';
 $title .= (!$id) ? $L['pmsend_title'] : $L['Edit'].' #'.$id;
 
+$url_newpm = cot_url('pm', 'm=send');
+$url_inbox = cot_url('pm');
+$url_sentbox = cot_url('pm', 'f=sentbox');
+
 $t->assign(array(
 	'PMSEND_TITLE' => $title,
-	'PMSEND_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
-	'PMSEND_INBOX' => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
+	'PMSEND_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link($url_newpm, $L['pm_sendnew'], array('class'=>'ajax')) : '',
+	'PMSEND_SENDNEWPM_URL' => ($usr['auth_write']) ? $url_newpm : '',
+	'PMSEND_INBOX' => cot_rc_link($url_inbox, $L['pm_inbox'], array('class'=>'ajax')),
+	'PMSEND_INBOX_URL' => $url_inbox,
 	'PMSEND_INBOX_COUNT' => $totalinbox,
-	'PMSEND_SENTBOX' => cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class'=>'ajax')),
+	'PMSEND_SENTBOX' => cot_rc_link($url_sentbox, $L['pm_sentbox'], array('class'=>'ajax')),
+	'PMSEND_SENTBOX_URL' => $url_sentbox,
 	'PMSEND_SENTBOX_COUNT' => $totalsentbox,
 	'PMSEND_FORM_SEND' => cot_url('pm', 'm=send&a=send'.$idurl),
 	'PMSEND_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),

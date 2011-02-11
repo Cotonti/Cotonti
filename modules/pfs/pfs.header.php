@@ -20,7 +20,11 @@ defined('COT_CODE') or die('Wrong URL.');
 
 if ($usr['id'] > 0 && $cot_groups[$usr['maingrp']]['pfs_maxtotal'] > 0 && $cot_groups[$usr['maingrp']]['pfs_maxfile'] > 0)
 {
-	$out['pfs'] = cot_rc_link(cot_url('pfs'), $L['Mypfs']);
-	$t->assign('HEADER_USER_PFS', $out['pfs']);
+	$pfs_url = cot_url('pfs');
+	$out['pfs'] = cot_rc_link($pfs_url, $L['Mypfs']);
+	$t->assign(array(
+		'HEADER_USER_PFS' => $out['pfs'],
+		'HEADER_USER_PFS_URL' => $pfs_url
+	));
 }
 ?>

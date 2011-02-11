@@ -264,10 +264,12 @@ if (!empty($sq))
 		/* ===== */
 		foreach ($sql->fetchAll() as $row)
 		{
-			$page_url = empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id'].'&highlight='.$hl) : cot_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
+			$url_cat = cot_url('page', 'c='.$row['page_cat']);
+			$url_page = empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id'].'&highlight='.$hl) : cot_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
 			$t->assign(array(
-				'PLUGIN_PR_CATEGORY' => cot_rc_link(cot_url('page', 'c='.$row['page_cat']), $cot_cat[$row['page_cat']]['tpath']),
-				'PLUGIN_PR_TITLE' => cot_rc_link($page_url, htmlspecialchars($row['page_title'])),
+				'PLUGIN_PR_CATEGORY' => cot_rc_link($url_cat, $cot_cat[$row['page_cat']]['tpath']),
+				'PLUGIN_PR_CATEGORY_URL' => $url_cat,
+				'PLUGIN_PR_TITLE' => cot_rc_link($url_page, htmlspecialchars($row['page_title'])),
 				'PLUGIN_PR_TEXT' => cot_clear_mark($row['page_text'], $row['page_type'], $words),
 				'PLUGIN_PR_TIME' => cot_date('datetime_medium', $row['page_date'] + $usr['timezone'] * 3600),
 				'PLUGIN_PR_TIMESTAMP' => $row['page_date'] + $usr['timezone'] * 3600,
@@ -325,6 +327,7 @@ if (!empty($sq))
 				$t->assign(array(
 					'PLUGIN_FR_CATEGORY' => cot_forums_buildpath($row['ft_cat']),
 					'PLUGIN_FR_TITLE' => cot_rc_link($post_url, htmlspecialchars($row['ft_title'])),
+					'PLUGIN_FR_TITLE_URL' => $post_url,
 					'PLUGIN_FR_TEXT' => cot_clear_mark($row['fp_text'], 0, $words),
 					'PLUGIN_FR_TIME' => $row['ft_updated'] > 0 ? cot_date('datetime_medium', $row['ft_updated'] + $usr['timezone'] * 3600) : cot_date('datetime_medium', $row['fp_updated'] + $usr['timezone'] * 3600),
 					'PLUGIN_FR_TIMESTAMP' => $row['ft_updated'] > 0 ? $row['ft_updated'] + $usr['timezone'] * 3600 : $row['fp_updated'] + $usr['timezone'] * 3600,

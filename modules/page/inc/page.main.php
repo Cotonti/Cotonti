@@ -48,8 +48,8 @@ $cat = $cot_cat[$pag['page_cat']];
 $sys['sublocation'] = $pag['page_title'];
 
 $pag['page_begin_noformat'] = $pag['page_begin'];
-$pag['page_tab'] = (empty($pg)) ? 0 : $pg;
-$pag['page_pageurl'] = (empty($al)) ? cot_url('page', 'id='.$id) : cot_url('page', 'al='.$al);
+$pag['page_tab'] = empty($pg) ? 0 : $pg;
+$pag['page_pageurl'] = empty($al) ? cot_url('page', array('id' => $id)) : cot_url('page', array('al' => $al));
 
 if ($pag['page_state'] == 1 && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
 {
@@ -167,6 +167,7 @@ if ($pag['page_file'] > 0)
 
 		$t->assign(array(
 			'PAGE_FILE_SIZE' => $pag['page_size'],
+			'PAGE_FILE_SIZE_READABLE' => cot_build_filesize($pag['page_size']),
 			'PAGE_FILE_COUNT' => $pag['page_filecount'],
 			'PAGE_FILE_ICON' => $pag['page_fileicon'],
 			'PAGE_FILE_NAME' => basename($pag['page_url']),
@@ -181,7 +182,7 @@ if ($pag['page_file'] > 0)
 		{
 			$t->assign(array(
 				'PAGE_FILETITLE' => $pag['page_title'],
-				'PAGE_FILE_URL' => cot_url('page', "id=".$id."&a=dl")
+				'PAGE_FILE_URL' => cot_url('page', array('id' => $id, 'a' => 'dl'))
 			));
 		}
 	}

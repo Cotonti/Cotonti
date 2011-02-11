@@ -32,6 +32,7 @@ if ($usr['id'] > 0)
 	);
 	
 	$t->assign(array(
+		'HEADER_USER_PM_URL' => cot_url('pm'),
 		'HEADER_USER_PMS' => $out['pms'],
 		'HEADER_USER_PMREMINDER' => $out['pmreminder']
 	));

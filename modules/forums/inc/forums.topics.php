@@ -364,6 +364,10 @@ function cursort($trigger, $way)
 	return ('');
 }
 
+foreach (array('title', 'viewcount', 'postcount', 'creationdate', 'updated') as $ord)
+{
+	$title_urls[$ord] = cot_url('forums', "m=topics&s=$s&ord=$ord&w=".rev($w));
+}
 $t->assign(array(
 	'FORUMS_TOPICS_PARENT_SECTION_ID' => $s,
 	'FORUMS_TOPICS_SECTION_RSS' => cot_url('rss', "c=section&id=$s"),
@@ -374,14 +378,25 @@ $t->assign(array(
 	'FORUMS_TOPICS_PAGES' => $pagenav['main'],
 	'FORUMS_TOPICS_PAGEPREV' => $pagenav['prev'],
 	'FORUMS_TOPICS_PAGENEXT' => $pagenav['next'],
+	'FORUMS_TOPICS_PAGELAST' => $pagenav['last'],
+	'FORUMS_TOPICS_PAGECURRENT' => $pagenav['current'],
+	'FORUMS_TOPICS_PAGETOTAL' => $pagenav['total'],
+	'FORUMS_TOPICS_PAGEONPAGE' => $pagenav['onpage'],
+	'FORUMS_TOPICS_PAGEENTRIES' => $pagenav['entries'],
 	'FORUMS_TOPICS_PRVTOPICS' => $prvtopics,
 	'FORUMS_TOPICS_JUMPBOX' => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"'),
-	'FORUMS_TOPICS_TITLE_TOPICS' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=title&w=".rev($w)), $L['forums_topics'].' '.cursort($o == 'title', $w), 'rel="nofollow"'),
-	'FORUMS_TOPICS_TITLE_VIEWS' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=viewcount&w=".rev($w)), $L['Views']." ".cursort($o == 'viewcount', $w), 'rel="nofollow"'),
-	'FORUMS_TOPICS_TITLE_POSTS' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=postcount&w=".rev($w)), $L['forums_posts']." ".cursort($o == 'postcount', $w), 'rel="nofollow"'),
-	'FORUMS_TOPICS_TITLE_REPLIES' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=postcount&w=".rev($w)), $L['Replies']." ".cursort($o == 'postcount', $w), 'rel="nofollow"'),
-	'FORUMS_TOPICS_TITLE_STARTED' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=creationdate&w=".rev($w)), $L['Started']." ".cursort($o == 'creationdate', $w), 'rel="nofollow"'),
-	'FORUMS_TOPICS_TITLE_LASTPOST' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=updated&w=".rev($w)), $L['Lastpost']." ".cursort($o == 'updated', $w), 'rel="nofollow"')
+	'FORUMS_TOPICS_TITLE_TOPICS' => cot_rc_link($title_urls['title'], $L['forums_topics'].' '.cursort($o == 'title', $w), 'rel="nofollow"'),
+	'FORUMS_TOPICS_TITLE_TOPICS_URL' => $title_urls['title'],
+	'FORUMS_TOPICS_TITLE_VIEWS' => cot_rc_link($title_urls['viewcount'], $L['Views']." ".cursort($o == 'viewcount', $w), 'rel="nofollow"'),
+	'FORUMS_TOPICS_TITLE_VIEWS_URL' => $title_urls['viewcount'],
+	'FORUMS_TOPICS_TITLE_POSTS' => cot_rc_link($title_urls['postcount'], $L['forums_posts']." ".cursort($o == 'postcount', $w), 'rel="nofollow"'),
+	'FORUMS_TOPICS_TITLE_POSTS_URL' => $title_urls['postcount'],
+	'FORUMS_TOPICS_TITLE_REPLIES' => cot_rc_link($title_urls['postcount'], $L['Replies']." ".cursort($o == 'postcount', $w), 'rel="nofollow"'),
+	'FORUMS_TOPICS_TITLE_REPLIES_URL' => $title_urls['postcount'],
+	'FORUMS_TOPICS_TITLE_STARTED' => cot_rc_link($title_urls['creationdate'], $L['Started']." ".cursort($o == 'creationdate', $w), 'rel="nofollow"'),
+	'FORUMS_TOPICS_TITLE_STARTED_URL' => $title_urls['creationdate'],
+	'FORUMS_TOPICS_TITLE_LASTPOST' => cot_rc_link($title_urls['updated'], $L['Lastpost']." ".cursort($o == 'updated', $w), 'rel="nofollow"'),
+	'FORUMS_TOPICS_TITLE_LASTPOST_URL' => $title_urls['updated']
 ));
 
 

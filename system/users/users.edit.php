@@ -253,10 +253,12 @@ $bhome = $cfg['homebreadcrumb'] ?
 
 $protected = $sys['protecttopadmin'] ? array('disabled' => 'disabled') : array();
 
-$useredit_array = array(
+$t->assign(array(
 	'USERS_EDIT_TITLE' => $bhome.cot_rc_link(cot_url('users'), $L['Users']).' '.$cfg['separator'].' '
 		.cot_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])).' '.$cfg['separator']
 		.cot_rc_link(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit']),
+	'USERS_EDIT_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
+	'USERS_EDIT_EDITLINK' => cot_url('users', 'm=edit&id='.$urr['user_id']),
 	'USERS_EDIT_SUBTITLE' => $L['useed_subtitle'],
 	'USERS_EDIT_SEND' => cot_url('users', 'm=edit&a=update&'.cot_xg().'&id='.$urr['user_id']),
 	'USERS_EDIT_ID' => $urr['user_id'],
@@ -284,8 +286,7 @@ $useredit_array = array(
 	'USERS_EDIT_LOGCOUNT' => $urr['user_logcount'],
 	'USERS_EDIT_LASTIP' => cot_build_ipsearch($urr['user_lastip']),
 	'USERS_EDIT_DELETE' => ($sys['user_istopadmin']) ? cot_radiobox(0, 'ruserdelete', array(1, 0), array($L['Yes'], $L['No'])) . cot_checkbox(false, 'ruserdelpfs', $L['PFS']) : $L['na'],
-);
-$t->assign($useredit_array);
+));
 
 // Extra fields
 $extra_array = cot_build_extrafields('user', 'USERS_EDIT', $cot_extrafields['users'], $urr);

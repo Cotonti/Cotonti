@@ -33,6 +33,11 @@ if ($i18n_enabled && $i18n_notmain)
 	$cat_i18n = cot_i18n_get_cat($page_data['page_cat'], $i18n_locale);
 	if ($cat_i18n)
 	{
+		$cat_url = cot_url('page', 'c=' . $page_data['page_cat'].$append_param);
+		$validate_url = cot_url('admin', "m=page&a=validate&id={$page_data['page_id']}&x={$sys['xk']}$append_param");
+		$unvalidate_url = cot_url('admin', "m=page&a=unvalidate&id={$page_data['page_id']}&x={$sys['xk']}$append_param");
+		$edit_url = cot_url('page', "m=edit&id={$page_data['page_id']}$append_param");
+		
 		$catpath = cot_i18n_build_catpath('page', $page_data['page_cat'], $i18n_locale);
 		$i18n_array = array_merge($i18n_array, array(
 			'TITLE' => $catpath." ".$cfg['separator'].' '.cot_rc_link(cot_url('page', $urlparams),
@@ -43,6 +48,21 @@ if ($i18n_enabled && $i18n_notmain)
 			htmlspecialchars($cat_i18n['title'])),
 			'CATDESC' => htmlspecialchars($cat_i18n['desc']),
 		));
+		if ($admin_rights)
+		{
+			$i18n_array['ADMIN_EDIT'] = cot_rc_link($edit_url, $L['Edit']);
+			$i18n_array['ADMIN_EDIT_URL'] = $edit_url;
+			$i18n_array['ADMIN_UNVALIDATE'] = $page_data['page_state'] == 1 ?
+				cot_rc_link($validate_url, $L['Validate']) :
+				cot_rc_link($unvalidate_url, $L['Putinvalidationqueue']);
+			$i18n_array['ADMIN_UNVALIDATE_URL'] = $page_data['page_state'] == 1 ?
+				$validate_url : $unvalidate_url;
+		}
+		else if ($usr['id'] == $page_data['page_ownerid'])
+		{
+			$i18n_array['ADMIN_EDIT'] = cot_rc_link($edit_url, $L['Edit']);
+			$i18n_array['ADMIN_EDIT_URL'] = $edit_url;
+		}
 	}
 	else
 	{

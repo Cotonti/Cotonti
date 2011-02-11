@@ -114,7 +114,6 @@ if ($history)
 
 		if ($row2['pm_fromuserid'] == $usr['id'])
 		{// sentbox
-			$row2['pm_icon_edit'] = ($row2['pm_tostate'] == 0) ? cot_rc_link(cot_url('pm', 'm=send&id='.$row2['pm_id']), $R['pm_icon_edit'], array('title' => $L['Edit'], 'class'=>'ajax')) : '';
 			$pm_user = cot_generate_usertags($usr['profile'], 'PM_ROW_USER_');
 			$star_class2 = ($row2['pm_fromstate'] == 2) ? 1 : 0;
 		}
@@ -126,24 +125,31 @@ if ($history)
 
 		$pm_data = cot_parse($row2['pm_text'], $cfg['pm']['markup']);
 
-		$row2['pm_icon_delete'] = cot_rc_link(cot_url('pm', 'a=delete&'.cot_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d),
-				$R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax'));
+		$url_star = cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d);
+		$url_pm = cot_url('pm', 'm=message&id='.$row2['pm_id']);
+		$url_delete = cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d);
+		$url_edit = cot_url('pm', 'm=send&id='.$row2['pm_id']);
 
 		$t->assign(array(
 			'PM_ROW_ID' => $row2['pm_id'],
 			'PM_ROW_STATE' => $row2['pm_tostate'],
-			'PM_ROW_STAR' => cot_rc($star_class2 ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d))),
+			'PM_ROW_STAR' => cot_rc($star_class2 ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => $url_star)),
+			'PM_ROW_STAR_URL' => $url_star,
 			'PM_ROW_DATE' => cot_date('datetime_medium', $row2['pm_date'] + $usr['timezone'] * 3600),
 			'PM_ROW_DATE_STAMP' => $row2['pm_date'] + $usr['timezone'] * 3600,
-			'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), htmlspecialchars($row2['pm_title']), array('class'=>'ajax')),
+			'PM_ROW_TITLE' => cot_rc_link($url_pm, htmlspecialchars($row2['pm_title']), array('class'=>'ajax')),
+			'PM_ROW_URL' => $url_pm,
 			'PM_ROW_TEXT' => $pm_data,
 			'PM_ROW_ICON_STATUS' => $row2['pm_icon_readstatus'],
-			'PM_ROW_ICON_DELETE' => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d), $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax')),
-			'PM_ROW_ICON_EDIT' => $row2['pm_icon_edit'],
+			'PM_ROW_ICON_DELETE' => cot_rc_link($url_delete, $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax')),
+			'PM_ROW_DELETE_URL' => $url_delete,
+			'PM_ROW_ICON_EDIT' => ($row2['pm_tostate'] == 0) ? cot_rc_link($url_edit, $R['pm_icon_edit'], array('title' => $L['Edit'], 'class'=>'ajax')) : '',
+			'PM_ROW_EDIT_URL' => ($row2['pm_tostate'] == 0) ? $url_edit : '',
 			'PM_ROW_ODDEVEN' => cot_build_oddeven($jj),
 			'PM_ROW_NUM' => $jj
 		));
 		$t->assign($pm_user);
+
 		/* === Hook - Part2 : Include === */
 		foreach ($extp as $pl)
 		{
