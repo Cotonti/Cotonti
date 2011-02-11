@@ -3855,6 +3855,26 @@ HTM;
 }
 
 /**
+ * Splits a query string into keys and values array. In comparison with built-in
+ * parse_str() function, this doesn't apply addslashes and urldecode to parameters
+ * and does not support arrays and complex parameters.
+ *
+ * @param string $str Query string
+ * @return array
+ */
+function cot_parse_str($str)
+{
+	$res = array();
+	$tmp = explode('&', strtr($str, '=', '&'));
+	$cnt = count($tmp);
+	for ($i = 0; $i < $cnt; $i += 2)
+	{
+		$res[$tmp[$i]] = $tmp[$i+1];
+	}
+	return $res;
+}
+
+/**
  * Transforms parameters into URL by following user-defined rules.
  * This function can be overloaded by cot_url_custom().
  *
@@ -3873,16 +3893,19 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 
 	global $cfg;
 	// Preprocess arguments
-	is_array($params) ? $args = $params : parse_str($params, $args);
+	if (is_string($params))
+	{
+		$params = cot_parse_str($params);
+	}
 	$url = $name . '.php';
 	// Append query string if needed
-	if (count($args) > 0)
+	if (count($params) > 0)
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
-		$sep_len = mb_strlen($sep);
+		$sep_len = strlen($sep);
 		$qs = '?';
 		$i = 0;
-		foreach ($args as $key => $val)
+		foreach ($params as $key => $val)
 		{
 			if ($val != '')
 			{
