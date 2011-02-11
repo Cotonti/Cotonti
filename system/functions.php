@@ -4600,6 +4600,26 @@ function sed_load_urltrans()
 }
 
 /**
+ * Splits a query string into keys and values array. In comparison with built-in
+ * parse_str() function, this doesn't apply addslashes and urldecode to parameters
+ * and does not support arrays and complex parameters.
+ * 
+ * @param string $str Query string
+ * @return array
+ */
+function sed_parse_str($str)
+{
+	$res = array();
+	$tmp = explode('&', strtr($str, '=', '&'));
+	$cnt = count($tmp);
+	for ($i = 0; $i < $cnt; $i += 2)
+	{
+		$res[$tmp[$i]] = $tmp[$i+1];
+	}
+	return $res;
+}
+
+/**
  * Transforms parameters into URL by following user-defined rules
  *
  * @param string $name Site area or script name
@@ -4612,7 +4632,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 {
 	global $cfg, $sed_urltrans;
 	// Preprocess arguments
-	is_array($params) ? $args = $params : mb_parse_str($params, $args);
+	$args = is_array($params) ? $params : sed_parse_str($params);
 	$area = empty($sed_urltrans[$name]) ? '*' : $name;
 	// Find first matching rule
 	$url = $sed_urltrans['*'][0]['trans']; // default rule
