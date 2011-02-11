@@ -188,9 +188,11 @@ $profile_form_email = cot_inputbox('text', 'ruseremail', $urr['user_email'], arr
 
 $editor_class = $cfg['parsebbcodeusertext'] ? 'minieditor' : '';
 
-$useredit_array = array(
+$t->assign(array(
 	'USERS_PROFILE_TITLE' => cot_rc_link(cot_url('users', 'm=profile'), $L['pro_title']),
 	'USERS_PROFILE_SUBTITLE' => $L['pro_subtitle'],
+	'USERS_PROFILE_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
+	'USERS_PROFILE_EDITLINK' => cot_url('users', 'm=edit&id='.$urr['user_id']),
 	'USERS_PROFILE_FORM_SEND' => cot_url('users', "m=profile&a=update&".cot_xg()),
 	'USERS_PROFILE_ID' => $urr['user_id'],
 	'USERS_PROFILE_NAME' => htmlspecialchars($urr['user_name']),
@@ -216,8 +218,7 @@ $useredit_array = array(
 	'USERS_PROFILE_OLDPASS' => cot_inputbox('password', 'roldpass', '', array('size' => 12, 'maxlength' => 32)),
 	'USERS_PROFILE_NEWPASS1' => cot_inputbox('password', 'rnewpass1', '', array('size' => 12, 'maxlength' => 32)),
 	'USERS_PROFILE_NEWPASS2' => cot_inputbox('password', 'rnewpass2', '', array('size' => 12, 'maxlength' => 32)),
-);
-$t->assign($useredit_array);
+));
 
 // Extra fields
 foreach($cot_extrafields['users'] as $i => $row)

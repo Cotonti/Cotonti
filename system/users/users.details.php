@@ -89,7 +89,8 @@ foreach (cot_getextplugins('users.details.tags') as $pl)
 if ($usr['isadmin'])
 {
 	$t-> assign(array(
-		'USERS_DETAILS_ADMIN_EDIT' => cot_rc_link(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit'])
+		'USERS_DETAILS_ADMIN_EDIT' => cot_rc_link(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit']),
+		'USERS_DETAILS_ADMIN_EDIT_URL' => cot_url('users', 'm=edit&id='.$urr['user_id'])
 	));
 
 	$t->parse('MAIN.USERS_DETAILS_ADMIN');

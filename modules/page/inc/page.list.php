@@ -143,8 +143,6 @@ else
 $totalpages = ceil($totallines / $cfg['page']['maxrowsperpage']);
 $currentpage= ceil($d / $cfg['page']['maxrowsperpage']) + 1;
 
-$submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? cot_rc('page_submitnewpage', array('sub_url' => cot_url('page', 'm=add&c='.$c))) : ''; // TODO - to resorses OR move to tpl with logic {if}
-
 $pagenav = cot_pagenav('list', $list_url_path + array('dc' => $dc), $d, $totallines, $cfg['page']['maxrowsperpage']);
 
 $title_params = array(
@@ -165,8 +163,6 @@ foreach (cot_getextplugins('page.list.main') as $pl)
 require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = cot_tplfile(array('page' ,'list', $cat['tpl']));
-
-
 $t = new XTemplate($mskin);
 
 $t->assign(array(
@@ -183,53 +179,80 @@ $t->assign(array(
 			'desc' => htmlspecialchars($cat['desc'])
 		)),
 	'LIST_EXTRATEXT' => $extratext,
-	'LIST_SUBMITNEWPAGE' => $submitnewpage,
 	'LIST_TOP_PAGINATION' => $pagenav['main'],
 	'LIST_TOP_PAGEPREV' => $pagenav['prev'],
 	'LIST_TOP_PAGENEXT' => $pagenav['next']
 ));
 
+if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated')
+{
+	$t->assign(array(
+		'LIST_SUBMITNEWPAGE' => cot_rc('page_submitnewpage', array('sub_url' => cot_url('page', 'm=add&c='.$c))),
+		'LIST_SUBMITNEWPAGE_URL' => cot_url('page', 'm=add&c='.$c)
+	));
+}
+
 // Extra fields for structure
 foreach ($cot_extrafields['structure'] as $row_c)
 {
 	$uname = strtoupper($row_c['field_name']);
-	$t->assign('LIST_CAT_'.$uname.'_TITLE', isset($L['structure_'.$row_c['field_name'].'_title']) ? $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description']);
-	$t->assign('LIST_CAT_'.$uname, cot_build_extrafields_data('structure', $row_c, $cat[$row_c['field_name']]));
+	$t->assign(array(
+		'LIST_CAT_'.$uname.'_TITLE' => isset($L['structure_'.$row_c['field_name'].'_title']) ?
+			$L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description'],
+		'LIST_CAT_'.$uname => cot_build_extrafields_data('structure', $row_c, $cat[$row_c['field_name']])
+	));
 }
-
-$arrows = array();
-$params = array('title','key','date','author','owner','count','filecount');
-foreach($params as $val)
-{
-    $arrows[$val]['asc']  = $R['icon_down'];
-    $arrows[$val]['desc'] = $R['icon_up'];
-}
-$arrows[$s][$w]  = $R['icon_vert_active'][$w];
 
 $t->assign(array(
 	'LIST_TOP_CURRENTPAGE' => $currentpage,
 	'LIST_TOP_TOTALLINES' => $totallines,
 	'LIST_TOP_MAXPERPAGE' => $cfg['page']['maxrowsperpage'],
-	'LIST_TOP_TOTALPAGES' => $totalpages,
-	'LIST_TOP_TITLE' => cot_rc('list_link_title', array('cot_img_down'=>$arrows['title']['asc'],'cot_img_up'=>$arrows['title']['desc'],'list_link_url_down' => cot_url('page', array('s' => 'title', 'w' => 'asc') + $list_url_path), 'list_link_url_up' => cot_url('page', array('s' => 'title', 'w' => 'desc') + $list_url_path))),
-	'LIST_TOP_KEY' => cot_rc('list_link_key', array('cot_img_down'=>$arrows['key']['asc'],'cot_img_up'=>$arrows['key']['desc'],'list_link_key_url_down' => cot_url('page', array('s' => 'key', 'w' => 'asc') + $list_url_path), 'list_link_key_url_up' => cot_url('page', array('s' => 'key', 'w' => 'desc') + $list_url_path))),
-	'LIST_TOP_DATE' => cot_rc('list_link_date', array('cot_img_down'=>$arrows['date']['asc'],'cot_img_up'=>$arrows['date']['desc'],'list_link_date_url_down' => cot_url('page', array('s' => 'date', 'w' => 'asc') + $list_url_path), 'list_link_date_url_up' => cot_url('page', array('s' => 'date', 'w' => 'desc') + $list_url_path))),
-	'LIST_TOP_AUTHOR' => cot_rc('list_link_author', array('cot_img_down'=>$arrows['author']['asc'],'cot_img_up'=>$arrows['author']['desc'],'list_link_author_url_down' => cot_url('page', array('s' => 'author', 'w' => 'asc') + $list_url_path), 'list_link_author_url_up' => cot_url('page', array('s' => 'author', 'w' => 'desc') + $list_url_path))),
-	'LIST_TOP_OWNER' => cot_rc('list_link_owner', array('cot_img_down'=>$arrows['owner']['asc'],'cot_img_up'=>$arrows['owner']['desc'],'list_link_owner_url_down' => cot_url('page', array('s' => 'ownerid', 'w' => 'asc') + $list_url_path), 'list_link_owner_url_up' => cot_url('page', array('s' => 'ownerid', 'w' => 'desc') + $list_url_path))),
-	'LIST_TOP_COUNT' => cot_rc('list_link_count', array('cot_img_down'=>$arrows['count']['asc'],'cot_img_up'=>$arrows['count']['desc'],'list_link_count_url_down' => cot_url('page', array('s' => 'count', 'w' => 'asc') + $list_url_path), 'list_link_count_url_up' => cot_url('page', array('s' => 'count', 'w' => 'desc') + $list_url_path))),
-	'LIST_TOP_FILECOUNT' => cot_rc('list_link_filecount', array('cot_img_down'=>$arrows['filecount']['asc'],'cot_img_up'=>$arrows['filecount']['desc'],'list_link_filecount_url_down' => cot_url('page', array('s' => 'filecount', 'w' => 'acs') + $list_url_path), 'list_link_filecount_url_up' => cot_url('page', array('s' => 'filecount', 'w' => 'desc') + $list_url_path)))
+	'LIST_TOP_TOTALPAGES' => $totalpages
 ));
 
+$arrows = array();
+foreach(array('title', 'key', 'date', 'author', 'owner', 'count', 'filecount') as $val)
+{
+    $arrows[$val]['asc']  = $R['icon_down'];
+    $arrows[$val]['desc'] = $R['icon_up'];
+	if ($s == $val)
+	{
+		$arrows[$s][$w] = $R['icon_vert_active'][$w];
+	}
+	$uname = strtoupper($col);
+	$url_asc = cot_url('page', array('s' => $col, 'w' => 'asc') + $list_url_path);
+	$url_desc = cot_url('page', array('s' => $col, 'w' => 'desc') + $list_url_path);
+	$t->assign(array(
+		'LIST_TOP_'.$uname => cot_rc("list_link_$col", array(
+			'cot_img_down' => $arrows[$col]['asc'], 'cot_img_up' => $arrows[$col]['desc'],
+			'list_link_url_down' => $url_asc, 'list_link_url_up' => $url_desc
+		)),
+		'LIST_TOP_'.$uname.'_URL_ASC' => $url_asc,
+		'LIST_TOP_'.$uname.'_URL_DESC' => $url_desc
+	));
+}
 
 // Extra fields for pages
 foreach ($cot_extrafields['pages'] as $row_p)
 {
 	$uname = strtoupper($row_p['field_name']);
+	$url_asc = cot_url('page',  array('s' => $row_p['field_name'], 'w' => 'asc') + $list_url_path);
+	$url_desc = cot_url('page', array('s' => $row_p['field_name'], 'w' => 'desc') + $list_url_path);
 	$arrows[$row_p['field_name']]['asc']  = $R['icon_down'];
 	$arrows[$row_p['field_name']]['desc'] = $R['icon_up'];
 	$arrows[$s][$w]  = $R['icon_vert_active'][$w];
-	isset($L['page_'.$row_p['field_name'].'_title']) ? $extratitle = $L['page_'.$row_p['field_name'].'_title'] : $extratitle = $row_p['field_description'];
-	$t->assign('LIST_TOP_'.$uname, cot_rc('list_link_field_name', array('cot_img_down'=>$arrows[$row_p['field_name']]['asc'],'cot_img_up'=>$arrows[$row_p['field_name']]['desc'],'list_link_url_down' => cot_url('page',  array('s' => $row['field_name'], 'w' => 'asc') + $list_url_path), 'list_link_url_up' => cot_url('page', array('s' => $row['field_name'], 'w' => 'desc') + $list_url_path))));
+	$extratitle = isset($L['page_'.$row_p['field_name'].'_title']) ?
+		$L['page_'.$row_p['field_name'].'_title'] : $row_p['field_description'];
+	$t->assign(array(
+		'LIST_TOP_'.$uname => cot_rc('list_link_field_name', array(
+			'cot_img_down' => $arrows[$row_p['field_name']]['asc'],
+			'cot_img_up' => $arrows[$row_p['field_name']]['desc'],
+			'list_link_url_down' => $url_asc,
+			'list_link_url_up' => $url_desc
+		)),
+		'LIST_TOP_'.$uname.'_URL_ASC' => $url_asc,
+		'LIST_TOP_'.$uname.'_URL_DESC' => $url_desc
+	));
 }
 
 $kk = 0;
@@ -241,8 +264,9 @@ $extp = cot_getextplugins('page.list.rowcat.loop');
 /* ===== */
 foreach ($subcat as $x)
 {
-	$sub_count = $db->query("SELECT SUM(structure_count) FROM $db_structure WHERE 
-		structure_path LIKE '".$db->prep($structure['page'][$x]['rpath']).".%' OR  structure_path = ".$db->quote($structure['page'][$x]['rpath']))->fetchColumn();
+	$sub_count = $db->query("SELECT SUM(structure_count) FROM $db_structure
+		WHERE structure_path LIKE '".$db->prep($structure['page'][$x]['rpath']).".%'
+		OR structure_path = ".$db->quote($structure['page'][$x]['rpath']))->fetchColumn();
 
 	$t->assign(array(
 		'LIST_ROWCAT_URL' => cot_url('page', 'c='.$x),

@@ -145,32 +145,36 @@ foreach ($pm_sql->fetchAll() as $row)
 
 	if ($f == 'sentbox')
 	{
-		$row['pm_icon_edit'] = ($row['pm_tostate'] == 0) ? cot_rc_link(cot_url('pm', 'm=send&id='.$row['pm_id']), $R['pm_icon_edit'], array('title' => $L['Edit'], 'class'=>'ajax')) : '';
 		$star_class = ($row['pm_fromstate'] == 2) ? 1 : 0;
 	}
 	else
 	{
 		$star_class = ($row['pm_tostate'] == 2) ? 1 : 0;
 	}
-	$pm_user = cot_generate_usertags($row, 'PM_ROW_USER_');
+	$url_edit = cot_url('pm', 'm=send&id='.$row['pm_id']);
+	$url_delete = cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f.'&d='.$d);
 
 	$t->assign(array(
 		'PM_ROW_ID' => $row['pm_id'],
 		'PM_ROW_STATE' => $row['pm_tostate'],
 		'PM_ROW_STAR' => cot_rc($star_class ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d))),
+		'PM_ROW_STAR_URL' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d),
 		'PM_ROW_DATE' => cot_date('datetime_medium', $row['pm_date'] + $usr['timezone'] * 3600),
 		'PM_ROW_DATE_STAMP' => $row['pm_date'] + $usr['timezone'] * 3600,
 		'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), htmlspecialchars($row['pm_title']), array('class'=>'ajax')),
+		'PM_ROW_URL' => cot_url('pm', 'm=message&id='.$row['pm_id']),
 		'PM_ROW_TEXT' => $pm_data,
 		'PM_ROW_ICON_STATUS' => $row['pm_icon_readstatus'],
 		'PM_ROW_ICON_STARRED' => $row['pm_icon_starred'],
-		'PM_ROW_ICON_DELETE' => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f.'&d='.$d), $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax')),
-		'PM_ROW_ICON_EDIT' => $row['pm_icon_edit'],
+		'PM_ROW_ICON_DELETE' => cot_rc_link($url_delete, $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax')),
+		'PM_ROW_DELETE_URL' => $url_delete,
+		'PM_ROW_ICON_EDIT' => ($row['pm_tostate'] == 0) ? cot_rc_link($url_edit, $R['pm_icon_edit'], array('title' => $L['Edit'], 'class'=>'ajax')) : '',
+		'PM_ROW_EDIT_URL' => ($row['pm_tostate'] == 0) ? $url_edit : '',
 		'PM_ROW_DESC' => $pm_desc,
 		'PM_ROW_ODDEVEN' => cot_build_oddeven($jj),
 		'PM_ROW_NUM' => $jj
 	));
-	$t->assign($pm_user);
+	$t->assign(cot_generate_usertags($row, 'PM_ROW_USER_'));
 
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
@@ -192,18 +196,31 @@ if (!COT_AJAX)
 	$t->parse('MAIN.AFTER_AJAX');
 }
 
+$url_newpm = cot_url('pm', 'm=send');
+$url_inbox = cot_url('pm');
+$url_sentbox = cot_url('pm', 'f=sentbox');
+$url_all = cot_url('pm', 'f='.$f);
+$url_unread = cot_url('pm', 'f='.$f.'&filter=unread');
+$url_starred = cot_url('pm', 'f='.$f.'&filter=starred');
+
 $t->assign(array(
 	'PM_PAGETITLE' => $title,
 	'PM_SUBTITLE' => $subtitle,
 	'PM_FORM_UPDATE' => cot_url('pm', cot_xg().'&f='.$f.'&filter='.$filter.'&d='.$d),
-	'PM_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
-	'PM_INBOX' => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
+	'PM_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link($url_newpm, $L['pm_sendnew'], array('class'=>'ajax')) : '',
+	'PM_SENDNEWPM_URL' => ($usr['auth_write']) ? $url_newpm : '',
+	'PM_INBOX' => cot_rc_link($url_inbox, $L['pm_inbox'], array('class'=>'ajax')),
+	'PM_INBOX_URL' => $url_inbox,
 	'PM_INBOX_COUNT' => $totalinbox,
-	'PM_SENTBOX' => cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class'=>'ajax')),
+	'PM_SENTBOX' => cot_rc_link($url_sentbox, $L['pm_sentbox'], array('class'=>'ajax')),
+	'PM_SENTBOX_URL' => $url_sentbox,
 	'PM_SENTBOX_COUNT' => $totalsentbox,
-	'PM_FILTER_ALL' => cot_rc_link(cot_url('pm', 'f='.$f), $L['pm_all'], array('class'=>'ajax')),
-	'PM_FILTER_UNREAD' => cot_rc_link(cot_url('pm', 'f='.$f.'&filter=unread'), $L['pm_unread'], array('class'=>'ajax')),
-	'PM_FILTER_STARRED' => cot_rc_link(cot_url('pm', 'f='.$f.'&filter=starred'), $L['pm_starred'], array('class'=>'ajax')),
+	'PM_FILTER_ALL' => cot_rc_link($url_all, $L['pm_all'], array('class'=>'ajax')),
+	'PM_FILTER_ALL_URL' => $url_all,
+	'PM_FILTER_UNREAD' => cot_rc_link($url_unread, $L['pm_unread'], array('class'=>'ajax')),
+	'PM_FILTER_UNREAD_URL' => $url_unread,
+	'PM_FILTER_STARRED' => cot_rc_link($url_starred, $L['pm_starred'], array('class'=>'ajax')),
+	'PM_FILTER_STARRED_URL' => $url_starred,
 	'PM_PAGEPREV' => $pagenav['prev'],
 	'PM_PAGENEXT' => $pagenav['next'],
 	'PM_PAGES' => $pagenav['main'],

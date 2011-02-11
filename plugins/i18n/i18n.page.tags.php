@@ -62,7 +62,11 @@ if ($i18n_enabled)
 			if ($i18n_admin || $pag_i18n['ipage_translatorid'] == $usr['id'])
 			{
 				// Edit translation
-				$t->assign('PAGE_ADMIN_EDIT', cot_rc_link(cot_url('plug', "e=i18n&m=page&a=edit&id=$id&l=$i18n_locale"), $L['Edit']));
+				$url_i18n = cot_url('plug', "e=i18n&m=page&a=edit&id=$id&l=$i18n_locale");
+				$t->assign(array(
+					'PAGE_ADMIN_EDIT' => cot_rc_link($url_i18n, $L['Edit']),
+					'PAGE_ADMIN_EDIT_URL' => $url_i18n
+				));
 			}
 		}
 		else
@@ -70,7 +74,11 @@ if ($i18n_enabled)
 			if (count($pag_i18n_locales) < count($i18n_locales))
 			{
 				// Translate button
-				$t->assign('PAGE_I18N_TRANSLATE', cot_rc_link(cot_url('plug', "e=i18n&m=page&a=add&id=$id"), $L['i18n_translate']));
+				$url_i18n = cot_url('plug', "e=i18n&m=page&a=add&id=$id");
+				$t->assign(array(
+					'PAGE_I18N_TRANSLATE', cot_rc_link($url_i18n, $L['i18n_translate']),
+					'PAGE_I18N_TRANSLATE_URL', $url_i18n
+				));
 			}
 		}
 	}
@@ -81,7 +89,11 @@ if ($i18n_enabled)
 		if ($pag_i18n)
 		{
 			// Delete translation
-			$t->assign('PAGE_I18N_DELETE', cot_rc_link(cot_url('plug', "e=i18n&m=page&a=delete&id=$id&l=$i18n_locale"), $L['Delete']));
+			$url_i18n = cot_url('plug', "e=i18n&m=page&a=delete&id=$id&l=$i18n_locale");
+			$t->assign(array(
+				'PAGE_I18N_DELETE' => cot_rc_link($url_i18n, $L['Delete']),
+				'PAGE_I18N_DELETE_URL' => $url_i18n
+			));
 		}
 	}
 }

@@ -127,8 +127,11 @@ if (!COT_AJAX)
 		$t->assign(array(
 			'HEADER_USER_NAME' => $usr['name'],
 			'HEADER_USER_ADMINPANEL' => $out['adminpanel'],
+			'HEADER_USER_ADMINPANEL_URL' => cot_url('admin'),
 			'HEADER_USER_LOGINOUT' => $out['loginout'],
+			'HEADER_USER_LOGINOUT_URL' => $out['loginout_url'],
 			'HEADER_USER_PROFILE' => $out['profile'],
+			'HEADER_USER_PROFILE_URL' => cot_url('users', 'm=profile'),
 			'HEADER_USER_MESSAGES' => $usr['messages']
 		));
 
@@ -154,6 +157,7 @@ if (!COT_AJAX)
 			'HEADER_GUEST_USERNAME' => $out['guest_username'],
 			'HEADER_GUEST_PASSWORD' => $out['guest_password'],
 			'HEADER_GUEST_REGISTER' => $out['guest_register'],
+			'HEADER_GUEST_REGISTER_URL' => cot_url('users', 'm=register'),
 			'HEADER_GUEST_COOKIETTL' => $out['guest_cookiettl']
 		));
 

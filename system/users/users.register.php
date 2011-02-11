@@ -239,7 +239,7 @@ foreach($timezonelist as $x)
 $form_timezone = cot_selectbox($ruser['user_timezone'], 'rtimezone', $timezonelist, $timezonename, false);
 $form_timezone .= ' '.$usr['gmttime']." / ".cot_date('datetime_medium', $sys['now_offset'] + $usr['timezone']*3600).' '.$usr['timetext'];
 
-$useredit_array = array(
+$t->assign(array(
 	'USERS_REGISTER_TITLE' => $L['aut_registertitle'],
 	'USERS_REGISTER_SUBTITLE' => $L['aut_registersubtitle'],
 	'USERS_REGISTER_ADMINEMAIL' => $cot_adminemail,
@@ -252,8 +252,7 @@ $useredit_array = array(
 	'USERS_REGISTER_TIMEZONE' => $form_timezone,
 	'USERS_REGISTER_GENDER' => cot_selectbox_gender($ruser['user_gender'],'rusergender'),
 	'USERS_REGISTER_BIRTHDATE' => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', cot_date('Y', $sys['now_offset']), cot_date('Y', $sys['now_offset']) - 100, false),
-);
-$t->assign($useredit_array);
+));
 
 // Extra fields
 foreach($cot_extrafields['users'] as $i => $row)

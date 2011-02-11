@@ -66,16 +66,20 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			$row['ft_replycount'] = $R['forums_code_post_empty'];
 			$row['ft_viewcount'] = $R['forums_code_post_empty'];
 			$row['ft_lastpostername'] = $R['forums_code_post_empty'];
-			$row['ft_lastposturl'] = cot_rc_link(cot_url('forums', 'm=posts&q=' . $row['ft_movedto'] . '&n=last', '#bottom'), $R['icon_follow']) . ' ' . $L['Moved'];
+			$row['ft_lastposturl'] = cot_url('forums', 'm=posts&q=' . $row['ft_movedto'] . '&n=last', '#bottom');
+			$row['ft_lastpostlink'] = cot_rc_link($row['ft_lastposturl'], $R['icon_follow']) . ' ' . $L['Moved'];
 			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], $sys['now_offset']);
 		}
 		else
 		{
 			$row['ft_url'] = cot_url('forums', 'm=posts&q=' . $row['ft_id']);
 			$row['ft_lastposturl'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ?
-				cot_rc_link(cot_url('forums', 'm=posts&q=' . $row['ft_id'] . '&n=unread', '#unread'), $R['icon_unread'], 'rel="nofollow"') :
-				cot_rc_link(cot_url('forums', 'm=posts&q=' . $row['ft_id'] . '&n=last', '#bottom'), $R['icon_follow'], 'rel="nofollow"');
-			$row['ft_lastposturl'] .= cot_date('datetime_medium', $row['ft_updated'] + $usr['timezone'] * 3600);
+				cot_url('forums', 'm=posts&q=' . $row['ft_id'] . '&n=unread', '#unread') :
+				cot_url('forums', 'm=posts&q=' . $row['ft_id'] . '&n=last', '#bottom');
+			$row['ft_lastpostlink'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ?
+				cot_rc_link($row['ft_lastposturl'], $R['icon_unread'], 'rel="nofollow"') :
+				cot_rc_link($row['ft_lastposturl'], $R['icon_follow'], 'rel="nofollow"');
+			$row['ft_lastpostlink'] .= cot_date('datetime_medium', $row['ft_updated'] + $usr['timezone'] * 3600);
 			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], $sys['now_offset']);
 			$row['ft_replycount'] = $row['ft_postcount'] - 1;
 
@@ -125,7 +129,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			'FORUM_ROW_PREVIEW' => $row['ft_preview'] . '...',
 			'FORUM_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate'] + $usr['timezone'] * 3600),
 			'FORUM_ROW_CREATIONDATE_STAMP' => $row['ft_creationdate'] + $usr['timezone'] * 3600,
-			'FORUM_ROW_UPDATED' => $row['ft_lastposturl'],
+			'FORUM_ROW_UPDATED' => $row['ft_lastpostlink'],
 			'FORUM_ROW_UPDATED_STAMP' => $row['ft_updated'] + $usr['timezone'] * 3600,
 			'FORUM_ROW_TIMEAGO' => $row['ft_timeago'],
 			'FORUM_ROW_POSTCOUNT' => $row['ft_postcount'],
@@ -133,6 +137,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			'FORUM_ROW_VIEWCOUNT' => $row['ft_viewcount'],
 			'FORUM_ROW_FIRSTPOSTER' => $row['ft_firstpostername'],
 			'FORUM_ROW_LASTPOSTER' => $row['ft_lastpostername'],
+			'FORUM_ROW_LASTPOSTURL' => $row['ft_lastposturl'],
 			'FORUM_ROW_URL' => $row['ft_url'],
 			'FORUM_ROW_PAGES' => $row['ft_pages'],
 			'FORUM_ROW_MAXPAGES' => $row['ft_maxpages'],

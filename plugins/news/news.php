@@ -103,9 +103,11 @@ if (count($cats) > 0)
 		foreach ($sql->fetchAll() as $pag)
 		{
 			$jj++;
+			$url = cot_url('index', 'c=' . $pag['page_cat']);
 			$news->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $v[2]));
 			$news->assign(array(
-				'PAGE_ROW_NEWSPATH' => cot_rc_link(cot_url('index', 'c=' . $pag['page_cat']), htmlspecialchars($structure['page'][$row['page_cat']]['title'])),
+				'PAGE_ROW_NEWSPATH' => cot_rc_link($url, htmlspecialchars($structure['page'][$row['page_cat']]['title'])),
+				'PAGE_ROW_URL' => $url,
 				'PAGE_ROW_CATDESC' => htmlspecialchars($structure['page'][$pag['page_cat']]['desc']),
 				'PAGE_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
 				'PAGE_ROW_ODDEVEN' => cot_build_oddeven($jj),
@@ -123,6 +125,7 @@ if (count($cats) > 0)
 			$news->parse('NEWS.PAGE_ROW');
 		}
 
+		$url_newpage = cot_url('page', 'm=add&c=' . $cat);
 		$news->assign(array(
 			'PAGE_PAGENAV' => $pagenav['main'],
 			'PAGE_PAGEPREV' => $pagenav['prev'],
@@ -132,7 +135,8 @@ if (count($cats) > 0)
 			'PAGE_PAGECOUNT' => $pagenav['total'],
 			'PAGE_ENTRIES_ONPAGE' => $pagenav['onpage'],
 			'PAGE_ENTRIES_TOTAL' => $pagenav['entries'],
-			'PAGE_SUBMITNEWPOST' => (cot_auth('page', $cat, 'W')) ? cot_rc_link(cot_url('page', 'm=add&c=' . $cat), $L['Submitnew']) : '',
+			'PAGE_SUBMITNEWPOST' => (cot_auth('page', $cat, 'W')) ? cot_rc_link($url_newpage, $L['Submitnew']) : '',
+			'PAGE_SUBMITNEWPOST_URL' => (cot_auth('page', $cat, 'W')) ? $url_newpage : '',
 			'PAGE_CATTITLE' => $structure['page'][$cat]['title'],
 			'PAGE_CATPATH' => cot_structure_buildpath('page', $cat),
 			'PAGE_CAT' => $cat

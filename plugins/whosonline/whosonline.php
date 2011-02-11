@@ -55,12 +55,12 @@ while ($row = $sql_users->fetch())
 		else continue;
 	}
 	$count_users++;
+	$url_ipsearch = cot_url('admin',	'm=other&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg());
 	$t->assign(array(
 		'USER_LOCATION' => htmlspecialchars($row['online_location']),
 		'USER_SUBLOCATION' => htmlspecialchars($row['online_subloc']),
-		'USER_IP' => ($ipsearch) ? cot_rc_link(cot_url('admin',
-			'm=other&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg()),
-			$row['online_ip']) : $row['online_ip'],
+		'USER_IP' => $ipsearch ? cot_rc_link($url_ipsearch, $row['online_ip']) : $row['online_ip'],
+		'USER_IP_URL' => $ipsearch ? $url_ipsearch : '',
 		'USER_LINK' => cot_build_user($row['online_userid'], htmlspecialchars($row['online_name'])),
 		'USER_LASTSEEN' => cot_build_timegap($row['online_lastseen'], $sys['now'])
 	));
@@ -78,12 +78,12 @@ $sql_guests = $db->query("
 while ($row = $sql_guests->fetch())
 {
 	$count_guests++;
+	$url_ipsearch = cot_url('admin', 'm=other&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg());
 	$t->assign(array(
 		'GUEST_LOCATION' => htmlspecialchars($row['online_location']),
 		'GUEST_SUBLOCATION' => htmlspecialchars($row['online_subloc']),
-		'GUEST_IP' => ($ipsearch) ? cot_rc_link(cot_url('admin',
-			'm=other&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg()),
-			$row['online_ip']) : $row['online_ip'],
+		'GUEST_IP' => $ipsearch ? cot_rc_link($url_ipsearch, $row['online_ip']) : $row['online_ip'],
+		'GUEST_IP_URL' => $ipsearch ? $url_ipsearch : '',
 		'GUEST_NUMBER' => $count_guests,
 		'GUEST_LASTSEEN' => cot_build_timegap($row['online_lastseen'], $sys['now'])
 	));
