@@ -56,7 +56,10 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 {
 	global $cfg, $cot_urltrans, $sys;
 	// Preprocess arguments
-	is_array($params) ? $args = $params : mb_parse_str($params, $args);
+	if (is_string($params))
+	{
+		$params = cot_parse_str($params);
+	}
 	$area = empty($cot_urltrans[$name]) ? '*' : $name;
 	// Find first matching rule
 	$url = $cot_urltrans['*'][0]['trans']; // default rule
@@ -68,9 +71,9 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 			$matched = true;
 			foreach($rule['params'] as $key => $val)
 			{
-				if (empty($args[$key])
-					|| (is_array($val) && !in_array($args[$key], $val))
-					|| ($val != '*' && $args[$key] != $val))
+				if (empty($params[$key])
+					|| (is_array($val) && !in_array($params[$key], $val))
+					|| ($val != '*' && $params[$key] != $val))
 				{
 					$matched = false;
 					break;
@@ -97,14 +100,14 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 			{
 				// Callback
 				$func = mb_substr($m[1], 0, $p);
-				$url = str_replace($m[0], $func($args, $spec), $url);
+				$url = str_replace($m[0], $func($params, $spec), $url);
 			}
 			elseif (mb_strpos($m[1], '!$') === 0)
 			{
 				// Unset
 				$var = mb_substr($m[1], 2);
 				$url = str_replace($m[0], '', $url);
-				unset($args[$var]);
+				unset($params[$var]);
 			}
 			else
 			{
@@ -114,10 +117,10 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 				{
 					$url = str_replace($m[0], urlencode($spec[$var]), $url);
 				}
-				elseif (isset($args[$var]))
+				elseif (isset($params[$var]))
 				{
-					$url = str_replace($m[0], urlencode($args[$var]), $url);
-					unset($args[$var]);
+					$url = str_replace($m[0], urlencode($params[$var]), $url);
+					unset($params[$var]);
 				}
 				else
 				{
@@ -127,12 +130,12 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 		}
 	}
 	// Append query string if needed
-	if (!empty($args))
+	if (!empty($params))
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
 		$sep_len = mb_strlen($sep);
 		$qs = mb_strpos($url, '?') !== false ? $sep : '?';
-		foreach($args as $key => $val)
+		foreach($params as $key => $val)
 		{
 			// Exclude static parameters that are not used in format,
 			// they should be passed by rewrite rule (htaccess)
