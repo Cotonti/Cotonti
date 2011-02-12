@@ -264,6 +264,7 @@ $extp = cot_getextplugins('page.list.rowcat.loop');
 /* ===== */
 foreach ($subcat as $x)
 {
+	$kk++;
 	$sub_count = $db->query("SELECT SUM(structure_count) FROM $db_structure
 		WHERE structure_path LIKE '".$db->prep($structure['page'][$x]['rpath']).".%'
 		OR structure_path = ".$db->quote($structure['page'][$x]['rpath']))->fetchColumn();
@@ -274,7 +275,7 @@ foreach ($subcat as $x)
 		'LIST_ROWCAT_DESC' => $structure['page'][$x]['desc'],
 		'LIST_ROWCAT_ICON' => $structure['page'][$x]['icon'],
 		'LIST_ROWCAT_COUNT' => $sub_count,
-		'LIST_ROWCAT_ODDEVEN' => cot_build_oddeven($kk+1),
+		'LIST_ROWCAT_ODDEVEN' => cot_build_oddeven($kk),
 		'LIST_ROWCAT_NUM' => $kk
 	));
 
@@ -293,8 +294,7 @@ foreach ($subcat as $x)
 	}
 	/* ===== */
 
-	$t->parse('MAIN.LIST_ROWCAT');
-	$kk++;
+	$t->parse('MAIN.LIST_ROWCAT');	
 }
 
 $pagenav = cot_pagenav('list', $list_url_path + array('d' => $d), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
@@ -310,10 +310,11 @@ $extp = cot_getextplugins('page.list.loop');
 /* ===== */
 foreach ($sqllist->fetchAll() as $pag)
 {
+	$jj++;
 	$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', 0, $usr['isadmin']));
 	$t->assign(array(
 		'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-		'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj+1),
+		'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj),
 		'LIST_ROW_NUM' => $jj
 	));
 	$t->assign(cot_generate_usertags($pag, 'LIST_ROW_OWNER_'));
@@ -325,7 +326,6 @@ foreach ($sqllist->fetchAll() as $pag)
 	}
 	/* ===== */
 	$t->parse('MAIN.LIST_ROW');
-	$jj++;
 }
 
 /* === Hook === */
