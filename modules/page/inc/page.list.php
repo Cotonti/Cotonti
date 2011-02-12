@@ -274,7 +274,7 @@ foreach ($subcat as $x)
 		'LIST_ROWCAT_DESC' => $structure['page'][$x]['desc'],
 		'LIST_ROWCAT_ICON' => $structure['page'][$x]['icon'],
 		'LIST_ROWCAT_COUNT' => $sub_count,
-		'LIST_ROWCAT_ODDEVEN' => cot_build_oddeven($kk),
+		'LIST_ROWCAT_ODDEVEN' => cot_build_oddeven($kk+1),
 		'LIST_ROWCAT_NUM' => $kk
 	));
 
@@ -313,7 +313,7 @@ foreach ($sqllist->fetchAll() as $pag)
 	$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', 0, $usr['isadmin']));
 	$t->assign(array(
 		'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-		'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj),
+		'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj+1),
 		'LIST_ROW_NUM' => $jj
 	));
 	$t->assign(cot_generate_usertags($pag, 'LIST_ROW_OWNER_'));
