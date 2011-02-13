@@ -107,7 +107,7 @@ if (count($cats) > 0)
 			$news->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $v[2]));
 			$news->assign(array(
 				'PAGE_ROW_NEWSPATH' => cot_rc_link($url, htmlspecialchars($structure['page'][$row['page_cat']]['title'])),
-				'PAGE_ROW_URL' => $url,
+				'PAGE_ROW_NEWSPATH_URL' => $url,
 				'PAGE_ROW_CATDESC' => htmlspecialchars($structure['page'][$pag['page_cat']]['desc']),
 				'PAGE_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
 				'PAGE_ROW_ODDEVEN' => cot_build_oddeven($jj),
