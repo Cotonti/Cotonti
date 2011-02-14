@@ -175,7 +175,7 @@ elseif (cot_error_found())
 }
 else
 {
-	$poll_id='new';
+	$poll_id = 'new';
 	$formname = $L['Add'];
 	$send_button = $L['Create'];
 }

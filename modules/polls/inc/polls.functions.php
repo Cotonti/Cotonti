@@ -177,9 +177,9 @@ function cot_poll_save($type = 'index', $code = '')
 {
 	global $db, $sys, $db_polls, $db_polls_options, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
 
-	if (!empty($poll_id) && !cot_error_found())
+	if (!empty($poll_id) && !cot_error_found() && $poll_options)
 	{
-		if (is_int($poll_id) && $poll_id > 0)
+		if ((int)$poll_id > 0)
 		{
 			$db->update($db_polls, array(
 				'poll_state' => (int)$poll_state,
