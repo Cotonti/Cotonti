@@ -259,7 +259,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
 	$u = empty($_SESSION[$site_id]) ? explode(':', base64_decode($_COOKIE[$site_id])) : explode(':', base64_decode($_SESSION[$site_id]));
 	$u_id = (int) cot_import($u[0], 'D', 'INT');
-	$u_sid = $db->quote(base64_decode($u[1]));
+	$u_sid = $db->quote($u[1]);
 	if ($u_id > 0)
 	{
 		$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = $u_sid");
@@ -267,7 +267,8 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 		if ($row = $sql->fetch())
 		{
 			if ($row['user_maingrp'] > 3
-				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip']))
+				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip'])
+				&& $row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now_offset'])
 			{
 				$usr['id'] = (int) $row['user_id'];
 				$usr['name'] = $row['user_name'];

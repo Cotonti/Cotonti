@@ -40,9 +40,9 @@
 
 				<!-- BEGIN: COMPLETED -->
 				<p class="complete">
-					<span>{PHP.L.install_upgrade_success_note}</span>
+					<span>{UPDATE_COMPLETED_NOTE}</span>
 
-					<a href="index.php">{PHP.L.install_view_site}</a>
+					<a href="{PHP.cfg.mainurl}">{PHP.L.install_view_site}</a>
 				</p>
 				<!-- END: COMPLETED -->
 			</div>

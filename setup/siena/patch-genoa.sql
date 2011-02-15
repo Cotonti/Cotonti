@@ -297,6 +297,7 @@ UPDATE `cot_forum_sections` SET `fs_icon` = 'images/icons/default/forums.png' WH
 DELETE FROM `cot_auth` WHERE auth_code = 'comments';
 DELETE FROM `cot_config` WHERE config_owner = 'core' AND config_cat = 'comments';
 DELETE FROM `cot_core` WHERE ct_code = 'comments';
+DELETE FROM `cot_core` WHERE ct_code = 'plug';
 DELETE FROM `cot_core` WHERE ct_code = 'ratings';
 DELETE FROM `cot_core` WHERE ct_code = 'trash';
 
@@ -530,3 +531,7 @@ UPDATE `cot_rated` SET `rated_area` = 'showcase' WHERE `rated_code` LIKE 'sc%';
 
 UPDATE `cot_rated` SET `rated_code` = SUBSTRING(`rated_code`, 3) WHERE `rated_area` = 'showcase';
 UPDATE `cot_rated` SET `rated_code` = SUBSTRING(`rated_code`, 2) WHERE `rated_area` != '';
+
+/* r1842 login session expiration */
+ALTER TABLE `cot_users` MODIFY `user_sid` char(64) collate utf8_unicode_ci NOT NULL default '';
+ALTER TABLE `cot_users` ADD COLUMN `user_sidtime` int NOT NULL default 0;

@@ -218,6 +218,7 @@ if (defined('COT_UPGRADE'))
 		if (!cot_error_found())
 		{
 			// Success
+			$t->assign('UPDATE_COMPLETED_NOTE', $L['install_upgrade_success_note']);
 			$t->parse('MAIN.COMPLETED');
 			$db->update($db_updates,  array('upd_value' => $branch), "upd_param = 'branch'");
 			$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_success', array('ver' => $branch)));
@@ -296,6 +297,8 @@ else
 	elseif ($new_rev === true && !$updated_config && !$updated_ext)
 	{
 		$t->assign('UPDATE_TITLE', $L['install_update_nothing']);
+		$t->assign('UPDATE_COMPLETED_NOTE', '');
+		$t->parse('MAIN.COMPLETED');
 	}
 	else
 	{
@@ -308,6 +311,8 @@ else
 			$db->update($db_updates, array('upd_value' => "\$Rev: $new_rev \$"), "upd_param = 'revision'");
 		}
 		$t->assign('UPDATE_TITLE', cot_rc('install_update_success', array('rev' => $new_rev)));
+		$t->assign('UPDATE_COMPLETED_NOTE', $L['install_complete_note']);
+		$t->parse('MAIN.COMPLETED');
 	}
 
 	$t->assign(array(
