@@ -3031,7 +3031,7 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 	}
 	else
 	{
-		$headers = (empty($headers)) ? "From: \"".$cfg['maintitle']."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
+		$headers = (empty($headers)) ? "From: \"".mb_encode_mimeheader($cfg['maintitle'], $cfg['charset'], 'Q')."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
 		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
 		if($cfg['charset'] != 'us-ascii')
 		{
