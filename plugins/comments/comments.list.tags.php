@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=list.tags
+Hooks=page.list.tags
 Tags=page.list.tpl:{LIST_COMMENTS},{LIST_COMMENTS_DISPLAY}
 [END_COT_EXT]
 ==================== */

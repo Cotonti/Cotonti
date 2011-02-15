@@ -29,6 +29,8 @@ $L['plu_search_pages'] = 'Search pages';
 
 // Mode selectors and result titles
 $L['plu_tabs_all'] = 'All';
+$L['plu_tabs_frm'] = 'Forums';
+$L['plu_tabs_pag'] = 'Pages';
 
 // Parameters - common
 $L['plu_ctrl_list'] = 'Hold CTRL to select multiple sections';

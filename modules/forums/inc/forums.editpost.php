@@ -52,6 +52,8 @@ else
 	cot_die();
 }
 
+$is_first_post = $p == $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = ? ORDER BY fp_id ASC LIMIT 1", array($q))->fetchColumn();
+
 $sql_forums = $db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id = $q LIMIT 1");
 
 if ($rowt = $sql_forums->fetch())

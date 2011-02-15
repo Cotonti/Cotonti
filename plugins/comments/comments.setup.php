@@ -4,7 +4,7 @@
 Code=comments
 Name=Comments system
 Description=Comments system for Cotonti
-Version=0.7.4
+Version=0.7.5
 Date=2010-jan-03
 Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2011
