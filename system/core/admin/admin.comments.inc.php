@@ -39,7 +39,13 @@ if(is_array($extp))
 if($a == 'delete')
 {
 	sed_check_xg();
-	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$id'");
+	$row_code = sed_sql_result(sed_sql_query("SELECT com_code FROM $db_com WHERE com_id='$id' LIMIT 1"), 0, 0);
+	sed_sql_query("DELETE FROM $db_com WHERE com_id='$id'");
+	if (preg_match('#^p(\d+)$#', $row_code, $mt))
+	{
+		$page_id = (int) $mt[1];
+		sed_sql_query("UPDATE $db_pages SET page_comcount='".sed_get_comcount($row_code)."' WHERE page_id=".$page_id);
+	}
 
 	$adminwarnings = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];
 }
