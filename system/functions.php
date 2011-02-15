@@ -3898,6 +3898,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 		$params = cot_parse_str($params);
 	}
 	$url = $name . '.php';
+	$params = array_filter($params);
 	// Append query string if needed
 	if (count($params) > 0)
 	{
@@ -3907,15 +3908,12 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 		$i = 0;
 		foreach ($params as $key => $val)
 		{
-			if ($val != '')
+			if ($i > 0)
 			{
-				if ($i > 0)
-				{
-					$qs .= $sep;
-				}
-				$qs .= $key . '=' . urlencode($val);
-				$i++;
+				$qs .= $sep;
 			}
+			$qs .= $key . '=' . urlencode($val);
+			$i++;
 		}
 		$url .= $qs;
 	}
