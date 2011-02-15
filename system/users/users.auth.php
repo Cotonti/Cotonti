@@ -94,12 +94,14 @@ if ($a=='check')
 
 		$token = cot_unique(16);
 
-		$sid = hash_hmac('sha256', $rmdpass, $cfg['secret_key'], true);
+		$sid = hash_hmac('sha256', $rmdpass . $row['user_sidtime'], $cfg['secret_key']);
 
-		if (empty($row['user_sid']) || $row['user_sid'] != $sid)
+		if (empty($row['user_sid']) || $row['user_sid'] != $sid
+			|| $row['user_sidtime'] + $cfg['cookielifetime'] < $sys['now_offset'])
 		{
 			// Generate new session identifier
-			$update_sid = ", user_sid = " . $db->quote($sid);
+			$sid = hash_hmac('sha256', $rmdpass . $sys['now_offset'], $cfg['secret_key']);
+			$update_sid = ", user_sid = " . $db->quote($sid) . ", user_sidtime = " . $sys['now_offset'];
 		}
 		else
 		{
@@ -108,7 +110,7 @@ if ($a=='check')
 
 		$db->query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_logcount = user_logcount + 1, user_token = '$token' $update_sid WHERE user_id={$row['user_id']}");
 
-		$u = base64_encode($ruserid.':'.base64_encode($sid));
+		$u = base64_encode($ruserid.':'.$sid);
 
 		if($rremember)
 		{

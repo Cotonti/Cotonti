@@ -540,7 +540,8 @@ function cot_extension_install($name, $is_module = false, $update = false)
     {
         if ($update)
 		{
-			$db->update($db_updates, array('upd_value' => $new_ver), "upd_param = '$name.ver'");
+			$db->query("INSERT INTO $db_updates (upd_param, upd_value) VALUES('$name.ver', ?)
+				ON DUPLICATE KEY UPDATE upd_value = ?", array($new_ver, $new_ver));
 			cot_message(cot_rc('ext_updated', array(
 				'type' => $L['Plugin'],
 				'name' => $name,
