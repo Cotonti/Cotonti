@@ -1149,11 +1149,7 @@ class Cotpl_var
 			{
 				if (is_array($func))
 				{
-					$pos = array_search('$this', $func['args']);
-					if ($pos !== false)
-					{
-						$func['args'][$pos] = $val;
-					}
+					array_walk(&$func['args'], 'cotpl_callback_replace', $val);
 					$val = call_user_func_array($func['name'], $func['args']);
 				}
 				else
@@ -1163,6 +1159,22 @@ class Cotpl_var
 			}
 		}
 		return $val;
+	}
+}
+
+/**
+ * Replaces $this in callback arguments with the template tag value.
+ * To be used with array_walk.
+ *
+ * @param string $arg Callback function argument value
+ * @param int $i Callback function argument key
+ * @param string $val Tag value
+ */
+function cotpl_callback_replace(&$arg, $i, $val)
+{
+	if (mb_strpos($arg, '$this') !== FALSE)
+	{
+		$arg = str_replace('$this', (string)$val, $arg);
 	}
 }
 
