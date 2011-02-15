@@ -133,11 +133,11 @@ elseif ($c == "section")
 
 	if (isset($structure['forums'][$forum_id]))
 	{
-		$rss_title = $structure['forums'][$s]['title'];
-		$rss_description = $structure['forums'][$s]['desc'];
+		$rss_title = $structure['forums'][$forum_id]['title'];
+		$rss_description = $structure['forums'][$forum_id]['desc'];
 
 		$all = cot_structure_children('forums', $forum_id);
-		$where = "fs_cat IN (".implode(', ', $all).")";
+		$where = "fp_cat IN ('".implode("', '", $all)."')";
 
 		$sql = "SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
 		$res = $db->query($sql);

@@ -4,7 +4,7 @@
 Code=tags
 Name=Tags
 Description=Provides tags - site content keywords, tag clouds, tag search and API
-Version=0.7.5
+Version=0.7.6
 Date=2010-dec-16
 Author=Trustmaster
 Copyright=All rights reserved (c) Vladimir Sibirov 2008-2011

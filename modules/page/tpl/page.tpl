@@ -3,7 +3,7 @@
 		<div id="center" class="column">
 			<div class="block">
 				<h2 class="page">{PAGE_TITLE}</h2>
-					<div class="combox">{PHP.pag.page_comcount}</div>
+					<div class="combox">{PAGE_COMMENTS_COUNT}</div>
 					<h3>{PAGE_SHORTTITLE}</h3>
 					<!-- IF {PAGE_DESC} --><p class="small">{PAGE_DESC}</p><!-- ENDIF -->
 					<div class="clear desc">
