@@ -37,8 +37,8 @@ if($_FILES)
 			    $file['name']= cot_safename($file['name'], true);
 				$filename_full = $usr['id'].'-'.strtolower($file['name']);
 				$filepath = ($code == 'avatar') ?
-					$cfg['av_dir'].$filename_full:
-					$cfg['photos_dir'].$filename_full;
+					$cfg['avatars_dir'].'/'.$filename_full:
+					$cfg['photos_dir'].'/'.$filename_full;
 
 				if(file_exists($filepath))
 				{

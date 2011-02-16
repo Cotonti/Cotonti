@@ -1829,11 +1829,12 @@ function cot_imagesharpen($imgdata, $source_width, $target_width)
  */
 function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 {
+	global $cfg;
 	require_once cot_incfile('extensions');
-	$handle = opendir('./themes/');
+	$handle = opendir($cfg['themes_dir']);
 	while ($f = readdir($handle))
 	{
-		if (mb_strpos($f, '.') === FALSE && is_dir('./themes/'.$f))
+		if (mb_strpos($f, '.') === FALSE && is_dir("{$cfg['themes_dir']}/$f"))
 		{
 			$themelist[] = $f;
 		}
@@ -1845,7 +1846,7 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 	$titles = array();
 	foreach ($themelist as $i => $x)
 	{
-		$themeinfo = "./themes/$x/$x.php";
+		$themeinfo = "{$cfg['themes_dir']}/$x/$x.php";
 		if (file_exists($themeinfo))
 		{
 			$info = cot_infoget($themeinfo, 'COT_THEME');
@@ -2357,9 +2358,9 @@ function cot_get_rc_theme()
 {
 	global $usr;
 	$R = array();
-	if (file_exists('./themes/'.$usr['theme'].'/'.$usr['theme'].'.php'))
+	if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php"))
 	{
-		include './themes/'.$usr['theme'].'/'.$usr['theme'].'.php';
+		include "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
 	}
 	return $R;
 }
@@ -2376,57 +2377,57 @@ function cot_schemefile()
 {
 	global $usr, $cfg, $out;
 
-	if (file_exists('./themes/'.$usr['theme'].'/'.$usr['scheme'].'.css'))
+	if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['scheme']}.css"))
 	{
-		return './themes/'.$usr['theme'].'/'.$usr['scheme'].'.css';
+		return "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['scheme']}.css";
 	}
-	elseif (file_exists('./themes/'.$usr['theme'].'/css/'))
+	elseif (is_dir("{$cfg['themes_dir']}/{$usr['theme']}/css/"))
 	{
-		if (file_exists('./themes/'.$usr['theme'].'/css/'.$usr['scheme'].'.css'))
+		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/css/{$usr['scheme']}.css"))
 		{
-			return './themes/'.$usr['theme'].'/css/'.$usr['scheme'].'.css';
+			return "{$cfg['themes_dir']}/{$usr['theme']}/css/{$usr['scheme']}.css";
 		}
-		elseif (file_exists('./themes/'.$usr['theme'].'/css/'.$cfg['defaultscheme'].'.css'))
+		elseif (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/css/{$cfg['defaultscheme']}.css"))
 		{
 			$out['notices'] .= $L['com_schemefail'];
 			$usr['scheme'] = $cfg['defaultscheme'];
-			return './themes/'.$usr['theme'].'/css/'.$cfg['defaultscheme'].'.css';
+			return "{$cfg['themes_dir']}/{$usr['theme']}/css/{$cfg['defaultscheme']}.css";
 		}
 	}
-	elseif (file_exists('./themes/'.$usr['theme']))
+	elseif (is_dir("{$cfg['themes_dir']}/{$usr['theme']}"))
 	{
-		if (file_exists('./themes/'.$usr['theme'].'/'.$cfg['defaultscheme'].'.css'))
+		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$cfg['defaultscheme']}.css"))
 		{
 			$out['notices'] .= $L['com_schemefail'];
 			$usr['scheme'] = $cfg['defaultscheme'];
-			return './themes/'.$usr['theme'].'/'.$cfg['defaultscheme'].'.css';
+			return "{$cfg['themes_dir']}/{$usr['theme']}/{$cfg['defaultscheme']}.css";
 		}
-		elseif (file_exists('./themes/'.$usr['theme'].'/'.$usr['theme'].'.css'))
+		elseif (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.css"))
 		{
 			$out['notices'] .= $L['com_schemefail'];
 			$usr['scheme'] = $usr['theme'];
-			return './themes/'.$usr['theme'].'/'.$usr['theme'].'.css';
+			return "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.css";
 		}
-		elseif (file_exists('./themes/'.$usr['theme'].'/style.css'))
+		elseif (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/style.css"))
 		{
 			$out['notices'] .= $L['com_schemefail'];
 			$usr['scheme'] = 'style';
-			return './themes/'.$usr['theme'].'/style.css';
+			return "{$cfg['themes_dir']}/{$usr['theme']}/style.css";
 		}
 	}
 
 	$out['notices'] .= $L['com_schemefail'];
-	if (file_exists('./themes/'.$cfg['defaulttheme'].'/'.$cfg['defaultscheme'].'.css'))
+	if (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaultscheme']}.css"))
 	{
 		$usr['theme'] = $cfg['defaulttheme'];
 		$usr['scheme'] = $cfg['defaultscheme'];
-		return './themes/'.$cfg['defaulttheme'].'/'.$cfg['defaultscheme'].'.css';
+		return "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaultscheme']}.css";
 	}
-	elseif (file_exists('./themes/'.$cfg['defaulttheme'].'/css/'.$cfg['defaultscheme'].'.css'))
+	elseif (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/css/{$cfg['defaultscheme']}.css"))
 	{
 		$usr['theme'] = $cfg['defaulttheme'];
 		$usr['scheme'] = $cfg['defaultscheme'];
-		return './themes/'.$cfg['defaulttheme'].'/css/'.$cfg['defaultscheme'].'.css';
+		return "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/css/{$cfg['defaultscheme']}.css";
 	}
 	else
 	{
@@ -2465,12 +2466,12 @@ function cot_tplfile($base, $type = 'module')
 	if ($type == 'plug')
 	{
 		// Plugin template paths
-		$scan_prefix[] = './themes/' . $usr['theme'] . '/plugins/';
+		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/";
 		if ($using_alternative_theme)
 		{
-			$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/plugins/';
+			$scan_prefix[] = "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/plugins/";
 		}
-		$scan_prefix[] = $cfg['plugins_dir'] . '/' . $basename . '/tpl/';
+		$scan_prefix[] = "{$cfg['themes_dir']}/{$cfg['plugins_dir']}/$basename/tpl/";
 	}
 	elseif ($type == 'core')
 	{
@@ -2478,32 +2479,31 @@ function cot_tplfile($base, $type = 'module')
 		if(in_array($basename, array('admin', 'header', 'footer')))
 		{
 			$basename = 'admin';
-			$scan_prefix[] = './themes/' . $usr['theme'] . '/' . $basename . '/';
+			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/$basename/";
 			if ($using_alternative_theme)
 			{
-				$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/' . $basename . '/';
+				$scan_prefix[] = "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/$basename/";
 			}
-			$scan_prefix[] = $cfg['system_dir'] . '/' . $basename . '/tpl/';
 		}
 		else
 		{
-			$scan_prefix[] = './themes/' . $usr['theme'] . '/';
+			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
 			if ($using_alternative_theme)
 			{
-				$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/';
+				$scan_prefix[] = "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/";
 			}
-			$scan_prefix[] = $cfg['system_dir'] . '/' . $basename . '/tpl/';
 		}
+		$scan_prefix[] = "{$cfg['system_dir']}/$basename/tpl/";
 	}
 	else
 	{
 		// Module template paths
-		$scan_prefix[] = './themes/' . $usr['theme'] . '/';
+		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
 		if ($using_alternative_theme)
 		{
-			$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/';
+			$scan_prefix[] = "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/";
 		}
-		$scan_prefix[] = $cfg['modules_dir'] . '/' . $basename . '/tpl/';
+		$scan_prefix[] = "{$cfg['modules_dir']}/$basename/tpl/";
 	}
 
 	// Build template file name from base parts glued with dots
@@ -3306,9 +3306,9 @@ function cot_rc_consolidate()
 	}
 	if (!$is_admin_section)
 	{
-		if (file_exists('./themes/'.$usr['theme'].'/'.$usr['theme'].'.rc.php'))
+		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php"))
 		{
-			include './themes/'.$usr['theme'].'/'.$usr['theme'].'.rc.php';
+			include "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php";
 		}
 	}
 

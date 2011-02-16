@@ -86,18 +86,17 @@ $cfg['new_install'] = 1;			// This setting denotes a new install step and redire
 // folders among different hosts.
 // ========================
 
-$cfg['av_dir'] = './datas/avatars/';
-$cfg['cache_dir'] = './datas/cache';
-$cfg['defav_dir'] = './datas/defaultav/';
-$cfg['lang_dir'] = './lang';
-$cfg['modules_dir'] = './modules';
-$cfg['pfs_dir'] = './datas/users/';
-$cfg['photos_dir'] = './datas/photos/';
-$cfg['plugins_dir'] = './plugins';
-$cfg['sig_dir'] = './datas/signatures/';
-$cfg['system_dir'] = './system';
-$cfg['th_dir'] = './datas/thumbs/';
-$cfg['extrafield_files_dir'] = './datas/exflds/';
+$cfg['avatars_dir'] = 'datas/avatars';
+$cfg['cache_dir'] = 'datas/cache';
+$cfg['lang_dir'] = 'lang';
+$cfg['modules_dir'] = 'modules';
+$cfg['pfs_dir'] = 'datas/users';
+$cfg['photos_dir'] = 'datas/photos';
+$cfg['plugins_dir'] = 'plugins';
+$cfg['system_dir'] = 'system';
+$cfg['thumbs_dir'] = 'datas/thumbs';
+$cfg['themes_dir'] = 'themes';
+$cfg['extrafield_files_dir'] = 'datas/exflds';
 
 // ========================
 // Directory and file permissions for uploaded files

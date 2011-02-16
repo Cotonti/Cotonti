@@ -3,9 +3,9 @@
 /**
  * PFS Icons
  */
-$R['pfs_code_addfile'] = '<a href="'.$cfg['pfs_dir'].'\'+gfile+\'" title="\'+gdesc+\'">\'+gfile+\'</a>';
-$R['pfs_code_addpix'] = '<img src="'.$cfg['pfs_dir'].'\'+gfile+\'" alt="\'+gdesc+\'" />';
-$R['pfs_code_addthumb'] = '<a href="'.$cfg['pfs_dir'].'\'+gfile+\'" title="\'+gdesc+\'"><img src="'.$cfg['thumb_path'].'\'+gfile+\'" alt="\'+gdesc+\'" /></a>';
+$R['pfs_code_addfile'] = '<a href="'.$cfg['pfs_dir_user'].'\'+gfile+\'" title="\'+gdesc+\'">\'+gfile+\'</a>';
+$R['pfs_code_addpix'] = '<img src="'.$cfg['pfs_dir_user'].'\'+gfile+\'" alt="\'+gdesc+\'" />';
+$R['pfs_code_addthumb'] = '<a href="'.$cfg['pfs_dir_user'].'\'+gfile+\'" title="\'+gdesc+\'"><img src="'.$cfg['thumbs_dir_user'].'\'+gfile+\'" alt="\'+gdesc+\'" /></a>';
 $R['pfs_code_header_javascript'] = '
 function addfile(gfile, c1, c2, gdesc) {
 	insertText(opener.document, \'{$c1}\', \'{$c2}\', \''.$R['pfs_code_addfile'].'\');{$winclose}

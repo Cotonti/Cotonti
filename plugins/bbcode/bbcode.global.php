@@ -34,7 +34,7 @@ $R['forums_code_quote_begin'] = '[quote';
 $R['forums_code_quote_close'] = '[/quote]';
 $R['forums_code_update'] = "\n\n[b]{\$updated}[/b]\n\n";
 // PFS
-$R['pfs_code_addfile'] = "'[url=".$cfg['pfs_dir']."'+gfile+']'+gfile+'[/url]'";
+$R['pfs_code_addfile'] = "'[url={$cfg['pfs_dir']}/'+gfile+']'+gfile+'[/url]'";
 $R['pfs_code_addpix'] = "'[img]'+gfile+'[/img]'";
-$R['pfs_code_addthumb'] = "'[img=".$cfg['pfs_dir']."'+gfile+']".$cfg['pfs_thumbpath']."'+gfile+'[/img]'";
+$R['pfs_code_addthumb'] = "'[img={$cfg['pfs_dir']}/'+gfile+']{$cfg['thumbs_dir']}/'+gfile+'[/img]'";
 ?>

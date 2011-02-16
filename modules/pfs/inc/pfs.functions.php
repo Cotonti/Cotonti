@@ -78,8 +78,8 @@ function cot_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
 	}
 	if ($cfg['pfs']['pfsuserfolder'])
 	{
-		cot_pfs_mkdir($cfg['pfs_dir'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
-		cot_pfs_mkdir($cfg['pfs_thumbpath'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
+		cot_pfs_mkdir($cfg['pfs_dir_user'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
+		cot_pfs_mkdir($cfg['thumbs_dir_user'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
 	}
 
 	$db->insert($db_pfs_folders, array(
@@ -114,13 +114,13 @@ function cot_pfs_deletefile($userid, $id)
 	{
 		$fpath = cot_pfs_filepath($id);
 
-		if (file_exists($cfg['pfs_thumbpath'].$fpath))
+		if (file_exists($cfg['thumbs_dir_user'].$fpath))
 		{
-			@unlink($cfg['pfs_thumbpath'].$fpath);
+			@unlink($cfg['thumbs_dir_user'].$fpath);
 		}
-		if (file_exists($cfg['pfs_dir'].$fpath))
+		if (file_exists($cfg['pfs_dir_user'].$fpath))
 		{
-			@unlink($cfg['pfs_dir'].$fpath);
+			@unlink($cfg['pfs_dir_user'].$fpath);
 		}
 		else
 		{
@@ -166,8 +166,8 @@ function cot_pfs_deletefolder($userid, $folderid)
 		{
 			if($cfg['pfs']['pfsuserfolder'])
 			{
-				@rmdir($cfg['pfs_dir'].$row['pff_path']);
-				@rmdir($cfg['pfs_thumbpath'].$row['pff_path']);
+				@rmdir($cfg['pfs_dir_user'].$row['pff_path']);
+				@rmdir($cfg['thumbs_dir_user'].$row['pff_path']);
 			}
 			$db->delete($db_pfs_folders, "pff_id='".(int)$row['pff_id']."'");
 		}
@@ -213,9 +213,9 @@ function cot_pfs_deleteall($userid)
 		if (file_exists($ff))
 		{
 			@unlink($ff);
-			if(file_exists($cfg['th_dir_user'].$pfs_file))
+			if(file_exists($cfg['thumbs_dir_user'].$pfs_file))
 			{
-				@unlink($cfg['th_dir_user'].$pfs_file);
+				@unlink($cfg['thumbs_dir_user'].$pfs_file);
 			}
 		}
 	}
@@ -226,7 +226,7 @@ function cot_pfs_deleteall($userid)
 	if ($cfg['pfs']['pfsuserfolder'] && $userid>0)
 	{
 		@rmdir($cfg['pfs_dir_user']);
-		@rmdir($cfg['th_dir_user']);
+		@rmdir($cfg['thumbs_dir_user']);
 	}
 
 	return($num);
@@ -269,6 +269,7 @@ function cot_pfs_folderpath($folderid, $fullpath='')
 
 	if($fullpath && $folderid>0)
 	{
+		// TODO Clean up this mess and fix pff_path
 		$sql = $db->query("SELECT pff_path FROM $db_pfs_folders WHERE pff_id=".(int)$folderid);
 		if($sql->rowCount()==0)
 		{
@@ -322,9 +323,9 @@ function cot_pfs_mkdir($path, $feedback=FALSE)
 	{
 		$path = substr($path, 2);
 	}
-	if(!$feedback && !file_exists($cfg['pfs_dir']))
+	if(!$feedback && !file_exists($cfg['pfs_dir_user']))
 	{
-		cot_pfs_mkdir($cfg['pfs_dir'], TRUE);
+		cot_pfs_mkdir($cfg['pfs_dir_user'], TRUE);
 	}
 	if(@mkdir($path, $cfg['dir_perms']))
 	{
@@ -348,11 +349,11 @@ function cot_pfs_path($userid)
 
 	if ($cfg['pfs']['pfsuserfolder'])
 	{
-		return($cfg['pfs_dir'].$userid.'/');
+		return($cfg['pfs_dir'].'/'.$userid.'/');
 	}
 	else
 	{
-		return($cfg['pfs_dir']);
+		return($cfg['pfs_dir'].'/');
 	}
 }
 
@@ -388,11 +389,11 @@ function cot_pfs_thumbpath($userid)
 
 	if ($cfg['pfs']['pfsuserfolder'])
 	{
-		return($cfg['th_dir'].$userid.'/');
+		return($cfg['thumbs_dir'].'/'.$userid.'/');
 	}
 	else
 	{
-		return($cfg['th_dir']);
+		return($cfg['thumbs_dir'].'/');
 	}
 }
 
@@ -469,26 +470,26 @@ function cot_pfs_upload($userid, $folderid='')
 				$fcheck = cot_file_check($u_tmp_name, $u_name, $f_extension);
 				if($fcheck == 1)
 				{
-					if (!file_exists($cfg['pfs_dir'].$npath.$u_newname))
+					if (!file_exists($cfg['pfs_dir_user'].$npath.$u_newname))
 					{
 						$is_moved = true;
 
 						if ($cfg['pfs']['pfsuserfolder'])
 						{
-							if (!is_dir($cfg['pfs_dir']))
+							if (!is_dir($cfg['pfs_dir_user']))
 							{
-								$is_moved &= mkdir($cfg['pfs_dir'], $cfg['dir_perms']);
+								$is_moved &= mkdir($cfg['pfs_dir_user'], $cfg['dir_perms']);
 							}
-							if (!is_dir($cfg['pfs_thumbpath']))
+							if (!is_dir($cfg['thumbs_dir_user']))
 							{
-								$is_moved &= mkdir($cfg['pfs_thumbpath'], $cfg['dir_perms']);
+								$is_moved &= mkdir($cfg['thumbs_dir_user'], $cfg['dir_perms']);
 							}
 						}
 
-						$is_moved &= move_uploaded_file($u_tmp_name, $cfg['pfs_dir'].$npath.$u_newname);
-						$is_moved &= chmod($cfg['pfs_dir'].$npath.$u_newname, $cfg['file_perms']);
+						$is_moved &= move_uploaded_file($u_tmp_name, $cfg['pfs_dir_user'].$npath.$u_newname);
+						$is_moved &= chmod($cfg['pfs_dir_user'].$npath.$u_newname, $cfg['file_perms']);
 
-						$u_size = filesize($cfg['pfs_dir'].$npath.$u_newname);
+						$u_size = filesize($cfg['pfs_dir_user'].$npath.$u_newname);
 
 						if ($is_moved && (int)$u_size > 0)
 						{
@@ -522,22 +523,22 @@ function cot_pfs_upload($userid, $folderid='')
 							/* ===== */
 
 							if (in_array($f_extension, $gd_supported) && $cfg['pfs']['th_amode']!='Disabled'
-								&& file_exists($cfg['pfs_dir'].$u_newname))
+								&& file_exists($cfg['pfs_dir_user'].$u_newname))
 							{
-								@unlink($cfg['pfs_thumbpath'].$npath.$u_newname);
+								@unlink($cfg['thumbs_dir_user'].$npath.$u_newname);
 								$th_colortext = array(hexdec(substr($cfg['pfs']['th_colortext'],0,2)),
 									hexdec(substr($cfg['pfs']['th_colortext'],2,2)), hexdec(substr($cfg['pfs']['th_colortext'],4,2)));
 								$th_colorbg = array(hexdec(substr($cfg['pfs']['th_colorbg'],0,2)),
 									hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
-								cot_imageresize($cfg['pfs_dir'] . $npath . $u_newname,
-									$cfg['pfs']['pfs_thumbpath'] . $npath . $u_newname,
+								cot_imageresize($cfg['pfs_dir_user'] . $npath . $u_newname,
+									$cfg['pfs']['thumbs_dir_user'] . $npath . $u_newname,
 									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
 									$cfg['pfs']['th_jpeg_quality'], true);
 							}
 						}
 						else
 						{
-							@unlink($cfg['pfs_dir'].$npath.$u_newname);
+							@unlink($cfg['pfs_dir_user'].$npath.$u_newname);
 							$disp_errors .= $L['pfs_filenotmoved'];
 						}
 					}
