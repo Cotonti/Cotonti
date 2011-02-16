@@ -349,7 +349,7 @@ switch($a)
 				/* ===== */
 			break;
 			case 'update':
-				$result = cot_extension_install($code, $is_module, true);
+				$result = cot_extension_install($code, $is_module, true, true);
 
 				$t->assign(array(
 					'ADMIN_EXTENSIONS_EDIT_TITLE' => cot_rc('ext_updating', array(

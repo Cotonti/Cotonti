@@ -185,9 +185,10 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
  * @param string $name Plugin code
  * @param bool $is_module TRUE for modules, FALSE for plugins
  * @param bool $update Perform update rather than new install
+ * @param bool $force_update Forces extension update even if version has not changed
  * @return bool Operation status
  */
-function cot_extension_install($name, $is_module = false, $update = false)
+function cot_extension_install($name, $is_module = false, $update = false, $force_update = false)
 {
     global $cfg, $L, $cache, $usr, $db_auth, $db_config, $db_users,
 		$db_updates, $db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x;
@@ -237,7 +238,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 		$res->closeCursor();
 		if ($update)
 		{
-			if (version_compare($current_ver, $info['Version']) == 0)
+			if (version_compare($current_ver, $info['Version']) == 0 && !$force_update)
 			{
 				// Nothing to update
 				cot_message(cot_rc('ext_up2date', array(
