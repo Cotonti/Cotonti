@@ -56,13 +56,13 @@
 						<li><strong class="file" title="{PHP.L.File}">{PHP.file.config}</strong> {INSTALL_CONFIG}</li>
 						<li><strong class="file" title="{PHP.L.File}">{PHP.file.config_sample}</strong> {INSTALL_CONFIG_SAMPLE}</li>
 						<li><strong class="file" title="{PHP.L.File}">{PHP.file.sql}</strong> {INSTALL_SQL_FILE}</li>
-						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.av_dir}</strong> {INSTALL_AV_DIR}</li>
+						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.avatars_dir}</strong> {INSTALL_AV_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.cache_dir}</strong> {INSTALL_CACHE_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.extrafield_files_dir}</strong> {INSTALL_EXFLDS_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.pfs_dir}</strong> {INSTALL_PFS_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.photos_dir}</strong> {INSTALL_PHOTOS_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.sig_dir}</strong> {INSTALL_SIG_DIR}</li>
-						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.th_dir}</strong> {INSTALL_TH_DIR}</li>
+						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.thumbs_dir}</strong> {INSTALL_THUMBS_DIR}</li>
 					</ul>
 					<div style="text-align: center;"><input type="submit" name="submit" value="{PHP.L.Next}" /></div>
 				<!-- END: STEP_1 -->

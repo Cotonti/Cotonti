@@ -454,12 +454,12 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 /* ======== Theme / color scheme ======== */
 
-$mtheme = './themes/'.$usr['theme'].'/header.tpl';
+$mtheme = "{$cfg['themes_dir']}/{$usr['theme']}/header.tpl";
 if (!file_exists($mtheme))
 {
 	$out['notices'] .= $L['com_themefail'].'<br />';
 	$usr['theme'] = $cfg['defaulttheme'];
-	$mtheme = './themes/'.$usr['theme'].'/header.tpl';
+	$mtheme = "{$cfg['themes_dir']}/{$usr['theme']}/header.tpl";
 	if (!file_exists($mtheme))
 	{
 		cot_diefatal('Default theme not found.'); // TODO: Need translate
@@ -472,8 +472,8 @@ if (!$mscheme)
 	cot_diefatal('Default scheme not found.'); // TODO: Need translate
 }
 
-$usr['def_theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme'].'.en.lang.php';
-$usr['theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme'].'.'.$usr['lang'].'.lang.php';
+$usr['def_theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
+$usr['theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.{$usr['lang']}.lang.php";
 if ($usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
 {
 	require_once $usr['theme_lang'];

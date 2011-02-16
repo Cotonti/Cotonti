@@ -174,14 +174,14 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 				$fname = str_replace('..', '.', $fname);
 				$fname = (empty($fname)) ? cot_unique() : $fname;
 
-				$fname .= ( file_exists($cfg['extrafield_files_dir'] . $fname . '.' . $ext) && $oldvalue != $fname . '.' . $ext) ? date("YmjGis") : '';
+				$fname .= (file_exists("{$cfg['extrafield_files_dir']}/$fname.$ext") && $oldvalue != $fname . '.' . $ext) ? date("YmjGis") : '';
 
 				$fname .= '.' . $ext;
 
-				$file['old'] = (!empty($oldvalue) && ($import['delete'] || $import['tmp_name'])) ? $cfg['extrafield_files_dir'] . $oldvalue : '';
+				$file['old'] = (!empty($oldvalue) && ($import['delete'] || $import['tmp_name'])) ? "{$cfg['extrafield_files_dir']}/$oldvalue" : '';
 				$file['field'] = $extrafield['field_name'];
 				$file['tmp'] = (!$import['delete']) ? $import['tmp_name'] : '';
-				$file['new'] = (!$import['delete']) ? $cfg['extrafield_files_dir'] . $fname : '';
+				$file['new'] = (!$import['delete']) ? "{$cfg['extrafield_files_dir']}/$fname" : '';
 				$exfldsize[$extrafield['field_name']] = $import['size'];
 				$uploadfiles[] = $file;
 				$import = $fname;
@@ -190,7 +190,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			{
 				$exfldsize[$extrafield['field_name']] = 0;
 				$import = '';
-				$file['old'] = (!empty($oldvalue)) ? $cfg['extrafield_files_dir'] . $oldvalue : '';
+				$file['old'] = (!empty($oldvalue)) ? "{$cfg['extrafield_files_dir']}/$oldvalue" : '';
 				$uploadfiles[] = $file;
 			}
 			else

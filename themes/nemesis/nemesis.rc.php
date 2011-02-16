@@ -11,9 +11,9 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-cot_rc_add_file('themes/nemesis/css/reset.css');
-cot_rc_add_file('themes/nemesis/css/header.css');
-cot_rc_add_file('themes/nemesis/css/footer.css');
-cot_rc_add_file('themes/nemesis/css/default.css');
+cot_rc_add_file($cfg['themes_dir'].'/nemesis/css/reset.css');
+cot_rc_add_file($cfg['themes_dir'].'/nemesis/css/header.css');
+cot_rc_add_file($cfg['themes_dir'].'/nemesis/css/footer.css');
+cot_rc_add_file($cfg['themes_dir'].'/nemesis/css/default.css');
 
 ?>

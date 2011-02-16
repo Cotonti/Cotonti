@@ -376,17 +376,17 @@ switch ($step)
 		// Build CHMOD/Exists/Version data
 		clearstatcache();
 
-		if (is_dir($cfg['av_dir']))
+		if (is_dir($cfg['avatars_dir']))
 		{
-			$status['av_dir'] = (substr(decoct(fileperms($cfg['av_dir'])), -4) >= $cfg['dir_perms'])
+			$status['avatars_dir'] = (substr(decoct(fileperms($cfg['avatars_dir'])), -4) >= $cfg['dir_perms'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
-						substr(decoct(fileperms($cfg['av_dir'])), -4)))));
+						substr(decoct(fileperms($cfg['avatars_dir'])), -4)))));
 		}
 		else
 		{
-			$status['av_dir'] = $R['install_code_not_found'];
+			$status['avatars_dir'] = $R['install_code_not_found'];
 		}
 		/* ------------------- */
 		if (is_dir($cfg['cache_dir']))
@@ -454,17 +454,17 @@ switch ($step)
 			$status['sig_dir'] = $R['install_code_not_found'];
 		}
 		/* ------------------- */
-		if (is_dir($cfg['th_dir']))
+		if (is_dir($cfg['thumbs_dir']))
 		{
-			$status['th_dir'] = (substr(decoct(fileperms($cfg['th_dir'])), -4) >= $cfg['dir_perms'])
+			$status['thumbs_dir'] = (substr(decoct(fileperms($cfg['thumbs_dir'])), -4) >= $cfg['dir_perms'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
-						substr(decoct(fileperms($cfg['th_dir'])), -4)))));
+						substr(decoct(fileperms($cfg['thumbs_dir'])), -4)))));
 		}
 		else
 		{
-			$status['th_dir'] = $R['install_code_not_found'];
+			$status['thumbs_dir'] = $R['install_code_not_found'];
 		}
 		/* ------------------- */
 		if (file_exists($file['config']))
@@ -539,13 +539,13 @@ switch ($step)
 		}
 
 		$t->assign(array(
-			'INSTALL_AV_DIR' => $status['av_dir'],
+			'INSTALL_AV_DIR' => $status['avatars_dir'],
 			'INSTALL_CACHE_DIR' => $status['cache_dir'],
 			'INSTALL_PFS_DIR' => $status['pfs_dir'],
 			'INSTALL_EXFLDS_DIR' => $status['exflds_dir'],
 			'INSTALL_PHOTOS_DIR' => $status['photos_dir'],
 			'INSTALL_SIG_DIR' => $status['sig_dir'],
-			'INSTALL_TH_DIR' => $status['th_dir'],
+			'INSTALL_THUMBS_DIR' => $status['thumbs_dir'],
 			'INSTALL_CONFIG' => $status['config'],
 			'INSTALL_CONFIG_SAMPLE' => $status['config_sample'],
 			'INSTALL_SQL_FILE' => $status['sql_file'],
