@@ -4051,15 +4051,16 @@ $cot_languages['uk'] = 'Українська';
  *
  * @global string $lang Current language
  * @param int $digit Numeric value
- * @param string $expr Word or expression
+ * @param mixed $expr Word or expression
  * @param bool $onlyword Return only words, without numbers
  * @param bool $canfrac - Numeric value can be Decimal Fraction
  * @return string
  */
 function cot_declension($digit, $expr, $onlyword = false, $canfrac = false)
 {
-	global $lang;
-
+	global $lang, $Ls;
+	
+	$expr = is_string($expr) ? $Ls[$expr] : $expr;
 	if (!is_array($expr))
 	{
 		return trim(($onlyword ? '' : "$digit ").$expr);
