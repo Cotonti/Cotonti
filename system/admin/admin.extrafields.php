@@ -162,7 +162,7 @@ elseif ($a == 'del' && isset($name))
 	}
 }
 
-$cfg['cache'] && $cache->db->remove('cot_extrafields', 'system');
+$cache && $cache->db->remove('cot_extrafields', 'system');
 
 $totalitems = $db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$location'")->fetchColumn();
 $res = $db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$location' ORDER BY field_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
