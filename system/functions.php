@@ -2460,17 +2460,12 @@ function cot_tplfile($base, $type = 'module')
 	}
 
 	$basename = $base[0];
-	$using_alternative_theme = ($usr['theme'] != $cfg['defaulttheme']);
 
 	// Possible search directories depending on extension type
 	if ($type == 'plug')
 	{
 		// Plugin template paths
 		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/";
-		if ($using_alternative_theme)
-		{
-			$scan_prefix[] = "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/plugins/";
-		}
 		$scan_prefix[] = "{$cfg['themes_dir']}/{$cfg['plugins_dir']}/$basename/tpl/";
 	}
 	elseif ($type == 'core')
@@ -2480,18 +2475,10 @@ function cot_tplfile($base, $type = 'module')
 		{
 			$basename = 'admin';
 			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/$basename/";
-			if ($using_alternative_theme)
-			{
-				$scan_prefix[] = "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/$basename/";
-			}
 		}
 		else
 		{
 			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
-			if ($using_alternative_theme)
-			{
-				$scan_prefix[] = "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/";
-			}
 		}
 		$scan_prefix[] = "{$cfg['system_dir']}/$basename/tpl/";
 	}
@@ -2499,10 +2486,6 @@ function cot_tplfile($base, $type = 'module')
 	{
 		// Module template paths
 		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
-		if ($using_alternative_theme)
-		{
-			$scan_prefix[] = "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/";
-		}
 		$scan_prefix[] = "{$cfg['modules_dir']}/$basename/tpl/";
 	}
 
