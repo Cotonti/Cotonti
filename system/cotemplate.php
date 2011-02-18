@@ -1149,7 +1149,7 @@ class Cotpl_var
 			{
 				if (is_array($func))
 				{
-					array_walk(&$func['args'], 'cotpl_callback_replace', $val);
+					array_walk($func['args'], 'cotpl_callback_replace', $val);
 					$val = call_user_func_array($func['name'], $func['args']);
 				}
 				else
