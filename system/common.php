@@ -454,6 +454,11 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 /* ======== Theme / color scheme ======== */
 
+if (empty($cfg['themes_dir']))
+{
+	$cfg['themes_dir'] = 'themes';
+}
+
 $mtheme = "{$cfg['themes_dir']}/{$usr['theme']}/header.tpl";
 if (!file_exists($mtheme))
 {
