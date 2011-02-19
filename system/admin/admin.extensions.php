@@ -308,6 +308,7 @@ switch($a)
 				'ADMIN_EXTENSIONS_INSTALL_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=install"),
 				'ADMIN_EXTENSIONS_UPDATE_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=update"),
 				'ADMIN_EXTENSIONS_UNINSTALL_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=uninstall"),
+				'ADMIN_EXTENSIONS_UNINSTALL_CONFIRM_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=uninstall&x={$sys['xk']}"),
 				'ADMIN_EXTENSIONS_PAUSE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=pause"),
 				'ADMIN_EXTENSIONS_UNPAUSE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=unpause")
 			));
@@ -368,23 +369,37 @@ switch($a)
 				/* ===== */
 				break;
 			case 'uninstall':
-				$result = cot_extension_uninstall($code, $is_module);
-
-				$t->assign(array(
-					'ADMIN_EXTENSIONS_EDIT_TITLE' => cot_rc('ext_uninstalling', array(
-							'type' => $is_module ? $L['Module'] : $L['Plugin'],
-							'name' => $code
-						)),
-					'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !cot_error_found() ? 'success' : 'error',
-					'ADMIN_EXTENSIONS_EDIT_LOG' => cot_implode_messages(),
-					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code")
-				));
 				/* === Hook  === */
-				foreach (cot_getextplugins('admin.extensions.uninstall.tags') as $pl)
+				foreach (cot_getextplugins('admin.extensions.uninstall.first') as $pl)
 				{
 					include $pl;
 				}
 				/* ===== */
+				if (cot_check_xg(false))
+				{
+					$result = cot_extension_uninstall($code, $is_module);
+					$t->assign(array(
+						'ADMIN_EXTENSIONS_EDIT_TITLE' => cot_rc('ext_uninstalling', array(
+								'type' => $is_module ? $L['Module'] : $L['Plugin'],
+								'name' => $code
+							)),
+						'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !cot_error_found() ? 'success' : 'error',
+						'ADMIN_EXTENSIONS_EDIT_LOG' => cot_implode_messages(),
+						'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code")
+					));
+					/* === Hook  === */
+					foreach (cot_getextplugins('admin.extensions.uninstall.tags') as $pl)
+					{
+						include $pl;
+					}
+					/* ===== */
+				}
+				else
+				{
+					$url = cot_url('admin', "m=extensions&a=edit&$arg=$code&b=uninstall&x={$sys['xk']}");
+					cot_message(cot_rc('ext_uninstall_confirm', array('url' => $url)), 'error');
+					cot_redirect(cot_url('admin', "m=extensions&a=details&$arg=$code", '', true));
+				}
 			break;
 			default:
 				cot_die();

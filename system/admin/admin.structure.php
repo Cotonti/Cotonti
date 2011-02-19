@@ -183,19 +183,20 @@ elseif ($a == 'delete')
 elseif ($a == 'resyncall')
 {
 	cot_check_xg();
-	$res = TRUE;
+	$res = false;
 	$area_sync = 'cot_'.$n.'_sync';
-	$sql = $db->query("SELECT structure_code FROM $db_structure WHERE structure_area='".$db->prep($n)."'");
-	foreach ($sql->fetchAll() as $row)
+	if(function_exists($area_sync))
 	{
-		if(function_exists($area_sync))
+		$res = true;
+		$sql = $db->query("SELECT structure_code FROM $db_structure WHERE structure_area='".$db->prep($n)."'");
+		foreach ($sql->fetchAll() as $row)
 		{
-			$items = (function_exists($area_sync)) ? $area_sync($cat) : 0;		
+			$items = $area_sync($cat);
 			$db->update($db_structure, array("structure_count" => (int)$items), "structure_code='".$db->prep($cat)."' AND structure_area='".$db->prep($n)."'");
 		}
+		$sql->closeCursor();
 	}
-	$sql->closeCursor();
-	$res ? cot_message('Resynced') : cot_message('Error');
+	$res ? cot_message('Resynced') : cot_message("Error: function $area_sync doesn't exist."); // TODO i18n
 	($cache && $cfg['cache_'.$n]) && $cache->page->clear($n);
 	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$d, '', true));
 }

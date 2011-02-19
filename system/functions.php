@@ -3645,16 +3645,20 @@ function cot_rc_link_file($path, $prepend = false)
 /**
  * Checks GET anti-XSS parameter
  *
+ * @param bool $redirect Redirect to message on failure
  * @return bool
  */
-function cot_check_xg()
+function cot_check_xg($redirect = true)
 {
 	global $env, $sys;
 	$x = cot_import('x', 'G', 'ALP');
 	if ($x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 	{
-		$env['status'] = '403 Forbidden';
-		cot_redirect(cot_url('message', 'msg=950', '', true));
+		if ($redirect)
+		{
+			$env['status'] = '403 Forbidden';
+			cot_redirect(cot_url('message', 'msg=950', '', true));
+		}
 		return false;
 	}
 	return true;

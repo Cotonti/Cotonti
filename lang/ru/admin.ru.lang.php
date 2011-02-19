@@ -261,6 +261,7 @@ $L['ext_old_format'] = 'Это старый плагин для Genoa/Seditio. �
 $L['ext_patch_applied'] = 'Установлен патч {$f}: {$msg}';
 $L['ext_patch_error'] = 'Ошибка установки патча {$f}: {$msg}';
 $L['ext_setup_not_found'] = 'Файл установок не найден';
+$L['ext_uninstall_confirm'] = 'Are you sure you want to uninstall this extension? Any data linked to the extension will be removed and cannot be recovered.<br/><a href="{$url}">Yes, uninstall and remove data.</a>';
 $L['ext_uninstalling'] = 'Удаление {$type} &quot;{$name}&quot;';
 $L['ext_up2date'] = '{$type} &quot;{$name}&quot; не требует обновления';
 $L['ext_update_error'] = 'Ошибка обновления {$type} &quot;{$name}&quot;';
