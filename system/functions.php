@@ -2466,7 +2466,7 @@ function cot_tplfile($base, $type = 'module')
 	{
 		// Plugin template paths
 		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/";
-		$scan_prefix[] = "{$cfg['themes_dir']}/{$cfg['plugins_dir']}/$basename/tpl/";
+		$scan_prefix[] = "{$cfg['plugins_dir']}/$basename/tpl/";
 	}
 	elseif ($type == 'core')
 	{
