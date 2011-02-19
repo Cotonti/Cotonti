@@ -137,9 +137,13 @@ foreach (cot_getextplugins('users.query') as $pl)
 }
 /* ===== */
 
-$sql = $db->query("SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where));
-$totalusers = $sql->fetchColumn();
-$sqlusers = $db->query("SELECT u.* $join_columns FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
+$totalusers = $db->query(
+	"SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where)
+)->fetchColumn();
+$sqlusers = $db->query(
+	"SELECT u.* $join_columns FROM $db_users AS u $join_condition
+	WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['maxusersperpage']}"
+)->fetchAll();
 
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage = ceil($d / $cfg['maxusersperpage']) + 1;
@@ -254,7 +258,7 @@ $jj = 0;
 $extp = cot_getextplugins('users.loop');
 /* ===== */
 
-foreach ($sqlusers->fetchAll() as $urr)
+foreach ($sqlusers as $urr)
 {
 	$jj++;
 	$t->assign(array(

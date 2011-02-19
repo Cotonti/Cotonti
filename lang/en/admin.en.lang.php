@@ -261,6 +261,7 @@ $L['ext_old_format'] = 'This is old Genoa/Seditio plugin. It may work incorrectl
 $L['ext_patch_applied'] = 'Applied patch {$f}: {$msg}';
 $L['ext_patch_error'] = 'Error applying patch {$f}: {$msg}';
 $L['ext_setup_not_found'] = 'Setup file is not found';
+$L['ext_uninstall_confirm'] = 'Are you sure you want to uninstall this extension? Any data linked to the extension will be removed and cannot be recovered.<br/><a href="{$url}">Yes, uninstall and remove data.</a>';
 $L['ext_uninstalling'] = 'Uninstalling {$type} &quot;{$name}&quot;';
 $L['ext_up2date'] = '{$type} &quot;{$name}&quot; is up to date';
 $L['ext_update_error'] = 'Failed updating {$type} &quot;{$name}&quot;';
