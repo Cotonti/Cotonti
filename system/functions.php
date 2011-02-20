@@ -2040,14 +2040,14 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 
 	if (defined('COT_DEBUG') && COT_DEBUG)
 	{
-		echo '<br /><pre>';
+		echo "<strong><a href=\"".$cfg['mainurl']."\">".$cfg['maintitle']."</a></strong><br/>";
+		echo @date('Y-m-d H:i')."<p>$title: $text</p>";
+		echo '<pre>';
 		debug_print_backtrace();
 		echo '</pre>';
+		exit;
 	}
-
-	$disp = "<strong><a href=\"".$cfg['mainurl']."\">".$cfg['maintitle']."</a></strong><br />";
-	$disp .= @date('Y-m-d H:i').'<br />'.$title.' : '.$text;
-	die($disp);
+	cot_redirect(cot_url('message', 'msg=500', '', true));
 }
 
 /**
@@ -2244,6 +2244,7 @@ function cot_log($text, $group='def')
  */
 function cot_log_import($s, $e, $v, $o)
 {
+	if ($e == 'PSW') $o = str_repeat('*', mb_strlen($o));
 	$text = "A variable type check failed, expecting ".$s."/".$e." for '".$v."' : ".$o;
 	cot_log($text, 'sec');
 }
