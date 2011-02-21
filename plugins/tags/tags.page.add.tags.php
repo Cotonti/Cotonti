@@ -26,7 +26,7 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 		'PAGEADD_TOP_TAGS_HINT' => $L['tags_comma_separated'],
 		'PAGEADD_FORM_TAGS' => cot_rc('tags_input_editpage', array('tags' => ''))
 	));
-	if ($cot_current_hook == 'i18n.page.translate.tags')
+	if (cot_get_caller() == 'i18n.page')
 	{
 		$t->assign(array(
 			'I18N_PAGE_TAGS' => implode(', ', cot_tag_list($id)),

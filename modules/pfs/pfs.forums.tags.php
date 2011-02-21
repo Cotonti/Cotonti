@@ -20,14 +20,14 @@ defined('COT_CODE') or die('Wrong URL.');
 
 require_once cot_incfile('pfs', 'module');
 
-// TODO unify field names for cleaner multihooking
-if ($cot_current_hook == 'forums.posts.newpost.tags')
+$pfs_caller = cot_get_caller();
+if ($pfs_caller == 'forums.posts')
 {
 	$pfs_src = 'newpost';
 	$pfs_name = 'newmsg';
 	$pfs_tag = 'NEWPOST';
 }
-elseif ($cot_current_hook == 'forums.newtopic.tags')
+elseif ($pfs_caller == 'forums.newtopic')
 {
 	$pfs_src = 'newtopic';
 	$pfs_name = 'newmsg';

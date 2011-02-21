@@ -23,7 +23,7 @@ require_once cot_incfile('pfs', 'module');
 $pfs = cot_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
 $pfs .= (cot_auth('pfs', 'a', 'A')) ? ' &nbsp; '.cot_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';
 
-$pfs_tag = $cot_current_hook == 'pm.send.tags' ? 'PMSEND_FORM_PFS' : 'PM_FORM_PFS';
+$pfs_tag = cot_get_caller() == 'pm.send' ? 'PMSEND_FORM_PFS' : 'PM_FORM_PFS';
 
 $t->assign($pfs_tag, $pfs);
 ?>

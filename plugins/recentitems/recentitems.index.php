@@ -19,7 +19,7 @@ Order=10,20
  */
 defined('COT_CODE') or die('Wrong URL');
 
-if (strpos($cot_current_hook, $cfg['plugin']['recentitems']['hook']) !== false)
+if (cot_get_caller() == $cfg['plugin']['recentitems']['part'])
 {
 	require_once cot_incfile('users', 'module');
 	require_once cot_incfile('recentitems', 'plug');
