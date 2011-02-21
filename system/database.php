@@ -384,6 +384,10 @@ class CotDB extends PDO {
 				{
 					return $this->error . '<br />' . htmlspecialchars($query) . '<hr />';
 				}
+				elseif ($result instanceof PDOStatement)
+				{
+					$result->closeCursor();
+				}
 			}
 		}
 		return '';
