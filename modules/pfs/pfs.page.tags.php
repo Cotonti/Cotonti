@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL.');
 
 require_once cot_incfile('pfs', 'module');
 
-if ($cot_current_hook == 'page.add.tags')
+if (cot_get_caller() == 'page.add')
 {
 	$pfs_tag = 'PAGEADD';
 }

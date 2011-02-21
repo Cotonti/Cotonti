@@ -99,6 +99,34 @@ function cot_cutstring($res, $l)
 }
 
 /**
+ * Returns name part of the caller file. Use this in plugins to detect from which file
+ * current hook part was included. Example:
+ * <code>
+ * if (cot_get_caller() == 'users.details')
+ * {
+ *     // We are called from users.details
+ * }
+ * else if (cot_get_caller() == 'header')
+ * {
+ *     // We are called from header
+ * }
+ * </code>
+ * @return string Caller file basename without .php suffix on success, 'unknown or error
+ */
+function cot_get_caller()
+{
+	$bt = debug_backtrace();
+	if (isset($bt[1]) && in_array($bt[1]['function'], array('include', 'require_once', 'require', 'include_once')))
+	{
+		return preg_replace('#\.php$#', '', basename($bt[1]['file']));
+	}
+	else
+	{
+		return 'unknown';
+	}
+}
+
+/**
  * Returns a list of plugins registered for a hook
  *
  * @param string $hook Hook name
@@ -107,9 +135,7 @@ function cot_cutstring($res, $l)
  */
 function cot_getextplugins($hook, $cond='R')
 {
-	global $cot_plugins, $cache, $cot_current_hook;
-
-	$cot_current_hook = $hook;
+	global $cot_plugins, $cache;
 
 	$extplugins = array();
 

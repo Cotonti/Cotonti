@@ -47,7 +47,7 @@ foreach ($categories as $v)
 		$v[3] = (empty($c) || $cfg['plugin']['news']['syncpagination']) ? $d : $v[3];
 		$c = (empty($c)) ? $v[0] : $c;
 		$indexcat = ($jj == 0) ? $v[0] : $indexcat;
-		
+	
 		$v[2] = ((int)$v[2] > 0) ? $v[2] : 0;
 		$v[1] = ((int)$v[1] > 0) ? $v[1] : (int)$cfg['plugin']['news']['maxpages'];
 
@@ -65,7 +65,7 @@ if (count($cats) > 0)
 
 		$catsub = cot_structure_children('page', $cat);
 		$where = "page_state = 0 AND page_cat <> 'system' AND page_date <= " . (int)$sys['now_offset'] . " AND page_cat IN ('" . implode("','", $catsub) . "')";
-		
+
 		$news_link_params = ($c != $indexcat) ? "c=" . $c : '';
 
 		/* === Hook - Part2 : Include === FIRST === */
@@ -74,7 +74,7 @@ if (count($cats) > 0)
 			include $pl;
 		}
 		/* ===== */
-		
+
 		$sql = $db->query("SELECT p.*, u.* $news_join_columns
 			FROM $db_pages AS p
 				LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid $news_join_tables

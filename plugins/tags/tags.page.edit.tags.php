@@ -21,7 +21,8 @@ defined('COT_CODE') or die('Wrong URL');
 if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 {
 	require_once cot_incfile('tags', 'plug');
-	if ($cot_current_hook == 'i18n.page.edit.tags')
+	$tags_caller = cot_get_caller();
+	if ($tags_caller == 'i18n.page')
 	{
 		$tags_extra = array('tag_locale' => $i18n_locale);
 	}
@@ -36,7 +37,7 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 		'PAGEEDIT_TOP_TAGS_HINT' => $L['tags_comma_separated'],
 		'PAGEEDIT_FORM_TAGS' => cot_rc('tags_input_editpage')
 	));
-	if ($cot_current_hook == 'i18n.page.edit.tags')
+	if ($tags_caller == 'i18n.page')
 	{
 		$t->assign(array(
 			'I18N_PAGE_TAGS' => implode(', ', cot_tag_list($id)),

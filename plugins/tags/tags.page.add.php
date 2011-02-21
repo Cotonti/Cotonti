@@ -21,7 +21,7 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 {
 	require_once cot_incfile('tags', 'plug');
 	// I18n
-	if ($cot_current_hook == 'i18n.page.add.done')
+	if (cot_get_caller() == 'i18n.page')
 	{
 		$tags_extra = array('tag_locale' => $i18n_locale);
 		$item_id = $id;
