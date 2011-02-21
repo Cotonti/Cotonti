@@ -154,11 +154,11 @@ function cot_comments_display($ext_name, $code, $cat = '')
 
 			$com_text = cot_parse($row['com_text'], $cfg['plugin']['comments']['markup']);
 
-			$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comedit']['time'] * 60)) ? TRUE
+			$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE
 				: FALSE;
 			$usr['isowner_com'] = $time_limit && ($usr['id'] > 0 && $row['com_authorid'] == $usr['id']
 				|| $usr['id'] == 0 && $usr['ip'] == $row['com_authorip']);
-			$com_gup = $sys['now_offset'] - ($row['com_date'] + $cfg['plugin']['comedit']['time'] * 60);
+			$com_gup = $sys['now_offset'] - ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60);
 			$allowed_time = ($usr['isowner_com'] && !$usr['isadmin']) ? ' - '
 				. cot_build_timegap($sys['now_offset'] + $com_gup, $sys['now_offset']) . $L['plu_comgup'] : '';
 			$com_edit = ($auth_admin || $usr['isowner_com']) ? cot_rc('comments_code_edit', array(

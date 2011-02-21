@@ -253,6 +253,8 @@ $bhome = $cfg['homebreadcrumb'] ?
 
 $protected = $sys['protecttopadmin'] ? array('disabled' => 'disabled') : array();
 
+$editor_class = $cfg['usertextimg'] ? 'minieditor' : '';
+
 $t->assign(array(
 	'USERS_EDIT_TITLE' => $bhome.cot_rc_link(cot_url('users'), $L['Users']).' '.$cfg['separator'].' '
 		.cot_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])).' '.$cfg['separator']
@@ -274,8 +276,7 @@ $t->assign(array(
 	'USERS_EDIT_EMAIL' => cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)),
 	'USERS_EDIT_HIDEEMAIL' => cot_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array($L['Yes'], $L['No'])),
 	'USERS_EDIT_PMNOTIFY' => cot_radiobox($urr['user_pmnotify'], 'ruserpmnotify', array(1, 0), array($L['Yes'], $L['No'])),
-	'USERS_EDIT_TEXT' => cot_textarea('rusertext', $urr['user_text'], 4, 56, '', 'input_textarea_editor'),
-	'USERS_EDIT_TEXTBOXER' => cot_textarea('rusertext', $urr['user_text'], 4, 56, '', 'input_textarea_editor'),
+	'USERS_EDIT_TEXT' => cot_textarea('rusertext', $urr['user_text'], 4, 56, array('class' => $editor_class)),
 	'USERS_EDIT_GENDER' => cot_selectbox_gender($urr['user_gender'], 'rusergender'),
 	'USERS_EDIT_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', $sys['now_offset']), cot_date('Y', $sys['now_offset']) - 100, false),
 	'USERS_EDIT_TIMEZONE' => cot_inputbox('text', 'rusertimezone', $urr['user_timezone'], array('size' => 32, 'maxlength' => 16)),

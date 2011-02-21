@@ -111,7 +111,7 @@ function cot_cutstring($res, $l)
  *     // We are called from header
  * }
  * </code>
- * @return string Caller file basename without .php suffix on success, 'unknown or error
+ * @return string Caller file basename without .php suffix on success, 'unknown' or error
  */
 function cot_get_caller()
 {

@@ -61,6 +61,7 @@ function insertText(docObj, formName, fieldName, value) {
 // Example of use:
 // ajaxErrorHandlers.push({divId: 'ajaxBlock', func: myErrorHandler});
 var ajaxErrorHandlers = new Array();
+var ajaxSuccessHandlers = new Array();
 // AJAX enablement defaults to false
 var ajaxEnabled = false;
 // Required to calculate paths
@@ -98,6 +99,9 @@ function ajaxSend(settings) {
 		success: function(msg) {
 			$('#loading').remove();
 			$('#' + settings.divId).hide().html(msg).fadeIn(500);
+			for (var i = 0; i < ajaxSuccessHandlers.length; i++) {
+				ajaxSuccessHandlers[i]();
+			}
 		},
 		error: function(msg) {
 			$('#loading').remove();

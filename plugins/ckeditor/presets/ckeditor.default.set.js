@@ -23,6 +23,23 @@ function ckeditorReplace() {
 	}
 }
 
+function ckeditorReplaceJQ () {
+	$('textarea.editor').each(function () {
+		var instance = CKEDITOR.instances[$(this).attr('name')];
+		if (instance) {
+			CKEDITOR.remove(instance);
+		}
+		$(this).ckeditor(ckeditorConfig);
+	});
+	$('textarea.minieditor').each(function () {
+		var instance = CKEDITOR.instances[$(this).attr('name')];
+		if (instance) {
+			CKEDITOR.remove(instance);
+		}
+		$(this).ckeditor(ckeditorConfig);
+	});
+}
+
 if (typeof jQuery == 'undefined') {
 	if (window.addEventListener) {
 		window.addEventListener('load', ckeditorReplace, false);
@@ -32,8 +49,6 @@ if (typeof jQuery == 'undefined') {
 		window.onload = ckeditorReplace;
 	}
 } else {
-	$(document).ready(function () {
-		$('textarea.editor').ckeditor(ckeditorConfig);
-		$('textarea.minieditor').ckeditor(ckeditorMiniConfig);
-	});
+	$(document).ready(ckeditorReplaceJQ);
+	ajaxSuccessHandlers.push(ckeditorReplaceJQ);
 }
