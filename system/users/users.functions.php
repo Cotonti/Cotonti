@@ -13,6 +13,8 @@
 require_once cot_langfile('users', 'core');
 require_once cot_incfile('users', 'module', 'resources');
 
+require_once cot_incfile('extrafields');
+
 // Extafield globals
 $cot_extrafields['users'] = (!empty($cot_extrafields[$db_users])) ? $cot_extrafields[$db_users] : array();
 

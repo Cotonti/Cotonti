@@ -32,7 +32,7 @@ if (!file_exists($smile_lang))
 }
 
 // BBcode or HTML preset
-$mkup_set = function_exists('cot_bbcode_parse') ? 'bbcode' : 'html';
+$mkup_set = cot_plugin_active('bbcode') ? 'bbcode' : 'html';
 
 // Load head resources
 cot_rc_add_file($smile_lang);
