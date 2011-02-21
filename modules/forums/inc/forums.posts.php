@@ -468,6 +468,7 @@ $t->assign(array(
 	'FORUMS_POSTS_PAGETITLE' => $toptitle,
 	'FORUMS_POSTS_TOPICDESC' => htmlspecialchars($rowt['ft_desc']),
 	'FORUMS_POSTS_SHORTTITLE' => $rowt['ft_title'],
+	'FORUMS_POSTS_CATTITLE' => htmlspecialchars($structure['forums'][$s]['title']),
 	'FORUMS_POSTS_PATH' => $toppath,
 	'FORUMS_POSTS_PAGES' => $pagenav['main'],
 	'FORUMS_POSTS_PAGEPREV' => $pagenav['prev'],
