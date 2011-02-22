@@ -72,7 +72,7 @@ else
 
 if (!COT_AJAX)
 {
-	$mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] ? 'core' : 'module';
+	$mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R') ? 'core' : 'module';
 	if ($cfg['enablecustomhf'])
 	{
 		$mtpl_base = (defined('COT_PLUG') && !empty($e)) ? array('header', $e) : array('header', $env['location']);
