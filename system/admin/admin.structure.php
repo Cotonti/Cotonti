@@ -33,6 +33,11 @@ foreach (cot_getextplugins('admin.structure.first') as $pl)
 
 (empty($n)) && cot_redirect(cot_url('message', 'msg=950', '', true));
 
+if (file_exists(cot_incfile($n, 'module')))
+{
+	require_once cot_incfile($n, 'module');
+}
+
 if ($a == 'update')
 {
 	$rstructurecode = cot_import('rstructurecode', 'P', 'ARR');
