@@ -20,5 +20,8 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('comments', 'plug');
 
-$indexpolls->assign('IPOLLS_COMMENTS', cot_comments_link('polls', 'id='.$row_p['poll_id'], 'polls', $row_p['poll_id']));
+$indexpolls->assign(array(
+	'IPOLLS_COMMENTS' => cot_comments_link('polls', 'id='.$row_p['poll_id'], 'polls', $row_p['poll_id']),
+	'IPOLLS_COMMENTS_COUNT' => cot_comments_count('polls', $row_p['poll_id'])
+));
 ?>

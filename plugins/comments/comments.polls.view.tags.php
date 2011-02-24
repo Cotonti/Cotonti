@@ -22,6 +22,7 @@ require_once cot_incfile('comments', 'plug');
 
 $t->assign(array(
 	'POLLS_COMMENTS' => cot_comments_link('polls', 'id='.$id, 'polls', $id),
+	'POLLS_COMMENTS_COUNT' => cot_comments_count('polls', $id),
 	'POLLS_COMMENTS_DISPLAY' => cot_comments_display('polls', $id)
 ));
 
