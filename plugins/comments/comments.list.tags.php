@@ -20,6 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 $t->assign(array(
 	'LIST_COMMENTS' => cot_comments_link('page', 'c='.$c, 'page', $c),
+	'LIST_COMMENTS_COUNT' => cot_comments_count('page', $c),
 	'LIST_COMMENTS_DISPLAY' => cot_comments_display('page', $c)
 ));
 

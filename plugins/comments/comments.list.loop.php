@@ -20,6 +20,9 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('comments', 'plug');
 
-$t->assign('LIST_ROW_COMMENTS', cot_comments_link('page', $page_urlp, 'page', $pag['page_id'], $c));
+$t->assign(array(
+	'LIST_ROW_COMMENTS' => cot_comments_link('page', $page_urlp, 'page', $pag['page_id'], $c),
+	'LIST_ROW_COMMENTS_COUNT' => cot_comments_count('page', $pag['page_id'])
+));
 
 ?>
