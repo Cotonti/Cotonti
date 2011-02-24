@@ -100,7 +100,7 @@
 <!-- BEGIN: POLLS_VIEW -->
 <h2 class="polls">{POLLS_TITLE}</h2>
 	{POLLS_FORM}
-<!--	{PHP.L.Comments}: {POLLS_COMMENTS}{POLLS_COMMENTS_DISPLAY}-->
+	<!-- {PHP.L.comments_comments}: {POLLS_COMMENTS}{POLLS_COMMENTS_DISPLAY} -->
 <!-- END: POLLS_VIEW -->
 
 <!-- BEGIN: POLLS_VIEWALL -->
