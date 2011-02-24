@@ -1,0 +1,48 @@
+-----------------------
+Cotonti Website engine
+Copyright  Cotonti
+http://www.cotonti.com
+----------------------
+
+For Cotonti version : 0.9.0 or newer
+Updated : 30.09.2009
+Cotonti theme : SymiSun-03
+Language : English (code:en)
+-----------------------
+Skin made by : SymiSun*
+Website : http://www.symisun.com
+Copyright � 2009 SymiSun*. All Rights Reserved.
+-----------------------
+
+Designed By: Stamatis Kritikos
+Programming By: Stamatis Kritikos
+
+NOTICE TO USER: PLEASE READ THIS CONTRACT CAREFULLY. BY USING ALL OR 
+ANY PORITION OF THE SOFTWARE YOU ACCEPT ALL THE TERMS AND CONDITIONS 
+OF THIS AGREEMENT.
+
+(i) The SymiSun-03 source code may be modified at the user's risk.
+
+(ii) Keep the 3 words with the link at the bottom of the template saying 
+Designed by SymiSun*.
+
+(iii) The Redistributable Code is the property of SymiSun.Com 
+and is protected by copyright law and international treaty provisions. 
+It can only be distributed with Cotonti Website Engine. SymiSun.Com, 
+reserves all rights not expressly granted.
+
+THE REDISTRIBUTABLE CODE IS PROVIDED TO YOU "AS IS" WITHOUT WARRANTY 
+OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
+PARTICULAR PURPOSE. YOU ASSUME THE ENTIRE RISK AS TO THE ACCURACY 
+AND THE USE OF THE REDISTRIBUTABLE CODE. SYMISUN.COM, SHALL 
+NOT BE LIABLE FOR ANY DAMAGES WHATSOEVER ARISING OUT OF THE USE OF 
+OR INABILITY TO USE THE REDISTRIBUTABLE CODE, EVEN IF SYMISUN.COM, 
+HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+-----------------------
+MODIFICATION GUIDE:
+
+/* STRUCTURE CHANGES */
+admin.php?m=other&p=userimages
+Change avatar to 80px x 80px
