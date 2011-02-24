@@ -3911,8 +3911,12 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	{
 		$params = cot_parse_str($params);
 	}
-	$url = $name . '.php';
+	elseif (!is_array($params))
+	{
+		$params = array();
+	}
 	$params = array_filter($params);
+	$url = $name . '.php';
 	// Append query string if needed
 	if (count($params) > 0)
 	{
