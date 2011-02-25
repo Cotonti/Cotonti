@@ -15,15 +15,14 @@
 		<!-- ENDIF -->
 		</span>
 		<!-- IF {USERS_DETAILS_COUNTRY} != '<a href="users.php?f=country_00">---</a>' -->
-		{USERS_DETAILS_COUNTRY}
+		{USERS_DETAILS_COUNTRY}<br />
 		<!-- ENDIF -->
 		{USERS_DETAILS_TIMEZONE}<br />
-		<strong>{USERS_DETAILS_LOCATION}</strong><br />
-		<strong>{USERS_DETAILS_AGE}</strong> &nbsp; {USERS_DETAILS_BIRTHDATE} &nbsp; <em>{USERS_DETAILS_GENDER}</em><br />
-		<strong>{USERS_DETAILS_OCCUPATION}</strong><br />
-		<span class="home">{USERS_DETAILS_WEBSITE}</span><br />
-		<span class="msn">{USERS_DETAILS_MSN}</span><br />
-		{USERS_DETAILS_ICQ} <br class="clear" />
+		<br />
+		<strong>{USERS_DETAILS_AGE} {PHP.themelang.usersdetails.years}</strong> <br />
+                {USERS_DETAILS_BIRTHDATE}<br /> 
+                <em>{USERS_DETAILS_GENDER}</em><br />
+		<br class="clear" />
 		<h4>{PHP.L.Signature}</h4>
 		<!-- IF {USERS_DETAILS_TEXT} -->
 		<p>{USERS_DETAILS_TEXT}</p>
