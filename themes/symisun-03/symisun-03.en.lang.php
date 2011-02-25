@@ -144,6 +144,7 @@ $themelang['usersedit']['edit'] = 'Edit User';
  */
 
 $themelang['usersdetails']['posts'] = 'Total posts';
+$themelang['usersdetails']['years'] = 'years old';
 
 /**
  * users.profile.tpl
