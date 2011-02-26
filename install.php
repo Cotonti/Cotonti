@@ -34,6 +34,9 @@ if (empty($cfg['lang_dir']))
 	$cfg['lang_dir'] = './lang';
 }
 
+// Force config options
+$cfg['display_errors'] = true;
+$cfg['debug_mode'] = true;
 $cfg['customfuncs'] = false;
 $cfg['cache'] = false;
 
@@ -94,7 +97,6 @@ else
 	if ($sql_install->rowCount() != 1)
 	{
 		define('COT_UPGRADE', true);
-		define('COT_DEBUG', true);
 		$cfg['defaulttheme'] = 'nemesis';
 		$cfg['defaultscheme'] = 'default';
 	}

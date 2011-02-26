@@ -71,6 +71,8 @@ date_default_timezone_set('GMT');
 
 $cfg['check_updates'] = FALSE;		// Automatically check for updates, set it TRUE to enable
 
+$cfg['display_errors'] = TRUE;		// Display error messages. Switch it FALSE on production sites
+
 $cfg['redirmode'] = FALSE;			// 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
 $cfg['xmlclient'] = FALSE;  		// For testing-purposes only, else keep it off.
 $cfg['ipcheck'] = FALSE;  			// Will kill the logged-in session if the IP has changed
@@ -117,8 +119,7 @@ $cfg['file_perms'] = 0664;
  * Set it TRUE when you experiment with something new.
  * Set it FALSE on production sites.
  */
-
-define('COT_DEBUG', FALSE);
+$cfg['debug_mode'] = FALSE;
 
 /**
  * Path to debug log file used by functions which dump debug data into it.
@@ -126,15 +127,13 @@ define('COT_DEBUG', FALSE);
  * compromise your website security. Protect it with .htaccess or use some
  * path accessible to you only via FTP.
  */
-
-define('COT_DEBUG_LOGFILE', '/tmp/cot_debug_'.date("Ymd_His").'.log');
+$cfg['debug_logfile'] = '/tmp/cot_debug_'.date("Ymd_His").'.log';
 
 /**
  * The shield is disabled for administrators by default. But if you are testing
  * it with your admin account, you can enable it by setting this TRUE.
  */
-
-define('COT_SHIELD_FORCE', FALSE);
+$cfg['shield_force'] = FALSE;
 
 // ========================
 // Names for MySQL tables

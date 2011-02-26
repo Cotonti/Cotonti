@@ -12,7 +12,7 @@
 defined('COT_CODE') or die('Wrong URL');
 
 error_reporting(E_ALL ^ E_NOTICE);
-ini_set("display_errors", 1);
+ini_set('display_errors', 1);
 
 /**
  * Accepts several variables and prints their values in debug mode (var dump).
@@ -34,12 +34,14 @@ function cot_print()
 /**
  * Dumps current state of its arguments to debug log file and continues normal script execution.
  *
+ * @global string $cfg['debug_logfile'] Path to debug log file
  * @example cot_watch($foo, $bar);
- * @see cot_assert(), cot_checkpoint(), COT_DEBUG_LOGFILE
+ * @see cot_assert(), cot_checkpoint()
  */
 function cot_watch()
 {
-	$fp = fopen(COT_DEBUG_LOGFILE, 'a');
+	global $cfg;
+	$fp = fopen($cfg['debug_logfile'], 'a');
 	$btrace = debug_backtrace();
 	fputs($fp, $btrace[1]['file'].', '.$btrace[1]['line'].":\n");
 	$vars = func_get_args();
@@ -117,11 +119,13 @@ die();');
 /**
  * Dumps current state of global variables into debug log file and continues normal script execution.
  *
- * @see COT_CHECKPOINT_LOCALS, COT_DEBUG_LOGFILE, cot_watch(), cot_vardump()
+ * @global string $cfg['debug_logfile'] Path to debug log file
+ * @see COT_CHECKPOINT_LOCALS, cot_watch(), cot_vardump()
  */
 function cot_checkpoint()
 {
-	$fp = fopen(COT_DEBUG_LOGFILE, 'a');
+	global $cfg;
+	$fp = fopen($cfg['debug_logfile'], 'a');
 	$btrace = debug_backtrace();
 	fputs($fp, $btrace[1]['file'] . ', ' . $btrace[1]['line'] . ":\n");
 	foreach ($GLOBALS as $key => $val)
@@ -138,10 +142,12 @@ function cot_checkpoint()
 /**
  * Dumps variables in local scope into debug log file and continues normal script execution.
  *
+ * @global string $cfg['debug_logfile'] Path to debug log file
  * @example eval(COT_CHECKPOINT_LOCALS);
- * @see cot_checkpoint(), COT_DEBUG_LOGFILE, cot_watch(), COT_VARDUMP_LOCALS
+ * @see cot_checkpoint(), cot_watch(), COT_VARDUMP_LOCALS
  */
-define('COT_CHECKPOINT_LOCALS', '$debug_fp = fopen(COT_DEBUG_LOGFILE, "a");
+define('COT_CHECKPOINT_LOCALS', 'global $cfg;
+	$debug_fp = fopen($cfg[\'debug_logfile\'], "a");
 	$debug_btrace = debug_backtrace();
 	fputs($debug_fp, $debug_btrace[0]["file"] . ", " . $debug_btrace[1]["line"] . ":\n");
 	$debug_vars = get_defined_vars();

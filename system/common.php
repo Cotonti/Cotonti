@@ -24,9 +24,21 @@ if (version_compare(PHP_VERSION, '6.0.0', '<='))
 	}
 }
 define('MQGPC', FALSE);
-error_reporting(0);
-ini_set("display_errors", 0);
-if (COT_DEBUG) require_once $cfg['system_dir'].'/debug.php';
+if ($cfg['display_errors'])
+{
+	error_reporting(E_ALL ^ E_NOTICE);
+	ini_set('display_errors', 1);
+}
+else
+{
+	error_reporting(0);
+	ini_set('display_errors', 0);
+}
+
+if ($cfg['debug_mode'])
+{
+	require_once $cfg['system_dir'].'/debug.php';
+}
 
 register_shutdown_function('cot_shutdown');
 
@@ -419,7 +431,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 			$online_count = 1;
 			$sys['online_location'] = $row['online_location'];
 			$sys['online_subloc'] = $row['online_subloc'];
-			if ($cfg['shieldenabled'] && (!cot_auth('admin', 'a', 'A') || COT_SHIELD_FORCE))
+			if ($cfg['shieldenabled'] && (!cot_auth('admin', 'a', 'A') || $cfg['shield_force']))
 			{
 				$shield_limit = $row['online_shield'];
 				$shield_action = $row['online_action'];

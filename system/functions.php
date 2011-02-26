@@ -2064,7 +2064,7 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 {
 	global $cfg;
 
-	if (defined('COT_DEBUG') && COT_DEBUG)
+	if ($cfg['display_errors'])
 	{
 		echo "<strong><a href=\"".$cfg['mainurl']."\">".$cfg['maintitle']."</a></strong><br/>";
 		echo @date('Y-m-d H:i')."<p>$title: $text</p>";
@@ -2073,7 +2073,10 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 		echo '</pre>';
 		exit;
 	}
-	cot_redirect(cot_url('message', 'msg=500', '', true));
+	else
+	{
+		cot_redirect(cot_url('message', 'msg=500', '', true));
+	}
 }
 
 /**
