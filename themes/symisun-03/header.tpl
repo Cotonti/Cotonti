@@ -51,7 +51,7 @@
 				<button type="submit" class="login">{PHP.L.Login}</button>
 				</p>
 				</form>
-                <p class="margin5">{PHP.themelang.header.notmember} <a href="users.php?m=register"><strong>{PHP.L.Register}</strong></a></p>
+                <p class="margin5">{PHP.L.No} {PHP.L.Members} {PHP.L.Unknown} <a href="users.php?m=register"><strong>{PHP.L.Register}</strong></a></p>
                 <!-- END: GUEST -->
                 
 				<!-- BEGIN: USER -->
@@ -110,7 +110,7 @@
 			</script>
 			
 		
-            <span id="online">{PHP.themelang.index.Online}: <a href="plug.php?e=whosonline">{PHP.out.whosonline}</a></span>
+            <span id="online">{PHP.L.Online}: <a href="plug.php?e=whosonline">{PHP.out.whosonline}</a></span>
         </div>
         <div id="sitemenu">
             <h4 class="none">{PHP.L.Navigation}</h4>

@@ -2,7 +2,7 @@
 
 
 <!-- BEGIN: PAGE_ROW -->
-	<img src="themes/{PHP.theme}/img/system/arrow-right.gif" width="12" height="12" alt="read" /> 
+    <img src="themes/{PHP.theme}/img/system/arrow-right.gif" width="12" height="12" alt="read" />
 
     <span class="time">{PAGE_ROW_DATE}</span> &nbsp;
 

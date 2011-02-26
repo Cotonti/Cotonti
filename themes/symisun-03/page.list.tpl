@@ -46,7 +46,7 @@
 	</div>
 	<div id="right">
 	<!-- IF {PHP.usr.id} == 0 -->
-	<h3><a href="users.php?m=auth">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.lis_submitnew}</a></h3>
+	<h3><a href="users.php?m=auth">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.page_addtitle}</a></h3>
 	<!-- ELSE -->
 	<h3>{LIST_SUBMITNEWPAGE}</h3>
 	<!-- ENDIF -->

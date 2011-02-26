@@ -17,7 +17,7 @@
 					<p>
 					<input type="text" name="rsq" value="type term..." onfocus="if (this.value == 'type term...') this.value = '';" class="sq" maxlength="40" />
 					<input value="{PHP.L.Search|strtoupper}" type="submit" class="sb" />
-					<a href="plug.php?e=search" class="adv"><span>{PHP.themelang.footer.advanced}</span></a>
+					<a href="plug.php?e=search" class="adv"><span>{PHP.themelang.pageadd.adv}</span></a>
 					</p>
 					</form>
 				</div>
@@ -51,7 +51,7 @@
         </div>
         <div id="top"><a href="{PHP.out.uri}#topofpage">{PHP.themelang.footer.top}</a></div>
         <div id="bot">
-        	Copyright &copy; 2009 SymiSun* 03, {PHP.themelang.footer.design}
+        	Copyright &copy; 2009 SymiSun* 03, Web Design by <a href="http://symisun.com" title="We digitalize your ambitions">SymiSun<span class="orange">*</span></a>
             <br class="none" />
             <span style="padding:0 95px 0 95px">{PHP.cfg.menu2}</span><br class="none" />
             {PHP.cfg.freetext4}

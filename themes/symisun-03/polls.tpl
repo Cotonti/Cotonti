@@ -44,7 +44,7 @@
 	}
 	anim();
 </script>
-<p style="margin-top:10px"><strong>{POLL_VOTERS} {PHP.themelang.ratings.Votes}</strong> {PHP.L.polls_since} {POLL_SINCE_SHORT}</p>
+<p style="margin-top:10px"><strong>{POLL_VOTERS} {PHP.L.Votes}</strong> {PHP.L.polls_since} {POLL_SINCE_SHORT}</p>
 <p class="red">{PHP.L.polls_alreadyvoted}</p>
 <!-- END: POLL_VIEW_VOTED -->
 <!-- BEGIN: POLL_VIEW_LOCKED -->
@@ -55,7 +55,7 @@
   <div class="bar_front" style="width:{POLL_PER}%"></div>
 </div>
 <!-- END: POLLTABLE -->
-<p style="margin-top:10px"><strong>{POLL_VOTERS} {PHP.themelang.ratings.Votes}</strong> {PHP.L.polls_since} {POLL_SINCE_SHORT}</p>
+<p style="margin-top:10px"><strong>{POLL_VOTERS} {PHP.L.Votes}</strong> {PHP.L.polls_since} {POLL_SINCE_SHORT}</p>
 <p class="red">{PHP.L.polls_alreadyvoted}</p>
 <!-- END: POLL_VIEW_LOCKED -->
 <!-- BEGIN: POLL_VIEW_DISABLED -->
