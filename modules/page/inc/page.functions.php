@@ -110,11 +110,12 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
  * @param bool $cacheitem Cache tags
  * @return array
  */
-function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = 0, $dateformat = '', $emptytitle = '', $cacheitem = true)
+function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = null, $dateformat = '', $emptytitle = '', $cacheitem = true)
 {
-	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $pag_cache, $db_pages, $usr, $sys, $cot_yesno, $cot_cat;
+	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $db_pages, $usr, $sys, $cot_yesno, $cot_cat;
 	
 	static $extp_first = null, $extp_main = null;
+	static $pag_auth = array(), $pag_cache = array();
 
 	if (is_null($extp_first))
 	{
@@ -147,6 +148,15 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 
 		if ($page_data['page_id'] > 0 && !empty($page_data['page_title']))
 		{
+			if (is_null($admin_rights))
+			{
+				if (!isset($pag_auth[$page_data['page_cat']]))
+				{
+					$pag_auth[$page_data['page_cat']] = cot_auth('page', $page_data['page_cat'], 'RWA1');
+				}
+				$admin_rights = (bool) $pag_auth[$page_data['page_cat']][2];
+			}
+
 			$catpath = cot_structure_buildpath('page', $page_data['page_cat']);
 			$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ? cot_url('page', 'id='.$page_data['page_id']) : cot_url('page', 'al='.$page_data['page_alias']);
 			$page_data['page_fulltitle'] = $catpath." ".$cfg['separator'].' '.cot_rc_link($page_data['page_pageurl'], htmlspecialchars($page_data['page_title']));

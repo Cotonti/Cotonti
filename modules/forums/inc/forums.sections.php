@@ -98,7 +98,7 @@ foreach ($structure['forums'] as $i => $x)
 				$cat_top[$parents[$ii]]['fs_lt_title'] = $cat_top[$i]['fs_lt_title'];
 				$cat_top[$parents[$ii]]['fs_lt_date'] = $cat_top[$i]['fs_lt_date'];
 				$cat_top[$parents[$ii]]['fs_lt_posterid'] = $cat_top[$i]['fs_lt_posterid'];
-				$cat_top[$parents[$ii]]['fs_lt_postername'] = $cat_top[$i]['fs_lt_posterid'];
+				$cat_top[$parents[$ii]]['fs_lt_postername'] = $cat_top[$i]['fs_lt_postername'];
 			}
 			$cat_top[$parents[$ii]]['topiccount'] += $cat_top[$i]['fs_topiccount'];
 			$cat_top[$parents[$ii]]['postcount'] += $cat_top[$i]['fs_postcount'];
