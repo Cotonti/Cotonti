@@ -37,7 +37,7 @@
 	</div>
 	<div id="right">
 		<h3><a href="{USERS_AUTH_REGISTER}">{PHP.L.Register}</a></h3>
-		<h3><a href="plug.php?e=passrecover">{PHP.themelang.usersauth.Lostpassword}</a></h3>
+		<h3><a href="users.php?m=passrecover">{PHP.L.hea_lostpass}</a></h3>
 		&nbsp; 
 	</div>
 <!-- ENDIF -->

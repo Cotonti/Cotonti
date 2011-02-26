@@ -35,7 +35,7 @@
           <div class="sc4 colleft"> {FORUMS_SECTIONS_ROW_LASTPOST}<br />
             <!-- IF {FORUMS_SECTIONS_ROW_LASTPOSTER} -->
             {PHP.themelang.index.by} {FORUMS_SECTIONS_ROW_LASTPOSTER}<br />
-            {FORUMS_SECTIONS_ROW_TIMEAGO} {PHP.themelang.forumstopics.ago}
+            {FORUMS_SECTIONS_ROW_TIMEAGO} {PHP.L.Ago}
             <!-- ENDIF -->
           </div>
           <div class="clear"></div>
@@ -65,7 +65,7 @@
           <div style="float:left; width:40px; padding-left:7px"> {FORUMS_TOPICS_ROW_POSTCOUNT} </div>
           <div style="float:left; width:47px; padding-left:7px"> {FORUMS_TOPICS_ROW_VIEWCOUNT} </div>
           <div style="float:left; width:150px; font-size:.9em"> {PHP.themelang.index.by} {FORUMS_TOPICS_ROW_LASTPOSTER} <br />
-            {FORUMS_TOPICS_ROW_TIMEAGO} {PHP.themelang.forumstopics.ago} </div>
+            {FORUMS_TOPICS_ROW_TIMEAGO} {PHP.L.Ago} </div>
           <div class="clear"></div>
         </div>
         <!-- END: FORUMS_TOPICS_ROW -->
@@ -76,11 +76,11 @@
 	
     <div id="right">
       <!-- IF {PHP.usr.id} > 0 AND {FORUMS_TOPICS_NEWPOLLURL} -->
-      <h3><a href="{FORUMS_TOPICS_NEWTOPICURL}">{PHP.themelang.forumstopics.Newtopic}</a></h3>
-      <h3><a href="{FORUMS_TOPICS_NEWPOLLURL}">{PHP.themelang.forumstopics.Newpoll}</a></h3>
+      <h3><a href="{FORUMS_TOPICS_NEWTOPICURL}">{PHP.L.forums_newtopic}</a></h3>
+      <h3><a href="{FORUMS_TOPICS_NEWPOLLURL}">{PHP.L.forums_newpoll}</a></h3>
       <!-- ENDIF -->
       <!-- IF {PHP.usr.id} > 0 AND !{FORUMS_TOPICS_NEWPOLLURL} -->
-      <h3><a href="{FORUMS_TOPICS_NEWTOPICURL}">{PHP.themelang.forumstopics.Newtopic}</a></h3>
+      <h3><a href="{FORUMS_TOPICS_NEWTOPICURL}">{PHP.L.forums_newtopic}</a></h3>
       <!-- ENDIF -->
       <!-- IF {PHP.usr.id} == 0= -->
       <h3><a href="users.php?m=auth">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.themelang.forumstopics.Start}</a></h3>

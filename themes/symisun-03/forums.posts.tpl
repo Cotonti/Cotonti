@@ -6,7 +6,7 @@
     <h1>{FORUMS_POSTS_SHORTTITLE}</h1>
     <p class="breadcrumb">{PHP.themelang.list.bread}: {FORUMS_POSTS_PAGETITLE}</p>
     <!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
-    <div class="error">{PHP.themelang.forumspost.privatetopic}</div>
+    <div class="error">{PHP.L.forums_privatetopic}</div>
     <!-- END: FORUMS_POSTS_TOPICPRIVATE -->
     <!-- IF {FORUMS_POSTS_PAGES} -->
     <div class="paging">{FORUMS_POSTS_PAGEPREV}{FORUMS_POSTS_PAGES}{FORUMS_POSTS_PAGENEXT}</div>
@@ -22,7 +22,7 @@
     <!-- post -->
     <div class="post">
       <h4 class="ug{FORUMS_POSTS_ROW_MAINGRPID}">{FORUMS_POSTS_ROW_POSTERNAME}</h4>
-      <span class="postinfo colright"> <a href="forums.php?m=posts&amp;p={FORUMS_POSTS_ROW_ID}#p{FORUMS_POSTS_ROW_ID}">{PHP.themelang.forumspost.permalink}</a> || <strong>{FORUMS_POSTS_ROW_CREATION}</strong> </span> <br class="clear" />
+      <span class="postinfo colright"> <a href="forums.php?m=posts&amp;p={FORUMS_POSTS_ROW_ID}#p{FORUMS_POSTS_ROW_ID}">#{FORUMS_POSTS_ROW_ORDER}</a> || <strong>{FORUMS_POSTS_ROW_CREATION}</strong> </span> <br class="clear" />
       <!-- user details -->
       <div class="posusr nou">
         <div class="avatarious"> {FORUMS_POSTS_ROW_USERAVATAR}
@@ -43,9 +43,7 @@
           <div class="postbox">
             <!-- ENDIF -->
             <div class="padding10"> {FORUMS_POSTS_ROW_TEXT}
-              <!-- IF {FORUMS_POSTS_ROW_UPDATER} > 0 -->
-              <p> {PHP.themelang.forumspost.updated} {FORUMS_POSTS_ROW_UPDATER}, {PHP.row.fp_updated_ago} {PHP.themelang.forumstopics.ago}. </p>
-              <!-- ENDIF -->
+              <p> {FORUMS_POSTS_ROW_UPDATEDBY}</p>
             </div>
           </div>
           <!-- action buttons -->

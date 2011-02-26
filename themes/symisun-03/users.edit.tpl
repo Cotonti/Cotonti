@@ -2,7 +2,7 @@
 
     <div id="content">
     	<div class="padding20 whitee">    	            
-			<h1>{PHP.themelang.usersedit.edit}</h1>			
+			<h1>{PHP.L.Edit} {PHP.L.User}</h1>
 			<div class="breadcrumb">{USERS_EDIT_TITLE}</div>
 
 			<!-- BEGIN: USERS_EDIT_ERROR -->		
@@ -12,7 +12,7 @@
 			<form action="{USERS_EDIT_SEND}" method="post" name="useredit"><input type="hidden" name="id" value="{USERS_EDIT_ID}" />
 				<table class="cells" border="0" cellspacing="1" cellpadding="2">				
 					<tr>
-						<td style="width:176px;">{PHP.themelang.usersedit.UserID}:</td>					
+						<td style="width:176px;">{PHP.L.Userid}:</td>
 						<td>#{USERS_EDIT_ID}</td>				
 					</tr>				
 					<tr>					
@@ -58,8 +58,8 @@
 					</tr>				
 					<!-- ENDIF -->
 					<tr>					
-						<td>{PHP.themelang.usersedit.Newpassword}:</td>					
-						<td>{USERS_EDIT_NEWPASS}<br />{PHP.themelang.usersedit.Newpasswordhint}</td>				
+						<td>{PHP.L.New} {PHP.L.Password:</td>
+						<td>{USERS_EDIT_NEWPASS}<br /></td>				
 					</tr>
 					<tr>					
 						<td>{PHP.L.Email}:</td>					
@@ -71,7 +71,7 @@
 					</tr>
 					<tr>					
 						<td>{PHP.themelang.usersedit.PMnotify}:</td>					
-						<td>{USERS_EDIT_PMNOTIFY}<br />{PHP.skinlang.usersedit.PMnotifyhint}</td>				
+						<td>{USERS_EDIT_PMNOTIFY}<br /></td>				
 					</tr>
 					<tr>					
 						<td>{PHP.L.Birthdate}:</td>					

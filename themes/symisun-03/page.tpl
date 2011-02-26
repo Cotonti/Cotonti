@@ -17,7 +17,7 @@
 
 			<div id="right">
                 <!-- BEGIN: PAGE_FILE -->
-					<h3>{PHP.themelang.page.download}</h3>
+					<h3>{PHP.L.Download}</h3>
 					<div class="box padding15 admin">
 
                 	<!-- BEGIN: MEMBERSONLY -->
@@ -43,14 +43,12 @@
                 </div>
                 <!-- ENDIF -->
 		
-                <h3><a href="page.php?id={PHP.pag.page_id}#com">{PHP.L.comments_comments}: {PAGE_COMMENTS_COUNT}</a></h3> <!--{PHP.pag.page_comcount}????-->
-
-                <div class="h3"><div class="colright" style="margin-top:5px; display:inline">{PAGE_RATINGS}</div>{PHP.L.Ratings}: {PAGE_RATINGS_AVERAGE} - {PAGE_RATINGS_DISPLAY}</div>
+                <h3><a href="page.php?id={PHP.pag.page_id}#com">{PHP.L.comments_comments}: {PAGE_COMMENTS_COUNT}</a></h3>
 
                 <h3><a href="{PAGE_COMMENTS_RSS}">Subscribe via RSS</a></h3>
 				
                 <!-- BEGIN: PAGE_ADMIN -->
-                <h3 class="adm">{PHP.themelang.page.admin}</h3>
+                <h3 class="adm">{PHP.L.Administration}</h3>
                 <div class="boxa padding15 admin">
                     {PAGE_ADMIN_EDIT}<br />
                     {PAGE_ADMIN_UNVALIDATE}
@@ -62,7 +60,7 @@
                 
                 <div class="paging">{PAGE_MULTI_TABNAV}</div>
                 <div class="block">
-                	<h5>{PHP.themelang.page.Summary}</h5>
+                	<h5>{PHP.L.Summary}</h5>
                 	{PAGE_MULTI_TABTITLES}
                 </div>
                 

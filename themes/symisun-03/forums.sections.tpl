@@ -26,7 +26,7 @@
           <div class="sc4 colleft"> {FORUMS_SECTIONS_ROW_LASTPOST}<br />
             <!-- IF {FORUMS_SECTIONS_ROW_LASTPOSTER} -->
             {PHP.themelang.index.by} {FORUMS_SECTIONS_ROW_LASTPOSTER}<br />
-            {FORUMS_SECTIONS_ROW_TIMEAGO} {PHP.themelang.forumstopics.ago}
+            {FORUMS_SECTIONS_ROW_TIMEAGO} {PHP.L.Ago}
             <!-- ENDIF -->
           </div>
           <div class="clear"></div>

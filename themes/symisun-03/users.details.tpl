@@ -19,12 +19,14 @@
 		<!-- ENDIF -->
 		{USERS_DETAILS_TIMEZONE}<br />
 		<br />
+                <!-- IF {USERS_DETAILS_BIRTHDATE} -->
 		<strong>{USERS_DETAILS_AGE} {PHP.themelang.usersdetails.years}</strong> <br />
-                {USERS_DETAILS_BIRTHDATE}<br /> 
+                {USERS_DETAILS_BIRTHDATE}<br />
+                <!-- ENDIF -->
                 <em>{USERS_DETAILS_GENDER}</em><br />
 		<br class="clear" />
-		<h4>{PHP.L.Signature}</h4>
 		<!-- IF {USERS_DETAILS_TEXT} -->
+                <h4>{PHP.L.Signature}</h4>
 		<p>{USERS_DETAILS_TEXT}</p>
 		<!-- ELSE -->
 		<p class="red">{PHP.themelang.usersdetails.none}</p>
