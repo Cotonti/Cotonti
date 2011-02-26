@@ -16,11 +16,19 @@ defined('COT_CODE') or die('Wrong URL.');
  * User authentication
  */
 
-$L['aut_usernameoremail'] = 'Имя или email';
+$L['users_nameormail'] = 'Имя или email';
+$L['users_rememberme'] = 'Запомнить меня';
+$L['users_lostpass'] = 'Восстановить пароль';
+$L['users_maintenance1'] = 'Сайт в режиме обслуживания';
+$L['users_maintenance2'] = 'Вход только для администраторов и разрешенных групп';
 
 /**
  * User registration
  */
+
+$L['users_validemail'] = 'Действующий e-mail';
+$L['users_validemailhint'] = '(необходим для подтверждения регистрации)';
+$L['users_confirmpass'] = 'Подтвердить пароль';
 
 $L['aut_contactadmin'] = 'В случае необходимости свяжитесь с администратором';
 $L['aut_emailalreadyindb'] = 'Такой e-mail уже существует в базе данных';
@@ -65,8 +73,11 @@ $L['aut_emailchange'] = 'Здравствуйте, %1$s,
 %2$s';
 
 /**
- * Users
+ * User list
  */
+
+$L['users_usersperpage'] = 'Пользователей на страницу';
+$L['users_usersinthissection'] = 'Всего пользователей';
 
 $L['pro_emailandpass'] = 'Вы не можете изменить и e-mail и пароль одновременно';
 $L['pro_passdiffer'] = 'Введенные пароли не совпадают';
@@ -101,27 +112,30 @@ $L['pasrec_request'] = 'Запрос';
 $L['pasrec_youremail'] = 'Ваш email: ';
 
 /**
- * Moved from theme.lang
+ * User details
  */
 
-$themelang['users']['usersperpage'] = 'Пользователей на страницу';
-$themelang['users']['usersinthissection'] = 'Всего пользователей';
+$L['users_sendpm'] = 'Отправить личное сообщение';
 
-$themelang['usersauth']['Rememberme'] = 'Запомнить меня';
-$themelang['usersauth']['Lostpassword'] = 'Восстановить пароль';
-$themelang['usersauth']['Maintenance'] = 'Режим обслуживания (Maintenance Mode): вход разрешен только администраторам';
-$themelang['usersauth']['Maintenancereason'] = 'Причина';
+/**
+ * User profile & edit
+ */
 
-$themelang['usersdetails']['Sendprivatemessage'] = 'Отправить личное сообщение';
-$themelang['usersedit']['UserID'] = 'ID пользователя';
-$themelang['usersedit']['Newpassword'] = 'Установить новый пароль';
-$themelang['usersedit']['Newpasswordhint'] = '(оставьте пустым чтобы сохранить текущий)';
-$themelang['usersedit']['Hidetheemail'] = 'Скрывать e-mail';
-$themelang['usersedit']['PMnotify'] = 'Уведомлять о новых личных сообщениях';
-$themelang['usersedit']['PMnotifyhint'] = '(получать e-mail уведомление при получении нового личного сообщения)';
-$themelang['usersedit']['LastIP'] = 'Последний IP';
-$themelang['usersedit']['Logcounter'] = 'Всего авторизаций';
-$themelang['usersedit']['Deletethisuser'] = '!Удалить пользователя!';
+$L['users_id'] = 'ID пользователя';
+$L['users_hideemail'] = 'Скрывать e-mail';
+$L['users_pmnotify'] = 'Уведомлять о новых личных сообщениях';
+$L['users_pmnotifyhint'] = '(получать e-mail уведомление при получении нового личного сообщения)';
+$L['users_newpass'] = 'Установить новый пароль';
+$L['users_newpasshint1'] = '(оставьте пустым чтобы сохранить текущий)';
+$L['users_newpasshint2'] = '(введите новый пароль дважды)';
+$L['users_oldpasshint'] = '(введите свой текущий пароль чтобы установить новый)';
+$L['users_lastip'] = 'Последний IP';
+$L['users_logcounter'] = 'Всего авторизаций';
+$L['users_deleteuser'] = '!Удалить пользователя!';
+
+/**
+ * Todo
+ */
 
 $themelang['usersprofile']['Emailpassword'] = 'Ваш текущий пароль';
 $themelang['usersprofile']['Emailnotes'] = '<p><b>Порядок смены e-mail (если разрешено администратором и при обязательном подтверждении нового e-mail):</b></p>
@@ -135,17 +149,5 @@ $themelang['usersprofile']['Emailnotes'] = '<p><b>Порядок смены e-ma
 	<li>Если вы все-таки допустили ошибку при вводе нового e-mail, обратитесь к администратору.</li>
 </ol>
 <p><b>При отсутствии обязательного подтверждения нового e-mail, изменения вступают в силу немедленно.</b></p>';
-$themelang['usersprofile']['Hidetheemail'] = 'Скрывать e-mail';
-$themelang['usersprofile']['PMnotify'] = 'Уведомлять о новых личных сообщениях';
-$themelang['usersprofile']['PMnotifyhint'] = '(получать e-mail уведомление при получении нового личного сообщения)';
-$themelang['usersprofile']['Newpassword'] = 'Установить новый пароль';
-$themelang['usersprofile']['Newpasswordhint1'] = '(оставьте пустым чтобы сохранить текущий)';
-$themelang['usersprofile']['Newpasswordhint2'] = '(введите новый пароль дважды)';
-$themelang['usersprofile']['Oldpasswordhint'] = '(введите свой текущий пароль чтобы установить новый)';
-
-$themelang['usersregister']['Validemail'] = 'Действующий e-mail';
-$themelang['usersregister']['Validemailhint'] = '(необходим для подтверждения регистрации!)';
-$themelang['usersregister']['Confirmpassword'] = 'Подтвердить пароль';
-$themelang['usersregister']['Formhint'] = 'После успешной регистрации и входа в систему рекомендуем отредактировать свою учетную запись, создав аватар, подпись, введя номер ICQ, домашнюю страницу, город, часовой пояс, и проч.';
 
 ?>

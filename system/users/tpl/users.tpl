@@ -35,6 +35,6 @@
 			</form>
 		</div>
 
-		<p class="paging"><span>{PHP.themelang.users.usersperpage}: {USERS_TOP_MAXPERPAGE}</span><span>{PHP.themelang.users.usersinthissection}: {USERS_TOP_TOTALUSERS}</span>{USERS_TOP_PAGEPREV}{USERS_TOP_PAGNAV}{USERS_TOP_PAGENEXT}</p>
+		<p class="paging"><span>{PHP.L.users_usersperpage}: {USERS_TOP_MAXPERPAGE}</span><span>{PHP.L.users_usersinthissection}: {USERS_TOP_TOTALUSERS}</span>{USERS_TOP_PAGEPREV}{USERS_TOP_PAGNAV}{USERS_TOP_PAGENEXT}</p>
 
 <!-- END: MAIN -->

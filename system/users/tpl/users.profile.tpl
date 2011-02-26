@@ -44,12 +44,15 @@
 					</tr>
 					<!-- END: USERS_PROFILE_EMAILCHANGE -->
 					<tr>
-						<td>{PHP.themelang.usersprofile.Hidetheemail}:</td>
+						<td>{PHP.L.users_hideemail}:</td>
 						<td>{USERS_PROFILE_HIDEEMAIL}</td>
 					</tr>
 					<tr>
-						<td>{PHP.themelang.usersprofile.PMnotify}:</td>
-						<td>{USERS_PROFILE_PMNOTIFY}<br />{PHP.themelang.usersprofile.PMnotifyhint}</td>
+						<td>{PHP.L.users_pmnotify}:</td>
+						<td>
+							{USERS_PROFILE_PMNOTIFY}
+							<p class="small">{PHP.L.users_pmnotifyhint}</p>
+						</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Theme}:</td>
@@ -94,13 +97,14 @@
 					</tr>
 					<tr>
 						<td>
-							{PHP.themelang.usersprofile.Newpassword}:<br />{PHP.themelang.usersprofile.Newpasswordhint1}
+							{PHP.L.users_newpass}:
+							<p class="small">{PHP.L.users_newpasshint1}</p>
 						</td>
 						<td>
 							{USERS_PROFILE_OLDPASS}
-							<p class="small">{PHP.themelang.usersprofile.Oldpasswordhint}</p>
+							<p class="small">{PHP.L.users_oldpasshint}</p>
 							{USERS_PROFILE_NEWPASS1} {USERS_PROFILE_NEWPASS2}
-							<p class="small">{PHP.themelang.usersprofile.Newpasswordhint2}</p>
+							<p class="small">{PHP.L.users_newpasshint2}</p>
 						</td>
 					</tr>
 					<tr>

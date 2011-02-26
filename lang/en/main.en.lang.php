@@ -454,7 +454,6 @@ $L['com_schemefail'] = 'Warning, failed to load your prefered color scheme for t
  * Header
  */
 
-$L['hea_lostpass'] = 'Lost your password?';
 $L['hea_noprivatemessages'] = 'No private messages';
 $L['hea_valqueues'] = 'In validation queues: ';
 $L['hea_viewsite'] = 'View Website';

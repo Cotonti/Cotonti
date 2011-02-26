@@ -8,7 +8,7 @@
 				<input type="hidden" name="id" value="{USERS_EDIT_ID}" />
 				<table class="cells">
 					<tr>
-						<td class="width30">{PHP.themelang.usersedit.UserID}:</td>
+						<td class="width30">{PHP.L.users_id}:</td>
 						<td class="width70">#{USERS_EDIT_ID}</td>
 					</tr>
 					<tr>
@@ -54,19 +54,22 @@
 					</tr>
 					<!-- ENDIF -->
 					<tr>
-						<td>{PHP.themelang.usersedit.Newpassword}:</td>
-						<td>{USERS_EDIT_NEWPASS}<br />{PHP.themelang.usersedit.Newpasswordhint}</td>
+						<td>{PHP.L.users_newpass}:</td>
+						<td>
+							{USERS_EDIT_NEWPASS}
+							<p class="small">{PHP.L.users_newpasshint1}</p>
+						</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Email}:</td>
 						<td>{USERS_EDIT_EMAIL}</td>
 					</tr>
 					<tr>
-						<td>{PHP.themelang.usersedit.Hidetheemail}:</td>
+						<td>{PHP.L.users_hideemail}:</td>
 						<td>{USERS_EDIT_HIDEEMAIL}</td>
 					</tr>
 					<tr>
-						<td>{PHP.themelang.usersedit.PMnotify}:</td>
+						<td>{PHP.L.users_pmnotify}:</td>
 						<td>{USERS_EDIT_PMNOTIFY}<br />{PHP.themelang.usersedit.PMnotifyhint}</td>
 					</tr>
 					<tr>
@@ -90,15 +93,15 @@
 						<td>{USERS_EDIT_LASTLOG}</td>
 					</tr>
 					<tr>
-						<td>{PHP.themelang.usersedit.LastIP}:</td>
+						<td>{PHP.L.users_lastip}:</td>
 						<td>{USERS_EDIT_LASTIP}</td>
 					</tr>
 					<tr>
-						<td>{PHP.themelang.usersedit.Logcounter}:</td>
+						<td>{PHP.L.users_logcounter}:</td>
 						<td>{USERS_EDIT_LOGCOUNT}</td>
 					</tr>
 					<tr>
-						<td>{PHP.themelang.usersedit.Deletethisuser}:</td>
+						<td>{PHP.L.users_deleteuser}:</td>
 						<td>{USERS_EDIT_DELETE}</td>
 					</tr>
 					<tr>

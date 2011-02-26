@@ -16,11 +16,19 @@ defined('COT_CODE') or die('Wrong URL.');
  * User authentication
  */
 
- $L['aut_usernameoremail'] = 'Username or email';
+$L['users_nameormail'] = 'Username or email';
+$L['users_rememberme'] = 'Remember me';
+$L['users_lostpass'] = 'Lost your password?';
+$L['users_maintenance1'] = 'Site in maintenance mode';
+$L['users_maintenance2'] = 'Access for admins and authorized groups only';
 
 /**
  * User registration
  */
+
+$L['users_validemail'] = 'Valid e-mail';
+$L['users_validemailhint'] = '(A valid e-mail is required to complete the registration process)';
+$L['users_confirmpass'] = 'Confirm password';
 
 $L['aut_contactadmin'] = 'If you have any difficulties please contact the board administrator';
 $L['aut_emailalreadyindb'] = 'The e-mail you provided is already in the database';
@@ -65,8 +73,11 @@ To change your recent e-mail please use this activation link:
 %2$s';
 
 /**
- * Users
+ * User list
  */
+
+$L['users_usersperpage'] = 'Users per page';
+$L['users_usersinthissection'] = 'Users total';
 
 $L['pro_emailandpass'] = 'You can not change both e-mail and password at a time';
 $L['pro_passdiffer'] = 'The 2 password fields do not match';
@@ -101,28 +112,30 @@ $L['pasrec_request'] = 'Request';
 $L['pasrec_youremail'] = 'Your email: ';
 
 /**
- * Moved from theme.lang
+ * User details
  */
 
-$themelang['users']['usersperpage'] = 'Users per page';
-$themelang['users']['usersinthissection'] = 'Users in this section';
+$L['users_sendpm'] = 'Send a private message';
 
-$themelang['usersauth']['Rememberme'] = 'Remember me';
-$themelang['usersauth']['Lostpassword'] = 'Lost your password?';
-$themelang['usersauth']['Maintenance'] = 'Site in maintenance mode. Administrators can login below.';
-$themelang['usersauth']['Maintenancereason'] = 'Reason: ';
+/**
+ * User profile & edit
+ */
 
-$themelang['usersdetails']['Sendprivatemessage'] = 'Send a private message';
+$L['users_id'] = 'User ID';
+$L['users_hideemail'] = 'Always hide the e-mail';
+$L['users_pmnotify'] = 'PM notify';
+$L['users_pmnotifyhint'] = '(Notify by e-mail when there\'s a new private message)';
+$L['users_newpass'] = 'Set a new password';
+$L['users_newpasshint1'] = '(Leave empty to keep the current password)';
+$L['users_newpasshint2'] = '(Enter your new password twice)';
+$L['users_oldpasshint'] = '(To set a new password enter your current one)';
+$L['users_lastip'] = 'Last known IP';
+$L['users_logcounter'] = 'Log counter';
+$L['users_deleteuser'] = 'Delete this user';
 
-$themelang['usersedit']['UserID'] = 'User ID';
-$themelang['usersedit']['Newpassword'] = 'Set a new password';
-$themelang['usersedit']['Newpasswordhint'] = '(Leave empty to keep the current password)';
-$themelang['usersedit']['Hidetheemail'] = 'Always hide the e-mail';
-$themelang['usersedit']['PMnotify'] = 'PM notify';
-$themelang['usersedit']['PMnotifyhint'] = '(Notify by e-mail when there\'s a new private message)';
-$themelang['usersedit']['LastIP'] = 'Last known IP';
-$themelang['usersedit']['Logcounter'] = 'Log counter';
-$themelang['usersedit']['Deletethisuser'] = 'Delete this user';
+/**
+ * Moved from theme.lang
+ */
 
 $themelang['usersprofile']['Emailpassword'] = 'Your current password';
 $themelang['usersprofile']['Emailnotes'] = '<p><b>E-mail transition process (if e-mail transition is available and new e-mail validation is required):</b></p>
@@ -136,17 +149,5 @@ $themelang['usersprofile']['Emailnotes'] = '<p><b>E-mail transition process (if 
 	<li>If you still mistyped your new e-mail, please contact administrator</li>
 </ol>
 <p><b>If new e-mail validation is not required, the new e-mail will become effective immediately.</b></p>';
-$themelang['usersprofile']['Hidetheemail'] = 'Always hide the e-mail';
-$themelang['usersprofile']['PMnotify'] = 'PM notify';
-$themelang['usersprofile']['PMnotifyhint'] = '(Notify by e-mail when there\'s a new private message)';
-$themelang['usersprofile']['Newpassword'] = 'Set a new password';
-$themelang['usersprofile']['Newpasswordhint1'] = '(Leave empty to keep the current password)';
-$themelang['usersprofile']['Newpasswordhint2'] = '(Enter your new password twice)';
-$themelang['usersprofile']['Oldpasswordhint'] = '(To set a new password enter your current one)';
-
-$themelang['usersregister']['Validemail'] = 'Valid e-mail';
-$themelang['usersregister']['Validemailhint'] = 'A valid e-mail is required to complete the registration process!';
-$themelang['usersregister']['Confirmpassword'] = 'Confirm password';
-$themelang['usersregister']['Formhint'] = 'Once you\'re registered and logged in, have a look in your profile to set your avatar, signature, ICQ, website, location, timezone, etc.';
 
 ?>
