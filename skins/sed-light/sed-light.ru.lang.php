@@ -3,9 +3,9 @@
  * Russian Language File for Sed-Light Skin
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.6.14
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 
@@ -109,6 +109,7 @@ $skinlang['pageadd']['Formhint'] = 'После заполнения формы �
  * page.edit.tpl
  */
 
+$skinlang['pageedit']['Now'] = 'Обновить дату до текущей';	// New in N-0.6.14
 $skinlang['pageedit']['File'] = 'Прикрепить файл';
 $skinlang['pageedit']['Filehint'] = '(при включении модуля загрузок заполните два поля ниже)';
 $skinlang['pageedit']['URLhint'] = '(если прикреплен файл)';

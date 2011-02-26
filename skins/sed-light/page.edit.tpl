@@ -30,7 +30,10 @@
 				</tr>
 				<tr>
 					<td>{PHP.L.Date}:</td>
-					<td>{PAGEEDIT_FORM_DATE}</td>
+					<td>
+						{PAGEEDIT_FORM_DATE}
+						<p>{PAGEEDIT_FORM_DATENOW} {PHP.skinlang.pageedit.Now}</p>
+					</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Begin}:</td>

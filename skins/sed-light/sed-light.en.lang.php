@@ -3,9 +3,9 @@
  * English Language File for Sed-Light Skin
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.6.14
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 
@@ -109,6 +109,7 @@ $skinlang['pageadd']['Formhint'] = 'Once your submission is done, the page will 
  * page.edit.tpl
  */
 
+$skinlang['pageedit']['Now'] = 'Update page date to current';	// New in N-0.6.14
 $skinlang['pageedit']['File'] = 'File download?';
 $skinlang['pageedit']['Filehint'] = '(Set &quot;Yes&quot; to enable the download module at bottom of the page, and fill up the 2 fields below)';
 $skinlang['pageedit']['URLhint'] = '(If File download = &quot;Yes&quot;)';
