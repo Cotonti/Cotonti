@@ -27,7 +27,7 @@
 			<li><strong>{PHP.L.hea_youarenotlogged}</strong></li>
 			<li><a href="users.php?m=auth">{PHP.L.Login}</a></li>
 			<li><a href="users.php?m=register">{PHP.L.Register}</a></li>
-			<li><a href="users.php?m=passrecover">{PHP.L.hea_lostpass}</a></li>
+			<li><a href="users.php?m=passrecover">{PHP.L.users_lostpass}</a></li>
 <!-- END: GUEST -->
 <!-- BEGIN: USER -->
 			<li><strong>Hello, {PHP.usr.name} <!-- IF {PHP.usr.maingrp} = 5 --> &nbsp; [ <a href="admin.php" class="lower">{PHP.L.Adminpanel}</a> ]<!-- ENDIF --></strong></li>
