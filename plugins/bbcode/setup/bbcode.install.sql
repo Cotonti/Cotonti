@@ -38,7 +38,8 @@ INSERT INTO `cot_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacemen
 ('pre', 'str', '[pre]', '<pre>', 1, 1, 128, '', 0),
 ('pre', 'str', '[/pre]', '</pre>', 0, 1, 128, '', 0),
 ('nbsp', 'str', '[_]', '&nbsp;', 0, 1, 128, '', 0),
-('email', 'callback', '\\[email=(\\w[\\._\\w\\-]+@[\\w\\.\\-]+\\.[a-z]+)\\](.+?)\\[/email\\]', 'return cot_obfuscate(''<a href="mailto:''.$input[1].''">''.$input[2].''</a>'');', 1, 1, 128, '', 0),
+('email', 'pcre', '\\[email\\](.+?)\\[/email\\]', '<a href="mailto:$1">$1</a>', 1, 1, 128, '', 0),
+('email', 'pcre', '\\[email=(\\w[\\._\\w\\-]+@[\\w\\.\\-]+\\.[a-z]+)\\](.+?)\\[/email\\]', '<a href="mailto:$1">$2</a>', 1, 1, 128, '', 0)
 ('quote', 'pcre', '\\[quote=(.+?)\\](.+?)\\[/quote\\]', '<blockquote><strong>$1:</strong><hr />$2</blockquote>', 1, 1, 128, '', 0),
 ('quote', 'pcre', '\\[quote\\](.+?)\\[/quote\\]', '<blockquote>$1</blockquote>', 1, 1, 128, '', 0),
 ('color', 'pcre', '\\[color=(#?\\w+)\\](.+?)\\[/color\\]', '<span style="color:$1">$2</span>', 1, 1, 128, '', 0),

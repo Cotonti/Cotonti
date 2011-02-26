@@ -17,7 +17,7 @@ if (!file_exists("./setup/$branch"))
 	cot_diefatal($L['install_dir_not_found']);
 }
 
-include $file['config'];
+// include $file['config'];
 
 $mskin = cot_tplfile('install.update');
 if (!file_exists($mskin))
@@ -94,6 +94,11 @@ else
 	// Display some warning
 	cot_error('install_update_config_error');
 }
+
+// Force config options
+$cfg['display_errors'] = true;
+$cfg['debug_mode'] = true;
+$cfg['customfuncs'] = false;
 
 if (defined('COT_UPGRADE'))
 {
@@ -197,6 +202,9 @@ if (defined('COT_UPGRADE'))
 		cot_extension_install('bbcode');
 		if ($parser == 'html')
 		{
+			// Import old Seditio/LDU bbcodes
+			$db->runScript(file_get_contents('./setup/siena/seditio_bbcodes.sql'));
+			// Run the converter
 			require_once './setup/siena/bbcode2html.inc';
 			cot_message('BBcode =&gt; HTML: OK');
 			cot_extension_uninstall('bbcode');
