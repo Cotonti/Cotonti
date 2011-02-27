@@ -2064,6 +2064,7 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 {
 	global $cfg;
 
+	$env['status'] = '500 Internal Server Error';
 	if ($cfg['display_errors'])
 	{
 		echo "<strong><a href=\"".$cfg['mainurl']."\">".$cfg['maintitle']."</a></strong><br/>";

@@ -2,27 +2,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-
 <!-- vital meta tags -->
 <meta http-equiv="Content-Type" content="{HEADER_META_CONTENTTYPE}; charset={HEADER_META_CHARSET}" />
 <title>{HEADER_TITLE}</title>
 <meta name="description" content="{HEADER_META_DESCRIPTION}" />
 <meta name="keywords" content="{HEADER_META_KEYWORDS}" />
-
 <!-- 2ndary -->
 <meta name="generator" content="Cotonti http://www.cotonti.com" />
-<meta http-equiv="pragma" content="no-cache" />
-<meta http-equiv="cache-control" content="no-cache" />
-<meta http-equiv="last-modified" content="{HEADER_META_LASTMODIFIED} GMT" />
-
 <!-- files linkage -->
+{HEADER_BASEHREF}
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 <link href="themes/{PHP.theme}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
 {HEADER_HEAD}
-{HEADER_BASEHREF}
 {HEADER_COMPOPUP}
-
 <!-- SymiSun 03 / Designed By: SymiSun* - SymiSun.Com -->
 </head>
 
