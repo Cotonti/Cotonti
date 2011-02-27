@@ -900,7 +900,7 @@ function sed_build_comments($code, $url, $display = true)
 		if (is_array($extp)) { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
-		$error_string .= (mb_strlen($rtext)<2) ? $L['com_commenttooshort']."<br />" : '';
+		$error_string .= (mb_strlen($rtext) < $cfg['commentminsize']) ? $L['com_commenttooshort']."<br />" : '';
 		$error_string .= ($cfg['commentsize'] && mb_strlen($rtext) > $cfg['commentsize']) ? $L['com_commenttoolong']
 			.'<br />' : '';
 

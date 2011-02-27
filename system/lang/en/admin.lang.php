@@ -42,6 +42,7 @@ $L['cfg_countcomments'] = array('Count comments', 'Display the count of comments
 $L['cfg_disable_comments'] = array('Disable the comments', '');
 $L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by default');	// New in N-0.0.2
 $L['cfg_maxcommentsperpage'] = array('Max. comments on page', ' ');   // New in N-0.0.6
+$L['cfg_commentminsize'] = array('Min. size of comment', 'Default: 2');
 $L['cfg_commentsize'] = array('Max. size of comment', 'In bytes (zero for unlimited size). Default: 0');   // New in N-0.0.6
 
 /**
@@ -56,6 +57,7 @@ $L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
 $L['cfg_maxtopicsperpage'] = array('Maximum topics per page', '');
 $L['cfg_mergeforumposts'] = array('Post merge feature', 'Will merge user\'s posts if they are sent consecutively, anti-bump must be off');	// New in N-0.1.0
 $L['cfg_mergetimeout'] = array('Post merge timeout', 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)');	// New in N-0.1.0
+$L['cfg_minpostlength'] = array('Min. length of a post', 'Default: 2');
 $L['cfg_maxpostsperpage'] = array('Max. posts per page', ' '); // New in N-0.0.6
 
 /**

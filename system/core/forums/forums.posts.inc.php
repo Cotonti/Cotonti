@@ -164,7 +164,9 @@ if ($a=='newpost')
 
 	$newmsg = sed_import('newmsg','P','HTM');
 
-	if (empty($error_string) && !empty($newmsg) && !empty($s) && !empty($q))
+	$error_string .= ( mb_strlen($newmsg) < $cfg['minpostlength']) ? $L["for_messagetooshort"]."<br />" : '';
+
+	if (empty($error_string) && !empty($s) && !empty($q))
 	{
 
 		if (!$merge)
