@@ -72,9 +72,9 @@ if ($m == 'edit' && $id > 0)
 
 		$comtext = cot_import('comtext', 'P', 'HTM');
 
-		if (empty($comtext))
+		if (mb_strlen($comtext) < $cfg['plugin']['comments']['minsize'])
 		{
-			cot_error($L['plu_comtooshort'], 'comtext');
+			cot_error($L['com_commenttooshort'], 'comtext');
 		}
 
 		if (!cot_error_found())
@@ -159,7 +159,7 @@ if ($a == 'send' && $usr['auth_write'])
 	}
 	/* ===== */
 
-	if (mb_strlen($rtext) < 2)
+	if (mb_strlen($rtext) < $cfg['plugin']['comments']['minsize'])
 	{
 		cot_error($L['com_commenttooshort'], 'rtext');
 	}

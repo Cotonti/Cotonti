@@ -82,7 +82,16 @@ if ($a == 'update')
 	$rtopicdesc = cot_import('rtopicdesc', 'P', 'TXT', 255);
 	$rupdater = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) && empty($fp_updater) ) ? '' : $usr['name'];
 
-	if (!empty($rtext))
+	if (!empty($rtopictitle) && mb_strlen($rtopictitle) < $cfg['forums']['mintitlelength'])
+	{
+		cot_error('forums_titletooshort', 'rtopictitle');
+	}
+	if (mb_strlen($rtext) < $cfg['forums']['minpostlength'])
+	{
+		cot_error('forums_messagetooshort', 'rtext');
+	}
+
+	if (!cot_error_found())
 	{
 		$db->update($db_forum_posts, array("fp_text" => $rtext, "fp_updated" => $sys['now_offset'], "fp_updater" => $rupdater), "fp_id=$p");
 
