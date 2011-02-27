@@ -54,8 +54,6 @@ $themelang['index']['Recentcomments'] = 'Recent <strong>Comments</strong>';
  */
 
 $themelang['list']['sort'] = 'Sort by';
-$themelang['list']['title'] = 'title';
-$themelang['list']['date'] = 'date';
 $themelang['list']['asc'] = 'ascending';
 $themelang['list']['desc'] = 'descending';
 $themelang['list']['bread'] = 'You are here';

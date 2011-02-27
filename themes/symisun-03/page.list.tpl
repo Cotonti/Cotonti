@@ -6,7 +6,7 @@
     <h1>{LIST_CATTITLE}</h1>
     <p class="details">{LIST_CATDESC}</p>
     <!-- IF {LIST_TOP_TOTALLINES} != 0 -->
-		<p> {PHP.themelang.list.sort} <strong>{PHP.themelang.list.title}</strong> <a href="list.php?c={PHP.c}&amp;s=title&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=title&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> | <strong>{PHP.themelang.page.views}</strong> <a href="list.php?c={PHP.c}&amp;s=count&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=count&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> | <strong>{PHP.themelang.list.date}</strong> <a href="list.php?c={PHP.c}&amp;s=date&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=date&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> </p>
+		<p> {PHP.themelang.list.sort} <strong>{PHP.L.Title}</strong> <a href="list.php?c={PHP.c}&amp;s=title&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=title&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> | <strong>{PHP.L.Views}</strong> <a href="list.php?c={PHP.c}&amp;s=count&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=count&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> | <strong>{PHP.L.Date}</strong> <a href="list.php?c={PHP.c}&amp;s=date&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=date&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> </p>
 		<!-- ELSE -->
 		<div class="red">{PHP.themelang.list.none}</div>
 		<!-- IF {PHP.usr.id} == 0 -->
@@ -34,7 +34,7 @@
     <span style="font-size:11px; color:#888">{LIST_ROW_DESC}</span> </div>
     <div style="float:left; width:27px; position:relative; border-right:1px solid #ececec; margin-right:7px"> <a href="{LIST_ROW_URL}#com"><img src="themes/{PHP.theme}/img/system/icon-comment.gif" alt="S????a" /> <span style="position:absolute; top:-4px; left:2px; font-size:10px">{LIST_ROW_COMMENTS_COUNT}</span></a> </div>
     <div style="float:left; width:90px; border-right:1px solid #ececec; margin-right:7px"> {LIST_ROW_RATINGS} </div>
-    <div style="float:left; width:85px; font-size:11px"> {LIST_ROW_COUNT} {PHP.themelang.page.views} </div>
+    <div style="float:left; width:85px; font-size:11px"> {LIST_ROW_COUNT} {PHP.L.Views} </div>
     <div class="clear"></div>
     </div>
     <!-- END: LIST_ROW -->
