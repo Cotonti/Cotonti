@@ -12,7 +12,7 @@
 			&nbsp;
 			<!-- IF {USERS_TOP_TOTALUSERS} > 0 -->
 			<p style="border-bottom:1px solid #ececec">{PHP.themelang.list.sort}<br />
-			<strong>{USERS_TOP_NAME} &nbsp; {USERS_TOP_MAINGRP} &nbsp; {USERS_TOP_COUNTRY} &nbsp; {USERS_TOP_LASTLOGGED} &nbsp; {USERS_TOP_REGDATE}</strong>
+                            <strong>{USERS_TOP_NAME}</strong> &nbsp; <strong style="font-size: 0.87em;">{USERS_TOP_MAINGRP} &nbsp; {USERS_TOP_COUNTRY} &nbsp; {USERS_TOP_LASTLOGGED} &nbsp; {USERS_TOP_REGDATE}</strong>
 			</p>
 			<!-- ELSE -->
 			<h4>{PHP.f}</h4>

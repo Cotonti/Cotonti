@@ -42,7 +42,7 @@
 				</div>
 				<div>
 					<label>{PHP.L.users_pmnotify}</label>
-					{USERS_PROFILE_PMNOTIFY} &nbsp; <span class="hint">{PHP.L.users_pmnotifyhint}</span>
+                                        {USERS_PROFILE_PMNOTIFY} &nbsp;<span class="hint">{PHP.L.users_pmnotifyhint}</span>
 				</div>
 			</fieldset>
 			<a id="settings" name="settings"></a>
@@ -102,16 +102,16 @@
 			<a id="password" name="password"></a>
 			<fieldset>
 				<legend>{PHP.L.Edit} {PHP.L.Password}</legend>
-				<span class="hint" style="margin-left:30px">{PHP.themelang.usersprofile.Oldpasswordhint} - {PHP.themelang.usersprofile.Newpasswordhint1}</span>
+				<span class="hint" style="margin-left:30px">{PHP.L.users_oldpasshint} - {PHP.L.users_newpasshint1}</span>
 				<div>
 					<label>{PHP.themelang.usersprofile.current} {PHP.L.Password}</label>
 					{USERS_PROFILE_OLDPASS} 
 				</div>
 				<div>
-					<label>{PHP.themelang.usersprofile.Newpassword}</label>
+					<label>{PHP.L.users_newpass}</label>
 					{USERS_PROFILE_NEWPASS1} {USERS_PROFILE_NEWPASS2} 
 				</div>
-				<span class="hint" style="margin-left:180px">{PHP.themelang.usersprofile.Newpasswordhint2}</span>
+				<span class="hint" style="margin-left:180px">{PHP.L.users_newpasshint2}</span>
 			</fieldset>
 			<p>&nbsp;</p>
 			<input type="submit" value="{PHP.L.Update}" class="submit" />
@@ -119,7 +119,7 @@
     </div>
 	
     <div id="right">
-		<h3 style="color:#000">{PHP.themelang.header.logged} {PHP.usr.name}</h3>
+		<h3 style="color:#000">{PHP.L.hea_youareloggedas} {PHP.usr.name}</h3>
 		<h3><a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.L.View} {PHP.L.Profile}</a></h3>
 		<h3><span style="background-color:#94af66; color:#fff">{PHP.L.Update} {PHP.L.Profile}</span></h3>
 		<div class="padding15 admin" style="padding-bottom:0">
