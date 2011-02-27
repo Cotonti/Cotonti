@@ -48,7 +48,6 @@ $themelang['index']['by'] = 'By';
 $themelang['index']['Newinforums'] = 'Recent <strong>Forum Posts</strong>';
 $themelang['index']['Recentadditions'] = 'Recent <strong>Pages</strong>';
 $themelang['index']['Recentcomments'] = 'Recent <strong>Comments</strong>';
-$themelang['index']['Online'] = 'Now Online';
 
 /**
  * page.list.tpl
@@ -106,6 +105,7 @@ $themelang['users']['login'] = 'Login to your account';
  */
 $themelang['usersauth']['already'] = 'You are already logged in!';
 $themelang['usersauth']['goto'] = 'Go to your account';
+$themelang['usersauth']['Maintenancereason'] = 'Reason';
 
 /**
  * users.edit.tpl

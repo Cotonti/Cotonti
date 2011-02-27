@@ -39,7 +39,7 @@
     <div id="right">
       <h3><a href="{FORUMS_RSS}">{PHP.themelang.list.rss}</a></h3>
       <h3>{PHP.L.Forums} {PHP.L.Options}</h3>
-      <div class="box padding15 admin"> <a href="plug.php?e=search&amp;frm=1">{PHP.L.forums_searchinforums}</a><br />
+      <div class="box padding15 admin"> <a href="plug.php?e=search&tab=frm">{PHP.L.forums_searchinforums}</a><br />
         <a href="plug.php?e=forumstats">{PHP.L.Statistics}</a><br />
         <a href="forums.php?n=markall">{PHP.L.forums_markasread}</a><br />
       </div>
