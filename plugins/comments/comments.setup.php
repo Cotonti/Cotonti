@@ -4,7 +4,7 @@
 Code=comments
 Name=Comments system
 Description=Comments system for Cotonti
-Version=0.7.5
+Version=0.9.0
 Date=2010-jan-03
 Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2011
@@ -22,11 +22,12 @@ mail=02:radio:0,1:0:Notify about new comments by email?
 rss_commentmaxsymbols=05:string:::Comments. Cut element description longer than N symbols, Disabled by default
 expand_comments=06:radio:0,1:1:Expand comments, Show comments expanded by default
 maxcommentsperpage=07:string::15:Max. comments on page
-commentsize=08:select:0,1024,2048,4096,8192,16384,32768,65536:0:Max. size of comment, In bytes (zero for unlimited size). Default - 0
+commentsize=08:string::0:Max. size of comment, In bytes (zero for unlimited size). Default - 0
 countcomments=09:radio:0,1:1:Count comments, Display the count of comments near the icon
 parsebbcodecom=10:radio:0,1:1:Parse BBcode in comments
 parsesmiliescom=11:radio:0,1:1:Parse smilies in comments
 markup=12:radio::1:Enable markup in comments
+minsize=13:string::2:Min. comment size
 [END_COT_EXT_CONFIG]
 ==================== */
 

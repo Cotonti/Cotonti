@@ -18,10 +18,12 @@ defined('COT_CODE') or die('Wrong URL.');
 $L['cfg_antibumpforums'] = array('Anti-bump protection', 'Will prevent users from posting twice in a row in the same topic');
 $L['cfg_hideprivateforums'] = array('Hide private forums', '');
 $L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
+$L['cfg_maxpostsperpage'] = array('Max. posts per page', ' ');
 $L['cfg_maxtopicsperpage'] = array('Maximum topics per page', '');
 $L['cfg_mergeforumposts'] = array('Post merge feature', 'Will merge user\'s posts if they are sent consecutively, anti-bump must be off');
 $L['cfg_mergetimeout'] = array('Post merge timeout', 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)');
-$L['cfg_maxpostsperpage'] = array('Max. posts per page', ' ');
+$L['cfg_minpostlength'] = array('Min. post length', ' ');
+$L['cfg_mintitlelength'] = array('Min. topic title length', ' ');
 
 $L['cfg_allowusertext'] = array('Display signatures');
 $L['cfg_allowbbcodes'] = array('Enable BBcodes');

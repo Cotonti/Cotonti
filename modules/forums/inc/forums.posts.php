@@ -100,6 +100,11 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	}
 	$newmsg = cot_import('newmsg', 'P', 'HTM');
 
+	if (mb_strlen($newmsg) < $cfg['forums']['minpostlength'])
+	{
+		cot_error('forums_messagetooshort', 'newmsg');
+	}
+
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.posts.newpost.first') as $pl)
 	{
@@ -107,7 +112,7 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	}
 	/* ===== */
 
-	if (!cot_error_found() && !empty($newmsg))
+	if (!cot_error_found())
 	{
 		if (!$merge)
 		{
