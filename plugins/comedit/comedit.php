@@ -50,7 +50,8 @@ if($a == 'update')
 
 	$comtext = sed_import('comtext', 'P', 'TXT');
 
-	$error_string .= (empty($comtext)) ? $L['plu_comtooshort']."<br />" : '';
+	$error_string .= (mb_strlen($comtext) < $cfg['commentminsize']) ? $L['plu_comtooshort']."<br />" : '';
+	$error_string .= ($cfg['commentsize'] && mb_strlen($rtext) > $cfg['commentsize']) ? $L['com_commenttoolong'].'<br />' : '';
 
 	if(isset($error_string))
 	{

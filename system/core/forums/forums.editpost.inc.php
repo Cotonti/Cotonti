@@ -110,7 +110,10 @@ if ($a=='update')
 	$rtopicdesc = sed_import('rtopicdesc','P','TXT', 255);
 	$rupdater = ($fp_posterid == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) && empty($fp_updater) ) ? '' : $usr['name'];
 
-	if(!empty($rtext))
+	$error_string .= (!empty($rtopictitle) && mb_strlen($rtopictitle) < 2) ? $L["for_titletooshort"]."<br />" : '';
+	$error_string .= (mb_strlen($rtext) < $cfg['minpostlength']) ? $L["for_messagetooshort"]."<br />" : '';
+	
+	if(empty($error_string))
 	{
 		if($cfg['parser_cache'])
 		{
