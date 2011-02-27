@@ -38,11 +38,11 @@
 				<!-- END: USERS_PROFILE_EMAILCHANGE -->
 				<div>
 					<label>{PHP.L.Hide} {PHP.L.Email}</label>
-					{USERS_PROFILE_HIDEEMAIL} &nbsp; <span class="hint">{PHP.themelang.usersprofile.Hidetheemail}</span> 
+					{USERS_PROFILE_HIDEEMAIL} &nbsp; <span class="hint">{PHP.L.users_hideemail}</span>
 				</div>
 				<div>
-					<label>{PHP.themelang.usersprofile.PMnotify}</label>
-					{USERS_PROFILE_PMNOTIFY} &nbsp; <span class="hint">{PHP.themelang.usersprofile.PMnotifyhint}</span> 
+					<label>{PHP.L.users_pmnotify}</label>
+					{USERS_PROFILE_PMNOTIFY} &nbsp; <span class="hint">{PHP.L.users_pmnotifyhint}</span>
 				</div>
 			</fieldset>
 			<a id="settings" name="settings"></a>

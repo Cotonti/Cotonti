@@ -6,7 +6,7 @@
 		<h1>{USERS_AUTH_TITLE}</h1>
       
 		<!-- BEGIN: USERS_AUTH_MAINTENANCE -->
-		<div class="maintenance"> {PHP.themelang.usersauth.Maintenance}
+		<div class="maintenance"> {PHP.L.users_maintenance1} {PHP.L.users_maintenance2}
 		<p><strong>{PHP.themelang.usersauth.Maintenancereason}:</strong> {USERS_AUTH_MAINTENANCERES}</p>
 		</div>
 		<!-- END: USERS_AUTH_MAINTENANCE -->
@@ -27,7 +27,7 @@
 				{USERS_AUTH_PASSWORD} </div>
 			<div class="remember">
 				<label>&nbsp;</label>
-				{PHP.themelang.usersauth.Rememberme} {PHP.out.guest_cookiettl} </div>
+				{PHP.L.users_rememberme} {PHP.out.guest_cookiettl} </div>
 			<div>
 			<label>&nbsp;</label>
 			<input type="submit" value="{PHP.L.Login}" class="submit" />

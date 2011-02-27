@@ -28,21 +28,19 @@
 		<!-- IF {USERS_DETAILS_TEXT} -->
                 <h4>{PHP.L.Signature}</h4>
 		<p>{USERS_DETAILS_TEXT}</p>
-		<!-- ELSE -->
-		<p class="red">{PHP.themelang.usersdetails.none}</p>
 		<!-- ENDIF -->
     </div>
 	
     <div id="right">
 		<!-- IF {PHP.usr.id} > 0 -->
-		<h3 style="color:#000">{PHP.themelang.header.logged} {PHP.usr.name}</h3>
+		<h3 style="color:#000">{PHP.L.hea_youareloggedas} {PHP.usr.name}</h3>
 		<!-- ENDIF -->
 		<!-- IF {PHP.usr.id} > 0 AND {PHP.usr.id} == {PHP.urr.user_id} -->
 		
 		<h3><span style="background-color:#94af66; color:#fff">{PHP.L.View} {PHP.L.Profile}</span></h3>
 		<div class="padding15" style="padding-bottom:0">
 			<ul>
-			  <li><a href="pm.php?m=send&amp;to={USERS_DETAILS_ID}">{PHP.themelang.usersdetails.Sendprivatemessage}</a></li>
+			  <li><a href="pm.php?m=send&amp;to={USERS_DETAILS_ID}">{PHP.L.users_sendpm}</a></li>
 			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAINGRP}</li>
 			  <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>
 			  <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>
@@ -62,8 +60,11 @@
 		<div class="padding15" style="padding-bottom:0; padding-right:0">
 			<span class="colright">{USERS_DETAILS_AVATAR}</span>
 			<ul>
-			  <li><a href="pm.php?m=send&amp;to={USERS_DETAILS_ID}">{PHP.themelang.usersdetails.Sendprivatemessage}</a></li>
-			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAINGRP}</li>          <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>          <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>          <li><em>{PHP.L.Lastlogged}</em>: {USERS_DETAILS_LASTLOG}</li>
+			  <li><a href="pm.php?m=send&amp;to={USERS_DETAILS_ID}">{PHP.L.users_sendpm}</a></li>
+			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAINGRP}</li>
+                          <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>
+                          <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>
+                          <li><em>{PHP.L.Lastlogged}</em>: {USERS_DETAILS_LASTLOG}</li>
 			</ul>
 		</div>
 		
@@ -81,8 +82,11 @@
 		<div class="padding15" style="padding-bottom:0; padding-right:0">
 			<span class="colright">{USERS_DETAILS_AVATAR}</span>
 			<ul>
-			  <li><a href="pm.php?m=send&amp;to={USERS_DETAILS_ID}">{PHP.themelang.usersdetails.Sendprivatemessage}</a></li>
-			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAINGRP}</li>          <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>          <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>          <li><em>{PHP.L.Lastlogged}</em>: {USERS_DETAILS_LASTLOG}</li>
+			  <li><a href="pm.php?m=send&amp;to={USERS_DETAILS_ID}">{PHP.L.users_sendpm}</a></li>
+			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAINGRP}</li>
+                          <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>
+                          <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>
+                          <li><em>{PHP.L.Lastlogged}</em>: {USERS_DETAILS_LASTLOG}</li>
 			</ul>
 		</div>
 		<!-- ENDIF -->

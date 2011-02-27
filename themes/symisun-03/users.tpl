@@ -47,7 +47,7 @@
 		
 		<div id="right">
 			<!-- IF {PHP.usr.id} > 0 -->
-			<h3 style="color:#000">{PHP.themelang.header.logged} {PHP.usr.name}</h3>
+			<h3 style="color:#000">{PHP.L.hea_youareloggedas} {PHP.usr.name}</h3>
 			<h3><a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.L.View} {PHP.L.Profile}</a></h3>
 			<h3><a href="users.php?m=profile">{PHP.L.Update} {PHP.L.Profile}</a></h3>
 			<h3><a href="pm.php">{PHP.L.Private_Messages}</a></h3>
@@ -57,8 +57,8 @@
 			<h3><span style="background-color:#94af66; color:#fff">{PHP.L.Users}</span></h3>
 			<div class="padding15 admin nou scrabble" style="padding-bottom:0">
 				{USERS_TOP_FILTERS_OTHERS}<a href="users.php"><strong>{PHP.L.All}</strong></a><br />.....<br />
-				{PHP.themelang.users.usersperpage}: <strong>{USERS_TOP_MAXPERPAGE}</strong><br />
-				{PHP.themelang.users.usersinthissection} (<em>{PHP.f}</em>): <strong>{USERS_TOP_TOTALUSERS}</strong>
+				{PHP.L.users_usersperpage}: <strong>{USERS_TOP_MAXPERPAGE}</strong><br />
+				{PHP.L.users_usersinthissection} (<em>{PHP.f}</em>): <strong>{USERS_TOP_TOTALUSERS}</strong>
 				<!-- IF {USERS_TOP_PAGNAV} -->
 				<div class="paging">{USERS_TOP_PAGEPREV}{USERS_TOP_PAGNAV}{USERS_TOP_PAGENEXT}</div>
 				<!-- ENDIF -->

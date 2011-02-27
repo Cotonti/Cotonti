@@ -58,7 +58,7 @@
 					</tr>				
 					<!-- ENDIF -->
 					<tr>					
-						<td>{PHP.L.New} {PHP.L.Password:</td>
+						<td>{PHP.L.New} {PHP.L.Password}:</td>
 						<td>{USERS_EDIT_NEWPASS}<br /></td>				
 					</tr>
 					<tr>					
@@ -66,20 +66,16 @@
 						<td>{USERS_EDIT_EMAIL}</td>				
 					</tr>
 					<tr>					
-						<td>{PHP.themelang.usersedit.Hidetheemail}:</td>					
+						<td>{PHP.L.users_hideemail}:</td>
 						<td>{USERS_EDIT_HIDEEMAIL}</td>				
 					</tr>
 					<tr>					
-						<td>{PHP.themelang.usersedit.PMnotify}:</td>					
+						<td>{PHP.L.users_pmnotify}:</td>
 						<td>{USERS_EDIT_PMNOTIFY}<br /></td>				
 					</tr>
 					<tr>					
 						<td>{PHP.L.Birthdate}:</td>					
 						<td>{USERS_EDIT_BIRTHDATE}</td>				
-					</tr>
-					<tr>						
-						<td>{PHP.L.Occupation}:</td>					
-						<td>{USERS_EDIT_OCCUPATION}</td>				
 					</tr>
 					<tr>					
 						<td>{PHP.L.Gender}:</td>					
@@ -97,15 +93,15 @@
 						<td>{USERS_EDIT_LASTLOG}</td>				
 					</tr>
 					<tr>					
-						<td>{PHP.themelang.usersedit.LastIP}:</td>					
+						<td>{PHP.L.users_lastip}:</td>
 						<td>{USERS_EDIT_LASTIP}</td>				
 					</tr>
 					<tr>					
-						<td>{PHP.themelang.usersedit.Logcounter}:</td>					
+						<td>{PHP.L.users_logcounter}:</td>
 						<td>{USERS_EDIT_LOGCOUNT}</td>				
 					</tr>
 					<tr>					
-						<td>{PHP.themelang.usersedit.Deletethisuser}:</td>					
+						<td>{PHP.L.users_deleteuser}:</td>
 						<td>{USERS_EDIT_DELETE}</td>				
 					</tr>
 					<tr>					

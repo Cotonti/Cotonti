@@ -18,15 +18,15 @@
 					{USERS_REGISTER_USER} * 
 				</div>
 				<div>
-					<label>{PHP.themelang.usersregister.Validemail}</label>
-					{USERS_REGISTER_EMAIL} * &nbsp; <span class="hint">{PHP.themelang.usersregister.Validemailhint}</span> 
+					<label>{PHP.L.users_validemail}</label>
+					{USERS_REGISTER_EMAIL} * &nbsp; <span class="hint">{PHP.L.users_validemailhint}</span>
 				</div>
 				<div>
 					<label>{PHP.L.Password}</label>
 					{USERS_REGISTER_PASSWORD} * 
 				</div>
 				<div>
-					<label>{PHP.themelang.usersregister.Confirmpassword}</label>
+					<label>{PHP.L.users_confirmpass}</label>
 					{USERS_REGISTER_PASSWORDREPEAT} * 
 				</div>
 				<div>
@@ -38,9 +38,9 @@
 					{USERS_REGISTER_VERIFYINPUT} * 
 				</div>
 				<div>
-				<p style="color:#c66; padding:10px 15px">{PHP.themelang.usersregister.Formhint}</p>
-				<label>&nbsp;</label>
-				<input type="submit" value="{PHP.L.Submit}" class="submit" />
+                                        <label>&nbsp;</label>
+                                        <input type="submit" value="{PHP.L.Submit}" class="submit" />
+                                </div>
 			</fieldset>
 		  </form>
 		  <!-- ENDIF -->

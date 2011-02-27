@@ -51,7 +51,7 @@
 				<button type="submit" class="login">{PHP.L.Login}</button>
 				</p>
 				</form>
-                <p class="margin5">{PHP.L.No} {PHP.L.Members} {PHP.L.Unknown} <a href="users.php?m=register"><strong>{PHP.L.Register}</strong></a></p>
+                <p class="margin5">{PHP.L.No} {PHP.Ls.Members.1} {PHP.L.Unknown} <a href="users.php?m=register"><strong>{PHP.L.Register}</strong></a></p>
                 <!-- END: GUEST -->
                 
 				<!-- BEGIN: USER -->

@@ -46,3 +46,6 @@ MODIFICATION GUIDE:
 /* STRUCTURE CHANGES */
 admin.php?m=other&p=userimages
 Change avatar to 80px x 80px
+
+admin.php?m=config&n=edit&o=plug&p=recentitems
+Change "Part from where recent items should be called:" from index to header

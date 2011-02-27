@@ -44,13 +44,44 @@
     <div>
         <label>{PHP.L.Edit}</label>
     </div>
-    <!-- BEGIN: OPTIONS -->
-    <div>
-        <label>{PHP.L.Options}</label>
-        {EDIT_POLL_OPTION_TEXT}
-        <input name="deloption" value="x" type="button" class="deloption" style="display:none;" />
-    </div>
-    <!-- END: OPTIONS -->
+</fieldset>
+    <table>
+					<!-- BEGIN: POLL -->
+					<tr>
+						<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/polls.js"></script>
+						<script type="text/javascript">
+							var ansMax = {PHP.cfg.polls.max_options_polls};
+						</script>
+						<td>{PHP.L.poll}:</td>
+						<td>
+							{EDIT_POLL_IDFIELD}
+							{EDIT_POLL_TEXT}
+						</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.Options}:</td>
+						<td>
+							<!-- BEGIN: OPTIONS -->
+							<div class="polloptiondiv">
+								{EDIT_POLL_OPTION_TEXT}
+								<input name="deloption" value="x" type="button" class="deloption" style="display:none;" />
+							</div>
+							<!-- END: OPTIONS -->
+							<input id="addoption" name="addoption" value="{PHP.L.Add}" type="button" style="display:none;" /></td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>{EDIT_POLL_MULTIPLE}</td>
+					</tr>
+					<!-- BEGIN: EDIT -->
+					<tr>
+						<td>&nbsp;</td>
+						<td>{EDIT_POLL_LOCKED} {EDIT_POLL_RESET} {EDIT_POLL_DELETE}</td>
+					</tr>
+					<!-- END: EDIT -->
+					<!-- END: POLL -->
+                               </table>
+<fieldset>
     <div>
         <label>{PHP.L.polls_multiple}</label>
         {EDIT_POLL_MULTIPLE}
