@@ -3919,7 +3919,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	{
 		$params = array();
 	}
-	$params = array_filter($params);
+	$params = array_filter((array)$params);
 	$url = $name . '.php';
 	// Append query string if needed
 	if (count($params) > 0)
