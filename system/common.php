@@ -85,9 +85,18 @@ if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .
 define('SED_SITE_URI', $sys['site_uri']);
 if (empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
 // Absolute site url
-$sys['host'] = preg_match('`^(.+\.)?'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']
-	: $sys['domain'];
-$sys['abs_url'] = $url['scheme'].'://'.$sys['host']. $sys['site_uri'];
+if ($_SERVER['HTTP_HOST'] == $url['host']
+	|| $_SERVER['HTTP_HOST'] != 'www.' . $url['host']
+		&& preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']))
+{
+	$sys['host'] = $_SERVER['HTTP_HOST'];
+}
+else
+{
+	$sys['host'] = $url['host'];
+}
+$sys['abs_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['site_uri'];
+$sys['canonical_uri'] = $url['scheme'] . '://' . $sys['host'] . $_SERVER['REQUEST_URI'];
 define('SED_ABSOLUTE_URL', $sys['abs_url']);
 // URI redirect appliance
 $sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ?

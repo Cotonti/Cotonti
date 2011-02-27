@@ -110,6 +110,7 @@ if (!SED_AJAX)
 		"HEADER_META_KEYWORDS" => $out['meta_keywords'],
 		"HEADER_META_LASTMODIFIED" => $out['meta_lastmod'],
 		"HEADER_HEAD" => $out['head_head'],
+		"HEADER_CANONICAL_URL" => str_replace('&', '&amp;', $sys['canonical_uri'])
 	));
 
 	/* === Hook === */
