@@ -23,8 +23,14 @@
             <label>{PHP.L.Description}</label>
             {FORUMS_EDITPOST_TOPICDESCRIPTION}
         </div>
-</fieldset>
 <!-- END: FORUMS_EDITPOST_FIRSTPOST -->
+<!-- BEGIN: FORUMS_EDITPOST_TAGS -->
+        <div>
+            <label>{PHP.L.Tags}</label>
+            {FORUMS_EDITPOST_FORM_TAGS} &nbsp; <span class="hint">{FORUMS_EDITPOST_TOP_TAGS_HINT}</span>
+        </div>
+<!-- END: FORUMS_EDITPOST_TAGS -->
+</fieldset>
 
 <fieldset>
     <legend>{PHP.L.Text}</legend>
@@ -41,9 +47,6 @@
 
 <fieldset>
     <legend>{PHP.L.Poll}</legend>
-    <div>
-        <label>{PHP.L.Edit}</label>
-    </div>
 </fieldset>
     <table>
 					<!-- BEGIN: POLL -->
@@ -82,11 +85,6 @@
 					<!-- END: POLL -->
                                </table>
 <fieldset>
-    <div>
-        <label>{PHP.L.polls_multiple}</label>
-        {EDIT_POLL_MULTIPLE}
-    </div>
-
     <!-- BEGIN: EDIT -->
     <div>
         <label>{PHP.L.Close}</label>
@@ -106,12 +104,7 @@
 <!-- END: POLL -->
 
 
-<!-- BEGIN: FORUMS_EDITPOST_TAGS -->
-<div>
-    <label>{PHP.L.Tags}</label>
-    {FORUMS_EDITPOST_FORM_TAGS} &nbsp; <span class="hint">{FORUMS_EDITPOST_TOP_TAGS_HINT}</span>
-</div>
-<!-- END: FORUMS_EDITPOST_TAGS -->
+
 
 <p>&nbsp;</p>
 <input type="submit" value="{PHP.L.Update}" class="submit" />
