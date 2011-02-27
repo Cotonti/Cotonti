@@ -2387,7 +2387,7 @@ function cot_langfile($name, $type = 'plug', $default = 'en')
  */
 function cot_get_rc_theme()
 {
-	global $usr;
+	global $cfg, $usr;
 	$R = array();
 	if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php"))
 	{
