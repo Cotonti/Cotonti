@@ -429,7 +429,7 @@ if (!$notlastpage && !$rowt['ft_state'] && $usr['id'] > 0 && $allowreplybox && $
 
 	$t->assign(array(
 		'FORUMS_POSTS_NEWPOST_SEND' => cot_url('forums', "m=posts&a=newpost&s=" . $s . "&q=" . $q),
-		'FORUMS_POSTS_NEWPOST_TEXT' => $R['forums_code_newpost_mark'] . cot_textarea('newmsg', $newmsg, 16, 56, '', 'input_textarea_editor')
+		'FORUMS_POSTS_NEWPOST_TEXT' => $R['forums_code_newpost_mark'] . cot_textarea('newmsg', $newmsg, 16, 56, '', 'input_textarea_medieditor')
 	));
 
 	cot_display_messages($t);

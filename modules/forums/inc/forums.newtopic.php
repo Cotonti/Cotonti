@@ -171,7 +171,7 @@ $t->assign(array(
 	'FORUMS_NEWTOPIC_SEND' => cot_url('forums', "m=newtopic&a=newtopic&s=".$s),
 	'FORUMS_NEWTOPIC_TITLE' => cot_inputbox('text', 'newtopictitle', htmlspecialchars($newtopictitle), array('size' => 56, 'maxlength' => 255)),
 	'FORUMS_NEWTOPIC_DESC' => cot_inputbox('text', 'newtopicdesc', htmlspecialchars($newtopicdesc), array('size' => 56, 'maxlength' => 255)),
-	'FORUMS_NEWTOPIC_TEXT' => cot_textarea('newmsg', htmlspecialchars($newmsg), 20, 56, '', 'input_textarea_editor')
+	'FORUMS_NEWTOPIC_TEXT' => cot_textarea('newmsg', htmlspecialchars($newmsg), 20, 56, '', 'input_textarea_medieditor')
 ));
 
 if ($cfg['forums'][$s]['allowprvtopics'])
