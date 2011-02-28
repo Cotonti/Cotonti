@@ -44,7 +44,6 @@ register_shutdown_function('cot_shutdown');
 
 $sys['day'] = @date('Y-m-d');
 $sys['now'] = time();
-$sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
 $site_id = 'ct'.substr(md5(empty($cfg['site_id']) ? $cfg['mainurl'] : $cfg['site_id']), 0, 16);
 $sys['site_id'] = $site_id;
 
@@ -124,6 +123,8 @@ else
 mb_internal_encoding('UTF-8');
 
 /* ======== Extra settings (the other presets are in functions.php) ======== */
+
+$sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
 
 if ($cfg['clustermode'])
 {

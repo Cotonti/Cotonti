@@ -50,12 +50,6 @@ class XTemplate
 		{
 			$this->restart($path);
 		}
-		// Theme resources override trick
-		global $R, $themeR;
-		if ($themeR)
-		{
-			$R = array_merge($R, $themeR);
-		}
 	}
 
 	/**
@@ -209,6 +203,17 @@ class XTemplate
 	 */
 	public function parse($block = 'MAIN')
 	{
+		global $cot_rc_theme_reload;
+		if ($cot_rc_theme_reload)
+		{
+			// Theme resources override trick
+			global $themeR, $R;
+			if ($themeR)
+			{
+				$R = array_merge($R, $themeR);
+			}
+			$cot_rc_theme_reload = false;
+		}
 		$path = $this->index[$block];
 		if ($path)
 		{
