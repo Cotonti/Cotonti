@@ -1318,7 +1318,7 @@ function cot_build_email($email, $hide = false)
  *	Filesize in KiB (1 KiB = 1024 bytes)
  * @param int $decimals
  *	Number of decimals to show.
- * @param mixed $round 
+ * @param mixed $round
  *	Round up to this number of decimals.
  *	Set false to disable or null to inherit from $decimals.
  * @return string
@@ -2314,7 +2314,11 @@ function cot_message($text, $class = 'ok', $src = 'default')
  */
 function cot_incfile($name, $type = 'core', $part = 'functions')
 {
-	global $cfg;
+	global $cfg, $cot_rc_theme_reload;
+	if ($part == 'resources')
+	{
+		$cot_rc_theme_reload = true;
+	}
 	if ($type == 'core')
 	{
 		return $cfg['system_dir'] . "/$name.php";
@@ -2619,7 +2623,7 @@ function cot_mktime($hour = false, $minute = false, $second = false, $month = fa
  * @param string $format
  *	Format on which to base the conversion.
  *	Defaults to MySQL date format.
- *	Can also be set to 'auto', in which case 
+ *	Can also be set to 'auto', in which case
  *	it will rely on strtotime for parsing.
  * @return int UNIX timestamp
  */
@@ -3256,7 +3260,17 @@ function cot_wraptext($str, $wrap = 80)
  */
 function cot_rc($name, $params = array())
 {
-	global $R, $L;
+	global $R, $L, $cot_rc_theme_reload;
+	if ($cot_rc_theme_reload)
+	{
+		// Theme resources override trick
+		global $themeR;
+		if ($themeR)
+		{
+			$R = array_merge($R, $themeR);
+		}
+		$cot_rc_theme_reload = false;
+	}
 	$res = isset($R[$name]) ? $R[$name]
 		: (isset($L[$name]) ? $L[$name] : $name);
 	is_array($params) ? $args = $params : parse_str($params, $args);
@@ -4081,7 +4095,7 @@ $cot_languages['uk'] = 'Українська';
 function cot_declension($digit, $expr, $onlyword = false, $canfrac = false)
 {
 	global $lang, $Ls;
-	
+
 	$expr = is_string($expr) ? $Ls[$expr] : $expr;
 	if (!is_array($expr))
 	{

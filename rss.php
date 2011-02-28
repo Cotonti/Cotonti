@@ -320,9 +320,9 @@ function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl)
 
 function cot_parse_post_text($post_id, $post_text)
 {
-	global $db, $cfg, $db_forum_posts, $usr, $fs_allowbbcodes, $fs_allowsmilies;
+	global $db, $cfg, $db_forum_posts, $usr;
 
-	$post_text = cot_parse($post_text, ($cfg['forums']['markup'] && $fs_allowbbcodes));
+	$post_text = cot_parse($post_text, $cfg['forums']['markup']);
 
 	if ((int)$cfg['rss']['rss_postmaxsymbols'] > 0)
 	{
