@@ -53,10 +53,13 @@ $autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
 cot_rc_add_embed('markitup.set', '$(document).ready(function() {
 	mySettings.previewAutorefresh = '.$autorefresh.';
 	mySettings.previewParserPath = "plug.php?r=markitup&x=" + $("input[name=\'x\'][type=\'hidden\']").eq(0).val();
-	mini.previewAutorefresh = '.$autorefresh.';
-	mini.previewParserPath = mySettings.previewParserPath;
+	mediSettings.previewAutorefresh = '.$autorefresh.';
+	mediSettings.previewParserPath = mySettings.previewParserPath;
+	miniSettings.previewAutorefresh = '.$autorefresh.';
+	miniSettings.previewParserPath = mySettings.previewParserPath;
 	$("textarea.editor").markItUp(mySettings);
-	$("textarea.minieditor").markItUp(mini);
+	$("textarea.medieditor").markItUp(mediSettings);
+	$("textarea.minieditor").markItUp(miniSettings);
 });');
 
 ?>
