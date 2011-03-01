@@ -97,6 +97,14 @@ if ($a == 'update')
 				$sql_page_delete = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row_page_delete['page_cat']."' ");
 			}
 
+			foreach($cot_extrafields['pages'] as $i => $row_extf) 
+			{ 
+				if ($row_extf['field_type']=='file')
+				{
+					 @unlink($cfg['extrafield_files_dir']."/".$row_page_delete['page_'.$row_extf['field_name']]); 
+				}
+			}
+			
 			$sql_page_delete = $db->delete($db_pages, "page_id=$id");
 			cot_log("Deleted page #".$id,'adm');
 			/* === Hook === */

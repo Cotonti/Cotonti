@@ -165,7 +165,7 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 	/* ===== */
 
 	cot_shield_protect();
-	$sql = $db->query("SELECT user_id, user_maingrp, user_sid FROM $db_users WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') LIMIT 1");
+	$sql = $db->query("SELECT * FROM $db_users WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') LIMIT 1");
 
 	if ($row = $sql->fetch())
 	{
@@ -188,6 +188,14 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 			}
 			elseif ($y == 0)
 			{
+				foreach($cot_extrafields['users'] as $i => $row_extf) 
+				{ 
+					if ($row_extf['field_type']=='file')
+					{
+						 @unlink($cfg['extrafield_files_dir']."/".$sql['user_'.$row_extf['field_name']]); 
+					}
+				}
+				
 				$sql = $db->delete($db_users, "user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");
 				$sql = $db->delete($db_users, "user_id='".$row['user_id']."'");
 				$sql = $db->delete($db_groups_users, "gru_userid='".$row['user_id']."'");
