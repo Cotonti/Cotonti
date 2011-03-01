@@ -57,7 +57,7 @@ if ($a=='check')
 	}
 	/* ===== */
 
-	$sql = $db->query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid FROM $db_users WHERE $user_select_condition");
+	$sql = $db->query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
 
 	if ($row = $sql->fetch())
 	{
