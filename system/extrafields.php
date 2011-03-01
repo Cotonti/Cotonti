@@ -85,7 +85,7 @@ function cot_build_extrafields($name, $extrafield, $data)
 			$R["input_text_{$rc_name}"] = (!empty($R["input_text_{$rc_name}"])) ? $R["input_text_{$rc_name}"] : $extrafield['field_html'];
 
 			$result['FILE'] = cot_inputbox('file', $name, '');
-			$result['DELETE'] = cot_checkbox($data, 'rdel_' . $name, $L['Delete']);
+			$result['DELETE'] = cot_checkbox(false, 'rdel_' . $name, $L['Delete']);
 			$result['LINK'] = htmlspecialchars($data);
 			break;
 
@@ -250,6 +250,18 @@ function cot_build_extrafields_data($name, $extrafield, $value)
 
 		case 'datetime':
 			return cot_date('datetime_medium', $value + $usr['timezone'] * 3600);
+			break;
+		
+		case 'file':
+			return $value;
+			break;	
+		
+		case 'filesize':
+			return $value;
+			break;
+		
+		default:
+			return $value;
 			break;
 	}
 }
