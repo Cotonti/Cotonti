@@ -61,8 +61,8 @@ elseif (!empty($q))
 	}
 }
 
-(empty($s)) && cot_die();
-isset($structure['forums'][$s]) || cot_die();
+(empty($s)) && cot_die(true, true);
+isset($structure['forums'][$s]) || cot_die(true, true);
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
 
 /* === Hook === */
@@ -263,7 +263,7 @@ if ($rowt = $sql_forums->fetch())
 }
 else
 {
-	cot_die();
+	cot_die(true, true);
 }
 
 $sql_forums = $db->query("UPDATE $db_forum_topics SET ft_viewcount=ft_viewcount+1 WHERE ft_id = $q");

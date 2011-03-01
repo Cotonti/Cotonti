@@ -198,7 +198,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 }
 else
 {
-	cot_die();
+	cot_die(true, true);
 }
 
 ?>

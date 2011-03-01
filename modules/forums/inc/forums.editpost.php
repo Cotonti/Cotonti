@@ -65,7 +65,7 @@ if ($rowt = $sql_forums->fetch())
 }
 else
 {
-	cot_die();
+	cot_die(true, true);
 }
 
 if ($a == 'update')
