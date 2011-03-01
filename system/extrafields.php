@@ -153,7 +153,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			break;
 
 		case 'file':
-			global $lang, $cot_translit, $exfldfiles, $exfldsize, $cfg;
+			global $lang, $cot_translit, $exfldfiles, $exfldsize, $cfg, $uploadfiles;
 			if ($source == 'P')
 			{
 				$import = $_FILES[$inputname];
@@ -561,7 +561,7 @@ function cot_load_extrafields()
 	if (!isset($cot_extrafields))
 	{
 		$cot_extrafields = array();
-		$fieldsres = $db->query("SELECT * FROM $db_extra_fields WHERE 1");
+		$fieldsres = $db->query("SELECT * FROM $db_extra_fields WHERE 1 ORDER BY field_type ASC");
 		while ($row = $fieldsres->fetch())
 		{
 			$cot_extrafields[$row['field_location']][$row['field_name']] = $row;
