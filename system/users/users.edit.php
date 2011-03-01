@@ -65,6 +65,14 @@ if ($a=='update')
 		$sql = $db->delete($db_users, "user_id=$id");
 		$sql = $db->delete($db_groups_users, "gru_userid=$id");
 
+		foreach($cot_extrafields['users'] as $i => $row_extf) 
+		{ 
+			if ($row_extf['field_type']=='file')
+			{
+				 @unlink($cfg['extrafield_files_dir']."/".$sql_page['user_'.$row_extf['field_name']]); 
+			}
+		}
+		
 		if (cot_import('ruserdelpfs','P','BOL'))// TODO PFS SEPARATE
 		{
 			cot_pfs_deleteall($id);
