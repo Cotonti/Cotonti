@@ -45,7 +45,7 @@ if($cfg['plugin']['tags']['forums'])
 				break;
 			}
 		}
-		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t)."</a>\r\n<span>".$cnt.'</span></li>';
+		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t)."</a><span>".$cnt."</span></li>\r\n";
 	}
 	$tc_html .= '</ul>';
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
