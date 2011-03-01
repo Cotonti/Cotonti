@@ -83,7 +83,7 @@ elseif (!empty($r))
 }
 else
 {
-	cot_die();
+	cot_die(true, true);
 }
 
 // Plugin requirements autoloading

@@ -20,7 +20,7 @@ $w = cot_import('w','G','ALP',4); // way
 $o = (empty($o)) ? 'updated' : $o;
 $w =  (empty($w)) ? 'desc' : $w;
 
-cot_die(empty($s) || !isset($structure['forums'][$s]));
+cot_die(empty($s) || !isset($structure['forums'][$s]), true);
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
 

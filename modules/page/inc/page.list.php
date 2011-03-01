@@ -36,7 +36,7 @@ elseif ($c == 'unvalidated')
 }
 elseif (!isset($structure['page'][$c]))
 {
-	cot_die(true);
+	cot_die(true, true);
 }
 else
 {

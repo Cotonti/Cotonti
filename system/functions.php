@@ -2043,13 +2043,14 @@ function cot_clear_messages($src = '', $class = '')
  * @param bool $cond Really die?
  * @return bool
  */
-function cot_die($cond=TRUE)
+function cot_die($cond = true, $notfound = false)
 {
 	global $env;
 	if ($cond)
 	{
-		$env['status'] = '403 Forbidden';
-		cot_redirect(cot_url('message', 'msg=950', '', true));
+		$msg = $notfound ? '404' : '950';
+		$env['status'] = $notfound ? '404 Not Found' : '403 Forbidden';
+		cot_redirect(cot_url('message', 'msg=' . $msg, '', true));
 	}
 	return FALSE;
 }

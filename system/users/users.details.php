@@ -31,17 +31,17 @@ foreach (cot_getextplugins('users.details.first') as $pl)
 
 if(!empty($u) && empty($id))
 {
-	$u = $db->query("SELECT user_id FROM $db_users WHERE user_name='".$db->prep($u)."' LIMIT 1")->fetch();
+	$u = $db->query("SELECT user_id FROM $db_users WHERE user_name=".$db->quote($u)." LIMIT 1")->fetch();
 	$id = $u['user_id'];
 }
-elseif(empty($id) && $usr['id']>0)
+elseif(empty($id) && empty($u) && $usr['id']>0)
 {
 	$id = $usr['id'];
 }
-
+cot_die(empty($id), true);
 
 $sql = $db->query("SELECT * FROM $db_users WHERE user_id=$id LIMIT 1");
-cot_die($sql->rowCount()==0);
+cot_die($sql->rowCount()==0, true);
 $urr = $sql->fetch();
 
 $title_params = array(
