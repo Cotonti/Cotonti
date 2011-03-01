@@ -3,7 +3,7 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.6.13
+ * @version 0.6.14
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD License
@@ -37,8 +37,8 @@ $sys['starttime'] = $i[1] + $i[0];
 //unset ($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount)
 
 $cfg['svnrevision'] = '$Rev$'; //DO NOT MODIFY this is set by SVN automatically
-$cfg['version'] = '0.6.13';
-$cfg['dbversion'] = '0.6.12';
+$cfg['version'] = '0.6.14';
+$cfg['dbversion'] = '0.6.14';
 
 if($cfg['customfuncs'])
 {
