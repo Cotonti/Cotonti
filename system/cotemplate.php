@@ -1123,6 +1123,10 @@ class Cotpl_var
 		else
 		{
 			$val = $tpl->vars[$this->name];
+			if ($this->keys && is_array($val))
+			{
+				$var =& $tpl->vars[$this->name];
+			}
 		}
 		if ($this->keys)
 		{
@@ -1134,18 +1138,26 @@ class Cotpl_var
 				{
 					$var =& $var->{$key};
 				}
-				else
+				elseif (is_array($var))
 				{
 					$var =& $var[$key];
+				}
+				else
+				{
+					break;
 				}
 			}
 			if (is_object($var))
 			{
 				$val = $var->{$last_key};
 			}
-			else
+			elseif (is_array($var))
 			{
 				$val = $var[$last_key];
+			}
+			else
+			{
+				$val = null;
 			}
 		}
 		if ($this->callbacks)
