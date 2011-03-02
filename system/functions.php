@@ -2718,6 +2718,11 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			$ajax, $target_div, $ajax_module, $ajax_params);
 	}
 
+	if (!$perpage)
+	{
+		$perpage = $cfg['maxrowsperpage'] ? $cfg['maxrowsperpage'] : 1;
+	}
+
 	$onpage = $entries - $current;
 	if ($onpage > $perpage) $onpage = $perpage;
 
