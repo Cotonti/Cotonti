@@ -2522,6 +2522,7 @@ function cot_tplfile($base, $type = 'module')
 	{
 		// Module template paths
 		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
+		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
 		$scan_prefix[] = "{$cfg['modules_dir']}/$basename/tpl/";
 	}
 
