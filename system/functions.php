@@ -2718,6 +2718,8 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			$ajax, $target_div, $ajax_module, $ajax_params);
 	}
 
+	global $L, $R, $cfg;
+
 	if (!$perpage)
 	{
 		$perpage = $cfg['maxrowsperpage'] ? $cfg['maxrowsperpage'] : 1;
@@ -2733,8 +2735,6 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'entries' => $entries
 		);
 	}
-
-	global $L, $R, $cfg;
 
 	$each_side = 3; // Links each side
 
