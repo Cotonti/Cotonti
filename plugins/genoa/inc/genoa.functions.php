@@ -1216,12 +1216,12 @@ function sed_url_check($url)
 
 function sed_urlencode($str, $translit = false)
 {
-	return cot_urlencode($str, $translit);
+	return $translit ? cot_translit_encode($str) : $str;
 }
 
 function sed_urldecode($str, $translit = false)
 {
-	return cot_urldecode($str, $translit);
+	return $translit ? cot_translit_decode($str) : $str;
 }
 
 function sed_uriredir_store()

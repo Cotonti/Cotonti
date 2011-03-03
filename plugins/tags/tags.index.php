@@ -29,7 +29,7 @@ if ($cfg['plugin']['tags']['pages'] || $cfg['plugin']['tags']['forums'])
 	{
 		$tag_count++;
 		$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
-		$tag_u = cot_urlencode($tag, $cfg['plugin']['tags']['translit']);
+		$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
 		foreach ($tc_styles as $key => $val)
 		{
