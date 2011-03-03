@@ -4755,7 +4755,7 @@ function sed_urlencode($str, $translit = false)
 		// Apply transliteration
 		$str = strtr($str, $sed_translit);
 	}
-	return urlencode($str);
+	return $str;
 }
 
 /**
@@ -4773,7 +4773,7 @@ function sed_urldecode($str, $translit = false)
 		// Apply transliteration
 		$str = strtr($str, $sed_translitb);
 	}
-	return urldecode($str);
+	return $str;
 }
 
 /**
