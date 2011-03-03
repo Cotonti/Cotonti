@@ -30,7 +30,7 @@ $newrate = (!empty($newrate)) ? $newrate : 0;
 $newrate *= 2;
 
 $enabled = cot_ratings_enabled($area, $cat, $code);
-list($auth_read, $auth_write, $auth_admin) = cot_auth('ratings', 'a');
+list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'ratings');
 
 if ($inr == 'send' && $newrate > 0 && $newrate <= 10 && $auth_write && $enabled)
 {
