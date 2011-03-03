@@ -96,6 +96,7 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_COMMENTS_ITEM_DEL_URL' => cot_url('admin', 'm=other&p=comments&a=delete&id='.$row['com_id'].'&'.cot_xg()),
 		'ADMIN_COMMENTS_ITEM_ID' => $row['com_id'],
 		'ADMIN_COMMENTS_CODE' => $row['com_code'],
+		'ADMIN_COMMENTS_AREA' => $row['com_area'],
 		'ADMIN_COMMENTS_AUTHOR' => $row['com_author'],
 		'ADMIN_COMMENTS_DATE' => cot_date('datetime_medium', $row['com_date']),
 		'ADMIN_COMMENTS_DATE_STAMP' => $row['com_date'],

@@ -303,6 +303,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];
 				$usr['newpm'] = $row['user_newpm'];
 				$usr['auth'] = unserialize($row['user_auth']);
+				$usr['adminaccess'] = cot_auth('admin', 'any', 'R');
 				$usr['level'] = $cot_groups[$usr['maingrp']]['level'];
 				$usr['profile'] = $row;
 

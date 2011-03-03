@@ -6,7 +6,8 @@
 			</ul>
 			<table class="cells">
 				<tr>
-					<td class="coltop width20" style="width:20%;">{PHP.L.Code}</td>
+					<td class="coltop width20" style="width:10%;">{PHP.L.adm_area}</td>
+					<td class="coltop width20" style="width:10%;">{PHP.L.Code}</td>
 					<td class="coltop width20" style="width:20%;">{PHP.L.Date} (GMT)</td>
 					<td class="coltop width20" style="width:20%;">{PHP.L.Votes}</td>
 					<td class="coltop width20" style="width:20%;">{PHP.L.Rating}</td>
@@ -14,6 +15,7 @@
 				</tr>
 <!-- BEGIN: RATINGS_ROW -->
 				<tr>
+					<td class="textcenter">{ADMIN_RATINGS_ROW_RATING_AREA}</td>
 					<td class="textcenter">{ADMIN_RATINGS_ROW_RATING_CODE}</td>
 					<td class="textcenter">{ADMIN_RATINGS_ROW_CREATIONDATE}</td>
 					<td class="textcenter">{ADMIN_RATINGS_ROW_VOTES}</td>

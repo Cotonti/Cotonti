@@ -8,7 +8,8 @@
 			<table class="cells">
 				<tr>
 					<td class="coltop width5">#</td>
-					<td class="coltop width10">{PHP.L.Code}</td>
+					<td class="coltop width5">{PHP.L.adm_area}</td>
+					<td class="coltop width5">{PHP.L.Code}</td>
 					<td class="coltop width15">{PHP.L.Author}</td>
 					<td class="coltop width15">{PHP.L.Date}</td>
 					<td class="coltop width35">{PHP.L.comments_comment}</td>
@@ -17,6 +18,7 @@
 <!-- BEGIN: ADMIN_COMMENTS_ROW -->
 				<tr>
 					<td class="textcenter">{ADMIN_COMMENTS_ITEM_ID}</td>
+					<td class="textcenter">{ADMIN_COMMENTS_AREA}</td>
 					<td class="textcenter">{ADMIN_COMMENTS_CODE}</td>
 					<td class="textcenter">{ADMIN_COMMENTS_AUTHOR}</td>
 					<td class="textcenter">{ADMIN_COMMENTS_DATE}</td>
