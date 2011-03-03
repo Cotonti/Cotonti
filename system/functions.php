@@ -3978,32 +3978,30 @@ function cot_url_check($url)
 }
 
 /**
- * Encodes a string for use in URLs
+ * Transliterates a string if transliteration is available
  *
  * @param string $str Source string
- * @param bool $translit Transliterate non-English characters
  * @return string
  */
 
-function cot_urlencode($str, $translit = false)
+function cot_translit_encode($str)
 {
 	global $lang, $cot_translit;
-	if ($translit && $lang != 'en' && is_array($cot_translit))
+	if ($lang != 'en' && is_array($cot_translit))
 	{
 		// Apply transliteration
 		$str = strtr($str, $cot_translit);
 	}
-	return urlencode($str);
+	return $str;
 }
 
 /**
- * Decodes a string that has been previously encoded with cot_urlencode()
+ * Backwards transition for cot_translit_encode
  *
  * @param string $str Encoded string
- * @param bool $translit Transliteration of non-English characters was used
  * @return string
  */
-function cot_urldecode($str, $translit = false)
+function cot_translit_decode($str)
 {
 	global $lang, $cot_translitb;
 	if ($translit && $lang != 'en' && is_array($cot_translitb))
@@ -4011,7 +4009,7 @@ function cot_urldecode($str, $translit = false)
 		// Apply transliteration
 		$str = strtr($str, $cot_translitb);
 	}
-	return urldecode($str);
+	return $str;
 }
 
 /**

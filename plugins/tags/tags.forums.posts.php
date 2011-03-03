@@ -32,7 +32,7 @@ if ($cfg['plugin']['tags']['forums'])
 		foreach ($tags as $tag)
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? htmlspecialchars(cot_tag_title($tag)) : htmlspecialchars($tag);
-			$tag_u = cot_urlencode($tag, $cfg['plugin']['tags']['translit']);
+			$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
 			if ($tag_i > 0) $tc_html .= ', ';
 			$tc_html .= cot_rc('tags_link_tag', array(
