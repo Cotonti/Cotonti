@@ -35,7 +35,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	global $db, $db_ratings, $db_rated, $db_users, $cfg, $usr, $sys, $L, $R;
 
 	// Check permissions
-	list($auth_read, $auth_write, $auth_admin) = cot_auth('ratings', 'a');
+	list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'ratings');
 
 	$enabled = cot_ratings_enabled($ext_name, $cat, $code);
 
