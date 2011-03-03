@@ -80,6 +80,7 @@ foreach ($sql->fetchAll() as $row)
 	$t->assign(array(
 		'ADMIN_RATINGS_ROW_URL_DEL' => cot_url('admin', 'm=ratings&a=delete&id='.$row['rating_code'].'&d='.$d.'&'.cot_xg()),
 		'ADMIN_RATINGS_ROW_RATING_CODE' => $row['rating_code'],
+		'ADMIN_RATINGS_ROW_RATING_AREA' => $row['rating_area'],
 		'ADMIN_RATINGS_ROW_CREATIONDATE' => cot_date('datetime_medium', $row['rating_creationdate']),
 		'ADMIN_RATINGS_ROW_CREATIONDATE_STAMP' => $row['rating_creationdate'],
 		'ADMIN_RATINGS_ROW_VOTES' => $votes,
