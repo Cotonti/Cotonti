@@ -20,34 +20,18 @@ global $db_pm, $db_x;
 $db_pm = (isset($db_pm)) ? $db_pm : $db_x . 'pm';
 
 /**
- * Returns usertags
+ * Send an email in the recipient's language
  *
- * @param string $rlang recipient language
- * @param string $remail recipient email
- * @param string $rusername recipient name
- *
+ * @param string $rlang Recipient language
+ * @param string $remail Recipient email
+ * @param string $rusername Recipient name
  */
 function cot_send_translated_mail($rlang, $remail, $rusername)
 {
-	global $cfg, $usr, $lang;
-
-	$is_global = true;
-	$a = array($rlang, 'en', $cfg['defaultlang'],);
-	foreach ($a as $v)
-	{
-		if ($v == $lang)
-		{
-			break;
-		}
-		$r = "{$cfg['system_dir']}/lang/$v/main.lang.php";
-		if (file_exists($r))
-		{
-			require($r);
-			$is_global = false;
-			break;
-		}
-	}
-	if($is_global)
+	global $cfg, $usr;
+	
+	require_once cot_langfile('pm', 'module', $cfg['defaultlang'], $rlang);
+	if (!$L || !array_key_exists('pm_notify', $L))
 	{
 		global $L;
 	}
