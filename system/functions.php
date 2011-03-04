@@ -2340,16 +2340,21 @@ function cot_incfile($name, $type = 'core', $part = 'functions')
 }
 
 /**
- * Returns a language file path for a plugin or FALSE on error.
+ * Returns a language file path for an extension or core part.
  *
- * @param string $name Plugin name
- * @param bool $type Langfile type: 'plug', 'module' or 'core'
- * @param mixed $default Default (fallback) language code
- * @return bool
+ * @param string $name Part name (area code or plugin name)
+ * @param string $type Part type: 'plug', 'module' or 'core'
+ * @param string $default Default (fallback) language code
+ * @param string $lang Set this to override global $lang
+ * @return string
  */
-function cot_langfile($name, $type = 'plug', $default = 'en')
+function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 {
-	global $cfg, $lang;
+	global $cfg;
+	if (!is_string($lang))
+	{
+		global $lang;
+	}
 	if ($type == 'module')
 	{
 		if (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
