@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=profile.tags
+Hooks=users.profile.tags
 [END_COT_EXT]
 ==================== */
 

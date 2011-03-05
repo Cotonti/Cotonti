@@ -20,7 +20,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users',
 cot_block($usr['auth_write']);
 
 /* === Hook === */
-foreach (cot_getextplugins('profile.first') as $pl)
+foreach (cot_getextplugins('users.profile.first') as $pl)
 {
 	include $pl;
 }
@@ -38,7 +38,7 @@ if($a == 'update')
 	cot_check_xg();
 
 	/* === Hook === */
-	foreach (cot_getextplugins('profile.update.first') as $pl)
+	foreach (cot_getextplugins('users.profile.update.first') as $pl)
 	{
 		include $pl;
 	}
@@ -140,7 +140,7 @@ if($a == 'update')
 		cot_extrafield_movefiles();
 		
 		/* === Hook === */
-		foreach (cot_getextplugins('profile.update.done') as $pl)
+		foreach (cot_getextplugins('users.profile.update.done') as $pl)
 		{
 			include $pl;
 		}
@@ -161,7 +161,7 @@ $out['subtitle'] = cot_title('title_users_profile', $title_params);
 $out['head'] .= $R['code_noindex'];
 
 /* === Hook === */
-foreach (cot_getextplugins('profile.main') as $pl)
+foreach (cot_getextplugins('users.profile.main') as $pl)
 {
 	include $pl;
 }
@@ -228,7 +228,7 @@ foreach($cot_extrafields['users'] as $i => $row)
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('profile.tags') as $pl)
+foreach (cot_getextplugins('users.profile.tags') as $pl)
 {
 	include $pl;
 }
