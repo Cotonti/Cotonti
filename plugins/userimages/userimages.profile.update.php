@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=profile.update.first
+Hooks=users.profile.update.first
 Tags=users.profile.tpl:
 [END_COT_EXT]
 ==================== */
