@@ -22,20 +22,18 @@ function toggleblock(id){
 }
 
 // Inserts text into textarea at cursor position
-function insertText(docObj, formName, fieldName, value) {
+function insertText(docObj, fieldName, value) {
 	var field = null;
 	if(!docObj)
 		docObj = document;
 	// Find the field in the docObj
+	findField:
 	for(var i = 0; i < docObj.forms.length; i++) {
-		if(docObj.forms[i].name == formName) {
-			for(var j = 0; j < docObj.forms[i].elements.length; j++) {
-				if(docObj.forms[i].elements[j].name == fieldName) {
-					field = docObj.forms[i].elements[j];
-					break;
-				}
+		for(var j = 0; j < docObj.forms[i].elements.length; j++) {
+			if(docObj.forms[i].elements[j].name == fieldName) {
+				field = docObj.forms[i].elements[j];
+				break findField;
 			}
-			break;
 		}
 	}
 	if(!field)

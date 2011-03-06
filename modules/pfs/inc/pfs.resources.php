@@ -3,21 +3,21 @@
 /**
  * PFS Icons
  */
-$R['pfs_code_addfile'] = '<a href="'.$cfg['pfs_dir_user'].'\'+gfile+\'" title="\'+gdesc+\'">\'+gfile+\'</a>';
-$R['pfs_code_addpix'] = '<img src="'.$cfg['pfs_dir_user'].'\'+gfile+\'" alt="\'+gdesc+\'" />';
-$R['pfs_code_addthumb'] = '<a href="'.$cfg['pfs_dir_user'].'\'+gfile+\'" title="\'+gdesc+\'"><img src="'.$cfg['thumbs_dir_user'].'\'+gfile+\'" alt="\'+gdesc+\'" /></a>';
+$R['pfs_code_addfile'] = '<a href="{$pfs_dir_user}/\'+gfile+\'" title="\'+gdesc+\'">\'+gfile+\'</a>';
+$R['pfs_code_addpix'] = '<img src="{$pfs_dir_user}/\'+gfile+\'" alt="\'+gdesc+\'" />';
+$R['pfs_code_addthumb'] = '<a href="{$pfs_dir_user}/\'+gfile+\'" title="\'+gdesc+\'"><img src="{$thumbs_dir_user}/\'+gfile+\'" alt="\'+gdesc+\'" /></a>';
 $R['pfs_code_header_javascript'] = '
-function addfile(gfile, c1, c2, gdesc) {
-	insertText(opener.document, \'{$c1}\', \'{$c2}\', \''.$R['pfs_code_addfile'].'\');{$winclose}
+function addfile(gfile, c2, gdesc) {
+	insertText(opener.document, \'{$c2}\', \'{$pfs_code_addfile}\');{$winclose}
 }
-function addthumb(gfile, c1, c2, gdesc) {
-	insertText(opener.document, \'{$c1}\', \'{$c2}\', \''.$R['pfs_code_addthumb'].'\');{$winclose}
+function addthumb(gfile, c2, gdesc) {
+	insertText(opener.document, \'{$c2}\', \'{$pfs_code_addthumb}\');{$winclose}
 }
-function addpix(gfile, c1, c2, gdesc) {
-	insertText(opener.document, \'{$c1}\', \'{$c2}\', \''.$R['pfs_code_addpix'].'\');{$winclose}
+function addpix(gfile, c2, gdesc) {
+	insertText(opener.document, \'{$c2}\', \'{$pfs_code_addpix}\');{$winclose}
 }';
 $R['pfs_link_thumbnail'] = 
-	'<a href="{$pfs_fullfile}" title="{$pfs_desc}"><img src="{$thumbpath}{$pfs_file}" alt="{$pfs_desc}" /></a>';
+	'<a href="{$pfs_fullfile}" title="{$pfs_desc}"><img src="{$thumbpath}/{$pfs_file}" alt="{$pfs_desc}" /></a>';
 
 /**
  * PFS Folder Types
@@ -44,11 +44,11 @@ $R['pfs_icon_pastethumb'] =
  */
 
 $R['pfs_link_addpix'] = 
-	'<a href="javascript:addpix(\'{$pfs_file}\',\'{$c1}\',\'{$c2}\',\'{$pfs_desc}\')">'.$R['pfs_icon_pasteimage'].'</a>';
+	'<a href="javascript:addpix(\'{$pfs_file}\',\'{$c2}\',\'{$pfs_desc}\')">'.$R['pfs_icon_pasteimage'].'</a>';
 $R['pfs_link_addthumb'] = 
-	'<a href="javascript:addthumb(\'{$pfs_file}\',\'{$c1}\',\'{$c2}\',\'{$pfs_desc}\')">'.$R['pfs_icon_pastethumb'].'</a>';
+	'<a href="javascript:addthumb(\'{$pfs_file}\',\'{$c2}\',\'{$pfs_desc}\')">'.$R['pfs_icon_pastethumb'].'</a>';
 $R['pfs_link_addfile'] = 
-	'<a href="javascript:addfile(\'{$pfs_file}\',\'{$c1}\',\'{$c2}\',\'{$pfs_desc}\')">'.$R['pfs_icon_pastefile'].'</a>';
+	'<a href="javascript:addfile(\'{$pfs_file}\',\'{$c2}\',\'{$pfs_desc}\')">'.$R['pfs_icon_pastefile'].'</a>';
 
 
 /**

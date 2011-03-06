@@ -43,9 +43,9 @@ $standalone = FALSE;
 $user_info = cot_userinfo($userid);
 $maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
 
-$cfg['pfs_dir_user'] = cot_pfs_path($userid);
-$cfg['thumbs_dir_user'] = cot_pfs_thumbpath($userid);
-$cfg['rel_dir_user'] = cot_pfs_relpath($userid);
+$pfs_dir_user = cot_pfs_path($userid);
+$thumbs_dir_user = cot_pfs_thumbpath($userid);
+$rel_dir_user = cot_pfs_relpath($userid);
 
 $sql_pfs_max = $db->query("SELECT grp_pfs_maxfile, grp_pfs_maxtotal FROM $db_groups WHERE grp_id=$maingroup");
 if ($row = $sql_pfs_max->fetch())
@@ -155,22 +155,22 @@ if ($a=='upload')
 				$fcheck = cot_file_check($u_tmp_name, $u_name, $f_extension);
 				if($fcheck == 1)
 				{
-					if (!file_exists($cfg['pfs_dir_user'].$u_newname))
+					if (!file_exists($pfs_dir_user.$u_newname))
 					{
 						$is_moved = true;
 
 						if ($cfg['pfs']['pfsuserfolder'])
 						{
-							if (!is_dir($cfg['pfs_dir_user']))
-							{ $is_moved &= mkdir($cfg['pfs_dir_user'], $cfg['dir_perms']); }
-							if (!is_dir($cfg['thumbs_dir_user']))
-							{ $is_moved &= mkdir($cfg['thumbs_dir_user'], $cfg['dir_perms']); }
+							if (!is_dir($pfs_dir_user))
+							{ $is_moved &= mkdir($pfs_dir_user, $cfg['dir_perms']); }
+							if (!is_dir($thumbs_dir_user))
+							{ $is_moved &= mkdir($thumbs_dir_user, $cfg['dir_perms']); }
 						}
 
-						$is_moved &= move_uploaded_file($u_tmp_name, $cfg['pfs_dir_user'].$u_newname);
-						$is_moved &= chmod($cfg['pfs_dir_user'].$u_newname, $cfg['file_perms']);
+						$is_moved &= move_uploaded_file($u_tmp_name, $pfs_dir_user.$u_newname);
+						$is_moved &= chmod($pfs_dir_user.$u_newname, $cfg['file_perms']);
 
-						$u_size = filesize($cfg['pfs_dir_user'].$u_newname);
+						$u_size = filesize($pfs_dir_user.$u_newname);
 
 						if ($is_moved && (int)$u_size > 0)
 						{
@@ -204,19 +204,19 @@ if ($a=='upload')
 							}
 							/* ===== */
 
-							if (in_array($f_extension, $gd_supported) && $cfg['pfs']['th_amode']!='Disabled' && file_exists($cfg['pfs_dir_user'].$u_newname))
+							if (in_array($f_extension, $gd_supported) && $cfg['pfs']['th_amode']!='Disabled' && file_exists($pfs_dir_user.$u_newname))
 							{
-								@unlink($cfg['thumbs_dir_user'].$u_newname);
+								@unlink($thumbs_dir_user.$u_newname);
 								$th_colortext = array(hexdec(substr($cfg['pfs']['th_colortext'],0,2)), hexdec(substr($cfg['pfs']['th_colortext'],2,2)), hexdec(substr($cfg['pfs']['th_colortext'],4,2)));
 								$th_colorbg = array(hexdec(substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
-								cot_imageresize($cfg['pfs_dir_user'] . $u_newname, $cfg['thumbs_dir_user']  . $u_newname,
+								cot_imageresize($pfs_dir_user . $u_newname, $thumbs_dir_user  . $u_newname,
 									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
 									$cfg['pfs']['th_jpeg_quality'], true);
 							}
 						}
 						else
 						{
-							@unlink($cfg['pfs_dir_user'].$u_newname);
+							@unlink($pfs_dir_user.$u_newname);
 							$disp_errors .= $L['pfs_filenotmoved'];
 						}
 					}
@@ -252,14 +252,14 @@ elseif ($a=='delete')
 	{
 		$pfs_file = $row['pfs_file'];
 		$f = $row['pfs_folderid'];
-		$ff = $cfg['pfs_dir_user'].$pfs_file;
+		$ff = $pfs_dir_user.$pfs_file;
 
 		if (file_exists($ff))
 		{
 			@unlink($ff);
-			if (file_exists($cfg['thumbs_dir_user'].$pfs_file))
+			if (file_exists($thumbs_dir_user.$pfs_file))
 			{
-				@unlink($cfg['thumbs_dir_user'].$pfs_file);
+				@unlink($thumbs_dir_user.$pfs_file);
 			}
 		}
 		$sql_pfs_delete = $db->delete($db_pfs, "pfs_id='".(int)$id."'");
@@ -400,7 +400,7 @@ foreach ($sql_pfs->fetchAll() as $row)
 	$pfs_date = $row['pfs_date'];
 	$pfs_extension = $row['pfs_extension'];
 	$pfs_desc = htmlspecialchars($row['pfs_desc']);
-	$pfs_fullfile = $cfg['pfs_dir_user'].$pfs_file;
+	$pfs_fullfile = $pfs_dir_user.$pfs_file;
 	$pfs_filesize = floor($row['pfs_size']/1024);
 	$pfs_icon = $icon[$pfs_extension];
 
@@ -417,11 +417,11 @@ foreach ($sql_pfs->fetchAll() as $row)
 
 	if (in_array($pfs_extension, $gd_supported) && $cfg['pfs']['th_amode']!='Disabled')
 	{
-		if (!file_exists($cfg['thumbs_dir_user'].$pfs_file) && file_exists($cfg['pfs_dir_user'].$pfs_file))
+		if (!file_exists($thumbs_dir_user.$pfs_file) && file_exists($pfs_dir_user.$pfs_file))
 		{
 			$th_colortext = array(hexdec(mb_substr($cfg['pfs']['th_colortext'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],4,2)));
 			$th_colorbg = array(hexdec(mb_substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],4,2)));
-			cot_imageresize($cfg['pfs_dir_user'] . $pfs_file, $cfg['thumbs_dir_user'] . $pfs_file,
+			cot_imageresize($pfs_dir_user . $pfs_file, $thumbs_dir_user . $pfs_file,
 				$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
 				$cfg['pfs']['th_jpeg_quality'], true);
 		}
@@ -572,9 +572,9 @@ if ($standalone)
 {
 	if($c1 == 'newpage' && $c2 == 'newpageurl' || $c1 == 'update' && $c2 == 'rpageurl')
 	{
-		$addthumb = "'".$cfg['thumbs_dir_user']."' + gfile";
+		$addthumb = "'".$thumbs_dir_user."' + gfile";
 		$addpix = 'gfile';
-		$addfile = "'".$cfg['pfs_dir_user']."' + gfile";
+		$addfile = "'".$pfs_dir_user."' + gfile";
 	}
 	else
 	{
@@ -584,9 +584,16 @@ if ($standalone)
 	}
 	$winclose = $cfg['pfs']['pfs_winclose'] ? "\nwindow.close();" : '';
 
+	$pfs_code_addfile = cot_rc('pfs_code_addfile');
+	$pfs_code_addthumb = cot_rc('pfs_code_addthumb');
+	$pfs_code_addpix = cot_rc('pfs_code_addpix');
+
 	cot_sendheaders();
 
+	cot_rc_output();
+
 	$t->assign(array(
+		'PFS_HEAD' => $out['head_head'],
 		'PFS_HEADER_JAVASCRIPT' => cot_rc('pfs_code_header_javascript'),
 		'PFS_C1' => $c1,
 		'PFS_C2' => $c2,

@@ -37,8 +37,8 @@ $standalone = FALSE;
 $user_info = cot_userinfo($userid);
 $maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
 
-$cfg['pfs_dir_user'] = cot_pfs_path($userid);
-$cfg['thumbs_dir_user'] = cot_pfs_thumbpath($userid);
+$pfs_dir_user = cot_pfs_path($userid);
+$thumbs_dir_user = cot_pfs_thumbpath($userid);
 
 reset($cot_extensions);
 foreach ($cot_extensions as $k => $line)
