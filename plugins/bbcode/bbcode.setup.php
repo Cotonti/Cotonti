@@ -4,7 +4,7 @@
 Code=bbcode
 Name=BBcode Parser
 Description=Parses bbcodes and smilies
-Version=0.7.0.1
+Version=0.7.0.2
 Date=2010-sep-24
 Author=Cotonti Team
 Copyright=Copyright (c) Cotonti Team 2008-2011

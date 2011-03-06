@@ -1,15 +1,23 @@
 <!-- BEGIN: MAIN -->
 
-	<!-- BEGIN: STANDALONE_HEADER -->
-	{PFS_STANDALONE_HEADER1}
-
-	<link href="themes/{PHP.theme}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
-	<style type="text/css">
+<!-- BEGIN: STANDALONE_HEADER -->
+<html>
+<head>
+<title>{PHP.cfg.maintitle}</title>
+{PFS_HEAD}
+<script type="text/javascript">
+//<![CDATA[
+{PFS_HEADER_JAVASCRIPT}
+//]]>
+</script>
+<link href="themes/{PHP.theme}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
+<style type="text/css">
 	#content, #left { width: 100%; }
 	#right, .breadcrumb { display: none; }
 	</style>
-	{PFS_STANDALONE_HEADER2}
-	<!-- END: STANDALONE_HEADER -->
+</head>
+<body>
+<!-- END: STANDALONE_HEADER -->
 
 	<div id="content">
     	<div class="padding20 popup whitee">
@@ -174,22 +182,10 @@
 		</fieldset>
 
 		<br class="clear" />
-
 	</div>	
-			
-			
-			
-			
-			
-			
-			
-			
+
             </div>
-			
-			
-			
-			
-			
+
 			<div id="right">
             	<h3 style="color:#000">{PHP.L.hea_youareloggedas} {PHP.usr.name}</h3>
                 <h3><a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.L.View} {PHP.L.Profile}</a></h3>
@@ -210,10 +206,9 @@
         </div>    
     </div>
     <br class="clear" />
-	<!-- BEGIN: STANDALONE_FOOTER -->
-
-	{PFS_STANDALONE_FOOTER}
-
-	<!-- END: STANDALONE_FOOTER -->
+<!-- BEGIN: STANDALONE_FOOTER -->
+</body>
+</html>
+<!-- END: STANDALONE_FOOTER -->
 
 <!-- END: MAIN -->

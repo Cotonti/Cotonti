@@ -8,7 +8,7 @@
 <script type="text/javascript">
 //<![CDATA[
 function add(text) {
-	insertText(document, "{POPUP_C1}", "{POPUP_C2}", text);
+	insertText(document, "{POPUP_C2}", text);
 }
 //]]>
 </script>

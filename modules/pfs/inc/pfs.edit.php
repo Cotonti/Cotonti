@@ -37,8 +37,8 @@ $standalone = FALSE;
 $user_info = cot_userinfo($userid);
 $maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
 
-$cfg['pfs_dir_user'] = cot_pfs_path($userid);
-$cfg['thumbs_dir_user'] = cot_pfs_thumbpath($userid);
+$pfs_dir_user = cot_pfs_path($userid);
+$thumbs_dir_user = cot_pfs_thumbpath($userid);
 
 reset($cot_extensions);
 foreach ($cot_extensions as $k => $line)
@@ -84,7 +84,7 @@ if ($row = $sql_pfs->fetch())
 	$pfs_extension = $row['pfs_extension'];
 	$pfs_desc = htmlspecialchars($row['pfs_desc']);
 	$pfs_size = floor($row['pfs_size']/1024);
-	$ff = $cfg['pfs_dir_user'].$pfs_file;
+	$ff = $pfs_dir_user.$pfs_file;
 }
 else
 { 

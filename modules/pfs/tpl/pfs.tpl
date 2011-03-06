@@ -4,8 +4,7 @@
 <html>
 <head>
 <title>{PHP.cfg.maintitle}</title>
-{PFS_METAS}
-{PFS_JAVASCRIPT}
+{PFS_HEAD}
 <script type="text/javascript">
 //<![CDATA[
 {PFS_HEADER_JAVASCRIPT}

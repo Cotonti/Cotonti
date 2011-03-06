@@ -475,7 +475,7 @@ DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'sig_m
 DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'sig_maxx';
 DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'sig_maxy';
 
-/* r1572 Remove SMTP email settings and leave it up to plugins and remove index module from registry*/
+/* r1572 Remove SMTP email settings and leave it up to plugins */
 DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'email';
 
 /* r1592 Ratings tables update */

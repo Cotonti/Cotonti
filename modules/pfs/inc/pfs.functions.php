@@ -78,8 +78,8 @@ function cot_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
 	}
 	if ($cfg['pfs']['pfsuserfolder'])
 	{
-		cot_pfs_mkdir($cfg['pfs_dir_user'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
-		cot_pfs_mkdir($cfg['thumbs_dir_user'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
+		cot_pfs_mkdir($pfs_dir_user.$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
+		cot_pfs_mkdir($thumbs_dir_user.$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
 	}
 
 	$db->insert($db_pfs_folders, array(
@@ -114,13 +114,13 @@ function cot_pfs_deletefile($userid, $id)
 	{
 		$fpath = cot_pfs_filepath($id);
 
-		if (file_exists($cfg['thumbs_dir_user'].$fpath))
+		if (file_exists($thumbs_dir_user.$fpath))
 		{
-			@unlink($cfg['thumbs_dir_user'].$fpath);
+			@unlink($thumbs_dir_user.$fpath);
 		}
-		if (file_exists($cfg['pfs_dir_user'].$fpath))
+		if (file_exists($pfs_dir_user.$fpath))
 		{
-			@unlink($cfg['pfs_dir_user'].$fpath);
+			@unlink($pfs_dir_user.$fpath);
 		}
 		else
 		{
@@ -166,8 +166,8 @@ function cot_pfs_deletefolder($userid, $folderid)
 		{
 			if($cfg['pfs']['pfsuserfolder'])
 			{
-				@rmdir($cfg['pfs_dir_user'].$row['pff_path']);
-				@rmdir($cfg['thumbs_dir_user'].$row['pff_path']);
+				@rmdir($pfs_dir_user.$row['pff_path']);
+				@rmdir($thumbs_dir_user.$row['pff_path']);
 			}
 			$db->delete($db_pfs_folders, "pff_id='".(int)$row['pff_id']."'");
 		}
@@ -208,14 +208,14 @@ function cot_pfs_deleteall($userid)
 	{
 		$pfs_file = $row['pfs_file'];
 		$f = $row['pfs_folderid'];
-		$ff = $cfg['pfs_dir_user'].$pfs_file;
+		$ff = $pfs_dir_user.$pfs_file;
 
 		if (file_exists($ff))
 		{
 			@unlink($ff);
-			if(file_exists($cfg['thumbs_dir_user'].$pfs_file))
+			if(file_exists($thumbs_dir_user.$pfs_file))
 			{
-				@unlink($cfg['thumbs_dir_user'].$pfs_file);
+				@unlink($thumbs_dir_user.$pfs_file);
 			}
 		}
 	}
@@ -225,8 +225,8 @@ function cot_pfs_deleteall($userid)
 
 	if ($cfg['pfs']['pfsuserfolder'] && $userid>0)
 	{
-		@rmdir($cfg['pfs_dir_user']);
-		@rmdir($cfg['thumbs_dir_user']);
+		@rmdir($pfs_dir_user);
+		@rmdir($thumbs_dir_user);
 	}
 
 	return($num);
@@ -323,9 +323,9 @@ function cot_pfs_mkdir($path, $feedback=FALSE)
 	{
 		$path = substr($path, 2);
 	}
-	if(!$feedback && !file_exists($cfg['pfs_dir_user']))
+	if(!$feedback && !file_exists($pfs_dir_user))
 	{
-		cot_pfs_mkdir($cfg['pfs_dir_user'], TRUE);
+		cot_pfs_mkdir($pfs_dir_user, TRUE);
 	}
 	if(@mkdir($path, $cfg['dir_perms']))
 	{
@@ -470,26 +470,26 @@ function cot_pfs_upload($userid, $folderid='')
 				$fcheck = cot_file_check($u_tmp_name, $u_name, $f_extension);
 				if($fcheck == 1)
 				{
-					if (!file_exists($cfg['pfs_dir_user'].$npath.$u_newname))
+					if (!file_exists($pfs_dir_user.$npath.$u_newname))
 					{
 						$is_moved = true;
 
 						if ($cfg['pfs']['pfsuserfolder'])
 						{
-							if (!is_dir($cfg['pfs_dir_user']))
+							if (!is_dir($pfs_dir_user))
 							{
-								$is_moved &= mkdir($cfg['pfs_dir_user'], $cfg['dir_perms']);
+								$is_moved &= mkdir($pfs_dir_user, $cfg['dir_perms']);
 							}
-							if (!is_dir($cfg['thumbs_dir_user']))
+							if (!is_dir($thumbs_dir_user))
 							{
-								$is_moved &= mkdir($cfg['thumbs_dir_user'], $cfg['dir_perms']);
+								$is_moved &= mkdir($thumbs_dir_user, $cfg['dir_perms']);
 							}
 						}
 
-						$is_moved &= move_uploaded_file($u_tmp_name, $cfg['pfs_dir_user'].$npath.$u_newname);
-						$is_moved &= chmod($cfg['pfs_dir_user'].$npath.$u_newname, $cfg['file_perms']);
+						$is_moved &= move_uploaded_file($u_tmp_name, $pfs_dir_user.$npath.$u_newname);
+						$is_moved &= chmod($pfs_dir_user.$npath.$u_newname, $cfg['file_perms']);
 
-						$u_size = filesize($cfg['pfs_dir_user'].$npath.$u_newname);
+						$u_size = filesize($pfs_dir_user.$npath.$u_newname);
 
 						if ($is_moved && (int)$u_size > 0)
 						{
@@ -523,14 +523,14 @@ function cot_pfs_upload($userid, $folderid='')
 							/* ===== */
 
 							if (in_array($f_extension, $gd_supported) && $cfg['pfs']['th_amode']!='Disabled'
-								&& file_exists($cfg['pfs_dir_user'].$u_newname))
+								&& file_exists($pfs_dir_user.$u_newname))
 							{
-								@unlink($cfg['thumbs_dir_user'].$npath.$u_newname);
+								@unlink($thumbs_dir_user.$npath.$u_newname);
 								$th_colortext = array(hexdec(substr($cfg['pfs']['th_colortext'],0,2)),
 									hexdec(substr($cfg['pfs']['th_colortext'],2,2)), hexdec(substr($cfg['pfs']['th_colortext'],4,2)));
 								$th_colorbg = array(hexdec(substr($cfg['pfs']['th_colorbg'],0,2)),
 									hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
-								cot_imageresize($cfg['pfs_dir_user'] . $npath . $u_newname,
+								cot_imageresize($pfs_dir_user . $npath . $u_newname,
 									$cfg['pfs']['thumbs_dir_user'] . $npath . $u_newname,
 									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
 									$cfg['pfs']['th_jpeg_quality'], true);
@@ -538,7 +538,7 @@ function cot_pfs_upload($userid, $folderid='')
 						}
 						else
 						{
-							@unlink($cfg['pfs_dir_user'].$npath.$u_newname);
+							@unlink($pfs_dir_user.$npath.$u_newname);
 							$disp_errors .= $L['pfs_filenotmoved'];
 						}
 					}

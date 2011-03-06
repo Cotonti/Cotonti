@@ -3909,11 +3909,13 @@ HTM;
 function cot_parse_str($str)
 {
 	$res = array();
-	$tmp = explode('&', strtr($str, '=', '&'));
-	$cnt = count($tmp);
-	for ($i = 0; $i < $cnt; $i += 2)
+	foreach (explode('&', $str) as $item)
 	{
-		$res[$tmp[$i]] = $tmp[$i+1];
+		if (!empty($item))
+		{
+			list($key, $val) = explode('=', $item);
+			$res[$key] = $val;
+		}
 	}
 	return $res;
 }
