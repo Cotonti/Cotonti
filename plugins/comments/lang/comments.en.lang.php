@@ -26,6 +26,7 @@ $L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by 
 $L['cfg_maxcommentsperpage'] = array('Max. comments on page', ' ');
 $L['cfg_commentsize'] = array('Max. size of comment, bytes', '0 for unlimited size');
 $L['cfg_countcomments'] = array('Count comments', 'Display number of comments near the icon');
+$L['cfg_order'] = array('Sorting order', 'Chronological or most recent first');
 $L['cfg_parsebbcodecom'] = array('Parse BBcodes in comments', '');
 $L['cfg_parsesmiliescom'] = array('Parse smilies in comments', '');
 

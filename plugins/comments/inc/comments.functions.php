@@ -131,9 +131,11 @@ function cot_comments_display($ext_name, $code, $cat = '')
 		$t->parse('COMMENTS.COMMENTS_CLOSED');
 	}
 
+	$order = $cfg['plugin']['comments']['order'] == 'Chronological' ? 'ASC' : 'DESC';
+
 	$sql = $db->query("SELECT c.*, u.*
 		FROM $db_com AS c LEFT JOIN $db_users AS u ON u.user_id = c.com_authorid
-		WHERE com_area = ? AND com_code = ? ORDER BY com_id ASC LIMIT ?, ?",
+		WHERE com_area = ? AND com_code = ? ORDER BY com_id $order LIMIT ?, ?",
 		array($ext_name, $code, (int) $d, (int) $cfg['plugin']['comments']['maxcommentsperpage']));
 	if ($sql->rowCount() > 0 && $enabled)
 	{
