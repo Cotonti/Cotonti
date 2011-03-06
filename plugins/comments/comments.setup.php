@@ -4,7 +4,7 @@
 Code=comments
 Name=Comments system
 Description=Comments system for Cotonti
-Version=0.9.0
+Version=0.9.0.1
 Date=2010-jan-03
 Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2011
@@ -28,6 +28,7 @@ parsebbcodecom=10:radio:0,1:1:Parse BBcode in comments
 parsesmiliescom=11:radio:0,1:1:Parse smilies in comments
 markup=12:radio::1:Enable markup in comments
 minsize=13:string::2:Min. comment size
+order=14:select:Chronological,Recent:Recent:Comment sorting order
 [END_COT_EXT_CONFIG]
 ==================== */
 

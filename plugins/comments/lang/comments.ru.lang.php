@@ -24,6 +24,7 @@ $L['cfg_markitup'] = array('Использовать markitup');
 $L['cfg_markup'] = array('Включить разметку в комментариях');
 $L['cfg_maxcommentsperpage'] = array('Макс. количество комментариев на странице', ' ');
 $L['cfg_minsize'] = array('Мин. длина комментария');
+$L['cfg_order'] = array('Порядок сортировки', 'Хронологический или самые последние вверху');
 $L['cfg_parsebbcodecom'] = array('Парсинг BBCode в комментариях', ' ');
 $L['cfg_parsesmiliescom'] = array('Парсинг смайликов в комментариях', ' ');
 $L['cfg_rss_commentmaxsymbols'] = array('Макс. количество символов для комментариев', 'По умолчанию отключено');
