@@ -491,10 +491,15 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
  * @param int $max_items Max items per page
  * @return array Array containing 2 items: page number and database offset
  */
-function cot_import_pagenav($var_name, $max_items)
+function cot_import_pagenav($var_name, $max_items = 0)
 {
 	global $cfg;
 
+	if($max_items <= 0)
+	{
+		$max_items = $cfg['maxrowsperpage'];
+	}	
+	
 	if($max_items <= 0)
 	{
 		throw new Exception('Invalid $max_items ('.$max_items.') for pagination.');
