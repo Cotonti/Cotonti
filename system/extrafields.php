@@ -31,6 +31,7 @@ function cot_build_extrafields($name, $extrafield, $data)
 		case 'input':
 		case 'inputint':
 		case 'currency':
+		case 'double':	
 			$R["input_text_{$rc_name}"] = (!empty($R["input_text_{$rc_name}"])) ? $R["input_text_{$rc_name}"] : $extrafield['field_html'];
 			$result = cot_inputbox('text', $name, htmlspecialchars($data));
 			break;
@@ -124,6 +125,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			$import = ((int)$import > 0) ? (int)$import : 0;
 			break;
 		case 'currency':
+		case 'double':	
 			$import = cot_import($inputname, $source, 'TXT');
 			$import = (doubleval($import) != 0) ? doubleval($import) : 0;
 			break;
@@ -227,17 +229,6 @@ function cot_build_extrafields_data($name, $extrafield, $value)
 	$parse_type = array('HTML', 'BBCode', 'Text');
 	switch ($extrafield['field_type'])
 	{
-		case 'input':
-		case 'inputint':
-		case 'currency':
-		case 'textarea':
-			if ($extrafield['field_parse'] == 'Text')
-			{
-				$value = cot_parse($value, true);
-			}
-			return $value;
-			break;
-
 		case 'select':
 		case 'radio':
 			$value = htmlspecialchars($value);
@@ -245,6 +236,7 @@ function cot_build_extrafields_data($name, $extrafield, $value)
 			break;
 
 		case 'checkbox':
+			$value = ($value) ? 1 : 0;
 			return $value;
 			break;
 
@@ -253,14 +245,26 @@ function cot_build_extrafields_data($name, $extrafield, $value)
 			break;
 		
 		case 'file':
+			$value = (is_null($value)) ? '' : $value;
 			return $value;
 			break;	
 		
 		case 'filesize':
+			$value = (is_null($value)) ? '' : $value;
 			return $value;
 			break;
-		
+
+		case 'input':
+		case 'inputint':
+		case 'currency':
+		case 'double':	
+		case 'textarea':
 		default:
+			$value = (is_null($value)) ? '' : $value;
+			if ($extrafield['field_parse'] == 'Text')
+			{
+				$value = cot_parse($value, true);
+			}
 			return $value;
 			break;
 	}
@@ -283,6 +287,7 @@ function cot_default_html_construction($type)
 		case 'input':
 		case 'inputint':
 		case 'currency':
+		case 'double':	
 			$html = $R['input_text'];
 			break;
 
@@ -378,6 +383,8 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 			break;
 		case 'currency': $sqltype = "DOUBLE(13,2) NOT NULL default '0'";
 			break;
+		case 'double': $sqltype = "DOUBLE NOT NULL default '0'";
+			break;		
 		case 'textarea': $sqltype = 'TEXT';
 			break;
 		case 'select': $sqltype = "VARCHAR(255)";
@@ -465,6 +472,8 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 			break;
 		case 'currency': $sqltype = "DOUBLE(13,2) NOT NULL default '0'";
 			break;
+		case 'double': $sqltype = "DOUBLE NOT NULL default '0'";
+			break;		
 		case 'textarea': $sqltype = 'TEXT';
 			break;
 		case 'select': $sqltype = "VARCHAR(255)";
