@@ -143,7 +143,7 @@ else
 $totalpages = ceil($totallines / $cfg['page']['maxrowsperpage']);
 $currentpage= ceil($d / $cfg['page']['maxrowsperpage']) + 1;
 
-$pagenav = cot_pagenav('list', $list_url_path + array('dc' => $dc), $d, $totallines, $cfg['page']['maxrowsperpage']);
+$pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dc), $d, $totallines, $cfg['page']['maxrowsperpage']);
 
 $title_params = array(
 	'TITLE' => $cat['title']
@@ -297,7 +297,7 @@ foreach ($subcat as $x)
 	$t->parse('MAIN.LIST_ROWCAT');	
 }
 
-$pagenav = cot_pagenav('list', $list_url_path + array('d' => $d), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
+$pagenav = cot_pagenav('page', $list_url_path + array('d' => $d), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
 
 $t->assign(array(
 	'LISTCAT_PAGEPREV' => $pagenav['prev'],
