@@ -13,7 +13,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 $s = cot_import('s','G','TXT'); // Section CODE
 $q = cot_import('q','G','INT'); // topic id
-list($pg, $d) = cot_import_pagenav('d', $cfg['forums']['maxtopicsperpage']);  // Page
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['forums']['maxtopicsperpage']);  // Page
 $o = cot_import('ord','G','ALP',16); //order
 $w = cot_import('w','G','ALP',4); // way
 

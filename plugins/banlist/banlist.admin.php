@@ -26,7 +26,7 @@ require_once cot_langfile('banlist', 'plug');
 $db_banlist = (isset($db_banlist)) ? $db_banlist : $db_x . 'banlist';
 $adminhelp = $L['banlist_help'];
 
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('banlist.admin.first') as $pl)
@@ -103,7 +103,7 @@ foreach ($sql->fetchAll() as $row)
 {
 	$tt->assign(array(
 		'ADMIN_BANLIST_ROW_ID' => $row['banlist_id'],
-		'ADMIN_BANLIST_ROW_URL' => cot_url('admin', 'm=other&p=banlist&a=update&id='.$row['banlist_id'].'&d='.$d),
+		'ADMIN_BANLIST_ROW_URL' => cot_url('admin', 'm=other&p=banlist&a=update&id='.$row['banlist_id'].'&d='.$durl),
 		'ADMIN_BANLIST_ROW_DELURL' => cot_url('admin', 'm=other&p=banlist&a=delete&id='.$row['banlist_id'].'&'.cot_xg()),
 		'ADMIN_BANLIST_ROW_EXPIRE' => ($row['banlist_expire'] > 0) ? cot_date('datetime_medium', $row['banlist_expire']) : $L['banlist_neverexpire'],
 		'ADMIN_BANLIST_ROW_EXPIRE_STAMP' => ($row['banlist_expire'] > 0) ? $row['banlist_expire'] : '',

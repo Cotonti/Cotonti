@@ -30,7 +30,7 @@ $news_extp = cot_getextplugins('news.loop');
 $news_tags_extp = cot_getextplugins('news.tags');
 /* ===== */
 
-list($pg, $d) = cot_import_pagenav('d', $cfg['plugin']['news']['maxpages']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['plugin']['news']['maxpages']);
 $c = cot_import('c', 'G', 'TXT');
 $c = (!isset($structure['page'][$c])) ? '' : $c;
 

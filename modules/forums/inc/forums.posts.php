@@ -15,7 +15,7 @@ $id = cot_import('id', 'G', 'INT'); // post id
 $s = cot_import('s', 'G', 'TXT'); // section cat
 $q = cot_import('q', 'G', 'INT'); // topic id
 $p = cot_import('p', 'G', 'INT'); // post id
-list($pg, $d) = cot_import_pagenav('d', $cfg['forums']['maxpostsperpage']); // page
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['forums']['maxpostsperpage']); // page
 $quote = cot_import('quote', 'G', 'INT');
 
 require_once cot_langfile('countries', 'core');
@@ -478,7 +478,7 @@ $t->assign(array(
 	'FORUMS_POSTS_PAGES' => $pagenav['main'],
 	'FORUMS_POSTS_PAGEPREV' => $pagenav['prev'],
 	'FORUMS_POSTS_PAGENEXT' => $pagenav['next'],
-	'FORUMS_POSTS_CURRENTPAGE' => $d / $cfg['forums']['maxpostsperpage'],
+	'FORUMS_POSTS_CURRENTPAGE' => $pagenav['current'],
 	'FORUMS_POSTS_TOTALPAGES' => ceil($totalposts / $cfg['forums']['maxpostsperpage']),
 	'FORUMS_POSTS_JUMPBOX' => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"'),
 ));

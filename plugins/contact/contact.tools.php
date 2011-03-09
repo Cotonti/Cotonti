@@ -21,7 +21,7 @@ require_once cot_incfile('contact', 'plug');
 
 $a = cot_import('a','G','TXT');
 $id = (int) cot_import('id','G','INT');
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 $rtext = cot_import('rtext','P','TXT');
 
 if ($a == 'del')

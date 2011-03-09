@@ -25,7 +25,7 @@ $db_referers = (isset($db_referers)) ? $db_referers : $db_x . 'referers';
 require_once cot_langfile('referers', 'plug');
 $adminhelp = $L['adm_help_referers'];
 
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook  === */
 foreach (cot_getextplugins('referers.admin.first') as $pl)

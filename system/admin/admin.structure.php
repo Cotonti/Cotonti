@@ -19,7 +19,7 @@ require_once cot_incfile('auth');
 
 $id = cot_import('id', 'G', 'INT');
 $c = cot_import('c', 'G', 'TXT');
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 $mode = cot_import('mode', 'G', 'ALP');
 
 $t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
@@ -110,7 +110,7 @@ if ($a == 'update')
 	}
 
 	cot_message('Updated');
-	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$d, '', true));
+	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 }
 elseif ($a == 'add')
 {
@@ -160,7 +160,7 @@ elseif ($a == 'add')
 	{
 		cot_message('Error');
 	}
-	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$d, '', true));
+	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 }
 elseif ($a == 'delete')
 {
@@ -183,7 +183,7 @@ elseif ($a == 'delete')
 		$cache->clear();
 	}
 	cot_message('Deleted');
-	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$d, '', true));
+	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 }
 elseif ($a == 'resyncall')
 {
@@ -203,7 +203,7 @@ elseif ($a == 'resyncall')
 	}
 	$res ? cot_message('Resynced') : cot_message("Error: function $area_sync doesn't exist."); // TODO i18n
 	($cache && $cfg['cache_'.$n]) && $cache->page->clear($n);
-	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$d, '', true));
+	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 }
 
 if($id > 0)
@@ -228,8 +228,8 @@ else
 }
 
 $t->assign(array(
-	'ADMIN_STRUCTURE_UPDATE_FORM_URL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=update&d='.$d),
-	'ADMIN_PAGE_STRUCTURE_RESYNCALL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=resyncall&'.cot_xg().'&d='.$d),
+	'ADMIN_STRUCTURE_UPDATE_FORM_URL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=update&d='.$durl),
+	'ADMIN_PAGE_STRUCTURE_RESYNCALL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=resyncall&'.cot_xg().'&d='.$durl),
 	'ADMIN_STRUCTURE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n=structure')
 ));
 
@@ -279,7 +279,7 @@ foreach ($sql->fetchAll() as $row)
 	$cat_selectbox = cot_selectbox($row['structure_tpl'], 'rstructuretplforced['.$structure_id.']', array_keys($cat_path), array_values($cat_path), false);
 
 	$t->assign(array(
-		'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$d.'&'.cot_xg()),
+		'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$durl.'&'.cot_xg()),
 		'ADMIN_STRUCTURE_ID' => $structure_id,
 		'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $structure_code, 'size="10" maxlength="255"'),
 		'ADMIN_STRUCTURE_SPACEIMG' => $pathspaceimg,

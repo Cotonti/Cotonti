@@ -30,7 +30,7 @@ $adminhelp = $L['adm_help_page'];
 
 $id = cot_import('id', 'G', 'INT');
 
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 $sorttype = cot_import('sorttype', 'R', 'ALP');
 $sorttype = empty($sorttype) ? 'id' : $sorttype;
@@ -392,8 +392,8 @@ foreach ($sql_page->fetchAll() as $row)
 		'ADMIN_PAGE_TYPE' => $page_type,
 		'ADMIN_PAGE_OWNER' => cot_build_user($row['page_ownerid'], htmlspecialchars($row['user_name'])),
 		'ADMIN_PAGE_FILE_BOOL' => $row['page_file'],
-		'ADMIN_PAGE_URL_FOR_VALIDATED' => cot_url('admin', 'm=page&a=validate&id='.$row['page_id'].'&d='.$d.'&'.cot_xg()),
-		'ADMIN_PAGE_URL_FOR_DELETED' => cot_url('admin', 'm=page&a=delete&id='.$row['page_id'].'&d='.$d.'&'.cot_xg()),
+		'ADMIN_PAGE_URL_FOR_VALIDATED' => cot_url('admin', 'm=page&a=validate&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()),
+		'ADMIN_PAGE_URL_FOR_DELETED' => cot_url('admin', 'm=page&a=delete&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()),
 		'ADMIN_PAGE_URL_FOR_EDIT' => cot_url('page', 'm=edit&id='.$row['page_id']),
 		'ADMIN_PAGE_ODDEVEN' => cot_build_oddeven($ii),
 		'ADMIN_PAGE_CAT_COUNT' => $sub_count
@@ -422,7 +422,7 @@ $t->assign(array(
 	'ADMIN_PAGE_URL_ADD' => cot_url('page', 'm=add'),
 	'ADMIN_PAGE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n=page'),
 	'ADMIN_PAGE_URL_STRUCTURE' => cot_url('admin', 'm=structure&n=page'),
-	'ADMIN_PAGE_FORM_URL' => cot_url('admin', 'm=page&a=update_checked&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter.'&d='.$d),
+	'ADMIN_PAGE_FORM_URL' => cot_url('admin', 'm=page&a=update_checked&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter.'&d='.$durl),
 	'ADMIN_PAGE_ORDER' => cot_selectbox($sorttype, 'sorttype', array_keys($sort_type), array_values($sort_type), false),
 	'ADMIN_PAGE_WAY' => cot_selectbox($sortway, 'sortway', array_keys($sort_way), array_values($sort_way), false),
 	'ADMIN_PAGE_FILTER' => cot_selectbox($filter, 'filter', array_keys($filter_type), array_values($filter_type), false),

@@ -31,7 +31,7 @@ require_once cot_langfile('trashcan', 'plug');
 $adminhelp = $L['adm_help_trashcan'];
 
 $id = cot_import('id', 'G', 'INT');
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 $info = ($a == 'info') ? 1 : 0;
 
 /* === Hook === */
@@ -145,8 +145,8 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_TRASHCAN_TYPESTR' => $typestr,
 		'ADMIN_TRASHCAN_TITLE' => htmlspecialchars($row['tr_title']),
 		'ADMIN_TRASHCAN_TRASHEDBY' => ($row['tr_trashedby'] == 0) ? $L['System'] : cot_build_user($row['tr_trashedby'], htmlspecialchars($row['user_name'])),
-		'ADMIN_TRASHCAN_ROW_WIPE_URL' => cot_url('admin', 'm=other&p=trashcan&a=wipe&id='.$row['tr_id'].'&d='.$d.'&'.cot_xg()),
-		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => cot_url('admin', 'm=other&p=trashcan&a=restore&id='.$row['tr_id'].'&d='.$d.'&'.cot_xg()),
+		'ADMIN_TRASHCAN_ROW_WIPE_URL' => cot_url('admin', 'm=other&p=trashcan&a=wipe&id='.$row['tr_id'].'&d='.$durl.'&'.cot_xg()),
+		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => cot_url('admin', 'm=other&p=trashcan&a=restore&id='.$row['tr_id'].'&d='.$durl.'&'.cot_xg()),
 		'ADMIN_TRASHCAN_ROW_INFO_URL' => cot_url('admin', 'm=other&p=trashcan&a=info&id='.$row['tr_id']),
 		'ADMIN_TRASHCAN_ROW_RESTORE_ENABLED' => $enabled,
 	));

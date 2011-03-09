@@ -21,7 +21,7 @@ $t = new XTemplate(cot_tplfile(array('admin', 'extrafields', $n), 'core'));
 $a = cot_import('a', 'G', 'ALP');
 $id = (int) cot_import('id', 'G', 'INT');
 $name = cot_import('name', 'G', 'ALP');
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 $parse_type = array('HTML', 'Text');
 
@@ -202,7 +202,7 @@ foreach ($res->fetchAll() as $row)
 }
 
 $t->assign(array(
-	'ADMIN_EXTRAFIELDS_URL_FORM_EDIT' => cot_url('admin', $extra_path.'&a=upd&d='.$d),
+	'ADMIN_EXTRAFIELDS_URL_FORM_EDIT' => cot_url('admin', $extra_path.'&a=upd&d='.$durl),
 	'ADMIN_EXTRAFIELDS_NAME' => cot_inputbox('text', 'field_name', ''),
 	'ADMIN_EXTRAFIELDS_DESCRIPTION' => cot_textarea('field_description', '', 1, 30),
 	'ADMIN_EXTRAFIELDS_SELECT' => cot_selectbox('input', 'field_type', $field_types, $field_types, false),
@@ -211,7 +211,7 @@ $t->assign(array(
 	'ADMIN_EXTRAFIELDS_DEFAULT' => cot_textarea('field_default', '', 1, 60),
 	'ADMIN_EXTRAFIELDS_REQUIRED' => cot_checkbox(0, 'field_required'),
 	'ADMIN_EXTRAFIELDS_PARSE' => cot_selectbox('HTML', 'field_parse', $parse_type, $parse_type, false),
-	'ADMIN_EXTRAFIELDS_URL_FORM_ADD' => cot_url('admin', $extra_path.'&a=add&d='.$d),
+	'ADMIN_EXTRAFIELDS_URL_FORM_ADD' => cot_url('admin', $extra_path.'&a=add&d='.$durl),
 	'ADMIN_EXTRAFIELDS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_EXTRAFIELDS_PAGNAV' => $pagenav['main'],
 	'ADMIN_EXTRAFIELDS_PAGINATION_NEXT' => $pagenav['next'],
