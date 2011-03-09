@@ -490,7 +490,7 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
  *
  * @param string $var_name URL parameter name, e.g. 'pg' or 'd'
  * @param int $max_items Max items per page
- * @return array Array containing 2 items: page number and database offset
+ * @return array Array containing 3 items: page number, database offset and argument for URLs
  */
 function cot_import_pagenav($var_name, $max_items = 0)
 {
@@ -514,6 +514,7 @@ function cot_import_pagenav($var_name, $max_items = 0)
 			$page = 1;
 		}
 		$offset = ($page - 1) * $max_items;
+		$urlnum = $page;
 	}
 	else
 	{
@@ -523,9 +524,10 @@ function cot_import_pagenav($var_name, $max_items = 0)
 			$offset = 0;
 		}
 		$page = floor($offset / $max_items) + 1;
+		$urlnum = $offset;
 	}
 
-	return array($page, $offset);
+	return array($page, $offset, $urlnum);
 }
 
 /**
@@ -2709,7 +2711,7 @@ function cot_date2strftime($format) {
  *
  * @param string $module Site area or script name
  * @param mixed $params URL parameters as array or parameter string
- * @param int $current Current page number
+ * @param int $current Current page offset
  * @param int $entries Total rows
  * @param int $perpage Rows per page
  * @param string $characters It is symbol for parametre which transfer pagination
@@ -2773,19 +2775,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	$rel = '';
 
 	$totalpages = ceil($entries / $perpage);
-//	if ($cfg['easypagenav'])
-//	{
-//		$currentpage = $current;
-//		if ($currentpage <= 0)
-//		{
-//			$currentpage = 1;
-//		}
-//		$current = ($currentpage - 1) * $perpage;
-//	}
-//	else
-//	{
-		$currentpage = floor($current / $perpage) + 1;
-//	}
+	$currentpage = floor($current / $perpage) + 1;
 	$cur_left = $currentpage - $each_side;
 	if ($cur_left < 1) $cur_left = 1;
 	$cur_right = $currentpage + $each_side;

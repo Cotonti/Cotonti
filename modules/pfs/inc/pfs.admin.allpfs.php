@@ -18,7 +18,7 @@ $adminpath[] = array(cot_url('admin', 'm=pfs'), $L['PFS']);
 $adminpath[] = array(cot_url('admin', 'm=pfs&s=allpfs'), $L['adm_allpfs']);
 $adminhelp = $L['adm_help_allpfs'];
 
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.pfs.allpfs.first') as $pl)

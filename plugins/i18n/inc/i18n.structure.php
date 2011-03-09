@@ -13,7 +13,7 @@ defined('COT_CODE') or die('Wrong URL.');
 
 cot_block($i18n_admin);
 
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('i18n.structure.first') as $pl)
@@ -171,7 +171,7 @@ else
 		$cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 	$t->assign(array(
-		'I18N_ACTION' => cot_url('plug', 'e=i18n&m=structure&l='.$i18n_locale.'&a=update&d='.$d),
+		'I18N_ACTION' => cot_url('plug', 'e=i18n&m=structure&l='.$i18n_locale.'&a=update&d='.$durl),
 		'I18N_ORIGINAL_LANG' => $i18n_locales[$cfg['defaultlang']],
 		'I18N_TARGET_LANG' => $i18n_locales[$i18n_locale],
 		'I18N_PAGINATION_PREV' => $pagenav['prev'],

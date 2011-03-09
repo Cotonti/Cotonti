@@ -30,7 +30,7 @@ $log_groups = array(
 	'plg' => $L['Plugins']
 );
 
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.log.first') as $pl)

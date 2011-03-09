@@ -18,7 +18,7 @@ Hooks=standalone
 defined('COT_CODE') or die("Wrong URL.");
 
 $days = cot_import('days', 'G', 'INT');
-list($pg, $d) = cot_import_pagenav('d', $cfg['plugin']['recentitems']['itemsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['plugin']['recentitems']['itemsperpage']);
 $mode = cot_import('mode', 'G', 'TXT');
 
 if ($days == 0)

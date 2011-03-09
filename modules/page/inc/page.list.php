@@ -21,8 +21,8 @@ $c = cot_import('c', 'G', 'TXT'); // cat code
 $o = cot_import('ord', 'G', 'ALP', 16); // sort field name without 'page_'
 $p = cot_import('p', 'G', 'ALP', 16); // sort way (asc, desc)
 $maxrowsperpage = ($cfg['page'][$c]['maxrowsperpage']) ? $cfg['page'][$c]['maxrowsperpage'] : $cfg['page']['__default']['maxrowsperpage'];
-list($pg, $d) = cot_import_pagenav('d', $maxrowsperpage); //page number for pages list
-list($pgc, $dc) = cot_import_pagenav('dc', $maxrowsperpage);// page number for cats list
+list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage); //page number for pages list
+list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', $maxrowsperpage);// page number for cats list
 
 if ($c == 'all' || $c == 'system')
 {
@@ -143,7 +143,7 @@ else
 $totalpages = ceil($totallines / $cfg['page']['maxrowsperpage']);
 $currentpage= ceil($d / $cfg['page']['maxrowsperpage']) + 1;
 
-$pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dc), $d, $totallines, $cfg['page']['maxrowsperpage']);
+$pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $totallines, $cfg['page']['maxrowsperpage']);
 
 $title_params = array(
 	'TITLE' => $cat['title']
@@ -297,7 +297,7 @@ foreach ($subcat as $x)
 	$t->parse('MAIN.LIST_ROWCAT');	
 }
 
-$pagenav = cot_pagenav('page', $list_url_path + array('d' => $d), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
+$pagenav = cot_pagenav('page', $list_url_path + array('d' => $durl), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
 
 $t->assign(array(
 	'LISTCAT_PAGEPREV' => $pagenav['prev'],

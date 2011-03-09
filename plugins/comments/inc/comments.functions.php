@@ -81,7 +81,7 @@ function cot_comments_display($ext_name, $code, $cat = '')
 	$_SESSION['cot_com_back'][$ext_name][$cat][$code] = array($link_area, $link_params);
 
 	$d_var = 'dcm';
-	list($pg, $d) = cot_import_pagenav($d_var, $cfg['plugin']['comments']['maxcommentsperpage']);
+	list($pg, $d, $durl) = cot_import_pagenav($d_var, $cfg['plugin']['comments']['maxcommentsperpage']);
 	$d = empty($d) ? 0 : (int) $d;
 
 	if ($auth_write && $enabled)

@@ -20,7 +20,7 @@ cot_block($usr['auth_read']);
 $id = cot_import('id','G','INT');				// Message ID
 $q = cot_import('q','G','TXT');					// Quote
 $history = cot_import('history','G','BOL');		// Turn on history
-list($pg, $d) = cot_import_pagenav('d', $cfg['pm']['maxpmperpage']); //pagination history
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['pm']['maxpmperpage']); //pagination history
 
 if (empty($id))
 {
@@ -125,9 +125,9 @@ if ($history)
 
 		$pm_data = cot_parse($row2['pm_text'], $cfg['pm']['markup']);
 
-		$url_star = cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d);
+		$url_star = cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$durl);
 		$url_pm = cot_url('pm', 'm=message&id='.$row2['pm_id']);
-		$url_delete = cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d);
+		$url_delete = cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$durl);
 		$url_edit = cot_url('pm', 'm=send&id='.$row2['pm_id']);
 
 		$t->assign(array(
@@ -188,7 +188,7 @@ if ($usr['auth_write'])
 	$onclick = "insertText(document, 'newpmtext', '[quote]'+$('#pm_text').text()+'[/quote]'); return false;";
 
 	$t->assign(array(
-		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.$history.'&d='.$d), $L['Quote'], array('onclick' => $onclick)),
+		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.$history.'&d='.$durl), $L['Quote'], array('onclick' => $onclick)),
 		'PM_FORM_SEND' => cot_url('pm', 'm=send&a=send&to='.$to),
 		'PM_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 		'PM_FORM_TEXT' => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
@@ -220,14 +220,14 @@ $t->assign(array(
 	'PM_SENTBOX_COUNT' => $totalsentbox,
 	'PM_ID' => $row['pm_id'],
 	'PM_STATE' => $row['pm_tostate'],
-	'PM_STAR' => cot_rc($star_class ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d))),
+	'PM_STAR' => cot_rc($star_class ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$durl))),
 	'PM_DATE' => cot_date('datetime_medium', $row['pm_date'] + $usr['timezone'] * 3600),
 	'PM_DATE_STAMP' => $row['pm_date'] + $usr['timezone'] * 3600,
 	'PM_TITLE' => htmlspecialchars($row['pm_title']),
 	'PM_TEXT' => '<div id="pm_text">'.$pm_maindata.'</div>',
 	'PM_DELETE' => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=>'ajax')),
 	'PM_EDIT' => $row['pm_icon_edit'],
-	'PM_HISTORY' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$d), $L['pm_messagehistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),
+	'PM_HISTORY' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$durl), $L['pm_messagehistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),
 	'PM_SENT_TYPE' => ($f == 'sentbox') ? $L['Recipient'] : $L['Sender']
 ));
 $t->assign(cot_generate_usertags($row_user, 'PM_USER_'));

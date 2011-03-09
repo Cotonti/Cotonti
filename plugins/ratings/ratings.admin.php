@@ -29,7 +29,7 @@ $adminpath[] = array(cot_url('admin', 'm=ratings'), $L['Ratings']);
 $adminhelp = $L['adm_help_ratings'];
 
 $id = cot_import('id','G','TXT');
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook  === */
 foreach (cot_getextplugins('admin.ratings.first') as $pl)
@@ -78,7 +78,7 @@ foreach ($sql->fetchAll() as $row)
 	}
 
 	$t->assign(array(
-		'ADMIN_RATINGS_ROW_URL_DEL' => cot_url('admin', 'm=ratings&a=delete&id='.$row['rating_code'].'&d='.$d.'&'.cot_xg()),
+		'ADMIN_RATINGS_ROW_URL_DEL' => cot_url('admin', 'm=ratings&a=delete&id='.$row['rating_code'].'&d='.$durl.'&'.cot_xg()),
 		'ADMIN_RATINGS_ROW_RATING_CODE' => $row['rating_code'],
 		'ADMIN_RATINGS_ROW_RATING_AREA' => $row['rating_area'],
 		'ADMIN_RATINGS_ROW_CREATIONDATE' => cot_date('datetime_medium', $row['rating_creationdate']),

@@ -16,7 +16,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pm', 'a
 cot_block($usr['auth_read']);
 
 $f = cot_import('f','G','ALP');				// Category inbox, sentbox, archive
-list($pg, $d) = cot_import_pagenav('d', $cfg['pm']['maxpmperpage']); // pagination
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['pm']['maxpmperpage']); // pagination
 $a = cot_import('a','G','TXT');				// Action
 $filter = cot_import('filter','G','TXT');	// filter
 
@@ -152,13 +152,13 @@ foreach ($pm_sql->fetchAll() as $row)
 		$star_class = ($row['pm_tostate'] == 2) ? 1 : 0;
 	}
 	$url_edit = cot_url('pm', 'm=send&id='.$row['pm_id']);
-	$url_delete = cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f.'&d='.$d);
+	$url_delete = cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f.'&d='.$durl);
 
 	$t->assign(array(
 		'PM_ROW_ID' => $row['pm_id'],
 		'PM_ROW_STATE' => $row['pm_tostate'],
-		'PM_ROW_STAR' => cot_rc($star_class ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d))),
-		'PM_ROW_STAR_URL' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d),
+		'PM_ROW_STAR' => cot_rc($star_class ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$durl))),
+		'PM_ROW_STAR_URL' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$durl),
 		'PM_ROW_DATE' => cot_date('datetime_medium', $row['pm_date'] + $usr['timezone'] * 3600),
 		'PM_ROW_DATE_STAMP' => $row['pm_date'] + $usr['timezone'] * 3600,
 		'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), htmlspecialchars($row['pm_title']), array('class'=>'ajax')),
@@ -206,7 +206,7 @@ $url_starred = cot_url('pm', 'f='.$f.'&filter=starred');
 $t->assign(array(
 	'PM_PAGETITLE' => $title,
 	'PM_SUBTITLE' => $subtitle,
-	'PM_FORM_UPDATE' => cot_url('pm', cot_xg().'&f='.$f.'&filter='.$filter.'&d='.$d),
+	'PM_FORM_UPDATE' => cot_url('pm', cot_xg().'&f='.$f.'&filter='.$filter.'&d='.$durl),
 	'PM_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link($url_newpm, $L['pm_sendnew'], array('class'=>'ajax')) : '',
 	'PM_SENDNEWPM_URL' => ($usr['auth_write']) ? $url_newpm : '',
 	'PM_INBOX' => cot_rc_link($url_inbox, $L['pm_inbox'], array('class'=>'ajax')),

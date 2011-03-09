@@ -26,7 +26,7 @@ $adminhelp = $L['adm_help_bbcodes'];
 
 $a = cot_import('a', 'G', 'ALP');
 $id = (int) cot_import('id', 'G', 'INT');
-list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('bbcode.admin.first') as $pl)
@@ -116,7 +116,7 @@ foreach ($res->fetchAll() as $row)
 		'ADMIN_BBCODE_ROW_MODE' => cot_selectbox($row['bbc_mode'], 'bbc_mode', $bbc_modes, $bbc_modes, false),
 		'ADMIN_BBCODE_ROW_PRIO' => cot_selectbox($row['bbc_priority'], 'bbc_priority', range(1, 256), range(1, 256), false),
 		'ADMIN_BBCODE_ROW_POSTRENDER' => cot_checkbox($row['bbc_postrender'], 'bbc_postrender'),
-		'ADMIN_BBCODE_ROW_UPDATE_URL' => cot_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id'].'&d='.$d),
+		'ADMIN_BBCODE_ROW_UPDATE_URL' => cot_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id'].'&d='.$durl),
 		'ADMIN_BBCODE_ROW_DELETE_URL' => cot_url('admin', 'm=bbcode&a=del&id='.$row['bbc_id']),
 		'ADMIN_BBCODE_ROW_ODDEVEN' => cot_build_oddeven($ii)
 	));
@@ -148,7 +148,7 @@ $bb_t->assign(array(
 	'ADMIN_BBCODE_MODE' => cot_selectbox('pcre', 'bbc_mode', $bbc_modes, $bbc_modes, false),
 	'ADMIN_BBCODE_PRIO' => cot_selectbox('128', 'bbc_priority', range(1, 256), range(1, 256), false),
 	'ADMIN_BBCODE_POSTRENDER' => cot_checkbox('0', 'bbc_postrender'),
-	'ADMIN_BBCODE_URL_CLEAR_CACHE' => cot_url('admin', 'm=bbcode&a=clearcache&d='.$d)
+	'ADMIN_BBCODE_URL_CLEAR_CACHE' => cot_url('admin', 'm=bbcode&a=clearcache&d='.$durl)
 ));
 
 cot_display_messages($bb_t);
