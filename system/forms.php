@@ -329,7 +329,7 @@ function cot_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '')
  */
 function cot_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
 {
-	global $cot_textarea_count;
+	global $cot_textarea_count, $R;
 	$cot_textarea_count++;
 	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
