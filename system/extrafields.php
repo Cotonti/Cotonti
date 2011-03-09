@@ -517,8 +517,13 @@ function cot_extrafield_remove($location, $name)
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
 	$step1 = $db->delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;
-	$step2 = $db->query("ALTER TABLE $location DROP " . $column_prefix . "_" . $name);
-
+	
+	$step2 = true;
+	if ($db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0)
+	{	
+		$step2 = $db->query("ALTER TABLE $location DROP " . $column_prefix . "_" . $name);
+	}
+	
 	return $step1 && $step2;
 }
 
