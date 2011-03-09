@@ -66,7 +66,7 @@ if ($i18n_enabled && $i18n_notmain)
 	}
 	else
 	{
-		$cat_i18n = &$cot_cat[$page_data['page_cat']];
+		$cat_i18n = &$structure['page'][$page_data['page_cat']];
 	}
 	
 	if (!empty($page_data['ipage_title']))

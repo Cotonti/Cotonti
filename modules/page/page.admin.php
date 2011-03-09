@@ -116,7 +116,7 @@ if ($a == 'validate')
 		{
 			if ($cfg['cache_page'])
 			{
-				$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
+				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$row['page_cat']]['path']));
 			}
 			if ($cfg['cache_index'])
 			{
@@ -157,7 +157,7 @@ elseif ($a == 'unvalidate')
 		{
 			if ($cfg['cache_page'])
 			{
-				$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
+				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$row['page_cat']]['path']));
 			}
 			if ($cfg['cache_index'])
 			{
@@ -214,7 +214,7 @@ elseif ($a == 'delete')
 		{
 			if ($cfg['cache_page'])
 			{
-				$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
+				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$row['page_cat']]['path']));
 			}
 			if ($cfg['cache_index'])
 			{
@@ -265,7 +265,7 @@ elseif ($a == 'update_checked')
 
 					if ($cache && $cfg['cache_page'])
 					{
-						$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
+						$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$row['page_cat']]['path']));
 					}
 
 					$perelik .= '#'.$id.', ';
@@ -320,7 +320,7 @@ elseif ($a == 'update_checked')
 
 					if ($cache && $cfg['cache_page'])
 					{
-						$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
+						$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$row['page_cat']]['path']));
 					}
 
 					/* === Hook === */
@@ -383,7 +383,7 @@ foreach ($sql_page->fetchAll() as $row)
 	$row['page_pageurl'] = cot_url('page', $page_urlp);
 	$catpath = cot_structure_buildpath('page', $row['page_cat']);
 	$row['page_fulltitle'] = $catpath.' '.$cfg['separator'].' <a href="'.$row['page_pageurl'].'">'.htmlspecialchars($row['page_title']).'</a>';
-	$sql_page_subcount = $db->query("SELECT SUM(structure_count) FROM $db_structure WHERE structure_path LIKE '".$db->prep($cot_cat[$row["page_cat"]]['rpath'])."%' ");
+	$sql_page_subcount = $db->query("SELECT SUM(structure_count) FROM $db_structure WHERE structure_path LIKE '".$db->prep($structure['page'][$row["page_cat"]]['rpath'])."%' ");
 	$sub_count = $sql_page_subcount->fetchColumn();
 	$row['page_file'] = intval($row['page_file']);
 	$t->assign(cot_generate_pagetags($row, 'ADMIN_PAGE_', 200));

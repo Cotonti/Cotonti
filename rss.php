@@ -216,12 +216,12 @@ elseif ($defult_c)
 
 	if ($id != 'all')
 	{
-		$mtch = $cot_cat[$id]['path'].".";
+		$mtch = $structure['page'][$id]['path'].".";
 		$mtchlen = mb_strlen($mtch);
 		$catsub = array();
 		$catsub[] = $id;
 
-		foreach ($cot_cat as $i => $x)
+		foreach ($structure['page'] as $i => $x)
 		{
 			if (mb_substr($x['path'], 0, $mtchlen) == $mtch)
 			{

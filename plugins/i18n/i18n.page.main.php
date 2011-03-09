@@ -26,7 +26,7 @@ if ($i18n_enabled && $i18n_notmain)
 	$cat_i18n = cot_i18n_get_cat($pag['page_cat'], $i18n_locale);
 	if (!$cat_i18n)
 	{
-		$cat_i18n = &$cot_cat[$pag['page_cat']];
+		$cat_i18n = &$structure['page'][$pag['page_cat']];
 	}
 	
 	if ($pag_i18n)

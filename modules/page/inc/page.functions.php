@@ -23,7 +23,9 @@ $db_pages = (isset($db_pages)) ? $db_pages : $db_x . 'pages';
 
 $cot_extrafields['pages'] = (!empty($cot_extrafields[$db_pages]))
 	? $cot_extrafields[$db_pages] : array();
-	
+
+$structure['page'] = (is_array($structure['page'])) ? $structure['page'] : array();	
+
 /**
  * Cuts the page after 'more' tag or after the first page (if multipage)
  *
@@ -76,14 +78,16 @@ function cot_readraw($file)
  */
 function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = true)
 {
-	global $db, $db_structure, $usr, $cot_cat, $L, $R;
+	global $db, $db_structure, $usr, $structure, $L, $R;
 
-	foreach ($cot_cat as $i => $x)
+	$structure['page'] = (is_array($structure['page'])) ? $structure['page'] : array();
+	
+	foreach ($structure['page'] as $i => $x)
 	{
 		$display = ($hideprivate) ? cot_auth('page', $i, 'W') : true;
-		if ($display && !empty($subcat) && isset($cot_cat[$subcat]) && !(empty($check)))
+		if ($display && !empty($subcat) && isset($structure['page'][$subcat]) && !(empty($check)))
 		{
-			$mtch = $cot_cat[$subcat]['path'].".";
+			$mtch = $structure['page'][$subcat]['path'].".";
 			$mtchlen = mb_strlen($mtch);
 			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i == $check) ? true : false;
 		}
@@ -112,7 +116,7 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
  */
 function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = null, $dateformat = '', $emptytitle = '', $cacheitem = true)
 {
-	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $db_pages, $usr, $sys, $cot_yesno, $cot_cat;
+	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $db_pages, $usr, $sys, $cot_yesno, $structure;
 	
 	static $extp_first = null, $extp_main = null;
 	static $pag_auth = array(), $pag_cache = array();
@@ -197,11 +201,11 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'SHORTTITLE' => htmlspecialchars($page_data['page_title']),
 				'CAT' => $page_data['page_cat'],
 				'CATURL' => $cat_url,
-				'CATTITLE' => htmlspecialchars($cot_cat[$page_data['page_cat']]['title']),
+				'CATTITLE' => htmlspecialchars($structure['page'][$page_data['page_cat']]['title']),
 				'CATPATH' => $catpath,
-				'CATPATH_SHORT' => cot_rc_link($cat_url, htmlspecialchars($cot_cat[$page_data['page_cat']]['title'])),
-				'CATDESC' => htmlspecialchars($cot_cat[$page_data['page_cat']]['desc']),
-				'CATICON' => $cot_cat[$page_data['page_cat']]['icon'],
+				'CATPATH_SHORT' => cot_rc_link($cat_url, htmlspecialchars($structure['page'][$page_data['page_cat']]['title'])),
+				'CATDESC' => htmlspecialchars($structure['page'][$page_data['page_cat']]['desc']),
+				'CATICON' => $structure['page'][$page_data['page_cat']]['icon'],
 				'KEY' => htmlspecialchars($page_data['page_key']),
 				'DESC' => htmlspecialchars($page_data['page_desc']),
 				'TEXT' => $text,
@@ -259,7 +263,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			{
 				$tag = mb_strtoupper($row['field_name']);
 				$temp_array['CAT_'.$tag.'_TITLE'] = isset($L['structure_'.$row['field_name'].'_title']) ?  $L['structure_'.$row['field_name'].'_title'] : $row['field_description'];
-				$temp_array['CAT_'.$tag] = cot_build_extrafields_data('structure', $row, $cot_cat[$row['page_cat']][$row['field_name']]);
+				$temp_array['CAT_'.$tag] = cot_build_extrafields_data('structure', $row, $structure['page'][$row['page_cat']][$row['field_name']]);
 			}
 
 			/* === Hook === */
