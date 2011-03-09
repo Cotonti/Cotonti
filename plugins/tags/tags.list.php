@@ -33,8 +33,8 @@ if ($cfg['plugin']['tags']['pages'])
 	}
 	// Get all subcategories
 	$tc_cats = array($db->quote($c));
-	$tc_path = $cot_cat[$c]['path'] . '.';
-	foreach ($cot_cat as $key => $val)
+	$tc_path = $structure['page'][$c]['path'] . '.';
+	foreach ($structure['page'] as $key => $val)
 	{
 		if (mb_strpos($val['path'], $tc_path) !== false)
 		{

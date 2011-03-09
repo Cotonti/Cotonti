@@ -117,7 +117,7 @@ if ($a == 'update')
 			{
 				if ($cfg['cache_page'])
 				{
-					$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row_page_delete['page_cat']]['path']));
+					$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$row_page_delete['page_cat']]['path']));
 				}
 				if ($cfg['cache_index'])
 				{
@@ -183,7 +183,7 @@ if ($a == 'update')
 		{
 			if ($cfg['cache_page'])
 			{
-				$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$rpage['page_cat']]['path']));
+				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$rpage['page_cat']]['path']));
 			}
 			if ($cfg['cache_index'])
 			{
@@ -209,11 +209,11 @@ cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $pag['page_owne
 
 $title_params = array(
 	'TITLE' => $L['page_edittitle'],
-	'CATEGORY' => $cot_cat[$c]['title']
+	'CATEGORY' => $structure['page'][$c]['title']
 );
 $out['subtitle'] = cot_title('title_page', $title_params);
 $out['head'] .= $R['code_noindex'];
-$sys['sublocation'] = $cot_cat[$c]['title'];
+$sys['sublocation'] = $structure['page'][$c]['title'];
 
 /* === Hook === */
 foreach (cot_getextplugins('page.edit.main') as $pl)
@@ -224,7 +224,7 @@ foreach (cot_getextplugins('page.edit.main') as $pl)
 
 require_once $cfg['system_dir'].'/header.php';
 
-$mskin = cot_tplfile(array('page', 'edit', $cot_cat[$pag['page_cat']]['tpl']));
+$mskin = cot_tplfile(array('page', 'edit', $structure['page'][$pag['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
 
 $pageedit_array = array(

@@ -43,7 +43,7 @@ cot_block($usr['auth_read']);
 
 $al = empty($pag['page_alias']) ? '' : $pag['page_alias'];
 $id = (int) $pag['page_id'];
-$cat = $cot_cat[$pag['page_cat']];
+$cat = $structure['page'][$pag['page_cat']];
 
 $sys['sublocation'] = $pag['page_title'];
 

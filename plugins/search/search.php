@@ -108,7 +108,7 @@ if (($tab == 'pag' || empty($tab))  && cot_module_active('page') && $cfg['plugin
 {
 	// Making the category list
 	$pages_cat_list['all'] = $L['plu_allcategories'];
-	foreach ($cot_cat as $cat => $x)
+	foreach ($structure['page'] as $cat => $x)
 	{
 		if ($cat != 'all' && $cat != 'system' && cot_auth('page', $cat, 'R') && $x['group'] == 0)
 		{
@@ -267,7 +267,7 @@ if (!empty($sq))
 			$url_cat = cot_url('page', 'c='.$row['page_cat']);
 			$url_page = empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id'].'&highlight='.$hl) : cot_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
 			$t->assign(array(
-				'PLUGIN_PR_CATEGORY' => cot_rc_link($url_cat, $cot_cat[$row['page_cat']]['tpath']),
+				'PLUGIN_PR_CATEGORY' => cot_rc_link($url_cat, $structure['page'][$row['page_cat']]['tpath']),
 				'PLUGIN_PR_CATEGORY_URL' => $url_cat,
 				'PLUGIN_PR_TITLE' => cot_rc_link($url_page, htmlspecialchars($row['page_title'])),
 				'PLUGIN_PR_TEXT' => cot_clear_mark($row['page_text'], $row['page_type'], $words),

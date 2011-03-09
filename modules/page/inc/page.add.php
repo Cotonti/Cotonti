@@ -133,7 +133,7 @@ if ($a == 'add')
 		{
 			if ($cfg['cache_page'])
 			{
-				$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$rpage['page_cat']]['path']));
+				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$rpage['page_cat']]['path']));
 			}
 			if ($cfg['cache_index'])
 			{
@@ -157,12 +157,12 @@ if (empty($rpage['page_cat']) && !empty($c))
 
 $title_params = array(
 	'TITLE' => $L['page_addsubtitle'],
-	'CATEGORY' => $cot_cat[$c]['title']
+	'CATEGORY' => $structure['page'][$c]['title']
 );
 
 $out['subtitle'] = cot_title('title_page', $title_params);
 $out['head'] .= $R['code_noindex'];
-$sys['sublocation'] = $cot_cat[$c]['title'];
+$sys['sublocation'] = $structure['page'][$c]['title'];
 
 /* === Hook === */
 foreach (cot_getextplugins('page.add.main') as $pl)
@@ -173,7 +173,7 @@ foreach (cot_getextplugins('page.add.main') as $pl)
 
 require_once $cfg['system_dir'].'/header.php';
 
-$mskin = cot_tplfile(array('page', 'add', $cot_cat[$rpage['page_cat']]['tpl']));
+$mskin = cot_tplfile(array('page', 'add', $structure['page'][$rpage['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
 
 $pageadd_array = array(
