@@ -241,7 +241,7 @@ if ($id)
 	{
 		$row = $pmsql->fetch();
 		$newpmtitle = (!empty($newpmtitle)) ? $newpmtitle : $row['pm_title'];
-		$newpmtext = (!empty($newpmtitle)) ? $newpmtext : $row['pm_text'];
+		$newpmtext = (!empty($newpmtext)) ? $newpmtext : $row['pm_text'];
 		$idurl = '&id='.$id;
 	}
 	else

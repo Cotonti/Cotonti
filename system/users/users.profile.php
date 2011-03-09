@@ -53,7 +53,7 @@ if($a == 'update')
 	$ruser['user_gender'] = cot_import('rusergender','P','ALP');
 	$ruser['user_timezone'] = (float) cot_import('rusertimezone','P','TXT',5);
 	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','BOL');
-	$ruser['user_pmnotify'] = cot_import('ruserpmnotify','P','BOL');
+	
 	// Extra fields
 	foreach($cot_extrafields['users'] as $row)
 	{
@@ -203,7 +203,6 @@ $t->assign(array(
 	'USERS_PROFILE_EMAIL' => $profile_form_email,
 	'USERS_PROFILE_EMAILPASS' => cot_inputbox('password', 'rmailpass', '', array('size' => 12, 'maxlength' => 32)),
 	'USERS_PROFILE_HIDEEMAIL' => cot_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array($L['Yes'], $L['No'])),
-	'USERS_PROFILE_PMNOTIFY' => cot_radiobox($urr['user_pmnotify'], 'ruserpmnotify', array(1, 0), array($L['Yes'], $L['No'])),
 	'USERS_PROFILE_THEME' => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
 	'USERS_PROFILE_LANG' => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	'USERS_PROFILE_GENDER' => cot_selectbox_gender($urr['user_gender'] ,'rusergender'),

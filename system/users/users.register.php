@@ -98,7 +98,6 @@ if ($a=='add')
 		cot_shield_update(20, "Registration");
 
 		$ruser['user_hideemail'] = 1;
-		$ruser['user_pmnotify'] = 0;
 
 		$ruser['user_theme'] = $cfg['defaulttheme'];
 		$ruser['user_scheme'] = $cfg['defaultscheme'];
