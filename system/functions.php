@@ -195,7 +195,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			{
 				if ($buffer)
 				{
-					$v = cot_import_buffered($name, $v);
+					$v = cot_import_buffered($name, $v, null);
 				}
 				return($v);
 			}
@@ -230,7 +230,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 	{
 		if ($buffer)
 		{
-			$v = cot_import_buffered($name, $v);
+			$v = cot_import_buffered($name, $v, null);
 		}
 		return($v);
 	}
@@ -407,9 +407,10 @@ function cot_import_buffer_save()
  *
  * @param string $name Input name
  * @param mixed $value Currently imported value
+ * @param mixed $null null import
  * @return mixed Input value or NULL if the variable is not in the buffer
  */
-function cot_import_buffered($name, $value)
+function cot_import_buffered($name, $value, $null = '')
 {
 	if (empty($value))
 	{
@@ -419,7 +420,7 @@ function cot_import_buffered($name, $value)
 		}
 		else
 		{
-			return null;
+			return $null;
 		}
 	}
 	else
