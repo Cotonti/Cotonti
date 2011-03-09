@@ -43,7 +43,7 @@ function cot_watch()
 	global $cfg;
 	$fp = fopen($cfg['debug_logfile'], 'a');
 	$btrace = debug_backtrace();
-	fputs($fp, $btrace[1]['file'].', '.$btrace[1]['line'].":\n");
+	fputs($fp, $btrace[0]['file'].', '.$btrace[0]['line'].":\n");
 	$vars = func_get_args();
 	foreach ($vars as $name => $var)
 	{
