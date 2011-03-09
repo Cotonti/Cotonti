@@ -18,12 +18,6 @@ INSERT INTO `cot_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights
 (4, 'admin', 'a', 0, 255, 1),
 (5, 'admin', 'a', 255, 255, 1),
 (6, 'admin', 'a', 1, 0, 1),
-(1, 'index', 'a', 1, 255, 1),
-(2, 'index', 'a', 1, 255, 1),
-(3, 'index', 'a', 1, 255, 1),
-(4, 'index', 'a', 1, 255, 1),
-(5, 'index', 'a', 255, 255, 1),
-(6, 'index', 'a', 131, 0, 1),
 (1, 'message', 'a', 1, 255, 1),
 (2, 'message', 'a', 1, 255, 1),
 (3, 'message', 'a', 1, 255, 1),
@@ -182,7 +176,6 @@ CREATE TABLE `cot_core` (
 
 INSERT INTO `cot_core` (`ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_lock`) VALUES
 ('admin', 'Administration panel', '0.7.0', 1, 1),
-('index', 'Home page', '0.7.0', 1, 0),
 ('message', 'Messages', '0.7.0', 1, 1),
 ('users', 'Users', '0.7.0', 1, 1);
 
