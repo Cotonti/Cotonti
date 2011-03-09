@@ -61,7 +61,6 @@
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.extrafield_files_dir}</strong> {INSTALL_EXFLDS_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.pfs_dir}</strong> {INSTALL_PFS_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.photos_dir}</strong> {INSTALL_PHOTOS_DIR}</li>
-						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.sig_dir}</strong> {INSTALL_SIG_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.thumbs_dir}</strong> {INSTALL_THUMBS_DIR}</li>
 					</ul>
 					<div style="text-align: center;"><input type="submit" name="submit" value="{PHP.L.Next}" /></div>

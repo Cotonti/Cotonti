@@ -441,19 +441,6 @@ switch ($step)
 			$status['photos_dir'] = $R['install_code_not_found'];
 		}
 		/* ------------------- */
-		if (is_dir($cfg['sig_dir']))
-		{
-			$status['sig_dir'] = (substr(decoct(fileperms($cfg['sig_dir'])), -4) >= $cfg['dir_perms'])
-				? $R['install_code_writable']
-				: cot_rc('install_code_invalid', array('text' =>
-					cot_rc('install_chmod_value', array('chmod' =>
-						substr(decoct(fileperms($cfg['sig_dir'])), -4)))));
-		}
-		else
-		{
-			$status['sig_dir'] = $R['install_code_not_found'];
-		}
-		/* ------------------- */
 		if (is_dir($cfg['thumbs_dir']))
 		{
 			$status['thumbs_dir'] = (substr(decoct(fileperms($cfg['thumbs_dir'])), -4) >= $cfg['dir_perms'])
@@ -544,7 +531,6 @@ switch ($step)
 			'INSTALL_PFS_DIR' => $status['pfs_dir'],
 			'INSTALL_EXFLDS_DIR' => $status['exflds_dir'],
 			'INSTALL_PHOTOS_DIR' => $status['photos_dir'],
-			'INSTALL_SIG_DIR' => $status['sig_dir'],
 			'INSTALL_THUMBS_DIR' => $status['thumbs_dir'],
 			'INSTALL_CONFIG' => $status['config'],
 			'INSTALL_CONFIG_SAMPLE' => $status['config_sample'],
