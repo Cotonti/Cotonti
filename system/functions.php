@@ -139,7 +139,7 @@ function cot_getextplugins($hook, $cond='R')
 
 	$extplugins = array();
 
-	if (is_array($cot_plugins[$hook]))
+	if (array_key_exists($hook, $cot_plugins) && is_array($cot_plugins[$hook]))
 	{
 		foreach($cot_plugins[$hook] as $k)
 		{
