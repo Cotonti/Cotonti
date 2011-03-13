@@ -1467,7 +1467,7 @@ class Cache
 	public function trigger($event)
 	{
 		$cnt = 0;
-		if (array_key_exists($event, $this->bindings) && count($this->bindings[$event]) > 0)
+		if (isset($this->bindings[$event]) && count($this->bindings[$event]) > 0)
 		{
 			foreach ($this->bindings[$event] as $cell)
 			{
