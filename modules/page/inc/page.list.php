@@ -60,8 +60,7 @@ if (empty($s))
 }
 $s = empty($s) ? 'title' : $s;
 $w = empty($w) ? 'asc' : $w;
-$d = empty($d) ? 0 : (int) $d;
-$dc = empty($dc) ? 0 : (int) $dc;
+
 
 $sys['sublocation'] = $cat['title'];
 
