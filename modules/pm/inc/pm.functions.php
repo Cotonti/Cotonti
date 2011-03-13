@@ -31,7 +31,7 @@ function cot_send_translated_mail($rlang, $remail, $rusername)
 	global $cfg, $usr;
 	
 	require_once cot_langfile('pm', 'module', $cfg['defaultlang'], $rlang);
-	if (!$L || !array_key_exists('pm_notify', $L))
+	if (!$L || !isset($L['pm_notify']))
 	{
 		global $L;
 	}
