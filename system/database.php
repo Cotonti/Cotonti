@@ -191,7 +191,7 @@ class CotDB extends PDO {
 		if ($cfg['showsqlstats'])
 		{
 			$ytime = microtime();
-			$xtime = explode(' ',$xtime);
+			$xtime = explode(' ',$this->_xtime);
 			$ytime = explode(' ',$ytime);
 			$this->_tcount += $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0];
 			if ($cfg['devmode'] && $usr['isadmin'])
