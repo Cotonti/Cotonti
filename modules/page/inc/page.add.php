@@ -43,7 +43,7 @@ if ($a == 'add')
 	/* ===== */
 
 	$rpage['page_cat'] = cot_import('rpagecat', 'P', 'TXT');
-	$rpage['page_key'] = cot_import('rpagekey', 'P', 'TXT');
+	$rpage['page_keywords'] = cot_import('rpagekeywords', 'P', 'TXT');
 	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'ALP');
 	$rpage['page_title'] = cot_import('rpagetitle', 'P', 'TXT');
 	$rpage['page_desc'] = cot_import('rpagedesc', 'P', 'TXT');
@@ -183,11 +183,11 @@ $pageadd_array = array(
 	'PAGEADD_FORM_SEND' => cot_url('page', 'm=add&a=add'),
 	'PAGEADD_FORM_CAT' => cot_selectbox_categories($rpage['page_cat'], 'rpagecat'),
 	'PAGEADD_FORM_CAT_SHORT' => cot_selectbox_categories($rpage['page_cat'], 'rpagecat', $c),
-	'PAGEADD_FORM_KEY' => cot_inputbox('text', 'rpagekey', $rpage['page_key'], array('size' => '16', 'maxlength' => '16')),
+	'PAGEADD_FORM_KEYWORDS' => cot_inputbox('text', 'rpagekeywords', $rpage['page_keywords'], array('size' => '32', 'maxlength' => '255')),
 	'PAGEADD_FORM_ALIAS' => cot_inputbox('text', 'rpagealias', $rpage['page_alias'], array('size' => '32', 'maxlength' => '255')),
 	'PAGEADD_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', $rpage['page_title'], array('size' => '64', 'maxlength' => '255')),
 	'PAGEADD_FORM_DESC' => cot_inputbox('text', 'rpagedesc', $rpage['page_desc'], array('size' => '64', 'maxlength' => '255')),
-	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('size' => '16', 'maxlength' => '24')),
+	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('size' => '24', 'maxlength' => '100')),
 	'PAGEADD_FORM_OWNER' => cot_build_user($usr['id'], htmlspecialchars($usr['name'])),
 	'PAGEADD_FORM_OWNERID' => $usr['id'],
 	'PAGEADD_FORM_BEGIN' => cot_selectbox_date($sys['now_offset'], 'long', 'rpagebegin'),

@@ -206,7 +206,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'CATPATH_SHORT' => cot_rc_link($cat_url, htmlspecialchars($structure['page'][$page_data['page_cat']]['title'])),
 				'CATDESC' => htmlspecialchars($structure['page'][$page_data['page_cat']]['desc']),
 				'CATICON' => $structure['page'][$page_data['page_cat']]['icon'],
-				'KEY' => htmlspecialchars($page_data['page_key']),
+				'KEYWORDS' => htmlspecialchars($page_data['page_keywords']),
 				'DESC' => htmlspecialchars($page_data['page_desc']),
 				'TEXT' => $text,
 				'TEXT_CUT' => $text_cut,

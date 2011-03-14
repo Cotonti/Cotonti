@@ -35,12 +35,12 @@
 						<td>{PAGEEDIT_FORM_EXPIRE}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.Extrakey}:</td>
-						<td>{PAGEEDIT_FORM_KEY}</td>
-					</tr>
-					<tr>
 						<td>{PHP.L.Alias}:</td>
 						<td>{PAGEEDIT_FORM_ALIAS}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.Keywords}:</td>
+						<td>{PAGEEDIT_FORM_KEYWORDS}</td>
 					</tr>
 					<!-- BEGIN: TAGS -->
 					<tr>

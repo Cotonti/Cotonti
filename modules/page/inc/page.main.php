@@ -119,7 +119,8 @@ else
 	);
 	$out['subtitle'] = cot_title('title_page', $title_params);
 }
-$out['desc'] = htmlspecialchars(strip_tags($pag['page_desc']));
+$out['desc'] = strip_tags($pag['page_desc']);
+$out['keywords'] = strip_tags($pag['page_keywords']);
 
 /* === Hook === */
 foreach (cot_getextplugins('page.main') as $pl)

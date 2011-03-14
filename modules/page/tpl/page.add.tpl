@@ -23,12 +23,12 @@
 						<td>{PAGEADD_FORM_AUTHOR}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.Extrakey}</td>
-						<td>{PAGEADD_FORM_KEY}</td>
-					</tr>
-					<tr>
 						<td>{PHP.L.Alias}:</td>
 						<td>{PAGEADD_FORM_ALIAS}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.Keywords}</td>
+						<td>{PAGEADD_FORM_KEYWORDS}</td>
 					</tr>
 					<!-- BEGIN: TAGS -->
 					<tr>

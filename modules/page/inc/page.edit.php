@@ -43,7 +43,7 @@ if ($a == 'update')
 	/* ===== */
 	cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $row_page['page_ownerid']);
 
-	$rpage['page_key'] = cot_import('rpagekey', 'P', 'TXT');
+	$rpage['page_keywords'] = cot_import('rpagekeywords', 'P', 'TXT');
 	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'ALP');
 	$rpage['page_title'] = cot_import('rpagetitle', 'P', 'TXT');
 	$rpage['page_desc'] = cot_import('rpagedesc', 'P', 'TXT');
@@ -235,11 +235,11 @@ $pageedit_array = array(
 	'PAGEEDIT_FORM_STATE' => $pag['page_state'],
 	'PAGEEDIT_FORM_CAT' => cot_selectbox_categories($pag['page_cat'], 'rpagecat'),
 	'PAGEEDIT_FORM_CAT_SHORT' => cot_selectbox_categories($pag['page_cat'], 'rpagecat', $c),
-	'PAGEEDIT_FORM_KEY' => cot_inputbox('text', 'rpagekey', $pag['page_key'], array('size' => '16', 'maxlength' => '16')),
+	'PAGEEDIT_FORM_KEYWORDS' => cot_inputbox('text', 'rpagekeywords', $pag['page_keywords'], array('size' => '32', 'maxlength' => '255')),
 	'PAGEEDIT_FORM_ALIAS' => cot_inputbox('text', 'rpagealias', $pag['page_alias'], array('size' => '32', 'maxlength' => '255')),
 	'PAGEEDIT_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', $pag['page_title'], array('size' => '64', 'maxlength' => '255')),
 	'PAGEEDIT_FORM_DESC' => cot_inputbox('text', 'rpagedesc', $pag['page_desc'], array('size' => '64', 'maxlength' => '255')),
-	'PAGEEDIT_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $pag['page_author'], array('size' => '24', 'maxlength' => '24')),
+	'PAGEEDIT_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $pag['page_author'], array('size' => '24', 'maxlength' => '100')),
 	'PAGEEDIT_FORM_DATE' => cot_selectbox_date($pag['page_date'],'long', 'rpagedate').' '.$usr['timetext'],
 	'PAGEEDIT_FORM_DATENOW' => cot_checkbox(0, 'rpagedatenow'),
 	'PAGEEDIT_FORM_BEGIN' => cot_selectbox_date($pag['page_begin'], 'long', 'rpagebegin').' '.$usr['timetext'],

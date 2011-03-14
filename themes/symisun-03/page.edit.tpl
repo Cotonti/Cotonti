@@ -30,23 +30,23 @@
 			<label>{PHP.L.Description}</label>
 			{PAGEEDIT_FORM_DESC}
 		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>{PHP.themelang.pageadd.adv}</legend>
+		<div>
+			<label>{PHP.L.Alias}</label>
+			{PAGEEDIT_FORM_ALIAS}
+		</div>
 		<!-- BEGIN: TAGS -->
 		<div>
 			<label>{PAGEEDIT_TOP_TAGS}</label>
 			{PAGEEDIT_FORM_TAGS} &nbsp; <span class="hint">{PAGEEDIT_TOP_TAGS_HINT}</span>
 		</div>
 		<!-- END: TAGS -->
-	</fieldset>
-
-	<fieldset>
-		<legend>{PHP.themelang.pageadd.adv}</legend>
 		<div>
-			<label>{PHP.L.Extrakey}</label>
-			{PAGEEDIT_FORM_KEY}
-		</div>
-		<div>
-			<label>{PHP.L.Alias}</label>
-			{PAGEEDIT_FORM_ALIAS}
+			<label>{PHP.L.Keywords}</label>
+			{PAGEEDIT_FORM_KEYWORDS}
 		</div>
 		<!-- BEGIN: ADMIN -->
 		<div>
