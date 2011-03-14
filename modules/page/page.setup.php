@@ -3,8 +3,8 @@
 [BEGIN_COT_EXT]
 Name=Pages
 Description=Pages and Categories
-Version=0.9.0
-Date=2010-nov-25
+Version=0.9.0.1
+Date=2011-03-14
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2011
 Notes=BSD License
@@ -28,15 +28,5 @@ way=02:select:asc,desc:asc:
 maxrowsperpage=03:string::30:
 [END_COT_EXT_CONFIG_STRUCTURE]
 ==================== */
-
-/**
- * Page module setup file
- *
- * @package page
- * @version 0.7.0
- * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
- * @license BSD
- */
 
 ?>
