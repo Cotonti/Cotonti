@@ -4,7 +4,7 @@
 Code=ratings
 Name=Star Ratings
 Description=Ratings plugin with jQuery stars
-Version=0.7.4
+Version=0.9.0
 Date=2010-dec-16
 Author=Cotonti Team
 Copyright=Copyright (c) Cotonti Team 2008-2011

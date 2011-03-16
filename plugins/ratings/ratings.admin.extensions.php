@@ -19,13 +19,13 @@ defined('COT_CODE') or die('Wrong URL');
 
 require cot_incfile('ratings', 'plug', 'enablement');
 
-if ($is_module && in_array($code, $rat_modules_list))
+if ($is_module && in_array($code, $rat_modules_list) && !cot_config_implanted($code, 'ratings'))
 {
-	cot_config_implant($code, $rat_options);
+	cot_config_implant($code, $rat_options, false, 'ratings');
 }
-elseif ($is_module && in_array($code, $rat_modules_struct_list))
+elseif ($is_module && in_array($code, $rat_modules_struct_list) && !cot_config_implanted($code, 'ratings'))
 {
-	cot_config_implant($code, $rat_options, true);
+	cot_config_implant($code, $rat_options, true, 'ratings');
 }
 
 ?>

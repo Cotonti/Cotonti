@@ -92,9 +92,10 @@ define('COT_CONFIG_TYPE_RANGE', 7);
  * 'text' => Textual description. It is usually omitted and stored in langfiles
  * @param bool $is_module Flag indicating if it is module or plugin config
  * @param string $category Structure category code. Only for per-category config options
+ * @param string $donor Extension name for extension-to-extension config implantations
  * @return bool Operation status
  */
-function cot_config_add($name, $options, $is_module = false, $category = '')
+function cot_config_add($name, $options, $is_module = false, $category = '', $donor = '')
 {
     global $db, $cfg, $db_config;
     $cnt = count($options);
@@ -119,7 +120,8 @@ function cot_config_add($name, $options, $is_module = false, $category = '')
 			'config_value' => $opt['default'],
 			'config_default' => $opt['default'],
 			'config_variants' => $opt['variants'],
-			'config_text' => $opt['text']
+			'config_text' => $opt['text'],
+			'config_donor' => $donor
 		);
 	}
 
@@ -137,10 +139,11 @@ function cot_config_add($name, $options, $is_module = false, $category = '')
  * @param array $options Array of implantable options, described in cot_config_add()
  * @param bool $into_struct A flag indicating that config options should be implanted into
  * module categories configuration rather than the module root configuration
+ * @param string $donor Extension name for extension-to-extension config implantations
  * @return int Number of options actually implanted
  * @see cot_config_add()
  */
-function cot_config_implant($module_name, $options, $into_struct = false)
+function cot_config_implant($module_name, $options, $into_struct, $donor)
 {
 	global $cfg;
 
@@ -155,7 +158,20 @@ function cot_config_implant($module_name, $options, $into_struct = false)
 		}
 	}
 
-	return cot_config_add($module_name, $add_options, true, $category);
+	return cot_config_add($module_name, $add_options, true, $category, $donor);
+}
+
+/**
+ * Checks if there are already implanted config records
+ *
+ * @param string $acceptor Acceptor module name
+ * @param string $donor Donor extension name
+ * @return bool TRUE if implanted records found, FALSE if not
+ */
+function cot_config_implanted($acceptor, $donor)
+{
+	global $db, $db_config;
+	return $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner = 'module' AND config_cat = ? AND config_donor = ?", array($acceptor, $donor))->fetchColumn() > 0;
 }
 
 /**
@@ -164,10 +180,11 @@ function cot_config_implant($module_name, $options, $into_struct = false)
  * @param string $name Extension code
  * @param bool $is_module TRUE if module, FALSE if plugin
  * @param string $category Structure category code. Only for per-category config options
+ * @param string $donor Extension name for extension-to-extension config implantations
  * @return array Config options structure
  * @see cot_config_add()
  */
-function cot_config_load($name, $is_module = false, $category = '')
+function cot_config_load($name, $is_module = false, $category = '', $donor = '')
 {
 	global $db, $db_config;
 	$options = array();
@@ -175,18 +192,8 @@ function cot_config_load($name, $is_module = false, $category = '')
 
 	$query = "SELECT config_name, config_type, config_value,
 			config_default, config_variants, config_order
-		FROM $db_config WHERE config_owner = ? AND config_cat = ?";
-	$params = array($type, $name);
-
-	if (empty($category))
-	{
-		$query .= " AND config_subcat = ''";
-	}
-	else
-	{
-		$query .= " AND config_subcat = ?";
-		$params[] = $category;
-	}
+		FROM $db_config WHERE config_owner = ? AND config_cat = ? AND config_subcat = ? AND config_donor = ?";
+	$params = array($type, $name, $category, $donor);
 
 	$res = $db->query($query, $params);
 	while ($row = $res->fetch())
@@ -212,15 +219,16 @@ function cot_config_load($name, $is_module = false, $category = '')
  * @param array $options Configuration entries
  * @param bool $is_module TRUE if module, FALSE if plugin
  * @param string $category Structure category code. Only for per-category config options
+ * @param string $donor Extension name for extension-to-extension config implantations
  * @return int Number of entries updated
  */
-function cot_config_modify($name, $options, $is_module = false, $category = '')
+function cot_config_modify($name, $options, $is_module = false, $category = '', $donor = '')
 {
 	global $db, $db_config;
 	$type = $is_module ? 'module' : 'plug';
 	$affected = 0;
 
-	$where = "config_owner = ? AND config_cat = ? AND config_name = ?";
+	$where = "config_owner = ? AND config_cat = ? AND config_name = ? AND config_donor = ?";
 
 	if (!empty($category))
 	{
@@ -237,7 +245,7 @@ function cot_config_modify($name, $options, $is_module = false, $category = '')
 			$opt_row['config_' . $key] = $val;
 		}
 		$affected += $db->update($db_config, $opt_row, $where,
-			empty($category) ? array($type, $name, $config_name) : array($type, $name, $config_name, $category));
+			empty($category) ? array($type, $name, $config_name, $donor) : array($type, $name, $config_name, $donor, $category));
 	}
 
 	return $affected;
@@ -309,9 +317,10 @@ function cot_config_parse($info_cfg)
  * Or pass an array of option names to remove them at once. If empty or omitted,
  * all options from selected module/plugin will be removed
  * @param string $category Structure category code. Only for per-category config options
+ * @param string $donor Extension name for extension-to-extension config implantations
  * @return int Number of options actually removed
  */
-function cot_config_remove($name, $is_module = false, $option = '', $category = '')
+function cot_config_remove($name, $is_module = false, $option = '', $category = '', $donor = null)
 {
     global $db, $db_config;
 
@@ -320,6 +329,10 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
 	if (!empty($category))
 	{
 		$where .= " AND config_subcat = " . $db->quote($category);
+	}
+	if (!is_null($donor))
+	{
+		$where .= " AND config_donor = " . $db->quote($donor);
 	}
 
     if (is_array($option))
@@ -336,7 +349,7 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
             {
                 if ($i > 0)
                     $where .= ',';
-                $where .= "'" . $db->prep($option[$i]) . "'";
+                $where .= $db->quote($option[$i]);
             }
 			$where .= ')';
             unset($option);
@@ -344,7 +357,7 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
     }
     if (!empty($option))
     {
-        $where .= " AND config_name = '" . $db->prep($option) . "'";
+        $where .= " AND config_name = " . $db->quote($option);
     }
     return $db->delete($db_config, $where);
 }
@@ -404,12 +417,13 @@ function cot_config_set($name, $options, $is_module = false, $category = '')
  * @param array $options Configuration options
  * @param bool $is_module TRUE for modules, FALSE for plugins
  * @param string $category Structure category code. Only for per-category config options
+ * @param string $donor Extension name for extension-to-extension config implantations
  * @return int Number of entries affected
  */
-function cot_config_update($name, $options, $is_module = false, $category = '')
+function cot_config_update($name, $options, $is_module = false, $category = '', $donor = '')
 {
 	$affected = 0;
-	$old_options = cot_config_load($name, $is_module, $category);
+	$old_options = cot_config_load($name, $is_module, $category, $donor);
 
 	// Find and remove options which no longer exist
 	$remove_opts = array();
@@ -431,7 +445,7 @@ function cot_config_update($name, $options, $is_module = false, $category = '')
 	}
 	if (count($remove_opts) > 0)
 	{
-		$affected += cot_config_remove($name, $is_module, $remove_opts, $category);
+		$affected += cot_config_remove($name, $is_module, $remove_opts, $category, $donor);
 	}
 
 	// Find new options and options which have been modified
