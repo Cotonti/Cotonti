@@ -16,18 +16,18 @@ require cot_incfile('comments', 'plug', 'enablement');
 // Add options into module configs
 foreach ($com_modules_list as $mod_name)
 {
-	if (cot_module_installed($mod_name))
+	if (cot_module_installed($mod_name) && !cot_config_implanted($mod_name, 'comments'))
 	{
-		cot_config_implant($mod_name, $com_options);
+		cot_config_implant($mod_name, $com_options, false, 'comments');
 	}
 }
 
 // Add options into module structure configs
 foreach ($com_modules_struct_list as $mod_name)
 {
-	if (cot_module_installed($mod_name))
+	if (cot_module_installed($mod_name) && !cot_config_implanted($mod_name, 'comments'))
 	{
-		cot_config_implant($mod_name, $com_options, true);
+		cot_config_implant($mod_name, $com_options, true, 'comments');
 	}
 }
 ?>

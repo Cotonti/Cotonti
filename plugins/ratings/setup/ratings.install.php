@@ -16,18 +16,18 @@ require cot_incfile('ratings', 'plug', 'enablement');
 // Add options into module configs
 foreach ($rat_modules_list as $mod_name)
 {
-	if (cot_module_installed($mod_name))
+	if (cot_module_installed($mod_name) && !cot_config_implanted($mod_name, 'ratings'))
 	{
-		cot_config_implant($mod_name, $rat_options);
+		cot_config_implant($mod_name, $rat_options, false, 'ratings');
 	}
 }
 
 // Add options into module structure configs
 foreach ($rat_modules_struct_list as $mod_name)
 {
-	if (cot_module_installed($mod_name))
+	if (cot_module_installed($mod_name) && !cot_config_implanted($mod_name, 'ratings'))
 	{
-		cot_config_implant($mod_name, $rat_options, true);
+		cot_config_implant($mod_name, $rat_options, true, 'ratings');
 	}
 }
 ?>
