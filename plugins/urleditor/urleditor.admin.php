@@ -312,6 +312,8 @@ if($a == 'save')
 		'ADMIN_URLS_HTA' => $hta
 	));
 	$t->parse('MAIN.HTA');
+
+	$cache && $cache->db->remove('cot_urltrans', 'system');
 }
 
 // Check urltrans.dat
