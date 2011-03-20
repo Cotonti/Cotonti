@@ -268,12 +268,12 @@ $t -> assign(array(
 	"USERS_TOP_PM" => "PM",
 ));
 
-$k = '_.+._';
+$k = '_.__._';
 $asc = explode($k, sed_url('users', "f=$f&amp;s=$k&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq"));
 $desc = explode($k, sed_url('users', "f=$f&amp;s=$k&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq"));
 foreach ($users_sort_tags as $k => $x)
 {
-	$t -> assign($x[0], '<a href="'.implode($k, $asc).'">'.$sed_img_down.'</a> <a href="'.implode($k, $desc).'">'.$sed_img_up.'</a> '.$x[1]);
+	$t->assign($x[0], '<a href="'.implode($k, $asc).'">'.$sed_img_down.'</a> <a href="'.implode($k, $desc).'">'.$sed_img_up.'</a> '.$x[1]);
 }
 
 // Extra fields for users
