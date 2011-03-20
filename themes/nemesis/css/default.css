@@ -31,7 +31,7 @@ sup			{ top:-.5em; }
 -------------------------------------------------- */
 
 h2	{ color:#a01517; font-size:1.1em; text-shadow:0 1px 0 #fff; margin-bottom:15px; padding:8px 8px 8px 40px; background-color:#ccc; background-position:10px 50%; background-repeat:no-repeat; }
-h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-position:10px 50%; background-repeat:no-repeat; }
+h3	{ color:#000; font-size:1em; font-weight:900; margin:10px 0 5px; background-position:10px 50%; background-repeat:no-repeat; }
 
 .admin		{ background-image:url(../../../images/icons/default/prefs.png); }
 .comments	{ background-image:url(../../../images/icons/default/comments.png); }
@@ -103,7 +103,7 @@ button::-moz-focus-inner		{ padding:0; border:none; }
 
 .clear	{ clear:both; }
 .lhn	{ line-height:normal; }
-.strong	{ font-weight:bold; }
+.strong	{ font-weight:900; }
 .italic	{ font-style:italic; }
 
 .small	{ font-size:.9em!important; line-height:1.6em; }
@@ -181,7 +181,7 @@ button::-moz-focus-inner		{ padding:0; border:none; }
 
 .pagenav_prev, .pagenav_next, .pagenav_first, .pagenav_last, .pagenav_pages, .pagenav_current { padding:2px 6px; margin:1px; border:1px dashed #7f7772; }
 .pagenav_prev a, .pagenav_next a, .pagenav_first a, .pagenav_last a, .pagenav_pages a	{ color:#555; }
-.pagenav_current	{ font-weight:bold; color:#fff; background:none!important; border:none!important; }
+.pagenav_current	{ font-weight:900; color:#fff; background:none!important; border:none!important; }
 .pagenav_current a	{ color:#555; }
 .pagenav_small		{ text-align:right; font-size:.9em; }
 
@@ -205,7 +205,7 @@ button::-moz-focus-inner		{ padding:0; border:none; }
 
 .b1 img			{ margin:0 5px 0 0; vertical-align:-5px!important; }
 .userstatus		{ margin-top:2px; float:right; }
-.forumssection	{ font-weight:bold; background:#eee; }
+.forumssection	{ font-weight:900; background:#eee; }
 .subforums img	{ vertical-align:-3px; margin-right:5px; }
 #newf			{ margin:10px 0; }
 #newf li			{ margin-right:10px; display:inline; }
@@ -215,7 +215,7 @@ button::-moz-focus-inner		{ padding:0; border:none; }
 
 .search-res			{ margin:0 0 10px; overflow:auto; }
 .search-res .small	{ color:#000; }
-.search-hl      		{ font-weight:bold; padding:0 2px; background:yellow; }
+.search-hl      		{ font-weight:900; padding:0 2px; background:yellow; }
 
 /* 12. Lists
 -------------------------------------------------- */
