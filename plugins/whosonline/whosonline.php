@@ -20,14 +20,12 @@ Hooks=standalone
 require_once cot_incfile('users', 'module');
 require_once cot_incfile('hits', 'plug');
 
-$sql_stats = $db->query("
-	SELECT stat_value
-	FROM $db_stats
-	WHERE stat_name='maxusers'
-	LIMIT 1
-");
-$stats = $sql_stats->fetch();
-$maxusers = $stats[0];
+$maxusers = 0;
+if(isset($cfg['plugin']['hits']))
+{
+	$stats = $db->query("SELECT stat_value FROM $db_stats WHERE stat_name='maxusers' LIMIT 1")->fetch();
+	$maxusers = $stats[0];
+}
 $count_users = 0;
 $count_guests = 0;
 
