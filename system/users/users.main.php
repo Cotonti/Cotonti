@@ -228,6 +228,7 @@ $t->assign(array(
 	'USERS_TOP_PM' => 'PM',
 ));
 
+$k = '_.__._';
 $asc = explode($k, cot_url('users', array('s' => $k, 'w'=> 'asc') + $users_url_path));
 $desc = explode($k, cot_url('users', array('s' => $k, 'w'=> 'desc') + $users_url_path));
 foreach ($users_sort_tags as $k => $x)
