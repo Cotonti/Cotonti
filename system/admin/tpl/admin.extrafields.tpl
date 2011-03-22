@@ -35,28 +35,6 @@
 					<a title="{PHP.L.Delete}" href="{ADMIN_EXTRAFIELDS_ROW_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a>
 				</td>
 			</tr>
-			<!--//<tr>
-				<td colspan="4"> &nbsp;&nbsp;&nbsp
-					< !-- IF {PHP.n} == 'pages' -- >
-					page.tpl: {PAGE_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}},
-					page.add.tpl: {PAGEADD_FORM_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}},
-					page.edit.tpl: {PAGEEDIT_FORM_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}} ,
-					list.tpl: {LIST_ROW_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}}, {LIST_TOP_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}}
-					< !-- ENDIF -- >
-					< !-- IF {PHP.n} == 'structure' -- >
-					list.tpl, list.group.tpl: {LIST_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}},
-					list.group.tpl: {LIST_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}},
-					admin.structure.inc.tpl: {ADMIN_STRUCTURE_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}},{ADMIN_STRUCTURE_FORMADD_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}}
-					< !-- ENDIF -- >
-					< !-- IF {PHP.n} == 'users' -- >
-					users.profile.tpl: {USERS_PROFILE_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}},
-					users.edit.tpl: {USERS_EDIT_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}},
-					users.details.tpl: {USERS_DETAILS_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}},
-					user.register.tpl: {USERS_REGISTER_{ADMIN_EXTRAFIELDS_ROW_BIGNAME}},
-					forums.posts.tpl: {FORUMS_POSTS_ROW_USER{ADMIN_EXTRAFIELDS_ROW_BIGNAME}}
-					< !-- ENDIF -- >
-				</td>
-			</tr>//-->
 <!-- END: EXTRAFIELDS_ROW -->
 			<tr>
                 <td class="valid" colspan="4">
