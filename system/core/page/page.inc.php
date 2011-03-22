@@ -117,7 +117,7 @@ if(!$usr['isadmin'] || $cfg['count_admin'])
 }
 
 $catpath = sed_build_catpath($pag['page_cat'], '<a href="%1$s">%2$s</a>');
-$pag['page_fulltitle'] = empty($catpath) ? '' : $catpath . '<span>' . $cfg['separator'] . '</span>';
+$pag['page_fulltitle'] = empty($catpath) ? '' : $catpath . ' <span>' . $cfg['separator'] . '</span> ';
 $pag['page_fulltitle'] .= "<a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";
 $pag['page_fulltitle'] .= ($pag['page_totaltabs']>1 && !empty($pag['page_tabtitle'][$pag['page_tab']-1])) ? " (".$pag['page_tabtitle'][$pag['page_tab']-1].")" : '';
 
