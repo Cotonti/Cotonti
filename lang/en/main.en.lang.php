@@ -308,6 +308,7 @@ $L['Until'] = 'Until';
 $L['Update'] = 'Update';
 $L['Updated'] = 'Updated';
 $L['Upload'] = 'Upload';
+$L['Uploaded'] = 'Uploaded';
 $L['URL'] = 'URL';
 $L['User'] = 'User';
 $L['Userid'] = 'User ID';
