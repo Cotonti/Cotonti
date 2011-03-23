@@ -65,8 +65,16 @@
 
 <!-- BEGIN: COMMENTS_NEWCOMMENT -->
 	<h2 class="comments">{PHP.L.Newcomment}</h2>
+	{FILE ./themes/nemesis/warnings.tpl}
 	<form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
+		<!-- BEGIN: GUEST -->
+		<div>{PHP.L.Name}: {COMMENTS_FORM_AUTHOR}</div>
+		<!-- END: GUEST -->
 		<div>{COMMENTS_FORM_TEXT}</div>
+		
+		<!-- IF {PHP.usr.id} == 0 AND {COMMENTS_FORM_VERIFYIMG} -->
+		<div>{COMMENTS_FORM_VERIFYIMG} : {COMMENTS_FORM_VERIFY}</div>
+		<!-- ENDIF -->
 		<div class="valid"><button type="submit">{PHP.L.Submit}</button></div>
 	</form>
 	<div class="help">{COMMENTS_FORM_HINT}</div>
@@ -75,10 +83,6 @@
 <!-- BEGIN: COMMENTS_EMPTY -->
 <div class="block">{COMMENTS_EMPTYTEXT}</div>
 <!-- END: COMMENTS_EMPTY -->
-
-<!-- BEGIN: COMMENTS_ERROR -->
-<div class="error">{COMMENTS_ERROR_BODY}</div>
-<!-- END: COMMENTS_ERROR -->
 
 <!-- BEGIN: COMMENTS_CLOSED -->
 <div class="error">{COMMENTS_CLOSED}</div>

@@ -2093,14 +2093,16 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
  * Renders different messages on page
  *
  * @param XTemplate $tpl Current template object reference
+ * @param string $block Current template block
  */
-function cot_display_messages($tpl)
+function cot_display_messages($tpl, $block = 'MAIN')
 {
 	global $L;
 	if (!cot_check_messages())
 	{
 		return;
 	}
+	$block = (!empty($block)) ? $block.'.' : '';
 	$errors = cot_get_messages('', 'error');
 	if (count($errors) > 0)
 	{
@@ -2108,9 +2110,9 @@ function cot_display_messages($tpl)
 		{
 			$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
 			$tpl->assign('ERROR_ROW_MSG', $text);
-			$tpl->parse('MAIN.ERROR.ERROR_ROW');
+			$tpl->parse($block.'ERROR.ERROR_ROW');
 		}
-		$tpl->parse('MAIN.ERROR');
+		$tpl->parse($block.'ERROR');
 	}
 	$warnings = cot_get_messages('', 'warning');
 	if (count($warnings) > 0)
@@ -2119,9 +2121,9 @@ function cot_display_messages($tpl)
 		{
 			$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
 			$tpl->assign('WARNING_ROW_MSG', $text);
-			$tpl->parse('MAIN.WARNING.WARNING_ROW');
+			$tpl->parse($block.'WARNING.WARNING_ROW');
 		}
-		$tpl->parse('MAIN.WARNING');
+		$tpl->parse($block.'WARNING');
 	}
 	$okays = cot_get_messages('', 'ok');
 	if (count($okays) > 0)
@@ -2130,9 +2132,9 @@ function cot_display_messages($tpl)
 		{
 			$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
 			$tpl->assign('DONE_ROW_MSG', $text);
-			$tpl->parse('MAIN.DONE.DONE_ROW');
+			$tpl->parse($block.'DONE.DONE_ROW');
 		}
-		$tpl->parse('MAIN.DONE');
+		$tpl->parse($block.'DONE');
 	}
 	cot_clear_messages();
 }

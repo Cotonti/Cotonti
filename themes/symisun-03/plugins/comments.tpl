@@ -89,15 +89,19 @@ polls.php?id={PHP.id}
 <div class="padding10 red">{COMMENTS_EMPTYTEXT}</div>
 <!-- END: COMMENTS_EMPTY -->
 
-<!-- BEGIN: COMMENTS_ERROR -->
-{FILE ./themes/symisun-03/warnings.tpl}
-<!-- END: COMMENTS_ERROR -->
 &nbsp;
 <!-- BEGIN: COMMENTS_NEWCOMMENT -->
 <a name="post" id="post"></a>
 <form action="{COMMENTS_FORM_SEND}" method="post">
 	<h2>{PHP.L.Newcomment}</h2>
+		{FILE ./themes/nemesis/warnings.tpl}
+		<!-- BEGIN: GUEST -->
+	<div style="width:100%;">	{PHP.L.Name}: {COMMENTS_FORM_AUTHOR}</div>
+		<!-- END: GUEST -->
 	<div style="width:100%;">{COMMENTS_FORM_TEXT}<br />{COMMENTS_FORM_HINT}</div>
+	<!-- IF {PHP.usr.id} == 0 AND {COMMENTS_FORM_VERIFYIMG} -->
+	<div style="width:100%;">	{COMMENTS_FORM_VERIFYIMG} : {COMMENTS_FORM_VERIFY}</div>
+	<!-- ENDIF -->
 	<p><input type="submit" value="{PHP.L.Submit}" class="submit" /></p>
 </form>
 <!-- END: COMMENTS_NEWCOMMENT -->

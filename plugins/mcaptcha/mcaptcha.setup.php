@@ -4,7 +4,7 @@
 Code=mcaptcha
 Name=MathCaptcha
 Description=Mathematical CAPTCHA. Protects your site from spam bots with simple arithmetic tasks. Requires JavaScript.
-Version=1.1.0
+Version=1.1.1
 Date=2010-12-22
 Author=Trustmaster
 Copyright=Copyright (c) 2008-2011, Vladimir Sibirov. Distributed under BSD License.
