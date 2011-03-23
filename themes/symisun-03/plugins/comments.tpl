@@ -94,7 +94,7 @@ polls.php?id={PHP.id}
 <a name="post" id="post"></a>
 <form action="{COMMENTS_FORM_SEND}" method="post">
 	<h2>{PHP.L.Newcomment}</h2>
-		{FILE ./themes/nemesis/warnings.tpl}
+		{FILE ./themes/symisun-03/warnings.tpl}
 		<!-- BEGIN: GUEST -->
 	<div style="width:100%;">	{PHP.L.Name}: {COMMENTS_FORM_AUTHOR}</div>
 		<!-- END: GUEST -->
