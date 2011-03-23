@@ -101,7 +101,7 @@ function cot_comments_display($ext_name, $code, $cat = '')
 	$t->assign(array(
 		'COMMENTS_CODE' => $code,
 		'COMMENTS_FORM_SEND' => cot_url('plug', "e=comments&a=send&area=$ext_name&cat=$cat&item=$code"),
-		'COMMENTS_FORM_AUTHOR' => $usr['name'],
+		'COMMENTS_FORM_AUTHOR' => ($usr['id'] > 0) ? $usr['name'] : cot_inputbox('text', 'rname'),
 		'COMMENTS_FORM_AUTHORID' => $usr['id'],
 		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? cot_textarea('rtext', $rtext, 10, 120, '', 'input_textarea_minieditor')
 			: '',
@@ -122,6 +122,8 @@ function cot_comments_display($ext_name, $code, $cat = '')
 		}
 		/* ===== */
 
+		$usr['id'] == 0 && $t->parse('COMMENTS.COMMENTS_NEWCOMMENT.GUEST');
+		cot_display_messages($t, 'COMMENTS.COMMENTS_NEWCOMMENT');
 		$t->assign('COMMENTS_FORM_HINT', $com_hint);
 		$t->parse('COMMENTS.COMMENTS_NEWCOMMENT');
 	}
@@ -223,7 +225,6 @@ function cot_comments_display($ext_name, $code, $cat = '')
 		$t->parse('COMMENTS.COMMENTS_EMPTY');
 	}
 
-	cot_display_messages($t);
 
 	/* == Hook == */
 	foreach (cot_getextplugins('comments.tags') as $pl)

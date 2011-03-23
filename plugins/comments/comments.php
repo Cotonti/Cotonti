@@ -119,7 +119,7 @@ if ($m == 'edit' && $id > 0)
 
 	$com_limit = ($sys['now_offset'] < ($com['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
 	$usr['isowner'] = $com_limit
-		&& ($usr['id'] > 0 && $com['com_authorid'] == $usr['id'] || $usr['id'] == 0 && $usr['ip'] == $com['com_authorip']);
+		&& ($usr['id'] > 0 && $com['com_authorid'] == $usr['id'] || $usr['id'] == 0 && isset($_SESSION['cot_comments_edit'][$id]));
 
 	$usr['allow_write'] = ($usr['isadmin'] || $usr['isowner']);
 	cot_block($usr['allow_write']);
@@ -151,6 +151,7 @@ if ($a == 'send' && $usr['auth_write'])
 {
 	cot_shield_protect();
 	$rtext = cot_import('rtext', 'P', 'HTM');
+	$rname = cot_import('rname', 'P', 'TXT');
 
 	/* == Hook == */
 	foreach (cot_getextplugins('comments.send.first') as $pl)
@@ -158,7 +159,11 @@ if ($a == 'send' && $usr['auth_write'])
 		include $pl;
 	}
 	/* ===== */
-
+	
+	if (empty($rname) && $usr['id'] == 0)
+	{
+		cot_error($L['com_authortooshort'], 'rname');
+	}
 	if (mb_strlen($rtext) < $cfg['plugin']['comments']['minsize'])
 	{
 		cot_error($L['com_commenttooshort'], 'rtext');
@@ -173,7 +178,7 @@ if ($a == 'send' && $usr['auth_write'])
 		$comarray = array(
 			'com_area' => $area,
 			'com_code' => $item,
-			'com_author' => $usr['name'],
+			'com_author' => ($usr['id'] == 0) ? $rname : $usr['name'],
 			'com_authorid' => (int)$usr['id'],
 			'com_authorip' => $usr['ip'],
 			'com_text' => $rtext,
@@ -181,7 +186,9 @@ if ($a == 'send' && $usr['auth_write'])
 		);
 		$sql = $db->insert($db_com, $comarray);
 		$id = $db->lastInsertId();
-
+		
+		$_SESSION['cot_comments_edit'][$id] = $sys['now_offset'];
+		
 		if ($cfg['plugin']['comments']['mail'])
 		{
 			$sql = $db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
@@ -207,8 +214,8 @@ if ($a == 'send' && $usr['auth_write'])
 		cot_message($L['com_commentadded']);
 
 		cot_shield_update(20, 'New comment');
-		cot_redirect(cot_url($url_area, $url_params, '#c'.$id, true));
 	}
+	cot_redirect(cot_url($url_area, $url_params, '#c'.$id, true));
 }
 elseif ($a == 'delete' && $usr['isadmin'])
 {
