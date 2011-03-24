@@ -3,7 +3,9 @@
 <!-- BEGIN: STANDALONE_HEADER -->
 <html>
 <head>
-<title>{PHP.cfg.maintitle}</title>
+<title>{PHP.L.pfs_title} - {PHP.cfg.maintitle}</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<base href="{PHP.cfg.mainurl}/" />
 <link href="themes/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
