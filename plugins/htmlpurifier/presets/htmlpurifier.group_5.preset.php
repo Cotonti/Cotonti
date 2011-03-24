@@ -11,6 +11,8 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+require_once $cfg['plugins_dir'] . '/htmlpurifier/lib/standalone/HTMLPurifier/Filter/YouTube.php';
+
 /**
  * HTML Purifier config set
  * @see http://htmlpurifier.org/live/configdoc/plain.html
@@ -30,8 +32,10 @@ $htmlpurifier_preset = array(
 	'HTML.FlashAllowFullScreen'					=> true,
 	'HTML.MaxImgLength'							=> 1200,
 	'HTML.SafeObject'							=> true,
+	'HTML.SafeEmbed'							=> true,
 	'HTML.Trusted'								=> true,
 	'Output.FlashCompat'						=> true,
+	'Filter.YouTube'							=> true,
 	// URI
 	'URI.DisableExternal'						=> false,
 	'URI.DisableExternalResources'				=> false
