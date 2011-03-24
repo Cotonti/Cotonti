@@ -39,7 +39,7 @@ $sql = sed_sql_query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users
 sed_die(sed_sql_numrows($sql)==0);
 $row = sed_sql_fetcharray($sql);
 
-$title = "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> <span>".$cfg['separator']."</span>";
+$title = "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> ".$cfg['separator'];
 
 if ($row['pm_touserid']==$usr['id'] && $row['pm_state']==2)
 {
@@ -98,7 +98,7 @@ else
     sed_die();
 }
 
-$title .= "<span>".$cfg['separator']."</span> <a href=\"".sed_url('pm', 'id='.$id)."\">".htmlspecialchars($row['pm_title'])."</a>";
+$title .= ' '.$cfg['separator']." <a href=\"".sed_url('pm', 'id='.$id)."\">".htmlspecialchars($row['pm_title'])."</a>";
 
 $title_tags[] = array('{PM}', '{INBOX}', '{ARCHIVES}', '{SENTBOX}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s', '%4$s');

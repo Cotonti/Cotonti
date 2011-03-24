@@ -36,9 +36,9 @@ unset($pageprev, $pagenext);
 
 
 
-$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> <span>'.$cfg['separator'].'</span> ' : '';
+$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
 
-$title = $bhome . "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> <span>".$cfg['separator']."</span>";
+$title = $bhome . "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> ".$cfg['separator'];
 
 if ($f=='archives')
 {
