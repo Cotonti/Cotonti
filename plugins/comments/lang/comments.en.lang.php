@@ -48,7 +48,7 @@ $L['com_commentadded'] = 'Done, comment added';
 $L['com_commenttoolong'] = 'The comment is too long';
 $L['com_commenttooshort'] = 'The comment is too short or missing';
 $L['com_nocommentsyet'] = 'No comments yet';
-$L['com_authortooshort'] = 'Poster name too short';
+$L['com_authortooshort'] = 'Poster name is too short';
 $L['com_regonly'] = 'Only registered users can post new comments';
 
 $L['plu_comgup'] = ' left';

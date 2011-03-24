@@ -119,7 +119,8 @@ if ($m == 'edit' && $id > 0)
 
 	$com_limit = ($sys['now_offset'] < ($com['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
 	$usr['isowner'] = $com_limit
-		&& ($usr['id'] > 0 && $com['com_authorid'] == $usr['id'] || $usr['id'] == 0 && isset($_SESSION['cot_comments_edit'][$id]));
+		&& ($usr['id'] > 0 && $com['com_authorid'] == $usr['id'] || $usr['id'] == 0
+		&& isset($_SESSION['cot_comments_edit'][$id]) && ($_SESSION['cot_comments_edit'][$id] + $cfg['plugin']['comments']['time'] * 60) > $sys['now_offset']);
 
 	$usr['allow_write'] = ($usr['isadmin'] || $usr['isowner']);
 	cot_block($usr['allow_write']);
