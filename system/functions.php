@@ -867,7 +867,7 @@ function sed_build_catpath($cat, $mask)
 			$tmp[]= sprintf($mask, sed_url('list', 'c='.$x), $sed_cat[$x]['title']);
 		}
 	}
-	return is_array($tmp) ? implode(' <span>'.$cfg['separator'].'</span> ', $tmp) : '';
+	return is_array($tmp) ? implode(' '.$cfg['separator'].' ', $tmp) : '';
 }
 
 /* ------------------ */
