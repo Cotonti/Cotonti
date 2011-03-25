@@ -33,12 +33,11 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'])
 		if (isset($structure['page'][$v[0]]))
 		{
 			$jj++;
-			$v[2] = ((int)$v[2] > 0) ? $v[2] : '';
 			$tt->assign(array(
 				'ADDNUM' => $jj,
 				'ADDCATEGORY' => $v[0],
 				'ADDCOUNT' => ((int)$v[1] > 0) ? $v[1] : $cfg['plugin']['news']['maxpages'],
-				'ADDCUT' => ((int)$v[2] > 0) ? $v2 : ''
+				'ADDCUT' => ((int)$v[2] > 0) ? $v[2] : ''
 			));
 			$tt->parse('MAIN.ADDITIONAL');
 		}
