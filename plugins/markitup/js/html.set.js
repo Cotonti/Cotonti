@@ -157,7 +157,7 @@ var mediSettings = {
 		{separator:'---------------'},
 		{name: L.ul, className: 'mUl', openWith:'<ul>\n', closeWith:'\n</ul>'},
 		{name: L.ol, className: 'mOl', openWith:'<ol>\n', closeWith:'\n</ol>'},
-		{name: L.li, className: 'mLi', openWith:'[li]', key: 'M', closeWith: '[/li]'},
+		{name: L.li, className: 'mLi', openWith:'<li>', key: 'M', closeWith: '</li>'},
 		{separator:'---------------'},
 		{name: L.quote, className:'mQuote', dropMenu: [
 			{name: L.quote, className: 'mQuote', openWith:'<blockquote><strong>[![' + L.quote_from + ']!]: </strong>', closeWith:'</blockquote>',
@@ -171,7 +171,7 @@ var mediSettings = {
 				}
 			},
 			{name: L.pre, className: 'mPre', openWith:'<pre>', closeWith:'</pre>'},
-			{name: L.code, className: 'mCode', openWith:'<code>', closeWith:'</code>'}
+			{name: L.code, className: 'mCode', openWith:'<pre class="code">', closeWith:'</pre>'}
 		]},
 		{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) {showSmilies(markitup)}},
 		{separator:'---------------'},
