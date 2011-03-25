@@ -39,7 +39,7 @@ $L['info_desc'] = 'Система комментариев для Cotonti с API
 
 $L['comments_comment'] = 'Комментарий';
 $L['comments_comments'] = 'Комментарии';
-$L['Newcomment'] = 'Новый комментарии';
+$L['Newcomment'] = 'Новый комментарий';
 
 $L['comm_on_page'] = 'на странице';
 
