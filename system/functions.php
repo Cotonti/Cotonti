@@ -412,7 +412,7 @@ function cot_import_buffer_save()
  */
 function cot_import_buffered($name, $value, $null = '')
 {
-	if (empty($value))
+	if ($value === '' || $value === null)
 	{
 		if (isset($_SESSION['cot_buffer'][$name]))
 		{
