@@ -1,0 +1,57 @@
+REQUIREMENTS
+------------
+
+To install Cotonti you need the following server software pre-installed:
+
+* WWW Server (Apache, nginx, etc)
+* PHP 5.2 or higher
+* MySQL 5.0 or higher
+
+
+SERVER CONFIGURATION
+--------------------
+
+You MUST ensure that PHP has been compiled with support for:
+* GD
+* Hash
+* Mbstring
+* MySQL
+* PCRE
+* PDO and PDO_MySQL
+* Sessions
+* Zlib
+in order to successfully run Cotonti.
+
+
+OPTIONAL COMPONENTS
+-------------------
+
+If you want support for SEF (Search Engine Friendly) URLs,
+you'll need mod_rewrite and the ability to use local .htaccess files.
+
+
+INSTALLATION
+------------
+
+1. Copy datas/config-sample.php to datas/config.php and make it writable
+  with CHMOD 666 or CHMOD 664 (depending on your hosting configuration).
+
+2. Make the following folders and all their subfolders writable too
+  with CHMOD 777 or CHMOD 775:
+
+/datas/avatars
+/datas/cache (and all its subfolders)
+/datas/defaultav
+/datas/extflds
+/datas/photos
+/datas/signatures
+/datas/thumbs
+/datas/tmp
+/datas/users
+
+3. Open your favorite browser and locate the installation script in it, e.g.:
+  http://example.com/install.php
+
+4. Follow the instruction on the screen up to the end of installation.
+
+For more information and support please visit http://www.cotonti.com
