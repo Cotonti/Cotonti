@@ -442,7 +442,7 @@ $L['adm_pluginstall_msg05'] = 'Установка частей...';	// New in N-
 $L['adm_pluginstall_msg06'] = 'Поиск настроек в файле конфигурации...';	// New in N-0.0.6
 $L['adm_pluginstall_msg07'] = 'Не найдено! Установка прервана!';	// New in N-0.0.6
 $L['adm_pluginstall_msg08'] = 'Удаление прав пользователей для плагина...';	// New in N-0.0.6
-$L['adm_pluginstall_msg09'] = 'Добавление прав для групп ользователей...';	// New in N-0.0.6
+$L['adm_pluginstall_msg09'] = 'Добавление прав для групп пользователей...';	// New in N-0.0.6
 $L['adm_pluginstall_msg10'] = 'Сброс прав для всех пользователей...';	// New in N-0.0.6
 $L['adm_pluginstall_msg11'] = 'Выполнение деинсталлятора...';	// New in N-0.0.6
 
