@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<div id="center" class="column">
+		<div class="col3-2 first">
 			<div class="block">
 				<h2 class="folder">{LIST_CATTITLE}</h2>
 				<!-- BEGIN: LIST_ROWCAT -->
@@ -24,7 +24,7 @@
 			<!-- ENDIF -->
 		</div>
 
-		<div id="side" class="column">
+		<div class="col3-1">
 <!-- IF {PHP.usr.isadmin} -->
 			<div class="block">
 				<h2 class="admin">{PHP.L.Admin}</h2>

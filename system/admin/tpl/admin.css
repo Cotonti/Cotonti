@@ -27,11 +27,22 @@ hr		{ margin:4px 0 1px; border:1px solid; border-color:#ddd transparent transpar
 #user a		{ font-weight:bold; }
 #user li#hi	{ position:absolute; top:30px; left:45px; }
 
-#main		{ padding:0 45px; }
-#center		{ width:550px; margin-right:40px;  }
-#side		{ width:280px; }
-.column		{ position:relative; float:left; }
-.block		{ margin-bottom:10px; }
+#main		{ }
+
+.block		{ margin:0 10px 25px; }
+
+.col, .col4-1, .col4-2, .col4-3, .col3-1, .col3-2, .col2-1		{ float:left; }
+
+.col		{ width:100%; }
+.col4-1		{ width:240px; /* width:25%; */ }
+.col4-2		{ width:480px; /* width:50%; */ }
+.col4-3		{ width:720px; /* width:75%; */ }
+.col3-1		{ width:320px; /* width:33%; */ }
+.col3-2		{ width:640px; /* width:67%; */ }
+.col2-1		{ width:480px; /* width:50%; */ }
+
+.col.first, .col4-1.first, .col4-2.first, .col4-3.first, .col3-1.first, .col3-2.first, .col2-1.first	{ margin-left:0; clear:left; }
+
 #footer		{ font-size:.9em; text-align:center; padding:15px; height:50px; background:url(img/footer.png) repeat-x 0 0; }
 #footer a	{ color:#d3dde7; }
 #footer ul li	{ display:inline; margin:0 5px; }
@@ -42,7 +53,7 @@ hr		{ margin:4px 0 1px; border:1px solid; border-color:#ddd transparent transpar
 h1,h2,h3,h4,h5,h6 { font-weight:normal; font-size:1em; margin:0; padding:0; position:relative; }
 h1		{ color:#036; margin:0 auto; padding:8px 45px 0; height:52px; width:870px!important; background:url(img/crumbs.png) no-repeat 50% 0; }
 h1 a		{ font-weight:bold; padding:0 10px; }
-h2		{ font:normal 2em "Times New Roman"; margin:10px 0; padding-bottom:2px; border-bottom:1px solid; }
+h2		{ font:normal 2em "Times New Roman"; margin:10px; padding-bottom:2px; border-bottom:1px solid; }
 h3		{ color:#4f789f; font:normal 1.6em "Times New Roman"; margin:5px 0; }
 h4		{ font-weight:bold; }
 

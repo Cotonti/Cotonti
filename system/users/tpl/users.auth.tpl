@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<div id="center" class="column">
+		<div class="col3-2 first">
 			<div class="block">
 				<h2 class="users">{USERS_AUTH_TITLE}</h2>
 				<form name="login" action="{USERS_AUTH_SEND}" method="post">
@@ -24,7 +24,8 @@
 				</form>
 			</div>
 		</div>
-		<div id="side" class="column">
+
+		<div class="col3-1">
 {FILE "./themes/nemesis/inc/contact.tpl"}
 		</div>
 

@@ -1,12 +1,15 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.adm_internalcache}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
+		<div class="block">
 			<ul class="follow">
 				<li><a href="{ADMIN_CACHE_URL_REFRESH}" class="ajax">{PHP.L.Refresh}</a></li>
 				<li><a href="{ADMIN_CACHE_URL_PURGE}" class="ajax">{PHP.L.adm_purgeall}</a></li>
 				<li><a href="{ADMIN_CACHE_URL_SHOWALL}" class="ajax">{PHP.L.adm_showall}</a></li>
 			</ul>
-			<!-- BEGIN: ADMIN_CACHE_MEMORY -->
+		</div>
+<!-- BEGIN: ADMIN_CACHE_MEMORY -->
+		<div class="block">
 			<h3>{ADMIN_CACHE_MEMORY_DRIVER}</h3>
 			<p>
 				<div class="bar_back">
@@ -14,7 +17,9 @@
 				</div>
 				{PHP.L.Available}: {ADMIN_CACHE_MEMORY_AVAILABLE} / {ADMIN_CACHE_MEMORY_MAX} {PHP.L.bytes}
 			</p>
-			<!-- END: ADMIN_CACHE_MEMORY -->
+		</div>
+<!-- END: ADMIN_CACHE_MEMORY -->
+		<div class="block">
 			<h3>{PHP.L.Database}</h3>
 			<table class="cells">
 				<tr>
@@ -40,4 +45,5 @@
 					<td>&nbsp;</td>
 				</tr>
 			</table>
+		</div>
 <!-- END: MAIN -->

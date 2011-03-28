@@ -1,7 +1,10 @@
 <!-- BEGIN: MAIN -->
+
 		<!-- IF {PHP.is_adminwarnings} --><div class="error">{PHP.L.adm_warnings}: {PHP.adm_nogd}</div><!-- ENDIF -->
+
 		<h2>{PHP.L.Main}</h2>
-		<div id="center" class="column">
+
+		<div class="col3-2 first">
 <!-- BEGIN: UPDATE -->
 			<div class="block">
 				<h3>{PHP.L.adminqv_update_notice}:</h3>
@@ -47,7 +50,8 @@
 				</table>
 			</div>
 		</div>
-		<div id="side" class="column">
+
+		<div class="col3-1">
 			<div class="block">
 				<h3>{PHP.L.adm_valqueue}:</h3>
 				<ul class="follow">

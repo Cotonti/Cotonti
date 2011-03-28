@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.ipsearch_title}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
-		<div id="center" class="column">
+		<div class="col3-2 first">
 			<div class="block">
 				<h3>{PHP.L.ipsearch_dnsrecord}: {IPSEARCH_RES_DNS}</h3>
 <!-- BEGIN: IPSEARCH_RESULTS -->
@@ -26,7 +26,7 @@
 <!-- END: IPSEARCH_RESULTS -->
 			</div>
 		</div>
-		<div id="side" class="column">
+		<div class="col3-1">
 			<div class="block">
 				<h3>{PHP.L.ipsearch_searchthisuser}:</h3>
 				<form id="search" action="{IPSEARCH_FORM_URL}" method="post">

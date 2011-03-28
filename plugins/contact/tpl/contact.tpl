@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-	<div id="center" class="column">
+	<div class="col3-2 first">
 		<div class="block">
 			<h2 class="message"><a href="plug.php?e=contact">{PHP.L.contact_title}</a></h2>
 
@@ -42,7 +42,7 @@
 		</div>
 	</div>
 
-	<div id="side" class="column">
+	<div class="col3-1">
 		<div class="block">
 			<h2 class="message">{PHP.L.contact_subtitle}</h2>
 			<p><strong>Phone:</strong> +375 (29) 774 3589</p>

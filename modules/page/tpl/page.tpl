@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<div id="center" class="column">
+		<div class="col3-2 first">
 			<div class="block">
 				<h2 class="page">{PAGE_TITLE}</h2>
 					<div class="combox">{PAGE_COMMENTS_COUNT}</div>
@@ -37,7 +37,7 @@
 			{PAGE_COMMENTS_DISPLAY}
 		</div>
 
-		<div id="side" class="column">
+		<div class="col3-1">
 			<!-- BEGIN: PAGE_ADMIN -->
 			<div class="block">
 				<h2 class="admin">{PHP.L.Adminpanel}</h2>

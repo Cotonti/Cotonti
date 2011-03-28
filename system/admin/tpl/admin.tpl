@@ -15,9 +15,11 @@
 		<div id="ajaxBlock">
 		{ADMIN_MAIN}
 		</div>
-		<div class="help">
-			<h4>{PHP.L.Help}:</h4>
-			<p>{ADMIN_HELP}</p>
+		<div class="block">
+			<div class="help">
+				<h4>{PHP.L.Help}:</h4>
+				<p>{ADMIN_HELP}</p>
+			</div>
 		</div>
 	</div>
 
