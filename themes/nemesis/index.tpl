@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<div id="center" class="column">
+		<div class="col3-2 first">
 			<!-- IF {INDEX_NEWS} -->
 			<div class="block">
 				<h2 class="news">{PHP.L.News}</h2>
@@ -9,7 +9,7 @@
 			<!-- ENDIF -->
 		</div>
 
-		<div id="side" class="column">
+		<div class="col3-1">
 <!-- IF {PHP.usr.isadmin} -->{FILE "themes/nemesis/inc/admin.tpl"}<!-- ENDIF -->
 			<!-- IF {INDEX_POLLS} -->
 			<div class="block">

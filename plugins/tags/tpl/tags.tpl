@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<div id="center" class="column">
+		<div class="col3-2 first">
 			<div class="block">
 				<h2 class="tags">{PHP.L.tags_Search_tags}</h2>
 				<form action="{TAGS_ACTION}" method="post">
@@ -35,7 +35,8 @@
 			<!-- END: TAGS_RESULT -->
 			<!-- IF {TAGS_PAGNAV} --><p class="paging">{TAGS_PAGEPREV}{TAGS_PAGNAV}{TAGS_PAGENEXT}</p><!-- ENDIF -->
 		</div>
-		<div id="side" class="column">
+
+		<div class="col3-1">
 			<div class="block">
 				<h2 class="info">{PHP.L.Tags}</h2>
 				<p>{TAGS_HINT}</p>

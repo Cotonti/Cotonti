@@ -1,13 +1,16 @@
 <!-- BEGIN: MAIN -->
-		<ul class="follow">
-			<li>
-				<a title="{PHP.L.Configuration}" href="{ADMIN_FORUMS_URL_CONFIG}">{PHP.L.Configuration}</a>
-			</li>
-			<li>
-				<a href="{ADMIN_FORUMS_URL_STRUCTURE}">{PHP.L.Categories}</a>
-			</li>
-		</ul>
-		<h2 class="stats">{PHP.L.Statistics}</h2>
+
+		<h2>{PHP.L.Forums}</h2>
+
+		<div class="block">
+			<ul class="follow">
+				<li><a title="{PHP.L.Configuration}" href="{ADMIN_FORUMS_URL_CONFIG}">{PHP.L.Configuration}</a></li>
+				<li><a href="{ADMIN_FORUMS_URL_STRUCTURE}">{PHP.L.Categories}</a></li>
+			</ul>
+		</div>
+		
+		<div class="block">
+		<h3>{PHP.L.Statistics}</h3>
 			<table class="cells">
 				<tr>
 					<td>{PHP.L.forums_topics}:</td>
@@ -22,8 +25,10 @@
 					<td class="centerall">{ADMIN_FORUMS_TOTALVIEWS}</td>
 				</tr>
 			</table>
+		</div>
 
-			<h2 class="stats">{PHP.L.home_newtopics}</h2>
+		<div class="block">
+			<h3>{PHP.L.home_newtopics}</h3>
 			<table class="cells">
 <!-- BEGIN: ADMIN_FORUMS_ROW_USER -->
 				<tr>
@@ -32,6 +37,6 @@
 					<td class="centerall width10">{ADMIN_FORUMS_ROW_POSTCOUNT}</td>
 				</tr>
 <!-- END: ADMIN_FORUMS_ROW_USER -->
-
 			</table>
+		</div>
 <!-- END: MAIN -->

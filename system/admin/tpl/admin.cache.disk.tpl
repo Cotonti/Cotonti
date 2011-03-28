@@ -1,9 +1,13 @@
 <!-- BEGIN: MAIN -->
 		<h2>Disk Cache</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
+		<div class="block">
 			<ul class="follow">
 				<li><a href="{ADMIN_DISKCACHE_URL_REFRESH}" class="ajax">{PHP.L.Refresh}</a></li>
 				<li><a href="{ADMIN_DISKCACHE_URL_PURGE}" class="ajax">{PHP.L.adm_purgeall}</a></li>
+			</ul>
+		</div>
+		<div class="block">
 			<table class="cells">
 				<tr>
 					<td class="coltop width25">{PHP.L.Item}</td>
@@ -26,4 +30,5 @@
 				<td class="centerall">&nbsp;</td>
 			</tr>
 			</table>
+		</div>
 <!-- END: MAIN -->
