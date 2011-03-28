@@ -45,7 +45,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		$row['ft_postisnew'] = FALSE;
 		$row['ft_pages'] = '';
 		$ft_num++;
-		if ((int)$titlelength > 0)
+		if ((int)$titlelength > 0 && mb_strlen($row['ft_title']) > $titlelength)
 		{
 			$row['ft_title'] = cot_string_truncate($row['ft_title'], $titlelength, false). "...";
 		}
