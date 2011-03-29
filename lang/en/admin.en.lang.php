@@ -75,7 +75,7 @@ $L['core_rss'] = &$L['RSS_Feeds'];
 $L['core_structure'] = &$L['Categories'];
 $L['core_theme'] = &$L['Themes'];
 $L['core_time'] = 'Time and Date';
-$L['core_title'] = 'Titles (&lt;title&gt; tag)';
+$L['core_title'] = 'Titles and Metas';
 $L['core_users'] = &$L['Users'];
 
 $L['cfg_struct_defaults'] = 'Structure Defaults';
@@ -174,23 +174,9 @@ $L['cfg_showsqlstats'] = array('Show SQL queries statistics', '(used in footer.t
 
 $L['cfg_maintitle'] = array('Site title', 'Main title for the website, required');
 $L['cfg_subtitle'] = array('Description', 'Optional, will be displayed after the title of the site');
-$L['cfg_title_forum_editpost'] = array('Forum EditPost title', 'Options: {FORUM}, {SECTION}, {EDIT}');
-$L['cfg_title_forum_main'] = array('Forum Main title', 'Options: {FORUM}');
-$L['cfg_title_forum_newtopic'] = array('Forum NewTopic title', 'Options: {FORUM}, {SECTION}, {NEWTOPIC}');
-$L['cfg_title_forum_posts'] = array('Forum Posts title', 'Options: {FORUM}, {SECTION}, {TITLE}');
-$L['cfg_title_forum_topics'] = array('Forum Topics title', 'Options: {FORUM}, {SECTION}');
 $L['cfg_title_header'] = array('Header title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 $L['cfg_title_header_index'] = array('Header Index title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
-$L['cfg_title_list'] = array('List title', 'Options: {TITLE}');
-$L['cfg_title_page'] = array('Page title', 'Options: {TITLE}, {CATEGORY}');
-$L['cfg_title_pfs'] = array($L['PFS'].' title', 'Options: {PFS}');
-$L['cfg_title_pm_main'] = array('PM title', 'Options: {PM}, {INBOX}, {ARCHIVES}, {SENTBOX}');
-$L['cfg_title_pm_send'] = array('PM Send title', 'Options: {PM}, {SEND_NEW}');
 $L['cfg_title_users_details'] = array('Users Details title', 'Options: {USER}, {NAME}');
-$L['cfg_title_users_edit'] = array('Users Edit title', 'Options: {EDIT}, {NAME}');
-$L['cfg_title_users_main'] = array('Users Main title', 'Options: {USERS}');
-$L['cfg_title_users_profile'] = array('Users Profile title', 'Options: {PROFILE}, {NAME}');
-$L['cfg_title_users_pasrec'] = array('Users - password recovery', 'Options: {PASSRECOVER}');
 
 /**
  * Config Section

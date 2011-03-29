@@ -237,7 +237,7 @@ $title_params = array(
 	'EDIT' => $L['Edit'],
 	'NAME' => $urr['user_name']
 );
-$out['subtitle'] = cot_title('title_users_edit', $title_params);
+$out['subtitle'] = cot_title('{EDIT} - {NAME}', $title_params);
 $out['head'] .= $R['code_noindex'];
 
 /* === Hook === */

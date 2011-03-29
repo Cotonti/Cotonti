@@ -3,8 +3,8 @@
 [BEGIN_COT_EXT]
 Name=Forums
 Description=Cotonti Bulletin Board Module
-Version=0.9.0.1
-Date=2010-oct-05
+Version=0.9.0.2
+Date=2011-03-29
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2011
 Notes=BSD License
@@ -28,6 +28,8 @@ mergetimeout=07:select:0,1,2,3,6,12,24,36,48,72:0:
 maxpostsperpage=08:string::15:
 mintitlelength=09:string::5:
 minpostlength=10:string::2:
+title_posts=31:string::{TITLE} - {SECTION} - {FORUM}:
+title_topics=32:string::{SECTION} - {FORUM}:
 [END_COT_EXT_CONFIG]
 
 [BEGIN_COT_EXT_CONFIG_STRUCTURE]

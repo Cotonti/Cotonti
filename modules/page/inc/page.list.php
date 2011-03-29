@@ -132,11 +132,8 @@ else
 
 $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $totallines, $cfg['page']['maxrowsperpage']);
 
-$title_params = array(
-	'TITLE' => $cat['title']
-);
 $out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
-$out['subtitle'] = cot_title('title_list', $title_params);
+$out['subtitle'] = $cat['title'];
 
 $_SESSION['cat'] = $c;
 

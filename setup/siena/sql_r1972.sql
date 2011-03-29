@@ -1,0 +1,3 @@
+/* r1972 title configs cleanup */
+UPDATE `cot_config` SET `config_cat` = 'title' WHERE `config_owner` = 'core' AND `config_name` = 'metakeywords';
+DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_name` IN ('title_forum_main', 'title_forum_topics', 'title_forum_posts', 'title_forum_newtopic', 'title_forum_editpost', 'title_list', 'title_page', 'title_pfs', 'title_pm_main', 'title_pm_send', 'title_users_main', 'title_users_profile', 'title_users_edit', 'title_users_pasrec');

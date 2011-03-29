@@ -133,9 +133,10 @@ $sys['sublocation'] = $structure['forums'][$s]['title'];
 $title_params = array(
 	'FORUM' => $L['Forums'],
 	'SECTION' => $structure['forums'][$s]['title'],
+	'TOPIC' => $rowt['ft_title'],
 	'EDIT' => $L['Edit']
 );
-$out['subtitle'] = cot_title('title_forum_editpost', $title_params);
+$out['subtitle'] = cot_title('{EDIT} - {TOPIC}', $title_params);
 $out['head'] .= $R['code_noindex'];
 
 /* === Hook === */

@@ -106,10 +106,7 @@ if (!$usr['isadmin'] || $cfg['page']['count_admin'])
 
 if ($pag['page_cat'] == 'system')
 {
-	$title_params = array(
-		'TITLE' => $pag['page_title']
-	);
-	$out['subtitle'] = cot_title('title_list', $title_params);
+	$out['subtitle'] = $pag['page_title'];
 }
 else
 {
@@ -117,7 +114,7 @@ else
 		'TITLE' => $pag['page_title'],
 		'CATEGORY' => $cat['title']
 	);
-	$out['subtitle'] = cot_title('title_page', $title_params);
+	$out['subtitle'] = cot_title($cfg['page']['title_page'], $title_params);
 }
 $out['desc'] = strip_tags($pag['page_desc']);
 $out['keywords'] = strip_tags($pag['page_keywords']);

@@ -20,6 +20,7 @@ $L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster
 $L['cfg_count_admin'] = array('Count Administrators\' hits', '');
 $L['cfg_maxlistsperpage'] = array('Max. lists per page', ' ');
 $L['cfg_order'] = array('Sorting column');
+$L['cfg_title_page'] = array('Page title tag format', 'Options: {TITLE}, {CATEGORY}');
 $L['cfg_way'] = array('Sorting direction');
 
 $L['info_desc'] = 'Extensible content management functionality: pages and page categories.';

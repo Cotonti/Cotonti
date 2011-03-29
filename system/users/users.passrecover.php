@@ -106,11 +106,7 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 	}
 }
 
-
-$title_params = array(
-	'PASSRECOVER' => $L['pasrec_title']
-);
-$out['subtitle'] = cot_title('title_users_pasrec', $title_params);
+$out['subtitle'] = $L['pasrec_title'];
 $out['head'] .= $R['code_noindex'];
 
 $bhome = $cfg['homebreadcrumb'] ? cot_url($cfg['mainurl'], $cfg['maintitle']).' '.$cfg['separator'].' ' : '';

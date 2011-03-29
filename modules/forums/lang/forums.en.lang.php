@@ -24,6 +24,8 @@ $L['cfg_mergeforumposts'] = array('Post merge feature', 'Will merge user\'s post
 $L['cfg_mergetimeout'] = array('Post merge timeout', 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)');
 $L['cfg_minpostlength'] = array('Min. post length', ' ');
 $L['cfg_mintitlelength'] = array('Min. topic title length', ' ');
+$L['cfg_title_posts'] = array('Forum Posts title format', 'Options: {FORUM}, {SECTION}, {TITLE}');
+$L['cfg_title_topics'] = array('Forum Topics title format', 'Options: {FORUM}, {SECTION}');
 
 $L['cfg_allowusertext'] = array('Display signatures');
 $L['cfg_allowbbcodes'] = array('Enable BBcodes');

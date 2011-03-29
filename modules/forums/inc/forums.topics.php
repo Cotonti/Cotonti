@@ -144,7 +144,7 @@ $title_params = array(
 	'FORUM' => $L['Forums'],
 	'SECTION' => $structure['forums'][$s]['title']
 );
-$out['subtitle'] = cot_title('title_forum_topics', $title_params);
+$out['subtitle'] = cot_title($cfg['forums']['title_topics'], $title_params);
 $out['desc'] = htmlspecialchars(strip_tags($structure['forums'][$s]['desc']));
 $sys['sublocation'] = $structure['forums'][$s]['title'];
 

@@ -55,6 +55,8 @@ if ($row['pm_touserid'] == $usr['id'])
 	$title .= ' '.cot_rc_link(cot_url('pm', 'f=inbox'), $L['pm_inbox']);
 	$to = $row['pm_fromuserid'];
 	$star_class = ($row['pm_tostate'] == 2) ?  1 : 0;
+	$totalcount = $totalinbox;
+	$subtitle = $L['pm_inbox'];
 }
 elseif ($row['pm_fromuserid'] == $usr['id'])
 {
@@ -63,6 +65,8 @@ elseif ($row['pm_fromuserid'] == $usr['id'])
 	$row['pm_icon_edit'] = ($row['pm_tostate'] == 0) ? cot_rc_link(cot_url('pm', 'm=send&id='.$row['pm_id']), $L['Edit']) : '';
 	$to = $row['pm_touserid'];
 	$star_class = ($row['pm_fromstate'] == 2) ?  1 : 0;
+	$totalcount = $totalsentbox;
+	$subtitle = $L['pm_sentbox'];
 }
 else
 {
@@ -72,10 +76,10 @@ $row_user = $db->query("SELECT * FROM $db_users WHERE user_id = $to LIMIT 1")->f
 
 $title_params = array(
 	'PM' => $L['Private_Messages'],
-	'INBOX' => $totalinbox,
-	'SENTBOX' => $totalsentbox
+	'COUNT' => $totalcount,
+	'BOX' => $subtitle
 );
-$out['subtitle'] = cot_title('title_pm_main', $title_params);
+$out['subtitle'] = cot_title('{BOX} ({COUNT}) - {PM}', $title_params);
 $out['head'] .= $R['code_noindex'];
 
 /* === Hook === */
