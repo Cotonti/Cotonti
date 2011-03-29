@@ -74,7 +74,9 @@ CREATE TABLE `cot_config` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
-('core','lang','01','forcedefaultlang',3,'0','0','',''),
+('core','locale','01','forcedefaultlang',3,'0','0','',''),
+('core','locale','05','servertimezone',1,'0','0','',''),
+('core','locale','06','defaulttimezone',1,'0','0','',''),
 ('core','main','01','adminemail',1,'admin@mysite.com','admin@mysite.com','',''),
 ('core','main','02','clustermode',3,'0','0','',''),
 ('core','main','03','hostip',1,'999.999.999.999','999.999.999.999','',''),
@@ -117,7 +119,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','performance','01','gzip',3,'1','1','',''),
 ('core','performance','02','headrc_consolidate',3,'0','0','',''),
 ('core','performance','03','headrc_minify',3,'1','1','',''),
-('core','performance','04','jquery_cdn',3,'0','0','',''),
+('core','performance','04','jquery_cdn',1,'','','',''),
 ('core','theme','01','forcedefaulttheme',3,'0','0','',''),
 ('core','theme','02','homebreadcrumb',3,'0','0','',''),
 ('core','theme','03','metakeywords',1,'','','',''),
@@ -126,13 +128,6 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','theme','06','keepcrbottom',3,'1','1','',''),
 ('core','theme','07','showsqlstats',3,'0','0','',''),
 ('core','theme','08','msg_separate',3,'0','0','','Show messages separately for each source'),
-('core','time','01','dateformat',1,'Y-m-d H:i','Y-m-d H:i','',''),
-('core','time','02','formatmonthday',1,'m-d','m-d','',''),
-('core','time','03','formatyearmonthday',1,'Y-m-d','Y-m-d','',''),
-('core','time','04','formatmonthdayhourmin',1,'m-d H:i','m-d H:i','',''),
-('core','time','05','servertimezone',1,'0','0','',''),
-('core','time','06','defaulttimezone',1,'0','0','',''),
-('core','time','07','timedout',2,'1200','1200','30,60,120,300,600,900,1200,1800,2400,3600',''),
 ('core','title','01','maintitle',1,'Title of your site','Title of your site','',''),
 ('core','title','02','subtitle',1,'Subtitle','Subtitle','',''),
 ('core','title','03','title_forum_main',1,'{FORUM}','{FORUM}','',''),
@@ -162,6 +157,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','users','08','usertextimg',3,'0','0','',''),
 ('core','users','09','usertextmax',1,'300','300','',''),
 ('core','users','10','forcerememberme',3,'0','0','',''),
+('core','users','11','timedout',2,'1200','1200','30,60,120,300,600,900,1200,1800,2400,3600',''),
 ('core','version','01','revision',0,'','','','');
 
 CREATE TABLE `cot_core` (

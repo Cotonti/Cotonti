@@ -61,7 +61,7 @@ $L['home_update_revision'] = 'Current Version: <span style="color:#C00;font-weig
  */
 
 $L['core_forums'] = &$L['Forums'];
-$L['core_lang'] = &$L['Language'];
+$L['core_locale'] = &$L['Locale'];
 $L['core_main'] = 'Main Settings';
 $L['core_menus'] = &$L['Menus'];
 $L['core_page'] = &$L['Pages'];
@@ -82,10 +82,11 @@ $L['cfg_struct_defaults'] = 'Structure Defaults';
 
 /**
  * Config Section
- * Lang Subsection
+ * Locale Subsection
  */
 
 $L['cfg_forcedefaultlang'] = array('Force the default language for all users', '');
+$L['cfg_defaulttimezone'] = array('Default time zone', 'For guests and new members, from -12 to +12');
 
 /**
  * Config Section
@@ -148,15 +149,7 @@ $L['cfg_menu9'] = array('Menu slot #9<br />{PHP.cfg.menu9} in all tpl files', ''
 $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
 $L['cfg_headrc_consolidate'] = array('Consolidate header and footer resources (JS/CSS)');
 $L['cfg_headrc_minify'] = array('Minify consolidated JS/CSS');
-$L['cfg_jquery_cdn'] = array('Use jQuery from Google Ajax APIs CDN');
-$L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache)');
-
-/**
- * Config Section
- * Plugins Subsection
- */
-
-$L['cfg_disable_plug'] = array('Disable the plugins', '');
+$L['cfg_jquery_cdn'] = array('Use jQuery from this CDN URL', 'Example: https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js');
 
 /**
  * Config Section
@@ -173,19 +166,6 @@ $L['cfg_metakeywords'] = array('HTML Meta keywords', '(comma separated)');
 $L['cfg_msg_separate'] = array('Display messages separately for each source', '');
 $L['cfg_separator'] = array('Generic separator', '(used in breadcrumbs etc)');
 $L['cfg_showsqlstats'] = array('Show SQL queries statistics', '(used in footer.tpl)');
-
-/**
- * Config Section
- * Time Subsection
- */
-
-$L['cfg_dateformat'] = array('Main date mask', 'Default: Y-m-d H:i');
-$L['cfg_formatmonthday'] = array('Short date mask', 'Default: m-d');
-$L['cfg_formatyearmonthday'] = array('Medium date mask', 'Default: Y-m-d');
-$L['cfg_formatmonthdayhourmin'] = array('Forum date mask', 'Default: m-d H:i');
-$L['cfg_servertimezone'] = array('Server time zone', 'Offset of the server from the GMT+00');
-$L['cfg_defaulttimezone'] = array('Default time zone', 'For guests and new members, from -12 to +12');
-$L['cfg_timedout'] = array('Idle delay, in seconds', 'After this delay, user is away');
 
 /**
  * Config Section
@@ -223,6 +203,7 @@ $L['cfg_forcerememberme'] = array('Force &quot;remember me&quot;', 'Use it on mu
 $L['cfg_maxusersperpage'] = array('Maximum lines in userlist', '');
 $L['cfg_regnoactivation'] = array('Skip e-mail check for new users', '\'No\'recommended, for security reasons');
 $L['cfg_regrequireadmin'] = array('Administrators must validate new accounts', '');
+$L['cfg_timedout'] = array('Idle delay, in seconds', 'After this delay, user is away');
 $L['cfg_user_email_noprotection'] = array('Disable password protection of e-mail change', '\'No\' recommended, for security reasons');
 $L['cfg_useremailchange'] = array('Allow users to change their e-mail address', '\'No\' recommended, for security reasons');
 $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');

@@ -55,14 +55,6 @@ $cfg['cache_page'] = FALSE;     // Static page cache for guests on pages and cat
 $cfg['cache_forums'] = FALSE;   // Static page cache for guests on forums
 
 // ========================
-// Default built-in time zone settings
-// See http://php.net/manual/en/timezones.php
-// ========================
-
-(function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>=')) &&
-date_default_timezone_set('GMT');
-
-// ========================
 // More settings
 // Should work fine in most of cases.
 // If you don't know, don't change.
