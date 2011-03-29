@@ -559,10 +559,7 @@ if ($usr['auth_write'])
 
 // ========== Putting all together =========
 
-$title_tags[] = array('{PFS}');
-$title_tags[] = array('%1$s');
-$title_data = array($L['Mypfs']);
-$out['subtitle'] = cot_title('title_pfs', $title_tags, $title_data);
+$out['subtitle'] = $L['Mypfs'];
 
 /* ============= */
 

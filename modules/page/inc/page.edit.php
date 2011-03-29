@@ -207,11 +207,7 @@ $pag = $sql_page->fetch();
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $pag['page_cat']);
 cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $pag['page_ownerid']);
 
-$title_params = array(
-	'TITLE' => $L['page_edittitle'],
-	'CATEGORY' => $structure['page'][$c]['title']
-);
-$out['subtitle'] = cot_title('title_page', $title_params);
+$out['subtitle'] = $L['page_edittitle'];
 $out['head'] .= $R['code_noindex'];
 $sys['sublocation'] = $structure['page'][$c]['title'];
 

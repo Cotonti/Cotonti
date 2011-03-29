@@ -149,10 +149,7 @@ $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage = ceil($d / $cfg['maxusersperpage']) + 1;
 $pagenav = cot_pagenav('users', $users_url_path, $d, $totalusers, $cfg['maxusersperpage']);
 
-$title_params = array(
-	'USERS' => $L['Users']
-);
-$out['subtitle'] = cot_title('title_users_main', $title_params);
+$out['subtitle'] = $L['Users'];
 
 /* === Hook === */
 foreach (cot_getextplugins('users.main') as $pl)

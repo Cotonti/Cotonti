@@ -112,10 +112,7 @@ foreach ($structure['forums'] as $i => $x)
 }
 $secact_max = is_array($cot_act) ? (max($cot_act)) : 0;
 
-$title_params = array(
-	'FORUM' => $L['Forums']
-);
-$out['subtitle'] = cot_title('title_forum_main', $title_params);
+$out['subtitle'] = $L['Forums'];
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.sections.main') as $pl)

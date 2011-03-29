@@ -274,7 +274,7 @@ $title_params = array(
 	'SECTION' => $structure['forums'][$s]['title'],
 	'TITLE' => $rowt['ft_title']
 );
-$out['subtitle'] = cot_title('title_forum_posts', $title_params);
+$out['subtitle'] = cot_title($cfg['forums']['title_posts'], $title_params);
 $out['desc'] = htmlspecialchars(strip_tags($rowt['ft_desc']));
 
 /* === Hook === */

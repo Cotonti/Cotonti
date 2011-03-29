@@ -153,11 +153,7 @@ if($a == 'update')
 $sql = $db->query("SELECT * FROM $db_users WHERE user_id='".$usr['id']."' LIMIT 1");
 $urr = $sql->fetch();
 
-$title_params = array(
-	'PROFILE' => $L['Profile'],
-	'NAME' => $urr['user_name']
-);
-$out['subtitle'] = cot_title('title_users_profile', $title_params);
+$out['subtitle'] = $L['Profile'];
 $out['head'] .= $R['code_noindex'];
 
 /* === Hook === */

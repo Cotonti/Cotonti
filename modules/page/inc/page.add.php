@@ -155,12 +155,7 @@ if (empty($rpage['page_cat']) && !empty($c))
 	$usr['isadmin'] = cot_auth('page', $rpage['page_cat'], 'A');
 }
 
-$title_params = array(
-	'TITLE' => $L['page_addsubtitle'],
-	'CATEGORY' => $structure['page'][$c]['title']
-);
-
-$out['subtitle'] = cot_title('title_page', $title_params);
+$out['subtitle'] = $L['page_addsubtitle'];
 $out['head'] .= $R['code_noindex'];
 $sys['sublocation'] = $structure['page'][$c]['title'];
 

@@ -544,3 +544,14 @@ ALTER TABLE `cot_config` ADD COLUMN `config_donor` varchar(64) collate utf8_unic
 
 UPDATE `cot_config` SET `config_donor` = 'comments' WHERE `config_owner` = 'module' AND `config_cat` IN('page', 'polls') AND `config_name` = 'enable_comments';
 UPDATE `cot_config` SET `config_donor` = 'ratings' WHERE `config_owner` = 'module' AND `config_cat` = 'page' AND `config_name` = 'enable_ratings';
+
+/* r1971 Configuration cleanup */
+UPDATE `cot_config` SET `config_cat` = 'users' WHERE `config_owner` = 'core' AND `config_name` = 'timedout';
+UPDATE `cot_config` SET `config_cat` = 'locale' WHERE `config_owner` = 'core' AND `config_name` IN ('forcedefaultlang', 'defaulttimezone');
+DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` IN ('lang', 'time');
+
+UPDATE `cot_config` SET `config_type` = 1, `config_value` = '', `config_default` = '' WHERE `config_owner` = 'core' AND `config_name` = 'jquery_cdn';
+
+/* r1972 title configs cleanup */
+UPDATE `cot_config` SET `config_cat` = 'title' WHERE `config_owner` = 'core' AND `config_name` = 'metakeywords';
+DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_name` IN ('title_forum_main', 'title_forum_topics', 'title_forum_posts', 'title_forum_newtopic', 'title_forum_editpost', 'title_list', 'title_page', 'title_pfs', 'title_pm_main', 'title_pm_send', 'title_users_main', 'title_users_profile', 'title_users_edit', 'title_users_pasrec');

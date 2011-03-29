@@ -143,12 +143,7 @@ $toptitle = cot_forums_buildpath($s);
 $toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $sys['sublocation'] = $structure['forums'][$s]['title'];
-$title_params = array(
-	'FORUM' => $L['Forums'],
-	'SECTION' => htmlspecialchars($structure['forums'][$s]['title']),
-	'NEWTOPIC' => $L['forums_newtopic']
-);
-$out['subtitle'] = cot_title('title_forum_newtopic', $title_params);
+$out['subtitle'] = $L['forums_newtopic'];
 $out['head'] .= $R['code_noindex'];
 
 /* === Hook === */

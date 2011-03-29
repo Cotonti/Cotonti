@@ -75,6 +75,7 @@ if ($f == 'sentbox')
 	$sqlfilter = "pm_fromuserid = '".$usr['id']."' AND pm_fromstate <> 3";
 	$title .= ' '.cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox']);
 	$subtitle = $L['pm_sentboxsubtitle'];
+	$totalcount = $totalsentbox;
 }
 else
 {
@@ -82,6 +83,7 @@ else
 	$sqlfilter = "pm_touserid = '".$usr['id']."' AND pm_tostate <> 3";
 	$title .= ' '.cot_rc_link(cot_url('pm'),$L['pm_inbox']);
 	$subtitle = $L['pm_inboxsubtitle'];
+	$totalcount = $totalintbox;
 }
 
 if ($filter == 'unread')
@@ -105,10 +107,10 @@ foreach (cot_getextplugins('pm.list.main') as $pl)
 /* === Title === */
 $title_params = array(
 	'PM' => $L['Private_Messages'],
-	'INBOX' => $totalinbox,
-	'SENTBOX' => $totalsentbox
+	'COUNT' => $totalcount,
+	'BOX' => $subtitle
 );
-$out['subtitle'] = cot_title('title_pm_main', $title_params);
+$out['subtitle'] = cot_title('{BOX} ({COUNT}) - {PM}', $title_params);
 $out['head'] .= $R['code_noindex'];
 
 /* === Title === */

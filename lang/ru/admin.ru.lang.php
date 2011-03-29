@@ -75,7 +75,7 @@ $L['core_rss'] = &$L['RSS_Feeds'];
 $L['core_skin'] = &$L['Skins'];
 $L['core_structure'] = &$L['Categories'];
 $L['core_time'] = 'Время и дата';
-$L['core_title'] = 'Заголовки (тэг &lt;title&gt;)';
+$L['core_title'] = 'Заголовки и мета-теги';
 $L['core_users'] = &$L['Users'];
 
 $L['cfg_struct_defaults'] = 'Настройки по умолчанию для структуры';
@@ -175,23 +175,9 @@ $L['cfg_showsqlstats'] = array('Показывать статистику SQL-з
 
 $L['cfg_maintitle'] = array('Название сайта', 'Обязательно');
 $L['cfg_subtitle'] = array('Описание сайта', 'Необязательно');
-$L['cfg_title_forum_editpost'] = array('Форумы - правка', 'Опции: {FORUM}, {SECTION}, {EDIT}');
-$L['cfg_title_forum_main'] = array('Форумы - главная страница', 'Опции: {FORUM}');
-$L['cfg_title_forum_newtopic'] = array('Форумы - новая тема', 'Опции: {FORUM}, {SECTION}, {NEWTOPIC}');
-$L['cfg_title_forum_posts'] = array('Форумы - сообщения', 'Опции: {FORUM}, {SECTION}, {TITLE}');
-$L['cfg_title_forum_topics'] = array('Форумы - темы', 'Опции: {FORUM}, {SECTION}');
 $L['cfg_title_header'] = array('Основной заголовок', 'Опции: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 $L['cfg_title_header_index'] = array('Заголовок главной страницы', 'Опции: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
-$L['cfg_title_list'] = array('Заголовок раздела', 'Опции: {TITLE}');
-$L['cfg_title_page'] = array('Заголовок страницы', 'Опции: {TITLE}, {CATEGORY}');
-$L['cfg_title_pfs'] = array($L['PFS'], 'Опции: {PFS}');
-$L['cfg_title_pm_main'] = array('Личные сообщения', 'Опции: {PM}, {INBOX}, {ARCHIVES}, {SENTBOX}');
-$L['cfg_title_pm_send'] = array('Отправка личных сообщений', 'Опции: {PM}, {SEND_NEW}');
 $L['cfg_title_users_details'] = array('Пользователи - просмотр профиля', 'Опции: {USER}, {NAME}');
-$L['cfg_title_users_edit'] = array('Пользователи - редактирование пользователя', 'Опции: {EDIT}, {NAME}');
-$L['cfg_title_users_main'] = array('Пользователи - главная', 'Опции: {USERS}');
-$L['cfg_title_users_profile'] = array('Пользователи - редактирование профиля', 'Опции: {PROFILE}, {NAME}');
-$L['cfg_title_users_pasrec'] = array('Пользователи - восстановление пароля', 'Опции: {PASSRECOVER}');
 
 /**
  * Config Section
