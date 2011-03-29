@@ -16,7 +16,7 @@
  * @author		Joe Scylla <joe.scylla@gmail.com>
  * @copyright	2008 - 2011 Joe Scylla <joe.scylla@gmail.com>
  * @license		http://opensource.org/licenses/mit-license.php MIT License
- * @version		2.0.2 (2011-02-17)
+ * @version		2.0.2.2 (2011-03-28)
  */
 class CssMin
 	{
@@ -187,13 +187,19 @@ class CssMin
 	 *
 	 * @var integer
 	 */
-	const T_STRING = 254;
+	const T_STRING = 253;
 	/**
 	 * State: Is in url string property
 	 *
 	 * @var integer
 	 */
-	const T_STRING_URL = 255;
+	const T_STRING_URL = 254;
+	/**
+	 * State: Is in expression string property
+	 *
+	 * @var integer
+	 */
+	const T_STRING_EXPRESSION = 255;
 	/**
 	 * Default configuration.
 	 *
@@ -204,6 +210,7 @@ class CssMin
 		"remove-empty-blocks"			=> true,
 		"remove-empty-rulesets"			=> true,
 		"remove-last-semicolons"		=> true,
+		"remove-comments"				=> true,
 		"convert-css3-properties"		=> false,
 		"convert-font-weight-values"	=> false,
 		"convert-named-color-values"	=> false,
@@ -517,8 +524,6 @@ class CssMin
 		"outline-bottom-right-radius"	=> array("-moz-outline-radius-bottomright", null, null, null),
 		"outline-top-left-radius"		=> array("-moz-outline-radius-topleft", null, null, null),
 		"outline-top-right-radius"		=> array("-moz-outline-radius-topright", null, null, null),
-		"overflow-x"					=> array(null, null, null, "-ms-overflow-x"),
-		"overflow-y"					=> array(null, null, null, "-ms-overflow-y"),
 		"padding-after"					=> array(null, "-webkit-padding-after", null, null),
 		"padding-before"				=> array(null, "-webkit-padding-before", null, null),
 		"padding-end"					=> array("-moz-padding-end", "-webkit-padding-end", null, null),
@@ -592,12 +597,16 @@ class CssMin
 		{
 		$tokens = self::parse($css);
 		// Normalize configuration parameters
-		$config = array_combine(array_map("trim", array_map("strtolower", array_keys($config))), array_values($config));
+		if (count($config) > 0)
+			{
+			$config = array_combine(array_map("trim", array_map("strtolower", array_keys($config))), array_values($config));
+			}
 		$config = array_merge(self::$defaultConfiguration, $config);
 		// Minification options/variables
 		$sRemoveEmptyBlocks				= $config["remove-empty-blocks"];
 		$sRemoveEmptyRulesets			= $config["remove-empty-rulesets"];
 		$sRemoveLastSemicolon			= $config["remove-last-semicolons"];
+		$sRemoveComments				= $config["remove-comments"];
 		$sConvertCss3Properties 		= $config["convert-css3-properties"];
 		$sCss3Variables					= array();
 		$sConvertFontWeightValues		= $config["convert-font-weight-values"];
@@ -626,7 +635,7 @@ class CssMin
 		$sImportStatementTokens 		= array(self::T_AT_RULE, self::T_AT_IMPORT);
 		$sImportMediaEndToken			= array(self::T_AT_MEDIA_END);
 		$sImportImportedFiles			= array();
-		$sRemoveTokens					= array(self::T_NULL, self::T_COMMENT);
+		$sRemoveTokens					= array_filter(array(self::T_NULL, ($sRemoveComments ? self::T_COMMENT : false)));
 
 		/*
 		 * Import @import at-rules.
@@ -953,7 +962,10 @@ class CssMin
 					{
 					$tokens[$i][2] = preg_replace($rCompressUnitValues1, $rCompressUnitValues1R, $tokens[$i][2]);
 					$tokens[$i][2] = preg_replace($rCompressUnitValues2, $rCompressUnitValues2R, $tokens[$i][2]);
-					if ($tokens[$i][2] == "0 0 0 0" || $tokens[$i][2] == "0 0 0" || $tokens[$i][2] == "0 0") {$tokens[$i][2] = "0";}
+					if (strtolower($tokens[$i][1]) != "background-position")
+						{
+						if ($tokens[$i][2] == "0 0 0 0" || $tokens[$i][2] == "0 0 0" || $tokens[$i][2] == "0 0") {$tokens[$i][2] = "0";}
+						}
 					}
 				/*
 				 * Convert RGB color values if the configuration option "convert-rgb-color-values" is enabled.
@@ -1088,6 +1100,10 @@ class CssMin
 			elseif (in_array($tokens[$i][0], array(self::T_DECLARATIONS_END, self::T_AT_MEDIA_END, self::T_AT_FONT_FACE_END, self::T_AT_PAGE_END)))
 				{
 				$r .= "}";
+				}
+			elseif ($tokens[$i][0] == self::T_COMMENT)
+				{
+				$r .= "\n" . $tokens[$i][1] . "\n";
 				}
 			else
 				{
@@ -1250,9 +1266,26 @@ class CssMin
 					$stringChar = null;
 					}
 				/**
+				 * Start of expression string property
+				 */
+				elseif ($c == "(" && ($currentState != self::T_COMMENT && $currentState != self::T_STRING && $currentState != self::T_STRING_URL) && strtolower(substr($css, $i - 10, 10) == "expression")
+					&& ($currentState == self::T_DECLARATION || $currentState == self::T_FONT_FACE_DECLARATION || $currentState == self::T_PAGE_DECLARATION || $currentState == self::T_VARIABLE_DECLARATION))
+					{
+					array_push($state, self::T_STRING_EXPRESSION);
+					}
+				/**
+				 * End of expression string property
+				 */
+				elseif (($c == ";" || $c == "}") && $p == ")" && $currentState == self::T_STRING_EXPRESSION)
+					{
+					$buffer = substr($buffer, 0, -2);
+					array_pop($state);
+					$i = $i - 2;
+					}
+				/**
 				 * Start of url string property
 				 */
-				elseif ($c == "(" && ($currentState != self::T_COMMENT && $currentState != self::T_STRING) && strtolower(substr($css, $i - 3, 3) == "url")
+				elseif ($c == "(" && ($currentState != self::T_COMMENT && $currentState != self::T_STRING && $currentState != self::T_STRING_EXPRESSION) && strtolower(substr($css, $i - 3, 3) == "url")
 					&& ($currentState == self::T_DECLARATION || $currentState == self::T_FONT_FACE_DECLARATION || $currentState == self::T_PAGE_DECLARATION || $currentState == self::T_VARIABLE_DECLARATION || $currentState == self::T_AT_IMPORT))
 					{
 					array_push($state, self::T_STRING_URL);
@@ -1260,7 +1293,7 @@ class CssMin
 				/**
 				 * End of url string property
 				 */
-				elseif (($c == ")" || $c == "\n") && ($currentState != self::T_COMMENT && $currentState != self::T_STRING) && $currentState == self::T_STRING_URL)
+				elseif (($c == ")" || $c == "\n") && $currentState == self::T_STRING_URL)
 					{
 					if ($p == "\\")
 						{
@@ -1575,6 +1608,11 @@ class CssMin
 				 */
 				elseif ($c == ":" && $currentState == self::T_DECLARATION)
 					{
+					// Fix for Internet Explorer declaration filter as the declaration value conrains a colon (Ex.: progid:DXImageTransform.Microsoft.Alpha(Opacity=85);)
+					if (strpos(strtolower($property), "filter") !== false && strtolower(trim($buffer)) == "progid:")
+						{
+						continue;
+						}
 					$errorStart	= strrpos($css, "\n", -($l - strrpos($css, ":", -($l - $i + 2))));
 					$errorEnd	= strpos($css, "\n", $errorStart + 1);
 					$errorLine	= trim(substr($css, $errorStart, $errorEnd - $errorStart));
