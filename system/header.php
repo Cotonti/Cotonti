@@ -57,7 +57,7 @@ $out['head_head'] .= $out['head'];
 
 if ($cfg['jquery'] && $cfg['jquery_cdn'])
 {
-	cot_rc_link_file('https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js', true);
+	cot_rc_link_file($cfg['jquery_cdn'], true);
 }
 cot_rc_output();
 

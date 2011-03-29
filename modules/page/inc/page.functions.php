@@ -110,11 +110,11 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
  * @param int $textlength Text truncate
  * @param bool $admin_rights Page Admin Rights
  * @param bool $date_format DateTime Format
- * @param string $emptytitle Page title text if page is not exist
+ * @param string $emptytitle Page title text if page does not exist
  * @param bool $cacheitem Cache tags
  * @return array
  */
-function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = null, $dateformat = '', $emptytitle = '', $cacheitem = true)
+function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = null, $date_format = '', $emptytitle = '', $cacheitem = true)
 {
 	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $db_pages, $usr, $sys, $cot_yesno, $structure;
 	

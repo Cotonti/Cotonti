@@ -144,6 +144,7 @@ $L['Level']	= 'Level';
 $L['Levels']	= 'Levels';
 $L['Link']	= 'Link';
 $L['Links']	= 'Links';
+$L['Locale'] = 'Locale';
 $L['Location'] = 'Location';
 $L['Lock'] = 'Lock';
 $L['Locked'] = 'Locked';
