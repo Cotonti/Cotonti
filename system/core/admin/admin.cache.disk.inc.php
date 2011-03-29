@@ -127,18 +127,22 @@ function sed_diskcache_calc($dir, $do_subdirs = true)
 {
 	$cnt = $sz = 0;
 
-	foreach (glob("$dir/*") as $f)
+	$glob = glob("$dir/*");
+	if (is_array($glob))
 	{
-		if (is_file($f))
+		foreach ($glob as $f)
 		{
-			$cnt++;
-			$sz += @filesize($f);
-		}
-		elseif (is_dir($f) && $do_subdirs)
-		{
-			$a = sed_diskcache_calc($f);
-			$cnt += $a[0]/*files*/ + 1/*directory*/;
-			$sz += $a[1];
+			if (is_file($f))
+			{
+				$cnt++;
+				$sz += @filesize($f);
+			}
+			elseif (is_dir($f) && $do_subdirs)
+			{
+				$a = sed_diskcache_calc($f);
+				$cnt += $a[0]/*files*/ + 1/*directory*/;
+				$sz += $a[1];
+			}
 		}
 	}
 

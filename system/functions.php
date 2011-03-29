@@ -3025,6 +3025,11 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 {
 	global $cfg;
 
+	if (function_exists('sed_mail_custom'))
+	{
+		return sed_mail_custom($fmail, $subject, $body, $headers, $additional_parameters);
+	}
+
 	if(empty($fmail))
 	{
 		return(FALSE);
