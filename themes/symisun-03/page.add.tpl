@@ -54,7 +54,7 @@
 		<legend>{PHP.L.Text}</legend>
 		<div style="padding:0 10px; margin-top:-15px" class="pageadd">
 			{PAGEADD_FORM_TEXT}
-			 &nbsp; &nbsp; {PAGEADD_FORM_PFS_TEXT_USER} &nbsp; {PAGEADD_FORM_PFS_TEXT_SITE}
+			 &nbsp; &nbsp; {PAGEADD_FORM_PFS} &nbsp; {PAGEADD_FORM_SFS}
 		</div>
 	</fieldset>
 
