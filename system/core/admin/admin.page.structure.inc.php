@@ -401,7 +401,7 @@ else
 		"ADMIN_PAGE_STRUCTURE_URL_FORM_ADD" => sed_url('admin', "m=page&s=structure&a=add"),
 		"ADMIN_PAGE_STRUCTURE_URL_FORM_ADD_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addstructure', url: '".sed_url('admin','m=page&s=structure&ajax=1&a=add')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_PAGE_STRUCTURE_RESYNCALL" => sed_url('admin', "m=page&s=structure&a=resyncall&".sed_xg()),
-		"ADMIN_PAGE_STRUCTURE_RESYNCALL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=page&s=structure&a=resyncall&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+		"ADMIN_PAGE_STRUCTURE_RESYNCALL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=page&s=structure&a=resyncall&ajax=1&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 	));
 	$t -> parse("PAGE_STRUCTURE.DEFULT");
 }
