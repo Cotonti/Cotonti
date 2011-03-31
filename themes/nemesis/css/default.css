@@ -99,9 +99,9 @@ table.fico td img	{ margin-right:10px; vertical-align:middle; }
 -------------------------------------------------- */
 
 form							{ }
-input, select, textarea, button	{ font:normal 11px Georgia; }
+input, select, textarea, button	{ font:normal 1em Georgia; }
 input, select, button			{ padding:2px; }
-label input						{ vertical-align:middle; }
+label input					{ vertical-align:middle; }
 button::-moz-focus-inner		{ padding:0; border:none; }
 
 /* 6. Misc
@@ -122,6 +122,9 @@ button::-moz-focus-inner		{ padding:0; border:none; }
 .lower		{ text-transform:lowercase; }
 .upper		{ text-transform:uppercase; }
 .capital	{ text-transform:capitalize; }
+
+.hidden		{ display:none; }
+.invis		{ visibility:hidden; }
 
 .textleft		{ text-align:left; }
 .textcenter		{ text-align:center; }
