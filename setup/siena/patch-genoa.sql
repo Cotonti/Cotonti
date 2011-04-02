@@ -536,9 +536,6 @@ UPDATE `cot_rated` SET `rated_code` = SUBSTRING(`rated_code`, 2) WHERE `rated_ar
 ALTER TABLE `cot_users` MODIFY `user_sid` char(64) collate utf8_unicode_ci NOT NULL default '';
 ALTER TABLE `cot_users` ADD COLUMN `user_sidtime` int NOT NULL default 0;
 
-/* r1935 page_keywords field */
-ALTER TABLE `cot_pages` ADD COLUMN `page_keywords` varchar(255) collate utf8_unicode_ci;
-
 /* r1936 config_donor field required for safe handling of ext-to-ext config implantations */
 ALTER TABLE `cot_config` ADD COLUMN `config_donor` varchar(64) collate utf8_unicode_ci NOT NULL default '';
 
