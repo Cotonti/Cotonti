@@ -38,8 +38,8 @@
     <div class="clear"></div>
     </div>
     <!-- END: LIST_ROW -->
-	  
-	<!-- IF {LIST_TOP_PAGINATION} == true -->
+
+	<!-- IF {LIST_TOP_PAGINATION}-->
 	<div class="paging">{LIST_TOP_PAGEPREV}{LIST_TOP_PAGINATION}{LIST_TOP_PAGENEXT}</div>
 	<!-- ENDIF -->
 	<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="index.php">{PHP.L.Home}</a> {LIST_CATPATH}</div>
@@ -57,7 +57,10 @@
 	<!-- ENDIF -->
 	<!-- IF {LIST_TOP_TOTALLINES} != 0 -->
 	<h3>{PHP.L.Category} {PHP.L.Entries}</h3>
-	<div class="box padding15"> {PHP.L.Page}: <strong>{LIST_TOP_CURRENTPAGE}/{LIST_TOP_TOTALPAGES}</strong><br />
+	<div class="box padding15"> 
+            <!-- IF {LIST_TOP_PAGINATION}-->
+            {PHP.L.Page}: <strong>{LIST_TOP_CURRENTPAGE}/{LIST_TOP_TOTALPAGES}</strong><br />
+            <!-- ENDIF -->
 	{PHP.L.pag_linesperpage}: <strong>{LIST_TOP_MAXPERPAGE}</strong><br />
 	{PHP.L.pag_linesinthissection}: <strong>{LIST_TOP_TOTALLINES}</strong> </div>
 	<!-- ENDIF -->
