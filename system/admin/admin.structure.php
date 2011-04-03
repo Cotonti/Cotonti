@@ -62,7 +62,7 @@ if ($a == 'update')
 
 	$rtplmodearr = cot_import('rstructuretplmode', 'P', 'ARR');
 	$rtplforcedarr = cot_import('rtplforced', 'P', 'ARR');
-	
+
 	foreach ($rstructurecode as $i => $k)
 	{
 		$oldrow = $db->query("SELECT structure_code FROM $db_structure WHERE structure_id=".(int)$i)->fetch();
@@ -246,13 +246,13 @@ foreach ($sql->fetchAll() as $row)
 	$structure_code = $row['structure_code'];
 	$pathfielddep = count(explode(".", $row['structure_path']));
 	$dozvil = ($row['structure_count'] > 0) ? false : true;
-	
+
 	$pathspaceimg = '';
 	for($pathfielddepi = 1; $pathfielddepi < $pathfielddep; $pathfielddepi++)
 	{
 		$pathspaceimg .= '.'.$R['admin_icon_blank'];
 	}
-	
+
 	if (empty($row['structure_tpl']))
 	{
 		$structure_tpl_sym = '-';
@@ -333,7 +333,7 @@ if (!$id)
 	$t->parse('MAIN.DEFAULT');
 
 	$t->assign(array(
-		'ADMIN_STRUCTURE_URL_FORM_ADD' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=add'),
+		'ADMIN_STRUCTURE_URL_FORM_ADD' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=add&d='.$durl),
 		'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode', '', 'size="16"'),
 		'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath', '', 'size="16" maxlength="16"'),
 		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle', '', 'size="64" maxlength="100"'),
