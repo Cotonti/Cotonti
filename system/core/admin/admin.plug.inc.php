@@ -104,7 +104,7 @@ switch($a)
 				/* === Hook - Part1 : Set === */
 				$extp = sed_getextplugins('admin.plug.details.part.loop');
 				/* ===== */
-				while(list($i, $x) = each($parts))
+				foreach ($parts as $i => $x)
 				{
 					$extplugin_file = $cfg['plugins_dir']."/".$pl."/".$x;
 					$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
@@ -288,7 +288,7 @@ switch($a)
 
 					if(count($parts) > 0)
 					{
-						while(list($i, $x) = each($parts))
+						foreach ($parts as $i => $x)
 						{
 							$extplugin_file = $cfg['plugins_dir']."/".$pl."/".$x;
 							$info_part = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
@@ -569,7 +569,7 @@ switch($a)
 		/* === Hook - Part1 : Set === */
 		$extp = sed_getextplugins('admin.plug.list.loop');
 		/* ===== */
-		while(list($i, $x) = each($extplugins))
+		foreach($extplugins as $i => $x)
 		{
 			$extplugin_info = $cfg['plugins_dir']."/".$x."/".$x.".setup.php";
 			if(file_exists($extplugin_info))

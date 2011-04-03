@@ -72,7 +72,7 @@ while($row = sed_sql_fetchrow($sql))
 	$tables[] = $status1;
 }
 
-while(list($i,$dat) = each($tables))
+foreach ($tables as $dat)
 {
 	$table_length = $dat['Index_length']+$dat['Data_length'];
 	$total_length += $table_length;

@@ -111,7 +111,7 @@ else
 
 		usort($plugins, "cmp");
 
-		while(list($i, $x) = each($plugins))
+		foreach($plugins as $i => $x)
 		{
 			$extplugin_info = $cfg['plugins_dir']."/".$x[0]."/".$x[0].".setup.php";
 
