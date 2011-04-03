@@ -249,7 +249,7 @@ $mtchlvl = mb_substr_count($mtch,".");
 $extp = sed_getextplugins('list.rowcat.loop');
 /* ===== */
 
-while (list($i,$x) = each($sed_cat))
+foreach ($sed_cat as $i => $x)
 {
 	if(mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl && $mm<$dc)
 	{
