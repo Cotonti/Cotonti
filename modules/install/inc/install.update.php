@@ -114,6 +114,16 @@ if (defined('COT_UPGRADE'))
 	}
 	else
 	{
+		// Create missing cache folders
+		$cache_subfolders = array('cot', 'static', 'system', 'templates');
+		foreach ($cache_subfolders as $sub)
+		{
+			if (!file_exists($cfg['cache_dir'] . '/' . $sub))
+			{
+				mkdir($cfg['cache_dir'] . '/' . $sub, $cfg['dir_perms']);
+			}
+		}
+
 		// Run SQL patches for core
 		$script = file_get_contents("./setup/$branch/patch-$prev_branch.sql");
 		$error = $db->runScript($script);
