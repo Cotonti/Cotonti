@@ -14,7 +14,7 @@ defined('COT_CODE') or die('Wrong URL');
 // System requirements check
 if (!defined('COT_INSTALL'))
 {
-	(function_exists('version_compare') && version_compare(PHP_VERSION, '5.2.0', '>=')) or die('Cotonti system requirements: PHP 5.2 or above.'); // TODO: Need translate
+	(function_exists('version_compare') && version_compare(PHP_VERSION, '5.2.3', '>=')) or die('Cotonti system requirements: PHP 5.2.3 or above.'); // TODO: Need translate
 	extension_loaded('mbstring') or die('Cotonti system requirements: mbstring PHP extension must be loaded.'); // TODO: Need translate
 }
 
