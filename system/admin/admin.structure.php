@@ -196,6 +196,7 @@ elseif ($a == 'resyncall')
 		$sql = $db->query("SELECT structure_code FROM $db_structure WHERE structure_area='".$db->prep($n)."'");
 		foreach ($sql->fetchAll() as $row)
 		{
+			$cat = $row['structure_code'];
 			$items = $area_sync($cat);
 			$db->update($db_structure, array("structure_count" => (int)$items), "structure_code='".$db->prep($cat)."' AND structure_area='".$db->prep($n)."'");
 		}

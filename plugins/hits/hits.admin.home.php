@@ -52,7 +52,7 @@ if (!$cfg['plugin']['hits']['disablehitstats'])
 			$tt->parse('MAIN.STAT.ADMIN_HOME_ROW');
 		}
 	}
-	$tt->assign('ADMIN_HOME_MORE_HITS_URL', cot_url('admin', 'm=hits'));
+	$tt->assign('ADMIN_HOME_MORE_HITS_URL', cot_url('admin', 'm=other&p=hits'));
 	$tt->parse('MAIN.STAT');
 }
 
