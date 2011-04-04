@@ -117,6 +117,8 @@ if ($a=='update' && !empty($id))
 
 /* ============= */
 
+$out['subtitle'] = $L['pfs_title'];
+
 if (!$standalone)
 {
 	require_once $cfg['system_dir'] . '/header.php';
