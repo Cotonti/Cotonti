@@ -154,11 +154,12 @@ $t->parse('MAIN.RIGHTS_SECTION');
 $area = '';
 
 // Structure permissions
-$sql = $db->query("SELECT a.*, u.user_name, s.structure_path, s.structure_area FROM $db_auth as a
-	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
-	LEFT JOIN $db_structure AS s ON s.structure_code=a.auth_option
-	WHERE auth_groupid='$g' AND auth_option != 'a'
-	ORDER BY structure_area ASC, structure_path ASC");
+$sql = $db->query("SELECT a.*, u.user_name, s.structure_path, s.structure_area
+	FROM $db_structure AS s
+	LEFT JOIN $db_auth AS a ON s.structure_code=a.auth_option AND s.structure_area=a.auth_code
+	LEFT JOIN $db_users AS u ON a.auth_setbyuserid=u.user_id
+	WHERE a.auth_groupid='$g' AND a.auth_option != 'a'
+	ORDER BY s.structure_area ASC, s.structure_path ASC");
 while ($row = $sql->fetch())
 {
 	if($area != $row['structure_area'] && !empty($area))
