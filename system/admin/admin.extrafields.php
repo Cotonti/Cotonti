@@ -58,9 +58,9 @@ if ($a == 'add')
 {
 	$field['field_name'] = cot_import('field_name', 'P', 'ALP');
 	$field['field_type'] = cot_import('field_type', 'P', 'ALP');
-	$field['field_html'] = str_replace("'", "\"", htmlspecialchars_decode(cot_import('field_html', 'P', 'HTM')));
+	$field['field_html'] = htmlspecialchars_decode(cot_import('field_html', 'P', 'NOC'));
 	$field['field_variants'] = cot_import('field_variants', 'P', 'HTM');
-	$field['field_description'] = cot_import('field_description', 'P', 'HTM');
+	$field['field_description'] = cot_import('field_description', 'P', 'NOC');
 	$field['field_default'] = cot_import('field_default', 'P', 'HTM');
 	$field['field_required'] = cot_import('field_required', 'P', 'BOL');
 	$field['field_parse'] = cot_import('field_parse', 'P', 'ALP');
@@ -109,9 +109,9 @@ elseif ($a == 'upd')
 		{
 			$field['field_name'] = cot_import($field_name[$k], 'D', 'ALP');
 			$field['field_type'] = cot_import($field_type[$k], 'D', 'ALP');
-			$field['field_html'] = str_replace("'", "\"", htmlspecialchars_decode(cot_import($field_html[$k], 'D', 'HTM')));
+			$field['field_html'] = htmlspecialchars_decode(cot_import($field_html[$k], 'D', 'NOC'));
 			$field['field_variants'] = cot_import($field_variants[$k], 'D', 'HTM');
-			$field['field_description'] = cot_import($field_description[$k], 'D', 'HTM');
+			$field['field_description'] = cot_import($field_description[$k], 'D', 'NOC');
 			$field['field_default'] = cot_import($field_default[$k], 'D', 'HTM');
 			$field['field_required'] = cot_import($field_required[$k], 'D', 'BOL');
 			$field['field_parse'] = cot_import($field_parse[$k], 'D', 'ALP');
