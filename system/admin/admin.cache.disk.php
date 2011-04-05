@@ -142,12 +142,16 @@ function cot_diskcache_list()
 	}
 
 	$pos = mb_strlen($cfg['cache_dir']) + 1;
-	foreach (glob("{$cfg['cache_dir']}/*", GLOB_ONLYDIR) as $dir)
+	$glob = glob("{$cfg['cache_dir']}/*", GLOB_ONLYDIR);
+	if (is_array($glob))
 	{
-		$a = cot_diskcache_calc($dir);
-		if ($a[0])
+		foreach ($glob as $dir)
 		{
-			$dir_a[mb_substr($dir, $pos)] = $a;
+			$a = cot_diskcache_calc($dir);
+			if ($a[0])
+			{
+				$dir_a[mb_substr($dir, $pos)] = $a;
+			}
 		}
 	}
 
@@ -169,15 +173,19 @@ function cot_diskcache_clear($dir, $do_subdirs = true, $rm_dir = false)
 		return false;
 	}
 
-	foreach (glob("$dir/*") as $f)
+	$glob = glob("$dir/*");
+	if (is_array($glob))
 	{
-		if (is_file($f))
+		foreach ($glob as $f)
 		{
-			@unlink($f);
-		}
-		elseif (is_dir($f) && $do_subdirs)
-		{
-			cot_diskcache_clear($f, true, true);
+			if (is_file($f))
+			{
+				@unlink($f);
+			}
+			elseif (is_dir($f) && $do_subdirs)
+			{
+				cot_diskcache_clear($f, true, true);
+			}
 		}
 	}
 
@@ -200,9 +208,13 @@ function cot_diskcache_clearall()
 	global $cfg;
 
 	cot_diskcache_clear($cfg['cache_dir'], false);
-	foreach (glob("{$cfg['cache_dir']}/*", GLOB_ONLYDIR) as $dir)
+	$glob = glob("{$cfg['cache_dir']}/*", GLOB_ONLYDIR);
+	if (is_array($glob))
 	{
-		cot_diskcache_clear($dir);
+		foreach ($glob as $dir)
+		{
+			cot_diskcache_clear($dir);
+		}
 	}
 
 	return true;
