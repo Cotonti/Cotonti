@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-	<div class="col3-2 first">
+	<div class="col">
 		<div class="block">
 			<h2 class="message"><a href="plug.php?e=contact">{PHP.L.contact_title}</a></h2>
 
@@ -39,14 +39,6 @@
 			</form>
 <!-- END: FORM -->
 
-		</div>
-	</div>
-
-	<div class="col3-1">
-		<div class="block">
-			<h2 class="message">{PHP.L.contact_subtitle}</h2>
-			<p><strong>Phone:</strong> +375 (29) 774 3589</p>
-			<p><strong>E-mail:</strong> <a href="mailto:mail@seditio.by">mail@seditio.by</a></p>
 		</div>
 	</div>
 
