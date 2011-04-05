@@ -83,7 +83,7 @@ while ($row = $sql->fetch())
 {
 	$db->query("INSERT INTO `$db_structure` (`structure_area`, `structure_code`, `structure_path`, `structure_tpl`, `structure_title`,
    `structure_desc`, `structure_icon`, `structure_locked`, `structure_count`) VALUES
-	('forums', '".$row['fn_code']."', '".$row['fn_path']."', '', '".$row['fn_title']."', '".$row['fn_desc']."', '".$row['fn_icon']."', 0, 0)");
+	('forums', '".$row['fn_code']."', '".$row['fn_path']."', '', ".$db->quote($row['fn_title']).", ".$db->quote($row['fn_desc']).", '".$row['fn_icon']."', 0, 0)");
 
 	$auth_permit = array(COT_GROUP_DEFAULT => 'RW', COT_GROUP_GUESTS => 'R', COT_GROUP_MEMBERS => 'RW');
 	$auth_lock = array(COT_GROUP_DEFAULT => '0', COT_GROUP_GUESTS => 'A', COT_GROUP_MEMBERS => '0');
@@ -124,12 +124,12 @@ while ($row = $sql->fetch())
 	$subpath = $frm_structure_paths[$row['fs_category']] . '.' . frm_section_path($row['fs_id'], $frm_section_masters, $frm_section_orders);
 	$db->query("INSERT INTO `$db_structure` (`structure_area`, `structure_code`, `structure_path`, `structure_tpl`, `structure_title`,
    `structure_desc`, `structure_icon`, `structure_locked`, `structure_count`) VALUES
-	('forums', '".$row['fs_id']."', '$subpath', '', '".$row['fs_title']."',
-	'".$row['fs_desc']."', '".$row['fs_icon']."', '".$row['fs_state']."', '".$row['fs_fs_state']."')");
+	('forums', '".$row['fs_id']."', '$subpath', '', ".$db->quote($row['fs_title']).",
+	".$db->quote($row['fs_desc']).", '".$row['fs_icon']."', '".$row['fs_state']."', '".$row['fs_topiccount']."')");
 
 	$db->query("INSERT INTO `$db_forum_stats` (`fs_cat`, `fs_lt_id`, `fs_lt_title`, `fs_lt_date`, `fs_lt_posterid`, `fs_lt_postername`,
 	`fs_topiccount`, `fs_postcount`, `fs_viewcount`) VALUES
-	('".$row['fs_id']."', '".$row['fs_lt_id']."', '".$row['fs_lt_title']."', '".$row['fs_lt_date']."', '".$row['fs_lt_posterid']."', '".$row['fs_lt_postername']."',
+	('".$row['fs_id']."', '".$row['fs_lt_id']."', ".$db->quote($row['fs_lt_title']).", '".$row['fs_lt_date']."', '".$row['fs_lt_posterid']."', ".$db->quote($row['fs_lt_postername']).",
 	'".$row['fs_topiccount']."', '".$row['fs_postcount']."', '".$row['fs_viewcount']."')");
 }
 $sql->closeCursor();
