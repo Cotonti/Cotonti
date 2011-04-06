@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS `cot_com` (
 	`com_authorid` int(11) default NULL,
 	`com_authorip` varchar(15) collate utf8_unicode_ci NOT NULL default '',
 	`com_text` text collate utf8_unicode_ci NOT NULL,
-	`com_html` text collate utf8_unicode_ci,
 	`com_date` int(11) NOT NULL default '0',
 	`com_count` int(11) NOT NULL default '0',
 	`com_isspecial` tinyint(1) NOT NULL default '0',
