@@ -9,7 +9,7 @@ Hooks=pfs.first
  * Overrides markup in PFS insertText
  *
  * @package ckeditor
- * @version 0.7.0
+ * @version 0.7.5
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
@@ -19,13 +19,28 @@ defined('COT_CODE') or die('Wrong URL');
 
 $R['pfs_code_header_javascript'] = '
 function addfile(gfile, c2, gdesc) {
-	window.opener.CKEDITOR.instances.{$c2}.insertHtml(\'{$pfs_code_addfile}\');{$winclose}
+	if (opener.CKEDITOR.instances.{$c2} != undefined) {
+		opener.CKEDITOR.instances.{$c2}.insertHtml(\'{$pfs_code_addfile}\');
+	} else {
+		insertText(opener.document, \'{$c2}\', \'{$pfs_code_addfile}\');
+	}
+	{$winclose}
 }
 function addthumb(gfile, c2, gdesc) {
-	window.opener.CKEDITOR.instances.{$c2}.insertHtml(\'{$pfs_code_addthumb}\');{$winclose}
+	if (opener.CKEDITOR.instances.{$c2} != undefined) {
+		opener.CKEDITOR.instances.{$c2}.insertHtml(\'{$pfs_code_addthumb}\');
+	} else {
+		insertText(opener.document, \'{$c2}\', \'{$pfs_code_addthumb}\');
+	}
+	{$winclose}
 }
 function addpix(gfile, c2, gdesc) {
-	window.opener.CKEDITOR.instances.{$c2}.insertHtml(\'{$pfs_code_addpix}\');{$winclose}
+	if (opener.CKEDITOR.instances.{$c2} != undefined) {
+		opener.CKEDITOR.instances.{$c2}.insertHtml(\'{$pfs_code_addpix}\');
+	} else {
+		insertText(opener.document, \'{$c2}\', \'{$pfs_code_addpix}\');
+	}
+	{$winclose}
 }';
 
 ?>
