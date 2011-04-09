@@ -107,14 +107,17 @@ class XTemplate
 	 */
 	private static function restart_include_files($m)
 	{
-		if (preg_match('`\.tpl$`i', $m[2]) && file_exists($m[2]))
+		if (preg_match('`\.tpl$`i', $m[2]))
 		{
-			return file_get_contents($m[2]);
+			$fname = preg_replace_callback('`\{([\w\.]+)\}`', 'XTemplate::substitute_var', $m[2]);
+			if (file_exists($fname))
+			{
+				return file_get_contents($fname);
+			}
+			return $fname;
 		}
-		else
-		{
-			return $m[0];
-		}
+
+		return $m[0];
 	}
 
 	/**
@@ -184,6 +187,18 @@ class XTemplate
 			$this->blocks = unserialize(file_get_contents($cache_path));
 			$this->index = unserialize(file_get_contents($cache_idx));
 		}
+	}
+
+	/**
+	 * PCRE callback which immediately subsitutes a TPL var with its value
+	 *
+	 * @param array $m PCRE matches
+	 * @return string
+	 */
+	private static function substitute_var($m)
+	{
+		$var = new Cotpl_var($m[1]);
+		return $var->evaluate($this);
 	}
 
 	/**

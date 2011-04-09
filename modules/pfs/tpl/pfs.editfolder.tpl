@@ -14,7 +14,7 @@
 	<div class="block">
 		<h2 class="pfs">{PFS_TITLE}</h2>
 		<p class="small">{PFS_SUBTITLE}</p>
-		{FILE ./themes/nemesis/warnings.tpl}
+		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 		<form id="editfolder" action="{PFS_ACTION}" method="post">
 			<table class="cells">
 				<!--<tr>

@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>Disk Cache</h2>
-		{FILE ./themes/nemesis/warnings.tpl}
+		{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
 		<div class="block">
 			<ul class="follow">
 				<li><a href="{ADMIN_DISKCACHE_URL_REFRESH}" class="ajax">{PHP.L.Refresh}</a></li>

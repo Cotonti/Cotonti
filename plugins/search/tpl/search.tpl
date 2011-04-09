@@ -72,7 +72,7 @@
 		</form>
 	</div>
 
-	{FILE ./themes/nemesis/warnings.tpl}
+	{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
 	<!-- BEGIN: RESULTS -->
 	<!-- BEGIN: PAGES -->

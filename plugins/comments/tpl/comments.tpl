@@ -4,7 +4,7 @@
 <h2><a href="{COMMENTS_TITLE_URL}">{COMMENTS_TITLE}</a></h2>
 <!-- END: COMMENTS_TITLE -->
 
-{FILE ./themes/nemesis/warnings.tpl}
+{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
 <!-- BEGIN: COMMENTS_FORM_EDIT -->
 <div class="block">
@@ -65,7 +65,7 @@
 
 <!-- BEGIN: COMMENTS_NEWCOMMENT -->
 	<h2 class="comments">{PHP.L.Newcomment}</h2>
-	{FILE ./themes/nemesis/warnings.tpl}
+	{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 	<form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
 		<!-- BEGIN: GUEST -->
 		<div>{PHP.L.Name}: {COMMENTS_FORM_AUTHOR}</div>

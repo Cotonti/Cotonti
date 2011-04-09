@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		{FILE ./themes/nemesis/warnings.tpl}
+		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
 		<div class="block">
 			<h2 class="users">{USERS_EDIT_TITLE}</h2>

@@ -2,7 +2,7 @@
 
 	<h2 class="message"><a href="admin.php?m=other&amp;p=contact">{PHP.L.contact_title}</a></h2>
 
-	{FILE ./themes/nemesis/warnings.tpl}
+	{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
 	<table class="cells">
 		<tr>
