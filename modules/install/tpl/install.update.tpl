@@ -24,7 +24,7 @@
 
 			<div id="content">
 				<h3>{UPDATE_TITLE}</h3>
-				{FILE ./themes/nemesis/warnings.tpl}
+				{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
 
 				<!-- BEGIN: PARSER -->
 				<form action="install.php" method="get">

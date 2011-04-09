@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Referers}</h2>
-		{FILE ./themes/nemesis/warnings.tpl}
+		{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
 <!-- IF {PHP.usr.isadmin} -->
 			<ul class="follow">
 				<li><a href="{ADMIN_REFERERS_URL_PRUNE}">{PHP.L.adm_purgeall}</a></li>

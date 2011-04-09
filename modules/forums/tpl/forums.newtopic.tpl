@@ -3,7 +3,7 @@
 		<div class="block">
 			<h2 class="forums">{FORUMS_NEWTOPIC_PAGETITLE}</h2>
 		
-			{FILE ./themes/nemesis/warnings.tpl}
+			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
 		<form action="{FORUMS_NEWTOPIC_SEND}" method="post" name="newtopic">
 			<table class="cells">

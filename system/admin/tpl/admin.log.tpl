@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Log} ({ADMIN_LOG_TOTALDBLOG})</h2>
-		{FILE ./themes/nemesis/warnings.tpl}
+		{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
 <!-- IF {PHP.usr.isadmin} -->
 			<ul class="follow">
 				<li><a title="{PHP.L.adm_purgeall}" href="{ADMIN_LOG_URL_PRUNE}" class="ajax">{PHP.L.adm_purgeall}</a></li>

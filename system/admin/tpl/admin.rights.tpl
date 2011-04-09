@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Rights}</h2>
-		{FILE ./themes/nemesis/warnings.tpl}
+		{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
 		<form name="saverights" id="saverights" action="{ADMIN_RIGHTS_FORM_URL}" method="post" class="ajax">
 			<!-- IF {PHP.g} > 5 -->
 			<table class="cells">

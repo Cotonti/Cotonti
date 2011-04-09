@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 <h2>{PHP.L.i18n_structure}</h2>
-{FILE ./themes/nemesis/warnings.tpl}
+{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
 <form action="{I18N_ACTION}" method="post">
 <table class="cells">

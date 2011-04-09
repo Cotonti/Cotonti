@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.banlist_title}</h2>
-		{FILE ./themes/nemesis/warnings.tpl}
+		{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
 			<h3>{PHP.L.editdeleteentries}:</h3>
 			<table class="cells">
 				<tr>

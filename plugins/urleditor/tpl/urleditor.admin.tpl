@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.adm_urls_rules}</h2>
-		{FILE ./themes/nemesis/warnings.tpl}
+		{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
 <!-- BEGIN: HTA -->
 		<h3>{PHP.L.adm_urls_your} {ADMIN_URLS_CONF_NAME}</h3>
 		<pre class="code">{ADMIN_URLS_HTA}</pre>

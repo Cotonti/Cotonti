@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		{FILE ./themes/nemesis/warnings.tpl}
+		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
 		<div class="block">
 			<h2 class="page">{PAGEADD_PAGETITLE}</h2>

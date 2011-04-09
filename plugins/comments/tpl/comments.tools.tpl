@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.comments_comments}</h2>
-		{FILE ./themes/nemesis/warnings.tpl}
+		{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
 			<ul class="follow">
 				<li><a title="{PHP.L.Configuration}" href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration}</a></li>
 			</ul>

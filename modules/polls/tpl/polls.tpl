@@ -121,6 +121,6 @@
 	</table>
 <!-- END: POLLS_VIEWALL -->
 
-{FILE ./themes/nemesis/warnings.tpl}
+{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
 <!-- END: MAIN -->
