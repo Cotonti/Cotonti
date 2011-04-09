@@ -142,15 +142,15 @@ function cot_comments_display($ext_name, $code, $cat = '')
 	if ($sql->rowCount() > 0 && $enabled)
 	{
 		$i = $d;
-
+		$kk = 0;
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('comments.loop');
 		/* ===== */
-
+		
 		foreach ($sql->fetchAll() as $row)
 		{
 			$i++;
-
+			$kk++;
 			$com_admin = ($auth_admin) ? cot_rc('comments_code_admin', array(
 					'ipsearch' => cot_build_ipsearch($row['com_authorip']),
 					'delete_url' => cot_url('plug', 'e=comments&a=delete&cat='.$cat.'&id='.$row['com_id'].'&'.cot_xg())
@@ -180,7 +180,9 @@ function cot_comments_display($ext_name, $code, $cat = '')
 				'COMMENTS_ROW_DATE' => cot_date('datetime_medium', $row['com_date'] + $usr['timezone'] * 3600),
 				'COMMENTS_ROW_DATE_STAMP' => $row['com_date'] + $usr['timezone'] * 3600,
 				'COMMENTS_ROW_ADMIN' => $com_admin,
-				'COMMENTS_ROW_EDIT' => $com_edit
+				'COMMENTS_ROW_EDIT' => $com_edit,
+				'COMMENTS_ROW_ODDEVEN' => cot_build_oddeven($kk),
+				'COMMENTS_ROW_NUM' => $kk
 			));
 			$t->assign(cot_generate_usertags($row['com_authorid'], 'COMMENTS_ROW_AUTHOR_'), htmlspecialchars($row['com_author']));
 
