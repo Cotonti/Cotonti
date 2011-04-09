@@ -1,9 +1,18 @@
+function getBaseHref() {
+	var href = document.getElementsByTagName('base')[0].href;
+	if (href == null) {
+		return '/';
+	} else {
+		return href;
+	}
+}
+
 function popup(code, w, h){
-    window.open('plug.php?o=' + code, '', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=' + w + ',height=' + h + ',left=32,top=16');
+    window.open(getBaseHref() + 'plug.php?o=' + code, '', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=' + w + ',height=' + h + ',left=32,top=16');
 }
 
 function pfs(id, c1, c2){
-    window.open('pfs.php?userid=' + id + '&c1=' + c1 + '&c2=' + c2, 'PFS', 'status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16');
+    window.open(getBaseHref() + 'pfs.php?userid=' + id + '&c1=' + c1 + '&c2=' + c2, 'PFS', 'status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16');
 }
 
 function redirect(url){

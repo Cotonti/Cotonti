@@ -43,6 +43,7 @@ $standalone = FALSE;
 $user_info = cot_userinfo($userid);
 $maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
 
+$pfs_base_href = $sys['abs_url'];
 $pfs_dir_user = cot_pfs_path($userid);
 $thumbs_dir_user = cot_pfs_thumbpath($userid);
 $rel_dir_user = cot_pfs_relpath($userid);
