@@ -65,13 +65,13 @@
 			<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post" class="ajax" enctype="multipart/form-data" >
 			<table class="cells">
 				<tr>
-					<td class="coltop width20">{PHP.L.Path}</td>
+					<td class="coltop width15">{PHP.L.Path}</td>
 					<td class="coltop width10">{PHP.L.Code}</td>
 					<td class="coltop width20">{PHP.L.Title}</td>
 					<td class="coltop width5">{PHP.L.TPL}</td>
 					<td class="coltop width10">{PHP.L.Locked}</td>
 					<td class="coltop width5">{PHP.L.Pages}</td>
-					<td class="coltop width15">{PHP.L.Action}</td>
+					<td class="coltop width20">{PHP.L.Action}</td>
 				</tr>
 				<!-- BEGIN: ROW -->
 				<tr>
