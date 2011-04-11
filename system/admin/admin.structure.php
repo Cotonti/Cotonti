@@ -61,7 +61,7 @@ if ($a == 'update')
 	}
 
 	$rtplmodearr = cot_import('rstructuretplmode', 'P', 'ARR');
-	$rtplforcedarr = cot_import('rtplforced', 'P', 'ARR');
+	$rtplforcedarr = cot_import('rstructuretplforced', 'P', 'ARR');
 
 	foreach ($rstructurecode as $i => $k)
 	{
@@ -79,7 +79,19 @@ if ($a == 'update')
 		}
 
 		$rtplmode = cot_import($rtplmodearr[$i], 'D', 'INT');
-		($rtplmode > 0) && $rstructure['structure_tpl'] = ($rtplmode == 1) ? '' : (($rtplmode == 3) ? 'same_as_parent' : cot_import($rtplforcedarr[$i], 'D', 'ALP'));
+
+		if ($rtplmode == 1)
+		{
+			$rstructure['structure_tpl'] = '';
+		}
+		elseif ($rtplmode == 2)
+		{
+			$rstructure['structure_tpl'] = 'same_as_parent';
+		}
+		else
+		{
+			$rstructure['structure_tpl'] = cot_import($rtplforcedarr[$i], 'D', 'ALP');
+		}
 
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.structure.update') as $pl)
@@ -287,7 +299,7 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ? $R['admin_icon_pathfieldnoimg'] : $R['admin_icon_pathfieldimg'],
 		'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath['.$structure_id.']', $row['structure_path'], 'size="12" maxlength="255"'),
 		'ADMIN_STRUCTURE_TPL_SYM' => $structure_tpl_sym,
-		'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox($check_tpl, 'rstructuretplmode['.$structure_id.']', array('1', '3', '2'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />'),
+		'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox($check_tpl, 'rstructuretplmode['.$structure_id.']', array('1', '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />'),
 		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'size="32" maxlength="255"'),
 		'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$structure_id.']', $row['structure_desc'], 'size="64" maxlength="255"'),
 		'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$structure_id.']', $row['structure_icon'], 'size="64" maxlength="128"'),
