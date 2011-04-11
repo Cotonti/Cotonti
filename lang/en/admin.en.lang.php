@@ -239,6 +239,7 @@ $L['ext_updating'] = 'Updating {$type} &quot;{$name}&quot;';
   * Structure Section
  */
 
+$L['adm_cat_exists'] = 'A category with such code already exists';
 $L['adm_tpl_mode'] = 'Template mode';
 $L['adm_tpl_empty'] = 'Default';
 $L['adm_tpl_forced'] = 'Same as';
