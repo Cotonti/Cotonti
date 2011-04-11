@@ -137,4 +137,20 @@ $sql->closeCursor();
 $db->query("DROP TABLE IF EXISTS `$db_forum_sections`");
 $db->query("DROP TABLE IF EXISTS `$db_forum_structure`");
 
+/**
+ * r2008: Add missing auth options for page and forums after upgrade
+ */
+
+global $db_auth;
+
+if ($db->query("SELECT COUNT(*) FROM `$db_auth` WHERE auth_code = 'page' AND auth_option = 'a'")->fetchColumn() == 0)
+{
+	cot_auth_add_item('page', 'a');
+}
+
+if ($db->query("SELECT COUNT(*) FROM `$db_auth` WHERE auth_code = 'forums' AND auth_option = 'a'")->fetchColumn() == 0)
+{
+	cot_auth_add_item('forums', 'a');
+}
+
 ?>
