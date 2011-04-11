@@ -140,7 +140,7 @@ elseif ($a == 'add')
 	if (!empty($rstructure['structure_title']) && !empty($rstructure['structure_code']) && !empty($rstructure['structure_path']) && $rstructure['structure_code'] != 'all')
 	{
 		$sql = $db->query("SELECT structure_code FROM $db_structure WHERE structure_code='".$db->prep($rstructure['structure_code'])."' LIMIT 1");
-		if ($sql->rowCount() == 0 || $rstructure['structure_code'] != 'all')
+		if ($sql->rowCount() == 0)
 		{
 			$sql = $db->insert($db_structure, $rstructure);
 			$auth_permit = array(COT_GROUP_DEFAULT => 'RW', COT_GROUP_GUESTS => 'R', COT_GROUP_MEMBERS => 'RW');
@@ -153,12 +153,12 @@ elseif ($a == 'add')
 		}
 		else
 		{
-			cot_message('Error');
+			cot_error('adm_cat_exists', 'rstructurecode');
 		}
 	}
 	else
 	{
-		cot_message('Error');
+		cot_error('Error');
 	}
 	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 }

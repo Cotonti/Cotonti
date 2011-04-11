@@ -240,6 +240,7 @@ $L['ext_updating'] = 'Обновление {$type} &quot;{$name}&quot;';
  * Structure Section
  */
 
+$L['adm_cat_exists'] = 'Категория с таким кодом уже существует';
 $L['adm_tpl_mode'] = 'Установка шаблона';
 $L['adm_tpl_empty'] = 'По умолчанию';
 $L['adm_tpl_forced'] = 'Как';
