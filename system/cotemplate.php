@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.5
+ * @version 2.6
  * @author Vladimir Sibirov a.k.a. Trustmaster
  * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
@@ -34,6 +34,18 @@ class XTemplate
 	 * @var array Index for quick block search.
 	 */
 	protected $index = array();
+	/**
+	 * @var bool Enables disk caching of precompiled templates
+	 */
+	protected static $cache_enabled = false;
+	/**
+	 * @var string Cache directory path
+	 */
+	protected static $cache_dir = '';
+	/**
+	 * @var bool Enables debug output
+	 */
+	protected static $debug_mode = false;
 	/**
 	 * @var bool Indicates that root-level blocks were found during another run
 	 */
@@ -89,6 +101,35 @@ class XTemplate
 	}
 
 	/**
+	 * Debugging output of a tag name and current value
+	 *
+	 * @param string $name Tag name
+	 * @param mixed $value Tag value, will be casted to string
+	 * @param int $length_limit Max length of a value in the output
+	 * @return string A list elemented for debug output
+	 */
+	public static function debug_var($name, $value, $length_limit = 60)
+	{
+		if (is_numeric($value))
+		{
+			$val_disp = (string) $value;
+		}
+		else
+		{
+			if (!is_string($value))
+			{
+				$value = (string) $value;
+			}
+			if (mb_strlen($value) > $length_limit)
+			{
+				$value = mb_substr($value, 0, $length_limit) . '...';
+			}
+			$val_disp = '&quot;' . htmlspecialchars($value) . '&quot;';
+		}
+		return  '<li>{' . htmlspecialchars($name) . '} =&gt; <em>' . $val_disp . '</em></li>';
+	}
+
+	/**
 	 * Returns current template variable value
 	 *
 	 * @param string $name Variable name
@@ -97,6 +138,22 @@ class XTemplate
 	public function get($name)
 	{
 		return $this->vars[$name];
+	}
+
+	/**
+	 * Initializes static class configuration
+	 *
+	 * @param bool $enable_cache Enable disk cache for precompiled templates
+	 * @param string $cache_dir Path to system cache directory
+	 * @param bool $debug_mode Enables debug output for designers
+	 * @param bool $cleanup Remove extra spaces and tabs
+	 */
+	public static function init($enable_cache = false, $cache_dir = '', $debug_mode = false, $cleanup = false)
+	{
+		self::$cache_enabled = $enable_cache;
+		self::$cache_dir = $cache_dir;
+		self::$debug_mode = $debug_mode;
+		Cotpl_data::init($cleanup);
 	}
 
 	/**
@@ -143,16 +200,15 @@ class XTemplate
 	 */
 	public function restart($path)
 	{
-		global $cfg;
 		if (!file_exists($path))
 		{
 			throw new Exception("Template file not found: $path");
 			return false;
 		}
 		$this->filename = $path;
-		$cache_path = $cfg['cache_dir'] . '/templates/' . str_replace(array('./', '/'), '_', $path);
+		$cache_path = self::$cache_dir . '/templates/' . str_replace(array('./', '/'), '_', $path);
 		$cache_idx = $cache_path . '.idx';
-		if (!$cfg['xtpl_cache'] || !file_exists($cache_path) || filemtime($path) > filemtime($cache_path))
+		if (!self::$cache_enabled || !file_exists($cache_path) || filemtime($path) > filemtime($cache_path))
 		{
 			$this->blocks = array();
 			$this->index = array();
@@ -169,16 +225,16 @@ class XTemplate
 					array($this, 'restart_root_blocks'), $code);
 			} while($this->found);
 
-			if ($cfg['xtpl_cache'])
+			if (self::$cache_enabled)
 			{
-				if (is_writeable($cfg['cache_dir'] . '/templates/'))
+				if (is_writeable(self::$cache_dir . '/templates/'))
 				{
 					file_put_contents($cache_path, serialize($this->blocks));
 					file_put_contents($cache_idx, serialize($this->index));
 				}
 				else
 				{
-					throw new Exception('Your "' . $cfg['cache_dir'] . '/templates/" is not writable');
+					throw new Exception('Your "' . self::$cache_dir . '/templates/" is not writable');
 				}
 			}
 		}
@@ -186,6 +242,11 @@ class XTemplate
 		{
 			$this->blocks = unserialize(file_get_contents($cache_path));
 			$this->index = unserialize(file_get_contents($cache_idx));
+		}
+
+		if (self::$debug_mode)
+		{
+			echo "<h2>File &quot;$path&quot;</h2>";
 		}
 	}
 
@@ -208,7 +269,10 @@ class XTemplate
 	 */
 	public function out($block = 'MAIN')
 	{
-		echo $this->text($block);
+		if (!self::$debug_mode)
+		{
+			echo $this->text($block);
+		}
 	}
 
 	/**
@@ -247,6 +311,39 @@ class XTemplate
 			$blk->parse($this);
 		}
 		//else throw new Exception("Block $block is not found in " . $this->filename);
+
+		if (self::$debug_mode)
+		{
+			static $displayed_blocks = array();
+			if (!in_array($block, $displayed_blocks))
+			{
+				$block_level = substr_count($block, '.');
+				$block_name = $block_level > 0 ? mb_substr($block, mb_strrpos($block, '.') + 1) : $block;
+				$block_offset = 20 * $block_level;
+				$tags_offset = 20 * ($block_level + 1);
+				echo "<h3 style=\"margin-left:{$block_offset}px\">Block &quot;$block_name&quot;</h3>";
+				echo "<ul style=\"margin-left:{$tags_offset}px\">";
+				$tags = $this->vars;
+				ksort($tags);
+				foreach ($tags as $key => $val)
+				{
+					if (is_array($val))
+					{
+						// One level of nesting is supported
+						foreach ($val as $key2 => $val2)
+						{
+							echo self::debug_var($key . '.' . $key2, $val2);
+						}
+					}
+					else
+					{
+						echo self::debug_var($key, $val);
+					}
+				}
+				echo "</ul>";
+				$displayed_blocks[] = $block;
+			}
+		}
 	}
 
 	/**
@@ -537,6 +634,10 @@ class Cotpl_data
 	 * @var array Block data consisting of strings and Cotpl_vars
 	 */
 	protected $chunks = array();
+	/**
+	 * @var bool Enables space removal for compact output
+	 */
+	protected static $cleanup_enabled = false;
 
 	/**
 	 * Block constructor
@@ -545,8 +646,7 @@ class Cotpl_data
 	 */
 	public function __construct($code)
 	{
-		global $cfg;
-		if ($cfg['html_cleanup'])
+		if (self::$cleanup_enabled)
 		{
 			$code = $this->cleanup($code);
 		}
@@ -584,6 +684,15 @@ class Cotpl_data
 			}
 		}
 		return $str . "\n";
+	}
+
+	/**
+	 * Initializes static class configuration
+	 * @param bool Enables space removal for compact output
+	 */
+	public static function init($cleanup_enabled = false)
+	{
+		self::$cleanup_enabled = $cleanup_enabled;
 	}
 
 	/**
@@ -1123,6 +1232,52 @@ class Cotpl_var
 	}
 
 	/**
+	 * Variable debug output handler for {var_name|dump}
+	 *
+	 * @param mixed $val Var value
+	 * @return string
+	 */
+	private function dump($val)
+	{
+		$key = $this->keys ? $this->name . '.' . implode('.', $this->keys) : $this->name;
+		if ($this->name == 'PHP' && !$this->keys)
+		{
+			$val =& $GLOBALS;
+		}
+		return '<ul class="dump">' . self::dump_r($key, $val, 0) . '</ul>';
+	}
+
+	/**
+	 * Recursively fetches debug representation of a TPL variable
+	 *
+	 * @param string $key Variable key
+	 * @param mixed $val Variable value
+	 * @param int $level Current nesting level
+	 * @return string
+	 */
+	private static function dump_r($key, $val, $level)
+	{
+		if ($level > 5 || $key == 'PHP.GLOBALS')
+		{
+			return '';
+		}
+		$ret = '';
+		if (is_array($val))
+		{
+			ksort($val);
+			foreach ($val as $key2 => $val2)
+			{
+				$ret .= self::dump_r($key . '.' . $key2, $val2, $level + 1);
+			}
+		}
+		elseif (is_string($val))
+		{
+			$ret = XTemplate::debug_var($key, $val);
+		}
+		return $ret;
+	}
+
+	/**
 	 * Evaluates a variable
 	 *
 	 * @param XTemplate $tpl Reference to CoTemplate storing local variables
@@ -1183,6 +1338,10 @@ class Cotpl_var
 				{
 					array_walk($func['args'], 'cotpl_callback_replace', $val);
 					$val = call_user_func_array($func['name'], $func['args']);
+				}
+				elseif ($func == 'dump')
+				{
+					$val = $this->dump($val);
 				}
 				else
 				{
@@ -1288,5 +1447,8 @@ function cotpl_tokenize($str, $delim = array(' '))
 	}
 	return $tokens;
 }
+
+// Cotonti-specific initialization
+XTemplate::init($cfg['xtpl_cache'], $cfg['cache_dir'], $cfg['debug_mode'] && $_GET['tpl_debug'], $cfg['html_cleanup']);
 
 ?>
