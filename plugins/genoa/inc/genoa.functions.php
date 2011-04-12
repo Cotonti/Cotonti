@@ -714,6 +714,10 @@ function sed_get_uploadmax()
 
 function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 {
+	if ($filter == 'STX' || $filter == 'SLU')
+	{
+		$filter = 'TXT';
+	}
 	return cot_import($name, $source, $filter, $maxlen, $dieonerror);
 }
 

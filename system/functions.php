@@ -242,7 +242,6 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 
 	$pass = FALSE;
 	$defret = NULL;
-	$filter = ($filter=='STX') ? 'TXT' : $filter;
 
 	// Custom filter support
 	if (is_array($cot_import_filters[$filter]))
@@ -280,19 +279,6 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			else
 			{
 				$defret = str_replace('<', '&lt;', $v);
-			}
-			break;
-
-		case 'SLU':
-			$v = trim($v);
-			$f = preg_replace('/[^a-zA-Z0-9_=\/]/', '', $v);
-			if ($v == $f)
-			{
-				$pass = TRUE;
-			}
-			else
-			{
-				$defret = '';
 			}
 			break;
 
@@ -347,17 +333,6 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			else
 			{
 				$defret = '0';
-			}
-			break;
-
-		case 'LVL':
-			if (is_numeric($v) && $v >= 0 && $v <= 100 && floor($v)==$v)
-			{
-				$pass = TRUE;
-			}
-			else
-			{
-				$defret = NULL;
 			}
 			break;
 
