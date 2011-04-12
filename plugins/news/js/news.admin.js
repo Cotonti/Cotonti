@@ -24,12 +24,9 @@ function changecats()
 			if (!(newstext.indexOf(mycat) + 1))
 			{
 				newstext += mycat;
-				unsetcats = '';
-				if ($('#cat_'+i+' .cac').val() != $('[name=maxpages]').val())
-					unsetcats = '|' + $('#cat_'+i+' .cac').val();
+				unsetcats = '|' + $('#cat_'+i+' .cac').val();
 				if ($('#cat_'+i+' .cam').val() != '' && $('#cat_'+i+' .cam').val() != '0')
 				{
-					if (unsetcats == '') unsetcats = "|";
 					unsetcats += '|' + $('#cat_'+i+' .cam').val();
 				}
 				newstext +=  unsetcats;
