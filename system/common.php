@@ -170,7 +170,7 @@ $sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0)
 	mb_substr($_SERVER['REQUEST_URI'], mb_strlen($sys['site_uri'])) : ltrim($_SERVER['REQUEST_URI'], '/');
 $sys['uri_redir'] = base64_encode($sys['uri_curr']);
 $sys['url_redirect'] = 'redirect='.$sys['uri_redir'];
-$redirect = cot_import('redirect','G','SLU');
+$redirect = preg_replace('/[^a-zA-Z0-9_=\/]/', '', cot_import('redirect','G','TXT'));
 $out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
 define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER['X-Requested-With']) || $_GET['_ajax'] == 1);
