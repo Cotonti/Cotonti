@@ -112,7 +112,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 	switch ($extrafield['field_type'])
 	{
 		case 'input':
-			$import = cot_import($inputname, $source, 'HTM');
+			$import = ($extrafield['field_parse'] == 'Text') ? cot_import($inputname, $source, 'TXT') : cot_import($inputname, $source, 'HTM');
 			if (!empty($extrafield['field_variants']) && !is_null($import) && !preg_match($extrafield['field_variants'], $import))
 			{
 				$L['field_pregmatch_' . $extrafield['field_name']] = (isset($L['field_pregmatch_' . $extrafield['field_name']])) ? $L['field_pregmatch_' . $extrafield['field_name']] : $L['field_pregmatch'];
@@ -126,7 +126,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			break;
 		case 'currency':
 		case 'double':	
-			$import = cot_import($inputname, $source, 'TXT');
+			$import = cot_import($inputname, $source, 'NUM');
 			$import = (doubleval($import) != 0) ? doubleval($import) : 0;
 			break;
 
@@ -461,6 +461,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 
 	if (!$alter)
 	{
+		$step1 = ($step1) ? $step1 : 2;
 		return $step1;
 	}
 

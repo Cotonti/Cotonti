@@ -58,7 +58,7 @@ if ($a == 'add')
 {
 	$field['field_name'] = cot_import('field_name', 'P', 'ALP');
 	$field['field_type'] = cot_import('field_type', 'P', 'ALP');
-	$field['field_html'] = htmlspecialchars_decode(cot_import('field_html', 'P', 'NOC'));
+	$field['field_html'] = cot_import('field_html', 'P', 'NOC');
 	$field['field_variants'] = cot_import('field_variants', 'P', 'HTM');
 	$field['field_description'] = cot_import('field_description', 'P', 'NOC');
 	$field['field_default'] = cot_import('field_default', 'P', 'HTM');
@@ -109,7 +109,7 @@ elseif ($a == 'upd')
 		{
 			$field['field_name'] = cot_import($field_name[$k], 'D', 'ALP');
 			$field['field_type'] = cot_import($field_type[$k], 'D', 'ALP');
-			$field['field_html'] = htmlspecialchars_decode(cot_import($field_html[$k], 'D', 'NOC'));
+			$field['field_html'] = cot_import($field_html[$k], 'D', 'NOC');
 			$field['field_variants'] = cot_import($field_variants[$k], 'D', 'HTM');
 			$field['field_description'] = cot_import($field_description[$k], 'D', 'NOC');
 			$field['field_default'] = cot_import($field_default[$k], 'D', 'HTM');
@@ -130,12 +130,13 @@ elseif ($a == 'upd')
 					include $pl;
 				}
 				/* ===== */
-
-				if (cot_extrafield_update($location, $k, $field['field_name'], $field['field_type'], $field['field_html'], $field['field_variants'], $field['field_default'], $field['field_required'], $field['field_parse'], $field['field_description']))
+				
+				$fieldresult = cot_extrafield_update($location, $k, $field['field_name'], $field['field_type'], $field['field_html'], $field['field_variants'], $field['field_default'], $field['field_required'], $field['field_parse'], $field['field_description']);
+				if ($fieldresult == 1)
 				{
 					cot_message(sprintf($L['adm_extrafield_updated'], $k));
 				}
-				else
+				elseif(!$fieldresult)
 				{
 					cot_error(sprintf($L['adm_extrafield_not_updated'], $k));
 				}
