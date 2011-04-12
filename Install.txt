@@ -44,7 +44,6 @@ INSTALLATION
 /datas/defaultav
 /datas/extflds
 /datas/photos
-/datas/signatures
 /datas/thumbs
 /datas/tmp
 /datas/users
