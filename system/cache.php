@@ -1269,8 +1269,14 @@ class Cache
 		}
 		if (!empty($selected))
 		{
-			$this->mem = new $selected();
-			$this->selected_drv = $selected;
+			$mem = new $selected();
+			// Some drivers may be enabled but without variable cache
+			$info = $mem->get_info();
+			if ($info['max'] > 1024)
+			{
+				$this->mem = $mem;
+				$this->selected_drv = $selected;
+			}
 		}
 		else
 		{
