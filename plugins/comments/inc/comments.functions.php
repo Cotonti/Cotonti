@@ -58,14 +58,21 @@ function cot_comments_count($ext_name, $code)
  * @param string $ext_name Module or plugin code
  * @param string $code Item identifier
  * @param string $cat Item category code (optional)
+ * @param bool $force_admin Enforces user to be administrator of comments for this item.
+ *	E.g. to moderate his wall even if he is not a moderator
  * @return string Rendered HTML output for comments
  */
-function cot_comments_display($ext_name, $code, $cat = '')
+function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 {
 	global $db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $env, $pg;
 
 	// Check permissions and enablement
 	list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'comments');
+
+	if ($auth_read && $auth_write && $force_admin)
+	{
+		$auth_admin = true;
+	}
 
 	$enabled = cot_comments_enabled($ext_name, $cat, $code);
 
