@@ -3333,7 +3333,7 @@ function cot_rc_consolidate()
 	// CSS should go first
 	ksort($cot_rc_reg);
 
-	// Build the header CSS outputs
+	// Build the header outputs
 	$cot_rc_html = array();
 
 	// Consolidate resources
@@ -3429,19 +3429,6 @@ function cot_rc_consolidate()
 						$code .= $file_code . $separator;
 					}
 
-					if ($cfg['headrc_minify'])
-					{
-						if ($type == 'js')
-						{
-							require_once './lib/jsmin.php';
-							$code = JSMin::minify($code);
-						}
-						elseif ($type == 'css')
-						{
-							require_once './lib/cssmin.php';
-							$code = CssMin::minify($code);
-						}
-					}
 					file_put_contents($target_path, $code);
 					if ($cfg['gzip'])
 					{
@@ -3508,6 +3495,10 @@ function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
 		$path = $cfg['cache_dir'] . '/static/' . $identifier . '.' . $type;
 		if (!file_exists($path) || md5($code) != md5_file($path))
 		{
+			if ($cfg['headrc_minify'])
+			{
+				$code = cot_rc_minify($code, $type);
+			}
 			file_put_contents($path, $code);
 		}
 		$cot_rc_reg[$type][$scope][] = $path;
@@ -3550,7 +3541,15 @@ function cot_rc_add_file($path, $scope = 'global')
 		return false;
 	}
 
-	$type = preg_match('#\.(js|css)$#i', $path, $m) ? strtolower($m[1]) : 'js';
+	$type = preg_match('#\.(min\.)?(js|css)$#', $path, $m) ? strtolower($m[2]) : 'js';
+
+	if ($cfg['headrc_minify'] && $m[1] != 'min.')
+	{
+		$bname = basename($path);
+		$code = cot_rc_minify(file_get_contents($path), $type);
+		$path = $cfg['cache_dir'] . '/static/' . $bname . '.min';
+		file_put_contents($path, $code);
+	}
 
 	if ($cfg['headrc_consolidate'])
 	{
@@ -3572,12 +3571,12 @@ function cot_rc_add_standard()
 
 	if ($cfg['jquery'] && !$cfg['jquery_cdn'])
 	{
-		cot_rc_add_file('js/jquery.js');
+		cot_rc_add_file('js/jquery.min.js');
 	}
 
 	if ($cfg['jquery'] && $cfg['turnajax'])
 	{
-		cot_rc_add_file('js/jquery.history.js');
+		cot_rc_add_file('js/jquery.history.min.js');
 	}
 
 	cot_rc_add_file('js/base.js');
@@ -3666,6 +3665,28 @@ function cot_rc_link_file($path, $prepend = false)
 	$type = preg_match('#\.(js|css)$#i', $path, $m) ? strtolower($m[1]) : 'js';
 	$embed = cot_rc("code_rc_{$type}_file", array('url' => $path));
 	$prepend ? $out['head_head'] = $embed . $out['head_head'] : $out['head_head'] .= $embed;
+}
+
+/**
+ * JS/CSS minification function
+ *
+ * @param string $code Code to minify
+ * @param string $type Type: 'js' or 'css'
+ * @return string Minified code
+ */
+function cot_rc_minify($code, $type = 'js')
+{
+	if ($type == 'js')
+	{
+		require_once './lib/jsmin.php';
+		$code = JSMin::minify($code);
+	}
+	elseif ($type == 'css')
+	{
+		require_once './lib/cssmin.php';
+		$code = CssMin::minify($code);
+	}
+	return $code;
 }
 
 /*

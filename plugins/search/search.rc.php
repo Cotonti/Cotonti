@@ -17,5 +17,5 @@ Hooks=rc
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_rc_add_file($cfg['plugins_dir'].'/search/js/hl.js');
+cot_rc_add_file($cfg['plugins_dir'].'/search/js/hl.min.js');
 ?>
