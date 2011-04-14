@@ -3389,15 +3389,20 @@ function cot_rc_consolidate()
 					{
 						// Get file contents and remove BOM
 						$file_code = str_replace(pack('CCC', 0xef, 0xbb, 0xbf), '', file_get_contents($path));
-						$file_path = dirname(realpath($path));
-						$relative_path = str_replace($current_path, '', $file_path);
-						if ($relative_path[0] === '/')
-						{
-							$relative_path = mb_substr($relative_path, 1);
-						}
 
 						if ($type == 'css')
 						{
+							if (strpos($path, '._.') !== false)
+							{
+								// Restore original file path
+								$path = str_replace('._.', '/', basename($path));
+							}
+							$file_path = dirname(realpath($path));
+							$relative_path = str_replace($current_path, '', $file_path);
+							if ($relative_path[0] === '/')
+							{
+								$relative_path = mb_substr($relative_path, 1);
+							}
 							// Apply CSS imports
 							if (preg_match_all('#@import\s+url\((\'|")?(.+?\.css)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
 							{
@@ -3545,9 +3550,9 @@ function cot_rc_add_file($path, $scope = 'global')
 
 	if ($cfg['headrc_minify'] && $m[1] != 'min.')
 	{
-		$bname = basename($path);
+		$bname = ($type == 'css') ? str_replace('/', '._.', $path) : basename($path) . '.min';
 		$code = cot_rc_minify(file_get_contents($path), $type);
-		$path = $cfg['cache_dir'] . '/static/' . $bname . '.min';
+		$path = $cfg['cache_dir'] . '/static/' . $bname;
 		file_put_contents($path, $code);
 	}
 
