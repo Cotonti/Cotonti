@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['autocomplete']['autocomplete'] > 0)
 {
-	cot_rc_add_file($cfg['plugins_dir'] . '/autocomplete/lib/jquery.autocomplete.js');
+	cot_rc_add_file($cfg['plugins_dir'] . '/autocomplete/lib/jquery.autocomplete.min.js');
 	if($cfg['plugin']['autocomplete']['css'])
 	{
 		cot_rc_add_file($cfg['plugins_dir'] . '/autocomplete/lib/jquery.autocomplete.css');

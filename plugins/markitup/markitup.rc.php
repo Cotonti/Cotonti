@@ -37,9 +37,9 @@ $mkup_set = cot_plugin_active('bbcode') ? 'bbcode' : 'html';
 // Load head resources
 cot_rc_add_file($smile_lang);
 cot_rc_add_file('images/smilies/set.js');
-cot_rc_add_file($cfg['plugins_dir'] . '/markitup/js/jquery.markitup.js');
+cot_rc_add_file($cfg['plugins_dir'] . '/markitup/js/jquery.markitup.min.js');
 cot_rc_add_file($mkup_lang);
-cot_rc_add_file($cfg['plugins_dir'] . '/markitup/js/jqModal.js');
+cot_rc_add_file($cfg['plugins_dir'] . '/markitup/js/jqModal.min.js');
 cot_rc_add_file($cfg['plugins_dir'] . "/markitup/js/{$mkup_set}.set.js");
 cot_rc_add_file($cfg['plugins_dir'] . '/markitup/skins/' . $cfg['plugin']['markitup']['skin'] . '/style.css');
 cot_rc_add_file($cfg['plugins_dir'] . '/markitup/style.css');
