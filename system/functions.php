@@ -3548,7 +3548,7 @@ function cot_rc_add_file($path, $scope = 'global')
 
 	$type = preg_match('#\.(min\.)?(js|css)$#', $path, $m) ? strtolower($m[2]) : 'js';
 
-	if ($cfg['headrc_minify'] && $m[1] != 'min.')
+	if ($cfg['headrc_consolidate'] && $cfg['headrc_minify'] && $m[1] != 'min.')
 	{
 		$bname = ($type == 'css') ? str_replace('/', '._.', $path) : basename($path) . '.min';
 		$code = cot_rc_minify(file_get_contents($path), $type);
