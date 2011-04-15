@@ -48,6 +48,13 @@ $url_area = $_SESSION['cot_com_back'][$area][$cat][$item][0];
 $url_params = $_SESSION['cot_com_back'][$area][$cat][$item][1];
 cot_block(!empty($url_area));
 
+// Try to fetch $force_admin from session
+if (isset($_SESSION['cot_comments_force_admin'][$area][$item]) && $_SESSION['cot_comments_force_admin'][$area][$item]
+	&& $usr['auth_read'] && $usr['auth_write'])
+{
+	$usr['isadmin'] = true;
+}
+
 if ($m == 'edit' && $id > 0)
 {
 	if ($a == 'update' && $id > 0)
