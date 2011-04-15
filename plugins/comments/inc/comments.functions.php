@@ -72,6 +72,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	if ($auth_read && $auth_write && $force_admin)
 	{
 		$auth_admin = true;
+		$_SESSION['cot_comments_force_admin'][$ext_name][$code] = true;
 	}
 
 	$enabled = cot_comments_enabled($ext_name, $cat, $code);
