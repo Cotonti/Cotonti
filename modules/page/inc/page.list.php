@@ -126,7 +126,7 @@ if ($c == 'all' || $c == 'system' || $c == 'unvalidated')
 }
 else
 {
-	$catpath = cot_structure_buildpath('page', $c, true);
+	$catpath = cot_breadcrumbs(cot_structure_buildpath('page', $c), $cfg['homebreadcrumb'], true);
 }
 
 

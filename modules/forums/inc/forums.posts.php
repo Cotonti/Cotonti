@@ -460,11 +460,12 @@ if ($rowt['ft_mode'] == 1)
 }
 
 
-$rowt['ft_title'] = (($rowt['ft_mode'] == 1) ? '# ' : '') . htmlspecialchars($rowt['ft_title']);
+$rowt['ft_title'] = (($rowt['ft_mode'] == 1) ? '# ' : '') . $rowt['ft_title'];
 
-$toptitle = cot_forums_buildpath($s);
-$toppath = $toptitle;
-$toptitle .= ' ' . $cfg['separator'] . ' ' . $rowt['ft_title'];
+$crumbs = cot_forums_buildpath($s);
+$toppath = cot_breadcrumbs($crumbs, $cfg['homebreadcrumb']);
+$crumbs[] = array('', $rowt['ft_title']);
+$toptitle = cot_breadcrumbs($crumbs, $cfg['homebreadcrumb'], true);
 $toptitle .= ( $usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $t->assign(array(
@@ -472,7 +473,7 @@ $t->assign(array(
 	'FORUMS_POSTS_RSS' => cot_url('rss', "c=topics&id=$q"),
 	'FORUMS_POSTS_PAGETITLE' => $toptitle,
 	'FORUMS_POSTS_TOPICDESC' => htmlspecialchars($rowt['ft_desc']),
-	'FORUMS_POSTS_SHORTTITLE' => $rowt['ft_title'],
+	'FORUMS_POSTS_SHORTTITLE' => htmlspecialchars($rowt['ft_title']),
 	'FORUMS_POSTS_CATTITLE' => htmlspecialchars($structure['forums'][$s]['title']),
 	'FORUMS_POSTS_PATH' => $toppath,
 	'FORUMS_POSTS_PAGES' => $pagenav['main'],

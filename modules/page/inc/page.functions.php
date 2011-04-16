@@ -161,7 +161,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				$admin_rights = (bool) $pag_auth[$page_data['page_cat']][2];
 			}
 
-			$catpath = cot_structure_buildpath('page', $page_data['page_cat']);
+			$catpath = cot_breadcrumbs(cot_structure_buildpath('page', $page_data['page_cat']), $cfg['homebreadcrumb']);
 			$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ? cot_url('page', 'id='.$page_data['page_id']) : cot_url('page', 'al='.$page_data['page_alias']);
 			$page_data['page_fulltitle'] = $catpath." ".$cfg['separator'].' '.cot_rc_link($page_data['page_pageurl'], htmlspecialchars($page_data['page_title']));
 

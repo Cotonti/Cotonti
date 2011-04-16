@@ -21,28 +21,6 @@ require_once cot_incfile('admin', 'module', 'resources');
 /* ======== Defaulting the admin variables ========= */
 
 unset($adminmain, $adminhelp, $admin_icon, $plugin_body, $plugin_title, $plugin_help);
-$adminpath = array();
-
-/**
- * Builds administration breadcrumbs (path)
- *
- * @param array $adminpath Path links
- * @return string
- */
-function cot_build_adminsection($adminpath)
-{
-	global $cfg, $L;
-
-	$result = array();
-	$result[] = '<a href="'.cot_url('admin').'">'.$L['Adminpanel'].'</a>';
-	foreach ($adminpath as $i => $k)
-	{
-		$result[] = '<a href="'.$k[0].'">'.$k[1].'</a>';
-	}
-	$result = implode(' '.$cfg['separator'].' ', $result);
-
-	return $result;
-}
 
 /**
  * Returns $url as an HTML link if $cond is TRUE or just plain $text otherwise

@@ -337,7 +337,7 @@ foreach ($sql_forums->fetchAll() as $row)
 
 $pagenav = cot_pagenav('forums', "m=topics&s=$s&ord=$o&w=$w", $d, $totaltopics, $cfg['forums']['maxtopicsperpage']);
 
-$toptitle = cot_forums_buildpath($s, true);
+$toptitle = cot_breadcrumbs(cot_forums_buildpath($s), $cfg['homebreadcrumb']);
 $toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $jumpbox[cot_url('forums')] = $L['Forums'];

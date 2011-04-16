@@ -155,7 +155,8 @@ function sed_build_age($birth)
 
 function sed_build_catpath($cat, $mask)
 {
-	return cot_structure_buildpath('page', $cat);
+	global $cfg;
+	return cot_breadcrumbs(cot_structure_buildpath('page', $cat), $cfg['homebreadcrumb']);
 }
 
 function sed_build_comments($code, $url, $display = true)

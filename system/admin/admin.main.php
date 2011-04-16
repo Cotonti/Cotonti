@@ -62,6 +62,8 @@ $usr['admin_config'] = cot_auth('admin', 'a', 'A');
 $usr['admin_structure'] = cot_auth('structure', 'a', 'A');
 $usr['admin_users'] = cot_auth('users', 'a', 'A');
 
+$adminpath = array(array(cot_url('admin'), $L['Adminpanel']));
+
 require $inc_file;
 
 $adminhelp = (empty($adminhelp)) ? $L['None'] : $adminhelp;
@@ -156,7 +158,7 @@ if (!COT_AJAX)
 	}
 
 	$t->assign(array(
-		'ADMIN_TITLE' => cot_build_adminsection($adminpath),
+		'ADMIN_TITLE' => cot_breadcrumbs($adminpath, false),
 		'ADMIN_SUBTITLE' => $adminsubtitle,
 		'ADMIN_MAIN' => $adminmain,
 		'ADMIN_HELP' => $adminhelp

@@ -25,50 +25,31 @@ $db_forum_stats = (isset($db_forum_stats)) ? $db_forum_stats : $db_x . 'forum_st
  * Builds forum category path
  *
  * @param string $cat Category code
- * @param bool $nolast Last link as simple text
- * @param bool $forumslink Show forums main link
- * @return string
+ * @param bool $forumslink Include forums main link
+ * @return array
+ * @see cot_breadcrumbs()
  */
-function cot_forums_buildpath($cat, $nolast = false, $forumslink = true)
+function cot_forums_buildpath($cat, $forumslink = true)
 {
 	global $structure, $cfg, $L;
-	$mask = 'link_catpath';
-	$mask = str_replace('%1$s', '{$url}', $mask);
-	$mask = str_replace('%2$s', '{$title}', $mask);
-	if ($cfg['homebreadcrumb'] && $forumslink)
-	{
-		$tmp[] = cot_rc($mask, array(
-			'url' => $cfg['mainurl'],
-			'title' => htmlspecialchars($cfg['maintitle'])
-			));
-	}
+	$tmp = array();
 	if ($forumslink)
 	{
-		$tmp[] = cot_rc($mask, array(
-			'url' => cot_url('forums'),
-			'title' => $L['Forums']
-			));
+		$tmp[] = array(cot_url('forums'), $L['Forums']);
 	}
 	$pathcodes = explode('.', $structure['forums'][$cat]['path']);
-	$last = count($pathcodes) - 1;
 	foreach ($pathcodes as $k => $x)
 	{
 		if ($k == 0)
 		{
-			$tmp[] = cot_rc($mask, array(
-				'url' => cot_url('forums', 'c=' . $x, '#' . $x),
-				'title' => htmlspecialchars($structure['forums'][$x]['title'])
-				));
+			$tmp[] = array(cot_url('forums', 'c=' . $x, '#' . $x), $structure['forums'][$x]['title']);
 		}
 		else
 		{
-			$tmp[] = ($k === $last && $nolast) ? htmlspecialchars($structure['forums'][$x]['title']) : cot_rc($mask, array(
-					'url' => cot_url('forums', 'm=topics&s=' . $x),
-					'title' => htmlspecialchars($structure['forums'][$x]['title'])
-				));
+			$tmp[] = array(cot_url('forums', 'm=topics&s=' . $x), $structure['forums'][$x]['title']);
 		}
 	}
-	return is_array($tmp) ? implode(' ' . $cfg['separator'] . ' ', $tmp) : '';
+	return $tmp;
 }
 
 /**
