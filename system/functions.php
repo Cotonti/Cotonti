@@ -1183,6 +1183,41 @@ function cot_blockguests()
  */
 
 /**
+ * Renders breadcrumbs string from array of path crumbs
+ *
+ * @param array $crumbs Path crumbs as an array: { {$url1, $title1}, {$url2, $title2},..}
+ * @param bool $home Whether to include link to home page in the root
+ * @param bool $nolast If TRUE, last crumb will be rendered as plain text rather than hyperlink
+ * @return string
+ */
+function cot_breadcrumbs($crumbs, $home = true, $nolast = false)
+{
+	global $cfg;
+	$tmp = array();
+	if ($home)
+	{
+		array_unshift($crumbs, array($cfg['mainurl'], $cfg['maintitle']));
+	}
+	$cnt = count($crumbs);
+	for ($i = 0; $i < $cnt; $i++)
+	{
+		if (is_array($crumbs[$i]))
+		{
+			$tmp[] = ($nolast && $i === $cnt - 1) ? htmlspecialchars($crumbs[$i][1])
+				: cot_rc('link_catpath', array(
+					'url' => $crumbs[$i][0],
+					'title' => htmlspecialchars($crumbs[$i][1])
+			));
+		}
+		elseif (is_string($crumbs[$i]))
+		{
+			$tmp[] = $crumbs[$i];
+		}
+	}
+	return implode(' '.$cfg['separator'].' ', $tmp);
+}
+
+/**
  * Calculates age out of D.O.B.
  *
  * @param int $birth Date of birth as UNIX timestamp
@@ -1221,40 +1256,26 @@ function cot_build_age($birth)
 }
 
 /**
- * Builds category path
+ * Builds category path for cot_breadcrumbs()
  *
  * @param string $area Area code
  * @param string $cat Category code
- * @param bool $nolast Last element as simple text
- * @return string
+ * @return array
+ * @see cot_breadcrumbs()
  */
-function cot_structure_buildpath($area, $cat, $nolast = false)
+function cot_structure_buildpath($area, $cat)
 {
-	global $structure, $cfg;
-	$mask = 'link_catpath';
-	$mask = str_replace('%1$s', '{$url}', $mask);
-	$mask = str_replace('%2$s', '{$title}', $mask);
-	if ($cfg['homebreadcrumb'])
-	{
-		$tmp[] = cot_rc('link_catpath', array(
-			'url' => $cfg['mainurl'],
-			'title' => htmlspecialchars($cfg['maintitle'])
-		));
-	}
+	global $structure;
+	$tmp = array();
 	$pathcodes = explode('.', $structure[$area][$cat]['path']);
-	$last = count($pathcodes) - 1;
 	foreach ($pathcodes as $k => $x)
 	{
 		if ($x != 'system')
 		{
-			$tmp[] = ($nolast && $k === $last) ? htmlspecialchars($structure[$area][$x]['title'])
-				: cot_rc($mask, array(
-				'url' => cot_url($area, 'c='.$x),
-				'title' => htmlspecialchars($structure[$area][$x]['title'])
-			));
+			$tmp[] = array(cot_url($area, 'c='.$x), $structure[$area][$x]['title']);
 		}
 	}
-	return is_array($tmp) ? implode(' '.$cfg['separator'].' ', $tmp) : '';
+	return $tmp;
 }
 
 /**

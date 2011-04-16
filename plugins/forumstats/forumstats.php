@@ -41,7 +41,7 @@ while ($row = $sql->fetch())
 		$ft_title .= ($row['ft_state']) ? " (x)" : '';
 		$t->assign(array(
 			'FORUMSTATS_REPLIEDTOP_II' => $ii,
-			'FORUMSTATS_REPLIEDTOP_FORUMS' => cot_forums_buildpath($row['ft_cat']),
+			'FORUMSTATS_REPLIEDTOP_FORUMS' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat'], false), false),
 			'FORUMSTATS_REPLIEDTOP_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
 			'FORUMSTATS_REPLIEDTOP_TITLE' => htmlspecialchars($ft_title),
 			'FORUMSTATS_REPLIEDTOP_POSTCOUNT' => $row['ft_postcount']
@@ -53,7 +53,7 @@ while ($row = $sql->fetch())
 		$ii++;
 		$t->assign(array(
 			'FORUMSTATS_REPLIEDTOP_II' => $ii,
-			'FORUMSTATS_REPLIEDTOP_FORUMS' => cot_forums_buildpath($row['ft_cat']),
+			'FORUMSTATS_REPLIEDTOP_FORUMS' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat'], false), false),
 			'FORUMSTATS_REPLIEDTOP_POSTCOUNT' => $row['ft_postcount']
 		));
 		$t->parse('MAIN.FORUMSTATS_REPLIEDTOP_NO_USER');
@@ -76,7 +76,7 @@ while ($row = $sql->fetch())
 		$ft_title .= ($row['ft_state'] && !$row['ft_sticky']) ? " (x)" : '';
 		$t->assign(array(
 			'FORUMSTATS_VIEWEDTOP_II' => $ii,
-			'FORUMSTATS_VIEWEDTOP_FORUMS' => cot_forums_buildpath($row['ft_cat']),
+			'FORUMSTATS_VIEWEDTOP_FORUMS' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat'], false), false),
 			'FORUMSTATS_VIEWEDTOP_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
 			'FORUMSTATS_VIEWEDTOP_TITLE' => htmlspecialchars($ft_title),
 			'FORUMSTATS_VIEWEDTOP_VIEWCOUNT' => $row['ft_viewcount']
@@ -88,7 +88,7 @@ while ($row = $sql->fetch())
 		$ii++;
 		$t->assign(array(
 			'FORUMSTATS_VIEWEDTOP_II' => $ii,
-			'FORUMSTATS_VIEWEDTOP_FORUMS' => cot_forums_buildpath($row['ft_cat']),
+			'FORUMSTATS_VIEWEDTOP_FORUMS' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat'], false), false),
 			'FORUMSTATS_VIEWEDTOP_VIEWCOUNT' => $row['ft_viewcount']
 		));
 		$t->parse('MAIN.FORUMSTATS_VIEWEDTOP_NO_USER');

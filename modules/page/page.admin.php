@@ -381,7 +381,7 @@ foreach ($sql_page->fetchAll() as $row)
 	$page_urlp = empty($row['page_alias']) ? 'id='.$row['page_id'] : 'al='.$row['page_alias'];
 	$row['page_begin_noformat'] = $row['page_begin'];
 	$row['page_pageurl'] = cot_url('page', $page_urlp);
-	$catpath = cot_structure_buildpath('page', $row['page_cat']);
+	$catpath = cot_breadcrumbs(cot_structure_buildpath('page', $row['page_cat']), false);
 	$row['page_fulltitle'] = $catpath.' '.$cfg['separator'].' <a href="'.$row['page_pageurl'].'">'.htmlspecialchars($row['page_title']).'</a>';
 	$sql_page_subcount = $db->query("SELECT SUM(structure_count) FROM $db_structure WHERE structure_path LIKE '".$db->prep($structure['page'][$row["page_cat"]]['rpath'])."%' ");
 	$sub_count = $sql_page_subcount->fetchColumn();

@@ -138,7 +138,7 @@ if (count($cats) > 0)
 			'PAGE_SUBMITNEWPOST' => (cot_auth('page', $cat, 'W')) ? cot_rc_link($url_newpage, $L['Submitnew']) : '',
 			'PAGE_SUBMITNEWPOST_URL' => (cot_auth('page', $cat, 'W')) ? $url_newpage : '',
 			'PAGE_CATTITLE' => $structure['page'][$cat]['title'],
-			'PAGE_CATPATH' => cot_structure_buildpath('page', $cat),
+			'PAGE_CATPATH' => cot_breadcrumbs(cot_structure_buildpath('page', $cat), false),
 			'PAGE_CAT' => $cat
 		));
 

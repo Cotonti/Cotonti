@@ -197,7 +197,7 @@ function cot_tag_search_pages($query)
 		$t->assign(array(
 			'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id']) : cot_url('page', 'al='.$row['page_alias']),
 			'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
-			'TAGS_RESULT_ROW_PATH' => cot_structure_buildpath('page', $row['page_cat']),
+			'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_structure_buildpath('page', $row['page_cat']), false),
 			'TAGS_RESULT_ROW_TAGS' => $tag_list
 		));
 		/* == Hook : Part 2 == */
@@ -283,7 +283,7 @@ function cot_tag_search_forums($query)
 		$t->assign(array(
 			'TAGS_RESULT_ROW_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
 			'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['ft_title']),
-			'TAGS_RESULT_ROW_PATH' => cot_forums_buildpath($row['ft_cat']),
+			'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false),
 			'TAGS_RESULT_ROW_TAGS' => $tag_list
 		));
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
