@@ -24,24 +24,14 @@ $db_i18n_structure = (isset($db_i18n_structure)) ? $db_i18n_structure : $db_x . 
  *
  * @param string $area Area code
  * @param string $cat Category code
- * @param string $mask Format mask
+ * @param string $locale Locale code
  * @return string
  */
-function cot_i18n_build_catpath($area, $cat, $locale, $mask = 'link_catpath')
+function cot_i18n_build_catpath($area, $cat, $locale)
 {
 	global $structure, $cfg, $i18n_structure;
-	$mask = str_replace('%1$s', '{$url}', $mask);
-	$mask = str_replace('%2$s', '{$title}', $mask);
-	if ($cfg['homebreadcrumb'])
-	{
-		$tmp[] = cot_rc('link_catpath', array(
-			'url' => $cfg['mainurl'],
-			'title' => htmlspecialchars($cfg['maintitle'])
-		));
-	}
+	$tmp = array();
 	$pathcodes = explode('.', $structure[$area][$cat]['path']);
-	$last = count($pathcodes) - 1;
-	$list = defined('COT_LIST');
 	foreach ($pathcodes as $k => $x)
 	{
 		if ($x != 'system')
@@ -56,14 +46,10 @@ function cot_i18n_build_catpath($area, $cat, $locale, $mask = 'link_catpath')
 				$title = $i18n_structure[$x][$locale]['title'];
 				$url = cot_url($area, 'c=' . $x . '&l=' . $locale);
 			}
-			$tmp[] = ($list && $k === $last) ? htmlspecialchars($title)
-				: cot_rc($mask, array(
-				'url' => $url,
-				'title' => htmlspecialchars($title)
-			));
+			$tmp[] = array($url, $title);
 		}
 	}
-	return is_array($tmp) ? implode(' '.$cfg['separator'].' ', $tmp) : '';
+	return $tmp;
 }
 
 /**

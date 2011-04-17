@@ -23,7 +23,7 @@ if (!empty($row['ipage_title']))
 		? cot_url('page', 'id='.$row['page_id'].'&l='.$row['ipage_locale'].'&highlight='.$hl)
 		: cot_url('page', 'al='.$row['page_alias'].'&l='.$row['ipage_locale'].'&highlight='.$hl);
 	$t->assign(array(
-		'PLUGIN_PR_CATEGORY' => cot_i18n_build_catpath('page', $row['page_cat'], $row['ipage_locale']),
+		'PLUGIN_PR_CATEGORY' => cot_breadcrumbs(cot_i18n_build_catpath('page', $row['page_cat'], $row['ipage_locale']), false),
 		'PLUGIN_PR_TITLE' => cot_rc_link($page_url, htmlspecialchars($row['ipage_title'])),
 		'PLUGIN_PR_TEXT' => cot_clear_mark($row['ipage_text'], $row['page_type'], $words),
 		'PLUGIN_PR_TIME' => cot_date('datetime_medium', $row['ipage_date'] + $usr['timezone'] * 3600),

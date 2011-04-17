@@ -23,7 +23,7 @@ if ($i18n_enabled)
 	if ($cat_i18n && $i18n_notmain)
 	{
 		// Override category tags
-		$catpath = cot_i18n_build_catpath('page', $c, $i18n_locale);
+		$catpath = cot_breadcrumbs(cot_i18n_build_catpath('page', $c, $i18n_locale), $cfg['homebreadcrumb']);
 		$urlparams = (!$cfg['plugin']['i18n']['omitmain'] || $i18n_locale != $cfg['defaultlang'])
 			? "c=$c&l=$i18n_locale" : "c=$c";
 		$t->assign(array(
