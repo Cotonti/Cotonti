@@ -1216,8 +1216,8 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false)
 			$tmp[] = $crumbs[$i];
 		}
 	}
-	$cfg['separator'] = (mb_strlen($cfg['separator']) > 2) ? $cfg['separator'] : ' '.$cfg['separator'].' ';
-	return implode($cfg['separator'], $tmp);
+	$separator = (mb_strlen($cfg['separator']) > 2) ? $cfg['separator'] : ' '.$cfg['separator'].' ';
+	return implode($separator, $tmp);
 }
 
 /**
@@ -2529,6 +2529,7 @@ function cot_tplfile($base, $type = 'module')
 		else
 		{
 			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
+			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
 		}
 		$scan_prefix[] = "{$cfg['system_dir']}/$basename/tpl/";
 	}
