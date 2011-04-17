@@ -56,7 +56,7 @@ function sed_tag_parse_query($qs)
  */
 function sed_tag_search_form($area = 'all')
 {
-	global $d, $perpage, $tl, $qs, $t, $L, $cfg, $db_tag_references, $tc_styles;
+	global $d, $perpage, $lang, $tl, $qs, $t, $L, $cfg, $db_tag_references, $tc_styles;
 	$limit = ($perpage > 0) ? "$d, $perpage" : NULL;
 	$tcloud = sed_tag_cloud($area, $cfg['plugin']['tags']['order'], $limit);
 	$tc_html = '<div class="tag_cloud">';
@@ -101,7 +101,7 @@ function sed_tag_search_form($area = 'all')
  */
 function sed_tag_search_pages($query)
 {
-	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
+	global $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
 	$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
@@ -168,7 +168,7 @@ function sed_tag_search_pages($query)
  */
 function sed_tag_search_forums($query)
 {
-	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections, $o, $row;
+	global $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections, $o, $row;
 	$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
