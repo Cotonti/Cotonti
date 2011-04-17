@@ -75,11 +75,11 @@ foreach ($cot_extensions as $k => $line)
 
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = cot_rc_link(cot_url('pfs', $more), $L['pfs_title']);
+$title[] = array(cot_url('pfs', $more), $L['pfs_title']);
 
 if ($userid!=$usr['id'])
 {
-	$title .= ($userid==0) ? '' : " (".cot_build_user($user_info['user_id'], $user_info['user_name']).")";
+	($userid == 0) || $title[] = array(cot_url('users', 'm=details&id='.$user_info['user_id']), $user_info['user_name']);
 }
 
 /* === Hook === */
@@ -320,7 +320,7 @@ if ($f>0)
 
 		$sql_pfs_files = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid=$userid AND pfs_folderid=$f ORDER BY pfs_file ASC");
 		$sql_pfs = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid=$userid AND pfs_folderid=$f ORDER BY pfs_file ASC LIMIT $d, ".$cfg['pfs']['maxpfsperpage']);
-		$title .= ' '.$cfg['separator'].' '.cot_rc_link(cot_url('pfs', 'f='.$pff_id.'&'.$more), $pff_title);
+		$title[] = array(cot_url('pfs', 'f='.$pff_id.'&'.$more), $pff_title);
 	}
 	else
 	{ cot_die(); }
@@ -567,7 +567,7 @@ $out['subtitle'] = $L['Mypfs'];
 
 /* ============= */
 
-$t->assign('PFS_TITLE', $title);
+$t->assign('PFS_TITLE', cot_breadcrumbs($title, $cfg['homebreadcrumb']));
 
 if ($standalone)
 {

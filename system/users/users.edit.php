@@ -255,17 +255,12 @@ $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');
 
-$bhome = $cfg['homebreadcrumb'] ?
-	cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';
-
 $protected = $sys['protecttopadmin'] ? array('disabled' => 'disabled') : array();
 
 $editor_class = $cfg['usertextimg'] ? 'minieditor' : '';
 
 $t->assign(array(
-	'USERS_EDIT_TITLE' => $bhome.cot_rc_link(cot_url('users'), $L['Users']).' '.$cfg['separator'].' '
-		.cot_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])).' '.$cfg['separator']
-		.cot_rc_link(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit']),
+	'USERS_EDIT_TITLE' => cot_breadcrumbs(array(array(cot_url('users'), $L['Users']), array(cot_url('users', 'm=details&id='.$urr['user_id']), $urr['user_name']), array(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit'])), $cfg['homebreadcrumb']),
 	'USERS_EDIT_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
 	'USERS_EDIT_EDITLINK' => cot_url('users', 'm=edit&id='.$urr['user_id']),
 	'USERS_EDIT_SUBTITLE' => $L['useed_subtitle'],

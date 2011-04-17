@@ -37,11 +37,11 @@ if ($i18n_enabled && $i18n_notmain)
 		$validate_url = cot_url('admin', "m=page&a=validate&id={$page_data['page_id']}&x={$sys['xk']}$append_param");
 		$unvalidate_url = cot_url('admin', "m=page&a=unvalidate&id={$page_data['page_id']}&x={$sys['xk']}$append_param");
 		$edit_url = cot_url('page', "m=edit&id={$page_data['page_id']}$append_param");
-		
-		$catpath = cot_breadcrumbs(cot_i18n_build_catpath('page', $page_data['page_cat'], $i18n_locale), $cfg['homebreadcrumb']);
+		$pagepath = cot_i18n_build_catpath('page', $page_data['page_cat'], $i18n_locale);
+		$catpath = cot_breadcrumbs($pagepath, $pagepath_home);
+		$page_link[] = array(cot_url('page', $urlparams), $page_data['page_title']);
 		$i18n_array = array_merge($i18n_array, array(
-			'TITLE' => $catpath." ".$cfg['separator'].' '.cot_rc_link(cot_url('page', $urlparams),
-				htmlspecialchars($page_data['page_title'])),
+			'TITLE' => cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home),
 			'CATTITLE' => htmlspecialchars($cat_i18n['title']),
 			'CATPATH' => $catpath,
 			'CATPATH_SHORT' => cot_rc_link(cot_url('page', 'c='.$page_data['page_cat'] . $append_param),
@@ -74,11 +74,10 @@ if ($i18n_enabled && $i18n_notmain)
 		$text = cot_parse($page_data['ipage_text'], $cfg['page']['markup']);
 		$text = ((int) $textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
 		$cutted = mb_strlen($page_data['ipage_text']) > mb_strlen($text);
-
+		$page_link[] = array(cot_url('page', $urlparams), $page_data['ipage_title']);
 		$i18n_array = array_merge($i18n_array, array(
 			'URL' => cot_url('page', $urlparams),
-			'TITLE' => $catpath." ".$cfg['separator'].' '.cot_rc_link(cot_url('page', $urlparams),
-				htmlspecialchars($page_data['ipage_title'])),
+			'TITLE' => cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home),
 			'SHORTTITLE' => htmlspecialchars($page_data['ipage_title']),
 			'DESC' => htmlspecialchars($page_data['ipage_desc']),
 			'TEXT' => $text,

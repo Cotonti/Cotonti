@@ -67,13 +67,12 @@ if (count($msg) > 0)
 
 list($totalsentbox, $totalinbox) = cot_message_count($usr['id']);
 
-$bhome = $cfg['homebreadcrumb'] ? cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ' : '';
-$title = $bhome . cot_rc_link(cot_url('pm'), $L['Private_Messages']).' '.$cfg['separator'];
+$title[] = array(cot_url('pm'), $L['Private_Messages']);
 
 if ($f == 'sentbox')
 {
 	$sqlfilter = "pm_fromuserid = '".$usr['id']."' AND pm_fromstate <> 3";
-	$title .= ' '.cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox']);
+	$title[] = array(cot_url('pm', 'f=sentbox'), $L['pm_sentbox']);
 	$subtitle = $L['pm_sentboxsubtitle'];
 	$totalcount = $totalsentbox;
 }
@@ -81,7 +80,7 @@ else
 {
 	$f = 'inbox';
 	$sqlfilter = "pm_touserid = '".$usr['id']."' AND pm_tostate <> 3";
-	$title .= ' '.cot_rc_link(cot_url('pm'),$L['pm_inbox']);
+	$title[] = array(cot_url('pm'), $L['pm_inbox']);
 	$subtitle = $L['pm_inboxsubtitle'];
 	$totalcount = $totalintbox;
 }
@@ -89,12 +88,12 @@ else
 if ($filter == 'unread')
 {
 	$sqlfilter .= " AND pm_tostate = 0";
-	$title .= ' ('.$L['pm_unread'].')';
+	$title[] = $L['pm_unread'];
 }
 elseif ($filter == 'starred')
 {
 	$sqlfilter .= ($f == 'sentbox') ? " AND pm_fromstate = 2" : " AND pm_tostate = 2";
-	$title .= ' ('.$L['pm_starred'].')';
+	$title[] = $L['pm_starred'];
 }
 
 /* === Hook === */
@@ -206,7 +205,7 @@ $url_unread = cot_url('pm', 'f='.$f.'&filter=unread');
 $url_starred = cot_url('pm', 'f='.$f.'&filter=starred');
 
 $t->assign(array(
-	'PM_PAGETITLE' => $title,
+	'PM_PAGETITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'PM_SUBTITLE' => $subtitle,
 	'PM_FORM_UPDATE' => cot_url('pm', cot_xg().'&f='.$f.'&filter='.$filter.'&d='.$durl),
 	'PM_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link($url_newpm, $L['pm_sendnew'], array('class'=>'ajax')) : '',

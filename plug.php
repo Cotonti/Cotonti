@@ -141,20 +141,11 @@ if ($ext_display_header)
 if ($autoassigntags)
 {
 	$plugin_title = (empty($plugin_title)) ? $L['plu_title'] : $plugin_title;
-
-	if ($cfg['homebreadcrumb'])
-	{
-		$bhome = $R['plug_code_homebreadcrumb'];
-	}
-	else
-	{
-		$bhome = '';
-	}
-
+	$pltitle[] = array(cot_url('plug', "e=$e"), $plugin_title);
 	if (empty($o))
 	{
 		$t->assign(array(
-			'PLUGIN_TITLE' => cot_rc('plug_code_title', array('url' => cot_url('plug', "e=$e"))),
+			'PLUGIN_TITLE' => cot_breadcrumbs(array_merge($pltitle, $title), $cfg['homebreadcrumb']),
 			'PLUGIN_SUBTITLE' => $plugin_subtitle,
 			'PLUGIN_BODY' => $plugin_body
 		));

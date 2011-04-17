@@ -109,14 +109,13 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 $out['subtitle'] = $L['pasrec_title'];
 $out['head'] .= $R['code_noindex'];
 
-$bhome = $cfg['homebreadcrumb'] ? cot_url($cfg['mainurl'], $cfg['maintitle']).' '.$cfg['separator'].' ' : '';
-$title = $bhome . $L['pasrec_title'];
+$title[] = $L['pasrec_title'];
 
 require_once $cfg['system_dir'].'/header.php';
 $t = new XTemplate(cot_tplfile('users.passrecover', 'core'));
 
 $t->assign(array(
-	'PASSRECOVER_TITLE' => $title,
+	'PASSRECOVER_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'PASSRECOVER_URL_FORM' => cot_url('users', 'm=passrecover&a=request')
 ));
 

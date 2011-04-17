@@ -125,12 +125,10 @@ require_once $cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate(cot_tplfile('forums.sections'));
 
-$bhome = ($cfg['homebreadcrumb']) ? cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ' : '';
-
 $url_markall = cot_url('forums', "n=markall");
 $t->assign(array(
 	'FORUMS_RSS' => cot_url('rss', 'c=forums'),
-	'FORUMS_SECTIONS_PAGETITLE' => $bhome.cot_rc_link(cot_url('forums'), $L['Forums']),
+	'FORUMS_SECTIONS_PAGETITLE' => cot_breadcrumbs(array(cot_url('forums'), $L['Forums']), $cfg['homebreadcrumb']),
 	'FORUMS_SECTIONS_MARKALL' =>  ($usr['id'] > 0) ? cot_rc_link($url_markall, $L['forums_markallasread']) : '',
 	'FORUMS_SECTIONS_MARKALL_URL' => ($usr['id'] > 0) ? $url_markall : '',
 	'FORUMS_SECTIONS_WHOSONLINE' => $out['whosonline']." : ".$out['whosonline_reg_list']

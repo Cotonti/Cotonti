@@ -62,10 +62,8 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = cot_tplfile(array('users', 'details'), 'core');
 $t = new XTemplate($mskin);
 
-$bhome = $cfg['homebreadcrumb'] ? cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';
-
 $t->assign(array(
-	'USERS_DETAILS_TITLE' => $bhome . cot_rc_link(cot_url('users'), $L['Users']).' '.$cfg['separator'].' '.cot_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])),
+	'USERS_DETAILS_TITLE' => cot_breadcrumbs(array(array(cot_url('users'), $L['Users']), array(cot_url('users', 'm=details&id='.$urr['user_id']), $urr['user_name'])), $cfg['homebreadcrumb']),
 	'USERS_DETAILS_SUBTITLE' => $L['use_subtitle'],
 ));
 
