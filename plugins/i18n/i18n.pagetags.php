@@ -38,7 +38,7 @@ if ($i18n_enabled && $i18n_notmain)
 		$unvalidate_url = cot_url('admin', "m=page&a=unvalidate&id={$page_data['page_id']}&x={$sys['xk']}$append_param");
 		$edit_url = cot_url('page', "m=edit&id={$page_data['page_id']}$append_param");
 		
-		$catpath = cot_i18n_build_catpath('page', $page_data['page_cat'], $i18n_locale);
+		$catpath = cot_breadcrumbs(cot_i18n_build_catpath('page', $page_data['page_cat'], $i18n_locale), $cfg['homebreadcrumb']);
 		$i18n_array = array_merge($i18n_array, array(
 			'TITLE' => $catpath." ".$cfg['separator'].' '.cot_rc_link(cot_url('page', $urlparams),
 				htmlspecialchars($page_data['page_title'])),

@@ -1188,9 +1188,10 @@ function cot_blockguests()
  * @param array $crumbs Path crumbs as an array: { {$url1, $title1}, {$url2, $title2},..}
  * @param bool $home Whether to include link to home page in the root
  * @param bool $nolast If TRUE, last crumb will be rendered as plain text rather than hyperlink
+ * @param bool $plain If TRUE plain titles will be rendered instead of hyperlinks
  * @return string
  */
-function cot_breadcrumbs($crumbs, $home = true, $nolast = false)
+function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false)
 {
 	global $cfg;
 	$tmp = array();
@@ -1203,7 +1204,7 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = false)
 	{
 		if (is_array($crumbs[$i]))
 		{
-			$tmp[] = ($nolast && $i === $cnt - 1) ? htmlspecialchars($crumbs[$i][1])
+			$tmp[] = ($nolast && $i === $cnt - 1 || $plain) ? htmlspecialchars($crumbs[$i][1])
 				: cot_rc('link_catpath', array(
 					'url' => $crumbs[$i][0],
 					'title' => htmlspecialchars($crumbs[$i][1])

@@ -27,7 +27,7 @@ if (is_array($i18n_structure) && count($i18n_structure) > 0)
 			// Permissions to main category already checked
 			foreach ($row as $lc => $x)
 			{
-				$pages_cat_list[$cat.':'.$lc] = cot_i18n_build_catpath('page', $cat, $lc, '{$title}');
+				$pages_cat_list[$cat.':'.$lc] = cot_breadcrumbs(cot_i18n_build_catpath('page', $cat, $lc), false, true, true);
 			}
 		}
 	}
