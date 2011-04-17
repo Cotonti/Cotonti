@@ -1207,7 +1207,7 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false)
 		{
 			$tmp[] = ($nolast && $i === $cnt - 1 || $plain) ? htmlspecialchars($crumbs[$i][1])
 				: cot_rc('link_catpath', array(
-					'url' => $crumbs[$i][0],
+					'url' => (!empty($crumbs[$i][0])) ? $crumbs[$i][0] : '#',
 					'title' => htmlspecialchars($crumbs[$i][1])
 			));
 		}
@@ -1216,7 +1216,8 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false)
 			$tmp[] = $crumbs[$i];
 		}
 	}
-	return implode(' '.$cfg['separator'].' ', $tmp);
+	$cfg['separator'] = (mb_strlen($cfg['separator']) > 2) ? $cfg['separator'] : ' '.$cfg['separator'].' ';
+	return implode($cfg['separator'], $tmp);
 }
 
 /**
