@@ -366,30 +366,12 @@ $extp = cot_getextplugins('page.admin.loop');
 /* ===== */
 foreach ($sql_page->fetchAll() as $row)
 {
-	if ($row['page_type'] == 0)
-	{
-		$page_type = 'BBcode';
-	}
-	elseif ($row['page_type'] == 1)
-	{
-		$page_type = 'HTML';
-	}
-	elseif ($row['page_type'] == 2)
-	{
-		$page_type = 'PHP';
-	}
-	$page_urlp = empty($row['page_alias']) ? 'id='.$row['page_id'] : 'al='.$row['page_alias'];
-	$row['page_begin_noformat'] = $row['page_begin'];
-	$row['page_pageurl'] = cot_url('page', $page_urlp);
-	$catpath = cot_breadcrumbs(cot_structure_buildpath('page', $row['page_cat']), false);
-	$row['page_fulltitle'] = $catpath.' '.$cfg['separator'].' <a href="'.$row['page_pageurl'].'">'.htmlspecialchars($row['page_title']).'</a>';
 	$sql_page_subcount = $db->query("SELECT SUM(structure_count) FROM $db_structure WHERE structure_path LIKE '".$db->prep($structure['page'][$row["page_cat"]]['rpath'])."%' ");
 	$sub_count = $sql_page_subcount->fetchColumn();
 	$row['page_file'] = intval($row['page_file']);
 	$t->assign(cot_generate_pagetags($row, 'ADMIN_PAGE_', 200));
 	$t->assign(array(
 		'ADMIN_PAGE_ID_URL' => cot_url('page', 'id='.$row['page_id']),
-		'ADMIN_PAGE_TYPE' => $page_type,
 		'ADMIN_PAGE_OWNER' => cot_build_user($row['page_ownerid'], htmlspecialchars($row['user_name'])),
 		'ADMIN_PAGE_FILE_BOOL' => $row['page_file'],
 		'ADMIN_PAGE_URL_FOR_VALIDATED' => cot_url('admin', 'm=page&a=validate&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()),

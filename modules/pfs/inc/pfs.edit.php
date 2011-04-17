@@ -56,7 +56,7 @@ if (!empty($c1) || !empty($c2))
 /* ============= */
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = cot_rc_link(cot_url('pfs', $more), $L['pfs_title']);
+$title[] = array(cot_url('pfs', $more), $L['pfs_title']);
 
 /* === Hook === */
 foreach (cot_getextplugins('pfs.edit.first') as $pl)
@@ -67,11 +67,11 @@ foreach (cot_getextplugins('pfs.edit.first') as $pl)
 
 if ($userid != $usr['id'])
 {
-	cot_block($usr['isadmin']);
-	$title .= ($userid == 0) ? '' : " (".cot_build_user($user_info['user_id'], $user_info['user_name']).")";
+	cot_block($usr['isadmin']);	
+	($userid == 0) || $title[] = array(cot_url('users', 'm=details&id='.$user_info['user_id']), $user_info['user_name']);
 }
 
-$title .= " ".$cfg['separator']." ".$L['Edit'];
+$title[] = $L['Edit'];
 
 $sql_pfs = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid=$userid AND pfs_id=$id LIMIT 1");
 
@@ -91,7 +91,7 @@ else
 	cot_die();
 }
 
-$title .= " ".$cfg['separator']." ".htmlspecialchars($pfs_file);
+$title[] = htmlspecialchars($pfs_file);
 
 if ($a=='update' && !empty($id))
 {
@@ -135,7 +135,7 @@ if ($standalone)
 }
 
 $t->assign(array(
-	'PFS_TITLE' => $title,
+	'PFS_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'PFS_ACTION'=> cot_url('pfs', 'm=edit&a=update&id='.$pfs_id.'&'.$more),
 	'PFS_FILE' => $pfs_file,
 	'PFS_DATE' => cot_date('datetime_medium', $pfs_date),

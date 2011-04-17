@@ -898,7 +898,8 @@ function cot_load_structure()
 		{
 			$path1 = mb_substr($row['structure_path'], 0, $last_dot);
 			$path[$row['structure_path']] = $path[$path1] . '.' . $row['structure_code'];
-			$tpath[$row['structure_path']] = $tpath[$path1] . ' ' . $cfg['separator'] . ' ' . $row['structure_title'];
+			$separaror = ($cfg['separator'] == strip_tags($cfg['separator'])) ? ' ' . $cfg['separator'] . ' ' : ' \ ';
+			$tpath[$row['structure_path']] = $tpath[$path1] . $separaror . $row['structure_title'];
 			$row['structure_tpl'] = ($row['structure_tpl'] == 'same_as_parent') ? $parent_tpl : $row['structure_tpl'];
 		}
 		else

@@ -107,12 +107,6 @@ $R['img_smilie'] = '<img src="{$src}" alt="{$name}" class="icon" />';
 $R['link_catpath'] = '<a href="{$url}" title="{$title}">{$title}</a>';
 $R['link_email'] = '<a href="mailto:{$email}">{$email}</a>';
 
-/**
- * Plugin Title
- */
-
-$R['plug_code_homebreadcrumb'] = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ';
-$R['plug_code_title'] = '{$bhome}<a href="{$url}">{$plugin_title}</a>';
 
 /**
  * Structure

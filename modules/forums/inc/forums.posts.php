@@ -464,7 +464,7 @@ $rowt['ft_title'] = (($rowt['ft_mode'] == 1) ? '# ' : '') . $rowt['ft_title'];
 
 $crumbs = cot_forums_buildpath($s);
 $toppath = cot_breadcrumbs($crumbs, $cfg['homebreadcrumb']);
-$crumbs[] = array('', $rowt['ft_title']);
+$crumbs[] = $rowt['ft_title'];
 $toptitle = cot_breadcrumbs($crumbs, $cfg['homebreadcrumb'], true);
 $toptitle .= ( $usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 

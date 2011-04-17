@@ -109,12 +109,12 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
  * @param string $tag_prefix Prefix for tags
  * @param int $textlength Text truncate
  * @param bool $admin_rights Page Admin Rights
- * @param bool $date_format DateTime Format
+ * @param bool $pagepath_home Add home link for page path
  * @param string $emptytitle Page title text if page does not exist
  * @param bool $cacheitem Cache tags
  * @return array
  */
-function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = null, $date_format = '', $emptytitle = '', $cacheitem = true)
+function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = null, $pagepath_home = false, $emptytitle = '', $cacheitem = true)
 {
 	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $db_pages, $usr, $sys, $cot_yesno, $structure;
 	
@@ -160,11 +160,11 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				}
 				$admin_rights = (bool) $pag_auth[$page_data['page_cat']][2];
 			}
-
-			$catpath = cot_breadcrumbs(cot_structure_buildpath('page', $page_data['page_cat']), $cfg['homebreadcrumb']);
+			$pagepath = cot_structure_buildpath('page', $page_data['page_cat']);
+			$catpath = cot_breadcrumbs($pagepath, $pagepath_home);
 			$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ? cot_url('page', 'id='.$page_data['page_id']) : cot_url('page', 'al='.$page_data['page_alias']);
-			$page_data['page_fulltitle'] = $catpath." ".$cfg['separator'].' '.cot_rc_link($page_data['page_pageurl'], htmlspecialchars($page_data['page_title']));
-
+			$page_link[] = array($page_data['page_pageurl'], $page_data['page_title']);
+			$page_data['page_fulltitle'] = cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home);
 			if (!empty($page_data['page_url']) && $page_data['page_file'])
 			{
 				$dotpos = mb_strrpos($page_data['page_url'], ".") + 1;
@@ -181,7 +181,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				$page_data['page_fileicon'] = '';
 			}
 
-			$date_format = (!empty($date_format)) ? $date_format : 'datetime_medium';
+			$date_format = 'datetime_medium';
 
 			$text = cot_parse($page_data['page_text'], $cfg['page']['markup']);
 			$text_cut = ((int)$textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);

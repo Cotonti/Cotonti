@@ -193,7 +193,6 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	foreach ($sql->fetchAll() as $pag)
 	{
 		$jj++;
-		$catpath = cot_breadcrumbs(cot_structure_buildpath('page', $pag['page_cat']), false);
 		if ((int)$titlelength > 0 && mb_strlen($pag['page_title']) > $titlelength)
 		{
 			$pag['page_title'] = (cot_string_truncate($pag['page_title'], $titlelength, false)) . "...";

@@ -71,9 +71,7 @@ if (empty($d))
 	$d = 0;
 }
 
-$bhome = $cfg['homebreadcrumb'] ? cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ' : '';
-
-$title = $bhome . cot_rc_link(cot_url('users'), $L['Users']);
+$title[] = array(cot_url('users'), $L['Users']);
 $localskin = cot_tplfile('users', 'core');
 
 if(!empty($sq))
@@ -89,25 +87,24 @@ if ($s == 'grplevel' || $s == 'grptitle' || $gm > 1)
 if($f == 'search' && mb_strlen($y) > 1)
 {
 	$sq = $y;
-	$title .= $cfg['separator']." ". $L['Search']." '".htmlspecialchars($y)."'";
+	$title[] = $L['Search']." '".htmlspecialchars($y)."'";
 	$where['namelike'] = "user_name LIKE '%".$db->prep($y)."%'";
 }
 elseif($g > 1)
 {
-	$title .= $cfg['separator']." ".$L['Maingroup']." = ".cot_build_group($g);
+	$title[] = $L['Maingroup']." = ".cot_build_group($g);
 	$where['maingrp'] = "user_maingrp=$g";
 }
 elseif($gm > 1)
 {
-	$title .= $cfg['separator']." ".$L['Group']." = ".cot_build_group($gm);
+	$title[] = $L['Group']." = ".cot_build_group($gm);
 	$join_condition .= " LEFT JOIN $db_groups_users as m ON m.gru_userid=u.user_id";
 	$where['maingrp'] = "m.gru_groupid=".$gm;
 }
 elseif(mb_substr($f, 0, 8) == 'country_')
 {
 	$cn = mb_strtolower(mb_substr($f, 8, 2));
-	$title .= $cfg['separator']." ".$L['Country']." '";
-	$title .= ($cn == '00') ? $L['None']."'" : $cot_countries[$cn]."'";
+	$title[] = $L['Country']." '" . (($cn == '00') ? $L['None']."'" : $cot_countries[$cn]."'");
 	$where['country'] = "user_country='$cn'";
 }
 else//if($f == 'all')
@@ -206,7 +203,7 @@ foreach (cot_getextplugins('users.filters') as $pl)
 /* ===== */
 
 $t->assign(array(
-	'USERS_TITLE' => $title,
+	'USERS_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'USERS_SUBTITLE' => $L['use_subtitle'],
 	'USERS_CURRENTFILTER' => $f,
 	'USERS_TOP_CURRENTPAGE' => $currentpage,

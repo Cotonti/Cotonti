@@ -41,14 +41,17 @@ if($poll_form)
 
 	if (!empty($poll_form['poll_text']))
 	{
-		$ft_title = $L['Poll'].": ".$ft_title;
+		$rowt['ft_title'] = $L['Poll'].": ".$rowt['ft_title'];
 	}
+	$crumbs = cot_forums_buildpath($s);
+	$toppath = cot_breadcrumbs($crumbs, $cfg['homebreadcrumb']);
+	$crumbs[] = $rowt['ft_title'];
+	$toptitle = cot_breadcrumbs($crumbs, $cfg['homebreadcrumb'], true);
 
-	$toptitle = $toppath.' ' . $cfg['separator'] . ' ' . $ft_title;
 	$toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 	$t->assign(array(
 		'FORUMS_POSTS_PAGETITLE' => $toptitle,
-		'FORUMS_POSTS_SHORTTITLE' => $ft_title
+		'FORUMS_POSTS_SHORTTITLE' => htmlspecialchars($rowt['ft_title'])
 	));
 }
 ?>

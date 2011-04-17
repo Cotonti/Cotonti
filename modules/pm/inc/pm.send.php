@@ -261,16 +261,15 @@ if (!COT_AJAX)
 
 cot_display_messages($t);
 
-$bhome = $cfg['homebreadcrumb'] ? cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';
-$title = $bhome . cot_rc_link(cot_url('pm'), $L['Private_Messages']).' '.$cfg['separator'].' ';
-$title .= (!$id) ? $L['pmsend_title'] : $L['Edit'].' #'.$id;
+$title[] = array(cot_url('pm'), $L['Private_Messages']);
+$title[] = (!$id) ? $L['pmsend_title'] : $L['Edit'].' #'.$id;
 
 $url_newpm = cot_url('pm', 'm=send');
 $url_inbox = cot_url('pm');
 $url_sentbox = cot_url('pm', 'f=sentbox');
 
 $t->assign(array(
-	'PMSEND_TITLE' => $title,
+	'PMSEND_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'PMSEND_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link($url_newpm, $L['pm_sendnew'], array('class'=>'ajax')) : '',
 	'PMSEND_SENDNEWPM_URL' => ($usr['auth_write']) ? $url_newpm : '',
 	'PMSEND_INBOX' => cot_rc_link($url_inbox, $L['pm_inbox'], array('class'=>'ajax')),

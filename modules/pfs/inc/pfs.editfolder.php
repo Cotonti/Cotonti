@@ -56,7 +56,7 @@ if (!empty($c1) || !empty($c2))
 /* ============= */
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = cot_rc_link(cot_url('pfs', $more), $L['pfs_title']);
+$title[] = array(cot_url('pfs', $more), $L['pfs_title']);
 
 /* === Hook === */
 foreach (cot_getextplugins('pfs.editfolder.first') as $pl)
@@ -68,10 +68,10 @@ foreach (cot_getextplugins('pfs.editfolder.first') as $pl)
 if ($userid!=$usr['id'])
 {
 	cot_block($usr['isadmin']);
-	$title .= ($userid==0) ? '' : " (".cot_build_user($user_info['user_id'], $user_info['user_name']).")";
+	($userid == 0) || $title[] = array(cot_url('users', 'm=details&id='.$user_info['user_id']), $user_info['user_name']);
 }
 
-$title .= " ".$cfg['separator']." ".$L['Edit'];
+$title[] = $L['Edit'];
 
 $sql_pfs = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid=$userid AND pff_id=$f LIMIT 1");
 
@@ -85,7 +85,7 @@ if ($row = $sql_pfs->fetch())
 	$pff_ispublic = $row['pff_ispublic'];
 	$pff_isgallery = $row['pff_isgallery'];
 	$pff_count = $row['pff_count'];
-	$title .= " ".$cfg['separator']." ".htmlspecialchars($pff_title);
+	$title[]= htmlspecialchars($pff_title);
 }
 else
 { 
@@ -136,7 +136,7 @@ if ($standalone)
 }
 
 $t->assign(array(
-	'PFS_TITLE' => $title,
+	'PFS_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'PFS_ACTION' => cot_url('pfs', 'm=editfolder&a=update&f=' . $pff_id . '&' . $more),
 //	'PFF_FOLDER' => cot_selectbox_folders($userid, '', $row['pff_parentid'], 'rparentid'),
 	'PFF_TITLE' => cot_inputbox('text', 'rtitle', htmlspecialchars($pff_title), 'size="56" maxlength="255"'),

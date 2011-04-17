@@ -39,7 +39,7 @@ $pmsql = $db->query("SELECT * FROM $db_pm WHERE pm_id = $id LIMIT 1");
 cot_die($pmsql->rowCount() == 0);
 $row = $pmsql->fetch();
 
-$title = cot_rc_link(cot_url('pm'), $L['Private_Messages']) ." ".$cfg['separator'];
+$title[] = array(cot_url('pm'), $L['Private_Messages']);
 
 if ($row['pm_touserid'] == $usr['id'])
 {
@@ -52,7 +52,7 @@ if ($row['pm_touserid'] == $usr['id'])
 		}
 	}
 	$f = 'inbox';
-	$title .= ' '.cot_rc_link(cot_url('pm', 'f=inbox'), $L['pm_inbox']);
+	$title[] = array(cot_url('pm', 'f=inbox'), $L['pm_inbox']);
 	$to = $row['pm_fromuserid'];
 	$star_class = ($row['pm_tostate'] == 2) ?  1 : 0;
 	$totalcount = $totalinbox;
@@ -61,7 +61,7 @@ if ($row['pm_touserid'] == $usr['id'])
 elseif ($row['pm_fromuserid'] == $usr['id'])
 {
 	$f = 'sentbox';
-	$title .= ' '.cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox']);
+	$title[] = array(cot_url('pm', 'f=sentbox'), $L['pm_sentbox']);
 	$row['pm_icon_edit'] = ($row['pm_tostate'] == 0) ? cot_rc_link(cot_url('pm', 'm=send&id='.$row['pm_id']), $L['Edit']) : '';
 	$to = $row['pm_touserid'];
 	$star_class = ($row['pm_fromstate'] == 2) ?  1 : 0;
@@ -214,9 +214,11 @@ if (!COT_AJAX)
 	$t->parse('MAIN.AFTER_AJAX');
 }
 
-$pm_username=cot_build_user($row_user['user_id'], htmlspecialchars($row_user['user_name']));
+$pm_username = cot_build_user($row_user['user_id'], htmlspecialchars($row_user['user_name']));
+$title[] =  array(cot_url('users', 'm=details&id='.$row_user['user_id']), $row_user['user_name']);
+$title[] = array(cot_url('pm', 'm=message&id='.$id), $row['pm_title']);
 $t->assign(array(
-	'PM_PAGETITLE' => $title.' '.$cfg['separator'].' '.$pm_username.' '.$cfg['separator'].' '.cot_rc_link(cot_url('pm', 'm=message&id='.$id),htmlspecialchars($row['pm_title'])),
+	'PM_PAGETITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'PM_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
 	'PM_INBOX' => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
 	'PM_INBOX_COUNT' => $totalinbox,
