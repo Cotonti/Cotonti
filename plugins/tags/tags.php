@@ -140,7 +140,7 @@ else
  */
 function cot_tag_search_pages($query)
 {
-	global $db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
+	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
 
 	if (!cot_module_active('page'))
 	{
@@ -237,7 +237,7 @@ function cot_tag_search_pages($query)
  */
 function cot_tag_search_forums($query)
 {
-	global $db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $o, $row;
+	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $o, $row;
 
 	if (!cot_module_active('forums'))
 	{

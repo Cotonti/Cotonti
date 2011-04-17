@@ -398,7 +398,7 @@ function cot_tag_unregister($tag)
  */
 function cot_tag_search_form($area = 'all')
 {
-	global $db, $dt, $perpage, $tl, $qs, $t, $L, $R, $cfg, $db_tag_references, $tc_styles;
+	global $db, $dt, $perpage, $lang, $tl, $qs, $t, $L, $R, $cfg, $db_tag_references, $tc_styles;
 	$limit = ($perpage > 0) ? "$dt, $perpage" : NULL;
 	$tcloud = cot_tag_cloud($area, $cfg['plugin']['tags']['order'], $limit);
 	$tc_html = $R['tags_code_cloud_open'];
