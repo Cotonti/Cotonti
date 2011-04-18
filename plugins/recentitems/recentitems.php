@@ -65,6 +65,8 @@ if ($mode != 'pages' || $mode != 'forums')
 	/* ===== */
 }
 
+$out['subtitle'] = $L['recentitems_title'];
+
 $totalpages = max($totalrecent);
 $days = ($days > 0) ? "&days=" . $days : "";
 $mode = (!empty($mode)) ? "&mode=" . $mode : "";

@@ -15,7 +15,7 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Title & Subtitle
  */
 
-$L['plu_title'] = 'Поиск';
+$L['plu_search'] = 'Поиск';
 
 /**
  * Plugin Body

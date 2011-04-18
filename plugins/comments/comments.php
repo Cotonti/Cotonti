@@ -27,7 +27,7 @@ $item = cot_import('item', 'G', 'TXT');
 $cat = cot_import('cat', 'G', 'TXT');
 $area = cot_import('area', 'G', 'ALP');
 
-$plugin_title = $L['plu_title'];
+$out['subtitle'] = $L['comments_comments'];
 
 // Get area/item/cat by id
 if ($id > 0)

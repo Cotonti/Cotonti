@@ -21,7 +21,7 @@ require_once cot_langfile('bbcode', 'plug');
 
 $bb_t = new XTemplate(cot_tplfile('bbcode.admin', 'plug'));
 
-$plugin_title = $L['adm_bbcodes'];
+$out['subtitle'] = $L['adm_bbcodes'];
 $adminhelp = $L['adm_help_bbcodes'];
 
 $a = cot_import('a', 'G', 'ALP');

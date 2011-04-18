@@ -79,6 +79,8 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			cot_redirect(cot_url('page', $page_urlp, '', true));
 		}
 
+		$out['subtitle'] = $L['i18n_adding'];
+
 		$t = new XTemplate(cot_tplfile('i18n.page', 'plug'));
 
 		// Get locales list
@@ -147,6 +149,8 @@ if ($id > 0 && $stmt->rowCount() == 1)
 				: 'al=' . $pag['page_alias'] . '&l=' . $i18n_locale;
 			cot_redirect(cot_url('page', $page_urlp, '', true));
 		}
+
+		$out['subtitle'] = $L['i18n_editing'];
 
 		$t = new XTemplate(cot_tplfile('i18n.page', 'plug'));
 		$t->assign(array(

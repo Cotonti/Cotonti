@@ -109,6 +109,8 @@ if (isset($_POST['rtext']))
 	}
 }
 
+$out['subtitle'] = $L['contact_title'];
+
 cot_display_messages($t);
 
 if (!$sent)

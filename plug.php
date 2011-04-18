@@ -140,8 +140,7 @@ if ($ext_display_header)
 
 if ($autoassigntags)
 {
-	$plugin_title = (empty($plugin_title)) ? $L['plu_title'] : $plugin_title;
-	$pltitle[] = array(cot_url('plug', "e=$e"), $plugin_title);
+	array_unshift($pltitle, array(cot_url('plug', "e=$e"), $out['subtitle']));
 	if (empty($o))
 	{
 		$t->assign(array(

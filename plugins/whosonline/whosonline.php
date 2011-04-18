@@ -36,6 +36,8 @@ if(cot_plugin_active('hiddengroups'))
 }
 $ipsearch = cot_plugin_active('ipsearch');
 
+$out['subtitle'] = $L['WhosOnline'];
+
 $sql_users = $db->query("
 	SELECT DISTINCT u.*, o.*
 	FROM $db_online AS o

@@ -1205,10 +1205,10 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false)
 	{
 		if (is_array($crumbs[$i]))
 		{
-			$tmp[] = ($nolast && $i === $cnt - 1 || $plain) ? htmlspecialchars($crumbs[$i][1])
+			$tmp[] = ($plain || $nolast && $i === $cnt - 1) ? htmlspecialchars($crumbs[$i][1], ENT_COMPAT, 'UTF-8', false)
 				: cot_rc('link_catpath', array(
 					'url' => (!empty($crumbs[$i][0])) ? $crumbs[$i][0] : '#',
-					'title' => htmlspecialchars($crumbs[$i][1])
+					'title' => htmlspecialchars($crumbs[$i][1], ENT_COMPAT, 'UTF-8', false)
 			));
 		}
 		elseif (is_string($crumbs[$i]))
