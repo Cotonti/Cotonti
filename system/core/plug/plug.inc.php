@@ -85,6 +85,11 @@ elseif (!empty($e))
 
 	require_once $cfg['system_dir'] . '/header.php';
 
+	if (!empty($out['subtitle']))
+	{
+		$L['plu_title'] = $out['subtitle'];
+	}
+
 	$t = new XTemplate($path_skin);
 
 	$extp = array();
