@@ -17,8 +17,8 @@ Hooks=pfs.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-$R['pfs_code_addfile'] = "'[url={$cfg['pfs_dir']}/'+gfile+']'+gfile+'[/url]'";
-$R['pfs_code_addpix'] = "'[img]'+gfile+'[/img]'";
-$R['pfs_code_addthumb'] = "'[img={$cfg['pfs_dir']}/'+gfile+']{$cfg['thumbs_dir']}/'+gfile+'[/img]'";
+$R['pfs_code_addfile'] = '[url={$pfs_base_href}{$pfs_dir_user}\'+gfile+\']\'+gfile+\'[/url]';
+$R['pfs_code_addpix'] = '[img]{$pfs_base_href}{$pfs_dir_user}\'+gfile+\'[/img]';
+$R['pfs_code_addthumb'] = '[img={$pfs_base_href}{$pfs_dir_user}\'+gfile+\']{$pfs_base_href}{$thumbs_dir_user}\'+gfile+\'[/img]';
 
 ?>

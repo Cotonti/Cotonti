@@ -435,10 +435,9 @@ foreach ($sql_pfs->fetchAll() as $row)
 			$add_thumbnail .= cot_rc('pfs_link_addthumb');
 			$add_image = cot_rc('pfs_link_addpix');
 		}
-		if ($opt=='thumbs')
+		if ($opt == 'thumbs')
 		{
-			$thumbpath = $cfg['thumbs_dir'];
-			$pfs_icon = cot_rc('pfs_link_thumbnail');
+			$pfs_icon = cot_rc('pfs_link_thumbnail', array('thumbpath' => $thumbs_dir_user));
 		}
 	}
 
