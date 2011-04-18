@@ -15,6 +15,8 @@ cot_block($i18n_admin);
 
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
+$out['subtitle'] = $L['i18n_structure'];
+
 /* === Hook === */
 foreach (cot_getextplugins('i18n.structure.first') as $pl)
 {

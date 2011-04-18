@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 <div class="block">
-	<h2 class="stats">{PHP.L.Search}</h2>
+	<h2 class="stats">{PLUGIN_TITLE}</h2>
 
 	<div>
 		<form id="search" name="search" action="{PLUGIN_SEARCH_ACTION}" method="post">

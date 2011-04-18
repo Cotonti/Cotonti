@@ -17,7 +17,7 @@ $L['info_desc'] = 'Простая статистика по сайту';
  * Plugin Title & Subtitle
  */
 
-$L['plu_title'] = 'Статистика';
+$L['Statistics'] = 'Статистика';
 
 /**
  * Plugin Body

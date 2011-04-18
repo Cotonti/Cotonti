@@ -27,7 +27,7 @@ require_once cot_incfile('polls', 'module');
 
 $s = cot_import('s', 'G', 'TXT');
 
-$plugin_title = $L['plu_title'];
+$out['subtitle'] = $L['Statistics'];
 
 $totaldbpages = $db->countRows($db_pages);
 $totaldbratings = $db->countRows($db_ratings);

@@ -364,15 +364,16 @@ if (!empty($sq))
 }
 
 // Search title
-$plugin_title  = $L['plu_title_all'];
+$crumbs = array(array(cot_url('plug', 'e=search'), $L['plu_search']));
 if (!empty($tab))
 {
-	$title[] = array(cot_url('plug', 'e=search&tab='.$tab), $L['plu_title_'.$tab.'tab']);
-	$L['plu_title'] = $L['plu_title_'.$tab.'tab'];
+	$crumbs[] = array(cot_url('plug', 'e=search&tab='.$tab), $L['plu_tabs_'.$tab]);
 }
 $out['head'] .= $R['code_noindex'];
-$out['subtitle'] = empty($sq) ? $L['plu_title'] : htmlspecialchars(strip_tags($sq)).' - '.$L['plu_result'];
+$search_subtitle = empty($tab) ? $L['plu_search'] : $L['plu_tabs_'.$tab] . ' - ' . $L['plu_search'];
+$out['subtitle'] = empty($sq) ? $search_subtitle : htmlspecialchars(strip_tags($sq)).' - '.$L['plu_result'];
 $t->assign(array(
+	'PLUGIN_TITLE' => cot_breadcrumbs($crumbs, $cfg['breadcrumb'], true),
 	'PLUGIN_SEARCH_ACTION' => cot_url('plug', 'e=search&tab='.$tab),
 	'PLUGIN_SEARCH_TEXT' => cot_inputbox('text', 'rsq', htmlspecialchars($sq), 'size="32" maxlength="'.$cfg['plugin']['search']['maxsigns'].'"'),
 	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rsuser', htmlspecialchars($rsearch['set']['user']), 'class="userinput" size="32"'),
