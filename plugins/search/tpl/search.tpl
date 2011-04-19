@@ -22,7 +22,7 @@
 				<tr>
 					<td class="width50">
 							{PHP.L.plu_pag_set_sec}:
-						<div>{PLUGIN_PAGE_SEC_LIST}</div>
+						<div>{PLUGIN_PAGE_SEC_LIST}<p>{PLUGIN_PAGE_SEARCH_SUBCAT}</p></div>
 						<div class="desc">{PHP.L.plu_ctrl_list}</div>
 					</td>
 					<td class="width50" style="padding-left:25px">
@@ -50,7 +50,7 @@
 					<td class="width50">
 							{PHP.L.plu_frm_set_sec}:
 
-						<div>{PLUGIN_FORUM_SEC_LIST}</div>
+						<div>{PLUGIN_FORUM_SEC_LIST}<p>{PLUGIN_FORUM_SEARCH_SUBCAT}</p></div>
 						<div class="desc">{PHP.L.plu_ctrl_list}</div>
 					</td>
 					<td class="width50" style="padding-left:25px">

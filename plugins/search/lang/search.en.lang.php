@@ -41,6 +41,7 @@ $L['plu_sort_desc'] = 'Descending';
 $L['plu_sort_asc'] = 'Ascending';
 $L['plu_other_opt'] = 'Optional parameters';
 $L['plu_other_date'] = 'Including date';
+$L['plu_other_userfilter'] = 'Filter users';
 
 // Parameters - dates
 $L['plu_any_date'] = 'Any date';
@@ -61,7 +62,7 @@ $L['plu_frm_res_sort6'] = 'Section';
 $L['plu_frm_search_names'] = 'Search in topic titles';
 $L['plu_frm_search_post'] = 'Search in posts';
 $L['plu_frm_search_answ'] = 'Show topics with replies only';
-$L['plu_other_userfilter'] = 'Filter users';
+$L['plu_frm_set_subsec'] = 'Include subsections';
 
 // Parameters - pages
 $L['plu_pag_set_sec'] = 'Select page categories';
@@ -73,6 +74,7 @@ $L['plu_pag_search_names'] = 'Search in page titles';
 $L['plu_pag_search_desc'] = 'Search in page descriptions';
 $L['plu_pag_search_text'] = 'Search in page text';
 $L['plu_pag_search_file'] = 'Show pages with files only';
+$L['plu_pag_set_subsec'] = 'Include subcategories';
 
 // Error messages
 $L['plu_querytooshort'] = 'The query string is too short';
