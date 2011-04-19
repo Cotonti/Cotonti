@@ -172,7 +172,7 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugi
 		'PLUGIN_FORUM_SEARCH_NAMES' => cot_checkbox(($rsearch['frm']['title'] == 1 || count($rsearch['frm']['sub']) == 0), 'rfrmtitle', $L['plu_frm_search_names']),
 		'PLUGIN_FORUM_SEARCH_POST' => cot_checkbox(($rsearch['frm']['text'] == 1 || count($rsearch['frm']['sub']) == 0), 'rfrmtext', $L['plu_frm_search_post']),
 		'PLUGIN_FORUM_SEARCH_ANSW' => cot_checkbox(($rsearch['frm']['reply'] == 1 || count($rsearch['frm']['sub']) == 0), 'rfrmreply', $L['plu_frm_search_answ']),
-		'PLUGIN_FORUM_SEARCH_SUBCAT' => cot_checkbox(($rsearch['frm']['subcat'] == 1), 'rfrmsubcut', $L['plu_frm_set_subsec'])
+		'PLUGIN_FORUM_SEARCH_SUBCAT' => cot_checkbox(($rsearch['frm']['subcat'] == 1), 'rfrmsubcat', $L['plu_frm_set_subsec'])
 	));
 	if ($tab == 'frm' || (empty($tab) && $cfg['plugin']['search']['extrafilters']))
 	{
@@ -232,11 +232,16 @@ if (!empty($sq))
 					$tempcat = array_merge(cot_structure_children('page', $scat), $tempcat);				
 				}
 				$tempcat = array_unique($tempcat);
-				$where_and['cat'] = "page_cat IN ('".$db->prep(implode("','", $tempcat))."')"; 
+				$where_and['cat'] = "page_cat IN ('".implode("','", $tempcat)."')"; 
 			}
 			else
 			{
-				$where_and['cat'] = "page_cat IN ('".$db->prep(implode("','", $rsearch['pag']['sub']))."')"; 
+				$tempcat = array();
+				foreach($rsearch['pag']['sub'] as $scat)
+				{
+					$tempcat[] = $db->prep($scat);				
+				}
+				$where_and['cat'] = "page_cat IN ('".implode("','", $tempcat)."')"; 
 			}
 		}
 		else
@@ -326,11 +331,16 @@ if (!empty($sq))
 					$tempcat = array_merge(cot_structure_children('forums', $scat), $tempcat);				
 				}
 				$tempcat = array_unique($tempcat);
-				$where_and['cat'] = "page_cat IN ('".$db->prep(implode("','", $tempcat))."')"; 
+				$where_and['cat'] = "page_cat IN ('".implode("','", $tempcat)."')"; 
 			}
 			else
 			{
-				$where_and['cat'] = "t.ft_cat IN ('".$db->prep(implode("','", $rsearch['frm']['sub']))."')";
+				$tempcat = array();
+				foreach($rsearch['frm']['sub'] as $scat)
+				{
+					$tempcat[] = $db->prep($scat);				
+				}
+				$where_and['cat'] = "t.ft_cat IN ('".implode("','", $tempcat)."')";
 			}
 		}
 		else
