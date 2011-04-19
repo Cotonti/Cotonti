@@ -70,7 +70,7 @@ if(!empty($p))
 	{
 		foreach($extp as $k => $pl)
 		{
-			include_once $pl['pl_file'];
+			include_once $cfg['plugins_dir'] . '/' . $pl['pl_file'];
 			$adminmain .= $plugin_body;
 		}
 	}

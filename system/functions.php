@@ -135,7 +135,7 @@ function cot_get_caller()
  */
 function cot_getextplugins($hook, $cond='R')
 {
-	global $cot_plugins, $cache;
+	global $cot_plugins, $cache, $cfg;
 
 	$extplugins = array();
 
@@ -145,17 +145,19 @@ function cot_getextplugins($hook, $cond='R')
 		{
 			if ($k['pl_module'])
 			{
+				$dir = $cfg['modules_dir'];
 				$cat = $k['pl_code'];
 				$opt = 'a';
 			}
 			else
 			{
+				$dir = $cfg['plugins_dir'];
 				$cat = 'plug';
 				$opt = $k['pl_code'];
 			}
 			if (cot_auth($cat, $opt, $cond))
 			{
-				$extplugins[] = $k['pl_file'];
+				$extplugins[] = $dir . '/' . $k['pl_file'];
 			}
 		}
 	}

@@ -848,13 +848,12 @@ function cot_module_update($name, $version)
  */
 function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
 {
-    global $db, $db_plugins, $cfg;
+    global $db, $db_plugins;
 
     if (empty($title))
     {
 		$title = $name;
 	}
-    $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 
     $insert_rows = array();
     foreach ($hook_bindings as $binding)
@@ -864,7 +863,7 @@ function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
             'pl_code' => $name,
             'pl_part' => $binding['part'],
             'pl_title' => $title,
-            'pl_file' => empty($binding['file']) ? "$path/$name.{$binding['part']}.php" : $path . '/' . $binding['file'],
+            'pl_file' => empty($binding['file']) ? "$name/$name.{$binding['part']}.php" : $name . '/' . $binding['file'],
             'pl_order' => $binding['order'],
             'pl_active' => 1,
             'pl_module' => (int) $is_module
