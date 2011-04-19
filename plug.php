@@ -116,7 +116,7 @@ if (is_array($cot_plugins[$exthook]))
 		if ($k['pl_code'] == $extname)
 		{
 			$out['subtitle'] = $k['pl_title'];
-			include $k['pl_file'];
+			include $cfg['plugins_dir'] . '/' . $k['pl_file'];
 			$empty = false;
 		}
 	}

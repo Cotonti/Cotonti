@@ -339,11 +339,7 @@ else
 	));
 
 	// Clear cache
-	if ($updated_ext && $cache)
-	{
-		$cache->clear();
-		cot_rc_consolidate();
-	}
+	$db->query("TRUNCATE TABLE $db_cache");
 }
 
 cot_display_messages($t);
