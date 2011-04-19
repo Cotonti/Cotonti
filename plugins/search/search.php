@@ -49,6 +49,7 @@ else
 	$rsearch['pag']['sort2'] = $db->prep(cot_import('rpagsort2', 'P', 'TXT'));
 	$rsearch['pag']['sort2'] = (empty($rsearch['pag']['sort2'])) ? 'DESC' : $rsearch['pag']['sort2'];
 	$rsearch['pag']['sub'] = cot_import('rpagsub', 'P', 'ARR');
+	$rsearch['pag']['subcat'] = cot_import('rpagsubcat', 'P', 'BOL') ? 1 : 0;
 
 	$rsearch['frm']['title'] = cot_import('rfrmtitle', 'P', 'INT');
 	$rsearch['frm']['text'] = cot_import('rfrmtext', 'P', 'INT');
@@ -58,7 +59,8 @@ else
 	$rsearch['frm']['sort2'] = $db->prep(cot_import('rfrmsort2', 'P', 'TXT'));
 	$rsearch['frm']['sort2'] = (empty($rsearch['frm']['sort2'])) ? 'DESC' : $rsearch['frm']['sort2'];
 	$rsearch['frm']['sub'] = cot_import('rfrmsub', 'P', 'ARR');
-
+	$rsearch['frm']['subcat'] = cot_import('rfrmsubcat', 'P', 'BOL') ? 1 : 0;
+	
 	if ($rsearch['pag']['title'] < 1 && $rsearch['pag']['desc'] < 1 && $rsearch['pag']['text'] < 1)
 	{
 		$rsearch['pag']['title'] = 1;
@@ -136,6 +138,7 @@ if (($tab == 'pag' || empty($tab))  && cot_module_active('page') && $cfg['plugin
 		'PLUGIN_PAGE_SEARCH_NAMES' => cot_checkbox(($rsearch['pag']['title'] == 1 || count($rsearch['pag']['sub']) == 0), 'rpagtitle', $L['plu_pag_search_names']),
 		'PLUGIN_PAGE_SEARCH_DESC' => cot_checkbox(($rsearch['pag']['desc'] == 1 || count($rsearch['pag']['sub']) == 0), 'rpagdesc', $L['plu_pag_search_desc']),
 		'PLUGIN_PAGE_SEARCH_TEXT' => cot_checkbox(($rsearch['pag']['text'] == 1 || count($rsearch['pag']['sub']) == 0), 'rpagtext', $L['plu_pag_search_text']),
+		'PLUGIN_PAGE_SEARCH_SUBCAT' => cot_checkbox(($rsearch['pag']['subcat'] == 1), 'rpagsubcat', $L['plu_pag_set_subsec']),
 		'PLUGIN_PAGE_SEARCH_FILE' => cot_checkbox($rsearch['pag']['file'] == 1, 'rpagfile', $L['plu_pag_search_file'])
 	));
 	if ($tab == 'pag' || (empty($tab) && $cfg['plugin']['search']['extrafilters']))
@@ -168,7 +171,8 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugi
 		'PLUGIN_FORUM_RES_SORT_WAY' => cot_radiobox($rsearch['frm']['sort2'], 'rfrmsort2', array('DESC', 'ASC'), array($L['plu_sort_desc'],  $L['plu_sort_asc'])),
 		'PLUGIN_FORUM_SEARCH_NAMES' => cot_checkbox(($rsearch['frm']['title'] == 1 || count($rsearch['frm']['sub']) == 0), 'rfrmtitle', $L['plu_frm_search_names']),
 		'PLUGIN_FORUM_SEARCH_POST' => cot_checkbox(($rsearch['frm']['text'] == 1 || count($rsearch['frm']['sub']) == 0), 'rfrmtext', $L['plu_frm_search_post']),
-		'PLUGIN_FORUM_SEARCH_ANSW' => cot_checkbox(($rsearch['frm']['reply'] == 1 || count($rsearch['frm']['sub']) == 0), 'rfrmreply', $L['plu_frm_search_answ'])
+		'PLUGIN_FORUM_SEARCH_ANSW' => cot_checkbox(($rsearch['frm']['reply'] == 1 || count($rsearch['frm']['sub']) == 0), 'rfrmreply', $L['plu_frm_search_answ']),
+		'PLUGIN_FORUM_SEARCH_SUBCAT' => cot_checkbox(($rsearch['frm']['subcat'] == 1), 'rfrmsubcut', $L['plu_frm_set_subsec'])
 	));
 	if ($tab == 'frm' || (empty($tab) && $cfg['plugin']['search']['extrafilters']))
 	{
@@ -218,8 +222,27 @@ if (!empty($sq))
 
 	if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && $cfg['plugin']['search']['pagesearch'] && !cot_error_found())
 	{
-		$where_and['cat'] = ($rsearch['pag']['sub'][0] != 'all' && count($rsearch['pag']['sub']) > 0) ?
-			"page_cat IN ('".$db->prep(implode("','", $rsearch['pag']['sub']))."')" : "page_cat IN ('".implode("','", $pag_catauth)."')"; 
+		if($rsearch['pag']['sub'][0] != 'all' && count($rsearch['pag']['sub']) > 0)
+		{
+			if($rsearch['pag']['subcat'])
+			{
+				$tempcat = array();
+				foreach($rsearch['pag']['sub'] as $scat)
+				{
+					$tempcat = array_merge(cot_structure_children('page', $scat), $tempcat);				
+				}
+				$tempcat = array_unique($tempcat);
+				$where_and['cat'] = "page_cat IN ('".$db->prep(implode("','", $tempcat))."')"; 
+			}
+			else
+			{
+				$where_and['cat'] = "page_cat IN ('".$db->prep(implode("','", $rsearch['pag']['sub']))."')"; 
+			}
+		}
+		else
+		{
+			$where_and['cat'] = "page_cat IN ('".implode("','", $pag_catauth)."')"; 			
+		}
 		$where_and['state'] = "page_state = '0'";
 		$where_and['notcat'] = "page_cat <> 'system'";
 		$where_and['date'] = "page_date <= ".(int)$sys['now_offset'];
@@ -293,8 +316,27 @@ if (!empty($sq))
 	}
 	if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugin']['search']['forumsearch'] && !cot_error_found())
 	{
-		$where_and['cat'] = ($rsearch['frm']['sub'][0] != 'all' && count($rsearch['frm']['sub'])>0) ?
-			"t.ft_cat IN ('".$db->prep(implode("','", $rsearch['frm']['sub']))."')" : "t.ft_cat IN ('".implode("','", $frm_catauth)."')";
+		if ($rsearch['frm']['sub'][0] != 'all' && count($rsearch['frm']['sub']) > 0)
+		{	
+			if($rsearch['frm']['subcat'])
+			{
+				$tempcat = array();
+				foreach($rsearch['frm']['sub'] as $scat)
+				{
+					$tempcat = array_merge(cot_structure_children('forums', $scat), $tempcat);				
+				}
+				$tempcat = array_unique($tempcat);
+				$where_and['cat'] = "page_cat IN ('".$db->prep(implode("','", $tempcat))."')"; 
+			}
+			else
+			{
+				$where_and['cat'] = "t.ft_cat IN ('".$db->prep(implode("','", $rsearch['frm']['sub']))."')";
+			}
+		}
+		else
+		{
+			$where_and['cat'] =  "t.ft_cat IN ('".implode("','", $frm_catauth)."')";
+		}
 		$where_and['reply'] = ($rsearch['frm']['reply'] == '1') ? "t.ft_postcount > 1" : "";
 		$where_and['time'] = ($rsearch['set']['limit'] > 0) ? "p.fp_creation >= ".$rsearch['set']['from']." AND p.fp_updated <= ".$rsearch['set']['to'] : "";
 		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid ".$touser_ids : "";
