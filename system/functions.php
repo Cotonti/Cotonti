@@ -3486,7 +3486,7 @@ function cot_rc_consolidate()
 				{
 					foreach ($scope_data as $file)
 					{
-						$cot_rc_html[$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $file));
+						$cot_rc_html[$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $file)) . "\n";
 					}
 				}
 			}
@@ -3494,7 +3494,7 @@ function cot_rc_consolidate()
 			{
 				foreach ($cot_rc_reg[$type]['embed'] as $scope => $code)
 				{
-					$cot_rc_html[$scope] .= cot_rc("code_rc_{$type}_embed", array('code' => $code));
+					$cot_rc_html[$scope] .= cot_rc("code_rc_{$type}_embed", array('code' => $code)) . "\n";
 				}
 			}
 		}
