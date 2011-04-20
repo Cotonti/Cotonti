@@ -26,12 +26,15 @@ foreach (cot_getextplugins('page.first') as $pl)
 }
 /* ===== */
 
-$where = (!empty($al)) ? "page_alias='".$al."'" : 'page_id='.$id;
-$sql_page = $db->query("SELECT p.*, u.* FROM $db_pages AS p
-		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		WHERE $where LIMIT 1");
+if ($id > 0)
+{
+	$where = (!empty($al)) ? "page_alias='".$al."'" : 'page_id='.$id;
+	$sql_page = $db->query("SELECT p.*, u.* FROM $db_pages AS p
+			LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+			WHERE $where LIMIT 1");
+}
 
-if($sql_page->rowCount() == 0)
+if(!$id || $sql_page->rowCount() == 0)
 {
 	$env['status'] = '404 Not Found';
 	cot_redirect(cot_url('message', 'msg=404', '', true));
