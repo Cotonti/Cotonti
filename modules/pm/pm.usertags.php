@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=users.usertags.main
+Hooks=usertags.main
 [END_COT_EXT]
 ==================== */
 
