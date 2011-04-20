@@ -1,3 +1,7 @@
+/**
+ * Version: 0.9.1
+ */
+
 CREATE TABLE `cot_auth` (
   `auth_id` int NOT NULL auto_increment,
   `auth_groupid` int NOT NULL default '0',
