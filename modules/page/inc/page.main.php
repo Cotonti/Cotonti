@@ -26,7 +26,7 @@ foreach (cot_getextplugins('page.first') as $pl)
 }
 /* ===== */
 
-if ($id > 0)
+if ($id > 0 || !empty($al))
 {
 	$where = (!empty($al)) ? "page_alias='".$al."'" : 'page_id='.$id;
 	$sql_page = $db->query("SELECT p.*, u.* FROM $db_pages AS p
@@ -34,7 +34,7 @@ if ($id > 0)
 			WHERE $where LIMIT 1");
 }
 
-if(!$id || $sql_page->rowCount() == 0)
+if(!$id && empty($al) || $sql_page->rowCount() == 0)
 {
 	$env['status'] = '404 Not Found';
 	cot_redirect(cot_url('message', 'msg=404', '', true));

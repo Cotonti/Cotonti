@@ -151,6 +151,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	{
 		$i = $d;
 		$kk = 0;
+		$totalitems = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_code = ?", array($code))->fetchColumn();
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('comments.loop');
 		/* ===== */
@@ -180,7 +181,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			
 			$t->assign(array(
 				'COMMENTS_ROW_ID' => $row['com_id'],
-				'COMMENTS_ROW_ORDER' => $i,
+				'COMMENTS_ROW_ORDER' => $cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
 				'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#c'.$row['com_id']),
 				'COMMENTS_ROW_AUTHOR' => cot_build_user($row['com_authorid'], htmlspecialchars($row['com_author'])),
 				'COMMENTS_ROW_AUTHORID' => $row['com_authorid'],
@@ -204,7 +205,6 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			$t->parse('COMMENTS.COMMENTS_ROW');
 		}
 
-		$totalitems = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_code = ?", array($code))->fetchColumn();
 		$pagenav = cot_pagenav($link_area, $link_params, $d, $totalitems,
 			$cfg['plugin']['comments']['maxcommentsperpage'], $d_var, '#comments',
 			$cfg['jquery'] && $cfg['ajax_enabled'], 'comments', 'plug', "e=comments&area=$ext_name&cat=$cat&item=$code");
