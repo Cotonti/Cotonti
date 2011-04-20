@@ -258,7 +258,7 @@ foreach (cot_getextplugins('page.tags') as $pl)
 	include $pl;
 }
 /* ===== */
-if ($usr['isadmin'])
+if ($usr['isadmin'] || $usr['id'] == $pag['page_ownerid'])
 {
 	$t->parse('MAIN.PAGE_ADMIN');
 }

@@ -25,11 +25,13 @@
 		</div>
 
 		<div class="col3-1">
-<!-- IF {PHP.usr.isadmin} -->
+<!-- IF {PHP.usr.auth_write} -->
 			<div class="block">
 				<h2 class="admin">{PHP.L.Admin}</h2>
 				<ul class="bullets">
+					<!-- IF {PHP.usr.isadmin} -->
 					<li><a href="admin.php">{PHP.L.Adminpanel}</a></li>
+					<!-- ENDIF -->
 					<li>{LIST_SUBMITNEWPAGE}</li>
 				</ul>
 			</div>
