@@ -62,7 +62,11 @@ polls.php?id={PHP.id}
 <!-- ELSE -->
 <span class="commenttext"><span class="comav">
 <!-- ENDIF -->
-	<a href="users.php?m=details&amp;id={COMMENTS_ROW_AUTHORID}">{COMMENTS_ROW_AUTHOR_AVATAR}</a></span>
+<!-- IF {COMMENTS_ROW_AUTHORID} == 0 -->
+<img src="/datas/defaultav/blank.png" alt="Guest" /></span>
+<!-- ELSE -->
+<a href="users.php?m=details&amp;id={COMMENTS_ROW_AUTHORID}">{COMMENTS_ROW_AUTHOR_AVATAR}</a></span>
+<!-- ENDIF -->	
 	<cite>{COMMENTS_ROW_AUTHOR}</cite> 
 	<span style="font-size:10px; color:#93adca">
 		<span class="colright" style="margin-top:1px"> &nbsp; {COMMENTS_ROW_ADMIN} &nbsp; {COMMENTS_ROW_EDIT}</span>
