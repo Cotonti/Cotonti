@@ -82,6 +82,7 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
 
 	$structure['page'] = (is_array($structure['page'])) ? $structure['page'] : array();
 	
+	$result_array = array();
 	foreach ($structure['page'] as $i => $x)
 	{
 		$display = ($hideprivate) ? cot_auth('page', $i, 'W') : true;
