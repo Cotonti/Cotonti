@@ -41,16 +41,15 @@ foreach ($categories as $v)
 	$v = explode('|', trim($v));
 	if (isset($structure['page'][$v[0]]))
 	{
-		$v[3] = cot_import($v[0] . 'd', 'G', 'INT');
-		$v[3] = (empty($v[3])) ? 0 : $v[3];
-
-		$v[3] = (empty($c) || $cfg['plugin']['news']['syncpagination']) ? $d : $v[3];
 		$c = (empty($c)) ? $v[0] : $c;
 		$indexcat = ($jj == 0) ? $v[0] : $indexcat;
 	
 		$v[2] = ((int)$v[2] > 0) ? $v[2] : 0;
 		$v[1] = ((int)$v[1] > 0) ? $v[1] : (int)$cfg['plugin']['news']['maxpages'];
-
+		
+		$_GET[$v[0].'d'] = (empty($c) || ($jj == 0) || $cfg['plugin']['news']['syncpagination']) ? $_GET['d'] : $_GET[$v[0].'d'];		
+		list($v[3]['pg'], $v[3]['d'], $v[3]['durl']) = cot_import_pagenav($v[0] . 'd', $v[1]);
+		
 		$cats[$v[0]] = $v;
 		$jj++;
 	}
@@ -76,26 +75,25 @@ if (count($cats) > 0)
 		/* ===== */
 
 		$sql = $db->query("SELECT p.*, u.* $news_join_columns
-			FROM $db_pages AS p
-				LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid $news_join_tables
-			WHERE $where
-			ORDER BY page_date DESC LIMIT " . $v[3] . ", " . $v[1]);
+			FROM $db_pages AS p LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid $news_join_tables
+			WHERE $where ORDER BY page_date DESC LIMIT " . $v[3]['d'] . ", " . $v[1]);
 		$totalnews = $db->query("SELECT COUNT(*)
-			FROM $db_pages AS p $news_join_tables
-			WHERE " . $where)->fetchColumn();
+			FROM $db_pages AS p $news_join_tables WHERE " . $where)->fetchColumn();
 
 		if (!$cfg['plugin']['news']['syncpagination'])
 		{
-			$news_link_params .= ($catn != 0 && $d != 0) ? '&d=' . $d : '';
+			$news_link_params .= ($catn != 0 && $d != 0) ? '&d=' . $durl : '';
+			$xx = 0;
 			foreach ($cats as $key => $var)
 			{
-				$news_link_params .= (($key != $cat) && $var[2] != 0) ? "&" . $key . "d=" . $var[2] : '';
+				$news_link_params .= (($key != $cat) && $var[3] != 0 && $xx != 0) ? "&" . $key . "d=" . $var[3]['durl'] : '';
+				$xx++;
 			}
 		}
 
 		$news_link = cot_url('index', $news_link_params);
 		$catd = ($catn != 0 && !$cfg['plugin']['news']['syncpagination']) ? $cat . "d" : "d";
-		$pagenav = cot_pagenav('index', $news_link_params, $v[3], $totalnews, $v[1], $catd);
+		$pagenav = cot_pagenav('index', $news_link_params, $v[3]['d'], $totalnews, $v[1], $catd);
 
 		$news = new XTemplate(cot_tplfile(($catn == 0) ? "news" : "news." . $v[0], 'plug'));
 
