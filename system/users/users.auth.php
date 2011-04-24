@@ -137,6 +137,14 @@ if ($a=='check')
 		$env['status'] = '403 Forbidden';
 		cot_shield_update(7, "Log in");
 		cot_log("Log in failed, user : ".$rusername,'usr');
+		
+		/* === Hook === */
+		foreach (cot_getextplugins('users.auth.check.fail') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+		
 		cot_redirect(cot_url('message', 'msg=151', '', true));
 	}
 }
