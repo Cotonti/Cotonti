@@ -193,7 +193,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 				'COMMENTS_ROW_ODDEVEN' => cot_build_oddeven($kk),
 				'COMMENTS_ROW_NUM' => $kk
 			));
-			$t->assign(cot_generate_usertags($row['com_authorid'], 'COMMENTS_ROW_AUTHOR_'), htmlspecialchars($row['com_author']));
+			$t->assign(cot_generate_usertags($row, 'COMMENTS_ROW_AUTHOR_'), htmlspecialchars($row['com_author']));
 
 			/* === Hook - Part2 : Include === */
 			foreach ($extp as $pl)

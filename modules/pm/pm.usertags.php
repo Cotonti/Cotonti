@@ -19,7 +19,15 @@ defined('COT_CODE') or die('Wrong URL.');
 
 require_once cot_incfile('pm', 'module');
 
-$temp_array['PM'] = cot_build_pm($user_data['user_id']);
-$temp_array['PMNOTIFY'] = $cot_yesno[$user_data['user_pmnotify']];
+if ($user_data['user_id'] > 0)
+{
+	$temp_array['PM'] = cot_build_pm($user_data['user_id']);
+	$temp_array['PMNOTIFY'] = $cot_yesno[$user_data['user_pmnotify']];
+}
+else
+{
+	$temp_array['PM'] = '';
+	$temp_array['PMNOTIFY'] = '';
+}
 
 ?>
