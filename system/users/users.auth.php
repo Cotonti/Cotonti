@@ -134,7 +134,7 @@ if ($a=='check')
 	}
 	else
 	{
-		$env['status'] = '403 Forbidden';
+		$env['status'] = '401 Unauthorized';
 		cot_shield_update(7, "Log in");
 		cot_log("Log in failed, user : ".$rusername,'usr');
 		
