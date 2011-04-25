@@ -21,7 +21,6 @@ $L['adm_polls_indexpolls'] = 'Index polls (recent at top):';
 $L['adm_polls_msg916_bump'] = 'Successfully bumped!';
 $L['adm_polls_msg916_deleted'] = 'Successfully deleted!';
 $L['adm_polls_msg916_reset'] = 'Successfully reset!';
-$L['adm_polls_on_page'] = 'on page';
 $L['adm_polls_polltopic'] = 'Poll topic';
 $L['adm_polls_nopolls'] = 'There is no polls';
 

@@ -33,5 +33,5 @@
 				</tr>
 <!-- END: LOG_ROW -->
 			</table>
-			<p class="paging">{ADMIN_LOG_PAGINATION_PREV} {ADMIN_LOG_PAGNAV} {ADMIN_LOG_PAGINATION_NEXT}<span>{PHP.L.Total}: {ADMIN_LOG_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_LOG_ON_PAGE}</span></p>
+			<p class="paging">{ADMIN_LOG_PAGINATION_PREV} {ADMIN_LOG_PAGNAV} {ADMIN_LOG_PAGINATION_NEXT}<span>{PHP.L.Total}: {ADMIN_LOG_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_LOG_ON_PAGE}</span></p>
 <!-- END: MAIN -->

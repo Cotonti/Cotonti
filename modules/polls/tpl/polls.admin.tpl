@@ -43,7 +43,7 @@
 		</tr>
 		<!-- END: POLLS_ROW_EMPTY -->
 	</table>
-	<p class="paging">{ADMIN_POLLS_PAGINATION_PREV}{ADMIN_POLLS_PAGNAV}{ADMIN_POLLS_PAGINATION_NEXT}<span>{PHP.L.Total}: {ADMIN_POLLS_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_POLLS_ON_PAGE}</span></p>
+	<p class="paging">{ADMIN_POLLS_PAGINATION_PREV}{ADMIN_POLLS_PAGNAV}{ADMIN_POLLS_PAGINATION_NEXT}<span>{PHP.L.Total}: {ADMIN_POLLS_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_POLLS_ON_PAGE}</span></p>
 	<h3>{ADMIN_POLLS_FORMNAME}:</h3>
 	<form id="addpoll" action="{ADMIN_POLLS_FORM_URL}" method="post">
 		<!-- IF {PHP.cfg.jquery} -->
