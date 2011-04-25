@@ -101,6 +101,7 @@ foreach ($req_files as $req_file)
 }
 
 // Display
+$pltitle = array();
 
 if (!empty($path_skin))
 {
