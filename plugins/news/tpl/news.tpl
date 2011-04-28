@@ -18,7 +18,7 @@
 <!-- END: PAGE_NO_TAGS -->
 		</p>
 		<p class="column floatright">
-			<strong>{PHP.L.Category}:</strong> {PAGE_ROW_CATPATH}
+			<strong>{PHP.L.Filedunder}:</strong> {PAGE_ROW_CATPATH}
 		</p>
 	</div>
 

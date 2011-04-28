@@ -62,7 +62,9 @@
 
 <div class="block">
 	<h2 class="tags">{PHP.L.Tags}</h2>
-			{FORUMS_SECTIONS_TAG_CLOUD}
+	<ul class="tagcloud">
+	{FORUMS_SECTIONS_TAG_CLOUD}
+	</ul>
 </div>
 
 <!-- END: MAIN -->

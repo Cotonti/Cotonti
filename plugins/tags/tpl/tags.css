@@ -1,9 +1,9 @@
 /* Tags
 -------------------------------------------------- */
 
-.tag_cloud	{ }
-.tag_cloud li	{ }
-.tag_cloud a	{ }
+.tag_cloud				{ text-align:center; }
+.tag_cloud li				{ margin:0 5px 0 0; display:inline-block; }
+.tag_cloud li a			{ }
 
 .tag_cloud a.xs			{ color:#c4c4c4; }
 .tag_cloud a.xs:hover	{ color:#000; }

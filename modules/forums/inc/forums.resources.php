@@ -53,6 +53,8 @@ $R['forums_code_quote_close'] = '</blockquote>';
 $R['forums_code_unread'] = '<a name="unread" id="unread"></a>';
 $R['forums_code_update'] = '<p><strong>{$updated}</strong></p>';
 
+$R['forums_noavatar'] = '<img src="datas/defaultav/blank.png" alt="" />';
+
 /**
  * Misc
  */

@@ -5,39 +5,34 @@
 	<div>
 		<form id="search" name="search" action="{PLUGIN_SEARCH_ACTION}" method="post">
 			<input type="hidden" name="a" value="search" />
-			<div style="text-align:right;">
+			<p class="textcenter">
 				<a href="plug.php?e=search">{PHP.L.plu_tabs_all}</a> |
 				<a href="plug.php?e=search&amp;tab=frm">{PHP.L.Forums}</a> |
 				<a href="plug.php?e=search&amp;tab=pag">{PHP.L.Pages}</a>
-			</div>
+			</p>
 
-			<h2>
-				{PHP.L.plu_search_req}: {PLUGIN_SEARCH_TEXT} <input type="submit" value="{PHP.L.plu_search_key}" />
-			</h2>
-			<div style="margin:10px 0">{PHP.L.plu_other_date}: {PLUGIN_SEARCH_DATE_SELECT} {PLUGIN_SEARCH_DATE_FROM} - {PLUGIN_SEARCH_DATE_TO}</div>
-			<div style="margin:10px 0">{PHP.L.plu_other_userfilter}: {PLUGIN_SEARCH_USER}</div>
+			<p class="margin10 textcenter">{PHP.L.plu_search_req}: {PLUGIN_SEARCH_TEXT} <input type="submit" value="{PHP.L.plu_search_key}" /></p>
+			<p class="margin10 textcenter">{PHP.L.plu_other_date}: {PLUGIN_SEARCH_DATE_SELECT} {PLUGIN_SEARCH_DATE_FROM} - {PLUGIN_SEARCH_DATE_TO}</p>
+			<p class="margin10 textcenter">{PHP.L.plu_other_userfilter}: {PLUGIN_SEARCH_USER}</p>
 			<!-- BEGIN: PAGES_OPTIONS -->
 			<h3>{PHP.L.Pages}</h3>
-			<table class="cells">
+			<table class="main">
 				<tr>
 					<td class="width50">
-							{PHP.L.plu_pag_set_sec}:
-						<div>{PLUGIN_PAGE_SEC_LIST}<p>{PLUGIN_PAGE_SEARCH_SUBCAT}</p></div>
-						<div class="desc">{PHP.L.plu_ctrl_list}</div>
+						<p class="strong">{PHP.L.plu_pag_set_sec}:</p>
+						<p>{PLUGIN_PAGE_SEC_LIST}</p>
+						<p>{PLUGIN_PAGE_SEARCH_SUBCAT}</p>
+						<p class="small">{PHP.L.plu_ctrl_list}</p>
 					</td>
-					<td class="width50" style="padding-left:25px">
-						<div style="padding:10px 0">{PHP.L.plu_other_opt}:</div>
-
-						<div><label>{PLUGIN_PAGE_SEARCH_NAMES} {PHP.L.plu_pag_search_names}</label></div>
-						<div style="margin:5px 0">{PLUGIN_PAGE_SEARCH_DESC}</div>
-						<div style="margin:5px 0">{PLUGIN_PAGE_SEARCH_TEXT}</div>
-						<div>{PLUGIN_PAGE_SEARCH_FILE}</div>
-						<div style="padding:15px 0 0 0">{PHP.L.plu_res_sort}:</div>
-						<div>
-							<div>{PLUGIN_PAGE_RES_SORT}</div>
-							<span style="margin-left:12px">{PLUGIN_PAGE_RES_SORT_WAY}</span>
-						</div>
-
+					<td class="width50">
+						<p class="strong">{PHP.L.plu_other_opt}:</p>
+						<p><label>{PLUGIN_PAGE_SEARCH_NAMES} {PHP.L.plu_pag_search_names}</label></p>
+						<p>{PLUGIN_PAGE_SEARCH_DESC}</p>
+						<p>{PLUGIN_PAGE_SEARCH_TEXT}</p>
+						<p>{PLUGIN_PAGE_SEARCH_FILE}</p>
+						<p class="strong">{PHP.L.plu_res_sort}:</p>
+						<p>{PLUGIN_PAGE_RES_SORT}</p>
+						<p>{PLUGIN_PAGE_RES_SORT_WAY}</p>
 					</td>
 				</tr>
 			</table>
@@ -45,25 +40,22 @@
 
 			<!-- BEGIN: FORUMS_OPTIONS -->
 			<h3>{PHP.L.Forums}</h3>
-			<table class="cells">
+			<table class="main">
 				<tr>
 					<td class="width50">
-							{PHP.L.plu_frm_set_sec}:
-
-						<div>{PLUGIN_FORUM_SEC_LIST}<p>{PLUGIN_FORUM_SEARCH_SUBCAT}</p></div>
-						<div class="desc">{PHP.L.plu_ctrl_list}</div>
+						<p class="strong">{PHP.L.plu_frm_set_sec}:</p>
+						<p>{PLUGIN_FORUM_SEC_LIST}</p>
+						<p>{PLUGIN_FORUM_SEARCH_SUBCAT}</p>
+						<div class="small">{PHP.L.plu_ctrl_list}</div>
 					</td>
-					<td class="width50" style="padding-left:25px">
-						<div style="padding-bottom:10px">{PHP.L.plu_other_opt}:</div>
-
-						<div>{PLUGIN_FORUM_SEARCH_NAMES}</div>
-						<div style="margin:5px 0">{PLUGIN_FORUM_SEARCH_POST}</div>
-						<div>{PLUGIN_FORUM_SEARCH_ANSW}</div>
-						<div style="padding:15px 0 0 0">{PHP.L.plu_res_sort}:</div>
-						<div>
-							<div>{PLUGIN_FORUM_RES_SORT}</div>
-							<span style="margin-left:12px">{PLUGIN_FORUM_RES_SORT_WAY}</span>
-						</div>
+					<td class="width50">
+						<p class="strong">{PHP.L.plu_other_opt}:</p>
+						<p>{PLUGIN_FORUM_SEARCH_NAMES}</p>
+						<p>{PLUGIN_FORUM_SEARCH_POST}</p>
+						<p>{PLUGIN_FORUM_SEARCH_ANSW}</p>
+						<p class="strong">{PHP.L.plu_res_sort}:</p>
+						<p>{PLUGIN_FORUM_RES_SORT}</p>
+						<p>{PLUGIN_FORUM_RES_SORT_WAY}</p>
 
 					</td>
 				</tr>
@@ -90,8 +82,8 @@
 			<td colspan="2" class="{PLUGIN_PR_ODDEVEN}">{PLUGIN_PR_TEXT}</td>
 		</tr>
 		<tr>
-			<td class="{PLUGIN_PR_ODDEVEN}"><div class="desc">{PHP.L.plu_last_date}: {PLUGIN_PR_TIME}</div></td>
-			<td class="{PLUGIN_PR_ODDEVEN}"><div class="desc">{PHP.L.plu_section}: {PLUGIN_PR_CATEGORY}</div></td>
+			<td class="{PLUGIN_PR_ODDEVEN} width50"><p class="small">{PHP.L.plu_last_date}: {PLUGIN_PR_TIME}</p></td>
+			<td class="{PLUGIN_PR_ODDEVEN} textright width50"><p class="small">{PHP.L.plu_section}: {PLUGIN_PR_CATEGORY}</p></td>
 		</tr>
 		<!-- END: ITEM -->
 	</table>
@@ -108,18 +100,18 @@
 		<tr>
 			<td colspan="2" class="{PLUGIN_FR_ODDEVEN}">{PLUGIN_FR_TITLE}</td>
 		</tr>
-		<tr>
+		<!-- IF {PLUGIN_FR_TEXT} --><tr>
 			<td colspan="2" class="{PLUGIN_FR_ODDEVEN}">{PLUGIN_FR_TEXT}</td>
-		</tr>
+		</tr><!-- ENDIF -->
 		<tr>
-			<td class="{PLUGIN_FR_ODDEVEN}"><div class="desc">{PHP.L.plu_last_date}: {PLUGIN_FR_TIME}</div></td>
-			<td class="{PLUGIN_FR_ODDEVEN}"><div class="desc">{PHP.L.plu_section}: {PLUGIN_FR_CATEGORY}</div></td>
+			<td class="{PLUGIN_FR_ODDEVEN} width50"><p class="small">{PHP.L.plu_last_date}: {PLUGIN_FR_TIME}</p></td>
+			<td class="{PLUGIN_FR_ODDEVEN} textright width50"><p class="small">{PHP.L.plu_section}: {PLUGIN_FR_CATEGORY}</p></td>
 		</tr>
 		<!-- END: ITEM -->
 	</table>
 
 	<!-- END: FORUMS -->
-	<div class="pagnav">{PLUGIN_PAGEPREV} {PLUGIN_PAGENAV} {PLUGIN_PAGENEXT}</div>
+	<p class="paging">{PLUGIN_PAGEPREV}{PLUGIN_PAGENAV}{PLUGIN_PAGENEXT}</p>
 	<!-- END: RESULTS -->
 </div>
 <!-- END: MAIN -->

@@ -7,7 +7,7 @@
 <!-- BEGIN: POLLS_VIEW -->
 <div class="block">
 	<h2 class="polls">{POLLS_TITLE}</h2>
-			{POLLS_FORM}
+	{POLLS_FORM}
 </div>
 <!-- END: POLLS_VIEW -->
 
@@ -31,8 +31,7 @@
 		</tr>
 		<tr>
 			<td class="textright">{PHP.L.Move}:</td>
-			<td>{FORUMS_POSTS_MOVEBOX_SELECT}<span class="small spaced">{FORUMS_POSTS_MOVEBOX_KEEP} {PHP.L.forums_keepmovedlink}</span><button type="submit">{PHP.L.Move}</button>
-			</td>
+			<td>{FORUMS_POSTS_MOVEBOX_SELECT}<span class="small spaced">{FORUMS_POSTS_MOVEBOX_KEEP} {PHP.L.forums_keepmovedlink}</span><button type="submit">{PHP.L.Move}</button></td>
 		</tr>
 	</table>
 </form>
@@ -46,7 +45,7 @@
 		<!-- BEGIN: FORUMS_POSTS_ROW -->
 		<tr>
 			<td class="{FORUMS_POSTS_ROW_ODDEVEN}">
-						{FORUMS_POSTS_ROW_ANCHORLINK}
+				{FORUMS_POSTS_ROW_ANCHORLINK}
 				<h4><img src="themes/{PHP.theme}/img/online{FORUMS_POSTS_ROW_USERONLINE}.png" title="{PHP.L.Status}: {FORUMS_POSTS_ROW_USERONLINETITLE}" alt="" class="userstatus" />{FORUMS_POSTS_ROW_USERNAME}</h4>
 			</td>
 			<td class="small centerall textright {FORUMS_POSTS_ROW_ODDEVEN}">
@@ -55,24 +54,22 @@
 		</tr>
 		<tr>
 			<td class="{FORUMS_POSTS_ROW_ODDEVEN}">
-				<p>
-							{FORUMS_POSTS_ROW_USERAVATAR}<br />
-							{FORUMS_POSTS_ROW_USERMAINGRP}
-				</p>
+				<p><!-- IF {FORUMS_POSTS_ROW_USERAVATAR} -->{FORUMS_POSTS_ROW_USERAVATAR}<!-- ELSE -->{PHP.R.forums_noavatar}<!-- ENDIF -->
+				<p>{FORUMS_POSTS_ROW_USERMAINGRP}</p>
 			</td>
 			<td class="{FORUMS_POSTS_ROW_ODDEVEN}">
 				<div>
-							{FORUMS_POSTS_ROW_TEXT}
-							{FORUMS_POSTS_ROW_UPDATEDBY}
+					{FORUMS_POSTS_ROW_TEXT}
+					{FORUMS_POSTS_ROW_UPDATEDBY}
 				</div>
 			</td>
 		</tr>
 		<tr>
 			<td class="small {FORUMS_POSTS_ROW_ODDEVEN}">
-						{PHP.L.forums_posts}: {FORUMS_POSTS_ROW_USERPOSTCOUNT}
+				{PHP.L.forums_posts}: {FORUMS_POSTS_ROW_USERPOSTCOUNT}
 			</td>
 			<td class="small {FORUMS_POSTS_ROW_ODDEVEN}">
-						{FORUMS_POSTS_ROW_USERTEXT}
+				{FORUMS_POSTS_ROW_USERTEXT}
 			</td>
 		</tr>
 		<!-- END: FORUMS_POSTS_ROW -->

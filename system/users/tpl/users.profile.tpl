@@ -13,7 +13,11 @@
 					</tr>
 					<tr>
 						<td>{PHP.L.Groupsmembership}:</td>
-						<td>{PHP.L.Maingroup}:<br />&nbsp;{PHP.out.img_down}<br />{USERS_PROFILE_GROUPS}</td>
+						<td>
+							<div id="usergrouplist">
+								{USERS_PROFILE_GROUPS}
+							</div>
+						</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Registered}:</td>
@@ -62,7 +66,7 @@
 						<td>{PHP.L.Language}:</td>
 						<td>{USERS_PROFILE_LANG}</td>
 					</tr>
-					<tr>
+					<tr class="hidden">
 						<td>{PHP.L.Country}:</td>
 						<td>{USERS_PROFILE_COUNTRY}</td>
 					</tr>
