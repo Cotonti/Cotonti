@@ -103,6 +103,10 @@ $R['admin_icon_user'] = '<img class="icon" src="system/admin/img/user.png" title
 $R['admin_icon_users'] = '<img class="icon" src="system/admin/img/users.png" title="'.$L['Users'].'" alt="'.$L['Users'].'" />';
 $R['admin_icon_versions'] = '<img class="icon" src="system/admin/img/versions.png" alt="" />';
 
+// Usergroups
+$R['admin_icon_usergroup0'] = '<img class="icon" src="system/admin/img/users-off.png" title="'.$L['Group0'].'" alt="'.$L['Group0'].'" />';
+$R['admin_icon_usergroup1'] = '<img class="icon" src="system/admin/img/users.png" title="'.$L['Group1'].'" alt="'.$L['Group1'].'" />';
+
 // Admin Menu
 $R['admin_menu_icon_config'] = '<img src="system/admin/tpl/img/adminmenu/config.png" alt="'.$L['Configuration'].'" />
 	<span>'.$L['Configuration'].'</span>';

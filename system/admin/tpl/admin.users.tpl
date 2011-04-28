@@ -14,20 +14,20 @@
 			<table class="cells">
 				<tr>
 					<td class="coltop width5">&nbsp;</td>
-					<td class="coltop width35">{PHP.L.Groups} {PHP.L.adm_clicktoedit}</td>
+					<td class="coltop width35">{PHP.L.Groups}</td>
 					<td class="coltop width20">{PHP.L.Members}</td>
 					<td class="coltop width20">{PHP.L.Enabled}</td>
 					<td class="coltop width20">{PHP.L.Action}</td>
 				</tr>
 <!-- BEGIN: USERS_ROW -->
 				<tr>
-					<td class="centerall">{ADMIN_USERS_ROW_GRP_ID}</td>
-					<td><a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}" class="ajax">{ADMIN_USERS_ROW_GRP_TITLE}</a></td>
+					<td class="centerall">
+					<!-- IF {PHP.hidden_groups} AND {ADMIN_USERS_ROW_GRP_HIDDEN} == Yes -->{PHP.R.admin_icon_usergroup0}<!-- ELSE -->{PHP.R.admin_icon_usergroup1}<!-- ENDIF -->
+					<!-- ENDIF -->
+					</td>
+					<td><a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}" class="ajax" title="{PHP.L.Edit}">{ADMIN_USERS_ROW_GRP_TITLE} (#{ADMIN_USERS_ROW_GRP_ID})</a></td>
 					<td class="centerall">{ADMIN_USERS_ROW_GRP_COUNT_MEMBERS}</td>
 					<td class="centerall">{ADMIN_USERS_ROW_GRP_DISABLED}</td>
-					<!-- IF {PHP.hidden_groups} -->
-					<td class="centerall">{ADMIN_USERS_ROW_GRP_HIDDEN}</td>
-					<!-- ENDIF -->
 					<td class="centerall action">
 						<a title="{PHP.L.Rights}" href="{ADMIN_USERS_ROW_GRP_RIGHTS_URL}">{PHP.R.admin_icon_rights}</a>
 						<a title="{PHP.L.Open}" href="{ADMIN_USERS_ROW_GRP_JUMPTO_URL}">{PHP.R.admin_icon_jumpto}</a>
