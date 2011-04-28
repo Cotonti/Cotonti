@@ -38,9 +38,11 @@
 <!-- ENDIF -->
 			<div class="block">
 				<h2 class="tags">{PHP.L.Tags}</h2>
+				<ul class="tagcloud clearfix">
 				{LIST_TAG_CLOUD}
+				</ul>
 			</div>
-{FILE "themes/nemesis/inc/contact.tpl"}
+{FILE "{PHP.cfg.themes_dir}/{PHP.theme}/inc/contact.tpl"}
 		</div>
 
 <!-- END: MAIN -->

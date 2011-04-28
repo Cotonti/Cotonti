@@ -92,6 +92,7 @@ $L['Expand'] = 'Expand';
 $L['Expire'] = 'Expire';
 $L['Extrafield'] = 'Extra field';
 $L['File'] = 'File';
+$L['Filedunder'] = 'Filed under';
 $L['Files'] = 'Files';
 $L['Filesize'] = 'Filesize';
 $L['Filter'] = 'Filter';

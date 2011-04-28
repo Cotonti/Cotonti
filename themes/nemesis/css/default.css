@@ -186,6 +186,10 @@ button::-moz-focus-inner		{ padding:0; border:none; }
 .readmore	{ display:block; }
 .download	{ margin:10px 0; padding:10px 0 10px 84px; background:url(../img/download.png) no-repeat 10px 12px; border:1px dashed #c00; }
 
+.clearfix:before, .clearfix:after	{ content:'\0020'; display:block; overflow:hidden; visibility:hidden; width:0; height:0; }
+.clearfix:after						{ clear:both; }
+.clearfix							{ zoom:1; }
+
 /* 7. Pagination
 -------------------------------------------------- */
 
@@ -234,5 +238,6 @@ button::-moz-focus-inner		{ padding:0; border:none; }
 /* 12. Lists
 -------------------------------------------------- */
 
-ul.bullets li	{ padding-left:25px; background:url(../img/bullets.png) no-repeat 5px 2px; }
-ol			{ margin-left:20px; list-style-type:decimal; }
+ul.bullets li						{ padding-left:25px; background:url(../img/bullets.png) no-repeat 5px 2px; }
+ol								{ margin-left:20px; list-style-type:decimal; }
+#usergrouplist ul li:first-child a	{ color:#900; }

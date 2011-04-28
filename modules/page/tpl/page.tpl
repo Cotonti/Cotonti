@@ -17,7 +17,7 @@
 						<!-- END: PAGE_NO_TAGS -->
 						</p>
 						<p class="column floatright">
-							<strong>Filed under:</strong>{PAGE_CATPATH}
+							<strong>{PHP.L.Filedunder}:</strong>{PAGE_CATPATH}
 						</p>
 					</div>
 					<div class="clear textbox">{PAGE_TEXT}</div>
@@ -51,7 +51,7 @@
 				</ul>
 			</div>
 			<!-- END: PAGE_ADMIN -->
-{FILE "themes/nemesis/inc/contact.tpl"}
+{FILE "{PHP.cfg.themes_dir}/{PHP.theme}/inc/contact.tpl"}
 			<!-- BEGIN: PAGE_MULTI -->
 			<div class="block">
 				<h2 class="info">{PHP.L.Summary}:</h2>

@@ -10,7 +10,7 @@
 		</div>
 
 		<div class="col3-1">
-<!-- IF {PHP.usr.isadmin} -->{FILE "themes/nemesis/inc/admin.tpl"}<!-- ENDIF -->
+<!-- IF {PHP.usr.isadmin} -->{FILE "{PHP.cfg.themes_dir}/{PHP.theme}/inc/admin.tpl"}<!-- ENDIF -->
 			<!-- IF {INDEX_POLLS} -->
 			<div class="block">
 				<h2 class="polls">{PHP.L.Polls}</h2>
@@ -20,7 +20,9 @@
 			<!-- IF {INDEX_TAG_CLOUD} -->
 			<div class="block">
 				<h2 class="tags">{PHP.L.Tags}</h2>
+				<ul class="tagcloud">
 				{INDEX_TAG_CLOUD}
+				</ul>
 			</div>
 			<!-- ENDIF -->
 			<!-- IF {PHP.out.whosonline} -->
