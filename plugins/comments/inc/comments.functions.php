@@ -220,6 +220,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 					'totalitems' => $totalitems,
 					'onpage' => $i - $d
 				)),
+			'COMMENTS_PAGES_TOTALITEMS' => $totalitems,
 			'COMMENTS_PAGES_PAGESPREV' => $pagenav['prev'],
 			'COMMENTS_PAGES_PAGNAV' => $pagenav['main'],
 			'COMMENTS_PAGES_PAGESNEXT' => $pagenav['next']
