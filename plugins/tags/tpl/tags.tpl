@@ -31,6 +31,11 @@
 					</li>
 					<!-- END: TAGS_RESULT_ROW -->
 				</ol>
+				<!-- BEGIN: TAGS_RESULT_NONE -->
+				<div class="error">
+					{PHP.L.Noitemsfound}
+				</div>
+				<!-- END: TAGS_RESULT_NONE -->
 			</div>
 			<!-- END: TAGS_RESULT -->
 			<!-- IF {TAGS_PAGNAV} --><p class="paging">{TAGS_PAGEPREV}{TAGS_PAGNAV}{TAGS_PAGENEXT}</p><!-- ENDIF -->

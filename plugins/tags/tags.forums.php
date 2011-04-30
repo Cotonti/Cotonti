@@ -31,7 +31,7 @@ if ($cfg['plugin']['tags']['forums'])
 		$tag_count++;
 		$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
 		$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
-		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+		$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 		foreach ($tc_styles as $key => $val)
 		{
 			if ($cnt <= $key)
@@ -41,7 +41,7 @@ if ($cfg['plugin']['tags']['forums'])
 			}
 		}
 		$tc_html .= cot_rc('tags_link_cloud_tag', array(
-			'url' => cot_url('plug', 'e=tags&a=forums' . $tl . '&t=' . $tag_u),
+			'url' => cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $tag_u, 'tl' => $tl)),
 			'tag_title' => htmlspecialchars($tag_t),
 			'dim' => $dim
 		));

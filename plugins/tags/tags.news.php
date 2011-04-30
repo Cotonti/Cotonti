@@ -35,11 +35,11 @@ if ($cfg['plugin']['tags']['pages'])
 		foreach ($tags as $tag)
 		{
 			$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
-			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+			$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 			$news->assign(array(
 				'PAGE_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? htmlspecialchars(cot_tag_title($tag)) : htmlspecialchars($tag),
 				'PAGE_TAGS_ROW_TAG_COUNT' => $tag_ii,
-				'PAGE_TAGS_ROW_URL' => cot_url('plug', 'e=tags&a=pages&t=' . $tag_u . $tl)
+				'PAGE_TAGS_ROW_URL' => cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl))
 			));
 			$news->parse('NEWS.PAGE_ROW.PAGE_TAGS.PAGE_TAGS_ROW');
 			$tag_ii++;
