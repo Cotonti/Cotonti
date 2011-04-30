@@ -36,7 +36,7 @@ if($cfg['plugin']['tags']['forums'])
 		$tag_count++;
 		$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
 		$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
-		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+		$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 		foreach($tc_styles as $key => $val)
 		{
 			if($cnt <= $key)
@@ -45,7 +45,7 @@ if($cfg['plugin']['tags']['forums'])
 				break;
 			}
 		}
-		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t)."</a><span>".$cnt."</span></li>\r\n";
+		$tc_html .= '<li><a href="'.sed_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $tag_u, 'tl' => $tl)).'" class="'.$dim.'">'.htmlspecialchars($tag_t)."</a><span>".$cnt."</span></li>\r\n";
 	}
 	$tc_html .= '</ul>';
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];

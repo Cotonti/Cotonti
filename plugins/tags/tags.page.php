@@ -33,10 +33,10 @@ if($cfg['plugin']['tags']['pages'])
 		foreach($tags as $tag)
 		{
 			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
-			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+			$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 			$t->assign(array(
 			'PAGE_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? htmlspecialchars(sed_tag_title($tag)) : htmlspecialchars($tag),
-			'PAGE_TAGS_ROW_URL' => sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl)
+			'PAGE_TAGS_ROW_URL' => sed_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl))
 			));
 			$t->parse('MAIN.PAGE_TAGS_ROW');
 			$tag_i++;

@@ -67,7 +67,7 @@ if($cfg['plugin']['tags']['pages'])
 		$tag = $tc_row['tag'];
 		$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
 		$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
-		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+		$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 		$cnt = (int) $tc_row['cnt'];
 		foreach($tc_styles as $key => $val)
 		{
@@ -77,7 +77,7 @@ if($cfg['plugin']['tags']['pages'])
 				break;
 			}
 		}
-		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t)."</a><span>".$cnt."</span></li>\r\n";
+		$tc_html .= '<li><a href="'.sed_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl)).'" class="'.$dim.'">'.htmlspecialchars($tag_t)."</a><span>".$cnt."</span></li>\r\n";
 	}
 	sed_sql_freeresult($tc_res);
 	$tc_html .= '</ul>';
