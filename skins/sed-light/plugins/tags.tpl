@@ -36,6 +36,9 @@
 			</tr>
 			<!-- END: TAGS_RESULT_ROW -->
 		</table>
+		<!-- BEGIN: TAGS_RESULT_NONE -->
+		<div class="error">{PHP.L.Noitemsfound}</div>
+		<!-- END: TAGS_RESULT_NONE -->
 		<!-- END: TAGS_RESULT -->
 		</div>
 		<div class="pagnav">{TAGS_PAGEPREV} {TAGS_PAGNAV} {TAGS_PAGENEXT}</div>
