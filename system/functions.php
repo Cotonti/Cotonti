@@ -269,6 +269,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			if (is_numeric($v))
 			{
 				$pass = TRUE;
+				$v = (float) $v;
 			}
 			break;
 
@@ -347,7 +348,10 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			break;
 	}
 
-	$v = preg_replace('/(&#\d+)(?![\d;])/', '$1;', $v);
+	if (!$pass || !($filter == 'INT' || $filter == 'NUM'))
+	{
+		$v = preg_replace('/(&#\d+)(?![\d;])/', '$1;', $v);
+	}
 	if ($pass)
 	{
 		return $v;
