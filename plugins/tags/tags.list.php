@@ -72,7 +72,7 @@ if ($cfg['plugin']['tags']['pages'])
 		$tag = $tc_row['tag'];
 		$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
 		$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
-		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+		$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 		$cnt = (int) $tc_row['cnt'];
 		foreach ($tc_styles as $key => $val)
 		{
@@ -83,7 +83,7 @@ if ($cfg['plugin']['tags']['pages'])
 			}
 		}
 		$tc_html .= cot_rc('tags_link_cloud_tag', array(
-			'url' => cot_url('plug', 'e=tags&a=pages' . $tl . '&t=' . $tag_u),
+			'url' => cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl)),
 			'tag_title' => htmlspecialchars($tag_t),
 			'dim' => $dim
 		));

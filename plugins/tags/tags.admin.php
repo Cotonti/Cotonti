@@ -29,10 +29,10 @@ if ($cfg['plugin']['tags']['pages'])
 		foreach ($tags as $tag)
 		{
 			$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
-			$tl = ($lang != 'en' && $tag_u != urlencode($tag)) ? '&tl=1' : '';
+			$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 			$t->assign(array(
 				'ADMIN_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? htmlspecialchars(cot_tag_title($tag)) : htmlspecialchars($tag),
-				'ADMIN_TAGS_ROW_URL' => cot_url('plug', 'e=tags&a=pages'.$tl.'&t='.$tag_u)
+				'ADMIN_TAGS_ROW_URL' => cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl))
 			));
 			$t->parse('PAGE.PAGE_ROW.ADMIN_TAGS_ROW');
 			$tag_i++;

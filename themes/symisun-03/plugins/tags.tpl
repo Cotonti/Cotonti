@@ -28,6 +28,13 @@
                         <span class="hint">{TAGS_RESULT_ROW_PATH} {PHP.L.Tags}: {TAGS_RESULT_ROW_TAGS}</span>
                     </li>
                     <!-- END: TAGS_RESULT_ROW -->
+					<!-- BEGIN: TAGS_RESULT_NONE -->
+					<li>
+						<div class="error">
+							{PHP.L.Noitemsfound}
+						</div>
+					</li>
+					<!-- END: TAGS_RESULT_NONE -->
                 </ul>
                 <!-- END: TAGS_RESULT -->
                 <div class="pagnav">{TAGS_PAGEPREV} {TAGS_PAGNAV} {TAGS_PAGENEXT}</div>

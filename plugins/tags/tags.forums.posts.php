@@ -33,10 +33,10 @@ if ($cfg['plugin']['tags']['forums'])
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? htmlspecialchars(cot_tag_title($tag)) : htmlspecialchars($tag);
 			$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
-			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+			$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 			if ($tag_i > 0) $tc_html .= ', ';
 			$tc_html .= cot_rc('tags_link_tag', array(
-				'url' => cot_url('plug', 'e=tags&a=forums' . $tl . '&t=' . $tag_u),
+				'url' => cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $tag_u, 'tl' => $tl)),
 				'tag_title' => $tag_t
 			));
 			$tag_i++;

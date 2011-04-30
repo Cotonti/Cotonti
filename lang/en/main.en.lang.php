@@ -188,6 +188,7 @@ $L['Newspost'] = 'News post';
 $L['Newsposts'] = 'News posts';
 $L['Next'] = 'Next page';
 $L['No'] = 'No';
+$L['Noitemsfound'] = 'No items matching your query';
 $L['None'] = 'None';
 $L['Normal'] = 'Normal';
 $L['Notes'] = 'Notes';

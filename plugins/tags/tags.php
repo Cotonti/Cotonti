@@ -184,48 +184,57 @@ function cot_tag_search_pages($query)
 	/* == Hook : Part 1 == */
 	$extp = cot_getextplugins('tags.search.pages.loop');
 	/* ===== */
-	foreach ($sql->fetchAll() as $row)
+	if ($sql->rowCount() > 0)
 	{
-		$tags = cot_tag_list($row['page_id']);
-		$tag_list = '';
-		$tag_i = 0;
-		foreach ($tags as $tag)
+		foreach ($sql->fetchAll() as $row)
 		{
-			$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
-			$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
-			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
-			if ($tag_i > 0) $tag_list .= ', ';
-			$tag_list .= cot_rc_link(cot_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl), htmlspecialchars($tag_t), 'rel="nofollow"');
-			$tag_i++;
+			$tags = cot_tag_list($row['page_id']);
+			$tag_list = '';
+			$tag_i = 0;
+			foreach ($tags as $tag)
+			{
+				$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
+				$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
+				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
+				if ($tag_i > 0) $tag_list .= ', ';
+				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl)), htmlspecialchars($tag_t), 'rel="nofollow"');
+				$tag_i++;
+			}
+			$t->assign(array(
+				'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id']) : cot_url('page', 'al='.$row['page_alias']),
+				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
+				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_structure_buildpath('page', $row['page_cat']), false),
+				'TAGS_RESULT_ROW_TAGS' => $tag_list
+			));
+			/* == Hook : Part 2 == */
+			foreach ($extp as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
+			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}
+		$sql->closeCursor();
+		$qs_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($qs) : $qs;
+		$tl = $lang != 'en' && $qs_u != $qs ? 1 : null;
+		$pagenav = cot_pagenav('plug', array('e' => 'tags', 'a' => 'pages', 't' => $qs_u, 'tl' => $tl), $d, $totalitems, $cfg['maxrowsperpage']);
 		$t->assign(array(
-			'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id']) : cot_url('page', 'al='.$row['page_alias']),
-			'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
-			'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_structure_buildpath('page', $row['page_cat']), false),
-			'TAGS_RESULT_ROW_TAGS' => $tag_list
+			'TAGS_PAGEPREV' => $pagenav['prev'],
+			'TAGS_PAGENEXT' => $pagenav['next'],
+			'TAGS_PAGNAV' => $pagenav['main']
 		));
-		/* == Hook : Part 2 == */
-		foreach ($extp as $pl)
+
+		/* == Hook == */
+		foreach (cot_getextplugins('tags.search.pages.tags') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
-		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 	}
-	$sql->closeCursor();
-	$pagenav = cot_pagenav('plug','e=tags&a=pages&t=' . urlencode($qs), $d, $totalitems, $cfg['maxrowsperpage']);
-	$t->assign(array(
-		'TAGS_PAGEPREV' => $pagenav['prev'],
-		'TAGS_PAGENEXT' => $pagenav['next'],
-		'TAGS_PAGNAV' => $pagenav['main']
-	));
-
-	/* == Hook == */
-	foreach (cot_getextplugins('tags.search.pages.tags') as $pl)
+	else
 	{
-		include $pl;
+		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
 	}
-	/* ===== */
 
 	$t->parse('MAIN.TAGS_RESULT');
 }
@@ -269,36 +278,45 @@ function cot_tag_search_forums($query)
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
-	while ($row = $sql->fetch())
+	if ($sql->rowCount() > 0)
 	{
-		$tags = cot_tag_list($row['ft_id'], 'forums');
-		$tag_list = '';
-		$tag_i = 0;
-		foreach ($tags as $tag)
+		while ($row = $sql->fetch())
 		{
-			$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
-			$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
-			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
-			if ($tag_i > 0) $tag_list .= ', ';
-			$tag_list .= cot_rc_link(cot_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl), htmlspecialchars($tag_t), 'rel="nofollow"');
-			$tag_i++;
+			$tags = cot_tag_list($row['ft_id'], 'forums');
+			$tag_list = '';
+			$tag_i = 0;
+			foreach ($tags as $tag)
+			{
+				$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
+				$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
+				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
+				if ($tag_i > 0) $tag_list .= ', ';
+				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $tag_u, 'tl' => $tl)), htmlspecialchars($tag_t), 'rel="nofollow"');
+				$tag_i++;
+			}
+			$master = ($row['fs_masterid'] > 0) ? array($row['fs_masterid'], $row['fs_mastername']) : false;
+			$t->assign(array(
+				'TAGS_RESULT_ROW_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
+				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['ft_title']),
+				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false),
+				'TAGS_RESULT_ROW_TAGS' => $tag_list
+			));
+			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}
-		$master = ($row['fs_masterid'] > 0) ? array($row['fs_masterid'], $row['fs_mastername']) : false;
+		$sql->closeCursor();
+		$qs_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($qs) : $qs;
+		$tl = $lang != 'en' && $qs_u != $qs ? 1 : null;
+		$pagenav = cot_pagenav('plug', array('e' => 'tags', 'a' => 'forums', 't' => $qs_u, 'tl' => $tl), $d, $totalitems, $cfg['maxrowsperpage']);
 		$t->assign(array(
-			'TAGS_RESULT_ROW_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
-			'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['ft_title']),
-			'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false),
-			'TAGS_RESULT_ROW_TAGS' => $tag_list
+			'TAGS_PAGEPREV' => $pagenav['prev'],
+			'TAGS_PAGENEXT' => $pagenav['next'],
+			'TAGS_PAGNAV' => $pagenav['main']
 		));
-		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 	}
-	$sql->closeCursor();
-	$pagenav = cot_pagenav('plug','e=tags&a=forums&t='.urlencode($qs), $d, $totalitems, $cfg['maxrowsperpage']);
-	$t->assign(array(
-		'TAGS_PAGEPREV' => $pagenav['prev'],
-		'TAGS_PAGENEXT' => $pagenav['next'],
-		'TAGS_PAGNAV' => $pagenav['main']
-	));
+	else
+	{
+		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
+	}
 	$t->parse('MAIN.TAGS_RESULT');
 }
 

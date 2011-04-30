@@ -26,9 +26,9 @@ if (!empty($row['ipage_title']))
 	{
 		$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
 		$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
-		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+		$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 		if ($tag_i > 0) $tag_list .= ', ';
-		$tag_list .= cot_rc_link(cot_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl), htmlspecialchars($tag_t), 'rel="nofollow"');
+		$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl)), htmlspecialchars($tag_t), 'rel="nofollow"');
 		$tag_i++;
 	}
 	$t->assign(array(
