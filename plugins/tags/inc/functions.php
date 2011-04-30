@@ -64,7 +64,7 @@ function sed_tag_search_form($area = 'all')
 	{
 		$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
 		$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
-		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+		$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 		foreach($tc_styles as $key => $val)
 		{
 			if($cnt <= $key)
@@ -73,7 +73,7 @@ function sed_tag_search_form($area = 'all')
 				break;
 			}
 		}
-		$tc_html .= '<a href="'.sed_url('plug', 'e=tags&a='.$area.'&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a> ';
+		$tc_html .= '<a href="'.sed_url('plug', array('e' => 'tags', 'a' => $area, 't' => $tag_u, 'tl' => $tl)).'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a> ';
 	}
 	$tc_html .= '</div>';
 	$t->assign('TAGS_CLOUD_BODY', $tc_html);
@@ -127,37 +127,46 @@ function sed_tag_search_pages($query)
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_pages']);
-	while($row = sed_sql_fetchassoc($sql))
+	if (sed_sql_numrows($sql) > 0)
 	{
-		$tags = sed_tag_list($row['page_id']);
-		$tag_list = '';
-		$tag_i = 0;
-		foreach($tags as $tag)
+		while($row = sed_sql_fetchassoc($sql))
 		{
-			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
-			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
-			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
-			if ($tag_i > 0) $tag_list .= ', ';
-			$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'">'.htmlspecialchars($tag_t).'</a>';
-			$tag_i++;
+			$tags = sed_tag_list($row['page_id']);
+			$tag_list = '';
+			$tag_i = 0;
+			foreach($tags as $tag)
+			{
+				$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
+				$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
+				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
+				if ($tag_i > 0) $tag_list .= ', ';
+				$tag_list .= '<a href="'.sed_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl)).'">'.htmlspecialchars($tag_t).'</a>';
+				$tag_i++;
+			}
+			$t->assign(array(
+				'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']),
+				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
+				'TAGS_RESULT_ROW_PATH' => sed_build_catpath($row['page_cat'], '<a href="%1$s">%2$s</a>'),
+				'TAGS_RESULT_ROW_TAGS' => $tag_list
+			));
+			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}
-		$t->assign(array(
-			'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']),
-			'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
-			'TAGS_RESULT_ROW_PATH' => sed_build_catpath($row['page_cat'], '<a href="%1$s">%2$s</a>'),
-			'TAGS_RESULT_ROW_TAGS' => $tag_list
-		));
-		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
-	}
-	sed_sql_freeresult($sql);
-	$pagnav = sed_pagination(sed_url('plug','e=tags&a=pages&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage']);
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a=pages&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+		sed_sql_freeresult($sql);
+		$qs_u = sed_urlencode($qs, $cfg['plugin']['tags']['translit']);
+		$tl = $lang != 'en' && $qs_u != $qs ? 1 : null;
+		$pagnav = sed_pagination(sed_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $qs_u, 'tl' => $tl)), $d, $totalitems, $cfg['maxrowsperpage']);
+		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $qs_u, 'tl' => $tl)), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
-	$t->assign(array(
-		'TAGS_PAGEPREV' => $pagination_prev,
-		'TAGS_PAGENEXT' => $pagination_next,
-		'TAGS_PAGNAV' => $pagnav
-	));
+		$t->assign(array(
+			'TAGS_PAGEPREV' => $pagination_prev,
+			'TAGS_PAGENEXT' => $pagination_next,
+			'TAGS_PAGNAV' => $pagnav
+		));
+	}
+	else
+	{
+		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
+	}
 	$t->parse('MAIN.TAGS_RESULT');
 }
 
@@ -196,38 +205,47 @@ function sed_tag_search_forums($query)
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
-	while($row = sed_sql_fetchassoc($sql))
+	if (sed_sql_numrows($sql) > 0)
 	{
-		$tags = sed_tag_list($row['ft_id'], 'forums');
-		$tag_list = '';
-		$tag_i = 0;
-		foreach($tags as $tag)
+		while($row = sed_sql_fetchassoc($sql))
 		{
-			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
-			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
-			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
-			if ($tag_i > 0) $tag_list .= ', ';
-			$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.htmlspecialchars($tag_t).'</a>';
-			$tag_i++;
+			$tags = sed_tag_list($row['ft_id'], 'forums');
+			$tag_list = '';
+			$tag_i = 0;
+			foreach($tags as $tag)
+			{
+				$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
+				$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
+				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
+				if ($tag_i > 0) $tag_list .= ', ';
+				$tag_list .= '<a href="'.sed_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $tag_u, 'tl' => $tl)).'">'.htmlspecialchars($tag_t).'</a>';
+				$tag_i++;
+			}
+			$master = ($row['fs_masterid'] > 0) ? array($row['fs_masterid'],$row['fs_mastername']) : false;
+			$t->assign(array(
+				'TAGS_RESULT_ROW_URL' => sed_url('forums', 'm=posts&q='.$row['ft_id']),
+				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['ft_title']),
+				'TAGS_RESULT_ROW_PATH' => sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, $master),
+				'TAGS_RESULT_ROW_TAGS' => $tag_list
+			));
+			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}
-		$master = ($row['fs_masterid'] > 0) ? array($row['fs_masterid'],$row['fs_mastername']) : false;
-		$t->assign(array(
-			'TAGS_RESULT_ROW_URL' => sed_url('forums', 'm=posts&q='.$row['ft_id']),
-			'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['ft_title']),
-			'TAGS_RESULT_ROW_PATH' => sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, $master),
-			'TAGS_RESULT_ROW_TAGS' => $tag_list
-		));
-		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
-	}
-	sed_sql_freeresult($sql);
-	$pagnav = sed_pagination(sed_url('plug','e=tags&a=forums&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage']);
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a=forums&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+		sed_sql_freeresult($sql);
+		$qs_u = sed_urlencode($qs, $cfg['plugin']['tags']['translit']);
+		$tl = $lang != 'en' && $qs_u != $qs ? 1 : null;
+		$pagnav = sed_pagination(sed_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $qs_u, 'tl' => $tl)), $d, $totalitems, $cfg['maxrowsperpage']);
+		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $qs_u, 'tl' => $tl)), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
-	$t->assign(array(
-		'TAGS_PAGEPREV' => $pagination_prev,
-		'TAGS_PAGENEXT' => $pagination_next,
-		'TAGS_PAGNAV' => $pagnav
-	));
+		$t->assign(array(
+			'TAGS_PAGEPREV' => $pagination_prev,
+			'TAGS_PAGENEXT' => $pagination_next,
+			'TAGS_PAGNAV' => $pagnav
+		));
+	}
+	else
+	{
+		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
+	}
 	$t->parse('MAIN.TAGS_RESULT');
 }
 
