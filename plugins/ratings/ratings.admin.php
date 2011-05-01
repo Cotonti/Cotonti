@@ -25,7 +25,7 @@ require_once cot_incfile('ratings', 'plug');
 $t = new XTemplate(cot_tplfile('ratings.admin', 'plug'));
 
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=ratings'), $L['Ratings']);
+$adminpath[] = array(cot_url('admin', 'm=other&p=ratings'), $L['Ratings']);
 $adminhelp = $L['adm_help_ratings'];
 
 $id = cot_import('id','G','TXT');
@@ -49,7 +49,7 @@ if($a == 'delete')
 
 
 $totalitems = $db->countRows($db_ratings);
-$pagenav = cot_pagenav('admin', 'm=ratings', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav('admin', 'm=other&p=ratings', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = $db->query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -78,7 +78,7 @@ foreach ($sql->fetchAll() as $row)
 	}
 
 	$t->assign(array(
-		'ADMIN_RATINGS_ROW_URL_DEL' => cot_url('admin', 'm=ratings&a=delete&id='.$row['rating_code'].'&d='.$durl.'&'.cot_xg()),
+		'ADMIN_RATINGS_ROW_URL_DEL' => cot_url('admin', 'm=other&p=ratings&a=delete&id='.$row['rating_code'].'&d='.$durl.'&'.cot_xg()),
 		'ADMIN_RATINGS_ROW_RATING_CODE' => $row['rating_code'],
 		'ADMIN_RATINGS_ROW_RATING_AREA' => $row['rating_area'],
 		'ADMIN_RATINGS_ROW_CREATIONDATE' => cot_date('datetime_medium', $row['rating_creationdate']),
