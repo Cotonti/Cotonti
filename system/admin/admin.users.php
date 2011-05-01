@@ -38,7 +38,7 @@ if($n == 'add')
 	$rgroups['grp_desc'] = cot_import('rdesc', 'P', 'TXT');
 	$rgroups['grp_icon'] = cot_import('ricon', 'P', 'TXT');
 	$rgroups['grp_alias'] = cot_import('ralias', 'P', 'TXT');
-	$rgroups['grp_level'] = (int)cot_import('rlevel', 'P', 'LVL');
+	$rgroups['grp_level'] = (int)cot_import('rlevel', 'P', 'INT');
 	$rgroups['grp_disabled'] = cot_import('rdisabled', 'P', 'BOL') ? 1 : 0;
 	$rgroups['grp_maintenance'] = cot_import('rmtmode', 'P', 'BOL') ? 1 : 0;
 	$rgroups['grp_ownerid'] = (int)$usr['id'];	
@@ -79,7 +79,7 @@ elseif($n == 'edit')
 		$rgroups['grp_desc'] = cot_import('rdesc', 'P', 'TXT');
 		$rgroups['grp_icon'] = cot_import('ricon', 'P', 'TXT');
 		$rgroups['grp_alias'] = cot_import('ralias', 'P', 'TXT');
-		$rgroups['grp_level'] = (int)cot_import('rlevel', 'P', 'LVL');
+		$rgroups['grp_level'] = (int)cot_import('rlevel', 'P', 'INT');
 		$rgroups['grp_disabled'] = cot_import('rdisabled', 'P', 'BOL') ? 1 : 0;
 		$rgroups['grp_maintenance'] = cot_import('rmtmode', 'P', 'BOL') ? 1 : 0;
 
