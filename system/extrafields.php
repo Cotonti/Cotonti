@@ -225,8 +225,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 function cot_build_extrafields_data($name, $extrafield, $value)
 {
 	global $L;
-	$value = htmlspecialchars($value);
-	$parse_type = array('HTML', 'BBCode', 'Text');
+	$parse_type = array('HTML', 'Text');
 	switch ($extrafield['field_type'])
 	{
 		case 'select':
@@ -261,10 +260,7 @@ function cot_build_extrafields_data($name, $extrafield, $value)
 		case 'textarea':
 		default:
 			$value = (is_null($value)) ? '' : $value;
-			if ($extrafield['field_parse'] == 'Text')
-			{
-				$value = cot_parse($value, true);
-			}
+			$value = cot_parse($value, ($extrafield['field_parse'] == 'Text') ? false : true);
 			return $value;
 			break;
 	}
