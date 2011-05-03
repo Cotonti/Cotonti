@@ -69,7 +69,7 @@ if ($a=='update')
 		{ 
 			if ($row_extf['field_type']=='file')
 			{
-				 @unlink($cfg['extrafield_files_dir']."/".$sql_page['user_'.$row_extf['field_name']]); 
+				 @unlink($cfg['extrafield_files_dir']."/".$row1['user_'.$row_extf['field_name']]); 
 			}
 		}
 		
