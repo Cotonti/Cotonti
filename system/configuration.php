@@ -438,7 +438,7 @@ function cot_config_update($name, $options, $is_module = false, $category = '', 
 				break;
 			}
 		}
-		if (!$keep)
+		if (!$keep && $old_opt['type'] != COT_CONFIG_TYPE_HIDDEN)
 		{
 			$remove_opts[] = $old_opt['name'];
 		}
