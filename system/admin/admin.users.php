@@ -67,7 +67,7 @@ if($n == 'add')
 
 	cot_auth_add_group($grp_id, $rcopyrightsfrom);
 
-	$cache->db->remove('cot_groups', 'system');
+	$cache && $cache->db->remove('cot_groups', 'system');
 
 	cot_message('Added');
 }
@@ -95,7 +95,7 @@ elseif($n == 'edit')
 			$db->update($db_groups, $rgroups, "grp_id='$g'");
 		}
 
-		$cache->db->remove('cot_groups', 'system');
+		$cache && $cache->db->remove('cot_groups', 'system');
 
 		cot_message('Updated');
 	}
@@ -112,7 +112,7 @@ elseif($n == 'edit')
 		}
 		/* ===== */
 		cot_auth_clear('all');
-		$cache->db->remove('cot_groups', 'system');
+		$cache && $cache->db->remove('cot_groups', 'system');
 
 		cot_message('Deleted');
 	}
