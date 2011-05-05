@@ -193,7 +193,6 @@ foreach ($fstlvl as $x)
 				'FORUMS_SECTIONS_ROW_ODDEVEN' => cot_build_oddeven($yy),
 				'FORUMS_SECTIONS_ROW_NUM' => $yy,
 			));
-			
 			/* === Hook - Part2 : Include === */
 			foreach ($extps as $pl)
 			{
