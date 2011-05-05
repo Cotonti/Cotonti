@@ -186,10 +186,10 @@ foreach ($fstlvl as $x)
 
 			}
 			$t->assign(array(
+				'FORUMS_SECTIONS_ROW_SUBITEMS' => (is_array($nxtlvl[$y]) && $cfg['forums'][$y]['defstate']) ? 1 : 0,
 				'FORUMS_SECTIONS_ROW_ACTIVITY' => cot_rc('forums_icon_section_activity', array('secact_num'=>$secact_num)),
 				'FORUMS_SECTIONS_ROW_ACTIVITYVALUE' => $secact_num,
 				'FORUMS_SECTIONS_ROW_VIEWERS' => $cot_sections_vw_cur,
-				'FORUMS_SECTIONS_ROW_SUBITEMS' => (is_array($nxtlvl[$y]) && $cfg['forums'][$y]['defstate']) ? 1 : 0,
 				'FORUMS_SECTIONS_ROW_ODDEVEN' => cot_build_oddeven($yy),
 				'FORUMS_SECTIONS_ROW_NUM' => $yy,
 			));
