@@ -4137,23 +4137,29 @@ $cot_languages['uk'] = 'Українська';
 function cot_declension($digit, $expr, $onlyword = false, $canfrac = false)
 {
 	global $lang, $Ls;
-	
-	$digit = floatval($digit);
+
 	$expr = is_string($expr) ? $Ls[$expr] : $expr;
 	if (!is_array($expr))
 	{
 		return trim(($onlyword ? '' : "$digit ").$expr);
 	}
 
+	$is_frac = false;
 	if ($canfrac)
 	{
-		$is_frac = floor($digit) != $digit;
-		$i = $digit;
+		if (is_float($digit) || mb_strpos($digit, '.') !== false)
+		{
+			$i = floatval($digit);
+			$is_frac = true;
+		}
+		else
+		{
+			$i = intval($digit);
+		}
 	}
 	else
 	{
-		$is_frac = false;
-		$i = preg_replace('#\D+#', '', $digit);
+		$i = intval(preg_replace('#\D+#', '', $digit));
 	}
 
 	$plural = cot_get_plural($i, $lang, $is_frac);
