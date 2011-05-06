@@ -145,6 +145,7 @@ $L['cfg_parsebbcodeusertext'] = array('Parse BBcode in user signature', '');
 $L['cfg_parser_cache'] = array('Enable HTML cache', '');	// New in N-0.0.1
 $L['cfg_parser_custom'] = array('Enable custom parser', '');	// New in N-0.0.1
 $L['cfg_parser_disable'] = array('Disable default parser', '');	// New in N-0.0.3
+$L['cfg_parser_vid'] = array('Parse BBCodes for video embeds', '');
 $L['cfg_parsesmiliescom'] = array('Parse smilies in comments and private messages', '');
 $L['cfg_parsesmiliesforums'] = array('Parse smilies in forums', '');
 $L['cfg_parsesmiliespages'] = array('Parse smilies in pages', '');

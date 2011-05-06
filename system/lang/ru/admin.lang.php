@@ -145,6 +145,7 @@ $L['cfg_parsebbcodeusertext'] = array('Парсинг BBCode в подписях
 $L['cfg_parser_cache'] = array('Включить HTML-кэш', ' ');	// New in N-0.0.1
 $L['cfg_parser_custom'] = array('Включить собственный парсер', ' ');	// New in N-0.0.1
 $L['cfg_parser_disable'] = array('Отключить стандартный парсер', ' ');	// New in N-0.0.3
+$L['cfg_parser_vid'] = array('Парсинг BBCodes для вставок видео', '');
 $L['cfg_parsesmiliescom'] = array('Парсинг смайликов в комментариях и личных сообщениях', ' ');
 $L['cfg_parsesmiliesforums'] = array('Парсинг смайликов в форумах', ' ');
 $L['cfg_parsesmiliespages'] = array('Парсинг смайликов в страницах', ' ');
