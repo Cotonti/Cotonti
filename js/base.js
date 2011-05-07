@@ -98,7 +98,7 @@ function ajaxSend(settings) {
 	}
 	$.ajax({
 		type: method,
-		url: url,
+		url: encodeURI(url),
 		data: data,
 		beforeSend: function() {
 			$('#' + settings.divId).append('<span style="position:absolute;left:' + ($('#' + settings.divId).width()/2 - 110) + 'px;top:' + ($('#' + settings.divId).height()/2 + 9) + 'px;" class="loading" id="loading"><img src="./images/spinner.gif" alt="loading"/></span>');
