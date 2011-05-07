@@ -24,7 +24,7 @@ if ($cfg['plugin']['tags']['forums'])
 	// Get all subcategories
 	$limit = $cfg['plugin']['tags']['lim_forums'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_forums'];
 	$tcloud = cot_tag_cloud('forums', $cfg['plugin']['tags']['order'], $limit);
-	$tc_html = $R['tags_code_cloud_open'];
+	$tc_html = '';
 	$tag_count = 0;
 	foreach ($tcloud as $tag => $cnt)
 	{
@@ -46,7 +46,6 @@ if ($cfg['plugin']['tags']['forums'])
 			'dim' => $dim
 		));
 	}
-	$tc_html .= $R['tags_code_cloud_close'];
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 	$t->assign('FORUMS_SECTIONS_TAG_CLOUD', $tc_html);
 	if ($cfg['plugin']['tags']['more'] && $limit > 0 && $tag_count == $limit)

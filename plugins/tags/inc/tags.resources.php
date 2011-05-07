@@ -9,9 +9,7 @@
  * @license BSD
  */
 
-$R['tags_code_cloud_close'] = '</div>';
 $R['tags_code_cloud_more'] = '<a class="more" href="{$url}">'.$L['tags_All'].'</a>';
-$R['tags_code_cloud_open'] = '<div class="tag_cloud">';
 /*$R['tags_code_style'] = '<link rel="stylesheet" type="text/css" href="'.$cfg['plugins_dir'].'/tags/style.css" />';*/
 $R['tags_input_editpage'] = '<input type="text" name="rtags" size="56" class="autotags" value="{$tags}" />';
 $R['tags_input_editpost'] = '<input type="text" name="rtags" size="56" class="autotags" value="{$tags}" />';
