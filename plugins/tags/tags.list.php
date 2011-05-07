@@ -64,7 +64,7 @@ if ($cfg['plugin']['tags']['pages'])
 		WHERE r.tag_area = 'pages' $tags_where AND p.page_cat IN ($tc_cats) AND p.page_state = 0
 		GROUP BY r.tag
 		ORDER BY $order $limit");
-	$tc_html = $R['tags_code_cloud_open'];
+	$tc_html = '';
 	$tag_count = 0;
 	while ($tc_row = $tc_res->fetch())
 	{
@@ -89,7 +89,7 @@ if ($cfg['plugin']['tags']['pages'])
 		));
 	}
 	$tc_res->closeCursor();
-	$tc_html .= $R['tags_code_cloud_close'];
+
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 
 	$t->assign('LIST_TAG_CLOUD', $tc_html);

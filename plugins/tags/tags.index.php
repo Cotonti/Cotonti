@@ -23,7 +23,7 @@ if ($cfg['plugin']['tags']['pages'] || $cfg['plugin']['tags']['forums'])
 	require_once cot_incfile('tags', 'plug');
 	$limit = $cfg['plugin']['tags']['lim_index'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_index'];
 	$tcloud = cot_tag_cloud($cfg['plugin']['tags']['index'], $cfg['plugin']['tags']['order'], $limit);
-	$tc_html = $R['tags_code_cloud_open'];
+	$tc_html = '';
 	$tag_count = 0;
 	foreach ($tcloud as $tag => $cnt)
 	{
@@ -46,7 +46,6 @@ if ($cfg['plugin']['tags']['pages'] || $cfg['plugin']['tags']['forums'])
 		));
 	}
 
-	$tc_html .= $R['tags_code_cloud_close'];
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 	$t->assign('INDEX_TAG_CLOUD', $tc_html);
 	if ($cfg['plugin']['tags']['more'] && $limit > 0 && $tag_count == $limit)
