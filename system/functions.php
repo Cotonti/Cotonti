@@ -223,7 +223,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			break;
 	}
 
-	if (MQGPC && ($source=='G' || $source=='P' || $source=='C') )
+	if (MQGPC && ($source=='G' || $source=='P' || $source=='C') && $v != NULL)
 	{
 		$v = stripslashes($v);
 	}
