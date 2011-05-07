@@ -34,14 +34,14 @@ function cot_print()
 /**
  * Dumps current state of its arguments to debug log file and continues normal script execution.
  *
- * @global string $cfg['debug_logfile'] Path to debug log file
+ * @global string $cfg['debug_logpath'] Path to debug log file
  * @example cot_watch($foo, $bar);
  * @see cot_assert(), cot_checkpoint()
  */
 function cot_watch()
 {
 	global $cfg;
-	$fp = fopen($cfg['debug_logfile'], 'a');
+	$fp = fopen($cfg['debug_logpath'] . '/cot_debug_' . date('Ymd_His') . '.log', 'a');
 	$btrace = debug_backtrace();
 	fputs($fp, $btrace[0]['file'].', '.$btrace[0]['line'].":\n");
 	$vars = func_get_args();
@@ -119,13 +119,13 @@ die();');
 /**
  * Dumps current state of global variables into debug log file and continues normal script execution.
  *
- * @global string $cfg['debug_logfile'] Path to debug log file
+ * @global string $cfg['debug_logpath'] Path to debug log file
  * @see COT_CHECKPOINT_LOCALS, cot_watch(), cot_vardump()
  */
 function cot_checkpoint()
 {
 	global $cfg;
-	$fp = fopen($cfg['debug_logfile'], 'a');
+	$fp = fopen($cfg['debug_logpath'] . '/cot_debug_' . date('Ymd_His') . '.log', 'a');
 	$btrace = debug_backtrace();
 	fputs($fp, $btrace[1]['file'] . ', ' . $btrace[1]['line'] . ":\n");
 	foreach ($GLOBALS as $key => $val)
@@ -142,12 +142,12 @@ function cot_checkpoint()
 /**
  * Dumps variables in local scope into debug log file and continues normal script execution.
  *
- * @global string $cfg['debug_logfile'] Path to debug log file
+ * @global string $cfg['debug_logpath'] Path to debug log file
  * @example eval(COT_CHECKPOINT_LOCALS);
  * @see cot_checkpoint(), cot_watch(), COT_VARDUMP_LOCALS
  */
 define('COT_CHECKPOINT_LOCALS', 'global $cfg;
-	$debug_fp = fopen($cfg[\'debug_logfile\'], "a");
+	$debug_fp = fopen($cfg[\'debug_logpath\'] . \'/cot_debug_\' . date(\'Ymd_His\') . \'.log\', "a");
 	$debug_btrace = debug_backtrace();
 	fputs($debug_fp, $debug_btrace[0]["file"] . ", " . $debug_btrace[1]["line"] . ":\n");
 	$debug_vars = get_defined_vars();

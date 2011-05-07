@@ -39,6 +39,7 @@ $cfg['display_errors'] = true;
 $cfg['debug_mode'] = true;
 $cfg['customfuncs'] = false;
 $cfg['cache'] = false;
+$cfg['xtpl_cache'] = false;
 
 require_once $cfg['system_dir'].'/functions.php';
 require_once 'system/debug.php';
