@@ -114,12 +114,12 @@ $cfg['file_perms'] = 0664;
 $cfg['debug_mode'] = FALSE;
 
 /**
- * Path to debug log file used by functions which dump debug data into it.
+ * Path to debug log files used by functions which dump debug data into it.
  * This file MUST NOT be available to strangers (e.g. via HTTP) or it can
  * compromise your website security. Protect it with .htaccess or use some
  * path accessible to you only via FTP.
  */
-$cfg['debug_logfile'] = '/tmp/cot_debug_'.date("Ymd_His").'.log';
+$cfg['debug_logpath'] = '/tmp';
 
 /**
  * The shield is disabled for administrators by default. But if you are testing

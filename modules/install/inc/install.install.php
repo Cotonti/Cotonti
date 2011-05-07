@@ -17,9 +17,6 @@ $step = empty($_SESSION['cot_inst_lang']) ? 0 : (int) $cfg['new_install'];
 
 cot_sendheaders();
 
-// Force Xtpl cache off
-$cfg['xtpl_cache'] = false;
-
 $mskin = cot_tplfile('install.install');
 $t = new XTemplate($mskin);
 
@@ -142,16 +139,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			}
 			break;
 		case 2:
-			// Create missing cache folders
-			$cache_subfolders = array('cot', 'static', 'system', 'templates');
-			foreach ($cache_subfolders as $sub)
-			{
-				if (!file_exists($cfg['cache_dir'] . '/' . $sub))
-				{
-					mkdir($cfg['cache_dir'] . '/' . $sub, $cfg['dir_perms']);
-				}
-			}
-
 			// Database setup
 			$db_x = cot_import('db_x', 'P', 'TXT', 0, false, true);
 			
@@ -372,13 +359,26 @@ switch ($step)
 		));
 		break;
 	case 1:
+		// Create missing cache folders
+		if (is_writable($cfg['cache_dir']))
+		{
+			$cache_subfolders = array('cot', 'static', 'system', 'templates');
+			foreach ($cache_subfolders as $sub)
+			{
+				if (!file_exists($cfg['cache_dir'] . '/' . $sub))
+				{
+					mkdir($cfg['cache_dir'] . '/' . $sub, $cfg['dir_perms']);
+				}
+			}
+		}
+		
 		// System info
 		// Build CHMOD/Exists/Version data
 		clearstatcache();
 
 		if (is_dir($cfg['avatars_dir']))
 		{
-			$status['avatars_dir'] = (substr(decoct(fileperms($cfg['avatars_dir'])), -4) >= $cfg['dir_perms'])
+			$status['avatars_dir'] = is_writable($cfg['avatars_dir'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
@@ -391,7 +391,7 @@ switch ($step)
 		/* ------------------- */
 		if (is_dir($cfg['cache_dir']))
 		{
-			$status['cache_dir'] = (substr(decoct(fileperms($cfg['cache_dir'])), -4) >= $cfg['dir_perms'])
+			$status['cache_dir'] = is_writable($cfg['cache_dir'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
@@ -404,7 +404,7 @@ switch ($step)
 		/* ------------------- */
 		if (is_dir($cfg['pfs_dir']))
 		{
-			$status['pfs_dir'] = (substr(decoct(fileperms($cfg['pfs_dir'])), -4) >= $cfg['dir_perms'])
+			$status['pfs_dir'] = is_writable($cfg['pfs_dir'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
@@ -417,7 +417,7 @@ switch ($step)
 		/* ------------------- */
 		if (is_dir($cfg['extrafield_files_dir']))
 		{
-			$status['exflds_dir'] = (substr(decoct(fileperms($cfg['extrafield_files_dir'])), -4) >= $cfg['dir_perms'])
+			$status['exflds_dir'] = is_writable($cfg['extrafield_files_dir'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
@@ -430,7 +430,7 @@ switch ($step)
 		/* ------------------- */
 		if (is_dir($cfg['photos_dir']))
 		{
-			$status['photos_dir'] = (substr(decoct(fileperms($cfg['photos_dir'])), -4) >= $cfg['dir_perms'])
+			$status['photos_dir'] = is_writable($cfg['photos_dir'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
@@ -443,7 +443,7 @@ switch ($step)
 		/* ------------------- */
 		if (is_dir($cfg['thumbs_dir']))
 		{
-			$status['thumbs_dir'] = (substr(decoct(fileperms($cfg['thumbs_dir'])), -4) >= $cfg['dir_perms'])
+			$status['thumbs_dir'] = is_writable($cfg['thumbs_dir'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
@@ -456,8 +456,7 @@ switch ($step)
 		/* ------------------- */
 		if (file_exists($file['config']))
 		{
-			$status['config'] = (substr(decoct(fileperms($file['config'])), -4)
-					>= $cfg['file_perms'])
+			$status['config'] = is_writable($file['config'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>

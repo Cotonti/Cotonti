@@ -100,7 +100,7 @@ $cfg['display_errors'] = true;
 $cfg['debug_mode'] = true;
 $cfg['customfuncs'] = false;
 
-if (defined('COT_UPGRADE'))
+if (defined('COT_UPGRADE') && !cot_error_found())
 {
 	// Is Genoa, perform upgrade
 	$parser = cot_import('parser', 'G', 'ALP');
@@ -253,7 +253,7 @@ if (defined('COT_UPGRADE'))
 		'UPDATE_TO' => $branch
 	));
 }
-else
+elseif (!cot_error_found())
 {
 	// Update the core
 	$sql_install = $db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
