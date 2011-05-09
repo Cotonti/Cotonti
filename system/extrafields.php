@@ -33,12 +33,12 @@ function cot_build_extrafields($name, $extrafield, $data)
 		case 'currency':
 		case 'double':	
 			$R["input_text_{$rc_name}"] = (!empty($R["input_text_{$rc_name}"])) ? $R["input_text_{$rc_name}"] : $extrafield['field_html'];
-			$result = cot_inputbox('text', $name, htmlspecialchars($data));
+			$result = cot_inputbox('text', $name, $data);
 			break;
 
 		case 'textarea':
 			$R["input_textarea_{$rc_name}"] = (!empty($R["input_textarea_{$rc_name}"])) ? $R["input_textarea_{$rc_name}"] : $extrafield['field_html'];
-			$result = cot_textarea($name, htmlspecialchars($data), 4, 56);
+			$result = cot_textarea($name, $data, 4, 56);
 			break;
 
 		case 'select':
