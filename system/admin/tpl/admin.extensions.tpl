@@ -1,5 +1,5 @@
 <!-- BEGIN: MAIN -->
-	{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
+	{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 <!-- BEGIN: CONFIG_URL -->
 	<ul>
 		<li><a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_CONFIG_URL}">{PHP.L.Configuration}: {PHP.R.admin_icon_config}</a></li>
