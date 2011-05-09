@@ -313,6 +313,7 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_TOPICS_ROW_UPDATEDURL' => $row['ft_lastposturl'],
 		'FORUMS_TOPICS_ROW_UPDATED' => $row['ft_lastpostlink'],
 		'FORUMS_TOPICS_ROW_UPDATED_STAMP' => $row['ft_updated'] + $usr['timezone'] * 3600,
+		'FORUMS_TOPICS_ROW_MOVED' => ($row['ft_movedto'] > 0) ? 1 : 0,
 		'FORUMS_TOPICS_ROW_TIMEAGO' => cot_build_timegap($row['ft_updated']),
 		'FORUMS_TOPICS_ROW_POSTCOUNT' => $row['ft_postcount'],
 		'FORUMS_TOPICS_ROW_REPLYCOUNT' => $row['ft_replycount'],
