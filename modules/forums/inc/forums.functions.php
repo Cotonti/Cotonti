@@ -150,12 +150,12 @@ function cot_forums_sectionsetlast($cat, $postcount = '', $topiccount='', $viewc
 	$row = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics
 		WHERE ft_cat='".$db->prep($cat)."' AND ft_movedto='' AND ft_mode='0' ORDER BY ft_updated DESC LIMIT 1")->fetch();
 
-	$i_postcount = ($postcount != '' && is_int($postcount)) ? $postcount : 1;
-	$i_topiccount = ($topiccount != '' && is_int($topiccount)) ? $topiccount : 1;
+	$i_postcount = ($postcount != '' && is_int($postcount)) ? $postcount : 0;
+	$i_topiccount = ($topiccount != '' && is_int($topiccount)) ? $topiccount : 0;
 
-	$postcount = (!empty($postcount)) ? ", fs_postcount = ".$postcount : '';
-	$topiccount = (!empty($topiccount)) ? ", fs_topiccount = ".$topiccount : '';
-	$viewcount = (!empty($viewcount)) ? ", fs_viewcount = ".$viewcount : '';
+	$postcount = ($postcount != '') ? ", fs_postcount = ".$postcount : '';
+	$topiccount = ($topiccount != '') ? ", fs_topiccount = ".$topiccount : '';
+	$viewcount = ($viewcount != '') ? ", fs_viewcount = ".$viewcount : '';
 
 	$db->query("INSERT INTO $db_forum_stats
 		(fs_cat, fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername, fs_topiccount, fs_postcount,
