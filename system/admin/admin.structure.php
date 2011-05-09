@@ -65,7 +65,7 @@ if ($a == 'update')
 
 	foreach ($rstructurecode as $i => $k)
 	{
-		$oldrow = $db->query("SELECT structure_code FROM $db_structure WHERE structure_id=".(int)$i)->fetch();
+		$oldrow = $db->query("SELECT * FROM $db_structure WHERE structure_id=".(int)$i)->fetch();
 		$rstructure['structure_code'] = cot_import($rstructurecode[$i], 'D', 'TXT');
 		$rstructure['structure_path'] = cot_import($rstructurepath[$i], 'D', 'TXT');
 		$rstructure['structure_title'] = cot_import($rstructuretitle[$i], 'D', 'TXT');
@@ -102,11 +102,19 @@ if ($a == 'update')
 
 		if ($oldrow['structure_code'] != $rstructure['structure_code'])
 		{
-			$db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='".$db->prep($n)."' AND auth_option='".$db->prep($oldrow['structure_code'])."'");
-			$db->update($db_config, array("config_subcat" => $rstructure['structure_code']), "config_cat='".$db->prep($n)."' AND config_subcat='".$db->prep($oldrow['structure_code'])."' AND config_owner='module'");
-			$area_updatecat = 'cot_'.$n.'_updatecat';
-			(function_exists($area_updatecat)) ? $area_updatecat($oldrow['structure_code'], $rstructure['structure_code']) : FALSE;
-			cot_auth_reorder();
+			if ($db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_code=".$db->quote($rstructure['structure_code'])." AND structure_area = '$n'")->fetchColumn() == 0)
+			{
+				$db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='".$db->prep($n)."' AND auth_option='".$db->prep($oldrow['structure_code'])."'");
+				$db->update($db_config, array("config_subcat" => $rstructure['structure_code']), "config_cat='".$db->prep($n)."' AND config_subcat='".$db->prep($oldrow['structure_code'])."' AND config_owner='module'");
+				$area_updatecat = 'cot_'.$n.'_updatecat';
+				(function_exists($area_updatecat)) ? $area_updatecat($oldrow['structure_code'], $rstructure['structure_code']) : FALSE;
+				cot_auth_reorder();
+			}
+			else
+			{
+				unset($rstructure['structure_code']);
+				cot_error('adm_cat_exists');
+			}
 		}
 
 		$area_sync = 'cot_'.$n.'_sync';
@@ -151,8 +159,8 @@ elseif ($a == 'add')
 
 	if (!empty($rstructure['structure_title']) && !empty($rstructure['structure_code']) && !empty($rstructure['structure_path']) && $rstructure['structure_code'] != 'all')
 	{
-		$sql = $db->query("SELECT structure_code FROM $db_structure WHERE structure_code='".$db->prep($rstructure['structure_code'])."' LIMIT 1");
-		if ($sql->rowCount() == 0)
+		$sql = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_code=".$db->quote($rstructure['structure_code'])." AND structure_area = '$n'");
+		if ($sql->fetchColumn() == 0)
 		{
 			$sql = $db->insert($db_structure, $rstructure);
 			$auth_permit = array(COT_GROUP_DEFAULT => 'RW', COT_GROUP_GUESTS => 'R', COT_GROUP_MEMBERS => 'RW');
