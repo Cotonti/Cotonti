@@ -82,6 +82,12 @@ function cot_build_extrafields($name, $extrafield, $data)
 			$result = cot_selectbox_date($data, 'long', $name);
 			break;
 
+		case 'country':
+			$R["input_select_{$rc_name}"] = (!empty($R["input_select_{$rc_name}"])) ? $R["input_select_{$rc_name}"] : $extrafield['field_html'];
+			global $cot_countries;
+			$result = cot_selectbox_countries(trim($data), $name, false);
+			break;		
+		
 		case 'file':
 			$R["input_text_{$rc_name}"] = (!empty($R["input_text_{$rc_name}"])) ? $R["input_text_{$rc_name}"] : $extrafield['field_html'];
 
@@ -153,6 +159,10 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 		case 'datetime':
 			$import = cot_import_date($inputname, true, false, $source);
 			break;
+		
+		case 'country':
+			$import = cot_import($inputname, $source,'ALP');
+			break;	
 
 		case 'file':
 			global $lang, $cot_translit, $exfldfiles, $exfldsize, $cfg, $uploadfiles;
@@ -243,11 +253,8 @@ function cot_build_extrafields_data($name, $extrafield, $value)
 			return cot_date('datetime_medium', $value + $usr['timezone'] * 3600);
 			break;
 		
+		case 'country':
 		case 'file':
-			$value = (is_null($value)) ? '' : $value;
-			return $value;
-			break;	
-		
 		case 'filesize':
 			$value = (is_null($value)) ? '' : $value;
 			return $value;
@@ -290,7 +297,8 @@ function cot_default_html_construction($type)
 		case 'textarea':
 			$html = $R['input_textarea'];
 			break;
-
+		
+		case 'country':
 		case 'select':
 			$html = $R['input_select'];
 			break;
@@ -391,6 +399,8 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 			break;
 		case 'datetime': $sqltype = "int(11) NOT NULL default '0'";
 			break;
+		case 'country': $sqltype = "CHAR(2)";
+			break;
 		case 'file': $sqltype = "VARCHAR(255)";
 			break;
 		case 'filesize': $sqltype = "int(11) NOT NULL";
@@ -480,6 +490,8 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 		case 'radio': $sqltype = "VARCHAR(255)";
 			break;
 		case 'datetime': $sqltype = "int(11) NOT NULL default '0'";
+			break;
+		case 'country': $sqltype = "CHAR(2)";
 			break;
 		case 'file': $sqltype = "VARCHAR(255)";
 			break;
