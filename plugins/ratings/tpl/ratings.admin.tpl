@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Ratings}</h2>
-		{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
+		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 			<ul class="follow">
 				<li><a title="{PHP.L.Configuration}" href="{ADMIN_RATINGS_URL_CONFIG}">{PHP.L.Configuration}</a></li>
 			</ul>

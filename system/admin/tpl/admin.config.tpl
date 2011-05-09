@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Configuration}</h2>
-		{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
+		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 		<div class="block">
 <!-- BEGIN: EDIT -->
 			<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post" class="ajax">

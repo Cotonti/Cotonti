@@ -216,7 +216,7 @@ class XTemplate
 			// Remove BOM if present
 			if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) $code = mb_substr($code, 0);
 			// FILE includes
-			$code = preg_replace_callback('`\{FILE\s+("|\'|)(.+?)\1\}`', 'XTemplate::restart_include_files', $code);
+			$code = preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restart_include_files', $code);
 			// Get root-level blocks
 			do
 			{

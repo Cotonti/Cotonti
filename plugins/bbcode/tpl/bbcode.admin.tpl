@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>BBCodes</h2>
-		{FILE "{PHP.cfg.themes_dir}/nemesis/warnings.tpl"}
+		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 			<h3>{PHP.L.editdeleteentries}:</h3>
 			<table class="cells">
 				<tr>

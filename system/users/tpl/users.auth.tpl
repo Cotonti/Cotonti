@@ -26,7 +26,7 @@
 		</div>
 
 		<div class="col3-1">
-{FILE "./themes/nemesis/inc/contact.tpl"}
+{FILE "./themes/{PHP.cfg.defaulttheme}/inc/contact.tpl"}
 		</div>
 
 		<!-- BEGIN: USERS_AUTH_MAINTENANCE -->
