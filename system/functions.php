@@ -395,7 +395,7 @@ function cot_import_buffered($name, $value, $null = '')
 {
 	if ($value === '' || $value === null)
 	{
-		if (isset($_SESSION['cot_buffer'][$name]))
+		if (isset($_SESSION['cot_buffer'][$name]) && !is_array($_SESSION['cot_buffer'][$name]))
 		{
 			return $_SESSION['cot_buffer'][$name];
 		}
