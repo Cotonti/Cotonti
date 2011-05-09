@@ -3,8 +3,8 @@
 	<h2 class="stats">{PLUGIN_TITLE}</h2>
 
 	<div>
-		<form id="search" name="search" action="{PLUGIN_SEARCH_ACTION}" method="post">
-			<input type="hidden" name="a" value="search" />
+		<form id="search" name="search" action="{PLUGIN_SEARCH_ACTION}" method="get">
+			<input type="hidden" name="e" value="search" />
 			<p class="textcenter">
 				<a href="plug.php?e=search">{PHP.L.plu_tabs_all}</a> |
 				<a href="plug.php?e=search&amp;tab=frm">{PHP.L.Forums}</a> |
