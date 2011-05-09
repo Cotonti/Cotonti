@@ -20,9 +20,7 @@
 			<!-- IF {INDEX_TAG_CLOUD} -->
 			<div class="block">
 				<h2 class="tags">{PHP.L.Tags}</h2>
-				<ul class="tagcloud">
 				{INDEX_TAG_CLOUD}
-				</ul>
 			</div>
 			<!-- ENDIF -->
 			<!-- IF {PHP.out.whosonline} -->

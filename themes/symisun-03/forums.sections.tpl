@@ -44,7 +44,7 @@
         <a href="forums.php?n=markall">{PHP.L.forums_markasread}</a><br />
       </div>
       <h3>{PHP.L.Tags}</h3>
-      <div class="box padding15"> <ul class="tag_cloud">{FORUMS_SECTIONS_TAG_CLOUD}</ul> </div>
+      <div class="box padding15"> {FORUMS_SECTIONS_TAG_CLOUD} </div>
       &nbsp; </div>
   </div>
 </div>

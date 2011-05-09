@@ -53,7 +53,7 @@
 	<h3><a href="{LIST_CAT_RSS}">{PHP.themelang.list.rss}</a></h3>
 	<!-- IF {LIST_TAG_CLOUD} != {PHP.L.tags_Tag_cloud_none} -->
 	<h3>{PHP.L.Tags}</h3>
-	<div class="box padding15"> <ul class="tag_cloud">{LIST_TAG_CLOUD}</ul> </div>
+	<div class="box padding15"> {LIST_TAG_CLOUD} </div>
 	<!-- ENDIF -->
 	<!-- IF {LIST_TOP_TOTALLINES} != 0 -->
 	<h3>{PHP.L.Category} {PHP.L.Entries}</h3>
