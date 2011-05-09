@@ -228,7 +228,7 @@ else
 			}
 			/* ===== */
 
-			if($roww['structure_code'] != $s[$i]['rcode'])
+			if($roww['structure_code'] != $s[$i]['rcode'] && !isset($sed_cat[$s[$i]['rcode']]))
 			{
 				$sql = sed_sql_query("UPDATE $db_structure SET structure_code='".sed_sql_prep($s[$i]['rcode'])."' WHERE structure_code='".sed_sql_prep($roww['structure_code'])."' ");
 				$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='".sed_sql_prep($roww['structure_code'])."' ");
@@ -271,10 +271,13 @@ else
 			}
 		}
 		/* ===== */
+		
+		if (!isset($sed_cat[$ncode]))
+		{
+			sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup);
 
-		sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup);
-
-		$adminwarnings = $L['Added'];
+			$adminwarnings = $L['Added'];
+		}
 	}
 	elseif($a == 'delete')
 	{
