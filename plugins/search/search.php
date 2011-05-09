@@ -24,7 +24,6 @@ require_once cot_incfile('forms');
 
 
 $sq = cot_import('sq', 'R', 'TXT');
-$sq = (!empty($sq)) ? $sq : $rsq;
 
 $sq = $db->prep($sq);
 $hl = urlencode(mb_strtoupper($sq));
@@ -33,7 +32,6 @@ list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['plugin']['search']['maxitem
 $totalitems = array();
 $pag_catauth = array();
 $frm_catauth = array();
-
 
 $rs = $_REQUEST['rs'];
 
@@ -405,7 +403,23 @@ if (!empty($sq))
 	{
 		$t->parse('MAIN.RESULTS');
 	}
-	$pagenav = cot_pagenav('plug', array('e' => 'search', 'pre' => $sq, 'tab' => $tab), $d, array_sum($totalitems), $cfg['plugin']['search']['maxitems']);
+	
+	$rs_url_path = array();
+	foreach ($rs as $k => $v)
+	{
+		if (is_array($v))
+		{
+			foreach ($v as $sk => $sv)
+			{
+				$rs_url_path['rs[' . $k . '][' . $sk . ']'] = $sv;
+			}
+		}
+		else
+		{
+			$rs_url_path['rs[' . $k . ']'] = $v;
+		}
+	}
+	$pagenav = cot_pagenav('plug', array('e' => 'search', 'sq' => $sq, 'tab' => $tab)+$rs_url_path, $d, array_sum($totalitems), $cfg['plugin']['search']['maxitems']);
 }
 
 // Search title
