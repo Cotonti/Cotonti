@@ -170,7 +170,7 @@ $res = $db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$locat
 
 $pagenav = cot_pagenav('admin',$extra_path, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$field_types = array('input', 'inputint', 'currency', 'double', 'textarea', 'select', 'checkbox', 'radio', 'datetime', 'file'/*, 'filesize'*/);
+$field_types = array('input', 'inputint', 'currency', 'double', 'textarea', 'select', 'checkbox', 'radio', 'datetime', 'country', 'file'/*, 'filesize'*/);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
