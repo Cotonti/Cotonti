@@ -29,7 +29,7 @@ require_once(sed_langfile('message', true));
 unset($r, $rd, $ru);
 
 $title = $L['msg'.$msg.'_title'];
-$body = $L['msg'.$msg.'_body'];
+$body = "<p>".$L['msg'.$msg.'_body']."</p>";
 
 /* === Hook === */
 $extp = sed_getextplugins('message.first');
@@ -54,7 +54,7 @@ switch( $msg )
 
 	case '153':
 		if ($num>0)
-		{ $body .= "<br />(-> ".date($cfg['dateformat'],$num)."GMT".")"; }
+		{ $body .= "<p>(-> ".date($cfg['dateformat'],$num)."GMT".")</p>"; }
 	break;
 
 		/* ======== Error Pages ========= */
@@ -141,7 +141,7 @@ if ($rc != '')
 		$r["$rc"] = SED_ABSOLUTE_URL . $r["$rc"];
 	}
 	$plug_head .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />";
-	$body .= "<br />&nbsp;<br />".$L['msgredir'];
+	$body .= "<p>".$L['msgredir']."</p>";
 }
 
 elseif ($rd != '')
@@ -151,7 +151,7 @@ elseif ($rd != '')
 		$ru = SED_ABSOLUTE_URL . ltrim($ru, '/');
 	}
 	$plug_head .= "<meta http-equiv=\"refresh\" content=\"".$rd.";url=".$ru."\" />";
-	$body .= "<br />&nbsp;<br />".$L['msgredir'];
+	$body .= "<p>".$L['msgredir']."</p>";
 }
 
 /* === Hook === */
