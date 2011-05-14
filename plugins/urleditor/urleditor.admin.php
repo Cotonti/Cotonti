@@ -10,7 +10,7 @@ Hooks=tools
  * transformation rules
  *
  * @package urleditor
- * @version 0.7.0
+ * @version 0.9.2
  * @author Trustmaster
  * @copyright Copyright (c) Cotonti Team 2010-2011
  * @license BSD
@@ -90,7 +90,7 @@ foreach (cot_getextplugins('admin.urls.first') as $pl)
 }
 /* ===== */
 
-if($a == 'save')
+if ($a == 'save' && is_writable('./datas/urltrans.dat'))
 {
 	// Fetch data
 	$ut_area = cot_import('area', 'P', 'ARR');
@@ -294,17 +294,28 @@ if($a == 'save')
 	fclose($fp);
 	if($htaccess)
 	{
+		$custom_htaccess = cot_import('custom_htaccess', 'P', 'NOC');
 		$htdata = file_get_contents('.htaccess');
-		if (mb_strpos($htdata, '### COTONTI URLTRANS ###') !== false)
+		if (mb_strpos($htdata, "\n### COTONTI URLTRANS ###\n") !== false)
 		{
-			$htparts = explode('### COTONTI URLTRANS ###', $htdata);
-			$htdata = $htparts[0] . "\n### COTONTI URLTRANS ###\n$hta\n### COTONTI URLTRANS ###\n" . $htparts[2];
+			$htparts = explode("\n### COTONTI URLTRANS ###\n", $htdata);
+			$htparts[1] = $hta;
+			if (count($htparts) == 3)
+			{
+				$htparts[3] = $htparts[2];
+			}
+			$htparts[2] = $custom_htaccess;
 		}
 		else
 		{
-			$htdata .= "\n### COTONTI URLTRANS ###\n$hta\n### COTONTI URLTRANS ###\n";
+			$htparts[0] = $htdata;
+			$htparts[1] = $hta;
+			$htparts[2] = $custom_htaccess;
+			$htparts[3] = '';
 		}
+		$htdata = implode("\n### COTONTI URLTRANS ###\n", $htparts);
 		file_put_contents('.htaccess', $htdata);
+		$hta = $htdata;
 	}
 
 	$t->assign(array(
@@ -376,6 +387,15 @@ while($line = trim(fgets($fp), " \t\r\n"))
 fclose($fp);
 
 $htaccess = ($serv_type == 'apache' && is_writeable('./'.$conf_name)) ? true : false;
+if ($htaccess)
+{
+	$htdata = file_get_contents('.htaccess');
+	$htparts = explode("\n### COTONTI URLTRANS ###\n", $htdata);
+	if (count($htparts) == 4)
+	{
+		$t->assign('ADMIN_URLS_CUSTOM_HTACCESS', $htparts[2]);
+	}
+}
 
 // Error and message reporting
 cot_display_messages($t);

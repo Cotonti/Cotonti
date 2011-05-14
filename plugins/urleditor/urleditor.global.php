@@ -10,7 +10,7 @@ Hooks=global
  * transformation rules
  *
  * @package urleditor
- * @version 0.7.0
+ * @version 0.9.2
  * @author Trustmaster
  * @copyright Copyright (c) Cotonti Team 2010-2011
  * @license BSD
@@ -21,23 +21,31 @@ defined('COT_CODE') or die('Wrong URL');
 if (!is_array($cot_urltrans))
 {
 	$cot_urltrans = array();
-	$fp = fopen('./datas/urltrans.dat', 'r');
-	while ($line = trim(fgets($fp), " \t\r\n"))
+	if (file_exists('./datas/urltrans.dat'))
 	{
-		$parts = explode("\t", $line);
-		$rule = array();
-		$rule['trans'] = $parts[2];
-		$parts[1] == '*' ? $rule['params'] = array() : parse_str($parts[1], $rule['params']);
-		foreach($rule['params'] as $key => $val)
+		$fp = fopen('./datas/urltrans.dat', 'r');
+		while ($line = trim(fgets($fp), " \t\r\n"))
 		{
-			if (mb_strpos($val, '|') !== false)
+			$parts = explode("\t", $line);
+			$rule = array();
+			$rule['trans'] = $parts[2];
+			$parts[1] == '*' ? $rule['params'] = array() : parse_str($parts[1], $rule['params']);
+			foreach($rule['params'] as $key => $val)
 			{
-				$rule['params'][$key] = explode('|', $val);
+				if (mb_strpos($val, '|') !== false)
+				{
+					$rule['params'][$key] = explode('|', $val);
+				}
 			}
+			$cot_urltrans[$parts[0]][] = $rule;
 		}
-		$cot_urltrans[$parts[0]][] = $rule;
+		fclose($fp);
 	}
-	fclose($fp);
+	// Fallback rule for standard PHP URLs
+	$cot_urltrans['*'][] = array(
+		'params' => array(),
+		'trans' => '{$_area}.php'
+	);
 	$cache && $cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
 }
 
