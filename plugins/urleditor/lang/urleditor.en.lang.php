@@ -13,7 +13,8 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['adm_urls'] = 'URLs';
 $L['adm_urls_area'] = 'Area';
-$L['adm_urls_error_dat'] = 'Error: datas/urltrans.dat is not writable!';
+$L['adm_urls_custom_htaccess'] = 'Custom .htaccess rules';
+$L['adm_urls_error_dat'] = 'Error: datas/urltrans.dat is not writable! Please create it and set CHMOD 666.';
 $L['adm_urls_format'] = 'Format';
 $L['adm_urls_htaccess'] = 'Overwrite .htaccess?';
 $L['adm_urls_new'] = 'New Rule';

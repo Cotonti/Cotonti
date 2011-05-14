@@ -13,7 +13,8 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['adm_urls'] = 'Ссылки';
 $L['adm_urls_area'] = 'Модуль';
-$L['adm_urls_error_dat'] = 'Ошибка: datas/urltrans.dat недоступен для записи!';
+$L['adm_urls_custom_htaccess'] = 'Дополнительные правила .htaccess';
+$L['adm_urls_error_dat'] = 'Ошибка: datas/urltrans.dat недоступен для записи! Создайте его и установите CHMOD 666.';
 $L['adm_urls_format'] = 'Формат';
 $L['adm_urls_htaccess'] = 'Перезаписать .htaccess?';
 $L['adm_urls_new'] = 'Новое правило';

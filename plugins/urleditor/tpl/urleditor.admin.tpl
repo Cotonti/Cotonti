@@ -5,7 +5,7 @@
 		<h3>{PHP.L.adm_urls_your} {ADMIN_URLS_CONF_NAME}</h3>
 		<pre class="code">{ADMIN_URLS_HTA}</pre>
 <!-- END: HTA -->
-	<script type="text/javascript" src="js/jquery.tablednd.js"></script>
+	<script type="text/javascript" src="js/jquery.tablednd.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$("#rules").tableDnD({});
@@ -57,11 +57,21 @@
 					<a href="#" onclick="return addRule()"><strong>{PHP.L.adm_urls_new}</strong></a>
 				</td>
 			</tr>
+			<!-- IF {PHP.htaccess} -->
+			<tr>
+				<td>
+					<input type="checkbox" name="htaccess" /> <strong>{PHP.L.adm_urls_htaccess}</strong><br />
+				</td>
+				<td>
+					{PHP.L.adm_urls_custom_htaccess}:
+				</td>
+				<td colspan="2">
+					<textarea name="custom_htaccess" rows="8" cols="80">{ADMIN_URLS_CUSTOM_HTACCESS}</textarea>
+				</td>
+			</tr>
+			<!-- ENDIF -->
 			<tr>
 				<td class="valid" colspan="4">
-<!-- IF {PHP.htaccess} -->
-					<input type="checkbox" name="htaccess" /> {PHP.L.adm_urls_htaccess}<br />
-<!-- ENDIF -->
 					<input type="submit" value="{PHP.L.adm_urls_save}" />
 				</td>
 			</tr>
