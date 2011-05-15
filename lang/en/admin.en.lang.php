@@ -177,6 +177,8 @@ $L['cfg_subtitle'] = array('Description', 'Optional, will be displayed after the
 $L['cfg_title_header'] = array('Header title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 $L['cfg_title_header_index'] = array('Header Index title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 $L['cfg_title_users_details'] = array('Users Details title', 'Options: {USER}, {NAME}');
+$L['cfg_subject_mail'] = array('Email subject', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}');
+$L['cfg_body_mail'] = array('Email title', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {SITE_URL}, {ADMIN_EMAIL}, {MAIL_BODY}, {MAIL_SUBJECT}');
 
 /**
  * Config Section

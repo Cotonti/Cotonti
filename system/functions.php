@@ -522,16 +522,17 @@ function cot_import_pagenav($var_name, $max_items = 0)
  * @param string $subject Subject
  * @param string $body Message body
  * @param string $headers Message headers
+ * @param bool $customtemplate Use custom template
  * @param string $additional_parameters Additional parameters passed to sendmail
  * @return bool
  */
-function cot_mail($fmail, $subject, $body, $headers='', $additional_parameters = null)
+function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false, $additional_parameters = null)
 {
 	global $cfg, $cot_mail_senders;
 
 	if (function_exists('cot_mail_custom'))
 	{
-		return cot_mail_custom($fmail, $subject, $body, $headers, $additional_parameters);
+		return cot_mail_custom($fmail, $subject, $body, $headers, $customtemplate, $additional_parameters);
 	}
 
 	if (is_array($cot_mail_senders) && count($cot_mail_senders) > 0)
@@ -557,7 +558,29 @@ function cot_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
 		$headers .= "Content-Type: text/plain; charset=UTF-8\n";
 		$headers .= "Content-Transfer-Encoding: 8bit\n";
+
+		if (!$customtemplate)
+		{
+			$body_params = array(
+			'SITE_TITLE' => $cfg['maintitle'],
+			'SITE_URL' => $cfg['mainurl'],	
+			'SITE_DESCRIPTION' => $cfg['subtitle'],
+			'ADMIN_EMAIL' => $cfg['adminemail'],
+			'MAIL_SUBJECT' => $subject,	
+			'MAIL_BODY' => $body
+			);
+			
+			$subject_params = array(
+			'SITE_TITLE' => $cfg['maintitle'],
+			'SITE_DESCRIPTION' => $cfg['subtitle'],
+			'MAIL_SUBJECT' => $subject
+			);
+			
+			$subject = cot_title($cfg['subject_mail'], $subject_params);
+			$body = cot_title($cfg['subject_mail'], $body_params);
+		}		
 		$subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\n");
+
 		if (ini_get('safe_mode'))
 		{
 			mail($fmail, $subject, $body, $headers);

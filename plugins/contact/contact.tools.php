@@ -42,7 +42,7 @@ elseif ($a == 'unval')
 elseif ($a == 'send' && $rtext != '')
 {
     $row = $db->query("SELECT contact_email FROM $db_contact WHERE contact_id = $id")->fetch();
-    cot_mail($row['contact_email'], $cfg['maintitle'] . ' - ' . $cfg['mainurl'], $rtext);
+    cot_mail($row['contact_email'], $cfg['mainurl'], $rtext);
 	$db->update($db_contact, array('contact_reply' => $rtext), "contact_id = $id");
 	cot_message('Done');
 }

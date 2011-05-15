@@ -92,7 +92,7 @@ if ($m == 'edit' && $id > 0)
 			{
 				$sql2 = $db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
 
-				$email_title = $L['plu_comlive'].$cfg['main_url'];
+				$email_title = $L['plu_comlive'];
 				$email_body  = $L['User']." ".$usr['name'].", ".$L['plu_comlive3'];
 				$email_body .= $url . $sep . 'comments=1#c' . $id . "\n\n";
 
@@ -200,7 +200,7 @@ if ($a == 'send' && $usr['auth_write'])
 		if ($cfg['plugin']['comments']['mail'])
 		{
 			$sql = $db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
-			$email_title = $L['plu_comlive'] . $cfg['main_url'];
+			$email_title = $L['plu_comlive'];
 			$email_body  = $L['User'] .' ' . $usr['name'] . ', ' . $L['plu_comlive2'];
 			$sep = (mb_strpos($url, '?') !== false) ? '&' : '?';
 			$email_body .= $url . $sep . 'comments=1#c' . $id . "\n\n";

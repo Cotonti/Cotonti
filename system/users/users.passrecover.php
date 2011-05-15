@@ -44,7 +44,7 @@ if ($a == 'request' && $email != '')
 
 		$rinfo = sprintf($L['pasrec_email1b'], $usr['ip'], cot_date('datetime_medium'));
 
-		$rsubject = $cfg['maintitle']." - ".$L['pasrec_title'];
+		$rsubject = $L['pasrec_title'];
 		$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=passrecover&a=auth&v='.$validationkey, '', true);
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['pasrec_email1']."\n\n".$ractivate."\n\n".$rinfo."\n\n ".$L['aut_contactadmin'];
 		cot_mail($email, $rsubject, $rbody);
@@ -91,7 +91,7 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 		$newpass = cot_randompass();
 		$sql = $db->update($db_users, array('user_password' => md5($newpass), 'user_lostpass' => $validationkey), "user_id=$ruserid");
 
-		$rsubject = $cfg['maintitle']." - ".$L['pasrec_title'];
+		$rsubject = $L['pasrec_title'];
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['pasrec_email2']."\n\n".$newpass."\n\n".$L['aut_contactadmin'];
 		cot_mail($rusermail, $rsubject, $rbody);
 
