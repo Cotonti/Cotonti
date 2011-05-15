@@ -206,7 +206,7 @@ if ($a=='update')
 
 		if ($ruser['user_maingrp'] == COT_GROUP_MEMBERS && $urr['user_maingrp'] == COT_GROUP_INACTIVE)
 		{
-			$rsubject = $cfg['maintitle']." - ".$L['useed_accountactivated'];
+			$rsubject = $L['useed_accountactivated'];
 			$rbody = $L['Hi']." ".$urr['user_name'].",\n\n";
 			$rbody .= $L['useed_email'];
 			$rbody .= $L['auth_contactadmin'];

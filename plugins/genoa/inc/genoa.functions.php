@@ -768,7 +768,7 @@ function sed_log_sed_import($s, $e, $v, $o)
 
 function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters = null)
 {
-	return cot_mail($fmail, $subject, $body, $headers, $additional_parameters);
+	return cot_mail($fmail, $subject, $body, $headers, true, $additional_parameters);
 }
 
 function sed_htmlmetas()

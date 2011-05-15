@@ -36,7 +36,7 @@ function cot_send_translated_mail($rlang, $remail, $rusername)
 		global $L;
 	}
 
-	$rsubject = "{$cfg['maintitle']} - {$L['pm_notifytitle']}";
+	$rsubject = $L['pm_notifytitle'];
 	$rbody = sprintf($L['pm_notify'], $rusername, htmlspecialchars($usr['name']), $cfg['mainurl'] . '/' . cot_url('pm', '', '', true));
 
 	cot_mail($remail, $rsubject, $rbody);

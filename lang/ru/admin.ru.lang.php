@@ -178,7 +178,8 @@ $L['cfg_subtitle'] = array('Описание сайта', 'Необязател�
 $L['cfg_title_header'] = array('Основной заголовок', 'Опции: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 $L['cfg_title_header_index'] = array('Заголовок главной страницы', 'Опции: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 $L['cfg_title_users_details'] = array('Пользователи - просмотр профиля', 'Опции: {USER}, {NAME}');
-
+$L['cfg_subject_mail'] = array('Заголовок email', 'Опции: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}');
+$L['cfg_body_mail'] = array('Текст email', 'Опции: {SITE_TITLE}, {SITE_DESCRIPTION}, {SITE_URL}, {ADMIN_EMAIL}, {MAIL_BODY}, {MAIL_SUBJECT}');
 /**
  * Config Section
  * Users Subsection

@@ -106,7 +106,7 @@ if($a == 'update')
 				$validationkey = md5(microtime());
 				$db->update($db_users, array('user_lostpass' => $validationkey, 'user_maingrp' => '-1', 'user_sid' => $urr['user_maingrp']), "user_id='".$usr['id']."'");
 
-				$rsubject = $cfg['maintitle']." - ".$L['aut_mailnoticetitle'];
+				$rsubject = $L['aut_mailnoticetitle'];
 				$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
 				$rbody = sprintf($L['aut_emailchange'], $usr['name'], $ractivate);
 				$rbody .= "\n\n".$L['aut_contactadmin'];
