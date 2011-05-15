@@ -555,7 +555,6 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
 		$headers = (empty($headers)) ? "From: \"".$sitemaintitle."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
 		$headers .= "Message-ID: <".md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'].">\n";
 
-		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
 		$headers .= "Content-Type: text/plain; charset=UTF-8\n";
 		$headers .= "Content-Transfer-Encoding: 8bit\n";
 
