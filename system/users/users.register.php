@@ -126,12 +126,12 @@ if ($a=='add')
 
 		if ($cfg['regrequireadmin'])
 		{
-			$rsubject = $cfg['maintitle']." - ".$L['aut_regrequesttitle'];
+			$rsubject = $L['aut_regrequesttitle'];
 			$rbody = sprintf($L['aut_regrequest'], $ruser['user_name'], $rpassword1);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
 			cot_mail ($ruser['user_email'], $rsubject, $rbody);
 
-			$rsubject = $cfg['maintitle']." - ".$L['aut_regreqnoticetitle'];
+			$rsubject = $L['aut_regreqnoticetitle'];
 			$rinactive = $cfg['mainurl'].'/'.cot_url('users', 'gm=2&s=regdate&w=desc', '', true);
 			$rbody = sprintf($L['aut_regreqnotice'], $ruser['user_name'], $rinactive);
 			cot_mail ($cfg['adminemail'], $rsubject, $rbody);
@@ -139,7 +139,7 @@ if ($a=='add')
 		}
 		else
 		{
-			$rsubject = $cfg['maintitle']." - ".$L['Registration'];
+			$rsubject = $L['Registration'];
 			$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['user_lostpass'].'&y=1', '', true);
 			$rdeactivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['user_lostpass'].'&y=0', '', true);
 			$rbody = sprintf($L['aut_emailreg'], $ruser['user_name'], $rpassword1, $ractivate, $rdeactivate);
