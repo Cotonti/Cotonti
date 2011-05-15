@@ -225,7 +225,7 @@ $title_params = array(
 	'PM' => $L['Private_Messages'],
 	'SEND_NEW' => $L['pm_sendnew']
 );
-$out['subtitle'] = cot_title('title_pm_send', $title_params);
+$out['subtitle'] = cot_title('{SEND_NEW} - {PM}', $title_params);
 $out['head'] .= $R['code_noindex'];
 
 /* === Hook === */
