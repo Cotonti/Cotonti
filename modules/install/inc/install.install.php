@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			}
 			catch (PDOException $e)
 			{
-				if ($e->getCode() == 1049)
+				if ($e->getCode() == 1049 || mb_strpos($e->getMessage(), '[1049]') !== false)
 				{
 					// Attempt to create a new database
 					try
