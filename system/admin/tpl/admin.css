@@ -163,6 +163,8 @@ form							{ }
 input, select, textarea, button	{ font:normal 1em Georgia; }
 input, select, button			{ padding:2px; }
 
+#saveconfig input[type=text], #saveconfig textarea { width:98%; }
+
 /* 9. Pagination
 -------------------------------------------------- */
 
