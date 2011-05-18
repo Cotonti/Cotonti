@@ -399,6 +399,7 @@ require_once cot_langfile('main', 'core');
 /* ======== Category Structure ======== */
 if (!$structure)
 {
+	require_once cot_incfile('extrafields');
 	cot_load_structure();
 	$cache && $cache->db->store('structure', $structure, 'system');
 }

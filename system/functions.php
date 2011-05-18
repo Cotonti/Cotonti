@@ -955,7 +955,7 @@ function cot_load_structure()
 		{
 			foreach ($cot_extrafields['structure'] as $row_c)
 			{
-				$structure[$row['structure_area']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
+				$structure[$row['structure_area']][$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
 			}
 		}
 
