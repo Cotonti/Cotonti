@@ -19,6 +19,12 @@
 				</td>
 			</tr>
 			<tr>
+				<td class="centerall">{PHP.R.icon_prefs}</td>
+				<td>
+					<a href="{ADMIN_OTHER_URL_EXFLDS}">{PHP.L.adm_extrafields}</a>
+				</td>
+			</tr>			
+			<tr>
 				<td class="centerall">{PHP.R.icon_page}</td>
 				<td>
 					<a href="{ADMIN_OTHER_URL_LOG}">{PHP.L.adm_log}</a>

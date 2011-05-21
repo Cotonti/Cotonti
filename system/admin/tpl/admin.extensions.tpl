@@ -258,9 +258,6 @@
 <!-- IF {PHP.ifstruct} -->
 					<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}">{PHP.R.admin_icon_structure}</a>
 <!-- ENDIF -->
-<!-- IF {PHP.ifexflds} -->
-					<a title="{PHP.L.adm_extrafields}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_EXFLD}">{PHP.R.admin_icon_links}</a>
-<!-- ENDIF -->
 				</td>
 			</tr>
 <!-- END: ROW -->

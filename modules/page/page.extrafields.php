@@ -17,14 +17,7 @@ Hooks=admin.extrafields.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($n == 'page')
-{
-	require_once cot_incfile('page', 'module');
-	$adminpath[] = array(cot_url('admin', 'm=page'), $L['Page']);
-	$adminpath[] = array(cot_url('admin', 'm=extrafields&n=page'), $L['adm_extrafields']);
-	$adminhelp = $L['adm_help_pages_extrafield'];
-	$extra_path = 'm=extrafields&n=page';
-	$location = $db_pages;
-}
+require_once cot_incfile('page', 'module');
+$extra_whitelist[$db_pages] = array('name' => $db_pages, 'caption' => $L['Page'], 'help' => $L['adm_help_pages_extrafield']);
 
 ?>

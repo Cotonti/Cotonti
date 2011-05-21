@@ -501,15 +501,6 @@ switch($a)
 			}
 			$sql3->closeCursor();
 
-			$extraflds = array();
-			$sql3 = $db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='admin.extrafields.first'");
-			while ($row3 = $sql3->fetch())
-			{
-				$extraflds[$row3['pl_code']] = TRUE;
-			}
-
-			$sql3->closeCursor();
-
 			$struct = array();
 			$sql3 = $db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='admin.structure.first'");
 			while ($row3 = $sql3->fetch())
@@ -578,7 +569,6 @@ switch($a)
 						$ent_code = $cfgentries[$x];
 						$if_plg_standalone = $type == 'plug' ? $standalone[$x] : cot_module_installed($x);
 						$ifstruct = $struct[$x];
-						$ifexflds = $extraflds[$x];
 
 						if ($type == 'module')
 						{
@@ -605,7 +595,6 @@ switch($a)
 							'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? cot_url('admin', "m=other&p=$x")
 								: cot_url('admin', "m=$x"),
 							'ADMIN_EXTENSIONS_JUMPTO_URL' => $jump_url,
-							'ADMIN_EXTENSIONS_JUMPTO_URL_EXFLD' => cot_url('admin', "m=extrafields&n=$x"),
 							'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => cot_url('admin', "m=structure&n=$x"),
 							'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i)
 						));

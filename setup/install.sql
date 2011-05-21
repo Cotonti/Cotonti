@@ -210,8 +210,6 @@ CREATE TABLE `cot_groups_users` (
   `gru_userid` int NOT NULL default '0',
   `gru_groupid` int NOT NULL default '0',
   `gru_state` tinyint NOT NULL default '0',
-  `gru_extra1` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `gru_extra2` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   UNIQUE KEY `gru_groupid` (`gru_groupid`,`gru_userid`),
   KEY `gru_userid` (`gru_userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

@@ -217,7 +217,7 @@ if(!isset($showdefault) || $showdefault == true)
 
 $t->assign(array(
 	'ADMIN_USERS_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=users'),
-	'ADMIN_USERS_EXTRAFIELDS_URL' => cot_url('admin', 'm=extrafields&n=users')
+	'ADMIN_USERS_EXTRAFIELDS_URL' => cot_url('admin', 'm=extrafields&n='.$db_users)
 ));
 
 

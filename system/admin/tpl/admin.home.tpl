@@ -68,7 +68,7 @@
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=lang">{PHP.L.home_ql_b1_5}</a></li>
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=time">{PHP.L.home_ql_b1_6}</a></li>
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=parser">{PHP.L.home_ql_b2_4}</a></li>
-					<li><a href="admin.php?m=extrafields&amp;n=structure">{PHP.L.home_ql_b2_3}</a></li>
+					<li><a href="admin.php?m=extrafields">{PHP.L.adm_extrafields}</a></li>
 				</ul>
 			</div>
 <!-- IF {PHP.cfg.page} -->			
@@ -76,7 +76,7 @@
 				<h3>{PHP.L.Pages}</h3>
 				<ul class="follow">
 					<li><a href="page.php?m=add">{PHP.L.Add}</a></li>
-					<li><a href="admin.php?m=extrafields&amp;n=page">{PHP.L.home_ql_b2_2}</a></li>
+					<li><a href="admin.php?m=extrafields&amp;n={PHP.db_pages}">{PHP.L.home_ql_b2_2}</a></li>
 				</ul>
 			</div>
 <!-- ENDIF -->
@@ -84,7 +84,7 @@
 				<h3>{PHP.L.Users}</h3>
 				<ul class="follow">
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=users">{PHP.L.home_ql_b3_1}</a></li>
-					<li><a href="admin.php?m=extrafields&amp;n=users">{PHP.L.home_ql_b3_2}</a></li>
+					<li><a href="admin.php?m=extrafields&amp;n={PHP.db_users}">{PHP.L.home_ql_b3_2}</a></li>
 					<li><a href="admin.php?m=users">{PHP.L.home_ql_b3_4}</a></li>
 				</ul>
 			</div>

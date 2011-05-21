@@ -256,6 +256,8 @@ $L['adm_help_structure'] = 'The pages that belong to the category &quot;system&q
  */
 
 $L['adm_extrafields_desc'] = 'Add/Edit extra fields';
+$L['adm_extrafields_all'] = 'Show all database tables';
+
 $L['adm_help_structure_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank<br /><br />
 <b>New tags in tpl files:</b><br /><br />
 <u>list.tpl:</u><br /><br />
