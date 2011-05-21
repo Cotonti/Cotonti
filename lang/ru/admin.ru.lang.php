@@ -423,6 +423,8 @@ $L['adm_extrafield_confirmupd'] = 'Вы действительно хотите 
 $L['adm_extrafield_default'] = 'Значение по умолчанию';
 $L['adm_extrafield_required'] = 'Обязательное';
 $L['adm_extrafield_parse'] = 'Парсинг';
+$L['adm_extrafield_enable'] = 'Включить';
+$L['adm_extrafield_params'] = 'Параметры поля';
 
 $L['extf_Name'] = 'Название поля';
 $L['extf_Type'] = 'Тип поля';

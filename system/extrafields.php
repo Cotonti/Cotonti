@@ -338,11 +338,13 @@ function cot_default_html_construction($type)
  * @param bool $required Required field
  * @param string $parse Parsing Type (HTML, BBCodes)
  * @param string $description Description of field (optional, for admin)
+ * @param string $params Params (for radiobuttons, selectors etc)
+ * @param string $enabled Enable field
  * @param bool $noalter Do not ALTER the table, just register the extra field
  * @return bool
  *
  */
-function cot_extrafield_add($location, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="", $noalter = false)
+function cot_extrafield_add($location, $name, $type, $html, $variants='', $default='', $required=0, $parse='HTML', $description='', $params = '', $enabled = 1, $noalter = false)
 {
 	global $db, $db_extra_fields;
 	if ($db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
@@ -369,9 +371,11 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 	$extf['field_type'] = $type;
 	$extf['field_html'] = $html;
 	$extf['field_variants'] = is_null($variants) ? '' : $variants;
+	$extf['field_params'] = is_null($params) ? '' : $params;
 	$extf['field_default'] = is_null($default) ? '' : $default;
 	$extf['field_required'] = ($required > 0) ? 1 : 0;
 	$extf['field_parse'] = is_null($parse) ? 'HTML' : $parse;
+	$extf['field_enabled'] = ($enabled > 0) ? 1 : 0;
 	$extf['field_description'] = is_null($description) ? '' : $description;
 
 	$step1 = $db->insert($db_extra_fields, $extf) == 1;
@@ -425,10 +429,12 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
  * @param string $html HTML Resource string
  * @param string $variants Variants of values (for radiobuttons, selectors etc)
  * @param string $description Description of field (optional, for admin)
+ * @param string $params Params (for radiobuttons, selectors etc)
+ * @param string $enabled Enable field
  * @return bool
  *
  */
-function cot_extrafield_update($location, $oldname, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="")
+function cot_extrafield_update($location, $oldname, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="", $params = "", $enabled = 1)
 {
 	global $db, $db_extra_fields;
 	$fieldsres = $db->query("SELECT * FROM $db_extra_fields WHERE field_name = '$oldname' AND field_location='$location'");
@@ -459,10 +465,12 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 	$extf['field_html'] = $html;
 	$extf['field_parse'] = is_null($parse) ? 'HTML' : $parse;
 	$extf['field_variants'] = is_null($variants) ? '' : $variants;
+	$extf['field_params'] = is_null($params) ? '' : $params;
 	$extf['field_default'] = is_null($default) ? '' : $default;
 	$extf['field_required'] = ($required > 0) ? 1 : 0;
 	$extf['field_description'] = is_null($description) ? '' : $description;
-
+	$extf['field_enabled'] = ($enabled > 0) ? 1 : 0;
+	
 	$step1 = $db->update($db_extra_fields, $extf, "field_name = '$oldname' AND field_location='$location'") == 1;
 
 	if (!$alter)
@@ -596,7 +604,7 @@ function cot_load_extrafields()
 	if (!isset($cot_extrafields))
 	{
 		$cot_extrafields = array();
-		$fieldsres = $db->query("SELECT * FROM $db_extra_fields WHERE 1 ORDER BY field_type ASC");
+		$fieldsres = $db->query("SELECT * FROM $db_extra_fields WHERE field_enabled=1 ORDER BY field_type ASC");
 		while ($row = $fieldsres->fetch())
 		{
 			$cot_extrafields[$row['field_location']][$row['field_name']] = $row;
@@ -610,5 +618,5 @@ function cot_load_extrafields()
 /* ======== Extrafields Pre-load ======== */
 
 cot_load_extrafields();
-$cot_extrafields['structure'] = (!empty($cot_extrafields[$db_structure])) ? $cot_extrafields[$db_structure] : array();
+$cot_extrafields[$db_structure] = (!empty($cot_extrafields[$db_structure])) ? $cot_extrafields[$db_structure] : array();
 ?>

@@ -47,7 +47,7 @@ if ($a == 'update')
 	$rstructureicon = cot_import('rstructureicon', 'P', 'ARR');
 	$rstructurelocked = cot_import('rstructurelocked', 'P', 'ARR');
 
-	foreach ($cot_extrafields['structure'] as $row)
+	foreach ($cot_extrafields[$db_structure] as $row)
 	{
 		if ($row['field_type'] != 'file' || $row['field_type'] != 'filesize')
 		{
@@ -73,7 +73,7 @@ if ($a == 'update')
 		$rstructure['structure_icon'] = cot_import($rstructureicon[$i], 'D', 'TXT');
 		$rstructure['structure_locked'] = (cot_import($rstructurelocked[$i], 'D', 'BOL')) ? 1 : 0;
 
-		foreach ($cot_extrafields['structure'] as $row)
+		foreach ($cot_extrafields[$db_structure] as $row)
 		{
 			$rstructure['structure_'.$row['field_name']] = cot_import_extrafields($rstructureextrafieldsarr[$row['field_name']][$i], $row, 'D', $oldrow['structure_'.$row['field_name']]);
 		}
@@ -142,7 +142,7 @@ elseif ($a == 'add')
 	$rstructure['structure_locked'] = (cot_import('rstructurelocked', 'P', 'BOL')) ? 1 : 0;
 	$rstructure['structure_area'] = $n;
 
-	foreach ($cot_extrafields['structure'] as $row)
+	foreach ($cot_extrafields[$db_structure] as $row)
 	{
 		$rstructure['structure_'.$row['field_name']] = cot_import_extrafields('rstructure'.$row['field_name'], $row);
 	}
@@ -332,7 +332,7 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_STRUCTURE_ODDEVEN' => cot_build_oddeven($ii)
 	));
 
-	foreach($cot_extrafields['structure'] as $i => $row2)
+	foreach($cot_extrafields[$db_structure] as $i => $row2)
 	{
 		$t->assign('ADMIN_STRUCTURE_'.strtoupper($row2['field_name']).'_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
 		$t->assign('ADMIN_STRUCTURE_'.strtoupper($row2['field_name']), cot_build_extrafields('rstructure'.$row2['field_name'].'['.$structure_id.']', $row2, $row['structure_'.$row2['field_name']]));
@@ -376,7 +376,7 @@ if (!$id)
 	));
 
 	// Extra fields
-	foreach($cot_extrafields['structure'] as $i => $row2)
+	foreach($cot_extrafields[$db_structure] as $i => $row2)
 	{
 		$t->assign('ADMIN_STRUCTURE_'.strtoupper($row2['field_name']), cot_build_extrafields('rstructure'.$row2['field_name'],  $row2, ''));
 		$t->assign('ADMIN_STRUCTURE_'.strtoupper($row2['field_name']).'_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);

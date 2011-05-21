@@ -18,17 +18,23 @@
 	<form action="{ADMIN_EXTRAFIELDS_URL_FORM_EDIT}" method="post">
 		<table class="cells">
 			<tr>
+				<td class="coltop"></td>
 				<td class="coltop">{PHP.L.extf_Name}</td>
 				<td class="coltop">{PHP.L.extf_Type}</td>
-				<td class="coltop">{PHP.L.extf_Base_HTML}</td>
-				<td class="coltop">{PHP.L.Action}</td>
+				<td class="coltop">{PHP.L.adm_extrafield_params}</td>
+				<td class="coltop"></td>
 			</tr>
-			<!-- BEGIN: EXTRAFIELDS_ROW -->			
-			<tr>
+			<!-- BEGIN: EXTRAFIELDS_ROW -->	
+			<tr id="ex{ADMIN_EXTRAFIELDS_ROW_ID}">
+				<td>
+					{ADMIN_EXTRAFIELDS_ROW_ENABLED}
+				</td>
 				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
 						{ADMIN_EXTRAFIELDS_ROW_NAME}
 					<p class="small">{PHP.L.extf_Description}</p>
 						{ADMIN_EXTRAFIELDS_ROW_DESCRIPTION}
+					<p class="small">{PHP.L.extf_Base_HTML}</p>
+						{ADMIN_EXTRAFIELDS_ROW_HTML}
 				</td>
 				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
 						{ADMIN_EXTRAFIELDS_ROW_SELECT}
@@ -38,9 +44,9 @@
 
 				</td>
 				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
-						{ADMIN_EXTRAFIELDS_ROW_HTML}
+					{ADMIN_EXTRAFIELDS_ROW_PARAMS}
 					<p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
-						{ADMIN_EXTRAFIELDS_ROW_VARIANTS}
+						{ADMIN_EXTRAFIELDS_ROW_VARIANTS}						
 					<p class="small">{PHP.L.adm_extrafield_default}</p>
 						{ADMIN_EXTRAFIELDS_ROW_DEFAULT}
 				</td>
@@ -65,15 +71,17 @@
 	<form action="{ADMIN_EXTRAFIELDS_URL_FORM_ADD}" method="post">
 		<table class="cells">
 			<tr>
-				<td class="coltop width40">{PHP.L.extf_Name}</td>
+				<td class="coltop width30">{PHP.L.extf_Name}</td>
 				<td class="coltop width20">{PHP.L.extf_Type}</td>
-				<td class="coltop width40">{PHP.L.extf_Base_HTML}</td>
+				<td class="coltop width40">{PHP.L.adm_extrafield_params}</td>
 			</tr>
-			<tr>
+			<tr id="exnew">
 				<td>
-							{ADMIN_EXTRAFIELDS_NAME}
+					{ADMIN_EXTRAFIELDS_NAME}
 					<p class="small">{PHP.L.extf_Description}</p>
 							{ADMIN_EXTRAFIELDS_DESCRIPTION}
+					<p class="small">{PHP.L.extf_Base_HTML}</p>
+						{ADMIN_EXTRAFIELDS_HTML}	
 				</td>
 				<td>
 							{ADMIN_EXTRAFIELDS_SELECT}
@@ -82,9 +90,9 @@
 					<p class="small">{ADMIN_EXTRAFIELDS_REQUIRED}{PHP.L.adm_extrafield_required}</p>
 				</td>
 				<td>
-							{ADMIN_EXTRAFIELDS_HTML}
+							{ADMIN_EXTRAFIELDS_PARAMS}
 					<p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
-							{ADMIN_EXTRAFIELDS_VARIANTS}
+							{ADMIN_EXTRAFIELDS_VARIANTS}					
 					<p class="small">{PHP.L.adm_extrafield_default}</p>
 						{ADMIN_EXTRAFIELDS_DEFAULT}
 				</td>

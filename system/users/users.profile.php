@@ -55,7 +55,7 @@ if($a == 'update')
 	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','BOL');
 	
 	// Extra fields
-	foreach($cot_extrafields['users'] as $row)
+	foreach($cot_extrafields[$db_users] as $row)
 	{
 		$ruser['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row, 'P', $urr['user_'.$row['field_name']]);
 	}
@@ -216,7 +216,7 @@ $t->assign(array(
 ));
 
 // Extra fields
-foreach($cot_extrafields['users'] as $i => $row)
+foreach($cot_extrafields[$db_users] as $i => $row)
 {
 	$t->assign('USERS_PROFILE_'.strtoupper($row['field_name']), cot_build_extrafields('ruser'.$row['field_name'], $row, $urr['user_'.$row['field_name']]));
 	$t->assign('USERS_PROFILE_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);

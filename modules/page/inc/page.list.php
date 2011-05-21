@@ -181,7 +181,7 @@ if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated')
 }
 
 // Extra fields for structure
-foreach ($cot_extrafields['structure'] as $row_c)
+foreach ($cot_extrafields[$db_structure] as $row_c)
 {
 	$uname = strtoupper($row_c['field_name']);
 	$t->assign(array(
@@ -192,7 +192,7 @@ foreach ($cot_extrafields['structure'] as $row_c)
 }
 
 $arrows = array();
-foreach ($cot_extrafields['pages'] + array('title' => 'title', 'key' => 'key', 'date' => 'date', 'author' => 'author', 'owner' => 'owner', 'count' => 'count', 'filecount' => 'filecount') as $row_k => $row_p)
+foreach ($cot_extrafields[$db_pages] + array('title' => 'title', 'key' => 'key', 'date' => 'date', 'author' => 'author', 'owner' => 'owner', 'count' => 'count', 'filecount' => 'filecount') as $row_k => $row_p)
 {
 	$uname = strtoupper($row_k);
 	$url_asc = cot_url('page',  array('s' => $row_k, 'w' => 'asc') + $list_url_path);
@@ -253,7 +253,7 @@ foreach ($subcat as $x)
 	));
 
 	// Extra fields for structure
-	foreach ($cot_extrafields['structure'] as $row_c)
+	foreach ($cot_extrafields[$db_structure] as $row_c)
 	{
 		$uname = strtoupper($row_c['field_name']);
 		$t->assign('LIST_ROWCAT_'.$uname.'_TITLE', isset($L['structure_'.$row_c['field_name'].'_title']) ?  $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description']);

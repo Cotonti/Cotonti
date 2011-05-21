@@ -951,9 +951,9 @@ function cot_load_structure()
 			'icon' => $row['structure_icon']
 		);
 
-		if (is_array($cot_extrafields['structure']))
+		if (is_array($cot_extrafields[$db_structure]))
 		{
-			foreach ($cot_extrafields['structure'] as $row_c)
+			foreach ($cot_extrafields[$db_structure] as $row_c)
 			{
 				$structure[$row['structure_area']][$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
 			}

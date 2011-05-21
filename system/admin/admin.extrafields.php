@@ -89,11 +89,13 @@ else
 		$field['field_type'] = cot_import('field_type', 'P', 'ALP');
 		$field['field_html'] = cot_import('field_html', 'P', 'NOC');
 		$field['field_variants'] = cot_import('field_variants', 'P', 'HTM');
+		$field['field_params'] = cot_import('field_params', 'P', 'HTM');
 		$field['field_description'] = cot_import('field_description', 'P', 'NOC');
 		$field['field_default'] = cot_import('field_default', 'P', 'HTM');
 		$field['field_required'] = cot_import('field_required', 'P', 'BOL');
 		$field['field_parse'] = cot_import('field_parse', 'P', 'ALP');
 		$field['field_noalter'] = cot_import('field_noalter', 'P', 'BOL');
+		$field['field_enabled'] = 1;
 		if (empty($field['field_html']))
 		{
 			$field['field_html'] = cot_default_html_construction($field['field_type']);
@@ -108,7 +110,7 @@ else
 
 		if (!empty($field['field_name']) && !empty($field['field_type']))
 		{
-			if (cot_extrafield_add($n, $field['field_name'], $field['field_type'], $field['field_html'], $field['field_variants'], $field['field_default'], $field['field_required'], $field['field_parse'], $field['field_description'], $field['field_noalter']))
+			if (cot_extrafield_add($n, $field['field_name'], $field['field_type'], $field['field_html'], $field['field_variants'], $field['field_default'], $field['field_required'], $field['field_parse'], $field['field_description'], $field['field_params'], $field['field_enabled'], $field['field_noalter']))
 			{
 				cot_message('adm_extrafield_added');
 			}
@@ -124,10 +126,12 @@ else
 		$field_type = cot_import('field_type', 'P', 'ARR');
 		$field_html = cot_import('field_html', 'P', 'ARR');
 		$field_variants = cot_import('field_variants', 'P', 'ARR');
+		$field_params = cot_import('field_params', 'P', 'ARR');
 		$field_description = cot_import('field_description', 'P', 'ARR');
 		$field_default = cot_import('field_default', 'P', 'ARR');
 		$field_required = cot_import('field_required', 'P', 'ARR');
 		$field_parse = cot_import('field_parse', 'P', 'ARR');
+		$field_enabled = cot_import('field_enabled', 'P', 'ARR');
 
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('admin.extrafields.update');
@@ -140,10 +144,12 @@ else
 				$field['field_type'] = cot_import($field_type[$k], 'D', 'ALP');
 				$field['field_html'] = cot_import($field_html[$k], 'D', 'NOC');
 				$field['field_variants'] = cot_import($field_variants[$k], 'D', 'HTM');
+				$field['field_params'] = cot_import($field_params[$k], 'D', 'HTM');
 				$field['field_description'] = cot_import($field_description[$k], 'D', 'NOC');
 				$field['field_default'] = cot_import($field_default[$k], 'D', 'HTM');
 				$field['field_required'] = cot_import($field_required[$k], 'D', 'BOL');
 				$field['field_parse'] = cot_import($field_parse[$k], 'D', 'ALP');
+				$field['field_enabled'] = cot_import($field_enabled[$k], 'D', 'BOL');
 				$field['field_location'] = $n;
 
 				if ($field != $cot_extrafields[$n][$field['field_name']] && !empty($field['field_name']) && !empty($field['field_type']))
@@ -160,7 +166,7 @@ else
 					}
 					/* ===== */
 
-					$fieldresult = cot_extrafield_update($n, $k, $field['field_name'], $field['field_type'], $field['field_html'], $field['field_variants'], $field['field_default'], $field['field_required'], $field['field_parse'], $field['field_description']);
+					$fieldresult = cot_extrafield_update($n, $k, $field['field_name'], $field['field_type'], $field['field_html'], $field['field_variants'], $field['field_default'], $field['field_required'], $field['field_parse'], $field['field_description'], $field['field_params'], $field['field_enabled']);
 					if ($fieldresult == 1)
 					{
 						cot_message(sprintf($L['adm_extrafield_updated'], $k));
@@ -212,11 +218,14 @@ else
 			'ADMIN_EXTRAFIELDS_ROW_DESCRIPTION' => cot_textarea('field_description['.$row['field_name'].']', $row['field_description'], 1, 30),
 			'ADMIN_EXTRAFIELDS_ROW_SELECT' => cot_selectbox($row['field_type'], 'field_type['.$row['field_name'].']', $field_types, $field_types, false),
 			'ADMIN_EXTRAFIELDS_ROW_VARIANTS' => cot_textarea('field_variants['.$row['field_name'].']', $row['field_variants'], 1, 60),
+			'ADMIN_EXTRAFIELDS_ROW_PARAMS' => cot_textarea('field_params['.$row['field_name'].']', $row['field_params'], 1, 60),
 			'ADMIN_EXTRAFIELDS_ROW_HTML' => cot_textarea('field_html['.$row['field_name'].']', $row['field_html'], 1, 60),
 			'ADMIN_EXTRAFIELDS_ROW_DEFAULT' => cot_textarea('field_default['.$row['field_name'].']', $row['field_default'], 1, 60),
 			'ADMIN_EXTRAFIELDS_ROW_REQUIRED' => cot_checkbox($row['field_required'], 'field_required['.$row['field_name'].']'),
+			'ADMIN_EXTRAFIELDS_ROW_ENABLED' => cot_checkbox($row['field_enabled'], 'field_enabled['.$row['field_name'].']', '', 'title="'.$L['adm_extrafield_enable'].'"'),
 			'ADMIN_EXTRAFIELDS_ROW_PARSE' => cot_selectbox($row['field_parse'], 'field_parse['.$row['field_name'].']', $parse_type, $parse_type, false),
 			'ADMIN_EXTRAFIELDS_ROW_BIGNAME' => strtoupper($row['field_name']),
+			'ADMIN_EXTRAFIELDS_ROW_ID' => $row['field_name'],
 			'ADMIN_EXTRAFIELDS_ROW_DEL_URL' => cot_url('admin', 'm=extrafields&n='.$n.'&a=del&name='.$row['field_name'])
 		));
 
@@ -237,6 +246,7 @@ else
 		'ADMIN_EXTRAFIELDS_DESCRIPTION' => cot_textarea('field_description', '', 1, 30),
 		'ADMIN_EXTRAFIELDS_SELECT' => cot_selectbox('input', 'field_type', $field_types, $field_types, false),
 		'ADMIN_EXTRAFIELDS_VARIANTS' => cot_textarea('field_variants', '', 1, 60),
+		'ADMIN_EXTRAFIELDS_PARAMS' => cot_textarea('field_params', '', 1, 60),
 		'ADMIN_EXTRAFIELDS_HTML' => cot_textarea('field_html', '', 1, 60),
 		'ADMIN_EXTRAFIELDS_DEFAULT' => cot_textarea('field_default', '', 1, 60),
 		'ADMIN_EXTRAFIELDS_REQUIRED' => cot_checkbox(0, 'field_required'),

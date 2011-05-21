@@ -425,6 +425,8 @@ $L['adm_extrafield_confirmupd'] = 'Really update this extra field? Some data in 
 $L['adm_extrafield_default'] = 'Default value';
 $L['adm_extrafield_required'] = 'Required field';
 $L['adm_extrafield_parse'] = 'Parse';
+$L['adm_extrafield_enable'] = 'Enable field';
+$L['adm_extrafield_params'] = 'Field parameters';
 
 $L['extf_Name'] = 'Name';
 $L['extf_Type'] = 'Type of field';

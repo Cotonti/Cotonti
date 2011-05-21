@@ -63,7 +63,7 @@ if ($a == 'update')
 	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? $rpage['page_begin'] + 31536000 : $rpage['page_expire'];
 
 	// Extra fields
-	foreach ($cot_extrafields['pages'] as $row_extf)
+	foreach ($cot_extrafields[$db_pages] as $row_extf)
 	{
 		$rpage['page_'.$row_extf['field_name']] = cot_import_extrafields('rpage'.$row_extf['field_name'], $row_extf, 'P', $row_page['page_'.$row_extf['field_name']]);
 	}
@@ -97,7 +97,7 @@ if ($a == 'update')
 				$sql_page_delete = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row_page_delete['page_cat']."' ");
 			}
 
-			foreach($cot_extrafields['pages'] as $i => $row_extf) 
+			foreach($cot_extrafields[$db_pages] as $i => $row_extf) 
 			{ 
 				if ($row_extf['field_type']=='file')
 				{
@@ -258,7 +258,7 @@ if ($usr['isadmin'])
 $t->assign($pageedit_array);
 
 // Extra fields
-foreach($cot_extrafields['pages'] as $i => $row_extf)
+foreach($cot_extrafields[$db_pages] as $i => $row_extf)
 {
 	$uname = strtoupper($row_extf['field_name']);
 	$t->assign('PAGEEDIT_FORM_'.$uname, cot_build_extrafields('rpage'.$row_extf['field_name'], $row_extf, $pag['page_'.$row_extf['field_name']]));

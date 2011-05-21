@@ -21,8 +21,7 @@ require_once cot_incfile('extrafields');
 global $cot_extrafields, $db_pages, $db_x;
 $db_pages = (isset($db_pages)) ? $db_pages : $db_x . 'pages';
 
-$cot_extrafields['pages'] = (!empty($cot_extrafields[$db_pages]))
-	? $cot_extrafields[$db_pages] : array();
+$cot_extrafields[$db_pages] = (!empty($cot_extrafields[$db_pages]))	? $cot_extrafields[$db_pages] : array();
 
 $structure['page'] = (is_array($structure['page'])) ? $structure['page'] : array();	
 
@@ -117,7 +116,7 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
  */
 function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = null, $pagepath_home = false, $emptytitle = '', $cacheitem = true)
 {
-	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $db_pages, $usr, $sys, $cot_yesno, $structure;
+	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $db_pages, $usr, $sys, $cot_yesno, $structure, $db_structure;
 	
 	static $extp_first = null, $extp_main = null;
 	static $pag_auth = array(), $pag_cache = array();
@@ -252,7 +251,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			}
 
 			// Extrafields
-			foreach ($cot_extrafields['pages'] as $row)
+			foreach ($cot_extrafields[$db_pages] as $row)
 			{
 				$tag = mb_strtoupper($row['field_name']);
 				$temp_array[$tag.'_TITLE'] = isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
@@ -260,7 +259,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			}
 
 			// Extra fields for structure
-			foreach ($cot_extrafields['structure'] as $row)
+			foreach ($cot_extrafields[$db_structure] as $row)
 			{
 				$tag = mb_strtoupper($row['field_name']);
 				$temp_array['CAT_'.$tag.'_TITLE'] = isset($L['structure_'.$row['field_name'].'_title']) ?  $L['structure_'.$row['field_name'].'_title'] : $row['field_description'];
@@ -296,7 +295,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
  */
 function cot_page_config_order()
 {
-	global $cot_extrafields, $L;
+	global $cot_extrafields, $L, $db_pages;
 
 	$options_sort = array(
 		'id' => $L['Id'],
@@ -316,7 +315,7 @@ function cot_page_config_order()
 		'filecount' => $L['adm_filecount']
 	);
 
-	foreach($cot_extrafields['pages'] as $row)
+	foreach($cot_extrafields[$db_pages] as $row)
 	{
 		$options_sort[$row['field_name']] = isset($L['page_'.$row['field_name'].'_title']) ? $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
 	}

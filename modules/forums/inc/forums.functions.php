@@ -182,7 +182,7 @@ function cot_forums_sectionsetlast($cat, $postcount = '', $topiccount='', $viewc
  */
 function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 {
-	global $cfg, $structure, $cot_extrafields, $usr, $sys, $L;
+	global $cfg, $structure, $cot_extrafields, $usr, $sys, $L, $db_structure;
 
 	$new_elems = ($usr['id'] > 0 && $stat['fs_lt_date'] > $usr['lastvisit'] && $stat['fs_lt_posterid'] != $usr['id']);
 
@@ -238,7 +238,7 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 		);
 	}
 
-	foreach ($cot_extrafields['structure'] as $row_c)
+	foreach ($cot_extrafields[$db_structure] as $row_c)
 	{
 		$uname = strtoupper($row_c['field_name']);
 		$sections[$tag_prefix . $uname . '_TITLE'] = isset($L['structure_' . $row_c['field_name'] . '_title']) ? $L['structure_' . $row_c['field_name'] . '_title'] : $row_c['field_description'];

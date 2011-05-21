@@ -65,7 +65,7 @@ if ($a=='update')
 		$sql = $db->delete($db_users, "user_id=$id");
 		$sql = $db->delete($db_groups_users, "gru_userid=$id");
 
-		foreach($cot_extrafields['users'] as $i => $row_extf) 
+		foreach($cot_extrafields[$db_users] as $i => $row_extf) 
 		{ 
 			if ($row_extf['field_type']=='file')
 			{
@@ -110,7 +110,7 @@ if ($a=='update')
 	$rusernewpass = cot_import('rusernewpass','P','TXT', 16);
 
 	// Extra fields
-	foreach($cot_extrafields['users'] as $row)
+	foreach($cot_extrafields[$db_users] as $row)
 	{
 		$ruser['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row, 'P', $row1['user_'.$row['field_name']]);
 	}
@@ -291,8 +291,8 @@ $t->assign(array(
 ));
 
 // Extra fields
-$extra_array = cot_build_extrafields('user', 'USERS_EDIT', $cot_extrafields['users'], $urr);
-foreach($cot_extrafields['users'] as $i => $row)
+$extra_array = cot_build_extrafields('user', 'USERS_EDIT', $cot_extrafields[$db_users], $urr);
+foreach($cot_extrafields[$db_users] as $i => $row)
 {
 	$t->assign('USERS_EDIT_'.strtoupper($row['field_name']), cot_build_extrafields('ruser'.$row['field_name'],  $row, $urr['user_'.$row['field_name']]));
 	$t->assign('USERS_EDIT_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);

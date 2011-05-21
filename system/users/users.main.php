@@ -235,7 +235,7 @@ foreach ($users_sort_tags as $k => $x)
 }
 
 // Extra fields for users
-foreach($cot_extrafields['users'] as $i => $extrafield)
+foreach($cot_extrafields[$db_users] as $i => $extrafield)
 {
 	$uname = strtoupper($extrafield['field_name']);
 	$fieldtext = isset($L['user_'.$extrafield['field_name'].'_title']) ? $L['user_'.$extrafield['field_name'].'_title']

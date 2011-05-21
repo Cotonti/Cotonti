@@ -61,7 +61,7 @@ if ($a == 'add')
 	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? $rpage['page_begin'] + 31536000 : $rpage['page_expire'];
 		
 	// Extra fields
-	foreach ($cot_extrafields['pages'] as $row)
+	foreach ($cot_extrafields[$db_pages] as $row)
 	{
 		$rpage['page_'.$row['field_name']] = cot_import_extrafields('rpage'.$row['field_name'], $row);
 	}
@@ -196,7 +196,7 @@ $pageadd_array = array(
 $t->assign($pageadd_array);
 
 // Extra fields
-foreach($cot_extrafields['pages'] as $i => $row)
+foreach($cot_extrafields[$db_pages] as $i => $row)
 {
 	$uname = strtoupper($row['field_name']);
 	$t->assign('PAGEADD_FORM_'.$uname, cot_build_extrafields('rpage'.$row['field_name'], $row, $rpage[$row['field_name']]));

@@ -52,7 +52,7 @@ if ($a=='add')
 	$ruser['user_email'] = mb_strtolower($ruser['user_email']);
 
 	// Extra fields
-	foreach($cot_extrafields['users'] as $row)
+	foreach($cot_extrafields[$db_users] as $row)
 	{
 		$ruser['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
 	}
@@ -187,7 +187,7 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 			}
 			elseif ($y == 0)
 			{
-				foreach($cot_extrafields['users'] as $i => $row_extf) 
+				foreach($cot_extrafields[$db_users] as $i => $row_extf) 
 				{ 
 					if ($row_extf['field_type']=='file')
 					{
@@ -262,7 +262,7 @@ $t->assign(array(
 ));
 
 // Extra fields
-foreach($cot_extrafields['users'] as $i => $row)
+foreach($cot_extrafields[$db_users] as $i => $row)
 {
 	$t->assign('USERS_REGISTER_'.strtoupper($row['field_name']), cot_build_extrafields('ruser'.$row['field_name'],  $row, htmlspecialchars($ruser['user_extrafields'][$row['field_name']])));
 	$t->assign('USERS_REGISTER_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
