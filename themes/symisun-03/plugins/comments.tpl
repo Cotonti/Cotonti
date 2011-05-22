@@ -6,7 +6,7 @@
 			<h1>{COMMENTS_TITLE}</h1>
 
 
-			{FILE ./themes/symisun-03/warnings.tpl}
+			{FILE "./themes/symisun-03/warnings.tpl"}
 
 			<!-- BEGIN: COMMENTS_FORM_EDIT -->
 					<form id="comments" name="comments" action="{COMMENTS_FORM_POST}" method="post">

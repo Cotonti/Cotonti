@@ -131,7 +131,7 @@
 </div>
 
   <!-- BEGIN: ERROR -->
-	{FILE ./themes/symisun-03/warnings.tpl}
+	{FILE "./themes/symisun-03/warnings.tpl"}
   <!-- END: ERROR -->    	
   
   <!-- BEGIN: RESULTS -->	

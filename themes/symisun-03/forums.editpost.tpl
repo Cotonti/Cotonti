@@ -8,7 +8,7 @@
             
             <p class="details">{FORUMS_EDITPOST_SUBTITLE}</p>
 
-{FILE ./themes/symisun-03/warnings.tpl}
+{FILE "./themes/symisun-03/warnings.tpl"}
 
 <form action="{FORUMS_EDITPOST_SEND}" method="post" name="editpost">
 

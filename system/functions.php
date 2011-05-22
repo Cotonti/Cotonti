@@ -3675,7 +3675,7 @@ function cot_rc_output()
 			}
 			if ($pass)
 			{
-				$out['head_head'] .= $html;
+				$out['head_head'] = $html.$out['head_head'];
 			}
 		}
 	}
