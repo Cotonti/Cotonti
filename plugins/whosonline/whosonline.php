@@ -44,7 +44,10 @@ $sql_users = $db->query("
 	INNER JOIN $db_users AS u ON u.user_id=o.online_userid
 	ORDER BY online_lastseen DESC
 ");
-while ($row = $sql_users->fetch())
+/* === Hook - Part1 : Set === */
+$extp = cot_getextplugins('whosonline.users.loop');
+/* ===== */
+foreach ($sql_users->fetchAll() as $row)
 {
 	if($hiddenusers && in_array($row['user_id'], $hiddenusers))
 	{
@@ -65,6 +68,12 @@ while ($row = $sql_users->fetch())
 		'USER_LASTSEEN' => cot_build_timegap($row['online_lastseen'], $sys['now'])
 	));
 	$t->assign(cot_generate_usertags($row, 'USER_'));
+		/* === Hook - Part2 : Include === */
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 	$t->parse('MAIN.USERS');
 }
 $sql_users->closeCursor();
@@ -75,7 +84,11 @@ $sql_guests = $db->query("
 	WHERE online_userid = -1
 	ORDER BY online_lastseen DESC
 ");
-while ($row = $sql_guests->fetch())
+
+/* === Hook - Part1 : Set === */
+$extp = cot_getextplugins('whosonline.guests.loop');
+/* ===== */
+foreach ($sql_guests->fetchAll() as $row)
 {
 	$count_guests++;
 	$url_ipsearch = cot_url('admin', 'm=other&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg());
@@ -87,6 +100,12 @@ while ($row = $sql_guests->fetch())
 		'GUEST_NUMBER' => $count_guests,
 		'GUEST_LASTSEEN' => cot_build_timegap($row['online_lastseen'], $sys['now'])
 	));
+	/* === Hook - Part2 : Include === */
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 	$t->parse('MAIN.GUESTS');
 }
 $sql_guests->closeCursor();

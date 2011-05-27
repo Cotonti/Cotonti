@@ -4,10 +4,10 @@
 Code=contact
 Name=Contact
 Description=Contact form for user feedback delivered by e-mail and recorded in database
-Version=2.1.0
-Date=2010-12-24
-Author=Seditio.by
-Copyright=&copy; 2008-2011 Seditio.by
+Version=2.1.1
+Date=2011-05-24
+Author=Cotonti Team
+Copyright=&copy; 2008-2011 Cotonti Team
 Notes=
 Auth_guests=RW
 Lock_guests=12345A
@@ -26,8 +26,8 @@ minchars=12:string::5:Min post length, chars
  *
  * @package contact
  * @version 2.1
- * @author Seditio.by
- * @copyright (c) 2008-2011 Seditio.by and Cotonti Team
+ * @author Cotonti Team
+ * @copyright (c) 2008-2011 Cotonti Team
  * @license BSD
  */
 

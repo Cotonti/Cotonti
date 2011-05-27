@@ -4,8 +4,8 @@
  *
  * @package contact
  * @version 2.1.0
- * @author Seditio.by & Cotonti Team
- * @copyright (c) 2008-2011 Seditio.by and Cotonti Team
+ * @author Cotonti Team
+ * @copyright (c) 2008-2011 Cotonti Team
  * @license BSD
  */
 

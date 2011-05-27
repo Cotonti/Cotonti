@@ -3,8 +3,8 @@
 /**
  * Contact Plugin for Cotonti CMF (Russian Localization)
  * @version 2.00
- * @author Seditio.by
- * @copyright (c) 2008-2011 Seditio.by and Cotonti Team
+ * @author Cotonti Team
+ * @copyright (c) 2008-2011 Cotonti Team
  * @license BSD
  */
 
