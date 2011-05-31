@@ -3863,7 +3863,7 @@ function cot_shield_update($shield_add, $shield_newaction)
 	if ($cfg['shieldenabled'])
 	{
 		$shield_newlimit = $sys['now'] + floor($shield_add * $cfg['shieldtadjust'] /100);
-		$db->update($db_online, array('online_shield' => $shield_newlimit, 'online_action' => $shield_newaction), 'online_ip='.$usr['ip']);
+		$db->update($db_online, array('online_shield' => $shield_newlimit, 'online_action' => $shield_newaction), 'online_ip="'.$usr['ip'].'"');
 	}
 }
 
