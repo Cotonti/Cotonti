@@ -13,7 +13,7 @@
 // Set the environment
 define('COT_CODE', true);
 define('COT_PLUG', true);
-$env['z'] = 'plug';
+$env['ext'] = 'plug';
 $env['location'] = 'plugins';
 
 // Requirements
