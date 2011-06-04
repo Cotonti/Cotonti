@@ -47,6 +47,7 @@ $id = cot_import('id', 'G', 'ALP');
 $c = empty($c) ? "pages" : $c;
 $id = empty($id) ? "all" : $id;
 
+ob_clean();
 header('Content-type: text/xml; charset=UTF-8');
 $sys['now'] = time();
 
@@ -282,7 +283,7 @@ foreach (cot_getextplugins('rss.output') as $pl)
 /* ===== */
 
 $t->parse('MAIN');
-$out_rss = $t->out('MAIN');
+$out_rss = $t->text('MAIN');
 
 if ($usr['id'] === 0 && $cache)
 {
