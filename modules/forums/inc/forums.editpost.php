@@ -29,7 +29,7 @@ isset($structure['forums'][$s]) || cot_die();
 
 $sql_forums = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id = ? and fp_topicid = ? and fp_cat = ?",
 	array($p, $q, $s));
-if ($row = $sql_forums->fetch())
+if ($rowpost = $sql_forums->fetch())
 {
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
 
@@ -40,7 +40,7 @@ if ($row = $sql_forums->fetch())
 	}
 	/* ===== */
 
-	if (!$usr['isadmin'] && $row['fp_posterid'] != $usr['id'])
+	if (!$usr['isadmin'] && $rowpost['fp_posterid'] != $usr['id'])
 	{
 		cot_log('Attempt to edit a post without rights', 'sec');
 		cot_die();
@@ -80,7 +80,7 @@ if ($a == 'update')
 	$rtext = cot_import('rtext', 'P', 'HTM');
 	$rtopictitle = cot_import('rtopictitle', 'P', 'TXT', 255);
 	$rtopicdesc = cot_import('rtopicdesc', 'P', 'TXT', 255);
-	$rupdater = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
+	$rupdater = ($rowpost['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $rowpost['fp_updated'] + 300) && empty($rowpost['fp_updater']) ) ? '' : $usr['name'];
 
 	if (!empty($rtopictitle) && mb_strlen($rtopictitle) < $cfg['forums']['mintitlelength'])
 	{
@@ -113,7 +113,7 @@ if ($a == 'update')
 	}
 	/* ===== */
 
-	cot_forums_sectionsetlast($row['fp_cat']);
+	cot_forums_sectionsetlast($rowpost['fp_cat']);
 
 	if ($cache)
 	{
@@ -167,11 +167,11 @@ if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY
 
 $t->assign(array(
 	'FORUMS_EDITPOST_PAGETITLE' => $toptitle,
-	'FORUMS_EDITPOST_SUBTITLE' => $L['forums_postedby'] . ": <a href=\"users.php?m=details&id=" . $row['fp_posterid'] . "\">" . $row['fp_postername'] . "</a> @ " . cot_date('datetime_medium', $row['fp_updated'] + $usr['timezone'] * 3600),
-	'FORUMS_EDITPOST_UPDATED' => cot_date('datetime_medium', $row['fp_updated'] + $usr['timezone'] * 3600),
-	'FORUMS_EDITPOST_UPDATED_STAMP' => $row['fp_updated'] + $usr['timezone'] * 3600,
+	'FORUMS_EDITPOST_SUBTITLE' => $L['forums_postedby'] . ": <a href=\"users.php?m=details&id=" . $rowpost['fp_posterid'] . "\">" . $rowpost['fp_postername'] . "</a> @ " . cot_date('datetime_medium', $rowpost['fp_updated'] + $usr['timezone'] * 3600),
+	'FORUMS_EDITPOST_UPDATED' => cot_date('datetime_medium', $rowpost['fp_updated'] + $usr['timezone'] * 3600),
+	'FORUMS_EDITPOST_UPDATED_STAMP' => $rowpost['fp_updated'] + $usr['timezone'] * 3600,
 	'FORUMS_EDITPOST_SEND' => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . cot_xg()),
-	'FORUMS_EDITPOST_TEXT' => cot_textarea('rtext', $row['fp_text'], 20, 56, '', 'input_textarea_medieditor')
+	'FORUMS_EDITPOST_TEXT' => cot_textarea('rtext', $rowpost['fp_text'], 20, 56, '', 'input_textarea_medieditor')
 ));
 
 /* === Hook === */
