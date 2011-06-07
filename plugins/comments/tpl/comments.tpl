@@ -43,7 +43,7 @@
 
 <a name="comments"></a>
 
-<div style="display:{COMMENTS_DISPLAY}">
+<div class="block" style="display:{COMMENTS_DISPLAY}">
 
 <!-- BEGIN: COMMENTS_ROW -->
 	<div class="comments1">
@@ -53,14 +53,14 @@
 	</div>
 	<div class="comments2">
 		<p>{COMMENTS_ROW_TEXT}</p>
-		{COMMENTS_ROW_EDIT} {COMMENTS_ROW_ADMIN}
+		{COMMENTS_ROW_ADMIN}{COMMENTS_ROW_EDIT}
 	</div>
-	<hr class="clear" />
+	<hr class="clear marginbottom10" />
 <!-- END: COMMENTS_ROW -->
 
 <!-- BEGIN: PAGNAVIGATOR -->
-<p class="paging">{COMMENTS_PAGES_PAGESPREV}{COMMENTS_PAGES_PAGNAV}{COMMENTS_PAGES_PAGESNEXT}</p>
-<p class="paging"><span>{COMMENTS_PAGES_INFO}</span></p>
+<!-- IF {COMMENTS_PAGES_PAGNAV} --><p class="paging">{COMMENTS_PAGES_PAGESPREV}{COMMENTS_PAGES_PAGNAV}{COMMENTS_PAGES_PAGESNEXT}</p>
+<p class="paging"><span>{COMMENTS_PAGES_INFO}</span></p><!-- ENDIF -->
 <!-- END: PAGNAVIGATOR -->
 
 <!-- BEGIN: COMMENTS_NEWCOMMENT -->
@@ -75,13 +75,13 @@
 		<!-- IF {PHP.usr.id} == 0 AND {COMMENTS_FORM_VERIFYIMG} -->
 		<div>{COMMENTS_FORM_VERIFYIMG} : {COMMENTS_FORM_VERIFY}</div>
 		<!-- ENDIF -->
-		<div class="valid"><button type="submit">{PHP.L.Submit}</button></div>
+		<div class="margin10 textcenter"><button type="submit">{PHP.L.Submit}</button></div>
 	</form>
 	<div class="help">{COMMENTS_FORM_HINT}</div>
 <!-- END: COMMENTS_NEWCOMMENT -->
 
 <!-- BEGIN: COMMENTS_EMPTY -->
-<div class="block">{COMMENTS_EMPTYTEXT}</div>
+<div class="warning">{COMMENTS_EMPTYTEXT}</div>
 <!-- END: COMMENTS_EMPTY -->
 
 <!-- BEGIN: COMMENTS_CLOSED -->
