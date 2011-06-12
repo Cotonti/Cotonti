@@ -3603,7 +3603,7 @@ function cot_rc_add_file($path, $scope = 'global')
 		return false;
 	}
 
-	$type = preg_match('#\.(min\.)?(js|css)$#', $path, $m) ? strtolower($m[2]) : 'js';
+	$type = preg_match('#\.(min\.)?(js|css)$#', mb_strtolower($path), $m) ? $m[2] : 'js';
 
 	if ($cfg['headrc_consolidate'] && $cfg['headrc_minify'] && $m[1] != 'min.')
 	{
