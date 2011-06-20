@@ -33,6 +33,8 @@ foreach (cot_getextplugins('users.register.first') as $pl)
 if ($a=='add')
 {
 	cot_shield_protect();
+	
+	$ruser = array();
 
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.register.add.first') as $pl)
@@ -52,25 +54,29 @@ if ($a=='add')
 	$ruser['user_email'] = mb_strtolower($ruser['user_email']);
 
 	// Extra fields
-	foreach($cot_extrafields[$db_users] as $row)
+	foreach($cot_extrafields['users'] as $row)
 	{
 		$ruser['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
 	}
 	$ruser['user_birthdate'] = (int)cot_import_date('ruserbirthdate', false);
 
-	$sql = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_name='".$db->prep($ruser['user_name'])."'");
-	$res1 = $sql->fetchColumn();
-	$sql = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_email='".$db->prep($ruser['user_email'])."'");
-	$res2 = $sql->fetchColumn();
+	$user_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_name = ? LIMIT 1", array($ruser['user_name']))->fetch();
+	$email_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_email = ? LIMIT 1", array($ruser['user_email']))->fetch();
 
 	if (preg_match('/&#\d+;/', $ruser['user_name']) || preg_match('/[<>#\'"\/]/', $ruser['user_name'])) cot_error('aut_invalidloginchars', 'rusername');
 	if (mb_strlen($ruser['user_name']) < 2) cot_error('aut_usernametooshort', 'rusername');
-	if (mb_strlen($rpassword1) < 4 || cot_alphaonly($rpassword1) != $rpassword1) cot_error('aut_passwordtooshort', 'rpassword1');
+	if (mb_strlen($rpassword1) < 4) cot_error('aut_passwordtooshort', 'rpassword1');
 	if (mb_strlen($ruser['user_email']) < 4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $ruser['user_email']))
 		cot_error('aut_emailtooshort', 'ruseremail');
-	if ($res1>0) cot_error('aut_usernamealreadyindb', 'rusername');
-	if ($res2>0) cot_error('aut_emailalreadyindb', 'ruseremail');
+	if ($user_exists) cot_error('aut_usernamealreadyindb', 'rusername');
+	if ($email_exists) cot_error('aut_emailalreadyindb', 'ruseremail');
 	if ($rpassword1 != $rpassword2) cot_error('aut_passwordmismatch', 'rpassword2');
+	
+	$extrafields = array();
+	foreach($cot_extrafields['users'] as $row)
+	{
+		$extrafields['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
+	}
 
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.register.add.validate') as $pl)
@@ -78,73 +84,28 @@ if ($a=='add')
 		include $pl;
 	}
 	/* ===== */
-
-	if (!cot_error_found())
+	
+	if (!cot_error_found() && add_user(
+		$ruser['user_email'],
+		$ruser['user_name'],
+		$rpassword1,
+		$ruser['user_country'],
+		$ruser['user_timezone'],
+		$ruser['user_gender'],
+		$ruser['user_birthdate'],
+		$extrafields
+	))
 	{
-		if ($db->countRows($db_users)==0)
-		{
-			$ruser['user_maingrp'] = 5;
-		}
-		else
-		{
-			$ruser['user_maingrp'] = ($cfg['regnoactivation']) ? 4 : 2;
-		}
-
-		$ruser['user_password'] = md5($rpassword1);
-		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['user_birthdate'];
-		$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
-
-		$ruser['user_lostpass'] = md5(microtime());
-		cot_shield_update(20, "Registration");
-
-		$ruser['user_hideemail'] = 1;
-
-		$ruser['user_theme'] = $cfg['defaulttheme'];
-		$ruser['user_scheme'] = $cfg['defaultscheme'];
-		$ruser['user_lang'] = $cfg['defaultlang'];
-		$ruser['user_regdate'] = (int)$sys['now_offset'];
-		$ruser['user_logcount'] = 0;
-		$ruser['user_lastip'] = $usr['ip'];
-
-		$db->insert($db_users, $ruser);
-
-		$userid = $db->lastInsertId();
-
-		$db->insert($db_groups_users, array('gru_userid' => (int)$userid, 'gru_groupid' => (int)$ruser['user_maingrp']));
-		cot_extrafield_movefiles();
-		/* === Hook for the plugins === */
-		foreach (cot_getextplugins('users.register.add.done') as $pl)
-		{
-			include $pl;
-		}
-		/* ===== */
-
-		if ($cfg['regnoactivation'] || $ruser['user_maingrp']==5)
+		if ($cfg['regnoactivation'] || $db->countRows($db_users) == 1)
 		{
 			cot_redirect(cot_url('message', 'msg=106', '', true));
 		}
-
-		if ($cfg['regrequireadmin'])
+		elseif ($cfg['regrequireadmin'])
 		{
-			$rsubject = $L['aut_regrequesttitle'];
-			$rbody = sprintf($L['aut_regrequest'], $ruser['user_name'], $rpassword1);
-			$rbody .= "\n\n".$L['aut_contactadmin'];
-			cot_mail ($ruser['user_email'], $rsubject, $rbody);
-
-			$rsubject = $L['aut_regreqnoticetitle'];
-			$rinactive = $cfg['mainurl'].'/'.cot_url('users', 'gm=2&s=regdate&w=desc', '', true);
-			$rbody = sprintf($L['aut_regreqnotice'], $ruser['user_name'], $rinactive);
-			cot_mail ($cfg['adminemail'], $rsubject, $rbody);
 			cot_redirect(cot_url('message', 'msg=118', '', true));
 		}
 		else
 		{
-			$rsubject = $L['Registration'];
-			$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['user_lostpass'].'&y=1', '', true);
-			$rdeactivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['user_lostpass'].'&y=0', '', true);
-			$rbody = sprintf($L['aut_emailreg'], $ruser['user_name'], $rpassword1, $ractivate, $rdeactivate);
-			$rbody .= "\n\n".$L['aut_contactadmin'];
-			cot_mail ($ruser['user_email'], $rsubject, $rbody);
 			cot_redirect(cot_url('message', 'msg=105', '', true));
 		}
 	}
