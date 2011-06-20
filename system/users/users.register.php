@@ -54,7 +54,7 @@ if ($a=='add')
 	$ruser['user_email'] = mb_strtolower($ruser['user_email']);
 
 	// Extra fields
-	foreach($cot_extrafields['users'] as $row)
+	foreach($cot_extrafields[$db_users] as $row)
 	{
 		$ruser['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
 	}
@@ -73,7 +73,7 @@ if ($a=='add')
 	if ($rpassword1 != $rpassword2) cot_error('aut_passwordmismatch', 'rpassword2');
 	
 	$extrafields = array();
-	foreach($cot_extrafields['users'] as $row)
+	foreach($cot_extrafields[$db_users] as $row)
 	{
 		$extrafields['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
 	}
@@ -85,17 +85,17 @@ if ($a=='add')
 	}
 	/* ===== */
 	
-	if (!cot_error_found() && add_user(
-		$ruser['user_email'],
-		$ruser['user_name'],
-		$rpassword1,
-		$ruser['user_country'],
-		$ruser['user_timezone'],
-		$ruser['user_gender'],
-		$ruser['user_birthdate'],
-		$extrafields
-	))
+	if (!cot_error_found())
 	{
+		$userid = add_user($ruser['user_email'], $ruser['user_name'], $rpassword1, $ruser['user_country'], $ruser['user_timezone'], $ruser['user_gender'], $ruser['user_birthdate'], $extrafields);
+		
+		/* === Hook for the plugins === */
+		foreach (cot_getextplugins('users.register.add.done') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+		
 		if ($cfg['regnoactivation'] || $db->countRows($db_users) == 1)
 		{
 			cot_redirect(cot_url('message', 'msg=106', '', true));

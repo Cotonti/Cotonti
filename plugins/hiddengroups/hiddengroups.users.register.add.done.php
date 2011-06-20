@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=users.register.add.done
+Hooks=users.adduser.done
 [END_COT_EXT]
 ==================== */
 

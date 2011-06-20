@@ -66,7 +66,8 @@ if (count($cats) > 0)
 		$where = "page_state = 0 AND page_cat <> 'system' AND page_date <= " . (int)$sys['now_offset'] . " AND page_cat IN ('" . implode("','", $catsub) . "')";
 
 		$news_link_params = ($c != $indexcat) ? "c=" . $c : '';
-
+		$news_join_columns = '';
+		$news_join_tables = '';
 		/* === Hook - Part2 : Include === FIRST === */
 		foreach ($news_first_extp as $pl)
 		{

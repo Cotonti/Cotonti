@@ -72,7 +72,7 @@ function add_user($email, $name = null, $password = null, $country = '', $timezo
 	cot_extrafield_movefiles();
 	
 	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('users.register.add.done') as $pl)
+	foreach (cot_getextplugins('users.adduser.done') as $pl)
 	{
 		include $pl;
 	}
