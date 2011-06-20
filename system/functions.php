@@ -326,16 +326,16 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			if ($v == '1' || $v == 'on')
 			{
 				$pass = TRUE;
-				$v = '1';
+				$v = TRUE;
 			}
 			elseif ($v=='0' || $v=='off')
 			{
 				$pass = TRUE;
-				$v = '0';
+				$v = FALSE;
 			}
 			else
 			{
-				$defret = '0';
+				$defret = FALSE;
 			}
 			break;
 
@@ -348,7 +348,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			break;
 	}
 
-	if (!$pass || !($filter == 'INT' || $filter == 'NUM'))
+	if (!$pass || !($filter == 'INT' || $filter == 'NUM' || $filter == 'BOL'))
 	{
 		$v = preg_replace('/(&#\d+)(?![\d;])/', '$1;', $v);
 	}
@@ -877,14 +877,41 @@ function cot_title($mask, $params = array())
 }
 
 /**
- * Generates random string
+ * Generates random string within hexadecimal range
  *
- * @param int $l Length
+ * @param int $length Length
  * @return string
  */
-function cot_unique($l=16)
+function cot_unique($length = 16)
 {
-	return(mb_substr(md5(mt_rand()), 0, $l));
+	$string = sha1(mt_rand());
+	if ($length > 40)
+	{
+		for ($i=0; $i < floor($length / 40); $i++)
+		{
+			$string .= sha1(mt_rand());
+		}
+	}
+	return(substr($string, 0, $length));
+}
+
+/**
+ * Generates random string within specified charlist
+ * 
+ * @param int $length String length
+ * @param string $charlist Allowed characters, defaults to alphanumeric chars
+ * @return string and numbers ($pass)
+ */
+function cot_randomstring($length = 8, $charlist = null)
+{
+	if (!is_string($charlist))
+		$charlist = 'ABCDEFGHIJKLMNOPRSTUVYZabcdefghijklmnoprstuvyz0123456789';
+	$max = strlen($charlist) - 1;
+	for ($i=0; $i < $length; $i++)
+	{
+		$string .= $charlist[mt_rand(0, $max)];
+	}
+	return $string;
 }
 
 /*

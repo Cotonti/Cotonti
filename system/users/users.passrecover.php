@@ -88,7 +88,7 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 		}
 
 		$validationkey = md5(microtime());
-		$newpass = cot_randompass();
+		$newpass = cot_randomstring();
 		$sql = $db->update($db_users, array('user_password' => md5($newpass), 'user_lostpass' => $validationkey), "user_id=$ruserid");
 
 		$rsubject = $L['pasrec_title'];
@@ -130,25 +130,5 @@ $t->parse('MAIN');
 $t->out('MAIN');
 
 require_once $cfg['system_dir'].'/footer.php';
-
-/**
-*Random password generator for password recovery plugin
-*@return string and numbers ($pass)
-*/
-function cot_randompass()
-{
-	$abc = "abcdefghijklmnoprstuvyz";
-	$vars = $abc.strtoupper($abc)."0123456789";
-	srand((double)microtime() * 1000000);
-	$i = 0;
-	while ($i <= 7)
-	{
-		$num = rand() % 33;
-		$tmp = substr($vars, $num, 1);
-		$pass = $pass.$tmp;
-		$i++;
-	}
-	return $pass;
-}
 
 ?>
