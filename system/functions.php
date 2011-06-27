@@ -552,8 +552,9 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
 	{
 		$sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], 'UTF-8', 'B', "\n");
 
-		$headers = (empty($headers)) ? "From: \"".$sitemaintitle."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
-		$headers .= "Message-ID: <".md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'].">\n";
+		$headers = (empty($headers)) ? "From: \"" . $sitemaintitle . "\" <" . $cfg['adminemail'] . ">\n" . "Reply-To: <" . $cfg['adminemail'] . ">\n"
+				: $headers;
+		$headers .= "Message-ID: <" . md5(uniqid(microtime())) . "@" . $_SERVER['SERVER_NAME'] . ">\n";
 
 		$headers .= "Content-Type: text/plain; charset=UTF-8\n";
 		$headers .= "Content-Transfer-Encoding: 8bit\n";
@@ -561,23 +562,23 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
 		if (!$customtemplate)
 		{
 			$body_params = array(
-			'SITE_TITLE' => $cfg['maintitle'],
-			'SITE_URL' => $cfg['mainurl'],	
-			'SITE_DESCRIPTION' => $cfg['subtitle'],
-			'ADMIN_EMAIL' => $cfg['adminemail'],
-			'MAIL_SUBJECT' => $subject,	
-			'MAIL_BODY' => $body
+				'SITE_TITLE' => $cfg['maintitle'],
+				'SITE_URL' => $cfg['mainurl'],
+				'SITE_DESCRIPTION' => $cfg['subtitle'],
+				'ADMIN_EMAIL' => $cfg['adminemail'],
+				'MAIL_SUBJECT' => $subject,
+				'MAIL_BODY' => $body
 			);
-			
+
 			$subject_params = array(
-			'SITE_TITLE' => $cfg['maintitle'],
-			'SITE_DESCRIPTION' => $cfg['subtitle'],
-			'MAIL_SUBJECT' => $subject
+				'SITE_TITLE' => $cfg['maintitle'],
+				'SITE_DESCRIPTION' => $cfg['subtitle'],
+				'MAIL_SUBJECT' => $subject
 			);
-			
-			$subject = cot_title($cfg['subject_mail'], $subject_params);
-			$body = cot_title($cfg['body_mail'], $body_params);
-		}		
+
+			$subject = cot_title($cfg['subject_mail'], $subject_params, false);
+			$body = cot_title($cfg['body_mail'], $body_params, false);
+		}
 		$subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\n");
 
 		if (ini_get('safe_mode'))
@@ -858,9 +859,10 @@ function cot_shutdown()
  *
  * @param string $area Area maskname or actual mask
  * @param array $params An associative array of available parameters
+ * @param bool $escape Escape HTML special characters
  * @return string
  */
-function cot_title($mask, $params = array())
+function cot_title($mask, $params = array(), $escape = true)
 {
 	global $cfg;
 	$res = (!empty($cfg[$mask])) ? $cfg[$mask] : $mask;
@@ -870,7 +872,8 @@ function cot_title($mask, $params = array())
 		foreach($matches as $m)
 		{
 			$var = $m[1];
-			$res = str_replace($m[0], htmlspecialchars($args[$var], ENT_COMPAT, 'UTF-8', false), $res);
+			$val = $escape ? htmlspecialchars($args[$var], ENT_COMPAT, 'UTF-8', false) : $args[$var];
+			$res = str_replace($m[0], $val, $res);
 		}
 	}
 	return $res;
