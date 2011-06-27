@@ -26,6 +26,7 @@ $c = sed_import('c','G','TXT');
 
 // Extra fields - getting
 $extrafields = array();
+$rpageextrafields = array();
 $fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
 while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
 
@@ -83,6 +84,7 @@ if ($a=='update')
 
 	$error_string .= (empty($rpagecat)) ? $L['pag_catmissing']."<br />" : '';
 	$error_string .= (mb_strlen($rpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
+	$error_string .= (empty($rpagetext)) ? $L['pag_textmissing']."<br />" : '';
 
 	if($rpagefile == 0 && !empty($rpageurl))
 	{
@@ -90,15 +92,17 @@ if ($a=='update')
 	}
 
 	// Extra fields
-	if(count($extrafields)>0)
-	foreach($extrafields as $row)
+	if (count($extrafields)>0)
 	{
-		$import = sed_import('rpage'.$row['field_name'],'P','HTM');
-		if($row['field_type'] == 'checkbox')
+		foreach($extrafields as $row)
 		{
-			$import = $import != '';
+			$import = sed_import('rpage'.$row['field_name'],'P','HTM');
+			if($row['field_type'] == 'checkbox')
+			{
+				$import = $import != '';
+			}
+			$rpageextrafields['page_'.$row['field_name']] = $import;
 		}
-		$rpageextrafields[] = $import;
 	}
 	if (empty($error_string) || $rpagedelete)
 	{
@@ -192,9 +196,9 @@ if ($a=='update')
 			{
 				foreach($extrafields as $i=>$row)
 				{
-					if(!is_null($rpageextrafields[$i]))
+					if(!is_null($rpageextrafields['page_'.$row['field_name']]))
 					{
-						$ssql_extra .= "page_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',";
+						$ssql_extra .= "page_".$row['field_name']." = '".sed_sql_prep($rpageextrafields['page_'.$row['field_name']])."',";
 					}
 				}
 			}
@@ -377,9 +381,9 @@ for($i = 0; $i<$numtags; $i++)
 }
 
 // Extra fields
-if(count($extrafields)>0)
+if (count($extrafields)>0)
 {
-	$extra_array = sed_build_extrafields('page', 'PAGEEDIT_FORM', $extrafields, $pag);
+	$extra_array = sed_build_extrafields('page', 'PAGEEDIT_FORM', $extrafields, array_merge($pag, $rpageextrafields));
 	$pageedit_array= $pageedit_array + $extra_array;
 }
 $t->assign($pageedit_array);

@@ -85,13 +85,14 @@ if ($a=='add')
 		{
 			$import = $import != '';
 		}
-		$newpageextrafields[] = $import;
+		$newpageextrafields['page_'.$row['field_name']] = $import;
 	}
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $newpagecat);
 	sed_block($usr['auth_write']);
 
 	$error_string .= (empty($newpagecat)) ? $L['pag_catmissing']."<br />" : '';
 	$error_string .= (mb_strlen($newpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
+	$error_string .= (empty($newpagetext)) ? $L['pag_textmissing']."<br />" : '';
 
 	if($newpagefile == 0 && !empty($newpageurl))
 	{
@@ -146,10 +147,10 @@ if ($a=='add')
 		{
 			foreach($extrafields as $i => $row)
 			{
-				if(!is_null($newpageextrafields[$i]))
+				if(!is_null($newpageextrafields['page_'.$row['field_name']]))
 				{
 					$ssql_extra_columns .= 'page_'.$row['field_name'].', ';
-					$ssql_extra_values .= "'".sed_sql_prep($newpageextrafields[$i])."', ";
+					$ssql_extra_values .= "'".sed_sql_prep($newpageextrafields['page_'.$row['field_name']])."', ";
 				}
 			}
 		}
@@ -336,7 +337,7 @@ for($i = 0; $i<$numtags; $i++)
 // Extra fields
 if(count($extrafields)>0)
 {
-	$extra_array = sed_build_extrafields('page', 'PAGEADD_FORM', $extrafields, '', true);
+	$extra_array = sed_build_extrafields('page', 'PAGEADD_FORM', $extrafields, $newpageextrafields, true);
 	$pageadd_array= $pageadd_array + $extra_array;
 }
 $t->assign($pageadd_array);
