@@ -32,7 +32,7 @@ function cot_trash_page_sync($data)
 {
 	global $cache, $cfg, $db_structure;
 
-	cot_page_resync($data['page_cat']);
+	cot_page_sync($data['page_cat']);
 	($cache && $cfg['cache_page']) && $cache->page->clear('page');
 	return true;
 }
