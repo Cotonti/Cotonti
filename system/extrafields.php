@@ -604,7 +604,7 @@ function cot_load_extrafields()
 	if (!isset($cot_extrafields))
 	{
 		$cot_extrafields = array();
-		$where = (defined('COT_UPGRADE')) ? "1" : "field_enabled=1";
+		$where = (defined('COT_INSTALL')) ? "1" : "field_enabled=1";
 		$fieldsres = $db->query("SELECT * FROM $db_extra_fields WHERE $where ORDER BY field_type ASC");
 		while ($row = $fieldsres->fetch())
 		{
