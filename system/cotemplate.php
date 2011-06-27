@@ -30,6 +30,10 @@ class XTemplate
 	 */
 	protected $blocks = array();
 	/**
+	 * @var array Blocks already displayed (for debug mode)
+	 */
+	protected $displayed_blocks = array();
+	/**
 	 * Maps block paths to actual array indices.
 	 * @var array Index for quick block search.
 	 */
@@ -150,9 +154,9 @@ class XTemplate
 	 */
 	public static function init($enable_cache = false, $cache_dir = '', $debug_mode = false, $cleanup = false)
 	{
-		self::$cache_enabled = $enable_cache;
-		self::$cache_dir = $cache_dir;
 		self::$debug_mode = $debug_mode;
+		self::$cache_enabled = $enable_cache && !$debug_mode;
+		self::$cache_dir = $cache_dir;
 		Cotpl_data::init($cleanup);
 	}
 
@@ -206,6 +210,7 @@ class XTemplate
 			return false;
 		}
 		$this->filename = $path;
+		$this->vars = array();
 		$cache_path = self::$cache_dir . '/templates/' . str_replace(array('./', '/'), '_', $path);
 		$cache_idx = $cache_path . '.idx';
 		if (!self::$cache_enabled || !file_exists($cache_path) || filemtime($path) > filemtime($cache_path))
@@ -242,11 +247,6 @@ class XTemplate
 		{
 			$this->blocks = unserialize(file_get_contents($cache_path));
 			$this->index = unserialize(file_get_contents($cache_idx));
-		}
-
-		if (self::$debug_mode)
-		{
-			echo "<h2>File &quot;$path&quot;</h2>";
 		}
 	}
 
@@ -314,15 +314,14 @@ class XTemplate
 
 		if (self::$debug_mode)
 		{
-			static $displayed_blocks = array();
-			if (!in_array($block, $displayed_blocks))
+			if (!in_array($block, $this->displayed_blocks))
 			{
 				$block_level = substr_count($block, '.');
-				$block_name = $block_level > 0 ? mb_substr($block, mb_strrpos($block, '.') + 1) : $block;
-				$block_offset = 20 * $block_level;
-				$tags_offset = 20 * ($block_level + 1);
-				echo "<h3 style=\"margin-left:{$block_offset}px\">Block &quot;$block_name&quot;</h3>";
-				echo "<ul style=\"margin-left:{$tags_offset}px\">";
+				$block_name = basename($this->filename) . ' / ' . str_replace('.', ' / ', $block);
+//				$block_offset = 20 * $block_level;
+//				$tags_offset = 20 * ($block_level + 1);
+				echo "<h2>$block_name</h2>";
+				echo "<ul>";
 				$tags = $this->vars;
 				ksort($tags);
 				foreach ($tags as $key => $val)
@@ -341,7 +340,7 @@ class XTemplate
 					}
 				}
 				echo "</ul>";
-				$displayed_blocks[] = $block;
+				$this->displayed_blocks[] = $block;
 			}
 		}
 	}
