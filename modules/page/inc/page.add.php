@@ -16,6 +16,11 @@ require_once cot_incfile('forms');
 $id = cot_import('id', 'G', 'INT');
 $c = cot_import('c', 'G', 'TXT');
 
+if (!empty($c) && !isset($structure['page'][$c]))
+{
+	$c = '';
+}
+
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', 'any');
 
 /* === Hook === */
@@ -176,7 +181,7 @@ $pageadd_array = array(
 	'PAGEADD_PAGETITLE' => $L['page_addtitle'],
 	'PAGEADD_SUBTITLE' => $L['page_addsubtitle'],
 	'PAGEADD_ADMINEMAIL' => "mailto:".$cfg['adminemail'],
-	'PAGEADD_FORM_SEND' => cot_url('page', 'm=add&a=add'),
+	'PAGEADD_FORM_SEND' => cot_url('page', 'm=add&a=add&c='.$c),
 	'PAGEADD_FORM_CAT' => cot_selectbox_categories($rpage['page_cat'], 'rpagecat'),
 	'PAGEADD_FORM_CAT_SHORT' => cot_selectbox_categories($rpage['page_cat'], 'rpagecat', $c),
 	'PAGEADD_FORM_KEYWORDS' => cot_inputbox('text', 'rpagekeywords', $rpage['page_keywords'], array('size' => '32', 'maxlength' => '255')),
