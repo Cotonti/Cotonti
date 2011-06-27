@@ -18,8 +18,8 @@ $env['location'] = 'list';
 $s = cot_import('s', 'G', 'ALP'); // order field name without 'page_'
 $w = cot_import('w', 'G', 'ALP', 4); // order way (asc, desc)
 $c = cot_import('c', 'G', 'TXT'); // cat code
-$o = cot_import('ord', 'G', 'ALP', 16); // sort field name without 'page_'
-$p = cot_import('p', 'G', 'ALP', 16); // sort way (asc, desc)
+$o = cot_import('ord', 'G', 'ALP', 16); // filter field name without 'page_'
+$p = cot_import('p', 'G', 'TXT', 16); // filter value
 $maxrowsperpage = ($cfg['page'][$c]['maxrowsperpage']) ? $cfg['page'][$c]['maxrowsperpage'] : $cfg['page']['__default']['maxrowsperpage'];
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage); //page number for pages list
 list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', $maxrowsperpage);// page number for cats list
@@ -58,7 +58,10 @@ if (empty($s))
 	$s = $cfg['page'][$c]['order'];
 	$w = $cfg['page'][$c]['way'];
 }
-$s = empty($s) ? 'title' : $s;
+elseif ($db->query("SHOW COLUMNS FROM $db_pages WHERE Field = 'page_$s'")->rowCount() == 0)
+{
+	$s = 'title';
+}
 $w = empty($w) ? 'asc' : $w;
 
 
@@ -81,9 +84,12 @@ elseif ($c != 'all')
 {
 	$where['cat'] = 'page_cat=' . $db->quote($c);
 }
-if (!empty($o) && !empty($p) && $p != 'password')
+if (!empty($o) && !empty($p))
 {
-	$where['filter'] .= "page_$o='$p'";
+	if ($db->query("SHOW COLUMNS FROM $db_pages WHERE Field = 'page_$o'")->rowCount() == 1)
+	{
+		$where['filter'] .= "page_$o=" . $db->quote($p);
+	}
 }
 if (!$usr['isadmin'])
 {

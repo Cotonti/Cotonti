@@ -17,7 +17,10 @@ list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['forums']['maxtopicsperpage'
 $o = cot_import('ord','G','ALP',16); //order
 $w = cot_import('w','G','ALP',4); // way
 
-$o = (empty($o)) ? 'updated' : $o;
+if (empty($o) || $db->query("SHOW COLUMNS FROM $db_forum_topics WHERE Field = 'ft_$o'")->rowCount() == 0)
+{
+	$o = 'updated';
+}
 $w =  (empty($w)) ? 'desc' : $w;
 
 cot_die(empty($s) || !isset($structure['forums'][$s]), true);

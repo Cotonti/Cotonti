@@ -12,7 +12,7 @@
 defined('COT_CODE') or die('Wrong URL');
 
 $id = cot_import('id', 'G', 'INT');
-$s = cot_import('s', 'G', 'ALP', 13);
+$s = cot_import('s', 'G', 'ALP', 16);
 $w = cot_import('w', 'G', 'ALP', 4);
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxusersperpage']);
 $f = cot_import('f', 'G', 'ALP', 16);
@@ -45,7 +45,8 @@ $users_sort_tags = array(
 	'grptitle' => array('USERS_TOP_GRPTITLE', &$L['Maingroup'],),
 );
 
-$users_sort_blacklist = array('email', 'lastip',);
+$users_sort_blacklist = array('email', 'lastip', 'password', 'sid', 'sidtime', 'lostpass', 'auth', 'token');
+$users_sort_whitelist = array('id', 'name', 'maingrp', 'country', 'timezone', 'birthdate', 'gender', 'lang', 'regdate');
 
 /* === Hook === */
 foreach (cot_getextplugins('users.first') as $pl)
@@ -54,7 +55,7 @@ foreach (cot_getextplugins('users.first') as $pl)
 }
 /* ===== */
 
-if (empty($s) || in_array(mb_strtolower($s), array('password', 'sid', 'lostpass', 'auth', 'hashsalt',)) || in_array(mb_strtolower($s), $users_sort_blacklist))
+if (empty($s) || in_array(mb_strtolower($s), $users_sort_blacklist) || !in_array($s, $users_sort_whitelist) && $db->query("SHOW COLUMNS FROM $db_users WHERE Field = 'user_$s'")->rowCount() == 0)
 {
 	$s = 'name';
 }

@@ -34,7 +34,7 @@ if ($id > 0 || !empty($al))
 			WHERE $where LIMIT 1");
 }
 
-if(!$id && empty($al) || $sql_page->rowCount() == 0)
+if(!$id && empty($al) || !$sql_page || $sql_page->rowCount() == 0)
 {
 	$env['status'] = '404 Not Found';
 	cot_redirect(cot_url('message', 'msg=404', '', true));
