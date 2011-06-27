@@ -785,25 +785,18 @@ if (extension_loaded('memcache'))
 		 * @var Memcache
 		 */
 		protected $memcache = NULL;
-		/**
-		 * Compression flag
-		 * @var int
-		 */
-		protected $compressed = true;
 
 		/**
 		 * Creates an object and establishes Memcached server connection
 		 * @param string $host Memcached host
 		 * @param int $port Memcached port
 		 * @param bool $persistent Use persistent connection
-		 * @param bool $compressed Use compression
 		 * @return Memcache_driver
 		 */
-		public function __construct($host = 'localhost', $port = 11211, $persistent = true, $compressed = true)
+		public function __construct($host = 'localhost', $port = 11211, $persistent = true)
 		{
 			$this->memcache = new Memcache;
 			$this->memcache->addServer($host, $port, $persistent);
-			$this->compressed = $compressed ? MEMCACHE_COMPRESSED : 0;
 		}
 
 		/**
@@ -827,14 +820,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function dec($id, $realm = COT_DEFAULT_REALM, $value = 1)
 		{
-			if ($this->compressed == MEMCACHE_COMPRESSED)
-			{
-				return parent::dec($id, $realm, $value);
-			}
-			else
-			{
-				return $this->memcache->decrement($realm.'/'.$id, $value);
-			}
+			return $this->memcache->decrement($realm.'/'.$id, $value);
 		}
 
 		/**
@@ -842,7 +828,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function exists($id, $realm = COT_DEFAULT_REALM)
 		{
-			return $this->memcache->get($realm.'/'.$id, $this->compressed) !== FALSE;
+			return $this->memcache->get($realm.'/'.$id, 0) !== FALSE;
 		}
 
 		/**
@@ -850,7 +836,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function get($id, $realm = COT_DEFAULT_REALM)
 		{
-			return $this->memcache->get($realm.'/'.$id, $this->compressed);
+			return $this->memcache->get($realm.'/'.$id, 0);
 		}
 
 		/**
@@ -871,14 +857,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function inc($id, $realm = COT_DEFAULT_REALM, $value = 1)
 		{
-			if ($this->compressed == MEMCACHE_COMPRESSED)
-			{
-				return parent::inc($id, $realm, $value);
-			}
-			else
-			{
-				return $this->memcache->increment($realm.'/'.$id, $value);
-			}
+			return $this->memcache->increment($realm.'/'.$id, $value);
 		}
 
 		/**
@@ -894,7 +873,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 		{
-			return $this->memcache->set($realm.'/'.$id, $data, $this->compressed, $ttl);
+			return $this->memcache->set($realm.'/'.$id, $data, 0, $ttl);
 		}
 	}
 }
