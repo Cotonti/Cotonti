@@ -76,8 +76,8 @@ if ($i18n_enabled)
 				// Translate button
 				$url_i18n = cot_url('plug', "e=i18n&m=page&a=add&id=$id");
 				$t->assign(array(
-					'PAGE_I18N_TRANSLATE', cot_rc_link($url_i18n, $L['i18n_translate']),
-					'PAGE_I18N_TRANSLATE_URL', $url_i18n
+					'PAGE_I18N_TRANSLATE' => cot_rc_link($url_i18n, $L['i18n_translate']),
+					'PAGE_I18N_TRANSLATE_URL' => $url_i18n
 				));
 			}
 		}
