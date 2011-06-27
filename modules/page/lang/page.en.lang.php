@@ -73,6 +73,7 @@ $L['page_editsubtitle'] = 'Edit all required fields and hit "Sumbit" to continue
 
 $L['page_catmissing'] = 'The category code is missing';
 $L['page_notavailable'] = 'This page will be published in ';
+$L['page_textmissing'] = 'Page text must not be empty';
 $L['page_titletooshort'] = 'The title is too short or missing';
 $L['page_validation'] = 'Awaiting validation';
 $L['page_validation_desc'] = 'Your pages which have not been validated by administrator yet';

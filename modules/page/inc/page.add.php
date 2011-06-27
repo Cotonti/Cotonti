@@ -69,13 +69,14 @@ if ($a == 'add')
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
 	cot_block($usr['auth_write']);
 
-	if (empty($rpage['page_cat'])) cot_error('page_catmissing', 'rpagecat');
+	cot_check(empty($rpage['page_cat']), 'page_catmissing', 'rpagecat');
 	if ($structure['page'][$rpage['page_cat']]['locked'])
 	{
 		require_once cot_langfile('message', 'core');
 		cot_error('msg602_body', 'rpagecat');
 	}
-	if (mb_strlen($rpage['page_title']) < 2) cot_error('page_titletooshort', 'rpagetitle');
+	cot_check(mb_strlen($rpage['page_title']) < 2, 'page_titletooshort', 'rpagetitle');
+	cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.add.add.error') as $pl)

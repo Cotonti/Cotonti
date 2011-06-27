@@ -1985,6 +1985,21 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
  */
 
 /**
+ * If condition is true, triggers an error with given message and source
+ * 
+ * @param bool $condition Boolean condition
+ * @param string $message Error message or message key
+ * @param string $src Error source field name
+ */
+function cot_check($condition, $message, $src = 'default')
+{
+	if ($condition)
+	{
+		cot_error($message, $src);
+	}
+}
+
+/**
  * Checks if there are messages to display
  *
  * @param string $src If non-emtpy, check messages in this specific source only

@@ -76,8 +76,9 @@ if ($a == 'update')
 	}
 	$rpagedelete = cot_import('rpagedelete', 'P', 'BOL');
 
-	if (empty($rpage['page_cat'])) cot_error('page_catmissing', 'rpagecat');
-	if (mb_strlen($rpage['page_title']) < 2) cot_error('page_titletooshort', 'rpagetitle');
+	cot_check(empty($rpage['page_cat']), 'page_catmissing', 'rpagecat');
+	cot_check(mb_strlen($rpage['page_title']) < 2, 'page_titletooshort', 'rpagetitle');
+	cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.edit.update.error') as $pl)
