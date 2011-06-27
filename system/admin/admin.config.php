@@ -158,12 +158,14 @@ switch($n)
 					$db->delete($db_config, "config_name = ? AND config_owner = ? AND config_cat = ?
 						AND config_subcat = ?",
 						array($v, $o, $p, $sub));
+					$update = false;
 				}
 			}
-			if ($exists)
+
+			if ($update && $db->query("SELECT COUNT(*) FROM $db_config WHERE config_name = ? AND config_owner = ? AND config_cat = ? $where_cat", array_merge(array($v, $o, $p), $sub_param))->fetchColumn() == 1)
 			{
 				$db->query("UPDATE $db_config SET config_value = config_default
-					WHERE config_name = ?' AND config_owner = ? AND config_cat = ? $where_cat",
+					WHERE config_name = ? AND config_owner = ? AND config_cat = ? $where_cat",
 					array_merge(array($v, $o, $p), $sub_param));
 			}
 			/* === Hook  === */
