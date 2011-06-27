@@ -280,7 +280,7 @@ $pageadd_array = array(
 	"PAGEADD_PAGETITLE" => $L['pagadd_title'],
 	"PAGEADD_SUBTITLE" => $L['pagadd_subtitle'],
 	"PAGEADD_ADMINEMAIL" => "mailto:".$cfg['adminemail'],
-	"PAGEADD_FORM_SEND" => sed_url('page', "m=add&a=add"),
+	"PAGEADD_FORM_SEND" => sed_url('page', "m=add&a=add&c=$c"),
 	"PAGEADD_FORM_CAT" => $pageadd_form_categories,
 	"PAGEADD_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"newpagekey\" value=\"".htmlspecialchars($newpagekey)."\" size=\"28\" maxlength=\"16\" />",
 	"PAGEADD_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"newpagealias\" value=\"".htmlspecialchars($newpagealias)."\" size=\"56\" maxlength=\"255\" />",
