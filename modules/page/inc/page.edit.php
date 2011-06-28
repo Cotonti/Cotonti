@@ -141,8 +141,7 @@ if ($a == 'update')
 
 		if ($row_page_update['page_cat'] != $rpage['page_cat'] /*&& ($row_page_update['page_state'] == 0 || $row_page_update['page_state'] == 2)*/)
 		{
-			$sql_page_update = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$db->prep($row_page_update['page_cat'])."' ");
-			//$sql_page_update = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat)."' ");
+			$sql_page_update = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$db->prep($row_page_update['page_cat'])."' AND structure_area = 'page'");
 		}
 
 		//$usr['isadmin'] = cot_auth('page', $rpage['page_cat'], 'A');
@@ -152,9 +151,9 @@ if ($a == 'update')
 			if ($rpublish == 'OK' )
 			{
 				$rpage['page_state'] = 0;
-				if ($row_page_update['page_state'] == 1)
+				if ($row_page_update['page_state'] == 1 || $row_page_update['page_cat'] != $rpage['page_cat'])
 				{
-					$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
+					$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' AND structure_area = 'page'");
 				}
 			}
 			else
