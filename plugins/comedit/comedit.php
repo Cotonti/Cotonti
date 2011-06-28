@@ -105,7 +105,7 @@ if($a == 'update')
 			$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_maingrp=5");
 
 			$email_title = $L['plu_comlive'].$cfg['main_url'];
-			$email_body  = $L['User']." ".$usr['name'].", ".$L['plu_comlive3'].$cfg['mainurl'].'/'.$com_url."\n\n";
+			$email_body  = $L['User'].' '.preg_replace('#[^\w\p{L}]#u', '', $row['com_author']).', '.$L['plu_comlive3'].$cfg['mainurl'].'/'.$com_url."\n\n";
 
 			while($adm = sed_sql_fetcharray($sql2))
 			{
