@@ -148,7 +148,7 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
 	foreach ($required_modules as $req_ext)
 	{
 		if (!empty($req_ext) && !in_array($req_ext, $selected_modules)
-			&& !cot_module_installed($req_ext))
+			&& !cot_extension_installed($req_ext))
 		{
 			cot_error(cot_rc('ext_dependency_error', array(
 				'name' => $name,
@@ -163,7 +163,7 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
 	foreach ($required_plugins as $req_ext)
 	{
 		if (!empty($req_ext) && !in_array($req_ext, $selected_plugins)
-			&& !cot_plugin_installed($req_ext))
+			&& !cot_extension_installed($req_ext))
 		{
 			cot_error(cot_rc('ext_dependency_error', array(
 				'name' => $name,
@@ -191,7 +191,7 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
 function cot_extension_install($name, $is_module = false, $update = false, $force_update = false)
 {
     global $cfg, $L, $cache, $usr, $db_auth, $db_config, $db_users,
-		$db_updates, $db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x;
+		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 
@@ -222,16 +222,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
     }
 
 	// Check versions
-	if ($is_module)
-	{
-		$res = $db->query("SELECT ct_version FROM $db_core
-			WHERE ct_code = '$name'");
-	}
-	else
-	{
-		$res = $db->query("SELECT upd_value FROM $db_updates
-			WHERE upd_param = '$name.ver'");
-	}
+	$res = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$name'");
 	if ($res->rowCount() == 1)
 	{
 		$current_ver = $res->fetchColumn();
@@ -521,40 +512,19 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	}
 
 	// Register version information
-	if ($is_module)
+	if ($update)
 	{
-		if ($update)
-		{
-			cot_module_update($name, $new_ver);
-			cot_message(cot_rc('ext_updated', array(
-				'type' => $L['Module'],
-				'name' => $name,
-				'ver' => $new_ver
-			)));
-		}
-		else
-		{
-			cot_module_add($name, $info['Name'], $info['Version']);
-		}
+		cot_extension_update($name, $new_ver, !$is_module);
+		cot_message(cot_rc('ext_updated', array(
+			'type' => $is_module ? $L['Module'] : $L['Plugin'],
+			'name' => $name,
+			'ver' => $new_ver
+		)));
 	}
-    else
-    {
-        if ($update)
-		{
-			$db->query("INSERT INTO $db_updates (upd_param, upd_value) VALUES('$name.ver', ?)
-				ON DUPLICATE KEY UPDATE upd_value = ?", array($new_ver, $new_ver));
-			cot_message(cot_rc('ext_updated', array(
-				'type' => $L['Plugin'],
-				'name' => $name,
-				'ver' => $new_ver
-			)));
-		}
-		else
-		{
-			$db->insert($db_updates, array('upd_param' => "$name.ver",
-				'upd_value' => $info['Version']));
-		}
-    }
+	else
+	{
+		cot_extension_add($name, $info['Name'], $info['Version'], !$is_module);
+	}
 
     // Cleanup
     cot_auth_reorder();
@@ -634,16 +604,8 @@ function cot_extension_uninstall($name, $is_module = false)
         }
     }
 
-    if ($is_module)
-	{
-		// Unregister from modules table
-		cot_module_remove($name);
-	}
-	else
-    {
-        // Unregister from updates table
-        $db->delete($db_updates, "upd_param = '$name.ver'");
-    }
+	// Unregister from core table
+	cot_extension_remove($name, !$is_module);
 
 	// Clear cache
 	$db->update($db_users, array('user_auth' => ''));
@@ -736,19 +698,20 @@ function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
 }
 
 /**
- * Registers a module in the core
+ * Registers an extension in the core
  *
- * @param string $name Module name (code)
+ * @param string $name Extension name (code)
  * @param string $title Title name
  * @param string $version Version number as A.B.C
+ * @param bool $is_plug Is a plugin
  * @return bool TRUE on success, FALSE on error
  */
-function cot_module_add($name, $title, $version = '1.0.0')
+function cot_extension_add($name, $title, $version = '1.0.0', $is_plug = false)
 {
     global $db, $db_core;
 
     $res = $db->insert($db_core, array('ct_code' => $name, 'ct_title' => $title,
-		'ct_version' => $version));
+		'ct_version' => $version, 'ct_plug' => (int) $is_plug));
 
     return false;
 }
@@ -759,13 +722,12 @@ function cot_module_add($name, $title, $version = '1.0.0')
  * @param string $name Module code
  * @return bool
  */
-function cot_module_installed($name)
+function cot_extension_installed($name)
 {
     global $db, $db_core, $cfg;
-
-    $cnt = $db->query("SELECT COUNT(*) FROM $db_core
-		WHERE ct_code = '$name'")->fetchColumn();
-    return $cnt > 0 && file_exists($cfg['modules_dir'] . '/' . $name);
+	
+    $cnt = $db->query("SELECT COUNT(*) FROM $db_core WHERE ct_code = '$name'")->fetchColumn();
+    return $cnt > 0;
 }
 
 /**
@@ -774,10 +736,10 @@ function cot_module_installed($name)
  * @param string $name Module name
  * @return bool
  */
-function cot_module_pause($name)
+function cot_extension_pause($name)
 {
     global $db, $db_core;
-
+	cot_plugin_pause($name);
     return $db->update($db_core, array('ct_state' => 0), "ct_code = '$name'") == 1;
 }
 
@@ -787,9 +749,9 @@ function cot_module_pause($name)
  * @param string $name Module name
  * @return bool
  */
-function cot_module_remove($name)
+function cot_extension_remove($name)
 {
-    global $db, $db_core, $db_updates;
+    global $db, $db_core;
 
     return $db->delete($db_core, "ct_code = '$name'");
 }
@@ -800,10 +762,10 @@ function cot_module_remove($name)
  * @param string $name Module name
  * @return bool
  */
-function cot_module_resume($name)
+function cot_extension_resume($name)
 {
     global $db, $db_core;
-
+	cot_plugin_resume($name);
     return $db->update($db_core, array('ct_state' => 1), "ct_code = '$name'") == 1;
 }
 
@@ -814,7 +776,7 @@ function cot_module_resume($name)
  * @param string $version New version string
  * @return bool
  */
-function cot_module_update($name, $version)
+function cot_extension_update($name, $version)
 {
     global $db, $db_core;
 
@@ -871,21 +833,6 @@ function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
         );
     }
     return $db->insert($db_plugins, $insert_rows);
-}
-
-/**
- * Checks if plugin is already installed
- *
- * @param string $name Plugin code
- * @return bool
- */
-function cot_plugin_installed($name)
-{
-    global $db, $db_plugins, $cfg;
-
-    $cnt = $db->query("SELECT COUNT(*) FROM $db_plugins
-		WHERE pl_code = '$name'")->fetchColumn();
-    return $cnt > 0 && file_exists($cfg['plugins_dir'] . '/' . $name);
 }
 
 /**

@@ -203,14 +203,25 @@ if (!$cot_modules)
 	{
 		while ($row = $sql->fetch())
 		{
-			$cot_modules[$row['ct_code']] = array(
-                'code' => $row['ct_code'],
-                'title' => $row['ct_title']
-            );
+			if ($row['ct_plug'])
+			{
+				$cot_plugins_enabled[$row['ct_code']] = array(
+					'code' => $row['ct_code'],
+					'title' => $row['ct_title']
+				);
+			}
+			else
+			{
+				$cot_modules[$row['ct_code']] = array(
+					'code' => $row['ct_code'],
+					'title' => $row['ct_title']
+				);
+			}
 		}
         $sql->closeCursor();
 	}
 	$cache && $cache->db->store('cot_modules', $cot_modules, 'system');
+	$cache && $cache->db->store('cot_plugins_enabled', $cot_plugins_enabled, 'system');
 }
 
 /* ======== Gzip and output filtering ======== */

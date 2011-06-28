@@ -38,7 +38,7 @@
 			<tr>
 				<td>{PHP.L.Rights}:</td>
 				<td>
-<!-- IF {PHP.isinstalled} -->
+<!-- IF {PHP.isinstalled} AND {PHP.exists} -->
 					<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS}">{PHP.R.icon_rights}</a>
 <!-- ELSE -->
 					{PHP.L.None}
@@ -88,6 +88,7 @@
 				</td>
 			</tr>
 <!-- ELSE -->
+			<!-- IF {PHP.exists} -->
 			<tr>
 				<td class="width30">
 					<a href="{ADMIN_EXTENSIONS_UPDATE_URL}" class="ajax">{PHP.L.adm_opt_update}</a>
@@ -96,6 +97,7 @@
 					{PHP.L.adm_opt_update_explain}
 				</td>
 			</tr>
+			<!-- ENDIF -->
 			<tr>
 				<td>
 					<a href="{ADMIN_EXTENSIONS_UNINSTALL_URL}" class="ajax">{PHP.L.adm_opt_uninstall}</a>
@@ -112,6 +114,7 @@
 					{PHP.L.adm_opt_pauseall_explain}
 				</td>
 			</tr>
+			<!-- IF {PHP.exists} -->
 			<tr>
 				<td>
 					<a href="{ADMIN_EXTENSIONS_UNPAUSE_URL}" class="ajax">{PHP.L.adm_opt_unpauseall}</a>
@@ -120,6 +123,7 @@
 					{PHP.L.adm_opt_unpauseall_explain}
 				</td>
 			</tr>
+			<!-- ENDIF -->
 <!-- ENDIF -->
 		</table>
 	</div>

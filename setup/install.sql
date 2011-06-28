@@ -159,6 +159,7 @@ CREATE TABLE `cot_core` (
   `ct_version` varchar(32) collate utf8_unicode_ci NOT NULL default '',
   `ct_state` tinyint unsigned NOT NULL default '1',
   `ct_lock` tinyint unsigned NOT NULL default '0',
+  `ct_plug` tinyint unsigned NOT NULL default '0',
   PRIMARY KEY  (`ct_id`),
   KEY `ct_code` (`ct_code`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

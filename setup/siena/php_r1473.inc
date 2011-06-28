@@ -5,7 +5,7 @@
 
 defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
 
-if (cot_module_installed('forums'))
+if (cot_extension_installed('forums'))
 {
 	global $db_structure, $db_forum_stats, $db_forum_structure, $db_forum_sections, $db_x;
 	require_once cot_incfile('forums', 'module');
