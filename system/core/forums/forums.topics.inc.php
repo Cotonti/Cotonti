@@ -564,7 +564,7 @@ $t->assign(array(
 		"FORUMS_TOPICS_ROW_FIRSTPOSTER" => $row['ft_firstpostername'],
 		"FORUMS_TOPICS_ROW_LASTPOSTER" => $row['ft_lastpostername'],
 		"FORUMS_TOPICS_ROW_URL" => $row['ft_url'],
-		"FORUMS_TOPICS_ROW_PREVIEW" => $row['ft_preview'].'...',
+		"FORUMS_TOPICS_ROW_PREVIEW" => empty($row['ft_preview']) ? '' : sed_parse($row['ft_preview'], $cfg['parsebbcodeforums']) .'...',
 		"FORUMS_TOPICS_ROW_PAGES" => $row['ft_pages'],
 		"FORUMS_TOPICS_ROW_MAXPAGES" => $row['ft_maxpages'],
 		"FORUMS_TOPICS_ROW_ODDEVEN" => sed_build_oddeven($ft_num),

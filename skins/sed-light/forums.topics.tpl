@@ -77,7 +77,7 @@
 					{FORUMS_TOPICS_ROW_ICON}
 				</td>
 				<td class="{FORUMS_TOPICS_ROW_ODDEVEN}">
-					<strong><a href="{FORUMS_TOPICS_ROW_URL}" title="{FORUMS_TOPICS_ROW_PREVIEW}">{FORUMS_TOPICS_ROW_TITLE}</a></strong><br />
+					<strong><a href="{FORUMS_TOPICS_ROW_URL}" title="{FORUMS_TOPICS_ROW_DESC}">{FORUMS_TOPICS_ROW_TITLE}</a></strong><br />
 					{FORUMS_TOPICS_ROW_CREATIONDATE}: {FORUMS_TOPICS_ROW_FIRSTPOSTER} &nbsp; {FORUMS_TOPICS_ROW_PAGES}<br />
 					{FORUMS_TOPICS_ROW_TAGS}
 				</td>
