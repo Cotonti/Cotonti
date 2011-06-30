@@ -372,7 +372,7 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
  *     'hidden_test' => 'test45',
  * );
  *
- * cot_config_set($config_values, 'test', true);
+ * cot_config_set('test', $config_values, true);
  * </code>
  *
  * @param string $name Extension name config belongs to

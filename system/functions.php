@@ -3139,28 +3139,93 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
  */
 
 /**
+ * Returns the list of available rich text editors
+ * 
+ * @return array 
+ */
+function cot_get_editors()
+{
+	global $cot_plugins;
+	$list = array('none');
+	if (is_array($cot_plugins['editor']))
+	{
+		foreach ($cot_plugins['editor'] as $k)
+		{
+			if (cot_auth('plug', $k['pl_code'], 'W'))
+			{
+				$list[] = $k['pl_code'];
+			}
+		}
+	}
+	return $list;
+}
+
+/**
+ * Returns the list of available markup parsers
+ * 
+ * @return array 
+ */
+function cot_get_parsers()
+{
+	global $cot_plugins;
+	$list = array('none');
+	if (is_array($cot_plugins['parser']))
+	{
+		foreach ($cot_plugins['parser'] as $k)
+		{
+			if (cot_auth('plug', $k['pl_code'], 'W'))
+			{
+				$list[] = $k['pl_code'];
+			}
+		}
+	}
+	return $list;
+}
+
+/**
  * Parses text body
  *
  * @param string $text Source text
+ * @param bool $enable_markup Enable markup or plain text output
+ * @param string $parser Non-default parser to use
  * @return string
  */
-function cot_parse($text, $enable_markup = true)
+function cot_parse($text, $enable_markup = true, $parser = '')
 {
-	global $cfg, $cot_parsers;
+	global $cfg, $cot_plugins;
 
 	if ($enable_markup)
 	{
-		foreach ($cot_parsers as $func)
+		if (empty($parser))
 		{
-			$text = $func($text);
+			$parser = $cfg['parser'];
+		}
+		if (!empty($parser) && $parser != 'none')
+		{
+			$func = "cot_parse_$parser";
+			if (function_exists($func))
+			{
+				return $func($text);
+			}
+			else
+			{
+				// Load the appropriate parser
+				if (is_array($cot_plugins['parser']))
+				{
+					foreach ($cot_plugins['parser'] as $k)
+					{
+						if ($k['pl_code'] == $parser && cot_auth('plug', $k['pl_code'], 'R'))
+						{
+							include $cfg['plugins_dir'] . '/' . $k['pl_file'];
+							return $func($text);
+						}
+					}
+				}
+			}
 		}
 	}
-	else
-	{
-		$text = htmlspecialchars($text);
-	}
 
-	return $text;
+	return htmlspecialchars($text);
 }
 
 /**
@@ -3746,6 +3811,19 @@ function cot_rc_embed($code, $prepend = false, $type = 'js')
 }
 
 /**
+ * A shortcut for plain output of an embedded stylesheet/javascript in the footer of the page
+ *
+ * @global array $out Output snippets
+ * @param string $code Stylesheet or javascript code
+ * @param string $type Resource type: 'js' or 'css'
+ */
+function cot_rc_embed_footer($code, $type = 'js')
+{
+	global $out;
+	$out['footer_rc'] .= cot_rc("code_rc_{$type}_embed", array('code' => $code));
+}
+
+/**
  * Quick link resource pattern
  *
  * @param string $url Link href
@@ -3772,6 +3850,19 @@ function cot_rc_link_file($path, $prepend = false)
 	$type = preg_match('#\.(js|css)$#i', $path, $m) ? strtolower($m[1]) : 'js';
 	$embed = cot_rc("code_rc_{$type}_file", array('url' => $path));
 	$prepend ? $out['head_head'] = $embed . $out['head_head'] : $out['head_head'] .= $embed;
+}
+
+/**
+ * A shortcut to append a JavaScript or CSS file to {FOOTER_JS} tag
+ * 
+ * @global array $out Output snippets
+ * @param string $path JavaScript or CSS file path
+ */
+function cot_rc_link_footer($path)
+{
+	global $out;
+	$type = preg_match('#\.(js|css)$#i', $path, $m) ? strtolower($m[1]) : 'js';
+	$out['footer_rc'] .= cot_rc("code_rc_{$type}_file", array('url' => $path));
 }
 
 /**

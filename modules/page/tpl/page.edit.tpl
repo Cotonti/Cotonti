@@ -59,6 +59,10 @@
 					</tr>
 					<!-- END: ADMIN -->
 					<tr>
+						<td>{PHP.L.Parser}:</td>
+						<td>{PAGEEDIT_FORM_PARSER}</td>
+					</tr>
+					<tr>
 						<td colspan="2">
 							{PAGEEDIT_FORM_TEXT}
 							<!-- IF {PAGEEDIT_FORM_PFS} -->{PAGEEDIT_FORM_PFS}<!-- ENDIF -->

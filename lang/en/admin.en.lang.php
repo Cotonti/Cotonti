@@ -105,6 +105,7 @@ $L['cfg_jquery'] = array('Enable jQuery', '');
 $L['cfg_maintenance'] = array('Maintenance mode', 'Let only authorized personel access to site');
 $L['cfg_maintenancereason'] = array('Maintenance reason', 'Optional, should better be short');
 $L['cfg_maxrowsperpage'] = array('Max. items per page', 'Default item limit for pagination');
+$L['cfg_parser'] = array('Markup parser', 'Default is: plain text');
 $L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');
 $L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');
 $L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
@@ -201,8 +202,9 @@ $L['cfg_usertextmax'] = array('Maximum length for user signature', '');
  * Config Section
  * Common strings
  */
-$L['cfg_markup'] = array('Enable markup', 'Enables HTML/BBcode or other parsing which is installed in your system');
 $L['cfg_css'] = array('Enable module/plugin CSS');
+$L['cfg_editor'] = array('Rich text editor', '');
+$L['cfg_markup'] = array('Enable markup', 'Enables HTML/BBcode or other parsing which is installed in your system');
 
 /**
  * Extension management

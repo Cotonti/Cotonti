@@ -183,7 +183,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 
 			$date_format = 'datetime_medium';
 
-			$text = cot_parse($page_data['page_text'], $cfg['page']['markup']);
+			$text = cot_parse($page_data['page_text'], $cfg['page']['markup'], $page_data['page_parser']);
 			$text_cut = ((int)$textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
 			$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;
 

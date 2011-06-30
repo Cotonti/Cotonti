@@ -59,7 +59,7 @@
 	</div>
 	<!-- ENDIF -->
 
-{FOOTER_JS}
+{FOOTER_RC}
 </body>
 </html>
 <!-- END: FOOTER -->

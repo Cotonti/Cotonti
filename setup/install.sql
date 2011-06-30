@@ -93,6 +93,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','main','21','shieldenabled',3,'0','0','',''),
 ('core','main','22','shieldtadjust',2,'100','100','10,25,50,75,100,125,150,200,300,400,600,800',''),
 ('core','main','23','shieldzhammer',2,'25','25','5,10,15,20,25,30,40,50,100',''),
+('core','main','31','parser',4,'none','none','cot_get_parsers()',''),
 ('core','main','41','redirbkonlogin',3,'1','1','',''),
 ('core','main','42','redirbkonlogout',3,'0','0','',''),
 ('core','main','43','maxrowsperpage',1,'15','15','',''),

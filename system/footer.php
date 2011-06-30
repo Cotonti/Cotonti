@@ -16,6 +16,7 @@ foreach (cot_getextplugins('footer.first') as $pl)
 }
 /* ===== */
 
+// Creation time statistics
 $i = explode(' ', microtime());
 $sys['endtime'] = $i[1] + $i[0];
 $sys['creationtime'] = round(($sys['endtime'] - $sys['starttime']), 3);
@@ -25,6 +26,7 @@ $out['sqlstatistics'] = ($cfg['showsqlstats']) ? $L['foo_sqltotal'].': '.cot_dec
 $out['bottomline'] = $cfg['bottomline'];
 $out['bottomline'] .= ($cfg['keepcrbottom']) ? $out['copyright'] : '';
 
+// Development mode SQL query timings
 if ($cfg['devmode'] && cot_auth('admin', 'a', 'A'))
 {
 	$out['devmode'] = "<h4>Dev-mode :</h4><table><tr><td><em>SQL query</em></td><td><em>Duration</em></td><td><em>Timeline</em></td><td><em>Query</em></td></tr>";
@@ -45,20 +47,6 @@ if ($cfg['devmode'] && cot_auth('admin', 'a', 'A'))
 	$out['devmode'] .= "</table><br />Total:".round($db->tcount, 4)."s - Queries:".$db->count. " - Average:".round(($db->tcount / $db->count), 5)."s/q";
 }
 
-/*
-========= DEBUG:START =========
-if (is_array($sys['auth_log']))
-{
-	$out['devauth'] .= "AUTHLOG: ".implode(', ',$sys['auth_log']);
-}
-$txt_r = ($usr['auth_read']) ? '1' : '0';
-$txt_w = ($usr['auth_write']) ? '1' : '0';
-$txt_a = ($usr['isadmin']) ? '1' : '0';
-$out['devauth'] .= " &nbsp; AUTH_FINAL_RWA:".$txt_r.$txt_w.$txt_a;
-$out['devmode']	 .= $out['devauth'];
-========= DEBUG:END =========
-*/
-
 if (!COT_AJAX)
 {
 	/* === Hook === */
@@ -78,6 +66,24 @@ if (!COT_AJAX)
 		$mtpl_base = 'footer';
 	}
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
+	
+	// Attach rich text editors if any
+	if ($cot_textarea_count > 0)
+	{
+		if (is_array($cot_plugins['editor']))
+		{
+			$parser = isset($sys['parser']) ? $sys['parser'] : $cfg['parser'];
+			$editor = $cfg['plugin'][$parser]['editor'];
+			foreach ($cot_plugins['editor'] as $k)
+			{
+				if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R'))
+				{
+					include $cfg['plugins_dir'] . '/' . $k['pl_file'];
+					break;
+				}
+			}
+		}
+	}
 
 	$t->assign(array(
 		'FOOTER_BOTTOMLINE' => $out['bottomline'],
@@ -88,7 +94,7 @@ if (!COT_AJAX)
 		'FOOTER_PMREMINDER' => $out['pmreminder'],
 		'FOOTER_ADMINPANEL' => $out['adminpanel'],
 		'FOOTER_DEVMODE' => $out['devmode'],
-		'FOOTER_JS' => $out['footer_js']
+		'FOOTER_RC' => $out['footer_rc']
 	));
 
 	/* === Hook === */

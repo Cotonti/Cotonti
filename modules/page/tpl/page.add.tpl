@@ -49,6 +49,10 @@
 						<td>{PAGEADD_FORM_EXPIRE}</td>
 					</tr>
 					<tr>
+						<td>{PHP.L.Parser}:</td>
+						<td>{PAGEADD_FORM_PARSER}</td>
+					</tr>
+					<tr>
 						<td colspan="2">
 							{PAGEADD_FORM_TEXT}
 							<!-- IF {PAGEADD_FORM_PFS} -->{PAGEADD_FORM_PFS}<!-- ENDIF -->

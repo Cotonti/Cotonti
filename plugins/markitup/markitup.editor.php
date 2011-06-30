@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=rc
+Hooks=editor
 [END_COT_EXT]
 ==================== */
 
@@ -19,7 +19,6 @@ defined('COT_CODE') or die('Wrong URL');
 
 // Language selection
 global $lang;
-// FIXME language selection is currently site-wide, not per user
 $mkup_lang = $cfg['plugins_dir']."/markitup/lang/$lang.lang.js";
 if (!file_exists($mkup_lang))
 {
@@ -34,23 +33,24 @@ if (!file_exists($smile_lang))
 // BBcode or HTML preset
 $mkup_set = cot_plugin_active('bbcode') ? 'bbcode' : 'html';
 
-// Load head resources
-cot_rc_add_file($smile_lang);
-cot_rc_add_file('images/smilies/set.js');
-cot_rc_add_file($cfg['plugins_dir'] . '/markitup/js/jquery.markitup.min.js');
-cot_rc_add_file($mkup_lang);
-cot_rc_add_file($cfg['plugins_dir'] . '/markitup/js/jqModal.min.js');
-cot_rc_add_file($cfg['plugins_dir'] . "/markitup/js/{$mkup_set}.set.js");
-cot_rc_add_file($cfg['plugins_dir'] . '/markitup/skins/' . $cfg['plugin']['markitup']['skin'] . '/style.css');
-cot_rc_add_file($cfg['plugins_dir'] . '/markitup/style.css');
+// Load resources
+cot_rc_link_footer($cfg['plugins_dir'] . '/markitup/skins/' . $cfg['plugin']['markitup']['skin'] . '/style.css');
+cot_rc_link_footer($cfg['plugins_dir'] . '/markitup/style.css');
+cot_rc_link_footer($smile_lang);
+cot_rc_link_footer('images/smilies/set.js');
+cot_rc_link_footer($cfg['plugins_dir'] . '/markitup/js/jquery.markitup.min.js');
+cot_rc_link_footer($mkup_lang);
+cot_rc_link_footer($cfg['plugins_dir'] . '/markitup/js/jqModal.min.js');
+cot_rc_link_footer($cfg['plugins_dir'] . "/markitup/js/{$mkup_set}.set.js");
+
 if ($cfg['plugin']['markitup']['chili'])
 {
-	cot_rc_add_file($cfg['plugins_dir'].'/markitup/js/chili.js');
+	cot_rc_link_footer($cfg['plugins_dir'].'/markitup/js/chili.js');
 }
 
 // User-specific setup
 $autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
-cot_rc_add_embed('markitup.set', '$(document).ready(function() {
+cot_rc_embed_footer('$(document).ready(function() {
 	mySettings.previewAutorefresh = '.$autorefresh.';
 	mySettings.previewParserPath = "plug.php?r=markitup&x=" + $("input[name=\'x\'][type=\'hidden\']").eq(0).val();
 	mediSettings.previewAutorefresh = '.$autorefresh.';

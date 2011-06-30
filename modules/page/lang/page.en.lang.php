@@ -15,7 +15,6 @@ defined('COT_CODE') or die('Wrong URL.');
  * Module Config
  */
 
-$L['cfg_allowphp_pages'] = array('Allow the PHP page type', 'Execution of PHP code in pages, use with caution!');
 $L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster have admin rights for page category');
 $L['cfg_count_admin'] = array('Count Administrators\' hits', '');
 $L['cfg_maxlistsperpage'] = array('Max. lists per page', ' ');

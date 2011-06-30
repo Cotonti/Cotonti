@@ -26,18 +26,6 @@
 				<h3>{UPDATE_TITLE}</h3>
 				{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
-				<!-- BEGIN: PARSER -->
-				<form action="install.php" method="get">
-						<ul>
-							<li class="title">{PHP.L.install_parsing}</li>
-							<li><input type="radio" name="parser" value="html" checked="checked" /> HTML</li>
-							<li><input type="radio" name="parser" value="bbcode" /> BBCode</li>
-							<li><em>{PHP.L.install_parsing_hint}</em></li>
-						</ul>
-					<div style="text-align:center"><input type="submit" value="{PHP.L.Next}" /></div>
-				</form>
-				<!-- END: PARSER -->
-
 				<!-- BEGIN: COMPLETED -->
 				<p class="complete">
 					<span>{UPDATE_COMPLETED_NOTE}</span>

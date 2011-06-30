@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=global
+Hooks=parser
 [END_COT_EXT]
 ==================== */
 
@@ -9,7 +9,7 @@ Hooks=global
  * Connects BBcode parser, loads data and registers parser function
  *
  * @package bbcode
- * @version 0.7.0
+ * @version 0.9.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
@@ -24,7 +24,5 @@ if ($cfg['plugin']['bbcode']['smilies'])
 {
 	cot_smilies_load();
 }
-
-$cot_parsers[] = 'cot_bbcode_parse';
 
 ?>

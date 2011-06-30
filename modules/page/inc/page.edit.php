@@ -27,6 +27,9 @@ foreach (cot_getextplugins('page.edit.first') as $pl)
 
 cot_block($usr['auth_read']);
 
+$sys['parser'] = $cfg['page']['parser'];
+$parser_list = cot_get_parsers();
+
 if ($a == 'update')
 {
 	$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
@@ -48,6 +51,7 @@ if ($a == 'update')
 	$rpage['page_title'] = cot_import('rpagetitle', 'P', 'TXT');
 	$rpage['page_desc'] = cot_import('rpagedesc', 'P', 'TXT');
 	$rpage['page_text'] = cot_import('rpagetext', 'P', 'HTM');
+	$rpage['page_parser'] = cot_import('rpageparser', 'P', 'ALP');
 	$rpage['page_author'] = cot_import('rpageauthor', 'P', 'TXT');
 	$rpage['page_file'] = cot_import('rpagefile', 'P', 'INT');
 	$rpage['page_url'] = cot_import('rpageurl', 'P', 'TXT');
@@ -79,6 +83,11 @@ if ($a == 'update')
 	cot_check(empty($rpage['page_cat']), 'page_catmissing', 'rpagecat');
 	cot_check(mb_strlen($rpage['page_title']) < 2, 'page_titletooshort', 'rpagetitle');
 	cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
+	
+	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || !cot_auth('plug', $sys['parser'], 'W'))
+	{
+		$rpage['page_parser'] = $cfg['page']['parser'];
+	}
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.edit.update.error') as $pl)
@@ -244,7 +253,8 @@ $pageedit_array = array(
 	'PAGEEDIT_FORM_URL' => cot_inputbox('text', 'rpageurl', $pag['page_url'], array('size' => '56', 'maxlength' => '255')),
 	'PAGEEDIT_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $pag['page_size'], array('size' => '56', 'maxlength' => '255')),
 	'PAGEEDIT_FORM_TEXT' => cot_textarea('rpagetext', $pag['page_text'], 24, 120, '', 'input_textarea_editor'),
-	'PAGEEDIT_FORM_DELETE' => cot_radiobox(0, 'rpagedelete', array(1, 0), array($L['Yes'], $L['No']))
+	'PAGEEDIT_FORM_DELETE' => cot_radiobox(0, 'rpagedelete', array(1, 0), array($L['Yes'], $L['No'])),
+	'PAGEEDIT_FORM_PARSER' => cot_selectbox($pag['page_parser'], 'rpageparser', cot_get_parsers(), cot_get_parsers(), false)
 );
 if ($usr['isadmin'])
 {

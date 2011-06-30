@@ -62,6 +62,7 @@
     </div>
 </div>
 
+{FOOTER_RC}
 </body>
 </html>
 <!-- END: FOOTER -->

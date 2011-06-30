@@ -3,9 +3,10 @@
 [BEGIN_COT_EXT]
 Code=ckeditor
 Name=CKEditor
+Category=editor
 Description=WYSIWYG HTML editor
-Version=0.7.5-3.5.3
-Date=2011-mar-07
+Version=0.9.0-3.5.3
+Date=2011-06-30
 Author=CKSource, http://ckeditor.com/
 Copyright=(c) 2003 - 2011 CKSource - Frederico Knabben.
 Notes=Licensed under the terms of any of the following licenses: GPL, LGPL, MPL

@@ -1,10 +1,10 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Code=bbcode
-Name=BBcode Parser
+Code=html
+Name=HTML Parser
 Category=parser
-Description=Adds BBcode parser support to the contents
+Description=Adds HTML parsing support to site contents
 Version=0.9.0
 Date=2011-06-30
 Author=Cotonti Team
@@ -14,16 +14,13 @@ Auth_guests=R
 Lock_guests=12345A
 Auth_members=RW
 Lock_members=
-Recommends_modules=page,forums
-Recommends_plugins=markitup
+Recommends_modules=page
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-smilies=01:radio::1:Enable smilies
-editor=02:callback:cot_get_editors():markitup:
+editor=01:callback:cot_get_editors():ckeditor:
 [END_COT_EXT_CONFIG]
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-
 ?>

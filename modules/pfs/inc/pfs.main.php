@@ -25,6 +25,8 @@ list($pgf, $df) = cot_import_pagenav('df', $cfg['pfs']['maxpfsperpage']);   // p
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
 cot_block($usr['auth_read']);
 
+$sys['parser'] = $cfg['parser'];
+
 $pn_c1 = empty($c1) ? '' : '&c1=' . $c1;
 $pn_c2 = empty($c2) ? '' : '&c2=' . $c2;
 

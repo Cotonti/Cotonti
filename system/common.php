@@ -197,7 +197,7 @@ if (!$cot_plugins && !defined('COT_INSTALL'))
 
 if (!$cot_modules)
 {
-    $sql = $db->query("SELECT ct_code, ct_title FROM $db_core
+    $sql = $db->query("SELECT ct_code, ct_title, ct_plug FROM $db_core
 		WHERE ct_state = 1 AND ct_lock = 0");
 	if ($sql->rowCount() > 0)
 	{

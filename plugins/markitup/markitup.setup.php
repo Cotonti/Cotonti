@@ -3,9 +3,10 @@
 [BEGIN_COT_EXT]
 Code=markitup
 Name=MarkItUp!
+Category=editor
 Description=Plain-source BBcode/HTML editor using jQuery
-Version=0.7.4
-Date=2010-dec-16
+Version=0.9.0
+Date=2011-06-30
 Author=Jay Salvat, http://markitup.jaysalvat.com
 Copyright=Copyright (C) 2007-2011 Jay Salvat
 Notes=Dual licensed under the MIT and GPL licenses.

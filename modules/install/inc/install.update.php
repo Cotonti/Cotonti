@@ -103,149 +103,132 @@ $cfg['customfuncs'] = false;
 if (defined('COT_UPGRADE') && !cot_error_found())
 {
 	// Is Genoa, perform upgrade
-	$parser = cot_import('parser', 'G', 'ALP');
 
-	if (is_null($parser) || !in_array($parser, array('html', 'bbcode')))
+	// Create missing cache folders
+	$cache_subfolders = array('cot', 'static', 'system', 'templates');
+	foreach ($cache_subfolders as $sub)
 	{
-		// Parser choice required
-		$t->parse('MAIN.PARSER');
-		$t->assign('UPDATE_TITLE', cot_rc('install_upgrade',
-			array('from' => $prev_branch, 'to' => $branch)));
+		if (!file_exists($cfg['cache_dir'] . '/' . $sub))
+		{
+			mkdir($cfg['cache_dir'] . '/' . $sub, $cfg['dir_perms']);
+		}
+	}
+
+	// Run SQL patches for core
+	$script = file_get_contents("./setup/$branch/patch-$prev_branch.sql");
+	$error = $db->runScript($script);
+	if (empty($error))
+	{
+		cot_message(cot_rc('install_update_patch_applied',
+			array('f' => "setup/$branch/patch-$prev_branch.sql",
+				'msg' => 'OK')));
 	}
 	else
 	{
-		// Create missing cache folders
-		$cache_subfolders = array('cot', 'static', 'system', 'templates');
-		foreach ($cache_subfolders as $sub)
+		cot_error(cot_rc('install_update_patch_error',
+			array('f' => "setup/$branch/patch-$prev_branch.sql",
+				'msg' => $error)));
+	}
+
+	// Run PHP patches
+	$ret = include "./setup/$branch/patch-$prev_branch.inc";
+	if ($ret !== false)
+	{
+		$msg = $ret == 1 ? 'OK' : $ret;
+		cot_message('install_update_patch_applied',
+			array('f' => "setup/$branch/patch-$prev_branch.inc",
+				'msg' => $ret));
+	}
+	else
+	{
+		cot_error('install_update_patch_error',
+			array('f' => "setup/$branch/patch-$prev_branch.inc",
+				'msg' => $L['Error']));
+	}
+
+	// Unregister modules which have no registration anymore
+	$db->delete($db_core, "ct_code IN ('index', 'comments', 'ratings', 'trash')");
+
+	// Set Module versions to Genoa version before upgrade
+	$db->update($db_core, array('ct_version' => '0.8.99'), '1');
+
+	// Install bbcode and html parsers
+	cot_extension_install('bbcode');
+	cot_extension_install('htmlparser');
+	// Import old Seditio/LDU bbcodes
+	$db->runScript(file_get_contents('./setup/siena/seditio_bbcodes.sql'));
+
+	// Update modules
+	foreach (array('forums', 'page', 'pfs', 'pm', 'polls') as $code)
+	{
+		$ret = cot_extension_install($code, true, true);
+		if ($ret === false)
 		{
-			if (!file_exists($cfg['cache_dir'] . '/' . $sub))
-			{
-				mkdir($cfg['cache_dir'] . '/' . $sub, $cfg['dir_perms']);
-			}
+			cot_error(cot_rc('ext_update_error', array(
+				'type' => $L['Module'],
+				'name' => $code
+			)));
 		}
+	}
 
-		// Run SQL patches for core
-		$script = file_get_contents("./setup/$branch/patch-$prev_branch.sql");
-		$error = $db->runScript($script);
-		if (empty($error))
+	// Update installed Siena plugins and uninstall Genoa plugins
+	$res = $db->query("SELECT DISTINCT(pl_code) FROM $db_plugins
+		WHERE pl_module = 0");
+	while ($row = $res->fetch(PDO::FETCH_NUM))
+	{
+		$code = $row[0];
+		$setup_file = $cfg['plugins_dir'] . '/' . $code . '/' . $code . '.setup.php';
+		if (file_exists($setup_file) && cot_infoget($setup_file))
 		{
-			cot_message(cot_rc('install_update_patch_applied',
-				array('f' => "setup/$branch/patch-$prev_branch.sql",
-					'msg' => 'OK')));
-		}
-		else
-		{
-			cot_error(cot_rc('install_update_patch_error',
-				array('f' => "setup/$branch/patch-$prev_branch.sql",
-					'msg' => $error)));
-		}
-
-		// Run PHP patches
-		$ret = include "./setup/$branch/patch-$prev_branch.inc";
-		if ($ret !== false)
-		{
-			$msg = $ret == 1 ? 'OK' : $ret;
-			cot_message('install_update_patch_applied',
-				array('f' => "setup/$branch/patch-$prev_branch.inc",
-					'msg' => $ret));
-		}
-		else
-		{
-			cot_error('install_update_patch_error',
-				array('f' => "setup/$branch/patch-$prev_branch.inc",
-					'msg' => $L['Error']));
-		}
-
-		// Unregister modules which have no registration anymore
-		$db->delete($db_core, "ct_code IN ('index', 'comments', 'ratings', 'trash')");
-
-		// Set Module versions to Genoa version before upgrade
-		$db->update($db_core, array('ct_version' => '0.8.99'), '1');
-
-		// Update modules
-		foreach (array('forums', 'page', 'pfs', 'pm', 'polls') as $code)
-		{
-			$ret = cot_extension_install($code, true, true);
-			if ($ret === false)
-			{
-				cot_error(cot_rc('ext_update_error', array(
-					'type' => $L['Module'],
-					'name' => $code
-				)));
-			}
-		}
-
-		// Update installed Siena plugins and uninstall Genoa plugins
-		$res = $db->query("SELECT DISTINCT(pl_code) FROM $db_plugins
-			WHERE pl_module = 0");
-		while ($row = $res->fetch(PDO::FETCH_NUM))
-		{
-			$code = $row[0];
-			$setup_file = $cfg['plugins_dir'] . '/' . $code . '/' . $code . '.setup.php';
-			if (file_exists($setup_file) && cot_infoget($setup_file))
-			{
-				// Update
-				cot_extension_install($code, false, true);
-			}
-			else
-			{
-				// Uninstall
-				$qcode = $db->quote($code);
-				$db->delete($db_auth, "auth_option = $qcode");
-				$db->delete($db_config, "config_cat = $qcode");
-				$db->delete($db_plugins, "pl_code = $qcode");
-			}
-		}
-		$res->closeCursor();
-
-		// Install URLEditor if urltrans.dat is non-standard
-		if (file_exists('datas/urltrans.dat'))
-		{
-			$urltrans_dat = trim(file_get_contents('datas/urltrans.dat'));
-			if ($urltrans_dat != '*	*	{$_area}.php')
-			{
-				cot_extension_install('urleditor');
-			}
-		}
-
-		// Install bbcode or convert to HTML
-		cot_extension_install('bbcode');
-		if ($parser == 'html')
-		{
-			// Import old Seditio/LDU bbcodes
-			$db->runScript(file_get_contents('./setup/siena/seditio_bbcodes.sql'));
-			// Run the converter
-			require_once './setup/siena/bbcode2html.inc';
-			cot_message('BBcode =&gt; HTML: OK');
-			cot_extension_uninstall('bbcode');
-		}
-
-		// Install userimages plugin
-		cot_extension_install('userimages');
-
-		// Update config theme and scheme
-		$config_contents = file_get_contents($file['config']);
-		$config_contents = preg_replace('#^\$cfg\[\'defaultscheme\'\]\s*=\s*\'.*?\';\n?#m', '', $config_contents);
-		$config_contents = preg_replace('#^\$cfg\[\'defaulttheme\'\]\s*=.*?;#m',
-			"\$cfg['defaultscheme'] = 'default';", $config_contents);
-		$config_contents = preg_replace('#^\$cfg\[\'defaultskin\'\]\s*=.*?;#m',
-			"\$cfg['defaulttheme'] = 'nemesis';", $config_contents);
-		file_put_contents($file['config'], $config_contents);
-
-		// Display results
-		if (!cot_error_found())
-		{
-			// Success
-			$t->assign('UPDATE_COMPLETED_NOTE', $L['install_upgrade_success_note']);
-			$t->parse('MAIN.COMPLETED');
-			$db->update($db_updates,  array('upd_value' => $branch), "upd_param = 'branch'");
-			$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_success', array('ver' => $branch)));
+			// Update
+			cot_extension_install($code, false, true);
 		}
 		else
 		{
-			// Error
-			$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_error', array('ver' => $branch)));
+			// Uninstall
+			$qcode = $db->quote($code);
+			$db->delete($db_auth, "auth_option = $qcode");
+			$db->delete($db_config, "config_cat = $qcode");
+			$db->delete($db_plugins, "pl_code = $qcode");
 		}
+	}
+	$res->closeCursor();
+
+	// Install URLEditor if urltrans.dat is non-standard
+	if (file_exists('datas/urltrans.dat'))
+	{
+		$urltrans_dat = trim(file_get_contents('datas/urltrans.dat'));
+		if ($urltrans_dat != '*	*	{$_area}.php')
+		{
+			cot_extension_install('urleditor');
+		}
+	}
+
+	// Install userimages plugin
+	cot_extension_install('userimages');
+
+	// Update config theme and scheme
+	$config_contents = file_get_contents($file['config']);
+	$config_contents = preg_replace('#^\$cfg\[\'defaultscheme\'\]\s*=\s*\'.*?\';\n?#m', '', $config_contents);
+	$config_contents = preg_replace('#^\$cfg\[\'defaulttheme\'\]\s*=.*?;#m',
+		"\$cfg['defaultscheme'] = 'default';", $config_contents);
+	$config_contents = preg_replace('#^\$cfg\[\'defaultskin\'\]\s*=.*?;#m',
+		"\$cfg['defaulttheme'] = 'nemesis';", $config_contents);
+	file_put_contents($file['config'], $config_contents);
+
+	// Display results
+	if (!cot_error_found())
+	{
+		// Success
+		$t->assign('UPDATE_COMPLETED_NOTE', $L['install_upgrade_success_note']);
+		$t->parse('MAIN.COMPLETED');
+		$db->update($db_updates,  array('upd_value' => $branch), "upd_param = 'branch'");
+		$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_success', array('ver' => $branch)));
+	}
+	else
+	{
+		// Error
+		$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_error', array('ver' => $branch)));
 	}
 
 	$t->assign(array(

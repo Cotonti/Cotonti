@@ -3,7 +3,7 @@
  * BBcode parsing and management API
  *
  * @package bbcode
- * @version 0.7.0
+ * @version 0.9.0
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD License
  */
@@ -192,7 +192,7 @@ function cot_bbcode_clearcache()
  * @param string $text Text body
  * @return string
  */
-function cot_bbcode_parse($text)
+function cot_parse_bbcode($text)
 {
 	global $cfg, $cot_bbcodes, $cot_bbcode_containersm, $sys, $cot_smilies, $L, $usr;
 
