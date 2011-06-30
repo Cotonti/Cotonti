@@ -577,7 +577,7 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
 			);
 
 			$subject = cot_title($cfg['subject_mail'], $subject_params, false);
-			$body = cot_title($cfg['body_mail'], $body_params, false);
+			$body = cot_title(str_replace("\r\n", "\n", $cfg['body_mail']), $body_params, false);
 		}
 		$subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\n");
 
