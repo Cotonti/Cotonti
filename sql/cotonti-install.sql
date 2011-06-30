@@ -834,7 +834,9 @@ INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`,
 (39, 'forums.topics.delete.done', 'tags', 'forums.delete', 'Tags', 'tags.forums.delete', 10, 1),
 (40, 'standalone', 'tags', 'search', 'Tags', 'tags', 0, 1),
 (41, 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', 10, 1),
-(42, 'header.main', 'tags', 'header', 'Tags', 'tags.header', 10, 1);
+(42, 'header.main', 'tags', 'header', 'Tags', 'tags.header', 10, 1),
+(43, 'forums.posts.tags', 'tags', 'forums.posts', 'Tags', 'tags.forums.posts', 10, 1),
+(44, 'list.loop', 'tags', 'list.loop', 'Tags', 'tags.list.loop', 10, 1);
 
 CREATE TABLE `sed_pm` (
   `pm_id` int(11) unsigned NOT NULL auto_increment,
