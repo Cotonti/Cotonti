@@ -21,7 +21,7 @@
 						{ADMIN_BBCODE_ROW_PATTERN}
 					</td>
 					<td class="centerall">
-						<textarea name="bbc_replacement" rows="2" cols="20">{ADMIN_BBCODE_ROW_REPLACEMENT}</textarea>
+						{ADMIN_BBCODE_ROW_REPLACEMENT}
 					</td>
 					<td class="centerall">
 						<span style="display:block;">{ADMIN_BBCODE_ROW_PLUG}</span>
