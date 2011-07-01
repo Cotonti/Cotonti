@@ -96,7 +96,9 @@ function mcaptcha_obfuscate($text)
 	$letters = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 	$rnd = $letters[array_rand($letters)] . md5(time());
 	// the actual js (in one line to confuse)
-	$script = "<script type=\"text/javascript\">function $rnd(s){var r='';for(var i=0;i<s.length;i++){var n=s.charCodeAt(i);if(n>=8364){n=128;}r+=String.fromCharCode(n-4);}return r;}document.write($rnd('".$enc_string."'));</script>";
+	$script = "<script type=\"text/javascript\">//<![CDATA[
+function $rnd(s){var r='';for(var i=0;i<s.length;i++){var n=s.charCodeAt(i);if(n>=8364){n=128;}r+=String.fromCharCode(n-4);}return r;}document.write($rnd('".$enc_string."'));
+//]]></script>";
 	return $script;
 }
 
