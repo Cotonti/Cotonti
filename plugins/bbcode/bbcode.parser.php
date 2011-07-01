@@ -19,10 +19,4 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('bbcode', 'plug');
 
-cot_bbcode_load();
-if ($cfg['plugin']['bbcode']['smilies'])
-{
-	cot_smilies_load();
-}
-
 ?>

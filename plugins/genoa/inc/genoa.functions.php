@@ -20,7 +20,6 @@ require_once cot_incfile('admin',		'module');
 require_once cot_incfile('page',		'module');
 require_once cot_incfile('pfs',			'module');
 require_once cot_incfile('users',		'module');
-require_once cot_incfile('bbcode',		'plug');
 require_once cot_incfile('comments',	'plug');
 require_once cot_incfile('ratings',		'plug');
 require_once cot_incfile('tags',		'plug');
@@ -131,7 +130,7 @@ function sed_parse_autourls($text)
 function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_newlines = TRUE)
 {
 	$enable_markup = $parse_bbcodes;
-	return cot_parse($text, $enable_markup);
+	return cot_parse($text, $enable_markup, 'bbcode');
 }
 
 function sed_post_parse($text, $area = '')

@@ -61,9 +61,13 @@
 					<td class="centerall">{ADMIN_BBCODE_POSTRENDER}</td>
 					<td class="centerall"><input type="submit" value="{PHP.L.Add}" /></td>
 				</tr>
-				<tr>
-					<td class="strong textcenter" colspan="5"><a href="{ADMIN_BBCODE_URL_CLEAR_CACHE}" onclick="return confirm('{PHP.L.adm_bbcodes_clearcache_confirm}')">{PHP.L.adm_bbcodes_clearcache}</a></td>
-				</tr>
 				</form>
 			</table>
+			<h3>{PHP.L.adm_bbcodes_other}:</h3>
+			<ul>
+				<li><a href="{ADMIN_BBCODE_URL_CLEAR_CACHE}" onclick="return confirm('{PHP.L.adm_bbcodes_clearcache_confirm}')">{PHP.L.adm_bbcodes_clearcache}</a></li>
+				<!-- BEGIN: ADMIN_BBCODE_CONVERT -->
+				<li><a href="{ADMIN_BBCODE_CONVERT_URL}" onclick="return confirm('{PHP.L.adm_bbcodes_convert_confirm}')">{ADMIN_BBCODE_CONVERT_TITLE}</a></li>
+				<!-- END: ADMIN_BBCODE_CONVERT -->
+			</ul>
 <!-- END: MAIN -->

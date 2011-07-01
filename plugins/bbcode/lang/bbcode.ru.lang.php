@@ -19,8 +19,16 @@ $L['adm_bbcodes_clearcache_confirm'] = 'Это очистит кэш всех с
 $L['adm_bbcodes_clearcache_done'] = 'HTML-кэш очищен.';
 $L['adm_bbcodes_confirm'] = 'Удалить данный BBCode?';
 $L['adm_bbcodes_container'] = 'Контейнер';
+$L['adm_bbcodes_convert_comments'] = 'Конвертировать комментарии в HTML';
+$L['adm_bbcodes_convert_complete'] = 'Конвертирование завершено';
+$L['adm_bbcodes_convert_confirm'] = 'Вы уверены? Операция необратима! Если не уверены, сначала сделайте бекап базы данных.';
+$L['adm_bbcodes_convert_forums'] = 'Конвертировать форумы в HTML';
+$L['adm_bbcodes_convert_page'] = 'Конвертировать страницы в HTML';
+$L['adm_bbcodes_convert_pm'] = 'Конвертировать личные сообщения в HTML';
+$L['adm_bbcodes_convert_users'] = 'Конвертировать подписи пользователей в HTML';
 $L['adm_bbcodes_mode'] = 'Режим';
 $L['adm_bbcodes_new'] = 'Новый BBCode';
+$L['adm_bbcodes_other'] = 'Другие действия';
 $L['adm_bbcodes_pattern'] = 'Шаблон';
 $L['adm_bbcodes_postrender'] = 'Пост-рендер';
 $L['adm_bbcodes_priority'] = 'Приоритет';
@@ -42,6 +50,6 @@ HTM;
 
 $L['cfg_smilies'] = array('Включить смайлики', '');
 
-$L['info_desc'] = 'Включает барсинг ББ-кодов везде на сайте и отключает стандартный HTML-парсинг. Администратор может настраивать бб-коды с помощью утилиты. Также добавляет поддержку кодов смайликов.';
+$L['info_desc'] = 'Включает поддержку ББ-кодов на сайте. Администратор может настраивать бб-коды с помощью утилиты. Также добавляет поддержку кодов смайликов.';
 
 ?>

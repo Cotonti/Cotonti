@@ -10,8 +10,14 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-global $db_bbcode;
+global $cfg, $db_x, $db_bbcode;
 $db_bbcode = isset($db_bbcode) ? $db_bbcode : $db_x . 'bbcode';
+
+cot_bbcode_load();
+if ($cfg['plugin']['bbcode']['smilies'])
+{
+	cot_smilies_load();
+}
 
 /**
  * Registers a new bbcode in database.

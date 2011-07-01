@@ -3225,7 +3225,7 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 		}
 	}
 
-	return htmlspecialchars($text);
+	return nl2br(htmlspecialchars($text));
 }
 
 /**

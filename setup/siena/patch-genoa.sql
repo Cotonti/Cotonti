@@ -562,3 +562,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ALTER TABLE `cot_extra_fields` ADD COLUMN `field_params` text collate utf8_unicode_ci NOT NULL;
 ALTER TABLE `cot_extra_fields` ADD COLUMN `field_enabled` tinyint(1) unsigned NOT NULL default '1';
 UPDATE `cot_extra_fields` SET `field_enabled` = '1' WHERE 1;
+
+/* r2145 Editor/parser choice options */
+INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
+('core','main','31','parser',4,'none','none','cot_get_parsers()','');

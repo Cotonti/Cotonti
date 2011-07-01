@@ -17,7 +17,7 @@ Hooks=tools
 
 defined('COT_CODE') or die('Wrong URL');
 
-require_once cot_langfile('bbcode', 'plug');
+require_once cot_incfile('bbcode', 'plug');
 
 $bb_t = new XTemplate(cot_tplfile('bbcode.admin', 'plug'));
 
@@ -86,6 +86,128 @@ elseif ($a == 'clearcache')
 	cot_bbcode_clearcache();
 	cot_message('adm_bbcodes_clearcache_done');
 }
+elseif ($a == 'convert')
+{
+	// Convert from BBcode to HTML
+	if ($b == 'page')
+	{
+		require_once cot_incfile('page', 'module');
+		// Attempt to override from HTML cache
+		if ($db->query("SHOW COLUMNS FROM $db_pages WHERE Field = 'page_html'")->rowCount() == 1)
+		{
+			$db->query("UPDATE $db_pages SET page_text = page_html, page_parser = 'html' WHERE page_html != '' AND page_parser = 'bbcode'");
+			$db->query("ALTER TABLE $db_pages DROP COLUMN page_html");
+		}
+		// Update manually
+		$res = $db->query("SELECT page_text, page_id FROM $db_pages WHERE page_parser = 'bbcode'");
+		while ($row = $res->fetch())
+		{
+			$html = cot_parse_bbcode($row['page_text']);
+			$db->update($db_pages, array('page_text' => $html, 'page_parser' => 'html'), 'page_id = ' . $row['page_id']);
+		}
+		$res->closeCursor();
+		cot_message('adm_bbcodes_convert_complete');
+	}
+	elseif ($b == 'forums')
+	{
+		require_once cot_incfile('forums', 'module');
+		// Attempt to override from HTML cache
+		if ($db->query("SHOW COLUMNS FROM $db_forum_posts WHERE Field = 'fp_html'")->rowCount() == 1)
+		{
+			$db->query("UPDATE $db_forum_posts SET fp_text = fp_html WHERE fp_html != ''");
+			$res = $db->query("SELECT fp_text, fp_id FROM $db_forum_posts WHERE fp_html = ''");
+			$has_html = true;
+		}
+		else
+		{
+			// Update manually
+			// This may fail if there are too many posts in the database
+			$res = $db->query("SELECT fp_text, fp_id FROM $db_forum_posts");
+			$has_html = false;
+		}
+		while ($row = $res->fetch())
+		{
+			$html = cot_parse_bbcode($row['fp_text']);
+			$db->update($db_forum_posts, array('fp_text' => $html), 'fp_id = ' . $row['fp_id']);
+		}
+		$res->closeCursor();
+		if ($has_html)
+		{
+			// Drop HTML cache
+			$db->query("ALTER TABLE $db_forum_posts DROP COLUMN fp_html");
+		}
+		cot_message('adm_bbcodes_convert_complete');
+	}
+	elseif ($b == 'comments')
+	{
+		require_once cot_incfile('comments', 'plug');
+		// Attempt to override from HTML cache
+		if ($db->query("SHOW COLUMNS FROM $db_com WHERE Field = 'com_html'")->rowCount() == 1)
+		{
+			$db->query("UPDATE $db_com SET com_text = com_html WHERE com_html != ''");
+			$res = $db->query("SELECT com_text, com_id FROM $db_com WHERE com_html = ''");
+			$has_html = true;
+		}
+		else
+		{
+			// Update manually
+			$res = $db->query("SELECT com_text, com_id FROM $db_com");
+			$has_html = false;
+		}
+		while ($row = $res->fetch())
+		{
+			$html = cot_parse_bbcode($row['com_text']);
+			$db->update($db_pm, array('com_text' => $html), 'com_id = ' . $row['com_id']);
+		}
+		$res->closeCursor();
+		if ($has_html)
+		{
+			// Drop HTML cache
+			$db->query("ALTER TABLE $db_com DROP COLUMN com_html");
+		}
+		cot_message('adm_bbcodes_convert_complete');
+	}
+	elseif ($b == 'pm')
+	{
+		require_once cot_incfile('pm', 'module');
+		// Attempt to override from HTML cache
+		if ($db->query("SHOW COLUMNS FROM $db_com WHERE Field = 'pm_html'")->rowCount() == 1)
+		{
+			$db->query("UPDATE $db_pm SET pm_text = pm_html WHERE pm_html != ''");
+			$res = $db->query("SELECT pm_text, pm_id FROM $db_pm WHERE pm_html = ''");
+			$has_html = true;
+		}
+		else
+		{
+			// Update manually
+			$res = $db->query("SELECT pm_text, pm_id FROM $db_pm");
+			$has_html = false;
+		}
+		while ($row = $res->fetch())
+		{
+			$html = cot_parse_bbcode($row['pm_text']);
+			$db->update($db_pm, array('pm_text' => $html), 'pm_id = ' . $row['pm_id']);
+		}
+		$res->closeCursor();
+		if ($has_html)
+		{
+			// Drop HTML cache
+			$db->query("ALTER TABLE $db_pm DROP COLUMN pm_html");
+		}
+		cot_message('adm_bbcodes_convert_complete');
+	}
+	elseif ($b == 'users')
+	{
+		$res = $db->query("SELECT user_text, user_id FROM $db_users");
+		while ($row = $res->fetch())
+		{
+			$html = cot_parse_bbcode($row['user_text']);
+			$db->update($db_users, array('user_text' => $html), 'user_id = ' . $row['user_id']);
+		}
+		$res->closeCursor();
+		cot_message('adm_bbcodes_convert_complete');
+	}
+}
 
 $totalitems = $db->countRows($db_bbcode);
 
@@ -150,6 +272,48 @@ $bb_t->assign(array(
 	'ADMIN_BBCODE_POSTRENDER' => cot_checkbox('0', 'bbc_postrender'),
 	'ADMIN_BBCODE_URL_CLEAR_CACHE' => cot_url('admin', 'm=bbcode&a=clearcache&d='.$durl)
 ));
+
+// HTML conversion links
+if (cot_module_active('page'))
+{
+	$bb_t->assign(array(
+		'ADMIN_BBCODE_CONVERT_URL' => cot_url('admin', 'm=bbcode&a=convert&b=page'),
+		'ADMIN_BBCODE_CONVERT_TITLE' => $L['adm_bbcodes_convert_page']
+	));
+	$bb_t->parse('MAIN.ADMIN_BBCODE_CONVERT');
+}
+if (cot_module_active('forums'))
+{
+	$bb_t->assign(array(
+		'ADMIN_BBCODE_CONVERT_URL' => cot_url('admin', 'm=bbcode&a=convert&b=forums'),
+		'ADMIN_BBCODE_CONVERT_TITLE' => $L['adm_bbcodes_convert_forums']
+	));
+	$bb_t->parse('MAIN.ADMIN_BBCODE_CONVERT');
+}
+if (cot_plugin_active('comments'))
+{
+	$bb_t->assign(array(
+		'ADMIN_BBCODE_CONVERT_URL' => cot_url('admin', 'm=bbcode&a=convert&b=comments'),
+		'ADMIN_BBCODE_CONVERT_TITLE' => $L['adm_bbcodes_convert_comments']
+	));
+	$bb_t->parse('MAIN.ADMIN_BBCODE_CONVERT');
+}
+if (cot_module_active('pm'))
+{
+	$bb_t->assign(array(
+		'ADMIN_BBCODE_CONVERT_URL' => cot_url('admin', 'm=bbcode&a=convert&b=pm'),
+		'ADMIN_BBCODE_CONVERT_TITLE' => $L['adm_bbcodes_convert_pm']
+	));
+	$bb_t->parse('MAIN.ADMIN_BBCODE_CONVERT');
+}
+//if (cot_module_active('users'))
+//{
+$bb_t->assign(array(
+	'ADMIN_BBCODE_CONVERT_URL' => cot_url('admin', 'm=bbcode&a=convert&b=users'),
+	'ADMIN_BBCODE_CONVERT_TITLE' => $L['adm_bbcodes_convert_users']
+));
+$bb_t->parse('MAIN.ADMIN_BBCODE_CONVERT');
+//}
 
 cot_display_messages($bb_t);
 

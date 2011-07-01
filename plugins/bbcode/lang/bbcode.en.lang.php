@@ -19,8 +19,16 @@ $L['adm_bbcodes_clearcache_confirm'] = 'This will clear cache for all pages and 
 $L['adm_bbcodes_clearcache_done'] = 'HTML cache has been cleared.';
 $L['adm_bbcodes_confirm'] = 'Really delete this bbcode?';
 $L['adm_bbcodes_container'] = 'Container';
+$L['adm_bbcodes_convert_comments'] = 'Convert comments to HTML';
+$L['adm_bbcodes_convert_complete'] = 'Conversion complete';
+$L['adm_bbcodes_convert_confirm'] = 'Are you sure? There is no rollback! If not sure, backup your database first.';
+$L['adm_bbcodes_convert_forums'] = 'Convert forums to HTML';
+$L['adm_bbcodes_convert_page'] = 'Convert pages to HTML';
+$L['adm_bbcodes_convert_pm'] = 'Convert PMs to HTML';
+$L['adm_bbcodes_convert_users'] = 'Convert user signatures to HTML';
 $L['adm_bbcodes_mode'] = 'Mode';
 $L['adm_bbcodes_new'] = 'New BBCode';
+$L['adm_bbcodes_other'] = 'Other Actions';
 $L['adm_bbcodes_pattern'] = 'Pattern';
 $L['adm_bbcodes_postrender'] = 'Post-render';
 $L['adm_bbcodes_priority'] = 'Priority';
@@ -42,6 +50,6 @@ HTM;
 
 $L['cfg_smilies'] = array('Enable smilies', '');
 
-$L['info_desc'] = 'Enables BBCode parsing everywhere on site and disables default HTML parsing. Administrator can customize bbcodes with Admin tool. Also adds support for smilie codes and smilie sets.';
+$L['info_desc'] = 'Enables BBCode parsing support. Administrator can customize bbcodes with Admin tool. Also adds support for smilie codes and smilie sets.';
 
 ?>

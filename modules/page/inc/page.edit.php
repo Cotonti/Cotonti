@@ -27,7 +27,6 @@ foreach (cot_getextplugins('page.edit.first') as $pl)
 
 cot_block($usr['auth_read']);
 
-$sys['parser'] = $cfg['page']['parser'];
 $parser_list = cot_get_parsers();
 
 if ($a == 'update')
@@ -35,6 +34,8 @@ if ($a == 'update')
 	$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
 	cot_die($sql_page->rowCount() == 0);
 	$row_page = $sql_page->fetch();
+	
+	$sys['parser'] = $row_page['page_parser'];
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $row_page['page_cat']);
 
@@ -212,6 +213,8 @@ if ($a == 'update')
 $sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
 cot_die($sql_page->rowCount() == 0);
 $pag = $sql_page->fetch();
+
+$sys['parser'] = $pag['page_parser'];
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $pag['page_cat']);
 cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $pag['page_ownerid']);
