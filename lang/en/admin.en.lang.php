@@ -210,7 +210,7 @@ $L['cfg_markup'] = array('Enable markup', 'Enables HTML/BBcode or other parsing 
  * Extension management
  */
 
-$L['ext_already_installed'] = 'This extension is already installed';
+$L['ext_already_installed'] = 'This extension is already installed: {$name}';
 $L['ext_auth_installed'] = 'Installed authorization defaults';
 $L['ext_auth_locks_updated'] = 'Updated authorization locks';
 $L['ext_auth_uninstalled'] = 'Removed authorization options';
@@ -231,7 +231,7 @@ $L['ext_invalid_format'] = 'This is not a valid Cotonti >= 0.9 extension. Please
 $L['ext_old_format'] = 'This is old Genoa/Seditio plugin. It may work incorrectly or not work at all.';
 $L['ext_patch_applied'] = 'Applied patch {$f}: {$msg}';
 $L['ext_patch_error'] = 'Error applying patch {$f}: {$msg}';
-$L['ext_setup_not_found'] = 'Setup file is not found';
+$L['ext_setup_not_found'] = 'Setup file is not found: {$path}';
 $L['ext_uninstall_confirm'] = 'Are you sure you want to uninstall this extension? Any data linked to the extension will be removed and cannot be recovered.<br/><a href="{$url}">Yes, uninstall and remove data.</a>';
 $L['ext_uninstalling'] = 'Uninstalling {$type} &quot;{$name}&quot;';
 $L['ext_up2date'] = '{$type} &quot;{$name}&quot; is up to date';

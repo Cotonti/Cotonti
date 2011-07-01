@@ -152,12 +152,6 @@ if (defined('COT_UPGRADE') && !cot_error_found())
 	// Set Module versions to Genoa version before upgrade
 	$db->update($db_core, array('ct_version' => '0.8.99'), '1');
 
-	// Install bbcode and html parsers
-	cot_extension_install('bbcode');
-	cot_extension_install('htmlparser');
-	// Import old Seditio/LDU bbcodes
-	$db->runScript(file_get_contents('./setup/siena/seditio_bbcodes.sql'));
-
 	// Update modules
 	foreach (array('forums', 'page', 'pfs', 'pm', 'polls') as $code)
 	{
@@ -178,9 +172,10 @@ if (defined('COT_UPGRADE') && !cot_error_found())
 	{
 		$code = $row[0];
 		$setup_file = $cfg['plugins_dir'] . '/' . $code . '/' . $code . '.setup.php';
-		if (file_exists($setup_file) && cot_infoget($setup_file))
+		if (file_exists($setup_file) && $info = cot_infoget($setup_file))
 		{
 			// Update
+			cot_extension_add($code, $info['Name'], '0.0.0', true);
 			cot_extension_install($code, false, true);
 		}
 		else
@@ -193,6 +188,12 @@ if (defined('COT_UPGRADE') && !cot_error_found())
 		}
 	}
 	$res->closeCursor();
+	
+	// Install bbcode and html parsers
+	cot_extension_install('bbcode');
+	cot_extension_install('html');
+	// Import old Seditio/LDU bbcodes
+	$db->runScript(file_get_contents('./setup/siena/seditio_bbcodes.sql'));
 
 	// Install URLEditor if urltrans.dat is non-standard
 	if (file_exists('datas/urltrans.dat'))
@@ -262,19 +263,11 @@ elseif (!cot_error_found())
 		{
 			cot_error(cot_rc('ext_update_error', array(
 				'type' => $L['Module'],
-				'name' => $name
+				'name' => $code
 			)));
 		}
 	}
-	$installed_plugs = array();
-	$res = $db->query("SELECT DISTINCT(pl_code) FROM $db_plugins
-		WHERE pl_module = 0");
-	while ($row = $res->fetch(PDO::FETCH_NUM))
-	{
-		$installed_plugs[] = $row[0];
-	}
-	$res->closeCursor();
-	foreach ($installed_plugs as $code)
+	foreach ($cot_plugins_enabled as $code => $plug)
 	{
 		$ret = cot_extension_install($code, false, true);
 		if ($ret === true)
@@ -285,7 +278,7 @@ elseif (!cot_error_found())
 		{
 			cot_error(cot_rc('ext_update_error', array(
 				'type' => $L['Plugin'],
-				'name' => $name
+				'name' => $code
 			)));
 		}
 	}

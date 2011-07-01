@@ -217,6 +217,4 @@ global $db_config;
 // All to bbcode
 $db->update($db_config, array('config_value' => 'bbcode'), "config_owner = 'core' AND config_cat = 'main' AND config_name = 'parser'");
 
-cot_extension_install('html');
-
 ?>

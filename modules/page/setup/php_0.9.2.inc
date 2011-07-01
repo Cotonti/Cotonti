@@ -14,10 +14,9 @@ $db->query("ALTER TABLE $db_pages ADD COLUMN `page_parser` VARCHAR(64) NOT NULL 
 if (defined('COT_UPGRADE'))
 {
 	// Upgrading from Genoa
-	$db->update($db_pages, array('page_parser' => 'html'), 'page_type = 0');
-	$db->update($db_pages, array('page_parser' => 'bbcode'), 'page_type = 1');
+	$db->update($db_pages, array('page_parser' => 'html'), 'page_type = 1');
+	$db->update($db_pages, array('page_parser' => 'bbcode'), 'page_type = 0');
 	// Drop HTML cache and page_type
-	$db->query("ALTER TABLE $db_pages DROP COLUMN page_html");
 	$db->query("ALTER TABLE $db_pages DROP COLUMN page_type");
 	// Set default parsing to bbcode and editor to markitup
 	$db->update($db_config, array('config_value' => 'bbcode'), "config_owner = 'module' AND config_cat = 'page' AND config_name = 'parser'");

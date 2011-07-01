@@ -566,3 +566,9 @@ UPDATE `cot_extra_fields` SET `field_enabled` = '1' WHERE 1;
 /* r2145 Editor/parser choice options */
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
 ('core','main','31','parser',4,'none','none','cot_get_parsers()','');
+
+/* r2150 remove obsolete configuration options */
+DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` IN ('forums', 'page', 'pfs', 'pm', 'polls');
+
+/* r2150 Patch for old regexp with sed_bbcode_cdata calls */
+UPDATE `cot_bbcode` SET `bbc_replacement` = REPLACE(`bbc_replacement`, 'sed_bbcode_cdata', 'cot_bbcode_cdata') WHERE `bbc_replacement` LIKE '%sed_%';

@@ -210,7 +210,7 @@ $L['cfg_markup'] = array('Включить разметку', 'Включает 
  * Extension management
  */
 
-$L['ext_already_installed'] = 'Данное расширение уже установлено';
+$L['ext_already_installed'] = 'Данное расширение уже установлено: {$name}';
 $L['ext_auth_installed'] = 'Значения авторизации по умолчанию установлены';
 $L['ext_auth_locks_updated'] = 'Блокировки авторизации обновлены';
 $L['ext_auth_uninstalled'] = 'Опции авторизации удалены';
@@ -231,7 +231,7 @@ $L['ext_invalid_format'] = 'Расширение несовместимо с Cot
 $L['ext_old_format'] = 'Это старый плагин для Genoa/Seditio. Он может работать некорректно или не работать вовсе.';
 $L['ext_patch_applied'] = 'Установлен патч {$f}: {$msg}';
 $L['ext_patch_error'] = 'Ошибка установки патча {$f}: {$msg}';
-$L['ext_setup_not_found'] = 'Файл установок не найден';
+$L['ext_setup_not_found'] = 'Файл установок не найден: {$path}';
 $L['ext_uninstall_confirm'] = 'Вы действительно хотите удалить это расширение? Все данные, связанные с этим расширением, будут удалены без возможности восстановления.<br/><a href="{$url}">Да, удалить вместе с данными.</a>';
 $L['ext_uninstalling'] = 'Удаление {$type} &quot;{$name}&quot;';
 $L['ext_up2date'] = '{$type} &quot;{$name}&quot; не требует обновления';

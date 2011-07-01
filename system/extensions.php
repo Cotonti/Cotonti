@@ -199,7 +199,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
     $setup_file = $path . "/$name.setup.php";
     if (!file_exists($setup_file))
     {
-        cot_error('ext_setup_not_found');
+        cot_error(cot_rc('ext_setup_not_found', array('path' => $setup_file)));
         return false;
     }
 
@@ -241,7 +241,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		}
 		else
 		{
-			cot_error('ext_already_installed');
+			cot_error(cot_rc('ext_already_installed', array('name' => $name)));
 			return false;
 		}
 	}
