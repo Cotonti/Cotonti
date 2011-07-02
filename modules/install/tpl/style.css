@@ -54,7 +54,7 @@ body {
 	padding: 29px 27px 0 26px;
 	font-size: 13px;
 	font-weight: bold;
-	color: #929292;
+	color: #525252;
 	text-shadow: 0 1px 2px #FFF;
 }
 
@@ -266,6 +266,7 @@ span.invalid {color: #EA0000;}
 	border: none !important;
 	font-weight: normal;
 	color: #555;
+    background: none !important;
 }
 
 #content div.done ul li span, #content div.error ul li span {
@@ -313,6 +314,7 @@ input[type=text], input[type=password] {
 	border: 1px solid #C7C7C7;
     border-radius: 3px;
     -moz-border-radius: 3px;
+    -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
 	font-size: 11px;
 	font-weight: bold;
@@ -334,7 +336,7 @@ input[type=submit] {
     -webkit-border-radius: 3px;
 	font-size: 13px;
 	font-weight: bold;
-	color: #909090;
+	color: #505050;
 	text-shadow: 0 1px 2px #FFF;
 	cursor: pointer;
 }

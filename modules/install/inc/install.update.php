@@ -252,34 +252,40 @@ elseif (!cot_error_found())
 
 	// Update installed modules and plugins
 	$updated_ext = false;
-	foreach ($cot_modules as $code => $mod)
+	if(count($cot_modules)>0)
 	{
-		$ret = cot_extension_install($code, true, true);
-		if ($ret === true)
+		foreach ($cot_modules as $code => $mod)
 		{
-			$updated_ext = true;
-		}
-		elseif ($ret === false)
-		{
-			cot_error(cot_rc('ext_update_error', array(
-				'type' => $L['Module'],
-				'name' => $code
-			)));
+			$ret = cot_extension_install($code, true, true);
+			if ($ret === true)
+			{
+				$updated_ext = true;
+			}
+			elseif ($ret === false)
+			{
+				cot_error(cot_rc('ext_update_error', array(
+					'type' => $L['Module'],
+					'name' => $code
+				)));
+			}
 		}
 	}
-	foreach ($cot_plugins_enabled as $code => $plug)
+	if(count($cot_plugins_enabled)>0)
 	{
-		$ret = cot_extension_install($code, false, true);
-		if ($ret === true)
+		foreach ($cot_plugins_enabled as $code => $plug)
 		{
-			$updated_ext = true;
-		}
-		elseif ($ret === false)
-		{
-			cot_error(cot_rc('ext_update_error', array(
-				'type' => $L['Plugin'],
-				'name' => $code
-			)));
+			$ret = cot_extension_install($code, false, true);
+			if ($ret === true)
+			{
+				$updated_ext = true;
+			}
+			elseif ($ret === false)
+			{
+				cot_error(cot_rc('ext_update_error', array(
+					'type' => $L['Plugin'],
+					'name' => $code
+				)));
+			}
 		}
 	}
 
