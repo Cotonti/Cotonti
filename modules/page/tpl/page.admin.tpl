@@ -58,7 +58,7 @@
 								<table class="flat">
 									<tr>
 										<td class="width20">{PHP.L.Category}:</td>
-										<td class="width80"><a href="{ADMIN_PAGE_CAT_URL}">{ADMIN_PAGE_CATICON}{ADMIN_PAGE_CAT_TITLE}</a></td>
+										<td class="width80">{ADMIN_PAGE_CATPATH_SHORT}</td>
 									</tr>
 									<tr>
 										<td>{PHP.L.Description}:</td>
