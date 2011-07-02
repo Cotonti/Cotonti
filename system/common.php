@@ -174,6 +174,8 @@ $redirect = preg_replace('/[^a-zA-Z0-9_=\/]/', '', cot_import('redirect','G','TX
 $out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
 define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER['X-Requested-With']) || $_GET['_ajax'] == 1);
+// Other system variables
+$sys['parser'] = $cfg['parser'];
 
 /* ======== Plugins ======== */
 

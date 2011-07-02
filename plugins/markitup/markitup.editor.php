@@ -31,7 +31,7 @@ if (!file_exists($smile_lang))
 }
 
 // BBcode or HTML preset
-$mkup_set = cot_plugin_active('bbcode') ? 'bbcode' : 'html';
+$mkup_set = $sys['parser'] == 'bbcode'? 'bbcode' : 'html';
 
 // Load resources
 $mkup_skin = cot_rc('code_rc_css_file', array('url' => $cfg['plugins_dir'] . '/markitup/skins/' . $cfg['plugin']['markitup']['skin'] . '/style.css'));

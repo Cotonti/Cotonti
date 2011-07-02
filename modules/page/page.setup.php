@@ -17,7 +17,7 @@ Admin_icon=img/adminmenu_page.png
 
 [BEGIN_COT_EXT_CONFIG]
 markup=01:radio::1:
-parser=02:callback:cot_get_parsers():html:
+parser=02:callback:cot_get_parsers():none:
 count_admin=03:radio::0:
 autovalidate=04:radio::1:
 maxlistsperpage=06:select:5,10,15,20,25,30,40,50,60,70,100,200,500:30:
