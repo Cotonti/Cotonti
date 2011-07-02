@@ -67,6 +67,24 @@ if (!COT_AJAX)
 	}
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 	
+	$t->assign(array(
+		'FOOTER_BOTTOMLINE' => $out['bottomline'],
+		'FOOTER_CREATIONTIME' => $out['creationtime'],
+		'FOOTER_COPYRIGHT' => $out['copyright'],
+		'FOOTER_SQLSTATISTICS' => $out['sqlstatistics'],
+		'FOOTER_LOGSTATUS' => $out['logstatus'],
+		'FOOTER_PMREMINDER' => $out['pmreminder'],
+		'FOOTER_ADMINPANEL' => $out['adminpanel'],
+		'FOOTER_DEVMODE' => $out['devmode']
+	));
+
+	/* === Hook === */
+	foreach (cot_getextplugins('footer.tags') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+	
 	// Attach rich text editors if any
 	if ($cot_textarea_count > 0)
 	{
@@ -84,25 +102,8 @@ if (!COT_AJAX)
 			}
 		}
 	}
-
-	$t->assign(array(
-		'FOOTER_BOTTOMLINE' => $out['bottomline'],
-		'FOOTER_CREATIONTIME' => $out['creationtime'],
-		'FOOTER_COPYRIGHT' => $out['copyright'],
-		'FOOTER_SQLSTATISTICS' => $out['sqlstatistics'],
-		'FOOTER_LOGSTATUS' => $out['logstatus'],
-		'FOOTER_PMREMINDER' => $out['pmreminder'],
-		'FOOTER_ADMINPANEL' => $out['adminpanel'],
-		'FOOTER_DEVMODE' => $out['devmode'],
-		'FOOTER_RC' => $out['footer_rc']
-	));
-
-	/* === Hook === */
-	foreach (cot_getextplugins('footer.tags') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+	
+	$t->assign('FOOTER_RC', $out['footer_rc']);
 
 	if ($usr['id'] > 0)
 	{
