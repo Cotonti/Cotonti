@@ -48,6 +48,10 @@
 			<label>{PHP.L.Keywords}</label>
 			{PAGEADD_FORM_KEYWORDS}
 		</div>
+		<div>
+			<label>{PHP.L.Parser}</label>
+			{PAGEADD_FORM_PARSER}
+		</div>
 	</fieldset>
 
 	<fieldset>

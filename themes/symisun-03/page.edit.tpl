@@ -58,6 +58,10 @@
 			{PAGEEDIT_FORM_PAGECOUNT}
 		</div>
 		<!-- END: ADMIN -->
+		<div>
+			<label>{PHP.L.Parser}</label>
+			{PAGEEDIT_FORM_PARSER}
+		</div>
 	</fieldset>
 
 	<fieldset>
