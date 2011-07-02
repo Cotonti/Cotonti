@@ -38,6 +38,11 @@ if ((!empty($n) && !empty($q)) || !empty($p) || !empty($id))
 	{
 		$sql_forums = $db->query("SELECT fp_id, fp_topicid, fp_cat, fp_posterid
 			FROM $db_forum_posts WHERE fp_topicid = $q AND fp_updated > " . $usr['lastvisit'] . " ORDER by fp_id ASC LIMIT 1");
+		if ($sql_forums->rowCount() == 0)
+		{
+			$sql_forums = $db->query("SELECT fp_id, fp_topicid, fp_cat, fp_posterid FROM $db_forum_posts
+			WHERE fp_topicid = $q ORDER by fp_id DESC LIMIT 1");
+		}
 	}
 	elseif (!empty($p) || !empty($id))
 	{
