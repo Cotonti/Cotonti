@@ -514,6 +514,10 @@ if (!$mscheme)
 {
 	cot_diefatal('Default scheme not found.'); // TODO: Need translate
 }
+else
+{
+	cot_rc_add_file($mscheme);
+}
 
 $usr['def_theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
 $usr['theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.{$usr['lang']}.lang.php";
