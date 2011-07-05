@@ -1,51 +1,80 @@
-/* 1. Elements
--------------------------------------------------- */
+* {
+	margin: 0;
+	padding: 0;
+}
+html {
+	height: 100%;
+}
+body {
+	font: 12px/18px Arial, Tahoma, Verdana, sans-serif;
+	width: 100%;
+	height: 100%;
+    background:url(img/header-bg-blue.png) repeat-x;
+}
+a {
+	color: inherit;
+	outline: none;
+	text-decoration: underline;
+}
+a:hover {
+	text-decoration: none;
+}
+p {
+	margin: 0 0 18px
+}
+img {
+	border: none;
+}
+input {
+	vertical-align: middle;
+}
+#wrapper {
+	width: 980px;
+	margin: 0 auto;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+}
 
-*	{ margin:0; padding:0; }
-html	{ padding:0; }
 
-body	{ font:normal 76%/1.8em Georgia, serif; background:url(img/body.png) repeat-x 0 60px; }
+/* Header
+-----------------------------------------------------------------------------*/
+#header {
+	height: 54px;
+}
 
-ul 			{ list-style-type:none; }
-ol			{ list-style-position:outside; margin-bottom:5px; padding-left:20px; }
-ul.follow li	{ padding-left:25px; background:url(img/follow.png) no-repeat 5px 3px; }
-ul.follow img	{ vertical-align:-3px; }
+#header #logo { padding-top: 14px; padding-left: 15px; font-size: 23px; color: #333; font-weight: bold; text-shadow: 0pt 1px #CCC; float:left;}
+#header #logo a { text-decoration: none;  color: inherit;}
+#header ul { margin: 0pt; padding: 0pt; position: absolute; }
+#header li { display: inline; list-style: none outside none; margin: 0pt; padding: 0pt; }
+#header #main {  margin: 12px 0 0 20px; }
+#header #main a { background: url('img/header-mainnav-blue.png') repeat-x scroll 0pt 0pt transparent; border: 1px solid rgb(59, 117, 158); border-radius: 5px 5px 5px 5px; box-shadow: 0pt 1px rgba(255, 255, 255, 0.2) inset, 0pt 1px rgba(255, 255, 255, 0.2); color: rgb(255, 255, 255); display: inline-block; font-size: 14px; font-weight: bold; height: 27px; line-height: 27px; margin-right: 5px; padding: 0pt 10px; text-decoration: none; text-shadow: 0pt -1px rgba(59, 117, 158, 0.95); }
+#header #main a:hover { background-position: 0pt -27px; text-decoration: none; }
+#header #main a:active, #header #main .selected, #header #main .selected:hover { background-position: 0pt -54px; border-color: rgb(49, 95, 128); box-shadow: 0pt 3px 5px rgba(0, 0, 0, 0.15) inset; color: rgba(255, 255, 255, 0.8); text-shadow: 0pt -1px rgba(7, 59, 95, 0.95); }
 
-a			{ color:#172973; text-decoration:none; }
-a:hover		{ text-decoration:underline; }
-a img		{ border:0; }
 
-hr		{ margin:4px 0 1px; border:1px solid; border-color:#ddd transparent transparent transparent; }
-* html hr	{ margin:4px 0 1px; border:1px solid #ddd; }
+/* Middle
+-----------------------------------------------------------------------------*/
+#content {
+	padding: 0 0 30px;
+}
 
-/* 2. Structure
--------------------------------------------------- */
 
-.body		{ font-size:.9em; width:960px; margin:0 auto; position:relative; }
 
-#user		{ text-align:right; padding:30px 45px 0; height:30px; width:870px; background:url(img/user.png) no-repeat 0 0; position:relative; }
-#user a		{ font-weight:bold; }
-#user li#hi	{ position:absolute; top:30px; left:45px; }
 
-#main		{ }
+/* Footer
+-----------------------------------------------------------------------------*/
+#footer {
+	width: 980px;
+	margin: -30px auto 0;
+	height: 30px;
+	background: #BFF08E;
+}
 
-.block		{ margin:0 10px 25px; }
 
-.col, .col4-1, .col4-2, .col4-3, .col3-1, .col3-2, .col2-1		{ float:left; }
 
-.col		{ width:100%; }
-.col4-1		{ width:240px; /* width:25%; */ }
-.col4-2		{ width:480px; /* width:50%; */ }
-.col4-3		{ width:720px; /* width:75%; */ }
-.col3-1		{ width:320px; /* width:33%; */ }
-.col3-2		{ width:640px; /* width:67%; */ }
-.col2-1		{ width:480px; /* width:50%; */ }
 
-.col.first, .col4-1.first, .col4-2.first, .col4-3.first, .col3-1.first, .col3-2.first, .col2-1.first	{ margin-left:0; clear:left; }
 
-#footer		{ font-size:.9em; text-align:center; padding:15px; height:50px; background:url(img/footer.png) repeat-x 0 0; }
-#footer a	{ color:#d3dde7; }
-#footer ul li	{ display:inline; margin:0 5px; }
 
 /* 3. Headings
 -------------------------------------------------- */

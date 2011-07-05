@@ -87,6 +87,7 @@ if (!COT_AJAX)
 		'code' => 'home',
 		'url' => cot_url('admin'),
 		'icon' => $R['admin_menu_icon_home'],
+		'title' => $L['Home'],
 		'class' => empty($m) ? 'sel' : ''
 	);
 	if ($usr['admin_config'])
@@ -95,12 +96,14 @@ if (!COT_AJAX)
 			'code' => 'config',
 			'url' => cot_url('admin', 'm=config'),
 			'icon' => $R['admin_menu_icon_config'],
+			'title' => $L['Configuration'],
 			'class' => $m == 'config' ? 'sel' : ''
 		);
 		$admin_menu[] = array(
 			'code' => 'extensions',
 			'url' => cot_url('admin', 'm=extensions'),
 			'icon' => $R['admin_menu_icon_extensions'],
+			'title' => $L['Extensions'],
 			'class' => $m == 'extensions' ? 'sel' : ''
 		);
 	}
@@ -110,6 +113,7 @@ if (!COT_AJAX)
 			'code' => 'users',
 			'url' => cot_url('admin', 'm=users'),
 			'icon' => $R['admin_menu_icon_users'],
+			'title' => $L['Users'],
 			'class' => $m == 'users' ? 'sel' : ''
 		);
 	}
@@ -119,6 +123,7 @@ if (!COT_AJAX)
 			'code' => 'other',
 			'url' => cot_url('admin', "m=other"),
 			'icon' => $R['admin_menu_icon_other'],
+			'title' => $L['Other'],
 			'class' => $m == 'other' ? 'sel' : ''
 		);
 	}
@@ -135,12 +140,12 @@ if (!COT_AJAX)
 			};
 			$title = isset($L[$info['Name']]) ? $L[$info['Name']] : $info['Name'];
 			$src = $cfg['modules_dir'] . "/$code/" . trim($info['Admin_icon']);
-			$admin_menu[] = array(
-				'code' => $code,
-				'url' => cot_url('admin', "m=$code"),
-				'icon' => cot_rc('admin_menu_icon_module', array('code' => $code, 'src' => $src, 'title' => $title)),
-				'class' => $m == $code ? 'sel' : ''
-			);
+//			$admin_menu[] = array(
+//				'code' => $code,
+//				'url' => cot_url('admin', "m=$code"),
+//				'icon' => cot_rc('admin_menu_icon_module', array('code' => $code, 'src' => $src, 'title' => $title)),
+//				'class' => $m == $code ? 'sel' : ''
+//			);
 		}
 	}
 
