@@ -516,7 +516,7 @@ if (!$mscheme)
 }
 else
 {
-	if(!defined(COT_ADMIN))
+	if(!defined('COT_ADMIN'))
 	{
 		cot_rc_add_file($mscheme);
 	}
