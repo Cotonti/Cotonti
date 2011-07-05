@@ -94,7 +94,7 @@ $L['page_deletepage'] = 'Delete this page';
  * Moved from theme.lang
  */
 
-$L['pag_linesperpage'] = 'Lines per page';
-$L['pag_linesinthissection'] = 'Lines in this section';
+$L['page_linesperpage'] = 'Lines per page';
+$L['page_linesinthissection'] = 'Lines in this section';
 
 ?>

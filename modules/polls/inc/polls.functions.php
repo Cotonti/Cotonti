@@ -313,7 +313,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 		$where = "pv_userid = '".$usr['id']."'";
 		$canvote = true;
 	}
-	elseif ($cfg['polls']['ip_id_polls'] == 'ip')
+	else
 	{
 		$where = ($usr['id'] > 0) ? "(pv_userid = '".$usr['id']."' OR pv_userip = '".$usr['ip']."')" : "pv_userip = '".$usr['ip']."'";
 		$canvote = true;

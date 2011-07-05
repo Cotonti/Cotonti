@@ -61,8 +61,8 @@
             <!-- IF {LIST_TOP_PAGINATION}-->
             {PHP.L.Page}: <strong>{LIST_TOP_CURRENTPAGE}/{LIST_TOP_TOTALPAGES}</strong><br />
             <!-- ENDIF -->
-	{PHP.L.pag_linesperpage}: <strong>{LIST_TOP_MAXPERPAGE}</strong><br />
-	{PHP.L.pag_linesinthissection}: <strong>{LIST_TOP_TOTALLINES}</strong> </div>
+	{PHP.L.page_linesperpage}: <strong>{LIST_TOP_MAXPERPAGE}</strong><br />
+	{PHP.L.page_linesinthissection}: <strong>{LIST_TOP_TOTALLINES}</strong> </div>
 	<!-- ENDIF -->
     &nbsp; </div>
   </div>

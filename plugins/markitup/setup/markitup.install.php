@@ -14,6 +14,8 @@ defined('COT_CODE') or die('Wrong URL');
 // Installing new bbcodes
 if (cot_plugin_active('bbcode'))
 {
+	require_once cot_incfile('bbcode', 'plug');
+	
 	cot_bbcode_remove(0, 'markitup');
 
 	cot_bbcode_add('size', 'pcre', '\[size=([1-2][0-9])\](.+?)\[/size\]', '<span style="font-size:$1pt">$2</span>', true, 128, 'markitup');
