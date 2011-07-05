@@ -51,10 +51,8 @@ $L['home_ql_b3_1'] = 'Basic config';
 $L['home_ql_b3_2'] = 'Extra fields for users';
 $L['home_ql_b3_4'] = 'User rights';
 
-$L['home_rev_title'] = 'Revision';
-$L['home_rev'] = 'r';
 $L['home_update_notice'] = 'Update Avaliable';
-$L['home_update_revision'] = 'Current Version: <span style="color:#C00;font-weight:bold;">%1$s(r%2$s)</span><br />New Version: <span style="color:#4E9A06;font-weight:bold;">%3$s(r%4$s)</span>'; // %1/%2 Current Version/Revision %3/%4 Updated Version/Revision
+$L['home_update_revision'] = 'Current Version: <span style="color:#C00;font-weight:bold;">%1$s</span><br />New Version: <span style="color:#4E9A06;font-weight:bold;">%2$s</span>'; // %1/%2 Current Version/Revision %3/%4 Updated Version/Revision
 
 /**
  * Config Section

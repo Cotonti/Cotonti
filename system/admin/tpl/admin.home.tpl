@@ -16,8 +16,8 @@
 				<h3>Cotonti:</h3>
 				<table class="cells">
 					<tr>
-						<td class="width80">{PHP.L.Version} ({PHP.L.home_rev_title})</td>
-						<td class="textcenter width20">{ADMIN_HOME_VERSION} ({ADMIN_HOME_REVISION})</td>
+						<td class="width80">{PHP.L.Version}</td>
+						<td class="textcenter width20">{ADMIN_HOME_VERSION}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Database}</td>

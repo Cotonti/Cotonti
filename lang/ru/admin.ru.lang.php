@@ -51,10 +51,8 @@ $L['home_ql_b3_1'] = 'Настройка пользователей';
 $L['home_ql_b3_2'] = 'Дополнительные поля для профиля';
 $L['home_ql_b3_4'] = 'Права групп';
 
-$L['home_rev_title'] = 'редакция';
-$L['home_rev'] = 'r';
 $L['home_update_notice'] = 'Доступно обновление';
-$L['home_update_revision'] = 'Текущая версия: <span style="color:#C00;font-weight:bold;">%1$s(r%2$s)</span><br />Новая версия: <span style="color:#4E9A06;font-weight:bold;">%3$s(r%4$s)</span>'; // %1/%2 Current Version/Revision %3/%4 Updated Version/Revision
+$L['home_update_revision'] = 'Текущая версия: <span style="color:#C00;font-weight:bold;">%1$s</span><br />Новая версия: <span style="color:#4E9A06;font-weight:bold;">%2$s</span>'; // %1/%2 Current Version/Revision %3/%4 Updated Version/Revision
 
 /**
  * Config Section

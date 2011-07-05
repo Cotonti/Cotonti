@@ -11,16 +11,6 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-//Version Checking
-preg_match('/Rev: ([0-9]+)/', $cfg['svnrevision'], $revmatch);
-$cfg['svnrevision'] = $revmatch[1];
-unset($revmatch);
-if ($cfg['svnrevision'] > $cfg['revision'])
-{
-	$cfg['revision'] = $cfg['svnrevision'];
-	$db->update($db_config, array('config_value' => (int)$cfg['svnrevision']), "config_owner = 'core' AND config_cat = 'version' AND config_name = 'revision' LIMIT 1");
-}
-
 $t = new XTemplate(cot_tplfile('admin.home', 'core'));
 
 $adminpath[] = array(cot_url('admin', 'm=home'), $L['Home']);
@@ -70,10 +60,10 @@ if ($cfg['check_updates'] && $cache)
 			curl_close($curl);
 		}
 	}
-	if ($update_info['update_rev'] > $cfg['revision'])
+	if ($update_info['update_ver'] > $cfg['version'])
 	{
 		$t->assign(array(
-			'ADMIN_HOME_UPDATE_REVISION' => sprintf($L['home_update_revision'], $cfg['version'], $cfg['revision'], htmlspecialchars($update_info['update_ver']), (int)$update_info['update_rev']),
+			'ADMIN_HOME_UPDATE_REVISION' => sprintf($L['home_update_revision'], $cfg['version'], htmlspecialchars($update_info['update_ver'])),
 			'ADMIN_HOME_UPDATE_MESSAGE' => cot_parse($update_info['update_message']),
 		));
 		$t->parse('MAIN.UPDATE');
@@ -82,8 +72,7 @@ if ($cfg['check_updates'] && $cache)
 
 $t->assign(array(
 	'ADMIN_HOME_VERSION' => $cfg['version'],
-	'ADMIN_HOME_REVISION' => $L['home_rev'].$cfg['revision'],
-	'ADMIN_HOME_DB_VERSION' => $cfg['dbversion']
+	'ADMIN_HOME_DB_VERSION' => htmlspecialchars($db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'")->fetchColumn())
 ));
 
 /* === Hook === */

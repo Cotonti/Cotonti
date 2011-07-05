@@ -46,8 +46,8 @@ $cot_ext_ignore_parts = array('configure', 'install', 'setup', 'uninstall');
  * number of the latest applied patch if patching was successful.
  */
 function cot_apply_patches($directory, $from_ver,
-	$sql_pattern = '(sql)_([\w\.\-\_]+)\.sql',
-	$php_pattern = '(php)_([\w\.\-\_]+)\.inc')
+	$sql_pattern = 'patch_([\w\.\-\_]+)\.(sql)',
+	$php_pattern = 'patch_([\w\.\-\_]+)\.(inc)')
 {
 	global $L, $db;
 
@@ -59,8 +59,8 @@ function cot_apply_patches($directory, $from_ver,
 		if (preg_match('#^' . $sql_pattern . '$#', $f, $mt)
 			|| preg_match('#^' . $php_pattern . '$#', $f, $mt))
 		{
-			$type = $mt[1];
-			$ver = $mt[2];
+			$type = $mt[2] == 'sql' ? 'sql' : 'php';
+			$ver = $mt[1];
 			if (version_compare($ver, $from_ver) > 0)
 			{
 				$delta[$ver][$type] = $directory . '/' . $f;

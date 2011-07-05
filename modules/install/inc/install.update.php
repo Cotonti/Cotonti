@@ -242,13 +242,33 @@ elseif (!cot_error_found())
 	// Update the core
 	$sql_install = $db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
 	$upd_rev = $sql_install->fetchColumn();
-	preg_match('#\$Rev: (\d+) \$#', $upd_rev, $mt);
-	$rev = (int) $mt[1];
-	$new_rev = cot_apply_patches("./setup/$branch", 'r' . $rev);
-	if (is_string($new_rev))
+	if (preg_match('#\$Rev: (\d+) \$#', $upd_rev, $mt))
 	{
-		$new_rev = (int) substr($new_rev, 1);
+		// Old SVN revision format
+		if ($mt[1] > 2099)
+		{
+			$rev = '0.9.3';
+		}
+		elseif ($mt[1] > 2033)
+		{
+			$rev = '0.9.2';
+		}
+		elseif ($mt[1] > 1972)
+		{
+			$rev = '0.9.1';
+		}
+		else
+		{
+			$rev = '0.9.0';
+		}
+		$rev .=  '-r' . $mt[1];
 	}
+	else
+	{
+		// New revision format
+		$rev = $upd_rev;
+	}
+	$new_rev = cot_apply_patches("./setup/$branch", $rev);
 
 	// Update installed modules and plugins
 	$updated_ext = false;
@@ -308,7 +328,7 @@ elseif (!cot_error_found())
 		}
 		else
 		{
-			$db->update($db_updates, array('upd_value' => "\$Rev: $new_rev \$"), "upd_param = 'revision'");
+			$db->update($db_updates, array('upd_value' => $new_rev), "upd_param = 'revision'");
 		}
 		$t->assign('UPDATE_TITLE', cot_rc('install_update_success', array('rev' => $new_rev)));
 		$t->assign('UPDATE_COMPLETED_NOTE', $L['install_complete_note']);
@@ -316,8 +336,8 @@ elseif (!cot_error_found())
 	}
 
 	$t->assign(array(
-		'UPDATE_FROM' => 'r' . $rev,
-		'UPDATE_TO' => is_int($new_rev) ? 'r' . $new_rev : 'r' . $rev
+		'UPDATE_FROM' => $rev,
+		'UPDATE_TO' => is_string($new_rev) ? $new_rev : $rev
 	));
 
 	// Clear cache

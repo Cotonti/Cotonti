@@ -572,3 +572,12 @@ DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` IN ('for
 
 /* r2150 Patch for old regexp with sed_bbcode_cdata calls */
 UPDATE `cot_bbcode` SET `bbc_replacement` = REPLACE(`bbc_replacement`, 'sed_bbcode_cdata', 'cot_bbcode_cdata') WHERE `bbc_replacement` LIKE '%sed_%';
+
+/* 0.9.4-001 Remove obsolete option */
+DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'locale' AND `config_name` = 'servertimezone';
+
+-------------------------------------------------------------------------------
+
+/* KEEP THIS AT THE BOTTOM
+   AND UPDATE TO THE LATEST PATCH REVISION */
+UPDATE `cot_updates` SET `upd_value` = '0.9.4-001' WHERE `upd_param` = 'revision';

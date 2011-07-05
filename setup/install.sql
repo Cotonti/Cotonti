@@ -79,7 +79,6 @@ CREATE TABLE `cot_config` (
 
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
 ('core','locale','01','forcedefaultlang',3,'0','0','',''),
-('core','locale','05','servertimezone',1,'0','0','',''),
 ('core','locale','06','defaulttimezone',1,'0','0','',''),
 ('core','main','01','adminemail',1,'admin@mysite.com','admin@mysite.com','',''),
 ('core','main','02','clustermode',3,'0','0','',''),
@@ -279,7 +278,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '$Rev$'),
+('revision', '0.9.4-001'),
 ('branch', 'siena');
 
 CREATE TABLE `cot_users` (
