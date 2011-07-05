@@ -516,7 +516,10 @@ if (!$mscheme)
 }
 else
 {
-	cot_rc_add_file($mscheme);
+	if(!defined(COT_ADMIN))
+	{
+		cot_rc_add_file($mscheme);
+	}
 }
 
 $usr['def_theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
