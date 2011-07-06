@@ -160,6 +160,7 @@ if ($a == 'add')
 	}
 	else
 	{
+		$c = ($c != $rpage['page_cat']) ? $rpage['page_cat'] : $c;
 		cot_redirect(cot_url('page', 'm=add&c='.$c, '', true));
 	}
 }
