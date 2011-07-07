@@ -633,6 +633,7 @@ switch($a)
 						'ADMIN_EXTENSIONS_CODE_X' => $x,
 						'ADMIN_EXTENSIONS_EDIT_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$x"),
 						'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
+						'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 						'ADMIN_EXTENSIONS_STATUS' => $status[$part_status],
 						'ADMIN_EXTENSIONS_RIGHTS_URL' => $type == 'module' ? cot_url('admin', "m=rightsbyitem&ic=$x&io=a") : cot_url('admin',
 								"m=rightsbyitem&ic=$type&io=$x"),

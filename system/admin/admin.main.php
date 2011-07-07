@@ -66,7 +66,7 @@ $adminpath = array(array(cot_url('admin'), $L['Adminpanel']));
 
 require $inc_file;
 
-$adminhelp = (empty($adminhelp)) ? $L['None'] : $adminhelp;
+$adminhelp = (empty($adminhelp)) ? "" : $adminhelp;
 
 $title_params = array(
 	'ADMIN' => $L['Administration']
@@ -123,7 +123,7 @@ if (!COT_AJAX)
 			'code' => 'other',
 			'url' => cot_url('admin', "m=other"),
 			'icon' => $R['admin_menu_icon_other'],
-			'title' => $L['Other'],
+			'title' => $L['Admin_Other'],
 			'class' => $m == 'other' ? 'sel' : ''
 		);
 	}

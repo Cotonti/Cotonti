@@ -2,18 +2,39 @@
 
 		<!-- IF {PHP.is_adminwarnings} --><div class="error">{PHP.L.adm_warnings}: {PHP.adm_nogd}</div><!-- ENDIF -->
 
-		<h2>{PHP.L.Main}</h2>
+<div class="col3-2">
+    <h2>{PHP.L.adm_quick}</h2>
+    <ul class="icons">
+        <li>
+            <a href="page.php?m=add"><img src="system/admin/tpl/img/big_icons/page_add.png">{PHP.L.Submitnew}</a>
+        </li>
+        <li>
+            <a href="admin.php?m=structure&n=page"><img src="system/admin/tpl/img/big_icons/table_edit.png">{PHP.L.adm_quick_categories}</a>
+        </li>
+    </ul>
+</div>
 
-		<div class="col3-2 first">
+<div class="col3-1">
+    <div class="block">
+        <h2>{PHP.L.adm_valqueue}:</h2>
+        <ul class="follow">
+            <li><a href="{ADMIN_HOME_URL}">{PHP.L.Pages}: {ADMIN_HOME_PAGESQUEUED}</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="clear"></div>
+
+<div class="col1 first">
 <!-- BEGIN: UPDATE -->
 			<div class="block">
-				<h3>{PHP.L.adminqv_update_notice}:</h3>
+				<h2>{PHP.L.adminqv_update_notice}:</h2>
 				<p>{ADMIN_HOME_UPDATE_REVISION} {ADMIN_HOME_UPDATE_MESSAGE}</p>
 			</div>
 <!-- END: UPDATE -->
 			{ADMIN_HOME_HITS}
 			<div class="block">
-				<h3>Cotonti:</h3>
+				<h2>Cotonti:</h2>
 				<table class="cells">
 					<tr>
 						<td class="width80">{PHP.L.Version} ({PHP.L.home_rev_title})</td>
@@ -51,43 +72,4 @@
 			</div>
 		</div>
 
-		<div class="col3-1">
-			<div class="block">
-				<h3>{PHP.L.adm_valqueue}:</h3>
-				<ul class="follow">
-					<li><a href="{ADMIN_HOME_URL}">{PHP.L.Pages}: {ADMIN_HOME_PAGESQUEUED}</a></li>
-				</ul>
-			</div>
-			<div class="block">
-				<h3>{PHP.L.home_ql_b1_title}</h3>
-				<ul class="follow">
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=main">{PHP.L.home_ql_b1_1}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=title">{PHP.L.home_ql_b1_2}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=theme">{PHP.L.home_ql_b1_3}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=menus">{PHP.L.home_ql_b1_4}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=lang">{PHP.L.home_ql_b1_5}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=time">{PHP.L.home_ql_b1_6}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=parser">{PHP.L.home_ql_b2_4}</a></li>
-					<li><a href="admin.php?m=extrafields">{PHP.L.adm_extrafields}</a></li>
-				</ul>
-			</div>
-<!-- IF {PHP.cfg.page} -->			
-			<div class="block">
-				<h3>{PHP.L.Pages}</h3>
-				<ul class="follow">
-					<li><a href="page.php?m=add">{PHP.L.Add}</a></li>
-					<li><a href="admin.php?m=extrafields&amp;n={PHP.db_pages}">{PHP.L.home_ql_b2_2}</a></li>
-				</ul>
-			</div>
-<!-- ENDIF -->
-			<div class="block">
-				<h3>{PHP.L.Users}</h3>
-				<ul class="follow">
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=users">{PHP.L.home_ql_b3_1}</a></li>
-					<li><a href="admin.php?m=extrafields&amp;n={PHP.db_users}">{PHP.L.home_ql_b3_2}</a></li>
-					<li><a href="admin.php?m=users">{PHP.L.home_ql_b3_4}</a></li>
-				</ul>
-			</div>
-		</div>
-		<div class="clear"></div>
 <!-- END: MAIN -->

@@ -414,6 +414,10 @@ $L['alreadydeletednewentry'] = 'Запись удалена';
  */
 
 $L['adm_extrafields'] = 'Дополнительные поля';
+$L['adm_extrafields_icon_pages'] = 'Экстраполя для страниц';
+$L['adm_extrafields_icon_structure'] = 'Экстраполя для категорий';
+$L['adm_extrafields_icon_users'] = 'Экстраполя для пользователей';
+$L['adm_extrafields_icon_extra'] = 'Экстраполя для любой таблицы БД';
 $L['adm_extrafield_added'] = 'Новое поле добавлено';
 $L['adm_extrafield_not_added'] = 'Ошибка! Новое поле не добавлено';
 $L['adm_extrafield_updated'] = 'Поле "%1$s" отредактировано';
@@ -448,4 +452,19 @@ $L['adm_help_check1'] = 'Недоступно';
 $L['adm_help_check2'] = 'Недоступно';
 $L['adm_help_config']= 'Недоступно';
 
+/**
+ * Buttons
+ */
+$L['Admin_Other'] = "Обслуживание";
+$L['Admin_Configuration'] = "Config";
+$L['Admin_Rights'] = "Access";
+$L['Admin_Admin'] = "Backend";
+$L['Admin_Open'] = "Frontend";
+$L['Admin_Structure'] = "Structure";
+
+/**
+ * Quick links
+ */
+$L['adm_quick'] = "Частые операции";
+$L['adm_quick_categories'] = "Управление категориями страниц";
 ?>

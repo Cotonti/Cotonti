@@ -1,10 +1,10 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Configuration}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
-		<div class="block">
+
 <!-- BEGIN: EDIT -->
 			<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post" class="ajax">
-			<table class="cells">
+            <table class="cells">
 				<tr>
 					<td class="coltop width30">{PHP.L.Parameter}</td>
 					<td class="coltop width60">{PHP.L.Value}</td>
@@ -47,24 +47,50 @@
 			</form>
 <!-- END: EDIT -->
 <!-- BEGIN: DEFAULT -->
-			<table class="cells">
-				<tr>
-					<td class="coltop width40">{PHP.L.Core}</td>
-					<td class="coltop width30">{PHP.L.Modules}</td>
-					<td class="coltop width30">{PHP.L.Plugins}</td>
-				</tr>
-				<tr>
-<!-- BEGIN: ADMIN_CONFIG_COL -->
-					<td>
-						<ul class="follow">
-<!-- BEGIN: ADMIN_CONFIG_ROW -->
-							<li><a href="{ADMIN_CONFIG_ROW_URL}" class="ajax">{ADMIN_CONFIG_ROW_NAME}</a></li>
-<!-- END: ADMIN_CONFIG_ROW -->
-						</ul>
-					</td>
-<!-- END: ADMIN_CONFIG_COL -->
-				</tr>
-			</table>
+			<div class="col first">
+            <ul class="icons">
+                <li>
+                    <a href="admin.php?m=config&n=edit&o=core&p=main"><img src="system/admin/tpl/img/big_icons/wrench.png"><br>{PHP.L.core_main}</a>
+                </li>
+                <li>
+                    <a href="admin.php?m=config&n=edit&o=core&p=title"><img src="system/admin/tpl/img/big_icons/layout_header.png"><br>{PHP.L.core_title}</a>
+                </li>
+                <li>
+                    <a href="admin.php?m=config&n=edit&o=core&p=menus"><img src="system/admin/tpl/img/big_icons/application_side_tree.png"><br>{PHP.L.core_menus}</a>
+                </li>
+                <li>
+                    <a href="admin.php?m=config&n=edit&o=core&p=locale"><img src="system/admin/tpl/img/big_icons/world.png"><br>{PHP.L.core_locale}</a>
+                </li>
+                <li>
+                    <a href="admin.php?m=config&n=edit&o=core&p=theme"><img src="system/admin/tpl/img/big_icons/html.png"><br>{PHP.L.core_theme}</a>
+                </li>
+                <li>
+                    <a href="admin.php?m=config&n=edit&o=core&p=performance"><img src="system/admin/tpl/img/big_icons/speedometer.png"><br>{PHP.L.core_performance}</a>
+                </li>
+                <li>
+                    <a href="admin.php?m=config&n=edit&o=core&p=users"><img src="system/admin/tpl/img/big_icons/group.png"><br>{PHP.L.core_users}</a>
+                </li>
+			</ul>
+            </div>
+
+            <div class="col first">
+            <h2 class="margintop10">{PHP.L.adm_extrafields}</h2>
+            <ul class="icons">
+                <li>
+                    <a href="admin.php?m=extrafields&n=cot_pages"><img src="system/admin/tpl/img/big_icons/page_gear.png">{PHP.L.adm_extrafields_icon_pages}</a>
+                </li>
+                <li>
+                    <a href="admin.php?m=extrafields&n=cot_structure"><img src="system/admin/tpl/img/big_icons/table_gear.png">{PHP.L.adm_extrafields_icon_structure}</a>
+                </li>
+                <li>
+                    <a href="admin.php?m=extrafields&n=cot_users"><img src="system/admin/tpl/img/big_icons/group_gear.png">{PHP.L.adm_extrafields_icon_users}</a>
+                </li>
+                <li>
+                    <a href="admin.php?m=extrafields&alltables=1"><img src="system/admin/tpl/img/big_icons/gear_in.png">{PHP.L.adm_extrafields_icon_extra}</a>
+                </li>
+            </ul>
+            </div>
+
 <!-- END: DEFAULT -->
-		</div>
+
 <!-- END: MAIN -->

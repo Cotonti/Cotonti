@@ -1,9 +1,6 @@
 <!-- BEGIN: MAIN -->
 <div id="wrapper">
     <div id="header">
-		<div id="logo">
-	        Cotonti
-        </div>
         <ul id="main">
 		<!-- BEGIN: ADMIN_MENU_ROW -->
 		<li>
@@ -15,18 +12,22 @@
 	</ul>
 	</div><!-- #header-->
 
-    <h1 class="body">{PHP.L.Crumbs}: {ADMIN_TITLE}</h1>
+    <div id="content">
 
-	<div id="main" class="body clear">
-		<div id="ajaxBlock">
-		{ADMIN_MAIN}
-		</div>
-		<div class="block">
-			<div class="help">
-				<h4>{PHP.L.Help}:</h4>
-				<p>{ADMIN_HELP}</p>
-			</div>
-		</div>
-	</div>
+    <div class="breadcrumbs">{ADMIN_TITLE}</div>
 
+    <div id="ajaxBlock">
+    {ADMIN_MAIN}
+    </div>
+
+    <!-- IF {ADMIN_HELP} -->
+    <div class="help">
+        <h4>{PHP.L.Help}:</h4>
+        <p>{ADMIN_HELP}</p>
+    </div>
+    <!-- ENDIF -->
+
+    </div><!-- #content-->
+
+</div><!-- #wrapper -->
 <!-- END: MAIN -->

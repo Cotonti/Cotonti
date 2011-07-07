@@ -416,6 +416,10 @@ $L['alreadydeletednewentry'] = 'Entry deleted';
  */
 
 $L['adm_extrafields'] = 'Extra fields';
+$L['adm_extrafields_icon_pages'] = 'Extra fields for pages';
+$L['adm_extrafields_icon_structure'] = 'Extra fields for categories';
+$L['adm_extrafields_icon_users'] = 'Extra fields for users';
+$L['adm_extrafields_icon_extra'] = 'Various extra fields';
 $L['adm_extrafield_added'] = 'Successfully added new extra field.';
 $L['adm_extrafield_not_added'] = 'Error! New extra field not added.';
 $L['adm_extrafield_updated'] = 'Successfully updated extra field \'%1$s\'.';
@@ -450,4 +454,19 @@ $L['adm_help_check1'] = 'Not available';
 $L['adm_help_check2'] = 'Not available';
 $L['adm_help_config']= 'Not available';
 
+/**
+ * Buttons
+ */
+$L['Admin_Other'] = "Maintenance";
+$L['Admin_Configuration'] = "Config";
+$L['Admin_Rights'] = "Access";
+$L['Admin_Admin'] = "Backend";
+$L['Admin_Open'] = "Frontend";
+$L['Admin_Structure'] = "Structure";
+
+/**
+ * Quick links
+ */
+$L['adm_quick'] = "Quick links";
+$L['adm_quick_categories'] = "Manage page categories";
 ?>
