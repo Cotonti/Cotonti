@@ -65,24 +65,31 @@
 			<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post" class="ajax" enctype="multipart/form-data" >
 			<table class="cells">
 				<tr>
-					<td class="coltop width15">{PHP.L.Path}</td>
+					<td class="coltop width5">{PHP.L.Path}</td>
 					<td class="coltop width10">{PHP.L.Code}</td>
-					<td class="coltop width20">{PHP.L.Title}</td>
+					<td class="coltop width15">{PHP.L.Title}</td>
 					<td class="coltop width5">{PHP.L.TPL}</td>
-					<td class="coltop width10">{PHP.L.Locked}</td>
-					<td class="coltop width5">{PHP.L.Pages}</td>
-					<td class="coltop width20">{PHP.L.Action}</td>
+					<td class="coltop width5">{PHP.L.adm_locked}</td>
+					<td class="coltop width5">{PHP.L.adm_pages}</td>
+					<td class="coltop width55">&nbsp;</td>
 				</tr>
 				<!-- BEGIN: ROW -->
 				<tr>
-					<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_SPACEIMG}{ADMIN_STRUCTURE_PATH}</td>
+					<td class="{ADMIN_STRUCTURE_ODDEVEN}"><div style="white-space: nowrap;">{ADMIN_STRUCTURE_SPACEIMG}{ADMIN_STRUCTURE_PATH}</div></td>
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_SYM}</td>
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_LOCKED}</td>
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
-					<td class="centerall action {ADMIN_STRUCTURE_ODDEVEN}">
-						<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a><a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax">{PHP.R.admin_icon_config}</a><!-- IF {PHP.dozvil} --><a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a><!-- ENDIF --><a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" >{PHP.R.admin_icon_jumpto}</a> <a href="{ADMIN_STRUCTURE_CONFIG_URL}" title="{PHP.L.Config}" >{PHP.R.admin_icon_config}</a></td>
+					<td class="{ADMIN_STRUCTURE_ODDEVEN}">
+						<a href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="button icon edit">{PHP.L.Admin_Configuration}</a>
+                        <a href="{ADMIN_STRUCTURE_RIGHTS_URL}" class="button">{PHP.L.Admin_Rights}</a>
+                        <a href="{ADMIN_STRUCTURE_CONFIG_URL}" class="button">{PHP.L.Admin_List}</a>
+                        <a href="{ADMIN_STRUCTURE_JUMPTO_URL}" class="button">{PHP.L.Admin_Open}</a>
+                        <!-- IF {PHP.dozvil} --><a href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="ajax button confirm"
+                            
+                            >{PHP.L.Admin_Delete}</a><!-- ENDIF -->
+                    </td>
 				</tr>
 				<!-- END: ROW -->
 				<tr>

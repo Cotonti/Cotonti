@@ -66,7 +66,7 @@ $L['core_main'] = 'Настройки сайта';
 $L['core_menus'] = &$L['Menus'];
 $L['core_page'] = &$L['Pages'];
 $L['core_parser'] = &$L['Parser'];
-$L['core_performance'] = 'Производительность';
+$L['core_performance'] = 'Скорость';
 $L['core_pfs'] = &$L['PFS'];
 $L['core_plug'] = &$L['Plugins'];
 $L['core_pm'] = &$L['Private_Messages'];
@@ -326,7 +326,7 @@ $L['adm_opt_update_explain'] = 'Обновление конфигурации и
 $L['adm_opt_uninstall'] = 'Удалить';
 $L['adm_opt_uninstall_explain'] = 'Отключение всех компонентов плагина без физического удаления файлов';
 $L['adm_opt_unpause'] = 'Продолжить выполнение';
-$L['adm_opt_unpauseall'] = 'Продолжить выполнение всех';
+$L['adm_opt_unpauseall'] = 'Продолжить выполнение';
 $L['adm_opt_unpauseall_explain'] = 'Возобновление выполнения всех компонентов плагина';
 
 $L['adm_opt_setup_missing'] = 'Ошибка: отсутствует файл настроек!';
@@ -352,7 +352,7 @@ $L['adm_diskcache'] = 'Дисковый кэш';
  * Log Subsection
  */
 
-$L['adm_log'] = 'Системный протокол';
+$L['adm_log'] = 'Логи';
 $L['adm_infos'] = 'Информация';
 $L['adm_versiondclocks'] = 'Версии и таймеры';
 $L['adm_checkcorethemes'] = 'Проверить файлы ядра и скинов';
@@ -416,8 +416,8 @@ $L['alreadydeletednewentry'] = 'Запись удалена';
 $L['adm_extrafields'] = 'Дополнительные поля';
 $L['adm_extrafields_icon_pages'] = 'Экстраполя для страниц';
 $L['adm_extrafields_icon_structure'] = 'Экстраполя для категорий';
-$L['adm_extrafields_icon_users'] = 'Экстраполя для пользователей';
-$L['adm_extrafields_icon_extra'] = 'Экстраполя для любой таблицы БД';
+$L['adm_extrafields_icon_users'] = 'Экстраполя для юзеров';
+$L['adm_extrafields_icon_extra'] = 'Экстраполя для таблиц БД';
 $L['adm_extrafield_added'] = 'Новое поле добавлено';
 $L['adm_extrafield_not_added'] = 'Ошибка! Новое поле не добавлено';
 $L['adm_extrafield_updated'] = 'Поле "%1$s" отредактировано';
@@ -456,15 +456,19 @@ $L['adm_help_config']= 'Недоступно';
  * Buttons
  */
 $L['Admin_Other'] = "Обслуживание";
-$L['Admin_Configuration'] = "Config";
-$L['Admin_Rights'] = "Access";
-$L['Admin_Admin'] = "Backend";
-$L['Admin_Open'] = "Frontend";
-$L['Admin_Structure'] = "Structure";
+$L['Admin_Configuration'] = "Конфиг";
+$L['Admin_Rights'] = "Доступ";
+$L['Admin_Admin'] = "Админка";
+$L['Admin_Open'] = "Открыть";
+$L['Admin_Structure'] = "Структура";
+$L['Admin_Delete'] = "Удалить";
+$L['Admin_List'] = "Список";
 
 /**
- * Quick links
+ * Various
  */
 $L['adm_quick'] = "Частые операции";
 $L['adm_quick_categories'] = "Управление категориями страниц";
+$L['adm_locked'] = "Лок";
+$L['adm_pages'] = "Страниц";
 ?>

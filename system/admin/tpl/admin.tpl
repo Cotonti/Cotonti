@@ -9,7 +9,13 @@
 			</a>
 		</li>
 		<!-- END: ADMIN_MENU_ROW -->
-	</ul>
+	    </ul>
+        <ul id="return">
+            <li>
+                <a href="{PHP.cfg.mainurl}" target="_blank">{PHP.L.hea_viewsite}</a>
+            </li>
+        </ul>
+
 	</div><!-- #header-->
 
     <div id="content">

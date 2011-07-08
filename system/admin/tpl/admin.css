@@ -47,13 +47,14 @@ input {
 
 #header #logo { padding-top: 14px; padding-left: 15px; font-size: 23px; color: #333; font-weight: bold; text-shadow: 0pt 1px #CCC; float:left;}
 #header #logo a { text-decoration: none;  color: inherit;}
-#header ul { margin: 0pt; padding: 0pt; position: absolute; }
+#header ul { margin: 0pt; padding: 0pt; position: relative; margin: 12px 0 0 0px; }
 #header li { display: inline; list-style: none outside none; margin: 0pt; padding: 0pt; }
-#header #main {  margin: 12px 0 0 0px; }
-#header #main a { background: url('img/header-mainnav-blue.png') repeat-x scroll 0pt 0pt transparent; border: 1px solid rgb(59, 117, 158); border-radius: 5px 5px 5px 5px; box-shadow: 0pt 1px rgba(255, 255, 255, 0.2) inset, 0pt 1px rgba(255, 255, 255, 0.2); color: rgb(255, 255, 255); display: inline-block; font-size: 14px; font-weight: bold; height: 27px; line-height: 27px; margin-right: 5px; padding: 0pt 10px; text-decoration: none; text-shadow: 0pt -1px rgba(59, 117, 158, 0.95); }
-#header #main a:hover { background-position: 0pt -27px; text-decoration: none; }
-#header #main a:active, #header #main .sel, #header #main .sel:hover { background-position: 0pt -54px; border-color: rgb(49, 95, 128); box-shadow: 0pt 3px 5px rgba(0, 0, 0, 0.15) inset; color: rgba(255, 255, 255, 0.8); text-shadow: 0pt -1px rgba(7, 59, 95, 0.95); }
+#header  a { background: url('img/header-mainnav-blue.png') repeat-x scroll 0pt 0pt transparent; border: 1px solid rgb(59, 117, 158); border-radius: 5px 5px 5px 5px; box-shadow: 0pt 1px rgba(255, 255, 255, 0.2) inset, 0pt 1px rgba(255, 255, 255, 0.2); color: rgb(255, 255, 255); display: inline-block; font-size: 14px; font-weight: bold; height: 27px; line-height: 27px; margin-right: 5px; padding: 0pt 10px; text-decoration: none; text-shadow: 0pt -1px rgba(59, 117, 158, 0.95); }
+#header # a:hover { background-position: 0pt -27px; text-decoration: none; }
+#header a:active, #header #main .sel, #header #main .sel:hover { background-position: 0pt -54px; border-color: rgb(49, 95, 128); box-shadow: 0pt 3px 5px rgba(0, 0, 0, 0.15) inset; color: rgba(255, 255, 255, 0.8); text-shadow: 0pt -1px rgba(7, 59, 95, 0.95); }
 
+#header #main { float: left; }
+#header #return { float: right; }
 
 /* Middle
 -----------------------------------------------------------------------------*/

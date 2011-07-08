@@ -463,10 +463,14 @@ $L['Admin_Rights'] = "Access";
 $L['Admin_Admin'] = "Backend";
 $L['Admin_Open'] = "Frontend";
 $L['Admin_Structure'] = "Structure";
+$L['Admin_Delete'] = "Delete";
+$L['Admin_List'] = "List";
 
 /**
- * Quick links
+ * Various
  */
 $L['adm_quick'] = "Quick links";
 $L['adm_quick_categories'] = "Manage page categories";
+$L['adm_locked'] = "Lock";
+$L['adm_pages'] = "Pages";
 ?>
