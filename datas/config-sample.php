@@ -38,6 +38,7 @@ $cfg['defaulttheme'] = 'nemesis';	// Default theme code. Be SURE it's pointing t
 $cfg['defaultscheme'] = 'default';	// Default color scheme, only name, not like themename.css. Be SURE it's pointing to a valid folder in ./themes/defaulttheme/... !!
 $cfg['defaulticons'] = 'default';	// Default icon pack
 $cfg['defaultlang'] = 'en';			// Default language code
+$cfg['defaultadmintheme'] = 'spring';	// Default admin area theme
 $cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
 
 // ========================

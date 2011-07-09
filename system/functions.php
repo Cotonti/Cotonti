@@ -2608,7 +2608,8 @@ function cot_tplfile($base, $type = 'module')
 			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
 			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
 		}
-		$scan_prefix[] = "{$cfg['system_dir']}/$basename/tpl/";
+		if($cfg['defaultadmintheme']=="") $cfg['defaultadmintheme'] = "default";
+		$scan_prefix[] = "{$cfg['system_dir']}/$basename/tpl/{$cfg['defaultadmintheme']}/";
 	}
 	else
 	{

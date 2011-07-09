@@ -117,9 +117,9 @@ ul.follow img	{ vertical-align:-3px; }
 .textjustify	{ text-align:justify; }
 
 div.error, div.warning, div.done, div.help		{ line-height:1.8em; margin:20px 0; padding:10px 50px; background-position:15px 50%; background-repeat:no-repeat; clear:both; }
-div.error									{ color:#d8000c; background-color:#ffbaba; background-image:url(../../../images/icons/default/error.png); border:1px solid #d8000c; }
-div.warning									{ color:#9f6000; background-color:#feefb3; background-image:url(../../../images/icons/default/warning.png); border:1px solid #9f6000; }
-div.done										{ color:#4f8a10; background-color:#dff2bf; background-image:url(../../../images/icons/default/done.png); border:1px solid #4f8a10; }
+div.error									{ color:#d8000c; background-color:#ffbaba; background-image:url(../../../../images/icons/default/error.png); border:1px solid #d8000c; }
+div.warning									{ color:#9f6000; background-color:#feefb3; background-image:url(../../../../images/icons/default/warning.png); border:1px solid #9f6000; }
+div.done										{ color:#4f8a10; background-color:#dff2bf; background-image:url(../../../../images/icons/default/done.png); border:1px solid #4f8a10; }
 div.help										{ color: #222222; background-color: #F2F2F2; border:1px solid #cccccc; padding-left: 10px !important;}
 
 .margintop10	{ margin-top:10px; }
