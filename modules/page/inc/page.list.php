@@ -70,9 +70,6 @@ $sys['sublocation'] = $cat['title'];
 
 $cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cfg['page']['__default']['maxrowsperpage'] : $cfg['page'][$c]['maxrowsperpage'];
 
-$c = (empty($cat['title'])) ? 'all' : $c;
-cot_die((empty($cat['title'])) && !$usr['isadmin']);
-
 $where['state'] = '(page_state=0 OR page_state=2)';
 if ($c == 'unvalidated')
 {
@@ -87,6 +84,10 @@ elseif ($c != 'all')
 {
 	$where['cat'] = 'page_cat=' . $db->quote($c);
 }
+
+$c = (empty($cat['title'])) ? 'all' : $c;
+cot_die((empty($cat['title'])) && !$usr['isadmin']);
+
 if (!empty($o) && !empty($p))
 {
 	if ($db->query("SHOW COLUMNS FROM $db_pages WHERE Field = 'page_$o'")->rowCount() == 1)
