@@ -62,7 +62,8 @@ elseif ($db->query("SHOW COLUMNS FROM $db_pages WHERE Field = 'page_$s'")->rowCo
 {
 	$s = 'title';
 }
-$w = empty($w) ? 'asc' : $w;
+$s = empty($s) ? $cfg['page']['__default']['order'] : $s;
+$w = empty($w) ? $cfg['page']['__default']['way'] : $w;
 
 
 $sys['sublocation'] = $cat['title'];
@@ -79,6 +80,8 @@ if ($c == 'unvalidated')
 	$where['ownerid'] = 'page_ownerid = ' . $usr['id'];
 	$cat['title'] = $L['page_validation'];
 	$cat['desc'] = $L['page_validation_desc'];
+	$s = 'date';
+	$w = 'desc';
 }
 elseif ($c != 'all')
 {
