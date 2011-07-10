@@ -65,6 +65,11 @@ $cot_mail_senders = array();
  */
 $cot_parsers = array();
 
+/**
+ * Parameters to be automatically appended to all URLs if present
+ */
+$cot_url_appendix = array();
+
 /*
  * =========================== System Functions ===============================
 */
@@ -4123,12 +4128,7 @@ function cot_parse_str($str)
  */
 function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = false)
 {
-	if (function_exists('cot_url_custom'))
-	{
-		return cot_url_custom($name, $params, $tail, $htmlspecialchars_bypass);
-	}
-
-	global $cfg;
+	global $cfg, $cot_url_appendix;
 	// Preprocess arguments
 	if (is_string($params))
 	{
@@ -4138,7 +4138,17 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	{
 		$params = array();
 	}
+	if (count($cot_url_appendix) > 0)
+	{
+		$params = array_merge($params, $cot_url_appendix);
+	}
 	$params = array_filter((array)$params);
+	
+	if (function_exists('cot_url_custom'))
+	{
+		return cot_url_custom($name, $params, $tail, $htmlspecialchars_bypass);
+	}
+	
 	$url = $name . '.php';
 	// Append query string if needed
 	if (count($params) > 0)
