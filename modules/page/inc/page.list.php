@@ -68,7 +68,7 @@ $w = empty($w) ? $cfg['page']['__default']['way'] : $w;
 
 $sys['sublocation'] = $cat['title'];
 
-$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system') ? $cfg['page']['__default']['maxrowsperpage'] : $cfg['page'][$c]['maxrowsperpage'];
+$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cfg['page']['__default']['maxrowsperpage'] : $cfg['page'][$c]['maxrowsperpage'];
 
 $c = (empty($cat['title'])) ? 'all' : $c;
 cot_die((empty($cat['title'])) && !$usr['isadmin']);
