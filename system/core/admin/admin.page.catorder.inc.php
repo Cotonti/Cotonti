@@ -63,8 +63,8 @@ if($a == 'update')
 
 	foreach($s as $i => $k)
 	{
-		$order = $s[$i]['order'].'.'.$s[$i]['way'];
-		$sql = sed_sql_query("UPDATE $db_structure SET structure_order='$order' WHERE structure_id='$i'");
+		$order = sed_sql_prep($s[$i]['order'].'.'.$s[$i]['way']);
+		$sql = sed_sql_query("UPDATE $db_structure SET structure_order='$order' WHERE structure_id='".sed_sql_prep($i)."'");
 	}
 	sed_cache_clear('sed_cat');
 	$adminwarnings = $L['Updated'];

@@ -64,6 +64,7 @@ if($a == 'update')
 			{
 				$mask += sed_auth_getvalue($l);
 			}
+			$i = (int) $i;
 			$sql = sed_sql_query("UPDATE $db_auth SET auth_rights='$mask' WHERE auth_groupid='$i' AND auth_code='$ic' AND auth_option='$io'");
 		}
 	}

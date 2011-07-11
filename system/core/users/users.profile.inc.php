@@ -29,7 +29,7 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$id = sed_import('id','G','TXT');
+$id = sed_import('id','G','ALP');
 $a = sed_import('a','G','ALP');
 
 $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$usr['id']."' LIMIT 1");

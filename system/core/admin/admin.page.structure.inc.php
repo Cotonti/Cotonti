@@ -212,6 +212,7 @@ else
 
 		foreach($s as $i => $k)
 		{
+			$i = (int) $i;
 			$s[$i]['rgroup'] = (isset($s[$i]['rgroup'])) ? 1 : 0;
 
 			$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ");
@@ -243,7 +244,7 @@ else
 			$sql1 = sed_sql_query("UPDATE $db_structure
 				SET structure_path='".sed_sql_prep($s[$i]['rpath'])."',
 					structure_title='".sed_sql_prep($s[$i]['rtitle'])."',
-					structure_group='".$s[$i]['rgroup']."'
+					structure_group='".sed_sql_prep($s[$i]['rgroup'])."'
 				WHERE structure_id='".$i."'");
 		}
 

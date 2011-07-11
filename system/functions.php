@@ -17,6 +17,11 @@ defined('SED_CODE') or die('Wrong URL');
 extension_loaded('mbstring')
 	or die('Cotonti system requirements: mbstring PHP extension must be loaded.');
 
+if (ini_get('register_globals'))
+{
+	die('Please set the PHP setting register_globals = Off, otherwise your site is in high security risk! Contact your hosting support for more information.');
+}
+
 // Group constants
 define('SED_GROUP_GUESTS', 1);
 define('SED_GROUP_INACTIVE', 2);

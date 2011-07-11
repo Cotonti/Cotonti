@@ -148,10 +148,10 @@ else
 		foreach($s as $i => $k)
 		{
 			$sql1 = sed_sql_query("UPDATE $db_forum_structure SET
-				fn_path='".$s[$i]['rpath']."',
-				fn_title='".$s[$i]['rtitle']."',
-				fn_defstate='".$s[$i]['rdefstate']."'
-				WHERE fn_id='".$i."'");
+				fn_path='".sed_sql_prep($s[$i]['rpath'])."',
+				fn_title='".sed_sql_prep($s[$i]['rtitle'])."',
+				fn_defstate='".sed_sql_prep($s[$i]['rdefstate'])."'
+				WHERE fn_id='".sed_sql_prep($i)."'");
 		}
 		sed_cache_clear('sed_forums_str');
 

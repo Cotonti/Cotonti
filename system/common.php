@@ -72,6 +72,10 @@ else
 {
 	$usr['ip'] = $_SERVER['REMOTE_ADDR'];
 }
+if (!preg_match('#^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$#', $usr['ip']))
+{
+	$usr['ip'] = '0.0.0.0';
+}
 $sys['unique'] = sed_unique(16);
 
 // Getting the server-relative path
