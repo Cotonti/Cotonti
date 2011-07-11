@@ -61,6 +61,11 @@ if ($cfg['jquery'] && $cfg['jquery_cdn'])
 }
 cot_rc_output();
 
+if ($sys['noindex'])
+{
+	$out['head_head'] .= $R['code_noindex'];
+}
+
 if (isset($env['status']))
 {
 	cot_sendheaders($out['meta_contenttype'], $env['status']);

@@ -4130,9 +4130,10 @@ function cot_parse_str($str)
  * @param mixed $params URL parameters as array or parameter string
  * @param string $tail URL postfix, e.g. anchor
  * @param bool $htmlspecialchars_bypass If TRUE, will not convert & to &amp; and so on.
+ * @param bool $ignore_appendix If TRUE, $cot_url_appendix will be ignored for this URL
  * @return string Valid HTTP URL
  */
-function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = false)
+function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = false, $ignore_appendix = false)
 {
 	global $cfg, $cot_url_appendix;
 	// Preprocess arguments
@@ -4144,7 +4145,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	{
 		$params = array();
 	}
-	if (count($cot_url_appendix) > 0)
+	if (!$ignore_appendix && count($cot_url_appendix) > 0)
 	{
 		$params = array_merge($params, $cot_url_appendix);
 	}

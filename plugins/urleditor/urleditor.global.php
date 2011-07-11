@@ -137,6 +137,22 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 			}
 		}
 	}
+	// Support for i18n parameter
+	if (isset($params['l']) && isset($cfg['plugin']['i18n']['rewrite']) && $cfg['plugin']['i18n']['rewrite'])
+	{
+		// Add with slash at the beginning of the URL
+		$p = mb_strpos($url, '://');
+		if ($p === false)
+		{
+			$url = mb_strpos($url, '/') === 0 ? '/' . $params['l'] . $url : $params['l'] . '/' . $url;
+		}
+		else
+		{
+			$p = mb_strpos($url, '/', $p + 3);
+			$url = $p === false ? $url . '/' . $params['l'] : mb_substr($url, 0, $p) . $params['l'] . '/' . mb_substr($url, $p + 1);
+		}
+		unset($params['l']);
+	}
 	// Append query string if needed
 	if (!empty($params))
 	{
