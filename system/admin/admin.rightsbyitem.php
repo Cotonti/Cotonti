@@ -64,6 +64,7 @@ if ($a == 'update')
 			{
 				$mask += cot_auth_getvalue($l);
 			}
+			$i = (int) $i;
 			$db->update($db_auth, array('auth_rights' => $mask),
 				"auth_groupid=$i AND auth_code='$ic' AND auth_option='$io'");
 		}

@@ -18,6 +18,12 @@ if (!defined('COT_INSTALL'))
 	extension_loaded('mbstring') or die('Cotonti system requirements: mbstring PHP extension must be loaded.'); // TODO: Need translate
 }
 
+
+if (ini_get('register_globals'))
+{
+	die('Please set the PHP setting register_globals = Off, otherwise your site is in high security risk! Contact your hosting support for more information.');
+}
+
 // Group constants
 define('COT_GROUP_DEFAULT', 0);
 define('COT_GROUP_GUESTS', 1);
