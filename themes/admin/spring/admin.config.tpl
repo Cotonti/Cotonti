@@ -50,25 +50,25 @@
 			<div class="col first">
             <ul class="icons">
                 <li>
-                    <a href="admin.php?m=config&n=edit&o=core&p=main"><img src="system/admin/tpl/spring/img/big_icons/wrench.png"><br>{PHP.L.core_main}</a>
+                    <a href="admin.php?m=config&n=edit&o=core&p=main"><img src="themes/admin/spring/img/big_icons/wrench.png"><br>{PHP.L.core_main}</a>
                 </li>
                 <li>
-                    <a href="admin.php?m=config&n=edit&o=core&p=title"><img src="system/admin/tpl/spring/img/big_icons/layout_header.png"><br>{PHP.L.core_title}</a>
+                    <a href="admin.php?m=config&n=edit&o=core&p=title"><img src="themes/admin/spring/img/big_icons/layout_header.png"><br>{PHP.L.core_title}</a>
                 </li>
                 <li>
-                    <a href="admin.php?m=config&n=edit&o=core&p=menus"><img src="system/admin/tpl/spring/img/big_icons/application_side_tree.png"><br>{PHP.L.core_menus}</a>
+                    <a href="admin.php?m=config&n=edit&o=core&p=menus"><img src="themes/admin/spring/img/big_icons/application_side_tree.png"><br>{PHP.L.core_menus}</a>
                 </li>
                 <li>
-                    <a href="admin.php?m=config&n=edit&o=core&p=locale"><img src="system/admin/tpl/spring/img/big_icons/world.png"><br>{PHP.L.core_locale}</a>
+                    <a href="admin.php?m=config&n=edit&o=core&p=locale"><img src="themes/admin/spring/img/big_icons/world.png"><br>{PHP.L.core_locale}</a>
                 </li>
                 <li>
-                    <a href="admin.php?m=config&n=edit&o=core&p=theme"><img src="system/admin/tpl/spring/img/big_icons/html.png"><br>{PHP.L.core_theme}</a>
+                    <a href="admin.php?m=config&n=edit&o=core&p=theme"><img src="themes/admin/spring/img/big_icons/html.png"><br>{PHP.L.core_theme}</a>
                 </li>
                 <li>
-                    <a href="admin.php?m=config&n=edit&o=core&p=performance"><img src="system/admin/tpl/spring/img/big_icons/speedometer.png"><br>{PHP.L.core_performance}</a>
+                    <a href="admin.php?m=config&n=edit&o=core&p=performance"><img src="themes/admin/spring/img/big_icons/speedometer.png"><br>{PHP.L.core_performance}</a>
                 </li>
                 <li>
-                    <a href="admin.php?m=config&n=edit&o=core&p=users"><img src="system/admin/tpl/spring/img/big_icons/group.png"><br>{PHP.L.core_users}</a>
+                    <a href="admin.php?m=config&n=edit&o=core&p=users"><img src="themes/admin/spring/img/big_icons/group.png"><br>{PHP.L.core_users}</a>
                 </li>
 			</ul>
             </div>
@@ -77,16 +77,16 @@
             <h2 class="margintop10">{PHP.L.adm_extrafields}</h2>
             <ul class="icons">
                 <li>
-                    <a href="admin.php?m=extrafields&n=cot_pages"><img src="system/admin/tpl/spring/img/big_icons/page_gear.png">{PHP.L.adm_extrafields_icon_pages}</a>
+                    <a href="admin.php?m=extrafields&n=cot_pages"><img src="themes/admin/spring/img/big_icons/page_gear.png">{PHP.L.adm_extrafields_icon_pages}</a>
                 </li>
                 <li>
-                    <a href="admin.php?m=extrafields&n=cot_structure"><img src="system/admin/tpl/spring/img/big_icons/table_gear.png">{PHP.L.adm_extrafields_icon_structure}</a>
+                    <a href="admin.php?m=extrafields&n=cot_structure"><img src="themes/admin/spring/img/big_icons/table_gear.png">{PHP.L.adm_extrafields_icon_structure}</a>
                 </li>
                 <li>
-                    <a href="admin.php?m=extrafields&n=cot_users"><img src="system/admin/tpl/spring/img/big_icons/group_gear.png">{PHP.L.adm_extrafields_icon_users}</a>
+                    <a href="admin.php?m=extrafields&n=cot_users"><img src="themes/admin/spring/img/big_icons/group_gear.png">{PHP.L.adm_extrafields_icon_users}</a>
                 </li>
                 <li>
-                    <a href="admin.php?m=extrafields&alltables=1"><img src="system/admin/tpl/spring/img/big_icons/gear_in.png">{PHP.L.adm_extrafields_icon_extra}</a>
+                    <a href="admin.php?m=extrafields&alltables=1"><img src="themes/admin/spring/img/big_icons/gear_in.png">{PHP.L.adm_extrafields_icon_extra}</a>
                 </li>
             </ul>
             </div>

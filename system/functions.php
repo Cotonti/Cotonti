@@ -2608,8 +2608,8 @@ function cot_tplfile($base, $type = 'module')
 			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
 			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
 		}
-		if($cfg['defaultadmintheme']=="") $cfg['defaultadmintheme'] = "default";
-		$scan_prefix[] = "{$cfg['system_dir']}/$basename/tpl/{$cfg['defaultadmintheme']}/";
+		if($cfg['defaultadmintheme']=="") $cfg['defaultadmintheme'] = "seditio";
+		$scan_prefix[] = "{$cfg['themes_dir']}/admin/{$cfg['defaultadmintheme']}/";
 	}
 	else
 	{
