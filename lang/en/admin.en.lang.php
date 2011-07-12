@@ -378,9 +378,9 @@ $L['adm_time1'] = '#1: Raw server time';
 $L['adm_time2'] = '#2: GMT time returned by the server';
 $L['adm_time3'] = '#3: GMT time + server offset (Cotonti reference)';
 $L['adm_time4'] = '#4: Your local time, adjusted from your profile';
-$L['adm_help_versions'] = 'Adjust the Server time zone to have the clock #3 properlly set.<br />
-Clock #4 depends of the timezone setting in your profile.<br />
-Clocks #1 and #2 are ignored by Cotonti.';
+$L['adm_help_versions'] = 'Adjust the server time zone to have clock #3 properly set.<br />
+Clock #4 depends on the time zone setting in your profile.<br />
+Clocks #1 and #2 are being ignored by Cotonti.';
 
 /**
  * Common Entries
