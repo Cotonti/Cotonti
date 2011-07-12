@@ -103,7 +103,10 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			'I18N_LOCALIZED_LANG' => cot_selectbox('', 'locale', $lc_values, $lc_names, false),
 			'I18N_PAGE_TITLE' => htmlspecialchars($pag['page_title']),
 			'I18N_PAGE_DESC' => htmlspecialchars($pag['page_desc']),
-			'I18N_PAGE_TEXT' => cot_parse($pag['page_text'], $cfg['page']['markup'])
+			'I18N_PAGE_TEXT' => cot_parse($pag['page_text'], $cfg['page']['markup']),
+			'I18N_IPAGE_TITLE' => htmlspecialchars($pag_i18n['ipage_title']),
+			'I18N_IPAGE_DESC' => htmlspecialchars($pag_i18n['ipage_desc']),
+			'I18N_IPAGE_TEXT' => cot_textarea('translate_text', $pag_i18n['ipage_text'], 32, 80, '', 'input_textarea_editor')
 		));
 
 		cot_display_messages($t);

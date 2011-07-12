@@ -23,14 +23,11 @@ if ($i18n_enabled && $i18n_notmain)
 	
 	if ($cat_i18n)
 	{
-		$title_params = array(
-			'TITLE' => $cat_i18n['title']
-		);
 		$out['desc'] = htmlspecialchars(strip_tags($cat_i18n['desc']));
-		$out['subtitle'] = cot_title('title_list', $title_params);
+		$out['subtitle'] = $cat_i18n['title'];
 		
 		// Enable indexing
-		$sys['noindex'] = falase;
+		$sys['noindex'] = false;
 	}
 }
 
