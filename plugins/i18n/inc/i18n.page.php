@@ -12,6 +12,7 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 require_once cot_incfile('page', 'module');
+require_once cot_incfile('forms');
 
 $id = cot_import('id', 'G', 'INT');
 $l = cot_import('l', 'G', 'ALP');
@@ -163,7 +164,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			'I18N_PAGE_TEXT' => cot_parse($pag['page_text'], $cfg['page']['markup']),
 			'I18N_IPAGE_TITLE' => htmlspecialchars($pag_i18n['ipage_title']),
 			'I18N_IPAGE_DESC' => htmlspecialchars($pag_i18n['ipage_desc']),
-			'I18N_IPAGE_TEXT' => htmlspecialchars($pag_i18n['ipage_text']),
+			'I18N_IPAGE_TEXT' => cot_textarea('translate_text', $pag_i18n['ipage_text'], 32, 80, '', 'input_textarea_editor')
 		));
 
 		cot_display_messages($t);

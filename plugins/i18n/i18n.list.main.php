@@ -28,6 +28,9 @@ if ($i18n_enabled && $i18n_notmain)
 		);
 		$out['desc'] = htmlspecialchars(strip_tags($cat_i18n['desc']));
 		$out['subtitle'] = cot_title('title_list', $title_params);
+		
+		// Enable indexing
+		$sys['noindex'] = falase;
 	}
 }
 

@@ -17,6 +17,8 @@ if (cot_plugin_active('tags'))
 	require_once cot_incfile('tags', 'plug');
 	global $db_tag_references;
 	$db->delete($db_tag_references, "tag_locale != ''");
+	$db->query("ALTER TABLE $db_tag_references DROP PRIMARY KEY");
+	$db->query("ALTER TABLE $db_tag_references ADD PRIMARY KEY (`tag`,`tag_area`,`tag_item`)");
 	$db->query("ALTER TABLE $db_tag_references DROP COLUMN `tag_locale`");
 }
 ?>

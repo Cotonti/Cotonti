@@ -32,18 +32,35 @@ if (!$i18n_locales)
 $i18n_locale = cot_import('l', 'G', 'ALP');
 if (empty($i18n_locale) || !isset($i18n_locales[$i18n_locale]))
 {
-	$i18n_locale = $cfg['defaultlang'];
+	$i18n_locale = $usr['lang'];
+}
+if (file_exists($cfg['lang_dir'] . '/' . $i18n_locale))
+{
+	// Switch interface language for guests
+	$i18n_fallback = $usr['lang'];
+	$usr['lang'] = $i18n_locale;
+	$lang = $i18n_locale;
 }
 else
 {
-	if ($usr['id'] == 0 && file_exists($cfg['lang_dir'] . '/' . $i18n_locale))
-	{
-		// Switch interface language for guests
-		$lang = $i18n_locale;
-	}
+	$i18n_locale = $cfg['defaultlang'];
+}
+
+// The flag to omit language parameter
+$i18n_omit = $cfg['plugin']['i18n']['omitmain'] && $i18n_locale == $i18n_fallback;
+
+if (!$i18n_omit)
+{
+	$cot_url_appendix['l'] = $i18n_locale;
 }
 
 $i18n_notmain = $i18n_locale != $cfg['defaultlang'];
 list($i18n_read, $i18n_write, $i18n_admin, $i18n_edit) = cot_auth('plug', 'i18n', 'RWA1');
+
+// SEO fix
+if ($usr['id'] == 0 && $i18n_notmain && $env['ext'] != 'index')
+{
+	$sys['noindex'] = true;
+}
 
 ?>

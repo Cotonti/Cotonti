@@ -38,12 +38,12 @@ if ($i18n_enabled)
 				$lc_selected = '';
 			}
 			$urlparams = empty($pag['page_alias']) ? array('id' => $id) : array('al' => $al);
-			if (!$cfg['plugin']['i18n']['omitmain'] || $lc != $cfg['defaultlang'])
+			if (!$cfg['plugin']['i18n']['omitmain'] || $lc != $i18n_fallback)
 			{
 				$urlparams += array('l' => $lc);
 			}
 			$t->assign(array(
-				'I18N_LANG_ROW_URL' => cot_url('page', $urlparams),
+				'I18N_LANG_ROW_URL' => cot_url('page', $urlparams, '', false, true),
 				'I18N_LANG_ROW_CODE' => $lc,
 				'I18N_LANG_ROW_TITLE' => $i18n_locales[$lc],
 				'I18N_LANG_ROW_CLASS' => $lc_class,

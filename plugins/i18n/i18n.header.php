@@ -1,16 +1,16 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=index.tags
-Tags=index.tpl:{I18N_LANG_ROW_URL},{I18N_LANG_ROW_CODE},{I18N_LANG_ROW_TITLE},{I18N_LANG_ROW_CLASS},{I18N_LANG_ROW_SELECTED}
+Hooks=header.tags
+Tags=header.tpl:{I18N_LANG_ROW_URL},{I18N_LANG_ROW_CODE},{I18N_LANG_ROW_TITLE},{I18N_LANG_ROW_CLASS},{I18N_LANG_ROW_SELECTED}
 [END_COT_EXT]
 ==================== */
 
 /**
- * Renders language selector for index
+ * Renders language selector
  *
  * @package i18n
- * @version 0.7.0
+ * @version 0.9.0
  * @author Trustmaster
  * @copyright Copyright (c) Cotonti Team 2010-2011
  * @license BSD License
@@ -33,23 +33,24 @@ if (count($i18n_locales) > 0)
 			$lc_selected = '';
 		}
 		$urlparams = $_GET;
-		if (!$cfg['plugin']['i18n']['omitmain'] || $lc != $cfg['defaultlang'])
-		{
-			$urlparams['l'] = $lc;
-		}
-		else
+		if ($cfg['plugin']['i18n']['omitmain'] && $lc == $i18n_fallback)
 		{
 			unset($urlparams['l']);
 		}
+		else
+		{
+			$urlparams['l'] = $lc;
+		}
 		$t->assign(array(
-			'I18N_LANG_ROW_URL' => cot_url('index', $urlparams),
+			'I18N_LANG_ROW_URL' => cot_url($env['ext'], $urlparams, '', false, true),
 			'I18N_LANG_ROW_CODE' => $lc,
-			'I18N_LANG_ROW_TITLE' => $lc_title,
+			'I18N_LANG_ROW_FLAG' => $lc == 'en' ? 'gb' : $lc,
+			'I18N_LANG_ROW_TITLE' => htmlspecialchars($lc_title),
 			'I18N_LANG_ROW_CLASS' => $lc_class,
 			'I18N_LANG_ROW_SELECTED' => $lc_selected
 		));
-		$t->parse('MAIN.I18N_LANG.I18N_LANG_ROW');
+		$t->parse('HEADER.I18N_LANG.I18N_LANG_ROW');
 	}
-	$t->parse('MAIN.I18N_LANG');
+	$t->parse('HEADER.I18N_LANG');
 }
 ?>
