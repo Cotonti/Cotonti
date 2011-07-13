@@ -33,7 +33,7 @@ $L['msg102_title'] = 'User logged out';
 $L['msg102_body'] = 'Done, you\'re logged out.';
 
 $L['msg105_title'] = 'Registration done (1st step)';
-$L['msg105_body'] = 'Please check your mailbox in few minutes,<br />and please confirm the registration process<br />by clicking the URL in the body of the message...<br />Until this, your account is marked as &quot;Inactive&quot; in the user list.';
+$L['msg105_body'] = 'Please check your mailbox in a few minutes,<br />and please confirm the registration process<br />by clicking the URL in the body of the message.<br />Until this, your account is marked as &quot;Inactive&quot; in the user list.';
 
 $L['msg106_title'] = 'Registration completed';
 $L['msg106_body'] = 'Welcome, your account is now valid and activated.<br />You\'re now able to login with your password.';
@@ -51,7 +51,7 @@ $L['msg151_title'] = 'Login failed (wrong name or password)';
 $L['msg151_body'] = 'Error, the user name you provided isn\'t in the database or the password do not match!';
 
 $L['msg152_title'] = 'Login failed (account isn\'t activated)';
-$L['msg152_body'] = 'Error, your account is registered but not activated yet.';
+$L['msg152_body'] = 'Error, your account is registered but not yet actived.';
 
 $L['msg153_title'] = 'Login failed (user banned)';
 $L['msg153_body'] = 'Error, your account is banned.';

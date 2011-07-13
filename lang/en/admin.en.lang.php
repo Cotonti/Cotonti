@@ -51,7 +51,7 @@ $L['home_ql_b3_1'] = 'Basic config';
 $L['home_ql_b3_2'] = 'Extra fields for users';
 $L['home_ql_b3_4'] = 'User rights';
 
-$L['home_update_notice'] = 'Update Avaliable';
+$L['home_update_notice'] = 'Update available';
 $L['home_update_revision'] = 'Current Version: <span style="color:#C00;font-weight:bold;">%1$s</span><br />New Version: <span style="color:#4E9A06;font-weight:bold;">%2$s</span>'; // %1/%2 Current Version/Revision %3/%4 Updated Version/Revision
 
 /**
@@ -176,8 +176,8 @@ $L['cfg_subtitle'] = array('Description', 'Optional, will be displayed after the
 $L['cfg_title_header'] = array('Header title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 $L['cfg_title_header_index'] = array('Header Index title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 $L['cfg_title_users_details'] = array('Users Details title', 'Options: {USER}, {NAME}');
-$L['cfg_subject_mail'] = array('Email subject', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}');
-$L['cfg_body_mail'] = array('Email title', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {SITE_URL}, {ADMIN_EMAIL}, {MAIL_BODY}, {MAIL_SUBJECT}');
+$L['cfg_subject_mail'] = array('E-mail subject', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}');
+$L['cfg_body_mail'] = array('E-mail title', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {SITE_URL}, {ADMIN_EMAIL}, {MAIL_BODY}, {MAIL_SUBJECT}');
 
 /**
  * Config Section
