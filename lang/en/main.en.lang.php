@@ -54,7 +54,7 @@ $L['Cancel'] = 'Cancel';
 $L['Categories'] = 'Categories';
 $L['Category'] = 'Category';
 $L['Clearstatus'] = 'Clear status';
-$L['Clickhere'] = 'Click here to continue...';
+$L['Clickhere'] = 'Click here to continue..';
 $L['Close'] = 'Close';
 $L['Code'] = 'Code';
 $L['Configuration'] = 'Configuration';
@@ -238,7 +238,7 @@ $L['Rated'] = 'Rated';
 $L['Rating'] = 'Rating';
 $L['Ratings'] = 'Ratings';
 $L['Read'] = 'Read';
-$L['ReadMore'] = 'Read more...';
+$L['ReadMore'] = 'Read more..';
 $L['Reason'] = 'Reason';
 $L['Recipient'] = 'Recipient';
 $L['Recipients'] = 'Recipients';
@@ -454,7 +454,7 @@ $L['Gender_U'] = 'Unknown';
  */
 
 $L['com_themefail'] = 'Warning, failed to load your prefered theme, check your profile';
-$L['com_schemefail'] = 'Warning, failed to load your prefered color scheme for the prefered theme, please check your profile and update values';
+$L['com_schemefail'] = 'Warning, failed to load your prefered colour scheme for the prefered theme, please check your profile and update values';
 
 /**
  * Header

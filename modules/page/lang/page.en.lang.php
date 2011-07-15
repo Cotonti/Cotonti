@@ -15,7 +15,7 @@ defined('COT_CODE') or die('Wrong URL.');
  * Module Config
  */
 
-$L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster have admin rights for page category');
+$L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster has admin rights for page category');
 $L['cfg_count_admin'] = array('Count Administrators\' hits', '');
 $L['cfg_maxlistsperpage'] = array('Max. lists per page', ' ');
 $L['cfg_order'] = array('Sorting column');
@@ -35,7 +35,7 @@ $L['cfg_way_params'] = array($L['Ascending'], $L['Descending']);
  * Extrafields Subsection
  */
 
-$L['adm_help_pages_extrafield'] = '<p><em>Base HTML</em> is set automaticaly if you leave it blank</p>
+$L['adm_help_pages_extrafield'] = '<p><em>Base HTML</em> is set automatically if you leave it blank</p>
 <p class="margintop10"><b>New tags in tpl files:</b></p>
 <ul class="follow">
 <li>page.tpl: {PAGE_XXXXX}, {PAGE_XXXXX_TITLE}</li>
@@ -48,7 +48,7 @@ $L['adm_help_pages_extrafield'] = '<p><em>Base HTML</em> is set automaticaly if 
  * Admin Page Section
  */
 
-$L['adm_queue_deleted'] = 'Page was deleted in to trash can';
+$L['adm_queue_deleted'] = 'Page was deleted in to the trash can';
 $L['adm_valqueue'] = 'Waiting for validation';
 $L['adm_validated'] = 'Already validated';
 $L['adm_structure'] = 'Structure of the pages (categories)';

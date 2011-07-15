@@ -22,6 +22,6 @@ $L['cfg_pmold'] = array('Delete <strong>ALL</strong> private messages older than
 $L['cfg_refprune'] = array('Delete referers older than', 'days (0 - disable)');
 $L['cfg_userprune'] = array('Delete inactive user accounts older than', 'days (0 - disable)');
 
-$L['info_desc'] = 'Periodically cleans logs, private messages, referers and inative users';
+$L['info_desc'] = 'Periodically cleans logs, private messages, referers and inactive users';
 
 ?>

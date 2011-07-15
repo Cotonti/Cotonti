@@ -16,7 +16,7 @@ defined('COT_CODE') or die('Wrong URL.');
  */
 
 $L['cfg_enable_comments'] = array('Enable comments');
-$L['cfg_mail'] = array('Notify about new comments by email');
+$L['cfg_mail'] = array('Notify about new comments via e-mail');
 $L['cfg_markitup'] = array('Use markitup');
 $L['cfg_markup'] = array('Enable markup in comments');
 $L['cfg_minsize'] = array('Min. comment length');

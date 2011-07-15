@@ -18,7 +18,7 @@ $L['Next'] = 'Next';
 
 $L['install_adminacc'] = 'Administrator Account';
 $L['install_body_title'] = 'Cotonti Web Installer';
-$L['install_body_message1'] = 'This script will setup the basic install and configuration of Cotonti for you.';
+$L['install_body_message1'] = 'This script will setup the basic Cotonti install and configuration for you.';
 $L['install_body_message2'] = 'It is recommended to copy datas/config-sample.php to datas/config.php and set CHMOD 666 on datas/config.php before running this script.';
 $L['install_body_message3'] = 'First you need to <strong>create a blank database</strong> with the above name on your server, if this user has no permission to create new databases.';
 $L['install_chmod_value'] = 'CHMOD {$chmod}';
@@ -63,7 +63,7 @@ $L['install_update_patch_error'] = 'Error applying patch {$f}: {$msg}';
 $L['install_update_patches'] = 'Applied patches:';
 $L['install_update_success'] = 'Successfully updated to revision {$rev}';
 $L['install_update_template_not_found'] = 'Update template file not found';
-$L['install_upgrade'] = 'The system is ready to perform global upgrade...';
+$L['install_upgrade'] = 'The system is ready to perform global upgrade..';
 $L['install_upgrade_error'] = 'Failed upgrading Cotonti to {$ver}';
 $L['install_upgrade_success'] = 'Successfully upgraded Cotonti to {$ver}';
 $L['install_upgrade_success_note'] = 'All Genoa plugins have been uninstalled to avoid compatibility problems. You can update them manually later.';

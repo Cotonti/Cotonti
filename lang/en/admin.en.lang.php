@@ -52,7 +52,7 @@ $L['home_ql_b3_2'] = 'Extra fields for users';
 $L['home_ql_b3_4'] = 'User rights';
 
 $L['home_update_notice'] = 'Update available';
-$L['home_update_revision'] = 'Current Version: <span style="color:#C00;font-weight:bold;">%1$s</span><br />New Version: <span style="color:#4E9A06;font-weight:bold;">%2$s</span>'; // %1/%2 Current Version/Revision %3/%4 Updated Version/Revision
+$L['home_update_revision'] = 'Current version: <span style="color:#C00;font-weight:bold;">%1$s</span><br />New version: <span style="color:#4E9A06;font-weight:bold;">%2$s</span>'; // %1/%2 Current version/revision %3/%4 Updated version/revision
 
 /**
  * Config Section
@@ -359,7 +359,7 @@ $L['adm_checkcorenow'] = 'Check core files now!';
 $L['adm_checkingcore'] = 'Checking core files...';
 $L['adm_checkthemes'] = 'Check if all files are present in themes';
 $L['adm_checktheme'] = 'Check TPL files for the theme';
-$L['adm_checkingtheme'] = 'Checking the theme...';
+$L['adm_checkingtheme'] = 'Checking the theme..';
 $L['adm_check_ok'] = 'Ok';
 $L['adm_check_missing'] = 'Missing';
 
@@ -392,7 +392,7 @@ $L['adm_confirm'] = 'Press this button to confirm: ';
 $L['adm_done'] = 'Done';
 $L['adm_failed'] = 'Failed';
 $L['adm_from'] = 'From';
-$L['adm_more'] = 'More tools...';
+$L['adm_more'] = 'More tools..';
 $L['adm_purgeall'] = 'Purge all';
 $L['adm_queue_unvalidated'] = 'Unvalidated';
 $L['adm_queue_validated'] = 'Validated';
