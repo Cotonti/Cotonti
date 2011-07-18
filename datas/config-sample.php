@@ -91,6 +91,7 @@ $cfg['system_dir'] = 'system';
 $cfg['thumbs_dir'] = 'datas/thumbs';
 $cfg['themes_dir'] = 'themes';
 $cfg['extrafield_files_dir'] = 'datas/exflds';
+$cfg['icons_dir'] = 'images/icons';
 
 // ========================
 // Directory and file permissions for uploaded files

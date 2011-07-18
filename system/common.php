@@ -553,7 +553,7 @@ if (empty($usr['icons']))
 {
 	$usr['icons'] = $cfg['defaulticons'];
 }
-require_once './images/icons/' . $usr['icons'] . '/resources.php';
+require_once $cfg['icons_dir'].'/' . $usr['icons'] . '/resources.php';
 
 $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." Cotonti</a>";
 
