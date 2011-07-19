@@ -3047,8 +3047,9 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		{
 			$rel = $base_rel;
 		}
+		$prevlink = cot_url($module, $args, $hash);
 		$prev = cot_rc('link_pagenav_prev', array(
-			'url' => cot_url($module, $args, $hash),
+			'url' => $prevlink,
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $prev_n + 1
@@ -3063,8 +3064,9 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		{
 			$rel = $base_rel;
 		}
+		$firstlink = cot_url($module, $args, $hash);
 		$first = cot_rc('link_pagenav_first', array(
-			'url' => cot_url($module, $args, $hash),
+			'url' => $firstlink,
 			'event' => $event,
 			'rel' => $rel,
 			'num' => 1
@@ -3092,8 +3094,9 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		{
 			$rel = $base_rel;
 		}
+		$nextlink = cot_url($module, $args, $hash);
 		$next = cot_rc('link_pagenav_next', array(
-			'url' => cot_url($module, $args, $hash),
+			'url' => $nextlink,
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $next_n + 1
@@ -3117,8 +3120,9 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		{
 			$rel = $base_rel;
 		}
+		$lastlink = cot_url($module, $args, $hash);
 		$last = cot_rc('link_pagenav_last', array(
-			'url' => cot_url($module, $args, $hash),
+			'url' => $lastlink,
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $last_n + 1
@@ -3138,6 +3142,10 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		'next' => $next.$last,
 		'last' => $lastn,
 		'current' => $currentpage,
+		'firstlink' => $firstlink,
+		'prevlink' => $prevlink,
+		'nextlink' => $nextlink,
+		'lastlink' => $lastlink,
 		'total' => $totalpages,
 		'onpage' => $onpage,
 		'entries' => $entries
