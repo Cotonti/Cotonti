@@ -38,7 +38,7 @@ if (empty($i18n_locale) || $i18n_locale == $cfg['defaultlang'])
 		if ($lc != $cfg['defaultlang'])
 		{
 			$t->assign(array(
-				'I18N_LOCALE_ROW_URL' => cot_url('plug', "e=i18n&m=structure&l=$lc"),
+				'I18N_LOCALE_ROW_URL' => cot_url('plug', "e=i18n&m=structure&l=$lc", false, true),
 				'I18N_LOCALE_ROW_TITLE' => $title
 			));
 			$t->parse('MAIN.I18N_LOCALE_ROW');
