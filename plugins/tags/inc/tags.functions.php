@@ -240,7 +240,7 @@ function cot_tag_parse($input)
  */
 function cot_tag_parse_query($qs)
 {
-	global $db, $db_tag_refrences;
+	global $db, $db_tag_references;
 	$tokens1 = explode(';', $qs);
 	$tokens1 = array_map('trim', $tokens1);
 	$cnt1 = count($tokens1);
@@ -270,7 +270,7 @@ function cot_tag_parse_query($qs)
 				}
 				else
 				{
-					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_refrences AS r{$i}_{$j} WHERE r{$i}_{$j}.tag_item = p.page_id AND r{$i}_{$j}.tag $op)";
+					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_references AS r{$i}_{$j} WHERE r{$i}_{$j}.tag_item = p.page_id AND r{$i}_{$j}.tag $op)";
 				}
 			}
 			else
