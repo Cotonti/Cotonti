@@ -17,25 +17,37 @@
  */
 function sed_tag_parse_query($qs)
 {
+	global $db_tag_references;
 	$tokens1 = explode(';', $qs);
+	$tokens1 = array_map('trim', $tokens1);
 	$cnt1 = count($tokens1);
-	for($i = 0; $i < $cnt1; $i++)
+	for ($i = 0; $i < $cnt1; $i++)
 	{
 		$tokens2 = explode(',', $tokens1[$i]);
+		$tokens2 = array_map('trim', $tokens2);
 		$cnt2 = count($tokens2);
-		for($j = 0; $j < $cnt2; $j++)
+		for ($j = 0; $j < $cnt2; $j++)
 		{
 			$tag = sed_tag_prep($tokens2[$j]);
-			if(!empty($tag))
+			if (!empty($tag))
 			{
+
 				if (mb_strpos($tag, '*') !== false)
 				{
 					$tag = str_replace('*', '%', $tag);
-					$tokens2[$j] = "r.tag LIKE '".sed_sql_prep($tag)."'";
+					$op = "LIKE '" . sed_sql_prep($tag) . "'";
 				}
 				else
 				{
-					$tokens2[$j] = "r.tag = '".sed_sql_prep($tag)."'";
+					$op = "= '" . sed_sql_prep($tag) . "'";
+				}
+				if ($j == 0)
+				{
+					$tokens2[$j] = 'r.tag ' . $op;
+				}
+				else
+				{
+					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_references AS r{$i}_{$j} WHERE r{$i}_{$j}.tag_item = p.page_id AND r{$i}_{$j}.tag $op)";
 				}
 			}
 			else
