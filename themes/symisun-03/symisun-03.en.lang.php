@@ -65,7 +65,7 @@ $themelang['list']['all'] = 'All entries';
  * page.add.tpl
  */
 
-$themelang['pageadd']['save'] = 'Save to..';
+$themelang['pageadd']['save'] = 'Save to...';
 $themelang['pageadd']['basic'] = 'Basic info';
 $themelang['pageadd']['adv'] = 'Advanced';
 $themelang['pageadd']['dates'] = 'Dates';

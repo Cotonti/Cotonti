@@ -91,7 +91,7 @@ $L['cfg_defaulttimezone'] = array('Default time zone', 'For guests and new membe
  * Main Subsection
  */
 
-$L['cfg_adminemail'] = array('Administrator\'s e-mail', 'Required');
+$L['cfg_adminemail'] = array('Administrator\'s email', 'Required');
 $L['cfg_clustermode'] = array('Cluster of servers', 'Set to yes if it\'s a load balanced setup.');
 $L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
 $L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
@@ -176,8 +176,8 @@ $L['cfg_subtitle'] = array('Description', 'Optional, will be displayed after the
 $L['cfg_title_header'] = array('Header title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 $L['cfg_title_header_index'] = array('Header Index title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 $L['cfg_title_users_details'] = array('Users Details title', 'Options: {USER}, {NAME}');
-$L['cfg_subject_mail'] = array('E-mail subject', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}');
-$L['cfg_body_mail'] = array('E-mail title', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {SITE_URL}, {ADMIN_EMAIL}, {MAIL_BODY}, {MAIL_SUBJECT}');
+$L['cfg_subject_mail'] = array('Email subject', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}');
+$L['cfg_body_mail'] = array('Email title', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {SITE_URL}, {ADMIN_EMAIL}, {MAIL_BODY}, {MAIL_SUBJECT}');
 
 /**
  * Config Section
@@ -188,11 +188,11 @@ $L['cfg_disablereg'] = array('Disable registration process', 'Prevent users from
 $L['cfg_disablewhosonline'] = array('Disable who\'s online', 'Automatically enabled if you turn on the Shield');
 $L['cfg_forcerememberme'] = array('Force &quot;remember me&quot;', 'Use it on multi-domain sites or if there are sudden logouts');
 $L['cfg_maxusersperpage'] = array('Maximum lines in userlist', '');
-$L['cfg_regnoactivation'] = array('Skip e-mail check for new users', '\'No\'recommended, for security reasons');
+$L['cfg_regnoactivation'] = array('Skip email check for new users', '\'No\'recommended, for security reasons');
 $L['cfg_regrequireadmin'] = array('Administrators must validate new accounts', '');
 $L['cfg_timedout'] = array('Idle delay, in seconds', 'After this delay, user is away');
-$L['cfg_user_email_noprotection'] = array('Disable password protection of e-mail change', '\'No\' recommended, for security reasons');
-$L['cfg_useremailchange'] = array('Allow users to change their e-mail address', '\'No\' recommended, for security reasons');
+$L['cfg_user_email_noprotection'] = array('Disable password protection of email change', '\'No\' recommended, for security reasons');
+$L['cfg_useremailchange'] = array('Allow users to change their email address', '\'No\' recommended, for security reasons');
 $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');
 $L['cfg_usertextmax'] = array('Maximum length for user signature', '');
 
@@ -359,7 +359,7 @@ $L['adm_checkcorenow'] = 'Check core files now!';
 $L['adm_checkingcore'] = 'Checking core files...';
 $L['adm_checkthemes'] = 'Check if all files are present in themes';
 $L['adm_checktheme'] = 'Check TPL files for the theme';
-$L['adm_checkingtheme'] = 'Checking the theme..';
+$L['adm_checkingtheme'] = 'Checking the theme...';
 $L['adm_check_ok'] = 'Ok';
 $L['adm_check_missing'] = 'Missing';
 
@@ -392,7 +392,7 @@ $L['adm_confirm'] = 'Press this button to confirm: ';
 $L['adm_done'] = 'Done';
 $L['adm_failed'] = 'Failed';
 $L['adm_from'] = 'From';
-$L['adm_more'] = 'More tools..';
+$L['adm_more'] = 'More tools...';
 $L['adm_purgeall'] = 'Purge all';
 $L['adm_queue_unvalidated'] = 'Unvalidated';
 $L['adm_queue_validated'] = 'Validated';

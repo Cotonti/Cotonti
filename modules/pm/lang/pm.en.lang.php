@@ -15,10 +15,10 @@ defined('COT_CODE') or die('Wrong URL.');
  * Module Config
  */
 
-$L['cfg_allownotifications'] = array('Allow PM notifications by e-mail', '');
+$L['cfg_allownotifications'] = array('Allow PM notifications by email', '');
 $L['cfg_maxsize'] = array('Maximum length for messages', '');
 $L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');
-$L['info_desc'] = 'Private messaging system is on-site user communication similar to e-mail';
+$L['info_desc'] = 'Private messaging system is on-site user communication similar to email';
 
 /**
  * Other
@@ -65,7 +65,7 @@ $L['pm_selected'] = 'Selected';
  */
 
 $L['pm_notify'] = 'Hi %1$s,
-You are receiving this e-mail because there is a new private message in your inbox from %2$s
+You are receiving this email because there is a new private message in your inbox from %2$s
 Click this link to read it: %3$s';
 
 ?>
