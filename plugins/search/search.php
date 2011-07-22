@@ -39,18 +39,18 @@ $rs['pagtitle'] = cot_import($rs['pagtitle'], 'D', 'INT');
 $rs['pagdesc'] = cot_import($rs['pagdesc'], 'D', 'INT');
 $rs['pagtext'] = cot_import($rs['pagtext'], 'D', 'INT');
 $rs['pagfile'] = cot_import($rs['pagfile'], 'D', 'INT');
-$rs['pagsort'] = cot_import($rs['pagsort'], 'D', 'TXT');
+$rs['pagsort'] = cot_import($rs['pagsort'], 'D', 'ALP');
 $rs['pagsort'] = (empty($rs['pagsort'])) ? 'date' : $rs['pagsort'];
-$rs['pagsort2'] = (cot_import($rs['pagsort2'], 'D', 'TXT') == 'DESC') ? 'DESC' : 'ASC';
+$rs['pagsort2'] = (cot_import($rs['pagsort2'], 'D', 'ALP') == 'DESC') ? 'DESC' : 'ASC';
 $rs['pagsub'] = cot_import($rs['pagsub'], 'D', 'ARR');
 $rs['pagsubcat'] = cot_import($rs['pagsubcat'], 'D', 'BOL') ? 1 : 0;
 
 $rs['frmtitle'] = cot_import($rs['frmtitle'], 'D', 'INT');
 $rs['frmtext'] = cot_import($rs['frmtext'], 'D', 'INT');
 $rs['frmreply'] = cot_import($rs['frmreply'], 'D', 'INT');
-$rs['frmsort'] = cot_import($rs['frmsort'], 'D', 'TXT');
+$rs['frmsort'] = cot_import($rs['frmsort'], 'D', 'ALP');
 $rs['frmsort'] = (empty($rs['frmsort'])) ? 'updated' : $rs['frmsort'];
-$rs['frmsort2'] = ((cot_import($rs['frmsort2'], 'D', 'TXT')) == 'DESC') ? 'DESC' : 'ASC';;
+$rs['frmsort2'] = ((cot_import($rs['frmsort2'], 'D', 'ALP')) == 'DESC') ? 'DESC' : 'ASC';;
 $rs['frmsub'] = cot_import($rs['frmsub'], 'D', 'ARR');
 $rs['frmsubcat'] = cot_import($rs['frmsubcat'], 'D', 'BOL') ? 1 : 0;
 
