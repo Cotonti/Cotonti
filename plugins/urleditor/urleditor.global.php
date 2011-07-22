@@ -144,12 +144,12 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 		$p = mb_strpos($url, '://');
 		if ($p === false)
 		{
-			$url = mb_strpos($url, '/') === 0 ? '/' . $params['l'] . $url : $params['l'] . '/' . $url;
+			$url = mb_strpos($url, '/') === 0 ? '/' . urlencode($params['l']) . $url : urlencode($params['l']) . '/' . $url;
 		}
 		else
 		{
 			$p = mb_strpos($url, '/', $p + 3);
-			$url = $p === false ? $url . '/' . $params['l'] : mb_substr($url, 0, $p) . $params['l'] . '/' . mb_substr($url, $p + 1);
+			$url = $p === false ? $url . '/' . urlencode($params['l']) : mb_substr($url, 0, $p) . urlencode($params['l']) . '/' . mb_substr($url, $p + 1);
 		}
 		unset($params['l']);
 	}
@@ -165,7 +165,7 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 			// they should be passed by rewrite rule (htaccess)
 			if ($rule['params'][$key] != $val)
 			{
-				$qs .= $key .'='.urlencode($val).$sep;
+				$qs .= urlencode($key) .'='.urlencode($val).$sep;
 			}
 		}
 		$qs = mb_substr($qs, 0, -$sep_len);

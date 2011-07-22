@@ -4178,7 +4178,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 			{
 				$qs .= $sep;
 			}
-			$qs .= $key . '=' . urlencode($val);
+			$qs .= urlencode($key) . '=' . urlencode($val);
 			$i++;
 		}
 		$url .= $qs;
