@@ -123,7 +123,11 @@ if($tab=='frm' && !$cfg['disable_forums'])
 		$sea_frmtext = sed_import('sea_frmtext','P','INT');
 		$sea_frmreply = sed_import('sea_frmreply','P','INT');
 		$sea_frmsort = sed_import('sea_frmsort','P','INT');
-		$sea_frmsort2 = sed_sql_prep(sed_import('sea_frmsort2','P','TXT'));
+		$sea_frmsort2 = sed_import('sea_frmsort2','P','ALP');
+		if (!in_array($sea_frmsort2, array('ASC', 'DESC')))
+		{
+			$sea_frmsort2 = 'ASC';
+		}
 		$sea_frmsub = sed_import('sea_frmsub','P','ARR');
 
 		if (count($sea_frmsub) == 0) $sea_frmsub = array('all');
@@ -398,7 +402,11 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 		$sea_pagtext = sed_import('sea_pagtext','P','INT');
 		$sea_pagfile = sed_import('sea_pagfile','P','INT');
 		$sea_pagsort = sed_import('sea_pagsort','P','INT');
-		$sea_pagsort2 = sed_sql_prep(sed_import('sea_pagsort2','P','TXT'));
+		$sea_pagsort2 = sed_import('sea_pagsort2','P','ALP');
+		if (!in_array($sea_pagsort2, array('ASC', 'DESC')))
+		{
+			$sea_pagsort2 = 'ASC';
+		}
 		$sea_pagsub = sed_import('sea_pagsub','P','ARR');
 
 		if (count($sea_pagsub) == 0) $sea_pagsub = array('all');
