@@ -103,7 +103,7 @@ if ($history)
 						OR (pm_fromuserid = $to AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)
 						ORDER BY pm_date DESC LIMIT $d,".$cfg['pm']['maxpmperpage']);
 
-	$pagenav = cot_pagenav('pm', 'm=message&id='.$id.'&history='.$history.'&q='.$q, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax'], 'ajaxHistory');
+	$pagenav = cot_pagenav('pm', 'm=message&id='.$id.'&history='.(int)$history.'&q='.$q, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax'], 'ajaxHistory');
 
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('pm.history.loop');
@@ -192,7 +192,7 @@ if ($usr['auth_write'])
 	$onclick = "insertText(document, 'newpmtext', '[quote]'+$('#pm_text').text()+'[/quote]'); return false;";
 
 	$t->assign(array(
-		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.$history.'&d='.$durl), $L['Quote'], array('onclick' => $onclick)),
+		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.(int)$history.'&d='.$durl), $L['Quote'], array('onclick' => $onclick)),
 		'PM_FORM_SEND' => cot_url('pm', 'm=send&a=send&to='.$to),
 		'PM_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 		'PM_FORM_TEXT' => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),

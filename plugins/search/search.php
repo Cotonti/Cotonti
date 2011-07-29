@@ -129,7 +129,7 @@ if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && $cfg['plugin'
 		'PLUGIN_PAGE_SEARCH_NAMES' => cot_checkbox(($rs['pagtitle'] == 1 || count($rs['pagsub']) == 0), 'rs[pagtitle]', $L['plu_pag_search_names']),
 		'PLUGIN_PAGE_SEARCH_DESC' => cot_checkbox(($rs['pagdesc'] == 1 || count($rs['pagsub']) == 0), 'rs[pagdesc]', $L['plu_pag_search_desc']),
 		'PLUGIN_PAGE_SEARCH_TEXT' => cot_checkbox(($rs['pagtext'] == 1 || count($rs['pagsub']) == 0), 'rs[pagtext]', $L['plu_pag_search_text']),
-		'PLUGIN_PAGE_SEARCH_SUBCAT' => cot_checkbox(($rs['pagsubcat'] == 1), 'rs[pagsubcat]', $L['plu_pag_set_subsec']),
+		'PLUGIN_PAGE_SEARCH_SUBCAT' => cot_checkbox($rs['pagsubcat'], 'rs[pagsubcat]', $L['plu_pag_set_subsec']),
 		'PLUGIN_PAGE_SEARCH_FILE' => cot_checkbox($rs['pagfile'] == 1, 'rs[pagfile]', $L['plu_pag_search_file'])
 	));
 	if ($tab == 'pag' || (empty($tab) && $cfg['plugin']['search']['extrafilters']))
@@ -163,7 +163,7 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugi
 		'PLUGIN_FORUM_SEARCH_NAMES' => cot_checkbox(($rs['frmtitle'] == 1 || count($rs['frmsub']) == 0), 'rs[frmtitle]', $L['plu_frm_search_names']),
 		'PLUGIN_FORUM_SEARCH_POST' => cot_checkbox(($rs['frmtext'] == 1 || count($rs['frmsub']) == 0), 'rs[frmtext]', $L['plu_frm_search_post']),
 		'PLUGIN_FORUM_SEARCH_ANSW' => cot_checkbox(($rs['frmreply'] == 1 || count($rs['frmsub']) == 0), 'rs[frmreply]', $L['plu_frm_search_answ']),
-		'PLUGIN_FORUM_SEARCH_SUBCAT' => cot_checkbox(($rs['frmsubcat'] == 1), 'rs[frmsubcat]', $L['plu_frm_set_subsec'])
+		'PLUGIN_FORUM_SEARCH_SUBCAT' => cot_checkbox($rs['frmsubcat'], 'rs[frmsubcat]', $L['plu_frm_set_subsec'])
 	));
 	if ($tab == 'frm' || (empty($tab) && $cfg['plugin']['search']['extrafilters']))
 	{
