@@ -41,8 +41,17 @@ if (count($i18n_locales) > 0)
 		{
 			$urlparams['l'] = $lc;
 		}
+		if (defined('COT_PLUG'))
+		{
+			$i18n_ext = 'plug';
+			$urlparams['e'] = $env['ext'];
+		}
+		else
+		{
+			$i18n_ext = $env['ext'];
+		}
 		$t->assign(array(
-			'I18N_LANG_ROW_URL' => cot_url($env['ext'], $urlparams, '', false, true),
+			'I18N_LANG_ROW_URL' => cot_url($i18n_ext, $urlparams, '', false, true),
 			'I18N_LANG_ROW_CODE' => $lc,
 			'I18N_LANG_ROW_FLAG' => $lc == 'en' ? 'gb' : $lc,
 			'I18N_LANG_ROW_TITLE' => htmlspecialchars($lc_title),
