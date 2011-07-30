@@ -52,7 +52,7 @@ if ($a == 'add')
 
 	$rpage['page_cat'] = cot_import('rpagecat', 'P', 'TXT');
 	$rpage['page_keywords'] = cot_import('rpagekeywords', 'P', 'TXT');
-	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'ALP');
+	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'TXT');
 	$rpage['page_title'] = cot_import('rpagetitle', 'P', 'TXT');
 	$rpage['page_desc'] = cot_import('rpagedesc', 'P', 'TXT');
 	$rpage['page_text'] = cot_import('rpagetext', 'P', 'HTM');

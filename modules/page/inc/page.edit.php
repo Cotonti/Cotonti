@@ -48,7 +48,7 @@ if ($a == 'update')
 	cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $row_page['page_ownerid']);
 
 	$rpage['page_keywords'] = cot_import('rpagekeywords', 'P', 'TXT');
-	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'ALP');
+	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'TXT');
 	$rpage['page_title'] = cot_import('rpagetitle', 'P', 'TXT');
 	$rpage['page_desc'] = cot_import('rpagedesc', 'P', 'TXT');
 	$rpage['page_text'] = cot_import('rpagetext', 'P', 'HTM');
