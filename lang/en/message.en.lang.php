@@ -51,7 +51,7 @@ $L['msg151_title'] = 'Login failed (wrong name or password)';
 $L['msg151_body'] = 'Error, the user name you provided isn\'t in the database or the password does not match!';
 
 $L['msg152_title'] = 'Login failed (account isn\'t activated)';
-$L['msg152_body'] = 'Error, your account is registered but not yet actived.';
+$L['msg152_body'] = 'Error, your account is registered but not yet activated.';
 
 $L['msg153_title'] = 'Login failed (user banned)';
 $L['msg153_body'] = 'Error, your account is banned.';
