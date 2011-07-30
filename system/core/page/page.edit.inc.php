@@ -47,7 +47,7 @@ if ($a=='update')
 
 
 	$rpagekey = sed_import('rpagekey','P','TXT');
-	$rpagealias = sed_import('rpagealias','P','ALP');
+	$rpagealias = sed_import('rpagealias','P','TXT');
 	$rpagetype = sed_import('rpagetype','P','INT');
 	$rpagetitle = sed_import('rpagetitle','P','TXT');
 	$rpagedesc = sed_import('rpagedesc','P','TXT');

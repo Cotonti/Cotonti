@@ -52,7 +52,7 @@ if ($a=='add')
 	$usr['isadmin'] = sed_auth('page', $newpagecat, 'A');
 	
 	$newpagekey = sed_import('newpagekey','P','TXT');
-	$newpagealias = sed_import('newpagealias','P','ALP');
+	$newpagealias = sed_import('newpagealias','P','TXT');
 	$newpagetype = $usr['isadmin'] ? sed_import('newpagetype','P','INT') : 0;
 	$newpagetitle = sed_import('newpagetitle','P','TXT');
 	$newpagedesc = sed_import('newpagedesc','P','TXT');
