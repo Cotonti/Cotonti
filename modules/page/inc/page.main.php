@@ -15,7 +15,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', 
 cot_block($usr['auth_read']);
 
 $id = cot_import('id', 'G', 'INT');
-$al = cot_import('al', 'G', 'ALP');
+$al = $db->prep(cot_import('al', 'G', 'TXT'));
 $c = cot_import('c', 'G', 'TXT');
 $pg = cot_import('pg', 'G', 'INT');
 
