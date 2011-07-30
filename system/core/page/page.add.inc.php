@@ -245,8 +245,8 @@ if (empty($newpagecat) && !empty($c))
 }
 
 $pageadd_form_categories = sed_selectbox_categories($newpagecat, 'newpagecat');
-$newpage_form_begin = sed_selectbox_date($sys['now_offset']+$usr['timezone']*3600, 'long', '_beg');
-$newpage_form_expire = sed_selectbox_date($sys['now_offset']+$usr['timezone']*3600 + 31536000, 'long', '_exp');
+$newpage_form_begin = sed_selectbox_date($sys['now_offset']+$usr['timezone']*3600, 'long', '_beg', 2030, 2000);
+$newpage_form_expire = sed_selectbox_date($sys['now_offset']+$usr['timezone']*3600 + 31536000, 'long', '_exp', 2030, 2000);
 
 $pfs = sed_build_pfs($usr['id'], 'newpage', 'newpagetext',$L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newpage', 'newpagetext', $L['SFS']) : '';

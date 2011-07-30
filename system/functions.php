@@ -3534,9 +3534,10 @@ function sed_selectbox_countries($check,$name)
  * @param string $mode Display mode: 'short' or complete
  * @param string $ext Variable name suffix
  * @param int $max_year Max. year possible
+ * @param int $min_year Min. year possible
  * @return string
  */
-function sed_selectbox_date($utime, $mode, $ext='', $max_year = 2030)
+function sed_selectbox_date($utime, $mode, $ext='', $max_year = 2030, $min_year = 1902)
 {
 	global $L;
 	list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $utime));
@@ -3555,7 +3556,7 @@ function sed_selectbox_date($utime, $mode, $ext='', $max_year = 2030)
 	$p_monthes[] = array(12, $L['December']);
 
 	$result = "<select name=\"ryear".$ext."\">";
-	for ($i = 1902; $i < $max_year; $i++)
+	for ($i = $min_year; $i < $max_year; $i++)
 	{
 		$selected = ($i==$s_year) ? "selected=\"selected\"" : '';
 		$result .= "<option value=\"$i\" $selected>$i</option>";

@@ -247,9 +247,9 @@ $sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
 sed_die(sed_sql_numrows($sql)==0);
 $pag = sed_sql_fetcharray($sql);
 
-$pag['page_date'] = sed_selectbox_date($pag['page_date'] + $usr['timezone'] * 3600,'long');
-$pag['page_begin'] = sed_selectbox_date($pag['page_begin'] + $usr['timezone'] * 3600, 'long', '_beg');
-$pag['page_expire'] = sed_selectbox_date($pag['page_expire'] + $usr['timezone'] * 3600, 'long', '_exp');
+$pag['page_date'] = sed_selectbox_date($pag['page_date'] + $usr['timezone'] * 3600, 'long', 2030, 2000);
+$pag['page_begin'] = sed_selectbox_date($pag['page_begin'] + $usr['timezone'] * 3600, 'long', '_beg', 2030, 2000);
+$pag['page_expire'] = sed_selectbox_date($pag['page_expire'] + $usr['timezone'] * 3600, 'long', '_exp', 2030, 2000);
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $pag['page_cat']);
 
