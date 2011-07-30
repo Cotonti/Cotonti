@@ -22,7 +22,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 
 sed_block($usr['auth_read']);
 
 $id = sed_import('id','G','INT');
-$al = sed_import('al','G','ALP');
+$al = sed_sql_prep(sed_import('al','G','TXT'));
 $r = sed_import('r','G','ALP');
 $c = sed_import('c','G','TXT');
 $pg = sed_import('pg','G','INT');
