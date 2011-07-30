@@ -17,7 +17,7 @@ defined('COT_CODE') or die('Wrong URL.');
  */
 
 $L['cfg_enable_ratings'] = array('Enable ratings');
-$L['cfg_ratings_allowchange'] = array('Allow Ratings to be changed?', 'If enabled it will allow users to change their rating.');
+$L['cfg_ratings_allowchange'] = array('Allow ratings to be changed?', 'If enabled it will allow users to change their rating.');
 
 $L['info_desc'] = 'One-click star ratings using jQuery';
 

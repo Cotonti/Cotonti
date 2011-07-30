@@ -21,5 +21,5 @@ $L['Referers'] = 'Referers';
  */
 
 $L['adm_ref_prune'] = 'Cleaned';
-$L['adm_ref_prunelowhits'] = 'Referers with the number of visitors is less 5 successfully removed';
+$L['adm_ref_prunelowhits'] = 'Referers with less than 5 visitors succesfully removed';
 ?>

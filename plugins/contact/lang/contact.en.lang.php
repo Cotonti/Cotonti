@@ -14,10 +14,10 @@ defined('COT_CODE') or die('Wrong URL');
  * Plugin Config
  */
 
-$L['cfg_email'] = array('E-mail', '(leave empty to use Admin E-mail)');
+$L['cfg_email'] = array('Email', '(leave empty to use admin email)');
 $L['cfg_minchars'] = array('Min. chars in message');
 
-$L['info_desc'] = 'Contact form for user feedback delivered by e-mail and recorded in database';
+$L['info_desc'] = 'Contact form for user feedback delivered via email and recorded in database';
 
 /**
  * Plugin Admin
@@ -34,8 +34,8 @@ $L['contact_nosubject'] = 'No subject';
  * Plugin Title & Subtitle
  */
 
-$L['contact_title'] = 'Contact Us';
-$L['contact_subtitle'] = 'Contact Info';
+$L['contact_title'] = 'Contact us';
+$L['contact_subtitle'] = 'Contact info';
 
 /**
  * Plugin Body
@@ -45,7 +45,7 @@ $L['contact_headercontact'] = 'Contact';
 $Ls['contact_headercontact'] = array('messages', 'message');
 $L['contact_entrytooshort'] = 'Message too short or missing';
 $L['contact_noname'] = 'Name missing';
-$L['contact_emailnotvalid'] = 'Incorrect E-mail';
+$L['contact_emailnotvalid'] = 'Incorrect email address';
 $L['contact_message_sent'] = 'Message sent';
 
 ?>
