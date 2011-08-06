@@ -19,7 +19,6 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($code == 'tags' && $result && !cot_error_found())
 {
-	$cot_plugins_active['tags'] = true;
 	include $cfg['plugins_dir'] . '/i18n/setup/i18n.install.php';
 }
 

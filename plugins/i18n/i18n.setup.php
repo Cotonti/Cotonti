@@ -15,6 +15,7 @@ Auth_members=RW
 Lock_members=
 Requires_modules=page
 Recommends_plugins=search,tags
+Order=50
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]

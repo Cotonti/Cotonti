@@ -301,6 +301,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				$usr['id'] = 1;
 				// Install all at once
 				// Note: installation statuses are ignored in this installer
+				$selected_modules = cot_install_sort_extensions($selected_modules, true);
 				foreach ($selected_modules as $ext)
 				{
 					if (!cot_extension_install($ext, true))
@@ -308,6 +309,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         cot_error("Installing $ext module has failed");
                     }
 				}
+				$selected_plugins = cot_install_sort_extensions($selected_plugins, false);
 				foreach ($selected_plugins as $ext)
 				{
 					if (!cot_extension_install($ext, false))
@@ -687,4 +689,40 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 		}
 	}
 }
+
+/**
+ * Sorts selected extensions by their setup order if present
+ * 
+ * @global array $cfg
+ * @param array $selected_extensions Unsorted list of extension names
+ * @param bool $is_module TRUE if sorting modules, FALSE if sorting plugins
+ * @return array Sorted list of extension names
+ */
+function cot_install_sort_extensions($selected_extensions, $is_module = FALSE)
+{
+	global $cfg;
+	$path = $is_module ? $cfg['modules_dir'] : $cfg['plugins_dir'];
+	$ret = array();
+	
+	// Split into groups by Order value
+	$extensions = array();
+	foreach ($selected_extensions as $name)
+	{
+		$info = cot_infoget("$path/$name/$name.setup.php", 'COT_EXT');
+		$order = isset($info['Order']) ? (int) $info['Order'] : COT_PLUGIN_DEFAULT_ORDER;
+		$extensions[$order][] = $name;
+	}
+	
+	// Merge back into a single array
+	foreach ($extensions as $grp)
+	{
+		foreach ($grp as $name)
+		{
+			$ret[] = $name;
+		}
+	}
+	
+	return $ret;
+}
+
 ?>
