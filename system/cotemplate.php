@@ -1094,10 +1094,10 @@ class Cotpl_logical extends Cotpl_block
 	public function  __toString()
 	{
 		$str = "<!-- IF " . $this->expr->__toString() . " -->\n";
-		$str .= $this->blocks_toString($this->blocks);
-		if (count($this->else_blocks) > 0)
+		$str .= $this->blocks_toString($this->blocks[0]);
+		if (count($this->blocks[1]) > 0)
 		{
-			$str .= "<!-- ELSE -->\n" . $this->blocks_toString($this->else_blocks);
+			$str .= "<!-- ELSE -->\n" . $this->blocks_toString($this->blocks[1]);
 		}
 		$str .= "<!-- ENDIF -->\n";
 		return $str;
