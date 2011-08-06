@@ -5,6 +5,8 @@ avatars/*
 !avatars/index.php
 cache/*
 !cache/.htaccess
+exflds/*
+!exflds/index.php
 photos/*
 !photos/index.php
 thumbs/*
