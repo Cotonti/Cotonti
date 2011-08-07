@@ -295,7 +295,23 @@ elseif ($a=='deletefolder')
 	cot_block($usr['auth_write']);
 	cot_check_xg();
 	$sql_pfs_delete = $db->delete($db_pfs_folders, "pff_userid=$userid AND pff_id=$id");
-	$db->update($db_pfs, array('pfs_folderid' => 0), "pfs_userid=$userid AND pfs_folderid=$id");
+	// Remove all contained files
+	$pfs_res = $db->query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid=$userid AND pfs_folderid=$id");
+	foreach ($pfs_res->fetchAll() as $row)
+	{
+		$pfs_file = $row['pfs_file'];
+		$ff = $pfs_dir_user.$pfs_file;
+
+		if (file_exists($ff))
+		{
+			@unlink($ff);
+			if (file_exists($thumbs_dir_user.$pfs_file))
+			{
+				@unlink($thumbs_dir_user.$pfs_file);
+			}
+		}
+	}
+	$db->delete($db_pfs, "pfs_userid=$userid AND pfs_folderid=$id");
 }
 
 $f = (empty($f)) ? '0' : $f;
