@@ -3212,6 +3212,7 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 {
 	global $cfg, $cot_plugins;
 
+	$plain = true;
 	if ($enable_markup)
 	{
 		if (empty($parser))
@@ -3223,7 +3224,8 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 			$func = "cot_parse_$parser";
 			if (function_exists($func))
 			{
-				return $func($text);
+				$text = $func($text);
+				$plain = false;
 			}
 			else
 			{
@@ -3235,7 +3237,9 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 						if ($k['pl_code'] == $parser && cot_auth('plug', $k['pl_code'], 'R'))
 						{
 							include $cfg['plugins_dir'] . '/' . $k['pl_file'];
-							return $func($text);
+							$text = $func($text);
+							$plain = false;
+							break;
 						}
 					}
 				}
@@ -3243,7 +3247,19 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 		}
 	}
 
-	return nl2br(htmlspecialchars($text));
+	if ($plain)
+	{
+		$text = nl2br(htmlspecialchars($text));
+	}
+	
+	/* == Hook == */
+	foreach (cot_getextplugins('parser.last') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+	
+	return $text;
 }
 
 /**
