@@ -17,8 +17,14 @@ Hooks=standalone
  */
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
-require_once cot_incfile('page', 'module');
-require_once cot_incfile('forums', 'module');
+if (cot_module_active('page'))
+{
+	require_once cot_incfile('page', 'module');
+}
+if (cot_module_active('forums'))
+{
+	require_once cot_incfile('forums', 'module');
+}
 require_once cot_incfile('search', 'plug');
 require_once cot_incfile('forms');
 
