@@ -71,11 +71,7 @@ if ($a == 'pages')
 	else
 	{
 		// Search results
-		$query = sed_tag_parse_query($qs);
-		if(!empty($query))
-		{
-			sed_tag_search_pages($query);
-		}
+		sed_tag_search_pages($qs);
 	}
 }
 elseif ($a == 'forums')
@@ -88,11 +84,7 @@ elseif ($a == 'forums')
 	else
 	{
 		// Search results
-		$query = sed_tag_parse_query($qs);
-		if(!empty($query))
-		{
-			sed_tag_search_forums($query);
-		}
+		sed_tag_search_forums($qs);
 	}
 }
 elseif ($a == 'all')
@@ -105,16 +97,12 @@ elseif ($a == 'all')
 	else
 	{
 		// Search results
-		$query = sed_tag_parse_query($qs);
-		if(!empty($query))
+		foreach ($tag_areas as $area)
 		{
-			foreach ($tag_areas as $area)
+			$tag_search_callback = 'sed_tag_search_' . $area;
+			if (function_exists($tag_search_callback))
 			{
-				$tag_search_callback = 'sed_tag_search_' . $area;
-				if (function_exists($tag_search_callback))
-				{
-					$tag_search_callback($query);
-				}
+				$tag_search_callback($qs);
 			}
 		}
 	}

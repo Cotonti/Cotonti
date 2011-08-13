@@ -13,11 +13,16 @@
  * Parses search string into SQL query
  *
  * @param string $qs User input
+ * @param array $join_columns Columns to be joined by on tag_item match in subquery
  * @return string
  */
-function sed_tag_parse_query($qs)
+function sed_tag_parse_query($qs, $join_columns)
 {
 	global $db_tag_references;
+	if (is_string($join_columns))
+	{
+		$join_columns = array($join_columns);
+	}
 	$tokens1 = explode(';', $qs);
 	$tokens1 = array_map('trim', $tokens1);
 	$cnt1 = count($tokens1);
@@ -47,7 +52,13 @@ function sed_tag_parse_query($qs)
 				}
 				else
 				{
-					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_references AS r{$i}_{$j} WHERE r{$i}_{$j}.tag_item = p.page_id AND r{$i}_{$j}.tag $op)";
+					$join_conds = array();
+					foreach ($join_columns as $col)
+					{
+						$join_conds[] = "r{$i}_{$j}.tag_item = $col"; 
+					}
+					$join_cond = implode(' OR ', $join_conds);
+					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_references AS r{$i}_{$j} WHERE ($join_cond) AND r{$i}_{$j}.tag $op)";
 				}
 			}
 			else
@@ -109,11 +120,16 @@ function sed_tag_search_form($area = 'all')
 /**
  * Search by tag in pages
  *
- * @param string $query Search query as SQL condition
+ * @param string $query User-entered query string
  */
 function sed_tag_search_pages($query)
 {
 	global $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
+	$query = sed_tag_parse_query($query, 'p.page_id');
+	if (empty($query))
+	{
+		return;
+	}
 	$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
@@ -185,11 +201,16 @@ function sed_tag_search_pages($query)
 /**
  * Search by tag in forums
  *
- * @param string $query Search query as SQL condition
+ * @param string $query User-entered search query
  */
 function sed_tag_search_forums($query)
 {
 	global $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections, $o, $row;
+	$query = sed_tag_parse_query($query, 't.ft_id');
+	if (empty($query))
+	{
+		return;
+	}
 	$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
