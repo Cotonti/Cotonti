@@ -75,11 +75,7 @@ if ($a == 'pages' && cot_module_active('page'))
 	else
 	{
 		// Search results
-		$query = cot_tag_parse_query($qs);
-		if(!empty($query))
-		{
-			cot_tag_search_pages($query);
-		}
+		cot_tag_search_pages($query);
 	}
 }
 elseif ($a == 'forums' && cot_module_active('forums'))
@@ -92,11 +88,7 @@ elseif ($a == 'forums' && cot_module_active('forums'))
 	else
 	{
 		// Search results
-		$query = cot_tag_parse_query($qs);
-		if(!empty($query))
-		{
-			cot_tag_search_forums($query);
-		}
+		cot_tag_search_forums($qs);
 	}
 }
 elseif ($a == 'all')
@@ -109,16 +101,12 @@ elseif ($a == 'all')
 	else
 	{
 		// Search results
-		$query = cot_tag_parse_query($qs);
-		if(!empty($query))
+		foreach ($tag_areas as $area)
 		{
-			foreach ($tag_areas as $area)
+			$tag_search_callback = 'cot_tag_search_' . $area;
+			if (function_exists($tag_search_callback))
 			{
-				$tag_search_callback = 'cot_tag_search_' . $area;
-				if (function_exists($tag_search_callback))
-				{
-					$tag_search_callback($query);
-				}
+				$tag_search_callback($qs);
 			}
 		}
 	}
@@ -136,13 +124,19 @@ else
 /**
  * Search by tag in pages
  *
- * @param string $query Search query as SQL condition
+ * @param string $query User-entered query string
  */
 function cot_tag_search_pages($query)
 {
 	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
 
 	if (!cot_module_active('page'))
+	{
+		return;
+	}
+	
+	$query = cot_tag_parse_query($query, 'p.page_id');
+	if (empty($query))
 	{
 		return;
 	}
@@ -242,13 +236,19 @@ function cot_tag_search_pages($query)
 /**
  * Search by tag in forums
  *
- * @param string $query Search query as SQL condition
+ * @param string $query User-entered query string
  */
 function cot_tag_search_forums($query)
 {
 	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $o, $row;
 
 	if (!cot_module_active('forums'))
+	{
+		return;
+	}
+	
+	$query = cot_tag_parse_query($query, 't.ft_id');
+	if (empty($query))
 	{
 		return;
 	}

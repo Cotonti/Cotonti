@@ -236,11 +236,16 @@ function cot_tag_parse($input)
  * Parses search string into SQL query
  *
  * @param string $qs User input
+ * @param array $join_columns Columns to be joined by on tag_item match in subquery
  * @return string
  */
-function cot_tag_parse_query($qs)
+function cot_tag_parse_query($qs, $join_columns)
 {
 	global $db, $db_tag_references;
+	if (is_string($join_columns))
+	{
+		$join_columns = array($join_columns);
+	}
 	$tokens1 = explode(';', $qs);
 	$tokens1 = array_map('trim', $tokens1);
 	$cnt1 = count($tokens1);
@@ -270,7 +275,13 @@ function cot_tag_parse_query($qs)
 				}
 				else
 				{
-					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_references AS r{$i}_{$j} WHERE r{$i}_{$j}.tag_item = p.page_id AND r{$i}_{$j}.tag $op)";
+					$join_conds = array();
+					foreach ($join_columns as $col)
+					{
+						$join_conds[] = "r{$i}_{$j}.tag_item = $col"; 
+					}
+					$join_cond = implode(' OR ', $join_conds);
+					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_references AS r{$i}_{$j} WHERE ($join_cond) AND r{$i}_{$j}.tag $op)";
 				}
 			}
 			else
