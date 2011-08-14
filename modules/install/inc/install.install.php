@@ -110,25 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				cot_error('install_error_sql_ext');
 			}
-			// Try to detect mysql version from system and PHP, connection is not available yet
-			$mysql_out = @shell_exec('mysql -V');
-			if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt))
-			{
-				if (!version_compare($mt[0], '5.0.7', '>='))
-				{
-					cot_error(cot_rc('install_error_sql_ver', array('ver' => $mt[0])));
-				}
-			}
-			elseif (function_exists('mysql_get_client_info'))
-			{
-				// Try to detect from PHP Client API version
-				$mysql_out = mysql_get_client_info();
-				if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt)
-					&& !version_compare($mt[0], '5.0.7', '>='))
-				{
-					cot_error(cot_rc('install_error_sql_ver', array('ver' => $mt[0])));
-				}
-			}
 
 			if (!file_exists($file['config']))
 			{
@@ -498,34 +479,6 @@ switch ($step)
 		$status['mysql'] = (extension_loaded('pdo_mysql'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
 
-		// Try to detect mysql version from system and PHP, connection is not available yet
-		$mysql_out = @shell_exec('mysql -V');
-		if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt))
-		{
-			if (version_compare($mt[0], '5.0.7', '>='))
-			{
-				$status['mysql_ver'] = cot_rc('install_code_valid', array('text' => cot_rc('install_ver_valid', array('ver' => $mt[0]))));
-			}
-			else
-			{
-				$status['mysql_ver'] = cot_rc('install_code_invalid', array('text' => cot_rc('install_ver_invalid', array('ver' => $mt[0]))));
-			}
-		}
-		elseif (function_exists('mysql_get_client_info'))
-		{
-			// Try to detect from PHP Client API version
-			$mysql_out = mysql_get_client_info();
-			if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt)
-				&& !version_compare($mt[0], '5.0.7', '>='))
-			{
-				$status['mysql_ver'] = cot_rc('install_code_valid', array('text' => cot_rc('install_ver_valid', array('ver' => $mt[0]))));
-			}
-			else
-			{
-				$status['mysql_ver'] = cot_rc('install_code_invalid', array('text' => cot_rc('install_ver_invalid', array('ver' => $mt[0]))));
-			}
-		}
-
 		$t->assign(array(
 			'INSTALL_AV_DIR' => $status['avatars_dir'],
 			'INSTALL_CACHE_DIR' => $status['cache_dir'],
@@ -539,8 +492,7 @@ switch ($step)
 			'INSTALL_PHP_VER' => $status['php_ver'],
 			'INSTALL_MBSTRING' => $status['mbstring'],
 			'INSTALL_HASH' => $status['hash'],
-			'INSTALL_MYSQL' => $status['mysql'],
-			'INSTALL_MYSQL_VER' => $status['mysql_ver']
+			'INSTALL_MYSQL' => $status['mysql']
 		));
 		break;
 	case 2:

@@ -46,7 +46,7 @@
 						<li><strong class="php">PHP</strong> {INSTALL_PHP_VER}</li>
 						<li><strong class="mbstring">mbstring</strong> {INSTALL_MBSTRING}</li>
 						<li><strong class="mbstring">hash</strong> {INSTALL_HASH}</li>
-						<li><strong class="mysql">MySQL</strong> {INSTALL_MYSQL} {INSTALL_MYSQL_VER}</li>
+						<li><strong class="mysql">MySQL</strong> {INSTALL_MYSQL}</li>
 					</ul>
 
 					<p>{PHP.L.install_body_message2}</p>
