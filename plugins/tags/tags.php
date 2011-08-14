@@ -75,7 +75,7 @@ if ($a == 'pages' && cot_module_active('page'))
 	else
 	{
 		// Search results
-		cot_tag_search_pages($query);
+		cot_tag_search_pages($qs);
 	}
 }
 elseif ($a == 'forums' && cot_module_active('forums'))
