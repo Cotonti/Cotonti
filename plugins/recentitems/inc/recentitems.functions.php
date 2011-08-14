@@ -162,7 +162,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 
 function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $textlength = 0, $rightprescan = true, $cat = '')
 {
-	global $db, $structure, $db_pages, $db_users, $sys, $cfg, $L, $cot_extrafields, $usr;
+	global $db, $structure, $db_pages, $db_users, $sys, $cfg, $L, $cot_extrafields, $usr, $pag;
 	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
 	if ($rightprescan || $cat)
@@ -181,9 +181,22 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		$where = "WHERE page_date >= $mode AND page_date <= " . (int)$sys['now_offset'] . " AND page_state=0 AND page_cat <> 'system' " . $incat;
 		$totalrecent['pages'] = $db->query("SELECT COUNT(*) FROM $db_pages " . $where)->fetchColumn();
 	}
+	
+	$join_columns = '';
+	$join_tables = '';
+	
+	/* === Hook === */
+	foreach (cot_getextplugins('recentitems.recentpages.first') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 
-	$sql = $db->query("SELECT p.*, u.* FROM $db_pages AS p
-		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid " . $where . " ORDER by page_date desc LIMIT $d, " . $maxperpage);
+	$sql = $db->query("SELECT p.*, u.* $join_columns
+		FROM $db_pages AS p
+			LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+		$join_tables
+		$where ORDER by page_date desc LIMIT $d, $maxperpage");
 
 	$jj = 0;
 
