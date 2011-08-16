@@ -2411,8 +2411,8 @@ function cot_message($text, $class = 'ok', $src = 'default')
  */
 function cot_incfile($name, $type = 'core', $part = 'functions')
 {
-	global $cfg, $cot_rc_theme_reload;
-	if ($part == 'resources')
+	global $cfg, $cot_rc_theme_reload, $themeR;
+	if ($part == 'resources' && count($themeR) > 0)
 	{
 		$cot_rc_theme_reload = true;
 	}
@@ -2446,10 +2446,14 @@ function cot_incfile($name, $type = 'core', $part = 'functions')
  */
 function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 {
-	global $cfg;
+	global $cfg, $themeL, $cot_lang_theme_reload;
 	if (!is_string($lang))
 	{
 		global $lang;
+	}
+	if (count($themeL) > 0)
+	{
+		$cot_lang_theme_reload = true;
 	}
 	if ($type == 'module')
 	{
@@ -2484,6 +2488,26 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 			return $cfg['plugins_dir']."/$name/lang/$name.$default.lang.php";
 		}
 	}
+}
+
+/**
+ * Auxilliary function that returns theme language strings as an array
+ *
+ * @return array Theme language strings
+ */
+function cot_get_lang_theme()
+{
+	global $cfg, $usr;
+	$L = array();
+	if ($usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
+	{
+		require_once $usr['theme_lang'];
+	}
+	elseif (@file_exists($usr['def_theme_lang']))
+	{
+		require_once $usr['def_theme_lang'];
+	}
+	return $L;
 }
 
 /**
@@ -3446,15 +3470,19 @@ function cot_wraptext($str, $wrap = 80)
  */
 function cot_rc($name, $params = array())
 {
-	global $R, $L, $cot_rc_theme_reload;
+	global $R, $L, $cot_rc_theme_reload, $cot_lang_theme_reload;
+	if ($cot_lang_theme_reload)
+	{
+		// Theme lang override trick
+		global $themeL;
+		$L = array_merge($L, $themeL);
+		$cot_lang_theme_reload = false;
+	}
 	if ($cot_rc_theme_reload)
 	{
 		// Theme resources override trick
 		global $themeR;
-		if ($themeR)
-		{
-			$R = array_merge($R, $themeR);
-		}
+		$R = array_merge($R, $themeR);
 		$cot_rc_theme_reload = false;
 	}
 	$res = isset($R[$name]) ? $R[$name]

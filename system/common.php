@@ -527,14 +527,7 @@ else
 
 $usr['def_theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
 $usr['theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.{$usr['lang']}.lang.php";
-if ($usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
-{
-	require_once $usr['theme_lang'];
-}
-elseif (@file_exists($usr['def_theme_lang']))
-{
-	require_once $usr['def_theme_lang'];
-}
+$themeL = cot_get_lang_theme();
 
 $theme = $usr['theme'];
 $scheme = $usr['scheme'];
