@@ -48,7 +48,7 @@ $L['pm_sentboxsubtitle'] = 'Sent messages';
 $L['pm_titletooshort'] = 'The title is too short or missing';
 $L['pm_toomanyrecipients'] = '%1$s recipients maximum please';
 $L['pm_wrongname'] = 'At least one recipient was wrong, and so removed from the list';
-$L['pm_messageshistory'] = 'Messages history';
+$L['pm_messagehistory'] = 'Messages history';
 $L['pm_notmovetosentbox'] = 'Do not move to "Sentbox"';
 
 $L['pm_filter'] = 'Filter';
