@@ -21,7 +21,7 @@ $htmlpurifier_preset = array(
 	// Auto-format
 	'AutoFormat.AutoParagraph'					=> false,
 	'AutoFormat.DisplayLinkURI'					=> false,
-	'AutoFormat.Linkify'						=> true,
+	'AutoFormat.Linkify'						=> false,
 	'AutoFormat.RemoveEmpty.RemoveNbsp'			=> false,
 	'AutoFormat.RemoveEmpty'					=> true,
 	'AutoFormat.RemoveSpansWithoutAttributes'	=> true,
