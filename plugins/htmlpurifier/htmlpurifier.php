@@ -70,6 +70,9 @@ function htmlpurifier_filter($value, $name)
 	return $purifier->purify($value);
 }
 
-$cot_import_filters['HTM'][] = 'htmlpurifier_filter';
+if ($sys['parser'] == 'html')
+{
+	$cot_import_filters['HTM'][] = 'htmlpurifier_filter';
+}
 
 ?>
