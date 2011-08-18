@@ -9,6 +9,9 @@
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
+
+defined('COT_CODE') or die('Wrong URL');
+
 // Requirements
 require_once cot_langfile('users', 'core');
 require_once cot_incfile('users', 'module', 'resources');

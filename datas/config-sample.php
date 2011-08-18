@@ -9,6 +9,8 @@
  * @license BSD
  */
 
+defined('COT_CODE') or die('Wrong URL');
+
 // ========================
 // MySQL database parameters. Change to fit your host.
 // ========================
