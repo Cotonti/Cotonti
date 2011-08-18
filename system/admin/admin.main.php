@@ -87,7 +87,8 @@ if (!COT_AJAX)
 		'code' => 'home',
 		'url' => cot_url('admin'),
 		'icon' => $R['admin_menu_icon_home'],
-		'class' => empty($m) ? 'sel' : ''
+		'class' => empty($m) ? 'sel' : '',
+		'title' => $L['Administration']
 	);
 	if ($usr['admin_config'])
 	{
@@ -95,13 +96,15 @@ if (!COT_AJAX)
 			'code' => 'config',
 			'url' => cot_url('admin', 'm=config'),
 			'icon' => $R['admin_menu_icon_config'],
-			'class' => $m == 'config' ? 'sel' : ''
+			'class' => $m == 'config' ? 'sel' : '',
+			'title' => $L['Configuration']
 		);
 		$admin_menu[] = array(
 			'code' => 'extensions',
 			'url' => cot_url('admin', 'm=extensions'),
 			'icon' => $R['admin_menu_icon_extensions'],
-			'class' => $m == 'extensions' ? 'sel' : ''
+			'class' => $m == 'extensions' ? 'sel' : '',
+			'title' => $L['Extensions']
 		);
 	}
 	if ($usr['admin_users'])
@@ -110,7 +113,8 @@ if (!COT_AJAX)
 			'code' => 'users',
 			'url' => cot_url('admin', 'm=users'),
 			'icon' => $R['admin_menu_icon_users'],
-			'class' => $m == 'users' ? 'sel' : ''
+			'class' => $m == 'users' ? 'sel' : '',
+			'title' => $L['Users']
 		);
 	}
 	if ($usr['isadmin'])
@@ -119,7 +123,8 @@ if (!COT_AJAX)
 			'code' => 'other',
 			'url' => cot_url('admin', "m=other"),
 			'icon' => $R['admin_menu_icon_other'],
-			'class' => $m == 'other' ? 'sel' : ''
+			'class' => $m == 'other' ? 'sel' : '',
+			'title' => $L['Other']
 		);
 	}
 	// Module admin
@@ -139,7 +144,8 @@ if (!COT_AJAX)
 				'code' => $code,
 				'url' => cot_url('admin', "m=$code"),
 				'icon' => cot_rc('admin_menu_icon_module', array('code' => $code, 'src' => $src, 'title' => $title)),
-				'class' => $m == $code ? 'sel' : ''
+				'class' => $m == $code ? 'sel' : '',
+				'title' => $title
 			);
 		}
 	}
