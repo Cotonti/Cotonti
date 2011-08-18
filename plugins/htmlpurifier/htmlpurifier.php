@@ -27,52 +27,56 @@ defined('COT_CODE') or die('Wrong URL');
 function htmlpurifier_filter($value, $name)
 {
 	global $cfg, $sys, $usr;
-	static $purifier = null;
-	// Lazy loading to save performance
-	if (is_null($purifier))
+	if ($sys['parser'] == 'html')
 	{
-		define('HTMLPURIFIER_PREFIX', $cfg['plugins_dir'] . '/htmlpurifier/lib/standalone');
-		require_once $cfg['plugins_dir'] . '/htmlpurifier/lib/HTMLPurifier.standalone.php';
-
-		$config = HTMLPurifier_Config::createDefault();
-		$config->set('HTML.Doctype', $cfg['plugin']['htmlpurifier']['doctype']);
-		$config->set('HTML.TidyLevel', $cfg['plugin']['htmlpurifier']['tidylevel']);
-		$config->set('URI.Base', COT_ABSOLUTE_URL);
-		$config->set('URI.Host', $sys['domain']);
-		if ($cfg['plugin']['htmlpurifier']['rel2abs'])
+		static $purifier = null;
+		// Lazy loading to save performance
+		if (is_null($purifier))
 		{
-			$config->set('URI.MakeAbsolute', true);
-		}
-		$config->set('Cache.SerializerPath', realpath($cfg['cache_dir']) . '/htmlpurifier');
+			define('HTMLPURIFIER_PREFIX', $cfg['plugins_dir'] . '/htmlpurifier/lib/standalone');
+			require_once $cfg['plugins_dir'] . '/htmlpurifier/lib/HTMLPurifier.standalone.php';
 
-		// Load preset
-		if ($usr['id'] > 0)
-		{
-			$preset_name = 'group_' . $usr['maingrp'];
-			if (!file_exists($cfg['plugins_dir'] . "/htmlpurifier/presets/htmlpurifier.$preset_name.preset.php"))
+			$config = HTMLPurifier_Config::createDefault();
+			$config->set('HTML.Doctype', $cfg['plugin']['htmlpurifier']['doctype']);
+			$config->set('HTML.TidyLevel', $cfg['plugin']['htmlpurifier']['tidylevel']);
+			$config->set('URI.Base', COT_ABSOLUTE_URL);
+			$config->set('URI.Host', $sys['domain']);
+			if ($cfg['plugin']['htmlpurifier']['rel2abs'])
 			{
-				$preset_name = 'default';
+				$config->set('URI.MakeAbsolute', true);
 			}
-		}
-		else
-		{
-			$preset_name = 'group_1';
-		}
-		require_once  $cfg['plugins_dir'] . "/htmlpurifier/presets/htmlpurifier.$preset_name.preset.php";
-		foreach ($htmlpurifier_preset as $key => $val)
-		{
-			$config->set($key, $val);
+			$config->set('Cache.SerializerPath', realpath($cfg['cache_dir']) . '/htmlpurifier');
+
+			// Load preset
+			if ($usr['id'] > 0)
+			{
+				$preset_name = 'group_' . $usr['maingrp'];
+				if (!file_exists($cfg['plugins_dir'] . "/htmlpurifier/presets/htmlpurifier.$preset_name.preset.php"))
+				{
+					$preset_name = 'default';
+				}
+			}
+			else
+			{
+				$preset_name = 'group_1';
+			}
+			require_once  $cfg['plugins_dir'] . "/htmlpurifier/presets/htmlpurifier.$preset_name.preset.php";
+			foreach ($htmlpurifier_preset as $key => $val)
+			{
+				$config->set($key, $val);
+			}
+
+			$purifier = new HTMLPurifier($config);
 		}
 
-		$purifier = new HTMLPurifier($config);
+		return $purifier->purify($value);
 	}
-
-	return $purifier->purify($value);
+	else
+	{
+		return $value;
+	}
 }
 
-if ($sys['parser'] == 'html')
-{
-	$cot_import_filters['HTM'][] = 'htmlpurifier_filter';
-}
+$cot_import_filters['HTM'][] = 'htmlpurifier_filter';
 
 ?>
