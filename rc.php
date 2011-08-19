@@ -4,7 +4,7 @@
  * Used by static resource consolidation and cache
  *
  * @package Cotonti
- * @version 0.9.0
+ * @version 0.9.4
  * @author Julien Lecomte, massively modified by Cotonti Team
  * @link http://www.julienlecomte.net/blog/2007/08/13/
  * @license BSD
@@ -14,6 +14,7 @@ define('COT_CODE', true);
 
 // Required for PHP 5.3
 require_once './datas/config.php';
+date_default_timezone_set('GMT');
 
 /*
  * Get the path of the target file.

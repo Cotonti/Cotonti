@@ -1,0 +1,49 @@
+<?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=module
+[END_COT_EXT]
+==================== */
+
+/**
+ * Page module main
+ *
+ * @package page
+ * @version 0.9.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @license BSD
+ */
+
+defined('COT_CODE') or die('Wrong URL.');
+
+// Environment setup
+define('COT_PAGES', TRUE);
+$env['location'] = 'pages';
+
+// Bootstrap
+require_once $cfg['system_dir'] . '/common.php';
+
+// Additional API requirements
+require_once cot_incfile('extrafields');
+require_once cot_incfile('users', 'module');
+
+// Self requirements
+require_once cot_incfile('page', 'module');
+
+// Mode choice
+if (!in_array($m, array('add', 'edit')))
+{
+	if (isset($_GET['c']))
+	{
+		$m = 'list';
+	}
+	else
+	{
+		$m = 'main';
+	}
+}
+
+require_once cot_incfile('page', 'module', $m);
+
+?>

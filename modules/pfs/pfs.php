@@ -1,0 +1,41 @@
+<?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=module
+[END_COT_EXT]
+==================== */
+
+/**
+ * PFS module main
+ *
+ * @package pfs
+ * @version 0.9.2
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @license BSD
+ */
+
+defined('COT_CODE') or die('Wrong URL.');
+
+// Environment setup
+define('COT_PFS', true);
+$env['location'] = 'pfs';
+
+// Bootstrap
+require_once $cfg['system_dir'] . '/common.php';
+
+// Additional API requirements
+require_once cot_incfile('uploads');
+require_once './datas/extensions.php';
+
+// Self requirements
+require_once cot_incfile('pfs', 'module');
+
+// Mode choice
+if (!in_array($m, array('edit', 'editfolder', 'view')))
+{
+	$m = 'main';
+}
+
+require_once cot_incfile('pfs', 'module', $m);
+?>

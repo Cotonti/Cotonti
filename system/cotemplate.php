@@ -1454,7 +1454,4 @@ function cotpl_tokenize($str, $delim = array(' '))
 	return $tokens;
 }
 
-// Cotonti-specific initialization
-XTemplate::init($cfg['xtpl_cache'], $cfg['cache_dir'], $cfg['debug_mode'] && $_GET['tpl_debug'], $cfg['html_cleanup']);
-
 ?>

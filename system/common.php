@@ -588,6 +588,12 @@ if (!$cot_rc_html || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMI
 	cot_rc_consolidate();
 }
 
+// Cotonti-specific XTemplate initialization
+if (class_exists('XTemplate'))
+{
+	XTemplate::init($cfg['xtpl_cache'], $cfg['cache_dir'], $cfg['debug_mode'] && $_GET['tpl_debug'], $cfg['html_cleanup']);
+}
+
 /* ======== Global hook ======== */
 
 foreach (cot_getextplugins('global') as $pl)
