@@ -4109,7 +4109,7 @@ function cot_confirm_url($target_url, $ext_name = '', $msg_key = '')
 	return cot_url('message', array(
 		'msg' => 920,
 		'm' => $ext_name,
-		'a' => $msg_key,
+		'lng' => $msg_key,
 		'redirect' => base64_encode($target_url)
 	));
 }
