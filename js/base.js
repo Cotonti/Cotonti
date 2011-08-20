@@ -253,6 +253,25 @@ function bindHandlers() {
 			$.historyLoad(ajaxMakeHash($(this).attr('href').replace(/#.*$/, ''), $(this).attr('rel')));
 			return ajaxError;
 		});
+		
+		// AJAX action confirmations
+		$('a.confirmLink').live('click', function() {
+			if ($('#confirmBox')) {
+				$('#confirmBox').remove();
+			}
+			$('body').prepend('<div id="confirmBox" class="jqmWindow"></div>');
+			$('#confirmBox').jqm({ajax:$(this).attr('href'),modal:true,onLoad:function(){
+				$('#confirmBox').css('margin-left', '-'+($('#confirmBox').width()/2)+'px');
+				$('#confirmBox').css('margin-top', '-'+($('#confirmBox').height()/2)+'px');
+			}});
+			$('#confirmBox').jqmShow();
+			return false;
+		});
+		$('a#confirmNo').live('click', function() {
+			$('#confirmBox').jqmHide();
+			$('#confirmBox').remove();
+			return false;
+		});
 	}
 }
 

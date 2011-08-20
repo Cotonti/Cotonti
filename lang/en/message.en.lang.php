@@ -121,6 +121,9 @@ $L['msg915_body'] = 'At least 1 field is empty.';
 $L['msg916_title'] = 'Database updated';
 $L['msg916_body'] = 'Done, database successfully updated.<br />Affected entries : $num';
 
+$L['msg920_title'] = 'Confirmation required';
+$L['msg920_body'] = 'Are you sure you want to perform this action?';
+
 $L['msg930_title'] = 'Access denied';
 $L['msg930_body'] = 'You\'re not allowed to do this.';
 

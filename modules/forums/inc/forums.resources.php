@@ -42,7 +42,7 @@ $R['forums_code_newpost_mark'] = '<a name="np" id="np"></a>';
 
 $R['forums_rowquote'] = '<a href="{$url}">'.$L['Quote'].'</a>';
 $R['forums_rowedit'] = '<a href="{$url}">'.$L['Edit'].'</a>';
-$R['forums_rowdelete'] = '<a href="{$url}">'.$L['Delete'].'</a>';
+$R['forums_rowdelete'] = '<a href="{$url}" class="confirmLink">'.$L['Delete'].'</a>';
 
 $R['forums_code_post_anchor'] = '<a name="post{$id}" id="post{$id}"></a>';
 

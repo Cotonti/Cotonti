@@ -3812,6 +3812,11 @@ function cot_rc_add_standard()
 	{
 		cot_rc_add_file('js/jquery.history.min.js');
 	}
+	
+	if ($cfg['jquery'])
+	{
+		cot_rc_add_file('js/jqModal.min.js');
+	}
 
 	cot_rc_add_file('js/base.js');
 
@@ -4090,6 +4095,24 @@ function cot_xp()
 /*
  * ============================ URL and URI ===================================
 */
+
+/**
+ * Generates an URL used to confirm an action performed by target URL
+ * 
+ * @param string $target_url Target URL which performs the action
+ * @param string $ext_name Module/plugin name to peform the action
+ * @param string $msg_code Language string key which contains confirmation request text
+ * @return string 
+ */
+function cot_confirm_url($target_url, $ext_name = '', $msg_key = '')
+{
+	return cot_url('message', array(
+		'msg' => 920,
+		'm' => $ext_name,
+		'a' => $msg_key,
+		'redirect' => base64_encode($target_url)
+	));
+}
 
 /**
  * Displays redirect page

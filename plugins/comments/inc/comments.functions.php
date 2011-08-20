@@ -162,7 +162,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			$kk++;
 			$com_admin = ($auth_admin) ? cot_rc('comments_code_admin', array(
 					'ipsearch' => cot_build_ipsearch($row['com_authorip']),
-					'delete_url' => cot_url('plug', 'e=comments&a=delete&cat='.$cat.'&id='.$row['com_id'].'&'.cot_xg())
+					'delete_url' => cot_confirm_url(cot_url('plug', 'e=comments&a=delete&cat='.$cat.'&id='.$row['com_id'].'&'.cot_xg()), 'comments', 'comments_confirm_delete')
 				)) : '';
 
 			$com_text = cot_parse($row['com_text'], $cfg['plugin']['comments']['markup']);

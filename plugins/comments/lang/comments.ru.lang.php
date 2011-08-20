@@ -39,6 +39,7 @@ $L['info_desc'] = 'Система комментариев для Cotonti с API
 
 $L['comments_comment'] = 'Комментарий';
 $L['comments_comments'] = 'Комментарии';
+$L['comments_confirm_delete'] = 'Вы действительно хотите удалить этот комментарий?';
 $L['Newcomment'] = 'Новый комментарий';
 
 $L['comm_on_page'] = 'на странице';

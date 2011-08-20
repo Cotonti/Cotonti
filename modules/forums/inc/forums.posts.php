@@ -334,7 +334,7 @@ foreach ($sql_forums->fetchAll() as $row)
 	$rowquote = ($usr['id'] > 0) ? cot_rc('forums_rowquote', array('url' => $rowquote_url)) : '';
 	$rowedit_url = (($usr['isadmin'] || $row['fp_posterid'] == $usr['id']) && $usr['id'] > 0) ? cot_url('forums', 'm=editpost&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&' . cot_xg()) : '';
 	$rowedit = (($usr['isadmin'] || $row['fp_posterid'] == $usr['id']) && $usr['id'] > 0) ? cot_rc('forums_rowedit', array('url' => $rowedit_url)) : '';
-	$rowdelete_url = ($usr['id'] > 0 && ($usr['isadmin'] || $row['fp_posterid'] == $usr['id'])) ? cot_url('forums', 'm=posts&a=delete&' . cot_xg() . '&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id']) : '';
+	$rowdelete_url = ($usr['id'] > 0 && ($usr['isadmin'] || $row['fp_posterid'] == $usr['id'])) ? cot_confirm_url(cot_url('forums', 'm=posts&a=delete&' . cot_xg() . '&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id']), 'forums', 'forums_confirm_delete_post') : '';
 	$rowdelete = ($usr['id'] > 0 && ($usr['isadmin'] || $row['fp_posterid'] == $usr['id'])) ? cot_rc('forums_rowdelete', array('url' => $rowdelete_url)) : '';
 
 	if (!empty($row['fp_updater']))
@@ -405,7 +405,7 @@ if ($usr['isadmin'])
 		'FORUMS_POSTS_ANNOUNCE_URL' => cot_url('forums', 'm=topics&a=announcement&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_PRIVATE_URL' => cot_url('forums', 'm=topics&a=private&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_CLEAR_URL' => cot_url('forums', 'm=topics&a=clear&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
-		'FORUMS_POSTS_DELETE_URL' => cot_url('forums', 'm=topics&a=delete&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
+		'FORUMS_POSTS_DELETE_URL' => cot_confirm_url(cot_url('forums', 'm=topics&a=delete&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']), 'forums', 'forums_confirm_delete_topic'),
 		'FORUMS_POSTS_MOVEBOX_SELECT' => cot_selectbox('', 'ns', array_keys($movebox), array_values($movebox), false),
 		'FORUMS_POSTS_MOVEBOX_KEEP' => cot_checkbox('0', 'ghost')
 	));

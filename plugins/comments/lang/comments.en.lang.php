@@ -39,6 +39,7 @@ $L['info_desc'] = 'Comments system for Cotonti with API and integration with pag
 
 $L['comments_comment'] = 'Comment';
 $L['comments_comments'] = 'Comments';
+$L['comments_confirm_delete'] = 'Do you really want to delete this comment?';
 $L['Newcomment'] = 'New comment';
 
 $L['comm_on_page'] = 'on page';

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * System messages and redirect proxy
  *
@@ -17,8 +18,8 @@ $env['ext'] = 'message';
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/common.php';
 require_once $cfg['system_dir'] . '/cotemplate.php';
+require_once $cfg['system_dir'] . '/common.php';
 
 require_once cot_langfile('message', 'core');
 
@@ -31,8 +32,8 @@ $rc = cot_import('rc', 'G', 'INT');
 
 unset($r, $rd, $ru);
 
-$title = $L['msg'.$msg.'_title'];
-$body = $L['msg'.$msg.'_body'];
+$title = $L['msg' . $msg . '_title'];
+$body = $L['msg' . $msg . '_body'];
 
 /* === Hook === */
 foreach (cot_getextplugins('message.first') as $pl)
@@ -41,27 +42,27 @@ foreach (cot_getextplugins('message.first') as $pl)
 }
 /* ===== */
 
-switch( $msg )
+switch ($msg)
 {
 	/* ======== Users ======== */
 
 	case '100':
 		$rd = 2;
-		$ru = cot_url('users', 'm=auth'.(empty($redirect) ? '' : "&redirect=$redirect"));
-	break;
+		$ru = cot_url('users', 'm=auth' . (empty($redirect) ? '' : "&redirect=$redirect"));
+		break;
 
 	case '102':
 		$r = 1;
 		$rd = 2;
 		$ru = cot_url('index');
-	break;
+		break;
 
 	case '153':
 		if ($num > 0)
 		{
 			$body .= cot_rc('msg_code_153_date', array('date' => cot_date('datetime_medium', $num)));
 		}
-	break;
+		break;
 
 	/* ======== Error Pages ========= */
 
@@ -72,14 +73,38 @@ switch( $msg )
 	case '500':
 		$rd = 5;
 		$ru = empty($redirect) ? cot_url('index') : str_replace('&', '&amp;', base64_decode($redirect));
-	break;
+		break;
 
 	/* ======== System messages ======== */
 
 	case '916':
 		$rd = 2;
 		$ru = cot_url('admin');
-	break;
+		break;
+
+	case '920':
+		if (!empty($m))
+		{
+			// Load module or plugin langfile
+			if (file_exists(cot_langfile($m, 'module')))
+			{
+				include cot_langfile($m, 'module');
+			}
+			elseif (file_exists(cot_langfile($m, 'plug')))
+			{
+				include cot_langfile($m, 'plug');
+			}
+		}
+		if (!empty($a))
+		{
+			// Assign custom message
+			if (isset($L[$a]))
+			{
+				$body = $L[$a];
+			}
+		}
+		$rc = '920';
+		break;
 
 	case '930':
 		if ($usr['id'] > 0)
@@ -96,8 +121,8 @@ switch( $msg )
 				break;
 			}
 		}
-		$ru = cot_url('users', 'm=auth'.(empty($redirect) ? '' : "&redirect=$redirect"));
-	break;
+		$ru = cot_url('users', 'm=auth' . (empty($redirect) ? '' : "&redirect=$redirect"));
+		break;
 }
 
 /* ============= */
@@ -117,27 +142,27 @@ switch ($rc)
 {
 	case '100':
 		$r['100'] = cot_url('admin', 'm=plug');
-	break;
+		break;
 
 	case '101':
 		$r['101'] = cot_url('admin', 'm=hitsperday');
-	break;
+		break;
 
 	case '102':
 		$r['102'] = cot_url('admin', 'm=polls');
-	break;
+		break;
 
 	case '103':
 		$r['103'] = cot_url('admin', 'm=forums');
-	break;
+		break;
 
 	case '200':
 		$r['200'] = cot_url('users');
-	break;
+		break;
 
 	default:
 		$rc = '';
-	break;
+		break;
 }
 
 if ($rc != '')
@@ -149,12 +174,11 @@ if ($rc != '')
 	$out['head'] .= cot_rc('msg_code_redir_head', array('delay' => 2, 'url' => $r["$rc"]));
 	$body .= $R['code_error_separator'] . $L['msgredir'];
 }
-
 elseif ($rd != '')
 {
 	if (mb_strpos($ru, '://') === false)
 	{
-		$ru = COT_ABSOLUTE_URL.ltrim($ru, '/');
+		$ru = COT_ABSOLUTE_URL . ltrim($ru, '/');
 	}
 	$out['head'] .= cot_rc('msg_code_redir_head', array('delay' => $rd, 'url' => $ru));
 	$body .= $R['code_error_separator'] . $L['msgredir'];
@@ -169,14 +193,32 @@ foreach (cot_getextplugins('message.main') as $pl)
 
 $out['head'] .= $R['code_noindex'];
 $out['subtitle'] = $title;
-require_once $cfg['system_dir'].'/header.php';
+require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(cot_tplfile('message'));
 
 $errmsg = $title;
-$title .= ($usr['isadmin']) ? ' (#'.$msg.')' : '';
+$title .= ($usr['isadmin']) ? ' (#' . $msg . ')' : '';
 
 $t->assign('MESSAGE_TITLE', $title);
 $t->assign('MESSAGE_BODY', $body);
+
+if ($msg == '920')
+{
+	// Confirmation page
+	if (COT_AJAX)
+	{
+		$confirm_no_url = '#'; // set via jQuery
+	}
+	else
+	{
+		$confirm_no_url = preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_REFERER']) ? str_replace('&', '&amp;', $_SERVER['HTTP_REFERER']) : cot_url('index');
+	}
+	$t->assign(array(
+		'MESSAGE_CONFIRM_YES' => base64_decode($redirect),
+		'MESSAGE_CONFIRM_NO' => $confirm_no_url
+	));
+	$t->parse('MAIN.MESSAGE_CONFIRM');
+}
 
 /* === Hook === */
 foreach (cot_getextplugins('message.tags') as $pl)
@@ -188,6 +230,5 @@ foreach (cot_getextplugins('message.tags') as $pl)
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once $cfg['system_dir'].'/footer.php';
-
+require_once $cfg['system_dir'] . '/footer.php';
 ?>

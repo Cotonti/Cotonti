@@ -93,4 +93,7 @@ $L['pfs_insertasimage'] = 'Insert as fullsize image';
 $L['pfs_insertaslink'] = 'Insert as a link to the file';
 $L['pfs_dimensions'] = 'Dimensions';
 
+$L['pfs_confirm_delete_file'] = 'Are you sure want to delete this file?';
+$L['pfs_confirm_delete_file'] = 'Are you sure want to delete this folder and all of its contents?';
+
 ?>

@@ -236,13 +236,15 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			// Admin tags
 			if ($admin_rights)
 			{
+				$validate_confirm_url = cot_confirm_url($validate_url, 'page', 'page_confirm_validate');
+				$unvalidate_confirm_url = cot_confirm_url($unvalidate_url, 'page', 'page_confirm_unvalidate');
 				$temp_array['ADMIN_EDIT'] = cot_rc_link($edit_url, $L['Edit']);
 				$temp_array['ADMIN_EDIT_URL'] = $edit_url;
 				$temp_array['ADMIN_UNVALIDATE'] = $page_data['page_state'] == 1 ?
-					cot_rc_link($validate_url, $L['Validate']) :
-					cot_rc_link($unvalidate_url, $L['Putinvalidationqueue']);
+					cot_rc_link($validate_confirm_url, $L['Validate'], 'class="confirmLink"') :
+					cot_rc_link($unvalidate_confirm_url, $L['Putinvalidationqueue'], 'class="confirmLink"');
 				$temp_array['ADMIN_UNVALIDATE_URL'] = $page_data['page_state'] == 1 ?
-					$validate_url : $unvalidate_url;
+					$validate_confirm_url : $unvalidate_confirm_url;
 			}
 			else if ($usr['id'] == $page_data['page_ownerid'])
 			{

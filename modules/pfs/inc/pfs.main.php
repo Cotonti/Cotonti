@@ -389,7 +389,7 @@ else
 			'PFF_ROW_COUNT' => $pff_count,
 			'PFF_ROW_FCOUNT' => $pff_fcount,
 			'PFF_ROW_FSIZE' => $pff_fssize,
-			'PFF_ROW_DELETE_URL' => cot_url('pfs', 'a=deletefolder&'.cot_xg().'&id='.$pff_id.'&'.$more),
+			'PFF_ROW_DELETE_URL' => cot_confirm_url(cot_url('pfs', 'a=deletefolder&'.cot_xg().'&id='.$pff_id.'&'.$more), 'pfs', 'pfs_confirm_delete_folder'),
 			'PFF_ROW_EDIT_URL' => cot_url('pfs', "m=editfolder&f=".$pff_id.'&'.$more),
 			'PFF_ROW_URL' => cot_url('pfs', 'f='.$pff_id.'&'.$more),
 			'PFF_ROW_ICON' => $icon_f,
@@ -470,7 +470,7 @@ foreach ($sql_pfs->fetchAll() as $row)
 		'PFS_ROW_FILE_URL' => $pfs_fullfile,
 		'PFS_ROW_SIZE' => $pfs_filesize,
 		'PFS_ROW_ICON' => $pfs_icon,
-		'PFS_ROW_DELETE_URL' => cot_url('pfs', 'a=delete&'.cot_xg().'&id='.$pfs_id.'&'.$more.'&opt='.$opt),
+		'PFS_ROW_DELETE_URL' => cot_confirm_url(cot_url('pfs', 'a=delete&'.cot_xg().'&id='.$pfs_id.'&'.$more.'&opt='.$opt), 'pfs', 'pfs_confirm_delete_file'),
 		'PFS_ROW_EDIT_URL' => cot_url('pfs', 'm=edit&id='.$pfs_id.'&'.$more),
 		'PFS_ROW_COUNT' => $row['pfs_count'],
 		'PFS_ROW_INSERT' => $standalone ? $add_thumbnail.$add_image.$add_file : ''

@@ -49,10 +49,10 @@
           <!-- action buttons -->
           <p> &nbsp;
             <!-- IF {FORUMS_POSTS_ROW_POSTERID} == {PHP.usr.id} OR {PHP.usr.isadmin} -->
-            <a href="forums.php?m=editpost&amp;s={PHP.s}&amp;q={PHP.q}&amp;p={FORUMS_POSTS_ROW_ID}&amp;x={PHP.sys.xk}" class="more"> <span>{PHP.L.Edit}</span></a> &nbsp; <a href="forums.php?m=posts&amp;a=delete&amp;x={PHP.sys.xk}&amp;s={PHP.s}&amp;q={PHP.q}&amp;p={FORUMS_POSTS_ROW_ID}" class="more"> <span>{PHP.L.Delete}</span></a> &nbsp;
+            <a href="{FORUMS_POSTS_ROW_EDIT_URL}" class="more"> <span>{PHP.L.Edit}</span></a> &nbsp; <a href="{FORUMS_POSTS_ROW_DELETE_URL}" class="more confirmLink"> <span>{PHP.L.Delete}</span></a> &nbsp;
             <!-- ENDIF -->
             <!-- IF {PHP.usr.id} > 0 -->
-            <a href="forums.php?m=posts&amp;s={PHP.s}&amp;q={PHP.q}&amp;quote={FORUMS_POSTS_ROW_ID}&amp;n=last#np" class="comm"> <span>{PHP.L.Quote}</span></a> &nbsp;
+            <a href="{FORUMS_POSTS_ROW_QUOTE_URL}" class="comm"> <span>{PHP.L.Quote}</span></a> &nbsp;
             <!-- ELSE -->
             <a href="users.php?m=auth" class="comm"><span>{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.Quote}</span></a> &nbsp;
             <!-- ENDIF -->

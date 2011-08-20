@@ -69,7 +69,7 @@
 					<td class="centerall">{PFF_ROW_UPDATED}</td>
 					<td class="centerall">
 						<a href="{PFF_ROW_EDIT_URL}">{PHP.L.Edit}</a>
-						<a href="{PFF_ROW_DELETE_URL}">x</a>
+						<a href="{PFF_ROW_DELETE_URL}" class="confirmLink">x</a>
 					</td>
 				</tr>
 				<!-- END: PFF_ROW -->
@@ -100,7 +100,7 @@
 					<td class="centerall">{PFS_ROW_DATE}</td>
 					<td class="centerall">
 						<input type="checkbox" name="folderid[{PFS_ROW_ID}]" />
-						<a href="{PFS_ROW_DELETE_URL}">{PHP.L.Delete}</a>
+						<a href="{PFS_ROW_DELETE_URL}" class="confirmLink">{PHP.L.Delete}</a>
 						<a href="{PFS_ROW_EDIT_URL}">{PHP.L.Edit}</a>
 						<br />{PFS_ROW_INSERT}
 					</td>
