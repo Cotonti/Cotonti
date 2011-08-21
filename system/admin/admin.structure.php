@@ -16,6 +16,7 @@ cot_block($usr['isadmin']);
 
 require_once cot_incfile('extrafields');
 require_once cot_incfile('auth');
+require_once cot_incfile('structure');
 
 $id = cot_import('id', 'G', 'INT');
 $c = cot_import('c', 'G', 'TXT');
@@ -93,34 +94,11 @@ if ($a == 'update')
 			$rstructure['structure_tpl'] = '';
 		}
 
-		/* === Hook === */
-		foreach (cot_getextplugins('admin.structure.update') as $pl)
+		$res = cot_structure_update($n, $i, $oldrow, $rstructure);
+		if (is_array($res))
 		{
-			include $pl;
+			cot_error($res[0], $res[1]);
 		}
-		/* ===== */
-
-		if ($oldrow['structure_code'] != $rstructure['structure_code'])
-		{
-			if ($db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_code=".$db->quote($rstructure['structure_code'])." AND structure_area = '$n'")->fetchColumn() == 0)
-			{
-				$db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='".$db->prep($n)."' AND auth_option='".$db->prep($oldrow['structure_code'])."'");
-				$db->update($db_config, array("config_subcat" => $rstructure['structure_code']), "config_cat='".$db->prep($n)."' AND config_subcat='".$db->prep($oldrow['structure_code'])."' AND config_owner='module'");
-				$area_updatecat = 'cot_'.$n.'_updatecat';
-				(function_exists($area_updatecat)) ? $area_updatecat($oldrow['structure_code'], $rstructure['structure_code']) : FALSE;
-				cot_auth_reorder();
-			}
-			else
-			{
-				unset($rstructure['structure_code']);
-				cot_error('adm_cat_exists');
-			}
-		}
-
-		$area_sync = 'cot_'.$n.'_sync';
-		$rstructure['structure_count'] = (function_exists($area_sync)) ? $area_sync($rstructure['structure_code']) : 0;
-
-		$sql1 = $db->update($db_structure, $rstructure, "structure_id=".(int)$i);
 	}
 	cot_extrafield_movefiles();
 	cot_auth_clear('all');
@@ -161,59 +139,31 @@ elseif ($a == 'add')
 		$rstructure['structure_tpl'] = '';
 	}
 
-	/* === Hook === */
-	foreach (cot_getextplugins('admin.structure.add') as $pl)
+	$res = cot_structure_add($n, $rstructure);
+	if ($res === true)
 	{
-		include $pl;
+		cot_message('Added');
 	}
-	/* ===== */
-
-	if (!empty($rstructure['structure_title']) && !empty($rstructure['structure_code']) && !empty($rstructure['structure_path']) && $rstructure['structure_code'] != 'all')
+	elseif (is_array($res))
 	{
-		$sql = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_code=".$db->quote($rstructure['structure_code'])." AND structure_area = '$n'");
-		if ($sql->fetchColumn() == 0)
-		{
-			$sql = $db->insert($db_structure, $rstructure);
-			$auth_permit = array(COT_GROUP_DEFAULT => 'RW', COT_GROUP_GUESTS => 'R', COT_GROUP_MEMBERS => 'RW');
-			$auth_lock = array(COT_GROUP_DEFAULT => '0', COT_GROUP_GUESTS => 'A', COT_GROUP_MEMBERS => '0');
-			cot_auth_add_item($n, $rstructure['structure_code'], $auth_permit, $auth_lock);
-			$area_addcat = 'cot_'.$n.'_addcat';
-			(function_exists($area_addcat)) ? $area_addcat($rstructure['structure_code']) : FALSE;
-			$cache && $cache->clear();
-			cot_message('Added');
-		}
-		else
-		{
-			cot_error('adm_cat_exists', 'rstructurecode');
-		}
+		cot_error($res[0], $res[1]);
 	}
 	else
 	{
 		cot_error('Error');
 	}
+
 	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 }
 elseif ($a == 'delete')
 {
 	cot_check_xg();
 
-	/* === Hook === */
-	foreach (cot_getextplugins('admin.structure.delete') as $pl)
+	if (cot_structure_delete($n, $c))
 	{
-		include $pl;
+		cot_message('Deleted');
 	}
-	/* ===== */
-
-	$db->delete($db_structure, "structure_code='".$db->prep($c)."' AND structure_area='".$db->prep($n)."'");
-	$db->delete($db_config, "config_cat='".$db->prep($n)."' AND config_subcat='".$db->prep($c)."' AND config_owner='module'");
-	cot_auth_remove_item($n, $c);
-	$area_deletecat = 'cot_'.$n.'_deletecat';
-	(function_exists($area_deletecat)) ? $area_deletecat($c) : FALSE;
-	if ($cache)
-	{
-		$cache->clear();
-	}
-	cot_message('Deleted');
+	
 	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 }
 elseif ($a == 'resyncall')
