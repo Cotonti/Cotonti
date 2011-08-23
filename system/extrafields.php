@@ -341,12 +341,19 @@ function cot_default_html_construction($type)
  * @param string $params Params (for radiobuttons, selectors etc)
  * @param string $enabled Enable field
  * @param bool $noalter Do not ALTER the table, just register the extra field
+ * @param string $customtype Modify sql type, size, default
  * @return bool
  *
  */
-function cot_extrafield_add($location, $name, $type, $html, $variants='', $default='', $required=0, $parse='HTML', $description='', $params = '', $enabled = 1, $noalter = false)
+function cot_extrafield_add($location, $name, $type, $html='', $variants='', $default='', $required=0, $parse='HTML', $description='', $params = '', $enabled = 1, $noalter = false, $customtype = '')
 {
 	global $db, $db_extra_fields;
+	$checkname = cot_import($name, 'D', 'ALP');
+	$checkname = str_replace(array('-', '.'), array('', ''), $checkname);
+	if($checkname != $name)
+	{
+		return false;
+	}
 	if ($db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
 		($db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0 && !$noalter))
 	{
@@ -361,7 +368,9 @@ function cot_extrafield_add($location, $name, $type, $html, $variants='', $defau
 
 		preg_match("#.*?_$name$#", $column, $match);
 		if ($match[1] != "" && !$noalter)
+		{
 			return false; // No adding - fields already exist
+		}
 		$i++;
 	}
 	$fieldsres->closeCursor();
@@ -369,7 +378,7 @@ function cot_extrafield_add($location, $name, $type, $html, $variants='', $defau
 	$extf['field_location'] = $location;
 	$extf['field_name'] = $name;
 	$extf['field_type'] = $type;
-	$extf['field_html'] = $html;
+	$extf['field_html'] = (!empty($html)) ? $html : cot_default_html_construction($type);
 	$extf['field_variants'] = is_null($variants) ? '' : $variants;
 	$extf['field_params'] = is_null($params) ? '' : $params;
 	$extf['field_default'] = is_null($default) ? '' : $default;
@@ -410,6 +419,10 @@ function cot_extrafield_add($location, $name, $type, $html, $variants='', $defau
 		case 'filesize': $sqltype = "int(11) NOT NULL";
 			break;
 	}
+	if(!empty($customtype))
+	{
+		$sqltype = $customtype;
+	}	
 	$step2 = $db->query("ALTER TABLE $location ADD " . $column_prefix . "_$name $sqltype ");
 
 	return $step1 && $step2;
@@ -431,12 +444,20 @@ function cot_extrafield_add($location, $name, $type, $html, $variants='', $defau
  * @param string $description Description of field (optional, for admin)
  * @param string $params Params (for radiobuttons, selectors etc)
  * @param string $enabled Enable field
+ * @param string $customtype Modify sql type, size, default
  * @return bool
  *
  */
-function cot_extrafield_update($location, $oldname, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="", $params = "", $enabled = 1)
+function cot_extrafield_update($location, $oldname, $name, $type, $html='', $variants='', $default='', $required=0, $parse='HTML', $description='', $params = '', $enabled = 1, $customtype = '')
 {
 	global $db, $db_extra_fields;
+	
+	$checkname = cot_import($name, 'D', 'ALP');
+	$checkname = str_replace(array('-', '.'), array('', ''), $checkname);
+	if($checkname != $name)
+	{
+		return false;
+	}
 	$fieldsres = $db->query("SELECT * FROM $db_extra_fields WHERE field_name = '$oldname' AND field_location='$location'");
 	if ($fieldsres->rowCount() <= 0 || $name != $oldname && $db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0)
 	{
@@ -456,13 +477,13 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 		$extf['field_name'] = $name;
 		$alter = true;
 	}
-	if ($type != $field['field_type'])
+	if ($type != $field['field_type'] && empty($customtype))
 	{
 		$extf['field_type'] = $type;
 		$alter = true;
 	}
 
-	$extf['field_html'] = $html;
+	$extf['field_html'] = (!empty($html)) ? $html : cot_default_html_construction($type);
 	$extf['field_parse'] = is_null($parse) ? 'HTML' : $parse;
 	$extf['field_variants'] = is_null($variants) ? '' : $variants;
 	$extf['field_params'] = is_null($params) ? '' : $params;
@@ -505,6 +526,10 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 			break;
 		case 'filesize': $sqltype = "int(11) NOT NULL";
 			break;
+	}
+	if(!empty($customtype))
+	{
+		$sqltype = $customtype;
 	}
 	$sql = "ALTER TABLE $location CHANGE " . $column_prefix . "_$oldname " . $column_prefix . "_$name $sqltype ";
 	$step2 = $db->query($sql);
