@@ -19,7 +19,7 @@ if (!defined('COT_INSTALL'))
 }
 
 
-if (ini_get('register_globals'))
+if (isset($cfg['check_globals']) && $cfg['check_globals'] && ini_get('register_globals'))
 {
 	die('Please set the PHP setting register_globals = Off, otherwise your site is in high security risk! Contact your hosting support for more information.');
 }
