@@ -66,6 +66,7 @@ $cfg['cache_forums'] = FALSE;   // Static page cache for guests on forums
 $cfg['check_updates'] = FALSE;		// Automatically check for updates, set it TRUE to enable
 
 $cfg['display_errors'] = TRUE;		// Display error messages. Switch it FALSE on production sites
+$cfg['check_globals'] = TRUE;		// Stops further execution if regiser_globals is On. Handle with care!
 
 $cfg['redirmode'] = FALSE;			// 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
 $cfg['xmlclient'] = FALSE;  		// For testing-purposes only, else keep it off.
