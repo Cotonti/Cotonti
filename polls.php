@@ -1,6 +1,6 @@
 <?php
 /**
- * Polls module
+ * Polls root-level redirector for backwards compatibility
  *
  * @package Cotonti
  * @version 0.9.4
@@ -10,16 +10,8 @@
  * @deprecated Deprecated since Cotonti Siena
  */
 
-// Environment setup
-define('COT_CODE', true);
-define('COT_MODULE', true);
-$env['ext'] = 'polls';
+$_GET['e'] = 'pm';
 
-// Basic requirements
-require_once './datas/config.php';
-require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/cotemplate.php';
-
-require_once $cfg['modules_dir'] . '/polls/polls.php';
+require 'index.php';
 
 ?>

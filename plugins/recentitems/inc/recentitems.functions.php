@@ -162,7 +162,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 
 function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $textlength = 0, $rightprescan = true, $cat = '')
 {
-	global $db, $structure, $db_pages, $db_users, $sys, $cfg, $L, $cot_extrafields, $usr, $pag;
+	global $db, $structure, $db_pages, $db_users, $sys, $cfg, $L, $cot_extrafields, $usr;
 	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
 	if ($rightprescan || $cat)

@@ -21,9 +21,6 @@ defined('COT_CODE') or die('Wrong URL.');
 define('COT_PFS', true);
 $env['location'] = 'pfs';
 
-// Bootstrap
-require_once $cfg['system_dir'] . '/common.php';
-
 // Additional API requirements
 require_once cot_incfile('uploads');
 require_once './datas/extensions.php';

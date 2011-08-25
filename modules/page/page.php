@@ -21,9 +21,6 @@ defined('COT_CODE') or die('Wrong URL.');
 define('COT_PAGES', TRUE);
 $env['location'] = 'pages';
 
-// Bootstrap
-require_once $cfg['system_dir'] . '/common.php';
-
 // Additional API requirements
 require_once cot_incfile('extrafields');
 require_once cot_incfile('users', 'module');
@@ -34,13 +31,13 @@ require_once cot_incfile('page', 'module');
 // Mode choice
 if (!in_array($m, array('add', 'edit')))
 {
-	if (isset($_GET['c']))
+	if (isset($_GET['id']) || isset($_GET['al']))
 	{
-		$m = 'list';
+		$m = 'main';
 	}
 	else
 	{
-		$m = 'main';
+		$m = 'list';
 	}
 }
 

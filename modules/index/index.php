@@ -21,9 +21,6 @@ defined('COT_CODE') or die('Wrong URL.');
 define('COT_INDEX', true);
 $env['location'] = 'home';
 
-// Bootstrap
-require_once $cfg['system_dir'] . '/common.php';
-
 /* === Hook === */
 foreach (cot_getextplugins('index.first') as $pl)
 {

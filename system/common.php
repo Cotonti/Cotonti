@@ -59,9 +59,10 @@ if ($cfg['cache'] && !$cfg['devmode'])
 	$cache = new Cache();
 	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$site_id]) && empty($_SESSION[$site_id]))
 	{
-		if ($cfg['cache_' . $env['ext']])
+		$cache_ext = empty($_GET['e']) ? 'index' : preg_replace('#\W#', '', $_GET['e']);
+		if ($cfg['cache_' . $cache_ext])
 		{
-			$cache->page->init($env['ext'], $cfg['defaulttheme']);
+			$cache->page->init($cache_ext, $cfg['defaulttheme']);
 			$cache->page->read();
 		}
 	}
@@ -383,38 +384,6 @@ if ($usr['id'] == 0)
 
 $lang = $usr['lang'];
 
-/* === Hook === */
-foreach (cot_getextplugins('input') as $pl)
-{
-	include $pl;
-}
-/* ======================== */
-
-
-/* ======== Maintenance mode ======== */
-
-if ($cfg['maintenance'])
-{
-	$sqll = $db->query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
-	$roow = $sqll->fetch();
-
-	if (!$roow['grp_maintenance'] && !defined('COT_AUTH'))
-	{
-		cot_redirect(cot_url('users', 'm=auth', '', true));
-	}
-}
-
-/* ======== Zone variables ======== */
-
-$m = cot_import('m', 'G', 'ALP', 24);
-$n = cot_import('n', 'G', 'ALP', 24);
-$a = cot_import('a', 'G', 'ALP', 24);
-$b = cot_import('b', 'G', 'ALP', 24);
-
-/* ======== Language ======== */
-
-require_once cot_langfile('main', 'core');
-
 /* ======== Category Structure ======== */
 if (!$structure)
 {
@@ -448,6 +417,38 @@ if (!$cache || !$cot_cfg)
 	$cache && $cache->db->store('cot_cfg', $cfg, 'system');
 }
 unset($cot_cfg);
+
+/* === Hook === */
+foreach (cot_getextplugins('input') as $pl)
+{
+	include $pl;
+}
+/* ======================== */
+
+
+/* ======== Maintenance mode ======== */
+
+if ($cfg['maintenance'])
+{
+	$sqll = $db->query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
+	$roow = $sqll->fetch();
+
+	if (!$roow['grp_maintenance'] && !defined('COT_AUTH'))
+	{
+		cot_redirect(cot_url('users', 'm=auth', '', true));
+	}
+}
+
+/* ======== Zone variables ======== */
+
+$m = cot_import('m', 'G', 'ALP', 24);
+$n = cot_import('n', 'G', 'ALP', 24);
+$a = cot_import('a', 'G', 'ALP', 24);
+$b = cot_import('b', 'G', 'ALP', 24);
+
+/* ======== Language ======== */
+
+require_once cot_langfile('main', 'core');
 
 /* ======== Who's online (part 1) and shield protection ======== */
 

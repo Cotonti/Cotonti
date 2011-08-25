@@ -21,9 +21,6 @@ defined('COT_CODE') or die('Wrong URL.');
 define('COT_FORUMS', true);
 $env['location'] = 'forums';
 
-// Bootstrap
-require_once $cfg['system_dir'] . '/common.php';
-
 // Additional requirements
 require_once cot_incfile('extrafields');
 require_once cot_incfile('users', 'module');

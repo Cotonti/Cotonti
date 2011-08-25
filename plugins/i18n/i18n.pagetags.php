@@ -24,7 +24,7 @@ if ($i18n_enabled && $i18n_notmain)
 {
 	$i18n_array = array();
 	$append_param = '';
-	$urlparams = empty($page_data['page_alias']) ? array('id' => $page_data['page_id']) : array('al' => $page_data['page_alias']);
+	$urlparams = empty($page_data['page_alias']) ? array('c' => $page_data['page_cat'], 'id' => $page_data['page_id']) : array('c' => $page_data['page_cat'], 'al' => $page_data['page_alias']);
 	if (!$cfg['plugin']['i18n']['omitmain'] || $i18n_locale != $cfg['defaultlang'])
 	{
 		$urlparams['l'] = $i18n_locale;

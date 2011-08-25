@@ -1,0 +1,16 @@
+page	m=*						page?m={$m}
+page	c=system&al=*			{$al}{!$c}
+page	c=*&al=*				{cot_url_catpath()}/{$al}
+page	c=*&id=*				{cot_url_catpath()}/{$id}
+page	c=*						{cot_url_catpath()}
+index	*						/
+plug	e=*						{$e}
+users	*						users.php
+users	m=details&id=*&u=*		users/{cot_url_username()}
+admin	m=*						admin/{$m}
+*		c=*&al=*				{$_area}/{cot_url_catpath()}/{$al}
+*		c=*&id=*				{$_area}/{cot_url_catpath()}/{$id}
+*		c=*						{$_area}/{cot_url_catpath()}
+*		al=*					{$_area}/{$al}
+*		id=*					{$_area}/{$id}
+*		*						{$_area}

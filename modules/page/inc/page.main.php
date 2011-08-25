@@ -52,7 +52,7 @@ $sys['sublocation'] = $pag['page_title'];
 
 $pag['page_begin_noformat'] = $pag['page_begin'];
 $pag['page_tab'] = empty($pg) ? 0 : $pg;
-$pag['page_pageurl'] = empty($al) ? cot_url('page', array('id' => $id)) : cot_url('page', array('al' => $al));
+$pag['page_pageurl'] = empty($al) ? cot_url('page', array('c' => $pag['page_cat'], 'id' => $id)) : cot_url('page', array('c' => $pag['page_cat'], 'al' => $al));
 
 if ($pag['page_state'] == 1 && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
 {
@@ -186,7 +186,7 @@ if ($pag['page_file'] > 0)
 		{
 			$t->assign(array(
 				'PAGE_FILETITLE' => $pag['page_title'],
-				'PAGE_FILE_URL' => cot_url('page', array('id' => $id, 'a' => 'dl'))
+				'PAGE_FILE_URL' => cot_url('page', array('c' => $pag['page_cat'], 'id' => $id, 'a' => 'dl'))
 			));
 		}
 	}
@@ -229,7 +229,7 @@ if ($pag['page_totaltabs'] > 1)
 		{
 			$pag['page_tabtitle'][$i] = $i == 1 ? $pag['page_title'] : $L['Page'] . ' ' . ($i + 1);
 		}
-		$tab_url = empty($al) ? cot_url('page', 'id='.$id.'&pg='.$i) : cot_url('page', 'al='.$al.'&pg='.$i);
+		$tab_url = empty($al) ? cot_url('page', 'c='.$pag['page_cat'].'&id='.$id.'&pg='.$i) : cot_url('page', 'c='.$pag['page_cat'].'&al='.$al.'&pg='.$i);
 		$pag['page_tabtitles'][] .= cot_rc_link($tab_url, ($i+1).'. '.$pag['page_tabtitle'][$i],
 			array('class' => 'page_tabtitle'));
 		$pn = cot_pagenav('page', (empty($al) ? 'id='.$id : 'al='.$al), $pag['page_tab'], $pag['page_totaltabs'], 1, 'pg');

@@ -1,6 +1,6 @@
 <?php
 /**
- * Private messages module
+ * Private messages root-level redirector for backwards compatibility
  *
  * @package Cotonti
  * @version 0.9.4
@@ -10,15 +10,7 @@
  * @deprecated Deprecated since Cotonti Siena
  */
 
-// Environment setup
-define('COT_CODE', true);
-define('COT_MODULE', true);
-$env['ext'] = 'pm';
+$_GET['e'] = 'pm';
 
-// Basic requirements
-require_once './datas/config.php';
-require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/cotemplate.php';
-
-require_once $cfg['modules_dir'] . '/pm/pm.php';
+require 'index.php';
 ?>

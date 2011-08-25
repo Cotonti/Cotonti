@@ -134,7 +134,8 @@ if ($a == 'add')
 
 		$sql_page_insert = $db->insert($db_pages, $rpage);
 		$id = $db->lastInsertId();
-		$r_url = (!$rpage['page_state']) ? cot_url('page', "id=".$id, '', true) : cot_url('message', "msg=300", '', true);
+		$urlparams = empty($rpage['page_alias']) ? array('c' => $rpage['page_cat'], 'id' => $id) : array('c' => $rpage['page_cat'], 'al' => $rpage['page_alias']);
+		$r_url = (!$rpage['page_state']) ? cot_url('page', $urlparams, '', true) : cot_url('message', 'msg=300', '', true);
 		cot_extrafield_movefiles();
 		
 		/* === Hook === */

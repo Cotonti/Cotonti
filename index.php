@@ -29,6 +29,13 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 	exit;
 }
 
+// Load the Core API, the template engine
+require_once $cfg['system_dir'] . '/functions.php';
+require_once $cfg['system_dir'] . '/cotemplate.php';
+
+// Bootstrap
+require_once $cfg['system_dir'] . '/common.php';
+
 // Support for ajax and popup hooked plugins
 if (empty($_GET['e']) && !empty($_GET['r']))
 {
@@ -77,10 +84,6 @@ else
 		exit;
 	}
 }
-
-// Load the Core API and template engine
-require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/cotemplate.php';
 
 
 // Load the requested extension

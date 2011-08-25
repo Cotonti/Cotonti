@@ -1,6 +1,6 @@
 <?php
 /**
- * RSS module
+ * RSS root-level redirector for backwards compatibility
  *
  * @package Cotonti
  * @version 0.9.4
@@ -25,16 +25,8 @@ rss.php
 	OR rss.php?c=pages			=== Show pages from category "news" ===
 */
 
-// Environment setup
-define('COT_CODE', true);
-define('COT_MODULE', true);
-$env['ext'] = 'rss';
+$_GET['e'] = 'rss';
 
-// Basic requirements
-require_once './datas/config.php';
-require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/cotemplate.php';
-
-require_once $cfg['modules_dir'] . '/rss/rss.php';
+require 'index.php';
 
 ?>

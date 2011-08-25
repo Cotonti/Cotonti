@@ -21,9 +21,6 @@ defined('COT_CODE') or die('Wrong URL.');
 define('COT_VIEW', true);
 $env['location'] = 'views';
 
-// Bootstrap
-require_once $cfg['system_dir'] . '/common.php';
-
 $v = cot_import('v', 'G', 'TXT');
 
 if (mb_strpos($v, '.') !== false || mb_strpos($v, '/') !== false)

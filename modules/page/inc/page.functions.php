@@ -162,7 +162,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			}
 			$pagepath = cot_structure_buildpath('page', $page_data['page_cat']);
 			$catpath = cot_breadcrumbs($pagepath, $pagepath_home);
-			$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ? cot_url('page', 'id='.$page_data['page_id']) : cot_url('page', 'al='.$page_data['page_alias']);
+			$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ? cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id']) : cot_url('page', 'c='.$page_data['page_cat'].'&al='.$page_data['page_alias']);
 			$page_link[] = array($page_data['page_pageurl'], $page_data['page_title']);
 			$page_data['page_fulltitle'] = cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home);
 			if (!empty($page_data['page_url']) && $page_data['page_file'])
@@ -221,7 +221,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'BEGIN_STAMP' => $page_data['page_begin'] + $usr['timezone'] * 3600,
 				'EXPIRE_STAMP' => $page_data['page_expire'] + $usr['timezone'] * 3600,
 				'FILE' => $cot_yesno[$page_data['page_file']],
-				'FILE_URL' => empty($page_data['page_url']) ? '' : cot_url('page', 'id='.$page_data['page_id'].'&a=dl'),
+				'FILE_URL' => empty($page_data['page_url']) ? '' : cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id'].'&a=dl'),
 				'FILE_SIZE' => $page_data['page_size'],
 				'FILE_SIZE_READABLE' => cot_build_filesize($page_data['page_size']),
 				'FILE_ICON' => $page_data['page_fileicon'],

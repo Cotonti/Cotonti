@@ -53,4 +53,10 @@ INSTALLATION
 
 4. Follow the instruction on the screen up to the end of installation.
 
+5. If you have chosen to install URL Editor plugin, then you need to modify the
+.htaccess file (if using Apache webserver) or nginx.conf file (if using Nginx)
+and put there contents from one of these files according to your webserver:
+/plugins/urleditor/presets/handy-apache.htaccess
+/plugins/urleditor/presets/handy-nginx.conf
+
 For more information and support please visit http://www.cotonti.com

@@ -21,9 +21,6 @@ defined('COT_CODE') or die('Wrong URL.');
 define('COT_RSS', true);
 $env['location'] = 'rss';
 
-// Bootstrap
-require_once $cfg['system_dir'] . '/common.php';
-
 // Self requirements
 require_once cot_langfile('rss', 'module');
 
@@ -225,7 +222,7 @@ elseif ($defult_c)
 	$i = 0;
 	while ($row = $sql->fetch())
 	{
-		$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'id='.$row['page_id']) : cot_url('page', 'al='.$row['page_alias']);
+		$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']);
 
 		$items[$i]['title'] = $row['page_title'];
 		$items[$i]['link'] = COT_ABSOLUTE_URL . $row['page_pageurl'];

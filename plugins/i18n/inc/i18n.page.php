@@ -75,8 +75,8 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			/* =============*/
 
 			cot_message('Added');
-			$page_urlp = empty($pag['page_alias']) ? "id=$id&l=" . $pag_i18n['ipage_locale']
-				: 'al=' . $pag['page_alias'] . '&l=' . $pag_i18n['ipage_locale'];
+			$page_urlp = empty($pag['page_alias']) ? "c={$pag['page_cat']}id=$id&l=" . $pag_i18n['ipage_locale']
+				: 'c='.$pag['page_cat'] . '&al=' . $pag['page_alias'] . '&l=' . $pag_i18n['ipage_locale'];
 			cot_redirect(cot_url('page', $page_urlp, '', true));
 		}
 
@@ -149,8 +149,8 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			/* =============*/
 
 			cot_message('Updated');
-			$page_urlp = empty($pag['page_alias']) ? "id=$id&l=$i18n_locale"
-				: 'al=' . $pag['page_alias'] . '&l=' . $i18n_locale;
+			$page_urlp = empty($pag['page_alias']) ? 'c=' . $pag['page_cat'] . "id=$id&l=$i18n_locale"
+				: 'c=' . $pag['page_cat'] . 'al=' . $pag['page_alias'] . '&l=' . $i18n_locale;
 			cot_redirect(cot_url('page', $page_urlp, '', true));
 		}
 
@@ -200,7 +200,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 		/* =============*/
 
 		cot_message('Deleted');
-		$page_urlp = empty($pag['page_alias']) ? "id=$id" : 'al=' . $pag['page_alias'];
+		$page_urlp = empty($pag['page_alias']) ? 'c=' . $pag['page_cat'] . "id=$id" : 'c=' . $pag['page_cat'] . 'al=' . $pag['page_alias'];
 		cot_redirect(cot_url('page', $page_urlp, '', true));
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Page module main
+ * Page root-level redirector for backwards compatibility
  *
  * @package Cotonti
  * @version 0.9.4
@@ -10,13 +10,8 @@
  * @deprecated Deprecated since Cotonti Siena
  */
 
-define('COT_CODE', true);
+$_GET['e'] = 'page';
 
-// Basic requirements
-require_once './datas/config.php';
-require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/cotemplate.php';
-
-require_once $cfg['modules_dir'] . '/page/page.php';
+require 'index.php';
 
 ?>

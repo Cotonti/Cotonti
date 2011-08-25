@@ -64,7 +64,7 @@ foreach ($sql->fetchAll() as $row)
 	switch ($row['com_area'])
 	{
 		case 'page':
-			$row['com_url'] = cot_url('page', "id=".$row['com_value']."&comments=1", "#c".$row['com_id']);
+			$row['com_url'] = cot_url('page', "c=system&id=".$row['com_value']."&comments=1", "#c".$row['com_id']);
 		break;
 
 		case 'weblogs':

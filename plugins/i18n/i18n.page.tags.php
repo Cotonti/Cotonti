@@ -37,7 +37,7 @@ if ($i18n_enabled)
 				$lc_class = '';
 				$lc_selected = '';
 			}
-			$urlparams = empty($pag['page_alias']) ? array('id' => $id) : array('al' => $al);
+			$urlparams = empty($pag['page_alias']) ? array('c' => $pag['page_cat'], 'id' => $id) : array('c' => $pag['page_cat'], 'al' => $al);
 			if (!$cfg['plugin']['i18n']['omitmain'] || $lc != $i18n_fallback)
 			{
 				$urlparams += array('l' => $lc);

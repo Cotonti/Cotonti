@@ -21,9 +21,6 @@ defined('COT_CODE') or die('Wrong URL.');
 define('COT_POLLS', true);
 $env['location'] = 'polls';
 
-// Bootstrap
-require_once $cfg['system_dir'] . '/common.php';
-
 // Self requirements
 require_once cot_incfile('polls', 'module');
 require_once cot_incfile('polls', 'module', 'resources');

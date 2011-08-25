@@ -1,52 +1,80 @@
 <?php
-/* ====================
-[BEGIN_COT_EXT]
-Hooks=global
-[END_COT_EXT]
-==================== */
-
 /**
- * Overloads standard cot_url() function and loads URL
- * transformation rules
+ * URL rewriting functions
  *
  * @package urleditor
- * @version 0.9.2
+ * @version 0.9.0
  * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2010-2011
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (!is_array($cot_urltrans))
+require_once cot_langfile('urleditor', 'plug');
+
+/**
+ * Applies Handly URLs rewrite to current script parameters
+ * @global array $cfg 
+ */
+function cot_apply_rwr()
 {
-	$cot_urltrans = array();
-	if (file_exists('./datas/urltrans.dat'))
+	global $cfg, $structure;
+	if (isset($_GET['rwr']) && !empty($_GET['rwr']) && preg_match('`^[\w\p{L}/\-_]+?$`u', $_GET['rwr']))
 	{
-		$fp = fopen('./datas/urltrans.dat', 'r');
-		while ($line = trim(fgets($fp), " \t\r\n"))
+		// Ignore ending slash and split the path into parts
+		$path = explode('/', (mb_strrpos($_GET['rwr'], '/') == mb_strlen($_GET['rwr']) - 1) ? mb_substr($_GET['rwr'], 0, -1) : $_GET['rwr']);
+		$count = count($path);
+		
+		if ($count == 1)
 		{
-			$parts = explode("\t", $line);
-			$rule = array();
-			$rule['trans'] = $parts[2];
-			$parts[1] == '*' ? $rule['params'] = array() : parse_str($parts[1], $rule['params']);
-			foreach($rule['params'] as $key => $val)
+			if (isset($structure['page'][$path[0]]))
 			{
-				if (mb_strpos($val, '|') !== false)
+				// Is a category
+				$_GET['e'] = 'page';
+				$_GET['c'] = $path[0];
+			}
+			elseif (file_exists($cfg['modules_dir'] . '/' . $path[0]) || file_exists($cfg['plugins_dir'] . '/' . $path[0]))
+			{
+				// Is an extension
+				$_GET['e'] = $path[0];
+			}
+			else
+			{
+				// Maybe it is a system page, if not 404 will be given
+				$_GET['e'] = 'page';
+				$_GET['c'] = 'system';
+				$_GET['al'] = $path[0];
+			}
+		}
+		else
+		{
+			$last = $count - 1;
+			$ext = (isset($structure['page'][$path[0]])) ? 'page' : $path[0];
+			$_GET['e'] = $ext;
+			if (isset($structure[$ext][$path[$last]]))
+			{
+				// Is a category
+				$_GET['c'] = $path[$last];
+			}
+			else
+			{
+				// Is a page/item
+				if ($ext == 'page' || $count > 2)
 				{
-					$rule['params'][$key] = explode('|', $val);
+					$_GET['c'] = $path[$last - 1];
+				}
+				if (is_numeric($path[$last]))
+				{
+					$_GET['id'] = $path[$last];
+				}
+				else
+				{
+					$_GET['al'] = $path[$last];
 				}
 			}
-			$cot_urltrans[$parts[0]][] = $rule;
 		}
-		fclose($fp);
 	}
-	// Fallback rule for standard PHP URLs
-	$cot_urltrans['*'][] = array(
-		'params' => array(),
-		'trans' => '{$_area}.php'
-	);
-	$cache && $cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
 }
 
 /**
@@ -108,7 +136,9 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 			{
 				// Callback
 				$func = mb_substr($m[1], 0, $p);
-				$url = str_replace($m[0], $func($params, $spec), $url);
+				$arg = mb_substr($m[1], $p + 1, mb_strpos($m[1], ')') - $p - 1);
+				$sub = empty($arg) ? $func($params, $spec) : $func($params, $spec, $arg);
+				$url = str_replace($m[0], $sub, $url);
 			}
 			elseif (mb_strpos($m[1], '!$') === 0)
 			{
@@ -175,6 +205,47 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	$url .= $tail;
 	$url = str_replace('&amp;amp;', '&amp;', $url);
 	return $url;
+}
+
+/**
+ * Category path URL subsitution handler
+ * 
+ * @global array $structure Site structure categories
+ * @param array $params Link parameters
+ * @param array $spec Special parameters
+ * @param string $arg Callback argument
+ * @return string 
+ */
+function cot_url_catpath(&$params, $spec, $arg = 'c')
+{
+	global $structure;
+	$cat = '';
+	$name = $spec['_area'] == 'plug' ? $params['e'] : $spec['_area'];
+	if (isset($structure[$name]) && isset($structure[$name][$params[$arg]]))
+	{
+		$parts = explode('.', $structure[$name][$params[$arg]]['path']);
+		$cat = implode('/', array_map('urlencode', $parts));
+	}
+	else
+	{
+		$cat = $params[$arg];
+	}
+	unset($params[$arg]);
+	return $cat;
+}
+
+/**
+ * User name URL subsitution handler
+ *
+ * @param array $params Link parameters
+ * @param array $spec Special parameters
+ * @return string 
+ */
+function cot_url_username(&$params, $spec)
+{
+	$name = urlencode($params['u']);
+	unset($args['m'], $args['id'], $args['u']);
+	return $name;
 }
 
 ?>

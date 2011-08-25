@@ -195,7 +195,7 @@ function cot_tag_search_pages($query)
 				$tag_i++;
 			}
 			$t->assign(array(
-				'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id']) : cot_url('page', 'al='.$row['page_alias']),
+				'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']),
 				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
 				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_structure_buildpath('page', $row['page_cat']), false),
 				'TAGS_RESULT_ROW_TAGS' => $tag_list
