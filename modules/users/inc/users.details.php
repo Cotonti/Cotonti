@@ -59,7 +59,7 @@ foreach (cot_getextplugins('users.details.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_tplfile(array('users', 'details'), 'core');
+$mskin = cot_tplfile(array('users', 'details'), 'module');
 $t = new XTemplate($mskin);
 
 $t->assign(array(

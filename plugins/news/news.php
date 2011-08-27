@@ -20,7 +20,6 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('page', 'module');
 require_once cot_langfile('news', 'plug');
-require_once cot_incfile('users', 'module');
 
 /* === Hook - Part1 : Set === FIRST === */
 $news_first_extp = cot_getextplugins('news.first');

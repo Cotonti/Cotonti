@@ -44,7 +44,7 @@ if($a == 'update')
 	}
 	/* ===== */
 
-	$ruser['user_text'] = cot_import('rusertext','P','HTM', $cfg['usertextmax']);
+	$ruser['user_text'] = cot_import('rusertext','P','HTM', $cfg['users']['usertextmax']);
 	$ruser['user_country'] = cot_import('rusercountry','P','ALP');
 	$rtheme = explode(':', cot_import('rusertheme','P','TXT'));
 	$ruser['user_theme'] = $rtheme[0];
@@ -75,7 +75,7 @@ if($a == 'update')
 		if (mb_strlen($rnewpass1) < 4 || cot_alphaonly($rnewpass1) != $rnewpass2) cot_error('pro_passtoshort', 'rnewpass1');
 		if (md5($roldpass) != $urr['user_password']) cot_error('pro_wrongpass', 'roldpass');
 
-		if (!empty($ruseremail) && !empty($rmailpass) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
+		if (!empty($ruseremail) && !empty($rmailpass) && $cfg['users']['useremailchange'] && $ruseremail != $urr['user_email'])
 		{
 			cot_error('pro_emailandpass', 'ruseremail');
 		}
@@ -84,12 +84,12 @@ if($a == 'update')
 			$db->update($db_users, array('user_password' => md5($rnewpass1)), "user_id='".$usr['id']."'");
 		}
 	}
-	if (!empty($ruseremail) && (!empty($rmailpass) || $cfg['user_email_noprotection']) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
+	if (!empty($ruseremail) && (!empty($rmailpass) || $cfg['users']['user_email_noprotection']) && $cfg['users']['useremailchange'] && $ruseremail != $urr['user_email'])
 	{
 		$sqltmp = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_email='".$db->prep($ruseremail)."'");
 		$res = $sqltmp->fetchColumn();
 
-		if (!$cfg['user_email_noprotection'])
+		if (!$cfg['users']['user_email_noprotection'])
 		{
 			$rmailpass = md5($rmailpass);
 			if ($rmailpass != $urr['user_password']) cot_error('pro_wrongpass', 'rmailpass');
@@ -101,7 +101,7 @@ if($a == 'update')
 
 		if (!cot_error_found())
 		{
-			if (!$cfg['user_email_noprotection'])
+			if (!$cfg['users']['user_email_noprotection'])
 			{
 				$validationkey = md5(microtime());
 				$db->update($db_users, array('user_lostpass' => $validationkey, 'user_maingrp' => '-1', 'user_sid' => $urr['user_maingrp']), "user_id='".$usr['id']."'");
@@ -165,7 +165,7 @@ foreach (cot_getextplugins('users.profile.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_tplfile(array('users', 'profile'), 'core');
+$mskin = cot_tplfile(array('users', 'profile'), 'module');
 $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');
@@ -178,7 +178,7 @@ foreach($timezonelist as $x)
 $profile_form_timezone = cot_selectbox($urr['user_timezone'], 'rusertimezone', $timezonelist, $timezonename, false);
 $profile_form_timezone .= ' '.$usr['gmttime'].' / '.cot_date('datetime_medium', $sys['now_offset'] + $usr['timezone']*3600).' '.$usr['timetext'];
 
-$protected = !$cfg['useremailchange'] ? array('disabled' => 'disabled') : array();
+$protected = !$cfg['users']['useremailchange'] ? array('disabled' => 'disabled') : array();
 $profile_form_email = cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)
 	+ $protected);
 
@@ -232,9 +232,9 @@ foreach (cot_getextplugins('users.profile.tags') as $pl)
 // Error handling
 cot_display_messages($t);
 
-if ($cfg['useremailchange'])
+if ($cfg['users']['useremailchange'])
 {
-	if (!$cfg['user_email_noprotection'])
+	if (!$cfg['users']['user_email_noprotection'])
 	{
 		$t->parse('MAIN.USERS_PROFILE_EMAILCHANGE.USERS_PROFILE_EMAILPROTECTION');
 	}

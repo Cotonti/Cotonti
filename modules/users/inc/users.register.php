@@ -17,7 +17,7 @@ require_once cot_incfile('auth');
 $v = cot_import('v','G','ALP');
 $y = cot_import('y','G','INT');
 
-if ($cfg['disablereg'])
+if ($cfg['users']['disablereg'])
 {
 	$env['status'] = '403 Forbidden';
 	cot_redirect(cot_url('message', 'msg=117', '', true));
@@ -96,11 +96,11 @@ if ($a=='add')
 		}
 		/* ===== */
 		
-		if ($cfg['regnoactivation'] || $db->countRows($db_users) == 1)
+		if ($cfg['users']['regnoactivation'] || $db->countRows($db_users) == 1)
 		{
 			cot_redirect(cot_url('message', 'msg=106', '', true));
 		}
-		elseif ($cfg['regrequireadmin'])
+		elseif ($cfg['users']['regrequireadmin'])
 		{
 			cot_redirect(cot_url('message', 'msg=118', '', true));
 		}
@@ -195,7 +195,7 @@ foreach (cot_getextplugins('users.register.main') as $pl)
 $out['subtitle'] = $L['aut_registertitle'];
 $out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(cot_tplfile('users.register', 'core'));
+$t = new XTemplate(cot_tplfile('users.register', 'module'));
 
 require_once cot_incfile('forms');
 

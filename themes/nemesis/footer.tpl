@@ -25,7 +25,7 @@
 		<ul id="account" class="column">
 <!-- BEGIN: GUEST -->
 			<li><strong>{PHP.L.hea_youarenotlogged}</strong></li>
-			<li><a href="users.php?m=auth">{PHP.L.Login}</a></li>
+			<li><a href="login.php">{PHP.L.Login}</a></li>
 			<li><a href="users.php?m=register">{PHP.L.Register}</a></li>
 			<li><a href="users.php?m=passrecover">{PHP.L.users_lostpass}</a></li>
 <!-- END: GUEST -->

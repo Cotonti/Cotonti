@@ -435,7 +435,7 @@ if ($cfg['maintenance'])
 
 	if (!$roow['grp_maintenance'] && !defined('COT_AUTH'))
 	{
-		cot_redirect(cot_url('users', 'm=auth', '', true));
+		cot_redirect(cot_url('login'));
 	}
 }
 

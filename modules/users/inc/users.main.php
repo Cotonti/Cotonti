@@ -14,7 +14,7 @@ defined('COT_CODE') or die('Wrong URL');
 $id = cot_import('id', 'G', 'INT');
 $s = cot_import('s', 'G', 'ALP', 16);
 $w = cot_import('w', 'G', 'ALP', 4);
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxusersperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['users']['maxusersperpage']);
 $f = cot_import('f', 'G', 'ALP', 16);
 $g = cot_import('g', 'G', 'INT');
 $gm = cot_import('gm', 'G', 'INT');
@@ -73,7 +73,7 @@ if (empty($d))
 }
 
 $title[] = array(cot_url('users'), $L['Users']);
-$localskin = cot_tplfile('users', 'core');
+$localskin = cot_tplfile('users', 'module');
 
 if(!empty($sq))
 {
@@ -140,12 +140,12 @@ $totalusers = $db->query(
 )->fetchColumn();
 $sqlusers = $db->query(
 	"SELECT u.* $join_columns FROM $db_users AS u $join_condition
-	WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['maxusersperpage']}"
+	WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['users']['maxusersperpage']}"
 )->fetchAll();
 
-$totalpage = ceil($totalusers / $cfg['maxusersperpage']);
-$currentpage = ceil($d / $cfg['maxusersperpage']) + 1;
-$pagenav = cot_pagenav('users', $users_url_path, $d, $totalusers, $cfg['maxusersperpage']);
+$totalpage = ceil($totalusers / $cfg['users']['maxusersperpage']);
+$currentpage = ceil($d / $cfg['users']['maxusersperpage']) + 1;
+$pagenav = cot_pagenav('users', $users_url_path, $d, $totalusers, $cfg['users']['maxusersperpage']);
 
 $out['subtitle'] = $L['Users'];
 
@@ -209,7 +209,7 @@ $t->assign(array(
 	'USERS_CURRENTFILTER' => $f,
 	'USERS_TOP_CURRENTPAGE' => $currentpage,
 	'USERS_TOP_TOTALPAGE' => $totalpage,
-	'USERS_TOP_MAXPERPAGE' => $cfg['maxusersperpage'],
+	'USERS_TOP_MAXPERPAGE' => $cfg['users']['maxusersperpage'],
 	'USERS_TOP_TOTALUSERS' => $totalusers,
 	'USERS_TOP_PAGNAV' => $pagenav['main'],
 	'USERS_TOP_PAGEPREV' => $pagenav['prev'],

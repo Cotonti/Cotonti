@@ -184,17 +184,10 @@ $L['cfg_body_mail'] = array('Email title', 'Options: {SITE_TITLE}, {SITE_DESCRIP
  * Users Subsection
  */
 
-$L['cfg_disablereg'] = array('Disable registration process', 'Prevent users from registering new accounts');
 $L['cfg_disablewhosonline'] = array('Disable who\'s online', 'Automatically enabled if you turn on the Shield');
 $L['cfg_forcerememberme'] = array('Force &quot;remember me&quot;', 'Use it on multi-domain sites or if there are sudden logouts');
-$L['cfg_maxusersperpage'] = array('Maximum lines in userlist', '');
-$L['cfg_regnoactivation'] = array('Skip email check for new users', '\'No\'recommended, for security reasons');
-$L['cfg_regrequireadmin'] = array('Administrators must validate new accounts', '');
 $L['cfg_timedout'] = array('Idle delay, in seconds', 'After this delay, user is away');
-$L['cfg_user_email_noprotection'] = array('Disable password protection of email change', '\'No\' recommended, for security reasons');
-$L['cfg_useremailchange'] = array('Allow users to change their email address', '\'No\' recommended, for security reasons');
 $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');
-$L['cfg_usertextmax'] = array('Maximum length for user signature', '');
 
 /**
  * Config Section

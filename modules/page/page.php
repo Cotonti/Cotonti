@@ -23,7 +23,6 @@ $env['location'] = 'pages';
 
 // Additional API requirements
 require_once cot_incfile('extrafields');
-require_once cot_incfile('users', 'module');
 
 // Self requirements
 require_once cot_incfile('page', 'module');

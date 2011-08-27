@@ -112,7 +112,7 @@ $out['head'] .= $R['code_noindex'];
 $title[] = $L['pasrec_title'];
 
 require_once $cfg['system_dir'].'/header.php';
-$t = new XTemplate(cot_tplfile('users.passrecover', 'core'));
+$t = new XTemplate(cot_tplfile('users.passrecover', 'module'));
 
 $t->assign(array(
 	'PASSRECOVER_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),

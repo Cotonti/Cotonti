@@ -49,6 +49,14 @@ function cot_apply_rwr()
 		}
 		else
 		{
+			// Special shortcut for user profiles
+			if ($path[0] == 'users' && $count == 2)
+			{
+				$_GET['e'] = 'users';
+				$_GET['m'] = 'details';
+				$_GET['u'] = $path[1];
+				return;
+			}
 			$last = $count - 1;
 			$ext = (isset($structure['page'][$path[0]])) ? 'page' : $path[0];
 			$_GET['e'] = $ext;
@@ -91,23 +99,33 @@ function cot_apply_rwr()
 function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypass = false)
 {
 	global $cfg, $cot_urltrans, $sys;
+
 	// Preprocess arguments
 	if (is_string($params))
 	{
 		$params = cot_parse_str($params);
 	}
-	$area = empty($cot_urltrans[$name]) ? '*' : $name;
+
+	// Initialize with something very default
+	$url = ($name == 'plug') ? 'index.php' : 'index.php?e=' . $name;
+	// Detect search areas
+	$areas = array();
+	if (isset($cot_urltrans[$name]) && count($cot_urltrans[$name]) > 0)
+	{
+		$areas[] = $name;
+	}
+	$areas[] = '*'; // default area rules
+
 	// Find first matching rule
-	$url = $cot_urltrans['*'][0]['trans']; // default rule
 	$rule = array();
-	if (!empty($cot_urltrans[$area]))
+	foreach ($areas as $area)
 	{
 		foreach($cot_urltrans[$area] as $rule)
 		{
 			$matched = true;
 			foreach($rule['params'] as $key => $val)
 			{
-				if (empty($params[$key])
+				if (!isset($params[$key]) || empty($params[$key])
 					|| (is_array($val) && !in_array($params[$key], $val))
 					|| ($val != '*' && $params[$key] != $val))
 				{
@@ -118,10 +136,11 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 			if ($matched)
 			{
 				$url = $rule['trans'];
-				break;
+				break 2;
 			}
 		}
 	}
+
 	// Some special substitutions
 	$spec['_area'] = $name;
 	$spec['_host'] = $sys['host'];
@@ -244,7 +263,7 @@ function cot_url_catpath(&$params, $spec, $arg = 'c')
 function cot_url_username(&$params, $spec)
 {
 	$name = urlencode($params['u']);
-	unset($args['m'], $args['id'], $args['u']);
+	unset($params['m'], $params['id'], $params['u']);
 	return $name;
 }
 

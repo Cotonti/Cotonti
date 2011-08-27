@@ -10,7 +10,7 @@
 		<!-- ELSE -->
 		<div class="red">{PHP.themelang.list.none}</div>
 		<!-- IF {PHP.usr.id} == 0 -->
-		<a href="users.php?m=auth">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.lis_submitnew}</a>
+		<a href="login.php">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.lis_submitnew}</a>
 		<!-- ELSE -->
 		{LIST_SUBMITNEWPAGE}
 		<!-- ENDIF -->
@@ -46,7 +46,7 @@
 	</div>
 	<div id="right">
 	<!-- IF {PHP.usr.id} == 0 -->
-	<h3><a href="users.php?m=auth">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.page_addtitle}</a></h3>
+	<h3><a href="login.php">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.page_addtitle}</a></h3>
 	<!-- ELSE -->
 	<h3>{LIST_SUBMITNEWPAGE}</h3>
 	<!-- ENDIF -->

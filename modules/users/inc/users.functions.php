@@ -81,9 +81,9 @@ function add_user($email, $name = null, $password = null, $country = '', $timezo
 	}
 	/* ===== */
 
-	if (!$cfg['regnoactivation'] && $ruser['user_maingrp'] != 5)
+	if (!$cfg['users']['regnoactivation'] && $ruser['user_maingrp'] != 5)
 	{
-		if ($cfg['regrequireadmin'])
+		if ($cfg['users']['regrequireadmin'])
 		{
 			$subject = $cfg['maintitle']." - ".$L['aut_regrequesttitle'];
 			$body = sprintf($L['aut_regrequest'], $ruser['user_name'], $password);
@@ -238,142 +238,6 @@ function cot_userisonline($id)
 		$res = (in_array($id, $cot_usersonline)) ? TRUE : FALSE;
 	}
 	return ($res);
-}
-
-/**
- * Returns all user tags foк XTemplate
- *
- * @param mixed $user_data User Info Array
- * @param string $tag_prefix Prefix for tags
- * @param string $emptyname Name text if user is not exist
- * @param bool $allgroups Build info about all user groups
- * @param bool $cacheitem Cache tags
- * @return array
- */
-function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false, $cacheitem = true)
-{
-	global $db, $cot_extrafields, $cfg, $L, $cot_yesno, $themelang, $user_cache, $db_users, $usr;
-
-	static $extp_first = null, $extp_main = null;
-	
-	$return_array = array();
-
-	if (is_null($extp_first))
-	{
-		$extp_first = cot_getextplugins('usertags.first');
-		$extp_main = cot_getextplugins('usertags.main');
-	}
-
-	/* === Hook === */
-	foreach ($extp_first as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
-	
-	$user_id = (int) (is_array($user_data) ? $user_data['user_id'] : $user_data);
-
-	if (isset($user_cache[$user_id]))
-	{	
-		$temp_array = $user_cache[$user_id];
-	}
-	else
-	{
-		if (is_int($user_data) && $user_data > 0)
-		{
-			$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $user_data");
-			$user_data = $sql->fetch();
-		}
-
-		if (is_array($user_data) && $user_data['user_id'] > 0 && !empty($user_data['user_name']))
-		{
-			$user_data['user_birthdate'] = cot_date2stamp($user_data['user_birthdate']);
-			$user_data['user_text'] = cot_parse($user_data['user_text'], $cfg['usertextimg']);
-			
-			$temp_array = array(
-				'ID' => $user_data['user_id'],
-				'NAME' => cot_build_user($user_data['user_id'], htmlspecialchars($user_data['user_name'])),
-				'NICKNAME' => htmlspecialchars($user_data['user_name']),
-				'DETAILSLINK' => cot_url('users', 'm=details&id=' . $user_data['user_id'].'&u='.htmlspecialchars($user_data['user_name'])),
-				'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
-				'MAINGRP' => cot_build_group($user_data['user_maingrp']),
-				'MAINGRPID' => $user_data['user_maingrp'],
-				'MAINGRPSTARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
-				'MAINGRPICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
-				'COUNTRY' => cot_build_country($user_data['user_country']),
-				'COUNTRYFLAG' => cot_build_flag($user_data['user_country']),
-				'TEXT' => $user_data['user_text'],
-				'EMAIL' => cot_build_email($user_data['user_email'], $user_data['user_hideemail']),
-				'THEME' => $user_data['user_theme'],
-				'SCHEME' => $user_data['user_scheme'],
-				'GENDER' => ($user_data['user_gender'] == '' || $user_data['user_gender'] == 'U') ? '' : $L['Gender_' . $user_data['user_gender']],
-				'BIRTHDATE' => ($user_data['user_birthdate'] != 0) ? cot_date('date_full', $user_data['user_birthdate']) : '',
-				'BIRTHDATE_STAMP' => ($user_data['user_birthdate'] != 0) ? $user_data['user_birthdate'] : '',
-				'AGE' => ($user_data['user_birthdate'] != 0) ? cot_build_age($user_data['user_birthdate']) : '',
-				'TIMEZONE' => cot_build_timezone($user_data['user_timezone']),
-				'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate'] + $usr['timezone'] * 3600),
-				'REGDATE_STAMP' => $user_data['user_regdate'] + $usr['timezone'] * 3600,
-				'LASTLOG' => cot_date('datetime_medium', $user_data['user_lastlog'] + $usr['timezone'] * 3600),
-				'LASTLOG_STAMP' => $user_data['user_lastlog'] + $usr['timezone'] * 3600,
-				'LOGCOUNT' => $user_data['user_logcount'],
-				'POSTCOUNT' => $user_data['user_postcount'],
-				'LASTIP' => $user_data['user_lastip'],
-				'ONLINE' => (cot_userisonline($user_data['user_id'])) ? '1' : '0',
-				'ONLINETITLE' => ($user_data['user_online']) ? $themelang['forumspost']['Onlinestatus1'] : $themelang['forumspost']['Onlinestatus0'],
-			);
-
-			if ($allgroups)
-			{
-				$temp_array['GROUPS'] = cot_build_groupsms($user_data['user_id'], FALSE, $user_data['user_maingrp']);
-			}
-			// Extra fields
-			foreach ($cot_extrafields[$db_users] as $i => $row)
-			{
-				$temp_array[strtoupper($row['field_name'])] = cot_build_extrafields_data('user', $row, $user_data['user_' . $row['field_name']]);
-				$temp_array[strtoupper($row['field_name']) . '_TITLE'] = isset($L['user_' . $row['field_name'] . '_title']) ? $L['user_' . $row['field_name'] . '_title'] : $row['field_description'];
-			}
-		}
-		else
-		{
-			$temp_array = array(
-				'ID' => 0,
-				'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-				'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-				'MAINGRP' => cot_build_group(1),
-				'MAINGRPID' => 1,
-				'MAINGRPSTARS' => '',
-				'MAINGRPICON' => cot_build_groupicon($cot_groups[1]['icon']),
-				'COUNTRY' => cot_build_country(''),
-				'COUNTRYFLAG' => cot_build_flag(''),
-				'TEXT' => '',
-				'EMAIL' => '',
-				'GENDER' => '',
-				'BIRTHDATE' => '',
-				'BIRTHDATE_STAMP' => '',
-				'AGE' => '',
-				'REGDATE' => '',
-				'REGDATE_STAMP' => '',
-				'POSTCOUNT' => '',
-				'LASTIP' => '',
-				'ONLINE' => '0',
-				'ONLINETITLE' => '',
-			);
-		}
-		
-		/* === Hook === */
-		foreach ($extp_main as $pl)
-		{
-			include $pl;
-		}
-		/* ===== */
-
-		$cacheitem && $user_cache[$user_data['user_id']] = $temp_array;
-	}
-	foreach ($temp_array as $key => $val)
-	{
-		$return_array[$tag_prefix . $key] = $val;
-	}
-	return $return_array;
 }
 
 ?>

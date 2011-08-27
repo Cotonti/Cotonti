@@ -53,7 +53,7 @@
 			<h3><a href="pm.php">{PHP.L.Private_Messages}</a></h3>
 			<h3><a href="pfs.php">{PHP.L.PFS}</a></h3>
 			<!-- ENDIF -->	<!-- IF {PHP.usr.id} == 0 -->
-			<h3><a href="users.php?m=auth">{PHP.themelang.users.login}</a></h3>	<!-- ENDIF -->
+			<h3><a href="login.php">{PHP.themelang.users.login}</a></h3>	<!-- ENDIF -->
 			<h3><span style="background-color:#94af66; color:#fff">{PHP.L.Users}</span></h3>
 			<div class="padding15 admin nou scrabble" style="padding-bottom:0">
 				{USERS_TOP_FILTERS_OTHERS}<a href="users.php"><strong>{PHP.L.All}</strong></a><br />.....<br />

@@ -9,9 +9,58 @@
  * @license BSD
  */
 
-defined('COT_CODE') or die('Wrong URL');
+// Environment
+define('COT_CODE', TRUE);
+define('COT_CORE', TRUE);
+define('COT_AUTH', TRUE);
+$env['location'] = 'users';
+$env['ext'] = 'users';
 
-$v = cot_import('v','G','PSW');
+require_once './datas/config.php';
+require_once $cfg['system_dir'] . '/functions.php';
+require_once $cfg['system_dir'] . '/cotemplate.php';
+require_once $cfg['system_dir'] . '/common.php';
+
+$out = cot_import('out', 'G', 'BOL');
+
+if ($out)
+{
+	// Perform logout
+	cot_check_xg();
+
+	/* === Hook === */
+	foreach (cot_getextplugins('users.logout') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
+	if ($usr['id'] > 0)
+	{
+		cot_uriredir_apply($cfg['redirbkonlogout']);
+	}
+
+	if(!empty($_COOKIE[$sys['site_id']]))
+	{
+		cot_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+	}
+
+	session_unset();
+	session_destroy();
+
+	if ($usr['id'] > 0)
+	{
+		$db->update($db_users, array('user_lastvisit' => $sys['now_offset']), "user_id = " . $usr['id']);
+		$db->delete($db_online, "online_ip='{$usr['ip']}'");
+		cot_uriredir_redirect(empty($redirect) ? cot_url('index') : base64_decode($redirect));
+	}
+	else
+	{
+		cot_redirect(cot_url('index'));
+	}
+	
+	exit;
+}
 
 /* === Hook === */
 foreach (cot_getextplugins('users.auth.first') as $pl)
@@ -20,7 +69,7 @@ foreach (cot_getextplugins('users.auth.first') as $pl)
 }
 /* ===== */
 
-if ($a=='check')
+if ($a == 'check')
 {
 	cot_shield_protect();
 
@@ -159,7 +208,8 @@ foreach (cot_getextplugins('users.auth.main') as $pl)
 $out['subtitle'] = $L['aut_logintitle'];
 $out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(cot_tplfile('users.auth', 'core'));
+$mskin = file_exists(cot_tplfile('login', 'core')) ? cot_tplfile('login', 'core') : cot_tplfile('users.auth', 'module');
+$t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');
 
@@ -171,7 +221,7 @@ if ($cfg['maintenance'])
 
 $t->assign(array(
 	'USERS_AUTH_TITLE' => $L['aut_logintitle'],
-	'USERS_AUTH_SEND' => cot_url('users', 'm=auth&a=check' . (empty($redirect) ? '' : "&redirect=$redirect")),
+	'USERS_AUTH_SEND' => cot_url('login', 'a=check' . (empty($redirect) ? '' : "&redirect=$redirect")),
 	'USERS_AUTH_USER' => cot_inputbox('text', 'rusername', $rusername, array('size' => '16', 'maxlength' => '32')),
 	'USERS_AUTH_PASSWORD' => cot_inputbox('password', 'rpassword', '', array('size' => '16', 'maxlength' => '32')),
 	'USERS_AUTH_REGISTER' => cot_url('users', 'm=register')

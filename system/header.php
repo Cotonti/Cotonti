@@ -126,7 +126,7 @@ if (!COT_AJAX)
 	if ($usr['id'] > 0)
 	{
 		$out['adminpanel'] = (cot_auth('admin', 'any', 'R')) ? cot_rc_link(cot_url('admin'), $L['Administration']) : '';
-		$out['loginout_url'] = cot_url('users', 'm=logout&' . cot_xg());
+		$out['loginout_url'] = cot_url('login', 'out=1&' . cot_xg());
 		$out['loginout'] = cot_rc_link($out['loginout_url'], $L['Logout']);
 		$out['profile'] = cot_rc_link(cot_url('users', 'm=profile'), $L['Profile']);
 
@@ -159,7 +159,7 @@ if (!COT_AJAX)
 			: $R['form_guest_remember'];
 
 		$t->assign(array (
-			'HEADER_GUEST_SEND' => cot_url('users', 'm=auth&a=check&' . $sys['url_redirect']),
+			'HEADER_GUEST_SEND' => cot_url('login', 'a=check&' . $sys['url_redirect']),
 			'HEADER_GUEST_USERNAME' => $out['guest_username'],
 			'HEADER_GUEST_PASSWORD' => $out['guest_password'],
 			'HEADER_GUEST_REGISTER' => $out['guest_register'],

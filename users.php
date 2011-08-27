@@ -1,6 +1,6 @@
 <?php
 /**
- * Users loader
+ * Users root-level redirector for backwards compatibility
  *
  * @package Cotonti
  * @version 0.9.4
@@ -9,18 +9,8 @@
  * @license BSD
  */
 
-define('COT_CODE', TRUE);
-define('COT_CORE', TRUE);
-$env['ext'] = 'users';
+$_GET['e'] = 'users';
 
-if (isset($_GET['m']) && $_GET['m'] == 'auth')
-{
-	define('COT_AUTH', TRUE);
-}
+require 'index.php';
 
-require_once './datas/config.php';
-require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/cotemplate.php';
-
-require_once $cfg['system_dir'] . '/users/users.php';
 ?>

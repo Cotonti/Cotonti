@@ -14,7 +14,7 @@
       <a href="{FORUMS_TOPICS_NEWTOPICURL}" class="comm"><span>{PHP.L.forums_newtopic}</span></a>
       <!-- ENDIF -->
       <!-- IF {PHP.usr.id} == 0 -->
-      <a href="users.php?m=auth" class="comm"><span>{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.themelang.forumstopics.Start}</span></a>
+      <a href="login.php" class="comm"><span>{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.themelang.forumstopics.Start}</span></a>
       <!-- ENDIF -->
       <div> &nbsp;
       
@@ -83,7 +83,7 @@
       <h3><a href="{FORUMS_TOPICS_NEWTOPICURL}">{PHP.L.forums_newtopic}</a></h3>
       <!-- ENDIF -->
       <!-- IF {PHP.usr.id} == 0= -->
-      <h3><a href="users.php?m=auth">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.themelang.forumstopics.Start}</a></h3>
+      <h3><a href="login.php">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.themelang.forumstopics.Start}</a></h3>
       <!-- ENDIF -->
       <h3><a href="rss.php?c=section&amp;id={PHP.s}">{PHP.themelang.list.rss}</a></h3> 
       <h3>{PHP.themelang.forumspost.jump}<br /><span class="colleft whitee jump">{FORUMS_TOPICS_JUMPBOX}</span><br /></h3> 

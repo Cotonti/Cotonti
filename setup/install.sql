@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.3
+ * Version: 0.9.4
  */
 
 CREATE TABLE `cot_auth` (
@@ -28,12 +28,6 @@ INSERT INTO `cot_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights
 (4, 'message', 'a', 1, 255, 1),
 (5, 'message', 'a', 255, 255, 1),
 (6, 'message', 'a', 131, 0, 1),
-(1, 'users', 'a', 1, 254, 1),
-(2, 'users', 'a', 0, 254, 1),
-(3, 'users', 'a', 0, 255, 1),
-(4, 'users', 'a', 3, 128, 1),
-(5, 'users', 'a', 255, 255, 1),
-(6, 'users', 'a', 3, 0, 1),
 (1, 'structure', 'a', 0, 255, 1),
 (2, 'structure', 'a', 0, 255, 1),
 (3, 'structure', 'a', 0, 255, 1),
@@ -139,15 +133,8 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','title','19','title_header_index',1,'{MAINTITLE} - {DESCRIPTION}','{MAINTITLE} - {DESCRIPTION}','',''),
 ('core','title','98','subject_mail',1,'{SITE_TITLE} - {MAIL_SUBJECT}','{SITE_TITLE} - {MAIL_SUBJECT}','',''),
 ('core','title','99','body_mail',0,'{MAIL_BODY}\n\n{SITE_TITLE} - {SITE_URL}\n{SITE_DESCRIPTION}','{MAIL_BODY}\n\n{SITE_TITLE} - {SITE_URL}\n{SITE_DESCRIPTION}','',''),
-('core','users','01','disablereg',3,'0','0','',''),
 ('core','users','02','disablewhosonline',3,'0','0','',''),
-('core','users','03','maxusersperpage',1,'50','50','',''),
-('core','users','04','regrequireadmin',3,'0','0','',''),
-('core','users','05','regnoactivation',3,'0','0','',''),
-('core','users','06','useremailchange',3,'0','0','',''),
-('core','users','07','user_email_noprotection',3,'0','0','',''),
 ('core','users','08','usertextimg',3,'0','0','',''),
-('core','users','09','usertextmax',1,'300','300','',''),
 ('core','users','10','forcerememberme',3,'0','0','',''),
 ('core','users','11','timedout',2,'1200','1200','30,60,120,300,600,900,1200,1800,2400,3600',''),
 ('core','version','01','revision',0,'','','','');
@@ -166,8 +153,7 @@ CREATE TABLE `cot_core` (
 
 INSERT INTO `cot_core` (`ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_lock`) VALUES
 ('admin', 'Administration panel', '0.7.0', 1, 1),
-('message', 'Messages', '0.7.0', 1, 1),
-('users', 'Users', '0.7.0', 1, 1);
+('message', 'Messages', '0.7.0', 1, 1);
 
 CREATE TABLE `cot_extra_fields` (
   `field_location` varchar(255) collate utf8_unicode_ci NOT NULL,
@@ -278,7 +264,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.4-001'),
+('revision', '0.9.4-002'),
 ('branch', 'siena');
 
 CREATE TABLE `cot_users` (

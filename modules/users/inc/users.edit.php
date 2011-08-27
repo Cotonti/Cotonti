@@ -250,7 +250,7 @@ foreach (cot_getextplugins('users.edit.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_tplfile(array('users', 'edit', $usr['maingrp']), 'core');
+$mskin = cot_tplfile(array('users', 'edit', $usr['maingrp']), 'module');
 $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');

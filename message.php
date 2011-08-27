@@ -48,7 +48,7 @@ switch ($msg)
 
 	case '100':
 		$rd = 2;
-		$ru = cot_url('users', 'm=auth' . (empty($redirect) ? '' : "&redirect=$redirect"));
+		$ru = cot_url('login', (empty($redirect) ? '' : "redirect=$redirect"));
 		break;
 
 	case '102':
@@ -122,7 +122,7 @@ switch ($msg)
 				break;
 			}
 		}
-		$ru = cot_url('users', 'm=auth' . (empty($redirect) ? '' : "&redirect=$redirect"));
+		$ru = cot_url('login', (empty($redirect) ? '' : "redirect=$redirect"));
 		break;
 }
 
