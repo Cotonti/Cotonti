@@ -109,35 +109,6 @@ function add_user($email, $name = null, $password = null, $country = '', $timezo
 }
 
 /**
- * Returns group link (button)
- *
- * @param int $grpid Group ID
- * @return string
- */
-function cot_build_group($grpid)
-{
-	if (empty($grpid))
-		return '';
-	global $cot_groups, $L;
-
-	if ($cot_groups[$grpid]['hidden'])
-	{
-		if (cot_auth('users', 'a', 'A'))
-		{
-			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid]['title'] . ' (' . $L['Hidden'] . ')');
-		}
-		else
-		{
-			return $L['Hidden'];
-		}
-	}
-	else
-	{
-		return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid]['title']);
-	}
-}
-
-/**
  * Builds list of user's groups, editable or not
  *
  * @param int $userid Edited user ID
@@ -220,24 +191,6 @@ function cot_selectbox_gender($check, $name)
 		$titlelist[] = $L['Gender_' . $i];
 	}
 	return cot_selectbox($check, $name, $genlist, $titlelist, false);
-}
-
-/**
- * Checks whether user is online
- *
- * @param int $id User ID
- * @return bool
- */
-function cot_userisonline($id)
-{
-	global $cot_usersonline;
-
-	$res = FALSE;
-	if (is_array($cot_usersonline))
-	{
-		$res = (in_array($id, $cot_usersonline)) ? TRUE : FALSE;
-	}
-	return ($res);
 }
 
 ?>

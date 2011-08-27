@@ -1671,6 +1671,35 @@ function cot_build_user($id, $user, $extra_attrs = '')
 }
 
 /**
+ * Returns group link (button)
+ *
+ * @param int $grpid Group ID
+ * @return string
+ */
+function cot_build_group($grpid)
+{
+	if (empty($grpid))
+		return '';
+	global $cot_groups, $L;
+
+	if ($cot_groups[$grpid]['hidden'])
+	{
+		if (cot_auth('users', 'a', 'A'))
+		{
+			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid]['title'] . ' (' . $L['Hidden'] . ')');
+		}
+		else
+		{
+			return $L['Hidden'];
+		}
+	}
+	else
+	{
+		return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid]['title']);
+	}
+}
+
+/**
  * Returns user group icon
  *
  * @param string $src Image file path
@@ -1780,10 +1809,13 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				$temp_array['GROUPS'] = cot_build_groupsms($user_data['user_id'], FALSE, $user_data['user_maingrp']);
 			}
 			// Extra fields
-			foreach ($cot_extrafields[$db_users] as $i => $row)
+			if (isset($cot_extrafields[$db_users]))
 			{
-				$temp_array[strtoupper($row['field_name'])] = cot_build_extrafields_data('user', $row, $user_data['user_' . $row['field_name']]);
-				$temp_array[strtoupper($row['field_name']) . '_TITLE'] = isset($L['user_' . $row['field_name'] . '_title']) ? $L['user_' . $row['field_name'] . '_title'] : $row['field_description'];
+				foreach ($cot_extrafields[$db_users] as $i => $row)
+				{
+					$temp_array[strtoupper($row['field_name'])] = cot_build_extrafields_data('user', $row, $user_data['user_' . $row['field_name']]);
+					$temp_array[strtoupper($row['field_name']) . '_TITLE'] = isset($L['user_' . $row['field_name'] . '_title']) ? $L['user_' . $row['field_name'] . '_title'] : $row['field_description'];
+				}
 			}
 		}
 		else
@@ -2124,6 +2156,24 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 	}
 
 	return cot_selectbox("$selected_theme:$selected_scheme", $input_name, $values, $titles, false);
+}
+
+/**
+ * Checks whether user is online
+ *
+ * @param int $id User ID
+ * @return bool
+ */
+function cot_userisonline($id)
+{
+	global $cot_usersonline;
+
+	$res = FALSE;
+	if (is_array($cot_usersonline))
+	{
+		$res = (in_array($id, $cot_usersonline)) ? TRUE : FALSE;
+	}
+	return ($res);
 }
 
 /*
@@ -4450,7 +4500,8 @@ function cot_uriredir_store()
 	if ($_SERVER['REQUEST_METHOD'] != 'POST' // not form action/POST
 		&& empty($_GET['x']) // not xg, hence not form action/GET and not command from GET
 		&& !defined('COT_MESSAGE') // not message location
-		&& (!defined('COT_USERS') // not login/logout location
+		&& !defined('COT_AUTH') // not login/logout location
+		&&	(!defined('COT_USERS')
 			|| empty($_GET['m'])
 			|| !in_array($_GET['m'], array('auth', 'logout', 'register'))
 	)
