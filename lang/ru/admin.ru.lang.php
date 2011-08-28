@@ -18,6 +18,7 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['Extension'] = 'Расширение';
 $L['Extensions'] = 'Расширения';
+$L['Structure'] = 'Структура';
 
 /**
  * Home Section
@@ -77,6 +78,15 @@ $L['core_title'] = 'Заголовки и мета-теги';
 $L['core_users'] = &$L['Users'];
 
 $L['cfg_struct_defaults'] = 'Настройки по умолчанию для структуры';
+
+/**
+ * Shortcuts
+ */
+$L['short_admin'] = 'Админ';
+$L['short_config'] = 'Конфиг';
+$L['short_rights'] = 'Права';
+$L['short_open'] = 'Открыть';
+$L['short_struct'] = 'Структ';
 
 /**
  * Config Section

@@ -1,10 +1,12 @@
+@import url('fb-buttons.css');
+
 /* 1. Elements
 -------------------------------------------------- */
 
 *	{ margin:0; padding:0; }
 html	{ padding:0; }
 
-body	{ font:normal 76%/1.8em Georgia, serif; background:url(img/body.png) repeat-x 0 60px; }
+body	{ font:normal 76%/1.8em Georgia, serif; background:url(img/body.png) repeat-x 0 20px; }
 
 ul 			{ list-style-type:none; }
 ol			{ list-style-position:outside; margin-bottom:5px; padding-left:20px; }
@@ -121,7 +123,7 @@ div.help										{ color:#00529b; background-color:#bde5f8; background-image:ur
 /* 5. Admin Menu
 -------------------------------------------------- */
 
-#adminmenu			{ padding:15px 45px; background:url(img/adminmenu.png) no-repeat 0 0; min-height:160px; width:870px; overflow:auto; }
+#adminmenu			{ padding:15px 45px; background:url(img/adminmenu.png) no-repeat 0 0; min-height:80px; width:870px; overflow:auto; }
 #adminmenu li			{ padding:12px 15px 10px; height:60px; width:115px; background:url(img/menuitem.png) no-repeat 0 0; display:block; float:left; }
 #adminmenu li a		{ color:#3b3b3b; text-align:center; display:block; height:100%; opacity:.6; zoom:1; filter:alpha(opacity=60); }
 #adminmenu li a:hover	{ text-decoration:none; opacity:.8; zoom:1; filter:alpha(opacity=80); }

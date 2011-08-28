@@ -66,7 +66,7 @@ $adminpath = array(array(cot_url('admin'), $L['Adminpanel']));
 
 require $inc_file;
 
-$adminhelp = (empty($adminhelp)) ? $L['None'] : $adminhelp;
+$adminhelp = (empty($adminhelp)) ? '' : $adminhelp;
 
 $title_params = array(
 	'ADMIN' => $L['Administration']
@@ -100,6 +100,13 @@ if (!COT_AJAX)
 			'title' => $L['Configuration']
 		);
 		$admin_menu[] = array(
+			'code' => 'structure',
+			'url' => cot_url('admin', 'm=structure'),
+			'icon' => $R['admin_menu_icon_structure'],
+			'class' => $m == 'structure' ? 'sel' : '',
+			'title' => $L['Structure']
+		);
+		$admin_menu[] = array(
 			'code' => 'extensions',
 			'url' => cot_url('admin', 'm=extensions'),
 			'icon' => $R['admin_menu_icon_extensions'],
@@ -127,28 +134,28 @@ if (!COT_AJAX)
 			'title' => $L['Other']
 		);
 	}
-	// Module admin
-	foreach ($cot_modules as $code => $mod)
-	{
-		$info = cot_infoget($cfg['modules_dir'] . "/$code/$code.setup.php", 'COT_EXT');
-		if (!empty($info['Admin_icon']))
-		{
-			if (file_exists(cot_langfile($code, 'module')))
-			{
-				require_once cot_langfile($code, 'module');
-				$title = $L[ucfirst($code)];
-			};
-			$title = isset($L[$info['Name']]) ? $L[$info['Name']] : $info['Name'];
-			$src = $cfg['modules_dir'] . "/$code/" . trim($info['Admin_icon']);
-			$admin_menu[] = array(
-				'code' => $code,
-				'url' => cot_url('admin', "m=$code"),
-				'icon' => cot_rc('admin_menu_icon_module', array('code' => $code, 'src' => $src, 'title' => $title)),
-				'class' => $m == $code ? 'sel' : '',
-				'title' => $title
-			);
-		}
-	}
+//	// Module admin
+//	foreach ($cot_modules as $code => $mod)
+//	{
+//		$info = cot_infoget($cfg['modules_dir'] . "/$code/$code.setup.php", 'COT_EXT');
+//		if (!empty($info['Admin_icon']))
+//		{
+//			if (file_exists(cot_langfile($code, 'module')))
+//			{
+//				require_once cot_langfile($code, 'module');
+//				$title = $L[ucfirst($code)];
+//			};
+//			$title = isset($L[$info['Name']]) ? $L[$info['Name']] : $info['Name'];
+//			$src = $cfg['modules_dir'] . "/$code/" . trim($info['Admin_icon']);
+//			$admin_menu[] = array(
+//				'code' => $code,
+//				'url' => cot_url('admin', "m=$code"),
+//				'icon' => cot_rc('admin_menu_icon_module', array('code' => $code, 'src' => $src, 'title' => $title)),
+//				'class' => $m == $code ? 'sel' : '',
+//				'title' => $title
+//			);
+//		}
+//	}
 
 	// Rendering
 	foreach ($admin_menu as $item)

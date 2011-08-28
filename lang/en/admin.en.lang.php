@@ -18,6 +18,7 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['Extension'] = 'Extension';
 $L['Extensions'] = 'Extensions';
+$L['Structure'] = 'Structure';
 
 /**
  * Home Section
@@ -77,6 +78,15 @@ $L['core_title'] = 'Titles and Metas';
 $L['core_users'] = &$L['Users'];
 
 $L['cfg_struct_defaults'] = 'Structure Defaults';
+
+/**
+ * Shortcuts
+ */
+$L['short_admin'] = 'Admin';
+$L['short_config'] = 'Config';
+$L['short_rights'] = 'Rights';
+$L['short_open'] = 'Open';
+$L['short_struct'] = 'Struct';
 
 /**
  * Config Section

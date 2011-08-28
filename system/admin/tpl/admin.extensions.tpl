@@ -220,12 +220,12 @@
 	<div class="block">
 		<table class="cells">
 			<tr>
-				<td class="coltop width5">&nbsp;</td>
 				<td class="coltop width25">{PHP.L.Name} {PHP.L.adm_clicktoedit}</td>
-				<td class="coltop width20">{PHP.L.Code}</td>
-				<td class="coltop width10">{PHP.L.Parts}</td>
-				<td class="coltop width20">{PHP.L.Status}</td>
-				<td class="coltop width20">{PHP.L.Action}</td>
+				<td class="coltop width15">{PHP.L.Code}</td>
+				<td class="coltop width5">{PHP.L.Version}</td>
+				<td class="coltop width5">{PHP.L.Parts}</td>
+				<td class="coltop width15">{PHP.L.Status}</td>
+				<td class="coltop width35">{PHP.L.Action}</td>
 			</tr>
 <!-- BEGIN: ROW -->
 <!-- BEGIN: ROW_ERROR_EXT-->
@@ -235,32 +235,27 @@
 			</tr>
 <!-- END: ROW_ERROR_EXT -->
 			<tr>
-				<td class="centerall">
-<!-- IF {PHP.ifthistools} -->
-					{PHP.R.icon_tool}
-<!-- ELSE -->
-					{PHP.R.icon_plug}
-<!-- ENDIF -->
-				</td>
-				<td><a href="{ADMIN_EXTENSIONS_DETAILS_URL}">{ADMIN_EXTENSIONS_NAME}</a></td>
+				<td><a href="{ADMIN_EXTENSIONS_DETAILS_URL}"><strong>{ADMIN_EXTENSIONS_NAME}</strong></a></td>
 				<td>{ADMIN_EXTENSIONS_CODE_X}</td>
+				<td>{ADMIN_EXTENSIONS_VERSION}</td>
 				<td class="centerall">{ADMIN_EXTENSIONS_PARTSCOUNT}</td>
 				<td class="centerall">{ADMIN_EXTENSIONS_STATUS}</td>
-				<td class="centerall action">
+				<td class="action">
 <!-- IF {PHP.totalinstalled} -->
-					<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_EDIT_URL}">{PHP.R.admin_icon_config}</a>
-<!-- ENDIF -->
-<!-- IF {PHP.totalinstalled} -->
-					<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a>
-<!-- ENDIF -->
-<!-- IF {PHP.ifthistools} -->
-					<a title="{PHP.L.Admin}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}">{PHP.R.admin_icon_tools}</a>
-<!-- ENDIF -->
-<!-- IF {PHP.if_plg_standalone} -->
-					<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL}">{PHP.R.admin_icon_jumpto}</a>
+					
+					<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_EDIT_URL}" class="button">{PHP.L.short_config}</a>
 <!-- ENDIF -->
 <!-- IF {PHP.ifstruct} -->
-					<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}">{PHP.R.admin_icon_structure}</a>
+					<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}" class="button">{PHP.L.short_struct}</a>
+<!-- ENDIF -->
+<!-- IF {PHP.totalinstalled} -->
+					<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a>
+<!-- ENDIF -->
+<!-- IF {PHP.ifthistools} -->
+					<a title="{PHP.L.Administration}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}" class="button">{PHP.L.short_admin}</a>
+<!-- ENDIF -->
+<!-- IF {PHP.if_plg_standalone} -->
+					<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL}" class="button">{PHP.L.Open}</a>
 <!-- ENDIF -->
 				</td>
 			</tr>

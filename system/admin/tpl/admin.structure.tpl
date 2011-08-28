@@ -1,3 +1,24 @@
+<!-- BEGIN: LIST -->
+<h2>{PHP.L.Modules}</h2>
+	<div class="block">
+		<table class="cells">
+<!-- BEGIN: ADMIN_STRUCTURE_EXT -->
+			<tr>
+				<td class="centerall width10">{PHP.R.icon_tool}</td>
+				<td class="width90"><a href="{ADMIN_STRUCTURE_EXT_URL}">{ADMIN_STRUCTURE_EXT_NAME}</a></td>
+			</tr>
+<!-- END: ADMIN_STRUCTURE_EXT -->
+<!-- BEGIN: ADMIN_STRUCTURE_EMPTY -->
+			<tr>
+				<td colspan="2">{PHP.L.adm_listisempty}</td>
+			</tr>
+<!-- END: ADMIN_STRUCTURE_EMPTY -->
+		</table>
+</div>
+
+<h2><a href="{ADMIN_STRUCTURE_EXFLDS_URL}">{PHP.L.adm_extrafields}</a></h2>
+<!-- END: LIST -->
+
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Structure}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
