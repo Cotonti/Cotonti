@@ -194,6 +194,22 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
+	
+	// Emit initial message
+	if ($update)
+	{
+		cot_message(cot_rc('ext_updating', array(
+			'type' => $is_module ? $L['Module'] : $L['Plugin'],
+			'name' => $name
+		)));
+	}
+	else
+	{
+		cot_message(cot_rc('ext_installing', array(
+			'type' => $is_module ? $L['Module'] : $L['Plugin'],
+			'name' => $name
+		)));
+	}
 
     // Check setup file and tags
     $setup_file = $path . "/$name.setup.php";
@@ -544,6 +560,12 @@ function cot_extension_uninstall($name, $is_module = false)
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
 		. "/$name";
+	
+	// Emit initial message
+	cot_message(cot_rc('ext_uninstalling', array(
+		'type' => $is_module ? $L['Module'] : $L['Plugin'],
+		'name' => $name
+	)));
 
     // Remove bindings
     cot_plugin_remove($name);
