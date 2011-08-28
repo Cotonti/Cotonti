@@ -205,7 +205,7 @@ else
 
 	$pagenav = cot_pagenav('admin', 'm=extrafields&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-	$field_types = array('input', 'inputint', 'currency', 'double', 'textarea', 'select', 'checkbox', 'radio', 'datetime', 'country', 'file'/* , 'filesize' */);
+	$field_types = array('input', 'inputint', 'currency', 'double', 'textarea', 'select', 'checkbox', 'radio', 'datetime', 'country', 'range', 'file'/* , 'filesize' */);
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */

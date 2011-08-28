@@ -150,10 +150,7 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 			{
 				foreach($cot_extrafields[$db_users] as $i => $row_extf) 
 				{ 
-					if ($row_extf['field_type']=='file')
-					{
-						 @unlink($cfg['extrafield_files_dir']."/".$sql['user_'.$row_extf['field_name']]); 
-					}
+					cot_extrafield_unlinkfiles($sql['user_'.$row_extf['field_name']], $row_extf);
 				}
 				
 				$sql = $db->delete($db_users, "user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");

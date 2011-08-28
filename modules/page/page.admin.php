@@ -192,10 +192,7 @@ elseif ($a == 'delete')
 
 		foreach($cot_extrafields[$db_pages] as $i => $row_extf)
 		{
-			if ($row_extf['field_type']=='file')
-			{
-				 @unlink($cfg['extrafield_files_dir']."/".$sql_page['page_'.$row_extf['field_name']]);
-			}
+			cot_extrafield_unlinkfiles($sql_page['page_'.$row_extf['field_name']], $row_extf);
 		}
 
 		$sql_page = $db->delete($db_pages, "page_id=$id");

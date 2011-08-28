@@ -67,10 +67,7 @@ if ($a=='update')
 
 		foreach($cot_extrafields[$db_users] as $i => $row_extf) 
 		{ 
-			if ($row_extf['field_type']=='file')
-			{
-				 @unlink($cfg['extrafield_files_dir']."/".$row1['user_'.$row_extf['field_name']]); 
-			}
+			cot_extrafield_unlinkfiles($row1['user_'.$row_extf['field_name']], $row_extf);
 		}
 		
 		if (cot_import('ruserdelpfs','P','BOL'))// TODO PFS SEPARATE

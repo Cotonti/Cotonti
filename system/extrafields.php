@@ -78,15 +78,31 @@ function cot_build_extrafields($name, $extrafield, $data)
 			break;
 
 		case 'datetime':
+			global $sys;
+			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
+			list($min, $max) = explode(",",$extrafield['field_params'], 2);
+			$max = (int)$max > 0 ? $max : 2030;
+			$min =  (int)$min > 0 ? $min : 2000;
+			
+			$data = (mb_substr($data, 0, 1) == "+") ? $sys['now_offset'] + (int)(mb_substr($data, 1)) : $data;
+			$data = (mb_substr($data, 0, 1) == "-") ? $sys['now_offset'] - (int)(mb_substr($data, 1)) : $data;
+			
 			$R["input_date_{$rc_name}"] = (!empty($R["input_date_{$rc_name}"])) ? $R["input_date_{$rc_name}"] : $extrafield['field_html'];
-			$result = cot_selectbox_date($data, 'long', $name);
+			$result = cot_selectbox_date((int)$data, 'long', $name, (int)$max, (int)$min);
 			break;
 
 		case 'country':
 			$R["input_select_{$rc_name}"] = (!empty($R["input_select_{$rc_name}"])) ? $R["input_select_{$rc_name}"] : $extrafield['field_html'];
 			global $cot_countries;
 			$result = cot_selectbox_countries(trim($data), $name, false);
-			break;		
+			break;	
+		
+		case 'range':
+			$R["input_select_{$rc_name}"] = (!empty($R["input_select_{$rc_name}"])) ? $R["input_select_{$rc_name}"] : $extrafield['field_html'];
+			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
+			list($min, $max) = explode(",",$extrafield['field_params'], 2);
+			$result = cot_selectbox(trim($data), $name, range((int)$min, (int)$max));
+			break;
 		
 		case 'file':
 			$R["input_text_{$rc_name}"] = (!empty($R["input_text_{$rc_name}"])) ? $R["input_text_{$rc_name}"] : $extrafield['field_html'];
@@ -119,7 +135,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 	{
 		case 'input':
 			$import = ($extrafield['field_parse'] == 'Text') ? cot_import($inputname, $source, 'TXT') : cot_import($inputname, $source, 'HTM');
-			if (!empty($extrafield['field_variants']) && !is_null($import) && !preg_match($extrafield['field_variants'], $import))
+			if (!empty($extrafield['field_params']) && !is_null($import) && !preg_match($extrafield['field_params'], $import))
 			{
 				$L['field_pregmatch_' . $extrafield['field_name']] = (isset($L['field_pregmatch_' . $extrafield['field_name']])) ? $L['field_pregmatch_' . $extrafield['field_name']] : $L['field_pregmatch'];
 				cot_error('field_pregmatch_' . $extrafield['field_name'], $name);
@@ -127,13 +143,28 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			break;
 
 		case 'inputint':
+			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
+			list($min, $max) = explode(",",$extrafield['field_params'], 2);
 			$import = cot_import($inputname, $source, 'INT');
 			$import = ((int)$import > 0) ? (int)$import : 0;
+			
+			if ((int)$min > 0 || (int)$max > 0)
+			{
+				$import = ($min != "" && (int)$min > $s_year) ? $min : $import;
+				$import = ($max != "" && (int)$max < $s_year) ? $max : $import;
+			}
 			break;
 		case 'currency':
 		case 'double':	
+			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
+			list($min, $max) = explode(",",$extrafield['field_params'], 2);
 			$import = cot_import($inputname, $source, 'NUM');
 			$import = (doubleval($import) != 0) ? doubleval($import) : 0;
+			if ((float)$min > 0 || (float)$max > 0)
+			{
+				$import = ($min != "" && (float)$min > $s_year) ? $min : $import;
+				$import = ($max != "" && (float)$max < $s_year) ? $max : $import;
+			}
 			break;
 
 		case 'textarea':
@@ -157,13 +188,36 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			break;
 
 		case 'datetime':
+			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
+			list($min, $max) = explode(",",$extrafield['field_params'], 2);
+			
 			$import = cot_import_date($inputname, true, false, $source);
+			if ((int)$min > 0 || (int)$max > 0)
+			{
+				list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $utime));
+				if ($min > $s_year)
+				{
+					$import=mktime($s_hour, $s_minute, 0, $s_month, $s_day, $min);
+				}
+				if ($max < $s_year)
+				{
+					$import=mktime($s_hour, $s_minute, 0, $s_month, $s_day, $max);
+				}							
+			}
 			break;
 		
 		case 'country':
 			$import = cot_import($inputname, $source,'ALP');
 			break;	
-
+		
+		case 'range':	
+			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
+			list($min, $max) = explode(",",$extrafield['field_params'], 2);
+			$import = cot_import($inputname, $source,'INT');
+			$import ($import > (int)$max) ? '' : $import;
+			$import ($import < (int)min) ? '' : $import;
+			break;
+		
 		case 'file':
 			global $lang, $cot_translit, $exfldfiles, $exfldsize, $cfg, $uploadfiles;
 			if ($source == 'P')
@@ -179,24 +233,40 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			{
 				$fname = mb_substr($import['name'], 0, mb_strrpos($import['name'], '.'));
 				$ext = mb_strtolower(mb_substr($import['name'], mb_strrpos($import['name'], '.') + 1));
+				
+				//check extension
+				$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', mb_strtolower($extrafield['field_variants']));
+				$ext_array = explode(",", trim($extrafield['field_variants']));
+				
+				if(in_array($ext, $ext_array))
+				{
+					$fname = ($lang != 'en' && is_array($cot_translit)) ? strtr($fname, $cot_translit) : '';
+					$fname = str_replace(' ', '_', $fname);
+					$fname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
+					$fname = str_replace('..', '.', $fname);
+					$fname = (empty($fname)) ? cot_unique() : $fname;
 
-				$fname = ($lang != 'en' && is_array($cot_translit)) ? strtr($fname, $cot_translit) : '';
-				$fname = str_replace(' ', '_', $fname);
-				$fname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
-				$fname = str_replace('..', '.', $fname);
-				$fname = (empty($fname)) ? cot_unique() : $fname;
+					$fname .= (file_exists("{$cfg['extrafield_files_dir']}/$fname.$ext") && $oldvalue != $fname . '.' . $ext) ? date("YmjGis") : '';
 
-				$fname .= (file_exists("{$cfg['extrafield_files_dir']}/$fname.$ext") && $oldvalue != $fname . '.' . $ext) ? date("YmjGis") : '';
+					$fname .= '.' . $ext;
+					
+					$extrafield['field_params'] = (!empty($extrafield['field_params'])) ? $extrafield['field_params'] : $cfg['extrafield_files_dir'];
+					$extrafield['field_params'] .= (mb_substr($extrafield['field_params'], -1) == '/') ? '' : '/';
 
-				$fname .= '.' . $ext;
-
-				$file['old'] = (!empty($oldvalue) && ($import['delete'] || $import['tmp_name'])) ? "{$cfg['extrafield_files_dir']}/$oldvalue" : '';
-				$file['field'] = $extrafield['field_name'];
-				$file['tmp'] = (!$import['delete']) ? $import['tmp_name'] : '';
-				$file['new'] = (!$import['delete']) ? "{$cfg['extrafield_files_dir']}/$fname" : '';
-				$exfldsize[$extrafield['field_name']] = $import['size'];
-				$uploadfiles[] = $file;
-				$import = $fname;
+					$file['old'] = (!empty($oldvalue) && ($import['delete'] || $import['tmp_name'])) ? $extrafield['field_params'].$oldvalue : '';
+					$file['field'] = $extrafield['field_name'];
+					$file['tmp'] = (!$import['delete']) ? $import['tmp_name'] : '';
+					$file['new'] = (!$import['delete']) ? $extrafield['field_params'].$fname : '';
+					$exfldsize[$extrafield['field_name']] = $import['size'];
+					$uploadfiles[] = $file;
+					$import = $fname;
+				}
+				else
+				{
+					cot_error('field_extension_' . $extrafield['field_name'], $name);
+					$exfldsize[$extrafield['field_name']] = null;
+					$import = null;
+				}
 			}
 			elseif (is_array($import) && $import['delete'])
 			{
@@ -265,6 +335,7 @@ function cot_build_extrafields_data($name, $extrafield, $value)
 		case 'currency':
 		case 'double':	
 		case 'textarea':
+		case 'range':	
 		default:
 			$value = (is_null($value)) ? '' : $value;
 			$value = cot_parse($value, ($extrafield['field_parse'] == 'Text') ? false : true);
@@ -300,6 +371,7 @@ function cot_default_html_construction($type)
 		
 		case 'country':
 		case 'select':
+		case 'range':	
 			$html = $R['input_select'];
 			break;
 
@@ -318,7 +390,7 @@ function cot_default_html_construction($type)
 		case 'file':
 			$html = $R['input_text'] . '|' . $R['input_checkbox'];
 			break;
-
+	
 		case 'filesize':
 			$html = '';
 			break;
@@ -394,6 +466,10 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 	}
 	switch ($type)
 	{
+		case 'select':
+		case 'radio':
+		case 'range':
+		case 'file':
 		case 'input': $sqltype = "VARCHAR(255)";
 			break;
 		case 'inputint': $sqltype = "int(11) NOT NULL default '0'";
@@ -404,17 +480,11 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 			break;		
 		case 'textarea': $sqltype = 'TEXT';
 			break;
-		case 'select': $sqltype = "VARCHAR(255)";
-			break;
 		case 'checkbox': $sqltype = 'BOOL';
-			break;
-		case 'radio': $sqltype = "VARCHAR(255)";
 			break;
 		case 'datetime': $sqltype = "int(11) NOT NULL default '0'";
 			break;
 		case 'country': $sqltype = "CHAR(2)";
-			break;
-		case 'file': $sqltype = "VARCHAR(255)";
 			break;
 		case 'filesize': $sqltype = "int(11) NOT NULL";
 			break;
@@ -502,6 +572,10 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 
 	switch ($type)
 	{
+		case 'select':
+		case 'radio':
+		case 'range':
+		case 'file':
 		case 'input': $sqltype = "VARCHAR(255)";
 			break;
 		case 'inputint': $sqltype = "int(11) NOT NULL default '0'";
@@ -512,17 +586,11 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 			break;		
 		case 'textarea': $sqltype = 'TEXT';
 			break;
-		case 'select': $sqltype = "VARCHAR(255)";
-			break;
 		case 'checkbox': $sqltype = 'BOOL';
-			break;
-		case 'radio': $sqltype = "VARCHAR(255)";
 			break;
 		case 'datetime': $sqltype = "int(11) NOT NULL default '0'";
 			break;
 		case 'country': $sqltype = "CHAR(2)";
-			break;
-		case 'file': $sqltype = "VARCHAR(255)";
 			break;
 		case 'filesize': $sqltype = "int(11) NOT NULL";
 			break;
@@ -615,6 +683,25 @@ function cot_extrafield_movefiles()
 			{
 				@move_uploaded_file($uploadfile['tmp'], $uploadfile['new']);
 			}
+		}
+	}
+}
+
+/**
+ * Delete files in extrafield array
+ * @param string $fielddata field data
+ * @param array $extrafields Extra fields data
+ */
+function cot_extrafield_unlinkfiles($fielddata, $extrafield)
+{
+	global $cfg;
+	if ($extrafield['field_type'] == 'file')
+	{
+		$extrafield['field_params'] = (!empty($extrafield['field_params'])) ? $extrafield['field_params'] : $cfg['extrafield_files_dir'];
+		$extrafield['field_params'] .= (mb_substr($extrafield['field_params'], -1) == '/') ? '' : '/';
+		if($extrafield['field_params'].$fielddata)
+		{
+			@unlink($extrafield['field_params'].$fielddata);
 		}
 	}
 }
