@@ -18,8 +18,6 @@ require_once cot_incfile('configuration');
 
 $t = new XTemplate(cot_tplfile('admin.config', 'core'));
 
-$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
-
 $sub = cot_import('sub', 'G', 'TXT');
 if (empty($sub))
 {
@@ -214,15 +212,17 @@ switch($n)
 		
 		if ($o == 'core')
 		{
+			$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
 			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub), $L['core_'.$p]);
 		}
 		else
 		{
+			$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 			$plmod = $o == 'module' ? 'mod' : 'pl';
 			$plmod_title = $o == 'module' ? $L['Module'] : $L['Plugin'];
 			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $plmod_title.' ('.$o.':'.$p.')');
 			$edit_title = empty($sub) ? $L['Edit'] : $structure[$p][$sub]['title'] . ' - ' . $L['Edit'];
-			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub), $L['Edit']);
+			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub), $L['Configuration']);
 		}
 		
 		if ($o != 'core' && file_exists(cot_langfile($p, $o)))
