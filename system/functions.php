@@ -2822,6 +2822,10 @@ function cot_tplfile($base, $type = 'module')
 		{
 			$basename = 'admin';
 			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/$basename/";
+			if (!empty($cfg['admintheme']))
+			{
+				$scan_prefix[] = "{$cfg['themes_dir']}/$basename/{$cfg['admintheme']}/";
+			}
 		}
 		else
 		{
