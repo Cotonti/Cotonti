@@ -10,8 +10,8 @@
 <meta http-equiv="pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-cache" />
 <meta http-equiv="last-modified" content="{HEADER_META_LASTMODIFIED} GMT" />
-{HEADER_HEAD}
 {HEADER_BASEHREF}
+{HEADER_HEAD}
 <link rel="shortcut icon" href="favicon.ico" />
 <link href="{PHP.cfg.system_dir}/admin/tpl/admin.css" type="text/css" rel="stylesheet" />
 {HEADER_COMPOPUP}
