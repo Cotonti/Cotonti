@@ -25,8 +25,11 @@ $L['info_desc'] = 'Contact form for user feedback delivered via email and record
 
 $L['contact_view'] = 'View message';
 $L['contact_markread'] = 'Mark as read';
+$L['contact_read'] = 'Read';
 $L['contact_markunread'] = 'Mark as unread';
+$L['contact_unread'] = 'Unread';
 $L['contact_new'] = 'new message';
+$L['contact_shortnew'] = 'new';
 $L['contact_sent'] = 'Last reply';
 $L['contact_nosubject'] = 'No subject';
 

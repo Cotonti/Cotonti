@@ -2,11 +2,10 @@
 
 		<h2>{PHP.L.Forums}</h2>
 
-		<div class="block">
-			<ul class="follow">
-				<li><a title="{PHP.L.Configuration}" href="{ADMIN_FORUMS_URL_CONFIG}">{PHP.L.Configuration}</a></li>
-				<li><a href="{ADMIN_FORUMS_URL_STRUCTURE}">{PHP.L.Categories}</a></li>
-			</ul>
+		<div class="block button-toolbar">
+			<a title="{PHP.L.Configuration}" href="{ADMIN_FORUMS_URL_CONFIG}" class="button">{PHP.L.Configuration}</a>
+			<a href="{ADMIN_FORUMS_URL_STRUCTURE}" class="button">{PHP.L.Categories}</a>
+
 		</div>
 		
 		<div class="block">

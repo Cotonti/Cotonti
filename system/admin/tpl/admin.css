@@ -138,7 +138,7 @@ div.help										{ color:#00529b; background-color:#bde5f8; background-image:ur
 table td 	{ vertical-align:top; }
 
 table.cells 	{ border-collapse:collapse; width:100%; }
-table.cells td	{ padding:5px 10px; border:1px solid #a4b6c8; }
+table.cells td	{ padding:5px 5px; border:1px solid #a4b6c8; }
 
 table.flat 	{ border-collapse:collapse; width:100%; }
 table.flat td	{ padding:0; border:0; }

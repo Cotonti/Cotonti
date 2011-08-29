@@ -34,7 +34,7 @@
 						</td>
 <!-- END: ROW_ITEMS -->
 						<td class="textcenter">{ADMIN_RIGHTSBYITEM_ROW_USER}{ADMIN_RIGHTSBYITEM_ROW_PRESERVE}</td>
-						<td class="centerall"><a title="{PHP.L.Open}" href="{ADMIN_RIGHTSBYITEM_ROW_JUMPTO}">{PHP.R.admin_icon_jumpto}</a></td>
+						<td class="centerall"><a title="{PHP.L.Open}" href="{ADMIN_RIGHTSBYITEM_ROW_JUMPTO}" class="button">{PHP.L.Open}</a></td>
 					</tr>
 <!-- END: RIGHTSBYITEM_ROW -->
 					<tr>

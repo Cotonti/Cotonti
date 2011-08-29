@@ -6,21 +6,20 @@
 
 	<table class="cells">
 		<tr>
-			<td class="coltop width15">{PHP.L.Date}</td>
-			<td class="coltop width20">{PHP.L.User}</td>
-			<td class="coltop width45">{PHP.L.Message}</td>
-			<td class="coltop width20">{PHP.L.Action}</td>
+			<td class="coltop width10">{PHP.L.Date}</td>
+			<td class="coltop width15">{PHP.L.User}</td>
+			<td class="coltop width50">{PHP.L.Message}</td>
+			<td class="coltop width25">{PHP.L.Action}</td>
 		 </tr>
 <!-- BEGIN: DATA -->
 		 <tr>
-			<td class="textcenter {CONTACT_ODDEVEN}">{CONTACT_DATE}<!-- IF {CONTACT_VAL} == val --><br /><span style="color:#900;">[ {PHP.L.contact_new} ]</span><!-- ENDIF --></td>
+			<td class="textcenter {CONTACT_ODDEVEN}">{CONTACT_DATE}<!-- IF {CONTACT_VAL} == val --><br /><span style="color:#900;">[ {PHP.L.contact_shortnew} ]</span><!-- ENDIF --></td>
 			<td class="{CONTACT_ODDEVEN}">{CONTACT_USER}<br />{CONTACT_EMAIL}</td>
 			<td class="{CONTACT_ODDEVEN}">{CONTACT_TEXTSHORT}</td>
 			<td class="centerall {CONTACT_ODDEVEN}">
-				<a href="{CONTACT_VIEWLINK}" title="{PHP.L.View}"><img src="{PHP.cfg.plugins_dir}/contact/images/view.png" alt="{PHP.L.View}" /></a>
-				<a href="{CONTACT_READLINK}" title="{PHP.L.contact_markread}"><img src="{PHP.cfg.plugins_dir}/contact/images/read.png" alt="Mark as read" /></a>
-				<a href="{CONTACT_UNREADLINK}" title="{PHP.L.contact_markunread}"><img src="{PHP.cfg.plugins_dir}/contact/images/unread.png" alt="Mark as unread" /></a>
-				<a href="{CONTACT_DELLINK}" title="{PHP.L.Delete}"><img src="{PHP.cfg.plugins_dir}/contact/images/delete.png" alt="{PHP.L.Delete}" /></a>
+<a href="{CONTACT_VIEWLINK}" title="{PHP.L.View}" class="button special">{PHP.L.short_open}</a>
+<!-- IF {CONTACT_VAL} == val --><a href="{CONTACT_READLINK}" title="{PHP.L.contact_markread}" class="button confirm">{PHP.L.contact_read}</a>
+<!-- ELSE --><a href="{CONTACT_UNREADLINK}" title="{PHP.L.contact_markunread}" class="button">{PHP.L.contact_unread}</a><!-- ENDIF --><a href="{CONTACT_DELLINK}" title="{PHP.L.Delete}" class="button">{PHP.L.Delete}</a>
 			</td>
 		 </tr>
 <!-- END: DATA -->

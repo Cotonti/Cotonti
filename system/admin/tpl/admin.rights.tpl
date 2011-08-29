@@ -49,7 +49,7 @@
 						<!-- ENDIF -->
 					</td>
 <!-- END: RIGHTS_ROW_ITEMS -->
-					<td class="centerall"><a title="{PHP.L.Rights}" href="{ADMIN_RIGHTS_ROW_RIGHTSBYITEM}">{PHP.R.admin_icon_rights2}</a></td>
+					<td class="centerall"><a title="{PHP.L.Rights}" href="{ADMIN_RIGHTS_ROW_RIGHTSBYITEM}" class="button">{PHP.L.Rights}</a></td>
 					<td class="textcenter">{ADMIN_RIGHTS_ROW_USER}{ADMIN_RIGHTS_ROW_PRESERVE}</td>
 				</tr>
 <!-- END: RIGHTS_ROW -->

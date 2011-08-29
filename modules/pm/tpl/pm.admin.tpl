@@ -1,8 +1,8 @@
 <!-- BEGIN: MAIN -->
 	<h2>{PHP.L.Private_Messages}</h2>
-		<ul class="follow">
-			<li><a title="{PHP.L.Configuration}" href="{ADMIN_PM_URL_CONFIG}">{PHP.L.Configuration}</a></li>
-		</ul>
+		<div class="block button-toolbar">
+			<a title="{PHP.L.Configuration}" href="{ADMIN_PM_URL_CONFIG}" class="button">{PHP.L.Configuration}</a>
+		</div>
 		<table class="cells">
 			<tr>
 				<td class="width85">{PHP.L.adm_pm_totaldb}</td>

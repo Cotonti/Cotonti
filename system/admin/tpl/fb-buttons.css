@@ -6,15 +6,16 @@ http://github.com/necolas/css3-facebook-buttons
 
 /* ------------------------------------------------------------------------------------------------------------- BUTTON */
 
-.button, input[type="submit"] {
+.button, input[type="submit"], input[type="button"], button {
     position: relative;
     z-index: 1;
     overflow: visible;
     display: inline-block;
     padding: 0.3em 0.6em 0.375em;
+    margin: 0.5em 0 0 0;
     border: 1px solid #999;
     border-bottom-color: #888;
-    margin: 0;
+   /* margin: 0;*/
     text-decoration: none;
     text-align: center;
     font: bold 10px/normal 'lucida grande', tahoma, verdana, arial, sans-serif;
@@ -39,13 +40,14 @@ input[type="submit"].small {
     padding: 0em 0.5em 0em !important;
 }
 
-.button:hover,
-.button:focus,
-.button:active {
+.button:hover, input[type="submit"]:hover, input[type="button"]:hover, button:hover, 
+.button:focus, input[type="submit"]:focus, input[type="button"]:focus, button:focus, 
+.button:active input[type="submit"]:active, input[type="button"]:active, button:active {
     border-color: #777 #777 #666;
 }
 
-.button:active, .button.selected {
+.button:active, input[type="submit"]:active, input[type="button"]:active, button:active, 
+.button.selected, input[type="submit"].selected, input[type="button"].selected, button.selected {
     border-color: #aaa;
     background: #ddd;
     filter: none;
@@ -89,7 +91,7 @@ input[type="submit"].small {
 
 /* ............................................................................................................. Submit, etc */
 
-.button.confirm {
+.button.confirm, input[type="submit"].confirm, input[type="button"].confirm, button.confirm {
     border-color: #29447e #29447e #1a356e;
     color: #fff;
     background-color: #5B74A8;
@@ -103,7 +105,7 @@ input[type="submit"].small {
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 #8a9cc2;
 }
 
-.button.confirm:active {
+.button.confirm:active, input[type="submit"].confirm:active, input[type="button"].confirm:active, button.confirm:active {
     border-color: #29447E;
     background: #4F6AA3;
     filter: none;

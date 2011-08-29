@@ -24,6 +24,7 @@ $L['adm_polls_msg916_reset'] = 'Результаты опроса обнулен
 $L['adm_polls_on_page'] = 'на странице';
 $L['adm_polls_polltopic'] = 'Опрос';
 $L['adm_polls_nopolls'] = 'Опросов нет';
+$L['adm_polls_bump'] = 'Поднять';
 
 $L['poll'] = 'Опрос';
 $L['polls_alreadyvoted'] = 'Вы уже проголосовали в этом опросе';

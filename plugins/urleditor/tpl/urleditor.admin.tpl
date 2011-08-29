@@ -37,7 +37,7 @@
 				<td class="centerall">{ADMIN_URLS_ROW_PARTS1}</td>
 				<td class="centerall">{ADMIN_URLS_ROW_PARTS2}</td>
 				<td class="centerall">
-					<a title="{PHP.L.Delete}" href="#" onclick="$(this).parent().parent().remove();return false;">{PHP.R.admin_icon_delete}</a>
+					<a title="{PHP.L.Delete}" href="#" onclick="$(this).parent().parent().remove();return false;">{PHP.L.Delete}</a>
 				</td>
 			</tr>
 <!-- END: ROW -->
@@ -46,7 +46,7 @@
 				<td class="centerall">{ADMIN_URLS_ROW_PARTS1}</td>
 				<td class="centerall">{ADMIN_URLS_ROW_PARTS2}</td>
 				<td class="centerall">
-					<a title="{PHP.L.Delete}" href="#" onclick="$(this).parent().parent().remove();return false;">{PHP.R.admin_icon_delete}</a>
+					<a title="{PHP.L.Delete}" href="#" onclick="$(this).parent().parent().remove();return false;">{PHP.L.Delete}</a>
 				</td>
 			</tr>
 			<tr id="add_rule" style="display:none;" class="nodrop nodrag">

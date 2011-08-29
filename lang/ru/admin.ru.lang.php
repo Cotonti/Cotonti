@@ -349,6 +349,7 @@ $L['adm_delcacheitem'] = 'Элемент кэша удален';
 $L['adm_internalcache'] = 'Внутренний кэш';
 $L['adm_purgeall_done'] = 'Кэш очищен полностью';
 $L['adm_diskcache'] = 'Дисковый кэш';
+$L['adm_cache_showall'] = 'Отобразить все';
 
 /**
  * Other Section

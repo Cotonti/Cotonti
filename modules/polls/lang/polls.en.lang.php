@@ -23,6 +23,7 @@ $L['adm_polls_msg916_deleted'] = 'Successfully deleted!';
 $L['adm_polls_msg916_reset'] = 'Successfully reset!';
 $L['adm_polls_polltopic'] = 'Poll topic';
 $L['adm_polls_nopolls'] = 'There is no polls';
+$L['adm_polls_bump'] = 'Bump';
 
 $L['poll'] = 'Poll';
 $L['polls_alreadyvoted'] = 'You\'ve already voted for this poll.';

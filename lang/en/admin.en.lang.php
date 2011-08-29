@@ -350,6 +350,7 @@ $L['adm_delcacheitem'] = 'Cache item removed';
 $L['adm_internalcache'] = 'Internal cache';
 $L['adm_purgeall_done'] = 'Cache cleared completely';
 $L['adm_diskcache'] = 'Disk cache';
+$L['adm_cache_showall'] = 'Show all';
 
 /**
  * Other Section

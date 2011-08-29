@@ -6,9 +6,9 @@
 			<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
-					<td class="coltop width30">{PHP.L.Parameter}</td>
+					<td class="coltop width35">{PHP.L.Parameter}</td>
 					<td class="coltop width60">{PHP.L.Value}</td>
-					<td class="coltop width10">{PHP.L.Reset}</td>
+					<td class="coltop width5">{PHP.L.Reset}</td>
 				</tr>
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
 <!-- BEGIN: ADMIN_CONFIG_FIELDSET_BEGIN -->
@@ -26,8 +26,8 @@
 						<div class="adminconfigmore">{ADMIN_CONFIG_ROW_CONFIG_MORE}</div>
 					</td>
 					<td class="centerall">
-						<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="ajax">
-							{PHP.R.admin_icon_reset}
+						<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="ajax button">
+							{PHP.L.Reset}
 						</a>
 					</td>
 				</tr>

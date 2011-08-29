@@ -2,11 +2,9 @@
 		<h2>{PHP.L.Users}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
-		<div class="block">
-			<ul class="follow">
-				<li><a title="{PHP.L.Configuration}" href="{ADMIN_USERS_URL}">{PHP.L.Configuration}</a></li>
-				<li><a href="{ADMIN_USERS_EXTRAFIELDS_URL}">{PHP.L.adm_extrafields_desc}</a></li>
-			</ul>
+		<div class="block button-toolbar">
+			<a title="{PHP.L.Configuration}" href="{ADMIN_USERS_URL}" class="button">{PHP.L.Configuration}</a>
+			<a href="{ADMIN_USERS_EXTRAFIELDS_URL}" class="button">{PHP.L.adm_extrafields_desc}</a>
 		</div>
 
 <!-- BEGIN: ADMIN_USERS_DEFAULT -->
@@ -29,8 +27,8 @@
 					<td class="centerall">{ADMIN_USERS_ROW_GRP_COUNT_MEMBERS}</td>
 					<td class="centerall">{ADMIN_USERS_ROW_GRP_DISABLED}</td>
 					<td class="centerall action">
-						<a title="{PHP.L.Rights}" href="{ADMIN_USERS_ROW_GRP_RIGHTS_URL}">{PHP.R.admin_icon_rights}</a>
-						<a title="{PHP.L.Open}" href="{ADMIN_USERS_ROW_GRP_JUMPTO_URL}">{PHP.R.admin_icon_jumpto}</a>
+						<a title="{PHP.L.Rights}" href="{ADMIN_USERS_ROW_GRP_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a>
+						<a title="{PHP.L.Open}" href="{ADMIN_USERS_ROW_GRP_JUMPTO_URL}" class="button special">{PHP.L.short_open}</a>
 					</td>
 				</tr>
 <!-- END: USERS_ROW -->
@@ -149,7 +147,7 @@
 					</tr>
 					<tr>
 						<td>{PHP.L.Rights}:</td>
-						<td><a href="{ADMIN_USERS_EDITFORM_RIGHT_URL}">{PHP.R.admin_icon_rights}</a></td>
+						<td><a href="{ADMIN_USERS_EDITFORM_RIGHT_URL}" class="button">{PHP.L.Rights}</a></td>
 					</tr>
 <!-- IF {PHP.g} > 5 -->
 					<tr>

@@ -1,9 +1,9 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.comments_comments}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
-			<ul class="follow">
-				<li><a title="{PHP.L.Configuration}" href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration}</a></li>
-			</ul>
+			<div class="block button-toolbar">
+				<a title="{PHP.L.Configuration}" href="{ADMIN_COMMENTS_CONFIG_URL}" class="button">{PHP.L.Configuration}</a>
+			</div>
 			<h3>{PHP.L.viewdeleteentries}:</h3>
 			<table class="cells">
 				<tr>
@@ -24,8 +24,8 @@
 					<td class="textcenter">{ADMIN_COMMENTS_DATE}</td>
 					<td>{ADMIN_COMMENTS_TEXT}</td>
 					<td class="centerall action">
-						<a title="{PHP.L.Delete}" href="{ADMIN_COMMENTS_ITEM_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a>
-						<a title="{PHP.L.Open}" href="{ADMIN_COMMENTS_URL}">{PHP.R.admin_icon_jumpto}</a>
+						<a title="{PHP.L.Open}" href="{ADMIN_COMMENTS_URL}" class="button special">{PHP.L.Open}</a><a title="{PHP.L.Delete}" href="{ADMIN_COMMENTS_ITEM_DEL_URL}" class="ajax button">{PHP.L.Delete}</a>
+
 					</td>
 				</tr>
 <!-- END: ADMIN_COMMENTS_ROW -->
