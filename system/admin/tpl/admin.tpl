@@ -9,7 +9,7 @@
 		<!-- END: ADMIN_MENU_ROW -->
 	</ul>
 
-	<h1 class="body">{PHP.L.Crumbs}: {ADMIN_TITLE}</h1>
+	<h1 class="body">{ADMIN_TITLE}</h1>
 
 	<div id="main" class="body clear">
 		<div id="ajaxBlock">

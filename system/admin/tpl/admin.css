@@ -6,7 +6,7 @@
 *	{ margin:0; padding:0; }
 html	{ padding:0; }
 
-body	{ font:normal 76%/1.8em Georgia, serif; background:url(img/body.png) repeat-x 0 20px; }
+body	{ font:normal 76%/1.8em Georgia, serif; background:url(img/body.png) repeat-x 0 58px; }
 
 ul 			{ list-style-type:none; }
 ol			{ list-style-position:outside; margin-bottom:5px; padding-left:20px; }
@@ -45,7 +45,7 @@ hr		{ margin:4px 0 1px; border:1px solid; border-color:#ddd transparent transpar
 
 .col.first, .col4-1.first, .col4-2.first, .col4-3.first, .col3-1.first, .col3-2.first, .col2-1.first	{ margin-left:0; clear:left; }
 
-#footer		{ font-size:.9em; text-align:center; padding:15px; height:50px; background:url(img/footer.png) repeat-x 0 0; }
+#footer		{ font-size:.9em; text-align:center; padding:15px; height:40px; background:url(img/footer.png) repeat-x 0 0; }
 #footer a	{ color:#d3dde7; }
 #footer ul li	{ display:inline; margin:0 5px; }
 

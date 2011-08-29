@@ -182,6 +182,12 @@ input[type="submit"].small {
 }
 
 .button + .button,
+.button + input[type="submit"], 
+.button + input[type="button"], 
+.button + button,
+input[type="submit"] + input[type="submit"],
+input[type="button"] + input[type="button"],
+button + button,
 .button + .button-group,
 .button-group + .button,
 .button-group + .button-group {
