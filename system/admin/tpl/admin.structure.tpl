@@ -90,9 +90,8 @@
 					<td class="coltop width10">{PHP.L.Code}</td>
 					<td class="coltop width20">{PHP.L.Title}</td>
 					<td class="coltop width5">{PHP.L.TPL}</td>
-					<td class="coltop width10">{PHP.L.Locked}</td>
 					<td class="coltop width5">{PHP.L.Pages}</td>
-					<td class="coltop width20">{PHP.L.Action}</td>
+					<td class="coltop width35">{PHP.L.Action}</td>
 				</tr>
 				<!-- BEGIN: ROW -->
 				<tr>
@@ -100,10 +99,13 @@
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_SYM}</td>
-					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_LOCKED}</td>
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
 					<td class="centerall action {ADMIN_STRUCTURE_ODDEVEN}">
-						<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a><a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax">{PHP.R.admin_icon_config}</a><!-- IF {PHP.dozvil} --><a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a><!-- ENDIF --><a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" >{PHP.R.admin_icon_jumpto}</a> <a href="{ADMIN_STRUCTURE_CONFIG_URL}" title="{PHP.L.Config}" >{PHP.R.admin_icon_config}</a></td>
+						<a href="{ADMIN_STRUCTURE_CONFIG_URL}" title="{PHP.L.Config}" class="button">{PHP.L.short_config}</a>
+						<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a>
+						<a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax button">{PHP.L.short_options}</a>
+						<!-- IF {PHP.dozvil} --><a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="ajax confirmLink button">{PHP.L.short_delete}</a><!-- ENDIF -->
+						<a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" class="button">{PHP.L.short_open}</a> </td>
 				</tr>
 				<!-- END: ROW -->
 				<tr>

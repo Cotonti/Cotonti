@@ -84,8 +84,10 @@ $L['cfg_struct_defaults'] = 'Structure Defaults';
  */
 $L['short_admin'] = 'Admin';
 $L['short_config'] = 'Config';
-$L['short_rights'] = 'Rights';
+$L['short_delete'] = 'Delete';
 $L['short_open'] = 'Open';
+$L['short_options'] = 'Options';
+$L['short_rights'] = 'Rights';
 $L['short_struct'] = 'Struct';
 
 /**

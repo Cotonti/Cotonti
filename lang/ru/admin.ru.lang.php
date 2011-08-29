@@ -84,8 +84,10 @@ $L['cfg_struct_defaults'] = 'Настройки по умолчанию для �
  */
 $L['short_admin'] = 'Админ';
 $L['short_config'] = 'Конфиг';
-$L['short_rights'] = 'Права';
+$L['short_delete'] = 'Удалить';
 $L['short_open'] = 'Открыть';
+$L['short_options'] = 'Опции';
+$L['short_rights'] = 'Права';
 $L['short_struct'] = 'Структ';
 
 /**

@@ -34,6 +34,7 @@ foreach (cot_getextplugins('admin.structure.first') as $pl)
 
 if (empty($n))
 {
+	$adminpath[] = array(cot_url('admin', 'm=structure'), $L['Structure']);
 	// Show available module list
 	if (is_array($structure) && count($structure) > 0)
 	{
@@ -98,7 +99,10 @@ else
 			$rstructure['structure_title'] = cot_import($rstructuretitle[$i], 'D', 'TXT');
 			$rstructure['structure_desc'] = cot_import($rstructuredesc[$i], 'D', 'TXT');
 			$rstructure['structure_icon'] = cot_import($rstructureicon[$i], 'D', 'TXT');
-			$rstructure['structure_locked'] = (cot_import($rstructurelocked[$i], 'D', 'BOL')) ? 1 : 0;
+			if (cot_import($rstructurelocked[$i], 'D', 'BOL') != null)
+			{
+				$rstructure['structure_locked'] = (cot_import($rstructurelocked[$i], 'D', 'BOL')) ? 1 : 0;
+			}
 
 			foreach ($cot_extrafields[$db_structure] as $row)
 			{
@@ -287,7 +291,7 @@ else
 		$cat_selectbox = cot_selectbox($row['structure_tpl'], 'rstructuretplforced['.$structure_id.']', array_keys($cat_path), array_values($cat_path), false);
 
 		$t->assign(array(
-			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$durl.'&'.cot_xg()),
+			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_confirm_url(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$durl.'&'.cot_xg(), 'admin')),
 			'ADMIN_STRUCTURE_ID' => $structure_id,
 			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $structure_code, 'size="10" maxlength="255"'),
 			'ADMIN_STRUCTURE_SPACEIMG' => $pathspaceimg,
