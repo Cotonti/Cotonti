@@ -240,8 +240,8 @@
 	</div>
 <!-- END: SECTION -->
 
-	<div class="block">
-		<h3><a href="{ADMIN_EXTENSIONS_HOOKS_URL}">{PHP.L.Hooks}</a></h3>
+	<div class="block button-toolbar">
+		<a href="{ADMIN_EXTENSIONS_HOOKS_URL}" class="button large">{PHP.L.Hooks}</a>
 	</div>
 
 <!-- END: DEFAULT -->
