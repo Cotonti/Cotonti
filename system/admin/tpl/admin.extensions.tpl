@@ -80,18 +80,18 @@
 		<div class="button-toolbar">
 <!-- IF !{PHP.isinstalled} -->
 
-					<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_INSTALL_URL}" class="ajax button special">{PHP.L.adm_opt_install}</a>
+					<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_INSTALL_URL}" class="ajax button special large">{PHP.L.adm_opt_install}</a>
 <!-- ELSE -->
 			<!-- IF {PHP.exists} -->
 
-					<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_UPDATE_URL}" class="ajax button special">{PHP.L.adm_opt_update}</a>
+					<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_UPDATE_URL}" class="ajax button special large">{PHP.L.adm_opt_update}</a>
 			<!-- ENDIF -->
-					<a title="{PHP.L.adm_opt_uninstall_explain}" href="{ADMIN_EXTENSIONS_UNINSTALL_URL}" class="ajax button">{PHP.L.adm_opt_uninstall}</a>
-					<a title="{PHP.L.adm_opt_pauseall_explain}" href="{ADMIN_EXTENSIONS_PAUSE_URL}" class="ajax button">{PHP.L.adm_opt_pauseall}</a>
+					<a title="{PHP.L.adm_opt_uninstall_explain}" href="{ADMIN_EXTENSIONS_UNINSTALL_URL}" class="ajax button large">{PHP.L.adm_opt_uninstall}</a>
+					<a title="{PHP.L.adm_opt_pauseall_explain}" href="{ADMIN_EXTENSIONS_PAUSE_URL}" class="ajax button large">{PHP.L.adm_opt_pauseall}</a>
 
 			<!-- IF {PHP.exists} -->
 
-					<a title="{PHP.L.adm_opt_unpauseall_explain}" href="{ADMIN_EXTENSIONS_UNPAUSE_URL}" class="ajax button">{PHP.L.adm_opt_unpauseall}</a>
+					<a title="{PHP.L.adm_opt_unpauseall_explain}" href="{ADMIN_EXTENSIONS_UNPAUSE_URL}" class="ajax button large">{PHP.L.adm_opt_unpauseall}</a>
 
 			<!-- ENDIF -->
 <!-- ENDIF -->

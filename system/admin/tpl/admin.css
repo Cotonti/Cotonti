@@ -55,8 +55,9 @@ hr		{ margin:4px 0 1px; border:1px solid; border-color:#ddd transparent transpar
 h1,h2,h3,h4,h5,h6 { font-weight:normal; font-size:1em; margin:0; padding:0; position:relative; }
 h1		{ color:#036; margin:0 auto; padding:8px 45px 0; height:52px; width:870px!important; background:url(img/crumbs.png) no-repeat 50% 0; }
 h1 a		{ font-weight:bold; padding:0 10px; }
-h2		{ font:normal 2em "Times New Roman"; margin:10px; padding-bottom:2px; border-bottom:1px solid; }
-h3		{ color:#4f789f; font:normal 1.6em "Times New Roman"; margin:5px 0; }
+h2		{ font:normal 2em "lucida grande",tahoma,verdana,arial,sans-serif; margin:10px; padding-bottom:2px; border-bottom:1px solid; }
+/*h3		{ color:#4f789f; font:normal 1.6em "Times New Roman"; margin:5px 0; }*/
+h3 {  padding: 0 6px; border-top: 1px solid #ccc; background: #f2f2f2; margin-top: 15px;}
 h4		{ font-weight:bold; }
 
 /* 4. Misc
@@ -81,7 +82,7 @@ div.error, div.warning, div.done, div.help		{ line-height:1.8em; margin:20px 0; 
 div.error									{ color:#d8000c; background-color:#ffbaba; background-image:url(../../../images/icons/default/error.png); border:1px solid #d8000c; }
 div.warning									{ color:#9f6000; background-color:#feefb3; background-image:url(../../../images/icons/default/warning.png); border:1px solid #9f6000; }
 div.done										{ color:#4f8a10; background-color:#dff2bf; background-image:url(../../../images/icons/default/done.png); border:1px solid #4f8a10; }
-div.help										{ color:#00529b; background-color:#bde5f8; background-image:url(../../../images/icons/default/help.png); border:1px solid #00529b; }
+div.help										{ color:#000; background-color:#f2f2f2; background-image:url(../../../images/icons/default/help.png); border:1px solid #ccc; }
 
 .margintop10	{ margin-top:10px; }
 .marginright10	{ margin-right:10px; }
@@ -138,16 +139,17 @@ div.help										{ color:#00529b; background-color:#bde5f8; background-image:ur
 table td 	{ vertical-align:top; }
 
 table.cells 	{ border-collapse:collapse; width:100%; }
-table.cells td	{ padding:5px 5px; border:1px solid #a4b6c8; }
+table.cells td	{ padding:7px 5px; border:1px solid #ccc; }
 
 table.flat 	{ border-collapse:collapse; width:100%; }
 table.flat td	{ padding:0; border:0; }
 
 .action a	{ margin:0 2px; }
-.coltop		{ text-align:center; line-height:1.4em; vertical-align:middle; font-size:.9em; background-color:#4f789f!important; color:#fff; }
+.coltop		{ text-align:center; line-height:1.4em; vertical-align:middle; font-size:.9em; background-color:#EDEFF4!important; color:#000;}
 .coltop img	{ vertical-align:middle; }
 .centerall 	{ text-align:center; vertical-align:middle; }
-.valid 		{ height:5em; text-align:center; vertical-align:middle; border:0!important; }
+/*.valid 		{ height:5em; text-align:center; vertical-align:middle; border:0!important; }*/
+.valid
 
 td.group_begin	{ color:#4f789f; border:none!important; }
 td.group_end		{ font-size:0; padding:0!important; border:none!important; }

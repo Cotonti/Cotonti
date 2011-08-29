@@ -44,16 +44,17 @@ input[type="submit"].small {
 .button:focus, input[type="submit"]:focus, input[type="button"]:focus, button:focus, 
 .button:active input[type="submit"]:active, input[type="button"]:active, button:active {
     border-color: #777 #777 #666;
+    text-decoration: none;
+     filter: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;   
 }
 
 .button:active, input[type="submit"]:active, input[type="button"]:active, button:active, 
 .button.selected, input[type="submit"].selected, input[type="button"].selected, button.selected {
     border-color: #aaa;
     background: #ddd;
-    filter: none;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
 }
 
 /* overrides extra padding on button elements in Firefox */
@@ -91,7 +92,7 @@ input[type="submit"].small {
 
 /* ............................................................................................................. Submit, etc */
 
-.button.confirm, input[type="submit"].confirm, input[type="button"].confirm, button.confirm {
+.button.confirm, input[type="submit"].confirm, input[type="button"].confirm, button.confirm, .valid input[type="submit"], .valid button{
     border-color: #29447e #29447e #1a356e;
     color: #fff;
     background-color: #5B74A8;
@@ -105,7 +106,7 @@ input[type="submit"].small {
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 #8a9cc2;
 }
 
-.button.confirm:active, input[type="submit"].confirm:active, input[type="button"].confirm:active, button.confirm:active {
+.button.confirm:active, input[type="submit"].confirm:active, input[type="button"].confirm:active, button.confirm:active, .valid input[type="submit"]:active, .valid button:active {
     border-color: #29447E;
     background: #4F6AA3;
     filter: none;
@@ -219,8 +220,8 @@ button + button,
 /* ------------------------------------------------------------------------------------------------------------- BUTTON CONTAINER */
 /* For mixing buttons and button groups, e.g., in a navigation bar */
 
-.button-toolbar {
-    padding: 6px;
+.button-toolbar, h3 {
+    padding: 0 6px 6px;
     border-top: 1px solid #ccc;
     background: #f2f2f2;
     margin-bottom: 15px;

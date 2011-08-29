@@ -15,22 +15,14 @@
 <!-- END: ADMIN_STRUCTURE_EMPTY -->
 		</table>
 </div>
-
-<h2><a href="{ADMIN_STRUCTURE_EXFLDS_URL}">{PHP.L.adm_extrafields}</a></h2>
 <!-- END: LIST -->
 
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Structure}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
-		<div class="block">
-			<ul class="follow">
-				<li>
-					<a href="{ADMIN_STRUCTURE_URL_EXTRAFIELDS}">{PHP.L.adm_extrafields_desc}</a>
-				</li>
-				<li>
-					<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>
-				</li>
-			</ul>
+		<div class="block button-toolbar">
+				<a href="{ADMIN_STRUCTURE_URL_EXTRAFIELDS}" class="button">{PHP.L.adm_extrafields_desc}</a>
+				<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax button special" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>
 		</div>
 
 		<!-- BEGIN: OPTIONS -->
