@@ -34,7 +34,7 @@ $cot_extrafields[$db_users] = (!empty($cot_extrafields[$db_users])) ? $cot_extra
  */
 function cot_add_user($ruser, $email = null, $name = null, $password = null, $maingrp = null, $sendemail = true)
 {
-	global $cfg, $cot_extrafields, $db, $db_users, $db_groups_users, $db_x, $L, $R, $sys;
+	global $cfg, $cot_extrafields, $db, $db_users, $db_groups_users, $db_x, $L, $R, $sys, $uploadfiles;
 	
 	$ruser['user_email'] = (!empty($email)) ? $email : $ruser['user_email'];
 	$ruser['user_name'] = (!empty($name)) ? $name : $ruser['user_name'];
