@@ -22,37 +22,40 @@ require_once cot_incfile('extrafields');
 $cot_extrafields[$db_users] = (!empty($cot_extrafields[$db_users])) ? $cot_extrafields[$db_users] : array();
 
 /**
- * Add new user
- *
+ * Adds new user
+ * 
+ * @param array $ruser User data array
  * @param string $email Email address
  * @param string $name User name; defaults to $email if omitted
  * @param string $password Password; randomly generated if omitted
- * @param string $country 2-char country code
- * @param float $timezone Time zone
- * @param string $gender Gender: M, F or U (unknown)
- * @param int $birthdate Birth date as timestamp
- * @param array $extrafields Extra fields as columnname => value array
- * @return int New user ID
+ * @param string $maingrp Custom main grp
+ * @param float $sendemail Send email if need activation 
+ * @return int New user ID or false
  */
-function add_user($email, $name = null, $password = null, $country = '', $timezone = 0.0, $gender = 'U', $birthdate = null, $extrafields = array())
+function cot_add_user($ruser, $email = null, $name = null, $password = null, $maingrp = null, $sendemail = true)
 {
 	global $cfg, $cot_extrafields, $db, $db_users, $db_groups_users, $db_x, $L, $R, $sys;
 	
-	if (!is_string($name)) $name = $email;
-	if (!is_string($password)) $password = cot_randomstring();
+	$ruser['user_email'] = (!empty($email)) ? $email : $ruser['user_email'];
+	$ruser['user_name'] = (!empty($name)) ? $name : $ruser['user_name'];
+	$ruser['user_password'] = (!empty($password)) ? $password : $ruser['user_password'];
 	
-	$ruser = array(
-		'user_name' => $name,
-		'user_email' => $email,
-		'user_password' => $password,
-		'user_country' => $country,
-		'user_timezone' => $timezone,
-		'user_gender' => $gender,
-		'user_birthdate' => $birthdate
-	);
-	$ruser = array_merge($extrafields, $ruser);
+	(empty($ruser['user_password'])) && $ruser['user_password'] = cot_randomstring();
+	(empty($ruser['user_name'])) && $ruser['user_name'] = $ruser['user_email'];
+	
+	$user_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_name = ? OR user_email = ? LIMIT 1", array($ruser['user_name'], $ruser['user_email']))->fetch();
+	if(mb_strlen($ruser['user_email']) < 4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $ruser['user_email']) || $user_exists)
+	{
+		return false;
+	}
+
+	$ruser['user_gender'] = (in_array($ruser['user_gender'], array('M', 'F'))) ? $ruser['user_gender'] : 'U';
+	$ruser['user_country'] = (mb_strlen($ruser['user_country']) < 4) ? $ruser['user_country'] : '';
+	$ruser['user_timezone'] = is_null($ruser['user_timezone']) ? $cfg['defaulttimezone'] : (float) $ruser['user_timezone'];
 	
 	$ruser['user_maingrp'] = ($db->countRows($db_users) == 0) ? 5 : ($cfg['regnoactivation']) ? 4 : 2;
+	$ruser['user_maingrp'] = (int)$maingrp > 0 ? $maingrp : $ruser['user_maingrp']; 
+	
 	$ruser['user_password'] = md5($password);
 	$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now']) ? ($sys['now'] - 31536000) : $ruser['user_birthdate'];
 	$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
@@ -81,7 +84,7 @@ function add_user($email, $name = null, $password = null, $country = '', $timezo
 	}
 	/* ===== */
 
-	if (!$cfg['users']['regnoactivation'] && $ruser['user_maingrp'] != 5)
+	if ($ruser['user_maingrp'] == 2 && $sendemail)
 	{
 		if ($cfg['users']['regrequireadmin'])
 		{

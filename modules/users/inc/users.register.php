@@ -71,12 +71,6 @@ if ($a=='add')
 	if ($user_exists) cot_error('aut_usernamealreadyindb', 'rusername');
 	if ($email_exists) cot_error('aut_emailalreadyindb', 'ruseremail');
 	if ($rpassword1 != $rpassword2) cot_error('aut_passwordmismatch', 'rpassword2');
-	
-	$extrafields = array();
-	foreach($cot_extrafields[$db_users] as $row)
-	{
-		$extrafields['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
-	}
 
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.register.add.validate') as $pl)
@@ -87,7 +81,8 @@ if ($a=='add')
 	
 	if (!cot_error_found())
 	{
-		$userid = add_user($ruser['user_email'], $ruser['user_name'], $rpassword1, $ruser['user_country'], $ruser['user_timezone'], $ruser['user_gender'], $ruser['user_birthdate'], $extrafields);
+		$ruser['user_password'] = $rpassword1;
+		$userid = cot_add_user($ruser);
 		
 		/* === Hook for the plugins === */
 		foreach (cot_getextplugins('users.register.add.done') as $pl)
