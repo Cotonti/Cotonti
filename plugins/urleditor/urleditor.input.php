@@ -43,10 +43,13 @@ if (!is_array($cot_urltrans))
 		fclose($fp);
 	}
 	// Fallback rules for standard PHP URLs
-	$cot_urltrans['plug'][] = array(
+	$cot_urltrans_fallback = array(
 		'params' => array(),
 		'trans' => '{$_area}.php'
 	);
+	$cot_urltrans['admin'][] = $cot_urltrans_fallback;
+	$cot_urltrans['login'][] = $cot_urltrans_fallback;
+	$cot_urltrans['message'][] = $cot_urltrans_fallback;
 	$cot_urltrans['*'][] = array(
 		'params' => array(),
 		'trans' => 'index.php?e={$_area}'
