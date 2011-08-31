@@ -8,9 +8,9 @@
 <!-- BEGIN: DETAILS -->
 	<h2>{ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:</h2>
 	<div class="block">
-		<table class="cells">
+		<table class="cells info">
 			<tr>
-				<td class="width5" rowspan="9" >
+				<td class="width5" rowspan="7" >
 					<!-- IF {ADMIN_EXTENSIONS_ICO} --> 
 					<img src="{ADMIN_EXTENSIONS_ICO}">
 					<!-- ELSE -->
@@ -31,26 +31,6 @@
 			<tr>
 				<td>{PHP.L.Date}:</td>
 				<td>{ADMIN_EXTENSIONS_DATE}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Configuration}:</td>
-				<td>
-<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} > 0 -->
-					<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_CONFIG_URL}" class="button">{PHP.L.short_config} ({ADMIN_EXTENSIONS_TOTALCONFIG})</a>
-<!-- ELSE -->
-					{PHP.L.None}
-<!-- ENDIF -->
-				</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Rights}:</td>
-				<td>
-<!-- IF {PHP.isinstalled} AND {PHP.exists} -->
-					<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS}" class="button">{PHP.L.short_rights}</a>
-<!-- ELSE -->
-					{PHP.L.None}
-<!-- ENDIF -->
-				</td>
 			</tr>
 <!--//<tr>
 	<td>{PHP.L.adm_defauth_guests}:</td>
@@ -82,6 +62,29 @@
 			</tr>
 		</table>
 	</div>
+	<!-- IF {PHP.isinstalled} AND {PHP.exists} -->
+	<div class="block">
+		
+		<h3>{PHP.L.Action}:</h3>
+		<div class="button-toolbar">
+		<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL} -->
+		<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL}" class="button special large">{PHP.L.Open}</a>
+		<!-- ENDIF -->
+		<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS} -->
+		<a title="{PHP.L.Administration}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}" class="button special large">{PHP.L.Administration}</a>
+		<!-- ENDIF -->
+		<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} > 0 -->
+		<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_CONFIG_URL}" class="button large">{PHP.L.Configuration} ({ADMIN_EXTENSIONS_TOTALCONFIG})</a>
+		<!-- ENDIF -->	
+		<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS}" class="button large">{PHP.L.short_rights}</a>
+		<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT} -->
+		<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}" class="button large">{PHP.L.Structure}</a>
+		<!-- ENDIF -->
+
+			</div>
+	</div>					
+<!-- ENDIF -->
+
 	<div class="block">
 		<h3>{PHP.L.Options}:</h3>
 		<div class="button-toolbar">

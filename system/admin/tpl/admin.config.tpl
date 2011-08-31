@@ -47,7 +47,7 @@
 			</form>
 <!-- END: EDIT -->
 <!-- BEGIN: DEFAULT -->
-			<table class="cells">
+			<table class="cells info">
 				<tr>
 					<td class="coltop width35">{PHP.L.Core}</td>
 					<td class="coltop width35">{PHP.L.Modules}</td>

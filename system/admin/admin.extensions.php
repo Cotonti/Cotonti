@@ -138,7 +138,9 @@ switch($a)
 			$info['Name'] = $row['ct_title'];
 			$info['Version'] = $row['ct_version'];
 		}
-		$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$arg=$code"), $info['Name']." ($code)");
+		
+		$adminpath[] = $type == 'module' ? array(cot_url('admin', 'm=extensions'), $L['Modules']) : array(cot_url('admin', 'm=extensions'), $L['Plugins']);
+		$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$arg=$code"), $info['Name']);
 
 		$isinstalled = cot_extension_installed($code);
 
@@ -286,6 +288,24 @@ switch($a)
 		}
 		$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $code . '/' . $code . '.png';
 		
+		// Search admin parts, standalone parts, struct
+			if( $db->query("SELECT pl_code FROM $db_plugins WHERE (pl_hook='standalone' OR pl_hook='module') AND pl_code='$code' LIMIT 1")->rowCount() > 0)
+			{
+				$standalone = ($type == 'module') ? cot_url($code) : cot_url('plug', 'e=' . $code);
+			}
+
+			$tool_hook = $type == 'plug' ? 'tools' : 'admin';
+			if($db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook' AND pl_code='$code' LIMIT 1")->rowCount() > 0)
+			{
+				$tools = $type == 'plug' ? cot_url('admin', "m=other&p=$code") : cot_url('admin', "m=$code");
+			}
+
+			if($db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='admin.structure.first' AND pl_code='$code' LIMIT 1")->rowCount() > 0)
+			{
+				$struct = cot_url('admin', "m=structure&n=$code");
+			}
+		// Search admin parts, standalone parts, struct
+		
 		$t->assign(array(
 			'ADMIN_EXTENSIONS_NAME' => $info['Name'],
 			'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? $L['Module'] : $L['Plugin'],
@@ -295,6 +315,9 @@ switch($a)
 			'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 			'ADMIN_EXTENSIONS_DATE' => $info['Date'],
 			'ADMIN_EXTENSIONS_CONFIG_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$code"),
+			'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $tools,
+			'ADMIN_EXTENSIONS_JUMPTO_URL' => $standalone,
+			'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => $struct,
 			'ADMIN_EXTENSIONS_TOTALCONFIG' => $totalconfig,
 			'ADMIN_EXTENSIONS_INSTALL_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=install"),
 			'ADMIN_EXTENSIONS_UPDATE_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=update"),
@@ -515,16 +538,13 @@ switch($a)
 			$cnt_extp = count($extensions);
 			$cnt_parts = 0;
 
-			if ($type == 'plug')
+			$standalone = array();
+			$sql3 = $db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone' OR pl_hook='module'");
+			while ($row3 = $sql3->fetch())
 			{
-				$standalone = array();
-				$sql3 = $db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone'");
-				while ($row3 = $sql3->fetch())
-				{
-					$standalone[$row3['pl_code']] = TRUE;
-				}
-				$sql3->closeCursor();
+				$standalone[$row3['pl_code']] = TRUE;
 			}
+			$sql3->closeCursor();
 
 			$tools = array();
 			$tool_hook = $type == 'plug' ? 'tools' : 'admin';
@@ -614,7 +634,7 @@ switch($a)
 
 					$ifthistools = $tools[$x];
 					$ent_code = $cfgentries[$x];
-					$if_plg_standalone = $type == 'plug' ? $standalone[$x] : cot_extension_installed($x);
+					$if_plg_standalone = $standalone[$x];
 					$ifstruct = $struct[$x];
 
 					if ($type == 'module')
@@ -641,8 +661,7 @@ switch($a)
 						'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 						'ADMIN_EXTENSIONS_RIGHTS_URL' => $type == 'module' ? cot_url('admin', "m=rightsbyitem&ic=$x&io=a") : cot_url('admin',
 								"m=rightsbyitem&ic=$type&io=$x"),
-						'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? cot_url('admin', "m=other&p=$x") : cot_url('admin',
-								"m=$x"),
+						'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? cot_url('admin', "m=other&p=$x") : cot_url('admin', "m=$x"),
 						'ADMIN_EXTENSIONS_JUMPTO_URL' => $jump_url,
 						'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => cot_url('admin', "m=structure&n=$x"),
 						'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i)

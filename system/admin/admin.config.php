@@ -219,9 +219,11 @@ switch($n)
 		{
 			$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 			$plmod = $o == 'module' ? 'mod' : 'pl';
-			$plmod_title = $o == 'module' ? $L['Module'] : $L['Plugin'];
-			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $plmod_title.' ('.$o.':'.$p.')');
-			$edit_title = empty($sub) ? $L['Edit'] : $structure[$p][$sub]['title'] . ' - ' . $L['Edit'];
+			$adminpath[] = $o == 'module' ? array(cot_url('admin', 'm=extensions'), $L['Modules']) : array(cot_url('admin', 'm=extensions'), $L['Plugins']);
+
+			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $o == 'module' ? $cot_modules[$p]['title'] : $cot_plugins_enabled[$p]['title']);
+			empty($sub) || $adminpath[] = array(cot_url('admin', 'm=structure&n='.$p.'&al='.$sub), $structure[$p][$sub]['title']);
+
 			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub), $L['Configuration']);
 		}
 		

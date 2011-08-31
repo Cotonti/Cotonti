@@ -147,6 +147,9 @@ table td 	{ vertical-align:top; }
 
 table.cells 	{ border-collapse:collapse; width:100%; }
 table.cells td	{ padding:7px 5px; border:1px solid #ccc; }
+table.cells tr:hover td {background: #EDEFF4;}
+table.cells.info tr:hover td {background: #fff!important;}
+table.cells tr:hover td.valid {background: #fff!important;}
 
 table.flat 	{ border-collapse:collapse; width:100%; }
 table.flat td	{ padding:0; border:0; }
@@ -156,7 +159,6 @@ table.flat td	{ padding:0; border:0; }
 .coltop img	{ vertical-align:middle; }
 .centerall 	{ text-align:center; vertical-align:middle; }
 /*.valid 		{ height:5em; text-align:center; vertical-align:middle; border:0!important; }*/
-.valid
 
 td.group_begin	{ color:#4f789f; border:none!important; }
 td.group_end		{ font-size:0; padding:0!important; border:none!important; }
