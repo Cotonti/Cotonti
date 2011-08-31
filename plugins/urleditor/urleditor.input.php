@@ -18,11 +18,11 @@ Hooks=input
 
 defined('COT_CODE') or die('Wrong URL');
 
-//if (!is_array($cot_urltrans))
-//{
+if (!is_array($cot_urltrans))
+{
 	$cot_urltrans = array();
 	$urltrans_preset = $cfg['plugin']['urleditor']['preset'] == 'custom' ? './datas/urltrans.dat' : $cfg['plugins_dir'] . '/urleditor/presets/' . $cfg['plugin']['urleditor']['preset'] . '.dat';
-	if (file_exists($urltrans_preset))
+	if ($cfg['plugin']['urleditor']['preset'] != 'none' && file_exists($urltrans_preset))
 	{
 		$fp = fopen($urltrans_preset, 'r');
 		while ($line = trim(fgets($fp), " \t\r\n"))
@@ -43,16 +43,19 @@ defined('COT_CODE') or die('Wrong URL');
 		fclose($fp);
 	}
 	// Fallback rules for standard PHP URLs
-	$cot_urltrans['plug'][] = array(
+	$cot_urltrans_fallback = array(
 		'params' => array(),
 		'trans' => '{$_area}.php'
 	);
+	$cot_urltrans['admin'][] = $cot_urltrans_fallback;
+	$cot_urltrans['login'][] = $cot_urltrans_fallback;
+	$cot_urltrans['message'][] = $cot_urltrans_fallback;
 	$cot_urltrans['*'][] = array(
 		'params' => array(),
 		'trans' => 'index.php?e={$_area}'
 	);
 	$cache && $cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
-//}
+}
 
 require_once cot_incfile('urleditor', 'plug');
 

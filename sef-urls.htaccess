@@ -6,7 +6,7 @@
 Options FollowSymLinks -Indexes
 RewriteEngine On
 
-# Server-relative path to Cotonti. Replace it to you path if you run Cotonti
+# Server-relative path to Cotonti. Replace it with your path if you run Cotonti
 # in a subfolder
 RewriteBase "/"
 
@@ -22,8 +22,7 @@ RewriteRule ^([a-z]+)\.php(.*)$ $1.php$2 [QSA,NC,NE,L]
 
 # Admin area and message are special scripts
 RewriteRule ^admin/([a-z0-9]+) admin.php?m=$1 [QSA,NC,NE,L]
-RewriteRule ^admin admin.php [QSA,NC,NE,L]
-RewriteRule ^message message.php [QSA,NC,NE,L]
+RewriteRule ^(admin|login|message)(/|\?|$) $1.php [QSA,NC,NE,L]
 
 # All the rest goes through standard rewrite gateway
 RewriteRule ^([^?]+) index.php?rwr=$1 [QSA,NC,NE,L]
