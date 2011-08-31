@@ -433,7 +433,7 @@ switch($n)
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=module&p='.$row['config_cat']),
 				'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
-				'ADMIN_CONFIG_ROW_NAME' => $row['config_cat'],
+				'ADMIN_CONFIG_ROW_NAME' => $cot_modules[$row['config_cat']]['title'],
 				'ADMIN_CONFIG_ROW_NUM' => $jj,
 				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 			));
@@ -455,7 +455,7 @@ switch($n)
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p='.$row['config_cat']),
 				'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
-				'ADMIN_CONFIG_ROW_NAME' => $row['config_cat'],
+				'ADMIN_CONFIG_ROW_NAME' => $cot_plugins_enabled[$row['config_cat']]['title'],
 				'ADMIN_CONFIG_ROW_NUM' => $jj,
 				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 			));
