@@ -33,7 +33,13 @@
 				</tr>
 <!-- BEGIN: RIGHTS_ROW -->
 				<tr>
-					<td class="centerall"><img src="images/icons/default/{ADMIN_RIGHTS_ROW_AUTH_CODE}.png" alt="" /></td>
+					<td class="centerall">					
+					<!-- IF {ADMIN_RIGHTS_ROW_ICO} --> 
+					<img src="{ADMIN_RIGHTS_ROW_ICO}">
+					<!-- ELSE -->
+					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+					<!-- ENDIF -->
+					</td>
 					<td> <a href="{ADMIN_RIGHTS_ROW_LINK}">{ADMIN_RIGHTS_ROW_TITLE}</a></td>
 <!-- BEGIN: RIGHTS_ROW_ITEMS -->
 					<td class="centerall">
@@ -49,7 +55,7 @@
 						<!-- ENDIF -->
 					</td>
 <!-- END: RIGHTS_ROW_ITEMS -->
-					<td class="centerall"><a title="{PHP.L.Rights}" href="{ADMIN_RIGHTS_ROW_RIGHTSBYITEM}" class="button">{PHP.L.Rights}</a></td>
+					<td class="centerall"><a title="{PHP.L.Rights}" href="{ADMIN_RIGHTS_ROW_RIGHTSBYITEM}" class="button">{PHP.L.Rights}</a><a title="{PHP.L.Rights}" href="{ADMIN_RIGHTS_ROW_LINK}" class="button special">{PHP.L.Open}</a></td>
 					<td class="textcenter">{ADMIN_RIGHTS_ROW_USER}{ADMIN_RIGHTS_ROW_PRESERVE}</td>
 				</tr>
 <!-- END: RIGHTS_ROW -->

@@ -19,6 +19,7 @@ require_once cot_incfile('auth');
 require_once cot_incfile('structure');
 
 $id = cot_import('id', 'G', 'INT');
+$al = cot_import('al', 'G', 'ALP');
 $c = cot_import('c', 'G', 'TXT');
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 $mode = cot_import('mode', 'G', 'ALP');
@@ -220,9 +221,10 @@ else
 		cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 	}
 
-	if($id > 0)
+	if($id > 0 || !empty($al))
 	{
-		$sql = $db->query("SELECT * FROM $db_structure WHERE structure_id=$id LIMIT 1");
+		$where = $id > 0 ? 'structure_id='.(int)$id  : "structure_code='".$db->prep($al)."'";
+		$sql = $db->query("SELECT * FROM $db_structure WHERE $where LIMIT 1");
 		cot_die($sql->rowCount() == 0);
 	}
 	elseif($mode && ($mode=='all' || $structure[$mode]))
@@ -254,6 +256,7 @@ else
 	foreach ($sql->fetchAll() as $row)
 	{
 		($id) && $adminpath[] = array (cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&id='.$id), htmlspecialchars($row['structure_title']));
+		($al) && $adminpath[] = array (cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&al='.$al), htmlspecialchars($row['structure_title']));
 
 		$ii++;
 		$structure_id = $row['structure_id'];
@@ -322,7 +325,7 @@ else
 			// extra fields universal tags
 			$t->assign('ADMIN_STRUCTURE_EXTRAFLD', cot_build_extrafields('rstructure'.$row2['field_name'],  $row2, $row['structure_'.$row2['field_name']]));
 			$t->assign('ADMIN_STRUCTURE_EXTRAFLD_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
-			$t->parse(($id) ? 'MAIN.OPTIONS.EXTRAFLD' : 'MAIN.DEFAULT.ROW.EXTRAFLD');
+			$t->parse(($id || !empty($al)) ? 'MAIN.OPTIONS.EXTRAFLD' : 'MAIN.DEFAULT.ROW.EXTRAFLD');
 		}
 
 		/* === Hook - Part2 : Include === */
@@ -332,10 +335,10 @@ else
 		}
 		/* ===== */
 
-		$t->parse(($id) ? 'MAIN.OPTIONS' : 'MAIN.DEFAULT.ROW');
+		$t->parse(($id || !empty($al)) ? 'MAIN.OPTIONS' : 'MAIN.DEFAULT.ROW');
 	}
 
-	if (!$id)
+	if (!$id || !empty($al))
 	{
 		$t->assign(array(
 			'ADMIN_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],
