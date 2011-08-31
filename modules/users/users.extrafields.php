@@ -6,10 +6,10 @@ Hooks=admin.extrafields.first
 ==================== */
 
 /**
- * Page module
+ * Users module
  *
- * @package page
- * @version 0.7.0
+ * @package users
+ * @version 0.9.4
  * @author esclkm, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
@@ -17,7 +17,6 @@ Hooks=admin.extrafields.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-require_once cot_incfile('page', 'module');
-$extra_whitelist[$db_pages] = array('name' => $db_pages, 'caption' => $L['Module'].' Pages', 'help' => $L['adm_help_pages_extrafield']);
+$extra_whitelist[$db_users] = array('name' => $db_users, 'caption' => $L['Module']. ' Users', 'help' => $L['adm_help_users_extrafield']);
 
 ?>

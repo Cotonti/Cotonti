@@ -57,7 +57,7 @@
 			</tr>
 			<!-- END: EXTRAFIELDS_ROW -->
 			<tr>
-				<td class="valid" colspan="4">
+				<td class="valid" colspan="5">
 					<input type="submit" value="{PHP.L.Update}" onclick="location.href='{ADMIN_EXTRAFIELDS_ROW_FORM_URL}'"  class="confirm" />
 				</td>
 			</tr>
@@ -69,7 +69,7 @@
 <div class="block">
 	<h3>{PHP.L.adm_extrafield_new}:</h3>
 	<form action="{ADMIN_EXTRAFIELDS_URL_FORM_ADD}" method="post">
-		<table class="cells">
+		<table class="cells info">
 			<tr>
 				<td class="coltop width30">{PHP.L.extf_Name}</td>
 				<td class="coltop width20">{PHP.L.extf_Type}</td>

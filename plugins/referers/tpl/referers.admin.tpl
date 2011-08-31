@@ -2,10 +2,10 @@
 		<h2>{PHP.L.Referers}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 <!-- IF {PHP.usr.isadmin} -->
-			<ul class="follow">
-				<li><a href="{ADMIN_REFERERS_URL_PRUNE}">{PHP.L.adm_purgeall}</a></li>
-				<li><a href="{ADMIN_REFERERS_URL_PRUNELOWHITS}">{PHP.L.adm_ref_lowhits}</a></li>
-			</ul>
+			<div class="block button-toolbar">
+				<a href="{ADMIN_REFERERS_URL_PRUNE}" class="button">{PHP.L.adm_purgeall}</a>
+				<a href="{ADMIN_REFERERS_URL_PRUNELOWHITS}" class="button">{PHP.L.adm_ref_lowhits}</a>
+			</div>
 <!-- ENDIF -->
 <!-- IF {PHP.is_ref_empty} -->
 			<table class="cells">

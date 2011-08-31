@@ -24,8 +24,6 @@ require_once cot_incfile('ratings', 'plug');
 
 $t = new XTemplate(cot_tplfile('ratings.admin', 'plug'));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=other&p=ratings'), $L['Ratings']);
 $adminhelp = $L['adm_help_ratings'];
 
 $id = cot_import('id','G','TXT');

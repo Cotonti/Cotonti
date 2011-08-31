@@ -2,7 +2,7 @@
 
 	<h2>{PHP.L.Hits}</h2>
 	<p>{ADMIN_HITS_MAXHITS}</p>
-
+	<div class="block">
 <!-- BEGIN: YEAR_OR_MONTH -->
 	<h3>{PHP.v}:</h3>
 	<table class="cells">
@@ -68,5 +68,5 @@
 <!-- END: ROW_WEEK -->
 	</table>
 <!-- END: DEFAULT -->
-
+	</div>
 <!-- END: MAIN -->

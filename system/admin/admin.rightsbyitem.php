@@ -88,7 +88,7 @@ foreach (cot_getextplugins('admin.rightsbyitem.case') as $pl)
 	include $pl;
 }
 /* ===== */
-if($ic =='message' && $ic =='admin')
+if($ic == 'message' || $ic == 'admin')
 {
 	$adminpath[] = array(cot_url('admin'), $L['adm_code'][$ic]);
 }

@@ -67,9 +67,9 @@ h4		{ font-weight:bold; }
 
 /* 4. Misc
 -------------------------------------------------- */
-.odd	{ background-color:#fff!important; }
+/*.odd	{ background-color:#fff!important; }
 .even	{ background-color:#f1f1f1!important; }
-
+*/
 .small		{ font-size:.9em; line-height:1.4em; }
 .clear		{ clear:both; }
 .strong		{ font-weight:bold; }

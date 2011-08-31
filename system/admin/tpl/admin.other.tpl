@@ -7,31 +7,31 @@
 				<td class="coltop width90">{PHP.L.Part} {PHP.L.adm_clicktoedit}</td>
 			</tr>
 			<tr>
-				<td class="centerall">{PHP.R.icon_prefs}</td>
+				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"></td>
 				<td>
 					<a href="{ADMIN_OTHER_URL_CACHE}">{PHP.L.adm_internalcache}</a>
 				</td>
 			</tr>
 			<tr>
-				<td class="centerall">{PHP.R.icon_prefs}</td>
+				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"></td>
 				<td>
 					<a href="{ADMIN_OTHER_URL_DISKCACHE}">{PHP.L.adm_diskcache}</a>
 				</td>
 			</tr>
 			<tr>
-				<td class="centerall">{PHP.R.icon_prefs}</td>
+				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"></td>
 				<td>
 					<a href="{ADMIN_OTHER_URL_EXFLDS}">{PHP.L.adm_extrafields}</a>
 				</td>
 			</tr>			
 			<tr>
-				<td class="centerall">{PHP.R.icon_page}</td>
+				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"></td>
 				<td>
 					<a href="{ADMIN_OTHER_URL_LOG}">{PHP.L.adm_log}</a>
 				</td>
 			</tr>
 			<tr>
-				<td class="centerall">{PHP.R.icon_info}</td>
+				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/cfg_info.png"></td>
 				<td>
 					<a href="{ADMIN_OTHER_URL_INFOS}">{PHP.L.adm_infos}</a>
 				</td>

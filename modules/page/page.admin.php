@@ -25,7 +25,9 @@ $t = new XTemplate(cot_tplfile('page.admin', 'module'));
 require_once cot_incfile('page', 'module');
 
 $adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
-$adminpath[] = array(cot_url('admin', 'm=page'), $L['Pages']);
+$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Modules']);
+$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
+$adminpath[] = array(cot_url('admin', 'm='.$m), $L['Administration']);
 $adminhelp = $L['adm_help_page'];
 
 $id = cot_import('id', 'G', 'INT');

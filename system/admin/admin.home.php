@@ -13,8 +13,6 @@
 
 $t = new XTemplate(cot_tplfile('admin.home', 'core'));
 
-$adminpath[] = array(cot_url('admin', 'm=home'), $L['Home']);
-
 if (cot_module_active('page'))
 {
 	require_once cot_incfile('page', 'module');

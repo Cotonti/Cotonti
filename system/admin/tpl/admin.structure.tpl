@@ -119,7 +119,7 @@
 		<div class="block">
 			<h3>{PHP.L.Add}:</h3>
 			<form name="addstructure" id="addstructure" action="{ADMIN_STRUCTURE_URL_FORM_ADD}" method="post" class="ajax" enctype="multipart/form-data">
-			<table class="cells">
+			<table class="cells info">
 				<tr>
 					<td class="width20">{PHP.L.Path}:</td>
 					<td class="width80">{ADMIN_STRUCTURE_PATH} {PHP.L.adm_required}</td>

@@ -1,10 +1,10 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Trashcan}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
-			<ul class="follow">
-				<li><a title="{PHP.L.Configuration}" href="{ADMIN_TRASHCAN_CONF_URL}">{PHP.L.Configuration}</a></li>
-				<li><a title="{PHP.L.Wipeall}" href="{ADMIN_TRASHCAN_WIPEALL_URL}">{PHP.L.Wipeall}</a></li>
-			</ul>
+			<div class="block button-toolbar">
+				<a title="{PHP.L.Configuration}" href="{ADMIN_TRASHCAN_CONF_URL}" class="button">{PHP.L.Configuration}</a>
+				<a title="{PHP.L.Wipeall}" href="{ADMIN_TRASHCAN_WIPEALL_URL}" class="button">{PHP.L.Wipeall}</a>
+			</div>
 			<table class="cells">
 				<tr>
 					<td class="coltop width5">{PHP.L.Type}</td>
@@ -20,8 +20,8 @@
 				<td class="centerall"><a href="{ADMIN_TRASHCAN_ROW_INFO_URL}">{ADMIN_TRASHCAN_TITLE}</a></td>
 				<td class="centerall">{ADMIN_TRASHCAN_TRASHEDBY}</td>
 				<td class="centerall action">
-					<!-- IF {ADMIN_TRASHCAN_ROW_RESTORE_ENABLED} --><a title="{PHP.L.Restore}" href="{ADMIN_TRASHCAN_ROW_RESTORE_URL}">{PHP.R.icon_undo}</a><!-- ENDIF -->
-					<a title="{PHP.L.Wipe}" href="{ADMIN_TRASHCAN_ROW_WIPE_URL}">{PHP.R.icon_delete}</a>
+					<!-- IF {ADMIN_TRASHCAN_ROW_RESTORE_ENABLED} --><a title="{PHP.L.Restore}" href="{ADMIN_TRASHCAN_ROW_RESTORE_URL} class="button"">{PHP.L.Restore}</a><!-- ENDIF -->
+					<a title="{PHP.L.Wipe}" href="{ADMIN_TRASHCAN_ROW_WIPE_URL}" class="button">{PHP.L.Wipe}</a>
 				</td>
 			</tr>
 <!-- END: TRASHCAN_ROW -->

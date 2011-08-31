@@ -23,7 +23,7 @@
 					</tr>
 <!-- BEGIN: RIGHTSBYITEM_ROW -->
 					<tr>
-						<td class="centerall">{PHP.R.admin_icon_groups}</td>
+						<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/users.png"></td>
 						<td><a href="{ADMIN_RIGHTSBYITEM_ROW_LINK}">{ADMIN_RIGHTSBYITEM_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_ITEMS -->
 						<td class="centerall">
