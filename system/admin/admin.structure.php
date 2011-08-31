@@ -40,8 +40,10 @@ if (empty($n))
 	{
 		foreach ($structure as $code => $mod)
 		{
+			$icofile = $cfg['modules_dir'] . '/' . $code . '/' . $code . '.png';
 			$t->assign(array(
 				'ADMIN_STRUCTURE_EXT_URL' => cot_url('admin', 'm=structure&n='.$code),
+				'ADMIN_STRUCTURE_EXT_ICO' => (file_exists($icofile)) ? $icofile : '',
 				'ADMIN_STRUCTURE_EXT_NAME' => htmlspecialchars($cot_modules[$code]['title'])
 			));
 			$t->parse('LIST.ADMIN_STRUCTURE_EXT');

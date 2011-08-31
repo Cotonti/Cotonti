@@ -45,7 +45,13 @@
 		<table class="cells">
 <!-- BEGIN: ROW -->
 			<tr>
-				<td class="centerall width10">{PHP.R.icon_tool}</td>
+				<td class="centerall width10">
+					<!-- IF {ADMIN_OTHER_EXT_ICO} --> 
+					<img src="{ADMIN_OTHER_EXT_ICO}">
+					<!-- ELSE -->
+					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+					<!-- ENDIF -->
+				</td>
 				<td class="width90"><a href="{ADMIN_OTHER_EXT_URL}">{ADMIN_OTHER_EXT_NAME}</a></td>
 			</tr>
 <!-- END: ROW -->

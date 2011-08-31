@@ -49,16 +49,22 @@
 <!-- BEGIN: DEFAULT -->
 			<table class="cells">
 				<tr>
-					<td class="coltop width40">{PHP.L.Core}</td>
-					<td class="coltop width30">{PHP.L.Modules}</td>
+					<td class="coltop width35">{PHP.L.Core}</td>
+					<td class="coltop width35">{PHP.L.Modules}</td>
 					<td class="coltop width30">{PHP.L.Plugins}</td>
 				</tr>
 				<tr>
 <!-- BEGIN: ADMIN_CONFIG_COL -->
 					<td>
-						<ul class="follow">
+						<ul class="config">
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
-							<li><a href="{ADMIN_CONFIG_ROW_URL}" class="ajax">{ADMIN_CONFIG_ROW_NAME}</a></li>
+							<li>
+					<!-- IF {ADMIN_CONFIG_ROW_ICO} --> 
+					<img src="{ADMIN_CONFIG_ROW_ICO}">
+					<!-- ELSE -->
+					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+					<!-- ENDIF -->
+					<a href="{ADMIN_CONFIG_ROW_URL}" class="ajax">{ADMIN_CONFIG_ROW_NAME}</a></li>
 <!-- END: ADMIN_CONFIG_ROW -->
 						</ul>
 					</td>

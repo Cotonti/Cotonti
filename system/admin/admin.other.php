@@ -126,10 +126,12 @@ else
 					include_once cot_langfile('message', 'core');
 					$info['Name'] = $pl['pl_code'] . ' : '. $L['msg907_1'];
 				}
-
+				$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $pl['pl_code'] . '/' . $pl['pl_code'] . '.png';
+				
 				$t->assign(array(
 					'ADMIN_OTHER_EXT_URL' => $type == 'plug' ? cot_url('admin', 'm=other&p=' . $pl['pl_code']) :
 						cot_url('admin', 'm=' . $pl['pl_code']),
+					'ADMIN_OTHER_EXT_ICO' => (file_exists($icofile)) ? $icofile : '',
 					'ADMIN_OTHER_EXT_NAME' => $info['Name']
 				));
 				$t->parse('MAIN.SECTION.ROW');

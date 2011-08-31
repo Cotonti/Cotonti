@@ -400,13 +400,18 @@ switch($n)
 			AND config_type != '".COT_CONFIG_TYPE_HIDDEN."'
 			ORDER BY config_cat ASC
 		");
+		$jj = 0;
 		while ($row = $sql->fetch())
 		{
+			$jj++;
 			if($L['core_'.$row['config_cat']])
 			{
 				$t->assign(array(
 					'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=core&p='.$row['config_cat']),
-					'ADMIN_CONFIG_ROW_NAME' => $L['core_'.$row['config_cat']]
+					'ADMIN_CONFIG_ROW_ICO' => '',
+					'ADMIN_CONFIG_ROW_NAME' => $L['core_'.$row['config_cat']],
+					'ADMIN_CONFIG_ROW_NUM' => $jj,
+					'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 				));
 				$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 			}
@@ -419,11 +424,17 @@ switch($n)
 			AND config_type != '".COT_CONFIG_TYPE_HIDDEN."'
 			ORDER BY config_cat ASC
 		");
+		$jj = 0;
 		while ($row = $sql->fetch())
 		{
+			$jj++;
+			$icofile = $cfg['modules_dir'] . '/' . $row['config_cat'] . '/' . $row['config_cat'] . '.png';
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=module&p='.$row['config_cat']),
-				'ADMIN_CONFIG_ROW_NAME' => $row['config_cat']
+				'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
+				'ADMIN_CONFIG_ROW_NAME' => $row['config_cat'],
+				'ADMIN_CONFIG_ROW_NUM' => $jj,
+				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 			));
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
@@ -435,11 +446,17 @@ switch($n)
 			AND config_type != '".COT_CONFIG_TYPE_HIDDEN."'
 			ORDER BY config_cat ASC
 		");
+		$jj = 0;
 		while ($row = $sql->fetch())
 		{
+			$jj++;
+			$icofile = $cfg['plugins_dir'] . '/' . $row['config_cat'] . '/' . $row['config_cat'] . '.png';
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p='.$row['config_cat']),
-				'ADMIN_CONFIG_ROW_NAME' => $row['config_cat']
+				'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
+				'ADMIN_CONFIG_ROW_NAME' => $row['config_cat'],
+				'ADMIN_CONFIG_ROW_NUM' => $jj,
+				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 			));
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}

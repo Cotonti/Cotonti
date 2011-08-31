@@ -284,11 +284,13 @@ switch($a)
 		{
 			include cot_langfile($code, $type);
 		}
-
+		$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $code . '/' . $code . '.png';
+		
 		$t->assign(array(
 			'ADMIN_EXTENSIONS_NAME' => $info['Name'],
 			'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? $L['Module'] : $L['Plugin'],
 			'ADMIN_EXTENSIONS_CODE' => $code,
+			'ADMIN_EXTENSIONS_ICO' => (file_exists($icofile)) ? $icofile : '',
 			'ADMIN_EXTENSIONS_DESCRIPTION' => empty($L['info_desc']) ? $info['Description'] : $L['info_desc'],
 			'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 			'ADMIN_EXTENSIONS_DATE' => $info['Date'],
@@ -625,12 +627,14 @@ switch($a)
 						$jump_url = cot_url('plug', 'e=' . $x);
 						$arg = 'pl';
 					}
-
+					$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $x . '/' . $x . '.png';
+					
 					$t->assign(array(
 						'ADMIN_EXTENSIONS_DETAILS_URL' => cot_url('admin', "m=extensions&a=details&$arg=$x"),
 						'ADMIN_EXTENSIONS_NAME' => $info['Name'],
 						'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? $L['Module'] : $L['Plugin'],
 						'ADMIN_EXTENSIONS_CODE_X' => $x,
+						'ADMIN_EXTENSIONS_ICO' => (file_exists($icofile)) ? $icofile : '',
 						'ADMIN_EXTENSIONS_EDIT_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$x"),
 						'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
 						'ADMIN_EXTENSIONS_STATUS' => $status[$part_status],

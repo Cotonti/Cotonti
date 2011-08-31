@@ -10,7 +10,14 @@
 	<div class="block">
 		<table class="cells">
 			<tr>
-				<td class="width30">{PHP.L.Code}:</td>
+				<td class="width5" rowspan="9" >
+					<!-- IF {ADMIN_EXTENSIONS_ICO} --> 
+					<img src="{ADMIN_EXTENSIONS_ICO}">
+					<!-- ELSE -->
+					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+					<!-- ENDIF -->
+				</td>
+				<td class="width25">{PHP.L.Code}:</td>
 				<td class="width70">{ADMIN_EXTENSIONS_CODE}</td>
 			</tr>
 			<tr>
@@ -190,7 +197,8 @@
 	<div class="block">
 		<table class="cells">
 			<tr>
-				<td class="coltop width25">{PHP.L.Name} {PHP.L.adm_clicktoedit}</td>
+				<td class="coltop width5"></td>
+				<td class="coltop width20">{PHP.L.Name} {PHP.L.adm_clicktoedit}</td>
 				<td class="coltop width15">{PHP.L.Code}</td>
 				<td class="coltop width5">{PHP.L.Version}</td>
 				<td class="coltop width5">{PHP.L.Parts}</td>
@@ -205,6 +213,13 @@
 			</tr>
 <!-- END: ROW_ERROR_EXT -->
 			<tr>
+				<td>
+					<!-- IF {ADMIN_EXTENSIONS_ICO} --> 
+					<img src="{ADMIN_EXTENSIONS_ICO}">
+					<!-- ELSE -->
+					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+					<!-- ENDIF -->
+				</td>
 				<td><a href="{ADMIN_EXTENSIONS_DETAILS_URL}"><strong>{ADMIN_EXTENSIONS_NAME}</strong></a></td>
 				<td>{ADMIN_EXTENSIONS_CODE_X}</td>
 				<td>{ADMIN_EXTENSIONS_VERSION}</td>
