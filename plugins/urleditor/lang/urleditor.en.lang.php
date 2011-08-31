@@ -44,7 +44,7 @@ You can change rule order by simply dragging the rows and dropping them at desir
 </ol>';
 
 $L['cfg_preset'] = 'URL Preset';
-$L['cfg_preset_params'] = array('Handy', 'Genoa/Seditio compatible', 'Custom urltrans.dat');
+$L['cfg_preset_params'] = array('Handy', 'Genoa/Seditio compatible', 'Custom urltrans.dat', 'Disabled');
 
 $L['info_desc'] = 'With this plugin you can set custom rules for URL transformation in Admin Panel or choose an easy to use preset for human and search engine friendly URLs';
 

@@ -16,7 +16,7 @@ Lock_members=
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-preset=01:select:handy,compat,custom:handy:URL Preset
+preset=01:select:handy,compat,custom,none:none:URL Preset
 [END_COT_EXT_CONFIG]
 ==================== */
 
