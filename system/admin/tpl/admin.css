@@ -16,6 +16,7 @@ ul.follow img	{ vertical-align:-3px; }
 ul.config li	{ padding:5px; border-bottom:1px solid #ccc;}
 ul.config img	{ padding-right:10px;}
 ul.config li:last-child {border-bottom:0px;}
+ul.config li:hover {background: #EDEFF4;}
 
 a			{ color:#172973; text-decoration:none; }
 a:hover		{ text-decoration:underline; }

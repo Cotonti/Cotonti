@@ -406,9 +406,10 @@ switch($n)
 			$jj++;
 			if($L['core_'.$row['config_cat']])
 			{
+				$icofile = $cfg['system_dir'] . '/admin/img/cfg_' . $row['config_cat'] . '.png';
 				$t->assign(array(
 					'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=core&p='.$row['config_cat']),
-					'ADMIN_CONFIG_ROW_ICO' => '',
+					'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
 					'ADMIN_CONFIG_ROW_NAME' => $L['core_'.$row['config_cat']],
 					'ADMIN_CONFIG_ROW_NUM' => $jj,
 					'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
