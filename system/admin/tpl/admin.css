@@ -148,9 +148,10 @@ table td 	{ vertical-align:top; }
 table.cells 	{ border-collapse:collapse; width:100%; }
 table.cells td	{ padding:7px 5px; border:1px solid #ccc; }
 table.cells tr:hover td {background: #EDEFF4;}
+
+table.cells.info tr:hover td.coltop {background: #EDEFF4!important;}
 table.cells.info tr:hover td {background: #fff!important;}
 table.cells tr:hover td.valid {background: #fff!important;}
-
 table.flat 	{ border-collapse:collapse; width:100%; }
 table.flat td	{ padding:0; border:0; }
 
