@@ -76,10 +76,9 @@ $out['subtitle'] = cot_title('{ADMIN}', $title_params);
 
 require_once $cfg['system_dir'].'/header.php';
 
+$t = new XTemplate(cot_tplfile('admin', 'core'));
 if (!COT_AJAX)
 {
-	$t = new XTemplate(cot_tplfile('admin', 'core'));
-
 	// Generate the admin menu
 	$admin_menu = array();
 	// Standard admin areas
@@ -169,27 +168,30 @@ if (!COT_AJAX)
 		));
 		$t->parse('MAIN.ADMIN_MENU_ROW');
 	}
+}
 
-	$t->assign(array(
-		'ADMIN_TITLE' => cot_breadcrumbs($adminpath, false),
-		'ADMIN_SUBTITLE' => $adminsubtitle,
-		'ADMIN_MAIN' => $adminmain,
-		'ADMIN_HELP' => $adminhelp
-	));
-	
-	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('admin.tags') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+$t->assign(array(
+	'ADMIN_TITLE' => cot_breadcrumbs($adminpath, false),
+	'ADMIN_SUBTITLE' => $adminsubtitle,
+	'ADMIN_MAIN' => $adminmain,
+	'ADMIN_HELP' => $adminhelp
+));
 
+/* === Hook for the plugins === */
+foreach (cot_getextplugins('admin.tags') as $pl)
+{
+	include $pl;
+}
+/* ===== */
+$t->parse('MAIN.BODY');
+if(!COT_AJAX)
+{
 	$t->parse('MAIN');
 	$t->out('MAIN');
 }
 else
 {
-	echo $adminmain;
+	$t->out('MAIN.BODY');
 }
 
 require_once $cfg['system_dir'].'/footer.php';

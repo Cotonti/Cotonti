@@ -219,7 +219,6 @@ switch($n)
 		{
 			$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 			$plmod = $o == 'module' ? 'mod' : 'pl';
-			$adminpath[] = $o == 'module' ? array(cot_url('admin', 'm=extensions'), $L['Modules']) : array(cot_url('admin', 'm=extensions'), $L['Plugins']);
 
 			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $o == 'module' ? $cot_modules[$p]['title'] : $cot_plugins_enabled[$p]['title']);
 			empty($sub) || $adminpath[] = array(cot_url('admin', 'm=structure&n='.$p.'&al='.$sub), $structure[$p][$sub]['title']);
@@ -396,6 +395,7 @@ switch($n)
 		break;
 	
 	default:
+		$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
 		$sql = $db->query("
 			SELECT DISTINCT(config_cat) FROM $db_config
 			WHERE config_owner='core'

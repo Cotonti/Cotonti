@@ -139,7 +139,6 @@ switch($a)
 			$info['Version'] = $row['ct_version'];
 		}
 		
-		$adminpath[] = $type == 'module' ? array(cot_url('admin', 'm=extensions'), $L['Modules']) : array(cot_url('admin', 'm=extensions'), $L['Plugins']);
 		$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$arg=$code"), $info['Name']);
 
 		$isinstalled = cot_extension_installed($code);
