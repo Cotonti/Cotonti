@@ -25,20 +25,8 @@ $r = (isset($_POST['r'])) ? cot_import('r','P','ALP') : cot_import('r','G','ALP'
 $c1 = cot_import('c1', 'G', 'ALP');
 $c2 = cot_import('c2', 'G', 'ALP');
 
-if (!empty($e))
-{
-	$extname = $e;
-    $exthook = 'standalone';
-    $ext_display_header = true;
-    $path_skin = cot_tplfile($extname, 'plug');
-    $autoassigntags = false;
-    if (!file_exists($path_skin))
-    {
-        $path_skin = cot_tplfile(array('plugin', $extname));
-        $autoassigntags = true;
-    }
-}
-elseif (!empty($o))
+
+if (!empty($o))
 {
 	$extname = $o;
     $exthook = 'popup';
@@ -53,6 +41,19 @@ elseif (!empty($r))
     $ext_display_header = false;
     $path_skin = '';
     $autoassigntags = false;
+}
+elseif (!empty($e))
+{
+	$extname = $e;
+    $exthook = 'standalone';
+    $ext_display_header = true;
+    $path_skin = cot_tplfile($extname, 'plug');
+    $autoassigntags = false;
+    if (!file_exists($path_skin))
+    {
+        $path_skin = cot_tplfile(array('plugin', $extname));
+        $autoassigntags = true;
+    }
 }
 else
 {
