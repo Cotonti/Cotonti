@@ -139,20 +139,19 @@ div.help										{ color:#000; background-color:#f2f2f2; background-image:url(.
 #adminmenu li a img		{ height:32px; width:32px; }
 #adminmenu li a span	{ text-align:center; line-height:18px; margin:8px 0 0; height:18px; background:#ddd; display:block; overflow:hidden; }
 
-div.thumbicons {
+a.thumbicons {
   float: left;
-  width:215px;
+  width:211px;
   text-align: left;
-  padding: 5px 10px;
+  padding: 10px;
+  margin: 2px;
   }
-div.thumbicons img {
+a.thumbicons img {
    float: left;
    padding-right: 10px;
    } 
-div.thumbicons p {
-   text-align: left;
-   }
-div.thumbicons:hover {background: #EDEFF4;}
+
+a.thumbicons:hover {background: #EDEFF4;}
 /* 6. Tables
 -------------------------------------------------- */
 

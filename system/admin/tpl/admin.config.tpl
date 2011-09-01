@@ -52,16 +52,15 @@
 <h3 class="clear">{ADMIN_CONFIG_COL_CAPTION}:</h3>
 <div class="container">
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
-<div class="thumbicons">
-					<!-- IF {ADMIN_CONFIG_ROW_ICO} --> 
-					<img src="{ADMIN_CONFIG_ROW_ICO}">
-					<!-- ELSE -->
-					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
-					<!-- ENDIF -->
-					<p><a href="{ADMIN_CONFIG_ROW_URL}" class="ajax">{ADMIN_CONFIG_ROW_NAME}</a></p>
-</div>
+<a href="{ADMIN_CONFIG_ROW_URL}" class="ajax thumbicons">
+	<!-- IF {ADMIN_CONFIG_ROW_ICO} --> 
+	<img src="{ADMIN_CONFIG_ROW_ICO}">
+	<!-- ELSE -->
+	<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+	<!-- ENDIF -->
+	{ADMIN_CONFIG_ROW_NAME}
+</a>
 <!-- END: ADMIN_CONFIG_ROW -->
-
 </div>
 <!-- END: ADMIN_CONFIG_COL -->
 <div class="clear">
