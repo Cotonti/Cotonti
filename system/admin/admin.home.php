@@ -24,9 +24,9 @@ if (cot_module_active('page'))
 	));
 }
 
-if (!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled')
+if (!$cfg['debug_mode'] && file_exists('install.php') && is_writable('datas/config.php'))
 {
-	$is_adminwarnings = true;
+	cot_error('home_installable_error');
 }
 
 //Version Checking
@@ -79,6 +79,8 @@ foreach (cot_getextplugins('admin.home', 'R') as $pl)
 	include $pl;
 }
 /* ===== */
+
+cot_display_messages($t);
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');

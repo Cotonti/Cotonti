@@ -24,6 +24,8 @@ $L['Structure'] = 'Structure';
  * Home Section
  */
 
+$L['home_installable_error'] = 'Please remove install.php until next update or at least protect config.php from being writable';
+
 $L['home_newusers'] = 'New members';
 $L['home_newpages'] = 'New pages';
 $L['home_newtopics'] = 'New topics';
