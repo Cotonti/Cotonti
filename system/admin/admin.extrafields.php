@@ -11,7 +11,7 @@
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['isadmin']);
 
 require_once cot_incfile('extrafields');
