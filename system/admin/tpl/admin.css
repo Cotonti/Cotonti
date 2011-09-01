@@ -13,11 +13,6 @@ ol			{ list-style-position:outside; margin-bottom:5px; padding-left:20px; }
 ul.follow li	{ padding-left:25px; background:url(img/follow.png) no-repeat 5px 3px; }
 ul.follow img	{ vertical-align:-3px; }
 
-ul.config li	{ padding:5px; border-bottom:1px solid #ccc;}
-ul.config img	{ padding-right:10px;}
-ul.config li:last-child {border-bottom:0px;}
-ul.config li:hover {background: #EDEFF4;}
-
 a			{ color:#172973; text-decoration:none; }
 a:hover		{ text-decoration:underline; }
 a img		{ border:0; }
@@ -144,7 +139,8 @@ a.thumbicons {
   width:211px;
   text-align: left;
   padding: 10px;
-  margin: 2px;
+  margin: 2px 2px 5px 2px;
+  height: 30px;
   }
 a.thumbicons img {
    float: left;
