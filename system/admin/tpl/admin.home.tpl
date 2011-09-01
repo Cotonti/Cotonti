@@ -1,7 +1,4 @@
 <!-- BEGIN: MAIN -->
-
-		<!-- IF {PHP.is_adminwarnings} --><div class="error">{PHP.L.adm_warnings}: {PHP.adm_nogd}</div><!-- ENDIF -->
-
 		<h2>{PHP.L.Main}</h2>
 
 		<div class="col3-2 first">
@@ -11,6 +8,7 @@
 				<p>{ADMIN_HOME_UPDATE_REVISION} {ADMIN_HOME_UPDATE_MESSAGE}</p>
 			</div>
 <!-- END: UPDATE -->
+			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 			{ADMIN_HOME_HITS}
 			<div class="block">
 				<h3>Cotonti:</h3>
