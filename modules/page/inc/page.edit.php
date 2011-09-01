@@ -199,8 +199,7 @@ if ($a == 'update')
 		}
 
 		cot_log("Edited page #".$id,'adm');
-		$page_urlp = empty($rpage['page_alias']) ? 'c=' . $rpage['page_cat'] . "id=$id"
-				: 'c=' . $rpage['page_cat'] . 'al=' . $rpage['page_alias'];
+		$page_urlp = empty($rpage['page_alias']) ? array('c' => $rpage['page_cat'], 'id' => $id) : array('c' => $rpage['page_cat'], 'al' => $rpage['page_alias']);
 		cot_redirect(cot_url('page', $page_urlp, '', true));
 	}
 	else
