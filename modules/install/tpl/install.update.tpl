@@ -30,7 +30,7 @@
 				<p class="complete">
 					<span>{UPDATE_COMPLETED_NOTE}</span>
 
-					<a href="{PHP.cfg.mainurl}">{PHP.L.install_view_site}</a>
+					<a href="{PHP.cfg.mainurl}"><strong>{PHP.L.install_view_site}</strong></a>
 				</p>
 				<!-- END: COMPLETED -->
 			</div>

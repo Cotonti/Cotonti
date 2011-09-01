@@ -25,7 +25,7 @@ if ($pfs_caller == 'forums.posts')
 {
 	$pfs_src = 'newpost';
 	$pfs_name = 'newmsg';
-	$pfs_tag = 'NEWPOST';
+	$pfs_tag = 'POSTS_NEWPOST';
 }
 elseif ($pfs_caller == 'forums.newtopic')
 {

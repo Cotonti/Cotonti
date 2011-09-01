@@ -10,7 +10,7 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Modules and plugins checked by default
-$default_modules = array('index', 'page', 'rss');
+$default_modules = array('index', 'page', 'users', 'rss');
 $default_plugins = array('ckeditor', 'cleaner', 'html', 'htmlpurifier', 'ipsearch', 'mcaptcha', 'news', 'search');
 
 $step = empty($_SESSION['cot_inst_lang']) ? 0 : (int) $cfg['new_install'];
@@ -437,9 +437,9 @@ switch ($step)
 			$status['thumbs_dir'] = $R['install_code_not_found'];
 		}
 		/* ------------------- */
-		if (file_exists($file['config']))
+		if (file_exists($file['config']) || is_writable('datas'))
 		{
-			$status['config'] = is_writable($file['config'])
+			$status['config'] = is_writable($file['config']) || is_writable('datas')
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>

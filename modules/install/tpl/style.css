@@ -244,7 +244,7 @@ span.invalid {color: #EA0000;}
 
 #content div.done, #content div.error {
 	padding: 5px;
-	background: #63F39E;
+	background: #A6F4C5;
 	border: 1px solid #00CC33;
 	max-height: 300px;
 	overflow: auto;
