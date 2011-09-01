@@ -420,6 +420,7 @@ switch($n)
 			}
 		}
 		$sql->closeCursor();
+		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Core']);
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
 		$sql = $db->query("
 			SELECT DISTINCT(config_cat) FROM $db_config
@@ -442,6 +443,7 @@ switch($n)
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
 		$sql->closeCursor();
+		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Modules']);
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
 		$sql = $db->query("
 			SELECT DISTINCT(config_cat) FROM $db_config
@@ -464,6 +466,7 @@ switch($n)
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
 		$sql->closeCursor();
+		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Plugins']);
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
 		/* === Hook  === */
 		foreach (cot_getextplugins('admin.config.default.tags') as $pl)
