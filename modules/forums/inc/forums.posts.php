@@ -339,7 +339,7 @@ foreach ($sql_forums->fetchAll() as $row)
 
 	if (!empty($row['fp_updater']))
 	{
-		$row['fp_updatedby'] = sprintf($L['forums_updatedby'], htmlspecialchars($row['fp_updater']), cot_date('datetime_medium', $row['fp_updated'] + $usr['timezone'] * 3600), cot_build_timegap($row['fp_updated'], $sys['now_offset']));
+		$row['fp_updatedby'] = sprintf($L['forums_updatedby'], htmlspecialchars($row['fp_updater']), cot_date('datetime_medium', $row['fp_updated']), cot_build_timegap($row['fp_updated'], $sys['now_offset']));
 	}
 
 	$t->assign(cot_generate_usertags($row, 'FORUMS_POSTS_ROW_USER'));
@@ -348,9 +348,9 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_POSTID' => 'post_' . $row['fp_id'],
 		'FORUMS_POSTS_ROW_IDURL' => cot_url('forums', 'm=posts&id=' . $row['fp_id']),
 		'FORUMS_POSTS_ROW_URL' => cot_url('forums', 'm=posts&p=' . $row['fp_id'], "#" . $row['fp_id']),
-		'FORUMS_POSTS_ROW_CREATION' => cot_date('datetime_medium', $row['fp_creation'] + $usr['timezone'] * 3600),
+		'FORUMS_POSTS_ROW_CREATION' => cot_date('datetime_medium', $row['fp_creation']),
 		'FORUMS_POSTS_ROW_CREATION_STAMP' => $row['fp_creation'] + $usr['timezone'] * 3600,
-		'FORUMS_POSTS_ROW_UPDATED' => cot_date('datetime_medium', $row['fp_updated'] + $usr['timezone'] * 3600),
+		'FORUMS_POSTS_ROW_UPDATED' => cot_date('datetime_medium', $row['fp_updated']),
 		'FORUMS_POSTS_ROW_UPDATED_STAMP' => $row['fp_updated'] + $usr['timezone'] * 3600,
 		'FORUMS_POSTS_ROW_UPDATER' => htmlspecialchars($row['fp_updater']),
 		'FORUMS_POSTS_ROW_UPDATEDBY' => $row['fp_updatedby'],

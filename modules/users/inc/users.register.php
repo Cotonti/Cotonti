@@ -197,7 +197,7 @@ foreach($timezonelist as $x)
 	$timezonename[] = 'GMT ' . $x;
 }
 $form_timezone = cot_selectbox($ruser['user_timezone'], 'rtimezone', $timezonelist, $timezonename, false);
-$form_timezone .= ' '.$usr['gmttime']." / ".cot_date('datetime_medium', $sys['now_offset'] + $usr['timezone']*3600).' '.$usr['timetext'];
+$form_timezone .= ' '.$usr['gmttime']." / ".cot_date('datetime_medium', $sys['now_offset']).' '.$usr['timetext'];
 
 $t->assign(array(
 	'USERS_REGISTER_TITLE' => $L['aut_registertitle'],

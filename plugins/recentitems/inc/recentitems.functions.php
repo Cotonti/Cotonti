@@ -80,7 +80,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			$row['ft_lastpostlink'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ?
 				cot_rc_link($row['ft_lastposturl'], $R['icon_unread'], 'rel="nofollow"') :
 				cot_rc_link($row['ft_lastposturl'], $R['icon_follow'], 'rel="nofollow"');
-			$row['ft_lastpostlink'] .= cot_date('datetime_medium', $row['ft_updated'] + $usr['timezone'] * 3600);
+			$row['ft_lastpostlink'] .= cot_date('datetime_medium', $row['ft_updated']);
 			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], $sys['now_offset']);
 			$row['ft_replycount'] = $row['ft_postcount'] - 1;
 
@@ -128,7 +128,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			'FORUM_ROW_PATH_SHORT' => $build_forum_short,
 			'FORUM_ROW_DESC' => htmlspecialchars($row['ft_desc']),
 			'FORUM_ROW_PREVIEW' => $row['ft_preview'] . '...',
-			'FORUM_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate'] + $usr['timezone'] * 3600),
+			'FORUM_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate']),
 			'FORUM_ROW_CREATIONDATE_STAMP' => $row['ft_creationdate'] + $usr['timezone'] * 3600,
 			'FORUM_ROW_UPDATED' => $row['ft_lastpostlink'],
 			'FORUM_ROW_UPDATED_STAMP' => $row['ft_updated'] + $usr['timezone'] * 3600,

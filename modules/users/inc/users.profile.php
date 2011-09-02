@@ -176,7 +176,7 @@ foreach($timezonelist as $x)
 	$timezonename[] = 'GMT '.$x.', '.cot_date('datetime_medium', $sys['now_offset'] + $x*3600);
 }
 $profile_form_timezone = cot_selectbox($urr['user_timezone'], 'rusertimezone', $timezonelist, $timezonename, false);
-$profile_form_timezone .= ' '.$usr['gmttime'].' / '.cot_date('datetime_medium', $sys['now_offset'] + $usr['timezone']*3600).' '.$usr['timetext'];
+$profile_form_timezone .= ' '.$usr['gmttime'].' / '.cot_date('datetime_medium', $sys['now_offset']).' '.$usr['timetext'];
 
 $protected = !$cfg['users']['useremailchange'] ? array('disabled' => 'disabled') : array();
 $profile_form_email = cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)
@@ -204,9 +204,9 @@ $t->assign(array(
 	'USERS_PROFILE_GENDER' => cot_selectbox_gender($urr['user_gender'] ,'rusergender'),
 	'USERS_PROFILE_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', $sys['now_offset']), cot_date('Y', $sys['now_offset']) - 100, false),
 	'USERS_PROFILE_TIMEZONE' => $profile_form_timezone,
-	'USERS_PROFILE_REGDATE' => cot_date('datetime_medium', $urr['user_regdate'] + $usr['timezone'] * 3600),
+	'USERS_PROFILE_REGDATE' => cot_date('datetime_medium', $urr['user_regdate']),
 	'USERS_PROFILE_REGDATE_STAMP' => $urr['user_regdate'] + $usr['timezone'] * 3600,
-	'USERS_PROFILE_LASTLOG' => cot_date('datetime_medium', $urr['user_lastlog'] + $usr['timezone'] * 3600),
+	'USERS_PROFILE_LASTLOG' => cot_date('datetime_medium', $urr['user_lastlog']),
 	'USERS_PROFILE_LASTLOG_STAMP' => $urr['user_lastlog'] + $usr['timezone'] * 3600,
 	'USERS_PROFILE_LOGCOUNT' => $urr['user_logcount'],
 	'USERS_PROFILE_ADMINRIGHTS' => '',
