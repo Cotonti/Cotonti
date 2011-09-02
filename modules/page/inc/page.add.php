@@ -68,6 +68,7 @@ if ($a == 'add')
 	$rpage['page_begin'] = (int)cot_import_date('rpagebegin');
 	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
 	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
+	$rpage['page_updated'] = $sys['now_offset'];
 		
 	// Extra fields
 	foreach ($cot_extrafields[$db_pages] as $row)

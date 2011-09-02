@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `cot_pages` (
   `page_date` int(11) NOT NULL default '0',
   `page_begin` int(11) NOT NULL default '0',
   `page_expire` int(11) NOT NULL default '0',
+  `page_updated` int(11) NOT NULL default '0',
   `page_file` tinyint(4) default NULL,
   `page_url` varchar(255) collate utf8_unicode_ci default NULL,
   `page_size` varchar(16) collate utf8_unicode_ci default NULL,
