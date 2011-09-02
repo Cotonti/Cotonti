@@ -54,11 +54,11 @@ $pag['page_begin_noformat'] = $pag['page_begin'];
 $pag['page_tab'] = empty($pg) ? 0 : $pg;
 $pag['page_pageurl'] = empty($al) ? cot_url('page', array('c' => $pag['page_cat'], 'id' => $id)) : cot_url('page', array('c' => $pag['page_cat'], 'al' => $al));
 
-if ($pag['page_state'] == 1 && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
+if (($pag['page_state'] == 1 || $pag['page_begin'] > $sys['now'] || $pag['page_expire'] > 0 && $sys['now'] > $pag['page_expire']) && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
 {
 	$env['status'] = '403 Forbidden';
-	cot_log("Attempt to directly access an un-validated page", 'sec'); // TODO i18n
-	cot_redirect(cot_url('message', "msg=930", '', true));
+	cot_log("Attempt to directly access an un-validated or future/expired page", 'sec');
+	cot_redirect(cot_url('message', "msg=403", '', true));
 }
 if (mb_substr($pag['page_text'], 0, 6) == 'redir:')
 {
@@ -157,7 +157,7 @@ $t->assign(cot_generate_usertags($pag, 'PAGE_OWNER_'));
 $pag['page_file'] = intval($pag['page_file']);
 if ($pag['page_file'] > 0)
 {
-	if ($sys['now_offset'] > $pag['page_date'])
+	if ($sys['now_offset'] > $pag['page_begin'])
 	{
 		if (!empty($pag['page_url']))
 		{

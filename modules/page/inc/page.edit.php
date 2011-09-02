@@ -61,11 +61,12 @@ if ($a == 'update')
 
 	$rpage['page_cat'] = cot_import('rpagecat', 'P', 'TXT');
 
-	$rpagedatenow = cot_import('rpagedatenow', 'P', 'BOL');
-	$rpage['page_date'] = ($rpagedatenow) ? $sys['now_offset'] : (int)cot_import_date('rpagedate');
+//	$rpagedatenow = cot_import('rpagedatenow', 'P', 'BOL');
+//	$rpage['page_date'] = ($rpagedatenow) ? $sys['now_offset'] : (int)cot_import_date('rpagedate');
+	$rpage['page_date'] = $sys['now'];
 	$rpage['page_begin'] = (int)cot_import_date('rpagebegin');
 	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
-	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? $rpage['page_begin'] + 31536000 : $rpage['page_expire'];
+	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
 
 	// Extra fields
 	foreach ($cot_extrafields[$db_pages] as $row_extf)
@@ -246,7 +247,7 @@ $pageedit_array = array(
 	'PAGEEDIT_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', $pag['page_title'], array('size' => '64', 'maxlength' => '255')),
 	'PAGEEDIT_FORM_DESC' => cot_inputbox('text', 'rpagedesc', $pag['page_desc'], array('size' => '64', 'maxlength' => '255')),
 	'PAGEEDIT_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $pag['page_author'], array('size' => '24', 'maxlength' => '100')),
-	'PAGEEDIT_FORM_DATE' => cot_selectbox_date($pag['page_date'],'long', 'rpagedate').' '.$usr['timetext'],
+	'PAGEEDIT_FORM_DATE' => cot_date('datetime_full', $pag['page_date'] + $usr['timezone'] * 3600).' '.$usr['timetext'],
 	'PAGEEDIT_FORM_DATENOW' => cot_checkbox(0, 'rpagedatenow'),
 	'PAGEEDIT_FORM_BEGIN' => cot_selectbox_date($pag['page_begin'], 'long', 'rpagebegin').' '.$usr['timetext'],
 	'PAGEEDIT_FORM_EXPIRE' => cot_selectbox_date($pag['page_expire'], 'long', 'rpageexpire').' '.$usr['timetext'],

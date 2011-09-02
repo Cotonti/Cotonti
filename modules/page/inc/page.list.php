@@ -95,9 +95,9 @@ if (!empty($o) && !empty($p))
 		$where['filter'] .= "page_$o=" . $db->quote($p);
 	}
 }
-if (!$usr['isadmin'])
+if (!$usr['isadmin'] && $c != 'unvalidated')
 {
-	$where['date'] = 'page_date <= '.(int)$sys['now_offset'];
+	$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 }
 $list_url_path = array('c' =>$c, 'ord' => $o, 'p' => $p);
 if ($s != $cfg['page'][$c]['order'])

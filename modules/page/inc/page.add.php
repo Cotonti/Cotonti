@@ -67,7 +67,7 @@ if ($a == 'add')
 	$rpage['page_date'] = (int)$sys['now_offset'];
 	$rpage['page_begin'] = (int)cot_import_date('rpagebegin');
 	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
-	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? $rpage['page_begin'] + 31536000 : $rpage['page_expire'];
+	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
 		
 	// Extra fields
 	foreach ($cot_extrafields[$db_pages] as $row)
@@ -202,8 +202,8 @@ $pageadd_array = array(
 	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('size' => '24', 'maxlength' => '100')),
 	'PAGEADD_FORM_OWNER' => cot_build_user($usr['id'], htmlspecialchars($usr['name'])),
 	'PAGEADD_FORM_OWNERID' => $usr['id'],
-	'PAGEADD_FORM_BEGIN' => cot_selectbox_date($sys['now_offset'], 'long', 'rpagebegin'),
-	'PAGEADD_FORM_EXPIRE' => cot_selectbox_date($sys['now_offset'] + 31536000, 'long', 'rpageexpire'),
+	'PAGEADD_FORM_BEGIN' => cot_selectbox_date($sys['now'], 'long', 'rpagebegin'),
+	'PAGEADD_FORM_EXPIRE' => cot_selectbox_date(0, 'long', 'rpageexpire'),
 	'PAGEADD_FORM_FILE' => cot_selectbox($rpage['page_file'], 'rpagefile', range(0, 2), array($L['No'], $L['Yes'], $L['Members_only']), false),
 	'PAGEADD_FORM_URL' => cot_inputbox('text', 'rpageurl', $rpage['page_url'], array('size' => '56', 'maxlength' => '255')),
 	'PAGEADD_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $rpage['page_size'], array('size' => '56', 'maxlength' => '255')),

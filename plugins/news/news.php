@@ -62,7 +62,7 @@ if (count($cats) > 0)
 		$cat = ($catn == 0) ? $c : $v[0];
 
 		$catsub = cot_structure_children('page', $cat);
-		$where = "page_state = 0 AND page_cat <> 'system' AND page_date <= " . (int)$sys['now_offset'] . " AND page_cat IN ('" . implode("','", $catsub) . "')";
+		$where = "page_state = 0 AND page_cat <> 'system' AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat IN ('" . implode("','", $catsub) . "')";
 
 		$news_link_params = ($c != $indexcat) ? "c=" . $c : '';
 		$news_join_columns = '';

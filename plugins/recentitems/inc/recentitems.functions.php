@@ -178,7 +178,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	}
 	else
 	{
-		$where = "WHERE page_date >= $mode AND page_date <= " . (int)$sys['now_offset'] . " AND page_state=0 AND page_cat <> 'system' " . $incat;
+		$where = "WHERE page_date >= $mode AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_state=0 AND page_cat <> 'system' " . $incat;
 		$totalrecent['pages'] = $db->query("SELECT COUNT(*) FROM $db_pages " . $where)->fetchColumn();
 	}
 	
