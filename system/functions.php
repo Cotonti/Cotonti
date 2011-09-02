@@ -1793,9 +1793,9 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'BIRTHDATE_STAMP' => ($user_data['user_birthdate'] != 0) ? $user_data['user_birthdate'] : '',
 				'AGE' => ($user_data['user_birthdate'] != 0) ? cot_build_age($user_data['user_birthdate']) : '',
 				'TIMEZONE' => cot_build_timezone($user_data['user_timezone']),
-				'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate'] + $usr['timezone'] * 3600),
+				'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate']),
 				'REGDATE_STAMP' => $user_data['user_regdate'] + $usr['timezone'] * 3600,
-				'LASTLOG' => cot_date('datetime_medium', $user_data['user_lastlog'] + $usr['timezone'] * 3600),
+				'LASTLOG' => cot_date('datetime_medium', $user_data['user_lastlog']),
 				'LASTLOG_STAMP' => $user_data['user_lastlog'] + $usr['timezone'] * 3600,
 				'LOGCOUNT' => $user_data['user_logcount'],
 				'POSTCOUNT' => $user_data['user_postcount'],
@@ -2872,11 +2872,16 @@ function cot_tplfile($base, $type = 'module')
  * @see http://php.net/manual/en/function.date.php
  * @param string $format Date/time format as defined in $Ldt or according to PHP date() format
  * @param int $timestamp Unix timestamp
+ * @param bool $usertimezone Offset the date with current user's timezone
  * @return string
  */
-function cot_date($format, $timestamp = null)
+function cot_date($format, $timestamp = null, $usertimezone = true)
 {
-	global $L, $Ldt;
+	global $L, $Ldt, $usr;
+	if ($usertimezone)
+	{
+		$timestamp += $usr['timezone'] * 3600;
+	}
 	$datetime = ($Ldt[$format]) ? @date($Ldt[$format], $timestamp) : @date($format, $timestamp);
 	$search = array(
 		'Monday', 'Tuesday', 'Wednesday', 'Thursday',
