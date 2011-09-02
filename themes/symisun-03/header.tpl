@@ -9,6 +9,7 @@
 <meta name="keywords" content="{HEADER_META_KEYWORDS}" />
 <!-- 2ndary -->
 <meta name="generator" content="Cotonti http://www.cotonti.com" />
+<link rel="canonical" href="{HEADER_CANONICAL_URL}" />
 <!-- files linkage -->
 {HEADER_BASEHREF}
 <link rel="shortcut icon" href="favicon.ico" />

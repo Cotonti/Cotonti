@@ -170,7 +170,7 @@ else
 }
 $sys['port'] = empty($url['port']) ? '' : ':' . $url['port'];
 $sys['abs_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
-$sys['canonical_uri'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $_SERVER['REQUEST_URI'];
+$sys['canonical_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $_SERVER['REQUEST_URI'];
 define('COT_ABSOLUTE_URL', $sys['abs_url']);
 // URI redirect appliance
 $sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ?

@@ -4421,7 +4421,11 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 		return cot_url_custom($name, $params, $tail, $htmlspecialchars_bypass);
 	}
 	
-	$url = $name . '.php';
+	$url = in_array($name, array('admin', 'login', 'message')) ? "$name.php" : 'index.php';
+	if (!in_array($name, array('admin', 'index', 'login', 'message', 'plug')))
+	{
+		$params = array('e' => $name) + $params;
+	}
 	// Append query string if needed
 	if (count($params) > 0)
 	{

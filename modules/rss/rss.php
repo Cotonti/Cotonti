@@ -213,11 +213,11 @@ elseif ($defult_c)
 			}
 		}
 
-		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
+		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 	}
 	else
 	{
-		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
+		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 	}
 	$i = 0;
 	while ($row = $sql->fetch())

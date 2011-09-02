@@ -95,9 +95,9 @@ if (!empty($o) && !empty($p))
 		$where['filter'] .= "page_$o=" . $db->quote($p);
 	}
 }
-if (!$usr['isadmin'])
+if (!$usr['isadmin'] && $c != 'unvalidated')
 {
-	$where['date'] = 'page_date <= '.(int)$sys['now_offset'];
+	$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 }
 $list_url_path = array('c' =>$c, 'ord' => $o, 'p' => $p);
 if ($s != $cfg['page'][$c]['order'])
@@ -144,6 +144,18 @@ $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $tota
 
 $out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
 $out['subtitle'] = $cat['title'];
+
+// Building the canonical URL
+$pageurl_params = array('c' => $c, 'ord' => $o, 'p' => $p);
+if ($durl > 1)
+{
+	$pageurl_params['d'] = $durl;
+}
+if ($dcurl > 1)
+{
+	$pageurl_params['dc'] = $dcurl;
+}
+$out['canonical_uri'] = cot_url('page', $pageurl_params);
 
 $_SESSION['cat'] = $c;
 
