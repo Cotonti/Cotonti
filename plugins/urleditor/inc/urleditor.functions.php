@@ -50,7 +50,7 @@ function cot_apply_rwr()
 		else
 		{
 			// Special shortcut for user profiles
-			if ($path[0] == 'users' && $count == 2)
+			if ($path[0] == 'users' && $count == 2 && !isset($_GET['m']))
 			{
 				$_GET['e'] = 'users';
 				$_GET['m'] = 'details';
