@@ -122,6 +122,15 @@ else
 $out['desc'] = strip_tags($pag['page_desc']);
 $out['keywords'] = strip_tags($pag['page_keywords']);
 
+// Building the canonical URL
+$pageurl_params = array('c' => $pag['page_cat']);
+empty($al) ? $pageurl_params['id'] = $id : $pageurl_params['al'] = $al;
+if ($pg > 0)
+{
+	$pageurl_params['pg'] = $pg;
+}
+$out['canonical_uri'] = cot_url('page', $pageurl_params);
+
 /* === Hook === */
 foreach (cot_getextplugins('page.main') as $pl)
 {

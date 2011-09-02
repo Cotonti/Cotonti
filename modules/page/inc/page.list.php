@@ -145,6 +145,18 @@ $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $tota
 $out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
 $out['subtitle'] = $cat['title'];
 
+// Building the canonical URL
+$pageurl_params = array('c' => $c, 'ord' => $o, 'p' => $p);
+if ($durl > 1)
+{
+	$pageurl_params['d'] = $durl;
+}
+if ($dcurl > 1)
+{
+	$pageurl_params['dc'] = $dcurl;
+}
+$out['canonical_uri'] = cot_url('page', $pageurl_params);
+
 $_SESSION['cat'] = $c;
 
 /* === Hook === */
