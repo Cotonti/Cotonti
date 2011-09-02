@@ -370,11 +370,31 @@ switch($a)
 	/* =============== */
 	case 'edit':
 	/* =============== */
+		$dir = $is_module ? $cfg['modules_dir'] : $cfg['plugins_dir'];
+		$ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
+		$arg = $is_module ? 'mod' : 'pl';
+		$exists = file_exists($ext_info);
+		if ($exists)
+		{
+			$info = cot_infoget($ext_info, 'COT_EXT');
+			if (!$info && cot_plugin_active('genoa'))
+			{
+				// Try to load old format info
+				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
+			}
+		}
+		else
+		{
+			$info = array(
+				'Name' => $code
+			);
+		}
+		$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$arg=$code"), $info['Name']);
 		switch($b)
 		{
 			case 'install':
 				$result = cot_extension_install($code, $is_module);
-
+				$adminpath[] = $L['adm_opt_install'];
 				$t->assign(array(
 					'ADMIN_EXTENSIONS_EDIT_TITLE' => cot_rc('ext_installing', array(
 							'type' => $is_module ? $L['Module'] : $L['Plugin'],
@@ -393,7 +413,7 @@ switch($a)
 			break;
 			case 'update':
 				$result = cot_extension_install($code, $is_module, true, true);
-
+				$adminpath[] = $L['adm_opt_update'];
 				$t->assign(array(
 					'ADMIN_EXTENSIONS_EDIT_TITLE' => cot_rc('ext_updating', array(
 							'type' => $is_module ? $L['Module'] : $L['Plugin'],
@@ -420,6 +440,7 @@ switch($a)
 				if (cot_check_xg(false))
 				{
 					$result = cot_extension_uninstall($code, $is_module);
+					$adminpath[] = $L['adm_opt_uninstall'];
 					$t->assign(array(
 						'ADMIN_EXTENSIONS_EDIT_TITLE' => cot_rc('ext_uninstalling', array(
 								'type' => $is_module ? $L['Module'] : $L['Plugin'],

@@ -265,9 +265,13 @@
 <!-- END: DEFAULT -->
 <!-- BEGIN: EDIT -->
 		<h2>{ADMIN_EXTENSIONS_EDIT_TITLE}</h2>
-		<div class="{ADMIN_EXTENSIONS_EDIT_RESULT}">
-			{ADMIN_EXTENSIONS_EDIT_LOG}
+		<div class="block">
+			<div class="{ADMIN_EXTENSIONS_EDIT_RESULT}">
+				{ADMIN_EXTENSIONS_EDIT_LOG}
+			</div>
 		</div>
-			<a href="{ADMIN_EXTENSIONS_EDIT_CONTINUE_URL}" class="ajax button">{PHP.L.Clickhere}</a>
+		<div class="block button-toolbar">
+			<a href="{ADMIN_EXTENSIONS_EDIT_CONTINUE_URL}" class="ajax button special large">{PHP.L.Clickhere}</a>
+		</div>
 <!-- END: EDIT -->
 <!-- END: MAIN -->
