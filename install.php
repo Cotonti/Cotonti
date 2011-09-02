@@ -42,6 +42,7 @@ $cfg['cache'] = false;
 $cfg['xtpl_cache'] = false;
 
 require_once $cfg['system_dir'].'/functions.php';
+require_once $cfg['system_dir'] . '/cotemplate.php';
 require_once 'system/debug.php';
 
 
@@ -106,7 +107,6 @@ else
 
 require_once cot_incfile('forms');
 require_once cot_incfile('extensions');
-require_once cot_incfile('cotemplate');
 require_once cot_langfile('install', 'module');
 require_once cot_langfile('users', 'core');
 require_once cot_langfile('admin', 'core');
