@@ -468,10 +468,8 @@ switch($a)
 				cot_die();
 			break;
 		}
-		$db->update($db_users, array('user_auth' => ''));
 		if ($cache)
 		{
-			$cache->clear();
 			cot_rc_consolidate();
 		}
 		cot_clear_messages();

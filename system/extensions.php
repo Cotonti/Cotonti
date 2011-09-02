@@ -556,7 +556,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
  */
 function cot_extension_uninstall($name, $is_module = false)
 {
-    global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins;
+    global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins, $cot_plugins_active, $cot_plugins_enabled, $cot_modules;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
 		. "/$name";
@@ -641,6 +641,15 @@ function cot_extension_uninstall($name, $is_module = false)
         $sql->closeCursor();
 	}
 	
+	$cot_plugins_active[$name] = false;
+	if (!$is_module)
+	{
+		unset($cot_plugins_enabled[$name]);
+	}
+	else
+	{
+		unset($cot_modules[$name]);
+	}
 	// Clear cache
 	$db->update($db_users, array('user_auth' => ''));
 	$cache && $cache->clear();
