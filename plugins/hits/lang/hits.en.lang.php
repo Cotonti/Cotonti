@@ -16,7 +16,6 @@ defined('COT_CODE') or die('Wrong URL.');
  */
 
 $L['cfg_disableactivitystats'] = array('Do not display stats for the last 7 days', '(displayed on the administration panel home page)');
-$L['cfg_disabledbstats'] = array('Do not display database stats', '(displayed on the administration panel home page)');
 $L['cfg_hit_precision'] = array('Optimized hit counter precision', '');
 
 $L['info_desc'] = 'Simple hit statistics. Recommended for small sites only.';

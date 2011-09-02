@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Administration panel - Home page for administrators
  *
@@ -8,21 +9,9 @@
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
-
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 $t = new XTemplate(cot_tplfile('admin.home', 'core'));
-
-if (cot_module_active('page'))
-{
-	require_once cot_incfile('page', 'module');
-	$pagesqueued = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
-	$pagesqueued = $pagesqueued->fetchColumn();
-	$t->assign(array(
-		'ADMIN_HOME_URL' => cot_url('admin', 'm=page'),
-		'ADMIN_HOME_PAGESQUEUED' => $pagesqueued
-	));
-}
 
 if (!$cfg['debug_mode'] && file_exists('install.php') && is_writable('datas/config.php'))
 {
@@ -68,10 +57,64 @@ if ($cfg['check_updates'] && $cache)
 	}
 }
 
+$sql = $db->query("SHOW TABLES");
+foreach ($sql->fetchAll(PDO::FETCH_NUM) as $row)
+{
+	$table_name = $row[0];
+	$status = $db->query("SHOW TABLE STATUS LIKE '$table_name'");
+	$status1 = $status->fetch();
+	$status->closeCursor();
+	$tables[] = $status1;
+}
+
+foreach ($tables as $dat)
+{
+	$table_length = $dat['Index_length'] + $dat['Data_length'];
+	$total_length += $table_length;
+	$total_rows += $dat['Rows'];
+	$total_index_length += $dat['Index_length'];
+	$total_data_length += $dat['Data_length'];
+}
+
+$totalplugins = $db->query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code")->rowCount();
+$totalhooks = $db->query("SELECT COUNT(*) FROM $db_plugins")->fetchColumn();
+
 $t->assign(array(
+	'ADMIN_HOME_DB_TOTAL_ROWS' => $total_rows,
+	'ADMIN_HOME_DB_INDEXSIZE' => number_format(($total_index_length / 1024), 1, '.', ' '),
+	'ADMIN_HOME_DB_DATASSIZE' => number_format(($total_data_length / 1024), 1, '.', ' '),
+	'ADMIN_HOME_DB_TOTALSIZE' => number_format(($total_length / 1024), 1, '.', ' '),
+	'ADMIN_HOME_TOTALPLUGINS' => $totalplugins,
+	'ADMIN_HOME_TOTALHOOKS' => $totalhooks,
 	'ADMIN_HOME_VERSION' => $cfg['version'],
 	'ADMIN_HOME_DB_VERSION' => htmlspecialchars($db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'")->fetchColumn())
 ));
+
+/* === Hook === */
+foreach (cot_getextplugins('admin.home.mainpanel', 'R') as $pl)
+{
+	$line = '';
+	include $pl;
+	if (!empty($line))
+	{
+		$t->assign('ADMIN_HOME_MAINPANEL', $line);
+		$t->parse('MAIN.MAINPANEL');
+	}
+}
+/* ===== */
+
+/* === Hook === */
+foreach (cot_getextplugins('admin.home.sidepanel', 'R') as $pl)
+{
+	$line = '';
+	include $pl;
+	if (!empty($line))
+	{
+		$t->assign('ADMIN_HOME_SIDEPANEL', $line);
+		$t->parse('MAIN.SIDEPANEL');
+	}
+}
+/* ===== */
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.home', 'R') as $pl)
@@ -84,5 +127,4 @@ cot_display_messages($t);
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
-
 ?>
