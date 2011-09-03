@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<h3><a href="index.php">{PHP.L.Pages}</a></h3>
+		<h3><a href="{PHP|cot_url('index')}">{PHP.L.Pages}</a></h3>
 		<table class="cells">
 			<tr>
 				<td class="coltop width5">&nbsp;</td>

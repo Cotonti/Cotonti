@@ -54,7 +54,7 @@
             <!-- IF {PHP.usr.id} > 0 -->
             <a href="{FORUMS_POSTS_ROW_QUOTE_URL}" class="comm"> <span>{PHP.L.Quote}</span></a> &nbsp;
             <!-- ELSE -->
-            <a href="login.php" class="comm"><span>{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.Quote}</span></a> &nbsp;
+            <a href="{PHP|cot_url('login')}" class="comm"><span>{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.Quote}</span></a> &nbsp;
             <!-- ENDIF -->
           </p>
           <!-- action buttons -->
@@ -83,7 +83,7 @@
       <!-- IF {PHP.usr.id} > 0 -->
       <h3><a href="{PHP.q|cot_url('forums','m=posts&q=$this&n=last')}#np">{PHP.themelang.forumspost.post}</a></h3>
       <!-- ELSE -->
-      <h3><a href="login.php">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.themelang.forumspost.post}</a></h3>
+      <h3><a href="{PHP|cot_url('login')}">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.themelang.forumspost.post}</a></h3>
       <!-- ENDIF -->
       <h3><a href="{PHP.q|cot_url('rss','c=topics&amp;id=$this')}">{PHP.themelang.list.rss}</a></h3>
       <h3>{PHP.themelang.forumspost.jump}<br /><span class="colleft whitee jump">{FORUMS_POSTS_JUMPBOX}</span><br /></h3> 

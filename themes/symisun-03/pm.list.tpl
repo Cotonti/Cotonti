@@ -8,7 +8,7 @@
   <div class="padding20">
     <div id="left">
       <h1>{PHP.L.Private_Messages}</h1>
-      <div class="breadcrumb">{PHP.themelang.list.bread}: <a href="users.php">{PHP.L.Users}</a> <a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.usr.name}</a> {PM_PAGETITLE} </div>
+      <div class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('users')}">{PHP.L.Users}</a> <a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.usr.name}</a> {PM_PAGETITLE} </div>
       <p class="details">{PM_SUBTITLE}</p>
 
 	  
@@ -79,8 +79,8 @@
 		  <li>{PHP.L.Filter}: {PM_FILTER_UNREAD}, {PM_FILTER_STARRED}, {PM_FILTER_ALL} </li>
         </ul>
       </div>
-      <h3><a href="pfs.php">{PHP.L.PFS}</a></h3>
-      <h3><a href="users.php">{PHP.L.Users}</a></h3>
+      <h3><a href="{PHP|cot_url('pfs')}">{PHP.L.PFS}</a></h3>
+      <h3><a href="{PHP|cot_url('users')}">{PHP.L.Users}</a></h3>
       &nbsp; </div>
   </div>
 </div>

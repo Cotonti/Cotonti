@@ -1,6 +1,6 @@
 <!-- BEGIN: POLL_VIEW -->
 	<div id = "poll_{POLL_ID}">
-		<form action="{POLL_FORM_URL}" method="post" id="poll_form_{POLL_ID}" class="ajax post-poll_{POLL_ID};polls.php;mode=ajax">
+		<form action="{POLL_FORM_URL}" method="post" id="poll_form_{POLL_ID}" class="ajax post-poll_{POLL_ID};{PHP|cot_url('polls')};mode=ajax">
 			<input type="hidden" name="poll_id" value="{POLL_ID}" />
 			<table class="cells">
 				<!-- BEGIN: POLLTABLE -->
@@ -79,7 +79,7 @@
     	<div class="padding20">	
 <div id="left">
 	<h1>{POLLS_TITLE}</h1>
-	<p class="breadcrumb">{PHP.themelang.list.bread}: <a href="index.php">{PHP.L.Home}</a> {PHP.cfg.separator} <a href="polls.php">{PHP.L.Polls}</a> {PHP.cfg.separator} {PHP.L.Poll} #{PHP.id}</p>
+	<p class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('index')}">{PHP.L.Home}</a> {PHP.cfg.separator} <a href="{PHP|cot_url('polls')}">{PHP.L.Polls}</a> {PHP.cfg.separator} {PHP.L.Poll} #{PHP.id}</p>
 	{POLLS_FORM}	
 </div>
 <div id="right">
@@ -101,7 +101,7 @@
     	<div class="padding20">	
 <div id="left" style="margin-right:25px" class="noimg">
 	<h1>{PHP.L.polls_viewarchives}</h1>
-	<p class="breadcrumb">{PHP.themelang.list.bread}: <a href="index.php">{PHP.L.Home}</a> {PHP.cfg.separator} <a href="polls.php">{PHP.L.Polls}</a></p>
+	<p class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('index')}">{PHP.L.Home}</a> {PHP.cfg.separator} <a href="{PHP|cot_url('polls')}">{PHP.L.Polls}</a></p>
 	<!-- BEGIN: POLL_ROW -->
 	{POLL_DATE|cot_date('date_full', $this)} &nbsp; <a href="{POLL_HREF}">{POLL_TEXT}</a> <br />
 	<!-- END: POLL_ROW -->

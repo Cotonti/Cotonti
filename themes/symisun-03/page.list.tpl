@@ -18,7 +18,7 @@
 		<!-- ELSE -->
 		<div class="red">{PHP.themelang.list.none}</div>
 		<!-- IF {PHP.usr.id} == 0 -->
-		<a href="login.php">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.lis_submitnew}</a>
+		<a href="{PHP|cot_url('login')}">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.lis_submitnew}</a>
 		<!-- ELSE -->
 		{LIST_SUBMITNEWPAGE}
 		<!-- ENDIF -->
@@ -50,11 +50,11 @@
 	<!-- IF {LIST_TOP_PAGINATION}-->
 	<div class="paging">{LIST_TOP_PAGEPREV}{LIST_TOP_PAGINATION}{LIST_TOP_PAGENEXT}</div>
 	<!-- ENDIF -->
-	<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="index.php">{PHP.L.Home}</a> {LIST_CATPATH}</div>
+	<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('index')}">{PHP.L.Home}</a> {LIST_CATPATH}</div>
 	</div>
 	<div id="right">
 	<!-- IF {PHP.usr.id} == 0 -->
-	<h3><a href="login.php">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.page_addtitle}</a></h3>
+	<h3><a href="{PHP|cot_url('login')}">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.page_addtitle}</a></h3>
 	<!-- ELSE -->
 	<h3>{LIST_SUBMITNEWPAGE}</h3>
 	<!-- ENDIF -->

@@ -4,7 +4,7 @@
   <div class="padding20 whitee">
     <div id="left">
 		<h1>{PHP.L.Update} {PHP.L.Profile}</h1>
-		<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="users.php">{PHP.L.Users}</a> <a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{USERS_PROFILE_NAME}</a> <a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Profile} {PHP.L.Update}</a> </div>
+		<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('users')}">{PHP.L.Users}</a> <a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{USERS_PROFILE_NAME}</a> <a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Profile} {PHP.L.Update}</a> </div>
 		<p class="details">{USERS_PROFILE_SUBTITLE}</p>
 		<!-- BEGIN: USERS_PROFILE_ERROR -->
 		<div class="error">{USERS_PROFILE_ERROR_BODY}</div>
@@ -127,9 +127,9 @@
 				<li><a href="{PHP|cot_url('users','m=profile#privacy')}">{PHP.themelang.usersprofile.privacy}</a></li>          <li><a href="{PHP|cot_url('users','m=profile#settings')}">{PHP.themelang.usersprofile.settings}</a></li>          <li><a href="{PHP|cot_url('users','m=profile#personal')}">{PHP.themelang.usersprofile.personal}</a></li>          <li><a href="{PHP|cot_url('users','m=profile#avatar')}">{PHP.L.Avatar} &amp; {PHP.L.Photo}</a></li>          <li><a href="{PHP|cot_url('users','m=profile#sig')}">{PHP.L.Signature}</a></li>          <li><a href="{PHP|cot_url('users','m=profile#password')}">{PHP.L.Edit} {PHP.L.Password}</a></li>
 			</ul>
 		</div>
-		<h3><a href="pm.php">{PHP.L.Private_Messages}</a></h3>
-		<h3><a href="pfs.php">{PHP.L.PFS}</a></h3>
-		<h3><a href="users.php">{PHP.L.Users}</a></h3>
+		<h3><a href="{PHP|cot_url('pm')}">{PHP.L.Private_Messages}</a></h3>
+		<h3><a href="{PHP|cot_url('pfs')}">{PHP.L.PFS}</a></h3>
+		<h3><a href="{PHP|cot_url('users')}">{PHP.L.Users}</a></h3>
 		&nbsp; 
 	</div>
   </div>

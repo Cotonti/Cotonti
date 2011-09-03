@@ -3,7 +3,7 @@
 <div id="content">  
 	<div class="padding20 whitee">    
 		<h1>{PHP.L.Search}</h1>	
-		<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="index.php">{PHP.L.Home}</a> {PHP.L.Search}</div>    
+		<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('index')}">{PHP.L.Home}</a> {PHP.L.Search}</div>    
 		<p><em>{PHP.themelang.search.Generalhint}</em></p>    &nbsp;	
     <form id='search' action='{PLUGIN_SEARCH_ACTION}' method='post'>		
 		<input type='hidden' name='a' value='search' />		

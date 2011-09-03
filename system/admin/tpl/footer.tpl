@@ -2,7 +2,7 @@
 
 <div id="footer">
 	<ul>
-		<li><a href="admin.php">{PHP.L.Home}</a></li>
+		<li><a href="{PHP|cot_url('admin')}">{PHP.L.Home}</a></li>
 		<li><a href="{PHP|cot_url('admin','m=config')}">{PHP.L.Configuration}</a></li>
 		<li><a href="{PHP|cot_url('admin','m=structure')}">{PHP.L.Structure}</a></li>
 		<li><a href="{PHP|cot_url('admin','m=extensions')}">{PHP.L.Extensions}</a></li>

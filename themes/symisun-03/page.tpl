@@ -12,7 +12,7 @@
                 {PAGE_TEXT}
                 <br class="clear" /> 
                 &nbsp;
-            	<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="index.php">{PHP.L.Home}</a>{PAGE_CATPATH} {PAGE_SHORTTITLE}</div>
+            	<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('index')}">{PHP.L.Home}</a>{PAGE_CATPATH} {PAGE_SHORTTITLE}</div>
 			</div>
 
 			<div id="right">

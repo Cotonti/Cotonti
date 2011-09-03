@@ -30,7 +30,7 @@
 		</li>
 		<!-- IF {PHP.cot_modules.forums} -->
 		<li>
-			<a href="forums.php" title="{PHP.L.Forums}">
+			<a href="{PHP|cot_url('forums')}" title="{PHP.L.Forums}">
 				{PHP.L.Forums}
 				<span>Discussions</span>
 			</a>
@@ -44,7 +44,7 @@
 		</li>
 		<!-- IF {PHP.cot_modules.rss} -->
 		<li>
-			<a href="rss.php" title="{PHP.L.RSS_Feeds}">
+			<a href="{PHP|cot_url('rss')}" title="{PHP.L.RSS_Feeds}">
 				RSS
 				<span>Subscribe me</span>
 			</a>

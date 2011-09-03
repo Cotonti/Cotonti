@@ -50,9 +50,9 @@
 		
 		<h3><a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Update} {PHP.L.Profile}</a></h3>
 		
-		<h3><a href="pm.php">{PHP.L.Private_Messages}</a></h3>
+		<h3><a href="{PHP|cot_url('pm')}">{PHP.L.Private_Messages}</a></h3>
 		
-		<h3><a href="pfs.php">{PHP.L.PFS}</a></h3>
+		<h3><a href="{PHP|cot_url('pfs')}">{PHP.L.PFS}</a></h3>
 		<!-- ENDIF -->
 		
 		<!-- IF {PHP.usr.id} > 0 AND {PHP.usr.id} != {PHP.urr.user_id} -->
@@ -72,9 +72,9 @@
 		
 		<h3><a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Update} {PHP.L.Profile}</a></h3>
 		
-		<h3><a href="pm.php">{PHP.L.Private_Messages}</a></h3>
+		<h3><a href="{PHP|cot_url('pm')}">{PHP.L.Private_Messages}</a></h3>
 		
-		<h3><a href="pfs.php">{PHP.L.PFS}</a></h3>
+		<h3><a href="{PHP|cot_url('pfs')}">{PHP.L.PFS}</a></h3>
 		<!-- ENDIF -->
 		
 		<!-- IF {PHP.usr.id} == 0 -->
@@ -91,7 +91,7 @@
 		</div>
 		<!-- ENDIF -->
 		
-		<h3><a href="users.php">{PHP.L.Users}</a></h3>
+		<h3><a href="{PHP|cot_url('users')}">{PHP.L.Users}</a></h3>
 		
 		<!-- BEGIN: USERS_DETAILS_ADMIN -->
 		<h3 class="adm">{PHP.themelang.page.admin}</h3>

@@ -30,7 +30,7 @@
 				<h2 class="admin">{PHP.L.Admin}</h2>
 				<ul class="bullets">
 					<!-- IF {PHP.usr.isadmin} -->
-					<li><a href="admin.php">{PHP.L.Adminpanel}</a></li>
+					<li><a href="{PHP|cot_url('admin')}">{PHP.L.Adminpanel}</a></li>
 					<!-- ENDIF -->
 					<li>{LIST_SUBMITNEWPAGE}</li>
 				</ul>

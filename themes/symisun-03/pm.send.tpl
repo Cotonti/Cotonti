@@ -4,7 +4,7 @@
   <div class="padding20">
     <div id="left">
       <h1>{PHP.L.pmsend_title}</h1>
-      <p class="breadcrumb"> {PHP.themelang.list.bread}: <a href="users.php">{PHP.L.Users}</a> <a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.usr.name}</a> {PMSEND_TITLE} </p>
+      <p class="breadcrumb"> {PHP.themelang.list.bread}: <a href="{PHP|cot_url('users')}">{PHP.L.Users}</a> <a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.usr.name}</a> {PMSEND_TITLE} </p>
       <!-- BEGIN: PMSEND_ERROR -->
       <div class="error">{PMSEND_ERROR_BODY}</div>
       <!-- END: PMSEND_ERROR -->
@@ -37,8 +37,8 @@
           <li>{PMSEND_SENDNEWPM}</li>
         </ul>
       </div>
-      <h3><a href="pfs.php">{PHP.L.PFS}</a></h3>
-      <h3><a href="users.php">{PHP.L.Users}</a></h3>
+      <h3><a href="{PHP|cot_url('pfs')}">{PHP.L.PFS}</a></h3>
+      <h3><a href="{PHP|cot_url('users')}">{PHP.L.Users}</a></h3>
       &nbsp; </div>
   </div>
 </div>
