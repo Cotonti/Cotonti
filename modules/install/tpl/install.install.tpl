@@ -25,7 +25,7 @@
 			<div id="content">
 					{FILE "./themes/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
-				<form action="{PHP|cot_url('install')}" method="post">
+				<form action="install.php" method="post">
 
 				<!-- BEGIN: STEP_0 -->
 					<input type="hidden" name="step" value="0" />
@@ -138,7 +138,7 @@
 					<strong>{PHP.L.install_complete}</strong>
 					<span>{PHP.L.install_complete_note}</span>
 
-					<a href="{PHP|cot_url('index')}">{PHP.L.install_view_site}</a>
+					<a href="{PHP.cfg.mainurl}">{PHP.L.install_view_site}</a>
 				</p>
 				<!-- END: STEP_5 -->
 				</form>
