@@ -2641,6 +2641,10 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 	{
 		$cot_lang_theme_reload = true;
 	}
+	if (@file_exists($cfg['lang_dir']."/$lang/$name.$lang.lang.php"))
+	{
+		return $cfg['lang_dir']."/$lang/$name.$lang.lang.php";
+	}
 	if ($type == 'module')
 	{
 		if (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
@@ -2654,14 +2658,7 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 	}
 	elseif ($type == 'core')
 	{
-		if (@file_exists($cfg['lang_dir']."/$lang/$name.$lang.lang.php"))
-		{
-			return $cfg['lang_dir']."/$lang/$name.$lang.lang.php";
-		}
-		else
-		{
-			return $cfg['lang_dir']."/$default/$name.$default.lang.php";
-		}
+		return $cfg['lang_dir']."/$default/$name.$default.lang.php";
 	}
 	else
 	{
