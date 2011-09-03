@@ -3,7 +3,7 @@
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 <!-- IF {PHP.usr.isadmin} -->
 			<div class="block button-toolbar">
-				<a title="{PHP.L.adm_purgeall}" href="{ADMIN_LOG_URL_PRUNE}" class="ajax button">{PHP.L.adm_purgeall}</a>
+				<a title="{PHP.L.adm_purgeall}" href="{ADMIN_LOG_URL_PRUNE}" class="ajax button large">{PHP.L.adm_purgeall}</a>
 			</div>
 <!-- ENDIF -->
 			<form action="" class="margintop10 marginbottom10">{PHP.L.Group}:

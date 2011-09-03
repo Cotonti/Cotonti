@@ -48,6 +48,7 @@ if (!is_array($cot_urltrans))
 		'trans' => '{$_area}.php'
 	);
 	$cot_urltrans['admin'][] = $cot_urltrans_fallback;
+	$cot_urltrans['index'][] = $cot_urltrans_fallback;
 	$cot_urltrans['login'][] = $cot_urltrans_fallback;
 	$cot_urltrans['message'][] = $cot_urltrans_fallback;
 	$cot_urltrans['*'][] = array(

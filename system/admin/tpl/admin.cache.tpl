@@ -2,9 +2,9 @@
 		<h2>{PHP.L.adm_internalcache}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 		<div class="block button-toolbar">
-			<a href="{ADMIN_CACHE_URL_REFRESH}" class="ajax button">{PHP.L.Refresh}</a>
-			<a href="{ADMIN_CACHE_URL_PURGE}" class="ajax button">{PHP.L.adm_purgeall}</a>
-			<a href="{ADMIN_CACHE_URL_SHOWALL}" class="ajax button">{PHP.L.adm_cache_showall}</a>
+			<a href="{ADMIN_CACHE_URL_REFRESH}" class="ajax button large">{PHP.L.Refresh}</a>
+			<a href="{ADMIN_CACHE_URL_PURGE}" class="ajax button large">{PHP.L.adm_purgeall}</a>
+			<a href="{ADMIN_CACHE_URL_SHOWALL}" class="ajax button large">{PHP.L.adm_cache_showall}</a>
 		</div>
 <!-- BEGIN: ADMIN_CACHE_MEMORY -->
 		<div class="block">
