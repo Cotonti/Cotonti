@@ -37,7 +37,7 @@
 		</li>
 		<!-- ENDIF -->
 		<li>
-			<a href="page.php?c=news" title="{PHP.L.News}">
+			<a href="{PHP|cot_url('page','c=news')}" title="{PHP.L.News}">
 				{PHP.L.News}
 				<span>Our updates</span>
 			</a>

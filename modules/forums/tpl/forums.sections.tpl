@@ -8,7 +8,7 @@
 			<tr>
 				<td class="coltop" class="width10">&nbsp;</td>
 				<td class="coltop" class="width40">
-					<a href="forums.php?c=fold#top" rel="nofollow">{PHP.L.forums_foldall}</a><span class="spaced">/</span><a href="forums.php?c=unfold#top" rel="nofollow">{PHP.L.forums_unfoldall}</a>
+					<a href="{PHP|cot_url('forums','c=fold#top')}" rel="nofollow">{PHP.L.forums_foldall}</a><span class="spaced">/</span><a href="{PHP|cot_url('forums','c=unfold#top')}" rel="nofollow">{PHP.L.forums_unfoldall}</a>
 				</td>
 				<td class="coltop" class="width20">{PHP.L.Lastpost}</td>
 				<td class="coltop" class="width10">{PHP.L.forums_topics}</td>
@@ -57,7 +57,7 @@
 
 	</table>
 	<!-- END: FORUMS_SECTIONS -->
-	<p class="paging"><span><a href="plug.php?e=search&amp;tab=frm">{PHP.L.forums_searchinforums}</a></span><span><a href="plug.php?e=forumstats">{PHP.L.Statistics}</a></span><span><a href="forums.php?n=markall" rel="nofollow">{PHP.L.forums_markasread}</a></span></p>
+	<p class="paging"><span><a href="{PHP|cot_url('plug','e=search&amp;tab=frm')}">{PHP.L.forums_searchinforums}</a></span><span><a href="{PHP|cot_url('plug','e=forumstats')}">{PHP.L.Statistics}</a></span><span><a href="{PHP|cot_url('forums','n=markall')}" rel="nofollow">{PHP.L.forums_markasread}</a></span></p>
 </div>
 
 <div class="block">

@@ -4,7 +4,7 @@
   <div class="padding20">
     <div id="left">
       <h1>{PHP.L.pmsend_title}</h1>
-      <p class="breadcrumb"> {PHP.themelang.list.bread}: <a href="users.php">{PHP.L.Users}</a> <a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.usr.name}</a> {PMSEND_TITLE} </p>
+      <p class="breadcrumb"> {PHP.themelang.list.bread}: <a href="users.php">{PHP.L.Users}</a> <a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.usr.name}</a> {PMSEND_TITLE} </p>
       <!-- BEGIN: PMSEND_ERROR -->
       <div class="error">{PMSEND_ERROR_BODY}</div>
       <!-- END: PMSEND_ERROR -->
@@ -26,8 +26,8 @@
     </div>
     <div id="right">
       <h3 style="color:#000">{PHP.L.hea_youareloggedas} {PHP.usr.name}</h3>
-      <h3><a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.L.View} {PHP.L.Profile}</a></h3>
-      <h3><a href="users.php?m=profile">{PHP.L.Update} {PHP.L.Profile}</a></h3>
+      <h3><a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.L.View} {PHP.L.Profile}</a></h3>
+      <h3><a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Update} {PHP.L.Profile}</a></h3>
       <h3><span style="background-color:#94af66; color:#fff">{PHP.L.Private_Messages}</span></h3>
       <div class="padding15 admin" style="padding-bottom:0">
         <ul>

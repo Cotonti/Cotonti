@@ -48,8 +48,8 @@
 		<div id="right">
 			<!-- IF {PHP.usr.id} > 0 -->
 			<h3 style="color:#000">{PHP.L.hea_youareloggedas} {PHP.usr.name}</h3>
-			<h3><a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.L.View} {PHP.L.Profile}</a></h3>
-			<h3><a href="users.php?m=profile">{PHP.L.Update} {PHP.L.Profile}</a></h3>
+			<h3><a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.L.View} {PHP.L.Profile}</a></h3>
+			<h3><a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Update} {PHP.L.Profile}</a></h3>
 			<h3><a href="pm.php">{PHP.L.Private_Messages}</a></h3>
 			<h3><a href="pfs.php">{PHP.L.PFS}</a></h3>
 			<!-- ENDIF -->	<!-- IF {PHP.usr.id} == 0 -->

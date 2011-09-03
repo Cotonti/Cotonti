@@ -10,7 +10,7 @@
 			<div id="adminmenu">
 				<ul>
 					<li>
-						<a href='plug.php?e=search' 				
+						<a href='{PHP|cot_url('plug','e=search')}' 				
 						<!-- IF !{PHP.tab} -->
 						class='current'				
 						<!-- ENDIF -->				
@@ -18,7 +18,7 @@
 						</a>
 					</li>				
 					<li>
-						<a href='plug.php?e=search&amp;tab=frm'
+						<a href='{PHP|cot_url('plug','e=search&amp;tab=frm')}'
 						<!-- IF {PHP.tab} == "frm" -->
 						class='current'
 						<!-- ENDIF -->
@@ -26,7 +26,7 @@
 						</a>
 					</li>
 					<li>
-						<a href='plug.php?e=search&amp;tab=pag'
+						<a href='{PHP|cot_url('plug','e=search&amp;tab=pag')}'
 						<!-- IF {PHP.tab} == "pag" -->
 						class='current'
 						<!-- ENDIF -->

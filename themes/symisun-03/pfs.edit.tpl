@@ -25,7 +25,7 @@
     	<div class="padding20 popup whitee">
         	
             <h1>{PFS_TITLE}</h1>
-            <div class="breadcrumb">{PHP.themelang.list.bread}: <a href="users.php">{PHP.L.Users}</a> <a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.usr.name}</a> <a href="pfs.php">{PHP.L.PFS}</a></div>
+            <div class="breadcrumb">{PHP.themelang.list.bread}: <a href="users.php">{PHP.L.Users}</a> <a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.usr.name}</a> <a href="pfs.php">{PHP.L.PFS}</a></div>
             <!-- IF {PFS_SUBTITLE} == true -->
             <p class="details">{PFS_SUBTITLE}</p>
             <!-- ENDIF -->

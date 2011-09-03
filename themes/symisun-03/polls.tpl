@@ -83,8 +83,8 @@
 	{POLLS_FORM}	
 </div>
 <div id="right">
-	<h3><a href="polls.php?id={PHP.id}#com">{PHP.L.comments_comments}</a></h3>
-	<h3><a href="polls.php?id=viewall">{PHP.L.polls_viewarchives}</a></h3>
+	<h3><a href="{PHP.id|cot_url('polls','id=$this')}#com">{PHP.L.comments_comments}</a></h3>
+	<h3><a href="{PHP|cot_url('polls','id=viewall')}">{PHP.L.polls_viewarchives}</a></h3>
 	&nbsp;
 </div>
             <br class="clear" />

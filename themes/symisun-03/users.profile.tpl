@@ -4,7 +4,7 @@
   <div class="padding20 whitee">
     <div id="left">
 		<h1>{PHP.L.Update} {PHP.L.Profile}</h1>
-		<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="users.php">{PHP.L.Users}</a> <a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{USERS_PROFILE_NAME}</a> <a href="users.php?m=profile">{PHP.L.Profile} {PHP.L.Update}</a> </div>
+		<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="users.php">{PHP.L.Users}</a> <a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{USERS_PROFILE_NAME}</a> <a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Profile} {PHP.L.Update}</a> </div>
 		<p class="details">{USERS_PROFILE_SUBTITLE}</p>
 		<!-- BEGIN: USERS_PROFILE_ERROR -->
 		<div class="error">{USERS_PROFILE_ERROR_BODY}</div>
@@ -120,11 +120,11 @@
 	
     <div id="right">
 		<h3 style="color:#000">{PHP.L.hea_youareloggedas} {PHP.usr.name}</h3>
-		<h3><a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.L.View} {PHP.L.Profile}</a></h3>
+		<h3><a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.L.View} {PHP.L.Profile}</a></h3>
 		<h3><span style="background-color:#94af66; color:#fff">{PHP.L.Update} {PHP.L.Profile}</span></h3>
 		<div class="padding15 admin" style="padding-bottom:0">
 			<ul>
-				<li><a href="users.php?m=profile#privacy">{PHP.themelang.usersprofile.privacy}</a></li>          <li><a href="users.php?m=profile#settings">{PHP.themelang.usersprofile.settings}</a></li>          <li><a href="users.php?m=profile#personal">{PHP.themelang.usersprofile.personal}</a></li>          <li><a href="users.php?m=profile#avatar">{PHP.L.Avatar} &amp; {PHP.L.Photo}</a></li>          <li><a href="users.php?m=profile#sig">{PHP.L.Signature}</a></li>          <li><a href="users.php?m=profile#password">{PHP.L.Edit} {PHP.L.Password}</a></li>
+				<li><a href="{PHP|cot_url('users','m=profile#privacy')}">{PHP.themelang.usersprofile.privacy}</a></li>          <li><a href="{PHP|cot_url('users','m=profile#settings')}">{PHP.themelang.usersprofile.settings}</a></li>          <li><a href="{PHP|cot_url('users','m=profile#personal')}">{PHP.themelang.usersprofile.personal}</a></li>          <li><a href="{PHP|cot_url('users','m=profile#avatar')}">{PHP.L.Avatar} &amp; {PHP.L.Photo}</a></li>          <li><a href="{PHP|cot_url('users','m=profile#sig')}">{PHP.L.Signature}</a></li>          <li><a href="{PHP|cot_url('users','m=profile#password')}">{PHP.L.Edit} {PHP.L.Password}</a></li>
 			</ul>
 		</div>
 		<h3><a href="pm.php">{PHP.L.Private_Messages}</a></h3>

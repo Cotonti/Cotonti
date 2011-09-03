@@ -9,7 +9,7 @@
 		<!-- END: USERS_REGISTER_ERROR -->
 		<!-- IF {PHP.usr.id} > 0 -->
 		<p class="red">{PHP.themelang.usersauth.already}</p>
-		<a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.themelang.usersauth.goto}</a>.
+		<a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.themelang.usersauth.goto}</a>.
 		<!-- ELSE -->
 		  <form action="{USERS_REGISTER_SEND}" method="post">
 			<fieldset style="border:none">

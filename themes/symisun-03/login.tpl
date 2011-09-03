@@ -13,7 +13,7 @@
 		  
 <!-- IF {PHP.usr.id} > 0 -->
 		<p class="red">{PHP.themelang.usersauth.already}</p>
-		<a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.themelang.usersauth.goto}</a>.</div> 
+		<a href="{PHP.usr.name|cot_url('users','m=details&id=$this')}">{PHP.themelang.usersauth.goto}</a>.</div> 
 	
 <!-- ELSE -->
 		<form action="{USERS_AUTH_SEND}" method="post">
@@ -37,7 +37,7 @@
 	</div>
 	<div id="right">
 		<h3><a href="{USERS_AUTH_REGISTER}">{PHP.L.Register}</a></h3>
-		<h3><a href="users.php?m=passrecover">{PHP.L.hea_lostpass}</a></h3>
+		<h3><a href="{PHP|cot_url('users','m=passrecover')}">{PHP.L.hea_lostpass}</a></h3>
 		&nbsp; 
 	</div>
 <!-- ENDIF -->

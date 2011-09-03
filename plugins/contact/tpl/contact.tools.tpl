@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-	<h2 class="message"><a href="admin.php?m=other&amp;p=contact">{PHP.L.contact_title}</a></h2>
+	<h2 class="message"><a href="{PHP|cot_url('admin','m=other&amp;p=contact')}">{PHP.L.contact_title}</a></h2>
 
 	{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 

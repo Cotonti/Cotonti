@@ -6,7 +6,15 @@
     <h1>{LIST_CATTITLE}</h1>
     <p class="details">{LIST_CATDESC}</p>
     <!-- IF {LIST_TOP_TOTALLINES} != 0 -->
-		<p> {PHP.themelang.list.sort} <strong>{PHP.L.Title}</strong> <a href="list.php?c={PHP.c}&amp;s=title&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=title&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> | <strong>{PHP.L.Views}</strong> <a href="list.php?c={PHP.c}&amp;s=count&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=count&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> | <strong>{PHP.L.Date}</strong> <a href="list.php?c={PHP.c}&amp;s=date&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=date&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> </p>
+		<p> {PHP.themelang.list.sort} <strong>{PHP.L.Title}</strong>
+		<a href="page.php?c={PHP.c}&amp;s=title&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a>
+		<a href="page.php?c={PHP.c}&amp;s=title&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a>
+		| <strong>{PHP.L.Views}</strong>
+		<a href="page.php?c={PHP.c}&amp;s=count&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a>
+		<a href="page.php?c={PHP.c}&amp;s=count&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a>
+		| <strong>{PHP.L.Date}</strong>
+		<a href="page.php?c={PHP.c}&amp;s=date&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a>
+		<a href="page.php?c={PHP.c}&amp;s=date&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> </p>
 		<!-- ELSE -->
 		<div class="red">{PHP.themelang.list.none}</div>
 		<!-- IF {PHP.usr.id} == 0 -->

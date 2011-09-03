@@ -45,7 +45,7 @@
 					<!-- IF {PHP.usr.isadmin} -->
 					<li><a href="admin.php">{PHP.L.Adminpanel}</a></li>
 					<!-- ENDIF -->
-					<li><a href="page.php?m=add&amp;c={PAGE_CAT}">{PHP.L.page_addtitle}</a></li>
+					<li><a href="{PAGE_CAT|cot_url('page','m=add&c=$this')}">{PHP.L.page_addtitle}</a></li>
 					<li>{PAGE_ADMIN_UNVALIDATE}</li>
 					<li>{PAGE_ADMIN_EDIT}</li>
 				</ul>

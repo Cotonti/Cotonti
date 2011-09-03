@@ -26,14 +26,14 @@
 			<!-- IF {PHP.out.whosonline} -->
 			<div class="block">
 				<h2 class="online">{PHP.L.Online}</h2>
-				<p><a href="plug.php?e=whosonline">{PHP.out.whosonline}</a><!-- IF {PHP.out.whosonline_reg_list} -->:<br />{PHP.out.whosonline_reg_list}<!-- ENDIF --></p>
+				<p><a href="{PHP|cot_url('plug','e=whosonline')}">{PHP.out.whosonline}</a><!-- IF {PHP.out.whosonline_reg_list} -->:<br />{PHP.out.whosonline_reg_list}<!-- ENDIF --></p>
 			</div>
 			<!-- ENDIF -->
 		</div>
 
 		<!-- IF {PHP.cot_plugins_active.recentitems} -->
 		<div class="clear block">
-			<h2 class="warning"><a href="plug.php?e=recentitems">{PHP.L.recentitems_title}</a></h2>
+			<h2 class="warning"><a href="{PHP|cot_url('plug','e=recentitems')}">{PHP.L.recentitems_title}</a></h2>
 				<!-- IF {RECENT_PAGES} -->
 				<h3>{PHP.L.recentitems_pages}</h3>
 				{RECENT_PAGES}
