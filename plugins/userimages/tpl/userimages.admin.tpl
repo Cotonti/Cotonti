@@ -40,7 +40,7 @@
 		<!-- END: USERIMG_LIST -->
   </tbody>
   <tfoot>
-    <form action="admin.php?m=other&p=userimages&a=add" method="post">
+    <form action="{PHP|cot_url('admin','m=other&p=userimages&a=add')}" method="post">
 		<tr>
 			<td><strong>{PHP.L.userimages_addnew}:</strong> <input type="text" name="userimg_code" size="30" /></td>
 			<td><input type="text" name="userimg_width" size="10" /> px</td>

@@ -2,8 +2,8 @@
 		<h2>Disk Cache</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 		<div class="block  button-toolbar">
-				<a href="{ADMIN_DISKCACHE_URL_REFRESH}" class="ajax button">{PHP.L.Refresh}</a>
-				<a href="{ADMIN_DISKCACHE_URL_PURGE}" class="ajax button">{PHP.L.adm_purgeall}</a>
+				<a href="{ADMIN_DISKCACHE_URL_REFRESH}" class="ajax button large">{PHP.L.Refresh}</a>
+				<a href="{ADMIN_DISKCACHE_URL_PURGE}" class="ajax button large">{PHP.L.adm_purgeall}</a>
 		</div>
 		<div class="block">
 			<table class="cells">

@@ -20,7 +20,7 @@
 <body>
 
 	<ul id="user" class="body">
-		<li id="hi"><a href="users.php?m=profile">{PHP.usr.name}</a><span class="spaced">{PHP.cfg.separator}</span><a href="pm.php"><!-- IF {PHP.usr.messages} == 0 -->{PHP.L.Private_Messages}<!-- ELSE -->New messages: {PHP.usr.messages}<!-- ENDIF --></a><span class="spaced">{PHP.cfg.separator}</span>{PHP.out.loginout}</li>
+		<li id="hi"><a href="{PHP|cot_url('users','m=profile')}">{PHP.usr.name}</a><span class="spaced">{PHP.cfg.separator}</span><a href="{PHP|cot_url('pm')}"><!-- IF {PHP.usr.messages} == 0 -->{PHP.L.Private_Messages}<!-- ELSE -->New messages: {PHP.usr.messages}<!-- ENDIF --></a><span class="spaced">{PHP.cfg.separator}</span>{PHP.out.loginout}</li>
 		<li><a href="{PHP.cfg.mainurl}" title="{PHP.L.hea_viewsite}"><!-- IF {PHP.cfg.maintitle} && {PHP.cfg.maintitle|mb_strlen} < 50 -->{PHP.cfg.maintitle} <!-- ELSE -->{PHP.L.hea_viewsite} <!-- ENDIF --></a></li>
 	</ul>
 

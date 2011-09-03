@@ -173,7 +173,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 
 	if ($mode == 'recent')
 	{
-		$where = "WHERE page_state=0 AND page_cat <> 'system' " . $incat;
+		$where = "WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat <> 'system' " . $incat;
 		$totalrecent['pages'] = $cfg['plugin']['recentitems']['maxpages'];
 	}
 	else

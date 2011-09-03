@@ -57,14 +57,14 @@
 			<div class="block">
 				<h3>{PHP.L.home_ql_b1_title}</h3>
 				<ul class="follow">
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=main">{PHP.L.home_ql_b1_1}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=title">{PHP.L.home_ql_b1_2}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=theme">{PHP.L.home_ql_b1_3}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=menus">{PHP.L.home_ql_b1_4}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=lang">{PHP.L.home_ql_b1_5}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=time">{PHP.L.home_ql_b1_6}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=parser">{PHP.L.home_ql_b2_4}</a></li>
-					<li><a href="admin.php?m=extrafields">{PHP.L.adm_extrafields}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&amp;n=edit&amp;o=core&amp;p=main')}">{PHP.L.home_ql_b1_1}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&amp;n=edit&amp;o=core&amp;p=title')}">{PHP.L.home_ql_b1_2}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&amp;n=edit&amp;o=core&amp;p=theme')}">{PHP.L.home_ql_b1_3}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&amp;n=edit&amp;o=core&amp;p=menus')}">{PHP.L.home_ql_b1_4}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&amp;n=edit&amp;o=core&amp;p=lang')}">{PHP.L.home_ql_b1_5}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&amp;n=edit&amp;o=core&amp;p=time')}">{PHP.L.home_ql_b1_6}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&amp;n=edit&amp;o=core&amp;p=parser')}">{PHP.L.home_ql_b2_4}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=extrafields')}">{PHP.L.adm_extrafields}</a></li>
 				</ul>
 			</div>
 			<!-- BEGIN: SIDEPANEL -->

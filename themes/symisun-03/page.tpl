@@ -12,7 +12,7 @@
                 {PAGE_TEXT}
                 <br class="clear" /> 
                 &nbsp;
-            	<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="index.php">{PHP.L.Home}</a>{PAGE_CATPATH} {PAGE_SHORTTITLE}</div>
+            	<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('index')}">{PHP.L.Home}</a>{PAGE_CATPATH} {PAGE_SHORTTITLE}</div>
 			</div>
 
 			<div id="right">
@@ -43,7 +43,7 @@
                 </div>
                 <!-- ENDIF -->
 		
-                <h3><a href="page.php?id={PHP.pag.page_id}#com">{PHP.L.comments_comments}: {PAGE_COMMENTS_COUNT}</a></h3>
+                <h3><a href="{PHP.pag.page_id|cot_url('page','id=$this')}#com">{PHP.L.comments_comments}: {PAGE_COMMENTS_COUNT}</a></h3>
 
                 <h3><a href="{PAGE_COMMENTS_RSS}">Subscribe via RSS</a></h3>
 				
