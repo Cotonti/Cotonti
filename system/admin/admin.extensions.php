@@ -618,10 +618,9 @@ switch($a)
 				}
 				else
 				{
-					$sql1 = $db->query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$x'");
-					$sql2 = $db->query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$x'");
-					$totalactive = $sql1->fetchColumn();
-					$totalinstalled = $sql2->fetchColumn();
+					$totalactive = $db->query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$x'")->fetchColumn();
+					$totalinstalled = $db->query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$x'")->fetchColumn();
+
 					$cnt_parts += $totalinstalled;
 
 					if (!cot_extension_installed($x))
@@ -649,6 +648,7 @@ switch($a)
 							$part_status = 1;
 						}
 					}
+					$totalconfig = $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$x'")->fetchColumn();
 
 					$ifthistools = $tools[$x];
 					$ent_code = $cfgentries[$x];
@@ -674,6 +674,7 @@ switch($a)
 						'ADMIN_EXTENSIONS_CODE_X' => $x,
 						'ADMIN_EXTENSIONS_ICO' => (file_exists($icofile)) ? $icofile : '',
 						'ADMIN_EXTENSIONS_EDIT_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$x"),
+						'ADMIN_EXTENSIONS_TOTALCONFIG' => $totalconfig,
 						'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
 						'ADMIN_EXTENSIONS_STATUS' => $status[$part_status],
 						'ADMIN_EXTENSIONS_VERSION' => $info['Version'],

@@ -86,7 +86,7 @@ input[type="submit"].small {
 
 /* ............................................................................................................. Large */
 
-.button.large {
+.button.large, .valid input[type="submit"], .valid button {
     font-size: 13px;
 }
 

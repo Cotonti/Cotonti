@@ -229,7 +229,7 @@
 				<td class="centerall">{ADMIN_EXTENSIONS_PARTSCOUNT}</td>
 				<td class="centerall">{ADMIN_EXTENSIONS_STATUS}</td>
 				<td class="action">
-<!-- IF {PHP.totalinstalled} -->
+<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} -->
 					
 					<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_EDIT_URL}" class="button">{PHP.L.short_config}</a>
 <!-- ENDIF -->
