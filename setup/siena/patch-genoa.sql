@@ -587,4 +587,4 @@ INSERT INTO `cot_plugins` (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_modu
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.4-001' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.4-002' WHERE `upd_param` = 'revision';
