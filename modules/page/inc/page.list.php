@@ -292,12 +292,12 @@ foreach ($subcat as $x)
 	$t->parse('MAIN.LIST_ROWCAT');	
 }
 
-$pagenav = cot_pagenav('page', $list_url_path + array('d' => $durl), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
+$pagenav_cat = cot_pagenav('page', $list_url_path + array('d' => $durl), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
 
 $t->assign(array(
-	'LISTCAT_PAGEPREV' => $pagenav['prev'],
-	'LISTCAT_PAGENEXT' => $pagenav['next'],
-	'LISTCAT_PAGNAV' => $pagenav['main']
+	'LISTCAT_PAGEPREV' => $pagenav_cat['prev'],
+	'LISTCAT_PAGENEXT' => $pagenav_cat['next'],
+	'LISTCAT_PAGNAV' => $pagenav_cat['main']
 ));
 $jj = 0;
 /* === Hook - Part1 : Set === */

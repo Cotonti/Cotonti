@@ -60,7 +60,7 @@ if (!$cfg['plugin']['hits']['disablehitstats'])
 if (!$cfg['plugin']['hits']['disableactivitystats'] && cot_module_active('page'))
 {
 	$timeback = $sys['now_offset'] - (7 * 86400);// 7 days
-
+	require_once cot_incfile('page', 'module');
 	$sql = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_regdate > $timeback");
 	$newusers = $sql->fetchColumn();
 
