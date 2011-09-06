@@ -43,7 +43,7 @@ You can change rule order by simply dragging the rows and dropping them at desir
 <li><strong>Save</strong> button will save rules and apply changes immediately. It will also apply changes on your .htaccess (if writable) and provide you with .htaccess/IsapiRewrite4.ini/nginx.conf (depending on your server type).</li>
 </ol>';
 
-$L['cfg_preset'] = 'URL Preset';
+$L['cfg_preset'] = array('URL Preset');
 $L['cfg_preset_params'] = array('Handy', 'Genoa/Seditio compatible', 'Custom urltrans.dat', 'Disabled');
 
 $L['info_desc'] = 'With this plugin you can set custom rules for URL transformation in Admin Panel or choose an easy to use preset for human and search engine friendly URLs';

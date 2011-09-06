@@ -449,6 +449,7 @@ $b = cot_import('b', 'G', 'ALP', 24);
 /* ======== Language ======== */
 
 require_once cot_langfile('main', 'core');
+require_once cot_langfile('users', 'core');
 
 /* ======== Who's online (part 1) and shield protection ======== */
 

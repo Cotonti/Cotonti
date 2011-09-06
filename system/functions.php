@@ -2643,7 +2643,11 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 	}
 	if ($type == 'module')
 	{
-		if (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
+		if (@file_exists($cfg['modules_dir']."/$name/lang/modules/$name.$lang.lang.php"))
+		{
+			return $cfg['modules_dir']."/$name/lang/modules/$name.$lang.lang.php";
+		}		
+		elseif (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
 		{
 			return $cfg['modules_dir']."/$name/lang/$name.$lang.lang.php";
 		}
@@ -2654,11 +2658,22 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 	}
 	elseif ($type == 'core')
 	{
-		return $cfg['lang_dir']."/$default/$name.$default.lang.php";
+		if (@file_exists($cfg['lang_dir']."/$lang/$name.$lang.lang.php"))
+		{
+			return $cfg['lang_dir']."/$lang/$name.$lang.lang.php";
+		}
+		else
+		{
+			return $cfg['lang_dir']."/$default/$name.$default.lang.php";
+		}
 	}
 	else
-	{
-		if (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
+	{		
+		if (@file_exists($cfg['plugins_dir']."/$name/lang/plugins/$name.$lang.lang.php"))
+		{
+			return $cfg['plugins_dir']."/$name/lang/plugins/$name.$lang.lang.php";
+		}		
+		elseif (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
 		{
 			return $cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php";
 		}
@@ -2666,10 +2681,6 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 		{
 			return $cfg['plugins_dir']."/$name/lang/$name.$default.lang.php";
 		}
-	}
-	if (@file_exists($cfg['lang_dir']."/$lang/$name.$lang.lang.php"))
-	{
-		return $cfg['lang_dir']."/$lang/$name.$lang.lang.php";
 	}
 }
 
