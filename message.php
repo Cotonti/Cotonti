@@ -205,15 +205,8 @@ $t->assign('MESSAGE_BODY', $body);
 
 if ($msg == '920')
 {
-	// Confirmation page
-	if (COT_AJAX)
-	{
-		$confirm_no_url = '#'; // set via jQuery
-	}
-	else
-	{
-		$confirm_no_url = preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_REFERER']) ? str_replace('&', '&amp;', $_SERVER['HTTP_REFERER']) : cot_url('index');
-	}
+	$confirm_no_url = eregi('^.+'.preg_quote($sys['domain']), $_SERVER['HTTP_REFERER']) ? str_replace('&', '&amp;', $_SERVER['HTTP_REFERER']) : cot_url('index');
+
 	$t->assign(array(
 		'MESSAGE_CONFIRM_YES' => base64_decode($redirect),
 		'MESSAGE_CONFIRM_NO' => $confirm_no_url

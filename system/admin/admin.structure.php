@@ -68,7 +68,6 @@ else
 	{
 		require_once cot_incfile($n, 'module');
 	}
-
 	if ($a == 'update')
 	{
 		$rstructurecode = cot_import('rstructurecode', 'P', 'ARR');
@@ -296,7 +295,7 @@ else
 		$cat_selectbox = cot_selectbox($row['structure_tpl'], 'rstructuretplforced['.$structure_id.']', array_keys($cat_path), array_values($cat_path), false);
 
 		$t->assign(array(
-			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_confirm_url(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$durl.'&'.cot_xg(), 'admin')),
+			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_confirm_url(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$durl.'&'.cot_xg()), 'admin'),
 			'ADMIN_STRUCTURE_ID' => $structure_id,
 			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $structure_code, 'size="10" maxlength="255"'),
 			'ADMIN_STRUCTURE_SPACEIMG' => $pathspaceimg,
