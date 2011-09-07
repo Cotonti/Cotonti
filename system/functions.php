@@ -2107,7 +2107,7 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 	$handle = opendir($cfg['themes_dir']);
 	while ($f = readdir($handle))
 	{
-		if (mb_strpos($f, '.') === FALSE && is_dir("{$cfg['themes_dir']}/$f"))
+		if (mb_strpos($f, '.') === FALSE && is_dir("{$cfg['themes_dir']}/$f") && $f != "admin")
 		{
 			$themelist[] = $f;
 		}
