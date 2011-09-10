@@ -268,9 +268,16 @@ function bindHandlers() {
 			return false;
 		});
 		$('a#confirmNo').live('click', function() {
-			$('#confirmBox').jqmHide();
-			$('#confirmBox').remove();
-			return false;
+			if ($("#confirmBox").is(".jqmWindow"))
+			{
+				$('#confirmBox').jqmHide();
+				$('#confirmBox').remove();
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		});
 	}
 }

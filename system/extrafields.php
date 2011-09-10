@@ -238,7 +238,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 				$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', mb_strtolower($extrafield['field_variants']));
 				$ext_array = explode(",", trim($extrafield['field_variants']));
 				
-				if(in_array($ext, $ext_array))
+				if(empty($extrafield['field_variants']) || in_array($ext, $ext_array))
 				{
 					$fname = ($lang != 'en' && is_array($cot_translit)) ? strtr($fname, $cot_translit) : '';
 					$fname = str_replace(' ', '_', $fname);

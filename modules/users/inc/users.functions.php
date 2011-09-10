@@ -53,10 +53,10 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_country'] = (mb_strlen($ruser['user_country']) < 4) ? $ruser['user_country'] : '';
 	$ruser['user_timezone'] = is_null($ruser['user_timezone']) ? $cfg['defaulttimezone'] : (float) $ruser['user_timezone'];
 	
-	$ruser['user_maingrp'] = ($db->countRows($db_users) == 0) ? 5 : ($cfg['regnoactivation']) ? 4 : 2;
+	$ruser['user_maingrp'] = ($db->countRows($db_users) == 0) ? 5 : ($cfg['users']['regnoactivation']) ? 4 : 2;
 	$ruser['user_maingrp'] = (int)$maingrp > 0 ? $maingrp : $ruser['user_maingrp']; 
 	
-	$ruser['user_password'] = md5($password);
+	$ruser['user_password'] = md5($ruser['user_password']);
 	$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now']) ? ($sys['now'] - 31536000) : $ruser['user_birthdate'];
 	$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
 	$ruser['user_lostpass'] = md5(microtime());
