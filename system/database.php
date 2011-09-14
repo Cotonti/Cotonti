@@ -302,7 +302,7 @@ class CotDB extends PDO {
 				{
 					if (is_null($val))
 					{
-						continue;
+						$val = 'NULL';
 					}
 					if ($j > 0) $vals .= ',';
 					if (!$keys_built)
