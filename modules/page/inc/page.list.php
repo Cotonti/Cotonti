@@ -110,6 +110,8 @@ if ($w != $cfg['page'][$c]['way'])
 }
 $list_url = cot_url('page', $list_url_path);
 
+$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cat['title'] :cot_breadcrumbs(cot_structure_buildpath('page', $c), $cfg['homebreadcrumb'], true);
+
 /* === Hook === */
 foreach (cot_getextplugins('page.list.query') as $pl)
 {
@@ -129,16 +131,6 @@ if(empty($sql_page_string))
 }
 $totallines = $db->query($sql_page_count)->fetchColumn();
 $sqllist = $db->query($sql_page_string);
-
-if ($c == 'all' || $c == 'system' || $c == 'unvalidated')
-{
-	$catpath = $cat['title'];
-}
-else
-{
-	$catpath = cot_breadcrumbs(cot_structure_buildpath('page', $c), $cfg['homebreadcrumb'], true);
-}
-
 
 $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $totallines, $cfg['page']['maxrowsperpage']);
 
