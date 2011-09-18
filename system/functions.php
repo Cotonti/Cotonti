@@ -2597,11 +2597,7 @@ function cot_message($text, $class = 'ok', $src = 'default')
  */
 function cot_incfile($name, $type = 'core', $part = 'functions')
 {
-	global $cfg, $cot_rc_theme_reload, $themeR;
-	if ($part == 'resources' && count($themeR) > 0)
-	{
-		$cot_rc_theme_reload = true;
-	}
+	global $cfg;
 	if ($type == 'core')
 	{
 		return $cfg['system_dir'] . "/$name.php";
@@ -2632,14 +2628,10 @@ function cot_incfile($name, $type = 'core', $part = 'functions')
  */
 function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 {
-	global $cfg, $themeL, $cot_lang_theme_reload;
+	global $cfg;
 	if (!is_string($lang))
 	{
 		global $lang;
-	}
-	if (count($themeL) > 0)
-	{
-		$cot_lang_theme_reload = true;
 	}
 	if ($type == 'module')
 	{
@@ -2682,42 +2674,6 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 			return $cfg['plugins_dir']."/$name/lang/$name.$default.lang.php";
 		}
 	}
-}
-
-/**
- * Auxilliary function that returns theme language strings as an array
- *
- * @return array Theme language strings
- */
-function cot_get_lang_theme()
-{
-	global $cfg, $usr;
-	$L = array();
-	if ($usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
-	{
-		require_once $usr['theme_lang'];
-	}
-	elseif (@file_exists($usr['def_theme_lang']))
-	{
-		require_once $usr['def_theme_lang'];
-	}
-	return $L;
-}
-
-/**
- * Auxilliary function that returns theme resources as an array
- *
- * @return array Theme resource strings
- */
-function cot_get_rc_theme()
-{
-	global $cfg, $usr;
-	$R = array();
-	if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php"))
-	{
-		include "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
-	}
-	return $R;
 }
 
 /**
@@ -3673,21 +3629,16 @@ function cot_wraptext($str, $wrap = 80)
  */
 function cot_rc($name, $params = array())
 {
-	global $R, $L, $cot_rc_theme_reload, $cot_lang_theme_reload;
-	if ($cot_lang_theme_reload)
+	global $R, $L, $theme_reload;
+	if (isset($R[$name]) && is_array($theme_reload))
 	{
-		// Theme lang override trick
-		global $themeL;
-		$L = array_merge($L, $themeL);
-		$cot_lang_theme_reload = false;
+		$R[$name] = (!empty($theme_reload['R'][$name]) && $theme_reload['R'][$name] != $R[$name]) ? $theme_reload['R'][$name] : $R[$name];
 	}
-	if ($cot_rc_theme_reload)
+	elseif (isset($L[$name]) && is_array($theme_reload))
 	{
-		// Theme resources override trick
-		global $themeR;
-		$R = array_merge($R, $themeR);
-		$cot_rc_theme_reload = false;
+		$L[$name] = (!empty($theme_reload['L'][$name]) && $theme_reload['L'][$name] != $L[$name]) ? $theme_reload['L'][$name] : $L[$name];
 	}
+	
 	$res = isset($R[$name]) ? $R[$name]
 		: (isset($L[$name]) ? $L[$name] : $name);
 	is_array($params) ? $args = $params : parse_str($params, $args);

@@ -532,7 +532,15 @@ if (!defined('COT_ADMIN'))
 
 $usr['def_theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
 $usr['theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.{$usr['lang']}.lang.php";
-$themeL = cot_get_lang_theme();
+
+if ($usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
+{
+	require_once $usr['theme_lang'];
+}
+elseif (@file_exists($usr['def_theme_lang']))
+{
+	require_once $usr['def_theme_lang'];
+}
 
 $theme = $usr['theme'];
 $scheme = $usr['scheme'];
@@ -540,8 +548,10 @@ $scheme = $usr['scheme'];
 // Resource strings
 require_once $cfg['system_dir'].'/resources.php';
 // Theme resources
-$themeR = cot_get_rc_theme();
-$R = array_merge($R, $themeR);
+if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php"))
+{
+	require_once "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
+}
 // Iconpack
 if (empty($cfg['defaulticons']))
 {

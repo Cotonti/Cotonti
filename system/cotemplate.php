@@ -285,20 +285,13 @@ class XTemplate
 	 */
 	public function parse($block = 'MAIN')
 	{
-		global $cot_lang_theme_reload, $cot_rc_theme_reload;
-		if ($cot_lang_theme_reload)
+		global $theme_reload;
+		if(is_array($theme_reload))
 		{
-			// Theme lang override trick
-			global $L, $themeL;
-			$L = array_merge($L, $themeL);
-			$cot_lang_theme_reload = false;
-		}
-		if ($cot_rc_theme_reload)
-		{
-			// Theme resources override trick
-			global $themeR, $R;
-			$R = array_merge($R, $themeR);
-			$cot_rc_theme_reload = false;
+			foreach($theme_reload as $key_reload => $val_reload)
+			{
+				$GLOBALS[$key_reload] = (is_array($GLOBALS[$key_reload]) && is_array($val_reload)) ? array_merge($GLOBALS[$key_reload], $val_reload) : $val_reload;
+			}
 		}
 		$path = $this->index[$block];
 		if ($path)
