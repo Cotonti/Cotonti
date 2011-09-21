@@ -4340,6 +4340,7 @@ HTM;
 function cot_parse_str($str)
 {
 	$res = array();
+	$str = str_replace('&amp;', '&', $str);
 	foreach (explode('&', $str) as $item)
 	{
 		if (!empty($item))

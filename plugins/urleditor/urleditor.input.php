@@ -51,6 +51,10 @@ if (!is_array($cot_urltrans))
 	$cot_urltrans['index'][] = $cot_urltrans_fallback;
 	$cot_urltrans['login'][] = $cot_urltrans_fallback;
 	$cot_urltrans['message'][] = $cot_urltrans_fallback;
+	$cot_urltrans['plug'][] = array(
+		'params' => array(),
+		'trans' => 'index.php'
+	);
 	$cot_urltrans['*'][] = array(
 		'params' => array(),
 		'trans' => 'index.php?e={$_area}'
