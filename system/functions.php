@@ -4396,16 +4396,11 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
 		$sep_len = strlen($sep);
 		$qs = '?';
-		$i = 0;
 		foreach ($params as $key => $val)
 		{
-			if ($i > 0)
-			{
-				$qs .= $sep;
-			}
-			$qs .= urlencode($key) . '=' . urlencode($val);
-			$i++;
+			$qs .= cot_url_encode($key, $val, $sep);
 		}
+		$qs = mb_substr($qs, 0, -$sep_len);
 		$url .= $qs;
 	}
 	$url .= $tail;
@@ -4423,6 +4418,32 @@ function cot_url_check($url)
 {
 	global $sys;
 	return preg_match('`^'.preg_quote($sys['scheme'].'://').'([^/]+\.)?'.preg_quote($sys['domain']).'`i', $url);
+}
+
+/**
+ * Encodes a pair of url parameter key and value, supporting multi-dimension
+ * arrays of parameters recursively.
+ * 
+ * @param string $key Parameter name
+ * @param mixed $val Parameter value, can be an array
+ * @param string $sep Query string delimiter
+ * @return string 
+ */
+function cot_url_encode($key, $val, $sep)
+{
+	$qs = '';
+	if (is_array($val))
+	{
+		foreach ($val as $k => $v)
+		{
+			$qs .= cot_url_encode("{$key}[$k]", $v, $sep);
+		}
+	}
+	else
+	{
+		$qs .= urlencode($key) . '=' . urlencode($val) . $sep;
+	}
+	return $qs;
 }
 
 /**
