@@ -55,7 +55,7 @@ foreach (cot_getextplugins('users.first') as $pl)
 }
 /* ===== */
 
-if (empty($s) || in_array(mb_strtolower($s), $users_sort_blacklist) || !in_array($s, $users_sort_whitelist) && $db->query("SHOW COLUMNS FROM $db_users WHERE Field = 'user_$s'")->rowCount() == 0)
+if (empty($s) || in_array(mb_strtolower($s), $users_sort_blacklist) || !in_array($s, $users_sort_whitelist) && !$db->fieldExists($db_users, "user_$s"))
 {
 	$s = 'name';
 }

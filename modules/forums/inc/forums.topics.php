@@ -17,7 +17,7 @@ list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['forums']['maxtopicsperpage'
 $o = cot_import('ord','G','ALP',16); //order
 $w = cot_import('w','G','ALP',4); // way
 
-if (empty($o) || $db->query("SHOW COLUMNS FROM $db_forum_topics WHERE Field = 'ft_$o'")->rowCount() == 0)
+if (empty($o) || !$db->fieldExists($db_forum_topics, "ft_$o"))
 {
 	$o = 'updated';
 }

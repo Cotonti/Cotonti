@@ -58,7 +58,7 @@ if (empty($s))
 	$s = $cfg['page'][$c]['order'];
 	$w = $cfg['page'][$c]['way'];
 }
-elseif ($db->query("SHOW COLUMNS FROM $db_pages WHERE Field = 'page_$s'")->rowCount() == 0)
+elseif (!$db->fieldExists($db_pages, "page_$s"))
 {
 	$s = 'title';
 }
@@ -90,7 +90,7 @@ cot_die((empty($cat['title'])) && !$usr['isadmin']);
 
 if (!empty($o) && !empty($p))
 {
-	if ($db->query("SHOW COLUMNS FROM $db_pages WHERE Field = 'page_$o'")->rowCount() == 1)
+	if ($db->fieldExists($db_pages, "page_$o"))
 	{
 		$where['filter'] .= "page_$o=" . $db->quote($p);
 	}
