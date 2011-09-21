@@ -3691,6 +3691,7 @@ function cot_rc_consolidate()
 	global $cache, $cfg, $cot_rc_html, $cot_rc_reg, $env, $L, $R, $sys, $usr;
 
 	$is_admin_section = defined('COT_ADMIN');
+	$cot_rc_reg = array();
 
 	// Load standard resources
 	cot_rc_add_standard();
@@ -3751,7 +3752,6 @@ function cot_rc_consolidate()
 				{
 					// Load the list of files already cached
 					$file_list = unserialize(file_get_contents("$target_path.idx"));
-					$code = file_get_contents($target_path);
 
 					// Check presense or modification time for each file
 					foreach ($files as $path)
