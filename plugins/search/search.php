@@ -359,6 +359,11 @@ if (!empty($sq))
 
 		$maxitems = $cfg['plugin']['search']['maxitems'] - $items;
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
+		
+		if ($db->query("SHOW COLUMNS FROM $db_forum_topics WHERE Field = 'ft_{$rs['frmsort']}'")->rowCount() == 0)
+		{
+			$rs['frmsort'] = 'updated';
+		}
 
 		$sql = $db->query("SELECT SQL_CALC_FOUND_ROWS p.*, t.*
 			 	FROM $db_forum_posts AS p, $db_forum_topics AS t
