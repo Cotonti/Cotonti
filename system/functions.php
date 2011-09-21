@@ -644,7 +644,7 @@ function cot_online_update()
 						'online_name' => $usr['name'],
 						'online_lastseen' => (int)$sys['now'],
 						'online_location' => $env['location'],
-						'online_subloc' => $sys['sublocation'],
+						'online_subloc' => (string) $sys['sublocation'],
 						'online_userid' => (int)$usr['id'],
 						'online_shield' => 0,
 						'online_hammer' => 0

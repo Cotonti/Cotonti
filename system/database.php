@@ -320,7 +320,7 @@ class CotDB extends PDO {
 					}
 					if (is_null($val))
 					{
-						$val = 'NULL';
+						$vals .= 'NULL';
 					}
 					elseif ($val === 'NOW()')
 					{
