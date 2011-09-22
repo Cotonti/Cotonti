@@ -280,9 +280,10 @@ class CotDB extends PDO {
 	 *
 	 * @param string $table_name Table name
 	 * @param array $data Associative or 2D array containing data for insertion.
+	 * @param bool $insert_null Insert SQL NULL for empty values rather than ignoring them.
 	 * @return int The number of affected records
 	 */
-	public function insert($table_name, $data)
+	public function insert($table_name, $data, $insert_null = false)
 	{
 		if (!is_array($data))
 		{
@@ -318,7 +319,7 @@ class CotDB extends PDO {
 						if ($j > 0) $keys .= ',';
 						$keys .= "`$key`";
 					}
-					if (is_null($val))
+					if (is_null($val) && $insert_null)
 					{
 						$vals .= 'NULL';
 					}
