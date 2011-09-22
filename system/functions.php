@@ -654,8 +654,8 @@ function cot_online_update()
 				{
 					$db->update($db_online, array(
 						'online_lastseen' => $sys['now'],
-						'online_location' => $db->prep($env['location']),
-						'online_subloc' => $db->prep($sys['sublocation']),
+						'online_location' => $env['location'],
+						'online_subloc' => (string) $sys['sublocation'],
 						'online_hammer' => (int)$sys['online_hammer']
 						), "online_userid=".$usr['id']);
 				}
@@ -669,7 +669,7 @@ function cot_online_update()
 						'online_name' => 'v',
 						'online_lastseen' => (int)$sys['now'],
 						'online_location' => $env['location'],
-						'online_subloc' => $sys['sublocation'],
+						'online_subloc' => (string) $sys['sublocation'],
 						'online_userid' => -1,
 						'online_shield' => 0,
 						'online_hammer' => 0
@@ -679,8 +679,8 @@ function cot_online_update()
 				{
 					$db->update($db_online, array(
 						'online_lastseen' => $sys['now'],
-						'online_location' => $db->prep($env['location']),
-						'online_subloc' => $db->prep($sys['sublocation']),
+						'online_location' => $env['location'],
+						'online_subloc' => (string)$sys['sublocation'],
 						'online_hammer' => (int)$sys['online_hammer']
 						), "online_ip='".$usr['ip']."'");
 				}
