@@ -55,6 +55,8 @@ function cot_tag($tag, $item, $area = 'pages', $extra = null)
  * Collects data for a tag cloud in some area. The result is an associative array with
  * tags as keys and count of entries as values.
  *
+ * @global CotDB $db
+ * @global Cache $cache
  * @param string $area Site area
  * @param string $order Should be 'tag' to order the result set by tag (alphabetical) or 'cnt' to order it by item count (descending)
  * @param int $limit Use this parameter to limit number of rows in the result set
@@ -62,7 +64,12 @@ function cot_tag($tag, $item, $area = 'pages', $extra = null)
  */
 function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 {
-	global $db, $db_tag_references;
+	global $db, $db_tag_references, $cache;
+	$cache_name = 'tag_cloud_cache_' . $area;
+	if ($cache && $GLOBALS[$cache_name] && is_array($GLOBALS[$cache_name]))
+	{
+		return $GLOBALS[$cache_name];
+	}
 	$res = array();
 	$limit = is_null($limit) ? '' : ' LIMIT '.$limit;
 	switch($order)
@@ -89,6 +96,7 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 		$res[$row['tag']] = $row['cnt'];
 	}
 	$sql->closeCursor();
+	$cache && $cache->db->store($cache_name, $res, COT_DEFAULT_REALM, 300);
 	return $res;
 }
 
