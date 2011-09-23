@@ -300,9 +300,10 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
  * @param string $name Lang row
  * @param array $extrafields Extra fields data
  * @param string $value Existing user value
+ * @param string $parser Non-default parser to use
  * @return string
  */
-function cot_build_extrafields_data($name, $extrafield, $value)
+function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 {
 	global $L;
 	$parse_type = array('HTML', 'Text');
@@ -338,7 +339,7 @@ function cot_build_extrafields_data($name, $extrafield, $value)
 		case 'range':	
 		default:
 			$value = (is_null($value)) ? '' : $value;
-			$value = cot_parse($value, ($extrafield['field_parse'] == 'Text') ? false : true);
+			$value = cot_parse($value, ($extrafield['field_parse'] == 'Text') ? false : true, $parser);
 			return $value;
 			break;
 	}
