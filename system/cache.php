@@ -663,6 +663,10 @@ class MySQL_cache extends Db_cache_driver
 	public function exists($id, $realm = COT_DEFAULT_REALM)
 	{
 		global $db, $db_cache;
+		if (isset($this->buffer[$realm][$id]))
+		{
+			return true;
+		}
 		$sql = $db->query("SELECT c_value FROM $db_cache WHERE c_realm = ".$db->quote($realm)." AND c_name = ".$db->quote($id));
 		$res = $sql->rowCount() == 1;
 		if ($res)
