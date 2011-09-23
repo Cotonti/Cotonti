@@ -26,9 +26,10 @@ $db_com = (isset($db_com)) ? $db_com : $db_x . 'com';
  *
  * @param string $ext_name Target extension name
  * @param string $code Item code
+ * @param array $row Database row entry (optional)
  * @return int
  */
-function cot_comments_count($ext_name, $code)
+function cot_comments_count($ext_name, $code, $row = array())
 {
 	global $db, $db_com;
 	static $com_cache = array();
@@ -37,19 +38,24 @@ function cot_comments_count($ext_name, $code)
 	{
 		return $com_cache[$ext_name][$code];
 	}
-
-	$sql = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_area = ? AND com_code = ?", array($ext_name, $code));
-
-	if ($sql->rowCount() == 1)
+	
+	$cnt = 0;
+	if (isset($row['com_count']))
 	{
-		$cnt = (int) $sql->fetchColumn();
+		$cnt = (int) $row['com_count'];
 		$com_cache[$ext_name][$code] = $cnt;
-		return $cnt;
 	}
 	else
 	{
-		return 0;
+		$sql = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_area = ? AND com_code = ?", array($ext_name, $code));
+		if ($sql->rowCount() == 1)
+		{
+			$cnt = (int) $sql->fetchColumn();
+			$com_cache[$ext_name][$code] = $cnt;
+		}
 	}
+	
+	return $cnt;
 }
 
 /**
@@ -281,10 +287,11 @@ function cot_comments_enabled($ext_name, $cat = '', $item = '')
  * @param string $ext_name Module or plugin code
  * @param string $code Item identifier
  * @param string $cat Item category code (optional)
+ * @param array $row Database row entry (optional)
  * @return string Rendered HTML output for comments
  * @see cot_comments_count()
  */
-function cot_comments_link($link_area, $link_params, $ext_name, $code, $cat = '')
+function cot_comments_link($link_area, $link_params, $ext_name, $code, $cat = '', $row = array())
 {
 	global $cfg, $db, $R, $L, $db_com;
 
@@ -295,7 +302,7 @@ function cot_comments_link($link_area, $link_params, $ext_name, $code, $cat = ''
 
 	$res = cot_rc('comments_link', array(
 		'url' => cot_url($link_area, $link_params, '#comments'),
-		'count' => $cfg['plugin']['comments']['countcomments'] ? cot_comments_count($ext_name, $code) : ''
+		'count' => $cfg['plugin']['comments']['countcomments'] ? cot_comments_count($ext_name, $code, $row) : ''
 	));
 	return $res;
 }

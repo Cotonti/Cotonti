@@ -1,7 +1,7 @@
 <!-- BEGIN: NEWS -->
 
 <!-- BEGIN: PAGE_ROW -->
-	<div class="combox">{PHP.pag.page_comcount}</div>
+	<div class="combox">{PAGE_ROW_COMMENTS_COUNT}</div>
 	<h3><!-- IF {PHP.usr.isadmin} -->[ {PAGE_ROW_ADMIN_EDIT} ] &nbsp; <!-- ENDIF --><a href="{PAGE_ROW_URL}" title="{PAGE_ROW_SHORTTITLE}">{PAGE_ROW_SHORTTITLE}</a></h3>
 	<!-- IF {PAGE_ROW_DESC} --><p class="small">{PAGE_ROW_DESC}</p><!-- ENDIF -->
 
