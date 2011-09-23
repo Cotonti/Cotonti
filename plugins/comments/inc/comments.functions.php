@@ -151,7 +151,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	{
 		$i = $d;
 		$kk = 0;
-		$totalitems = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_code = ?", array($code))->fetchColumn();
+		$totalitems = cot_comments_count($ext_name, $code);
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('comments.loop');
 		/* ===== */
