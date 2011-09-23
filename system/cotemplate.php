@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.6.1
+ * @version 2.6.2
  * @author Vladimir Sibirov a.k.a. Trustmaster
  * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
@@ -173,7 +173,7 @@ class XTemplate
 			$fname = preg_replace_callback('`\{([\w\.]+)\}`', 'XTemplate::substitute_var', $m[2]);
 			if (file_exists($fname))
 			{
-				$code = file_get_contents($fname);
+				$code = cotpl_read_file($fname);
 				if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) $code = mb_substr($code, 0);
 				$code = preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restart_include_files', $code);
 				return $code;
@@ -220,7 +220,7 @@ class XTemplate
 		{
 			$this->blocks = array();
 			$this->index = array();
-			$code = file_get_contents($path);
+			$code = cotpl_read_file($path);
 			// Remove BOM if present
 			if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) $code = mb_substr($code, 0);
 			// FILE includes
@@ -248,8 +248,8 @@ class XTemplate
 		}
 		else
 		{
-			$this->blocks = unserialize(file_get_contents($cache_path));
-			$this->index = unserialize(file_get_contents($cache_idx));
+			$this->blocks = unserialize(cotpl_read_file($cache_path));
+			$this->index = unserialize(cotpl_read_file($cache_idx));
 		}
 	}
 
@@ -1336,7 +1336,29 @@ class Cotpl_var
 				if (is_array($func))
 				{
 					array_walk($func['args'], 'cotpl_callback_replace', $val);
-					$val = call_user_func_array($func['name'], $func['args']);
+					$f = $func['name'];
+					$a = $func['args'];
+					switch (count($a))
+					{
+						case 0:
+							$val = $f();
+							break;
+						case 1:
+							$val = $f($a[0]);
+							break;
+						case 2:
+							$val = $f($a[0], $a[1]);
+							break;
+						case 3:
+							$val =$f($a[0], $a[1], $a[2]);
+							break;
+						case 4:
+							$val = $f($a[0], $a[1], $a[2], $a[3]);
+							break;
+						default:
+							$val = call_user_func_array($f, $a);
+							break;
+					}
 				}
 				elseif ($func == 'dump')
 				{
@@ -1366,6 +1388,19 @@ function cotpl_callback_replace(&$arg, $i, $val)
 	{
 		$arg = str_replace('$this', (string)$val, $arg);
 	}
+}
+
+/**
+ * A faster implementation of file_get_contents(). Reads a file into a string.
+ * @param string $path File path
+ * @return string
+ */
+function cotpl_read_file($path)
+{
+	$fp = fopen($path, 'r');
+	$code = fread($fp, filesize($path));
+	fclose($fp);
+	return $code;
 }
 
 /**
