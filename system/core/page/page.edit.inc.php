@@ -84,7 +84,7 @@ if ($a=='update')
 
 	$error_string .= (empty($rpagecat)) ? $L['pag_catmissing']."<br />" : '';
 	$error_string .= (mb_strlen($rpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
-	$error_string .= (empty($rpagetext)) ? $L['pag_textmissing']."<br />" : '';
+	// $error_string .= (empty($rpagetext)) ? $L['pag_textmissing']."<br />" : '';
 
 	if($rpagefile == 0 && !empty($rpageurl))
 	{

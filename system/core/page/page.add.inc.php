@@ -92,7 +92,7 @@ if ($a=='add')
 
 	$error_string .= (empty($newpagecat)) ? $L['pag_catmissing']."<br />" : '';
 	$error_string .= (mb_strlen($newpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
-	$error_string .= (empty($newpagetext)) ? $L['pag_textmissing']."<br />" : '';
+	// $error_string .= (empty($newpagetext)) ? $L['pag_textmissing']."<br />" : '';
 
 	if($newpagefile == 0 && !empty($newpageurl))
 	{
