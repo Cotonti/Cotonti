@@ -346,13 +346,13 @@ $Ls['Members'] = array('пользователь','пользователя','п
 $Ls['Pages'] = array('страница','страницы','страниц');
 $Ls['Times'] = array('раз','раза','раз');
 
-$Ls['Milliseconds'] = array('ms', 'ms');
+$Ls['Milliseconds'] = array('мс', 'мс', 'мс');
 $Ls['Seconds'] = array('секунда','секунды','секунд');
 $Ls['Minutes'] = array('минута','минуты','минут');
 $Ls['Hours'] = array('час','часа','часов');
 $Ls['Days'] = array('день','дня','дней');
 $Ls['Weeks'] = array('неделя','недели', 'недель');
-$Ls['Months'] = array('months','month');
+$Ls['Months'] = array('месяц','месяца', 'месяцев');
 $Ls['Years'] = array('год','года', 'лет');
 
 $Ls['Bytes'] = array('B', 'B');
