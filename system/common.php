@@ -554,6 +554,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('SED_NO_ANTIXSS') && !defin
 	sed_redirect(sed_url('message', 'msg=950', '', true));
 }
 
+// Cotonti-specific XTemplate initialization
+if (class_exists('XTemplate'))
+{
+	XTemplate::init($cfg['xtpl_cache'], $cfg['cache_dir'], SED_DEBUG && $_GET['tpl_debug'], $cfg['html_cleanup']);
+}
+
 /* ======== Global hook ======== */
 
 $extp = sed_getextplugins('global');

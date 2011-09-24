@@ -1,13 +1,14 @@
 # Files which should be ignored by Git
-datas/config.php
-datas/urltrans.dat
-datas/avatars/*
-!datas/avatars/index.php
-datas/cache/*
-!datas/cache/.htaccess
-datas/photos/*
-!datas/photos/index.php
-datas/thumbs/*
-!datas/thumbs/index.php
-datas/users/*
-!datas/users/index.php
+/datas/config.php
+/datas/urltrans.dat
+/datas/avatars/*
+!/datas/avatars/index.php
+/datas/cache/*
+!/datas/cache/templates/index.php
+!/datas/cache/.htaccess
+/datas/photos/*
+!/datas/photos/index.php
+/datas/thumbs/*
+!/datas/thumbs/index.php
+/datas/users/*
+!/datas/users/index.php
