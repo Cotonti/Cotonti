@@ -295,7 +295,7 @@ function cot_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '')
 	$handle = opendir($cfg['lang_dir'] . '/');
 	while ($f = readdir($handle))
 	{
-		if ($f[0] != '.')
+		if ($f[0] != '.' && is_dir($cfg['lang_dir'] . '/' . $f))
 		{
 			$langlist[] = $f;
 		}
