@@ -84,7 +84,7 @@ if ($a == 'update')
 
 	cot_check(empty($rpage['page_cat']), 'page_catmissing', 'rpagecat');
 	cot_check(mb_strlen($rpage['page_title']) < 2, 'page_titletooshort', 'rpagetitle');
-	cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
+	// cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
 	
 	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || !cot_auth('plug', $sys['parser'], 'W'))
 	{
