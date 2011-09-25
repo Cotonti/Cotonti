@@ -15,7 +15,7 @@ RewriteRule ^(datas|images|js)/(.*)$ $1/$2 [QSA,NC,NE,L]
 RewriteRule ^(.*)\.(css|js|gif|jpg|png|ico)$ $1.$2 [QSA,NC,NE,L]
 
 # Language selector
-RewriteRule ^(en|ru|de|nl)/(.*) index.php?rwr=$2&l=$1 [QSA,NC,NE]
+RewriteRule ^(en|ru|de|nl)/(.*) $2?l=$1 [QSA,NC,NE]
 
 # Protect standard .php URLs
 RewriteRule ^([a-z]+)\.php(.*)$ $1.php$2 [QSA,NC,NE,L]
