@@ -90,7 +90,16 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 
 	// Get the URL and parameters
 	$link_area = $env['ext'];
-	$link_params = $_SERVER['QUERY_STRING'];
+	$link_params = $_GET;
+	if (defined('COT_PLUG'))
+	{
+		$link_area = 'plug';
+		$link_params['e'] = $env['ext'];
+	}
+	if (isset($_GET['rwr']))
+	{
+		unset($link_params['rwr'], $link_params['e']);
+	}
 
 	$_SESSION['cot_com_back'][$ext_name][$cat][$code] = array($link_area, $link_params);
 
