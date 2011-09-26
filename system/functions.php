@@ -4399,7 +4399,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 		$qs = '?';
 		foreach ($params as $key => $val)
 		{
-			$qs .= cot_url_encode($key, $val, $sep);
+			$qs .= is_array($val) ? cot_url_encode($key, $val, $sep) : $key . '=' . urlencode($val) . $sep;
 		}
 		$qs = mb_substr($qs, 0, -$sep_len);
 		$url .= $qs;

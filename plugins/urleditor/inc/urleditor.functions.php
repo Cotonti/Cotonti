@@ -214,7 +214,7 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 			// they should be passed by rewrite rule (htaccess)
 			if ($rule['params'][$key] != $val)
 			{
-				$qs .= cot_url_encode($key, $val, $sep);
+				$qs .= is_array($val) ? cot_url_encode($key, $val, $sep) : $key . '=' . urlencode($val) . $sep;
 			}
 		}
 		$qs = mb_substr($qs, 0, -$sep_len);
