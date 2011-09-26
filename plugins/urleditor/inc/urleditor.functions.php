@@ -20,7 +20,7 @@ require_once cot_langfile('urleditor', 'plug');
 function cot_apply_rwr()
 {
 	global $cfg, $structure;
-	if (isset($_GET['rwr']) && !empty($_GET['rwr']) && preg_match('`^[\w\p{L}/\-_]+?$`u', $_GET['rwr']))
+	if (isset($_GET['rwr']) && !empty($_GET['rwr']) && preg_match('`^[\w\p{L}/\-_\ \+]+?$`u', $_GET['rwr']))
 	{
 		// Ignore ending slash and split the path into parts
 		$path = explode('/', (mb_strrpos($_GET['rwr'], '/') == mb_strlen($_GET['rwr']) - 1) ? mb_substr($_GET['rwr'], 0, -1) : $_GET['rwr']);
@@ -44,7 +44,7 @@ function cot_apply_rwr()
 				// Maybe it is a system page, if not 404 will be given
 				$_GET['e'] = 'page';
 				$_GET['c'] = 'system';
-				$_GET['al'] = $path[0];
+				$_GET['al'] = urldecode($path[0]);
 			}
 		}
 		else
@@ -54,7 +54,7 @@ function cot_apply_rwr()
 			{
 				$_GET['e'] = 'users';
 				$_GET['m'] = 'details';
-				$_GET['u'] = $path[1];
+				$_GET['u'] = urldecode($path[1]);
 				return;
 			}
 			$last = $count - 1;
@@ -78,7 +78,7 @@ function cot_apply_rwr()
 				}
 				else
 				{
-					$_GET['al'] = $path[$last];
+					$_GET['al'] = urldecode($path[$last]);
 				}
 			}
 		}
