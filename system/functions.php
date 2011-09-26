@@ -3875,9 +3875,9 @@ function cot_rc_consolidate()
  */
 function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
 {
-	global $cfg, $cot_rc_reg;
+	global $cfg, $cot_rc_reg, $cot_rc_skip_minification;
 
-	if ($cfg['headrc_consolidate'])
+	if ($cfg['headrc_consolidate'] && !$cot_rc_skip_minification)
 	{
 		// Save as file
 		$path = $cfg['cache_dir'] . '/static/' . $identifier . '.' . $type;
@@ -3923,7 +3923,7 @@ function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
  */
 function cot_rc_add_file($path, $scope = 'global')
 {
-	global $cfg, $cot_rc_reg;
+	global $cfg, $cot_rc_reg, $cot_rc_skip_minification;
 	if (!file_exists($path))
 	{
 		return false;
@@ -3931,7 +3931,7 @@ function cot_rc_add_file($path, $scope = 'global')
 
 	$type = preg_match('#\.(min\.)?(js|css)$#', mb_strtolower($path), $m) ? $m[2] : 'js';
 
-	if ($cfg['headrc_consolidate'] && $cfg['headrc_minify'] && $m[1] != 'min.')
+	if ($cfg['headrc_consolidate'] && $cfg['headrc_minify'] && !$cot_rc_skip_minification && $m[1] != 'min.')
 	{
 		$bname = ($type == 'css') ? str_replace('/', '._.', $path) : basename($path) . '.min';
 		$code = cot_rc_minify(file_get_contents($path), $type);

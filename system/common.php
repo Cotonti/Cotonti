@@ -524,7 +524,7 @@ if (!defined('COT_ADMIN'))
 	{
 		cot_diefatal('Default scheme not found.'); // TODO: Need translate
 	}
-	else
+	elseif (!$cot_rc_html || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMIN'))
 	{
 		cot_rc_add_file($mscheme);
 	}
@@ -598,10 +598,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('COT_NO_ANTIXSS') && !defin
 }
 
 /* ============ Head Resources ===========*/
+$cot_rc_skip_minification = false;
 if (!$cot_rc_html || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMIN'))
 {
 	cot_rc_consolidate();
 }
+$cot_rc_skip_minification = true;
 
 // Cotonti-specific XTemplate initialization
 if (class_exists('XTemplate'))
