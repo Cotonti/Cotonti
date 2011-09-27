@@ -95,6 +95,12 @@ if ($id > 0 && $stmt->rowCount() == 1)
 		}
 		$lc_values = array_keys($lc_list);
 		$lc_names = array_values($lc_list);
+		
+		if (empty($pag_i18n['ipage_text']))
+		{
+			// Insert original page source into translation tab to keep markup
+			$pag_i18n['ipage_text'] = $pag['page_text'];
+		}
 
 		$t->assign(array(
 			'I18N_ACTION' => cot_url('plug', "e=i18n&m=page&a=add&id=$id"),
