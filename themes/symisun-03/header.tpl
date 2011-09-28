@@ -14,7 +14,6 @@
 {HEADER_BASEHREF}
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<link href="themes/{PHP.theme}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
 {HEADER_HEAD}
 {HEADER_COMPOPUP}
 <!-- SymiSun 03 / Designed By: SymiSun* - SymiSun.Com -->

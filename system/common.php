@@ -517,19 +517,6 @@ if (!file_exists($mtheme))
 	}
 }
 
-if (!defined('COT_ADMIN'))
-{
-	$mscheme = cot_schemefile();
-	if (!$mscheme)
-	{
-		cot_diefatal('Default scheme not found.'); // TODO: Need translate
-	}
-	elseif (!$cot_rc_html || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMIN'))
-	{
-		cot_rc_add_file($mscheme);
-	}
-}
-
 $usr['def_theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
 $usr['theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.{$usr['lang']}.lang.php";
 
