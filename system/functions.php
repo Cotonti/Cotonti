@@ -4458,7 +4458,7 @@ function cot_translit_encode($str)
 {
 	global $lang, $cot_translit;
 	static $lang_loaded = false;
-	if (!$lang_loaded)
+	if ($lang != 'en' && !$lang_loaded)
 	{
 		require_once cot_langfile('translit', 'core');
 		$lang_loaded = true;
