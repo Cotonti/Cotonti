@@ -4457,6 +4457,12 @@ function cot_url_encode($key, $val, $sep)
 function cot_translit_encode($str)
 {
 	global $lang, $cot_translit;
+	static $lang_loaded = false;
+	if (!$lang_loaded)
+	{
+		require_once cot_langfile('translit', 'core');
+		$lang_loaded = true;
+	}
 	if ($lang != 'en' && is_array($cot_translit))
 	{
 		// Apply transliteration
