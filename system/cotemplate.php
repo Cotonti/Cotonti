@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.6.2
+ * @version 2.6.3
  * @author Vladimir Sibirov a.k.a. Trustmaster
  * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
@@ -1179,11 +1179,11 @@ class Cotpl_var
 			foreach ($chain as $cbk)
 			{
 				if (mb_strpos($cbk, '(') !== false
-					&& preg_match('`(\w+)\((.+?)\)`', $cbk, $mt))
+					&& preg_match('`(\w+)\s*\((.+?)\)`', $cbk, $mt))
 				{
 					$this->callbacks[] = array(
 						'name' => $mt[1],
-						'args' => cotpl_tokenize($mt[2], array(',', ' '))
+						'args' => cotpl_tokenize(trim($mt[2]), array(',', ' '))
 					);
 				}
 				else
@@ -1471,6 +1471,19 @@ function cotpl_tokenize($str, $delim = array(' '))
 			{
 				$tokens[$idx] .= $c;
 			}
+			$prev_delim = false;
+		}
+		elseif ($c == '{' && !$quote)
+		{
+			// Avoid variable tokenization
+			$quote = $c;
+			$tokens[$idx] .= $c;
+			$prev_delim = false;
+		}
+		elseif ($c == '}' && $quote)
+		{
+			$quote = '';
+			$tokens[$idx] .= $c;
 			$prev_delim = false;
 		}
 		else
