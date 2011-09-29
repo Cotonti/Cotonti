@@ -4103,7 +4103,7 @@ function cot_rc_minify($code, $type = 'js')
 	elseif ($type == 'css')
 	{
 		require_once './lib/cssmin.php';
-		$code = CssMin::minify($code);
+		$code = minify_css($code);
 	}
 	return $code;
 }
