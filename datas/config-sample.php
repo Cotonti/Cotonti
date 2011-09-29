@@ -16,6 +16,7 @@ defined('COT_CODE') or die('Wrong URL');
 // ========================
 
 $cfg['mysqlhost'] = 'localhost';	// Database host URL
+$cfg['mysqlport'] = '';				// Database port, if non-default
 $cfg['mysqluser'] = 'root';			// Database user
 $cfg['mysqlpassword'] = '';			// Database password
 $cfg['mysqldb'] = 'cotonti';		// Database name

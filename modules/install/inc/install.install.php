@@ -28,7 +28,8 @@ define('COT_ABSOLUTE_URL', $site_url . '/');
 
 if ($step > 2)
 {
-	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+	$dbс_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
+	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbс_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 }
 
 // Import section
@@ -36,6 +37,7 @@ switch ($step)
 {
 	case 2:
 		$db_host = cot_import('db_host', 'P', 'TXT', 0, false, true);
+		$db_port = cot_import('db_port', 'P', 'TXT', 0, false, true);
 		$db_user = cot_import('db_user', 'P', 'TXT', 0, false, true);
 		$db_pass = cot_import('db_pass', 'P', 'TXT', 0, false, true);
 		$db_name = cot_import('db_name', 'P', 'TXT', 0, false, true);
@@ -125,7 +127,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			
 			try
 			{
-				$db = new CotDB('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_pass);
+				$dbс_port = empty($db_port) ? '' : ';port='.$db_port;
+				$db = new CotDB('mysql:host='.$db_host.$dbc_port.';dbname='.$db_name, $db_user, $db_pass);
 			}
 			catch (PDOException $e)
 			{
@@ -134,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 					// Attempt to create a new database
 					try
 					{
-						$db = new CotDB('mysql:host='.$db_host, $db_user, $db_pass);
+						$db = new CotDB('mysql:host='.$db_host.$dbc_port, $db_user, $db_pass);
 						$db->query("CREATE DATABASE `$db_name`");
 						$db->query("USE `$db_name`");
 					}
@@ -159,6 +162,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				$config_contents = file_get_contents($file['config']);
 				cot_install_config_replace($config_contents, 'mysqlhost', $db_host);
+				if (!empty($db_port))
+				{
+					cot_install_config_replace($config_contents, 'mysqlport', $db_port);
+				}
 				cot_install_config_replace($config_contents, 'mysqluser', $db_user);
 				cot_install_config_replace($config_contents, 'mysqlpassword', $db_pass);
 				cot_install_config_replace($config_contents, 'mysqldb', $db_name);
@@ -499,6 +506,7 @@ switch ($step)
 		// Database form
 		$t->assign(array(
 			'INSTALL_DB_HOST' => is_null($db_host) ? $cfg['mysqlhost'] : $db_host,
+			'INSTALL_DB_PORT' => is_null($db_port) ? $cfg['mysqlport'] : $db_port,
 			'INSTALL_DB_USER' => is_null($db_user) ? $cfg['mysqluser'] : $db_user,
 			'INSTALL_DB_NAME' => is_null($db_name) ? $cfg['mysqldb'] : $db_name,
 			'INSTALL_DB_X' => $db_x,

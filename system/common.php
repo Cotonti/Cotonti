@@ -77,7 +77,8 @@ else
 require_once $cfg['system_dir'].'/database.php';
 try
 {
-	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+	$dbc_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
+	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbc_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 }
 catch (PDOException $e)
 {
@@ -85,7 +86,7 @@ catch (PDOException $e)
 		Please check your settings in the file datas/config.php<br />
 		MySQL error : '.$e->getMessage());
 }
-unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $dbc_port);
 
 $cache && $cache->init();
 
