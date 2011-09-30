@@ -191,7 +191,7 @@ function ajaxMakeHash(href, rel, formData) {
 	var hash = (formData == 'post') ? 'post' : 'get';
 	var hrefBase, params;
 	var sep = '?';
-	var m = rel.match(/(get|post)(-[^ ;]+)?(;\S*)?/);
+	var m = rel ? rel.match(/(get|post)(-[^ ;]+)?(;\S*)?/) : false;
 	if (m) {
 		hash = m[1];
 		if (m[2]) {

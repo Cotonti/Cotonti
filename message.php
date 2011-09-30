@@ -23,6 +23,11 @@ require_once $cfg['system_dir'] . '/common.php';
 
 require_once cot_langfile('message', 'core');
 
+if (defined('COT_ADMIN'))
+{
+	require_once cot_incfile('admin', 'module');
+}
+
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('message', 'a');
 cot_block($usr['auth_read']);
 
@@ -195,7 +200,14 @@ foreach (cot_getextplugins('message.main') as $pl)
 $out['head'] .= $R['code_noindex'];
 $out['subtitle'] = $title;
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(cot_tplfile('message'));
+
+$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
+$t = new XTemplate(cot_tplfile('message', $tpl_type));
+
+if (COT_AJAX)
+{
+	$t->assign('AJAX_MODE', true);
+}
 
 $errmsg = $title;
 $title .= ($usr['isadmin']) ? ' (#' . $msg . ')' : '';

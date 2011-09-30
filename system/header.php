@@ -86,7 +86,7 @@ if (!COT_AJAX)
 	{
 		$mtpl_base = 'header';
 	}
-	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));	
+	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 	
 	/* === Hook === */
 	foreach (cot_getextplugins('header.main') as $pl)

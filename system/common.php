@@ -294,11 +294,6 @@ $usr['timezone'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
-if (!defined('COT_MESSAGE'))
-{
-	$_SESSION['s_run_admin'] = defined('COT_ADMIN');
-}
-
 if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
 	$u = empty($_SESSION[$site_id]) ? explode(':', base64_decode($_COOKIE[$site_id])) : explode(':', base64_decode($_SESSION[$site_id]));
@@ -384,6 +379,15 @@ if ($usr['id'] == 0)
 }
 
 $lang = $usr['lang'];
+
+if (defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R'))
+{
+	define('COT_ADMIN', TRUE);
+}
+else
+{
+	$_SESSION['s_run_admin'] = defined('COT_ADMIN');
+}
 
 /* ======== Category Structure ======== */
 if (!$structure)

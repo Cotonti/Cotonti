@@ -2782,7 +2782,7 @@ function cot_tplfile($base, $type = 'module')
 	elseif ($type == 'core')
 	{
 		// Built-in core modules
-		if(in_array($basename, array('admin', 'header', 'footer')))
+		if(in_array($basename, array('admin', 'header', 'footer', 'message')))
 		{
 			$basename = 'admin';
 			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/$basename/";
@@ -3875,15 +3875,15 @@ function cot_rc_consolidate()
  */
 function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
 {
-	global $cfg, $cot_rc_reg, $cot_rc_skip_minification;
+	global $cache, $cfg, $cot_rc_reg, $cot_rc_skip_minification;
 
-	if ($cfg['headrc_consolidate'] && !$cot_rc_skip_minification)
+	if ($cfg['headrc_consolidate'] && $cache && !defined('COT_ADMIN'))
 	{
 		// Save as file
 		$path = $cfg['cache_dir'] . '/static/' . $identifier . '.' . $type;
 		if (!file_exists($path) || md5($code) != md5_file($path))
 		{
-			if ($cfg['headrc_minify'])
+			if ($cfg['headrc_minify'] && !$cot_rc_skip_minification)
 			{
 				$code = cot_rc_minify($code, $type);
 			}
@@ -3923,7 +3923,7 @@ function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
  */
 function cot_rc_add_file($path, $scope = 'global')
 {
-	global $cfg, $cot_rc_reg, $cot_rc_skip_minification;
+	global $cache, $cfg, $cot_rc_reg, $cot_rc_skip_minification;
 	if (!file_exists($path))
 	{
 		return false;
@@ -3931,15 +3931,15 @@ function cot_rc_add_file($path, $scope = 'global')
 
 	$type = preg_match('#\.(min\.)?(js|css)$#', mb_strtolower($path), $m) ? $m[2] : 'js';
 
-	if ($cfg['headrc_consolidate'] && $cfg['headrc_minify'] && !$cot_rc_skip_minification && $m[1] != 'min.')
+	if ($cfg['headrc_consolidate'] && !defined('COT_ADMIN') && $cfg['headrc_minify'] && !$cot_rc_skip_minification && $m[1] != 'min.')
 	{
 		$bname = ($type == 'css') ? str_replace('/', '._.', $path) : basename($path) . '.min';
-		$code = cot_rc_minify(file_get_contents($path), $type);
+		$code = file_get_contents(cot_rc_minify($code, $type));
 		$path = $cfg['cache_dir'] . '/static/' . $bname;
 		file_put_contents($path, $code);
 	}
 
-	if ($cfg['headrc_consolidate'])
+	if ($cfg['headrc_consolidate'] && $cache && !defined('COT_ADMIN'))
 	{
 		$cot_rc_reg[$type][$scope][] = $path;
 	}

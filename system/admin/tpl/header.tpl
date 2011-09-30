@@ -23,5 +23,14 @@
 		<li id="hi"><a href="{PHP|cot_url('users','m=profile')}">{PHP.usr.name}</a><span class="spaced">{PHP.cfg.separator}</span><a href="{PHP|cot_url('pm')}"><!-- IF {PHP.usr.messages} == 0 -->{PHP.L.Private_Messages}<!-- ELSE -->New messages: {PHP.usr.messages}<!-- ENDIF --></a><span class="spaced">{PHP.cfg.separator}</span>{PHP.out.loginout}</li>
 		<li><a href="{PHP.cfg.mainurl}" title="{PHP.L.hea_viewsite}"><!-- IF {PHP.cfg.maintitle} && {PHP.cfg.maintitle|mb_strlen} < 50 -->{PHP.cfg.maintitle} <!-- ELSE -->{PHP.L.hea_viewsite} <!-- ENDIF --></a></li>
 	</ul>
+	
+	<ul id="adminmenu" class="body">
+		<li><a href="{PHP|cot_url('admin')}" class="<!-- IF !{PHP.m} -->sel<!-- ENDIF -->" title="{PHP.L.Administration}">{PHP.R.admin_menu_icon_home}</a></li>
+		<li><a href="{PHP|cot_url('admin', 'm=config')}" class="<!-- IF {PHP.m} == 'config' -->sel<!-- ENDIF -->" title="{PHP.L.Configuration}">{PHP.R.admin_menu_icon_config}</a></li>
+		<li><a href="{PHP|cot_url('admin', 'm=structure')}" class="<!-- IF {PHP.m} == 'structure' -->sel<!-- ENDIF -->" title="{PHP.L.Structure}">{PHP.R.admin_menu_icon_structure}</a></li>
+		<li><a href="{PHP|cot_url('admin', 'm=extensions')}" class="<!-- IF {PHP.m} == 'extensions' -->sel<!-- ENDIF -->" title="{PHP.L.Extensions}">{PHP.R.admin_menu_icon_extensions}</a></li>
+		<li><a href="{PHP|cot_url('admin', 'm=users')}" class="<!-- IF {PHP.m} == 'users' -->sel<!-- ENDIF -->" title="{PHP.L.Users}">{PHP.R.admin_menu_icon_users}</a></li>
+		<li><a href="{PHP|cot_url('admin', 'm=other')}" class="<!-- IF {PHP.m} == 'other' -->sel<!-- ENDIF -->" title="{PHP.L.Other}">{PHP.R.admin_menu_icon_other}</a></li>
+	</ul>
 
 <!-- END: HEADER -->
