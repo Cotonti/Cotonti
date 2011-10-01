@@ -2430,7 +2430,7 @@ function cot_die_message($code, $header = TRUE)
 	if ($header)
 	{
 		$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
-		echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.$stylesheet.'</head><body><div class="block">';
+		echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.$R['code_basehref'].$stylesheet.'</head><body><div class="block">';
 	}
 	else
 	{
