@@ -36,8 +36,7 @@ if ($id > 0 || !empty($al))
 
 if(!$id && empty($al) || !$sql_page || $sql_page->rowCount() == 0)
 {
-	$env['status'] = '404 Not Found';
-	cot_redirect(cot_url('message', 'msg=404', '', true));
+	cot_die_message(404, TRUE);
 }
 $pag = $sql_page->fetch();
 
@@ -56,9 +55,8 @@ $pag['page_pageurl'] = empty($al) ? cot_url('page', array('c' => $pag['page_cat'
 
 if (($pag['page_state'] == 1 || $pag['page_begin'] > $sys['now'] || $pag['page_expire'] > 0 && $sys['now'] > $pag['page_expire']) && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
 {
-	$env['status'] = '403 Forbidden';
 	cot_log("Attempt to directly access an un-validated or future/expired page", 'sec');
-	cot_redirect(cot_url('message', "msg=403", '', true));
+	cot_die_message(403, TRUE);
 }
 if (mb_substr($pag['page_text'], 0, 6) == 'redir:')
 {

@@ -19,8 +19,7 @@ $y = cot_import('y','G','INT');
 
 if ($cfg['users']['disablereg'])
 {
-	$env['status'] = '403 Forbidden';
-	cot_redirect(cot_url('message', 'msg=117', '', true));
+	cot_die_message(117, TRUE);
 }
 
 /* === Hook === */

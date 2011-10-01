@@ -2321,16 +2321,18 @@ function cot_clear_messages($src = '', $class = '')
  * Terminates script execution and performs redirect
  *
  * @param bool $cond Really die?
+ * @param bool $notfound Page not found?
+ * @param bool $header Render header part?
  * @return bool
  */
-function cot_die($cond = true, $notfound = false)
+function cot_die($cond = true, $notfound = false, $header = true)
 {
 	global $env;
 	if ($cond)
 	{
 		$msg = $notfound ? '404' : '950';
-		$env['status'] = $notfound ? '404 Not Found' : '403 Forbidden';
-		cot_redirect(cot_url('message', 'msg=' . $msg, '', true));
+		
+		cot_die_message($msg, true);
 	}
 	return FALSE;
 }
@@ -2357,8 +2359,100 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 	}
 	else
 	{
-		cot_redirect(cot_url('message', 'msg=500', '', true));
+		cot_die_message(500, true);
 	}
+}
+
+/**
+ * Terminates script execution and displays message page
+ * 
+ * @param int $code Message code
+ * @param bool $header Render page header
+ */
+function cot_die_message($code, $header = TRUE)
+{
+	// Globals and requirements
+	global $cfg, $env, $error_string, $out, $L, $R;
+	require_once cot_langfile('message', 'core');
+	
+	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST')
+	{
+		// Save the POST data
+		cot_import_buffer_save();
+		if (!empty($error_string))
+		{
+			// Message should not be lost
+			cot_error($error_string);
+		}
+	}
+	
+	// Determine response header
+	static $msg_status = array(
+		100 => '403 Forbidden',
+		101 => '200 OK',
+		102 => '200 OK',
+		105 => '200 OK',
+		106 => '200 OK',
+		109 => '200 OK',
+		117 => '403 Forbidden',
+		118 => '200 OK',
+		151 => '403 Forbidden',
+		152 => '403 Forbidden',
+		153 => '403 Forbidden',
+		157 => '403 Forbidden',
+		300 => '200 OK',
+		400 => '400 Bad Request',
+		401 => '401 Authorization Required',
+		403 => '403 Forbidden',
+		404 => '404 Not Found',
+		500 => '500 Internal Server Error',
+		602 => '403 Forbidden',
+		603 => '403 Forbidden',
+		900 => '503 Service Unavailable',
+		904 => '403 Forbidden',
+		907 => '404 Not Found',
+		911 => '404 Not Found',
+		915 => '200 OK',
+		916 => '200 OK',
+		920 => '200 OK',
+		930 => '403 Forbidden',
+		940 => '403 Forbidden',
+		950 => '403 Forbidden',
+		951 => '503 Service Unavailable'
+	);
+	$env['status'] = $msg_status[$code];
+	
+	// Determine message title and body
+	$title = $L['msg' . $code . '_title'];
+	$body = $L['msg' . $code . '_body'];
+	
+	// Render the message page
+	if ($header)
+	{
+		echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" /></head><body>';
+	}
+	else
+	{
+		header($env['status']);
+	}
+
+	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
+	$t = new XTemplate(cot_tplfile('message', $tpl_type));
+
+	$t->assign(array(
+		'AJAX_MODE' => COT_AJAX,
+		'MESSAGE_TITLE' => $title,
+		'MESSAGE_BODY' => $body
+	));
+
+	$t->parse('MAIN');
+	$t->out('MAIN');
+
+	if ($header)
+	{
+		echo '</body></html>';
+	}
+	exit;
 }
 
 /**
@@ -4126,8 +4220,7 @@ function cot_check_xg($redirect = true)
 	{
 		if ($redirect)
 		{
-			$env['status'] = '403 Forbidden';
-			cot_redirect(cot_url('message', 'msg=950', '', true));
+			cot_die_message(950, TRUE);
 		}
 		return false;
 	}

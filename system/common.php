@@ -586,7 +586,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('COT_NO_ANTIXSS') && !defin
 	&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 {
 	$cot_error = true;
-	cot_redirect(cot_url('message', 'msg=950', '', true));
+	cot_die_message(950, TRUE);
 }
 
 /* ============ Head Resources ===========*/

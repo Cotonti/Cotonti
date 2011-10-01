@@ -42,7 +42,7 @@ $sys['protecttopadmin'] = $sys['edited_istopadmin'] && !$sys['user_istopadmin'];
 
 if ($sys['protecttopadmin'])
 {
-	cot_redirect(cot_url('message', "msg=930", '', true));
+	cot_die_message(930, TRUE);
 }
 
 if ($a=='update')
@@ -87,7 +87,7 @@ if ($a=='update')
 	}
 	elseif($ruserdelete)
 	{
-		cot_redirect(cot_url('message', "msg=930", '', true));
+		cot_die_message(930, TRUE);
 	}
 
 	$ruser['user_name'] = cot_import('rusername','P','TXT');

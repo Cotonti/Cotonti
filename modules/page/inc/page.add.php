@@ -33,7 +33,7 @@ cot_block($usr['auth_write']);
 
 if ($structure['page'][$c]['locked'])
 {
-	cot_redirect(cot_url('message', 'msg=602', '', true));
+	cot_die_message(602, TRUE);
 }
 
 $sys['parser'] = $cfg['page']['parser'];

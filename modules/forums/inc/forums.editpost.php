@@ -60,7 +60,7 @@ if ($rowt = $sql_forums->fetch())
 {
 	if ($rowt['ft_state'] && !$usr['isadmin'])
 	{
-		cot_redirect(cot_url('message', 'msg=603', '', true));
+		cot_die_message(603, true);
 	}
 }
 else

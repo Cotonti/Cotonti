@@ -37,7 +37,7 @@ cot_block($usr['auth_write']);
 
 if ($structure['forums'][$s]['locked'])
 {
-	cot_redirect(cot_url('message', 'msg=602', '', true));
+	cot_die_message(602, true);
 }
 
 if ($a == 'newtopic')

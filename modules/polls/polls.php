@@ -91,8 +91,7 @@ elseif ((int)$id > 0)
 	$id = cot_import($id, 'D', 'INT');
 	if ((int) $db->query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id AND poll_type='index' ")->fetchColumn() != 1)
 	{
-		$env['status'] = '404 Not Found';
-		cot_redirect(cot_url('message', 'msg=404', '', TRUE));
+		cot_die_message(404, TRUE);
 	}
 	cot_poll_vote();
 	$poll_form = cot_poll_form($id);

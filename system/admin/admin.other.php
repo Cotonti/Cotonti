@@ -46,9 +46,9 @@ if(!empty($p))
 		}
 	}
 
-	if(count($extp) == 0)
+	if (count($extp) == 0)
 	{
-		cot_redirect(cot_url('message', 'msg=907', '', true));
+		cot_die_message(907, TRUE);
 	}
 
 	$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);

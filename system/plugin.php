@@ -99,8 +99,7 @@ if (is_array($cot_plugins[$exthook]))
 
 if ($empty)
 {
-	$env['status'] = '404 Not Found';
-	cot_redirect(cot_url('message', 'msg=907', '', true));
+	cot_die_message(907, TRUE);
 }
 
 $out['subtitle'] = empty($out['subtitle']) ? $L['plu_title'] : $out['subtitle'];
