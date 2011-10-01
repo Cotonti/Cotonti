@@ -2429,7 +2429,8 @@ function cot_die_message($code, $header = TRUE)
 	// Render the message page
 	if ($header)
 	{
-		echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" /></head><body>';
+		$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
+		echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.$stylesheet.'</head><body><div class="block">';
 	}
 	else
 	{
@@ -2450,7 +2451,7 @@ function cot_die_message($code, $header = TRUE)
 
 	if ($header)
 	{
-		echo '</body></html>';
+		echo '</div></body></html>';
 	}
 	exit;
 }
