@@ -356,35 +356,38 @@ foreach($areas as $ar)
 	$t->parse('MAIN.AREABOX');
 }
 
-$fp = fopen('./datas/urltrans.dat', 'r');
-// Rules
-$ii = 0;
-/* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('admin.urls.loop');
-/* ===== */
-while($line = trim(fgets($fp), " \t\r\n"))
+if (is_readable('./datas/urltrans.dat'))
 {
-	$parts = explode("\t", $line);
-
-	$t->assign(array(
-		'ADMIN_URLS_ROW_I' => $ii,
-		'ADMIN_URLS_ROW_AREAS' => cot_selectbox($parts[0], 'area[]', $areas, $areas, false),
-		'ADMIN_URLS_ROW_PARTS1' => cot_inputbox('text', 'params[]', $parts[1]),
-		'ADMIN_URLS_ROW_PARTS2' => cot_inputbox('text', 'format[]', $parts[2]),
-		'ADMIN_URLS_ROW_ODDEVEN' => cot_build_oddeven($ii)
-	));
-
-	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
-		include $pl;
-	}
+	$fp = fopen('./datas/urltrans.dat', 'r');
+	// Rules
+	$ii = 0;
+	/* === Hook - Part1 : Set === */
+	$extp = cot_getextplugins('admin.urls.loop');
 	/* ===== */
+	while($line = trim(fgets($fp), " \t\r\n"))
+	{
+		$parts = explode("\t", $line);
 
-	$t->parse('MAIN.ROW');
-	$ii++;
+		$t->assign(array(
+			'ADMIN_URLS_ROW_I' => $ii,
+			'ADMIN_URLS_ROW_AREAS' => cot_selectbox($parts[0], 'area[]', $areas, $areas, false),
+			'ADMIN_URLS_ROW_PARTS1' => cot_inputbox('text', 'params[]', $parts[1]),
+			'ADMIN_URLS_ROW_PARTS2' => cot_inputbox('text', 'format[]', $parts[2]),
+			'ADMIN_URLS_ROW_ODDEVEN' => cot_build_oddeven($ii)
+		));
+
+		/* === Hook - Part2 : Include === */
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		$t->parse('MAIN.ROW');
+		$ii++;
+	}
+	fclose($fp);
 }
-fclose($fp);
 
 $htaccess = ($serv_type == 'apache' && is_writeable('./'.$conf_name)) ? true : false;
 if ($htaccess)
