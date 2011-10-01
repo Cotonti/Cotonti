@@ -79,8 +79,8 @@ else
 	}
 	else
 	{
-		// Redirect to error page
-		header('Location: ' .  $cfg['mainurl'] . '/message.php?msg=404', null, 404);
+		// Error page
+		cot_die_message(404);
 		exit;
 	}
 }

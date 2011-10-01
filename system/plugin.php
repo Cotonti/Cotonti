@@ -14,10 +14,6 @@ defined('COT_CODE') or die('Wrong URL');
 // Bootstrap
 require_once $cfg['system_dir'] . '/common.php';
 
-// Initial permission check
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', $env['ext']);
-cot_block($usr['auth_read']);
-
 // Input import
 $e = cot_import('e', 'G', 'ALP');
 $o = cot_import('o', 'G', 'ALP');
@@ -57,8 +53,17 @@ elseif (!empty($e))
 }
 else
 {
-	cot_die(true, true);
+	cot_die_message(404);
 }
+
+if (!file_exists($cfg['plugins_dir'] . '/' . $extname))
+{
+	cot_die_message(404);
+}
+
+// Initial permission check
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', $env['ext']);
+cot_block($usr['auth_read']);
 
 // Plugin requirements autoloading
 $req_files = array();
