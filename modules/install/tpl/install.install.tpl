@@ -71,7 +71,7 @@
 					<ul>
 						<li class="title">{PHP.L.install_db}</li>
 						<li><label>{PHP.L.install_db_host}</label>  <input type="text" name="db_host" value="{INSTALL_DB_HOST}" size="32" /></li>
-						<li><label>{PHP.L.install_db_port}</label>  <input type="text" name="db_host" value="{INSTALL_DB_PORT}" size="32" /><div style="text-align:center;margin:3px 0"><small>{PHP.L.install_db_port_hint}</small></div></li>
+						<li><label>{PHP.L.install_db_port}</label>  <input type="text" name="db_port" value="{INSTALL_DB_PORT}" size="32" /><div style="text-align:center;margin:3px 0"><small>{PHP.L.install_db_port_hint}</small></div></li>
 						<li><label>{PHP.L.install_db_user}</label> <input type="text" name="db_user" value="{INSTALL_DB_USER}" size="32" /></li>
 						<li><label>{PHP.L.install_db_pass}</label> <input type="password" name="db_pass" size="32" /></li>
 						<li><label>{PHP.L.install_db_name}</label>  <input type="text" name="db_name" value="{INSTALL_DB_NAME}" size="32" /></li>
