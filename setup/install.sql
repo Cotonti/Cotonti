@@ -91,6 +91,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','main','42','redirbkonlogout',3,'0','0','',''),
 ('core','main','43','maxrowsperpage',1,'15','15','',''),
 ('core','main','44','easypagenav',3,'1','1','',''),
+('core','main','45','confirmlinks',3,'1','1','',''),
 ('core','main','98','jquery',3,'1','1','',''),
 ('core','main','99','turnajax',3,'1','1','',''),
 ('core','menus','01','topline',0,'','','',''),

@@ -108,6 +108,7 @@ $L['cfg_defaulttimezone'] = array('Часовой пояс по умолчани
 
 $L['cfg_adminemail'] = array('E-mail администратора сайта', 'Обязательно!');
 $L['cfg_clustermode'] = array('Серверный кластер', 'Выберите Да, если используется кластерная система балансировки нагрузок.');
+$L['cfg_confirmlinks'] = array('Подтверждать потенциально опасные действия');
 $L['cfg_cookiedomain'] = array('Домен для cookies', 'По умолчанию пусто');
 $L['cfg_cookielifetime'] = array('Срок действия cookies', 'В секундах');
 $L['cfg_cookiepath'] = array('Путь для cookies', 'По умолчанию пусто');

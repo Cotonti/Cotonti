@@ -3934,7 +3934,7 @@ function cot_rc_add_file($path, $scope = 'global')
 	if ($cfg['headrc_consolidate'] && !defined('COT_ADMIN') && $cfg['headrc_minify'] && !$cot_rc_skip_minification && $m[1] != 'min.')
 	{
 		$bname = ($type == 'css') ? str_replace('/', '._.', $path) : basename($path) . '.min';
-		$code = file_get_contents(cot_rc_minify($code, $type));
+		$code = cot_rc_minify(file_get_contents($path), $type);
 		$path = $cfg['cache_dir'] . '/static/' . $bname;
 		file_put_contents($path, $code);
 	}
@@ -4260,12 +4260,20 @@ function cot_xp()
  */
 function cot_confirm_url($target_url, $ext_name = '', $msg_key = '')
 {
-	return cot_url('message', array(
-		'msg' => 920,
-		'm' => $ext_name,
-		'lng' => $msg_key,
-		'redirect' => base64_encode($target_url)
-	));
+	global $cfg;
+	if ($cfg['confirmlinks'])
+	{
+		return cot_url('message', array(
+			'msg' => 920,
+			'm' => $ext_name,
+			'lng' => $msg_key,
+			'redirect' => base64_encode($target_url)
+		));
+	}
+	else
+	{
+		return $target_url;
+	}
 }
 
 /**

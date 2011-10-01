@@ -107,6 +107,7 @@ $L['cfg_defaulttimezone'] = array('Default time zone', 'For guests and new membe
 
 $L['cfg_adminemail'] = array('Administrator\'s email', 'Required');
 $L['cfg_clustermode'] = array('Cluster of servers', 'Set to yes if it\'s a load balanced setup.');
+$L['cfg_confirmlinks'] = array('Confirm potentially dangerous actions');
 $L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
 $L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
 $L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
