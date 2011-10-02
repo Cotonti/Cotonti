@@ -2432,10 +2432,7 @@ function cot_die_message($code, $header = TRUE)
 		$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
 		echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.$R['code_basehref'].$stylesheet.'</head><body><div class="block">';
 	}
-	else
-	{
-		header($env['status']);
-	}
+	header('HTTP/1.1 ' . $env['status']);
 
 	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
 	$t = new XTemplate(cot_tplfile('message', $tpl_type));
@@ -4393,7 +4390,7 @@ function cot_redirect($url)
 	if (!cot_url_check($url))
 	{
 		// No redirects to foreign domains
-		$url = COT_ABSOLUTE_URL . $url;
+		$url = $url == '/' ? COT_ABSOLUTE_URL : COT_ABSOLUTE_URL . $url;
 	}
 
 	if (defined('COT_AJAX') && COT_AJAX)
@@ -4405,7 +4402,7 @@ function cot_redirect($url)
 
 	if (isset($env['status']))
 	{
-		header('HTTP/1.1' . $env['status']);
+		header('HTTP/1.1 ' . $env['status']);
 	}
 
 	if ($cfg['redirmode'])
