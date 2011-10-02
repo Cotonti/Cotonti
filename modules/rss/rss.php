@@ -227,7 +227,7 @@ elseif ($defult_c)
 		$items[$i]['title'] = $row['page_title'];
 		$items[$i]['link'] = COT_ABSOLUTE_URL . $row['page_pageurl'];
 		$items[$i]['pubDate'] = date('r', $row['page_date']);
-		$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_pageurl']);
+		$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_pageurl'], $row['page_parser']);
 
 		$i++;
 	}
@@ -274,11 +274,11 @@ if ($usr['id'] === 0 && $cache)
 }
 echo $out_rss;
 
-function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl)
+function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl, $pag_parser)
 {
 	global $db, $cfg, $db_pages, $usr;
 
-	$pag_text = cot_parse($pag_text, $cfg['page']['markup']);
+	$pag_text = cot_parse($pag_text, $pag_parser !== 'none', $pag_parser);
 	$readmore = mb_strpos($pag_text, "<!--more-->");
 	if ($readmore > 0)
 	{
