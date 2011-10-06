@@ -222,7 +222,7 @@ elseif ($defult_c)
 	$i = 0;
 	while ($row = $sql->fetch())
 	{
-		$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']);
+		$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'], '', true) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'], '', true);
 
 		$items[$i]['title'] = $row['page_title'];
 		$items[$i]['link'] = COT_ABSOLUTE_URL . $row['page_pageurl'];

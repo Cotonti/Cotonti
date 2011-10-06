@@ -34,7 +34,7 @@ $cot_extrafields[$db_users] = (!empty($cot_extrafields[$db_users])) ? $cot_extra
  */
 function cot_add_user($ruser, $email = null, $name = null, $password = null, $maingrp = null, $sendemail = true)
 {
-	global $cfg, $cot_extrafields, $db, $db_users, $db_groups_users, $db_x, $L, $R, $sys, $uploadfiles;
+	global $cfg, $cot_extrafields, $db, $db_users, $db_groups_users, $db_x, $L, $R, $sys, $uploadfiles, $usr;
 	
 	$ruser['user_email'] = (!empty($email)) ? $email : $ruser['user_email'];
 	$ruser['user_name'] = (!empty($name)) ? $name : $ruser['user_name'];
@@ -42,6 +42,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	
 	(empty($ruser['user_password'])) && $ruser['user_password'] = cot_randomstring();
 	(empty($ruser['user_name'])) && $ruser['user_name'] = $ruser['user_email'];
+	$password = $ruser['user_password'];
 	
 	$user_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_name = ? OR user_email = ? LIMIT 1", array($ruser['user_name'], $ruser['user_email']))->fetch();
 	if(mb_strlen($ruser['user_email']) < 4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $ruser['user_email']) || $user_exists)
@@ -68,7 +69,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_lang'] = $cfg['defaultlang'];
 	$ruser['user_regdate'] = (int)$sys['now'];
 	$ruser['user_logcount'] = 0;
-	$ruser['user_lastip'] = $usr['ip'];
+	$ruser['user_lastip'] = empty($ruser['user_lastip']) ? $usr['ip'] : $ruser['user_lastip'];
 
 	if (!$db->insert($db_users, $ruser)) return;
 

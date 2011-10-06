@@ -36,7 +36,7 @@
             	<h3>{PHP.themelang.header.user}</h3>
                 
 				<!-- BEGIN: GUEST -->
-                <form action="{PHP|cot_url('login')}&amp;a=check" method="post">                
+                <form action="{PHP|cot_url('login', 'a=check')}" method="post">                
 				<p>                
 				<input type="text" name="rusername" maxlength="32" value="{PHP.L.Username}" onfocus="if (this.value == '{PHP.L.Username}') this.value = ''" class="userinput" />
 				<input type="password" name="rpassword" maxlength="32" class="userinput" />
