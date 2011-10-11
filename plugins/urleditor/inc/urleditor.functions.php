@@ -25,7 +25,7 @@ function cot_apply_rwr()
 		// Ignore ending slash and split the path into parts
 		$path = explode('/', (mb_strrpos($_GET['rwr'], '/') == mb_strlen($_GET['rwr']) - 1) ? mb_substr($_GET['rwr'], 0, -1) : $_GET['rwr']);
 		$count = count($path);
-		print_r($path);
+		
 		if ($count == 1)
 		{
 			if (isset($structure['page'][$path[0]]))
@@ -83,7 +83,6 @@ function cot_apply_rwr()
 			}
 		}
 	}
-	echo "WHAT?";
 }
 
 /**
