@@ -112,7 +112,6 @@ else
 			}
 
 			$rtplmode = cot_import($rtplmodearr[$i], 'D', 'INT');
-
 			if ($rtplmode == 3)
 			{
 				$rstructure['structure_tpl'] = cot_import($rtplforcedarr[$i], 'D', 'ALP');
@@ -121,11 +120,10 @@ else
 			{
 				$rstructure['structure_tpl'] = 'same_as_parent';
 			}
-			else
+			elseif ($rtplmode == 1)
 			{
 				$rstructure['structure_tpl'] = '';
 			}
-
 			$res = cot_structure_update($n, $i, $oldrow, $rstructure);
 			if (is_array($res))
 			{
@@ -140,7 +138,7 @@ else
 		}
 
 		cot_message('Updated');
-		cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
+		//cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 	}
 	elseif ($a == 'add')
 	{
