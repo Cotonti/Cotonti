@@ -344,7 +344,7 @@ function cot_default_html_construction($type)
  * @return bool
  *
  */
-function cot_extrafield_add($location, $name, $type, $html, $variants='', $default='', $required=0, $parse='HTML', $description='', $params = '', $enabled = 1, $noalter = false)
+function cot_extrafield_add($location, $name, $type, $html, $variants='', $default='', $required=false, $parse='HTML', $description='', $params = '', $enabled = 1, $noalter = false)
 {
 	global $db, $db_extra_fields;
 	if ($db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
@@ -373,7 +373,7 @@ function cot_extrafield_add($location, $name, $type, $html, $variants='', $defau
 	$extf['field_variants'] = is_null($variants) ? '' : $variants;
 	$extf['field_params'] = is_null($params) ? '' : $params;
 	$extf['field_default'] = is_null($default) ? '' : $default;
-	$extf['field_required'] = ($required > 0) ? 1 : 0;
+	$extf['field_required'] = $required ? 1 : 0;
 	$extf['field_parse'] = is_null($parse) ? 'HTML' : $parse;
 	$extf['field_enabled'] = ($enabled > 0) ? 1 : 0;
 	$extf['field_description'] = is_null($description) ? '' : $description;
