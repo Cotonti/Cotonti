@@ -8,8 +8,8 @@
 						<td class="coltop width5" rowspan="2"></td>
 						<td class="coltop width25" rowspan="2">{PHP.L.Groups}</td>
 						<td class="coltop width40" colspan="{ADMIN_RIGHTSBYITEM_ADV_COLUMNS}">{PHP.L.Rights}</td>
-						<td class="coltop width15" rowspan="2">{PHP.L.adm_setby}</td>
 						<td class="coltop width15" rowspan="2">{PHP.L.Open}</td>
+						<td class="coltop width15" rowspan="2">{PHP.L.adm_setby}</td>
 					</tr>
 					<tr>
 						<td class="coltop">{PHP.R.admin_icon_auth_r}</td>
@@ -23,7 +23,7 @@
 					</tr>
 <!-- BEGIN: RIGHTSBYITEM_ROW -->
 					<tr>
-						<td class="centerall">{PHP.R.admin_icon_groups}</td>
+						<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/users.png"></td>
 						<td><a href="{ADMIN_RIGHTSBYITEM_ROW_LINK}">{ADMIN_RIGHTSBYITEM_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_ITEMS -->
 						<td class="centerall">
@@ -33,8 +33,9 @@
 							<!-- IF !{PHP.out.tpl_rights_parseline_locked} --><input type="checkbox" class="checkbox" name="{ADMIN_RIGHTSBYITEM_ROW_ITEMS_NAME}"{ADMIN_RIGHTSBYITEM_ROW_ITEMS_CHECKED}{ADMIN_RIGHTSBYITEM_ROW_ITEMS_DISABLED} /><!-- ENDIF -->
 						</td>
 <!-- END: ROW_ITEMS -->
+						<td class="centerall"><a title="{PHP.L.Open}" href="{ADMIN_RIGHTSBYITEM_ROW_JUMPTO}" class="button special">{PHP.L.Open}</a><a title="{PHP.L.Open}" href="{ADMIN_RIGHTSBYITEM_ROW_LINK}" class="button">{PHP.L.Rights}</a> </td>
 						<td class="textcenter">{ADMIN_RIGHTSBYITEM_ROW_USER}{ADMIN_RIGHTSBYITEM_ROW_PRESERVE}</td>
-						<td class="centerall"><a title="{PHP.L.Open}" href="{ADMIN_RIGHTSBYITEM_ROW_JUMPTO}">{PHP.R.admin_icon_jumpto}</a></td>
+						
 					</tr>
 <!-- END: RIGHTSBYITEM_ROW -->
 					<tr>

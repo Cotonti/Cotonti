@@ -90,7 +90,7 @@ if (!COT_AJAX)
 	{
 		if (is_array($cot_plugins['editor']))
 		{
-			$parser = isset($sys['parser']) ? $sys['parser'] : $cfg['parser'];
+			$parser = !empty($sys['parser']) ? $sys['parser'] : $cfg['parser'];
 			$editor = $cfg['plugin'][$parser]['editor'];
 			foreach ($cot_plugins['editor'] as $k)
 			{

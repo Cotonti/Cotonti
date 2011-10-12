@@ -24,8 +24,7 @@ foreach (cot_getextplugins('i18n.page.first') as $pl)
 }
 /* =============*/
 
-$stmt = $db->query("SELECT page_alias, page_title, page_text, page_desc, page_ownerid
-	FROM $db_pages WHERE page_id = $id");
+$stmt = $db->query("SELECT * FROM $db_pages WHERE page_id = $id");
 
 if ($id > 0 && $stmt->rowCount() == 1)
 {
@@ -75,9 +74,9 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			/* =============*/
 
 			cot_message('Added');
-			$page_urlp = empty($pag['page_alias']) ? "id=$id&l=" . $pag_i18n['ipage_locale']
-				: 'al=' . $pag['page_alias'] . '&l=' . $pag_i18n['ipage_locale'];
-			cot_redirect(cot_url('page', $page_urlp, '', true));
+			$page_urlp = empty($pag['page_alias']) ? "c={$pag['page_cat']}&id=$id&l=" . $pag_i18n['ipage_locale']
+				: 'c='.$pag['page_cat'] . '&al=' . $pag['page_alias'] . '&l=' . $pag_i18n['ipage_locale'];
+			cot_redirect(cot_url('page', $page_urlp, '', true, false, true));
 		}
 
 		$out['subtitle'] = $L['i18n_adding'];
@@ -95,6 +94,12 @@ if ($id > 0 && $stmt->rowCount() == 1)
 		}
 		$lc_values = array_keys($lc_list);
 		$lc_names = array_values($lc_list);
+		
+		if (empty($pag_i18n['ipage_text']))
+		{
+			// Insert original page source into translation tab to keep markup
+			$pag_i18n['ipage_text'] = $pag['page_text'];
+		}
 
 		$t->assign(array(
 			'I18N_ACTION' => cot_url('plug', "e=i18n&m=page&a=add&id=$id"),
@@ -149,9 +154,9 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			/* =============*/
 
 			cot_message('Updated');
-			$page_urlp = empty($pag['page_alias']) ? "id=$id&l=$i18n_locale"
-				: 'al=' . $pag['page_alias'] . '&l=' . $i18n_locale;
-			cot_redirect(cot_url('page', $page_urlp, '', true));
+			$page_urlp = empty($pag['page_alias']) ? 'c=' . $pag['page_cat'] . "&id=$id&l=$i18n_locale"
+				: 'c=' . $pag['page_cat'] . '&al=' . $pag['page_alias'] . '&l=' . $i18n_locale;
+			cot_redirect(cot_url('page', $page_urlp, '', true, false, true));
 		}
 
 		$out['subtitle'] = $L['i18n_editing'];
@@ -200,7 +205,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 		/* =============*/
 
 		cot_message('Deleted');
-		$page_urlp = empty($pag['page_alias']) ? "id=$id" : 'al=' . $pag['page_alias'];
+		$page_urlp = empty($pag['page_alias']) ? 'c=' . $pag['page_cat'] . "id=$id" : 'c=' . $pag['page_cat'] . 'al=' . $pag['page_alias'];
 		cot_redirect(cot_url('page', $page_urlp, '', true));
 	}
 }

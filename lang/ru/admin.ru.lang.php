@@ -18,10 +18,13 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['Extension'] = 'Расширение';
 $L['Extensions'] = 'Расширения';
+$L['Structure'] = 'Структура';
 
 /**
  * Home Section
  */
+
+$L['home_installable_error'] = 'Пожалуйста, удалите install.php до следующего обновления или по крайней мере защитите config.php от записи';
 
 $L['home_newusers'] = 'Новые пользователи';
 $L['home_newpages'] = 'Новые страницы';
@@ -79,6 +82,17 @@ $L['core_users'] = &$L['Users'];
 $L['cfg_struct_defaults'] = 'Настройки по умолчанию для структуры';
 
 /**
+ * Shortcuts
+ */
+$L['short_admin'] = 'Админ';
+$L['short_config'] = 'Конфиг';
+$L['short_delete'] = 'Удалить';
+$L['short_open'] = 'Открыть';
+$L['short_options'] = 'Опции';
+$L['short_rights'] = 'Права';
+$L['short_struct'] = 'Структ';
+
+/**
  * Config Section
  * Locale Subsection
  */
@@ -94,6 +108,7 @@ $L['cfg_defaulttimezone'] = array('Часовой пояс по умолчани
 
 $L['cfg_adminemail'] = array('E-mail администратора сайта', 'Обязательно!');
 $L['cfg_clustermode'] = array('Серверный кластер', 'Выберите Да, если используется кластерная система балансировки нагрузок.');
+$L['cfg_confirmlinks'] = array('Подтверждать потенциально опасные действия');
 $L['cfg_cookiedomain'] = array('Домен для cookies', 'По умолчанию пусто');
 $L['cfg_cookielifetime'] = array('Срок действия cookies', 'В секундах');
 $L['cfg_cookiepath'] = array('Путь для cookies', 'По умолчанию пусто');
@@ -184,17 +199,10 @@ $L['cfg_body_mail'] = array('Текст email', 'Опции: {SITE_TITLE}, {SITE
  * Users Subsection
  */
 
-$L['cfg_disablereg'] = array('Отключить регистрацию', 'Запретить регистрацию новых пользователей');
 $L['cfg_disablewhosonline'] = array('Отключить статистику &laquo;Кто онлайн&raquo;', 'Включается автоматически при включении защиты');
 $L['cfg_forcerememberme'] = array('Зафиксировать &quot;запомнить меня&quot;', 'Используйте на мультидоменных сайтах или при случайных выходах из системы');
-$L['cfg_maxusersperpage'] = array('Максимальное количество записей на страницу в списке пользователей', ' ');
-$L['cfg_regnoactivation'] = array('Отменить проверку e-mail при регистрации', 'По причине безопасности рекомендуется &laquo;Нет&raquo;!');
-$L['cfg_regrequireadmin'] = array('Утверждение новых учетных записей администратором', ' ');
 $L['cfg_timedout'] = array('Задержка ожидания в секундах', 'По истечении данного срока пользователь считается покинувшим сайт');
-$L['cfg_user_email_noprotection'] = array('Выключить защиту смены e-mail с паролем', 'По причине безопасности рекомендуется &laquo;Нет&raquo;!');
-$L['cfg_useremailchange'] = array('Разрешить пользователям изменять свой e-mail', 'По причине безопасности рекомендуется &laquo;Нет&raquo;!');
 $L['cfg_usertextimg'] = array('Разрешить изображения и HTML-код в подписях пользователей', 'По причине безопасности рекомендуется &laquo;Нет&raquo;!');
-$L['cfg_usertextmax'] = array('Максимальная длина подписи, символов', '');
 
 /**
  * Config Section
@@ -257,6 +265,7 @@ $L['adm_help_structure'] = 'Страницы категории &laquo;system&ra
 
 $L['adm_extrafields_desc'] = 'Создание / правка дополнительных полей';
 $L['adm_extrafields_all'] = 'Все таблицы';
+$L['adm_extrafields_table'] = 'Таблица';
 $L['adm_help_structure_extrafield'] = 'HTML-код поля установится в значение по умолчанию автоматически, если его очистить и обновить<br /><br />
 <b>Новые тэги в tpl-файлах:</b><br /><br />
 <u>list.tpl:</u><br /><br />
@@ -344,6 +353,7 @@ $L['adm_delcacheitem'] = 'Элемент кэша удален';
 $L['adm_internalcache'] = 'Внутренний кэш';
 $L['adm_purgeall_done'] = 'Кэш очищен полностью';
 $L['adm_diskcache'] = 'Дисковый кэш';
+$L['adm_cache_showall'] = 'Отобразить все';
 
 /**
  * Other Section

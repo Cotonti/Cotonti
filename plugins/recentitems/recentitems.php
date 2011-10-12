@@ -38,7 +38,6 @@ if ($days > 0)
 	$timeback = $sys['now_offset'] - $timeminus;
 }
 
-require_once cot_incfile('users', 'module');
 require_once cot_incfile('recentitems', 'plug');
 $totalrecent[] = 0;
 if ($cfg['plugin']['recentitems']['newpages'] && cot_module_active('page') && (empty($mode) || $mode == 'pages'))

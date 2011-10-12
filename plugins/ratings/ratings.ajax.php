@@ -75,7 +75,7 @@ if ($inr == 'send' && $newrate > 0 && $newrate <= 10 && $auth_write && $enabled)
 	if (!$cfg['plugin']['ratings']['ratings_allowchange'] && $already_rated)
 	{
 		// Can't vote twice
-		cot_redirect(cot_url('message', 'msg=403'));
+		cot_die_message(403, TRUE);
 		exit;
 	}
 

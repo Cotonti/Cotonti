@@ -42,6 +42,7 @@ $cfg['cache'] = false;
 $cfg['xtpl_cache'] = false;
 
 require_once $cfg['system_dir'].'/functions.php';
+require_once $cfg['system_dir'] . '/cotemplate.php';
 require_once 'system/debug.php';
 
 
@@ -91,7 +92,8 @@ else
 
 	require_once $cfg['system_dir'].'/database.php';
 
-	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+	$dbc_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
+	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbc_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
 	$sql_install = @$db->query("SHOW TABLES LIKE '$db_updates'");
 
@@ -106,7 +108,6 @@ else
 
 require_once cot_incfile('forms');
 require_once cot_incfile('extensions');
-require_once cot_incfile('cotemplate');
 require_once cot_langfile('install', 'module');
 require_once cot_langfile('users', 'core');
 require_once cot_langfile('admin', 'core');

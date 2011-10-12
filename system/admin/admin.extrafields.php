@@ -11,16 +11,16 @@
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['isadmin']);
 
 require_once cot_incfile('extrafields');
 
 $extra_blacklist = array($db_auth, $db_cache, $db_cache_bindings, $db_core, $db_updates, $db_logger, $db_online, $db_extra_fields, $db_config, $db_plugins);
 $extra_whitelist = array(
-	$db_users => array('name' => $db_users, 'caption' => $L['Users'], 'help' => $L['adm_help_structure_extrafield']),
-	$db_structure => array('name' => $db_structure, 'caption' => $L['Categories'], 'help' => $L['adm_help_users_extrafield']),
+	$db_structure => array('name' => $db_structure, 'caption' => $L['Categories'], 'help' => $L['adm_help_structure_extrafield']),
 );
+$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=extrafields'), $L['adm_extrafields']);
 
 $t = new XTemplate(cot_tplfile(array('admin', 'extrafields', $n), 'core'));
@@ -52,12 +52,13 @@ if (empty($n) || in_array($n, $extra_blacklist))
 			}
 		}
 	}
+	cot_import('alltables', 'G', 'BOL') && $adminpath[] = array(cot_url('admin', 'm=extrafields&alltables=1'), $L['adm_extrafields_all']);
 	$ii = 0;
 	foreach ($tablelist as $table)
 	{	
 		$ii++;
 		$t->assign(array(
-			'ADMIN_EXTRAFIELDS_ROW_TABLENAME' => (isset($extra_whitelist[$table])) ? $extra_whitelist[$table]['caption'] : $table,
+			'ADMIN_EXTRAFIELDS_ROW_TABLENAME' => $table . ((isset($extra_whitelist[$table])) ? " - " . $extra_whitelist[$table]['caption'] : ''),
 			'ADMIN_EXTRAFIELDS_ROW_TABLEURL' => cot_url('admin', 'm=extrafields&n='.$table),
 			'ADMIN_EXTRAFIELDS_COUNTER_ROW' => $ii,
 			'ADMIN_EXTRAFIELDS_ODDEVEN' => cot_build_oddeven($ii)
@@ -81,7 +82,7 @@ else
 	list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 	$parse_type = array('HTML', 'Text');
 	
-	$adminpath[] = array(cot_url('admin', 'm=extrafields&n='.$n), (isset($extra_whitelist[$n])) ? $extra_whitelist[$n]['caption'] : $n); 
+	$adminpath[] = array(cot_url('admin', 'm=extrafields&n='.$n), $L['adm_extrafields_table'].' '.$n . ((isset($extra_whitelist[$n])) ? ' - ' . $extra_whitelist[$n]['caption'] : '')); 
 	
 	if ($a == 'add')
 	{
@@ -205,7 +206,7 @@ else
 
 	$pagenav = cot_pagenav('admin', 'm=extrafields&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-	$field_types = array('input', 'inputint', 'currency', 'double', 'textarea', 'select', 'checkbox', 'radio', 'datetime', 'country', 'file'/* , 'filesize' */);
+	$field_types = array('input', 'inputint', 'currency', 'double', 'textarea', 'select', 'checkbox', 'radio', 'datetime', 'country', 'range', 'file'/* , 'filesize' */);
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */

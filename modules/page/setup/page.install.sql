@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `cot_pages` (
   `page_date` int(11) NOT NULL default '0',
   `page_begin` int(11) NOT NULL default '0',
   `page_expire` int(11) NOT NULL default '0',
+  `page_updated` int(11) NOT NULL default '0',
   `page_file` tinyint(4) default NULL,
   `page_url` varchar(255) collate utf8_unicode_ci default NULL,
   `page_size` varchar(16) collate utf8_unicode_ci default NULL,
@@ -60,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `cot_pages` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `cot_pages` (`page_state`, `page_cat`, `page_title`, `page_desc`, `page_text`, `page_author`, `page_ownerid`, `page_date`, `page_begin`, `page_expire`, `page_file`, `page_url`, `page_size`, `page_count`, `page_rating`, `page_filecount`, `page_alias`) VALUES
-(0, 'news', 'Welcome!', '', 'Congratulations, Cotonti was succesfully installed! You can now login with the user account you created during installation. Next step is to go to the Administration panel and change the settings for your website, such as the title, server settings, language, user groups and extensions. You can safely remove this message by clicking its title, then clicking Edit and Delete this page.', '', 1, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), UNIX_TIMESTAMP()+86400, 0, '', '', 27, '0.00', 0, '');
+(0, 'news', 'Welcome!', '', 'Congratulations, Cotonti was succesfully installed! You can now login with the user account you created during installation. Next step is to go to the Administration panel and change the settings for your website, such as the title, server settings, language, user groups and extensions. You can safely remove this message by clicking its title, then clicking Edit and Delete this page.', '', 1, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 0, '', '', 27, '0.00', 0, '');
 
 -- Default page categories
 INSERT INTO `cot_structure` (`structure_area`, `structure_code`, `structure_path`, `structure_tpl`, `structure_title`,

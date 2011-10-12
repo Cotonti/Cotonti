@@ -36,7 +36,7 @@ elseif ($c == 'unvalidated')
 }
 elseif (!isset($structure['page'][$c]))
 {
-	cot_die(true, true);
+	cot_die_message(404, TRUE);
 }
 else
 {
@@ -58,7 +58,7 @@ if (empty($s))
 	$s = $cfg['page'][$c]['order'];
 	$w = $cfg['page'][$c]['way'];
 }
-elseif ($db->query("SHOW COLUMNS FROM $db_pages WHERE Field = 'page_$s'")->rowCount() == 0)
+elseif (!$db->fieldExists($db_pages, "page_$s"))
 {
 	$s = 'title';
 }
@@ -90,14 +90,14 @@ cot_die((empty($cat['title'])) && !$usr['isadmin']);
 
 if (!empty($o) && !empty($p))
 {
-	if ($db->query("SHOW COLUMNS FROM $db_pages WHERE Field = 'page_$o'")->rowCount() == 1)
+	if ($db->fieldExists($db_pages, "page_$o"))
 	{
 		$where['filter'] .= "page_$o=" . $db->quote($p);
 	}
 }
-if (!$usr['isadmin'])
+if (!$usr['isadmin'] && $c != 'unvalidated')
 {
-	$where['date'] = 'page_date <= '.(int)$sys['now_offset'];
+	$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 }
 $list_url_path = array('c' =>$c, 'ord' => $o, 'p' => $p);
 if ($s != $cfg['page'][$c]['order'])
@@ -109,6 +109,8 @@ if ($w != $cfg['page'][$c]['way'])
 	$list_url_path['w'] = $w;
 }
 $list_url = cot_url('page', $list_url_path);
+
+$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cat['title'] :cot_breadcrumbs(cot_structure_buildpath('page', $c), $cfg['homebreadcrumb'], true);
 
 /* === Hook === */
 foreach (cot_getextplugins('page.list.query') as $pl)
@@ -130,20 +132,22 @@ if(empty($sql_page_string))
 $totallines = $db->query($sql_page_count)->fetchColumn();
 $sqllist = $db->query($sql_page_string);
 
-if ($c == 'all' || $c == 'system' || $c == 'unvalidated')
-{
-	$catpath = $cat['title'];
-}
-else
-{
-	$catpath = cot_breadcrumbs(cot_structure_buildpath('page', $c), $cfg['homebreadcrumb'], true);
-}
-
-
 $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $totallines, $cfg['page']['maxrowsperpage']);
 
 $out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
 $out['subtitle'] = $cat['title'];
+
+// Building the canonical URL
+$pageurl_params = array('c' => $c, 'ord' => $o, 'p' => $p);
+if ($durl > 1)
+{
+	$pageurl_params['d'] = $durl;
+}
+if ($dcurl > 1)
+{
+	$pageurl_params['dc'] = $dcurl;
+}
+$out['canonical_uri'] = cot_url('page', $pageurl_params);
 
 $_SESSION['cat'] = $c;
 
@@ -280,12 +284,12 @@ foreach ($subcat as $x)
 	$t->parse('MAIN.LIST_ROWCAT');	
 }
 
-$pagenav = cot_pagenav('page', $list_url_path + array('d' => $durl), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
+$pagenav_cat = cot_pagenav('page', $list_url_path + array('d' => $durl), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
 
 $t->assign(array(
-	'LISTCAT_PAGEPREV' => $pagenav['prev'],
-	'LISTCAT_PAGENEXT' => $pagenav['next'],
-	'LISTCAT_PAGNAV' => $pagenav['main']
+	'LISTCAT_PAGEPREV' => $pagenav_cat['prev'],
+	'LISTCAT_PAGENEXT' => $pagenav_cat['next'],
+	'LISTCAT_PAGNAV' => $pagenav_cat['main']
 ));
 $jj = 0;
 /* === Hook - Part1 : Set === */

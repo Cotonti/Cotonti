@@ -17,8 +17,14 @@ Hooks=standalone
  */
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
-require_once cot_incfile('page', 'module');
-require_once cot_incfile('forums', 'module');
+if (cot_module_active('page'))
+{
+	require_once cot_incfile('page', 'module');
+}
+if (cot_module_active('forums'))
+{
+	require_once cot_incfile('forums', 'module');
+}
 require_once cot_incfile('search', 'plug');
 require_once cot_incfile('forms');
 
@@ -129,7 +135,7 @@ if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && $cfg['plugin'
 		'PLUGIN_PAGE_SEARCH_NAMES' => cot_checkbox(($rs['pagtitle'] == 1 || count($rs['pagsub']) == 0), 'rs[pagtitle]', $L['plu_pag_search_names']),
 		'PLUGIN_PAGE_SEARCH_DESC' => cot_checkbox(($rs['pagdesc'] == 1 || count($rs['pagsub']) == 0), 'rs[pagdesc]', $L['plu_pag_search_desc']),
 		'PLUGIN_PAGE_SEARCH_TEXT' => cot_checkbox(($rs['pagtext'] == 1 || count($rs['pagsub']) == 0), 'rs[pagtext]', $L['plu_pag_search_text']),
-		'PLUGIN_PAGE_SEARCH_SUBCAT' => cot_checkbox(($rs['pagsubcat'] == 1), 'rs[pagsubcat]', $L['plu_pag_set_subsec']),
+		'PLUGIN_PAGE_SEARCH_SUBCAT' => cot_checkbox($rs['pagsubcat'], 'rs[pagsubcat]', $L['plu_pag_set_subsec']),
 		'PLUGIN_PAGE_SEARCH_FILE' => cot_checkbox($rs['pagfile'] == 1, 'rs[pagfile]', $L['plu_pag_search_file'])
 	));
 	if ($tab == 'pag' || (empty($tab) && $cfg['plugin']['search']['extrafilters']))
@@ -163,7 +169,7 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugi
 		'PLUGIN_FORUM_SEARCH_NAMES' => cot_checkbox(($rs['frmtitle'] == 1 || count($rs['frmsub']) == 0), 'rs[frmtitle]', $L['plu_frm_search_names']),
 		'PLUGIN_FORUM_SEARCH_POST' => cot_checkbox(($rs['frmtext'] == 1 || count($rs['frmsub']) == 0), 'rs[frmtext]', $L['plu_frm_search_post']),
 		'PLUGIN_FORUM_SEARCH_ANSW' => cot_checkbox(($rs['frmreply'] == 1 || count($rs['frmsub']) == 0), 'rs[frmreply]', $L['plu_frm_search_answ']),
-		'PLUGIN_FORUM_SEARCH_SUBCAT' => cot_checkbox(($rs['frmsubcat'] == 1), 'rs[frmsubcat]', $L['plu_frm_set_subsec'])
+		'PLUGIN_FORUM_SEARCH_SUBCAT' => cot_checkbox($rs['frmsubcat'], 'rs[frmsubcat]', $L['plu_frm_set_subsec'])
 	));
 	if ($tab == 'frm' || (empty($tab) && $cfg['plugin']['search']['extrafilters']))
 	{
@@ -241,7 +247,7 @@ if (!empty($sq))
 		}
 		$where_and['state'] = "page_state = '0'";
 		$where_and['notcat'] = "page_cat <> 'system'";
-		$where_and['date'] = "page_date <= ".(int)$sys['now_offset'];
+		$where_and['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 		$where_and['date2'] = ($rs['setlimit'] > 0) ? "page_date >= ".$rs['setfrom']." AND page_date <= ".$rs['setto'] : "";
 		$where_and['file'] = ($rs['pagfile'] == 1) ? "page_file = '1'" : "";
 		$where_and['users'] = (!empty($touser)) ? "page_ownerid ".$touser_ids : "";
@@ -284,13 +290,13 @@ if (!empty($sq))
 		foreach ($sql->fetchAll() as $row)
 		{
 			$url_cat = cot_url('page', 'c='.$row['page_cat']);
-			$url_page = empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id'].'&highlight='.$hl) : cot_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
+			$url_page = empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'].'&highlight='.$hl) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'].'&highlight='.$hl);
 			$t->assign(array(
 				'PLUGIN_PR_CATEGORY' => cot_rc_link($url_cat, $structure['page'][$row['page_cat']]['tpath']),
 				'PLUGIN_PR_CATEGORY_URL' => $url_cat,
 				'PLUGIN_PR_TITLE' => cot_rc_link($url_page, htmlspecialchars($row['page_title'])),
 				'PLUGIN_PR_TEXT' => cot_clear_mark($row['page_text'], $row['page_type'], $words),
-				'PLUGIN_PR_TIME' => cot_date('datetime_medium', $row['page_date'] + $usr['timezone'] * 3600),
+				'PLUGIN_PR_TIME' => cot_date('datetime_medium', $row['page_date']),
 				'PLUGIN_PR_TIMESTAMP' => $row['page_date'] + $usr['timezone'] * 3600,
 				'PLUGIN_PR_ODDEVEN' => cot_build_oddeven($jj),
 				'PLUGIN_PR_NUM' => $jj
@@ -353,6 +359,11 @@ if (!empty($sq))
 
 		$maxitems = $cfg['plugin']['search']['maxitems'] - $items;
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
+		
+		if (!$db->fieldExists($db_forum_topics, "ft_{$rs['frmsort']}"))
+		{
+			$rs['frmsort'] = 'updated';
+		}
 
 		$sql = $db->query("SELECT SQL_CALC_FOUND_ROWS p.*, t.*
 			 	FROM $db_forum_posts AS p, $db_forum_topics AS t
@@ -372,7 +383,7 @@ if (!empty($sq))
 					'PLUGIN_FR_TITLE' => cot_rc_link($post_url, htmlspecialchars($row['ft_title'])),
 					'PLUGIN_FR_TITLE_URL' => $post_url,
 					'PLUGIN_FR_TEXT' => cot_clear_mark($row['fp_text'], 0, $words),
-					'PLUGIN_FR_TIME' => $row['ft_updated'] > 0 ? cot_date('datetime_medium', $row['ft_updated'] + $usr['timezone'] * 3600) : cot_date('datetime_medium', $row['fp_updated'] + $usr['timezone'] * 3600),
+					'PLUGIN_FR_TIME' => $row['ft_updated'] > 0 ? cot_date('datetime_medium', $row['ft_updated']) : cot_date('datetime_medium', $row['fp_updated']),
 					'PLUGIN_FR_TIMESTAMP' => $row['ft_updated'] > 0 ? $row['ft_updated'] + $usr['timezone'] * 3600 : $row['fp_updated'] + $usr['timezone'] * 3600,
 					'PLUGIN_FR_ODDEVEN' => cot_build_oddeven($jj),
 					'PLUGIN_FR_NUM' => $jj,

@@ -80,7 +80,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			$row['ft_lastpostlink'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ?
 				cot_rc_link($row['ft_lastposturl'], $R['icon_unread'], 'rel="nofollow"') :
 				cot_rc_link($row['ft_lastposturl'], $R['icon_follow'], 'rel="nofollow"');
-			$row['ft_lastpostlink'] .= cot_date('datetime_medium', $row['ft_updated'] + $usr['timezone'] * 3600);
+			$row['ft_lastpostlink'] .= cot_date('datetime_medium', $row['ft_updated']);
 			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], $sys['now_offset']);
 			$row['ft_replycount'] = $row['ft_postcount'] - 1;
 
@@ -128,7 +128,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			'FORUM_ROW_PATH_SHORT' => $build_forum_short,
 			'FORUM_ROW_DESC' => htmlspecialchars($row['ft_desc']),
 			'FORUM_ROW_PREVIEW' => $row['ft_preview'] . '...',
-			'FORUM_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate'] + $usr['timezone'] * 3600),
+			'FORUM_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate']),
 			'FORUM_ROW_CREATIONDATE_STAMP' => $row['ft_creationdate'] + $usr['timezone'] * 3600,
 			'FORUM_ROW_UPDATED' => $row['ft_lastpostlink'],
 			'FORUM_ROW_UPDATED_STAMP' => $row['ft_updated'] + $usr['timezone'] * 3600,
@@ -173,17 +173,30 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 
 	if ($mode == 'recent')
 	{
-		$where = "WHERE page_state=0 AND page_cat <> 'system' " . $incat;
+		$where = "WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat <> 'system' " . $incat;
 		$totalrecent['pages'] = $cfg['plugin']['recentitems']['maxpages'];
 	}
 	else
 	{
-		$where = "WHERE page_date >= $mode AND page_date <= " . (int)$sys['now_offset'] . " AND page_state=0 AND page_cat <> 'system' " . $incat;
+		$where = "WHERE page_date >= $mode AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_state=0 AND page_cat <> 'system' " . $incat;
 		$totalrecent['pages'] = $db->query("SELECT COUNT(*) FROM $db_pages " . $where)->fetchColumn();
 	}
+	
+	$join_columns = '';
+	$join_tables = '';
+	
+	/* === Hook === */
+	foreach (cot_getextplugins('recentitems.recentpages.first') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 
-	$sql = $db->query("SELECT p.*, u.* FROM $db_pages AS p
-		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid " . $where . " ORDER by page_date desc LIMIT $d, " . $maxperpage);
+	$sql = $db->query("SELECT p.*, u.* $join_columns
+		FROM $db_pages AS p
+			LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+		$join_tables
+		$where ORDER by page_date desc LIMIT $d, $maxperpage");
 
 	$jj = 0;
 

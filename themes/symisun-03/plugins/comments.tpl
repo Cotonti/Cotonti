@@ -42,9 +42,9 @@
 <a name="com" id="com"></a>
 <h2>{PHP.L.comments_comments} <span class="cominfo">{COMMENTS_PAGES_INFO}</span> <span class="leave">{<a href="
 <!-- IF {PHP.pag.page_id} -->
-page.php?id={PHP.pag.page_id}
+{PHP.pag.page_id|cot_url('page','id=$this')}
 <!-- ELSE -->
-polls.php?id={PHP.id}
+{PHP.id|cot_url('polls','id=$this')}
 <!-- ENDIF -->
 #post" title="{PHP.L.comments_comments}"><strong>+</strong></a>}</span></h2>
 
@@ -65,7 +65,7 @@ polls.php?id={PHP.id}
 <!-- IF {COMMENTS_ROW_AUTHORID} == 0 -->
 <img src="/datas/defaultav/blank.png" alt="Guest" /></span>
 <!-- ELSE -->
-<a href="users.php?m=details&amp;id={COMMENTS_ROW_AUTHORID}">{COMMENTS_ROW_AUTHOR_AVATAR}</a></span>
+<a href="{COMMENTS_ROW_AUTHORID|cot_url('users','m=details&id=$this')}">{COMMENTS_ROW_AUTHOR_AVATAR}</a></span>
 <!-- ENDIF -->	
 	<cite>{COMMENTS_ROW_AUTHOR}</cite> 
 	<span style="font-size:10px; color:#93adca">

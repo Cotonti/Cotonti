@@ -27,7 +27,7 @@ $L['plu_totalpagessince'] = 'Total pages displayed since';
 $L['plu_maxwasreached'] = 'Maximum hitcount was reached';
 $L['plu_pagesdisplayedthisday'] = 'pages were displayed this day';
 $L['plu_registeredusers'] = 'Registered members';
-$L['plu_totalmails'] = 'Emails sent';
+$L['plu_totalmails'] = 'E-mails sent';
 
 $L['plu_totalpms'] = 'Private messages sent';
 $L['plu_totalactivepms'] = 'Active private messages';

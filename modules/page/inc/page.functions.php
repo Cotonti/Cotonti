@@ -162,7 +162,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			}
 			$pagepath = cot_structure_buildpath('page', $page_data['page_cat']);
 			$catpath = cot_breadcrumbs($pagepath, $pagepath_home);
-			$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ? cot_url('page', 'id='.$page_data['page_id']) : cot_url('page', 'al='.$page_data['page_alias']);
+			$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ? cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id']) : cot_url('page', 'c='.$page_data['page_cat'].'&al='.$page_data['page_alias']);
 			$page_link[] = array($page_data['page_pageurl'], $page_data['page_title']);
 			$page_data['page_fulltitle'] = cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home);
 			if (!empty($page_data['page_url']) && $page_data['page_file'])
@@ -214,14 +214,16 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'DESC_OR_TEXT' => (!empty($page_data['page_desc'])) ? htmlspecialchars($page_data['page_desc']) : $text,
 				'MORE' => ($cutted) ? cot_rc_link($page_data['page_pageurl'], $L['ReadMore']) : "",
 				'AUTHOR' => htmlspecialchars($page_data['page_author']),
-				'DATE' => cot_date($date_format, $page_data['page_date'] + $usr['timezone'] * 3600),
-				'BEGIN' => cot_date($date_format, $page_data['page_begin'] + $usr['timezone'] * 3600),
-				'EXPIRE' => cot_date($date_format, $page_data['page_expire'] + $usr['timezone'] * 3600),
+				'DATE' => cot_date($date_format, $page_data['page_date']),
+				'BEGIN' => cot_date($date_format, $page_data['page_begin']),
+				'EXPIRE' => cot_date($date_format, $page_data['page_expire']),
+				'UPDATED' => cot_date($date_format, $page_data['page_updated']),
 				'DATE_STAMP' => $page_data['page_date'] + $usr['timezone'] * 3600,
 				'BEGIN_STAMP' => $page_data['page_begin'] + $usr['timezone'] * 3600,
 				'EXPIRE_STAMP' => $page_data['page_expire'] + $usr['timezone'] * 3600,
+				'UPDATED_STAMP' => $page_data['page_updated'] + $usr['timezone'] * 3600,
 				'FILE' => $cot_yesno[$page_data['page_file']],
-				'FILE_URL' => empty($page_data['page_url']) ? '' : cot_url('page', 'id='.$page_data['page_id'].'&a=dl'),
+				'FILE_URL' => empty($page_data['page_url']) ? '' : cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id'].'&a=dl'),
 				'FILE_SIZE' => $page_data['page_size'],
 				'FILE_SIZE_READABLE' => cot_build_filesize($page_data['page_size']),
 				'FILE_ICON' => $page_data['page_fileicon'],
@@ -230,19 +232,21 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'FILE_NAME' => basename($page_data['page_url']),
 				'COUNT' => $page_data['page_count'],
 				'ADMIN' => $admin_rights ? cot_rc('list_row_admin', array('unvalidate_url' => $unvalidate_url, 'edit_url' => $edit_url)) : '',
-				'NOTAVAILABLE' => ($page_data['page_date'] > $sys['now_offset']) ? $L['page_notavailable'].cot_build_timegap($sys['now_offset'], $pag['page_date']) : ''
+				'NOTAVAILABLE' => ($page_data['page_begin'] > $sys['now_offset']) ? $L['page_notavailable'].cot_build_timegap($sys['now'], $pag['page_begin']) : ''
 			);
 
 			// Admin tags
 			if ($admin_rights)
 			{
+				$validate_confirm_url = cot_confirm_url($validate_url, 'page', 'page_confirm_validate');
+				$unvalidate_confirm_url = cot_confirm_url($unvalidate_url, 'page', 'page_confirm_unvalidate');
 				$temp_array['ADMIN_EDIT'] = cot_rc_link($edit_url, $L['Edit']);
 				$temp_array['ADMIN_EDIT_URL'] = $edit_url;
 				$temp_array['ADMIN_UNVALIDATE'] = $page_data['page_state'] == 1 ?
-					cot_rc_link($validate_url, $L['Validate']) :
-					cot_rc_link($unvalidate_url, $L['Putinvalidationqueue']);
+					cot_rc_link($validate_confirm_url, $L['Validate'], 'class="confirmLink"') :
+					cot_rc_link($unvalidate_confirm_url, $L['Putinvalidationqueue'], 'class="confirmLink"');
 				$temp_array['ADMIN_UNVALIDATE_URL'] = $page_data['page_state'] == 1 ?
-					$validate_url : $unvalidate_url;
+					$validate_confirm_url : $unvalidate_confirm_url;
 			}
 			else if ($usr['id'] == $page_data['page_ownerid'])
 			{
@@ -255,7 +259,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			{
 				$tag = mb_strtoupper($row['field_name']);
 				$temp_array[$tag.'_TITLE'] = isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
-				$temp_array[$tag] = cot_build_extrafields_data('page', $row, $page_data["page_{$row['field_name']}"]);
+				$temp_array[$tag] = cot_build_extrafields_data('page', $row, $page_data["page_{$row['field_name']}"], $page_data['page_parser']);
 			}
 
 			// Extra fields for structure

@@ -23,9 +23,10 @@ cot_block($usr['isadmin']);
 $t = new XTemplate(cot_tplfile('page.admin', 'module'));
 
 require_once cot_incfile('page', 'module');
-require_once cot_incfile('users', 'module');
 
-$adminpath[] = array(cot_url('admin', 'm=page'), $L['Pages']);
+$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
+$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
+$adminpath[] = array(cot_url('admin', 'm='.$m), $L['Administration']);
 $adminhelp = $L['adm_help_page'];
 
 $id = cot_import('id', 'G', 'INT');
@@ -193,10 +194,7 @@ elseif ($a == 'delete')
 
 		foreach($cot_extrafields[$db_pages] as $i => $row_extf)
 		{
-			if ($row_extf['field_type']=='file')
-			{
-				 @unlink($cfg['extrafield_files_dir']."/".$sql_page['page_'.$row_extf['field_name']]);
-			}
+			cot_extrafield_unlinkfiles($sql_page['page_'.$row_extf['field_name']], $row_extf);
 		}
 
 		$sql_page = $db->delete($db_pages, "page_id=$id");
@@ -371,11 +369,11 @@ foreach ($sql_page->fetchAll() as $row)
 	$row['page_file'] = intval($row['page_file']);
 	$t->assign(cot_generate_pagetags($row, 'ADMIN_PAGE_', 200));
 	$t->assign(array(
-		'ADMIN_PAGE_ID_URL' => cot_url('page', 'id='.$row['page_id']),
+		'ADMIN_PAGE_ID_URL' => cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']),
 		'ADMIN_PAGE_OWNER' => cot_build_user($row['page_ownerid'], htmlspecialchars($row['user_name'])),
 		'ADMIN_PAGE_FILE_BOOL' => $row['page_file'],
-		'ADMIN_PAGE_URL_FOR_VALIDATED' => cot_url('admin', 'm=page&a=validate&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()),
-		'ADMIN_PAGE_URL_FOR_DELETED' => cot_url('admin', 'm=page&a=delete&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()),
+		'ADMIN_PAGE_URL_FOR_VALIDATED' => cot_confirm_url(cot_url('admin', 'm=page&a=validate&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()), 'page', 'page_confirm_validate'),
+		'ADMIN_PAGE_URL_FOR_DELETED' => cot_confirm_url(cot_url('admin', 'm=page&a=delete&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()), 'page', 'page_confirm_delete'),
 		'ADMIN_PAGE_URL_FOR_EDIT' => cot_url('page', 'm=edit&id='.$row['page_id']),
 		'ADMIN_PAGE_ODDEVEN' => cot_build_oddeven($ii),
 		'ADMIN_PAGE_CAT_COUNT' => $sub_count

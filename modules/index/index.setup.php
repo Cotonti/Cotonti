@@ -3,8 +3,8 @@
 [BEGIN_COT_EXT]
 Name=Index
 Description=Home Page
-Version=0.9.0
-Date=2010-02-10
+Version=0.9.1
+Date=2011-08-19
 Author=Cotonti Team
 Copyright=(c) Cotonti Team 2008-2011
 Notes=BSD License
@@ -21,7 +21,7 @@ Recommends_plugins=news,recentitems
  * Index module setup file
  *
  * @package index
- * @version 0.9.0
+ * @version 0.9.1
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD

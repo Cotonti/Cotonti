@@ -59,9 +59,10 @@ if ($cfg['cache'] && !$cfg['devmode'])
 	$cache = new Cache();
 	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$site_id]) && empty($_SESSION[$site_id]))
 	{
-		if ($cfg['cache_' . $env['ext']])
+		$cache_ext = empty($_GET['e']) ? 'index' : preg_replace('#\W#', '', $_GET['e']);
+		if ($cfg['cache_' . $cache_ext])
 		{
-			$cache->page->init($env['ext'], $cfg['defaulttheme']);
+			$cache->page->init($cache_ext, $cfg['defaulttheme']);
 			$cache->page->read();
 		}
 	}
@@ -76,7 +77,8 @@ else
 require_once $cfg['system_dir'].'/database.php';
 try
 {
-	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+	$dbc_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
+	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbc_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 }
 catch (PDOException $e)
 {
@@ -84,7 +86,7 @@ catch (PDOException $e)
 		Please check your settings in the file datas/config.php<br />
 		MySQL error : '.$e->getMessage());
 }
-unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $dbc_port);
 
 $cache && $cache->init();
 
@@ -169,7 +171,7 @@ else
 }
 $sys['port'] = empty($url['port']) ? '' : ':' . $url['port'];
 $sys['abs_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
-$sys['canonical_uri'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $_SERVER['REQUEST_URI'];
+$sys['canonical_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $_SERVER['REQUEST_URI'];
 define('COT_ABSOLUTE_URL', $sys['abs_url']);
 // URI redirect appliance
 $sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ?
@@ -292,11 +294,6 @@ $usr['timezone'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
-if (!defined('COT_MESSAGE'))
-{
-	$_SESSION['s_run_admin'] = defined('COT_ADMIN');
-}
-
 if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
 	$u = empty($_SESSION[$site_id]) ? explode(':', base64_decode($_COOKIE[$site_id])) : explode(':', base64_decode($_SESSION[$site_id]));
@@ -383,37 +380,14 @@ if ($usr['id'] == 0)
 
 $lang = $usr['lang'];
 
-/* === Hook === */
-foreach (cot_getextplugins('input') as $pl)
+if (defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R'))
 {
-	include $pl;
+	define('COT_ADMIN', TRUE);
 }
-/* ======================== */
-
-
-/* ======== Maintenance mode ======== */
-
-if ($cfg['maintenance'])
+else
 {
-	$sqll = $db->query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
-	$roow = $sqll->fetch();
-
-	if (!$roow['grp_maintenance'] && !defined('COT_AUTH'))
-	{
-		cot_redirect(cot_url('users', 'm=auth', '', true));
-	}
+	$_SESSION['s_run_admin'] = defined('COT_ADMIN');
 }
-
-/* ======== Zone variables ======== */
-
-$m = cot_import('m', 'G', 'ALP', 24);
-$n = cot_import('n', 'G', 'ALP', 24);
-$a = cot_import('a', 'G', 'ALP', 24);
-$b = cot_import('b', 'G', 'ALP', 24);
-
-/* ======== Language ======== */
-
-require_once cot_langfile('main', 'core');
 
 /* ======== Category Structure ======== */
 if (!$structure)
@@ -448,6 +422,39 @@ if (!$cache || !$cot_cfg)
 	$cache && $cache->db->store('cot_cfg', $cfg, 'system');
 }
 unset($cot_cfg);
+
+/* === Hook === */
+foreach (cot_getextplugins('input') as $pl)
+{
+	include $pl;
+}
+/* ======================== */
+
+
+/* ======== Maintenance mode ======== */
+
+if ($cfg['maintenance'])
+{
+	$sqll = $db->query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
+	$roow = $sqll->fetch();
+
+	if (!$roow['grp_maintenance'] && !defined('COT_AUTH'))
+	{
+		cot_redirect(cot_url('login'));
+	}
+}
+
+/* ======== Zone variables ======== */
+
+$m = cot_import('m', 'G', 'ALP', 24);
+$n = cot_import('n', 'G', 'ALP', 24);
+$a = cot_import('a', 'G', 'ALP', 24);
+$b = cot_import('b', 'G', 'ALP', 24);
+
+/* ======== Language ======== */
+
+require_once cot_langfile('main', 'core');
+require_once cot_langfile('users', 'core');
 
 /* ======== Who's online (part 1) and shield protection ======== */
 
@@ -515,18 +522,9 @@ if (!file_exists($mtheme))
 	}
 }
 
-$mscheme = cot_schemefile();
-if (!$mscheme)
-{
-	cot_diefatal('Default scheme not found.'); // TODO: Need translate
-}
-else
-{
-	cot_rc_add_file($mscheme);
-}
-
 $usr['def_theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
 $usr['theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.{$usr['lang']}.lang.php";
+
 if ($usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
 {
 	require_once $usr['theme_lang'];
@@ -542,8 +540,10 @@ $scheme = $usr['scheme'];
 // Resource strings
 require_once $cfg['system_dir'].'/resources.php';
 // Theme resources
-$themeR = cot_get_rc_theme();
-$R = array_merge($R, $themeR);
+if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php"))
+{
+	require_once "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
+}
 // Iconpack
 if (empty($cfg['defaulticons']))
 {
@@ -586,13 +586,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('COT_NO_ANTIXSS') && !defin
 	&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 {
 	$cot_error = true;
-	cot_redirect(cot_url('message', 'msg=950', '', true));
+	cot_die_message(950, TRUE);
 }
 
 /* ============ Head Resources ===========*/
+$cot_rc_skip_minification = false;
 if (!$cot_rc_html || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMIN'))
 {
 	cot_rc_consolidate();
+}
+$cot_rc_skip_minification = true;
+
+// Cotonti-specific XTemplate initialization
+if (class_exists('XTemplate'))
+{
+	XTemplate::init($cfg['xtpl_cache'], $cfg['cache_dir'], $cfg['debug_mode'] && $_GET['tpl_debug'], $cfg['html_cleanup']);
 }
 
 /* ======== Global hook ======== */

@@ -17,7 +17,7 @@ list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['forums']['maxtopicsperpage'
 $o = cot_import('ord','G','ALP',16); //order
 $w = cot_import('w','G','ALP',4); // way
 
-if (empty($o) || $db->query("SHOW COLUMNS FROM $db_forum_topics WHERE Field = 'ft_$o'")->rowCount() == 0)
+if (empty($o) || !$db->fieldExists($db_forum_topics, "ft_$o"))
 {
 	$o = 'updated';
 }
@@ -274,7 +274,7 @@ foreach ($sql_forums->fetchAll() as $row)
 	{
 		$row['ft_url'] = cot_url('forums', "m=posts&q=".$row['ft_id']);
 		$row['ft_lastposturl'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ? cot_url('forums', "m=posts&q=".$row['ft_id']."&n=unread", "#unread") : cot_url('forums', "m=posts&q=".$row['ft_id']."&n=last", "#bottom");
-		$row['ft_lastpostlink'] = cot_rc_link($row['ft_lastposturl'], $R['icon_unread'], 'rel="nofollow"').cot_date('datetime_short', $row['ft_updated'] + $usr['timezone'] * 3600);
+		$row['ft_lastpostlink'] = cot_rc_link($row['ft_lastposturl'], $R['icon_unread'], 'rel="nofollow"').cot_date('datetime_short', $row['ft_updated']);
 
 		$row['ft_replycount'] = $row['ft_postcount'] - 1;
 	
@@ -311,7 +311,7 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_TOPICS_ROW_ICON' => $row['ft_icon'],
 		'FORUMS_TOPICS_ROW_TITLE' => htmlspecialchars($row['ft_title']),
 		'FORUMS_TOPICS_ROW_DESC' => htmlspecialchars($row['ft_desc']),
-		'FORUMS_TOPICS_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate'] + $usr['timezone'] * 3600),
+		'FORUMS_TOPICS_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate']),
 		'FORUMS_TOPICS_ROW_CREATIONDATE_STAMP' => $row['ft_creationdate'] + $usr['timezone'] * 3600,
 		'FORUMS_TOPICS_ROW_UPDATEDURL' => $row['ft_lastposturl'],
 		'FORUMS_TOPICS_ROW_UPDATED' => $row['ft_lastpostlink'],

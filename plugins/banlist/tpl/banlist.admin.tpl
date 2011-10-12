@@ -25,10 +25,10 @@
 				</form>
 <!-- END: ADMIN_BANLIST_ROW -->
 			</table>
-			<p class="paging">{ADMIN_BANLIST_PAGINATION_PREV}{ADMIN_BANLIST_PAGNAV}{ADMIN_BANLIST_PAGINATION_NEXT}<span>{PHP.L.Total}: {ADMIN_BANLIST_TOTALITEMS}, <span class="lower">{PHP.L.Onpage}</span>: {ADMIN_BANLIST_COUNTER_ROW}</span></p>
+			<p class="paging">{ADMIN_BANLIST_PAGINATION_PREV}{ADMIN_BANLIST_PAGNAV}{ADMIN_BANLIST_PAGINATION_NEXT}<span>{PHP.L.Total}: {ADMIN_BANLIST_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_BANLIST_COUNTER_ROW}</span></p>
 			<h3>{PHP.L.Add}:</h3>
 			<form name="addbanlist" id="addbanlist" action="{ADMIN_BANLIST_URLFORMADD}" method="post" class="ajax">
-				<table class="cells">
+				<table class="cells info">
 					<tr>
 						<td class="width20">{PHP.L.banlist_ipmask}:</td>
 						<td class="width80">{ADMIN_BANLIST_IP}</td>

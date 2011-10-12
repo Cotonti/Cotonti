@@ -50,8 +50,10 @@ if ($c == 'comments')
 				$text .= (cot_string_truncate($text, $cfg['plugin']['comments']['rss_commentmaxsymbols'])) ? '...' : '';
 			}
 			$items[$i]['description'] = $text;
-			// FIXME this section does not support page aliases!
-			$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('page', "id=".strtr($row['com_code'], 'p', ''), '#c'.$row['com_id'], true);
+			
+			$pag = $db->select("SELECT page_id, page_alias, page_cat FROM $db_pages WHERE page_id = ?", array(strtr($row['com_code'], 'p', '')))->fetch();
+			$items[$i]['link'] = COT_ABSOLUTE_URL . (empty($pag['page_alias']) ? cot_url('page', 'c='.$pag['page_cat'].'&id='.$pag['page_id']) : cot_url('page', 'c='.$pag['page_cat'].'&al='.$pag['page_alias']));
+			
 			$items[$i]['pubDate'] = date('r', $row['com_date']);
 			$i++;
 		}
@@ -94,10 +96,10 @@ if ($c == 'comments')
 				}
 				$sql->closeCursor();
 				// Attach original page text as last item
-				$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'id='.$row['page_id']) : cot_url('page', 'al='.$row['page_alias']);
+				$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']);
 				$items[$i]['title'] = $L['rss_original'];
 				$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_pageurl']);
-				$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('page', "id=$page_id", '', true);
+				$items[$i]['link'] = COT_ABSOLUTE_URL . ((empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']));
 				$items[$i]['pubDate'] = date('r', $row['page_date']);
 			}
 		}

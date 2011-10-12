@@ -22,7 +22,7 @@
     <!-- post -->
     <div class="post">
       <h4 class="ug{FORUMS_POSTS_ROW_MAINGRPID}">{FORUMS_POSTS_ROW_POSTERNAME}</h4>
-      <span class="postinfo colright"> <a href="forums.php?m=posts&amp;p={FORUMS_POSTS_ROW_ID}#p{FORUMS_POSTS_ROW_ID}">#{FORUMS_POSTS_ROW_ORDER}</a> || <strong>{FORUMS_POSTS_ROW_CREATION}</strong> </span> <br class="clear" />
+      <span class="postinfo colright"> <a href="{FORUMS_POSTS_ROW_ID|cot_url('forums','m=posts&p=$this')}#p{FORUMS_POSTS_ROW_ID}">#{FORUMS_POSTS_ROW_ORDER}</a> || <strong>{FORUMS_POSTS_ROW_CREATION}</strong> </span> <br class="clear" />
       <!-- user details -->
       <div class="posusr nou">
         <div class="avatarious"> {FORUMS_POSTS_ROW_USERAVATAR}
@@ -49,12 +49,12 @@
           <!-- action buttons -->
           <p> &nbsp;
             <!-- IF {FORUMS_POSTS_ROW_POSTERID} == {PHP.usr.id} OR {PHP.usr.isadmin} -->
-            <a href="forums.php?m=editpost&amp;s={PHP.s}&amp;q={PHP.q}&amp;p={FORUMS_POSTS_ROW_ID}&amp;x={PHP.sys.xk}" class="more"> <span>{PHP.L.Edit}</span></a> &nbsp; <a href="forums.php?m=posts&amp;a=delete&amp;x={PHP.sys.xk}&amp;s={PHP.s}&amp;q={PHP.q}&amp;p={FORUMS_POSTS_ROW_ID}" class="more"> <span>{PHP.L.Delete}</span></a> &nbsp;
+            <a href="{FORUMS_POSTS_ROW_EDIT_URL}" class="more"> <span>{PHP.L.Edit}</span></a> &nbsp; <a href="{FORUMS_POSTS_ROW_DELETE_URL}" class="more confirmLink"> <span>{PHP.L.Delete}</span></a> &nbsp;
             <!-- ENDIF -->
             <!-- IF {PHP.usr.id} > 0 -->
-            <a href="forums.php?m=posts&amp;s={PHP.s}&amp;q={PHP.q}&amp;quote={FORUMS_POSTS_ROW_ID}&amp;n=last#np" class="comm"> <span>{PHP.L.Quote}</span></a> &nbsp;
+            <a href="{FORUMS_POSTS_ROW_QUOTE_URL}" class="comm"> <span>{PHP.L.Quote}</span></a> &nbsp;
             <!-- ELSE -->
-            <a href="users.php?m=auth" class="comm"><span>{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.Quote}</span></a> &nbsp;
+            <a href="{PHP|cot_url('login')}" class="comm"><span>{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.Quote}</span></a> &nbsp;
             <!-- ENDIF -->
           </p>
           <!-- action buttons -->
@@ -81,11 +81,11 @@
     </div>
     <div id="right">
       <!-- IF {PHP.usr.id} > 0 -->
-      <h3><a href="forums.php?m=posts&q={PHP.q}&n=last#np">{PHP.themelang.forumspost.post}</a></h3>
+      <h3><a href="{PHP.q|cot_url('forums','m=posts&q=$this&n=last')}#np">{PHP.themelang.forumspost.post}</a></h3>
       <!-- ELSE -->
-      <h3><a href="users.php?m=auth">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.themelang.forumspost.post}</a></h3>
+      <h3><a href="{PHP|cot_url('login')}">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.themelang.forumspost.post}</a></h3>
       <!-- ENDIF -->
-      <h3><a href="rss.php?c=topics&amp;id={PHP.q}">{PHP.themelang.list.rss}</a></h3>
+      <h3><a href="{PHP.q|cot_url('rss','c=topics&amp;id=$this')}">{PHP.themelang.list.rss}</a></h3>
       <h3>{PHP.themelang.forumspost.jump}<br /><span class="colleft whitee jump">{FORUMS_POSTS_JUMPBOX}</span><br /></h3> 
 
       &nbsp; </div>

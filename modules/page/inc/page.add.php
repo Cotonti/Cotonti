@@ -33,7 +33,7 @@ cot_block($usr['auth_write']);
 
 if ($structure['page'][$c]['locked'])
 {
-	cot_redirect(cot_url('message', 'msg=602', '', true));
+	cot_die_message(602, TRUE);
 }
 
 $sys['parser'] = $cfg['page']['parser'];
@@ -52,7 +52,7 @@ if ($a == 'add')
 
 	$rpage['page_cat'] = cot_import('rpagecat', 'P', 'TXT');
 	$rpage['page_keywords'] = cot_import('rpagekeywords', 'P', 'TXT');
-	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'ALP');
+	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'TXT');
 	$rpage['page_title'] = cot_import('rpagetitle', 'P', 'TXT');
 	$rpage['page_desc'] = cot_import('rpagedesc', 'P', 'TXT');
 	$rpage['page_text'] = cot_import('rpagetext', 'P', 'HTM');
@@ -67,7 +67,8 @@ if ($a == 'add')
 	$rpage['page_date'] = (int)$sys['now_offset'];
 	$rpage['page_begin'] = (int)cot_import_date('rpagebegin');
 	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
-	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? $rpage['page_begin'] + 31536000 : $rpage['page_expire'];
+	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
+	$rpage['page_updated'] = $sys['now_offset'];
 		
 	// Extra fields
 	foreach ($cot_extrafields[$db_pages] as $row)
@@ -85,7 +86,7 @@ if ($a == 'add')
 		cot_error('msg602_body', 'rpagecat');
 	}
 	cot_check(mb_strlen($rpage['page_title']) < 2, 'page_titletooshort', 'rpagetitle');
-	cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
+	// cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
 	
 	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || !cot_auth('plug', $sys['parser'], 'W'))
 	{
@@ -134,7 +135,8 @@ if ($a == 'add')
 
 		$sql_page_insert = $db->insert($db_pages, $rpage);
 		$id = $db->lastInsertId();
-		$r_url = (!$rpage['page_state']) ? cot_url('page', "id=".$id, '', true) : cot_url('message', "msg=300", '', true);
+		$urlparams = empty($rpage['page_alias']) ? array('c' => $rpage['page_cat'], 'id' => $id) : array('c' => $rpage['page_cat'], 'al' => $rpage['page_alias']);
+		$r_url = (!$rpage['page_state']) ? cot_url('page', $urlparams, '', true) : cot_url('message', 'msg=300', '', true);
 		cot_extrafield_movefiles();
 		
 		/* === Hook === */
@@ -201,8 +203,8 @@ $pageadd_array = array(
 	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('size' => '24', 'maxlength' => '100')),
 	'PAGEADD_FORM_OWNER' => cot_build_user($usr['id'], htmlspecialchars($usr['name'])),
 	'PAGEADD_FORM_OWNERID' => $usr['id'],
-	'PAGEADD_FORM_BEGIN' => cot_selectbox_date($sys['now_offset'], 'long', 'rpagebegin'),
-	'PAGEADD_FORM_EXPIRE' => cot_selectbox_date($sys['now_offset'] + 31536000, 'long', 'rpageexpire'),
+	'PAGEADD_FORM_BEGIN' => cot_selectbox_date($sys['now'], 'long', 'rpagebegin'),
+	'PAGEADD_FORM_EXPIRE' => cot_selectbox_date(0, 'long', 'rpageexpire'),
 	'PAGEADD_FORM_FILE' => cot_selectbox($rpage['page_file'], 'rpagefile', range(0, 2), array($L['No'], $L['Yes'], $L['Members_only']), false),
 	'PAGEADD_FORM_URL' => cot_inputbox('text', 'rpageurl', $rpage['page_url'], array('size' => '56', 'maxlength' => '255')),
 	'PAGEADD_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $rpage['page_size'], array('size' => '56', 'maxlength' => '255')),

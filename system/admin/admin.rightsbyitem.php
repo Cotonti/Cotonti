@@ -22,17 +22,7 @@ $io = cot_import('io', 'G', 'ALP');
 $advanced = cot_import('advanced', 'G', 'BOL');
 
 $L['adm_code']['admin'] = $L['Administration'];
-$L['adm_code']['comments'] = $L['Comments'];
-$L['adm_code']['forums'] = $L['Forums'];
-$L['adm_code']['index'] = $L['Home'];
 $L['adm_code']['message'] = $L['Messages'];
-$L['adm_code']['page'] = $L['Pages'];
-$L['adm_code']['pfs'] = $L['PFS'];
-$L['adm_code']['plug'] = $L['Plugin'];
-$L['adm_code']['pm'] = $L['Private_Messages'];
-$L['adm_code']['polls'] = $L['Polls'];
-$L['adm_code']['ratings'] = $L['Ratings'];
-$L['adm_code']['users'] = $L['Users'];
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.rightsbyitem.first') as $pl)
@@ -98,8 +88,31 @@ foreach (cot_getextplugins('admin.rightsbyitem.case') as $pl)
 	include $pl;
 }
 /* ===== */
+if($ic == 'message' || $ic == 'admin')
+{
+	$adminpath[] = array(cot_url('admin'), $L['adm_code'][$ic]);
+}
+else
+{
+	$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
+	if($ic == 'plug')
+	{
+		$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$io), $cot_plugins_enabled[$io]['title']);
+	}
+	else
+	{
+		$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$ic), $cot_modules[$ic]['title']);
+		if($io != 'a')
+		{
+			$adminpath[] = array(cot_url('admin', 'm=structure&n='.$ic.'&al='.$io), $structure[$ic][$io]['title']);
+		}
+	}
+}
 
-$adminpath[] = ($advanced) ? array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), $L['Rights'].' / '.$L['adm_code'][$ic].$title.' ('.$L['More'].')') : array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), $L['Rights'].' / '.$L['adm_code'][$ic].$title);
+//m=extensions&a=details&mod=page
+$adminpath[] = array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), $L['Rights']);
+($advanced) && $adminpath[] = array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), $L['More']);
+
 
 $adv_columns = ($advanced) ? 8 : 3;
 $adv_columns = (!$advanced && $ic == 'page') ? 4 : $adv_columns;

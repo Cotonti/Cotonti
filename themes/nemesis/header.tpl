@@ -7,6 +7,7 @@
 <!-- IF {HEADER_META_KEYWORDS} --><meta name="keywords" content="{HEADER_META_KEYWORDS}" /><!-- ENDIF -->
 <meta http-equiv="content-type" content="{HEADER_META_CONTENTTYPE}; charset={HEADER_META_CHARSET}" />
 <meta name="generator" content="Cotonti http://www.cotonti.com" />
+<link rel="canonical" href="{HEADER_CANONICAL_URL}" />
 {HEADER_BASEHREF}
 {HEADER_HEAD}
 <link rel="shortcut icon" href="favicon.ico" />
@@ -29,21 +30,21 @@
 		</li>
 		<!-- IF {PHP.cot_modules.forums} -->
 		<li>
-			<a href="forums.php" title="{PHP.L.Forums}">
+			<a href="{PHP|cot_url('forums')}" title="{PHP.L.Forums}">
 				{PHP.L.Forums}
 				<span>Discussions</span>
 			</a>
 		</li>
 		<!-- ENDIF -->
 		<li>
-			<a href="page.php?c=news" title="{PHP.L.News}">
+			<a href="{PHP|cot_url('page','c=news')}" title="{PHP.L.News}">
 				{PHP.L.News}
 				<span>Our updates</span>
 			</a>
 		</li>
 		<!-- IF {PHP.cot_modules.rss} -->
 		<li>
-			<a href="rss.php" title="{PHP.L.RSS_Feeds}">
+			<a href="{PHP|cot_url('rss')}" title="{PHP.L.RSS_Feeds}">
 				RSS
 				<span>Subscribe me</span>
 			</a>

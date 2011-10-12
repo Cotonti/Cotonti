@@ -25,7 +25,7 @@
     	<div class="padding20 popup whitee">
         	<div id="left">
             <h1>{PFS_TITLE}</h1>
-            <div class="breadcrumb">{PHP.themelang.list.bread}: <a href="users.php">{PHP.L.Users}</a> <a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.usr.name}</a> <a href="pfs.php">{PHP.L.PFS}</a></div>
+            <div class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('users')}">{PHP.L.Users}</a> <a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.usr.name}</a> <a href="{PHP|cot_url('pfs')}">{PHP.L.PFS}</a></div>
             <!-- IF {PFS_SUBTITLE} == true -->
             <p class="details">{PFS_SUBTITLE}</p>
             <!-- ENDIF -->
@@ -69,7 +69,7 @@
 					<td class="centerall">{PFF_ROW_UPDATED}</td>
 					<td class="centerall">
 						<a href="{PFF_ROW_EDIT_URL}">{PHP.L.Edit}</a>
-						<a href="{PFF_ROW_DELETE_URL}">x</a>
+						<a href="{PFF_ROW_DELETE_URL}" class="confirmLink">x</a>
 					</td>
 				</tr>
 				<!-- END: PFF_ROW -->
@@ -100,7 +100,7 @@
 					<td class="centerall">{PFS_ROW_DATE}</td>
 					<td class="centerall">
 						<input type="checkbox" name="folderid[{PFS_ROW_ID}]" />
-						<a href="{PFS_ROW_DELETE_URL}">{PHP.L.Delete}</a>
+						<a href="{PFS_ROW_DELETE_URL}" class="confirmLink">{PHP.L.Delete}</a>
 						<a href="{PFS_ROW_EDIT_URL}">{PHP.L.Edit}</a>
 						<br />{PFS_ROW_INSERT}
 					</td>
@@ -190,11 +190,11 @@
 
 			<div id="right">
             	<h3 style="color:#000">{PHP.L.hea_youareloggedas} {PHP.usr.name}</h3>
-                <h3><a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.L.View} {PHP.L.Profile}</a></h3>
-                <h3><a href="users.php?m=profile">{PHP.L.Update} {PHP.L.Profile}</a></h3>
-                <h3><a href="pm.php">{PHP.L.Private_Messages}</a></h3>
+                <h3><a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.L.View} {PHP.L.Profile}</a></h3>
+                <h3><a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Update} {PHP.L.Profile}</a></h3>
+                <h3><a href="{PHP|cot_url('pm')}">{PHP.L.Private_Messages}</a></h3>
                 <h3><span style="background-color:#94af66; color:#fff">{PHP.L.PFS}</span></h3>
-                <h3><a href="users.php">{PHP.L.Users}</a></h3>
+                <h3><a href="{PHP|cot_url('users')}">{PHP.L.Users}</a></h3>
 				<div class="box">
 				<h3>{PHP.L.pfs_extallowed}</h3>
 					<!-- BEGIN: ALLOWED_ROW -->

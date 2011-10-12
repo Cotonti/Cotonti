@@ -33,8 +33,8 @@ if (!empty($row['ipage_title']))
 	}
 	$t->assign(array(
 		'TAGS_RESULT_ROW_URL' => empty($row['page_alias'])
-			? cot_url('page', 'id='.$row['page_id'].'&l='. $row['ipage_locale'])
-			: cot_url('page', 'al='.$row['page_alias'].'&l='. $row['ipage_locale']),
+			? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'].'&l='. $row['ipage_locale'])
+			: cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'].'&l='. $row['ipage_locale']),
 		'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['ipage_title']),
 		'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_i18n_build_catpath('page', $row['page_cat'], $row['ipage_locale']), false),
 		'TAGS_RESULT_ROW_TAGS' => $tag_list

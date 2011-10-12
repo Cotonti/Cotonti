@@ -16,9 +16,9 @@ require_once cot_langfile('tags', 'plug');
 require_once cot_incfile('tags', 'plug', 'resources');
 
 // Global variables
-global $db_tags, $db_tag_refrences, $db_x;
+global $db_tags, $db_tag_references, $db_x;
 $db_tags = (isset($db_tags)) ? $db_tags : $db_x . 'tags';
-$db_tag_refrences = (isset($$db_tag_refrences)) ? $db_tag_refrences : $db_x . 'tag_references';
+$db_tag_references = (isset($db_tag_references)) ? $db_tag_references : $db_x . 'tag_references';
 
 /**
  * Tags a given item from a specific area with a keyword
@@ -55,6 +55,8 @@ function cot_tag($tag, $item, $area = 'pages', $extra = null)
  * Collects data for a tag cloud in some area. The result is an associative array with
  * tags as keys and count of entries as values.
  *
+ * @global CotDB $db
+ * @global Cache $cache
  * @param string $area Site area
  * @param string $order Should be 'tag' to order the result set by tag (alphabetical) or 'cnt' to order it by item count (descending)
  * @param int $limit Use this parameter to limit number of rows in the result set
@@ -62,7 +64,12 @@ function cot_tag($tag, $item, $area = 'pages', $extra = null)
  */
 function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 {
-	global $db, $db_tag_references;
+	global $db, $db_tag_references, $cache;
+	$cache_name = 'tag_cloud_cache_' . $area;
+	if ($cache && $GLOBALS[$cache_name] && is_array($GLOBALS[$cache_name]))
+	{
+		return $GLOBALS[$cache_name];
+	}
 	$res = array();
 	$limit = is_null($limit) ? '' : ' LIMIT '.$limit;
 	switch($order)
@@ -89,6 +96,7 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 		$res[$row['tag']] = $row['cnt'];
 	}
 	$sql->closeCursor();
+	$cache && $cache->db->store($cache_name, $res, COT_DEFAULT_REALM, 300);
 	return $res;
 }
 
@@ -236,11 +244,16 @@ function cot_tag_parse($input)
  * Parses search string into SQL query
  *
  * @param string $qs User input
+ * @param array $join_columns Columns to be joined by on tag_item match in subquery
  * @return string
  */
-function cot_tag_parse_query($qs)
+function cot_tag_parse_query($qs, $join_columns)
 {
 	global $db, $db_tag_references;
+	if (is_string($join_columns))
+	{
+		$join_columns = array($join_columns);
+	}
 	$tokens1 = explode(';', $qs);
 	$tokens1 = array_map('trim', $tokens1);
 	$cnt1 = count($tokens1);
@@ -270,7 +283,13 @@ function cot_tag_parse_query($qs)
 				}
 				else
 				{
-					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_references AS r{$i}_{$j} WHERE r{$i}_{$j}.tag_item = p.page_id AND r{$i}_{$j}.tag $op)";
+					$join_conds = array();
+					foreach ($join_columns as $col)
+					{
+						$join_conds[] = "r{$i}_{$j}.tag_item = $col"; 
+					}
+					$join_cond = implode(' OR ', $join_conds);
+					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_references AS r{$i}_{$j} WHERE ($join_cond) AND r{$i}_{$j}.tag $op)";
 				}
 			}
 			else

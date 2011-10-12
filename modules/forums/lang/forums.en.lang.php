@@ -97,6 +97,9 @@ $L['forums_explainprivate'] = 'Mark topic as private (access for moderator(s) an
 $L['forums_explaindefault'] = 'Reset topic to default status';
 $L['forums_explaindelete'] = 'Delete topic';
 
+$L['forums_confirm_delete_topic'] = 'Are you sure want to delete this topic?';
+$L['forums_confirm_delete_post'] = 'Are you sure want to delete this post?';
+
 /**
  * Unused?
  */

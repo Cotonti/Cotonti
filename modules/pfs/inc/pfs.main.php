@@ -295,7 +295,23 @@ elseif ($a=='deletefolder')
 	cot_block($usr['auth_write']);
 	cot_check_xg();
 	$sql_pfs_delete = $db->delete($db_pfs_folders, "pff_userid=$userid AND pff_id=$id");
-	$db->update($db_pfs, array('pfs_folderid' => 0), "pfs_userid=$userid AND pfs_folderid=$id");
+	// Remove all contained files
+	$pfs_res = $db->query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid=$userid AND pfs_folderid=$id");
+	foreach ($pfs_res->fetchAll() as $row)
+	{
+		$pfs_file = $row['pfs_file'];
+		$ff = $pfs_dir_user.$pfs_file;
+
+		if (file_exists($ff))
+		{
+			@unlink($ff);
+			if (file_exists($thumbs_dir_user.$pfs_file))
+			{
+				@unlink($thumbs_dir_user.$pfs_file);
+			}
+		}
+	}
+	$db->delete($db_pfs, "pfs_userid=$userid AND pfs_folderid=$id");
 }
 
 $f = (empty($f)) ? '0' : $f;
@@ -373,11 +389,11 @@ else
 			'PFF_ROW_COUNT' => $pff_count,
 			'PFF_ROW_FCOUNT' => $pff_fcount,
 			'PFF_ROW_FSIZE' => $pff_fssize,
-			'PFF_ROW_DELETE_URL' => cot_url('pfs', 'a=deletefolder&'.cot_xg().'&id='.$pff_id.'&'.$more),
+			'PFF_ROW_DELETE_URL' => cot_confirm_url(cot_url('pfs', 'a=deletefolder&'.cot_xg().'&id='.$pff_id.'&'.$more), 'pfs', 'pfs_confirm_delete_folder'),
 			'PFF_ROW_EDIT_URL' => cot_url('pfs', "m=editfolder&f=".$pff_id.'&'.$more),
 			'PFF_ROW_URL' => cot_url('pfs', 'f='.$pff_id.'&'.$more),
 			'PFF_ROW_ICON' => $icon_f,
-			'PFF_ROW_UPDATED' => cot_date('datetime_medium', $row_pff['pff_updated'] + $usr['timezone'] * 3600),
+			'PFF_ROW_UPDATED' => cot_date('datetime_medium', $row_pff['pff_updated']),
 			'PFF_ROW_UPDATED_STAMP' => $row_pff['pff_updated'] + $usr['timezone'] * 3600,
 			'PFF_ROW_ISPUBLIC' => $cot_yesno[$pff_ispublic],
 			'PFF_ROW_DESC' => cot_cutstring($pff_desc,32)
@@ -446,7 +462,7 @@ foreach ($sql_pfs->fetchAll() as $row)
 	$t-> assign(array(
 		'PFS_ROW_ID' => $pfs_id,
 		'PFS_ROW_FILE' => $pfs_file,
-		'PFS_ROW_DATE' => cot_date('datetime_medium', $pfs_date + $usr['timezone'] * 3600),
+		'PFS_ROW_DATE' => cot_date('datetime_medium', $pfs_date),
 		'PFS_ROW_DATE_STAMP' => $pfs_date + $usr['timezone'] * 3600,
 		'PFS_ROW_EXT' => $pfs_extension,
 		'PFS_ROW_DESC' => $pfs_desc,
@@ -454,7 +470,7 @@ foreach ($sql_pfs->fetchAll() as $row)
 		'PFS_ROW_FILE_URL' => $pfs_fullfile,
 		'PFS_ROW_SIZE' => $pfs_filesize,
 		'PFS_ROW_ICON' => $pfs_icon,
-		'PFS_ROW_DELETE_URL' => cot_url('pfs', 'a=delete&'.cot_xg().'&id='.$pfs_id.'&'.$more.'&opt='.$opt),
+		'PFS_ROW_DELETE_URL' => cot_confirm_url(cot_url('pfs', 'a=delete&'.cot_xg().'&id='.$pfs_id.'&'.$more.'&opt='.$opt), 'pfs', 'pfs_confirm_delete_file'),
 		'PFS_ROW_EDIT_URL' => cot_url('pfs', 'm=edit&id='.$pfs_id.'&'.$more),
 		'PFS_ROW_COUNT' => $row['pfs_count'],
 		'PFS_ROW_INSERT' => $standalone ? $add_thumbnail.$add_image.$add_file : ''

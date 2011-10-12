@@ -24,8 +24,9 @@ require_once cot_incfile('pm', 'module');
 
 $t = new XTemplate(cot_tplfile('pm.admin', 'module'));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=pm'), $L['Private_Messages']);
+$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
+$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
+$adminpath[] = array(cot_url('admin', 'm='.$m), $L['Administration']);
 $adminhelp = $L['adm_help_pm'];
 
 $totalpmdb = $db->countRows($db_pm);

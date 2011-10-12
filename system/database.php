@@ -255,6 +255,18 @@ class CotDB extends PDO {
 		$this->_stopTimer($query);
 		return $res;
 	}
+	
+	/**
+	 * Checks if a field exists in a table
+	 * 
+	 * @param string $table_name Table name
+	 * @param string $field_name Field name
+	 * @return bool TRUE if the field exists, FALSE otherwise
+	 */
+	function fieldExists($table_name, $field_name)
+	{
+		return $this->query("SHOW COLUMNS FROM `$table_name` WHERE Field = " . $this->quote($field_name))->rowCount() == 1;
+	}
 
 	/**
 	 * Performs SQL INSERT on simple data array. Array keys must match table keys, optionally you can specify
@@ -268,9 +280,10 @@ class CotDB extends PDO {
 	 *
 	 * @param string $table_name Table name
 	 * @param array $data Associative or 2D array containing data for insertion.
+	 * @param bool $insert_null Insert SQL NULL for empty values rather than ignoring them.
 	 * @return int The number of affected records
 	 */
-	public function insert($table_name, $data)
+	public function insert($table_name, $data, $insert_null = false)
 	{
 		if (!is_array($data))
 		{
@@ -300,17 +313,17 @@ class CotDB extends PDO {
 			{
 				foreach ($rowset[$i] as $key => $val)
 				{
-					if (is_null($val))
-					{
-						continue;
-					}
 					if ($j > 0) $vals .= ',';
 					if (!$keys_built)
 					{
 						if ($j > 0) $keys .= ',';
 						$keys .= "`$key`";
 					}
-					if ($val === 'NOW()')
+					if (is_null($val) && $insert_null)
+					{
+						$vals .= 'NULL';
+					}
+					elseif ($val === 'NOW()')
 					{
 						$vals .= 'NOW()';
 					}

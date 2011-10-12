@@ -6,9 +6,9 @@
 			<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
-					<td class="coltop width30">{PHP.L.Parameter}</td>
+					<td class="coltop width35">{PHP.L.Parameter}</td>
 					<td class="coltop width60">{PHP.L.Value}</td>
-					<td class="coltop width10">{PHP.L.Reset}</td>
+					<td class="coltop width5">{PHP.L.Reset}</td>
 				</tr>
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
 <!-- BEGIN: ADMIN_CONFIG_FIELDSET_BEGIN -->
@@ -26,8 +26,8 @@
 						<div class="adminconfigmore">{ADMIN_CONFIG_ROW_CONFIG_MORE}</div>
 					</td>
 					<td class="centerall">
-						<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="ajax">
-							{PHP.R.admin_icon_reset}
+						<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="ajax button">
+							{PHP.L.Reset}
 						</a>
 					</td>
 				</tr>
@@ -47,24 +47,25 @@
 			</form>
 <!-- END: EDIT -->
 <!-- BEGIN: DEFAULT -->
-			<table class="cells">
-				<tr>
-					<td class="coltop width40">{PHP.L.Core}</td>
-					<td class="coltop width30">{PHP.L.Modules}</td>
-					<td class="coltop width30">{PHP.L.Plugins}</td>
-				</tr>
-				<tr>
+
 <!-- BEGIN: ADMIN_CONFIG_COL -->
-					<td>
-						<ul class="follow">
+<h3 class="clear">{ADMIN_CONFIG_COL_CAPTION}:</h3>
+<div class="container">
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
-							<li><a href="{ADMIN_CONFIG_ROW_URL}" class="ajax">{ADMIN_CONFIG_ROW_NAME}</a></li>
+<a href="{ADMIN_CONFIG_ROW_URL}" class="ajax thumbicons">
+	<!-- IF {ADMIN_CONFIG_ROW_ICO} --> 
+	<img src="{ADMIN_CONFIG_ROW_ICO}">
+	<!-- ELSE -->
+	<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+	<!-- ENDIF -->
+	{ADMIN_CONFIG_ROW_NAME}
+</a>
 <!-- END: ADMIN_CONFIG_ROW -->
-						</ul>
-					</td>
+</div>
 <!-- END: ADMIN_CONFIG_COL -->
-				</tr>
-			</table>
+<div class="clear">
+  &nbsp;
+</div>
 <!-- END: DEFAULT -->
 		</div>
 <!-- END: MAIN -->

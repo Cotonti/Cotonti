@@ -15,7 +15,7 @@ defined('COT_CODE') or die('Wrong URL.');
  * Admin
  */
 
-$L['adm_help_polls'] = 'Fill in the form and press &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.';
+$L['adm_help_polls'] = 'Fill in the form and press the &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.';
 $L['adm_polls_forumpolls'] = 'Polls from forums (recent at top):';
 $L['adm_polls_indexpolls'] = 'Index polls (recent at top):';
 $L['adm_polls_msg916_bump'] = 'Successfully bumped!';
@@ -23,6 +23,7 @@ $L['adm_polls_msg916_deleted'] = 'Successfully deleted!';
 $L['adm_polls_msg916_reset'] = 'Successfully reset!';
 $L['adm_polls_polltopic'] = 'Poll topic';
 $L['adm_polls_nopolls'] = 'There is no polls';
+$L['adm_polls_bump'] = 'Bump';
 
 $L['poll'] = 'Poll';
 $L['polls_alreadyvoted'] = 'You\'ve already voted for this poll.';

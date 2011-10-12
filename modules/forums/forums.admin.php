@@ -23,7 +23,9 @@ $t = new XTemplate(cot_tplfile('forums.admin', 'module'));
 
 require_once cot_incfile('forums', 'module');
 
-$adminpath[] = array(cot_url('admin', 'm=forums'), $L['Forums']);
+$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
+$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
+$adminpath[] = array(cot_url('admin', 'm='.$m), $L['Administration']);
 $adminhelp = $L['adm_help_forums'];
 
 /* === Hook  === */

@@ -15,7 +15,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', 
 cot_block($usr['auth_read']);
 
 $id = cot_import('id', 'G', 'INT');
-$al = cot_import('al', 'G', 'ALP');
+$al = $db->prep(cot_import('al', 'G', 'TXT'));
 $c = cot_import('c', 'G', 'TXT');
 $pg = cot_import('pg', 'G', 'INT');
 
@@ -36,8 +36,7 @@ if ($id > 0 || !empty($al))
 
 if(!$id && empty($al) || !$sql_page || $sql_page->rowCount() == 0)
 {
-	$env['status'] = '404 Not Found';
-	cot_redirect(cot_url('message', 'msg=404', '', true));
+	cot_die_message(404, TRUE);
 }
 $pag = $sql_page->fetch();
 
@@ -52,13 +51,12 @@ $sys['sublocation'] = $pag['page_title'];
 
 $pag['page_begin_noformat'] = $pag['page_begin'];
 $pag['page_tab'] = empty($pg) ? 0 : $pg;
-$pag['page_pageurl'] = empty($al) ? cot_url('page', array('id' => $id)) : cot_url('page', array('al' => $al));
+$pag['page_pageurl'] = empty($al) ? cot_url('page', array('c' => $pag['page_cat'], 'id' => $id)) : cot_url('page', array('c' => $pag['page_cat'], 'al' => $al));
 
-if ($pag['page_state'] == 1 && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
+if (($pag['page_state'] == 1 || $pag['page_begin'] > $sys['now'] || $pag['page_expire'] > 0 && $sys['now'] > $pag['page_expire']) && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
 {
-	$env['status'] = '403 Forbidden';
-	cot_log("Attempt to directly access an un-validated page", 'sec'); // TODO i18n
-	cot_redirect(cot_url('message', "msg=930", '', true));
+	cot_log("Attempt to directly access an un-validated or future/expired page", 'sec');
+	cot_die_message(403, TRUE);
 }
 if (mb_substr($pag['page_text'], 0, 6) == 'redir:')
 {
@@ -122,6 +120,15 @@ else
 $out['desc'] = strip_tags($pag['page_desc']);
 $out['keywords'] = strip_tags($pag['page_keywords']);
 
+// Building the canonical URL
+$pageurl_params = array('c' => $pag['page_cat']);
+empty($al) ? $pageurl_params['id'] = $id : $pageurl_params['al'] = $al;
+if ($pg > 0)
+{
+	$pageurl_params['pg'] = $pg;
+}
+$out['canonical_uri'] = cot_url('page', $pageurl_params);
+
 /* === Hook === */
 foreach (cot_getextplugins('page.main') as $pl)
 {
@@ -148,7 +155,7 @@ $t->assign(cot_generate_usertags($pag, 'PAGE_OWNER_'));
 $pag['page_file'] = intval($pag['page_file']);
 if ($pag['page_file'] > 0)
 {
-	if ($sys['now_offset'] > $pag['page_date'])
+	if ($sys['now_offset'] > $pag['page_begin'])
 	{
 		if (!empty($pag['page_url']))
 		{
@@ -186,7 +193,7 @@ if ($pag['page_file'] > 0)
 		{
 			$t->assign(array(
 				'PAGE_FILETITLE' => $pag['page_title'],
-				'PAGE_FILE_URL' => cot_url('page', array('id' => $id, 'a' => 'dl'))
+				'PAGE_FILE_URL' => cot_url('page', array('c' => $pag['page_cat'], 'id' => $id, 'a' => 'dl'))
 			));
 		}
 	}
@@ -229,7 +236,7 @@ if ($pag['page_totaltabs'] > 1)
 		{
 			$pag['page_tabtitle'][$i] = $i == 1 ? $pag['page_title'] : $L['Page'] . ' ' . ($i + 1);
 		}
-		$tab_url = empty($al) ? cot_url('page', 'id='.$id.'&pg='.$i) : cot_url('page', 'al='.$al.'&pg='.$i);
+		$tab_url = empty($al) ? cot_url('page', 'c='.$pag['page_cat'].'&id='.$id.'&pg='.$i) : cot_url('page', 'c='.$pag['page_cat'].'&al='.$al.'&pg='.$i);
 		$pag['page_tabtitles'][] .= cot_rc_link($tab_url, ($i+1).'. '.$pag['page_tabtitle'][$i],
 			array('class' => 'page_tabtitle'));
 		$pn = cot_pagenav('page', (empty($al) ? 'id='.$id : 'al='.$al), $pag['page_tab'], $pag['page_totaltabs'], 1, 'pg');

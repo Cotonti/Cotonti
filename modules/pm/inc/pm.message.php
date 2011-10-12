@@ -103,7 +103,7 @@ if ($history)
 						OR (pm_fromuserid = $to AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)
 						ORDER BY pm_date DESC LIMIT $d,".$cfg['pm']['maxpmperpage']);
 
-	$pagenav = cot_pagenav('pm', 'm=message&id='.$id.'&history='.$history.'&q='.$q, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax'], 'ajaxHistory');
+	$pagenav = cot_pagenav('pm', 'm=message&id='.$id.'&history='.(int)$history.'&q='.$q, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax'], 'ajaxHistory');
 
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('pm.history.loop');
@@ -139,7 +139,7 @@ if ($history)
 			'PM_ROW_STATE' => $row2['pm_tostate'],
 			'PM_ROW_STAR' => cot_rc($star_class2 ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => $url_star)),
 			'PM_ROW_STAR_URL' => $url_star,
-			'PM_ROW_DATE' => cot_date('datetime_medium', $row2['pm_date'] + $usr['timezone'] * 3600),
+			'PM_ROW_DATE' => cot_date('datetime_medium', $row2['pm_date']),
 			'PM_ROW_DATE_STAMP' => $row2['pm_date'] + $usr['timezone'] * 3600,
 			'PM_ROW_TITLE' => cot_rc_link($url_pm, htmlspecialchars($row2['pm_title']), array('class'=>'ajax')),
 			'PM_ROW_URL' => $url_pm,
@@ -192,7 +192,7 @@ if ($usr['auth_write'])
 	$onclick = "insertText(document, 'newpmtext', '[quote]'+$('#pm_text').text()+'[/quote]'); return false;";
 
 	$t->assign(array(
-		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.$history.'&d='.$durl), $L['Quote'], array('onclick' => $onclick)),
+		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.(int)$history.'&d='.$durl), $L['Quote'], array('onclick' => $onclick)),
 		'PM_FORM_SEND' => cot_url('pm', 'm=send&a=send&to='.$to),
 		'PM_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 		'PM_FORM_TEXT' => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
@@ -227,7 +227,7 @@ $t->assign(array(
 	'PM_ID' => $row['pm_id'],
 	'PM_STATE' => $row['pm_tostate'],
 	'PM_STAR' => cot_rc($star_class ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$durl))),
-	'PM_DATE' => cot_date('datetime_medium', $row['pm_date'] + $usr['timezone'] * 3600),
+	'PM_DATE' => cot_date('datetime_medium', $row['pm_date']),
 	'PM_DATE_STAMP' => $row['pm_date'] + $usr['timezone'] * 3600,
 	'PM_TITLE' => htmlspecialchars($row['pm_title']),
 	'PM_TEXT' => '<div id="pm_text">'.$pm_maindata.'</div>',

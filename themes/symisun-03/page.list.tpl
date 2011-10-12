@@ -6,11 +6,19 @@
     <h1>{LIST_CATTITLE}</h1>
     <p class="details">{LIST_CATDESC}</p>
     <!-- IF {LIST_TOP_TOTALLINES} != 0 -->
-		<p> {PHP.themelang.list.sort} <strong>{PHP.L.Title}</strong> <a href="list.php?c={PHP.c}&amp;s=title&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=title&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> | <strong>{PHP.L.Views}</strong> <a href="list.php?c={PHP.c}&amp;s=count&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=count&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> | <strong>{PHP.L.Date}</strong> <a href="list.php?c={PHP.c}&amp;s=date&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a><a href="list.php?c={PHP.c}&amp;s=date&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> </p>
+		<p> {PHP.themelang.list.sort} <strong>{PHP.L.Title}</strong>
+		<a href="page.php?c={PHP.c}&amp;s=title&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a>
+		<a href="page.php?c={PHP.c}&amp;s=title&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a>
+		| <strong>{PHP.L.Views}</strong>
+		<a href="page.php?c={PHP.c}&amp;s=count&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a>
+		<a href="page.php?c={PHP.c}&amp;s=count&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a>
+		| <strong>{PHP.L.Date}</strong>
+		<a href="page.php?c={PHP.c}&amp;s=date&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-up.gif" alt="" /></a>
+		<a href="page.php?c={PHP.c}&amp;s=date&amp;w=asc&amp;o={PHP.o}&amp;p={PHP.p}"><img src="themes/{PHP.theme}/img/system/arrow-down.gif" alt="" /></a> </p>
 		<!-- ELSE -->
 		<div class="red">{PHP.themelang.list.none}</div>
 		<!-- IF {PHP.usr.id} == 0 -->
-		<a href="users.php?m=auth">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.lis_submitnew}</a>
+		<a href="{PHP|cot_url('login')}">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.lis_submitnew}</a>
 		<!-- ELSE -->
 		{LIST_SUBMITNEWPAGE}
 		<!-- ENDIF -->
@@ -42,11 +50,11 @@
 	<!-- IF {LIST_TOP_PAGINATION}-->
 	<div class="paging">{LIST_TOP_PAGEPREV}{LIST_TOP_PAGINATION}{LIST_TOP_PAGENEXT}</div>
 	<!-- ENDIF -->
-	<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="index.php">{PHP.L.Home}</a> {LIST_CATPATH}</div>
+	<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('index')}">{PHP.L.Home}</a> {LIST_CATPATH}</div>
 	</div>
 	<div id="right">
 	<!-- IF {PHP.usr.id} == 0 -->
-	<h3><a href="users.php?m=auth">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.page_addtitle}</a></h3>
+	<h3><a href="{PHP|cot_url('login')}">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.page_addtitle}</a></h3>
 	<!-- ELSE -->
 	<h3>{LIST_SUBMITNEWPAGE}</h3>
 	<!-- ENDIF -->

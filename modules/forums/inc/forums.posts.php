@@ -334,12 +334,12 @@ foreach ($sql_forums->fetchAll() as $row)
 	$rowquote = ($usr['id'] > 0) ? cot_rc('forums_rowquote', array('url' => $rowquote_url)) : '';
 	$rowedit_url = (($usr['isadmin'] || $row['fp_posterid'] == $usr['id']) && $usr['id'] > 0) ? cot_url('forums', 'm=editpost&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&' . cot_xg()) : '';
 	$rowedit = (($usr['isadmin'] || $row['fp_posterid'] == $usr['id']) && $usr['id'] > 0) ? cot_rc('forums_rowedit', array('url' => $rowedit_url)) : '';
-	$rowdelete_url = ($usr['id'] > 0 && ($usr['isadmin'] || $row['fp_posterid'] == $usr['id'])) ? cot_url('forums', 'm=posts&a=delete&' . cot_xg() . '&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id']) : '';
+	$rowdelete_url = ($usr['id'] > 0 && ($usr['isadmin'] || $row['fp_posterid'] == $usr['id'])) ? cot_confirm_url(cot_url('forums', 'm=posts&a=delete&' . cot_xg() . '&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id']), 'forums', 'forums_confirm_delete_post') : '';
 	$rowdelete = ($usr['id'] > 0 && ($usr['isadmin'] || $row['fp_posterid'] == $usr['id'])) ? cot_rc('forums_rowdelete', array('url' => $rowdelete_url)) : '';
 
 	if (!empty($row['fp_updater']))
 	{
-		$row['fp_updatedby'] = sprintf($L['forums_updatedby'], htmlspecialchars($row['fp_updater']), cot_date('datetime_medium', $row['fp_updated'] + $usr['timezone'] * 3600), cot_build_timegap($row['fp_updated'], $sys['now_offset']));
+		$row['fp_updatedby'] = sprintf($L['forums_updatedby'], htmlspecialchars($row['fp_updater']), cot_date('datetime_medium', $row['fp_updated']), cot_build_timegap($row['fp_updated'], $sys['now_offset']));
 	}
 
 	$t->assign(cot_generate_usertags($row, 'FORUMS_POSTS_ROW_USER'));
@@ -348,9 +348,9 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_POSTID' => 'post_' . $row['fp_id'],
 		'FORUMS_POSTS_ROW_IDURL' => cot_url('forums', 'm=posts&id=' . $row['fp_id']),
 		'FORUMS_POSTS_ROW_URL' => cot_url('forums', 'm=posts&p=' . $row['fp_id'], "#" . $row['fp_id']),
-		'FORUMS_POSTS_ROW_CREATION' => cot_date('datetime_medium', $row['fp_creation'] + $usr['timezone'] * 3600),
+		'FORUMS_POSTS_ROW_CREATION' => cot_date('datetime_medium', $row['fp_creation']),
 		'FORUMS_POSTS_ROW_CREATION_STAMP' => $row['fp_creation'] + $usr['timezone'] * 3600,
-		'FORUMS_POSTS_ROW_UPDATED' => cot_date('datetime_medium', $row['fp_updated'] + $usr['timezone'] * 3600),
+		'FORUMS_POSTS_ROW_UPDATED' => cot_date('datetime_medium', $row['fp_updated']),
 		'FORUMS_POSTS_ROW_UPDATED_STAMP' => $row['fp_updated'] + $usr['timezone'] * 3600,
 		'FORUMS_POSTS_ROW_UPDATER' => htmlspecialchars($row['fp_updater']),
 		'FORUMS_POSTS_ROW_UPDATEDBY' => $row['fp_updatedby'],
@@ -405,7 +405,7 @@ if ($usr['isadmin'])
 		'FORUMS_POSTS_ANNOUNCE_URL' => cot_url('forums', 'm=topics&a=announcement&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_PRIVATE_URL' => cot_url('forums', 'm=topics&a=private&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_CLEAR_URL' => cot_url('forums', 'm=topics&a=clear&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
-		'FORUMS_POSTS_DELETE_URL' => cot_url('forums', 'm=topics&a=delete&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
+		'FORUMS_POSTS_DELETE_URL' => cot_confirm_url(cot_url('forums', 'm=topics&a=delete&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']), 'forums', 'forums_confirm_delete_topic'),
 		'FORUMS_POSTS_MOVEBOX_SELECT' => cot_selectbox('', 'ns', array_keys($movebox), array_values($movebox), false),
 		'FORUMS_POSTS_MOVEBOX_KEEP' => cot_checkbox('0', 'ghost')
 	));

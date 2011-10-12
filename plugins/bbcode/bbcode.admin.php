@@ -93,7 +93,7 @@ elseif ($a == 'convert')
 	{
 		require_once cot_incfile('page', 'module');
 		// Attempt to override from HTML cache
-		if ($db->query("SHOW COLUMNS FROM $db_pages WHERE Field = 'page_html'")->rowCount() == 1)
+		if ($db->fieldExists($db_pages, 'page_html'))
 		{
 			$db->query("UPDATE $db_pages SET page_text = page_html, page_parser = 'html' WHERE page_html != '' AND page_parser = 'bbcode'");
 			$db->query("ALTER TABLE $db_pages DROP COLUMN page_html");
@@ -112,7 +112,7 @@ elseif ($a == 'convert')
 	{
 		require_once cot_incfile('forums', 'module');
 		// Attempt to override from HTML cache
-		if ($db->query("SHOW COLUMNS FROM $db_forum_posts WHERE Field = 'fp_html'")->rowCount() == 1)
+		if ($db->fieldExists($db_forum_posts, 'fp_html'))
 		{
 			$db->query("UPDATE $db_forum_posts SET fp_text = fp_html WHERE fp_html != ''");
 			$res = $db->query("SELECT fp_text, fp_id FROM $db_forum_posts WHERE fp_html = ''");
@@ -142,7 +142,7 @@ elseif ($a == 'convert')
 	{
 		require_once cot_incfile('comments', 'plug');
 		// Attempt to override from HTML cache
-		if ($db->query("SHOW COLUMNS FROM $db_com WHERE Field = 'com_html'")->rowCount() == 1)
+		if ($db->fieldExists($db_com, 'com_html'))
 		{
 			$db->query("UPDATE $db_com SET com_text = com_html WHERE com_html != ''");
 			$res = $db->query("SELECT com_text, com_id FROM $db_com WHERE com_html = ''");
@@ -171,7 +171,7 @@ elseif ($a == 'convert')
 	{
 		require_once cot_incfile('pm', 'module');
 		// Attempt to override from HTML cache
-		if ($db->query("SHOW COLUMNS FROM $db_com WHERE Field = 'pm_html'")->rowCount() == 1)
+		if ($db->fieldExists($db_pm, 'pm_html'))
 		{
 			$db->query("UPDATE $db_pm SET pm_text = pm_html WHERE pm_html != ''");
 			$res = $db->query("SELECT pm_text, pm_id FROM $db_pm WHERE pm_html = ''");

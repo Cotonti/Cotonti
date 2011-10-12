@@ -52,13 +52,13 @@
 				</td>
 				<td class="centerall {ADMIN_EXTRAFIELDS_ODDEVEN}">
 
-					<a title="{PHP.L.Delete}" href="{ADMIN_EXTRAFIELDS_ROW_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a>
+					<a title="{PHP.L.Delete}" href="{ADMIN_EXTRAFIELDS_ROW_DEL_URL}" class="ajax button">{PHP.L.Delete}</a>
 				</td>
 			</tr>
 			<!-- END: EXTRAFIELDS_ROW -->
 			<tr>
-				<td class="valid" colspan="4">
-					<input type="submit" value="{PHP.L.Update}" onclick="location.href='{ADMIN_EXTRAFIELDS_ROW_FORM_URL}'" />
+				<td class="valid" colspan="5">
+					<input type="submit" value="{PHP.L.Update}" onclick="location.href='{ADMIN_EXTRAFIELDS_ROW_FORM_URL}'"  class="confirm" />
 				</td>
 			</tr>
 		</table>
@@ -69,7 +69,7 @@
 <div class="block">
 	<h3>{PHP.L.adm_extrafield_new}:</h3>
 	<form action="{ADMIN_EXTRAFIELDS_URL_FORM_ADD}" method="post">
-		<table class="cells">
+		<table class="cells info">
 			<tr>
 				<td class="coltop width30">{PHP.L.extf_Name}</td>
 				<td class="coltop width20">{PHP.L.extf_Type}</td>
@@ -100,7 +100,7 @@
 			<tr>
 				<td class="valid" colspan="3">
 					<p class="small"><input type="checkbox" name="field_noalter" /> {PHP.L.adm_extrafield_noalter}</p>
-					<input type="submit" value="{PHP.L.Add}" />
+					<input type="submit" class="confirm" value="{PHP.L.Add}" />
 				</td>
 			</tr>
 		</table>

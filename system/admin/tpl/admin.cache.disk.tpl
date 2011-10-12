@@ -1,11 +1,9 @@
 <!-- BEGIN: MAIN -->
 		<h2>Disk Cache</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
-		<div class="block">
-			<ul class="follow">
-				<li><a href="{ADMIN_DISKCACHE_URL_REFRESH}" class="ajax">{PHP.L.Refresh}</a></li>
-				<li><a href="{ADMIN_DISKCACHE_URL_PURGE}" class="ajax">{PHP.L.adm_purgeall}</a></li>
-			</ul>
+		<div class="block  button-toolbar">
+				<a href="{ADMIN_DISKCACHE_URL_REFRESH}" class="ajax button large">{PHP.L.Refresh}</a>
+				<a href="{ADMIN_DISKCACHE_URL_PURGE}" class="ajax button large">{PHP.L.adm_purgeall}</a>
 		</div>
 		<div class="block">
 			<table class="cells">
@@ -20,7 +18,7 @@
 					<td class="textcenter">{ADMIN_DISKCACHE_ITEM_NAME}</td>
 					<td class="textcenter">{ADMIN_DISKCACHE_FILES}</td>
 					<td class="textcenter">{ADMIN_DISKCACHE_SIZE}</td>
-					<td class="centerall"><a title="{PHP.L.Delete}" href="{ADMIN_DISKCACHE_ITEM_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a></td>
+					<td class="centerall"><a title="{PHP.L.Delete}" href="{ADMIN_DISKCACHE_ITEM_DEL_URL}" class="ajax button">{PHP.L.Delete}</a></td>
 				</tr>
 <!-- END: ADMIN_DISKCACHE_ROW -->
 			<tr class="strong">

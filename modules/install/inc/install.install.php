@@ -10,7 +10,7 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Modules and plugins checked by default
-$default_modules = array('index', 'page', 'rss');
+$default_modules = array('index', 'page', 'users', 'rss');
 $default_plugins = array('ckeditor', 'cleaner', 'html', 'htmlpurifier', 'ipsearch', 'mcaptcha', 'news', 'search');
 
 $step = empty($_SESSION['cot_inst_lang']) ? 0 : (int) $cfg['new_install'];
@@ -28,7 +28,8 @@ define('COT_ABSOLUTE_URL', $site_url . '/');
 
 if ($step > 2)
 {
-	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+	$dbс_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
+	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbс_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 }
 
 // Import section
@@ -36,6 +37,7 @@ switch ($step)
 {
 	case 2:
 		$db_host = cot_import('db_host', 'P', 'TXT', 0, false, true);
+		$db_port = cot_import('db_port', 'P', 'TXT', 0, false, true);
 		$db_user = cot_import('db_user', 'P', 'TXT', 0, false, true);
 		$db_pass = cot_import('db_pass', 'P', 'TXT', 0, false, true);
 		$db_name = cot_import('db_name', 'P', 'TXT', 0, false, true);
@@ -110,25 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				cot_error('install_error_sql_ext');
 			}
-			// Try to detect mysql version from system and PHP, connection is not available yet
-			$mysql_out = @shell_exec('mysql -V');
-			if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt))
-			{
-				if (!version_compare($mt[0], '5.0.7', '>='))
-				{
-					cot_error(cot_rc('install_error_sql_ver', array('ver' => $mt[0])));
-				}
-			}
-			elseif (function_exists('mysql_get_client_info'))
-			{
-				// Try to detect from PHP Client API version
-				$mysql_out = mysql_get_client_info();
-				if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt)
-					&& !version_compare($mt[0], '5.0.7', '>='))
-				{
-					cot_error(cot_rc('install_error_sql_ver', array('ver' => $mt[0])));
-				}
-			}
 
 			if (!file_exists($file['config']))
 			{
@@ -144,7 +127,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			
 			try
 			{
-				$db = new CotDB('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_pass);
+				$dbс_port = empty($db_port) ? '' : ';port='.$db_port;
+				$db = new CotDB('mysql:host='.$db_host.$dbc_port.';dbname='.$db_name, $db_user, $db_pass);
 			}
 			catch (PDOException $e)
 			{
@@ -153,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 					// Attempt to create a new database
 					try
 					{
-						$db = new CotDB('mysql:host='.$db_host, $db_user, $db_pass);
+						$db = new CotDB('mysql:host='.$db_host.$dbc_port, $db_user, $db_pass);
 						$db->query("CREATE DATABASE `$db_name`");
 						$db->query("USE `$db_name`");
 					}
@@ -178,6 +162,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				$config_contents = file_get_contents($file['config']);
 				cot_install_config_replace($config_contents, 'mysqlhost', $db_host);
+				if (!empty($db_port))
+				{
+					cot_install_config_replace($config_contents, 'mysqlport', $db_port);
+				}
 				cot_install_config_replace($config_contents, 'mysqluser', $db_user);
 				cot_install_config_replace($config_contents, 'mysqlpassword', $db_pass);
 				cot_install_config_replace($config_contents, 'mysqldb', $db_name);
@@ -301,6 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				$usr['id'] = 1;
 				// Install all at once
 				// Note: installation statuses are ignored in this installer
+				$selected_modules = cot_install_sort_extensions($selected_modules, true);
 				foreach ($selected_modules as $ext)
 				{
 					if (!cot_extension_install($ext, true))
@@ -308,6 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         cot_error("Installing $ext module has failed");
                     }
 				}
+				$selected_plugins = cot_install_sort_extensions($selected_plugins, false);
 				foreach ($selected_plugins as $ext)
 				{
 					if (!cot_extension_install($ext, false))
@@ -454,9 +444,9 @@ switch ($step)
 			$status['thumbs_dir'] = $R['install_code_not_found'];
 		}
 		/* ------------------- */
-		if (file_exists($file['config']))
+		if (file_exists($file['config']) || is_writable('datas'))
 		{
-			$status['config'] = is_writable($file['config'])
+			$status['config'] = is_writable($file['config']) || is_writable('datas')
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
@@ -496,34 +486,6 @@ switch ($step)
 		$status['mysql'] = (extension_loaded('pdo_mysql'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
 
-		// Try to detect mysql version from system and PHP, connection is not available yet
-		$mysql_out = @shell_exec('mysql -V');
-		if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt))
-		{
-			if (version_compare($mt[0], '5.0.7', '>='))
-			{
-				$status['mysql_ver'] = cot_rc('install_code_valid', array('text' => cot_rc('install_ver_valid', array('ver' => $mt[0]))));
-			}
-			else
-			{
-				$status['mysql_ver'] = cot_rc('install_code_invalid', array('text' => cot_rc('install_ver_invalid', array('ver' => $mt[0]))));
-			}
-		}
-		elseif (function_exists('mysql_get_client_info'))
-		{
-			// Try to detect from PHP Client API version
-			$mysql_out = mysql_get_client_info();
-			if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt)
-				&& !version_compare($mt[0], '5.0.7', '>='))
-			{
-				$status['mysql_ver'] = cot_rc('install_code_valid', array('text' => cot_rc('install_ver_valid', array('ver' => $mt[0]))));
-			}
-			else
-			{
-				$status['mysql_ver'] = cot_rc('install_code_invalid', array('text' => cot_rc('install_ver_invalid', array('ver' => $mt[0]))));
-			}
-		}
-
 		$t->assign(array(
 			'INSTALL_AV_DIR' => $status['avatars_dir'],
 			'INSTALL_CACHE_DIR' => $status['cache_dir'],
@@ -537,14 +499,14 @@ switch ($step)
 			'INSTALL_PHP_VER' => $status['php_ver'],
 			'INSTALL_MBSTRING' => $status['mbstring'],
 			'INSTALL_HASH' => $status['hash'],
-			'INSTALL_MYSQL' => $status['mysql'],
-			'INSTALL_MYSQL_VER' => $status['mysql_ver']
+			'INSTALL_MYSQL' => $status['mysql']
 		));
 		break;
 	case 2:
 		// Database form
 		$t->assign(array(
 			'INSTALL_DB_HOST' => is_null($db_host) ? $cfg['mysqlhost'] : $db_host,
+			'INSTALL_DB_PORT' => is_null($db_port) ? $cfg['mysqlport'] : $db_port,
 			'INSTALL_DB_USER' => is_null($db_user) ? $cfg['mysqluser'] : $db_user,
 			'INSTALL_DB_NAME' => is_null($db_name) ? $cfg['mysqldb'] : $db_name,
 			'INSTALL_DB_X' => $db_x,
@@ -687,4 +649,40 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 		}
 	}
 }
+
+/**
+ * Sorts selected extensions by their setup order if present
+ * 
+ * @global array $cfg
+ * @param array $selected_extensions Unsorted list of extension names
+ * @param bool $is_module TRUE if sorting modules, FALSE if sorting plugins
+ * @return array Sorted list of extension names
+ */
+function cot_install_sort_extensions($selected_extensions, $is_module = FALSE)
+{
+	global $cfg;
+	$path = $is_module ? $cfg['modules_dir'] : $cfg['plugins_dir'];
+	$ret = array();
+	
+	// Split into groups by Order value
+	$extensions = array();
+	foreach ($selected_extensions as $name)
+	{
+		$info = cot_infoget("$path/$name/$name.setup.php", 'COT_EXT');
+		$order = isset($info['Order']) ? (int) $info['Order'] : COT_PLUGIN_DEFAULT_ORDER;
+		$extensions[$order][] = $name;
+	}
+	
+	// Merge back into a single array
+	foreach ($extensions as $grp)
+	{
+		foreach ($grp as $name)
+		{
+			$ret[] = $name;
+		}
+	}
+	
+	return $ret;
+}
+
 ?>

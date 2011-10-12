@@ -18,8 +18,6 @@ require_once cot_incfile('configuration');
 
 $t = new XTemplate(cot_tplfile('admin.config', 'core'));
 
-$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
-
 $sub = cot_import('sub', 'G', 'TXT');
 if (empty($sub))
 {
@@ -214,15 +212,18 @@ switch($n)
 		
 		if ($o == 'core')
 		{
+			$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
 			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub), $L['core_'.$p]);
 		}
 		else
 		{
+			$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 			$plmod = $o == 'module' ? 'mod' : 'pl';
-			$plmod_title = $o == 'module' ? $L['Module'] : $L['Plugin'];
-			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $plmod_title.' ('.$o.':'.$p.')');
-			$edit_title = empty($sub) ? $L['Edit'] : $structure[$p][$sub]['title'] . ' - ' . $L['Edit'];
-			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub), $L['Edit']);
+
+			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $o == 'module' ? $cot_modules[$p]['title'] : $cot_plugins_enabled[$p]['title']);
+			empty($sub) || $adminpath[] = array(cot_url('admin', 'm=structure&n='.$p.'&al='.$sub), $structure[$p][$sub]['title']);
+
+			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub), $L['Configuration']);
 		}
 		
 		if ($o != 'core' && file_exists(cot_langfile($p, $o)))
@@ -394,24 +395,32 @@ switch($n)
 		break;
 	
 	default:
+		$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
 		$sql = $db->query("
 			SELECT DISTINCT(config_cat) FROM $db_config
 			WHERE config_owner='core'
 			AND config_type != '".COT_CONFIG_TYPE_HIDDEN."'
 			ORDER BY config_cat ASC
 		");
+		$jj = 0;
 		while ($row = $sql->fetch())
 		{
+			$jj++;
 			if($L['core_'.$row['config_cat']])
 			{
+				$icofile = $cfg['system_dir'] . '/admin/img/cfg_' . $row['config_cat'] . '.png';
 				$t->assign(array(
 					'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=core&p='.$row['config_cat']),
-					'ADMIN_CONFIG_ROW_NAME' => $L['core_'.$row['config_cat']]
+					'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
+					'ADMIN_CONFIG_ROW_NAME' => $L['core_'.$row['config_cat']],
+					'ADMIN_CONFIG_ROW_NUM' => $jj,
+					'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 				));
 				$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 			}
 		}
 		$sql->closeCursor();
+		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Core']);
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
 		$sql = $db->query("
 			SELECT DISTINCT(config_cat) FROM $db_config
@@ -419,15 +428,22 @@ switch($n)
 			AND config_type != '".COT_CONFIG_TYPE_HIDDEN."'
 			ORDER BY config_cat ASC
 		");
+		$jj = 0;
 		while ($row = $sql->fetch())
 		{
+			$jj++;
+			$icofile = $cfg['modules_dir'] . '/' . $row['config_cat'] . '/' . $row['config_cat'] . '.png';
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=module&p='.$row['config_cat']),
-				'ADMIN_CONFIG_ROW_NAME' => $row['config_cat']
+				'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
+				'ADMIN_CONFIG_ROW_NAME' => $cot_modules[$row['config_cat']]['title'],
+				'ADMIN_CONFIG_ROW_NUM' => $jj,
+				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 			));
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
 		$sql->closeCursor();
+		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Modules']);
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
 		$sql = $db->query("
 			SELECT DISTINCT(config_cat) FROM $db_config
@@ -435,15 +451,22 @@ switch($n)
 			AND config_type != '".COT_CONFIG_TYPE_HIDDEN."'
 			ORDER BY config_cat ASC
 		");
+		$jj = 0;
 		while ($row = $sql->fetch())
 		{
+			$jj++;
+			$icofile = $cfg['plugins_dir'] . '/' . $row['config_cat'] . '/' . $row['config_cat'] . '.png';
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p='.$row['config_cat']),
-				'ADMIN_CONFIG_ROW_NAME' => $row['config_cat']
+				'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
+				'ADMIN_CONFIG_ROW_NAME' => $cot_plugins_enabled[$row['config_cat']]['title'],
+				'ADMIN_CONFIG_ROW_NUM' => $jj,
+				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 			));
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
 		$sql->closeCursor();
+		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Plugins']);
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
 		/* === Hook  === */
 		foreach (cot_getextplugins('admin.config.default.tags') as $pl)

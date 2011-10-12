@@ -2,7 +2,7 @@
 
 	<div class="col">
 		<div class="block">
-			<h2 class="message"><a href="plug.php?e=contact">{PHP.L.contact_title}</a></h2>
+			<h2 class="message"><a href="{PHP|cot_url('plug','e=contact')}">{PHP.L.contact_title}</a></h2>
 
 			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 

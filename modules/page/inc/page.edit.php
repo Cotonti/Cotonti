@@ -48,7 +48,7 @@ if ($a == 'update')
 	cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $row_page['page_ownerid']);
 
 	$rpage['page_keywords'] = cot_import('rpagekeywords', 'P', 'TXT');
-	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'ALP');
+	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'TXT');
 	$rpage['page_title'] = cot_import('rpagetitle', 'P', 'TXT');
 	$rpage['page_desc'] = cot_import('rpagedesc', 'P', 'TXT');
 	$rpage['page_text'] = cot_import('rpagetext', 'P', 'HTM');
@@ -62,10 +62,11 @@ if ($a == 'update')
 	$rpage['page_cat'] = cot_import('rpagecat', 'P', 'TXT');
 
 	$rpagedatenow = cot_import('rpagedatenow', 'P', 'BOL');
-	$rpage['page_date'] = ($rpagedatenow) ? $sys['now_offset'] : (int)cot_import_date('rpagedate');
+	$rpage['page_date'] = $rpagedatenow ? $sys['now'] : (int)cot_import_date('rpagedate');
 	$rpage['page_begin'] = (int)cot_import_date('rpagebegin');
 	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
-	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? $rpage['page_begin'] + 31536000 : $rpage['page_expire'];
+	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
+	$rpage['page_updated'] = $sys['now'];
 
 	// Extra fields
 	foreach ($cot_extrafields[$db_pages] as $row_extf)
@@ -83,7 +84,7 @@ if ($a == 'update')
 
 	cot_check(empty($rpage['page_cat']), 'page_catmissing', 'rpagecat');
 	cot_check(mb_strlen($rpage['page_title']) < 2, 'page_titletooshort', 'rpagetitle');
-	cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
+	// cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
 	
 	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || !cot_auth('plug', $sys['parser'], 'W'))
 	{
@@ -110,10 +111,7 @@ if ($a == 'update')
 
 			foreach($cot_extrafields[$db_pages] as $i => $row_extf) 
 			{ 
-				if ($row_extf['field_type']=='file')
-				{
-					 @unlink($cfg['extrafield_files_dir']."/".$row_page_delete['page_'.$row_extf['field_name']]); 
-				}
+				cot_extrafield_unlinkfiles($row_page_delete['page_'.$row_extf['field_name']], $row_extf);
 			}
 			
 			$sql_page_delete = $db->delete($db_pages, "page_id=$id");
@@ -202,7 +200,8 @@ if ($a == 'update')
 		}
 
 		cot_log("Edited page #".$id,'adm');
-		cot_redirect(cot_url('page', "id=".$id, '', true));
+		$page_urlp = empty($rpage['page_alias']) ? array('c' => $rpage['page_cat'], 'id' => $id) : array('c' => $rpage['page_cat'], 'al' => $rpage['page_alias']);
+		cot_redirect(cot_url('page', $page_urlp, '', true));
 	}
 	else
 	{
@@ -248,10 +247,11 @@ $pageedit_array = array(
 	'PAGEEDIT_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', $pag['page_title'], array('size' => '64', 'maxlength' => '255')),
 	'PAGEEDIT_FORM_DESC' => cot_inputbox('text', 'rpagedesc', $pag['page_desc'], array('size' => '64', 'maxlength' => '255')),
 	'PAGEEDIT_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $pag['page_author'], array('size' => '24', 'maxlength' => '100')),
-	'PAGEEDIT_FORM_DATE' => cot_selectbox_date($pag['page_date'],'long', 'rpagedate').' '.$usr['timetext'],
+	'PAGEEDIT_FORM_DATE' => cot_selectbox_date($pag['page_date'], 'long', 'rpagedate').' '.$usr['timetext'],
 	'PAGEEDIT_FORM_DATENOW' => cot_checkbox(0, 'rpagedatenow'),
 	'PAGEEDIT_FORM_BEGIN' => cot_selectbox_date($pag['page_begin'], 'long', 'rpagebegin').' '.$usr['timetext'],
 	'PAGEEDIT_FORM_EXPIRE' => cot_selectbox_date($pag['page_expire'], 'long', 'rpageexpire').' '.$usr['timetext'],
+	'PAGEEDIT_FORM_UPDATED' => cot_date('datetime_full', $pag['page_updated']).' '.$usr['timetext'],
 	'PAGEEDIT_FORM_FILE' => cot_selectbox($pag['page_file'], 'rpagefile', range(0, 2), array($L['No'], $L['Yes'], $L['Members_only']), false),
 	'PAGEEDIT_FORM_URL' => cot_inputbox('text', 'rpageurl', $pag['page_url'], array('size' => '56', 'maxlength' => '255')),
 	'PAGEEDIT_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $pag['page_size'], array('size' => '56', 'maxlength' => '255')),

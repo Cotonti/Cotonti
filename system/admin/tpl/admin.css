@@ -1,10 +1,12 @@
+@import url('fb-buttons.css');
+
 /* 1. Elements
 -------------------------------------------------- */
 
 *	{ margin:0; padding:0; }
 html	{ padding:0; }
 
-body	{ font:normal 76%/1.8em Georgia, serif; background:url(img/body.png) repeat-x 0 60px; }
+body	{ font:normal 76%/1.8em Georgia, serif; background:url(img/body.png) repeat-x 0 58px; }
 
 ul 			{ list-style-type:none; }
 ol			{ list-style-position:outside; margin-bottom:5px; padding-left:20px; }
@@ -43,7 +45,7 @@ hr		{ margin:4px 0 1px; border:1px solid; border-color:#ddd transparent transpar
 
 .col.first, .col4-1.first, .col4-2.first, .col4-3.first, .col3-1.first, .col3-2.first, .col2-1.first	{ margin-left:0; clear:left; }
 
-#footer		{ font-size:.9em; text-align:center; padding:15px; height:50px; background:url(img/footer.png) repeat-x 0 0; }
+#footer		{ font-size:.9em; text-align:center; padding:15px; height:40px; background:url(img/footer.png) repeat-x 0 0; }
 #footer a	{ color:#d3dde7; }
 #footer ul li	{ display:inline; margin:0 5px; }
 
@@ -53,13 +55,16 @@ hr		{ margin:4px 0 1px; border:1px solid; border-color:#ddd transparent transpar
 h1,h2,h3,h4,h5,h6 { font-weight:normal; font-size:1em; margin:0; padding:0; position:relative; }
 h1		{ color:#036; margin:0 auto; padding:8px 45px 0; height:52px; width:870px!important; background:url(img/crumbs.png) no-repeat 50% 0; }
 h1 a		{ font-weight:bold; padding:0 10px; }
-h2		{ font:normal 2em "Times New Roman"; margin:10px; padding-bottom:2px; border-bottom:1px solid; }
-h3		{ color:#4f789f; font:normal 1.6em "Times New Roman"; margin:5px 0; }
+h2		{ font:normal 2em "lucida grande",tahoma,verdana,arial,sans-serif; margin:10px; padding-bottom:2px; border-bottom:1px solid; }
+/*h3		{ color:#4f789f; font:normal 1.6em "Times New Roman"; margin:5px 0; }*/
+h3 {  padding: 0 6px; border-top: 1px solid #ccc; background: #f2f2f2; margin-top: 15px;}
 h4		{ font-weight:bold; }
 
 /* 4. Misc
 -------------------------------------------------- */
-
+/*.odd	{ background-color:#fff!important; }
+.even	{ background-color:#f1f1f1!important; }
+*/
 .small		{ font-size:.9em; line-height:1.4em; }
 .clear		{ clear:both; }
 .strong		{ font-weight:bold; }
@@ -76,10 +81,10 @@ h4		{ font-weight:bold; }
 .textjustify	{ text-align:justify; }
 
 div.error, div.warning, div.done, div.help		{ line-height:1.8em; margin:20px 0; padding:10px 50px; background-position:15px 50%; background-repeat:no-repeat; clear:both; }
-div.error									{ color:#d8000c; background-color:#ffbaba; background-image:url(../../../images/icons/default/error.png); border:1px solid #d8000c; }
-div.warning									{ color:#9f6000; background-color:#feefb3; background-image:url(../../../images/icons/default/warning.png); border:1px solid #9f6000; }
-div.done										{ color:#4f8a10; background-color:#dff2bf; background-image:url(../../../images/icons/default/done.png); border:1px solid #4f8a10; }
-div.help										{ color:#00529b; background-color:#bde5f8; background-image:url(../../../images/icons/default/help.png); border:1px solid #00529b; }
+div.error									{ color:#d8000c; background-color:#ffebe8; background-image:url(../../../images/icons/default/error.png); border:1px solid #dd3c10; }
+div.warning									{ color:#9f6000; background-color:#fff9d7; background-image:url(../../../images/icons/default/warning.png); border:1px solid #e2c822; }
+div.done										{ color:#4f8a10; background-color:#eceff6; background-image:url(../../../images/icons/default/done.png); border:1px solid #d4dae8; }
+div.help										{ color:#000; background-color:#f2f2f2; background-image:url(../../../images/icons/default/help.png); border:1px solid #ccc; }
 
 .margintop10	{ margin-top:10px; }
 .marginright10	{ margin-right:10px; }
@@ -121,7 +126,7 @@ div.help										{ color:#00529b; background-color:#bde5f8; background-image:ur
 /* 5. Admin Menu
 -------------------------------------------------- */
 
-#adminmenu			{ padding:15px 45px; background:url(img/adminmenu.png) no-repeat 0 0; min-height:160px; width:870px; overflow:auto; }
+#adminmenu			{ padding:15px 45px; background:url(img/adminmenu.png) no-repeat 0 0; min-height:80px; width:870px; overflow:auto; }
 #adminmenu li			{ padding:12px 15px 10px; height:60px; width:115px; background:url(img/menuitem.png) no-repeat 0 0; display:block; float:left; }
 #adminmenu li a		{ color:#3b3b3b; text-align:center; display:block; height:100%; opacity:.6; zoom:1; filter:alpha(opacity=60); }
 #adminmenu li a:hover	{ text-decoration:none; opacity:.8; zoom:1; filter:alpha(opacity=80); }
@@ -129,23 +134,40 @@ div.help										{ color:#00529b; background-color:#bde5f8; background-image:ur
 #adminmenu li a img		{ height:32px; width:32px; }
 #adminmenu li a span	{ text-align:center; line-height:18px; margin:8px 0 0; height:18px; background:#ddd; display:block; overflow:hidden; }
 
+a.thumbicons {
+  float: left;
+  width:211px;
+  text-align: left;
+  padding: 10px;
+  margin: 2px 2px 5px 2px;
+  height: 30px;
+  }
+a.thumbicons img {
+   float: left;
+   padding-right: 10px;
+   } 
 
+a.thumbicons:hover {background: #EDEFF4;}
 /* 6. Tables
 -------------------------------------------------- */
 
 table td 	{ vertical-align:top; }
 
 table.cells 	{ border-collapse:collapse; width:100%; }
-table.cells td	{ padding:5px 10px; border:1px solid #a4b6c8; }
+table.cells td	{ padding:7px 5px; border:1px solid #ccc; }
+table.cells tr:hover td {background: #EDEFF4;}
 
+table.cells.info tr:hover td.coltop {background: #EDEFF4!important;}
+table.cells.info tr:hover td {background: #fff!important;}
+table.cells tr:hover td.valid {background: #fff!important;}
 table.flat 	{ border-collapse:collapse; width:100%; }
 table.flat td	{ padding:0; border:0; }
 
 .action a	{ margin:0 2px; }
-.coltop		{ text-align:center; line-height:1.4em; vertical-align:middle; font-size:.9em; background-color:#4f789f!important; color:#fff; }
+.coltop		{ text-align:center; line-height:1.4em; vertical-align:middle; font-size:.9em; background-color:#EDEFF4!important; color:#000;}
 .coltop img	{ vertical-align:middle; }
 .centerall 	{ text-align:center; vertical-align:middle; }
-.valid 		{ height:5em; text-align:center; vertical-align:middle; border:0!important; }
+/*.valid 		{ height:5em; text-align:center; vertical-align:middle; border:0!important; }*/
 
 td.group_begin	{ color:#4f789f; border:none!important; }
 td.group_end		{ font-size:0; padding:0!important; border:none!important; }
@@ -179,3 +201,63 @@ input, select, button			{ padding:2px; }
 .pagenav_small		{ text-align:right; font-size:.9em; }
 
 .spaced				{ margin:0 8px; }
+
+
+
+/* 10. Modal box
+-------------------------------------------------- */
+
+/* The Window's CSS z-index value is respected (takes priority). If none is supplied,
+	the Window's z-index value will be set to 3000 by default (via jqModal.js). */
+
+.jqmWindow {
+    display: none;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+	
+	overflow: auto;
+
+    background-color: #EEE;
+    color: #333;
+    border: 3px solid white;
+    padding: 7px;
+	text-align: center;
+}
+
+.jqmWindow h4 {
+	border-bottom: 1px dotted #b0c4de;
+	font-size: 14px;
+	margin: 0 0 7px 0;
+	padding: 0 0 5px 0;
+	text-align: left;
+	color: #3E606F;
+}
+
+.jqmWindow p{
+	text-align: right;
+	margin: 15px 0 0 0;
+	font-size: x-small;
+	text-transform: lowercase;
+}
+
+.jqmOverlay { background-color: #000; }
+
+/* Background iframe styling for IE6. Prevents ActiveX bleed-through (<select> form elements, etc.) */
+* iframe.jqm {
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:-1;
+	width: expression(this.parentNode.offsetWidth+'px');
+	height: expression(this.parentNode.offsetHeight+'px');
+}
+
+/* Fixed posistioning emulation for IE6
+     Star selector used to hide definition from browsers other than IE6
+     For valid CSS, use a conditional include instead */
+* html .jqmWindow {
+     position: absolute;
+     top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');
+}

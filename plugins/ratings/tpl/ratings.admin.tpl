@@ -1,9 +1,9 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Ratings}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
-			<ul class="follow">
-				<li><a title="{PHP.L.Configuration}" href="{ADMIN_RATINGS_URL_CONFIG}">{PHP.L.Configuration}</a></li>
-			</ul>
+			<div class="block button-toolbar">
+				<a title="{PHP.L.Configuration}" href="{ADMIN_RATINGS_URL_CONFIG}" class="button">{PHP.L.Configuration}</a>
+			</div>
 			<table class="cells">
 				<tr>
 					<td class="coltop width20" style="width:10%;">{PHP.L.adm_area}</td>
@@ -21,8 +21,8 @@
 					<td class="textcenter">{ADMIN_RATINGS_ROW_VOTES}</td>
 					<td class="textcenter">{ADMIN_RATINGS_ROW_RATING_AVERAGE}</td>
 					<td class="centerall action">
-						<a title="{PHP.L.Delete}" href="{ADMIN_RATINGS_ROW_URL_DEL}">{PHP.R.admin_icon_delete}</a>
-						<a title="{PHP.L.Open}" href="{ADMIN_RATINGS_ROW_RAT_URL}">{PHP.R.admin_icon_jumpto}</a>
+						<a title="{PHP.L.Delete}" href="{ADMIN_RATINGS_ROW_URL_DEL}" class="button">{PHP.L.Delete}</a>
+						<a title="{PHP.L.Open}" href="{ADMIN_RATINGS_ROW_RAT_URL}" class="button special">{PHP.L.Open}</a>
 					</td>
 				</tr>
 <!-- END: RATINGS_ROW -->

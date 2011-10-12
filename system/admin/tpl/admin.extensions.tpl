@@ -8,9 +8,16 @@
 <!-- BEGIN: DETAILS -->
 	<h2>{ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:</h2>
 	<div class="block">
-		<table class="cells">
+		<table class="cells info">
 			<tr>
-				<td class="width30">{PHP.L.Code}:</td>
+				<td class="width5" rowspan="7" >
+					<!-- IF {ADMIN_EXTENSIONS_ICO} --> 
+					<img src="{ADMIN_EXTENSIONS_ICO}">
+					<!-- ELSE -->
+					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+					<!-- ENDIF -->
+				</td>
+				<td class="width25">{PHP.L.Code}:</td>
 				<td class="width70">{ADMIN_EXTENSIONS_CODE}</td>
 			</tr>
 			<tr>
@@ -24,26 +31,6 @@
 			<tr>
 				<td>{PHP.L.Date}:</td>
 				<td>{ADMIN_EXTENSIONS_DATE}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Configuration}:</td>
-				<td>
-<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} > 0 -->
-					<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_CONFIG_URL}">{PHP.R.icon_prefs} {PHP.L.Edit} ({ADMIN_EXTENSIONS_TOTALCONFIG})</a>
-<!-- ELSE -->
-					{PHP.L.None}
-<!-- ENDIF -->
-				</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Rights}:</td>
-				<td>
-<!-- IF {PHP.isinstalled} AND {PHP.exists} -->
-					<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS}">{PHP.R.icon_rights}</a>
-<!-- ELSE -->
-					{PHP.L.None}
-<!-- ENDIF -->
-				</td>
 			</tr>
 <!--//<tr>
 	<td>{PHP.L.adm_defauth_guests}:</td>
@@ -75,57 +62,50 @@
 			</tr>
 		</table>
 	</div>
+	<!-- IF {PHP.isinstalled} AND {PHP.exists} -->
+	<div class="block">
+		
+		<h3>{PHP.L.Action}:</h3>
+		<div class="button-toolbar">
+		<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL} -->
+		<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL}" class="button special large">{PHP.L.Open}</a>
+		<!-- ENDIF -->
+		<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS} -->
+		<a title="{PHP.L.Administration}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}" class="button special large">{PHP.L.Administration}</a>
+		<!-- ENDIF -->
+		<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} > 0 -->
+		<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_CONFIG_URL}" class="button large">{PHP.L.Configuration} ({ADMIN_EXTENSIONS_TOTALCONFIG})</a>
+		<!-- ENDIF -->	
+		<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS}" class="button large">{PHP.L.short_rights}</a>
+		<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT} -->
+		<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}" class="button large">{PHP.L.Structure}</a>
+		<!-- ENDIF -->
+
+			</div>
+	</div>					
+<!-- ENDIF -->
+
 	<div class="block">
 		<h3>{PHP.L.Options}:</h3>
-		<table class="cells">
+		<div class="button-toolbar">
 <!-- IF !{PHP.isinstalled} -->
-			<tr>
-				<td class="width30">
-					<a href="{ADMIN_EXTENSIONS_INSTALL_URL}" class="ajax">{PHP.L.adm_opt_install}</a>
-				</td>
-				<td class="width70">
-					{PHP.L.adm_opt_install_explain}
-				</td>
-			</tr>
+
+					<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_INSTALL_URL}" class="ajax button special large">{PHP.L.adm_opt_install}</a>
 <!-- ELSE -->
 			<!-- IF {PHP.exists} -->
-			<tr>
-				<td class="width30">
-					<a href="{ADMIN_EXTENSIONS_UPDATE_URL}" class="ajax">{PHP.L.adm_opt_update}</a>
-				</td>
-				<td class="width70">
-					{PHP.L.adm_opt_update_explain}
-				</td>
-			</tr>
+
+					<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_UPDATE_URL}" class="ajax button special large">{PHP.L.adm_opt_update}</a>
 			<!-- ENDIF -->
-			<tr>
-				<td>
-					<a href="{ADMIN_EXTENSIONS_UNINSTALL_URL}" class="ajax">{PHP.L.adm_opt_uninstall}</a>
-				</td>
-				<td>
-					{PHP.L.adm_opt_uninstall_explain}
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<a href="{ADMIN_EXTENSIONS_PAUSE_URL}" class="ajax">{PHP.L.adm_opt_pauseall}</a>
-				</td>
-				<td>
-					{PHP.L.adm_opt_pauseall_explain}
-				</td>
-			</tr>
+					<a title="{PHP.L.adm_opt_uninstall_explain}" href="{ADMIN_EXTENSIONS_UNINSTALL_URL}" class="ajax button large">{PHP.L.adm_opt_uninstall}</a>
+					<a title="{PHP.L.adm_opt_pauseall_explain}" href="{ADMIN_EXTENSIONS_PAUSE_URL}" class="ajax button large">{PHP.L.adm_opt_pauseall}</a>
+
 			<!-- IF {PHP.exists} -->
-			<tr>
-				<td>
-					<a href="{ADMIN_EXTENSIONS_UNPAUSE_URL}" class="ajax">{PHP.L.adm_opt_unpauseall}</a>
-				</td>
-				<td>
-					{PHP.L.adm_opt_unpauseall_explain}
-				</td>
-			</tr>
+
+					<a title="{PHP.L.adm_opt_unpauseall_explain}" href="{ADMIN_EXTENSIONS_UNPAUSE_URL}" class="ajax button large">{PHP.L.adm_opt_unpauseall}</a>
+
 			<!-- ENDIF -->
 <!-- ENDIF -->
-		</table>
+</div>
 	</div>
 	<div class="block">
 		<h3>{PHP.L.Parts}:</h3>
@@ -134,8 +114,8 @@
 				<td class="coltop width5">#</td>
 				<td class="coltop width15">{PHP.L.Part}</td>
 				<td class="coltop width20">{PHP.L.File}</td>
-				<td class="coltop width15">{PHP.L.Hooks}</td>
-				<td class="coltop width15">{PHP.L.Order}</td>
+				<td class="coltop width20">{PHP.L.Hooks}</td>
+				<td class="coltop width10">{PHP.L.Order}</td>
 				<td class="coltop width15">{PHP.L.Status}</td>
 				<td class="coltop width15">{PHP.L.Action}</td>
 			</tr>
@@ -158,10 +138,10 @@
 					&ndash;
 <!-- END: ROW_PART_NOTINSTALLED -->
 <!-- BEGIN: ROW_PART_PAUSE -->
-					<a href="{ADMIN_EXTENSIONS_DETAILS_ROW_PAUSEPART_URL}" class="ajax">{PHP.L.adm_opt_pause}</a>
+					<a href="{ADMIN_EXTENSIONS_DETAILS_ROW_PAUSEPART_URL}" class="ajax button">{PHP.L.adm_opt_pause}</a>
 <!-- END: ROW_PART_PAUSE -->
 <!-- BEGIN: ROW_PART_UNPAUSE -->
-					<a href="{ADMIN_EXTENSIONS_DETAILS_ROW_UNPAUSEPART_URL}" class="ajax">{PHP.L.adm_opt_unpause}</a>
+					<a href="{ADMIN_EXTENSIONS_DETAILS_ROW_UNPAUSEPART_URL}" class="ajax button">{PHP.L.adm_opt_unpause}</a>
 <!-- END: ROW_PART_UNPAUSE -->
 				</td>
 			</tr>
@@ -220,12 +200,13 @@
 	<div class="block">
 		<table class="cells">
 			<tr>
-				<td class="coltop width5">&nbsp;</td>
-				<td class="coltop width25">{PHP.L.Name} {PHP.L.adm_clicktoedit}</td>
-				<td class="coltop width20">{PHP.L.Code}</td>
-				<td class="coltop width10">{PHP.L.Parts}</td>
-				<td class="coltop width20">{PHP.L.Status}</td>
-				<td class="coltop width20">{PHP.L.Action}</td>
+				<td class="coltop width5"></td>
+				<td class="coltop width20">{PHP.L.Name} {PHP.L.adm_clicktoedit}</td>
+				<td class="coltop width15">{PHP.L.Code}</td>
+				<td class="coltop width5">{PHP.L.Version}</td>
+				<td class="coltop width5">{PHP.L.Parts}</td>
+				<td class="coltop width15">{PHP.L.Status}</td>
+				<td class="coltop width35">{PHP.L.Action}</td>
 			</tr>
 <!-- BEGIN: ROW -->
 <!-- BEGIN: ROW_ERROR_EXT-->
@@ -235,32 +216,34 @@
 			</tr>
 <!-- END: ROW_ERROR_EXT -->
 			<tr>
-				<td class="centerall">
-<!-- IF {PHP.ifthistools} -->
-					{PHP.R.icon_tool}
-<!-- ELSE -->
-					{PHP.R.icon_plug}
-<!-- ENDIF -->
+				<td>
+					<!-- IF {ADMIN_EXTENSIONS_ICO} --> 
+					<img src="{ADMIN_EXTENSIONS_ICO}">
+					<!-- ELSE -->
+					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+					<!-- ENDIF -->
 				</td>
-				<td><a href="{ADMIN_EXTENSIONS_DETAILS_URL}">{ADMIN_EXTENSIONS_NAME}</a></td>
+				<td><a href="{ADMIN_EXTENSIONS_DETAILS_URL}"><strong>{ADMIN_EXTENSIONS_NAME}</strong></a></td>
 				<td>{ADMIN_EXTENSIONS_CODE_X}</td>
+				<td>{ADMIN_EXTENSIONS_VERSION}</td>
 				<td class="centerall">{ADMIN_EXTENSIONS_PARTSCOUNT}</td>
 				<td class="centerall">{ADMIN_EXTENSIONS_STATUS}</td>
-				<td class="centerall action">
-<!-- IF {PHP.totalinstalled} -->
-					<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_EDIT_URL}">{PHP.R.admin_icon_config}</a>
-<!-- ENDIF -->
-<!-- IF {PHP.totalinstalled} -->
-					<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a>
-<!-- ENDIF -->
-<!-- IF {PHP.ifthistools} -->
-					<a title="{PHP.L.Admin}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}">{PHP.R.admin_icon_tools}</a>
-<!-- ENDIF -->
-<!-- IF {PHP.if_plg_standalone} -->
-					<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL}">{PHP.R.admin_icon_jumpto}</a>
+				<td class="action">
+<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} -->
+					
+					<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_EDIT_URL}" class="button">{PHP.L.short_config}</a>
 <!-- ENDIF -->
 <!-- IF {PHP.ifstruct} -->
-					<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}">{PHP.R.admin_icon_structure}</a>
+					<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}" class="button">{PHP.L.short_struct}</a>
+<!-- ENDIF -->
+<!-- IF {PHP.totalinstalled} -->
+					<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a>
+<!-- ENDIF -->
+<!-- IF {PHP.ifthistools} -->
+					<a title="{PHP.L.Administration}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}" class="button special">{PHP.L.short_admin}</a>
+<!-- ENDIF -->
+<!-- IF {PHP.if_plg_standalone} -->
+					<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL}" class="button special">{PHP.L.Open}</a>
 <!-- ENDIF -->
 				</td>
 			</tr>
@@ -275,18 +258,20 @@
 	</div>
 <!-- END: SECTION -->
 
-	<div class="block">
-		<h3><a href="{ADMIN_EXTENSIONS_HOOKS_URL}">{PHP.L.Hooks}</a></h3>
+	<div class="block button-toolbar">
+		<a href="{ADMIN_EXTENSIONS_HOOKS_URL}" class="button large">{PHP.L.Hooks}</a>
 	</div>
 
 <!-- END: DEFAULT -->
 <!-- BEGIN: EDIT -->
 		<h2>{ADMIN_EXTENSIONS_EDIT_TITLE}</h2>
-		<div class="{ADMIN_EXTENSIONS_EDIT_RESULT}">
-			{ADMIN_EXTENSIONS_EDIT_LOG}
+		<div class="block">
+			<div class="{ADMIN_EXTENSIONS_EDIT_RESULT}">
+				{ADMIN_EXTENSIONS_EDIT_LOG}
+			</div>
 		</div>
-		<ul class="follow">
-			<li><a href="{ADMIN_EXTENSIONS_EDIT_CONTINUE_URL}" class="ajax">{PHP.L.Clickhere}</a></li>
-		</ul>
+		<div class="block button-toolbar">
+			<a href="{ADMIN_EXTENSIONS_EDIT_CONTINUE_URL}" class="ajax button special large">{PHP.L.Clickhere}</a>
+		</div>
 <!-- END: EDIT -->
 <!-- END: MAIN -->

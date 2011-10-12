@@ -16,6 +16,6 @@ defined('COT_CODE') or die('Wrong URL.');
  */
 
 $L['plu_title'] = 'Autocomplete';
-$L['cfg_autocomplete'] = array('Min. chars for autocomplete', '0 - disable autocompete');
+$L['cfg_autocomplete'] = array('Min. chars for autocomplete', '0 - disable autocomplete');
 
 ?>

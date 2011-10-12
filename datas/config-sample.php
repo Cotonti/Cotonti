@@ -9,11 +9,14 @@
  * @license BSD
  */
 
+defined('COT_CODE') or die('Wrong URL');
+
 // ========================
 // MySQL database parameters. Change to fit your host.
 // ========================
 
 $cfg['mysqlhost'] = 'localhost';	// Database host URL
+$cfg['mysqlport'] = '';				// Database port, if non-default
 $cfg['mysqluser'] = 'root';			// Database user
 $cfg['mysqlpassword'] = '';			// Database password
 $cfg['mysqldb'] = 'cotonti';		// Database name
@@ -39,6 +42,7 @@ $cfg['defaultscheme'] = 'default';	// Default color scheme, only name, not like 
 $cfg['defaulticons'] = 'default';	// Default icon pack
 $cfg['defaultlang'] = 'en';			// Default language code
 $cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
+$cfg['admintheme'] = '';			// Put custom administration theme name here
 
 // ========================
 // Performance-related settings
@@ -64,6 +68,7 @@ $cfg['cache_forums'] = FALSE;   // Static page cache for guests on forums
 $cfg['check_updates'] = FALSE;		// Automatically check for updates, set it TRUE to enable
 
 $cfg['display_errors'] = TRUE;		// Display error messages. Switch it FALSE on production sites
+$cfg['check_globals'] = TRUE;		// Stops further execution if regiser_globals is On. Handle with care!
 
 $cfg['redirmode'] = FALSE;			// 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
 $cfg['xmlclient'] = FALSE;  		// For testing-purposes only, else keep it off.
@@ -120,7 +125,7 @@ $cfg['debug_mode'] = FALSE;
  * compromise your website security. Protect it with .htaccess or use some
  * path accessible to you only via FTP.
  */
-$cfg['debug_logpath'] = './tmp';
+$cfg['debug_logpath'] = '/tmp';
 
 /**
  * The shield is disabled for administrators by default. But if you are testing

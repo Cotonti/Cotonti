@@ -46,7 +46,7 @@
 						<li><strong class="php">PHP</strong> {INSTALL_PHP_VER}</li>
 						<li><strong class="mbstring">mbstring</strong> {INSTALL_MBSTRING}</li>
 						<li><strong class="mbstring">hash</strong> {INSTALL_HASH}</li>
-						<li><strong class="mysql">MySQL</strong> {INSTALL_MYSQL} {INSTALL_MYSQL_VER}</li>
+						<li><strong class="mysql">MySQL</strong> {INSTALL_MYSQL}</li>
 					</ul>
 
 					<p>{PHP.L.install_body_message2}</p>
@@ -71,6 +71,7 @@
 					<ul>
 						<li class="title">{PHP.L.install_db}</li>
 						<li><label>{PHP.L.install_db_host}</label>  <input type="text" name="db_host" value="{INSTALL_DB_HOST}" size="32" /></li>
+						<li><label>{PHP.L.install_db_port}</label>  <input type="text" name="db_port" value="{INSTALL_DB_PORT}" size="32" /><div style="text-align:center;margin:3px 0"><small>{PHP.L.install_db_port_hint}</small></div></li>
 						<li><label>{PHP.L.install_db_user}</label> <input type="text" name="db_user" value="{INSTALL_DB_USER}" size="32" /></li>
 						<li><label>{PHP.L.install_db_pass}</label> <input type="password" name="db_pass" size="32" /></li>
 						<li><label>{PHP.L.install_db_name}</label>  <input type="text" name="db_name" value="{INSTALL_DB_NAME}" size="32" /></li>
@@ -138,7 +139,7 @@
 					<strong>{PHP.L.install_complete}</strong>
 					<span>{PHP.L.install_complete_note}</span>
 
-					<a href="index.php">{PHP.L.install_view_site}</a>
+					<a href="{PHP.cfg.mainurl}">{PHP.L.install_view_site}</a>
 				</p>
 				<!-- END: STEP_5 -->
 				</form>

@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=admin.home
+Hooks=admin.home.mainpanel
 [END_COT_EXT]
 ==================== */
 
@@ -60,7 +60,7 @@ if (!$cfg['plugin']['hits']['disablehitstats'])
 if (!$cfg['plugin']['hits']['disableactivitystats'] && cot_module_active('page'))
 {
 	$timeback = $sys['now_offset'] - (7 * 86400);// 7 days
-
+	require_once cot_incfile('page', 'module');
 	$sql = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_regdate > $timeback");
 	$newusers = $sql->fetchColumn();
 
@@ -109,46 +109,6 @@ if (!$cfg['plugin']['hits']['disableactivitystats'] && cot_module_active('page')
 
 $tt->parse('MAIN');
 
-//Show db stats
-if (!$cfg['plugin']['hits']['disabledbstats'])
-{
-	$sql = $db->query("SHOW TABLES");
-
-	foreach ($sql->fetchAll(PDO::FETCH_NUM) as $row)
-	{
-		$table_name = $row[0];
-		$status = $db->query("SHOW TABLE STATUS LIKE '$table_name'");
-		$status1 = $status->fetch();
-		$status->closeCursor();
-		$tables[] = $status1;
-	}
-
-	foreach ($tables as $dat)
-	{
-		$table_length = $dat['Index_length'] + $dat['Data_length'];
-		$total_length += $table_length;
-		$total_rows += $dat['Rows'];
-		$total_index_length += $dat['Index_length'];
-		$total_data_length += $dat['Data_length'];
-	}
-
-	$sql = $db->query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code");
-	$totalplugins = $sql->rowCount();
-
-	$sql = $db->query("SELECT COUNT(*) FROM $db_plugins");
-	$totalhooks = $sql->fetchColumn();
-
-	$t->assign(array(
-		'ADMIN_HOME_DB_TOTAL_ROWS' => $total_rows,
-		'ADMIN_HOME_DB_INDEXSIZE' => number_format(($total_index_length / 1024), 1, '.', ' '),
-		'ADMIN_HOME_DB_DATASSIZE' => number_format(($total_data_length / 1024), 1, '.', ' '),
-		'ADMIN_HOME_DB_TOTALSIZE' => number_format(($total_length / 1024), 1, '.', ' '),
-		'ADMIN_HOME_TOTALPLUGINS' => $totalplugins,
-		'ADMIN_HOME_TOTALHOOKS' => $totalhooks
-	));
-}
-
-$t->assign('ADMIN_HOME_HITS', $tt->text('MAIN'));
-
+$line = $tt->text('MAIN');
 
 ?>

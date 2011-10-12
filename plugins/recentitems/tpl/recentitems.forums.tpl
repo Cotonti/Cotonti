@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<h3><a href="forums.php">{PHP.L.Forums}</a></h3>
+		<h3><a href="{PHP|cot_url('forums')}">{PHP.L.Forums}</a></h3>
 		<table class="cells">
 			<tr>
 				<td class="coltop width5">&nbsp;</td>

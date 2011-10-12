@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
 
 		<div class="block">
-			<h2 class="users"><a href="plug.php?e=whosonline">{PHP.L.WhosOnline}</a></h2>
+			<h2 class="users"><a href="{PHP|cot_url('plug','e=whosonline')}">{PHP.L.WhosOnline}</a></h2>
 			<table class="cells">
 				<thead>
 					<tr>

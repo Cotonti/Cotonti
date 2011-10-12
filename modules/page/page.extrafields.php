@@ -18,6 +18,6 @@ Hooks=admin.extrafields.first
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('page', 'module');
-$extra_whitelist[$db_pages] = array('name' => $db_pages, 'caption' => $L['Page'], 'help' => $L['adm_help_pages_extrafield']);
+$extra_whitelist[$db_pages] = array('name' => $db_pages, 'caption' => $L['Module'].' Pages', 'help' => $L['adm_help_pages_extrafield']);
 
 ?>

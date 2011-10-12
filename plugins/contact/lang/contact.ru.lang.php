@@ -25,8 +25,11 @@ $L['info_desc'] = 'Форма для связи, отправляемая по e
 
 $L['contact_view'] = 'Просмотр сообщения';
 $L['contact_markread'] = 'Отметить как прочитанное';
+$L['contact_read'] = 'Прочитано';
 $L['contact_markunread'] = 'Снять отметку о прочтении';
+$L['contact_unread'] = 'Не прочитано';
 $L['contact_new'] = 'новое сообщение';
+$L['contact_shortnew'] = 'новое';
 $L['contact_sent'] = 'Последний ответ';
 $L['contact_nosubject'] = 'Без темы';
 

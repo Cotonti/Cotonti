@@ -194,6 +194,22 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
+	
+	// Emit initial message
+	if ($update)
+	{
+		cot_message(cot_rc('ext_updating', array(
+			'type' => $is_module ? $L['Module'] : $L['Plugin'],
+			'name' => $name
+		)));
+	}
+	else
+	{
+		cot_message(cot_rc('ext_installing', array(
+			'type' => $is_module ? $L['Module'] : $L['Plugin'],
+			'name' => $name
+		)));
+	}
 
     // Check setup file and tags
     $setup_file = $path . "/$name.setup.php";
@@ -540,10 +556,16 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
  */
 function cot_extension_uninstall($name, $is_module = false)
 {
-    global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x;
+    global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins, $cot_plugins_active, $cot_plugins_enabled, $cot_modules;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
 		. "/$name";
+	
+	// Emit initial message
+	cot_message(cot_rc('ext_uninstalling', array(
+		'type' => $is_module ? $L['Module'] : $L['Plugin'],
+		'name' => $name
+	)));
 
     // Remove bindings
     cot_plugin_remove($name);
@@ -607,6 +629,27 @@ function cot_extension_uninstall($name, $is_module = false)
 	// Unregister from core table
 	cot_extension_remove($name, !$is_module);
 
+	$sql = $db->query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
+		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
+	$cot_plugins = array();
+	if ($sql->rowCount() > 0)
+	{
+		while ($row = $sql->fetch())
+		{
+			$cot_plugins[$row['pl_hook']][] = $row;
+		}
+        $sql->closeCursor();
+	}
+	
+	$cot_plugins_active[$name] = false;
+	if (!$is_module)
+	{
+		unset($cot_plugins_enabled[$name]);
+	}
+	else
+	{
+		unset($cot_modules[$name]);
+	}
 	// Clear cache
 	$db->update($db_users, array('user_auth' => ''));
 	$cache && $cache->clear();

@@ -21,7 +21,6 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (cot_get_caller() == $cfg['plugin']['recentitems']['part'])
 {
-	require_once cot_incfile('users', 'module');
 	require_once cot_incfile('recentitems', 'plug');
 
 	if ($cfg['plugin']['recentitems']['recentpages'] && cot_module_active('page'))

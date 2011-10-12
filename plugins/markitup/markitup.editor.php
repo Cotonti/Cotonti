@@ -40,7 +40,6 @@ cot_rc_link_footer($smile_lang);
 cot_rc_link_footer('images/smilies/set.js');
 cot_rc_link_footer($cfg['plugins_dir'] . '/markitup/js/jquery.markitup.min.js');
 cot_rc_link_footer($mkup_lang);
-cot_rc_link_footer($cfg['plugins_dir'] . '/markitup/js/jqModal.min.js');
 cot_rc_link_footer($cfg['plugins_dir'] . "/markitup/js/{$mkup_set}.set.js");
 
 if ($cfg['plugin']['markitup']['chili'])

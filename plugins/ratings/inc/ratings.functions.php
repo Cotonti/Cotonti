@@ -113,7 +113,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 			WHERE rated_area = ? AND rated_code = ?",
 			array($ext_name, $code));
 		$rating_voters = $sql->fetchColumn();
-		$rating_since = $L['rat_since'] . ' ' . cot_date('datetime_medium', $row['rating_creationdate'] + $usr['timezone'] * 3600);
+		$rating_since = $L['rat_since'] . ' ' . cot_date('datetime_medium', $row['rating_creationdate']);
 		$rating_since_stamp = $row['rating_creationdate'] + $usr['timezone'] * 3600;
 		$rating_averageimg = cot_rc('icon_rating_stars', array('val' => $rating_cntround));
 	}

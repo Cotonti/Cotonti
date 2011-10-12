@@ -3,7 +3,7 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.9.3
+ * @version 0.9.5
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD License
@@ -19,7 +19,7 @@ if (!defined('COT_INSTALL'))
 }
 
 
-if (ini_get('register_globals'))
+if (isset($cfg['check_globals']) && $cfg['check_globals'] && ini_get('register_globals'))
 {
 	die('Please set the PHP setting register_globals = Off, otherwise your site is in high security risk! Contact your hosting support for more information.');
 }
@@ -43,8 +43,8 @@ $usr = array();
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.4';
-$cfg['dbversion'] = '0.9.4';
+$cfg['version'] = '0.9.5';
+$cfg['dbversion'] = '0.9.5';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms']))
@@ -644,7 +644,7 @@ function cot_online_update()
 						'online_name' => $usr['name'],
 						'online_lastseen' => (int)$sys['now'],
 						'online_location' => $env['location'],
-						'online_subloc' => $sys['sublocation'],
+						'online_subloc' => (string) $sys['sublocation'],
 						'online_userid' => (int)$usr['id'],
 						'online_shield' => 0,
 						'online_hammer' => 0
@@ -654,8 +654,8 @@ function cot_online_update()
 				{
 					$db->update($db_online, array(
 						'online_lastseen' => $sys['now'],
-						'online_location' => $db->prep($env['location']),
-						'online_subloc' => $db->prep($sys['sublocation']),
+						'online_location' => $env['location'],
+						'online_subloc' => (string) $sys['sublocation'],
 						'online_hammer' => (int)$sys['online_hammer']
 						), "online_userid=".$usr['id']);
 				}
@@ -669,7 +669,7 @@ function cot_online_update()
 						'online_name' => 'v',
 						'online_lastseen' => (int)$sys['now'],
 						'online_location' => $env['location'],
-						'online_subloc' => $sys['sublocation'],
+						'online_subloc' => (string) $sys['sublocation'],
 						'online_userid' => -1,
 						'online_shield' => 0,
 						'online_hammer' => 0
@@ -679,8 +679,8 @@ function cot_online_update()
 				{
 					$db->update($db_online, array(
 						'online_lastseen' => $sys['now'],
-						'online_location' => $db->prep($env['location']),
-						'online_subloc' => $db->prep($sys['sublocation']),
+						'online_location' => $env['location'],
+						'online_subloc' => (string)$sys['sublocation'],
 						'online_hammer' => (int)$sys['online_hammer']
 						), "online_ip='".$usr['ip']."'");
 				}
@@ -1671,6 +1671,35 @@ function cot_build_user($id, $user, $extra_attrs = '')
 }
 
 /**
+ * Returns group link (button)
+ *
+ * @param int $grpid Group ID
+ * @return string
+ */
+function cot_build_group($grpid)
+{
+	if (empty($grpid))
+		return '';
+	global $cot_groups, $L;
+
+	if ($cot_groups[$grpid]['hidden'])
+	{
+		if (cot_auth('users', 'a', 'A'))
+		{
+			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid]['title'] . ' (' . $L['Hidden'] . ')');
+		}
+		else
+		{
+			return $L['Hidden'];
+		}
+	}
+	else
+	{
+		return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid]['title']);
+	}
+}
+
+/**
  * Returns user group icon
  *
  * @param string $src Image file path
@@ -1691,6 +1720,145 @@ function cot_build_usertext($text)
 {
 	global $cfg;
 	return cot_parse($text, $cfg['usertextimg']);
+}
+
+/**
+ * Returns all user tags for XTemplate
+ *
+ * @param mixed $user_data User Info Array
+ * @param string $tag_prefix Prefix for tags
+ * @param string $emptyname Name text if user is not exist
+ * @param bool $allgroups Build info about all user groups
+ * @param bool $cacheitem Cache tags
+ * @return array
+ */
+function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false, $cacheitem = true)
+{
+	global $db, $cot_extrafields, $cfg, $L, $cot_yesno, $themelang, $user_cache, $db_users, $usr;
+
+	static $extp_first = null, $extp_main = null;
+	
+	$return_array = array();
+
+	if (is_null($extp_first))
+	{
+		$extp_first = cot_getextplugins('usertags.first');
+		$extp_main = cot_getextplugins('usertags.main');
+	}
+
+	/* === Hook === */
+	foreach ($extp_first as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+	
+	$user_id = (int) (is_array($user_data) ? $user_data['user_id'] : $user_data);
+
+	if (isset($user_cache[$user_id]))
+	{	
+		$temp_array = $user_cache[$user_id];
+	}
+	else
+	{
+		if (is_int($user_data) && $user_data > 0)
+		{
+			$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $user_data");
+			$user_data = $sql->fetch();
+		}
+
+		if (is_array($user_data) && $user_data['user_id'] > 0 && !empty($user_data['user_name']))
+		{
+			$user_data['user_birthdate'] = cot_date2stamp($user_data['user_birthdate']);
+			$user_data['user_text'] = cot_parse($user_data['user_text'], $cfg['usertextimg']);
+			
+			$temp_array = array(
+				'ID' => $user_data['user_id'],
+				'NAME' => cot_build_user($user_data['user_id'], htmlspecialchars($user_data['user_name'])),
+				'NICKNAME' => htmlspecialchars($user_data['user_name']),
+				'DETAILSLINK' => cot_url('users', 'm=details&id=' . $user_data['user_id'].'&u='.htmlspecialchars($user_data['user_name'])),
+				'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
+				'MAINGRP' => cot_build_group($user_data['user_maingrp']),
+				'MAINGRPID' => $user_data['user_maingrp'],
+				'MAINGRPSTARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
+				'MAINGRPICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
+				'COUNTRY' => cot_build_country($user_data['user_country']),
+				'COUNTRYFLAG' => cot_build_flag($user_data['user_country']),
+				'TEXT' => $user_data['user_text'],
+				'EMAIL' => cot_build_email($user_data['user_email'], $user_data['user_hideemail']),
+				'THEME' => $user_data['user_theme'],
+				'SCHEME' => $user_data['user_scheme'],
+				'GENDER' => ($user_data['user_gender'] == '' || $user_data['user_gender'] == 'U') ? '' : $L['Gender_' . $user_data['user_gender']],
+				'BIRTHDATE' => ($user_data['user_birthdate'] != 0) ? cot_date('date_full', $user_data['user_birthdate']) : '',
+				'BIRTHDATE_STAMP' => ($user_data['user_birthdate'] != 0) ? $user_data['user_birthdate'] : '',
+				'AGE' => ($user_data['user_birthdate'] != 0) ? cot_build_age($user_data['user_birthdate']) : '',
+				'TIMEZONE' => cot_build_timezone($user_data['user_timezone']),
+				'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate']),
+				'REGDATE_STAMP' => $user_data['user_regdate'] + $usr['timezone'] * 3600,
+				'LASTLOG' => cot_date('datetime_medium', $user_data['user_lastlog']),
+				'LASTLOG_STAMP' => $user_data['user_lastlog'] + $usr['timezone'] * 3600,
+				'LOGCOUNT' => $user_data['user_logcount'],
+				'POSTCOUNT' => $user_data['user_postcount'],
+				'LASTIP' => $user_data['user_lastip'],
+				'ONLINE' => (cot_userisonline($user_data['user_id'])) ? '1' : '0',
+				'ONLINETITLE' => ($user_data['user_online']) ? $themelang['forumspost']['Onlinestatus1'] : $themelang['forumspost']['Onlinestatus0'],
+			);
+
+			if ($allgroups)
+			{
+				$temp_array['GROUPS'] = cot_build_groupsms($user_data['user_id'], FALSE, $user_data['user_maingrp']);
+			}
+			// Extra fields
+			if (isset($cot_extrafields[$db_users]))
+			{
+				foreach ($cot_extrafields[$db_users] as $i => $row)
+				{
+					$temp_array[strtoupper($row['field_name'])] = cot_build_extrafields_data('user', $row, $user_data['user_' . $row['field_name']]);
+					$temp_array[strtoupper($row['field_name']) . '_TITLE'] = isset($L['user_' . $row['field_name'] . '_title']) ? $L['user_' . $row['field_name'] . '_title'] : $row['field_description'];
+				}
+			}
+		}
+		else
+		{
+			$temp_array = array(
+				'ID' => 0,
+				'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+				'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+				'MAINGRP' => cot_build_group(1),
+				'MAINGRPID' => 1,
+				'MAINGRPSTARS' => '',
+				'MAINGRPICON' => cot_build_groupicon($cot_groups[1]['icon']),
+				'COUNTRY' => cot_build_country(''),
+				'COUNTRYFLAG' => cot_build_flag(''),
+				'TEXT' => '',
+				'EMAIL' => '',
+				'GENDER' => '',
+				'BIRTHDATE' => '',
+				'BIRTHDATE_STAMP' => '',
+				'AGE' => '',
+				'REGDATE' => '',
+				'REGDATE_STAMP' => '',
+				'POSTCOUNT' => '',
+				'LASTIP' => '',
+				'ONLINE' => '0',
+				'ONLINETITLE' => '',
+			);
+		}
+		
+		/* === Hook === */
+		foreach ($extp_main as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		$cacheitem && $user_cache[$user_data['user_id']] = $temp_array;
+	}
+	foreach ($temp_array as $key => $val)
+	{
+		$return_array[$tag_prefix . $key] = $val;
+	}
+	return $return_array;
 }
 
 /**
@@ -1939,7 +2107,7 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 	$handle = opendir($cfg['themes_dir']);
 	while ($f = readdir($handle))
 	{
-		if (mb_strpos($f, '.') === FALSE && is_dir("{$cfg['themes_dir']}/$f"))
+		if (mb_strpos($f, '.') === FALSE && is_dir("{$cfg['themes_dir']}/$f") && $f != "admin")
 		{
 			$themelist[] = $f;
 		}
@@ -1988,6 +2156,24 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 	}
 
 	return cot_selectbox("$selected_theme:$selected_scheme", $input_name, $values, $titles, false);
+}
+
+/**
+ * Checks whether user is online
+ *
+ * @param int $id User ID
+ * @return bool
+ */
+function cot_userisonline($id)
+{
+	global $cot_usersonline;
+
+	$res = FALSE;
+	if (is_array($cot_usersonline))
+	{
+		$res = (in_array($id, $cot_usersonline)) ? TRUE : FALSE;
+	}
+	return ($res);
 }
 
 /*
@@ -2135,16 +2321,18 @@ function cot_clear_messages($src = '', $class = '')
  * Terminates script execution and performs redirect
  *
  * @param bool $cond Really die?
+ * @param bool $notfound Page not found?
+ * @param bool $header Render header part?
  * @return bool
  */
-function cot_die($cond = true, $notfound = false)
+function cot_die($cond = true, $notfound = false, $header = true)
 {
 	global $env;
 	if ($cond)
 	{
 		$msg = $notfound ? '404' : '950';
-		$env['status'] = $notfound ? '404 Not Found' : '403 Forbidden';
-		cot_redirect(cot_url('message', 'msg=' . $msg, '', true));
+		
+		cot_die_message($msg, true);
 	}
 	return FALSE;
 }
@@ -2171,8 +2359,98 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 	}
 	else
 	{
-		cot_redirect(cot_url('message', 'msg=500', '', true));
+		cot_die_message(500, true);
 	}
+}
+
+/**
+ * Terminates script execution and displays message page
+ * 
+ * @param int $code Message code
+ * @param bool $header Render page header
+ */
+function cot_die_message($code, $header = TRUE)
+{
+	// Globals and requirements
+	global $cfg, $env, $error_string, $out, $L, $R;
+	require_once cot_langfile('message', 'core');
+	
+	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST')
+	{
+		// Save the POST data
+		cot_import_buffer_save();
+		if (!empty($error_string))
+		{
+			// Message should not be lost
+			cot_error($error_string);
+		}
+	}
+	
+	// Determine response header
+	static $msg_status = array(
+		100 => '403 Forbidden',
+		101 => '200 OK',
+		102 => '200 OK',
+		105 => '200 OK',
+		106 => '200 OK',
+		109 => '200 OK',
+		117 => '403 Forbidden',
+		118 => '200 OK',
+		151 => '403 Forbidden',
+		152 => '403 Forbidden',
+		153 => '403 Forbidden',
+		157 => '403 Forbidden',
+		300 => '200 OK',
+		400 => '400 Bad Request',
+		401 => '401 Authorization Required',
+		403 => '403 Forbidden',
+		404 => '404 Not Found',
+		500 => '500 Internal Server Error',
+		602 => '403 Forbidden',
+		603 => '403 Forbidden',
+		900 => '503 Service Unavailable',
+		904 => '403 Forbidden',
+		907 => '404 Not Found',
+		911 => '404 Not Found',
+		915 => '200 OK',
+		916 => '200 OK',
+		920 => '200 OK',
+		930 => '403 Forbidden',
+		940 => '403 Forbidden',
+		950 => '403 Forbidden',
+		951 => '503 Service Unavailable'
+	);
+	$env['status'] = $msg_status[$code];
+	
+	// Determine message title and body
+	$title = $L['msg' . $code . '_title'];
+	$body = $L['msg' . $code . '_body'];
+	
+	// Render the message page
+	if ($header)
+	{
+		$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
+		echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.$R['code_basehref'].$stylesheet.'</head><body><div class="block">';
+	}
+	header('HTTP/1.1 ' . $env['status']);
+
+	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
+	$t = new XTemplate(cot_tplfile('message', $tpl_type));
+
+	$t->assign(array(
+		'AJAX_MODE' => COT_AJAX,
+		'MESSAGE_TITLE' => $title,
+		'MESSAGE_BODY' => $body
+	));
+
+	$t->parse('MAIN');
+	$t->out('MAIN');
+
+	if ($header)
+	{
+		echo '</div></body></html>';
+	}
+	exit;
 }
 
 /**
@@ -2411,11 +2689,7 @@ function cot_message($text, $class = 'ok', $src = 'default')
  */
 function cot_incfile($name, $type = 'core', $part = 'functions')
 {
-	global $cfg, $cot_rc_theme_reload;
-	if ($part == 'resources')
-	{
-		$cot_rc_theme_reload = true;
-	}
+	global $cfg;
 	if ($type == 'core')
 	{
 		return $cfg['system_dir'] . "/$name.php";
@@ -2424,7 +2698,7 @@ function cot_incfile($name, $type = 'core', $part = 'functions')
 	{
 		return $cfg['plugins_dir']."/$name/inc/$name.$part.php";
 	}
-	elseif ($name == 'admin' || $name == 'users' || $name == 'message')
+	elseif ($name == 'admin')
 	{
 		// Built-in extensions
 		return $cfg['system_dir']."/$name/$name.$part.php";
@@ -2453,7 +2727,11 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 	}
 	if ($type == 'module')
 	{
-		if (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
+		if (@file_exists($cfg['modules_dir']."/$name/lang/modules/$name.$lang.lang.php"))
+		{
+			return $cfg['modules_dir']."/$name/lang/modules/$name.$lang.lang.php";
+		}		
+		elseif (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
 		{
 			return $cfg['modules_dir']."/$name/lang/$name.$lang.lang.php";
 		}
@@ -2474,8 +2752,12 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 		}
 	}
 	else
-	{
-		if (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
+	{		
+		if (@file_exists($cfg['plugins_dir']."/$name/lang/plugins/$name.$lang.lang.php"))
+		{
+			return $cfg['plugins_dir']."/$name/lang/plugins/$name.$lang.lang.php";
+		}		
+		elseif (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
 		{
 			return $cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php";
 		}
@@ -2484,22 +2766,6 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 			return $cfg['plugins_dir']."/$name/lang/$name.$default.lang.php";
 		}
 	}
-}
-
-/**
- * Auxilliary function that returns theme resources as an array
- *
- * @return array Theme resource strings
- */
-function cot_get_rc_theme()
-{
-	global $cfg, $usr;
-	$R = array();
-	if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php"))
-	{
-		include "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
-	}
-	return $R;
 }
 
 /**
@@ -2608,10 +2874,14 @@ function cot_tplfile($base, $type = 'module')
 	elseif ($type == 'core')
 	{
 		// Built-in core modules
-		if(in_array($basename, array('admin', 'header', 'footer')))
+		if(in_array($basename, array('admin', 'header', 'footer', 'message')))
 		{
 			$basename = 'admin';
 			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/$basename/";
+			if (!empty($cfg['admintheme']))
+			{
+				$scan_prefix[] = "{$cfg['themes_dir']}/$basename/{$cfg['admintheme']}/";
+			}
 		}
 		else
 		{
@@ -2658,11 +2928,16 @@ function cot_tplfile($base, $type = 'module')
  * @see http://php.net/manual/en/function.date.php
  * @param string $format Date/time format as defined in $Ldt or according to PHP date() format
  * @param int $timestamp Unix timestamp
+ * @param bool $usertimezone Offset the date with current user's timezone
  * @return string
  */
-function cot_date($format, $timestamp = null)
+function cot_date($format, $timestamp = null, $usertimezone = true)
 {
-	global $L, $Ldt;
+	global $L, $Ldt, $usr;
+	if ($usertimezone)
+	{
+		$timestamp += $usr['timezone'] * 3600;
+	}
 	$datetime = ($Ldt[$format]) ? @date($Ldt[$format], $timestamp) : @date($format, $timestamp);
 	$search = array(
 		'Monday', 'Tuesday', 'Wednesday', 'Thursday',
@@ -3212,6 +3487,7 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 {
 	global $cfg, $cot_plugins;
 
+	$plain = true;
 	if ($enable_markup)
 	{
 		if (empty($parser))
@@ -3223,7 +3499,8 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 			$func = "cot_parse_$parser";
 			if (function_exists($func))
 			{
-				return $func($text);
+				$text = $func($text);
+				$plain = false;
 			}
 			else
 			{
@@ -3235,7 +3512,9 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 						if ($k['pl_code'] == $parser && cot_auth('plug', $k['pl_code'], 'R'))
 						{
 							include $cfg['plugins_dir'] . '/' . $k['pl_file'];
-							return $func($text);
+							$text = $func($text);
+							$plain = false;
+							break;
 						}
 					}
 				}
@@ -3243,7 +3522,19 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 		}
 	}
 
-	return nl2br(htmlspecialchars($text));
+	if ($plain)
+	{
+		$text = nl2br(htmlspecialchars($text));
+	}
+	
+	/* == Hook == */
+	foreach (cot_getextplugins('parser.last') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+	
+	return $text;
 }
 
 /**
@@ -3430,17 +3721,16 @@ function cot_wraptext($str, $wrap = 80)
  */
 function cot_rc($name, $params = array())
 {
-	global $R, $L, $cot_rc_theme_reload;
-	if ($cot_rc_theme_reload)
+	global $R, $L, $theme_reload;
+	if (isset($R[$name]) && is_array($theme_reload))
 	{
-		// Theme resources override trick
-		global $themeR;
-		if ($themeR)
-		{
-			$R = array_merge($R, $themeR);
-		}
-		$cot_rc_theme_reload = false;
+		$R[$name] = (!empty($theme_reload['R'][$name]) && $theme_reload['R'][$name] != $R[$name]) ? $theme_reload['R'][$name] : $R[$name];
 	}
+	elseif (isset($L[$name]) && is_array($theme_reload))
+	{
+		$L[$name] = (!empty($theme_reload['L'][$name]) && $theme_reload['L'][$name] != $L[$name]) ? $theme_reload['L'][$name] : $L[$name];
+	}
+	
 	$res = isset($R[$name]) ? $R[$name]
 		: (isset($L[$name]) ? $L[$name] : $name);
 	is_array($params) ? $args = $params : parse_str($params, $args);
@@ -3493,6 +3783,7 @@ function cot_rc_consolidate()
 	global $cache, $cfg, $cot_rc_html, $cot_rc_reg, $env, $L, $R, $sys, $usr;
 
 	$is_admin_section = defined('COT_ADMIN');
+	$cot_rc_reg = array();
 
 	// Load standard resources
 	cot_rc_add_standard();
@@ -3553,7 +3844,6 @@ function cot_rc_consolidate()
 				{
 					// Load the list of files already cached
 					$file_list = unserialize(file_get_contents("$target_path.idx"));
-					$code = file_get_contents($target_path);
 
 					// Check presense or modification time for each file
 					foreach ($files as $path)
@@ -3677,15 +3967,15 @@ function cot_rc_consolidate()
  */
 function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
 {
-	global $cfg, $cot_rc_reg;
+	global $cache, $cfg, $cot_rc_reg, $cot_rc_skip_minification;
 
-	if ($cfg['headrc_consolidate'])
+	if ($cfg['headrc_consolidate'] && $cache && !defined('COT_ADMIN'))
 	{
 		// Save as file
 		$path = $cfg['cache_dir'] . '/static/' . $identifier . '.' . $type;
 		if (!file_exists($path) || md5($code) != md5_file($path))
 		{
-			if ($cfg['headrc_minify'])
+			if ($cfg['headrc_minify'] && !$cot_rc_skip_minification)
 			{
 				$code = cot_rc_minify($code, $type);
 			}
@@ -3725,7 +4015,7 @@ function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
  */
 function cot_rc_add_file($path, $scope = 'global')
 {
-	global $cfg, $cot_rc_reg;
+	global $cache, $cfg, $cot_rc_reg, $cot_rc_skip_minification;
 	if (!file_exists($path))
 	{
 		return false;
@@ -3733,7 +4023,7 @@ function cot_rc_add_file($path, $scope = 'global')
 
 	$type = preg_match('#\.(min\.)?(js|css)$#', mb_strtolower($path), $m) ? $m[2] : 'js';
 
-	if ($cfg['headrc_consolidate'] && $cfg['headrc_minify'] && $m[1] != 'min.')
+	if ($cfg['headrc_consolidate'] && !defined('COT_ADMIN') && $cfg['headrc_minify'] && !$cot_rc_skip_minification && $m[1] != 'min.')
 	{
 		$bname = ($type == 'css') ? str_replace('/', '._.', $path) : basename($path) . '.min';
 		$code = cot_rc_minify(file_get_contents($path), $type);
@@ -3741,7 +4031,7 @@ function cot_rc_add_file($path, $scope = 'global')
 		file_put_contents($path, $code);
 	}
 
-	if ($cfg['headrc_consolidate'])
+	if ($cfg['headrc_consolidate'] && $cache && !defined('COT_ADMIN'))
 	{
 		$cot_rc_reg[$type][$scope][] = $path;
 	}
@@ -3767,6 +4057,11 @@ function cot_rc_add_standard()
 	if ($cfg['jquery'] && $cfg['turnajax'])
 	{
 		cot_rc_add_file('js/jquery.history.min.js');
+	}
+	
+	if ($cfg['jquery'])
+	{
+		cot_rc_add_file('js/jqModal.min.js');
 	}
 
 	cot_rc_add_file('js/base.js');
@@ -3900,7 +4195,7 @@ function cot_rc_minify($code, $type = 'js')
 	elseif ($type == 'css')
 	{
 		require_once './lib/cssmin.php';
-		$code = CssMin::minify($code);
+		$code = minify_css($code);
 	}
 	return $code;
 }
@@ -3923,8 +4218,7 @@ function cot_check_xg($redirect = true)
 	{
 		if ($redirect)
 		{
-			$env['status'] = '403 Forbidden';
-			cot_redirect(cot_url('message', 'msg=950', '', true));
+			cot_die_message(950, TRUE);
 		}
 		return false;
 	}
@@ -4048,6 +4342,32 @@ function cot_xp()
 */
 
 /**
+ * Generates an URL used to confirm an action performed by target URL
+ * 
+ * @param string $target_url Target URL which performs the action
+ * @param string $ext_name Module/plugin name to peform the action
+ * @param string $msg_code Language string key which contains confirmation request text
+ * @return string 
+ */
+function cot_confirm_url($target_url, $ext_name = '', $msg_key = '')
+{
+	global $cfg;
+	if ($cfg['confirmlinks'])
+	{
+		return cot_url('message', array(
+			'msg' => 920,
+			'm' => $ext_name,
+			'lng' => $msg_key,
+			'redirect' => base64_encode($target_url)
+		));
+	}
+	else
+	{
+		return $target_url;
+	}
+}
+
+/**
  * Displays redirect page
  *
  * @param string $url Target URI
@@ -4070,7 +4390,7 @@ function cot_redirect($url)
 	if (!cot_url_check($url))
 	{
 		// No redirects to foreign domains
-		$url = COT_ABSOLUTE_URL . $url;
+		$url = $url == '/' ? COT_ABSOLUTE_URL : COT_ABSOLUTE_URL . $url;
 	}
 
 	if (defined('COT_AJAX') && COT_AJAX)
@@ -4082,7 +4402,7 @@ function cot_redirect($url)
 
 	if (isset($env['status']))
 	{
-		header('HTTP/1.1' . $env['status']);
+		header('HTTP/1.1 ' . $env['status']);
 	}
 
 	if ($cfg['redirmode'])
@@ -4119,6 +4439,7 @@ HTM;
 function cot_parse_str($str)
 {
 	$res = array();
+	$str = str_replace('&amp;', '&', $str);
 	foreach (explode('&', $str) as $item)
 	{
 		if (!empty($item))
@@ -4164,23 +4485,22 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 		return cot_url_custom($name, $params, $tail, $htmlspecialchars_bypass);
 	}
 	
-	$url = $name . '.php';
+	$url = in_array($name, array('admin', 'login', 'message')) ? "$name.php" : 'index.php';
+	if (!in_array($name, array('admin', 'index', 'login', 'message', 'plug')))
+	{
+		$params = array('e' => $name) + $params;
+	}
 	// Append query string if needed
 	if (count($params) > 0)
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
 		$sep_len = strlen($sep);
 		$qs = '?';
-		$i = 0;
 		foreach ($params as $key => $val)
 		{
-			if ($i > 0)
-			{
-				$qs .= $sep;
-			}
-			$qs .= $key . '=' . urlencode($val);
-			$i++;
+			$qs .= is_array($val) ? cot_url_encode($key, $val, $sep) : $key . '=' . urlencode($val) . $sep;
 		}
+		$qs = mb_substr($qs, 0, -$sep_len);
 		$url .= $qs;
 	}
 	$url .= $tail;
@@ -4201,6 +4521,32 @@ function cot_url_check($url)
 }
 
 /**
+ * Encodes a pair of url parameter key and value, supporting multi-dimension
+ * arrays of parameters recursively.
+ * 
+ * @param string $key Parameter name
+ * @param mixed $val Parameter value, can be an array
+ * @param string $sep Query string delimiter
+ * @return string 
+ */
+function cot_url_encode($key, $val, $sep)
+{
+	$qs = '';
+	if (is_array($val))
+	{
+		foreach ($val as $k => $v)
+		{
+			$qs .= cot_url_encode("{$key}[$k]", $v, $sep);
+		}
+	}
+	else
+	{
+		$qs .= urlencode($key) . '=' . urlencode($val) . $sep;
+	}
+	return $qs;
+}
+
+/**
  * Transliterates a string if transliteration is available
  *
  * @param string $str Source string
@@ -4210,6 +4556,12 @@ function cot_url_check($url)
 function cot_translit_encode($str)
 {
 	global $lang, $cot_translit;
+	static $lang_loaded = false;
+	if ($lang != 'en' && !$lang_loaded)
+	{
+		require_once cot_langfile('translit', 'core');
+		$lang_loaded = true;
+	}
 	if ($lang != 'en' && is_array($cot_translit))
 	{
 		// Apply transliteration
@@ -4247,7 +4599,8 @@ function cot_uriredir_store()
 	if ($_SERVER['REQUEST_METHOD'] != 'POST' // not form action/POST
 		&& empty($_GET['x']) // not xg, hence not form action/GET and not command from GET
 		&& !defined('COT_MESSAGE') // not message location
-		&& (!defined('COT_USERS') // not login/logout location
+		&& !defined('COT_AUTH') // not login/logout location
+		&&	(!defined('COT_USERS')
 			|| empty($_GET['m'])
 			|| !in_array($_GET['m'], array('auth', 'logout', 'register'))
 	)

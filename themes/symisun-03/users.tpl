@@ -4,7 +4,7 @@
 	<div class="padding20 whitee">
 		<div id="left">
 			<h1>{PHP.L.Users}</h1>
-			<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="users.php">{PHP.L.Users}</a></div>
+			<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('users')}">{PHP.L.Users}</a></div>
 			&nbsp;
 			<div class="nou">
 				{USERS_TOP_FILTERS_COUNTRY} {USERS_TOP_FILTERS_MAINGROUP} {USERS_TOP_FILTERS_GROUP}
@@ -48,15 +48,15 @@
 		<div id="right">
 			<!-- IF {PHP.usr.id} > 0 -->
 			<h3 style="color:#000">{PHP.L.hea_youareloggedas} {PHP.usr.name}</h3>
-			<h3><a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.L.View} {PHP.L.Profile}</a></h3>
-			<h3><a href="users.php?m=profile">{PHP.L.Update} {PHP.L.Profile}</a></h3>
-			<h3><a href="pm.php">{PHP.L.Private_Messages}</a></h3>
-			<h3><a href="pfs.php">{PHP.L.PFS}</a></h3>
+			<h3><a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.L.View} {PHP.L.Profile}</a></h3>
+			<h3><a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Update} {PHP.L.Profile}</a></h3>
+			<h3><a href="{PHP|cot_url('pm')}">{PHP.L.Private_Messages}</a></h3>
+			<h3><a href="{PHP|cot_url('pfs')}">{PHP.L.PFS}</a></h3>
 			<!-- ENDIF -->	<!-- IF {PHP.usr.id} == 0 -->
-			<h3><a href="users.php?m=auth">{PHP.themelang.users.login}</a></h3>	<!-- ENDIF -->
+			<h3><a href="{PHP|cot_url('login')}">{PHP.themelang.users.login}</a></h3>	<!-- ENDIF -->
 			<h3><span style="background-color:#94af66; color:#fff">{PHP.L.Users}</span></h3>
 			<div class="padding15 admin nou scrabble" style="padding-bottom:0">
-				{USERS_TOP_FILTERS_OTHERS}<a href="users.php"><strong>{PHP.L.All}</strong></a><br />.....<br />
+				{USERS_TOP_FILTERS_OTHERS}<a href="{PHP|cot_url('users')}"><strong>{PHP.L.All}</strong></a><br />.....<br />
 				{PHP.L.users_usersperpage}: <strong>{USERS_TOP_MAXPERPAGE}</strong><br />
 				{PHP.L.users_usersinthissection} (<em>{PHP.f}</em>): <strong>{USERS_TOP_TOTALUSERS}</strong>
 				<!-- IF {USERS_TOP_PAGNAV} -->

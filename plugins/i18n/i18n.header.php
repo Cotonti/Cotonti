@@ -32,17 +32,30 @@ if (count($i18n_locales) > 0)
 			$lc_class = '';
 			$lc_selected = '';
 		}
-		$urlparams = $_GET;
+		$i18n_urlparams = $_GET;
 		if ($cfg['plugin']['i18n']['omitmain'] && $lc == $i18n_fallback)
 		{
-			unset($urlparams['l']);
+			unset($i18n_urlparams['l']);
 		}
 		else
 		{
-			$urlparams['l'] = $lc;
+			$i18n_urlparams['l'] = $lc;
+		}
+		if (defined('COT_PLUG'))
+		{
+			$i18n_ext = 'plug';
+		}
+		else
+		{
+			$i18n_ext = $env['ext'];
+			unset($i18n_urlparams['e']);
+		}
+		if (isset($i18n_urlparams['rwr']))
+		{
+			unset($i18n_urlparams['rwr']);
 		}
 		$t->assign(array(
-			'I18N_LANG_ROW_URL' => cot_url($env['ext'], $urlparams, '', false, true),
+			'I18N_LANG_ROW_URL' => cot_url($i18n_ext, $i18n_urlparams, '', false, true),
 			'I18N_LANG_ROW_CODE' => $lc,
 			'I18N_LANG_ROW_FLAG' => $lc == 'en' ? 'gb' : $lc,
 			'I18N_LANG_ROW_TITLE' => htmlspecialchars($lc_title),

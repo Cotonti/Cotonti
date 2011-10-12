@@ -66,7 +66,7 @@ $adminpath = array(array(cot_url('admin'), $L['Adminpanel']));
 
 require $inc_file;
 
-$adminhelp = (empty($adminhelp)) ? $L['None'] : $adminhelp;
+$adminhelp = (empty($adminhelp)) ? '' : $adminhelp;
 
 $title_params = array(
 	'ADMIN' => $L['Administration']
@@ -76,107 +76,30 @@ $out['subtitle'] = cot_title('{ADMIN}', $title_params);
 
 require_once $cfg['system_dir'].'/header.php';
 
-if (!COT_AJAX)
+$t = new XTemplate(cot_tplfile('admin', 'core'));
+
+$t->assign(array(
+	'ADMIN_TITLE' => cot_breadcrumbs($adminpath, false),
+	'ADMIN_SUBTITLE' => $adminsubtitle,
+	'ADMIN_MAIN' => $adminmain,
+	'ADMIN_HELP' => $adminhelp
+));
+
+/* === Hook for the plugins === */
+foreach (cot_getextplugins('admin.tags') as $pl)
 {
-	$t = new XTemplate(cot_tplfile('admin', 'core'));
-
-	// Generate the admin menu
-	$admin_menu = array();
-	// Standard admin areas
-	$admin_menu[] = array(
-		'code' => 'home',
-		'url' => cot_url('admin'),
-		'icon' => $R['admin_menu_icon_home'],
-		'class' => empty($m) ? 'sel' : ''
-	);
-	if ($usr['admin_config'])
-	{
-		$admin_menu[] = array(
-			'code' => 'config',
-			'url' => cot_url('admin', 'm=config'),
-			'icon' => $R['admin_menu_icon_config'],
-			'class' => $m == 'config' ? 'sel' : ''
-		);
-		$admin_menu[] = array(
-			'code' => 'extensions',
-			'url' => cot_url('admin', 'm=extensions'),
-			'icon' => $R['admin_menu_icon_extensions'],
-			'class' => $m == 'extensions' ? 'sel' : ''
-		);
-	}
-	if ($usr['admin_users'])
-	{
-		$admin_menu[] = array(
-			'code' => 'users',
-			'url' => cot_url('admin', 'm=users'),
-			'icon' => $R['admin_menu_icon_users'],
-			'class' => $m == 'users' ? 'sel' : ''
-		);
-	}
-	if ($usr['isadmin'])
-	{
-		$admin_menu[] = array(
-			'code' => 'other',
-			'url' => cot_url('admin', "m=other"),
-			'icon' => $R['admin_menu_icon_other'],
-			'class' => $m == 'other' ? 'sel' : ''
-		);
-	}
-	// Module admin
-	foreach ($cot_modules as $code => $mod)
-	{
-		$info = cot_infoget($cfg['modules_dir'] . "/$code/$code.setup.php", 'COT_EXT');
-		if (!empty($info['Admin_icon']))
-		{
-			if (file_exists(cot_langfile($code, 'module')))
-			{
-				require_once cot_langfile($code, 'module');
-				$title = $L[ucfirst($code)];
-			};
-			$title = isset($L[$info['Name']]) ? $L[$info['Name']] : $info['Name'];
-			$src = $cfg['modules_dir'] . "/$code/" . trim($info['Admin_icon']);
-			$admin_menu[] = array(
-				'code' => $code,
-				'url' => cot_url('admin', "m=$code"),
-				'icon' => cot_rc('admin_menu_icon_module', array('code' => $code, 'src' => $src, 'title' => $title)),
-				'class' => $m == $code ? 'sel' : ''
-			);
-		}
-	}
-
-	// Rendering
-	foreach ($admin_menu as $item)
-	{
-		$t->assign(array(
-			'ADMIN_MENU_CODE' => $item['code'],
-			'ADMIN_MENU_URL' => $item['url'],
-			'AMDIN_MENU_TITLE' => $item['title'],
-			'ADMIN_MENU_ICON' => $item['icon'],
-			'ADMIN_MENU_CLASS' => $item['class']
-		));
-		$t->parse('MAIN.ADMIN_MENU_ROW');
-	}
-
-	$t->assign(array(
-		'ADMIN_TITLE' => cot_breadcrumbs($adminpath, false),
-		'ADMIN_SUBTITLE' => $adminsubtitle,
-		'ADMIN_MAIN' => $adminmain,
-		'ADMIN_HELP' => $adminhelp
-	));
-	
-	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('admin.tags') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
-
+	include $pl;
+}
+/* ===== */
+$t->parse('MAIN.BODY');
+if(!COT_AJAX)
+{
 	$t->parse('MAIN');
 	$t->out('MAIN');
 }
 else
 {
-	echo $adminmain;
+	$t->out('MAIN.BODY');
 }
 
 require_once $cfg['system_dir'].'/footer.php';

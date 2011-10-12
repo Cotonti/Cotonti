@@ -26,9 +26,10 @@ $db_com = (isset($db_com)) ? $db_com : $db_x . 'com';
  *
  * @param string $ext_name Target extension name
  * @param string $code Item code
+ * @param array $row Database row entry (optional)
  * @return int
  */
-function cot_comments_count($ext_name, $code)
+function cot_comments_count($ext_name, $code, $row = array())
 {
 	global $db, $db_com;
 	static $com_cache = array();
@@ -37,19 +38,24 @@ function cot_comments_count($ext_name, $code)
 	{
 		return $com_cache[$ext_name][$code];
 	}
-
-	$sql = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_area = ? AND com_code = ?", array($ext_name, $code));
-
-	if ($sql->rowCount() == 1)
+	
+	$cnt = 0;
+	if (isset($row['com_count']))
 	{
-		$cnt = (int) $sql->fetchColumn();
+		$cnt = (int) $row['com_count'];
 		$com_cache[$ext_name][$code] = $cnt;
-		return $cnt;
 	}
 	else
 	{
-		return 0;
+		$sql = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_area = ? AND com_code = ?", array($ext_name, $code));
+		if ($sql->rowCount() == 1)
+		{
+			$cnt = (int) $sql->fetchColumn();
+			$com_cache[$ext_name][$code] = $cnt;
+		}
 	}
+	
+	return $cnt;
 }
 
 /**
@@ -84,7 +90,16 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 
 	// Get the URL and parameters
 	$link_area = $env['ext'];
-	$link_params = $_SERVER['QUERY_STRING'];
+	$link_params = $_GET;
+	if (defined('COT_PLUG'))
+	{
+		$link_area = 'plug';
+		$link_params['e'] = $env['ext'];
+	}
+	if (isset($_GET['rwr']))
+	{
+		unset($link_params['rwr'], $link_params['e']);
+	}
 
 	$_SESSION['cot_com_back'][$ext_name][$cat][$code] = array($link_area, $link_params);
 
@@ -151,7 +166,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	{
 		$i = $d;
 		$kk = 0;
-		$totalitems = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_code = ?", array($code))->fetchColumn();
+		$totalitems = cot_comments_count($ext_name, $code);
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('comments.loop');
 		/* ===== */
@@ -162,7 +177,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			$kk++;
 			$com_admin = ($auth_admin) ? cot_rc('comments_code_admin', array(
 					'ipsearch' => cot_build_ipsearch($row['com_authorip']),
-					'delete_url' => cot_url('plug', 'e=comments&a=delete&cat='.$cat.'&id='.$row['com_id'].'&'.cot_xg())
+					'delete_url' => cot_confirm_url(cot_url('plug', 'e=comments&a=delete&cat='.$cat.'&id='.$row['com_id'].'&'.cot_xg()), 'comments', 'comments_confirm_delete')
 				)) : '';
 
 			$com_text = cot_parse($row['com_text'], $cfg['plugin']['comments']['markup']);
@@ -186,7 +201,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 				'COMMENTS_ROW_AUTHOR' => cot_build_user($row['com_authorid'], htmlspecialchars($row['com_author'])),
 				'COMMENTS_ROW_AUTHORID' => $row['com_authorid'],
 				'COMMENTS_ROW_TEXT' => $com_text,
-				'COMMENTS_ROW_DATE' => cot_date('datetime_medium', $row['com_date'] + $usr['timezone'] * 3600),
+				'COMMENTS_ROW_DATE' => cot_date('datetime_medium', $row['com_date']),
 				'COMMENTS_ROW_DATE_STAMP' => $row['com_date'] + $usr['timezone'] * 3600,
 				'COMMENTS_ROW_ADMIN' => $com_admin,
 				'COMMENTS_ROW_EDIT' => $com_edit,
@@ -281,10 +296,11 @@ function cot_comments_enabled($ext_name, $cat = '', $item = '')
  * @param string $ext_name Module or plugin code
  * @param string $code Item identifier
  * @param string $cat Item category code (optional)
+ * @param array $row Database row entry (optional)
  * @return string Rendered HTML output for comments
  * @see cot_comments_count()
  */
-function cot_comments_link($link_area, $link_params, $ext_name, $code, $cat = '')
+function cot_comments_link($link_area, $link_params, $ext_name, $code, $cat = '', $row = array())
 {
 	global $cfg, $db, $R, $L, $db_com;
 
@@ -295,7 +311,7 @@ function cot_comments_link($link_area, $link_params, $ext_name, $code, $cat = ''
 
 	$res = cot_rc('comments_link', array(
 		'url' => cot_url($link_area, $link_params, '#comments'),
-		'count' => $cfg['plugin']['comments']['countcomments'] ? cot_comments_count($ext_name, $code) : ''
+		'count' => $cfg['plugin']['comments']['countcomments'] ? cot_comments_count($ext_name, $code, $row) : ''
 	));
 	return $res;
 }

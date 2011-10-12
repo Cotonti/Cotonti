@@ -38,7 +38,7 @@ $t->assign(array(
 	'ADMIN_INFOS_DATE' => cot_date('datetime_medium', time()),
 	'ADMIN_INFOS_GMDATE' => gmdate('Y-m-d H:i'),
 	'ADMIN_INFOS_GMTTIME' => $usr['gmttime'],
-	'ADMIN_INFOS_USRTIME' => cot_date('datetime_medium', $sys['now_offset'] + $usr['timezone'] * 3600),
+	'ADMIN_INFOS_USRTIME' => cot_date('datetime_medium', $sys['now_offset']),
 	'ADMIN_INFOS_TIMETEXT' => $usr['timetext']
 ));
 

@@ -576,8 +576,19 @@ UPDATE `cot_bbcode` SET `bbc_replacement` = REPLACE(`bbc_replacement`, 'sed_bbco
 /* 0.9.4-001 Remove obsolete option */
 DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'locale' AND `config_name` = 'servertimezone';
 
+/* 0.9.4-002 Moving users from core to module */
+UPDATE `cot_core` SET `ct_lock` = 0 WHERE `ct_code` = 'users';
+
+UPDATE `cot_config` SET `config_owner` = 'module' WHERE `config_cat` = 'users' AND `config_name` NOT IN('disablewhosonline', 'usertextimg', 'forcerememberme', 'timedout');
+
+INSERT INTO `cot_plugins` (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_module) VALUES ('module', 'users', 'main', 'Users', 'users/users.php', 1);
+
+/* 0.9.5-01: confirmlinks config option */
+INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
+('core','main','45','confirmlinks',3,'1','1','','');
+
 -------------------------------------------------------------------------------
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.4-001' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.5-01' WHERE `upd_param` = 'revision';

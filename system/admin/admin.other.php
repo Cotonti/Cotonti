@@ -13,7 +13,6 @@
 
 $t = new XTemplate(cot_tplfile('admin.other', 'core'));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 
 $p = cot_import('p', 'G', 'ALP');
 
@@ -47,23 +46,14 @@ if(!empty($p))
 		}
 	}
 
-	if(count($extp) == 0)
+	if (count($extp) == 0)
 	{
-		cot_redirect(cot_url('message', 'msg=907', '', true));
+		cot_die_message(907, TRUE);
 	}
 
-	$extplugin_info = $cfg['plugins_dir'].'/'.$p.'/'.$p.'.setup.php';
-
-	if(file_exists($extplugin_info))
-	{
-		$info = cot_infoget($extplugin_info, 'COT_EXT');
-	}
-	else
-	{
-		cot_redirect(cot_url('message', 'msg=907', '', true));
-	}
-
-	$adminpath[] = array(cot_url('admin', 'm=other&p='.$p), htmlspecialchars($info['Name']));
+	$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
+	$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$p), $cot_plugins_enabled[$p]['title']);
+	$adminpath[] = array(cot_url('admin', 'm=other&p='.$p), $L['Administration']);
 	// $adminhelp = $L['Description'].' : '.$info['Description'].'<br />'.$L['Version'].' : '.$info['Version'].'<br />'.$L['Date'].' : '.$info['Date'].'<br />'.$L['Author'].' : '.$info['Author'].'<br />'.$L['Copyright'].' : '.$info['Copyright'].'<br />'.$L['Notes'].' : '.$info['Notes'];
 
 	if(is_array($extp))
@@ -78,6 +68,7 @@ if(!empty($p))
 }
 else
 {
+	$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 	cot_block($usr['auth_read']);
 
@@ -126,10 +117,12 @@ else
 					include_once cot_langfile('message', 'core');
 					$info['Name'] = $pl['pl_code'] . ' : '. $L['msg907_1'];
 				}
-
+				$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $pl['pl_code'] . '/' . $pl['pl_code'] . '.png';
+				
 				$t->assign(array(
 					'ADMIN_OTHER_EXT_URL' => $type == 'plug' ? cot_url('admin', 'm=other&p=' . $pl['pl_code']) :
 						cot_url('admin', 'm=' . $pl['pl_code']),
+					'ADMIN_OTHER_EXT_ICO' => (file_exists($icofile)) ? $icofile : '',
 					'ADMIN_OTHER_EXT_NAME' => $info['Name']
 				));
 				$t->parse('MAIN.SECTION.ROW');
@@ -147,6 +140,7 @@ else
 		'ADMIN_OTHER_URL_CACHE' => cot_url('admin', 'm=cache'),
 		'ADMIN_OTHER_URL_DISKCACHE' => cot_url('admin', 'm=cache&s=disk'),
 		'ADMIN_OTHER_URL_EXFLDS' => cot_url('admin', 'm=extrafields'),
+		'ADMIN_OTHER_URL_STRUCTURE' => cot_url('admin', 'm=structure'),
 		'ADMIN_OTHER_URL_BBCODE' => cot_url('admin', 'm=bbcode'),
 		'ADMIN_OTHER_URL_LOG' => cot_url('admin', 'm=log'),
 		'ADMIN_OTHER_URL_INFOS' => cot_url('admin', 'm=infos')

@@ -13,13 +13,11 @@
 
 		<h2>{PHP.L.Pages} ({ADMIN_PAGE_TOTALDBPAGES})</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.theme}/warnings.tpl"}
-		<div class="block">
-			<ul class="follow">
-				<li><a title="{PHP.L.Configuration}" href="{ADMIN_PAGE_URL_CONFIG}">{PHP.L.Configuration}</a></li>
-				<li><a href="{ADMIN_PAGE_URL_ADD}">{PHP.L.page_addtitle}</a></li>
-				<li><a href="{ADMIN_PAGE_URL_EXTRAFIELDS}">{PHP.L.adm_extrafields_desc}</a></li>
-				<li><a href="{ADMIN_PAGE_URL_STRUCTURE}">{PHP.L.Categories}</a></li>
-			</ul>
+		<div class=" button-toolbar block">
+				<a title="{PHP.L.Configuration}" href="{ADMIN_PAGE_URL_CONFIG}" class="button">{PHP.L.Configuration}</a>
+				<a href="{ADMIN_PAGE_URL_EXTRAFIELDS}" class="button">{PHP.L.adm_extrafields_desc}</a>
+				<a href="{ADMIN_PAGE_URL_STRUCTURE}" class="button">{PHP.L.Categories}</a></li>
+				<a href="{ADMIN_PAGE_URL_ADD}" class="button special">{PHP.L.page_addtitle}</a>
 		</div>
 		<div class="block">
 			<h3>{PHP.L.Pages}:</h3>
@@ -39,8 +37,8 @@
 						<!-- ENDIF -->
 					</td>
 					<td class="coltop width5">{PHP.L.Id}</td>
-					<td class="coltop width70">{PHP.L.Title}</td>
-					<td class="coltop width20">{PHP.L.Action}</td>
+					<td class="coltop width65">{PHP.L.Title}</td>
+					<td class="coltop width25">{PHP.L.Action}</td>
 				</tr>
 <!-- BEGIN: PAGE_ROW -->
 				<tr>
@@ -72,11 +70,11 @@
 							</div>
 						</div>
 					</td>
-					<td class="centerall action {ADMIN_PAGE_ODDEVEN}">
-						<!-- IF {PHP.row.page_state} == 1 --><a title="{PHP.L.Validate}" href="{ADMIN_PAGE_URL_FOR_VALIDATED}" class="ajax">{PHP.R.icon_news}</a><!-- ENDIF -->
-						<a title="{PHP.L.Delete}" href="{ADMIN_PAGE_URL_FOR_DELETED}" class="ajax">{PHP.R.icon_delete}</a>
-						<a title="{PHP.L.Open}" href="{ADMIN_PAGE_ID_URL}" target="_blank">{PHP.R.admin_icon_jumpto}</a>
-						<a title="{PHP.L.Edit}" href="{ADMIN_PAGE_URL_FOR_EDIT}" target="_blank">{PHP.R.admin_icon_config}</a>
+					<td class="action {ADMIN_PAGE_ODDEVEN}">
+						<!-- IF {PHP.row.page_state} == 1 --><a title="{PHP.L.Validate}" href="{ADMIN_PAGE_URL_FOR_VALIDATED}" class="confirmLink button">{PHP.L.Validate}</a><!-- ENDIF -->
+						<a title="{PHP.L.Delete}" href="{ADMIN_PAGE_URL_FOR_DELETED}" class="confirmLink button">{PHP.L.short_delete}</a>
+						<a title="{PHP.L.Open}" href="{ADMIN_PAGE_ID_URL}" target="_blank" class="button special">{PHP.L.short_open}</a>
+						<a title="{PHP.L.Edit}" href="{ADMIN_PAGE_URL_FOR_EDIT}" target="_blank" class="button">{PHP.L.Edit}</a>
 					</td>
 				</tr>
 <!-- END: PAGE_ROW -->
@@ -87,7 +85,7 @@
 <!-- ENDIF -->
 				<tr>
 					<td class="valid" colspan="4">
-						<!-- IF {PHP.filter} != {PHP.L.adm_validated} --><input name="paction" type="submit" value="{PHP.L.Validate}" onclick="this.form.paction.value=this.value" /><!-- ENDIF -->
+						<!-- IF {PHP.filter} != {PHP.L.adm_validated} --><input name="paction" type="submit" value="{PHP.L.Validate}" onclick="this.form.paction.value=this.value" class="confirm" /><!-- ENDIF -->
 						<input name="paction" type="submit" value="{PHP.L.Delete}" onclick="this.form.paction.value=this.value" />
 					</td>
 				</tr>

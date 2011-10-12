@@ -1,7 +1,4 @@
 <!-- BEGIN: MAIN -->
-
-		<!-- IF {PHP.is_adminwarnings} --><div class="error">{PHP.L.adm_warnings}: {PHP.adm_nogd}</div><!-- ENDIF -->
-
 		<h2>{PHP.L.Main}</h2>
 
 		<div class="col3-2 first">
@@ -11,7 +8,12 @@
 				<p>{ADMIN_HOME_UPDATE_REVISION} {ADMIN_HOME_UPDATE_MESSAGE}</p>
 			</div>
 <!-- END: UPDATE -->
-			{ADMIN_HOME_HITS}
+			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+			<!-- BEGIN: MAINPANEL -->
+			<div class="block">
+				{ADMIN_HOME_MAINPANEL}
+			</div>
+			<!-- END: MAINPANEL -->
 			<div class="block">
 				<h3>Cotonti:</h3>
 				<table class="cells">
@@ -23,7 +25,7 @@
 						<td>{PHP.L.Database}</td>
 						<td class="textcenter">{ADMIN_HOME_DB_VERSION}</td>
 					</tr>
-					<!-- IF !{PHP.cfg.plugin.hits.disabledbstats} AND {PHP.cfg.plugin.hits}  --><tr>
+					<tr>
 						<td>{PHP.L.home_db_rows}</td>
 						<td class="textcenter">{ADMIN_HOME_DB_TOTAL_ROWS}</td>
 					</tr>
@@ -46,48 +48,29 @@
 					<tr>
 						<td>{PHP.L.Hooks}</td>
 						<td class="textcenter">{ADMIN_HOME_TOTALHOOKS}</td>
-					</tr><!-- ENDIF -->
+					</tr>
 				</table>
 			</div>
 		</div>
 
 		<div class="col3-1">
 			<div class="block">
-				<h3>{PHP.L.adm_valqueue}:</h3>
-				<ul class="follow">
-					<li><a href="{ADMIN_HOME_URL}">{PHP.L.Pages}: {ADMIN_HOME_PAGESQUEUED}</a></li>
-				</ul>
-			</div>
-			<div class="block">
 				<h3>{PHP.L.home_ql_b1_title}</h3>
 				<ul class="follow">
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=main">{PHP.L.home_ql_b1_1}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=title">{PHP.L.home_ql_b1_2}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=theme">{PHP.L.home_ql_b1_3}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=menus">{PHP.L.home_ql_b1_4}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=lang">{PHP.L.home_ql_b1_5}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=time">{PHP.L.home_ql_b1_6}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=parser">{PHP.L.home_ql_b2_4}</a></li>
-					<li><a href="admin.php?m=extrafields">{PHP.L.adm_extrafields}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=main')}">{PHP.L.home_ql_b1_1}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=title')}">{PHP.L.home_ql_b1_2}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=theme')}">{PHP.L.home_ql_b1_3}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=menus')}">{PHP.L.home_ql_b1_4}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=locale')}">{PHP.L.Locale}</a></li>
+					<li><a href="{PHP|cot_url('admin','m=extrafields')}">{PHP.L.adm_extrafields}</a></li>
 				</ul>
 			</div>
-<!-- IF {PHP.cfg.page} -->			
+			<!-- BEGIN: SIDEPANEL -->
 			<div class="block">
-				<h3>{PHP.L.Pages}</h3>
-				<ul class="follow">
-					<li><a href="page.php?m=add">{PHP.L.Add}</a></li>
-					<li><a href="admin.php?m=extrafields&amp;n={PHP.db_pages}">{PHP.L.home_ql_b2_2}</a></li>
-				</ul>
+				{ADMIN_HOME_SIDEPANEL}
 			</div>
-<!-- ENDIF -->
-			<div class="block">
-				<h3>{PHP.L.Users}</h3>
-				<ul class="follow">
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=users">{PHP.L.home_ql_b3_1}</a></li>
-					<li><a href="admin.php?m=extrafields&amp;n={PHP.db_users}">{PHP.L.home_ql_b3_2}</a></li>
-					<li><a href="admin.php?m=users">{PHP.L.home_ql_b3_4}</a></li>
-				</ul>
-			</div>
+			<!-- END: SIDEPANEL -->
+
 		</div>
 		<div class="clear"></div>
 <!-- END: MAIN -->

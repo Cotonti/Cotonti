@@ -14,7 +14,7 @@
 		<img src="themes/{PHP.theme}/img/nophoto.jpg" width="150" height="150" alt="{PHP.L.Photo}" />
 		<!-- ENDIF -->
 		</span>
-		<!-- IF {USERS_DETAILS_COUNTRY} != '<a href="users.php?f=country_00">---</a>' -->
+		<!-- IF {USERS_DETAILS_COUNTRY} != '<a href="{PHP|cot_url('users','f=country_00')}">---</a>' -->
 		{USERS_DETAILS_COUNTRY}<br />
 		<!-- ENDIF -->
 		{USERS_DETAILS_TIMEZONE}<br />
@@ -40,7 +40,7 @@
 		<h3><span style="background-color:#94af66; color:#fff">{PHP.L.View} {PHP.L.Profile}</span></h3>
 		<div class="padding15" style="padding-bottom:0">
 			<ul>
-			  <li><a href="pm.php?m=send&amp;to={USERS_DETAILS_ID}">{PHP.L.users_sendpm}</a></li>
+			  <li><a href="{USERS_DETAILS_ID|cot_url('pm','m=send&amp;to=$this')}">{PHP.L.users_sendpm}</a></li>
 			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAINGRP}</li>
 			  <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>
 			  <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>
@@ -48,11 +48,11 @@
 			</ul>
 		</div>
 		
-		<h3><a href="users.php?m=profile">{PHP.L.Update} {PHP.L.Profile}</a></h3>
+		<h3><a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Update} {PHP.L.Profile}</a></h3>
 		
-		<h3><a href="pm.php">{PHP.L.Private_Messages}</a></h3>
+		<h3><a href="{PHP|cot_url('pm')}">{PHP.L.Private_Messages}</a></h3>
 		
-		<h3><a href="pfs.php">{PHP.L.PFS}</a></h3>
+		<h3><a href="{PHP|cot_url('pfs')}">{PHP.L.PFS}</a></h3>
 		<!-- ENDIF -->
 		
 		<!-- IF {PHP.usr.id} > 0 AND {PHP.usr.id} != {PHP.urr.user_id} -->
@@ -60,7 +60,7 @@
 		<div class="padding15" style="padding-bottom:0; padding-right:0">
 			<span class="colright">{USERS_DETAILS_AVATAR}</span>
 			<ul>
-			  <li><a href="pm.php?m=send&amp;to={USERS_DETAILS_ID}">{PHP.L.users_sendpm}</a></li>
+			  <li><a href="{USERS_DETAILS_ID|cot_url('pm','m=send&amp;to=$this')}">{PHP.L.users_sendpm}</a></li>
 			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAINGRP}</li>
                           <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>
                           <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>
@@ -68,13 +68,13 @@
 			</ul>
 		</div>
 		
-		<h3><a href="users.php?m=details&amp;id={PHP.usr.id}&amp;u={PHP.usr.name}">{PHP.L.View} {PHP.L.Profile}</a></h3>
+		<h3><a href="{PHP.usr.name|cot_url('users','m=details&u=$this')}">{PHP.L.View} {PHP.L.Profile}</a></h3>
 		
-		<h3><a href="users.php?m=profile">{PHP.L.Update} {PHP.L.Profile}</a></h3>
+		<h3><a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Update} {PHP.L.Profile}</a></h3>
 		
-		<h3><a href="pm.php">{PHP.L.Private_Messages}</a></h3>
+		<h3><a href="{PHP|cot_url('pm')}">{PHP.L.Private_Messages}</a></h3>
 		
-		<h3><a href="pfs.php">{PHP.L.PFS}</a></h3>
+		<h3><a href="{PHP|cot_url('pfs')}">{PHP.L.PFS}</a></h3>
 		<!-- ENDIF -->
 		
 		<!-- IF {PHP.usr.id} == 0 -->
@@ -82,7 +82,7 @@
 		<div class="padding15" style="padding-bottom:0; padding-right:0">
 			<span class="colright">{USERS_DETAILS_AVATAR}</span>
 			<ul>
-			  <li><a href="pm.php?m=send&amp;to={USERS_DETAILS_ID}">{PHP.L.users_sendpm}</a></li>
+			  <li><a href="{USERS_DETAILS_ID|cot_url('pm','m=send&amp;to=$this')}">{PHP.L.users_sendpm}</a></li>
 			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAINGRP}</li>
                           <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>
                           <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>
@@ -91,7 +91,7 @@
 		</div>
 		<!-- ENDIF -->
 		
-		<h3><a href="users.php">{PHP.L.Users}</a></h3>
+		<h3><a href="{PHP|cot_url('users')}">{PHP.L.Users}</a></h3>
 		
 		<!-- BEGIN: USERS_DETAILS_ADMIN -->
 		<h3 class="adm">{PHP.themelang.page.admin}</h3>

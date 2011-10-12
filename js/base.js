@@ -191,7 +191,7 @@ function ajaxMakeHash(href, rel, formData) {
 	var hash = (formData == 'post') ? 'post' : 'get';
 	var hrefBase, params;
 	var sep = '?';
-	var m = rel.match(/(get|post)(-[^ ;]+)?(;\S*)?/);
+	var m = rel ? rel.match(/(get|post)(-[^ ;]+)?(;\S*)?/) : false;
 	if (m) {
 		hash = m[1];
 		if (m[2]) {
@@ -252,6 +252,36 @@ function bindHandlers() {
 		$('a.ajax').live('click', function() {
 			$.historyLoad(ajaxMakeHash($(this).attr('href').replace(/#.*$/, ''), $(this).attr('rel')));
 			return ajaxError;
+		});
+		
+		// AJAX action confirmations
+		$('a.confirmLink').live('click', function() {
+			if ($(this).attr('href').match(/message.+920/i)) {
+				if ($('#confirmBox')) {
+					$('#confirmBox').remove();
+				}
+				$('body').prepend('<div id="confirmBox" class="jqmWindow"></div>');
+				$('#confirmBox').jqm({ajax:$(this).attr('href'),modal:true,onLoad:function(){
+					$('#confirmBox').css('margin-left', '-'+($('#confirmBox').width()/2)+'px');
+					$('#confirmBox').css('margin-top', '-'+($('#confirmBox').height()/2)+'px');
+				}});
+				$('#confirmBox').jqmShow();
+				return false;
+			} else {
+				return true;
+			}
+		});
+		$('a#confirmNo').live('click', function() {
+			if ($("#confirmBox").is(".jqmWindow"))
+			{
+				$('#confirmBox').jqmHide();
+				$('#confirmBox').remove();
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		});
 	}
 }

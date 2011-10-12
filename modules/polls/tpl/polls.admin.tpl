@@ -1,9 +1,9 @@
 <!-- BEGIN: MAIN -->
 	<h2>{PHP.L.Polls}</h2>
 	{FILE "{PHP.cfg.themes_dir}/{PHP.theme}/warnings.tpl"}
-	<ul class="follow">
-		<li><a title="{PHP.L.Configuration}" href="{ADMIN_POLLS_CONF_URL}">{PHP.L.Configuration}</a></li>
-	</ul>
+	<div class=" button-toolbar block">
+		<a title="{PHP.L.Configuration}" href="{ADMIN_POLLS_CONF_URL}" class="button">{PHP.L.Configuration}</a>
+	</div>
 	<h3>{PHP.L.poll}:</h3>
 	<select name="jumpbox" size="1" onchange="redirect(this)" class="marginbottom10 margintop10">
 			<!-- BEGIN: POLLS_ROW_FILTER -->
@@ -12,11 +12,11 @@
 	</select>
 	<table class="cells">
 		<tr>
-			<td class="coltop width15">{PHP.L.Date}</td>
-			<td class="coltop width15">{PHP.L.Type}</td>
-			<td class="coltop width30">{PHP.L.Poll} {PHP.L.adm_clicktoedit}</td>
-			<td class="coltop width15">{PHP.L.Votes}</td>
-			<td class="coltop width25">{PHP.L.Action}</td>
+			<td class="coltop width10">{PHP.L.Date}</td>
+			<td class="coltop width10">{PHP.L.Type}</td>
+			<td class="coltop width35">{PHP.L.Poll} {PHP.L.adm_clicktoedit}</td>
+			<td class="coltop width5">{PHP.L.Votes}</td>
+			<td class="coltop width40">{PHP.L.Action}</td>
 		</tr>
 		<!-- BEGIN: POLLS_ROW -->
 		<tr>
@@ -24,16 +24,16 @@
 			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_TYPE}</td>
 			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_LOCKED}<a href="{ADMIN_POLLS_ROW_POLL_URL}">{ADMIN_POLLS_ROW_POLL_TEXT}</a></td>
 			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_TOTALVOTES}</td>
-			<td class="centerall action">
+			<td class="action">
 				<!-- IF !{ADMIN_POLLS_ROW_POLL_LOCKED} -->
-				<a title="{PHP.L.Lock}" href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">{PHP.R.polls_icon_lock}</a>
+				<a title="{PHP.L.Lock}" href="{ADMIN_POLLS_ROW_POLL_URL_LCK}" class="button">{PHP.L.Lock}</a>
 				<!-- ELSE -->
-				<a title="{PHP.L.Unlock}" href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">{PHP.R.polls_icon_unlock}</a>
+				<a title="{PHP.L.Unlock}" href="{ADMIN_POLLS_ROW_POLL_URL_LCK}" class="button">{PHP.L.Unlock}</a>
 				<!-- ENDIF -->
-				<a title="{PHP.L.Delete}" href="{ADMIN_POLLS_ROW_POLL_URL_DEL}">{PHP.R.polls_icon_delete}</a>
-				<a title="{PHP.L.Reset}" href="{ADMIN_POLLS_ROW_POLL_URL_RES}">{PHP.R.polls_icon_reset}</a>
-				<a title="{PHP.L.Bump}" href="{ADMIN_POLLS_ROW_POLL_URL_BMP}">{PHP.R.polls_icon_bump}</a>
-				<a title="{PHP.L.Open}" href="{ADMIN_POLLS_ROW_POLL_URL_OPN}">{PHP.R.polls_icon_open}</a>
+				<a title="{PHP.L.Delete}" href="{ADMIN_POLLS_ROW_POLL_URL_DEL}" class="button">{PHP.L.Delete}</a>
+				<a title="{PHP.L.Reset}" href="{ADMIN_POLLS_ROW_POLL_URL_RES}" class="button">{PHP.L.Reset}</a>
+				<a title="{PHP.L.adm_polls_bump}" href="{ADMIN_POLLS_ROW_POLL_URL_BMP}" class="button">{PHP.L.adm_polls_bump}</a>
+				<a title="{PHP.L.Open}" href="{ADMIN_POLLS_ROW_POLL_URL_OPN}" class="button special">{PHP.L.Open}</a>
 			</td>
 		</tr>
 		<!-- END: POLLS_ROW -->
@@ -83,7 +83,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="valid" colspan="2"><button type="submit">{ADMIN_POLLS_SEND_BUTTON}</button></td>
+				<td colspan="2"><button type="submit" class="confirm">{ADMIN_POLLS_SEND_BUTTON}</button></td>
 			</tr>
 		</table>
 	</form>

@@ -4,5 +4,5 @@ Disallow: /images
 Disallow: /js
 Disallow: /lang
 Disallow: /lib
-Disallow: /skins
+Disallow: /themes
 Disallow: /system

@@ -60,7 +60,7 @@ if ($rowt = $sql_forums->fetch())
 {
 	if ($rowt['ft_state'] && !$usr['isadmin'])
 	{
-		cot_redirect(cot_url('message', 'msg=603', '', true));
+		cot_die_message(603, true);
 	}
 }
 else
@@ -167,8 +167,8 @@ if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY
 
 $t->assign(array(
 	'FORUMS_EDITPOST_PAGETITLE' => $toptitle,
-	'FORUMS_EDITPOST_SUBTITLE' => $L['forums_postedby'] . ": <a href=\"users.php?m=details&id=" . $rowpost['fp_posterid'] . "\">" . $rowpost['fp_postername'] . "</a> @ " . cot_date('datetime_medium', $rowpost['fp_updated'] + $usr['timezone'] * 3600),
-	'FORUMS_EDITPOST_UPDATED' => cot_date('datetime_medium', $rowpost['fp_updated'] + $usr['timezone'] * 3600),
+	'FORUMS_EDITPOST_SUBTITLE' => $L['forums_postedby'] . ": <a href=\"users.php?m=details&id=" . $rowpost['fp_posterid'] . "\">" . $rowpost['fp_postername'] . "</a> @ " . cot_date('datetime_medium', $rowpost['fp_updated']),
+	'FORUMS_EDITPOST_UPDATED' => cot_date('datetime_medium', $rowpost['fp_updated']),
 	'FORUMS_EDITPOST_UPDATED_STAMP' => $rowpost['fp_updated'] + $usr['timezone'] * 3600,
 	'FORUMS_EDITPOST_SEND' => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . cot_xg()),
 	'FORUMS_EDITPOST_TEXT' => cot_textarea('rtext', $rowpost['fp_text'], 20, 56, '', 'input_textarea_medieditor')

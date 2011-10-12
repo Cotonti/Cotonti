@@ -1,15 +1,34 @@
+<!-- BEGIN: LIST -->
+<h2>{PHP.L.Modules}</h2>
+	<div class="block">
+		<table class="cells">
+<!-- BEGIN: ADMIN_STRUCTURE_EXT -->
+			<tr>
+				<td class="centerall width10">
+					<!-- IF {ADMIN_STRUCTURE_EXT_ICO} --> 
+					<img src="{ADMIN_STRUCTURE_EXT_ICO}">
+					<!-- ELSE -->
+					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+					<!-- ENDIF -->
+				</td>
+				<td class="width90"><a href="{ADMIN_STRUCTURE_EXT_URL}">{ADMIN_STRUCTURE_EXT_NAME}</a></td>
+			</tr>
+<!-- END: ADMIN_STRUCTURE_EXT -->
+<!-- BEGIN: ADMIN_STRUCTURE_EMPTY -->
+			<tr>
+				<td colspan="2">{PHP.L.adm_listisempty}</td>
+			</tr>
+<!-- END: ADMIN_STRUCTURE_EMPTY -->
+		</table>
+</div>
+<!-- END: LIST -->
+
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Structure}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
-		<div class="block">
-			<ul class="follow">
-				<li>
-					<a href="{ADMIN_STRUCTURE_URL_EXTRAFIELDS}">{PHP.L.adm_extrafields_desc}</a>
-				</li>
-				<li>
-					<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>
-				</li>
-			</ul>
+		<div class="block button-toolbar">
+				<a href="{ADMIN_STRUCTURE_URL_EXTRAFIELDS}" class="button">{PHP.L.adm_extrafields_desc}</a>
+				<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax button special" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>
 		</div>
 
 		<!-- BEGIN: OPTIONS -->
@@ -69,9 +88,8 @@
 					<td class="coltop width10">{PHP.L.Code}</td>
 					<td class="coltop width20">{PHP.L.Title}</td>
 					<td class="coltop width5">{PHP.L.TPL}</td>
-					<td class="coltop width10">{PHP.L.Locked}</td>
 					<td class="coltop width5">{PHP.L.Pages}</td>
-					<td class="coltop width20">{PHP.L.Action}</td>
+					<td class="coltop width35">{PHP.L.Action}</td>
 				</tr>
 				<!-- BEGIN: ROW -->
 				<tr>
@@ -79,10 +97,13 @@
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_SYM}</td>
-					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_LOCKED}</td>
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
-					<td class="centerall action {ADMIN_STRUCTURE_ODDEVEN}">
-						<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a><a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax">{PHP.R.admin_icon_config}</a><!-- IF {PHP.dozvil} --><a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a><!-- ENDIF --><a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" >{PHP.R.admin_icon_jumpto}</a> <a href="{ADMIN_STRUCTURE_CONFIG_URL}" title="{PHP.L.Config}" >{PHP.R.admin_icon_config}</a></td>
+					<td class="action {ADMIN_STRUCTURE_ODDEVEN}">
+						<a href="{ADMIN_STRUCTURE_CONFIG_URL}" title="{PHP.L.Config}" class="button">{PHP.L.short_config}</a>
+						<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a>
+						<a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax button">{PHP.L.short_options}</a>
+						<!-- IF {PHP.dozvil} --><a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="confirmLink button">{PHP.L.short_delete}</a><!-- ENDIF -->
+						<a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" class="button special">{PHP.L.short_open}</a> </td>
 				</tr>
 				<!-- END: ROW -->
 				<tr>
@@ -98,7 +119,7 @@
 		<div class="block">
 			<h3>{PHP.L.Add}:</h3>
 			<form name="addstructure" id="addstructure" action="{ADMIN_STRUCTURE_URL_FORM_ADD}" method="post" class="ajax" enctype="multipart/form-data">
-			<table class="cells">
+			<table class="cells info">
 				<tr>
 					<td class="width20">{PHP.L.Path}:</td>
 					<td class="width80">{ADMIN_STRUCTURE_PATH} {PHP.L.adm_required}</td>

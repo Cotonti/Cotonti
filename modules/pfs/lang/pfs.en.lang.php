@@ -69,7 +69,7 @@ $L['pfs_filenotmoved'] = 'The upload failed, temporary file cannot be moved.';
 $L['pfs_filenotvalid'] = 'This is not a valid %1$s file.';
 $L['pfs_filesintheroot'] = 'File(s) in the root';
 $L['pfs_filesinthisfolder'] = 'File(s) in this folder';
-$L['pfs_filetoobigorext'] = 'The upload failed, this file is too big maybe, or the extension is not allowed?';
+$L['pfs_filetoobigorext'] = 'The upload failed, this file is too big or the extension is not allowed?';
 $L['pfs_folderistempty'] = 'This folder is empty.';
 $L['pfs_foldertitlemissing'] = 'A folder title is required.';
 $L['pfs_isgallery'] = 'Gallery?';
@@ -92,5 +92,8 @@ $L['pfs_insertasthumbnail'] = 'Insert as thumbnail';
 $L['pfs_insertasimage'] = 'Insert as fullsize image';
 $L['pfs_insertaslink'] = 'Insert as a link to the file';
 $L['pfs_dimensions'] = 'Dimensions';
+
+$L['pfs_confirm_delete_file'] = 'Are you sure want to delete this file?';
+$L['pfs_confirm_delete_folder'] = 'Are you sure want to delete this folder and all of its contents?';
 
 ?>

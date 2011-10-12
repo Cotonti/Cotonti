@@ -18,10 +18,13 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['Extension'] = 'Extension';
 $L['Extensions'] = 'Extensions';
+$L['Structure'] = 'Structure';
 
 /**
  * Home Section
  */
+
+$L['home_installable_error'] = 'Please remove install.php until next update or at least protect config.php from being writable';
 
 $L['home_newusers'] = 'New members';
 $L['home_newpages'] = 'New pages';
@@ -51,8 +54,8 @@ $L['home_ql_b3_1'] = 'Basic config';
 $L['home_ql_b3_2'] = 'Extra fields for users';
 $L['home_ql_b3_4'] = 'User rights';
 
-$L['home_update_notice'] = 'Update Avaliable';
-$L['home_update_revision'] = 'Current Version: <span style="color:#C00;font-weight:bold;">%1$s</span><br />New Version: <span style="color:#4E9A06;font-weight:bold;">%2$s</span>'; // %1/%2 Current Version/Revision %3/%4 Updated Version/Revision
+$L['home_update_notice'] = 'Update available';
+$L['home_update_revision'] = 'Current version: <span style="color:#C00;font-weight:bold;">%1$s</span><br />New version: <span style="color:#4E9A06;font-weight:bold;">%2$s</span>'; // %1/%2 Current version/revision %3/%4 Updated version/revision
 
 /**
  * Config Section
@@ -79,6 +82,17 @@ $L['core_users'] = &$L['Users'];
 $L['cfg_struct_defaults'] = 'Structure Defaults';
 
 /**
+ * Shortcuts
+ */
+$L['short_admin'] = 'Admin';
+$L['short_config'] = 'Config';
+$L['short_delete'] = 'Delete';
+$L['short_open'] = 'Open';
+$L['short_options'] = 'Options';
+$L['short_rights'] = 'Rights';
+$L['short_struct'] = 'Struct';
+
+/**
  * Config Section
  * Locale Subsection
  */
@@ -91,8 +105,9 @@ $L['cfg_defaulttimezone'] = array('Default time zone', 'For guests and new membe
  * Main Subsection
  */
 
-$L['cfg_adminemail'] = array('Administrator\'s e-mail', 'Required');
+$L['cfg_adminemail'] = array('Administrator\'s email', 'Required');
 $L['cfg_clustermode'] = array('Cluster of servers', 'Set to yes if it\'s a load balanced setup.');
+$L['cfg_confirmlinks'] = array('Confirm potentially dangerous actions');
 $L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
 $L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
 $L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
@@ -184,17 +199,10 @@ $L['cfg_body_mail'] = array('Email title', 'Options: {SITE_TITLE}, {SITE_DESCRIP
  * Users Subsection
  */
 
-$L['cfg_disablereg'] = array('Disable registration process', 'Prevent users from registering new accounts');
 $L['cfg_disablewhosonline'] = array('Disable who\'s online', 'Automatically enabled if you turn on the Shield');
 $L['cfg_forcerememberme'] = array('Force &quot;remember me&quot;', 'Use it on multi-domain sites or if there are sudden logouts');
-$L['cfg_maxusersperpage'] = array('Maximum lines in userlist', '');
-$L['cfg_regnoactivation'] = array('Skip e-mail check for new users', '\'No\'recommended, for security reasons');
-$L['cfg_regrequireadmin'] = array('Administrators must validate new accounts', '');
 $L['cfg_timedout'] = array('Idle delay, in seconds', 'After this delay, user is away');
-$L['cfg_user_email_noprotection'] = array('Disable password protection of e-mail change', '\'No\' recommended, for security reasons');
-$L['cfg_useremailchange'] = array('Allow users to change their e-mail address', '\'No\' recommended, for security reasons');
 $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');
-$L['cfg_usertextmax'] = array('Maximum length for user signature', '');
 
 /**
  * Config Section
@@ -257,7 +265,7 @@ $L['adm_help_structure'] = 'The pages that belong to the category &quot;system&q
 
 $L['adm_extrafields_desc'] = 'Add/Edit extra fields';
 $L['adm_extrafields_all'] = 'Show all database tables';
-
+$L['adm_extrafields_table'] = 'Table';
 $L['adm_help_structure_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank<br /><br />
 <b>New tags in tpl files:</b><br /><br />
 <u>list.tpl:</u><br /><br />
@@ -345,6 +353,7 @@ $L['adm_delcacheitem'] = 'Cache item removed';
 $L['adm_internalcache'] = 'Internal cache';
 $L['adm_purgeall_done'] = 'Cache cleared completely';
 $L['adm_diskcache'] = 'Disk cache';
+$L['adm_cache_showall'] = 'Show all';
 
 /**
  * Other Section
@@ -378,9 +387,9 @@ $L['adm_time1'] = '#1: Raw server time';
 $L['adm_time2'] = '#2: GMT time returned by the server';
 $L['adm_time3'] = '#3: GMT time + server offset (Cotonti reference)';
 $L['adm_time4'] = '#4: Your local time, adjusted from your profile';
-$L['adm_help_versions'] = 'Adjust the Server time zone to have the clock #3 properlly set.<br />
-Clock #4 depends of the timezone setting in your profile.<br />
-Clocks #1 and #2 are ignored by Cotonti.';
+$L['adm_help_versions'] = 'Adjust the server time zone to have clock #3 properly set.<br />
+Clock #4 depends on the time zone setting in your profile.<br />
+Clocks #1 and #2 are being ignored by Cotonti.';
 
 /**
  * Common Entries

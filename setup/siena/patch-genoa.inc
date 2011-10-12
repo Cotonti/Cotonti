@@ -28,7 +28,7 @@ $sql = $db->query("SELECT `structure_code`, `structure_order` FROM `$db_structur
 $multi_insert = array();
 while ($row = $sql->fetch())
 {
-	if ($row['structure_order'] != 'title.asc')
+	if (!(empty($row['structure_order'])) && $row['structure_order'] != 'title.asc')
 	{
 		$order_parts = explode('.', $row['structure_order']);
 		$multi_insert[] = array(

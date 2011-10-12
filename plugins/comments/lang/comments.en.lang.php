@@ -16,7 +16,7 @@ defined('COT_CODE') or die('Wrong URL.');
  */
 
 $L['cfg_enable_comments'] = array('Enable comments');
-$L['cfg_mail'] = array('Notify about new comments by email');
+$L['cfg_mail'] = array('Notify about new comments via email');
 $L['cfg_markitup'] = array('Use markitup');
 $L['cfg_markup'] = array('Enable markup in comments');
 $L['cfg_minsize'] = array('Min. comment length');
@@ -39,6 +39,7 @@ $L['info_desc'] = 'Comments system for Cotonti with API and integration with pag
 
 $L['comments_comment'] = 'Comment';
 $L['comments_comments'] = 'Comments';
+$L['comments_confirm_delete'] = 'Do you really want to delete this comment?';
 $L['Newcomment'] = 'New comment';
 
 $L['comm_on_page'] = 'on page';

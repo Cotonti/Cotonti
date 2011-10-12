@@ -13,11 +13,11 @@
 				<a href="#four">Link Four</a>
 
 				<div id="footsearch">
-					<form action="plug.php?e=search" method="post">
+					<form action="{PHP|cot_url('plug','e=search')}" method="post">
 					<p>
 					<input type="text" name="rsq" value="type term..." onfocus="if (this.value == 'type term...') this.value = '';" class="sq" maxlength="40" />
 					<input value="{PHP.L.Search|strtoupper}" type="submit" class="sb" />
-					<a href="plug.php?e=search" class="adv"><span>{PHP.themelang.pageadd.adv}</span></a>
+					<a href="{PHP|cot_url('plug','e=search')}" class="adv"><span>{PHP.themelang.pageadd.adv}</span></a>
 					</p>
 					</form>
 				</div>

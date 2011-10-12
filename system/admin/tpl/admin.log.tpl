@@ -2,9 +2,9 @@
 		<h2>{PHP.L.Log} ({ADMIN_LOG_TOTALDBLOG})</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 <!-- IF {PHP.usr.isadmin} -->
-			<ul class="follow">
-				<li><a title="{PHP.L.adm_purgeall}" href="{ADMIN_LOG_URL_PRUNE}" class="ajax">{PHP.L.adm_purgeall}</a></li>
-			</ul>
+			<div class="block button-toolbar">
+				<a title="{PHP.L.adm_purgeall}" href="{ADMIN_LOG_URL_PRUNE}" class="ajax button large">{PHP.L.adm_purgeall}</a>
+			</div>
 <!-- ENDIF -->
 			<form action="" class="margintop10 marginbottom10">{PHP.L.Group}:
 				<select name="groups" size="1" onchange="redirect(this)">
