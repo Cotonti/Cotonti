@@ -88,6 +88,7 @@ class XTemplate
 	 *
 	 * @param mixed $name Variable name or array of values
 	 * @param mixed $val Tag value if $name is not an array
+	 *	If $val is an array the keys act as tag name and $name acts as a prefix
 	 */
 	public function assign($name, $val = NULL)
 	{
@@ -96,6 +97,13 @@ class XTemplate
 			foreach ($name as $key => $val)
 			{
 				$this->vars[$key] = $val;
+			}
+		}
+		elseif (is_array($val))
+		{
+			foreach ($val as $k => $v)
+			{
+				$this->vars[$name.'_'.$k] = $v;
 			}
 		}
 		else
