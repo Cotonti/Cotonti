@@ -24,8 +24,7 @@ foreach (cot_getextplugins('i18n.page.first') as $pl)
 }
 /* =============*/
 
-$stmt = $db->query("SELECT page_alias, page_title, page_text, page_desc, page_ownerid
-	FROM $db_pages WHERE page_id = $id");
+$stmt = $db->query("SELECT * FROM $db_pages WHERE page_id = $id");
 
 if ($id > 0 && $stmt->rowCount() == 1)
 {
@@ -75,9 +74,9 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			/* =============*/
 
 			cot_message('Added');
-			$page_urlp = empty($pag['page_alias']) ? "c={$pag['page_cat']}id=$id&l=" . $pag_i18n['ipage_locale']
+			$page_urlp = empty($pag['page_alias']) ? "c={$pag['page_cat']}&id=$id&l=" . $pag_i18n['ipage_locale']
 				: 'c='.$pag['page_cat'] . '&al=' . $pag['page_alias'] . '&l=' . $pag_i18n['ipage_locale'];
-			cot_redirect(cot_url('page', $page_urlp, '', true));
+			cot_redirect(cot_url('page', $page_urlp, '', true, false, true));
 		}
 
 		$out['subtitle'] = $L['i18n_adding'];
@@ -155,9 +154,9 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			/* =============*/
 
 			cot_message('Updated');
-			$page_urlp = empty($pag['page_alias']) ? 'c=' . $pag['page_cat'] . "id=$id&l=$i18n_locale"
-				: 'c=' . $pag['page_cat'] . 'al=' . $pag['page_alias'] . '&l=' . $i18n_locale;
-			cot_redirect(cot_url('page', $page_urlp, '', true));
+			$page_urlp = empty($pag['page_alias']) ? 'c=' . $pag['page_cat'] . "&id=$id&l=$i18n_locale"
+				: 'c=' . $pag['page_cat'] . '&al=' . $pag['page_alias'] . '&l=' . $i18n_locale;
+			cot_redirect(cot_url('page', $page_urlp, '', true, false, true));
 		}
 
 		$out['subtitle'] = $L['i18n_editing'];
