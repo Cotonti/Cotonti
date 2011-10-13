@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.6
+ * @version 2.6.4
  * @author Vladimir Sibirov a.k.a. Trustmaster
  * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
@@ -181,7 +181,10 @@ class XTemplate
 			$fname = preg_replace_callback('`\{([\w\.]+)\}`', 'XTemplate::substitute_var', $m[2]);
 			if (file_exists($fname))
 			{
-				return file_get_contents($fname);
+				$code = cotpl_read_file($fname);
+				if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) $code = mb_substr($code, 0);
+				$code = preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restart_include_files', $code);
+				return $code;
 			}
 			return $fname;
 		}
@@ -225,7 +228,7 @@ class XTemplate
 		{
 			$this->blocks = array();
 			$this->index = array();
-			$code = file_get_contents($path);
+			$code = cotpl_read_file($path);
 			// Remove BOM if present
 			if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) $code = mb_substr($code, 0);
 			// FILE includes
@@ -253,8 +256,8 @@ class XTemplate
 		}
 		else
 		{
-			$this->blocks = unserialize(file_get_contents($cache_path));
-			$this->index = unserialize(file_get_contents($cache_idx));
+			$this->blocks = unserialize(cotpl_read_file($cache_path));
+			$this->index = unserialize(cotpl_read_file($cache_idx));
 		}
 	}
 
@@ -290,16 +293,13 @@ class XTemplate
 	 */
 	public function parse($block = 'MAIN')
 	{
-		global $cot_rc_theme_reload;
-		if ($cot_rc_theme_reload)
+		global $theme_reload;
+		if(is_array($theme_reload))
 		{
-			// Theme resources override trick
-			global $themeR, $R;
-			if ($themeR)
+			foreach($theme_reload as $key_reload => $val_reload)
 			{
-				$R = array_merge($R, $themeR);
+				$GLOBALS[$key_reload] = (is_array($GLOBALS[$key_reload]) && is_array($val_reload)) ? array_merge($GLOBALS[$key_reload], $val_reload) : $val_reload;
 			}
-			$cot_rc_theme_reload = false;
 		}
 		$path = $this->index[$block];
 		if ($path)
@@ -1099,10 +1099,10 @@ class Cotpl_logical extends Cotpl_block
 	public function  __toString()
 	{
 		$str = "<!-- IF " . $this->expr->__toString() . " -->\n";
-		$str .= $this->blocks_toString($this->blocks);
-		if (count($this->else_blocks) > 0)
+		$str .= $this->blocks_toString($this->blocks[0]);
+		if (count($this->blocks[1]) > 0)
 		{
-			$str .= "<!-- ELSE -->\n" . $this->blocks_toString($this->else_blocks);
+			$str .= "<!-- ELSE -->\n" . $this->blocks_toString($this->blocks[1]);
 		}
 		$str .= "<!-- ENDIF -->\n";
 		return $str;
@@ -1187,11 +1187,11 @@ class Cotpl_var
 			foreach ($chain as $cbk)
 			{
 				if (mb_strpos($cbk, '(') !== false
-					&& preg_match('`(\w+)\((.+?)\)`', $cbk, $mt))
+					&& preg_match('`(\w+)\s*\((.+?)\)`', $cbk, $mt))
 				{
 					$this->callbacks[] = array(
 						'name' => $mt[1],
-						'args' => cotpl_tokenize($mt[2], array(',', ' '))
+						'args' => cotpl_tokenize(trim($mt[2]), array(',', ' '))
 					);
 				}
 				else
@@ -1344,7 +1344,29 @@ class Cotpl_var
 				if (is_array($func))
 				{
 					array_walk($func['args'], 'cotpl_callback_replace', $val);
-					$val = call_user_func_array($func['name'], $func['args']);
+					$f = $func['name'];
+					$a = $func['args'];
+					switch (count($a))
+					{
+						case 0:
+							$val = $f();
+							break;
+						case 1:
+							$val = $f($a[0]);
+							break;
+						case 2:
+							$val = $f($a[0], $a[1]);
+							break;
+						case 3:
+							$val =$f($a[0], $a[1], $a[2]);
+							break;
+						case 4:
+							$val = $f($a[0], $a[1], $a[2], $a[3]);
+							break;
+						default:
+							$val = call_user_func_array($f, $a);
+							break;
+					}
 				}
 				elseif ($func == 'dump')
 				{
@@ -1374,6 +1396,19 @@ function cotpl_callback_replace(&$arg, $i, $val)
 	{
 		$arg = str_replace('$this', (string)$val, $arg);
 	}
+}
+
+/**
+ * A faster implementation of file_get_contents(). Reads a file into a string.
+ * @param string $path File path
+ * @return string
+ */
+function cotpl_read_file($path)
+{
+	$fp = fopen($path, 'r');
+	$code = fread($fp, filesize($path));
+	fclose($fp);
+	return $code;
 }
 
 /**
@@ -1446,6 +1481,19 @@ function cotpl_tokenize($str, $delim = array(' '))
 			}
 			$prev_delim = false;
 		}
+		elseif ($c == '{' && !$quote)
+		{
+			// Avoid variable tokenization
+			$quote = $c;
+			$tokens[$idx] .= $c;
+			$prev_delim = false;
+		}
+		elseif ($c == '}' && $quote)
+		{
+			$quote = '';
+			$tokens[$idx] .= $c;
+			$prev_delim = false;
+		}
 		else
 		{
 			$tokens[$idx] .= $c;
@@ -1454,8 +1502,5 @@ function cotpl_tokenize($str, $delim = array(' '))
 	}
 	return $tokens;
 }
-
-// Cotonti-specific initialization
-XTemplate::init($cfg['xtpl_cache'], $cfg['cache_dir'], $cfg['debug_mode'] && $_GET['tpl_debug'], $cfg['html_cleanup']);
 
 ?>
