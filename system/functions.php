@@ -522,25 +522,14 @@ function cot_import_pagenav($var_name, $max_items = 0)
 }
 
 /**
- * Checks the string
+ * Checks the email
  *
  * @param string $res input string
- * @param string $type String type (email)
- * @return bool True if string valid
+ * @return bool True if email valid
  */
-function cot_string_match($res, $type = 'email')
+function cot_validate_email($res)
 {
-	$result = true;
-	switch($type)
-	{
-		case 'email':
-			$result = (mb_strlen($res) < 4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $res)) ? false : true;
-			break;
-		default:
-			$result = preg_match($type, $res);
-			break;
-	}
-	return $result;
+	  return(mb_strlen($res) < 4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $res)) ? false : true;
 }
 
 /**
