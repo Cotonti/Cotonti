@@ -95,7 +95,7 @@ if($a == 'update')
 			if ($rmailpass != $urr['user_password']) cot_error('pro_wrongpass', 'rmailpass');
 		}
 
-		if (mb_strlen($ruseremail) < 4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $ruseremail))
+		if (!cot_check_email($ruseremail))
 			cot_error('aut_emailtooshort', 'ruseremail');
 		if ($res > 0) cot_error('aut_emailalreadyindb', 'ruseremail');
 

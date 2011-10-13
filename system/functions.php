@@ -527,9 +527,9 @@ function cot_import_pagenav($var_name, $max_items = 0)
  * @param string $res input string
  * @return bool True if email valid
  */
-function cot_validate_email($res)
+function cot_check_email($res)
 {
-	  return(mb_strlen($res) < 4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $res)) ? false : true;
+	  return mb_strlen($res) > 4 && preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $res);
 }
 
 /**
@@ -1390,7 +1390,7 @@ function cot_build_email($email, $hide = false)
 	{
 		return $L['Hidden'];
 	}
-	elseif (!empty($email) && preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $email))
+	elseif (!empty($email) && cot_check_email($email))
 	{
 		$link = cot_rc('link_email', array('email' => $email));
 		return function_exists('cot_obfuscate') ? cot_obfuscate($link) : $link;

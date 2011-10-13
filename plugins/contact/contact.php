@@ -73,7 +73,7 @@ if (isset($_POST['rtext']))
 	{
 		cot_error('contact_noname', 'ruser');
 	}
-	if (mb_strlen($remail) < 4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $remail))
+	if (!cot_check_email($remail))
 	{
 		cot_error('contact_emailnotvalid', 'remail');
 	}
@@ -95,7 +95,7 @@ if (isset($_POST['rtext']))
 		));
 
 		$semail = (!empty($cfg['plugin']['contact']['email'])) ? $cfg['plugin']['contact']['email'] : $cfg['adminemail'];
-		if (mb_strlen($semail) > 4 || preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $semail))
+		if (cot_check_email($semail))
 		{
 			$headers = ("From: \"" . $ruser . "\" <" . $remail . ">\n");
 			$rtextm = $cfg["maintitle"] . " - " . $cfg['mainurl'] . " \n\n" .

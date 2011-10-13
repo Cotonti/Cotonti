@@ -65,7 +65,7 @@ if ($a=='add')
 	if (preg_match('/&#\d+;/', $ruser['user_name']) || preg_match('/[<>#\'"\/]/', $ruser['user_name'])) cot_error('aut_invalidloginchars', 'rusername');
 	if (mb_strlen($ruser['user_name']) < 2) cot_error('aut_usernametooshort', 'rusername');
 	if (mb_strlen($rpassword1) < 4) cot_error('aut_passwordtooshort', 'rpassword1');
-	if (cot_validate_email($ruser['user_email']))	cot_error('aut_emailtooshort', 'ruseremail');
+	if (!cot_check_email($ruser['user_email']))	cot_error('aut_emailtooshort', 'ruseremail');
 	if ($user_exists) cot_error('aut_usernamealreadyindb', 'rusername');
 	if ($email_exists) cot_error('aut_emailalreadyindb', 'ruseremail');
 	if ($rpassword1 != $rpassword2) cot_error('aut_passwordmismatch', 'rpassword2');

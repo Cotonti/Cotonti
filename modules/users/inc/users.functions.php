@@ -45,7 +45,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$password = $ruser['user_password'];
 	
 	$user_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_name = ? OR user_email = ? LIMIT 1", array($ruser['user_name'], $ruser['user_email']))->fetch();
-	if(mb_strlen($ruser['user_email']) < 4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $ruser['user_email']) || $user_exists)
+	if(!cot_check_email($ruser['user_email']) || $user_exists)
 	{
 		return false;
 	}
