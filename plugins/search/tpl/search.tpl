@@ -111,8 +111,8 @@
 	</table>
 
 	<!-- END: FORUMS -->
-	<p class="paging">{PLUGIN_PAGEPREV}{PLUGIN_PAGENAV}{PLUGIN_PAGENEXT}</p>
 	<!-- END: RESULTS -->
+	<p class="paging">{PLUGIN_PAGEPREV}{PLUGIN_PAGENAV}{PLUGIN_PAGENEXT}</p>
 </div>
 <!-- END: MAIN -->
 

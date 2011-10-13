@@ -522,6 +522,28 @@ function cot_import_pagenav($var_name, $max_items = 0)
 }
 
 /**
+ * Checks the string
+ *
+ * @param string $res input string
+ * @param string $type String type (email)
+ * @return bool True if string valid
+ */
+function cot_string_match($res, $type = 'email')
+{
+	$result = true;
+	switch($type)
+	{
+		case 'email':
+			$result = (mb_strlen($res) < 4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $res)) ? false : true;
+			break;
+		default:
+			$result = preg_match($type, $res);
+			break;
+	}
+	return $result;
+}
+
+/**
  * Sends mail with standard PHP mail().
  * If cot_mail_custom() function exists, it will be called instead of the PHP
  * function. This way custom mail delivery methods, such as SMTP, are
