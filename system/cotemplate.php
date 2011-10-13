@@ -88,27 +88,20 @@ class XTemplate
 	 *
 	 * @param mixed $name Variable name or array of values
 	 * @param mixed $val Tag value if $name is not an array
-	 *	If $val is an array the keys act as tag name and $name acts as a prefix
+	 * @param string $prefix An optional prefix for variable keys
 	 */
-	public function assign($name, $val = NULL)
+	public function assign($name, $val = NULL, $prefix = '')
 	{
 		if (is_array($name))
 		{
 			foreach ($name as $key => $val)
 			{
-				$this->vars[$key] = $val;
-			}
-		}
-		elseif (is_array($val))
-		{
-			foreach ($val as $k => $v)
-			{
-				$this->vars[$name.'_'.$k] = $v;
+				$this->vars[$prefix.$key] = $val;
 			}
 		}
 		else
 		{
-			$this->vars[$name] = $val;
+			$this->vars[$prefix.$name] = $val;
 		}
 	}
 
