@@ -73,11 +73,11 @@ $cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvali
 $where['state'] = '(page_state=0 OR page_state=2)';
 if ($c == 'unvalidated')
 {
-	$where['state'] = 'page_state = 1';
+	$where['state'] = 'page_state != 0';
 	$where['ownerid'] = 'page_ownerid = ' . $usr['id'];
 	$cat['title'] = $L['page_validation'];
 	$cat['desc'] = $L['page_validation_desc'];
-	$s = 'date';
+	$s = 'state';
 	$w = 'desc';
 }
 elseif ($c != 'all')
