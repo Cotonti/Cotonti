@@ -354,7 +354,7 @@ function cot_page_status($page_state, $page_begin, $page_expire)
 		{
 			return 'expired';
 		}
-		elseif ($page_begin <= $sys['now'])
+		elseif ($page_begin > $sys['now'])
 		{
 			return 'approved';
 		}
