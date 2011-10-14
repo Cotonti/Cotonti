@@ -73,6 +73,7 @@ $cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvali
 $where['state'] = '(page_state=0 OR page_state=2)';
 if ($c == 'unvalidated')
 {
+	$cat['tpl'] = 'unvalidated';
 	$where['state'] = 'page_state != 0';
 	$where['ownerid'] = 'page_ownerid = ' . $usr['id'];
 	$cat['title'] = $L['page_validation'];
@@ -160,7 +161,7 @@ foreach (cot_getextplugins('page.list.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_tplfile(array('page' ,'list', $cat['tpl']));
+$mskin = cot_tplfile(array('page', 'list', $cat['tpl']));
 $t = new XTemplate($mskin);
 
 $t->assign(array(
