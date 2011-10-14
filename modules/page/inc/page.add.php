@@ -69,7 +69,10 @@ if ($a == 'add')
 	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
 	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
 	$rpage['page_updated'] = $sys['now_offset'];
-		
+	
+	$rpublish = cot_import('rpublish', 'P', 'ALP'); // For backwards compatibility
+	$rpage['page_state'] = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', 'P', 'INT');
+	
 	// Extra fields
 	foreach ($cot_extrafields[$db_pages] as $row)
 	{
@@ -108,22 +111,16 @@ if ($a == 'add')
 			$rpage['page_alias'] = ($sql_page->rowCount() > 0) ? $rpage['page_alias'].rand(1000, 9999) : $rpage['page_alias'];
 		}
 
-		if ($usr['isadmin'] && $cfg['page']['autovalidate'])
+		if ($rpage['page_state'] == 0)
 		{
-			$rpublish = cot_import('rpublish', 'P', 'ALP');
-			if ($rpublish == 'OK')
+			if ($usr['isadmin'] && $cfg['page']['autovalidate'])
 			{
-				$rpage['page_state'] = 0;
 				$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
 			}
 			else
 			{
 				$rpage['page_state'] = 1;
 			}
-		}
-		else
-		{
-			$rpage['page_state'] = 1;
 		}
 
 		/* === Hook === */

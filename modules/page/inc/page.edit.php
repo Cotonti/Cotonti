@@ -45,6 +45,7 @@ if ($a == 'update')
 		include $pl;
 	}
 	/* ===== */
+	
 	cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $row_page['page_ownerid']);
 
 	$rpage['page_keywords'] = cot_import('rpagekeywords', 'P', 'TXT');
@@ -67,6 +68,9 @@ if ($a == 'update')
 	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
 	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
 	$rpage['page_updated'] = $sys['now'];
+	
+	$rpublish = cot_import('rpublish', 'P', 'ALP'); // For backwards compatibility
+	$rpage['page_state'] = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', 'P', 'INT');
 
 	// Extra fields
 	foreach ($cot_extrafields[$db_pages] as $row_extf)
@@ -104,7 +108,7 @@ if ($a == 'update')
 
 		if ($row_page_delete = $sql_page_delete->fetch())
 		{
-			if ($row_page_delete['page_state'] != 1)
+			if ($row_page_delete['page_state'] == 0)
 			{
 				$sql_page_delete = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row_page_delete['page_cat']."' ");
 			}
@@ -147,19 +151,17 @@ if ($a == 'update')
 		$sql_page_update = $db->query("SELECT page_cat, page_state FROM $db_pages WHERE page_id=$id");
 		$row_page_update = $sql_page_update->fetch();
 
-		if ($row_page_update['page_cat'] != $rpage['page_cat'] /*&& ($row_page_update['page_state'] == 0 || $row_page_update['page_state'] == 2)*/)
+		if ($row_page_update['page_cat'] != $rpage['page_cat'] && $row_page_update['page_state'] == 0)
 		{
 			$sql_page_update = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$db->prep($row_page_update['page_cat'])."' AND structure_area = 'page'");
 		}
 
 		//$usr['isadmin'] = cot_auth('page', $rpage['page_cat'], 'A');
-		if ($usr['isadmin'] && $cfg['page']['autovalidate'])
+		if ($rpage['page_state'] == 0)
 		{
-			$rpublish = cot_import('rpublish', 'P', 'ALP');
-			if ($rpublish == 'OK' )
+			if ($usr['isadmin'] && $cfg['page']['autovalidate'])
 			{
-				$rpage['page_state'] = 0;
-				if ($row_page_update['page_state'] == 1 || $row_page_update['page_cat'] != $rpage['page_cat'])
+				if ($row_page_update['page_state'] != 0 || $row_page_update['page_cat'] != $rpage['page_cat'])
 				{
 					$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' AND structure_area = 'page'");
 				}
@@ -169,11 +171,8 @@ if ($a == 'update')
 				$rpage['page_state'] = 1;
 			}
 		}
-		else
-		{
-			$rpage['page_state'] = 1;
-		}
-		if ($rpage['page_state'] == 1 && $row_page_update['page_state'] != 1)
+		
+		if ($rpage['page_state'] != 0 && $row_page_update['page_state'] == 0)
 		{
 			$db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
 		}
