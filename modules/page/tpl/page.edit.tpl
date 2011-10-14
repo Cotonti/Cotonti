@@ -35,6 +35,10 @@
 						<td>{PAGEEDIT_FORM_EXPIRE}</td>
 					</tr>
 					<tr>
+						<td>{PHP.L.Status}:</td>
+						<td>{PAGEEDIT_FORM_LOCALSTATUS}</td>
+					</tr>
+					<tr>
 						<td>{PHP.L.Alias}:</td>
 						<td>{PAGEEDIT_FORM_ALIAS}</td>
 					</tr>

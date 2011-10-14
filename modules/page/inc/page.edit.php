@@ -213,6 +213,12 @@ $sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
 cot_die($sql_page->rowCount() == 0);
 $pag = $sql_page->fetch();
 
+$pag['page_status'] = cot_page_status(
+	$pag['page_state'],
+	$pag['page_begin'],
+	$pag['page_expire']
+);
+
 $sys['parser'] = $pag['page_parser'];
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $pag['page_cat']);
@@ -240,6 +246,8 @@ $pageedit_array = array(
 	'PAGEEDIT_FORM_SEND' => cot_url('page', "m=edit&a=update&id=".$pag['page_id']),
 	'PAGEEDIT_FORM_ID' => $pag['page_id'],
 	'PAGEEDIT_FORM_STATE' => $pag['page_state'],
+	'PAGEEDIT_FORM_STATUS' => $pag['page_status'],
+	'PAGEEDIT_FORM_LOCALSTATUS' => $L['page_status_'.$pag['page_status']],
 	'PAGEEDIT_FORM_CAT' => cot_selectbox_categories($pag['page_cat'], 'rpagecat'),
 	'PAGEEDIT_FORM_CAT_SHORT' => cot_selectbox_categories($pag['page_cat'], 'rpagecat', $c),
 	'PAGEEDIT_FORM_KEYWORDS' => cot_inputbox('text', 'rpagekeywords', $pag['page_keywords'], array('size' => '32', 'maxlength' => '255')),

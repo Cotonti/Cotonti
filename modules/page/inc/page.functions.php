@@ -350,13 +350,21 @@ function cot_page_status($page_state, $page_begin, $page_expire)
 	
 	if ($page_state == 0)
 	{
-		return ($page_expire >= $sys['now']) ? (($page_begin <= $sys['now']) ? 
-			'approved' : 'published') : 'expired';
+		if ($page_expire > 0 && $page_expire <= $sys['now'])
+		{
+			return 'expired';
+		}
+		elseif ($page_begin <= $sys['now'])
+		{
+			return 'approved';
+		}
+		return 'published';
 	}
-	else
+	elseif ($page_state == 2)
 	{
-		return ($page_state == 2) ? 'draft' : 'pending';
+		return 'draft';
 	}
+	return 'pending';
 }
 
 /**
