@@ -94,6 +94,16 @@ $L['page_pageid'] = 'Page ID';
 $L['page_deletepage'] = 'Delete this page';
 
 /**
+ * Page statuses
+ */
+
+$L['page_status_draft'] = 'Draft';
+$L['page_status_pending'] = 'Pending';
+$L['page_status_approved'] = 'Approved';
+$L['page_status_published'] = 'Published';
+$L['page_status_expired'] = 'Expired';
+
+/**
  * Moved from theme.lang
  */
 

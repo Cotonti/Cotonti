@@ -191,6 +191,12 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			$validate_url = cot_url('admin', "m=page&a=validate&id={$page_data['page_id']}&x={$sys['xk']}");
 			$unvalidate_url = cot_url('admin', "m=page&a=unvalidate&id={$page_data['page_id']}&x={$sys['xk']}");
 			$edit_url = cot_url('page', "m=edit&id={$page_data['page_id']}");
+			
+			$page_data['page_status'] = cot_page_status(
+				$page_data['page_state'], 
+				$page_data['page_begin'], 
+				$page_data['page_expire']
+			);
 
 			$temp_array = array(
 				'URL' => $page_data['page_pageurl'],
@@ -198,6 +204,8 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'TITLE' => $page_data['page_fulltitle'],
 				'ALIAS' => $page_data['page_alias'],
 				'STATE' => $page_data['page_state'],
+				'STATUS' => $page_data['page_status'],
+				'LOCALSTATUS' => $L['page_status_'.$page_data['page_status']],
 				'SHORTTITLE' => htmlspecialchars($page_data['page_title']),
 				'CAT' => $page_data['page_cat'],
 				'CATURL' => $cat_url,
@@ -326,6 +334,29 @@ function cot_page_config_order()
 
 	$L['cfg_order_params'] = array_values($options_sort);
 	return array_keys($options_sort);
+}
+
+/**
+ * Determines page status
+ *
+ * @param int $page_state
+ * @param int $page_begin
+ * @param int $page_expire
+ * @return string 'draft', 'pending', 'approved', 'published' or 'expired'
+ */
+function cot_page_status($page_state, $page_begin, $page_expire)
+{
+	global $sys;
+	
+	if ($page_state == 0)
+	{
+		return ($page_expire >= $sys['now']) ? (($page_begin <= $sys['now']) ? 
+			'approved' : 'published') : 'expired';
+	}
+	else
+	{
+		return ($page_state == 2) ? 'draft' : 'pending';
+	}
 }
 
 /**
