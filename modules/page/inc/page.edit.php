@@ -199,8 +199,24 @@ if ($a == 'update')
 		}
 
 		cot_log("Edited page #".$id,'adm');
-		$page_urlp = empty($rpage['page_alias']) ? array('c' => $rpage['page_cat'], 'id' => $id) : array('c' => $rpage['page_cat'], 'al' => $rpage['page_alias']);
-		cot_redirect(cot_url('page', $page_urlp, '', true));
+		
+		switch ($rpage['page_state'])
+		{
+			case 0:
+				$urlparams = $rpage['page_alias'] ? 
+					array('c' => $rpage['page_cat'], 'id' => $id) : 
+					array('c' => $rpage['page_cat'], 'al' => $rpage['page_alias']);
+				$r_url = cot_url('page', $urlparams, '', true);
+				break;
+			case 1:
+				$r_url = cot_url('message', 'msg=300', '', true);
+				break;
+			case 2:
+				cot_message($L['page_savedasdraft']);
+				$r_url = cot_url('page', 'm=edit&id='.$id, '', true);
+				break;
+		}
+		cot_redirect($r_url);
 	}
 	else
 	{

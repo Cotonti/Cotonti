@@ -93,6 +93,8 @@ $L['page_formhint'] = 'Once your submission is done, the page will be placed in 
 $L['page_pageid'] = 'Page ID';
 $L['page_deletepage'] = 'Delete this page';
 
+$L['page_savedasdraft'] = 'Page saved as draft.';
+
 /**
  * Page statuses
  */

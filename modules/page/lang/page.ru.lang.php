@@ -93,6 +93,8 @@ $L['page_formhint'] = 'После заполнения формы страниц
 $L['page_pageid'] = 'ID страницы';
 $L['page_deletepage'] = 'Удалить страницу';
 
+$L['page_savedasdraft'] = 'Page saved as draft.';
+
 /**
  * Page statuses
  */
