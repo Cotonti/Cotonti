@@ -320,7 +320,7 @@ else
 			$t->assign('ADMIN_STRUCTURE_'.strtoupper($row2['field_name']), cot_build_extrafields('rstructure'.$row2['field_name'].'['.$structure_id.']', $row2, $row['structure_'.$row2['field_name']]));
 
 			// extra fields universal tags
-			$t->assign('ADMIN_STRUCTURE_EXTRAFLD', cot_build_extrafields('rstructure'.$row2['field_name'],  $row2, $row['structure_'.$row2['field_name']]));
+			$t->assign('ADMIN_STRUCTURE_EXTRAFLD', cot_build_extrafields('rstructure'.$row2['field_name'].'['.$structure_id.']',  $row2, $row['structure_'.$row2['field_name']]));
 			$t->assign('ADMIN_STRUCTURE_EXTRAFLD_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
 			$t->parse(($id || !empty($al)) ? 'MAIN.OPTIONS.EXTRAFLD' : 'MAIN.DEFAULT.ROW.EXTRAFLD');
 		}
