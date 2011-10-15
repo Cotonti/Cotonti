@@ -709,12 +709,13 @@ function cot_extrafield_unlinkfiles($fielddata, $extrafield)
 
 /**
  * Loads extrafields data into global
+ * @param bool $forcibly Forcibly reload exflds
  * @global array $cot_extrafields
  */
-function cot_load_extrafields()
+function cot_load_extrafields($forcibly = false)
 {
 	global $db, $cot_extrafields, $db_extra_fields, $cache;
-	if (!isset($cot_extrafields))
+	if (!isset($cot_extrafields) || $forcibly)
 	{
 		$cot_extrafields = array();
 		$where = (defined('COT_INSTALL')) ? "1" : "field_enabled=1";

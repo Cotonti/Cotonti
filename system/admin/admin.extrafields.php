@@ -97,10 +97,6 @@ else
 		$field['field_parse'] = cot_import('field_parse', 'P', 'ALP');
 		$field['field_noalter'] = cot_import('field_noalter', 'P', 'BOL');
 		$field['field_enabled'] = 1;
-		if (empty($field['field_html']))
-		{
-			$field['field_html'] = cot_default_html_construction($field['field_type']);
-		}
 
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.extrafields.add') as $pl)
@@ -155,11 +151,6 @@ else
 
 				if ($field != $cot_extrafields[$n][$field['field_name']] && !empty($field['field_name']) && !empty($field['field_type']))
 				{
-					if (empty($field['field_html']) || $field['field_type'] != $cot_extrafields[$n][$field['field_name']]['field_type'])
-					{
-						$field['field_html'] = cot_default_html_construction($field['field_type']);
-					}
-
 					/* === Hook - Part2 : Include === */
 					foreach ($extp as $pl)
 					{
@@ -200,7 +191,8 @@ else
 	}
 
 	$cache && $cache->db->remove('cot_extrafields', 'system');
-
+	cot_load_extrafields(true);
+	
 	$totalitems = $db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$n'")->fetchColumn();
 	$res = $db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$n' ORDER BY field_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
