@@ -11,11 +11,11 @@
 				<!-- END: LIST_ROWCAT -->
 
 				<!-- BEGIN: LIST_ROW -->
-					<h3>{LIST_ROW_TITLE}</h3>
+					<h3><a href="{LIST_ROW_URL}">{LIST_ROW_SHORTTITLE}</a></h3>
 					<!-- IF {LIST_ROW_DESC} --><p class="small marginbottom10">{LIST_ROW_DESC}</p><!-- ENDIF -->
 					<!-- IF {PHP.usr.isadmin} --><p class="small marginbottom10">{LIST_ROW_ADMIN} ({LIST_ROW_COUNT})</p><!-- ENDIF -->
-					<div>{LIST_ROW_TEXT}</div>
-					<!-- IF {LIST_ROW_MORE} -->{LIST_ROW_MORE}<!-- ENDIF -->
+					<div>{LIST_ROW_TEXT_CUT}
+					<!-- IF {LIST_ROW_TEXT_IS_CUT} -->{LIST_ROW_MORE}<!-- ENDIF --></div>
 					<hr />
 				<!-- END: LIST_ROW -->
 			</div>

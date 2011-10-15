@@ -70,6 +70,8 @@ $sys['sublocation'] = $cat['title'];
 
 $cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cfg['page']['__default']['maxrowsperpage'] : $cfg['page'][$c]['maxrowsperpage'];
 
+$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cfg['page']['__default']['truncatetext'] : $cfg['page'][$c]['truncatetext'];
+
 $where['state'] = '(page_state=0 OR page_state=2)';
 if ($c == 'unvalidated')
 {
@@ -299,7 +301,7 @@ $extp = cot_getextplugins('page.list.loop');
 foreach ($sqllist->fetchAll() as $pag)
 {
 	$jj++;
-	$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', 0, $usr['isadmin']));
+	$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', $cfg['page']['truncatetext'], $usr['isadmin']));
 	$t->assign(array(
 		'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
 		'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj),

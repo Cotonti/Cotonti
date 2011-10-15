@@ -21,6 +21,7 @@ $L['cfg_maxlistsperpage'] = array('Max. lists per page', ' ');
 $L['cfg_order'] = array('Sorting column');
 $L['cfg_title_page'] = array('Page title tag format', 'Options: {TITLE}, {CATEGORY}');
 $L['cfg_way'] = array('Sorting direction');
+$L['cfg_truncatetext'] = array('Set truncated page text length in list', 'Zero to disable this feature');
 
 $L['info_desc'] = 'Extensible content management functionality: pages and page categories.';
 
