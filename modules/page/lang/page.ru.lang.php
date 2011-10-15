@@ -93,17 +93,17 @@ $L['page_formhint'] = 'После заполнения формы страниц
 $L['page_pageid'] = 'ID страницы';
 $L['page_deletepage'] = 'Удалить страницу';
 
-$L['page_savedasdraft'] = 'Page saved as draft.';
+$L['page_savedasdraft'] = 'Страница сохранена в черновиках';
 
 /**
  * Page statuses
  */
 
-$L['page_status_draft'] = 'Draft';
-$L['page_status_pending'] = 'Pending';
-$L['page_status_approved'] = 'Approved';
-$L['page_status_published'] = 'Published';
-$L['page_status_expired'] = 'Expired';
+$L['page_status_draft'] = 'Черновик';
+$L['page_status_pending'] = 'На рассмотрении';
+$L['page_status_approved'] = 'Утверждена';
+$L['page_status_published'] = 'Опубликована';
+$L['page_status_expired'] = 'Устарела';
 
 /**
  * Moved from theme.lang
