@@ -2431,25 +2431,46 @@ function cot_die_message($code, $header = TRUE)
 		950 => '403 Forbidden',
 		951 => '503 Service Unavailable'
 	);
-	$env['status'] = $msg_status[$code];
+	header('HTTP/1.1 ' . $msg_status[$code]);
 	
 	// Determine message title and body
 	$title = $L['msg' . $code . '_title'];
 	$body = $L['msg' . $code . '_body'];
 	
 	// Render the message page
+	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
+	$tpl_path = '';
 	if ($header)
 	{
-		$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
-		echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.$R['code_basehref'].$stylesheet.'</head><body><div class="block">';
+		if (file_exists(cot_tplfile("error.$code", $tpl_type)))
+		{
+			$tpl_path = cot_tplfile("error.$code", $tpl_type);
+			$header = false;
+		}
+		elseif (cot_tplfile('error', $tpl_type))
+		{
+			$tpl_path = cot_tplfile('error', $tpl_type);
+			$header = false;
+		}
+		else
+		{
+			echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.$R['code_basehref'].$stylesheet.'</head><body><div class="block">';
+		}
 	}
-	header('HTTP/1.1 ' . $env['status']);
 
-	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
-	$t = new XTemplate(cot_tplfile('message', $tpl_type));
+	if (empty($tpl_path))
+	{
+		$tpl_path = cot_tplfile('message', $tpl_type);
+	}
+
+	$t = new XTemplate($tpl_path);
+	
+	$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
 
 	$t->assign(array(
 		'AJAX_MODE' => COT_AJAX,
+		'MESSAGE_BASEHREF' => $R['code_basehref'],
+		'MESSAGE_STYLESHEET' => $stylesheet,
 		'MESSAGE_TITLE' => $title,
 		'MESSAGE_BODY' => $body
 	));
