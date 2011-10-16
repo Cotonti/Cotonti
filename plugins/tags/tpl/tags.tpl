@@ -28,6 +28,9 @@
 						<span class="strong"><a href="{TAGS_RESULT_ROW_URL}">{TAGS_RESULT_ROW_TITLE}</a></span><br />
 						<span class="small">{PHP.L.Sections}: {TAGS_RESULT_ROW_PATH}<br />
 						{PHP.L.Tags}: {TAGS_RESULT_ROW_TAGS}</span>
+						<!-- IF {TAGS_RESULT_ROW_TEXT_CUT} -->
+						<p>{TAGS_RESULT_ROW_TEXT_CUT}</p>
+						<!-- ENDIF -->
 					</li>
 					<!-- END: TAGS_RESULT_ROW -->
 				</ol>

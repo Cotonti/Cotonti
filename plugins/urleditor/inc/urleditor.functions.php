@@ -49,13 +49,31 @@ function cot_apply_rwr()
 		}
 		else
 		{
-			// Special shortcut for user profiles
+			// Special shortcuts
 			if ($path[0] == 'users' && $count == 2 && !isset($_GET['m']))
 			{
+				// User profiles
 				$_GET['e'] = 'users';
 				$_GET['m'] = 'details';
 				$_GET['u'] = urldecode($path[1]);
 				return;
+			}
+			elseif ($path[0] == 'tags')
+			{
+				// Tags
+				$_GET['e'] = 'tags';
+				if ($count == 3)
+				{
+					$_GET['a'] = $path[1];
+					$_GET['t'] = $path[2];
+				}
+				else
+				{
+					$_GET['a'] = 'pages';
+					$_GET['t'] = $path[1];
+				}
+				return;
+				
 			}
 			$last = $count - 1;
 			$ext = (isset($structure['page'][$path[0]])) ? 'page' : $path[0];

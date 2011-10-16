@@ -4,6 +4,8 @@ page	c=*&al=*				{cot_url_catpath()}/{$al}
 page	c=*&id=*				{cot_url_catpath()}/{$id}
 page	c=*						{cot_url_catpath()}
 index	*						/
+plug	e=tags&a=pages&t=*		{$e}/{$t}{!$a}
+plug	e=tags&a=*&t=*			{$e}/{$a}/{$t}
 plug	e=*						{$e}
 users	m=details&u=*			users/{cot_url_username()}
 admin	m=*						admin/{$m}

@@ -167,7 +167,7 @@ function cot_tag_search_pages($query)
 	}
 	/* ===== */
 
-	$sql = $db->query("SELECT DISTINCT p.page_id, p.page_alias, p.page_title, p.page_cat $join_columns
+	$sql = $db->query("SELECT DISTINCT p.* $join_columns
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id $join_tables
 		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0 $join_where
@@ -194,8 +194,10 @@ function cot_tag_search_pages($query)
 				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl)), htmlspecialchars($tag_t), 'rel="nofollow"');
 				$tag_i++;
 			}
+			
+			$t->assign(cot_generate_pagetags($row, 'TAGS_RESULT_ROW_', $cfg['page']['truncatetext']));
 			$t->assign(array(
-				'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']),
+				//'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']),
 				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
 				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_structure_buildpath('page', $row['page_cat']), false),
 				'TAGS_RESULT_ROW_TAGS' => $tag_list
