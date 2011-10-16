@@ -3,7 +3,7 @@
  * English Language File for the Page Module (page.en.lang.php)
  *
  * @package page
- * @version 0.7.0
+ * @version 0.9.6
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
@@ -22,6 +22,7 @@ $L['cfg_order'] = array('Sorting column');
 $L['cfg_title_page'] = array('Page title tag format', 'Options: {TITLE}, {CATEGORY}');
 $L['cfg_way'] = array('Sorting direction');
 $L['cfg_truncatetext'] = array('Set truncated page text length in list', 'Zero to disable this feature');
+$L['cfg_allowemptytext'] = array('Allow empty page text');
 
 $L['info_desc'] = 'Extensible content management functionality: pages and page categories.';
 
