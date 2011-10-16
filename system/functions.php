@@ -2442,14 +2442,9 @@ function cot_die_message($code, $header = TRUE)
 	$tpl_path = '';
 	if ($header)
 	{
-		if (file_exists(cot_tplfile("error.$code", $tpl_type)))
+		$tpl_path = cot_tplfile("error.$code", $tpl_type);
+		if ($tpl_path)
 		{
-			$tpl_path = cot_tplfile("error.$code", $tpl_type);
-			$header = false;
-		}
-		elseif (cot_tplfile('error', $tpl_type))
-		{
-			$tpl_path = cot_tplfile('error', $tpl_type);
 			$header = false;
 		}
 		else
