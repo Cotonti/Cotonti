@@ -3,7 +3,7 @@
  * Russian Language File for the Page Module (page.ru.lang.php)
  *
  * @package page
- * @version 0.7.0
+ * @version 0.9.6
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
@@ -22,6 +22,7 @@ $L['cfg_order'] = array('Поле сортировки');
 $L['cfg_title_page'] = array('Формат заголовка страницы', 'Опции: {TITLE}, {CATEGORY}');
 $L['cfg_way'] = array('Направление сортировки');
 $L['cfg_truncatetext'] = array('Ограничить размер текста в списках страниц', '0 для отключения');
+$L['cfg_allowemptytext'] = array('Разрешить пустой текст страницы');
 
 $L['info_desc'] = 'Расширяемая функциональность по управлению содержимым: страницы и категории страниц.';
 
