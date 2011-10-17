@@ -260,7 +260,7 @@ foreach ($subcat as $x)
 		OR structure_path = ".$db->quote($structure['page'][$x]['rpath']))->fetchColumn();
 
 	$t->assign(array(
-		'LIST_ROWCAT_URL' => cot_url('page', 'c='.$x),
+		'LIST_ROWCAT_URL' => cot_url('page', array('c' => $x, 'ord' => $o, 'p' => $p)),
 		'LIST_ROWCAT_TITLE' => $structure['page'][$x]['title'],
 		'LIST_ROWCAT_DESC' => $structure['page'][$x]['desc'],
 		'LIST_ROWCAT_ICON' => $structure['page'][$x]['icon'],
