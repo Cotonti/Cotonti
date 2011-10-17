@@ -2396,7 +2396,6 @@ function cot_die_message($code, $header = TRUE)
 			cot_error($error_string);
 		}
 	}
-	
 	// Determine response header
 	static $msg_status = array(
 		100 => '403 Forbidden',
@@ -2431,7 +2430,8 @@ function cot_die_message($code, $header = TRUE)
 		950 => '403 Forbidden',
 		951 => '503 Service Unavailable'
 	);
-	header('HTTP/1.1 ' . $msg_status[$code]);
+	
+	cot_sendheaders('text/html', $msg_status[$code]);
 	
 	// Determine message title and body
 	$title = $L['msg' . $code . '_title'];
