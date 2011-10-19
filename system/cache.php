@@ -953,6 +953,12 @@ if (extension_loaded('apc'))
 		 */
 		public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 		{
+			// Protect from exhausted memory
+			$info = $this->get_info();
+			if ($info['available'] < $info['max'] * 0.1)
+			{
+				$this->clear();
+			}
 			return apc_store($realm.'/'.$id, serialize($data), $ttl);
 		}
 	}
