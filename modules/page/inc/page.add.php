@@ -139,7 +139,7 @@ if ($a == 'add')
 		switch ($rpage['page_state'])
 		{
 			case 0:
-				$urlparams = $rpage['page_alias'] ? 
+				$urlparams = empty($rpage['page_alias']) ? 
 					array('c' => $rpage['page_cat'], 'id' => $id) : 
 					array('c' => $rpage['page_cat'], 'al' => $rpage['page_alias']);
 				$r_url = cot_url('page', $urlparams, '', true);
