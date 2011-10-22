@@ -99,7 +99,7 @@ function cot_bbcode_remove($id = 0, $plug = '')
 function cot_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, $container, $priority = 128, $postrender = false)
 {
 	global $db, $db_bbcode;
-	$bbc['enabled'] = empty($enabled) ? 0 : 1;
+	$bbc['bbc_enabled'] = empty($enabled) ? 0 : 1;
 	if (!empty($name))
 	{
 		$bbc['bbc_name'] = $name;
