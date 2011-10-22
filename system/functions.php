@@ -4691,7 +4691,7 @@ $cot_languages['pl']= 'Polski';
 $cot_languages['pt']= 'Portugese';
 $cot_languages['ru']= 'Русский';
 $cot_languages['se']= 'Svenska';
-$cot_languages['uk'] = 'Українська';
+$cot_languages['ua'] = 'Українська';
 
 /**
  * Makes correct plural forms of words
