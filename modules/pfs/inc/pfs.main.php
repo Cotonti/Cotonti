@@ -394,7 +394,7 @@ else
 			'PFF_ROW_URL' => cot_url('pfs', 'f='.$pff_id.'&'.$more),
 			'PFF_ROW_ICON' => $icon_f,
 			'PFF_ROW_UPDATED' => cot_date('datetime_medium', $row_pff['pff_updated']),
-			'PFF_ROW_UPDATED_STAMP' => $row_pff['pff_updated'] + $usr['timezone'] * 3600,
+			'PFF_ROW_UPDATED_STAMP' => $row_pff['pff_updated'],
 			'PFF_ROW_ISPUBLIC' => $cot_yesno[$pff_ispublic],
 			'PFF_ROW_DESC' => cot_cutstring($pff_desc,32)
 		));
@@ -463,7 +463,7 @@ foreach ($sql_pfs->fetchAll() as $row)
 		'PFS_ROW_ID' => $pfs_id,
 		'PFS_ROW_FILE' => $pfs_file,
 		'PFS_ROW_DATE' => cot_date('datetime_medium', $pfs_date),
-		'PFS_ROW_DATE_STAMP' => $pfs_date + $usr['timezone'] * 3600,
+		'PFS_ROW_DATE_STAMP' => $pfs_date,
 		'PFS_ROW_EXT' => $pfs_extension,
 		'PFS_ROW_DESC' => $pfs_desc,
 		'PFS_ROW_TYPE' => $filedesc[$pfs_extension],

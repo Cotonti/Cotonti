@@ -1613,7 +1613,10 @@ function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round =
 		'1' => $Ls['Seconds'],
 		'0.001' => $Ls['Milliseconds']
 	);
-	if ($t2 === null) $t2 = $sys['now_offset'];
+	if ($t2 === null) 
+	{
+		$t2 = $sys['now_offset'];
+	}
 	$gap = $t2 - $t1;
 	return cot_build_friendlynumber($gap, $units, $levels, $decimals, $round);
 }
@@ -1805,9 +1808,9 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'AGE' => ($user_data['user_birthdate'] != 0) ? cot_build_age($user_data['user_birthdate']) : '',
 				'TIMEZONE' => cot_build_timezone($user_data['user_timezone']),
 				'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate']),
-				'REGDATE_STAMP' => $user_data['user_regdate'] + $usr['timezone'] * 3600,
+				'REGDATE_STAMP' => $user_data['user_regdate'],
 				'LASTLOG' => cot_date('datetime_medium', $user_data['user_lastlog']),
-				'LASTLOG_STAMP' => $user_data['user_lastlog'] + $usr['timezone'] * 3600,
+				'LASTLOG_STAMP' => $user_data['user_lastlog'],
 				'LOGCOUNT' => $user_data['user_logcount'],
 				'POSTCOUNT' => $user_data['user_postcount'],
 				'LASTIP' => $user_data['user_lastip'],
@@ -2754,9 +2757,9 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 	}
 	if ($type == 'module')
 	{
-		if (@file_exists($cfg['modules_dir']."/$name/lang/modules/$name.$lang.lang.php"))
+		if (@file_exists($cfg['lang_dir']."/$lang/modules/$name.$lang.lang.php"))
 		{
-			return $cfg['modules_dir']."/$name/lang/modules/$name.$lang.lang.php";
+			return $cfg['lang_dir']."/$lang/modules/$name.$lang.lang.php";
 		}		
 		elseif (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
 		{
@@ -2780,9 +2783,9 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 	}
 	else
 	{		
-		if (@file_exists($cfg['plugins_dir']."/$name/lang/plugins/$name.$lang.lang.php"))
+		if (@file_exists($cfg['lang_dir']."/$lang/plugins/$name.$lang.lang.php"))
 		{
-			return $cfg['plugins_dir']."/$name/lang/plugins/$name.$lang.lang.php";
+			return $cfg['lang_dir']."/$lang/plugins/$name.$lang.lang.php";
 		}		
 		elseif (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
 		{

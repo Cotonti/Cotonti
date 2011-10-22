@@ -64,7 +64,7 @@ while ($row = $sql->fetch())
     
     $tuman->assign(array(
         'CONTACT_DATE' => cot_date('date_full', $row['contact_date']),
-        'CONTACT_DATE_STAMP' => $row['contact_date'] + $usr['timezone'] * 3600,
+        'CONTACT_DATE_STAMP' => $row['contact_date'],
         'CONTACT_USER' => ($row['contact_authorid'] > 0) ? cot_build_user($row['contact_authorid'], $row['contact_author']) : $row['contact_author'],
         'CONTACT_EMAIL' => $row['contact_email'],
         'CONTACT_ID' => $row['contact_id'],
@@ -91,7 +91,7 @@ if(($a == '') && !empty($id))
 
     $tuman->assign(array(
         'CONTACT_DATE' => cot_date('date_full', $row['contact_date']),
-        'CONTACT_DATE_STAMP' => $row['contact_date'] + $usr['timezone'] * 3600,
+        'CONTACT_DATE_STAMP' => $row['contact_date'],
         'CONTACT_USER' => ($row['contact_authorid'] > 0) ? cot_build_user($row['contact_authorid'], $row['contact_author']) : $row['contact_author'],
         'CONTACT_EMAIL' => $row['contact_email'],
         'CONTACT_ID' => $row['contact_id'],

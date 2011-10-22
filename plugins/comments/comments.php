@@ -140,7 +140,7 @@ if ($m == 'edit' && $id > 0)
 		'COMMENTS_IP' => $com['com_authorip'],
 		'COMMENTS_DATE_TITLE' => $L['Date'],
 		'COMMENTS_DATE' => cot_date('datetime_medium', $com['com_date']),
-		'COMMENTS_DATE_STAMP' => $com['com_date'] + $usr['timezone'] * 3600,
+		'COMMENTS_DATE_STAMP' => $com['com_date'],
 		'COMMENTS_FORM_UPDATE_BUTTON' => $L['Update'],
 		'COMMENTS_FORM_TEXT' => cot_textarea('comtext', $com['com_text'], 8, 64, '', 'input_textarea_minieditor')
 	));

@@ -161,7 +161,7 @@ foreach ($pm_sql->fetchAll() as $row)
 		'PM_ROW_STAR' => cot_rc($star_class ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$durl))),
 		'PM_ROW_STAR_URL' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$durl),
 		'PM_ROW_DATE' => cot_date('datetime_medium', $row['pm_date']),
-		'PM_ROW_DATE_STAMP' => $row['pm_date'] + $usr['timezone'] * 3600,
+		'PM_ROW_DATE_STAMP' => $row['pm_date'],
 		'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), htmlspecialchars($row['pm_title']), array('class'=>'ajax')),
 		'PM_ROW_URL' => cot_url('pm', 'm=message&id='.$row['pm_id']),
 		'PM_ROW_TEXT' => $pm_data,

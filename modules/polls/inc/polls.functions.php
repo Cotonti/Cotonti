@@ -356,7 +356,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	$t->assign(array(
 		'POLL_VOTERS' => $totalvotes,
 		'POLL_SINCE' => cot_date('datetime_medium', $row['poll_creationdate']),
-		'POLL_SINCE_STAMP' => $row['poll_creationdate'] + $usr['timezone'] * 3600,
+		'POLL_SINCE_STAMP' => $row['poll_creationdate'],
 		'POLL_SINCE_SHORT' => cot_date('date_short', $row['poll_creationdate']),
 		'POLL_TITLE' => cot_parse($row['poll_text'], $cfg['polls']['markup']),
 		'POLL_ID' => $id,

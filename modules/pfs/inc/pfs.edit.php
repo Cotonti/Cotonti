@@ -79,7 +79,7 @@ if ($row = $sql_pfs->fetch())
 {
 	$pfs_id = $row['pfs_id'];
 	$pfs_file = $row['pfs_file'];
-	$pfs_date = $row['pfs_date'] + $usr['timezone'] * 3600;
+	$pfs_date = $row['pfs_date'];
 	$pfs_folderid = $row['pfs_folderid'];
 	$pfs_extension = $row['pfs_extension'];
 	$pfs_desc = htmlspecialchars($row['pfs_desc']);
