@@ -73,7 +73,7 @@
 					<td class="valid" colspan="2"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
 				</tr>
 			</table>
-			<p class="paging"><span class="a1"><a href="{ADMIN_STRUCTURE_CONFIG_URL}">{PHP.L.Configuration}</a></span></p>
+			<p class="paging"><a href="{ADMIN_STRUCTURE_CONFIG_URL}" class="button">{PHP.L.Configuration}</a></p>
 			</form>
 		</div>
 		<!-- END: OPTIONS -->

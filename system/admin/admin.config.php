@@ -221,8 +221,11 @@ switch($n)
 			$plmod = $o == 'module' ? 'mod' : 'pl';
 
 			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $o == 'module' ? $cot_modules[$p]['title'] : $cot_plugins_enabled[$p]['title']);
-			empty($sub) || $adminpath[] = array(cot_url('admin', 'm=structure&n='.$p.'&al='.$sub), $structure[$p][$sub]['title']);
-
+			if (!empty($sub))
+			{
+				$adminpath[] = array(cot_url('admin', 'm=structure&n='.$p), $L['Structure']);
+				$adminpath[] = array(cot_url('admin', 'm=structure&n='.$p.'&al='.$sub), $structure[$p][$sub]['title']);
+			}
 			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub), $L['Configuration']);
 		}
 		

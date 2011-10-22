@@ -335,7 +335,7 @@ else
 		$t->parse(($id || !empty($al)) ? 'MAIN.OPTIONS' : 'MAIN.DEFAULT.ROW');
 	}
 
-	if (!$id || !empty($al))
+	if (!$id && empty($al))
 	{
 		$t->assign(array(
 			'ADMIN_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],
