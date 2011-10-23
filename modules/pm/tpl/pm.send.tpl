@@ -1,15 +1,16 @@
 <!-- BEGIN: MAIN -->
 
 <!-- BEGIN: BEFORE_AJAX -->
-	<div id="ajaxBlock">
-<!-- END: BEFORE_AJAX -->
+<div id="ajaxBlock">
+	<!-- END: BEFORE_AJAX -->
 
-		<div class="block">
-			<h2 class="comments">{PMSEND_TITLE}</h2>
+	<div class="block content">
+		<h2 class="comments">{PMSEND_TITLE}</h2>
+		<div class="blockbody">
 			<p class="small">{PHP.L.pmsend_subtitle}</p>
-			<p class="paging">{PMSEND_INBOX}<span class="spaced">{PHP.cfg.separator}</span>{PMSEND_SENTBOX}<span class="spaced">{PHP.cfg.separator}</span>{PMSEND_SENDNEWPM}</div>
+			<p class="paging">{PMSEND_INBOX}<span class="spaced">{PHP.cfg.separator}</span>{PMSEND_SENTBOX}<span class="spaced">{PHP.cfg.separator}</span>{PMSEND_SENDNEWPM}
 
-			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+				{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
 			<form action="{PMSEND_FORM_SEND}" method="post" name="newmessage" id="mewmessage">
 				<table class="cells">
@@ -40,15 +41,15 @@
 				</table>
 			</form>
 		</div>
-
-<!-- IF {PMSEND_AJAX_MARKITUP} -->
+	</div>
+	<!-- IF {PMSEND_AJAX_MARKITUP} -->
 	<script type="text/javascript">
 		$(document).ready(function() {$("textarea.editor").markItUp(mySettings);});
 	</script>
-<!-- ENDIF -->
+	<!-- ENDIF -->
 
-<!-- BEGIN: AFTER_AJAX -->
-	</div>
+	<!-- BEGIN: AFTER_AJAX -->
+</div>
 <!-- END: AFTER_AJAX -->
 
 <!-- END: MAIN -->

@@ -1,11 +1,12 @@
 <!-- BEGIN: MAIN -->
 
 <!-- BEGIN: BEFORE_AJAX -->
-	<div id="ajaxBlock">
-<!-- END: BEFORE_AJAX -->
+<div id="ajaxBlock">
+	<!-- END: BEFORE_AJAX -->
 
-		<div class="block">
-			<h2 class="comments">{PM_PAGETITLE}</h2>
+	<div class="block content">
+		<h2 class="comments">{PM_PAGETITLE}</h2>
+		<div class="blockbody">
 			<p class="small">{PM_SUBTITLE}</p>
 			<p class="paging">{PM_INBOX}<span class="spaced">{PHP.cfg.separator}</span>{PM_SENTBOX}<span class="spaced">{PHP.cfg.separator}</span>{PM_SENDNEWPM}</p>
 
@@ -35,23 +36,23 @@
 			<!-- BEGIN: REPLY -->
 			<h3>{PHP.L.pm_replyto}</h3>
 			<form action="{PM_FORM_SEND}" method="post" name="newlink">
-			<table class="cells">
-				<tr>
-					<td class="width15">{PHP.L.Subject}:</td>
-					<td class="width85">{PM_FORM_TITLE}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.Message}:</td>
-					<td>{PM_FORM_TEXT}</td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td><input type="checkbox" class="checkbox" name="fromstate" value="3" /> {PHP.L.pm_notmovetosentbox}</td>
-				</tr>
-				<tr>
-					<td colspan="2" class="valid"><button type="submit">{PHP.L.Reply}</button></td>
-				</tr>
-			</table>
+				<table class="cells">
+					<tr>
+						<td class="width15">{PHP.L.Subject}:</td>
+						<td class="width85">{PM_FORM_TITLE}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.Message}:</td>
+						<td>{PM_FORM_TEXT}</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td><input type="checkbox" class="checkbox" name="fromstate" value="3" /> {PHP.L.pm_notmovetosentbox}</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="valid"><button type="submit">{PHP.L.Reply}</button></td>
+					</tr>
+				</table>
 			</form>
 			<!-- END: REPLY -->
 
@@ -75,17 +76,17 @@
 				<!-- END: HISTORY -->
 			</div>
 		</div>
-
-<!-- IF {PM_AJAX_MARKITUP} -->
-	<script type="text/javascript">$(document).ready(function() {$("textarea.editor").markItUp(mySettings);});</script>
-<!-- ENDIF -->
-
-<!-- IF {PHP.cfg.jquery} -->
-	<script type="text/javascript" src="{PHP.cfg.modules_dir}/pm/js/pm.js"></script>
-<!-- ENDIF -->
-
-<!-- BEGIN: AFTER_AJAX -->
 	</div>
+	<!-- IF {PM_AJAX_MARKITUP} -->
+	<script type="text/javascript">$(document).ready(function() {$("textarea.editor").markItUp(mySettings);});</script>
+	<!-- ENDIF -->
+
+	<!-- IF {PHP.cfg.jquery} -->
+	<script type="text/javascript" src="{PHP.cfg.modules_dir}/pm/js/pm.js"></script>
+	<!-- ENDIF -->
+
+	<!-- BEGIN: AFTER_AJAX -->
+</div>
 <!-- END: AFTER_AJAX -->
 
 <!-- END: MAIN -->

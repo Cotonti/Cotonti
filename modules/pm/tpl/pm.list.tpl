@@ -2,17 +2,18 @@
 
 <!-- BEGIN: BEFORE_AJAX -->
 <div id="ajaxBlock">
-<!-- END: BEFORE_AJAX -->
+	<!-- END: BEFORE_AJAX -->
 
-		<div class="block">
-			<h2 class="comments">{PM_PAGETITLE}</h2>
+	<div class="block content">
+		<h2 class="comments">{PM_PAGETITLE}</h2>
+		<div class="blockbody">
 			<p class="small">{PM_SUBTITLE}</p>
 
 			<p class="paging">
 				{PM_INBOX}<span class="spaced">{PHP.cfg.separator}</span>{PM_SENTBOX}<span class="spaced">{PHP.cfg.separator}</span>{PM_SENDNEWPM}<br />
 				{PHP.L.Filter}: {PM_FILTER_UNREAD}, {PM_FILTER_STARRED}, {PM_FILTER_ALL}
 			</p>
-		
+
 			<form action="{PM_FORM_UPDATE}" method="post" name="update" id="update" class="ajax">
 				<table class="cells">
 					<tr>
@@ -63,12 +64,12 @@
 				<!-- ENDIF -->
 			</form>
 		</div>
-
+	</div>
 	<!-- IF {PHP.cfg.jquery} -->
 	<script type="text/javascript" src="{PHP.cfg.modules_dir}/pm/js/pm.js"></script>
 	<!-- ENDIF -->
 
-<!-- BEGIN: AFTER_AJAX -->
+	<!-- BEGIN: AFTER_AJAX -->
 </div>
 <!-- END: AFTER_AJAX -->
 

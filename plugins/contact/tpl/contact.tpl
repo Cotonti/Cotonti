@@ -1,12 +1,12 @@
 <!-- BEGIN: MAIN -->
 
-	<div class="col">
-		<div class="block">
-			<h2 class="message"><a href="{PHP|cot_url('plug','e=contact')}">{PHP.L.contact_title}</a></h2>
-
+<div class="col">
+	<div class="block content">
+		<h2 class="message"><a href="{PHP|cot_url('plug','e=contact')}">{PHP.L.contact_title}</a></h2>
+		<div class="blockbody">
 			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
-<!-- BEGIN: FORM -->
+			<!-- BEGIN: FORM -->
 			<form action="{CONTACT_FORM_SEND}" method="post" name="contact_form">
 				<table class="flat">
 					<tr>
@@ -37,9 +37,9 @@
 					</tr>
 				</table>
 			</form>
-<!-- END: FORM -->
-
+			<!-- END: FORM -->
 		</div>
 	</div>
+</div>
 
 <!-- END: MAIN -->

@@ -1,9 +1,9 @@
 <!-- BEGIN: MAIN -->
 
-		<div class="block">
-			<h2 class="forums">{FORUMS_NEWTOPIC_PAGETITLE}</h2>
-		
-			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+<div class="block content">
+	<h2 class="forums">{FORUMS_NEWTOPIC_PAGETITLE}</h2>
+	<div class="blockbody">
+		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 
 		<form action="{FORUMS_NEWTOPIC_SEND}" method="post" name="newtopic">
 			<table class="cells">
@@ -69,5 +69,5 @@
 			</table>
 		</form>
 	</div>
-
+</div>
 <!-- END: MAIN -->
