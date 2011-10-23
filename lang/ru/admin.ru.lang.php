@@ -286,6 +286,7 @@ $L['adm_maxsizesingle'] = 'Максимальный размер одного ф
 $L['adm_maxsizeallpfs'] = 'Максимальный размер всех файлов в разделе &laquo;'.$L['PFS'].'&raquo; (Кб)';
 $L['adm_copyrightsfrom'] = 'Установить права как в группе';
 $L['adm_rights_maintenance'] = 'Разрешить авторизацию при включенном режиме обслуживания';
+$L['adm_skiprights'] = 'Пропустить права для этой группы';
 
 /**
  * Users Section

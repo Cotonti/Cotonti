@@ -587,8 +587,11 @@ INSERT INTO `cot_plugins` (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_modu
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
 ('core','main','45','confirmlinks',3,'1','1','','');
 
+/* 0.9.6-01 issue #426 rightless groups */
+ALTER TABLE `cot_groups` ADD COLUMN `grp_skiprights` tinyint NOT NULL default '0';
+
 -------------------------------------------------------------------------------
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.5-01' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.6-01' WHERE `upd_param` = 'revision';

@@ -69,7 +69,7 @@ if ($a == 'update')
 $sql = $db->query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 	LEFT JOIN $db_groups AS g ON g.grp_id=a.auth_groupid
-	WHERE auth_code='$ic' AND auth_option='$io' ORDER BY grp_level DESC, grp_id DESC");
+	WHERE auth_code='$ic' AND auth_option='$io' AND grp_skiprights = 0 ORDER BY grp_level DESC, grp_id DESC");
 
 cot_die($sql->rowCount() == 0);
 

@@ -41,7 +41,8 @@ if($n == 'add')
 	$rgroups['grp_level'] = (int)cot_import('rlevel', 'P', 'INT');
 	$rgroups['grp_disabled'] = cot_import('rdisabled', 'P', 'BOL') ? 1 : 0;
 	$rgroups['grp_maintenance'] = cot_import('rmtmode', 'P', 'BOL') ? 1 : 0;
-	$rgroups['grp_ownerid'] = (int)$usr['id'];	
+	$rgroups['grp_skiprights'] = cot_import('rskiprights', 'P', 'BOL') ? 1 : 0;
+	$rgroups['grp_ownerid'] = (int)$usr['id'];
 
 	$rcopyrightsfrom = cot_import('rcopyrightsfrom', 'P', 'INT');
 
@@ -65,7 +66,10 @@ if($n == 'add')
 	}
 	/* ===== */
 
-	cot_auth_add_group($grp_id, $rcopyrightsfrom);
+	if (!$rgroups['grp_skiprights'])
+	{
+		cot_auth_add_group($grp_id, $rcopyrightsfrom);
+	}
 
 	$cache && $cache->db->remove('cot_groups', 'system');
 
@@ -82,6 +86,7 @@ elseif($n == 'edit')
 		$rgroups['grp_level'] = (int)cot_import('rlevel', 'P', 'INT');
 		$rgroups['grp_disabled'] = cot_import('rdisabled', 'P', 'BOL') ? 1 : 0;
 		$rgroups['grp_maintenance'] = cot_import('rmtmode', 'P', 'BOL') ? 1 : 0;
+		$rgroups['grp_skiprights'] = cot_import('rskiprights', 'P', 'BOL') ? 1 : 0;
 
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.users.update') as $pl)
@@ -92,7 +97,19 @@ elseif($n == 'edit')
 
 		if ($rgroups['grp_title'])
 		{
-			$db->update($db_groups, $rgroups, "grp_id='$g'");
+			$db->update($db_groups, $rgroups, "grp_id=$g");
+			
+			$was_rightless = $db->query("SELECT grp_skiprights FROM $db_groups WHERE grp_id = $g")->fetchColumn();
+			if ($was_rightless && !$rgroups['grp_skiprights'])
+			{
+				// Add missing rights from default group
+				cot_auth_add_group($grp_id, COT_GROUP_MEMBERS);
+			}
+			elseif (!$was_rightless && $rgroups['grp_skiprights'])
+			{
+				// Remove rights
+				cot_auth_remove_group($g);
+			}
 		}
 
 		$cache && $cache->db->remove('cot_groups', 'system');
@@ -139,9 +156,11 @@ elseif($n == 'edit')
 			'ADMIN_USERS_EDITFORM_GRP_ALIAS' => cot_inputbox('text', 'ralias', htmlspecialchars($row['grp_alias']), 'size="40" maxlength="24"'),
 			'ADMIN_USERS_EDITFORM_GRP_DISABLED' => ($g <= 5) ? $L['No'] : cot_radiobox($row['grp_disabled'], 'rdisabled', array(1, 0), array($L['Yes'], $L['No'])),
 			'ADMIN_USERS_EDITFORM_GRP_MAINTENANCE' => cot_radiobox($row['grp_maintenance'], 'rmtmode', array(1, 0), array($L['Yes'], $L['No'])),
+			'ADMIN_USERS_EDITFORM_GRP_SKIPRIGHTS' => cot_radiobox($row['grp_skiprights'], 'rskiprights', array(1, 0), array($L['Yes'], $L['No'])),
 			'ADMIN_USERS_EDITFORM_GRP_RLEVEL' => cot_selectbox($row['grp_level'], 'rlevel', range(0, 99), range(0, 99), false),
 			'ADMIN_USERS_EDITFORM_GRP_MEMBERSCOUNT' => $row['grp_memberscount'],
 			'ADMIN_USERS_EDITFORM_GRP_MEMBERSCOUNT_URL' => cot_url('users', 'g='.$g),
+			'ADMIN_USERS_EDITFORM_SKIPRIGHTS' => $row['grp_skiprights'],
 			'ADMIN_USERS_EDITFORM_RIGHT_URL' => cot_url('admin', 'm=rights&g='.$g),
 			'ADMIN_USERS_EDITFORM_DEL_URL' => cot_url('admin', 'm=users&n=edit&a=delete&g='.$g.'&'.cot_xg()),
 		));
@@ -165,7 +184,7 @@ if(!isset($showdefault) || $showdefault == true)
 	}
 	$sql->closeCursor();
 
-	$sql = $db->query("SELECT grp_id, grp_title, grp_disabled FROM $db_groups WHERE 1 ORDER BY grp_level DESC, grp_id DESC");
+	$sql = $db->query("SELECT * FROM $db_groups WHERE 1 ORDER BY grp_level DESC, grp_id DESC");
 
 	if($sql->rowCount() > 0)
 	{
@@ -181,6 +200,7 @@ if(!isset($showdefault) || $showdefault == true)
 				'ADMIN_USERS_ROW_GRP_ID' => $row['grp_id'],
 				'ADMIN_USERS_ROW_GRP_COUNT_MEMBERS' => $members[$row['grp_id']],
 				'ADMIN_USERS_ROW_GRP_DISABLED' => $cot_yesno[!$row['grp_disabled']],
+				'ADMIN_USERS_ROW_GRP_SKIPRIGHTS' => $row['grp_skiprights'],
 				'ADMIN_USERS_ROW_GRP_RIGHTS_URL' => cot_url('admin', 'm=rights&g='.$row['grp_id']),
 				'ADMIN_USERS_ROW_GRP_JUMPTO_URL' => cot_url('users', 'g='.$row['grp_id'])
 			));
@@ -202,6 +222,7 @@ if(!isset($showdefault) || $showdefault == true)
 		'ADMIN_USERS_NGRP_ALIAS' => cot_inputbox('text', 'ralias', '', 'size="40" maxlength="24"'),
 		'ADMIN_USERS_NGRP_DISABLED' => cot_radiobox(0, 'rdisabled', array(1, 0), array($L['Yes'], $L['No'])),
 		'ADMIN_USERS_NGRP_MAINTENANCE' => cot_radiobox(0, 'rmtmode', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_USERS_NGRP_SKIPRIGHTS' => cot_radiobox(0, 'rskiprights', array(1, 0), array($L['Yes'], $L['No'])),
 		'ADMIN_USERS_NGRP_RLEVEL' => cot_selectbox(50, 'rlevel', range(0, 99), range(0, 99), false),
 		'ADMIN_USERS_FORM_SELECTBOX_GROUPS' => cot_selectbox_groups(4, 'rcopyrightsfrom', array('5'))
 	));

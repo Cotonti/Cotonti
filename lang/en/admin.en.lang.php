@@ -286,6 +286,7 @@ $L['adm_maxsizesingle'] = 'Max size for a single file in '.$L['PFS'].' (KB)';
 $L['adm_maxsizeallpfs'] = 'Max size of all files together in '.$L['PFS'].' (KB)';
 $L['adm_copyrightsfrom'] = 'Set the same rights as the group';
 $L['adm_rights_maintenance'] = 'Access to site when maintenance mode on';
+$L['adm_skiprights'] = 'Omit rights for this group';
 
 /**
  * Users Section

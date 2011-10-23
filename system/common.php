@@ -269,7 +269,8 @@ if (!$cot_groups )
 				'icon' => $row['grp_icon'],
 				'pfs_maxfile' => $row['grp_pfs_maxfile'],
 				'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
-				'ownerid' => $row['grp_ownerid']
+				'ownerid' => $row['grp_ownerid'],
+				'skiprights' => $row['grp_skiprights']
 			);
 		}
 		$sql->closeCursor();

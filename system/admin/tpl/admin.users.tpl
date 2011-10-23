@@ -27,7 +27,9 @@
 					<td class="centerall">{ADMIN_USERS_ROW_GRP_COUNT_MEMBERS}</td>
 					<td class="centerall">{ADMIN_USERS_ROW_GRP_DISABLED}</td>
 					<td class="centerall action">
+						<!-- IF !{ADMIN_USERS_ROW_GRP_SKIPRIGHTS} -->
 						<a title="{PHP.L.Rights}" href="{ADMIN_USERS_ROW_GRP_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a>
+						<!-- ENDIF -->
 						<a title="{PHP.L.Open}" href="{ADMIN_USERS_ROW_GRP_JUMPTO_URL}" class="button special">{PHP.L.short_open}</a>
 					</td>
 				</tr>
@@ -67,6 +69,10 @@
 				<tr>
 					<td>{PHP.L.adm_copyrightsfrom}:</td>
 					<td>{ADMIN_USERS_FORM_SELECTBOX_GROUPS} {PHP.L.adm_required}</td>
+				</tr>
+				<tr>
+					<td>{PHP.L.adm_skiprights}:</td>
+					<td>{ADMIN_USERS_NGRP_SKIPRIGHTS}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Level}:</td>
@@ -146,9 +152,15 @@
 						<td>{ADMIN_USERS_EDITFORM_GRP_MAINTENANCE}</td>
 					</tr>
 					<tr>
+						<td>{PHP.L.adm_skiprights}:</td>
+						<td>{ADMIN_USERS_EDITFORM_GRP_SKIPRIGHTS}</td>
+					</tr>
+					<!-- IF !{ADMIN_USERS_EDITFORM_SKIPRIGHTS} -->
+					<tr>
 						<td>{PHP.L.Rights}:</td>
 						<td><a href="{ADMIN_USERS_EDITFORM_RIGHT_URL}" class="button">{PHP.L.Rights}</a></td>
 					</tr>
+					<!-- ENDIF -->
 <!-- IF {PHP.g} > 5 -->
 					<tr>
 						<td>{PHP.L.Delete}:</td>

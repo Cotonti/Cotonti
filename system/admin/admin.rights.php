@@ -20,6 +20,12 @@ $t = new XTemplate(cot_tplfile('admin.rights', 'core'));
 $g = cot_import('g', 'G', 'INT');
 $advanced = cot_import('advanced', 'G', 'BOL');
 
+// Check if the group is rightless
+if ($db->query("SELECT grp_skiprights FROM $db_groups WHERE grp_id = $g")->fetchColumn())
+{
+	cot_die();
+}
+
 /* === Hook === */
 foreach (cot_getextplugins('admin.rights.first') as $pl)
 {

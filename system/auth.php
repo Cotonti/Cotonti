@@ -99,15 +99,18 @@ function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth
 	$ins_array = array();
 	foreach ($cot_groups as $k => $v)
 	{
-		$base_grp = $k > COT_GROUP_SUPERADMINS ? COT_GROUP_DEFAULT : $k;
-		$ins_array[] = array(
-			'auth_groupid' => $k,
-			'auth_code' => $module_name,
-			'auth_option' => $item_id,
-			'auth_rights' => cot_auth_getvalue($auth_permit[$base_grp]),
-			'auth_rights_lock' => cot_auth_getvalue($auth_lock[$base_grp]),
-			'auth_setbyuserid' => $usr['id']
-		);
+		if (!$v['skiprights'])
+		{
+			$base_grp = $k > COT_GROUP_SUPERADMINS ? COT_GROUP_DEFAULT : $k;
+			$ins_array[] = array(
+				'auth_groupid' => $k,
+				'auth_code' => $module_name,
+				'auth_option' => $item_id,
+				'auth_rights' => cot_auth_getvalue($auth_permit[$base_grp]),
+				'auth_rights_lock' => cot_auth_getvalue($auth_lock[$base_grp]),
+				'auth_setbyuserid' => $usr['id']
+			);
+		}
 	}
 	$res = $db->insert($db_auth, $ins_array);
 	cot_auth_reorder();

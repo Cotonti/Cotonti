@@ -182,6 +182,7 @@ CREATE TABLE `cot_groups` (
   `grp_icon` varchar(128) collate utf8_unicode_ci NOT NULL default '',
   `grp_ownerid` int NOT NULL default '0',
   `grp_maintenance` tinyint NOT NULL default '0',
+  `grp_skiprights` tinyint NOT NULL default '0',
   PRIMARY KEY  (`grp_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7;
 

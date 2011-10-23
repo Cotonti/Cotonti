@@ -414,54 +414,57 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		$insert_rows = array();
 		foreach ($cot_groups as $k => $v)
 		{
-			if ($v['id'] == COT_GROUP_GUESTS || $v['id'] == COT_GROUP_INACTIVE)
+			if (!$v['skiprights'])
 			{
-				$ins_auth = cot_auth_getvalue($info['Auth_guests']);
-				$ins_lock = cot_auth_getvalue($info['Lock_guests']);
-
-				if ($ins_auth > 128 || $ins_lock < 128)
+				if ($v['id'] == COT_GROUP_GUESTS || $v['id'] == COT_GROUP_INACTIVE)
 				{
-					$ins_auth = ($ins_auth > 127) ? $ins_auth - 128 : $ins_auth;
-					$ins_lock = 128;
-				}
-			}
-			elseif ($v['id'] == COT_GROUP_BANNED)
-			{
-				$ins_auth = 0;
-				$ins_lock = 255;
-			}
-			elseif ($v['id'] == COT_GROUP_SUPERADMINS)
-			{
-				$ins_auth = 255;
-				$ins_lock = 255;
-			}
-			else
-			{
-				$ins_auth = cot_auth_getvalue($info['Auth_members']);
-				$ins_lock = cot_auth_getvalue($info['Lock_members']);
-			}
+					$ins_auth = cot_auth_getvalue($info['Auth_guests']);
+					$ins_lock = cot_auth_getvalue($info['Lock_guests']);
 
-			if ($is_module)
-			{
-				$insert_rows[] = array(
-					'auth_groupid' => $v['id'],
-					'auth_code' => $name,
-					'auth_option' => 'a',
-					'auth_rights' => $ins_auth,
-					'auth_rights_lock' => $ins_lock,
-					'auth_setbyuserid' => $usr['id']
-				);
-			}
-			else
-			{
-				$insert_rows[] = array(
-					'auth_groupid' => $v['id'],
-					'auth_code' => 'plug',
-					'auth_option' => $name,
-					'auth_rights' => $ins_auth,
-					'auth_rights_lock' => $ins_lock,
-					'auth_setbyuserid' => $usr['id']
-				);
+					if ($ins_auth > 128 || $ins_lock < 128)
+					{
+						$ins_auth = ($ins_auth > 127) ? $ins_auth - 128 : $ins_auth;
+						$ins_lock = 128;
+					}
+				}
+				elseif ($v['id'] == COT_GROUP_BANNED)
+				{
+					$ins_auth = 0;
+					$ins_lock = 255;
+				}
+				elseif ($v['id'] == COT_GROUP_SUPERADMINS)
+				{
+					$ins_auth = 255;
+					$ins_lock = 255;
+				}
+				else
+				{
+					$ins_auth = cot_auth_getvalue($info['Auth_members']);
+					$ins_lock = cot_auth_getvalue($info['Lock_members']);
+				}
+
+				if ($is_module)
+				{
+					$insert_rows[] = array(
+						'auth_groupid' => $v['id'],
+						'auth_code' => $name,
+						'auth_option' => 'a',
+						'auth_rights' => $ins_auth,
+						'auth_rights_lock' => $ins_lock,
+						'auth_setbyuserid' => $usr['id']
+					);
+				}
+				else
+				{
+					$insert_rows[] = array(
+						'auth_groupid' => $v['id'],
+						'auth_code' => 'plug',
+						'auth_option' => $name,
+						'auth_rights' => $ins_auth,
+						'auth_rights_lock' => $ins_lock,
+						'auth_setbyuserid' => $usr['id']
+					);
+				}
 			}
 		}
 		if ($db->insert($db_auth, $insert_rows))
