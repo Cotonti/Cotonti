@@ -1,9 +1,9 @@
 <!-- BEGIN: MAIN -->
 
-		<div class="col first">
+		<div class="col first content">
 			<div class="block">
 				<h2 class="warning">{MESSAGE_TITLE}</h2>
-				<div class="warning">
+				<div class="warning blockbody">
 					{MESSAGE_BODY}
 					<!-- BEGIN: MESSAGE_CONFIRM -->
 					<table class="inline" style="width:80%">

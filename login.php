@@ -226,7 +226,8 @@ $t->assign(array(
 	'USERS_AUTH_SEND' => cot_url('login', 'a=check' . (empty($redirect) ? '' : "&redirect=$redirect")),
 	'USERS_AUTH_USER' => cot_inputbox('text', 'rusername', $rusername, array('size' => '16', 'maxlength' => '32')),
 	'USERS_AUTH_PASSWORD' => cot_inputbox('password', 'rpassword', '', array('size' => '16', 'maxlength' => '32')),
-	'USERS_AUTH_REGISTER' => cot_url('users', 'm=register')
+	'USERS_AUTH_REGISTER' => cot_url('users', 'm=register'),
+	'USERS_AUTH_REMEMBER' => $cfg['forcerememberme'] ? $R['form_guest_remember_forced'] : $R['form_guest_remember']
 ));
 
 /* === Hook === */
