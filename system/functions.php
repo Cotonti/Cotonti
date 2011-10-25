@@ -2963,25 +2963,25 @@ function cot_tplfile($base, $type = 'module')
  */
 function cot_date($format, $timestamp = null, $usertimezone = true)
 {
-	global $L, $Ldt, $usr;
+	global $lang, $L, $Ldt, $usr;
 	if ($usertimezone)
 	{
 		$timestamp += $usr['timezone'] * 3600;
 	}
 	$datetime = ($Ldt[$format]) ? @date($Ldt[$format], $timestamp) : @date($format, $timestamp);
 	$search = array(
-		'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-		'Friday', 'Saturday', 'Sunday',
-		'Mon', 'Tue', 'Wed', 'Thu',
-		'Fri', 'Sat', 'Sun',
-		'January', 'February', 'March',
-		'April', 'May', 'June',
-		'July', 'August', 'September',
-		'October', 'November', 'December',
-		'Jan', 'Feb', 'Mar',
-		'Apr', 'May', 'Jun',
-		'Jul', 'Aug', 'Sep',
-		'Oct', 'Nov', 'Dec'
+		'/Monday/', '/Tuesday/', '/Wednesday/', '/Thursday/',
+		'/Friday/', '/Saturday/', '/Sunday/',
+		'/Mon([^a-z])/', '/Tue([^a-z])/', '/Wed([^a-z])/', '/Thu([^a-z])/',
+		'/Fri([^a-z])/', '/Sat([^a-z])/', '/Sun([^a-z])/',
+		'/January/', '/February/', '/March/',
+		'/April/', '/May/', '/June/',
+		'/July/', '/August/', '/September/',
+		'/October/', '/November/', '/December/',
+		'/Jan([^a-z])/', '/Feb([^a-z])/', '/Mar([^a-z])/',
+		'/Apr([^a-z])/', '/May([^a-z])/', '/Jun([^a-z])/',
+		'/Jul([^a-z])/', '/Aug([^a-z])/', '/Sep([^a-z])/',
+		'/Oct([^a-z])/', '/Nov([^a-z])/', '/Dec([^a-z])/'
 	);
 	$replace = array(
 		$L['Monday'], $L['Tuesday'], $L['Wednesday'], $L['Thursday'],
@@ -2997,7 +2997,7 @@ function cot_date($format, $timestamp = null, $usertimezone = true)
 		$L['July_s'], $L['August_s'], $L['September_s'],
 		$L['October_s'], $L['November_s'], $L['December_s']
 	);
-	return ($lang == 'en') ? $datetime : str_replace($search, $replace, $datetime);
+	return ($lang == 'en') ? $datetime : preg_replace($search, $replace, $datetime);
 }
 
 /**
