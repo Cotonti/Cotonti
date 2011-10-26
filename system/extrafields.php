@@ -100,8 +100,29 @@ function cot_build_extrafields($name, $extrafield, $data)
 		case 'range':
 			$R["input_select_{$rc_name}"] = (!empty($R["input_select_{$rc_name}"])) ? $R["input_select_{$rc_name}"] : $extrafield['field_html'];
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
-			list($min, $max) = explode(",",$extrafield['field_params'], 2);
+			list($min, $max) = explode(',',$extrafield['field_params'], 2);
 			$result = cot_selectbox(trim($data), $name, range((int)$min, (int)$max));
+			break;
+		case 'checklistbox':
+			$R["input_checkbox_{$rc_name}"] = (!empty($R["input_checkbox_{$rc_name}"])) ? $R["input_checkbox_{$rc_name}"] : $extrafield['field_html'];
+			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
+			$opt_array = explode(",", $extrafield['field_variants']);
+			if (count($opt_array) > 0)
+			{
+				$ii = 0;
+				foreach ($opt_array as $var)
+				{
+					$ii++;
+					$options_titles[$ii] = (!empty($L[$extrafield['field_name'] . '_' . $var])) ? $L[$extrafield['field_name'] . '_' . $var] : $var;
+					$options_values[$ii] .= trim($var);
+				}
+			}
+			if (!is_array($data))
+			{
+				$data = trim(str_replace(array(' , ', ', ', ' ,'), ',', $data));
+				$data = explode(',', $data);
+			}
+			$result = cot_checklistbox($data, $name, $options_values, $options_titles);
 			break;
 		
 		case 'file':
@@ -218,6 +239,38 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			$import ($import < (int)min) ? '' : $import;
 			break;
 		
+		case 'checklistbox':
+			$import = cot_import($inputname, $source, 'ARR');
+			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
+			$opt_array = explode(',', trim($extrafield['field_variants']));
+			if(count($import) < 1)
+			{
+				$import = null;
+			}
+			elseif(count($import) == 1)
+			{
+				$import = array();
+			}
+			else
+			{
+				foreach ($import as $k => $v)
+				{
+					$import[$k] = cot_import($v, 'D', 'HTM');
+				}
+			}
+
+			if (!is_null($import) && !in_array($import, $opt_array))
+			{
+				$L['field_notinarray_' . $extrafield['field_name']] = (isset($L['field_notinarray_' . $extrafield['field_name']])) ? $L['field_notinarray_' . $extrafield['field_name']] : $L['field_notinarray'];
+				cot_error('field_notinarray_' . $extrafield['field_name'], $name);
+			}
+			
+			if(is_array($import))
+			{
+				$import = implode(',', $import);
+			}
+			break;
+			
 		case 'file':
 			global $lang, $cot_translit, $exfldfiles, $exfldsize, $cfg, $uploadfiles;
 			if ($source == 'P')
@@ -326,6 +379,28 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 			return (empty($format)) ? $value : cot_date($format, $value);
 			break;
 		
+		case 'checklistbox':
+			$value = htmlspecialchars($value);
+			$value = trim(str_replace(array(' , ', ', ', ' ,'), ',', $value));
+			$value = explode(',', $value);
+			$sep = (!empty($extrafield['field_params'])) ? $extrafield['field_params'] : ', ';
+			$result = '';
+			$i = 0;
+			if(is_array($value))
+			{
+				foreach($value as $k => $v)
+				{
+					if($i != 0)
+					{
+						$result .= $sep;	
+					}
+					$i++;
+					$result .= (!empty($L[$name . '_' . $extrafield['field_name'] . '_' . $v])) ? $L[$name . '_' . $extrafield['field_name'] . '_' . $v] : $v;
+				}
+			}
+			return $result;
+			break;
+		
 		case 'country':
 		case 'file':
 		case 'filesize':
@@ -379,6 +454,7 @@ function cot_default_html_construction($type)
 			break;
 
 		case 'checkbox':
+		case 'checklistbox':
 			$html = $R['input_checkbox'];
 			break;
 
@@ -469,6 +545,7 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 	}
 	switch ($type)
 	{
+		case 'checklistbox':
 		case 'select':
 		case 'radio':
 		case 'range':
@@ -575,6 +652,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 
 	switch ($type)
 	{
+		case 'checklistbox':
 		case 'select':
 		case 'radio':
 		case 'range':

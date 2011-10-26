@@ -446,7 +446,7 @@ $L['extf_Description'] = 'Description (_TITLE)';
 
 $L['adm_extrafield_new'] = 'New extra field';
 $L['adm_extrafield_noalter'] = 'Do not add actual field in DB, just register it as extra';
-$L['adm_extrafield_selectable_values'] = 'Options for select and radio (comma sep.)';
+$L['adm_extrafield_selectable_values'] = 'Options for select, radio and checklistbox (comma sep.)';
 $L['adm_help_extrafield'] = 'Hint: Field &quot;Base HTML&quot; is set to default automatically if you leave it blank and press Update.';
 
 /**

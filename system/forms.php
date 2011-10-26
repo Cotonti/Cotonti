@@ -346,4 +346,69 @@ function cot_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
 		'error' => $error
 	));
 }
+
+/**
+ * Generates a checklistbox output
+ * @param mixed $chosen Checkbox state
+ * @param string $name Input name
+ * @param array $values Options available
+ * @param array $titles Titles for options
+ * @param mixed $attrs Additional attributes as an associative array or a string
+ * @param string $separator Option separator, by default is taken from $R['input_radio_separator']
+ * @param bool $addnull add nullvalue field for easycheck if chechlisybox is isset on the form
+ * @return string
+ */
+function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '', $separator = '', $addnull = true)
+{
+	global $R;
+	if (!is_array($values))
+	{
+		$values = explode(',', $values);
+	}
+	if (!is_array($titles))
+	{
+		$titles = explode(',', $titles);
+	}
+	$use_titles = count($values) == count($titles);
+	$input_attrs = cot_rc_attr_string($attrs);
+	
+	$chosen = cot_import_buffered($name, $chosen);
+
+	if (empty($separator))
+	{
+		$separator = $R['input_radio_separator'];
+	}
+	
+	$i = 0;
+	$result = '';
+	if ($addnull)
+	{
+		$result .= cot_inputbox('hidden', $name.'[nullval]', 'nullval');
+	}
+	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
+	$name = $name.'[]';
+	$rc = empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}";
+	foreach ($values as $k => $x)
+	{
+		$i++;
+		$x = trim($x);
+		$checked = (is_array($chosen) && in_array($x, $chosen)) || (!is_array($chosen) && $x == $chosen) ? ' checked="checked"' : '';
+		$title = $use_titles ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
+		if ($i > 1)
+		{
+			$result .= $separator;
+		}
+		$result .= cot_rc($rc, array(
+			'value' => htmlspecialchars($x),
+			'name' => $name.'['.$i.']',
+			'checked' => $checked,
+			'title' => $title,
+			'attrs' => $input_attrs
+		));
+
+	}
+	return $result;
+
+}
+
 ?>
