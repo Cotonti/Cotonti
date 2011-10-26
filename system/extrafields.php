@@ -247,12 +247,13 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			{
 				$import = null;
 			}
-			elseif(count($import) == 1)
+			elseif(count($import) == 1 && isset($import['nullval']))
 			{
 				$import = array();
 			}
 			else
 			{
+				unset($import['nullval']);
 				foreach ($import as $k => $v)
 				{
 					$import[$k] = cot_import($v, 'D', 'HTM');
