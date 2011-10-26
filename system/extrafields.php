@@ -80,7 +80,7 @@ function cot_build_extrafields($name, $extrafield, $data)
 		case 'datetime':
 			global $sys;
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
-			list($min, $max) = explode(",",$extrafield['field_params'], 2);
+			list($min, $max, $format) = explode(",",$extrafield['field_params'], 3);
 			$max = (int)$max > 0 ? $max : 2030;
 			$min =  (int)$min > 0 ? $min : 2000;
 			
@@ -321,7 +321,9 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 			break;
 
 		case 'datetime':
-			return cot_date('datetime_medium', $value);
+			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
+			list($min, $max, $format) = explode(",",$extrafield['field_params'], 3);
+			return (empty($format)) ? $value : cot_date($format, $value);
 			break;
 		
 		case 'country':
@@ -554,7 +556,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 		$alter = true;
 	}
 
-	$extf['field_html'] = (!empty($html)) ? $html : cot_default_html_construction($type);
+	$extf['field_html'] = (!empty($html) && $type == $field['field_type']) ? $html : cot_default_html_construction($type);
 	$extf['field_parse'] = is_null($parse) ? 'HTML' : $parse;
 	$extf['field_variants'] = is_null($variants) ? '' : $variants;
 	$extf['field_params'] = is_null($params) ? '' : $params;
