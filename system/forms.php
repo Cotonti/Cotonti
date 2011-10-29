@@ -220,7 +220,7 @@ function cot_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '')
 function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030, $min_year = 2000, $usertimezone = true)
 {
 	global $L, $R, $usr;
-	$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
+	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
 	$utime = ($usertimezone && $utime > 0) ? ($utime + $usr['timezone'] * 3600) : $utime;
 
@@ -266,7 +266,7 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 	$minute = cot_selectbox($s_minute, $name.'[minute]', $range);
 
 	$rc = empty($R["input_date_{$mode}"]) ? 'input_date' : "input_date_{$mode}";
-	$rc = empty($R["input_date_{$name}"]) ? $rc : "input_date_{$name}";
+	$rc = empty($R["input_date_{$rc_name}"]) ? $rc : "input_date_{$rc_name}";
 
 	$result = cot_rc($rc, array(
 		'day' => $day,
