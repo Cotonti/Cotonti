@@ -50,7 +50,7 @@ else
 $out['meta_contenttype'] = $cfg['xmlclient'] ? 'application/xml' : 'text/html';
 $out['basehref'] = $R['code_basehref'];
 $out['meta_charset'] = 'UTF-8';
-$out['meta_desc'] = htmlspecialchars($out['desc']);
+$out['meta_desc'] = empty($out['desc']) ? $cfg['subtitle'] : htmlspecialchars($out['desc']);
 $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspecialchars($out['keywords']);
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] .= $out['head'];

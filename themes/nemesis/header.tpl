@@ -5,7 +5,7 @@
 <title>{HEADER_TITLE}</title> 
 <!-- IF {HEADER_META_DESCRIPTION} --><meta name="description" content="{HEADER_META_DESCRIPTION}" /><!-- ENDIF -->
 <!-- IF {HEADER_META_KEYWORDS} --><meta name="keywords" content="{HEADER_META_KEYWORDS}" /><!-- ENDIF -->
-<meta http-equiv="content-type" content="{HEADER_META_CONTENTTYPE}; charset={HEADER_META_CHARSET}" />
+<meta http-equiv="content-type" content="{HEADER_META_CONTENTTYPE}; charset=UTF-8" />
 <meta name="generator" content="Cotonti http://www.cotonti.com" />
 <link rel="canonical" href="{HEADER_CANONICAL_URL}" />
 {HEADER_BASEHREF}
