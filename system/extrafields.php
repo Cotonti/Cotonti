@@ -235,8 +235,8 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
 			list($min, $max) = explode(",",$extrafield['field_params'], 2);
 			$import = cot_import($inputname, $source,'INT');
-			$import ($import > (int)$max) ? '' : $import;
-			$import ($import < (int)min) ? '' : $import;
+			$import = ($import > (int)$max) ? '' : $import;
+			$import = ($import < (int)$min) ? '' : $import;
 			break;
 		
 		case 'checklistbox':
