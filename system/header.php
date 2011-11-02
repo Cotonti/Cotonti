@@ -113,6 +113,8 @@ if (!COT_AJAX)
 		'HEADER_META_LASTMODIFIED' => $out['meta_lastmod'],
 		'HEADER_HEAD' => $out['head_head'],
 		'HEADER_CANONICAL_URL' => empty($out['canonical_uri']) ? str_replace('&', '&amp;', $sys['canonical_url']) : COT_ABSOLUTE_URL . $out['canonical_uri'],
+		'HEADER_PREV_URL' => $out['prev_uri'],
+		'HEADER_NEXT_URL' => $out['next_uri'],
 		'HEADER_COLOR_SCHEME' => cot_schemefile()
 	));
 
