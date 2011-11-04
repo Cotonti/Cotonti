@@ -432,7 +432,7 @@ function cot_import_buffered($name, $value, $null = '')
 function cot_import_date($name, $usertimezone = true, $returnarray = false, $source = 'P')
 {
 	global $L, $R, $usr;
-	$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
+	//$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$date = cot_import($name, $source, 'ARR');
 
 	$year = cot_import($date['year'], 'D', 'INT');
