@@ -40,6 +40,7 @@ if ($cfg['debug_mode'])
 	require_once $cfg['system_dir'].'/debug.php';
 }
 
+spl_autoload_register('cot_autoload');
 register_shutdown_function('cot_shutdown');
 
 // Each user has his own timezone preference based on offset from GMT, so all dates are GMT by default
