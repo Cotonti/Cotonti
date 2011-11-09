@@ -92,6 +92,33 @@ function cot_alphaonly($text)
 }
 
 /**
+ * Generic autoloader function to be used with spl_autoload_register
+ *
+ * @param string $class Class name
+ */
+function cot_autoload($class)
+{
+	global $cfg, $env;
+	if ($env['type'] == 'module')
+	{
+		$paths[] = "{$cfg['modules_dir']}/{$env['ext']}/classes/$class.php";
+	}
+	elseif ($env['type'] == 'plug')
+	{
+		$paths[] = "{$cfg['plugins_dir']}/{$env['ext']}/classes/$class.php";
+	}
+	$paths[] = "{$cfg['system_dir']}/classes/$class.php";
+	foreach ($paths as $path)
+	{
+		if (file_exists($path))
+		{
+			require $path;
+			return;
+		}
+	}
+}
+
+/**
  * Truncates a string
  *
  * @param string $res Source string
