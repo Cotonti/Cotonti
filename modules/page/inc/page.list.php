@@ -18,8 +18,8 @@ $env['location'] = 'list';
 $s = cot_import('s', 'G', 'ALP'); // order field name without 'page_'
 $w = cot_import('w', 'G', 'ALP', 4); // order way (asc, desc)
 $c = cot_import('c', 'G', 'TXT'); // cat code
-$o = cot_import('ord', 'G', 'ALP', 16); // filter field name without 'page_'
-$p = cot_import('p', 'G', 'TXT', 16); // filter value
+$o = cot_import('ord', 'G', 'ARR'); // filter field names without 'page_'
+$p = cot_import('p', 'G', 'ARR'); // filter values
 $maxrowsperpage = ($cfg['page'][$c]['maxrowsperpage']) ? $cfg['page'][$c]['maxrowsperpage'] : $cfg['page']['__default']['maxrowsperpage'];
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage); //page number for pages list
 list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', $maxrowsperpage);// page number for cats list
@@ -91,12 +91,21 @@ elseif ($c != 'all')
 $c = (empty($cat['title'])) ? 'all' : $c;
 cot_die((empty($cat['title'])) && !$usr['isadmin']);
 
-if (!empty($o) && !empty($p))
+if ($o && $p)
 {
-	if ($db->fieldExists($db_pages, "page_$o"))
+	if (!is_array($o)) $o = array($o);
+	if (!is_array($p)) $p = array($p);
+	$filters = array_combine($o, $p);
+	foreach ($filters as $key => $val)
 	{
-		$where['filter'] .= "page_$o=" . $db->quote($p);
+		$key = cot_import($key, 'D', 'ALP', 16);
+		$val = cot_import($val, 'D', 'TXT', 16);
+		if ($key && $val && $db->fieldExists($db_pages, "page_$key"))
+		{
+			$where['filter'][] = "page_$key = " . $db->quote($val);
+		}
 	}
+	empty($where['filter']) || $where['filter'] = implode(' AND ', $where['filter']);
 }
 if (!$usr['isadmin'] && $c != 'unvalidated')
 {
