@@ -107,6 +107,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 				}
 			}
 
+			$row['ft_icon_type'] = $row['ft_icon'];
 			$row['ft_icon'] = cot_rc('forums_icon_topic_t', array('icon' => $row['ft_icon'], 'title' => $L['recentitems_' . $row['ft_icon']]));
 			$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
 		}
@@ -123,6 +124,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			'FORUM_ROW_ID' => $row['ft_id'],
 			'FORUM_ROW_STATE' => $row['ft_state'],
 			'FORUM_ROW_ICON' => $row['ft_icon'],
+			'FORUM_ROW_ICON_TYPE' => $row['ft_icon_type'],
 			'FORUM_ROW_TITLE' => htmlspecialchars($row['ft_title']),
 			'FORUM_ROW_PATH' => $build_forum,
 			'FORUM_ROW_PATH_SHORT' => $build_forum_short,

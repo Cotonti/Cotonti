@@ -294,6 +294,7 @@ foreach ($sql_forums->fetchAll() as $row)
 			$row['ft_icon'] .=  ($row['ft_state']) ? '_locked' : '';
 		}
 		
+		$row['ft_icon_type'] = $row['ft_icon'];
 		$row['ft_icon'] = cot_rc('forums_icon_topic', array('icon' => $row['ft_icon']));
 		$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
 	}
@@ -309,6 +310,7 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_TOPICS_ROW_ID' => $row['ft_id'],
 		'FORUMS_TOPICS_ROW_STATE' => $row['ft_state'],
 		'FORUMS_TOPICS_ROW_ICON' => $row['ft_icon'],
+		'FORUMS_TOPICS_ROW_ICON_TYPE' => $row['ft_icon_type'],
 		'FORUMS_TOPICS_ROW_TITLE' => htmlspecialchars($row['ft_title']),
 		'FORUMS_TOPICS_ROW_DESC' => htmlspecialchars($row['ft_desc']),
 		'FORUMS_TOPICS_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate']),
