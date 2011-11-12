@@ -260,7 +260,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			break;
 	}
 
-	if (MQGPC && ($source=='G' || $source=='P' || $source=='C') && $v != NULL)
+	if (MQGPC && ($source=='G' || $source=='P' || $source=='C') && $v != NULL && $filter != 'ARR')
 	{
 		$v = stripslashes($v);
 	}
@@ -385,7 +385,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			break;
 	}
 
-	if (!$pass || !($filter == 'INT' || $filter == 'NUM' || $filter == 'BOL'))
+	if (!$pass || !in_array($filter, array('INT', 'NUM', 'BOL', 'ARR')))
 	{
 		$v = preg_replace('/(&#\d+)(?![\d;])/', '$1;', $v);
 	}
