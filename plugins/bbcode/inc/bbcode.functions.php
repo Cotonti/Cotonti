@@ -187,8 +187,11 @@ function cot_bbcode_load()
 function cot_bbcode_clearcache()
 {
 	global $cache;
-	$cache->db->remove('cot_bbcodes', 'system');
-	$cache->db->remove('cot_bbcode_containers', 'system');
+	if ($cache)
+	{
+		$cache->db->remove('cot_bbcodes', 'system');
+		$cache->db->remove('cot_bbcode_containers', 'system');
+	}
 }
 
 /**
