@@ -32,17 +32,14 @@ function cot_build_extrafields($name, $extrafield, $data)
 		case 'inputint':
 		case 'currency':
 		case 'double':	
-			$R["input_text_{$rc_name}"] = (!empty($R["input_text_{$rc_name}"])) ? $R["input_text_{$rc_name}"] : $extrafield['field_html'];
-			$result = cot_inputbox('text', $name, $data);
+			$result = cot_inputbox('text', $name, $data, '', $extrafield['field_html']);
 			break;
 
 		case 'textarea':
-			$R["input_textarea_{$rc_name}"] = (!empty($R["input_textarea_{$rc_name}"])) ? $R["input_textarea_{$rc_name}"] : $extrafield['field_html'];
-			$result = cot_textarea($name, $data, 4, 56);
+			$result = cot_textarea($name, $data, 4, 56, '', $extrafield['field_html']);
 			break;
 
 		case 'select':
-			$R["input_select_{$rc_name}"] = (!empty($R["input_select_{$rc_name}"])) ? $R["input_select_{$rc_name}"] : $extrafield['field_html'];
 			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
 			$opt_array = explode(",", $extrafield['field_variants']);
 			$ii = 0;
@@ -52,11 +49,10 @@ function cot_build_extrafields($name, $extrafield, $data)
 				$options_titles[$ii] = (!empty($L[$extrafield['field_name'] . '_' . $var])) ? $L[$extrafield['field_name'] . '_' . $var] : $var;
 				$options_values[$ii] .= trim($var);
 			}
-			$result = cot_selectbox(trim($data), $name, $options_values, $options_titles, false);
+			$result = cot_selectbox(trim($data), $name, $options_values, $options_titles, false, '', $extrafield['field_html']);
 			break;
 
 		case 'radio':
-			$R["input_radio_{$rc_name}"] = (!empty($R["input_radio_{$rc_name}"])) ? $R["input_radio_{$rc_name}"] : $extrafield['field_html'];
 			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
 			$opt_array = explode(",", $extrafield['field_variants']);
 			if (count($opt_array) > 0)
@@ -69,12 +65,11 @@ function cot_build_extrafields($name, $extrafield, $data)
 					$options_values[$ii] .= trim($var);
 				}
 			}
-			$result = cot_radiobox(trim($data), $name, $options_values, $options_titles);
+			$result = cot_radiobox(trim($data), $name, $options_values, $options_titles, '', '', $extrafield['field_html']);
 			break;
 
 		case 'checkbox':
-			$R["input_checkbox_{$rc_name}"] = (!empty($R["input_checkbox_{$rc_name}"])) ? $R["input_checkbox_{$rc_name}"] : $extrafield['field_html'];
-			$result = cot_checkbox($data, $name, $extrafield['field_description']);
+			$result = cot_checkbox($data, $name, $extrafield['field_description'], '', '1', $extrafield['field_html']);
 			break;
 
 		case 'datetime':
@@ -87,24 +82,20 @@ function cot_build_extrafields($name, $extrafield, $data)
 			$data = (mb_substr($data, 0, 1) == "+") ? $sys['now_offset'] + (int)(mb_substr($data, 1)) : $data;
 			$data = (mb_substr($data, 0, 1) == "-") ? $sys['now_offset'] - (int)(mb_substr($data, 1)) : $data;
 			
-			$R["input_date_{$rc_name}"] = (!empty($R["input_date_{$rc_name}"])) ? $R["input_date_{$rc_name}"] : $extrafield['field_html'];
-			$result = cot_selectbox_date((int)$data, 'long', $name, (int)$max, (int)$min);
+			$result = cot_selectbox_date((int)$data, 'long', $name, (int)$max, (int)$min, true, $extrafield['field_html']);
 			break;
 
 		case 'country':
-			$R["input_select_{$rc_name}"] = (!empty($R["input_select_{$rc_name}"])) ? $R["input_select_{$rc_name}"] : $extrafield['field_html'];
 			global $cot_countries;
-			$result = cot_selectbox_countries(trim($data), $name, false);
+			$result = cot_selectbox_countries(trim($data), $name, true, '', $extrafield['field_html']);
 			break;	
 		
 		case 'range':
-			$R["input_select_{$rc_name}"] = (!empty($R["input_select_{$rc_name}"])) ? $R["input_select_{$rc_name}"] : $extrafield['field_html'];
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
 			list($min, $max) = explode(',',$extrafield['field_params'], 2);
-			$result = cot_selectbox(trim($data), $name, range((int)$min, (int)$max));
+			$result = cot_selectbox(trim($data), $name, range((int)$min, (int)$max), range((int)$min, (int)$max), true, '', $extrafield['field_html']);
 			break;
 		case 'checklistbox':
-			$R["input_checkbox_{$rc_name}"] = (!empty($R["input_checkbox_{$rc_name}"])) ? $R["input_checkbox_{$rc_name}"] : $extrafield['field_html'];
 			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
 			$opt_array = explode(",", $extrafield['field_variants']);
 			if (count($opt_array) > 0)
@@ -122,15 +113,11 @@ function cot_build_extrafields($name, $extrafield, $data)
 				$data = trim(str_replace(array(' , ', ', ', ' ,'), ',', $data));
 				$data = explode(',', $data);
 			}
-			$result = cot_checklistbox($data, $name, $options_values, $options_titles);
+			$result = cot_checklistbox($data, $name, $options_values, $options_titles, '', '', true, $extrafield['field_html']);
 			break;
 		
 		case 'file':
-			$R["input_text_{$rc_name}"] = (!empty($R["input_text_{$rc_name}"])) ? $R["input_text_{$rc_name}"] : $extrafield['field_html'];
-
-			$result['FILE'] = cot_inputbox('file', $name, '');
-			$result['DELETE'] = cot_checkbox(false, 'rdel_' . $name, $L['Delete']);
-			$result['LINK'] = htmlspecialchars($data);
+			$result = cot_filebox($name, htmlspecialchars($data), $cfg['extrafield_files_dir'].'/'.htmlspecialchars($data), 'rdel_' . $name, '', $extrafield['field_html']);
 			break;
 
 		default:
@@ -468,7 +455,7 @@ function cot_default_html_construction($type)
 			break;
 
 		case 'file':
-			$html = $R['input_text'] . '|' . $R['input_checkbox'];
+			$html = $R['input_file'] . '|' . $R['input_file_empty'];
 			break;
 	
 		case 'filesize':

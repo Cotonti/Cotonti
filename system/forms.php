@@ -165,9 +165,7 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
 	$selected = (is_null($chosen) || $chosen === '' || $chosen == '00') ? ' selected="selected"' : '';
-	$rc = empty($custom_rc) 
-		? empty($R["input_option_{$rc_name}"]) ? 'input_option' : "input_option_{$rc_name}"
-		: $custom_rc;
+	$rc = empty($R["input_option_{$rc_name}"]) ? 'input_option' : "input_option_{$rc_name}";
 	if ($add_empty)
 	{
 		$options .= cot_rc($rc, array(
@@ -187,7 +185,9 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 			'title' => $title
 		));
 	}
-	$rc = empty($R["input_select_{$rc_name}"]) ? 'input_select' : "input_select_{$rc_name}";
+	$rc = empty($custom_rc) 
+		? empty($R["input_select_{$rc_name}"]) ? 'input_select' : "input_select_{$rc_name}"
+		: $custom_rc;
 	$result .= cot_rc($rc, array(
 		'name' => $name,
 		'attrs' => $input_attrs,
@@ -427,6 +427,50 @@ function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '
 	}
 	return $result;
 
+}
+
+/**
+ * Generates a form input file from a resource string
+ *
+ * @param string $name Input name
+ * @param string $value Entered value
+ * @param string $filepath Entered filepath if defferent from value
+ * @param string $delname  Delete file chechbox name
+ * @param mixed $attrs Additional attributes as an associative array or a string
+ * @param string $custom_rc Custom resource string name
+ * @return string
+ */
+function cot_filebox($name, $value = '', $filepath = '', $delname ='', $attrs = '', $custom_rc = '')
+{
+	global $R, $cfg, $L;
+	$input_attrs = cot_rc_attr_string($attrs);
+	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
+	
+	$custom_rc = explode('|', $custom_rc, 2);
+	if(empty($value))
+	{
+		$rc = empty($custom_rc[1])
+			? (empty($R["input_file_{$rc_name}_empty"]) ? "input_file_empty" : "input_file_{$rc_name}_empty")
+			: $custom_rc[1];
+	}
+	else
+	{
+		$rc = empty($custom_rc[0])
+			? (empty($R["input_file_{$rc_name}"]) ? "input_file" : "input_file_{$rc_name}")
+			: $custom_rc[0];
+	}
+	
+	$filepath = empty($filepath) ? $value : $filepath;
+	$delname = empty($delname) ? 'del'.$name : $delname;
+	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
+	return cot_rc($rc, array(
+		'name' => $name,
+		'filepath' => $filepath,
+		'delname' => $delname,
+		'value' => $value,
+		'attrs' => $input_attrs,
+		'error' => $error
+	));
 }
 
 ?>
