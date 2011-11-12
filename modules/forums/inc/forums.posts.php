@@ -382,7 +382,7 @@ foreach ($sql_forums->fetchAll() as $row)
 	$t->parse('MAIN.FORUMS_POSTS_ROW');
 }
 
-$notlastpage = (($d + $cfg['forums']['maxpostsperpage']) < $totalposts) ? TRUE : FALSE;
+$lastpage = (($d + $cfg['forums']['maxpostsperpage']) < $totalposts) ? FALSE : TRUE;
 $pagenav = cot_pagenav('forums', "m=posts&q=$q", $d, $totalposts, $cfg['forums']['maxpostsperpage']);
 
 $jumpbox[cot_url('forums')] = $L['Forums'];
@@ -414,7 +414,7 @@ if ($usr['isadmin'])
 
 $allowreplybox = ($cfg['forums']['antibumpforums'] && $row['fp_posterid'] > 0 && $row['fp_posterid'] == $usr['id'] && $usr['auth_write']) ? FALSE : TRUE;
 
-if (!$notlastpage && !$rowt['ft_state'] && $usr['id'] > 0 && $allowreplybox && $usr['auth_write'])
+if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $usr['id'] > 0 && $allowreplybox && $usr['auth_write'])
 {
 	if ($quote > 0)
 	{
@@ -453,7 +453,7 @@ elseif ($rowt['ft_state'])
 	$t->assign('FORUMS_POSTS_TOPICLOCKED_BODY', $L['forums_topiclocked']);
 	$t->parse('MAIN.FORUMS_POSTS_TOPICLOCKED');
 }
-elseif (!$allowreplybox && !$notlastpage && !$rowt['ft_state'] && $usr['id'] > 0)
+elseif (!$allowreplybox && ($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $usr['id'] > 0)
 {
 	$t->assign('FORUMS_POSTS_ANTIBUMP_BODY', $L['forums_antibump']);
 	$t->parse('MAIN.FORUMS_POSTS_ANTIBUMP');

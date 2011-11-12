@@ -24,14 +24,18 @@ $cot_textarea_count = 0;
  * @param string $title Option caption
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @param string $value Input value (passed), defaults to 'on' or '1'
+ * @param string $custom_rc Custom resource string name
+ * @return string
  */
-function cot_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1')
+function cot_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1', $custom_rc = '')
 {
 	global $R;
 	$input_attrs = cot_rc_attr_string($attrs);
 	$checked = $chosen ? ' checked="checked"' : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	$rc = empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}";
+	$rc = empty($custom_rc) 
+		? empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}" 
+		: $custom_rc;
 	return cot_rc($rc, array(
 		'value' => htmlspecialchars(cot_import_buffered($name, $value)),
 		'name' => $name,
@@ -82,9 +86,10 @@ function cot_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
  * @param array $titles Titles for options
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @param string $separator Option separator, by default is taken from $R['input_radio_separator']
+ * @param string $custom_rc Custom resource string name
  * @return string
  */
-function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $separator = '')
+function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $separator = '', $custom_rc = '')
 {
 	global $R;
 	if (!is_array($values))
@@ -105,7 +110,9 @@ function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
 	$i = 0;
 	$result = '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	$rc = empty($R["input_radio_{$rc_name}"]) ? 'input_radio' : "input_radio_{$rc_name}";
+	$rc = empty($custom_rc) 
+		? empty($R["input_radio_{$rc_name}"]) ? 'input_radio' : "input_radio_{$rc_name}"
+		: $custom_rc;
 	foreach ($values as $k => $x)
 	{
 		$checked = ($x == $chosen) ? ' checked="checked"' : '';
@@ -135,9 +142,10 @@ function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
  * @param array $titles Titles for options
  * @param bool $add_empty Allow empty choice
  * @param mixed $attrs Additional attributes as an associative array or a string
+ * @param string $custom_rc Custom resource string name
  * @return string
  */
-function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = true, $attrs = '')
+function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = true, $attrs = '', $custom_rc = '')
 {
 	global $R, $cfg;
 
@@ -157,7 +165,9 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
 	$selected = (is_null($chosen) || $chosen === '' || $chosen == '00') ? ' selected="selected"' : '';
-	$rc = empty($R["input_option_{$rc_name}"]) ? 'input_option' : "input_option_{$rc_name}";
+	$rc = empty($custom_rc) 
+		? empty($R["input_option_{$rc_name}"]) ? 'input_option' : "input_option_{$rc_name}"
+		: $custom_rc;
 	if ($add_empty)
 	{
 		$options .= cot_rc($rc, array(
@@ -194,16 +204,18 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
  * @param string $name Dropdown name
  * @param bool $add_empty Add empty language option
  * @param mixed $attrs Additional attributes as an associative array or a string
+ * @param string $custom_rc Custom resource string name
+ * @param string $custom_rc Custom resource string name
  * @return string
  */
-function cot_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '')
+function cot_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '', $custom_rc = '')
 {
 	global $cot_countries;
 
 	if (!$cot_countries)
 		include_once cot_langfile('countries', 'core');
 
-	return cot_selectbox($chosen, $name, array_keys($cot_countries), array_values($cot_countries), $add_empty, $attrs);
+	return cot_selectbox($chosen, $name, array_keys($cot_countries), array_values($cot_countries), $add_empty, $attrs, $custom_rc);
 }
 
 /**
@@ -215,9 +227,10 @@ function cot_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '')
  * @param int $max_year Max. year possible
  * @param int $min_year Min. year possible
  * @param bool $usertimezone Use user timezone
+ * @param string $custom_rc Custom resource string name
  * @return string
  */
-function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030, $min_year = 2000, $usertimezone = true)
+function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030, $min_year = 2000, $usertimezone = true, $custom_rc = '')
 {
 	global $L, $R, $usr;
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
@@ -267,6 +280,7 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 
 	$rc = empty($R["input_date_{$mode}"]) ? 'input_date' : "input_date_{$mode}";
 	$rc = empty($R["input_date_{$rc_name}"]) ? $rc : "input_date_{$rc_name}";
+	$rc = empty($custom_rc) ? $rc : $custom_rc;
 
 	$result = cot_rc($rc, array(
 		'day' => $day,
@@ -286,9 +300,10 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
  * @param string $name Dropdown name
  * @param bool $add_empty Add empty language option
  * @param mixed $attrs Additional attributes as an associative array or a string
+ * @param string $custom_rc Custom resource string name
  * @return string
  */
-function cot_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '')
+function cot_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '', $custom_rc = '')
 {
 	global $cot_languages, $cot_countries, $cfg;
 
@@ -313,7 +328,7 @@ function cot_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '')
 		$vals[] = $lang;
 		$titles[] = (empty($cot_languages[$lang]) ? $cot_countries[$lang] : $cot_languages[$lang]) . " ($lang)";
 	}
-	return cot_selectbox($chosen, $name, $vals, $titles, $add_empty, $attrs);
+	return cot_selectbox($chosen, $name, $vals, $titles, $add_empty, $attrs, $custom_rc);
 }
 
 /**
@@ -356,9 +371,10 @@ function cot_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @param string $separator Option separator, by default is taken from $R['input_radio_separator']
  * @param bool $addnull add nullvalue field for easycheck if chechlisybox is isset on the form
+ * @param string $custom_rc Custom resource string name
  * @return string
  */
-function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '', $separator = '', $addnull = true)
+function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '', $separator = '', $addnull = true, $custom_rc = '')
 {
 	global $R;
 	if (!is_array($values))
@@ -387,7 +403,9 @@ function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '
 	}
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$name = $name.'[]';
-	$rc = empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}";
+	$rc = empty($custom_rc) 
+		? empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}"
+		: $custom_rc;
 	foreach ($values as $k => $x)
 	{
 		$i++;
