@@ -26,6 +26,7 @@ $L['cfg_minpostlength'] = array('Мин. длина сообщения', ' ');
 $L['cfg_mintitlelength'] = array('Мин. длина заголовка темы', ' ');
 $L['cfg_title_posts'] = array('Формат заголовка темы форума', 'Опции: {FORUM}, {SECTION}, {TITLE}');
 $L['cfg_title_topics'] = array('Формат заголовка раздела форума', 'Опции: {FORUM}, {SECTION}');
+$L['cfg_enablereplyform'] = array('Отображать форму ответа на всех страницах', '');
 
 $L['cfg_allowusertext'] = array('Показывать подписи');
 $L['cfg_allowbbcodes'] = array('Разрешить BBCodes');

@@ -26,6 +26,7 @@ $L['cfg_minpostlength'] = array('Min. post length', ' ');
 $L['cfg_mintitlelength'] = array('Min. topic title length', ' ');
 $L['cfg_title_posts'] = array('Forum Posts title format', 'Options: {FORUM}, {SECTION}, {TITLE}');
 $L['cfg_title_topics'] = array('Forum Topics title format', 'Options: {FORUM}, {SECTION}');
+$L['cfg_enablereplyform'] = array('Show reply form on every page', '');
 
 $L['cfg_allowusertext'] = array('Display signatures');
 $L['cfg_allowbbcodes'] = array('Enable BBcodes');
