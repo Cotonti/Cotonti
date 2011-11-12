@@ -1775,7 +1775,7 @@ function cot_build_usertext($text)
  */
 function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false, $cacheitem = true)
 {
-	global $db, $cot_extrafields, $cfg, $L, $cot_yesno, $themelang, $user_cache, $db_users, $usr;
+	global $db, $cot_extrafields, $cot_groups, $cfg, $L, $cot_yesno, $themelang, $user_cache, $db_users, $usr;
 
 	static $extp_first = null, $extp_main = null;
 	
