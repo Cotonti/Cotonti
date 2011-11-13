@@ -17,7 +17,7 @@ require_once cot_langfile('recentitems', 'plug');
 function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $rightprescan = true)
 {
 	global $db, $L, $cfg, $db_forum_topics, $theme, $usr, $sys, $R, $structure;
-	static $totalrecent;
+	global $totalrecent;
 	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
 	if ($rightprescan)
