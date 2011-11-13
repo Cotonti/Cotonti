@@ -13,6 +13,106 @@
 	<a href="{ADMIN_EXTRAFIELDS_ALLTABLES}">{PHP.L.adm_extrafields_all}</a>
 </div>
 <!-- END: TABLELIST -->
+<script type="text/javascript">
+//<![CDATA[
+	var exFLDHELPERS = "{ADMIN_EXTRAFIELDS_TAGS}";
+	var exnovars = "{PHP.L.adm_extrafields_help_notused}";
+	var exvariants = "{PHP.L.adm_extrafields_help_variants}";
+	var exrange = "{PHP.L.adm_extrafields_help_range}";
+	var exdata = "{PHP.L.adm_extrafields_help_data}";
+	var exregex = "{PHP.L.adm_extrafields_help_regex}";
+	var exfile = "{PHP.L.adm_extrafields_help_file}";
+	var exseparator = "{PHP.L.adm_extrafields_help_separator}";
+
+	$(document).ready(function(){
+		$('.exfldtype').live("change", function(){
+			var exParent = $(this).closest('tr');
+			var exvalid =  $(this).attr('value');
+			if(exvalid == 'select' || exvalid == 'radio' || exvalid == 'checklistbox')
+			{
+				$(exParent).find('.exfldvariants').attr('title',exvariants);
+				$(exParent).find('.exfldvariants').removeAttr("disabled");
+			}
+			else
+			{
+				$(exParent).find('.exfldvariants').attr('title', exnovars);
+				$(exParent).find('.exfldvariants').attr('disabled', 'disabled');
+
+			}
+			switch(exvalid)
+			{
+				case 'input':
+					$(exParent).find('.exfldparams').attr('title',exregex);
+					$(exParent).find('.exfldparams').removeAttr("disabled");
+					break;
+				case 'inputint':
+					$(exParent).find('.exfldparams').attr('title',exrange);
+					$(exParent).find('.exfldparams').removeAttr("disabled");
+					break;
+				case 'currency':
+					$(exParent).find('.exfldparams').attr('title',exrange);
+					$(exParent).find('.exfldparams').removeAttr("disabled");
+					break;
+				case 'double':
+					$(exParent).find('.exfldparams').attr('title',exrange);
+					$(exParent).find('.exfldparams').removeAttr("disabled");
+					break;
+				case 'textarea':
+					$(exParent).find('.exfldparams').attr('title',exnovars);
+					$(exParent).find('.exfldparams').attr('disabled', 'disabled');
+					break;
+				case 'select':
+					$(exParent).find('.exfldparams').attr('title',exnovars);
+					$(exParent).find('.exfldparams').attr('disabled', 'disabled');
+					break;
+				case 'checkbox':
+					$(exParent).find('.exfldparams').attr('title',exnovars);
+					$(exParent).find('.exfldparams').attr('disabled', 'disabled');
+					break;
+				case 'radio':
+					$(exParent).find('.exfldparams').attr('title',exnovars);
+					$(exParent).find('.exfldparams').attr('disabled', 'disabled');
+					break;
+				case 'datetime':
+					$(exParent).find('.exfldparams').attr('title',exdata);
+					$(exParent).find('.exfldparams').removeAttr("disabled");
+					break;
+				case 'file':
+					$(exParent).find('.exfldparams').attr('title',exfile);
+					$(exParent).find('.exfldparams').removeAttr("disabled");
+					break;
+				case 'country':
+					$(exParent).find('.exfldparams').attr('title',exnovars);
+					$(exParent).find('.exfldparams').attr('disabled', 'disabled');
+					break;
+				case 'range':
+					$(exParent).find('.exfldparams').attr('title',exrange);
+					$(exParent).find('.exfldparams').removeAttr("disabled");
+					break;
+				case 'checklistbox':
+					$(exParent).find('.exfldparams').attr('title',exseparator);
+					$(exParent).find('.exfldparams').removeAttr("disabled");
+					break;
+			}
+			if($(exParent).find('.exfldname').attr('value') != '')
+			{
+				var exhelper = $(exParent).find('.exfldname').attr('value').toUpperCase();
+				exhelper = exFLDHELPERS.replace(/XXXXX/g, exhelper);
+				$(exParent).find('.exfldname').attr('title',exhelper);
+				$(exParent).find('.exflddesc').attr('title',exhelper);
+			}
+			else
+			{
+				$(exParent).find('.exfldname').removeAttr("title");
+				$(exParent).find('.exflddesc').removeAttr("title");
+			}
+		});
+		 $(".exfldtype").change();
+	});
+	
+;
+//]]>
+</script>
 <!-- BEGIN: TABLE -->	
 <div class="block">
 	<form action="{ADMIN_EXTRAFIELDS_URL_FORM_EDIT}" method="post">
@@ -26,31 +126,31 @@
 			</tr>
 			<!-- BEGIN: EXTRAFIELDS_ROW -->	
 			<tr id="ex{ADMIN_EXTRAFIELDS_ROW_ID}">
-				<td>
+				<td class="{ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
 					{ADMIN_EXTRAFIELDS_ROW_ENABLED}
 				</td>
-				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
+				<td class="{ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
 						{ADMIN_EXTRAFIELDS_ROW_NAME}
 					<p class="small">{PHP.L.extf_Description}</p>
 						{ADMIN_EXTRAFIELDS_ROW_DESCRIPTION}
 					<p class="small">{PHP.L.extf_Base_HTML}</p>
 						{ADMIN_EXTRAFIELDS_ROW_HTML}
 				</td>
-				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
+				<td class="{ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
 						{ADMIN_EXTRAFIELDS_ROW_SELECT}
 					<p class="small">{PHP.L.adm_extrafield_parse}</p>
 						{ADMIN_EXTRAFIELDS_ROW_PARSE}
 					<p class="small">{ADMIN_EXTRAFIELDS_ROW_REQUIRED}{PHP.L.adm_extrafield_required}</p>
 
 				</td>
-				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
+				<td class="{ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
 					{ADMIN_EXTRAFIELDS_ROW_PARAMS}
 					<p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
 						{ADMIN_EXTRAFIELDS_ROW_VARIANTS}						
 					<p class="small">{PHP.L.adm_extrafield_default}</p>
 						{ADMIN_EXTRAFIELDS_ROW_DEFAULT}
 				</td>
-				<td class="centerall {ADMIN_EXTRAFIELDS_ODDEVEN}">
+				<td class="centerall {ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
 
 					<a title="{PHP.L.Delete}" href="{ADMIN_EXTRAFIELDS_ROW_DEL_URL}" class="ajax button">{PHP.L.Delete}</a>
 				</td>

@@ -462,6 +462,7 @@ function cot_default_html_construction($type)
 			$html = '';
 			break;
 	}
+	$html = str_replace('{$attrs}', '', $html);
 	return $html;
 }
 

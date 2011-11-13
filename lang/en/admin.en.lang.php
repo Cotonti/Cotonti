@@ -276,6 +276,13 @@ $L['adm_help_structure_extrafield'] = '<b>Base HTML</b> set automaticaly if you 
 &nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: OPTIONS --&gt; {ADMIN_STRUCTURE_XXXXX}, {ADMIN_STRUCTURE_XXXXX_TITLE} &lt;!-- END: OPTIONS --&gt;<br /><br />
 &nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: DEFULT --&gt; {ADMIN_STRUCTURE_FORMADD_XXXXX}, {ADMIN_STRUCTURE_FORMADD_XXXXX_TITLE} &lt;!-- END: DEFULT --&gt;<br /><br />
 <br />';
+$L['adm_extrafields_help_notused'] = 'Not used';
+$L['adm_extrafields_help_variants'] = '{variant1},{variant2},{variant3},...';
+$L['adm_extrafields_help_range'] = '{min_value},{max_value}';
+$L['adm_extrafields_help_data'] = '{min_year},{max_year},{date_format}. If empty {date_format}, used stamp';
+$L['adm_extrafields_help_regex'] = 'Regex for checking';
+$L['adm_extrafields_help_file'] = 'Upload directory';
+$L['adm_extrafields_help_separator'] = 'Values separator';
 
 /**
  * Users Section
