@@ -224,19 +224,7 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	if (!empty($params))
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
-		$sep_len = mb_strlen($sep);
-		$qs = mb_strpos($url, '?') !== false ? $sep : '?';
-		foreach($params as $key => $val)
-		{
-			// Exclude static parameters that are not used in format,
-			// they should be passed by rewrite rule (htaccess)
-			if ($rule['params'][$key] != $val)
-			{
-				$qs .= is_array($val) ? cot_url_encode($key, $val, $sep) : $key . '=' . urlencode($val) . $sep;
-			}
-		}
-		$qs = mb_substr($qs, 0, -$sep_len);
-		$url .= $qs;
+		$url .= '?' . http_build_query($params, '', $sep);
 	}
 	// Almost done
 	$url .= $tail;
