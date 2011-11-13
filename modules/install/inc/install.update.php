@@ -147,13 +147,13 @@ if (defined('COT_UPGRADE') && !cot_error_found())
 	}
 
 	// Unregister modules which have no registration anymore
-	$db->delete($db_core, "ct_code IN ('index', 'comments', 'ratings', 'trash')");
+	$db->delete($db_core, "ct_code IN ('comments', 'ratings', 'trash')");
 
 	// Set Module versions to Genoa version before upgrade
 	$db->update($db_core, array('ct_version' => '0.8.99'), '1');
 
 	// Update modules
-	foreach (array('forums', 'page', 'pfs', 'pm', 'polls') as $code)
+	foreach (array('forums', 'index', 'page', 'pfs', 'pm', 'polls') as $code)
 	{
 		$ret = cot_extension_install($code, true, true);
 		if ($ret === false)
