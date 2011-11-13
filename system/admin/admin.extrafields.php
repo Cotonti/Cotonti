@@ -18,7 +18,12 @@ require_once cot_incfile('extrafields');
 
 $extra_blacklist = array($db_auth, $db_cache, $db_cache_bindings, $db_core, $db_updates, $db_logger, $db_online, $db_extra_fields, $db_config, $db_plugins);
 $extra_whitelist = array(
-	$db_structure => array('name' => $db_structure, 'caption' => $L['Categories'], 'help' => $L['adm_help_structure_extrafield']),
+	$db_structure => array(
+		'name' => $db_structure, 
+		'caption' => $L['Categories'], 
+		'help' => $L['adm_help_structure_extrafield'],
+		'tags' => array('page.list.tpl' => '{LIST_ROWCAT_XXXXX}, {LIST_CAT_XXXXX}')
+	)
 );
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=extrafields'), $L['adm_extrafields']);
@@ -206,20 +211,24 @@ else
 	/* ===== */
 	foreach ($res->fetchAll() as $row)
 	{
+		$ii++;
 		$t->assign(array(
-			'ADMIN_EXTRAFIELDS_ROW_NAME' => cot_inputbox('text', 'field_name['.$row['field_name'].']', $row['field_name']),
-			'ADMIN_EXTRAFIELDS_ROW_DESCRIPTION' => cot_textarea('field_description['.$row['field_name'].']', $row['field_description'], 1, 30),
-			'ADMIN_EXTRAFIELDS_ROW_SELECT' => cot_selectbox($row['field_type'], 'field_type['.$row['field_name'].']', $field_types, $field_types, false),
-			'ADMIN_EXTRAFIELDS_ROW_VARIANTS' => cot_textarea('field_variants['.$row['field_name'].']', $row['field_variants'], 1, 60),
-			'ADMIN_EXTRAFIELDS_ROW_PARAMS' => cot_textarea('field_params['.$row['field_name'].']', $row['field_params'], 1, 60),
-			'ADMIN_EXTRAFIELDS_ROW_HTML' => cot_textarea('field_html['.$row['field_name'].']', $row['field_html'], 1, 60),
-			'ADMIN_EXTRAFIELDS_ROW_DEFAULT' => cot_textarea('field_default['.$row['field_name'].']', $row['field_default'], 1, 60),
-			'ADMIN_EXTRAFIELDS_ROW_REQUIRED' => cot_checkbox($row['field_required'], 'field_required['.$row['field_name'].']'),
-			'ADMIN_EXTRAFIELDS_ROW_ENABLED' => cot_checkbox($row['field_enabled'], 'field_enabled['.$row['field_name'].']', '', 'title="'.$L['adm_extrafield_enable'].'"'),
-			'ADMIN_EXTRAFIELDS_ROW_PARSE' => cot_selectbox($row['field_parse'], 'field_parse['.$row['field_name'].']', $parse_type, $parse_type, false),
+			'ADMIN_EXTRAFIELDS_ROW_NAME' => cot_inputbox('text', 'field_name['.$row['field_name'].']', $row['field_name'], 'class="exfldname"'),
+			'ADMIN_EXTRAFIELDS_ROW_FIELDNAME' => htmlspecialchars($row['field_name']),
+			'ADMIN_EXTRAFIELDS_ROW_DESCRIPTION' => cot_textarea('field_description['.$row['field_name'].']', $row['field_description'], 1, 30, 'class="exflddesc"'),
+			'ADMIN_EXTRAFIELDS_ROW_SELECT' => cot_selectbox($row['field_type'], 'field_type['.$row['field_name'].']', $field_types, $field_types, false, 'class="exfldtype"'),
+			'ADMIN_EXTRAFIELDS_ROW_VARIANTS' => cot_textarea('field_variants['.$row['field_name'].']', $row['field_variants'], 1, 60, 'class="exfldvariants"'),
+			'ADMIN_EXTRAFIELDS_ROW_PARAMS' => cot_textarea('field_params['.$row['field_name'].']', $row['field_params'], 1, 60, 'class="exfldparams"'),
+			'ADMIN_EXTRAFIELDS_ROW_HTML' => cot_textarea('field_html['.$row['field_name'].']', $row['field_html'], 1, 60, 'class="exfldhtml"'),
+			'ADMIN_EXTRAFIELDS_ROW_DEFAULT' => cot_textarea('field_default['.$row['field_name'].']', $row['field_default'], 1, 60, 'class="exflddefault"'),
+			'ADMIN_EXTRAFIELDS_ROW_REQUIRED' => cot_checkbox($row['field_required'], 'field_required['.$row['field_name'].']', '', 'class="exfldrequired"'),
+			'ADMIN_EXTRAFIELDS_ROW_ENABLED' => cot_checkbox($row['field_enabled'], 'field_enabled['.$row['field_name'].']', '', 'title="'.$L['adm_extrafield_enable'].'" class="exfldenabled" '),
+			'ADMIN_EXTRAFIELDS_ROW_PARSE' => cot_selectbox($row['field_parse'], 'field_parse['.$row['field_name'].']', $parse_type, $parse_type, false, 'class="exfldparse"'),
 			'ADMIN_EXTRAFIELDS_ROW_BIGNAME' => strtoupper($row['field_name']),
 			'ADMIN_EXTRAFIELDS_ROW_ID' => $row['field_name'],
-			'ADMIN_EXTRAFIELDS_ROW_DEL_URL' => cot_url('admin', 'm=extrafields&n='.$n.'&a=del&name='.$row['field_name'])
+			'ADMIN_EXTRAFIELDS_ROW_DEL_URL' => cot_url('admin', 'm=extrafields&n='.$n.'&a=del&name='.$row['field_name']),
+			'ADMIN_EXTRAFIELDS_ROW_COUNTER_ROW' => $ii,
+			'ADMIN_EXTRAFIELDS_ROW_ODDEVEN' => cot_build_oddeven($ii)
 		));
 
 		/* === Hook - Part2 : Include === */
@@ -230,27 +239,34 @@ else
 		/* ===== */
 
 		$t->parse('MAIN.TABLE.EXTRAFIELDS_ROW');
-		$ii++;
 	}
 
+	$tags_list = '';
+	if(is_array($extra_whitelist[$n]['tags']))
+	{
+		foreach($extra_whitelist[$n]['tags'] as $ktags => $vtags)
+		{
+			$tags_list .= cot_rc('admin_exflds_array', array('tplfile' => $ktags, 'tags' => $vtags));
+		}
+	}
+	
 	$t->assign(array(
 		'ADMIN_EXTRAFIELDS_URL_FORM_EDIT' => cot_url('admin', 'm=extrafields&n='.$n.'&a=upd&d='.$durl),
-		'ADMIN_EXTRAFIELDS_NAME' => cot_inputbox('text', 'field_name', ''),
-		'ADMIN_EXTRAFIELDS_DESCRIPTION' => cot_textarea('field_description', '', 1, 30),
-		'ADMIN_EXTRAFIELDS_SELECT' => cot_selectbox('input', 'field_type', $field_types, $field_types, false),
-		'ADMIN_EXTRAFIELDS_VARIANTS' => cot_textarea('field_variants', '', 1, 60),
-		'ADMIN_EXTRAFIELDS_PARAMS' => cot_textarea('field_params', '', 1, 60),
-		'ADMIN_EXTRAFIELDS_HTML' => cot_textarea('field_html', '', 1, 60),
-		'ADMIN_EXTRAFIELDS_DEFAULT' => cot_textarea('field_default', '', 1, 60),
-		'ADMIN_EXTRAFIELDS_REQUIRED' => cot_checkbox(0, 'field_required'),
-		'ADMIN_EXTRAFIELDS_PARSE' => cot_selectbox('HTML', 'field_parse', $parse_type, $parse_type, false),
+		'ADMIN_EXTRAFIELDS_NAME' => cot_inputbox('text', 'field_name', '', 'class="exfldname"'),
+		'ADMIN_EXTRAFIELDS_DESCRIPTION' => cot_textarea('field_description', '', 1, 30, 'class="exflddesc"'),
+		'ADMIN_EXTRAFIELDS_SELECT' => cot_selectbox('input', 'field_type', $field_types, $field_types, false, 'class="exfldtype"'),
+		'ADMIN_EXTRAFIELDS_VARIANTS' => cot_textarea('field_variants', '', 1, 60, 'class="exfldvariants"'),
+		'ADMIN_EXTRAFIELDS_PARAMS' => cot_textarea('field_params', '', 1, 60, 'class="exfldparams"'),
+		'ADMIN_EXTRAFIELDS_HTML' => cot_textarea('field_html', '', 1, 60, 'class="exfldhtml"'),
+		'ADMIN_EXTRAFIELDS_DEFAULT' => cot_textarea('field_default', '', 1, 60, 'class="exflddefault"'),
+		'ADMIN_EXTRAFIELDS_REQUIRED' => cot_checkbox(0, 'field_required', '', 'class="exfldrequired"'),
+		'ADMIN_EXTRAFIELDS_PARSE' => cot_selectbox('HTML', 'field_parse', $parse_type, $parse_type, false, 'class="exfldparse"'),
 		'ADMIN_EXTRAFIELDS_URL_FORM_ADD' => cot_url('admin', 'm=extrafields&n='.$n.'&a=add&d='.$durl),
 		'ADMIN_EXTRAFIELDS_PAGINATION_PREV' => $pagenav['prev'],
 		'ADMIN_EXTRAFIELDS_PAGNAV' => $pagenav['main'],
 		'ADMIN_EXTRAFIELDS_PAGINATION_NEXT' => $pagenav['next'],
 		'ADMIN_EXTRAFIELDS_TOTALITEMS' => $totalitems,
-		'ADMIN_EXTRAFIELDS_COUNTER_ROW' => $ii,
-		'ADMIN_EXTRAFIELDS_ODDEVEN' => cot_build_oddeven($ii)
+		'ADMIN_EXTRAFIELDS_TAGS' => $tags_list
 	));
 
 	cot_display_messages($t);

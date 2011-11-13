@@ -276,6 +276,13 @@ $L['adm_help_structure_extrafield'] = 'HTML-код поля установитс
 &nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: OPTIONS --&gt; {ADMIN_STRUCTURE_XXXXX}, {ADMIN_STRUCTURE_XXXXX_TITLE} &lt;!-- END: OPTIONS --&gt;<br /><br />
 &nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: DEFULT --&gt; {ADMIN_STRUCTURE_FORMADD_XXXXX}, {ADMIN_STRUCTURE_FORMADD_XXXXX_TITLE} &lt;!-- END: DEFULT --&gt;<br /><br />
 <br />';
+$L['adm_extrafields_help_notused'] = 'Не используется';
+$L['adm_extrafields_help_variants'] = '{значение1},{значение2},{значение3},...';
+$L['adm_extrafields_help_range'] = '{мин_значение},{макс_значение}';
+$L['adm_extrafields_help_data'] = '{мин_год},{макс_год},{формат_даты}. Если не указан {формат_даты}, выводится stamp';
+$L['adm_extrafields_help_regex'] = 'Регулярное выражение для ввода значение';
+$L['adm_extrafields_help_file'] = 'Директория для загрузки файлов';
+$L['adm_extrafields_help_separator'] = 'Разделитель значений';
 
 /**
  * Users Section

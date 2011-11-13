@@ -124,4 +124,7 @@ $R['admin_menu_icon_tools'] = '<img src="system/admin/tpl/img/adminmenu/tools.pn
 $R['admin_menu_icon_users'] = '<img src="system/admin/tpl/img/adminmenu/users.png" alt="'.$L['Users'].'" />
 	<span>'.$L['Users'].'</span>';
 
+//Extrafields
+$R['admin_exflds_array'] = '{$tplfile}: {$tags}; '
+
 ?>
