@@ -266,7 +266,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.4-002'),
+('revision', '0.9.6-01'),
 ('branch', 'siena');
 
 CREATE TABLE `cot_users` (
