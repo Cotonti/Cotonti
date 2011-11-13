@@ -18,7 +18,7 @@ defined('COT_CODE') or die('Wrong URL.');
 $L['cfg_enable_comments'] = array('Enable comments');
 $L['cfg_mail'] = array('Notify about new comments via email');
 $L['cfg_markitup'] = array('Use markitup');
-$L['cfg_markup'] = array('Enable markup in comments');
+$L['cfg_markup'] = array('Enable markup');
 $L['cfg_minsize'] = array('Min. comment length');
 $L['cfg_time'] = array('Comments editable timeout for users', 'in minutes');
 $L['cfg_rss_commentmaxsymbols'] = array('Comments. Cut element description longer than N symbols', 'Disabled by default');
