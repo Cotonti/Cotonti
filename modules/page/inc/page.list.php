@@ -275,9 +275,10 @@ foreach ($subcat as $x)
 	$sub_count = $db->query("SELECT SUM(structure_count) FROM $db_structure
 		WHERE structure_path LIKE '".$db->prep($structure['page'][$x]['rpath']).".%'
 		OR structure_path = ".$db->quote($structure['page'][$x]['rpath']))->fetchColumn();
-
+	$sub_url_path = $list_url_path;
+	$sub_url_path['c'] = $x;
 	$t->assign(array(
-		'LIST_ROWCAT_URL' => cot_url('page', array('c' => $x, 'ord' => $o, 'p' => $p)),
+		'LIST_ROWCAT_URL' => cot_url('page', $sub_url_path),
 		'LIST_ROWCAT_TITLE' => $structure['page'][$x]['title'],
 		'LIST_ROWCAT_DESC' => $structure['page'][$x]['desc'],
 		'LIST_ROWCAT_ICON' => $structure['page'][$x]['icon'],
