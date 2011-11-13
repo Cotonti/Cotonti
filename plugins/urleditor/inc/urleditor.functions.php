@@ -224,7 +224,7 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	if (!empty($params))
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
-		$url .= '?' . http_build_query($params, '', $sep);
+		$url .= (mb_strpos($url, '?') === false ? '?' : $sep) . http_build_query($params, '', $sep);
 	}
 	// Almost done
 	$url .= $tail;
