@@ -68,9 +68,15 @@ $w = empty($w) ? $cfg['page']['__default']['way'] : $w;
 
 $sys['sublocation'] = $cat['title'];
 
-$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cfg['page']['__default']['maxrowsperpage'] : $cfg['page'][$c]['maxrowsperpage'];
+$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? 
+	$cfg['page']['__default']['maxrowsperpage'] : 
+	$cfg['page'][$c]['maxrowsperpage'];
+$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? 
+	$cfg['page']['__default']['truncatetext'] : 
+	$cfg['page'][$c]['truncatetext'];
 
-$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cfg['page']['__default']['truncatetext'] : $cfg['page'][$c]['truncatetext'];
+$where = array();
+$params = array();
 
 $where['state'] = '(page_state=0 OR page_state=2)';
 if ($c == 'unvalidated')
@@ -102,7 +108,8 @@ if ($o && $p)
 		$val = cot_import($val, 'D', 'TXT', 16);
 		if ($key && $val && $db->fieldExists($db_pages, "page_$key"))
 		{
-			$where['filter'][] = "page_$key = " . $db->quote($val);
+			$params[$key] = $val;
+			$where['filter'][] = "page_$key = :$key";
 		}
 	}
 	empty($where['filter']) || $where['filter'] = implode(' AND ', $where['filter']);
@@ -122,7 +129,7 @@ if ($w != $cfg['page'][$c]['way'])
 }
 $list_url = cot_url('page', $list_url_path);
 
-$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cat['title'] :cot_breadcrumbs(cot_structure_buildpath('page', $c), $cfg['homebreadcrumb'], true);
+$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cat['title'] : cot_breadcrumbs(cot_structure_buildpath('page', $c), $cfg['homebreadcrumb'], true);
 
 /* === Hook === */
 foreach (cot_getextplugins('page.list.query') as $pl)
@@ -133,16 +140,17 @@ foreach (cot_getextplugins('page.list.query') as $pl)
 
 if(empty($sql_page_string))
 {
-	$where = array_diff($where,array(''));
-	$sql_page_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition WHERE ".implode(' AND ', $where);
+	$where = array_filter($where);
+	$where = ($where) ? 'WHERE ' . implode(' AND ', $where) : '';
+	$sql_page_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition $where";
 	$sql_page_string = "SELECT p.*, u.* $join_columns
 		FROM $db_pages as p $join_condition
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		WHERE ".implode(' AND ', $where)."
+		$where
 		ORDER BY page_$s $w LIMIT $d, ".$cfg['page']['maxrowsperpage'];
 }
-$totallines = $db->query($sql_page_count)->fetchColumn();
-$sqllist = $db->query($sql_page_string);
+$totallines = $db->query($sql_page_count, $params)->fetchColumn();
+$sqllist = $db->query($sql_page_string, $params);
 
 $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $totallines, $cfg['page']['maxrowsperpage']);
 
