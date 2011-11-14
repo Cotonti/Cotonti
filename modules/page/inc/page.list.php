@@ -22,7 +22,7 @@ $o = cot_import('ord', 'G', 'ARR'); // filter field names without 'page_'
 $p = cot_import('p', 'G', 'ARR'); // filter values
 $maxrowsperpage = ($cfg['page'][$c]['maxrowsperpage']) ? $cfg['page'][$c]['maxrowsperpage'] : $cfg['page']['__default']['maxrowsperpage'];
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage); //page number for pages list
-list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', $maxrowsperpage);// page number for cats list
+list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', $cfg['page']['maxlistsperpage']);// page number for cats list
 
 if ($c == 'all' || $c == 'system')
 {
