@@ -55,11 +55,11 @@ $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspe
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] .= $out['head'];
 
+cot_rc_output();
 if ($cfg['jquery'] && $cfg['jquery_cdn'])
 {
 	cot_rc_link_file($cfg['jquery_cdn'], true);
 }
-cot_rc_output();
 
 if ($sys['noindex'])
 {
