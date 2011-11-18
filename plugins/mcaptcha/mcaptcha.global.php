@@ -27,7 +27,7 @@ include_once cot_langfile('mcaptcha', 'plug');
  */
 function mcaptcha_generate()
 {
-	global $cfg;
+	global $cfg, $L;
 
 	if($cfg['plugin']['mcaptcha']['attempts'] > 0 && $_SESSION['mcaptcha_attempts'] > $cfg['plugin']['mcaptcha']['attempts'])
 	{
