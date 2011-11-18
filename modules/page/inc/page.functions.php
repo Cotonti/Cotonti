@@ -169,7 +169,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			{
 				$dotpos = mb_strrpos($page_data['page_url'], ".") + 1;
 				$type = mb_strtolower(mb_substr($page_data['page_url'], $dotpos, 5));
-				$page_data['page_fileicon'] = cot_rc('page_icon_file_path');
+				$page_data['page_fileicon'] = cot_rc('page_icon_file_path', array('type' => $type));
 				if (!file_exists($page_data['page_fileicon']))
 				{
 					$page_data['page_fileicon'] = cot_rc('page_icon_file_default');
