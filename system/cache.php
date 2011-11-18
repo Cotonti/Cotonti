@@ -2,7 +2,7 @@
 /**
  * Cache subsystem library
  * @package Cotonti
- * @version 0.9.0
+ * @version 0.9.6
  * @author Trustmaster
  * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
@@ -134,7 +134,7 @@ abstract class Writeback_cache_driver extends Dynamic_cache_driver
 	/**
 	 * Writes modified entries back to persistent storage
 	 */
-	abstract public function  __destruct();
+	abstract public function flush();
 
 	/**
 	 * Removes cache image of the object from the database
@@ -596,14 +596,25 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	public function __construct()
 	{
-		// TODO might use GC probability
-		$this->gc();
+		// 10% GC probability
+		if (mt_rand(1, 10) == 5)
+		{
+			$this->gc();
+		}
+	}
+	
+	/**
+	 * Enforces flush()
+	 */
+	public function __destruct()
+	{
+		$this->flush();
 	}
 
 	/**
 	 * Saves all modified data with one query
 	 */
-	public function  __destruct()
+	public function flush()
 	{
 		global $db, $db_cache, $sys;
 		if (count($this->removed_data) > 0)
@@ -618,6 +629,7 @@ class MySQL_cache extends Db_cache_driver
 				$q .= $or." (c_name = $c_name AND c_realm = $c_realm)";
 				$i++;
 			}
+			$this->removed_data = array();
 			$db->query($q);
 		}
 		if (count($this->writeback_data) > 0)
@@ -634,6 +646,7 @@ class MySQL_cache extends Db_cache_driver
 				$q .= $comma."($c_name, $c_realm, $c_expire, $c_value)";
 				$i++;
 			}
+			$this->writeback_data = array();
 			$q .= " ON DUPLICATE KEY UPDATE c_value=VALUES(c_value), c_expire=VALUES(c_expire)";
 			$db->query($q);
 		}

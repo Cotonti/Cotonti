@@ -888,7 +888,7 @@ function cot_setcookie($name, $value, $expire, $path, $domain, $secure = false, 
  */
 function cot_shutdown()
 {
-	global $cache;
+	global $cache, $db;
 	// Clear import buffer if everything's OK on POST
 	if ($_SERVER['REQUEST_METHOD'] == 'POST' && !cot_error_found())
 	{
@@ -898,7 +898,9 @@ function cot_shutdown()
 	{
 		ob_end_flush();
 	}
-	$cache = null; // Need to destroy before DB connection is lost
+	// Need to destroy cache before DB connection is lost
+	$cache && $cache->db->flush();
+	$cache = null;
 	$db = null;
 }
 
