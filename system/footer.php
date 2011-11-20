@@ -113,6 +113,19 @@ if (!COT_AJAX)
 	{
 		$t->parse('FOOTER.GUEST');
 	}
+	
+	if ($cfg['debug_mode'])
+	{
+		$cot_hooks_fired[] = 'footer.last';
+		$cot_hooks_fired[] = 'output';
+		$out['hooks'] = '<ol>';
+		foreach ($cot_hooks_fired as $hook)
+		{
+			$out['hooks'] .= '<li>'.$hook.'</li>';
+		}
+		$out['hooks'] .= '</ol>';
+		$t->assign('FOOTER_HOOKS', $out['hooks']);
+	}
 
 	$t->parse('FOOTER');
 	$t->out('FOOTER');

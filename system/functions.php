@@ -172,7 +172,12 @@ function cot_get_caller()
  */
 function cot_getextplugins($hook, $cond='R')
 {
-	global $cot_plugins, $cache, $cfg;
+	global $cot_plugins, $cache, $cfg, $cot_hooks_fired;
+
+	if ($cfg['debug_mode'])
+	{
+		$cot_hooks_fired[] = $hook;
+	}
 
 	$extplugins = array();
 
