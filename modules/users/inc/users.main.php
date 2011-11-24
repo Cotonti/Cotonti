@@ -192,7 +192,7 @@ foreach($cot_groups as $k => $i)
 	$grpfilters_maingrp_values[] = cot_url('users', 'g='.$k, '', true);
 	$grpfilters_group_values[] = cot_url('users', 'gm='.$k, '', true);
 	}
-$maingrpfilters = cot_selectbox($g, 'bymaingroup', $grpfilters_maingrp_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'));
+$maingrpfilters = cot_selectbox($g, 'bymaingroup', $grpfilters_maingrp_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
 
 $grpfilters_titles[0] = $L['Group'];
 $grpfilters = cot_selectbox($g, 'bygroupms', $grpfilters_group_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
