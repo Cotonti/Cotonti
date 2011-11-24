@@ -27,6 +27,11 @@ foreach (cot_getextplugins('page.edit.first') as $pl)
 
 cot_block($usr['auth_read']);
 
+if (!$id || $id < 0)
+{
+	cot_die_message(404);
+}
+
 $parser_list = cot_get_parsers();
 
 if ($a == 'update')
@@ -227,7 +232,10 @@ if ($a == 'update')
 }
 
 $sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
-cot_die($sql_page->rowCount() == 0);
+if ($sql_page->rowCount() == 0)
+{
+	cot_die_message(404);
+}
 $pag = $sql_page->fetch();
 
 $pag['page_status'] = cot_page_status(

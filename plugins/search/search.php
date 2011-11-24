@@ -273,6 +273,11 @@ if (!empty($sq))
 			include $pl;
 		}
 		/* ===== */
+		
+		if (!$db->fieldExists($db_pages, 'page_'.$rs['pagsort']))
+		{
+			$rs['pagsort'] = 'date';
+		}
 
 		$sql = $db->query("SELECT SQL_CALC_FOUND_ROWS p.* $search_join_columns
 			FROM $db_pages AS p $search_join_condition

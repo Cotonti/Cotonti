@@ -14,6 +14,7 @@ defined('COT_CODE') or die('Wrong URL');
 $id = cot_import('id', 'G', 'INT');
 $s = cot_import('s', 'G', 'ALP', 16);
 $w = cot_import('w', 'G', 'ALP', 4);
+
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['users']['maxusersperpage']);
 $f = cot_import('f', 'G', 'ALP', 16);
 $g = cot_import('g', 'G', 'INT');
@@ -59,7 +60,7 @@ if (empty($s) || in_array(mb_strtolower($s), $users_sort_blacklist) || !in_array
 {
 	$s = 'name';
 }
-if (empty($w))
+if (!in_array($w, array('asc', 'desc')))
 {
 	$w = 'asc';
 }

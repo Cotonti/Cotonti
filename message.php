@@ -218,6 +218,11 @@ $t->assign('MESSAGE_BODY', $body);
 if ($msg == '920')
 {
 	$confirm_no_url = preg_match("/^.+".preg_quote($sys['domain']."/"), $_SERVER['HTTP_REFERER']) ? str_replace('&', '&amp;', $_SERVER['HTTP_REFERER']) : cot_url('index');
+	
+	if (preg_match('#[ "\':]#', base64_decode($redirect)))
+	{
+		$redirect = '';
+	}
 
 	$t->assign(array(
 		'MESSAGE_CONFIRM_YES' => base64_decode($redirect),
