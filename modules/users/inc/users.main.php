@@ -181,7 +181,7 @@ foreach($cot_countries as $i => $x)
 		$countryfilters_values[] = cot_url('users', 'f=country_'.$i);
 	}
 }
-$countryfilters = cot_selectbox($f, 'bycountry', $countryfilters_values, $countryfilters_titles, false, array('onchange' => 'redirect(this)'));
+$countryfilters = cot_selectbox($f, 'bycountry', $countryfilters_values, $countryfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
 
 $grpfilters_titles = array($L['Maingroup']);
 $grpfilters_group_values = array(cot_url('users'));
@@ -195,7 +195,7 @@ foreach($cot_groups as $k => $i)
 $maingrpfilters = cot_selectbox($g, 'bymaingroup', $grpfilters_maingrp_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'));
 
 $grpfilters_titles[0] = $L['Group'];
-$grpfilters = cot_selectbox($g, 'bygroupms', $grpfilters_group_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'));
+$grpfilters = cot_selectbox($g, 'bygroupms', $grpfilters_group_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
 
 /* === Hook === */
 foreach (cot_getextplugins('users.filters') as $pl)

@@ -143,9 +143,10 @@ function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
  * @param bool $add_empty Allow empty choice
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @param string $custom_rc Custom resource string name
+ * @param bool $htmlspecialchars_bypass Bypass htmlspecialchars() in values
  * @return string
  */
-function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = true, $attrs = '', $custom_rc = '')
+function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = true, $attrs = '', $custom_rc = '', $htmlspecialchars_bypass = false)
 {
 	global $R, $cfg;
 
@@ -180,7 +181,7 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 		$selected = ($multi && in_array($x, $chosen)) || (!$multi && $x == $chosen) ? ' selected="selected"' : '';
 		$title = $use_titles ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
 		$options .= cot_rc($rc, array(
-			'value' => htmlspecialchars($x),
+			'value' => $htmlspecialchars_bypass ? $x : htmlspecialchars($x),
 			'selected' => $selected,
 			'title' => $title
 		));
