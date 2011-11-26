@@ -152,6 +152,14 @@ function cot_forums_sectionsetlast($cat, $postcount = '', $topiccount='', $viewc
 
 	$i_postcount = ($postcount != '' && is_int($postcount)) ? $postcount : 0;
 	$i_topiccount = ($topiccount != '' && is_int($topiccount)) ? $topiccount : 0;
+	if (!empty($postcount) && $i_postcount == 0)
+	{
+		$i_postcount = 1;
+	}
+	if (!empty($topiccount) && $i_topiccount == 0)
+	{
+		$i_topiccount = 1;
+	}
 
 	$postcount = ($postcount != '') ? ", fs_postcount = ".$postcount : '';
 	$topiccount = ($topiccount != '') ? ", fs_topiccount = ".$topiccount : '';

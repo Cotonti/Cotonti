@@ -75,6 +75,7 @@ foreach ($sql_forums->fetchAll() as $row)
 
 $fstlvl = array();
 $nxtlvl = array();
+$cot_act = array();
 foreach ($structure['forums'] as $i => $x)
 {
 	$parents = explode('.', $x['path']);
@@ -104,13 +105,11 @@ foreach ($structure['forums'] as $i => $x)
 			$cat_top[$parents[$ii]]['postcount'] += $cat_top[$i]['fs_postcount'];
 			$cat_top[$parents[$ii]]['viewcount'] += $cat_top[$i]['fs_viewcount'];
 		}
-		if ($depth > 1)
-		{
-			$cot_act[$parents[1]] += $cot_sections_act[$section];
-		}
+		$cot_act[$parents[0]] += $cot_sections_act[$i];
 	}
 }
-$secact_max = is_array($cot_act) ? (max($cot_act)) : 0;
+
+$secact_max = count($cot_act) > 0 ? (max($cot_act)) : 0;
 
 $out['subtitle'] = $L['Forums'];
 
@@ -175,14 +174,14 @@ foreach ($fstlvl as $x)
 			}
 			$yy++;
 			$t->assign(cot_generate_sectiontags($y, 'FORUMS_SECTIONS_ROW_', $cat_top[$y]));
-			$cot_sections_vw_cur = (!$cot_sections_vw[$fsn['fs_title']]) ? "0" : $cot_sections_vw[$fsn['fs_title']];
+			$cot_sections_vw_cur = (!$cot_sections_vw[$structure['forums'][$y]['title']]) ? "0" : $cot_sections_vw[$structure['forums'][$y]['title']];
 
 			$secact_num = 0;
 			if ($secact_max)
 			{
-				$secact_num = round(6.25 * $cot_sections_act[$fsn['fs_cat']] / $secact_max);
+				$secact_num = round(6.25 * $cot_sections_act[$y] / $secact_max);
 				$secact_num = ($secact_num>5) ? 5 : $secact_num;
-				$secact_num =  (!$secact_num && $cot_sections_act[$fsn['fs_cat']]>1) ? 1 : $secact_num;
+				$secact_num =  (!$secact_num && $cot_sections_act[$y]>1) ? 1 : $secact_num;
 
 			}
 			$t->assign(array(
