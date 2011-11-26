@@ -140,7 +140,7 @@ if ($a == 'send')
 				$pm['pm_touserid'] = $userid;
 				$pm['pm_tostate'] = 0;
 				$pmsql = $db->insert($db_pm, $pm);
-				$pmsql = $db->update($db_users, array('user_newpm' => '1'), "user_id = '".$usr['id']."'");
+				$pmsql = $db->update($db_users, array('user_newpm' => '1'), "user_id = $userid");
 
 				if ($cfg['pm']['allownotifications'])
 				{
