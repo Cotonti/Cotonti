@@ -70,8 +70,9 @@ if ($a=='update')
 			cot_extrafield_unlinkfiles($row1['user_'.$row_extf['field_name']], $row_extf);
 		}
 		
-		if (cot_import('ruserdelpfs','P','BOL'))// TODO PFS SEPARATE
+		if (cot_module_active('pfs') && cot_import('ruserdelpfs','P','BOL'))
 		{
+			require_once cot_incfile('pfs', 'module');
 			cot_pfs_deleteall($id);
 		}
 
