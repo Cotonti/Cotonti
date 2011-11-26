@@ -6,7 +6,7 @@ Hooks=global
 ==================== */
 
 /**
- * Hits delete page
+ * Hits counter
  *
  * @package hits
  * @version 0.9.0
@@ -16,22 +16,26 @@ Hooks=global
  */
 
 defined('COT_CODE') or die('Wrong URL');
-require_once cot_incfile('hits', 'plug');
 
-if ($cache && $cache->mem)
+if (!defined('COT_ADMIN'))
 {
-	$hits = $cache->mem->inc('hits', 'system');
-	$cfg['plugin']['hits']['hit_precision'] > 0 || $cfg['plugin']['hits']['hit_precision'] = 100;
-	if ($hits % $cfg['plugin']['hits']['hit_precision'] == 0)
+	require_once cot_incfile('hits', 'plug');
+
+	if ($cache && $cache->mem)
 	{
-		cot_stat_inc('totalpages', $cfg['plugin']['hits']['hit_precision']);
-		cot_stat_inc($sys['day'], $cfg['plugin']['hits']['hit_precision']);
+		$hits = $cache->mem->inc('hits', 'system');
+		$cfg['plugin']['hits']['hit_precision'] > 0 || $cfg['plugin']['hits']['hit_precision'] = 100;
+		if ($hits % $cfg['plugin']['hits']['hit_precision'] == 0)
+		{
+			cot_stat_inc('totalpages', $cfg['plugin']['hits']['hit_precision']);
+			cot_stat_inc($sys['day'], $cfg['plugin']['hits']['hit_precision']);
+		}
 	}
-}
-else
-{
-	cot_stat_inc('totalpages');
-	cot_stat_update($sys['day']);
+	else
+	{
+		cot_stat_inc('totalpages');
+		cot_stat_update($sys['day']);
+	}
 }
 
 ?>
