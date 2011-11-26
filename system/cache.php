@@ -968,7 +968,7 @@ if (extension_loaded('apc'))
 		{
 			// Protect from exhausted memory
 			$info = $this->get_info();
-			if ($info['available'] < $info['max'] * 0.1)
+			if ($info['available'] < $info['max'] * 0.2)
 			{
 				$this->clear();
 			}
