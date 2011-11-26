@@ -22,17 +22,30 @@ global $db_pfs, $db_pfs_folders, $db_x;
 $db_pfs = (isset($db_pfs)) ? $db_pfs : $db_x . 'pfs';
 $db_pfs_folders = (isset($db_pfs_folders)) ? $db_pfs_folders : $db_x . 'pfs_folders';
 
-// TODO eliminate this function
-function cot_build_pfs($id, $c1, $c2, $title)
+/**
+ * Generates a link to PFS
+ *
+ * @global array $L
+ * @global array $cfg
+ * @global array $usr
+ * @global array $cot_groups
+ * @param int $id User ID
+ * @param string $c1 Form name
+ * @param string $c2 Input name
+ * @param string $title Link title
+ * @param string $parser Custom parser (otional)
+ * @return string 
+ */
+function cot_build_pfs($id, $c1, $c2, $title, $parser = '')
 {
 	global $L, $cfg, $usr, $cot_groups;
 	if ($id == 0)
 	{
-		$res = "<a href=\"javascript:pfs('0','" . $c1 . "','" . $c2 . "')\">" . $title . "</a>";
+		$res = "<a href=\"javascript:pfs('0','" . $c1 . "','" . $c2 . "','" . $parser . "')\">" . $title . "</a>";
 	}
 	elseif ($cot_groups[$usr['maingrp']]['pfs_maxtotal'] > 0 && $cot_groups[$usr['maingrp']]['pfs_maxfile'] > 0 && cot_auth('pfs', 'a', 'R'))
 	{
-		$res = "<a href=\"javascript:pfs('" . $id . "','" . $c1 . "','" . $c2 . "')\">" . $title . "</a>";
+		$res = "<a href=\"javascript:pfs('" . $id . "','" . $c1 . "','" . $c2 . "','" . $parser . "')\">" . $title . "</a>";
 	}
 	else
 	{

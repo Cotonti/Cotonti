@@ -11,8 +11,8 @@ function popup(code, w, h){
     window.open(getBaseHref() + 'plug.php?o=' + code, '', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=' + w + ',height=' + h + ',left=32,top=16');
 }
 
-function pfs(id, c1, c2){
-    window.open(getBaseHref() + 'pfs.php?userid=' + id + '&c1=' + c1 + '&c2=' + c2, 'PFS', 'status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16');
+function pfs(id, c1, c2, parser){
+    window.open(getBaseHref() + 'pfs.php?userid=' + id + '&c1=' + c1 + '&c2=' + c2 + '&parser=' + parser, 'PFS', 'status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16');
 }
 
 function redirect(url){

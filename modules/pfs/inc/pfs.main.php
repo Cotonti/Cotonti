@@ -14,8 +14,9 @@ defined('COT_CODE') or die('Wrong URL');
 $id = cot_import('id','G','INT');                     // id (delete file(folder) id
 $opt = cot_import('opt','G','ALP');                     // display option
 $f = cot_import('f','G','INT');                       // folder id
-$c1 = cot_import('c1','G','ALP');					  //
-$c2 = cot_import('c2','G','ALP');					  //
+$c1 = cot_import('c1','G','ALP');					  // form name
+$c2 = cot_import('c2','G','ALP');					  // input name
+$parser = cot_import('parser', 'G', 'ALP');				// custom parser
 $userid = cot_import('userid','G','INT');			  // User ID or 0
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
@@ -25,7 +26,7 @@ list($pgf, $df) = cot_import_pagenav('df', $cfg['pfs']['maxpfsperpage']);   // p
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
 cot_block($usr['auth_read']);
 
-$sys['parser'] = $cfg['parser'];
+$sys['parser'] = empty($parser) ? $cfg['parser'] : $parser;
 
 $pn_c1 = empty($c1) ? '' : '&c1=' . $c1;
 $pn_c2 = empty($c2) ? '' : '&c2=' . $c2;
@@ -65,6 +66,10 @@ if (($maxfile==0 || $maxtotal==0) && !$usr['isadmin'])
 if (!empty($c1) || !empty($c2))
 {
 	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
+	if (!empty($parser))
+	{
+		$more .= '&parser='.$parser;
+	}
 	$standalone = TRUE;
 }
 
