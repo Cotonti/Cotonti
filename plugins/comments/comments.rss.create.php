@@ -98,7 +98,7 @@ if ($c == 'comments')
 				// Attach original page text as last item
 				$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']);
 				$items[$i]['title'] = $L['rss_original'];
-				$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_pageurl']);
+				$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_pageurl'], $row['page_parser']);
 				$items[$i]['link'] = COT_ABSOLUTE_URL . ((empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']));
 				$items[$i]['pubDate'] = date('r', $row['page_date']);
 			}
