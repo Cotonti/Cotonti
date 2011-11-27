@@ -25,6 +25,12 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		$catsub = cot_structure_children('forums', '', true, true, $rightprescan);
 		$incat = "AND ft_cat IN ('" . implode("','", $catsub) . "')";
 	}
+	/* === Hook === */
+	foreach (cot_getextplugins('recentitems.recentforums.first') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 	if ($mode == 'recent')
 	{
 		$sql = $db->query("SELECT * FROM $db_forum_topics
