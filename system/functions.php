@@ -270,10 +270,15 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 		$v = stripslashes($v);
 	}
 
-	if (($v == '' || $v == NULL) && $buffer)
+	if (($v === '' || $v === NULL) && $buffer)
 	{
 		$v = cot_import_buffered($name, $v, null);
 		return $v;
+	}
+	
+	if ($v === null)
+	{
+		return null;
 	}
 
 	if ($maxlen>0)
