@@ -151,27 +151,37 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			break;
 
 		case 'inputint':
+		case 'range':
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
-			list($min, $max) = explode(",",$extrafield['field_params'], 2);
 			$import = cot_import($inputname, $source, 'INT');
-			$import = ((int)$import > 0) ? (int)$import : 0;
-			
-			if ((int)$min > 0 || (int)$max > 0)
+			if (!is_null($import) && !empty($extrafield['field_params']))
 			{
-				$import = ($min != "" && (int)$min > $s_year) ? $min : $import;
-				$import = ($max != "" && (int)$max < $s_year) ? $max : $import;
+				list($min, $max) = explode(",",$extrafield['field_params'], 2);
+				$min = (int) $min;
+				$max = (int) $max;
+				if ($import < $min || $import > $max)
+				{
+					cot_error('field_range_' . $extrafield['field_name'], $name);
+				}
 			}
 			break;
 		case 'currency':
 		case 'double':	
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
-			list($min, $max) = explode(",",$extrafield['field_params'], 2);
 			$import = cot_import($inputname, $source, 'NUM');
-			$import = (doubleval($import) != 0) ? doubleval($import) : 0;
-			if ((float)$min > 0 || (float)$max > 0)
+			if (!is_null($import))
 			{
-				$import = ($min != "" && (float)$min > $s_year) ? $min : $import;
-				$import = ($max != "" && (float)$max < $s_year) ? $max : $import;
+				$import = floatval($import);
+			}
+			if (!is_null($import) && !empty($extrafield['field_params']))
+			{
+				list($min, $max) = explode(",",$extrafield['field_params'], 2);
+				$min = (int) $min;
+				$max = (int) $max;
+				if ($import < $min || $import > $max)
+				{
+					cot_error('field_range_' . $extrafield['field_name'], $name);
+				}
 			}
 			break;
 
@@ -200,7 +210,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			list($min, $max) = explode(",",$extrafield['field_params'], 2);
 			
 			$import = cot_import_date($inputname, true, false, $source);
-			if ((int)$min > 0 || (int)$max > 0)
+			if (!is_null($import) && ((int)$min > 0 || (int)$max > 0))
 			{
 				list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $utime));
 				if ($min > $s_year)
@@ -217,14 +227,6 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 		case 'country':
 			$import = cot_import($inputname, $source,'ALP');
 			break;	
-		
-		case 'range':	
-			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
-			list($min, $max) = explode(",",$extrafield['field_params'], 2);
-			$import = cot_import($inputname, $source,'INT');
-			$import = ($import > (int)$max) ? '' : $import;
-			$import = ($import < (int)$min) ? '' : $import;
-			break;
 		
 		case 'checklistbox':
 			$import = cot_import($inputname, $source, 'ARR');
@@ -327,7 +329,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			$import = $exfldsize[$extrafield['field_variants']];
 			break;
 	}
-	if (empty($import) && $extrafield['field_required'])
+	if (is_null($import) && $extrafield['field_required'])
 	{
 		$L['field_required_' . $extrafield['field_name']] = (isset($L['field_required_' . $extrafield['field_name']])) ? $L['field_required_' . $extrafield['field_name']] : $L['field_required'];
 		cot_error('field_required_' . $extrafield['field_name'], $name);
