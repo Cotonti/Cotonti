@@ -784,7 +784,7 @@ function cot_outputfilters($output)
 	/* === Hook === */
 	foreach (cot_getextplugins('output') as $pl)
 	{
-		include $pl;
+		include realpath(dirname(__FILE__).'/..') . '/' . $pl;
 	}
 	/* ==== */
 
