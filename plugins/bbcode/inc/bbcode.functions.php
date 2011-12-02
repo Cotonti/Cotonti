@@ -177,7 +177,7 @@ function cot_bbcode_load()
 	if ($cache)
 	{
 		$cache->db->store('cot_bbcodes', $cot_bbcodes, 'system');
-		$cache->db->store('cot_bbcode_containers', $cot_bbcode_containers, 'sysem');
+		$cache->db->store('cot_bbcode_containers', $cot_bbcode_containers, 'system');
 	}
 }
 
