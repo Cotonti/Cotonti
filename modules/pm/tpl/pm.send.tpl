@@ -42,7 +42,7 @@
 			</form>
 		</div>
 	</div>
-	<!-- IF {PMSEND_AJAX_MARKITUP} -->
+	<!-- IF {PMSEND_AJAX_MARKITUP} AND {PHP.cfg.pm.turnajax} -->
 	<script type="text/javascript">
 		$(document).ready(function() {$("textarea.editor").markItUp(mySettings);});
 	</script>

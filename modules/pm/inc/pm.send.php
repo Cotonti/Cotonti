@@ -270,19 +270,19 @@ $url_sentbox = cot_url('pm', 'f=sentbox');
 
 $t->assign(array(
 	'PMSEND_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
-	'PMSEND_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link($url_newpm, $L['pm_sendnew'], array('class'=>'ajax')) : '',
+	'PMSEND_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link($url_newpm, $L['pm_sendnew'], array('class'=>$cfg['pm']['turnajax'] ? 'ajax' : '')) : '',
 	'PMSEND_SENDNEWPM_URL' => ($usr['auth_write']) ? $url_newpm : '',
-	'PMSEND_INBOX' => cot_rc_link($url_inbox, $L['pm_inbox'], array('class'=>'ajax')),
+	'PMSEND_INBOX' => cot_rc_link($url_inbox, $L['pm_inbox'], array('class'=>$cfg['pm']['turnajax'] ? 'ajax' : '')),
 	'PMSEND_INBOX_URL' => $url_inbox,
 	'PMSEND_INBOX_COUNT' => $totalinbox,
-	'PMSEND_SENTBOX' => cot_rc_link($url_sentbox, $L['pm_sentbox'], array('class'=>'ajax')),
+	'PMSEND_SENTBOX' => cot_rc_link($url_sentbox, $L['pm_sentbox'], array('class'=>$cfg['pm']['turnajax'] ? 'ajax' : '')),
 	'PMSEND_SENTBOX_URL' => $url_sentbox,
 	'PMSEND_SENTBOX_COUNT' => $totalsentbox,
 	'PMSEND_FORM_SEND' => cot_url('pm', 'm=send&a=send'.$idurl),
 	'PMSEND_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
 	'PMSEND_FORM_TOUSER' => cot_textarea('newpmrecipient', $touser, 3, 56, 'class="userinput"'),
-	'PMSEND_AJAX_MARKITUP' => (COT_AJAX && cot_plugin_active('markitup') && $cfg['jquery'] && $cfg['turnajax'])
+	'PMSEND_AJAX_MARKITUP' => (COT_AJAX && cot_plugin_active('markitup') && $cfg['pm']['turnajax'])
 ));
 
 if (!$id)

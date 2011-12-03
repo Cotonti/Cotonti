@@ -4,7 +4,7 @@
  * PM
  *
  * @package pm
- * @version 0.7.0
+ * @version 0.9.6
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
@@ -103,7 +103,7 @@ if ($history)
 						OR (pm_fromuserid = $to AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)
 						ORDER BY pm_date DESC LIMIT $d,".$cfg['pm']['maxpmperpage']);
 
-	$pagenav = cot_pagenav('pm', 'm=message&id='.$id.'&history='.(int)$history.'&q='.$q, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax'], 'ajaxHistory');
+	$pagenav = cot_pagenav('pm', 'm=message&id='.$id.'&history='.(int)$history.'&q='.$q, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['pm']['turnajax'], 'ajaxHistory');
 
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('pm.history.loop');
@@ -113,8 +113,8 @@ if ($history)
 	{
 		$jj++;
 		$row2['pm_icon_readstatus'] = ($row2['pm_tostate'] == '0') ?
-				cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), $R['pm_icon_new'], array('title' => $L['pm_unread'], 'class'=>'ajax'))
-				: cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), $R['pm_icon'], array('title' => $L['pm_read'], 'class'=>'ajax'));
+				cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), $R['pm_icon_new'], array('title' => $L['pm_unread'], 'class'=> $cfg['pm']['turnajax'] ? 'ajax' : ''))
+				: cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), $R['pm_icon'], array('title' => $L['pm_read'], 'class'=> $cfg['pm']['turnajax'] ? 'ajax' : ''));
 
 		if ($row2['pm_fromuserid'] == $usr['id'])
 		{// sentbox
@@ -141,13 +141,13 @@ if ($history)
 			'PM_ROW_STAR_URL' => $url_star,
 			'PM_ROW_DATE' => cot_date('datetime_medium', $row2['pm_date']),
 			'PM_ROW_DATE_STAMP' => $row2['pm_date'],
-			'PM_ROW_TITLE' => cot_rc_link($url_pm, htmlspecialchars($row2['pm_title']), array('class'=>'ajax')),
+			'PM_ROW_TITLE' => cot_rc_link($url_pm, htmlspecialchars($row2['pm_title']), array('class' => $cfg['pm']['turnajax'] ? 'ajax' : '')),
 			'PM_ROW_URL' => $url_pm,
 			'PM_ROW_TEXT' => $pm_data,
 			'PM_ROW_ICON_STATUS' => $row2['pm_icon_readstatus'],
-			'PM_ROW_ICON_DELETE' => cot_rc_link($url_delete, $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax')),
+			'PM_ROW_ICON_DELETE' => cot_rc_link($url_delete, $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class' => $cfg['pm']['turnajax'] ? 'ajax' : '')),
 			'PM_ROW_DELETE_URL' => $url_delete,
-			'PM_ROW_ICON_EDIT' => ($row2['pm_tostate'] == 0) ? cot_rc_link($url_edit, $R['pm_icon_edit'], array('title' => $L['Edit'], 'class'=>'ajax')) : '',
+			'PM_ROW_ICON_EDIT' => ($row2['pm_tostate'] == 0) ? cot_rc_link($url_edit, $R['pm_icon_edit'], array('title' => $L['Edit'], 'class' => $cfg['pm']['turnajax'] ? 'ajax' : '')) : '',
 			'PM_ROW_EDIT_URL' => ($row2['pm_tostate'] == 0) ? $url_edit : '',
 			'PM_ROW_ODDEVEN' => cot_build_oddeven($jj),
 			'PM_ROW_NUM' => $jj
@@ -196,7 +196,7 @@ if ($usr['auth_write'])
 		'PM_FORM_SEND' => cot_url('pm', 'm=send&a=send&to='.$to),
 		'PM_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 		'PM_FORM_TEXT' => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
-		'PM_AJAX_MARKITUP' => (COT_AJAX && cot_plugin_active('markitup') && $cfg['jquery'] && $cfg['turnajax'])
+		'PM_AJAX_MARKITUP' => (COT_AJAX && cot_plugin_active('markitup') && $cfg['pm']['turnajax'])
 	));
 
 	/* === Hook === */
@@ -219,10 +219,10 @@ $title[] =  array(cot_url('users', 'm=details&id='.$row_user['user_id']), $row_u
 $title[] = array(cot_url('pm', 'm=message&id='.$id), $row['pm_title']);
 $t->assign(array(
 	'PM_PAGETITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
-	'PM_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
-	'PM_INBOX' => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
+	'PM_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class' => $cfg['pm']['turnajax'] ? 'ajax' : '')) : '',
+	'PM_INBOX' => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class' => $cfg['pm']['turnajax'] ? 'ajax' : '')),
 	'PM_INBOX_COUNT' => $totalinbox,
-	'PM_SENTBOX' => cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class'=>'ajax')),
+	'PM_SENTBOX' => cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class' => $cfg['pm']['turnajax'] ? 'ajax' : '')),
 	'PM_SENTBOX_COUNT' => $totalsentbox,
 	'PM_ID' => $row['pm_id'],
 	'PM_STATE' => $row['pm_tostate'],
@@ -231,9 +231,9 @@ $t->assign(array(
 	'PM_DATE_STAMP' => $row['pm_date'],
 	'PM_TITLE' => htmlspecialchars($row['pm_title']),
 	'PM_TEXT' => '<div id="pm_text">'.$pm_maindata.'</div>',
-	'PM_DELETE' => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=>'ajax')),
+	'PM_DELETE' => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=> $cfg['pm']['turnajax'] ? 'ajax' : '')),
 	'PM_EDIT' => $row['pm_icon_edit'],
-	'PM_HISTORY' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$durl), $L['pm_messagehistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),
+	'PM_HISTORY' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$durl), $L['pm_messagehistory'], array("rel" => "get-ajaxHistory", 'class' => $cfg['pm']['turnajax'] ? 'ajax' : '')),
 	'PM_SENT_TYPE' => ($f == 'sentbox') ? $L['Recipient'] : $L['Sender']
 ));
 $t->assign(cot_generate_usertags($row_user, 'PM_USER_'));

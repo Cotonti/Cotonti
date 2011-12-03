@@ -65,7 +65,7 @@
 			</form>
 		</div>
 	</div>
-	<!-- IF {PHP.cfg.jquery} -->
+	<!-- IF {PHP.cfg.jquery} AND {PHP.cfg.pm.turnajax} -->
 	<script type="text/javascript" src="{PHP.cfg.modules_dir}/pm/js/pm.js"></script>
 	<!-- ENDIF -->
 

@@ -4,7 +4,7 @@
  * PM
  *
  * @package pm
- * @version 0.7.0
+ * @version 0.9.6
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
@@ -121,7 +121,7 @@ $pm_sql = $db->query("SELECT p.*, u.* FROM $db_pm AS p
 		WHERE $sqlfilter
 		ORDER BY pm_date DESC LIMIT  $d,".$cfg['pm']['maxpmperpage']);
 
-$pagenav = cot_pagenav('pm', 'f='.$f.'&filter='.$filter, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav('pm', 'f='.$f.'&filter='.$filter, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['pm']['turnajax']);
 
 require_once $cfg['system_dir'] . '/header.php';
 
@@ -137,7 +137,7 @@ foreach ($pm_sql->fetchAll() as $row)
 {
 	$jj++;
 	$row['pm_icon_readstatus'] = ($row['pm_tostate'] == '0') ?
-			cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), $R['pm_icon_new'], array('title' => $L['pm_unread'], 'class'=>'ajax'))
+			cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), $R['pm_icon_new'], array('title' => $L['pm_unread'], 'class'=> $cfg['pm']['turnajax'] ? 'ajax' : ''))
 			: cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), $R['pm_icon'], array('title' => $L['pm_read'], 'class'=>'ajax'));
 
 	$pm_data = cot_parse($row['pm_text'], $cfg['pm']['markup']);
@@ -162,14 +162,14 @@ foreach ($pm_sql->fetchAll() as $row)
 		'PM_ROW_STAR_URL' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$durl),
 		'PM_ROW_DATE' => cot_date('datetime_medium', $row['pm_date']),
 		'PM_ROW_DATE_STAMP' => $row['pm_date'],
-		'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), htmlspecialchars($row['pm_title']), array('class'=>'ajax')),
+		'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), htmlspecialchars($row['pm_title']), array('class'=>$cfg['pm']['turnajax'] ? 'ajax' : '')),
 		'PM_ROW_URL' => cot_url('pm', 'm=message&id='.$row['pm_id']),
 		'PM_ROW_TEXT' => $pm_data,
 		'PM_ROW_ICON_STATUS' => $row['pm_icon_readstatus'],
 		'PM_ROW_ICON_STARRED' => $row['pm_icon_starred'],
-		'PM_ROW_ICON_DELETE' => cot_rc_link($url_delete, $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax')),
+		'PM_ROW_ICON_DELETE' => cot_rc_link($url_delete, $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>$cfg['pm']['turnajax'] ? 'ajax' : '')),
 		'PM_ROW_DELETE_URL' => $url_delete,
-		'PM_ROW_ICON_EDIT' => ($row['pm_tostate'] == 0) ? cot_rc_link($url_edit, $R['pm_icon_edit'], array('title' => $L['Edit'], 'class'=>'ajax')) : '',
+		'PM_ROW_ICON_EDIT' => ($row['pm_tostate'] == 0) ? cot_rc_link($url_edit, $R['pm_icon_edit'], array('title' => $L['Edit'], 'class'=> $cfg['pm']['turnajax'] ? 'ajax' : '')) : '',
 		'PM_ROW_EDIT_URL' => ($row['pm_tostate'] == 0) ? $url_edit : '',
 		'PM_ROW_DESC' => $pm_desc,
 		'PM_ROW_ODDEVEN' => cot_build_oddeven($jj),
@@ -208,19 +208,19 @@ $t->assign(array(
 	'PM_PAGETITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'PM_SUBTITLE' => $subtitle,
 	'PM_FORM_UPDATE' => cot_url('pm', cot_xg().'&f='.$f.'&filter='.$filter.'&d='.$durl),
-	'PM_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link($url_newpm, $L['pm_sendnew'], array('class'=>'ajax')) : '',
+	'PM_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link($url_newpm, $L['pm_sendnew'], $cfg['pm']['turnajax'] ? array('class'=>'ajax') : '') : '',
 	'PM_SENDNEWPM_URL' => ($usr['auth_write']) ? $url_newpm : '',
-	'PM_INBOX' => cot_rc_link($url_inbox, $L['pm_inbox'], array('class'=>'ajax')),
+	'PM_INBOX' => cot_rc_link($url_inbox, $L['pm_inbox'], $cfg['pm']['turnajax'] ? array('class'=>'ajax') : ''),
 	'PM_INBOX_URL' => $url_inbox,
 	'PM_INBOX_COUNT' => $totalinbox,
-	'PM_SENTBOX' => cot_rc_link($url_sentbox, $L['pm_sentbox'], array('class'=>'ajax')),
+	'PM_SENTBOX' => cot_rc_link($url_sentbox, $L['pm_sentbox'], $cfg['pm']['turnajax'] ? array('class'=>'ajax') : ''),
 	'PM_SENTBOX_URL' => $url_sentbox,
 	'PM_SENTBOX_COUNT' => $totalsentbox,
-	'PM_FILTER_ALL' => cot_rc_link($url_all, $L['pm_all'], array('class'=>'ajax')),
+	'PM_FILTER_ALL' => cot_rc_link($url_all, $L['pm_all'], $cfg['pm']['turnajax'] ? array('class'=>'ajax') : ''),
 	'PM_FILTER_ALL_URL' => $url_all,
-	'PM_FILTER_UNREAD' => cot_rc_link($url_unread, $L['pm_unread'], array('class'=>'ajax')),
+	'PM_FILTER_UNREAD' => cot_rc_link($url_unread, $L['pm_unread'], $cfg['pm']['turnajax'] ? array('class'=>'ajax') : ''),
 	'PM_FILTER_UNREAD_URL' => $url_unread,
-	'PM_FILTER_STARRED' => cot_rc_link($url_starred, $L['pm_starred'], array('class'=>'ajax')),
+	'PM_FILTER_STARRED' => cot_rc_link($url_starred, $L['pm_starred'], $cfg['pm']['turnajax'] ? array('class'=>'ajax') : ''),
 	'PM_FILTER_STARRED_URL' => $url_starred,
 	'PM_PAGEPREV' => $pagenav['prev'],
 	'PM_PAGENEXT' => $pagenav['next'],
