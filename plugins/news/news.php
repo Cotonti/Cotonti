@@ -97,8 +97,9 @@ if (count($cats) > 0)
 
 		$news = new XTemplate(cot_tplfile(($catn == 0) ? "news" : "news." . $v[0], 'plug'));
 
+		$sql_rowset = $sql->fetchAll();
 		$jj = 0;
-		foreach ($sql->fetchAll() as $pag)
+		foreach ($sql_rowset as $pag)
 		{
 			$jj++;
 			$url = cot_url('index', 'c=' . $pag['page_cat']);

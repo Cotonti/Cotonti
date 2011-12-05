@@ -249,7 +249,8 @@ $extp = cot_getextplugins('forums.topics.loop');
 /* ===== */
 
 $ft_num = 0;
-foreach ($sql_forums->fetchAll() as $row)
+$sql_forums_rowset = $sql_forums->fetchAll();
+foreach ($sql_forums_rowset as $row)
 {
 	$row['ft_icon'] = 'posts';
 	$row['ft_postisnew'] = FALSE;

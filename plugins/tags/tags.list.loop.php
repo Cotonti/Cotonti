@@ -30,7 +30,22 @@ if ($cfg['plugin']['tags']['pages'])
 		$tags_extra = null;
 	}
 	$item_id = $pag['page_id'];
-	$tags = cot_tag_list($item_id, 'pages', $tags_extra);
+
+	if (!isset($tags_rowset_list))
+	{
+		// Load tags for all entries with 1 query
+		$rowset_copy = $sqllist_rowset;
+		reset($rowset_copy);
+		$tag_items = array();
+		foreach ($rowset_copy as $t_row)
+		{
+			$tag_items[] = $t_row['page_id'];
+		}
+		unset($rowset_copy);
+		$tags_rowset_list = cot_tag_list($tag_items, 'pages', $tags_extra);
+	}
+
+	$tags = isset($tags_rowset_list[$item_id]) ? $tags_rowset_list[$item_id] : array();
 	if (count($tags) > 0)
 	{
 		$tag_i = 0;

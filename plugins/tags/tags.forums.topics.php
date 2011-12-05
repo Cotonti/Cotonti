@@ -22,7 +22,22 @@ if ($cfg['plugin']['tags']['forums'])
 {
 	require_once cot_incfile('tags', 'plug');
 	$item_id = $row['ft_id'];
-	$tags = cot_tag_list($item_id, 'forums');
+	
+	if (!isset($tags_rowset_list))
+	{
+		// Load tags for all entries with 1 query
+		$rowset_copy = $sql_forums_rowset;
+		reset($rowset_copy);
+		$tag_items = array();
+		foreach ($rowset_copy as $t_row)
+		{
+			$tag_items[] = $t_row['ft_id'];
+		}
+		unset($rowset_copy);
+		$tags_rowset_list = cot_tag_list($tag_items, 'forums');
+	}
+
+	$tags = isset($tags_rowset_list[$item_id]) ? $tags_rowset_list[$item_id] : array();
 	if (count($tags) > 0)
 	{
 		$tc_html = $L['Tags'] . ': ';

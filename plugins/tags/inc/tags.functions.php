@@ -189,9 +189,9 @@ function cot_tag_isset($tag, $item, $area = 'pages', $extra = null)
 }
 
 /**
- * Returns an array containing tags which have been set on an item
+ * Returns an array containing tags which have been set on an item / items
  *
- * @param int $item Item ID
+ * @param mixed $item Item ID or an array of item IDs
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
  * @param mixed $extra Extra condition (name => value) for plugins
  * @return array
@@ -200,8 +200,9 @@ function cot_tag_list($item, $area = 'pages', $extra = null)
 {
 	global $db, $db_tag_references;
 	$res = array();
-	$query = "SELECT `tag` FROM $db_tag_references
-		WHERE tag_item = $item AND tag_area = '$area'";
+	$item_cond = is_array($item) ? 'IN('.implode(',', $item).')' : "= $item";
+	$query = "SELECT `tag`, `tag_item` FROM $db_tag_references
+		WHERE tag_item $item_cond AND tag_area = '$area'";
 	if (!is_null($extra))
 	{
 		foreach ($extra as $key => $val)
@@ -212,7 +213,14 @@ function cot_tag_list($item, $area = 'pages', $extra = null)
 	$sql = $db->query($query);
 	while ($row = $sql->fetch())
 	{
-		$res[] = $row['tag'];
+		if (is_array($item))
+		{
+			$res[$row['tag_item']][] = $row['tag'];
+		}
+		else
+		{
+			$res[] = $row['tag'];
+		}
 	}
 	$sql->closeCursor();
 	return $res;
