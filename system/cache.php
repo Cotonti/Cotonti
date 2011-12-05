@@ -845,7 +845,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function exists($id, $realm = COT_DEFAULT_REALM)
 		{
-			return $this->memcache->get($realm.'/'.$id, 0) !== FALSE;
+			return $this->memcache->get($realm.'/'.$id) !== FALSE;
 		}
 
 		/**
@@ -853,7 +853,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function get($id, $realm = COT_DEFAULT_REALM)
 		{
-			return $this->memcache->get($realm.'/'.$id, 0);
+			return $this->memcache->get($realm.'/'.$id);
 		}
 
 		/**
