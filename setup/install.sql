@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.4
+ * Version: 0.9.6
  */
 
 CREATE TABLE `cot_auth` (
