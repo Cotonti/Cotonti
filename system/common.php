@@ -435,7 +435,7 @@ foreach (cot_getextplugins('input') as $pl)
 
 /* ======== Maintenance mode ======== */
 
-if ($cfg['maintenance'])
+if ($cfg['maintenance'] && !defined('COT_INSTALL'))
 {
 	$sqll = $db->query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
 	$roow = $sqll->fetch();
