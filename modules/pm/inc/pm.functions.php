@@ -3,7 +3,7 @@
  * PM function library.
  *
  * @package pm
- * @version 0.7.0
+ * @version 0.9.6
  * @author esclkm, Cotonti Team
  * @copyright Copyright (c) 2008-2011 Cotonti Team
  * @license BSD License
@@ -18,6 +18,8 @@ require_once cot_incfile('pm', 'module', 'resources');
 // Global variables
 global $db_pm, $db_x;
 $db_pm = (isset($db_pm)) ? $db_pm : $db_x . 'pm';
+
+$cfg['pm']['turnajax'] = ($cfg['jquery'] && $cfg['turnajax'] && $cfg['pm']['turnajax']) ? 1 : 0;
 
 /**
  * Send an email in the recipient's language
