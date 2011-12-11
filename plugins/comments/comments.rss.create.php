@@ -51,7 +51,7 @@ if ($c == 'comments')
 			}
 			$items[$i]['description'] = $text;
 			
-			$pag = $db->select("SELECT page_id, page_alias, page_cat FROM $db_pages WHERE page_id = ?", array(strtr($row['com_code'], 'p', '')))->fetch();
+			$pag = $db->query("SELECT page_id, page_alias, page_cat FROM $db_pages WHERE page_id = ?", array(strtr($row['com_code'], 'p', '')))->fetch();
 			$items[$i]['link'] = COT_ABSOLUTE_URL . (empty($pag['page_alias']) ? cot_url('page', 'c='.$pag['page_cat'].'&id='.$pag['page_id']) : cot_url('page', 'c='.$pag['page_cat'].'&al='.$pag['page_alias']));
 			
 			$items[$i]['pubDate'] = date('r', $row['com_date']);
