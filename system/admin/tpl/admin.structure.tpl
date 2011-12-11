@@ -29,6 +29,9 @@
 		<div class="block button-toolbar">
 				<a href="{ADMIN_STRUCTURE_URL_EXTRAFIELDS}" class="button">{PHP.L.adm_extrafields_desc}</a>
 				<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax button special" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>
+				<!-- IF {ADMIN_STRUCTURE_I18N_URL} -->
+				<a href="{ADMIN_STRUCTURE_I18N_URL}" class="button">{PHP.L.i18n_structure}</a>
+				<!-- ENDIF -->
 		</div>
 
 		<!-- BEGIN: OPTIONS -->
