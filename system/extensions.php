@@ -191,7 +191,7 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
 function cot_extension_install($name, $is_module = false, $update = false, $force_update = false)
 {
     global $cfg, $L, $cache, $usr, $db_auth, $db_config, $db_users,
-		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x;
+		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x, $env;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 	
@@ -515,7 +515,15 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		if (file_exists($install_handler))
 		{
 			// Run PHP install handler
+			$envtmp = $env;
+			$env = array(
+				'ext' => $name, 
+				'location' => $name,
+				'type' => ($is_module) ? 'module' : 'plug'
+			);
 			$ret = include $install_handler;
+			$env = $envtmp;
+			
 			if ($ret !== false)
 			{
 				$msg = $ret == 1 ? 'OK' : $ret;
@@ -559,7 +567,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
  */
 function cot_extension_uninstall($name, $is_module = false)
 {
-    global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins, $cot_plugins_active, $cot_plugins_enabled, $cot_modules;
+    global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins, $cot_plugins_active, $cot_plugins_enabled, $cot_modules, $env;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
 		. "/$name";
@@ -618,7 +626,15 @@ function cot_extension_uninstall($name, $is_module = false)
 
     if (file_exists($uninstall_handler))
     {
+        $envtmp = $env;
+		$env = array(
+			'ext' => $name, 
+			'location' => $name,
+			'type' => ($is_module) ? 'module' : 'plug'
+		);
         $ret = include $uninstall_handler;
+		$env = $envtmp;
+		
         if ($ret !== false)
         {
             cot_message(cot_rc('ext_executed_php', array('ret' => $ret)));
