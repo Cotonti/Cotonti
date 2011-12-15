@@ -158,8 +158,8 @@ cot_display_messages($t);
 if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
 {
 	$t->assign(array(
-		'FORUMS_EDITPOST_TOPICTITTLE' => cot_inputbox('text', 'rtopictitle', htmlspecialchars($rowt['ft_title']), array('size' => 56, 'maxlength' => 255)),
-		'FORUMS_EDITPOST_TOPICDESCRIPTION' => cot_inputbox('text', 'rtopicdesc', htmlspecialchars($rowt['ft_desc']), array('size' => 56, 'maxlength' => 255)),
+		'FORUMS_EDITPOST_TOPICTITTLE' => cot_inputbox('text', 'rtopictitle', $rowt['ft_title'], array('size' => 56, 'maxlength' => 255)),
+		'FORUMS_EDITPOST_TOPICDESCRIPTION' => cot_inputbox('text', 'rtopicdesc', $rowt['ft_desc'], array('size' => 56, 'maxlength' => 255)),
 	));
 	$t->parse('MAIN.FORUMS_EDITPOST_FIRSTPOST');
 }
