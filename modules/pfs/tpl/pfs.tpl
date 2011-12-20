@@ -15,19 +15,18 @@
 		<link href="themes/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
-		<!-- END: STANDALONE_HEADER -->
+<!-- END: STANDALONE_HEADER -->
 
-		<div class="block margin10 content">
+		<div class="block margin10">
 			<h2 class="pfs">{PFS_TITLE} {PFS_PATH}</h2>
-			<div class="blockbody">
 				<!-- IF {PFS_SUBTITLE} --><p class="small">{PFS_SUBTITLE}</p><!-- ENDIF -->
-				<!-- BEGIN: PFS_ERRORS -->
+<!-- BEGIN: PFS_ERRORS -->
 				<ul>
-					<!-- BEGIN: PFS_ERRORS_ROW -->
+<!-- BEGIN: PFS_ERRORS_ROW -->
 					<li>{PFS_ERRORS_ROW_MSG}</li>
-					<!-- END: PFS_ERRORS_ROW -->
+<!-- END: PFS_ERRORS_ROW -->
 				</ul>
-				<!-- END: PFS_ERRORS -->
+<!-- END: PFS_ERRORS -->
 				<h3>{PFF_FOLDERCOUNT} {PHP.L.Folders} / {PFF_FILESCOUNT} {PHP.L.Files} ({PHP.L.pfs_onpage}: {PFF_ONPAGE_FOLDERS} {PHP.L.Folders} / {PFF_ONPAGE_FILES} {PHP.L.Files})</h3>
 				<table class="cells">
 					<tr>
@@ -39,7 +38,7 @@
 						<td class="coltop width15">{PHP.L.Updated}</td>
 						<td class="coltop width15">{PHP.L.Action}</td>
 					</tr>
-					<!-- BEGIN: PFF_ROW -->
+<!-- BEGIN: PFF_ROW -->
 					<tr>
 						<td class="centerall"><a href="{PFF_ROW_URL}">{PFF_ROW_ICON}</a></td>
 						<td>
@@ -55,7 +54,7 @@
 							<a href="{PFF_ROW_DELETE_URL}" class="confirmLink">x</a>
 						</td>
 					</tr>
-					<!-- END: PFF_ROW -->
+<!-- END: PFF_ROW -->
 				</table>
 				<p class="paging">{PFF_PAGING_PREV}{PFF_PAGING_CURRENT}{PFF_PAGING_NEXT}</p>
 
@@ -69,7 +68,7 @@
 						<td class="coltop width15">{PHP.L.Date}</td>
 						<td class="coltop width15">{PHP.L.Action}</td>
 					</tr>
-					<!-- BEGIN: PFS_ROW -->
+<!-- BEGIN: PFS_ROW -->
 					<tr>
 						<td class="centerall">{PFS_ROW_ICON}</td>
 						<td>
@@ -86,7 +85,7 @@
 							<br />{PFS_ROW_INSERT}
 						</td>
 					</tr>
-					<!-- END: PFS_ROW -->
+<!-- END: PFS_ROW -->
 				</table>
 				<p class="paging">{PFS_PAGING_PREV}{PFS_PAGING_CURRENT}{PFS_PAGING_NEXT}</p>
 
@@ -99,7 +98,7 @@
 				</div>
 
 				<h3>{PHP.L.pfs_newfile}</h3>
-				<!-- BEGIN: PFS_UPLOAD_FORM -->
+<!-- BEGIN: PFS_UPLOAD_FORM -->
 				<form enctype="multipart/form-data" action="{PFS_UPLOAD_FORM_ACTION}" method="post">
 					<table class="cells">
 						<tr>
@@ -113,13 +112,13 @@
 							<td class="coltop">{PHP.L.Description}</td>
 							<td style="width:100%" class="coltop">{PHP.L.File}</td>
 						</tr>
-						<!-- BEGIN: PFS_UPLOAD_FORM_ROW -->
+<!-- BEGIN: PFS_UPLOAD_FORM_ROW -->
 						<tr>
 							<td style="text-align:center">#{PFS_UPLOAD_FORM_ROW_NUM}</td>
 							<td><input type="text" class="text" name="ndesc[{PFS_UPLOAD_FORM_ROW_ID}]" value="" size="40" maxlength="255" /></td>
 							<td><input name="userfile[{PFS_UPLOAD_FORM_ROW_ID}]" type="file" class="file" size="24" /></td>
 						</tr>
-						<!-- END: PFS_UPLOAD_FORM_ROW -->
+<!-- END: PFS_UPLOAD_FORM_ROW -->
 						<tr>
 							<td colspan="3" class="valid">
 								<button type="submit">{PHP.L.Upload}</button>
@@ -127,9 +126,9 @@
 						</tr>
 					</table>
 				</form>
-				<!-- END: PFS_UPLOAD_FORM -->
+<!-- END: PFS_UPLOAD_FORM -->
 
-				<!-- BEGIN: PFS_NEWFOLDER_FORM -->
+<!-- BEGIN: PFS_NEWFOLDER_FORM -->
 				<h3>{PHP.L.pfs_newfolder}</h3>
 				<form id="newfolder" action="{NEWFOLDER_FORM_ACTION}" method="post">
 					<table class="cells">
@@ -164,19 +163,18 @@
 						</tr>
 					</table>
 				</form>
-				<!-- END: PFS_NEWFOLDER_FORM -->
+<!-- END: PFS_NEWFOLDER_FORM -->
 
 				<h3>{PHP.L.pfs_extallowed}</h3>
-				<!-- BEGIN: ALLOWED_ROW -->
+<!-- BEGIN: ALLOWED_ROW -->
 				<div class="floatleft small width20">
 					<span style="vertical-align:-15px;">{ALLOWED_ROW_ICON}</span> {ALLOWED_ROW_EXT} {ALLOWED_ROW_DESC}
 				</div>
-				<!-- END: ALLOWED_ROW -->
+<!-- END: ALLOWED_ROW -->
 				<br class="clear" />
 
-			</div>
 		</div>
-		<!-- BEGIN: STANDALONE_FOOTER -->
+<!-- BEGIN: STANDALONE_FOOTER -->
 		<div class="block">
 			{PHP.R.pfs_icon_pastethumb} {PHP.L.pfs_pastethumb} &nbsp; 
 			{PHP.R.pfs_icon_pasteimage} {PHP.L.pfs_pasteimage} &nbsp; 
