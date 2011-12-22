@@ -72,7 +72,7 @@
 				</tr>
 				<!-- END: FORUMS_POSTS_ROW -->
 			</table>
-			<p class="paging">{FORUMS_POSTS_PAGEPREV}{FORUMS_POSTS_PAGENEXT}{FORUMS_POSTS_PAGES}</p>
+			<!-- IF {FORUMS_POSTS_PAGES} --><p class="paging">{FORUMS_POSTS_PAGEPREV}{FORUMS_POSTS_PAGENEXT}{FORUMS_POSTS_PAGES}</p><!-- ENDIF -->
 		</div>
 <!-- BEGIN: FORUMS_POSTS_TOPICLOCKED -->
 		<div class="error">{FORUMS_POSTS_TOPICLOCKED_BODY}</div>
