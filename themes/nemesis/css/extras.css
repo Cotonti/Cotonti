@@ -1,21 +1,18 @@
-/* 1. Main Navigation
--------------------------------------------------- */
-
-#nav				{ line-height:1.4em; background:#ddd; overflow:auto; }
-#nav li				{ width:159px; border-right:1px solid #f8f8f8; float:left; }
-#nav li a				{ text-shadow:0 1px 0 #fff; padding:10px 20px; display:block; }
-#nav li a:hover		{ color:#fff; text-decoration:none; text-shadow:0 -1px 0 #000; background:#667e72; }
-#nav li a span			{ color:#999; font-size:.9em; text-transform:lowercase; display:block; }
-#nav li a:hover span	{ color:#ccc; }
-
-/* 2. H1 Heading
--------------------------------------------------- */
-
-h1	{ color:#333; font-size:2.2em; font-weight:normal; margin:10px 0; padding:10px; }
-.subtitle	{ position:absolute; top:15px; left:650px; width:300px; }
-
-/* 3. Misc
+/* 1. Slider
 -------------------------------------------------- */
 
 #slider		{ margin-top:30px; }
 #slider img	{ padding:1px; border:4px solid #ddd; }
+
+/* 2. Quicksearch
+-------------------------------------------------- */
+
+#magnifier		{ margin:0 0 0 170px; height:36px; width:310px; position:absolute; left:50%; top:76px; }
+#magnifier input	{ float:left; padding:6px 10px; border:0; height:24px; line-height:24px; width:240px; background:#fff; }
+#magnifier button	{ text-indent:-9999px; line-height:0; float:left; height:36px; width:40px; border:0; padding:0; margin:0; background:#fff url(../../../images/icons/default/search.png) no-repeat 50% 50%; cursor:pointer; }
+
+/* 3. Powered by Cotonti (optional)
+-------------------------------------------------- */
+
+#powered	{ margin-top:-145px; background:url(../img/powered-by-cotonti.png) no-repeat 0 0; height:120px; width:157px; position:absolute; left:814px; top:100%; }
+#powered a	{ text-indent:-9999px; display:block; height:100%; }
