@@ -14,5 +14,7 @@ defined('COT_CODE') or die('Wrong URL.');
 cot_rc_add_file($cfg['themes_dir'].'/'.$usr['theme'].'/css/reset.css');
 cot_rc_add_file($cfg['themes_dir'].'/'.$usr['theme'].'/css/extras.css');
 cot_rc_add_file($cfg['themes_dir'].'/'.$usr['theme'].'/css/default.css');
+cot_rc_add_file($cfg['themes_dir'].'/'.$usr['theme'].'/css/modalbox.css');
+cot_rc_add_file($cfg['themes_dir'].'/'.$usr['theme'].'/js/js.js');
 
 ?>
