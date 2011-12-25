@@ -31,6 +31,8 @@ function cot_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1', $c
 {
 	global $R;
 	$input_attrs = cot_rc_attr_string($attrs);
+	$value_off = (is_array($value)) ? $value[0] : 0;
+	$value = (is_array($value)) ? $value[1] : $value;
 	$checked = $chosen ? ' checked="checked"' : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$rc = empty($custom_rc) 
@@ -38,6 +40,7 @@ function cot_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1', $c
 		: $custom_rc;
 	return cot_rc($rc, array(
 		'value' => htmlspecialchars(cot_import_buffered($name, $value)),
+		'value_off' => $value_off,
 		'name' => $name,
 		'checked' => $checked,
 		'title' => $title,

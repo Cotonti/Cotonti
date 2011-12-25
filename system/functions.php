@@ -1784,7 +1784,7 @@ function cot_build_usertext($text)
  */
 function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false, $cacheitem = true)
 {
-	global $db, $cot_extrafields, $cot_groups, $cfg, $L, $cot_yesno, $themelang, $user_cache, $db_users, $usr;
+	global $db, $cot_extrafields, $cot_groups, $cfg, $L, $cot_yesno, $user_cache, $db_users, $usr;
 
 	static $extp_first = null, $extp_main = null;
 	
@@ -1851,7 +1851,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'POSTCOUNT' => $user_data['user_postcount'],
 				'LASTIP' => $user_data['user_lastip'],
 				'ONLINE' => (cot_userisonline($user_data['user_id'])) ? '1' : '0',
-				'ONLINETITLE' => ($user_data['user_online']) ? $themelang['forumspost']['Onlinestatus1'] : $themelang['forumspost']['Onlinestatus0'],
+				'ONLINETITLE' => (cot_userisonline($user_data['user_id'])) ? $L['Online'] : $L['Offline'],
 			);
 
 			if ($allgroups)

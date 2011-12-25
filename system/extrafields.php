@@ -202,7 +202,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			break;
 
 		case 'checkbox':
-			$import = cot_import($inputname, $source, 'BOL') ? 1 : 0;
+			$import = cot_import($inputname, $source, 'BOL');
 			break;
 
 		case 'datetime':
