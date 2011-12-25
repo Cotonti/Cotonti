@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_langfile('hits', 'plug');
 require_once cot_incfile('hits', 'plug');
 
-$tt = new XTemplate(cot_tplfile('hits.admin.home', 'plug'));
+$tt = new XTemplate(cot_tplfile('hits.admin.home', 'plug', true));
 //Show hit stats
 if (!$cfg['plugin']['hits']['disablehitstats'])
 {

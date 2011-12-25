@@ -20,7 +20,7 @@ Hooks=tools
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
 cot_block($usr['isadmin']);
 
-$tt = new XTemplate(cot_tplfile('userimages.admin', 'plug'));
+$tt = new XTemplate(cot_tplfile('userimages.admin', 'plug', true));
 require_once cot_incfile('userimages', 'plug');
 require_once cot_incfile('userimages', 'plug', 'resources');
 require_once cot_langfile('userimages');

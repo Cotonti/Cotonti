@@ -17,7 +17,7 @@ Hooks=tools
 
 defined('COT_CODE') or die('Wrong URL');
 
-require_once cot_incfile('forums', 'module');
+require_once cot_incfile('forums', 'module', true);
 
 $out['subtitle'] = "Mass-move topics in forums";
 

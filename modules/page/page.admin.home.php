@@ -16,7 +16,7 @@ Hooks=admin.home.sidepanel
  */
 defined('COT_CODE') or die('Wrong URL');
 
-$tt = new XTemplate(cot_tplfile('page.admin.home', 'module'));
+$tt = new XTemplate(cot_tplfile('page.admin.home', 'module', true));
 
 require_once cot_incfile('page', 'module');
 

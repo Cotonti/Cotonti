@@ -22,7 +22,7 @@ cot_block($usr['isadmin']);
 
 require_once cot_incfile('ratings', 'plug');
 
-$t = new XTemplate(cot_tplfile('ratings.admin', 'plug'));
+$t = new XTemplate(cot_tplfile('ratings.admin', 'plug', true));
 
 $adminhelp = $L['adm_help_ratings'];
 

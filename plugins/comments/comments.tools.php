@@ -22,7 +22,7 @@ cot_block($usr['isadmin']);
 
 require_once cot_incfile('comments', 'plug');
 
-$t = new XTemplate(cot_tplfile('comments.tools', 'plug'));
+$t = new XTemplate(cot_tplfile('comments.tools', 'plug', true));
 
 $adminhelp = $L['plu_help_comments'];
 

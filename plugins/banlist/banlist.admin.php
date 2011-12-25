@@ -20,7 +20,7 @@ Hooks=tools
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
 cot_block($usr['isadmin']);
 
-$tt = new XTemplate(cot_tplfile('banlist.admin', 'plug'));
+$tt = new XTemplate(cot_tplfile('banlist.admin', 'plug', true));
 require_once cot_langfile('banlist', 'plug');
 
 $db_banlist = (isset($db_banlist)) ? $db_banlist : $db_x . 'banlist';
