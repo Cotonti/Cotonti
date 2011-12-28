@@ -11,7 +11,7 @@
 	</ul>
 	<p>{PHP.out.copyright} {PHP.cfg.version}</p>
 </div>
-{FOOTER_JS}
+{FOOTER_RC}
 </body>
 </html>
 <!-- END: FOOTER -->
