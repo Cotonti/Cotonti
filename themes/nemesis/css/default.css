@@ -31,9 +31,9 @@ sup			{ top:-.5em; }
 
 .body				{ margin:0 auto; width:960px; position:relative; }
 #header				{ border-top:5px solid; }
-#main				{ padding:30px 0 15px; overflow:auto; }
+#main				{ padding:30px 0 15px; }
 
-.block				{ margin:0 10px 25px 10px; }
+.block				{ margin:0 10px 25px; }
 .column				{ margin:0 10px; position:relative; float:left; }
 
 .col, .col4-1, .col4-2, .col4-3, .col3-1, .col3-2, .col2-1		{ float:left; }
@@ -265,6 +265,9 @@ button						{ padding:5px 10px; }
 
 /* 12. Lists
 -------------------------------------------------- */
+
+.endItem			{ margin-right:0!important; }
+.endItem+li			{ clear:both; }
 
 ul.bullets li			{ padding-left:25px; background:url(../img/bullets.png) no-repeat 5px 2px; }
 ol					{ margin-left:20px; list-style-type:decimal; }
