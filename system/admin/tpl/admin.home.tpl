@@ -9,11 +9,9 @@
 			</div>
 <!-- END: UPDATE -->
 			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
-			<!-- BEGIN: MAINPANEL -->
-			<div class="block">
-				{ADMIN_HOME_MAINPANEL}
-			</div>
-			<!-- END: MAINPANEL -->
+<!-- BEGIN: MAINPANEL -->
+			{ADMIN_HOME_MAINPANEL}
+<!-- END: MAINPANEL -->
 			<div class="block">
 				<h3>Cotonti:</h3>
 				<table class="cells">
