@@ -844,7 +844,8 @@ function cot_rmdir($dir)
 function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
 {
 	global $cfg;
-	header('HTTP/1.1 ' . $response_code);
+	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+	header($protocol . ' ' . $response_code);
 	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 	header('Cache-Control: post-check=0,pre-check=0', FALSE);
