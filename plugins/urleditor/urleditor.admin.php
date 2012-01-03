@@ -21,7 +21,7 @@ Hooks=tools
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'urleditor');
 cot_block($usr['isadmin']);
 
-$t = new XTemplate(cot_tplfile('urleditor.admin', 'plug'));
+$t = new XTemplate(cot_tplfile('urleditor.admin', 'plug', true));
 
 require_once cot_incfile('forms');
 require_once cot_langfile('urleditor', 'plug');

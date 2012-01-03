@@ -1,0 +1,54 @@
+/* The Window's CSS z-index value is respected (takes priority). If none is supplied,
+	the Window's z-index value will be set to 3000 by default (via jqModal.js). */
+
+.jqmWindow {
+    display: none;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+	
+	overflow: auto;
+
+    background-color: #EEE;
+    color: #333;
+    border: 3px solid white;
+    padding: 7px;
+	text-align: center;
+}
+
+.jqmWindow h4 {
+	border-bottom: 1px dotted #b0c4de;
+	font-size: 14px;
+	margin: 0 0 7px 0;
+	padding: 0 0 5px 0;
+	text-align: left;
+	color: #3E606F;
+}
+
+.jqmWindow p{
+	text-align: right;
+	margin: 15px 0 0 0;
+	font-size: x-small;
+	text-transform: lowercase;
+}
+
+.jqmOverlay { background-color: #000; }
+
+/* Background iframe styling for IE6. Prevents ActiveX bleed-through (<select> form elements, etc.) */
+* iframe.jqm {
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:-1;
+	width: expression(this.parentNode.offsetWidth+'px');
+	height: expression(this.parentNode.offsetHeight+'px');
+}
+
+/* Fixed posistioning emulation for IE6
+     Star selector used to hide definition from browsers other than IE6
+     For valid CSS, use a conditional include instead */
+* html .jqmWindow {
+     position: absolute;
+     top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');
+}

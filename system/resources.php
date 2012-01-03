@@ -16,7 +16,7 @@ defined('COT_CODE') or die('Wrong URL');
  */
 $R['code_option_empty'] = '---';
 $R['code_time_separator'] = ':';
-$R['input_checkbox'] = '<label><input type="checkbox" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
+$R['input_checkbox'] = '<input type="hidden" name="{$name}" value="{$value_off}" /><label><input type="checkbox" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
 $R['input_default'] = '<input type="{$type}" name="{$name}" value="{$value}"{$attrs} />{$error}';
 $R['input_option'] = '<option value="{$value}"{$selected}>{$title}</option>';
 $R['input_radio'] = '<label><input type="radio" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';

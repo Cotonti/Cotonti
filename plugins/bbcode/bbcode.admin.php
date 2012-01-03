@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('bbcode', 'plug');
 
-$bb_t = new XTemplate(cot_tplfile('bbcode.admin', 'plug'));
+$bb_t = new XTemplate(cot_tplfile('bbcode.admin', 'plug', true));
 
 $out['subtitle'] = $L['adm_bbcodes'];
 $adminhelp = $L['adm_help_bbcodes'];

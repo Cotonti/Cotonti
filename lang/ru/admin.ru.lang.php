@@ -46,12 +46,12 @@ $L['home_ql_b1_5'] = 'Язык сайта ';
 $L['home_ql_b1_6'] = 'Время и дата';
 
 $L['home_ql_b2_1'] = 'Структура страниц и категорий';
-$L['home_ql_b2_2'] = 'Дополнительные поля для страниц';
-$L['home_ql_b2_3'] = 'Дополнительные поля для категорий';
+$L['home_ql_b2_2'] = 'Экстраполя для страниц';
+$L['home_ql_b2_3'] = 'Экстраполя для категорий';
 $L['home_ql_b2_4'] = 'Настройки парсинга';
 
 $L['home_ql_b3_1'] = 'Настройка пользователей';
-$L['home_ql_b3_2'] = 'Дополнительные поля для профиля';
+$L['home_ql_b3_2'] = 'Экстраполя для профиля';
 $L['home_ql_b3_4'] = 'Права групп';
 
 $L['home_update_notice'] = 'Доступно обновление';
@@ -429,15 +429,15 @@ $L['alreadydeletednewentry'] = 'Запись удалена';
  * Extra Fields (Common Entries for Pages & Structure & Users)
  */
 
-$L['adm_extrafields'] = 'Дополнительные поля';
-$L['adm_extrafield_added'] = 'Новое поле добавлено';
-$L['adm_extrafield_not_added'] = 'Ошибка! Новое поле не добавлено';
+$L['adm_extrafields'] = 'Экстраполя';
+$L['adm_extrafield_added'] = 'Экстраполе добавлено';
+$L['adm_extrafield_not_added'] = 'Ошибка! Экстраполе не добавлено';
 $L['adm_extrafield_updated'] = 'Поле "%1$s" отредактировано';
 $L['adm_extrafield_not_updated'] = 'Ошибка! Поле "%1$s" не отредактировано';
-$L['adm_extrafield_removed'] = 'Поле удалено';
-$L['adm_extrafield_not_removed'] = 'Ошибка! Поле не удалено';
-$L['adm_extrafield_confirmdel'] = 'Вы действительно хотите удалить поле? Все данные этого поля будут потеряны!';
-$L['adm_extrafield_confirmupd'] = 'Вы действительно хотите редактировать поле? Некоторые данные этого поля могут быть потеряны.';
+$L['adm_extrafield_removed'] = 'Экстраполе удалено';
+$L['adm_extrafield_not_removed'] = 'Ошибка! Экстраполе не удалено';
+$L['adm_extrafield_confirmdel'] = 'Вы действительно хотите удалить экстраполеполе? Все данные этого поля будут потеряны!';
+$L['adm_extrafield_confirmupd'] = 'Вы действительно хотите редактировать экстраполеполе? Некоторые данные этого поля могут быть потеряны.';
 $L['adm_extrafield_default'] = 'Значение по умолчанию';
 $L['adm_extrafield_required'] = 'Обязательное';
 $L['adm_extrafield_parse'] = 'Парсинг';
