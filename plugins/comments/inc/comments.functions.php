@@ -16,6 +16,7 @@ global $R, $L;
 require_once cot_incfile('users', 'module');
 require_once cot_langfile('comments', 'plug');
 require_once cot_incfile('comments', 'plug', 'resources');
+require_once cot_incfile('forms');
 
 // Table name globals
 global $db_com, $db_x;
