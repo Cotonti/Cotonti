@@ -12,6 +12,8 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+global $db_groups;
+
 $dbres = $db->query("SHOW COLUMNS FROM `$db_groups` WHERE `Field` = 'grp_hidden'");
 if ($dbres->rowCount() == 1)
 {
