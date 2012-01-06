@@ -6,7 +6,7 @@
 			<h1>{COMMENTS_TITLE}</h1>
 
 
-			{FILE "./themes/symisun-03/warnings.tpl"}
+			{FILE "./{PHP.cfg.themes_dir}/{PHP.theme}/warnings.tpl"}
 
 			<!-- BEGIN: COMMENTS_FORM_EDIT -->
 					<form id="comments" name="comments" action="{COMMENTS_FORM_POST}" method="post">
@@ -98,7 +98,7 @@
 <a name="post" id="post"></a>
 <form action="{COMMENTS_FORM_SEND}" method="post">
 	<h2>{PHP.L.Newcomment}</h2>
-		{FILE ./themes/symisun-03/warnings.tpl}
+		{FILE "./{PHP.cfg.themes_dir}/{PHP.theme}/warnings.tpl"}
 		<!-- BEGIN: GUEST -->
 	<div style="width:100%;">	{PHP.L.Name}: {COMMENTS_FORM_AUTHOR}</div>
 		<!-- END: GUEST -->

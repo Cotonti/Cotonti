@@ -110,8 +110,8 @@
             <ul>
             	<li><a href="{PHP|cot_url('index')}"><strong>Home</strong></a></li>
 				<li><a href="{PHP|cot_url('forums')}"><strong>Forums</strong></a></li>
-				<li><a href="{PHP|cot_url('list','c=news')}"><strong>News</strong></a></li>
-				<li><a href="{PHP|cot_url('list','c=articles')}"><strong>Articles</strong></a></li>
+				<li><a href="{PHP|cot_url('page','c=news')}"><strong>News</strong></a></li>
+				<li><a href="{PHP|cot_url('page','c=articles')}"><strong>Articles</strong></a></li>
 				<li class="last"><a href="{PHP|cot_url('plug','e=search')}"><strong>Search</strong></a></li>
                 <li class="edgel">&nbsp;</li>
                 <li class="edger">&nbsp;</li>

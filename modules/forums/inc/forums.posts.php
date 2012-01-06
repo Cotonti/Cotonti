@@ -365,7 +365,7 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_EDIT_URL' => $rowedit_url,
 		'FORUMS_POSTS_ROW_QUOTE' => $rowquote,
 		'FORUMS_POSTS_ROW_QUOTE_URL' => $rowquote_url,
-		'FORUMS_POSTS_ROW_BOTTOM' => $fp_num == $totalposts ? $R['forums_code_bottom'] : 
+		'FORUMS_POSTS_ROW_BOTTOM' => ((empty($id) ? $d + $fp_num : $id) == $totalposts) ? $R['forums_code_bottom'] : 
 			($usr['id'] > 0 && $n == 'unread' && $row['fp_creation'] > $usr['lastvisit']) ? $R['forums_code_unread'] : '',
 		'FORUMS_POSTS_ROW_ODDEVEN' => cot_build_oddeven($fp_num),
 		'FORUMS_POSTS_ROW_NUM' => $fp_num,

@@ -16,6 +16,8 @@ defined('COT_CODE') or die('Wrong URL');
 
 $L['cfg_email'] = array('Email', '(leave empty to use admin email)');
 $L['cfg_minchars'] = array('Min. chars in message');
+$L['cfg_map'] = array('Map');
+$L['cfg_about'] = array('About');
 
 $L['info_desc'] = 'Contact form for user feedback delivered via email and recorded in database';
 

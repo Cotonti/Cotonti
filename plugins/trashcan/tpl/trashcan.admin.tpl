@@ -20,7 +20,7 @@
 				<td class="centerall"><a href="{ADMIN_TRASHCAN_ROW_INFO_URL}">{ADMIN_TRASHCAN_TITLE}</a></td>
 				<td class="centerall">{ADMIN_TRASHCAN_TRASHEDBY}</td>
 				<td class="centerall action">
-					<!-- IF {ADMIN_TRASHCAN_ROW_RESTORE_ENABLED} --><a title="{PHP.L.Restore}" href="{ADMIN_TRASHCAN_ROW_RESTORE_URL} class="button"">{PHP.L.Restore}</a><!-- ENDIF -->
+					<!-- IF {ADMIN_TRASHCAN_ROW_RESTORE_ENABLED} --><a title="{PHP.L.Restore}" href="{ADMIN_TRASHCAN_ROW_RESTORE_URL}" class="button">{PHP.L.Restore}</a><!-- ENDIF -->
 					<a title="{PHP.L.Wipe}" href="{ADMIN_TRASHCAN_ROW_WIPE_URL}" class="button">{PHP.L.Wipe}</a>
 				</td>
 			</tr>

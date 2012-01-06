@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 $adminhelp = $L['ipsearch_help'];
 
-$t = new XTemplate(cot_tplfile('ipsearch', 'plug'));
+$t = new XTemplate(cot_tplfile('ipsearch', 'plug', true));
 $t->assign(array(
 	'IPSEARCH_FORM_URL' => cot_url('admin', 'm=other&p=ipsearch&a=search&'.cot_xg()),
 	'IPSEARCH_ID' => $id

@@ -2,8 +2,7 @@
 
 		<div class="col3-2 first">
 			<div class="block">
-				<div class="blockheader tags">{PHP.L.tags_Search_tags}</div>
-				<div class="blockbody">
+				<h2 class="tags">{PHP.L.tags_Search_tags}</h2>
 				<form action="{TAGS_ACTION}" method="post">
 					<input type="text" name="t" value="{TAGS_QUERY}" />
 					<input type="submit" value="&raquo;&raquo;" />
@@ -13,20 +12,16 @@
 						{TAGS_ORDER}
 					</select>
 				</form>
-				</div>
 			</div>
 			<!-- BEGIN: TAGS_CLOUD -->
 			<div class="block">
 				<h2 class="tags">{PHP.L.tags_All}</h2>
-				<div class="blockbody">
 				{TAGS_CLOUD_BODY}
-				</div>
 			</div>
 			<!-- END: TAGS_CLOUD -->
 			<!-- BEGIN: TAGS_RESULT -->
-			<div class="block content">
+			<div class="block">
 				<h2 class="search">{TAGS_RESULT_TITLE}</h2>
-				<div class="blockbody">
 				<ol>
 					<!-- BEGIN: TAGS_RESULT_ROW -->
 					<li class="marginbottom10">
@@ -44,7 +39,6 @@
 					{PHP.L.Noitemsfound}
 				</div>
 				<!-- END: TAGS_RESULT_NONE -->
-				</div>
 			</div>
 			<!-- END: TAGS_RESULT -->
 			<!-- IF {TAGS_PAGNAV} --><p class="paging">{TAGS_PAGEPREV}{TAGS_PAGNAV}{TAGS_PAGENEXT}</p><!-- ENDIF -->
@@ -52,10 +46,8 @@
 
 		<div class="col3-1">
 			<div class="block">
-				<div class="blockheader info">{PHP.L.Tags}</div>
-				<div class="blockbody">
-					{TAGS_HINT}
-				</div>
+				<h2 class="info">{PHP.L.Tags}</h2>
+				{TAGS_HINT}
 			</div>
 		</div>
 

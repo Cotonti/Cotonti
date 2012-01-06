@@ -58,6 +58,6 @@
 	</div>
 	<!-- ENDIF -->
 
-	<div id="main" class="body">
+	<div id="main" class="body clearfix">
 
 <!-- END: HEADER -->

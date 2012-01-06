@@ -22,6 +22,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 }
 body { line-height: 1; }
 ol, ul { list-style: none; }
+ul li { list-style-type: none;}
 blockquote, q { quotes: none; }
 blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
 :focus { outline: 0; } /* remember to define focus styles! */

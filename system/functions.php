@@ -844,7 +844,8 @@ function cot_rmdir($dir)
 function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
 {
 	global $cfg;
-	header('HTTP/1.1 ' . $response_code);
+	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+	header($protocol . ' ' . $response_code);
 	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 	header('Cache-Control: post-check=0,pre-check=0', FALSE);
@@ -1784,7 +1785,7 @@ function cot_build_usertext($text)
  */
 function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false, $cacheitem = true)
 {
-	global $db, $cot_extrafields, $cot_groups, $cfg, $L, $cot_yesno, $themelang, $user_cache, $db_users, $usr;
+	global $db, $cot_extrafields, $cot_groups, $cfg, $L, $cot_yesno, $user_cache, $db_users, $usr;
 
 	static $extp_first = null, $extp_main = null;
 	
@@ -1851,7 +1852,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'POSTCOUNT' => $user_data['user_postcount'],
 				'LASTIP' => $user_data['user_lastip'],
 				'ONLINE' => (cot_userisonline($user_data['user_id'])) ? '1' : '0',
-				'ONLINETITLE' => ($user_data['user_online']) ? $themelang['forumspost']['Onlinestatus1'] : $themelang['forumspost']['Onlinestatus0'],
+				'ONLINETITLE' => (cot_userisonline($user_data['user_id'])) ? $L['Online'] : $L['Offline'],
 			);
 
 			if ($allgroups)
@@ -2912,9 +2913,10 @@ function cot_schemefile()
  *
  * @param mixed $base Item name (string), or base names (array)
  * @param string $type Extension type: 'plug', 'module' or 'core'
+ * @param bool $admin Admin part
  * @return string
  */
-function cot_tplfile($base, $type = 'module')
+function cot_tplfile($base, $type = 'module', $admin = false)
 {
 	global $usr, $cfg;
 
@@ -2934,6 +2936,7 @@ function cot_tplfile($base, $type = 'module')
 	if ($type == 'plug')
 	{
 		// Plugin template paths
+		($admin && !empty($cfg['admintheme'])) && $scan_prefix[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/plugins/";
 		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/";
 		$scan_prefix[] = "{$cfg['plugins_dir']}/$basename/tpl/";
 	}
@@ -2959,6 +2962,7 @@ function cot_tplfile($base, $type = 'module')
 	else
 	{
 		// Module template paths
+		($admin && !empty($cfg['admintheme'])) && $scan_prefix[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/modules/";
 		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
 		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
 		$scan_prefix[] = "{$cfg['modules_dir']}/$basename/tpl/";

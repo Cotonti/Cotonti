@@ -1,4 +1,4 @@
-<?php
+.<?php
 /**
  * Page list
  *
@@ -56,12 +56,13 @@ $cat = &$structure['page'][$c];
 if (empty($s))
 {
 	$s = $cfg['page'][$c]['order'];
-	$w = $cfg['page'][$c]['way'];
 }
 elseif (!$db->fieldExists($db_pages, "page_$s"))
 {
 	$s = 'title';
 }
+$w = empty($w) ? $cfg['page'][$c]['way'] : $w;
+
 $s = empty($s) ? $cfg['page']['__default']['order'] : $s;
 $w = empty($w) ? $cfg['page']['__default']['way'] : $w;
 
@@ -71,6 +72,8 @@ $sys['sublocation'] = $cat['title'];
 $cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? 
 	$cfg['page']['__default']['maxrowsperpage'] : 
 	$cfg['page'][$c]['maxrowsperpage'];
+$cfg['page']['maxrowsperpage'] = $cfg['page']['maxrowsperpage'] > 0 ? $cfg['page']['maxrowsperpage'] : 1;
+
 $cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? 
 	$cfg['page']['__default']['truncatetext'] : 
 	$cfg['page'][$c]['truncatetext'];

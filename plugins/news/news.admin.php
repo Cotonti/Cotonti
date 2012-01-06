@@ -22,7 +22,7 @@ $adminhelp = $L['news_help'];
 
 if ($p == 'news' && $config_name == 'category' && $cfg['jquery'])
 {
-	$sskin = cot_tplfile('news.admin', 'plug');
+	$sskin = cot_tplfile('news.admin', 'plug', true);
 	$tt = new XTemplate($sskin);
 
 	$categories = explode(',', $config_value);

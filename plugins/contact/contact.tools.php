@@ -47,7 +47,7 @@ elseif ($a == 'send' && $rtext != '')
 	cot_message('Done');
 }
 
-$tuman = new XTemplate(cot_tplfile('contact.tools', 'plug'));
+$tuman = new XTemplate(cot_tplfile('contact.tools', 'plug', true));
 $totallines = $db->query("SELECT COUNT(*) FROM $db_contact")->fetchColumn();
 $sql = $db->query("SELECT * FROM $db_contact ORDER BY contact_val ASC, contact_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
