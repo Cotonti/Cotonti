@@ -124,7 +124,7 @@ function sed_tag_search_form($area = 'all')
  */
 function sed_tag_search_pages($query)
 {
-	global $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
+	global $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $db_users, $db_extra_fields, $o, $row, $sed_cat;
 	$query = sed_tag_parse_query($query, 'p.page_id');
 	if (empty($query))
 	{
@@ -148,9 +148,11 @@ function sed_tag_search_pages($query)
 		default:
 			$order = '';
 	}
-	$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_title, p.page_cat
+	$sql = sed_sql_query("SELECT p.*, u.*
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
+		LEFT JOIN $db_users AS u
+			ON u.user_id = p.page_ownerid
 		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
@@ -175,8 +177,44 @@ function sed_tag_search_pages($query)
 				'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']),
 				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
 				'TAGS_RESULT_ROW_PATH' => sed_build_catpath($row['page_cat'], '<a href="%1$s">%2$s</a>'),
-				'TAGS_RESULT_ROW_TAGS' => $tag_list
+				'TAGS_RESULT_ROW_TAGS' => $tag_list,
+				'TAGS_RESULT_ROW_ID' => $row['page_id'],
+				'TAGS_RESULT_ROW_CAT' => $row['page_cat'],
+				'TAGS_RESULT_ROW_CATURL' => sed_url('list', 'c=' . $row['page_cat']),
+				'TAGS_RESULT_ROW_CATTITLE' => $sed_cat[$row['page_cat']]['title'],
+				'TAGS_RESULT_ROW_CATDESC' => $sed_cat[$row['page_cat']]['desc'],
+				'TAGS_RESULT_ROW_CATICON' => $sed_cat[$row['page_cat']]['icon'],
+				'TAGS_RESULT_ROW_KEY' => $row['page_key'],
+				'TAGS_RESULT_ROW_DESC' => $row['page_desc'],
+				'TAGS_RESULT_ROW_AUTHOR' => $row['page_author'],
+				'TAGS_RESULT_ROW_OWNER' => sed_build_user($row['page_ownerid'], htmlspecialchars($row['user_name'])),
+				'TAGS_RESULT_ROW_AVATAR' => sed_build_userimage($row['user_avatar'], 'avatar'),
+				'TAGS_RESULT_ROW_DATE' => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
+				'TAGS_RESULT_ROW_BEGIN' => @date($cfg['dateformat'], $row['page_begin'] + $usr['timezone'] * 3600),
+				'TAGS_RESULT_ROW_EXPIRE' => @date($cfg['dateformat'], $row['page_expire'] + $usr['timezone'] * 3600),
+				'TAGS_RESULT_ROW_ALIAS' => $row['page_alias']
 			));
+			
+			switch($row['page_type'])
+			{
+				case '1':
+					$t->assign('TAGS_RESULT_ROW_TEXT', $row['page_text']);
+					break;
+				default:
+					$text = sed_parse(htmlspecialchars($row['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
+					$text = sed_post_parse($text, 'pages');
+					$t->assign('TAGS_RESULT_ROW_TEXT', $text);
+				break;
+			}
+
+			// Extra fields
+			$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
+			while($row_e = sed_sql_fetchassoc($fieldsres))
+			{
+				$uname = strtoupper($row_e['field_name']);
+				$t->assign('TAGS_RESULT_ROW_'.$uname, sed_build_extrafields_data('page', $row_e['field_type'], $row_e['field_name'], $row['page_'.$row_e['field_name']]));
+				isset($L['page_'.$row_e['field_name'].'_title']) ? $t->assign('TAGS_RESULT_ROW_'.$uname.'_TITLE', $L['page_'.$row_e['field_name'].'_title']) : $t->assign('TAGS_RESULT_ROW_'.$uname.'_TITLE', $row_e['field_description']);
+			}
 			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}
 		sed_sql_freeresult($sql);
