@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.6.3
+ * @version 2.7.2
  * @author Vladimir Sibirov a.k.a. Trustmaster
  * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
@@ -88,19 +88,20 @@ class XTemplate
 	 *
 	 * @param mixed $name Variable name or array of values
 	 * @param mixed $val Tag value if $name is not an array
+	 * @param string $prefix An optional prefix for variable keys
 	 */
-	public function assign($name, $val = NULL)
+	public function assign($name, $val = NULL, $prefix = '')
 	{
 		if (is_array($name))
 		{
 			foreach ($name as $key => $val)
 			{
-				$this->vars[$key] = $val;
+				$this->vars[$prefix.$key] = $val;
 			}
 		}
 		else
 		{
-			$this->vars[$name] = $val;
+			$this->vars[$prefix.$name] = $val;
 		}
 	}
 
@@ -479,6 +480,7 @@ class Cotpl_block
 		do
 		{
 			$block_found = false;
+			$loop_found = false;
 			$log_found = false;
 			if (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s', $code, $mt))
 			{
@@ -487,6 +489,13 @@ class Cotpl_block
 				$block_mt = $mt;
 				$block_name = $mt[1];
 			}
+			if (preg_match('`<!--\s*FOR\s+(.+?)\s*-->`', $code, $mt))
+			{
+				$loop_found = true;
+				$loop_pos = mb_strpos($code, $mt[0]);
+				$loop_len = mb_strlen($mt[0]);
+				$loop_mt = $mt;
+			}
 			if (preg_match('`<!--\s*IF\s+(.+?)\s*-->`', $code, $mt))
 			{
 				$log_found = true;
@@ -494,7 +503,9 @@ class Cotpl_block
 				$log_len = mb_strlen($mt[0]);
 				$log_mt = $mt;
 			}
-			if ($block_found && (!$log_found || $block_pos < $log_pos))
+			if ($block_found
+					&& (!$loop_found || $block_pos < $loop_pos)
+					&& (!$log_found || $block_pos < $log_pos))
 			{
 				// Extract preceeding plain data chunk
 				if ($block_pos > 0)
@@ -511,6 +522,50 @@ class Cotpl_block
 				$index[cotpl_index_glue($bpath)] = $bpath;
 				$blocks[$block_name] = new Cotpl_block(trim($block_mt[2]), $index, $bpath);
 				$code = trim(mb_substr($code, $block_pos + mb_strlen($block_mt[0])));
+			}
+			elseif ($loop_found
+					&& (!$log_found || $loop_pos < $log_pos))
+			{
+				// Extract preceeding plain data chunk
+				if ($loop_pos > 0)
+				{
+					$chunk = trim(mb_substr($code, 0, $loop_pos), "\t\r\n");
+					if (!empty($chunk))
+					{
+						$blocks[$i++] = new Cotpl_data($chunk);
+					}
+				}
+				// Get the FOR loop contents
+				$scope = 1;
+				$loop_code = '';
+				$code = mb_substr($code, $loop_pos + $loop_len);
+				while ($scope > 0 && preg_match('`<!--\s*(FOR\s+.+?|ENDFOR)\s*-->`', $code, $m))
+				{
+						$m_pos = mb_strpos($code, $m[0]);
+						$m_len = mb_strlen($m[0]);
+						if ($m[1] === 'ENDFOR')
+						{
+							$scope--;
+						}
+						else
+						{
+							$scope++;
+						}
+						$postfix_len = $scope === 0 ? 0 : $m_len;
+						$loop_code .= mb_substr($code, 0, $m_pos + $postfix_len);
+						$code = mb_substr($code, $m_pos + $m_len);
+				}
+				if ($scope === 0)
+				{
+					$bpath = $path;
+					array_push($bpath, $i);
+					$blocks[$i++] = new Cotpl_loop($loop_mt[1], $loop_code, $index, $bpath);
+					$code = trim($code, "\t\r\n");
+				}
+				else
+				{
+					throw new Exception('Loop ' . htmlspecialchars($loop_mt[0]) . ' not closed');
+				}
 			}
 			elseif ($log_found)
 			{
@@ -1150,6 +1205,114 @@ class Cotpl_logical extends Cotpl_block
 }
 
 /**
+ * CoTemplate FOR loop
+ */
+class Cotpl_loop extends Cotpl_block
+{
+	/**
+	 * Key variable name (optional)
+	 * @var string
+	 */
+	protected $key = '';
+	/**
+	 * Source set/array variable
+	 * @var Cotpl_var
+	 */
+	protected $set = null;
+	/**
+	 * Value variable name
+	 * @var string
+	 */
+	protected $val = '';
+	
+	/**
+	 * Constructs loop block structure from strings
+	 *
+	 * @param string $header Loop header string
+	 * @param string $code Loop body
+	 * @param array $index CoTemplate index
+	 * @param array $path Current block path
+	 */
+	public function __construct($header, $code, &$index, $path)
+	{
+		if (preg_match('`^\{(\w+)\}\s*,\s*\{(\w+)\}\s*IN\s*\{((?:[\w\.]+)(?:\|.+?)?)\}$`', $header, $m))
+		{
+			$this->key = $m[1];
+			$this->val = $m[2];
+			$this->set = new Cotpl_var($m[3]);
+		}
+		elseif (preg_match('`^\{(\w+)\}\s*IN\s*\{((?:[\w\.]+)(?:\|.+?)?)\}$`', $header, $m))
+		{
+			$this->val = $m[1];
+			$this->set = new Cotpl_var($m[2]);
+		}
+		$this->compile($code, $this->blocks, $index, $path);
+	}
+	
+	/**
+	 * TPL code representation for debugging
+	 *
+	 * @return string
+	 */
+	public function  __toString()
+	{
+		$header = empty($this->key) ? '{' . $this->val . '}'
+				: '{' . $this->key . '}, {' . $this->val . '}';
+		$str = "<!-- FOR $header IN " . $this->set->__toString() . " -->\n";
+		$str .= $this->blocks_toString($this->blocks);
+		$str .= "<!-- ENDFOR -->\n";
+		return $str;
+	}
+
+	/**
+	 * Overloads parse()
+	 *
+	 * @param XTemplate $xtpl Reference to XTemplate object
+	 */
+	public function parse($xtpl)
+	{
+		throw new Exception('Calling parse() on a loop');
+	}
+
+	/**
+	 * Overloads reset()
+	 * @param mixed $dummy A stub to match Cotpl_block::reset() declaration (Strict mode)
+	 */
+	public function reset($dummy = null)
+	{
+		throw new Exception('Calling reset() on a loop');
+	}
+
+	/**
+	 * Actually parses a conditional block and returns parsed contents
+	 *
+	 * @param XTemplate $tpl A reference to XTemplate object containing variables
+	 * @return string
+	 */
+	public function text($tpl)
+	{
+		$data = '';
+		$set = $this->set->evaluate($tpl);
+		if (is_array($set) && $this->blocks)
+		{
+			foreach ($set as $key => $val)
+			{
+				$tpl->assign($this->val, $val);
+				if (!empty($this->key))
+				{
+					$tpl->assign($this->key, $key);
+				}
+				foreach ($this->blocks as $block)
+				{
+					$data .= $block->text($tpl);
+				}
+			}
+		}
+		return $data;
+	}
+}
+
+/**
  * CoTemplate variable with callback extensions support
  */
 class Cotpl_var
@@ -1188,7 +1351,7 @@ class Cotpl_var
 				}
 				else
 				{
-					$this->callbacks[] = $cbk;
+					$this->callbacks[] = str_replace('()', '', $cbk);
 				}
 			}
 		}
@@ -1466,6 +1629,10 @@ function cotpl_tokenize($str, $delim = array(' '))
 			elseif ($quote == $c)
 			{
 				$quote = '';
+				if (!isset($tokens[$idx]))
+				{
+					$tokens[$idx] = '';
+				}
 			}
 			else
 			{
