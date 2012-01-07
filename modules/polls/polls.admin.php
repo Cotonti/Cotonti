@@ -99,7 +99,7 @@ if(!$filter)
 }
 else
 {
-    $poll_type = 'poll_type='.$filter;
+    $poll_type = 'poll_type="'.$filter.'"';
     $poll_filter = '"&filter='.$filter;
 }
 
