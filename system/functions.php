@@ -4313,7 +4313,7 @@ function cot_check_xp()
 function cot_shield_clearaction()
 {
 	global $db, $db_online, $usr;
-	$db->update($db_online, array('online_action' => ''), 'online_ip='.$usr['ip']);
+	$db->update($db_online, array('online_action' => ''), 'online_ip="'.$usr['ip'].'"');
 }
 
 /**
