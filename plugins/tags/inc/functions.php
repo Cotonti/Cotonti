@@ -10,6 +10,30 @@
  */
 
 /**
+ * Cuts the page after 'more' tag
+ *
+ * @global $L
+ * @param string ptr $html Page body
+ * @param string $url Page URL
+ * @param string $tag 'more' tag
+ * @return bool
+ */
+function sed_tag_cut_more(&$html, $url, $tag = '<!--more-->')
+{
+    global $L;
+
+    $mpos = mb_strpos($html, $tag);
+
+    if ($mpos === false)
+    {
+        return false;
+    }
+
+    $html = mb_substr($html, 0, $mpos) . "<span class=\"readmore\"><a href=\"$url\">{$L['ReadMore']}</a></span>";
+    return true;
+}
+
+/**
  * Parses search string into SQL query
  *
  * @param string $qs User input
@@ -173,8 +197,9 @@ function sed_tag_search_pages($query)
 				$tag_list .= '<a href="'.sed_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl)).'">'.htmlspecialchars($tag_t).'</a>';
 				$tag_i++;
 			}
+			$row['page_pageurl'] = empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']);
 			$t->assign(array(
-				'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']),
+				'TAGS_RESULT_ROW_URL' => $row['page_pageurl'],
 				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
 				'TAGS_RESULT_ROW_PATH' => sed_build_catpath($row['page_cat'], '<a href="%1$s">%2$s</a>'),
 				'TAGS_RESULT_ROW_TAGS' => $tag_list,
@@ -198,11 +223,16 @@ function sed_tag_search_pages($query)
 			switch($row['page_type'])
 			{
 				case '1':
+					if (!sed_tag_cut_more($row['page_text'], $row['page_pageurl']))
+					{
+						sed_tag_cut_more($row['page_text'], $row['page_pageurl'], '[more]');
+					}
 					$t->assign('TAGS_RESULT_ROW_TEXT', $row['page_text']);
 					break;
 				default:
 					$text = sed_parse(htmlspecialchars($row['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
 					$text = sed_post_parse($text, 'pages');
+					sed_tag_cut_more($text, $row['page_pageurl']);
 					$t->assign('TAGS_RESULT_ROW_TEXT', $text);
 				break;
 			}
