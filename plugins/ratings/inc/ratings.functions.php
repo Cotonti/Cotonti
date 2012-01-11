@@ -192,16 +192,21 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 function cot_ratings_enabled($ext_name, $cat = '', $item = '')
 {
 	global $cfg, $cot_modules;
-
-	if (isset($cot_modules[$ext_name]))
+	if (isset($cfg[$ext_name][$cat]['enable_ratings']) 
+		|| isset($cfg[$ext_name]['enable_ratings']) 
+		|| isset($cfg['plugin'][$ext_name]['enable_ratings']))
 	{
-		return (bool) (isset($cfg[$ext_name][$cat]['enable_ratings']) ? $cfg[$ext_name][$cat]['enable_ratings']
-			: $cfg[$ext_name]['enable_ratings']);
+		if (isset($cot_modules[$ext_name]))
+		{
+			return (bool) (isset($cfg[$ext_name][$cat]['enable_ratings']) ? $cfg[$ext_name][$cat]['enable_ratings']
+				: $cfg[$ext_name]['enable_ratings']);
+		}
+		else
+		{
+			return (bool) $cfg['plugin'][$ext_name]['enable_ratings'];
+		}
 	}
-	else
-	{
-		return (bool) $cfg['plugin'][$ext_name]['enable_ratings'];
-	}
+	return true;
 }
 
 /**
