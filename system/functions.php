@@ -4472,7 +4472,8 @@ function cot_redirect($url)
 
 	if (isset($env['status']))
 	{
-		header('HTTP/1.1 ' . $env['status']);
+		$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+		header($protocol . ' ' . $env['status']);
 	}
 
 	if ($cfg['redirmode'])

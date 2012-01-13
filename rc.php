@@ -26,7 +26,8 @@ if (isset($_GET['rc']) && preg_match('#^[\w\.\-]+\.(js|css)$#', $_GET['rc'], $mt
 }
 else
 {
-	header('HTTP/1.1 400 Bad Request');
+	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+	header($protocol . ' 400 Bad Request');
 	echo '<html><body><h1>HTTP 400 - Bad Request</h1></body></html>';
 	exit;
 }
@@ -38,7 +39,8 @@ else
 
 if (!file_exists($src_uri))
 {
-	header('HTTP/1.1 404 Not Found');
+	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+	header($protocol . ' 404 Not Found');
 	echo '<html><body><h1>HTTP 404 - Not Found</h1></body></html>';
 	exit;
 }
@@ -81,7 +83,8 @@ else
 if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) == $etag
 	&& $if_modified_since >= $file_last_modified)
 {
-	header('HTTP/1.1 304 Not Modified');
+	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+	header($protocol . ' 304 Not Modified');
 	exit;
 }
 
