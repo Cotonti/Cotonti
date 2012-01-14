@@ -4363,13 +4363,13 @@ function cot_shield_protect()
 {
 	global $cfg, $sys, $online_count, $shield_limit, $shield_action;
 
-//	if ($cfg['shieldenabled'] && $online_count>0 && $shield_limit>$sys['now'])
-//	{
+	if ($cfg['shieldenabled'] && $online_count>0 && $shield_limit>$sys['now'])
+	{
 		cot_diefatal(cot_rc('shield_protect', array(
 			'sec' => $shield_limit-$sys['now'],
 			'action' => $shield_action
 		)));
-//	}
+	}
 }
 
 /**
