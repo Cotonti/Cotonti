@@ -72,7 +72,9 @@ var ajaxSuccessHandlers = new Array();
 // AJAX enablement defaults to false
 var ajaxEnabled = false;
 // Required to calculate paths
-var ajaxCurrentBase = location.href.replace($('base').eq(0).attr('href'), '').replace(/\?.*$/, '').replace(/#.*$/, '');
+if (typeof jQuery != 'undefined') {
+	var ajaxCurrentBase = location.href.replace($('base').eq(0).attr('href'), '').replace(/\?.*$/, '').replace(/#.*$/, '');
+}
 // This flag indicates that AJAX+history has been used on this page
 // It means that "#" or home link should be loaded via ajax too
 var ajaxUsed = false;
@@ -286,11 +288,13 @@ function bindHandlers() {
 	}
 }
 
-$(document).ready(function() {
-	bindHandlers();
-	if (ajaxEnabled) {
-		$.historyInit(ajaxPageLoad, location.hash);
-	}
-});
+if (typeof jQuery != 'undefined') {
+	$(document).ready(function() {
+		bindHandlers();
+		if (ajaxEnabled) {
+			$.historyInit(ajaxPageLoad, location.hash);
+		}
+	});
+}
 
 window.name = 'main';
