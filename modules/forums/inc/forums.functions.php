@@ -62,7 +62,7 @@ function cot_forums_buildpath($cat, $forumslink = true)
  */
 function cot_forums_prunetopics($mode, $section, $param)
 {
-	global $db, $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_stats, $L;
+	global $db, $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_stats, $db_users, $L;
 
 	$num = 0;
 	$num1 = 0;
@@ -95,11 +95,15 @@ function cot_forums_prunetopics($mode, $section, $param)
 				include $pl;
 			}
 			/* ===== */
+			
+			// Decrease postcount for users
+			foreach ($db->query("SELECT COUNT(*) AS cnt, fp_posterid FROM $db_forum_posts  WHERE fp_topicid=$q GROUP BY fp_posterid")->fetchAll() as $row2)
+			{
+				$db->query("UPDATE $db_users SET user_postcount = user_postcount - ? WHERE user_id = ?", array((int)$row2['cnt'], (int)$row2['fp_posterid']));
+			}
 
-			$sql = $db->delete($db_forum_posts, "fp_topicid=$q");
-			$num += $db->affectedRows;
-			$sql = $db->delete($db_forum_topics, "ft_id=$q");
-			$num1 += $db->affectedRows;
+			$num += $db->delete($db_forum_posts, "fp_topicid=$q");
+			$num1 += $db->delete($db_forum_topics, "ft_id=$q");
 		}
 
 		$sql = $db->delete($db_forum_topics, "ft_movedto=$q");
