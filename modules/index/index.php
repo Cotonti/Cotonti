@@ -38,6 +38,11 @@ foreach (cot_getextplugins('index.main') as $pl)
 }
 /* ===== */
 
+if ($_SERVER['REQUEST_URI'] == COT_SITE_URI . 'index.php')
+{
+	$sys['canonical_url'] = COT_ABSOLUTE_URL;
+}
+
 require_once $cfg['system_dir'].'/header.php';
 
 $t = new XTemplate(cot_tplfile('index'));
