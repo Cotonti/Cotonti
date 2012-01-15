@@ -89,9 +89,7 @@ if (cot_module_active('forums'))
 	}
 	$t->assign(array(
 		'STATISTICS_TOTALDBPOSTS' => $totaldbposts,
-		'STATISTICS_TOTALDBPOSTSPRUNED' => $totaldbpostspruned,
-		'STATISTICS_TOTALDBTOPICS' => $totaldbtopics,
-		'STATISTICS_TOTALDBTOPICSPRUNED' => $totaldbtopicspruned,
+		'STATISTICS_TOTALDBTOPICS' => $totaldbtopics
 	));
 }
 

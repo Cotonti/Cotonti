@@ -52,12 +52,12 @@
 					<td class="textright width20">{STATISTICS_TOTALDBVIEWS}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.plu_postsforums} ({PHP.L.plu_pruned})</td>
-					<td class="textright">{STATISTICS_TOTALDBPOSTS_AND_TOTALDBPOSTSPRUNED} ({STATISTICS_TOTALDBPOSTSPRUNED})</td>
+					<td>{PHP.L.plu_postsforums}</td>
+					<td class="textright">{STATISTICS_TOTALDBPOSTS}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.plu_topicsforums} ({PHP.L.plu_pruned})</td>
-					<td class="textright">{STATISTICS_TOTALDBTOPICS_AND_TOTALDBTOPICSPRUNED} ({STATISTICS_TOTALDBTOPICSPRUNED})</td>
+					<td>{PHP.L.plu_topicsforums}</td>
+					<td class="textright">{STATISTICS_TOTALDBTOPICS}</td>
 				</tr>
 			</table>
 
