@@ -15,6 +15,7 @@ Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
 Requires_modules=forums,page,pfs,pm,polls
+Requires_plugins=hits
 [END_COT_EXT]
 ==================== */
 
