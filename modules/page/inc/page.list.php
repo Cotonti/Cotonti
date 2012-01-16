@@ -243,7 +243,7 @@ foreach ($cot_extrafields[$db_pages] + array('title' => 'title', 'key' => 'key',
 	if(in_array($row_k, array('title', 'key', 'date', 'author', 'owner', 'count', 'filecount')))
 	{
 		$t->assign(array(
-		'LIST_TOP_'.$uname => cot_rc("list_link_$col", array(
+		'LIST_TOP_'.$uname => cot_rc("list_link_$row_k", array(
 			'cot_img_down' => $arrows[$col]['asc'], 'cot_img_up' => $arrows[$col]['desc'],
 			'list_link_url_down' => $url_asc, 'list_link_url_up' => $url_desc
 		))));

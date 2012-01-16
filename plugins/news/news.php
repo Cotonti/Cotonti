@@ -43,7 +43,7 @@ foreach ($categories as $v)
 		$c = (empty($c)) ? $v[0] : $c;
 		$indexcat = ($jj == 0) ? $v[0] : $indexcat;
 	
-		$v[2] = ((int)$v[2] > 0) ? $v[2] : 0;
+		$v[2] = ((int)$v[2] > 0) ? $v[2] : (int)$cfg['page'][$v[0]]['truncatetext'];
 		$v[1] = ((int)$v[1] > 0) ? $v[1] : (int)$cfg['plugin']['news']['maxpages'];
 		
 		$_GET[$v[0].'d'] = (empty($c) || ($jj == 0) || $cfg['plugin']['news']['syncpagination']) ? $_GET['d'] : $_GET[$v[0].'d'];		
