@@ -17,6 +17,8 @@
  */
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
+require_once cot_incfile('hits', 'plug');
+
 $s = cot_import('s', 'G', 'TXT');
 
 $out['subtitle'] = $L['Statistics'];
@@ -87,9 +89,7 @@ if (cot_module_active('forums'))
 	}
 	$t->assign(array(
 		'STATISTICS_TOTALDBPOSTS' => $totaldbposts,
-		'STATISTICS_TOTALDBPOSTSPRUNED' => $totaldbpostspruned,
-		'STATISTICS_TOTALDBTOPICS' => $totaldbtopics,
-		'STATISTICS_TOTALDBTOPICSPRUNED' => $totaldbtopicspruned,
+		'STATISTICS_TOTALDBTOPICS' => $totaldbtopics
 	));
 }
 

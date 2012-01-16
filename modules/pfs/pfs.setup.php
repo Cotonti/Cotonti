@@ -3,10 +3,10 @@
 [BEGIN_COT_EXT]
 Name=PFS
 Description=Personal File Space
-Version=0.9.2
-Date=2011-08-19
+Version=0.9.3
+Date=2012-01-14
 Author=Neocrome & Cotonti Team
-Copyright=(c) Cotonti Team 2008-2011
+Copyright=(c) Cotonti Team 2008-2012
 Notes=BSD License
 Auth_guests=R
 Lock_guests=W12345A

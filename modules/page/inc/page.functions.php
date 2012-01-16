@@ -263,19 +263,25 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			}
 
 			// Extrafields
-			foreach ($cot_extrafields[$db_pages] as $row)
+			if (isset($cot_extrafields[$db_pages]))
 			{
-				$tag = mb_strtoupper($row['field_name']);
-				$temp_array[$tag.'_TITLE'] = isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
-				$temp_array[$tag] = cot_build_extrafields_data('page', $row, $page_data["page_{$row['field_name']}"], $page_data['page_parser']);
+				foreach ($cot_extrafields[$db_pages] as $row)
+				{
+					$tag = mb_strtoupper($row['field_name']);
+					$temp_array[$tag.'_TITLE'] = isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
+					$temp_array[$tag] = cot_build_extrafields_data('page', $row, $page_data["page_{$row['field_name']}"], $page_data['page_parser']);
+				}
 			}
 
 			// Extra fields for structure
-			foreach ($cot_extrafields[$db_structure] as $row)
+			if (isset($cot_extrafields[$db_structure]))
 			{
-				$tag = mb_strtoupper($row['field_name']);
-				$temp_array['CAT_'.$tag.'_TITLE'] = isset($L['structure_'.$row['field_name'].'_title']) ?  $L['structure_'.$row['field_name'].'_title'] : $row['field_description'];
-				$temp_array['CAT_'.$tag] = cot_build_extrafields_data('structure', $row, $structure['page'][$row['page_cat']][$row['field_name']]);
+				foreach ($cot_extrafields[$db_structure] as $row)
+				{
+					$tag = mb_strtoupper($row['field_name']);
+					$temp_array['CAT_'.$tag.'_TITLE'] = isset($L['structure_'.$row['field_name'].'_title']) ?  $L['structure_'.$row['field_name'].'_title'] : $row['field_description'];
+					$temp_array['CAT_'.$tag] = cot_build_extrafields_data('structure', $row, $structure['page'][$row['page_cat']][$row['field_name']]);
+				}
 			}
 
 			/* === Hook === */

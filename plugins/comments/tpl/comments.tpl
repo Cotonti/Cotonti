@@ -20,7 +20,11 @@
 						<td>{COMMENTS_DATE}</td>
 					</tr>
 					<tr>
-						<td colspan="2">{COMMENTS_FORM_TEXT}</td>
+						<td colspan="2">
+							{COMMENTS_FORM_TEXT}
+							<!-- IF {COMMENTS_FORM_PFS} -->{COMMENTS_FORM_PFS}<!-- ENDIF -->
+							<!-- IF {COMMENTS_FORM_SFS} --><span class="spaced">{PHP.cfg.separator}</span>{COMMENTS_FORM_SFS}<!-- ENDIF -->
+						</td>
 					</tr>
 					<tr>
 						<td colspan="2" class="valid">
@@ -65,7 +69,11 @@
 					<!-- BEGIN: GUEST -->
 					<div>{PHP.L.Name}: {COMMENTS_FORM_AUTHOR}</div>
 					<!-- END: GUEST -->
-					<div>{COMMENTS_FORM_TEXT}</div>
+					<div>
+						{COMMENTS_FORM_TEXT}
+						<!-- IF {COMMENTS_FORM_PFS} -->{COMMENTS_FORM_PFS}<!-- ENDIF -->
+						<!-- IF {COMMENTS_FORM_SFS} --><span class="spaced">{PHP.cfg.separator}</span>{COMMENTS_FORM_SFS}<!-- ENDIF -->
+					</div>
 
 					<!-- IF {PHP.usr.id} == 0 AND {COMMENTS_FORM_VERIFYIMG} -->
 					<div>{COMMENTS_FORM_VERIFYIMG}: {COMMENTS_FORM_VERIFY}</div>

@@ -144,30 +144,32 @@ if ($a=='update')
 
 		if ($ruser['user_name'] != $urr['user_name'])
 		{
-			$oldname = $db->prep($urr['user_name']);
+			$newname = $ruser['user_name'];
+			$oldname = $urr['user_name'];
 			if (cot_module_active('forums'))
 			{
 				require_once cot_incfile('forums', 'module');
-				$db->update($db_forum_topics, array('ft_lastpostername' => $newname), 'ft_lastpostername="'.$oldname.'"');
-				$db->update($db_forum_topics, array('ft_firstpostername' => $newname), 'ft_firstpostername="'.$oldname.'"');
-				$db->update($db_forum_posts, array('fp_postername' => $newname), 'fp_postername="'.$oldname.'"');
+				$db->update($db_forum_topics, array('ft_lastpostername' => $newname), 'ft_lastpostername = ?', array($oldname));
+				$db->update($db_forum_topics, array('ft_firstpostername' => $newname), 'ft_firstpostername = ?', array($oldname));
+				$db->update($db_forum_posts, array('fp_postername' => $newname), 'fp_postername = ?', array($oldname));
+				$db->update($db_forum_stats, array('fs_lt_postername' => $newname), 'fs_lt_postername = ?', array($oldname));
 			}
 			if (cot_module_active('page'))
 			{
 				require_once cot_incfile('page', 'module');
-				$db->update($db_pages, array('page_author' => $newname), 'page_author="'.$oldname.'"');
+				$db->update($db_pages, array('page_author' => $newname), 'page_author = ?', array($oldname));
 			}
 			if (cot_plugin_active('comments'))
 			{
 				require_once cot_incfile('comments', 'plug');
-				$db->update($db_com, array('com_author' => $newname), 'com_author="'.$oldname.'"');
+				$db->update($db_com, array('com_author' => $newname), 'com_author = ?', array($oldname));
 			}
 			if (cot_module_active('pm'))
 			{
 				require_once cot_incfile('pm', 'module');
-				$db->update($db_pm, array('pm_fromuser' => $newname), 'pm_fromuser="'.$oldname.'"');
+				$db->update($db_pm, array('pm_fromuser' => $newname), 'pm_fromuser = ?', array($oldname));
 			}
-			$db->update($db_online, array('online_name' => $newname), 'online_name="'.$oldname.'"');
+			$db->update($db_online, array('online_name' => $newname), 'online_name = ?', array($oldname));
 		}
 
 		$ruser['user_auth'] = '';

@@ -92,6 +92,13 @@ else
 
 		$rtplmodearr = cot_import('rstructuretplmode', 'P', 'ARR');
 		$rtplforcedarr = cot_import('rstructuretplforced', 'P', 'ARR');
+		
+		/* === Hook === */
+		foreach (cot_getextplugins('admin.structure.update.first') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 
 		foreach ($rstructurecode as $i => $k)
 		{
@@ -136,6 +143,13 @@ else
 		{
 			$cache->clear();
 		}
+		
+		/* === Hook === */
+		foreach (cot_getextplugins('admin.structure.update.done') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 
 		cot_message('Updated');
 		//cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
@@ -168,10 +182,23 @@ else
 		{
 			$rstructure['structure_tpl'] = '';
 		}
+		
+		/* === Hook === */
+		foreach (cot_getextplugins('admin.structure.add.first') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 
 		$res = cot_structure_add($n, $rstructure);
 		if ($res === true)
 		{
+			/* === Hook === */
+			foreach (cot_getextplugins('admin.structure.add.done') as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
 			cot_message('Added');
 		}
 		elseif (is_array($res))
@@ -191,6 +218,12 @@ else
 
 		if (cot_structure_delete($n, $c))
 		{
+			/* === Hook === */
+			foreach (cot_getextplugins('admin.structure.delete.done') as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
 			cot_message('Deleted');
 		}
 
@@ -213,6 +246,14 @@ else
 			}
 			$sql->closeCursor();
 		}
+		
+		/* === Hook === */
+		foreach (cot_getextplugins('admin.structure.resync.done') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+		
 		$res ? cot_message('Resynced') : cot_message("Error: function $area_sync doesn't exist."); // TODO i18n
 		($cache && $cfg['cache_'.$n]) && $cache->page->clear($n);
 		cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
