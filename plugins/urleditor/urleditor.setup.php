@@ -4,7 +4,7 @@
 Code=urleditor
 Name=URL Editor
 Description=Advanced URL customizer for your site
-Version=0.9.0
+Version=0.9.1
 Date=2011-08-25
 Author=Trustmaster
 Copyright=Copyright (c) Vladimir Sibirov and Cotonti Team 2010-2011
@@ -16,7 +16,7 @@ Lock_members=
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-preset=01:select:handy,compat,custom,none:none:URL Preset
+preset=01:callback:cot_url_presets():none:URL Preset
 [END_COT_EXT_CONFIG]
 ==================== */
 
