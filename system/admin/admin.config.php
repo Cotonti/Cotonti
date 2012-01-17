@@ -315,9 +315,36 @@ switch($n)
 					{
 						$cfg_params = call_user_func($mt[1]);
 					}
-					$cfg_params_titles = (isset($L['cfg_'.$config_name.'_params'])
+					if (isset($L['cfg_'.$config_name.'_params'])
 						&& is_array($L['cfg_'.$config_name.'_params']))
-							? $L['cfg_'.$config_name.'_params'] : $cfg_params;
+					{
+						$lang_params_keys = array_keys($L['cfg_'.$config_name.'_params']);
+						if (is_numeric($lang_params_keys[0]))
+						{
+							// Numeric array, simply use it
+							$cfg_params_titles = $L['cfg_'.$config_name.'_params'];
+						}
+						else
+						{
+							// Associative, match entries
+							$cfg_params_titles = array();
+							foreach ($cfg_params as $val)
+							{
+								if (isset($L['cfg_'.$config_name.'_params'][$val]))
+								{
+									$cfg_params_titles[] = $L['cfg_'.$config_name.'_params'][$val];
+								}
+								else
+								{
+									$cfg_params_titles[] = $val;
+								}
+							}
+						}
+					}
+					else
+					{
+						$cfg_params_titles = $cfg_params;
+					}
 					$config_input = cot_selectbox($config_value, $config_name, $cfg_params, $cfg_params_titles, false);
 				}
 				else
