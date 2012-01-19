@@ -17,21 +17,17 @@ function cot_clear_mark($text, $type, $words)
 	$text = trim($text);
 	if (!empty($text))
 	{
-		$text = trim($text);
-		$text = preg_replace("'.\n'", " ", $text);
-		$text = preg_replace("'.\t'", " ", $text);
-		$text = preg_replace("' +'", " ", $text);
+		$text = preg_replace("'\r?\n'", " ", $text);
+		$text = preg_replace("'\s+'", " ", $text);
 		if (cot_plugin_active('bbcode'))
 		{// BB
 			$text = preg_replace("'\[img.*?/img\]'si", "", $text);
 			$text = preg_replace("'\[thumb.*?/thumb\]'si", "", $text);
 			$text = preg_replace("'[[^]]*?.*?]'si", "", $text);
-			$text = htmlspecialchars($text);
 		}
-		else
-		{// HTML
-			$text = preg_replace("'<[\/\!]*?[^<>]*?>'si", "", $text);
-		}
+		// HTML
+		$text = strip_tags($text);
+		$text = htmlspecialchars($text, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 
 		foreach ($words as $i => $w)
 		{
