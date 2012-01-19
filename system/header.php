@@ -27,7 +27,7 @@ $out['userlist'] = (cot_auth('users', 'a', 'R')) ? cot_rc_link(cot_url('users'),
 
 unset($title_tags, $title_data);
 
-if (is_int($pg) && $pg > 1)
+if (is_numeric($pg) && $pg > 1)
 {
 	// Append page number to subtitle
 	$out['subtitle'] .= cot_rc('code_title_page_num', array('num' => $pg));

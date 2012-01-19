@@ -274,6 +274,42 @@ else
 $sql_forums = $db->query("UPDATE $db_forum_topics SET ft_viewcount=ft_viewcount+1 WHERE ft_id = $q");
 $sql_forums = $db->query("UPDATE $db_forum_stats SET fs_viewcount=fs_viewcount+1 WHERE fs_cat = " . $db->quote($s));
 
+$where['topicid'] = "fp_topicid = $q";
+$order = 'fp_id ASC';
+$join_columns = '';
+$join_condition = '';
+
+if (!empty($p) || !empty($id))
+{
+	$p_id = empty($p) ? $id : $p;
+	$postsbefore = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE " . implode(' AND ', $where) . " AND fp_id < $p_id")->fetchColumn();
+	$d = $cfg['forums']['maxpostsperpage'] * floor($postsbefore / $cfg['forums']['maxpostsperpage']);
+}
+
+if (!empty($id))
+{
+	$where['id'] = "fp_id = $id";
+}
+
+/* === Hook === */
+foreach (cot_getextplugins('forums.posts.query') as $pl)
+{
+	include $pl;
+}
+/* ===== */
+
+$where = array_diff($where, array(''));
+$totalposts = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE " . implode(' AND ', $where))->fetchColumn();
+
+$orderlimit = empty($id) ? " ORDER BY $order LIMIT $d, " . $cfg['forums']['maxpostsperpage'] : '';
+
+$sql_forums = $db->query("SELECT p.*, u.* $join_columns
+	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid $join_condition
+	WHERE " . implode(' AND ', $where) . $orderlimit);
+
+$pg = floor($d / $cfg['forums']['maxpostsperpage']) + 1;
+$durl = ($cfg['easypagenav']) ? $pg : $d;
+
 $title_params = array(
 	'FORUM' => $L['Forums'],
 	'SECTION' => $structure['forums'][$s]['title'],
@@ -281,6 +317,15 @@ $title_params = array(
 );
 $out['subtitle'] = cot_title($cfg['forums']['title_posts'], $title_params);
 $out['desc'] = htmlspecialchars(strip_tags($rowt['ft_desc']));
+$topicurl_params = array(
+	'm' => 'posts',
+	'q' => $q
+);
+if ($durl > 1)
+{
+	$topicurl_params['d'] = $durl;
+}
+$out['canonical_uri'] = cot_url('forums', $topicurl_params);
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.posts.main') as $pl)
@@ -294,32 +339,6 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = cot_tplfile(array('forums', 'posts', $structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
 
-$where['topicid'] = "fp_topicid = $q";
-if (!empty($id))
-{
-	$where['id'] = "fp_id = $id";
-}
-$order = 'fp_id ASC';
-$join_columns = '';
-$join_condition = '';
-
-/* === Hook === */
-foreach (cot_getextplugins('forums.posts.query') as $pl)
-{
-	include $pl;
-}
-/* ===== */
-$where = array_diff($where, array(''));
-$totalposts = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE " . implode(' AND ', $where))->fetchColumn();
-if (!empty($p))
-{
-	$postsbefore = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE " . implode(' AND ', $where) . " AND fp_id < $p")->fetchColumn();
-	$d = $cfg['forums']['maxpostsperpage'] * floor($postsbefore / $cfg['forums']['maxpostsperpage']);
-}
-
-$sql_forums = $db->query("SELECT p.*, u.* $join_columns
-	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid $join_condition
-	WHERE " . implode(' AND ', $where) . " ORDER BY $order LIMIT $d, " . $cfg['forums']['maxpostsperpage']);
 
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('forums.posts.loop');
