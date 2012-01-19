@@ -2398,19 +2398,27 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 {
 	global $cfg;
 
-	$env['status'] = '500 Internal Server Error';
 	if ($cfg['display_errors'])
 	{
-		echo "<strong><a href=\"".$cfg['mainurl']."\">".$cfg['maintitle']."</a></strong><br/>";
-		echo @date('Y-m-d H:i')."<p>$title: $text</p>";
-		echo '<pre>';
+		$message_body = '<p><em>'.@date('Y-m-d H:i').'</em></p>';
+		$message_body .= '<p>'.$text.'</p>';
+		ob_clean();
 		debug_print_backtrace();
-		echo '</pre>';
-		exit;
+		$backtrace = ob_get_contents();
+		ob_clean();
+		$message_body .= '<pre style="overflow:auto">'.$backtrace.'</pre>';
+		$message_body .= '<hr /><a href="'.$cfg['mainurl'].'">'.$cfg['maintitle'].'</a>';
+		cot_die_message(500, true, $title, $message_body);
 	}
 	else
 	{
-		cot_die_message(500, true);
+		$backtrace = debug_backtrace();
+		if (isset($backtrace[1]))
+		{
+			$text .= ' in file ' . $backtrace[1]['file'] . ' at line ' . $backtrace[1]['line'] . ' function ' . $backtrace[1]['function'] . '(' . implode(', ', $backtrace[1]['args']) . ')';
+		}
+		error_log("$title: $text");
+		cot_die_message(503, true);
 	}
 }
 
@@ -2420,7 +2428,7 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
  * @param int $code Message code
  * @param bool $header Render page header
  */
-function cot_die_message($code, $header = TRUE)
+function cot_die_message($code, $header = TRUE, $message_title = '', $message_body = '')
 {
 	// Globals and requirements
 	global $cfg, $env, $error_string, $out, $L, $R;
@@ -2456,6 +2464,7 @@ function cot_die_message($code, $header = TRUE)
 		403 => '403 Forbidden',
 		404 => '404 Not Found',
 		500 => '500 Internal Server Error',
+		503 => '503 Service Unavailable',
 		602 => '403 Forbidden',
 		603 => '403 Forbidden',
 		900 => '503 Service Unavailable',
@@ -2474,8 +2483,8 @@ function cot_die_message($code, $header = TRUE)
 	cot_sendheaders('text/html', $msg_status[$code]);
 	
 	// Determine message title and body
-	$title = $L['msg' . $code . '_title'];
-	$body = $L['msg' . $code . '_body'];
+	$title = empty($message_title) ? $L['msg' . $code . '_title'] : $message_title;
+	$body = empty($message_body) ? $L['msg' . $code . '_body'] : $message_body;
 	
 	// Render the message page
 	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
