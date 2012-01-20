@@ -18,6 +18,8 @@ Lock_members=12345A
 [BEGIN_COT_EXT_CONFIG]
 email=01:string:::E-mail
 minchars=12:string::5:Min post length, chars
+map=12:text:::Map
+about=13:text:::About
 [END_COT_EXT_CONFIG]
 ==================== */
 

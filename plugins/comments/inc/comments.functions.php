@@ -16,6 +16,7 @@ global $R, $L;
 require_once cot_incfile('users', 'module');
 require_once cot_langfile('comments', 'plug');
 require_once cot_incfile('comments', 'plug', 'resources');
+require_once cot_incfile('forms');
 
 // Table name globals
 global $db_com, $db_x;
@@ -276,16 +277,21 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 function cot_comments_enabled($ext_name, $cat = '', $item = '')
 {
 	global $cfg, $cot_modules;
-	
-	if (isset($cot_modules[$ext_name]))
+	if (isset($cfg[$ext_name][$cat]['enable_comments']) 
+		|| isset($cfg[$ext_name]['enable_comments']) 
+		|| isset($cfg['plugin'][$ext_name]['enable_comments']))
 	{
-		return (bool) (isset($cfg[$ext_name][$cat]['enable_comments']) ? $cfg[$ext_name][$cat]['enable_comments']
-			: $cfg[$ext_name]['enable_comments']);
+		if (isset($cot_modules[$ext_name]))
+		{
+			return (bool) (isset($cfg[$ext_name][$cat]['enable_comments']) ? $cfg[$ext_name][$cat]['enable_comments']
+				: $cfg[$ext_name]['enable_comments']);
+		}
+		else
+		{
+			return (bool) $cfg['plugin'][$ext_name]['enable_comments'];
+		}
 	}
-	else
-	{
-		return (bool) $cfg['plugin'][$ext_name]['enable_comments'];
-	}
+	return true;
 }
 
 /**

@@ -194,7 +194,7 @@ elseif ($a == 'delete')
 
 		foreach($cot_extrafields[$db_pages] as $i => $row_extf)
 		{
-			cot_extrafield_unlinkfiles($sql_page['page_'.$row_extf['field_name']], $row_extf);
+			cot_extrafield_unlinkfiles($row['page_'.$row_extf['field_name']], $row_extf);
 		}
 
 		$sql_page = $db->delete($db_pages, "page_id=$id");

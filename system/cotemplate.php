@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.1
+ * @version 2.7.2
  * @author Vladimir Sibirov a.k.a. Trustmaster
  * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
@@ -1629,6 +1629,10 @@ function cotpl_tokenize($str, $delim = array(' '))
 			elseif ($quote == $c)
 			{
 				$quote = '';
+				if (!isset($tokens[$idx]))
+				{
+					$tokens[$idx] = '';
+				}
 			}
 			else
 			{

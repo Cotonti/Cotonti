@@ -34,6 +34,14 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 
 	$trash = array('tr_date' => $sys['now_offset'], 'tr_type' => $type, 'tr_title' => $title, 'tr_itemid' => $itemid,
 		'tr_trashedby' => (int)$usr['id'], 'tr_parentid' => $parentid);
+	
+	/* === Hook  === */
+	foreach (cot_getextplugins('trash.put.first') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+	
 	$i = 0;
 	if (is_array($datas))
 	{
@@ -55,6 +63,14 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 	}
 
 	$id = ($i) ? $db->lastInsertId() : false;
+	
+	/* === Hook  === */
+	foreach (cot_getextplugins('trash.put.done') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+	
 	return $id;
 }
 
@@ -68,6 +84,12 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 function cot_trash_restore($id)
 {
 	global $db, $db_trash, $trash_types;
+	/* === Hook  === */
+	foreach (cot_getextplugins('trash.restore.first') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 	$id = (int) $id;
 	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id=$id LIMIT 1");
 	if ($res = $tsql->fetch())
@@ -117,6 +139,12 @@ function cot_trash_restore($id)
 				$sql2->closeCursor();
 			}
 		}
+		/* === Hook  === */
+		foreach (cot_getextplugins('trash.restore.done') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 		return $sql;
 	}
 	return false;
@@ -132,6 +160,12 @@ function cot_trash_delete($id)
 {
 	global $db, $db_trash;
 	$id = (int) $id;
+	/* === Hook  === */
+	foreach (cot_getextplugins('trash.delete.first') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id=$id LIMIT 1");
 	if ($res = $tsql->fetch())
 	{
@@ -143,6 +177,12 @@ function cot_trash_delete($id)
 		}
 		$sql2->closeCursor();
 	}
+	/* === Hook  === */
+	foreach (cot_getextplugins('trash.delete.done') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 	return true;
 }
 

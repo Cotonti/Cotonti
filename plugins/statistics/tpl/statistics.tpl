@@ -20,12 +20,12 @@
 					<td class="textright">{STATISTICS_TOTALDBPAGES}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Comments}</td>
-					<td class="textright">{STATISTICS_TOTALDBCOMMENTS}</td>
-				</tr>
-				<tr>
 					<td>{PHP.L.plu_totalmails}</td>
 					<td class="textright">{STATISTICS_TOTALMAILSENT}</td>
+				</tr>
+				<tr>
+					<td>{PHP.L.comments_comments}</td>
+					<td class="textright">{STATISTICS_TOTALDBCOMMENTS}</td>
 				</tr>
 			</table>
 
@@ -52,12 +52,12 @@
 					<td class="textright width20">{STATISTICS_TOTALDBVIEWS}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.plu_postsforums} ({PHP.L.plu_pruned})</td>
-					<td class="textright">{STATISTICS_TOTALDBPOSTS_AND_TOTALDBPOSTSPRUNED} ({STATISTICS_TOTALDBPOSTSPRUNED})</td>
+					<td>{PHP.L.plu_postsforums}</td>
+					<td class="textright">{STATISTICS_TOTALDBPOSTS}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.plu_topicsforums} ({PHP.L.plu_pruned})</td>
-					<td class="textright">{STATISTICS_TOTALDBTOPICS_AND_TOTALDBTOPICSPRUNED} ({STATISTICS_TOTALDBTOPICSPRUNED})</td>
+					<td>{PHP.L.plu_topicsforums}</td>
+					<td class="textright">{STATISTICS_TOTALDBTOPICS}</td>
 				</tr>
 			</table>
 
@@ -97,15 +97,15 @@
 			<table class="cells">
 <!-- BEGIN: IS_USER -->
 				<tr>
-					<td class="width80">{PHP.L.Posts}</td>
+					<td class="width80">{PHP.L.forums_posts}</td>
 					<td class="textright width20">{STATISTICS_USER_POSTSCOUNT}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Topics}</td>
+					<td>{PHP.L.forums_topics}</td>
 					<td class="textright">{STATISTICS_USER_TOPICSCOUNT}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Comments}</td>
+					<td>{PHP.L.comments_comments}</td>
 					<td class="textright">{STATISTICS_USER_COMMENTS}</td>
 				</tr>
 <!-- END: IS_USER -->

@@ -252,13 +252,14 @@ function cot_poll_vote()
 			{
 				$where = "pv_userid = '".$usr['id']."'";
 			}
-			elseif ($cfg['polls']['ip_id_polls'] == 'ip')
+			else
 			{
 				$where = ($usr['id'] > 0) ? "(pv_userid = '".$usr['id']."' OR pv_userip = '".$usr['ip']."')" : "pv_userip = '".$usr['ip']."'";
 			}
 			$sql2 = $db->query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid = $id AND $where LIMIT 1");
 			$alreadyvoted = ($sql2->rowCount() == 1) ? 1 : 0;
-			if ($alreadyvoted != 1)
+
+			if ($alreadyvoted != 1 && !($cfg['polls']['ip_id_polls'] == 'id' && $usr['id'] == 0))
 			{
 				foreach ($vote as $val)
 				{

@@ -16,6 +16,8 @@ defined('COT_CODE') or die('Wrong URL');
 
 $L['cfg_email'] = array('E-mail', '(оставить пустым для использования E-mail\'а администратора)');
 $L['cfg_minchars'] = array('Минимальное количество символов в сообщении');
+$L['cfg_map'] = array('Код карты');
+$L['cfg_about'] = array('О сайте');
 
 $L['info_desc'] = 'Форма для связи, отправляемая по e-mail и записываемая в базу данных';
 

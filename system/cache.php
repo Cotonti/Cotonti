@@ -511,7 +511,8 @@ class Page_cache
 			if ($if_none_match == $etag
 				&& $if_modified_since >= $filemtime)
 			{
-				header('HTTP/1.1 304 Not Modified');
+				$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+				header($protocol . ' 304 Not Modified');
 				header("Etag: $etag");
 				exit;
 			}

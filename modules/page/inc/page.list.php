@@ -1,4 +1,4 @@
-<?php
+.<?php
 /**
  * Page list
  *
@@ -56,12 +56,13 @@ $cat = &$structure['page'][$c];
 if (empty($s))
 {
 	$s = $cfg['page'][$c]['order'];
-	$w = $cfg['page'][$c]['way'];
 }
 elseif (!$db->fieldExists($db_pages, "page_$s"))
 {
 	$s = 'title';
 }
+$w = empty($w) ? $cfg['page'][$c]['way'] : $w;
+
 $s = empty($s) ? $cfg['page']['__default']['order'] : $s;
 $w = empty($w) ? $cfg['page']['__default']['way'] : $w;
 
@@ -71,6 +72,8 @@ $sys['sublocation'] = $cat['title'];
 $cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? 
 	$cfg['page']['__default']['maxrowsperpage'] : 
 	$cfg['page'][$c]['maxrowsperpage'];
+$cfg['page']['maxrowsperpage'] = $cfg['page']['maxrowsperpage'] > 0 ? $cfg['page']['maxrowsperpage'] : 1;
+
 $cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? 
 	$cfg['page']['__default']['truncatetext'] : 
 	$cfg['page'][$c]['truncatetext'];
@@ -240,7 +243,7 @@ foreach ($cot_extrafields[$db_pages] + array('title' => 'title', 'key' => 'key',
 	if(in_array($row_k, array('title', 'key', 'date', 'author', 'owner', 'count', 'filecount')))
 	{
 		$t->assign(array(
-		'LIST_TOP_'.$uname => cot_rc("list_link_$col", array(
+		'LIST_TOP_'.$uname => cot_rc("list_link_$row_k", array(
 			'cot_img_down' => $arrows[$col]['asc'], 'cot_img_up' => $arrows[$col]['desc'],
 			'list_link_url_down' => $url_asc, 'list_link_url_up' => $url_desc
 		))));

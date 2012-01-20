@@ -58,7 +58,7 @@ if ($cfg['cache'] && !$cfg['devmode'])
 {
 	require_once $cfg['system_dir'].'/cache.php';
 	$cache = new Cache();
-	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$site_id]) && empty($_SESSION[$site_id]))
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$site_id]) && empty($_SESSION[$site_id]) && !defined('COT_AUTH') && !defined('COT_ADMIN') && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
 	{
 		$cache_ext = empty($_GET['e']) ? 'index' : preg_replace('#\W#', '', $_GET['e']);
 		if ($cfg['cache_' . $cache_ext])

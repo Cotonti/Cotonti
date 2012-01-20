@@ -237,15 +237,15 @@ function cot_config_modify($name, $options, $is_module = false, $category = '', 
 
 	foreach ($options as $opt)
 	{
-		$config_name = $opt['config_name'];
-		unset($opt['config_name']);
+		$config_name = $opt['name'];
+		unset($opt['name']);
 		$opt_row = array();
 		foreach ($opt as $key => $val)
 		{
 			$opt_row['config_' . $key] = $val;
 		}
-		$affected += $db->update($db_config, $opt_row, $where,
-			empty($category) ? array($type, $name, $config_name, $donor) : array($type, $name, $config_name, $donor, $category));
+		$params = empty($category) ? array($type, $name, $config_name, $donor) : array($type, $name, $config_name, $donor, $category);
+		$affected += $db->update($db_config, $opt_row, $where, $params);
 	}
 
 	return $affected;
@@ -459,14 +459,15 @@ function cot_config_update($name, $options, $is_module = false, $category = '', 
 			if ($opt['name'] == $old_opt['name'])
 			{
 				$changed = array_diff($opt, $old_opt);
-				foreach ($changed as $key => $val)
+				if (count($changed) > 0)
 				{
-					if ($key != 'value')
+					// Values for modified options are set to default
+					// only if both type and default value have changed
+					if ($opt['type'] != $old_opt['type'] && $opt['default'] != $old_opt['default'])
 					{
-						// Values for modified options are set to default
 						$opt['value'] = $opt['default'];
-						$upd_options[] = $opt;
 					}
+					$upd_options[] = $opt;
 				}
 				$existed = true;
 				break;

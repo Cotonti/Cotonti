@@ -88,6 +88,8 @@ $L['msg404_body'] = 'The requested object or URL was not found on this server. <
 
 $L['msg500_title'] = '500 Internal Server Error';
 $L['msg500_body'] = 'The server encountered an internal error or misconfiguration and was unable to complete your request. <br />Please contact the administrator and inform them of the time the error occurred, and anything you might have done that may have caused the error.';
+$L['msg503_title'] = '503 Service Temporarily Unavailable';
+$L['msg503_body'] = 'The page you requested is temporarily unavailable for technical reasons.<br />Please try again later or contact the site administrator.';
 
 /**
  * Forum Messages

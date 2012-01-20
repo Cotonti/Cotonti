@@ -844,7 +844,8 @@ function cot_rmdir($dir)
 function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
 {
 	global $cfg;
-	header('HTTP/1.1 ' . $response_code);
+	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+	header($protocol . ' ' . $response_code);
 	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 	header('Cache-Control: post-check=0,pre-check=0', FALSE);
@@ -2397,19 +2398,27 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 {
 	global $cfg;
 
-	$env['status'] = '500 Internal Server Error';
 	if ($cfg['display_errors'])
 	{
-		echo "<strong><a href=\"".$cfg['mainurl']."\">".$cfg['maintitle']."</a></strong><br/>";
-		echo @date('Y-m-d H:i')."<p>$title: $text</p>";
-		echo '<pre>';
+		$message_body = '<p><em>'.@date('Y-m-d H:i').'</em></p>';
+		$message_body .= '<p>'.$text.'</p>';
+		ob_clean();
 		debug_print_backtrace();
-		echo '</pre>';
-		exit;
+		$backtrace = ob_get_contents();
+		ob_clean();
+		$message_body .= '<pre style="overflow:auto">'.$backtrace.'</pre>';
+		$message_body .= '<hr /><a href="'.$cfg['mainurl'].'">'.$cfg['maintitle'].'</a>';
+		cot_die_message(500, true, $title, $message_body);
 	}
 	else
 	{
-		cot_die_message(500, true);
+		$backtrace = debug_backtrace();
+		if (isset($backtrace[1]))
+		{
+			$text .= ' in file ' . $backtrace[1]['file'] . ' at line ' . $backtrace[1]['line'] . ' function ' . $backtrace[1]['function'] . '(' . implode(', ', $backtrace[1]['args']) . ')';
+		}
+		error_log("$title: $text");
+		cot_die_message(503, true);
 	}
 }
 
@@ -2419,7 +2428,7 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
  * @param int $code Message code
  * @param bool $header Render page header
  */
-function cot_die_message($code, $header = TRUE)
+function cot_die_message($code, $header = TRUE, $message_title = '', $message_body = '')
 {
 	// Globals and requirements
 	global $cfg, $env, $error_string, $out, $L, $R;
@@ -2455,6 +2464,7 @@ function cot_die_message($code, $header = TRUE)
 		403 => '403 Forbidden',
 		404 => '404 Not Found',
 		500 => '500 Internal Server Error',
+		503 => '503 Service Unavailable',
 		602 => '403 Forbidden',
 		603 => '403 Forbidden',
 		900 => '503 Service Unavailable',
@@ -2473,8 +2483,8 @@ function cot_die_message($code, $header = TRUE)
 	cot_sendheaders('text/html', $msg_status[$code]);
 	
 	// Determine message title and body
-	$title = $L['msg' . $code . '_title'];
-	$body = $L['msg' . $code . '_body'];
+	$title = empty($message_title) ? $L['msg' . $code . '_title'] : $message_title;
+	$body = empty($message_body) ? $L['msg' . $code . '_body'] : $message_body;
 	
 	// Render the message page
 	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
@@ -3009,18 +3019,18 @@ function cot_date($format, $timestamp = null, $usertimezone = true)
 	}
 	$datetime = ($Ldt[$format]) ? @date($Ldt[$format], $timestamp) : @date($format, $timestamp);
 	$search = array(
-		'/Monday/', '/Tuesday/', '/Wednesday/', '/Thursday/',
-		'/Friday/', '/Saturday/', '/Sunday/',
-		'/Mon([^a-z])/', '/Tue([^a-z])/', '/Wed([^a-z])/', '/Thu([^a-z])/',
-		'/Fri([^a-z])/', '/Sat([^a-z])/', '/Sun([^a-z])/',
-		'/January/', '/February/', '/March/',
-		'/April/', '/May/', '/June/',
-		'/July/', '/August/', '/September/',
-		'/October/', '/November/', '/December/',
-		'/Jan([^a-z])/', '/Feb([^a-z])/', '/Mar([^a-z])/',
-		'/Apr([^a-z])/', '/May([^a-z])/', '/Jun([^a-z])/',
-		'/Jul([^a-z])/', '/Aug([^a-z])/', '/Sep([^a-z])/',
-		'/Oct([^a-z])/', '/Nov([^a-z])/', '/Dec([^a-z])/'
+		'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+		'Friday', 'Saturday', 'Sunday',
+		'Mon', 'Tue', 'Wed', 'Thu',
+		'Fri', 'Sat', 'Sun',
+		'January', 'February', 'March',
+		'April', 'May', 'June',
+		'July', 'August', 'September',
+		'October', 'November', 'December',
+		'Jan', 'Feb', 'Mar',
+		'Apr', 'May', 'Jun',
+		'Jul', 'Aug', 'Sep',
+		'Oct', 'Nov', 'Dec'
 	);
 	$replace = array(
 		$L['Monday'], $L['Tuesday'], $L['Wednesday'], $L['Thursday'],
@@ -3036,7 +3046,7 @@ function cot_date($format, $timestamp = null, $usertimezone = true)
 		$L['July_s'], $L['August_s'], $L['September_s'],
 		$L['October_s'], $L['November_s'], $L['December_s']
 	);
-	return ($lang == 'en') ? $datetime : preg_replace($search, $replace, $datetime);
+	return ($lang == 'en') ? $datetime : str_replace($search, $replace, $datetime);
 }
 
 /**
@@ -4312,7 +4322,7 @@ function cot_check_xp()
 function cot_shield_clearaction()
 {
 	global $db, $db_online, $usr;
-	$db->update($db_online, array('online_action' => ''), 'online_ip='.$usr['ip']);
+	$db->update($db_online, array('online_action' => ''), 'online_ip="'.$usr['ip'].'"');
 }
 
 /**
@@ -4364,7 +4374,10 @@ function cot_shield_protect()
 
 	if ($cfg['shieldenabled'] && $online_count>0 && $shield_limit>$sys['now'])
 	{
-		cot_diefatal('Shield protection activated, please retry in '.($shield_limit-$sys['now']).' seconds...<br />After this duration, you can refresh the current page to continue.<br />Last action was : '.$shield_action);
+		cot_diefatal(cot_rc('shield_protect', array(
+			'sec' => $shield_limit-$sys['now'],
+			'action' => $shield_action
+		)));
 	}
 }
 
@@ -4471,7 +4484,8 @@ function cot_redirect($url)
 
 	if (isset($env['status']))
 	{
-		header('HTTP/1.1 ' . $env['status']);
+		$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+		header($protocol . ' ' . $env['status']);
 	}
 
 	if ($cfg['redirmode'])

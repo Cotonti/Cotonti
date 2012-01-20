@@ -4,10 +4,10 @@
 Code=i18n
 Name=Content Internationalization
 Description=Enables site contents translation into multiple languages
-Version=0.9.3
-Date=2011-08-15
+Version=0.9.4
+Date=2012-01-14
 Author=Trustmaster
-Copyright=Copyright (c) Cotonti Team 2010-2011
+Copyright=Copyright (c) Cotonti Team 2010-2012
 Notes=BSD License
 Auth_guests=R
 Lock_guests=12345A

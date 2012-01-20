@@ -14,17 +14,32 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_langfile('urleditor', 'plug');
 
 /**
+ * Contains the list of URLeditor presets currently available.
+ * Append items to it to add other presets
+ * @var array 
+ */
+$cot_urleditor_presets = array('handy', 'compat', 'custom', 'none');
+
+/**
  * Applies Handly URLs rewrite to current script parameters
  * @global array $cfg 
  */
 function cot_apply_rwr()
 {
 	global $cfg, $structure;
+	
 	if (isset($_GET['rwr']) && !empty($_GET['rwr'])/* && preg_match('`^[\w\p{L}/\-_\ \+\.]+?$`u', $_GET['rwr'])*/)
 	{
 		// Ignore ending slash and split the path into parts
 		$path = explode('/', (mb_strrpos($_GET['rwr'], '/') == mb_strlen($_GET['rwr']) - 1) ? mb_substr($_GET['rwr'], 0, -1) : $_GET['rwr']);
 		$count = count($path);
+		
+		/* === Hook === */
+		foreach (cot_getextplugins('urleditor.rewrite.first') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 		
 		if ($count == 1)
 		{
@@ -257,6 +272,18 @@ function cot_url_catpath(&$params, $spec, $arg = 'c')
 	}
 	unset($params[$arg]);
 	return $cat;
+}
+
+/**
+ * Returns the list of current presets
+ * 
+ * @global array $cot_urleditor_presets
+ * @return array
+ */
+function cot_url_presets()
+{
+	global $cot_urleditor_presets;
+	return $cot_urleditor_presets;
 }
 
 /**

@@ -315,9 +315,36 @@ switch($n)
 					{
 						$cfg_params = call_user_func($mt[1]);
 					}
-					$cfg_params_titles = (isset($L['cfg_'.$config_name.'_params'])
+					if (isset($L['cfg_'.$config_name.'_params'])
 						&& is_array($L['cfg_'.$config_name.'_params']))
-							? $L['cfg_'.$config_name.'_params'] : $cfg_params;
+					{
+						$lang_params_keys = array_keys($L['cfg_'.$config_name.'_params']);
+						if (is_numeric($lang_params_keys[0]))
+						{
+							// Numeric array, simply use it
+							$cfg_params_titles = $L['cfg_'.$config_name.'_params'];
+						}
+						else
+						{
+							// Associative, match entries
+							$cfg_params_titles = array();
+							foreach ($cfg_params as $val)
+							{
+								if (isset($L['cfg_'.$config_name.'_params'][$val]))
+								{
+									$cfg_params_titles[] = $L['cfg_'.$config_name.'_params'][$val];
+								}
+								else
+								{
+									$cfg_params_titles[] = $val;
+								}
+							}
+						}
+					}
+					else
+					{
+						$cfg_params_titles = $cfg_params;
+					}
 					$config_input = cot_selectbox($config_value, $config_name, $cfg_params, $cfg_params_titles, false);
 				}
 				else
@@ -449,7 +476,8 @@ switch($n)
 		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Modules']);
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
 		$sql = $db->query("
-			SELECT DISTINCT(config_cat) FROM $db_config
+			SELECT DISTINCT(c.config_cat), r.ct_title FROM $db_config AS c
+				LEFT JOIN $db_core AS r ON c.config_cat = r.ct_code
 			WHERE config_owner = 'plug'
 			AND config_type != '".COT_CONFIG_TYPE_HIDDEN."'
 			ORDER BY config_cat ASC
@@ -462,7 +490,7 @@ switch($n)
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p='.$row['config_cat']),
 				'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
-				'ADMIN_CONFIG_ROW_NAME' => $cot_plugins_enabled[$row['config_cat']]['title'],
+				'ADMIN_CONFIG_ROW_NAME' => htmlspecialchars($row['ct_title']),
 				'ADMIN_CONFIG_ROW_NUM' => $jj,
 				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 			));

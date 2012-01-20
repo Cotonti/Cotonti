@@ -334,16 +334,12 @@ if(!is_writeable('./datas/urltrans.dat'))
 }
 
 // Get list of valid areas
-$areas = array('*');
-$dp = opendir('.');
-while($f = readdir($dp))
+$areas = array('*', 'plug');
+$res = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = 0 ORDER BY ct_code");
+foreach ($res->fetchAll() as $row)
 {
-	if(preg_match('#(.+)\.php$#', $f, $mt))
-	{
-		$areas[] = $mt[1];
-	}
+	$areas[] = $row['ct_code'];
 }
-closedir($dp);
 sort($areas);
 
 // New rule contents
