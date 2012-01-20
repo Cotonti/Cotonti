@@ -11,8 +11,8 @@ Tags=admin.page.inc.tpl:{ADMIN_TAGS_ROW_TAG},{ADMIN_TAGS_ROW_URL}
  *
  * @package tags
  * @version 0.7.0
- * @author Dayver - Pavel Tkachenko
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

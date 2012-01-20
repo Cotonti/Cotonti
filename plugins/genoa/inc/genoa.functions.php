@@ -4,7 +4,7 @@
  *
  * @package genoa
  * @version 0.9.0
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 
@@ -1323,7 +1323,7 @@ function sed_obfuscate_eml($m)
  *
  * Returns false if the input string isn't a valid UTF-8 octet sequence.
  *
- * @author Henri Sivonen
+ * @author Cotonti Team
  * @license Mozilla Public License (MPL)
  * @copyright (c) 2003 Henri Sivonen
  * @param string $str Unicode string

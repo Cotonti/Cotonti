@@ -10,8 +10,8 @@ Hooks=comments.send.first
  *
  * @package mcaptcha
  * @version 0.1.0
- * @author Trustmaster, esclkm
- * @copyright Copyright (c) Vladimir Sibirov and Pavel Mikulik 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Vladimir Sibirov and Pavel Mikulik 2008-2012
  * @license BSD
  */
 defined('COT_CODE') or die("Wrong URL.");

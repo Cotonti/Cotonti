@@ -3,7 +3,7 @@
  * Russian langfile for mcaptcha
  *
  * @package mcaptcha
- * @author Trustmaster
+ * @author Cotonti Team
  */
 
 defined('COT_CODE') or die('Wrong URL');

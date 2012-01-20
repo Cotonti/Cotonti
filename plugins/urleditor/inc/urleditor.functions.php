@@ -4,8 +4,8 @@
  *
  * @package urleditor
  * @version 0.9.0
- * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

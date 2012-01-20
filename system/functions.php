@@ -4,8 +4,8 @@
  *
  * @package Cotonti
  * @version 0.9.6
- * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD License
  */
 
@@ -3122,7 +3122,7 @@ function cot_stamp2date($stamp)
  * Unsupported date formats : S, n, t, L, B, G, u, e, I, P, Z, c, r
  * Unsupported strftime formats : %U, %W, %C, %g, %r, %R, %T, %X, %c, %D, %F, %x
  *
- * @author baptiste dot place at utopiaweb dot fr (php.net comment)
+ * @author Cotonti Team
  * @see http://php.net/manual/en/function.strftime.php
  * @param string $format A format for date().
  * @return string Format usable for strftime().

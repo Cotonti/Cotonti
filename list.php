@@ -5,8 +5,8 @@
  * @package Cotonti
  * @version 0.9.0
  * @deprecated List module no longer exists since Cotonti Siena
- * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  * @deprecated Deprecated since Cotonti Siena
  */

@@ -28,7 +28,7 @@ css=99:radio:0,1:1:Enable plugin CSS
  * @package ratings
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

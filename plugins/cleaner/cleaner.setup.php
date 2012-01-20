@@ -31,8 +31,8 @@ pmold=07:select:0,15,30,60,120,180,365:365:Delete ALL the private messages older
  *
  * @package cleaner
  * @version 0.7.0
- * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

@@ -11,8 +11,8 @@ Hooks=input
  *
  * @package urleditor
  * @version 0.9.3
- * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2010-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2010-2012
  * @license BSD
  */
 

@@ -24,8 +24,8 @@ Requires_plugins=hits
  *
  * @package statistics
  * @version 0.7.0
- * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

@@ -22,8 +22,8 @@ Lock_members=12345
  *
  * @package userimages
  * @version 1.2
- * @author Koradhil, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

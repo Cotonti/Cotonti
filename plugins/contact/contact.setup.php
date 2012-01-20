@@ -29,7 +29,7 @@ about=13:text:::About
  * @package contact
  * @version 2.1
  * @author Cotonti Team
- * @copyright (c) 2008-2011 Cotonti Team
+ * @copyright (c) 2008-2012 Cotonti Team
  * @license BSD
  */
 

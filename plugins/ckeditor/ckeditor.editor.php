@@ -13,8 +13,8 @@ Hooks=editor
  *
  * @package ckeditor
  * @version 0.9.0
- * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2010-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2010-2012
  * @license BSD
  */
 

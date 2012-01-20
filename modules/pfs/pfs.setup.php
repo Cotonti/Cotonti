@@ -41,8 +41,8 @@ th_textsize=18:range:0,5:1:
  *
  * @package pfs
  * @version 0.7.0
- * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 ?>

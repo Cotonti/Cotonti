@@ -11,8 +11,8 @@ Tags=users.register.tpl:{USERS_REGISTER_VERIFYIMG},{USERS_REGISTER_VERIFYINPUT}
  *
  * @package mcaptcha
  * @version 0.1.0
- * @author Trustmaster, esclkm
- * @copyright Copyright (c) Vladimir Sibirov and Pavel Mikulik 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Vladimir Sibirov and Pavel Mikulik 2008-2012
  * @license BSD
  */
 

@@ -10,7 +10,7 @@ Name=SymiSun-03
  *
  * @package Cotonti
  * @version 0.9.0
- * @author Stamatis Kritikos - SymiSun* http://www.symisun.com
+ * @author Cotonti Team
  * @copyright Copyright (c) 2009
  * @license BSD
  */
