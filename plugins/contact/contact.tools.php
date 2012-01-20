@@ -10,7 +10,7 @@ Hooks=tools
  *
  * @package contact
  * @version 2.1.0
- * @author Kort, Cotonti Team
+ * @author Cotonti Team
  * @copyright (c) 2008-2011 Cotonti Team
  * @license BSD
  */
