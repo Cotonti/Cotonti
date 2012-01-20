@@ -3,7 +3,7 @@
 /**
  * Contact Plugin for Cotonti CMF (English Localization)
  * @version 2.00
- * @author Cotonti Team
+ * @author Kort, Cotonti Team
  * @copyright (c) 2008-2011 Cotonti Team
  * @license BSD
  */

@@ -10,7 +10,7 @@ Hooks=standalone
  *
  * @package contact
  * @version 2.1.0
- * @author Cotonti Team
+ * @author Kort, Cotonti Team
  * @copyright (c) 2008-2011 Cotonti Team
  * @license BSD
  */
