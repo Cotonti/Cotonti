@@ -148,7 +148,7 @@ button						{ padding:5px 10px; }
 .upper		{ text-transform:uppercase; }
 .capital	{ text-transform:capitalize; }
 
-.hidde		{ display:none; }
+.hide		{ display:none; }
 .hidden		{ display:none; }
 .invis		{ visibility:hidden; }
 
