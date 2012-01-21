@@ -6,19 +6,16 @@
 	</ul>
 <!-- END: CONFIG_URL -->
 <!-- BEGIN: DETAILS -->
-	<h2>{ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:</h2>
+	<h2><!-- IF {ADMIN_EXTENSIONS_ICO} --> 
+					<img src="{ADMIN_EXTENSIONS_ICO}">
+					<!-- ELSE -->
+					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png" />
+					<!-- ENDIF -->{ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:</h2>
 	<div class="block">
 		<table class="cells info">
 			<tr>
-				<td class="width5" rowspan="7" >
-					<!-- IF {ADMIN_EXTENSIONS_ICO} --> 
-					<img src="{ADMIN_EXTENSIONS_ICO}">
-					<!-- ELSE -->
-					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
-					<!-- ENDIF -->
-				</td>
 				<td class="width25">{PHP.L.Code}:</td>
-				<td class="width70">{ADMIN_EXTENSIONS_CODE}</td>
+				<td class="width75">{ADMIN_EXTENSIONS_CODE}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Description}:</td>
@@ -60,6 +57,20 @@
 				<td>{PHP.L.Notes}:</td>
 				<td>{ADMIN_EXTENSIONS_NOTES}</td>
 			</tr>
+			<!-- BEGIN: DEPENDENCIES -->
+			<tr>
+				<td>{ADMIN_EXTENSIONS_DEPENDENCIES_TITLE}:</td>
+				<td>
+					<ul>
+					<!-- BEGIN: DEPENDENCIES_ROW -->
+						<li>
+							<a href="{ADMIN_EXTENSIONS_DEPENDENCIES_ROW_URL}" class="{ADMIN_EXTENSIONS_DEPENDENCIES_ROW_CLASS}">{ADMIN_EXTENSIONS_DEPENDENCIES_ROW_NAME}</a>
+						</li>
+					<!-- END: DEPENDENCIES_ROW -->
+					</ul>
+				</td>
+			</tr>
+			<!-- END: DEPENDENCIES -->
 		</table>
 	</div>
 	<!-- IF {PHP.isinstalled} AND {PHP.exists} -->
@@ -88,10 +99,11 @@
 	<div class="block">
 		<h3>{PHP.L.Options}:</h3>
 		<div class="button-toolbar">
-<!-- IF !{PHP.isinstalled} -->
+<!-- IF !{PHP.isinstalled} AND {PHP.dependencies_satisfied} -->
 
 					<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_INSTALL_URL}" class="ajax button special large">{PHP.L.adm_opt_install}</a>
-<!-- ELSE -->
+<!-- ENDIF -->
+<!-- IF {PHP.isinstalled} -->
 			<!-- IF {PHP.exists} -->
 
 					<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_UPDATE_URL}" class="ajax button special large">{PHP.L.adm_opt_update}</a>

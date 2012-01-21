@@ -230,6 +230,7 @@ $L['ext_config_struct_error'] = 'Structure configuration setup failed';
 $L['ext_config_struct_installed'] = 'Installed structure configuration';
 $L['ext_config_struct_updated'] = 'Updated structure configuration options';
 $L['ext_dependency_error'] = '{$dep_type} &quot;{$dep_name}&quot; required by {$type} &quot;{$name}&quot; is neither installed nor selected for installation';
+$L['ext_dependency_uninstall_error'] = '{$type} &quot;{$name}&quot; requires this extension and should be uninstalled first';
 $L['ext_executed_php'] = 'Executed PHP handler part: {$ret}';
 $L['ext_executed_sql'] = 'Executed SQL handler part: {$ret}';
 $L['ext_installing'] = 'Installing {$type} &quot;{$name}&quot;';
@@ -237,6 +238,10 @@ $L['ext_invalid_format'] = 'This is not a valid Cotonti >= 0.9 extension. Please
 $L['ext_old_format'] = 'This is old Genoa/Seditio plugin. It may work incorrectly or not work at all.';
 $L['ext_patch_applied'] = 'Applied patch {$f}: {$msg}';
 $L['ext_patch_error'] = 'Error applying patch {$f}: {$msg}';
+$L['ext_requires_modules'] = 'Requires modules';
+$L['ext_requires_plugins'] = 'Requries plugins';
+$L['ext_recommends_modules'] = 'Recommends modules';
+$L['ext_recommends_plugins'] = 'Recommends plugins';
 $L['ext_setup_not_found'] = 'Setup file is not found: {$path}';
 $L['ext_uninstall_confirm'] = 'Are you sure you want to uninstall this extension? Any data linked to the extension will be removed and cannot be recovered.<br/><a href="{$url}">Yes, uninstall and remove data.</a>';
 $L['ext_uninstalling'] = 'Uninstalling {$type} &quot;{$name}&quot;';
