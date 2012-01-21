@@ -11,7 +11,7 @@ Schemes=default:Default
  *
  * @package Cotonti
  * @version 0.9.0
- * @author Dmitri 'Kort' Beliavski / Seditio.by
+ * @author Cotonti Team
  * @copyright (c) Seditio.by 2010
  * @license BSD
  */

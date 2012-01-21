@@ -4,8 +4,8 @@
  *
  * @package pfs
  * @version 0.7.0
- * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2011 Cotonti Team
+ * @author Cotonti Team
+ * @copyright Copyright (c) 2008-2012 Cotonti Team
  * @license BSD License
  */
 

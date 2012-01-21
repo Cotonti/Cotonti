@@ -5,7 +5,7 @@
  * @package comments
  * @version 0.9.0.2
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

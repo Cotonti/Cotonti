@@ -10,8 +10,8 @@ Hooks=global
  *
  * @package hiddengroups
  * @version 1.0
- * @author Koradhil, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

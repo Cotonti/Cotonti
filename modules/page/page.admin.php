@@ -10,8 +10,8 @@ Hooks=admin
  *
  * @package Cotonti
  * @version 0.7.0
- * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 
@@ -102,13 +102,16 @@ if ($a == 'validate')
 	}
 	/* ===== */
 
-	$sql_page = $db->query("SELECT page_cat FROM $db_pages WHERE page_id=$id");
+	$sql_page = $db->query("SELECT page_cat, page_begin FROM $db_pages WHERE page_id = $id AND page_state != 0");
 	if ($row = $sql_page->fetch())
 	{
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
-
-		$sql_page = $db->update($db_pages, array('page_state' => 0), "page_id=$id");
+		if ($row['page_begin'] < $sys['now'])
+		{
+			$sql_page = $db->update($db_pages, array('page_begin' => $sys['now']), "page_id = $id");
+		}
+		$sql_page = $db->update($db_pages, array('page_state' => 0), "page_id = $id");
 		$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code=".$db->quote($row['page_cat']));
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');

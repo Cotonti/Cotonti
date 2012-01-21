@@ -10,8 +10,8 @@ Hooks=editor
  *
  * @package markitup
  * @version 0.7.0
- * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

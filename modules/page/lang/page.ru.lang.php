@@ -4,8 +4,8 @@
  *
  * @package page
  * @version 0.9.6
- * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

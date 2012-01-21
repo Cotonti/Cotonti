@@ -11,8 +11,8 @@ Tags=page.list.tpl:{LIST_TAG_CLOUD},{LIST_TAG_CLOUD_ALL_LINK}
  *
  * @package tags
  * @version 0.7.0
- * @author Trustmaster - Vladimir Sibirov
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

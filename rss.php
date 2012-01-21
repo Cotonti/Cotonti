@@ -4,8 +4,8 @@
  *
  * @package Cotonti
  * @version 0.9.4
- * @author medar, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2009-2012
  * @license BSD
  * @deprecated Deprecated since Cotonti Siena
  */

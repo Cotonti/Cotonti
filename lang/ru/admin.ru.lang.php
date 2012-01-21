@@ -5,8 +5,8 @@
  *
  * @package Cotonti
  * @version 0.9.0
- * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 
@@ -229,7 +229,8 @@ $L['ext_config_updated'] = 'Опции конфигурации обновлен
 $L['ext_config_struct_error'] = 'Ошибка настройки конфигурации структуры';
 $L['ext_config_struct_installed'] ='Конфигурация структуры установлена';
 $L['ext_config_struct_updated'] = 'Опции конфигурации структуры обновлены';
-$L['ext_dependency_error'] = '{$dep_type} &quot;{$dep_name}&quot; required by {$type} &quot;{$name}&quot; is neither installed nor selected for installation';
+$L['ext_dependency_error'] = '{$dep_type} &quot;{$dep_name}&quot;, необходимый для {$type} &quot;{$name}&quot;, не установлен и не выбран для установки';
+$L['ext_dependency_uninstall_error'] = '{$type} &quot;{$name}&quot; использует данное расширение и должен быть удален в первую очередь';
 $L['ext_executed_php'] = 'Выполнена часть PHP-хэндлера: {$ret}';
 $L['ext_executed_sql'] = 'Выполнена часть SQL-хэндлера: {$ret}';
 $L['ext_installing'] = 'Установка {$type} &quot;{$name}&quot;';
@@ -237,6 +238,10 @@ $L['ext_invalid_format'] = 'Расширение несовместимо с Cot
 $L['ext_old_format'] = 'Это старый плагин для Genoa/Seditio. Он может работать некорректно или не работать вовсе.';
 $L['ext_patch_applied'] = 'Установлен патч {$f}: {$msg}';
 $L['ext_patch_error'] = 'Ошибка установки патча {$f}: {$msg}';
+$L['ext_requires_modules'] = 'Необходимые модули';
+$L['ext_requires_plugins'] = 'Необходимые плагины';
+$L['ext_recommends_modules'] = 'Рекомендуемые модули';
+$L['ext_recommends_plugins'] = 'Рекомендуемые плагины';
 $L['ext_setup_not_found'] = 'Файл установок не найден: {$path}';
 $L['ext_uninstall_confirm'] = 'Вы действительно хотите удалить это расширение? Все данные, связанные с этим расширением, будут удалены без возможности восстановления.<br/><a href="{$url}">Да, удалить вместе с данными.</a>';
 $L['ext_uninstalling'] = 'Удаление {$type} &quot;{$name}&quot;';

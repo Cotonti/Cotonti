@@ -28,8 +28,8 @@ css=99:radio:0,1:1:Enable plugin CSS
  *
  * @package autocomplete
  * @version 0.8.0
- * @author esclkm
- * @copyright Copyright (c) Cotonti Team 2010-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2010-2012
  * @license BSD
  */
 

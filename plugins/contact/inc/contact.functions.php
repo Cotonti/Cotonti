@@ -5,7 +5,7 @@
  * @package contact
  * @version 2.1.0
  * @author Cotonti Team
- * @copyright (c) 2008-2011 Cotonti Team
+ * @copyright (c) 2008-2012 Cotonti Team
  * @license BSD
  */
 

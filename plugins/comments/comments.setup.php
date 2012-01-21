@@ -38,7 +38,7 @@ order=14:select:Chronological,Recent:Recent:Comment sorting order
  * @package comments
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 

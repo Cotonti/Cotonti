@@ -5,8 +5,8 @@
  *
  * @package Cotonti
  * @version 0.9.0
- * @author esclkm
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 
@@ -246,15 +246,14 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 				foreach ($import as $k => $v)
 				{
 					$import[$k] = cot_import($v, 'D', 'HTM');
+					if (!is_null($import[$k]) && !in_array($import[$k], $opt_array))
+					{
+						$L['field_notinarray_' . $extrafield['field_name']] = (isset($L['field_notinarray_' . $extrafield['field_name']])) ? $L['field_notinarray_' . $extrafield['field_name']] : $L['field_notinarray'];
+						cot_error('field_notinarray_' . $extrafield['field_name'], $name);
+					}
 				}
 			}
-
-			if (!is_null($import) && !in_array($import, $opt_array))
-			{
-				$L['field_notinarray_' . $extrafield['field_name']] = (isset($L['field_notinarray_' . $extrafield['field_name']])) ? $L['field_notinarray_' . $extrafield['field_name']] : $L['field_notinarray'];
-				cot_error('field_notinarray_' . $extrafield['field_name'], $name);
-			}
-			
+	
 			if(is_array($import))
 			{
 				$import = implode(',', $import);

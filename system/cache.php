@@ -3,8 +3,8 @@
  * Cache subsystem library
  * @package Cotonti
  * @version 0.9.6
- * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2009-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2009-2012
  * @license BSD
  */
 
@@ -47,7 +47,7 @@ define('COT_CACHE_TYPE_PAGE', 4);
 
 /**
  * Abstract class containing code common for all cache drivers
- * @author trustmaster
+ * @author Cotonti Team
  */
 abstract class Cache_driver
 {
@@ -270,7 +270,7 @@ abstract class Temporary_cache_driver extends Dynamic_cache_driver
  * A persistent cache using local file system tree. It does not use multilevel structure
  * or lexicograph search, so it may slow down when your cache grows very big.
  * But normally it is very fast reads.
- * @author trustmaster
+ * @author Cotonti Team
  */
 class File_cache extends Static_cache_driver
 {
@@ -582,7 +582,7 @@ class Page_cache
 /**
  * A very popular caching solution using MySQL as a storage. It is quite slow compared to
  * File_cache but may be considered more reliable.
- * @author trustmaster
+ * @author Cotonti Team
  */
 class MySQL_cache extends Db_cache_driver
 {
@@ -794,7 +794,7 @@ if (extension_loaded('memcache'))
 	 * if a cluster of webservers is used and Memcached is running via TCP/IP between them.
 	 * In other circumstances this only should be used if no APC/eAccelerator/XCache available,
 	 * keeping in mind that File_cache might be still faster.
-	 * @author trustmaster
+	 * @author Cotonti Team
 	 */
 	class Memcache_driver extends Temporary_cache_driver
 	{
@@ -903,7 +903,7 @@ if (extension_loaded('apc'))
 	/**
 	 * Accelerated PHP Cache driver implementation. This should be used as default cacher
 	 * on APC-enabled hosts.
-	 * @author trustmaster
+	 * @author Cotonti Team
 	 */
 	class APC_driver extends Temporary_cache_driver
 	{
@@ -985,7 +985,7 @@ if (extension_loaded('xcache'))
 	/**
 	 * XCache variable cache driver. It should be used on hosts that use XCache for
 	 * PHP acceleration and variable cache.
-	 * @author trustmaster
+	 * @author Cotonti Team
 	 */
 	class Xcache_driver extends Temporary_cache_driver
 	{

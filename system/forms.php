@@ -5,8 +5,8 @@
  *
  * @package Cotonti
  * @version 0.9.0
- * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 
@@ -406,7 +406,7 @@ function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '
 		$result .= cot_inputbox('hidden', $name.'[nullval]', 'nullval');
 	}
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	$name = $name.'[]';
+
 	$rc = empty($custom_rc) 
 		? empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}"
 		: $custom_rc;

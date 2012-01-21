@@ -11,8 +11,8 @@ Tags=users.profile.tpl:
  *
  * @package userimages
  * @version 1.1
- * @author Koradhil, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 
