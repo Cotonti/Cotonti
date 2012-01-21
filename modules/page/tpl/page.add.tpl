@@ -75,11 +75,11 @@
 					</tr>
 					<tr>
 						<td colspan="2" class="valid">
+							<!-- IF {PHP.usr_can_publish} -->
+							<button type="submit" name="rpagestate" value="0">{PHP.L.Publish}</button> 
+							<!-- ENDIF -->
 							<button type="submit" name="rpagestate" value="2" class="submit">{PHP.L.Saveasdraft}</button>
 							<button type="submit" name="rpagestate" value="1">{PHP.L.Submitforapproval}</button>
-							<!-- IF {PHP.usr_can_publish} -->
-							<button type="submit" name="rpagestate" value="0">{PHP.L.Publish}</button>
-							<!-- ENDIF -->
 						</td>
 					</tr>
 				</table>
