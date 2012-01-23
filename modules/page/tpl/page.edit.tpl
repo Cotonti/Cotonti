@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
 
 		<div class="block">
-			<h2 class="page">{PAGEEDIT_PAGETITLE}</h2>
+			<h2 class="page">{PAGEEDIT_PAGETITLE} #{PAGEEDIT_FORM_ID}</h2>
 			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 			<form action="{PAGEEDIT_FORM_SEND}" enctype="multipart/form-data" method="post" name="pageform">
 				<table class="cells">
@@ -90,20 +90,16 @@
 						<td>{PAGEEDIT_FORM_FILECOUNT}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.page_pageid}:</td>
-						<td>#{PAGEEDIT_FORM_ID}</td>
-					</tr>
-					<tr>
 						<td>{PHP.L.page_deletepage}:</td>
 						<td>{PAGEEDIT_FORM_DELETE}</td>
 					</tr>
 					<tr>
 						<td colspan="2" class="valid">
+							<!-- IF {PHP.usr_can_publish} -->
+							<button type="submit" name="rpagestate" value="0">{PHP.L.Publish}</button> 
+							<!-- ENDIF -->
 							<button type="submit" name="rpagestate" value="2" class="submit">{PHP.L.Saveasdraft}</button>
 							<button type="submit" name="rpagestate" value="1">{PHP.L.Submitforapproval}</button>
-							<!-- IF {PHP.usr_can_publish} -->
-							<button type="submit" name="rpagestate" value="0">{PHP.L.Publish}</button>
-							<!-- ENDIF -->
 						</td>
 					</tr>
 				</table>

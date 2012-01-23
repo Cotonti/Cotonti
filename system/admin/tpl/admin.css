@@ -86,6 +86,9 @@ div.warning									{ color:#9f6000; background-color:#fff9d7; background-image:
 div.done										{ color:#4f8a10; background-color:#eceff6; background-image:url(../../../images/icons/default/done.png); border:1px solid #d4dae8; }
 div.help										{ color:#000; background-color:#f2f2f2; background-image:url(../../../images/icons/default/help.png); border:1px solid #ccc; }
 
+.highlight_green { color:#205000; background-color:#befea8; }
+.highlight_red { color:#d8000c; background-color:#feebe8; }
+
 .margintop10	{ margin-top:10px; }
 .marginright10	{ margin-right:10px; }
 .marginbottom10	{ margin-bottom:10px; }
