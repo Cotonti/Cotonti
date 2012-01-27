@@ -159,6 +159,10 @@ $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $tota
 
 $out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
 $out['subtitle'] = $cat['title'];
+if (!empty($cfg['page'][$c]['keywords']))
+{
+	$out['keywords'] = $cfg['page'][$c]['keywords'];
+}
 
 // Building the canonical URL
 $pageurl_params = array('c' => $c, 'ord' => $o, 'p' => $p);

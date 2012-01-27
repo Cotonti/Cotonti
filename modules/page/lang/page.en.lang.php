@@ -23,6 +23,7 @@ $L['cfg_title_page'] = array('Page title tag format', 'Options: {TITLE}, {CATEGO
 $L['cfg_way'] = array('Sorting direction');
 $L['cfg_truncatetext'] = array('Set truncated page text length in list', 'Zero to disable this feature');
 $L['cfg_allowemptytext'] = array('Allow empty page text');
+$L['cfg_keywords'] = array('Keywords');
 
 $L['info_desc'] = 'Extensible content management functionality: pages and page categories.';
 
