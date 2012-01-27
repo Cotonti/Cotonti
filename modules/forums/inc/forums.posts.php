@@ -108,6 +108,7 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	if (mb_strlen($newmsg) < $cfg['forums']['minpostlength'])
 	{
 		cot_error('forums_messagetooshort', 'newmsg');
+		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
 
 	/* === Hook === */
