@@ -137,6 +137,6 @@ $themelang['usersregister']['Generalhint'] = 'All fields are mandatory.';
 $themelang['usersregister']['Usernamehint'] = 'Username must be at least 2 chars long.';
 
 
-$themelang['search']['Generalhint'] = 'You can make the search more exact by selecting necessary categories and search options only. Please note that "Search All" does not give you all the options. Choose "Forums" or "Pages" for more options.'
+$themelang['search']['Generalhint'] = 'You can make the search more exact by selecting necessary categories and search options only. Please note that "Search All" does not give you all the options. Choose "Forums" or "Pages" for more options.';
 
 ?>
