@@ -10,7 +10,7 @@
  * @deprecated Deprecated since Cotonti Siena
  */
 
-$_GET['e'] = 'pm';
+$_GET['e'] = 'polls';
 
 require 'index.php';
 
