@@ -54,9 +54,9 @@
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
 <a href="{ADMIN_CONFIG_ROW_URL}" class="ajax thumbicons">
 	<!-- IF {ADMIN_CONFIG_ROW_ICO} --> 
-	<img src="{ADMIN_CONFIG_ROW_ICO}">
+	<img src="{ADMIN_CONFIG_ROW_ICO}"/>
 	<!-- ELSE -->
-	<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+	<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/>
 	<!-- ENDIF -->
 	{ADMIN_CONFIG_ROW_NAME}
 </a>
