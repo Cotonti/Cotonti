@@ -205,16 +205,16 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 				$var = mb_substr($m[1], 1);
 				if (isset($spec[$var]))
 				{
-					$url = str_replace($m[0], urlencode($spec[$var]), $url);
+					$url = str_replace($m[0], rawurlencode($spec[$var]), $url);
 				}
 				elseif (isset($params[$var]))
 				{
-					$url = str_replace($m[0], urlencode($params[$var]), $url);
+					$url = str_replace($m[0], rawurlencode($params[$var]), $url);
 					unset($params[$var]);
 				}
 				else
 				{
-					$url = str_replace($m[0], urlencode($GLOBALS[$var]), $url);
+					$url = str_replace($m[0], rawurlencode($GLOBALS[$var]), $url);
 				}
 			}
 		}
@@ -226,12 +226,12 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 		$p = mb_strpos($url, '://');
 		if ($p === false)
 		{
-			$url = mb_strpos($url, '/') === 0 ? '/' . urlencode($params['l']) . $url : urlencode($params['l']) . '/' . $url;
+			$url = mb_strpos($url, '/') === 0 ? '/' . rawurlencode($params['l']) . $url : rawurlencode($params['l']) . '/' . $url;
 		}
 		else
 		{
 			$p = mb_strpos($url, '/', $p + 3);
-			$url = $p === false ? $url . '/' . urlencode($params['l']) : mb_substr($url, 0, $p) . urlencode($params['l']) . '/' . mb_substr($url, $p + 1);
+			$url = $p === false ? $url . '/' . rawurlencode($params['l']) : mb_substr($url, 0, $p) . rawurlencode($params['l']) . '/' . mb_substr($url, $p + 1);
 		}
 		unset($params['l']);
 	}
@@ -239,7 +239,14 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	if (!empty($params))
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
-		$url .= (mb_strpos($url, '?') === false ? '?' : $sep) . http_build_query($params, '', $sep);
+		if (version_compare(PHP_VERSION, '5.4.0', '>='))
+		{
+			$url .= (mb_strpos($url, '?') === false ? '?' : $sep) . http_build_query($params, '', $sep, PHP_QUERY_RFC3986);
+		}
+		else
+		{
+			$url .= (mb_strpos($url, '?') === false ? '?' : $sep) . str_replace('+', '%20', http_build_query($params, '', $sep));
+		}
 	}
 	// Almost done
 	$url .= $tail;
@@ -264,7 +271,7 @@ function cot_url_catpath(&$params, $spec, $arg = 'c')
 	if (isset($structure[$name]) && isset($structure[$name][$params[$arg]]))
 	{
 		$parts = explode('.', $structure[$name][$params[$arg]]['path']);
-		$cat = implode('/', array_map('urlencode', $parts));
+		$cat = implode('/', array_map('rawurlencode', $parts));
 	}
 	else
 	{
@@ -295,7 +302,7 @@ function cot_url_presets()
  */
 function cot_url_username(&$params, $spec)
 {
-	$name = urlencode($params['u']);
+	$name = rawurlencode($params['u']);
 	unset($params['m'], $params['id'], $params['u']);
 	return $name;
 }

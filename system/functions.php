@@ -4577,7 +4577,14 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	if (count($params) > 0)
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
-		$url .= '?' . http_build_query($params, '', $sep);
+		if (version_compare(PHP_VERSION, '5.4.0', '>='))
+		{
+			$url .= '?' . http_build_query($params, '', $sep, PHP_QUERY_RFC3986);
+		}
+		else
+		{
+			$url .= '?' . str_replace('+', '%20', http_build_query($params, '', $sep));
+		}
 	}
 	$url .= $tail;
 	//$url = str_replace('&amp;amp;', '&amp;', $url);
