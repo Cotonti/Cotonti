@@ -304,6 +304,8 @@ switch($a)
 			$struct = cot_url('admin', "m=structure&n=$code");
 		}
 		
+		$installed_ver = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$code'")->fetchColumn();
+		
 		// Universal tags
 		$t->assign(array(
 			'ADMIN_EXTENSIONS_NAME' => $info['Name'],
@@ -312,6 +314,7 @@ switch($a)
 			'ADMIN_EXTENSIONS_ICO' => (file_exists($icofile)) ? $icofile : '',
 			'ADMIN_EXTENSIONS_DESCRIPTION' => empty($L['info_desc']) ? $info['Description'] : $L['info_desc'],
 			'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
+			'ADMIN_EXTENSIONS_VERSION_INSTALLED' => $installed_ver,
 			'ADMIN_EXTENSIONS_DATE' => $info['Date'],
 			'ADMIN_EXTENSIONS_CONFIG_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$code"),
 			'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $tools,
@@ -686,7 +689,7 @@ switch($a)
 					);
 				}
 
-					if (!empty($info['Error']))
+				if (!empty($info['Error']))
 				{
 					$t->assign(array(
 						'ADMIN_EXTENSIONS_X_ERR' => $x,
@@ -746,6 +749,8 @@ switch($a)
 					}
 					$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $x . '/' . $x . '.png';
 					
+					$installed_ver = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$x'")->fetchColumn();
+					
 					$t->assign(array(
 						'ADMIN_EXTENSIONS_DETAILS_URL' => cot_url('admin', "m=extensions&a=details&$arg=$x"),
 						'ADMIN_EXTENSIONS_NAME' => $info['Name'],
@@ -757,6 +762,7 @@ switch($a)
 						'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
 						'ADMIN_EXTENSIONS_STATUS' => $status[$part_status],
 						'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
+						'ADMIN_EXTENSIONS_VERSION_INSTALLED' => $installed_ver,
 						'ADMIN_EXTENSIONS_RIGHTS_URL' => $type == 'module' ? cot_url('admin', "m=rightsbyitem&ic=$x&io=a") : cot_url('admin',
 								"m=rightsbyitem&ic=$type&io=$x"),
 						'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? cot_url('admin', "m=other&p=$x") : cot_url('admin', "m=$x"),

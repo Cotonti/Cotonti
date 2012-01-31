@@ -23,7 +23,13 @@
 			</tr>
 			<tr>
 				<td>{PHP.L.Version}:</td>
-				<td>{ADMIN_EXTENSIONS_VERSION}</td>
+				<td>
+					<!-- IF {PHP.isinstalled} AND {ADMIN_EXTENSIONS_VERSION} > {ADMIN_EXTENSIONS_VERSION_INSTALLED} -->
+					<span class="highlight_red">{ADMIN_EXTENSIONS_VERSION_INSTALLED}</span> / <span class="highlight_green">{ADMIN_EXTENSIONS_VERSION}</span>
+					<!-- ELSE -->
+					{ADMIN_EXTENSIONS_VERSION}
+					<!-- ENDIF -->
+				</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Date}:</td>
@@ -215,9 +221,9 @@
 				<td class="coltop width5"></td>
 				<td class="coltop width20">{PHP.L.Name} {PHP.L.adm_clicktoedit}</td>
 				<td class="coltop width15">{PHP.L.Code}</td>
-				<td class="coltop width5">{PHP.L.Version}</td>
-				<td class="coltop width5">{PHP.L.Parts}</td>
-				<td class="coltop width15">{PHP.L.Status}</td>
+				<td class="coltop width9">{PHP.L.Version}</td>
+				<td class="coltop width4">{PHP.L.Parts}</td>
+				<td class="coltop width12">{PHP.L.Status}</td>
 				<td class="coltop width35">{PHP.L.Action}</td>
 			</tr>
 <!-- BEGIN: ROW -->
@@ -237,7 +243,13 @@
 				</td>
 				<td><a href="{ADMIN_EXTENSIONS_DETAILS_URL}"><strong>{ADMIN_EXTENSIONS_NAME}</strong></a></td>
 				<td>{ADMIN_EXTENSIONS_CODE_X}</td>
-				<td>{ADMIN_EXTENSIONS_VERSION}</td>
+				<td>
+					<!-- IF {PHP.part_status} != 3 AND {ADMIN_EXTENSIONS_VERSION} > {ADMIN_EXTENSIONS_VERSION_INSTALLED} -->
+					<span class="highlight_red">{ADMIN_EXTENSIONS_VERSION_INSTALLED}</span> / <span class="highlight_green">{ADMIN_EXTENSIONS_VERSION}</span>
+					<!-- ELSE -->
+					{ADMIN_EXTENSIONS_VERSION}
+					<!-- ENDIF -->
+				</td>
 				<td class="centerall">{ADMIN_EXTENSIONS_PARTSCOUNT}</td>
 				<td class="centerall">{ADMIN_EXTENSIONS_STATUS}</td>
 				<td class="action">
