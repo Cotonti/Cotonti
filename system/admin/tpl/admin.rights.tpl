@@ -35,9 +35,9 @@
 				<tr>
 					<td class="centerall">					
 					<!-- IF {ADMIN_RIGHTS_ROW_ICO} --> 
-					<img src="{ADMIN_RIGHTS_ROW_ICO}">
+					<img src="{ADMIN_RIGHTS_ROW_ICO}"/>
 					<!-- ELSE -->
-					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/>
 					<!-- ENDIF -->
 					</td>
 					<td> <a href="{ADMIN_RIGHTS_ROW_LINK}">{ADMIN_RIGHTS_ROW_TITLE}</a></td>

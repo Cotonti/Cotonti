@@ -7,7 +7,7 @@
 <!-- END: CONFIG_URL -->
 <!-- BEGIN: DETAILS -->
 	<h2><!-- IF {ADMIN_EXTENSIONS_ICO} --> 
-					<img src="{ADMIN_EXTENSIONS_ICO}">
+					<img src="{ADMIN_EXTENSIONS_ICO}" />
 					<!-- ELSE -->
 					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png" />
 					<!-- ENDIF -->{ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:</h2>
@@ -230,9 +230,9 @@
 			<tr>
 				<td>
 					<!-- IF {ADMIN_EXTENSIONS_ICO} --> 
-					<img src="{ADMIN_EXTENSIONS_ICO}">
+					<img src="{ADMIN_EXTENSIONS_ICO}" />
 					<!-- ELSE -->
-					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png">
+					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png" />
 					<!-- ENDIF -->
 				</td>
 				<td><a href="{ADMIN_EXTENSIONS_DETAILS_URL}"><strong>{ADMIN_EXTENSIONS_NAME}</strong></a></td>
