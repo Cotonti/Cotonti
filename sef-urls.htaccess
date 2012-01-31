@@ -18,7 +18,7 @@ RewriteRule ^admin/([a-z0-9]+) admin.php?m=$1 [QSA,NC,NE,L]
 RewriteRule ^(admin|login|message)(/|\?|$) $1.php [QSA,NC,NE,L]
 
 # System category has priority over /system folder
-RewriteRule ^system($|[^A-Za-z0-9]*)  index.php?rwr=system$1 [QSA,NC,NE,L]
+RewriteRule ^system/?$  index.php?rwr=system [QSA,NC,NE,L]
 
 # All the rest goes through standard rewrite gateway
 RewriteCond %{REQUEST_FILENAME} !-f
