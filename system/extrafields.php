@@ -354,7 +354,7 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 		case 'select':
 		case 'radio':
 			$value = htmlspecialchars($value);
-			return (!empty($L[$name . '_' . $extrafield['field_name'] . '_' . $value])) ? $L[$name . '_' . $extrafield['field_name'] . '_' . $value] : $value;
+			return (!empty($L[$extrafield['field_name'] . '_' . $value])) ? $L[$extrafield['field_name'] . '_' . $value] : $value;
 			break;
 
 		case 'checkbox':
@@ -384,7 +384,7 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 						$result .= $sep;	
 					}
 					$i++;
-					$result .= (!empty($L[$name . '_' . $extrafield['field_name'] . '_' . $v])) ? $L[$name . '_' . $extrafield['field_name'] . '_' . $v] : $v;
+					$result .= (!empty($L[$extrafield['field_name'] . '_' . $v])) ? $L[$extrafield['field_name'] . '_' . $v] : $v;
 				}
 			}
 			return $result;

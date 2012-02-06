@@ -11,8 +11,9 @@ function changecats()
 		var mycat = $('#cat_'+i+' .cay').val();
 		if(i > 1)
 		{
-			$('#cat_'+i+' .cag').html(('{' + 'INDEX_NEWS_' + mycat + '}').toUpperCase());
-			$('#cat_'+i+ ' .caf').html('news.' + mycat + '.tpl');
+			var mycat2 = mycat.replace(/[.. -]/i, "_");
+			$('#cat_'+i+' .cag').html(('{' + 'INDEX_NEWS_' + mycat2 + '}').toUpperCase());
+			$('#cat_'+i+ ' .caf').html('news.' + mycat2 + '.tpl');
 		}
 		else
 		{

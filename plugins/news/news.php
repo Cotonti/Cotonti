@@ -94,8 +94,8 @@ if (count($cats) > 0)
 		$news_link = cot_url('index', $news_link_params);
 		$catd = ($catn != 0 && !$cfg['plugin']['news']['syncpagination']) ? $cat . "d" : "d";
 		$pagenav = cot_pagenav('index', $news_link_params, $v[3]['d'], $totalnews, $v[1], $catd);
-
-		$news = new XTemplate(cot_tplfile(($catn == 0) ? "news" : "news." . $v[0], 'plug'));
+		$filename =  str_replace(array(' ', ',', '.', '-'), '_', $v[0]);
+		$news = new XTemplate(cot_tplfile(($catn == 0) ? "news" : "news." . $filename, 'plug'));
 
 		$sql_rowset = $sql->fetchAll();
 		$jj = 0;
@@ -149,7 +149,8 @@ if (count($cats) > 0)
 		/* ===== */
 
 		$news->parse('NEWS');
-		$t->assign(($catn == 0) ? 'INDEX_NEWS' : 'INDEX_NEWS_' . strtoupper($v[0]), $news->text('NEWS'));
+		$tagname = str_replace(array(' ', ',', '.', '-'), '_', strtoupper($v[0]));	
+		$t->assign(($catn == 0) ? 'INDEX_NEWS' : 'INDEX_NEWS_' . $tagname, $news->text('NEWS'));
 
 		$catn++;
 	}
