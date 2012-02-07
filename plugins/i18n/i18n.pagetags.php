@@ -72,8 +72,9 @@ if ($i18n_enabled && $i18n_notmain)
 	if (!empty($page_data['ipage_title']))
 	{
 		$text = cot_parse($page_data['ipage_text'], $cfg['page']['markup']);
-		$text = ((int) $textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
-		$cutted = mb_strlen($page_data['ipage_text']) > mb_strlen($text);
+		$text_cut = ((int)$textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
+		$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;
+		
 		$page_link = array(array(cot_url('page', $urlparams), $page_data['ipage_title']));
 		$i18n_array = array_merge($i18n_array, array(
 			'URL' => cot_url('page', $urlparams),
@@ -81,6 +82,8 @@ if ($i18n_enabled && $i18n_notmain)
 			'SHORTTITLE' => htmlspecialchars($page_data['ipage_title']),
 			'DESC' => htmlspecialchars($page_data['ipage_desc']),
 			'TEXT' => $text,
+			'TEXT_CUT' => $text_cut,
+			'TEXT_IS_CUT' => $cutted,
 			'DESC_OR_TEXT' => !empty($page_data['ipage_desc'])
 				? htmlspecialchars($page_data['page_desc']) : $text,
 			'MORE' => $cutted ? cot_rc_link($page_data['page_pageurl'], $L['ReadMore']) : '',
