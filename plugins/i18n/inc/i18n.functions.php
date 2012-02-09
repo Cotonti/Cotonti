@@ -71,20 +71,8 @@ function cot_i18n_enabled($cat)
 		$i18n_cats = array_map('trim', $i18n_cats);
 	}
 	
-	if (in_array($cat, $i18n_cats))
-	{
-		return true;
-	}
-	
-	foreach ($i18n_cats as $icat)
-	{
-		if (mb_strpos($structure['page'][$cat]['path'], $icat . '.') !== false)
-		{
-			return true;
-		}
-	}
-	
-	return false;
+	return in_array(cot_structure_parents('page', $cat, 'first'), $i18n_cats);
+
 }
 
 /**
