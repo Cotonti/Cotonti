@@ -271,16 +271,6 @@ $L['adm_help_structure'] = 'The pages that belong to the category &quot;system&q
 $L['adm_extrafields_desc'] = 'Add/Edit extra fields';
 $L['adm_extrafields_all'] = 'Show all database tables';
 $L['adm_extrafields_table'] = 'Table';
-$L['adm_help_structure_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank<br /><br />
-<b>New tags in tpl files:</b><br /><br />
-<u>list.tpl:</u><br /><br />
-&nbsp;&nbsp;&nbsp;{LIST_XXXXX}, {LIST_XXXXX_TITLE}<br /><br />
-<u>list.group.tpl:</u><br /><br />
-&nbsp;&nbsp;&nbsp;{LIST_XXXXX}, {LIST_XXXXX_TITLE}<br /><br />
-<u>admin.structure.inc.tpl :</u><br /><br />
-&nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: OPTIONS --&gt; {ADMIN_STRUCTURE_XXXXX}, {ADMIN_STRUCTURE_XXXXX_TITLE} &lt;!-- END: OPTIONS --&gt;<br /><br />
-&nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: DEFULT --&gt; {ADMIN_STRUCTURE_FORMADD_XXXXX}, {ADMIN_STRUCTURE_FORMADD_XXXXX_TITLE} &lt;!-- END: DEFULT --&gt;<br /><br />
-<br />';
 $L['adm_extrafields_help_notused'] = 'Not used';
 $L['adm_extrafields_help_variants'] = '{variant1},{variant2},{variant3},...';
 $L['adm_extrafields_help_range'] = '{min_value},{max_value}';
@@ -288,6 +278,8 @@ $L['adm_extrafields_help_data'] = '{min_year},{max_year},{date_format}. If empty
 $L['adm_extrafields_help_regex'] = 'Regex for checking';
 $L['adm_extrafields_help_file'] = 'Upload directory';
 $L['adm_extrafields_help_separator'] = 'Values separator';
+$L['adm_help_info'] = '<b>Base HTML</b> set automaticaly if you leave it blank';
+$L['adm_help_newtags'] = '<br /><br /><b>New tags in tpl files:</b>';
 
 /**
  * Users Section
@@ -299,19 +291,6 @@ $L['adm_maxsizeallpfs'] = 'Max size of all files together in '.$L['PFS'].' (KB)'
 $L['adm_copyrightsfrom'] = 'Set the same rights as the group';
 $L['adm_rights_maintenance'] = 'Access to site when maintenance mode on';
 $L['adm_skiprights'] = 'Omit rights for this group';
-
-/**
- * Users Section
- * Extrafields Subsection
- */
-
-$L['adm_help_users_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank<br /><br />
-<b>New tags in tpl files:</b><br /><br />
-users.profile.tpl: {USERS_PROFILE_XXXXX}, {USERS_PROFILE_XXXXX_TITLE}<br /><br />
-users.edit.tpl: {USERS_EDIT_XXXXX}, {USERS_EDIT_XXXXX_TITLE}<br /><br />
-users.details.tpl: {USERS_DETAILS_XXXXX}, {USERS_DETAILS_XXXXX_TITLE}<br /><br />
-user.register.tpl: {USERS_REGISTER_XXXXX}, {USERS_REGISTER_XXXXX_TITLE}<br /><br />
-forums.posts.tpl: {FORUMS_POSTS_ROW_USERXXXXX}, {FORUMS_POSTS_ROW_USERXXXXX_TITLE}<br />';
 
 /**
  * Plug Section

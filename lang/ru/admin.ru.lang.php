@@ -271,16 +271,6 @@ $L['adm_help_structure'] = 'Страницы категории &laquo;system&ra
 $L['adm_extrafields_desc'] = 'Создание / правка дополнительных полей';
 $L['adm_extrafields_all'] = 'Все таблицы';
 $L['adm_extrafields_table'] = 'Таблица';
-$L['adm_help_structure_extrafield'] = 'HTML-код поля установится в значение по умолчанию автоматически, если его очистить и обновить<br /><br />
-<b>Новые тэги в tpl-файлах:</b><br /><br />
-<u>list.tpl:</u><br /><br />
-&nbsp;&nbsp;&nbsp;{LIST_XXXXX}, {LIST_XXXXX_TITLE}<br /><br />
-<u>list.group.tpl:</u><br /><br />
-&nbsp;&nbsp;&nbsp;{LIST_XXXXX}, {LIST_XXXXX_TITLE}<br /><br />
-<u>admin.structure.inc.tpl :</u><br /><br />
-&nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: OPTIONS --&gt; {ADMIN_STRUCTURE_XXXXX}, {ADMIN_STRUCTURE_XXXXX_TITLE} &lt;!-- END: OPTIONS --&gt;<br /><br />
-&nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: DEFULT --&gt; {ADMIN_STRUCTURE_FORMADD_XXXXX}, {ADMIN_STRUCTURE_FORMADD_XXXXX_TITLE} &lt;!-- END: DEFULT --&gt;<br /><br />
-<br />';
 $L['adm_extrafields_help_notused'] = 'Не используется';
 $L['adm_extrafields_help_variants'] = '{значение1},{значение2},{значение3},...';
 $L['adm_extrafields_help_range'] = '{мин_значение},{макс_значение}';
@@ -288,6 +278,8 @@ $L['adm_extrafields_help_data'] = '{мин_год},{макс_год},{форма
 $L['adm_extrafields_help_regex'] = 'Регулярное выражение для ввода значение';
 $L['adm_extrafields_help_file'] = 'Директория для загрузки файлов';
 $L['adm_extrafields_help_separator'] = 'Разделитель значений';
+$L['adm_help_info'] = 'HTML-код поля установится в значение по умолчанию автоматически, если его очистить и обновить';
+$L['adm_help_newtags'] = '<br /><br /><b>Новые тэги в tpl-файлах:</b>';
 
 /**
  * Users Section
@@ -299,19 +291,6 @@ $L['adm_maxsizeallpfs'] = 'Максимальный размер всех фай
 $L['adm_copyrightsfrom'] = 'Установить права как в группе';
 $L['adm_rights_maintenance'] = 'Разрешить авторизацию при включенном режиме обслуживания';
 $L['adm_skiprights'] = 'Пропустить права для этой группы';
-
-/**
- * Users Section
- * Extrafields Subsection
- */
-
-$L['adm_help_users_extrafield'] = 'Поле &laquo;Базовый HTML&raquo; устанавливается в значение по умолчанию автоматически, если его очистить и обновить.<br /><br />
-<b>Новые тэги в tpl-файлах:</b><br /><br />
-users.profile.tpl: {USERS_PROFILE_XXXXX}, {USERS_PROFILE_XXXXX_TITLE}<br /><br />
-users.edit.tpl: {USERS_EDIT_XXXXX}, {USERS_EDIT_XXXXX_TITLE}<br /><br />
-users.details.tpl: {USERS_DETAILS_XXXXX}, {USERS_DETAILS_XXXXX_TITLE}<br /><br />
-user.register.tpl: {USERS_REGISTER_XXXXX}, {USERS_REGISTER_XXXXX_TITLE}<br /><br />
-forums.posts.tpl: {FORUMS_POSTS_ROW_USERXXXXX}, {FORUMS_POSTS_ROW_USERXXXXX_TITLE}<br />';
 
 /**
  * Plug Section

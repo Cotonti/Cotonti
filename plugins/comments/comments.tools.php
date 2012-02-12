@@ -104,6 +104,19 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_COMMENTS_URL' => $row['com_url'],
 		'ADMIN_COMMENTS_ODDEVEN' => cot_build_oddeven($ii)
 	));
+	
+	if (isset($cot_extrafields[$db_com]))
+	{
+		foreach ($cot_extrafields[$db_com] as $exrow)
+		{
+			$tag = mb_strtoupper($exrow['field_name']);
+			$t->assign(array(
+				'ADMIN_COMMENTS_' . $tag . '_TITLE' => isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['comments_' . $exrow['field_name'] . '_title'] : $exrow['field_description'],
+				'ADMIN_COMMENTS_' . $tag => cot_build_extrafields_data('comments', $exrow, $row["com_{$exrow['field_name']}"]),
+			));
+		}
+	}
+			
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
 	{

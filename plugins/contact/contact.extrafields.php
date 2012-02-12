@@ -22,7 +22,6 @@ require_once cot_incfile('contact', 'plug');
 $extra_whitelist[$db_contact] = array(
 	'name' => $db_contact,
 	'caption' => $L['Plugin'].' Contact',
-	'help' => $L['adm_help_contact_extrafield'],
 	'tags' => array(
 		'contact.tools.tpl' => '{CONTACT_XXXXX}, {CONTACT_XXXXX_TITLE}',
 		'contact.tpl' => '{CONTACT_FORM_XXXXX}, {CONTACT_FORM_XXXXX_TITLE}',

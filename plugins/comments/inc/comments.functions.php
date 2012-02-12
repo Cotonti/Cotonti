@@ -21,7 +21,7 @@ require_once cot_incfile('forms');
 // Table name globals
 global $db_com, $db_x;
 $db_com = (isset($db_com)) ? $db_com : $db_x . 'com';
-
+$cot_extrafields[$db_com] = (!empty($cot_extrafields[$db_com]))	? $cot_extrafields[$db_com] : array();
 /**
  * Returns number of comments for item
  *
@@ -71,7 +71,7 @@ function cot_comments_count($ext_name, $code, $row = array())
  */
 function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 {
-	global $db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $env, $pg;
+	global $db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $env, $pg, $cot_extrafields;
 
 	// Check permissions and enablement
 	list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'comments');
@@ -134,7 +134,19 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 
 	if ($auth_write && $enabled)
 	{
-		
+		// Extra fields
+		foreach ($cot_extrafields[$db_com] as $i => $exrow)
+		{
+			$uname = strtoupper($exrow['field_name']);
+			$t->assign('COMMENTS_FORM_' . $uname, cot_build_extrafields('rcomments' . $exrow['field_name'], $exrow, $rcomments[$exrow['field_name']]));
+			$t->assign('COMMENTS_FORM_' . $uname . '_TITLE', isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['comments_' . $exrow['field_name'] . '_title'] : $exrow['field_description']);
+
+			// extra fields universal tags
+			$t->assign('COMMENTS_FORM_EXTRAFLD', cot_build_extrafields('rcomments' . $exrow['field_name'], $exrow, $rcomments[$exrow['field_name']]));
+			$t->assign('COMMENTS_FORM_EXTRAFLD_TITLE', isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['contact_' . $exrow['field_name'] . '_title'] : $exrow['field_description']);
+			$t->parse('COMMENTS.COMMENTS_NEWCOMMENT.EXTRAFLD');
+		}
+
 		$allowed_time = cot_build_timegap($sys['now_offset'] - $cfg['plugin']['comments']['time'] * 60,
 			$sys['now_offset']);
 		$com_hint = cot_rc('com_edithint', array('time' => $allowed_time));
@@ -209,6 +221,20 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 				'COMMENTS_ROW_ODDEVEN' => cot_build_oddeven($kk),
 				'COMMENTS_ROW_NUM' => $kk
 			));
+			
+				// Extrafields
+			if (isset($cot_extrafields[$db_com]))
+			{
+				foreach ($cot_extrafields[$db_com] as $exrow)
+				{
+					$tag = mb_strtoupper($exrow['field_name']);
+					$t->assign(array(
+						'COMMENTS_ROW_' . $tag . '_TITLE' => isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['comments_' . $exrow['field_name'] . '_title'] : $exrow['field_description'],
+						'COMMENTS_ROW_' . $tag => cot_build_extrafields_data('comments', $exrow, $row["com_{$exrow['field_name']}"]),
+					));
+				}
+			}
+			
 			$t->assign(cot_generate_usertags($row, 'COMMENTS_ROW_AUTHOR_'), htmlspecialchars($row['com_author']));
 
 			/* === Hook - Part2 : Include === */

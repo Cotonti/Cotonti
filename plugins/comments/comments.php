@@ -1,9 +1,10 @@
 <?php
+
 /* ====================
-[BEGIN_COT_EXT]
-Hooks=standalone
-[END_COT_EXT]
-==================== */
+ * [BEGIN_COT_EXT]
+ * Hooks=standalone
+ * [END_COT_EXT]
+ */
 
 /**
  * Comments system for Cotonti
@@ -14,7 +15,6 @@ Hooks=standalone
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
-
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
 require_once cot_incfile('comments', 'plug');
@@ -73,28 +73,35 @@ if ($m == 'edit' && $id > 0)
 		$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
 		$usr['isowner'] = $time_limit
 			&& ($usr['id'] > 0 && $row['com_authorid'] == $usr['id']
-				|| $usr['id'] == 0 && $usr['ip'] == $row['com_authorip']);
+			|| $usr['id'] == 0 && $usr['ip'] == $row['com_authorip']);
 		$usr['allow_write'] = ($usr['isadmin'] || $usr['isowner']);
 		cot_block($usr['allow_write']);
 
-		$comtext = cot_import('comtext', 'P', 'HTM');
+		$comarray['com_text'] = cot_import('comtext', 'P', 'HTM');
 
-		if (mb_strlen($comtext) < $cfg['plugin']['comments']['minsize'])
+		if (mb_strlen($comarray['com_text']) < $cfg['plugin']['comments']['minsize'])
 		{
 			cot_error($L['com_commenttooshort'], 'comtext');
+		}
+		
+		foreach ($cot_extrafields[$db_contact] as $exrow)
+		{
+			$comarray['com_' . $exrow['field_name']] = cot_import_extrafields('rcomments' . $exrow['field_name'], $exrow);
 		}
 
 		if (!cot_error_found())
 		{
-			$sql = $db->update($db_com, array('com_text' => $comtext), 'com_id=? AND com_code=?', array($id, $item));
-
+			$sql = $db->update($db_com, $comarray, 'com_id=? AND com_code=?', array($id, $item));
+			
+			cot_extrafield_movefiles();
+			
 			if ($cfg['plugin']['comments']['mail'])
 			{
 				$sql2 = $db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
 
 				$email_title = $L['plu_comlive'];
-				$email_body  = $L['User'] . ' ' . preg_replace('#[^\w\p{L}]#u', '', $usr['name']) . ', ' . $L['plu_comlive3'];
-				$email_body .= cot_url($url_area, $url_params, '#c'.$id, true) . "\n\n";
+				$email_body = $L['User'] . ' ' . preg_replace('#[^\w\p{L}]#u', '', $usr['name']) . ', ' . $L['plu_comlive3'];
+				$email_body .= cot_url($url_area, $url_params, '#c' . $id, true) . "\n\n";
 
 				while ($adm = $sql2->fetch())
 				{
@@ -110,8 +117,8 @@ if ($m == 'edit' && $id > 0)
 			/* ===== */
 
 			$com_grp = ($usr['isadmin']) ? 'adm' : 'usr';
-			cot_log('Edited comment #'.$id, $com_grp);
-			cot_redirect(cot_url($url_area, $url_params, '#c'.$id, true));
+			cot_log('Edited comment #' . $id, $com_grp);
+			cot_redirect(cot_url($url_area, $url_params, '#c' . $id, true));
 		}
 	}
 	$t->assign(array(
@@ -133,7 +140,7 @@ if ($m == 'edit' && $id > 0)
 	cot_block($usr['allow_write']);
 
 	$t->assign(array(
-		'COMMENTS_FORM_POST' => cot_url('plug', 'e=comments&m=edit&a=update&area='.$area.'&cat='.$cat.'&item='.$com['com_code'].'&id='.$com['com_id']),
+		'COMMENTS_FORM_POST' => cot_url('plug', 'e=comments&m=edit&a=update&area=' . $area . '&cat=' . $cat . '&item=' . $com['com_code'] . '&id=' . $com['com_id']),
 		'COMMENTS_POSTER_TITLE' => $L['Poster'],
 		'COMMENTS_POSTER' => $com['com_author'],
 		'COMMENTS_IP_TITLE' => $L['Ip'],
@@ -144,6 +151,19 @@ if ($m == 'edit' && $id > 0)
 		'COMMENTS_FORM_UPDATE_BUTTON' => $L['Update'],
 		'COMMENTS_FORM_TEXT' => cot_textarea('comtext', $com['com_text'], 8, 64, '', 'input_textarea_minieditor')
 	));
+	
+	// Extra fields
+	foreach ($cot_extrafields[$db_com] as $i => $exrow)
+	{
+		$uname = strtoupper($exrow['field_name']);
+		$t->assign('COMMENTS_FORM_' . $uname, cot_build_extrafields('rcomments' . $exrow['field_name'], $exrow, $com[$exrow['field_name']]));
+		$t->assign('COMMENTS_FORM_' . $uname . '_TITLE', isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['comments_' . $exrow['field_name'] . '_title'] : $exrow['field_description']);
+
+			// extra fields universal tags
+		$t->assign('COMMENTS_FORM_EXTRAFLD', cot_build_extrafields('rcomments' . $exrow['field_name'], $exrow, $com[$exrow['field_name']]));
+		$t->assign('COMMENTS_FORM_EXTRAFLD_TITLE', isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['contact_' . $exrow['field_name'] . '_title'] : $exrow['field_description']);
+		$t->parse('COMMENTS.COMMENTS_FORM_EDIT.EXTRAFLD');
+	}
 
 	/* == Hook == */
 	foreach (cot_getextplugins('comments.edit.tags') as $pl)
@@ -160,6 +180,12 @@ if ($a == 'send' && $usr['auth_write'])
 	cot_shield_protect();
 	$rtext = cot_import('rtext', 'P', 'HTM');
 	$rname = cot_import('rname', 'P', 'TXT');
+	$comarray = array();
+	// Extra fields
+	foreach ($cot_extrafields[$db_contact] as $exrow)
+	{
+		$comarray['com_' . $exrow['field_name']] = cot_import_extrafields('rcomments' . $exrow['field_name'], $exrow);
+	}
 
 	/* == Hook == */
 	foreach (cot_getextplugins('comments.send.first') as $pl)
@@ -167,7 +193,7 @@ if ($a == 'send' && $usr['auth_write'])
 		include $pl;
 	}
 	/* ===== */
-	
+
 	if (empty($rname) && $usr['id'] == 0)
 	{
 		cot_error($L['com_authortooshort'], 'rname');
@@ -183,26 +209,27 @@ if ($a == 'send' && $usr['auth_write'])
 
 	if (!cot_error_found())
 	{
-		$comarray = array(
-			'com_area' => $area,
-			'com_code' => $item,
-			'com_author' => ($usr['id'] == 0) ? $rname : $usr['name'],
-			'com_authorid' => (int)$usr['id'],
-			'com_authorip' => $usr['ip'],
-			'com_text' => $rtext,
-			'com_date' => (int)$sys['now_offset']
-		);
+		$comarray['com_area'] = $area;
+		$comarray['com_code'] = $item;
+		$comarray['com_author'] = ($usr['id'] == 0) ? $rname : $usr['name'];
+		$comarray['com_authorid'] = (int) $usr['id'];
+		$comarray['com_authorip'] = $usr['ip'];
+		$comarray['com_text'] = $rtext;
+		$comarray['com_date'] = (int) $sys['now_offset'];
+
 		$sql = $db->insert($db_com, $comarray);
 		$id = $db->lastInsertId();
+
+		cot_extrafield_movefiles();
 		
 		$_SESSION['cot_comments_edit'][$id] = $sys['now_offset'];
-		
+
 		if ($cfg['plugin']['comments']['mail'])
 		{
 			$sql = $db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
 			$email_title = $L['plu_comlive'];
-			$email_body  = $L['User'] .' ' . preg_replace('#[^\w\p{L}]#u', '', ($usr['id'] == 0 ? $rname : $usr['name'])) . ', ' . $L['plu_comlive2'];
-			$email_body .= cot_url($url_area, $url_params, '#c'.$id, true) . "\n\n";
+			$email_body = $L['User'] . ' ' . preg_replace('#[^\w\p{L}]#u', '', ($usr['id'] == 0 ? $rname : $usr['name'])) . ', ' . $L['plu_comlive2'];
+			$email_body .= cot_url($url_area, $url_params, '#c' . $id, true) . "\n\n";
 			while ($adm = $sql->fetch())
 			{
 				cot_mail($adm['user_email'], $email_title, $email_body);
@@ -222,7 +249,7 @@ if ($a == 'send' && $usr['auth_write'])
 
 		cot_shield_update(20, 'New comment');
 	}
-	cot_redirect(cot_url($url_area, $url_params, '#c'.$id, true));
+	cot_redirect(cot_url($url_area, $url_params, '#c' . $id, true));
 }
 elseif ($a == 'delete' && $usr['isadmin'])
 {
@@ -233,7 +260,12 @@ elseif ($a == 'delete' && $usr['isadmin'])
 	{
 		$sql->closeCursor();
 		$sql = $db->delete($db_com, "com_id=$id");
-
+		
+		foreach ($cot_extrafields[$db_com] as $i => $row_extf)
+		{
+			cot_extrafield_unlinkfiles($row['com_' . $row_extf['field_name']], $row_extf);
+		}
+		
 		/* == Hook == */
 		foreach (cot_getextplugins('comments.delete') as $pl)
 		{
@@ -241,7 +273,7 @@ elseif ($a == 'delete' && $usr['isadmin'])
 		}
 		/* ===== */
 
-		cot_log('Deleted comment #'.$id.' in &quot;'.$item.'&quot;', 'adm');
+		cot_log('Deleted comment #' . $id . ' in &quot;' . $item . '&quot;', 'adm');
 	}
 	cot_redirect(cot_url($url_area, $url_params, '#comments', true));
 }
@@ -249,9 +281,7 @@ elseif ($a == 'enable' && $usr['isadmin'])
 {
 	$area = cot_import('area', 'P', 'ALP');
 	$state = cot_import('state', 'P', 'INT');
-
 }
 
 cot_display_messages($t);
-
 ?>

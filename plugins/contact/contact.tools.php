@@ -26,8 +26,18 @@ $rtext = cot_import('rtext', 'P', 'TXT');
 
 if ($a == 'del')
 {
-	$db->delete($db_contact, "contact_id = $id");
-	cot_message('Deleted');
+	$sql_contact_delete = $db->query("SELECT * FROM $db_contact WHERE contact_id=$id LIMIT 1");
+
+	if ($row_contact_delete = $sql_contact_delete->fetch())
+	{
+		$db->delete($db_contact, "contact_id = $id");
+
+		foreach ($cot_extrafields[$db_contact] as $i => $row_extf)
+		{
+			cot_extrafield_unlinkfiles($row_contact_delete['contact_' . $row_extf['field_name']], $row_extf);
+		}
+		cot_message('Deleted');
+	}
 }
 elseif ($a == 'val')
 {

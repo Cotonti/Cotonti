@@ -21,8 +21,12 @@ $extra_whitelist = array(
 	$db_structure => array(
 		'name' => $db_structure, 
 		'caption' => $L['Categories'], 
-		'help' => $L['adm_help_structure_extrafield'],
-		'tags' => array('page.list.tpl' => '{LIST_ROWCAT_XXXXX}, {LIST_CAT_XXXXX}')
+		'tags' => array(
+			'page.list.tpl' => '{LIST_ROWCAT_XXXXX}, {LIST_CAT_XXXXX}',
+			'page.list.group.tpl' => '{LIST_ROWCAT_XXXXX}, {LIST_CAT_XXXXX}',
+			'page.tpl' => '{PAGE_CAT_XXXXX}, {PAGE_CAT_XXXXX_TITLE}',
+			'admin.structure.inc.tpl' => '{ADMIN_STRUCTURE_XXXXX}, {ADMIN_STRUCTURE_XXXXX_TITLE},{ADMIN_STRUCTURE_FORMADD_XXXXX}, {ADMIN_STRUCTURE_FORMADD_XXXXX_TITLE}'
+			)
 	)
 );
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
@@ -242,11 +246,13 @@ else
 	}
 
 	$tags_list = '';
+	$tags_list_li = '';
 	if(is_array($extra_whitelist[$n]['tags']))
 	{
 		foreach($extra_whitelist[$n]['tags'] as $ktags => $vtags)
 		{
 			$tags_list .= cot_rc('admin_exflds_array', array('tplfile' => $ktags, 'tags' => $vtags));
+			$tags_list_li .= '<li>'.cot_rc('admin_exflds_array', array('tplfile' => $ktags, 'tags' => $vtags)).'</li>';
 		}
 	}
 	
@@ -275,6 +281,14 @@ else
 	{
 		$adminhelp = $extra_whitelist[$n]['help'];
 	}	
+	else
+	{
+		$adminhelp = $L['adm_help_info'];
+		if(!empty($tags_list))
+		{
+			$adminhelp .= $L['adm_help_newtags'].'<ul class="follow">'.$tags_list_li.'</ul>';
+		}
+	}
 	/* === Hook  === */
 	foreach (cot_getextplugins('admin.extrafields.tags') as $pl)
 	{

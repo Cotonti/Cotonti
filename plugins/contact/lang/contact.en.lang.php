@@ -53,15 +53,4 @@ $L['contact_noname'] = 'Name missing';
 $L['contact_emailnotvalid'] = 'Incorrect email address';
 $L['contact_message_sent'] = 'Message sent';
 
-/**
- * Extrafields Subsection
- */
-
-$L['adm_help_contact_extrafield'] = '<p><em>Base HTML</em> is set automatically if you leave it blank</p>
-<p class="margintop10"><b>New tags in tpl files:</b></p>
-<ul class="follow">
-<li>contact.tpl: {CONTACT_FORM_XXXXX}, {CONTACT_FORM_XXXXX_TITLE}</li>
-<li>contact.tools.tpl: {CONTACT_XXXXX}, {CONTACT_XXXXX_TITLE}</li>
-</ul>';
-
 ?>

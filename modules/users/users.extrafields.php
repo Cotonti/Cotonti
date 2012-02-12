@@ -20,7 +20,6 @@ defined('COT_CODE') or die('Wrong URL');
 $extra_whitelist[$db_users] = array(
 	'name' => $db_users,
 	'caption' => $L['Module'].' Users',
-	'help' => $L['adm_help_users_extrafield'],
 	'tags' => array(
 		'users.profile.tpl' => '{USERS_PROFILE_XXXXX}, {USERS_PROFILE_XXXXX_TITLE}',
 		'users.edit.tpl' => '{USERS_EDIT_XXXXX}, {USERS_EDIT_XXXXX_TITLE}',

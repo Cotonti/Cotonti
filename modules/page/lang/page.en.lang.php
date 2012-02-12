@@ -35,19 +35,6 @@ $L['cfg_order_params'] = array(); // Redefined in cot_page_config_order()
 $L['cfg_way_params'] = array($L['Ascending'], $L['Descending']);
 
 /**
- * Extrafields Subsection
- */
-
-$L['adm_help_pages_extrafield'] = '<p><em>Base HTML</em> is set automatically if you leave it blank</p>
-<p class="margintop10"><b>New tags in tpl files:</b></p>
-<ul class="follow">
-<li>page.tpl: {PAGE_XXXXX}, {PAGE_XXXXX_TITLE}</li>
-<li>page.add.tpl: {PAGEADD_FORM_XXXXX}, {PAGEADD_FORM_XXXXX_TITLE}</li>
-<li>page.edit.tpl: {PAGEEDIT_FORM_XXXXX}, {PAGEEDIT_FORM_XXXXX_TITLE}</li>
-<li>page.list.tpl: {LIST_ROW_XXXXX}, {LIST_TOP_XXXXX}</li>
-</ul>';
-
-/**
  * Admin Page Section
  */
 

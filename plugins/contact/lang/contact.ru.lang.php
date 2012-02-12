@@ -53,15 +53,4 @@ $L['contact_noname'] = 'Вы не указали имя';
 $L['contact_emailnotvalid'] = 'Некорректно указан E-mail';
 $L['contact_message_sent'] = 'Сообщение отправлено';
 
-/**
- * Extrafields Section
- */
-
-$L['adm_help_contact_extrafield'] = '<p><em>HTML-код</em> поля установится в значение по умолчанию автоматически, если его очистить и обновить</p>
-<p class="margintop10"><b>Новые тэги в tpl-файлах:</b></p>
-<ul class="follow">
-<li>contact.tpl: {CONTACT_FORM_XXXXX}, {CONTACT_FORM_XXXXX_TITLE}</li>
-<li>contact.tools.tpl: {CONTACT_XXXXX}, {CONTACT_XXXXX_TITLE}</li>
-</ul>';
-
 ?>
