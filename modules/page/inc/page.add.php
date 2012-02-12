@@ -238,6 +238,11 @@ foreach($cot_extrafields[$db_pages] as $i => $row)
 	$uname = strtoupper($row['field_name']);
 	$t->assign('PAGEADD_FORM_'.$uname, cot_build_extrafields('rpage'.$row['field_name'], $row, $rpage[$row['field_name']]));
 	$t->assign('PAGEADD_FORM_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
+	
+	// extra fields universal tags
+	$t->assign('PAGEADD_FORM_EXTRAFLD', cot_build_extrafields('rpage'.$row['field_name'], $row, $rpage[$row['field_name']]));
+	$t->assign('PAGEADD_FORM_EXTRAFLD_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
+	$t->parse('MAIN.EXTRAFLD');
 }
 
 // Error and message handling

@@ -4,7 +4,7 @@
 Code=contact
 Name=Contact
 Description=Contact form for user feedback delivered by e-mail and recorded in database
-Version=2.1.1
+Version=2.5.0
 Date=2011-05-24
 Author=Cotonti Team
 Copyright=&copy; 2008-2011 Cotonti Team

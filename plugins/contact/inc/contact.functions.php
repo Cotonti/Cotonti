@@ -12,8 +12,11 @@
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_langfile('contact', 'plug');
+require_once cot_incfile('extrafields');
+require_once cot_incfile('forms');
 
 global $db_contact, $db_x;
 $db_contact = (isset($db_contact)) ? $db_contact : $db_x . 'contact';
+$cot_extrafields[$db_contact] = (!empty($cot_extrafields[$db_contact]))	? $cot_extrafields[$db_contact] : array();
 
 ?>

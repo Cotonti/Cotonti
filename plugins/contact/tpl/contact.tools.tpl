@@ -50,6 +50,12 @@
 				<td>{PHP.L.Message}:</td>
 				<td>{CONTACT_TEXT}</td>
 			</tr>
+			<!-- BEGIN: EXTRAFLD -->
+			<tr>
+				<td>{CONTACT_EXTRAFLD_TITLE}</td>
+				<td>{CONTACT_EXTRAFLD}</td>
+			</tr>
+			<!-- END: EXTRAFLD -->
 <!-- IF {CONTACT_REPLY} --><tr style="color:#900;">
 				<td>{PHP.L.contact_sent}:</td>
 				<td>{CONTACT_REPLY}</td>

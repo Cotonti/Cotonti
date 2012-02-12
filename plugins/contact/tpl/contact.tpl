@@ -29,6 +29,12 @@
 							<td>{PHP.L.Message}:</td>
 							<td>{CONTACT_FORM_TEXT}</td>
 						</tr>
+<!-- BEGIN: EXTRAFLD -->
+						<tr>
+							<td>{CONTACT_FORM_EXTRAFLD_TITLE}</td>
+							<td>{CONTACT_FORM_EXTRAFLD}</td>
+						</tr>
+<!-- END: EXTRAFLD -->
 <!-- BEGIN: CAPTCHA -->
 						<tr>
 							<td>{CONTACT_FORM_VERIFY_IMG}</td>

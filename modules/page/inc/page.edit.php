@@ -310,6 +310,11 @@ foreach($cot_extrafields[$db_pages] as $i => $row_extf)
 	$uname = strtoupper($row_extf['field_name']);
 	$t->assign('PAGEEDIT_FORM_'.$uname, cot_build_extrafields('rpage'.$row_extf['field_name'], $row_extf, $pag['page_'.$row_extf['field_name']]));
 	$t->assign('PAGEEDIT_FORM_'.$uname.'_TITLE', isset($L['page_'.$row_extf['field_name'].'_title']) ?  $L['page_'.$row_extf['field_name'].'_title'] : $row_extf['field_description']);
+	
+	// extra fields universal tags
+	$t->assign('PAGEEDIT_FORM_EXTRAFLD', cot_build_extrafields('rpage'.$row_extf['field_name'], $row_extf, $pag['page_'.$row_extf['field_name']]));
+	$t->assign('PAGEEDIT_FORM_EXTRAFLD_TITLE', isset($L['page_'.$row_extf['field_name'].'_title']) ?  $L['page_'.$row_extf['field_name'].'_title'] : $row_extf['field_description']);
+	$t->parse('MAIN.EXTRAFLD');
 }
 
 // Error and message handling
