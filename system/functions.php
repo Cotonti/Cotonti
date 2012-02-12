@@ -1804,7 +1804,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 	}
 	/* ===== */
 	
-	$user_id = (int) (is_array($user_data) ? $user_data['user_id'] : $user_data);
+	$user_id = is_array($user_data) ? (int)$user_data['user_id'] : is_numeric($user_data) ? (int)$user_data : 0;
 
 	if (isset($user_cache[$user_id]))
 	{	
@@ -1812,9 +1812,9 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 	}
 	else
 	{
-		if (is_int($user_data) && $user_data > 0)
+		if (!is_array($user_data) && $user_id > 0)
 		{
-			$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $user_data");
+			$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $user_id LIMIT 1");
 			$user_data = $sql->fetch();
 		}
 
