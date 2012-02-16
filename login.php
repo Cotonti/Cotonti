@@ -166,6 +166,7 @@ if ($a == 'check')
 		if($rremember)
 		{
 			cot_setcookie($sys['site_id'], $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+			unset($_SESSION[$sys['site_id']]);
 		}
 		else
 		{
