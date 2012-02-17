@@ -190,7 +190,7 @@ $sys['parser'] = $cfg['parser'];
 
 if (!$cot_plugins && !defined('COT_INSTALL'))
 {
-	$sql = $db->query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
+	$sql = $db->query("SELECT pl_code, pl_file, pl_hook, pl_module, pl_title FROM $db_plugins
 		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
 	$cot_plugins_active = array();
 	if ($sql->rowCount() > 0)
