@@ -347,8 +347,8 @@ UPDATE `cot_extra_fields` SET field_html = '<label><input type="checkbox" class=
 UPDATE `cot_extra_fields` SET field_html = '<label><input type="radio" class="radio" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>' WHERE field_html LIKE '%type="radio"%';
 
 /* r1297 Index polls sql delete and extrafields upd */
-UPDATE `cot_extra_fields` SET field_location = 'users' WHERE field_location = 'cot_users';
-UPDATE `cot_extra_fields` SET field_location = 'pages' WHERE field_location = 'cot_pages';
+UPDATE `cot_extra_fields` SET field_location = 'sed_users' WHERE field_location = 'users';
+UPDATE `cot_extra_fields` SET field_location = 'sed_pages' WHERE field_location = 'pages';
 
 DELETE FROM `cot_auth` WHERE auth_option = 'indexpolls';
 DELETE FROM `cot_config` WHERE config_cat = 'indexpolls';
@@ -357,12 +357,12 @@ DELETE FROM `cot_plugins` WHERE pl_code = 'indexpolls';
 /* r1306 Move user_msn user_icq to extrafields */
 INSERT INTO `cot_extra_fields` (`field_location`, `field_name`, `field_type`, `field_html`, `field_variants`, `field_default`, `field_required`, `field_parse`, `field_description`)
  VALUES
-('cot_users', 'icq', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', ''),
-('cot_users', 'msn', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', ''),
-('cot_users', 'irc', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', ''),
-('cot_users', 'website', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', ''),
-('cot_users', 'location', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', ''),
-('cot_users', 'occupation', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', '');
+('sed_users', 'icq', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', ''),
+('sed_users', 'msn', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', ''),
+('sed_users', 'irc', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', ''),
+('sed_users', 'website', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', ''),
+('sed_users', 'location', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', ''),
+('sed_users', 'occupation', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', '');
 
 /* r1311 charset option is obsolete */
 DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'skin' AND `config_name` = 'charset';
