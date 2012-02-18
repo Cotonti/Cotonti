@@ -3012,7 +3012,11 @@ function cot_tplfile($base, $type = 'module', $admin = false)
  */
 function cot_date($format, $timestamp = null, $usertimezone = true)
 {
-	global $lang, $L, $Ldt, $usr;
+	global $lang, $L, $Ldt, $usr, $sys;
+	if (is_null($timestamp))
+	{
+		$timestamp = $sys['now'];
+	}
 	if ($usertimezone)
 	{
 		$timestamp += $usr['timezone'] * 3600;
