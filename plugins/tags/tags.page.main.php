@@ -32,7 +32,7 @@ if ($cfg['plugin']['tags']['pages'])
 	$item_id = $pag['page_id'];
 	$tags = cot_tag_list($item_id, 'pages', $tags_extra);
 	$tag_keywords = implode(', ', $tags);
-	if (!empty($tag_keywords))
+	if (!empty($tag_keywords) && empty($pag['page_keywords']))
 	{
 		$out['keywords'] = $tag_keywords;
 	}
