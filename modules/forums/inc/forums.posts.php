@@ -438,14 +438,15 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 {
 	if ($quote > 0)
 	{
-		$sql_forums_quote = $db->query("SELECT fp_id, fp_text, fp_postername, fp_posterid FROM $db_forum_posts
+		$sql_forums_quote = $db->query("SELECT fp_id, fp_text, fp_postername, fp_posterid, fp_creation FROM $db_forum_posts
 			WHERE fp_topicid = ? AND fp_cat = ? AND fp_id = ? LIMIT 1",
 			array($q, $s, $quote));
 		if ($row4 = $sql_forums_quote->fetch())
 		{
 			$newmsg = cot_rc('forums_code_quote', array(
-				'url' => cot_url('forums', 'm=posts&p=' . $row4['fp_id'] . '#' . $row4['fp_id']),
+				'url' => cot_url('forums', 'm=posts&p=' . $row4['fp_id'], '#' . $row4['fp_id'], $forums_quote_htmlspecialchars_bypass),
 				'id' => $row4['fp_id'],
+				'date' => cot_date('datetime_medium', $row4['fp_creation']),
 				'postername' => $row4['fp_postername'],
 				'text' => str_ireplace(array($R['forums_code_quote_begin'], $R['forums_code_quote_close']), '', $row4['fp_text'])
 				));
