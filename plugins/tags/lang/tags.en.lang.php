@@ -45,6 +45,7 @@ $L['cfg_lim_forums'] = array('Tag limit for forums tag cloud, 0 for unlimited');
 $L['cfg_lim_index'] = array('Tag limit for index (homepage) tag cloud, 0 for unlimited');
 $L['cfg_lim_pages'] = array('Tag limit for pages tag cloud, 0 for unlimited');
 $L['cfg_more'] = array('Show &quot;All tags&quot; link in tag clouds');
+$L['cfg_noindex'] = array('Exclude from search engine index');
 $L['cfg_order'] = array('Cloud output order &mdash; alphabetical, descending frequency or random');
 $L['cfg_pages'] = array('Enable tags in pages');
 $L['cfg_perpage'] = array('Tags displayed per page in standalone cloud, 0 is all at once');

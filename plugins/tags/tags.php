@@ -55,7 +55,10 @@ foreach (cot_getextplugins('tags.first') as $pl)
 }
 /* ===== */
 
-$out['head'] .= $R['code_noindex'];
+if ($cfg['plugin']['tags']['noindex'])
+{
+	$out['head'] .= $R['code_noindex'];
+}
 $out['subtitle'] = empty($qs) ? $L['Tags'] : htmlspecialchars(strip_tags($qs)) . ' - ' . $L['tags_Search_results'];
 
 $t->assign(array(
@@ -191,7 +194,7 @@ function cot_tag_search_pages($query)
 				$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 				if ($tag_i > 0) $tag_list .= ', ';
-				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl)), htmlspecialchars($tag_t), 'rel="nofollow"');
+				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl)), htmlspecialchars($tag_t));
 				$tag_i++;
 			}
 			
@@ -293,7 +296,7 @@ function cot_tag_search_forums($query)
 				$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 				if ($tag_i > 0) $tag_list .= ', ';
-				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $tag_u, 'tl' => $tl)), htmlspecialchars($tag_t), 'rel="nofollow"');
+				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $tag_u, 'tl' => $tl)), htmlspecialchars($tag_t));
 				$tag_i++;
 			}
 			$master = ($row['fs_masterid'] > 0) ? array($row['fs_masterid'], $row['fs_mastername']) : false;

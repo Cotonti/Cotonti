@@ -4,8 +4,8 @@
 Code=tags
 Name=Tags
 Description=Provides tags - site content keywords, tag clouds, tag search and API
-Version=0.7.6
-Date=2010-dec-16
+Version=0.7.7
+Date=2012-02-19
 Author=Trustmaster
 Copyright=All rights reserved (c) Vladimir Sibirov 2008-2011
 Notes=BSD License.
@@ -30,6 +30,7 @@ lim_index=19:string::0:Limit of tags in a cloud displayed on index, 0 is unlimit
 more=20:radio::1:Show 'All tags' link in tag clouds
 perpage=21:string::0:Tags displayed per page in standalone cloud, 0 is all at once
 index=22:select:pages,forums,all:pages:Index page tag cloud area
+noindex=23:radio::1:Exclude from search engine index
 css=99:radio:0,1:1:Enable plugin CSS
 [END_COT_EXT_CONFIG]
 ==================== */
