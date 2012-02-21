@@ -61,9 +61,9 @@ if($a == 'update')
 	}
 	$ruser['user_birthdate'] = (int) cot_import_date('ruserbirthdate', false);
 
-	$roldpass = cot_import('roldpass','P','PSW');
-	$rnewpass1 = cot_import('rnewpass1','P','PSW');
-	$rnewpass2 = cot_import('rnewpass2','P','PSW');
+	$roldpass = cot_import('roldpass','P','TXT');
+	$rnewpass1 = cot_import('rnewpass1','P','TXT');
+	$rnewpass2 = cot_import('rnewpass2','P','TXT');
 	$rmailpass = cot_import('rmailpass','P','TXT');
 	$ruseremail = cot_import('ruseremail','P','TXT');
 
