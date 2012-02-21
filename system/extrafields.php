@@ -283,8 +283,11 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 				
 				if(empty($extrafield['field_variants']) || in_array($ext, $ext_array))
 				{
-					$fname = ($lang != 'en' && is_array($cot_translit)) ? strtr($fname, $cot_translit) : '';
-					$fname = str_replace(' ', '_', $fname);
+					if ($lang != 'en')
+					{
+						require_once cot_langfile('translit', 'core');
+						$fname = (is_array($cot_translit)) ? strtr($fname, $cot_translit) : '';
+					}					$fname = str_replace(' ', '_', $fname);
 					$fname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
 					$fname = str_replace('..', '.', $fname);
 					$fname = (empty($fname)) ? cot_unique() : $fname;
