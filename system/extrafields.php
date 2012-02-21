@@ -117,6 +117,7 @@ function cot_build_extrafields($name, $extrafield, $data)
 			break;
 		
 		case 'file':
+			global $cfg;
 			$result = cot_filebox($name, htmlspecialchars($data), $cfg['extrafield_files_dir'].'/'.htmlspecialchars($data), 'rdel_' . $name, '', $extrafield['field_html']);
 			break;
 
