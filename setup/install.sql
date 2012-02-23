@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.6
+ * Version: 0.9.8
  */
 
 CREATE TABLE `cot_auth` (
@@ -266,7 +266,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.6-01'),
+('revision', '0.9.8-01'),
 ('branch', 'siena');
 
 CREATE TABLE `cot_users` (
@@ -277,7 +277,7 @@ CREATE TABLE `cot_users` (
   `user_maingrp` int NOT NULL default '4',
   `user_country` char(2) collate utf8_unicode_ci NOT NULL default '',
   `user_text` text collate utf8_unicode_ci,
-  `user_timezone` decimal(2,1) NOT NULL default '0',
+  `user_timezone` decimal(3,1) NOT NULL default '0',
   `user_birthdate` DATE NOT NULL DEFAULT '0000-00-00',
   `user_gender` char(1) collate utf8_unicode_ci NOT NULL default 'U',
   `user_email` varchar(64) collate utf8_unicode_ci NOT NULL default '',

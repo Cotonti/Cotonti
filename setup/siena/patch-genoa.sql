@@ -590,8 +590,11 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 /* 0.9.6-01 issue #426 rightless groups */
 ALTER TABLE `cot_groups` ADD COLUMN `grp_skiprights` tinyint NOT NULL default '0';
 
+/* 0.9.8-01 timezone bug fix */
+ALTER TABLE `cot_users` MODIFY `user_timezone` decimal(3,1) NOT NULL default '0';
+
 -------------------------------------------------------------------------------
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.6-01' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.8-01' WHERE `upd_param` = 'revision';
