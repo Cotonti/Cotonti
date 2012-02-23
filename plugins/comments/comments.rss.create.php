@@ -54,7 +54,7 @@ if ($c == 'comments')
 			$pag = $db->query("SELECT page_id, page_alias, page_cat FROM $db_pages WHERE page_id = ?", array(strtr($row['com_code'], 'p', '')))->fetch();
 			$items[$i]['link'] = COT_ABSOLUTE_URL . (empty($pag['page_alias']) ? cot_url('page', 'c='.$pag['page_cat'].'&id='.$pag['page_id']) : cot_url('page', 'c='.$pag['page_cat'].'&al='.$pag['page_alias']));
 			
-			$items[$i]['pubDate'] = date('r', $row['com_date']);
+			$items[$i]['pubDate'] = cot_date('r', $row['com_date']);
 			$i++;
 		}
 		$sql->closeCursor();
@@ -91,7 +91,7 @@ if ($c == 'comments')
 					}
 					$items[$i]['description'] = $text;
 					$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('page', $page_args, '#c'.$row['com_id'], true);
-					$items[$i]['pubDate'] = date('r', $row['com_date']);
+					$items[$i]['pubDate'] = cot_date('r', $row['com_date']);
 					$i++;
 				}
 				$sql->closeCursor();
@@ -100,7 +100,7 @@ if ($c == 'comments')
 				$items[$i]['title'] = $L['rss_original'];
 				$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_pageurl'], $row['page_parser']);
 				$items[$i]['link'] = COT_ABSOLUTE_URL . ((empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']));
-				$items[$i]['pubDate'] = date('r', $row['page_date']);
+				$items[$i]['pubDate'] = cot_date('r', $row['page_date']);
 			}
 		}
 	}

@@ -102,7 +102,7 @@ if ($c == "topics")
 			$items[$i]['title'] = $row['fp_postername'];
 			$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text']);
 			$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('forums', "m=posts&q=$topic_id&d=$curpage", "#post$post_id", true);
-			$items[$i]['pubDate'] = date('r', $row['fp_creation']);
+			$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
 			$i++;
 		}
 		$res->closeCursor();
@@ -149,7 +149,7 @@ elseif ($c == "section")
 				$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 				$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text']);
 				$items[$i]['link'] = COT_ABSOLUTE_URL.$post_url;
-				$items[$i]['pubDate'] = date('r', $row['fp_creation']);
+				$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
 			}
 
 			$i++;
@@ -188,7 +188,7 @@ elseif ($c == "forums")
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 			$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text']);
 			$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('forums', "m=posts&p=$post_id", "#$post_id", true);
-			$items[$i]['pubDate'] = date('r', $row['fp_creation']);
+			$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
 		}
 
 		$i++;
@@ -226,7 +226,7 @@ elseif ($defult_c)
 
 		$items[$i]['title'] = $row['page_title'];
 		$items[$i]['link'] = COT_ABSOLUTE_URL . $row['page_pageurl'];
-		$items[$i]['pubDate'] = date('r', $row['page_date']);
+		$items[$i]['pubDate'] = cot_date('r', $row['page_date']);
 		$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_pageurl'], $row['page_parser']);
 
 		$i++;
@@ -241,7 +241,7 @@ $t->assign(array(
 	'RSS_LINK' => $rss_link,
 	'RSS_LANG' => $cfg['defaultlang'],
 	'RSS_DESCRIPTION' => htmlspecialchars($rss_description),
-	'RSS_DATE' => date("r", time())
+	'RSS_DATE' => cot_fix_pubdate(cot_date("r"))
 ));
 
 if (count($items) > 0)
@@ -251,7 +251,7 @@ if (count($items) > 0)
 		$t->assign(array(
 			'RSS_ROW_TITLE' => htmlspecialchars($item['title']),
 			'RSS_ROW_DESCRIPTION' => cot_convert_relative_urls($item['description']),
-			'RSS_ROW_DATE' => $item['pubDate'],
+			'RSS_ROW_DATE' => cot_fix_pubdate($item['pubDate']),
 			'RSS_ROW_LINK' => $item['link']
 		));
 		$t->parse('MAIN.ITEM_ROW');
@@ -343,6 +343,22 @@ function cot_convert_relative_urls($text)
 {
 	$text = preg_replace_callback('#(\s)(href|src)=("|\')?([^"\'\s>]+)(["\'\s>])#', 'cot_relative2absolute', $text);
 	return $text;
+}
+
+/**
+ * Fixes timezone in RSS pubdate
+ * @global array $usr
+ * @param string $pubdate Pubdate generated with cot_date()
+ * @return string Corrected pubdate
+ */
+function cot_fix_pubdate($pubdate)
+{
+	global $usr;
+	$tz = floatval($usr['timezone']);
+	$sign = $tz > 0 ? '+' : '-';
+	$base = intval(abs($tz) * 100);
+	$tz_str = $sign . str_pad($base, 4, '0', STR_PAD_LEFT);
+	return str_replace('+0000', $tz_str, $pubdate);
 }
 
 ?>
