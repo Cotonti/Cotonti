@@ -29,6 +29,8 @@ foreach (cot_getextplugins('users.register.first') as $pl)
 }
 /* ===== */
 
+cot_block($usr['id'] == 0);
+
 if ($a=='add')
 {
 	cot_shield_protect();

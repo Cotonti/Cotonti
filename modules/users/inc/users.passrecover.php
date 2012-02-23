@@ -21,6 +21,8 @@ foreach (cot_getextplugins('users.passrecover.first') as $pl)
 }
 /* ===== */
 
+cot_block($usr['id'] == 0);
+
 $msg = '';
 
 if ($a == 'request' && $email != '')
