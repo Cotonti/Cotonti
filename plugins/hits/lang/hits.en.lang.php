@@ -15,6 +15,7 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
+$L['cfg_adminhits'] = array('Count administrator hits');
 $L['cfg_disableactivitystats'] = array('Do not display stats for the last 7 days', '(displayed on the administration panel home page)');
 $L['cfg_hit_precision'] = array('Optimized hit counter precision', '');
 

@@ -4,10 +4,10 @@
 Code=hits
 Name=Hits
 Description=Simple Stat for Cotonti
-Version=0.9.1
-Date=2010-oct-17
+Version=0.9.2
+Date=2012-02-24
 Author=Cotonti Team
-Copyright=Copyright (c) Cotonti Team 2008-2011
+Copyright=Copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 Auth_guests=R
 Lock_guests=12345A
@@ -18,6 +18,7 @@ Recommends_plugins=
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
+adminhits=01:radio::1:
 hit_precision=21:select:10,100,1000:100:
 disableactivitystats=12:radio::0:
 [END_COT_EXT_CONFIG]

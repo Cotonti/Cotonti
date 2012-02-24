@@ -15,6 +15,7 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
+$L['cfg_adminhits'] = array('Считать посещения администраторов');
 $L['cfg_disableactivitystats'] = array('Не показывать статистику активности за последние 7 дней', '(отображается на главной странице админ-панели)');
 $L['cfg_hit_precision'] = array('Точность оптимизированного счётчика просмотров', '');
 

@@ -17,7 +17,7 @@ Hooks=global
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (!defined('COT_ADMIN'))
+if (!defined('COT_ADMIN') && ($cfg['plugin']['hits']['adminhits'] || $usr['maingrp'] != COT_GROUP_SUPERADMINS))
 {
 	require_once cot_incfile('hits', 'plug');
 
