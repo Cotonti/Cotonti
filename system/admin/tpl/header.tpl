@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
-<meta http-equiv="content-type" content="{HEADER_META_CONTENTTYPE}; charset={HEADER_META_CHARSET}" />
+<meta http-equiv="content-type" content="{HEADER_META_CONTENTTYPE}; charset=UTF-8" />
 <meta name="description" content="{HEADER_META_DESCRIPTION}" />
 <meta name="keywords" content="{HEADER_META_KEYWORDS}" />
 <meta name="generator" content="Cotonti http://www.cotonti.com" />
@@ -20,7 +20,16 @@
 <body>
 
 	<ul id="user" class="body">
-		<li id="hi"><a href="{PHP|cot_url('users','m=profile')}">{PHP.usr.name}</a><span class="spaced">{PHP.cfg.separator}</span><a href="{PHP|cot_url('pm')}"><!-- IF {PHP.usr.messages} == 0 -->{PHP.L.Private_Messages}<!-- ELSE -->{PHP.L.home_newpms}: {PHP.usr.messages}<!-- ENDIF --></a><span class="spaced">{PHP.cfg.separator}</span>{PHP.out.loginout}</li>
+		<li id="hi">
+			<a href="{PHP|cot_url('users','m=profile')}">{PHP.usr.name}</a>
+			<!-- IF {PHP.cot_modules.pm} -->
+				<span class="spaced">{PHP.cfg.separator}</span>
+				<a href="{PHP|cot_url('pm')}">
+					<!-- IF {PHP.usr.messages} == 0 -->{PHP.L.Private_Messages}<!-- ELSE -->{PHP.L.home_newpms}: {PHP.usr.messages}<!-- ENDIF -->
+				</a>
+			<!-- ENDIF -->
+			<span class="spaced">{PHP.cfg.separator}</span>{PHP.out.loginout}
+		</li>
 		<li><a href="{PHP.cfg.mainurl}" title="{PHP.L.hea_viewsite}"><!-- IF {PHP.cfg.maintitle} && {PHP.cfg.maintitle|mb_strlen} < 50 -->{PHP.cfg.maintitle} <!-- ELSE -->{PHP.L.hea_viewsite} <!-- ENDIF --></a></li>
 	</ul>
 	

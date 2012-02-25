@@ -197,6 +197,7 @@ $t->assign(array(
 	'LIST_CAT_RSS' => cot_url('rss', "c=$c"),
 	'LIST_CATTITLE' => $cat['title'],
 	'LIST_CATPATH' => $catpath,
+	'LIST_CATURL' => cot_url('page', $list_url_path),
 	'LIST_CATDESC' => $cat['desc'],
 	'LIST_CATICON' => empty($cat['icon']) ? '' : cot_rc('img_structure_cat', array(
 			'icon' => $cat['icon'],
