@@ -1310,11 +1310,12 @@ function cot_blockguests()
  */
 function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false)
 {
-	global $cfg;
+	global $cfg, $L;
 	$tmp = array();
 	if ($home)
 	{
-		array_unshift($crumbs, array($cfg['mainurl'], $cfg['maintitle']));
+		$maintitle = (empty($L['breadcrumbmaintitle'])) ? $cfg['maintitle'] : $L['breadcrumbmaintitle'];
+		array_unshift($crumbs, array($cfg['mainurl'], $maintitle));
 	}
 	$cnt = count($crumbs);
 	for ($i = 0; $i < $cnt; $i++)
