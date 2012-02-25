@@ -64,7 +64,10 @@
 				</tr>
 				<tr>
 					<td>{PHP.L.adm_tpl_mode}:</td>
-					<td>{ADMIN_STRUCTURE_TPLMODE} {ADMIN_STRUCTURE_SELECT}</td>
+					<td>
+						{ADMIN_STRUCTURE_TPLMODE} {ADMIN_STRUCTURE_SELECT}<br />
+						{PHP.L.adm_tpl_quickcat}: {ADMIN_STRUCTURE_TPLQUICK}
+					</td>
 				</tr>
 				<!-- BEGIN: EXTRAFLD -->
 				<tr>

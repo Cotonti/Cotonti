@@ -92,6 +92,7 @@ else
 
 		$rtplmodearr = cot_import('rstructuretplmode', 'P', 'ARR');
 		$rtplforcedarr = cot_import('rstructuretplforced', 'P', 'ARR');
+		$rtplquickarr = cot_import('rstructuretplquick', 'P', 'ARR');
 		
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.structure.update.first') as $pl)
@@ -119,9 +120,14 @@ else
 			}
 
 			$rtplmode = cot_import($rtplmodearr[$i], 'D', 'INT');
-			if ($rtplmode == 3)
+			$rtplquick = cot_import($rtplquickarr[$i], 'D', 'TXT');
+			if (!empty($rtplquick))
 			{
-				$rstructure['structure_tpl'] = cot_import($rtplforcedarr[$i], 'D', 'ALP');
+				$rstructure['structure_tpl'] = $rtplquick;
+			}
+			elseif ($rtplmode == 3)
+			{
+				$rstructure['structure_tpl'] = cot_import($rtplforcedarr[$i], 'D', 'TXT');
 			}
 			elseif ($rtplmode == 2)
 			{
@@ -170,9 +176,14 @@ else
 		}
 
 		$rtplmode = cot_import('rtplmode', 'P', 'INT');
-		if ($rtplmode == 3)
+		$rtplquick = cot_import('rtplquick', 'P', 'TXT');
+		if (!empty($rtplquick))
 		{
-			$rstructure['structure_tpl'] = cot_import('rtplforced', 'P', 'ALP');
+			$rstructure['structure_tpl'] = $rtplquick;
+		}
+		elseif ($rtplmode == 3)
+		{
+			$rstructure['structure_tpl'] = cot_import('rtplforced', 'P', 'TXT');
 		}
 		elseif ($rtplmode == 2)
 		{
@@ -342,6 +353,7 @@ else
 			'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath['.$structure_id.']', $row['structure_path'], 'size="12" maxlength="255"'),
 			'ADMIN_STRUCTURE_TPL_SYM' => $structure_tpl_sym,
 			'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox($check_tpl, 'rstructuretplmode['.$structure_id.']', array('1', '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />'),
+			'ADMIN_STRUCTURE_TPLQUICK' => cot_inputbox('text', 'rstructuretplquick['.$structure_id.']'),
 			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'size="32" maxlength="255"'),
 			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$structure_id.']', $row['structure_desc'], 'size="64" maxlength="255"'),
 			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$structure_id.']', $row['structure_icon'], 'size="64" maxlength="128"'),
@@ -395,7 +407,8 @@ else
 			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc', '', 'size="64" maxlength="255"'),
 			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon', '', 'size="64" maxlength="128"'),
 			'ADMIN_STRUCTURE_LOCKED' => cot_checkbox(0, 'rstructurelocked'),
-			'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox(1, 'rtplmode', array('1', '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />')
+			'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox(1, 'rtplmode', array('1', '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />'),
+			'ADMIN_STRUCTURE_TPLQUICK' => cot_inputbox('text', 'rstructuretplquick['.$structure_id.']')
 		));
 
 		// Extra fields
