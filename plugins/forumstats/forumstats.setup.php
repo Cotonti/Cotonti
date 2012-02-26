@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=forumstats
 Name=Forum statistics
+Category=community-social
 Description=Statistics for the forums
 Version=0.7.0
 Date=2010-jan-03
 Author=Neocrome & Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2011
+Copyright=Partial copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 SQL=
 Auth_guests=R

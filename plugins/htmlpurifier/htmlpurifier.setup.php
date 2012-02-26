@@ -3,8 +3,9 @@
 [BEGIN_COT_EXT]
 Code=htmlpurifier
 Name=HTML Purifier
+Category=security-authentication
 Description=Makes sure submitted HTML is valid and secure
-Version=0.9.0-4.2.0
+Version=0.9.0-4.4.0
 Date=2010-oct-07
 Author=Edward Z. Yang, Cotonti plugin by Trustmaster
 Copyright=Copyright (c) Edward Z. Yang

@@ -3,6 +3,7 @@
 [BEGIN_COT_EXT]
 Code=hits
 Name=Hits
+Category=performance-seo
 Description=Simple Stat for Cotonti
 Version=0.9.2
 Date=2012-02-24

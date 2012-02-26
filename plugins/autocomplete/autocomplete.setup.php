@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=autocomplete
 Name=Autocomplete
+Category=ext-misc
 Description=autocomplete script
 Version=0.8.3
 Date=2011-jan-8
 Author=esclkm
-Copyright=Copyright (c) Cotonti Team 2008-2011
+Copyright=Copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 SQL=
 Auth_guests=R

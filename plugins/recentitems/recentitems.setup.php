@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=recentitems
 Name=Recent items
+Category=publications-events
 Description=Recent pages, topics in forums, users, comments
 Version=0.9.0.1
 Date=2010-02-08
 Author=esclkm & Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2011
+Copyright=Partial copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 SQL=
 Auth_guests=R

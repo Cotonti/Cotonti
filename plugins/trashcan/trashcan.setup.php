@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=trashcan
 Name=Trashcan
+Category=administration-management
 Description=Trashcan
 Version=0.7.1
 Date=2010-sep-24
 Author=Cotonti Team
-Copyright=Copyright (c) Cotonti Team 2008-2011
+Copyright=Copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 Auth_guests=R
 Lock_guests=12345A

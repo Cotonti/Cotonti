@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=news
 Name=News
+Category=publications-events
 Description=Pick up pages from a category and display the newest in the home page
 Version=0.7.2
 Date=2010-jan-03
 Author=Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2011
+Copyright=Partial copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 SQL=
 Auth_guests=R
