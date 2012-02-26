@@ -1036,7 +1036,7 @@ function cot_load_structure()
 			'desc' => $row['structure_desc'],
 			'icon' => $row['structure_icon'],
 			'locked' => $row['structure_locked'],
-			'icon' => $row['structure_icon']
+			'count' => $row['structure_count']
 		);
 
 		if (is_array($cot_extrafields[$db_structure]))
