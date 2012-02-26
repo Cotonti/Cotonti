@@ -93,7 +93,7 @@ else
 		$rtplmodearr = cot_import('rstructuretplmode', 'P', 'ARR');
 		$rtplforcedarr = cot_import('rstructuretplforced', 'P', 'ARR');
 		$rtplquickarr = cot_import('rstructuretplquick', 'P', 'ARR');
-		
+
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.structure.update.first') as $pl)
 		{
@@ -120,9 +120,10 @@ else
 			}
 
 			$rtplmode = cot_import($rtplmodearr[$i], 'D', 'INT');
-			$rtplquick = '';
 			$rtplquick = cot_import($rtplquickarr[$i], 'D', 'TXT');
-			if (!empty($rtplquick))
+			
+			$rstructure['structure_tpl'] = null;
+			if (!empty($rtplquick) || empty($rtplmode))
 			{
 				$rstructure['structure_tpl'] = $rtplquick;
 			}
@@ -138,6 +139,7 @@ else
 			{
 				$rstructure['structure_tpl'] = '';
 			}
+			
 			$res = cot_structure_update($n, $i, $oldrow, $rstructure);
 			if (is_array($res))
 			{
