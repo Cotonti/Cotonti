@@ -134,6 +134,10 @@ $list_url = cot_url('page', $list_url_path);
 
 $catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cat['title'] : cot_breadcrumbs(cot_structure_buildpath('page', $c), $cfg['homebreadcrumb'], true);
 
+$shortpath = cot_structure_buildpath('page', $c);
+array_pop($shortpath);
+$catpath_short = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? '' : cot_breadcrumbs($shortpath, $cfg['homebreadcrumb']);
+
 /* === Hook === */
 foreach (cot_getextplugins('page.list.query') as $pl)
 {
@@ -197,6 +201,7 @@ $t->assign(array(
 	'LIST_CAT_RSS' => cot_url('rss', "c=$c"),
 	'LIST_CATTITLE' => $cat['title'],
 	'LIST_CATPATH' => $catpath,
+	'LIST_CATSHORTPATH' => $catpath_short,
 	'LIST_CATURL' => cot_url('page', $list_url_path),
 	'LIST_CATDESC' => $cat['desc'],
 	'LIST_CATICON' => empty($cat['icon']) ? '' : cot_rc('img_structure_cat', array(
