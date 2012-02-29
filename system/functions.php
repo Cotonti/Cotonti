@@ -18,12 +18,6 @@ if (!defined('COT_INSTALL'))
 	extension_loaded('mbstring') or die('Cotonti system requirements: mbstring PHP extension must be loaded.'); // TODO: Need translate
 }
 
-
-if (isset($cfg['check_globals']) && $cfg['check_globals'] && ini_get('register_globals'))
-{
-	die('Please set the PHP setting register_globals = Off, otherwise your site is in high security risk! Contact your hosting support for more information.');
-}
-
 // Group constants
 define('COT_GROUP_DEFAULT', 0);
 define('COT_GROUP_GUESTS', 1);
@@ -4436,6 +4430,41 @@ function cot_shield_update($shield_add, $shield_newaction)
 	{
 		$shield_newlimit = $sys['now'] + floor($shield_add * $cfg['shieldtadjust'] /100);
 		$db->update($db_online, array('online_shield' => $shield_newlimit, 'online_action' => $shield_newaction), 'online_ip="'.$usr['ip'].'"');
+	}
+}
+
+/**
+ * Unregisters globals if globals are On
+ * @see http://www.php.net/manual/en/faq.misc.php#faq.misc.registerglobals
+ */
+function cot_unregister_globals()
+{
+	if (!ini_get('register_globals'))
+	{
+		return;
+	}
+
+	// Might want to change this perhaps to a nicer error
+	if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS']))
+	{
+		die('GLOBALS overwrite attempt detected');
+	}
+
+	// Variables that shouldn't be unset
+	$noUnset = array('GLOBALS', '_GET',
+		'_POST', '_COOKIE',
+		'_REQUEST', '_SERVER',
+		'_ENV', '_FILES');
+
+	$input = array_merge($_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES,
+		isset($_SESSION) && is_array($_SESSION) ? $_SESSION : array());
+
+	foreach ($input as $k => $v)
+	{
+		if (!in_array($k, $noUnset) && isset($GLOBALS[$k]))
+		{
+			unset($GLOBALS[$k]);
+		}
 	}
 }
 
