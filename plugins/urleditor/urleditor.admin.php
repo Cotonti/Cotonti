@@ -362,7 +362,7 @@ if (is_readable('./datas/urltrans.dat'))
 	/* ===== */
 	while($line = trim(fgets($fp), " \t\r\n"))
 	{
-		$parts = explode("\t", $line);
+		$parts = preg_split('#\s+#', $line);
 
 		$t->assign(array(
 			'ADMIN_URLS_ROW_I' => $ii,
