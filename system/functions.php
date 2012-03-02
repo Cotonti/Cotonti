@@ -2427,7 +2427,9 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 {
 	// Globals and requirements
 	global $cfg, $env, $error_string, $out, $L, $R;
-	require_once cot_langfile('message', 'core');
+    $LL = $L;
+    require_once cot_langfile('message', 'core');
+    $L = array_merge($L, $LL);
 	
 	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST')
 	{
