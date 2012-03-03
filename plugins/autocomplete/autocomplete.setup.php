@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=autocomplete
 Name=Autocomplete
-Category=ext-misc
+Category=misc-ext
 Description=autocomplete script
 Version=0.8.3
 Date=2011-jan-8

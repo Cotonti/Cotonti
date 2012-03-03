@@ -263,6 +263,7 @@ $L['ext_cat']['editor'] = 'Editors';
 $L['ext_cat']['files-media'] = 'Files &amp; Media';
 $L['ext_cat']['forms-feedback'] = 'Forms &amp; Feedback';
 $L['ext_cat']['intranet-groupware'] = 'Intranet &amp; Groupware';
+$L['ext_cat']['misc-ext'] = 'Miscellaneous';
 $L['ext_cat']['mobile-geolocation'] = 'Mobile &amp; Geolocation';
 $L['ext_cat']['navigation-structure'] = 'Navigation &amp; Structure';
 $L['ext_cat']['parser'] = 'Parsers &amp; Markup';
@@ -270,7 +271,6 @@ $L['ext_cat']['performance-seo'] = 'Performance &amp; SEO';
 $L['ext_cat']['publications-events'] = 'Publications &amp; Events';
 $L['ext_cat']['security-authentication'] = 'Security &amp; Authentication';
 $L['ext_cat']['utilities-tools'] = 'Utilities &amp; Tools';
-$L['ext_cat']['ext-misc'] = 'Miscellaneous';
 $L['ext_cat']['post-install'] = 'Post-install Scripts';
 
 /**

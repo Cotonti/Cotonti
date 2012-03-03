@@ -119,15 +119,18 @@
 					</ul>
 					<ul class="step_4">
 						<li class="title"><span class="plugins">{PHP.L.Plugins}</span></li>
-						<!-- BEGIN: PLUGIN_ROW -->
-						<li>
-							{PLUGIN_ROW_CHECKBOX}
-							<strong>{PLUGIN_ROW_TITLE}</strong>
-							<p>{PLUGIN_ROW_DESCRIPTION}</p>
-							{PLUGIN_ROW_REQUIRES}
-							{PLUGIN_ROW_RECOMMENDS}
-						</li>
-						<!-- END: PLUGIN_ROW -->
+						<!-- BEGIN: PLUGIN_CAT -->
+							<li class="extcat">{PLUGIN_CAT_TITLE}</li>
+							<!-- BEGIN: PLUGIN_ROW -->
+							<li>
+								{PLUGIN_ROW_CHECKBOX}
+								<strong>{PLUGIN_ROW_TITLE}</strong>
+								<p>{PLUGIN_ROW_DESCRIPTION}</p>
+								{PLUGIN_ROW_REQUIRES}
+								{PLUGIN_ROW_RECOMMENDS}
+							</li>
+							<!-- END: PLUGIN_ROW -->
+						<!-- END: PLUGIN_CAT -->
 					</ul>
 
 					<div style="text-align: center;"><input type="submit" name="submit" value="{PHP.L.Finish}" /></div>
