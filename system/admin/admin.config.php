@@ -76,7 +76,7 @@ switch($n)
 			}
 		}
 
-		if ($a == 'update')
+		if ($a == 'update' && !empty($_POST))
 		{
 			// Update only those options which have been changed
 			$overriden = array();

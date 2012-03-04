@@ -1799,8 +1799,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 	}
 	/* ===== */
 	
-	$user_id = is_array($user_data) ? (int)$user_data['user_id'] : is_numeric($user_data) ? (int)$user_data : 0;
-
+	$user_id = is_array($user_data) ? (int)$user_data['user_id'] : (is_numeric($user_data) ? (int)$user_data : 0);
 	if (isset($user_cache[$user_id]))
 	{	
 		$temp_array = $user_cache[$user_id];
