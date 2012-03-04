@@ -3,6 +3,7 @@
 [BEGIN_COT_EXT]
 Code=userimages
 Name=User Images
+Category=files-media
 Description=Avatar and photo for users
 Version=1.21
 Date=2010-nov-08

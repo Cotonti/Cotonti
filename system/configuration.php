@@ -97,15 +97,15 @@ define('COT_CONFIG_TYPE_RANGE', 7);
  */
 function cot_config_add($name, $options, $is_module = false, $category = '', $donor = '')
 {
-    global $db, $cfg, $db_config;
-    $cnt = count($options);
-    $type = $is_module ? 'module' : 'plug';
-    // Check the arguments
-    if (!$cnt)
-    {
-        return false;
-    }
-    // Build the SQL query
+	global $db, $cfg, $db_config;
+	$cnt = count($options);
+	$type = $is_module ? 'module' : 'plug';
+	// Check the arguments
+	if (!$cnt)
+	{
+		return false;
+	}
+	// Build the SQL query
 	$option_set = array();
 	for ($i = 0; $i < $cnt; $i++)
 	{
@@ -125,8 +125,8 @@ function cot_config_add($name, $options, $is_module = false, $category = '', $do
 		);
 	}
 
-    $ins_cnt = $db->insert($db_config, $option_set);
-    return $ins_cnt == $cnt;
+	$ins_cnt = $db->insert($db_config, $option_set);
+	return $ins_cnt == $cnt;
 }
 
 /**
@@ -152,7 +152,7 @@ function cot_config_implant($module_name, $options, $into_struct, $donor)
 	foreach ($options as $opt)
 	{
 		if (!$into_struct && !isset($cfg[$module_name][$opt['name']])
-			|| $into_struct && !isset($cfg[$module_name]['__default'][$opt['name']]))
+				|| $into_struct && !isset($cfg[$module_name]['__default'][$opt['name']]))
 		{
 			$add_options[] = $opt;
 		}
@@ -259,7 +259,7 @@ function cot_config_modify($name, $options, $is_module = false, $category = '', 
  */
 function cot_config_parse($info_cfg)
 {
-    $options = array();
+	$options = array();
 	if (is_array($info_cfg))
 	{
 		foreach ($info_cfg as $i => $x)
@@ -305,7 +305,7 @@ function cot_config_parse($info_cfg)
 			}
 		}
 	}
-    return $options;
+	return $options;
 }
 
 /**
@@ -322,10 +322,10 @@ function cot_config_parse($info_cfg)
  */
 function cot_config_remove($name, $is_module = false, $option = '', $category = '', $donor = null)
 {
-    global $db, $db_config;
+	global $db, $db_config;
 
-    $type = $is_module ? 'module' : 'plug';
-    $where = "config_owner = '$type' AND config_cat = " . $db->quote($name);
+	$type = $is_module ? 'module' : 'plug';
+	$where = "config_owner = '$type' AND config_cat = " . $db->quote($name);
 	if (!empty($category))
 	{
 		$where .= " AND config_subcat = " . $db->quote($category);
@@ -335,31 +335,31 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
 		$where .= " AND config_donor = " . $db->quote($donor);
 	}
 
-    if (is_array($option))
-    {
-        $cnt = count($option);
-        if ($cnt == 1)
-        {
-            $option = $option[0];
-        }
-        else
-        {
-            $where .= " AND config_name IN (";
-            for ($i = 0; $i < $cnt; $i++)
-            {
-                if ($i > 0)
-                    $where .= ',';
-                $where .= $db->quote($option[$i]);
-            }
+	if (is_array($option))
+	{
+		$cnt = count($option);
+		if ($cnt == 1)
+		{
+			$option = $option[0];
+		}
+		else
+		{
+			$where .= " AND config_name IN (";
+			for ($i = 0; $i < $cnt; $i++)
+			{
+				if ($i > 0)
+					$where .= ',';
+				$where .= $db->quote($option[$i]);
+			}
 			$where .= ')';
-            unset($option);
-        }
-    }
-    if (!empty($option))
-    {
-        $where .= " AND config_name = " . $db->quote($option);
-    }
-    return $db->delete($db_config, $where);
+			unset($option);
+		}
+	}
+	if (!empty($option))
+	{
+		$where .= " AND config_name = " . $db->quote($option);
+	}
+	return $db->delete($db_config, $where);
 }
 
 /**
@@ -383,9 +383,9 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
  */
 function cot_config_set($name, $options, $is_module = false, $category = '')
 {
-    global $db, $db_config;
-    $type = $is_module ? 'module' : 'plug';
-    $upd_cnt = 0;
+	global $db, $db_config;
+	$type = $is_module ? 'module' : 'plug';
+	$upd_cnt = 0;
 
 	$where = 'config_owner = ? AND config_cat = ? AND config_name = ?';
 	if (!empty($category))
@@ -406,7 +406,7 @@ function cot_config_set($name, $options, $is_module = false, $category = '')
 		}
 	}
 
-    return $upd_cnt;
+	return $upd_cnt;
 }
 
 /**
@@ -489,4 +489,5 @@ function cot_config_update($name, $options, $is_module = false, $category = '', 
 
 	return $affected;
 }
+
 ?>

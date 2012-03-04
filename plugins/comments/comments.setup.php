@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=comments
 Name=Comments system
+Category=community-social
 Description=Comments system for Cotonti
 Version=0.9.7
 Date=2011-09-23
 Author=Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2011
+Copyright=Partial copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 Auth_guests=R
 Lock_guests=12345A

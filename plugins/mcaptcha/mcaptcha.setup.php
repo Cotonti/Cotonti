@@ -3,6 +3,7 @@
 [BEGIN_COT_EXT]
 Code=mcaptcha
 Name=MathCaptcha
+Category=security-authentication
 Description=Mathematical CAPTCHA. Protects your site from spam bots with simple arithmetic tasks. Requires JavaScript.
 Version=1.1.1
 Date=2010-12-22

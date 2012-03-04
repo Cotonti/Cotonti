@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=ratings
 Name=Star Ratings
+Category=community-social
 Description=Ratings plugin with jQuery stars
 Version=0.9.0
 Date=2010-dec-16
 Author=Cotonti Team
-Copyright=Copyright (c) Cotonti Team 2008-2011
+Copyright=Copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 Auth_guests=R
 Lock_guests=12345A

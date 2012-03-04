@@ -251,6 +251,29 @@ $L['ext_updated'] = '{$type} &quot;{$name}&quot; обновлен до верс�
 $L['ext_updating'] = 'Обновление {$type} &quot;{$name}&quot;';
 
 /**
+ * Extension categories 
+ */
+$L['ext_cat']['administration-management'] = 'Администрирование и управление';
+$L['ext_cat']['commerce'] = 'Электронная коммерция';
+$L['ext_cat']['community-social'] = 'Сообщества и социальное';
+$L['ext_cat']['customization-i18n'] = 'Тонкая настройка и I18n';
+$L['ext_cat']['data-apis'] = 'Потоки данных и API';
+$L['ext_cat']['development-maintenance'] = 'Разработка и поддержка';
+$L['ext_cat']['editor'] = 'Редакторы';
+$L['ext_cat']['files-media'] = 'Файлы и медиа';
+$L['ext_cat']['forms-feedback'] = 'Формы и обратная связь';
+$L['ext_cat']['intranet-groupware'] = 'Корпоративный сектор';
+$L['ext_cat']['misc-ext'] = 'Прочее';
+$L['ext_cat']['mobile-geolocation'] = 'Мобильность и геолокация';
+$L['ext_cat']['navigation-structure'] = 'Навигация и структура';
+$L['ext_cat']['parser'] = 'Парсеры и разметка';
+$L['ext_cat']['performance-seo'] = 'Производительность и SEO';
+$L['ext_cat']['publications-events'] = 'Публикации и события';
+$L['ext_cat']['security-authentication'] = 'Безопасность и аутентификация';
+$L['ext_cat']['utilities-tools'] = 'Инструменты';
+$L['ext_cat']['post-install'] = 'Пост-установочные скрипты';
+
+/**
  * Structure Section
  */
 

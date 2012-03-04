@@ -580,24 +580,43 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 	$ext_type_uc = strtoupper($ext_type);
 
 	$ext_list = array();
+	clearstatcache();
 	$dp = opendir($cfg["{$ext_type_lc}s_dir"]);
 	while ($f = readdir($dp))
 	{
 		$path = $cfg["{$ext_type_lc}s_dir"] . '/' . $f;
 		if ($f[0] != '.' && is_dir($path) && file_exists("$path/$f.setup.php"))
 		{
-			$ext_list[$f] = "$path/$f.setup.php";
+			$info = cot_infoget("$path/$f.setup.php", 'COT_EXT');
+			if ($ext_type_lc == 'plugin' && empty($info['Category']))
+			{
+				$info['Category'] = 'ext-misc';
+			}
+			$ext_list[$f] = $info;
 		}
 	}
 	closedir($dp);
 
-	ksort($ext_list);
+	$ext_type_lc == 'plugin' ? usort($ext_list, 'cot_install_ext_catcmp') : ksort($ext_list);
 
-	foreach ($ext_list as $f => $ext_setup)
+	$prev_cat = '';
+	$block_name = $ext_type_lc == 'plugin' ? "{$ext_type_uc}_CAT.{$ext_type_uc}_ROW" : "{$ext_type_uc}_ROW";
+	foreach ($ext_list as $f => $info)
 	{
-		$info = cot_infoget($ext_setup, 'COT_EXT');
 		if (is_array($info))
 		{
+			$code = $ext_type_lc == 'plugin' ? $info['Code'] : $f;
+			if ($ext_type_lc == 'plugin' && $prev_cat != $info['Category'])
+			{
+				if ($prev_cat != '')
+				{
+					// Render previous category
+					$t->parse("MAIN.STEP_4.{$ext_type_uc}_CAT");
+				}
+				// Assign a new one
+				$prev_cat = $info['Category'];
+				$t->assign('PLUGIN_CAT_TITLE', $L['ext_cat'][$info['Category']]);
+			}
 			if (!empty($info['Requires_modules']) || !empty($info['Requires_plugins']))
 			{
 				$modules_list = empty($info['Requires_modules']) ? $L['None']
@@ -626,27 +645,52 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 			}
 			if (count($selected_list) > 0)
 			{
-				$checked = in_array($f, $selected_list);
+				$checked = in_array($code, $selected_list);
 			}
 			else
 			{
-				$checked = in_array($f, $default_list);
+				$checked = in_array($code, $default_list);
 			}
 			$type = $ext_type == 'Module' ? 'module' : 'plug';
 			$L['info_desc'] = '';
-			if (file_exists(cot_langfile($f, $type)))
+			if (file_exists(cot_langfile($code, $type)))
 			{
-				include cot_langfile($f, $type);
+				include cot_langfile($code, $type);
 			}
 			$t->assign(array(
-				"{$ext_type_uc}_ROW_CHECKBOX" => cot_checkbox($checked, "install_{$ext_type_lc}s[$f]"),
+				"{$ext_type_uc}_ROW_CHECKBOX" => cot_checkbox($checked, "install_{$ext_type_lc}s[$code]"),
 				"{$ext_type_uc}_ROW_TITLE" => $info['Name'],
 				"{$ext_type_uc}_ROW_DESCRIPTION" => empty($L['info_desc']) ? $info['Description'] : $L['info_desc'],
 				"{$ext_type_uc}_ROW_REQUIRES" => $requires,
 				"{$ext_type_uc}_ROW_RECOMMENDS" => $recommends
 			));
-			$t->parse("MAIN.STEP_4.{$ext_type_uc}_ROW");
+			$t->parse("MAIN.STEP_4.$block_name");
 		}
+	}
+	if ($ext_type_lc == 'plugin' && $prev_cat != '')
+	{
+		// Render last category
+		$t->parse("MAIN.STEP_4.{$ext_type_uc}_CAT");
+	}
+}
+
+/**
+ * Compares 2 extension info entries by category code.
+ * post-install extensions are always last.
+ * 
+ * @param array $ext1 Ext info 1
+ * @param array $ext2 Ext info 2
+ * @return int 
+ */
+function cot_install_ext_catcmp($ext1, $ext2)
+{
+	if ($ext1['Category'] == $ext2['Category'])
+	{
+		return 0;
+	}
+	else
+	{
+		return ($ext1['Category'] > $ext2['Category'] || $ext1['Category'] == 'post-install') ? 1 : -1;
 	}
 }
 
@@ -670,6 +714,10 @@ function cot_install_sort_extensions($selected_extensions, $is_module = FALSE)
 	{
 		$info = cot_infoget("$path/$name/$name.setup.php", 'COT_EXT');
 		$order = isset($info['Order']) ? (int) $info['Order'] : COT_PLUGIN_DEFAULT_ORDER;
+		if ($info['Category'] == 'post-install' && $order < 999)
+		{
+			$order = 999;
+		}
 		$extensions[$order][] = $name;
 	}
 	

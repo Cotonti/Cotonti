@@ -95,6 +95,14 @@ body {
 	text-transform: uppercase;
 }
 
+#content ul li.extcat {
+	margin-top: 5px;
+	padding: 5px 0 0 0;
+	font-size: 14px;
+	font-weight: normal;
+	color: #808080;
+}
+
 #content ul li span.administrator {
 	background: url(../img/icons.png) no-repeat 0 -80px;
 	margin-left: 15px;

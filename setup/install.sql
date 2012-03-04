@@ -2,6 +2,7 @@
  * Version: 0.9.8
  */
 
+DROP TABLE IF EXISTS `cot_auth`;
 CREATE TABLE `cot_auth` (
   `auth_id` int NOT NULL auto_increment,
   `auth_groupid` int NOT NULL default '0',
@@ -35,6 +36,7 @@ INSERT INTO `cot_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights
 (5, 'structure', 'a', 255, 255, 1),
 (6, 'structure', 'a', 1, 0, 1);
 
+DROP TABLE IF EXISTS `cot_cache`;
 CREATE TABLE `cot_cache` (
   `c_name` varchar(120) collate utf8_unicode_ci NOT NULL,
   `c_realm` varchar(64) collate utf8_unicode_ci NOT NULL default 'cot',
@@ -47,6 +49,7 @@ CREATE TABLE `cot_cache` (
   KEY (`c_expire`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP TABLE IF EXISTS `cot_cache_bindings`;
 CREATE TABLE `cot_cache_bindings` (
   `c_event` VARCHAR(64) collate utf8_unicode_ci NOT NULL,
   `c_id` VARCHAR(120) collate utf8_unicode_ci NOT NULL,
@@ -55,6 +58,7 @@ CREATE TABLE `cot_cache_bindings` (
   PRIMARY KEY (`c_event`, `c_id`, `c_realm`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP TABLE IF EXISTS `cot_config`;
 CREATE TABLE `cot_config` (
   `config_owner` varchar(24) collate utf8_unicode_ci NOT NULL default 'core',
   `config_cat` varchar(64) collate utf8_unicode_ci NOT NULL default '',
@@ -140,6 +144,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','users','11','timedout',2,'1200','1200','30,60,120,300,600,900,1200,1800,2400,3600',''),
 ('core','version','01','revision',0,'','','','');
 
+DROP TABLE IF EXISTS `cot_core`;
 CREATE TABLE `cot_core` (
   `ct_id` mediumint NOT NULL auto_increment,
   `ct_code` varchar(64) collate utf8_unicode_ci NOT NULL default '',
@@ -156,6 +161,7 @@ INSERT INTO `cot_core` (`ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_loc
 ('admin', 'Administration panel', '0.7.0', 1, 1),
 ('message', 'Messages', '0.7.0', 1, 1);
 
+DROP TABLE IF EXISTS `cot_extra_fields`;
 CREATE TABLE `cot_extra_fields` (
   `field_location` varchar(255) collate utf8_unicode_ci NOT NULL,
   `field_name` varchar(255) collate utf8_unicode_ci NOT NULL,
@@ -172,6 +178,7 @@ CREATE TABLE `cot_extra_fields` (
   KEY `field_name` (`field_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP TABLE IF EXISTS `cot_groups`;
 CREATE TABLE `cot_groups` (
   `grp_id` int NOT NULL auto_increment,
   `grp_alias` varchar(32) collate utf8_unicode_ci NOT NULL default '',
@@ -195,6 +202,7 @@ INSERT INTO `cot_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `g
 (5, 'administrators', 99, 0, 'Administrators', '', '', 1, 1),
 (6, 'moderators', 50, 0, 'Moderators', '', '', 1, 1);
 
+DROP TABLE IF EXISTS `cot_groups_users`;
 CREATE TABLE `cot_groups_users` (
   `gru_userid` int NOT NULL default '0',
   `gru_groupid` int NOT NULL default '0',
@@ -203,7 +211,7 @@ CREATE TABLE `cot_groups_users` (
   KEY `gru_userid` (`gru_userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
+DROP TABLE IF EXISTS `cot_logger`;
 CREATE TABLE `cot_logger` (
   `log_id` mediumint NOT NULL auto_increment,
   `log_date` int NOT NULL default '0',
@@ -214,6 +222,7 @@ CREATE TABLE `cot_logger` (
   PRIMARY KEY  (`log_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP TABLE IF EXISTS `cot_online`;
 CREATE TABLE `cot_online` (
   `online_id` int NOT NULL auto_increment,
   `online_ip` varchar(15) collate utf8_unicode_ci NOT NULL default '',
@@ -231,6 +240,7 @@ CREATE TABLE `cot_online` (
   KEY `online_name` (`online_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP TABLE IF EXISTS `cot_plugins`;
 CREATE TABLE `cot_plugins` (
   `pl_id` mediumint NOT NULL auto_increment,
   `pl_hook` varchar(64) collate utf8_unicode_ci NOT NULL default '',
@@ -244,6 +254,7 @@ CREATE TABLE `cot_plugins` (
   PRIMARY KEY  (`pl_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP TABLE IF EXISTS `cot_structure`;
 CREATE TABLE `cot_structure` (
   `structure_id` mediumint NOT NULL auto_increment,
   `structure_area` varchar(64) collate utf8_unicode_ci NOT NULL default '',
@@ -260,6 +271,7 @@ CREATE TABLE `cot_structure` (
   KEY `structure_path` (`structure_path`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP TABLE IF EXISTS `cot_updates`;
 CREATE TABLE `cot_updates` (
   `upd_param` VARCHAR(255) NOT NULL,
   `upd_value` VARCHAR(255) NOT NULL,
@@ -269,6 +281,7 @@ INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
 ('revision', '0.9.8-01'),
 ('branch', 'siena');
 
+DROP TABLE IF EXISTS `cot_users`;
 CREATE TABLE `cot_users` (
   `user_id` int unsigned NOT NULL auto_increment,
   `user_banexpire` int default '0',

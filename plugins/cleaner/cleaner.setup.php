@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=cleaner
 Name=Cleaner
+Category=administration-management
 Description=Will clean various things...
 Version=0.7.0
 Date=2010-jan-03
 Author=Neocrome & Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2011
+Copyright=Partial copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 SQL=
 Auth_guests=0

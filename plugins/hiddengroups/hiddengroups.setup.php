@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=hiddengroups
 Name=Hidden Groups
+Category=community-social
 Description=Hide groups and/or its members
 Version=1.0
 Date=2010-nov-04
 Author=Koradhil, Cotonti Team
-Copyright=Copyright (c) Cotonti Team 2008-2011
+Copyright=Copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 Auth_guests=R
 Lock_guests=RW12345A

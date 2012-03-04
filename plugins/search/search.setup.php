@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=search
 Name=Search
+Category=navigation-structure
 Description=Search with extended features
 Version=4.0.4
 Date=2010-dec-16
 Author=Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2011
+Copyright=Partial copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 SQL=
 Auth_guests=R

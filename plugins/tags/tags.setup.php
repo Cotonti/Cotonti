@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=tags
 Name=Tags
+Category=navigation-structure
 Description=Provides tags - site content keywords, tag clouds, tag search and API
 Version=0.7.7
 Date=2012-02-19
 Author=Trustmaster
-Copyright=All rights reserved (c) Vladimir Sibirov 2008-2011
+Copyright=All rights reserved (c) Vladimir Sibirov 2008-2012
 Notes=BSD License.
 SQL=
 Auth_guests=R

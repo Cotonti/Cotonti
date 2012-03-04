@@ -334,7 +334,7 @@ if(!is_writeable('./datas/urltrans.dat'))
 }
 
 // Get list of valid areas
-$areas = array('*', 'plug');
+$areas = array('*', 'plug', 'login');
 $res = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = 0 ORDER BY ct_code");
 foreach ($res->fetchAll() as $row)
 {
@@ -362,7 +362,7 @@ if (is_readable('./datas/urltrans.dat'))
 	/* ===== */
 	while($line = trim(fgets($fp), " \t\r\n"))
 	{
-		$parts = explode("\t", $line);
+		$parts = preg_split('#\s+#', $line);
 
 		$t->assign(array(
 			'ADMIN_URLS_ROW_I' => $ii,

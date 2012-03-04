@@ -8,7 +8,10 @@ plug	e=tags&a=pages&t=*		{$e}/{$t}{!$a}
 plug	e=tags&a=*&t=*			{$e}/{$a}/{$t}
 plug	e=*						{$e}
 users	m=details&u=*			users/{cot_url_username()}
+login	*						{$_area}
+message	*						{$_area}
 admin	m=*						admin/{$m}
+admin	*						{$_area}
 *		c=*&al=*				{$_area}/{cot_url_catpath()}/{$al}
 *		c=*&id=*				{$_area}/{cot_url_catpath()}/{$id}
 *		c=*						{$_area}/{cot_url_catpath()}

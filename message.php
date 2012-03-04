@@ -18,10 +18,12 @@ $env['ext'] = 'message';
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'] . '/functions.php';
+
+require_once cot_langfile('message', 'core');
+
 require_once $cfg['system_dir'] . '/cotemplate.php';
 require_once $cfg['system_dir'] . '/common.php';
 
-require_once cot_langfile('message', 'core');
 
 if (defined('COT_ADMIN'))
 {

@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=genoa
 Name=Genoa Compatibility
+Category=development-maintenance
 Description=Compatibility layer for Cotonti 0.6 Genoa plugins. Enables some of the old plugins to run, but makes performance worse.
 Version=0.9.0
 Date=2010-12-24
 Author=Trustmaster, Cotonti Team
-Copyright=Copyright (c) Cotonti Team 2009-2011
+Copyright=Copyright (c) Cotonti Team 2009-2012
 Notes=BSD License
 SQL=
 Auth_guests=R

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Cotonti
- * @version 0.9.0
+ * @version 0.9.8
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
@@ -52,6 +52,8 @@ $site_id = 'ct'.substr(md5(empty($cfg['site_id']) ? $cfg['mainurl'] : $cfg['site
 $sys['site_id'] = $site_id;
 
 session_start();
+
+cot_unregister_globals();
 
 /* =========== Early page cache ==========*/
 if ($cfg['cache'] && !$cfg['devmode'])

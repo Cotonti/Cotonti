@@ -3,6 +3,7 @@
 [BEGIN_COT_EXT]
 Code=massmovetopics
 Name=Mass-move topics in forums
+Category=administration-management
 Description=Move all topics from one section to another section in forums
 Version=0.7.0
 Date=2010-jan-03

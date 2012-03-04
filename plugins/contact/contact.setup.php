@@ -3,11 +3,12 @@
 [BEGIN_COT_EXT]
 Code=contact
 Name=Contact
+Category=forms-feedback
 Description=Contact form for user feedback delivered by e-mail and recorded in database
 Version=2.5.0
 Date=2011-05-24
 Author=Cotonti Team
-Copyright=&copy; 2008-2011 Cotonti Team
+Copyright=&copy; 2008-2012 Cotonti Team
 Notes=
 Auth_guests=RW
 Lock_guests=12345A

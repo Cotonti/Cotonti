@@ -251,6 +251,29 @@ $L['ext_updated'] = '{$type} &quot;{$name}&quot; has been updated to version {$v
 $L['ext_updating'] = 'Updating {$type} &quot;{$name}&quot;';
 
 /**
+ * Extension categories 
+ */
+$L['ext_cat']['administration-management'] = 'Administration &amp; Management';
+$L['ext_cat']['commerce'] = 'Commerce &amp; Shopping';
+$L['ext_cat']['community-social'] = 'Community &amp; Social';
+$L['ext_cat']['customization-i18n'] = 'Customization &amp; I18n';
+$L['ext_cat']['data-apis'] = 'Data Feeds &amp; APIs';
+$L['ext_cat']['development-maintenance'] = 'Development &amp; Maintenance';
+$L['ext_cat']['editor'] = 'Editors';
+$L['ext_cat']['files-media'] = 'Files &amp; Media';
+$L['ext_cat']['forms-feedback'] = 'Forms &amp; Feedback';
+$L['ext_cat']['intranet-groupware'] = 'Intranet &amp; Groupware';
+$L['ext_cat']['misc-ext'] = 'Miscellaneous';
+$L['ext_cat']['mobile-geolocation'] = 'Mobile &amp; Geolocation';
+$L['ext_cat']['navigation-structure'] = 'Navigation &amp; Structure';
+$L['ext_cat']['parser'] = 'Parsers &amp; Markup';
+$L['ext_cat']['performance-seo'] = 'Performance &amp; SEO';
+$L['ext_cat']['publications-events'] = 'Publications &amp; Events';
+$L['ext_cat']['security-authentication'] = 'Security &amp; Authentication';
+$L['ext_cat']['utilities-tools'] = 'Utilities &amp; Tools';
+$L['ext_cat']['post-install'] = 'Post-install Scripts';
+
+/**
   * Structure Section
  */
 
