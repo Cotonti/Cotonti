@@ -3674,9 +3674,10 @@ function cot_parse_autourls($text)
  * @param integer $length Length of returned string, including ellipsis.
  * @param boolean $considerhtml If true, HTML tags would be handled correctly *
  * @param boolean $exact If false, $text will not be cut mid-word
+ * @param string  $cuttext Adds text if truncated
  * @return string trimmed string.
  */
-function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact = false)
+function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact = false, $cuttext = '')
 {
 	if ($considerhtml)
 	{
@@ -3791,6 +3792,7 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 			}
 		}
 	}
+	$truncate .= $cuttext;
 	if ($considerhtml)
 	{
 		// close all unclosed html-tags
