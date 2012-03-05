@@ -18,7 +18,8 @@ $L['cfg_email'] = array('Email', '(leave empty to use admin email)');
 $L['cfg_minchars'] = array('Min. chars in message');
 $L['cfg_map'] = array('Map');
 $L['cfg_about'] = array('About');
-
+$L['cfg_save'] = array('Save method');
+$L['cfg_save_params'] = array('e-mail', 'database', 'e-mail + database');
 $L['info_desc'] = 'Contact form for user feedback delivered via email and recorded in database';
 
 /**

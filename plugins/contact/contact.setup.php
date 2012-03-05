@@ -5,7 +5,7 @@ Code=contact
 Name=Contact
 Category=forms-feedback
 Description=Contact form for user feedback delivered by e-mail and recorded in database
-Version=2.5.0
+Version=2.5.5
 Date=2011-05-24
 Author=Cotonti Team
 Copyright=&copy; 2008-2012 Cotonti Team
@@ -21,6 +21,7 @@ email=01:string:::E-mail
 minchars=12:string::5:Min post length, chars
 map=12:text:::Map
 about=13:text:::About
+save=14:select:email,db,both:both:Save Method
 [END_COT_EXT_CONFIG]
 ==================== */
 

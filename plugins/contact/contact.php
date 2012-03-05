@@ -94,11 +94,14 @@ if (isset($_POST['rtext']))
 		$rcontact['contact_authorid'] = (int) $usr['id'];
 		$rcontact['contact_date'] = (int) $sys['now_offset'];
 		$rcontact['contact_val'] = 0;
-
-		$db->insert($db_contact, $rcontact);
-
+		
+		if (in_array($cfg['plugin']['contact']['save'], array('db','both')))
+		{
+			$db->insert($db_contact, $rcontact);
+		}
+		
 		$semail = (!empty($cfg['plugin']['contact']['email'])) ? $cfg['plugin']['contact']['email'] : $cfg['adminemail'];
-		if (cot_check_email($semail))
+		if (cot_check_email($semail) && in_array($cfg['plugin']['contact']['save'], array('email','both')))
 		{
 			$headers = ("From: \"" . $rcontact['contact_author'] . "\" <" . $rcontact['contact_email'] . ">\n");
 			$rtextm = $cfg["maintitle"] . " - " . $cfg['mainurl'] . " \n\n" .
@@ -109,7 +112,7 @@ if (isset($_POST['rtext']))
 			foreach ($cot_extrafields[$db_contact] as $row)
 			{
 				$ex_title = isset($L['contact_' . $row['field_name'] . '_title']) ? $L['contact_' . $row['field_name'] . '_title'] : $row['field_description'];
-				$ex_body = cot_build_extrafields_data('contact', $row, $rcontact["contact_{$exrow['field_name']}"]);
+				$ex_body = cot_build_extrafields_data('contact', $row, $rcontact["contact_{$row['field_name']}"]);
 				$rtextm .= "\n".$ex_title.": ".$ex_body;
 			}
 

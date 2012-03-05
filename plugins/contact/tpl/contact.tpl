@@ -31,7 +31,7 @@
 						</tr>
 <!-- BEGIN: EXTRAFLD -->
 						<tr>
-							<td>{CONTACT_FORM_EXTRAFLD_TITLE}</td>
+							<td>{CONTACT_FORM_EXTRAFLD_TITLE}:</td>
 							<td>{CONTACT_FORM_EXTRAFLD}</td>
 						</tr>
 <!-- END: EXTRAFLD -->
