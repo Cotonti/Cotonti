@@ -172,11 +172,60 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 {
 	global $db, $structure, $db_pages, $db_users, $sys, $cfg, $L, $cot_extrafields, $usr;
 	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
+	
+	// Load all cats and subcats in white list if set
+	if (!empty($cfg['plugin']['recentitems']['whitelist']))
+	{
+		$whitelist = array();
+		foreach (preg_split('#\r?\n#', $cfg['plugin']['recentitems']['whitelist']) as $c)
+		{
+			$whitelist = array_merge($whitelist, cot_structure_children('page', $c, true, true, $rightprescan));
+		}
+	}
+	else
+	{
+		$whitelist = false;
+	}
+	
+	// Load all cats and subcats in black list if set
+	if (!empty($cfg['plugin']['recentitems']['blacklist']))
+	{
+		$blacklist = array();
+		foreach (preg_split('#\r?\n#', $cfg['plugin']['recentitems']['blacklist']) as $c)
+		{
+			$blacklist = array_merge($blacklist, cot_structure_children('page', $c, true, true, $rightprescan));
+		}
+	}
+	else
+	{
+		$blacklist = false;
+	}
 
 	if ($rightprescan || $cat)
 	{
+		// Get selected cats
 		$catsub = cot_structure_children('page', $cat, true, true, $rightprescan);
+		if ($whitelist)
+		{
+			// Must be both in selected and whitelist
+			$catsub = array_intersect($catsub, $whitelist);
+		}
+		elseif ($blacklist)
+		{
+			// Must be in selected but not in blacklist
+			$catsub = array_diff($catsub, $blacklist);
+		}
 		$incat = "AND page_cat IN ('" . implode("','", $catsub) . "')";
+	}
+	elseif ($whitelist)
+	{
+		// Only cats from white list
+		$incat = "AND page_cat IN ('" . implode("','", $whitelist) . "')";
+	}
+	elseif ($blacklist)
+	{
+		// All cats but not in black list
+		$incat = "AND page_cat NOT IN ('" . implode("','", $blacklist) . "')";
 	}
 
 	if ($mode == 'recent')

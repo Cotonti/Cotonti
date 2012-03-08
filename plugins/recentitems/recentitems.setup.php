@@ -5,9 +5,9 @@ Code=recentitems
 Name=Recent items
 Category=publications-events
 Description=Recent pages, topics in forums, users, comments
-Version=0.9.0.1
-Date=2010-02-08
-Author=esclkm & Cotonti Team
+Version=0.9.2
+Date=2012-03-08
+Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
 SQL=
@@ -33,6 +33,8 @@ newpagestext=19:string:::New pages text length limit
 newforums=20:radio::1:Recent forums in standalone module
 itemsperpage=22:string::10:Elements per page in standalone module
 rightscan=23:radio::1:Enable prescanning category rights
+whitelist=31:text:::White list of categories
+blacklist=32:text:::Black list of categories
 [END_COT_EXT_CONFIG]
 ==================== */
 

@@ -29,6 +29,9 @@ $L['cfg_recentpagestitle'] = array('Recent pages title length limit', 'This will
 $L['cfg_recentpagestext'] = array('Recent pages text length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
 $L['cfg_recentforumstitle'] = array('Recent forums title length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
 $L['cfg_newpagestext'] = array('New pages text length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
+$L['cfg_whitelist'] = array('White list of categories', 'One code per line. Only these branches will be listed if not empty.');
+$L['cfg_blacklist'] = array('Black list of categories', 'One code per line. Only these branches will be excluded from output if not empty.');
+
 
 $L['info_desc'] = 'Displays recent site additions (pages, topics) on index page';
 
