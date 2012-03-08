@@ -39,13 +39,13 @@ $standard_admin = array('cache.disk', 'cache', 'config', 'extrafields', 'home', 
 
 $inc_file = (empty($m)) ? 'home' : $m;
 $inc_file = (empty($s)) ? $inc_file : $inc_file.'.'.$s;
-if (in_array($inc_file, $standard_admin))
+if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'module', $inc_file)))
 {
 	$inc_file = cot_incfile('admin', 'module', $inc_file);
 }
 else
 {
-	$inc_file = $cfg['modules_dir'] . "/$inc_file/$inc_file.admin.php";
+	$inc_file = $cfg['modules_dir'] . "/$m/$m.admin.php";
 }
 
 if (!file_exists($inc_file))
