@@ -213,11 +213,17 @@ elseif ($defult_c)
 			}
 		}
 
-		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
+		$sql = $db->query("SELECT p.*, u.* FROM $db_pages AS p
+				LEFT JOIN $db_users AS u ON p.page_ownerid = u.user_id
+			WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') 
+			ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 	}
 	else
 	{
-		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
+		$sql = $db->query("SELECT p.*, u.* FROM $db_pages AS p
+				LEFT JOIN $db_users AS u ON p.page_ownerid = u.user_id
+			WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat NOT LIKE 'system'
+			ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 	}
 	$i = 0;
 	while ($row = $sql->fetch())
@@ -228,6 +234,7 @@ elseif ($defult_c)
 		$items[$i]['link'] = COT_ABSOLUTE_URL . $row['page_pageurl'];
 		$items[$i]['pubDate'] = cot_date('r', $row['page_date']);
 		$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_pageurl'], $row['page_parser']);
+		$items[$i]['fields'] = cot_generate_pagetags($row);
 
 		$i++;
 	}
@@ -252,7 +259,8 @@ if (count($items) > 0)
 			'RSS_ROW_TITLE' => htmlspecialchars($item['title']),
 			'RSS_ROW_DESCRIPTION' => cot_convert_relative_urls($item['description']),
 			'RSS_ROW_DATE' => cot_fix_pubdate($item['pubDate']),
-			'RSS_ROW_LINK' => $item['link']
+			'RSS_ROW_LINK' => $item['link'],
+			'RSS_ROW_FIELDS' => $item['fields']
 		));
 		$t->parse('MAIN.ITEM_ROW');
 	}
