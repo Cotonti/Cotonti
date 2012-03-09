@@ -78,9 +78,9 @@ if ($a == 'update')
 	$rpage['page_state'] = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', 'P', 'INT');
 
 	// Extra fields
-	foreach ($cot_extrafields[$db_pages] as $row_extf)
+	foreach ($cot_extrafields[$db_pages] as $exfld)
 	{
-		$rpage['page_'.$row_extf['field_name']] = cot_import_extrafields('rpage'.$row_extf['field_name'], $row_extf, 'P', $row_page['page_'.$row_extf['field_name']]);
+		$rpage['page_'.$exfld['field_name']] = cot_import_extrafields('rpage'.$exfld['field_name'], $exfld, 'P', $row_page['page_'.$exfld['field_name']]);
 	}
 
 	if ($usr['isadmin'])
@@ -121,9 +121,9 @@ if ($a == 'update')
 				$sql_page_delete = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row_page_delete['page_cat']."' ");
 			}
 
-			foreach($cot_extrafields[$db_pages] as $i => $row_extf) 
+			foreach($cot_extrafields[$db_pages] as $exfld) 
 			{ 
-				cot_extrafield_unlinkfiles($row_page_delete['page_'.$row_extf['field_name']], $row_extf);
+				cot_extrafield_unlinkfiles($row_page_delete['page_'.$exfld['field_name']], $exfld);
 			}
 			
 			$sql_page_delete = $db->delete($db_pages, "page_id=$id");
@@ -305,15 +305,18 @@ if ($usr['isadmin'])
 $t->assign($pageedit_array);
 
 // Extra fields
-foreach($cot_extrafields[$db_pages] as $i => $row_extf)
+foreach($cot_extrafields[$db_pages] as $exfld)
 {
-	$uname = strtoupper($row_extf['field_name']);
-	$t->assign('PAGEEDIT_FORM_'.$uname, cot_build_extrafields('rpage'.$row_extf['field_name'], $row_extf, $pag['page_'.$row_extf['field_name']]));
-	$t->assign('PAGEEDIT_FORM_'.$uname.'_TITLE', isset($L['page_'.$row_extf['field_name'].'_title']) ?  $L['page_'.$row_extf['field_name'].'_title'] : $row_extf['field_description']);
-	
-	// extra fields universal tags
-	$t->assign('PAGEEDIT_FORM_EXTRAFLD', cot_build_extrafields('rpage'.$row_extf['field_name'], $row_extf, $pag['page_'.$row_extf['field_name']]));
-	$t->assign('PAGEEDIT_FORM_EXTRAFLD_TITLE', isset($L['page_'.$row_extf['field_name'].'_title']) ?  $L['page_'.$row_extf['field_name'].'_title'] : $row_extf['field_description']);
+	$uname = strtoupper($exfld['field_name']);
+	$exfld_val = cot_build_extrafields('rpage'.$exfld['field_name'], $exfld, $pag['page_'.$exfld['field_name']]);
+	$exfld_title = isset($L['page_'.$exfld['field_name'].'_title']) ?  $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
+		
+	$t->assign(array(
+		'PAGEEDIT_FORM_'.$uname => $exfld_val, 
+		'PAGEEDIT_FORM_'.$uname.'_TITLE' => $exfld_title,
+		'PAGEEDIT_FORM_EXTRAFLD' => $exfld_val,
+		'PAGEEDIT_FORM_EXTRAFLD_TITLE' => $exfld_title
+	));
 	$t->parse('MAIN.EXTRAFLD');
 }
 

@@ -228,13 +228,13 @@ if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated')
 }
 
 // Extra fields for structure
-foreach ($cot_extrafields[$db_structure] as $row_c)
+foreach ($cot_extrafields[$db_structure] as $exfld)
 {
-	$uname = strtoupper($row_c['field_name']);
+	$uname = strtoupper($exfld['field_name']);
 	$t->assign(array(
-		'LIST_CAT_'.$uname.'_TITLE' => isset($L['structure_'.$row_c['field_name'].'_title']) ?
-			$L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description'],
-		'LIST_CAT_'.$uname => cot_build_extrafields_data('structure', $row_c, $cat[$row_c['field_name']])
+		'LIST_CAT_'.$uname.'_TITLE' => isset($L['structure_'.$exfld['field_name'].'_title']) ?
+			$L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
+		'LIST_CAT_'.$uname => cot_build_extrafields_data('structure', $exfld, $cat[$exfld['field_name']])
 	));
 }
 
@@ -301,11 +301,13 @@ foreach ($subcat as $x)
 	));
 
 	// Extra fields for structure
-	foreach ($cot_extrafields[$db_structure] as $row_c)
+	foreach ($cot_extrafields[$db_structure] as $exfld)
 	{
-		$uname = strtoupper($row_c['field_name']);
-		$t->assign('LIST_ROWCAT_'.$uname.'_TITLE', isset($L['structure_'.$row_c['field_name'].'_title']) ?  $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description']);
-		$t->assign('LIST_ROWCAT_'.$uname, cot_build_extrafields_data('structure', $row_c, $structure['page'][$x][$row_c['field_name']]));
+		$uname = strtoupper($exfld['field_name']);
+		$t->assign(array(
+			'LIST_ROWCAT_'.$uname.'_TITLE' => isset($L['structure_'.$exfld['field_name'].'_title']) ?  $L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
+			'LIST_ROWCAT_'.$uname => cot_build_extrafields_data('structure', $exfld, $structure['page'][$x][$exfld['field_name']])
+		));
 	}
 
 	/* === Hook - Part2 : Include === */

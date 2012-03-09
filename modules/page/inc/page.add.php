@@ -74,9 +74,9 @@ if ($a == 'add')
 	$rpage['page_state'] = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', 'P', 'INT');
 	
 	// Extra fields
-	foreach ($cot_extrafields[$db_pages] as $row)
+	foreach ($cot_extrafields[$db_pages] as $exfld)
 	{
-		$rpage['page_'.$row['field_name']] = cot_import_extrafields('rpage'.$row['field_name'], $row);
+		$rpage['page_'.$exfld['field_name']] = cot_import_extrafields('rpage'.$exfld['field_name'], $exfld);
 	}
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
@@ -233,15 +233,17 @@ $pageadd_array = array(
 $t->assign($pageadd_array);
 
 // Extra fields
-foreach($cot_extrafields[$db_pages] as $i => $row)
+foreach($cot_extrafields[$db_pages] as $exfld)
 {
-	$uname = strtoupper($row['field_name']);
-	$t->assign('PAGEADD_FORM_'.$uname, cot_build_extrafields('rpage'.$row['field_name'], $row, $rpage[$row['field_name']]));
-	$t->assign('PAGEADD_FORM_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
-	
-	// extra fields universal tags
-	$t->assign('PAGEADD_FORM_EXTRAFLD', cot_build_extrafields('rpage'.$row['field_name'], $row, $rpage[$row['field_name']]));
-	$t->assign('PAGEADD_FORM_EXTRAFLD_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
+	$uname = strtoupper($exfld['field_name']);
+	$exfld_val = cot_build_extrafields('rpage'.$exfld['field_name'], $exfld, $rpage[$exfld['field_name']]);
+	$exfld_title = isset($L['page_'.$exfld['field_name'].'_title']) ?  $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
+	$t->assign(array(
+		'PAGEADD_FORM_'.$uname => $exfld_val, 
+		'PAGEADD_FORM_'.$uname.'_TITLE' => $exfld_title,
+		'PAGEADD_FORM_EXTRAFLD' => $exfld_val,
+		'PAGEADD_FORM_EXTRAFLD_TITLE' => $exfld_title
+		));
 	$t->parse('MAIN.EXTRAFLD');
 }
 

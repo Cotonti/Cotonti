@@ -256,22 +256,22 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 		// Extrafields
 		if (isset($cot_extrafields[$db_pages]))
 		{
-			foreach ($cot_extrafields[$db_pages] as $row)
+			foreach ($cot_extrafields[$db_pages] as $exfld)
 			{
-				$tag = mb_strtoupper($row['field_name']);
-				$temp_array[$tag.'_TITLE'] = isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
-				$temp_array[$tag] = cot_build_extrafields_data('page', $row, $page_data["page_{$row['field_name']}"], $page_data['page_parser']);
+				$tag = mb_strtoupper($exfld['field_name']);
+				$temp_array[$tag.'_TITLE'] = isset($L['page_'.$exfld['field_name'].'_title']) ?  $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
+				$temp_array[$tag] = cot_build_extrafields_data('page', $exfld, $page_data['page_'.$exfld['field_name']], $page_data['page_parser']);
 			}
 		}
 
 		// Extra fields for structure
 		if (isset($cot_extrafields[$db_structure]))
 		{
-			foreach ($cot_extrafields[$db_structure] as $row)
+			foreach ($cot_extrafields[$db_structure] as $exfld)
 			{
-				$tag = mb_strtoupper($row['field_name']);
-				$temp_array['CAT_'.$tag.'_TITLE'] = isset($L['structure_'.$row['field_name'].'_title']) ?  $L['structure_'.$row['field_name'].'_title'] : $row['field_description'];
-				$temp_array['CAT_'.$tag] = cot_build_extrafields_data('structure', $row, $structure['page'][$row['page_cat']][$row['field_name']]);
+				$tag = mb_strtoupper($exfld['field_name']);
+				$temp_array['CAT_'.$tag.'_TITLE'] = isset($L['structure_'.$exfld['field_name'].'_title']) ?  $L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
+				$temp_array['CAT_'.$tag] = cot_build_extrafields_data('structure', $exfld, $structure['page'][$page_data['page_cat']][$exfld['field_name']]);
 			}
 		}
 
@@ -325,9 +325,9 @@ function cot_page_config_order()
 		'filecount' => $L['adm_filecount']
 	);
 
-	foreach($cot_extrafields[$db_pages] as $row)
+	foreach($cot_extrafields[$db_pages] as $exfld)
 	{
-		$options_sort[$row['field_name']] = isset($L['page_'.$row['field_name'].'_title']) ? $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
+		$options_sort[$exfld['field_name']] = isset($L['page_'.$exfld['field_name'].'_title']) ? $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 	}
 
 	$L['cfg_order_params'] = array_values($options_sort);

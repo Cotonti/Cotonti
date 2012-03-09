@@ -237,14 +237,13 @@ foreach ($users_sort_tags as $k => $x)
 }
 
 // Extra fields for users
-foreach($cot_extrafields[$db_users] as $i => $extrafield)
+foreach($cot_extrafields[$db_users] as $exfld)
 {
-	$uname = strtoupper($extrafield['field_name']);
-	$fieldtext = isset($L['user_'.$extrafield['field_name'].'_title']) ? $L['user_'.$extrafield['field_name'].'_title']
-		: $extrafield['field_description'];
+	$uname = strtoupper($exfld['field_name']);
+	$fieldtext = isset($L['user_'.$exfld['field_name'].'_title']) ? $L['user_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 	$t->assign('USERS_TOP_'.$uname, cot_rc('users_link_sort', array(
-		'asc_url' => cot_url('users', array('s' => $extrafield['field_name'], 'w'=> 'asc') + $users_url_path),
-		'desc_url' => cot_url('users', array('s' => $extrafield['field_name'], 'w'=> 'desc') + $users_url_path),
+		'asc_url' => cot_url('users', array('s' => $exfld['field_name'], 'w'=> 'asc') + $users_url_path),
+		'desc_url' => cot_url('users', array('s' => $exfld['field_name'], 'w'=> 'desc') + $users_url_path),
 		'text' => $fieldtext
 	)));
 }

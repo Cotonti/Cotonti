@@ -254,11 +254,11 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 		);
 	}
 
-	foreach ($cot_extrafields[$db_structure] as $row_c)
+	foreach ($cot_extrafields[$db_structure] as $exfld)
 	{
-		$uname = strtoupper($row_c['field_name']);
-		$sections[$tag_prefix . $uname . '_TITLE'] = isset($L['structure_' . $row_c['field_name'] . '_title']) ? $L['structure_' . $row_c['field_name'] . '_title'] : $row_c['field_description'];
-		$sections[$tag_prefix . $uname] = cot_build_extrafields_data('structure', $row_c, $structure['forums'][$cat][$row_c['field_name']]);
+		$uname = strtoupper($exfld['field_name']);
+		$sections[$tag_prefix . $uname . '_TITLE'] = isset($L['structure_' . $exfld['field_name'] . '_title']) ? $L['structure_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
+		$sections[$tag_prefix . $uname] = cot_build_extrafields_data('structure', $exfld, $structure['forums'][$cat][$exfld['field_name']]);
 	}
 
 	return $sections;

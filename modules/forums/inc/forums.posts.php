@@ -115,9 +115,9 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	}
 	
 	// Extra fields
-	foreach ($cot_extrafields[$db_forum_posts] as $row_ex)
+	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
 	{
-		$nmsg['fp_'.$row_ex['field_name']] = cot_import_extrafields('nmsg'.$row_ex['field_name'], $row_ex);
+		$nmsg['fp_'.$exfld['field_name']] = cot_import_extrafields('nmsg'.$exfld['field_name'], $exfld);
 	}
 
 	/* === Hook === */
@@ -204,9 +204,9 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 		array($p, $q, $s))->fetch();
 	is_array($row) || cot_die();
 	
-	foreach($cot_extrafields[$db_forum_posts] as $i => $row_extf) 
+	foreach($cot_extrafields[$db_forum_posts] as $exfld) 
 	{ 
-		cot_extrafield_unlinkfiles($row['fp_'.$row_extf['field_name']], $row_extf);
+		cot_extrafield_unlinkfiles($row['fp_'.$exfld['field_name']], $exfld);
 	}
 			
 	$sql_forums = $db->delete($db_forum_posts, 'fp_id = ? AND fp_topicid = ? AND fp_cat = ?', array($p, $q, $s));
@@ -404,12 +404,12 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_ORDER' => empty($id) ? $d + $fp_num : $id
 	));
 	
-	foreach ($cot_extrafields[$db_forum_posts] as $row_ex)
+	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
 	{
-		$tag = mb_strtoupper($row_ex['field_name']);
+		$tag = mb_strtoupper($exfld['field_name']);
 		$t->assign(array(
-			'FORUMS_POSTS_ROW_'.$tag.'_TITLE' => isset($L['forums_posts_'.$row_ex['field_name'].'_title']) ?  $L['forums_posts_'.$row_ex['field_name'].'_title'] : $row_ex['field_description'],
-			'FORUMS_POSTS_ROW_'.$tag => cot_build_extrafields_data('forums', $row_ex, $row["ft_{$row_ex['field_name']}"], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
+			'FORUMS_POSTS_ROW_'.$tag.'_TITLE' => isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
+			'FORUMS_POSTS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
 		));
 	}
 	
@@ -475,15 +475,17 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 	}
 
 		// Extra fields
-	foreach($cot_extrafields[$db_forum_posts] as $i => $row_ex)
+	foreach($cot_extrafields[$db_forum_posts] as $exfld)
 	{
-		$uname = strtoupper($row_ex['field_name']);
-		$t->assign('FORUMS_POSTS_NEWPOST_'.$uname, cot_build_extrafields('nmsg'.$row_ex['field_name'], $row_ex, $nmsg[$row_ex['field_name']]));
-		$t->assign('FORUMS_POSTS_NEWPOST_'.$uname.'_TITLE', isset($L['forums_posts_'.$row_ex['field_name'].'_title']) ?  $L['forums_posts_'.$row_ex['field_name'].'_title'] : $row_ex['field_description']);
-
-		// extra fields universal tags
-		$t->assign('FORUMS_POSTS_NEWPOST_EXTRAFLD', cot_build_extrafields('nmsg'.$row_ex['field_name'], $row_ex, $nmsg[$row_ex['field_name']]));
-		$t->assign('FORUMS_POSTS_NEWPOST_EXTRAFLD_TITLE', isset($L['forums_posts_'.$row_ex['field_name'].'_title']) ?  $L['forums_posts_'.$row_ex['field_name'].'_title'] : $row_ex['field_description']);
+		$uname = strtoupper($exfld['field_name']);
+		$exfld_val = cot_build_extrafields('nmsg'.$exfld['field_name'], $exfld, $nmsg[$exfld['field_name']]);
+		$exfld_title = isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
+		$t->assign(array(
+			'FORUMS_POSTS_NEWPOST_'.$uname => $exfld_val,
+			'FORUMS_POSTS_NEWPOST_'.$uname.'_TITLE' => $exfld_title,
+			'FORUMS_POSTS_NEWPOST_EXTRAFLD' => $exfld_val,
+			'FORUMS_POSTS_NEWPOST_EXTRAFLD_TITLE' => $exfld_title
+			));
 		$t->parse('MAIN.FORUMS_POSTS_NEWPOST.EXTRAFLD');
 	}
 	

@@ -107,12 +107,12 @@ foreach ($sql->fetchAll() as $row)
 	
 	if (isset($cot_extrafields[$db_com]))
 	{
-		foreach ($cot_extrafields[$db_com] as $exrow)
+		foreach ($cot_extrafields[$db_com] as $exfld)
 		{
-			$tag = mb_strtoupper($exrow['field_name']);
+			$tag = mb_strtoupper($exfld['field_name']);
 			$t->assign(array(
-				'ADMIN_COMMENTS_' . $tag . '_TITLE' => isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['comments_' . $exrow['field_name'] . '_title'] : $exrow['field_description'],
-				'ADMIN_COMMENTS_' . $tag => cot_build_extrafields_data('comments', $exrow, $row["com_{$exrow['field_name']}"]),
+				'ADMIN_COMMENTS_' . $tag . '_TITLE' => isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exfld['field_name'] . '_title'] : $exfld['field_description'],
+				'ADMIN_COMMENTS_' . $tag => cot_build_extrafields_data('comments', $exfld, $row['com_'.$exfld['field_name']]),
 			));
 		}
 	}

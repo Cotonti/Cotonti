@@ -60,9 +60,9 @@ if (isset($_POST['rtext']))
 	$rcontact['contact_subject'] = cot_import('rsubject', 'P', 'TXT');
 
 	// Extra fields
-	foreach ($cot_extrafields[$db_contact] as $row)
+	foreach ($cot_extrafields[$db_contact] as $exfld)
 	{
-		$rcontact['contact_' . $row['field_name']] = cot_import_extrafields('rcontact' . $row['field_name'], $row);
+		$rcontact['contact_' . $exfld['field_name']] = cot_import_extrafields('rcontact' . $exfld['field_name'], $exfld);
 	}
 	
 	if ($usr['id'] == 0 && isset($cot_captcha))
@@ -108,10 +108,10 @@ if (isset($_POST['rtext']))
 			$rtextm .= ( $rcontact['contact_subject'] != '') ? $L['Topic'] . ": " . $rcontact['contact_subject'] . "\n" : "";
 			$rtextm .= $L['Message'] . ":\n" . $rcontact['contact_text'];
 
-			foreach ($cot_extrafields[$db_contact] as $row)
+			foreach ($cot_extrafields[$db_contact] as $exfld)
 			{
-				$ex_title = isset($L['contact_' . $row['field_name'] . '_title']) ? $L['contact_' . $row['field_name'] . '_title'] : $row['field_description'];
-				$ex_body = cot_build_extrafields_data('contact', $row, $rcontact["contact_{$row['field_name']}"]);
+				$ex_title = isset($L['contact_' . $exfld['field_name'] . '_title']) ? $L['contact_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
+				$ex_body = cot_build_extrafields_data('contact', $exfld, $rcontact['contact_'.$exfld['field_name']]);
 				$rtextm .= "\n".$ex_title.": ".$ex_body;
 			}
 
@@ -139,15 +139,17 @@ if (!$sent)
 	));
 
 	// Extra fields
-	foreach ($cot_extrafields[$db_contact] as $i => $row)
+	foreach ($cot_extrafields[$db_contact] as $exfld)
 	{
-		$uname = strtoupper($row['field_name']);
-		$t->assign('CONTACT_FORM_' . $uname, cot_build_extrafields('rcontact' . $row['field_name'], $row, $rcontact[$row['field_name']]));
-		$t->assign('CONTACT_FORM_' . $uname . '_TITLE', isset($L['contact_' . $row['field_name'] . '_title']) ? $L['contact_' . $row['field_name'] . '_title'] : $row['field_description']);
-
-		// extra fields universal tags
-		$t->assign('CONTACT_FORM_EXTRAFLD', cot_build_extrafields('rcontact' . $row['field_name'], $row, $rcontact[$row['field_name']]));
-		$t->assign('CONTACT_FORM_EXTRAFLD_TITLE', isset($L['contact_' . $row['field_name'] . '_title']) ? $L['contact_' . $row['field_name'] . '_title'] : $row['field_description']);
+		$uname = strtoupper($exfld['field_name']);
+		$exfld_val = cot_build_extrafields('rcontact' . $exfld['field_name'], $exfld, $rcontact[$exfld['field_name']]);
+		$exfld_title =  isset($L['contact_' . $exfld['field_name'] . '_title']) ? $L['contact_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
+		$t->assign(array(
+			'CONTACT_FORM_' . $uname => $exfld_val,
+			'CONTACT_FORM_' . $uname . '_TITLE' => $exfld_title,
+			'CONTACT_FORM_EXTRAFLD' => $exfld_val,
+			'CONTACT_FORM_EXTRAFLD_TITLE' => $exfld_title
+			));
 		$t->parse('MAIN.FORM.EXTRAFLD');
 	}
 	if ($usr['id'] == 0 && isset($cot_captcha))

@@ -32,9 +32,9 @@ if ($a == 'del')
 	{
 		$db->delete($db_contact, "contact_id = $id");
 
-		foreach ($cot_extrafields[$db_contact] as $i => $row_extf)
+		foreach ($cot_extrafields[$db_contact] as $exfld)
 		{
-			cot_extrafield_unlinkfiles($row_contact_delete['contact_' . $row_extf['field_name']], $row_extf);
+			cot_extrafield_unlinkfiles($row_contact_delete['contact_' . $exfld['field_name']], $exfld);
 		}
 		cot_message('Deleted');
 	}
@@ -95,14 +95,16 @@ while ($row = $sql->fetch())
 	// Extrafields
 	if (isset($cot_extrafields[$db_contact]))
 	{
-		foreach ($cot_extrafields[$db_contact] as $exrow)
+		foreach ($cot_extrafields[$db_contact] as $exfld)
 		{
-			$tag = mb_strtoupper($exrow['field_name']);
+			$tag = mb_strtoupper($exfld['field_name']);
+			$exfld_val = cot_build_extrafields_data('contact', $exfld, $row['contact_'.$exfld['field_name']]);
+			$exfld_title = isset($L['contact_' . $exfld['field_name'] . '_title']) ? $L['contact_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
 			$tuman->assign(array(
-				'CONTACT_' . $tag . '_TITLE' => isset($L['contact_' . $exrow['field_name'] . '_title']) ? $L['contact_' . $exrow['field_name'] . '_title'] : $exrow['field_description'],
-				'CONTACT_' . $tag => cot_build_extrafields_data('contact', $exrow, $row["contact_{$exrow['field_name']}"]),
-				'CONTACT_EXTRAFLD_TITLE' => isset($L['contact_' . $exrow['field_name'] . '_title']) ? $L['contact_' . $exrow['field_name'] . '_title'] : $exrow['field_description'],
-				'CONTACT_EXTRAFLD' => cot_build_extrafields_data('contact', $exrow, $row["contact_{$exrow['field_name']}"]),
+				'CONTACT_' . $tag . '_TITLE' => $exfld_title,
+				'CONTACT_' . $tag => $exfld_val,
+				'CONTACT_EXTRAFLD_TITLE' => $exfld_title,
+				'CONTACT_EXTRAFLD' => $exfld_val
 			));
 			$tuman->parse('MAIN.DATA.EXTRAFLD');
 		}
@@ -136,14 +138,17 @@ if (($a == '') && !empty($id))
 	// Extrafields
 	if (isset($cot_extrafields[$db_contact]))
 	{
-		foreach ($cot_extrafields[$db_contact] as $exrow)
+		foreach ($cot_extrafields[$db_contact] as $exfld)
 		{
-			$tag = mb_strtoupper($exrow['field_name']);
+			$tag = mb_strtoupper($exfld['field_name']);
+			$exfld_val = cot_build_extrafields_data('contact', $exfld, $row['contact_'.$exfld['field_name']]);
+			$exfld_title = isset($L['contact_' . $exfld['field_name'] . '_title']) ? $L['contact_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
+			
 			$tuman->assign(array(
-				'CONTACT_' . $tag . '_TITLE' => isset($L['contact_' . $exrow['field_name'] . '_title']) ? $L['contact_' . $exrow['field_name'] . '_title'] : $exrow['field_description'],
-				'CONTACT_' . $tag => cot_build_extrafields_data('contact', $exrow, $row["contact_{$exrow['field_name']}"]),
-				'CONTACT_EXTRAFLD_TITLE' => isset($L['contact_' . $exrow['field_name'] . '_title']) ? $L['contact_' . $exrow['field_name'] . '_title'] : $exrow['field_description'],
-				'CONTACT_EXTRAFLD' => cot_build_extrafields_data('contact', $exrow, $row["contact_{$exrow['field_name']}"]),
+				'CONTACT_' . $tag . '_TITLE' => $exfld_title,
+				'CONTACT_' . $tag => $exfld_val,
+				'CONTACT_EXTRAFLD_TITLE' => $exfld_title,
+				'CONTACT_EXTRAFLD' => $exfld_val
 			));
 			$tuman->parse('MAIN.VIEW.EXTRAFLD');
 		}

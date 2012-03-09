@@ -1035,9 +1035,9 @@ function cot_load_structure()
 
 		if (is_array($cot_extrafields[$db_structure]))
 		{
-			foreach ($cot_extrafields[$db_structure] as $row_c)
+			foreach ($cot_extrafields[$db_structure] as $exfld)
 			{
-				$structure[$row['structure_area']][$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
+				$structure[$row['structure_area']][$row['structure_code']][$exfld['field_name']] = $row['structure_'.$exfld['field_name']];
 			}
 		}
 
@@ -1856,10 +1856,10 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 			// Extra fields
 			if (isset($cot_extrafields[$db_users]))
 			{
-				foreach ($cot_extrafields[$db_users] as $i => $row)
+				foreach ($cot_extrafields[$db_users] as $exfld)
 				{
-					$temp_array[strtoupper($row['field_name'])] = cot_build_extrafields_data('user', $row, $user_data['user_' . $row['field_name']]);
-					$temp_array[strtoupper($row['field_name']) . '_TITLE'] = isset($L['user_' . $row['field_name'] . '_title']) ? $L['user_' . $row['field_name'] . '_title'] : $row['field_description'];
+					$temp_array[strtoupper($exfld['field_name'])] = cot_build_extrafields_data('user', $exfld, $user_data['user_' . $exfld['field_name']]);
+					$temp_array[strtoupper($exfld['field_name']) . '_TITLE'] = isset($L['user_' . $exfld['field_name'] . '_title']) ? $L['user_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
 				}
 			}
 		}

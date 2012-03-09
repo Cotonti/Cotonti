@@ -135,15 +135,17 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	if ($auth_write && $enabled)
 	{
 		// Extra fields
-		foreach ($cot_extrafields[$db_com] as $i => $exrow)
+		foreach ($cot_extrafields[$db_com] as $exfld)
 		{
-			$uname = strtoupper($exrow['field_name']);
-			$t->assign('COMMENTS_FORM_' . $uname, cot_build_extrafields('rcomments' . $exrow['field_name'], $exrow, $rcomments[$exrow['field_name']]));
-			$t->assign('COMMENTS_FORM_' . $uname . '_TITLE', isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['comments_' . $exrow['field_name'] . '_title'] : $exrow['field_description']);
-
-			// extra fields universal tags
-			$t->assign('COMMENTS_FORM_EXTRAFLD', cot_build_extrafields('rcomments' . $exrow['field_name'], $exrow, $rcomments[$exrow['field_name']]));
-			$t->assign('COMMENTS_FORM_EXTRAFLD_TITLE', isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['contact_' . $exrow['field_name'] . '_title'] : $exrow['field_description']);
+			$uname = strtoupper($exfld['field_name']);
+			$exfld_val = cot_build_extrafields('rcomments' . $exfld['field_name'], $exfld, $rcomments[$exfld['field_name']]);
+			$exfld_title = isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
+			$t->assign(array(
+				'COMMENTS_FORM_' . $uname => $exfld_val, 
+				'COMMENTS_FORM_' . $uname . '_TITLE' => $exfld_title,
+				'COMMENTS_FORM_EXTRAFLD' => $exfld_val,
+				'COMMENTS_FORM_EXTRAFLD_TITLE' => $exfld_title
+				));
 			$t->parse('COMMENTS.COMMENTS_NEWCOMMENT.EXTRAFLD');
 		}
 
@@ -225,12 +227,12 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 				// Extrafields
 			if (isset($cot_extrafields[$db_com]))
 			{
-				foreach ($cot_extrafields[$db_com] as $exrow)
+				foreach ($cot_extrafields[$db_com] as $exfld)
 				{
-					$tag = mb_strtoupper($exrow['field_name']);
+					$tag = mb_strtoupper($exfld['field_name']);
 					$t->assign(array(
-						'COMMENTS_ROW_' . $tag . '_TITLE' => isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['comments_' . $exrow['field_name'] . '_title'] : $exrow['field_description'],
-						'COMMENTS_ROW_' . $tag => cot_build_extrafields_data('comments', $exrow, $row["com_{$exrow['field_name']}"]),
+						'COMMENTS_ROW_' . $tag . '_TITLE' => isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exrow['field_name'] . '_title'] : $exfld['field_description'],
+						'COMMENTS_ROW_' . $tag => cot_build_extrafields_data('comments', $exfld, $row['com_'.$exfld['field_name']]),
 					));
 				}
 			}

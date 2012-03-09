@@ -84,9 +84,9 @@ if ($m == 'edit' && $id > 0)
 			cot_error($L['com_commenttooshort'], 'comtext');
 		}
 		
-		foreach ($cot_extrafields[$db_contact] as $exrow)
+		foreach ($cot_extrafields[$db_com] as $exfld)
 		{
-			$comarray['com_' . $exrow['field_name']] = cot_import_extrafields('rcomments' . $exrow['field_name'], $exrow);
+			$comarray['com_' . $exfld['field_name']] = cot_import_extrafields('rcomments' . $exfld['field_name'], $exfld);
 		}
 
 		if (!cot_error_found())
@@ -153,15 +153,17 @@ if ($m == 'edit' && $id > 0)
 	));
 	
 	// Extra fields
-	foreach ($cot_extrafields[$db_com] as $i => $exrow)
+	foreach ($cot_extrafields[$db_com] as $exfld)
 	{
-		$uname = strtoupper($exrow['field_name']);
-		$t->assign('COMMENTS_FORM_' . $uname, cot_build_extrafields('rcomments' . $exrow['field_name'], $exrow, $com[$exrow['field_name']]));
-		$t->assign('COMMENTS_FORM_' . $uname . '_TITLE', isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['comments_' . $exrow['field_name'] . '_title'] : $exrow['field_description']);
-
-			// extra fields universal tags
-		$t->assign('COMMENTS_FORM_EXTRAFLD', cot_build_extrafields('rcomments' . $exrow['field_name'], $exrow, $com[$exrow['field_name']]));
-		$t->assign('COMMENTS_FORM_EXTRAFLD_TITLE', isset($L['comments_' . $exrow['field_name'] . '_title']) ? $L['contact_' . $exrow['field_name'] . '_title'] : $exrow['field_description']);
+		$uname = strtoupper($exfld['field_name']);
+		$exfld_val = cot_build_extrafields('rcomments' . $exfld['field_name'], $exfld, $com[$exfld['field_name']]);
+		$exfld_title = isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
+		$t->assign(array(
+			'COMMENTS_FORM_' . $uname =>  $exfld_val,
+			'COMMENTS_FORM_' . $uname . '_TITLE' => $exfld_title,
+			'COMMENTS_FORM_EXTRAFLD' => $exfld_val,
+			'COMMENTS_FORM_EXTRAFLD_TITLE' => $exfld_title
+			));
 		$t->parse('COMMENTS.COMMENTS_FORM_EDIT.EXTRAFLD');
 	}
 
@@ -182,9 +184,9 @@ if ($a == 'send' && $usr['auth_write'])
 	$rname = cot_import('rname', 'P', 'TXT');
 	$comarray = array();
 	// Extra fields
-	foreach ($cot_extrafields[$db_contact] as $exrow)
+	foreach ($cot_extrafields[$db_com] as $exfld)
 	{
-		$comarray['com_' . $exrow['field_name']] = cot_import_extrafields('rcomments' . $exrow['field_name'], $exrow);
+		$comarray['com_' . $exfld['field_name']] = cot_import_extrafields('rcomments' . $exfld['field_name'], $exfld);
 	}
 
 	/* == Hook == */
@@ -261,9 +263,9 @@ elseif ($a == 'delete' && $usr['isadmin'])
 		$sql->closeCursor();
 		$sql = $db->delete($db_com, "com_id=$id");
 		
-		foreach ($cot_extrafields[$db_com] as $i => $row_extf)
+		foreach ($cot_extrafields[$db_com] as $exfld)
 		{
-			cot_extrafield_unlinkfiles($row['com_' . $row_extf['field_name']], $row_extf);
+			cot_extrafield_unlinkfiles($row['com_' . $exfld['field_name']], $exfld);
 		}
 		
 		/* == Hook == */

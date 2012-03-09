@@ -195,9 +195,9 @@ elseif ($a == 'delete')
 			$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code=".$db->quote($row['page_cat']));
 		}
 
-		foreach($cot_extrafields[$db_pages] as $i => $row_extf)
+		foreach($cot_extrafields[$db_pages] as $exfld)
 		{
-			cot_extrafield_unlinkfiles($row['page_'.$row_extf['field_name']], $row_extf);
+			cot_extrafield_unlinkfiles($row['page_'.$exfld['field_name']], $exfld);
 		}
 
 		$sql_page = $db->delete($db_pages, "page_id=$id");

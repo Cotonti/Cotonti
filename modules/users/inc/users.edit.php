@@ -65,9 +65,9 @@ if ($a=='update')
 		$sql = $db->delete($db_users, "user_id=$id");
 		$sql = $db->delete($db_groups_users, "gru_userid=$id");
 
-		foreach($cot_extrafields[$db_users] as $i => $row_extf) 
+		foreach($cot_extrafields[$db_users] as $exfld) 
 		{ 
-			cot_extrafield_unlinkfiles($row1['user_'.$row_extf['field_name']], $row_extf);
+			cot_extrafield_unlinkfiles($row1['user_'.$exfld['field_name']], $exfld);
 		}
 		
 		if (cot_module_active('pfs') && cot_import('ruserdelpfs','P','BOL'))
@@ -108,9 +108,9 @@ if ($a=='update')
 	$rusernewpass = cot_import('rusernewpass','P','TXT', 16);
 
 	// Extra fields
-	foreach($cot_extrafields[$db_users] as $row)
+	foreach($cot_extrafields[$db_users] as $exfld)
 	{
-		$ruser['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row, 'P', $row1['user_'.$row['field_name']]);
+		$ruser['user_'.$exfld['field_name']] = cot_import_extrafields('ruser'.$exfld['field_name'], $exfld, 'P', $row1['user_'.$exfld['field_name']]);
 	}
 
 	$rusergroupsms = cot_import('rusergroupsms', 'P', 'ARR');
@@ -292,10 +292,13 @@ $t->assign(array(
 
 // Extra fields
 $extra_array = cot_build_extrafields('user', 'USERS_EDIT', $cot_extrafields[$db_users], $urr);
-foreach($cot_extrafields[$db_users] as $i => $row)
+foreach($cot_extrafields[$db_users] as $exfld)
 {
-	$t->assign('USERS_EDIT_'.strtoupper($row['field_name']), cot_build_extrafields('ruser'.$row['field_name'],  $row, $urr['user_'.$row['field_name']]));
-	$t->assign('USERS_EDIT_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
+	$tag = strtoupper($exfld['field_name']);
+	$t->assign(array(
+		'USERS_EDIT_'.$tag => cot_build_extrafields('ruser'.$exfld['field_name'],  $exfld, $urr['user_'.$exfld['field_name']]),
+		'USERS_EDIT_'.$tag.'_TITLE' => isset($L['user_'.$exfld['field_name'].'_title']) ? $L['user_'.$exfld['field_name'].'_title'] : $exfld['field_description']
+	));
 }
 
 // Error and message reporting

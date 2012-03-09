@@ -55,9 +55,9 @@ if($a == 'update')
 	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','BOL');
 	
 	// Extra fields
-	foreach($cot_extrafields[$db_users] as $row)
+	foreach($cot_extrafields[$db_users] as $exfld)
 	{
-		$ruser['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row, 'P', $urr['user_'.$row['field_name']]);
+		$ruser['user_'.$exfld['field_name']] = cot_import_extrafields('ruser'.$exfld['field_name'], $exfld, 'P', $urr['user_'.$exfld['field_name']]);
 	}
 	$ruser['user_birthdate'] = (int) cot_import_date('ruserbirthdate', false);
 
@@ -215,10 +215,13 @@ $t->assign(array(
 ));
 
 // Extra fields
-foreach($cot_extrafields[$db_users] as $i => $row)
+foreach($cot_extrafields[$db_users] as $exfld)
 {
-	$t->assign('USERS_PROFILE_'.strtoupper($row['field_name']), cot_build_extrafields('ruser'.$row['field_name'], $row, $urr['user_'.$row['field_name']]));
-	$t->assign('USERS_PROFILE_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
+	$tag = strtoupper($exfld['field_name']);
+	$t->assign(array(
+		'USERS_PROFILE_'.$tag => cot_build_extrafields('ruser'.$exfld['field_name'], $exfld, $urr['user_'.$exfld['field_name']]),
+		'USERS_PROFILE_'.$tag.'_TITLE' => isset($L['user_'.$exfld['field_name'].'_title']) ? $L['user_'.$exfld['field_name'].'_title'] : $exfld['field_description']
+	));
 }
 
 /* === Hook === */
