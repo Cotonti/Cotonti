@@ -12,7 +12,7 @@ Tags=comments.tpl: {COMMENTS_FORM_VERIFY_IMG}, {COMMENTS_FORM_VERIFY}
  * @package mcaptcha
  * @version 0.1.0
  * @author Cotonti Team
- * @copyright Copyright (c) Vladimir Sibirov and Pavel Mikulik 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
  */
 
