@@ -54,6 +54,14 @@ if ($out)
 	{
 		$db->update($db_users, array('user_lastvisit' => $sys['now_offset']), "user_id = " . $usr['id']);
 		$db->delete($db_online, "online_ip='{$usr['ip']}'");
+		
+		$all = cot_import('all', 'G', 'BOL');
+		if ($all)
+		{
+			// Log out on all devices
+			$db->update($db_users, array('user_sid' => ''), "user_id = " . $usr['id']);
+		}
+		
 		cot_uriredir_redirect(empty($redirect) ? cot_url('index') : base64_decode($redirect));
 	}
 	else
