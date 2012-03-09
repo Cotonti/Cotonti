@@ -51,21 +51,20 @@ if (isset($cot_captcha))
 	}
 }
 
-
-//Import the variables
-$rcontact['contact_text'] = cot_import('rtext', 'P', 'TXT');
-$rcontact['contact_author'] = cot_import('ruser', 'P', 'TXT');
-$rcontact['contact_email'] = cot_import('remail', 'P', 'TXT');
-$rcontact['contact_subject'] = cot_import('rsubject', 'P', 'TXT');
-
-// Extra fields
-foreach ($cot_extrafields[$db_contact] as $row)
-{
-	$rcontact['contact_' . $row['field_name']] = cot_import_extrafields('rcontact' . $row['field_name'], $row);
-}
-
 if (isset($_POST['rtext']))
 {
+	//Import the variables
+	$rcontact['contact_text'] = cot_import('rtext', 'P', 'TXT');
+	$rcontact['contact_author'] = cot_import('ruser', 'P', 'TXT');
+	$rcontact['contact_email'] = cot_import('remail', 'P', 'TXT');
+	$rcontact['contact_subject'] = cot_import('rsubject', 'P', 'TXT');
+
+	// Extra fields
+	foreach ($cot_extrafields[$db_contact] as $row)
+	{
+		$rcontact['contact_' . $row['field_name']] = cot_import_extrafields('rcontact' . $row['field_name'], $row);
+	}
+	
 	if ($usr['id'] == 0 && isset($cot_captcha))
 	{
 		$rverify = cot_import('rverify', 'P', 'TXT');

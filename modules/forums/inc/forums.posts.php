@@ -103,12 +103,21 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	{
 		cot_die();
 	}
-	$newmsg = cot_import('newmsg', 'P', 'HTM');
-
-	if (mb_strlen($newmsg) < $cfg['forums']['minpostlength'])
+	$nmsg = array();
+	$nmsg['fp_text'] = cot_import('newmsg', 'P', 'HTM');
+	$nmsg['fp_updated'] = (int)$sys['now_offset'];
+	$nmsg['fp_posterip'] = $usr['ip'];
+	
+	if (mb_strlen($nmsg['fp_text']) < $cfg['forums']['minpostlength'])
 	{
 		cot_error('forums_messagetooshort', 'newmsg');
 		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
+	}
+	
+	// Extra fields
+	foreach ($cot_extrafields[$db_forum_posts] as $row_ex)
+	{
+		$nmsg['fp_'.$row_ex['field_name']] = cot_import_extrafields('nmsg'.$row_ex['field_name'], $row_ex);
 	}
 
 	/* === Hook === */
@@ -122,17 +131,14 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	{
 		if (!$merge)
 		{
-			$db->insert($db_forum_posts, array(
-				'fp_topicid' => (int)$q,
-				'fp_cat' => $s,
-				'fp_posterid' => (int)$usr['id'],
-				'fp_postername' => $usr['name'],
-				'fp_creation' => (int)$sys['now_offset'],
-				'fp_updated' => (int)$sys['now_offset'],
-				'fp_updater' => 0,
-				'fp_text' => $newmsg,
-				'fp_posterip' => $usr['ip']
-			));
+			$nmsg['fp_topicid'] = (int)$q;
+			$nmsg['fp_cat'] = $s;
+			$nmsg['fp_posterid'] = (int)$usr['id'];
+			$nmsg['fp_postername'] = $usr['name'];
+			$nmsg['fp_creation'] = (int)$sys['now_offset'];
+			$nmsg['fp_updater'] = 0;
+			
+			$db->insert($db_forum_posts, $nmsg);
 			$p = $db->lastInsertId();
 
 			$sql_forums = $db->query("UPDATE $db_forum_topics SET
@@ -153,16 +159,17 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 			$gap_base = empty($row['fp_updated']) ? $row['fp_creation'] : $row['fp_updated'];
 			$updated = sprintf($L['forums_mergetime'], cot_build_timegap($gap_base, $sys['now_offset']));
 
-			$newmsg = $row['fp_text'] . cot_rc('forums_code_update', array('updated' => $updated)) . $newmsg;
+			$nmsg['fp_text'] = $row['fp_text'] . cot_rc('forums_code_update', array('updated' => $updated)) . $nmsg['fp_text'];
+			$nmsg['fp_updater'] = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
 
-			$rupdater = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
-			$db->update($db_forum_posts, array('fp_text' => $newmsg, 'fp_updated' => $sys['now_offset'],
-				'fp_updater' => $rupdater, 'fp_posterip' => $usr['ip']), 'fp_id=' . $row['fp_id']);
-
+			$db->update($db_forum_posts, $nmsg, 'fp_id=' . $row['fp_id']);
 			$db->update($db_forum_topics, array('ft_updated' => $sys['now_offset']), "ft_id = $q");
 			
 			cot_forums_sectionsetlast($s);
 		}
+		
+		cot_extrafield_movefiles();
+		
 		/* === Hook === */
 		foreach (cot_getextplugins('forums.posts.newpost.done') as $pl)
 		{
@@ -196,7 +203,12 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 	$row = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id = ? AND fp_topicid = ? AND fp_cat = ? LIMIT 1",
 		array($p, $q, $s))->fetch();
 	is_array($row) || cot_die();
-
+	
+	foreach($cot_extrafields[$db_forum_posts] as $i => $row_extf) 
+	{ 
+		cot_extrafield_unlinkfiles($row['fp_'.$row_extf['field_name']], $row_extf);
+	}
+			
 	$sql_forums = $db->delete($db_forum_posts, 'fp_id = ? AND fp_topicid = ? AND fp_cat = ?', array($p, $q, $s));
 
 	if ($cfg['forums'][$s]['countposts'])
@@ -391,7 +403,16 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_NUM' => $fp_num,
 		'FORUMS_POSTS_ROW_ORDER' => empty($id) ? $d + $fp_num : $id
 	));
-
+	
+	foreach ($cot_extrafields[$db_forum_posts] as $row_ex)
+	{
+		$tag = mb_strtoupper($row_ex['field_name']);
+		$t->assign(array(
+			'FORUMS_POSTS_ROW_'.$tag.'_TITLE' => isset($L['forums_posts_'.$row_ex['field_name'].'_title']) ?  $L['forums_posts_'.$row_ex['field_name'].'_title'] : $row_ex['field_description'],
+			'FORUMS_POSTS_ROW_'.$tag => cot_build_extrafields_data('forums', $row_ex, $row["ft_{$row_ex['field_name']}"], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
+		));
+	}
+	
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
 	{
@@ -453,11 +474,24 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 		}
 	}
 
+		// Extra fields
+	foreach($cot_extrafields[$db_forum_posts] as $i => $row_ex)
+	{
+		$uname = strtoupper($row_ex['field_name']);
+		$t->assign('FORUMS_POSTS_NEWPOST_'.$uname, cot_build_extrafields('nmsg'.$row_ex['field_name'], $row_ex, $nmsg[$row_ex['field_name']]));
+		$t->assign('FORUMS_POSTS_NEWPOST_'.$uname.'_TITLE', isset($L['forums_posts_'.$row_ex['field_name'].'_title']) ?  $L['forums_posts_'.$row_ex['field_name'].'_title'] : $row_ex['field_description']);
+
+		// extra fields universal tags
+		$t->assign('FORUMS_POSTS_NEWPOST_EXTRAFLD', cot_build_extrafields('nmsg'.$row_ex['field_name'], $row_ex, $nmsg[$row_ex['field_name']]));
+		$t->assign('FORUMS_POSTS_NEWPOST_EXTRAFLD_TITLE', isset($L['forums_posts_'.$row_ex['field_name'].'_title']) ?  $L['forums_posts_'.$row_ex['field_name'].'_title'] : $row_ex['field_description']);
+		$t->parse('MAIN.FORUMS_POSTS_NEWPOST.EXTRAFLD');
+	}
+	
 	$t->assign(array(
 		'FORUMS_POSTS_NEWPOST_SEND' => cot_url('forums', "m=posts&a=newpost&s=" . $s . "&q=" . $q),
-		'FORUMS_POSTS_NEWPOST_TEXT' => $R['forums_code_newpost_mark'] . cot_textarea('newmsg', $newmsg, 16, 56, '', 'input_textarea_medieditor')
+		'FORUMS_POSTS_NEWPOST_TEXT' => $R['forums_code_newpost_mark'] . cot_textarea('newmsg', $nmsg['fp_text'], 16, 56, '', 'input_textarea_medieditor')
 	));
-
+	
 	cot_display_messages($t);
 
 	/* === Hook  === */

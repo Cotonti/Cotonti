@@ -7,12 +7,12 @@
   ==================== */
 
 /**
- * Page module
+ * Contact Plugin for Cotonti CMF
  *
- * @package page
- * @version 0.7.0
+ * @package contact
+ * @version 2.1.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright (c) 2008-2012 Cotonti Team
  * @license BSD
  */
 defined('COT_CODE') or die('Wrong URL');
