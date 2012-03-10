@@ -238,6 +238,11 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 		{
 			$sql_forums = $db->delete($db_forum_topics, "ft_movedto = $q");
 			$sql_forums = $db->delete($db_forum_topics, "ft_id = $q");
+			
+			foreach($cot_extrafields[$db_forum_topics] as $exfld) 
+			{ 
+				cot_extrafield_unlinkfiles($row['ft_'.$exfld['field_name']], $exfld);
+			}			
 
 			/* === Hook === */
 			foreach (cot_getextplugins('forums.posts.emptytopicdel') as $pl)
@@ -409,7 +414,7 @@ foreach ($sql_forums->fetchAll() as $row)
 		$tag = mb_strtoupper($exfld['field_name']);
 		$t->assign(array(
 			'FORUMS_POSTS_ROW_'.$tag.'_TITLE' => isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-			'FORUMS_POSTS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
+			'FORUMS_POSTS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['fp_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
 		));
 	}
 	
@@ -546,6 +551,15 @@ $t->assign(array(
 	'FORUMS_POSTS_JUMPBOX' => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"'),
 ));
 
+foreach ($cot_extrafields[$db_forum_topics] as $exfld)
+{
+	$tag = mb_strtoupper($exfld['field_name']);
+	$t->assign(array(
+		'FORUMS_POSTS_TOPIC_'.$tag.'_TITLE' => isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
+		'FORUMS_POSTS_TOPIC_'.$tag => cot_build_extrafields_data('forums', $exfld, $rowt['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
+	));
+}
+	
 /* === Hook  === */
 foreach (cot_getextplugins('forums.posts.tags') as $pl)
 {

@@ -66,7 +66,10 @@ if ($a == 'newtopic')
 	{
 		cot_error('forums_messagetooshort', 'rmsgtext');
 	}
-	
+	foreach ($cot_extrafields[$db_forum_topics] as $exfld)
+	{
+		$rtopic['ft_'.$exfld['field_name']] = cot_import_extrafields('rtopic'.$exfld['field_name'], $exfld);
+	}	
 	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
 	{
 		$rmsg['fp_'.$exfld['field_name']] = cot_import_extrafields('rmsg'.$exfld['field_name'], $exfld);
@@ -185,6 +188,21 @@ foreach($cot_extrafields[$db_forum_posts] as $exfld)
 		'FORUMS_NEWTOPIC_EXTRAFLD_TITLE' => $exfld_title
 	));
 	$t->parse('MAIN.EXTRAFLD');
+}
+
+// Extra fields
+foreach($cot_extrafields[$db_forum_topics] as $exfld)
+{
+	$uname = strtoupper($exfld['field_name']);
+	$exfld_val = cot_build_extrafields('rtopic'.$exfld['field_name'], $exfld, $rtopic[$exfld['field_name']]);
+	$exfld_title = isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
+	$t->assign(array(
+		'FORUMS_NEWTOPIC_TOPIC_'.$uname => $exfld_val,
+		'FORUMS_NEWTOPIC_TOPIC_'.$uname.'_TITLE' => $exfld_title,
+		'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD' => $exfld_val,
+		'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD_TITLE' => $exfld_title
+	));
+	$t->parse('MAIN.TOPIC_EXTRAFLD');
 }
 
 if ($cfg['forums'][$s]['allowprvtopics'])

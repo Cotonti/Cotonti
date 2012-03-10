@@ -335,6 +335,15 @@ foreach ($sql_forums_rowset as $row)
 		'FORUMS_TOPICS_ROW' => $row,
 	));
 	
+	foreach ($cot_extrafields[$db_forum_topics] as $exfld)
+	{
+		$tag = mb_strtoupper($exfld['field_name']);
+		$t->assign(array(
+			'FORUMS_TOPICS_ROW_'.$tag.'_TITLE' => isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
+			'FORUMS_TOPICS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
+		));
+	}
+	
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
 	{
