@@ -103,21 +103,21 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	{
 		cot_die();
 	}
-	$nmsg = array();
-	$nmsg['fp_text'] = cot_import('newmsg', 'P', 'HTM');
-	$nmsg['fp_updated'] = (int)$sys['now_offset'];
-	$nmsg['fp_posterip'] = $usr['ip'];
+	$rmsg = array();
+	$rmsg['fp_text'] = cot_import('rmsgtext', 'P', 'HTM');
+	$rmsg['fp_updated'] = (int)$sys['now_offset'];
+	$rmsg['fp_posterip'] = $usr['ip'];
 	
-	if (mb_strlen($nmsg['fp_text']) < $cfg['forums']['minpostlength'])
+	if (mb_strlen($rmsg['fp_text']) < $cfg['forums']['minpostlength'])
 	{
-		cot_error('forums_messagetooshort', 'newmsg');
+		cot_error('forums_messagetooshort', 'rmsgtext');
 		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
 	
 	// Extra fields
 	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
 	{
-		$nmsg['fp_'.$exfld['field_name']] = cot_import_extrafields('nmsg'.$exfld['field_name'], $exfld);
+		$rmsg['fp_'.$exfld['field_name']] = cot_import_extrafields('rmsg'.$exfld['field_name'], $exfld);
 	}
 
 	/* === Hook === */
@@ -131,14 +131,14 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	{
 		if (!$merge)
 		{
-			$nmsg['fp_topicid'] = (int)$q;
-			$nmsg['fp_cat'] = $s;
-			$nmsg['fp_posterid'] = (int)$usr['id'];
-			$nmsg['fp_postername'] = $usr['name'];
-			$nmsg['fp_creation'] = (int)$sys['now_offset'];
-			$nmsg['fp_updater'] = 0;
+			$rmsg['fp_topicid'] = (int)$q;
+			$rmsg['fp_cat'] = $s;
+			$rmsg['fp_posterid'] = (int)$usr['id'];
+			$rmsg['fp_postername'] = $usr['name'];
+			$rmsg['fp_creation'] = (int)$sys['now_offset'];
+			$rmsg['fp_updater'] = 0;
 			
-			$db->insert($db_forum_posts, $nmsg);
+			$db->insert($db_forum_posts, $rmsg);
 			$p = $db->lastInsertId();
 
 			$sql_forums = $db->query("UPDATE $db_forum_topics SET
@@ -159,10 +159,10 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 			$gap_base = empty($row['fp_updated']) ? $row['fp_creation'] : $row['fp_updated'];
 			$updated = sprintf($L['forums_mergetime'], cot_build_timegap($gap_base, $sys['now_offset']));
 
-			$nmsg['fp_text'] = $row['fp_text'] . cot_rc('forums_code_update', array('updated' => $updated)) . $nmsg['fp_text'];
-			$nmsg['fp_updater'] = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
+			$rmsg['fp_text'] = $row['fp_text'] . cot_rc('forums_code_update', array('updated' => $updated)) . $rmsg['fp_text'];
+			$rmsg['fp_updater'] = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
 
-			$db->update($db_forum_posts, $nmsg, 'fp_id=' . $row['fp_id']);
+			$db->update($db_forum_posts, $rmsg, 'fp_id=' . $row['fp_id']);
 			$db->update($db_forum_topics, array('ft_updated' => $sys['now_offset']), "ft_id = $q");
 			
 			cot_forums_sectionsetlast($s);
@@ -464,7 +464,7 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 			array($q, $s, $quote));
 		if ($row4 = $sql_forums_quote->fetch())
 		{
-			$newmsg = cot_rc('forums_code_quote', array(
+			$rmsg['fp_text'] = cot_rc('forums_code_quote', array(
 				'url' => cot_url('forums', 'm=posts&p=' . $row4['fp_id'], '#' . $row4['fp_id'], $forums_quote_htmlspecialchars_bypass),
 				'id' => $row4['fp_id'],
 				'date' => cot_date('datetime_medium', $row4['fp_creation']),
@@ -478,7 +478,7 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 	foreach($cot_extrafields[$db_forum_posts] as $exfld)
 	{
 		$uname = strtoupper($exfld['field_name']);
-		$exfld_val = cot_build_extrafields('nmsg'.$exfld['field_name'], $exfld, $nmsg[$exfld['field_name']]);
+		$exfld_val = cot_build_extrafields('rmsg'.$exfld['field_name'], $exfld, $rmsg[$exfld['field_name']]);
 		$exfld_title = isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 		$t->assign(array(
 			'FORUMS_POSTS_NEWPOST_'.$uname => $exfld_val,
@@ -491,7 +491,7 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 	
 	$t->assign(array(
 		'FORUMS_POSTS_NEWPOST_SEND' => cot_url('forums', "m=posts&a=newpost&s=" . $s . "&q=" . $q),
-		'FORUMS_POSTS_NEWPOST_TEXT' => $R['forums_code_newpost_mark'] . cot_textarea('newmsg', $nmsg['fp_text'], 16, 56, '', 'input_textarea_medieditor')
+		'FORUMS_POSTS_NEWPOST_TEXT' => $R['forums_code_newpost_mark'] . cot_textarea('rmsgtext', $rmsg['fp_text'], 16, 56, '', 'input_textarea_medieditor')
 	));
 	
 	cot_display_messages($t);
