@@ -51,6 +51,10 @@ if (isset($cot_captcha))
 	}
 }
 
+$tplfile = cot_import('tpl', 'G', 'TXT');
+$mskin = cot_tplfile(array('contact', $tplfile), 'plug');
+$t = new XTemplate($mskin);
+
 if (isset($_POST['rtext']))
 {
 	//Import the variables
@@ -103,18 +107,25 @@ if (isset($_POST['rtext']))
 		if (cot_check_email($semail) && in_array($cfg['plugin']['contact']['save'], array('email','both')))
 		{
 			$headers = ("From: \"" . $rcontact['contact_author'] . "\" <" . $rcontact['contact_email'] . ">\n");
-			$rtextm = $cfg["maintitle"] . " - " . $cfg['mainurl'] . " \n\n" .
-				$L['Sender'] . ": " . $rcontact['contact_author'] . " (" . $rcontact['contact_email'] . ") \n";
-			$rtextm .= ( $rcontact['contact_subject'] != '') ? $L['Topic'] . ": " . $rcontact['contact_subject'] . "\n" : "";
-			$rtextm .= $L['Message'] . ":\n" . $rcontact['contact_text'];
-
+			$context = array(
+				'sitetitle' => $cfg["maintitle"],
+				'siteurl' => $cfg['mainurl'],
+				'author' => $rcontact['contact_author'],
+				'email' => $rcontact['contact_email'],
+				'subject' => $rcontact['contact_subject'],
+				'text' => $rcontact['contact_text']	
+			);
 			foreach ($cot_extrafields[$db_contact] as $exfld)
 			{
 				$ex_title = isset($L['contact_' . $exfld['field_name'] . '_title']) ? $L['contact_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
 				$ex_body = cot_build_extrafields_data('contact', $exfld, $rcontact['contact_'.$exfld['field_name']]);
-				$rtextm .= "\n".$ex_title.": ".$ex_body;
+				$rextras .= "\n".$ex_title.": ".$ex_body;
+				$context['extra'.$exfld['field_name']] = $ex_body;
+				$context['extra'.$exfld['field_name'].'_title'] = $ex_title;
+				
 			}
-
+			$context['extra'] = $rextras;
+			$rtextm = cot_rc(empty($cfg['plugin']['contact']['template']) ? $R['contact_message'] : $cfg['plugin']['contact']['template'], $context);
 			cot_mail($semail, $rcontact['contact_subject'], $rtextm, $headers);
 		}
 		$sent = true;
@@ -131,7 +142,7 @@ cot_display_messages($t);
 if (!$sent)
 {
 	$t->assign(array(
-		'CONTACT_FORM_SEND' => cot_url('plug', 'e=contact'),
+		'CONTACT_FORM_SEND' => cot_url('plug', 'e=contact&tpl='.$tplfile),
 		'CONTACT_FORM_AUTHOR' => ($usr['id'] == 0) ? cot_inputbox('text', 'ruser', $rcontact['contact_author'], 'size="24" maxlength="24"') : cot_inputbox('text', 'ruser', $usr['name'], 'size="24" maxlength="24" readonly="readonly"'),
 		'CONTACT_FORM_EMAIL' => cot_inputbox('text', 'remail', $rcontact['contact_email'], 'size="24"'),
 		'CONTACT_FORM_SUBJECT' => cot_inputbox('text', 'rsubject', $rcontact['contact_subject'], 'size="24"'),

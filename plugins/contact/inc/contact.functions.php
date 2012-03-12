@@ -19,4 +19,9 @@ global $db_contact, $db_x;
 $db_contact = (isset($db_contact)) ? $db_contact : $db_x . 'contact';
 $cot_extrafields[$db_contact] = (!empty($cot_extrafields[$db_contact]))	? $cot_extrafields[$db_contact] : array();
 
+$R['contact_message'] = '{$sitetitle} - {$siteurl}\n\n
+	'.$L['Sender'] . ': {$author} ({$email}) \n
+	'.$L['Topic'] . ': {$subject}\n
+	'.$L['Message'] . ':\n{$text}\n\n{$extra}';
+
 ?>

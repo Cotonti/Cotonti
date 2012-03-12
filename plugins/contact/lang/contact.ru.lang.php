@@ -20,6 +20,7 @@ $L['cfg_map'] = array('Код карты');
 $L['cfg_about'] = array('О сайте');
 $L['cfg_save'] = array('Метод хранения сообщений');
 $L['cfg_save_params'] = array('e-mail', 'база данных', 'e-mail + база данных');
+$L['cfg_template'] = array('Шаблон письма', 'Используемые переменные: {$sitetitle}, {$siteurl}, {$author}, {$email}, {$subject}, {$text}, {$extra}, {$extraXXXX}, {$extraXXXX_title}');
 $L['info_desc'] = 'Форма для связи, отправляемая по e-mail и записываемая в базу данных';
 
 /**

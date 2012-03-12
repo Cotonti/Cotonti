@@ -20,6 +20,7 @@ $L['cfg_map'] = array('Map');
 $L['cfg_about'] = array('About');
 $L['cfg_save'] = array('Save method');
 $L['cfg_save_params'] = array('e-mail', 'database', 'e-mail + database');
+$L['cfg_template'] = array('Email template', 'Using variables: {$sitetitle}, {$siteurl}, {$author}, {$email}, {$subject}, {$text}, {$extra}, {$extraXXXX}, {$extraXXXX_title}');
 $L['info_desc'] = 'Contact form for user feedback delivered via email and recorded in database';
 
 /**
