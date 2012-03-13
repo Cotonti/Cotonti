@@ -861,13 +861,19 @@ function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
  * @param bool $httponly HttpOnly flag
  * @return bool
  */
-function cot_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = true)
+function cot_setcookie($name, $value, $expire = '', $path='', $domain='', $secure = false, $httponly = true)
 {
+	global $cfg;
+	
 	if (mb_strpos($domain, '.') === FALSE)
 	{
 		// Some browsers don't support cookies for local domains
 		$domain = '';
 	}
+
+	$domain = (empty($domain))? $cfg['cookiedomain'] : $domain;
+	$path = (empty($path)) ? $cfg['cookiepath'] : $path;
+	$expire = (empty($expire)) ? time()+$cfg['cookielifetime'] : $expire;
 
 	if ($domain != '')
 	{
