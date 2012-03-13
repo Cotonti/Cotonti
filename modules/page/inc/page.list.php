@@ -132,9 +132,10 @@ if ($w != $cfg['page'][$c]['way'])
 }
 $list_url = cot_url('page', $list_url_path);
 
-$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cat['title'] : cot_breadcrumbs(cot_structure_buildpath('page', $c), $cfg['homebreadcrumb'], true);
+$catpatharray = cot_structure_buildpath('page', $c);
+$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cat['title'] : cot_breadcrumbs($catpatharray, $cfg['homebreadcrumb'], true);
 
-$shortpath = cot_structure_buildpath('page', $c);
+$shortpath = $catpatharray;
 array_pop($shortpath);
 $catpath_short = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? '' : cot_breadcrumbs($shortpath, $cfg['homebreadcrumb']);
 
