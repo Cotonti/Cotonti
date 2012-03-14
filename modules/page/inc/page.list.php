@@ -121,6 +121,9 @@ if (!$usr['isadmin'] && $c != 'unvalidated')
 {
 	$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 }
+
+$orderby = "page_$s $w";
+
 $list_url_path = array('c' =>$c, 'ord' => $o, 'p' => $p);
 if ($s != $cfg['page'][$c]['order'])
 {
@@ -155,7 +158,7 @@ if(empty($sql_page_string))
 		FROM $db_pages as p $join_condition
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		$where
-		ORDER BY page_$s $w LIMIT $d, ".$cfg['page']['maxrowsperpage'];
+		ORDER BY $orderby LIMIT $d, ".$cfg['page']['maxrowsperpage'];
 }
 $totallines = $db->query($sql_page_count, $params)->fetchColumn();
 $sqllist = $db->query($sql_page_string, $params);
