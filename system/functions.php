@@ -575,7 +575,7 @@ function cot_check_email($res)
  * @param string $additional_parameters Additional parameters passed to sendmail
  * @return bool
  */
-function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false, $additional_parameters = null)
+function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false, $additional_parameters = null, $html = false)
 {
 	global $cfg, $cot_mail_senders;
 
@@ -605,7 +605,8 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
 				: $headers;
 		$headers .= "Message-ID: <" . md5(uniqid(microtime())) . "@" . $_SERVER['SERVER_NAME'] . ">\n";
 
-		$headers .= "Content-Type: text/plain; charset=UTF-8\n";
+		$type_body = $html ? "html" : "plain"; 
+		$headers .= "Content-Type: text/".$type_body."; charset=UTF-8\n";
 		$headers .= "Content-Transfer-Encoding: 8bit\n";
 
 		if (!$customtemplate)
