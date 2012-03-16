@@ -51,6 +51,7 @@ function cot_send_translated_mail($rlang, $remail, $rusername)
  * @param string $action delete or archive message
  *
  * @return bool true if  action sucsessfull
+ * @global CotDB $db
  */
 function cot_remove_pm($message_id)
 {
@@ -98,6 +99,7 @@ function cot_remove_pm($message_id)
  * @param array $message_id messages ids
  *
  * @return bool true if  action sucsessfull
+ * @global CotDB $db
  */
 function cot_star_pm($message_id)
 {
@@ -145,6 +147,7 @@ function cot_star_pm($message_id)
  * User Private Message count
  * @param int $user_id User ID
  * @return array
+ * @global CotDB $db
  */
 function cot_message_count($user_id=0)
 {

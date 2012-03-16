@@ -29,6 +29,7 @@ $db_polls_voters  = (isset($db_polls_voters)) ? $db_polls_voters : $db_x . 'poll
  * @param string $block Poll block in Template
  * @param string $type Poll type
  * @return bool
+ * @global CotDB $db
  */
 function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 {
@@ -172,6 +173,7 @@ function cot_poll_check()
  * @param string $type Poll type
  * @param int $code Poll Code
  * @return bool
+ * @global CotDB $db
  */
 function cot_poll_save($type = 'index', $code = '')
 {
@@ -234,6 +236,7 @@ function cot_poll_save($type = 'index', $code = '')
 
 /**
  * Poll function
+ * @global CotDB $db
  */
 function cot_poll_vote()
 {
@@ -286,6 +289,7 @@ function cot_poll_vote()
  * @param string $theme Poll template name
  * @param string $type Poll type
  * @return array
+ * @global CotDB $db
  */
 function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 {
@@ -379,6 +383,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
  * @param int $id Poll ID or Poll Code if $type is not epmty
  * @param string $type Poll type
  * @return bool
+ * @global CotDB $db
  */
 function cot_poll_delete($id, $type = '')
 {
@@ -417,6 +422,7 @@ function cot_poll_delete($id, $type = '')
  * @param int $state Poll lock status: 0 - unlocked, 1 - locked, 3 - toggle lock status
  * @param string $type Poll type
  * @return bool
+ * @global CotDB $db
  */
 function cot_poll_lock($id, $state, $type = '')
 {
@@ -444,6 +450,7 @@ function cot_poll_lock($id, $state, $type = '')
  * @param int $id Poll ID or Poll Code if $type is not epmty
  * @param string $type Poll type
  * @return bool
+ * @global CotDB $db
  */
 function cot_poll_reset($id, $type = '')
 {
@@ -469,6 +476,7 @@ function cot_poll_reset($id, $type = '')
  * @param int $id Poll ID or Poll Code if $type is not epmty
  * @param string $type Poll type
  * @return bool true if Poll exists
+ * @global CotDB $db
  */
 function cot_poll_exists($id, $type = '')
 {

@@ -666,6 +666,7 @@ function cot_module_active($name)
  * @global Cache $cache
  * @global array $cot_usersonline
  * @global array $env
+ * @global CotDB $db
  */
 function cot_online_update()
 {
@@ -894,6 +895,7 @@ function cot_setcookie($name, $value, $expire = '', $path='', $domain='', $secur
 
 /**
  * Performs actions required right before shutdown
+ * @global CotDB $db
  */
 function cot_shutdown()
 {
@@ -982,6 +984,7 @@ function cot_randomstring($length = 8, $charlist = null)
 
 /**
  * Loads comlete category structure into array
+ * @global CotDB $db
  */
 function cot_load_structure()
 {
@@ -1067,6 +1070,7 @@ function cot_load_structure()
  * @param bool $userrights Check userrights
  * @param bool $sqlprep use $db->prep function
  * @return array
+ * @global CotDB $db
  */
 function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = true, $userrights = true, $sqlprep = true)
 {
@@ -1133,6 +1137,7 @@ function cot_structure_parents($area, $cat, $type = 'full')
  * @param string $subcat Show only subcats of selected category
  * @param bool $hideprivate Hide private categories
  * @return string
+ * @global CotDB $db
  */
 function cot_selectbox_structure($area, $check, $name, $subcat = '', $hideprivate = true)
 {
@@ -1224,6 +1229,7 @@ function cot_auth($area, $option, $mask = 'RWA')
  * @param int $userid User ID
  * @param int $maingrp User main group
  * @return array
+ * @global CotDB $db
  */
 function cot_auth_build($userid, $maingrp = 0)
 {
@@ -1784,6 +1790,7 @@ function cot_build_usertext($text)
  * @param bool $allgroups Build info about all user groups
  * @param bool $cacheitem Cache tags
  * @return array
+ * @global CotDB $db
  */
 function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false, $cacheitem = true)
 {
@@ -2704,6 +2711,7 @@ function cot_implode_messages($src = 'default', $class = '')
  *
  * @param string $text Event description
  * @param string $group Event group
+ * @global CotDB $db
  */
 function cot_log($text, $group='def')
 {
@@ -4364,6 +4372,7 @@ function cot_check_xp()
 /**
  * Clears current user action in Who's online.
  *
+ * @global CotDB $db
  */
 function cot_shield_clearaction()
 {
@@ -4432,6 +4441,7 @@ function cot_shield_protect()
  *
  * @param int $shield_add Hammer
  * @param string $shield_newaction New action type
+ * @global CotDB $db
  */
 function cot_shield_update($shield_add, $shield_newaction)
 {

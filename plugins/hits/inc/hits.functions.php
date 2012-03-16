@@ -22,6 +22,7 @@ $db_stats = (isset($db_stats)) ? $db_stats : $db_x . 'stats';
  * Creates new stats parameter
  *
  * @param string $name Parameter name
+ * @global CotDB $db
  */
 function cot_stat_create($name)
 {
@@ -34,6 +35,7 @@ function cot_stat_create($name)
  *
  * @param string $name Parameter name
  * @return int
+ * @global CotDB $db
  */
 function cot_stat_get($name)
 {
@@ -48,6 +50,7 @@ function cot_stat_get($name)
  *
  * @param string $name Parameter name
  * @param int $value Increment step
+ * @global CotDB $db
  */
 function cot_stat_inc($name, $value = 1)
 {
@@ -60,6 +63,7 @@ function cot_stat_inc($name, $value = 1)
  *
  * @param string $name Parameter name
  * @param int $value Increment step
+ * @global CotDB $db
  */
 function cot_stat_update($name, $value = 1)
 {

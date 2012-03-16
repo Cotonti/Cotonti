@@ -28,6 +28,7 @@ $db_tag_references = (isset($db_tag_references)) ? $db_tag_references : $db_x . 
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
  * @param mixed $extra Extra condition (name => value) for plugins
  * @return bool
+ * @global CotDB $db
  */
 function cot_tag($tag, $item, $area = 'pages', $extra = null)
 {
@@ -61,6 +62,7 @@ function cot_tag($tag, $item, $area = 'pages', $extra = null)
  * @param string $order Should be 'tag' to order the result set by tag (alphabetical) or 'cnt' to order it by item count (descending)
  * @param int $limit Use this parameter to limit number of rows in the result set
  * @return array
+ * @global CotDB $db
  */
 function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 {
@@ -106,6 +108,7 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
  * @param string $tag Beginning of a tag
  * @param int $min_length Minimal length of the beginning
  * @return array
+ * @global CotDB $db
  */
 function cot_tag_complete($tag, $min_length = 3)
 {
@@ -131,6 +134,7 @@ function cot_tag_complete($tag, $min_length = 3)
  * @param string $area Site area or empty to count in all areas
  * @param mixed $extra Extra condition (name => value) for plugins
  * @return int
+ * @global CotDB $db
  */
 function cot_tag_count($tag, $area = '', $extra = null)
 {
@@ -155,6 +159,7 @@ function cot_tag_count($tag, $area = '', $extra = null)
  *
  * @param string $tag The tag
  * @return bool
+ * @global CotDB $db
  */
 function cot_tag_exists($tag)
 {
@@ -170,6 +175,7 @@ function cot_tag_exists($tag)
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
  * @param mixed $extra Extra condition (name => value) for plugins
  * @return bool
+ * @global CotDB $db
  */
 function cot_tag_isset($tag, $item, $area = 'pages', $extra = null)
 {
@@ -195,6 +201,7 @@ function cot_tag_isset($tag, $item, $area = 'pages', $extra = null)
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
  * @param mixed $extra Extra condition (name => value) for plugins
  * @return array
+ * @global CotDB $db
  */
 function cot_tag_list($item, $area = 'pages', $extra = null)
 {
@@ -254,6 +261,7 @@ function cot_tag_parse($input)
  * @param string $qs User input
  * @param array $join_columns Columns to be joined by on tag_item match in subquery
  * @return string
+ * @global CotDB $db
  */
 function cot_tag_parse_query($qs, $join_columns)
 {
@@ -330,6 +338,7 @@ function cot_tag_prep($tag)
  * Attempts to register a tag in the dictionary. Duplicate entries are just ignored.
  *
  * @param string $tag The tag
+ * @global CotDB $db
  */
 function cot_tag_register($tag)
 {
@@ -345,6 +354,7 @@ function cot_tag_register($tag)
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
  * @param mixed $extra Extra condition (name => value) for plugins
  * @return bool
+ * @global CotDB $db
  */
 function cot_tag_remove($tag, $item, $area = 'pages', $extra = null)
 {
@@ -374,6 +384,7 @@ function cot_tag_remove($tag, $item, $area = 'pages', $extra = null)
  * @param string $area Site area
  * @param mixed $extra Extra condition (name => value) for plugins
  * @return int
+ * @global CotDB $db
  */
 function cot_tag_remove_all($item = 0, $area = 'pages', $extra = null)
 {
@@ -411,6 +422,7 @@ function cot_tag_title($tag)
  * Unregisters a tag from the dictionary
  *
  * @param string $tag The tag
+ * @global CotDB $db
  */
 function cot_tag_unregister($tag)
 {
@@ -422,6 +434,7 @@ function cot_tag_unregister($tag)
  * Global tag cloud and search form
  *
  * @param string $area Site area
+ * @global CotDB $db
  */
 function cot_tag_search_form($area = 'all')
 {

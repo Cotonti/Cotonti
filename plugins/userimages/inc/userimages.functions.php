@@ -42,6 +42,7 @@ function cot_userimages_config_get($ignorecache=false)
  * @param int $height Image maximum height
  * @param string $crop Crop ratio, or 'fit' to use width/height to calculate ratio
  * @return bool
+ * @global CotDB $db
  */
 function cot_userimages_config_add($code, $width, $height, $crop='', $force=false)
 {
@@ -94,6 +95,7 @@ function cot_userimages_config_edit($code, $width, $height, $crop='')
  *
  * @param string $code User image code
  * @return DB query result
+ * @global CotDB $db
  */
 function cot_userimages_config_remove($code, $dropcolumn=true)
 {

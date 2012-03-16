@@ -44,6 +44,7 @@ $cot_auth_default_lock = array(
  * @param int $group_id Group ID
  * @param int $base_group_id ID of the group to copy permissions from
  * @return bool Operation status
+ * @global CotDB $db
  */
 function cot_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
 {
@@ -90,6 +91,7 @@ function cot_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
  * @param array $auth_permit Allowed permissions map
  * @param array $auth_lock Locked permissions map
  * @return int Number of rows inserted
+ * @global CotDB $db
  */
 function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth_lock = array())
 {
@@ -123,6 +125,7 @@ function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth
  *
  * @param mixed $id User ID (int) or 'all'
  * @return int Number of items affected
+ * @global CotDB $db
  */
 function cot_auth_clear($id = 'all')
 {
@@ -192,6 +195,7 @@ function cot_auth_getvalue($mask)
  *
  * @param int $group_id Group ID
  * @return int Number of records removed
+ * @global CotDB $db
  */
 function cot_auth_remove_group($group_id)
 {
@@ -206,6 +210,7 @@ function cot_auth_remove_group($group_id)
  * @param string $module_name The module object belongs to
  * @param string $item_id Object identifier within the module. If omitted, all objects will be removed.
  * @return int Number of records removed
+ * @global CotDB $db
  */
 function cot_auth_remove_item($module_name, $item_id = null)
 {
@@ -218,6 +223,7 @@ function cot_auth_remove_item($module_name, $item_id = null)
 
 /**
  * Optimizes auth table by sorting its rows
+ * @global CotDB $db
  */
 function cot_auth_reorder()
 {

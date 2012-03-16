@@ -32,6 +32,7 @@ function cot_hiddengroups_mode()
  * @param int $mode 0, 1 or 2 from cot_hiddengroups_mode()
  * @param string $type 'groups' or 'users'
  * @return array
+ * @global CotDB $db
  */
 function cot_hiddengroups_get($mode, $type='groups')
 {

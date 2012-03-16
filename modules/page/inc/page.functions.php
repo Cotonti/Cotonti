@@ -74,6 +74,7 @@ function cot_readraw($file)
  * @param string $subcat Show only subcats of selected category
  * @param bool $hideprivate Hide private categories
  * @return string
+ * @global CotDB $db
  */
 function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = true)
 {
@@ -112,6 +113,7 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
  * @param bool $pagepath_home Add home link for page path
  * @param string $emptytitle Page title text if page does not exist
  * @return array
+ * @global CotDB $db
  */
 function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = null, $pagepath_home = false, $emptytitle = '')
 {
@@ -370,6 +372,7 @@ function cot_page_status($page_state, $page_begin, $page_expire)
  *
  * @param string $cat Cat code
  * @return int
+ * @global CotDB $db
  */
 function cot_page_sync($cat)
 {
@@ -385,6 +388,7 @@ function cot_page_sync($cat)
  * @param string $oldcat Old Cat code
  * @param string $newcat New Cat code
  * @return bool
+ * @global CotDB $db
  */
 function cot_page_updatecat($oldcat, $newcat)
 {

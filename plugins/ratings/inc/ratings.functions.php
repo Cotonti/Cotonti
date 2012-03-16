@@ -29,6 +29,7 @@ $db_rated = isset($db_rated) ? $db_rated : $db_x . 'rated';
  * @param string $cat Item category code (optional)
  * @param bool $readonly Display as read-only
  * @return array Rendered HTML output for ratings and average integer value as an array with 2 elements
+ * @global CotDB $db
  */
 function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 {
@@ -214,6 +215,7 @@ function cot_ratings_enabled($ext_name, $cat = '', $item = '')
  *
  * @param string $area Item area code
  * @param string $code Item identifier
+ * @global CotDB $db
  */
 function cot_ratings_remove($area, $code)
 {

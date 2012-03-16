@@ -95,6 +95,7 @@ function cot_i18n_get_cat($cat, $locale)
  * @param int $page_id Page ID
  * @param string $locale Locale code
  * @return mixed Page translation row (array) on success or FALSE on error
+ * @global CotDB $db
  */
 function cot_i18n_get_page($page_id, $locale)
 {
@@ -125,6 +126,7 @@ function cot_i18n_list_cat_locales($cat)
  *
  * @param int $page_id Page ID
  * @return array List of locale codes
+ * @global CotDB $db
  */
 function cot_i18n_list_page_locales($page_id)
 {
@@ -139,6 +141,7 @@ function cot_i18n_list_page_locales($page_id)
  * Loads registered locales
  *
  * @global array $i18n_locales Available locale data
+ * @global CotDB $db
  */
 function cot_i18n_load_locales()
 {
@@ -160,6 +163,7 @@ function cot_i18n_load_locales()
  * Loads structure internationalization data
  *
  * @global array $i18n_structure Structure localizations
+ * @global CotDB $db
  */
 function cot_i18n_load_structure()
 {
@@ -186,6 +190,7 @@ function cot_i18n_load_structure()
  * @param string $text Translated text
  * @param bool $riched A flag that indicates that a field requires rich text editor
  * @return bool
+ * @global CotDB $db
  */
 function cot_i18n_save($table_name, $field, $item, $locale, $text, $riched = false)
 {

@@ -29,6 +29,7 @@ $cot_extrafields[$db_com] = (!empty($cot_extrafields[$db_com]))	? $cot_extrafiel
  * @param string $code Item code
  * @param array $row Database row entry (optional)
  * @return int
+ * @global CotDB $db
  */
 function cot_comments_count($ext_name, $code, $row = array())
 {
@@ -68,6 +69,7 @@ function cot_comments_count($ext_name, $code, $row = array())
  * @param bool $force_admin Enforces user to be administrator of comments for this item.
  *	E.g. to moderate his wall even if he is not a moderator
  * @return string Rendered HTML output for comments
+ * @global CotDB $db
  */
 function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 {
@@ -333,6 +335,7 @@ function cot_comments_enabled($ext_name, $cat = '', $item = '')
  * @param array $row Database row entry (optional)
  * @return string Rendered HTML output for comments
  * @see cot_comments_count()
+ * @global CotDB $db
  */
 function cot_comments_link($link_area, $link_params, $ext_name, $code, $cat = '', $row = array())
 {
@@ -355,6 +358,7 @@ function cot_comments_link($link_area, $link_params, $ext_name, $code, $cat = ''
  *
  * @param string $timeback Datetime to count from
  * @return int
+ * @global CotDB $db
  */
 function cot_comments_newcount($timeback)
 {
@@ -370,6 +374,7 @@ function cot_comments_newcount($timeback)
  *
  * @param string $area Item area code
  * @param string $code Item identifier
+ * @global CotDB $db
  */
 function cot_comments_remove($area, $code)
 {

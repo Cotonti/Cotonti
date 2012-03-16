@@ -63,6 +63,7 @@ function cot_forums_buildpath($cat, $forumslink = true)
  * @param string $section Section
  * @param int $param Selection parameter value
  * @return int
+ * @global CotDB $db
  */
 function cot_forums_prunetopics($mode, $section, $param)
 {
@@ -121,6 +122,7 @@ function cot_forums_prunetopics($mode, $section, $param)
  * Recounts posts in a given topic
  *
  * @param int $id Topic ID
+ * @global CotDB $db
  */
 function cot_forums_resynctopic($id)
 {
@@ -151,6 +153,7 @@ function cot_forums_resynctopic($id)
  * @param string $postcount Post count
  * @param string $topiccount Topic count
  * @param string $viewcount View count
+ * @global CotDB $db
  */
 function cot_forums_sectionsetlast($cat, $postcount = '', $topiccount='', $viewcount='')
 {
@@ -269,6 +272,7 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
  *
  * @param string $cat Cat code
  * @return int topiccount
+ * @global CotDB $db
  */
 function cot_forums_sync($cat)
 {
@@ -285,6 +289,7 @@ function cot_forums_sync($cat)
  * @param string $oldcat Old Cat code
  * @param string $newcat New Cat code
  * @return bool
+ * @global CotDB $db
  */
 function cot_forums_updatecat($oldcat, $newcat)
 {
@@ -303,6 +308,7 @@ function cot_forums_updatecat($oldcat, $newcat)
  * @param string $oldcat Old Cat code
  * @param string $newcat New Cat code
  * @return bool
+ * @global CotDB $db
  */
 function cot_forums_deletecat($cat)
 {

@@ -35,6 +35,7 @@ if ($cfg['plugin']['bbcode']['smilies'])
  * @param string $plug Plugin/part name this bbcode belongs to.
  * @param bool $postrender Whether this bbcode must be applied on a pre-rendered HTML cache.
  * @return bool
+ * @global CotDB $db
  */
 function cot_bbcode_add($name, $mode, $pattern, $replacement, $container = true, $priority = 128, $plug = '', $postrender = false)
 {
@@ -63,6 +64,7 @@ function cot_bbcode_add($name, $mode, $pattern, $replacement, $container = true,
  * @param int $id BBCode ID or 0 to remove all (use carefully)
  * @param string $plug Remove all bbcodes that belong to this plug
  * @return bool
+ * @global CotDB $db
  */
 function cot_bbcode_remove($id = 0, $plug = '')
 {
@@ -95,6 +97,7 @@ function cot_bbcode_remove($id = 0, $plug = '')
  * @param int $priority BBcode preority from 0 to 255. Smaller priority bbcodes are parsed first, 128 is default medium priority.
  * @param bool $postrender Whether this bbcode must be applied on a pre-rendered HTML cache.
  * @return bool
+ * @global CotDB $db
  */
 function cot_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, $container, $priority = 128, $postrender = false)
 {
@@ -130,6 +133,7 @@ function cot_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, 
  *
  * @global $cot_bbcodes
  * @global $db_bbcode
+ * @global CotDB $db
  */
 function cot_bbcode_load()
 {

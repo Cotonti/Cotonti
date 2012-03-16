@@ -31,6 +31,7 @@ $cot_extrafields[$db_users] = (!empty($cot_extrafields[$db_users])) ? $cot_extra
  * @param string $maingrp Custom main grp
  * @param float $sendemail Send email if need activation 
  * @return int New user ID or false
+ * @global CotDB $db
  */
 function cot_add_user($ruser, $email = null, $name = null, $password = null, $maingrp = null, $sendemail = true)
 {
@@ -119,6 +120,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
  * @param bool $edit Permission
  * @param int $maingrp User main group
  * @return string
+ * @global CotDB $db
  */
 function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 {

@@ -27,6 +27,7 @@ $trash_types = array(
  * @param mixed $datas Item contents
  * @param int $parentid trashcan parent id
  * @return int Trash insert id
+ * @global CotDB $db
  */
 function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 {
@@ -155,6 +156,7 @@ function cot_trash_restore($id)
  *
  * @param int $id Trash item ID
  * @return bool Operation success or failure
+ * @global CotDB $db
  */
 function cot_trash_delete($id)
 {

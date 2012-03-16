@@ -489,6 +489,7 @@ function cot_default_html_construction($type)
  * @param string $customtype Modify sql type, size, default
  * @return bool
  *
+ * @global CotDB $db
  */
 function cot_extrafield_add($location, $name, $type, $html='', $variants='', $default='', $required=false, $parse='HTML', $description='', $params = '', $enabled = 1, $noalter = false, $customtype = '')
 {
@@ -591,6 +592,7 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
  * @param string $customtype Modify sql type, size, default
  * @return bool
  *
+ * @global CotDB $db
  */
 function cot_extrafield_update($location, $oldname, $name, $type, $html='', $variants='', $default='', $required=0, $parse='HTML', $description='', $params = '', $enabled = 1, $customtype = '')
 {
@@ -687,6 +689,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
  * @param string $name Name of extra field
  * @return bool
  *
+ * @global CotDB $db
  */
 function cot_extrafield_remove($location, $name)
 {
@@ -785,6 +788,7 @@ function cot_extrafield_unlinkfiles($fielddata, $extrafield)
  * Loads extrafields data into global
  * @param bool $forcibly Forcibly reload exflds
  * @global array $cot_extrafields
+ * @global CotDB $db
  */
 function cot_load_extrafields($forcibly = false)
 {

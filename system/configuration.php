@@ -94,6 +94,7 @@ define('COT_CONFIG_TYPE_RANGE', 7);
  * @param string $category Structure category code. Only for per-category config options
  * @param string $donor Extension name for extension-to-extension config implantations
  * @return bool Operation status
+ * @global CotDB $db
  */
 function cot_config_add($name, $options, $is_module = false, $category = '', $donor = '')
 {
@@ -167,6 +168,7 @@ function cot_config_implant($module_name, $options, $into_struct, $donor)
  * @param string $acceptor Acceptor module name
  * @param string $donor Donor extension name
  * @return bool TRUE if implanted records found, FALSE if not
+ * @global CotDB $db
  */
 function cot_config_implanted($acceptor, $donor)
 {
@@ -183,6 +185,7 @@ function cot_config_implanted($acceptor, $donor)
  * @param string $donor Extension name for extension-to-extension config implantations
  * @return array Config options structure
  * @see cot_config_add()
+ * @global CotDB $db
  */
 function cot_config_load($name, $is_module = false, $category = '', $donor = '')
 {
@@ -221,6 +224,7 @@ function cot_config_load($name, $is_module = false, $category = '', $donor = '')
  * @param string $category Structure category code. Only for per-category config options
  * @param string $donor Extension name for extension-to-extension config implantations
  * @return int Number of entries updated
+ * @global CotDB $db
  */
 function cot_config_modify($name, $options, $is_module = false, $category = '', $donor = '')
 {
@@ -319,6 +323,7 @@ function cot_config_parse($info_cfg)
  * @param string $category Structure category code. Only for per-category config options
  * @param string $donor Extension name for extension-to-extension config implantations
  * @return int Number of options actually removed
+ * @global CotDB $db
  */
 function cot_config_remove($name, $is_module = false, $option = '', $category = '', $donor = null)
 {
@@ -380,6 +385,7 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
  * @param bool $is_module Flag indicating if it is module or plugin config
  * @param string $category Structure category code. Only for per-category config options
  * @return int Number of entries updated
+ * @global CotDB $db
  */
 function cot_config_set($name, $options, $is_module = false, $category = '')
 {

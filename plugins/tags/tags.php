@@ -128,6 +128,7 @@ else
  * Search by tag in pages
  *
  * @param string $query User-entered query string
+ * @global CotDB $db
  */
 function cot_tag_search_pages($query)
 {
@@ -242,6 +243,7 @@ function cot_tag_search_pages($query)
  * Search by tag in forums
  *
  * @param string $query User-entered query string
+ * @global CotDB $db
  */
 function cot_tag_search_forums($query)
 {

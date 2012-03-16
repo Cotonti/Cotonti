@@ -564,6 +564,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
  * Uninstalls an extension and removes all its data
  * @param string $name Extension code
  * @param bool $is_module TRUE for modules, FALSE for plugins
+ * @global CotDB $db
  */
 function cot_extension_uninstall($name, $is_module = false)
 {
@@ -767,6 +768,7 @@ function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
  * @param string $version Version number as A.B.C
  * @param bool $is_plug Is a plugin
  * @return bool TRUE on success, FALSE on error
+ * @global CotDB $db
  */
 function cot_extension_add($name, $title, $version = '1.0.0', $is_plug = false)
 {
@@ -783,6 +785,7 @@ function cot_extension_add($name, $title, $version = '1.0.0', $is_plug = false)
  *
  * @param string $name Module code
  * @return bool
+ * @global CotDB $db
  */
 function cot_extension_installed($name)
 {
@@ -797,6 +800,7 @@ function cot_extension_installed($name)
  *
  * @param string $name Module name
  * @return bool
+ * @global CotDB $db
  */
 function cot_extension_pause($name)
 {
@@ -810,6 +814,7 @@ function cot_extension_pause($name)
  *
  * @param string $name Module name
  * @return bool
+ * @global CotDB $db
  */
 function cot_extension_remove($name)
 {
@@ -823,6 +828,7 @@ function cot_extension_remove($name)
  *
  * @param string $name Module name
  * @return bool
+ * @global CotDB $db
  */
 function cot_extension_resume($name)
 {
@@ -837,6 +843,7 @@ function cot_extension_resume($name)
  * @param string $name Module name
  * @param string $version New version string
  * @return bool
+ * @global CotDB $db
  */
 function cot_extension_update($name, $version)
 {
@@ -870,6 +877,7 @@ function cot_extension_update($name, $version)
  * @param string $title Module or plugin title
  * @param bool $is_module TRUE for modules, FALSE for plugins
  * @return int Number of records added
+ * @global CotDB $db
  */
 function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
 {
@@ -903,6 +911,7 @@ function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
  * @param string $name Module or plugin name
  * @param int $binding_id ID of the binding to supsend or 0 to suspend all
  * @return int Number of bindings suspended
+ * @global CotDB $db
  */
 function cot_plugin_pause($name, $binding_id = 0)
 {
@@ -923,6 +932,7 @@ function cot_plugin_pause($name, $binding_id = 0)
  * @param string $name Module or plugin name
  * @param int $binding_id ID of the binding to remove or 0 to remove all
  * @return int Number of bindings removed
+ * @global CotDB $db
  */
 function cot_plugin_remove($name, $binding_id = 0)
 {
@@ -943,6 +953,7 @@ function cot_plugin_remove($name, $binding_id = 0)
  * @param string $name Module or plugin name
  * @param int $binding_id ID of the binding to resume or 0 to resume all
  * @return int Number of bindings resumed
+ * @global CotDB $db
  */
 function cot_plugin_resume($name, $binding_id = 0)
 {

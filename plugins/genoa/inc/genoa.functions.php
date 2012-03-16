@@ -340,6 +340,7 @@ function sed_build_usertext($text)
  *
  * @param string $name Item name
  * @return bool
+ * @global CotDB $db
  */
 function sed_cache_clear($name)
 {
@@ -353,6 +354,7 @@ function sed_cache_clear($name)
  * Clears cache completely
  *
  * @return bool
+ * @global CotDB $db
  */
 function sed_cache_clearall()
 {
@@ -379,6 +381,7 @@ function sed_cache_clearhtml()
  *
  * @param string $name Item name
  * @return mixed
+ * @global CotDB $db
  */
 function sed_cache_get($name)
 {
@@ -401,6 +404,7 @@ function sed_cache_get($name)
  *
  * @param int $auto Only with autoload flag
  * @return mixed
+ * @global CotDB $db
  */
 function sed_cache_getall($auto = 1)
 {
@@ -433,6 +437,7 @@ function sed_cache_getall($auto = 1)
  * @param int $expire Expires in seconds
  * @param int $auto Autload flag
  * @return bool
+ * @global CotDB $db
  */
 function sed_cache_store($name,$value,$expire,$auto="1")
 {
@@ -1467,6 +1472,7 @@ function utf8ToUnicode(&$str)
  * Returns number of rows affected by last query
  *
  * @return int
+ * @global CotDB $db
  */
 function sed_sql_affectedrows($conn = null)
 {
@@ -1479,6 +1485,7 @@ function sed_sql_affectedrows($conn = null)
  * Returns last error number
  *
  * @return int
+ * @global CotDB $db
  */
 function sed_sql_errno()
 {
@@ -1492,6 +1499,7 @@ function sed_sql_errno()
  * Returns last SQL error message
  *
  * @return string
+ * @global CotDB $db
  */
 function sed_sql_error()
 {
@@ -1539,6 +1547,7 @@ function sed_sql_fetchrow($res)
  *
  * @param PDO $conn Custom connection
  * @return int
+ * @global CotDB $db
  */
 function sed_sql_foundrows($conn = NULL)
 {
@@ -1560,6 +1569,7 @@ function sed_sql_freeresult($res)
  * Returns ID of last INSERT query
  *
  * @return int
+ * @global CotDB $db
  */
 function sed_sql_insertid()
 {
@@ -1573,6 +1583,7 @@ function sed_sql_insertid()
  *
  * @param string $db_name Database name
  * @return PDOStatement
+ * @global CotDB $db
  */
 function sed_sql_listtables($db_name)
 {
@@ -1597,6 +1608,7 @@ function sed_sql_numrows($res)
  *
  * @param string $str
  * @return string
+ * @global CotDB $db
  */
 function sed_sql_prep($str)
 {
@@ -1613,6 +1625,7 @@ function sed_sql_prep($str)
  * @global $usr
  * @param string $query SQL query
  * @return PDOStatement
+ * @global CotDB $db
  */
 function sed_sql_query($query)
 {

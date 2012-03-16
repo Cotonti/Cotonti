@@ -28,6 +28,7 @@ $trash_types['forumtopic'] = $db_forum_topics;
  *
  * @param array $data trashcan item data
  * @return bool
+ * @global CotDB $db
  */
 function cot_trash_forumpost_check($data)
 {
@@ -45,6 +46,7 @@ function cot_trash_forumpost_check($data)
  *
  * @param array $data trashcan item data
  * @return bool
+ * @global CotDB $db
  */
 function cot_trash_forumpost_sync($data)
 {
@@ -60,6 +62,7 @@ function cot_trash_forumpost_sync($data)
  *
  * @param array $data trashcan item data
  * @return bool
+ * @global CotDB $db
  */
 function cot_trash_forumtopic_sync($data)
 {
