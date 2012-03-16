@@ -126,6 +126,7 @@ function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth
  * @param mixed $id User ID (int) or 'all'
  * @return int Number of items affected
  * @global CotDB $db
+ * @global Cache $cache
  */
 function cot_auth_clear($id = 'all')
 {

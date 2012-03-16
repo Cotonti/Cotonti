@@ -23,6 +23,7 @@ require_once cot_incfile('auth');
  * @param array $data Structure entry data as array('structure_key' => 'value')
  * @return mixed TRUE on success, cot_error() arguments as array on specific error, FALSE on generic error
  * @global CotDB $db
+ * @global Cache $cache
  */
 function cot_structure_add($module, $data)
 {
@@ -71,6 +72,7 @@ function cot_structure_add($module, $data)
  * @param string $code Category code
  * @return bool 
  * @global CotDB $db
+ * @global Cache $cache
  */
 function cot_structure_delete($module, $code)
 {
@@ -111,6 +113,7 @@ function cot_structure_delete($module, $code)
  * @param array $new_data Submitted category data
  * @return mixed TRUE on success, cot_error() arguments as array on specific error, FALSE on generic error 
  * @global CotDB $db
+ * @global Cache $cache
  */
 function cot_structure_update($module, $id, $old_data, $new_data)
 {

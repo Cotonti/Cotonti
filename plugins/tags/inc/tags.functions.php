@@ -63,6 +63,7 @@ function cot_tag($tag, $item, $area = 'pages', $extra = null)
  * @param int $limit Use this parameter to limit number of rows in the result set
  * @return array
  * @global CotDB $db
+ * @global Cache $cache
  */
 function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 {

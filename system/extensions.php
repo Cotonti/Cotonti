@@ -187,6 +187,7 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
  * @param bool $update Perform update rather than new install
  * @param bool $force_update Forces extension update even if version has not changed
  * @return bool Operation status
+ * @global Cache $cache
  */
 function cot_extension_install($name, $is_module = false, $update = false, $force_update = false)
 {
@@ -565,6 +566,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
  * @param string $name Extension code
  * @param bool $is_module TRUE for modules, FALSE for plugins
  * @global CotDB $db
+ * @global Cache $cache
  */
 function cot_extension_uninstall($name, $is_module = false)
 {

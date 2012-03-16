@@ -187,6 +187,7 @@ function cot_bbcode_load()
 
 /**
  * Clears bbcode cache
+ * @global Cache $cache
  */
 function cot_bbcode_clearcache()
 {
@@ -363,6 +364,7 @@ function cot_smilies($res)
 
 /**
  * Load smilies from current pack
+ * @global Cache $cache
  */
 function cot_smilies_load()
 {

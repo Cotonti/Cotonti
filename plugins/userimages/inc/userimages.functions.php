@@ -8,6 +8,7 @@ require_once cot_incfile('configuration');
  * Get confuration for user image types
  *
  * @return array
+ * @global Cache $cache
  */
 function cot_userimages_config_get($ignorecache=false)
 {
@@ -43,6 +44,7 @@ function cot_userimages_config_get($ignorecache=false)
  * @param string $crop Crop ratio, or 'fit' to use width/height to calculate ratio
  * @return bool
  * @global CotDB $db
+ * @global Cache $cache
  */
 function cot_userimages_config_add($code, $width, $height, $crop='', $force=false)
 {
@@ -78,6 +80,7 @@ function cot_userimages_config_add($code, $width, $height, $crop='', $force=fals
  * @param int $height Image maximum height
  * @param string $crop Crop ratio, or 'fit' to use width/height to calculate ratio
  * @return Entries modified
+ * @global Cache $cache
  */
 function cot_userimages_config_edit($code, $width, $height, $crop='')
 {
@@ -96,6 +99,7 @@ function cot_userimages_config_edit($code, $width, $height, $crop='')
  * @param string $code User image code
  * @return DB query result
  * @global CotDB $db
+ * @global Cache $cache
  */
 function cot_userimages_config_remove($code, $dropcolumn=true)
 {

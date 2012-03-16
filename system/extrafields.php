@@ -789,6 +789,7 @@ function cot_extrafield_unlinkfiles($fielddata, $extrafield)
  * @param bool $forcibly Forcibly reload exflds
  * @global array $cot_extrafields
  * @global CotDB $db
+ * @global Cache $cache
  */
 function cot_load_extrafields($forcibly = false)
 {

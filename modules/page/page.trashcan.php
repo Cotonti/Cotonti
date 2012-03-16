@@ -27,6 +27,7 @@ $trash_types['page'] = $db_pages;
  *
  * @param array $data trashcan item data
  * @return bool
+ * @global Cache $cache
  */
 function cot_trash_page_sync($data)
 {

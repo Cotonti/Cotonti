@@ -163,6 +163,7 @@ function cot_get_caller()
  * @param string $hook Hook name
  * @param string $cond Permissions
  * @return array
+ * @global Cache $cache
  */
 function cot_getextplugins($hook, $cond='R')
 {
@@ -667,6 +668,7 @@ function cot_module_active($name)
  * @global array $cot_usersonline
  * @global array $env
  * @global CotDB $db
+ * @global Cache $cache
  */
 function cot_online_update()
 {
@@ -896,6 +898,7 @@ function cot_setcookie($name, $value, $expire = '', $path='', $domain='', $secur
 /**
  * Performs actions required right before shutdown
  * @global CotDB $db
+ * @global Cache $cache
  */
 function cot_shutdown()
 {
@@ -3910,6 +3913,7 @@ function cot_rc_attr_string($attrs)
  * @global array $cfg Configuration
  * @global array $env Environment strings
  * @global array $usr User object
+ * @global Cache $cache
  */
 function cot_rc_consolidate()
 {
@@ -4097,6 +4101,7 @@ function cot_rc_consolidate()
  * @param string $type Resource type: 'js' or 'css'
  * @return bool This function always returns TRUE
  * @see cot_rc_add_file()
+ * @global Cache $cache
  */
 function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
 {
@@ -4145,6 +4150,7 @@ function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
  * You can combine ext scope with other scopes, e.g. 'user&ext=forums' means "for registered users in forums".
  * It is recommended to use 'global' scope whenever possible because it delivers best caching opportunities.
  * @return bool Returns TRUE normally, FALSE is file was not found
+ * @global Cache $cache
  */
 function cot_rc_add_file($path, $scope = 'global')
 {
