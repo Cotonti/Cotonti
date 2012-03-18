@@ -4658,7 +4658,22 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	{
 		$params = array_merge($params, $cot_url_appendix);
 	}
-	$params = array_filter((array)$params);
+	
+	foreach ($params as $k => $param)
+	{
+		if (is_bool($param))
+		{
+			$params[$k] = (int)$param;
+		}
+		if (!is_array($param) && !is_object($param))
+		{
+			$params[$k] = strval($param);
+		}
+		if ($param === '')
+		{
+			unset($params[$k]);
+		}
+	}
 	
 	if (function_exists('cot_url_custom'))
 	{
