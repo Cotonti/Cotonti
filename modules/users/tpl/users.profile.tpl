@@ -50,6 +50,7 @@
 						<td>{PHP.L.users_hideemail}:</td>
 						<td>{USERS_PROFILE_HIDEEMAIL}</td>
 					</tr>
+<!-- IF {PHP.cot_modules.pm} -->
 					<tr>
 						<td>{PHP.L.users_pmnotify}:</td>
 						<td>
@@ -57,6 +58,7 @@
 							<p class="small">{PHP.L.users_pmnotifyhint}</p>
 						</td>
 					</tr>
+<!-- ENDIF -->
 					<tr>
 						<td>{PHP.L.Theme}:</td>
 						<td>{USERS_PROFILE_THEME}</td>
