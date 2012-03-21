@@ -692,7 +692,7 @@ function sed_obfuscate_eml($m)
 function sed_parse_autourls($text)
 {
 	$text = preg_replace('`(^|\s)(http|https|ftp)://([^\s"\'\[]+)`', '$1<a href="$2://$3">$2://$3</a>', $text);
-	$text = preg_replace_callback('`(^|\s)([\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+)`u', 'sed_obfuscate_eml', $text);
+	$text = preg_replace_callback('`(^|\s)([\w\p{L}][\.\w\p{L}\-]*@[\w\p{L}\.\-]+\.[\w\p{L}]+)`u', 'sed_obfuscate_eml', $text);
 	return $text;
 }
 
@@ -1149,7 +1149,7 @@ function sed_build_email($email, $hide = false)
 	{
 		return $L['Hidden'];
 	}
-	elseif(!empty($email) && preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $email))
+	elseif(!empty($email) && preg_match('#^[\w\p{L}][\.\w\p{L}\-]*@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $email))
 	{
 		return sed_obfuscate('<a href="mailto:'.$email.'">'.$email.'</a>');
 	}

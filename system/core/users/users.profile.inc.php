@@ -429,7 +429,7 @@ switch ($a)
 			$error_string .= ($rmailpass!=$urr['user_password']) ? $L['pro_wrongpass']."<br />" : '';
 		}
 		
-		$error_string .= (mb_strlen($ruseremail)<4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
+		$error_string .= (mb_strlen($ruseremail)<4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]*@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
 		$error_string .= ($res>0) ? $L['aut_emailalreadyindb']."<br />" : '';
 
 		if (empty($error_string))
