@@ -558,7 +558,7 @@ function cot_import_pagenav($var_name, $max_items = 0)
  */
 function cot_check_email($res)
 {
-	  return mb_strlen($res) > 4 && preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $res);
+	  return mb_strlen($res) > 4 && preg_match('#^[\w\p{L}][\.\w\p{L}\-]*@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $res);
 }
 
 /**
