@@ -6,9 +6,9 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.2
- * @author Vladimir Sibirov a.k.a. Trustmaster
- * @copyright Copyright (c) Cotonti Team 2009-2011
+ * @version 2.7.3
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2009-2012
  * @license BSD
  */
 
@@ -169,20 +169,15 @@ class XTemplate
 	 */
 	private static function restart_include_files($m)
 	{
-		if (preg_match('`\.tpl$`i', $m[2]))
+		$fname = preg_replace_callback('`\{([\w\.]+)\}`', 'XTemplate::substitute_var', $m[2]);
+		if (preg_match('`\.tpl$`i', $fname) && file_exists($fname))
 		{
-			$fname = preg_replace_callback('`\{([\w\.]+)\}`', 'XTemplate::substitute_var', $m[2]);
-			if (file_exists($fname))
-			{
-				$code = cotpl_read_file($fname);
-				if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) $code = mb_substr($code, 0);
-				$code = preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restart_include_files', $code);
-				return $code;
-			}
-			return $fname;
+			$code = cotpl_read_file($fname);
+			if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) $code = mb_substr($code, 0);
+			$code = preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restart_include_files', $code);
+			return $code;
 		}
-
-		return $m[0];
+		return $fname;
 	}
 
 	/**
