@@ -209,7 +209,7 @@ function cot_getextplugins($hook, $cond='R')
  * Imports data from the outer world
  *
  * @param string $name Variable name
- * @param string $source Source type: G (GET), P (POST), C (COOKIE) or D (variable filtering)
+ * @param string $source Source type: G/GET, P/POST, C/COOKIE, R/REQUEST, PUT, DELETE or D/DIRECT (variable filtering)
  * @param string $filter Filter type
  * @param int $maxlen Length limit
  * @param bool $dieonerror Die with fatal error on wrong input
@@ -219,15 +219,33 @@ function cot_getextplugins($hook, $cond='R')
 function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $buffer = false)
 {
 	global $cot_import_filters;
+	static $_PUT = null;
+	static $_PATCH = null;
+	static $_DELETE = null;
 
+	if ($_SERVER['REQUEST_METHOD'] == 'PUT' && is_null($_PUT))
+	{
+		parse_str(file_get_contents('php://input'), $_PUT);
+	}
+	elseif ($_SERVER['REQUEST_METHOD'] == 'PATCH' && is_null($_PATCH))
+	{
+		parse_str(file_get_contents('php://input'), $_PATCH);
+	}
+	elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE' && is_null($_DELETE))
+	{
+		parse_str(file_get_contents('php://input'), $_DELETE);
+	}
+	
 	switch($source)
 	{
 		case 'G':
+		case 'GET':
 			$v = (isset($_GET[$name])) ? $_GET[$name] : NULL;
 			$log = TRUE;
 			break;
 
 		case 'P':
+		case 'POST':
 			$v = (isset($_POST[$name])) ? $_POST[$name] : NULL;
 			$log = TRUE;
 			if ($filter=='ARR')
@@ -239,18 +257,36 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 				return($v);
 			}
 			break;
+			
+		case 'PUT':
+			$v = (isset($_PUT[$name])) ? $_PUT[$name] : NULL;
+			$log = TRUE;
+			break;
+		
+		case 'PATCH':
+			$v = (isset($_PATCH[$name])) ? $_PATCH[$name] : NULL;
+			$log = TRUE;
+			break;
+
+		case 'DELETE':
+			$v = (isset($_DELETE[$name])) ? $_DELETE[$name] : NULL;
+			$log = TRUE;
+			break;
 
 		case 'R':
+		case 'REQUEST':
 			$v = (isset($_REQUEST[$name])) ? $_REQUEST[$name] : NULL;
 			$log = TRUE;
 			break;
 
 		case 'C':
+		case 'COOKIE':
 			$v = (isset($_COOKIE[$name])) ? $_COOKIE[$name] : NULL;
 			$log = TRUE;
 			break;
 
 		case 'D':
+		case 'DIRECT':
 			$v = $name;
 			$log = FALSE;
 			break;
@@ -4658,7 +4694,22 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	{
 		$params = array_merge($params, $cot_url_appendix);
 	}
-	$params = array_filter((array)$params);
+	
+	foreach ($params as $k => $param)
+	{
+		if (is_bool($param))
+		{
+			$params[$k] = (int)$param;
+		}
+		if (!is_array($param) && !is_object($param))
+		{
+			$params[$k] = strval($param);
+		}
+		if ($param === '')
+		{
+			unset($params[$k]);
+		}
+	}
 	
 	if (function_exists('cot_url_custom'))
 	{

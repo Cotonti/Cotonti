@@ -3,13 +3,15 @@
 		<div class="block">
 			<h2 class="users">{USERS_DETAILS_TITLE}<!-- BEGIN: USERS_DETAILS_ADMIN --> &nbsp; [ {USERS_DETAILS_ADMIN_EDIT} ]<!-- END: USERS_DETAILS_ADMIN --></h2>
 			<table class="cells">
+<!-- IF {PHP.cot_modules.pm} -->
 				<tr>
-					<td class="width30">{PHP.L.users_sendpm}:</td>
-					<td class="width70">{USERS_DETAILS_PM}</td>
+					<td>{PHP.L.users_sendpm}:</td>
+					<td>{USERS_DETAILS_PM}</td>
 				</tr>
+<!-- ENDIF -->
 				<tr>
-					<td>{PHP.L.Maingroup}:</td>
-					<td>{USERS_DETAILS_MAINGRP}</td>
+					<td class="width30">{PHP.L.Maingroup}:</td>
+					<td class="width70">{USERS_DETAILS_MAINGRP}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Groupsmembership}:</td>
