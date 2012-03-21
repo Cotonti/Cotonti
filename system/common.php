@@ -220,6 +220,8 @@ $sys['site_id'] = $site_id;
 
 session_start();
 
+sed_unregister_globals();
+
 if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
 	$u = empty($_SESSION[$site_id]) ? explode(':', $_COOKIE[$site_id]) : explode(':', $_SESSION[$site_id]);

@@ -17,11 +17,6 @@ defined('SED_CODE') or die('Wrong URL');
 extension_loaded('mbstring')
 	or die('Cotonti system requirements: mbstring PHP extension must be loaded.');
 
-if (ini_get('register_globals'))
-{
-	die('Please set the PHP setting register_globals = Off, otherwise your site is in high security risk! Contact your hosting support for more information.');
-}
-
 // Group constants
 define('SED_GROUP_GUESTS', 1);
 define('SED_GROUP_INACTIVE', 2);
@@ -2012,6 +2007,41 @@ function sed_cc($text)
 	array('&#123;', '&lt;', '&gt;', '&#036;', '&#039;', '&quot;', '&#92;', '&amp;amp;', '&amp;nbsp;'), $text);
 	return $text;*/
 	return htmlspecialchars($text);
+}
+
+/**
+ * Unregisters globals if globals are On
+ * @see http://www.php.net/manual/en/faq.misc.php#faq.misc.registerglobals
+ */
+function sed_unregister_globals()
+{
+	if (!ini_get('register_globals'))
+	{
+		return;
+	}
+
+	// Might want to change this perhaps to a nicer error
+	if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS']))
+	{
+		die('GLOBALS overwrite attempt detected');
+	}
+
+	// Variables that shouldn't be unset
+	$noUnset = array('GLOBALS', '_GET',
+		'_POST', '_COOKIE',
+		'_REQUEST', '_SERVER',
+		'_ENV', '_FILES');
+
+	$input = array_merge($_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES,
+		isset($_SESSION) && is_array($_SESSION) ? $_SESSION : array());
+
+	foreach ($input as $k => $v)
+	{
+		if (!in_array($k, $noUnset) && isset($GLOBALS[$k]))
+		{
+			unset($GLOBALS[$k]);
+		}
+	}
 }
 
 /**
