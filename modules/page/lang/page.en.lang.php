@@ -41,6 +41,7 @@ $L['cfg_way_params'] = array($L['Ascending'], $L['Descending']);
 $L['adm_queue_deleted'] = 'Page was deleted in to the trash can';
 $L['adm_valqueue'] = 'Waiting for validation';
 $L['adm_validated'] = 'Already validated';
+$L['adm_expired'] = 'Expired';
 $L['adm_structure'] = 'Structure of the pages (categories)';
 $L['adm_sort'] = 'Sort';
 $L['adm_sortingorder'] = 'Set a default sorting order for the categories';

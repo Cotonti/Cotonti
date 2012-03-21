@@ -69,7 +69,8 @@ $filter = empty($filter) ? 'valqueue' : $filter;
 $filter_type = array(
 	'all' => $L['All'],
 	'valqueue' => $L['adm_valqueue'],
-	'validated' => $L['adm_validated']
+	'validated' => $L['adm_validated'],
+	'expired' => $L['adm_expired'],
 );
 if ($filter == 'all')
 {
@@ -83,7 +84,10 @@ elseif ($filter == 'validated')
 {
 	$sqlwhere = "page_state<>1 ";
 }
-
+elseif ($filter == 'expired')
+{
+	$sqlwhere = "page_begin > {$sys['now']} OR (page_expire <> 0 AND page_expire < {$sys['now']})";
+}
 /* === Hook  === */
 foreach (cot_getextplugins('page.admin.first') as $pl)
 {
@@ -357,7 +361,7 @@ $pagenav = cot_pagenav('admin', 'm=page&sorttype='.$sorttype.'&sortway='.$sortwa
 $sql_page = $db->query("SELECT p.*, u.user_name
 	FROM $db_pages as p
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-	WHERE $sqlwhere
+	WHERE $sqlwhere 
 		ORDER BY $sqlsorttype $sqlsortway
 		LIMIT $d, ".$cfg['maxrowsperpage']);
 
