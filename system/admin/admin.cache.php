@@ -26,6 +26,14 @@ foreach (cot_getextplugins('admin.cache.first') as $pl)
 }
 /* ===== */
 
+if (!$cache)
+{
+	// Enforce cache loading
+	require_once $cfg['system_dir'].'/cache.php';
+	$cache = new Cache();
+	$cache->init();
+}
+
 if ($a == 'purge' && $cache)
 {
 	if (cot_check_xg() && $cache->clear())
