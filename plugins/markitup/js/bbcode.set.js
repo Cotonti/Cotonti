@@ -15,10 +15,10 @@ var mySettings = {
 		{separator:'---------------' },
 		{name: L.align, className: 'mAlign',
 		dropMenu: [
-			{name: L.center, className: 'mCenter', openWith: '[center]', closeWith: '[/center]'},
-			{name: L.justify, className: 'mJustify', openWith: '[justify]', closeWith: '[/justify]'},
-			{name: L.left, className: 'mLeft', openWith: '[left]', closeWith: '[/left]'},
-			{name: L.right, className: 'mRight', openWith: '[right]', closeWith: '[/right]'}
+			{name: L.center, className: 'mCenter', multiline:true, openBlockWith: '[center]', closeBlockWith: '[/center]'},
+			{name: L.justify, className: 'mJustify', multiline:true, openBlockWith: '[justify]', closeBlockWith: '[/justify]'},
+			{name: L.left, className: 'mLeft', multiline:true, openBlockWith: '[left]', closeBlockWith: '[/left]'},
+			{name: L.right, className: 'mRight', multiline:true, openBlockWith: '[right]', closeBlockWith: '[/right]'}
 		]},
 		{name: L.font, className: 'mFonts', key:'F',
 		dropMenu :[
@@ -72,15 +72,15 @@ var mySettings = {
 		{name: L.link, className: 'mLink', key:'L', openWith:'[url=[![URL:!:http://]!]]', closeWith:'[/url]', placeHolder: L.link_text},
 		{name: L.email, className: 'mEmail', openWith:'[email=[![' + L.email_addr + ':!:john@doe.com]!]]', closeWith:'[/email]', placeHolder: L.email_text},
 		{separator:'---------------' },
-		{name: L.ul, className: 'mUl', openWith:'[list]\n', closeWith:'\n[/list]'},
-		{name: L.ol, className: 'mOl', openWith:'[ol]\n', closeWith:'\n[/ol]'},
+		{name: L.ul, className: 'mUl', multiline:true, openWith:'[li]', closeWith:'[/li]', openBlockWith:'[list]\n', closeBlockWith:'\n[/list]'},
+		{name: L.ol, className: 'mOl', multiline:true, openWith:'[li]', closeWith:'[/li]', openBlockWith:'[ol]\n', closeBlockWith:'\n[/ol]'},
 		{name: L.li, className: 'mLi', openWith:'[li]', key: 'M', closeWith: '[/li]'},
-		{name: L.table, openWith:'[table]\n', closeWith:'\n[/table]', placeHolder:"[tr][(!(td|!|th)!)][/(!(td|!|th)!)][/tr]", className:'mtable' },
+		{name: L.table, multiline:true, openBlockWith:'[table]\n', closeBlockWith:'\n[/table]', placeHolder:"[tr][(!(td|!|th)!)][/(!(td|!|th)!)][/tr]", className:'mtable' },
 		{name: L.table_row, openWith:'[tr]', closeWith:'[/tr]', placeHolder:"[(!(td|!|th)!)][/(!(td|!|th)!)]", className:'mtable-row' },
 		{name: L.table_cell, openWith:'[(!(td|!|th)!)]', closeWith:'[/(!(td|!|th)!)]', className:'mtable-col' },
 		{separator:'---------------' },
 		{name: L.quote, className:'mQuote', dropMenu: [
-			{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]',
+			{name: L.quote, className: 'mQuote', multiline:true, openBlockWith:'[quote=[![' + L.quote_from + ']!]]', closeBlockWith:'[/quote]',
 				afterInsert: function (h)
 				{
 					var str = $(h.textarea).val();
@@ -90,11 +90,11 @@ var mySettings = {
 					}
 				}
 			},
-			{name: L.pre, className: 'mPre', openWith:'[pre]', closeWith:'[/pre]'},
-			{name: L.spoiler, className: 'mSpoiler', openWith:'[spoiler=[![' + L.spoiler_text + ']!]]', closeWith:'[/spoiler]'}
+			{name: L.pre, className: 'mPre', multiline:true, openBlockWith:'[pre]', closeBlockWith:'[/pre]'},
+			{name: L.spoiler, className: 'mSpoiler', multiline:true, openBlockWith:'[spoiler=[![' + L.spoiler_text + ']!]]', closeBlockWith:'[/spoiler]'}
 		]},
-		{name: L.code, className: 'mCode', openWith:'[code]', closeWith:'[/code]'},
-		{name: L.hide, className: 'mHide', openWith:'[hide]', closeWith:'[/hide]'},
+		{name: L.code, className: 'mCode', multiline:true, openBlockWith:'[code]', closeBlockWith:'[/code]'},
+		{name: L.hide, className: 'mHide', multiline:true, openBlockWith:'[hide]', closeBlockWith:'[/hide]'},
 		{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) { showSmilies(markitup) } },
 		{separator:'---------------' },
 		{name: L.clean, className:"mClean", replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
@@ -156,12 +156,12 @@ var mediSettings = {
 		{name: L.link, className: 'mLink', key:'L', openWith:'[url=[![URL:!:http://]!]]', closeWith:'[/url]', placeHolder: L.link_text},
 		{name: L.email, className: 'mEmail', openWith:'[email=[![' + L.email_addr + ':!:john@doe.com]!]]', closeWith:'[/email]', placeHolder: L.email_text},
 		{separator:'---------------' },
-		{name: L.ul, className: 'mUl', openWith:'[list]\n', closeWith:'\n[/list]'},
-		{name: L.ol, className: 'mOl', openWith:'[ol]\n', closeWith:'\n[/ol]'},
+		{name: L.ul, className: 'mUl', multiline:true, openWith:'[li]', closeWith:'[/li]', openBlockWith:'[list]\n', closeBlockWith:'\n[/list]'},
+		{name: L.ol, className: 'mOl', multiline:true, openWith:'[li]', closeWith:'[/li]', openBlockWith:'[ol]\n', closeBlockWith:'\n[/ol]'},
 		{name: L.li, className: 'mLi', openWith:'[li]', key: 'M', closeWith: '[/li]'},
 		{separator:'---------------' },
 		{name: L.quote, className:'mQuote', dropMenu: [
-			{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]',
+			{name: L.quote, className: 'mQuote', multiline:true, openBlockWith:'[quote=[![' + L.quote_from + ']!]]', closeBlockWith:'[/quote]',
 				afterInsert: function (h)
 				{
 					var str = $(h.textarea).val();
@@ -171,10 +171,10 @@ var mediSettings = {
 					}
 				}
 			},
-			{name: L.pre, className: 'mPre', openWith:'[pre]', closeWith:'[/pre]'},
+			{name: L.pre, className: 'mPre', multiline:true, openBlockWith:'[pre]', closeBlockWith:'[/pre]'},
 		]},
-		{name: L.code, className: 'mCode', openWith:'[code]', closeWith:'[/code]'},
-		{name: L.hide, className: 'mHide', openWith:'[hide]', closeWith:'[/hide]'},
+		{name: L.code, className: 'mCode', multiline:true, openBlockWith:'[code]', closeBlockWith:'[/code]'},
+		{name: L.hide, className: 'mHide', multiline:true, openBlockWith:'[hide]', closeBlockWith:'[/hide]'},
 		{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) { showSmilies(markitup) } },
 		{separator:'---------------' },
 		{name: L.clean, className:"mClean", replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
@@ -193,7 +193,7 @@ var miniSettings = {
 			{name: L.italic, className:'mItalic', key:'I', openWith:'[i]', closeWith:'[/i]'},
 			{name: L.link, className: 'mLink', key:'L', openWith:'[url=[![URL:!:http://]!]]', closeWith:'[/url]', placeHolder: L.link_text},
 			{name: L.picture, className: 'mPicture', key:'P', replaceWith:'[img][![' + L.picture_url + ':!:http://]!][/img]'},
-			{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]',
+			{name: L.quote, className: 'mQuote', multiline:true, openBlockWith:'[quote=[![' + L.quote_from + ']!]]', closeBlockWith:'[/quote]',
 					afterInsert: function (h)
 					{
 						var str = $(h.textarea).val();
