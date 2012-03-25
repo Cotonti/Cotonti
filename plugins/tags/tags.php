@@ -32,11 +32,20 @@ list($pg, $d, $durl) = cot_import_pagenav('d',  $cfg['maxrowsperpage']);
 $dt = cot_import('dt', 'G', 'INT');
 $perpage = $cfg['plugin']['tags']['perpage'];
 
-require_once cot_incfile('page', 'module');
-require_once cot_incfile('forums', 'module');
-
 // Array to register areas with tag functions provided
-$tag_areas = array('pages', 'forums');
+$tag_areas = array();
+
+if (cot_module_active('page'))
+{
+	require_once cot_incfile('page', 'module');
+	$tag_areas[] = 'page';
+}
+
+if (cot_module_active('forums'))
+{
+	require_once cot_incfile('forums', 'module');
+	$tag_areas[] = 'forums';
+}
 
 // Sorting order
 $o = cot_import('order', 'P', 'ALP');
