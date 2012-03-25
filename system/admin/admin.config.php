@@ -247,6 +247,10 @@ switch($n)
 		/* ===== */
 		foreach ($rowset as $key => $row)
 		{
+			if (!is_array($L['cfg_'.$config_name]))
+			{
+				$L['cfg_'.$config_name] = array($L['cfg_'.$config_name]);
+			}
 			$config_owner = $o;
 			$config_cat = $p;
 			$config_subcat = $row['config_subcat'];
@@ -379,7 +383,7 @@ switch($n)
 
 			if ($config_type == COT_CONFIG_TYPE_SEPARATOR)
 			{
-				$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $L['cfg_' . $row['config_name']]);
+				$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $L['cfg_' . $row['config_name'][0]]);
 				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_BEGIN');
 			}
 			else
