@@ -949,7 +949,7 @@ function cot_shutdown()
 		ob_end_flush();
 	}
 	// Need to destroy cache before DB connection is lost
-	$cache && $cache->db->flush();
+	$cache && $cache->db && $cache->db->flush();
 	$cache = null;
 	$db = null;
 }
