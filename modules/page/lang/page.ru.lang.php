@@ -41,6 +41,7 @@ $L['cfg_way_params'] = array($L['Ascending'], $L['Descending']);
 $L['adm_queue_deleted'] = 'Страница удалена в корзину';
 $L['adm_valqueue'] = 'В очереди на утверждение';
 $L['adm_validated'] = 'Утвержденные';
+$L['adm_expired'] = 'C истекшим сроком';
 $L['adm_structure'] = 'Структура страниц (категории)';
 $L['adm_sort'] = 'Сортировать';
 $L['adm_sortingorder'] = 'Порядок сортировки по умолчанию в категории';

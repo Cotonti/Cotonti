@@ -1,5 +1,5 @@
 <!-- BEGIN: MAIN -->
-
+<div id="ajaxBlock">
 		<div class="block">
 			<h2>{PHP.L.i18n_structure}</h2>
 			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
@@ -31,5 +31,5 @@
 			</form>
 		</div>
 		<p class="paging">{I18N_PAGINATION_PREV}{I18N_PAGNAV}{I18N_PAGINATION_NEXT}</p>
-
+</div>
 <!-- END: MAIN -->

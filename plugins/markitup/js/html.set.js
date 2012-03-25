@@ -13,13 +13,13 @@ var mySettings = {
 		{name: L.underline, className: 'mUnderline', key:'U', openWith:'<span style="text-decoration:underline">', closeWith:'</span>'},
 		{name: L.strike, className: 'mStrike', key:'S', openWith:'<span style="text-decoration:line-through">', closeWith:'</span>'},
 		{separator:'---------------'},
-		{name: L.paragraph, className: 'mParagraph', key:'P', openWith:'<p>', closeWith:'</p>'},
+		{name: L.paragraph, className: 'mParagraph', key:'P', multiline: true, openBlockWith:'<p>', closeBlockWith:'</p>'},
 		{name: L.align, className: 'mAlign',
 		dropMenu: [
-			{name: L.center, className: 'mCenter', openWith: '<div style="text-align:center">', closeWith:'</div>'},
-			{name: L.justify, className: 'mJustify', openWith: '<div style="text-align:justify">', closeWith:'</div>'},
-			{name: L.left, className: 'mLeft', openWith: '<div style="text-align:left">', closeWith:'</div>'},
-			{name: L.right, className: 'mRight', openWith: '<div style="text-align:right">', closeWith:'</div>'}
+			{name: L.center, className: 'mCenter', multiline: true, openBlockWith: '<div style="text-align:center">', closeBlockWith:'</div>'},
+			{name: L.justify, className: 'mJustify', multiline: true, openBlockWith: '<div style="text-align:justify">', closeBlockWith:'</div>'},
+			{name: L.left, className: 'mLeft', multiline: true, openBlockWith: '<div style="text-align:left">', closeBlockWith:'</div>'},
+			{name: L.right, className: 'mRight', multiline: true, openBlockWith: '<div style="text-align:right">', closeBlockWith:'</div>'}
 		]},
 		{name: L.font, className: 'mFonts', key:'F',
 		dropMenu :[
@@ -72,15 +72,15 @@ var mySettings = {
 		{name: L.link, className: 'mLink', key:'L', openWith:'<a href="[![URL:!:http://]!]">', closeWith:'</a>', placeHolder: L.link_text},
 		{name: L.email, className: 'mEmail', openWith:'<a href="mailto:[![' + L.email_addr + ':!:john@doe.com]!]">', closeWith:'</a>', placeHolder: L.email_text},
 		{separator:'---------------'},
-		{name: L.ul, className: 'mUl', openWith:'<ul>\n', closeWith:'\n</ul>'},
-		{name: L.ol, className: 'mOl', openWith:'<ol>\n', closeWith:'\n</ol>'},
-		{name: L.li, className: 'mLi', openWith:'[li]', key: 'M', closeWith: '[/li]'},
-		{name: L.table, openWith:'<table>\n', closeWith:'\n</table>', placeHolder:"<tr><(!(td|!|th)!)></(!(td|!|th)!)></tr>", className:'mtable'},
+		{name: L.ul, className: 'mUl', openWith:'<li>', closeWith:'</li>', multiline:true, openBlockWith:'<ul>\n', closeBlockWith:'\n</ul>'},
+		{name: L.ol, className: 'mOl', openWith:'<li>', closeWith:'</li>', multiline:true, openBlockWith:'<ol>\n', closeBlockWith:'\n</ol>'},
+		{name: L.li, className: 'mLi', openWith:'<li>', key: 'M', closeWith: '</li>'},
+		{name: L.table, openBlockWith:'<table>\n', closeBlockWith:'\n</table>', placeHolder:"<tr><(!(td|!|th)!)></(!(td|!|th)!)></tr>", className:'mtable',multiline:true},
 		{name: L.table_row, openWith:'<tr>', closeWith:'</tr>', placeHolder:"<(!(td|!|th)!)></(!(td|!|th)!)>", className:'mtable-row'},
 		{name: L.table_cell, openWith:'<(!(td|!|th)!)>', closeWith:'</(!(td|!|th)!)>', className:'mtable-col'},
 		{separator:'---------------'},
 		{name: L.quote, className:'mQuote', dropMenu: [
-			{name: L.quote, className: 'mQuote', openWith:'<blockquote><strong>[![' + L.quote_from + ']!]: </strong>', closeWith:'</blockquote>',
+			{name: L.quote, className: 'mQuote', multiline:true, openBlockWith:'<blockquote><strong>[![' + L.quote_from + ']!]: </strong>', closeBlockWith:'</blockquote>',
 				afterInsert: function (h)
 				{
 					var str = $(h.textarea).val();
@@ -90,8 +90,8 @@ var mySettings = {
 					}
 				}
 			},
-			{name: L.pre, className: 'mPre', openWith:'<pre>', closeWith:'</pre>'},
-			{name: L.code, className: 'mCode', openWith:'<code>', closeWith:'</code>'}
+			{name: L.pre, className: 'mPre', multiline:true, openBlockWith:'<pre>', closeBlockWith:'</pre>'},
+			{name: L.code, className: 'mCode', multiline:true, openBlockWith:'<code>', closeBlockWith:'</code>'}
 		]},
 		{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) {showSmilies(markitup)}},
 		{separator:'---------------'},
@@ -112,7 +112,7 @@ var mediSettings = {
 		{name: L.underline, className: 'mUnderline', key:'U', openWith:'<span style="text-decoration:underline">', closeWith:'</span>'},
 		{name: L.strike, className: 'mStrike', key:'S', openWith:'<span style="text-decoration:line-through">', closeWith:'</span>'},
 		{separator:'---------------'},
-		{name: L.paragraph, className: 'mParagraph', key:'P', openWith:'<p>', closeWith:'</p>'},
+		{name: L.paragraph, className: 'mParagraph', key:'P', multiline:true, openBlockWith:'<p>', closeBlockWith:'</p>'},
 		{name: L.color, className:'palette', dropMenu: [
 			{name: L.yellow,	openWith:'<span style="color:#FCE94F">', closeWith: '</span>',	className:"col1-1"},
 			{name: L.yellow,	openWith:'<span style="color:#EDD400">', closeWith: '</span>', 	className:"col1-2"},
@@ -155,12 +155,12 @@ var mediSettings = {
 		{name: L.link, className: 'mLink', key:'L', openWith:'<a href="[![URL:!:http://]!]">', closeWith:'</a>', placeHolder: L.link_text},
 		{name: L.email, className: 'mEmail', openWith:'<a href="mailto:[![' + L.email_addr + ':!:john@doe.com]!]">', closeWith:'</a>', placeHolder: L.email_text},
 		{separator:'---------------'},
-		{name: L.ul, className: 'mUl', openWith:'<ul>\n', closeWith:'\n</ul>'},
-		{name: L.ol, className: 'mOl', openWith:'<ol>\n', closeWith:'\n</ol>'},
+		{name: L.ul, className: 'mUl', openWith:'<li>', closeWith:'</li>', multiline:true, openBlockWith:'<ul>\n', closeBlockWith:'\n</ul>'},
+		{name: L.ol, className: 'mOl', openWith:'<li>', closeWith:'</li>', multiline:true, openBlockWith:'<ol>\n', closeBlockWith:'\n</ol>'},
 		{name: L.li, className: 'mLi', openWith:'<li>', key: 'M', closeWith: '</li>'},
 		{separator:'---------------'},
 		{name: L.quote, className:'mQuote', dropMenu: [
-			{name: L.quote, className: 'mQuote', openWith:'<blockquote><strong>[![' + L.quote_from + ']!]: </strong>', closeWith:'</blockquote>',
+			{name: L.quote, className: 'mQuote', multiline:true, openBlockWith:'<blockquote><strong>[![' + L.quote_from + ']!]: </strong>', closeBlockWith:'</blockquote>',
 				afterInsert: function (h)
 				{
 					var str = $(h.textarea).val();
@@ -170,8 +170,8 @@ var mediSettings = {
 					}
 				}
 			},
-			{name: L.pre, className: 'mPre', openWith:'<pre>', closeWith:'</pre>'},
-			{name: L.code, className: 'mCode', openWith:'<pre class="code">', closeWith:'</pre>'}
+			{name: L.pre, className: 'mPre', multiline:true, openBlockWith:'<pre>', closeBlockWith:'</pre>'},
+			{name: L.code, className: 'mCode', multiline:true, openBlockWith:'<pre class="code">', closeBlockWith:'</pre>'}
 		]},
 		{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) {showSmilies(markitup)}},
 		{separator:'---------------'},
@@ -191,7 +191,7 @@ var miniSettings = {
 			{name: L.italic, className:'mItalic', key:'I', openWith:'(!(<em>|!|<i>)!)', closeWith:'(!(</em>|!|</i>)!)'},
 			{name: L.link, className: 'mLink', key:'L', openWith:'<a href="[![URL:!:http://]!]">', closeWith:'</a>', placeHolder: L.link_text},
 			{name: L.picture, className: 'mPicture', key:'P', replaceWith:'<img src="[![' + L.picture_url + ':!:http://]!]" />'},
-			{name: L.quote, className: 'mQuote', openWith:'<blockquote><strong>[![' + L.quote_from + ']!]: </strong>', closeWith:'</blockquote>',
+			{name: L.quote, className: 'mQuote', multiline:true, openBlockWith:'<blockquote><strong>[![' + L.quote_from + ']!]: </strong>', closeBlockWith:'</blockquote>',
 				afterInsert: function (h)
 				{
 					var str = $(h.textarea).val();

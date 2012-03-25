@@ -34,12 +34,19 @@ function cot_apply_rwr()
 		$path = explode('/', (mb_strrpos($_GET['rwr'], '/') == mb_strlen($_GET['rwr']) - 1) ? mb_substr($_GET['rwr'], 0, -1) : $_GET['rwr']);
 		$count = count($path);
 		
+		$rwr_continue = true;
+		
 		/* === Hook === */
 		foreach (cot_getextplugins('urleditor.rewrite.first') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
+		
+		if (!$rwr_continue)
+		{
+			return;
+		}
 		
 		if ($count == 1)
 		{

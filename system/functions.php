@@ -4692,7 +4692,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	}
 	if (!$ignore_appendix && count($cot_url_appendix) > 0)
 	{
-		$params = array_merge($params, $cot_url_appendix);
+		$params = $params + $cot_url_appendix;
 	}
 	
 	foreach ($params as $k => $param)
