@@ -41,7 +41,7 @@ if ($cfg['plugin']['tags']['forums'])
 			}
 		}
 		$tc_html .= cot_rc('tags_link_cloud_tag', array(
-			'url' => cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $tag_u, 'tl' => $tl)),
+			'url' => cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)),
 			'tag_title' => htmlspecialchars($tag_t),
 			'dim' => $dim
 		));

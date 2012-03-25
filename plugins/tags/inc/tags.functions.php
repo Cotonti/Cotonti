@@ -328,7 +328,7 @@ function cot_tag_parse_query($qs, $join_columns)
  */
 function cot_tag_prep($tag)
 {
-	static $invalid = array('`', '^', ':', '?', '=', '|', '\\', '/', '"', "\t", "\r\n", "\n");
+	static $invalid = array('`', '^', ':', '?', '=', '|', '\\', '/', '"', "\t", "\r\n", "\n", '-');
 	$tag = str_replace($invalid, ' ', $tag);
 	$tag = preg_replace('#\s\s+#', ' ', $tag);
 	$tag = trim($tag);
@@ -457,7 +457,7 @@ function cot_tag_search_form($area = 'all')
 			}
 		}
 		$tc_html .= cot_rc('tags_link_cloud_tag', array(
-			'url' => cot_url('plug', array('e' => 'tags', 'a' => $area, 't' => $tag_u, 'tl' => $tl)),
+			'url' => cot_url('plug', array('e' => 'tags', 'a' => $area, 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)),
 			'tag_title' => htmlspecialchars($tag_t),
 			'dim' => $dim
 		));

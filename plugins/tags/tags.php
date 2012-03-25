@@ -19,6 +19,7 @@ defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
 $qs = cot_import('t', 'G', 'TXT');
 if(empty($qs)) $qs = cot_import('t', 'P', 'TXT');
+$qs = str_replace('-', ' ', $qs);
 
 $tl = cot_import('tl', 'G', 'BOL');
 if ($tl) 
@@ -195,7 +196,7 @@ function cot_tag_search_pages($query)
 				$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 				if ($tag_i > 0) $tag_list .= ', ';
-				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl)), htmlspecialchars($tag_t));
+				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)), htmlspecialchars($tag_t));
 				$tag_i++;
 			}
 			
@@ -298,7 +299,7 @@ function cot_tag_search_forums($query)
 				$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 				if ($tag_i > 0) $tag_list .= ', ';
-				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $tag_u, 'tl' => $tl)), htmlspecialchars($tag_t));
+				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)), htmlspecialchars($tag_t));
 				$tag_i++;
 			}
 			$master = ($row['fs_masterid'] > 0) ? array($row['fs_masterid'], $row['fs_mastername']) : false;

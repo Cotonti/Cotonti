@@ -49,7 +49,7 @@ if ($cfg['plugin']['tags']['forums'])
 			$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 			if ($tag_i > 0) $tc_html .= ', ';
 			$tc_html .= cot_rc('tags_link_tag', array(
-				'url' => cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => $tag_u, 'tl' => $tl)),
+				'url' => cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)),
 				'tag_title' => $tag_t
 			));
 			$tag_i++;

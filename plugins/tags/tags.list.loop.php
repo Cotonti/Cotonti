@@ -55,7 +55,7 @@ if ($cfg['plugin']['tags']['pages'])
 			$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 			$t->assign(array(
 				'LIST_ROW_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? htmlspecialchars(cot_tag_title($tag)) : htmlspecialchars($tag),
-				'LIST_ROW_TAGS_ROW_URL' => cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl))
+				'LIST_ROW_TAGS_ROW_URL' => cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl))
 			));
 			$t->parse('MAIN.LIST_ROW.LIST_ROW_TAGS_ROW');
 			$tag_i++;

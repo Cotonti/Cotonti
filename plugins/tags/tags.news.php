@@ -56,7 +56,7 @@ if ($cfg['plugin']['tags']['pages'])
 			$news->assign(array(
 				'PAGE_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? htmlspecialchars(cot_tag_title($tag)) : htmlspecialchars($tag),
 				'PAGE_TAGS_ROW_TAG_COUNT' => $tag_ii,
-				'PAGE_TAGS_ROW_URL' => cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => $tag_u, 'tl' => $tl))
+				'PAGE_TAGS_ROW_URL' => cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl))
 			));
 			$news->parse('NEWS.PAGE_ROW.PAGE_TAGS.PAGE_TAGS_ROW');
 			$tag_ii++;
