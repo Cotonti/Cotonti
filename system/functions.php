@@ -4705,7 +4705,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 		{
 			$params[$k] = strval($param);
 		}
-		if ($param === '')
+		if ($params[$k] === '')
 		{
 			unset($params[$k]);
 		}
