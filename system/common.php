@@ -517,7 +517,7 @@ if (empty($cfg['themes_dir']))
 $mtheme = "{$cfg['themes_dir']}/{$usr['theme']}/header.tpl";
 if (!file_exists($mtheme))
 {
-	$out['notices'] .= $L['com_themefail'].'<br />';
+	$out['notices_array'][] = $L['com_themefail'];
 	$usr['theme'] = $cfg['defaulttheme'];
 	$mtheme = "{$cfg['themes_dir']}/{$usr['theme']}/header.tpl";
 	if (!file_exists($mtheme))

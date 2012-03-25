@@ -49,7 +49,7 @@ $L['contact_subtitle'] = 'Контактная информация';
  */
 
 $L['contact_headercontact'] = 'Обратная связь';
-$Ls['contact_headercontact'] = array('сообщение', 'сообщения', 'сообщений');
+$Ls['contact_headercontact'] = array('контакт-сообщение', 'контакт-сообщения', 'контакт-сообщений');
 $L['contact_entrytooshort'] = 'Сообщение слишком короткое или отсутствует';
 $L['contact_noname'] = 'Вы не указали имя';
 $L['contact_emailnotvalid'] = 'Некорректно указан E-mail';

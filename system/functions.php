@@ -2918,7 +2918,7 @@ function cot_schemefile()
 		}
 		elseif (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/css/{$cfg['defaultscheme']}.css"))
 		{
-			$out['notices'] .= $L['com_schemefail'];
+			$out['notices_array'][] = $L['com_schemefail'];
 			$usr['scheme'] = $cfg['defaultscheme'];
 			return "{$cfg['themes_dir']}/{$usr['theme']}/css/{$cfg['defaultscheme']}.css";
 		}
@@ -2927,25 +2927,25 @@ function cot_schemefile()
 	{
 		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$cfg['defaultscheme']}.css"))
 		{
-			$out['notices'] .= $L['com_schemefail'];
+			$out['notices_array'][] = $L['com_schemefail'];
 			$usr['scheme'] = $cfg['defaultscheme'];
 			return "{$cfg['themes_dir']}/{$usr['theme']}/{$cfg['defaultscheme']}.css";
 		}
 		elseif (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.css"))
 		{
-			$out['notices'] .= $L['com_schemefail'];
+			$out['notices_array'][] = $L['com_schemefail'];
 			$usr['scheme'] = $usr['theme'];
 			return "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.css";
 		}
 		elseif (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/style.css"))
 		{
-			$out['notices'] .= $L['com_schemefail'];
+			$out['notices_array'][] = $L['com_schemefail'];
 			$usr['scheme'] = 'style';
 			return "{$cfg['themes_dir']}/{$usr['theme']}/style.css";
 		}
 	}
 
-	$out['notices'] .= $L['com_schemefail'];
+	$out['notices_array'][] = $L['com_schemefail'];
 	if (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaultscheme']}.css"))
 	{
 		$usr['theme'] = $cfg['defaulttheme'];

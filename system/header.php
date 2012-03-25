@@ -94,7 +94,16 @@ if (!COT_AJAX)
 		include $pl;
 	}
 	/* ===== */
-
+	
+	if(is_array($out['notices_array']))
+	{
+		foreach ($out['notices_array'] as $notice)
+		{
+			$notice = (is_array($notice)) ? cot_rc_link($notice[0], $notice[1]) : $notice;
+			$out['notices'] .= ((!empty($out_notices)) ? ', ' : '').$notice;
+		}	
+	}
+	
 	$t->assign(array(
 		'HEADER_TITLE' => $out['fulltitle'],
 		'HEADER_COMPOPUP' => $out['compopup'],
@@ -105,6 +114,7 @@ if (!COT_AJAX)
 		'HEADER_GMTTIME' => $usr['gmttime'],
 		'HEADER_USERLIST' => $out['userlist'],
 		'HEADER_NOTICES' => $out['notices'],
+		'HEADER_NOTICES_ARRAY' => $out['notices_array'],
 		'HEADER_BASEHREF' => $out['basehref'],
 		'HEADER_META_CONTENTTYPE' => $out['meta_contenttype'],
 		'HEADER_META_CHARSET' => $out['meta_charset'],

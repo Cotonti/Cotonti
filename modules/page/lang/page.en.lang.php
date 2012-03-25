@@ -104,4 +104,7 @@ $L['page_status_expired'] = 'Expired';
 $L['page_linesperpage'] = 'Lines per page';
 $L['page_linesinthissection'] = 'Lines in this section';
 
+$Ls['pages'] = array('page', 'pages');
+$Ls['unvalidated_pages'] = array('unvalidated page', 'unvalidated pages');
+
 ?>
