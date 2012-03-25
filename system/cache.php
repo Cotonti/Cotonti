@@ -1185,10 +1185,6 @@ class Cache
 		{
 			$selected = $cfg['cache_drv'];
 		}
-		elseif (count($cot_cache_drivers) > 0)
-		{
-			$selected = $cot_cache_drivers[0];
-		}
 		if (!empty($selected))
 		{
 			$mem = new $selected();
