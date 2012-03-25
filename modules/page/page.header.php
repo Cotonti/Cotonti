@@ -25,16 +25,7 @@ if ($usr['id'] > 0 && cot_auth('page', 'any', 'A'))
 
 	if ($sys['pagesqueued'] > 0)
 	{
-		$out['notices'] .= $L['hea_valqueues'];
-
-		if ($sys['pagesqueued'] == 1)
-		{
-			$out['notices'] .= cot_rc_link(cot_url('admin', 'm=page'), '1 ' . $L['Page']);
-		}
-		elseif ($sys['pagesqueued'] > 1)
-		{
-			$out['notices'] .= cot_rc_link(cot_url('admin', 'm=page'), $sys['pagesqueued'] . ' ' . $L['Pages']);
-		}
+		$out['notices_array'][] = array(cot_url('admin', 'm=page'), cot_declension($sys['pagesqueued'], $Ls['unvalidated_pages']));
 	}
 }
 elseif ($usr['id'] > 0 && cot_auth('page', 'any', 'W'))
@@ -45,16 +36,7 @@ elseif ($usr['id'] > 0 && cot_auth('page', 'any', 'W'))
 
 	if ($sys['pagesqueued'] > 0)
 	{
-		$out['notices'] .= $L['hea_valqueues'];
-
-		if ($sys['pagesqueued'] == 1)
-		{
-			$out['notices'] .= cot_rc_link(cot_url('page', 'c=unvalidated'), '1 ' . $L['Page']);
-		}
-		elseif ($sys['pagesqueued'] > 1)
-		{
-			$out['notices'] .= cot_rc_link(cot_url('page', 'c=unvalidated'), $sys['pagesqueued'] . ' ' . $L['Pages']);
-		}
+		$out['notices_array'][] = array(cot_url('page', 'c=unvalidated'), cot_declension($sys['pagesqueued'], $Ls['unvalidated_pages']));
 	}
 }
 

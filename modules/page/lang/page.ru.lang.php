@@ -104,4 +104,7 @@ $L['page_status_expired'] = 'Устарела';
 $L['page_linesperpage'] = 'Записей на страницу';
 $L['page_linesinthissection'] = 'Записей в разделе';
 
+$Ls['pages'] = array('страница', 'страницы', 'страниц');
+$Ls['unvalidated_pages'] = array('неутвержденная страница', 'неутвержденные страницы', 'неутвержденных страниц');
+
 ?>

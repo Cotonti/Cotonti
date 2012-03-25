@@ -49,7 +49,7 @@ $L['contact_subtitle'] = 'Contact info';
  */
 
 $L['contact_headercontact'] = 'Contact';
-$Ls['contact_headercontact'] = array('messages', 'message');
+$Ls['contact_headercontact'] = array('contact message', 'contact messages');
 $L['contact_entrytooshort'] = 'Message too short or missing';
 $L['contact_noname'] = 'Name missing';
 $L['contact_emailnotvalid'] = 'Incorrect email address';
