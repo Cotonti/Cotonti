@@ -213,12 +213,14 @@
 <!-- END: HOOKS -->
 
 <!-- BEGIN: DEFAULT -->
+<div class="block button-toolbar">
+	<a class="button large <!-- IF {ADMIN_EXTENSIONS_SORT_ALP_SEL} -->special<!-- ENDIF -->" href="{ADMIN_EXTENSIONS_SORT_ALP_URL}">{PHP.L.adm_sort_alphabet}</a>
+	<a class="button large <!-- IF {ADMIN_EXTENSIONS_SORT_CAT_SEL} -->special<!-- ENDIF -->" href="{ADMIN_EXTENSIONS_SORT_CAT_URL}">{PHP.L.adm_sort_category}</a>
+	<a href="{ADMIN_EXTENSIONS_HOOKS_URL}" class="button large">{PHP.L.Hooks}</a>
+</div>
+
 <!-- BEGIN: SECTION-->
-	<h2>{ADMIN_EXTENSIONS_SECTION_TITLE} ({ADMIN_EXTENSIONS_CNT_EXTP})
-		<!-- IF {PHP.type} == 'plug' -->
-		 <a class="button large <!-- IF {ADMIN_EXTENSIONS_SORT_ALP_SEL} -->special<!-- ENDIF -->" href="{ADMIN_EXTENSIONS_SORT_ALP_URL}">{PHP.L.adm_sort_alphabet}</a> <a class="button large <!-- IF {ADMIN_EXTENSIONS_SORT_CAT_SEL} -->special<!-- ENDIF -->" href="{ADMIN_EXTENSIONS_SORT_CAT_URL}">{PHP.L.adm_sort_category}</a>
-		<!-- ENDIF -->
-	</h2>
+	<h2>{ADMIN_EXTENSIONS_SECTION_TITLE} ({ADMIN_EXTENSIONS_CNT_EXTP})</h2>
 	<div class="block">
 		<table class="cells">
 			<tr>
@@ -295,10 +297,6 @@
 		</table>
 	</div>
 <!-- END: SECTION -->
-
-	<div class="block button-toolbar">
-		<a href="{ADMIN_EXTENSIONS_HOOKS_URL}" class="button large">{PHP.L.Hooks}</a>
-	</div>
 
 <!-- END: DEFAULT -->
 <!-- BEGIN: EDIT -->
