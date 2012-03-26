@@ -783,6 +783,34 @@ function cot_extension_add($name, $title, $version = '1.0.0', $is_plug = false)
 }
 
 /**
+ * Compares 2 extension info entries by category code.
+ * post-install extensions are always last.
+ * 
+ * @param array $ext1 Ext info 1
+ * @param array $ext2 Ext info 2
+ * @return int 
+ */
+function cot_extension_catcmp($ext1, $ext2)
+{
+	if ($ext1['Category'] == $ext2['Category'])
+	{
+		// Compare by name
+		if ($ext1['Name'] == $ext2['Name'])
+		{
+			return 0;
+		}
+		else
+		{
+			return ($ext1['Name'] > $ext2['Name']) ? 1 : -1;
+		}
+	}
+	else
+	{
+		return ($ext1['Category'] > $ext2['Category'] || $ext1['Category'] == 'post-install') ? 1 : -1;
+	}
+}
+
+/**
  * Checks if module is already installed
  *
  * @param string $name Module code
@@ -795,6 +823,39 @@ function cot_extension_installed($name)
 	
     $cnt = $db->query("SELECT COUNT(*) FROM $db_core WHERE ct_code = '$name'")->fetchColumn();
     return $cnt > 0;
+}
+
+/**
+ * Returns an array containing meta information for all extensions in a directory
+ * 
+ * @param string $dir Directory to search for extensions in
+ * @return array Extension code => info array
+ */
+function cot_extension_list_info($dir)
+{
+	$ext_list = array();
+	clearstatcache();
+	$dp = opendir($dir);
+	while ($f = readdir($dp))
+	{
+		$path = $dir . '/' . $f;
+		if ($f[0] != '.' && is_dir($path) && file_exists("$path/$f.setup.php"))
+		{
+			$info = cot_infoget("$path/$f.setup.php", 'COT_EXT');
+			if (!$info && cot_plugin_active('genoa'))
+			{
+				// Try to load old format info
+				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
+			}
+			if (empty($info['Category']))
+			{
+				$info['Category'] = 'misc-ext';
+			}
+			$ext_list[$f] = $info;
+		}
+	}
+	closedir($dp);
+	return $ext_list;
 }
 
 /**

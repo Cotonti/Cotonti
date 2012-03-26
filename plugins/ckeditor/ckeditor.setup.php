@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=ckeditor
 Name=CKEditor
-Category=editor
+Category=editor-parser
 Description=WYSIWYG HTML editor
 Version=0.9.0-3.6.2
 Date=2011-06-30

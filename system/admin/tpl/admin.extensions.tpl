@@ -214,19 +214,30 @@
 
 <!-- BEGIN: DEFAULT -->
 <!-- BEGIN: SECTION-->
-	<h2>{ADMIN_EXTENSIONS_SECTION_TITLE} ({ADMIN_EXTENSIONS_CNT_EXTP}):</h2>
+	<h2>{ADMIN_EXTENSIONS_SECTION_TITLE} ({ADMIN_EXTENSIONS_CNT_EXTP})
+		<!-- IF {PHP.type} == 'plug' -->
+		 <a class="button large <!-- IF {ADMIN_EXTENSIONS_SORT_ALP_SEL} -->special<!-- ENDIF -->" href="{ADMIN_EXTENSIONS_SORT_ALP_URL}">{PHP.L.adm_sort_alphabet}</a> <a class="button large <!-- IF {ADMIN_EXTENSIONS_SORT_CAT_SEL} -->special<!-- ENDIF -->" href="{ADMIN_EXTENSIONS_SORT_CAT_URL}">{PHP.L.adm_sort_category}</a>
+		<!-- ENDIF -->
+	</h2>
 	<div class="block">
 		<table class="cells">
 			<tr>
-				<td class="coltop width5"></td>
-				<td class="coltop width20">{PHP.L.Name} {PHP.L.adm_clicktoedit}</td>
+				<td class="coltop width5">&nbsp;</td>
+				<td class="coltop width25">{PHP.L.Name} {PHP.L.adm_clicktoedit}</td>
 				<td class="coltop width15">{PHP.L.Code}</td>
 				<td class="coltop width9">{PHP.L.Version}</td>
 				<td class="coltop width4">{PHP.L.Parts}</td>
 				<td class="coltop width12">{PHP.L.Status}</td>
-				<td class="coltop width35">{PHP.L.Action}</td>
+				<td class="coltop width30">{PHP.L.Action}</td>
 			</tr>
 <!-- BEGIN: ROW -->
+<!-- BEGIN: ROW_CAT -->
+			<tr>
+				<td colspan="7">
+					<h4>{ADMIN_EXTENSIONS_CAT_TITLE}</h4>
+				</td>
+			</tr>
+<!-- END: ROW_CAT -->
 <!-- BEGIN: ROW_ERROR_EXT-->
 			<tr>
 				<td>{ADMIN_EXTENSIONS_X_ERR}</td>
@@ -241,7 +252,10 @@
 					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png" />
 					<!-- ENDIF -->
 				</td>
-				<td><a href="{ADMIN_EXTENSIONS_DETAILS_URL}"><strong>{ADMIN_EXTENSIONS_NAME}</strong></a></td>
+				<td>
+					<a href="{ADMIN_EXTENSIONS_DETAILS_URL}"><strong>{ADMIN_EXTENSIONS_NAME}</strong></a>
+					<p class="small">{ADMIN_EXTENSIONS_DESCRIPTION|cot_cutstring($this,60)}</p>
+				</td>
 				<td>{ADMIN_EXTENSIONS_CODE_X}</td>
 				<td>
 					<!-- IF {PHP.part_status} != 3 AND {ADMIN_EXTENSIONS_VERSION} > {ADMIN_EXTENSIONS_VERSION_INSTALLED} -->

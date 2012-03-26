@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=htmlpurifier
 Name=HTML Purifier
-Category=security-authentication
+Category=editor-parser
 Description=Makes sure submitted HTML is valid and secure
 Version=0.9.0-4.4.0
 Date=2010-oct-07

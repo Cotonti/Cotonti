@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=html
 Name=HTML Parser
-Category=parser
+Category=editor-parser
 Description=Adds HTML parsing support to site contents
 Version=0.9.1
 Date=2011-06-30

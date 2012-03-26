@@ -23,6 +23,7 @@ $adminpath[] = array (cot_url('admin', 'm=extensions'), $L['Extensions']);
 $pl = cot_import('pl', 'G', 'ALP');
 $mod = cot_import('mod', 'G', 'ALP');
 $part = cot_import('part', 'G', 'ALP');
+$sort = cot_import('sort', 'G', 'ALP');
 
 if (empty($mod))
 {
@@ -584,6 +585,14 @@ switch($a)
 	/* =============== */
 	default:
 	/* =============== */
+		$t->assign(array(
+			'ADMIN_EXTENSIONS_HOOKS_URL' => cot_url('admin', 'm=extensions&a=hooks'),
+			'ADMIN_EXTENSIONS_SORT_ALP_URL' => cot_url('admin', 'm=extensions'),
+			'ADMIN_EXTENSIONS_SORT_ALP_SEL' => $sort != 'cat',
+			'ADMIN_EXTENSIONS_SORT_CAT_URL' => cot_url('admin', 'm=extensions&sort=cat'),
+			'ADMIN_EXTENSIONS_SORT_CAT_SEL' => $sort == 'cat'
+		));
+		
 		foreach (array('module', 'plug') as $type)
 		{
 			$sql = $db->query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config
@@ -595,46 +604,36 @@ switch($a)
 			$sql->closeCursor();
 
 			$dir = $type == 'module' ? $cfg['modules_dir'] : $cfg['plugins_dir'];
-			$extensions = array();
-			$handle = opendir($dir);
-			while ($f = readdir($handle))
-			{
-				if (is_dir($dir . '/' . $f) && $f[0] != '.')
-				{
-					// Check for extension .php files, otherwise it's inconsistent
-					$is_ext = false;
-					$dp = opendir($dir . '/' . $f);
-					while ($pf = readdir($dp))
-					{
-						if (preg_match("#^$f(\.([\w\.]+))?.php$#", $pf))
-						{
-							$is_ext = true;
-							break;
-						}
-					}
-					closedir($dp);
-					if ($is_ext)
-					{
-						$extensions[] = $f;
-					}
-				}
-			}
-			closedir($handle);
+			$extensions = cot_extension_list_info($dir);
 			
 			// Find missing extensions
-			$extlist = count($extensions) > 0 ? "ct_code NOT IN('" . implode("','", $extensions) . "')" : '1';
+			$extlist = count($extensions) > 0 ? "ct_code NOT IN('" . implode("','", array_keys($extensions)) . "')" : '1';
 			$ctplug = $type == 'module' ? '0' : '1';
-			$sql = $db->query("SELECT ct_code FROM $db_core WHERE $extlist AND ct_plug = $ctplug");
+			$sql = $db->query("SELECT * FROM $db_core WHERE $extlist AND ct_plug = $ctplug");
 			foreach ($sql->fetchAll() as $row)
 			{
 				if ($type ==  'module' && in_array($row['ct_code'], array('admin', 'message', 'users')))
 				{
 					continue;
 				}
-				$extensions[] = $row['ct_code'];
+				$extensions[$row['ct_code']] = array(
+					'Code' => $row['ct_code'],
+					'Name' => $row['ct_title'],
+					'Version' => $row['ct_version'],
+					'Category' => 'misc-ext',
+					'NotFound' => true
+				);
+			}
+
+			if ($type == 'plug' && $sort == 'cat')
+			{
+				uasort($extensions, 'cot_extension_catcmp');
+			}
+			else
+			{
+				ksort($extensions);
 			}
 			
-			sort($extensions);
 			$cnt_extp = count($extensions);
 			$cnt_parts = 0;
 
@@ -664,35 +663,30 @@ switch($a)
 
 			$sql3->closeCursor();
 
-
+			$prev_cat = '';
 			/* === Hook - Part1 : Set === */
 			$extp = cot_getextplugins("admin.extensions.$type.list.loop");
 			/* ===== */
-			foreach ($extensions as $i => $x)
+			foreach ($extensions as $code => $info)
 			{
-				$ext_info = $dir . '/' . $x . '/' . $x . '.setup.php';
-				$exists = file_exists($ext_info);
-				
-				if ($exists)
+				if ($sort == 'cat' && $type == 'plug' && $prev_cat != $info['Category'])
 				{
-					$info = cot_infoget($ext_info, 'COT_EXT');
-					if (!$info && cot_plugin_active('genoa'))
+					if ($prev_cat != $info['Category'])
 					{
-						// Try to load old format info
-						$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
+						// Render category heading
+						$t->assign('ADMIN_EXTENSIONS_CAT_TITLE', $L['ext_cat'][$info['Category']]);
+						$t->parse('MAIN.DEFAULT.SECTION.ROW.ROW_CAT');
 					}
+					// Assign a new one
+					$prev_cat = $info['Category'];
 				}
-				else
-				{
-					$info = array(
-						'Name' => $x
-					);
-				}
+				
+				$exists = !isset($info['NotFound']);
 
 				if (!empty($info['Error']))
 				{
 					$t->assign(array(
-						'ADMIN_EXTENSIONS_X_ERR' => $x,
+						'ADMIN_EXTENSIONS_X_ERR' => $code,
 						'ADMIN_EXTENSIONS_ERROR_MSG' => $info['Error']
 					));
 					$t->parse('MAIN.DEFAULT.ROW.ROW_ERROR_EXT');
@@ -700,12 +694,12 @@ switch($a)
 				}
 				else
 				{
-					$totalactive = $db->query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$x'")->fetchColumn();
-					$totalinstalled = $db->query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$x'")->fetchColumn();
+					$totalactive = $db->query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$code'")->fetchColumn();
+					$totalinstalled = $db->query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$code'")->fetchColumn();
 
 					$cnt_parts += $totalinstalled;
 
-					if (!cot_extension_installed($x))
+					if (!cot_extension_installed($code))
 					{
 						$part_status = 3;
 						$info['Partscount'] = '?';
@@ -730,44 +724,51 @@ switch($a)
 							$part_status = 1;
 						}
 					}
-					$totalconfig = $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$x'")->fetchColumn();
+					$totalconfig = $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$code'")->fetchColumn();
 
-					$ifthistools = $tools[$x];
-					$ent_code = $cfgentries[$x];
-					$if_plg_standalone = $standalone[$x];
-					$ifstruct = $struct[$x];
+					$ifthistools = $tools[$code];
+					$ent_code = $cfgentries[$code];
+					$if_plg_standalone = $standalone[$code];
+					$ifstruct = $struct[$code];
 
 					if ($type == 'module')
 					{
-						$jump_url = cot_url($x);
+						$jump_url = cot_url($code);
 						$arg = 'mod';
 					}
 					else
 					{
-						$jump_url = cot_url('plug', 'e=' . $x);
+						$jump_url = cot_url('plug', 'e=' . $code);
 						$arg = 'pl';
 					}
-					$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $x . '/' . $x . '.png';
+					$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $code . '/' . $code . '.png';
 					
-					$installed_ver = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$x'")->fetchColumn();
+					$installed_ver = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$code'")->fetchColumn();
+					
+					$L['info_desc'] = '';
+					if (file_exists(cot_langfile($code, $type)))
+					{
+						include cot_langfile($code, $type);
+					}
 					
 					$t->assign(array(
-						'ADMIN_EXTENSIONS_DETAILS_URL' => cot_url('admin', "m=extensions&a=details&$arg=$x"),
+						'ADMIN_EXTENSIONS_DETAILS_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code"),
 						'ADMIN_EXTENSIONS_NAME' => $info['Name'],
 						'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? $L['Module'] : $L['Plugin'],
-						'ADMIN_EXTENSIONS_CODE_X' => $x,
+						'ADMIN_EXTENSIONS_CODE_X' => $code,
+						'ADMIN_EXTENSIONS_DESCRIPTION' => empty($L['info_desc']) ? $info['Description'] : $L['info_desc'],
 						'ADMIN_EXTENSIONS_ICO' => (file_exists($icofile)) ? $icofile : '',
-						'ADMIN_EXTENSIONS_EDIT_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$x"),
+						'ADMIN_EXTENSIONS_EDIT_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$code"),
 						'ADMIN_EXTENSIONS_TOTALCONFIG' => $totalconfig,
 						'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
 						'ADMIN_EXTENSIONS_STATUS' => $status[$part_status],
 						'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 						'ADMIN_EXTENSIONS_VERSION_INSTALLED' => $installed_ver,
-						'ADMIN_EXTENSIONS_RIGHTS_URL' => $type == 'module' ? cot_url('admin', "m=rightsbyitem&ic=$x&io=a") : cot_url('admin',
-								"m=rightsbyitem&ic=$type&io=$x"),
-						'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? cot_url('admin', "m=other&p=$x") : cot_url('admin', "m=$x"),
+						'ADMIN_EXTENSIONS_RIGHTS_URL' => $type == 'module' ? cot_url('admin', "m=rightsbyitem&ic=$code&io=a") : cot_url('admin',
+								"m=rightsbyitem&ic=$type&io=$code"),
+						'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? cot_url('admin', "m=other&p=$code") : cot_url('admin', "m=$code"),
 						'ADMIN_EXTENSIONS_JUMPTO_URL' => $jump_url,
-						'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => cot_url('admin', "m=structure&n=$x"),
+						'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => cot_url('admin', "m=structure&n=$code"),
 						'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i)
 					));
 					/* === Hook - Part2 : Include === */
@@ -785,10 +786,6 @@ switch($a)
 			));
 			$t->parse('MAIN.DEFAULT.SECTION');
 		}
-
-		$t->assign(array(
-			'ADMIN_EXTENSIONS_HOOKS_URL' => cot_url('admin', 'm=extensions&a=hooks')
-		));
 
 		$t->parse('MAIN.DEFAULT');
 	break;

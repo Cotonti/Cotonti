@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=bbcode
 Name=BBcode Parser
-Category=parser
+Category=editor-parser
 Description=Adds BBcode parser support to the contents
 Version=0.9.0
 Date=2011-06-30

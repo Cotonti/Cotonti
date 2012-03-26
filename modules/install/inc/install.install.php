@@ -579,25 +579,9 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 	$ext_type_lc = strtolower($ext_type);
 	$ext_type_uc = strtoupper($ext_type);
 
-	$ext_list = array();
-	clearstatcache();
-	$dp = opendir($cfg["{$ext_type_lc}s_dir"]);
-	while ($f = readdir($dp))
-	{
-		$path = $cfg["{$ext_type_lc}s_dir"] . '/' . $f;
-		if ($f[0] != '.' && is_dir($path) && file_exists("$path/$f.setup.php"))
-		{
-			$info = cot_infoget("$path/$f.setup.php", 'COT_EXT');
-			if ($ext_type_lc == 'plugin' && empty($info['Category']))
-			{
-				$info['Category'] = 'ext-misc';
-			}
-			$ext_list[$f] = $info;
-		}
-	}
-	closedir($dp);
+	$ext_list = cot_extension_list_info($cfg["{$ext_type_lc}s_dir"]);
 
-	$ext_type_lc == 'plugin' ? usort($ext_list, 'cot_install_ext_catcmp') : ksort($ext_list);
+	$ext_type_lc == 'plugin' ? usort($ext_list, 'cot_extension_catcmp') : ksort($ext_list);
 
 	$prev_cat = '';
 	$block_name = $ext_type_lc == 'plugin' ? "{$ext_type_uc}_CAT.{$ext_type_uc}_ROW" : "{$ext_type_uc}_ROW";
@@ -671,26 +655,6 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 	{
 		// Render last category
 		$t->parse("MAIN.STEP_4.{$ext_type_uc}_CAT");
-	}
-}
-
-/**
- * Compares 2 extension info entries by category code.
- * post-install extensions are always last.
- * 
- * @param array $ext1 Ext info 1
- * @param array $ext2 Ext info 2
- * @return int 
- */
-function cot_install_ext_catcmp($ext1, $ext2)
-{
-	if ($ext1['Category'] == $ext2['Category'])
-	{
-		return 0;
-	}
-	else
-	{
-		return ($ext1['Category'] > $ext2['Category'] || $ext1['Category'] == 'post-install') ? 1 : -1;
 	}
 }
 

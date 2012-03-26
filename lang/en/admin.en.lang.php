@@ -259,14 +259,14 @@ $L['ext_cat']['community-social'] = 'Community &amp; Social';
 $L['ext_cat']['customization-i18n'] = 'Customization &amp; I18n';
 $L['ext_cat']['data-apis'] = 'Data Feeds &amp; APIs';
 $L['ext_cat']['development-maintenance'] = 'Development &amp; Maintenance';
-$L['ext_cat']['editor'] = 'Editors';
+$L['ext_cat']['editor-parser'] = 'Editors &amp; Markup';
 $L['ext_cat']['files-media'] = 'Files &amp; Media';
 $L['ext_cat']['forms-feedback'] = 'Forms &amp; Feedback';
+$L['ext_cat']['gaming-clans'] = 'Gaming &amp; Clans';
 $L['ext_cat']['intranet-groupware'] = 'Intranet &amp; Groupware';
 $L['ext_cat']['misc-ext'] = 'Miscellaneous';
 $L['ext_cat']['mobile-geolocation'] = 'Mobile &amp; Geolocation';
 $L['ext_cat']['navigation-structure'] = 'Navigation &amp; Structure';
-$L['ext_cat']['parser'] = 'Parsers &amp; Markup';
 $L['ext_cat']['performance-seo'] = 'Performance &amp; SEO';
 $L['ext_cat']['publications-events'] = 'Publications &amp; Events';
 $L['ext_cat']['security-authentication'] = 'Security &amp; Authentication';
@@ -353,6 +353,9 @@ $L['adm_opt_unpauseall'] = 'Un-pause all';
 $L['adm_opt_unpauseall_explain'] = 'This will un-pause (enable) all the plugin parts.';
 
 $L['adm_opt_setup_missing'] = 'Error: setup file missing!';
+
+$L['adm_sort_alphabet'] = 'Alphabetical';
+$L['adm_sort_category'] = 'Category View';
 
 /**
  * Tools Section
