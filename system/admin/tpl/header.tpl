@@ -35,10 +35,18 @@
 	
 	<ul id="adminmenu" class="body">
 		<li><a href="{PHP|cot_url('admin')}" class="<!-- IF !{PHP.m} -->sel<!-- ENDIF -->" title="{PHP.L.Administration}">{PHP.R.admin_menu_icon_home}</a></li>
+		<!-- IF {PHP.usr.admin_config} -->
 		<li><a href="{PHP|cot_url('admin', 'm=config')}" class="<!-- IF {PHP.m} == 'config' -->sel<!-- ENDIF -->" title="{PHP.L.Configuration}">{PHP.R.admin_menu_icon_config}</a></li>
+		<!-- ENDIF -->
+		<!-- IF {PHP.usr.admin_structure} -->
 		<li><a href="{PHP|cot_url('admin', 'm=structure')}" class="<!-- IF {PHP.m} == 'structure' -->sel<!-- ENDIF -->" title="{PHP.L.Structure}">{PHP.R.admin_menu_icon_structure}</a></li>
+		<!-- ENDIF -->
+		<!-- IF {PHP.usr.admin_config} -->
 		<li><a href="{PHP|cot_url('admin', 'm=extensions')}" class="<!-- IF {PHP.m} == 'extensions' -->sel<!-- ENDIF -->" title="{PHP.L.Extensions}">{PHP.R.admin_menu_icon_extensions}</a></li>
+		<!-- ENDIF -->
+		<!-- IF {PHP.usr.admin_users} -->
 		<li><a href="{PHP|cot_url('admin', 'm=users')}" class="<!-- IF {PHP.m} == 'users' -->sel<!-- ENDIF -->" title="{PHP.L.Users}">{PHP.R.admin_menu_icon_users}</a></li>
+		<!-- ENDIF -->
 		<li><a href="{PHP|cot_url('admin', 'm=other')}" class="<!-- IF {PHP.m} == 'other' -->sel<!-- ENDIF -->" title="{PHP.L.Other}">{PHP.R.admin_menu_icon_other}</a></li>
 	</ul>
 
