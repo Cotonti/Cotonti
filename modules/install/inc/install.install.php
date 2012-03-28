@@ -96,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			break;
 		case 1:
 			// System info
+			clearstatcache();
 			if (!file_exists($file['sql']))
 			{
 				cot_error(cot_rc('install_error_missing_file', array('file' => $file['sql'])));
@@ -115,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 			if (!file_exists($file['config']))
 			{
-				if (!copy($file['config_sample'], $file['config']))
+				if (!is_writable('datas') || !copy($file['config_sample'], $file['config']))
 				{
 					cot_error('install_error_config');
 				}
