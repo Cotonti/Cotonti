@@ -11,6 +11,12 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
+if (!defined('SED_CODE'))
+{
+	// For Sed plugins
+	define('SED_CODE', true);
+}
+
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['isadmin']);
 
