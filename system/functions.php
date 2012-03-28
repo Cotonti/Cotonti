@@ -1045,7 +1045,7 @@ function cot_load_structure()
 
 	$path = array(); // code path tree
 	$tpath = array(); // title path tree
-	$parent_tpl = '';
+	$tpls = array(); // tpl codes tree
 
 	foreach ($sql->fetchAll() as $row)
 	{
@@ -1059,15 +1059,22 @@ function cot_load_structure()
 			$path[$row['structure_path']] = $path[$path1] . '.' . $row['structure_code'];
 			$separaror = ($cfg['separator'] == strip_tags($cfg['separator'])) ? ' ' . $cfg['separator'] . ' ' : ' \ ';
 			$tpath[$row['structure_path']] = $tpath[$path1] . $separaror . $row['structure_title'];
-			$row['structure_tpl'] = ($row['structure_tpl'] == 'same_as_parent') ? $parent_tpl : $row['structure_tpl'];
+			$parent_dot = mb_strrpos($path[$path1], '.');
+			$parent = ($parent_dot > 0) ? mb_substr($path[$path1], $parent_dot + 1) : $path[$path1];
 		}
 		else
 		{
 			$path[$row['structure_path']] = $row['structure_code'];
 			$tpath[$row['structure_path']] = $row['structure_title'];
+			$parent = $row['structure_code']; // self
+		}
+		
+		if ($row['structure_tpl'] == 'same_as_parent')
+		{
+			$row['structure_tpl'] = $structure[$parent]['tpl'];
 		}
 
-		$parent_tpl = $row['structure_tpl'];
+		$tpls[$row['structure_code']] = $row['structure_tpl'];
 
 		$structure[$row['structure_area']][$row['structure_code']] = array(
 			'path' => $path[$row['structure_path']],
