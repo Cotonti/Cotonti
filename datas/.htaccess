@@ -1,0 +1,4 @@
+<FilesMatch "\.(dat|php)$">
+order deny,allow
+deny from all
+</FilesMatch>
