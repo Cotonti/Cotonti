@@ -593,8 +593,11 @@ ALTER TABLE `cot_groups` ADD COLUMN `grp_skiprights` tinyint NOT NULL default '0
 /* 0.9.8-01 timezone bug fix */
 ALTER TABLE `cot_users` MODIFY `user_timezone` decimal(3,1) NOT NULL default '0';
 
+/* 0.9.8-02 remove obsolete plugin config */
+DELETE FROM `cot_config` WHERE config_owner = 'core' AND config_cat = 'plug';
+
 -------------------------------------------------------------------------------
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.8-01' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.8-02' WHERE `upd_param` = 'revision';
