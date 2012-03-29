@@ -81,7 +81,8 @@ $cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalida
 $where = array();
 $params = array();
 
-$where['state'] = '(page_state=0 OR page_state=2)';
+$where_state = $usr['isadmin'] ? '1' : "page_ownerid = {$usr['id']}";
+$where['state'] = "(page_state=0 OR page_state=2 AND $where_state)";
 if ($c == 'unvalidated')
 {
 	$cat['tpl'] = 'unvalidated';
