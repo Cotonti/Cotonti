@@ -218,8 +218,17 @@ function cot_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '',
 
 	if (!$cot_countries)
 		include_once cot_langfile('countries', 'core');
+	
+	$codes = array_keys($cot_countries);
+	$names = array_values($cot_countries);
+	
+	if ($add_empty)
+	{
+		array_unshift($codes, '00');
+		array_unshift($names, '---');
+	}
 
-	return cot_selectbox($chosen, $name, array_keys($cot_countries), array_values($cot_countries), $add_empty, $attrs, $custom_rc);
+	return cot_selectbox($chosen, $name, $codes, $names, false, $attrs, $custom_rc);
 }
 
 /**
