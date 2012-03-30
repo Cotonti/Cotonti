@@ -458,8 +458,16 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
  */
 function cot_import_buffer_save()
 {
-	unset($_SESSION['cot_buffer']);
-	$_SESSION['cot_buffer'] = $_POST;
+	// Referer contains an original form link
+	if (cot_url_check($_SERVER['HTTP_REFERER']))
+	{
+		// Extract the server-relative part
+		$url = parse_url($_SERVER['HTTP_REFERER']);
+		$hash = md5($url['path'] . '?' . $url['query']);
+		// Save the buffer
+		$_SESSION['cot_buffer'][$hash] = $_POST;
+	}
+	
 }
 
 /**
@@ -473,11 +481,13 @@ function cot_import_buffer_save()
  */
 function cot_import_buffered($name, $value, $null = '')
 {
+	// Params hash for current form
+	$hash = md5($_SERVER['REQUEST_URI']);
 	if ($value === '' || $value === null)
 	{
-		if (isset($_SESSION['cot_buffer'][$name]) && !is_array($_SESSION['cot_buffer'][$name]))
+		if (isset($_SESSION['cot_buffer'][$hash][$name]) && !is_array($_SESSION['cot_buffer'][$hash][$name]))
 		{
-			return $_SESSION['cot_buffer'][$name];
+			return $_SESSION['cot_buffer'][$hash][$name];
 		}
 		else
 		{
