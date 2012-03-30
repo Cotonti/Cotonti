@@ -332,29 +332,42 @@ $t->assign(array(
 	'LISTCAT_PAGENEXT' => $pagenav_cat['next'],
 	'LISTCAT_PAGNAV' => $pagenav_cat['main']
 ));
+
 $jj = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.list.loop');
 /* ===== */
 $sqllist_rowset = $sqllist->fetchAll();
-foreach ($sqllist_rowset as $pag)
-{
-	$jj++;
-	$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', $cfg['page']['truncatetext'], $usr['isadmin']));
-	$t->assign(array(
-		'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-		'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj),
-		'LIST_ROW_NUM' => $jj
-	));
-	$t->assign(cot_generate_usertags($pag, 'LIST_ROW_OWNER_'));
 
-	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
+$sqllist_rowset_other = false;
+/* === Hook === */
+foreach (cot_getextplugins('page.list.before_loop') as $pl)
+{
+	include $pl;
+}
+/* ===== */
+
+if(!$sqllist_rowset_other)
+{
+	foreach ($sqllist_rowset as $pag)
 	{
-		include $pl;
+		$jj++;
+		$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', $cfg['page']['truncatetext'], $usr['isadmin']));
+		$t->assign(array(
+			'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
+			'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj),
+			'LIST_ROW_NUM' => $jj
+		));
+		$t->assign(cot_generate_usertags($pag, 'LIST_ROW_OWNER_'));
+
+		/* === Hook - Part2 : Include === */
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+		$t->parse('MAIN.LIST_ROW');
 	}
-	/* ===== */
-	$t->parse('MAIN.LIST_ROW');
 }
 
 /* === Hook === */
