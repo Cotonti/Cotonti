@@ -51,6 +51,11 @@ if (!isset($cfg['dir_perms']))
 }
 
 /**
+ * Registry for captcha functions 
+ */
+$cot_captcha = array();
+
+/**
  * Array of custom cot_import() filter callbacks
  */
 $cot_import_filters = array();
@@ -4385,6 +4390,84 @@ function cot_rc_minify($code, $type = 'js')
 /*
  * ========================== Security Shield =================================
 */
+
+/**
+ * Generates a captcha
+ * 
+ * @global array $cfg
+ * @global array $cot_captcha
+ * @return string 
+ */
+function cot_captcha_generate()
+{
+	global $cfg, $cot_captcha;
+	if (!$cfg['captcharandom'])
+	{
+		$captcha = $cfg['captchamain'] . '_generate';
+	}
+	else
+	{
+		$captcha = $cot_captcha[rand(0, count($cot_captcha) - 1)];
+		$tepmcap = '<input type="hidden" name="capman" value="' . $captcha . '" />';
+		$captcha .="_generate";
+	}
+
+	if (function_exists($captcha))
+	{
+		return $captcha() . $tepmcap;
+	}
+	else
+	{
+		return '';
+	}
+}
+
+/**
+ * Returns the list of currently installed captchas
+ * @global array $cot_captcha Captcha registry
+ * @return array
+ */
+function cot_captcha_list()
+{
+	global $cot_captcha;
+	return $cot_captcha;
+}
+
+/**
+ * Valides a captcha value
+ * @global array $cfg
+ * @param string $value Captcha input for validation
+ * @return boolean 
+ */
+function cot_captcha_validate($value)
+{
+	global $cfg;
+
+	// This function can only be called once per request
+	static $called = false;
+	if ($called)
+	{
+		return true;
+	}
+	else
+	{
+		$called = true;
+	}
+	
+	if (!$cfg['captcharandom'])
+	{
+		$captcha = $cfg['captchamain'] . "_validate";
+	}
+	else
+	{
+		$captcha = cot_import('capman', 'P', 'TXT') . "_validate";
+	}
+	if (function_exists($captcha))
+	{
+		return $captcha($value);
+	}
+	return true;
+}
 
 /**
  * Checks GET anti-XSS parameter

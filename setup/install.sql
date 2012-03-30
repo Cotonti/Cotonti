@@ -123,6 +123,8 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','security','21','shieldenabled',3,'0','0','',''),
 ('core','security','22','shieldtadjust',2,'100','100','10,25,50,75,100,125,150,200,300,400,600,800',''),
 ('core','security','23','shieldzhammer',2,'25','25','5,10,15,20,25,30,40,50,100',''),
+('core','security','31','captchamain',4,'mcaptcha','mcaptcha','cot_captcha_list()',''),
+('core','security','32','captcharandom',3,'0','0','',''),
 ('core','theme','01','forcedefaulttheme',3,'0','0','',''),
 ('core','theme','02','homebreadcrumb',3,'0','0','',''),
 ('core','theme','04','separator',1,'/','/','',''),
@@ -278,7 +280,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.8-03'),
+('revision', '0.9.8-04'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;

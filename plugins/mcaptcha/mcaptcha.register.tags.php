@@ -18,20 +18,6 @@ Tags=users.register.tpl:{USERS_REGISTER_VERIFYIMG},{USERS_REGISTER_VERIFYINPUT}
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (!function_exists('cot_captcha_generate'))
-{
-    function cot_captcha_generate($func_index = 0)
-    {
-        global $cot_captcha;
-        if(!empty($cot_captcha[$func_index]))
-        {
-            $captcha=$cot_captcha[$func_index] . '_generate';
-            return $captcha();
-        }
-        return false;
-    }
-}
-
 $t->assign(array(
 	'USERS_REGISTER_VERIFYIMG' => cot_captcha_generate(),
 	'USERS_REGISTER_VERIFYINPUT' => cot_inputbox('text', 'rverify', '', 'size="10" maxlength="20"'),

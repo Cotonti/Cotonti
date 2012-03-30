@@ -109,9 +109,6 @@ $L['cfg_defaulttimezone'] = array('Default time zone', 'For guests and new membe
 $L['cfg_adminemail'] = array('Administrator\'s email', 'Required');
 $L['cfg_clustermode'] = array('Cluster of servers', 'Set to yes if it\'s a load balanced setup.');
 $L['cfg_confirmlinks'] = array('Confirm potentially dangerous actions');
-$L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
-$L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
-$L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
 $L['cfg_devmode'] = array('Debugging mode', 'Don\'t let this enabled on live sites');
 $L['cfg_easypagenav'] = array('User friendly pagination', 'Uses page numbers in URLs instead of DB offsets');
 $L['cfg_hostip'] = array('Server IP', 'The IP of the server, optional.');
@@ -122,9 +119,6 @@ $L['cfg_maxrowsperpage'] = array('Max. items per page', 'Default item limit for 
 $L['cfg_parser'] = array('Markup parser', 'Default is: plain text');
 $L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');
 $L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');
-$L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
-$L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
-$L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
 $L['cfg_turnajax'] = array('Enable Ajax', 'Works only if jQuery is enabled');
 
 /**
@@ -165,6 +159,20 @@ $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
 $L['cfg_headrc_consolidate'] = array('Consolidate header and footer resources (JS/CSS)');
 $L['cfg_headrc_minify'] = array('Minify consolidated JS/CSS');
 $L['cfg_jquery_cdn'] = array('Use jQuery from this CDN URL', 'Example: https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js');
+
+/**
+ * Config Section
+ * Security Subsection
+ */
+
+$L['cfg_captchamain'] = array('Main captcha');
+$L['cfg_captcharandom'] = array('Random captcha');
+$L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
+$L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
+$L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
+$L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
+$L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
+$L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
 
 /**
  * Config Section

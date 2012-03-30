@@ -10,7 +10,6 @@ Order=10
  * mCAPTCHA functions
  *
  * @package mcaptcha
- * @version 0.1.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
@@ -42,8 +41,8 @@ function mcaptcha_generate()
 	$_SESSION['mcaptcha_salt'] = $salt;
 	$_SESSION['mcaptcha_count'] = 0;
 	$_SESSION['mcaptcha_attempts']++;
-	$html = $n1 . ' + <input type="hidden" name="mcaptcha_salt" value="' . $salt . '" />' . $n2 . ' = ?';
-	return mcaptcha_obfuscate($html);
+	$html = $n1 . ' + ' . $n2 . ' = ?';
+	return mcaptcha_obfuscate($html) . '<input type="hidden" name="mcaptcha_salt" value="' . $salt . '" />';
 }
 
 /**
@@ -96,8 +95,8 @@ function mcaptcha_obfuscate($text)
 	$letters = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 	$rnd = $letters[array_rand($letters)] . md5(time());
 	// the actual js (in one line to confuse)
-	$script = "<script type=\"text/javascript\">//<![CDATA[
-function $rnd(s){var r='';for(var i=0;i<s.length;i++){var n=s.charCodeAt(i);if(n>=8364){n=128;}r+=String.fromCharCode(n-4);}return r;}document.write($rnd('".$enc_string."'));
+	$script = "<span id=\"mcap$rnd\"></span><script type=\"text/javascript\">//<![CDATA[
+function $rnd(s){var r='';for(var i=0;i<s.length;i++){var n=s.charCodeAt(i);if(n>=8364){n=128;}r+=String.fromCharCode(n-4);}return r;}document.getElementById('mcap$rnd').appendChild(document.createTextNode($rnd('".$enc_string."')));
 //]]></script>";
 	return $script;
 }
