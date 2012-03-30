@@ -596,8 +596,11 @@ ALTER TABLE `cot_users` MODIFY `user_timezone` decimal(3,1) NOT NULL default '0'
 /* 0.9.8-02 remove obsolete plugin config */
 DELETE FROM `cot_config` WHERE config_owner = 'core' AND config_cat = 'plug';
 
+/* 0.9.8-03 security section in configuration */
+UPDATE `cot_config` SET `config_cat` = 'security' WHERE `config_owner` = 'core' AND `config_name` IN('cookiedomain', 'cookiepath', 'cookielifetime', 'shieldenabled', 'shieldtadjust', 'shieldzhammer');
+
 -------------------------------------------------------------------------------
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.8-02' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.8-03' WHERE `upd_param` = 'revision';

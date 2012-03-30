@@ -84,12 +84,6 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','main','04','maintenance',3,'0','0','',''),
 ('core','main','05','maintenancereason',1,'','','',''),
 ('core','main','06','devmode',3,'0','0','',''),
-('core','main','11','cookiedomain',1,'','','',''),
-('core','main','12','cookiepath',1,'','','',''),
-('core','main','13','cookielifetime',2,'5184000','5184000','1800,3600,7200,14400,28800,43200,86400,172800,259200,604800,1296000,2592000,5184000',''),
-('core','main','21','shieldenabled',3,'0','0','',''),
-('core','main','22','shieldtadjust',2,'100','100','10,25,50,75,100,125,150,200,300,400,600,800',''),
-('core','main','23','shieldzhammer',2,'25','25','5,10,15,20,25,30,40,50,100',''),
 ('core','main','31','parser',4,'none','none','cot_get_parsers()',''),
 ('core','main','41','redirbkonlogin',3,'1','1','',''),
 ('core','main','42','redirbkonlogout',3,'0','0','',''),
@@ -123,6 +117,12 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','performance','02','headrc_consolidate',3,'0','0','',''),
 ('core','performance','03','headrc_minify',3,'1','1','',''),
 ('core','performance','04','jquery_cdn',1,'','','',''),
+('core','security','11','cookiedomain',1,'','','',''),
+('core','security','12','cookiepath',1,'','','',''),
+('core','security','13','cookielifetime',2,'5184000','5184000','1800,3600,7200,14400,28800,43200,86400,172800,259200,604800,1296000,2592000,5184000',''),
+('core','security','21','shieldenabled',3,'0','0','',''),
+('core','security','22','shieldtadjust',2,'100','100','10,25,50,75,100,125,150,200,300,400,600,800',''),
+('core','security','23','shieldzhammer',2,'25','25','5,10,15,20,25,30,40,50,100',''),
 ('core','theme','01','forcedefaulttheme',3,'0','0','',''),
 ('core','theme','02','homebreadcrumb',3,'0','0','',''),
 ('core','theme','04','separator',1,'/','/','',''),
@@ -278,7 +278,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.8-02'),
+('revision', '0.9.8-03'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;

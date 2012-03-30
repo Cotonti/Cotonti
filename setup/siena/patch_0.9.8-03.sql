@@ -1,0 +1,2 @@
+/* 0.9.8-03 security section in configuration */
+UPDATE `cot_config` SET `config_cat` = 'security' WHERE `config_owner` = 'core' AND `config_name` IN('cookiedomain', 'cookiepath', 'cookielifetime', 'shieldenabled', 'shieldtadjust', 'shieldzhammer');

@@ -73,6 +73,7 @@ $L['core_plug'] = &$L['Plugins'];
 $L['core_pm'] = &$L['Private_Messages'];
 $L['core_polls'] = &$L['Polls'];
 $L['core_rss'] = &$L['RSS_Feeds'];
+$L['core_security'] = &$L['Security'];
 $L['core_structure'] = &$L['Categories'];
 $L['core_theme'] = &$L['Themes'];
 $L['core_time'] = 'Time and Date';
