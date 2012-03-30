@@ -53,7 +53,6 @@ if ($out)
 	if ($usr['id'] > 0)
 	{
 		$db->update($db_users, array('user_lastvisit' => $sys['now_offset']), "user_id = " . $usr['id']);
-		$db->delete($db_online, "online_ip='{$usr['ip']}'");
 		
 		$all = cot_import('all', 'G', 'BOL');
 		if ($all)
@@ -81,7 +80,7 @@ foreach (cot_getextplugins('users.auth.first') as $pl)
 
 if ($a == 'check')
 {
-	cot_shield_protect();
+	cot_plugin_active('shield') && cot_shield_protect();
 
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.auth.check') as $pl)
@@ -188,14 +187,13 @@ if ($a == 'check')
 		}
 		/* ===== */
 
-		$sql = $db->delete($db_online, "online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
 		cot_uriredir_apply($cfg['redirbkonlogin']);
 		cot_uriredir_redirect(empty($redirect) ? cot_url('index') : base64_decode($redirect));
 	}
 	else
 	{
 		$env['status'] = '401 Unauthorized';
-		cot_shield_update(7, "Log in");
+		cot_plugin_active('shield') && cot_shield_update(7, "Log in");
 		cot_log("Log in failed, user : ".$rusername,'usr');
 		
 		/* === Hook === */

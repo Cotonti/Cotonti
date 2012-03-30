@@ -171,9 +171,6 @@ $L['cfg_captcharandom'] = array('Случайный выбор captcha');
 $L['cfg_cookiedomain'] = array('Домен для cookies', 'По умолчанию пусто');
 $L['cfg_cookielifetime'] = array('Срок действия cookies', 'В секундах');
 $L['cfg_cookiepath'] = array('Путь для cookies', 'По умолчанию пусто');
-$L['cfg_shieldenabled'] = array('Включить защиту', 'Защита против спама и хаммеринга');
-$L['cfg_shieldtadjust'] = array('Настройка таймеров защиты (в %)', 'Чем выше, тем сильнее защита против спама');
-$L['cfg_shieldzhammer'] = array('Анти-хаммер после * хитов', 'Чем меньше, тем короче срок автоблокировки пользователя');
 
 /**
  * Config Section
@@ -208,7 +205,6 @@ $L['cfg_body_mail'] = array('Текст email', 'Опции: {SITE_TITLE}, {SITE
  * Users Subsection
  */
 
-$L['cfg_disablewhosonline'] = array('Отключить статистику &laquo;Кто онлайн&raquo;', 'Включается автоматически при включении защиты');
 $L['cfg_forcerememberme'] = array('Зафиксировать &quot;запомнить меня&quot;', 'Используйте на мультидоменных сайтах или при случайных выходах из системы');
 $L['cfg_timedout'] = array('Задержка ожидания в секундах', 'По истечении данного срока пользователь считается покинувшим сайт');
 $L['cfg_usertextimg'] = array('Разрешить изображения и HTML-код в подписях пользователей', 'По причине безопасности рекомендуется &laquo;Нет&raquo;!');

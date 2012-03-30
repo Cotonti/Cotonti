@@ -33,7 +33,7 @@ cot_block($usr['id'] == 0);
 
 if ($a=='add')
 {
-	cot_shield_protect();
+	cot_plugin_active('shield') && cot_shield_protect();
 	
 	$ruser = array();
 
@@ -119,7 +119,7 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 	}
 	/* ===== */
 
-	cot_shield_protect();
+	cot_plugin_active('shield') && cot_shield_protect();
 	$sql = $db->query("SELECT * FROM $db_users WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') LIMIT 1");
 
 	if ($row = $sql->fetch())
@@ -171,7 +171,7 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 	else
 	{
 		$env['status'] = '403 Forbidden';
-		cot_shield_update(7, "Account validation");
+		cot_plugin_active('shield') && cot_shield_update(7, "Account validation");
 		cot_log("Wrong validation URL", 'sec');
 		cot_redirect(cot_url('message', 'msg=157', '', true));
 	}

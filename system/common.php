@@ -460,53 +460,6 @@ $b = cot_import('b', 'G', 'ALP', 24);
 require_once cot_langfile('main', 'core');
 require_once cot_langfile('users', 'core');
 
-/* ======== Who's online (part 1) and shield protection ======== */
-
-if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
-{
-	if ($usr['id'] > 0)
-	{
-		$sql = $db->query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
-
-		if ($row = $sql->fetch())
-		{
-			$sql->closeCursor();
-			$online_count = 1;
-			$sys['online_location'] = $row['online_location'];
-			$sys['online_subloc'] = $row['online_subloc'];
-			if ($cfg['shieldenabled'] && (!cot_auth('admin', 'a', 'A') || $cfg['shield_force']))
-			{
-				$shield_limit = $row['online_shield'];
-				$shield_action = $row['online_action'];
-				$shield_hammer = cot_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
-				$sys['online_hammer'] = $shield_hammer;
-			}
-		}
-	}
-	else
-	{
-		$sql = $db->query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."' LIMIT 1");
-		$online_count = $sql->rowCount();
-
-		if ($online_count > 0)
-		{
-			if ($row = $sql->fetch())
-			{
-				$sys['online_location'] = $row['online_location'];
-				$sys['online_subloc'] = $row['online_subloc'];
-				if ($cfg['shieldenabled'])
-				{
-					$shield_limit = $row['online_shield'];
-					$shield_action = $row['online_action'];
-					$shield_hammer = cot_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
-					$sys['online_hammer'] = $shield_hammer;
-				}
-			}
-			$sql->closeCursor();
-		}
-	}
-}
-
 /* ======== Theme / color scheme ======== */
 
 if (empty($cfg['themes_dir']))

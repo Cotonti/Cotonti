@@ -1,12 +1,12 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Code=hits
-Name=Hits
-Category=performance-seo
-Description=Simple Stat for Cotonti
-Version=0.9.2
-Date=2012-02-24
+Code=shield
+Name=Shield
+Category=security-authentication
+Description=Anti-hammering protection
+Version=1.0
+Date=2012-03-31
 Author=Cotonti Team
 Copyright=Copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
@@ -18,9 +18,8 @@ Requires_plugins=whosonline
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-adminhits=01:radio::1:
-hit_precision=21:select:10,100,1000:100:
-disableactivitystats=12:radio::0:
+shieldtadjust=01:select:10,25,50,75,100,125,150,200,300,400,600,800:100:
+shieldzhammer=02:select:5,10,15,20,25,30,40,50,100:25:
 [END_COT_EXT_CONFIG]
 ==================== */
 

@@ -48,18 +48,6 @@ if (!$cot_sections_act)
 	$cache && $cache->db->store('cot_sections_act', $cot_sections_act, 'system', 7200);
 }
 
-$cache && $cache->mem && $cot_sections_vw = $cache->mem->get('sections_wv', 'forums');
-if (!$cot_sections_vw)
-{
-	$sqltmp = $db->query("SELECT online_subloc, COUNT(*) FROM $db_online WHERE online_location='Forums' GROUP BY online_subloc");
-	while ($tmprow = $sqltmp->fetch())
-	{
-		$cot_sections_vw[$tmprow['online_subloc']] = $tmprow['COUNT(*)'];
-	}
-	$sqltmp->closeCursor();
-	$cache && $cache->mem && $cache->mem->store('sections_vw', $cot_sections_vw, 'forums', 120);
-}
-
 $sql_forums = $db->query("SELECT * FROM $db_forum_stats WHERE 1 ORDER by fs_cat DESC");
 foreach ($sql_forums->fetchAll() as $row)
 {
@@ -130,8 +118,7 @@ $t->assign(array(
 	'FORUMS_RSS' => cot_url('rss', 'c=forums'),
 	'FORUMS_SECTIONS_PAGETITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'FORUMS_SECTIONS_MARKALL' =>  ($usr['id'] > 0) ? cot_rc_link($url_markall, $L['forums_markallasread']) : '',
-	'FORUMS_SECTIONS_MARKALL_URL' => ($usr['id'] > 0) ? $url_markall : '',
-	'FORUMS_SECTIONS_WHOSONLINE' => $out['whosonline']." : ".$out['whosonline_reg_list']
+	'FORUMS_SECTIONS_MARKALL_URL' => ($usr['id'] > 0) ? $url_markall : ''
 ));
 
 

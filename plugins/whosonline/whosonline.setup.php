@@ -5,8 +5,8 @@ Code=whosonline
 Name=Who's online
 Category=community-social
 Description=Lists the members online
-Version=0.7.0
-Date=2010-jan-03
+Version=1.0
+Date=2012-03-31
 Author=Neocrome & Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2012
 Notes=BSD License
@@ -17,16 +17,6 @@ Auth_members=R
 Lock_members=W12345A
 [END_COT_EXT]
 ==================== */
-
-/**
- * Lists the members online
- *
- * @package whosonline
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
- * @license BSD
- */
 
 defined('COT_CODE') or die('Wrong URL');
 

@@ -169,7 +169,10 @@ if ($a=='update')
 				require_once cot_incfile('pm', 'module');
 				$db->update($db_pm, array('pm_fromuser' => $newname), 'pm_fromuser = ?', array($oldname));
 			}
-			$db->update($db_online, array('online_name' => $newname), 'online_name = ?', array($oldname));
+			if (cot_plugin_active('whosonline'))
+			{
+				$db->update($db_online, array('online_name' => $newname), 'online_name = ?', array($oldname));
+			}
 		}
 
 		$ruser['user_auth'] = '';

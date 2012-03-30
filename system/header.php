@@ -20,8 +20,6 @@ foreach (cot_getextplugins('header.first') as $pl)
 }
 /* ===== */
 
-cot_online_update();
-
 $out['logstatus'] = ($usr['id'] > 0) ? $L['hea_youareloggedas'].' '.$usr['name'] : $L['hea_youarenotlogged'];
 $out['userlist'] = (cot_auth('users', 'a', 'R')) ? cot_rc_link(cot_url('users'), $L['Users']) : '';
 
@@ -108,7 +106,6 @@ if (!COT_AJAX)
 		'HEADER_TITLE' => $out['fulltitle'],
 		'HEADER_COMPOPUP' => $out['compopup'],
 		'HEADER_LOGSTATUS' => $out['logstatus'],
-		'HEADER_WHOSONLINE' => $out['whosonline'],
 		'HEADER_TOPLINE' => $cfg['topline'],
 		'HEADER_BANNER' => $cfg['banner'],
 		'HEADER_GMTTIME' => $usr['gmttime'],
