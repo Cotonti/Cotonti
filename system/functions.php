@@ -974,7 +974,7 @@ function cot_load_structure()
 		
 		if ($row['structure_tpl'] == 'same_as_parent')
 		{
-			$row['structure_tpl'] = $structure[$parent]['tpl'];
+			$row['structure_tpl'] = $tpls[$parent];
 		}
 
 		$tpls[$row['structure_code']] = $row['structure_tpl'];
