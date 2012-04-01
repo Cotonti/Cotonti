@@ -122,7 +122,10 @@ if($a == 'update')
 					session_unset();
 					session_destroy();
 				}
-				$db->delete($db_online, "online_ip='{$usr['ip']}'");
+				if (cot_plugin_active('whosonline'))
+				{
+					$db->delete($db_online, "online_ip='{$usr['ip']}'");
+				}
 				cot_redirect(cot_url('message', 'msg=102', '', true));
 			}
 			else

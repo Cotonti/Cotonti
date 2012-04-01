@@ -3,7 +3,7 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.9.7
+ * @version 0.9.8
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD License
@@ -37,8 +37,8 @@ $usr = array();
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.7';
-$cfg['dbversion'] = '0.9.7';
+$cfg['version'] = '0.9.8';
+$cfg['dbversion'] = '0.9.8';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms']))
@@ -458,8 +458,17 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
  */
 function cot_import_buffer_save()
 {
-	unset($_SESSION['cot_buffer']);
-	$_SESSION['cot_buffer'] = $_POST;
+	// Referer contains an original form link
+	if (cot_url_check($_SERVER['HTTP_REFERER']))
+	{
+		// Extract the server-relative part
+		$url = parse_url($_SERVER['HTTP_REFERER']);
+		$path = empty($url['query']) ? $url['path'] : $url['path'] . '?' . $url['query'];
+		$hash = md5($path);
+		// Save the buffer
+		$_SESSION['cot_buffer'][$hash] = $_POST;
+	}
+	
 }
 
 /**
@@ -473,11 +482,13 @@ function cot_import_buffer_save()
  */
 function cot_import_buffered($name, $value, $null = '')
 {
+	// Params hash for current form
+	$hash = md5($_SERVER['REQUEST_URI']);
 	if ($value === '' || $value === null)
 	{
-		if (isset($_SESSION['cot_buffer'][$name]) && !is_array($_SESSION['cot_buffer'][$name]))
+		if (isset($_SESSION['cot_buffer'][$hash][$name]))
 		{
-			return $_SESSION['cot_buffer'][$name];
+			return $_SESSION['cot_buffer'][$hash][$name];
 		}
 		else
 		{
@@ -696,118 +707,6 @@ function cot_module_active($name)
 {
 	global $cot_modules;
 	return isset($cot_modules[$name]);
-}
-
-/**
- * Updates online users table
- * @global array $cfg
- * @global array $sys
- * @global array $usr
- * @global array $out
- * @global string $db_online
- * @global Cache $cache
- * @global array $cot_usersonline
- * @global array $env
- * @global CotDB $db
- * @global Cache $cache
- */
-function cot_online_update()
-{
-	global $db, $cfg, $sys, $usr, $out, $db_online, $cache, $cot_usersonline, $env, $Ls;
-	if (!$cfg['disablewhosonline'])
-	{
-		if ($env['location'] != $sys['online_location']
-			|| !empty($sys['sublocaction']) && $sys['sublocaction'] != $sys['online_subloc'])
-		{
-			if ($usr['id'] > 0)
-			{
-				if (empty($sys['online_location']))
-				{
-					$db->insert($db_online, array(
-						'online_ip' => $usr['ip'],
-						'online_name' => $usr['name'],
-						'online_lastseen' => (int)$sys['now'],
-						'online_location' => $env['location'],
-						'online_subloc' => (string) $sys['sublocation'],
-						'online_userid' => (int)$usr['id'],
-						'online_shield' => 0,
-						'online_hammer' => 0
-						));
-				}
-				else
-				{
-					$db->update($db_online, array(
-						'online_lastseen' => $sys['now'],
-						'online_location' => $env['location'],
-						'online_subloc' => (string) $sys['sublocation'],
-						'online_hammer' => (int)$sys['online_hammer']
-						), "online_userid=".$usr['id']);
-				}
-			}
-			else
-			{
-				if (empty($sys['online_location']))
-				{
-					$db->insert($db_online, array(
-						'online_ip' => $usr['ip'],
-						'online_name' => 'v',
-						'online_lastseen' => (int)$sys['now'],
-						'online_location' => $env['location'],
-						'online_subloc' => (string) $sys['sublocation'],
-						'online_userid' => -1,
-						'online_shield' => 0,
-						'online_hammer' => 0
-						));
-				}
-				else
-				{
-					$db->update($db_online, array(
-						'online_lastseen' => $sys['now'],
-						'online_location' => $env['location'],
-						'online_subloc' => (string)$sys['sublocation'],
-						'online_hammer' => (int)$sys['online_hammer']
-						), "online_ip='".$usr['ip']."'");
-				}
-			}
-		}
-		if ($cache && $cache->mem && $cache->mem->exists('whosonline', 'system'))
-		{
-			$whosonline_data = $cache->mem->get('whosonline', 'system');
-			$sys['whosonline_vis_count'] = $whosonline_data['vis_count'];
-			$sys['whosonline_reg_count'] = $whosonline_data['reg_count'];
-			$out['whosonline_reg_list'] = $whosonline_data['reg_list'];
-			unset($whosonline_data);
-		}
-		else
-		{
-			$online_timedout = $sys['now'] - $cfg['timedout'];
-			$db->delete($db_online, "online_lastseen < $online_timedout");
-			$sys['whosonline_vis_count'] = $db->query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'")->fetchColumn();
-			$sql_o = $db->query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
-			$sys['whosonline_reg_count'] = $sql_o->rowCount();
-			$ii_o = 0;
-			while ($row_o = $sql_o->fetch())
-			{
-				$out['whosonline_reg_list'] .= ($ii_o > 0) ? ', ' : '';
-				$out['whosonline_reg_list'] .= cot_build_user($row_o['online_userid'], htmlspecialchars($row_o['online_name']));
-				$cot_usersonline[] = $row_o['online_userid'];
-				$ii_o++;
-			}
-			$sql_o->closeCursor();
-			unset($ii_o, $sql_o, $row_o);
-			if ($cache && $cache->mem)
-			{
-				$whosonline_data = array(
-					'vis_count' => $sys['whosonline_vis_count'],
-					'reg_count' => $sys['whosonline_reg_count'],
-					'reg_list' => $out['whosonline_reg_list']
-				);
-				$cache->mem->store('whosonline', $whosonline_data, 'system', 30);
-			}
-		}
-		$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
-		$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : cot_declension($sys['whosonline_reg_count'], $Ls['Members']).', '.cot_declension($sys['whosonline_vis_count'], $Ls['Guests']);
-	}
 }
 
 /**
@@ -1076,7 +975,7 @@ function cot_load_structure()
 		
 		if ($row['structure_tpl'] == 'same_as_parent')
 		{
-			$row['structure_tpl'] = $structure[$parent]['tpl'];
+			$row['structure_tpl'] = $tpls[$parent];
 		}
 
 		$tpls[$row['structure_code']] = $row['structure_tpl'];
@@ -1909,9 +1808,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'LASTLOG_STAMP' => $user_data['user_lastlog'],
 				'LOGCOUNT' => $user_data['user_logcount'],
 				'POSTCOUNT' => $user_data['user_postcount'],
-				'LASTIP' => $user_data['user_lastip'],
-				'ONLINE' => (cot_userisonline($user_data['user_id'])) ? '1' : '0',
-				'ONLINETITLE' => (cot_userisonline($user_data['user_id'])) ? $L['Online'] : $L['Offline'],
+				'LASTIP' => $user_data['user_lastip']
 			);
 
 			if ($allgroups)
@@ -1949,9 +1846,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'REGDATE' => '',
 				'REGDATE_STAMP' => '',
 				'POSTCOUNT' => '',
-				'LASTIP' => '',
-				'ONLINE' => '0',
-				'ONLINETITLE' => '',
+				'LASTIP' => ''
 			);
 		}
 		
@@ -2266,24 +2161,6 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 	}
 
 	return cot_selectbox("$selected_theme:$selected_scheme", $input_name, $values, $titles, false);
-}
-
-/**
- * Checks whether user is online
- *
- * @param int $id User ID
- * @return bool
- */
-function cot_userisonline($id)
-{
-	global $cot_usersonline;
-
-	$res = FALSE;
-	if (is_array($cot_usersonline))
-	{
-		$res = (in_array($id, $cot_usersonline)) ? TRUE : FALSE;
-	}
-	return ($res);
 }
 
 /*
@@ -4388,7 +4265,7 @@ function cot_rc_minify($code, $type = 'js')
 }
 
 /*
- * ========================== Security Shield =================================
+ * ========================== Security functions =================================
 */
 
 /**
@@ -4502,90 +4379,6 @@ function cot_check_xp()
 }
 
 /**
- * Clears current user action in Who's online.
- *
- * @global CotDB $db
- */
-function cot_shield_clearaction()
-{
-	global $db, $db_online, $usr;
-	$db->update($db_online, array('online_action' => ''), 'online_ip="'.$usr['ip'].'"');
-}
-
-/**
- * Anti-hammer protection
- *
- * @param int $hammer Hammer rate
- * @param string $action Action type
- * @param int $lastseen User last seen timestamp
- * @return int
- */
-function cot_shield_hammer($hammer,$action, $lastseen)
-{
-	global $cfg, $sys, $usr;
-
-	if ($action=='Hammering')
-	{
-		cot_shield_protect();
-		cot_shield_clearaction();
-		cot_stat_inc('totalantihammer');
-	}
-
-	if (($sys['now']-$lastseen)<4)
-	{
-		$hammer++;
-		if ($hammer>$cfg['shieldzhammer'])
-		{
-			cot_shield_update(180, 'Hammering');
-			cot_log('IP banned 3 mins, was hammering', 'sec');
-			$hammer = 0;
-		}
-	}
-	else
-	{
-		if ($hammer>0)
-		{
-			$hammer--;
-		}
-	}
-	return($hammer);
-}
-
-/**
- * Warn user of shield protection
- *
- */
-function cot_shield_protect()
-{
-	global $cfg, $sys, $online_count, $shield_limit, $shield_action;
-
-	if ($cfg['shieldenabled'] && $online_count>0 && $shield_limit>$sys['now'])
-	{
-		cot_diefatal(cot_rc('shield_protect', array(
-			'sec' => $shield_limit-$sys['now'],
-			'action' => $shield_action
-		)));
-	}
-}
-
-/**
- * Updates shield state
- *
- * @param int $shield_add Hammer
- * @param string $shield_newaction New action type
- * @global CotDB $db
- */
-function cot_shield_update($shield_add, $shield_newaction)
-{
-	global $db, $cfg, $usr, $sys, $db_online;
-	if ($cfg['shieldenabled'])
-	{
-		$shield_newlimit = $sys['now'] + floor($shield_add * $cfg['shieldtadjust'] /100);
-		$db->update($db_online, array('online_shield' => $shield_newlimit, 'online_action' => $shield_newaction), 'online_ip="'.$usr['ip'].'"');
-	}
-}
-
-/**
  * Unregisters globals if globals are On
  * @see http://www.php.net/manual/en/faq.misc.php#faq.misc.registerglobals
  */
@@ -4684,12 +4477,12 @@ function cot_redirect($url)
 	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST')
 	{
 		// Save the POST data
-		cot_import_buffer_save();
 		if (!empty($error_string))
 		{
 			// Message should not be lost
 			cot_error($error_string);
 		}
+		cot_import_buffer_save();
 	}
 
 	if (!cot_url_check($url))

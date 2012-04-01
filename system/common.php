@@ -152,17 +152,11 @@ $sys['unique'] = cot_unique(16);
 
 // Getting the server-relative path
 $url = parse_url($cfg['mainurl']);
+$sys['scheme'] = strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === 0 ? 'https' : 'http';
 $sys['secure'] = $url['scheme'] == 'https' ? true : false;
-$sys['scheme'] = $url['scheme'];
 $sys['site_uri'] = $url['path'];
-$sys['host'] = $url['host'];
-$sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
-if (empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
-if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
-define('COT_SITE_URI', $sys['site_uri']);
-if (empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
-// Absolute site url
 if ($_SERVER['HTTP_HOST'] == $url['host']
+	|| $cfg['multihost']
 	|| $_SERVER['HTTP_HOST'] != 'www.' . $url['host']
 		&& preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']))
 {
@@ -172,10 +166,18 @@ else
 {
 	$sys['host'] = $url['host'];
 }
-$sys['port'] = empty($url['port']) ? '' : ':' . $url['port'];
-$sys['abs_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
+$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
+if (empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
+if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+define('COT_SITE_URI', $sys['site_uri']);
+if (empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
+// Absolute site url
+$sys['port'] = empty($url['port']) || $_SERVER['SERVER_PORT'] == 80 ? '' : ':' . ($cfg['multihost'] ? $_SERVER['SERVER_PORT'] : $url['port']);
+$sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
 $sys['canonical_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $_SERVER['REQUEST_URI'];
 define('COT_ABSOLUTE_URL', $sys['abs_url']);
+// Reassemble mainurl if necessary
+if ($cfg['multihost']) $cfg['mainurl'] = mb_substr($sys['abs_url'], 0, -1);
 // URI redirect appliance
 $sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ?
 	mb_substr($_SERVER['REQUEST_URI'], mb_strlen($sys['site_uri'])) : ltrim($_SERVER['REQUEST_URI'], '/');
@@ -459,53 +461,6 @@ $b = cot_import('b', 'G', 'ALP', 24);
 
 require_once cot_langfile('main', 'core');
 require_once cot_langfile('users', 'core');
-
-/* ======== Who's online (part 1) and shield protection ======== */
-
-if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
-{
-	if ($usr['id'] > 0)
-	{
-		$sql = $db->query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
-
-		if ($row = $sql->fetch())
-		{
-			$sql->closeCursor();
-			$online_count = 1;
-			$sys['online_location'] = $row['online_location'];
-			$sys['online_subloc'] = $row['online_subloc'];
-			if ($cfg['shieldenabled'] && (!cot_auth('admin', 'a', 'A') || $cfg['shield_force']))
-			{
-				$shield_limit = $row['online_shield'];
-				$shield_action = $row['online_action'];
-				$shield_hammer = cot_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
-				$sys['online_hammer'] = $shield_hammer;
-			}
-		}
-	}
-	else
-	{
-		$sql = $db->query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."' LIMIT 1");
-		$online_count = $sql->rowCount();
-
-		if ($online_count > 0)
-		{
-			if ($row = $sql->fetch())
-			{
-				$sys['online_location'] = $row['online_location'];
-				$sys['online_subloc'] = $row['online_subloc'];
-				if ($cfg['shieldenabled'])
-				{
-					$shield_limit = $row['online_shield'];
-					$shield_action = $row['online_action'];
-					$shield_hammer = cot_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
-					$sys['online_hammer'] = $shield_hammer;
-				}
-			}
-			$sql->closeCursor();
-		}
-	}
-}
 
 /* ======== Theme / color scheme ======== */
 

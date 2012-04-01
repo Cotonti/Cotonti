@@ -170,9 +170,6 @@ $L['cfg_captcharandom'] = array('Random captcha');
 $L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
 $L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
 $L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
-$L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
-$L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
-$L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
 
 /**
  * Config Section
@@ -208,7 +205,6 @@ $L['cfg_body_mail'] = array('Email title', 'Options: {SITE_TITLE}, {SITE_DESCRIP
  * Users Subsection
  */
 
-$L['cfg_disablewhosonline'] = array('Disable who\'s online', 'Automatically enabled if you turn on the Shield');
 $L['cfg_forcerememberme'] = array('Force &quot;remember me&quot;', 'Use it on multi-domain sites or if there are sudden logouts');
 $L['cfg_timedout'] = array('Idle delay, in seconds', 'After this delay, user is away');
 $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');

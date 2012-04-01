@@ -83,7 +83,7 @@ $sys['sublocation'] = $structure['forums'][$s]['title'];
 
 if ($a == 'newpost' && !empty($s) && !empty($q))
 {
-	cot_shield_protect();
+	cot_plugin_active('shield') && cot_shield_protect();
 
 	$db->query("SELECT ft_state FROM $db_forum_topics WHERE ft_id = $q")->fetchColumn() && cot_die();
 
@@ -183,7 +183,7 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 			($cfg['cache_index']) && $cache->page->clear('index');
 		}
 
-		cot_shield_update(30, "New post");
+		cot_plugin_active('shield') && cot_shield_update(30, "New post");
 		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
 }

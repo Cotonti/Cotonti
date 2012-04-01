@@ -499,8 +499,6 @@ $L['pagenav_last'] = '&gt;&gt;';
 
 $L['ajaxSenderror'] = 'The server encountered an internal error or misconfiguration and was unable to complete your request. Please contact the administrator and inform them of the time the error occurred, and anything you might have done that may have caused the error.';
 
-$L['shield_protect'] = 'Shield protection activated, please retry in {$sec} seconds...<br />After this duration, you can refresh the current page to continue.<br />Last action was : {$action}';
-
 $L['captcha_verification_failed'] = 'Wrong bot protection code';
 
 ?>

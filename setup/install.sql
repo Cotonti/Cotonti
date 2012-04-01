@@ -120,9 +120,6 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','security','11','cookiedomain',1,'','','',''),
 ('core','security','12','cookiepath',1,'','','',''),
 ('core','security','13','cookielifetime',2,'5184000','5184000','1800,3600,7200,14400,28800,43200,86400,172800,259200,604800,1296000,2592000,5184000',''),
-('core','security','21','shieldenabled',3,'0','0','',''),
-('core','security','22','shieldtadjust',2,'100','100','10,25,50,75,100,125,150,200,300,400,600,800',''),
-('core','security','23','shieldzhammer',2,'25','25','5,10,15,20,25,30,40,50,100',''),
 ('core','security','31','captchamain',4,'mcaptcha','mcaptcha','cot_captcha_list()',''),
 ('core','security','32','captcharandom',3,'0','0','',''),
 ('core','theme','01','forcedefaulttheme',3,'0','0','',''),
@@ -140,7 +137,6 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','title','19','title_header_index',1,'{MAINTITLE} - {DESCRIPTION}','{MAINTITLE} - {DESCRIPTION}','',''),
 ('core','title','98','subject_mail',1,'{SITE_TITLE} - {MAIL_SUBJECT}','{SITE_TITLE} - {MAIL_SUBJECT}','',''),
 ('core','title','99','body_mail',0,'{MAIL_BODY}\n\n{SITE_TITLE} - {SITE_URL}\n{SITE_DESCRIPTION}','{MAIL_BODY}\n\n{SITE_TITLE} - {SITE_URL}\n{SITE_DESCRIPTION}','',''),
-('core','users','02','disablewhosonline',3,'0','0','',''),
 ('core','users','08','usertextimg',3,'0','0','',''),
 ('core','users','10','forcerememberme',3,'0','0','',''),
 ('core','users','11','timedout',2,'1200','1200','30,60,120,300,600,900,1200,1800,2400,3600',''),
@@ -224,24 +220,6 @@ CREATE TABLE `cot_logger` (
   PRIMARY KEY  (`log_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `cot_online`;
-CREATE TABLE `cot_online` (
-  `online_id` int NOT NULL auto_increment,
-  `online_ip` varchar(15) collate utf8_unicode_ci NOT NULL default '',
-  `online_name` varchar(100) collate utf8_unicode_ci NOT NULL,
-  `online_lastseen` int NOT NULL default '0',
-  `online_location` varchar(128) collate utf8_unicode_ci NOT NULL default '',
-  `online_subloc` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `online_userid` int NOT NULL default '0',
-  `online_shield` int NOT NULL default '0',
-  `online_action` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `online_hammer` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`online_id`),
-  KEY `online_lastseen` (`online_lastseen`),
-  KEY `online_userid` (`online_userid`),
-  KEY `online_name` (`online_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 DROP TABLE IF EXISTS `cot_plugins`;
 CREATE TABLE `cot_plugins` (
   `pl_id` mediumint NOT NULL auto_increment,
@@ -280,7 +258,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.8-04'),
+('revision', '0.9.8-05'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;

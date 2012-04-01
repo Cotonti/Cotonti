@@ -27,7 +27,7 @@ $msg = '';
 
 if ($a == 'request' && $email != '')
 {
-	cot_shield_protect();
+	cot_plugin_active('shield') && cot_shield_protect();
 	$sql = $db->query("SELECT user_id, user_name, user_lostpass FROM $db_users WHERE user_email='".$db->prep($email)."' ORDER BY user_id ASC LIMIT 1");
 
 	if ($row = $sql->fetch())
@@ -42,7 +42,7 @@ if ($a == 'request' && $email != '')
 			$sql = $db->update($db_users, array('user_lostpass' => $validationkey, 'user_lastip' => $usr['ip']), "user_id=$ruserid");
 		}
 
-		cot_shield_update(60, "Password recovery email sent");
+		cot_plugin_active('shield') && cot_shield_update(60, "Password recovery email sent");
 
 		$rinfo = sprintf($L['pasrec_email1b'], $usr['ip'], cot_date('datetime_medium'));
 
@@ -55,7 +55,7 @@ if ($a == 'request' && $email != '')
 	}
 	else
 	{
-		cot_shield_update(10, "Password recovery requested");
+		cot_plugin_active('shield') && cot_shield_update(10, "Password recovery requested");
 		$env['status'] = '403 Forbidden';
 		cot_log("Pass recovery failed, user : ".$rusername);
 		cot_redirect(cot_url('message', 'msg=151', '', true));
@@ -63,7 +63,7 @@ if ($a == 'request' && $email != '')
 }
 elseif ($a == 'auth' && mb_strlen($v) == 32)
 {
-	cot_shield_protect();
+	cot_plugin_active('shield') && cot_shield_protect();
 
 	$sql = $db->query("SELECT user_name, user_id, user_email, user_password, user_maingrp, user_banexpire FROM $db_users WHERE user_lostpass='".$db->prep($v)."'");
 
@@ -102,7 +102,7 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 	else
 	{
 		$env['status'] = '403 Forbidden';
-		cot_shield_update(7, "Log in");
+		cot_plugin_active('shield') && cot_shield_update(7, "Log in");
 		cot_log("Pass recovery failed, user : ".$rusername);
 		cot_redirect(cot_url('message', 'msg=151', '', true));
 	}

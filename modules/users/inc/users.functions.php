@@ -62,7 +62,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now']) ? ($sys['now'] - 31536000) : $ruser['user_birthdate'];
 	$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
 	$ruser['user_lostpass'] = md5(microtime());
-	cot_shield_update(20, "Registration");
+	cot_plugin_active('shield') && cot_shield_update(20, "Registration");
 
 	$ruser['user_hideemail'] = 1;
 	$ruser['user_theme'] = $cfg['defaulttheme'];
