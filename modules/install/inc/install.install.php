@@ -28,8 +28,8 @@ define('COT_ABSOLUTE_URL', $site_url . '/');
 
 if ($step > 2)
 {
-	$dbс_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
-	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbс_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+	$dbc_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
+	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbc_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 }
 
 // Import section

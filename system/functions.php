@@ -463,7 +463,8 @@ function cot_import_buffer_save()
 	{
 		// Extract the server-relative part
 		$url = parse_url($_SERVER['HTTP_REFERER']);
-		$hash = md5($url['path'] . '?' . $url['query']);
+		$path = empty($url['query']) ? $url['path'] : $url['path'] . '?' . $url['query'];
+		$hash = md5($path);
 		// Save the buffer
 		$_SESSION['cot_buffer'][$hash] = $_POST;
 	}
@@ -485,7 +486,7 @@ function cot_import_buffered($name, $value, $null = '')
 	$hash = md5($_SERVER['REQUEST_URI']);
 	if ($value === '' || $value === null)
 	{
-		if (isset($_SESSION['cot_buffer'][$hash][$name]) && !is_array($_SESSION['cot_buffer'][$hash][$name]))
+		if (isset($_SESSION['cot_buffer'][$hash][$name]))
 		{
 			return $_SESSION['cot_buffer'][$hash][$name];
 		}
@@ -4476,12 +4477,12 @@ function cot_redirect($url)
 	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST')
 	{
 		// Save the POST data
-		cot_import_buffer_save();
 		if (!empty($error_string))
 		{
 			// Message should not be lost
 			cot_error($error_string);
 		}
+		cot_import_buffer_save();
 	}
 
 	if (!cot_url_check($url))

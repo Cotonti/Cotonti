@@ -67,6 +67,17 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 	error_reporting(E_ALL ^ E_NOTICE);
 
 	session_start();
+	
+	// Getting the server-relative path
+	$url = parse_url($cfg['mainurl']);
+	$sys['secure'] = $url['scheme'] == 'https' ? true : false;
+	$sys['scheme'] = $url['scheme'];
+	$sys['site_uri'] = $url['path'];
+	$sys['host'] = $url['host'];
+	$sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
+	if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+	$sys['port'] = empty($url['port']) ? '' : ':' . $url['port'];
+	$sys['abs_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
 
 	// Installer language selection support
 	if (empty($_SESSION['cot_inst_lang']))
@@ -77,6 +88,7 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 			$lang = 'en';
 		}
 	}
+	
 	else
 	{
 		$lang = $_SESSION['cot_inst_lang'];
