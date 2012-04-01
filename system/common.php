@@ -152,17 +152,11 @@ $sys['unique'] = cot_unique(16);
 
 // Getting the server-relative path
 $url = parse_url($cfg['mainurl']);
+$sys['scheme'] = strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === 0 ? 'https' : 'http';
 $sys['secure'] = $url['scheme'] == 'https' ? true : false;
-$sys['scheme'] = $url['scheme'];
 $sys['site_uri'] = $url['path'];
-$sys['host'] = $url['host'];
-$sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
-if (empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
-if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
-define('COT_SITE_URI', $sys['site_uri']);
-if (empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
-// Absolute site url
 if ($_SERVER['HTTP_HOST'] == $url['host']
+	|| $cfg['multihost']
 	|| $_SERVER['HTTP_HOST'] != 'www.' . $url['host']
 		&& preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']))
 {
@@ -172,10 +166,18 @@ else
 {
 	$sys['host'] = $url['host'];
 }
-$sys['port'] = empty($url['port']) ? '' : ':' . $url['port'];
-$sys['abs_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
+$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
+if (empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
+if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+define('COT_SITE_URI', $sys['site_uri']);
+if (empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
+// Absolute site url
+$sys['port'] = empty($url['port']) || $_SERVER['SERVER_PORT'] == 80 ? '' : ':' . ($cfg['multihost'] ? $_SERVER['SERVER_PORT'] : $url['port']);
+$sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
 $sys['canonical_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $_SERVER['REQUEST_URI'];
 define('COT_ABSOLUTE_URL', $sys['abs_url']);
+// Reassemble mainurl if necessary
+if ($cfg['multihost']) $cfg['mainurl'] = mb_substr($sys['abs_url'], 0, -1);
 // URI redirect appliance
 $sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ?
 	mb_substr($_SERVER['REQUEST_URI'], mb_strlen($sys['site_uri'])) : ltrim($_SERVER['REQUEST_URI'], '/');
