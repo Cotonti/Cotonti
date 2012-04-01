@@ -124,7 +124,7 @@ $cfg['debug_mode'] = FALSE;
  * compromise your website security. Protect it with .htaccess or use some
  * path accessible to you only via FTP.
  */
-$cfg['debug_logpath'] = '/tmp';
+$cfg['debug_logpath'] = 'tmp';
 
 /**
  * The shield is disabled for administrators by default. But if you are testing
