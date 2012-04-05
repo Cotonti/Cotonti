@@ -19,11 +19,14 @@ $env['ext'] = 'message';
 require_once './datas/config.php';
 require_once $cfg['system_dir'] . '/functions.php';
 
-require_once cot_langfile('message', 'core');
-
 require_once $cfg['system_dir'] . '/cotemplate.php';
 require_once $cfg['system_dir'] . '/common.php';
 
+// This trick allows message strings to be overriden in theme langfiles
+$temp_L = $L;
+require_once cot_langfile('message', 'core');
+$L = array_merge($L, $temp_L);
+unset($temp_L);
 
 if (defined('COT_ADMIN'))
 {
