@@ -122,7 +122,7 @@ else
 		{
 			cot_message(cot_rc('i18n_items_removed', array('cnt' => $removed_cnt)));
 		}
-		cot_redirect(cot_url('plug', "e=i18n&m=structure&l=$i18n_locale&d=$d", '', true));
+		cot_redirect(cot_url('plug', "e=i18n&m=structure&l=$i18n_locale&d=$durl", '', true));
 	}
 
 	$t = new XTemplate(cot_tplfile('i18n.structure', 'plug'));
