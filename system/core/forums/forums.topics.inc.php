@@ -55,7 +55,7 @@ function cursort($trigger, $way)
 }
 
 if (empty($o)) { $o = 'updated'; }
-if (empty($w)) { $w = 'desc'; }
+if (empty($w) || !in_array($w, array('asc', 'desc'))) { $w = 'desc'; }
 
 $sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
 

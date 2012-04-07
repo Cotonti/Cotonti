@@ -62,7 +62,7 @@ if (empty($s) || in_array(mb_strtolower($s), array('password', 'sid', 'lostpass'
 {
 	$s = 'name';
 }
-if(empty($w))
+if(empty($w) || !in_array($w, array('asc', 'desc')))
 {
 	$w = 'asc';
 }

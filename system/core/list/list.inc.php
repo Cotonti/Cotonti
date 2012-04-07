@@ -59,7 +59,7 @@ if (empty($s))
 }
 
 if (empty($s)) { $s = 'title'; }
-if (empty($w)) { $w = 'asc'; }
+if (empty($w) || !in_array($w, array('asc', 'desc'))) { $w = 'asc'; }
 if (empty($d)) { $d = '0'; }
 if (empty($dc)) { (int)$dc = 0; }
 $cfg['maxrowsperpage'] = ($c=='all' || $c=='system') ? $cfg['maxrowsperpage']*2 : $cfg['maxrowsperpage'];
