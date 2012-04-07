@@ -205,7 +205,7 @@ class XTemplate
 		self::$debug_mode = $debug_mode;
 		self::$cache_enabled = $enable_cache && !$debug_mode;
 		self::$cache_dir = $cache_dir;
-		CotplData::init($cleanup);
+		Cotpl_data::init($cleanup);
 	}
 
 	/**
@@ -238,7 +238,7 @@ class XTemplate
 		$name = $m[1];
 		$text = trim($m[2]);
 		$this->index[$name] = array($name);
-		$this->blocks[$name] = new CotplBlock($text, $this->index, array($name));
+		$this->blocks[$name] = new Cotpl_block($text, $this->index, array($name));
 		$this->found = true;
 		return '';
 	}
@@ -316,7 +316,7 @@ class XTemplate
 	 */
 	private static function substitute_var($m)
 	{
-		$var = new CotplVar($m[1]);
+		$var = new Cotpl_var($m[1]);
 		return $var->evaluate($this);
 	}
 
@@ -463,7 +463,7 @@ class XTemplate
 /**
  * CoTemplate block class
  */
-class CotplBlock
+class Cotpl_block
 {
 	/**
 	 * @var array Parsed block instances
@@ -567,14 +567,14 @@ class CotplBlock
 					$chunk = trim(mb_substr($code, 0, $block_pos), "\t\r\n");
 					if (!empty($chunk))
 					{
-						$blocks[$i++] = new CotplData($chunk);
+						$blocks[$i++] = new Cotpl_data($chunk);
 					}
 				}
 				// Extract the block
 				$bpath = $path;
 				array_push($bpath, $block_name);
 				$index[cotpl_index_glue($bpath)] = $bpath;
-				$blocks[$block_name] = new CotplBlock(trim($block_mt[2]), $index, $bpath);
+				$blocks[$block_name] = new Cotpl_block(trim($block_mt[2]), $index, $bpath);
 				$code = trim(mb_substr($code, $block_pos + mb_strlen($block_mt[0])));
 			}
 			elseif ($loop_found
@@ -586,7 +586,7 @@ class CotplBlock
 					$chunk = trim(mb_substr($code, 0, $loop_pos), "\t\r\n");
 					if (!empty($chunk))
 					{
-						$blocks[$i++] = new CotplData($chunk);
+						$blocks[$i++] = new Cotpl_data($chunk);
 					}
 				}
 				// Get the FOR loop contents
@@ -613,7 +613,7 @@ class CotplBlock
 				{
 					$bpath = $path;
 					array_push($bpath, $i);
-					$blocks[$i++] = new CotplLoop($loop_mt[1], $loop_code, $index, $bpath);
+					$blocks[$i++] = new Cotpl_loop($loop_mt[1], $loop_code, $index, $bpath);
 					$code = trim($code, "\t\r\n");
 				}
 				else
@@ -629,7 +629,7 @@ class CotplBlock
 					$chunk = trim(mb_substr($code, 0, $log_pos), "\t\r\n");
 					if (!empty($chunk))
 					{
-						$blocks[$i++] = new CotplData($chunk);
+						$blocks[$i++] = new Cotpl_data($chunk);
 					}
 				}
 				// Get the IF/ELSE contents
@@ -675,7 +675,7 @@ class CotplBlock
 				{
 					$bpath = $path;
 					array_push($bpath, $i);
-					$blocks[$i++] = new CotplLogical($log_mt[1], $if_code, $else_code, $index, $bpath);
+					$blocks[$i++] = new Cotpl_logical($log_mt[1], $if_code, $else_code, $index, $bpath);
 					$code = trim($code, "\t\r\n");
 				}
 				else
@@ -689,7 +689,7 @@ class CotplBlock
 				$code = trim($code, "\t\r\n");
 				if (!empty($code))
 				{
-					$blocks[$i++] = new CotplData($code);
+					$blocks[$i++] = new Cotpl_data($code);
 					$code = '';
 				}
 			}
@@ -706,7 +706,7 @@ class CotplBlock
 		$list = array();
 		foreach ($this->blocks as $block)
 		{
-			if ($block instanceof CotplData || $block instanceof CotplBlock)
+			if ($block instanceof Cotpl_data || $block instanceof Cotpl_block)
 			{
 				$list = array_merge($list, $block->getTags());
 			}
@@ -753,7 +753,7 @@ class CotplBlock
 /**
  * A simple nameless block of data which may parse variables
  */
-class CotplData
+class Cotpl_data
 {
 	/**
 	 * @var array Block data consisting of strings and Cotpl_vars
@@ -780,7 +780,7 @@ class CotplData
 		{
 			if (preg_match('`^\{((?:[\w\.]+)(?:\|.+?)?)\}$`', $chunk, $m))
 			{
-				$this->chunks[] = new CotplVar($m[1]);
+				$this->chunks[] = new Cotpl_var($m[1]);
 			}
 			else
 			{
@@ -799,7 +799,7 @@ class CotplData
 		$str = '';
 		foreach ($this->chunks as $chunk)
 		{
-			if ($chunk instanceof CotplVar)
+			if ($chunk instanceof Cotpl_var)
 			{
 				$str .= $chunk->__toString();
 			}
@@ -820,7 +820,7 @@ class CotplData
 		$list = array();
 		foreach ($this->chunks as $chunk)
 		{
-			if ($chunk instanceof CotplVar)
+			if ($chunk instanceof Cotpl_var)
 			{
 				$list[$chunk->name] = true;
 			}
@@ -848,7 +848,7 @@ class CotplData
 		$data = '';
 		foreach ($this->chunks as $chunk)
 		{
-			if ($chunk instanceof CotplVar)
+			if ($chunk instanceof Cotpl_var)
 			{
 				$data .= $chunk->evaluate($tpl);
 			}
@@ -958,7 +958,7 @@ define('COTPL_OP_MOD', 45);
 /**
  * CoTemplate logical expression
  */
-class CotplExpr
+class Cotpl_expr
 {
 	/**
 	 * @var array Postfix expression stack
@@ -1034,7 +1034,7 @@ class CotplExpr
 			{
 				if (preg_match('`^{(.+?)}$`', $word, $mt))
 				{
-					$token['var'] = new CotplVar($mt[1]);
+					$token['var'] = new Cotpl_var($mt[1]);
 				}
 				elseif (preg_match('`("|\')(.+?)\1`', $word, $mt))
 				{
@@ -1193,10 +1193,10 @@ class CotplExpr
 /**
  * CoTemplate run-time conditional block class
  */
-class CotplLogical extends CotplBlock
+class Cotpl_logical extends Cotpl_block
 {
 	/**
-	 * @var CotplExpr Condition expression
+	 * @var Cotpl_expr Condition expression
 	 */
 	protected $expr = null;
 
@@ -1211,7 +1211,7 @@ class CotplLogical extends CotplBlock
 	 */
 	public function __construct($expr_str, $if_code, $else_code, &$index, $path)
 	{
-		$this->expr = new CotplExpr($expr_str);
+		$this->expr = new Cotpl_expr($expr_str);
 		if (!empty($if_code))
 		{
 			$bpath = $path;
@@ -1256,7 +1256,7 @@ class CotplLogical extends CotplBlock
 			{
 				foreach ($this->blocks[$i] as $block)
 				{
-					if ($block instanceof CotplData || $block instanceof CotplBlock)
+					if ($block instanceof Cotpl_data || $block instanceof Cotpl_block)
 					{
 						$list = array_merge($list, $block->getTags());
 					}
@@ -1318,7 +1318,7 @@ class CotplLogical extends CotplBlock
 /**
  * CoTemplate FOR loop
  */
-class CotplLoop extends CotplBlock
+class Cotpl_loop extends Cotpl_block
 {
 	/**
 	 * Key variable name (optional)
@@ -1327,7 +1327,7 @@ class CotplLoop extends CotplBlock
 	protected $key = '';
 	/**
 	 * Source set/array variable
-	 * @var CotplVar
+	 * @var Cotpl_var
 	 */
 	protected $set = null;
 	/**
@@ -1350,12 +1350,12 @@ class CotplLoop extends CotplBlock
 		{
 			$this->key = $m[1];
 			$this->val = $m[2];
-			$this->set = new CotplVar($m[3]);
+			$this->set = new Cotpl_var($m[3]);
 		}
 		elseif (preg_match('`^\{(\w+)\}\s*IN\s*\{((?:[\w\.]+)(?:\|.+?)?)\}$`', $header, $m))
 		{
 			$this->val = $m[1];
-			$this->set = new CotplVar($m[2]);
+			$this->set = new Cotpl_var($m[2]);
 		}
 		$this->compile($code, $this->blocks, $index, $path);
 	}
@@ -1427,7 +1427,7 @@ class CotplLoop extends CotplBlock
  * CoTemplate variable with callback extensions support
  * @property-read string $name Tag name
  */
-class CotplVar
+class Cotpl_var
 {
 	/**
 	 * @var string Variable name
