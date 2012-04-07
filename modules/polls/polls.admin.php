@@ -80,7 +80,7 @@ if (!cot_error_found())
 {
 	$number = cot_poll_save();
 
-	if ($poll_id == 'new')
+	if ($poll_id == 0)
 	{
 		cot_message('polls_created');
 	}
@@ -156,15 +156,15 @@ if ($ii == 0)
 if ($n == 'options')
 {
 	$poll_id = cot_import('id', 'G', 'INT');
-	$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");
+	$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");
 	$formname = $L['editdeleteentries'];
 	$send_button = $L['Update'];
 }
 elseif (cot_error_found())
 {
-	if ($poll_id != 'new')
+	if ((int)$poll_id > 0)
 	{
-		$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");
+		$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");
 		$formname = $L['editdeleteentries'];
 		$send_button = $L['Update'];
 	}
@@ -176,7 +176,7 @@ elseif (cot_error_found())
 }
 else
 {
-	$poll_id = 'new';
+	$poll_id = 0;
 	$formname = $L['Add'];
 	$send_button = $L['Create'];
 }
@@ -208,7 +208,7 @@ $t->assign(array(
 	'ADMIN_POLLS_TOTALITEMS' => $totalitems,
 	'ADMIN_POLLS_ON_PAGE' => $ii,
 	'ADMIN_POLLS_FORMNAME' => $formname,
-	'ADMIN_POLLS_FORM_URL' => ($poll_id != 'new') ? cot_url('admin', 'm=polls'.$poll_filter.'&d='.$durl) : cot_url('admin', 'm=polls'),
+	'ADMIN_POLLS_FORM_URL' => ((int)$poll_id > 0) ? cot_url('admin', 'm=polls'.$poll_filter.'&d='.$durl) : cot_url('admin', 'm=polls'),
 	'ADMIN_POLLS_EDIT_FORM' => $poll_text,
 	'ADMIN_POLLS_SEND_BUTTON' => $send_button
 ));
