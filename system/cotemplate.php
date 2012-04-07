@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.3
+ * @version 2.7.4
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2012
  * @license BSD
@@ -38,6 +38,11 @@ class XTemplate
 	 * @var array Index for quick block search.
 	 */
 	protected $index = array();
+	/**
+	 * Contains a list of names of all tags present in the template
+	 * @var array
+	 */
+	protected $tags = null;
 	/**
 	 * @var bool Enables disk caching of precompiled templates
 	 */
@@ -113,7 +118,7 @@ class XTemplate
 	 * @param int $length_limit Max length of a value in the output
 	 * @return string A list elemented for debug output
 	 */
-	public static function debug_var($name, $value, $length_limit = 60)
+	public static function debugVar($name, $value, $length_limit = 60)
 	{
 		if (is_numeric($value))
 		{
@@ -144,6 +149,48 @@ class XTemplate
 	{
 		return $this->vars[$name];
 	}
+	
+	/**
+	 * Returns the list of names of all tags present in the template
+	 * @return array
+	 */
+	public function getTags()
+	{
+		if (is_null($this->tags))
+		{
+			// Collect all tags
+			$this->tags = array();
+			foreach ($this->blocks as $block)
+			{
+				$this->tags = array_merge($this->tags, $block->getTags());
+			}
+		}
+		return array_keys($this->tags);
+	}
+	
+	/**
+	 * Returns TRUE if the block is present in template or FALSE otherwise
+	 * @param string $name Full block name including dots and parent blocks
+	 * @return boolean 
+	 */
+	public function hasBlock($name)
+	{
+		return isset($this->index[$name]);
+	}
+	
+	/**
+	 * Returns TRUE if the tag is present in template or FALSE otherwise
+	 * @param string $name Tag name (case-sensitive)
+	 * @return boolean 
+	 */
+	public function hasTag($name)
+	{
+		if (is_null($this->tags))
+		{
+			$this->getTags();
+		}
+		return isset($this->tags[$name]);
+	}
 
 	/**
 	 * Initializes static class configuration
@@ -158,7 +205,7 @@ class XTemplate
 		self::$debug_mode = $debug_mode;
 		self::$cache_enabled = $enable_cache && !$debug_mode;
 		self::$cache_dir = $cache_dir;
-		Cotpl_data::init($cleanup);
+		CotplData::init($cleanup);
 	}
 
 	/**
@@ -191,7 +238,7 @@ class XTemplate
 		$name = $m[1];
 		$text = trim($m[2]);
 		$this->index[$name] = array($name);
-		$this->blocks[$name] = new Cotpl_block($text, $this->index, array($name));
+		$this->blocks[$name] = new CotplBlock($text, $this->index, array($name));
 		$this->found = true;
 		return '';
 	}
@@ -212,6 +259,7 @@ class XTemplate
 		$this->vars = array();
 		$cache_path = self::$cache_dir . '/templates/' . str_replace(array('./', '/'), '_', $path);
 		$cache_idx = $cache_path . '.idx';
+		$cache_tags = $cache_path . '.tags';
 		if (!self::$cache_enabled || !file_exists($cache_path) || filemtime($path) > filemtime($cache_path))
 		{
 			$this->blocks = array();
@@ -235,6 +283,8 @@ class XTemplate
 				{
 					file_put_contents($cache_path, serialize($this->blocks));
 					file_put_contents($cache_idx, serialize($this->index));
+					$this->getTags();
+					file_put_contents($cache_tags, serialize($this->tags));
 				}
 				else
 				{
@@ -246,6 +296,15 @@ class XTemplate
 		{
 			$this->blocks = unserialize(cotpl_read_file($cache_path));
 			$this->index = unserialize(cotpl_read_file($cache_idx));
+			if (file_exists($cache_tags))
+			{
+				$this->tags = unserialize(cotpl_read_file($cache_tags));
+			}
+			else
+			{
+				$this->getTags();
+				file_put_contents($cache_tags, serialize($this->tags));
+			}
 		}
 	}
 
@@ -257,7 +316,7 @@ class XTemplate
 	 */
 	private static function substitute_var($m)
 	{
-		$var = new Cotpl_var($m[1]);
+		$var = new CotplVar($m[1]);
 		return $var->evaluate($this);
 	}
 
@@ -327,12 +386,12 @@ class XTemplate
 						// One level of nesting is supported
 						foreach ($val as $key2 => $val2)
 						{
-							echo self::debug_var($key . '.' . $key2, $val2);
+							echo self::debugVar($key . '.' . $key2, $val2);
 						}
 					}
 					else
 					{
-						echo self::debug_var($key, $val);
+						echo self::debugVar($key, $val);
 					}
 				}
 				echo "</ul>";
@@ -404,7 +463,7 @@ class XTemplate
 /**
  * CoTemplate block class
  */
-class Cotpl_block
+class CotplBlock
 {
 	/**
 	 * @var array Parsed block instances
@@ -508,14 +567,14 @@ class Cotpl_block
 					$chunk = trim(mb_substr($code, 0, $block_pos), "\t\r\n");
 					if (!empty($chunk))
 					{
-						$blocks[$i++] = new Cotpl_data($chunk);
+						$blocks[$i++] = new CotplData($chunk);
 					}
 				}
 				// Extract the block
 				$bpath = $path;
 				array_push($bpath, $block_name);
 				$index[cotpl_index_glue($bpath)] = $bpath;
-				$blocks[$block_name] = new Cotpl_block(trim($block_mt[2]), $index, $bpath);
+				$blocks[$block_name] = new CotplBlock(trim($block_mt[2]), $index, $bpath);
 				$code = trim(mb_substr($code, $block_pos + mb_strlen($block_mt[0])));
 			}
 			elseif ($loop_found
@@ -527,7 +586,7 @@ class Cotpl_block
 					$chunk = trim(mb_substr($code, 0, $loop_pos), "\t\r\n");
 					if (!empty($chunk))
 					{
-						$blocks[$i++] = new Cotpl_data($chunk);
+						$blocks[$i++] = new CotplData($chunk);
 					}
 				}
 				// Get the FOR loop contents
@@ -554,7 +613,7 @@ class Cotpl_block
 				{
 					$bpath = $path;
 					array_push($bpath, $i);
-					$blocks[$i++] = new Cotpl_loop($loop_mt[1], $loop_code, $index, $bpath);
+					$blocks[$i++] = new CotplLoop($loop_mt[1], $loop_code, $index, $bpath);
 					$code = trim($code, "\t\r\n");
 				}
 				else
@@ -570,7 +629,7 @@ class Cotpl_block
 					$chunk = trim(mb_substr($code, 0, $log_pos), "\t\r\n");
 					if (!empty($chunk))
 					{
-						$blocks[$i++] = new Cotpl_data($chunk);
+						$blocks[$i++] = new CotplData($chunk);
 					}
 				}
 				// Get the IF/ELSE contents
@@ -616,7 +675,7 @@ class Cotpl_block
 				{
 					$bpath = $path;
 					array_push($bpath, $i);
-					$blocks[$i++] = new Cotpl_logical($log_mt[1], $if_code, $else_code, $index, $bpath);
+					$blocks[$i++] = new CotplLogical($log_mt[1], $if_code, $else_code, $index, $bpath);
 					$code = trim($code, "\t\r\n");
 				}
 				else
@@ -630,12 +689,29 @@ class Cotpl_block
 				$code = trim($code, "\t\r\n");
 				if (!empty($code))
 				{
-					$blocks[$i++] = new Cotpl_data($code);
+					$blocks[$i++] = new CotplData($code);
 					$code = '';
 				}
 			}
 		}
 		while (!empty($code));
+	}
+	
+	/**
+	 * Returns the list of tag names present in the block
+	 * @return array 
+	 */
+	public function getTags()
+	{
+		$list = array();
+		foreach ($this->blocks as $block)
+		{
+			if ($block instanceof CotplData || $block instanceof CotplBlock)
+			{
+				$list = array_merge($list, $block->getTags());
+			}
+		}
+		return $list;
 	}
 
 	/**
@@ -677,7 +753,7 @@ class Cotpl_block
 /**
  * A simple nameless block of data which may parse variables
  */
-class Cotpl_data
+class CotplData
 {
 	/**
 	 * @var array Block data consisting of strings and Cotpl_vars
@@ -704,7 +780,7 @@ class Cotpl_data
 		{
 			if (preg_match('`^\{((?:[\w\.]+)(?:\|.+?)?)\}$`', $chunk, $m))
 			{
-				$this->chunks[] = new Cotpl_var($m[1]);
+				$this->chunks[] = new CotplVar($m[1]);
 			}
 			else
 			{
@@ -723,7 +799,7 @@ class Cotpl_data
 		$str = '';
 		foreach ($this->chunks as $chunk)
 		{
-			if ($chunk instanceof Cotpl_var)
+			if ($chunk instanceof CotplVar)
 			{
 				$str .= $chunk->__toString();
 			}
@@ -733,6 +809,23 @@ class Cotpl_data
 			}
 		}
 		return $str . "\n";
+	}
+	
+	/**
+	 * Returns the list of tag names present in data block
+	 * @return array 
+	 */
+	public function getTags()
+	{
+		$list = array();
+		foreach ($this->chunks as $chunk)
+		{
+			if ($chunk instanceof CotplVar)
+			{
+				$list[$chunk->name] = true;
+			}
+		}
+		return $list;
 	}
 
 	/**
@@ -755,7 +848,7 @@ class Cotpl_data
 		$data = '';
 		foreach ($this->chunks as $chunk)
 		{
-			if ($chunk instanceof Cotpl_var)
+			if ($chunk instanceof CotplVar)
 			{
 				$data .= $chunk->evaluate($tpl);
 			}
@@ -865,7 +958,7 @@ define('COTPL_OP_MOD', 45);
 /**
  * CoTemplate logical expression
  */
-class Cotpl_expr
+class CotplExpr
 {
 	/**
 	 * @var array Postfix expression stack
@@ -941,7 +1034,7 @@ class Cotpl_expr
 			{
 				if (preg_match('`^{(.+?)}$`', $word, $mt))
 				{
-					$token['var'] = new Cotpl_var($mt[1]);
+					$token['var'] = new CotplVar($mt[1]);
 				}
 				elseif (preg_match('`("|\')(.+?)\1`', $word, $mt))
 				{
@@ -1100,10 +1193,10 @@ class Cotpl_expr
 /**
  * CoTemplate run-time conditional block class
  */
-class Cotpl_logical extends Cotpl_block
+class CotplLogical extends CotplBlock
 {
 	/**
-	 * @var Cotpl_expr Condition expression
+	 * @var CotplExpr Condition expression
 	 */
 	protected $expr = null;
 
@@ -1118,7 +1211,7 @@ class Cotpl_logical extends Cotpl_block
 	 */
 	public function __construct($expr_str, $if_code, $else_code, &$index, $path)
 	{
-		$this->expr = new Cotpl_expr($expr_str);
+		$this->expr = new CotplExpr($expr_str);
 		if (!empty($if_code))
 		{
 			$bpath = $path;
@@ -1148,6 +1241,29 @@ class Cotpl_logical extends Cotpl_block
 		}
 		$str .= "<!-- ENDIF -->\n";
 		return $str;
+	}
+	
+	/**
+	 * Returns the list of tag names present in the block
+	 * @return array 
+	 */
+	public function getTags()
+	{
+		$list = array();
+		for ($i = 0; $i < 2; $i++)
+		{
+			if (is_array($this->blocks[$i]))
+			{
+				foreach ($this->blocks[$i] as $block)
+				{
+					if ($block instanceof CotplData || $block instanceof CotplBlock)
+					{
+						$list = array_merge($list, $block->getTags());
+					}
+				}
+			}
+		}
+		return $list;
 	}
 
 	/**
@@ -1202,7 +1318,7 @@ class Cotpl_logical extends Cotpl_block
 /**
  * CoTemplate FOR loop
  */
-class Cotpl_loop extends Cotpl_block
+class CotplLoop extends CotplBlock
 {
 	/**
 	 * Key variable name (optional)
@@ -1211,7 +1327,7 @@ class Cotpl_loop extends Cotpl_block
 	protected $key = '';
 	/**
 	 * Source set/array variable
-	 * @var Cotpl_var
+	 * @var CotplVar
 	 */
 	protected $set = null;
 	/**
@@ -1234,12 +1350,12 @@ class Cotpl_loop extends Cotpl_block
 		{
 			$this->key = $m[1];
 			$this->val = $m[2];
-			$this->set = new Cotpl_var($m[3]);
+			$this->set = new CotplVar($m[3]);
 		}
 		elseif (preg_match('`^\{(\w+)\}\s*IN\s*\{((?:[\w\.]+)(?:\|.+?)?)\}$`', $header, $m))
 		{
 			$this->val = $m[1];
-			$this->set = new Cotpl_var($m[2]);
+			$this->set = new CotplVar($m[2]);
 		}
 		$this->compile($code, $this->blocks, $index, $path);
 	}
@@ -1309,8 +1425,9 @@ class Cotpl_loop extends Cotpl_block
 
 /**
  * CoTemplate variable with callback extensions support
+ * @property-read string $name Tag name
  */
-class Cotpl_var
+class CotplVar
 {
 	/**
 	 * @var string Variable name
@@ -1357,6 +1474,23 @@ class Cotpl_var
 			$this->keys = $keys;
 		}
 		$this->name = $text;
+	}
+	
+	/**
+	 * Property getter
+	 * @param string $name Property name
+	 * @return mixed Property value
+	 */
+	public function __get($name)
+	{
+		if (isset($this->{$name}))
+		{
+			return $this->{$name};
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	/**
@@ -1429,7 +1563,7 @@ class Cotpl_var
 		}
 		elseif (is_string($val))
 		{
-			$ret = XTemplate::debug_var($key, $val);
+			$ret = XTemplate::debugVar($key, $val);
 		}
 		return $ret;
 	}
