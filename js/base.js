@@ -103,17 +103,17 @@ function ajaxSend(settings) {
 		url: encodeURI(url),
 		data: data,
 		beforeSend: function() {
-			$('#' + settings.divId).append('<span style="position:absolute;left:' + ($('#' + settings.divId).width()/2 - 110) + 'px;top:' + ($('#' + settings.divId).height()/2 + 9) + 'px;" class="loading" id="loading"><img src="./images/spinner.gif" alt="loading"/></span>');
+			if (!settings.nonshowloading) $('#' + settings.divId).append('<span style="position:absolute;left:' + ($('#' + settings.divId).width()/2 - 110) + 'px;top:' + ($('#' + settings.divId).height()/2 + 9) + 'px;" class="loading" id="loading"><img src="./images/spinner.gif" alt="loading"/></span>');
 		},
 		success: function(msg) {
-			$('#loading').remove();
+			if (!settings.nonshowloading) $('#loading').remove();
 			$('#' + settings.divId).hide().html(msg).fadeIn(500);
 			for (var i = 0; i < ajaxSuccessHandlers.length; i++) {
 				ajaxSuccessHandlers[i]();
 			}
 		},
 		error: function(msg) {
-			$('#loading').remove();
+			if (!settings.nonshowloading) $('#loading').remove();
 			if (ajaxErrorHandlers.length > 0) {
 				for (var i = 0; i < ajaxErrorHandlers.length; i++) {
 					if (ajaxErrorHandlers[i].divId == settings.divId)
