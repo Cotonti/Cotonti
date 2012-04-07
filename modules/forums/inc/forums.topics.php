@@ -21,7 +21,7 @@ if (empty($o) || !$db->fieldExists($db_forum_topics, "ft_$o"))
 {
 	$o = 'updated';
 }
-$w =  (empty($w)) ? 'desc' : $w;
+$w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? 'desc' : $w;
 
 cot_die(empty($s) || !isset($structure['forums'][$s]), true);
 

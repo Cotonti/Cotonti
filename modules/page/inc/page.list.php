@@ -64,7 +64,7 @@ elseif (!$db->fieldExists($db_pages, "page_$s"))
 $w = empty($w) ? $cfg['page'][$c]['way'] : $w;
 
 $s = empty($s) ? $cfg['page']['__default']['order'] : $s;
-$w = empty($w) ? $cfg['page']['__default']['way'] : $w;
+$w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? $cfg['page']['__default']['way'] : $w;
 
 
 $sys['sublocation'] = $cat['title'];
