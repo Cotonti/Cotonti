@@ -501,4 +501,7 @@ $L['ajaxSenderror'] = 'The server encountered an internal error or misconfigurat
 
 $L['captcha_verification_failed'] = 'Wrong bot protection code';
 
+$L['shield_title'] = 'Anti-hammering protection';
+$L['shield_protect'] = 'Shield protection activated, please retry in {$sec} seconds...<br />After this duration, you can refresh the current page to continue.<br />Last action was : {$action}';
+
 ?>

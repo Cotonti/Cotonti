@@ -179,7 +179,7 @@ if ($m == 'edit' && $id > 0)
 
 if ($a == 'send' && $usr['auth_write'])
 {
-	cot_plugin_active('shield') && cot_shield_protect();
+	cot_shield_protect();
 	$rtext = cot_import('rtext', 'P', 'HTM');
 	$rname = cot_import('rname', 'P', 'TXT');
 	$comarray = array();
@@ -249,7 +249,7 @@ if ($a == 'send' && $usr['auth_write'])
 
 		cot_message($L['com_commentadded']);
 
-		cot_plugin_active('shield') && cot_shield_update(20, 'New comment');
+		cot_shield_update(20, 'New comment');
 	}
 	cot_redirect(cot_url($url_area, $url_params, '#c' . $id, true));
 }

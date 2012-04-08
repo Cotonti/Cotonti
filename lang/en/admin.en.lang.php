@@ -170,6 +170,9 @@ $L['cfg_captcharandom'] = array('Random captcha');
 $L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
 $L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
 $L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
+$L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
+$L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
+$L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
 
 /**
  * Config Section

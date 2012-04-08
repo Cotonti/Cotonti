@@ -42,7 +42,7 @@ if ($structure['forums'][$s]['locked'])
 
 if ($a == 'newtopic')
 {
-	cot_plugin_active('shield') && cot_shield_protect();
+	cot_shield_protect();
 	
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.newtopic.newtopic.first') as $pl)
@@ -140,7 +140,7 @@ if ($a == 'newtopic')
 			($cfg['cache_index']) && $cache->page->clear('index');
 		}
 		
-		cot_plugin_active('shield') && cot_shield_update(45, "New topic");
+		cot_shield_update(45, "New topic");
 		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
 }

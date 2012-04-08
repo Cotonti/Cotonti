@@ -171,6 +171,9 @@ $L['cfg_captcharandom'] = array('Случайный выбор captcha');
 $L['cfg_cookiedomain'] = array('Домен для cookies', 'По умолчанию пусто');
 $L['cfg_cookielifetime'] = array('Срок действия cookies', 'В секундах');
 $L['cfg_cookiepath'] = array('Путь для cookies', 'По умолчанию пусто');
+$L['cfg_shieldenabled'] = array('Включить защиту', 'Защита против спама и хаммеринга');
+$L['cfg_shieldtadjust'] = array('Настройка таймеров защиты (в %)', 'Чем выше, тем сильнее защита против спама');
+$L['cfg_shieldzhammer'] = array('Анти-хаммер после * хитов', 'Чем меньше, тем короче срок автоблокировки пользователя');
 
 /**
  * Config Section

@@ -605,10 +605,10 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','security','32','captcharandom',3,'0','0','','');
 
 /* 0.9.8-05 whosonline and shield cleanup */
-DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_name` IN ('disablewhosonline', 'shieldenabled', 'shieldtadjust', 'shieldzhammer');
+DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_name` IN ('disablewhosonline');
 
 -------------------------------------------------------------------------------
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.8-05' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.9-01' WHERE `upd_param` = 'revision';

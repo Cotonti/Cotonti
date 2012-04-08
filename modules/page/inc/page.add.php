@@ -41,7 +41,7 @@ $parser_list = cot_get_parsers();
 
 if ($a == 'add')
 {
-	cot_plugin_active('shield') && cot_shield_protect();
+	cot_shield_protect();
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.add.add.first') as $pl)
@@ -175,7 +175,7 @@ if ($a == 'add')
 				$cache->page->clear('index');
 			}
 		}
-		cot_plugin_active('shield') && cot_shield_update(30, "r page");
+		cot_shield_update(30, "r page");
 		cot_redirect($r_url);
 	}
 	else
