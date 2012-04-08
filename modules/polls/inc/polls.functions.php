@@ -188,8 +188,8 @@ function cot_poll_save($type = 'index', $code = '')
 				'poll_state' => (int) $poll_state,
 				'poll_text' => $poll_text,
 				'poll_multiple' => (int) $poll_multiple
-				), "poll_id = $poll_id");
-			$newpoll_id = $poll_id;
+				), "poll_id = ".(int)$poll_id);
+			$newpoll_id = (int)$poll_id;
 		}
 		else
 		{
