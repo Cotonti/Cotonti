@@ -38,6 +38,8 @@ $variants[0] = array($L['All'], "");
 $variants['index'] = array($L['Main'], "index");
 $variants['forum'] = array($L['Forums'], "forum");
 
+$id = cot_import('id', 'G', 'INT');
+
 /* === Hook === */
 foreach (cot_getextplugins('polls.admin.first') as $pl)
 {
@@ -45,28 +47,28 @@ foreach (cot_getextplugins('polls.admin.first') as $pl)
 }
 /* ===== */
 
-if($a == 'delete')
+if($a == 'delete' && $id > 0)
 {
 	cot_check_xg();
 	cot_poll_delete($id);
 
 	cot_message('adm_polls_msg916_deleted');
 }
-elseif($a == 'reset')
+elseif($a == 'reset' && $id > 0)
 {
 	cot_check_xg();
 	cot_poll_reset($id);
 
 	cot_message('adm_polls_msg916_reset');
 }
-elseif($a == 'lock')
+elseif($a == 'lock' && $id > 0)
 {
 	cot_check_xg();
 	cot_poll_lock($id, 3);
 
 	cot_message('Locked');
 }
-elseif($a == 'bump')
+elseif($a == 'bump' && $id > 0)
 {
 	cot_check_xg();
 	$sql_polls = $db->update($db_polls, array('poll_creationdate' => $sys['now_offset']),  "poll_id=$id");
@@ -76,7 +78,7 @@ elseif($a == 'bump')
 
 cot_poll_check();
 
-if (!cot_error_found())
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !cot_error_found())
 {
 	$number = cot_poll_save();
 
