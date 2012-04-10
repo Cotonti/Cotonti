@@ -555,8 +555,8 @@ if (empty($x) && COT_AJAX && $_SERVER['REQUEST_METHOD'] == 'POST')
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST'
 	&& (!defined('COT_NO_ANTIXSS') && !defined('COT_AUTH')
-			&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
-		|| ($cfg['referercheck'] && !preg_match('`https?://([^/]+\.)?'.preg_quote($sys['domain'].$sys['site_uri']).'`i', $_SERVER['HTTP_REFERER'])))
+			&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev'])
+		|| ($cfg['referercheck'] && !preg_match('`https?://([^/]+\.)?'.preg_quote($sys['domain'].$sys['site_uri']).'`i', $_SERVER['HTTP_REFERER']))))
 {
 	$cot_error = true;
 	cot_die_message(950, TRUE);
