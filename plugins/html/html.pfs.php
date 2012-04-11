@@ -17,7 +17,7 @@ Hooks=pfs.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($sys['parser'] == 'html')
+if ($parser == 'html')
 {
 	$R['pfs_code_addfile'] = '<a href="{$pfs_base_href}{$pfs_dir_user}\'+gfile+\'" title="\'+gdesc+\'">\'+gfile+\'</a>';
 	$R['pfs_code_addpix'] = '<img src="{$pfs_base_href}{$pfs_dir_user}\'+gfile+\'" alt="\'+gdesc+\'" />';
