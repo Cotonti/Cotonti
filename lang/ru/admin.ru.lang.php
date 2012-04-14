@@ -301,7 +301,7 @@ $L['adm_help_structure'] = 'Страницы категории &laquo;system&ra
  * Extrafields Subsection
  */
 
-$L['adm_extrafields_desc'] = 'Создание / правка дополнительных полей';
+$L['adm_extrafields_desc'] = 'Создание / правка экстраполей';
 $L['adm_extrafields_all'] = 'Все таблицы';
 $L['adm_extrafields_table'] = 'Таблица';
 $L['adm_extrafields_help_notused'] = 'Не используется';
