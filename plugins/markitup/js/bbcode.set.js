@@ -72,6 +72,7 @@ var mySettings = {
 		{name: L.link, className: 'mLink', key:'L', openWith:'[url=[![URL:!:http://]!]]', closeWith:'[/url]', placeHolder: L.link_text},
 		{name: L.email, className: 'mEmail', openWith:'[email=[![' + L.email_addr + ':!:john@doe.com]!]]', closeWith:'[/email]', placeHolder: L.email_text},
 		{separator:'---------------' },
+		{name: L.paragraph, className: 'mParagraph', openWith: '[p]', closeWith: '[/p]'},
 		{name: L.ul, className: 'mUl', multiline:true, openWith:'[li]', closeWith:'[/li]', openBlockWith:'[list]\n', closeBlockWith:'\n[/list]'},
 		{name: L.ol, className: 'mOl', multiline:true, openWith:'[li]', closeWith:'[/li]', openBlockWith:'[ol]\n', closeBlockWith:'\n[/ol]'},
 		{name: L.li, className: 'mLi', openWith:'[li]', key: 'M', closeWith: '[/li]'},
@@ -96,6 +97,7 @@ var mySettings = {
 		{name: L.code, className: 'mCode', multiline:true, openBlockWith:'[code]', closeBlockWith:'[/code]'},
 		{name: L.hide, className: 'mHide', multiline:true, openBlockWith:'[hide]', closeBlockWith:'[/hide]'},
 		{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) { showSmilies(markitup) } },
+		{name: L.more, className: 'mMore', replaceWith: '[more]'},
 		{separator:'---------------' },
 		{name: L.clean, className:"mClean", replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
 		{name: L.preview, className:"mPreview", call:'preview' }

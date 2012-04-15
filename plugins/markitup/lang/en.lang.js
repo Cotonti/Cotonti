@@ -28,6 +28,7 @@ var L = {
 	li:			'List item',
 	link:		'Link',
 	link_text:	'Enter text for the link here...',
+	more:		'Cut with &quot;Read more...&quot;',
 	ol:			'Numbered list',
 	orange:		'Orange',
 	paragraph:	'Paragraph',

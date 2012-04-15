@@ -27,6 +27,8 @@ INSERT INTO `cot_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacemen
 ('u', 'str', '[/u]', '</span>', 1, 1, 128, '', 0),
 ('s', 'str', '[s]', '<span style="text-decoration:line-through">', 1, 1, 128, '', 0),
 ('s', 'str', '[/s]', '</span>', 1, 1, 128, '', 0),
+('p', 'str', '[p]', '<p>', 1, 1, 128, '', 0),
+('p', 'str', '[/p]', '</p>', 0, 1, 128, '', 0),
 ('center', 'str', '[center]', '<div style="text-align:center">', 1, 1, 128, '', 0),
 ('center', 'str', '[/center]', '</div>', 1, 1, 128, '', 0),
 ('left', 'str', '[left]', '<div style="text-align:left">', 1, 1, 128, '', 0),

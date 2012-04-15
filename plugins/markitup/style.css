@@ -43,6 +43,9 @@
 .markItUp .mEmail a	{
 	background-image:url(images/email.png);
 }
+.markItUp .mMore a	{
+	background-image:url(images/more.png);
+}
 
 .markItUp .mFonts a	{
 	background-image:url(images/fonts.png);
