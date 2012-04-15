@@ -176,6 +176,7 @@ if ($a == 'add')
 			}
 		}
 		cot_shield_update(30, "r page");
+		cot_log ("Add page #". $ id, 'adm');
 		cot_redirect($r_url);
 	}
 	else
