@@ -3,7 +3,7 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.9.8
+ * @version 0.9.9
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD License
@@ -37,8 +37,8 @@ $usr = array();
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.8';
-$cfg['dbversion'] = '0.9.8';
+$cfg['version'] = '0.9.9';
+$cfg['dbversion'] = '0.9.9';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms']))
