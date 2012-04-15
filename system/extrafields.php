@@ -22,8 +22,7 @@ defined('COT_CODE') or die('Wrong URL');
  */
 function cot_build_extrafields($name, $extrafield, $data)
 {
-	global $L, $R;
-	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
+	global $L, $R, $cfg;
 	$data = ($data == null) ? $extrafield['field_default'] : $data;
 
 	switch ($extrafield['field_type'])
@@ -117,7 +116,6 @@ function cot_build_extrafields($name, $extrafield, $data)
 			break;
 		
 		case 'file':
-			global $cfg;
 			$result = cot_filebox($name, htmlspecialchars($data), $cfg['extrafield_files_dir'].'/'.htmlspecialchars($data), 'rdel_' . $name, '', $extrafield['field_html']);
 			break;
 
