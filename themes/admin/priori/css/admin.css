@@ -19,6 +19,7 @@ body {
 	font: 12px/1.3 Helvetica,arial,freesans,clean,sans-serif;
 	color: #666666;
 	font-weight:	400;
+	position: relative;
 }
 div#navbar {
 	background: #0b0b0b;
@@ -86,7 +87,7 @@ div#main #head a {
 	z-index: 100;
 }
 #footer {
-	position: fixed;
+	position: absolute;
 	bottom: 0px;
 	right: 70px;
 	border: 1px solid #bababa;

@@ -1,5 +1,8 @@
 <!-- BEGIN: FOOTER -->
 
+
+
+</div>
 <div id="messagebar">
 				<a href="{PHP|cot_url('users','m=profile')}" class="strong">{PHP.usr.name} </a>
 				<!-- IF {PHP.out.notices} -->
@@ -11,10 +14,8 @@
 				</a>
 				<!-- ENDIF -->
 </div>
-
-</div>
 <div id="footer">
-	<a href="http://cotonti.com" target="_blank" title="Cotonti {PHP.cfg.version}"><img src="{PHP.cfg.themes_dir}/admin/priopi/img/cotonti.png" alt="Cotonti{PHP.cfg.version}" /></a>
+	<a href="http://cotonti.com" target="_blank" title="Cotonti {PHP.cfg.version}"><img src="{PHP.cfg.themes_dir}/admin/priori/img/cotonti.png" alt="Cotonti{PHP.cfg.version}" /></a>
 </div>
 {FOOTER_RC}
 </body>
