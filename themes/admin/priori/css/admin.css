@@ -1,0 +1,484 @@
+@import url('reset.css');
+@import url('buttons.css');
+@import url('framework.css');
+
+/* 1. General
+--------------------------------------------------*/
+html {
+	height: 100%;
+	overflow-y: hidden;
+}
+body {
+	background-color: #dddddd;
+	height: 100%;
+	min-width: 1024px;
+	max-width: 2000px;
+	margin: 0 auto;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	width: 100%;
+	font: 12px/1.3 Helvetica,arial,freesans,clean,sans-serif;
+	color: #666666;
+	font-weight:	400;
+}
+div#navbar {
+	background: #0b0b0b;
+	float: left;
+	height: 100%;
+	width: 100px;
+}
+div#navbar ul {
+	padding: 7px 0;
+}
+div#navbar ul li a {
+	color: #BBBEC2;
+	display: block;
+	font-size: 11px;
+	line-height: 24px;
+	padding: 6px 0 5px;
+	text-align: center;
+	text-decoration: none;
+}
+div#navbar ul li a:hover, div#navbar ul li a.sel {
+	background: #232323!important;
+}
+div#navbar ul li a span {
+	display: block;
+	font-size: 32px;
+}
+div#navbar ul li.bottom a {
+	background: #0b0b0b;
+	bottom: 0px;
+	position: absolute;
+	width: 100px;
+}
+
+div#main {
+	height: 100%;
+	margin: 0 0 20px;
+	overflow: auto;
+	position: relative;
+}
+div#main #head {
+	display: block;
+	background-color: #497eac;
+	background-image: linear-gradient(top , #6ba0ce, #497eac);
+	border-bottom: 1px solid #467cad;
+	border-top: 1px solid #699fdo;
+	color: #fff;
+	text-shadow: 0 1px 0 #104266;
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 18px;
+	padding: 12px 14px;
+	text-decoration: none;
+	text-transform: uppercase;
+	outline: medium none;
+}
+div#main #head a {
+	color: #fff;
+}
+#sitetitle {
+	position: absolute;
+	top: 0px;
+	right: 20px;
+	padding: 12px 20px;
+	float: right;
+	z-index: 100;
+}
+#footer {
+	position: fixed;
+	bottom: 0px;
+	right: 70px;
+	border: 1px solid #bababa;
+	border-radius: 3px 3px 0px 0px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	border-bottom: 0px solid #bababa;
+	text-align: center;
+	padding: 5px 15px;
+	background-color: #E5E5E5;
+    background-image: linear-gradient(center top , #EBEBEB, #E5E5E5);
+}
+
+#messagebar
+{
+	color: #898989;
+	position: absolute;
+	bottom: 0px;
+	left: 160px;
+	font-size: 11px;
+	text-shadow: 0 1px 0 #FFFFFF;
+	border: 1px solid #bababa;
+	border-bottom: 0px solid #bababa;
+	border-radius: 3px 3px 0px 0px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	text-align: center;
+	padding: 5px 15px;
+	background-color: #E5E5E5;
+    background-image: linear-gradient(center top , #EBEBEB, #E5E5E5);
+}
+#footer a, #messagebar a {
+	color: #898989;
+}
+
+ul {
+	list-style-type: none;
+}
+ol {
+	list-style-position: outside;
+	margin-bottom: 5px;
+	padding-left: 20px;
+}
+ul.follow li {
+	padding-left: 25px;
+	background: url(../img/follow.png) no-repeat 5px 3px;
+}
+ul.follow img {
+	vertical-align: -3px;
+}
+a {
+	color: #000;
+	text-decoration: none;
+	outline: medium none;
+}
+a:hover {
+	text-decoration: underline;
+}
+a img {
+	border: 0;
+}
+hr {
+	margin: 4px 0 1px;
+	border: 1px solid;
+	border-color: #ddd transparent transparent transparent;
+}
+
+p {
+    line-height: 20px;
+    margin-bottom: 14px;
+}
+/* 2. Structure
+--------------------------------------------------*/
+
+.block {
+	background: none repeat scroll 0 0 #fafafa;
+    border-radius: 3px 3px 3px 3px;
+	margin: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	clear: both;
+}
+
+.button-toolbar {
+	padding: 20px;
+}
+
+h2 + .block {
+	margin: 0 20px;
+	border-radius: 0px 0px 3px 3px;
+}
+
+.block > ul, .block > p {
+	padding: 20px;
+
+}
+
+.col, .col4-1, .col4-2, .col4-3, .col3-1, .col3-2, .col2-1 {
+	float: left;
+}
+.col { width: 100%;}
+.col4-1 { width: 25%;}
+.col4-2 { width: 50%;}
+.col4-3 { width: 75%;}
+.col3-1 { width: 33%;}
+.col3-2 { width: 67%;}
+.col2-1 { width: 50%;}
+.col.first, .col4-1.first, .col4-2.first, .col4-3.first, .col3-1.first, .col3-2.first, .col2-1.first {
+	margin-left: 0;
+	clear: left;
+}
+
+/* 3. Headings
+--------------------------------------------------*/
+h1,h2,h3,h4,h5,h6 {
+	font-weight: normal;
+	font-size: 1em;
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+h1 {
+	display: block;
+	background-color: #497EAC;
+	background-image: linear-gradient(center top , #6BA0CE, #497EAC);
+	border-bottom: 1px solid #467CAD;
+	border-top: 1px solid #699FD0;
+}
+h1, #sitetitle {
+	color: #fff;
+	text-shadow: 0 1px 0 #104266;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 18px;
+	padding: 12px 14px;
+	text-decoration: none;
+	outline: medium none;
+}
+h1 a, #sitetitle a {
+	color: #fff;
+	text-decoration: none;
+}
+h2 {
+	color: #898989;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 40px;
+    padding-left: 14px;
+    text-shadow: 0 1px 0 #FFFFFF;
+    text-transform: uppercase;
+    border-top: 1px solid #FAFAFA;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+	display: block;
+    height: 40px;
+	margin: 20px 20px 0;
+	background: #E5E5E5;
+    background: linear-gradient(center top , #ebebeb, #e5e5e5);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ebebeb', endColorstr='#e5e5e5'); /* для IE6-9 */
+	background: -webkit-linear-gradient(top, bottom, #ebebeb, #e5e5e5); /* для webkit-браузеров */
+	background: -moz-linear-gradient(top,  #ebebeb,  #e5e5e5); /* для firefox 3.6+ */
+	background: -o-linear-gradient(top,  #ebebeb,  #e5e5e5); /* для Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ebebeb,  #e5e5e5); /* для IE10+ */
+}
+h3 {
+	color: #898989;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 40px;
+    padding-left: 14px;
+    text-shadow: 0 1px 0 #FFFFFF;
+    text-transform: uppercase;
+
+    border-top: 1px solid #FAFAFA;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+	display: block;
+    height: 40px;
+	margin: 0;
+	background: #E5E5E5;
+    background: linear-gradient(center top , #ebebeb, #e5e5e5);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ebebeb', endColorstr='#e5e5e5'); /* для IE6-9 */
+	background: -webkit-linear-gradient(top, bottom, #ebebeb, #e5e5e5); /* для webkit-браузеров */
+	background: -moz-linear-gradient(top,  #ebebeb,  #e5e5e5); /* для firefox 3.6+ */
+	background: -o-linear-gradient(top,  #ebebeb,  #e5e5e5); /* для Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ebebeb,  #e5e5e5); /* для IE10+ */
+}
+h4 {
+	font-weight: bold;
+}
+/* 4. Misc
+--------------------------------------------------*/
+
+div.error, div.warning, div.done, div.help {
+	line-height: 1.8em;
+	margin: 20px 0;
+	padding: 10px 50px;
+	background-position: 15px 50%;
+	background-repeat: no-repeat;
+	clear: both;
+}
+div.error {
+	color: #d8000c;
+	background-color: #ffebe8;
+	background-image: url(../img/error.png);
+	border: 1px solid #dd3c10;
+}
+div.warning {
+	color: #9f6000;
+	background-color: #fff9d7;
+	background-image: url(../img/warning.png);
+	border: 1px solid #e2c822;
+}
+div.done {
+	color: #4f8a10;
+	background-color: #eceff6;
+	background-image: url(../img/done.png);
+	border: 1px solid #d4dae8;
+}
+div.help {
+	color: #000;
+	background-color: #f2f2f2;
+	background-image: url(../img/help.png);
+	border: 1px solid #ccc;
+}
+.highlight_green {
+	color: #205000;
+	background-color: #befea8;
+}
+.highlight_red {
+	color: #d8000c;
+	background-color: #feebe8;
+}
+
+a.thumbicons {
+
+color: #666;
+
+margin: 5px;
+padding: 10px 2px;
+text-align: center;
+text-decoration: none;
+zoom: 1;	
+	border: 1px solid transparent;
+  float: left;
+  width:130px;
+  text-shadow: 0 1px 0 white;
+/*  text-align: left;
+  padding: 10px;
+  margin: 2px 2px 5px 2px;
+  height: 30px;*/
+  }
+a.thumbicons img {
+	text-align: center;
+	margin: 10px auto 0;
+	display: block;
+font-size: 32px;
+padding-bottom: 4px;
+   } 
+
+a.thumbicons:hover {background-color: #EBEBEB;
+background-image: -webkit-gradient(linear, left top, left bottom, from(whiteSmoke), to(#EBEBEB));
+background-image: -webkit-linear-gradient(top, whiteSmoke, #EBEBEB);
+background-image: -moz-linear-gradient(top, whiteSmoke, #EBEBEB);
+background-image: -o-linear-gradient(top, #F5F5F5, #EBEBEB);
+background-image: -ms-linear-gradient(top, #F5F5F5, #EBEBEB);
+background-image: linear-gradient(top, #F5F5F5, #EBEBEB);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f5f5f5', EndColorStr='#ebebeb');
+border: 1px solid #C4C4C4;
+border-radius: 3px;
+box-shadow: 0 1px 3px #ccc, inset 0 1px 0 #fff;}
+
+/* 6. Tables
+--------------------------------------------------*/
+table td {
+	vertical-align: top;
+}
+table.cells {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+table.cells td {
+	border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #F4F4F4;
+    padding: 8px 10px;
+	border-bottom: 1px solid #EBEBEB;
+}
+table.cells .coltop {
+	text-align: left;
+	vertical-align: middle;
+	padding: 12px 14px;
+	border-top: medium none;
+	border-bottom: 2px solid #EBEBEB;
+	font-weight: bold;
+	background-color: inherit!important;
+}
+table.cells tr:last-child td:first-child {
+    border-bottom-left-radius: 3px;
+}
+table.cells tr:last-child td:last-child {
+    border-bottom-right-radius: 3px;
+}
+table.cells tr:last-child {
+    border-bottom: medium none;
+}
+table.nowrap td {
+white-space:nowrap;
+}
+.odd, table.cells tr:nth-child(2n+1) td {background-color: inherit;}
+.even, table.cells tr:nth-child(2n) td {	background-color: #FDFDFD;border-bottom: 0px solid #EBEBEB;}	
+
+.coltop img {
+	vertical-align: middle;
+}
+
+
+/* 7. Polls
+--------------------------------------------------*/
+.bar_back {
+	background: #E2E2E2;
+	background: linear-gradient(#E2E2E2, #D8D8D8) repeat scroll 0 0 transparent;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#E2E2E2', endColorstr='#D8D8D8'); /* для IE6-9 */
+	background: -webkit-linear-gradient(top, bottom, #E2E2E2, #D8D8D8); /* для webkit-браузеров */
+	background: -moz-linear-gradient(top,  #E2E2E2,  #D8D8D8); /* для firefox 3.6+ */
+	background: -o-linear-gradient(top,  #E2E2E2,  #D8D8D8); /* для Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #E2E2E2,  #D8D8D8); /* для IE10+ */
+    border-radius: 3px 3px 3px 3px;
+    height: 13px;
+    margin-left: 3px;
+    position: relative;
+	/*box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);*/
+	border: 1px solid #d4d4d4;
+}
+.bar_front {
+	background: #8DCF16;
+	background: linear-gradient(#8DCF16, #65BD10) repeat scroll 0 0 transparent;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8DCF16', endColorstr='#65BD10'); /* для IE6-9 */
+	background: -webkit-linear-gradient(top, bottom, #8DCF16, #65BD10); /* для webkit-браузеров */
+	background: -moz-linear-gradient(top,  #8DCF16,  #65BD10); /* для firefox 3.6+ */
+	background: -o-linear-gradient(top,  #8DCF16,  #65BD10); /* для Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #8DCF16,  #65BD10); /* для IE10+ */
+
+	 /*   background: -moz-linear-gradient(#3e6c96, #5f93c3) repeat scroll 0 0 transparent;*/
+	border-radius: 3px 3px 3px 3px;
+    height: 13px;
+}
+.bar_back:hover .bar_front {
+	background: #69d344;
+	background: linear-gradient(#69d344, #4c8b36) repeat scroll 0 0 transparent;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#69d344', endColorstr='#4c8b36'); /* для IE6-9 */
+	background: -webkit-linear-gradient(top, bottom, #69d344, #4c8b36); /* для webkit-браузеров */
+	background: -moz-linear-gradient(top,  #69d344,  #4c8b36); /* для firefox 3.6+ */
+	background: -o-linear-gradient(top,  #69d344,  #4c8b36); /* для Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #69d344,  #4c8b36); /* для IE10+ */
+}
+
+
+/* 9. Pagination
+--------------------------------------------------*/
+.paging {
+	margin: 10px 0 20px 0;
+	text-align: center;
+	font-size: .9em;
+}
+.paging img {
+	vertical-align: -3px;
+}
+.paging span {
+	border: 1px dashed #7f7772;
+	padding: 2px 8px;
+	margin: 1px;
+}
+.pagenav_prev, .pagenav_next, .pagenav_first, .pagenav_last, .pagenav_pages, .pagenav_current {
+	padding: 2px 6px;
+	margin: 1px;
+	border: 1px dashed #7f7772;
+}
+.pagenav_prev a, .pagenav_next a, .pagenav_first a, .pagenav_last a, .pagenav_pages a {
+	color: #555;
+}
+.pagenav_current {
+	font-weight: bold;
+	color: #fff;
+	background: none!important;
+	border: none!important;
+}
+.pagenav_current a {
+	color: #555;
+}
+.pagenav_small {
+	text-align: right;
+	font-size: .9em;
+}
+.spaced {
+	margin: 0 8px;
+}
+
