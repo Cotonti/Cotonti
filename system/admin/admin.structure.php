@@ -352,6 +352,7 @@ else
 			'ADMIN_STRUCTURE_ID' => $structure_id,
 			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $structure_code, 'size="10" maxlength="255"'),
 			'ADMIN_STRUCTURE_SPACEIMG' => $pathspaceimg,
+			'ADMIN_STRUCTURE_LEVEL' => ($pathfielddep > 0) ? $pathfielddep - 1 : 0,
 			'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ? $R['admin_icon_pathfieldnoimg'] : $R['admin_icon_pathfieldimg'],
 			'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath['.$structure_id.']', $row['structure_path'], 'size="12" maxlength="255"'),
 			'ADMIN_STRUCTURE_TPL_SYM' => $structure_tpl_sym,
