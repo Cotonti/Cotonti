@@ -197,7 +197,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			'STATE' => $page_data['page_state'],
 			'STATUS' => $page_data['page_status'],
 			'LOCALSTATUS' => $L['page_status_'.$page_data['page_status']],
-			'SHORTTITLE' => htmlspecialchars($page_data['page_title']),
+			'SHORTTITLE' => htmlspecialchars($page_data['page_title'], ENT_COMPAT, 'UTF-8', false),
 			'CAT' => $page_data['page_cat'],
 			'CATURL' => $cat_url,
 			'CATTITLE' => htmlspecialchars($structure['page'][$page_data['page_cat']]['title']),
