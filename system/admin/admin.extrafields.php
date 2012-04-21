@@ -74,13 +74,15 @@ if (empty($n) || in_array($n, $extra_blacklist))
 		{
 			$name = (($extra_whitelist[$table]['type'] == 'module') ? $cot_modules[$extra_whitelist[$table]['code']]['title'] : $cot_plugins_enabled[$extra_whitelist[$table]['code']]['title']);
 		}
-		$name = (empty($name)) ? $L['System'] : $name;
-		
+
+		$name = (empty($name)) ? $extra_whitelist[$table]['caption'] : $name;
 		$ii++;
 		$t->assign(array(
 			'ADMIN_EXTRAFIELDS_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
 			'ADMIN_EXTRAFIELDS_ROW_ITEMNAME' => $name,
 			'ADMIN_EXTRAFIELDS_ROW_TABLENAME' => $table . ((isset($extra_whitelist[$table])) ? " - " . $extra_whitelist[$table]['caption'] : ''),
+			'ADMIN_EXTRAFIELDS_ROW_TABLE' => $table,
+			'ADMIN_EXTRAFIELDS_ROW_TYPE' => $extra_whitelist[$table]['type'],
 			'ADMIN_EXTRAFIELDS_ROW_TABLEURL' => cot_url('admin', 'm=extrafields&n='.$table),
 			'ADMIN_EXTRAFIELDS_COUNTER_ROW' => $ii,
 			'ADMIN_EXTRAFIELDS_ODDEVEN' => cot_build_oddeven($ii)
