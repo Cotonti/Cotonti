@@ -194,11 +194,15 @@ if ($a == 'update')
 		}
 		/* ===== */
 
-		if ($rpage['page_state'] == 0 && $cache)
+		if (($rpage['page_state'] == 0  || $rpage['page_cat'] != $row_page_update['page_cat']) && $cache)
 		{
 			if ($cfg['cache_page'])
 			{
 				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$rpage['page_cat']]['path']));
+				if ($rpage['page_cat'] != $row_page_update['page_cat'])
+				{
+					$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$row_page_update['page_cat']]['path']));
+				}
 			}
 			if ($cfg['cache_index'])
 			{
