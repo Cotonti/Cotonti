@@ -46,7 +46,7 @@ foreach (cot_getextplugins('admin.extrafields.first') as $pl)
 if (empty($n) || in_array($n, $extra_blacklist))
 {
 	// no params
-	$sql = $db->query("SHOW TABLES WHERE 1");
+	$sql = $db->query("SHOW TABLES");
 	$tablelist = array();
 	while ($row = $sql->fetch())
 	{
