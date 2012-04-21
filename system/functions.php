@@ -3,7 +3,7 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.9.8
+ * @version 0.9.9
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD License
@@ -37,8 +37,8 @@ $usr = array();
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.8';
-$cfg['dbversion'] = '0.9.8';
+$cfg['version'] = '0.9.9';
+$cfg['dbversion'] = '0.9.9';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms']))
@@ -4380,6 +4380,85 @@ function cot_check_xp()
 {
 	return (defined('COT_NO_ANTIXSS') || defined('COT_AUTH')) ?
 		($_SERVER['REQUEST_METHOD'] == 'POST') : isset($_POST['x']);
+}
+
+/**
+ * Clears current user action in shield
+ */
+function cot_shield_clearaction()
+{
+	$_SESSION['shield_action'] = '';
+}
+
+/**
+ * Anti-hammer protection
+ *
+ * @param int $hammer Hammer rate
+ * @param string $action Action type
+ * @param int $lastseen User last seen timestamp
+ * @return int
+ */
+function cot_shield_hammer($hammer, $action, $lastseen)
+{
+	global $cfg, $sys, $usr;
+
+	if ($action == 'Hammering')
+	{
+		cot_shield_protect();
+		cot_shield_clearaction();
+		cot_plugin_active('hits') && cot_stat_inc('totalantihammer');
+	}
+
+	if (($sys['now'] - $lastseen) < 4)
+	{
+		$hammer++;
+		if ($hammer > $cfg['shieldzhammer'])
+		{
+			cot_shield_update(180, 'Hammering');
+			cot_log('IP banned 3 mins, was hammering', 'sec');
+			$hammer = 0;
+		}
+	}
+	else
+	{
+		if ($hammer > 0)
+		{
+			$hammer--;
+		}
+	}
+	return $hammer;
+}
+
+/**
+ * Warn user of shield protection
+ *
+ */
+function cot_shield_protect()
+{
+	global $sys, $shield_limit, $shield_action, $L;
+
+	if ($shield_limit > $sys['now'])
+	{
+		cot_die_message(403, true, $L['shield_title'], cot_rc('shield_protect', array(
+			'sec' => $shield_limit - $sys['now'],
+			'action' => $shield_action
+		)));
+	}
+}
+
+/**
+ * Updates shield state
+ *
+ * @param int $shield_add Hammer
+ * @param string $shield_newaction New action type
+ */
+function cot_shield_update($shield_add, $shield_newaction)
+{
+	global $cfg, $sys;
+
+	$shield_newlimit = $sys['now'] + floor($shield_add * $cfg['shieldtadjust'] /100);
+	$_SESSION['online_shield'] = $shield_newlimit;
+	$_SESSION['online_action'] = $shield_newaction;
 }
 
 /**

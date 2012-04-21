@@ -492,7 +492,7 @@ if ($files_count>0 || $folders_count>0)
 	if ($folders_count>0)
 	{
 		$totalitemsf = $folders_count;
-		$pagenav = cot_pagenav('pfs', 'userid='.$usr['id'].$pn_c1.$pn_c2, $df, $totalitemsf, $cfg['pfs']['maxpfsperpage'], 'df');
+		$pagenav = cot_pagenav('pfs', 'userid='.$userid.$pn_c1.$pn_c2, $df, $totalitemsf, $cfg['pfs']['maxpfsperpage'], 'df');
 
 		$t->assign(array(
 			'PFF_FOLDERCOUNT' => $folders_count,
@@ -509,7 +509,7 @@ if ($files_count>0 || $folders_count>0)
 	{
 		$thumbspagination = ($opt == 'thumbs') ? '&opt=thumbs' : '';
 		$totalitems = $files_count;
-		$pagenav = cot_pagenav('pfs', 'f='.$f.'&userid='.$usr['id'].$pn_c1.$pn_c2.$thumbspagination, $d,
+		$pagenav = cot_pagenav('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination, $d,
 			$totalitems, $cfg['pfs']['maxpfsperpage']);
 
 		$filesinfolder .= ($f>0) ? $L['pfs_filesinthisfolder'] : $L['pfs_filesintheroot'];

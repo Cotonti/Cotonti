@@ -21,6 +21,8 @@ require_once cot_incfile('page', 'module');
 $extra_whitelist[$db_pages] = array(
 	'name' => $db_pages,
 	'caption' => $L['Module'].' Pages',
+	'type' => 'module',
+	'code' => 'page',
 	'tags' => array(
 		'page.list.tpl' => '{LIST_ROW_XXXXX}, {LIST_TOP_XXXXX}',
 		'page.tpl' => '{PAGE_XXXXX}, {PAGE_XXXXX_TITLE}',

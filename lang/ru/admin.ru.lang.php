@@ -171,6 +171,10 @@ $L['cfg_captcharandom'] = array('Случайный выбор captcha');
 $L['cfg_cookiedomain'] = array('Домен для cookies', 'По умолчанию пусто');
 $L['cfg_cookielifetime'] = array('Срок действия cookies', 'В секундах');
 $L['cfg_cookiepath'] = array('Путь для cookies', 'По умолчанию пусто');
+$L['cfg_referercheck'] = array('Проверка referer для форм', 'Предотвращает междоменный постинг');
+$L['cfg_shieldenabled'] = array('Включить защиту', 'Защита против спама и хаммеринга');
+$L['cfg_shieldtadjust'] = array('Настройка таймеров защиты (в %)', 'Чем выше, тем сильнее защита против спама');
+$L['cfg_shieldzhammer'] = array('Анти-хаммер после * хитов', 'Чем меньше, тем короче срок автоблокировки пользователя');
 
 /**
  * Config Section
@@ -297,7 +301,7 @@ $L['adm_help_structure'] = 'Страницы категории &laquo;system&ra
  * Extrafields Subsection
  */
 
-$L['adm_extrafields_desc'] = 'Создание / правка дополнительных полей';
+$L['adm_extrafields_desc'] = 'Создание / правка экстраполей';
 $L['adm_extrafields_all'] = 'Все таблицы';
 $L['adm_extrafields_table'] = 'Таблица';
 $L['adm_extrafields_help_notused'] = 'Не используется';

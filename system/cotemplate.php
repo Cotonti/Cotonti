@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.4
+ * @version 2.7.6
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2012
  * @license BSD
@@ -260,7 +260,7 @@ class XTemplate
 		$cache_path = self::$cache_dir . '/templates/' . str_replace(array('./', '/'), '_', $path);
 		$cache_idx = $cache_path . '.idx';
 		$cache_tags = $cache_path . '.tags';
-		if (!self::$cache_enabled || !file_exists($cache_path) || filemtime($path) > filemtime($cache_path))
+		if (!self::$cache_enabled || !file_exists($cache_path) || filesize($cache_path) == 0 || !file_exists($cache_idx) || filesize($cache_idx) == 0 || !file_exists($cache_tags) || filesize($cache_tags) == 0 || filemtime($path) > filemtime($cache_path))
 		{
 			$this->blocks = array();
 			$this->index = array();
@@ -296,15 +296,7 @@ class XTemplate
 		{
 			$this->blocks = unserialize(cotpl_read_file($cache_path));
 			$this->index = unserialize(cotpl_read_file($cache_idx));
-			if (file_exists($cache_tags))
-			{
-				$this->tags = unserialize(cotpl_read_file($cache_tags));
-			}
-			else
-			{
-				$this->getTags();
-				file_put_contents($cache_tags, serialize($this->tags));
-			}
+			$this->tags = unserialize(cotpl_read_file($cache_tags));
 		}
 	}
 

@@ -21,6 +21,8 @@ $extra_whitelist = array(
 	$db_structure => array(
 		'name' => $db_structure, 
 		'caption' => $L['Categories'], 
+		'type' => 'system',
+		'code' => 'structure',
 		'tags' => array(
 			'page.list.tpl' => '{LIST_ROWCAT_XXXXX}, {LIST_CAT_XXXXX}',
 			'page.list.group.tpl' => '{LIST_ROWCAT_XXXXX}, {LIST_CAT_XXXXX}',
@@ -44,7 +46,7 @@ foreach (cot_getextplugins('admin.extrafields.first') as $pl)
 if (empty($n) || in_array($n, $extra_blacklist))
 {
 	// no params
-	$sql = $db->query("SHOW TABLES WHERE 1");
+	$sql = $db->query("SHOW TABLES");
 	$tablelist = array();
 	while ($row = $sql->fetch())
 	{
@@ -65,8 +67,19 @@ if (empty($n) || in_array($n, $extra_blacklist))
 	$ii = 0;
 	foreach ($tablelist as $table)
 	{	
+		$icofile = '';
+		$icofile = (($extra_whitelist[$table]['type'] == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $extra_whitelist[$table]['code'] . '/' . $extra_whitelist[$table]['code'] . '.png';
+		$name = '';
+		if($extra_whitelist[$table]['type'] == 'module' || $extra_whitelist[$table]['type'] == 'plug')
+		{
+			$name = (($extra_whitelist[$table]['type'] == 'module') ? $cot_modules[$extra_whitelist[$table]['code']]['title'] : $cot_plugins_enabled[$extra_whitelist[$table]['code']]['title']);
+		}
+		$name = (empty($name)) ? $L['System'] : $name;
+		
 		$ii++;
 		$t->assign(array(
+			'ADMIN_EXTRAFIELDS_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
+			'ADMIN_EXTRAFIELDS_ROW_ITEMNAME' => $name,
 			'ADMIN_EXTRAFIELDS_ROW_TABLENAME' => $table . ((isset($extra_whitelist[$table])) ? " - " . $extra_whitelist[$table]['caption'] : ''),
 			'ADMIN_EXTRAFIELDS_ROW_TABLEURL' => cot_url('admin', 'm=extrafields&n='.$table),
 			'ADMIN_EXTRAFIELDS_COUNTER_ROW' => $ii,

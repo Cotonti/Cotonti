@@ -176,7 +176,7 @@ class CotDB extends PDO {
 	{
 		global $cfg;
 		$this->_count++;
-		if ($cfg['showsqlstats'])
+		if ($cfg['showsqlstats'] || $cfg['debug_mode'])
 		{
 			$this->_xtime = microtime();
 		}
@@ -188,13 +188,13 @@ class CotDB extends PDO {
 	private function _stopTimer($query)
 	{
 		global $cfg, $usr, $sys;
-		if ($cfg['showsqlstats'])
+		if ($cfg['showsqlstats'] || $cfg['debug_mode'])
 		{
 			$ytime = microtime();
 			$xtime = explode(' ',$this->_xtime);
 			$ytime = explode(' ',$ytime);
 			$this->_tcount += $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0];
-			if ($cfg['devmode'] && $usr['isadmin'])
+			if ($cfg['devmode'] || $cfg['debug_mode'])
 			{
 				$sys['devmode']['queries'][] = array ($this->_count, $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query);
 				$sys['devmode']['timeline'][] = $xtime[1] + $xtime[0] - $sys['starttime'];

@@ -262,6 +262,8 @@ $protected = $sys['protecttopadmin'] ? array('disabled' => 'disabled') : array()
 
 $editor_class = $cfg['usertextimg'] ? 'minieditor' : '';
 
+$delete_pfs = cot_module_active('pfs') ? cot_checkbox(false, 'ruserdelpfs', $L['PFS']) : '';
+
 $t->assign(array(
 	'USERS_EDIT_TITLE' => cot_breadcrumbs(array(array(cot_url('users'), $L['Users']), array(cot_url('users', 'm=details&id='.$urr['user_id']), $urr['user_name']), array(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit'])), $cfg['homebreadcrumb']),
 	'USERS_EDIT_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
@@ -290,7 +292,7 @@ $t->assign(array(
 	'USERS_EDIT_LASTLOG_STAMP' => $urr['user_lastlog'],
 	'USERS_EDIT_LOGCOUNT' => $urr['user_logcount'],
 	'USERS_EDIT_LASTIP' => cot_build_ipsearch($urr['user_lastip']),
-	'USERS_EDIT_DELETE' => ($sys['user_istopadmin']) ? cot_radiobox(0, 'ruserdelete', array(1, 0), array($L['Yes'], $L['No'])) . cot_checkbox(false, 'ruserdelpfs', $L['PFS']) : $L['na'],
+	'USERS_EDIT_DELETE' => ($sys['user_istopadmin']) ? cot_radiobox(0, 'ruserdelete', array(1, 0), array($L['Yes'], $L['No'])) . $delete_pfs : $L['na'],
 ));
 
 // Extra fields

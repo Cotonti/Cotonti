@@ -41,7 +41,7 @@ $parser_list = cot_get_parsers();
 
 if ($a == 'add')
 {
-	cot_plugin_active('shield') && cot_shield_protect();
+	cot_shield_protect();
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.add.add.first') as $pl)
@@ -96,7 +96,7 @@ if ($a == 'add')
 							$cfg['page'][$rpage['page_cat']]['allowemptytext'] : $cfg['page']['__default']['allowemptytext'];
 	$allowemptytext || cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
 	
-	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || !cot_auth('plug', $rpage['page_parser'], 'W'))
+	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || $rpage['page_parser'] != 'none' && !cot_auth('plug', $rpage['page_parser'], 'W'))
 	{
 		$rpage['page_parser'] = $cfg['page']['parser'];
 	}
@@ -175,7 +175,8 @@ if ($a == 'add')
 				$cache->page->clear('index');
 			}
 		}
-		cot_plugin_active('shield') && cot_shield_update(30, "r page");
+		cot_shield_update(30, "r page");
+		cot_log("Add page #".$id, 'adm');
 		cot_redirect($r_url);
 	}
 	else

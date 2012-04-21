@@ -80,7 +80,7 @@ foreach (cot_getextplugins('users.auth.first') as $pl)
 
 if ($a == 'check')
 {
-	cot_plugin_active('shield') && cot_shield_protect();
+	cot_shield_protect();
 
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.auth.check') as $pl)
@@ -193,7 +193,7 @@ if ($a == 'check')
 	else
 	{
 		$env['status'] = '401 Unauthorized';
-		cot_plugin_active('shield') && cot_shield_update(7, "Log in");
+		cot_shield_update(7, "Log in");
 		cot_log("Log in failed, user : ".$rusername,'usr');
 		
 		/* === Hook === */

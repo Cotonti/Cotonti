@@ -24,19 +24,19 @@ $pfs_caller = cot_get_caller();
 if ($pfs_caller == 'forums.posts')
 {
 	$pfs_src = 'newpost';
-	$pfs_name = 'newmsg';
+	$pfs_name = 'rmsgtext';
 	$pfs_tag = 'POSTS_NEWPOST';
 }
 elseif ($pfs_caller == 'forums.newtopic')
 {
 	$pfs_src = 'newtopic';
-	$pfs_name = 'newmsg';
+	$pfs_name = 'rmsgtext';
 	$pfs_tag = 'NEWTOPIC';
 }
 else
 {
 	$pfs_src = 'editpost';
-	$pfs_name = 'rtext';
+	$pfs_name = 'rmsgtext';
 	$pfs_tag = 'EDITPOST';
 }
 

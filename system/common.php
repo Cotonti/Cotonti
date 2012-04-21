@@ -450,6 +450,18 @@ if ($cfg['maintenance'] && !defined('COT_INSTALL'))
 	}
 }
 
+/* ======== Anti-hammering =========*/
+
+if ($cfg['shieldenabled'] &&
+	($usr['id'] == 0 || !cot_auth('admin', 'a', 'A') || $cfg['shield_force']))
+{
+	$shield_limit = $_SESSION['online_shield'];
+	$shield_action = $_SESSION['online_action'];
+	$shield_hammer = cot_shield_hammer($_SESSION['online_hammer'], $shield_action, $_SESSION['online_lastseen']);
+	$sys['online_hammer'] = $shield_hammer;
+	$_SESSION['online_lastseen'] = (int)$sys['now'];
+}
+
 /* ======== Zone variables ======== */
 
 $m = cot_import('m', 'G', 'ALP', 24);
@@ -541,8 +553,10 @@ if (empty($x) && COT_AJAX && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	$x = cot_import('x', 'G', 'ALP');
 }
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('COT_NO_ANTIXSS') && !defined('COT_AUTH')
-	&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
+if ($_SERVER['REQUEST_METHOD'] == 'POST'
+	&& (!defined('COT_NO_ANTIXSS') && !defined('COT_AUTH')
+			&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev'])
+		|| ($cfg['referercheck'] && !preg_match('`https?://([^/]+\.)?'.preg_quote($sys['domain'].$sys['site_uri']).'`i', $_SERVER['HTTP_REFERER']))))
 {
 	$cot_error = true;
 	cot_die_message(950, TRUE);

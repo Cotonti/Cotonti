@@ -34,7 +34,7 @@ foreach (cot_getextplugins('pm.send.first') as $pl)
 /* ===== */
 if ($a == 'send')
 {
-	cot_plugin_active('shield') && cot_shield_protect();
+	cot_shield_protect();
 	$newpmtitle = cot_import('newpmtitle', 'P', 'TXT');
 	$newpmtext = cot_import('newpmtext', 'P', 'HTM');
 	$newpmrecipient = cot_import('newpmrecipient', 'P', 'TXT');
@@ -163,7 +163,7 @@ if ($a == 'send')
 			/* ===== */
 
 			if($stats_enabled) { cot_stat_inc('totalpms'); }
-			cot_plugin_active('shield') && cot_shield_update(30, "New private message (".$totalrecipients.")");
+			cot_shield_update(30, "New private message (".$totalrecipients.")");
 			cot_redirect(cot_url('pm', 'f=sentbox'));
 		}
 	}
