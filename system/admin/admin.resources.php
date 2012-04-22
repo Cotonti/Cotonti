@@ -108,21 +108,7 @@ $R['admin_icon_usergroup0'] = '<img class="icon" src="system/admin/img/users-off
 $R['admin_icon_usergroup1'] = '<img class="icon" src="system/admin/img/users.png" title="'.$L['Group1'].'" alt="'.$L['Group1'].'" />';
 
 // Admin Menu
-$R['admin_menu_icon_config'] = '<img src="system/admin/tpl/img/adminmenu/config.png" alt="'.$L['Configuration'].'" />
-	<span>'.$L['Configuration'].'</span>';
-$R['admin_menu_icon_extensions'] = '<img src="system/admin/tpl/img/adminmenu/extensions.png" alt="'.$L['Extensions'].'" />
-	<span>'.$L['Extensions'].'</span>';
-$R['admin_menu_icon_home'] = '<img src="system/admin/tpl/img/adminmenu/home.png" alt="'.$L['Home'].'" />
-	<span>'.$L['Home'].'</span>';
 $R['admin_menu_icon_module'] = '<img src="{$src}" alt="{$title}" /><span>{$title}</span>';
-$R['admin_menu_icon_other'] = '<img src="system/admin/tpl/img/adminmenu/other.png" alt="'.$L['Other'].'" />
-	<span>'.$L['Other'].'</span>';
-$R['admin_menu_icon_structure'] = '<img src="system/admin/tpl/img/adminmenu/structure.png" alt="'.$L['Structure'].'" />
-	<span>'.$L['Structure'].'</span>';
-$R['admin_menu_icon_tools'] = '<img src="system/admin/tpl/img/adminmenu/tools.png" alt="'.$L['Tools'].'" />
-	<span>'.$L['Tools'].'</span>';
-$R['admin_menu_icon_users'] = '<img src="system/admin/tpl/img/adminmenu/users.png" alt="'.$L['Users'].'" />
-	<span>'.$L['Users'].'</span>';
 
 //Extrafields
 $R['admin_exflds_array'] = '{$tplfile}: {$tags}; '
