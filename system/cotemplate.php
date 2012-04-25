@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.6
+ * @version 2.7.7
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2012
  * @license BSD
@@ -1446,7 +1446,7 @@ class Cotpl_var
 			foreach ($chain as $cbk)
 			{
 				if (mb_strpos($cbk, '(') !== false
-					&& preg_match('`(\w+)\s*\((.+?)\)`', $cbk, $mt))
+					&& preg_match('`(\w+)\s*\((.+)\)`', $cbk, $mt))
 				{
 					$this->callbacks[] = array(
 						'name' => $mt[1],
