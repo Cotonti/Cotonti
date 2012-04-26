@@ -598,7 +598,7 @@ function cot_import_pagenav($var_name, $max_items = 0)
 		$page = floor($offset / $max_items) + 1;
 		$urlnum = $offset;
 	}
-
+	$urlnum = ($urlnum > 0) ? $urlnum : '';
 	return array($page, $offset, $urlnum);
 }
 

@@ -164,6 +164,12 @@ if(empty($sql_page_string))
 $totallines = $db->query($sql_page_count, $params)->fetchColumn();
 $sqllist = $db->query($sql_page_string, $params);
 
+if ((!$cfg['easypagenav'] && $durl > 0 && $cfg['page']['maxrowsperpage'] > 0 && $durl % $cfg['page']['maxrowsperpage'] > 0) 
+	|| ($d > 0 && $d >= $totallines))
+{
+	cot_redirect(cot_url('page', $list_url_path + array('dc' => $dcurl)));
+}
+
 $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $totallines, $cfg['page']['maxrowsperpage']);
 
 $out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
