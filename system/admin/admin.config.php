@@ -219,8 +219,8 @@ switch($n)
 		{
 			$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 			$plmod = $o == 'module' ? 'mod' : 'pl';
-
-			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $o == 'module' ? $cot_modules[$p]['title'] : $cot_plugins_enabled[$p]['title']);
+			$ext_info = cot_get_extensionparams($p, $o == 'module');
+			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $ext_info['name']);
 			if (!empty($sub))
 			{
 				$adminpath[] = array(cot_url('admin', 'm=structure&n='.$p), $L['Structure']);
@@ -466,11 +466,11 @@ switch($n)
 		while ($row = $sql->fetch())
 		{
 			$jj++;
-			$icofile = $cfg['modules_dir'] . '/' . $row['config_cat'] . '/' . $row['config_cat'] . '.png';
+			$ext_info = cot_get_extensionparams($row['config_cat'], true);
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=module&p='.$row['config_cat']),
-				'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
-				'ADMIN_CONFIG_ROW_NAME' => $cot_modules[$row['config_cat']]['title'],
+				'ADMIN_CONFIG_ROW_ICO' => $ext_info['icon'],
+				'ADMIN_CONFIG_ROW_NAME' => $ext_info['name'],
 				'ADMIN_CONFIG_ROW_NUM' => $jj,
 				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 			));
@@ -490,11 +490,11 @@ switch($n)
 		while ($row = $sql->fetch())
 		{
 			$jj++;
-			$icofile = $cfg['plugins_dir'] . '/' . $row['config_cat'] . '/' . $row['config_cat'] . '.png';
+			$ext_info = cot_get_extensionparams($row['config_cat'], false);
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p='.$row['config_cat']),
-				'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
-				'ADMIN_CONFIG_ROW_NAME' => htmlspecialchars($row['ct_title']),
+				'ADMIN_CONFIG_ROW_ICO' => $ext_info['icon'],
+				'ADMIN_CONFIG_ROW_NAME' => $ext_info['name'],
 				'ADMIN_CONFIG_ROW_NUM' => $jj,
 				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 			));

@@ -41,11 +41,11 @@ if (empty($n))
 	{
 		foreach ($structure as $code => $mod)
 		{
-			$icofile = $cfg['modules_dir'] . '/' . $code . '/' . $code . '.png';
+			$ext_info = cot_get_extensionparams($code, true);
 			$t->assign(array(
 				'ADMIN_STRUCTURE_EXT_URL' => cot_url('admin', 'm=structure&n='.$code),
-				'ADMIN_STRUCTURE_EXT_ICO' => (file_exists($icofile)) ? $icofile : '',
-				'ADMIN_STRUCTURE_EXT_NAME' => htmlspecialchars($cot_modules[$code]['title'])
+				'ADMIN_STRUCTURE_EXT_ICO' => $ext_info['icon'],
+				'ADMIN_STRUCTURE_EXT_NAME' => $ext_info['name']
 			));
 			$t->parse('LIST.ADMIN_STRUCTURE_EXT');
 		}
@@ -272,7 +272,11 @@ else
 		($cache && $cfg['cache_'.$n]) && $cache->page->clear($n);
 		cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 	}
-
+	$ext_info = cot_get_extensionparams($n, true);
+	$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
+	$adminpath[] = array(cot_url('admin', 'm='.$n), $ext_info['name']);
+	$adminpath[] = array (cot_url('admin', 'm=structure&n=page'), $L['Structure']);
+	
 	if($id > 0 || !empty($al))
 	{
 		$where = $id > 0 ? 'structure_id='.(int)$id  : "structure_code='".$db->prep($al)."'";

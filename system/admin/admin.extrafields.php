@@ -67,18 +67,18 @@ if (empty($n) || in_array($n, $extra_blacklist))
 	$ii = 0;
 	foreach ($tablelist as $table)
 	{	
-		$icofile = '';
-		$icofile = (($extra_whitelist[$table]['type'] == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $extra_whitelist[$table]['code'] . '/' . $extra_whitelist[$table]['code'] . '.png';
 		$name = '';
+		$ext_info = array();
 		if($extra_whitelist[$table]['type'] == 'module' || $extra_whitelist[$table]['type'] == 'plug')
 		{
-			$name = (($extra_whitelist[$table]['type'] == 'module') ? $cot_modules[$extra_whitelist[$table]['code']]['title'] : $cot_plugins_enabled[$extra_whitelist[$table]['code']]['title']);
+			$ext_info = cot_get_extensionparams($extra_whitelist[$table]['code'], $extra_whitelist[$table]['type'] == 'module');
+			$name = $ext_info['name'];
 		}
 
 		$name = (empty($name)) ? $extra_whitelist[$table]['caption'] : $name;
 		$ii++;
 		$t->assign(array(
-			'ADMIN_EXTRAFIELDS_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
+			'ADMIN_EXTRAFIELDS_ROW_ICO' => $ext_info['icon'],
 			'ADMIN_EXTRAFIELDS_ROW_ITEMNAME' => $name,
 			'ADMIN_EXTRAFIELDS_ROW_TABLENAME' => $table . ((isset($extra_whitelist[$table])) ? " - " . $extra_whitelist[$table]['caption'] : ''),
 			'ADMIN_EXTRAFIELDS_ROW_TABLE' => $table,

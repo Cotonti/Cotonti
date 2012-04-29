@@ -20,9 +20,6 @@ defined('COT_CODE') or die('Wrong URL');
 if ($n == 'forums')
 {
 	require_once cot_incfile('forums', 'module');
-	$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
-	$adminpath[] = array(cot_url('admin', 'm=forums'), $cot_modules[$n]['title']);
-	$adminpath[] = array (cot_url('admin', 'm=structure&n=forums'), $L['Categories']);
 	$adminhelp = $L['adm_help_structure'];
 }
 

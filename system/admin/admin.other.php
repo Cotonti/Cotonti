@@ -88,13 +88,11 @@ else
 		if ($type == 'module')
 		{
 			$target = $cot_plugins['admin'];
-			$dir = $cfg['modules_dir'];
 			$title = $L['Modules'];
 		}
 		else
 		{
 			$target = $cot_plugins['tools'];
-			$dir = $cfg['plugins_dir'];
 			$title = $L['Plugins'];
 		}
 		if (is_array($target))
@@ -102,28 +100,12 @@ else
 			usort($target, 'cot_admin_other_cmp');
 			foreach ($target as $pl)
 			{
-				$extplugin_info = $dir .'/' . $pl['pl_code'] .'/' . $pl['pl_code'] . '.setup.php';
-
-				if(file_exists($extplugin_info))
-				{
-					$info = cot_infoget($extplugin_info, 'COT_EXT');
-					if (!$info && cot_plugin_active('genoa'))
-					{
-						$info = cot_infoget($extplugin_info, 'SED_EXTPLUGIN');
-					}
-				}
-				else
-				{
-					include_once cot_langfile('message', 'core');
-					$info['Name'] = $pl['pl_code'] . ' : '. $L['msg907_1'];
-				}
-				$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $pl['pl_code'] . '/' . $pl['pl_code'] . '.png';
-				
+				$ext_info = cot_get_extensionparams($pl['pl_code'], $type == 'module');	
 				$t->assign(array(
 					'ADMIN_OTHER_EXT_URL' => $type == 'plug' ? cot_url('admin', 'm=other&p=' . $pl['pl_code']) :
 						cot_url('admin', 'm=' . $pl['pl_code']),
-					'ADMIN_OTHER_EXT_ICO' => (file_exists($icofile)) ? $icofile : '',
-					'ADMIN_OTHER_EXT_NAME' => $info['Name']
+					'ADMIN_OTHER_EXT_ICO' => $ext_info['icon'],
+					'ADMIN_OTHER_EXT_NAME' => $ext_info['name']
 				));
 				$t->parse('MAIN.SECTION.ROW');
 			}
