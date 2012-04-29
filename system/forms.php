@@ -463,13 +463,13 @@ function cot_filebox($name, $value = '', $filepath = '', $delname ='', $attrs = 
 	if(empty($value))
 	{
 		$rc = empty($custom_rc[1])
-			? (empty($R["input_file_{$rc_name}_empty"]) ? "input_file_empty" : "input_file_{$rc_name}_empty")
+			? (empty($R["input_filebox_{$rc_name}_empty"]) ? "input_filebox_empty" : "input_filebox_{$rc_name}_empty")
 			: $custom_rc[1];
 	}
 	else
 	{
 		$rc = empty($custom_rc[0])
-			? (empty($R["input_file_{$rc_name}"]) ? "input_file" : "input_file_{$rc_name}")
+			? (empty($R["input_filebox_{$rc_name}"]) ? "input_filebox" : "input_filebox_{$rc_name}")
 			: $custom_rc[0];
 	}
 	

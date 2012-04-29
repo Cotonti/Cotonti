@@ -27,8 +27,8 @@ $R['input_textarea'] = '<textarea name="{$name}" rows="{$rows}" cols="{$cols}"{$
 $R['input_textarea_editor'] =  '<textarea class="editor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_medieditor'] =  '<textarea class="medieditor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_minieditor'] =  '<textarea class="minieditor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
-$R['input_file'] = '<a href="{$filepath}">{$value}</a><br /><input type="file" name="{$name}" {$attrs} /><br /><label><input type="checkbox" name="{$delname}" value="1" />'.$L['Delete'].'</label>{$error}';
-$R['input_file_empty'] = '<input type="file" name="{$name}" {$attrs} />{$error}';
+$R['input_filebox'] = '<a href="{$filepath}">{$value}</a><br /><input type="file" name="{$name}" {$attrs} /><br /><label><input type="checkbox" name="{$delname}" value="1" />'.$L['Delete'].'</label>{$error}';
+$R['input_filebox_empty'] = '<input type="file" name="{$name}" {$attrs} />{$error}';
 
 $R['input_date'] =  '{$day} {$month} {$year} {$hour}: {$minute}';
 $R['input_date_short'] =  '{$day} {$month} {$year}';
@@ -107,6 +107,7 @@ $R['img_none'] = '<img src="{$src}" alt="'.$L['Image'].'" />';
 $R['img_pixel'] = '<img src="images/pixel.gif" width="{$x}" height="{$y}" alt="" />';
 $R['img_smilie'] = '<img src="{$src}" alt="{$name}" class="icon" />';
 $R['link_catpath'] = '<a href="{$url}" title="{$title}">{$title}</a>';
+$R['string_catpath'] = '<span>{$title}</span>';
 $R['link_email'] = '<a href="mailto:{$email}">{$email}</a>';
 
 
