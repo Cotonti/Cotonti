@@ -1263,9 +1263,11 @@ function cot_blockguests()
  * @param bool $home Whether to include link to home page in the root
  * @param bool $nolast If TRUE, last crumb will be rendered as plain text rather than hyperlink
  * @param bool $plain If TRUE plain titles will be rendered instead of hyperlinks
+ * @param string $inrc Item template
+ * @param string $separator Items separator
  * @return string
  */
-function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false)
+function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false, $inrc = '', $separator = '')
 {
 	global $cfg, $L;
 	$tmp = array();
@@ -1277,9 +1279,10 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false)
 	$cnt = count($crumbs);
 	for ($i = 0; $i < $cnt; $i++)
 	{
+		$elem = '';
 		if (is_array($crumbs[$i]))
 		{
-			$tmp[] = ($plain || $nolast && $i === $cnt - 1) ? 
+			$elem = ($plain || $nolast && $i === $cnt - 1) ? 
 				cot_rc('string_catpath', array('title' => htmlspecialchars($crumbs[$i][1], ENT_COMPAT, 'UTF-8', false)))
 				: cot_rc('link_catpath', array(
 					'url' => (!empty($crumbs[$i][0])) ? $crumbs[$i][0] : '#',
@@ -1288,10 +1291,17 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false)
 		}
 		elseif (is_string($crumbs[$i]))
 		{
-			$tmp[] = cot_rc('string_catpath', array('title' => $crumbs[$i]));
+			$elem = cot_rc('string_catpath', array('title' => $crumbs[$i]));
 		}
+		if(!empty($inrc))
+		{
+			$elem = cot_rc($inrc, array('elem' => $elem));
+		}
+		$tmp[] = $elem;
 	}
-	$separator = (mb_strlen($cfg['separator']) > 2) ? $cfg['separator'] : ' '.$cfg['separator'].' ';
+	$separator = (!empty($separator) || !empty($inrc)) ? $separator : $cfg['separator'];
+		
+	$separator = (!empty($inrc) && (mb_strlen($separator) > 2 || empty($separator))) ? $separator : ' '.$separator.' ';
 	return implode($separator, $tmp);
 }
 
