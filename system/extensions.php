@@ -301,7 +301,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 				else
 				{
 					$order = array_map('trim', explode(',', $part_info['Order']));
-					if (count($order) == 1)
+					if (count($order) == 1 || count($order) < count($hooks))
 					{
 						$order = (int) $order[0];
 					}

@@ -5,7 +5,7 @@ Code=recentitems
 Name=Recent items
 Category=publications-events
 Description=Recent pages, topics in forums, users, comments
-Version=0.9.2
+Version=0.9.10
 Date=2012-03-08
 Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2012
@@ -20,7 +20,6 @@ Recommends_plugins=comments
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-part=10:select:index,header:index:Part where recent items should be called
 recentpages=11:radio::1:Recent pages on index
 maxpages=12:string::5:Recent pages displayed
 recentpagestitle=13:string:::Recent pages title length limit
@@ -42,7 +41,7 @@ blacklist=32:text:::Black list of categories
  * Recent pages, topics in forums, users, comments
  *
  * @package recentitems
- * @version 0.7.0
+ * @version 0.9.10
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
