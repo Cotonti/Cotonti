@@ -37,9 +37,13 @@ if (empty($n))
 {
 	$adminpath[] = array(cot_url('admin', 'm=structure'), $L['Structure']);
 	// Show available module list
-	if (is_array($structure) && count($structure) > 0)
+	if(is_array($modules_structure) && count($modules_structure) == 1)
 	{
-		foreach ($structure as $code => $mod)
+		cot_redirect(cot_url('admin', 'm=structure&n='.$modules_structure[0], '', true));
+	}
+	if (is_array($modules_structure) && count($modules_structure) > 0)
+	{
+		foreach ($modules_structure as $code)
 		{
 			$ext_info = cot_get_extensionparams($code, true);
 			$t->assign(array(
@@ -68,6 +72,11 @@ else
 	{
 		require_once cot_incfile($n, 'module');
 	}
+	if (empty($adminhelp))
+	{
+		$adminhelp = $L['adm_help_structure'];
+	}
+	
 	if ($a == 'update' && !empty($_POST))
 	{
 		$rstructurecode = cot_import('rstructurecode', 'P', 'ARR');

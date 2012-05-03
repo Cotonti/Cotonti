@@ -17,10 +17,6 @@ Hooks=admin.structure.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($n == 'page')
-{
-	require_once cot_incfile('page', 'module');
-	$adminhelp = $L['adm_help_structure'];
-}
+$modules_structure[] = 'page';
 
 ?>
