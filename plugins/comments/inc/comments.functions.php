@@ -174,10 +174,18 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	}
 
 	$order = $cfg['plugin']['comments']['order'] == 'Chronological' ? 'ASC' : 'DESC';
+	$comments_order = "com_id $order";
 
-	$sql = $db->query("SELECT c.*, u.*
-		FROM $db_com AS c LEFT JOIN $db_users AS u ON u.user_id = c.com_authorid
-		WHERE com_area = ? AND com_code = ? ORDER BY com_id $order LIMIT ?, ?",
+	/* == Hook == */
+	foreach (cot_getextplugins('comments.query') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
+	$sql = $db->query("SELECT c.*, u.* $comments_join_columns
+		FROM $db_com AS c LEFT JOIN $db_users AS u ON u.user_id = c.com_authorid $comments_join_tables
+		WHERE com_area = ? AND com_code = ? $comments_join_where ORDER BY $comments_order LIMIT ?, ?",
 		array($ext_name, $code, (int) $d, (int) $cfg['plugin']['comments']['maxcommentsperpage']));
 	if ($sql->rowCount() > 0 && $enabled)
 	{
