@@ -40,6 +40,14 @@ if ($usr['id'] > 0)
 {
 	sed_sql_query("UPDATE $db_users SET user_lastvisit = {$sys['now_offset']} WHERE user_id = " . $usr['id']);
 	sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
+
+	$all = cot_import('all', 'G', 'BOL');
+	if ($all)
+	{
+		// Log out on all devices
+		$db->update($db_users, array('user_sid' => ''), "user_id = " . $usr['id']);
+	}
+
 	sed_uriredir_redirect(empty($redirect) ? sed_url('index') : base64_decode($redirect));
 	exit;
 }

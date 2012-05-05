@@ -58,7 +58,7 @@ if ($a=='check')
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	$sql = sed_sql_query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_skin, user_theme, user_lang FROM $db_users WHERE $user_select_condition");
+	$sql = sed_sql_query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_skin, user_theme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
@@ -87,15 +87,28 @@ if ($a=='check')
 		}
 
 		$ruserid = $row['user_id'];
-		$rdefskin = $row['user_skin'];
 		$rdeftheme = $row['user_theme'];
+		$rdefscheme = $row['user_scheme'];
 
 		$token = sed_unique(16);
-		$sid = sed_unique(32);
 
-		sed_sql_query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_logcount = user_logcount + 1, user_token = '$token', user_sid = '$sid' WHERE user_id={$row['user_id']}");
+		$sid = hash_hmac('sha256', $rmdpass . $row['user_sidtime'], $cfg['secret_key']);
 
-		$u = $ruserid.':'.$sid;
+		if (empty($row['user_sid']) || $row['user_sid'] != $sid
+			|| $row['user_sidtime'] + $cfg['cookielifetime'] < $sys['now_offset'])
+		{
+			// Generate new session identifier
+			$sid = hash_hmac('sha256', $rmdpass . $sys['now_offset'], $cfg['secret_key']);
+			$update_sid = ", user_sid = '" . sed_sql_prep($sid) . "', user_sidtime = " . $sys['now_offset'];
+		}
+		else
+		{
+			$update_sid = '';
+		}
+
+		sed_sql_query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_logcount = user_logcount + 1, user_token = '$token' $update_sid WHERE user_id={$row['user_id']}");
+
+		$u = base64_encode($ruserid.':'.$sid);
 
 		if($rremember)
 		{

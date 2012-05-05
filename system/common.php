@@ -224,9 +224,9 @@ sed_unregister_globals();
 
 if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
-	$u = empty($_SESSION[$site_id]) ? explode(':', $_COOKIE[$site_id]) : explode(':', $_SESSION[$site_id]);
+	$u = empty($_SESSION[$site_id]) ? explode(':', base64_decode($_COOKIE[$site_id])) : explode(':', base64_decode($_SESSION[$site_id]));
 	$u_id = (int) sed_import($u[0], 'D', 'INT');
-	$u_sid = sed_import($u[1], 'D', 'ALP');
+	$u_sid = sed_sql_prep($u[1]);
 	if ($u_id > 0)
 	{
 		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = '$u_sid'");
@@ -234,7 +234,8 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 		if ($row = sed_sql_fetcharray($sql))
 		{
 			if ($row['user_maingrp'] > 3
-				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip']))
+				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip'])
+				&& $row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now_offset'])
 			{
 				$usr['id'] = (int) $row['user_id'];
 				$usr['name'] = $row['user_name'];
