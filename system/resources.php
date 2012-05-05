@@ -47,7 +47,7 @@ $R['icon_stars'] = '<img class="icon" src="images/icons/'.$cfg['defaulticons'].'
 $R['code_title_page_num'] = ' (' . $L['Page'] . ' {$num})';
 $R['link_pagenav_current'] = '<span class="pagenav_current"><a href="{$url}"{$event}{$rel}>{$num}</a></span>';
 $R['link_pagenav_first'] = '<span class="pagenav_first"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_first'].'</a></span>';
-$R['link_pagenav_gap'] = '<span class="pagenav_pages">...</span>';
+$R['link_pagenav_gap'] = '<span class="pagenav_pages pagenav_gap">...</span>';
 $R['link_pagenav_last'] = '<span class="pagenav_last"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_last'].'</a></span>';
 $R['link_pagenav_main'] = '<span class="pagenav_pages"><a href="{$url}"{$event}{$rel}>{$num}</a></span>';
 $R['link_pagenav_next'] = '<span class="pagenav_next"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_next'].'</a></span>';
