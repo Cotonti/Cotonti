@@ -332,6 +332,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj < $cfg['maxrowsperpage']))
 	"LIST_ROW_DESC_OR_TEXT" => sed_cutpost($pag['page_text'], 200, false),
 	"LIST_ROW_AUTHOR" => htmlspecialchars($pag['page_author']),
 	"LIST_ROW_OWNER" => sed_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
+	"LIST_ROW_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
 	"LIST_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
 	"LIST_ROW_BEGIN" => @date($cfg['formatyearmonthday'], $pag['page_begin'] + $usr['timezone'] * 3600),
 	"LIST_ROW_EXPIRE" => @date($cfg['formatyearmonthday'], $pag['page_expire'] + $usr['timezone'] * 3600),	
