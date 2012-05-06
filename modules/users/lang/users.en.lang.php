@@ -19,6 +19,7 @@ $L['cfg_regnoactivation'] = array('Skip email check for new users', '\'No\'recom
 $L['cfg_regrequireadmin'] = array('Administrators must validate new accounts', '');
 $L['cfg_user_email_noprotection'] = array('Disable password protection of email change', '\'No\' recommended, for security reasons');
 $L['cfg_useremailchange'] = array('Allow users to change their email address', '\'No\' recommended, for security reasons');
+$L['cfg_useremailduplicate'] = array('Allow multiple users with the same email address', '\'No\' recommended, for security reasons');
 $L['cfg_usertextmax'] = array('Maximum length for user signature', '');
 
 ?>

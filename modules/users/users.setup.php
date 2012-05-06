@@ -20,8 +20,9 @@ maxusersperpage=02:string::50:
 regrequireadmin=03:radio::0:
 regnoactivation=04:radio::0:
 useremailchange=05:radio::0:
-user_email_noprotection=06:radio::0:
-usertextmax=07:string::300:
+useremailduplicate=06:radio::0:
+user_email_noprotection=07:radio::0:
+usertextmax=08:string::300:
 [END_COT_EXT_CONFIG]
 ==================== */
 
