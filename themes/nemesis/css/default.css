@@ -34,7 +34,6 @@ sup			{ top:-.5em; }
 #main				{ padding:30px 0 15px; }
 
 .block				{ margin:0 10px 25px; }
-.column				{ margin:0 10px; position:relative; float:left; }
 
 .col, .col4-1, .col4-2, .col4-3, .col3-1, .col3-2, .col2-1		{ float:left; }
 
@@ -210,7 +209,9 @@ button::-moz-focus-inner		{ padding:0; border:none; }
 .combox		{ font-size:2em; text-align:center; margin:0 10px 5px 0; padding-top:6px; height:42px; width:48px; background:url(../img/comments.png) no-repeat 0 0; float:left; }
 .textbox	{ margin-bottom:10px; overflow:auto; }
 
-.readmore	{ display:block; }
+span.readmore		{ display:block; }
+	span.readmore a	{  }
+
 .download	{ margin:10px 0; padding:10px 0 10px 84px; background:url(../img/download.png) no-repeat 10px 12px; border:1px dashed #c00; }
 
 .clearfix:before, .clearfix:after	{ content:'\0020'; display:block; overflow:hidden; visibility:hidden; width:0; height:0; }
