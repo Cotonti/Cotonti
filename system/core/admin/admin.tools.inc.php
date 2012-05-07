@@ -122,9 +122,9 @@ else
 			else
 			{
 				include_once($cfg['system_dir'].'/lang/en/message.lang.php');
-				if($lang!='en')
+				if($lang != 'en')
 				{
-					include_once($cfg['system_dir'].'/lang/$lang/message.lang.php');
+					include_once($cfg['system_dir']."/lang/$lang/message.lang.php");
 				}
 				$info['Name'] = $x[0]." : ".$L['msg907_1'];
 			}
