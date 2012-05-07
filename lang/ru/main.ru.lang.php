@@ -442,7 +442,7 @@ $L['December_s'] = 'дек';
  */
 
 $Ln['decimal_point'] = ',';
-$Ln['thousands_seperator'] = ' ';
+$Ln['thousands_separator'] = ' ';
 
 /**
  * Gender

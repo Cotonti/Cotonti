@@ -1555,7 +1555,7 @@ function cot_build_number($number, $decimals = 0, $round = null)
 	{
 		$number = round($number, $round);
 	}
-	return number_format($number, $decimals, $Ln['decimal_point'], $Ln['thousands_seperator']);
+	return number_format($number, $decimals, $Ln['decimal_point'], $Ln['thousands_separator']);
 }
 
 /**
