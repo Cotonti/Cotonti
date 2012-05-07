@@ -64,6 +64,7 @@ function cot_backtrace($clear_screen = TRUE)
 	if ($clear_screen)
 	{
 		ob_end_clean();
+		cot_sendheaders('text/plain');
 	}
 	debug_print_backtrace();
 	if ($clear_screen)
