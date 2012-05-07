@@ -3,26 +3,31 @@
 	</div>
 
 	<div id="footer" class="body clear">
-		<ul class="column">
-			<li><strong>Stay tuned!</strong></li>
-			<!-- IF {PHP.cot_modules.rss} -->
-			<li>{PHP.R.icon_rss} <a href="{PHP|cot_url('rss')}" title="{PHP.L.RSS_Feeds}">RSS</a></li>
-			<!-- IF {PHP.cfg.forums} -->
-			<li>{PHP.R.icon_rss} <a href="{PHP|cot_url('rss','c=forums')}" title="{PHP.L.RSS_Feeds} {PHP.cfg.separator} {PHP.L.Forums}"> RSS (<span class="lower">{PHP.L.Forums}</span>)</a></li>
-			<!-- ENDIF -->
-			<!-- ENDIF -->
-			<li class="margintop10"><a href="http://www.seditio.by" title="Free and Commercial Cotonti Themes and Plugins">Nemesis Theme by Seditio.by</a></li>
-		</ul>
-		<ul class="column">
-			<li><strong>{PHP.L.Navigation}</strong></li>
-			<li><a href="{PHP.cfg.mainurl}" title="{PHP.L.Home}">{PHP.L.Home}</a></li>
-			<!-- IF {PHP.cot_modules.forums} -->
-			<li><a href="{PHP|cot_url('forums')}" title="{PHP.L.Forums}">{PHP.L.Forums}</a></li>
-			<!-- ENDIF -->
-			<li><a href="{PHP|cot_url('page','c=news')}" title="{PHP.L.News}">{PHP.L.News}</a></li>
-			<li><a href="{PHP|cot_url('users')}" title="{PHP.L.Users}">{PHP.L.Users}</a></li>
-		</ul>
-		<ul id="account" class="column">
+		<div class="col4-1">
+			<ul class="block">
+				<li><strong>Stay tuned!</strong></li>
+				<!-- IF {PHP.cot_modules.rss} -->
+				<li>{PHP.R.icon_rss} <a href="{PHP|cot_url('rss')}" title="{PHP.L.RSS_Feeds}">RSS</a></li>
+				<!-- IF {PHP.cfg.forums} -->
+				<li>{PHP.R.icon_rss} <a href="{PHP|cot_url('rss','c=forums')}" title="{PHP.L.RSS_Feeds} {PHP.cfg.separator} {PHP.L.Forums}"> RSS (<span class="lower">{PHP.L.Forums}</span>)</a></li>
+				<!-- ENDIF -->
+				<!-- ENDIF -->
+				<li class=""><a href="http://www.seditio.by" title="Free and Commercial Cotonti Themes and Plugins">Nemesis Theme by Seditio.by</a></li>
+			</ul>
+		</div>
+		<div class="col4-1">
+			<ul class="block">
+				<li><strong>{PHP.L.Navigation}</strong></li>
+				<li><a href="{PHP.cfg.mainurl}" title="{PHP.L.Home}">{PHP.L.Home}</a></li>
+				<!-- IF {PHP.cot_modules.forums} -->
+				<li><a href="{PHP|cot_url('forums')}" title="{PHP.L.Forums}">{PHP.L.Forums}</a></li>
+				<!-- ENDIF -->
+				<li><a href="{PHP|cot_url('page','c=news')}" title="{PHP.L.News}">{PHP.L.News}</a></li>
+				<li><a href="{PHP|cot_url('users')}" title="{PHP.L.Users}">{PHP.L.Users}</a></li>
+			</ul>
+		</div>
+		<div class="col4-2">
+		<ul id="account" class="block">
 <!-- BEGIN: GUEST -->
 			<li><strong>{PHP.L.hea_youarenotlogged}</strong></li>
 			<li><a href="{PHP|cot_url('login')}">{PHP.L.Login}</a></li>
@@ -45,6 +50,7 @@
 			<li>{PHP.out.loginout}</li>
 <!-- END: USER -->
 		</ul>
+		</div>
 		<hr />
 <!-- While keeping copyright notice is optional, you can place a backlink to cotonti.com to support the Developers Team -->
 		<div id="powered">{FOOTER_COPYRIGHT}</div>

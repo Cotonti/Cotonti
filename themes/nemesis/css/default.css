@@ -47,16 +47,12 @@ sup			{ top:-.5em; }
 
 .col.first, .col4-1.first, .col4-2.first, .col4-3.first, .col3-1.first, .col3-2.first, .col2-1.first	{ margin-left:0; clear:left; }
 
-#footer				{ font-size:.9em; color:#f8f8f8; margin-bottom:10px; padding:20px 40px; width:880px; background:#667e72; }
-#footer a			{ color:#fff; }
-#footer strong		{ color:#a1b3aa; text-shadow:0 -1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
-
-#footer ul 				{ width:200px; }
-#footer ul  img			{ vertical-align:-4px; }
-#footer ul#account		{ width:420px; }
-#footer ul#account img	{ margin-top:3px; }
-
-#footer hr			{ border:0!important; }
+#footer				{ font-size:.9em; color:#f8f8f8; margin-bottom:10px; padding:20px 0; background:#667e72; }
+	#footer a				{ color:#fff; }
+	#footer strong			{ color:#a1b3aa; text-shadow:0 -1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
+	#footer ul  img			{ vertical-align:-4px; }
+	#footer ul#account img	{ margin-top:5px; }
+	#footer hr				{ border:0!important; }
 
 /* 3. Headings
 -------------------------------------------------- */
