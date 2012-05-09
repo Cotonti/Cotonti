@@ -145,7 +145,7 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 			{
 				foreach($cot_extrafields[$db_users] as $exfld) 
 				{ 
-					cot_extrafield_unlinkfiles($sql['user_'.$exfld['field_name']], $exfld);
+					cot_extrafield_unlinkfiles($row['user_'.$exfld['field_name']], $exfld);
 				}
 				
 				$sql = $db->delete($db_users, "user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");

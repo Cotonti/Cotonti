@@ -409,7 +409,7 @@ if (!$cache || !$cot_cfg)
 	// Fill missing options with default values
 	foreach ($structure as $module => $mod_struct)
 	{
-		if (is_array($cfg[$module]['__default']))
+		if (is_array($cfg[$module]['__default']) && is_array($mod_struct))
 		{
 			foreach ($mod_struct as $cat => $row)
 			{

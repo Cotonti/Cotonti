@@ -121,6 +121,7 @@ if ($a == 'add')
 			if ($usr['isadmin'] && $cfg['page']['autovalidate'])
 			{
 				$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
+				$cache && $cache->db->remove('structure', 'system');
 			}
 			else
 			{

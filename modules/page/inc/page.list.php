@@ -296,9 +296,13 @@ $extp = cot_getextplugins('page.list.rowcat.loop');
 foreach ($subcat as $x)
 {
 	$kk++;
-	$sub_count = $db->query("SELECT SUM(structure_count) FROM $db_structure
-		WHERE structure_path LIKE '".$db->prep($structure['page'][$x]['rpath']).".%'
-		OR structure_path = ".$db->quote($structure['page'][$x]['rpath']))->fetchColumn();
+	$cat_childs = cot_structure_children('page', $x);
+	$sub_count = 0;
+	foreach ($cat_childs as $cat_child)
+	{
+		$sub_count += (int)$structure['page'][$cat_child]['count'];
+	}
+	
 	$sub_url_path = $list_url_path;
 	$sub_url_path['c'] = $x;
 	$t->assign(array(

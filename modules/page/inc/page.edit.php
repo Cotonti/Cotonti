@@ -182,6 +182,7 @@ if ($a == 'update')
 		{
 			$db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='" . $db->prep($rpage['page_cat']) . "' ");
 		}
+		$cache && $cache->db->remove('structure', 'system');
 
 		$sql_page_update = $db->update($db_pages, $rpage, 'page_id=?', array($id));
 		cot_extrafield_movefiles();
