@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.3
+ * @version 2.7.7
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2012
  * @license BSD
@@ -38,6 +38,11 @@ class XTemplate
 	 * @var array Index for quick block search.
 	 */
 	protected $index = array();
+	/**
+	 * Contains a list of names of all tags present in the template
+	 * @var array
+	 */
+	protected $tags = null;
 	/**
 	 * @var bool Enables disk caching of precompiled templates
 	 */
@@ -113,7 +118,7 @@ class XTemplate
 	 * @param int $length_limit Max length of a value in the output
 	 * @return string A list elemented for debug output
 	 */
-	public static function debug_var($name, $value, $length_limit = 60)
+	public static function debugVar($name, $value, $length_limit = 60)
 	{
 		if (is_numeric($value))
 		{
@@ -143,6 +148,48 @@ class XTemplate
 	public function get($name)
 	{
 		return $this->vars[$name];
+	}
+	
+	/**
+	 * Returns the list of names of all tags present in the template
+	 * @return array
+	 */
+	public function getTags()
+	{
+		if (is_null($this->tags))
+		{
+			// Collect all tags
+			$this->tags = array();
+			foreach ($this->blocks as $block)
+			{
+				$this->tags = array_merge($this->tags, $block->getTags());
+			}
+		}
+		return array_keys($this->tags);
+	}
+	
+	/**
+	 * Returns TRUE if the block is present in template or FALSE otherwise
+	 * @param string $name Full block name including dots and parent blocks
+	 * @return boolean 
+	 */
+	public function hasBlock($name)
+	{
+		return isset($this->index[$name]);
+	}
+	
+	/**
+	 * Returns TRUE if the tag is present in template or FALSE otherwise
+	 * @param string $name Tag name (case-sensitive)
+	 * @return boolean 
+	 */
+	public function hasTag($name)
+	{
+		if (is_null($this->tags))
+		{
+			$this->getTags();
+		}
+		return isset($this->tags[$name]);
 	}
 
 	/**
@@ -212,7 +259,8 @@ class XTemplate
 		$this->vars = array();
 		$cache_path = self::$cache_dir . '/templates/' . str_replace(array('./', '/'), '_', $path);
 		$cache_idx = $cache_path . '.idx';
-		if (!self::$cache_enabled || !file_exists($cache_path) || filemtime($path) > filemtime($cache_path))
+		$cache_tags = $cache_path . '.tags';
+		if (!self::$cache_enabled || !file_exists($cache_path) || filesize($cache_path) == 0 || !file_exists($cache_idx) || filesize($cache_idx) == 0 || !file_exists($cache_tags) || filesize($cache_tags) == 0 || filemtime($path) > filemtime($cache_path))
 		{
 			$this->blocks = array();
 			$this->index = array();
@@ -235,6 +283,8 @@ class XTemplate
 				{
 					file_put_contents($cache_path, serialize($this->blocks));
 					file_put_contents($cache_idx, serialize($this->index));
+					$this->getTags();
+					file_put_contents($cache_tags, serialize($this->tags));
 				}
 				else
 				{
@@ -246,6 +296,7 @@ class XTemplate
 		{
 			$this->blocks = unserialize(cotpl_read_file($cache_path));
 			$this->index = unserialize(cotpl_read_file($cache_idx));
+			$this->tags = unserialize(cotpl_read_file($cache_tags));
 		}
 	}
 
@@ -327,12 +378,12 @@ class XTemplate
 						// One level of nesting is supported
 						foreach ($val as $key2 => $val2)
 						{
-							echo self::debug_var($key . '.' . $key2, $val2);
+							echo self::debugVar($key . '.' . $key2, $val2);
 						}
 					}
 					else
 					{
-						echo self::debug_var($key, $val);
+						echo self::debugVar($key, $val);
 					}
 				}
 				echo "</ul>";
@@ -637,6 +688,23 @@ class Cotpl_block
 		}
 		while (!empty($code));
 	}
+	
+	/**
+	 * Returns the list of tag names present in the block
+	 * @return array 
+	 */
+	public function getTags()
+	{
+		$list = array();
+		foreach ($this->blocks as $block)
+		{
+			if ($block instanceof Cotpl_data || $block instanceof Cotpl_block)
+			{
+				$list = array_merge($list, $block->getTags());
+			}
+		}
+		return $list;
+	}
 
 	/**
 	 * Parses block contents
@@ -733,6 +801,23 @@ class Cotpl_data
 			}
 		}
 		return $str . "\n";
+	}
+	
+	/**
+	 * Returns the list of tag names present in data block
+	 * @return array 
+	 */
+	public function getTags()
+	{
+		$list = array();
+		foreach ($this->chunks as $chunk)
+		{
+			if ($chunk instanceof Cotpl_var)
+			{
+				$list[$chunk->name] = true;
+			}
+		}
+		return $list;
 	}
 
 	/**
@@ -1149,6 +1234,29 @@ class Cotpl_logical extends Cotpl_block
 		$str .= "<!-- ENDIF -->\n";
 		return $str;
 	}
+	
+	/**
+	 * Returns the list of tag names present in the block
+	 * @return array 
+	 */
+	public function getTags()
+	{
+		$list = array();
+		for ($i = 0; $i < 2; $i++)
+		{
+			if (is_array($this->blocks[$i]))
+			{
+				foreach ($this->blocks[$i] as $block)
+				{
+					if ($block instanceof Cotpl_data || $block instanceof Cotpl_block)
+					{
+						$list = array_merge($list, $block->getTags());
+					}
+				}
+			}
+		}
+		return $list;
+	}
 
 	/**
 	 * Overloads parse()
@@ -1309,6 +1417,7 @@ class Cotpl_loop extends Cotpl_block
 
 /**
  * CoTemplate variable with callback extensions support
+ * @property-read string $name Tag name
  */
 class Cotpl_var
 {
@@ -1337,7 +1446,7 @@ class Cotpl_var
 			foreach ($chain as $cbk)
 			{
 				if (mb_strpos($cbk, '(') !== false
-					&& preg_match('`(\w+)\s*\((.+?)\)`', $cbk, $mt))
+					&& preg_match('`(\w+)\s*\((.+)\)`', $cbk, $mt))
 				{
 					$this->callbacks[] = array(
 						'name' => $mt[1],
@@ -1357,6 +1466,23 @@ class Cotpl_var
 			$this->keys = $keys;
 		}
 		$this->name = $text;
+	}
+	
+	/**
+	 * Property getter
+	 * @param string $name Property name
+	 * @return mixed Property value
+	 */
+	public function __get($name)
+	{
+		if (isset($this->{$name}))
+		{
+			return $this->{$name};
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	/**
@@ -1429,7 +1555,7 @@ class Cotpl_var
 		}
 		elseif (is_string($val))
 		{
-			$ret = XTemplate::debug_var($key, $val);
+			$ret = XTemplate::debugVar($key, $val);
 		}
 		return $ret;
 	}
