@@ -423,7 +423,14 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
  */
 function cot_default_html_construction($type)
 {
-	global $R;
+	global $cfg;
+	
+	include $cfg['system_dir'].'/resources.php';
+	if (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaulttheme']}.php"))
+	{
+		include "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaulttheme']}.php";
+	}
+	
 	$html = '';
 	switch ($type)
 	{
