@@ -177,6 +177,8 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 	}
 }
 
+$mskin = cot_tplfile('users.register', 'module');
+
 /* === Hook === */
 foreach (cot_getextplugins('users.register.main') as $pl)
 {
@@ -187,7 +189,8 @@ foreach (cot_getextplugins('users.register.main') as $pl)
 $out['subtitle'] = $L['aut_registertitle'];
 $out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(cot_tplfile('users.register', 'module'));
+
+$t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');
 

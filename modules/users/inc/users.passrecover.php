@@ -112,9 +112,17 @@ $out['subtitle'] = $L['pasrec_title'];
 $out['head'] .= $R['code_noindex'];
 
 $title[] = $L['pasrec_title'];
+$mskin = cot_tplfile('users.passrecover', 'module');
+
+/* === Hook === */
+foreach (cot_getextplugins('users.passrecover.main') as $pl)
+{
+	include $pl;
+}
+/* ===== */
 
 require_once $cfg['system_dir'].'/header.php';
-$t = new XTemplate(cot_tplfile('users.passrecover', 'module'));
+$t = new XTemplate($mskin);
 
 $t->assign(array(
 	'PASSRECOVER_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
