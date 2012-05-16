@@ -4128,7 +4128,7 @@ function cot_rc_add_file($path, $scope = 'global')
 
 	$type = preg_match('#\.(min\.)?(js|css)$#', mb_strtolower($path), $m) ? $m[2] : 'js';
 
-	if ($cfg['headrc_consolidate'] && !defined('COT_ADMIN') && $cfg['headrc_minify'] && !$cot_rc_skip_minification && $m[1] != 'min.')
+	if ($cache && $cfg['headrc_consolidate'] && !defined('COT_ADMIN') && $cfg['headrc_minify'] && !$cot_rc_skip_minification && $m[1] != 'min.')
 	{
 		$bname = ($type == 'css') ? str_replace('/', '._.', $path) : basename($path) . '.min';
 		$code = cot_rc_minify(file_get_contents($path), $type);
