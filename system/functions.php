@@ -3991,7 +3991,7 @@ function cot_rc_consolidate()
 								}
 							}
 							// Fix URLs
-							if (preg_match_all('#\burl\((\'|")?(.+?)\1?\)#i', $file_code, $mt, PREG_SET_ORDER))
+							if (preg_match_all('#\burl\((\'|")?([^\)"\']+)\1?\)#i', $file_code, $mt, PREG_SET_ORDER))
 							{
 								foreach ($mt as $m)
 								{
