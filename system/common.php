@@ -564,7 +564,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 
 /* ============ Head Resources ===========*/
 $cot_rc_skip_minification = false;
-if (!$cot_rc_html || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMIN'))
+if (!isset($cot_rc_html[$theme]) || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMIN'))
 {
 	cot_rc_consolidate();
 }

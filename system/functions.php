@@ -3883,7 +3883,7 @@ function cot_rc_attr_string($attrs)
  */
 function cot_rc_consolidate()
 {
-	global $cache, $cfg, $cot_rc_html, $cot_rc_reg, $env, $L, $R, $sys, $usr;
+	global $cache, $cfg, $cot_rc_html, $cot_rc_reg, $env, $L, $R, $sys, $usr, $theme;
 
 	$is_admin_section = defined('COT_ADMIN');
 	$cot_rc_reg = array();
@@ -3913,7 +3913,7 @@ function cot_rc_consolidate()
 	ksort($cot_rc_reg);
 
 	// Build the header outputs
-	$cot_rc_html = array();
+	$cot_rc_html[$theme] = array();
 
 	// Consolidate resources
 	if ($cache && $cfg['headrc_consolidate'] && !$is_admin_section)
@@ -3930,9 +3930,16 @@ function cot_rc_consolidate()
 				$separator = "\n;";
 			}
 			// Consolidation
-			foreach ($scope_data as $scope => $files)
+			foreach ($scope_data as $scope => $ordered_files)
 			{
-				$target_path = $cfg['cache_dir'] . '/static/' . $scope . '.' . $type;
+				$target_path = $cfg['cache_dir'] . "/static/$scope.$theme.$type";
+
+				$files = array();
+				foreach ($ordered_files as $order => $o_files)
+				{
+					$files = array_merge($files, $o_files);
+				}
+				$files = array_unique($files);
 
 				$code = '';
 				$modified = false;
@@ -4020,8 +4027,8 @@ function cot_rc_consolidate()
 					file_put_contents("$target_path.idx", serialize($files));
 				}
 
-				$rc_url = "rc.php?rc=$scope.$type";
-				$cot_rc_html[$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $rc_url));
+				$rc_url = "rc.php?rc=$scope.$theme.$type";
+				$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $rc_url));
 			}
 		}
 		// Save the output
@@ -4029,23 +4036,34 @@ function cot_rc_consolidate()
 	}
 	else
 	{
+		$log = array(); // log paths to avoid duplicates
 		foreach ($cot_rc_reg as $type => $scope_data)
 		{
 			if (is_array($cot_rc_reg[$type]['files']))
 			{
 				foreach ($cot_rc_reg[$type]['files'] as $scope => $scope_data)
 				{
-					foreach ($scope_data as $file)
+					foreach ($scope_data as $order => $files)
 					{
-						$cot_rc_html[$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $file)) . "\n";
+						foreach ($files as $file)
+						{
+							if (!in_array($file, $log))
+							{
+								$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $file)) . "\n";
+								$log[] = $file;
+							}
+						}
 					}
 				}
 			}
 			if (is_array($cot_rc_reg[$type]['embed']))
 			{
-				foreach ($cot_rc_reg[$type]['embed'] as $scope => $code)
+				foreach ($cot_rc_reg[$type]['embed'] as $scope => $scope_data)
 				{
-					$cot_rc_html[$scope] .= cot_rc("code_rc_{$type}_embed", array('code' => $code)) . "\n";
+					foreach ($scope_data as $order => $code)
+					{
+						$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_embed", array('code' => $code)) . "\n";
+					}
 				}
 			}
 		}
@@ -4065,11 +4083,12 @@ function cot_rc_consolidate()
  * @param string $code Embedded stylesheet or script code
  * @param string $scope Resource scope. See description of this parameter in cot_rc_add_file() docs.
  * @param string $type Resource type: 'js' or 'css'
+ * @param int $order Order priority number
  * @return bool This function always returns TRUE
  * @see cot_rc_add_file()
  * @global Cache $cache
  */
-function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
+function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js', $order = 50)
 {
 	global $cache, $cfg, $cot_rc_reg, $cot_rc_skip_minification;
 
@@ -4085,12 +4104,12 @@ function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
 			}
 			file_put_contents($path, $code);
 		}
-		$cot_rc_reg[$type][$scope][] = $path;
+		$cot_rc_reg[$type][$scope][$order][] = $path;
 	}
 	else
 	{
 		$separator = $type == 'js' ? "\n;" : "\n";
-		$cot_rc_reg[$type]['embed'][$scope] .= $code . $separator;
+		$cot_rc_reg[$type]['embed'][$scope][$order] .= $code . $separator;
 	}
 	return true;
 }
@@ -4108,17 +4127,17 @@ function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js')
  *
  * @global array $cot_rc_reg JavaScript/CSS footer/header resource registry
  * @param string $path Path to a *.js script or *.css stylesheet
- * @param string $scope Resource scope. Scope is a selector of domain where resource is used. Valid scopes are:
+ * @param mixed $scope Resource scope. Scope is a selector of domain where resource is used. Valid scopes are:
  *	'global' - global for entire site, will be included everywhere, this is the most static and persistent scope;
  *	'guest' - for unregistered visitors only;
  *	'user' - for registered members only;
  *	'group_123' - for members of a specific group (maingrp), in this example of group with id=123.
- * You can combine ext scope with other scopes, e.g. 'user&ext=forums' means "for registered users in forums".
  * It is recommended to use 'global' scope whenever possible because it delivers best caching opportunities.
+ * @param int $order Order priority number
  * @return bool Returns TRUE normally, FALSE is file was not found
  * @global Cache $cache
  */
-function cot_rc_add_file($path, $scope = 'global')
+function cot_rc_add_file($path, $scope = 'global', $order = 50)
 {
 	global $cache, $cfg, $cot_rc_reg, $cot_rc_skip_minification;
 	if (!file_exists($path))
@@ -4138,11 +4157,11 @@ function cot_rc_add_file($path, $scope = 'global')
 
 	if ($cfg['headrc_consolidate'] && $cache && !defined('COT_ADMIN'))
 	{
-		$cot_rc_reg[$type][$scope][] = $path;
+		$cot_rc_reg[$type][$scope][$order][] = $path;
 	}
 	else
 	{
-		$cot_rc_reg[$type]['files'][$scope][] = $path;
+		$cot_rc_reg[$type]['files'][$scope][$order][] = $path;
 	}
 	return true;
 }
@@ -4185,10 +4204,10 @@ function cot_rc_add_standard()
  */
 function cot_rc_output()
 {
-	global $cot_rc_html,  $out, $usr;
-	if (is_array($cot_rc_html))
+	global $cot_rc_html, $out, $usr, $theme;
+	if (is_array($cot_rc_html) && isset($cot_rc_html[$theme]))
 	{
-		foreach ($cot_rc_html as $scope => $html)
+		foreach ($cot_rc_html[$theme] as $scope => $html)
 		{
 			switch ($scope)
 			{
