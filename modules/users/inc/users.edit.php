@@ -243,6 +243,8 @@ $title_params = array(
 $out['subtitle'] = cot_title('{EDIT} - {NAME}', $title_params);
 $out['head'] .= $R['code_noindex'];
 
+$mskin = cot_tplfile(array('users', 'edit', $usr['maingrp']), 'module');
+
 /* === Hook === */
 foreach (cot_getextplugins('users.edit.main') as $pl)
 {
@@ -250,10 +252,8 @@ foreach (cot_getextplugins('users.edit.main') as $pl)
 }
 /* ===== */
 
-
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_tplfile(array('users', 'edit', $usr['maingrp']), 'module');
 $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');

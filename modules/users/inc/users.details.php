@@ -50,6 +50,8 @@ $title_params = array(
 );
 $out['subtitle'] = cot_title('title_users_details', $title_params);
 
+$mskin = cot_tplfile(array('users', 'details'), 'module');
+
 /* === Hook === */
 foreach (cot_getextplugins('users.details.main') as $pl)
 {
@@ -59,7 +61,6 @@ foreach (cot_getextplugins('users.details.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_tplfile(array('users', 'details'), 'module');
 $t = new XTemplate($mskin);
 
 $t->assign(array(
