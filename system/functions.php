@@ -3969,7 +3969,7 @@ function cot_rc_consolidate()
 				if ($modified)
 				{
 					// Reconsolidate cache
-					$current_path = realpath('.');
+					$current_path = str_replace('\\', '/', realpath('.'));
 					foreach ($files as $path)
 					{
 						// Get file contents and remove BOM
@@ -3982,7 +3982,11 @@ function cot_rc_consolidate()
 								// Restore original file path
 								$path = str_replace('._.', '/', basename($path));
 							}
-							$file_path = dirname(realpath($path));
+							if ($path[0] === '/')
+							{
+								$path = mb_substr($path, 1);
+							}
+							$file_path = str_replace('\\', '/', dirname(realpath($path)));
 							$relative_path = str_replace($current_path, '', $file_path);
 							if ($relative_path[0] === '/')
 							{
