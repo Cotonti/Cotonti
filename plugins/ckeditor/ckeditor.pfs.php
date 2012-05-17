@@ -18,7 +18,7 @@ Hooks=pfs.first
 defined('COT_CODE') or die('Wrong URL');
 
 
-if ($parser == 'html')
+if ($sys['parser'] == 'html')
 {
 	$R['pfs_code_header_javascript'] = '
 	function addfile(gfile, c2, gdesc) {

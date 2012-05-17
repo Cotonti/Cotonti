@@ -17,7 +17,7 @@ Hooks=pfs.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($parser == 'bbcode')
+if ($sys['parser'] == 'bbcode')
 {
 	$R['pfs_code_addfile'] = '[url={$pfs_base_href}{$pfs_dir_user}\'+gfile+\']\'+gfile+\'[/url]';
 	$R['pfs_code_addpix'] = '[img]{$pfs_base_href}{$pfs_dir_user}\'+gfile+\'[/img]';
