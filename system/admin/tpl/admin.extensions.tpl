@@ -216,6 +216,7 @@
 <div class="block button-toolbar">
 	<a class="button large <!-- IF {ADMIN_EXTENSIONS_SORT_ALP_SEL} -->special<!-- ENDIF -->" href="{ADMIN_EXTENSIONS_SORT_ALP_URL}">{PHP.L.adm_sort_alphabet}</a>
 	<a class="button large <!-- IF {ADMIN_EXTENSIONS_SORT_CAT_SEL} -->special<!-- ENDIF -->" href="{ADMIN_EXTENSIONS_SORT_CAT_URL}">{PHP.L.adm_sort_category}</a>
+	<a class="button large <!-- IF {ADMIN_EXTENSIONS_ONLY_INSTALLED_SEL} -->special<!-- ENDIF -->" href="{ADMIN_EXTENSIONS_ONLY_INSTALLED_URL}">{PHP.L.adm_only_installed}</a>
 	<a href="{ADMIN_EXTENSIONS_HOOKS_URL}" class="button large">{PHP.L.Hooks}</a>
 </div>
 

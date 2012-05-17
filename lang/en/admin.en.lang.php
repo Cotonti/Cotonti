@@ -366,6 +366,8 @@ $L['adm_opt_setup_missing'] = 'Error: setup file missing!';
 $L['adm_sort_alphabet'] = 'Alphabetical';
 $L['adm_sort_category'] = 'Category View';
 
+$L['adm_only_installed'] = 'Installed';
+
 /**
  * Tools Section
  */

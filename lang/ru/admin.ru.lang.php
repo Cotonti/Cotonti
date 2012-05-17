@@ -366,6 +366,8 @@ $L['adm_opt_setup_missing'] = 'Ошибка: отсутствует файл н�
 $L['adm_sort_alphabet'] = 'По алфавиту';
 $L['adm_sort_category'] = 'По категориям';
 
+$L['adm_only_installed'] = 'Установленные';
+
 /**
  * Tools Section
  */
