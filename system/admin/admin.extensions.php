@@ -595,7 +595,6 @@ switch($a)
 		$only_installed = cot_import('inst', 'G', 'BOL');
 		$only_installed_urlp = $only_installed ? '&inst=1' : '';
 		$sort_urlp = $sort == 'cat' ? '&sort=cat' : '';
-		$only_installed_url = $only_installed ? cot_url('admin', 'm=extensions'.$sort_urlp) : cot_url('admin', 'm=extensions'.$sort_urlp.'&inst=1');
 
 		// Filter/sort tags
 		$t->assign(array(
@@ -604,7 +603,8 @@ switch($a)
 			'ADMIN_EXTENSIONS_SORT_ALP_SEL' => $sort != 'cat',
 			'ADMIN_EXTENSIONS_SORT_CAT_URL' => cot_url('admin', 'm=extensions&sort=cat'.$only_installed_urlp),
 			'ADMIN_EXTENSIONS_SORT_CAT_SEL' => $sort == 'cat',
-			'ADMIN_EXTENSIONS_ONLY_INSTALLED_URL' => $only_installed_url,
+			'ADMIN_EXTENSIONS_ALL_EXTENSIONS_URL' => cot_url('admin', 'm=extensions'.$sort_urlp),
+			'ADMIN_EXTENSIONS_ONLY_INSTALLED_URL' => cot_url('admin', 'm=extensions'.$sort_urlp.'&inst=1'),
 			'ADMIN_EXTENSIONS_ONLY_INSTALLED_SEL' => $only_installed
 		));
 		
