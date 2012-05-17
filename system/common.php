@@ -134,7 +134,8 @@ mb_internal_encoding('UTF-8');
 
 if ($cfg['clustermode'])
 {
-	if (isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+	if (isset($_SERVER['HTTP_CLIENT_IP'])) $usr['ip'] = $_SERVER['HTTP_CLIENT_IP'];
+	elseif (isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
 	elseif (isset($_SERVER['HTTP_X_REAL_IP'])) $usr['ip'] = $_SERVER['HTTP_X_REAL_IP'];
 	elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $usr['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
 	else $usr['ip'] = $_SERVER['REMOTE_ADDR'];
