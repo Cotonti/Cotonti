@@ -94,7 +94,7 @@ foreach (cot_getextplugins('admin.rights.main') as $pl)
 /* ===== */
 
 $adminpath[] = array(cot_url('admin', 'm=users'), $L['Users']);
-$adminpath[] = array(cot_url('admin', 'admin.php?m=users&n=edit&g='.$g), $cot_groups[$g]['title']);
+$adminpath[] = array(cot_url('admin', 'm=users&n=edit&g='.$g), $cot_groups[$g]['title']);
 $adminpath[] = array(cot_url('admin', 'm=rights&g='.$g), $L['Rights']);
 ($advanced) && $adminpath[] = array(cot_url('admin', 'm=rights&g='.$g.'&advanced=1'), $L['More']);
 
