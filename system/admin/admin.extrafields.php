@@ -140,6 +140,7 @@ else
 				cot_error('adm_extrafield_not_added');
 			}
 		}
+		cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
 	}
 	elseif ($a == 'upd')
 	{
@@ -194,6 +195,7 @@ else
 				}
 			}
 		}
+		cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
 	}
 	elseif ($a == 'del' && isset($name))
 	{
@@ -212,6 +214,7 @@ else
 		{
 			cot_error('adm_extrafield_not_removed');
 		}
+		cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
 	}
 
 	$cache && $cache->db->remove('cot_extrafields', 'system');
