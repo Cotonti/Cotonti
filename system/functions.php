@@ -815,11 +815,11 @@ function cot_setcookie($name, $value, $expire = '', $path='', $domain='', $secur
 		$domain = '';
 	}
 
-	$domain = (empty($domain))? $cfg['cookiedomain'] : $domain;
+	$domain = (empty($domain)) ? $cfg['cookiedomain'] : $domain;
 	$path = (empty($path)) ? $cfg['cookiepath'] : $path;
 	$expire = (empty($expire)) ? time()+$cfg['cookielifetime'] : $expire;
 
-	if ($domain != '')
+	if ($domain != '' && $domain != 'localhost')
 	{
 		// Make sure www. is stripped and leading dot is added for subdomain support on some browsers
 		if (mb_strtolower(mb_substr($domain, 0, 4)) == 'www.')
@@ -830,6 +830,10 @@ function cot_setcookie($name, $value, $expire = '', $path='', $domain='', $secur
 		{
 			$domain = '.'.$domain;
 		}
+	}
+	else
+	{
+		$domain = false;
 	}
 
 	return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
