@@ -108,7 +108,7 @@ else
 	
 	$adminpath[] = array(cot_url('admin', 'm=extrafields&n='.$n), $L['adm_extrafields_table'].' '.$n . ((isset($extra_whitelist[$n])) ? ' - ' . $extra_whitelist[$n]['caption'] : '')); 
 	
-	if ($a == 'add')
+	if ($a == 'add' && !empty($_POST))
 	{
 		$field['field_name'] = cot_import('field_name', 'P', 'ALP');
 		$field['field_type'] = cot_import('field_type', 'P', 'ALP');
@@ -140,9 +140,9 @@ else
 				cot_error('adm_extrafield_not_added');
 			}
 		}
-		cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
+		//cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
 	}
-	elseif ($a == 'upd')
+	elseif ($a == 'upd' && !empty($_POST))
 	{
 		$field_name = cot_import('field_name', 'P', 'ARR');
 		$field_type = cot_import('field_type', 'P', 'ARR');
@@ -195,7 +195,7 @@ else
 				}
 			}
 		}
-		cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
+		//cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
 	}
 	elseif ($a == 'del' && isset($name))
 	{
@@ -214,7 +214,7 @@ else
 		{
 			cot_error('adm_extrafield_not_removed');
 		}
-		cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
+		//cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
 	}
 
 	$cache && $cache->db->remove('cot_extrafields', 'system');
