@@ -23,9 +23,9 @@ require_once $cfg['system_dir'] . '/common.php';
 
 require_once cot_langfile('users', 'core');
 
-$out = cot_import('out', 'G', 'BOL');
+$logout = cot_import('out', 'G', 'BOL');
 
-if ($out)
+if ($logout)
 {
 	// Perform logout
 	cot_check_xg();
