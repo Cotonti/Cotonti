@@ -2,3 +2,4 @@
 order deny,allow
 deny from all
 </FilesMatch>
+php_flag engine off
