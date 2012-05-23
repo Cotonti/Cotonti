@@ -150,7 +150,7 @@ switch($a)
 
 		$isinstalled = cot_extension_installed($code);
 
-		$sql = $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$code'");
+		$sql = $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$code' AND config_type != " . COT_CONFIG_TYPE_HIDDEN);
 		$totalconfig = $sql->fetchColumn();
 
 		if (count($parts) > 0)
@@ -751,7 +751,7 @@ switch($a)
 							$part_status = 1;
 						}
 					}
-					$totalconfig = $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$code'")->fetchColumn();
+					$totalconfig = $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$code' AND config_type != " . COT_CONFIG_TYPE_HIDDEN)->fetchColumn();
 
 					$ifthistools = $tools[$code];
 					$ent_code = $cfgentries[$code];
