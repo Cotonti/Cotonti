@@ -41,7 +41,14 @@ if($a == 'add')
 	$width = cot_import('userimg_width', 'P', 'INT');
 	$height = cot_import('userimg_height', 'P', 'INT');
 	$crop = cot_import('userimg_crop', 'P', 'TXT');
-	cot_userimages_config_add($code, $width, $height, $crop);
+	if (empty($code))
+	{
+		cot_error('userimages_emptycode', 'userimg_code');
+	}
+	else
+	{
+		cot_userimages_config_add($code, $width, $height, $crop);
+	}
 	cot_redirect(cot_url('admin', 'm=other&p=userimages', '', true));
 }
 if($a == 'edit')
@@ -50,7 +57,14 @@ if($a == 'edit')
 	$width = cot_import('userimg_width', 'P', 'INT');
 	$height = cot_import('userimg_height', 'P', 'INT');
 	$crop = cot_import('userimg_crop', 'P', 'TXT');
-	cot_userimages_config_edit($code, $width, $height, $crop);
+	if (empty($code))
+	{
+		cot_error('userimages_emptycode', 'code');
+	}
+	else
+	{
+		cot_userimages_config_edit($code, $width, $height, $crop);
+	}
 	cot_redirect(cot_url('admin', 'm=other&p=userimages', '', true));
 }
 if($a == 'remove')

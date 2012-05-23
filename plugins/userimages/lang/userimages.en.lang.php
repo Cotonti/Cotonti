@@ -26,6 +26,7 @@ $L['userimages_avatarschoose'] = 'Click an image below to set it as your own ava
 $L['userimages_avatarspreset'] = '...or click here to display a gallery of pre-loaded avatars';
 $L['userimages_avatarsupload'] = 'Upload an avatar';
 $L['userimages_avataruploadfailed'] = 'The upload failed, delete the old avatar before to free the slot!';
+$L['userimages_emptycode'] = 'Code must not be empty';
 $L['userimages_photonotvalid'] = 'This photo is not a valid %1$s image.';
 $L['userimages_photoupload'] = 'Upload a photography';
 $L['userimages_sigotvalid'] = 'This signature is not a valid %1$s image.';
