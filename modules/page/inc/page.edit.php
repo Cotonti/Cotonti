@@ -51,7 +51,7 @@ if ($a == 'update')
 		include $pl;
 	}
 	/* ===== */
-	
+
 	cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $row_page['page_ownerid']);
 
 	$rpage['page_keywords'] = cot_import('rpagekeywords', 'P', 'TXT');
@@ -74,7 +74,7 @@ if ($a == 'update')
 	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
 	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
 	$rpage['page_updated'] = $sys['now'];
-	
+
 	$rpublish = cot_import('rpublish', 'P', 'ALP'); // For backwards compatibility
 	$rpage['page_state'] = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', 'P', 'INT');
 
@@ -90,7 +90,16 @@ if ($a == 'update')
 		$rpage['page_ownerid'] = cot_import('rpageownerid', 'P', 'INT');
 		$rpage['page_filecount'] = cot_import('rpagefilecount', 'P', 'INT');
 	}
-	$rpagedelete = cot_import('rpagedelete', 'P', 'BOL');
+
+	if ($_SERVER['REQUEST_METHOD'] == 'POST')
+	{
+		$rpagedelete = cot_import('rpagedelete', 'P', 'BOL');
+	}
+	else
+	{
+		$rpagedelete = cot_import('delete', 'G', 'BOL');
+		cot_check_xg();
+	}
 
 	if ($rpagedelete)
 	{
@@ -126,7 +135,7 @@ if ($a == 'update')
 		}
 		cot_redirect(cot_url('page', "c=" . $row_page['page_cat'], '', true));
 	}
-	
+
 	cot_check(empty($rpage['page_cat']), 'page_catmissing', 'rpagecat');
 	cot_check(mb_strlen($rpage['page_title']) < 2, 'page_titletooshort', 'rpagetitle');
 	cot_check(!empty($rpage['page_alias']) && preg_match('`[+/?%#&]`', $rpage['page_alias']), 'page_aliascharacters', 'rpagealias');
@@ -145,7 +154,7 @@ if ($a == 'update')
 		include $pl;
 	}
 	/* ===== */
-	
+
 	if (!cot_error_found())
 	{
 		if (!empty($rpage['page_alias']))
@@ -303,7 +312,7 @@ foreach($cot_extrafields[$db_pages] as $exfld)
 	$exfld_title = isset($L['page_'.$exfld['field_name'].'_title']) ?  $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 
 	$t->assign(array(
-		'PAGEEDIT_FORM_'.$uname => $exfld_val, 
+		'PAGEEDIT_FORM_'.$uname => $exfld_val,
 		'PAGEEDIT_FORM_'.$uname.'_TITLE' => $exfld_title,
 		'PAGEEDIT_FORM_EXTRAFLD' => $exfld_val,
 		'PAGEEDIT_FORM_EXTRAFLD_TITLE' => $exfld_title

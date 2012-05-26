@@ -23,7 +23,7 @@ $db_pages = (isset($db_pages)) ? $db_pages : $db_x . 'pages';
 
 $cot_extrafields[$db_pages] = (!empty($cot_extrafields[$db_pages]))	? $cot_extrafields[$db_pages] : array();
 
-$structure['page'] = (is_array($structure['page'])) ? $structure['page'] : array();	
+$structure['page'] = (is_array($structure['page'])) ? $structure['page'] : array();
 
 /**
  * Cuts the page after 'more' tag or after the first page (if multipage)
@@ -81,7 +81,7 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
 	global $db, $db_structure, $usr, $structure, $L, $R;
 
 	$structure['page'] = (is_array($structure['page'])) ? $structure['page'] : array();
-	
+
 	$result_array = array();
 	foreach ($structure['page'] as $i => $x)
 	{
@@ -118,7 +118,7 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
 function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = null, $pagepath_home = false, $emptytitle = '')
 {
 	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $db_pages, $usr, $sys, $cot_yesno, $structure, $db_structure;
-	
+
 	static $extp_first = null, $extp_main = null;
 	static $pag_auth = array();
 
@@ -182,10 +182,11 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 		$validate_url = cot_url('admin', "m=page&a=validate&id={$page_data['page_id']}&x={$sys['xk']}");
 		$unvalidate_url = cot_url('admin', "m=page&a=unvalidate&id={$page_data['page_id']}&x={$sys['xk']}");
 		$edit_url = cot_url('page', "m=edit&id={$page_data['page_id']}");
+		$delete_url = cot_url('page', "m=edit&a=update&delete=1&id={$page_data['page_id']}&x={$sys['xk']}");
 
 		$page_data['page_status'] = cot_page_status(
-			$page_data['page_state'], 
-			$page_data['page_begin'], 
+			$page_data['page_state'],
+			$page_data['page_begin'],
 			$page_data['page_expire']
 		);
 
@@ -241,6 +242,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 		{
 			$validate_confirm_url = cot_confirm_url($validate_url, 'page', 'page_confirm_validate');
 			$unvalidate_confirm_url = cot_confirm_url($unvalidate_url, 'page', 'page_confirm_unvalidate');
+			$delete_confirm_url = cot_confirm_url($delete_url, 'page', 'page_confirm_delete');
 			$temp_array['ADMIN_EDIT'] = cot_rc_link($edit_url, $L['Edit']);
 			$temp_array['ADMIN_EDIT_URL'] = $edit_url;
 			$temp_array['ADMIN_UNVALIDATE'] = $page_data['page_state'] == 1 ?
@@ -248,6 +250,8 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				cot_rc_link($unvalidate_confirm_url, $L['Putinvalidationqueue'], 'class="confirmLink"');
 			$temp_array['ADMIN_UNVALIDATE_URL'] = $page_data['page_state'] == 1 ?
 				$validate_confirm_url : $unvalidate_confirm_url;
+			$temp_array['ADMIN_DELETE'] = cot_rc_link($delete_confirm_url, $L['Delete'], 'class="confirmLink"');
+			$temp_array['ADMIN_DELETE_URL'] = $delete_confirm_url;
 		}
 		else if ($usr['id'] == $page_data['page_ownerid'])
 		{
@@ -292,7 +296,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			'SHORTTITLE' => (!empty($emptytitle)) ? $emptytitle : $L['Deleted'],
 		);
 	}
-	
+
 	$return_array = array();
 	foreach ($temp_array as $key => $val)
 	{
@@ -347,7 +351,7 @@ function cot_page_config_order()
 function cot_page_status($page_state, $page_begin, $page_expire)
 {
 	global $sys;
-	
+
 	if ($page_state == 0)
 	{
 		if ($page_expire > 0 && $page_expire <= $sys['now'])
