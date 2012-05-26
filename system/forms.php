@@ -417,7 +417,7 @@ function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
 	$rc = empty($custom_rc) 
-		? empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}"
+		? empty($R["input_check_{$rc_name}"]) ? 'input_check' : "input_check_{$rc_name}"
 		: $custom_rc;
 	foreach ($values as $k => $x)
 	{

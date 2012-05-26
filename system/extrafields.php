@@ -441,6 +441,7 @@ function cot_default_html_construction($type)
 		case 'currency':
 		case 'double':	
 			$html = $R['input_text'];
+			$html = str_replace('{$attrs}', '{$attrs} maxlength="255"', $html);
 			break;
 
 		case 'textarea':
@@ -454,8 +455,11 @@ function cot_default_html_construction($type)
 			break;
 
 		case 'checkbox':
-		case 'checklistbox':
 			$html = $R['input_checkbox'];
+			break;
+		
+		case 'checklistbox':
+			$html = $R['input_check'];
 			break;
 
 		case 'radio':
