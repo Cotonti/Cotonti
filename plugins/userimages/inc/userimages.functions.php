@@ -49,6 +49,10 @@ function cot_userimages_config_get($ignorecache=false)
 function cot_userimages_config_add($code, $width, $height, $crop='', $force=false)
 {
 	global $cache, $db, $db_users;
+	if (empty($code))
+	{
+		return FALSE;
+	}
 	$exists = $db->query("SHOW COLUMNS FROM $db_users LIKE 'user_".$db->prep($code)."'")->rowCount() > 0;
 	if(!$exists)
 	{
@@ -85,6 +89,10 @@ function cot_userimages_config_add($code, $width, $height, $crop='', $force=fals
 function cot_userimages_config_edit($code, $width, $height, $crop='')
 {
 	global $cache;
+	if (empty($code))
+	{
+		return FALSE;
+	}
 	$cfg = array(strval($width), strval($height));
 	if($crop) $cfg[] = $crop;
 	$options = array(strtolower($code) => implode('x', $cfg));
@@ -104,6 +112,10 @@ function cot_userimages_config_edit($code, $width, $height, $crop='')
 function cot_userimages_config_remove($code, $dropcolumn=true)
 {
 	global $cache, $db, $db_users;
+	if (empty($code))
+	{
+		return FALSE;
+	}
 	$result = cot_config_remove('userimages', false, strtolower($code));
 	if($result && $dropcolumn)
 	{
