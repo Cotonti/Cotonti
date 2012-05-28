@@ -28,15 +28,49 @@ if ($enpages || $enforums)
 	if ($enpages && $cfg['plugin']['recentitems']['recentpages'] && cot_module_active('page'))
 	{
 		require_once cot_incfile('page', 'module');
-		$res = cot_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
-		$t->assign('RECENT_PAGES', $res);
+
+		// Try to load from cache for guests
+		if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['recentitems']['cache_ttl'] > 0)
+		{
+			$ri_cache_id = "$theme.pages";
+			$ri_html = $cache->disk->get($ri_cache_id, 'recentitems', (int) $cfg['plugin']['recentitems']['cache_ttl']);
+		}
+
+		if (empty($ri_html))
+		{
+			$ri_html = cot_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
+			if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['news']['cache_ttl'] > 0)
+			{
+				$cache->disk->store($ri_cache_id, $ri_html, 'recentitems');
+			}
+		}
+
+		$t->assign('RECENT_PAGES', $ri_html);
+		unset($ri_html);
 	}
 
 	if ($enforums && $cfg['plugin']['recentitems']['recentforums'] && cot_module_active('forums'))
 	{
 		require_once cot_incfile('forums', 'module');
-		$res = cot_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
-		$t->assign('RECENT_FORUMS', $res);
+
+		// Try to load from cache for guests
+		if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['recentitems']['cache_ttl'] > 0)
+		{
+			$ri_cache_id = "$theme.forums";
+			$ri_html = $cache->disk->get($ri_cache_id, 'recentitems', (int) $cfg['plugin']['recentitems']['cache_ttl']);
+		}
+
+		if (empty($ri_html))
+		{
+			$ri_html = cot_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
+			if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['news']['cache_ttl'] > 0)
+			{
+				$cache->disk->store($ri_cache_id, $ri_html, 'recentitems');
+			}
+		}
+
+		$t->assign('RECENT_FORUMS', $ri_html);
+		unset($ri_html);
 	}
 }
 
