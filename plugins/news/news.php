@@ -21,14 +21,6 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('page', 'module');
 require_once cot_langfile('news', 'plug');
 
-/* === Hook - Part1 : Set === FIRST === */
-$news_first_extp = cot_getextplugins('news.first');
-/* === Hook - Part1 : Set === LOOP === */
-$news_extp = cot_getextplugins('news.loop');
-/* === Hook - Part1 : Set === TAGS === */
-$news_tags_extp = cot_getextplugins('news.tags');
-/* ===== */
-
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['plugin']['news']['maxpages']);
 $c = cot_import('c', 'G', 'TXT');
 $c = (!isset($structure['page'][$c])) ? '' : $c;
@@ -42,13 +34,13 @@ foreach ($categories as $v)
 	{
 		$c = (empty($c)) ? $v[0] : $c;
 		$indexcat = ($jj == 0) ? $v[0] : $indexcat;
-	
+
 		$v[2] = ((int)$v[2] > 0) ? $v[2] : (int)$cfg['page'][$v[0]]['truncatetext'];
 		$v[1] = ((int)$v[1] > 0) ? $v[1] : (int)$cfg['plugin']['news']['maxpages'];
-		
-		$_GET[$v[0].'d'] = (empty($c) || ($jj == 0) || $cfg['plugin']['news']['syncpagination']) ? $_GET['d'] : $_GET[$v[0].'d'];		
+
+		$_GET[$v[0].'d'] = (empty($c) || ($jj == 0) || $cfg['plugin']['news']['syncpagination']) ? $_GET['d'] : $_GET[$v[0].'d'];
 		list($v[3]['pg'], $v[3]['d'], $v[3]['durl']) = cot_import_pagenav($v[0] . 'd', $v[1]);
-		
+
 		$cats[$v[0]] = $v;
 		$jj++;
 	}
@@ -56,10 +48,30 @@ foreach ($categories as $v)
 
 if (count($cats) > 0)
 {
+	/* === Hook - Part1 : Set === FIRST === */
+	$news_first_extp = cot_getextplugins('news.first');
+	/* === Hook - Part1 : Set === LOOP === */
+	$news_extp = cot_getextplugins('news.loop');
+	/* === Hook - Part1 : Set === TAGS === */
+	$news_tags_extp = cot_getextplugins('news.tags');
+	/* ===== */
 	$catn = 0;
 	foreach ($cats as $k => $v)
 	{
 		$cat = ($catn == 0) ? $c : $v[0];
+		$tagname = str_replace(array(' ', ',', '.', '-'), '_', strtoupper($v[0]));
+
+		// Cache for guests
+		if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['news']['cache_ttl'] > 0)
+		{
+			$news_cache_id = "$theme.$cat." . $v[3]['d']; // Includes theme, category and current page
+			$news_html = $cache->disk->get($news_cache_id, 'news', (int) $cfg['plugin']['news']['cache_ttl']);
+			if (!is_null($news_html))
+			{
+				$t->assign(($catn == 0) ? 'INDEX_NEWS' : 'INDEX_NEWS_' . $tagname, $news_html);
+				continue;
+			}
+		}
 
 		$catsub = cot_structure_children('page', $cat);
 		$where = "page_state = 0 AND page_cat <> 'system' AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat IN ('" . implode("','", $catsub) . "')";
@@ -149,9 +161,13 @@ if (count($cats) > 0)
 		/* ===== */
 
 		$news->parse('NEWS');
-		$tagname = str_replace(array(' ', ',', '.', '-'), '_', strtoupper($v[0]));	
-		$t->assign(($catn == 0) ? 'INDEX_NEWS' : 'INDEX_NEWS_' . $tagname, $news->text('NEWS'));
-
+		$news_html = $news->text('NEWS');
+		// Cache for guests
+		if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['news']['cache_ttl'] > 0)
+		{
+			$cache->disk->store($news_cache_id, $news_html, 'news');
+		}
+		$t->assign(($catn == 0) ? 'INDEX_NEWS' : 'INDEX_NEWS_' . $tagname, $news_html);
 		$catn++;
 	}
 }
