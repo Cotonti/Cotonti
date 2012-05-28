@@ -2,7 +2,7 @@
 /**
  * Cache subsystem library
  * @package Cotonti
- * @version 0.9.6
+ * @version 0.9.10
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2012
  * @license BSD
@@ -338,20 +338,23 @@ class File_cache extends Static_cache_driver
 	 * Checks if an object is stored in disk cache
 	 * @param string $id Object identifier
 	 * @param string $realm Cache realm
+	 * @param int $ttl Lifetime in seconds, 0 means unlimited
 	 * @return bool
 	 */
-	public function exists($id, $realm = COT_DEFAULT_REALM)
+	public function exists($id, $realm = COT_DEFAULT_REALM, $ttl = 0)
 	{
-		return file_exists($this->dir.'/'.$realm.'/'.$id);
+		$filename = $this->dir.'/'.$realm.'/'.$id;
+		return file_exists($filename) && ($ttl == 0 || time() - filemtime($filename) < $ttl);
 	}
 
 	/**
 	 * Gets an object directly from disk
 	 * @param string $id Object identifier
 	 * @param string $realm Realm name
+	 * @param int $ttl Lifetime in seconds, 0 means unlimited
 	 * @return mixed Cached item value or NULL if the item was not found in cache
 	 */
-	public function get($id, $realm = COT_DEFAULT_REALM)
+	public function get($id, $realm = COT_DEFAULT_REALM, $ttl = 0)
 	{
 		if ($this->exists($id, $realm))
 		{
@@ -603,7 +606,7 @@ class MySQL_cache extends Db_cache_driver
 			$this->gc();
 		}
 	}
-	
+
 	/**
 	 * Enforces flush()
 	 */
