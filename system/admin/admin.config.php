@@ -209,7 +209,7 @@ switch($n)
 				}
 			}
 		}
-		
+
 		if ($o == 'core')
 		{
 			$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
@@ -228,7 +228,7 @@ switch($n)
 			}
 			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub), $L['Configuration']);
 		}
-		
+
 		if ($o != 'core' && file_exists(cot_langfile($p, $o)))
 		{
 			require_once cot_langfile($p, $o);
@@ -247,14 +247,16 @@ switch($n)
 		/* ===== */
 		foreach ($rowset as $key => $row)
 		{
-			if (!is_array($L['cfg_'.$config_name]))
-			{
-				$L['cfg_'.$config_name] = array($L['cfg_'.$config_name]);
-			}
 			$config_owner = $o;
 			$config_cat = $p;
 			$config_subcat = $row['config_subcat'];
 			$config_name = $row['config_name'];
+
+			if (!is_array($L['cfg_'.$config_name]))
+			{
+				$L['cfg_'.$config_name] = array($L['cfg_'.$config_name]);
+			}
+
 			$config_value = $row['config_value'];
 			$config_default = $row['config_default'];
 			$config_type = $row['config_type'];
@@ -262,6 +264,7 @@ switch($n)
 			$config_text = htmlspecialchars($row['config_text']);
 			$config_more = $L['cfg_'.$config_name][1];
 			$if_config_more = (!empty($config_more)) ? true : false;
+
 
 			if ($config_subcat == '__default' && $prev_subcat == '' && $config_type != COT_CONFIG_TYPE_SEPARATOR)
 			{
@@ -274,7 +277,7 @@ switch($n)
 				$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $L['cfg_struct_defaults']);
 				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_BEGIN');
 			}
-					
+
 			if ($config_type == COT_CONFIG_TYPE_STRING)
 			{
 				$config_input = cot_inputbox('text', $config_name, $config_value);
@@ -284,9 +287,10 @@ switch($n)
 				if (!empty($row['config_variants']))
 				{
 					$cfg_params = explode(',', $row['config_variants']);
-					$cfg_params_titles = (isset($L['cfg_'.$config_name.'_params'])
-						&& is_array($L['cfg_'.$config_name.'_params']))
-							? $L['cfg_'.$config_name.'_params'] : $cfg_params;
+					// $cfg_params_titles = (isset($L['cfg_'.$config_name.'_params'])
+					// 	&& is_array($L['cfg_'.$config_name.'_params']))
+					// 		? $L['cfg_'.$config_name.'_params'] : $cfg_params;
+					$cfg_params_titles = cot_admin_config_get_titles($config_name, $cfg_params);
 				}
 				$config_input = (is_array($cfg_params))
 					? cot_selectbox($config_value, $config_name, $cfg_params, $cfg_params_titles, false)
@@ -319,36 +323,7 @@ switch($n)
 					{
 						$cfg_params = call_user_func($mt[1]);
 					}
-					if (isset($L['cfg_'.$config_name.'_params'])
-						&& is_array($L['cfg_'.$config_name.'_params']))
-					{
-						$lang_params_keys = array_keys($L['cfg_'.$config_name.'_params']);
-						if (is_numeric($lang_params_keys[0]))
-						{
-							// Numeric array, simply use it
-							$cfg_params_titles = $L['cfg_'.$config_name.'_params'];
-						}
-						else
-						{
-							// Associative, match entries
-							$cfg_params_titles = array();
-							foreach ($cfg_params as $val)
-							{
-								if (isset($L['cfg_'.$config_name.'_params'][$val]))
-								{
-									$cfg_params_titles[] = $L['cfg_'.$config_name.'_params'][$val];
-								}
-								else
-								{
-									$cfg_params_titles[] = $val;
-								}
-							}
-						}
-					}
-					else
-					{
-						$cfg_params_titles = $cfg_params;
-					}
+					$cfg_params_titles = cot_admin_config_get_titles($config_name, $cfg_params);
 					$config_input = cot_selectbox($config_value, $config_name, $cfg_params, $cfg_params_titles, false);
 				}
 				else
@@ -405,7 +380,7 @@ switch($n)
 				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_OPTION');
 			}
 			$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW');
-			
+
 			$prev_subcat = $config_subcat;
 		}
 
@@ -415,7 +390,7 @@ switch($n)
 			$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_END');
 			$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW');
 		}
-		
+
 		$t->assign(array(
 			'ADMIN_CONFIG_FORM_URL' => cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub.'&a=update')
 		));
@@ -427,7 +402,7 @@ switch($n)
 		/* ===== */
 		$t->parse('MAIN.EDIT');
 		break;
-	
+
 	default:
 		$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
 		$sql = $db->query("
@@ -524,5 +499,47 @@ foreach (cot_getextplugins('admin.config.tags') as $pl)
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
+
+/**
+ * Helper function that generates selection titles.
+ * @param  string $config_name Current config name
+ * @param  array  $cfg_params  Array of config params
+ * @return array               Selection titles
+ */
+function cot_admin_config_get_titles($config_name, $cfg_params)
+{
+	global $L;
+	if (isset($L['cfg_'.$config_name.'_params'])
+		&& is_array($L['cfg_'.$config_name.'_params']))
+	{
+		$lang_params_keys = array_keys($L['cfg_'.$config_name.'_params']);
+		if (is_numeric($lang_params_keys[0]))
+		{
+			// Numeric array, simply use it
+			$cfg_params_titles = $L['cfg_'.$config_name.'_params'];
+		}
+		else
+		{
+			// Associative, match entries
+			$cfg_params_titles = array();
+			foreach ($cfg_params as $val)
+			{
+				if (isset($L['cfg_'.$config_name.'_params'][$val]))
+				{
+					$cfg_params_titles[] = $L['cfg_'.$config_name.'_params'][$val];
+				}
+				else
+				{
+					$cfg_params_titles[] = $val;
+				}
+			}
+		}
+	}
+	else
+	{
+		$cfg_params_titles = $cfg_params;
+	}
+	return $cfg_params_titles;
+}
 
 ?>
