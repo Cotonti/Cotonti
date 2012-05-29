@@ -6,7 +6,7 @@
 	</ul>
 <!-- END: CONFIG_URL -->
 <!-- BEGIN: DETAILS -->
-	<h2><!-- IF {ADMIN_EXTENSIONS_ICO} --> 
+	<h2><!-- IF {ADMIN_EXTENSIONS_ICO} -->
 					<img src="{ADMIN_EXTENSIONS_ICO}" />
 					<!-- ELSE -->
 					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png" />
@@ -24,7 +24,7 @@
 			<tr>
 				<td>{PHP.L.Version}:</td>
 				<td>
-					<!-- IF {PHP.isinstalled} AND {ADMIN_EXTENSIONS_VERSION} > {ADMIN_EXTENSIONS_VERSION_INSTALLED} -->
+					<!-- IF {PHP.isinstalled} AND {ADMIN_EXTENSIONS_VERSION_COMPARE} > 0 -->
 					<span class="highlight_red">{ADMIN_EXTENSIONS_VERSION_INSTALLED}</span> / <span class="highlight_green">{ADMIN_EXTENSIONS_VERSION}</span>
 					<!-- ELSE -->
 					{ADMIN_EXTENSIONS_VERSION}
@@ -81,7 +81,7 @@
 	</div>
 	<!-- IF {PHP.isinstalled} AND {PHP.exists} -->
 	<div class="block">
-		
+
 		<h3>{PHP.L.Action}:</h3>
 		<div class="button-toolbar">
 		<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL} -->
@@ -92,14 +92,14 @@
 		<!-- ENDIF -->
 		<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} > 0 -->
 		<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_CONFIG_URL}" class="button large">{PHP.L.Configuration} ({ADMIN_EXTENSIONS_TOTALCONFIG})</a>
-		<!-- ENDIF -->	
+		<!-- ENDIF -->
 		<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS}" class="button large">{PHP.L.short_rights}</a>
 		<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT} -->
 		<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}" class="button large">{PHP.L.Structure}</a>
 		<!-- ENDIF -->
 
 			</div>
-	</div>					
+	</div>
 <!-- ENDIF -->
 
 	<div class="block">
@@ -249,7 +249,7 @@
 <!-- END: ROW_ERROR_EXT -->
 			<tr>
 				<td>
-					<!-- IF {ADMIN_EXTENSIONS_ICO} --> 
+					<!-- IF {ADMIN_EXTENSIONS_ICO} -->
 					<img src="{ADMIN_EXTENSIONS_ICO}" />
 					<!-- ELSE -->
 					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png" />
@@ -261,7 +261,7 @@
 				</td>
 				<td>{ADMIN_EXTENSIONS_CODE_X}</td>
 				<td>
-					<!-- IF {PHP.part_status} != 3 AND {ADMIN_EXTENSIONS_VERSION} > {ADMIN_EXTENSIONS_VERSION_INSTALLED} -->
+					<!-- IF {PHP.part_status} != 3 AND {ADMIN_EXTENSIONS_VERSION_COMPARE} > 0 -->
 					<span class="highlight_red">{ADMIN_EXTENSIONS_VERSION_INSTALLED}</span> / <span class="highlight_green">{ADMIN_EXTENSIONS_VERSION}</span>
 					<!-- ELSE -->
 					{ADMIN_EXTENSIONS_VERSION}
@@ -271,7 +271,6 @@
 				<td class="centerall">{ADMIN_EXTENSIONS_STATUS}</td>
 				<td class="action">
 <!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} -->
-					
 					<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_EDIT_URL}" class="button">{PHP.L.short_config}</a>
 <!-- ENDIF -->
 <!-- IF {PHP.ifstruct} -->

@@ -109,7 +109,7 @@ switch($a)
 			}
 		}
 		$exists = file_exists($ext_info);
-		
+
 		if ($exists)
 		{
 			$old_ext_format = false;
@@ -121,7 +121,7 @@ switch($a)
 				$old_ext_format = true;
 				cot_message('ext_old_format', 'warning');
 			}
-			
+
 			$parts = array();
 			$handle = opendir($dir . '/' . $code);
 			while($f = readdir($handle))
@@ -133,7 +133,7 @@ switch($a)
 				}
 			}
 			closedir($handle);
-			
+
 			$info['Auth_members'] = cot_auth_getvalue($info['Auth_members']);
 			$info['Lock_members'] = cot_auth_getvalue($info['Lock_members']);
 			$info['Auth_guests'] = cot_auth_getvalue($info['Auth_guests']);
@@ -145,7 +145,7 @@ switch($a)
 			$info['Name'] = $row['ct_title'];
 			$info['Version'] = $row['ct_version'];
 		}
-		
+
 		$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$arg=$code"), $info['Name']);
 
 		$isinstalled = cot_extension_installed($code);
@@ -293,7 +293,7 @@ switch($a)
 			include cot_langfile($code, $type);
 		}
 		$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $code . '/' . $code . '.png';
-		
+
 		// Search admin parts, standalone parts, struct
 		if( $db->query("SELECT pl_code FROM $db_plugins WHERE (pl_hook='standalone' OR pl_hook='module') AND pl_code='$code' LIMIT 1")->rowCount() > 0)
 		{
@@ -310,9 +310,9 @@ switch($a)
 		{
 			$struct = cot_url('admin', "m=structure&n=$code");
 		}
-		
+
 		$installed_ver = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$code'")->fetchColumn();
-		
+
 		// Universal tags
 		$t->assign(array(
 			'ADMIN_EXTENSIONS_NAME' => $info['Name'],
@@ -322,6 +322,7 @@ switch($a)
 			'ADMIN_EXTENSIONS_DESCRIPTION' => empty($L['info_desc']) ? $info['Description'] : $L['info_desc'],
 			'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 			'ADMIN_EXTENSIONS_VERSION_INSTALLED' => $installed_ver,
+			'ADMIN_EXTENSIONS_VERSION_COMPARE' => version_compare($info['Version'], $installed_ver),
 			'ADMIN_EXTENSIONS_DATE' => $info['Date'],
 			'ADMIN_EXTENSIONS_CONFIG_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$code"),
 			'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $tools,
@@ -354,7 +355,7 @@ switch($a)
 				'ADMIN_EXTENSIONS_COPYRIGHT' => $info['Copyright'],
 				'ADMIN_EXTENSIONS_NOTES' => cot_parse($info['Notes']),
 			));
-			
+
 			// Check and display dependencies
 			$dependencies_satisfied = true;
 			foreach (array('Requires_modules', 'Requires_plugins', 'Recommends_modules', 'Recommends_plugins') as $dep_type)
@@ -365,7 +366,7 @@ switch($a)
 					$dep_module = strpos($dep_type, 'modules') !== false;
 					$arg = $dep_module ? 'mod' : 'pl';
 					$dir = $dep_module ? $cfg['modules_dir'] : $cfg['plugins_dir'];
-					
+
 					foreach (explode(',', $info[$dep_type]) as $ext)
 					{
 						$dep_installed = cot_extension_installed($ext);
@@ -378,7 +379,7 @@ switch($a)
 						{
 							$dep_class = '';
 						}
-						
+
 						$dep_ext_info = $dir . '/' . $ext . '/' . $ext . '.setup.php';
 						if (file_exists($dep_ext_info))
 						{
@@ -524,7 +525,7 @@ switch($a)
 							}
 						}
 					}
-					
+
 					if ($dependencies_satisfied)
 					{
 						$result = cot_extension_uninstall($code, $is_module);
@@ -607,7 +608,7 @@ switch($a)
 			'ADMIN_EXTENSIONS_ONLY_INSTALLED_URL' => cot_url('admin', 'm=extensions'.$sort_urlp.'&inst=1'),
 			'ADMIN_EXTENSIONS_ONLY_INSTALLED_SEL' => $only_installed
 		));
-		
+
 		foreach (array('module', 'plug') as $type)
 		{
 			$sql = $db->query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config
@@ -636,7 +637,7 @@ switch($a)
 				}
 				$extensions = $tmp;
 			}
-			
+
 			// Find missing extensions
 			$extlist = count($extensions) > 0 ? "ct_code NOT IN('" . implode("','", array_keys($extensions)) . "')" : '1';
 			$sql = $db->query("SELECT * FROM $db_core WHERE $extlist AND ct_plug = $ctplug");
@@ -663,7 +664,7 @@ switch($a)
 			{
 				ksort($extensions);
 			}
-			
+
 			$cnt_extp = count($extensions);
 			$cnt_parts = 0;
 
@@ -707,7 +708,7 @@ switch($a)
 					// Assign a new one
 					$prev_cat = $info['Category'];
 				}
-				
+
 				$exists = !isset($info['NotFound']);
 
 				if (!empty($info['Error']))
@@ -769,15 +770,15 @@ switch($a)
 						$arg = 'pl';
 					}
 					$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $code . '/' . $code . '.png';
-					
+
 					$installed_ver = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$code'")->fetchColumn();
-					
+
 					$L['info_desc'] = '';
 					if (file_exists(cot_langfile($code, $type)))
 					{
 						include cot_langfile($code, $type);
 					}
-					
+
 					$t->assign(array(
 						'ADMIN_EXTENSIONS_DETAILS_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code"),
 						'ADMIN_EXTENSIONS_NAME' => $info['Name'],
@@ -791,6 +792,7 @@ switch($a)
 						'ADMIN_EXTENSIONS_STATUS' => $status[$part_status],
 						'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 						'ADMIN_EXTENSIONS_VERSION_INSTALLED' => $installed_ver,
+						'ADMIN_EXTENSIONS_VERSION_COMPARE' => version_compare($info['Version'], $installed_ver),
 						'ADMIN_EXTENSIONS_RIGHTS_URL' => $type == 'module' ? cot_url('admin', "m=rightsbyitem&ic=$code&io=a") : cot_url('admin',
 								"m=rightsbyitem&ic=$type&io=$code"),
 						'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? cot_url('admin', "m=other&p=$code") : cot_url('admin', "m=$code"),
