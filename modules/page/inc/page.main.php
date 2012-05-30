@@ -238,13 +238,11 @@ if ($pag['page_totaltabs'] > 1)
 		}
 		else
 		{
-			$pag['page_tabtitle'][$i] = $i == 1 ? $pag['page_title'] : $L['Page'] . ' ' . ($i + 1);
+			$pag['page_tabtitle'][$i] = $i == 0 ? $pag['page_title'] : $L['Page'] . ' ' . ($i + 1);
 		}
 		$tab_url = empty($al) ? cot_url('page', 'c='.$pag['page_cat'].'&id='.$id.'&pg='.$i) : cot_url('page', 'c='.$pag['page_cat'].'&al='.$al.'&pg='.$i);
 		$pag['page_tabtitles'][] .= cot_rc_link($tab_url, ($i+1).'. '.$pag['page_tabtitle'][$i],
 			array('class' => 'page_tabtitle'));
-		$pn = cot_pagenav('page', (empty($al) ? 'id='.$id : 'al='.$al), $pag['page_tab'], $pag['page_totaltabs'], 1, 'pg');
-		$pag['page_tabnav'] = $pn['main'];
 		$pag['page_tabs'][$i] = str_replace('[newpage]', '', $pag['page_tabs'][$i]);
 		$pag['page_tabs'][$i] = preg_replace('#^(<br />)+#', '', $pag['page_tabs'][$i]);
 		$pag['page_tabs'][$i] = trim($pag['page_tabs'][$i]);
@@ -252,6 +250,13 @@ if ($pag['page_totaltabs'] > 1)
 
 	$pag['page_tabtitles'] = implode('<br />', $pag['page_tabtitles']);
 	$pag['page_text'] = $pag['page_tabs'][$pag['page_tab']];
+
+	// Temporarily disable easypagenav to allow 0-based numbers
+	$tmp = $cfg['easypagenav'];
+	$cfg['easypagenav'] = false;
+	$pn = cot_pagenav('page', (empty($al) ? 'id='.$id : 'al='.$al), $pag['page_tab'], $pag['page_totaltabs'], 1, 'pg');
+	$pag['page_tabnav'] = $pn['main'];
+	$cfg['easypagenav'] = $tmp;
 
 	$t->assign(array(
 		'PAGE_MULTI_TABNAV' => $pag['page_tabnav'],
