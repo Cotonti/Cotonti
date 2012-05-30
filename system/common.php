@@ -173,7 +173,7 @@ if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .
 define('COT_SITE_URI', $sys['site_uri']);
 if (empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
 // Absolute site url
-$sys['port'] = empty($url['port']) || $_SERVER['SERVER_PORT'] == 80 ? '' : ':' . ($cfg['multihost'] ? $_SERVER['SERVER_PORT'] : $url['port']);
+$sys['port'] = empty($url['port']) || $_SERVER['SERVER_PORT'] == 80 ? '' : ($cfg['multihost'] ? '' : ':' . $url['port']);
 $sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
 $sys['canonical_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $_SERVER['REQUEST_URI'];
 define('COT_ABSOLUTE_URL', $sys['abs_url']);
