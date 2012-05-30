@@ -58,7 +58,7 @@ if (empty($n))
 	{
 		$t->parse('LIST.ADMIN_STRUCTURE_EMPTY');
 	}
-	
+
 	$t->assign(array(
 		'ADMIN_STRUCTURE_EXFLDS_URL' => cot_url('admin', 'm=extrafields')
 	));
@@ -76,7 +76,7 @@ else
 	{
 		$adminhelp = $L['adm_help_structure'];
 	}
-	
+
 	if ($a == 'update' && !empty($_POST))
 	{
 		$rstructurecode = cot_import('rstructurecode', 'P', 'ARR');
@@ -130,7 +130,7 @@ else
 
 			$rtplmode = cot_import($rtplmodearr[$i], 'D', 'INT');
 			$rtplquick = cot_import($rtplquickarr[$i], 'D', 'TXT');
-			
+
 			$rstructure['structure_tpl'] = null;
 			if (!empty($rtplquick) || empty($rtplmode))
 			{
@@ -148,11 +148,13 @@ else
 			{
 				$rstructure['structure_tpl'] = '';
 			}
-			
-			$res = cot_structure_update($n, $i, $oldrow, $rstructure);
-			if (is_array($res))
+			if (!cot_error_found())
 			{
-				cot_error($res[0], $res[1]);
+				$res = cot_structure_update($n, $i, $oldrow, $rstructure);
+				if (is_array($res))
+				{
+					cot_error($res[0], $res[1]);
+				}
 			}
 		}
 		cot_extrafield_movefiles();
@@ -161,7 +163,7 @@ else
 		{
 			$cache->clear();
 		}
-		
+
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.structure.update.done') as $pl)
 		{
@@ -205,34 +207,35 @@ else
 		{
 			$rstructure['structure_tpl'] = '';
 		}
-		
+
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.structure.add.first') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
-
-		$res = cot_structure_add($n, $rstructure);
-		if ($res === true)
+		if (!cot_error_found())
 		{
-			/* === Hook === */
-			foreach (cot_getextplugins('admin.structure.add.done') as $pl)
+			$res = cot_structure_add($n, $rstructure);
+			if ($res === true)
 			{
-				include $pl;
+				/* === Hook === */
+				foreach (cot_getextplugins('admin.structure.add.done') as $pl)
+				{
+					include $pl;
+				}
+				/* ===== */
+				cot_message('Added');
 			}
-			/* ===== */
-			cot_message('Added');
+			elseif (is_array($res))
+			{
+				cot_error($res[0], $res[1]);
+			}
+			else
+			{
+				cot_error('Error');
+			}
 		}
-		elseif (is_array($res))
-		{
-			cot_error($res[0], $res[1]);
-		}
-		else
-		{
-			cot_error('Error');
-		}
-
 		cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 	}
 	elseif ($a == 'delete')
@@ -269,14 +272,14 @@ else
 			}
 			$sql->closeCursor();
 		}
-		
+
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.structure.resync.done') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
-		
+
 		$res ? cot_message('Resynced') : cot_message("Error: function $area_sync doesn't exist."); // TODO i18n
 		($cache && $cfg['cache_'.$n]) && $cache->page->clear($n);
 		cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
@@ -285,7 +288,7 @@ else
 	$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 	$adminpath[] = array(cot_url('admin', 'm='.$n), $ext_info['name']);
 	$adminpath[] = array (cot_url('admin', 'm=structure&n=page'), $L['Structure']);
-	
+
 	if($id > 0 || !empty($al))
 	{
 		$where = $id > 0 ? 'structure_id='.(int)$id  : "structure_code='".$db->prep($al)."'";
