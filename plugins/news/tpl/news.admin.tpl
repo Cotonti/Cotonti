@@ -42,6 +42,11 @@
 			<td class="centerall">{PHP.R.icon_reset}</td>
 		</tr>
 		<tr>
+			<td>{PHP.L.cfg_cache_ttl.0}:</td>
+			<td class="centerall"><span id="cachettl"> &nbsp; </span></td>
+			<td class="centerall">{PHP.R.icon_reset}</td>
+		</tr>
+		<tr>
 			<td class="valid" colspan="3"><button type="submit">{PHP.L.Update}</button></td>
 		</tr>
 	</table>

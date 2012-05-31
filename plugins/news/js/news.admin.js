@@ -18,7 +18,7 @@ function changecats()
 		else
 		{
 			$('#cat_'+i+' .cag').html(('{' + 'INDEX_NEWS}').toUpperCase());
-			$('#cat_'+i+' .caf').html('news.tpl');			
+			$('#cat_'+i+' .caf').html('news.tpl');
 		}
 		if ($('#cat_'+i).length && mycat != '')
 		{
@@ -43,7 +43,7 @@ function changecats()
 				$('#cat_'+i+' > .cat_exists').show();
 			}
 		}
-	} 
+	}
 	$('[name=category]').val(newstext);
 }
 
@@ -65,6 +65,7 @@ $(document).ready(function(){
 	$('[name=x]').insertBefore('#addoption');
 	$("#cat_new").hide();
 	$("#syncpag").html($('[name=syncpagination]').parent().parent().html());
+	$("#cachettl").html($('[name=cache_ttl]').parent().html());
 	$('#catgenerator').show().parents('form#saveconfig').html($('#catgenerator').html());
 
 	for (var i = 1; i <= num + 1; i++)
