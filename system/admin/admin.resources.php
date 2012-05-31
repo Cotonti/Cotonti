@@ -34,12 +34,12 @@ $R['admin_icon_bbcodes'] = '<img class="icon" src="system/admin/img/page.png" al
 $R['admin_icon_cache'] = '<img class="icon" src="system/admin/img/config.png" alt="" />';
 $R['admin_icon_comments'] = '<img class="icon" src="system/admin/img/comments.png" alt="" />';
 
-$R['admin_icon_config'] = 
+$R['admin_icon_config'] =
 	'<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/prefs.png" alt="" />';
 
 $R['admin_icon_ct'] = '<img class="icon" src="system/admin/img/{$code}.png" alt="" />';
 
-$R['admin_icon_delete'] = 
+$R['admin_icon_delete'] =
 	'<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/trash.png" alt="" />';
 
 $R['admin_icon_deny'] = '<img class="icon" src="system/admin/img/deny.png" alt="" />';
@@ -65,7 +65,7 @@ $R['admin_icon_join2'] = '<img class="icon" src="system/admin/img/join2.png" alt
 $R['admin_icon_journals'] = '<img class="icon" src="system/admin/img/journals.png" alt="" />';
 $R['admin_icon_blank'] = '<img class="icon" src="system/admin/img/blank.png" alt="" />';
 
-$R['admin_icon_jumpto'] = 
+$R['admin_icon_jumpto'] =
 	'<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/arrow-jump.png" alt="" />';
 
 $R['admin_icon_links'] = '<img class="icon" src="system/admin/img/links.png" alt="" />';
@@ -85,11 +85,11 @@ $R['admin_icon_pm'] = '<img class="icon" src="system/admin/img/pm.png" alt="" />
 $R['admin_icon_polls'] = '<img class="icon" src="system/admin/img/polls.png" alt="" />';
 $R['admin_icon_referers'] = '<img class="icon" src="system/admin/img/info.png" alt="" />';
 
-$R['admin_icon_reset'] = 
+$R['admin_icon_reset'] =
 	'<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/reset.png" alt="" />';
-$R['admin_icon_rights'] = 
+$R['admin_icon_rights'] =
 	'<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/rights.png" alt="" />';
-$R['admin_icon_rights2'] = 
+$R['admin_icon_rights2'] =
 	'<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/rights.png" alt="" />';
 
 $R['admin_icon_smilies'] = '<img class="icon" src="system/admin/img/smilies.png" alt="" />';
@@ -111,6 +111,15 @@ $R['admin_icon_usergroup1'] = '<img class="icon" src="system/admin/img/users.png
 $R['admin_menu_icon_module'] = '<img src="{$src}" alt="{$title}" /><span>{$title}</span>';
 
 //Extrafields
-$R['admin_exflds_array'] = '{$tplfile}: {$tags}; '
+$R['admin_exflds_array'] = '{$tplfile}: {$tags}; ';
+
+// Breadcrumbs
+$R['breadcrumbs_container'] = '{$crumbs}';
+$R['breadcrumbs_separator'] = ' / ';
+$R['breadcrumbs_link'] = '<a href="{$url}" title="{$title}">{$title}</a>';
+$R['breadcrumbs_plain'] = '{$title}';
+$R['breadcrumbs_crumb'] = '{$crumb}';
+$R['breadcrumbs_first'] = '{$crumb}';
+$R['breadcrumbs_last'] = '{$crumb}';
 
 ?>
