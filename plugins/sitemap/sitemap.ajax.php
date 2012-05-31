@@ -65,7 +65,7 @@ if ($regenerate)
 			if (!$auth_cache[$c] || $c === 'system') continue;
 			// Pagination support
 			$maxrowsperpage = ($cfg['page'][$c]['maxrowsperpage']) ? $cfg['page'][$c]['maxrowsperpage'] : $cfg['page']['__default']['maxrowsperpage'];
-			$subs = ceil($cat['count'] / $maxrowsperpage);
+			$subs = floor($cat['count'] / $maxrowsperpage) + 1;
 			foreach (range(1, $subs) as $pg)
 			{
 				$d = $cfg['easypagenav'] ? $pg : ($pg - 1) * $maxrowsperpage;
@@ -117,7 +117,7 @@ if ($regenerate)
 			if (!$auth_cache[$c] || substr_count($cat['path'], '.') == 0) continue;
 			// Pagination support
 			$count = $cat_top[$c]['fs_topiccount'];
-			$subs = ceil($count / $maxrowsperpage);
+			$subs = floor($count / $maxrowsperpage) + 1;
 			// Pages starting from second
 			foreach (range(1, $subs) as $pg)
 			{
@@ -142,7 +142,7 @@ if ($regenerate)
 			$q = $row['ft_id'];
 			// Pagination support
 			$count = $row['ft_postcount'];
-			$subs = ceil($count / $maxrowsperpage);
+			$subs = floor($count / $maxrowsperpage) + 1;
 			// Pages starting from second
 			foreach (range(1, $subs) as $pg)
 			{
