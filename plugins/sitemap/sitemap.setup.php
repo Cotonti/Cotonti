@@ -27,12 +27,12 @@
  * page=10:radio::1:Include pages
  * page_freq=12:select:default,always,hourly,daily,weekly,monthly,yearly,never:default:Pages change frequency
  * page_prio=13:select:0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0:0.5:Pages priority
- * forums=10:radio::1:Include forums
- * forums_freq=12:select:default,always,hourly,daily,weekly,monthly,yearly,never:default:Forums change frequency
- * forums_prio=13:select:0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0:0.5:Forums priority
- * users=10:radio::0:Include users
- * users_freq=12:select:default,always,hourly,daily,weekly,monthly,yearly,never:default:Users change frequency
- * users_prio=13:select:0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0:0.5:Users priority
+ * forums=20:radio::1:Include forums
+ * forums_freq=22:select:default,always,hourly,daily,weekly,monthly,yearly,never:default:Forums change frequency
+ * forums_prio=23:select:0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0:0.5:Forums priority
+ * users=30:radio::0:Include users
+ * users_freq=32:select:default,always,hourly,daily,weekly,monthly,yearly,never:default:Users change frequency
+ * users_prio=33:select:0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0:0.5:Users priority
  * [END_COT_EXT_CONFIG]
 ==================== */
 
