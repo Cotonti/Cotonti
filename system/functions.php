@@ -3,7 +3,7 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.9.9
+ * @version 0.9.10
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD License
@@ -37,8 +37,8 @@ $usr = array();
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.9';
-$cfg['dbversion'] = '0.9.9';
+$cfg['version'] = '0.9.10';
+$cfg['dbversion'] = '0.9.10';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms']))
@@ -51,7 +51,7 @@ if (!isset($cfg['dir_perms']))
 }
 
 /**
- * Registry for captcha functions 
+ * Registry for captcha functions
  */
 $cot_captcha = array();
 
@@ -240,7 +240,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 	{
 		parse_str(file_get_contents('php://input'), $_DELETE);
 	}
-	
+
 	switch($source)
 	{
 		case 'G':
@@ -262,12 +262,12 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 				return($v);
 			}
 			break;
-			
+
 		case 'PUT':
 			$v = (isset($_PUT[$name])) ? $_PUT[$name] : NULL;
 			$log = TRUE;
 			break;
-		
+
 		case 'PATCH':
 			$v = (isset($_PATCH[$name])) ? $_PATCH[$name] : NULL;
 			$log = TRUE;
@@ -311,7 +311,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 		$v = cot_import_buffered($name, $v, null);
 		return $v;
 	}
-	
+
 	if ($v === null)
 	{
 		return null;
@@ -468,7 +468,7 @@ function cot_import_buffer_save()
 		// Save the buffer
 		$_SESSION['cot_buffer'][$hash] = $_POST;
 	}
-	
+
 }
 
 /**
@@ -571,8 +571,8 @@ function cot_import_pagenav($var_name, $max_items = 0)
 	if($max_items <= 0)
 	{
 		$max_items = $cfg['maxrowsperpage'];
-	}	
-	
+	}
+
 	if($max_items <= 0)
 	{
 		throw new Exception('Invalid $max_items ('.$max_items.') for pagination.');
@@ -662,7 +662,7 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
 				: $headers;
 		$headers .= "Message-ID: <" . md5(uniqid(microtime())) . "@" . $_SERVER['SERVER_NAME'] . ">\n";
 
-		$type_body = $html ? "html" : "plain"; 
+		$type_body = $html ? "html" : "plain";
 		$headers .= "Content-Type: text/".$type_body."; charset=UTF-8\n";
 		$headers .= "Content-Transfer-Encoding: 8bit\n";
 
@@ -812,7 +812,7 @@ function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
 function cot_setcookie($name, $value, $expire = '', $path='', $domain='', $secure = false, $httponly = true)
 {
 	global $cfg;
-	
+
 	if (mb_strpos($domain, '.') === FALSE)
 	{
 		// Some browsers don't support cookies for local domains
@@ -912,7 +912,7 @@ function cot_unique($length = 16)
 
 /**
  * Generates random string within specified charlist
- * 
+ *
  * @param int $length String length
  * @param string $charlist Allowed characters, defaults to alphanumeric chars
  * @return string and numbers ($pass)
@@ -980,7 +980,7 @@ function cot_load_structure()
 			$tpath[$row['structure_path']] = $row['structure_title'];
 			$parent = $row['structure_code']; // self
 		}
-		
+
 		if ($row['structure_tpl'] == 'same_as_parent')
 		{
 			$row['structure_tpl'] = $tpls[$parent];
@@ -1333,7 +1333,7 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false,
 	$separator = (!empty($separator) || !empty($inrc)) ? $separator : cot_rc('breadcrumbs_separator');
 	$separator = ($separator == 'breadcrumbs_separator') ? $cfg['separator'] : $separator;
 	$separator = (!empty($inrc) && (mb_strlen($separator) > 2 || empty($separator))) ? $separator : ' '.$separator.' ';
-	
+
 	$breadcrumbs = implode($separator, $tmp);
 	$container = cot_rc('breadcrumbs_container', array('crumbs' => $breadcrumbs));
 	return ($container == 'breadcrumbs_container') ? $breadcrumbs : $container;
@@ -1653,7 +1653,7 @@ function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round =
 		'1' => $Ls['Seconds'],
 		'0.001' => $Ls['Milliseconds']
 	);
-	if ($t2 === null) 
+	if ($t2 === null)
 	{
 		$t2 = $sys['now_offset'];
 	}
@@ -1792,7 +1792,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 	global $db, $cot_extrafields, $cot_groups, $cfg, $L, $cot_yesno, $user_cache, $db_users, $usr;
 
 	static $extp_first = null, $extp_main = null;
-	
+
 	$return_array = array();
 
 	if (is_null($extp_first))
@@ -1807,10 +1807,10 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 		include $pl;
 	}
 	/* ===== */
-	
+
 	$user_id = is_array($user_data) ? (int)$user_data['user_id'] : (is_numeric($user_data) ? (int)$user_data : 0);
 	if (isset($user_cache[$user_id]))
-	{	
+	{
 		$temp_array = $user_cache[$user_id];
 	}
 	else
@@ -1825,7 +1825,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 		{
 			$user_data['user_birthdate'] = cot_date2stamp($user_data['user_birthdate']);
 			$user_data['user_text'] = cot_parse($user_data['user_text'], $cfg['usertextimg']);
-			
+
 			$temp_array = array(
 				'ID' => $user_data['user_id'],
 				'NAME' => cot_build_user($user_data['user_id'], htmlspecialchars($user_data['user_name'])),
@@ -1894,7 +1894,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'LASTIP' => ''
 			);
 		}
-		
+
 		/* === Hook === */
 		foreach ($extp_main as $pl)
 		{
@@ -2214,7 +2214,7 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 
 /**
  * If condition is true, triggers an error with given message and source
- * 
+ *
  * @param bool $condition Boolean condition
  * @param string $message Error message or message key
  * @param string $src Error source field name
@@ -2363,7 +2363,7 @@ function cot_die($cond = true, $notfound = false, $header = true)
 	if ($cond)
 	{
 		$msg = $notfound ? '404' : '950';
-		
+
 		cot_die_message($msg, true);
 	}
 	return FALSE;
@@ -2405,7 +2405,7 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 
 /**
  * Terminates script execution and displays message page
- * 
+ *
  * @param int $code Message code
  * @param bool $header Render page header
  */
@@ -2416,7 +2416,7 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
     $LL = $L;
     require_once cot_langfile('message', 'core');
     $L = array_merge($L, $LL);
-	
+
 	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST')
 	{
 		// Save the POST data
@@ -2462,17 +2462,17 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 		950 => '403 Forbidden',
 		951 => '503 Service Unavailable'
 	);
-	
+
 	if (!$out['meta_contenttype'])
 	{
 		$out['meta_contenttype'] = 'text/html';
 	}
 	cot_sendheaders($out['meta_contenttype'], $msg_status[$code]);
-	
+
 	// Determine message title and body
 	$title = empty($message_title) ? $L['msg' . $code . '_title'] : $message_title;
 	$body = empty($message_body) ? $L['msg' . $code . '_body'] : $message_body;
-	
+
 	// Render the message page
 	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
 	$tpl_path = '';
@@ -2495,7 +2495,7 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 	}
 
 	$t = new XTemplate($tpl_path);
-	
+
 	$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
 
 	$t->assign(array(
@@ -2794,7 +2794,7 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 		if (@file_exists($cfg['lang_dir']."/$lang/modules/$name.$lang.lang.php"))
 		{
 			return $cfg['lang_dir']."/$lang/modules/$name.$lang.lang.php";
-		}		
+		}
 		elseif (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
 		{
 			return $cfg['modules_dir']."/$name/lang/$name.$lang.lang.php";
@@ -2816,11 +2816,11 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 		}
 	}
 	else
-	{		
+	{
 		if (@file_exists($cfg['lang_dir']."/$lang/plugins/$name.$lang.lang.php"))
 		{
 			return $cfg['lang_dir']."/$lang/plugins/$name.$lang.lang.php";
-		}		
+		}
 		elseif (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
 		{
 			return $cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php";
@@ -3072,7 +3072,7 @@ if (!function_exists('strptime'))
 	 * @license MIT
 	 * @param string $date
 	 * @param string $format
-	 * @return boolean 
+	 * @return boolean
 	 */
 	function strptime($date, $format)
 	{
@@ -3541,8 +3541,8 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 
 /**
  * Returns the list of available rich text editors
- * 
- * @return array 
+ *
+ * @return array
  */
 function cot_get_editors()
 {
@@ -3563,8 +3563,8 @@ function cot_get_editors()
 
 /**
  * Returns the list of available markup parsers
- * 
- * @return array 
+ *
+ * @return array
  */
 function cot_get_parsers()
 {
@@ -3634,14 +3634,14 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 	{
 		$text = nl2br(htmlspecialchars($text));
 	}
-	
+
 	/* == Hook == */
 	foreach (cot_getextplugins('parser.last') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	
+
 	return $text;
 }
 
@@ -3840,7 +3840,7 @@ function cot_rc($name, $params = array())
 	{
 		$L[$name] = (!empty($theme_reload['L'][$name]) && $theme_reload['L'][$name] != $L[$name]) ? $theme_reload['L'][$name] : $L[$name];
 	}
-	
+
 	$res = isset($R[$name]) ? $R[$name]
 		: (isset($L[$name]) ? $L[$name] : $name);
 	is_array($params) ? $args = $params : parse_str($params, $args);
@@ -4194,7 +4194,7 @@ function cot_rc_add_standard()
 	{
 		cot_rc_add_file('js/jquery.history.min.js');
 	}
-	
+
 	if ($cfg['jquery'])
 	{
 		cot_rc_add_file('js/jqModal.min.js');
@@ -4303,7 +4303,7 @@ function cot_rc_link_file($path, $prepend = false)
 
 /**
  * A shortcut to append a JavaScript or CSS file to {FOOTER_JS} tag
- * 
+ *
  * @global array $out Output snippets
  * @param string $path JavaScript or CSS file path
  */
@@ -4342,10 +4342,10 @@ function cot_rc_minify($code, $type = 'js')
 
 /**
  * Generates a captcha
- * 
+ *
  * @global array $cfg
  * @global array $cot_captcha
- * @return string 
+ * @return string
  */
 function cot_captcha_generate()
 {
@@ -4386,7 +4386,7 @@ function cot_captcha_list()
  * Valides a captcha value
  * @global array $cfg
  * @param string $value Captcha input for validation
- * @return boolean 
+ * @return boolean
  */
 function cot_captcha_validate($value)
 {
@@ -4402,7 +4402,7 @@ function cot_captcha_validate($value)
 	{
 		$called = true;
 	}
-	
+
 	if (!$cfg['captcharandom'])
 	{
 		$captcha = $cfg['captchamain'] . "_validate";
@@ -4592,11 +4592,11 @@ function cot_xp()
 
 /**
  * Generates an URL used to confirm an action performed by target URL
- * 
+ *
  * @param string $target_url Target URL which performs the action
  * @param string $ext_name Module/plugin name to peform the action
  * @param string $msg_code Language string key which contains confirmation request text
- * @return string 
+ * @return string
  */
 function cot_confirm_url($target_url, $ext_name = '', $msg_key = '')
 {
@@ -4728,7 +4728,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	{
 		$params = $params + $cot_url_appendix;
 	}
-	
+
 	foreach ($params as $k => $param)
 	{
 		if (is_bool($param))
@@ -4744,12 +4744,12 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 			unset($params[$k]);
 		}
 	}
-	
+
 	if (function_exists('cot_url_custom'))
 	{
 		return cot_url_custom($name, $params, $tail, $htmlspecialchars_bypass);
 	}
-	
+
 	$url = in_array($name, array('admin', 'login', 'message')) ? "$name.php" : 'index.php';
 	if (!in_array($name, array('admin', 'index', 'login', 'message', 'plug')))
 	{
