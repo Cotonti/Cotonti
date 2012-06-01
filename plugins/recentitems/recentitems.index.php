@@ -32,7 +32,7 @@ if ($enpages || $enforums)
 		// Try to load from cache for guests
 		if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['recentitems']['cache_ttl'] > 0)
 		{
-			$ri_cache_id = "$theme.pages";
+			$ri_cache_id = "$theme.$lang.pages";
 			$ri_html = $cache->disk->get($ri_cache_id, 'recentitems', (int) $cfg['plugin']['recentitems']['cache_ttl']);
 		}
 
@@ -56,7 +56,7 @@ if ($enpages || $enforums)
 		// Try to load from cache for guests
 		if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['recentitems']['cache_ttl'] > 0)
 		{
-			$ri_cache_id = "$theme.forums";
+			$ri_cache_id = "$theme.$lang.forums";
 			$ri_html = $cache->disk->get($ri_cache_id, 'recentitems', (int) $cfg['plugin']['recentitems']['cache_ttl']);
 		}
 

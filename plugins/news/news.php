@@ -64,7 +64,7 @@ if (count($cats) > 0)
 		// Cache for guests
 		if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['news']['cache_ttl'] > 0)
 		{
-			$news_cache_id = "$theme.$cat." . $v[3]['d']; // Includes theme, category and current page
+			$news_cache_id = "$theme.$lang.$cat." . $v[3]['d']; // Includes theme, lang, category and current page
 			$news_html = $cache->disk->get($news_cache_id, 'news', (int) $cfg['plugin']['news']['cache_ttl']);
 			if (!is_null($news_html))
 			{
