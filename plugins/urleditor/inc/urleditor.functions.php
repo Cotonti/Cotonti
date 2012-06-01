@@ -125,6 +125,8 @@ function cot_apply_rwr()
 	}
 }
 
+$cot_url_shortcuts['page']['c=rewbs&filter[foo][bar]=super&filter[boo][baz]=girl'] = 'rewbs/super-girl';
+
 /**
  * Transforms parameters into URL by following user-defined rules.
  * This function can be overloaded by cot_url_custom().
@@ -138,7 +140,13 @@ function cot_apply_rwr()
  */
 function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypass = false)
 {
-	global $cfg, $cot_urltrans, $sys;
+	global $cfg, $cot_urltrans, $sys, $cot_url_shortcuts;
+
+	$q_s = str_replace('%5B', '[', str_replace('%5D', ']', http_build_query($params)));
+	if (isset($cot_url_shortcuts[$name][$q_s]))
+	{
+		return $cot_url_shortcuts[$name][$q_s];
+	}
 
 	// Preprocess arguments
 	if (is_string($params))
