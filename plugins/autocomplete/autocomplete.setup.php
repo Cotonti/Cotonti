@@ -4,7 +4,7 @@
 Code=autocomplete
 Name=Autocomplete
 Category=misc-ext
-Description=autocomplete script
+Description=Autocomplete for user names in some forms
 Version=0.8.3
 Date=2011-jan-8
 Author=esclkm
