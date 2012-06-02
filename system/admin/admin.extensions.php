@@ -369,6 +369,7 @@ switch($a)
 
 					foreach (explode(',', $info[$dep_type]) as $ext)
 					{
+						$ext = trim($ext);
 						$dep_installed = cot_extension_installed($ext);
 						if ($dep_obligatory)
 						{
