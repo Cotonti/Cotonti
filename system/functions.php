@@ -2926,7 +2926,7 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 	{
 		$base = array($base);
 	}
-	if ($admin == null)
+	if (is_null($admin))
 	{
 		$admin = ($base[0] == 'admin' || ($base[1] && $base[1] == 'admin'));
 	}
