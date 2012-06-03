@@ -2910,10 +2910,10 @@ function cot_schemefile()
  *
  * @param mixed $base Item name (string), or base names (array)
  * @param string $type Extension type: 'plug', 'module' or 'core'
- * @param bool $admin Admin part
+ * @param bool $admin Use admin theme file if present. Tries to determine from base string by default.
  * @return string
  */
-function cot_tplfile($base, $type = 'module', $admin = false)
+function cot_tplfile($base, $type = 'module', $admin = null)
 {
 	global $usr, $cfg;
 
@@ -2926,43 +2926,36 @@ function cot_tplfile($base, $type = 'module', $admin = false)
 	{
 		$base = array($base);
 	}
-
-	$basename = $base[0];
+	if ($admin == null)
+	{
+		$admin = ($base[0] == 'admin' || ($base[1] && $base[1] == 'admin'));
+	}
+	$scan_dirs = array();
 
 	// Possible search directories depending on extension type
 	if ($type == 'plug')
 	{
 		// Plugin template paths
-		($admin && !empty($cfg['admintheme'])) && $scan_prefix[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/plugins/";
-		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/";
-		$scan_prefix[] = "{$cfg['plugins_dir']}/$basename/tpl/";
+		$admin && !empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/plugins/";
+		$admin && $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/plugins/";
+		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/";
+		$scan_dirs[] = "{$cfg['plugins_dir']}/{$base[0]}/tpl/";
 	}
-	elseif ($type == 'core')
+	elseif ($type == 'core' && in_array($base[0], array('admin', 'header', 'footer', 'message')))
 	{
 		// Built-in core modules
-		if(in_array($basename, array('admin', 'header', 'footer', 'message')))
-		{
-			$basename = 'admin';
-			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/$basename/";
-			if (!empty($cfg['admintheme']))
-			{
-				$scan_prefix[] = "{$cfg['themes_dir']}/$basename/{$cfg['admintheme']}/";
-			}
-		}
-		else
-		{
-			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
-			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
-		}
-		$scan_prefix[] = "{$cfg['system_dir']}/$basename/tpl/";
+		!empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/";
+		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/";
+		$scan_dirs[] = "{$cfg['system_dir']}/admin/tpl/";
 	}
 	else
 	{
 		// Module template paths
-		($admin && !empty($cfg['admintheme'])) && $scan_prefix[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/modules/";
-		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
-		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
-		$scan_prefix[] = "{$cfg['modules_dir']}/$basename/tpl/";
+		$admin && !empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/modules/";
+		$admin && $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/modules/";
+		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
+		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
+		$scan_dirs[] = "{$cfg['modules_dir']}/{$base[0]}/tpl/";
 	}
 
 	// Build template file name from base parts glued with dots
@@ -2972,16 +2965,15 @@ function cot_tplfile($base, $type = 'module', $admin = false)
 		$levels = array_slice($base, 0, $i);
 		$themefile = implode('.', $levels) . '.tpl';
 		// Search in all available directories
-		foreach ($scan_prefix as $pfx)
+		foreach ($scan_dirs as $dir)
 		{
-			if (file_exists($pfx . $themefile))
+			if (file_exists($dir . $themefile))
 			{
-				return $pfx . $themefile;
+				return $dir . $themefile;
 			}
 		}
 	}
-
-	// throw new Exception('Template file '.implode('.', $base).'.tpl ('.$type.') was not found.');
+	
 	return false;
 }
 
