@@ -43,8 +43,8 @@ if ($cfg['debug_mode'])
 spl_autoload_register('cot_autoload');
 register_shutdown_function('cot_shutdown');
 
-// Each user has his own timezone preference based on offset from GMT, so all dates are GMT by default
-date_default_timezone_set('GMT');
+// Each user has his own timezone preference based on offset from GMT, so all dates are UTC/GMT by default
+date_default_timezone_set('UTC');
 $sys['day'] = @date('Y-m-d');
 $sys['now'] = time();
 $sys['now_offset'] = $sys['now'];
@@ -545,7 +545,8 @@ $cot_yesno[1] = $L['Yes'];
 /* ======== Local/GMT time ======== */
 
 $usr['timetext'] = cot_build_timezone($usr['timezone']);
-$usr['gmttime'] = cot_date('datetime_medium', $sys['now_offset']).' GMT';
+$usr['gmttime'] = cot_date('datetime_medium', $sys['now'], false).' GMT';
+$usr['localtime'] = cot_date('datetime_medium', $sys['now']);
 
 /* ======== Anti-XSS protection ======== */
 

@@ -1662,20 +1662,27 @@ function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round =
 }
 
 /**
- * Returns user timezone offset
+ * Returns timezone offset formatted according to ISO 8601
  *
- * @param int $tz Timezone
- * @return string
+ * @param float $tz Timezone offset in hours. Set NULL for unknown timezone.
+ * @param bool $withgmt Include 'GMT' in the returned string.
+ * @param bool $short Use format without minutes, like GMT+1
+ * @return string Textual timezone like GMT+1:00
  */
-function cot_build_timezone($tz)
+function cot_build_timezone($tz, $withgmt = true, $short = false)
 {
-	global $L;
-
-	$result = 'GMT';
-
-	$result .= cot_declension($tz, $Ls['Hours']);
-
-	return $result;
+	$gmt = $withgmt ? 'GMT' : '';
+	if (is_null($tz))
+	{
+		return $short ? "$gmt-00" : "$gmt-00:00";
+	}
+	if ($tz == 0)
+	{
+		return $short ? "$gmt+00" : "$gmt+00:00";
+	}
+	$format = $short ? 'H' : 'H:i';
+	$time = gmdate($format, abs($tz) * 3600);
+	return ($tz > 0) ? "$gmt+$time" : "$gmt-$time";
 }
 
 /**
