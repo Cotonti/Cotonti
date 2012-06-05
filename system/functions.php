@@ -1666,8 +1666,8 @@ function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round =
  *
  * @param float $tz Timezone offset in hours. Set NULL for unknown timezone.
  * @param bool $withgmt Include 'GMT' in the returned string.
- * @param bool $short Use format without minutes, like GMT+1
- * @return string Textual timezone like GMT+1:00
+ * @param bool $short Use format without minutes, like GMT+01
+ * @return string Textual timezone like GMT+01:00
  */
 function cot_build_timezone($tz, $withgmt = true, $short = false)
 {
