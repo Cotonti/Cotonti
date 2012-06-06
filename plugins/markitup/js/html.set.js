@@ -94,6 +94,7 @@ var mySettings = {
 			{name: L.code, className: 'mCode', multiline:true, openBlockWith:'<code>', closeBlockWith:'</code>'}
 		]},
 		{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) {showSmilies(markitup)}},
+		{name: L.more, className: 'mMore', replaceWith: '<hr class="more" />'},
 		{separator:'---------------'},
 		{name: L.clean, className:"mClean", replaceWith:function(markitup) {return markitup.selection.replace(/\[(.*?)\]/g, "")}},
 		{name: L.preview, className:"mPreview", call:'preview'}

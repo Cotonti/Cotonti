@@ -9,15 +9,15 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 
 (function()
 {
-var moreCmd =
-        {
- exec : function( editor )
-	                {
-	                editor.insertHtml('<!--more-->');
-	                }
-};
+	var moreCmd =
+	{
+		exec : function( editor )
+		{
+			editor.insertHtml('<hr class="more" />');
+		}
+	};
 
-var pluginName = 'more';
+	var pluginName = 'more';
 // Регистрируем имя плагина .
 CKEDITOR.plugins.add( pluginName,
 {

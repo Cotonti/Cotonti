@@ -3,6 +3,7 @@
 CKEDITOR.editorConfig = function( config )
 {
     config.toolbar = 'Full';
+	config.extraPlugins = 'more';
 
 	config.toolbar_Full =
 	[
@@ -15,7 +16,7 @@ CKEDITOR.editorConfig = function( config )
 		['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
 		['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
 		['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-		['Link','Unlink','Anchor'],
+		['Link','Unlink','Anchor','More'],
 		['Styles','Format'],
 		['TextColor','BGColor']
 	];
