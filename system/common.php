@@ -298,6 +298,7 @@ $usr['level'] = 0;
 $usr['lastvisit'] = 30000000000;
 $usr['lastlog'] = 0;
 $usr['timezone'] = $cfg['defaulttimezone'];
+$usr['timezonename'] = 'GMT';
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
@@ -321,7 +322,8 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				$usr['maingrp'] = $row['user_maingrp'];
 				$usr['lastvisit'] = $row['user_lastvisit'];
 				$usr['lastlog'] = $row['user_lastlog'];
-				$usr['timezone'] = $row['user_timezone'];
+				$usr['timezone'] = cot_timezone_offset($row['user_timezone'], true);
+				$usr['timezonename'] = $row['user_timezone'];
 				$usr['theme'] = ($cfg['forcedefaulttheme']) ? $cfg['defaulttheme'] : $row['user_theme'];
 				$usr['scheme'] = $row['user_scheme'];
 				$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];

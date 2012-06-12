@@ -104,7 +104,7 @@ if ($a=='update')
 
 	$ruser['user_birthdate'] = (int)cot_import_date('ruserbirthdate', false);
 
-	$ruser['user_timezone'] = (float) cot_import('rusertimezone','P','TXT');
+	$ruser['user_timezone'] = cot_import('rusertimezone','P','TXT');
 	$rusernewpass = cot_import('rusernewpass','P','TXT', 16);
 
 	// Extra fields
@@ -285,7 +285,7 @@ $t->assign(array(
 	'USERS_EDIT_TEXT' => cot_textarea('rusertext', $urr['user_text'], 4, 56, array('class' => $editor_class)),
 	'USERS_EDIT_GENDER' => cot_selectbox_gender($urr['user_gender'], 'rusergender'),
 	'USERS_EDIT_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', $sys['now_offset']), cot_date('Y', $sys['now_offset']) - 100, false),
-	'USERS_EDIT_TIMEZONE' => cot_inputbox('text', 'rusertimezone', $urr['user_timezone'], array('size' => 32, 'maxlength' => 16)),
+	'USERS_EDIT_TIMEZONE' => cot_selectbox_timezone($urr['user_timezone'], 'rusertimezone'),
 	'USERS_EDIT_REGDATE' => cot_date('datetime_medium', $urr['user_regdate']),
 	'USERS_EDIT_REGDATE_STAMP' => $urr['user_regdate'],
 	'USERS_EDIT_LASTLOG' => cot_date('datetime_medium', $urr['user_lastlog']),

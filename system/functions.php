@@ -1664,25 +1664,27 @@ function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round =
 /**
  * Returns timezone offset formatted according to ISO 8601
  *
- * @param float $tz Timezone offset in hours. Set NULL for unknown timezone.
+ * @param float $offset Timezone offset in seconds or hours. Set NULL for unknown timezone.
  * @param bool $withgmt Include 'GMT' in the returned string.
- * @param bool $short Use format without minutes, like GMT+01
- * @return string Textual timezone like GMT+01:00
+ * @param bool $short Use format without minutes, like GMT+1
+ * @return string Textual timezone like GMT+1:00
  */
-function cot_build_timezone($tz, $withgmt = true, $short = false)
+function cot_build_timezone($offset, $withgmt = true, $short = false)
 {
 	$gmt = $withgmt ? 'GMT' : '';
-	if (is_null($tz))
+	if (is_null($offset))
 	{
 		return $short ? "$gmt-00" : "$gmt-00:00";
 	}
-	if ($tz == 0)
+	if ($offset == 0)
 	{
 		return $short ? "$gmt+00" : "$gmt+00:00";
 	}
 	$format = $short ? 'H' : 'H:i';
-	$time = gmdate($format, abs($tz) * 3600);
-	return ($tz > 0) ? "$gmt+$time" : "$gmt-$time";
+	$abs = abs($offset);
+	$seconds = $abs < 100 ? $abs * 3600 : $abs; // detect hours or seconds
+	$time = gmdate($format, $seconds);
+	return ($offset > 0) ? "$gmt+$time" : "$gmt-$time";
 }
 
 /**
@@ -1853,7 +1855,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'BIRTHDATE' => ($user_data['user_birthdate'] != 0) ? cot_date('date_full', $user_data['user_birthdate']) : '',
 				'BIRTHDATE_STAMP' => ($user_data['user_birthdate'] != 0) ? $user_data['user_birthdate'] : '',
 				'AGE' => ($user_data['user_birthdate'] != 0) ? cot_build_age($user_data['user_birthdate']) : '',
-				'TIMEZONE' => cot_build_timezone($user_data['user_timezone']),
+				'TIMEZONE' => cot_build_timezone(cot_timezone_offset($user_data['user_timezone'], false, false)) . ' ' .str_replace('_', ' ', $user_data['user_timezone']),
 				'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate']),
 				'REGDATE_STAMP' => $user_data['user_regdate'],
 				'LASTLOG' => cot_date('datetime_medium', $user_data['user_lastlog']),
@@ -3166,6 +3168,63 @@ function cot_date2strftime($format) {
 		's' => '%S', 'O' => '%z', 'T' => '%Z', 'U' => '%s'
     );
     return strtr((string)$format, $chars);
+}
+
+/**
+ * Returns a list of timezones sorted by GMT offset.
+ * 
+ * @return array Multidimensional array. Each timezone has the following keys:
+ *  'name' - PHP timezone name, e.g. "America/El_Salvador"
+ *  'offset' - GMT offset in seconds, e.g. -21600
+ *  'description' : Hourly GMT offset and name in readable format, e.g. "GMT-06:00 America/El Salvador"
+ */
+function cot_timezone_list()
+{
+	static $timezonelist = array();
+	if ($timezonelist) return $timezonelist;
+	
+	$regions = array('Africa', 'America', 'Antarctica', 'Asia', 'Atlantic', 'Europe', 'Indian', 'Pacific');
+	$timezones = DateTimeZone::listIdentifiers();
+	foreach ($timezones as $timezone)
+	{
+		list ($region, $city) = explode('/', $timezone);
+		if (!in_array($region, $regions)) continue;
+		$offset = cot_timezone_offset($timezone);
+		$gmtoffset = cot_build_timezone($offset);
+		$city = str_replace('_', ' ', $city);
+		$timezonelist[] = array(
+			'name' => $timezone,
+			'offset' => $offset,
+			'description' => "$gmtoffset $region/$city"
+		);
+	}
+	foreach ($timezonelist as $k => $tz) {
+		$offsets[$k] = $tz['offset'];
+		$names[$k] = $tz['name'];
+	}
+	array_multisort($offsets, SORT_ASC, $names, SORT_ASC, $timezonelist);
+	return $timezonelist;
+}
+
+/**
+ * Returns the offset from the origin timezone to the remote timezone, in seconds, including DST.
+ * Example: Europe/Amsterdam returns 3600 (GMT+1) in the winter, but 7200 (GMT+2) in the summer (DST).
+ * Whether or not to apply DST is determined automatically by PHP.
+ * A list of supported timezone identifiers is here: http://php.net/manual/en/timezones.php
+ * 
+ * @param string $tz Timezone identifier (e.g. Europe/Amsterdam)
+ * @param bool $hours Return hours instead of seconds
+ * @return mixed Timezone difference in seconds (int) or hours (float).
+ */
+function cot_timezone_offset($tz, $hours = false)
+{
+	if (!$tz || in_array($tz, array('UTC', 'GMT', 'Universal', 'UCT', 'Zulu'))) return 0;
+    $origin_dtz = new DateTimeZone('UTC');
+    $remote_dtz = new DateTimeZone($tz);
+    $origin_dt = new DateTime('now', $origin_dtz);
+    $remote_dt = new DateTime('now', $remote_dtz);
+    $offset = $remote_dtz->getOffset($remote_dt) - $origin_dtz->getOffset($origin_dt);
+	return $hours ? floatval($offset / 3600) : $offset;
 }
 
 /*
