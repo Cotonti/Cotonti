@@ -315,7 +315,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 		{
 			if ($row['user_maingrp'] > 3
 				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip'])
-				&& $row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now_offset'])
+				&& $row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now'])
 			{
 				$usr['id'] = (int) $row['user_id'];
 				$usr['name'] = $row['user_name'];
@@ -340,7 +340,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$_SESSION['cot_user_id'] = $usr['id'];
 				}
 
-				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now_offset'])
+				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now'])
 				{
 					$sys['comingback'] = TRUE;
 					if ($usr['lastlog'] > $usr['lastvisit'])
@@ -363,7 +363,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$cfg['authcache'] && $user_log['user_auth'] = serialize($usr['auth']);
 				}
 
-				$user_log['user_lastlog'] = $sys['now_offset'];
+				$user_log['user_lastlog'] = $sys['now'];
 
 				$db->update($db_users, $user_log, "user_id='{$usr['id']}'");
 				unset($u, $passhash, $oldhash, $hashsalt, $hashsaltprev, $user_log);

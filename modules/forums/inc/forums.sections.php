@@ -32,8 +32,8 @@ foreach (cot_getextplugins('forums.sections.first') as $pl)
 
 if ($n == 'markall' && $usr['id'] > 0)
 {
-	$db->update($db_users, array('user_lastvisit' => $sys['now_offset']), "user_id=".$usr['id']);
-	$usr['lastvisit'] = $sys['now_offset'];
+	$db->update($db_users, array('user_lastvisit' => $sys['now']), "user_id=".$usr['id']);
+	$usr['lastvisit'] = $sys['now'];
 }
 
 if (!$cot_sections_act)

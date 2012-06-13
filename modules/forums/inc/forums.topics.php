@@ -78,7 +78,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 					'ft_desc' => $row['ft_desc'],
 					'ft_preview' => $row['ft_preview'],
 					'ft_creationdate' => $row['ft_creationdate'],
-					'ft_updated' => (int)$sys['now_offset'],
+					'ft_updated' => (int)$sys['now'],
 					'ft_postcount' => 0,
 					'ft_viewcount' => 0,
 					'ft_firstposterid' => $row['ft_firstposterid'],
@@ -114,7 +114,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		
 		case 'bump':
 			cot_check_xg();
-			$db->update($db_forum_topics, array("ft_updated" => $sys['now_offset']), "ft_id=$q");
+			$db->update($db_forum_topics, array("ft_updated" => $sys['now']), "ft_id=$q");
 			cot_forums_sectionsetlast($s);
 			cot_log("Bumped topic #".$q, 'for');
 			break;

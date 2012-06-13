@@ -159,7 +159,7 @@ $t->assign(cot_generate_usertags($pag, 'PAGE_OWNER_'));
 $pag['page_file'] = intval($pag['page_file']);
 if ($pag['page_file'] > 0)
 {
-	if ($sys['now_offset'] > $pag['page_begin'])
+	if ($sys['now'] > $pag['page_begin'])
 	{
 		if (!empty($pag['page_url']))
 		{

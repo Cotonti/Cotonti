@@ -136,7 +136,7 @@ if($a == 'update')
 	}
 	if (!cot_error_found())
 	{
-		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['user_birthdate'];
+		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now']) ? ($sys['now'] - 31536000) : $ruser['user_birthdate'];
 		$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
 		$ruser['user_auth'] ='';
 		$db->update($db_users, $ruser, "user_id='".$usr['id']."'");
@@ -197,7 +197,7 @@ $t->assign(array(
 	'USERS_PROFILE_THEME' => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
 	'USERS_PROFILE_LANG' => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	'USERS_PROFILE_GENDER' => cot_selectbox_gender($urr['user_gender'] ,'rusergender'),
-	'USERS_PROFILE_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', $sys['now_offset']), cot_date('Y', $sys['now_offset']) - 100, false),
+	'USERS_PROFILE_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', $sys['now']), cot_date('Y', $sys['now']) - 100, false),
 	'USERS_PROFILE_TIMEZONE' => cot_selectbox_timezone($urr['user_timezone'], 'rusertimezone'),
 	'USERS_PROFILE_REGDATE' => cot_date('datetime_medium', $urr['user_regdate']),
 	'USERS_PROFILE_REGDATE_STAMP' => $urr['user_regdate'],

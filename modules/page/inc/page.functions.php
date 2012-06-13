@@ -238,7 +238,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			'FILE_NAME' => basename($page_data['page_url']),
 			'COUNT' => $page_data['page_count'],
 			'ADMIN' => $admin_rights ? cot_rc('list_row_admin', array('unvalidate_url' => $unvalidate_url, 'edit_url' => $edit_url)) : '',
-			'NOTAVAILABLE' => ($page_data['page_begin'] > $sys['now_offset']) ? $L['page_notavailable'].cot_build_timegap($sys['now'], $pag['page_begin']) : ''
+			'NOTAVAILABLE' => ($page_data['page_begin'] > $sys['now']) ? $L['page_notavailable'].cot_build_timegap($sys['now'], $pag['page_begin']) : ''
 		);
 
 		// Admin tags

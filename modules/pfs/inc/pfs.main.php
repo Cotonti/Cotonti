@@ -193,7 +193,7 @@ if ($a=='upload')
 
 							$db->insert($db_pfs, array(
 								'pfs_userid' => (int)$userid,
-								'pfs_date' => (int)$sys['now_offset'],
+								'pfs_date' => (int)$sys['now'],
 								'pfs_file' => $u_sqlname,
 								'pfs_extension' => $f_extension,
 								'pfs_folderid' => (int)$folderid,

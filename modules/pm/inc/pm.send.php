@@ -63,7 +63,7 @@ if ($a == 'send')
 		if (!cot_error_found())
 		{
 			$pm['pm_title'] = $newpmtitle;
-			$pm['pm_date'] = (int)$sys['now_offset'];
+			$pm['pm_date'] = (int)$sys['now'];
 			$pm['pm_text'] = $newpmtext;
 			$pm['pm_fromstate'] = $fromstate;
 
@@ -132,7 +132,7 @@ if ($a == 'send')
 			foreach ($touser_ids as $k => $userid)
 			{
 				$pm['pm_title'] = $newpmtitle;
-				$pm['pm_date'] = (int)$sys['now_offset'];
+				$pm['pm_date'] = (int)$sys['now'];
 				$pm['pm_text'] = $newpmtext;
 				$pm['pm_fromstate'] = $fromstate;
 				$pm['pm_fromuserid'] = (int)$usr['id'];

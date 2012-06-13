@@ -196,7 +196,7 @@ function cot_poll_save($type = 'index', $code = '')
 			$db->insert($db_polls, array(
 				'poll_type' => $type,
 				'poll_state' => (int) 0,
-				'poll_creationdate' => (int) $sys['now_offset'],
+				'poll_creationdate' => (int) $sys['now'],
 				'poll_text' => $poll_text,
 				'poll_multiple' => (int) $poll_multiple,
 				'poll_code' => (int) $code

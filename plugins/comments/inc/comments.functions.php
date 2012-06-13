@@ -151,8 +151,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			$t->parse('COMMENTS.COMMENTS_NEWCOMMENT.EXTRAFLD');
 		}
 
-		$allowed_time = cot_build_timegap($sys['now_offset'] - $cfg['plugin']['comments']['time'] * 60,
-			$sys['now_offset']);
+		$allowed_time = cot_build_timegap($sys['now'] - $cfg['plugin']['comments']['time'] * 60,
+			$sys['now']);
 		$com_hint = cot_rc('com_edithint', array('time' => $allowed_time));
 		
 		/* == Hook == */
@@ -207,13 +207,13 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 
 			$com_text = cot_parse($row['com_text'], $cfg['plugin']['comments']['markup']);
 
-			$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE
+			$time_limit = ($sys['now'] < ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE
 				: FALSE;
 			$usr['isowner_com'] = $time_limit && ($usr['id'] > 0 && $row['com_authorid'] == $usr['id']
 				|| $usr['id'] == 0 && $usr['ip'] == $row['com_authorip']);
-			$com_gup = $sys['now_offset'] - ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60);
+			$com_gup = $sys['now'] - ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60);
 			$allowed_time = ($usr['isowner_com'] && !$usr['isadmin']) ? ' - '
-				. cot_build_timegap($sys['now_offset'] + $com_gup, $sys['now_offset']) . $L['plu_comgup'] : '';
+				. cot_build_timegap($sys['now'] + $com_gup, $sys['now']) . $L['plu_comgup'] : '';
 			$com_edit = ($auth_admin || $usr['isowner_com']) ? cot_rc('comments_code_edit', array(
 					'edit_url' => cot_url('plug', 'e=comments&m=edit&cat='.$cat.'&id='.$row['com_id']),
 					'allowed_time' => $allowed_time

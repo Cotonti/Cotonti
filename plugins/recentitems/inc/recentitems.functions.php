@@ -75,7 +75,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			$row['ft_lastpostername'] = $R['forums_code_post_empty'];
 			$row['ft_lastposturl'] = cot_url('forums', 'm=posts&q=' . $row['ft_movedto'] . '&n=last', '#bottom');
 			$row['ft_lastpostlink'] = cot_rc_link($row['ft_lastposturl'], $R['icon_follow']) . ' ' . $L['Moved'];
-			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], $sys['now_offset']);
+			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], $sys['now']);
 		}
 		else
 		{
@@ -87,7 +87,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 				cot_rc_link($row['ft_lastposturl'], $R['icon_unread'], 'rel="nofollow"') :
 				cot_rc_link($row['ft_lastposturl'], $R['icon_follow'], 'rel="nofollow"');
 			$row['ft_lastpostlink'] .= cot_date('datetime_medium', $row['ft_updated']);
-			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], $sys['now_offset']);
+			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], $sys['now']);
 			$row['ft_replycount'] = $row['ft_postcount'] - 1;
 
 			if ($row['ft_updated'] > $usr['lastvisit'] && $usr['id'] > 0)

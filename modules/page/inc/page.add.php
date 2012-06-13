@@ -64,11 +64,11 @@ if ($a == 'add')
 	$rpage['page_file'] = ($rpage['page_file'] == 0 && !empty($rpage['page_url'])) ? 1 : $rpage['page_file'];
 	$rpage['page_ownerid'] = (int)$usr['id'];
 
-	$rpage['page_date'] = (int)$sys['now_offset'];
+	$rpage['page_date'] = (int)$sys['now'];
 	$rpage['page_begin'] = (int)cot_import_date('rpagebegin');
 	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
 	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
-	$rpage['page_updated'] = $sys['now_offset'];
+	$rpage['page_updated'] = $sys['now'];
 	
 	$rpublish = cot_import('rpublish', 'P', 'ALP'); // For backwards compatibility
 	$rpage['page_state'] = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', 'P', 'INT');

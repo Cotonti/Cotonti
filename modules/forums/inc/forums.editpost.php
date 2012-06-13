@@ -83,8 +83,8 @@ if ($a == 'update')
 	
 	$rmsg = array();
 	$rmsg['fp_text'] = cot_import('rmsgtext', 'P', 'HTM');
-	$rmsg['fp_updater'] = ($rowpost['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $rowpost['fp_updated'] + 300) && empty($rowpost['fp_updater']) ) ? '' : $usr['name'];
-	$rmsg['fp_updated'] = $sys['now_offset'];
+	$rmsg['fp_updater'] = ($rowpost['fp_posterid'] == $usr['id'] && ($sys['now'] < $rowpost['fp_updated'] + 300) && empty($rowpost['fp_updater']) ) ? '' : $usr['name'];
+	$rmsg['fp_updated'] = $sys['now'];
 
 	if (isset($_POST['rtopictitle']) && mb_strlen($rtopic['ft_title']) < $cfg['forums']['mintitlelength'])
 	{

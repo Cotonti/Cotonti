@@ -70,7 +70,7 @@ if ($m == 'edit' && $id > 0)
 		cot_die($sql1->rowCount() == 0);
 		$row = $sql1->fetch();
 
-		$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
+		$time_limit = ($sys['now'] < ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
 		$usr['isowner'] = $time_limit
 			&& ($usr['id'] > 0 && $row['com_authorid'] == $usr['id']
 			|| $usr['id'] == 0 && $usr['ip'] == $row['com_authorip']);
@@ -131,7 +131,7 @@ if ($m == 'edit' && $id > 0)
 	cot_die($sql->rowCount() != 1);
 	$com = $sql->fetch();
 
-	$com_limit = ($sys['now_offset'] < ($com['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
+	$com_limit = ($sys['now'] < ($com['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
 	$usr['isowner'] = $com_limit
 		&& ($usr['id'] > 0 && $com['com_authorid'] == $usr['id'] || $usr['id'] == 0
 		&& isset($_SESSION['cot_comments_edit'][$id]));
@@ -217,14 +217,14 @@ if ($a == 'send' && $usr['auth_write'])
 		$comarray['com_authorid'] = (int) $usr['id'];
 		$comarray['com_authorip'] = $usr['ip'];
 		$comarray['com_text'] = $rtext;
-		$comarray['com_date'] = (int) $sys['now_offset'];
+		$comarray['com_date'] = (int) $sys['now'];
 
 		$sql = $db->insert($db_com, $comarray);
 		$id = $db->lastInsertId();
 
 		cot_extrafield_movefiles();
 		
-		$_SESSION['cot_comments_edit'][$id] = $sys['now_offset'];
+		$_SESSION['cot_comments_edit'][$id] = $sys['now'];
 
 		if ($cfg['plugin']['comments']['mail'])
 		{

@@ -1358,9 +1358,9 @@ function cot_build_age($birth)
 	$month1 = @date('m', $birth);
 	$year1 = @date('Y', $birth);
 
-	$day2 = @date('d', $sys['now_offset']);
-	$month2 = @date('m', $sys['now_offset']);
-	$year2 = @date('Y', $sys['now_offset']);
+	$day2 = @date('d', $sys['now']);
+	$month2 = @date('m', $sys['now']);
+	$year2 = @date('Y', $sys['now']);
 
 	$age = ($year2-$year1)-1;
 
@@ -1655,7 +1655,7 @@ function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round =
 	);
 	if ($t2 === null)
 	{
-		$t2 = $sys['now_offset'];
+		$t2 = $sys['now'];
 	}
 	$gap = $t2 - $t1;
 	return cot_build_friendlynumber($gap, $units, $levels, $decimals, $round);
@@ -2704,7 +2704,7 @@ function cot_log($text, $group='def')
 	global $db, $db_logger, $sys, $usr, $_SERVER;
 
 	$db->insert($db_logger, array(
-		'log_date' => (int)$sys['now_offset'],
+		'log_date' => (int)$sys['now'],
 		'log_ip' => $usr['ip'],
 		'log_name' => $usr['name'],
 		'log_group' => $group,

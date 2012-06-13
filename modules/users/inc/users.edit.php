@@ -130,7 +130,7 @@ if ($a=='update')
 
 		$ruser['user_name'] = ($ruser['user_name']=='') ? $urr['user_name'] : $ruser['user_name'];
 
-		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['user_birthdate'];
+		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now']) ? ($sys['now'] - 31536000) : $ruser['user_birthdate'];
 		$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
 
 		if (!$ruserbanned)
@@ -284,7 +284,7 @@ $t->assign(array(
 	'USERS_EDIT_HIDEEMAIL' => cot_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array($L['Yes'], $L['No'])),
 	'USERS_EDIT_TEXT' => cot_textarea('rusertext', $urr['user_text'], 4, 56, array('class' => $editor_class)),
 	'USERS_EDIT_GENDER' => cot_selectbox_gender($urr['user_gender'], 'rusergender'),
-	'USERS_EDIT_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', $sys['now_offset']), cot_date('Y', $sys['now_offset']) - 100, false),
+	'USERS_EDIT_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', $sys['now']), cot_date('Y', $sys['now']) - 100, false),
 	'USERS_EDIT_TIMEZONE' => cot_selectbox_timezone($urr['user_timezone'], 'rusertimezone'),
 	'USERS_EDIT_REGDATE' => cot_date('datetime_medium', $urr['user_regdate']),
 	'USERS_EDIT_REGDATE_STAMP' => $urr['user_regdate'],
