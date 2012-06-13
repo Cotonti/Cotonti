@@ -57,7 +57,7 @@ if (($pag['page_state'] == 1
 		|| ($pag['page_state'] == 2 && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
 		|| ($pag['page_begin'] > $sys['now'])
 		|| ($pag['page_expire'] > 0 && $sys['now'] > $pag['page_expire'])) 
-	&& (!$usr['isadmin'] || $usr['id'] != $pag['page_ownerid']))
+	&& (!$usr['isadmin'] && $usr['id'] != $pag['page_ownerid']))
 {
 	cot_log("Attempt to directly access an un-validated or future/expired page", 'sec');
 	cot_die_message(403, TRUE);
