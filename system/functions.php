@@ -3171,59 +3171,97 @@ function cot_date2strftime($format) {
 }
 
 /**
+ * Returns previous, current and next transition in a certain timezone.
+ * Useful for detecting if DST is currently in effect.
+ *
+ * @param string $tz Timezone identifier, must be one of PHP supported timezones
+ * @return array Multidimensional array with keys 'previous', 'current' and 'next', 
+ *  each containing an element of the result of DateTimeZone::getTransitions
+ * @see http://www.php.net/manual/en/datetimezone.gettransitions.php 
+ */
+function cot_timezone_transitions($tz)
+{
+	global $sys;
+	$dtz = new DateTimeZone($tz);
+	$transitions = array_reverse((array)$dtz->getTransitions());
+	foreach ($transitions as $key => $transition)
+	{
+		if ($transition['ts'] < $sys['now'])
+		{
+			return array(
+				'previous' => $transitions[$key+1],
+				'current' => $transition,
+				'next' => $transitions[$key-1],
+			);
+		}
+	}
+}
+
+/**
  * Returns a list of timezones sorted by GMT offset.
  * 
+ * @param bool $withgmt Return 'GMT' as the first option, otherwise it won't be included
+ * @param bool $dst Include DST in timezone offsets, if DST is in effect there right now
  * @return array Multidimensional array. Each timezone has the following keys:
  *  'name' - PHP timezone name, e.g. "America/El_Salvador"
  *  'offset' - GMT offset in seconds, e.g. -21600
  *  'description' : Hourly GMT offset and name in readable format, e.g. "GMT-06:00 America/El Salvador"
  */
-function cot_timezone_list()
+function cot_timezone_list($withgmt = false, $dst = false)
 {
-	static $timezonelist = array();
-	if ($timezonelist) return $timezonelist;
-	
-	$regions = array('Africa', 'America', 'Antarctica', 'Asia', 'Atlantic', 'Europe', 'Indian', 'Pacific');
-	$timezones = DateTimeZone::listIdentifiers();
-	foreach ($timezones as $timezone)
+	static $timezones = array();
+	if (!$timezones)
 	{
-		list ($region, $city) = explode('/', $timezone);
-		if (!in_array($region, $regions)) continue;
-		$offset = cot_timezone_offset($timezone);
-		$gmtoffset = cot_build_timezone($offset);
-		$city = str_replace('_', ' ', $city);
-		$timezonelist[] = array(
-			'name' => $timezone,
-			'offset' => $offset,
-			'description' => "$gmtoffset $region/$city"
-		);
+		$timezonelist = array();
+		$regions = array('Africa', 'America', 'Antarctica', 'Asia', 'Atlantic', 'Europe', 'Indian', 'Pacific');
+		$identifiers = DateTimeZone::listIdentifiers();
+		foreach ($identifiers as $timezone)
+		{
+			list ($region, $city) = explode('/', $timezone);
+			if (!in_array($region, $regions)) continue;
+			$offset = cot_timezone_offset($timezone, false, $dst);
+			$gmtoffset = cot_build_timezone($offset);
+			$city = str_replace('_', ' ', $city);
+			$timezonelist[] = array(
+				'name' => $timezone,
+				'offset' => $offset,
+				'description' => "$gmtoffset $region/$city"
+			);
+		}
+		foreach ($timezonelist as $k => $tz) {
+			$offsets[$k] = $tz['offset'];
+			$names[$k] = $tz['name'];
+		}
+		array_multisort($offsets, SORT_ASC, $names, SORT_ASC, $timezonelist);
+		$timezones = $timezonelist;
 	}
-	foreach ($timezonelist as $k => $tz) {
-		$offsets[$k] = $tz['offset'];
-		$names[$k] = $tz['name'];
-	}
-	array_multisort($offsets, SORT_ASC, $names, SORT_ASC, $timezonelist);
-	return $timezonelist;
+	return $withgmt ? array_merge(array(array('name' => 'GMT', 'offset' => 0, 'description' => 'GMT')), $timezones) : $timezones;
 }
 
 /**
- * Returns the offset from the origin timezone to the remote timezone, in seconds, including DST.
+ * Returns the offset from GMT in seconds or hours, with or without DST.
  * Example: Europe/Amsterdam returns 3600 (GMT+1) in the winter, but 7200 (GMT+2) in the summer (DST).
- * Whether or not to apply DST is determined automatically by PHP.
+ * Whether or not to apply DST is determined automatically by PHP, but can be disabled.
  * A list of supported timezone identifiers is here: http://php.net/manual/en/timezones.php
  * 
  * @param string $tz Timezone identifier (e.g. Europe/Amsterdam)
  * @param bool $hours Return hours instead of seconds
- * @return mixed Timezone difference in seconds (int) or hours (float).
+ * @param bool $dst Include DST in offset if DST is in effect right now
+ * @return mixed Timezone difference in seconds (int) or hours (float)
  */
-function cot_timezone_offset($tz, $hours = false)
+function cot_timezone_offset($tz, $hours = false, $dst = true)
 {
 	if (!$tz || in_array($tz, array('UTC', 'GMT', 'Universal', 'UCT', 'Zulu'))) return 0;
     $origin_dtz = new DateTimeZone('UTC');
     $remote_dtz = new DateTimeZone($tz);
+	if (!$dst)
+	{
+		$trans = cot_timezone_transitions($tz);
+		$dstoffset = ($trans['current']['isdst']) ? $trans['current']['offset'] - $trans['previous']['offset'] : 0;
+	}
     $origin_dt = new DateTime('now', $origin_dtz);
     $remote_dt = new DateTime('now', $remote_dtz);
-    $offset = $remote_dtz->getOffset($remote_dt) - $origin_dtz->getOffset($origin_dt);
+    $offset = $remote_dtz->getOffset($remote_dt) - $origin_dtz->getOffset($origin_dt) - $dstoffset;
 	return $hours ? floatval($offset / 3600) : $offset;
 }
 
