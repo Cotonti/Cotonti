@@ -87,7 +87,7 @@ if ($c == 'unvalidated')
 {
 	$cat['tpl'] = 'unvalidated';
 	$where['state'] = 'page_state != 0';
-	$where['ownerid'] = 'page_ownerid = ' . $usr['id'];
+	$where['ownerid'] = $usr['isadmin'] ? '1' : 'page_ownerid = ' . $usr['id'];
 	$cat['title'] = $L['page_validation'];
 	$cat['desc'] = $L['page_validation_desc'];
 	$s = 'state';
