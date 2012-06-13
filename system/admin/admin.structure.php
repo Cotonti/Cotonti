@@ -287,7 +287,7 @@ else
 	$ext_info = cot_get_extensionparams($n, true);
 	$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 	$adminpath[] = array(cot_url('admin', 'm='.$n), $ext_info['name']);
-	$adminpath[] = array (cot_url('admin', 'm=structure&n=page'), $L['Structure']);
+	$adminpath[] = array (cot_url('admin', 'm=structure&n='.$n), $L['Structure']);
 
 	if($id > 0 || !empty($al))
 	{

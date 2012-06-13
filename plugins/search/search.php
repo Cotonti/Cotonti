@@ -73,21 +73,21 @@ if ($rs['frmtitle'] < 1 && $rs['frmtext'] < 1)
 }
 $rs['setuser'] = cot_import($rs['setuser'], 'D', 'INT');
 $rs['setlimit'] = cot_import($rs['setlimit'], 'D', 'INT');
-$rs['setfrom'] = $sys['now_offset'] - 31536000;
-$rs['setto'] = $sys['now_offset'];
+$rs['setfrom'] = $sys['now'] - 31536000;
+$rs['setto'] = $sys['now'];
 switch ($rs['setlimit'])
 {
 	case 1:
-		$rs['setfrom'] = $sys['now_offset'] - 1209600;
+		$rs['setfrom'] = $sys['now'] - 1209600;
 		break;
 	case 2:
-		$rs['setfrom'] = $sys['now_offset'] - 2592000;
+		$rs['setfrom'] = $sys['now'] - 2592000;
 		break;
 	case 3:
-		$rs['setfrom'] = $sys['now_offset'] - 7776000;
+		$rs['setfrom'] = $sys['now'] - 7776000;
 		break;
 	case 4:
-		$rs['setfrom'] = $sys['now_offset'] - 31536000;
+		$rs['setfrom'] = $sys['now'] - 31536000;
 		break;
 	case 5:
 		$rs['setfrom'] = cot_import_date($rs['rfrom']);
@@ -454,8 +454,8 @@ $t->assign(array(
 	'PLUGIN_SEARCH_TEXT' => cot_inputbox('text', 'sq', htmlspecialchars($sq), 'size="32" maxlength="'.$cfg['plugin']['search']['maxsigns'].'"'),
 	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rs[setuser]', htmlspecialchars($rs['setuser']), 'class="userinput" size="32"'),
 	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rs['setlimit'], 'rs[setlimit]', range(0, 5), array($L['plu_any_date'], $L['plu_last_2_weeks'], $L['plu_last_1_month'], $L['plu_last_3_month'], $L['plu_last_1_year'], $L['plu_need_datas']), false),
-	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rs[rfrom]', cot_date('Y', $sys['now_offset']) + 1),
-	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rs[rto]', cot_date('Y', $sys['now_offset']) + 1),
+	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rs[rfrom]', cot_date('Y', $sys['now']) + 1),
+	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rs[rto]', cot_date('Y', $sys['now']) + 1),
 	'PLUGIN_SEARCH_FOUND' => (array_sum($totalitems) > 0) ? array_sum($totalitems) : '',
 	'PLUGIN_PAGEPREV' => $pagenav['prev'],
 	'PLUGIN_PAGENEXT' => $pagenav['next'],

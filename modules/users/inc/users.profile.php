@@ -51,7 +51,7 @@ if($a == 'update')
 	$ruser['user_scheme'] = $rtheme[1];
 	$ruser['user_lang'] = cot_import('ruserlang','P','ALP');
 	$ruser['user_gender'] = cot_import('rusergender','P','ALP');
-	$ruser['user_timezone'] = (float) cot_import('rusertimezone','P','TXT',5);
+	$ruser['user_timezone'] = cot_import('rusertimezone','P','TXT');
 	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','BOL');
 	
 	// Extra fields
@@ -136,7 +136,7 @@ if($a == 'update')
 	}
 	if (!cot_error_found())
 	{
-		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['user_birthdate'];
+		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now']) ? ($sys['now'] - 31536000) : $ruser['user_birthdate'];
 		$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
 		$ruser['user_auth'] ='';
 		$db->update($db_users, $ruser, "user_id='".$usr['id']."'");
@@ -173,14 +173,6 @@ $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');
 
-$timezonelist = array('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
-foreach($timezonelist as $x)
-{
-	$timezonename[] = 'GMT '.$x.', '.cot_date('datetime_medium', $sys['now_offset'] + $x*3600);
-}
-$profile_form_timezone = cot_selectbox($urr['user_timezone'], 'rusertimezone', $timezonelist, $timezonename, false);
-$profile_form_timezone .= ' '.$usr['gmttime'].' / '.cot_date('datetime_medium', $sys['now_offset']).' '.$usr['timetext'];
-
 $protected = !$cfg['users']['useremailchange'] ? array('disabled' => 'disabled') : array();
 $profile_form_email = cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)
 	+ $protected);
@@ -205,8 +197,8 @@ $t->assign(array(
 	'USERS_PROFILE_THEME' => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
 	'USERS_PROFILE_LANG' => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	'USERS_PROFILE_GENDER' => cot_selectbox_gender($urr['user_gender'] ,'rusergender'),
-	'USERS_PROFILE_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', $sys['now_offset']), cot_date('Y', $sys['now_offset']) - 100, false),
-	'USERS_PROFILE_TIMEZONE' => $profile_form_timezone,
+	'USERS_PROFILE_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', $sys['now']), cot_date('Y', $sys['now']) - 100, false),
+	'USERS_PROFILE_TIMEZONE' => cot_selectbox_timezone($urr['user_timezone'], 'rusertimezone'),
 	'USERS_PROFILE_REGDATE' => cot_date('datetime_medium', $urr['user_regdate']),
 	'USERS_PROFILE_REGDATE_STAMP' => $urr['user_regdate'],
 	'USERS_PROFILE_LASTLOG' => cot_date('datetime_medium', $urr['user_lastlog']),

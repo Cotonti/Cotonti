@@ -142,7 +142,9 @@ $t->assign(array(
 	'PFS_DATE_STAMP' => $pfs_date,
 	'PFS_FOLDER' => cot_selectbox_folders($userid, '', $pfs_folderid),
 	'PFS_URL' => $ff,
-	'PFS_DESC' => cot_inputbox('text', 'rdesc', $pfs_desc, 'size="56" maxlength="255"')
+	'PFS_DESC' => cot_inputbox('text', 'rdesc', $pfs_desc, 'size="56" maxlength="255"'),
+	'PFS_SIZE' => cot_build_filesize($pfs_size, 1),
+	'PFS_SIZE_KB' => $pfs_size
 ));
 
 cot_display_messages($t);

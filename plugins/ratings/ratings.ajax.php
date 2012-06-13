@@ -94,7 +94,7 @@ if ($inr == 'send' && $newrate > 0 && $newrate <= 10 && $auth_write && $enabled)
 			'rating_area' => $area,
 			'rating_state' => 0,
 			'rating_average' => (int) $newrate,
-			'rating_creationdate' => (int) $sys['now_offset'],
+			'rating_creationdate' => (int) $sys['now'],
 			'rating_text' => ''
 		));
 	}

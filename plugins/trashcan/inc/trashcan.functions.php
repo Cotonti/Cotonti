@@ -33,7 +33,7 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 {
 	global $db, $db_trash, $sys, $usr, $trash_types;
 
-	$trash = array('tr_date' => $sys['now_offset'], 'tr_type' => $type, 'tr_title' => $title, 'tr_itemid' => $itemid,
+	$trash = array('tr_date' => $sys['now'], 'tr_type' => $type, 'tr_title' => $title, 'tr_itemid' => $itemid,
 		'tr_trashedby' => (int)$usr['id'], 'tr_parentid' => $parentid);
 	
 	/* === Hook  === */

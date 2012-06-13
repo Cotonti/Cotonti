@@ -66,7 +66,7 @@ if ($a == 'update')
 	cot_message('Updated');
 }
 
-$sql = $db->query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_auth as a
+$sql = $db->query("SELECT a.*, u.user_name, g.grp_name, g.grp_level FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 	LEFT JOIN $db_groups AS g ON g.grp_id=a.auth_groupid
 	WHERE auth_code='$ic' AND auth_option='$io' AND grp_skiprights = 0 ORDER BY grp_level DESC, grp_id DESC");
@@ -123,7 +123,7 @@ $l_custom1 = ($ic == 'page') ? $L['Download'] : $L['Custom'].' #1';
 while ($row = $sql->fetch())
 {
 	$link = cot_url('admin', 'm=rights&g='.$row['auth_groupid']);
-	$title = htmlspecialchars($row['grp_title']);
+	$title = htmlspecialchars($row['grp_name']);
 	cot_rights_parseline($row, $title, $link);
 }
 $sql->closeCursor();

@@ -49,8 +49,8 @@ if ($a=='add')
 	$rpassword1 = cot_import('rpassword1','P','TXT',16);
 	$rpassword2 = cot_import('rpassword2','P','TXT',16);
 	$ruser['user_country'] = cot_import('rcountry','P','TXT');
-	$ruser['user_timezone'] = cot_import('rtimezone','P','TXT',5);
-	$ruser['user_timezone'] = is_null($ruser['user_timezone']) ? $cfg['defaulttimezone'] : (float) $ruser['user_timezone'];
+	$ruser['user_timezone'] = cot_import('rtimezone','P','TXT');
+	$ruser['user_timezone'] = (!$ruser['user_timezone']) ? 'GMT' : $ruser['user_timezone'];
 	$ruser['user_gender'] = cot_import('rusergender','P','TXT');
 	$ruser['user_email'] = mb_strtolower($ruser['user_email']);
 
@@ -194,14 +194,6 @@ $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');
 
-$timezonelist = array('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
-foreach($timezonelist as $x)
-{
-	$timezonename[] = 'GMT ' . $x;
-}
-$form_timezone = cot_selectbox($ruser['user_timezone'], 'rtimezone', $timezonelist, $timezonename, false);
-$form_timezone .= ' '.$usr['gmttime']." / ".cot_date('datetime_medium', $sys['now_offset']).' '.$usr['timetext'];
-
 $t->assign(array(
 	'USERS_REGISTER_TITLE' => $L['aut_registertitle'],
 	'USERS_REGISTER_SUBTITLE' => $L['aut_registersubtitle'],
@@ -212,9 +204,9 @@ $t->assign(array(
 	'USERS_REGISTER_PASSWORD' => cot_inputbox('password', 'rpassword1', '', array('size' => 8, 'maxlength' => 32)),
 	'USERS_REGISTER_PASSWORDREPEAT' => cot_inputbox('password', 'rpassword2', '', array('size' => 8, 'maxlength' => 32)),
 	'USERS_REGISTER_COUNTRY' => cot_selectbox_countries($ruser['user_country'], 'rcountry'),
-	'USERS_REGISTER_TIMEZONE' => $form_timezone,
+	'USERS_REGISTER_TIMEZONE' => cot_selectbox_timezone($ruser['user_timezone'], 'rusertimezone'),
 	'USERS_REGISTER_GENDER' => cot_selectbox_gender($ruser['user_gender'],'rusergender'),
-	'USERS_REGISTER_BIRTHDATE' => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', cot_date('Y', $sys['now_offset']), cot_date('Y', $sys['now_offset']) - 100, false),
+	'USERS_REGISTER_BIRTHDATE' => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', cot_date('Y', $sys['now']), cot_date('Y', $sys['now']) - 100, false),
 ));
 
 // Extra fields

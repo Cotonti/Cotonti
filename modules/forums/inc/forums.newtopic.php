@@ -85,8 +85,8 @@ if ($a == 'newtopic')
 		$rtopic['ft_state'] = 0;
 		$rtopic['ft_sticky'] = 0;
 		$rtopic['ft_cat'] = $s;
-		$rtopic['ft_creationdate'] = (int)$sys['now_offset'];
-		$rtopic['ft_updated'] = (int)$sys['now_offset'];
+		$rtopic['ft_creationdate'] = (int)$sys['now'];
+		$rtopic['ft_updated'] = (int)$sys['now'];
 		$rtopic['ft_postcount'] = 1;
 		$rtopic['ft_viewcount'] = 0;
 		$rtopic['ft_firstposterid'] = (int)$usr['id'];
@@ -102,8 +102,8 @@ if ($a == 'newtopic')
 		$rmsg['fp_topicid'] = (int)$q;
 		$rmsg['fp_posterid'] = (int)$usr['id'];
 		$rmsg['fp_postername'] = $usr['name'];
-		$rmsg['fp_creation'] = (int)$sys['now_offset'];
-		$rmsg['fp_updated'] = (int)$sys['now_offset'];
+		$rmsg['fp_creation'] = (int)$sys['now'];
+		$rmsg['fp_updated'] = (int)$sys['now'];
 		$rmsg['fp_posterip'] = $usr['ip'];
 		
 		$db->insert($db_forum_posts, $rmsg);

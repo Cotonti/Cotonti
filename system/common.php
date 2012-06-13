@@ -43,8 +43,8 @@ if ($cfg['debug_mode'])
 spl_autoload_register('cot_autoload');
 register_shutdown_function('cot_shutdown');
 
-// Each user has his own timezone preference based on offset from GMT, so all dates are GMT by default
-date_default_timezone_set('GMT');
+// Each user has his own timezone preference based on offset from GMT, so all dates are UTC/GMT by default
+date_default_timezone_set('UTC');
 $sys['day'] = @date('Y-m-d');
 $sys['now'] = time();
 $sys['now_offset'] = $sys['now'];
@@ -270,6 +270,7 @@ if (!$cot_groups )
    				'disabled' => $row['grp_disabled'],
    				'hidden' => $row['grp_hidden'],
 				'state' => $row['grp_state'],
+				'name' => htmlspecialchars($row['grp_name']),
 				'title' => htmlspecialchars($row['grp_title']),
 				'desc' => htmlspecialchars($row['grp_desc']),
 				'icon' => $row['grp_icon'],
@@ -298,6 +299,7 @@ $usr['level'] = 0;
 $usr['lastvisit'] = 30000000000;
 $usr['lastlog'] = 0;
 $usr['timezone'] = $cfg['defaulttimezone'];
+$usr['timezonename'] = 'GMT';
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
@@ -314,14 +316,15 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 		{
 			if ($row['user_maingrp'] > 3
 				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip'])
-				&& $row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now_offset'])
+				&& $row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now'])
 			{
 				$usr['id'] = (int) $row['user_id'];
 				$usr['name'] = $row['user_name'];
 				$usr['maingrp'] = $row['user_maingrp'];
 				$usr['lastvisit'] = $row['user_lastvisit'];
 				$usr['lastlog'] = $row['user_lastlog'];
-				$usr['timezone'] = $row['user_timezone'];
+				$usr['timezone'] = cot_timezone_offset($row['user_timezone'], true);
+				$usr['timezonename'] = $row['user_timezone'];
 				$usr['theme'] = ($cfg['forcedefaulttheme']) ? $cfg['defaulttheme'] : $row['user_theme'];
 				$usr['scheme'] = $row['user_scheme'];
 				$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];
@@ -338,7 +341,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$_SESSION['cot_user_id'] = $usr['id'];
 				}
 
-				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now_offset'])
+				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now'])
 				{
 					$sys['comingback'] = TRUE;
 					if ($usr['lastlog'] > $usr['lastvisit'])
@@ -361,7 +364,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$cfg['authcache'] && $user_log['user_auth'] = serialize($usr['auth']);
 				}
 
-				$user_log['user_lastlog'] = $sys['now_offset'];
+				$user_log['user_lastlog'] = $sys['now'];
 
 				$db->update($db_users, $user_log, "user_id='{$usr['id']}'");
 				unset($u, $passhash, $oldhash, $hashsalt, $hashsaltprev, $user_log);
@@ -545,7 +548,8 @@ $cot_yesno[1] = $L['Yes'];
 /* ======== Local/GMT time ======== */
 
 $usr['timetext'] = cot_build_timezone($usr['timezone']);
-$usr['gmttime'] = cot_date('datetime_medium', $sys['now_offset']).' GMT';
+$usr['gmttime'] = cot_date('datetime_medium', $sys['now'], false).' GMT';
+$usr['localtime'] = cot_date('datetime_medium', $sys['now']);
 
 /* ======== Anti-XSS protection ======== */
 

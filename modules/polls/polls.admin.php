@@ -71,7 +71,7 @@ elseif($a == 'lock' && $id > 0)
 elseif($a == 'bump' && $id > 0)
 {
 	cot_check_xg();
-	$sql_polls = $db->update($db_polls, array('poll_creationdate' => $sys['now_offset']),  "poll_id=$id");
+	$sql_polls = $db->update($db_polls, array('poll_creationdate' => $sys['now']),  "poll_id=$id");
 
 	cot_message('adm_polls_msg916_bump');
 }

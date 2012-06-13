@@ -380,6 +380,7 @@ foreach ($sql_page->fetchAll() as $row)
 		'ADMIN_PAGE_OWNER' => cot_build_user($row['page_ownerid'], htmlspecialchars($row['user_name'])),
 		'ADMIN_PAGE_FILE_BOOL' => $row['page_file'],
 		'ADMIN_PAGE_URL_FOR_VALIDATED' => cot_confirm_url(cot_url('admin', 'm=page&a=validate&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()), 'page', 'page_confirm_validate'),
+		'ADMIN_PAGE_URL_FOR_UNVALIDATE' => cot_confirm_url(cot_url('admin', 'm=page&a=unvalidate&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()), 'page', 'page_confirm_unvalidate'),
 		'ADMIN_PAGE_URL_FOR_DELETED' => cot_confirm_url(cot_url('admin', 'm=page&a=delete&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()), 'page', 'page_confirm_delete'),
 		'ADMIN_PAGE_URL_FOR_EDIT' => cot_url('page', 'm=edit&id='.$row['page_id']),
 		'ADMIN_PAGE_ODDEVEN' => cot_build_oddeven($ii),

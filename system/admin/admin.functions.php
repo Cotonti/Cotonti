@@ -62,7 +62,7 @@ function cot_selectbox_groups($check, $name, $skip=array(0))
 		if (!$i['skiprights'])
 		{
 			$selected = ($k == $check) ? "selected=\"selected\"" : '';
-			$res .= (in_array($k, $skip)) ? '' : "<option value=\"$k\" $selected>".$cot_groups[$k]['title']."</option>";
+			$res .= (in_array($k, $skip)) ? '' : "<option value=\"$k\" $selected>".$cot_groups[$k]['name']."</option>";
 		}
 	}
 	$res .= "</select>";

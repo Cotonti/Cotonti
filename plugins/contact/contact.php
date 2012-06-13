@@ -95,7 +95,7 @@ if (isset($_POST['rtext']))
 	if (!cot_error_found())
 	{
 		$rcontact['contact_authorid'] = (int) $usr['id'];
-		$rcontact['contact_date'] = (int) $sys['now_offset'];
+		$rcontact['contact_date'] = (int) $sys['now'];
 		$rcontact['contact_val'] = 0;
 		
 		if (in_array($cfg['plugin']['contact']['save'], array('db','both')))

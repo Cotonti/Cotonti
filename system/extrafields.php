@@ -80,8 +80,8 @@ function cot_build_extrafields($name, $extrafield, $data)
 			$max = (int)$max > 0 ? $max : 2030;
 			$min =  (int)$min > 0 ? $min : 2000;
 			
-			$data = (mb_substr($data, 0, 1) == "+") ? $sys['now_offset'] + (int)(mb_substr($data, 1)) : $data;
-			$data = (mb_substr($data, 0, 1) == "-") ? $sys['now_offset'] - (int)(mb_substr($data, 1)) : $data;
+			$data = (mb_substr($data, 0, 1) == "+") ? $sys['now'] + (int)(mb_substr($data, 1)) : $data;
+			$data = (mb_substr($data, 0, 1) == "-") ? $sys['now'] - (int)(mb_substr($data, 1)) : $data;
 			
 			$result = cot_selectbox_date((int)$data, 'long', $name, (int)$max, (int)$min, true, $extrafield['field_html']);
 			break;

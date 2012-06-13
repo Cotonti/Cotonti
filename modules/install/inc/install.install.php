@@ -283,6 +283,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 						'disabled' => $row['grp_disabled'],
 						'hidden' => $row['grp_hidden'],
 						'state' => $row['grp_state'],
+						'name' => htmlspecialchars($row['grp_name']),
 						'title' => htmlspecialchars($row['grp_title'])
 					);
 				}

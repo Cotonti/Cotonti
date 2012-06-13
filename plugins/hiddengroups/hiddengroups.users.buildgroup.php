@@ -21,7 +21,7 @@ if($cot_groups[$grpid]['hidden'])
 {
 	if(cot_auth('users', 'a', 'A'))
 	{
-		return cot_rc_link(cot_url('users', 'gm='.$grpid), $cot_groups[$grpid]['title'].' ('.$L['Hidden'].')');
+		return cot_rc_link(cot_url('users', 'gm='.$grpid), $cot_groups[$grpid]['name'].' ('.$L['Hidden'].')');
 	}
 	elseif(!cot_auth('plug', 'hiddengroups', '1'))
 	{

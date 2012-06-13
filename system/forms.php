@@ -345,6 +345,28 @@ function cot_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '', $cu
 }
 
 /**
+ * Returns timezone selection dropdown
+ *
+ * @param string $chosen Seleced value, must be one of PHP supported timezone identifiers.
+ * @param string $name Form input name
+ * @param bool $add_gmt Add GMT option at the top
+ * @param bool $dst Show offsets including DST, if DST is currently in effect at the timezone.
+ * @param mixed $attrs Additional attributes as an associative array or a string
+ * @param string $custom_rc Custom resource string name
+ * @return string
+ */
+function cot_selectbox_timezone($chosen, $name, $add_gmt = true, $dst = false, $attrs = '', $custom_rc = '')
+{
+	$timezonelist = cot_timezone_list($add_gmt, $dst);
+	foreach($timezonelist as $timezone)
+	{
+		$names[] = $timezone['name'];
+		$titles[] = $timezone['description'];
+	}
+	return cot_selectbox($chosen, $name, $names, $titles, false, $attrs, $custom_rc);
+}
+
+/**
  * Generates a textarea
  *
  * @param string $name Input name

@@ -49,7 +49,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			}
 			$pag_i18n['ipage_translatorid'] = $usr['id'];
 			$pag_i18n['ipage_translatorname'] = $usr['name'];
-			$pag_i18n['ipage_date'] = $sys['now_offset'];
+			$pag_i18n['ipage_date'] = $sys['now'];
 			$pag_i18n['ipage_title'] = cot_import('title', 'P', 'TXT');
 			if (mb_strlen($pag_i18n['ipage_title']) < 2)
 			{
@@ -129,7 +129,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			// Update the translation
-			$pag_i18n['ipage_date'] = $sys['now_offset'];
+			$pag_i18n['ipage_date'] = $sys['now'];
 			$pag_i18n['ipage_title'] = cot_import('title', 'P', 'TXT');
 			if (mb_strlen($pag_i18n['ipage_title']) < 2)
 			{

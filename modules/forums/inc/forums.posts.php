@@ -97,7 +97,7 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 			cot_die();
 		}
 		$merge = (!$cfg['forums']['antibumpforums'] && $cfg['forums']['mergeforumposts'] && $row['fp_posterid'] == $usr['id']) ? true : false;
-		$merge = ($merge && $cfg['forums']['mergetimeout'] > 0 && (($sys['now_offset'] - $row['fp_updated']) > ($cfg['forums']['mergetimeout'] * 3600))) ? false : $merge;
+		$merge = ($merge && $cfg['forums']['mergetimeout'] > 0 && (($sys['now'] - $row['fp_updated']) > ($cfg['forums']['mergetimeout'] * 3600))) ? false : $merge;
 	}
 	else
 	{
@@ -105,7 +105,7 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	}
 	$rmsg = array();
 	$rmsg['fp_text'] = cot_import('rmsgtext', 'P', 'HTM');
-	$rmsg['fp_updated'] = (int)$sys['now_offset'];
+	$rmsg['fp_updated'] = (int)$sys['now'];
 	$rmsg['fp_posterip'] = $usr['ip'];
 	
 	if (mb_strlen($rmsg['fp_text']) < $cfg['forums']['minpostlength'])
@@ -135,14 +135,14 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 			$rmsg['fp_cat'] = $s;
 			$rmsg['fp_posterid'] = (int)$usr['id'];
 			$rmsg['fp_postername'] = $usr['name'];
-			$rmsg['fp_creation'] = (int)$sys['now_offset'];
+			$rmsg['fp_creation'] = (int)$sys['now'];
 			$rmsg['fp_updater'] = 0;
 			
 			$db->insert($db_forum_posts, $rmsg);
 			$p = $db->lastInsertId();
 
 			$sql_forums = $db->query("UPDATE $db_forum_topics SET
-				ft_postcount=ft_postcount+1, ft_updated=" . $sys['now_offset'] . ",
+				ft_postcount=ft_postcount+1, ft_updated=" . $sys['now'] . ",
 				ft_lastposterid=" . $usr['id'] . ", ft_lastpostername=" . $db->quote($usr['name']) . " WHERE ft_id=$q");
 			
 			cot_forums_sectionsetlast($s, 'fs_postcount+1');
@@ -157,13 +157,13 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 			$p = (int)$row['fp_id'];
 
 			$gap_base = empty($row['fp_updated']) ? $row['fp_creation'] : $row['fp_updated'];
-			$updated = sprintf($L['forums_mergetime'], cot_build_timegap($gap_base, $sys['now_offset']));
+			$updated = sprintf($L['forums_mergetime'], cot_build_timegap($gap_base, $sys['now']));
 
 			$rmsg['fp_text'] = $row['fp_text'] . cot_rc('forums_code_update', array('updated' => $updated)) . $rmsg['fp_text'];
-			$rmsg['fp_updater'] = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
+			$rmsg['fp_updater'] = ($row['fp_posterid'] == $usr['id'] && ($sys['now'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
 
 			$db->update($db_forum_posts, $rmsg, 'fp_id=' . $row['fp_id']);
-			$db->update($db_forum_topics, array('ft_updated' => $sys['now_offset']), "ft_id = $q");
+			$db->update($db_forum_topics, array('ft_updated' => $sys['now']), "ft_id = $q");
 			
 			cot_forums_sectionsetlast($s);
 		}
@@ -376,7 +376,7 @@ foreach ($sql_forums->fetchAll() as $row)
 
 	if (!empty($row['fp_updater']))
 	{
-		$row['fp_updatedby'] = sprintf($L['forums_updatedby'], htmlspecialchars($row['fp_updater']), cot_date('datetime_medium', $row['fp_updated']), cot_build_timegap($row['fp_updated'], $sys['now_offset']));
+		$row['fp_updatedby'] = sprintf($L['forums_updatedby'], htmlspecialchars($row['fp_updater']), cot_date('datetime_medium', $row['fp_updated']), cot_build_timegap($row['fp_updated'], $sys['now']));
 	}
 
 	$t->assign(cot_generate_usertags($row, 'FORUMS_POSTS_ROW_USER'));

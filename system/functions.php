@@ -1358,9 +1358,9 @@ function cot_build_age($birth)
 	$month1 = @date('m', $birth);
 	$year1 = @date('Y', $birth);
 
-	$day2 = @date('d', $sys['now_offset']);
-	$month2 = @date('m', $sys['now_offset']);
-	$year2 = @date('Y', $sys['now_offset']);
+	$day2 = @date('d', $sys['now']);
+	$month2 = @date('m', $sys['now']);
+	$year2 = @date('Y', $sys['now']);
 
 	$age = ($year2-$year1)-1;
 
@@ -1655,27 +1655,36 @@ function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round =
 	);
 	if ($t2 === null)
 	{
-		$t2 = $sys['now_offset'];
+		$t2 = $sys['now'];
 	}
 	$gap = $t2 - $t1;
 	return cot_build_friendlynumber($gap, $units, $levels, $decimals, $round);
 }
 
 /**
- * Returns user timezone offset
+ * Returns timezone offset formatted according to ISO 8601
  *
- * @param int $tz Timezone
- * @return string
+ * @param float $offset Timezone offset in seconds or hours. Set NULL for unknown timezone.
+ * @param bool $withgmt Include 'GMT' in the returned string.
+ * @param bool $short Use format without minutes, like GMT+1
+ * @return string Textual timezone like GMT+1:00
  */
-function cot_build_timezone($tz)
+function cot_build_timezone($offset, $withgmt = true, $short = false)
 {
-	global $L;
-
-	$result = 'GMT';
-
-	$result .= cot_declension($tz, $Ls['Hours']);
-
-	return $result;
+	$gmt = $withgmt ? 'GMT' : '';
+	if (is_null($offset))
+	{
+		return $short ? "$gmt-00" : "$gmt-00:00";
+	}
+	if ($offset == 0)
+	{
+		return $short ? "$gmt+00" : "$gmt+00:00";
+	}
+	$format = $short ? 'H' : 'H:i';
+	$abs = abs($offset);
+	$seconds = $abs < 100 ? $abs * 3600 : $abs; // detect hours or seconds
+	$time = gmdate($format, $seconds);
+	return ($offset > 0) ? "$gmt+$time" : "$gmt-$time";
 }
 
 /**
@@ -1728,19 +1737,21 @@ function cot_build_user($id, $user, $extra_attrs = '')
  * Returns group link (button)
  *
  * @param int $grpid Group ID
+ * @param bool $title Return group title instead of name
  * @return string
  */
-function cot_build_group($grpid)
+function cot_build_group($grpid, $title = false)
 {
 	if (empty($grpid))
 		return '';
 	global $cot_groups, $L;
 
+	$type = ($title) ? 'title' : 'name';
 	if ($cot_groups[$grpid]['hidden'])
 	{
 		if (cot_auth('users', 'a', 'A'))
 		{
-			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid]['title'] . ' (' . $L['Hidden'] . ')');
+			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type] . ' (' . $L['Hidden'] . ')');
 		}
 		else
 		{
@@ -1749,7 +1760,7 @@ function cot_build_group($grpid)
 	}
 	else
 	{
-		return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid]['title']);
+		return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type]);
 	}
 }
 
@@ -1832,8 +1843,11 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'NICKNAME' => htmlspecialchars($user_data['user_name']),
 				'DETAILSLINK' => cot_url('users', 'm=details&id=' . $user_data['user_id'].'&u='.htmlspecialchars($user_data['user_name'])),
 				'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
+				'TITLE' => $cot_groups[$user_data['user_maingrp']]['title'],
 				'MAINGRP' => cot_build_group($user_data['user_maingrp']),
 				'MAINGRPID' => $user_data['user_maingrp'],
+				'MAINGRPNAME' => $cot_groups[$user_data['user_maingrp']]['name'],
+				'MAINGRPTITLE' => cot_build_group($user_data['user_maingrp'], true),
 				'MAINGRPSTARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
 				'MAINGRPICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
 				'COUNTRY' => cot_build_country($user_data['user_country']),
@@ -1846,7 +1860,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'BIRTHDATE' => ($user_data['user_birthdate'] != 0) ? cot_date('date_full', $user_data['user_birthdate']) : '',
 				'BIRTHDATE_STAMP' => ($user_data['user_birthdate'] != 0) ? $user_data['user_birthdate'] : '',
 				'AGE' => ($user_data['user_birthdate'] != 0) ? cot_build_age($user_data['user_birthdate']) : '',
-				'TIMEZONE' => cot_build_timezone($user_data['user_timezone']),
+				'TIMEZONE' => cot_build_timezone(cot_timezone_offset($user_data['user_timezone'], false, false)) . ' ' .str_replace('_', ' ', $user_data['user_timezone']),
 				'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate']),
 				'REGDATE_STAMP' => $user_data['user_regdate'],
 				'LASTLOG' => cot_date('datetime_medium', $user_data['user_lastlog']),
@@ -2695,7 +2709,7 @@ function cot_log($text, $group='def')
 	global $db, $db_logger, $sys, $usr, $_SERVER;
 
 	$db->insert($db_logger, array(
-		'log_date' => (int)$sys['now_offset'],
+		'log_date' => (int)$sys['now'],
 		'log_ip' => $usr['ip'],
 		'log_name' => $usr['name'],
 		'log_group' => $group,
@@ -2910,10 +2924,10 @@ function cot_schemefile()
  *
  * @param mixed $base Item name (string), or base names (array)
  * @param string $type Extension type: 'plug', 'module' or 'core'
- * @param bool $admin Admin part
+ * @param bool $admin Use admin theme file if present. Tries to determine from base string by default.
  * @return string
  */
-function cot_tplfile($base, $type = 'module', $admin = false)
+function cot_tplfile($base, $type = 'module', $admin = null)
 {
 	global $usr, $cfg;
 
@@ -2926,43 +2940,36 @@ function cot_tplfile($base, $type = 'module', $admin = false)
 	{
 		$base = array($base);
 	}
-
-	$basename = $base[0];
+	if (is_null($admin))
+	{
+		$admin = ($base[0] == 'admin' || ($base[1] && $base[1] == 'admin'));
+	}
+	$scan_dirs = array();
 
 	// Possible search directories depending on extension type
 	if ($type == 'plug')
 	{
 		// Plugin template paths
-		($admin && !empty($cfg['admintheme'])) && $scan_prefix[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/plugins/";
-		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/";
-		$scan_prefix[] = "{$cfg['plugins_dir']}/$basename/tpl/";
+		$admin && !empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/plugins/";
+		$admin && $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/plugins/";
+		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/";
+		$scan_dirs[] = "{$cfg['plugins_dir']}/{$base[0]}/tpl/";
 	}
-	elseif ($type == 'core')
+	elseif ($type == 'core' && in_array($base[0], array('admin', 'header', 'footer', 'message')))
 	{
 		// Built-in core modules
-		if(in_array($basename, array('admin', 'header', 'footer', 'message')))
-		{
-			$basename = 'admin';
-			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/$basename/";
-			if (!empty($cfg['admintheme']))
-			{
-				$scan_prefix[] = "{$cfg['themes_dir']}/$basename/{$cfg['admintheme']}/";
-			}
-		}
-		else
-		{
-			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
-			$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
-		}
-		$scan_prefix[] = "{$cfg['system_dir']}/$basename/tpl/";
+		!empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/";
+		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/";
+		$scan_dirs[] = "{$cfg['system_dir']}/admin/tpl/";
 	}
 	else
 	{
 		// Module template paths
-		($admin && !empty($cfg['admintheme'])) && $scan_prefix[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/modules/";
-		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
-		$scan_prefix[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
-		$scan_prefix[] = "{$cfg['modules_dir']}/$basename/tpl/";
+		$admin && !empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/modules/";
+		$admin && $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/modules/";
+		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
+		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
+		$scan_dirs[] = "{$cfg['modules_dir']}/{$base[0]}/tpl/";
 	}
 
 	// Build template file name from base parts glued with dots
@@ -2972,16 +2979,15 @@ function cot_tplfile($base, $type = 'module', $admin = false)
 		$levels = array_slice($base, 0, $i);
 		$themefile = implode('.', $levels) . '.tpl';
 		// Search in all available directories
-		foreach ($scan_prefix as $pfx)
+		foreach ($scan_dirs as $dir)
 		{
-			if (file_exists($pfx . $themefile))
+			if (file_exists($dir . $themefile))
 			{
-				return $pfx . $themefile;
+				return $dir . $themefile;
 			}
 		}
 	}
-
-	// throw new Exception('Template file '.implode('.', $base).'.tpl ('.$type.') was not found.');
+	
 	return false;
 }
 
@@ -3167,6 +3173,101 @@ function cot_date2strftime($format) {
 		's' => '%S', 'O' => '%z', 'T' => '%Z', 'U' => '%s'
     );
     return strtr((string)$format, $chars);
+}
+
+/**
+ * Returns previous, current and next transition in a certain timezone.
+ * Useful for detecting if DST is currently in effect.
+ *
+ * @param string $tz Timezone identifier, must be one of PHP supported timezones
+ * @return array Multidimensional array with keys 'previous', 'current' and 'next', 
+ *  each containing an element of the result of DateTimeZone::getTransitions
+ * @see http://www.php.net/manual/en/datetimezone.gettransitions.php 
+ */
+function cot_timezone_transitions($tz)
+{
+	global $sys;
+	$dtz = new DateTimeZone($tz);
+	$transitions = array_reverse((array)$dtz->getTransitions());
+	foreach ($transitions as $key => $transition)
+	{
+		if ($transition['ts'] < $sys['now'])
+		{
+			return array(
+				'previous' => $transitions[$key+1],
+				'current' => $transition,
+				'next' => $transitions[$key-1],
+			);
+		}
+	}
+}
+
+/**
+ * Returns a list of timezones sorted by GMT offset.
+ * 
+ * @param bool $withgmt Return 'GMT' as the first option, otherwise it won't be included
+ * @param bool $dst Include DST in timezone offsets, if DST is in effect there right now
+ * @return array Multidimensional array. Each timezone has the following keys:
+ *  'name' - PHP timezone name, e.g. "America/El_Salvador"
+ *  'offset' - GMT offset in seconds, e.g. -21600
+ *  'description' : Hourly GMT offset and name in readable format, e.g. "GMT-06:00 America/El Salvador"
+ */
+function cot_timezone_list($withgmt = false, $dst = false)
+{
+	static $timezones = array();
+	if (!$timezones)
+	{
+		$timezonelist = array();
+		$regions = array('Africa', 'America', 'Antarctica', 'Asia', 'Atlantic', 'Europe', 'Indian', 'Pacific');
+		$identifiers = DateTimeZone::listIdentifiers();
+		foreach ($identifiers as $timezone)
+		{
+			list ($region, $city) = explode('/', $timezone);
+			if (!in_array($region, $regions)) continue;
+			$offset = cot_timezone_offset($timezone, false, $dst);
+			$gmtoffset = cot_build_timezone($offset);
+			$city = str_replace('_', ' ', $city);
+			$timezonelist[] = array(
+				'name' => $timezone,
+				'offset' => $offset,
+				'description' => "$gmtoffset $region/$city"
+			);
+		}
+		foreach ($timezonelist as $k => $tz) {
+			$offsets[$k] = $tz['offset'];
+			$names[$k] = $tz['name'];
+		}
+		array_multisort($offsets, SORT_ASC, $names, SORT_ASC, $timezonelist);
+		$timezones = $timezonelist;
+	}
+	return $withgmt ? array_merge(array(array('name' => 'GMT', 'offset' => 0, 'description' => 'GMT')), $timezones) : $timezones;
+}
+
+/**
+ * Returns the offset from GMT in seconds or hours, with or without DST.
+ * Example: Europe/Amsterdam returns 3600 (GMT+1) in the winter, but 7200 (GMT+2) in the summer (DST).
+ * Whether or not to apply DST is determined automatically by PHP, but can be disabled.
+ * A list of supported timezone identifiers is here: http://php.net/manual/en/timezones.php
+ * 
+ * @param string $tz Timezone identifier (e.g. Europe/Amsterdam)
+ * @param bool $hours Return hours instead of seconds
+ * @param bool $dst Include DST in offset if DST is in effect right now
+ * @return mixed Timezone difference in seconds (int) or hours (float)
+ */
+function cot_timezone_offset($tz, $hours = false, $dst = true)
+{
+	if (!$tz || in_array($tz, array('UTC', 'GMT', 'Universal', 'UCT', 'Zulu'))) return 0;
+    $origin_dtz = new DateTimeZone('UTC');
+    $remote_dtz = new DateTimeZone($tz);
+	if (!$dst)
+	{
+		$trans = cot_timezone_transitions($tz);
+		$dstoffset = ($trans['current']['isdst']) ? $trans['current']['offset'] - $trans['previous']['offset'] : 0;
+	}
+    $origin_dt = new DateTime('now', $origin_dtz);
+    $remote_dt = new DateTime('now', $remote_dtz);
+    $offset = $remote_dtz->getOffset($remote_dt) - $origin_dtz->getOffset($origin_dt) - $dstoffset;
+	return $hours ? floatval($offset / 3600) : $offset;
 }
 
 /*

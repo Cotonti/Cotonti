@@ -43,7 +43,7 @@ $users_sort_tags = array(
 	'postcount' => array('USERS_TOP_POSTCOUNT', &$L['Posts'],),
 	// like columns in $db_groups table
 	'grplevel' => array('USERS_TOP_GRPLEVEL', &$L['Level'],),
-	'grptitle' => array('USERS_TOP_GRPTITLE', &$L['Maingroup'],),
+	'grpname' => array('USERS_TOP_GRPTITLE', &$L['Maingroup'],),
 );
 
 $users_sort_blacklist = array('email', 'lastip', 'password', 'sid', 'sidtime', 'lostpass', 'auth', 'token');
@@ -81,7 +81,7 @@ if(!empty($sq))
 	$y = $sq;
 }
 
-if ($s == 'grplevel' || $s == 'grptitle' || $gm > 1)
+if ($s == 'grplevel' || $s == 'grpname' || $gm > 1)
 {
 	$join_condition = "LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp";
 }
@@ -119,8 +119,8 @@ switch ($s)
 	case 'grplevel':
 		$sqlorder = "g.grp_level $w";
 	break;
-	case 'grptitle':
-		$sqlorder = "g.grp_title $w";
+	case 'grpname':
+		$sqlorder = "g.grp_name $w";
 	break;
 	default:
 		$sqlorder = "user_$s $w";
@@ -188,7 +188,7 @@ $grpfilters_group_values = array(cot_url('users'));
 $grpfilters_maingrp_values = array(cot_url('users'));
 foreach($cot_groups as $k => $i)
 {
-	$grpfilters_titles[] = $cot_groups[$k]['title'];
+	$grpfilters_titles[] = $cot_groups[$k]['name'];
 	$grpfilters_maingrp_values[] = cot_url('users', 'g='.$k, '', true);
 	$grpfilters_group_values[] = cot_url('users', 'gm='.$k, '', true);
 	}

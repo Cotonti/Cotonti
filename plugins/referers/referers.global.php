@@ -30,9 +30,9 @@ if (!empty($sys['referer'])
 	$db->query("INSERT INTO $db_referers
 				(ref_url, ref_count, ref_date)
 			VALUES
-				('".$db->prep($sys['referer'])."', 1, {$sys['now_offset']})
+				('".$db->prep($sys['referer'])."', 1, {$sys['now']})
 			ON DUPLICATE KEY UPDATE
-				ref_count=ref_count+1, ref_date={$sys['now_offset']}");
+				ref_count=ref_count+1, ref_date={$sys['now']}");
 }
 
 

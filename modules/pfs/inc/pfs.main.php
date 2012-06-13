@@ -11,13 +11,13 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-$id = cot_import('id','G','INT');                     // id (delete file(folder) id
-$opt = cot_import('opt','G','ALP');                     // display option
-$f = cot_import('f','G','INT');                       // folder id
-$c1 = cot_import('c1','G','ALP');					  // form name
-$c2 = cot_import('c2','G','ALP');					  // input name
-$parser = cot_import('parser', 'G', 'ALP');				// custom parser
-$userid = cot_import('userid','G','INT');			  // User ID or 0
+$id = cot_import('id','G','INT');					// id (delete file(folder) id
+$opt = cot_import('opt','G','ALP');					// display option
+$f = cot_import('f','G','INT');						// folder id
+$c1 = cot_import('c1','G','ALP');					// form name
+$c2 = cot_import('c2','G','ALP');					// input name
+$parser = cot_import('parser', 'G', 'ALP');			// custom parser
+$userid = cot_import('userid','G','INT');			// User ID or 0
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['pfs']['maxpfsperpage']);   // Page number files
@@ -44,24 +44,28 @@ $files_count = 0;
 $folders_count = 0;
 $standalone = FALSE;
 $user_info = cot_userinfo($userid);
-$maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
 
 $pfs_base_href = $sys['abs_url'];
 $pfs_dir_user = cot_pfs_path($userid);
 $thumbs_dir_user = cot_pfs_thumbpath($userid);
 $rel_dir_user = cot_pfs_relpath($userid);
 
-$sql_pfs_max = $db->query("SELECT grp_pfs_maxfile, grp_pfs_maxtotal FROM $db_groups WHERE grp_id=$maingroup");
-if ($row = $sql_pfs_max->fetch())
-{
-	$maxfile = min($row['grp_pfs_maxfile'], cot_get_uploadmax());
-	$maxtotal = $row['grp_pfs_maxtotal'];
-}
-else
-{ cot_die(); }
+$sql_pfs_max = $db->query("
+	SELECT
+		MAX(grp_pfs_maxfile) AS maxfile,
+		SUM(grp_pfs_maxtotal) AS maxtotal
+	FROM $db_groups
+	WHERE grp_id IN (
+		SELECT gru_groupid
+		FROM $db_groups_users
+		WHERE gru_userid = {$user_info['user_id']}
+	)
+")->fetch();
 
-if (($maxfile==0 || $maxtotal==0) && !$usr['isadmin'])
-{ cot_block(FALSE); }
+$maxfile = min((int)$sql_pfs_max['maxfile'], cot_get_uploadmax());
+$maxtotal = (int)$sql_pfs_max['maxtotal'];
+
+cot_block(($maxfile > 0 && $maxtotal > 0) || $usr['isadmin']);
 
 if (!empty($c1) || !empty($c2))
 {
@@ -73,13 +77,11 @@ if (!empty($c1) || !empty($c2))
 	$standalone = TRUE;
 }
 
-reset($cot_extensions);
 foreach ($cot_extensions as $k => $line)
 {
 	$icon[$line[0]] = cot_rc('pfs_icon_type', array('type' => $line[2], 'name' => $line[1]));
 	$filedesc[$line[0]] = $line[1];
 }
-
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
 $title[] = array(cot_url('pfs', $more), $L['pfs_title']);
@@ -191,7 +193,7 @@ if ($a=='upload')
 
 							$db->insert($db_pfs, array(
 								'pfs_userid' => (int)$userid,
-								'pfs_date' => (int)$sys['now_offset'],
+								'pfs_date' => (int)$sys['now'],
 								'pfs_file' => $u_sqlname,
 								'pfs_extension' => $f_extension,
 								'pfs_folderid' => (int)$folderid,
@@ -530,10 +532,13 @@ if ($files_count>0 || $folders_count>0)
 $showthumbs .= ($opt!='thumbs' && $files_count>0 && $cfg['pfs']['th_amode']!='Disabled') ? cot_rc_link(cot_url('pfs', 'f='.$f.'&'.$more.'&opt=thumbs'), $L['Thumbnails']) : '';
 
 $t->assign(array(
-	'PFS_TOTALSIZE' => floor($pfs_totalsize/1024).$L['kb'],
-	'PFS_MAXTOTAL' => $maxtotal.$L['kb'],
-	'PFS_PERCENTAGE' => @floor(100*$pfs_totalsize/1024/$maxtotal),
-	'PFS_MAXFILESIZE' => $maxfile.$L['kb'],
+	'PFS_TOTALSIZE' => cot_build_filesize($pfs_totalsize/1024, 1),
+	'PFS_TOTALSIZE_KB' => floor($pfs_totalsize/1024),
+	'PFS_MAXTOTAL' => cot_build_filesize($maxtotal, 1),
+	'PFS_MAXTOTAL_KB' => $maxtotal,
+	'PFS_PERCENTAGE' => $maxtotal > 0 ? round(100*$pfs_totalsize/1024/$maxtotal) : 0,
+	'PFS_MAXFILESIZE' => cot_build_filesize($maxfile, 1),
+	'PFS_MAXFILESIZE_KB' => $maxfile,
 	'PFS_SHOWTHUMBS' => $showthumbs
 ));
 

@@ -35,7 +35,7 @@ if ($days == 0)
 if ($days > 0)
 {
 	$timeminus = $days * 86400;
-	$timeback = $sys['now_offset'] - $timeminus;
+	$timeback = $sys['now'] - $timeminus;
 }
 
 require_once cot_incfile('recentitems', 'plug');
