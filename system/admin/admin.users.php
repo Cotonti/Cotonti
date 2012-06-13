@@ -34,6 +34,7 @@ foreach (cot_getextplugins('admin.users.first') as $pl)
 
 if($n == 'add')
 {
+	$rgroups['grp_name'] = cot_import('rname', 'P', 'TXT');
 	$rgroups['grp_title'] = cot_import('rtitle', 'P', 'TXT');
 	$rgroups['grp_desc'] = cot_import('rdesc', 'P', 'TXT');
 	$rgroups['grp_icon'] = cot_import('ricon', 'P', 'TXT');
@@ -53,7 +54,7 @@ if($n == 'add')
 	}
 	/* ===== */
 
-	if ($rgroups['grp_title'])
+	if ($rgroups['grp_name'] && $rgroups['grp_title'])
 	{
 		$db->insert($db_groups, $rgroups);
 	}
@@ -79,6 +80,7 @@ elseif($n == 'edit')
 {
 	if($a == 'update')
 	{
+		$rgroups['grp_name'] = cot_import('rname', 'P', 'TXT');
 		$rgroups['grp_title'] = cot_import('rtitle', 'P', 'TXT');
 		$rgroups['grp_desc'] = cot_import('rdesc', 'P', 'TXT');
 		$rgroups['grp_icon'] = cot_import('ricon', 'P', 'TXT');
@@ -95,7 +97,7 @@ elseif($n == 'edit')
 		}
 		/* ===== */
 
-		if ($rgroups['grp_title'])
+		if ($rgroups['grp_name'] && $rgroups['grp_title'])
 		{
 			$db->update($db_groups, $rgroups, "grp_id=$g");
 			
@@ -144,12 +146,14 @@ elseif($n == 'edit')
 		$sql1 = $db->query("SELECT COUNT(*) FROM $db_groups_users WHERE gru_groupid='$g'");
 		$row['grp_memberscount'] = $sql1->fetchColumn();
 
+		$row['grp_name'] = htmlspecialchars($row['grp_name']);
 		$row['grp_title'] = htmlspecialchars($row['grp_title']);
 
-		$adminpath[] = array (cot_url('admin', 'm=users&n=edit&g='.$g), $row['grp_title']);
+		$adminpath[] = array (cot_url('admin', 'm=users&n=edit&g='.$g), $row['grp_name']);
 
 		$t->assign(array(
 			'ADMIN_USERS_EDITFORM_URL' => cot_url('admin', 'm=users&n=edit&a=update&g='.$g),
+			'ADMIN_USERS_EDITFORM_GRP_NAME' => cot_inputbox('text', 'rname', $row['grp_name'], 'size="40" maxlength="64"'),
 			'ADMIN_USERS_EDITFORM_GRP_TITLE' => cot_inputbox('text', 'rtitle', $row['grp_title'], 'size="40" maxlength="64"'),
 			'ADMIN_USERS_EDITFORM_GRP_DESC' => cot_inputbox('text', 'rdesc', htmlspecialchars($row['grp_desc']), 'size="40" maxlength="64"'),
 			'ADMIN_USERS_EDITFORM_GRP_ICON' => cot_inputbox('text', 'ricon', htmlspecialchars($row['grp_icon']), 'size="40" maxlength="128"'),
@@ -196,6 +200,7 @@ if(!isset($showdefault) || $showdefault == true)
 			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
 			$t->assign(array(
 				'ADMIN_USERS_ROW_GRP_TITLE_URL' => cot_url('admin', 'm=users&n=edit&g='.$row['grp_id']),
+				'ADMIN_USERS_ROW_GRP_NAME' => htmlspecialchars($row['grp_name']),
 				'ADMIN_USERS_ROW_GRP_TITLE' => htmlspecialchars($row['grp_title']),
 				'ADMIN_USERS_ROW_GRP_ID' => $row['grp_id'],
 				'ADMIN_USERS_ROW_GRP_COUNT_MEMBERS' => $members[$row['grp_id']],
@@ -216,6 +221,7 @@ if(!isset($showdefault) || $showdefault == true)
 
 	$t->assign(array(
 		'ADMIN_USERS_FORM_URL' => cot_url('admin', 'm=users&n=add'),
+		'ADMIN_USERS_NGRP_NAME' => cot_inputbox('text', 'rname', '', 'size="40" maxlength="64"'),
 		'ADMIN_USERS_NGRP_TITLE' => cot_inputbox('text', 'rtitle', '', 'size="40" maxlength="64"'),
 		'ADMIN_USERS_NGRP_DESC' => cot_inputbox('text', 'rdesc', '', 'size="40" maxlength="64"'),
 		'ADMIN_USERS_NGRP_ICON' => cot_inputbox('text', 'ricon', '', 'size="40" maxlength="128"'),

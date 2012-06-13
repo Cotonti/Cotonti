@@ -169,7 +169,7 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 						'attrs' => $readonly
 					));
 				}
-				$item .= ( $k == COT_GROUP_GUESTS) ? $cot_groups[$k]['title'] : cot_rc_link(cot_url('users', 'gm=' . $k), $cot_groups[$k]['title']);
+				$item .= ( $k == COT_GROUP_GUESTS) ? $cot_groups[$k]['name'] : cot_rc_link(cot_url('users', 'gm=' . $k), $cot_groups[$k]['name']);
 				$item .= ( $cot_groups[$k]['hidden']) ? ' (' . $L['Hidden'] . ')' : '';
 				$rc = ($maingrp == $k) ? 'users_code_grplist_item_main' : 'users_code_grplist_item';
 				$res .= cot_rc('users_code_grplist_item', array('item' => $item));

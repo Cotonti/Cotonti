@@ -270,6 +270,7 @@ if (!$cot_groups )
    				'disabled' => $row['grp_disabled'],
    				'hidden' => $row['grp_hidden'],
 				'state' => $row['grp_state'],
+				'name' => htmlspecialchars($row['grp_name']),
 				'title' => htmlspecialchars($row['grp_title']),
 				'desc' => htmlspecialchars($row['grp_desc']),
 				'icon' => $row['grp_icon'],

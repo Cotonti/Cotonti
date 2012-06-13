@@ -26,7 +26,7 @@ foreach($cot_groups as $k => $i)
 {
 	if(!in_array($k, cot_hiddengroups_get(cot_hiddengroups_mode())) || cot_auth('plug', 'hiddengroups', '1'))
 	{
-		$grpfilters_titles[] = $cot_groups[$k]['title'];
+		$grpfilters_titles[] = $cot_groups[$k]['name'];
 		$grpfilters_maingrp_values[] = cot_url('users', 'g='.$k);
 		$grpfilters_group_values[] = cot_url('users', 'gm='.$k);
 	}

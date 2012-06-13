@@ -19,7 +19,7 @@ Hooks=admin.users.update
 
 $rgroups['grp_hidden'] = cot_import('rhidden', 'P', 'BOL');
 
-if(!empty($rgroups['grp_title']))
+if(!empty($rgroups['grp_name']) && !empty($rgroups['grp_title']))
 {
 	$db->update($db_groups, array('grp_hidden' => (int)$rgroups['grp_hidden']), "grp_id = ".(int)$g);
 }

@@ -23,7 +23,7 @@
 					<!-- IF {PHP.hidden_groups} AND {ADMIN_USERS_ROW_GRP_HIDDEN} == Yes -->{PHP.R.admin_icon_usergroup0}<!-- ELSE -->{PHP.R.admin_icon_usergroup1}<!-- ENDIF -->
 					<!-- ENDIF -->
 					</td>
-					<td><a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}" class="ajax" title="{PHP.L.Edit}">{ADMIN_USERS_ROW_GRP_TITLE} (#{ADMIN_USERS_ROW_GRP_ID})</a></td>
+					<td><a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}" class="ajax" title="{PHP.L.Edit}">{ADMIN_USERS_ROW_GRP_NAME} (#{ADMIN_USERS_ROW_GRP_ID})</a></td>
 					<td class="centerall">{ADMIN_USERS_ROW_GRP_COUNT_MEMBERS}</td>
 					<td class="centerall">{ADMIN_USERS_ROW_GRP_DISABLED}</td>
 					<td class="centerall action">
@@ -41,8 +41,12 @@
 			<form name="addlevel" id="addlevel" action="{ADMIN_USERS_FORM_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
-					<td class="width40">{PHP.L.Group}:</td>
-					<td class="width60">{ADMIN_USERS_NGRP_TITLE}{PHP.L.adm_required}</td>
+					<td class="width40">{PHP.L.Name}:</td>
+					<td class="width60">{ADMIN_USERS_NGRP_NAME}{PHP.L.adm_required}</td>
+				</tr>
+				<tr>
+					<td>{PHP.L.Title}:</td>
+					<td>{ADMIN_USERS_NGRP_TITLE}{PHP.L.adm_required}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Description}:</td>
@@ -104,8 +108,12 @@
 			<form name="editlevel" id="editlevel" action="{ADMIN_USERS_EDITFORM_URL}" method="post" class="ajax">
 				<table class="cells">
 					<tr>
-						<td class="width40">{PHP.L.Group}:</td>
-						<td class="width60">{ADMIN_USERS_EDITFORM_GRP_TITLE} {PHP.L.adm_required}</td>
+						<td class="width40">{PHP.L.Name}:</td>
+						<td class="width60">{ADMIN_USERS_EDITFORM_GRP_NAME} {PHP.L.adm_required}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.Title}:</td>
+						<td>{ADMIN_USERS_EDITFORM_GRP_TITLE} {PHP.L.adm_required}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Description}:</td>

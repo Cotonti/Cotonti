@@ -186,6 +186,7 @@ CREATE TABLE `cot_groups` (
   `grp_alias` varchar(32) collate utf8_unicode_ci NOT NULL default '',
   `grp_level` tinyint NOT NULL default '1',
   `grp_disabled` tinyint NOT NULL default '0',
+  `grp_name` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `grp_title` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `grp_desc` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `grp_icon` varchar(128) collate utf8_unicode_ci NOT NULL default '',
@@ -196,13 +197,13 @@ CREATE TABLE `cot_groups` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7;
 
 
-INSERT INTO `cot_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `grp_title`, `grp_desc`, `grp_icon`, `grp_ownerid`, `grp_maintenance`) VALUES
-(1, 'guests', 0, 0, 'Guests', '', '', 1, 0),
-(2, 'inactive', 1, 0, 'Inactive', '', '', 1, 0),
-(3, 'banned', 1, 0, 'Banned', '', '', 1, 0),
-(4, 'members', 1, 0, 'Members', '', '', 1, 0),
-(5, 'administrators', 99, 0, 'Administrators', '', '', 1, 1),
-(6, 'moderators', 50, 0, 'Moderators', '', '', 1, 1);
+INSERT INTO `cot_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `grp_name`,, `grp_title`, `grp_desc`, `grp_icon`, `grp_ownerid`, `grp_maintenance`) VALUES
+(1, 'guests', 0, 0, 'Guests', 'Guest', '', '', 1, 0),
+(2, 'inactive', 1, 0, 'Inactive', 'Inactive', '', '', 1, 0),
+(3, 'banned', 1, 0, 'Banned', 'Banned', '', '', 1, 0),
+(4, 'members', 1, 0, 'Members', 'Member', '', '', 1, 0),
+(5, 'administrators', 99, 0, 'Administrators', 'Administrator', '', '', 1, 1),
+(6, 'moderators', 50, 0, 'Moderators', 'Moderator', '', '', 1, 1);
 
 DROP TABLE IF EXISTS `cot_groups_users`;
 CREATE TABLE `cot_groups_users` (

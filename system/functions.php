@@ -1737,19 +1737,21 @@ function cot_build_user($id, $user, $extra_attrs = '')
  * Returns group link (button)
  *
  * @param int $grpid Group ID
+ * @param bool $title Return group title instead of name
  * @return string
  */
-function cot_build_group($grpid)
+function cot_build_group($grpid, $title = false)
 {
 	if (empty($grpid))
 		return '';
 	global $cot_groups, $L;
 
+	$type = ($title) ? 'title' : 'name';
 	if ($cot_groups[$grpid]['hidden'])
 	{
 		if (cot_auth('users', 'a', 'A'))
 		{
-			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid]['title'] . ' (' . $L['Hidden'] . ')');
+			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type] . ' (' . $L['Hidden'] . ')');
 		}
 		else
 		{
@@ -1758,7 +1760,7 @@ function cot_build_group($grpid)
 	}
 	else
 	{
-		return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid]['title']);
+		return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type]);
 	}
 }
 
@@ -1841,8 +1843,11 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'NICKNAME' => htmlspecialchars($user_data['user_name']),
 				'DETAILSLINK' => cot_url('users', 'm=details&id=' . $user_data['user_id'].'&u='.htmlspecialchars($user_data['user_name'])),
 				'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
+				'TITLE' => $cot_groups[$user_data['user_maingrp']]['title'],
 				'MAINGRP' => cot_build_group($user_data['user_maingrp']),
 				'MAINGRPID' => $user_data['user_maingrp'],
+				'MAINGRPNAME' => $cot_groups[$user_data['user_maingrp']]['name'],
+				'MAINGRPTITLE' => cot_build_group($user_data['user_maingrp'], true),
 				'MAINGRPSTARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
 				'MAINGRPICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
 				'COUNTRY' => cot_build_country($user_data['user_country']),
