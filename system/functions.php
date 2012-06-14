@@ -2953,6 +2953,7 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 		$admin && !empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/plugins/";
 		$admin && $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/plugins/";
 		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/";
+		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/{$base[0]}/";
 		$scan_dirs[] = "{$cfg['plugins_dir']}/{$base[0]}/tpl/";
 	}
 	elseif ($type == 'core' && in_array($base[0], array('admin', 'header', 'footer', 'message')))
@@ -2969,6 +2970,7 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 		$admin && $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/modules/";
 		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
 		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
+		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/{$base[0]}/";
 		$scan_dirs[] = "{$cfg['modules_dir']}/{$base[0]}/tpl/";
 	}
 
