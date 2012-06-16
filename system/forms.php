@@ -360,7 +360,7 @@ function cot_selectbox_timezone($chosen, $name, $add_gmt = true, $dst = false, $
 	$timezonelist = cot_timezone_list($add_gmt, $dst);
 	foreach($timezonelist as $timezone)
 	{
-		$names[] = $timezone['name'];
+		$names[] = $timezone['identifier'];
 		$titles[] = $timezone['description'];
 	}
 	return cot_selectbox($chosen, $name, $names, $titles, false, $attrs, $custom_rc);

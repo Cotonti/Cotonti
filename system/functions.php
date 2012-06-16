@@ -3178,44 +3178,20 @@ function cot_date2strftime($format) {
 }
 
 /**
- * Returns previous, current and next transition in a certain timezone.
- * Useful for detecting if DST is currently in effect.
- *
- * @param string $tz Timezone identifier, must be one of PHP supported timezones
- * @return array Multidimensional array with keys 'previous', 'current' and 'next', 
- *  each containing an element of the result of DateTimeZone::getTransitions
- * @see http://www.php.net/manual/en/datetimezone.gettransitions.php 
- */
-function cot_timezone_transitions($tz)
-{
-	global $sys;
-	$dtz = new DateTimeZone($tz);
-	$transitions = array_reverse((array)$dtz->getTransitions());
-	foreach ($transitions as $key => $transition)
-	{
-		if ($transition['ts'] < $sys['now'])
-		{
-			return array(
-				'previous' => $transitions[$key+1],
-				'current' => $transition,
-				'next' => $transitions[$key-1],
-			);
-		}
-	}
-}
-
-/**
  * Returns a list of timezones sorted by GMT offset.
  * 
  * @param bool $withgmt Return 'GMT' as the first option, otherwise it won't be included
  * @param bool $dst Include DST in timezone offsets, if DST is in effect there right now
  * @return array Multidimensional array. Each timezone has the following keys:
- *  'name' - PHP timezone name, e.g. "America/El_Salvador"
+ *  'identifier' - PHP timezone name, e.g. "America/El_Salvador"
  *  'offset' - GMT offset in seconds, e.g. -21600
- *  'description' : Hourly GMT offset and name in readable format, e.g. "GMT-06:00 America/El Salvador"
+ *  'title' - Localized timezone name, e.g. "America/El Salvador"
+ *  'description' - Hourly GMT offset and localized name, e.g. "GMT-06:00 America/El Salvador"
  */
 function cot_timezone_list($withgmt = false, $dst = false)
 {
+	global $Ltz;
+	if (!$Ltz) include cot_langfile('countries', 'core');
 	static $timezones = array();
 	if (!$timezones)
 	{
@@ -3224,15 +3200,16 @@ function cot_timezone_list($withgmt = false, $dst = false)
 		$identifiers = DateTimeZone::listIdentifiers();
 		foreach ($identifiers as $timezone)
 		{
-			list ($region, $city) = explode('/', $timezone);
+			list ($region, $city) = explode('/', $timezone, 2);
 			if (!in_array($region, $regions)) continue;
 			$offset = cot_timezone_offset($timezone, false, $dst);
 			$gmtoffset = cot_build_timezone($offset);
-			$city = str_replace('_', ' ', $city);
+			$title = $Ltz[$timezone] ? $Ltz[$timezone] : $region.'/'.str_replace('_', ' ', $city);
 			$timezonelist[] = array(
-				'name' => $timezone,
+				'identifier' => $timezone,
 				'offset' => $offset,
-				'description' => "$gmtoffset $region/$city"
+				'title' => $title,
+				'description' => "$gmtoffset $title"
 			);
 		}
 		foreach ($timezonelist as $k => $tz) {
@@ -3270,6 +3247,58 @@ function cot_timezone_offset($tz, $hours = false, $dst = true)
     $remote_dt = new DateTime('now', $remote_dtz);
     $offset = $remote_dtz->getOffset($remote_dt) - $origin_dtz->getOffset($origin_dt) - $dstoffset;
 	return $hours ? floatval($offset / 3600) : $offset;
+}
+
+/**
+ * Returns a list of possible timezones based on country and/or GMT offset.
+ *
+ * @param string $countrycode 2 char lowercase country code
+ * @param int $gmtoffset Offset from GMT in seconds
+ * @return array Numeric array of timezone identifiers
+ */
+function cot_timezone_search($countrycode = '', $gmtoffset = null)
+{
+	global $cot_timezones;
+	$res = array();
+	$both = ($countrycode && is_int($gmtoffset));
+	foreach ($cot_timezones as $tz => $info)
+	{
+		$countrymatch = ($info[0] == $countrycode);
+		$offsetmatch = (is_int($gmtoffset) && ($info[1] == $gmtoffset || $info[2] == $gmtoffset));
+		if (($countrymatch && $offsetmatch) || (!$both && ($countrymatch || $offsetmatch)))
+		{
+			$res[] = $tz;
+		}
+	}
+	sort($res);
+	return $res;
+}
+
+/**
+ * Returns previous, current and next transition in a certain timezone.
+ * Useful for detecting if DST is currently in effect.
+ *
+ * @param string $tz Timezone identifier, must be one of PHP supported timezones
+ * @return array Multidimensional array with keys 'previous', 'current' and 'next', 
+ *  each containing an element of the result of DateTimeZone::getTransitions
+ * @see http://www.php.net/manual/en/datetimezone.gettransitions.php 
+ */
+function cot_timezone_transitions($tz)
+{
+	global $sys;
+	$dtz = new DateTimeZone($tz);
+	$transitions = array_reverse((array)$dtz->getTransitions());
+	foreach ($transitions as $key => $transition)
+	{
+		if ($transition['ts'] < $sys['now'])
+		{
+			return array(
+				'previous' => $transitions[$key+1],
+				'current' => $transition,
+				'next' => $transitions[$key-1],
+			);
+		}
+	}
 }
 
 /*
