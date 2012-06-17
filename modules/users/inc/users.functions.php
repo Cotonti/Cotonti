@@ -121,19 +121,22 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
  * @param bool $edit Permission
  * @param int $maingrp User main group
  * @return string
- * @global CotDB $db
  */
 function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 {
-	global $db, $db_groups_users, $cot_groups, $L, $usr, $R;
+	global $db, $db_groups, $db_groups_users, $cot_groups, $L, $usr, $R;
 
-	$sql = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$userid");
-
-	while ($row = $sql->fetch())
+	$memberships = $db->query("
+		SELECT gru_groupid
+		FROM $db_groups_users
+		WHERE gru_userid = ?
+	", array($userid))->fetchAll();
+	foreach ($memberships as $row)
 	{
 		$member[$row['gru_groupid']] = TRUE;
 	}
-	$sql->closeCursor();
+	
+	$maxlevel = cot_auth_getlevel($usr['id']);
 
 	$res = $R['users_code_grplist_begin'];
 	foreach ($cot_groups as $k => $i)
@@ -142,9 +145,9 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 		{
 			$checked = ($member[$k]) ? ' checked="checked"' : '';
 			$checked_maingrp = ($maingrp == $k) ? ' checked="checked"' : '';
-			$readonly = (!$edit || $usr['level'] < $cot_groups[$k]['level'] || $k == COT_GROUP_GUESTS
+			$readonly = (!$edit || $maxlevel < $cot_groups[$k]['level'] || $k == COT_GROUP_GUESTS
 					|| $k == COT_GROUP_INACTIVE || $k == COT_GROUP_BANNED || ($k == COT_GROUP_SUPERADMINS && $userid == 1)) ? ' disabled="disabled"' : '';
-			$readonly_maingrp = (!$edit || $usr['level'] < $cot_groups[$k]['level'] || $k == COT_GROUP_GUESTS
+			$readonly_maingrp = (!$edit || $maxlevel < $cot_groups[$k]['level'] || $k == COT_GROUP_GUESTS
 					|| ($k == COT_GROUP_INACTIVE && $userid == 1) || ($k == COT_GROUP_BANNED && $userid == 1)) ? ' disabled="disabled"' : '';
 		}
 		if ($member[$k] || $edit)

@@ -145,6 +145,38 @@ function cot_auth_clear($id = 'all')
 }
 
 /**
+ * Returns highest level of all groups a user belongs to.
+ * 
+ * @param int $userid User ID
+ * @param bool $maingroup Return level of maingroup
+ * @return int 
+ */
+function cot_auth_getlevel($userid, $maingroup = false)
+{
+	global $db, $db_groups, $db_groups_users, $db_users;
+	if ($maingroup)
+	{
+		return (int)$db->query("
+			SELECT grp_level FROM $db_groups
+			INNER JOIN $db_users
+			ON user_maingrp = grp_id
+			WHERE user_id = ?
+		", array($userid))->fetchColumn();
+	}
+	else
+	{
+		return (int)$db->query("
+			SELECT MAX(grp_level) FROM $db_groups 
+			WHERE grp_id IN (
+				SELECT gru_groupid
+				FROM $db_groups_users
+				WHERE gru_userid = ?
+			)
+		", array($userid))->fetchColumn();
+	}
+}
+
+/**
  * Returns an access character mask for a given access byte
  *
  * @param int $rn Permission byte

@@ -182,7 +182,8 @@ if ($a=='update')
 		
 		$ruser['user_maingrp'] = ($ruser['user_maingrp'] < COT_GROUP_MEMBERS && $id==1) ? COT_GROUP_SUPERADMINS : $ruser['user_maingrp'];
 
-		if($usr['level'] >= $cot_groups[$ruser['user_maingrp']]['level'])
+		$maxlevel = cot_auth_getlevel($usr['id']);
+		if($maxlevel >= $cot_groups[$ruser['user_maingrp']]['level'])
 		{
 			if (!$rusergroupsms[$ruser['user_maingrp']])
 			{
@@ -193,7 +194,7 @@ if ($a=='update')
 
 		foreach($cot_groups as $k => $i)
 		{
-			if (isset($rusergroupsms[$k]) && $usr['level'] >= $cot_groups[$k]['level'])
+			if (isset($rusergroupsms[$k]) && $maxlevel >= $cot_groups[$k]['level'])
 			{
 				$sql = $db->query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid=$id AND gru_groupid=$k");
 				if ($sql->rowCount() == 0 && !(($id == 1 && $k == COT_GROUP_BANNED) || ($id == 1 && $k == COT_GROUP_INACTIVE)))
