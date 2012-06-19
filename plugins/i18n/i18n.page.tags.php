@@ -20,6 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($i18n_enabled)
 {
+	$id = (empty($id)) ? $pag['page_id'] : $id;
 	// Render language selection
 	$pag_i18n_locales = cot_i18n_list_page_locales($id);
 	if (count($pag_i18n_locales) > 0)
