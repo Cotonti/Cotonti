@@ -197,7 +197,7 @@ CREATE TABLE `cot_groups` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7;
 
 
-INSERT INTO `cot_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `grp_name`,, `grp_title`, `grp_desc`, `grp_icon`, `grp_ownerid`, `grp_maintenance`) VALUES
+INSERT INTO `cot_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `grp_name`, `grp_title`, `grp_desc`, `grp_icon`, `grp_ownerid`, `grp_maintenance`) VALUES
 (1, 'guests', 0, 0, 'Guests', 'Guest', '', '', 1, 0),
 (2, 'inactive', 1, 0, 'Inactive', 'Inactive', '', '', 1, 0),
 (3, 'banned', 1, 0, 'Banned', 'Banned', '', '', 1, 0),
