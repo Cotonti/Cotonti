@@ -59,7 +59,11 @@ if ($a=='add')
 	{
 		$ruser['user_'.$exfld['field_name']] = cot_import_extrafields('ruser'.$exfld['field_name'], $exfld);
 	}
-	$ruser['user_birthdate'] = (int)cot_import_date('ruserbirthdate', false);
+	$ruser['user_birthdate'] = cot_import_date('ruserbirthdate', false);
+	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > $sys['now'])
+	{
+		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
+	}
 
 	$user_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_name = ? LIMIT 1", array($ruser['user_name']))->fetch();
 	$email_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_email = ? LIMIT 1", array($ruser['user_email']))->fetch();
@@ -206,7 +210,7 @@ $t->assign(array(
 	'USERS_REGISTER_COUNTRY' => cot_selectbox_countries($ruser['user_country'], 'rcountry'),
 	'USERS_REGISTER_TIMEZONE' => cot_selectbox_timezone($ruser['user_timezone'], 'rusertimezone'),
 	'USERS_REGISTER_GENDER' => cot_selectbox_gender($ruser['user_gender'],'rusergender'),
-	'USERS_REGISTER_BIRTHDATE' => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', cot_date('Y', $sys['now']), cot_date('Y', $sys['now']) - 100, false),
+	'USERS_REGISTER_BIRTHDATE' => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', 'ruserbirthdate', cot_date('Y', $sys['now']), cot_date('Y', $sys['now']) - 100, false),
 ));
 
 // Extra fields
