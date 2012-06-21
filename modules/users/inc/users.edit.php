@@ -102,7 +102,11 @@ if ($a=='update')
 	$ruser['user_lang'] = cot_import('ruserlang','P','ALP');
 	$ruser['user_gender'] = cot_import('rusergender','P','TXT');
 
-	$ruser['user_birthdate'] = (int)cot_import_date('ruserbirthdate', false);
+	$ruser['user_birthdate'] = cot_import_date('ruserbirthdate', false);
+	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > $sys['now'])
+	{
+		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
+	}
 
 	$ruser['user_timezone'] = cot_import('rusertimezone','P','TXT');
 	$rusernewpass = cot_import('rusernewpass','P','TXT', 16);
@@ -130,8 +134,7 @@ if ($a=='update')
 
 		$ruser['user_name'] = ($ruser['user_name']=='') ? $urr['user_name'] : $ruser['user_name'];
 
-		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now']) ? ($sys['now'] - 31536000) : $ruser['user_birthdate'];
-		$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
+		$ruser['user_birthdate'] = (is_null($ruser['user_birthdate'])) ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
 
 		if (!$ruserbanned)
 		{

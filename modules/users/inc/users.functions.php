@@ -121,6 +121,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
  * @param bool $edit Permission
  * @param int $maingrp User main group
  * @return string
+ * @global CotDB $db
  */
 function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 {

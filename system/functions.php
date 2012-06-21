@@ -1340,41 +1340,33 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false,
 }
 
 /**
- * Calculates age out of D.O.B.
+ * Calculates age out of date of birth.
  *
- * @param int $birth Date of birth as UNIX timestamp
- * @return int
+ * @param int $birthdate Timestamp or a string according to format 'YYYY-MM-DD'
+ * @return int Age in years or NULL on failure
  */
-function cot_build_age($birth)
+function cot_build_age($birthdate)
 {
-	global $sys;
-
-	if ($birth==1)
+	if (is_string($birthdate))
 	{
-		return ('?');
+		$birthdate = strtotime($birthdate);
+	}
+	if (is_null($birthdate) || $birthdate === false || $birthdate === -1)
+	{
+		return null;
 	}
 
-	$day1 = @date('d', $birth);
-	$month1 = @date('m', $birth);
-	$year1 = @date('Y', $birth);
+	list($birth_y, $birth_m, $birth_d) = explode('-', cot_date('Y-m-d', $birthdate));
+	list($now_y, $now_m, $now_d) = explode('-', cot_date('Y-m-d'));
 
-	$day2 = @date('d', $sys['now']);
-	$month2 = @date('m', $sys['now']);
-	$year2 = @date('Y', $sys['now']);
+	$age = $now_y - $birth_y - 1;
 
-	$age = ($year2-$year1)-1;
-
-	if ($month1<$month2 || ($month1==$month2 && $day1<=$day2))
+	if ($birth_m < $now_m || ($birth_m == $now_m && $birth_d <= $now_d))
 	{
-		$age++;
+		$age += 1;
 	}
 
-	if($age < 0)
-	{
-		$age += 136;
-	}
-
-	return ($age);
+	return ($age < 0) ? $age + 136 : $age;
 }
 
 /**
@@ -1857,9 +1849,9 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'THEME' => $user_data['user_theme'],
 				'SCHEME' => $user_data['user_scheme'],
 				'GENDER' => ($user_data['user_gender'] == '' || $user_data['user_gender'] == 'U') ? '' : $L['Gender_' . $user_data['user_gender']],
-				'BIRTHDATE' => ($user_data['user_birthdate'] != 0) ? cot_date('date_full', $user_data['user_birthdate']) : '',
-				'BIRTHDATE_STAMP' => ($user_data['user_birthdate'] != 0) ? $user_data['user_birthdate'] : '',
-				'AGE' => ($user_data['user_birthdate'] != 0) ? cot_build_age($user_data['user_birthdate']) : '',
+				'BIRTHDATE' => (is_null($user_data['user_birthdate'])) ? '' : cot_date('date_full', $user_data['user_birthdate']),
+				'BIRTHDATE_STAMP' => (is_null($user_data['user_birthdate'])) ? '' : $user_data['user_birthdate'],
+				'AGE' => (is_null($user_data['user_birthdate'])) ? '' : cot_build_age($user_data['user_birthdate']),
 				'TIMEZONE' => cot_build_timezone(cot_timezone_offset($user_data['user_timezone'], false, false)) . ' ' .str_replace('_', ' ', $user_data['user_timezone']),
 				'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate']),
 				'REGDATE_STAMP' => $user_data['user_regdate'],
@@ -3120,11 +3112,11 @@ if (!function_exists('strptime'))
  *	Defaults to MySQL date format.
  *	Can also be set to 'auto', in which case
  *	it will rely on strtotime for parsing.
- * @return int UNIX timestamp
+ * @return int UNIX timestamp or NULL for 0000-00-00
  */
 function cot_date2stamp($date, $format = null)
 {
-	if ($date == '0000-00-00') return 0;
+	if ($date == '0000-00-00') return null;
 	if (!$format)
 	{
 		preg_match('#(\d{4})-(\d{2})-(\d{2})#', $date, $m);
@@ -3236,15 +3228,22 @@ function cot_timezone_list($withgmt = false, $dst = false)
 function cot_timezone_offset($tz, $hours = false, $dst = true)
 {
 	if (!$tz || in_array($tz, array('UTC', 'GMT', 'Universal', 'UCT', 'Zulu'))) return 0;
-    $origin_dtz = new DateTimeZone('UTC');
-    $remote_dtz = new DateTimeZone($tz);
-	if (!$dst)
+	try
 	{
-		$trans = cot_timezone_transitions($tz);
-		$dstoffset = ($trans['current']['isdst']) ? $trans['current']['offset'] - $trans['previous']['offset'] : 0;
+		$origin_dtz = new DateTimeZone('UTC');
+		$remote_dtz = new DateTimeZone($tz);
+		if (!$dst)
+		{
+			$trans = cot_timezone_transitions($tz);
+			$dstoffset = ($trans['current']['isdst']) ? $trans['current']['offset'] - $trans['previous']['offset'] : 0;
+		}
+		$origin_dt = new DateTime('now', $origin_dtz);
+		$remote_dt = new DateTime('now', $remote_dtz);
 	}
-    $origin_dt = new DateTime('now', $origin_dtz);
-    $remote_dt = new DateTime('now', $remote_dtz);
+	catch(Exception $e)
+	{
+		return null;
+	}
     $offset = $remote_dtz->getOffset($remote_dt) - $origin_dtz->getOffset($origin_dt) - $dstoffset;
 	return $hours ? floatval($offset / 3600) : $offset;
 }
@@ -3286,7 +3285,14 @@ function cot_timezone_search($countrycode = '', $gmtoffset = null)
 function cot_timezone_transitions($tz)
 {
 	global $sys;
-	$dtz = new DateTimeZone($tz);
+	try
+	{
+		$dtz = new DateTimeZone($tz);
+	}
+	catch(Exception $e)
+	{
+		return null;
+	}
 	$transitions = array_reverse((array)$dtz->getTransitions());
 	foreach ($transitions as $key => $transition)
 	{

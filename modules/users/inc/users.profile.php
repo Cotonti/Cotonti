@@ -59,7 +59,11 @@ if($a == 'update')
 	{
 		$ruser['user_'.$exfld['field_name']] = cot_import_extrafields('ruser'.$exfld['field_name'], $exfld, 'P', $urr['user_'.$exfld['field_name']]);
 	}
-	$ruser['user_birthdate'] = (int) cot_import_date('ruserbirthdate', false);
+	$ruser['user_birthdate'] = cot_import_date('ruserbirthdate', false);
+	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > $sys['now'])
+	{
+		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
+	}
 
 	$roldpass = cot_import('roldpass','P','TXT');
 	$rnewpass1 = cot_import('rnewpass1','P','TXT');
@@ -136,9 +140,8 @@ if($a == 'update')
 	}
 	if (!cot_error_found())
 	{
-		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now']) ? ($sys['now'] - 31536000) : $ruser['user_birthdate'];
-		$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
-		$ruser['user_auth'] ='';
+		$ruser['user_birthdate'] = (is_null($ruser['user_birthdate'])) ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
+		$ruser['user_auth'] = '';
 		$db->update($db_users, $ruser, "user_id='".$usr['id']."'");
 		cot_extrafield_movefiles();
 		

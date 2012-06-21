@@ -85,6 +85,7 @@ $L['pro_passtoshort'] = 'The password must be at least 4 chars long and must con
 $L['pro_subtitle'] = 'Your personal account';
 $L['pro_title'] = 'Profile';
 $L['pro_wrongpass'] = 'You didn\'t enter your present password, or it\'s wrong';
+$L['pro_invalidbirthdate'] = 'The birthdate is invalid.';
 
 $L['useed_accountactivated'] = 'Account activated';
 $L['useed_email'] = 'You are receiving this email because an administrator activated your account. You may now login using the username and password you received in a previous email.';
