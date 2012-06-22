@@ -199,7 +199,7 @@ if (count($arraychilds) > 0)
 	}
 	$t->parse('MAIN.FORUMS_SECTIONS');
 }
-
+$where = (is_array($where)) ? $where : array();
 $where['cat'] = 'ft_cat='.$db->quote($s);
 $where['admin'] = ($usr['isadmin']) ? '' : "(ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".(int)$usr['id']."))";
 $order = "ft_sticky DESC, ft_$o $w";
@@ -213,7 +213,9 @@ foreach (cot_getextplugins('forums.topics.query') as $pl)
 }
 /* ===== */
 $where = array_diff($where,array(''));
-$prvtopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(' AND ', $where).' AND ft_mode=1')->fetchColumn();
+$where_prv = $where;
+$where_prv['ft_mode'] = '1';
+$prvtopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(' AND ', $where_prv))->fetchColumn();
 $totaltopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(' AND ', $where))->fetchColumn();
 
 $sql_forums = $db->query("SELECT t.* $join_columns FROM $db_forum_topics AS t $join_condition

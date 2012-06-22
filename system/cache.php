@@ -307,29 +307,35 @@ class File_cache extends Static_cache_driver
 	{
 		if (empty($realm))
 		{
-			$dp = opendir($this->dir);
-			while ($f = readdir($dp))
+			if(is_dir($this->dir))
 			{
-				$dname = $this->dir.'/'.$f;
-				if ($f[0] != '.' && is_dir($dname))
+				$dp = opendir($this->dir);
+				while ($f = readdir($dp))
 				{
-					$this->clear($f);
+					$dname = $this->dir.'/'.$f;
+					if ($f[0] != '.' && is_dir($dname))
+					{
+						$this->clear($f);
+					}
 				}
+				closedir($dp);
 			}
-			closedir($dp);
 		}
 		else
 		{
-			$dp = opendir($this->dir.'/'.$realm);
-			while ($f = readdir($dp))
+			if(is_dir($this->dir.'/'.$realm))
 			{
-				$fname = $this->dir.'/'.$realm.'/'.$f;
-				if (is_file($fname))
+				$dp = opendir($this->dir.'/'.$realm);
+				while ($f = readdir($dp))
 				{
-					unlink($fname);
+					$fname = $this->dir.'/'.$realm.'/'.$f;
+					if (is_file($fname))
+					{
+						unlink($fname);
+					}
 				}
+				closedir($dp);
 			}
-			closedir($dp);
 		}
 		return TRUE;
 	}
@@ -562,22 +568,25 @@ class Page_cache
 	private function rm_r($path)
 	{
 		$cnt = 0;
-		$dp = opendir($path);
-		while ($f = readdir($dp))
+		if(is_dir($path))
 		{
-			$fpath = $path . '/' . $f;
-			if (is_dir($fpath) && $f != '.' && $f != '..')
+			$dp = opendir($path);
+			while ($f = readdir($dp))
 			{
-				$cnt += $this->rm_r($fpath);
+				$fpath = $path . '/' . $f;
+				if (is_dir($fpath) && $f != '.' && $f != '..')
+				{
+					$cnt += $this->rm_r($fpath);
+				}
+				elseif (is_file($fpath))
+				{
+					unlink($fpath);
+					++$cnt;
+				}
 			}
-			elseif (is_file($fpath))
-			{
-				unlink($fpath);
-				++$cnt;
-			}
+			closedir($dp);
+			rmdir($path);
 		}
-		closedir($dp);
-		rmdir($path);
 		return ++$cnt;
 	}
 }

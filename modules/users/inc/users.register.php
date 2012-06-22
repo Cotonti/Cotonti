@@ -59,7 +59,11 @@ if ($a=='add')
 	{
 		$ruser['user_'.$exfld['field_name']] = cot_import_extrafields('ruser'.$exfld['field_name'], $exfld);
 	}
-	$ruser['user_birthdate'] = (int)cot_import_date('ruserbirthdate', false);
+	$ruser['user_birthdate'] = cot_import_date('ruserbirthdate', false);
+	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > $sys['now'])
+	{
+		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
+	}
 
 	$user_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_name = ? LIMIT 1", array($ruser['user_name']))->fetch();
 	$email_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_email = ? LIMIT 1", array($ruser['user_email']))->fetch();

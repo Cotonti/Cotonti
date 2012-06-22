@@ -54,7 +54,7 @@ $pag['page_tab'] = empty($pg) ? 0 : $pg;
 $pag['page_pageurl'] = empty($al) ? cot_url('page', array('c' => $pag['page_cat'], 'id' => $id)) : cot_url('page', array('c' => $pag['page_cat'], 'al' => $al));
 
 if (($pag['page_state'] == 1
-		|| ($pag['page_state'] == 2 && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
+		|| ($pag['page_state'] == 2)
 		|| ($pag['page_begin'] > $sys['now'])
 		|| ($pag['page_expire'] > 0 && $sys['now'] > $pag['page_expire'])) 
 	&& (!$usr['isadmin'] && $usr['id'] != $pag['page_ownerid']))
