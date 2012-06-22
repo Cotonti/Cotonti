@@ -37,7 +37,7 @@ if(is_array($extp))
 if($f == 'year' || $f == 'month')
 {
     $adminpath[] = array(sed_url('admin', 'm=hits&f='.$f.'&v='.$v), "(".$v.")");
-    $sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '$v%' ORDER BY stat_name DESC");
+    $sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '".sed_sql_prep($v)."%' ORDER BY stat_name DESC");
 
     while($row = sed_sql_fetcharray($sql))
     {
