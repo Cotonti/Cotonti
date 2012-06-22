@@ -638,14 +638,14 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
 
 	if (function_exists('cot_mail_custom'))
 	{
-		return cot_mail_custom($fmail, $subject, $body, $headers, $customtemplate, $additional_parameters);
+		return cot_mail_custom($fmail, $subject, $body, $headers, $customtemplate, $additional_parameters, $html);
 	}
 
 	if (is_array($cot_mail_senders) && count($cot_mail_senders) > 0)
 	{
 		foreach ($cot_mail_senders as $func)
 		{
-			$ret &= $func($fmail, $subject, $body, $headers, $additional_parameters);
+			$ret &= $func($fmail, $subject, $body, $headers, $additional_parameters, $html);
 		}
 		return $ret;
 	}
