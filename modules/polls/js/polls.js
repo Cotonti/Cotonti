@@ -9,25 +9,24 @@ $(".deloption").live("click",function () {
 	}
 	if (ansCount<=ansMax)
 	{
-		$("#addoption").attr('disabled', '');
+		$("#addoption").removeAttr('disabled');
 	}
 	return false;
 });
-
+$("#addoption").live("click",function () {
+	if (ansCount<ansMax)
+	{			
+		$('.polloptiondiv').last().clone().attr("id", '').insertAfter($('.polloptiondiv').last()).show().children('.tbox').attr('value', '');
+		ansCount++;
+	}
+	if (ansCount>=ansMax)
+	{
+		$("#addoption").attr('disabled', 'disabled');
+	}
+	return false;
+});
 $(document).ready(function(){
 	ansCount = $('.polloptiondiv').length;
-	$("#addoption").click(function () {
-		if (ansCount<ansMax)
-		{
-			$('.polloptiondiv').last().clone().attr("id", '').insertAfter($('.polloptiondiv').last()).show().children('.tbox').attr('value', '');
-			ansCount++;
-		}
-		if (ansCount>=ansMax)
-		{
-			$("#addoption").attr('disabled', 'disabled');
-		}
-		return false;
-	});
 	$('#addoption').show();
 	$('.deloption').show();
 });

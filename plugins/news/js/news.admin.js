@@ -4,90 +4,81 @@ function changecats()
 {
 	var newstext = '';
 	var unsetcats = '';
-	$('[name=maxpages]').val($('#cat_1 .cac').val());
+	num = $('#catgenerator .newscat').length;
+	$('[name=maxpages]').val($('#catgenerator .newscat').first().find('.cac').val());
 
-	for (var i = 1; i <= num; i++)
-	{
-		var mycat = $('#cat_'+i+' .cay').val();
-		if(i > 1)
+	$('#catgenerator .newscat').each(function(i) {
+		var mycat = $(this).find('.cay').val();
+		if(i > 0)
 		{
-			var mycat2 = mycat.replace(/[,. -]/i, "_");
-			$('#cat_'+i+' .cag').html(('{' + 'INDEX_NEWS_' + mycat2 + '}').toUpperCase());
-			$('#cat_'+i+ ' .caf').html('news.' + mycat2 + '.tpl');
+			var mycat2 = mycat.replace(/[,\.\s-]/g, "_");
+			$(this).find('.cag').html(('{' + 'INDEX_NEWS_' + mycat2 + '}').toUpperCase());
+			$(this).find('.caf').html('news.' + mycat2 + '.tpl');
 		}
 		else
 		{
-			$('#cat_'+i+' .cag').html(('{' + 'INDEX_NEWS}').toUpperCase());
-			$('#cat_'+i+' .caf').html('news.tpl');
+			$(this).find('.cag').html(('{' + 'INDEX_NEWS}').toUpperCase());
+			$(this).find('.caf').html('news.tpl');
 		}
-		if ($('#cat_'+i).length && mycat != '')
+		if ($(this).length && mycat != '')
 		{
 			if (!(newstext.indexOf(mycat) + 1))
 			{
 				newstext += mycat;
-				unsetcats = '|' + $('#cat_'+i+' .cac').val();
-				if ($('#cat_'+i+' .cam').val() != '' && $('#cat_'+i+' .cam').val() != '0')
+				unsetcats = '|' + $(this).find('.cac').val();
+				if ($(this).find('.cam').val() != '' && $(this).find('.cam').val() != '0')
 				{
-					unsetcats += '|' + $('#cat_'+i+' .cam').val();
+					unsetcats += '|' + $(this).find('.cam').val();
 				}
 				newstext +=  unsetcats;
 				if (i < num) newstext +=  ', ';
 
-				$('#cat_'+i+' > .cat_desc').show();
-				$('#cat_'+i+' > .cat_exists').hide();
+				$(this).find('.cat_desc').show();
+				$(this).find('.cat_exists').hide();
 
 			}
 			else
 			{
-				$('#cat_'+i+' > .cat_desc').hide();
-				$('#cat_'+i+' > .cat_exists').show();
+				$(this).find('.cat_desc').hide();
+				$(this).find('.cat_exists').show();
 			}
 		}
-	}
+	});
 	$('[name=category]').val(newstext);
 }
 
 $(".deloption").live("click", function () {
-	$(this).parents('tr').remove();
+	$(this).closest('tr').remove();
 	changecats();
 	return false;
 });
 
+$('#addoption').live("click", function(){
+	var object = $('.newscat').last().clone();
+	$(object).find('.deloption').show();
+	$(object).insertBefore('#addtr').show();
+	changecats();
+	return false;
+});
+	
 $('.cam, .cac, select').live("change", function(){
 	changecats();
 });
 
 $(document).ready(function(){
-	num = $('.newscat').length - 1;
-	$('#helptext').insertAfter('[name=maxpages]');
-	$('[name=maxpages]').insertBefore('#addoption').hide();
-	$('[name=category]').insertBefore('#addoption').width('100%').hide();
-	$('[name=x]').insertBefore('#addoption');
-	$("#cat_new").hide();
-	$("#syncpag").html($('[name=syncpagination]').parent().parent().html());
-	$("#cachettl").html($('[name=cache_ttl]').parent().html());
-	$('#catgenerator').show().parents('form#saveconfig').html($('#catgenerator').html());
+	$('#catgenerator').show().prependTo($('form#saveconfig'));
+	$('[name=category]').closest('tr').hide();
+	$('[name=maxpages]').closest('tr').hide();
 
-	for (var i = 1; i <= num + 1; i++)
-	{
-		if(i == (num + 1)) i = 'new';
+	$('#catgenerator .newscat').each(function(i) {
 		var input = $('[name=newsmaincat]').clone();
-		newstext = $('#cat_'+i+' .cay').val();
-		$(input).val(newstext).insertBefore('#cat_'+i+' .cay');
-		$('#cat_'+i+' .cay').remove();
+		newstext = $(this).find('.cay').val();
+		$(input).val(newstext).insertBefore($(this).find('.cay'));
+		$(this).find('.cay').remove();
 		$(input).attr('name', 'cay').attr('class', 'cay');
-		if(i > 1) $('#cat_'+i).find('.deloption').show();
-	}
+		if(i > 1) $(this).find('.deloption').show();
 
+	});
 	$('.cay').width('200px');
 	changecats();
-
-	$('#addoption').click(function(){
-		num++;
-		var object = $('#cat_new').clone().attr("id", 'cat_' + num);
-		$(object).find('.deloption').show();
-		$(object).insertBefore('#addtr').show();
-		changecats();
-	});
-
 });
