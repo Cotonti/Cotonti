@@ -1490,17 +1490,27 @@ function cot_build_flag($flag)
  * @param mixed $round
  *	Number of decimals to round the last level up to, can also be negative, see round().
  *	Set false to disable or null to inherit from $decimals.
+ * @param string $smallestunit
+ *  Key of the smallest unit to show. Any number smaller than this will return 'Less than 1 ...'.
+ *  Effectively its a way to cut off $units at a certain key.
  * @return string
  */
-function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $round = null)
+function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $round = null, $smallestunit = null)
 {
-	global $Ln, $Ls;
+	global $L;
 	if (!is_array($units)) return '';
 	$pieces = array();
 
 	// First sort from big to small
 	ksort($units, SORT_NUMERIC);
 	$units = array_reverse($units, true);
+	
+	// Trim units after $smallestunit
+	if (array_key_exists($smallestunit, $units))
+	{
+		$offset = array_search($smallestunit, array_keys($units));
+		$units = array_slice($units, 0, $offset+1, true);
+	}
 
 	foreach ($units as $size => $expr)
 	{
@@ -1530,10 +1540,9 @@ function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $
 	}
 	if (count($pieces) == 0)
 	{
-		// Return smallest possible unit
+		// Smaller than smallest possible unit
 		$expr = array_reverse(array_values($units));
-		return	cot_build_number($number, $decimals, $round). ' ' .
-				cot_declension($number, $expr[0], true, true);
+		return $L['LessThan'] . ' ' . cot_declension(1, $expr[0]);
 	}
 	return implode(' ', $pieces);
 }
@@ -1617,6 +1626,23 @@ function cot_build_stars($level)
 }
 
 /**
+ * Returns readable time difference or 'Just now'.
+ * 
+ * @param int $time Timestamp
+ * @param int $recently Seconds during which to show 'Just now'
+ * @return string
+ */
+function cot_build_timeago($time, $recently = 60)
+{
+	global $L, $sys;
+	if ($sys['now'] - $time < $recently)
+	{
+		return $L['JustNow'];
+	}
+	return cot_build_timegap($time) . ' ' . $L['Ago'];
+}
+
+/**
  * Returns time gap between two timestamps
  *
  * @param int $t1
@@ -1630,9 +1656,12 @@ function cot_build_stars($level)
  * @param mixed $round
  *	Round up last level to this number of decimals.
  *	Set false to disable or null to inherit from $decimals.
+ * @param string $smallestunit
+ *  Key of the smallest unit to show. Any number smaller than this will return 'Less than 1 ...'.
+ *  Effectively its a way to cut off $units at a certain key.
  * @return string
  */
-function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round = null)
+function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round = null, $smallestunit = null)
 {
 	global $Ls, $sys;
 	$units = array(
@@ -1645,12 +1674,12 @@ function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round =
 		'1' => $Ls['Seconds'],
 		'0.001' => $Ls['Milliseconds']
 	);
-	if ($t2 === null)
+	if ($t2 === null) 
 	{
 		$t2 = $sys['now'];
 	}
 	$gap = $t2 - $t1;
-	return cot_build_friendlynumber($gap, $units, $levels, $decimals, $round);
+	return cot_build_friendlynumber($gap, $units, $levels, $decimals, $round, $smallestunit);
 }
 
 /**
