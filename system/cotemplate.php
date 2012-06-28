@@ -149,7 +149,7 @@ class XTemplate
 	{
 		return $this->vars[$name];
 	}
-	
+
 	/**
 	 * Returns the list of names of all tags present in the template
 	 * @return array
@@ -167,21 +167,21 @@ class XTemplate
 		}
 		return array_keys($this->tags);
 	}
-	
+
 	/**
 	 * Returns TRUE if the block is present in template or FALSE otherwise
 	 * @param string $name Full block name including dots and parent blocks
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function hasBlock($name)
 	{
 		return isset($this->index[$name]);
 	}
-	
+
 	/**
 	 * Returns TRUE if the tag is present in template or FALSE otherwise
 	 * @param string $name Tag name (case-sensitive)
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function hasTag($name)
 	{
@@ -363,7 +363,7 @@ class XTemplate
 		{
 			if (!in_array($block, $this->displayed_blocks))
 			{
-				$block_level = substr_count($block, '.');
+//				$block_level = substr_count($block, '.');
 				$block_name = basename($this->filename) . ' / ' . str_replace('.', ' / ', $block);
 //				$block_offset = 20 * $block_level;
 //				$tags_offset = 20 * ($block_level + 1);
@@ -688,10 +688,10 @@ class Cotpl_block
 		}
 		while (!empty($code));
 	}
-	
+
 	/**
 	 * Returns the list of tag names present in the block
-	 * @return array 
+	 * @return array
 	 */
 	public function getTags()
 	{
@@ -802,10 +802,10 @@ class Cotpl_data
 		}
 		return $str . "\n";
 	}
-	
+
 	/**
 	 * Returns the list of tag names present in data block
-	 * @return array 
+	 * @return array
 	 */
 	public function getTags()
 	{
@@ -1234,10 +1234,10 @@ class Cotpl_logical extends Cotpl_block
 		$str .= "<!-- ENDIF -->\n";
 		return $str;
 	}
-	
+
 	/**
 	 * Returns the list of tag names present in the block
-	 * @return array 
+	 * @return array
 	 */
 	public function getTags()
 	{
@@ -1327,7 +1327,7 @@ class Cotpl_loop extends Cotpl_block
 	 * @var string
 	 */
 	protected $val = '';
-	
+
 	/**
 	 * Constructs loop block structure from strings
 	 *
@@ -1351,7 +1351,7 @@ class Cotpl_loop extends Cotpl_block
 		}
 		$this->compile($code, $this->blocks, $index, $path);
 	}
-	
+
 	/**
 	 * TPL code representation for debugging
 	 *
@@ -1467,7 +1467,7 @@ class Cotpl_var
 		}
 		$this->name = $text;
 	}
-	
+
 	/**
 	 * Property getter
 	 * @param string $name Property name
@@ -1622,6 +1622,10 @@ class Cotpl_var
 					array_walk($func['args'], 'cotpl_callback_replace', $val);
 					$f = $func['name'];
 					$a = $func['args'];
+					if (!function_exists($f))
+					{
+						return $this->__toString();
+					}
 					switch (count($a))
 					{
 						case 0:
@@ -1650,6 +1654,10 @@ class Cotpl_var
 				}
 				else
 				{
+					if (!function_exists($func))
+					{
+						return $this->__toString();
+					}
 					$val = $func($val);
 				}
 			}
