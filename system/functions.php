@@ -4168,11 +4168,18 @@ function cot_rc_consolidate()
 								$relative_path = mb_substr($relative_path, 1);
 							}
 							// Apply CSS imports
-							if (preg_match_all('#@import\s+url\((\'|")?(.+?\.css)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
+							if (preg_match_all('#@import\s+url\((\'|")?([^)]+)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
 							{
 								foreach ($mt as $m)
 								{
-									$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
+									if (preg_match('#^https?://#i', $m[2]))
+									{
+										$filename = $m[2];
+									}
+									else
+									{
+										$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
+									}
 									$file_code = str_replace($m[0], file_get_contents($filename), $file_code);
 								}
 							}
@@ -4182,7 +4189,7 @@ function cot_rc_consolidate()
 								foreach ($mt as $m)
 								{
 									$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
-									$filename = str_replace($current_path, '', realpath($filename));
+									$filename = str_replace($current_path, '', str_replace('\\', '/',realpath($filename)));
 									if (!$filename)
 									{
 										continue;
