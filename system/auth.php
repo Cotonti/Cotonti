@@ -132,7 +132,7 @@ function cot_auth_clear($id = 'all')
 {
 	global $db, $db_users, $cache;
 
-	if (is_int($id))
+	if (is_numeric($id))
 	{
 		$db->update($db_users, array('user_auth' => ''), "user_id=$id");
 	}
