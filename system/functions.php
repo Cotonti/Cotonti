@@ -122,11 +122,10 @@ function cot_autoload($class)
  *
  * @param string $res Source string
  * @param int $l Length
- * @return unknown
+ * @return string
  */
 function cot_cutstring($res, $l)
 {
-	global $cfg;
 	if (mb_strlen($res)>$l)
 	{
 		$res = mb_substr($res, 0, ($l-3)).'...';
@@ -424,7 +423,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			break;
 
 		default:
-			cot_diefatal('Unknown filter for a variable : <br />Var = '.$cv_v.'<br />Filter = &quot;'.$filter.'&quot; ?');
+			cot_diefatal('Unknown filter for a variable : <br />Var = '.$v.'<br />Filter = &quot;'.$filter.'&quot; ?');
 			break;
 	}
 
@@ -512,7 +511,7 @@ function cot_import_buffered($name, $value, $null = '')
  */
 function cot_import_date($name, $usertimezone = true, $returnarray = false, $source = 'P')
 {
-	global $L, $R, $usr;
+	global $usr;
 	//$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$date = cot_import($name, $source, 'ARR');
 
@@ -721,8 +720,6 @@ function cot_module_active($name)
  */
 function cot_outputfilters($output)
 {
-	global $cfg;
-
 	/* === Hook === */
 	foreach (cot_getextplugins('output') as $pl)
 	{
@@ -785,7 +782,6 @@ function cot_rmdir($dir)
  */
 function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
 {
-	global $cfg;
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
 	header($protocol . ' ' . $response_code);
 	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
@@ -939,7 +935,7 @@ function cot_randomstring($length = 8, $charlist = null)
  */
 function cot_load_structure()
 {
-	global $db, $db_structure, $db_extra_fields, $cfg, $L, $cot_extrafields, $structure, $R;
+	global $db, $db_structure, $cfg, $cot_extrafields, $structure;
 	$structure = array();
 	if (defined('COT_UPGRADE'))
 	{
@@ -1032,7 +1028,7 @@ function cot_load_structure()
  */
 function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = true, $userrights = true, $sqlprep = true)
 {
-	global $structure, $sys, $cfg, $db;
+	global $structure, $db;
 
 	$mtch = $structure[$area][$cat]['path'].'.';
 	$mtchlen = mb_strlen($mtch);
@@ -1048,7 +1044,7 @@ function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = tru
 	{
 		if (($cat == '' || mb_substr($x['path'], 0, $mtchlen) == $mtch) && (($userrights && cot_auth($area, $i, 'R') || !$userrights)))
 		{
-			$subcat = mb_substr($x['path'], $mtchlen + 1);
+			//$subcat = mb_substr($x['path'], $mtchlen + 1);
 			if ($cat == '' || $allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl))
 			{
 				$i = ($sqlprep) ? $db->prep($i) : $i;
@@ -1069,7 +1065,7 @@ function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = tru
  */
 function cot_structure_parents($area, $cat, $type = 'full')
 {
-	global $structure, $cfg;
+	global $structure;
 	$pathcodes = explode('.', $structure[$area][$cat]['path']);
 
 	if ($type == 'first')
@@ -1099,7 +1095,7 @@ function cot_structure_parents($area, $cat, $type = 'full')
  */
 function cot_selectbox_structure($area, $check, $name, $subcat = '', $hideprivate = true)
 {
-	global $db, $db_structure, $usr, $L, $R, $structure;
+	global $structure;
 
 	foreach ($structure[$area] as $i => $x)
 	{
@@ -1195,7 +1191,6 @@ function cot_auth_build($userid, $maingrp = 0)
 
 	$groups = array();
 	$authgrid = array();
-	$tmpgrid = array();
 
 	if ($userid == 0 || $maingrp == 0)
 	{
@@ -1382,7 +1377,7 @@ function cot_structure_buildpath($area, $cat)
 	global $structure;
 	$tmp = array();
 	$pathcodes = explode('.', $structure[$area][$cat]['path']);
-	foreach ($pathcodes as $k => $x)
+	foreach ($pathcodes as $x)
 	{
 		if ($x != 'system')
 		{
@@ -1516,7 +1511,7 @@ function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $
 	// First sort from big to small
 	ksort($units, SORT_NUMERIC);
 	$units = array_reverse($units, true);
-	
+
 	// Trim units after $smallestunit
 	if (array_key_exists($smallestunit, $units))
 	{
@@ -1631,9 +1626,7 @@ function cot_build_oddeven($number)
  */
 function cot_build_stars($level)
 {
-	global $theme, $R;
-
-	if($level>0 and $level<100)
+	if ($level > 0 and $level < 100)
 	{
 		$stars = floor($level / 10) + 1;
 		return cot_rc('icon_stars', array('val' => $stars));
@@ -1646,7 +1639,7 @@ function cot_build_stars($level)
 
 /**
  * Returns readable time difference or 'Just now'.
- * 
+ *
  * @param int $time Timestamp
  * @param int $recently Seconds during which to show 'Just now'
  * @return string
@@ -1693,7 +1686,7 @@ function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round =
 		'1' => $Ls['Seconds'],
 		'0.001' => $Ls['Milliseconds']
 	);
-	if ($t2 === null) 
+	if ($t2 === null)
 	{
 		$t2 = $sys['now'];
 	}
@@ -1736,8 +1729,6 @@ function cot_build_timezone($offset, $withgmt = true, $short = false)
  */
 function cot_build_url($text, $maxlen=64)
 {
-	global $cfg;
-
 	if (!empty($text))
 	{
 		if (mb_strpos($text, 'http://') !== 0)
@@ -1761,8 +1752,6 @@ function cot_build_url($text, $maxlen=64)
  */
 function cot_build_user($id, $user, $extra_attrs = '')
 {
-	global $cfg;
-
 	if (!$id)
 	{
 		return empty($user) ? '' : $user;
@@ -1840,7 +1829,7 @@ function cot_build_usertext($text)
  */
 function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false, $cacheitem = true)
 {
-	global $db, $cot_extrafields, $cot_groups, $cfg, $L, $cot_yesno, $user_cache, $db_users, $usr;
+	global $db, $cot_extrafields, $cot_groups, $cfg, $L, $user_cache, $db_users;
 
 	static $extp_first = null, $extp_main = null;
 
@@ -2064,7 +2053,7 @@ function cot_imageresize($source, $target='return', $target_width=99999, $target
 	}
 	$source_data = $fn_create($source);
 
-	if (in_array($size['mime'], array('image/gif', 'image/png')))
+	if (in_array($mimetype, array('image/gif', 'image/png')))
 	{
 		if (!$fillcolor)
 		{
@@ -2221,7 +2210,7 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 
 	$values = array();
 	$titles = array();
-	foreach ($themelist as $i => $x)
+	foreach ($themelist as $x)
 	{
 		$themeinfo = "{$cfg['themes_dir']}/$x/$x.php";
 		if (file_exists($themeinfo))
@@ -2408,12 +2397,10 @@ function cot_clear_messages($src = '', $class = '')
  *
  * @param bool $cond Really die?
  * @param bool $notfound Page not found?
- * @param bool $header Render header part?
  * @return bool
  */
-function cot_die($cond = true, $notfound = false, $header = true)
+function cot_die($cond = true, $notfound = false)
 {
-	global $env;
 	if ($cond)
 	{
 		$msg = $notfound ? '404' : '950';
@@ -2466,7 +2453,7 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 function cot_die_message($code, $header = TRUE, $message_title = '', $message_body = '')
 {
 	// Globals and requirements
-	global $cfg, $env, $error_string, $out, $L, $R;
+	global $error_string, $out, $L, $R;
     $LL = $L;
     require_once cot_langfile('message', 'core');
     $L = array_merge($L, $LL);
@@ -3029,7 +3016,7 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 			}
 		}
 	}
-	
+
 	return false;
 }
 
@@ -3219,7 +3206,7 @@ function cot_date2strftime($format) {
 
 /**
  * Returns a list of timezones sorted by GMT offset.
- * 
+ *
  * @param bool $withgmt Return 'GMT' as the first option, otherwise it won't be included
  * @param bool $dst Include DST in timezone offsets, if DST is in effect there right now
  * @return array Multidimensional array. Each timezone has the following keys:
@@ -3267,7 +3254,7 @@ function cot_timezone_list($withgmt = false, $dst = false)
  * Example: Europe/Amsterdam returns 3600 (GMT+1) in the winter, but 7200 (GMT+2) in the summer (DST).
  * Whether or not to apply DST is determined automatically by PHP, but can be disabled.
  * A list of supported timezone identifiers is here: http://php.net/manual/en/timezones.php
- * 
+ *
  * @param string $tz Timezone identifier (e.g. Europe/Amsterdam)
  * @param bool $hours Return hours instead of seconds
  * @param bool $dst Include DST in offset if DST is in effect right now
@@ -3326,9 +3313,9 @@ function cot_timezone_search($countrycode = '', $gmtoffset = null)
  * Useful for detecting if DST is currently in effect.
  *
  * @param string $tz Timezone identifier, must be one of PHP supported timezones
- * @return array Multidimensional array with keys 'previous', 'current' and 'next', 
+ * @return array Multidimensional array with keys 'previous', 'current' and 'next',
  *  each containing an element of the result of DateTimeZone::getTransitions
- * @see http://www.php.net/manual/en/datetimezone.gettransitions.php 
+ * @see http://www.php.net/manual/en/datetimezone.gettransitions.php
  */
 function cot_timezone_transitions($tz)
 {
@@ -3390,7 +3377,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			$ajax, $target_div, $ajax_module, $ajax_params);
 	}
 
-	global $L, $R, $cfg;
+	global $cfg;
 
 	if (!$perpage)
 	{
@@ -4077,7 +4064,7 @@ function cot_rc_attr_string($attrs)
  */
 function cot_rc_consolidate()
 {
-	global $cache, $cfg, $cot_rc_html, $cot_rc_reg, $env, $L, $R, $sys, $usr, $theme;
+	global $cache, $cfg, $cot_rc_html, $cot_rc_reg, $L, $R, $usr, $theme;
 
 	$is_admin_section = defined('COT_ADMIN');
 	$cot_rc_reg = array();
@@ -4187,11 +4174,18 @@ function cot_rc_consolidate()
 								$relative_path = mb_substr($relative_path, 1);
 							}
 							// Apply CSS imports
-							if (preg_match_all('#@import\s+url\((\'|")?(.+?\.css)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
+							if (preg_match_all('#@import\s+url\((\'|")?([^)]+)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
 							{
 								foreach ($mt as $m)
 								{
-									$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
+									if (preg_match('#^https?://#i', $m[2]))
+									{
+										$filename = $m[2];
+									}
+									else
+									{
+										$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
+									}
 									$file_code = str_replace($m[0], file_get_contents($filename), $file_code);
 								}
 							}
@@ -4201,7 +4195,7 @@ function cot_rc_consolidate()
 								foreach ($mt as $m)
 								{
 									$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
-									$filename = str_replace($current_path, '', realpath($filename));
+									$filename = str_replace($current_path, '', str_replace('\\', '/',realpath($filename)));
 									if (!$filename)
 									{
 										continue;
@@ -4612,7 +4606,7 @@ function cot_captcha_validate($value)
  */
 function cot_check_xg($redirect = true)
 {
-	global $env, $sys;
+	global $sys;
 	$x = cot_import('x', 'G', 'ALP');
 	if ($x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 	{
@@ -4654,7 +4648,7 @@ function cot_shield_clearaction()
  */
 function cot_shield_hammer($hammer, $action, $lastseen)
 {
-	global $cfg, $sys, $usr;
+	global $cfg, $sys;
 
 	if ($action == 'Hammering')
 	{
@@ -4741,7 +4735,7 @@ function cot_unregister_globals()
 	$input = array_merge($_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES,
 		isset($_SESSION) && is_array($_SESSION) ? $_SESSION : array());
 
-	foreach ($input as $k => $v)
+	foreach (array_keys($input) as $k)
 	{
 		if (!in_array($k, $noUnset) && isset($GLOBALS[$k]))
 		{
@@ -4900,7 +4894,7 @@ function cot_parse_str($str)
  */
 function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = false, $ignore_appendix = false)
 {
-	global $cfg, $cot_url_appendix;
+	global $cot_url_appendix;
 	// Preprocess arguments
 	if (is_string($params))
 	{
@@ -5004,7 +4998,7 @@ function cot_translit_encode($str)
 function cot_translit_decode($str)
 {
 	global $lang, $cot_translitb;
-	if ($translit && $lang != 'en' && is_array($cot_translitb))
+	if ($lang != 'en' && is_array($cot_translitb))
 	{
 		// Apply transliteration
 		$str = strtr($str, $cot_translitb);

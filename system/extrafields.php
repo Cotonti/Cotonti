@@ -24,7 +24,7 @@ require_once cot_incfile('forms');
  */
 function cot_build_extrafields($name, $extrafield, $data)
 {
-	global $L, $R, $cfg;
+	global $L, $R, $cfg, $pl;
 	$data = ($data == null) ? $extrafield['field_default'] : $data;
 
 	switch ($extrafield['field_type'])
@@ -118,7 +118,14 @@ function cot_build_extrafields($name, $extrafield, $data)
 			break;
 		
 		case 'file':
-			$result = cot_filebox($name, htmlspecialchars($data), $cfg['extrafield_files_dir'].'/'.htmlspecialchars($data), 'rdel_' . $name, '', $extrafield['field_html']);
+			$data_filepath = $cfg['extrafield_files_dir'].'/'.htmlspecialchars($data);
+			/* === Hook === */
+			foreach (cot_getextplugins('extrafields.build.file') as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
+			$result = cot_filebox($name, htmlspecialchars($data), $data_filepath, 'rdel_' . $name, '', $extrafield['field_html']);
 			break;
 
 		default:
@@ -262,7 +269,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			break;
 			
 		case 'file':
-			global $lang, $cot_translit, $exfldfiles, $exfldsize, $cfg, $uploadfiles;
+			global $lang, $cot_translit, $exfldfiles, $exfldsize, $cfg, $uploadfiles, $pl;
 			if ($source == 'P')
 			{
 				$import = $_FILES[$inputname];
@@ -272,6 +279,14 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			{
 				$import = $inputname;
 			}
+
+			/* === Hook === */
+			foreach (cot_getextplugins('extrafields.import.file.first') as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
+
 			if (is_array($import) && !$import['error'] && !empty($import['name']))
 			{
 				$fname = mb_substr($import['name'], 0, mb_strrpos($import['name'], '.'));
@@ -303,6 +318,14 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 					$file['field'] = $extrafield['field_name'];
 					$file['tmp'] = (!$import['delete']) ? $import['tmp_name'] : '';
 					$file['new'] = (!$import['delete']) ? $extrafield['field_params'].$fname : '';
+
+					/* === Hook === */
+					foreach (cot_getextplugins('extrafields.import.file.done') as $pl)
+					{
+						include $pl;
+					}
+					/* ===== */
+
 					$exfldsize[$extrafield['field_name']] = $import['size'];
 					$uploadfiles[] = $file;
 					$import = $fname;
@@ -759,11 +782,17 @@ function cot_import_filesarray($file_post)
  */
 function cot_extrafield_movefiles()
 {
-	global $uploadfiles;
+	global $uploadfiles, $cfg, $pl;
 	if (is_array($uploadfiles))
 	{
 		foreach ($uploadfiles as $uploadfile)
 		{
+			/* === Hook === */
+			foreach (cot_getextplugins('extrafields.movefiles') as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
 			if (!empty($uploadfile['old']) && file_exists($uploadfile['old']))
 			{
 				@unlink($uploadfile['old']);
@@ -783,13 +812,19 @@ function cot_extrafield_movefiles()
  */
 function cot_extrafield_unlinkfiles($fielddata, $extrafield)
 {
-	global $cfg;
+	global $cfg, $pl;
 	if ($extrafield['field_type'] == 'file')
 	{
 		$extrafield['field_params'] = (!empty($extrafield['field_params'])) ? $extrafield['field_params'] : $cfg['extrafield_files_dir'];
 		$extrafield['field_params'] .= (mb_substr($extrafield['field_params'], -1) == '/') ? '' : '/';
 		if($extrafield['field_params'].$fielddata)
 		{
+			/* === Hook === */
+			foreach (cot_getextplugins('extrafields.unlinkfiles') as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
 			@unlink($extrafield['field_params'].$fielddata);
 		}
 	}

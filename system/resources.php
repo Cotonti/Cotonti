@@ -96,7 +96,7 @@ $R['code_rc_js_embed'] = '<script type="text/javascript">
 {$code}
 //]]>
 </script>';
-$R['code_rc_js_file'] = '<script src="{$url}" type="text/javascript"></script>';
+$R['code_rc_js_file'] = '<script type="text/javascript" src="{$url}"></script>';
 
 /**
  * Misc

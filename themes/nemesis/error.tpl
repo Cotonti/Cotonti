@@ -5,7 +5,6 @@
 <title>{MESSAGE_TITLE}</title> 
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Cotonti http://www.cotonti.com" />
-<link rel="canonical" href="{HEADER_CANONICAL_URL}" />
 {MESSAGE_BASEHREF}
 {MESSAGE_STYLESHEET}
 </head>
@@ -23,5 +22,4 @@
 	</div>
 </body>
 </html>
-
 <!-- END: MAIN -->
