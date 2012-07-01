@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `cot_pages` (
   `page_updated` int(11) NOT NULL default '0',
   `page_file` tinyint(4) default NULL,
   `page_url` varchar(255) collate utf8_unicode_ci default NULL,
-  `page_size` varchar(16) collate utf8_unicode_ci default NULL,
+  `page_size` int(11) unsigned default NULL,
   `page_count` mediumint(8) unsigned default '0',
   `page_rating` decimal(5,2) NOT NULL default '0.00',
   `page_filecount` mediumint(8) unsigned default '0',

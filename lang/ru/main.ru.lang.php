@@ -361,6 +361,10 @@ $Ls['Months'] = array('месяц','месяца', 'месяцев');
 $Ls['Years'] = array('год','года', 'лет');
 
 $Ls['Bytes'] = array('B', 'B');
+$Ls['Kilobytes'] = array('kB', 'kB');
+$Ls['Megabytes'] = array('MB', 'MB');
+$Ls['Gigabytes'] = array('GB', 'GB');
+$Ls['Terabytes'] = array('TB', 'TB');
 $Ls['Kibibytes'] = array('KiB', 'KiB');
 $Ls['Mebibytes'] = array('MiB', 'MiB');
 $Ls['Gibibytes'] = array('GiB', 'GiB');

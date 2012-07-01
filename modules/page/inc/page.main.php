@@ -178,8 +178,9 @@ if ($pag['page_file'] > 0)
 		}
 
 		$t->assign(array(
-			'PAGE_FILE_SIZE' => $pag['page_size'],
-			'PAGE_FILE_SIZE_READABLE' => cot_build_filesize($pag['page_size']),
+			'PAGE_FILE_SIZE' => $pag['page_size'] / 1024, // in KiB; deprecated but kept for compatibility
+			'PAGE_FILE_SIZE_BYTES' => $pag['page_size'],
+			'PAGE_FILE_SIZE_READABLE' => cot_build_filesize($pag['page_size'], 1),
 			'PAGE_FILE_COUNT' => $pag['page_filecount'],
 			'PAGE_FILE_ICON' => $pag['page_fileicon'],
 			'PAGE_FILE_NAME' => basename($pag['page_url']),

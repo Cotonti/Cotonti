@@ -83,7 +83,8 @@ if ($row = $sql_pfs->fetch())
 	$pfs_folderid = $row['pfs_folderid'];
 	$pfs_extension = $row['pfs_extension'];
 	$pfs_desc = htmlspecialchars($row['pfs_desc']);
-	$pfs_size = floor($row['pfs_size']/1024);
+	$pfs_size = floor($row['pfs_size'] / 1024); // in KiB; deprecated but kept for compatibility
+	$pfs_size_bytes = $row['pfs_size'];
 	$ff = $pfs_dir_user.$pfs_file;
 }
 else
@@ -143,8 +144,9 @@ $t->assign(array(
 	'PFS_FOLDER' => cot_selectbox_folders($userid, '', $pfs_folderid),
 	'PFS_URL' => $ff,
 	'PFS_DESC' => cot_inputbox('text', 'rdesc', $pfs_desc, 'size="56" maxlength="255"'),
-	'PFS_SIZE' => cot_build_filesize($pfs_size, 1),
-	'PFS_SIZE_KB' => $pfs_size
+	'PFS_SIZE' => cot_build_filesize($pfs_size_bytes, 1),
+	'PFS_SIZE_BYTES' => $pfs_size_bytes,
+	'PFS_SIZE_KB' => $pfs_size_bytes / 1024 // in KiB; deprecated but kept for compatibility
 ));
 
 cot_display_messages($t);

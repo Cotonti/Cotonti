@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `cot_pfs` (
   `pfs_extension` varchar(8) collate utf8_unicode_ci NOT NULL default '',
   `pfs_folderid` int(11) NOT NULL default '0',
   `pfs_desc` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `pfs_size` int(11) NOT NULL default '0',
+  `pfs_size` int(11) unsigned NOT NULL default '0',
   `pfs_count` int(11) NOT NULL default '0',
   PRIMARY KEY  (`pfs_id`),
   KEY `pfs_userid` (`pfs_userid`)

@@ -65,7 +65,8 @@ $t->assign(array(
 	'PFSVIEW_FILE_USERNAME' => $pfs_owner,
 	'PFSVIEW_FILE_DESC' => htmlspecialchars($row['pfs_desc']),
 	'PFSVIEW_FILE_COUNT' => $row['pfs_count'],
-	'PFSVIEW_FILE_SIZE' => floor($row['pfs_size']/1024),
+	'PFSVIEW_FILE_SIZE' => cot_build_filesize($row['pfs_size'], 1),
+	'PFSVIEW_FILE_SIZE_BYTES' => $row['pfs_size'],
 	'PFSVIEW_FILE_SIZEX' => $pfs_imgsize[0],
 	'PFSVIEW_FILE_SIZEY' => $pfs_imgsize[1],
 	'PFSVIEW_FILE_IMAGE' => $pfs_img

@@ -1432,26 +1432,38 @@ function cot_build_email($email, $hide = false)
 /**
  * Generate human-readable filesize.
  *
- * @param float $kib
- *	Filesize in KiB (1 KiB = 1024 bytes)
+ * @param float $bytes
+ *	Filesize in bytes
  * @param int $decimals
  *	Number of decimals to show.
  * @param mixed $round
  *	Round up to this number of decimals.
  *	Set false to disable or null to inherit from $decimals.
+ * @param bool $binary Use binary instead of decimal calculation.
+ *  Set TRUE for the IEC binary standard where 1 Kibibyte = 1024 bytes
+ *  Set FALSE for the SI/IEEE decimal standard where 1 Kilobyte = 1000 bytes
+ * @param string $smallestunit
+ *  Key of the smallest unit to show. Any number smaller than this will return 'Less than 1 ...'.
+ *  Effectively its a way to cut off $units at a certain key.
  * @return string
  */
-function cot_build_filesize($kib, $decimals = 0, $round = null)
+function cot_build_filesize($bytes, $decimals = 0, $round = null, $binary = false, $smallestunit = null)
 {
 	global $Ls;
-	$units = array(
-		'1073741824' => $Ls['Tebibytes'],
-		'1048576' => $Ls['Gibibytes'],
-		'1024' => $Ls['Mebibytes'],
-		'1' => $Ls['Kibibytes'],
-		'0.0009765625' => $Ls['Bytes']
+	$units = $binary ? array(
+		'1099511627776' => $Ls['Tebibytes'],
+		'1073741824' => $Ls['Gibibytes'],
+		'1048576' => $Ls['Mebibytes'],
+		'1024' => $Ls['Kibibytes'],
+		'1' => $Ls['Bytes']
+	) : array(
+		'1000000000000' => $Ls['Terabytes'],
+		'1000000000' => $Ls['Gigabytes'],
+		'1000000' => $Ls['Megabytes'],
+		'1000' => $Ls['Kilobytes'],
+		'1' => $Ls['Bytes']
 	);
-	return cot_build_friendlynumber($kib, $units, 1, $decimals, $round);
+	return cot_build_friendlynumber($bytes, $units, 1, $decimals, $round, $smallestunit);
 }
 
 /**
@@ -1511,16 +1523,23 @@ function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $
 		$offset = array_search($smallestunit, array_keys($units));
 		$units = array_slice($units, 0, $offset+1, true);
 	}
+	
+	if ($number == 0)
+	{
+		// Return smallest possible unit
+		$units = array_reverse(array_values($units));
+		return cot_declension(0, $units[0]);
+	}
 
 	foreach ($units as $size => $expr)
 	{
 		$size = floatval($size);
-		if ($number >= $size && $number != 0)
+		if ($number >= $size)
 		{
 			$levels--;
 			$num = $number / $size;
 			$number -= floor($num) * $size;
-			if ($number > 0 || $decimals == 0)
+			if ($number > 0 && $levels > 0)
 			{
 				// There's more to come, so no decimals yet.
 				$pieces[] = cot_declension(floor($num), $expr);

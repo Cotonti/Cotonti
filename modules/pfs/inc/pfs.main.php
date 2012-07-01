@@ -62,8 +62,8 @@ $sql_pfs_max = $db->query("
 	)
 ")->fetch();
 
-$maxfile = min((int)$sql_pfs_max['maxfile'], cot_get_uploadmax());
-$maxtotal = (int)$sql_pfs_max['maxtotal'];
+$maxfile = min((int)$sql_pfs_max['maxfile'], cot_get_uploadmax()) * 1024; // KiB -> Bytes
+$maxtotal = (int)$sql_pfs_max['maxtotal'] * 1024; // KiB -> Bytes
 
 cot_block(($maxfile > 0 && $maxtotal > 0) || $usr['isadmin']);
 
@@ -160,7 +160,7 @@ if ($a=='upload')
 				}
 			}
 
-			if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok && ($pfs_totalsize+$u_size)<$maxtotal*1024   )
+			if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<$maxfile && $f_extension_ok && ($pfs_totalsize+$u_size)<$maxtotal)
 			{
 				$fcheck = cot_file_check($u_tmp_name, $u_name, $f_extension);
 				if($fcheck == 1)
@@ -384,10 +384,8 @@ else
 		$pff_ispublic = $row_pff['pff_ispublic'];
 		$pff_isgallery = $row_pff['pff_isgallery'];
 		$pff_count = $row_pff['pff_count'];
-		$pff_fcount = $pff_filescount[$pff_id];
-		$pff_fsize = floor($pff_filessize[$pff_id]/1024);
-		$pff_fcount = (empty($pff_fcount)) ? "0" : $pff_fcount;
-		$pff_fssize = (empty($pff_fsize)) ? "0" : $pff_fsize;
+		$pff_fcount = (int)$pff_filescount[$pff_id];
+		$pff_fsize = (int)$pff_filessize[$pff_id];
 		$icon_f = ($pff_isgallery) ? $R['pfs_icon_gallery'] : $R['pfs_icon_folder'];
 
 		$t->assign(array(
@@ -395,7 +393,8 @@ else
 			'PFF_ROW_TITLE' => $pff_title,
 			'PFF_ROW_COUNT' => $pff_count,
 			'PFF_ROW_FCOUNT' => $pff_fcount,
-			'PFF_ROW_FSIZE' => $pff_fssize,
+			'PFF_ROW_FSIZE' => cot_build_filesize($pff_fsize, 1),
+			'PFF_ROW_FSIZE_BYTES' => $pff_fsize,
 			'PFF_ROW_DELETE_URL' => cot_confirm_url(cot_url('pfs', 'a=deletefolder&'.cot_xg().'&id='.$pff_id.'&'.$more), 'pfs', 'pfs_confirm_delete_folder'),
 			'PFF_ROW_EDIT_URL' => cot_url('pfs', "m=editfolder&f=".$pff_id.'&'.$more),
 			'PFF_ROW_URL' => cot_url('pfs', 'f='.$pff_id.'&'.$more),
@@ -430,7 +429,7 @@ foreach ($sql_pfs->fetchAll() as $row)
 	$pfs_extension = $row['pfs_extension'];
 	$pfs_desc = htmlspecialchars($row['pfs_desc']);
 	$pfs_fullfile = $pfs_dir_user.$pfs_file;
-	$pfs_filesize = floor($row['pfs_size']/1024);
+	$pfs_filesize = $row['pfs_size'];
 	$pfs_icon = $icon[$pfs_extension];
 
 	$dotpos = mb_strrpos($pfs_file, ".")+1;
@@ -475,7 +474,8 @@ foreach ($sql_pfs->fetchAll() as $row)
 		'PFS_ROW_DESC' => $pfs_desc,
 		'PFS_ROW_TYPE' => $filedesc[$pfs_extension],
 		'PFS_ROW_FILE_URL' => $pfs_fullfile,
-		'PFS_ROW_SIZE' => $pfs_filesize,
+		'PFS_ROW_SIZE' => cot_build_filesize($pfs_filesize, 1),
+		'PFS_ROW_SIZE_BYTES' => $pfs_filesize,
 		'PFS_ROW_ICON' => $pfs_icon,
 		'PFS_ROW_DELETE_URL' => cot_confirm_url(cot_url('pfs', 'a=delete&'.cot_xg().'&id='.$pfs_id.'&'.$more.'&opt='.$opt), 'pfs', 'pfs_confirm_delete_file'),
 		'PFS_ROW_EDIT_URL' => cot_url('pfs', 'm=edit&id='.$pfs_id.'&'.$more),
@@ -532,20 +532,23 @@ if ($files_count>0 || $folders_count>0)
 $showthumbs .= ($opt!='thumbs' && $files_count>0 && $cfg['pfs']['th_amode']!='Disabled') ? cot_rc_link(cot_url('pfs', 'f='.$f.'&'.$more.'&opt=thumbs'), $L['Thumbnails']) : '';
 
 $t->assign(array(
-	'PFS_TOTALSIZE' => cot_build_filesize($pfs_totalsize/1024, 1),
-	'PFS_TOTALSIZE_KB' => floor($pfs_totalsize/1024),
+	'PFS_TOTALSIZE' => cot_build_filesize($pfs_totalsize, 1),
+	'PFS_TOTALSIZE_BYTES' => $pfs_totalsize,
+	'PFS_TOTALSIZE_KB' => floor($pfs_totalsize / 1024), // in KiB; deprecated but kept for compatibility
 	'PFS_MAXTOTAL' => cot_build_filesize($maxtotal, 1),
-	'PFS_MAXTOTAL_KB' => $maxtotal,
-	'PFS_PERCENTAGE' => $maxtotal > 0 ? round(100*$pfs_totalsize/1024/$maxtotal) : 0,
+	'PFS_MAXTOTAL_BYTES' => $maxtotal,
+	'PFS_MAXTOTAL_KB' => $maxtotal / 1024, // in KiB; deprecated but kept for compatibility
+	'PFS_PERCENTAGE' => $maxtotal > 0 ? round($pfs_totalsize/$maxtotal*100) : 0,
 	'PFS_MAXFILESIZE' => cot_build_filesize($maxfile, 1),
-	'PFS_MAXFILESIZE_KB' => $maxfile,
+	'PFS_MAXFILESIZE_BYTES' => $maxfile,
+	'PFS_MAXFILESIZE_KB' => $maxfile / 1024, // in KiB; deprecated but kept for compatibility
 	'PFS_SHOWTHUMBS' => $showthumbs
 ));
 
 // ========== Upload =========
 
 $t->assign(array(
-	'PFS_UPLOAD_FORM_MAX_SIZE' => $maxfile * 1024,
+	'PFS_UPLOAD_FORM_MAX_SIZE' => $maxfile,
 	'PFS_UPLOAD_FORM_USERID' => $userid
 ));
 

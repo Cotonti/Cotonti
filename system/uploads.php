@@ -80,7 +80,7 @@ function cot_file_check($path, $name, $ext)
 }
 
 /**
- * Returns maximum size for uploaded file, in KB (allowed in php.ini, and may be allowed in .htaccess)
+ * Returns maximum size for uploaded file, in KiB (allowed in php.ini, and may be allowed in .htaccess)
  *
  * @return int
  */
@@ -99,7 +99,7 @@ function cot_get_uploadmax()
 			$val_a[] = $val;
 		}
 	}
-	return floor(min($val_a) / 1024); // KB
+	return floor(min($val_a) / 1024); // KiB
 }
 
 /**

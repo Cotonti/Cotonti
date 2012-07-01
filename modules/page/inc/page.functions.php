@@ -230,8 +230,9 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			'UPDATED_STAMP' => $page_data['page_updated'],
 			'FILE' => $cot_yesno[$page_data['page_file']],
 			'FILE_URL' => empty($page_data['page_url']) ? '' : cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id'].'&a=dl'),
-			'FILE_SIZE' => $page_data['page_size'],
-			'FILE_SIZE_READABLE' => cot_build_filesize($page_data['page_size']),
+			'FILE_SIZE' => $page_data['page_size'] / 1024, // in KiB; deprecated but kept for compatibility
+			'FILE_SIZE_BYTES' => $page_data['page_size'],
+			'FILE_SIZE_READABLE' => cot_build_filesize($page_data['page_size'], 1),
 			'FILE_ICON' => $page_data['page_fileicon'],
 			'FILE_COUNT' => $page_data['page_filecount'],
 			'FILE_COUNTTIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),

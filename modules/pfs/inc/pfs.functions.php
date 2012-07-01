@@ -477,8 +477,8 @@ function cot_pfs_upload($userid, $folderid='')
 				}
 			}
 
-			if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok
-				&& ($pfs_totalsize+$u_size)<$maxtotal*1024   )
+			if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<$maxfile && $f_extension_ok
+				&& ($pfs_totalsize+$u_size)<$maxtotal)
 			{
 				$fcheck = cot_file_check($u_tmp_name, $u_name, $f_extension);
 				if($fcheck == 1)
