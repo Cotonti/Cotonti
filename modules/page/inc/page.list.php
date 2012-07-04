@@ -136,6 +136,17 @@ if ($w != $cfg['page'][$c]['way'])
 }
 $list_url = cot_url('page', $list_url_path);
 
+// Building the canonical URL
+$pageurl_params = array('c' => $c, 'ord' => $o, 'p' => $p);
+if ($durl > 1)
+{
+	$pageurl_params['d'] = $durl;
+}
+if ($dcurl > 1)
+{
+	$pageurl_params['dc'] = $dcurl;
+}
+
 $catpatharray = cot_structure_buildpath('page', $c);
 $catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cat['title'] : cot_breadcrumbs($catpatharray, $cfg['homebreadcrumb'], true);
 
@@ -178,17 +189,7 @@ if (!empty($cfg['page'][$c]['keywords']))
 {
 	$out['keywords'] = $cfg['page'][$c]['keywords'];
 }
-
 // Building the canonical URL
-$pageurl_params = array('c' => $c, 'ord' => $o, 'p' => $p);
-if ($durl > 1)
-{
-	$pageurl_params['d'] = $durl;
-}
-if ($dcurl > 1)
-{
-	$pageurl_params['dc'] = $dcurl;
-}
 $out['canonical_uri'] = cot_url('page', $pageurl_params);
 
 $_SESSION['cat'] = $c;
