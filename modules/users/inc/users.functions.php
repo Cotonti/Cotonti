@@ -13,6 +13,7 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
+require_once cot_incfile('auth');
 require_once cot_langfile('users', 'core');
 require_once cot_incfile('users', 'module', 'resources');
 
@@ -23,28 +24,28 @@ $cot_extrafields[$db_users] = (!empty($cot_extrafields[$db_users])) ? $cot_extra
 
 /**
  * Adds new user
- * 
+ *
  * @param array $ruser User data array
  * @param string $email Email address
  * @param string $name User name; defaults to $email if omitted
  * @param string $password Password; randomly generated if omitted
  * @param string $maingrp Custom main grp
- * @param float $sendemail Send email if need activation 
+ * @param float $sendemail Send email if need activation
  * @return int New user ID or false
  * @global CotDB $db
  */
 function cot_add_user($ruser, $email = null, $name = null, $password = null, $maingrp = null, $sendemail = true)
 {
 	global $cfg, $cot_extrafields, $db, $db_users, $db_groups_users, $db_x, $L, $R, $sys, $uploadfiles, $usr;
-	
+
 	$ruser['user_email'] = (!empty($email)) ? $email : $ruser['user_email'];
 	$ruser['user_name'] = (!empty($name)) ? $name : $ruser['user_name'];
 	$ruser['user_password'] = (!empty($password)) ? $password : $ruser['user_password'];
-	
+
 	(empty($ruser['user_password'])) && $ruser['user_password'] = cot_randomstring();
 	(empty($ruser['user_name'])) && $ruser['user_name'] = $ruser['user_email'];
 	$password = $ruser['user_password'];
-	
+
 	$user_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_name = ? LIMIT 1", array($user1['user_name']))->fetch();
 	$email_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_email = ? LIMIT 1", array($user1['user_email']))->fetch();
 	if(!cot_check_email($ruser['user_email']) || $user_exists || (!$cfg['users']['useremailduplicate'] && $email_exists))
@@ -55,10 +56,10 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_gender'] = (in_array($ruser['user_gender'], array('M', 'F'))) ? $ruser['user_gender'] : 'U';
 	$ruser['user_country'] = (mb_strlen($ruser['user_country']) < 4) ? $ruser['user_country'] : '';
 	$ruser['user_timezone'] = (!$ruser['user_timezone']) ? 'GMT' : $ruser['user_timezone'];
-	
+
 	$ruser['user_maingrp'] = ($db->countRows($db_users) == 0) ? 5 : ($cfg['users']['regnoactivation']) ? 4 : 2;
-	$ruser['user_maingrp'] = (int)$maingrp > 0 ? $maingrp : $ruser['user_maingrp']; 
-	
+	$ruser['user_maingrp'] = (int)$maingrp > 0 ? $maingrp : $ruser['user_maingrp'];
+
 	$ruser['user_password'] = md5($ruser['user_password']);
 	$ruser['user_birthdate'] = (is_null($ruser['user_birthdate']) || $ruser['user_birthdate'] > $sys['now']) ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
 	$ruser['user_lostpass'] = md5(microtime());
@@ -78,7 +79,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 
 	$db->insert($db_groups_users, array('gru_userid' => (int)$userid, 'gru_groupid' => (int)$ruser['user_maingrp']));
 	cot_extrafield_movefiles();
-	
+
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.adduser.done') as $pl)
 	{
@@ -135,7 +136,7 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 	{
 		$member[$row['gru_groupid']] = TRUE;
 	}
-	
+
 	$maxlevel = cot_auth_getlevel($usr['id']);
 
 	$res = $R['users_code_grplist_begin'];
@@ -175,7 +176,7 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 				$item .= ( $k == COT_GROUP_GUESTS) ? $cot_groups[$k]['name'] : cot_rc_link(cot_url('users', 'gm=' . $k), $cot_groups[$k]['name']);
 				$item .= ( $cot_groups[$k]['hidden']) ? ' (' . $L['Hidden'] . ')' : '';
 				$rc = ($maingrp == $k) ? 'users_code_grplist_item_main' : 'users_code_grplist_item';
-				$res .= cot_rc('users_code_grplist_item', array('item' => $item));
+				$res .= cot_rc($rc, array('item' => $item));
 			}
 		}
 	}
