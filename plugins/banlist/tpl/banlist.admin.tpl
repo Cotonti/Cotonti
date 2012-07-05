@@ -11,7 +11,7 @@
 					<td class="coltop width20">{PHP.L.Action}</td>
 				</tr>
 <!-- BEGIN: ADMIN_BANLIST_ROW -->
-				<form name="savebanlist_{ADMIN_BANLIST_ROW_ID}" id="savebanlist_{ADMIN_BANLIST_ROW_ID}" action="{ADMIN_BANLIST_ROW_URL}" method="post" class="ajax">
+				<form name="savebanlist_{ADMIN_BANLIST_ROW_ID}" id="savebanlist_{ADMIN_BANLIST_ROW_ID}" action="{ADMIN_BANLIST_ROW_URL}" method="post">
 				<tr>
 					<td class="centerall">{ADMIN_BANLIST_ROW_IP}</td>
 					<td class="centerall">{ADMIN_BANLIST_ROW_EMAIL}</td>
