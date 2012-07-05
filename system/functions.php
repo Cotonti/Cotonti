@@ -1518,7 +1518,7 @@ function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $
 		$offset = array_search($smallestunit, array_keys($units));
 		$units = array_slice($units, 0, $offset+1, true);
 	}
-	
+
 	if ($number == 0)
 	{
 		// Return smallest possible unit
@@ -3265,21 +3265,24 @@ function cot_timezone_offset($tz, $hours = false, $dst = true)
 	if (!$tz || in_array($tz, array('UTC', 'GMT', 'Universal', 'UCT', 'Zulu'))) return 0;
 	try
 	{
-		$origin_dtz = new DateTimeZone('UTC');
+		// $origin_dtz = new DateTimeZone('UTC');
 		$remote_dtz = new DateTimeZone($tz);
 		if (!$dst)
 		{
-			$trans = cot_timezone_transitions($tz);
-			$dstoffset = ($trans['current']['isdst']) ? $trans['current']['offset'] - $trans['previous']['offset'] : 0;
+			// Standard offset is in Winter
+			$standard_offset = $remote_dtz->getOffset(new DateTime("next year January 1"));
+			// $trans = cot_timezone_transitions($tz);
+			// $dstoffset = ($trans['current']['isdst']) ? $trans['current']['offset'] - $trans['previous']['offset'] : 0;
 		}
-		$origin_dt = new DateTime('now', $origin_dtz);
+		// $origin_dt = new DateTime('now', $origin_dtz);
 		$remote_dt = new DateTime('now', $remote_dtz);
 	}
 	catch(Exception $e)
 	{
 		return null;
 	}
-    $offset = $remote_dtz->getOffset($remote_dt) - $origin_dtz->getOffset($origin_dt) - $dstoffset;
+    // $offset = $remote_dtz->getOffset($remote_dt) - $origin_dtz->getOffset($origin_dt) - $dstoffset;
+   	$offset = $dst ? $remote_dtz->getOffset($remote_dt) : $standard_offset;
 	return $hours ? floatval($offset / 3600) : $offset;
 }
 
