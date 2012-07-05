@@ -137,7 +137,7 @@ function cot_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, 
  */
 function cot_bbcode_load()
 {
-	global $db, $db_bbcode, $cot_bbcodes, $cot_bbcode_containers;
+	global $cache, $db, $db_bbcode, $cot_bbcodes, $cot_bbcode_containers;
 	if (is_array($cot_bbcodes))
 	{
 		// Loaded from cache, exit
