@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.7
+ * @version 2.7.8
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2012
  * @license BSD
@@ -1009,7 +1009,7 @@ class Cotpl_expr
 		$text = str_replace('!{', ' ! {', $text);
 		$text = str_replace('!(', ' ! (', $text);
 		// Splitting into words
-		$words = cotpl_tokenize($text, array(' ', "\t"));
+		$words = cotpl_tokenize($text, " \t");
 		$operators = array_keys(self::$operators);
 		// Splitting infix into tokens
 		$tokens = array();
@@ -1450,7 +1450,7 @@ class Cotpl_var
 				{
 					$this->callbacks[] = array(
 						'name' => $mt[1],
-						'args' => cotpl_tokenize(trim($mt[2]), array(',', ' '))
+						'args' => cotpl_tokenize(trim($mt[2]), ', ')
 					);
 				}
 				else
@@ -1718,77 +1718,28 @@ function cotpl_index_glue($path)
  * Splits a string into tokens by delimiter characters with double and single quotes support.
  * Unicode-aware.
  *
- * @param string $str Source string
- * @param array $delim Array of delimiter characters
+ * @param string $str   Source string
+ * @param string $delim Delimiter characters
  * @return array
  */
-function cotpl_tokenize($str, $delim = array(' '))
+function cotpl_tokenize($str, $delim = ' ')
 {
-	$tokens = array();
-	$idx = 0;
-	$quote = '';
-	$prev_delim = false;
-	$len = mb_strlen($str);
-	for ($i = 0; $i < $len; $i++)
+	$delim = '#['.$delim.']+#';
+	$res = array();
+	$n = 0;
+	$quoted = preg_split('#["\']#', $str);
+	foreach($quoted as $part)
 	{
-		$c = mb_substr($str, $i, 1);
-		if (in_array($c, $delim))
+		if ($n++ % 2)
 		{
-			if ($quote)
-			{
-				$tokens[$idx] .= $c;
-				$prev_delim = false;
-			}
-			elseif ($prev_delim)
-			{
-				continue;
-			}
-			else
-			{
-				$idx++;
-				$prev_delim = true;
-			}
-		}
-		elseif ($c == '"' || $c == "'")
-		{
-			if (!$quote)
-			{
-				$quote = $c;
-			}
-			elseif ($quote == $c)
-			{
-				$quote = '';
-				if (!isset($tokens[$idx]))
-				{
-					$tokens[$idx] = '';
-				}
-			}
-			else
-			{
-				$tokens[$idx] .= $c;
-			}
-			$prev_delim = false;
-		}
-		elseif ($c == '{' && !$quote)
-		{
-			// Avoid variable tokenization
-			$quote = $c;
-			$tokens[$idx] .= $c;
-			$prev_delim = false;
-		}
-		elseif ($c == '}' && $quote)
-		{
-			$quote = '';
-			$tokens[$idx] .= $c;
-			$prev_delim = false;
+			array_push($res, array_pop($res) . $part);
 		}
 		else
 		{
-			$tokens[$idx] .= $c;
-			$prev_delim = false;
+			$tokens = preg_split($delim, $part);
+			array_push($res, array_pop($res) . array_shift($tokens));
+			$res = array_merge($res, $tokens);
 		}
 	}
-	return $tokens;
+	return $res;
 }
-
-?>
