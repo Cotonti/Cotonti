@@ -156,7 +156,7 @@ $L['cfg_freetext9'] = array('Текст #9<br />{PHP.cfg.freetext9} во все�
  * Performance Subsection
  */
 
-$L['cfg_gzip'] = array('Gzip', 'Gzip-сжатие для исходящего HTML-кода');
+$L['cfg_gzip'] = array('Gzip', 'Gzip-сжатие для исходящего HTML-кода. Не включайте эту опцию, если ваш сервер уже применяет Gzip к страницам сайта. Проверьте, включено ли Gzip-сжатие на вашем сайте, с помощью этого инструмента: <a href="http://www.whatsmyip.org/http-compression-test/">HTTP Compression Test</a>');
 $L['cfg_headrc_consolidate'] = array('Объединять ресурсы header/footer (JS/CSS)');
 $L['cfg_headrc_minify'] = array('Минифицировать объединённые JS/CSS');
 $L['cfg_jquery_cdn'] = array('Использовать jQuery из CDN по этой ссылке', 'Пример: https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js');
@@ -260,7 +260,7 @@ $L['ext_updated'] = '{$type} &quot;{$name}&quot; обновлен до верс�
 $L['ext_updating'] = 'Обновление {$type} &quot;{$name}&quot;';
 
 /**
- * Extension categories 
+ * Extension categories
  */
 $L['ext_cat']['administration-management'] = 'Администрирование и управление';
 $L['ext_cat']['commerce'] = 'Электронная коммерция';

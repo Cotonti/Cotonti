@@ -92,18 +92,20 @@ if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE
  *  Cotonti Static Resources Cache
  */
 header('Content-Type: '.$content_type);
-if (@strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') === FALSE)
-{
-	readfile($src_uri);
-}
-else
-{
-	header('Content-Encoding: gzip');
-	if (!file_exists($src_uri . '.gz'))
-	{
-		file_put_contents($src_uri . '.gz', gzencode(file_get_contents($src_uri)));
-	}
-	readfile($src_uri . '.gz');
-}
+readfile($src_uri);
+// Gzip compression of CSS and JS files is usually enabled in webserver
+// if (@strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') === FALSE)
+// {
+// 	readfile($src_uri);
+// }
+// else
+// {
+// 	header('Content-Encoding: gzip');
+// 	if (!file_exists($src_uri . '.gz'))
+// 	{
+// 		file_put_contents($src_uri . '.gz', gzencode(file_get_contents($src_uri)));
+// 	}
+// 	readfile($src_uri . '.gz');
+// }
 
 ?>

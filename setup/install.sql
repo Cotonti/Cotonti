@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.9
+ * Version: 0.9.11
  */
 
 DROP TABLE IF EXISTS `cot_auth`;
@@ -113,7 +113,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','menus','27','freetext7',0,'','','',''),
 ('core','menus','28','freetext8',0,'','','',''),
 ('core','menus','29','freetext9',0,'','','',''),
-('core','performance','01','gzip',3,'1','1','',''),
+('core','performance','01','gzip',3,'0','0','',''),
 ('core','performance','02','headrc_consolidate',3,'0','0','',''),
 ('core','performance','03','headrc_minify',3,'1','1','',''),
 ('core','performance','04','jquery_cdn',1,'','','',''),
@@ -122,8 +122,8 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','security','13','cookielifetime',2,'5184000','5184000','1800,3600,7200,14400,28800,43200,86400,172800,259200,604800,1296000,2592000,5184000',''),
 ('core','security','31','captchamain',4,'mcaptcha','mcaptcha','cot_captcha_list()',''),
 ('core','security','32','captcharandom',3,'0','0','',''),
-('core','security','21','shieldenabled',3,'0','0','',''),	  	
-('core','security','22','shieldtadjust',2,'100','100','10,25,50,75,100,125,150,200,300,400,600,800',''), 	
+('core','security','21','shieldenabled',3,'0','0','',''),
+('core','security','22','shieldtadjust',2,'100','100','10,25,50,75,100,125,150,200,300,400,600,800',''),
 ('core','security','23','shieldzhammer',2,'25','25','5,10,15,20,25,30,40,50,100',''),
 ('core','security','41','referercheck',3,'1','1','',''),
 ('core','theme','01','forcedefaulttheme',3,'0','0','',''),
@@ -263,7 +263,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.9-02'),
+('revision', '0.9.11-03'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;

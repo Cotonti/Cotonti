@@ -155,7 +155,7 @@ $L['cfg_menu9'] = array('Menu slot #9<br />{PHP.cfg.menu9} in all tpl files', ''
  * Performance Subsection
  */
 
-$L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
+$L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output. Do not enable it if your server already applies Gzip to your pages. Use this tool to test if Gzip is already enabled on your site: <a href="http://www.whatsmyip.org/http-compression-test/">HTTP Compression Test</a>');
 $L['cfg_headrc_consolidate'] = array('Consolidate header and footer resources (JS/CSS)');
 $L['cfg_headrc_minify'] = array('Minify consolidated JS/CSS');
 $L['cfg_jquery_cdn'] = array('Use jQuery from this CDN URL', 'Example: https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js');
@@ -260,7 +260,7 @@ $L['ext_updated'] = '{$type} &quot;{$name}&quot; has been updated to version {$v
 $L['ext_updating'] = 'Updating {$type} &quot;{$name}&quot;';
 
 /**
- * Extension categories 
+ * Extension categories
  */
 $L['ext_cat']['administration-management'] = 'Administration &amp; Management';
 $L['ext_cat']['commerce'] = 'Commerce &amp; Shopping';
