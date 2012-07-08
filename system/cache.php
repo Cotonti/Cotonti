@@ -362,7 +362,7 @@ class File_cache extends Static_cache_driver
 	 */
 	public function get($id, $realm = COT_DEFAULT_REALM, $ttl = 0)
 	{
-		if ($this->exists($id, $realm))
+		if ($this->exists($id, $realm, $ttl))
 		{
 			return unserialize(file_get_contents($this->dir.'/'.$realm.'/'.$id));
 		}
