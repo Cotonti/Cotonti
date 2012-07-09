@@ -153,7 +153,7 @@ function cot_config_implant($module_name, $options, $into_struct, $donor)
 	foreach ($options as $opt)
 	{
 		if (!$into_struct && !isset($cfg[$module_name][$opt['name']])
-				|| $into_struct && !isset($cfg[$module_name]['__default'][$opt['name']]))
+				|| $into_struct && !isset($cfg[$module_name]['cat___default'][$opt['name']]))
 		{
 			$add_options[] = $opt;
 		}

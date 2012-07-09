@@ -413,15 +413,15 @@ if (!$cache || !$cot_cfg)
 	// Fill missing options with default values
 	foreach ($structure as $module => $mod_struct)
 	{
-		if (is_array($cfg[$module]['__default']) && is_array($mod_struct))
+		if (is_array($cfg[$module]['cat___default']) && is_array($mod_struct))
 		{
 			foreach ($mod_struct as $cat => $row)
 			{
-				foreach ($cfg[$module]['__default'] as $key => $val)
+				foreach ($cfg[$module]['cat___default'] as $key => $val)
 				{
-					if (!isset($cfg[$module][$cat][$key]))
+					if (!isset($cfg[$module]['cat_' . $cat][$key]))
 					{
-						$cfg[$module][$cat][$key] = $val;
+						$cfg[$module]['cat_' . $cat][$key] = $val;
 					}
 				}
 			}

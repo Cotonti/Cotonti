@@ -100,7 +100,7 @@ function cot_forums_prunetopics($mode, $section, $param)
 				include $pl;
 			}
 			/* ===== */
-			
+
 			// Decrease postcount for users
 			foreach ($db->query("SELECT COUNT(*) AS cnt, fp_posterid FROM $db_forum_posts  WHERE fp_topicid=$q GROUP BY fp_posterid")->fetchAll() as $row2)
 			{
@@ -218,7 +218,7 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 		$tag_prefix . 'URL' => cot_url('forums', 'm=topics&s=' . $cat),
 		$tag_prefix . 'SECTIONSURL' => cot_url('forums', 'c=' . $cat),
 		$tag_prefix . 'NEWPOSTS' => $new_elems,
-		$tag_prefix . 'CAT_DEFSTATE' => htmlspecialchars($cfg['forums'][$cat]['defstate']),
+		$tag_prefix . 'CAT_DEFSTATE' => htmlspecialchars($cfg['forums']['cat_' . $cat]['defstate']),
 	);
 
 	if (is_array($stat))

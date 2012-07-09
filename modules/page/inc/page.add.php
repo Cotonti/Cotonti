@@ -93,7 +93,7 @@ if ($a == 'add')
 	cot_check(!empty($rpage['page_alias']) && preg_match('`[+/?%#&]`', $rpage['page_alias']), 'page_aliascharacters', 'rpagealias');
 
 	$allowemptytext = isset($cfg['page']['cat_' . $rpage['page_cat']]['allowemptytext']) ?
-							$cfg['page']['cat_' . $rpage['page_cat']]['allowemptytext'] : $cfg['page']['__default']['allowemptytext'];
+							$cfg['page']['cat_' . $rpage['page_cat']]['allowemptytext'] : $cfg['page']['cat___default']['allowemptytext'];
 	$allowemptytext || cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
 
 	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || $rpage['page_parser'] != 'none' && !cot_auth('plug', $rpage['page_parser'], 'W'))

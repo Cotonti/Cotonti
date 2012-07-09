@@ -147,7 +147,7 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 
 			cot_forums_sectionsetlast($s, 'fs_postcount+1');
 
-			if ($cfg['forums'][$s]['countposts'])
+			if ($cfg['forums']['cat_' . $s]['countposts'])
 			{
 				$sql_forums = $db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id=" . $usr['id']);
 			}
@@ -211,7 +211,7 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 
 	$sql_forums = $db->delete($db_forum_posts, 'fp_id = ? AND fp_topicid = ? AND fp_cat = ?', array($p, $q, $s));
 
-	if ($cfg['forums'][$s]['countposts'])
+	if ($cfg['forums']['cat_' . $s]['countposts'])
 	{
 		$sql_forums = $db->query("UPDATE $db_users SET user_postcount=user_postcount-1 WHERE user_id='" . $fp_posterid . "' AND user_postcount>0");
 	}
@@ -391,7 +391,7 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_UPDATED_STAMP' => $row['fp_updated'],
 		'FORUMS_POSTS_ROW_UPDATER' => htmlspecialchars($row['fp_updater']),
 		'FORUMS_POSTS_ROW_UPDATEDBY' => $row['fp_updatedby'],
-		'FORUMS_POSTS_ROW_TEXT' => cot_parse($row['fp_text'], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes'])),
+		'FORUMS_POSTS_ROW_TEXT' => cot_parse($row['fp_text'], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes'])),
 		'FORUMS_POSTS_ROW_ANCHORLINK' => cot_rc('forums_code_post_anchor', array('id' => $row['fp_id'])),
 		'FORUMS_POSTS_ROW_POSTERNAME' => cot_build_user($row['fp_posterid'], htmlspecialchars($row['fp_postername'])),
 		'FORUMS_POSTS_ROW_POSTERID' => $row['fp_posterid'],
@@ -414,7 +414,7 @@ foreach ($sql_forums->fetchAll() as $row)
 		$tag = mb_strtoupper($exfld['field_name']);
 		$t->assign(array(
 			'FORUMS_POSTS_ROW_'.$tag.'_TITLE' => isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-			'FORUMS_POSTS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['fp_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
+			'FORUMS_POSTS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['fp_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes']))
 		));
 	}
 
@@ -556,7 +556,7 @@ foreach ($cot_extrafields[$db_forum_topics] as $exfld)
 	$tag = mb_strtoupper($exfld['field_name']);
 	$t->assign(array(
 		'FORUMS_POSTS_TOPIC_'.$tag.'_TITLE' => isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-		'FORUMS_POSTS_TOPIC_'.$tag => cot_build_extrafields_data('forums', $exfld, $rowt['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
+		'FORUMS_POSTS_TOPIC_'.$tag => cot_build_extrafields_data('forums', $exfld, $rowt['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes']))
 	));
 }
 

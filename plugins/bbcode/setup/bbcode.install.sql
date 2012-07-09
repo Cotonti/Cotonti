@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS `cot_bbcode` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DELETE FROM `cot_bbcode` WHERE `bbc_name` IN ('b', 'i', 'u', 's', 'center', 'left', 'right', 'justify', 'pre', 'nbsp',
-	'email', 'quote', 'color', 'img', 'url', 'code', 'more', 'size', 'h', 'list', 'ol', 'li', 'li_short', 'table',
-	'tr', 'th', 'td', 'hide', 'spoiler', 'thumb', 'pfs');
+  'email', 'quote', 'color', 'img', 'url', 'code', 'more', 'size', 'h', 'list', 'ol', 'li', 'li_short', 'table',
+  'tr', 'th', 'td', 'hide', 'spoiler', 'thumb', 'pfs');
 
 INSERT INTO `cot_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacement`, `bbc_container`, `bbc_enabled`, `bbc_priority`, `bbc_plug`, `bbc_postrender`) VALUES
 ('b', 'str', '[b]', '<strong>', 1, 1, 128, '', 0),
@@ -42,8 +42,9 @@ INSERT INTO `cot_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacemen
 ('nbsp', 'str', '[_]', '&nbsp;', 0, 1, 128, '', 0),
 ('email', 'pcre', '\\[email\\](.+?)\\[/email\\]', '<a href="mailto:$1">$1</a>', 1, 1, 128, '', 0),
 ('email', 'pcre', '\\[email=(\\w[\\._\\w\\-]+@[\\w\\.\\-]+\\.[a-z]+)\\](.+?)\\[/email\\]', '<a href="mailto:$1">$2</a>', 1, 1, 128, '', 0),
-('quote', 'pcre', '\\[quote=(.+?)\\](.+?)\\[/quote\\]', '<blockquote><strong>$1:</strong><hr />$2</blockquote>', 1, 1, 128, '', 0),
-('quote', 'pcre', '\\[quote\\](.+?)\\[/quote\\]', '<blockquote>$1</blockquote>', 1, 1, 128, '', 0),
+('quote', 'pcre', '\\[quote=(.+?)\\]', '<blockquote><strong>$1:</strong><hr />', 1, 1, 128, '', 0),
+('quote', 'str', '[quote]', '<blockquote>', 1, 1, 128, '', 0),
+('quote', 'str', '[/quote]', '</blockquote>', 1, 1, 128, '', 0),
 ('color', 'pcre', '\\[color=(#?\\w+)\\](.+?)\\[/color\\]', '<span style="color:$1">$2</span>', 1, 1, 128, '', 0),
 ('img', 'pcre', '\\[img\\]((?:http://|https://|ftp://)?[^"\\'';:\\?\\[]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]', '<img src="$1" alt="" />', 1, 1, 128, '', 0),
 ('img', 'pcre', '\\[img=((?:http://|https://|ftp://)?[^\\]"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\]((?:http://|https://|ftp://)?[^\\]"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]', '<a href="$1"><img src="$2" alt="" /></a>', 1, 1, 128, '', 0),

@@ -20,7 +20,7 @@ $w = cot_import('w', 'G', 'ALP', 4); // order way (asc, desc)
 $c = cot_import('c', 'G', 'TXT'); // cat code
 $o = cot_import('ord', 'G', 'ARR'); // filter field names without 'page_'
 $p = cot_import('p', 'G', 'ARR'); // filter values
-$maxrowsperpage = ($cfg['page']['cat_' . $c]['maxrowsperpage']) ? $cfg['page']['cat_' . $c]['maxrowsperpage'] : $cfg['page']['__default']['maxrowsperpage'];
+$maxrowsperpage = ($cfg['page']['cat_' . $c]['maxrowsperpage']) ? $cfg['page']['cat_' . $c]['maxrowsperpage'] : $cfg['page']['cat___default']['maxrowsperpage'];
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage); //page number for pages list
 list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', $cfg['page']['maxlistsperpage']);// page number for cats list
 
@@ -63,19 +63,19 @@ elseif (!$db->fieldExists($db_pages, "page_$s"))
 }
 $w = empty($w) ? $cfg['page']['cat_' . $c]['way'] : $w;
 
-$s = empty($s) ? $cfg['page']['__default']['order'] : $s;
-$w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? $cfg['page']['__default']['way'] : $w;
+$s = empty($s) ? $cfg['page']['cat___default']['order'] : $s;
+$w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? $cfg['page']['cat___default']['way'] : $w;
 
 
 $sys['sublocation'] = $cat['title'];
 
 $cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ?
-	$cfg['page']['__default']['maxrowsperpage'] :
+	$cfg['page']['cat___default']['maxrowsperpage'] :
 	$cfg['page']['cat_' . $c]['maxrowsperpage'];
 $cfg['page']['maxrowsperpage'] = $cfg['page']['maxrowsperpage'] > 0 ? $cfg['page']['maxrowsperpage'] : 1;
 
 $cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ?
-	$cfg['page']['__default']['truncatetext'] :
+	$cfg['page']['cat___default']['truncatetext'] :
 	$cfg['page']['cat_' . $c]['truncatetext'];
 
 $where = array();

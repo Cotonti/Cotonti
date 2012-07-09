@@ -40,7 +40,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 	cot_check_xg();
 	switch($a)
 	{
-		case 'delete':		
+		case 'delete':
 			cot_forums_prunetopics('single', $s, $q);
 			cot_log("Deleted topic #".$q, 'for');
 			cot_forums_sectionsetlast($s);
@@ -51,19 +51,19 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			}
 			/* ===== */
 			break;
-		
+
 		case 'move':
 			$ns = cot_import('ns','P','ALP');
 			$ghost = cot_import('ghost','P','BOL');
-			
+
 			$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat=".$db->quote($s)." AND fp_topicid = $q")->fetchColumn();
 			if ($num < 1 || $s == $ns)
 			{
 				cot_die();
 			}
-			
+
 			$sql_forums = $db->delete($db_forum_topics, "ft_movedto = $q");
-			
+
 			if ($ghost)
 			{
 				$sql_forums_ghost = $db->query("SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername FROM $db_forum_topics WHERE ft_id= $q AND ft_cat = " . $db->quote($s));
@@ -88,15 +88,15 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 					'ft_movedto' => (int)$q
 				));
 			}
-			
+
 			$db->update($db_forum_topics, array("ft_cat" => $ns), "ft_id=$q AND ft_cat=" . $db->quote($s));
 			$db->update($db_forum_posts, array("fp_cat" => $ns), "fp_topicid=$q AND fp_cat=" . $db->quote($s));
-			
+
 			cot_forums_sectionsetlast($s, "fs_postcount-$num", "fs_topiccount-1");
-			cot_forums_sectionsetlast($ns, "fs_postcount+$num", "fs_topiccount+1");			
+			cot_forums_sectionsetlast($ns, "fs_postcount+$num", "fs_topiccount+1");
 			cot_log("Moved topic #$q from section #$s to section #".$ns, 'for');
 			break;
-		
+
 		case 'lock':
 			$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 0 ), "ft_id=$q");
 			cot_log("Locked topic #".$q, 'for');
@@ -106,12 +106,12 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 1 ), "ft_id=$q");
 			cot_log("Pinned topic #".$q, 'for');
 			break;
-		
+
 		case 'announcement':
 			$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 1 ), "ft_id=$q");
 			cot_log("Announcement topic #".$q, 'for');
 			break;
-		
+
 		case 'bump':
 			cot_check_xg();
 			$db->update($db_forum_topics, array("ft_updated" => $sys['now']), "ft_id=$q");
@@ -123,7 +123,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			cot_log("Made topic #".$q." private", 'for');
 			$db->update($db_forum_topics, array("ft_mode" => 1), "ft_id=$q");
 			break;
-		
+
 		case 'clear':
 			cot_log("Resetted topic #".$q, 'for');
 			$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 0, "ft_mode" => 0), "ft_id=$q");
@@ -173,7 +173,7 @@ if (count($arraychilds) > 0)
 	foreach($arraychilds as $cat)
 	{
 		$jj++;
-		
+
 		$all = cot_structure_children('forums', $cat);
 		$last = $db->query("SELECT fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername FROM $db_forum_stats
 				WHERE fs_cat IN (\"".implode('", "', $all)."\") ORDER BY fs_lt_date DESC LIMIT 1")->fetch();
@@ -187,14 +187,14 @@ if (count($arraychilds) > 0)
 			'FORUMS_SECTIONS_ROW_ODDEVEN' => cot_build_oddeven($jj),
 			'FORUMS_SECTIONS_ROW_NUM' => $jj
 		));
-		
+
 		/* === Hook - Part2 : Include === */
 		foreach ($extp as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
-		
+
 		$t->parse('MAIN.FORUMS_SECTIONS.FORUMS_SECTIONS_ROW_SECTION');
 	}
 	$t->parse('MAIN.FORUMS_SECTIONS');
@@ -233,9 +233,9 @@ foreach ($sql_forums_rowset as $row)
 	$row['ft_postisnew'] = FALSE;
 	$row['ft_pages'] = '';
 	$ft_num++;
-	
+
 	$row['ft_title'] = ($row['ft_mode'] == 1) ? "# ".$row['ft_title'] : $row['ft_title'];
-	
+
 	if ($row['ft_movedto'] > 0)
 	{
 		$row['ft_url'] = cot_url('forums', "m=posts&q=".$row['ft_movedto']);
@@ -255,13 +255,13 @@ foreach ($sql_forums_rowset as $row)
 		$row['ft_lastpostlink'] = cot_rc_link($row['ft_lastposturl'], $R['icon_unread'], 'rel="nofollow"').cot_date('datetime_short', $row['ft_updated']);
 
 		$row['ft_replycount'] = $row['ft_postcount'] - 1;
-	
+
 		if ($row['ft_updated'] > $usr['lastvisit'] && $usr['id']>0)
 		{
 			$row['ft_icon'] .= '_new';
 			$row['ft_postisnew'] = TRUE;
 		}
-		
+
 		if ($row['ft_postcount'] >= $cfg['forums']['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky'])
 		{
 			$row['ft_icon'] = ($row['ft_postisnew']) ? 'posts_new_hot' : 'posts_hot';
@@ -271,19 +271,19 @@ foreach ($sql_forums_rowset as $row)
 			$row['ft_icon'] .= ($row['ft_sticky']) ? '_sticky' : '';
 			$row['ft_icon'] .=  ($row['ft_state']) ? '_locked' : '';
 		}
-		
+
 		$row['ft_icon_type'] = $row['ft_icon'];
 		$row['ft_icon'] = cot_rc('forums_icon_topic', array('icon' => $row['ft_icon']));
 		$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
 	}
-	
+
 	if ($row['ft_postcount'] > $cfg['forums']['maxpostsperpage'] && !$row['ft_movedto'])
 	{
 		$pn_q = $row['ft_movedto'] > 0 ? $row['ft_movedto'] : $row['ft_id'];
 		$pn = cot_pagenav('forums', 'm=posts&q='.$pn_q, 0, $row['ft_postcount'], $cfg['forums']['maxpostsperpage'], 'd');
 		$row['ft_pages'] = cot_rc('forums_code_topic_pages', array('main' => $pn['main'], 'first' => $pn['first'], 'last' => $pn['last']));
 	}
-	
+
 	$t->assign(array(
 		'FORUMS_TOPICS_ROW_ID' => $row['ft_id'],
 		'FORUMS_TOPICS_ROW_STATE' => $row['ft_state'],
@@ -311,23 +311,23 @@ foreach ($sql_forums_rowset as $row)
 		'FORUMS_TOPICS_ROW_NUM' => $ft_num,
 		'FORUMS_TOPICS_ROW' => $row,
 	));
-	
+
 	foreach ($cot_extrafields[$db_forum_topics] as $exfld)
 	{
 		$tag = mb_strtoupper($exfld['field_name']);
 		$t->assign(array(
 			'FORUMS_TOPICS_ROW_'.$tag.'_TITLE' => isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-			'FORUMS_TOPICS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
+			'FORUMS_TOPICS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes']))
 		));
 	}
-	
+
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	
+
 	$t->parse('MAIN.FORUMS_TOPICS_ROW');
 }
 

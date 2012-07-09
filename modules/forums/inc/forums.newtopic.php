@@ -43,21 +43,21 @@ if ($structure['forums'][$s]['locked'])
 if ($a == 'newtopic')
 {
 	cot_shield_protect();
-	
+
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.newtopic.newtopic.first') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	
+
 	$rmsg['fp_text'] = cot_import('rmsgtext','P','HTM');
-	
+
 	$rtopic['ft_title'] = cot_import('rtopictitle','P','TXT', 255);
 	$rtopic['ft_desc'] = cot_import('rtopicdesc','P','TXT', 255);
-	$rtopic['ft_mode'] = (int)(cot_import('rtopicmode','P','BOL') && $cfg['forums'][$s]['allowprvtopics']) ? 1 : 0;
+	$rtopic['ft_mode'] = (int)(cot_import('rtopicmode','P','BOL') && $cfg['forums']['cat_' . $s]['allowprvtopics']) ? 1 : 0;
 	$rtopic['ft_preview'] = mb_substr(htmlspecialchars($rmsg['fp_text']), 0, 128);
-	
+
 	if (mb_strlen($rtopic['ft_title']) < $cfg['forums']['mintitlelength'])
 	{
 		cot_error('forums_titletooshort', 'newtopictitle');
@@ -69,19 +69,19 @@ if ($a == 'newtopic')
 	foreach ($cot_extrafields[$db_forum_topics] as $exfld)
 	{
 		$rtopic['ft_'.$exfld['field_name']] = cot_import_extrafields('rtopic'.$exfld['field_name'], $exfld);
-	}	
+	}
 	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
 	{
 		$rmsg['fp_'.$exfld['field_name']] = cot_import_extrafields('rmsg'.$exfld['field_name'], $exfld);
 	}
-	
+
 	if (!cot_error_found())
 	{
 		if (mb_substr($rtopic['ft_title'], 0 ,1) == "#")
 		{
 			$rtopic['ft_title'] = str_replace('#', '', $rtopic['ft_title']);
 		}
-		
+
 		$rtopic['ft_state'] = 0;
 		$rtopic['ft_sticky'] = 0;
 		$rtopic['ft_cat'] = $s;
@@ -93,11 +93,11 @@ if ($a == 'newtopic')
 		$rtopic['ft_firstpostername'] = $usr['name'];
 		$rtopic['ft_lastposterid'] = (int)$usr['id'];
 		$rtopic['ft_lastpostername'] = $usr['name'];
-		
+
 		$db->insert($db_forum_topics, $rtopic);
-		
+
 		$q = $db->lastInsertId();
-		
+
 		$rmsg['fp_cat'] = $s;
 		$rmsg['fp_topicid'] = (int)$q;
 		$rmsg['fp_posterid'] = (int)$usr['id'];
@@ -105,41 +105,41 @@ if ($a == 'newtopic')
 		$rmsg['fp_creation'] = (int)$sys['now'];
 		$rmsg['fp_updated'] = (int)$sys['now'];
 		$rmsg['fp_posterip'] = $usr['ip'];
-		
+
 		$db->insert($db_forum_posts, $rmsg);
 
 		$p = $db->lastInsertId();
-		
-		if ($cfg['forums'][$s]['autoprune'] > 0)
+
+		if ($cfg['forums']['cat_' . $s]['autoprune'] > 0)
 		{
-			cot_forums_prunetopics('updated', $s, $cfg['forums'][$s]['autoprune']);
+			cot_forums_prunetopics('updated', $s, $cfg['forums']['cat_' . $s]['autoprune']);
 		}
-		
-		if ($cfg['forums'][$s]['countposts'])
+
+		if ($cfg['forums']['cat_' . $s]['countposts'])
 		{
 			$sql_forums = $db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'");
 		}
-		
+
 		if (!$rtopic['ft_mode'])
 		{
 			cot_forums_sectionsetlast($s, "fs_postcount+1", "fs_topiccount+1");
 		}
-		
+
 		cot_extrafield_movefiles();
-		
+
 		/* === Hook === */
 		foreach (cot_getextplugins('forums.newtopic.newtopic.done') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
-		
+
 		if ($cache)
 		{
 			($cfg['cache_forums']) && $cache->page->clear('forums');
 			($cfg['cache_index']) && $cache->page->clear('index');
 		}
-		
+
 		cot_shield_update(45, "New topic");
 		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
@@ -205,7 +205,7 @@ foreach($cot_extrafields[$db_forum_topics] as $exfld)
 	$t->parse('MAIN.TOPIC_EXTRAFLD');
 }
 
-if ($cfg['forums'][$s]['allowprvtopics'])
+if ($cfg['forums']['cat_' . $s]['allowprvtopics'])
 {
 	$t->assign('FORUMS_NEWTOPIC_ISPRIVATE', cot_checkbox($rtopic['ft_mode'], 'rtopicmode'));
 	$t->parse('MAIN.PRIVATE');
