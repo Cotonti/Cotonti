@@ -171,7 +171,10 @@ else
 		}
 		/* ===== */
 
-		cot_message('Updated');
+		if (!cot_error_found())
+		{
+			cot_message('Updated');
+		}
 		//cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 	}
 	elseif ($a == 'add' && !empty($_POST))
