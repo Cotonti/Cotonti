@@ -3,7 +3,7 @@ page	c=system&al=*			{$al}{!$c}
 page	c=*&al=*				{cot_url_catpath()}/{$al}
 page	c=*&id=*				{cot_url_catpath()}/{$id}
 page	c=*						{cot_url_catpath()}
-index	*						/
+index	*						{$_path}
 plug	e=tags&a=pages&t=*		{$e}/{$t}{!$a}
 plug	e=tags&a=*&t=*			{$e}/{$a}/{$t}
 plug	e=*						{$e}

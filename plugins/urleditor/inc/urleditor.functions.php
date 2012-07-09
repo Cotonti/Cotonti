@@ -16,38 +16,38 @@ require_once cot_langfile('urleditor', 'plug');
 /**
  * Contains the list of URLeditor presets currently available.
  * Append items to it to add other presets
- * @var array 
+ * @var array
  */
 $cot_urleditor_presets = array('handy', 'compat', 'custom', 'none');
 
 /**
  * Applies Handly URLs rewrite to current script parameters
- * @global array $cfg 
+ * @global array $cfg
  */
 function cot_apply_rwr()
 {
 	global $cfg, $structure;
-	
+
 	if (isset($_GET['rwr']) && !empty($_GET['rwr'])/* && preg_match('`^[\w\p{L}/\-_\ \+\.]+?$`u', $_GET['rwr'])*/)
 	{
 		// Ignore ending slash and split the path into parts
 		$path = explode('/', (mb_strrpos($_GET['rwr'], '/') == mb_strlen($_GET['rwr']) - 1) ? mb_substr($_GET['rwr'], 0, -1) : $_GET['rwr']);
 		$count = count($path);
-		
+
 		$rwr_continue = true;
-		
+
 		/* === Hook === */
 		foreach (cot_getextplugins('urleditor.rewrite.first') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
-		
+
 		if (!$rwr_continue)
 		{
 			return;
 		}
-		
+
 		if ($count == 1)
 		{
 			if (isset($structure['page'][$path[0]]))
@@ -95,7 +95,7 @@ function cot_apply_rwr()
 					$_GET['t'] = $path[1];
 				}
 				return;
-				
+
 			}
 			$last = $count - 1;
 			$ext = (isset($structure['page'][$path[0]])) ? 'page' : $path[0];
@@ -220,7 +220,7 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 				$var = mb_substr($m[1], 1);
 				if (isset($spec[$var]))
 				{
-					$url = str_replace($m[0], rawurlencode($spec[$var]), $url);
+					$url = str_replace($m[0], $spec[$var], $url);
 				}
 				elseif (isset($params[$var]))
 				{
@@ -271,12 +271,12 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 
 /**
  * Category path URL subsitution handler
- * 
+ *
  * @global array $structure Site structure categories
  * @param array $params Link parameters
  * @param array $spec Special parameters
  * @param string $arg Callback argument
- * @return string 
+ * @return string
  */
 function cot_url_catpath(&$params, $spec, $arg = 'c')
 {
@@ -298,7 +298,7 @@ function cot_url_catpath(&$params, $spec, $arg = 'c')
 
 /**
  * Returns the list of current presets
- * 
+ *
  * @global array $cot_urleditor_presets
  * @return array
  */
@@ -313,7 +313,7 @@ function cot_url_presets()
  *
  * @param array $params Link parameters
  * @param array $spec Special parameters
- * @return string 
+ * @return string
  */
 function cot_url_username(&$params, $spec)
 {
