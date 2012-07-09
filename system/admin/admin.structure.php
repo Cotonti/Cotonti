@@ -118,7 +118,7 @@ else
 			$rstructure['structure_title'] = cot_import($rstructuretitle[$i], 'D', 'TXT');
 			$rstructure['structure_desc'] = cot_import($rstructuredesc[$i], 'D', 'TXT');
 			$rstructure['structure_icon'] = cot_import($rstructureicon[$i], 'D', 'TXT');
-			if (cot_import($rstructurelocked[$i], 'D', 'BOL') != null)
+			if (cot_import($rstructurelocked[$i], 'D', 'BOL') !== null)
 			{
 				$rstructure['structure_locked'] = (cot_import($rstructurelocked[$i], 'D', 'BOL')) ? 1 : 0;
 			}
