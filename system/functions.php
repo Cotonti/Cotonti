@@ -483,7 +483,8 @@ function cot_import_buffered($name, $value, $null = '')
 {
 	// Params hash for current form
 	$hash = md5($_SERVER['REQUEST_URI']);
-	if ($value === '' || $value === null)
+	if ($value === '' || $value === null
+		|| isset($_SESSION['cot_buffer'][$hash][$name]) && !empty($_SESSION['cot_buffer'][$hash][$name]))
 	{
 		if (isset($_SESSION['cot_buffer'][$hash][$name]))
 		{
