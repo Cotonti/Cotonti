@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.8
+ * @version 2.7.9
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2012
  * @license BSD
@@ -265,17 +265,8 @@ class XTemplate
 			$this->blocks = array();
 			$this->index = array();
 			$code = cotpl_read_file($path);
-			// Remove BOM if present
-			if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) $code = mb_substr($code, 0);
-			// FILE includes
-			$code = preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restart_include_files', $code);
-			// Get root-level blocks
-			do
-			{
-				$this->found = false;
-				$code = preg_replace_callback('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s',
-					array($this, 'restart_root_blocks'), $code);
-			} while($this->found);
+
+			$this->compile($code);
 
 			if (self::$cache_enabled)
 			{
@@ -298,6 +289,34 @@ class XTemplate
 			$this->index = unserialize(cotpl_read_file($cache_idx));
 			$this->tags = unserialize(cotpl_read_file($cache_tags));
 		}
+	}
+
+	/**
+	 * Compiles the template from raw TPL code. Example:
+	 *
+	 * <code>
+	 * $raw_tpl = file_get_contents('some/file.tpl');
+	 * // Process $raw_tpl code here
+	 * $t = new XTemplate();
+	 * $t->compile($raw_tpl);
+	 * // Use $t as normal XTemplate object
+	 * </code>
+	 *
+	 * @param  string $code Raw template source code
+	 */
+	public function compile($code)
+	{
+		// Remove BOM if present
+		if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) $code = mb_substr($code, 0);
+		// FILE includes
+		$code = preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restart_include_files', $code);
+		// Get root-level blocks
+		do
+		{
+			$this->found = false;
+			$code = preg_replace_callback('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s',
+				array($this, 'restart_root_blocks'), $code);
+		} while($this->found);
 	}
 
 	/**
