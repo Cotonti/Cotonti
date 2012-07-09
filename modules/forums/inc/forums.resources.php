@@ -47,8 +47,6 @@ $R['forums_rowdelete'] = '<a href="{$url}" class="confirmLink">'.$L['Delete'].'<
 $R['forums_code_post_anchor'] = '<a name="post{$id}" id="post{$id}"></a>';
 
 $R['forums_code_quote'] = "{\$postername}:\n{\$text}\n\n";
-$R['forums_code_quote_begin'] = '';
-$R['forums_code_quote_close'] = '';
 
 $R['forums_code_unread'] = '<a name="unread" id="unread"></a>';
 $R['forums_code_update'] = "\n\n{\$updated}\n\n";

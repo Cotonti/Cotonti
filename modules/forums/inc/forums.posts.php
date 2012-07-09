@@ -107,13 +107,13 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	$rmsg['fp_text'] = cot_import('rmsgtext', 'P', 'HTM');
 	$rmsg['fp_updated'] = (int)$sys['now'];
 	$rmsg['fp_posterip'] = $usr['ip'];
-	
+
 	if (mb_strlen($rmsg['fp_text']) < $cfg['forums']['minpostlength'])
 	{
 		cot_error('forums_messagetooshort', 'rmsgtext');
 		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
-	
+
 	// Extra fields
 	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
 	{
@@ -137,16 +137,16 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 			$rmsg['fp_postername'] = $usr['name'];
 			$rmsg['fp_creation'] = (int)$sys['now'];
 			$rmsg['fp_updater'] = 0;
-			
+
 			$db->insert($db_forum_posts, $rmsg);
 			$p = $db->lastInsertId();
 
 			$sql_forums = $db->query("UPDATE $db_forum_topics SET
 				ft_postcount=ft_postcount+1, ft_updated=" . $sys['now'] . ",
 				ft_lastposterid=" . $usr['id'] . ", ft_lastpostername=" . $db->quote($usr['name']) . " WHERE ft_id=$q");
-			
+
 			cot_forums_sectionsetlast($s, 'fs_postcount+1');
-			
+
 			if ($cfg['forums'][$s]['countposts'])
 			{
 				$sql_forums = $db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id=" . $usr['id']);
@@ -164,12 +164,12 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 
 			$db->update($db_forum_posts, $rmsg, 'fp_id=' . $row['fp_id']);
 			$db->update($db_forum_topics, array('ft_updated' => $sys['now']), "ft_id = $q");
-			
+
 			cot_forums_sectionsetlast($s);
 		}
-		
+
 		cot_extrafield_movefiles();
-		
+
 		/* === Hook === */
 		foreach (cot_getextplugins('forums.posts.newpost.done') as $pl)
 		{
@@ -191,7 +191,7 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 {
 	cot_check_xg();
 
-	
+
 
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.posts.delete.first') as $pl)
@@ -203,12 +203,12 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 	$row = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id = ? AND fp_topicid = ? AND fp_cat = ? LIMIT 1",
 		array($p, $q, $s))->fetch();
 	is_array($row) || cot_die();
-	
-	foreach($cot_extrafields[$db_forum_posts] as $exfld) 
-	{ 
+
+	foreach($cot_extrafields[$db_forum_posts] as $exfld)
+	{
 		cot_extrafield_unlinkfiles($row['fp_'.$exfld['field_name']], $exfld);
 	}
-			
+
 	$sql_forums = $db->delete($db_forum_posts, 'fp_id = ? AND fp_topicid = ? AND fp_cat = ?', array($p, $q, $s));
 
 	if ($cfg['forums'][$s]['countposts'])
@@ -238,11 +238,11 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 		{
 			$sql_forums = $db->delete($db_forum_topics, "ft_movedto = $q");
 			$sql_forums = $db->delete($db_forum_topics, "ft_id = $q");
-			
-			foreach($cot_extrafields[$db_forum_topics] as $exfld) 
-			{ 
+
+			foreach($cot_extrafields[$db_forum_topics] as $exfld)
+			{
 				cot_extrafield_unlinkfiles($row['ft_'.$exfld['field_name']], $exfld);
-			}			
+			}
 
 			/* === Hook === */
 			foreach (cot_getextplugins('forums.posts.emptytopicdel') as $pl)
@@ -402,13 +402,13 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_EDIT_URL' => $rowedit_url,
 		'FORUMS_POSTS_ROW_QUOTE' => $rowquote,
 		'FORUMS_POSTS_ROW_QUOTE_URL' => $rowquote_url,
-		'FORUMS_POSTS_ROW_BOTTOM' => ((empty($id) ? $d + $fp_num : $id) == $totalposts) ? $R['forums_code_bottom'] : 
+		'FORUMS_POSTS_ROW_BOTTOM' => ((empty($id) ? $d + $fp_num : $id) == $totalposts) ? $R['forums_code_bottom'] :
 			($usr['id'] > 0 && $n == 'unread' && $row['fp_creation'] > $usr['lastvisit']) ? $R['forums_code_unread'] : '',
 		'FORUMS_POSTS_ROW_ODDEVEN' => cot_build_oddeven($fp_num),
 		'FORUMS_POSTS_ROW_NUM' => $fp_num,
 		'FORUMS_POSTS_ROW_ORDER' => empty($id) ? $d + $fp_num : $id
 	));
-	
+
 	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
 	{
 		$tag = mb_strtoupper($exfld['field_name']);
@@ -417,7 +417,7 @@ foreach ($sql_forums->fetchAll() as $row)
 			'FORUMS_POSTS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['fp_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
 		));
 	}
-	
+
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
 	{
@@ -474,8 +474,8 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 				'id' => $row4['fp_id'],
 				'date' => cot_date('datetime_medium', $row4['fp_creation']),
 				'postername' => $row4['fp_postername'],
-				'text' => str_ireplace(array($R['forums_code_quote_begin'], $R['forums_code_quote_close']), '', $row4['fp_text'])
-				));
+				'text' => $row4['fp_text']
+			));
 		}
 	}
 
@@ -493,12 +493,12 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 			));
 		$t->parse('MAIN.FORUMS_POSTS_NEWPOST.EXTRAFLD');
 	}
-	
+
 	$t->assign(array(
 		'FORUMS_POSTS_NEWPOST_SEND' => cot_url('forums', "m=posts&a=newpost&s=" . $s . "&q=" . $q),
 		'FORUMS_POSTS_NEWPOST_TEXT' => $R['forums_code_newpost_mark'] . cot_textarea('rmsgtext', $rmsg['fp_text'], 16, 56, '', 'input_textarea_medieditor')
 	));
-	
+
 	cot_display_messages($t);
 
 	/* === Hook  === */
@@ -559,7 +559,7 @@ foreach ($cot_extrafields[$db_forum_topics] as $exfld)
 		'FORUMS_POSTS_TOPIC_'.$tag => cot_build_extrafields_data('forums', $exfld, $rowt['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums'][$s]['allowbbcodes']))
 	));
 }
-	
+
 /* === Hook  === */
 foreach (cot_getextplugins('forums.posts.tags') as $pl)
 {
