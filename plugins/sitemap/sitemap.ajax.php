@@ -64,7 +64,7 @@ if ($regenerate)
 			$auth_cache[$c] = cot_auth('page', $c, 'R');
 			if (!$auth_cache[$c] || $c === 'system') continue;
 			// Pagination support
-			$maxrowsperpage = ($cfg['page'][$c]['maxrowsperpage']) ? $cfg['page'][$c]['maxrowsperpage'] : $cfg['page']['__default']['maxrowsperpage'];
+			$maxrowsperpage = ($cfg['page']['cat_' . $c]['maxrowsperpage']) ? $cfg['page']['cat_' . $c]['maxrowsperpage'] : $cfg['page']['__default']['maxrowsperpage'];
 			$subs = floor($cat['count'] / $maxrowsperpage) + 1;
 			foreach (range(1, $subs) as $pg)
 			{

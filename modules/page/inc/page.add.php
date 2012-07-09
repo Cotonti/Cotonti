@@ -69,10 +69,10 @@ if ($a == 'add')
 	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
 	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
 	$rpage['page_updated'] = $sys['now'];
-	
+
 	$rpublish = cot_import('rpublish', 'P', 'ALP'); // For backwards compatibility
 	$rpage['page_state'] = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', 'P', 'INT');
-	
+
 	// Extra fields
 	foreach ($cot_extrafields[$db_pages] as $exfld)
 	{
@@ -89,13 +89,13 @@ if ($a == 'add')
 		cot_error('msg602_body', 'rpagecat');
 	}
 	cot_check(mb_strlen($rpage['page_title']) < 2, 'page_titletooshort', 'rpagetitle');
-	
+
 	cot_check(!empty($rpage['page_alias']) && preg_match('`[+/?%#&]`', $rpage['page_alias']), 'page_aliascharacters', 'rpagealias');
 
-	$allowemptytext = isset($cfg['page'][$rpage['page_cat']]['allowemptytext']) ? 
-							$cfg['page'][$rpage['page_cat']]['allowemptytext'] : $cfg['page']['__default']['allowemptytext'];
+	$allowemptytext = isset($cfg['page']['cat_' . $rpage['page_cat']]['allowemptytext']) ?
+							$cfg['page']['cat_' . $rpage['page_cat']]['allowemptytext'] : $cfg['page']['__default']['allowemptytext'];
 	$allowemptytext || cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
-	
+
 	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || $rpage['page_parser'] != 'none' && !cot_auth('plug', $rpage['page_parser'], 'W'))
 	{
 		$rpage['page_parser'] = $cfg['page']['parser'];
@@ -138,12 +138,12 @@ if ($a == 'add')
 
 		$sql_page_insert = $db->insert($db_pages, $rpage);
 		$id = $db->lastInsertId();
-		
+
 		switch ($rpage['page_state'])
 		{
 			case 0:
-				$urlparams = empty($rpage['page_alias']) ? 
-					array('c' => $rpage['page_cat'], 'id' => $id) : 
+				$urlparams = empty($rpage['page_alias']) ?
+					array('c' => $rpage['page_cat'], 'id' => $id) :
 					array('c' => $rpage['page_cat'], 'al' => $rpage['page_alias']);
 				$r_url = cot_url('page', $urlparams, '', true);
 				break;
@@ -155,9 +155,9 @@ if ($a == 'add')
 				$r_url = cot_url('page', 'm=edit&id='.$id, '', true);
 				break;
 		}
-		
+
 		cot_extrafield_movefiles();
-		
+
 		/* === Hook === */
 		foreach (cot_getextplugins('page.add.add.done') as $pl)
 		{
@@ -241,7 +241,7 @@ foreach($cot_extrafields[$db_pages] as $exfld)
 	$exfld_val = cot_build_extrafields('rpage'.$exfld['field_name'], $exfld, $rpage[$exfld['field_name']]);
 	$exfld_title = isset($L['page_'.$exfld['field_name'].'_title']) ?  $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 	$t->assign(array(
-		'PAGEADD_FORM_'.$uname => $exfld_val, 
+		'PAGEADD_FORM_'.$uname => $exfld_val,
 		'PAGEADD_FORM_'.$uname.'_TITLE' => $exfld_title,
 		'PAGEADD_FORM_EXTRAFLD' => $exfld_val,
 		'PAGEADD_FORM_EXTRAFLD_TITLE' => $exfld_title

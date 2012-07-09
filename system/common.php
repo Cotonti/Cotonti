@@ -117,7 +117,7 @@ else
 			}
 			else
 			{
-				$cfg[$row['config_cat']][$row['config_subcat']][$row['config_name']] = $row['config_value'];
+				$cfg[$row['config_cat']]['cat_' . $row['config_subcat']][$row['config_name']] = $row['config_value'];
 			}
 		}
 		else

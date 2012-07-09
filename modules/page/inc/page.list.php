@@ -20,7 +20,7 @@ $w = cot_import('w', 'G', 'ALP', 4); // order way (asc, desc)
 $c = cot_import('c', 'G', 'TXT'); // cat code
 $o = cot_import('ord', 'G', 'ARR'); // filter field names without 'page_'
 $p = cot_import('p', 'G', 'ARR'); // filter values
-$maxrowsperpage = ($cfg['page'][$c]['maxrowsperpage']) ? $cfg['page'][$c]['maxrowsperpage'] : $cfg['page']['__default']['maxrowsperpage'];
+$maxrowsperpage = ($cfg['page']['cat_' . $c]['maxrowsperpage']) ? $cfg['page']['cat_' . $c]['maxrowsperpage'] : $cfg['page']['__default']['maxrowsperpage'];
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage); //page number for pages list
 list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', $cfg['page']['maxlistsperpage']);// page number for cats list
 
@@ -55,13 +55,13 @@ $cat = &$structure['page'][$c];
 
 if (empty($s))
 {
-	$s = $cfg['page'][$c]['order'];
+	$s = $cfg['page']['cat_' . $c]['order'];
 }
 elseif (!$db->fieldExists($db_pages, "page_$s"))
 {
 	$s = 'title';
 }
-$w = empty($w) ? $cfg['page'][$c]['way'] : $w;
+$w = empty($w) ? $cfg['page']['cat_' . $c]['way'] : $w;
 
 $s = empty($s) ? $cfg['page']['__default']['order'] : $s;
 $w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? $cfg['page']['__default']['way'] : $w;
@@ -69,14 +69,14 @@ $w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? $cfg['page']['__defaul
 
 $sys['sublocation'] = $cat['title'];
 
-$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? 
-	$cfg['page']['__default']['maxrowsperpage'] : 
-	$cfg['page'][$c]['maxrowsperpage'];
+$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ?
+	$cfg['page']['__default']['maxrowsperpage'] :
+	$cfg['page']['cat_' . $c]['maxrowsperpage'];
 $cfg['page']['maxrowsperpage'] = $cfg['page']['maxrowsperpage'] > 0 ? $cfg['page']['maxrowsperpage'] : 1;
 
-$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? 
-	$cfg['page']['__default']['truncatetext'] : 
-	$cfg['page'][$c]['truncatetext'];
+$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ?
+	$cfg['page']['__default']['truncatetext'] :
+	$cfg['page']['cat_' . $c]['truncatetext'];
 
 $where = array();
 $params = array();
@@ -126,11 +126,11 @@ if (!$usr['isadmin'] && $c != 'unvalidated')
 $orderby = "page_$s $w";
 
 $list_url_path = array('c' =>$c, 'ord' => $o, 'p' => $p);
-if ($s != $cfg['page'][$c]['order'])
+if ($s != $cfg['page']['cat_' . $c]['order'])
 {
 	$list_url_path['s'] = $s;
 }
-if ($w != $cfg['page'][$c]['way'])
+if ($w != $cfg['page']['cat_' . $c]['way'])
 {
 	$list_url_path['w'] = $w;
 }
@@ -175,7 +175,7 @@ if(empty($sql_page_string))
 $totallines = $db->query($sql_page_count, $params)->fetchColumn();
 $sqllist = $db->query($sql_page_string, $params);
 
-if ((!$cfg['easypagenav'] && $durl > 0 && $cfg['page']['maxrowsperpage'] > 0 && $durl % $cfg['page']['maxrowsperpage'] > 0) 
+if ((!$cfg['easypagenav'] && $durl > 0 && $cfg['page']['maxrowsperpage'] > 0 && $durl % $cfg['page']['maxrowsperpage'] > 0)
 	|| ($d > 0 && $d >= $totallines))
 {
 	cot_redirect(cot_url('page', $list_url_path + array('dc' => $dcurl)));
@@ -185,9 +185,9 @@ $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $tota
 
 $out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
 $out['subtitle'] = $cat['title'];
-if (!empty($cfg['page'][$c]['keywords']))
+if (!empty($cfg['page']['cat_' . $c]['keywords']))
 {
-	$out['keywords'] = $cfg['page'][$c]['keywords'];
+	$out['keywords'] = $cfg['page']['cat_' . $c]['keywords'];
 }
 // Building the canonical URL
 $out['canonical_uri'] = cot_url('page', $pageurl_params);
@@ -228,7 +228,7 @@ $t->assign(array(
 	'LIST_TOP_CURRENTPAGE' => $pagenav['current'],
 	'LIST_TOP_TOTALLINES' => $totallines,
 	'LIST_TOP_MAXPERPAGE' => $cfg['page']['maxrowsperpage'],
-	'LIST_TOP_TOTALPAGES' => $pagenav['total']	
+	'LIST_TOP_TOTALPAGES' => $pagenav['total']
 ));
 
 if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated')
@@ -280,8 +280,8 @@ foreach ($cot_extrafields[$db_pages] + array('title' => 'title', 'key' => 'key',
 				'list_link_url_down' => $url_asc,
 				'list_link_url_up' => $url_desc
 		))));
-	}	
-	$t->assign(array(	
+	}
+	$t->assign(array(
 		'LIST_TOP_'.$uname.'_URL_ASC' => $url_asc,
 		'LIST_TOP_'.$uname.'_URL_DESC' => $url_desc
 	));
@@ -303,7 +303,7 @@ foreach ($subcat as $x)
 	{
 		$sub_count += (int)$structure['page'][$cat_child]['count'];
 	}
-	
+
 	$sub_url_path = $list_url_path;
 	$sub_url_path['c'] = $x;
 	$t->assign(array(
@@ -333,7 +333,7 @@ foreach ($subcat as $x)
 	}
 	/* ===== */
 
-	$t->parse('MAIN.LIST_ROWCAT');	
+	$t->parse('MAIN.LIST_ROWCAT');
 }
 
 $pagenav_cat = cot_pagenav('page', $list_url_path + array('d' => $durl), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
