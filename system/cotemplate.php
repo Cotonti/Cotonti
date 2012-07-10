@@ -1028,7 +1028,7 @@ class Cotpl_expr
 		$text = str_replace('!{', ' ! {', $text);
 		$text = str_replace('!(', ' ! (', $text);
 		// Splitting into words
-		$words = cotpl_tokenize($text, " \t");
+		$words = cotpl_tokenize($text, array(' ', "\t"));
 		$operators = array_keys(self::$operators);
 		// Splitting infix into tokens
 		$tokens = array();
@@ -1469,7 +1469,7 @@ class Cotpl_var
 				{
 					$this->callbacks[] = array(
 						'name' => $mt[1],
-						'args' => cotpl_tokenize(trim($mt[2]), ', ')
+						'args' => cotpl_tokenize(trim($mt[2]), array(',', ' '))
 					);
 				}
 				else
@@ -1741,24 +1741,71 @@ function cotpl_index_glue($path)
  * @param string $delim Delimiter characters
  * @return array
  */
-function cotpl_tokenize($str, $delim = ' ')
+function cotpl_tokenize($str, $delim = array(' '))
 {
-	$delim = '#['.$delim.']+#';
-	$res = array();
-	$n = 0;
-	$quoted = preg_split('#["\']#', $str);
-	foreach($quoted as $part)
+	$tokens = array();
+	$idx = 0;
+	$quote = '';
+	$prev_delim = false;
+	$len = mb_strlen($str);
+	for ($i = 0; $i < $len; $i++)
 	{
-		if ($n++ % 2)
+		$c = mb_substr($str, $i, 1);
+		if (in_array($c, $delim))
 		{
-			array_push($res, array_pop($res) . $part);
+			if ($quote)
+			{
+				$tokens[$idx] .= $c;
+				$prev_delim = false;
+			}
+			elseif ($prev_delim)
+			{
+				continue;
+			}
+			else
+			{
+				$idx++;
+				$prev_delim = true;
+			}
+		}
+		elseif ($c == '"' || $c == "'")
+		{
+			if (!$quote)
+			{
+				$quote = $c;
+			}
+			elseif ($quote == $c)
+			{
+				$quote = '';
+				if (!isset($tokens[$idx]))
+				{
+					$tokens[$idx] = '';
+				}
+			}
+			else
+			{
+				$tokens[$idx] .= $c;
+			}
+			$prev_delim = false;
+		}
+		elseif ($c == '{' && !$quote)
+		{
+			// Avoid variable tokenization
+			$quote = $c;
+			$tokens[$idx] .= $c;
+			$prev_delim = false;
+		}
+		elseif ($c == '}' && $quote)
+		{
+			$quote = '';
+			$tokens[$idx] .= $c;
+			$prev_delim = false;
 		}
 		else
 		{
-			$tokens = preg_split($delim, $part);
-			array_push($res, array_pop($res) . array_shift($tokens));
-			$res = array_merge($res, $tokens);
+			$tokens[$idx] .= $c;
+			$prev_delim = false;
 		}
 	}
-	return $res;
+	return $tokens;
 }
