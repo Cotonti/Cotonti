@@ -64,7 +64,7 @@ if($_FILES)
 			}
 			else
 			{
-				cot_error(sprintf($L['pro_'.$code.'notvalid'], $file_ext), $code);
+				cot_error(sprintf($L['userimages_'.$code.'notvalid'], $file_ext), $code);
 			}
 		}
 	}
