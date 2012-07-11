@@ -76,7 +76,7 @@ $(document).ready(function(){
 		$(input).val(newstext).insertBefore($(this).find('.cay'));
 		$(this).find('.cay').remove();
 		$(input).attr('name', 'cay').attr('class', 'cay');
-		if(i > 1) $(this).find('.deloption').show();
+		if(i > 0) $(this).find('.deloption').show();
 
 	});
 	$('.cay').width('200px');
