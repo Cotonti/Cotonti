@@ -91,19 +91,19 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	{
 		if ($cfg['users']['regrequireadmin'])
 		{
-			$subject = $cfg['maintitle']." - ".$L['aut_regrequesttitle'];
+			$subject = $L['aut_regrequesttitle'];
 			$body = sprintf($L['aut_regrequest'], $ruser['user_name'], $password);
 			$body .= "\n\n".$L['aut_contactadmin'];
 			cot_mail($ruser['user_email'], $subject, $body);
 
-			$subject = $cfg['maintitle']." - ".$L['aut_regreqnoticetitle'];
+			$subject = $L['aut_regreqnoticetitle'];
 			$inactive = $cfg['mainurl'].'/'.cot_url('users', 'gm=2&s=regdate&w=desc', '', true);
 			$body = sprintf($L['aut_regreqnotice'], $ruser['user_name'], $inactive);
 			cot_mail($cfg['adminemail'], $subject, $body);
 		}
 		else
 		{
-			$subject = $cfg['maintitle']." - ".$L['Registration'];
+			$subject = $L['Registration'];
 			$activate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['user_lostpass'].'&y=1', '', true);
 			$deactivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['user_lostpass'].'&y=0', '', true);
 			$body = sprintf($L['aut_emailreg'], $ruser['user_name'], $password, $activate, $deactivate);
