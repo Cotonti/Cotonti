@@ -126,6 +126,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','security','22','shieldtadjust',2,'100','100','10,25,50,75,100,125,150,200,300,400,600,800',''),
 ('core','security','23','shieldzhammer',2,'25','25','5,10,15,20,25,30,40,50,100',''),
 ('core','security','41','referercheck',3,'1','1','',''),
+('core','security','42','hashfunc',4,'sha256','sha256','cot_hash_funcs()',''),
 ('core','theme','01','forcedefaulttheme',3,'0','0','',''),
 ('core','theme','02','homebreadcrumb',3,'0','0','',''),
 ('core','theme','04','separator',1,'/','/','',''),
@@ -263,7 +264,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.11-03'),
+('revision', '0.9.11-04'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;
@@ -271,7 +272,9 @@ CREATE TABLE `cot_users` (
   `user_id` int unsigned NOT NULL auto_increment,
   `user_banexpire` int default '0',
   `user_name` varchar(100) collate utf8_unicode_ci NOT NULL,
-  `user_password` varchar(32) collate utf8_unicode_ci NOT NULL default '',
+  `user_password` varchar(224) collate utf8_unicode_ci NOT NULL default '',
+  `user_passfunc` VARCHAR(32) NOT NULL default 'sha256',
+  `user_passsalt` VARCHAR(16) NOT NULL default '',
   `user_maingrp` int NOT NULL default '4',
   `user_country` char(2) collate utf8_unicode_ci NOT NULL default '',
   `user_timezone` varchar(32) collate utf8_unicode_ci NOT NULL default 'GMT',

@@ -101,7 +101,6 @@ $L['short_struct'] = 'Структ';
 $L['cfg_forcedefaultlang'] = array('Принудительная установка языка по умолчанию для всех пользователей', ' ');
 $L['cfg_defaulttimezone'] = array('Часовой пояс по умолчанию', 'Для гостей и при регистрации, от -12 до +12');
 
-
 /**
  * Config Section
  * Main Subsection
@@ -171,6 +170,7 @@ $L['cfg_captcharandom'] = array('Случайный выбор captcha');
 $L['cfg_cookiedomain'] = array('Домен для cookies', 'По умолчанию пусто');
 $L['cfg_cookielifetime'] = array('Срок действия cookies', 'В секундах');
 $L['cfg_cookiepath'] = array('Путь для cookies', 'По умолчанию пусто');
+$L['cfg_hashfunc'] = array('Функция хеширования по умолчанию', 'Используется для хеширования паролей');
 $L['cfg_referercheck'] = array('Проверка referer для форм', 'Предотвращает междоменный постинг');
 $L['cfg_shieldenabled'] = array('Включить защиту', 'Защита против спама и хаммеринга');
 $L['cfg_shieldtadjust'] = array('Настройка таймеров защиты (в %)', 'Чем выше, тем сильнее защита против спама');

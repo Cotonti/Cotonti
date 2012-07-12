@@ -48,9 +48,9 @@ if ($sys['protecttopadmin'])
 if ($a=='update')
 {
 	cot_check_xg();
-	
+
 	$row1 = $db->query("SELECT * FROM $db_users WHERE user_id=$id")->fetch();
-	
+
 	/* === Hook === */
 	foreach (cot_getextplugins('users.edit.update.first') as $pl)
 	{
@@ -61,15 +61,15 @@ if ($a=='update')
 	$ruserdelete = cot_import('ruserdelete','P','BOL');
 	if ($ruserdelete && $sys['user_istopadmin'] && !$sys['edited_istopadmin'])
 	{
-		
+
 		$sql = $db->delete($db_users, "user_id=$id");
 		$sql = $db->delete($db_groups_users, "gru_userid=$id");
 
-		foreach($cot_extrafields[$db_users] as $exfld) 
-		{ 
+		foreach($cot_extrafields[$db_users] as $exfld)
+		{
 			cot_extrafield_unlinkfiles($row1['user_'.$exfld['field_name']], $exfld);
 		}
-		
+
 		if (cot_module_active('pfs') && cot_import('ruserdelpfs','P','BOL'))
 		{
 			require_once cot_incfile('pfs', 'module');
@@ -130,7 +130,16 @@ if ($a=='update')
 
 	if (!cot_error_found())
 	{
-		$ruser['user_password'] = (mb_strlen($rusernewpass)>0) ? md5($rusernewpass) : $urr['user_password'];
+		if (mb_strlen($rusernewpass) > 0)
+		{
+			$ruser['user_passsalt'] = cot_unique(16);
+			$ruser['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
+			$ruser['user_password'] = cot_hash($rusernewpass, $ruser['user_passsalt'], $ruser['user_passfunc']);
+		}
+		else
+		{
+			$ruser['user_password'] = $urr['user_password'];
+		}
 
 		$ruser['user_name'] = ($ruser['user_name']=='') ? $urr['user_name'] : $ruser['user_name'];
 
@@ -182,7 +191,7 @@ if ($a=='update')
 
 		$sql = $db->update($db_users, $ruser, 'user_id='.$id);
 		cot_extrafield_movefiles();
-		
+
 		$ruser['user_maingrp'] = ($ruser['user_maingrp'] < COT_GROUP_MEMBERS && $id==1) ? COT_GROUP_SUPERADMINS : $ruser['user_maingrp'];
 
 		$maxlevel = cot_auth_getlevel($usr['id']);

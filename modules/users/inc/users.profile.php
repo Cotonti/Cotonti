@@ -53,7 +53,7 @@ if($a == 'update')
 	$ruser['user_gender'] = cot_import('rusergender','P','ALP');
 	$ruser['user_timezone'] = cot_import('rusertimezone','P','TXT');
 	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','BOL');
-	
+
 	// Extra fields
 	foreach($cot_extrafields[$db_users] as $exfld)
 	{
@@ -77,7 +77,7 @@ if($a == 'update')
 	{
 		if ($rnewpass1 != $rnewpass2) cot_error('pro_passdiffer', 'rnewpass2');
 		if (mb_strlen($rnewpass1) < 4 || cot_alphaonly($rnewpass1) != $rnewpass2) cot_error('pro_passtoshort', 'rnewpass1');
-		if (md5($roldpass) != $urr['user_password']) cot_error('pro_wrongpass', 'roldpass');
+		if (cot_hash($roldpass, $urr['user_passsalt'], $urr['user_passfunc']) != $urr['user_password']) cot_error('pro_wrongpass', 'roldpass');
 
 		if (!empty($ruseremail) && !empty($rmailpass) && $cfg['users']['useremailchange'] && $ruseremail != $urr['user_email'])
 		{
@@ -85,7 +85,12 @@ if($a == 'update')
 		}
 		if (!cot_error_found())
 		{
-			$db->update($db_users, array('user_password' => md5($rnewpass1)), "user_id='".$usr['id']."'");
+			$ruserpass = array();
+			$ruserpass['user_passsalt'] = cot_unique(16);
+			$ruserpass['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
+			$ruserpass['user_password'] = cot_hash($rnewpass1, $ruserpass['user_passsalt'], $ruserpass['user_passfunc']);
+			$db->update($db_users, $ruserpass, "user_id='".$usr['id']."'");
+			unset($ruserpass);
 		}
 	}
 	if (!empty($ruseremail) && (!empty($rmailpass) || $cfg['users']['user_email_noprotection']) && $cfg['users']['useremailchange'] && $ruseremail != $urr['user_email'])
@@ -144,7 +149,7 @@ if($a == 'update')
 		$ruser['user_auth'] = '';
 		$db->update($db_users, $ruser, "user_id='".$usr['id']."'");
 		cot_extrafield_movefiles();
-		
+
 		/* === Hook === */
 		foreach (cot_getextplugins('users.profile.update.done') as $pl)
 		{

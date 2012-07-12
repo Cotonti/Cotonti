@@ -53,21 +53,21 @@ if ($logout)
 	if ($usr['id'] > 0)
 	{
 		$db->update($db_users, array('user_lastvisit' => $sys['now']), "user_id = " . $usr['id']);
-		
+
 		$all = cot_import('all', 'G', 'BOL');
 		if ($all)
 		{
 			// Log out on all devices
 			$db->update($db_users, array('user_sid' => ''), "user_id = " . $usr['id']);
 		}
-		
+
 		cot_uriredir_redirect(empty($redirect) ? cot_url('index') : base64_decode($redirect));
 	}
 	else
 	{
 		cot_redirect(cot_url('index'));
 	}
-	
+
 	exit;
 }
 
@@ -94,10 +94,18 @@ if ($a == 'check')
 	$rcookiettl = cot_import('rcookiettl', 'P', 'INT');
 	$rremember = cot_import('rremember', 'P', 'BOL');
 	if(empty($rremember) && $rcookiettl > 0 || $cfg['forcerememberme'])
-    {
-        $rremember = true;
-    }
-	$rmdpass  = md5($rpassword);
+	{
+		$rremember = true;
+	}
+
+	// Load salt and algo from db
+	$sql = $db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE user_name = ?", array($rusername));
+	if ($sql->rowCount() == 1)
+	{
+		$hash_params = $sql->fetch();
+		$rmdpass = cot_hash($rpassword, $hash_params['user_passsalt'], $hash_params['user_passfunc']);
+		unset($hash_params);
+	}
 
 	$login_param = cot_check_email($rusername) ?
 		'user_email' : 'user_name';
@@ -106,7 +114,7 @@ if ($a == 'check')
 	 * Sets user selection criteria for authentication. Override this string in your plugin
 	 * hooking into users.auth.check.query to provide other authentication methods.
 	 */
-	$user_select_condition = "user_password='$rmdpass' AND $login_param='".$db->prep($rusername)."'";
+	$user_select_condition = "user_password=".$db->quote($rmdpass)." AND $login_param=".$db->quote($rusername);
 
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.auth.check.query') as $pl)
@@ -195,14 +203,14 @@ if ($a == 'check')
 		$env['status'] = '401 Unauthorized';
 		cot_shield_update(7, "Log in");
 		cot_log("Log in failed, user : ".$rusername,'usr');
-		
+
 		/* === Hook === */
 		foreach (cot_getextplugins('users.auth.check.fail') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
-		
+
 		cot_redirect(cot_url('message', 'msg=151', '', true));
 	}
 }

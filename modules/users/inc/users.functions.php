@@ -60,7 +60,11 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_maingrp'] = ($db->countRows($db_users) == 0) ? 5 : ($cfg['users']['regnoactivation']) ? 4 : 2;
 	$ruser['user_maingrp'] = (int)$maingrp > 0 ? $maingrp : $ruser['user_maingrp'];
 
-	$ruser['user_password'] = md5($ruser['user_password']);
+	$ruser['user_passsalt'] = cot_unique(16);
+	$ruser['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
+	$ruser['user_password'] = cot_hash($ruser['user_password'], $ruser['user_passsalt'], $ruser['user_passfunc']);
+
+
 	$ruser['user_birthdate'] = (is_null($ruser['user_birthdate']) || $ruser['user_birthdate'] > $sys['now']) ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
 	$ruser['user_lostpass'] = md5(microtime());
 	cot_shield_update(20, "Registration");

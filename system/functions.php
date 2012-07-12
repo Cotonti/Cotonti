@@ -56,6 +56,11 @@ if (!isset($cfg['dir_perms']))
 $cot_captcha = array();
 
 /**
+ * Registry for hash functions
+ */
+$cot_hash_funcs = array('md5', 'sha1', 'sha256');
+
+/**
  * Array of custom cot_import() filter callbacks
  */
 $cot_import_filters = array();
@@ -4632,6 +4637,73 @@ function cot_check_xp()
 {
 	return (defined('COT_NO_ANTIXSS') || defined('COT_AUTH')) ?
 		($_SERVER['REQUEST_METHOD'] == 'POST') : isset($_POST['x']);
+}
+
+/**
+ * Hashes a value with given salt and specified hash algo.
+ *
+ * @global array  $cot_hash_func
+ * @param  string $data Data to be hash-protected
+ * @param  string $salt Hashing salt, usually a random value
+ * @param  string $algo Hashing algo name, must be registered in $cot_hash_funcs
+ * @return string       Hashed value
+ */
+function cot_hash($data, $salt = '', $algo = 'sha256')
+{
+	global $cfg, $cot_hash_funcs;
+	$data .= $salt;
+	if (isset($cfg['hashsalt']) && !empty($cfg['hashsalt']))
+	{
+		// Extra salt for extremely secure sites
+		$data .= $cfg['hashsalt'];
+	}
+	$func = (in_array($algo, $cot_hash_funcs) && function_exists('cot_hash_' . $algo)) ? 'cot_hash_' . $algo : 'cot_hash_sha256';
+	return $func($data);
+}
+
+/**
+ * Returns the list of available hash algos for use with configs.
+ *
+ * @global array $cot_hash_func
+ * @return array
+ */
+function cot_hash_funcs()
+{
+	global $cot_hash_funcs;
+	return $cot_hash_funcs;
+}
+
+/**
+ * Simple MD5 hash wrapper. Old passwords use this func.
+ *
+ * @param  string $data Data to be hashed
+ * @return string       MD5 hash of the data
+ */
+function cot_hash_md5($data)
+{
+	return md5($data);
+}
+
+/**
+ * SHA1 hash func for use with cot_hash().
+ *
+ * @param  string $data Data to be hashed
+ * @return string       SHA1 hash of the data
+ */
+function cot_hash_sha1($data)
+{
+	return hash('sha1', $data);
+}
+
+/**
+ * SHA256 hash func for use with cot_hash(). Default since Cotonti 0.9.11.
+ *
+ * @param  string $data Data to be hashed
+ * @return string       SHA256 hash of the data
+ */
+function cot_hash_sha256($data)
+{
+	return hash('sha256', $data);
 }
 
 /**
