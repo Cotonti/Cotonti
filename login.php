@@ -176,6 +176,9 @@ if ($a == 'check')
 
 		$db->query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now']}, user_logcount = user_logcount + 1, user_token = '$token' $update_sid WHERE user_id={$row['user_id']}");
 
+		// Hash the sid once more so it can't be faked even if you  know user_sid
+		$sid = hash_hmac('sha1', $sid, $cfg['secret_key']);
+
 		$u = base64_encode($ruserid.':'.$sid);
 
 		if($rremember)
