@@ -4807,7 +4807,7 @@ function cot_confirm_url($target_url, $ext_name = '', $msg_key = '')
  */
 function cot_redirect($url)
 {
-	global $cfg, $env, $error_string;
+	global $cfg, $env, $error_string, $sys;
 
 	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST')
 	{
@@ -4823,7 +4823,7 @@ function cot_redirect($url)
 	if (!cot_url_check($url))
 	{
 		// No redirects to foreign domains
-		$url = $url == '/' ? COT_ABSOLUTE_URL : COT_ABSOLUTE_URL . $url;
+		$url = $url == '/' || $url == $sys['site_uri'] ? COT_ABSOLUTE_URL : COT_ABSOLUTE_URL . $url;
 	}
 
 	if (defined('COT_AJAX') && COT_AJAX)
