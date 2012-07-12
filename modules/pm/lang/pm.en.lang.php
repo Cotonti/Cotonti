@@ -18,7 +18,7 @@ defined('COT_CODE') or die('Wrong URL.');
 $L['cfg_allownotifications'] = array('Allow PM notifications by email', '');
 $L['cfg_maxsize'] = array('Maximum length for messages', '');
 $L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');
-$L['info_desc'] = 'Private messaging system is on-site user communication similar to email';
+$L['info_desc'] = 'Private messaging system for on-site user communication';
 
 /**
  * Other

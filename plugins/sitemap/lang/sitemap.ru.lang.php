@@ -1,6 +1,6 @@
 <?php
 /**
- * Russian Language File for SiteXML plugin
+ * Russian Language File for Sitemap plugin
  *
  * @package sitemap
  * @author Cotonti Team
@@ -10,7 +10,7 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['info_desc'] = 'Простая карта сайта в формате XML';
+$L['info_desc'] = 'XML-карта сайта с данными для поисковых систем';
 
 $sitemap_freqs = array(
 	'default' => 'По умолчанию',

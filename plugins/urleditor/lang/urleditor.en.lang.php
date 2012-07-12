@@ -51,6 +51,6 @@ $L['cfg_preset_params'] = array(
 	'none' => 'Disabled'
 );
 
-$L['info_desc'] = 'With this plugin you can set custom rules for URL transformation in Admin Panel or choose an easy to use preset for human and search engine friendly URLs';
+$L['info_desc'] = 'URL transformations enabling SEF URL\'s via presets';
 
 ?>

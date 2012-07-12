@@ -39,7 +39,7 @@ $L['cfg_autoprune'] = array('Auto-prune topics after * days');
 $L['cfg_defstate'] = array('Default state');
 $L['cfg_defstate_params'] = array('Folded', 'Unfolded');
 
-$L['info_desc'] = 'Cotonti Bulletin Board Module: sections, subsections, topics, posts. Simple forums for community sites and support.';
+$L['info_desc'] = 'Basic forums for community sites with sections, subsections, topics and posts';
 
 /**
  * Main

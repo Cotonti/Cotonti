@@ -11,6 +11,8 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+$L['info_desc'] = 'Automatic alias generation from page title if left empty';
+
 $L['aliases_written'] = 'Aliases written';
 $L['create_aliases'] = 'Create aliases from titles if missing';
 

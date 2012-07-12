@@ -11,7 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['info_desc'] = 'Simple referers statistics. Recommended for small sites only.';
+$L['info_desc'] = 'Simple referers statistics recommended for small sites';
 
 $L['Referer'] = 'Referer';
 $L['Referers'] = 'Referers';

@@ -18,7 +18,7 @@ $L['cfg_locales'] = array('List of site locales', 'Each locale on new line, form
 $L['cfg_omitmain'] = array('Omit language parameter in URLs if pointing to main language');
 $L['cfg_rewrite'] = array('Enable URL overwrite for language parameter', 'Requires manual .htaccess update');
 
-$L['info_desc'] = 'Site contents (pages, categories, tags, etc.) can be translated and presented in multiple languages if this plugin is enabled.';
+$L['info_desc'] = 'Localization tool for pages, categories, tags, etc. enabling multilanguage support';
 
 // Plugin strings
 

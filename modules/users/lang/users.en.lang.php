@@ -11,7 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['info_desc'] = 'Enables user registration, profiles and listings on your site';
+$L['info_desc'] = 'User management with registration, listings and profiles';
 
 $L['cfg_disablereg'] = array('Disable registration process', 'Prevent users from registering new accounts');
 $L['cfg_maxusersperpage'] = array('Maximum lines in userlist', '');

@@ -27,7 +27,7 @@ $L['cfg_trash_prunedelay'] = array('Remove the items from the trash can after * 
 $L['cfg_trash_user'] = array('Use the trash can for the users', '');
 $L['cfg_trash_comment'] = array('Use the trash can for the comments', '');
 
-$L['info_desc'] = 'Saves removed items in trash can for a while, so that they can be restored if necessary';
+$L['info_desc'] = 'Delete items into trashcan for future recovery if needed';
 
 /**
   * TrashCan Section

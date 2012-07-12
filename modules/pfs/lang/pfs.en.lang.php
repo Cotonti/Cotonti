@@ -51,7 +51,7 @@ $L['adm_help_allpfs'] = $L['PFS'].' of all registered users';
 $L['adm_nogd'] = 'The GD graphical library is not supported by this host, Cotonti won\'t be able to create thumbnails for images. Go for '.$L['Configuration'].' &gt; '.$L['PFS'].' and set &quot;Thumbnails generation&quot; to &quot;'.$L['Disabled'].'&quot;.';
 $L['adm_help_pfsfiles'] = 'Not available';
 $L['adm_help_pfsthumbs'] = 'Not available';
-$L['info_desc'] = 'Organized storage for file uploads provided to registered users (Personal File Space) and entire site (Site File Space)';
+$L['info_desc'] = 'Personalized (PFS) and common (SFS) file storage facility';
 
 /**
  * Main

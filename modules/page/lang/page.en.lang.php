@@ -25,7 +25,7 @@ $L['cfg_truncatetext'] = array('Set truncated page text length in list', 'Zero t
 $L['cfg_allowemptytext'] = array('Allow empty page text');
 $L['cfg_keywords'] = array('Keywords');
 
-$L['info_desc'] = 'Extensible content management functionality: pages and page categories.';
+$L['info_desc'] = 'Enables website content through pages and page categories';
 
 /**
  * Structure Confing

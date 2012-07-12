@@ -1,8 +1,8 @@
 <?php
 /**
- * Russian Language File for Tags Plugin
+ * Russian Language File for Autocomplete Plugin
  *
- * @package tags
+ * @package autocomplete
  * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012

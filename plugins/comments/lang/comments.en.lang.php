@@ -31,7 +31,7 @@ $L['cfg_order_params'] = array('Chronological', 'Recent');
 $L['cfg_parsebbcodecom'] = array('Parse BBcodes in comments', '');
 $L['cfg_parsesmiliescom'] = array('Parse smilies in comments', '');
 
-$L['info_desc'] = 'Comments system for Cotonti with API and integration with pages, lists, polls, RSS and other extensions.';
+$L['info_desc'] = 'Comments system for Cotonti with API and integration with pages, lists, polls, RSS and other extensions';
 
 /**
  * Plugin Body

@@ -259,8 +259,8 @@
 					<a href="{ADMIN_EXTENSIONS_DETAILS_URL}"><strong>{ADMIN_EXTENSIONS_NAME}</strong></a>
 					<p class="small">{ADMIN_EXTENSIONS_DESCRIPTION|cot_cutstring($this,60)}</p>
 				</td>
-				<td>{ADMIN_EXTENSIONS_CODE_X}</td>
-				<td>
+				<td class="centerall">{ADMIN_EXTENSIONS_CODE_X}</td>
+				<td class="centerall">
 					<!-- IF {PHP.part_status} != 3 AND {ADMIN_EXTENSIONS_VERSION_COMPARE} > 0 -->
 					<span class="highlight_red">{ADMIN_EXTENSIONS_VERSION_INSTALLED}</span> / <span class="highlight_green">{ADMIN_EXTENSIONS_VERSION}</span>
 					<!-- ELSE -->

@@ -50,6 +50,6 @@ HTM;
 
 $L['cfg_smilies'] = array('Enable smilies', '');
 
-$L['info_desc'] = 'Enables BBCode parsing support. Administrator can customize bbcodes with Admin tool. Also adds support for smilie codes and smilie sets.';
+$L['info_desc'] = 'Customizable support for BBCodes and smilies parsing';
 
 ?>

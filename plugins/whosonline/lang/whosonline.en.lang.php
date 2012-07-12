@@ -11,7 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['info_desc'] = 'Lists the members online on index and standalone page. Enables user activity tracking on site.';
+$L['info_desc'] = 'Outputs online visitors on index and standalone page with user activity tracking on site';
 
 /**
  * Plugin Title & Subtitle

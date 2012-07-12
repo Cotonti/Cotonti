@@ -1,6 +1,6 @@
 <?php
 /**
- * Russian Language File for HTML Plugin
+ * English Language File for HTML Plugin
  *
  * @package html
  * @author Cotonti Team
@@ -10,6 +10,6 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['info_desc'] = 'Поддержка HTML-разметки в контенте сайта';
+$L['info_desc'] = 'Support for HTML-markup in the website content';
 
 ?>

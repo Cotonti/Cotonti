@@ -19,7 +19,7 @@ $L['cfg_category'] = array('News categories', 'Separate news category codes with
 $L['cfg_maxpages'] = array('Number of recent pages displayed');
 $L['cfg_syncpagination'] = array('Sync pagination');
 
-$L['info_desc'] = 'Picks up pages from a category and displays the newest of them on the home page';
+$L['info_desc'] = 'Outputs newsfeed at homepage from selected category pages';
 
 $L['Maincat']='Main news category';
 $L['Addcat']='Additional news categories';
