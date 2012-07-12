@@ -34,8 +34,10 @@ if (!file_exists($smile_lang))
 $mkup_set = $sys['parser'] == 'bbcode'? 'bbcode' : 'html';
 
 // Load resources
-$mkup_skin = cot_rc('code_rc_css_file', array('url' => $cfg['plugins_dir'] . '/markitup/skins/' . $cfg['plugin']['markitup']['skin'] . '/style.css'));
-$mkup_style = cot_rc('code_rc_css_file', array('url' => $cfg['plugins_dir'] . '/markitup/style.css'));
+$mkup_skin_path = $cfg['plugins_dir'] . '/markitup/skins/' . $cfg['plugin']['markitup']['skin'] . '/style.css';
+$mkup_skin = cot_rc('code_rc_css_file', array('url' => $mkup_skin_path));
+$mkup_style_path = $cfg['plugins_dir'] . '/markitup/style.css';
+$mkup_style = cot_rc('code_rc_css_file', array('url' => $mkup_style_path));
 cot_rc_link_footer($smile_lang);
 cot_rc_link_footer('images/smilies/set.js');
 cot_rc_link_footer($cfg['plugins_dir'] . '/markitup/js/jquery.markitup.min.js');
@@ -50,8 +52,8 @@ if ($cfg['plugin']['markitup']['chili'])
 // User-specific setup
 $autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
 cot_rc_embed_footer('$(document).ready(function() {
-	$("head").append(\''.$mkup_skin.'\');
-	$("head").append(\''.$mkup_style.'\');
+	if (document.createStyleSheet) { document.createStyleSheet("'.$mkup_skin_path.'"); } else { $("head").append(\''.$mkup_skin.'\'); }
+	if (document.createStyleSheet) { document.createStyleSheet("'.$mkup_style_path.'"); } else { $("head").append(\''.$mkup_style.'\'); }
 	mySettings.previewAutorefresh = '.$autorefresh.';
 	mySettings.previewParserPath = "plug.php?r=markitup&x=" + $("input[name=\'x\'][type=\'hidden\']").eq(0).val();
 	mediSettings.previewAutorefresh = '.$autorefresh.';
