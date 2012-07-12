@@ -100,7 +100,7 @@ if($a == 'update')
 
 		if (!$cfg['users']['user_email_noprotection'])
 		{
-			$rmailpass = md5($rmailpass);
+			$rmailpass = cot_hash($rmailpass, $urr['user_passsalt'], $urr['user_passfunc']);
 			if ($rmailpass != $urr['user_password']) cot_error('pro_wrongpass', 'rmailpass');
 		}
 
