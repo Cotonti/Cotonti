@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		case 2:
 			// Database setup
 			$db_x = cot_import('db_x', 'P', 'TXT', 0, false, true);
-			
+
 			try
 			{
 				$dbс_port = empty($db_port) ? '' : ';port='.$db_port;
@@ -227,11 +227,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 				file_put_contents($file['config'], $config_contents);
 
+				$ruserpass['user_passsalt'] = cot_unique(16);
+				$ruserpass['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
+				$ruserpass['user_password'] = cot_hash($user['pass'], $ruserpass['user_passsalt'], $ruserpass['user_passfunc']);
+
 				try
 				{
 					$db->insert($db_x . 'users', array(
 						'user_name' => $user['name'],
-						'user_password' => md5($user['pass']),
+						'user_password' => $ruserpass['user_password'],
+						'user_passsalt' => $ruserpass['user_passsalt'],
+						'user_passfunc' => $ruserpass['user_passfunc'],
 						'user_maingrp' => COT_GROUP_SUPERADMINS,
 						'user_country' => (string) $user['country'],
 						'user_email' => $user['email'],
@@ -363,7 +369,7 @@ switch ($step)
 				}
 			}
 		}
-		
+
 		// System info
 		// Build CHMOD/Exists/Version data
 		clearstatcache();
@@ -662,7 +668,7 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 
 /**
  * Sorts selected extensions by their setup order if present
- * 
+ *
  * @global array $cfg
  * @param array $selected_extensions Unsorted list of extension names
  * @param bool $is_module TRUE if sorting modules, FALSE if sorting plugins
@@ -673,7 +679,7 @@ function cot_install_sort_extensions($selected_extensions, $is_module = FALSE)
 	global $cfg;
 	$path = $is_module ? $cfg['modules_dir'] : $cfg['plugins_dir'];
 	$ret = array();
-	
+
 	// Split into groups by Order value
 	$extensions = array();
 	foreach ($selected_extensions as $name)
@@ -686,7 +692,7 @@ function cot_install_sort_extensions($selected_extensions, $is_module = FALSE)
 		}
 		$extensions[$order][] = $name;
 	}
-	
+
 	// Merge back into a single array
 	foreach ($extensions as $grp)
 	{
@@ -695,7 +701,7 @@ function cot_install_sort_extensions($selected_extensions, $is_module = FALSE)
 			$ret[] = $name;
 		}
 	}
-	
+
 	return $ret;
 }
 
