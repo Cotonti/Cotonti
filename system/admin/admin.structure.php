@@ -175,7 +175,7 @@ else
 		{
 			cot_message('Updated');
 		}
-		//cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
+		cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
 	}
 	elseif ($a == 'add' && !empty($_POST))
 	{
@@ -191,6 +191,11 @@ else
 		{
 			$rstructure['structure_'.$exfld['field_name']] = cot_import_extrafields('rstructure'.$exfld['field_name'], $exfld);
 		}
+		
+		($rstructure['structure_code'] != 'all') || cot_error('adm_structure_code_reserved', 'rstructurecode');
+		$rstructure['structure_code'] || cot_error('adm_structure_code_required', 'rstructurecode');
+		$rstructure['structure_path'] || cot_error('adm_structure_path_required', 'rstructurepath');
+		$rstructure['structure_title'] || cot_error('adm_structure_title_required', 'rstructuretitle');
 
 		$rtplmode = cot_import('rtplmode', 'P', 'INT');
 		$rtplquick = cot_import('rtplquick', 'P', 'TXT');
