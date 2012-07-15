@@ -74,7 +74,7 @@ function cot_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
 	return cot_rc($rc, array(
 		'type' => $type,
 		'name' => $name,
-		'value' => htmlspecialchars(cot_import_buffered($name, $value)),
+		'value' => htmlspecialchars((string)cot_import_buffered($name, $value)),
 		'attrs' => $input_attrs,
 		'error' => $error
 	));
