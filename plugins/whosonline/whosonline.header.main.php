@@ -68,7 +68,7 @@ if ($env['location'] != $sys['online_location']
 				'online_location' => $env['location'],
 				'online_subloc' => (string)$sys['sublocation'],
 				'online_hammer' => (int)$sys['online_hammer']
-				), "online_ip= ".$usr['ip']);
+				), "online_ip='".$usr['ip']."'");
 		}
 	}
 }
