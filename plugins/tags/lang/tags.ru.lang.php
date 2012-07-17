@@ -12,6 +12,12 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
+ * Plugin Info
+ */
+
+$L['info_desc'] = 'Теги &mdash; метки для контента с облаком, поиском и API';
+
+/**
  * Plugin Title & Subtitle
  */
 
@@ -51,7 +57,6 @@ $L['cfg_pages'] = array('Включить теги для страниц');
 $L['cfg_perpage'] = array('Тегов на странице в облаке всех тегов, 0 - все теги сразу');
 $L['cfg_title'] = array('Первые буквы тегов прописными');
 $L['cfg_translit'] = array('Транслитерировать теги в URL-адресах');
-
-$L['info_desc'] = 'Теги &mdash; метки для контента с облаком, поиском и API';
+$L['cfg_css'] = 'Использовать CSS стили плагина';
 
 ?>
