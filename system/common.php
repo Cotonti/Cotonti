@@ -367,7 +367,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 
 				$user_log['user_lastlog'] = $sys['now'];
 
-				$db->update($db_users, $user_log, "user_id='{$usr['id']}'");
+				$db->update($db_users, $user_log, "user_id={$usr['id']}");
 				unset($u, $passhash, $oldhash, $hashsalt, $hashsaltprev, $user_log);
 			}
 		}
