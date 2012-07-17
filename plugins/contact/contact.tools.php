@@ -61,7 +61,7 @@ $tuman = new XTemplate(cot_tplfile('contact.tools', 'plug', true));
 $totallines = $db->query("SELECT COUNT(*) FROM $db_contact")->fetchColumn();
 $sql = $db->query("SELECT * FROM $db_contact ORDER BY contact_val ASC, contact_id DESC LIMIT $d, " . $cfg['maxrowsperpage']);
 
-$pagnav = cot_pagenav('admin', 'm=other&p=contact', $d, $totallines, $cfg['maxlistsperpage']);
+$pagnav = cot_pagenav('admin', 'm=other&p=contact', $d, $totallines, $cfg['maxrowsperpage']);
 
 $i = 0;
 while ($row = $sql->fetch())
