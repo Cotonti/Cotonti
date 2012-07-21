@@ -194,6 +194,8 @@ $out['canonical_uri'] = cot_url('page', $pageurl_params);
 
 $_SESSION['cat'] = $c;
 
+$mskin = cot_tplfile(array('page', 'list', $cat['tpl']));
+
 /* === Hook === */
 foreach (cot_getextplugins('page.list.main') as $pl)
 {
@@ -202,8 +204,6 @@ foreach (cot_getextplugins('page.list.main') as $pl)
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
-
-$mskin = cot_tplfile(array('page', 'list', $cat['tpl']));
 $t = new XTemplate($mskin);
 
 $t->assign(array(

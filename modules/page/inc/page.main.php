@@ -133,6 +133,8 @@ if ($pg > 0)
 }
 $out['canonical_uri'] = cot_url('page', $pageurl_params);
 
+$mskin = cot_tplfile(array('page', $cat['tpl']));
+
 /* === Hook === */
 foreach (cot_getextplugins('page.main') as $pl)
 {
@@ -148,8 +150,6 @@ if ($pag['page_file'])
 
 require_once $cfg['system_dir'] . '/header.php';
 require_once cot_incfile('users', 'module');
-
-$mskin = cot_tplfile(array('page', $cat['tpl']));
 $t = new XTemplate($mskin);
 
 $t->assign(cot_generate_pagetags($pag, 'PAGE_', 0, $usr['isadmin'], $cfg['homebreadcrumb']));

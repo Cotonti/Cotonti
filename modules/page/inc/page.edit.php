@@ -254,6 +254,8 @@ $out['subtitle'] = $L['page_edittitle'];
 $out['head'] .= $R['code_noindex'];
 $sys['sublocation'] = $structure['page'][$c]['title'];
 
+$mskin = cot_tplfile(array('page', 'edit', $structure['page'][$pag['page_cat']]['tpl']));
+
 /* === Hook === */
 foreach (cot_getextplugins('page.edit.main') as $pl)
 {
@@ -262,8 +264,6 @@ foreach (cot_getextplugins('page.edit.main') as $pl)
 /* ===== */
 
 require_once $cfg['system_dir'].'/header.php';
-
-$mskin = cot_tplfile(array('page', 'edit', $structure['page'][$pag['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
 
 $pageedit_array = array(
