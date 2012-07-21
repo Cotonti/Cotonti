@@ -12,18 +12,21 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
- * Config Section
- * Ratings Subsection
+ * Plugin Info
  */
-
-$L['cfg_enable_ratings'] = array('Enable ratings');
-$L['cfg_ratings_allowchange'] = array('Allow ratings to be changed?', 'If enabled it will allow users to change their rating.');
 
 $L['info_desc'] = 'One-click star ratings using jQuery';
 
 /**
- * Other Section
- * Ratings Subsection
+ * Plugin Config
+ */
+
+$L['cfg_enable_ratings'] = array('Enable ratings');
+$L['cfg_ratings_allowchange'] = array('Allow ratings to be changed?', 'If enabled it will allow users to change their rating.');
+$L['cfg_css'] = 'Use plugin CSS';
+
+/**
+ * Plugin Admin
  */
 
 $L['adm_ratings_already_del'] = 'Rating removed';
@@ -32,7 +35,7 @@ $L['adm_ratings_totalvotes'] = 'Total votes';
 $L['adm_help_ratings'] = 'To reset a rating, simply delete it. It will be re-created with the first new vote.';
 
 /**
- * Ratings
+ * Plugin Body
  */
 
 $L['rat_choice1'] = 'Very poor';

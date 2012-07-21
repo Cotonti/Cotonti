@@ -12,18 +12,21 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
- * Config Section
- * Ratings Subsection
+ * Plugin Info
  */
-
-$L['cfg_enable_ratings'] = array('Включить рейтинги');
-$L['cfg_ratings_allowchange'] = array('Разрешить изменение рейтинга', 'Разрешить пользователям изменять ранее выставленный рейтинг');
 
 $L['info_desc'] = 'Рейтинги со звездами на базе jQuery, работающие в один клик';
 
 /**
- * Other Section
- * Ratings Subsection
+ * Plugin Config
+ */
+
+$L['cfg_enable_ratings'] = array('Включить рейтинги');
+$L['cfg_ratings_allowchange'] = array('Разрешить изменение рейтинга', 'Разрешить пользователям изменять ранее выставленный рейтинг');
+$L['cfg_css'] = 'Использовать CSS стили плагина';
+
+/**
+ * Plugin Admin
  */
 
 $L['adm_ratings_already_del'] = 'Рейтинг удален';
@@ -32,7 +35,7 @@ $L['adm_ratings_totalvotes'] = 'Всего голосов';
 $L['adm_help_ratings'] = 'Для обнуления рейтинга просто удалите его. Рейтинг будет создан заново при отправке первой оценки.';
 
 /**
- * Ratings
+ * Plugin Body
  */
 
 $L['rat_choice1'] = 'Очень плохо';
