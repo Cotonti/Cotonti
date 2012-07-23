@@ -59,7 +59,17 @@ if ($regenerate)
 
 		// Page categories
 		$auth_cache = array();
-		foreach ($structure['page'] as $c => $cat)
+
+		$category_list = $structure['page'];
+
+		/* === Hook === */
+		foreach (cot_getextplugins('sitemap.page.categorylist') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		foreach ($category_list as $c => $cat)
 		{
 			$auth_cache[$c] = cot_auth('page', $c, 'R');
 			if (!$auth_cache[$c] || $c === 'system') continue;
@@ -80,7 +90,22 @@ if ($regenerate)
 		}
 
 		// Pages
-		$res = $db->query("SELECT page_id, page_alias, page_cat, page_updated FROM $db_pages ORDER BY page_cat, page_id");
+		$sitemap_join_columns = '';
+		$sitemap_join_tables = '';
+		$sitemap_where = array();
+
+		/* === Hook === */
+		foreach (cot_getextplugins('sitemap.page.query') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . join(' AND ', $sitemap_where) : '';
+		$res = $db->query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_updated $sitemap_join_columns
+			FROM $db_pages AS p $sitemap_join_tables
+			$sitemap_where
+			ORDER BY p.page_cat, p.page_id");
 		foreach ($res->fetchAll() as $row)
 		{
 			if (!$auth_cache[$row['page_cat']]) continue;
@@ -111,7 +136,17 @@ if ($regenerate)
 		// Forums categories
 		$auth_cache = array();
 		$maxrowsperpage = $cfg['forums']['maxtopicsperpage'];
-		foreach ($structure['forums'] as $c => $cat)
+
+		$category_list = $structure['forums'];
+
+		/* === Hook === */
+		foreach (cot_getextplugins('sitemap.forums.categorylist') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		foreach ($category_list as $c => $cat)
 		{
 			$auth_cache[$c] = cot_auth('forums', $c, 'R');
 			if (!$auth_cache[$c] || substr_count($cat['path'], '.') == 0) continue;
@@ -133,8 +168,23 @@ if ($regenerate)
 		}
 
 		// Topics
-		$res = $db->query("SELECT t.ft_id, t.ft_cat, t.ft_updated, t.ft_postcount FROM $db_forum_topics t
-			LEFT JOIN $db_structure s ON (s.structure_area = 'forums' AND t.ft_cat = s.structure_code) ORDER BY t.ft_cat");
+		$sitemap_join_columns = '';
+		$sitemap_join_tables = '';
+		$sitemap_where = array();
+
+		/* === Hook === */
+		foreach (cot_getextplugins('sitemap.forums.query') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . join(' AND ', $sitemap_where) : '';
+		$res = $db->query("SELECT t.ft_id, t.ft_cat, t.ft_updated, t.ft_postcount $sitemap_join_columns
+			FROM $db_forum_topics t $sitemap_join_tables
+				LEFT JOIN $db_structure s ON (s.structure_area = 'forums' AND t.ft_cat = s.structure_code)
+			$sitemap_where
+			ORDER BY t.ft_cat");
 		$maxrowsperpage = $cfg['forums']['maxpostsperpage'];
 		foreach ($res->fetchAll() as $row)
 		{
@@ -166,7 +216,22 @@ if ($regenerate)
 		require_once cot_incfile('users', 'module');
 
 		// User profiles
-		$res = $db->query("SELECT user_id, user_name FROM $db_users ORDER BY user_id");
+		$sitemap_join_columns = '';
+		$sitemap_join_tables = '';
+		$sitemap_where = array();
+
+		/* === Hook === */
+		foreach (cot_getextplugins('sitemap.users.query') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . join(' AND ', $sitemap_where) : '';
+		$res = $db->query("SELECT u.user_id, u.user_name $sitemap_join_columns
+			FROM $db_users AS u $sitemap_join_tables
+			$sitemap_where
+			ORDER BY user_id");
 		foreach ($res->fetchAll() as $row)
 		{
 			sitemap_parse($t, $items, array(
