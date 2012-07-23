@@ -91,6 +91,7 @@ if($a == 'update')
 			$ruserpass['user_password'] = cot_hash($rnewpass1, $ruserpass['user_passsalt'], $ruserpass['user_passfunc']);
 			$db->update($db_users, $ruserpass, "user_id='".$usr['id']."'");
 			unset($ruserpass);
+			cot_message('Updated');
 		}
 	}
 	if (!empty($ruseremail) && (!empty($rmailpass) || $cfg['users']['user_email_noprotection']) && $cfg['users']['useremailchange'] && $ruseremail != $urr['user_email'])
