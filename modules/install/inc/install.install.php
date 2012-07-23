@@ -20,10 +20,11 @@ cot_sendheaders();
 $mskin = cot_tplfile('install.install');
 $t = new XTemplate($mskin);
 
-$site_url = (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false ? 'http://' : 'https://')
+$site_url = (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false && $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 443 && $_SERVER['HTTP_X_FORWARDED_PORT'] !== 443 ? 'http://' : 'https://')
 	. $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);
 $site_url = str_replace('\\', '/', $site_url);
 $site_url = preg_replace('#/$#', '', $site_url);
+$sys['abs_url'] = $site_url . '/';
 define('COT_ABSOLUTE_URL', $site_url . '/');
 
 if ($step > 2)

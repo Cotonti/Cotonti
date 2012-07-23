@@ -67,7 +67,7 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 	error_reporting(E_ALL ^ E_NOTICE);
 
 	session_start();
-	
+
 	// Getting the server-relative path
 	$url = parse_url($cfg['mainurl']);
 	$sys['secure'] = $url['scheme'] == 'https' ? true : false;
@@ -88,7 +88,7 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 			$lang = 'en';
 		}
 	}
-	
+
 	else
 	{
 		$lang = $_SESSION['cot_inst_lang'];

@@ -153,7 +153,7 @@ $sys['unique'] = cot_unique(16);
 
 // Getting the server-relative path
 $url = parse_url($cfg['mainurl']);
-$sys['scheme'] = strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === 0 ? 'https' : 'http';
+$sys['scheme'] = strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false && $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 443 && $_SERVER['HTTP_X_FORWARDED_PORT'] !== 443 ? 'http' : 'https';
 $sys['secure'] = $url['scheme'] == 'https' ? true : false;
 $sys['site_uri'] = $url['path'];
 if ($_SERVER['HTTP_HOST'] == $url['host']
