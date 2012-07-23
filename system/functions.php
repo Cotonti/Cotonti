@@ -4651,14 +4651,13 @@ function cot_check_xp()
 function cot_hash($data, $salt = '', $algo = 'sha256')
 {
 	global $cfg, $cot_hash_funcs;
-	$data .= $salt;
 	if (isset($cfg['hashsalt']) && !empty($cfg['hashsalt']))
 	{
 		// Extra salt for extremely secure sites
-		$data .= $cfg['hashsalt'];
+		$salt .= $cfg['hashsalt'];
 	}
 	$func = (in_array($algo, $cot_hash_funcs) && function_exists('cot_hash_' . $algo)) ? 'cot_hash_' . $algo : 'cot_hash_sha256';
-	return $func($data);
+	return $func($data, $salt);
 }
 
 /**
@@ -4677,33 +4676,36 @@ function cot_hash_funcs()
  * Simple MD5 hash wrapper. Old passwords use this func.
  *
  * @param  string $data Data to be hashed
+ * @param  string $salt Hashing salt, usually a random value
  * @return string       MD5 hash of the data
  */
-function cot_hash_md5($data)
+function cot_hash_md5($data, $salt)
 {
-	return md5($data);
+	return md5($data . $salt);
 }
 
 /**
  * SHA1 hash func for use with cot_hash().
  *
  * @param  string $data Data to be hashed
+ * @param  string $salt Hashing salt, usually a random value
  * @return string       SHA1 hash of the data
  */
-function cot_hash_sha1($data)
+function cot_hash_sha1($data, $salt)
 {
-	return hash('sha1', $data);
+	return hash('sha1', $data . $salt);
 }
 
 /**
  * SHA256 hash func for use with cot_hash(). Default since Cotonti 0.9.11.
  *
  * @param  string $data Data to be hashed
+ * @param  string $salt Hashing salt, usually a random value
  * @return string       SHA256 hash of the data
  */
-function cot_hash_sha256($data)
+function cot_hash_sha256($data, $salt)
 {
-	return hash('sha256', $data);
+	return hash('sha256', $data . $salt);
 }
 
 /**
