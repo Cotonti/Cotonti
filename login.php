@@ -98,17 +98,17 @@ if ($a == 'check')
 		$rremember = true;
 	}
 
+	$login_param = cot_check_email($rusername) ?
+		'user_email' : 'user_name';
+
 	// Load salt and algo from db
-	$sql = $db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE user_name = ?", array($rusername));
+	$sql = $db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE $login_param=".$db->quote($rusername));
 	if ($sql->rowCount() == 1)
 	{
 		$hash_params = $sql->fetch();
 		$rmdpass = cot_hash($rpassword, $hash_params['user_passsalt'], $hash_params['user_passfunc']);
 		unset($hash_params);
 	}
-
-	$login_param = cot_check_email($rusername) ?
-		'user_email' : 'user_name';
 
 	/**
 	 * Sets user selection criteria for authentication. Override this string in your plugin
