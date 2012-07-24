@@ -91,7 +91,12 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 
 		$validationkey = md5(microtime());
 		$newpass = cot_randomstring();
-		$sql = $db->update($db_users, array('user_password' => md5($newpass), 'user_lostpass' => $validationkey), "user_id=$ruserid");
+		$ruserpass = array();
+		$ruserpass['user_passsalt'] = cot_unique(16);
+		$ruserpass['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
+		$ruserpass['user_password'] = cot_hash($newpass, $ruserpass['user_passsalt'], $ruserpass['user_passfunc']);
+		$ruserpass['user_lostpass'] = $validationkey;
+		$sql = $db->update($db_users, $ruserpass, "user_id=$ruserid");
 
 		$rsubject = $L['pasrec_title'];
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['pasrec_email2']."\n\n".$newpass."\n\n".$L['aut_contactadmin'];
