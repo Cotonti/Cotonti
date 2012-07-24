@@ -18,7 +18,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($usr['id'] > 0)
 {
-	$db->delete($db_online, "online_ip='{$usr['ip']}'");
+	$db->delete($db_online, "online_userid='{$usr['id']}'");
 }
 
 ?>

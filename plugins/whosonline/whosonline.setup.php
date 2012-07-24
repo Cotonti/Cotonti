@@ -16,6 +16,10 @@ Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
 [END_COT_EXT]
+
+[BEGIN_COT_EXT_CONFIG]
+disable_guests=01:radio::0:Disable guest tracking
+[END_COT_EXT_CONFIG]
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');

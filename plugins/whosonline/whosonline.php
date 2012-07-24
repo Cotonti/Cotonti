@@ -78,38 +78,40 @@ foreach ($sql_users->fetchAll() as $row)
 }
 $sql_users->closeCursor();
 
-$sql_guests = $db->query("
-	SELECT online_ip, online_lastseen, online_location, online_subloc
-	FROM $db_online
-	WHERE online_userid = -1
-	ORDER BY online_lastseen DESC
-");
-
-/* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('whosonline.guests.loop');
-/* ===== */
-foreach ($sql_guests->fetchAll() as $row)
+if(!$cfg['plugin']['whosonline']['disable_guest'])
 {
-	$count_guests++;
-	$url_ipsearch = cot_url('admin', 'm=other&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg());
-	$t->assign(array(
-		'GUEST_LOCATION' => htmlspecialchars($row['online_location']),
-		'GUEST_SUBLOCATION' => htmlspecialchars($row['online_subloc']),
-		'GUEST_IP' => $ipsearch ? cot_rc_link($url_ipsearch, $row['online_ip']) : $row['online_ip'],
-		'GUEST_IP_URL' => $ipsearch ? $url_ipsearch : '',
-		'GUEST_NUMBER' => $count_guests,
-		'GUEST_LASTSEEN' => cot_build_timegap($row['online_lastseen'], $sys['now'])
-	));
-	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
-		include $pl;
-	}
+	$sql_guests = $db->query("
+		SELECT online_ip, online_lastseen, online_location, online_subloc
+		FROM $db_online
+		WHERE online_userid = -1
+		ORDER BY online_lastseen DESC
+	");
+	
+	/* === Hook - Part1 : Set === */
+	$extp = cot_getextplugins('whosonline.guests.loop');
 	/* ===== */
-	$t->parse('MAIN.GUESTS');
+	foreach ($sql_guests->fetchAll() as $row)
+	{
+		$count_guests++;
+		$url_ipsearch = cot_url('admin', 'm=other&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg());
+		$t->assign(array(
+			'GUEST_LOCATION' => htmlspecialchars($row['online_location']),
+			'GUEST_SUBLOCATION' => htmlspecialchars($row['online_subloc']),
+			'GUEST_IP' => $ipsearch ? cot_rc_link($url_ipsearch, $row['online_ip']) : $row['online_ip'],
+			'GUEST_IP_URL' => $ipsearch ? $url_ipsearch : '',
+			'GUEST_NUMBER' => $count_guests,
+			'GUEST_LASTSEEN' => cot_build_timegap($row['online_lastseen'], $sys['now'])
+		));
+		/* === Hook - Part2 : Include === */
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+		$t->parse('MAIN.GUESTS');
+	}
+	$sql_guests->closeCursor();
 }
-$sql_guests->closeCursor();
-
 $t->assign(array(
 	'STAT_MAXUSERS' => $maxusers,
 	'STAT_COUNT_USERS' => $count_users,

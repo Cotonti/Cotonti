@@ -11,6 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+$L['cfg_disable_guests'] = array('Disable guest tracking', '');
 $L['info_desc'] = 'Outputs online visitors on index and standalone page with user activity tracking on site';
 
 /**
