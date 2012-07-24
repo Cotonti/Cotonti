@@ -22,10 +22,10 @@ if(empty($qs)) $qs = cot_import('t', 'P', 'TXT');
 $qs = str_replace('-', ' ', $qs);
 
 $tl = cot_import('tl', 'G', 'BOL');
-if ($tl) 
-{ 
-	include_once cot_langfile('translit', 'core'); 
-	$qs = strtr($qs, $cot_translitb); 
+if ($tl)
+{
+	include_once cot_langfile('translit', 'core');
+	$qs = strtr($qs, $cot_translitb);
 }
 
 list($pg, $d, $durl) = cot_import_pagenav('d',  $cfg['maxrowsperpage']);
@@ -49,6 +49,10 @@ if (cot_module_active('forums'))
 
 // Sorting order
 $o = cot_import('order', 'P', 'ALP');
+if (empty($o))
+{
+	$o = mb_strtolower($cfg['plugin']['tags']['sort']);
+}
 $tag_order = '';
 $tag_orders = array('Title', 'Date', 'Category');
 foreach ($tag_orders as $order)
@@ -148,7 +152,7 @@ function cot_tag_search_pages($query)
 	{
 		return;
 	}
-	
+
 	$query = cot_tag_parse_query($query, 'p.page_id');
 	if (empty($query))
 	{
@@ -173,7 +177,7 @@ function cot_tag_search_pages($query)
 		default:
 			$order = '';
 	}
-	
+
 	/* == Hook == */
 	foreach (cot_getextplugins('tags.search.pages.query') as $pl)
 	{
@@ -208,7 +212,7 @@ function cot_tag_search_pages($query)
 				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)), htmlspecialchars($tag_t));
 				$tag_i++;
 			}
-			
+
 			$t->assign(cot_generate_pagetags($row, 'TAGS_RESULT_ROW_', $cfg['page']['truncatetext']));
 			$t->assign(array(
 				//'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']),
@@ -263,7 +267,7 @@ function cot_tag_search_forums($query)
 	{
 		return;
 	}
-	
+
 	$query = cot_tag_parse_query($query, 't.ft_id');
 	if (empty($query))
 	{
