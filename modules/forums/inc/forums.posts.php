@@ -204,6 +204,22 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 		array($p, $q, $s))->fetch();
 	is_array($row) || cot_die();
 
+	// If the post is first in the topic, then delete entire topic or show an error
+	$first_id = $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = ? LIMIT 1", array($q))->fetchColumn();
+	if ($p == $first_id)
+	{
+		if ($usr['isadmin'])
+		{
+			// Redirect to topic removal confirmation
+			cot_redirect(str_replace('&amp;', '&', cot_confirm_url(cot_url('forums', 'm=topics&a=delete&s='.$s.'&q='.$q.'&x='.$sys['xk'], '', true), 'forums', 'forums_confirm_delete_topic')));
+		}
+		else
+		{
+			// Users can't delete topics
+			cot_die();
+		}
+	}
+
 	foreach($cot_extrafields[$db_forum_posts] as $exfld)
 	{
 		cot_extrafield_unlinkfiles($row['fp_'.$exfld['field_name']], $exfld);
@@ -372,7 +388,7 @@ foreach ($sql_forums->fetchAll() as $row)
 	$rowedit_url = (($usr['isadmin'] || $row['fp_posterid'] == $usr['id']) && $usr['id'] > 0) ? cot_url('forums', 'm=editpost&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&' . cot_xg()) : '';
 	$rowedit = (($usr['isadmin'] || $row['fp_posterid'] == $usr['id']) && $usr['id'] > 0) ? cot_rc('forums_rowedit', array('url' => $rowedit_url)) : '';
 	$rowdelete_url = ($usr['id'] > 0 && ($usr['isadmin'] || $row['fp_posterid'] == $usr['id'])) ? cot_confirm_url(cot_url('forums', 'm=posts&a=delete&' . cot_xg() . '&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id']), 'forums', 'forums_confirm_delete_post') : '';
-	$rowdelete = ($usr['id'] > 0 && ($usr['isadmin'] || $row['fp_posterid'] == $usr['id'])) ? cot_rc('forums_rowdelete', array('url' => $rowdelete_url)) : '';
+	$rowdelete = ($usr['id'] > 0 && ($usr['isadmin'] || $row['fp_posterid'] == $usr['id'] && $fp_num > 1)) ? cot_rc('forums_rowdelete', array('url' => $rowdelete_url)) : '';
 
 	if (!empty($row['fp_updater']))
 	{
