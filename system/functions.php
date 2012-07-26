@@ -227,10 +227,7 @@ function cot_getextplugins($hook, $cond='R')
  */
 function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $buffer = false)
 {
-	global $cot_import_filters;
-	static $_PUT = null;
-	static $_PATCH = null;
-	static $_DELETE = null;
+	global $cot_import_filters, $_PUT, $_PATCH, $_DELETE;
 
 	if ($_SERVER['REQUEST_METHOD'] == 'PUT' && is_null($_PUT))
 	{
