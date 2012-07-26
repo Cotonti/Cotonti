@@ -32,7 +32,7 @@
 					<!-- END: GUESTS -->
 				</tbody>
 			</table>
-			<p><strong>{PHP.L.NowOnline}:</strong> {STAT_COUNT_USERS} {USERS}, {STAT_COUNT_GUESTS} {GUESTS}</p>
+			<p><strong>{PHP.L.NowOnline}:</strong> {STAT_COUNT_USERS} {USERS}<!-- IF !{PHP.cfg.plugin.whosonline.disable_guests} -->, {STAT_COUNT_GUESTS} {GUESTS}<!-- ENDIF --></p>
 			<!-- IF {STAT_MAXUSERS} --><p><strong>{PHP.L.MostOnline}:</strong> {STAT_MAXUSERS}</p><!-- ENDIF -->
 		</div>
 
