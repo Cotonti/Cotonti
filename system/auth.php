@@ -85,7 +85,7 @@ function cot_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
  *
  * cot_auth_add_item('test', 'item123', $auth_permit, $auth_lock);
  * </code>
- * 
+ *
  * @param string $module_name The module object belongs to
  * @param string $item_id Object identifier within the module
  * @param array $auth_permit Allowed permissions map
@@ -138,7 +138,7 @@ function cot_auth_clear($id = 'all')
 	}
 	else
 	{
-		$db->update($db_users, array('user_auth' => ''));
+		$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
 		$cache && $cache->db->remove('cot_guest_auth', 'system');
 	}
 	return $db->affectedRows;
@@ -146,10 +146,10 @@ function cot_auth_clear($id = 'all')
 
 /**
  * Returns highest level of all groups a user belongs to.
- * 
+ *
  * @param int $userid User ID
  * @param bool $maingroup Return level of maingroup
- * @return int 
+ * @return int
  */
 function cot_auth_getlevel($userid, $maingroup = false)
 {
@@ -166,7 +166,7 @@ function cot_auth_getlevel($userid, $maingroup = false)
 	else
 	{
 		return (int)$db->query("
-			SELECT MAX(grp_level) FROM $db_groups 
+			SELECT MAX(grp_level) FROM $db_groups
 			WHERE grp_id IN (
 				SELECT gru_groupid
 				FROM $db_groups_users

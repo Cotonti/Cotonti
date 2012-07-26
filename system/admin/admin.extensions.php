@@ -101,7 +101,7 @@ switch($a)
 		}
 		if (!empty($b))
 		{
-			$db->update($db_users, array('user_auth' => ''));
+			$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
 			if ($cache)
 			{
 				$cache->clear();

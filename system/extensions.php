@@ -36,7 +36,7 @@ $cot_ext_ignore_parts = array('configure', 'install', 'setup', 'uninstall');
 /**
  * Applies custom SQL and PHP patches in a directory. Error and success
  * messages are emitted via standard messaging API during execution.
- * 
+ *
  * @param string $directory Directory path
  * @param string $from_ver Current version, to patch starting from
  * @param string $sql_pattern SQL patch file name pattern (PCRE)
@@ -195,7 +195,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x, $env;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
-	
+
 	// Emit initial message
 	if ($update)
 	{
@@ -470,7 +470,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		}
 		if ($db->insert($db_auth, $insert_rows))
 		{
-			$db->update($db_users, array('user_auth' => ''));
+			$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
 			cot_message('ext_auth_installed');
 		}
 	}
@@ -518,13 +518,13 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 			// Run PHP install handler
 			$envtmp = $env;
 			$env = array(
-				'ext' => $name, 
+				'ext' => $name,
 				'location' => $name,
 				'type' => ($is_module) ? 'module' : 'plug'
 			);
 			$ret = include $install_handler;
 			$env = $envtmp;
-			
+
 			if ($ret !== false)
 			{
 				$msg = $ret == 1 ? 'OK' : $ret;
@@ -574,7 +574,7 @@ function cot_extension_uninstall($name, $is_module = false)
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
 		. "/$name";
-	
+
 	// Emit initial message
 	cot_message(cot_rc('ext_uninstalling', array(
 		'type' => $is_module ? $L['Module'] : $L['Plugin'],
@@ -631,13 +631,13 @@ function cot_extension_uninstall($name, $is_module = false)
     {
         $envtmp = $env;
 		$env = array(
-			'ext' => $name, 
+			'ext' => $name,
 			'location' => $name,
 			'type' => ($is_module) ? 'module' : 'plug'
 		);
         $ret = include $uninstall_handler;
 		$env = $envtmp;
-		
+
         if ($ret !== false)
         {
             cot_message(cot_rc('ext_executed_php', array('ret' => $ret)));
@@ -662,7 +662,7 @@ function cot_extension_uninstall($name, $is_module = false)
 		}
         $sql->closeCursor();
 	}
-	
+
 	$cot_plugins_active[$name] = false;
 	if (!$is_module)
 	{
@@ -673,7 +673,7 @@ function cot_extension_uninstall($name, $is_module = false)
 		unset($cot_modules[$name]);
 	}
 	// Clear cache
-	$db->update($db_users, array('user_auth' => ''));
+	$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
 	$cache && $cache->clear();
 }
 
@@ -785,10 +785,10 @@ function cot_extension_add($name, $title, $version = '1.0.0', $is_plug = false)
 /**
  * Compares 2 extension info entries by category code.
  * post-install extensions are always last.
- * 
+ *
  * @param array $ext1 Ext info 1
  * @param array $ext2 Ext info 2
- * @return int 
+ * @return int
  */
 function cot_extension_catcmp($ext1, $ext2)
 {
@@ -829,14 +829,14 @@ function cot_extension_catcmp($ext1, $ext2)
 function cot_extension_installed($name)
 {
     global $db, $db_core, $cfg;
-	
+
     $cnt = $db->query("SELECT COUNT(*) FROM $db_core WHERE ct_code = '$name'")->fetchColumn();
     return $cnt > 0;
 }
 
 /**
  * Returns an array containing meta information for all extensions in a directory
- * 
+ *
  * @param string $dir Directory to search for extensions in
  * @return array Extension code => info array
  */
