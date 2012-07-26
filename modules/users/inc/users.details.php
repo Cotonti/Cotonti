@@ -63,12 +63,12 @@ require_once $cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($mskin);
 
+$t->assign(cot_generate_usertags($urr, 'USERS_DETAILS_', '', true));
+
 $t->assign(array(
-	'USERS_DETAILS_TITLE' => cot_breadcrumbs(array(array(cot_url('users'), $L['Users']), array(cot_url('users', 'm=details&id='.$urr['user_id']), $urr['user_name'])), $cfg['homebreadcrumb']),
+	'USERS_DETAILS_TITLE' => cot_breadcrumbs(array(array(cot_url('users'), $L['Users']), array(cot_url('users', 'm=details&id='.$urr['user_id'].'&u='.$urr['user_name']), $urr['user_name'])), $cfg['homebreadcrumb']),
 	'USERS_DETAILS_SUBTITLE' => $L['use_subtitle'],
 ));
-
-$t->assign(cot_generate_usertags($urr, 'USERS_DETAILS_', '', true));
 
 /* === Hook === */
 foreach (cot_getextplugins('users.details.tags') as $pl)

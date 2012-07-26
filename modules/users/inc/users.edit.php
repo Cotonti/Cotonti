@@ -31,11 +31,11 @@ foreach (cot_getextplugins('users.edit.first') as $pl)
 }
 /* ===== */
 
-$sql = $db->query("SELECT user_name, user_password, user_maingrp, user_email  FROM $db_users WHERE user_id=$id LIMIT 1");
+$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $id");
 cot_die($sql->rowCount()==0);
 $urr = $sql->fetch();
 
-$sql1 = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$id and gru_groupid='".COT_GROUP_SUPERADMINS."'");
+$sql1 = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$id and gru_groupid=".COT_GROUP_SUPERADMINS);
 $sys['edited_istopadmin'] = ($sql1->rowCount()>0) ? TRUE : FALSE;
 $sys['user_istopadmin'] = cot_auth('admin', 'a', 'A');
 $sys['protecttopadmin'] = $sys['edited_istopadmin'] && !$sys['user_istopadmin'];
@@ -45,11 +45,9 @@ if ($sys['protecttopadmin'])
 	cot_die_message(930, TRUE);
 }
 
-if ($a=='update')
+if ($a == 'update')
 {
 	cot_check_xg();
-
-	$row1 = $db->query("SELECT * FROM $db_users WHERE user_id=$id")->fetch();
 
 	/* === Hook === */
 	foreach (cot_getextplugins('users.edit.update.first') as $pl)
@@ -67,7 +65,7 @@ if ($a=='update')
 
 		foreach($cot_extrafields[$db_users] as $exfld)
 		{
-			cot_extrafield_unlinkfiles($row1['user_'.$exfld['field_name']], $exfld);
+			cot_extrafield_unlinkfiles($urr['user_'.$exfld['field_name']], $exfld);
 		}
 
 		if (cot_module_active('pfs') && cot_import('ruserdelpfs','P','BOL'))
@@ -114,7 +112,7 @@ if ($a=='update')
 	// Extra fields
 	foreach($cot_extrafields[$db_users] as $exfld)
 	{
-		$ruser['user_'.$exfld['field_name']] = cot_import_extrafields('ruser'.$exfld['field_name'], $exfld, 'P', $row1['user_'.$exfld['field_name']]);
+		$ruser['user_'.$exfld['field_name']] = cot_import_extrafields('ruser'.$exfld['field_name'], $exfld, 'P', $urr['user_'.$exfld['field_name']]);
 	}
 
 	$rusergroupsms = cot_import('rusergroupsms', 'P', 'ARR');
@@ -122,6 +120,18 @@ if ($a=='update')
 	if (mb_strlen($ruser['user_name']) < 2 || mb_strpos($ruser['user_name'], ',') !== false || mb_strpos($ruser['user_name'], "'") !== false)
 	{
 		cot_error('aut_usernametooshort', 'rusername');
+	}
+	if ($ruser['user_name'] != $urr['user_name'] && $db->query("SELECT COUNT(*) FROM $db_users WHERE user_name = ?", array($ruser['user_name']))->fetchColumn() > 0)
+	{
+		cot_error('aut_usernamealreadyindb', 'rusername');
+	}
+	if (!cot_check_email($ruser['user_email']))
+	{
+		cot_error('aut_emailtooshort', 'ruseremail');
+	}
+	if ($ruser['user_email'] != $urr['user_email'] && $db->query("SELECT COUNT(*) FROM $db_users WHERE user_email = ?", array($ruser['user_email']))->fetchColumn() > 0)
+	{
+		cot_error('aut_emailalreadyindb', 'ruseremail');
 	}
 	if (!empty($rusernewpass) && (mb_strlen($rusernewpass) < 4 || cot_alphaonly($rusernewpass) != $rusernewpass))
 	{
@@ -278,7 +288,7 @@ $editor_class = $cfg['usertextimg'] ? 'minieditor' : '';
 $delete_pfs = cot_module_active('pfs') ? cot_checkbox(false, 'ruserdelpfs', $L['PFS']) : '';
 
 $t->assign(array(
-	'USERS_EDIT_TITLE' => cot_breadcrumbs(array(array(cot_url('users'), $L['Users']), array(cot_url('users', 'm=details&id='.$urr['user_id']), $urr['user_name']), array(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit'])), $cfg['homebreadcrumb']),
+	'USERS_EDIT_TITLE' => cot_breadcrumbs(array(array(cot_url('users'), $L['Users']), array(cot_url('users', 'm=details&id='.$urr['user_id'].'&u='.$urr['user_name']), $urr['user_name']), array(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit'])), $cfg['homebreadcrumb']),
 	'USERS_EDIT_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
 	'USERS_EDIT_EDITLINK' => cot_url('users', 'm=edit&id='.$urr['user_id']),
 	'USERS_EDIT_SUBTITLE' => $L['useed_subtitle'],
