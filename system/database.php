@@ -150,7 +150,7 @@ class CotDB extends PDO {
 
 	/**
 	 * Prepares a parametrized query on client side
-	 * 
+	 *
 	 * @param string $query Query being prepared
 	 * @param array $parameters Associative or numeric array of parameters
 	 * @return string Array with placeholders substituted
@@ -223,6 +223,10 @@ class CotDB extends PDO {
 	public function delete($table_name, $condition = '', $parameters = array())
 	{
 		$query = empty($condition) ? "DELETE FROM `$table_name`" : "DELETE FROM `$table_name` WHERE $condition";
+		if (!is_array($parameters))
+		{
+			$parameters = array($parameters);
+		}
 		$this->_startTimer();
 		try
 		{
@@ -255,10 +259,10 @@ class CotDB extends PDO {
 		$this->_stopTimer($query);
 		return $res;
 	}
-	
+
 	/**
 	 * Checks if a field exists in a table
-	 * 
+	 *
 	 * @param string $table_name Table name
 	 * @param string $field_name Field name
 	 * @return bool TRUE if the field exists, FALSE otherwise
@@ -421,6 +425,10 @@ class CotDB extends PDO {
 	 */
 	public function query($query, $parameters = array())
 	{
+		if (!is_array($parameters))
+		{
+			$parameters = array($parameters);
+		}
 		$this->_startTimer();
 		try
 		{
@@ -478,6 +486,10 @@ class CotDB extends PDO {
 			return 0;
 		}
 		$upd = '';
+		if (!is_array($parameters))
+		{
+			$parameters = array($parameters);
+		}
 		if ($this->_prepare_itself && !empty($condition) && count($parameters) > 0)
 		{
 			$condition = $this->_prepare($condition, $parameters);
