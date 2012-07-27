@@ -30,14 +30,36 @@ foreach (cot_getextplugins('admin.cache.disk.first') as $pl)
 
 if ($a == 'purge')
 {
-	cot_check_xg() && cot_diskcache_clearall() ? cot_message('adm_purgeall_done') : cot_message('Error');
+	if (cot_check_xg() && cot_diskcache_clearall())
+	{
+		cot_message('adm_purgeall_done');
+		// Empty resource consolidation cache
+		$db->delete($db_cache, "c_name = 'cot_rc_html'");
+		cot_rc_consolidate();
+	}
+	else
+	{
+		cot_message('Error');
+	}
 }
 elseif ($a == 'delete')
 {
 	$is_id = mb_strpos($id, '/') === false && mb_strpos($id, '\\') === false && $id != '.' && $id != '..';
 	$is_onlyf = $id == COT_DISKCACHE_ONLYFILES;
-	(cot_check_xg() && $is_id && cot_diskcache_clear($cfg['cache_dir'] . ($is_onlyf ? '' : "/$id"), !$is_onlyf))
-		? cot_message('adm_delcacheitem') : cot_message('Error');
+	if (cot_check_xg() && $is_id && cot_diskcache_clear($cfg['cache_dir'] . ($is_onlyf ? '' : "/$id"), !$is_onlyf))
+	{
+		cot_message('adm_delcacheitem');
+		if ($id == 'static' || $is_onlyf)
+		{
+			// Empty resource consolidation cache
+			$db->delete($db_cache, "c_name = 'cot_rc_html'");
+			cot_rc_consolidate();
+		}
+	}
+	else
+	{
+		cot_message('Error');
+	}
 }
 
 $row = cot_diskcache_list();
