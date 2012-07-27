@@ -10,6 +10,8 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+require_once cot_langfile('whosonline', 'plug');
+
 global $db_online, $db_x;
 $db_online = (isset($db_online)) ? $db_online : $db_x . 'online';
 
