@@ -34,7 +34,7 @@ if (defined('COT_ADMIN'))
 }
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('message', 'a');
-cot_block($usr['auth_read']);
+//cot_block($usr['auth_read']);
 
 $msg = cot_import('msg', 'G', 'INT');
 $num = cot_import('num', 'G', 'INT');
@@ -223,7 +223,7 @@ $t->assign('MESSAGE_BODY', $body);
 if ($msg == '920')
 {
 	$confirm_no_url = preg_match("/^.+".preg_quote($sys['domain']."/"), $_SERVER['HTTP_REFERER']) ? str_replace('&', '&amp;', $_SERVER['HTTP_REFERER']) : cot_url('index');
-	
+
 	if (preg_match('#[ "\':]#', base64_decode($redirect)))
 	{
 		$redirect = '';
