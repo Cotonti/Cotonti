@@ -41,6 +41,7 @@ $L['cfg_more'] = array('Show &quot;All tags&quot; link in tag clouds');
 $L['cfg_order'] = array('Cloud output order &mdash; alphabetical, descending frequency or random');
 $L['cfg_pages'] = array('Enable tags in pages');
 $L['cfg_perpage'] = array('Tags displayed per page in standalone cloud, 0 is all at once');
+$L['cfg_sort'] = array('Default sorting column for tag search results');
 $L['cfg_title'] = array('Capitalize first letters of keywords');
 $L['cfg_translit'] = array('Transliterate tags in URLs');
 

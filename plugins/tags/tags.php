@@ -39,6 +39,10 @@ $tag_areas = array('pages', 'forums');
 
 // Sorting order
 $o = sed_import('order', 'P', 'ALP');
+if (empty($o))
+{
+	$o = mb_strtolower($cfg['plugin']['tags']['sort']);
+}
 $tag_order = '';
 $tag_orders = array('Title', 'Date', 'Category');
 foreach ($tag_orders as $order)
