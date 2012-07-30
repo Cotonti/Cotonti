@@ -82,6 +82,7 @@ $L['cfg_cookiepath'] = array('Путь для cookies', 'По умолчанию
 $L['cfg_devmode'] = array('Режим отладки', 'Только для отладки под localhost');
 $L['cfg_disablehitstats'] = array('Отключить статистику', 'Рефереры и хиты за день');
 $L['cfg_gzip'] = array('Gzip', 'Gzip-сжатие для исходящего HTML-кода');
+$L['cfg_hashfunc'] = array('Функция хеширования по умолчанию', 'Используется для хеширования паролей');
 $L['cfg_hostip'] = array('IP-адрес сервера', 'Необязательно');
 $L['cfg_jquery'] = array('Включить jQuery', ' ');	// New in N-0.0.1
 $L['cfg_maintenance'] = array('Режим обслуживания', 'Доступа к сайту разрешен только администраторам'); // New in N-0.0.2

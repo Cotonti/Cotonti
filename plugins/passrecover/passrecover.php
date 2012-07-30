@@ -116,7 +116,12 @@ elseif($a == 'auth' && mb_strlen($v) == 32)
 
 		$validationkey = md5(microtime());
 		$newpass = sed_randompass();
-		$sql = sed_sql_query("UPDATE $db_users SET user_password='".md5($newpass)."', user_lostpass='$validationkey' WHERE user_id='$ruserid'");
+		$ruserpass = array();
+		$ruserpass['user_passsalt'] = sed_unique(16);
+		$ruserpass['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
+		$ruserpass['user_password'] = sed_hash($newpass, $ruserpass['user_passsalt'], $ruserpass['user_passfunc']);
+		$ruserpass['user_lostpass'] = $validationkey;
+		sed_sql_update($db_users, "user_id=$ruserid", $ruserpass);
 
 		$rsubject = $cfg['maintitle']." - ".$L['plu_title'];
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['plu_email2']."\n\n".$newpass. "\n\n".$L['aut_contactadmin'];

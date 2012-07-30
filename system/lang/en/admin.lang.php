@@ -82,6 +82,7 @@ $L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
 $L['cfg_devmode'] = array('Debugging mode', 'Don\'t let this enabled on live sites');
 $L['cfg_disablehitstats'] = array('Disable hit statistics', 'Referers and hits per day');
 $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
+$L['cfg_hashfunc'] = array('Default hash function', 'Used to hash passwords');
 $L['cfg_hostip'] = array('Server IP', 'The IP of the server, optional.');
 $L['cfg_jquery'] = array('Enable jQuery', '');	// New in N-0.0.1
 $L['cfg_maintenance'] = array('Maintenance mode', 'Let only authorized personel access to site');	// New in N-0.0.2

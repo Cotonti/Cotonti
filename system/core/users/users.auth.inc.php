@@ -34,7 +34,7 @@ if ($a=='check')
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT', 100, TRUE);
-	$rpassword = sed_import('rpassword','P','PSW', 16, TRUE);
+	$rpassword = sed_import('rpassword','P','TXT', 16, TRUE);
 	$rcookiettl = sed_import('rcookiettl', 'P', 'INT');
 	$rremember = sed_import('rremember', 'P', 'BOL');
 	if(empty($rremember) && $rcookiettl > 0 || $cfg['forcerememberme'])
@@ -45,6 +45,15 @@ if ($a=='check')
 
 	$login_param = preg_match('#^[\w\p{L}][\.\w\p{L}\-]*@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $rusername) ?
 		'user_email' : 'user_name';
+
+	// Load salt and algo from db
+	$sql = sed_sql_query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE $login_param='".sed_sql_prep($rusername)."'");
+	if (sed_sql_numrows($sql) == 1)
+	{
+		$hash_params = sed_sql_fetchassoc($sql);
+		$rmdpass = sed_hash($rpassword, $hash_params['user_passsalt'], $hash_params['user_passfunc']);
+		unset($hash_params);
+	}
 
 	/**
 	 * Sets user selection criteria for authentication. Override this string in your plugin
@@ -107,6 +116,9 @@ if ($a=='check')
 		}
 
 		sed_sql_query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_logcount = user_logcount + 1, user_token = '$token' $update_sid WHERE user_id={$row['user_id']}");
+
+		// Hash the sid once more so it can't be faked even if you  know user_sid
+		$sid = hash_hmac('sha1', $sid, $cfg['secret_key']);
 
 		$u = base64_encode($ruserid.':'.$sid);
 

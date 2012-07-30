@@ -110,7 +110,7 @@ if ($a=='update')
 		$ruserextrafields[] = $import;
 		$urr['user_'.$row[ 'field_name']] = $import;
 	}
-	
+
 	if ($ruserdelete)
 	{
 		if ($sys['user_istopadmin'] && !$sys['edited_istopadmin'])
@@ -138,7 +138,18 @@ if ($a=='update')
 
 	if (empty($error_string))
 	{
-		$ruserpassword = (mb_strlen($rusernewpass)>0) ? md5($rusernewpass) : $urr['user_password'];
+		if (mb_strlen($rusernewpass) > 0)
+		{
+			$ruser['user_passsalt'] = sed_unique(16);
+			$ruser['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
+			$ruser['user_password'] = sed_hash($rusernewpass, $ruser['user_passsalt'], $ruser['user_passfunc']);
+		}
+		else
+		{
+			$ruser['user_password'] = $urr['user_password'];
+			$ruser['user_passsalt'] = $urr['user_passsalt'];
+			$ruser['user_passfunc'] = $urr['user_passfunc'];
+		}
 
 		if ($rusername=='')
 		{ $rusername = $urr['user_name']; }
@@ -192,7 +203,9 @@ if ($a=='update')
 		$ssql = "UPDATE $db_users SET
 			user_banexpire='$rbanexpire',
 			user_name='".sed_sql_prep($rusername)."',
-			user_password='".sed_sql_prep($ruserpassword)."',
+			user_password='".sed_sql_prep($ruser['user_password'])."',
+			user_passsalt='".sed_sql_prep($ruser['user_passsalt'])."',
+			user_passfunc='".sed_sql_prep($ruser['user_passfunc'])."',
 			user_country='".sed_sql_prep($rusercountry)."',
 			user_text='".sed_sql_prep($rusertext)."',
 			user_avatar='".sed_sql_prep($ruseravatar)."',

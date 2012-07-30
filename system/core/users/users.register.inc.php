@@ -112,7 +112,10 @@ if ($a=='add')
 		else
 		{ $defgroup = ($cfg['regnoactivation']) ? 4 : 2; }
 
-		$mdpass = md5($rpassword1);
+		$ruser['user_passsalt'] = sed_unique(16);
+		$ruser['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
+		$ruser['user_password'] = sed_hash($rpassword1, $ruser['user_passsalt'], $ruser['user_passfunc']);
+
 		if ($rmonth=='x' || $rday=='x' || $ryear=='x' || empty($rmonth) || empty($rday) || empty($ryear))
 		{
 			$ruserbirthdate = '0000-00-00';
@@ -144,6 +147,8 @@ if ($a=='add')
 		$ssql = "INSERT into $db_users
 			(user_name,
 			user_password,
+			user_passsalt,
+			user_passfunc,
 			user_maingrp,
 			user_country,
 			user_location,
@@ -169,7 +174,9 @@ if ($a=='add')
 			user_lastip)
 			VALUES
 			('".sed_sql_prep($rusername)."',
-			'$mdpass',
+			'".sed_sql_prep($ruser['user_password'])."',
+			'".sed_sql_prep($ruser['user_passsalt'])."',
+			'".sed_sql_prep($ruser['user_passfunc'])."',
 			".(int)$defgroup.",
 			'".sed_sql_prep($rcountry)."',
 			'".sed_sql_prep($rlocation)."',
@@ -250,7 +257,7 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
-	
+
 		if ($row['user_maingrp'] == 2)
 		{
 
@@ -307,10 +314,10 @@ $form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear)
 $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 
 $form_timezone = "<select name=\"rtimezone\" size=\"1\">";
-foreach($timezonelist as $x) 
-{ 
-	$f = (float) $x; 
-	$selected = ($f==$rtimezone) ? "selected=\"selected\"" : ''; 
+foreach($timezonelist as $x)
+{
+	$f = (float) $x;
+	$selected = ($f==$rtimezone) ? "selected=\"selected\"" : '';
 	$form_timezone .= "<option value=\"$f\" $selected>GMT ".$x."</option>";
 }
 $form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];

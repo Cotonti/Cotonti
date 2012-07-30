@@ -229,11 +229,12 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 	$u_sid = sed_sql_prep($u[1]);
 	if ($u_id > 0)
 	{
-		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = '$u_sid'");
+		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_id = $u_id");
 
 		if ($row = sed_sql_fetcharray($sql))
 		{
-			if ($row['user_maingrp'] > 3
+			if ($u_sid == hash_hmac('sha1', $row['user_sid'], $cfg['secret_key'])
+				&& $row['user_maingrp'] > 3
 				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip'])
 				&& $row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now_offset'])
 			{

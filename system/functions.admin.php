@@ -261,6 +261,7 @@ function sed_loadconfigmap()
     $result[] = array ('main', '29', 'redirbkonlogout', 3, '0', ''); // N-0.6.1
     $result[] = array ('main', '30', 'jquery', 3, '1', '');
     $result[] = array ('main', '31', 'turnajax', 3, '1', '');
+    $result[] = array ('main', '42', 'hashfunc', 1, 'sha256', '');
     $result[] = array ('parser', '10', 'parser_cache', 3, '1', '');
     $result[] = array ('parser', '10', 'parser_custom', 3, '0', '');
     $result[] = array ('parser', '10', 'parser_disable', 3, '0', '');

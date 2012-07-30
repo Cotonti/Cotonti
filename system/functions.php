@@ -3,7 +3,7 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.6.23
+ * @version 0.6.24
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2011 Cotonti Team
  * @license BSD License
@@ -37,8 +37,8 @@ $sys['starttime'] = $i[1] + $i[0];
 //unset ($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount)
 
 $cfg['svnrevision'] = '$Rev$'; //DO NOT MODIFY this is set by SVN automatically
-$cfg['version'] = '0.6.23';
-$cfg['dbversion'] = '0.6.23';
+$cfg['version'] = '0.6.24';
+$cfg['dbversion'] = '0.6.24';
 
 if($cfg['customfuncs'])
 {
@@ -54,6 +54,11 @@ if (!isset($cfg['dir_perms']))
 {
 	$cfg['dir_perms'] = 0777;
 }
+
+/**
+ * Registry for hash functions
+ */
+$sed_hash_funcs = array('md5', 'sha1', 'sha256');
 
 /**
  * Strips everything but alphanumeric, hyphens and underscores
@@ -1169,7 +1174,7 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data=array(), 
 		isset($L[$rowname.'_'.$row['field_name'].'_title']) ? $t->assign($tpl_tag.'_'.strtoupper($row['field_name']).'_TITLE', $L[$rowname.'_'.$row['field_name'].'_title']) : $t->assign($tpl_tag.'_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
 		$t1 = $tpl_tag.'_'.strtoupper($row['field_name']);
 		$t2 = $row['field_html'];
-		switch($row['field_type']) 
+		switch($row['field_type'])
 		{
 			case "input":
 				$t2 = str_replace('<input ','<input name="'.$importrowname.$row['field_name'].'" ', $t2);
@@ -1206,10 +1211,10 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data=array(), 
 					{
 						$var_text = (!empty($L[$rowname.'_'.$row['field_name'].'_'.$var])) ? $L[$rowname.'_'.$row['field_name'].'_'.$var] : $var;
 						$sel = ($var == $data[$rowname.'_'.$row['field_name']]) ? ' checked="checked"' : '';
-						$buttons .= str_replace('/>', 'value="'.$var.'"'.$sel.' />'.$var_text.'&nbsp;&nbsp;', $t2);	
+						$buttons .= str_replace('/>', 'value="'.$var.'"'.$sel.' />'.$var_text.'&nbsp;&nbsp;', $t2);
 					}
 				$t2 = $buttons;
-			break;		
+			break;
 		}
 		$return_arr[$t1] = $t2;
 	}
@@ -2070,6 +2075,75 @@ function sed_check_xp()
 {
 	return (defined('SED_NO_ANTIXSS') || defined('SED_AUTH')) ?
 		($_SERVER['REQUEST_METHOD'] == 'POST') : isset($_POST['x']);
+}
+
+/**
+ * Hashes a value with given salt and specified hash algo.
+ *
+ * @global array  $sed_hash_func
+ * @param  string $data Data to be hash-protected
+ * @param  string $salt Hashing salt, usually a random value
+ * @param  string $algo Hashing algo name, must be registered in $sed_hash_funcs
+ * @return string       Hashed value
+ */
+function sed_hash($data, $salt = '', $algo = 'sha256')
+{
+	global $cfg, $sed_hash_funcs;
+	if (isset($cfg['hashsalt']) && !empty($cfg['hashsalt']))
+	{
+		// Extra salt for extremely secure sites
+		$salt .= $cfg['hashsalt'];
+	}
+	$func = (in_array($algo, $sed_hash_funcs) && function_exists('sed_hash_' . $algo)) ? 'sed_hash_' . $algo : 'sed_hash_sha256';
+	return $func($data, $salt);
+}
+
+/**
+ * Returns the list of available hash algos for use with configs.
+ *
+ * @global array $sed_hash_func
+ * @return array
+ */
+function sed_hash_funcs()
+{
+	global $sed_hash_funcs;
+	return $sed_hash_funcs;
+}
+
+/**
+ * Simple MD5 hash wrapper. Old passwords use this func.
+ *
+ * @param  string $data Data to be hashed
+ * @param  string $salt Hashing salt, usually a random value
+ * @return string       MD5 hash of the data
+ */
+function sed_hash_md5($data, $salt)
+{
+	return md5($data . $salt);
+}
+
+/**
+ * SHA1 hash func for use with sed_hash().
+ *
+ * @param  string $data Data to be hashed
+ * @param  string $salt Hashing salt, usually a random value
+ * @return string       SHA1 hash of the data
+ */
+function sed_hash_sha1($data, $salt)
+{
+	return hash('sha1', $data . $salt);
+}
+
+/**
+ * SHA256 hash func for use with sed_hash(). Default since Cotonti 0.9.11.
+ *
+ * @param  string $data Data to be hashed
+ * @param  string $salt Hashing salt, usually a random value
+ * @return string       SHA256 hash of the data
+ */
+function sed_hash_sha256($data, $salt)
+{
+	return hash('sha256', $data . $salt);
 }
 
 /**
@@ -4644,7 +4718,7 @@ function sed_load_urltrans()
  * Splits a query string into keys and values array. In comparison with built-in
  * parse_str() function, this doesn't apply addslashes and urldecode to parameters
  * and does not support arrays and complex parameters.
- * 
+ *
  * @param string $str Query string
  * @return array
  */
@@ -5127,7 +5201,7 @@ function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $varia
 	if ($description != $field['field_description'])
 		$extf['description'] = $description;
 	$step1 = sed_sql_update($db_extra_fields, "field_name = '$oldname' AND field_location='$sql_table'", $extf, 'field_') == 1;
-	
+
 	if (!$alter) return $step1;
 
 	switch ($type)
