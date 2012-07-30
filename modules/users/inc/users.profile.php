@@ -89,7 +89,7 @@ if($a == 'update')
 			$ruserpass['user_passsalt'] = cot_unique(16);
 			$ruserpass['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
 			$ruserpass['user_password'] = cot_hash($rnewpass1, $ruserpass['user_passsalt'], $ruserpass['user_passfunc']);
-			$db->update($db_users, $ruserpass, "user_id='".$usr['id']."'");
+			$db->update($db_users, $ruserpass, "user_id={$usr['id']}");
 			unset($ruserpass);
 			cot_message('Updated');
 		}

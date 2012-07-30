@@ -146,10 +146,6 @@ if ($a == 'update')
 			$ruser['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
 			$ruser['user_password'] = cot_hash($rusernewpass, $ruser['user_passsalt'], $ruser['user_passfunc']);
 		}
-		else
-		{
-			$ruser['user_password'] = $urr['user_password'];
-		}
 
 		$ruser['user_name'] = ($ruser['user_name']=='') ? $urr['user_name'] : $ruser['user_name'];
 
