@@ -15,7 +15,7 @@ Auth_guests=R
 Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
-Requires_plugins=hits, whosonline
+Requires_plugins=hits,whosonline
 [END_COT_EXT]
 ==================== */
 
