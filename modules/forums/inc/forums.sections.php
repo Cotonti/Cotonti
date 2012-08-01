@@ -139,7 +139,7 @@ foreach ($fstlvl as $x)
 		$yy = 0;
 		foreach ($nxtlvl[$x] as $y)
 		{
-			if (is_array($nxtlvl[$y]) && $cfg['forums'][$y]['defstate'])
+			if (is_array($nxtlvl[$y]) && $cfg['forums']['cat_' . $y]['defstate'])
 			{
 				$zz = 0;
 				foreach ($nxtlvl[$y] as $z)
@@ -172,7 +172,7 @@ foreach ($fstlvl as $x)
 
 			}
 			$t->assign(array(
-				'FORUMS_SECTIONS_ROW_SUBITEMS' => (is_array($nxtlvl[$y]) && $cfg['forums'][$y]['defstate']) ? 1 : 0,
+				'FORUMS_SECTIONS_ROW_SUBITEMS' => (is_array($nxtlvl[$y]) && $cfg['forums']['cat_' . $y]['defstate']) ? 1 : 0,
 				'FORUMS_SECTIONS_ROW_ACTIVITY' => cot_rc('forums_icon_section_activity', array('secact_num'=>$secact_num)),
 				'FORUMS_SECTIONS_ROW_ACTIVITYVALUE' => $secact_num,
 				'FORUMS_SECTIONS_ROW_VIEWERS' => $cot_sections_vw_cur,
@@ -190,7 +190,7 @@ foreach ($fstlvl as $x)
 	}
 	$xx++;
 
-	$fold = !$cfg['forums'][$x]['defstate'];
+	$fold = !$cfg['forums']['cat_' . $x]['defstate'];
 	if($c)
 	{
 		$fold = (int)($c=='fold' ? true : ($c=='unfold' ? false : ($c==$x ? false : true)));
