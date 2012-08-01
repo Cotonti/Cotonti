@@ -93,7 +93,9 @@ if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE
  */
 header('Content-Type: '.$content_type);
 readfile($src_uri);
-// Gzip compression of CSS and JS files is usually enabled in webserver
+
+// Gzip compression of CSS and JS files is usually enabled in webserver configuration.
+
 // if (@strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') === FALSE)
 // {
 // 	readfile($src_uri);

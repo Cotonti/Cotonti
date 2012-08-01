@@ -34,7 +34,7 @@ cot_block($usr['id'] == 0);
 if ($a=='add')
 {
 	cot_shield_protect();
-	
+
 	$ruser = array();
 
 	/* === Hook for the plugins === */
@@ -82,19 +82,19 @@ if ($a=='add')
 		include $pl;
 	}
 	/* ===== */
-	
+
 	if (!cot_error_found())
 	{
 		$ruser['user_password'] = $rpassword1;
 		$userid = cot_add_user($ruser);
-		
+
 		/* === Hook for the plugins === */
 		foreach (cot_getextplugins('users.register.add.done') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
-		
+
 		if ($cfg['users']['regnoactivation'] || $db->countRows($db_users) == 1)
 		{
 			cot_redirect(cot_url('message', 'msg=106', '', true));
@@ -147,11 +147,11 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 			}
 			elseif ($y == 0)
 			{
-				foreach($cot_extrafields[$db_users] as $exfld) 
-				{ 
+				foreach($cot_extrafields[$db_users] as $exfld)
+				{
 					cot_extrafield_unlinkfiles($row['user_'.$exfld['field_name']], $exfld);
 				}
-				
+
 				$sql = $db->delete($db_users, "user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");
 				$sql = $db->delete($db_users, "user_id='".$row['user_id']."'");
 				$sql = $db->delete($db_groups_users, "gru_userid='".$row['user_id']."'");
