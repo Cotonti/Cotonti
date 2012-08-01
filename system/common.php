@@ -51,7 +51,7 @@ while ($row = sed_sql_fetcharray($sql_config))
 }
 
 // Mbstring options
-mb_internal_encoding($cfg['charset']);
+mb_internal_encoding('UTF-8');
 
 /* ======== Extra settings (the other presets are in functions.php) ======== */
 
@@ -226,11 +226,10 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
 	$u = empty($_SESSION[$site_id]) ? explode(':', base64_decode($_COOKIE[$site_id])) : explode(':', base64_decode($_SESSION[$site_id]));
 	$u_id = (int) sed_import($u[0], 'D', 'INT');
-	$u_sid = sed_sql_prep($u[1]);
+	$u_sid = $u[1];
 	if ($u_id > 0)
 	{
-		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_id = $u_id");
-
+		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = $u_id");
 		if ($row = sed_sql_fetcharray($sql))
 		{
 			if ($u_sid == hash_hmac('sha1', $row['user_sid'], $cfg['secret_key'])

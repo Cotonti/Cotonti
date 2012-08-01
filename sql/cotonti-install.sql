@@ -320,7 +320,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'main', '20', 'shieldzhammer', 2, '25', '', ''),
 ('core', 'main', '30', 'jquery', 3, '1', '', ''),
 ('core', 'main', '31', 'turnajax', 3, '1', '1', ''),
-('core', 'main', '42', 'hashfunc', 1, 'sha256', '','',''),
+('core', 'main', '42', 'hashfunc', 1, 'sha256', '',''),
 ('core', 'parser', '10', 'parser_custom', 3, '0', '', ''),
 ('core', 'parser', '10', 'parser_cache', 3, '1', '', ''),
 ('core', 'parser', '10', 'parser_disable', 3, '0', '', ''),
