@@ -396,7 +396,7 @@ $L['adm_cache_showall'] = 'Show all';
  */
 
 $L['adm_log'] = 'System log';
-$L['adm_infos'] = 'Informations';
+$L['adm_infos'] = 'Information';
 $L['adm_versiondclocks'] = 'Versions and clocks';
 $L['adm_checkcorethemes'] = 'Check core files and themes';
 $L['adm_checkcorenow'] = 'Check core files now!';
