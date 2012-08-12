@@ -27,7 +27,10 @@ $cot_urleditor_presets = array('handy', 'compat', 'custom', 'none');
 function cot_apply_rwr()
 {
 	global $cfg, $structure;
-
+	if (function_exists('cot_apply_rwr_custom'))
+	{
+		return cot_apply_rwr_custom();
+	}
 	if (isset($_GET['rwr']) && !empty($_GET['rwr'])/* && preg_match('`^[\w\p{L}/\-_\ \+\.]+?$`u', $_GET['rwr'])*/)
 	{
 		// Ignore ending slash and split the path into parts
@@ -304,8 +307,26 @@ function cot_url_catpath(&$params, $spec, $arg = 'c')
  */
 function cot_url_presets()
 {
-	global $cot_urleditor_presets;
-	return $cot_urleditor_presets;
+	global $cot_urleditor_presets, $cfg;
+	$urleditor_presets = array();
+	foreach (glob('./datas/*.dat') as $filename) 
+	{
+		if($filename != "./datas/urltrans.dat")
+		{
+			$urleditor_presets[] = basename($filename, ".dat");
+		}
+	}
+	foreach (glob($cfg['plugins_dir'] . "/urleditor/presets/*.dat") as $filename) 
+	{
+		
+		$urleditor_presets[] = basename($filename, ".dat");
+	}	
+	if (file_exists("./datas/urltrans.dat"))
+	{
+		$urleditor_presets[] = 'custom';
+	}
+	$urleditor_presets[] = 'none';
+	return $urleditor_presets;
 }
 
 /**

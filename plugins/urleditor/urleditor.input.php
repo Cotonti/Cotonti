@@ -21,7 +21,12 @@ defined('COT_CODE') or die('Wrong URL');
 if (!is_array($cot_urltrans))
 {
 	$cot_urltrans = array();
-	$urltrans_preset = $cfg['plugin']['urleditor']['preset'] == 'custom' ? './datas/urltrans.dat' : $cfg['plugins_dir'] . '/urleditor/presets/' . $cfg['plugin']['urleditor']['preset'] . '.dat';
+	$urltrans_preset = './datas/urltrans.dat';
+	if(!in_array($cfg['plugin']['urleditor']['preset'], array('custom', 'none')))
+	{
+		$urltrans_preset = file_exists('./datas/' . $cfg['plugin']['urleditor']['preset'] . '.dat') ? './datas/' . $cfg['plugin']['urleditor']['preset'] . '.dat' : $cfg['plugins_dir'] . '/urleditor/presets/' . $cfg['plugin']['urleditor']['preset'] . '.dat';
+	}
+	
 	if ($cfg['plugin']['urleditor']['preset'] != 'none' && file_exists($urltrans_preset))
 	{
 		$fp = fopen($urltrans_preset, 'r');
@@ -60,6 +65,19 @@ if (!is_array($cot_urltrans))
 		'trans' => 'index.php?e={$_area}'
 	);
 	$cache && $cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
+}
+
+if(!in_array($cfg['plugin']['urleditor']['preset'], array('custom', 'none')))
+{
+	if (file_exists('./datas/' . $cfg['plugin']['urleditor']['preset'] . '.dat') 
+		&& file_exists('./datas/' . $cfg['plugin']['urleditor']['preset'] . '.functions.php'))
+	{
+		require_once './datas/' . $cfg['plugin']['urleditor']['preset'] . '.functions.php';
+	}
+	elseif(file_exists($cfg['plugins_dir'] . '/urleditor/presets/' . $cfg['plugin']['urleditor']['preset'] . '.functions.php'))
+	{
+		require_once $cfg['plugins_dir'] . '/urleditor/presets/' . $cfg['plugin']['urleditor']['preset'] . '.functions.php';
+	}
 }
 
 require_once cot_incfile('urleditor', 'plug');
