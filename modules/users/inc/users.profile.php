@@ -114,7 +114,7 @@ if($a == 'update')
 			if (!$cfg['users']['user_email_noprotection'])
 			{
 				$validationkey = md5(microtime());
-				$db->update($db_users, array('user_lostpass' => $validationkey, 'user_maingrp' => '-1', 'user_sid' => $urr['user_maingrp']), "user_id='".$usr['id']."'");
+				$db->update($db_users, array('user_email' => $ruseremail, 'user_lostpass' => $validationkey, 'user_maingrp' => '-1', 'user_sid' => $urr['user_maingrp']), "user_id='".$usr['id']."'");
 
 				$rsubject = $L['aut_mailnoticetitle'];
 				$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
