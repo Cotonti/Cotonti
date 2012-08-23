@@ -66,8 +66,8 @@ if($a == 'update')
 	}
 
 	$roldpass = cot_import('roldpass','P','TXT');
-	$rnewpass1 = cot_import('rnewpass1','P','TXT');
-	$rnewpass2 = cot_import('rnewpass2','P','TXT');
+	$rnewpass1 = cot_import('rnewpass1','P','TXT', 32);
+	$rnewpass2 = cot_import('rnewpass2','P','TXT', 32);
 	$rmailpass = cot_import('rmailpass','P','TXT');
 	$ruseremail = cot_import('ruseremail','P','TXT');
 
