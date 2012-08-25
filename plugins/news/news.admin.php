@@ -42,7 +42,8 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'])
 			$tt->parse('MAIN.ADDITIONAL');
 		}
 	}
-
+	
+	$jj++;
 	$tt->assign(array(
 		'MAINCATEGORY' => cot_selectbox_categories($index, 'newsmaincat'),
 		'CATNUM' => $jj
