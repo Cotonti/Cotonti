@@ -66,8 +66,8 @@ if($a == 'update')
 	}
 
 	$roldpass = cot_import('roldpass','P','TXT');
-	$rnewpass1 = cot_import('rnewpass1','P','TXT');
-	$rnewpass2 = cot_import('rnewpass2','P','TXT');
+	$rnewpass1 = cot_import('rnewpass1','P','TXT', 32);
+	$rnewpass2 = cot_import('rnewpass2','P','TXT', 32);
 	$rmailpass = cot_import('rmailpass','P','TXT');
 	$ruseremail = cot_import('ruseremail','P','TXT');
 
@@ -114,7 +114,7 @@ if($a == 'update')
 			if (!$cfg['users']['user_email_noprotection'])
 			{
 				$validationkey = md5(microtime());
-				$db->update($db_users, array('user_lostpass' => $validationkey, 'user_maingrp' => '-1', 'user_sid' => $urr['user_maingrp']), "user_id='".$usr['id']."'");
+				$db->update($db_users, array('user_email' => $ruseremail, 'user_lostpass' => $validationkey, 'user_maingrp' => '-1', 'user_sid' => $urr['user_maingrp']), "user_id='".$usr['id']."'");
 
 				$rsubject = $L['aut_mailnoticetitle'];
 				$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$validationkey, '', true);

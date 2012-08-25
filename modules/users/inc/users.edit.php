@@ -107,7 +107,7 @@ if ($a == 'update')
 	}
 
 	$ruser['user_timezone'] = cot_import('rusertimezone','P','TXT');
-	$rusernewpass = cot_import('rusernewpass','P','TXT', 16);
+	$rusernewpass = cot_import('rusernewpass','P','TXT', 32);
 
 	// Extra fields
 	foreach($cot_extrafields[$db_users] as $exfld)
@@ -295,7 +295,7 @@ $t->assign(array(
 	'USERS_EDIT_BANNED' => $user_form_banned,
 	'USERS_EDIT_THEME' => cot_inputbox('text', 'rusertheme', $urr['user_theme'], array('size' => 32, 'maxlength' => 32)),
 	'USERS_EDIT_LANG' => cot_inputbox('text', 'ruserlang', $urr['user_lang'], array('size' => 32, 'maxlength' => 32)),
-	'USERS_EDIT_NEWPASS' => cot_inputbox('password', 'rusernewpass', '', array('size' => 16, 'maxlength' => 16, 'autocomplete' => 'off') + $protected),
+	'USERS_EDIT_NEWPASS' => cot_inputbox('password', 'rusernewpass', '', array('size' => 12, 'maxlength' => 32, 'autocomplete' => 'off') + $protected),
 	'USERS_EDIT_MAINGRP' => cot_build_group($urr['user_maingrp']),
 	'USERS_EDIT_GROUPS' => cot_build_groupsms($urr['user_id'], $usr['isadmin'], $urr['user_maingrp']),
 	'USERS_EDIT_COUNTRY' => cot_selectbox_countries($urr['user_country'], 'rusercountry'),

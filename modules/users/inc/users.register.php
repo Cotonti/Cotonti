@@ -46,8 +46,8 @@ if ($a=='add')
 
 	$ruser['user_name'] = cot_import('rusername','P','TXT', 100, TRUE);
 	$ruser['user_email'] = cot_import('ruseremail','P','TXT',64, TRUE);
-	$rpassword1 = cot_import('rpassword1','P','TXT',16);
-	$rpassword2 = cot_import('rpassword2','P','TXT',16);
+	$rpassword1 = cot_import('rpassword1','P','TXT',32);
+	$rpassword2 = cot_import('rpassword2','P','TXT',32);
 	$ruser['user_country'] = cot_import('rcountry','P','TXT');
 	$ruser['user_timezone'] = cot_import('rtimezone','P','TXT');
 	$ruser['user_timezone'] = (!$ruser['user_timezone']) ? 'GMT' : $ruser['user_timezone'];
@@ -205,8 +205,8 @@ $t->assign(array(
 	'USERS_REGISTER_SEND' => cot_url('users', 'm=register&a=add'),
 	'USERS_REGISTER_USER' => cot_inputbox('text', 'rusername', $ruser['user_name'], array('size' => 24, 'maxlength' => 100)),
 	'USERS_REGISTER_EMAIL' => cot_inputbox('text', 'ruseremail', $ruser['user_email'], array('size' => 24, 'maxlength' => 64)),
-	'USERS_REGISTER_PASSWORD' => cot_inputbox('password', 'rpassword1', '', array('size' => 8, 'maxlength' => 32)),
-	'USERS_REGISTER_PASSWORDREPEAT' => cot_inputbox('password', 'rpassword2', '', array('size' => 8, 'maxlength' => 32)),
+	'USERS_REGISTER_PASSWORD' => cot_inputbox('password', 'rpassword1', '', array('size' => 12, 'maxlength' => 32)),
+	'USERS_REGISTER_PASSWORDREPEAT' => cot_inputbox('password', 'rpassword2', '', array('size' => 12, 'maxlength' => 32)),
 	'USERS_REGISTER_COUNTRY' => cot_selectbox_countries($ruser['user_country'], 'rcountry'),
 	'USERS_REGISTER_TIMEZONE' => cot_selectbox_timezone($ruser['user_timezone'], 'rusertimezone'),
 	'USERS_REGISTER_GENDER' => cot_selectbox_gender($ruser['user_gender'],'rusergender'),
