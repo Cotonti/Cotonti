@@ -380,7 +380,7 @@ $extp = cot_getextplugins('forums.posts.loop');
 $fp_num = 0;
 foreach ($sql_forums->fetchAll() as $row)
 {
-	$row['user_text'] = ($cfg['forums'][$s]['allowusertext']) ? $row['user_text'] : '';
+	$row['user_text'] = ($cfg['forums']['cat_' . $s]['allowusertext']) ? $row['user_text'] : '';
 	$fp_num++;
 
 	$rowquote_url = ($usr['id'] > 0) ? cot_url('forums', 'm=posts&s=' . $s . '&q=' . $q . '&quote=' . $row['fp_id'] . '&n=last', '#np') : '';
