@@ -252,7 +252,7 @@ cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $pag['page_owne
 
 $out['subtitle'] = $L['page_edittitle'];
 $out['head'] .= $R['code_noindex'];
-$sys['sublocation'] = $structure['page'][$c]['title'];
+$sys['sublocation'] = $structure['page'][$pag['page_cat']]['title'];
 
 $mskin = cot_tplfile(array('page', 'edit', $structure['page'][$pag['page_cat']]['tpl']));
 
