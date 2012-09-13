@@ -159,7 +159,7 @@ function cot_forums_sectionsetlast($cat, $postcount = '', $topiccount='', $viewc
 {
 	global $db, $db_forum_topics, $db_forum_stats;
 	$row = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics
-		WHERE ft_cat='".$db->prep($cat)."' AND ft_movedto='' AND ft_mode='0' ORDER BY ft_updated DESC LIMIT 1")->fetch();
+		WHERE ft_cat='".$db->prep($cat)."' AND (ft_movedto IS NULL OR ft_movedto = '') AND ft_mode='0' ORDER BY ft_updated DESC LIMIT 1")->fetch();
 
 	$i_postcount = ($postcount != '' && is_int($postcount)) ? $postcount : 0;
 	$i_topiccount = ($topiccount != '' && is_int($topiccount)) ? $topiccount : 0;

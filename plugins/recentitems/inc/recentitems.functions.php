@@ -34,7 +34,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 	if ($mode == 'recent')
 	{
 		$sql = $db->query("SELECT * FROM $db_forum_topics
-			WHERE ft_movedto=0 AND ft_mode=0 " . $incat . "
+			WHERE (ft_movedto IS NULL OR ft_movedto = '') AND ft_mode=0 " . $incat . "
 			ORDER by ft_updated DESC LIMIT $maxperpage");
 		$totalrecent['topics'] = $maxperpage;
 	}
@@ -172,7 +172,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 {
 	global $db, $structure, $db_pages, $db_users, $sys, $cfg, $L, $cot_extrafields, $usr;
 	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
-	
+
 	// Load all cats and subcats in white list if set
 	if (!empty($cfg['plugin']['recentitems']['whitelist']))
 	{
@@ -186,7 +186,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	{
 		$whitelist = false;
 	}
-	
+
 	// Load all cats and subcats in black list if set
 	if (!empty($cfg['plugin']['recentitems']['blacklist']))
 	{
@@ -238,10 +238,10 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		$where = "WHERE page_date >= $mode AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_state=0 AND page_cat <> 'system' " . $incat;
 		$totalrecent['pages'] = $db->query("SELECT COUNT(*) FROM $db_pages " . $where)->fetchColumn();
 	}
-	
+
 	$join_columns = '';
 	$join_tables = '';
-	
+
 	/* === Hook === */
 	foreach (cot_getextplugins('recentitems.recentpages.first') as $pl)
 	{
