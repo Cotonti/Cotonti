@@ -27,6 +27,7 @@ $c = (!isset($structure['page'][$c])) ? '' : $c;
 
 $categories = explode(',', $cfg['plugin']['news']['category']);
 $jj = 0;
+$cats = array();
 foreach ($categories as $v)
 {
 	$v = explode('|', trim($v));
