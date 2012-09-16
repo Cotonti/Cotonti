@@ -17,7 +17,9 @@ require_once cot_incfile('auth');
 $v = cot_import('v','G','ALP');
 $y = cot_import('y','G','INT');
 
-if ($cfg['users']['disablereg'])
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+
+if ($cfg['users']['disablereg'] && !$usr['isadmin'])
 {
 	cot_die_message(117, TRUE);
 }
@@ -29,7 +31,7 @@ foreach (cot_getextplugins('users.register.first') as $pl)
 }
 /* ===== */
 
-cot_block($usr['id'] == 0);
+cot_block($usr['id'] == 0 || $usr['isadmin']);
 
 if ($a=='add')
 {
