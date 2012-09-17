@@ -186,7 +186,7 @@ $protected = !$cfg['users']['useremailchange'] ? array('disabled' => 'disabled')
 $profile_form_email = cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)
 	+ $protected);
 
-$editor_class = $cfg['usertextimg'] ? 'minieditor' : '';
+$editor_class = $cfg['users']['usertextimg'] ? 'minieditor' : '';
 
 $t->assign(array(
 	'USERS_PROFILE_TITLE' => cot_rc_link(cot_url('users', 'm=profile'), $L['pro_title']),

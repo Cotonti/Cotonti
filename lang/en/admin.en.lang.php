@@ -15,7 +15,6 @@ defined('COT_CODE') or die('Wrong URL.');
 /**
  * Common words
  */
-
 $L['Extension'] = 'Extension';
 $L['Extensions'] = 'Extensions';
 $L['Structure'] = 'Structure';
@@ -23,7 +22,6 @@ $L['Structure'] = 'Structure';
 /**
  * Home Section
  */
-
 $L['home_installable_error'] = 'Please remove install.php until next update or at least protect config.php from being writable';
 
 $L['home_newusers'] = 'New members';
@@ -60,7 +58,6 @@ $L['home_update_revision'] = 'Current version: <span style="color:#C00;font-weig
 /**
  * Config Section
  */
-
 $L['core_forums'] = &$L['Forums'];
 $L['core_locale'] = &$L['Locale'];
 $L['core_main'] = 'Main Settings';
@@ -74,11 +71,11 @@ $L['core_pm'] = &$L['Private_Messages'];
 $L['core_polls'] = &$L['Polls'];
 $L['core_rss'] = &$L['RSS_Feeds'];
 $L['core_security'] = &$L['Security'];
+$L['core_sessions'] = 'Sessions';
 $L['core_structure'] = &$L['Categories'];
 $L['core_theme'] = &$L['Themes'];
 $L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles and Metas';
-$L['core_users'] = &$L['Users'];
 
 $L['cfg_struct_defaults'] = 'Structure Defaults';
 
@@ -97,7 +94,6 @@ $L['short_struct'] = 'Struct';
  * Config Section
  * Locale Subsection
  */
-
 $L['cfg_forcedefaultlang'] = array('Force the default language for all users', '');
 $L['cfg_defaulttimezone'] = array('Default time zone', 'For guests and new members, from -12 to +12');
 
@@ -105,27 +101,18 @@ $L['cfg_defaulttimezone'] = array('Default time zone', 'For guests and new membe
  * Config Section
  * Main Subsection
  */
-
 $L['cfg_adminemail'] = array('Administrator\'s email', 'Required');
 $L['cfg_clustermode'] = array('Cluster of servers', 'Set to yes if it\'s a load balanced setup.');
 $L['cfg_confirmlinks'] = array('Confirm potentially dangerous actions');
-$L['cfg_devmode'] = array('Debugging mode', 'Don\'t let this enabled on live sites');
 $L['cfg_easypagenav'] = array('User friendly pagination', 'Uses page numbers in URLs instead of DB offsets');
 $L['cfg_hostip'] = array('Server IP', 'The IP of the server, optional.');
-$L['cfg_jquery'] = array('Enable jQuery', '');
-$L['cfg_maintenance'] = array('Maintenance mode', 'Let only authorized personel access to site');
-$L['cfg_maintenancereason'] = array('Maintenance reason', 'Optional, should better be short');
 $L['cfg_maxrowsperpage'] = array('Max. items per page', 'Default item limit for pagination');
 $L['cfg_parser'] = array('Markup parser', 'Default is: plain text');
-$L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');
-$L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');
-$L['cfg_turnajax'] = array('Enable Ajax', 'Works only if jQuery is enabled');
 
 /**
  * Config Section
  * Menus Subsection
  */
-
 $L['cfg_banner'] = array('Banner<br />{HEADER_BANNER} in header.tpl', '');
 $L['cfg_bottomline'] = array('Bottom line<br />{FOOTER_BOTTOMLINE} in footer.tpl', '');
 $L['cfg_topline'] = array('Top line<br />{HEADER_TOPLINE} in header.tpl', '');
@@ -154,33 +141,44 @@ $L['cfg_menu9'] = array('Menu slot #9<br />{PHP.cfg.menu9} in all tpl files', ''
  * Config Section
  * Performance Subsection
  */
-
 $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output. Do not enable it if your server already applies Gzip to your pages. Use this tool to test if Gzip is already enabled on your site: <a href="http://www.whatsmyip.org/http-compression-test/">HTTP Compression Test</a>');
 $L['cfg_headrc_consolidate'] = array('Consolidate header and footer resources (JS/CSS)');
 $L['cfg_headrc_minify'] = array('Minify consolidated JS/CSS');
 $L['cfg_jquery_cdn'] = array('Use jQuery from this CDN URL', 'Example: https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js');
+$L['cfg_jquery'] = array('Enable jQuery', '');
+$L['cfg_turnajax'] = array('Enable Ajax', 'Works only if jQuery is enabled');
 
 /**
  * Config Section
  * Security Subsection
  */
-
 $L['cfg_captchamain'] = array('Main captcha');
 $L['cfg_captcharandom'] = array('Random captcha');
-$L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
-$L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
-$L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
 $L['cfg_hashfunc'] = array('Default hash function', 'Used to hash passwords');
 $L['cfg_referercheck'] = array('Referer check for forms', 'Prevents from cross-domain posting');
 $L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
 $L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
 $L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
+$L['cfg_devmode'] = array('Debugging mode', 'Don\'t let this enabled on live sites');
+$L['cfg_maintenance'] = array('Maintenance mode', 'Let only authorized personel access to site');
+$L['cfg_maintenancereason'] = array('Maintenance reason', 'Optional, should better be short');
+
+/**
+ * Config Section
+ * Sessions Subsection
+ */
+$L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
+$L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
+$L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
+$L['cfg_forcerememberme'] = array('Force &quot;remember me&quot;', 'Use it on multi-domain sites or if there are sudden logouts');
+$L['cfg_timedout'] = array('Idle delay, in seconds', 'After this delay, user is away');
+$L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');
+$L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');
 
 /**
  * Config Section
  * Themes Subsection
  */
-
 $L['cfg_charset'] = array('HTML charset', '');
 $L['cfg_disablesysinfos'] = array('Turn off page creation time', '(used in footer.tpl)');
 $L['cfg_doctypeid'] = array('Document Type', '&lt;!DOCTYPE&gt; of the HTML layout');
@@ -196,7 +194,6 @@ $L['cfg_showsqlstats'] = array('Show SQL queries statistics', '(used in footer.t
  * Config Section
  * Title Subsection
  */
-
 $L['cfg_maintitle'] = array('Site title', 'Main title for the website, required');
 $L['cfg_subtitle'] = array('Description', 'Optional, will be displayed after the title of the site');
 $L['cfg_title_header'] = array('Header title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
@@ -204,15 +201,6 @@ $L['cfg_title_header_index'] = array('Header Index title', 'Options: {MAINTITLE}
 $L['cfg_title_users_details'] = array('Users Details title', 'Options: {USER}, {NAME}');
 $L['cfg_subject_mail'] = array('Email subject', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}');
 $L['cfg_body_mail'] = array('Email title', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {SITE_URL}, {ADMIN_EMAIL}, {MAIL_BODY}, {MAIL_SUBJECT}');
-
-/**
- * Config Section
- * Users Subsection
- */
-
-$L['cfg_forcerememberme'] = array('Force &quot;remember me&quot;', 'Use it on multi-domain sites or if there are sudden logouts');
-$L['cfg_timedout'] = array('Idle delay, in seconds', 'After this delay, user is away');
-$L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');
 
 /**
  * Config Section
@@ -225,7 +213,6 @@ $L['cfg_markup'] = array('Enable markup', 'Enables HTML/BBcode or other parsing 
 /**
  * Extension management
  */
-
 $L['ext_already_installed'] = 'This extension is already installed: {$name}';
 $L['ext_auth_installed'] = 'Installed authorization defaults';
 $L['ext_auth_locks_updated'] = 'Updated authorization locks';
@@ -286,7 +273,6 @@ $L['ext_cat']['post-install'] = 'Post-install Scripts';
 /**
   * Structure Section
  */
-
 $L['adm_structure_code_reserved'] = "Structure code 'all' is reserved.";
 $L['adm_structure_code_required'] = 'Missing required field: Code';
 $L['adm_structure_path_required'] = 'Missing required field: Path';
@@ -305,7 +291,6 @@ $L['adm_help_structure'] = 'The pages that belong to the category &quot;system&q
  * Structure Section
  * Extrafields Subsection
  */
-
 $L['adm_extrafields_desc'] = 'Add/Edit extra fields';
 $L['adm_extrafields_all'] = 'Show all database tables';
 $L['adm_extrafields_table'] = 'Table';
@@ -322,7 +307,6 @@ $L['adm_help_newtags'] = '<br /><br /><b>New tags in tpl files:</b>';
 /**
  * Users Section
  */
-
 $L['adm_rightspergroup'] = 'Rights per group';
 $L['adm_maxsizesingle'] = 'Max size for a single file in '.$L['PFS'].' (KB)';
 $L['adm_maxsizeallpfs'] = 'Max size of all files together in '.$L['PFS'].' (KB)';
@@ -333,7 +317,6 @@ $L['adm_skiprights'] = 'Omit rights for this group';
 /**
  * Plug Section
  */
-
 $L['adm_defauth_guests'] = 'Default rights for the guests';
 $L['adm_deflock_guests'] = 'Lock mask for the guests';
 $L['adm_defauth_members'] = 'Default rights for the members';
@@ -376,14 +359,12 @@ $L['adm_only_installed'] = 'Installed';
 /**
  * Tools Section
  */
-
 $L['adm_listisempty'] = 'List is empty';
 
 /**
  * Other Section
  * Cache Subsection
  */
-
 $L['adm_delcacheitem'] = 'Cache item removed';
 $L['adm_internalcache'] = 'Internal cache';
 $L['adm_purgeall_done'] = 'Cache cleared completely';
@@ -394,7 +375,6 @@ $L['adm_cache_showall'] = 'Show all';
  * Other Section
  * Log Subsection
  */
-
 $L['adm_log'] = 'System log';
 $L['adm_infos'] = 'Information';
 $L['adm_versiondclocks'] = 'Versions and clocks';
@@ -411,7 +391,6 @@ $L['adm_check_missing'] = 'Missing';
  * Other Section
  * Infos Subsection
  */
-
 $L['adm_phpver'] = 'PHP engine version';
 $L['adm_zendver'] = 'Zend engine version';
 $L['adm_interface'] = 'Interface between webserver and PHP';
@@ -429,7 +408,6 @@ Clocks #1 and #2 are being ignored by Cotonti.';
 /**
  * Common Entries
  */
-
 $L['adm_area'] = 'Area';
 $L['adm_clicktoedit'] = '(Click to edit)';
 $L['adm_confirm'] = 'Press this button to confirm: ';
@@ -456,7 +434,6 @@ $L['alreadydeletednewentry'] = 'Entry deleted';
 /**
  * Extra Fields (Common Entries for Pages & Structure & Users)
  */
-
 $L['adm_extrafields'] = 'Extra fields';
 $L['adm_extrafield_added'] = 'Successfully added new extra field.';
 $L['adm_extrafield_not_added'] = 'Error! New extra field not added.';
@@ -486,7 +463,6 @@ $L['adm_help_extrafield'] = 'Hint: Field &quot;Base HTML&quot; is set to default
 /**
  * Help messages that still don't work
  */
-
 $L['adm_help_cache'] = 'Not available';
 $L['adm_help_check1'] = 'Not available';
 $L['adm_help_check2'] = 'Not available';

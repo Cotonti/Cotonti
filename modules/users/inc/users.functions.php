@@ -189,6 +189,18 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 }
 
 /**
+ * Renders user signature text
+ *
+ * @param string $text Signature text
+ * @return string
+ */
+function cot_build_usertext($text)
+{
+	global $cfg;
+	return cot_parse($text, $cfg['users']['usertextimg']);
+}
+
+/**
  * Generates gender dropdown
  *
  * @param string $check Checked gender

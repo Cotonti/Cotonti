@@ -1808,18 +1808,6 @@ function cot_build_groupicon($src)
 }
 
 /**
- * Renders user signature text
- *
- * @param string $text Signature text
- * @return string
- */
-function cot_build_usertext($text)
-{
-	global $cfg;
-	return cot_parse($text, $cfg['usertextimg']);
-}
-
-/**
  * Returns all user tags for XTemplate
  *
  * @param mixed $user_data User Info Array
@@ -1867,7 +1855,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 		if (is_array($user_data) && $user_data['user_id'] > 0 && !empty($user_data['user_name']))
 		{
 			$user_data['user_birthdate'] = cot_date2stamp($user_data['user_birthdate']);
-			$user_data['user_text'] = cot_parse($user_data['user_text'], $cfg['usertextimg']);
+			$user_data['user_text'] = cot_parse($user_data['user_text'], $cfg['users']['usertextimg']);
 
 			$temp_array = array(
 				'ID' => $user_data['user_id'],

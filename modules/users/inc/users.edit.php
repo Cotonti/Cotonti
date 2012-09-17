@@ -279,7 +279,7 @@ require_once cot_incfile('forms');
 
 $protected = $sys['protecttopadmin'] ? array('disabled' => 'disabled') : array();
 
-$editor_class = $cfg['usertextimg'] ? 'minieditor' : '';
+$editor_class = $cfg['users']['usertextimg'] ? 'minieditor' : '';
 
 $delete_pfs = cot_module_active('pfs') ? cot_checkbox(false, 'ruserdelpfs', $L['PFS']) : '';
 

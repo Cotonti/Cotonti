@@ -23,6 +23,7 @@ useremailchange=05:radio::0:
 useremailduplicate=06:radio::0:
 user_email_noprotection=07:radio::0:
 usertextmax=08:string::300:
+usertextimg=09:radio::0:
 [END_COT_EXT_CONFIG]
 ==================== */
 

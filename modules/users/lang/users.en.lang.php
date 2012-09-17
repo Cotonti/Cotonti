@@ -21,5 +21,6 @@ $L['cfg_user_email_noprotection'] = array('Disable password protection of email 
 $L['cfg_useremailchange'] = array('Allow users to change their email address', '\'No\' recommended, for security reasons');
 $L['cfg_useremailduplicate'] = array('Allow multiple users with the same email address', '\'No\' recommended, for security reasons');
 $L['cfg_usertextmax'] = array('Maximum length for user signature', '');
+$L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');
 
 ?>
