@@ -1,0 +1,8 @@
+# Convert line endings to OS native on checkout/pull, but always commit/push as LF (Unix).
+* text
+
+# Image files should not be converted but kept as-is.
+*.gif binary
+*.ico binary
+*.jpg binary
+*.png binary
