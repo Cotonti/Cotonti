@@ -38,7 +38,7 @@ $tag_areas = array();
 if (cot_module_active('page'))
 {
 	require_once cot_incfile('page', 'module');
-	$tag_areas[] = 'page';
+	$tag_areas[] = 'pages';
 }
 
 if (cot_module_active('forums'))
