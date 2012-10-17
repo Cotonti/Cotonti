@@ -51,6 +51,7 @@ if ($cache && $cache->mem && $cache->mem->exists('whosonline', 'system'))
 	$sys['whosonline_vis_count'] = $whosonline_data['vis_count'];
 	$sys['whosonline_reg_count'] = $whosonline_data['reg_count'];
 	$out['whosonline_reg_list'] = $whosonline_data['reg_list'];
+	$cot_usersonline = $whosonline_data['user_list'];
 	unset($whosonline_data);
 }
 else
@@ -62,6 +63,7 @@ else
 	$sql_o = $db->query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
 	$sys['whosonline_reg_count'] = $sql_o->rowCount();
 	$ii_o = 0;
+	$cot_usersonline = array();
 	while ($row_o = $sql_o->fetch())
 	{
 		$out['whosonline_reg_list'] .= ($ii_o > 0) ? ', ' : '';
@@ -76,7 +78,8 @@ else
 		$whosonline_data = array(
 			'vis_count' => $sys['whosonline_vis_count'],
 			'reg_count' => $sys['whosonline_reg_count'],
-			'reg_list' => $out['whosonline_reg_list']
+			'reg_list' => $out['whosonline_reg_list'],
+			'user_list' => $cot_usersonline
 		);
 		$cache->mem->store('whosonline', $whosonline_data, 'system', 30);
 	}
