@@ -208,7 +208,7 @@ function cot_bbcode_clearcache()
  */
 function cot_parse_bbcode($text)
 {
-	global $cfg, $cot_bbcodes, $cot_bbcode_containersm, $sys, $cot_smilies, $L, $usr;
+	global $cfg, $cot_bbcodes, $cot_bbcode_containers, $sys, $cot_smilies, $L, $usr;
 
 	$code = array();
 	$unique_seed = $sys['unique'];
