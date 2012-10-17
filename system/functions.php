@@ -1966,6 +1966,11 @@ function cot_imageresize($source, $target='return', $target_width=99999, $target
 	$mimetype = $source_size['mime'];
 	if (substr($mimetype, 0, 6) != 'image/') return;
 
+	// Prevent from loading images taking more than 100M of memory
+	if (!isset($source_size['channels'])) $source_size['channels'] = 1;
+	$required_memory = ($source_size[0] * $source_size[1] * ($source_size['bits'] / 8) * $source_size['channels'] * 2.5) / (1024 * 1024);
+	if ($required_memory > 100) return;
+
 	$source_width = $source_size[0];
 	$source_height = $source_size[1];
 	if($target_width > $source_width) $target_width = $source_width; $noscaling_x = true;
