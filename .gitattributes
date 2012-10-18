@@ -1,8 +1,29 @@
-# Convert line endings to OS native on checkout/pull, but always commit/push as LF (Unix).
-* text
+# Set default behaviour, in case users don't have core.autocrlf set.
 
-# Image files should not be converted but kept as-is.
-*.gif binary
-*.ico binary
-*.jpg binary
-*.png binary
+*          text=auto
+
+# Explicitly declare text files we want to always be normalized and converted 
+# to native line endings on checkout.
+
+*.conf     text
+*.css      text
+*.dat      text
+*.htaccess text
+*.html     text diff=html
+*.inc      text diff=php
+*.ini      text
+*.js       text
+*.md       text
+*.php      text diff=php
+*.sql      text
+*.tpl      text diff=html
+*.txt      text
+
+# Denote all files that are truly binary and should not be modified.
+
+*.gif      binary
+*.ico      binary
+*.jpeg     binary
+*.jpg      binary
+*.png      binary
+*.psd      binary
