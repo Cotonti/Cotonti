@@ -23,6 +23,7 @@ $R['input_option'] = '<option value="{$value}"{$selected}>{$title}</option>';
 $R['input_radio'] = '<label><input type="radio" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
 $R['input_radio_separator'] = ' ';
 $R['input_select'] = '<select name="{$name}"{$attrs}>{$options}</select>{$error}';
+$R['input_submit'] = '<button type="submit" name="{$name}" {$attrs}>{$value}</button>';
 $R['input_text'] = '<input type="text" name="{$name}" value="{$value}" {$attrs} />{$error}';
 $R['input_textarea'] = '<textarea name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_editor'] =  '<textarea class="editor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
@@ -120,7 +121,7 @@ $R['img_structure_cat'] = '<img src="{$icon}" alt="{$title}" title="{$desc}" />'
 /**
  * Timezones (countrycode, GMT offset, GMT offset with DST).
  * Used for finding timezones based on countrycode or offset.
- * Necessary because the $country param in DateTimeZone::listIdentifiers is not 
+ * Necessary because the $country param in DateTimeZone::listIdentifiers is not
  * supported in PHP 5.2.
  */
 $cot_timezones = array(
