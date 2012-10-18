@@ -23,6 +23,7 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 	// I18n
 	if (cot_get_caller() == 'i18n.page')
 	{
+		global $i18n_locale;
 		$tags_extra = array('tag_locale' => $i18n_locale);
 	}
 	else

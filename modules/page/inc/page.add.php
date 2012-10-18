@@ -50,56 +50,12 @@ if ($a == 'add')
 	}
 	/* ===== */
 
-	$rpage['page_cat'] = cot_import('rpagecat', 'P', 'TXT');
-	$rpage['page_keywords'] = cot_import('rpagekeywords', 'P', 'TXT');
-	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'TXT');
-	$rpage['page_title'] = cot_import('rpagetitle', 'P', 'TXT');
-	$rpage['page_desc'] = cot_import('rpagedesc', 'P', 'TXT');
-	$rpage['page_text'] = cot_import('rpagetext', 'P', 'HTM');
-	$rpage['page_parser'] = cot_import('rpageparser', 'P', 'ALP');
-	$rpage['page_author'] = cot_import('rpageauthor', 'P', 'TXT');
-	$rpage['page_file'] = intval(cot_import('rpagefile', 'P', 'INT'));
-	$rpage['page_url'] = cot_import('rpageurl', 'P', 'TXT');
-	$rpage['page_size'] = cot_import('rpagesize', 'P', 'TXT');
-	$rpage['page_file'] = ($rpage['page_file'] == 0 && !empty($rpage['page_url'])) ? 1 : $rpage['page_file'];
-	$rpage['page_ownerid'] = (int)$usr['id'];
-
-	$rpage['page_date'] = (int)$sys['now'];
-	$rpage['page_begin'] = (int)cot_import_date('rpagebegin');
-	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
-	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
-	$rpage['page_updated'] = $sys['now'];
-
-	$rpublish = cot_import('rpublish', 'P', 'ALP'); // For backwards compatibility
-	$rpage['page_state'] = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', 'P', 'INT');
-
-	// Extra fields
-	foreach ($cot_extrafields[$db_pages] as $exfld)
-	{
-		$rpage['page_'.$exfld['field_name']] = cot_import_extrafields('rpage'.$exfld['field_name'], $exfld);
-	}
+	$rpage = cot_page_import('POST', array(), $usr);
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
 	cot_block($usr['auth_write']);
 
-	cot_check(empty($rpage['page_cat']), 'page_catmissing', 'rpagecat');
-	if ($structure['page'][$rpage['page_cat']]['locked'])
-	{
-		require_once cot_langfile('message', 'core');
-		cot_error('msg602_body', 'rpagecat');
-	}
-	cot_check(mb_strlen($rpage['page_title']) < 2, 'page_titletooshort', 'rpagetitle');
-
-	cot_check(!empty($rpage['page_alias']) && preg_match('`[+/?%#&]`', $rpage['page_alias']), 'page_aliascharacters', 'rpagealias');
-
-	$allowemptytext = isset($cfg['page']['cat_' . $rpage['page_cat']]['allowemptytext']) ?
-							$cfg['page']['cat_' . $rpage['page_cat']]['allowemptytext'] : $cfg['page']['cat___default']['allowemptytext'];
-	$allowemptytext || cot_check(empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
-
-	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || $rpage['page_parser'] != 'none' && !cot_auth('plug', $rpage['page_parser'], 'W'))
-	{
-		$rpage['page_parser'] = $cfg['page']['parser'];
-	}
+	cot_page_validate($rpage);
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.add.add.error') as $pl)
@@ -110,34 +66,7 @@ if ($a == 'add')
 
 	if (!cot_error_found())
 	{
-		if (!empty($rpage['page_alias']))
-		{
-			$sql_page = $db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$db->prep($rpage['page_alias'])."'");
-			$rpage['page_alias'] = ($sql_page->rowCount() > 0) ? $rpage['page_alias'].rand(1000, 9999) : $rpage['page_alias'];
-		}
-
-		if ($rpage['page_state'] == 0)
-		{
-			if ($usr['isadmin'] && $cfg['page']['autovalidate'])
-			{
-				$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
-				$cache && $cache->db->remove('structure', 'system');
-			}
-			else
-			{
-				$rpage['page_state'] = 1;
-			}
-		}
-
-		/* === Hook === */
-		foreach (cot_getextplugins('page.add.add.query') as $pl)
-		{
-			include $pl;
-		}
-		/* ===== */
-
-		$sql_page_insert = $db->insert($db_pages, $rpage);
-		$id = $db->lastInsertId();
+		$id = cot_page_add($rpage, $usr);
 
 		switch ($rpage['page_state'])
 		{
@@ -151,33 +80,10 @@ if ($a == 'add')
 				$r_url = cot_url('message', 'msg=300', '', true);
 				break;
 			case 2:
-				cot_message($L['page_savedasdraft']);
+				cot_message('page_savedasdraft');
 				$r_url = cot_url('page', 'm=edit&id='.$id, '', true);
 				break;
 		}
-
-		cot_extrafield_movefiles();
-
-		/* === Hook === */
-		foreach (cot_getextplugins('page.add.add.done') as $pl)
-		{
-			include $pl;
-		}
-		/* ===== */
-
-		if ($rpage['page_state'] == 0 && $cache)
-		{
-			if ($cfg['cache_page'])
-			{
-				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$rpage['page_cat']]['path']));
-			}
-			if ($cfg['cache_index'])
-			{
-				$cache->page->clear('index');
-			}
-		}
-		cot_shield_update(30, "r page");
-		cot_log("Add page #".$id, 'adm');
 		cot_redirect($r_url);
 	}
 	else
