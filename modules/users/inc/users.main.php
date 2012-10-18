@@ -220,7 +220,6 @@ $t->assign(array(
 	'USERS_TOP_FILTERS_MAINGROUP' => $maingrpfilters,
 	'USERS_TOP_FILTERS_GROUP' => $grpfilters,
 	'USERS_TOP_FILTERS_SEARCH' => cot_inputbox('text', 'y', $y, array('size' => 8, 'maxlength' => 8)),
-	'USERS_TOP_FILTERS_SUBMIT' => cot_inputbox('submit', 'submit', $L['Search']),
 	'USERS_TOP_PM' => 'PM',
 ));
 
