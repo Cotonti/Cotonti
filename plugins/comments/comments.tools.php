@@ -57,7 +57,7 @@ $extp = cot_getextplugins('admin.comments.loop');
 /* ===== */
 foreach ($sql->fetchAll() as $row)
 {
-	$row['com_text'] = htmlspecialchars(cot_cutstring($row['com_text'], 40));
+	$row['com_text'] = htmlspecialchars(cot_cutstring(strip_tags($row['com_text']), 40));
 	$row['com_type'] = mb_substr($row['com_code'], 0, 1);
 	$row['com_value'] = $row['com_code'];
 
@@ -104,7 +104,7 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_COMMENTS_URL' => $row['com_url'],
 		'ADMIN_COMMENTS_ODDEVEN' => cot_build_oddeven($ii)
 	));
-	
+
 	if (isset($cot_extrafields[$db_com]))
 	{
 		foreach ($cot_extrafields[$db_com] as $exfld)
@@ -116,7 +116,7 @@ foreach ($sql->fetchAll() as $row)
 			));
 		}
 	}
-			
+
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
 	{

@@ -301,7 +301,7 @@ switch($a)
 		}
 
 		$tool_hook = $type == 'plug' ? 'tools' : 'admin';
-		if($db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook' AND pl_code='$code' LIMIT 1")->rowCount() > 0)
+		if($db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook' AND pl_code='$code' AND pl_active = 1 LIMIT 1")->rowCount() > 0)
 		{
 			$tools = $type == 'plug' ? cot_url('admin', "m=other&p=$code") : cot_url('admin', "m=$code");
 		}

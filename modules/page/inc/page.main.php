@@ -29,9 +29,10 @@ foreach (cot_getextplugins('page.first') as $pl)
 if ($id > 0 || !empty($al))
 {
 	$where = (!empty($al)) ? "page_alias='".$al."'" : 'page_id='.$id;
-	$sql_page = $db->query("SELECT p.*, u.* FROM $db_pages AS p
-			LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-			WHERE $where LIMIT 1");
+	$sql_page = $db->query("SELECT p.*, u.* $join_columns
+		FROM $db_pages AS p $join_condition
+		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+		WHERE $where LIMIT 1");
 }
 
 if(!$id && empty($al) || !$sql_page || $sql_page->rowCount() == 0)

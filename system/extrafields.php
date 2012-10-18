@@ -32,7 +32,7 @@ function cot_build_extrafields($name, $extrafield, $data)
 		case 'input':
 		case 'inputint':
 		case 'currency':
-		case 'double':	
+		case 'double':
 			$result = cot_inputbox('text', $name, $data, '', $extrafield['field_html']);
 			break;
 
@@ -79,18 +79,18 @@ function cot_build_extrafields($name, $extrafield, $data)
 			list($min, $max, $format) = explode(",",$extrafield['field_params'], 3);
 			$max = (int)$max > 0 ? $max : 2030;
 			$min =  (int)$min > 0 ? $min : 2000;
-			
+
 			$data = (mb_substr($data, 0, 1) == "+") ? $sys['now'] + (int)(mb_substr($data, 1)) : $data;
 			$data = (mb_substr($data, 0, 1) == "-") ? $sys['now'] - (int)(mb_substr($data, 1)) : $data;
-			
+
 			$result = cot_selectbox_date((int)$data, 'long', $name, (int)$max, (int)$min, true, $extrafield['field_html']);
 			break;
 
 		case 'country':
 			global $cot_countries;
 			$result = cot_selectbox_countries(trim($data), $name, true, '', $extrafield['field_html']);
-			break;	
-		
+			break;
+
 		case 'range':
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
 			list($min, $max) = explode(',',$extrafield['field_params'], 2);
@@ -116,7 +116,7 @@ function cot_build_extrafields($name, $extrafield, $data)
 			}
 			$result = cot_checklistbox($data, $name, $options_values, $options_titles, '', '', true, $extrafield['field_html']);
 			break;
-		
+
 		case 'file':
 			$data_filepath = $cfg['extrafield_files_dir'].'/'.htmlspecialchars($data);
 			/* === Hook === */
@@ -174,7 +174,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			}
 			break;
 		case 'currency':
-		case 'double':	
+		case 'double':
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
 			$import = cot_import($inputname, $source, 'NUM');
 			if (!is_null($import))
@@ -216,7 +216,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 		case 'datetime':
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
 			list($min, $max) = explode(",",$extrafield['field_params'], 2);
-			
+
 			$import = cot_import_date($inputname, true, false, $source);
 			if (!is_null($import) && ((int)$min > 0 || (int)$max > 0))
 			{
@@ -228,14 +228,14 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 				if ($max < $s_year)
 				{
 					$import=mktime($s_hour, $s_minute, 0, $s_month, $s_day, $max);
-				}							
+				}
 			}
 			break;
-		
+
 		case 'country':
 			$import = cot_import($inputname, $source,'ALP');
-			break;	
-		
+			break;
+
 		case 'checklistbox':
 			$import = cot_import($inputname, $source, 'ARR');
 			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
@@ -261,13 +261,13 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 					}
 				}
 			}
-	
+
 			if(is_array($import))
 			{
 				$import = implode(',', $import);
 			}
 			break;
-			
+
 		case 'file':
 			global $lang, $cot_translit, $exfldfiles, $exfldsize, $cfg, $uploadfiles, $pl;
 			if ($source == 'P')
@@ -291,11 +291,11 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			{
 				$fname = mb_substr($import['name'], 0, mb_strrpos($import['name'], '.'));
 				$ext = mb_strtolower(mb_substr($import['name'], mb_strrpos($import['name'], '.') + 1));
-				
+
 				//check extension
 				$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', mb_strtolower($extrafield['field_variants']));
 				$ext_array = explode(",", trim($extrafield['field_variants']));
-				
+
 				if(empty($extrafield['field_variants']) || in_array($ext, $ext_array))
 				{
 					if ($lang != 'en')
@@ -310,7 +310,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 					$fname .= (file_exists("{$cfg['extrafield_files_dir']}/$fname.$ext") && $oldvalue != $fname . '.' . $ext) ? date("YmjGis") : '';
 
 					$fname .= '.' . $ext;
-					
+
 					$extrafield['field_params'] = (!empty($extrafield['field_params'])) ? $extrafield['field_params'] : $cfg['extrafield_files_dir'];
 					$extrafield['field_params'] .= (mb_substr($extrafield['field_params'], -1) == '/') ? '' : '/';
 
@@ -355,7 +355,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			$import = $exfldsize[$extrafield['field_variants']];
 			break;
 	}
-	if (is_null($import) && $extrafield['field_required'])
+	if ((is_null($import) || $import === '') && $extrafield['field_required'])
 	{
 		$L['field_required_' . $extrafield['field_name']] = (isset($L['field_required_' . $extrafield['field_name']])) ? $L['field_required_' . $extrafield['field_name']] : $L['field_required'];
 		cot_error('field_required_' . $extrafield['field_name'], $name);
@@ -394,7 +394,7 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 			list($min, $max, $format) = explode(",",$extrafield['field_params'], 3);
 			return (empty($format)) ? $value : cot_date($format, $value);
 			break;
-		
+
 		case 'checklistbox':
 			$value = htmlspecialchars($value);
 			$value = trim(str_replace(array(' , ', ', ', ' ,'), ',', $value));
@@ -408,7 +408,7 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 				{
 					if($i != 0)
 					{
-						$result .= $sep;	
+						$result .= $sep;
 					}
 					$i++;
 					$result .= (!empty($L[$extrafield['field_name'] . '_' . $v])) ? $L[$extrafield['field_name'] . '_' . $v] : $v;
@@ -416,7 +416,7 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 			}
 			return $result;
 			break;
-		
+
 		case 'country':
 		case 'file':
 		case 'filesize':
@@ -427,9 +427,9 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 		case 'input':
 		case 'inputint':
 		case 'currency':
-		case 'double':	
+		case 'double':
 		case 'textarea':
-		case 'range':	
+		case 'range':
 		default:
 			$value = (is_null($value)) ? '' : $value;
 			$value = cot_parse($value, ($extrafield['field_parse'] == 'Text') ? false : true, $parser);
@@ -449,20 +449,20 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 function cot_default_html_construction($type)
 {
 	global $cfg;
-	
+
 	include $cfg['system_dir'].'/resources.php';
 	if (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaulttheme']}.php"))
 	{
 		include "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaulttheme']}.php";
 	}
-	
+
 	$html = '';
 	switch ($type)
 	{
 		case 'input':
 		case 'inputint':
 		case 'currency':
-		case 'double':	
+		case 'double':
 			$html = $R['input_text'];
 			$html = str_replace('{$attrs}', '{$attrs} maxlength="255"', $html);
 			break;
@@ -470,17 +470,17 @@ function cot_default_html_construction($type)
 		case 'textarea':
 			$html = $R['input_textarea'];
 			break;
-		
+
 		case 'country':
 		case 'select':
-		case 'range':	
+		case 'range':
 			$html = $R['input_select'];
 			break;
 
 		case 'checkbox':
 			$html = $R['input_checkbox'];
 			break;
-		
+
 		case 'checklistbox':
 			$html = $R['input_check'];
 			break;
@@ -496,7 +496,7 @@ function cot_default_html_construction($type)
 		case 'file':
 			$html = $R['input_file'] . '|' . $R['input_file_empty'];
 			break;
-	
+
 		case 'filesize':
 			$html = '';
 			break;
@@ -586,7 +586,7 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 		case 'currency': $sqltype = "DOUBLE(13,2) NOT NULL default '0'";
 			break;
 		case 'double': $sqltype = "DOUBLE NOT NULL default '0'";
-			break;		
+			break;
 		case 'textarea': $sqltype = 'TEXT';
 			break;
 		case 'checkbox': $sqltype = 'BOOL';
@@ -601,7 +601,7 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 	if(!empty($customtype))
 	{
 		$sqltype = $customtype;
-	}	
+	}
 	$step2 = $db->query("ALTER TABLE $location ADD " . $column_prefix . "_$name $sqltype ");
 
 	return $step1 && $step2;
@@ -631,7 +631,7 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 function cot_extrafield_update($location, $oldname, $name, $type, $html='', $variants='', $default='', $required=0, $parse='HTML', $description='', $params = '', $enabled = 1, $customtype = '')
 {
 	global $db, $db_extra_fields;
-	
+
 	$checkname = cot_import($name, 'D', 'ALP');
 	$checkname = str_replace(array('-', '.'), array('', ''), $checkname);
 	if($checkname != $name)
@@ -671,7 +671,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 	$extf['field_required'] = ($required > 0) ? 1 : 0;
 	$extf['field_description'] = is_null($description) ? '' : $description;
 	$extf['field_enabled'] = ($enabled > 0) ? 1 : 0;
-	
+
 	$step1 = $db->update($db_extra_fields, $extf, "field_name = '$oldname' AND field_location='$location'") == 1;
 
 	if (!$alter)
@@ -694,7 +694,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 		case 'currency': $sqltype = "DOUBLE(13,2) NOT NULL default '0'";
 			break;
 		case 'double': $sqltype = "DOUBLE NOT NULL default '0'";
-			break;		
+			break;
 		case 'textarea': $sqltype = 'TEXT';
 			break;
 		case 'checkbox': $sqltype = 'BOOL';
@@ -739,13 +739,13 @@ function cot_extrafield_remove($location, $name)
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
 	$step1 = $db->delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;
-	
+
 	$step2 = true;
 	if ($db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0)
-	{	
+	{
 		$step2 = $db->query("ALTER TABLE $location DROP " . $column_prefix . "_" . $name);
 	}
-	
+
 	return $step1 && $step2;
 }
 
@@ -755,7 +755,7 @@ function cot_extrafield_remove($location, $name)
  * $_FILES['field']['key']['index']
  * To the more standard and appropriate:
  * $array['index']['key']
- * 
+ *
  * @param array $file_post $_FILE array
  * @return array
  *

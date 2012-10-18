@@ -1590,7 +1590,6 @@ class Cotpl_var
 		if ($this->name === 'PHP')
 		{
 			$var =& $GLOBALS;
-			$val = null;
 		}
 		else
 		{
@@ -1677,7 +1676,7 @@ class Cotpl_var
 					{
 						return $this->__toString();
 					}
-					$val = $func($val);
+					$val = isset($val) ? $func($val) : $func();
 				}
 			}
 		}

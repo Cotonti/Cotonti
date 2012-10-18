@@ -1966,6 +1966,29 @@ function cot_imageresize($source, $target='return', $target_width=99999, $target
 	$mimetype = $source_size['mime'];
 	if (substr($mimetype, 0, 6) != 'image/') return;
 
+	// Prevent from loading images taking more than 100M of memory
+	if (!isset($source_size['channels'])) $source_size['channels'] = 1;
+	$required_memory = $source_size[0] * $source_size[1] * ($source_size['bits'] / 8) * $source_size['channels'] * 2.5;
+	$memory_limit = trim(ini_get('memory_limit'));
+	$last = strtolower($memory_limit[strlen($memory_limit)-1]);
+	switch ($last)
+	{
+		case 'g':
+			$memory_limit *= 1024;
+		case 'm':
+			$memory_limit *= 1024;
+		case 'k':
+			$memory_limit *= 1024;
+	}
+	if ($memory_limit > 0)
+	{
+		$avail_memory = $memory_limit - memory_get_usage();
+		if ($required_memory > $avail_memory * 0.7)
+		{
+			return;
+		}
+	}
+
 	$source_width = $source_size[0];
 	$source_height = $source_size[1];
 	if($target_width > $source_width) $target_width = $source_width; $noscaling_x = true;
@@ -2015,7 +2038,7 @@ function cot_imageresize($source, $target='return', $target_width=99999, $target
 		$target_width = ceil($height_ratio * $source_width);
 	}
 
-	ini_set('memory_limit', '100M');
+	//ini_set('memory_limit', '100M');
 	$canvas = imagecreatetruecolor($target_width, $target_height);
 
 	switch($mimetype)
