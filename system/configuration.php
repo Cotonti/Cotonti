@@ -46,6 +46,10 @@ define('COT_CONFIG_TYPE_SEPARATOR', 6);
  * Integer range
  */
 define('COT_CONFIG_TYPE_RANGE', 7);
+/**
+ * Custom type.
+ */
+define('COT_CONFIG_TYPE_CUSTOM', 8);
 
 /**
  * Registers a set of configuration entries at once.
@@ -293,6 +297,9 @@ function cot_config_parse($info_cfg)
 						break;
 					case 'range':
 						$line['Type'] = COT_CONFIG_TYPE_RANGE;
+						break;
+					case 'custom':
+						$line['Type'] = COT_CONFIG_TYPE_CUSTOM;
 						break;
 					default:
 						$line['Type'] = COT_CONFIG_TYPE_TEXT;

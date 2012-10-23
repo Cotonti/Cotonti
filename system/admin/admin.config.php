@@ -85,16 +85,27 @@ switch($n)
 				array_merge(array($o, $p), $sub_param));
 			while ($row = $sql->fetch())
 			{
-				$cfg_value = trim(cot_import($row['config_name'], 'P', 'NOC'));
+				if (sizeof($cot_import_filters[$row['config_name']]))
+				{
+					$cfg_value = cot_import($row['config_name'], 'P', $row['config_name']);
+				}
+				else
+				{
+					$cfg_value = trim(cot_import($row['config_name'], 'P', 'NOC'));
+				}
+
 				if ($o == 'core' && $p == 'users'
 					&& ($cfg_name == 'av_maxsize' || $cfg_name == 'sig_maxsize' || $cfg_name == 'ph_maxsize'))
 				{
 					$cfg_value = min($cfg_value, cot_get_uploadmax() * 1024);
 				}
-				$db->update($db_config, array('config_value' => $cfg_value),
-					"config_name = ? AND config_owner = ? AND config_cat = ? $where_cat",
-					array_merge(array($row['config_name'], $o, $p), $sub_param));
-				$overriden[] = $row['config_name'];
+				if ($cfg_value != $row['config_value'])
+				{
+					$db->update($db_config, array('config_value' => $cfg_value),
+						"config_name = ? AND config_owner = ? AND config_cat = ? $where_cat",
+						array_merge(array($row['config_name'], $o, $p), $sub_param));
+					$overriden[] = $row['config_name'];
+				}
 			}
 			$sql->closeCursor();
 			if (!empty($sub))
@@ -350,6 +361,35 @@ switch($n)
 				$cfg_params = count($range_params) == 3 ? range($range_params[0], $range_params[1], $range_params[2])
 					: range($range_params[0], $range_params[1]);
 				$config_input = cot_selectbox($config_value, $config_name, $cfg_params, $cfg_params, false);
+			}
+			elseif ($config_type == COT_CONFIG_TYPE_CUSTOM)
+			{
+				// Preload module/plugin functions
+				if (file_exists(cot_incfile($config_cat, $config_owner)))
+				{
+					require_once cot_incfile($config_cat, $config_owner);
+				}
+				if ((preg_match('#^(\w+)\((.*?)\)$#', $row['config_variants'], $mt) && function_exists($mt[1])))
+				{
+					$callback_params = preg_split('#\s*,\s*#', $mt[2]);
+					if (count($callback_params) > 0 && !empty($callback_params[0]))
+					{
+						for ($i = 0; $i < count($callback_params); $i++)
+						{
+						$callback_params[$i] = str_replace("'", '', $callback_params[$i]);
+						$callback_params[$i] = str_replace('"', '', $callback_params[$i]);
+						}
+						$config_input = call_user_func_array($mt[1], array_merge(array($config_name, $config_value)),$callback_params);
+					}
+						else
+						{
+						$config_input = call_user_func_array($mt[1], array($config_name, $config_value));
+						}
+				}
+				else
+				{
+					$config_input = '';
+				}
 			}
 			else
 			{
