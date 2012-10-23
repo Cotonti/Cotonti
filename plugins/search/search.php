@@ -34,11 +34,11 @@ $sq = cot_import('sq', 'R', 'TXT');
 $sq = $db->prep($sq);
 $hl = urlencode(mb_strtoupper($sq));
 $tab = cot_import('tab', 'R', 'ALP');
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['plugin']['search']['maxitems']);
+$cfg_maxitems = is_numeric($cfg['plugin']['search']['maxitems']) ? abs(floor($cfg['plugin']['search']['maxitems'])) : 50;
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg_maxitems);
 $totalitems = array();
 $pag_catauth = array();
 $frm_catauth = array();
-
 $rs = $_REQUEST['rs'];
 
 $rs['pagtitle'] = cot_import($rs['pagtitle'], 'D', 'INT');
@@ -273,7 +273,7 @@ if (!empty($sq))
 			include $pl;
 		}
 		/* ===== */
-		
+
 		if (!$db->fieldExists($db_pages, 'page_'.$rs['pagsort']))
 		{
 			$rs['pagsort'] = 'date';
@@ -283,7 +283,7 @@ if (!empty($sq))
 			FROM $db_pages AS p $search_join_condition
 			WHERE $where
 			ORDER BY page_".$rs['pagsort']." ".$rs['pagsort2']."
-			LIMIT $d, ".$cfg['plugin']['search']['maxitems']
+			LIMIT $d, ".$cfg_maxitems
 				.$search_union_query);
 
 		$items = $sql->rowCount();
@@ -363,9 +363,9 @@ if (!empty($sq))
 		$where_and = array_diff($where_and, array(''));
 		$where = implode(' AND ', $where_and);
 
-		$maxitems = $cfg['plugin']['search']['maxitems'] - $items;
+		$maxitems = $cfg_maxitems - $items;
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
-		
+
 		if (!$db->fieldExists($db_forum_topics, "ft_{$rs['frmsort']}"))
 		{
 			$rs['frmsort'] = 'updated';
@@ -420,7 +420,7 @@ if (!empty($sq))
 	{
 		$t->parse('MAIN.RESULTS');
 	}
-	
+
 	$rs_url_path = array();
 	foreach ($rs as $k => $v)
 	{
@@ -436,7 +436,7 @@ if (!empty($sq))
 			$rs_url_path['rs[' . $k . ']'] = $v;
 		}
 	}
-	$pagenav = cot_pagenav('plug', array('e' => 'search', 'sq' => $sq, 'tab' => $tab)+$rs_url_path, $d, array_sum($totalitems), $cfg['plugin']['search']['maxitems']);
+	$pagenav = cot_pagenav('plug', array('e' => 'search', 'sq' => $sq, 'tab' => $tab)+$rs_url_path, $d, array_sum($totalitems), $cfg_maxitems);
 }
 
 // Search title
