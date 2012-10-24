@@ -88,7 +88,11 @@
 		<form action="{FORUMS_POSTS_NEWPOST_SEND}" method="post" name="newpost">
 			<table class="flat">
 				<tr>
-					<td>{FORUMS_POSTS_NEWPOST_TEXT}</td>
+					<td>{FORUMS_POSTS_NEWPOST_TEXT}
+                                        <!-- IF {PHP.cfg.forums.edittimeout} != 0 -->
+                                                {PHP.L.forums_edittimeoutnote} {FORUMS_POSTS_NEWPOST_EDITTIMEOUT}    
+                                        <!-- ENDIF -->
+                                        </td>
 				</tr>
 				<tr>
 					<td class="valid"><button type="submit">{PHP.L.Reply}</button></td>

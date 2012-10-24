@@ -29,6 +29,7 @@ maxpostsperpage=08:string::15:
 mintitlelength=09:string::5:
 minpostlength=10:string::2:
 enablereplyform=11:radio::0:
+edittimeout=12:select:0,0.25,1,2,4,12,24,48,72,168:0:
 title_posts=31:string::{TITLE} - {SECTION} - {FORUM}:
 title_topics=32:string::{SECTION} - {FORUM}:
 [END_COT_EXT_CONFIG]

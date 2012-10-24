@@ -17,7 +17,11 @@
 					</tr>
 					<!-- END: FORUMS_EDITPOST_FIRSTPOST -->
 					<tr>
-						<td colspan="2">{FORUMS_EDITPOST_TEXT}</td>
+						<td colspan="2">{FORUMS_EDITPOST_TEXT}
+                                                <!-- IF {PHP.cfg.forums.edittimeout} != 0 -->
+                                                {PHP.L.forums_edittimeoutnote} {FORUMS_EDITPOST_EDITTIMEOUT}    
+                                                <!-- ENDIF -->
+                                                </td>
 					</tr>
 					<!-- BEGIN: POLL -->
 					<tr>

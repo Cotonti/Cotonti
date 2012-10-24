@@ -23,7 +23,11 @@
 					</tr>
 <!-- END: PRIVATE -->
 					<tr>
-						<td colspan="2">{FORUMS_NEWTOPIC_TEXT}</td>
+						<td colspan="2">{FORUMS_NEWTOPIC_TEXT}
+                                                <!-- IF {PHP.cfg.forums.edittimeout} != 0 -->
+                                                {PHP.L.forums_edittimeoutnote} {FORUMS_NEWTOPIC_EDITTIMEOUT}    
+                                                <!-- ENDIF -->
+                                                </td>
 					</tr>
 <!-- BEGIN: POLL -->
 					<tr>
