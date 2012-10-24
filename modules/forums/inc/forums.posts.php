@@ -187,7 +187,7 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
 }
-elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($p) && ($usr['isadmin'] || ($fp_posterid == $usr['id'] && ($cfg['forums']['edittimeout']=='0' || $sys['now']-$row['fp_creation']<$cfg['forums']['edittimeout']*3600))))
+elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($p) && ($usr['isadmin'] || ($fp_posterid == $usr['id'] && ($cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < $cfg['forums']['edittimeout'] * 3600))))
 {
 	cot_check_xg();
 
@@ -385,10 +385,10 @@ foreach ($sql_forums->fetchAll() as $row)
 
 	$rowquote_url = ($usr['id'] > 0) ? cot_url('forums', 'm=posts&s=' . $s . '&q=' . $q . '&quote=' . $row['fp_id'] . '&n=last', '#np') : '';
 	$rowquote = ($usr['id'] > 0) ? cot_rc('forums_rowquote', array('url' => $rowquote_url)) : '';
-	$rowedit_url = (($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout']=='0' || $sys['now']-$row['fp_creation']<$cfg['forums']['edittimeout']*3600))) && $usr['id'] > 0) ? cot_url('forums', 'm=editpost&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&' . cot_xg()) : '';
-	$rowedit = (($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout']=='0' || $sys['now']-$row['fp_creation']<$cfg['forums']['edittimeout']*3600))) && $usr['id'] > 0) ? cot_rc('forums_rowedit', array('url' => $rowedit_url)) : '';
-	$rowdelete_url = ($usr['id'] > 0 && ($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout']=='0' || $sys['now']-$row['fp_creation']<$cfg['forums']['edittimeout']*3600)))) ? cot_confirm_url(cot_url('forums', 'm=posts&a=delete&' . cot_xg() . '&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id']), 'forums', 'forums_confirm_delete_post') : '';
-	$rowdelete = ($usr['id'] > 0 && ($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout']=='0' || $sys['now']-$row['fp_creation']<$cfg['forums']['edittimeout']*3600)) && $fp_num > 1)) ? cot_rc('forums_rowdelete', array('url' => $rowdelete_url)) : '';
+	$rowedit_url = (($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < $cfg['forums']['edittimeout'] * 3600))) && $usr['id'] > 0) ? cot_url('forums', 'm=editpost&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&' . cot_xg()) : '';
+	$rowedit = (($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < $cfg['forums']['edittimeout'] * 3600))) && $usr['id'] > 0) ? cot_rc('forums_rowedit', array('url' => $rowedit_url)) : '';
+	$rowdelete_url = ($usr['id'] > 0 && ($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < $cfg['forums']['edittimeout'] * 3600)))) ? cot_confirm_url(cot_url('forums', 'm=posts&a=delete&' . cot_xg() . '&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id']), 'forums', 'forums_confirm_delete_post') : '';
+	$rowdelete = ($usr['id'] > 0 && ($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < $cfg['forums']['edittimeout'] * 3600)) && $fp_num > 1)) ? cot_rc('forums_rowdelete', array('url' => $rowdelete_url)) : '';
 
 	if (!empty($row['fp_updater']))
 	{
@@ -513,7 +513,7 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 	$t->assign(array(
 		'FORUMS_POSTS_NEWPOST_SEND' => cot_url('forums', "m=posts&a=newpost&s=" . $s . "&q=" . $q),
 		'FORUMS_POSTS_NEWPOST_TEXT' => $R['forums_code_newpost_mark'] . cot_textarea('rmsgtext', $rmsg['fp_text'], 16, 56, '', 'input_textarea_medieditor'),
-            	'FORUMS_POSTS_NEWPOST_EDITTIMEOUT' => cot_build_timegap(0, $cfg['forums']['edittimeout']*3600)
+            	'FORUMS_POSTS_NEWPOST_EDITTIMEOUT' => cot_build_timegap(0, $cfg['forums']['edittimeout'] * 3600)
 	));
 
 	cot_display_messages($t);

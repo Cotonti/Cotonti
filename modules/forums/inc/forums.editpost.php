@@ -40,7 +40,7 @@ if ($rowpost = $sql_forums->fetch())
 	}
 	/* ===== */
 
-	if (!$usr['isadmin'] && ($rowpost['fp_posterid'] != $usr['id'] || ($cfg['forums']['edittimeout']<>'0' && $sys['now']-$rowpost['fp_creation']>$cfg['forums']['edittimeout']*3600)))
+	if (!$usr['isadmin'] && ($rowpost['fp_posterid'] != $usr['id'] || ($cfg['forums']['edittimeout'] != '0' && $sys['now'] - $rowpost['fp_creation'] > $cfg['forums']['edittimeout'] * 3600)))
 	{
 		cot_log('Attempt to edit a post without rights', 'sec');
 		cot_die();
@@ -204,7 +204,7 @@ $t->assign(array(
 	'FORUMS_EDITPOST_UPDATED_STAMP' => $rowpost['fp_updated'],
 	'FORUMS_EDITPOST_SEND' => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . cot_xg()),
 	'FORUMS_EDITPOST_TEXT' => cot_textarea('rmsgtext', $rowpost['fp_text'], 20, 56, '', 'input_textarea_medieditor'),
-	'FORUMS_EDITPOST_EDITTIMEOUT' => cot_build_timegap(0, $cfg['forums']['edittimeout']*3600)
+	'FORUMS_EDITPOST_EDITTIMEOUT' => cot_build_timegap(0, $cfg['forums']['edittimeout'] * 3600)
 ));
 
 // Extra fields
