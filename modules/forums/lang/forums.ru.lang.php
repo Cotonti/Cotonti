@@ -27,6 +27,7 @@ $L['cfg_mintitlelength'] = array('Мин. длина заголовка темы
 $L['cfg_title_posts'] = array('Формат заголовка темы форума', 'Опции: {FORUM}, {SECTION}, {TITLE}');
 $L['cfg_title_topics'] = array('Формат заголовка раздела форума', 'Опции: {FORUM}, {SECTION}');
 $L['cfg_enablereplyform'] = array('Отображать форму ответа на всех страницах', '');
+$L['cfg_edittimeout'] = array('Тайм-аут редактирования', 'Не позволить пользователям редактировать или удалять собственные сообщения после данного времени (в часах) (0 для отключения этой функции)');
 
 $L['cfg_allowusertext'] = array('Показывать подписи');
 $L['cfg_allowbbcodes'] = array('Разрешить BBCodes');
@@ -62,6 +63,7 @@ $L['forums_topiclocked'] = 'Тема заблокирована, новые со
 $L['forums_topicoptions'] = 'Опции темы';
 $L['forums_updatedby'] = '<br /><em>Отредактировано: %1$s (%2$s, %3$s назад)</em>';
 $L['forums_postedby'] = 'Опубликовал(а)';
+$L['forums_edittimeoutnote'] = 'Время для редактирования или удаления собственного сообщения: ';
 
 $L['forums_privatetopic1'] = '&laquo;Частная&raquo; тема';
 $L['forums_privatetopic2'] = 'просмотр и ответы в теме будут доступны только модераторам форумов и вам как автору темы';

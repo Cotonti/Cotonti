@@ -27,6 +27,7 @@ $L['cfg_mintitlelength'] = array('Min. topic title length', ' ');
 $L['cfg_title_posts'] = array('Forum Posts title format', 'Options: {FORUM}, {SECTION}, {TITLE}');
 $L['cfg_title_topics'] = array('Forum Topics title format', 'Options: {FORUM}, {SECTION}');
 $L['cfg_enablereplyform'] = array('Show reply form on every page', '');
+$L['cfg_edittimeout'] = array('Edit timeout', 'Will prevent users from editing or deleting own posts after the given timeout (In hours) (Zero to disable this feature)');
 
 $L['cfg_allowusertext'] = array('Display signatures');
 $L['cfg_allowbbcodes'] = array('Enable BBcodes');
@@ -62,6 +63,7 @@ $L['forums_topiclocked'] = 'This topic is locked, new posts are not allowed.';
 $L['forums_topicoptions'] = 'Topic options';
 $L['forums_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
 $L['forums_postedby'] = 'Posted by';
+$L['forums_edittimeoutnote'] = 'Timeout for editing or deleting own post is ';
 
 $L['forums_privatetopic1'] = 'Mark this topic as private';
 $L['forums_privatetopic2'] = 'only forums moderators and the starter of the topic (you) will be allowed to read and reply';
