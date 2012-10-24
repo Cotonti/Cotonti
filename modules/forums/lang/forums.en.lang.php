@@ -27,7 +27,7 @@ $L['cfg_mintitlelength'] = array('Min. topic title length', ' ');
 $L['cfg_title_posts'] = array('Forum Posts title format', 'Options: {FORUM}, {SECTION}, {TITLE}');
 $L['cfg_title_topics'] = array('Forum Topics title format', 'Options: {FORUM}, {SECTION}');
 $L['cfg_enablereplyform'] = array('Show reply form on every page', '');
-$L['cfg_edittimeout'] = array('Edit timeout', 'Will prevent users from editing or deleting own posts after the given timeout (In hours) (Zero to disable this feature)');
+$L['cfg_edittimeout'] = array('Edit timeout', 'Prevents users from editing or deleting their own posts after the given timeout (in hours, 0 disables timeout)');
 
 $L['cfg_allowusertext'] = array('Display signatures');
 $L['cfg_allowbbcodes'] = array('Enable BBcodes');
@@ -50,7 +50,7 @@ $L['forums_post'] = 'Post';
 $L['forums_posts'] = 'Posts';
 $L['forums_topic'] = 'Topic';
 $L['forums_topics'] = 'Topics';
- 
+
 $L['forums_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.';
 $L['forums_keepmovedlink'] = 'Keep a Moved Topic link';
 $L['forums_markallasread'] = 'Mark all posts as read';
