@@ -98,7 +98,7 @@ if ($a == 'check')
 		$rremember = true;
 	}
 
-	$login_param = cot_check_email($rusername) ?
+	$login_param = !$cfg['useremailduplicate'] && cot_check_email($rusername) ?
 		'user_email' : 'user_name';
 
 	// Load salt and algo from db

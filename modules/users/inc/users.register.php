@@ -75,7 +75,7 @@ if ($a=='add')
 	if (mb_strlen($rpassword1) < 4) cot_error('aut_passwordtooshort', 'rpassword1');
 	if (!cot_check_email($ruser['user_email']))	cot_error('aut_emailtooshort', 'ruseremail');
 	if ($user_exists) cot_error('aut_usernamealreadyindb', 'rusername');
-	if ($email_exists) cot_error('aut_emailalreadyindb', 'ruseremail');
+	if ($email_exists && !$cfg['useremailduplicate']) cot_error('aut_emailalreadyindb', 'ruseremail');
 	if ($rpassword1 != $rpassword2) cot_error('aut_passwordmismatch', 'rpassword2');
 
 	/* === Hook for the plugins === */
