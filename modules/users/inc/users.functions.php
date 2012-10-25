@@ -48,7 +48,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 
 	$user_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_name = ? LIMIT 1", array($user1['user_name']))->fetch();
 	$email_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_email = ? LIMIT 1", array($user1['user_email']))->fetch();
-	if(!cot_check_email($ruser['user_email']) || $user_exists || (!$cfg['users']['useremailduplicate'] && $email_exists))
+	if(!cot_check_email($ruser['user_email']) || $user_exists || (!$cfg['useremailduplicate'] && $email_exists))
 	{
 		return false;
 	}
