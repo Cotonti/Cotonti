@@ -1084,42 +1084,6 @@ function cot_structure_parents($area, $cat, $type = 'full')
 	return $pathcodes;
 }
 
-
-/**
- * Renders category dropdown
- *
- * @param string $area Area code
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @param string $subcat Show only subcats of selected category
- * @param bool $hideprivate Hide private categories
- * @return string
- * @global CotDB $db
- */
-function cot_selectbox_structure($area, $check, $name, $subcat = '', $hideprivate = true)
-{
-	global $structure;
-
-	foreach ($structure[$area] as $i => $x)
-	{
-		$display = ($hideprivate) ? cot_auth($area, $i, 'W') : true;
-		if ($display && !empty($subcat) && isset($structure[$area][$subcat]) && !(empty($check)))
-		{
-			$mtch = $structure[$area][$subcat]['path'].".";
-			$mtchlen = mb_strlen($mtch);
-			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i == $check) ? true : false;
-		}
-
-		if (cot_auth($area, $i, 'R') && $i!='all' && $display)
-		{
-			$result_array[$i] = $x['tpath'];
-		}
-	}
-	$result = cot_selectbox($check, $name, array_keys($result_array), array_values($result_array), false);
-
-	return($result);
-}
-
 /*
  * ================================= Authorization Subsystem ==================================
 */

@@ -69,44 +69,6 @@ function cot_readraw($file)
 	return (mb_strpos($file, '..') === false && file_exists($file)) ? file_get_contents($file) : 'File not found : '.$file; // TODO need translate
 }
 
-
-/**
- * Renders category dropdown
- *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @param string $subcat Show only subcats of selected category
- * @param bool $hideprivate Hide private categories
- * @return string
- * @global CotDB $db
- */
-function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = true)
-{
-	global $db, $db_structure, $usr, $structure, $L, $R;
-
-	$structure['page'] = (is_array($structure['page'])) ? $structure['page'] : array();
-
-	$result_array = array();
-	foreach ($structure['page'] as $i => $x)
-	{
-		$display = ($hideprivate) ? cot_auth('page', $i, 'W') : true;
-		if ($display && !empty($subcat) && isset($structure['page'][$subcat]) && !(empty($check)))
-		{
-			$mtch = $structure['page'][$subcat]['path'].".";
-			$mtchlen = mb_strlen($mtch);
-			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i == $check) ? true : false;
-		}
-
-		if (cot_auth('page', $i, 'R') && $i!='all' && $display)
-		{
-			$result_array[$i] = $x['tpath'];
-		}
-	}
-	$result = cot_selectbox($check, $name, array_keys($result_array), array_values($result_array), false);
-
-	return($result);
-}
-
 /**
  * Returns all page tags for coTemplate
  *

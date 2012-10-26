@@ -367,6 +367,45 @@ function cot_selectbox_timezone($chosen, $name, $add_gmt = true, $dst = false, $
 }
 
 /**
+ * Renders stucture dropdown
+ *
+ * @param string $extension Extension code
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @param string $subcat Show only subcats of selected category
+ * @param bool $hideprivate Hide private categories
+ * @param bool $is_module TRUE for modules, FALSE for plugins
+ * @return string
+ * @global CotDB $db
+ */
+function cot_selectbox_structure($extension, $check, $name, $subcat = '', $hideprivate = true, $is_module = true)
+{
+	global $db, $db_structure, $usr, $structure, $L, $R;
+
+	$structure[$extension] = (is_array($structure[$extension])) ? $structure[$extension] : array();
+
+	$result_array = array();
+	foreach ($structure[$extension] as $i => $x)
+	{
+		$display = ($hideprivate && $is_module) ? cot_auth($extension, $i, 'W') : true;
+		if ($display && !empty($subcat) && isset($structure[$extension][$subcat]) && !(empty($check)))
+		{
+			$mtch = $structure[$extension][$subcat]['path'].".";
+			$mtchlen = mb_strlen($mtch);
+			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i == $check) ? true : false;
+		}
+
+		if ((!$is_module || cot_auth($extension, $i, 'R')) && $i!='all' && $display)
+		{
+			$result_array[$i] = $x['tpath'];
+		}
+	}
+	$result = cot_selectbox($check, $name, array_keys($result_array), array_values($result_array), false);
+
+	return($result);
+}
+
+/**
  * Generates a textarea
  *
  * @param string $name Input name

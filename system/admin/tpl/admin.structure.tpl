@@ -106,7 +106,7 @@
 					<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
 					<td class="action {ADMIN_STRUCTURE_ODDEVEN}">
 						<a href="{ADMIN_STRUCTURE_CONFIG_URL}" title="{PHP.L.Config}" class="button">{PHP.L.short_config}</a>
-						<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a>
+						<!-- IF {ADMIN_STRUCTURE_RIGHTS_URL} --><a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a><!-- ENDIF -->
 						<a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax button">{PHP.L.short_options}</a>
 						<!-- IF {PHP.dozvil} --><a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="confirmLink button">{PHP.L.short_delete}</a><!-- ENDIF -->
 						<a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" class="button special">{PHP.L.short_open}</a> </td>

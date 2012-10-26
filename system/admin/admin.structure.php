@@ -26,6 +26,8 @@ $mode = cot_import('mode', 'G', 'ALP');
 
 $t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
 
+$modules_structure = &$extension_structure; // for capability
+
 /* === Hook === */
 foreach (cot_getextplugins('admin.structure.first') as $pl)
 {
@@ -37,21 +39,36 @@ if (empty($n))
 {
 	$adminpath[] = array(cot_url('admin', 'm=structure'), $L['Structure']);
 	// Show available module list
-	if(is_array($modules_structure) && count($modules_structure) == 1)
+	if(is_array($extension_structure) && count($extension_structure) == 1 
+		&& ((cot_plugin_active($extension_structure[0]) || cot_module_active($extension_structure[0]))))
 	{
-		cot_redirect(cot_url('admin', 'm=structure&n='.$modules_structure[0], '', true));
+		cot_redirect(cot_url('admin', 'm=structure&n='.$extension_structure[0], '', true));
 	}
-	if (is_array($modules_structure) && count($modules_structure) > 0)
+	if (is_array($extension_structure) && count($extension_structure) > 0)
 	{
-		foreach ($modules_structure as $code)
+		foreach ($extension_structure as $code)
 		{
-			$ext_info = cot_get_extensionparams($code, true);
-			$t->assign(array(
-				'ADMIN_STRUCTURE_EXT_URL' => cot_url('admin', 'm=structure&n='.$code),
-				'ADMIN_STRUCTURE_EXT_ICO' => $ext_info['icon'],
-				'ADMIN_STRUCTURE_EXT_NAME' => $ext_info['name']
-			));
-			$t->parse('LIST.ADMIN_STRUCTURE_EXT');
+			$parse = false;
+			if(cot_plugin_active($code))
+			{
+				$is_module = false;
+				$parse = true;
+			}
+			if(cot_module_active($code))
+			{
+				$is_module = true;
+				$parse = true;
+			}	
+			if($parse)
+			{
+				$ext_info = cot_get_extensionparams($code, $is_module);
+				$t->assign(array(
+					'ADMIN_STRUCTURE_EXT_URL' => cot_url('admin', 'm=structure&n='.$code),
+					'ADMIN_STRUCTURE_EXT_ICO' => $ext_info['icon'],
+					'ADMIN_STRUCTURE_EXT_NAME' => $ext_info['name']
+				));
+				$t->parse('LIST.ADMIN_STRUCTURE_EXT');
+			}
 		}
 	}
 	else
@@ -67,10 +84,25 @@ if (empty($n))
 }
 else
 {
-	// Edit structure for a module
-	if (file_exists(cot_incfile($n, 'module')))
+	$parse = false;
+	if(cot_plugin_active($n))
 	{
-		require_once cot_incfile($n, 'module');
+		$is_module = false;
+		$parse = true;
+	}
+	if(cot_module_active($n))
+	{
+		$is_module = true;
+		$parse = true;
+	}
+	if (!$parse)
+	{
+		cot_redirect(cot_url('admin', 'm=structure', '', true));
+	}
+	// Edit structure for a module
+	if (file_exists(cot_incfile($n, $is_module ? 'module' : 'plug')))
+	{
+		require_once cot_incfile($n, $is_module ? 'module' : 'plug');
 	}
 	if (empty($adminhelp))
 	{
@@ -150,7 +182,7 @@ else
 			}
 			if (!cot_error_found())
 			{
-				$res = cot_structure_update($n, $i, $oldrow, $rstructure);
+				$res = cot_structure_update($n, $i, $oldrow, $rstructure, $is_module);
 				if (is_array($res))
 				{
 					cot_error($res[0], $res[1]);
@@ -224,7 +256,7 @@ else
 		/* ===== */
 		if (!cot_error_found())
 		{
-			$res = cot_structure_add($n, $rstructure);
+			$res = cot_structure_add($n, $rstructure, $is_module);
 			if ($res === true)
 			{
 				/* === Hook === */
@@ -250,7 +282,7 @@ else
 	{
 		cot_check_xg();
 
-		if (cot_structure_delete($n, $c))
+		if (cot_structure_delete($n, $c, $is_module))
 		{
 			/* === Hook === */
 			foreach (cot_getextplugins('admin.structure.delete.done') as $pl)
@@ -389,7 +421,7 @@ else
 			'ADMIN_STRUCTURE_SELECT' => $cat_selectbox,
 			'ADMIN_STRUCTURE_COUNT' => $row['structure_count'],
 			/*TODO*/		'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url($n, 'c='.$structure_code),
-			'ADMIN_STRUCTURE_RIGHTS_URL' => cot_url('admin', 'm=rightsbyitem&ic='.$n.'&io='.$structure_code),
+			'ADMIN_STRUCTURE_RIGHTS_URL' => $is_module ? cot_url('admin', 'm=rightsbyitem&ic='.$n.'&io='.$structure_code) : '',
 			'ADMIN_STRUCTURE_OPTIONS_URL' => cot_url('admin', 'm=structure&n='.$n.'&d='.$durl.'&id='.$structure_id.'&'.cot_xg()),
 			'ADMIN_STRUCTURE_CONFIG_URL' => cot_url('admin', 'm=config&n=edit&o=module&p='.$n.'&sub='.$structure_code),
 			'ADMIN_STRUCTURE_ODDEVEN' => cot_build_oddeven($ii)

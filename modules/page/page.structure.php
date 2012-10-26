@@ -17,6 +17,6 @@ Hooks=admin.structure.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-$modules_structure[] = 'page';
+$extension_structure[] = 'page';
 
 ?>

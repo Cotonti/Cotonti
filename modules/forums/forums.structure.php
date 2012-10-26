@@ -17,6 +17,6 @@ Hooks=admin.structure.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-$modules_structure[] = 'forums';
+$extension_structure[] = 'forums';
 
 ?>
