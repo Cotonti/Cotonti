@@ -56,6 +56,9 @@ $L['msg152_body'] = 'Error, your account is registered but not yet activated.';
 $L['msg153_title'] = 'Login failed (user banned)';
 $L['msg153_body'] = 'Error, your account is banned.';
 
+$L['msg154_title'] = 'Password recovery failed (email not found)';
+$L['msg154_body'] = 'Error, the email you provided isn\'t in the database!';
+
 $L['msg157_title'] = 'Wrong validation URL';
 $L['msg157_body'] = 'This validation URL isn\'t valid.';
 

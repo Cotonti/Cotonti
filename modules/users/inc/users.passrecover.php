@@ -58,7 +58,7 @@ if ($a == 'request' && $email != '')
 		cot_shield_update(10, "Password recovery requested");
 		$env['status'] = '403 Forbidden';
 		cot_log("Pass recovery failed, user : ".$rusername);
-		cot_redirect(cot_url('message', 'msg=151', '', true));
+		cot_redirect(cot_url('message', 'msg=154', '', true));
 	}
 }
 elseif ($a == 'auth' && mb_strlen($v) == 32)
