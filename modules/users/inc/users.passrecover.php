@@ -28,9 +28,9 @@ $msg = '';
 if ($a == 'request' && $email != '')
 {
 	cot_shield_protect();
-	$sql = $db->query("SELECT user_id, user_name, user_lostpass FROM $db_users WHERE user_email='".$db->prep($email)."' ORDER BY user_id ASC LIMIT 1");
-
-	if ($row = $sql->fetch())
+	$sql = $db->query("SELECT user_id, user_name, user_lostpass FROM $db_users WHERE user_email='".$db->prep($email)."' ORDER BY user_id ASC");
+    $email_found= FALSE;
+	while ($row = $sql->fetch())
 	{
 		$rusername = $row['user_name'];
 		$ruserid = $row['user_id'];
@@ -42,17 +42,19 @@ if ($a == 'request' && $email != '')
 			$sql = $db->update($db_users, array('user_lostpass' => $validationkey, 'user_lastip' => $usr['ip']), "user_id=$ruserid");
 		}
 
-		cot_shield_update(60, "Password recovery email sent");
-
 		$rinfo = sprintf($L['pasrec_email1b'], $usr['ip'], cot_date('datetime_medium'));
-
 		$rsubject = $L['pasrec_title'];
 		$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=passrecover&a=auth&v='.$validationkey, '', true);
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['pasrec_email1']."\n\n".$ractivate."\n\n".$rinfo."\n\n ".$L['aut_contactadmin'];
 		cot_mail($email, $rsubject, $rbody);
-
-		$msg = 'request';
+		$email_found = TRUE;
+		if (!$cfg['useremailduplicate']) break;
 	}
+	if ($email_found)
+	{
+		cot_shield_update(60, "Password recovery email sent");
+		$msg = 'request';
+    }        
 	else
 	{
 		cot_shield_update(10, "Password recovery requested");
