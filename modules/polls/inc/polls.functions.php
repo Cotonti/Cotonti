@@ -50,7 +50,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 			if ($val != '')
 			{
 				$counter++;
-				$t->assign('EDIT_POLL_OPTION_TEXT', cot_inputbox('text', $key, htmlspecialchars($val), 'size="40" maxlength="128"'));
+				$t->assign('EDIT_POLL_OPTION_TEXT', cot_inputbox('text', 'poll_option[]', htmlspecialchars($val), 'size="40" maxlength="128"'));
 				$t->parse($block . ".OPTIONS");
 			}
 		}
