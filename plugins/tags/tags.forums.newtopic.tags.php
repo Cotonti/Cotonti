@@ -21,10 +21,11 @@ defined('COT_CODE') or die('Wrong URL');
 if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W'))
 {
 	require_once cot_incfile('tags', 'plug');
+	$rtags = cot_import('rtags', 'P', 'TXT');
 	$t->assign(array(
 		'FORUMS_NEWTOPIC_TOP_TAGS' => $L['Tags'],
 		'FORUMS_NEWTOPIC_TOP_TAGS_HINT' => $L['tags_comma_separated'],
-		'FORUMS_NEWTOPIC_FORM_TAGS' => cot_rc('tags_input_editpost', array('tags' => ''))
+		'FORUMS_NEWTOPIC_FORM_TAGS' => cot_rc('tags_input_editpost', array('tags' => $rtags))
 	));
 	$t->parse('MAIN.FORUMS_NEWTOPIC_TAGS');
 }
