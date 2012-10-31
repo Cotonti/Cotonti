@@ -4,7 +4,7 @@
  * Plugin and Module Management API
  *
  * @package Cotonti
- * @version 0.9.0
+ * @version 0.9.12
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2010-2012
  * @license BSD
@@ -191,10 +191,10 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
  */
 function cot_extension_install($name, $is_module = false, $update = false, $force_update = false)
 {
-    global $cfg, $L, $cache, $usr, $db_auth, $db_config, $db_users,
+	global $cfg, $L, $cache, $usr, $db_auth, $db_config, $db_users,
 		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x, $env;
 
-    $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
+	$path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 
 	// Emit initial message
 	if ($update)
@@ -212,17 +212,17 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		)));
 	}
 
-    // Check setup file and tags
-    $setup_file = $path . "/$name.setup.php";
-    if (!file_exists($setup_file))
-    {
-        cot_error(cot_rc('ext_setup_not_found', array('path' => $setup_file)));
-        return false;
-    }
+	// Check setup file and tags
+	$setup_file = $path . "/$name.setup.php";
+	if (!file_exists($setup_file))
+	{
+		cot_error(cot_rc('ext_setup_not_found', array('path' => $setup_file)));
+		return false;
+	}
 
 	$old_ext_format = false;
 
-    $info = cot_infoget($setup_file, 'COT_EXT');
+	$info = cot_infoget($setup_file, 'COT_EXT');
 	if (!$info && cot_plugin_active('genoa'))
 	{
 		// Try load old format info
@@ -232,11 +232,11 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 			$old_ext_format = true;
 		}
 	}
-    if ($info === false)
-    {
-        cot_error('ext_invalid_format');
-        return false;
-    }
+	if ($info === false)
+	{
+		cot_error('ext_invalid_format');
+		return false;
+	}
 
 	// Check versions
 	$res = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$name'");
@@ -269,31 +269,31 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		$bindings_cnt = cot_plugin_remove($name);
 		cot_message(cot_rc('ext_bindings_uninstalled', array('cnt' => $bindings_cnt)));
 	}
-    // Install hook parts and bindings
-    $hook_bindings = array();
-    $dp = opendir($path);
-    while ($f = readdir($dp))
-    {
-        if (preg_match("#^$name(\.([\w\.]+))?.php$#", $f, $mt)
+	// Install hook parts and bindings
+	$hook_bindings = array();
+	$dp = opendir($path);
+	while ($f = readdir($dp))
+	{
+		if (preg_match("#^$name(\.([\w\.]+))?.php$#", $f, $mt)
 			&& !in_array($mt[2], $cot_ext_ignore_parts))
-        {
-            $part_info = cot_infoget($path . "/$f", 'COT_EXT');
+		{
+			$part_info = cot_infoget($path . "/$f", 'COT_EXT');
 			if (!$part_info && cot_plugin_active('genoa'))
 			{
 				// Try to load old format info
 				$part_info = cot_infoget($path . "/$f", 'SED_EXTPLUGIN');
 			}
-            if ($part_info)
-            {
-                if (empty($part_info['Hooks']))
-                {
-                    $hooks = $is_module ? array('module') : array('standalone');
-                }
-                else
-                {
-                    $hooks = explode(',', $part_info['Hooks']);
+			if ($part_info)
+			{
+				if (empty($part_info['Hooks']))
+				{
+					$hooks = $is_module ? array('module') : array('standalone');
+				}
+				else
+				{
+					$hooks = explode(',', $part_info['Hooks']);
 					$hooks = is_array($hooks) ? array_map('trim', $hooks) : array();
-                }
+				}
 				if (empty($part_info['Order']))
 				{
 					$order = COT_PLUGIN_DEFAULT_ORDER;
@@ -307,31 +307,31 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 					}
 				}
 				$i = 0;
-                foreach ($hooks as $hook)
-                {
-                    $hook_bindings[] = array(
-                        'part' => empty($mt[2]) ? 'main' : $mt[2],
+				foreach ($hooks as $hook)
+				{
+					$hook_bindings[] = array(
+						'part' => empty($mt[2]) ? 'main' : $mt[2],
 						'file' => $f,
-                        'hook' => $hook,
-                        'order' => isset($order[$i]) ? (int) $order[$i] : $order
-                    );
+						'hook' => $hook,
+						'order' => isset($order[$i]) ? (int) $order[$i] : $order
+					);
 					++$i;
-                }
-            }
-        }
-    }
-    closedir($dp);
-    $bindings_cnt = cot_plugin_add($hook_bindings, $name, $info['Name'], $is_module);
-    cot_message(cot_rc('ext_bindings_installed', array('cnt' => $bindings_cnt)));
+				}
+			}
+		}
+	}
+	closedir($dp);
+	$bindings_cnt = cot_plugin_add($hook_bindings, $name, $info['Name'], $is_module);
+	cot_message(cot_rc('ext_bindings_installed', array('cnt' => $bindings_cnt)));
 
-    // Install config
-    $info_cfg = cot_infoget($setup_file, 'COT_EXT_CONFIG');
+	// Install config
+	$info_cfg = cot_infoget($setup_file, 'COT_EXT_CONFIG');
 	if (!$info_cfg && cot_plugin_active('genoa'))
 	{
 		// Try to load old format config
 		$info_cfg = cot_infoget($setup_file, 'SED_EXTPLUGIN_CONFIG');
 	}
-    $options = cot_config_parse($info_cfg, $is_module);
+	$options = cot_config_parse($info_cfg, $is_module);
 
 	if ($update)
 	{
@@ -413,7 +413,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	{
 		// Install auth
 		$insert_rows = array();
-		foreach ($cot_groups as $k => $v)
+		foreach ($cot_groups as $v)
 		{
 			if (!$v['skiprights'])
 			{
@@ -510,6 +510,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 
 		if ($old_ext_format)
 		{
+			global $action;
 			$action = 'install';
 		}
 
@@ -554,11 +555,11 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		cot_extension_add($name, $info['Name'], $info['Version'], !$is_module);
 	}
 
-    // Cleanup
-    cot_auth_reorder();
-    $cache && $cache->clear();
+	// Cleanup
+	cot_auth_reorder();
+	$cache && $cache->clear();
 
-    return true;
+	return true;
 }
 
 /**
@@ -570,9 +571,9 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
  */
 function cot_extension_uninstall($name, $is_module = false)
 {
-    global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins, $cot_plugins_active, $cot_plugins_enabled, $cot_modules, $env;
+	global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins, $cot_plugins_active, $cot_plugins_enabled, $cot_modules, $env;
 
-    $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
+	$path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
 		. "/$name";
 
 	// Emit initial message
@@ -581,44 +582,45 @@ function cot_extension_uninstall($name, $is_module = false)
 		'name' => $name
 	)));
 
-    // Remove bindings
-    cot_plugin_remove($name);
+	// Remove bindings
+	cot_plugin_remove($name);
 
-    // Drop auth and config
-    if ($is_module)
-    {
-        $db->delete($db_config, "config_owner = 'module'
+	// Drop auth and config
+	if ($is_module)
+	{
+		$db->delete($db_config, "config_owner = 'module'
 			AND config_cat = '$name'");
-        $db->delete($db_auth, "auth_code = '$name'");
-    }
-    else
-    {
-        $db->delete($db_config, "config_owner = 'plug'
+		$db->delete($db_auth, "auth_code = '$name'");
+	}
+	else
+	{
+		$db->delete($db_config, "config_owner = 'plug'
 			AND config_cat = '$name'");
-        $db->delete($db_auth, "auth_code = 'plug'
+		$db->delete($db_auth, "auth_code = 'plug'
 			AND auth_option = '$name'");
-    }
-    cot_message('ext_auth_uninstalled');
-    cot_message('ext_config_uninstalled');
+	}
+	cot_message('ext_auth_uninstalled');
+	cot_message('ext_config_uninstalled');
 
-    // Run SQL script if present
-    if (file_exists($path . "/setup/$name.uninstall.sql"))
-    {
-        $sql_err = $db->runScript(
+	// Run SQL script if present
+	if (file_exists($path . "/setup/$name.uninstall.sql"))
+	{
+		$sql_err = $db->runScript(
 			file_get_contents("$path/setup/$name.uninstall.sql"));
-        if (empty($sql_err))
-        {
-            cot_message(cot_rc('ext_executed_sql', array('ret' => 'OK')));
-        }
-        else
-        {
-            cot_error(cot_rc('ext_executed_sql', array('ret' => $sql_err)));
-        }
-    }
+		if (empty($sql_err))
+		{
+			cot_message(cot_rc('ext_executed_sql', array('ret' => 'OK')));
+		}
+		else
+		{
+			cot_error(cot_rc('ext_executed_sql', array('ret' => $sql_err)));
+		}
+	}
 
-    // Run handler part
+	// Run handler part
 	if (cot_plugin_active('genoa') && cot_infoget($path . "/$name.setup.php", 'SED_EXTPLUGIN'))
 	{
+		global $action;
 		$action = 'uninstall';
 		$uninstall_handler = $path . "/$name.setup.php";
 	}
@@ -627,26 +629,26 @@ function cot_extension_uninstall($name, $is_module = false)
 		$uninstall_handler = $path . "/setup/$name.uninstall.php";
 	}
 
-    if (file_exists($uninstall_handler))
-    {
-        $envtmp = $env;
+	if (file_exists($uninstall_handler))
+	{
+		$envtmp = $env;
 		$env = array(
 			'ext' => $name,
 			'location' => $name,
 			'type' => ($is_module) ? 'module' : 'plug'
 		);
-        $ret = include $uninstall_handler;
+		$ret = include $uninstall_handler;
 		$env = $envtmp;
 
-        if ($ret !== false)
-        {
-            cot_message(cot_rc('ext_executed_php', array('ret' => $ret)));
-        }
-        else
-        {
-            cot_error(cot_rc('ext_executed_php', array('ret' => $L['Error'])));
-        }
-    }
+		if ($ret !== false)
+		{
+			cot_message(cot_rc('ext_executed_php', array('ret' => $ret)));
+		}
+		else
+		{
+			cot_error(cot_rc('ext_executed_php', array('ret' => $L['Error'])));
+		}
+	}
 
 	// Unregister from core table
 	cot_extension_remove($name, !$is_module);
@@ -660,7 +662,7 @@ function cot_extension_uninstall($name, $is_module = false)
 		{
 			$cot_plugins[$row['pl_hook']][] = $row;
 		}
-        $sql->closeCursor();
+		$sql->closeCursor();
 	}
 
 	$cot_plugins_active[$name] = false;
@@ -686,27 +688,27 @@ function cot_extension_uninstall($name, $is_module = false)
  */
 function cot_file_phpdoc($filename)
 {
-    $res = array();
-    $data = file_get_contents($filename);
-    if (preg_match('#^/\*\*(.*?)^\s\*/#ms', $data, $mt))
-    {
-        $phpdoc = preg_split('#\r?\n\s\*\s@#', $mt[1]);
-        $cnt = count($phpdoc);
-        if ($cnt > 0)
-        {
-            $res['description'] = trim(preg_replace('#\r?\n\s\*\s?#', '',
+	$res = array();
+	$data = file_get_contents($filename);
+	if (preg_match('#^/\*\*(.*?)^\s\*/#ms', $data, $mt))
+	{
+		$phpdoc = preg_split('#\r?\n\s\*\s@#', $mt[1]);
+		$cnt = count($phpdoc);
+		if ($cnt > 0)
+		{
+			$res['description'] = trim(preg_replace('#\r?\n\s\*\s?#', '',
 				$phpdoc[0]));
-            for ($i = 1; $i < $cnt; $i++)
-            {
-                $delim = mb_strpos($phpdoc[$i], ' ');
-                $key = mb_substr($phpdoc[$i], 0, $delim);
-                $contents = trim(preg_replace('#\r?\n\s\*\s?#', '',
+			for ($i = 1; $i < $cnt; $i++)
+			{
+				$delim = mb_strpos($phpdoc[$i], ' ');
+				$key = mb_substr($phpdoc[$i], 0, $delim);
+				$contents = trim(preg_replace('#\r?\n\s\*\s?#', '',
 					mb_substr($phpdoc[$i], $delim + 1)));
-                $res[$key] = $contents;
-            }
-        }
-    }
-    return $res;
+				$res[$key] = $contents;
+			}
+		}
+	}
+	return $res;
 }
 
 /**
@@ -719,47 +721,46 @@ function cot_file_phpdoc($filename)
  */
 function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
 {
-    global $L;
-    $result = array();
+	$result = array();
 
 	$fp = @fopen($file, 'r');
-    if ($fp)
-    {
-        $limiter_begin = '[BEGIN_' . $limiter . ']';
-        $limiter_end = '[END_' . $limiter . ']';
-        $data = fread($fp, $maxsize);
-        $begin = mb_strpos($data, $limiter_begin);
-        $end = mb_strpos($data, $limiter_end);
+	if ($fp)
+	{
+		$limiter_begin = '[BEGIN_' . $limiter . ']';
+		$limiter_end = '[END_' . $limiter . ']';
+		$data = fread($fp, $maxsize);
+		$begin = mb_strpos($data, $limiter_begin);
+		$end = mb_strpos($data, $limiter_end);
 
-        if ($end > $begin && $begin > 0)
-        {
-            $lines = mb_substr($data, $begin + 8 + mb_strlen($limiter),
+		if ($end > $begin && $begin > 0)
+		{
+			$lines = mb_substr($data, $begin + 8 + mb_strlen($limiter),
 				$end - $begin - mb_strlen($limiter) - 8);
-            $lines = explode("\n", $lines);
+			$lines = explode("\n", $lines);
 
-            foreach ($lines as $k => $line)
-            {
+			foreach ($lines as $line)
+			{
 				$line = ltrim($line, " */");
-                $linex = explode('=', $line);
-                $ii = 1;
-                while (!empty($linex[$ii]))
-                {
-                    $result[$linex[0]] .= trim($linex[$ii]);
-                    $ii++;
-                }
-            }
-        }
-        else
-        {
-            $result = false;
-        }
-    }
-    else
-    {
-        $result = false;
-    }
-    @fclose($fp);
-    return $result;
+				$linex = explode('=', $line);
+				$ii = 1;
+				while (!empty($linex[$ii]))
+				{
+					$result[$linex[0]] .= trim($linex[$ii]);
+					$ii++;
+				}
+			}
+		}
+		else
+		{
+			$result = false;
+		}
+	}
+	else
+	{
+		$result = false;
+	}
+	@fclose($fp);
+	return $result;
 }
 
 /**
@@ -774,12 +775,12 @@ function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
  */
 function cot_extension_add($name, $title, $version = '1.0.0', $is_plug = false)
 {
-    global $db, $db_core;
+	global $db, $db_core;
 
-    $res = $db->insert($db_core, array('ct_code' => $name, 'ct_title' => $title,
+	$res = $db->insert($db_core, array('ct_code' => $name, 'ct_title' => $title,
 		'ct_version' => $version, 'ct_plug' => (int) $is_plug));
 
-    return false;
+	return $res > 0;
 }
 
 /**
@@ -828,10 +829,31 @@ function cot_extension_catcmp($ext1, $ext2)
  */
 function cot_extension_installed($name)
 {
-    global $db, $db_core, $cfg;
+	global $db, $db_core;
 
-    $cnt = $db->query("SELECT COUNT(*) FROM $db_core WHERE ct_code = '$name'")->fetchColumn();
-    return $cnt > 0;
+	$cnt = $db->query("SELECT COUNT(*) FROM $db_core WHERE ct_code = '$name'")->fetchColumn();
+	return $cnt > 0;
+}
+
+/**
+ * Returns installed extension type: 'module' if extension is a module,
+ * 'plug' if extension is a plugin or FALSE if extension is not installed.
+ *
+ * @param string $name Module code
+ * @return mixed
+ * @global CotDB $db
+ */
+function cot_extension_type($name)
+{
+	global $db, $db_core;
+
+	$res = $db->query("SELECT ct_plug FROM $db_core WHERE ct_code = ?", $name);
+	if ($res->rowCount() == 0)
+	{
+		return false;
+	}
+	$is_plug = (int) $res->fetchColumn();
+	return $is_plug ? 'plug' : 'module';
 }
 
 /**
@@ -854,7 +876,7 @@ function cot_extension_list_info($dir)
 			if (!$info && cot_plugin_active('genoa'))
 			{
 				// Try to load old format info
-				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
+				$info = cot_infoget("$path/$f.setup.php", 'SED_EXTPLUGIN');
 			}
 			if (empty($info['Category']))
 			{
@@ -876,9 +898,9 @@ function cot_extension_list_info($dir)
  */
 function cot_extension_pause($name)
 {
-    global $db, $db_core;
+	global $db, $db_core;
 	cot_plugin_pause($name);
-    return $db->update($db_core, array('ct_state' => 0), "ct_code = '$name'") == 1;
+	return $db->update($db_core, array('ct_state' => 0), "ct_code = '$name'") == 1;
 }
 
 /**
@@ -890,9 +912,9 @@ function cot_extension_pause($name)
  */
 function cot_extension_remove($name)
 {
-    global $db, $db_core;
+	global $db, $db_core;
 
-    return $db->delete($db_core, "ct_code = '$name'");
+	return $db->delete($db_core, "ct_code = '$name'");
 }
 
 /**
@@ -904,9 +926,9 @@ function cot_extension_remove($name)
  */
 function cot_extension_resume($name)
 {
-    global $db, $db_core;
+	global $db, $db_core;
 	cot_plugin_resume($name);
-    return $db->update($db_core, array('ct_state' => 1), "ct_code = '$name'") == 1;
+	return $db->update($db_core, array('ct_state' => 1), "ct_code = '$name'") == 1;
 }
 
 /**
@@ -919,9 +941,9 @@ function cot_extension_resume($name)
  */
 function cot_extension_update($name, $version)
 {
-    global $db, $db_core;
+	global $db, $db_core;
 
-    return $db->update($db_core, array('ct_version' => $version), "ct_code = '$name'");
+	return $db->update($db_core, array('ct_version' => $version), "ct_code = '$name'");
 }
 
 /**
@@ -953,28 +975,28 @@ function cot_extension_update($name, $version)
  */
 function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
 {
-    global $db, $db_plugins;
+	global $db, $db_plugins;
 
-    if (empty($title))
-    {
+	if (empty($title))
+	{
 		$title = $name;
 	}
 
-    $insert_rows = array();
-    foreach ($hook_bindings as $binding)
-    {
-        $insert_rows[] = array(
-            'pl_hook' => $binding['hook'],
-            'pl_code' => $name,
-            'pl_part' => $binding['part'],
-            'pl_title' => $title,
-            'pl_file' => empty($binding['file']) ? "$name/$name.{$binding['part']}.php" : $name . '/' . $binding['file'],
-            'pl_order' => $binding['order'],
-            'pl_active' => 1,
-            'pl_module' => (int) $is_module
-        );
-    }
-    return $db->insert($db_plugins, $insert_rows);
+	$insert_rows = array();
+	foreach ($hook_bindings as $binding)
+	{
+		$insert_rows[] = array(
+			'pl_hook' => $binding['hook'],
+			'pl_code' => $name,
+			'pl_part' => $binding['part'],
+			'pl_title' => $title,
+			'pl_file' => empty($binding['file']) ? "$name/$name.{$binding['part']}.php" : $name . '/' . $binding['file'],
+			'pl_order' => $binding['order'],
+			'pl_active' => 1,
+			'pl_module' => (int) $is_module
+		);
+	}
+	return $db->insert($db_plugins, $insert_rows);
 }
 
 /**
@@ -987,15 +1009,15 @@ function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
  */
 function cot_plugin_pause($name, $binding_id = 0)
 {
-    global $db, $db_plugins;
+	global $db, $db_plugins;
 
-    $condition = "pl_code = '$name'";
-    if ($binding_id > 0)
-    {
-        $condition .= " AND pl_id = $binding_id";
-    }
+	$condition = "pl_code = '$name'";
+	if ($binding_id > 0)
+	{
+		$condition .= " AND pl_id = $binding_id";
+	}
 
-    return $db->update($db_plugins, array('pl_active' => 0), $condition);
+	return $db->update($db_plugins, array('pl_active' => 0), $condition);
 }
 
 /**
@@ -1008,15 +1030,15 @@ function cot_plugin_pause($name, $binding_id = 0)
  */
 function cot_plugin_remove($name, $binding_id = 0)
 {
-    global $db, $db_plugins;
+	global $db, $db_plugins;
 
-    $condition = "pl_code = '$name'";
-    if ($binding_id > 0)
-    {
-        $condition .= " AND pl_id = $binding_id";
-    }
+	$condition = "pl_code = '$name'";
+	if ($binding_id > 0)
+	{
+		$condition .= " AND pl_id = $binding_id";
+	}
 
-    return $db->delete($db_plugins, $condition);
+	return $db->delete($db_plugins, $condition);
 }
 
 /**
@@ -1029,15 +1051,15 @@ function cot_plugin_remove($name, $binding_id = 0)
  */
 function cot_plugin_resume($name, $binding_id = 0)
 {
-    global $db, $db_plugins;
+	global $db, $db_plugins;
 
-    $condition = "pl_code = '$name'";
-    if ($binding_id > 0)
-    {
-        $condition .= " AND pl_id = $binding_id";
-    }
+	$condition = "pl_code = '$name'";
+	if ($binding_id > 0)
+	{
+		$condition .= " AND pl_id = $binding_id";
+	}
 
-    return $db->update($db_plugins, array('pl_active' => 1), $condition);
+	return $db->update($db_plugins, array('pl_active' => 1), $condition);
 }
 
 ?>
