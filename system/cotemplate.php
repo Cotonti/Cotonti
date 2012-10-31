@@ -1676,7 +1676,7 @@ class Cotpl_var
 					{
 						return $this->__toString();
 					}
-					$val = isset($val) ? $func($val) : $func();
+					$val = isset($val) || is_null($val) ? $func($val) : $func();
 				}
 			}
 		}
