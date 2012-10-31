@@ -59,16 +59,46 @@ else
 	$found = false;
 	if (preg_match('`^\w+$`', $_GET['e']))
 	{
+		$module_found = false;
+		$plugin_found = false;
 		if (file_exists($cfg['modules_dir'] . '/' . $_GET['e']))
 		{
+			$module_found = true;
 			$found = true;
+		}
+		if (file_exists($cfg['plugins_dir'] . '/' . $_GET['e']))
+		{
+			$plugin_found = true;
+			$found = true;
+		}
+		if ($module_found && $plugin_found)
+		{
+			// Need to query the db to check which one is installed
+			$res = $db->query("SELECT ct_plug FROM $db_core WHERE ct_code = ? LIMIT 1", $_GET['e']);
+			if ($res->rowCount() == 1)
+			{
+				if ((int)$res->fetchColumn())
+				{
+					$module_found = false;
+				}
+				else
+				{
+					$plugin_found = false;
+				}
+			}
+			else
+			{
+				$found = false;
+			}
+		}
+		if ($module_found)
+		{
 			$env['type'] = 'module';
 			define('COT_MODULE', true);
 		}
-		elseif (file_exists($cfg['plugins_dir'] . '/' . $_GET['e']))
+		elseif ($plugin_found)
 		{
-			$found = true;
-			$env['type'] = 'plug'; 
+			$env['type'] = 'plug';
 			$env['location'] = 'plugins';
 			define('COT_PLUG', true);
 		}
