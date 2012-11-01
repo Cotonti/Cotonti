@@ -399,6 +399,14 @@ function cot_page_import($source = 'POST', $rpage = array(), $auth = array())
 		$auth = cot_page_auth($rpage['page_cat']);
 	}
 
+	if ($source == 'D' || $source == 'DIRECT')
+	{
+		// A trick so we don't have to affect every line below
+		global $_PATCH;
+		$_PATCH = $rpage;
+		$source = 'PATCH';
+	}
+
 	$rpage['page_cat']      = cot_import('rpagecat', $source, 'TXT');
 	$rpage['page_keywords'] = cot_import('rpagekeywords', $source, 'TXT');
 	$rpage['page_alias']    = cot_import('rpagealias', $source, 'TXT');
