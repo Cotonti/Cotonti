@@ -5,6 +5,7 @@
 		<h3>{PHP.L.adm_urls_your} {ADMIN_URLS_CONF_NAME}</h3>
 		<pre class="code">{ADMIN_URLS_HTA}</pre>
 <!-- END: HTA -->
+	<!-- IF {PHP.cfg.jquery} -->
 	<script type="text/javascript" src="js/jquery.tablednd.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -22,6 +23,7 @@
 			return false;
 		}
 	</script>
+	<!-- ENDIF -->
 	<style type="text/css">tr.tDnD_whileDrag td{background-color:yellow;}</style>
 	<form name="add_url" id="add_url" action="{ADMIN_URLS_FORM_URL}" method="post" class="ajax">
 		<table id="rules" class="cells">

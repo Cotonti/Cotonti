@@ -17,11 +17,14 @@ Hooks=rc
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_rc_add_file($cfg['plugins_dir'] . '/ratings/js/jquery.rating.min.js');
-cot_rc_add_file($cfg['plugins_dir'] . '/ratings/js/ratings.js');
-if($cfg['plugin']['ratings']['css'])
+if ($cfg['jquery'])
 {
-	cot_rc_add_file($cfg['plugins_dir'] . '/ratings/tpl/ratings.css');
+	cot_rc_add_file($cfg['plugins_dir'] . '/ratings/js/jquery.rating.min.js');
+	cot_rc_add_file($cfg['plugins_dir'] . '/ratings/js/ratings.js');
+	if($cfg['plugin']['ratings']['css'])
+	{
+		cot_rc_add_file($cfg['plugins_dir'] . '/ratings/tpl/ratings.css');
+	}
 }
 
 ?>

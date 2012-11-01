@@ -18,7 +18,7 @@ Tags=header.tpl:{HEADER_HEAD}
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (!empty($highlight))
+if (!empty($highlight) && $cfg['jquery'])
 {
 	$search_embed = '$(document).ready(function() {$("body").each(function() {';
 
