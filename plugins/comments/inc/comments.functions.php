@@ -169,7 +169,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	}
 	else
 	{
-		$t->assign('COMMENTS_CLOSED', $L['com_closed']);
+		$warning = $enabled ? $L['com_regonly'] : $L['com_closed'];
+		$t->assign('COMMENTS_CLOSED', $warning);
 		$t->parse('COMMENTS.COMMENTS_CLOSED');
 	}
 
