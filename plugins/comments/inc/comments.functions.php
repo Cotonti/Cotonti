@@ -40,7 +40,7 @@ function cot_comments_count($ext_name, $code, $row = array())
 	{
 		return $com_cache[$ext_name][$code];
 	}
-	
+
 	$cnt = 0;
 	if (isset($row['com_count']))
 	{
@@ -56,7 +56,7 @@ function cot_comments_count($ext_name, $code, $row = array())
 			$com_cache[$ext_name][$code] = $cnt;
 		}
 	}
-	
+
 	return $cnt;
 }
 
@@ -143,7 +143,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			$exfld_val = cot_build_extrafields('rcomments' . $exfld['field_name'], $exfld, $rcomments[$exfld['field_name']]);
 			$exfld_title = isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
 			$t->assign(array(
-				'COMMENTS_FORM_' . $uname => $exfld_val, 
+				'COMMENTS_FORM_' . $uname => $exfld_val,
 				'COMMENTS_FORM_' . $uname . '_TITLE' => $exfld_title,
 				'COMMENTS_FORM_EXTRAFLD' => $exfld_val,
 				'COMMENTS_FORM_EXTRAFLD_TITLE' => $exfld_title
@@ -154,7 +154,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		$allowed_time = cot_build_timegap($sys['now'] - $cfg['plugin']['comments']['time'] * 60,
 			$sys['now']);
 		$com_hint = cot_rc('com_edithint', array('time' => $allowed_time));
-		
+
 		/* == Hook == */
 		foreach (cot_getextplugins('comments.newcomment.tags') as $pl)
 		{
@@ -195,7 +195,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('comments.loop');
 		/* ===== */
-		
+
 		foreach ($sql->fetchAll() as $row)
 		{
 			$i++;
@@ -218,7 +218,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 					'edit_url' => cot_url('plug', 'e=comments&m=edit&cat='.$cat.'&id='.$row['com_id']),
 					'allowed_time' => $allowed_time
 				)) : '';
-			
+
 			$t->assign(array(
 				'COMMENTS_ROW_ID' => $row['com_id'],
 				'COMMENTS_ROW_ORDER' => $cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
@@ -233,7 +233,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 				'COMMENTS_ROW_ODDEVEN' => cot_build_oddeven($kk),
 				'COMMENTS_ROW_NUM' => $kk
 			));
-			
+
 				// Extrafields
 			if (isset($cot_extrafields[$db_com]))
 			{
@@ -241,12 +241,12 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 				{
 					$tag = mb_strtoupper($exfld['field_name']);
 					$t->assign(array(
-						'COMMENTS_ROW_' . $tag . '_TITLE' => isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exrow['field_name'] . '_title'] : $exfld['field_description'],
+						'COMMENTS_ROW_' . $tag . '_TITLE' => isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exfld['field_name'] . '_title'] : $exfld['field_description'],
 						'COMMENTS_ROW_' . $tag => cot_build_extrafields_data('comments', $exfld, $row['com_'.$exfld['field_name']]),
 					));
 				}
 			}
-			
+
 			$t->assign(cot_generate_usertags($row, 'COMMENTS_ROW_AUTHOR_'), htmlspecialchars($row['com_author']));
 
 			/* === Hook - Part2 : Include === */
@@ -262,13 +262,6 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		$pagenav = cot_pagenav($link_area, $link_params, $d, $totalitems,
 			$cfg['plugin']['comments']['maxcommentsperpage'], $d_var, '#comments',
 			$cfg['jquery'] && $cfg['ajax_enabled'], 'comments', 'plug', "e=comments&area=$ext_name&cat=$cat&item=$code");
-		if (!$cfg['plugin']['comments']['expand_comments'])
-		{
-			// A dirty fix for pagination anchors
-			$pagenav['main'] = preg_replace('/href="(.+?)"/', 'href="$1#comments"', $pagenav['main']);
-			$pagenav['prev'] = preg_replace('/href="(.+?)"/', 'href="$1#comments"', $pagenav['prev']);
-			$pagenav['next'] = preg_replace('/href="(.+?)"/', 'href="$1#comments"', $pagenav['next']);
-		}
 		$t->assign(array(
 			'COMMENTS_PAGES_INFO' => cot_rc('comments_code_pages_info', array(
 					'totalitems' => $totalitems,
@@ -315,8 +308,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 function cot_comments_enabled($ext_name, $cat = '', $item = '')
 {
 	global $cfg, $cot_modules;
-	if (isset($cfg[$ext_name][$cat]['enable_comments']) 
-		|| isset($cfg[$ext_name]['enable_comments']) 
+	if (isset($cfg[$ext_name][$cat]['enable_comments'])
+		|| isset($cfg[$ext_name]['enable_comments'])
 		|| isset($cfg['plugin'][$ext_name]['enable_comments']))
 	{
 		if (isset($cot_modules[$ext_name]))

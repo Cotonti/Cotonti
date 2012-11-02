@@ -83,7 +83,7 @@ if ($m == 'edit' && $id > 0)
 		{
 			cot_error($L['com_commenttooshort'], 'comtext');
 		}
-		
+
 		foreach ($cot_extrafields[$db_com] as $exfld)
 		{
 			$comarray['com_' . $exfld['field_name']] = cot_import_extrafields('rcomments' . $exfld['field_name'], $exfld);
@@ -92,9 +92,9 @@ if ($m == 'edit' && $id > 0)
 		if (!cot_error_found())
 		{
 			$sql = $db->update($db_com, $comarray, 'com_id=? AND com_code=?', array($id, $item));
-			
+
 			cot_extrafield_movefiles();
-			
+
 			if ($cfg['plugin']['comments']['mail'])
 			{
 				$sql2 = $db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
@@ -151,7 +151,7 @@ if ($m == 'edit' && $id > 0)
 		'COMMENTS_FORM_UPDATE_BUTTON' => $L['Update'],
 		'COMMENTS_FORM_TEXT' => cot_textarea('comtext', $com['com_text'], 8, 64, '', 'input_textarea_minieditor')
 	));
-	
+
 	// Extra fields
 	foreach ($cot_extrafields[$db_com] as $exfld)
 	{
@@ -223,7 +223,7 @@ if ($a == 'send' && $usr['auth_write'])
 		$id = $db->lastInsertId();
 
 		cot_extrafield_movefiles();
-		
+
 		$_SESSION['cot_comments_edit'][$id] = $sys['now'];
 
 		if ($cfg['plugin']['comments']['mail'])
@@ -250,8 +250,10 @@ if ($a == 'send' && $usr['auth_write'])
 		cot_message($L['com_commentadded']);
 
 		cot_shield_update(20, 'New comment');
+
+		cot_redirect(cot_url($url_area, $url_params, '#c' . $id, true));
 	}
-	cot_redirect(cot_url($url_area, $url_params, '#c' . $id, true));
+	cot_redirect(cot_url($url_area, $url_params, '#comments', true));
 }
 elseif ($a == 'delete' && $usr['isadmin'])
 {
@@ -262,12 +264,12 @@ elseif ($a == 'delete' && $usr['isadmin'])
 	{
 		$sql->closeCursor();
 		$sql = $db->delete($db_com, "com_id=$id");
-		
+
 		foreach ($cot_extrafields[$db_com] as $exfld)
 		{
 			cot_extrafield_unlinkfiles($row['com_' . $exfld['field_name']], $exfld);
 		}
-		
+
 		/* == Hook == */
 		foreach (cot_getextplugins('comments.delete') as $pl)
 		{
