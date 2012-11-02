@@ -95,7 +95,7 @@ if (is_array($cot_plugins[$exthook]))
 	{
 		if ($k['pl_code'] == $extname)
 		{
-			$out['subtitle'] = $k['pl_title'];
+			$out['plu_title'] = $k['pl_title'];
 			include $cfg['plugins_dir'] . '/' . $k['pl_file'];
 			$empty = false;
 		}
@@ -107,7 +107,14 @@ if ($empty)
 	cot_die_message(907, TRUE);
 }
 
-$out['subtitle'] = empty($out['subtitle']) ? $L['plu_title'] : $out['subtitle'];
+if (empty($out['subtitle']))
+{
+	if (empty($L['plu_title']))
+	{
+		$L['plu_title'] = $L[$extname . '_title'];
+	}
+	$out['subtitle'] = empty($L['plu_title']) ? $out['plu_title'] : $L['plu_title'];
+}
 $sys['sublocation'] = $out['subtitle'];
 
 if ($ext_display_header)
