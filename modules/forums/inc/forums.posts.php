@@ -335,6 +335,12 @@ foreach (cot_getextplugins('forums.posts.query') as $pl)
 $where = array_diff($where, array(''));
 $totalposts = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE " . implode(' AND ', $where))->fetchColumn();
 
+// Disallow accessing non-existent pages
+if ($totalposts > 0 && $d > $totalposts)
+{
+	cot_die_message(404);
+}
+
 $orderlimit = empty($id) ? " ORDER BY $order LIMIT $d, " . $cfg['forums']['maxpostsperpage'] : '';
 
 $sql_forums = $db->query("SELECT p.*, u.* $join_columns

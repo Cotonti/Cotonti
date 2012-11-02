@@ -139,6 +139,13 @@ foreach (cot_getextplugins('users.query') as $pl)
 $totalusers = $db->query(
 	"SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where)
 )->fetchColumn();
+
+// Disallow accessing non-existent pages
+if ($totalusers > 0 && $d > $totalusers)
+{
+	cot_die_message(404);
+}
+
 $sqlusers = $db->query(
 	"SELECT u.* $join_columns FROM $db_users AS u $join_condition
 	WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['users']['maxusersperpage']}"

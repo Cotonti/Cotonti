@@ -218,6 +218,12 @@ $where_prv['ft_mode'] = '1';
 $prvtopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(' AND ', $where_prv))->fetchColumn();
 $totaltopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(' AND ', $where))->fetchColumn();
 
+// Disallow accessing non-existent pages
+if ($totaltopics > 0 && $d > $totaltopics)
+{
+	cot_die_message(404);
+}
+
 $sql_forums = $db->query("SELECT t.* $join_columns FROM $db_forum_topics AS t $join_condition
 	WHERE ".implode(' AND ', $where)." ORDER BY $order LIMIT $d, ".$cfg['forums']['maxtopicsperpage']);
 

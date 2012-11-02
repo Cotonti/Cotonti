@@ -583,7 +583,11 @@ function cot_import_pagenav($var_name, $max_items = 0)
 	if ($cfg['easypagenav'])
 	{
 		$page = (int) cot_import($var_name, 'G', 'INT');
-		if ($page <= 0)
+		if ($page < 0)
+		{
+			cot_die_message(404);
+		}
+		elseif ($page == 0)
 		{
 			$page = 1;
 		}
@@ -595,7 +599,7 @@ function cot_import_pagenav($var_name, $max_items = 0)
 		$offset = (int) cot_import($var_name, 'G', 'INT');
 		if ($offset < 0)
 		{
-			$offset = 0;
+			cot_die_message(404);
 		}
 		if ($offset % $max_items != 0)
 		{
@@ -605,6 +609,7 @@ function cot_import_pagenav($var_name, $max_items = 0)
 		$urlnum = $offset;
 	}
 	$urlnum = ($urlnum > 0) ? $urlnum : '';
+
 	return array($page, $offset, $urlnum);
 }
 
