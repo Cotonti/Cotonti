@@ -652,7 +652,7 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 			}
 			$t->assign(array(
 				"{$ext_type_uc}_ROW_CHECKBOX" => cot_checkbox($checked, "install_{$ext_type_lc}s[$code]"),
-				"{$ext_type_uc}_ROW_TITLE" => $info['Name'],
+				"{$ext_type_uc}_ROW_TITLE" => empty($L['info_name']) ? $info['Name'] : $L['info_name'],
 				"{$ext_type_uc}_ROW_DESCRIPTION" => empty($L['info_desc']) ? $info['Description'] : $L['info_desc'],
 				"{$ext_type_uc}_ROW_REQUIRES" => $requires,
 				"{$ext_type_uc}_ROW_RECOMMENDS" => $recommends

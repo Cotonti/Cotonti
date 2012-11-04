@@ -315,7 +315,7 @@ switch($a)
 
 		// Universal tags
 		$t->assign(array(
-			'ADMIN_EXTENSIONS_NAME' => $info['Name'],
+			'ADMIN_EXTENSIONS_NAME' => empty($L['info_name']) ? $info['Name'] : $L['info_name'],
 			'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? $L['Module'] : $L['Plugin'],
 			'ADMIN_EXTENSIONS_CODE' => $code,
 			'ADMIN_EXTENSIONS_ICO' => (file_exists($icofile)) ? $icofile : '',
@@ -353,7 +353,7 @@ switch($a)
 				'ADMIN_EXTENSIONS_LOCK_MEMBERS' => $info['Lock_members'],
 				'ADMIN_EXTENSIONS_AUTHOR' => $info['Author'],
 				'ADMIN_EXTENSIONS_COPYRIGHT' => $info['Copyright'],
-				'ADMIN_EXTENSIONS_NOTES' => cot_parse($info['Notes']),
+				'ADMIN_EXTENSIONS_NOTES' => empty($L['info_notes']) ? $info['Notes'] : $L['info_notes'],
 			));
 
 			// Check and display dependencies
