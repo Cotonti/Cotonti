@@ -1696,7 +1696,14 @@ function cotpl_callback_replace(&$arg, $i, $val)
 {
 	if (mb_strpos($arg, '$this') !== FALSE)
 	{
-		$arg = str_replace('$this', (string)$val, $arg);
+		if (is_array($val))
+		{
+			$arg = $val;
+		}
+		else
+		{
+			$arg = str_replace('$this', (string)$val, $arg);
+		}
 	}
 }
 
