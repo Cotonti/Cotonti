@@ -47,7 +47,7 @@ switch ($step)
 	case 3:
 		$cfg['mainurl'] = cot_import('mainurl', 'P', 'TXT', 0, false, true);
 		$user['name'] = cot_import('user_name', 'P', 'TXT', 100, false, true);
-		$user['pass'] = cot_import('user_pass', 'P', 'TXT', 16);
+		$user['pass'] = cot_import('user_pass', 'P', 'HTM', 32);
 		$user['pass2'] = cot_import('user_pass2', 'P', 'TXT', 16);
 		$user['email'] = cot_import('user_email', 'P', 'TXT', 64, false, true);
 		$user['country'] = cot_import('user_country', 'P', 'TXT', 0, false, true);
@@ -198,8 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				cot_error('aut_usernametooshort', 'user_name');
 			}
-			if (mb_strlen($user['pass']) < 4
-				|| cot_alphaonly($user['pass']) != $user['pass'])
+			if (mb_strlen($user['pass']) < 4)
 			{
 				cot_error('aut_passwordtooshort', 'user_pass');
 			}

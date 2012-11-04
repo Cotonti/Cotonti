@@ -65,10 +65,10 @@ if($a == 'update')
 		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
 	}
 
-	$roldpass = cot_import('roldpass','P','TXT');
-	$rnewpass1 = cot_import('rnewpass1','P','TXT', 32);
-	$rnewpass2 = cot_import('rnewpass2','P','TXT', 32);
-	$rmailpass = cot_import('rmailpass','P','TXT');
+	$roldpass = cot_import('roldpass','P','HTM');
+	$rnewpass1 = cot_import('rnewpass1','P','HTM', 32);
+	$rnewpass2 = cot_import('rnewpass2','P','HTM', 32);
+	$rmailpass = cot_import('rmailpass','P','HTM');
 	$ruseremail = cot_import('ruseremail','P','TXT');
 
 	//$ruser['user_scheme'] = ($ruser['user_theme'] != $urr['user_theme']) ? $ruser['user_theme'] : $ruser['user_scheme'];
@@ -76,7 +76,7 @@ if($a == 'update')
 	if (!empty($rnewpass1) && !empty($rnewpass2) && !empty($roldpass))
 	{
 		if ($rnewpass1 != $rnewpass2) cot_error('pro_passdiffer', 'rnewpass2');
-		if (mb_strlen($rnewpass1) < 4 || cot_alphaonly($rnewpass1) != $rnewpass2) cot_error('pro_passtoshort', 'rnewpass1');
+		if (mb_strlen($rnewpass1) < 4) cot_error('pro_passtoshort', 'rnewpass1');
 		if (cot_hash($roldpass, $urr['user_passsalt'], $urr['user_passfunc']) != $urr['user_password']) cot_error('pro_wrongpass', 'roldpass');
 
 		if (!empty($ruseremail) && !empty($rmailpass) && $cfg['users']['useremailchange'] && $ruseremail != $urr['user_email'])

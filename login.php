@@ -90,7 +90,7 @@ if ($a == 'check')
 	/* ===== */
 
 	$rusername = cot_import('rusername','P','TXT', 100, TRUE);
-	$rpassword = cot_import('rpassword','P','TXT', 32, TRUE);
+	$rpassword = cot_import('rpassword','P','HTM', 32, TRUE);
 	$rcookiettl = cot_import('rcookiettl', 'P', 'INT');
 	$rremember = cot_import('rremember', 'P', 'BOL');
 	if(empty($rremember) && $rcookiettl > 0 || $cfg['forcerememberme'])

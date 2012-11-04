@@ -107,7 +107,7 @@ if ($a == 'update')
 	}
 
 	$ruser['user_timezone'] = cot_import('rusertimezone','P','TXT');
-	$rusernewpass = cot_import('rusernewpass','P','TXT', 32);
+	$rusernewpass = cot_import('rusernewpass','P','HTM', 32);
 
 	// Extra fields
 	foreach($cot_extrafields[$db_users] as $exfld)
@@ -133,7 +133,7 @@ if ($a == 'update')
 	{
 		cot_error('aut_emailalreadyindb', 'ruseremail');
 	}
-	if (!empty($rusernewpass) && (mb_strlen($rusernewpass) < 4 || cot_alphaonly($rusernewpass) != $rusernewpass))
+	if (mb_strlen($rusernewpass) < 4)
 	{
 		cot_error('aut_passwordtooshort', 'rusernewpass');
 	}
