@@ -518,7 +518,7 @@ function cot_page_add(&$rpage, $auth = array())
 	{
 		if ($auth['isadmin'] && $cfg['page']['autovalidate'])
 		{
-			$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code = ?", $rpage['page_cat']);
+			$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_area='page' AND structure_code = ?", $rpage['page_cat']);
 			$cache && $cache->db->remove('structure', 'system');
 		}
 		else
@@ -594,7 +594,7 @@ function cot_page_delete($id, $rpage = array())
 
 	if ($rpage['page_state'] == 0)
 	{
-		$db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code = ?", $rpage['page_cat']);
+		$db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE  structure_area='page' AND structure_code = ?", $rpage['page_cat']);
 	}
 
 	foreach ($cot_extrafields[$db_pages] as $exfld)
