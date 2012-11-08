@@ -80,7 +80,7 @@ switch($n)
 		{
 			// Update only those options which have been changed
 			$overriden = array();
-			$sql = $db->query("SELECT config_name FROM $db_config
+			$sql = $db->query("SELECT * FROM $db_config
 				WHERE config_owner = ? AND config_cat= ? $where_cat",
 				array_merge(array($o, $p), $sub_param));
 			while ($row = $sql->fetch())
