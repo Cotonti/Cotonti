@@ -48,8 +48,8 @@ if ($a=='add')
 
 	$ruser['user_name'] = cot_import('rusername','P','TXT', 100, TRUE);
 	$ruser['user_email'] = cot_import('ruseremail','P','TXT',64, TRUE);
-	$rpassword1 = cot_import('rpassword1','P','TXT',32);
-	$rpassword2 = cot_import('rpassword2','P','TXT',32);
+	$rpassword1 = cot_import('rpassword1','P','HTM',32);
+	$rpassword2 = cot_import('rpassword2','P','HTM',32);
 	$ruser['user_country'] = cot_import('rcountry','P','TXT');
 	$ruser['user_timezone'] = cot_import('rtimezone','P','TXT');
 	$ruser['user_timezone'] = (!$ruser['user_timezone']) ? 'GMT' : $ruser['user_timezone'];
