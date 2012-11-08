@@ -20,13 +20,13 @@ function changecats()
 			$(this).find('.cag').html(('{' + 'INDEX_NEWS}').toUpperCase());
 			$(this).find('.caf').html('news.tpl');
 		}
-		if ($(this).length && mycat != '')
+		if ($(this).length && mycat !== '')
 		{
 			if (!(newstext.indexOf(mycat) + 1))
 			{
 				newstext += mycat;
 				unsetcats = '|' + $(this).find('.cac').val();
-				if ($(this).find('.cam').val() != '' && $(this).find('.cam').val() != '0')
+				if ($(this).find('.cam').val() !== '' && $(this).find('.cam').val() != '0')
 				{
 					unsetcats += '|' + $(this).find('.cam').val();
 				}
@@ -60,13 +60,12 @@ $('#addoption').live("click", function(){
 	changecats();
 	return false;
 });
-	
+
 $('.cam, .cac, select').live("change", function(){
 	changecats();
 });
 
 $(document).ready(function(){
-	$('#catgenerator').show().prependTo($('form#saveconfig'));
 	$('[name=category]').closest('tr').hide();
 	$('[name=maxpages]').closest('tr').hide();
 

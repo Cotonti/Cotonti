@@ -3,6 +3,7 @@
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 		<div class="block">
 <!-- BEGIN: EDIT -->
+			{ADMIN_CONFIG_EDIT_CUSTOM}
 			<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
@@ -53,7 +54,7 @@
 <div class="container">
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
 <a href="{ADMIN_CONFIG_ROW_URL}" class="ajax thumbicons">
-	<!-- IF {ADMIN_CONFIG_ROW_ICO} --> 
+	<!-- IF {ADMIN_CONFIG_ROW_ICO} -->
 	<img src="{ADMIN_CONFIG_ROW_ICO}"/>
 	<!-- ELSE -->
 	<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/>

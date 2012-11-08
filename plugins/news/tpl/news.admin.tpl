@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
-<script src="{PHP.cfg.plugins_dir}/news/js/news.admin.js" type="text/javascript"></script>	
-<div id="catgenerator" style="display:none"> <div style="display:none">{MAINCATEGORY}</div>
+<script src="{PHP.cfg.plugins_dir}/news/js/news.admin.js" type="text/javascript"></script>
+<div id="catgenerator"> <div style="display:none">{MAINCATEGORY}</div>
 	<table class="cells">
 		<tr>
 			<td class="coltop width30">{PHP.L.Category}</td>

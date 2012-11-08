@@ -18,7 +18,6 @@ Hooks=admin.config.edit.loop
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('page', 'module');
-$adminhelp = $L['news_help'];
 
 if ($p == 'news' && $config_name == 'category' && $cfg['jquery'])
 {
@@ -42,16 +41,14 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'])
 			$tt->parse('MAIN.ADDITIONAL');
 		}
 	}
-	
+
 	$jj++;
 	$tt->assign(array(
-		'MAINCATEGORY' => cot_selectbox_categories($index, 'newsmaincat'),
+		'MAINCATEGORY' => cot_selectbox_structure('page', $index, 'newsmaincat'),
 		'CATNUM' => $jj
 	));
 	$tt->parse('MAIN');
 
-	$t->assign(array(
-		'ADMIN_CONFIG_ROW_CONFIG_MORE' => $tt->text('MAIN') . '<div id="helptext">' . $config_more . '</div>'
-	));
+	$t->assign('ADMIN_CONFIG_EDIT_CUSTOM', $tt->text('MAIN'));
 }
 ?>
