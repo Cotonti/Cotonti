@@ -393,9 +393,22 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	if ($update)
 	{
 		// Only update auth locks
+		if ($is_module)
+		{
+			$auth_code = $name;
+			$auth_option = 'a';
+		}
+		else
+		{
+			$auth_code = 'plug';
+			$auth_option = $name;
+		}
+
 		$lock_guests = cot_auth_getvalue($info['Lock_guests']);
-		$db->update($db_auth, array('auth_rights_lock' => $lock_guests), 'auth_groupid = ' . COT_GROUP_GUESTS
-				. ' OR auth_groupid = ' . COT_GROUP_INACTIVE);
+		$db->update($db_auth, array('auth_rights_lock' => $lock_guests), "
+			auth_code = '$auth_code' AND auth_option = '$auth_option'
+			AND (auth_groupid = " . COT_GROUP_GUESTS
+				. ' OR auth_groupid = ' . COT_GROUP_INACTIVE . ')');
 
 		$lock_members = cot_auth_getvalue($info['Lock_members']);
 		$ingore_groups = implode(',', array(
@@ -405,7 +418,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 			COT_GROUP_SUPERADMINS
 		));
 		$db->update($db_auth, array('auth_rights_lock' => $lock_members),
-			"auth_groupid NOT IN ($ingore_groups)");
+			"auth_code = '$auth_code' AND auth_option = '$auth_option' AND auth_groupid NOT IN ($ingore_groups)");
 
 		cot_message('ext_auth_locks_updated');
 	}
