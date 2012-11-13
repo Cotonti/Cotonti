@@ -1,10 +1,5 @@
 <!-- BEGIN: MAIN -->
 	{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
-<!-- BEGIN: CONFIG_URL -->
-	<ul>
-		<li><a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_CONFIG_URL}">{PHP.L.Configuration}: {PHP.R.admin_icon_config}</a></li>
-	</ul>
-<!-- END: CONFIG_URL -->
 <!-- BEGIN: DETAILS -->
 	<h2><!-- IF {ADMIN_EXTENSIONS_ICO} -->
 					<img src="{ADMIN_EXTENSIONS_ICO}" />
@@ -299,15 +294,4 @@
 <!-- END: SECTION -->
 
 <!-- END: DEFAULT -->
-<!-- BEGIN: EDIT -->
-		<h2>{ADMIN_EXTENSIONS_EDIT_TITLE}</h2>
-		<div class="block">
-			<div class="{ADMIN_EXTENSIONS_EDIT_RESULT}">
-				{ADMIN_EXTENSIONS_EDIT_LOG}
-			</div>
-		</div>
-		<div class="block button-toolbar">
-			<a href="{ADMIN_EXTENSIONS_EDIT_CONTINUE_URL}" class="ajax button special large">{PHP.L.Clickhere}</a>
-		</div>
-<!-- END: EDIT -->
 <!-- END: MAIN -->

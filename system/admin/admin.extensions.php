@@ -80,8 +80,90 @@ switch($a)
 	case 'details':
 	/* =============== */
 		$ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
+		$exists = file_exists($ext_info);
+		if ($exists)
+		{
+			$old_ext_format = false;
+			$info = cot_infoget($ext_info, 'COT_EXT');
+			
+			if (!$info && cot_plugin_active('genoa'))
+			{
+				// Try to load old format info
+				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
+								$old_ext_format = true;
+				cot_message('ext_old_format', 'warning');
+			}
+		}
+		else
+		{
+			$info = array(
+				'Name' => $code
+			);
+		}
 		switch($b)
 		{
+			case 'install':
+				$installed_modules = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = 0")->fetchAll(PDO::FETCH_COLUMN);
+				$installed_plugins = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = 1")->fetchAll(PDO::FETCH_COLUMN);
+				$dependencies_satisfied = cot_extension_dependencies_statisfied($code, $is_module, $installed_modules, $installed_plugins);
+				if ($dependencies_satisfied)
+				{
+					$result = cot_extension_install($code, $is_module);
+				}
+			break;
+			case 'update':
+				$result = cot_extension_install($code, $is_module, true, true);
+				break;
+			case 'uninstall':
+				/* === Hook  === */
+				foreach (cot_getextplugins('admin.extensions.uninstall.first') as $pl)
+				{
+					include $pl;
+				}
+				/* ===== */
+				if (cot_check_xg(false))
+				{
+					// Check if there are extensions installed depending on this one
+					$dependencies_satisfied = true;
+					$res = $db->query("SELECT ct_code, ct_plug FROM $db_core ORDER BY ct_plug, ct_code");
+					foreach ($res->fetchAll() as $row)
+					{
+						$ext = $row['ct_code'];
+						$dir_ext = $row['ct_plug'] ? $cfg['plugins_dir'] : $cfg['modules_dir'];
+						$dep_ext_info = $dir_ext . '/' . $ext . '/' . $ext . '.setup.php';
+						if (file_exists($dep_ext_info))
+						{
+							$dep_info = cot_infoget($dep_ext_info, 'COT_EXT');
+							if (!$dep_info && cot_plugin_active('genoa'))
+							{
+								// Try to load old format info
+								$dep_info = cot_infoget($dep_ext_info, 'SED_EXTPLUGIN');
+							}
+							$dep_field = $is_module ? 'Requires_modules' : 'Requires_plugins';
+							if (in_array($code, explode(',', $dep_info[$dep_field])))
+							{
+								cot_error(cot_rc('ext_dependency_uninstall_error', array(
+									'type' => $row['ct_plug'] ? $L['Plugin'] : $L['Module'],
+									'name' => $dep_info['Name']
+								)));
+								$dependencies_satisfied = false;
+							}
+						}
+					}
+
+					if ($dependencies_satisfied)
+					{
+						$result = cot_extension_uninstall($code, $is_module);
+					}
+					$adminpath[] = $L['adm_opt_uninstall'];
+				}
+				else
+				{
+					$url = cot_url('admin', "m=extensions&a=details&$arg=$code&b=uninstall&x={$sys['xk']}");
+					cot_message(cot_rc('ext_uninstall_confirm', array('url' => $url)), 'error');
+					cot_redirect(cot_url('admin', "m=extensions&a=details&$arg=$code", '', true));
+				}
+			break;
 			case 'pause':
 				cot_extension_pause($code);
 				cot_message('adm_paused');
@@ -108,20 +190,9 @@ switch($a)
 				cot_rc_consolidate();
 			}
 		}
-		$exists = file_exists($ext_info);
 
 		if ($exists)
 		{
-			$old_ext_format = false;
-			$info = cot_infoget($ext_info, 'COT_EXT');
-			if (!$info && cot_plugin_active('genoa'))
-			{
-				// Try to load old format info
-				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
-				$old_ext_format = true;
-				cot_message('ext_old_format', 'warning');
-			}
-
 			$parts = array();
 			$handle = opendir($dir . '/' . $code);
 			while($f = readdir($handle))
@@ -329,10 +400,10 @@ switch($a)
 			'ADMIN_EXTENSIONS_JUMPTO_URL' => $standalone,
 			'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => $struct,
 			'ADMIN_EXTENSIONS_TOTALCONFIG' => $totalconfig,
-			'ADMIN_EXTENSIONS_INSTALL_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=install"),
-			'ADMIN_EXTENSIONS_UPDATE_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=update"),
-			'ADMIN_EXTENSIONS_UNINSTALL_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=uninstall"),
-			'ADMIN_EXTENSIONS_UNINSTALL_CONFIRM_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=uninstall&x={$sys['xk']}"),
+			'ADMIN_EXTENSIONS_INSTALL_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=install"),
+			'ADMIN_EXTENSIONS_UPDATE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=update"),
+			'ADMIN_EXTENSIONS_UNINSTALL_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=uninstall"),
+			'ADMIN_EXTENSIONS_UNINSTALL_CONFIRM_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=uninstall&x={$sys['xk']}"),
 			'ADMIN_EXTENSIONS_PAUSE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=pause"),
 			'ADMIN_EXTENSIONS_UNPAUSE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=unpause")
 		));
@@ -420,151 +491,6 @@ switch($a)
 		}
 		/* ===== */
 		$t->parse('MAIN.DETAILS');
-	break;
-	/* =============== */
-	case 'edit':
-	/* =============== */
-		$dir = $is_module ? $cfg['modules_dir'] : $cfg['plugins_dir'];
-		$ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
-		$arg = $is_module ? 'mod' : 'pl';
-		$exists = file_exists($ext_info);
-		if ($exists)
-		{
-			$info = cot_infoget($ext_info, 'COT_EXT');
-			if (!$info && cot_plugin_active('genoa'))
-			{
-				// Try to load old format info
-				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
-			}
-		}
-		else
-		{
-			$info = array(
-				'Name' => $code
-			);
-		}
-		$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$arg=$code"), $info['Name']);
-		switch($b)
-		{
-			case 'install':
-				$installed_modules = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = 0")->fetchAll(PDO::FETCH_COLUMN);
-				$installed_plugins = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = 1")->fetchAll(PDO::FETCH_COLUMN);
-				$dependencies_satisfied = cot_extension_dependencies_statisfied($code, $is_module, $installed_modules, $installed_plugins);
-				if ($dependencies_satisfied)
-				{
-					$result = cot_extension_install($code, $is_module);
-				}
-				$adminpath[] = $L['adm_opt_install'];
-				$t->assign(array(
-					'ADMIN_EXTENSIONS_EDIT_TITLE' => cot_rc('ext_installing', array(
-							'type' => $is_module ? $L['Module'] : $L['Plugin'],
-							'name' => $code
-						)),
-					'ADMIN_EXTENSIONS_EDIT_RESULT' => $dependencies_satisfied && $result && !cot_error_found() ? 'success' : 'error',
-					'ADMIN_EXTENSIONS_EDIT_LOG' => cot_implode_messages(),
-					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code")
-				));
-				/* === Hook  === */
-				foreach (cot_getextplugins('admin.extensions.install.tags') as $pl)
-				{
-					include $pl;
-				}
-				/* ===== */
-			break;
-			case 'update':
-				$result = cot_extension_install($code, $is_module, true, true);
-				$adminpath[] = $L['adm_opt_update'];
-				$t->assign(array(
-					'ADMIN_EXTENSIONS_EDIT_TITLE' => cot_rc('ext_updating', array(
-							'type' => $is_module ? $L['Module'] : $L['Plugin'],
-							'name' => $code
-						)),
-					'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !cot_error_found() ? 'success' : 'error',
-					'ADMIN_EXTENSIONS_EDIT_LOG' => cot_implode_messages(),
-					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code")
-				));
-				/* === Hook  === */
-				foreach (cot_getextplugins('admin.extensions.update.tags') as $pl)
-				{
-					include $pl;
-				}
-				/* ===== */
-				break;
-			case 'uninstall':
-				/* === Hook  === */
-				foreach (cot_getextplugins('admin.extensions.uninstall.first') as $pl)
-				{
-					include $pl;
-				}
-				/* ===== */
-				if (cot_check_xg(false))
-				{
-					// Check if there are extensions installed depending on this one
-					$dependencies_satisfied = true;
-					$res = $db->query("SELECT ct_code, ct_plug FROM $db_core ORDER BY ct_plug, ct_code");
-					foreach ($res->fetchAll() as $row)
-					{
-						$ext = $row['ct_code'];
-						$dir = $row['ct_plug'] ? $cfg['plugins_dir'] : $cfg['modules_dir'];
-						$dep_ext_info = $dir . '/' . $ext . '/' . $ext . '.setup.php';
-						if (file_exists($dep_ext_info))
-						{
-							$dep_info = cot_infoget($dep_ext_info, 'COT_EXT');
-							if (!$dep_info && cot_plugin_active('genoa'))
-							{
-								// Try to load old format info
-								$dep_info = cot_infoget($dep_ext_info, 'SED_EXTPLUGIN');
-							}
-							$dep_field = $is_module ? 'Requires_modules' : 'Requires_plugins';
-							if (in_array($code, explode(',', $dep_info[$dep_field])))
-							{
-								cot_error(cot_rc('ext_dependency_uninstall_error', array(
-									'type' => $row['ct_plug'] ? $L['Plugin'] : $L['Module'],
-									'name' => $dep_info['Name']
-								)));
-								$dependencies_satisfied = false;
-							}
-						}
-					}
-
-					if ($dependencies_satisfied)
-					{
-						$result = cot_extension_uninstall($code, $is_module);
-					}
-					$adminpath[] = $L['adm_opt_uninstall'];
-					$t->assign(array(
-						'ADMIN_EXTENSIONS_EDIT_TITLE' => cot_rc('ext_uninstalling', array(
-								'type' => $is_module ? $L['Module'] : $L['Plugin'],
-								'name' => $code
-							)),
-						'ADMIN_EXTENSIONS_EDIT_RESULT' => $dependencies_satisfied && $result && !cot_error_found() ? 'success' : 'error',
-						'ADMIN_EXTENSIONS_EDIT_LOG' => cot_implode_messages(),
-						'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code")
-					));
-					/* === Hook  === */
-					foreach (cot_getextplugins('admin.extensions.uninstall.tags') as $pl)
-					{
-						include $pl;
-					}
-					/* ===== */
-				}
-				else
-				{
-					$url = cot_url('admin', "m=extensions&a=edit&$arg=$code&b=uninstall&x={$sys['xk']}");
-					cot_message(cot_rc('ext_uninstall_confirm', array('url' => $url)), 'error');
-					cot_redirect(cot_url('admin', "m=extensions&a=details&$arg=$code", '', true));
-				}
-			break;
-			default:
-				cot_die();
-			break;
-		}
-		if ($cache)
-		{
-			cot_rc_consolidate();
-		}
-		cot_clear_messages();
-		$t->parse('MAIN.EDIT');
 	break;
 	/* =============== */
 	case 'hooks':
@@ -820,13 +746,13 @@ switch($a)
 		$t->parse('MAIN.DEFAULT');
 	break;
 }
-
+/*
 if (!empty($code) && $b == 'install' && $totalconfig > 0)
 {
 	$t->assign('ADMIN_EXTENSIONS_CONFIG_URL', cot_url('admin', 'm=config&n=edit&o=plug&p='.$code));
 	$t->parse('MAIN.CONFIG_URL');
 }
-
+*/
 cot_display_messages($t);
 
 /* === Hook  === */
