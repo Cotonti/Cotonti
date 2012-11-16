@@ -129,7 +129,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	// Assign tags
 	$t->assign(array(
 		'RATINGS_CODE' => $code,
-		'RATINGS_AVERAGE' => round($rating_average / 2, 0),
+		'RATINGS_AVERAGE' => round($rating_average),
 		'RATINGS_AVERAGEIMG' => $rating_averageimg,
 		'RATINGS_VOTERS' => $rating_voters,
 		'RATINGS_SINCE' => $rating_since,
@@ -147,9 +147,9 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 
 	// Render voting form
 	$vote_block = ($auth_write && (!$already_voted || $cfg['plugin']['ratings']['ratings_allowchange'])) ? 'NOTVOTED.' : 'VOTED.';
-	for ($i = 1; $i <= 5; $i++)
+	for ($i = 1; $i <= 10; $i++)
 	{
-		$checked = ($i * 2 <= $rating_cntround) ? 'checked="checked"' : '';
+		$checked = ($i <= $rating_cntround) ? 'checked="checked"' : '';
 		$t->assign(array(
 			'RATINGS_ROW_VALUE' => $i,
 			'RATINGS_ROW_TITLE' => $L['rat_choice' . $i],
@@ -179,7 +179,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	$t->parse('RATINGS');
 	$res = $t->text('RATINGS');
 
-	return array($res, round($rating_cntround / 2, 0));
+	return array($res, round($rating_cntround));
 }
 
 /**
@@ -193,8 +193,8 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 function cot_ratings_enabled($ext_name, $cat = '', $item = '')
 {
 	global $cfg, $cot_modules;
-	if (isset($cfg[$ext_name][$cat]['enable_ratings']) 
-		|| isset($cfg[$ext_name]['enable_ratings']) 
+	if (isset($cfg[$ext_name][$cat]['enable_ratings'])
+		|| isset($cfg[$ext_name]['enable_ratings'])
 		|| isset($cfg['plugin'][$ext_name]['enable_ratings']))
 	{
 		if (isset($cot_modules[$ext_name]))

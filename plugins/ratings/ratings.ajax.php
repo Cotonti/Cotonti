@@ -26,8 +26,6 @@ $inr = cot_import('inr', 'G', 'ALP');
 
 $newrate = cot_import('rate_' . $code, 'P', 'INT');
 $newrate = (!empty($newrate)) ? $newrate : 0;
-// Trick: x2 for backwards compatibility
-$newrate *= 2;
 
 $enabled = cot_ratings_enabled($area, $cat, $code);
 list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'ratings');
@@ -137,7 +135,7 @@ if ($inr == 'send' && $newrate > 0 && $newrate <= 10 && $auth_write && $enabled)
 	}
 	else
 	{
-		echo round($ratingnewaverage / 2, 0);
+		echo round($ratingnewaverage);
 	}
 	exit;
 }

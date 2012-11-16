@@ -8,7 +8,7 @@ $(function() {
 				url: $('#form_' + rate_code).attr('action'),
 				data: rate_name + '=' + value + '&' + $('#form_' + rate_code).serialize(),
 				success: function(msg) {
-					var index = parseInt(msg) > 0 ? parseInt(msg) - 1 : 0;
+					var index = Number(msg) > 0 ? Number(msg) - 1 : 0;
 					$('#' + rate_name).rating('select', index).rating('disable');
 				},
 				error: function(msg) {
@@ -19,5 +19,3 @@ $(function() {
 		}
 	});
 });
-
-
