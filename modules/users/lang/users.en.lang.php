@@ -15,7 +15,7 @@ $L['info_desc'] = 'User management with registration, listings and profiles';
 
 $L['cfg_disablereg'] = array('Disable registration process', 'Prevent users from registering new accounts');
 $L['cfg_maxusersperpage'] = array('Maximum lines in userlist', '');
-$L['cfg_regnoactivation'] = array('Skip email check for new users', '\'No\'recommended, for security reasons');
+$L['cfg_regnoactivation'] = array('Skip email check for new users', '\'No\' recommended, for security reasons');
 $L['cfg_regrequireadmin'] = array('Administrators must validate new accounts', '');
 $L['cfg_user_email_noprotection'] = array('Disable password protection of email change', '\'No\' recommended, for security reasons');
 $L['cfg_useremailchange'] = array('Allow users to change their email address', '\'No\' recommended, for security reasons');
