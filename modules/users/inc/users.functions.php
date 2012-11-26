@@ -141,8 +141,6 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 		$member[$row['gru_groupid']] = TRUE;
 	}
 
-	$maxlevel = cot_auth_getlevel($usr['id']);
-
 	$res = $R['users_code_grplist_begin'];
 	foreach ($cot_groups as $k => $i)
 	{
@@ -150,9 +148,9 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 		{
 			$checked = ($member[$k]) ? ' checked="checked"' : '';
 			$checked_maingrp = ($maingrp == $k) ? ' checked="checked"' : '';
-			$readonly = (!$edit || $maxlevel < $cot_groups[$k]['level'] || $k == COT_GROUP_GUESTS
+			$readonly = (!$edit || $k == COT_GROUP_GUESTS
 					|| $k == COT_GROUP_INACTIVE || $k == COT_GROUP_BANNED || ($k == COT_GROUP_SUPERADMINS && $userid == 1)) ? ' disabled="disabled"' : '';
-			$readonly_maingrp = (!$edit || $maxlevel < $cot_groups[$k]['level'] || $k == COT_GROUP_GUESTS
+			$readonly_maingrp = (!$edit || $k == COT_GROUP_GUESTS
 					|| ($k == COT_GROUP_INACTIVE && $userid == 1) || ($k == COT_GROUP_BANNED && $userid == 1)) ? ' disabled="disabled"' : '';
 		}
 		if ($member[$k] || $edit)
