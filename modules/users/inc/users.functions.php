@@ -131,11 +131,7 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 {
 	global $db, $db_groups, $db_groups_users, $cot_groups, $L, $usr, $R;
 
-	$memberships = $db->query("
-		SELECT gru_groupid
-		FROM $db_groups_users
-		WHERE gru_userid = ?
-	", array($userid))->fetchAll();
+	$memberships = $db->query("SELECT gru_groupid FROM $db_groups_users	WHERE gru_userid = ?", array($userid))->fetchAll();
 	foreach ($memberships as $row)
 	{
 		$member[$row['gru_groupid']] = TRUE;
@@ -148,10 +144,10 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 		{
 			$checked = ($member[$k]) ? ' checked="checked"' : '';
 			$checked_maingrp = ($maingrp == $k) ? ' checked="checked"' : '';
-			$readonly = (!$edit || $k == COT_GROUP_GUESTS
-					|| $k == COT_GROUP_INACTIVE || $k == COT_GROUP_BANNED || ($k == COT_GROUP_SUPERADMINS && $userid == 1)) ? ' disabled="disabled"' : '';
-			$readonly_maingrp = (!$edit || $k == COT_GROUP_GUESTS
-					|| ($k == COT_GROUP_INACTIVE && $userid == 1) || ($k == COT_GROUP_BANNED && $userid == 1)) ? ' disabled="disabled"' : '';
+			$readonly = ($k == COT_GROUP_GUESTS || $k == COT_GROUP_INACTIVE || $k == COT_GROUP_BANNED 
+				|| ($k == COT_GROUP_SUPERADMINS && $userid == 1)) ? ' disabled="disabled"' : '';
+			$readonly_maingrp = ( $k == COT_GROUP_GUESTS || ($k == COT_GROUP_INACTIVE && $userid == 1) 
+				|| ($k == COT_GROUP_BANNED && $userid == 1)) ? ' disabled="disabled"' : '';
 		}
 		if ($member[$k] || $edit)
 		{

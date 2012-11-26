@@ -57,7 +57,7 @@ if ($a == 'update')
 	/* ===== */
 
 	$ruserdelete = cot_import('ruserdelete','P','BOL');
-	if ($ruserdelete && $sys['user_istopadmin'] && !$sys['edited_istopadmin'])
+	if ($ruserdelete)
 	{
 
 		$sql = $db->delete($db_users, "user_id=$id");
@@ -83,10 +83,6 @@ if ($a == 'update')
 
 		cot_log("Deleted user #".$id,'adm');
 		cot_redirect(cot_url('message', "msg=109&rc=200&id=".$id, '', true));
-	}
-	elseif($ruserdelete)
-	{
-		cot_die_message(930, TRUE);
 	}
 
 	$ruser['user_name'] = cot_import('rusername','P','TXT');
@@ -200,29 +196,25 @@ if ($a == 'update')
 
 		$ruser['user_maingrp'] = ($ruser['user_maingrp'] < COT_GROUP_MEMBERS && $id==1) ? COT_GROUP_SUPERADMINS : $ruser['user_maingrp'];
 
-		$maxlevel = cot_auth_getlevel($usr['id']);
-		if($maxlevel >= $cot_groups[$ruser['user_maingrp']]['level'])
+		if (!$rusergroupsms[$ruser['user_maingrp']])
 		{
-			if (!$rusergroupsms[$ruser['user_maingrp']])
-			{
-				$rusergroupsms[$ruser['user_maingrp']] = 1;
-			}
-			$db->update($db_users, array('user_maingrp' => $ruser['user_maingrp']), 'user_id='.$id);
+			$rusergroupsms[$ruser['user_maingrp']] = 1;
 		}
+		$db->update($db_users, array('user_maingrp' => $ruser['user_maingrp']), 'user_id='.$id);
 
 		foreach($cot_groups as $k => $i)
 		{
-			if (isset($rusergroupsms[$k]) && $maxlevel >= $cot_groups[$k]['level'])
+			if (isset($rusergroupsms[$k]))
 			{
-				$sql = $db->query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid=$id AND gru_groupid=$k");
-				if ($sql->rowCount() == 0 && !(($id == 1 && $k == COT_GROUP_BANNED) || ($id == 1 && $k == COT_GROUP_INACTIVE)))
+				if ($db->query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid=$id AND gru_groupid=$k")->rowCount() == 0 
+					&& !($id == 1 && in_array($k, array(COT_GROUP_BANNED, COT_GROUP_INACTIVE))))
 				{
-					$sql = $db->insert($db_groups_users, array('gru_userid' => (int)$id, 'gru_groupid' => (int)$k));
+					$db->insert($db_groups_users, array('gru_userid' => (int)$id, 'gru_groupid' => (int)$k));
 				}
 			}
-			elseif (!($id == 1 && $k == COT_GROUP_SUPERADMINS))
+			else
 			{
-				$sql = $db->delete($db_groups_users, "gru_userid=$id AND gru_groupid=$k");
+				$db->delete($db_groups_users, "gru_userid=$id AND gru_groupid=$k");
 			}
 		}
 
