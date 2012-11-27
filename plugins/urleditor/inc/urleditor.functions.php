@@ -69,7 +69,14 @@ function cot_apply_rwr()
 				// Maybe it is a system page, if not 404 will be given
 				$_GET['e'] = 'page';
 				$_GET['c'] = 'system';
-				$_GET['al'] = $path[0];
+				if (is_numeric($path[0]))
+				{
+					$_GET['id'] = $path[0];
+				}
+				else
+				{
+					$_GET['al'] = $path[0];
+				}
 			}
 		}
 		else
@@ -309,18 +316,18 @@ function cot_url_presets()
 {
 	global $cot_urleditor_presets, $cfg;
 	$urleditor_presets = array();
-	foreach (glob('./datas/*.dat') as $filename) 
+	foreach (glob('./datas/*.dat') as $filename)
 	{
 		if($filename != "./datas/urltrans.dat")
 		{
 			$urleditor_presets[] = basename($filename, ".dat");
 		}
 	}
-	foreach (glob($cfg['plugins_dir'] . "/urleditor/presets/*.dat") as $filename) 
+	foreach (glob($cfg['plugins_dir'] . "/urleditor/presets/*.dat") as $filename)
 	{
-		
+
 		$urleditor_presets[] = basename($filename, ".dat");
-	}	
+	}
 	if (file_exists("./datas/urltrans.dat"))
 	{
 		$urleditor_presets[] = 'custom';
