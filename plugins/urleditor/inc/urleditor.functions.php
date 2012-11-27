@@ -34,7 +34,7 @@ function cot_apply_rwr()
 	if (isset($_GET['rwr']) && !empty($_GET['rwr'])/* && preg_match('`^[\w\p{L}/\-_\ \+\.]+?$`u', $_GET['rwr'])*/)
 	{
 		// Ignore ending slash and split the path into parts
-		$path = explode('/', (mb_strrpos($_GET['rwr'], '/') == mb_strlen($_GET['rwr']) - 1) ? mb_substr($_GET['rwr'], 0, -1) : $_GET['rwr']);
+		$path = explode('/', (mb_strrpos($_GET['rwr'], '/') === mb_strlen($_GET['rwr']) - 1) ? mb_substr($_GET['rwr'], 0, -1) : $_GET['rwr']);
 		$count = count($path);
 
 		$rwr_continue = true;
