@@ -100,8 +100,11 @@ $L['use_subtitle'] = 'Registered members';
 $L['use_title'] = 'Users';
 
 $L['pasrec_title'] = 'Password recovery';
-$L['pasrec_email1'] = 'You may now reset your password using the link below:';
-$L['pasrec_email1b'] = 'Attention: if you did not request this password recovery email, please ignore it. IP of the requester is %1$s, and the date and time of the request is %2$s.';
+$L['pasrec_email1'] = 'Hi %1$s,
+You may now reset your password using the link below:
+%2$s
+
+Attention: if you did not request this password recovery email, please ignore it. IP of the requester is %3$s, and the date and time of the request is %4$s.';
 $L['pasrec_email2'] = 'Your password has been reset as you requested. Please change it as soon as possible and delete this email. Your new password is';
 $L['pasrec_explain1'] = 'Enter your email.';
 $L['pasrec_explain2'] = 'You will receive an email with an emergency link. Click it to reset your password.';

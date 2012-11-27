@@ -42,10 +42,10 @@ if ($a == 'request' && $email != '')
 			$sql = $db->update($db_users, array('user_lostpass' => $validationkey, 'user_lastip' => $usr['ip']), "user_id=$ruserid");
 		}
 
-		$rinfo = sprintf($L['pasrec_email1b'], $usr['ip'], cot_date('datetime_medium'));
 		$rsubject = $L['pasrec_title'];
 		$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=passrecover&a=auth&v='.$validationkey, '', true);
-		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['pasrec_email1']."\n\n".$ractivate."\n\n".$rinfo."\n\n ".$L['aut_contactadmin'];
+		$rbody = sprintf($L['pasrec_email1'], $rusername, $ractivate, $usr['ip'], cot_date('datetime_medium'));
+		$rbody .= "\n\n ".$L['aut_contactadmin'];
 		cot_mail($email, $rsubject, $rbody);
 		$email_found = TRUE;
 		if (!$cfg['useremailduplicate']) break;
