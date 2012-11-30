@@ -64,7 +64,6 @@ switch ($msg)
 	case '102':
 		$r = 1;
 		$rd = 2;
-		$ru = cot_url('index');
 		break;
 
 	case '153':
@@ -82,7 +81,7 @@ switch ($msg)
 	case '404':
 	case '500':
 		$rd = 5;
-		$ru = empty($redirect) ? cot_url('index') : str_replace('&', '&amp;', base64_decode($redirect));
+		$ru = empty($redirect) ? '' : str_replace('&', '&amp;', base64_decode($redirect));
 		break;
 
 	/* ======== System messages ======== */
@@ -128,7 +127,7 @@ switch ($msg)
 			$uri_redirect = base64_decode($redirect);
 			if (mb_strpos($uri_redirect, '&x=') !== false || mb_strpos($uri_redirect, '?x=') !== false)
 			{
-				$ru = cot_url('index'); // xg, not redirect to form action/GET or to command from GET
+				// xg, not redirect to form action/GET or to command from GET
 				break;
 			}
 		}
@@ -146,7 +145,6 @@ if (empty($title) || empty($body))
 if (empty($rc) && empty($rd))
 {
 	$rd = '5';
-	$ru = cot_url('index');
 }
 
 switch ($rc)
