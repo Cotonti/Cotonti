@@ -29,7 +29,7 @@ $out['bottomline'] .= ($cfg['keepcrbottom']) ? $out['copyright'] : '';
 // Development mode SQL query timings
 if ($cfg['devmode'] && cot_auth('admin', 'a', 'A'))
 {
-	$out['devmode'] = "<h4>Dev-mode :</h4><table><tr><td><em>SQL query</em></td><td><em>Duration</em></td><td><em>Timeline</em></td><td><em>Query</em></td></tr>";
+	$out['devmode'] = "<h4>Dev-mode :</h4><table><tr><td><em>SQL query</em></td><td><em>Duration</em></td><td><em>Timeline</em></td><td><em>Execution stack<br />(file[line]: function)</em></td><td><em>Query</em></td></tr>";
 	$out['devmode'] .= "<tr><td colspan=\"2\">BEGIN</td>";
 	$out['devmode'] .= "<td style=\"text-align:right;\">0.000 ms</td><td>&nbsp;</td></tr>";
 	if(is_array($sys['devmode']['queries']))
@@ -39,6 +39,7 @@ if ($cfg['devmode'] && cot_auth('admin', 'a', 'A'))
 			$out['devmode'] .= "<tr><td>#".$i[0]." &nbsp;</td>";
 			$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", round($i[1] * 1000, 3))." ms</td>";
 			$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", round($sys['devmode']['timeline'][$k] * 1000, 3))." ms</td>";
+			$out['devmode'] .= "<td style=\"text-align:left;\">".nl2br(htmlspecialchars($i[3]))."</td>";
 			$out['devmode'] .= "<td style=\"text-align:left;\">".htmlspecialchars($i[2])."</td></tr>";
 		}
 	}
@@ -66,7 +67,7 @@ if (!COT_AJAX)
 		$mtpl_base = 'footer';
 	}
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
-	
+
 	$t->assign(array(
 		'FOOTER_BOTTOMLINE' => $out['bottomline'],
 		'FOOTER_CREATIONTIME' => $out['creationtime'],
@@ -84,7 +85,7 @@ if (!COT_AJAX)
 		include $pl;
 	}
 	/* ===== */
-	
+
 	// Attach rich text editors if any
 	if ($cot_textarea_count > 0)
 	{
@@ -102,7 +103,7 @@ if (!COT_AJAX)
 			}
 		}
 	}
-	
+
 	$t->assign('FOOTER_RC', $out['footer_rc']);
 
 	if ($usr['id'] > 0)
@@ -113,7 +114,7 @@ if (!COT_AJAX)
 	{
 		$t->parse('FOOTER.GUEST');
 	}
-	
+
 	if ($cfg['debug_mode'])
 	{
 		$cot_hooks_fired[] = 'footer.last';

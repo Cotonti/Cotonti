@@ -196,7 +196,14 @@ class CotDB extends PDO {
 			$this->_tcount += $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0];
 			if ($cfg['devmode'] || $cfg['debug_mode'])
 			{
-				$sys['devmode']['queries'][] = array ($this->_count, $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query);
+				$calls = '';
+				$bt = debug_backtrace();
+				for ($i = sizeof($bt)-1; $i > 0; $i--)
+				{
+					$call = (($bt[$i]['object'] && $bt[$i]['class']) ? $bt[$i]['class'].$bt[$i]['type'] : '').$bt[$i]['function'].'();';
+					$calls .= (empty($calls)?'':"\n → ").basename($bt[$i]['file']).' ['.$bt[$i]['line'].']: '.$call;
+				}
+				$sys['devmode']['queries'][] = array ($this->_count, $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query, $calls);
 				$sys['devmode']['timeline'][] = $xtime[1] + $xtime[0] - $sys['starttime'];
 			}
 		}
