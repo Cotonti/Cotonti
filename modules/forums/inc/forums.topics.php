@@ -224,7 +224,14 @@ if ($totaltopics > 0 && $d > $totaltopics)
 	cot_die_message(404);
 }
 
-$sql_forums = $db->query("SELECT t.* $join_columns FROM $db_forum_topics AS t $join_condition
+if ($usr['id'] > 0)
+{
+	// Check if the user has posted in the topic
+	$join_columns .= ", (SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid = t.ft_id AND fp_posterid = {$usr['id']}) AS ft_user_posted";
+}
+
+$sql_forums = $db->query("SELECT t.* $join_columns
+	FROM $db_forum_topics AS t $join_condition
 	WHERE ".implode(' AND ', $where)." ORDER BY $order LIMIT $d, ".$cfg['forums']['maxtopicsperpage']);
 
 /* === Hook - Part1 : Set === */
@@ -290,11 +297,18 @@ foreach ($sql_forums_rowset as $row)
 		$row['ft_pages'] = cot_rc('forums_code_topic_pages', array('main' => $pn['main'], 'first' => $pn['first'], 'last' => $pn['last']));
 	}
 
+	$row['ft_icon_type_ex'] = $row['ft_icon_type'];
+	if ($row['ft_user_posted'])
+	{
+		$row['ft_icon_type_ex'] .= '_posted';
+	}
+
 	$t->assign(array(
 		'FORUMS_TOPICS_ROW_ID' => $row['ft_id'],
 		'FORUMS_TOPICS_ROW_STATE' => $row['ft_state'],
 		'FORUMS_TOPICS_ROW_ICON' => $row['ft_icon'],
 		'FORUMS_TOPICS_ROW_ICON_TYPE' => $row['ft_icon_type'],
+		'FORUMS_TOPICS_ROW_ICON_TYPE_EX' => $row['ft_icon_type_ex'],
 		'FORUMS_TOPICS_ROW_TITLE' => htmlspecialchars($row['ft_title']),
 		'FORUMS_TOPICS_ROW_DESC' => htmlspecialchars($row['ft_desc']),
 		'FORUMS_TOPICS_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate']),
@@ -309,6 +323,7 @@ foreach ($sql_forums_rowset as $row)
 		'FORUMS_TOPICS_ROW_VIEWCOUNT' => $row['ft_viewcount'],
 		'FORUMS_TOPICS_ROW_FIRSTPOSTER' => cot_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername'])),
 		'FORUMS_TOPICS_ROW_LASTPOSTER' => $row['ft_lastpostername'],
+		'FORUMS_TOPICS_ROW_USER_POSTED' => (int) $row['ft_user_posted'],
 		'FORUMS_TOPICS_ROW_URL' => $row['ft_url'],
 		'FORUMS_TOPICS_ROW_PREVIEW' => $row['ft_preview'].'...',
 		'FORUMS_TOPICS_ROW_PAGES' => $row['ft_pages'],
