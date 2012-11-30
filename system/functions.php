@@ -3993,11 +3993,11 @@ function cot_rc($name, $params = array())
 	global $R, $L, $theme_reload;
 	if (isset($R[$name]) && is_array($theme_reload))
 	{
-		$R[$name] = (!empty($theme_reload['R'][$name]) && $theme_reload['R'][$name] != $R[$name]) ? $theme_reload['R'][$name] : $R[$name];
+		$R[$name] = (!empty($theme_reload['R'][$name])) ? $theme_reload['R'][$name] : $R[$name];
 	}
 	elseif (isset($L[$name]) && is_array($theme_reload))
 	{
-		$L[$name] = (!empty($theme_reload['L'][$name]) && $theme_reload['L'][$name] != $L[$name]) ? $theme_reload['L'][$name] : $L[$name];
+		$L[$name] = (!empty($theme_reload['L'][$name])) ? $theme_reload['L'][$name] : $L[$name];
 	}
 
 	$res = isset($R[$name]) ? $R[$name]
