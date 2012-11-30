@@ -46,6 +46,11 @@ define('COT_CACHE_TYPE_MEMORY', 3);
 define('COT_CACHE_TYPE_PAGE', 4);
 
 /**
+ * Default cache type
+ */
+define('COT_CACHE_TYPE_DEFAULT', COT_CACHE_TYPE_DB);
+
+/**
  * Abstract class containing code common for all cache drivers
  * @author Cotonti Team
  */
@@ -499,7 +504,7 @@ class Page_cache
 		}
 		if (!empty($this->ext))
 		{
-			$filename .= '.' . $ext;
+			$filename .= '.' . $this->ext;
 		}
 		if (file_exists($filename))
 		{
@@ -718,7 +723,6 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	public function get($id, $realm = COT_DEFAULT_REALM)
 	{
-		global $db, $db_cache;
 		if($this->exists($id, $realm))
 		{
 			return $this->buffer[$realm][$id];
@@ -785,7 +789,7 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	public function store_now($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 	{
-		global $db, $db_cache;
+		global $db, $db_cache, $sys;
 		$c_name = $db->quote($id);
 		$c_realm = $db->quote($realm);
 		$c_expire = $ttl > 0 ? $sys['now'] + $ttl : 0;
@@ -1183,7 +1187,7 @@ class Cache
      */
     public function init()
     {
-        global $cfg, $cot_cache_autoload, $cot_cache_drivers, $cot_cache_bindings, $env, $usr;
+        global $cfg, $cot_cache_autoload, $cot_cache_drivers, $cot_cache_bindings, $env;
 
         $this->disk = new File_cache($cfg['cache_dir']);
 		$this->db = new MySQL_cache();
