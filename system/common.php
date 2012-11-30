@@ -519,6 +519,17 @@ require_once $cfg['system_dir'].'/resources.php';
 if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php"))
 {
 	require_once "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
+	// Save overridden strings in $theme_reload global
+	list($l_diff, $r_diff) = cot_themerc_list("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php");
+	foreach ($l_diff as $key)
+	{
+		$theme_reload['L'][$key] = $L[$key];
+	}
+	foreach ($r_diff as $key)
+	{
+		$theme_reload['R'][$key] = $R[$key];
+	}
+	unset($l_diff, $r_diff);
 }
 // Iconpack
 if (empty($cfg['defaulticons']))

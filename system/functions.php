@@ -3976,6 +3976,22 @@ function cot_wraptext($str, $wrap = 80)
  */
 
 /**
+ * Gets the list of $L and $R keys overridden in a theme PHP file
+ * @param  string $theme_file Path to theme PHP file
+ * @return array
+ */
+function cot_themerc_list($theme_file)
+{
+	$L = array();
+	$R = array();
+	include $theme_file;
+	return array(
+		array_keys($L),
+		array_keys($R)
+	);
+}
+
+/**
  * Resource string formatter function. Takes a string with predefined variable substitution, e.g.
  * 'My {$pet} likes {$food}. And {$pet} is hungry!' and an assotiative array of substitution values, e.g.
  * array('pet' => 'rabbit', 'food' => 'carrots') and assembles a formatted result. If {$var} cannot be found
