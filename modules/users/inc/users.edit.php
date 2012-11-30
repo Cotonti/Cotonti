@@ -129,14 +129,14 @@ if ($a == 'update')
 	{
 		cot_error('aut_emailalreadyindb', 'ruseremail');
 	}
-	if (mb_strlen($rusernewpass) < 4)
+	if (!empty($rusernewpass) && mb_strlen($rusernewpass) < 4)
 	{
 		cot_error('aut_passwordtooshort', 'rusernewpass');
 	}
 
 	if (!cot_error_found())
 	{
-		if (mb_strlen($rusernewpass) > 0)
+		if (!empty($rusernewpass))
 		{
 			$ruser['user_passsalt'] = cot_unique(16);
 			$ruser['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
