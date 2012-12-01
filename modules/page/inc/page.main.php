@@ -57,7 +57,7 @@ $pag['page_pageurl'] = empty($al) ? cot_url('page', array('c' => $pag['page_cat'
 if (($pag['page_state'] == 1
 		|| ($pag['page_state'] == 2)
 		|| ($pag['page_begin'] > $sys['now'])
-		|| ($pag['page_expire'] > 0 && $sys['now'] > $pag['page_expire'])) 
+		|| ($pag['page_expire'] > 0 && $sys['now'] > $pag['page_expire']))
 	&& (!$usr['isadmin'] && $usr['id'] != $pag['page_ownerid']))
 {
 	cot_log("Attempt to directly access an un-validated or future/expired page", 'sec');
@@ -112,17 +112,17 @@ if (!$usr['isadmin'] || $cfg['page']['count_admin'])
 
 if ($pag['page_cat'] == 'system')
 {
-	$out['subtitle'] = $pag['page_title'];
+	$out['subtitle'] = empty($pag['page_metatitle']) ? $pag['page_title'] : $pag['page_metatitle'];
 }
 else
 {
 	$title_params = array(
-		'TITLE' => $pag['page_title'],
+		'TITLE' => empty($pag['page_metatitle']) ? $pag['page_title'] : $pag['page_metatitle'],
 		'CATEGORY' => $cat['title']
 	);
 	$out['subtitle'] = cot_title($cfg['page']['title_page'], $title_params);
 }
-$out['desc'] = strip_tags($pag['page_desc']);
+$out['desc'] = empty($pag['page_metadesc']) ? strip_tags($pag['page_desc']) : strip_tags($pag['page_metadesc']);
 $out['keywords'] = strip_tags($pag['page_keywords']);
 
 // Building the canonical URL

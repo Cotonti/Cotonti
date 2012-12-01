@@ -26,8 +26,16 @@
 						<td>{PAGEADD_FORM_ALIAS}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.Keywords}</td>
+						<td>{PHP.L.page_metakeywords}:</td>
 						<td>{PAGEADD_FORM_KEYWORDS}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.page_metatitle}:</td>
+						<td>{PAGEADD_FORM_METATITLE}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.page_metadesc}:</td>
+						<td>{PAGEADD_FORM_METADESC}</td>
 					</tr>
 <!-- BEGIN: TAGS -->
 					<tr>
@@ -57,7 +65,7 @@
 							<!-- IF {PAGEADD_FORM_PFS} -->{PAGEADD_FORM_PFS}<!-- ENDIF -->
 							<!-- IF {PAGEADD_FORM_SFS} --><span class="spaced">{PHP.cfg.separator}</span>{PAGEADD_FORM_SFS}<!-- ENDIF -->
 						</td>
-					</tr>			
+					</tr>
 					<tr>
 						<td>{PHP.L.page_file}:</td>
 						<td>
@@ -76,7 +84,7 @@
 					<tr>
 						<td colspan="2" class="valid">
 							<!-- IF {PHP.usr_can_publish} -->
-							<button type="submit" name="rpagestate" value="0">{PHP.L.Publish}</button> 
+							<button type="submit" name="rpagestate" value="0">{PHP.L.Publish}</button>
 							<!-- ENDIF -->
 							<button type="submit" name="rpagestate" value="2" class="submit">{PHP.L.Saveasdraft}</button>
 							<button type="submit" name="rpagestate" value="1">{PHP.L.Submitforapproval}</button>

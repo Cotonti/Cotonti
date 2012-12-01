@@ -429,6 +429,8 @@ function cot_page_import($source = 'POST', $rpage = array(), $auth = array())
 	$rpage['page_updated']  = $sys['now'];
 
 	$rpage['page_keywords'] = cot_import('rpagekeywords', $source, 'TXT');
+	$rpage['page_metatitle'] = cot_import('rpagemetatitle', $source, 'TXT');
+	$rpage['page_metadesc'] = cot_import('rpagemetadesc', $source, 'TXT');
 
 	$rpublish               = cot_import('rpublish', $source, 'ALP'); // For backwards compatibility
 	$rpage['page_state']    = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', $source, 'INT');

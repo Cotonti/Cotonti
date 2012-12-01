@@ -79,6 +79,9 @@ $L['page_filesize'] = 'Filesize, kB';
 $L['page_filesizehint'] = '(If File download enabled)';
 $L['page_filehitcount'] = 'File hit count';
 $L['page_filehitcounthint'] = '(If File download enabled)';
+$L['page_metakeywords'] = 'Meta keywords';
+$L['page_metatitle'] = 'Meta title';
+$L['page_metadesc'] = 'Meta description';
 
 $L['page_formhint'] = 'Once your submission is done, the page will be placed in the validation queue and will be hidden, awaiting confirmation from a site administrator or global moderator before being displayed in the right section. Check all fields carefully. If you need to change something, you will be able to do that later. But submitting changes puts a page into validation queue again.';
 

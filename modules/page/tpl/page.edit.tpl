@@ -42,8 +42,16 @@
 						<td>{PAGEEDIT_FORM_ALIAS}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.Keywords}:</td>
+						<td>{PHP.L.page_metakeywords}:</td>
 						<td>{PAGEEDIT_FORM_KEYWORDS}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.page_metatitle}:</td>
+						<td>{PAGEEDIT_FORM_METATITLE}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.page_metadesc}:</td>
+						<td>{PAGEEDIT_FORM_METADESC}</td>
 					</tr>
 <!-- BEGIN: TAGS -->
 					<tr>
@@ -96,7 +104,7 @@
 					<tr>
 						<td colspan="2" class="valid">
 							<!-- IF {PHP.usr_can_publish} -->
-							<button type="submit" name="rpagestate" value="0">{PHP.L.Publish}</button> 
+							<button type="submit" name="rpagestate" value="0">{PHP.L.Publish}</button>
 							<!-- ENDIF -->
 							<button type="submit" name="rpagestate" value="2" class="submit">{PHP.L.Saveasdraft}</button>
 							<button type="submit" name="rpagestate" value="1">{PHP.L.Submitforapproval}</button>
