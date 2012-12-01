@@ -33,10 +33,11 @@ function cot_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1', $c
 	$input_attrs = cot_rc_attr_string($attrs);
 	$value_off = (is_array($value)) ? $value[0] : 0;
 	$value = (is_array($value)) ? $value[1] : $value;
+	$chosen = cot_import_buffered($name, $chosen);
 	$checked = $chosen ? ' checked="checked"' : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	$rc = empty($custom_rc) 
-		? empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}" 
+	$rc = empty($custom_rc)
+		? empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}"
 		: $custom_rc;
 	return cot_rc($rc, array(
 		'value' => htmlspecialchars(cot_import_buffered($name, $value)),
@@ -113,7 +114,7 @@ function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
 	$i = 0;
 	$result = '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	$rc = empty($custom_rc) 
+	$rc = empty($custom_rc)
 		? empty($R["input_radio_{$rc_name}"]) ? 'input_radio' : "input_radio_{$rc_name}"
 		: $custom_rc;
 	foreach ($values as $k => $x)
@@ -189,7 +190,7 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 			'title' => $title
 		));
 	}
-	$rc = empty($custom_rc) 
+	$rc = empty($custom_rc)
 		? empty($R["input_select_{$rc_name}"]) ? 'input_select' : "input_select_{$rc_name}"
 		: $custom_rc;
 	$result .= cot_rc($rc, array(
@@ -218,10 +219,10 @@ function cot_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '',
 
 	if (!$cot_countries)
 		include_once cot_langfile('countries', 'core');
-	
+
 	$codes = array_keys($cot_countries);
 	$names = array_values($cot_countries);
-	
+
 	if ($add_empty)
 	{
 		array_unshift($codes, '00');
@@ -461,14 +462,14 @@ function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '
 	}
 	$use_titles = count($values) == count($titles);
 	$input_attrs = cot_rc_attr_string($attrs);
-	
+
 	$chosen = cot_import_buffered($name, $chosen);
 
 	if (empty($separator))
 	{
 		$separator = $R['input_radio_separator'];
 	}
-	
+
 	$i = 0;
 	$result = '';
 	if ($addnull)
@@ -477,7 +478,7 @@ function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '
 	}
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
-	$rc = empty($custom_rc) 
+	$rc = empty($custom_rc)
 		? empty($R["input_check_{$rc_name}"]) ? 'input_check' : "input_check_{$rc_name}"
 		: $custom_rc;
 	foreach ($values as $k => $x)
@@ -519,7 +520,7 @@ function cot_filebox($name, $value = '', $filepath = '', $delname ='', $attrs = 
 	global $R, $cfg, $L;
 	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	
+
 	$custom_rc = explode('|', $custom_rc, 2);
 	if(empty($value))
 	{
@@ -533,7 +534,7 @@ function cot_filebox($name, $value = '', $filepath = '', $delname ='', $attrs = 
 			? (empty($R["input_filebox_{$rc_name}"]) ? "input_filebox" : "input_filebox_{$rc_name}")
 			: $custom_rc[0];
 	}
-	
+
 	$filepath = empty($filepath) ? $value : $filepath;
 	$delname = empty($delname) ? 'del'.$name : $delname;
 	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';

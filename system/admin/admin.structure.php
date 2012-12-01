@@ -39,7 +39,7 @@ if (empty($n))
 {
 	$adminpath[] = array(cot_url('admin', 'm=structure'), $L['Structure']);
 	// Show available module list
-	if(is_array($extension_structure) && count($extension_structure) == 1 
+	if(is_array($extension_structure) && count($extension_structure) == 1
 		&& ((cot_plugin_active($extension_structure[0]) || cot_module_active($extension_structure[0]))))
 	{
 		cot_redirect(cot_url('admin', 'm=structure&n='.$extension_structure[0], '', true));
@@ -58,7 +58,7 @@ if (empty($n))
 			{
 				$is_module = true;
 				$parse = true;
-			}	
+			}
 			if($parse)
 			{
 				$ext_info = cot_get_extensionparams($code, $is_module);
@@ -218,19 +218,19 @@ else
 		$rstructure['structure_icon'] = cot_import('rstructureicon', 'P', 'TXT');
 		$rstructure['structure_locked'] = (cot_import('rstructurelocked', 'P', 'BOL')) ? 1 : 0;
 		$rstructure['structure_area'] = $n;
+		$rtplmode = cot_import('rtplmode', 'P', 'INT');
+		$rtplquick = cot_import('rtplquick', 'P', 'TXT');
 
 		foreach ($cot_extrafields[$db_structure] as $exfld)
 		{
 			$rstructure['structure_'.$exfld['field_name']] = cot_import_extrafields('rstructure'.$exfld['field_name'], $exfld);
 		}
-		
+
 		($rstructure['structure_code'] != 'all') || cot_error('adm_structure_code_reserved', 'rstructurecode');
 		$rstructure['structure_code'] || cot_error('adm_structure_code_required', 'rstructurecode');
 		$rstructure['structure_path'] || cot_error('adm_structure_path_required', 'rstructurepath');
 		$rstructure['structure_title'] || cot_error('adm_structure_title_required', 'rstructuretitle');
 
-		$rtplmode = cot_import('rtplmode', 'P', 'INT');
-		$rtplquick = cot_import('rtplquick', 'P', 'TXT');
 		if (!empty($rtplquick))
 		{
 			$rstructure['structure_tpl'] = $rtplquick;
@@ -463,19 +463,19 @@ else
 
 		$t->assign(array(
 			'ADMIN_STRUCTURE_URL_FORM_ADD' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=add&d='.$durl),
-			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode', '', 'size="16"'),
-			'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath', '', 'size="16" maxlength="16"'),
-			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle', '', 'size="64" maxlength="100"'),
-			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc', '', 'size="64" maxlength="255"'),
-			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon', '', 'size="64" maxlength="128"'),
-			'ADMIN_STRUCTURE_LOCKED' => cot_checkbox(0, 'rstructurelocked'),
-			'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox(1, 'rtplmode', array('1', '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />')
+			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode', null, 'size="16"'),
+			'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath', null, 'size="16" maxlength="16"'),
+			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle', null, 'size="64" maxlength="100"'),
+			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc', null, 'size="64" maxlength="255"'),
+			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon', null, 'size="64" maxlength="128"'),
+			'ADMIN_STRUCTURE_LOCKED' => cot_checkbox(null, 'rstructurelocked'),
+			'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox(null, 'rtplmode', array('1', '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />')
 		));
 
 		// Extra fields
 		foreach($cot_extrafields[$db_structure] as $exfld)
 		{
-			$exfld_val = cot_build_extrafields('rstructure'.$exfld['field_name'],  $exfld, '');
+			$exfld_val = cot_build_extrafields('rstructure'.$exfld['field_name'],  $exfld, null);
 			$exfld_title = isset($L['structure_'.$exfld['field_name'].'_title']) ?  $L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 			$t->assign(array(
 				'ADMIN_STRUCTURE_'.strtoupper($exfld['field_name']) => $exfld_val,

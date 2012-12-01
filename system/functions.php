@@ -464,6 +464,8 @@ function cot_import_buffer_save()
 	{
 		// Extract the server-relative part
 		$url = parse_url($_SERVER['HTTP_REFERER']);
+		// Strip ajax param from the query
+		$url['query'] = str_replace('&_ajax=1', '', $url['query']);
 		$path = empty($url['query']) ? $url['path'] : $url['path'] . '?' . $url['query'];
 		$hash = md5($path);
 		// Save the buffer
@@ -484,7 +486,8 @@ function cot_import_buffer_save()
 function cot_import_buffered($name, $value, $null = '')
 {
 	// Params hash for current form
-	$hash = md5($_SERVER['REQUEST_URI']);
+	$uri = str_replace('&_ajax=1', '', $_SERVER['REQUEST_URI']);
+	$hash = md5($uri);
 	if ($value === '' || $value === null
 		|| isset($_SESSION['cot_buffer'][$hash][$name]) && !empty($_SESSION['cot_buffer'][$hash][$name]))
 	{
@@ -592,7 +595,7 @@ function cot_import_pagenav($var_name, $max_items = 0)
 			$page = 1;
 		}
 		$offset = ($page - 1) * $max_items;
-		$urlnum = $page;
+		$urlnum = $page <= 1 ? 0 : $page;
 	}
 	else
 	{
