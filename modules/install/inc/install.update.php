@@ -153,7 +153,7 @@ if (defined('COT_UPGRADE') && !cot_error_found())
 	$db->update($db_core, array('ct_version' => '0.8.99'), '1');
 
 	// Update modules
-	foreach (array('forums', 'index', 'page', 'pfs', 'pm', 'polls') as $code)
+	foreach (array('forums', 'index', 'page', 'pfs', 'pm', 'polls', 'users') as $code)
 	{
 		$ret = cot_extension_install($code, true, true);
 		if ($ret === false)
@@ -188,7 +188,7 @@ if (defined('COT_UPGRADE') && !cot_error_found())
 		}
 	}
 	$res->closeCursor();
-	
+
 	// Install bbcode and html parsers
 	cot_extension_install('bbcode');
 	cot_extension_install('html');

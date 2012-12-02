@@ -2440,7 +2440,7 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 {
 	// Globals and requirements
 	global $error_string, $out, $L, $R;
-    $LL = $L;
+    $LL = is_array($L) ? $L : array();
     require_once cot_langfile('message', 'core');
     $L = array_merge($L, $LL);
 
@@ -2503,6 +2503,7 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 	// Render the message page
 	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
 	$tpl_path = '';
+	$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
 	if ($header)
 	{
 		$tpl_path = cot_tplfile("error.$code", $tpl_type);
@@ -2521,20 +2522,25 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 		$tpl_path = cot_tplfile('message', $tpl_type);
 	}
 
-	$t = new XTemplate($tpl_path);
+	if (empty($tpl_path) || !file_exists($tpl_path))
+	{
+		echo $body;
+	}
+	else
+	{
+		$t = new XTemplate($tpl_path);
 
-	$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
+		$t->assign(array(
+			'AJAX_MODE' => COT_AJAX,
+			'MESSAGE_BASEHREF' => $R['code_basehref'],
+			'MESSAGE_STYLESHEET' => $stylesheet,
+			'MESSAGE_TITLE' => $title,
+			'MESSAGE_BODY' => $body
+		));
 
-	$t->assign(array(
-		'AJAX_MODE' => COT_AJAX,
-		'MESSAGE_BASEHREF' => $R['code_basehref'],
-		'MESSAGE_STYLESHEET' => $stylesheet,
-		'MESSAGE_TITLE' => $title,
-		'MESSAGE_BODY' => $body
-	));
-
-	$t->parse('MAIN');
-	$t->out('MAIN');
+		$t->parse('MAIN');
+		$t->out('MAIN');
+	}
 
 	if ($header)
 	{
