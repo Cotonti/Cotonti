@@ -201,7 +201,7 @@ if ($a=='upload')
 								'pfs_size' => (int)$u_size,
 								'pfs_count' => 0
 								));
-							
+
 							$db->update($db_pfs_folders, array('pff_updated' => $sys['now']), 'pff_id="'.$folderid.'"');
 
 							$disp_errors .= $L['Yes'];
@@ -294,7 +294,7 @@ elseif ($a=='newfolder')
 		'pff_isgallery' => (int)$nisgallery,
 		'pff_count' => 0
 	));
-		
+
 	cot_redirect(cot_url('pfs', $more, '', true));
 }
 elseif ($a=='deletefolder')
@@ -355,7 +355,7 @@ else
 {
 	$sql_pfs_files = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid=$userid AND pfs_folderid=0 ORDER BY pfs_file ASC");
 	$sql_pfs = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid=$userid AND pfs_folderid=0 ORDER BY pfs_file ASC LIMIT $d, ".$cfg['pfs']['maxpfsperpage']);
-	
+
 	$sql_pfs_filesinfo = $db->query("SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM $db_pfs WHERE pfs_userid=$userid GROUP BY pfs_folderid");
 	while ($pfs_filesinfo = $sql_pfs_filesinfo->fetch())
 	{
@@ -601,23 +601,25 @@ $t->assign('PFS_TITLE', cot_breadcrumbs($title, $cfg['homebreadcrumb']));
 
 if ($standalone)
 {
-	if($c1 == 'newpage' && $c2 == 'newpageurl' || $c1 == 'update' && $c2 == 'rpageurl')
+	if ($c1 == 'pageform' && $c2 == 'rpageurl')
 	{
-		$addthumb = "'".$thumbs_dir_user."' + gfile";
-		$addpix = 'gfile';
-		$addfile = "'".$pfs_dir_user."' + gfile";
+		$addthumb = $thumbs_dir_user."' + gfile + '";
+		$addpix = "' + gfile + '";
+		$addfile = $pfs_dir_user."' + gfile + '";
+		$pfs_code_addfile = $addfile;
+		$pfs_code_addthumb = $addthumb;
+		$pfs_code_addpix = $addpix;
 	}
 	else
 	{
 		$addthumb = $R['pfs_code_addthumb'];
 		$addpix = $R['pfs_code_addpix'];
 		$addfile = $R['pfs_code_addfile'];
+		$pfs_code_addfile = cot_rc('pfs_code_addfile');
+		$pfs_code_addthumb = cot_rc('pfs_code_addthumb');
+		$pfs_code_addpix = cot_rc('pfs_code_addpix');
 	}
 	$winclose = $cfg['pfs']['pfs_winclose'] ? "\nwindow.close();" : '';
-
-	$pfs_code_addfile = cot_rc('pfs_code_addfile');
-	$pfs_code_addthumb = cot_rc('pfs_code_addthumb');
-	$pfs_code_addpix = cot_rc('pfs_code_addpix');
 
 	cot_sendheaders();
 
