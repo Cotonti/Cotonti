@@ -2,7 +2,7 @@
 
 	<div id="content">
     	<div class="padding20 whitee">
-        	
+
             <h1>{PAGEEDIT_PAGETITLE}</h1>
             <p class="details">{PAGEEDIT_SUBTITLE}</p>
 
@@ -96,7 +96,7 @@
 		</div>
 		<div>
 			<label>{PHP.L.URL}</label>
-			{PAGEEDIT_FORM_URL} &nbsp; {PAGEEDIT_FORM_PFS_URL_USER} &nbsp; {PAGEEDIT_FORM_PFS_URL_SITE} &nbsp; <span class="hint">{PHP.L.page_urlhint}</span>
+			{PAGEEDIT_FORM_URL} &nbsp; {PAGEEDIT_FORM_URL_PFS} &nbsp; {PAGEEDIT_FORM_URL_SFS} &nbsp; <span class="hint">{PHP.L.page_urlhint}</span>
 		</div>
 		<div>
 			<label>{PHP.L.page_filesize}</label>

@@ -2,7 +2,7 @@
 
 	<div id="content">
     	<div class="padding20 whitee">
-        	
+
             <h1>{PAGEADD_PAGETITLE}</h1>
             <p class="details">{PAGEADD_SUBTITLE}</p>
 
@@ -82,7 +82,7 @@
 		</div>
 		<div>
 			<label>{PHP.L.URL}</label>
-			{PAGEADD_FORM_URL} &nbsp; {PAGEADD_FORM_PFS_URL_USER} &nbsp; {PAGEADD_FORM_PFS_URL_SITE} &nbsp; <span class="hint">{PHP.L.page_urlhint}</span>
+			{PAGEADD_FORM_URL} &nbsp; {PAGEADD_FORM_URL_PFS} &nbsp; {PAGEADD_FORM_URL_SFS} &nbsp; <span class="hint">{PHP.L.page_urlhint}</span>
 		</div>
 		<div>
 			<label>{PHP.L.Filesize}</label>
@@ -99,7 +99,7 @@
 	<!-- ELSE -->
 	<input type="submit" value="{PHP.L.Submit}" class="submit" />
 	<!-- ENDIF -->
-				
+
 </form>
 
 </div>
