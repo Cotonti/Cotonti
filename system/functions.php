@@ -5185,7 +5185,7 @@ function cot_declension($digit, $expr, $onlyword = false, $canfrac = false)
 	$is_frac = false;
 	if ($canfrac)
 	{
-		if (is_float($digit) || mb_strpos($digit, '.') !== false)
+		if ((is_float($digit) && $digit!=floor($digit)) || mb_strpos($digit, '.') !== false)
 		{
 			$i = floatval($digit);
 			$is_frac = true;
