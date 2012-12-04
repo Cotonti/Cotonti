@@ -494,7 +494,7 @@ if (!file_exists($mtheme))
 	$mtheme = "{$cfg['themes_dir']}/{$usr['theme']}/header.tpl";
 	if (!file_exists($mtheme))
 	{
-		cot_diefatal('Default theme not found.'); // TODO: Need translate
+		cot_diefatal($L['com_defthemefail']);
 	}
 }
 

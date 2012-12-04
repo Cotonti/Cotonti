@@ -464,6 +464,7 @@ $L['Gender_U'] = 'Unknown';
 
 $L['com_themefail'] = 'Warning, failed to load your prefered theme, check your profile';
 $L['com_schemefail'] = 'Warning, failed to load your prefered color scheme for the prefered theme, please check your profile and update values';
+$L['com_defthemefail'] = 'Error, default theme not found, check your theme folder';
 
 /**
  * Header
