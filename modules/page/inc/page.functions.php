@@ -435,13 +435,13 @@ function cot_page_import($source = 'POST', $rpage = array(), $auth = array())
 	$rpublish               = cot_import('rpublish', $source, 'ALP'); // For backwards compatibility
 	$rpage['page_state']    = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', $source, 'INT');
 
-	if ($auth['isadmin'])
+	if ($auth['isadmin'] && isset($rpage['page_ownerid']))
 	{
 		$rpage['page_count']     = cot_import('rpagecount', $source, 'INT');
 		$rpage['page_ownerid']   = cot_import('rpageownerid', $source, 'INT');
 		$rpage['page_filecount'] = cot_import('rpagefilecount', $source, 'INT');
 	}
-	elseif (!isset($rpage['page_ownerid']))
+	else
 	{
 		$rpage['page_ownerid'] = $usr['id'];
 	}
