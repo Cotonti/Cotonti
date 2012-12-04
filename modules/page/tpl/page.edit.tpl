@@ -87,7 +87,7 @@
 					</tr>
 					<tr>
 						<td>{PHP.L.URL}:<br />{PHP.L.page_urlhint}</td>
-						<td>{PAGEEDIT_FORM_URL}<br />{PAGEEDIT_FORM_PFS_URL_USER} &nbsp; {PAGEEDIT_FORM_PFS_URL_SITE}</td>
+						<td>{PAGEEDIT_FORM_URL}<br />{PAGEEDIT_FORM_URL_PFS} &nbsp; {PAGEEDIT_FORM_URL_SFS}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.page_filesize}:<br />{PHP.L.page_filesizehint}</td>

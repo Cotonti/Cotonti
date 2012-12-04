@@ -75,7 +75,7 @@
 					</tr>
 					<tr>
 						<td>{PHP.L.URL}:<br />{PHP.L.page_urlhint}</td>
-						<td>{PAGEADD_FORM_URL}<br />{PAGEADD_FORM_PFS_URL_USER} &nbsp; {PAGEADD_FORM_PFS_URL_SITE}</td>
+						<td>{PAGEADD_FORM_URL}<br />{PAGEADD_FORM_URL_PFS} &nbsp; {PAGEADD_FORM_URL_SFS}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Filesize}:<br />{PHP.L.page_filesizehint}</td>
