@@ -206,7 +206,7 @@ if ($a == 'update')
 		{
 			if (isset($rusergroupsms[$k]))
 			{
-				if ($db->query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid=$id AND gru_groupid=$k")->rowCount() == 0 
+				if ($db->query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid=$id AND gru_groupid=$k")->rowCount() == 0
 					&& !($id == 1 && in_array($k, array(COT_GROUP_BANNED, COT_GROUP_INACTIVE))))
 				{
 					$db->insert($db_groups_users, array('gru_userid' => (int)$id, 'gru_groupid' => (int)$k));
@@ -307,7 +307,6 @@ $t->assign(array(
 ));
 
 // Extra fields
-$extra_array = cot_build_extrafields('user', 'USERS_EDIT', $cot_extrafields[$db_users], $urr);
 foreach($cot_extrafields[$db_users] as $exfld)
 {
 	$tag = strtoupper($exfld['field_name']);
