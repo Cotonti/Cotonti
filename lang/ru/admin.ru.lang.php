@@ -386,6 +386,7 @@ $L['adm_checkskin'] = 'Проверить TPL-файлы скина';
 $L['adm_checkingskin'] = 'Проверяю скин...';
 $L['adm_check_ok'] = 'Ok';
 $L['adm_check_missing'] = 'Отсутствует';
+$L['adm_ref_prune'] = 'Очищено';
 
 /**
  * Other Section

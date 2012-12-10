@@ -386,6 +386,7 @@ $L['adm_checktheme'] = 'Check TPL files for the theme';
 $L['adm_checkingtheme'] = 'Checking the theme...';
 $L['adm_check_ok'] = 'Ok';
 $L['adm_check_missing'] = 'Missing';
+$L['adm_ref_prune'] = 'Cleaned';
 
 /**
  * Other Section
