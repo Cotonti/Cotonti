@@ -156,18 +156,19 @@ $url = parse_url($cfg['mainurl']);
 $sys['scheme'] = strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false && $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 443 && $_SERVER['HTTP_X_FORWARDED_PORT'] !== 443 ? 'http' : 'https';
 $sys['secure'] = $url['scheme'] == 'https' ? true : false;
 $sys['site_uri'] = $url['path'];
+$sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
 if ($_SERVER['HTTP_HOST'] == $url['host']
 	|| $cfg['multihost']
-	|| $_SERVER['HTTP_HOST'] != 'www.' . $url['host']
+	|| $_SERVER['HTTP_HOST'] != 'www.' . $sys['domain']
 		&& preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']))
 {
 	$sys['host'] = $_SERVER['HTTP_HOST'];
+	$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
 }
 else
 {
 	$sys['host'] = $url['host'];
 }
-$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
 if (empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
 if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
 define('COT_SITE_URI', $sys['site_uri']);
