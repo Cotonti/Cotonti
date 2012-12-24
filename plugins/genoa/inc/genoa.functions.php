@@ -965,7 +965,7 @@ function sed_selectbox($check, $name, $values)
 
 function sed_selectbox_categories($check, $name, $hideprivate=TRUE)
 {
-	return cot_selectbox_categories($check, $name, '', $hideprivate);
+	return cot_selectbox_structure('page',$check, $name, '', $hideprivate);
 }
 
 function sed_selectbox_countries($check,$name)
