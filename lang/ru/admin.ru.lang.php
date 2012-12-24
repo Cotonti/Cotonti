@@ -273,10 +273,10 @@ $L['ext_cat']['post-install'] = 'Пост-установочные скрипт�
 /**
  * Structure Section
  */
-$L['adm_structure_code_reserved'] = "Structure code 'all' is reserved.";
-$L['adm_structure_code_required'] = 'Missing required field: Code';
-$L['adm_structure_path_required'] = 'Missing required field: Path';
-$L['adm_structure_title_required'] = 'Missing required field: Title';
+$L['adm_structure_code_reserved'] = "Код категории 'all' не может быть использован.";
+$L['adm_structure_code_required'] = 'Не задано поле: Код';
+$L['adm_structure_path_required'] = 'Не задано поле: Путь';
+$L['adm_structure_title_required'] = 'Не задано поле: Заголовок';
 $L['adm_cat_exists'] = 'Категория с таким кодом уже существует';
 $L['adm_tpl_mode'] = 'Установка шаблона';
 $L['adm_tpl_empty'] = 'По умолчанию';
