@@ -277,6 +277,7 @@ $L['adm_structure_code_reserved'] = "Код категории 'all' не мож
 $L['adm_structure_code_required'] = 'Не задано поле: Код';
 $L['adm_structure_path_required'] = 'Не задано поле: Путь';
 $L['adm_structure_title_required'] = 'Не задано поле: Заголовок';
+$L['adm_structure_somenotupdated'] = 'Внимание! Некоторые значения не сохранены.';
 $L['adm_cat_exists'] = 'Категория с таким кодом уже существует';
 $L['adm_tpl_mode'] = 'Установка шаблона';
 $L['adm_tpl_empty'] = 'По умолчанию';
