@@ -258,6 +258,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		}
 		else
 		{
+			$_SESSION['cot_messages'] = array();
 			cot_error(cot_rc('ext_already_installed', array('name' => $name)));
 			return false;
 		}
