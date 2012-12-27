@@ -37,7 +37,7 @@
 	</div>
 	<div id="right">
 		<h3><a href="{USERS_AUTH_REGISTER}">{PHP.L.Register}</a></h3>
-		<h3><a href="{PHP|cot_url('users','m=passrecover')}">{PHP.L.hea_lostpass}</a></h3>
+		<h3><a href="{PHP|cot_url('users','m=passrecover')}">{PHP.L.users_lostpass}</a></h3>
 		&nbsp; 
 	</div>
 <!-- ENDIF -->
