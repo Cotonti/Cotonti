@@ -122,6 +122,7 @@ if (isset($_POST['rtext']))
 				$rextras .= "\n".$ex_title.": ".$ex_body;
 				$context['extra'.$exfld['field_name']] = $ex_body;
 				$context['extra'.$exfld['field_name'].'_title'] = $ex_title;
+				$context['extra'.$exfld['field_name'].'_value'] = $rcontact['contact_'.$exfld['field_name']];
 				
 			}
 			$context['extra'] = $rextras;

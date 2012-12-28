@@ -113,6 +113,7 @@ foreach ($sql->fetchAll() as $row)
 			$t->assign(array(
 				'ADMIN_COMMENTS_' . $tag . '_TITLE' => isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exfld['field_name'] . '_title'] : $exfld['field_description'],
 				'ADMIN_COMMENTS_' . $tag => cot_build_extrafields_data('comments', $exfld, $row['com_'.$exfld['field_name']]),
+				'ADMIN_COMMENTS_' . $tag . '_VALUE' => $row['com_'.$exfld['field_name']],
 			));
 		}
 	}

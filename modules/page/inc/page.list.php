@@ -246,7 +246,8 @@ foreach ($cot_extrafields[$db_structure] as $exfld)
 	$t->assign(array(
 		'LIST_CAT_'.$uname.'_TITLE' => isset($L['structure_'.$exfld['field_name'].'_title']) ?
 			$L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-		'LIST_CAT_'.$uname => cot_build_extrafields_data('structure', $exfld, $cat[$exfld['field_name']])
+		'LIST_CAT_'.$uname => cot_build_extrafields_data('structure', $exfld, $cat[$exfld['field_name']]),
+		'LIST_CAT_'.$uname.'_VALUE' => $cat[$exfld['field_name']],
 	));
 }
 
@@ -322,7 +323,8 @@ foreach ($subcat as $x)
 		$uname = strtoupper($exfld['field_name']);
 		$t->assign(array(
 			'LIST_ROWCAT_'.$uname.'_TITLE' => isset($L['structure_'.$exfld['field_name'].'_title']) ?  $L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-			'LIST_ROWCAT_'.$uname => cot_build_extrafields_data('structure', $exfld, $structure['page'][$x][$exfld['field_name']])
+			'LIST_ROWCAT_'.$uname => cot_build_extrafields_data('structure', $exfld, $structure['page'][$x][$exfld['field_name']]),
+			'LIST_ROWCAT_'.$uname.'_VALUE' => $structure['page'][$x][$exfld['field_name']],
 		));
 	}
 

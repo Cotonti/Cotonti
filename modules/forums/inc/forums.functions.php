@@ -262,6 +262,7 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 		$uname = strtoupper($exfld['field_name']);
 		$sections[$tag_prefix . $uname . '_TITLE'] = isset($L['structure_' . $exfld['field_name'] . '_title']) ? $L['structure_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
 		$sections[$tag_prefix . $uname] = cot_build_extrafields_data('structure', $exfld, $structure['forums'][$cat][$exfld['field_name']]);
+		$sections[$tag_prefix . $uname . '_VALUE'] = $structure['forums'][$cat][$exfld['field_name']];
 	}
 
 	return $sections;

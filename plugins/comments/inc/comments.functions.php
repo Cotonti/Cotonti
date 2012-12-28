@@ -244,6 +244,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 					$t->assign(array(
 						'COMMENTS_ROW_' . $tag . '_TITLE' => isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exfld['field_name'] . '_title'] : $exfld['field_description'],
 						'COMMENTS_ROW_' . $tag => cot_build_extrafields_data('comments', $exfld, $row['com_'.$exfld['field_name']]),
+						'COMMENTS_ROW_' . $tag . '_VALUE' => $row['com_'.$exfld['field_name']]
 					));
 				}
 			}

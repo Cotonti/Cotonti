@@ -338,7 +338,8 @@ foreach ($sql_forums_rowset as $row)
 		$tag = mb_strtoupper($exfld['field_name']);
 		$t->assign(array(
 			'FORUMS_TOPICS_ROW_'.$tag.'_TITLE' => isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-			'FORUMS_TOPICS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes']))
+			'FORUMS_TOPICS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes'])),
+			'FORUMS_TOPICS_ROW_'.$tag.'_VALUE' => $row['ft_'.$exfld['field_name']]
 		));
 	}
 

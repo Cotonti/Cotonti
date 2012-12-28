@@ -234,6 +234,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				$tag = mb_strtoupper($exfld['field_name']);
 				$temp_array[$tag.'_TITLE'] = isset($L['page_'.$exfld['field_name'].'_title']) ?  $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 				$temp_array[$tag] = cot_build_extrafields_data('page', $exfld, $page_data['page_'.$exfld['field_name']], $page_data['page_parser']);
+				$temp_array[$tag.'_VALUE'] = $page_data['page_'.$exfld['field_name']];
 			}
 		}
 
@@ -245,6 +246,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				$tag = mb_strtoupper($exfld['field_name']);
 				$temp_array['CAT_'.$tag.'_TITLE'] = isset($L['structure_'.$exfld['field_name'].'_title']) ?  $L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 				$temp_array['CAT_'.$tag] = cot_build_extrafields_data('structure', $exfld, $structure['page'][$page_data['page_cat']][$exfld['field_name']]);
+				$temp_array['CAT_'.$tag.'_VALUE'] = $structure['page'][$page_data['page_cat']][$exfld['field_name']];
 			}
 		}
 

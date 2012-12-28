@@ -436,7 +436,8 @@ foreach ($sql_forums->fetchAll() as $row)
 		$tag = mb_strtoupper($exfld['field_name']);
 		$t->assign(array(
 			'FORUMS_POSTS_ROW_'.$tag.'_TITLE' => isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-			'FORUMS_POSTS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['fp_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes']))
+			'FORUMS_POSTS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['fp_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes'])),
+			'FORUMS_POSTS_ROW_'.$tag.'_VALUE' => $row['fp_'.$exfld['field_name']]
 		));
 	}
 
@@ -579,7 +580,8 @@ foreach ($cot_extrafields[$db_forum_topics] as $exfld)
 	$tag = mb_strtoupper($exfld['field_name']);
 	$t->assign(array(
 		'FORUMS_POSTS_TOPIC_'.$tag.'_TITLE' => isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-		'FORUMS_POSTS_TOPIC_'.$tag => cot_build_extrafields_data('forums', $exfld, $rowt['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes']))
+		'FORUMS_POSTS_TOPIC_'.$tag => cot_build_extrafields_data('forums', $exfld, $rowt['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes'])),
+		'FORUMS_POSTS_TOPIC_'.$tag.'_VALUE' => $rowt['ft_'.$exfld['field_name']]	
 	));
 }
 

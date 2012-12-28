@@ -103,8 +103,10 @@ while ($row = $sql->fetch())
 			$tuman->assign(array(
 				'CONTACT_' . $tag . '_TITLE' => $exfld_title,
 				'CONTACT_' . $tag => $exfld_val,
+				'CONTACT_' . $tag . '_VALUE' => $row['contact_'.$exfld['field_name']],
 				'CONTACT_EXTRAFLD_TITLE' => $exfld_title,
-				'CONTACT_EXTRAFLD' => $exfld_val
+				'CONTACT_EXTRAFLD' => $exfld_val,
+				'CONTACT_EXTRAFLD_VALUE' => $row['contact_'.$exfld['field_name']]
 			));
 			$tuman->parse('MAIN.DATA.EXTRAFLD');
 		}
@@ -147,8 +149,10 @@ if (($a == '') && !empty($id))
 			$tuman->assign(array(
 				'CONTACT_' . $tag . '_TITLE' => $exfld_title,
 				'CONTACT_' . $tag => $exfld_val,
+				'CONTACT_' . $tag . '_VALUE' => $row['contact_'.$exfld['field_name']],
 				'CONTACT_EXTRAFLD_TITLE' => $exfld_title,
-				'CONTACT_EXTRAFLD' => $exfld_val
+				'CONTACT_EXTRAFLD' => $exfld_val,
+				'CONTACT_EXTRAFLD_VALUE' => $row['contact_'.$exfld['field_name']]
 			));
 			$tuman->parse('MAIN.VIEW.EXTRAFLD');
 		}
