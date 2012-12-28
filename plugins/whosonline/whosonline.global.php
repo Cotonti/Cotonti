@@ -8,8 +8,6 @@ Order=9
 
 defined('COT_CODE') or die('Wrong URL');
 
-require_once cot_incfile('whosonline', 'plug');
-
 $sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
 $out['whosonline'] = ($cfg['disablewhosonline']) ? '' : cot_declension($sys['whosonline_reg_count'], $Ls['Members']).(!$cfg['plugin']['whosonline']['disable_guests'] ? ', '.cot_declension($sys['whosonline_vis_count'], $Ls['Guests']) : '');
 
