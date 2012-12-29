@@ -52,10 +52,10 @@ $fields = array(
 	'postrender'	=> 'BOL',
 	'enabled'		=> 'BOL'
 );
+$bbc = cot_import_list($fields,'P',null,'bbc_');
 
 if ($a == 'add')
 {
-	$bbc = cot_import_list($fields,'P',null,'bbc_');
 	if (!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
 	{
 		cot_bbcode_clearcache();
@@ -69,7 +69,7 @@ if ($a == 'add')
 }
 elseif ($a == 'upd')
 {
-	$bbca = cot_import_tabledata($fields,'P','bbc_');
+	$bbca = cot_import_tabledata($fields,'P','bbca_');
 
 	$updated = 0;
 	$errors = 0;
@@ -81,13 +81,13 @@ elseif ($a == 'upd')
 			? $updated++ : $errors++;
 		}
 	}
-	if ($updated == sizeof($bbca['name']))
+	if ($updated == sizeof($bbca))
 	{
 		cot_message('adm_bbcodes_updated');
 	}
 	else
 	{
-		if ($updated + $errors != sizeof($bbca['name']))
+		if ($updated + $errors != sizeof($bbca))
 		{
 			cot_error('adm_bbcodes_fieldrequired');
 		}
@@ -246,15 +246,15 @@ foreach ($res->fetchAll() as $row)
 {
 	$id = $row['bbc_id'];
 	$bb_t->assign(array(
-		'ADMIN_BBCODE_ROW_NAME' => cot_inputbox('text', 'bbc_name['.$id.']', $row['bbc_name']),
-		'ADMIN_BBCODE_ROW_ENABLED' => cot_checkbox($row['bbc_enabled'], 'bbc_enabled['.$id.']'),
-		'ADMIN_BBCODE_ROW_CONTAINER' => cot_checkbox($row['bbc_container'], 'bbc_container['.$id.']'),
-		'ADMIN_BBCODE_ROW_PATTERN' => cot_textarea('bbc_pattern['.$id.']', $row['bbc_pattern'], 2, 20),
-		'ADMIN_BBCODE_ROW_REPLACEMENT' => cot_textarea('bbc_replacement['.$id.']', $row['bbc_replacement'], 2, 20),
+		'ADMIN_BBCODE_ROW_NAME' => cot_inputbox('text', 'bbca_name['.$id.']', $row['bbc_name']),
+		'ADMIN_BBCODE_ROW_ENABLED' => cot_checkbox($row['bbc_enabled'], 'bbca_enabled['.$id.']'),
+		'ADMIN_BBCODE_ROW_CONTAINER' => cot_checkbox($row['bbc_container'], 'bbca_container['.$id.']'),
+		'ADMIN_BBCODE_ROW_PATTERN' => cot_textarea('bbca_pattern['.$id.']', $row['bbc_pattern'], 2, 20),
+		'ADMIN_BBCODE_ROW_REPLACEMENT' => cot_textarea('bbca_replacement['.$id.']', $row['bbc_replacement'], 2, 20),
 		'ADMIN_BBCODE_ROW_PLUG' => $row['bbc_plug'],
-		'ADMIN_BBCODE_ROW_MODE' => cot_selectbox($row['bbc_mode'], 'bbc_mode['.$id.']', $bbc_modes, $bbc_modes, false),
-		'ADMIN_BBCODE_ROW_PRIO' => cot_selectbox($row['bbc_priority'], 'bbc_priority['.$id.']', range(1, 256), range(1, 256), false),
-		'ADMIN_BBCODE_ROW_POSTRENDER' => cot_checkbox($row['bbc_postrender'], 'bbc_postrender['.$id.']'),
+		'ADMIN_BBCODE_ROW_MODE' => cot_selectbox($row['bbc_mode'], 'bbca_mode['.$id.']', $bbc_modes, $bbc_modes, false),
+		'ADMIN_BBCODE_ROW_PRIO' => cot_selectbox($row['bbc_priority'], 'bbca_priority['.$id.']', range(1, 256), range(1, 256), false),
+		'ADMIN_BBCODE_ROW_POSTRENDER' => cot_checkbox($row['bbc_postrender'], 'bbca_postrender['.$id.']'),
 		'ADMIN_BBCODE_ROW_DELETE_URL' => cot_url('admin', 'm=other&p=bbcode&a=del&id='.$id.'&d='.$durl),
 		'ADMIN_BBCODE_ROW_ODDEVEN' => cot_build_oddeven($ii)
 	));
