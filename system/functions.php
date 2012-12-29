@@ -455,6 +455,117 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 }
 
 /**
+ * Imports data from the outer world by list of Variable names
+ * Relies on `cot_import` function
+ *
+ * @param mixed $nameslist List of Variables names to import, can be:<br />
+ * 				string 'name1, name2 , ...' - list of variable names comma separated.<br />
+ * 				array('name1', 'name2', ...) - list of variable names only.
+ 	* 				In that case $filter parameter nust be specified.<br />
+ * 				array('name1' => 'TYPE1', 'name2' => 'TYPE2' ,...) - list of variable names with their filter types
+ * @param string $source Source type: G/GET, P/POST, C/COOKIE, R/REQUEST, PUT, DELETE or D/DIRECT (variable filtering)
+ * @param array $origindata Array with origin data that will be extended with imported one
+ * @param string $nameprefix Unified prefix for Variables names
+ * @param string $filter Filter type, can be setted as:<br />
+ * 				string 'FLT' - single filter string for all Variables<br />
+ * 				string 'FLT1, FLT2, ...' - comma separated string with filters corresponding to Variable names<br />
+ * 				array('FLT1', 'FLT2', ...) - array of filters<br />
+ * 			Overrides Filter types specified in $nameslist. If passed as list - number of Filters must be equal to count of
+ * 			variables names in $nameslist.
+ *
+ * @param bool $arrayprefix Use $nameprefix for array fields
+ * @param int $maxlen Length limit
+ * @param bool $dieonerror Die with fatal error on wrong input
+ * @param bool $buffer Try to load from input buffer (previously submitted) if current value is empty
+ * @return boolean|array Returns combined array of data or FALSE if wrong parameters setted
+ */
+function cot_import_list($nameslist=array(), $source='P', $origindata=array(), $nameprefix='', $filter=null, $arrayprefix=false, $maxlen=0, $dieonerror=false, $buffer=false)
+{
+	$direct = ($source == 'D' || $source == 'DIRECT');
+	$filter = empty($filter) ? null : $filter;
+	$nameslist = empty($nameslist) ? array() : $nameslist;
+	$origindata = !is_array($origindata) ? array() : $origindata;
+	if (!is_array($nameslist) && !empty($nameslist))
+	{
+		$nameslist = array_map('trim', explode(',',$nameslist));
+	}
+	if (!is_array($filter) && strpos($filter, ',') !== false)
+	{
+		$filter = array_map('trim', explode(',',$filter));
+	}
+	elseif (!is_array($filter) && !is_null($filter))
+	{
+		$filter = array_fill(0,sizeof($direct && empty($nameslist) ? $origindata : $nameslist),$filter);
+	}
+	if (!$direct && sizeof($nameslist) == 0)
+	{
+		return false; // no propper name list
+	}
+	elseif (sizeof($nameslist) == 0)
+	{ // direct by origin
+		if (is_null($filter)) return false;
+		foreach ($origindata as $key => $value) {
+			$origindata[$key] = cot_import($value, 'D', array_shift($filter), $maxlen, $dieonerror);
+		}
+	}
+	else
+	{ // namelist exists
+		$index = array_pop(array_keys($nameslist));
+		$types_not_defined = (is_numeric($index) && is_int($index ));
+		if ((is_array($filter) && sizeof($filter) != sizeof($nameslist))
+			|| ($types_not_defined && is_null($filter)))
+		{
+			return false; // can't rely on filter or no filter exists
+		}
+		elseif (is_array($filter))
+		{
+			$nameslist = array_combine($types_not_defined ? $nameslist : array_keys($nameslist), $filter);
+		}
+		foreach ($nameslist as $name => $filtertype) {
+			$origindata[($arrayprefix) ? $nameprefix.$name : $name] = cot_import($direct ? $origindata[$nameprefix.$name] : $nameprefix.$name, $source, $filtertype, $maxlen, $dieonerror, $buffer);
+		}
+	}
+	return $origindata;
+}
+
+/**
+ * Imports data from the outer world as indexed array of records imported by cot_import_list.
+ * Used to import table editing data as one array ordered by index (IDs) of table lines.
+ *
+ * @param For parameters see `cot_import_list`:
+ *
+ * @return  boolean|array Returns indexed array of data or FALSE if wrong parameters setted
+ */
+function cot_import_tabledata($nameslist=array(), $source='P', $nameprefix='', $origindata=array(), $maxlen=0, $dieonerror=false, $buffer=false)
+{
+	$imported_arrays = cot_import_list($nameslist, $source, $origindata, $nameprefix,'ARR', $maxlen, $dieonerror, $buffer);
+	if (!$imported_arrays) return false;
+	$result = array();
+	foreach ($imported_arrays as $name => $data)
+	{
+		if (!is_array($data))
+		{
+			$na_data[$name] = $data;
+			unset($imported_arrays[$name]);
+		}
+	}
+	foreach ($imported_arrays as $name => $data)
+	{
+		if (is_array($data))
+		{
+			foreach ($data as $index => $value)
+			{
+				$result[$index][$name] = $value;
+				foreach ($na_data as $k => $v) {
+					$result[$index][$k] = $v;
+				}
+			}
+		}
+	}
+	return $result;
+}
+
+/**
  * Puts POST data into the cross-request buffer
  */
 function cot_import_buffer_save()
