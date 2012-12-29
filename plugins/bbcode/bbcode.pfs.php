@@ -9,7 +9,6 @@ Hooks=pfs.first
  * Overrides markup in PFS insertText
  *
  * @package bbcode
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD

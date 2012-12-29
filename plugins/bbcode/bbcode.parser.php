@@ -9,7 +9,6 @@ Hooks=parser
  * Connects BBcode parser, loads data and registers parser function
  *
  * @package bbcode
- * @version 0.9.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD

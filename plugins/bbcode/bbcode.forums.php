@@ -9,7 +9,6 @@ Hooks=forums.posts.first
  * Overrides markup in Forums posts
  *
  * @package bbcode
- * @version 0.9.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD

@@ -3,7 +3,6 @@
  * English Language File for BBcode management
  *
  * @package bbcode
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
@@ -14,6 +13,8 @@ defined('COT_CODE') or die('Wrong URL.');
 $L['adm_bbcode'] = 'BBCode';
 $L['adm_bbcodes'] = 'BBCodes';
 $L['adm_bbcodes_added'] = 'Successfully added new bbcode.';
+$L['adm_bbcodes_notadded'] = 'BBCode not added.';
+$L['adm_bbcodes_notallfields'] = 'Some required fields not filled.';
 $L['adm_bbcodes_clearcache'] = 'Clear HTML cache';
 $L['adm_bbcodes_clearcache_confirm'] = 'This will clear cache for all pages and posts, continue?';
 $L['adm_bbcodes_clearcache_done'] = 'HTML cache has been cleared.';
@@ -33,8 +34,11 @@ $L['adm_bbcodes_pattern'] = 'Pattern';
 $L['adm_bbcodes_postrender'] = 'Post-render';
 $L['adm_bbcodes_priority'] = 'Priority';
 $L['adm_bbcodes_removed'] = 'Successfully removed bbcode.';
+$L['adm_bbcodes_notremoved'] = 'BBCode not deleted.';
 $L['adm_bbcodes_replacement'] = 'Replacement';
-$L['adm_bbcodes_updated'] = 'Successfully updated bbcode.';
+$L['adm_bbcodes_updated'] = 'Successfully updated changed bbcode(s).';
+$L['adm_bbcodes_notupdated'] = 'Some BBCode(s) not updated.';
+$L['adm_bbcodes_fieldrequired'] = 'Required field not filled in some of BBCodes.';
 $L['adm_help_bbcodes'] = <<<HTM
 <ul>
 <li><strong>Name</strong> - BBcode name (use alphanumerics and underscores only)</li>

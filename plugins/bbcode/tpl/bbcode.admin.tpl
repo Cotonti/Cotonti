@@ -1,7 +1,9 @@
 <!-- BEGIN: MAIN -->
 		<h2>BBCodes</h2>
+
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 			<h3>{PHP.L.editdeleteentries}:</h3>
+			<form action="{ADMIN_BBCODE_UPDATE_URL}" method="post">
 			<table class="cells">
 				<tr>
 					<td class="coltop width35">{PHP.L.Name}<br />{PHP.L.adm_bbcodes_mode} / {PHP.L.Enabled} / {PHP.L.adm_bbcodes_container}</td>
@@ -11,7 +13,6 @@
 					<td class="coltop width10">{PHP.L.Action}</td>
 				</tr>
 <!-- BEGIN: ADMIN_BBCODE_ROW -->
-				<form action="{ADMIN_BBCODE_ROW_UPDATE_URL}" method="post">
 				<tr>
 					<td class="centerall">
 						{ADMIN_BBCODE_ROW_NAME}
@@ -29,13 +30,13 @@
 						{ADMIN_BBCODE_ROW_POSTRENDER}
 					</td>
 					<td class="centerall">
-						<input type="submit" value="{PHP.L.Update}" /><br />
 						<input type="button" value="{PHP.L.Delete}" onclick="if(confirm('{PHP.L.adm_bbcodes_confirm}')) location.href='{ADMIN_BBCODE_ROW_DELETE_URL}'" />
 					</td>
 				</tr>
-			</form>
 <!-- END: ADMIN_BBCODE_ROW -->
 			</table>
+			<input onclick="" type="submit" value="{PHP.L.Update}" /><br />
+			</form>
 			<p class="paging">{ADMIN_BBCODE_PAGINATION_PREV} {ADMIN_BBCODE_PAGNAV} {ADMIN_BBCODE_PAGINATION_NEXT}<span>{PHP.L.Total}: {ADMIN_BBCODE_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_BBCODE_COUNTER_ROW}</span></p>
 			<h3>{PHP.L.adm_bbcodes_new}:</h3>
 			<table class="cells">

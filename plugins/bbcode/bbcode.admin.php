@@ -9,7 +9,6 @@ Hooks=tools
  * BBcode management interface
  *
  * @package bbcode
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
@@ -28,6 +27,14 @@ $a = cot_import('a', 'G', 'ALP');
 $id = (int) cot_import('id', 'G', 'INT');
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
+$totalitems = $db->countRows($db_bbcode);
+
+// FIXME AJAX-based pagination doesn't work because of some strange PHP bug
+// Xtpl_block->text() returns 'str' instead of a long string which it has in $text
+//$pagenav = cot_pagenav('admin', 'm=other&p=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav('admin', 'm=other&p=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd');
+
+
 /* === Hook === */
 foreach (cot_getextplugins('bbcode.admin.first') as $pl)
 {
@@ -35,51 +42,70 @@ foreach (cot_getextplugins('bbcode.admin.first') as $pl)
 }
 /* ===== */
 
+$fields = array(
+	'name'			=> 'ALP',
+	'mode'			=> 'ALP',
+	'pattern'		=> 'HTM',
+	'priority'		=> 'INT',
+	'container'		=> 'BOL',
+	'replacement'	=> 'HTM',
+	'postrender'	=> 'BOL',
+	'enabled'		=> 'BOL'
+);
+
 if ($a == 'add')
 {
-	$bbc['name'] = cot_import('bbc_name', 'P', 'ALP');
-	$bbc['mode'] = cot_import('bbc_mode', 'P', 'ALP');
-	$bbc['pattern'] = cot_import('bbc_pattern', 'P', 'HTM');
-	$bbc['priority'] = cot_import('bbc_priority', 'P', 'INT');
-	$bbc['container'] = cot_import('bbc_container', 'P', 'BOL');
-	$bbc['replacement'] = cot_import('bbc_replacement', 'P', 'HTM');
-	$bbc['postrender'] = cot_import('bbc_postrender', 'P', 'BOL');
+	$bbc = cot_import_list($fields,'P',null,'bbc_');
 	if (!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
 	{
 		cot_bbcode_clearcache();
 		cot_bbcode_add($bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], '', $bbc['postrender'])
-				? cot_message('adm_bbcodes_added') : cot_message('Error');
+				? cot_message('adm_bbcodes_added') : cot_error('adm_bbcodes_added');
 	}
 	else
 	{
-		cot_message('Error');
+		cot_error('adm_bbcodes_notallfields');
 	}
 }
-elseif ($a == 'upd' && $id > 0)
+elseif ($a == 'upd')
 {
-	$bbc['name'] = cot_import('bbc_name', 'P', 'ALP');
-	$bbc['mode'] = cot_import('bbc_mode', 'P', 'ALP');
-	$bbc['pattern'] = cot_import('bbc_pattern', 'P', 'HTM');
-	$bbc['priority'] = cot_import('bbc_priority', 'P', 'INT');
-	$bbc['container'] = cot_import('bbc_container', 'P', 'BOL');
-	$bbc['replacement'] = cot_import('bbc_replacement', 'P', 'HTM');
-	$bbc['postrender'] = cot_import('bbc_postrender', 'P', 'BOL');
-	$bbc['enabled'] = cot_import('bbc_enabled', 'P', 'BOL');
-	if(!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
+	$bbca = cot_import_tabledata($fields,'P','bbc_');
+
+	$updated = 0;
+	$errors = 0;
+	foreach ($bbca as $id => $bbc)
 	{
-		cot_bbcode_clearcache();
-		cot_bbcode_update($id, $bbc['enabled'], $bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], $bbc['postrender'])
-			? cot_message('adm_bbcodes_updated') : cot_message('Error');
+		if(!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
+		{
+			cot_bbcode_update($id, $bbc['enabled'], $bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], $bbc['postrender'])
+			? $updated++ : $errors++;
+		}
+	}
+	if ($updated == sizeof($bbca['name']))
+	{
+		cot_message('adm_bbcodes_updated');
 	}
 	else
 	{
-		cot_message('Error');
+		if ($updated + $errors != sizeof($bbca['name']))
+		{
+			cot_error('adm_bbcodes_fieldrequired');
+		}
+		if ($errors)
+		{
+			cot_message('adm_bbcodes_notupdated');
+		}
 	}
+	if ($updated)
+	{
+		cot_bbcode_clearcache();
+	}
+	unset($bbca,$bbc);
 }
 elseif ($a == 'del' && $id > 0)
 {
 	cot_bbcode_clearcache();
-	cot_bbcode_remove($id) ? cot_message('adm_bbcodes_removed') : cot_message('Error');
+	cot_bbcode_remove($id) ? cot_message('adm_bbcodes_removed') : cot_error('adm_bbcodes_notremoved');
 }
 elseif ($a == 'clearcache')
 {
@@ -209,37 +235,27 @@ elseif ($a == 'convert')
 	}
 }
 
-$totalitems = $db->countRows($db_bbcode);
-
-// FIXME AJAX-based pagination doesn't work because of some strange PHP bug
-// Xtpl_block->text() returns 'str' instead of a long string which it has in $text
-//$pagenav = cot_pagenav('admin', 'm=other&p=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
-$pagenav = cot_pagenav('admin', 'm=other&p=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd');
-
 $bbc_modes = array('str', 'pcre', 'callback');
+
 $res = $db->query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
-
-
-
 $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('bbcode.admin.loop');
 /* ===== */
 foreach ($res->fetchAll() as $row)
 {
-
+	$id = $row['bbc_id'];
 	$bb_t->assign(array(
-		'ADMIN_BBCODE_ROW_NAME' => cot_inputbox('text', 'bbc_name', $row['bbc_name']),
-		'ADMIN_BBCODE_ROW_ENABLED' => cot_checkbox($row['bbc_enabled'], 'bbc_enabled'),
-		'ADMIN_BBCODE_ROW_CONTAINER' => cot_checkbox($row['bbc_container'], 'bbc_container'),
-		'ADMIN_BBCODE_ROW_PATTERN' => cot_textarea('bbc_pattern', $row['bbc_pattern'], 2, 20),
-		'ADMIN_BBCODE_ROW_REPLACEMENT' => cot_textarea('bbc_replacement', $row['bbc_replacement'], 2, 20),
+		'ADMIN_BBCODE_ROW_NAME' => cot_inputbox('text', 'bbc_name['.$id.']', $row['bbc_name']),
+		'ADMIN_BBCODE_ROW_ENABLED' => cot_checkbox($row['bbc_enabled'], 'bbc_enabled['.$id.']'),
+		'ADMIN_BBCODE_ROW_CONTAINER' => cot_checkbox($row['bbc_container'], 'bbc_container['.$id.']'),
+		'ADMIN_BBCODE_ROW_PATTERN' => cot_textarea('bbc_pattern['.$id.']', $row['bbc_pattern'], 2, 20),
+		'ADMIN_BBCODE_ROW_REPLACEMENT' => cot_textarea('bbc_replacement['.$id.']', $row['bbc_replacement'], 2, 20),
 		'ADMIN_BBCODE_ROW_PLUG' => $row['bbc_plug'],
-		'ADMIN_BBCODE_ROW_MODE' => cot_selectbox($row['bbc_mode'], 'bbc_mode', $bbc_modes, $bbc_modes, false),
-		'ADMIN_BBCODE_ROW_PRIO' => cot_selectbox($row['bbc_priority'], 'bbc_priority', range(1, 256), range(1, 256), false),
-		'ADMIN_BBCODE_ROW_POSTRENDER' => cot_checkbox($row['bbc_postrender'], 'bbc_postrender'),
-		'ADMIN_BBCODE_ROW_UPDATE_URL' => cot_url('admin', 'm=other&p=bbcode&a=upd&id='.$row['bbc_id'].'&d='.$durl),
-		'ADMIN_BBCODE_ROW_DELETE_URL' => cot_url('admin', 'm=other&p=bbcode&a=del&id='.$row['bbc_id']),
+		'ADMIN_BBCODE_ROW_MODE' => cot_selectbox($row['bbc_mode'], 'bbc_mode['.$id.']', $bbc_modes, $bbc_modes, false),
+		'ADMIN_BBCODE_ROW_PRIO' => cot_selectbox($row['bbc_priority'], 'bbc_priority['.$id.']', range(1, 256), range(1, 256), false),
+		'ADMIN_BBCODE_ROW_POSTRENDER' => cot_checkbox($row['bbc_postrender'], 'bbc_postrender['.$id.']'),
+		'ADMIN_BBCODE_ROW_DELETE_URL' => cot_url('admin', 'm=other&p=bbcode&a=del&id='.$id.'&d='.$durl),
 		'ADMIN_BBCODE_ROW_ODDEVEN' => cot_build_oddeven($ii)
 	));
 
@@ -261,16 +277,17 @@ $bb_t->assign(array(
 	'ADMIN_BBCODE_PAGINATION_NEXT' => $pagenav['next'],
 	'ADMIN_BBCODE_TOTALITEMS' => $totalitems,
 	'ADMIN_BBCODE_COUNTER_ROW' => $ii,
-	'ADMIN_BBCODE_FORM_ACTION' => cot_url('admin', 'm=other&p=bbcode&a=add'),
-	'ADMIN_BBCODE_NAME' => cot_inputbox('text', 'bbc_name', ''),
-	'ADMIN_BBCODE_ENABLED' => cot_checkbox('', 'bbc_enabled'),
-	'ADMIN_BBCODE_CONTAINER' => cot_checkbox(1, 'bbc_container'),
-	'ADMIN_BBCODE_PATTERN' => cot_textarea('bbc_pattern', '', 2, 20),
-	'ADMIN_BBCODE_REPLACEMENT' => cot_textarea('bbc_replacement', '', 2, 20),
-	'ADMIN_BBCODE_MODE' => cot_selectbox('pcre', 'bbc_mode', $bbc_modes, $bbc_modes, false),
-	'ADMIN_BBCODE_PRIO' => cot_selectbox('128', 'bbc_priority', range(1, 256), range(1, 256), false),
-	'ADMIN_BBCODE_POSTRENDER' => cot_checkbox('0', 'bbc_postrender'),
-	'ADMIN_BBCODE_URL_CLEAR_CACHE' => cot_url('admin', 'm=other&p=bbcode&a=clearcache&d='.$durl)
+	'ADMIN_BBCODE_FORM_ACTION' => cot_url('admin', 'm=other&p=bbcode&a=add&d='.$durl),
+	'ADMIN_BBCODE_NAME' => cot_inputbox('text', 'bbc_name', $bbc['name']),
+	'ADMIN_BBCODE_ENABLED' => cot_checkbox($bbc['enabled'], 'bbc_enabled'),
+	'ADMIN_BBCODE_CONTAINER' => cot_checkbox($bbc['container'], 'bbc_container'),
+	'ADMIN_BBCODE_PATTERN' => cot_textarea('bbc_pattern', $bbc['pattern'], 2, 20),
+	'ADMIN_BBCODE_REPLACEMENT' => cot_textarea('bbc_replacement', $bbc['replacement'], 2, 20),
+	'ADMIN_BBCODE_MODE' => cot_selectbox(!empty($bbc['mode']) ? $bbc['mode'] : 'pcre', 'bbc_mode', $bbc_modes, $bbc_modes, false),
+	'ADMIN_BBCODE_PRIO' => cot_selectbox(is_numeric($bbc['priority']) ? $bbc['priority'] : '128', 'bbc_priority', range(1, 256), range(1, 256), false),
+	'ADMIN_BBCODE_POSTRENDER' => cot_checkbox($bbc['postrender'], 'bbc_postrender'),
+	'ADMIN_BBCODE_URL_CLEAR_CACHE' => cot_url('admin', 'm=other&p=bbcode&a=clearcache&d='.$durl),
+	'ADMIN_BBCODE_UPDATE_URL' => cot_url('admin', 'm=other&p=bbcode&a=upd&d='.$durl)
 ));
 
 // HTML conversion links

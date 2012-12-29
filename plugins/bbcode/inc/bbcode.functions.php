@@ -3,7 +3,6 @@
  * BBcode parsing and management API
  *
  * @package bbcode
- * @version 0.9.0
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD License
  */
@@ -102,6 +101,7 @@ function cot_bbcode_remove($id = 0, $plug = '')
 function cot_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, $container, $priority = 128, $postrender = false)
 {
 	global $db, $db_bbcode;
+
 	$bbc['bbc_enabled'] = empty($enabled) ? 0 : 1;
 	if (!empty($name))
 	{

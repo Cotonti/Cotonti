@@ -3,7 +3,6 @@
  * Russian Language File for BBcode management
  *
  * @package bbcode
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2012
  * @license BSD
@@ -14,6 +13,8 @@ defined('COT_CODE') or die('Wrong URL.');
 $L['adm_bbcode'] = 'BBCode';
 $L['adm_bbcodes'] = 'BBCodes';
 $L['adm_bbcodes_added'] = 'Новый BBCode успешно добавлен.';
+$L['adm_bbcodes_notadded'] = 'Ошибка добавления BBCode.';
+$L['adm_bbcodes_notallfields'] = 'Не все необходимые поля заполнены.';
 $L['adm_bbcodes_clearcache'] = 'Очистить HTML-кэш';
 $L['adm_bbcodes_clearcache_confirm'] = 'Это очистит кэш всех страниц и сообщений. Продолжить?';
 $L['adm_bbcodes_clearcache_done'] = 'HTML-кэш очищен.';
@@ -33,8 +34,11 @@ $L['adm_bbcodes_pattern'] = 'Шаблон';
 $L['adm_bbcodes_postrender'] = 'Пост-рендер';
 $L['adm_bbcodes_priority'] = 'Приоритет';
 $L['adm_bbcodes_removed'] = 'BBCode удален.';
+$L['adm_bbcodes_notremoved'] = 'BBCode не удален.';
 $L['adm_bbcodes_replacement'] = 'Замена';
-$L['adm_bbcodes_updated'] = 'BBCode обновлен.';
+$L['adm_bbcodes_updated'] = 'Измененные BBCode\'ы обновлены.';
+$L['adm_bbcodes_notupdated'] = 'Некоторые BBCode\'ы остались не измененными.';
+$L['adm_bbcodes_fieldrequired'] = 'В одном из BBCode\'ов не заполнено обязательное поле.';
 $L['adm_help_bbcodes'] = <<<HTM
 <ul>
 <li><strong>Имя</strong> - Название BBcode (только буквы латинского алфавита, цифры и подчеркивание)</li>
