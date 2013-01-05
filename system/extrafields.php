@@ -534,11 +534,16 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 	{
 		return false;
 	}
-	if ($db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
-		($db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0 && !$noalter))
+	
+	/* dandielo fix start */
+	if ( $db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
+		($db->query("SHOW COLUMNS FROM $location WHERE SUBSTR(Field, INSTR(Field, '_') + 1) = '$name'")->rowCount() > 0 && !$noalter))
 	{
-		return false; // No adding - fields already exist // Check table cot_$sql_table - if field with same name exists - exit.
+		// No adding - fields already exist // Check table cot_$sql_table - if field with same name exists - exit.
+		return false;
 	}
+	/* dandielo fix end */
+	
 	$fieldsres = $db->query("SHOW COLUMNS FROM $location");
 	while ($fieldrow = $fieldsres->fetch())
 	{
