@@ -537,28 +537,10 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 	
 	/* dandielo fix start */
 	if ( $db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
-		($db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0 && !$noalter))
+		($db->query("SHOW COLUMNS FROM $location WHERE SUBSTR(Field, INSTR(Field, '_') + 1) = '$name'")->rowCount() > 0 && !$noalter))
 	{
-		//doubled the fetch 
-		$statement = $db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'");
-		
-		//to be sure nothing goes wrong
-		if ( $statement != null )
-		{
-			$found = false;
-			for ( $i = 0 ; $i < $statement->rowCount() ; ++$i )
-			{
-				//gettig the real column name
-				$columnName = preg_replace('/([^_]*[_])/', "", $statement->fetch(PDO::FETCH_ASSOC)['Field'], 1);
-				//cheking if it has repated
-				if ( $columnName == $name )
-					$found = true;
-			}
-			
-			// No adding - fields already exist // Check table cot_$sql_table - if field with same name exists - exit.
-			if ( $found )
-				return false;
-		}
+		// No adding - fields already exist // Check table cot_$sql_table - if field with same name exists - exit.
+		return false;
 	}
 	/* dandielo fix end */
 	
