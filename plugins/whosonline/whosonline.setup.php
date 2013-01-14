@@ -8,14 +8,15 @@ Description=Lists the members online
 Version=1.3
 Date=2012-12-18
 Author=Neocrome & Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2012
+Copyright=Partial copyright (c) Cotonti Team 2008-2013
 Notes=BSD License
 SQL=
 Auth_guests=R
 Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
-Requires_plugins=hits,users
+Requires_modules=users
+Requires_plugins=hits
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
