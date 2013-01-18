@@ -72,6 +72,13 @@ if ($a == 'update')
 		cot_redirect(cot_url('page', "c=" . $row_page['page_cat'], '', true));
 	}
 
+	/* === Hook === */
+	foreach (cot_getextplugins('page.edit.update.import') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
 	cot_page_validate($rpage);
 
 	/* === Hook === */

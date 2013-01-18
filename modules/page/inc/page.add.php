@@ -55,6 +55,13 @@ if ($a == 'add')
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
 	cot_block($usr['auth_write']);
 
+	/* === Hook === */
+	foreach (cot_getextplugins('page.add.add.import') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
 	cot_page_validate($rpage);
 
 	/* === Hook === */
