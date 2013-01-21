@@ -5,8 +5,8 @@ Code=whosonline
 Name=Who's online
 Category=community-social
 Description=Lists the members online
-Version=1.3
-Date=2012-12-18
+Version=1.3.1
+Date=2013-01-22
 Author=Neocrome & Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2013
 Notes=BSD License
@@ -16,7 +16,7 @@ Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
 Requires_modules=users
-Requires_plugins=hits
+Recommends_plugins=hits
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
