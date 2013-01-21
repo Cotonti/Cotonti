@@ -1,6 +1,6 @@
 /* r91 more fix, hooks fix */
 INSERT INTO `sed_bbcode` VALUES (NULL,'more','str','[more]','<!--more-->',1,1,128,'',0),(NULL,'more','str','[/more]','&nbsp;',1,1,128,'',0);
-INSERT INTO `sed_plugins` VALUES (NULL, 'header.main', 'search', 'header', 'Search', 'search.header', 10, 1), (NULL, 'page.first', 'search', 'page', 'Search', 'search.page.first', 10, 1), (NULL, 'forums.posts.first', 'search', 'forums', 'Search', 'search.forums.posts.first', 10, 1); 
+INSERT INTO `sed_plugins` VALUES (NULL, 'header.main', 'search', 'header', 'Search', 'search.header', 10, 1), (NULL, 'page.first', 'search', 'page', 'Search', 'search.page.first', 10, 1), (NULL, 'forums.posts.first', 'search', 'forums', 'Search', 'search.forums.posts.first', 10, 1);
 
 /* r103 remove antibump */
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'forums' AND `config_name` = 'antibumpforums' LIMIT 1;
@@ -22,7 +22,7 @@ UPDATE `sed_config` SET `config_order` = '05' WHERE `config_cat` = 'main' AND `c
 UPDATE `sed_config` SET `config_order` = '06' WHERE `config_cat` = 'main' AND `config_name` = 'gzip' LIMIT 1;
 UPDATE `sed_config` SET `config_order` = '07' WHERE `config_cat` = 'main' AND `config_name` = 'devmode' LIMIT 1;
 
-INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'title', '03', 'title_forum_main', '01', '{FORUM}'),('core', 'title', '04', 'title_forum_topics', '01', '{FORUM} - {SECTION}'),('core', 'title', '05', 'title_forum_posts', '01', '{FORUM} - {TITLE}'),('core', 'title', '06', 'title_forum_newtopic', '01', '{FORUM} - {SECTION}'),('core', 'title', '07', 'title_forum_editpost', '01', '{FORUM} - {SECTION}'),('core', 'title', '08', 'title_list', '01', '{TITLE}'),('core', 'title', '09', 'title_page', '01', '{TITLE}'),('core', 'title', '10', 'title_pfs', '01', '{PFS}'),('core', 'title', '11', 'title_pm_main', '01', '{PM}'),('core', 'title', '12', 'title_pm_send', '01', '{PM}'),('core', 'title', '13', 'title_users_main', '01', '{USERS}'),('core', 'title', '14', 'title_users_details', '01', '{USER} : {NAME}'),('core', 'title', '15', 'title_users_profile', '01', '{PROFILE}'),('core', 'title', '16', 'title_users_edit', '01', '{NAME}'),('core', 'title', '17', 'title_header', '01', '{MAINTITLE} - {SUBTITLE}'),('core', 'title', '18', 'title_header_index', '01', '{MAINTITLE} - {DESCRIPTION}');
+INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'title', '03', 'title_forum_main', '01', '{FORUM}'),('core', 'title', '04', 'title_forum_topics', '01', '{FORUM} - {SECTION}'),('core', 'title', '05', 'title_forum_posts', '01', '{FORUM} - {TITLE}'),('core', 'title', '06', 'title_forum_newtopic', '01', '{FORUM} - {SECTION}'),('core', 'title', '07', 'title_forum_editpost', '01', '{FORUM} - {SECTION}'),('core', 'title', '08', 'title_list', '01', '{TITLE}'),('core', 'title', '09', 'title_page', '01', '{TITLE}'),('core', 'title', '10', 'title_pfs', '01', '{PFS}'),('core', 'title', '11', 'title_pm_main', '01', '{PM}'),('core', 'title', '12', 'title_pm_send', '01', '{PM}'),('core', 'title', '13', 'title_users_main', '01', '{USERS}'),('core', 'title', '14', 'title_users_details', '01', '{USER}: {NAME}'),('core', 'title', '15', 'title_users_profile', '01', '{PROFILE}'),('core', 'title', '16', 'title_users_edit', '01', '{NAME}'),('core', 'title', '17', 'title_header', '01', '{MAINTITLE} - {SUBTITLE}'),('core', 'title', '18', 'title_header_index', '01', '{MAINTITLE} - {DESCRIPTION}');
 
 /* r128 page extra fields enhancment */
 CREATE TABLE `sed_pages_extra_fields` (
@@ -105,7 +105,7 @@ DROP TABLE sed_smilies;
 RENAME TABLE sed_pages_extra_fields  TO sed_extra_fields ;
 ALTER TABLE `sed_extra_fields` ADD `field_location` VARCHAR( 255 ) NOT NULL FIRST ;
 ALTER TABLE `sed_extra_fields` ADD `field_description` TEXT NOT NULL ;
-ALTER TABLE `sed_extra_fields` ADD INDEX ( `field_location` ) ; 
+ALTER TABLE `sed_extra_fields` ADD INDEX ( `field_location` ) ;
 ALTER TABLE `sed_extra_fields` DROP INDEX `field_name`  ;
 ALTER TABLE `sed_extra_fields` ADD INDEX ( `field_name` )  ;
 INSERT INTO `sed_extra_fields` (`field_location`, `field_name`, `field_type`, `field_html`, `field_variants`, `field_description`) VALUES('pages', 'extra1', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('pages', 'extra2', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('pages', 'extra3', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('pages', 'extra4', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('pages', 'extra5', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra1', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra2', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra3', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra4', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra5', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra6', 'textarea', '<textarea cols="80" rows="6" ></textarea>', '', ''), ('users', 'extra7', 'textarea', '<textarea cols="80" rows="6" ></textarea>', '', ''), ('users', 'extra8', 'textarea', '<textarea cols="80" rows="6" ></textarea>', '', ''), ('users', 'extra9', 'textarea', '<textarea cols="80" rows="6" ></textarea>', '', '');
@@ -137,7 +137,7 @@ DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users' AND `config_name` = 'sig_resize' LIMIT 1;
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users' AND `config_name` = 'ph_resize' LIMIT 1;
 
-/* r285 24 symbols for user name - not enough */ 
+/* r285 24 symbols for user name - not enough */
 ALTER TABLE `sed_users` CHANGE `user_name` `user_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 
 /* r289 added config option for autovalidate*/
@@ -146,28 +146,28 @@ INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_
 /* r290 indexpolls*/
 DELETE FROM `sed_plugins` WHERE `pl_file` = 'indexpolls.main';
 
-/* r293 Increase size of user_name and page category title (begins in r285)*/ 
-ALTER TABLE `sed_com` CHANGE `com_author` `com_author` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ; 
-ALTER TABLE `sed_forum_posts` CHANGE `fp_postername` `fp_postername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;  
+/* r293 Increase size of user_name and page category title (begins in r285)*/
+ALTER TABLE `sed_com` CHANGE `com_author` `com_author` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
+ALTER TABLE `sed_forum_posts` CHANGE `fp_postername` `fp_postername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 ALTER TABLE `sed_forum_posts` CHANGE `fp_updater` `fp_updater` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  ;
-ALTER TABLE `sed_forum_sections` CHANGE `fs_lt_postername` `fs_lt_postername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;  
-ALTER TABLE `sed_forum_topics` CHANGE `ft_lastpostername` `ft_lastpostername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ; 
-ALTER TABLE `sed_forum_topics` CHANGE `ft_firstpostername` `ft_firstpostername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;  
+ALTER TABLE `sed_forum_sections` CHANGE `fs_lt_postername` `fs_lt_postername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+ALTER TABLE `sed_forum_topics` CHANGE `ft_lastpostername` `ft_lastpostername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
+ALTER TABLE `sed_forum_topics` CHANGE `ft_firstpostername` `ft_firstpostername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 ALTER TABLE `sed_logger` CHANGE `log_name` `log_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  ;
-ALTER TABLE `sed_online` CHANGE `online_name` `online_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;  
+ALTER TABLE `sed_online` CHANGE `online_name` `online_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 ALTER TABLE `sed_pages` CHANGE `page_author` `page_author` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  ;
 ALTER TABLE `sed_pm` CHANGE `pm_fromuser` `pm_fromuser` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  ;
 ALTER TABLE `sed_structure` CHANGE `structure_title` `structure_title` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 
-/* r372 Fix, adding new hook for MarkitUp!, add search url style config */ 
+/* r372 Fix, adding new hook for MarkitUp!, add search url style config */
 DELETE FROM `sed_plugins` WHERE `pl_code` = 'markitup' AND `pl_file` = 'markitup.ajax';
 REPLACE INTO `sed_plugins` (`pl_id` ,`pl_hook` ,`pl_code` ,`pl_part` ,`pl_title` ,`pl_file` ,`pl_order` ,`pl_active`) VALUES (NULL , 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', '10', '1');
 INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('plug', 'search', '1', 'searchurl', 2, 'Normal', 'Normal,Single', 'Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link');
 
-/* r387 Structure page count fix for news */ 
+/* r387 Structure page count fix for news */
 UPDATE sed_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='news';
 
-/* r400 change poll type */ 
+/* r400 change poll type */
 ALTER TABLE sed_polls MODIFY poll_type VARCHAR(100) NOT NULL DEFAULT 'index';
 UPDATE sed_polls SET poll_type = 'index' WHERE poll_type = '0';
 UPDATE sed_polls SET poll_type = 'forum' WHERE poll_type = '1';
