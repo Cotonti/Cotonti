@@ -344,6 +344,12 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 				$pass = TRUE;
 				$v = (int) $v;
 			}
+			//is $v is a empty string convert it into 0 int
+			elseif ( $v == '' )
+			{
+				$pass = TRUE;
+				$v = 0;
+			}
 			break;
 
 		case 'NUM':
