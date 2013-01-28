@@ -12,7 +12,7 @@ Tags=news.tpl:{PAGE_TAGS_ROW_TAG},{PAGE_TAGS_ROW_URL},{PAGE_TAGS_ROW_TAG_COUNT}
  * @package tags
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
 

@@ -5,7 +5,7 @@
  * @package genoa
  * @version 0.9.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009-2012
+ * @copyright Copyright (c) Cotonti Team 2009-2013
  * @license BSD
  */
 

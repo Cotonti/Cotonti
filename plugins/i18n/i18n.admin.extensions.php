@@ -11,7 +11,7 @@ Hooks=admin.extensions.install.tags
  * @package i18n
  * @version 0.9.2
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2011-2012
+ * @copyright Copyright (c) Cotonti Team 2011-2013
  * @license BSD License
  */
 

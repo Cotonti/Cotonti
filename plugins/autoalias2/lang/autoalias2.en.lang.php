@@ -5,7 +5,7 @@
  * @package autoalias2
  * @version 2.1.2
  * @author Trustmaster
- * @copyright (c) Cotonti Team 2010-2012
+ * @copyright (c) Cotonti Team 2010-2013
  * @license BSD
  */
 

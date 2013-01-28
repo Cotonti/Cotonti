@@ -11,7 +11,7 @@ Hooks=page.edit.delete.done
  * @package i18n
  * @version 0.9.12
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2012
+ * @copyright Copyright (c) Cotonti Team 2010-2013
  * @license BSD License
  */
 

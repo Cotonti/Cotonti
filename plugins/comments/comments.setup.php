@@ -8,7 +8,7 @@ Description=Comments system for Cotonti
 Version=0.9.7
 Date=2011-09-23
 Author=Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2012
+Copyright=Partial copyright (c) Cotonti Team 2008-2013
 Notes=BSD License
 Auth_guests=R
 Lock_guests=12345A
@@ -39,7 +39,7 @@ order=14:select:Chronological,Recent:Recent:Comment sorting order
  * @package comments
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
 

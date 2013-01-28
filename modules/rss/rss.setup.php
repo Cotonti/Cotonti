@@ -31,7 +31,7 @@ rss_postmaxsymbols=06:string:::
  * @package rss
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
 ?>

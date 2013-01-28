@@ -12,7 +12,7 @@ Tags=header.tpl:{I18N_LANG_ROW_URL},{I18N_LANG_ROW_CODE},{I18N_LANG_ROW_TITLE},{
  * @package i18n
  * @version 0.9.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2012
+ * @copyright Copyright (c) Cotonti Team 2010-2013
  * @license BSD License
  */
 

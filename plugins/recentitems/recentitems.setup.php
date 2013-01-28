@@ -8,7 +8,7 @@ Description=Recent pages, topics in forums, users, comments
 Version=1.0
 Date=2012-05-28
 Author=Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2012
+Copyright=Partial copyright (c) Cotonti Team 2008-2013
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -44,7 +44,7 @@ cache_ttl=80:select:0,60,180,300,600,1800,3600:0:Cache lifetime in seconds, 0 di
  * @package recentitems
  * @version 0.9.10
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
 

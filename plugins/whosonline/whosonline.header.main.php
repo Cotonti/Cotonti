@@ -11,7 +11,7 @@ Tags=header.tpl:{HEADER_WHOSONLINE}
  *
  * @package whosonline
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
 
