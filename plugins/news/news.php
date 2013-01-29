@@ -93,6 +93,11 @@ if (count($cats) > 0)
 		$totalnews = $db->query("SELECT COUNT(*)
 			FROM $db_pages AS p $news_join_tables WHERE " . $where)->fetchColumn();
 
+		if ($v[3]['d'] < 0 || $totalnews > 0 && $v[3]['d'] > $totalnews)
+		{
+			cot_die_message(404);
+		}
+
 		if (!$cfg['plugin']['news']['syncpagination'])
 		{
 			$news_link_params .= ($catn != 0 && $d != 0) ? '&d=' . $durl : '';

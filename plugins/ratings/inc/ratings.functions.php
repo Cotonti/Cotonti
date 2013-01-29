@@ -46,9 +46,9 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	}
 
 	// Get current rating value
-	$sql = $db->query("SELECT * FROM $db_ratings
+	$sql = $db->query("SELECT r.*, (SELECT COUNT(*) FROM $db_rated WHERE rated_area = ? AND rated_code = ?) AS `cnt` FROM $db_ratings AS r
 		WHERE rating_area = ? AND rating_code = ? LIMIT 1",
-		array($ext_name, $code));
+		array($ext_name, $code, $ext_name, $code));
 
 	if ($row = $sql->fetch())
 	{
@@ -63,19 +63,21 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 			$rating_average = 10;
 		}
 		$rating_cntround = round($rating_average, 0);
+		$rating_raters_count = $row['cnt'];
 	}
 	else
 	{
 		$item_has_rating = false;
 		$rating_average = 0;
 		$rating_cntround = 0;
+		$rating_raters_count = 0;
 	}
 
 	// Render read-only image
 	$rating_fancy =  cot_rc('icon_rating_stars', array('val' => $rating_cntround));
 	if (!$auth_write || $readonly)
 	{
-		return array($rating_fancy, $rating_cntround);
+		return array($rating_fancy, $rating_cntround, $rating_raters_count);
 	}
 
 	// Check if the user has voted already for this item
@@ -95,7 +97,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 
 	if ($already_voted && !$cfg['plugin']['ratings']['ratings_allowchange'])
 	{
-		return array($rating_fancy, $rating_cntround);
+		return array($rating_fancy, $rating_cntround, $rating_raters_count);
 	}
 
 	$t = new XTemplate(cot_tplfile('ratings', 'plug'));
@@ -179,7 +181,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	$t->parse('RATINGS');
 	$res = $t->text('RATINGS');
 
-	return array($res, round($rating_cntround));
+	return array($res, round($rating_cntround), $rating_raters_count);
 }
 
 /**
