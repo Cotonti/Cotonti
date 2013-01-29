@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.12
+ * Version: 0.9.13
  */
 
 DROP TABLE IF EXISTS `cot_auth`;
@@ -143,8 +143,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','title','18','title_header',1,'{SUBTITLE} - {MAINTITLE}','{SUBTITLE} - {MAINTITLE}','',''),
 ('core','title','19','title_header_index',1,'{MAINTITLE} - {DESCRIPTION}','{MAINTITLE} - {DESCRIPTION}','',''),
 ('core','title','98','subject_mail',1,'{SITE_TITLE} - {MAIL_SUBJECT}','{SITE_TITLE} - {MAIL_SUBJECT}','',''),
-('core','title','99','body_mail',0,'{MAIL_BODY}\n\n{SITE_TITLE} - {SITE_URL}\n{SITE_DESCRIPTION}','{MAIL_BODY}\n\n{SITE_TITLE} - {SITE_URL}\n{SITE_DESCRIPTION}','',''),
-('core','version','01','revision',0,'','','','');
+('core','title','99','body_mail',0,'{MAIL_BODY}\n\n{SITE_TITLE} - {SITE_URL}\n{SITE_DESCRIPTION}','{MAIL_BODY}\n\n{SITE_TITLE} - {SITE_URL}\n{SITE_DESCRIPTION}','','');
 
 DROP TABLE IF EXISTS `cot_core`;
 CREATE TABLE `cot_core` (
@@ -263,7 +262,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.12-01'),
+('revision', '0.9.13-01'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;

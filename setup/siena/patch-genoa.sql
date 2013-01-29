@@ -1002,8 +1002,11 @@ WHERE `config_owner` = 'core'
   AND `config_cat` = 'main'
   AND `config_name` = 'maintenancereason';
 
+/* 0.9.13-01 remove the obsolete version/revision config */
+DELETE FROM `cot_config` WHERE config_owner = 'core' AND `config_cat` = 'version';
+
 -------------------------------------------------------------------------------
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.12-01' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.13-01' WHERE `upd_param` = 'revision';
