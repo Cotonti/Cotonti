@@ -12,7 +12,7 @@ Tags=page.edit.tpl:{PAGEEDIT_FORM_TAGS},{PAGEEDIT_TOP_TAGS},{PAGEEDIT_TOP_TAGS_H
  * @package tags
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
 

@@ -12,7 +12,7 @@ Hooks=standalone
  * @package search
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD License
  */
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');

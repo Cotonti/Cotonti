@@ -8,7 +8,7 @@ Description=Compatibility layer for Cotonti 0.6 Genoa plugins. Enables some of t
 Version=0.9.0
 Date=2010-12-24
 Author=Trustmaster, Cotonti Team
-Copyright=Copyright (c) Cotonti Team 2009-2012
+Copyright=Copyright (c) Cotonti Team 2009-2013
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -26,7 +26,7 @@ Recommends_plugins=bbcode,comments,ratings,tags,trashcan,userimages
  * @package genoa
  * @version 0.9.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009-2012
+ * @copyright Copyright (c) Cotonti Team 2009-2013
  * @license BSD
  */
 

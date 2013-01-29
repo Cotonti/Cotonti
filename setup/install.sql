@@ -139,7 +139,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','title','01','maintitle',1,'Title of your site','Title of your site','',''),
 ('core','title','02','subtitle',1,'Subtitle','Subtitle','',''),
 ('core','title','03','metakeywords',1,'','','',''),
-('core','title','14','title_users_details',1,'{USER} : {NAME}','{USER} - {NAME}','',''),
+('core','title','14','title_users_details',1,'{USER}: {NAME}','{USER} - {NAME}','',''),
 ('core','title','18','title_header',1,'{SUBTITLE} - {MAINTITLE}','{SUBTITLE} - {MAINTITLE}','',''),
 ('core','title','19','title_header_index',1,'{MAINTITLE} - {DESCRIPTION}','{MAINTITLE} - {DESCRIPTION}','',''),
 ('core','title','98','subject_mail',1,'{SITE_TITLE} - {MAIL_SUBJECT}','{SITE_TITLE} - {MAIL_SUBJECT}','',''),

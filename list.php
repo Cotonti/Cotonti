@@ -6,7 +6,7 @@
  * @version 0.9.0
  * @deprecated List module no longer exists since Cotonti Siena
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  * @deprecated Deprecated since Cotonti Siena
  */

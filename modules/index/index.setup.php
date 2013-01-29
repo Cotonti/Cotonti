@@ -23,7 +23,7 @@ Recommends_plugins=news,recentitems
  * @package index
  * @version 0.9.1
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
 

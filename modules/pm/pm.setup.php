@@ -30,7 +30,7 @@ css=99:radio:0,1:1:Enable module CSS
  * @package pm
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
 

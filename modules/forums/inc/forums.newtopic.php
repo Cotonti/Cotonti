@@ -6,7 +6,7 @@
  * @package forums
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) 2008-2012 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD License
  */
 

@@ -11,7 +11,7 @@ Hooks=admin.extensions.install.tags
  * @package comments
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
 

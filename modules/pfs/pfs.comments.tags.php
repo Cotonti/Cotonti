@@ -12,7 +12,7 @@ Tags=comments.tpl:{COMMENTS_FORM_PFS},{COMMENTS_FORM_SFS}
  * @package pfs
  * @version 0.9.3
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
 

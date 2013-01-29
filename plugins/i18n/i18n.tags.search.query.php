@@ -11,7 +11,7 @@ Hooks=tags.search.pages.query
  * @package i18n
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2012
+ * @copyright Copyright (c) Cotonti Team 2010-2013
  * @license BSD License
  */
 

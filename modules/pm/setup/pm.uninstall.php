@@ -5,7 +5,7 @@
  * @package pm
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2011-2012
+ * @copyright Copyright (c) Cotonti Team 2011-2013
  * @license BSD License
  */
 

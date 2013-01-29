@@ -10,7 +10,7 @@ Hooks=standalone
  *
  * @package whosonline
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2012
+ * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
 
@@ -20,7 +20,6 @@ $sys['sublocation'] = $L['WhosOnline'];
 // to update first
 require_once $cfg['plugins_dir'].'/whosonline/whosonline.header.main.php';
 require_once cot_incfile('users', 'module');
-require_once cot_incfile('hits', 'plug');
 
 $pl_cfg = $cfg['plugin']['whosonline'];
 $maxuserssperpage = is_numeric($pl_cfg['maxusersperpage']) ? $pl_cfg['maxusersperpage'] : 0;
@@ -28,6 +27,7 @@ list($pg, $d, $durl) = cot_import_pagenav('d', $maxuserssperpage);
 $maxusers = 0;
 if(isset($cfg['plugin']['hits']))
 {
+	require_once cot_incfile('hits', 'plug');
 	$stats = $db->query("SELECT stat_value FROM $db_stats WHERE stat_name='maxusers' LIMIT 1")->fetch();
 	$maxusers = $stats[0];
 }
