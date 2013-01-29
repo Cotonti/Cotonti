@@ -11,9 +11,6 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-// Bootstrap
-require_once $cfg['system_dir'] . '/common.php';
-
 // Input import
 $e = cot_import('e', 'G', 'ALP');
 $o = cot_import('o', 'G', 'ALP');
