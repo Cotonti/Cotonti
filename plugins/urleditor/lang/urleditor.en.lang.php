@@ -28,7 +28,7 @@ $L['adm_help_urls'] = 'On this page you can customize your URLs using simple URL
 <ol>
 <li><strong>Area</strong> is script name the rule belongs to. The metasymbol (*) stands for &quot;any script&quot;.</li>
 <li><strong>Parameters</strong> is a condition matched against URL parameters. It is a string, containing name-value pairs separated with &amp; and = sign used between parameter name and value. No ? sign in the beginning is needed. If you specify some variable here, it must be present in the URL to match the rule. You can use * which means &quot;any value&quot;, a single value, or a list of possible values separated with | sign. All values should be urlencoded. <em>Example: name=Val|Josh&amp;id=124&amp;page=*</em>.</li>
-<li><strong>Format</strong> sets format of the URLs matching this rule. It is a string containing special sequences substituded with their values. Normal sequence looks like {$name} where &quot;name&quot; is the name of URL parameter (GET variable), value of which will be inserted instead of this sequence. There are several special sequences which are not from URL parameters (&quot;query string&quot;):
+<li><strong>Format</strong> sets format of the URLs matching this rule. It is a string containing special sequences substituded with their values. Normal sequence looks like {$name} where &quot;name&quot; is the name of URL parameter (GET variable), value of which will be inserted instead of this sequence (or {!$name} if its insertion is not required). There are several special sequences which are not from URL parameters (&quot;query string&quot;):
 	<ul>
 		<li><em>{$_area}</em> - script name;</li>
 		<li><em>{$_host}</em> - host name from your site Main URL;</li>
