@@ -100,7 +100,7 @@ elseif($n == 'edit')
 		if ($rgroups['grp_name'] && $rgroups['grp_title'])
 		{
 			$db->update($db_groups, $rgroups, "grp_id=$g");
-			
+
 			$was_rightless = $db->query("SELECT grp_skiprights FROM $db_groups WHERE grp_id = $g")->fetchColumn();
 			if ($was_rightless && !$rgroups['grp_skiprights'])
 			{
@@ -243,7 +243,7 @@ if(!isset($showdefault) || $showdefault == true)
 }
 
 $t->assign(array(
-	'ADMIN_USERS_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=users'),
+	'ADMIN_USERS_URL' => cot_url('admin', 'm=config&n=edit&o=module&p=users'),
 	'ADMIN_USERS_EXTRAFIELDS_URL' => cot_url('admin', 'm=extrafields&n='.$db_users)
 ));
 
