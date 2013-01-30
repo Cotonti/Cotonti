@@ -1715,7 +1715,7 @@ function cotpl_callback_replace(&$arg, $i, $val)
 function cotpl_read_file($path)
 {
 	$fp = fopen($path, 'r');
-	$code = fread($fp, filesize($path));
+	$code = filesize($path) ? fread($fp, filesize($path)) : '';
 	fclose($fp);
 	return $code;
 }
