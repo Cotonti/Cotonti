@@ -1,5 +1,5 @@
 <!-- BEGIN: MAIN -->
-	{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+	{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 <!-- BEGIN: DETAILS -->
 	<h2><!-- IF {ADMIN_EXTENSIONS_ICO} -->
 					<img src="{ADMIN_EXTENSIONS_ICO}" />

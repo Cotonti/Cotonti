@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 <h2>{PHP.L.adm_extrafields}</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+		{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 <!-- BEGIN: TABLELIST -->	
 <div class="block">
 	<table class="cells">

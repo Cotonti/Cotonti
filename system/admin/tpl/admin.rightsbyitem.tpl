@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Rights}</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+		{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 		<div class="block">
 			<form name="saverightsbyitem" id="saverightsbyitem" action="{ADMIN_RIGHTSBYITEM_FORM_URL}" method="post" class="ajax">
 				<table class="cells">

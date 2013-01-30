@@ -8,7 +8,7 @@
 				<p>{ADMIN_HOME_UPDATE_REVISION} {ADMIN_HOME_UPDATE_MESSAGE}</p>
 			</div>
 <!-- END: UPDATE -->
-			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+			{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 <!-- BEGIN: MAINPANEL -->
 			{ADMIN_HOME_MAINPANEL}
 <!-- END: MAINPANEL -->

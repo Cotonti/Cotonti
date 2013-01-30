@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.adm_internalcache}</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+		{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 		<div class="block button-toolbar">
 			<a href="{ADMIN_CACHE_URL_REFRESH}" class="ajax button large">{PHP.L.Refresh}</a>
 			<a href="{ADMIN_CACHE_URL_PURGE}" class="ajax button large">{PHP.L.adm_purgeall}</a>

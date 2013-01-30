@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Log} ({ADMIN_LOG_TOTALDBLOG})</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+		{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 <!-- IF {PHP.usr.isadmin} -->
 			<div class="block button-toolbar">
 				<a title="{PHP.L.adm_purgeall}" href="{ADMIN_LOG_URL_PRUNE}" class="ajax button large">{PHP.L.adm_purgeall}</a>

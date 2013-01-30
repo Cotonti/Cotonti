@@ -25,7 +25,7 @@
 
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Structure}</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+		{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 		<div class="block button-toolbar">
 				<a href="{ADMIN_STRUCTURE_URL_EXTRAFIELDS}" class="button">{PHP.L.adm_extrafields_desc}</a>
 				<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax button special" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>

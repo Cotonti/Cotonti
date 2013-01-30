@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Configuration}</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+		{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 		<div class="block">
 <!-- BEGIN: EDIT -->
 			{ADMIN_CONFIG_EDIT_CUSTOM}

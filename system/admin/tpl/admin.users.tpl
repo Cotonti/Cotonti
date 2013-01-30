@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.Users}</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+		{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 
 		<div class="block button-toolbar">
 			<a title="{PHP.L.Configuration}" href="{ADMIN_USERS_URL}" class="button">{PHP.L.Configuration}</a>
