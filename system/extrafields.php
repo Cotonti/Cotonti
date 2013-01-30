@@ -270,7 +270,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 
 		case 'file':
 			global $lang, $cot_translit, $exfldfiles, $exfldsize, $cfg, $uploadfiles, $pl;
-			if ($source == 'P')
+			if ($source == 'P' || $source == 'POST')
 			{
 				$import = $_FILES[$inputname];
 				$import['delete'] = cot_import('rdel_' . $inputname, 'P', 'BOL') ? 1 : 0;
