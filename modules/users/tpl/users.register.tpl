@@ -30,7 +30,7 @@
 					</tr>
 					<tr>
 						<td colspan="2" class="valid">
-							<input type="submit" value="{PHP.L.Submit}" />
+							<button type="submit">{PHP.L.Submit}</button>
 						</td>
 					</tr>
 				</table>

@@ -106,7 +106,7 @@
 						<td>{USERS_EDIT_DELETE}</td>
 					</tr>
 					<tr>
-						<td colspan="2" class="valid"><input type="submit" value="{PHP.L.Update}" /></td>
+						<td colspan="2" class="valid"><button type="submit">{PHP.L.Update}</button></td>
 					</tr>
 				</table>
 			</form>
