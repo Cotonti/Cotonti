@@ -72,7 +72,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_hideemail'] = 1;
 	$ruser['user_theme'] = $cfg['defaulttheme'];
 	$ruser['user_scheme'] = $cfg['defaultscheme'];
-	$ruser['user_lang'] = $cfg['defaultlang'];
+	$ruser['user_lang'] = empty($ruser['user_lang']) ? $cfg['defaultlang'] : $ruser['user_lang'];
 	$ruser['user_regdate'] = (int)$sys['now'];
 	$ruser['user_logcount'] = 0;
 	$ruser['user_lastip'] = empty($ruser['user_lastip']) ? $usr['ip'] : $ruser['user_lastip'];
@@ -144,9 +144,9 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 		{
 			$checked = ($member[$k]) ? ' checked="checked"' : '';
 			$checked_maingrp = ($maingrp == $k) ? ' checked="checked"' : '';
-			$readonly = ($k == COT_GROUP_GUESTS || $k == COT_GROUP_INACTIVE || $k == COT_GROUP_BANNED 
+			$readonly = ($k == COT_GROUP_GUESTS || $k == COT_GROUP_INACTIVE || $k == COT_GROUP_BANNED
 				|| ($k == COT_GROUP_SUPERADMINS && $userid == 1)) ? ' disabled="disabled"' : '';
-			$readonly_maingrp = ( $k == COT_GROUP_GUESTS || ($k == COT_GROUP_INACTIVE && $userid == 1) 
+			$readonly_maingrp = ( $k == COT_GROUP_GUESTS || ($k == COT_GROUP_INACTIVE && $userid == 1)
 				|| ($k == COT_GROUP_BANNED && $userid == 1)) ? ' disabled="disabled"' : '';
 		}
 		if ($member[$k] || $edit)
