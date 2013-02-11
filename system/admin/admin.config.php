@@ -220,7 +220,7 @@ switch($n)
 				}
 			}
 		}
-
+		cot_die(!sizeof($rowset),true);
 		if ($o == 'core')
 		{
 			$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
