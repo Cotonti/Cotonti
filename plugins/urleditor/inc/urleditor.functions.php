@@ -248,15 +248,23 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	if (isset($params['l']) && isset($cfg['plugin']['i18n']['rewrite']) && $cfg['plugin']['i18n']['rewrite'])
 	{
 		// Add with slash at the beginning of the URL
-		$p = mb_strpos($url, '://');
-		if ($p === false)
+		$pos = strpos($url, $sys['site_uri']);
+		if ($sys['site_uri'] != '/' && $pos !== false)
 		{
-			$url = mb_strpos($url, '/') === 0 ? '/' . rawurlencode($params['l']) . $url : rawurlencode($params['l']) . '/' . $url;
+			$url = substr_replace($url, $sys['site_uri'] . rawurlencode($params['l']) .'/', $pos, mb_strlen($sys['site_uri']));
 		}
 		else
 		{
-			$p = mb_strpos($url, '/', $p + 3);
-			$url = $p === false ? $url . '/' . rawurlencode($params['l']) : mb_substr($url, 0, $p) . rawurlencode($params['l']) . '/' . mb_substr($url, $p + 1);
+			$p = mb_strpos($url, '://');
+			if ($p === false)
+			{
+				$url = mb_strpos($url, '/') === 0 ? '/' . rawurlencode($params['l']) . $url : rawurlencode($params['l']) . '/' . $url;
+			}
+			else
+			{
+				$p = mb_strpos($url, '/', $p + 3);
+				$url = $p === false ? $url . '/' . rawurlencode($params['l']) : mb_substr($url, 0, $p) . rawurlencode($params['l']) . '/' . mb_substr($url, $p + 1);
+			}
 		}
 		unset($params['l']);
 	}
