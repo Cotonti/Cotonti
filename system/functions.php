@@ -4106,10 +4106,7 @@ function cot_themerc_list($theme_file)
 	$L = array();
 	$R = array();
 	include $theme_file;
-	return array(
-		array_keys($L),
-		array_keys($R)
-	);
+	return array($L, $R);
 }
 
 /**
