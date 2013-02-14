@@ -519,16 +519,15 @@ require_once $cfg['system_dir'].'/resources.php';
 // Theme resources
 if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php"))
 {
-	require_once "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
 	// Save overridden strings in $theme_reload global
 	list($l_diff, $r_diff) = cot_themerc_list("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php");
-	foreach ($l_diff as $key)
+	foreach ($l_diff as $key => $value)
 	{
-		$theme_reload['L'][$key] = $L[$key];
+		$theme_reload['L'][$key] = $value;
 	}
-	foreach ($r_diff as $key)
+	foreach ($r_diff as $key => $value)
 	{
-		$theme_reload['R'][$key] = $R[$key];
+		$theme_reload['R'][$key] = $value;
 	}
 	unset($l_diff, $r_diff);
 }
