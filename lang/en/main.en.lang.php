@@ -308,6 +308,7 @@ $L['Today'] = 'Today';
 $L['Tool'] = 'Tool';
 $L['Tools'] = 'Tools';
 $L['Total'] = 'Total';
+$L['Topic'] = 'Topic';
 $L['TPL'] = 'TPL';
 $L['Type'] = 'Type';
 $L['Unfold'] = 'Unfold';
