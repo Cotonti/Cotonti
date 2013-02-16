@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.9
+ * @version 2.7.10
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2013
  * @license BSD
@@ -547,35 +547,38 @@ class Cotpl_block
 			$block_found = false;
 			$loop_found = false;
 			$log_found = false;
-			if (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s', $code, $mt))
+			// finds first block for further analizing
+			preg_match('`<!--\s*(?:(BEGIN):\s*([\w_]+)|(FOR|IF)\s+).+?-->.*?<!--\s*(?:END:\s*\2|END\3)\s*-->`s', $code,$mt);
+			if ($mt[1])
 			{
 				$block_found = true;
+			}
+			elseif ($mt[3]==='IF')
+			{
+				$log_found = true;
+			}
+			elseif ($mt[3]==='FOR')
+			{
+				$loop_found = true;
+			}
+			else
+			{
+				// No blocks found
+				if (!empty($code))
+				{
+					$blocks[$i++] = new Cotpl_data($code);
+					$code = '';
+				}
+			}
+			if ($block_found && preg_match('`(?:(?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*BEGIN:\s*(?:[\w_]+)\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*BEGIN:\s*([\w_]+)\s*-->(?:\s*(?:\r?\n|\r))?((?:.*?))?((?<=\n|\r)[^\S\n\r]*)?<!--\s*END:\s*\1\s*-->(?(3)(\s*(?:\r?\n|\r))?)`s', $code, $mt))
+			{
 				$block_pos = mb_strpos($code, $mt[0]);
 				$block_mt = $mt;
 				$block_name = $mt[1];
-			}
-			if (preg_match('`<!--\s*FOR\s+(.+?)\s*-->`', $code, $mt))
-			{
-				$loop_found = true;
-				$loop_pos = mb_strpos($code, $mt[0]);
-				$loop_len = mb_strlen($mt[0]);
-				$loop_mt = $mt;
-			}
-			if (preg_match('`<!--\s*IF\s+(.+?)\s*-->`', $code, $mt))
-			{
-				$log_found = true;
-				$log_pos = mb_strpos($code, $mt[0]);
-				$log_len = mb_strlen($mt[0]);
-				$log_mt = $mt;
-			}
-			if ($block_found
-					&& (!$loop_found || $block_pos < $loop_pos)
-					&& (!$log_found || $block_pos < $log_pos))
-			{
 				// Extract preceeding plain data chunk
 				if ($block_pos > 0)
 				{
-					$chunk = trim(mb_substr($code, 0, $block_pos), "\t\r\n");
+					$chunk = mb_substr($code, 0, $block_pos);
 					if (!empty($chunk))
 					{
 						$blocks[$i++] = new Cotpl_data($chunk);
@@ -585,16 +588,18 @@ class Cotpl_block
 				$bpath = $path;
 				array_push($bpath, $block_name);
 				$index[cotpl_index_glue($bpath)] = $bpath;
-				$blocks[$block_name] = new Cotpl_block(trim($block_mt[2]), $index, $bpath);
-				$code = trim(mb_substr($code, $block_pos + mb_strlen($block_mt[0])));
+				$blocks[$block_name] = new Cotpl_block($block_mt[2], $index, $bpath);
+				$code = mb_substr($code, $block_pos + mb_strlen($block_mt[0]));
 			}
-			elseif ($loop_found
-					&& (!$log_found || $loop_pos < $log_pos))
+			if ($loop_found && preg_match('`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*FOR\s+[^>]+\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*FOR\s+(.+?)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`', $code, $mt))
 			{
+				$loop_pos = mb_strpos($code, $mt[0]);
+				$loop_len = mb_strlen($mt[0]);
+				$loop_mt = $mt;
 				// Extract preceeding plain data chunk
 				if ($loop_pos > 0)
 				{
-					$chunk = trim(mb_substr($code, 0, $loop_pos), "\t\r\n");
+					$chunk = mb_substr($code, 0, $loop_pos);
 					if (!empty($chunk))
 					{
 						$blocks[$i++] = new Cotpl_data($chunk);
@@ -604,40 +609,44 @@ class Cotpl_block
 				$scope = 1;
 				$loop_code = '';
 				$code = mb_substr($code, $loop_pos + $loop_len);
-				while ($scope > 0 && preg_match('`<!--\s*(FOR\s+.+?|ENDFOR)\s*-->`', $code, $m))
+				while ($scope > 0 && preg_match('`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*(FOR\s+[^>]|ENDFOR)\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*(FOR\s+.+?|ENDFOR)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`', $code, $m))
 				{
-						$m_pos = mb_strpos($code, $m[0]);
-						$m_len = mb_strlen($m[0]);
-						if ($m[1] === 'ENDFOR')
-						{
-							$scope--;
-						}
-						else
-						{
-							$scope++;
-						}
-						$postfix_len = $scope === 0 ? 0 : $m_len;
-						$loop_code .= mb_substr($code, 0, $m_pos + $postfix_len);
-						$code = mb_substr($code, $m_pos + $m_len);
+					$m_pos = mb_strpos($code, $m[0]);
+					$m_len = mb_strlen($m[0]);
+					if ($m[2] === 'ENDFOR')
+					{
+						$scope--;
+					}
+					else
+					{
+						$scope++;
+					}
+					$postfix_len = $scope === 0 ? 0 : $m_len;
+					$loop_code .= mb_substr($code, 0, $m_pos + $postfix_len);
+					$code = mb_substr($code, $m_pos + $m_len);
 				}
 				if ($scope === 0)
 				{
 					$bpath = $path;
 					array_push($bpath, $i);
-					$blocks[$i++] = new Cotpl_loop($loop_mt[1], $loop_code, $index, $bpath);
-					$code = trim($code, "\t\r\n");
+					$blocks[$i++] = new Cotpl_loop($loop_mt[2], $loop_code, $index, $bpath);
+					//$code = trim($code, "\t\r\n");
 				}
 				else
 				{
 					throw new Exception('Loop ' . htmlspecialchars($loop_mt[0]) . ' not closed');
 				}
+
 			}
-			elseif ($log_found)
+			if ($log_found && preg_match('`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*IF\s+[^>]+\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*IF\s+(.+?)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`', $code, $mt))
 			{
-				// Extract preceeding plain data chunk
+				$log_pos = mb_strpos($code, $mt[0]);
+				$log_len = mb_strlen($mt[0]);
+				$log_mt = $mt;
+							// Extract preceeding plain data chunk
 				if ($log_pos > 0)
 				{
-					$chunk = trim(mb_substr($code, 0, $log_pos), "\t\r\n");
+					$chunk = mb_substr($code, 0, $log_pos);
 					if (!empty($chunk))
 					{
 						$blocks[$i++] = new Cotpl_data($chunk);
@@ -649,15 +658,15 @@ class Cotpl_block
 				$else_code = '';
 				$else = false;
 				$code = mb_substr($code, $log_pos + $log_len);
-				while ($scope > 0 && preg_match('`<!--\s*(IF\s+.+?|ELSE|ENDIF)\s*-->`', $code, $m))
+				while ($scope > 0 && preg_match('`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*(?:IF\s+[^>]+?|ELSE|ENDIF)\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*(IF\s+.+?|ELSE|ENDIF)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`', $code, $m))
 				{
 						$m_pos = mb_strpos($code, $m[0]);
 						$m_len = mb_strlen($m[0]);
-						if ($m[1] === 'ENDIF')
+						if ($m[2] === 'ENDIF')
 						{
 							$scope--;
 						}
-						elseif ($m[1] === 'ELSE')
+						elseif ($m[2] === 'ELSE')
 						{
 							if ($scope === 1)
 							{
@@ -686,22 +695,11 @@ class Cotpl_block
 				{
 					$bpath = $path;
 					array_push($bpath, $i);
-					$blocks[$i++] = new Cotpl_logical($log_mt[1], $if_code, $else_code, $index, $bpath);
-					$code = trim($code, "\t\r\n");
+					$blocks[$i++] = new Cotpl_logical($log_mt[2], $if_code, $else_code, $index, $bpath);
 				}
 				else
 				{
 					throw new Exception('Logical block ' . htmlspecialchars($log_mt[0]) . ' not closed');
-				}
-			}
-			else
-			{
-				// No blocks found
-				$code = trim($code, "\t\r\n");
-				if (!empty($code))
-				{
-					$blocks[$i++] = new Cotpl_data($code);
-					$code = '';
 				}
 			}
 		}
