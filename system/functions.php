@@ -1198,12 +1198,11 @@ function cot_structure_parents($area, $cat, $type = 'full')
 
 	if ($type == 'first')
 	{
-		reset($pathcodes);
-		$pathcodes = current($pathcodes);
+		return $pathcodes[0];
 	}
 	elseif ($type == 'last')
 	{
-		$pathcodes = end($pathcodes);
+		return (count($pathcodes) > 1) ? $pathcodes[count($pathcodes) - 2] : null;
 	}
 
 	return $pathcodes;
