@@ -147,6 +147,7 @@ if ($history)
 			'PM_ROW_ICON_STATUS' => $row2['pm_icon_readstatus'],
 			'PM_ROW_ICON_DELETE' => cot_rc_link($url_delete, $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class' => $cfg['pm']['turnajax'] ? 'ajax' : '')),
 			'PM_ROW_DELETE_URL' => $url_delete,
+			'PM_ROW_DELETE_CONFIRM_URL' => cot_confirm_url($url_delete),
 			'PM_ROW_ICON_EDIT' => ($row2['pm_tostate'] == 0) ? cot_rc_link($url_edit, $R['pm_icon_edit'], array('title' => $L['Edit'], 'class' => $cfg['pm']['turnajax'] ? 'ajax' : '')) : '',
 			'PM_ROW_EDIT_URL' => ($row2['pm_tostate'] == 0) ? $url_edit : '',
 			'PM_ROW_ODDEVEN' => cot_build_oddeven($jj),
@@ -232,6 +233,7 @@ $t->assign(array(
 	'PM_TITLE' => htmlspecialchars($row['pm_title']),
 	'PM_TEXT' => '<div id="pm_text">'.$pm_maindata.'</div>',
 	'PM_DELETE' => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=> $cfg['pm']['turnajax'] ? 'ajax' : '')),
+	'PM_DELETE_CONFIRM' => cot_rc_link(cot_confirm_url(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f)), $L['Delete'], array('class'=> $cfg['pm']['turnajax'] ? 'ajax' : '')),
 	'PM_EDIT' => $row['pm_icon_edit'],
 	'PM_HISTORY' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$durl), $L['pm_messagehistory'], array("rel" => "get-ajaxHistory", 'class' => $cfg['pm']['turnajax'] ? 'ajax' : '')),
 	'PM_SENT_TYPE' => ($f == 'sentbox') ? $L['Recipient'] : $L['Sender']
