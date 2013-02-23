@@ -31,7 +31,7 @@ $sys['parser'] = empty($parser) ? $cfg['parser'] : $parser;
 $pn_c1 = empty($c1) ? '' : '&c1=' . $c1;
 $pn_c2 = empty($c2) ? '' : '&c2=' . $c2;
 
-if (!$usr['isadmin'] || $userid=='')
+if (!$usr['isadmin'])
 {
 	$userid = $usr['id'];
 }
@@ -43,7 +43,8 @@ else
 $files_count = 0;
 $folders_count = 0;
 $standalone = FALSE;
-$user_info = cot_userinfo($userid);
+$uid = ($userid > 0) ? $userid : $usr['id'];
+$user_info = cot_userinfo($uid);
 
 $pfs_base_href = $sys['abs_url'];
 $pfs_dir_user = cot_pfs_path($userid);
