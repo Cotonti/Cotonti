@@ -141,8 +141,7 @@ foreach ($pm_sql->fetchAll() as $row)
 			: cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), $R['pm_icon'], array('title' => $L['pm_read'], 'class'=>'ajax'));
 
 	$pm_data = cot_parse($row['pm_text'], $cfg['pm']['markup']);
-	$pm_desc = $pm_data;
-	$pm_desc .= (cot_string_truncate($pm_desc)) ? "..." : "";
+	$pm_desc = cot_string_truncate($pm_data , 100 , true, false, '...');
 
 	if ($f == 'sentbox')
 	{

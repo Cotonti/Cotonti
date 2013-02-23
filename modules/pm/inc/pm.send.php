@@ -75,7 +75,7 @@ if ($a == 'send')
 			include $pl;
 		}
 		/* ===== */
-		cot_redirect(cot_url('pm', 'f=sentbox'));
+		cot_redirect(cot_url('pm', 'f=sentbox', '', true));
 	}
 	else				//send message
 
@@ -164,7 +164,7 @@ if ($a == 'send')
 
 			if($stats_enabled) { cot_stat_inc('totalpms'); }
 			cot_shield_update(30, "New private message (".$totalrecipients.")");
-			cot_redirect(cot_url('pm', 'f=sentbox'));
+			cot_redirect(cot_url('pm', 'f=sentbox', '', true));
 		}
 	}
 }
