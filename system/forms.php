@@ -389,11 +389,11 @@ function cot_selectbox_structure($extension, $check, $name, $subcat = '', $hidep
 	foreach ($structure[$extension] as $i => $x)
 	{
 		$display = ($hideprivate && $is_module) ? cot_auth($extension, $i, 'W') : true;
-		if ($display && !empty($subcat) && isset($structure[$extension][$subcat]) && !(empty($check)))
+		if ($display && !empty($subcat) && isset($structure[$extension][$subcat]))
 		{
 			$mtch = $structure[$extension][$subcat]['path'].".";
 			$mtchlen = mb_strlen($mtch);
-			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i == $check) ? true : false;
+			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch);
 		}
 
 		if ((!$is_module || cot_auth($extension, $i, 'R')) && $i!='all' && $display)
