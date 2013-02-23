@@ -638,6 +638,12 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
 	$hour = cot_import($date['hour'], 'D', 'INT');
 	$minute = cot_import($date['minute'], 'D', 'INT');
 
+	if (count($date) > 0 && is_null($year) && is_null($month) && is_null($day) && is_null($hour) && is_null($minute))
+	{
+		// Datetime field is present in form but it is set to zero date (empty)
+		return 0;
+	}
+
 	if (($month && $day && $year) || ($day && $minute))
 	{
 		$timestamp = cot_mktime($hour, $minute, 0, $month, $day, $year);
