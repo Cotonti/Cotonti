@@ -310,14 +310,23 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 function cot_comments_enabled($ext_name, $cat = '', $item = '')
 {
 	global $cfg, $cot_modules;
-	if (isset($cfg[$ext_name][$cat]['enable_comments'])
+	if (isset($cfg[$ext_name]['cat_'.$cat]['enable_comments'])
 		|| isset($cfg[$ext_name]['enable_comments'])
-		|| isset($cfg['plugin'][$ext_name]['enable_comments']))
+		|| isset($cfg['plugin'][$ext_name]['enable_comments'])
+		|| isset($cfg[$ext_name]['cat___default']['enable_comments']))
 	{
 		if (isset($cot_modules[$ext_name]))
 		{
-			return (bool) (isset($cfg[$ext_name][$cat]['enable_comments']) ? $cfg[$ext_name][$cat]['enable_comments']
-				: $cfg[$ext_name]['enable_comments']);
+			if (isset($cfg[$ext_name]['cat_'.$cat]['enable_comments']))
+			{
+				return $cfg[$ext_name]['cat_'.$cat]['enable_comments'];
+			}
+			else
+			{
+				return isset($cfg[$ext_name]['cat___default']['enable_comments'])
+					? $cfg[$ext_name]['cat___default']['enable_comments']
+					: $cfg[$ext_name]['enable_comments'];
+			}
 		}
 		else
 		{
