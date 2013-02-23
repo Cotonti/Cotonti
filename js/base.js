@@ -103,7 +103,7 @@ function ajaxSend(settings) {
 		url: encodeURI(url),
 		data: data,
 		beforeSend: function() {
-			if (!settings.nonshowloading) $('#' + settings.divId).append('<span style="position:absolute;left:' + ($('#' + settings.divId).width()/2 - 110) + 'px;top:' + ($('#' + settings.divId).height()/2 + 9) + 'px;" class="loading" id="loading"><img src="./images/spinner.gif" alt="loading"/></span>');
+			if (!settings.nonshowloading) $('#' + settings.divId).append('<span style="position:absolute; left:' + ($('#' + settings.divId).width()/2 - 110) + 'px;top:' + ($('#' + settings.divId).height()/2 - 9) + 'px;" class="loading" id="loading"><img src="./images/spinner.gif" alt="loading"/></span>').css('position', 'relative');
 		},
 		success: function(msg) {
 			if (!settings.nonshowloading) $('#loading').remove();
@@ -255,7 +255,7 @@ function bindHandlers() {
 			$.historyLoad(ajaxMakeHash($(this).attr('href').replace(/#.*$/, ''), $(this).attr('rel')));
 			return ajaxError;
 		});
-		
+
 		// AJAX action confirmations
 		$('a.confirmLink').live('click', function() {
 			if ($(this).attr('href').match(/message.+920/i)) {
