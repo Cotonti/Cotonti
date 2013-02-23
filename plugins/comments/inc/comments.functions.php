@@ -49,7 +49,19 @@ function cot_comments_count($ext_name, $code, $row = array())
 	}
 	else
 	{
-		$sql = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_area = ? AND com_code = ?", array($ext_name, $code));
+		$comments_join_columns = '';
+		$comments_join_tables = '';
+		$comments_join_where = '';
+		/* == Hook == */
+		foreach (cot_getextplugins('comments.count.query') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+		$sql = $db->query("SELECT COUNT(*) $comments_join_columns
+			FROM $db_com $comments_join_tables
+			WHERE com_area = ? AND com_code = ? $comments_join_where",
+			array($ext_name, $code));
 		if ($sql->rowCount() == 1)
 		{
 			$cnt = (int) $sql->fetchColumn();
