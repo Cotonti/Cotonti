@@ -357,8 +357,9 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 	}
 	if ((is_null($import) || $import === '') && $extrafield['field_required'])
 	{
-		$L['field_required_' . $extrafield['field_name']] = (isset($L['field_required_' . $extrafield['field_name']])) ? $L['field_required_' . $extrafield['field_name']] : $L['field_required'];
-		cot_error('field_required_' . $extrafield['field_name'], $name);
+		$fname = (!empty($extrafield['field_description'])) ? $extrafield['field_description'] : $extrafield['field_name'];
+		$msg = (isset($L['field_required_' . $extrafield['field_name']])) ? 'field_required_' . $extrafield['field_name'] : $L['field_required'].': '.$fname;
+		cot_error($msg, $name);
 	}
 	return $import;
 }
@@ -534,14 +535,14 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 	{
 		return false;
 	}
-	
+
 	if ( $db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
 		($db->query("SHOW COLUMNS FROM $location WHERE SUBSTR(Field, INSTR(Field, '_') + 1) = '$name'")->rowCount() > 0 && !$noalter))
 	{
 		// No adding - fields already exist // Check table cot_$sql_table - if field with same name exists - exit.
 		return false;
 	}
-	
+
 	$fieldsres = $db->query("SHOW COLUMNS FROM $location");
 	while ($fieldrow = $fieldsres->fetch())
 	{
