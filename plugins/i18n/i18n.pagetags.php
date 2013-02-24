@@ -104,4 +104,3 @@ if ($i18n_enabled && $i18n_notmain)
 	$temp_array = array_merge($temp_array, $i18n_array);
 }
 
-?>

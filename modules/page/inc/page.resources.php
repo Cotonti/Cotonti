@@ -36,4 +36,3 @@ $R['page_icon_file'] = '<img class="icon" src="{$icon}" alt="'.$L['File'].'" />'
 $R['page_icon_file_default'] = 'images/icons/'.$cfg['defaulticons'].'/page.png';
 $R['page_icon_file_path'] = 'images/filetypes/default/{$type}.png';
 
-?>

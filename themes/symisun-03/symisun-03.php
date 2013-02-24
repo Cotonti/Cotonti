@@ -33,4 +33,3 @@ $R['forums_icon_posts_new_sticky_locked'] = '<img class="icon" src="themes/symis
 $R['forums_icon_posts_sticky'] = '<img class="icon" src="themes/symisun-03/img/system/posts_sticky.gif" alt="'.$L['forums_sticky'].'" />';
 $R['forums_icon_posts_sticky_locked'] = '<img class="icon" src="themes/symisun-03/img/system/posts_sticky_locked.gif" alt="'.$L['forums_announcment'].'" />';
 $R['forums_icon_subforum'] = '<img class="icon" src="modules/forums/img/subforum.png" alt="{PHP.L.Subforum}" />';
-?>

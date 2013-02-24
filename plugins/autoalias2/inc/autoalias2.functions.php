@@ -92,4 +92,3 @@ function autoalias2_update($title, $id)
 	while ($duplicate && !$cfg['plugin']['autoalias2']['prepend_id']);
 }
 
-?>

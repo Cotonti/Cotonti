@@ -16,4 +16,3 @@ $L['captcha_verification_failed'] = 'The sum was not solved correctly';
 $L['cfg_delay'] = array('Anti hammering delay', 'sec');
 $L['cfg_attempts'] = array('Max attempts per second', '0 - unlimited');
 
-?>

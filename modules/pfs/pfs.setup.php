@@ -45,4 +45,3 @@ th_textsize=18:range:0,5:1:
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
-?>

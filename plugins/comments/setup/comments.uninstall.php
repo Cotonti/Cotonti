@@ -14,4 +14,3 @@ defined('COT_CODE') or die('Wrong URL');
 global $db, $db_config;
 $db->delete($db_config, "config_donor = 'comments'");
 
-?>

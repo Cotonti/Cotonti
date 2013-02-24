@@ -29,4 +29,3 @@ if ($cfg['plugin']['trashcan']['trash_prunedelay'] > 0)
 	}
 }
 
-?>

@@ -33,4 +33,3 @@ if ($i18n_enabled && $i18n_notmain)
 	}
 }
 
-?>

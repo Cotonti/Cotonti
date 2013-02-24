@@ -44,4 +44,3 @@ $extra_whitelist[$db_forum_topics] = array(
 	)
 );
 
-?>

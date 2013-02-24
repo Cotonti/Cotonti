@@ -23,4 +23,3 @@ if (!defined('COT_UPGRADE'))
 	}
 }
 
-?>

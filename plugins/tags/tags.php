@@ -341,4 +341,3 @@ function cot_tag_search_forums($query)
 	$t->parse('MAIN.TAGS_RESULT');
 }
 
-?>

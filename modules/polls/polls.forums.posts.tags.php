@@ -54,4 +54,3 @@ if($poll_form)
 		'FORUMS_POSTS_SHORTTITLE' => htmlspecialchars($rowt['ft_title'])
 	));
 }
-?>

@@ -23,4 +23,3 @@ require_once cot_incfile('i18n', 'plug');
 $trash_types['i18n_page'] = $db_i18n_pages;
 
 // Actually no functions are required so far
-?>

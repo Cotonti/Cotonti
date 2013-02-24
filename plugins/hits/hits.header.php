@@ -39,4 +39,3 @@ if (cot_plugin_active('hits') && $env['ext'] != 'admin')
 }
 
 
-?>

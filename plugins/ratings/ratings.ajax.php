@@ -140,4 +140,3 @@ if ($inr == 'send' && $newrate > 0 && $newrate <= 10 && $auth_write && $enabled)
 	exit;
 }
 
-?>

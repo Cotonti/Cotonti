@@ -29,4 +29,3 @@ if (is_array($i18n_structure) && count($i18n_structure) > 0)
 		ON p.page_id = i18n.ipage_id AND r.tag_locale = i18n.ipage_locale";
 }
 
-?>

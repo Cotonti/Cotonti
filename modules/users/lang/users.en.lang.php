@@ -22,4 +22,3 @@ $L['cfg_useremailchange'] = array('Allow users to change their email address', '
 $L['cfg_usertextmax'] = array('Maximum length for user signature', '');
 $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');
 
-?>

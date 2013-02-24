@@ -14,4 +14,3 @@ defined('COT_CODE') or die('Wrong URL');
 $R['i18n_structure_translations_begin'] = '<ul>';
 $R['i18n_structure_translations_end'] = '</ul>';
 $R['i18n_structure_translations_item'] = '<li><a href="{$url}" title="' . $L['Edit'] . '">{$title}</a></li>';
-?>

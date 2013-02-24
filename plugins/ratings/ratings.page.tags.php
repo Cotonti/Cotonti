@@ -28,4 +28,3 @@ $t->assign(array(
 	'PAGE_RATINGS_COUNT'   => $ratings_count
 ));
 
-?>

@@ -44,4 +44,3 @@ $pfs = cot_build_pfs($usr['id'], $pfs_src, $pfs_name, $L['Mypfs']);
 $pfs .= (cot_auth('pfs', 'a', 'A')) ? ' &nbsp; '.cot_build_pfs(0, $pfs_src, $pfs_name, $L['SFS']) : '';
 
 $t->assign('FORUMS_' . $pfs_tag . '_MYPFS', $pfs);
-?>

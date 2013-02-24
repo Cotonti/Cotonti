@@ -53,4 +53,3 @@ $L['cfg_preset_params'] = array(
 
 $L['info_desc'] = 'URL transformations enabling SEF URL\'s via presets';
 
-?>

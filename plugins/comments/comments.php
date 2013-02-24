@@ -288,4 +288,3 @@ elseif ($a == 'enable' && $usr['isadmin'])
 }
 
 cot_display_messages($t);
-?>

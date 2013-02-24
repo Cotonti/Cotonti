@@ -55,4 +55,3 @@ $L['contact_noname'] = 'Name missing';
 $L['contact_emailnotvalid'] = 'Incorrect email address';
 $L['contact_message_sent'] = 'Message sent';
 
-?>

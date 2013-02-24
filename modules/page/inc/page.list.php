@@ -400,4 +400,3 @@ if ($cache && $usr['id'] === 0 && $cfg['cache_page'])
 	$cache->page->write();
 }
 
-?>

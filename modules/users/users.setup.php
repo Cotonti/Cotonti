@@ -26,4 +26,3 @@ usertextimg=09:radio::0:
 [END_COT_EXT_CONFIG]
 ==================== */
 
-?>

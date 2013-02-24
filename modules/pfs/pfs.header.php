@@ -27,4 +27,3 @@ if ($usr['id'] > 0 && $cot_groups[$usr['maingrp']]['pfs_maxtotal'] > 0 && $cot_g
 		'HEADER_USER_PFS_URL' => $pfs_url
 	));
 }
-?>

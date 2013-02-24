@@ -23,4 +23,3 @@ $t->assign(array(
 	'ADMIN_STRUCTURE_I18N_URL' => cot_url('plug', 'e=i18n&m=structure')
 ));
 
-?>

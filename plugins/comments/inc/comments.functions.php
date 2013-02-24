@@ -407,4 +407,3 @@ function cot_comments_remove($area, $code)
 	$db->delete($db_com, 'com_area = ? AND com_code = ?', array($area, $code));
 }
 
-?>

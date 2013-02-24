@@ -47,4 +47,3 @@ if ($sys['parser'] == 'html')
 	}';
 }
 
-?>

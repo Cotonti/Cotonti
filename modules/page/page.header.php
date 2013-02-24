@@ -40,4 +40,3 @@ elseif ($usr['id'] > 0 && cot_auth('page', 'any', 'W'))
 	}
 }
 
-?>

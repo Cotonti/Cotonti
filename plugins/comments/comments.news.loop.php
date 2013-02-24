@@ -24,4 +24,3 @@ $news->assign(array(
 	'PAGE_ROW_COMMENTS_COUNT' => cot_comments_count('page', $pag['page_id'], $pag)
 ));
 
-?>

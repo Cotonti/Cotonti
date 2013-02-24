@@ -23,4 +23,3 @@ $com_modules_list = array('polls');
 
 // Module list to implant into their structure config
 $com_modules_struct_list = array('page');
-?>

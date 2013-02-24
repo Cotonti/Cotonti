@@ -154,4 +154,3 @@ function cot_structure_update($extension, $id, $old_data, $new_data, $is_module 
 	return true;
 }
 
-?>

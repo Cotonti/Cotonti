@@ -43,4 +43,3 @@ $L['adm_trashcan_deleted'] = "Элемент удален";
 $L['adm_trashcan_prune'] = "Корзина очищена";
 $L['adm_trashcan_restored'] = "Элемент восстановлен";
 
-?>

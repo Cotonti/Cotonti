@@ -214,4 +214,3 @@ else
 	cot_die(true, true);
 }
 
-?>

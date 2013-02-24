@@ -38,4 +38,3 @@ $t->assign(array(
 	'COMMENTS_FORM_SFS' => (cot_auth('pfs', 'a', 'A')) ? ' &nbsp; '.cot_build_pfs(0, $form_name, $input_name, $L['SFS'], $sys['parser']) : ''
 ));
 
-?>

@@ -30,4 +30,3 @@ foreach ($rat_modules_struct_list as $mod_name)
 		cot_config_implant($mod_name, $rat_options, true, 'ratings');
 	}
 }
-?>

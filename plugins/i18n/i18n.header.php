@@ -66,4 +66,3 @@ if (count($i18n_locales) > 0)
 	}
 	$t->parse('HEADER.I18N_LANG');
 }
-?>

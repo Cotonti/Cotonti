@@ -34,4 +34,3 @@ css=99:radio:0,1:1:Enable module CSS
  * @license BSD
  */
 
-?>

@@ -29,4 +29,3 @@ if ($i18n_notmain && !empty($pag['ipage_title']))
 	));
 }
 
-?>

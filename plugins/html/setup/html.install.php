@@ -26,4 +26,3 @@ if (!defined('COT_UPGRADE'))
 		$db->update($db_config, array('config_value' => 'html'), "config_owner='module' AND config_cat = 'page' AND config_name = 'parser'");
 	}
 }
-?>

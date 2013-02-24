@@ -205,4 +205,3 @@ function cot_i18n_save($table_name, $field, $item, $locale, $text, $riched = fal
 	return $res->rowCount() == 1;
 }
 
-?>

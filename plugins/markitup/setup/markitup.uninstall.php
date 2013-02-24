@@ -19,4 +19,3 @@ if (cot_plugin_active('bbcode'))
 	cot_bbcode_remove(0, 'markitup');
 	cot_bbcode_clearcache();
 }
-?>

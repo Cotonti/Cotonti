@@ -441,4 +441,3 @@ foreach (cot_getextplugins('page.admin.tags') as $pl)
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
 
-?>

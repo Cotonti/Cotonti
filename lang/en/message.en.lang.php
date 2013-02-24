@@ -141,4 +141,3 @@ $L['msg950_body'] = 'An error occured, maybe a wrong URL?';
 $L['msg951_title'] = 'Session expired';
 $L['msg951_body'] = 'Your session is no longer valid. Please try again.';
 
-?>

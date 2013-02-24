@@ -24,4 +24,3 @@ $tt->parse('MAIN');
 
 $line = $tt->text('MAIN');
 
-?>

@@ -23,4 +23,3 @@ if ($cfg['parser'] == 'bbcode')
 	$R['forums_code_update'] = "\n\n[b]{\$updated}[/b]\n\n";
 }
 
-?>

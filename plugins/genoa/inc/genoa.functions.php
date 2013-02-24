@@ -1696,4 +1696,3 @@ function sed_sql_update($table_name, $condition, $data, $prefix = '', $update_nu
 	return $db->update($table_name, $data_tmp, $condition, array(), $update_null);
 }
 
-?>

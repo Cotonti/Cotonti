@@ -21,4 +21,3 @@ if (cot_extension_installed('tags'))
 	$db->query("ALTER TABLE $db_tag_references DROP PRIMARY KEY");
 	$db->query("ALTER TABLE $db_tag_references ADD PRIMARY KEY (`tag`,`tag_area`,`tag_item`, `tag_locale`)");
 }
-?>

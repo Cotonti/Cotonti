@@ -122,4 +122,3 @@ $R['breadcrumbs_crumb'] = '{$crumb}';
 $R['breadcrumbs_first'] = '{$crumb}';
 $R['breadcrumbs_last'] = '{$crumb}';
 
-?>

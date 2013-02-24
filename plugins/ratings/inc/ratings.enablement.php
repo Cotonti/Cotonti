@@ -23,4 +23,3 @@ $rat_modules_list = array();
 
 // Module list to implant into their structure config
 $rat_modules_struct_list = array('page');
-?>

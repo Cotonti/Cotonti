@@ -35,4 +35,3 @@ $t->assign(array(
 	$pfs_tag . '_FORM_URL_PFS' => cot_build_pfs($usr['id'], 'pageform', 'rpageurl', $L['Mypfs']),
 	$pfs_tag . '_FORM_URL_SFS' => (cot_auth('pfs', 'a', 'A')) ? ' '.cot_build_pfs(0, 'pageform', 'rpageurl', $L['SFS']) : ''
 ));
-?>

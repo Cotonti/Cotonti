@@ -56,4 +56,3 @@ $L['cfg_smilies'] = array('Enable smilies', '');
 
 $L['info_desc'] = 'Customizable support for BBCodes and smilies parsing';
 
-?>

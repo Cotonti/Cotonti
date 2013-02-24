@@ -23,4 +23,3 @@ require_once cot_incfile('comments', 'plug');
 
 $join_columns .= ", (SELECT COUNT(*) FROM `$db_com` WHERE com_area = 'page' AND com_code = p.page_id) AS com_count";
 
-?>

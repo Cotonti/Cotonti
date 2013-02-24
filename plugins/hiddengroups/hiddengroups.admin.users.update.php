@@ -26,4 +26,3 @@ if(!empty($rgroups['grp_name']) && !empty($rgroups['grp_title']))
 
 $cache && $cache->db->remove('cot_hiddenusers', 'system');
 
-?>

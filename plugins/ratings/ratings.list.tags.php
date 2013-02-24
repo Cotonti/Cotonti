@@ -28,4 +28,3 @@ $t->assign(array(
 	'LIST_RATINGS_COUNT'   => $ratings_count
 ));
 
-?>

@@ -26,4 +26,3 @@ if (!$i18n_structure)
 	$cache && $cache->db->store('structure', $i18n_structure, 'i18n');
 }
 
-?>

@@ -12,4 +12,3 @@
 defined('COT_CODE') or die('Wrong URL');
 
 $R['rat_code_fancy_star'] = '<a class="{$class}" title="{$title}">{$num}</a>';
-?>

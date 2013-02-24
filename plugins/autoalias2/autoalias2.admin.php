@@ -42,4 +42,3 @@ $create_url = cot_url('admin', 'm=other&p=autoalias2&a=create');
 $plugin_body .= <<<HTM
 <a href="$create_url">{$L['create_aliases']}</a>
 HTM;
-?>

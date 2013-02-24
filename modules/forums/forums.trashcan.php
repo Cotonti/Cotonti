@@ -73,4 +73,3 @@ function cot_trash_forumtopic_sync($data)
 	return TRUE;
 }
 
-?>

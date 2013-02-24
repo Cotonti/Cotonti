@@ -58,4 +58,3 @@ $R['pfs_link_addfile'] =
 $R['pfs_icon_type'] = 
 	'<img class="icon" src="images/filetypes/default/{$type}.png" alt="{$name}" />';
 
-?>

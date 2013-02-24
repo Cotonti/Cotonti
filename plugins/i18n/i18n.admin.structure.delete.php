@@ -19,4 +19,3 @@ defined('COT_CODE') or die('Wrong URL');
 
 $db->delete($db_i18n_structure, "istructure_code = ?", array($c));
 
-?>

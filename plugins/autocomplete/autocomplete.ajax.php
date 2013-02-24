@@ -33,4 +33,3 @@ if (!empty($q))
 }
 echo $userlist;
 
-?>

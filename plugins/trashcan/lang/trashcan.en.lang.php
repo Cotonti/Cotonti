@@ -42,4 +42,3 @@ Restore: Put the item back in the live database<br />
 $L['adm_trashcan_deleted'] = 'Item deleted';
 $L['adm_trashcan_prune'] = 'Trash emptied';
 $L['adm_trashcan_restored'] = 'Item restored';
-?>

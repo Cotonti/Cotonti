@@ -30,4 +30,3 @@ $L['cfg_css'] = 'Use plugin CSS';
 
 $L['plu_title'] = 'Autocomplete';
 
-?>

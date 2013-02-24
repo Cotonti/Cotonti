@@ -25,4 +25,3 @@ $t->assign(array(
 	'STATISTICS_TOTALDBCOMMENTS' => $totaldbcomments
 ));
 
-?>

@@ -22,4 +22,3 @@ global $db_i18n_pages;
 
 $db->delete($db_i18n_pages, "ipage_id = ?", array($id));
 
-?>

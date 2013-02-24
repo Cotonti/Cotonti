@@ -425,4 +425,3 @@ else
 	$adminmain = $t->text('MAIN');
 }
 
-?>

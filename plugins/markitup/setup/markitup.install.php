@@ -33,4 +33,3 @@ if (cot_plugin_active('bbcode'))
 
 	cot_bbcode_clearcache();
 }
-?>

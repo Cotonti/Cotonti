@@ -70,4 +70,3 @@ if (is_array($i18n_structure) && count($i18n_structure) > 0
 	$search_join_condition .= "LEFT JOIN $db_i18n_pages AS i18n ON p.page_id = i18n.ipage_id";
 }
 
-?>

@@ -26,4 +26,3 @@ $L['ipsearch_found2'] = 'совпадение(ий) для';
 
 $L['ipsearch_help'] = 'No help for this plugin yet!';
 
-?>

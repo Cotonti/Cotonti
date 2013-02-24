@@ -41,4 +41,3 @@ if ($sql->rowCount() > 0)
 	}
 }
 
-?>

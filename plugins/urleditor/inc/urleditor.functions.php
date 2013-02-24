@@ -358,4 +358,3 @@ function cot_url_username(&$params, $spec)
 	return $name;
 }
 
-?>

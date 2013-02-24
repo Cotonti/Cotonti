@@ -28,4 +28,3 @@ function cot_parse_html($text)
 	return $text;
 }
 
-?>

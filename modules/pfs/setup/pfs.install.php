@@ -28,4 +28,3 @@ if ($dbres->rowCount() == 0)
 }
 $dbres->closeCursor();
 
-?>

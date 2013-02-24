@@ -41,4 +41,3 @@ if (!empty($row['ipage_title']))
 	));
 }
 
-?>

@@ -34,4 +34,3 @@ $L['cfg_lowercase'] = 'Lowercase alias';
 $L['aliases_written'] = 'Aliases written';
 $L['create_aliases'] = 'Create aliases from titles if missing';
 
-?>

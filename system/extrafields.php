@@ -863,4 +863,3 @@ function cot_load_extrafields($forcibly = false)
 
 cot_load_extrafields();
 $cot_extrafields[$db_structure] = (!empty($cot_extrafields[$db_structure])) ? $cot_extrafields[$db_structure] : array();
-?>

@@ -20,4 +20,3 @@ $R['users_link_sort'] = '<a href="{$asc_url}" rel="nofollow">'.$R['icon_down'].'
  * User's profile resources
  */
 
-?>

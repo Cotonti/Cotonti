@@ -61,4 +61,3 @@ $R['forums_code_admin_mark'] = ' *';
 
 $R['forums_code_post_empty'] = '&nbsp;';
 
-?>

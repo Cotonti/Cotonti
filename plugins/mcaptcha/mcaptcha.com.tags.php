@@ -25,4 +25,3 @@ if ($usr['id'] == '0' && $cfg['captchamain'] == 'mcaptcha')
 	));
 }
 
-?>

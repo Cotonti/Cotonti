@@ -34,4 +34,3 @@ $L['userimages_sigupload'] = 'Upload a signature';
 
 $L['userimages_help'] = '';
 
-?>

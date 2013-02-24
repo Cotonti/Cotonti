@@ -27,4 +27,3 @@ foreach($userimages as $code => $settings)
 	$temp_array[strtoupper($code).'_SRC'] = $user_data['user_'.$code];
 }
 
-?>

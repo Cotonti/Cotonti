@@ -36,4 +36,3 @@ chili=03:radio::0:Enable Chili tags
 
 defined('COT_CODE') or die('Wrong URL');
 
-?>

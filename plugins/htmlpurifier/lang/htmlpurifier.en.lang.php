@@ -17,4 +17,3 @@ $L['cfg_tidylevel'] = array('Tidy Level', 'Sets how intensively HTML Purifier wi
 
 $L['info_desc'] = 'Makes sure submitted HTML content is valid, clean and secure';
 
-?>

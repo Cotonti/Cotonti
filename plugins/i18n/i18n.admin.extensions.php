@@ -22,4 +22,3 @@ if ($code == 'tags' && $result && !cot_error_found())
 	include $cfg['plugins_dir'] . '/i18n/setup/i18n.install.php';
 }
 
-?>

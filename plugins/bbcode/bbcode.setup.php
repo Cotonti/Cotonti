@@ -26,4 +26,3 @@ editor=02:callback:cot_get_editors():markitup:
 
 defined('COT_CODE') or die('Wrong URL');
 
-?>

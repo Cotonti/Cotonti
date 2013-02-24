@@ -21,4 +21,3 @@ if ($dbres->rowCount() == 1)
 }
 $dbres->closeCursor();
 
-?>

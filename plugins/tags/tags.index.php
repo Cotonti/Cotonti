@@ -56,4 +56,3 @@ if ($cfg['plugin']['tags']['pages'] || $cfg['plugin']['tags']['forums'])
 	}
 }
 
-?>

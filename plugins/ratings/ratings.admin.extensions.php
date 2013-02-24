@@ -28,4 +28,3 @@ elseif ($is_module && in_array($code, $rat_modules_struct_list) && !cot_config_i
 	cot_config_implant($code, $rat_options, true, 'ratings');
 }
 
-?>
