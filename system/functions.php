@@ -254,14 +254,6 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 		case 'POST':
 			$v = (isset($_POST[$name])) ? $_POST[$name] : NULL;
 			$log = TRUE;
-			if ($filter=='ARR')
-			{
-				if ($buffer)
-				{
-					$v = cot_import_buffered($name, $v, null);
-				}
-				return($v);
-			}
 			break;
 
 		case 'PUT':
@@ -307,7 +299,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 		$v = stripslashes($v);
 	}
 
-	if (($v === '' || $v === NULL) && $buffer)
+	if (($v === '' || $v === NULL || $filter == 'ARR') && $buffer)
 	{
 		$v = cot_import_buffered($name, $v, null);
 		return $v;
