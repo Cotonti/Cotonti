@@ -103,13 +103,11 @@ if ($a == 'check')
 
 	// Load salt and algo from db
 	$sql = $db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE $login_param=".$db->quote($rusername));
-	/* dandielo start */
-	if ( $sql->rowCount() == 0 )
+	if ($sql->rowCount() == 0)
 	{
-		//if login has e-mail format, try to find it as user_name
+		// If login has e-mail format, try to find it as user_name
 		$sql = $db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE user_name=".$db->quote($rusername));
 	}
-	/* dandielo end */
 	if ($sql->rowCount() == 1)
 	{
 		$hash_params = $sql->fetch();
@@ -131,20 +129,19 @@ if ($a == 'check')
 	/* ===== */
 
 	$sql = $db->query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
-	/* dandielo start */	
-	/* 	checking if we got any entries with the current login conditions, 
-		only may fail when user name has e-mail format or user is not registered, 
+
+	/* 	Checking if we got any entries with the current login conditions,
+		only may fail when user name has e-mail format or user is not registered,
 		added for compatibility, because disallowed using e-mail as login on registration
-	*/ 
+	*/
 	if ( $sql->rowCount() == 0 )
 	{
-		//if login has e-mail format, try to find it as user_name
+		// If login has e-mail format, try to find it as user_name
 		$user_select_condition = "user_password=".$db->quote($rmdpass)." AND user_name=".$db->quote($rusername);
-		
-		//querry the database
+
+		// Query the database
 		$sql = $db->query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
 	}
-	/* dandielo end */
 	if ($row = $sql->fetch())
 	{
 		$rusername = $row['user_name'];
