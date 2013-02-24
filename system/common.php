@@ -162,7 +162,7 @@ if ($_SERVER['HTTP_HOST'] == $url['host']
 	|| $_SERVER['HTTP_HOST'] != 'www.' . $sys['domain']
 		&& preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']))
 {
-	$sys['host'] = $_SERVER['HTTP_HOST'];
+	$sys['host'] = preg_match('#^[\w\p{L}\.\-]+$#u', $_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $url['host'];
 	$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
 }
 else
