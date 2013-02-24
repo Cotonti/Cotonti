@@ -495,8 +495,8 @@ class Page_cache
 			{
 				$args[$key] = $val;
 			}
-			ksort($args);
 		}
+		ksort($args);
 		if (count($args) > 0)
 		{
 			$hashkey = serialize($args);
