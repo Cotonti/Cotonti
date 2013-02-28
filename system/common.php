@@ -576,7 +576,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 		|| ($cfg['referercheck'] && !preg_match('`https?://([^/]+\.)?'.preg_quote($sys['domain']).'(/|:|$)`i', $_SERVER['HTTP_REFERER']))))
 {
 	$cot_error = true;
-	cot_die_message(950, TRUE);
+	cot_die_message(950, TRUE, '', '', $_SERVER['HTTP_REFERER']);
 }
 
 /* ============ Head Resources ===========*/

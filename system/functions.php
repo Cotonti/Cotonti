@@ -2542,10 +2542,13 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 /**
  * Terminates script execution and displays message page
  *
- * @param int $code Message code
- * @param bool $header Render page header
+ * @param integer $code          Message code
+ * @param boolean $header        Render page header
+ * @param string  $message_title Custom page title
+ * @param string  $message_body  Custom message body
+ * @param string  $redirect      Optional URL to redirect after 3 seconds
  */
-function cot_die_message($code, $header = TRUE, $message_title = '', $message_body = '')
+function cot_die_message($code, $header = TRUE, $message_title = '', $message_body = '', $redirect = '')
 {
 	// Globals and requirements
 	global $error_string, $out, $L, $R;
@@ -2613,6 +2616,14 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
 	$tpl_path = '';
 	$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
+	$redirect_meta = '';
+	if (!empty($redirect))
+	{
+		if (cot_url_check($redirect))
+		{
+			$redirect_meta = '<meta http-equiv="refresh" content="3; url='.$redirect.'" />';
+		}
+	}
 	if ($header)
 	{
 		$tpl_path = cot_tplfile("error.$code", $tpl_type);
@@ -2622,7 +2633,7 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 		}
 		else
 		{
-			echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.$R['code_basehref'].$stylesheet.'</head><body><div class="block">';
+			echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.$R['code_basehref'].$stylesheet.$redirect_meta.'</head><body><div class="block">';
 		}
 	}
 
@@ -2643,6 +2654,7 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 			'AJAX_MODE' => COT_AJAX,
 			'MESSAGE_BASEHREF' => $R['code_basehref'],
 			'MESSAGE_STYLESHEET' => $stylesheet,
+			'MESSAGE_REDIRECT' => $redirect_meta,
 			'MESSAGE_TITLE' => $title,
 			'MESSAGE_BODY' => $body
 		));
@@ -5148,7 +5160,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 function cot_url_check($url)
 {
 	global $sys;
-	return preg_match('`^'.preg_quote($sys['scheme'].'://').'([^/]+\.)?'.preg_quote($sys['domain']).'`i', $url);
+	return preg_match('`^'.preg_quote($sys['scheme'].'://').'([\w\p{L}\.\-]+\.)?'.preg_quote($sys['domain']).'`ui', $url);
 }
 
 /**
