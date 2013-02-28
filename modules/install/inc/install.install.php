@@ -644,6 +644,7 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 				$checked = in_array($code, $default_list);
 			}
 			$type = $ext_type == 'Module' ? 'module' : 'plug';
+			$L['info_name'] = '';
 			$L['info_desc'] = '';
 			if (file_exists(cot_langfile($code, $type)))
 			{

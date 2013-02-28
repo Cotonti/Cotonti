@@ -85,7 +85,7 @@ switch($a)
 		{
 			$old_ext_format = false;
 			$info = cot_infoget($ext_info, 'COT_EXT');
-			
+
 			if (!$info && cot_plugin_active('genoa'))
 			{
 				// Try to load old format info
@@ -358,7 +358,9 @@ switch($a)
 			}
 		}
 
+		$L['info_name'] = '';
 		$L['info_desc'] = '';
+		$L['info_notes'] = '';
 		if (file_exists(cot_langfile($code, $type)))
 		{
 			include cot_langfile($code, $type);
@@ -700,6 +702,7 @@ switch($a)
 
 					$installed_ver = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$code'")->fetchColumn();
 
+					$L['info_name'] = '';
 					$L['info_desc'] = '';
 					if (file_exists(cot_langfile($code, $type)))
 					{
@@ -708,7 +711,7 @@ switch($a)
 
 					$t->assign(array(
 						'ADMIN_EXTENSIONS_DETAILS_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code"),
-						'ADMIN_EXTENSIONS_NAME' => $info['Name'],
+						'ADMIN_EXTENSIONS_NAME' => empty($L['info_name']) ? $info['Name'] : $L['info_name'],
 						'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? $L['Module'] : $L['Plugin'],
 						'ADMIN_EXTENSIONS_CODE_X' => $code,
 						'ADMIN_EXTENSIONS_DESCRIPTION' => empty($L['info_desc']) ? $info['Description'] : $L['info_desc'],
