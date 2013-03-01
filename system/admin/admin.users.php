@@ -54,27 +54,32 @@ if($n == 'add')
 	}
 	/* ===== */
 
-	if ($rgroups['grp_name'] && $rgroups['grp_title'])
+	cot_check(empty($rgroups['grp_name']), 'adm_groups_name_empty', 'rname');
+	cot_check(empty($rgroups['grp_title']), 'adm_groups_title_empty', 'rtitle');
+
+	if (!cot_error_found())
 	{
 		$db->insert($db_groups, $rgroups);
+
+		$grp_id = $db->lastInsertId();
+
+		/* === Hook === */
+		foreach (cot_getextplugins('admin.users.add') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		if (!$rgroups['grp_skiprights'])
+		{
+			cot_auth_add_group($grp_id, $rcopyrightsfrom);
+		}
+
+		$cache && $cache->db->remove('cot_groups', 'system');
+
+		cot_message('Added');
 	}
-	$grp_id = $db->lastInsertId();
-
-	/* === Hook === */
-	foreach (cot_getextplugins('admin.users.add') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
-
-	if (!$rgroups['grp_skiprights'])
-	{
-		cot_auth_add_group($grp_id, $rcopyrightsfrom);
-	}
-
-	$cache && $cache->db->remove('cot_groups', 'system');
-
-	cot_message('Added');
+	cot_redirect(cot_url('admin', 'm=users', '', true));
 }
 elseif($n == 'edit')
 {
@@ -97,7 +102,10 @@ elseif($n == 'edit')
 		}
 		/* ===== */
 
-		if ($rgroups['grp_name'] && $rgroups['grp_title'])
+		cot_check(empty($rgroups['grp_name']), 'adm_groups_name_empty', 'rname');
+		cot_check(empty($rgroups['grp_title']), 'adm_groups_title_empty', 'rtitle');
+
+		if (!cot_error_found())
 		{
 			$db->update($db_groups, $rgroups, "grp_id=$g");
 
@@ -112,11 +120,11 @@ elseif($n == 'edit')
 				// Remove rights
 				cot_auth_remove_group($g);
 			}
+
+			$cache && $cache->db->remove('cot_groups', 'system');
+
+			cot_message('Updated');
 		}
-
-		$cache && $cache->db->remove('cot_groups', 'system');
-
-		cot_message('Updated');
 	}
 	elseif($a == 'delete' && $g > 5)
 	{
