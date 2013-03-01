@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.10
+ * @version 2.7.11
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2013
  * @license BSD
@@ -784,10 +784,10 @@ class Cotpl_data
 		{
 			$code = $this->cleanup($code);
 		}
-		$chunks = preg_split('`(\{(?:[\w\.]+)(?:\|.+?)?\})`', $code, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$chunks = preg_split('`(\{(?:[\w\.\-]+)(?:\|.+?)?\})`', $code, -1, PREG_SPLIT_DELIM_CAPTURE);
 		foreach ($chunks as $chunk)
 		{
-			if (preg_match('`^\{((?:[\w\.]+)(?:\|.+?)?)\}$`', $chunk, $m))
+			if (preg_match('`^\{((?:[\w\.\-]+)(?:\|.+?)?)\}$`', $chunk, $m))
 			{
 				$this->chunks[] = new Cotpl_var($m[1]);
 			}
@@ -1355,13 +1355,13 @@ class Cotpl_loop extends Cotpl_block
 	 */
 	public function __construct($header, $code, &$index, $path)
 	{
-		if (preg_match('`^\{(\w+)\}\s*,\s*\{(\w+)\}\s*IN\s*\{((?:[\w\.]+)(?:\|.+?)?)\}$`', $header, $m))
+		if (preg_match('`^\{(\w+)\}\s*,\s*\{(\w+)\}\s*IN\s*\{((?:[\w\.\-]+)(?:\|.+?)?)\}$`', $header, $m))
 		{
 			$this->key = $m[1];
 			$this->val = $m[2];
 			$this->set = new Cotpl_var($m[3]);
 		}
-		elseif (preg_match('`^\{(\w+)\}\s*IN\s*\{((?:[\w\.]+)(?:\|.+?)?)\}$`', $header, $m))
+		elseif (preg_match('`^\{(\w+)\}\s*IN\s*\{((?:[\w\.\-]+)(?:\|.+?)?)\}$`', $header, $m))
 		{
 			$this->val = $m[1];
 			$this->set = new Cotpl_var($m[2]);
