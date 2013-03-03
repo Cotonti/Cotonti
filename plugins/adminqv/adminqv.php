@@ -101,44 +101,44 @@ if (is_array($hits_d))
 	}
 	}
 
-//Version Checking
-if ($cfg['check_updates'])
-{
-	$update_info = sed_cache_get('update_info');
-	if(!$update_info)
-	{
-		if(ini_get('allow_url_fopen'))
-		{
-			$update_info = @file_get_contents('http://www.cotonti.com/update-check');
-			if($update_info)
-			{
-				$update_info = json_decode($update_info, TRUE);
-				sed_cache_store('update_info', $update_info, 86400, FALSE);
-			}
-		}
-		elseif(function_exists('curl_init'))
-		{
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, 'http://www.cotonti.com/update-check');
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-			$update_info = curl_exec($curl);
-			if($update_info)
-			{
-				$update_info = json_decode($update_info, TRUE);
-				sed_cache_store('update_info', $update_info, 86400, FALSE);
-			}
-			curl_close($curl);
-		}
-	}
-	if($update_info['update_rev'] > $cfg['revision'])
-	{
-		$t->assign(array(
-			'ADMINQV_UPDATE_REVISION' => sprintf($L['adminqv_update_revision'], $cfg['version'], $cfg['revision'], htmlspecialchars($update_info['update_ver']), (int)$update_info['update_rev']),
-			'ADMINQV_UPDATE_MESSAGE' => sed_parse(htmlspecialchars($update_info['update_message']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true),
-			));
-		$t->parse('ADMINQV.UPDATE');
-	}
-}
+// //Version Checking
+// if ($cfg['check_updates'])
+// {
+// 	$update_info = sed_cache_get('update_info');
+// 	if(!$update_info)
+// 	{
+// 		if(ini_get('allow_url_fopen'))
+// 		{
+// 			$update_info = @file_get_contents('http://www.cotonti.com/update-check');
+// 			if($update_info)
+// 			{
+// 				$update_info = json_decode($update_info, TRUE);
+// 				sed_cache_store('update_info', $update_info, 86400, FALSE);
+// 			}
+// 		}
+// 		elseif(function_exists('curl_init'))
+// 		{
+// 			$curl = curl_init();
+// 			curl_setopt($curl, CURLOPT_URL, 'http://www.cotonti.com/update-check');
+// 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+// 			$update_info = curl_exec($curl);
+// 			if($update_info)
+// 			{
+// 				$update_info = json_decode($update_info, TRUE);
+// 				sed_cache_store('update_info', $update_info, 86400, FALSE);
+// 			}
+// 			curl_close($curl);
+// 		}
+// 	}
+// 	if($update_info['update_rev'] > $cfg['revision'])
+// 	{
+// 		$t->assign(array(
+// 			'ADMINQV_UPDATE_REVISION' => sprintf($L['adminqv_update_revision'], $cfg['version'], $cfg['revision'], htmlspecialchars($update_info['update_ver']), (int)$update_info['update_rev']),
+// 			'ADMINQV_UPDATE_MESSAGE' => sed_parse(htmlspecialchars($update_info['update_message']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true),
+// 			));
+// 		$t->parse('ADMINQV.UPDATE');
+// 	}
+// }
 
 $t -> assign(array(
 	'ADMINQV_NEWUSERS_URL' => sed_url('users', 'f=all&s=regdate&w=desc'),
@@ -153,7 +153,7 @@ $t -> assign(array(
 	'ADMINQV_NEWCOMMENTS' => $newcomments,
 	'ADMINQV_NEWPMS' => $newpms,
 	'ADMINQV_VERSION' => $cfg['version'],
-	'ADMINQV_REVISION' => $L['adminqv_rev'].$cfg['revision'],
+	// 'ADMINQV_REVISION' => $L['adminqv_rev'].$cfg['revision'],
 	'ADMINQV_DB_VERSION' => $cfg['dbversion'],
 	'ADMINQV_DB_TOTAL_ROWS' => $total_rows,
 	'ADMINQV_DB_INDEXSIZE' => number_format(($total_index_length/1024),1,'.',' '),

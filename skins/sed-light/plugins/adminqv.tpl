@@ -74,8 +74,8 @@
 
 		<h4>Cotonti:</h4>
 		<table class="cells">
-		<tr><td>{PHP.L.Version} ({PHP.L.adminqv_rev_title}) / {PHP.L.Database}</td>
-		<td style="text-align:right;">{ADMINQV_VERSION}({ADMINQV_REVISION}) / {ADMINQV_DB_VERSION}</td></tr>
+		<tr><td>{PHP.L.Version} / {PHP.L.Database}</td>
+		<td style="text-align:right;">{ADMINQV_VERSION} / {ADMINQV_DB_VERSION}</td></tr>
 		<tr><td>{PHP.L.plu_db_rows}</td>
 		<td style="text-align:right;">{ADMINQV_DB_TOTAL_ROWS}</td></tr>
 		<tr><td>{PHP.L.plu_db_indexsize}</td>
