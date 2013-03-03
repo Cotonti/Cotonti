@@ -108,10 +108,13 @@ switch ($a)
 	/* ============= */
 
 	sed_check_xg();
-	$avatar = $cfg['defav_dir'].urldecode($id);
-	$avatar = str_replace(array("'", ",", chr(0x00)), "", $avatar);
+	$avatar = sed_import('file', 'G', 'TXT');
+	$avatar = preg_replace('#[^\w\-\.]#', '', $avatar);
+	$avatar = $cfg['defav_dir'].$avatar;
 	if (file_exists($avatar))
-		{ $sql = sed_sql_query("UPDATE $db_users SET user_avatar='".sed_sql_prep($avatar)."' WHERE user_id='".$usr['id']."'"); }
+	{
+		$sql = sed_sql_query("UPDATE $db_users SET user_avatar='".sed_sql_prep($avatar)."' WHERE user_id='".$usr['id']."'");
+	}
 	header("Location: " . SED_ABSOLUTE_URL . sed_url('users', "m=profile", '#avatar', true));
 	exit;
 
@@ -579,8 +582,11 @@ if ($a=='avatarchoose')
 	$handle = opendir($cfg['defav_dir']);
 	while ($f = readdir($handle))
 	{
-		if ($f != "." && $f != "..")
-			{ $profile_form_avatar .= "<a href=\"".sed_url('users', 'm=profile&a=avatarselect&'.sed_xg().'&id='.urlencode($f), '#avatar')."\"><img src=\"".$cfg['defav_dir'].$f."\" alt=\"\" /></a> "; }
+		$f_ext = mb_strtolower(pathinfo($f, PATHINFO_EXTENSION));
+		if ($f != "." && $f != ".." && in_array($f_ext, array('gif','jpg','jpeg','png')))
+		{
+			$profile_form_avatar .= "<a href=\"".sed_url('users', 'm=profile&a=avatarselect&'.sed_xg().'&file='.urlencode($f), '#avatar')."\"><img src=\"".$cfg['defav_dir'].$f."\" alt=\"\" /></a> ";
+		}
 	}
 	closedir($handle);
 }
