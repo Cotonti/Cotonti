@@ -250,25 +250,25 @@ $L['ext_updating'] = 'Обновление {$type} &quot;{$name}&quot;';
 /**
  * Extension categories
  */
-$L['ext_cat']['administration-management'] = 'Администрирование и управление';
-$L['ext_cat']['commerce'] = 'Электронная коммерция';
-$L['ext_cat']['community-social'] = 'Сообщества и социальное';
-$L['ext_cat']['customization-i18n'] = 'Тонкая настройка и I18n';
-$L['ext_cat']['data-apis'] = 'Потоки данных и API';
-$L['ext_cat']['development-maintenance'] = 'Разработка и поддержка';
-$L['ext_cat']['editor-parser'] = 'Редакторы и разметка';
-$L['ext_cat']['files-media'] = 'Файлы и медиа';
-$L['ext_cat']['forms-feedback'] = 'Формы и обратная связь';
-$L['ext_cat']['gaming-clans'] = 'Игры и кланы';
-$L['ext_cat']['intranet-groupware'] = 'Корпоративный сектор';
-$L['ext_cat']['misc-ext'] = 'Прочее';
-$L['ext_cat']['mobile-geolocation'] = 'Мобильность и геолокация';
-$L['ext_cat']['navigation-structure'] = 'Навигация и структура';
-$L['ext_cat']['performance-seo'] = 'Производительность и SEO';
-$L['ext_cat']['publications-events'] = 'Публикации и события';
-$L['ext_cat']['security-authentication'] = 'Безопасность и аутентификация';
-$L['ext_cat']['utilities-tools'] = 'Инструменты';
-$L['ext_cat']['post-install'] = 'Пост-установочные скрипты';
+$Lext['administration-management'] = 'Администрирование и управление';
+$Lext['commerce'] = 'Электронная коммерция';
+$Lext['community-social'] = 'Сообщества и социальное';
+$Lext['customization-i18n'] = 'Тонкая настройка и I18n';
+$Lext['data-apis'] = 'Потоки данных и API';
+$Lext['development-maintenance'] = 'Разработка и поддержка';
+$Lext['editor-parser'] = 'Редакторы и разметка';
+$Lext['files-media'] = 'Файлы и медиа';
+$Lext['forms-feedback'] = 'Формы и обратная связь';
+$Lext['gaming-clans'] = 'Игры и кланы';
+$Lext['intranet-groupware'] = 'Корпоративный сектор';
+$Lext['misc-ext'] = 'Прочее';
+$Lext['mobile-geolocation'] = 'Мобильность и геолокация';
+$Lext['navigation-structure'] = 'Навигация и структура';
+$Lext['performance-seo'] = 'Производительность и SEO';
+$Lext['publications-events'] = 'Публикации и события';
+$Lext['security-authentication'] = 'Безопасность и аутентификация';
+$Lext['utilities-tools'] = 'Инструменты';
+$Lext['post-install'] = 'Пост-установочные скрипты';
 
 /**
  * Structure Section

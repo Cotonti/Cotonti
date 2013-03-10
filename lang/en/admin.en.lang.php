@@ -250,25 +250,25 @@ $L['ext_updating'] = 'Updating {$type} &quot;{$name}&quot;';
 /**
  * Extension categories
  */
-$L['ext_cat']['administration-management'] = 'Administration &amp; Management';
-$L['ext_cat']['commerce'] = 'Commerce &amp; Shopping';
-$L['ext_cat']['community-social'] = 'Community &amp; Social';
-$L['ext_cat']['customization-i18n'] = 'Customization &amp; I18n';
-$L['ext_cat']['data-apis'] = 'Data Feeds &amp; APIs';
-$L['ext_cat']['development-maintenance'] = 'Development &amp; Maintenance';
-$L['ext_cat']['editor-parser'] = 'Editors &amp; Markup';
-$L['ext_cat']['files-media'] = 'Files &amp; Media';
-$L['ext_cat']['forms-feedback'] = 'Forms &amp; Feedback';
-$L['ext_cat']['gaming-clans'] = 'Gaming &amp; Clans';
-$L['ext_cat']['intranet-groupware'] = 'Intranet &amp; Groupware';
-$L['ext_cat']['misc-ext'] = 'Miscellaneous';
-$L['ext_cat']['mobile-geolocation'] = 'Mobile &amp; Geolocation';
-$L['ext_cat']['navigation-structure'] = 'Navigation &amp; Structure';
-$L['ext_cat']['performance-seo'] = 'Performance &amp; SEO';
-$L['ext_cat']['publications-events'] = 'Publications &amp; Events';
-$L['ext_cat']['security-authentication'] = 'Security &amp; Authentication';
-$L['ext_cat']['utilities-tools'] = 'Utilities &amp; Tools';
-$L['ext_cat']['post-install'] = 'Post-install Scripts';
+$Lext['administration-management'] = 'Administration &amp; Management';
+$Lext['commerce'] = 'Commerce &amp; Shopping';
+$Lext['community-social'] = 'Community &amp; Social';
+$Lext['customization-i18n'] = 'Customization &amp; I18n';
+$Lext['data-apis'] = 'Data Feeds &amp; APIs';
+$Lext['development-maintenance'] = 'Development &amp; Maintenance';
+$Lext['editor-parser'] = 'Editors &amp; Markup';
+$Lext['files-media'] = 'Files &amp; Media';
+$Lext['forms-feedback'] = 'Forms &amp; Feedback';
+$Lext['gaming-clans'] = 'Gaming &amp; Clans';
+$Lext['intranet-groupware'] = 'Intranet &amp; Groupware';
+$Lext['misc-ext'] = 'Miscellaneous';
+$Lext['mobile-geolocation'] = 'Mobile &amp; Geolocation';
+$Lext['navigation-structure'] = 'Navigation &amp; Structure';
+$Lext['performance-seo'] = 'Performance &amp; SEO';
+$Lext['publications-events'] = 'Publications &amp; Events';
+$Lext['security-authentication'] = 'Security &amp; Authentication';
+$Lext['utilities-tools'] = 'Utilities &amp; Tools';
+$Lext['post-install'] = 'Post-install Scripts';
 
 /**
   * Structure Section

@@ -583,7 +583,7 @@ function cot_install_config_replace(&$file_contents, $config_name, $config_value
  */
 function cot_install_parse_extensions($ext_type, $default_list = array(), $selected_list = array())
 {
-	global $t, $cfg, $L;
+	global $t, $cfg, $L, $Lext;
 	$ext_type_lc = strtolower($ext_type);
 	$ext_type_uc = strtoupper($ext_type);
 
@@ -607,7 +607,7 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 				}
 				// Assign a new one
 				$prev_cat = $info['Category'];
-				$t->assign('PLUGIN_CAT_TITLE', $L['ext_cat'][$info['Category']]);
+				$t->assign('PLUGIN_CAT_TITLE', $Lext[$info['Category']]);
 			}
 			if (!empty($info['Requires_modules']) || !empty($info['Requires_plugins']))
 			{
