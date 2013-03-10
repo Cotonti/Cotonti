@@ -5294,6 +5294,11 @@ function cot_declension($digit, $expr, $onlyword = false, $canfrac = false)
 {
 	global $lang, $Ls;
 
+	if (isset($Ls[$expr]) && !is_array($Ls[$expr]))
+	{
+		$Ls[$expr] = explode(',', $Ls[$expr]);
+	}
+
 	$expr = is_string($expr) ? $Ls[$expr] : $expr;
 	if (!is_array($expr))
 	{
