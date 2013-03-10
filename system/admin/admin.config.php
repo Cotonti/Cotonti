@@ -266,6 +266,8 @@ switch($n)
 			if (!is_array($L['cfg_'.$config_name]))
 			{
 				$L['cfg_'.$config_name] = array($L['cfg_'.$config_name]);
+				if (isset($L['cfg_'.$config_name.'_hint']))
+					$L['cfg_'.$config_name][1] = $L['cfg_'.$config_name.'_hint'];
 			}
 
 			$config_value = $row['config_value'];
@@ -406,7 +408,7 @@ switch($n)
 			{
 				$t->assign(array(
 					'ADMIN_CONFIG_ROW_CONFIG' => $config_input,
-					'ADMIN_CONFIG_ROW_CONFIG_TITLE' => (empty($L['cfg_'.$row['config_name']][0]) && !empty($config_text))
+					'ADMIN_CONFIG_ROW_CONFIG_TITLE' => (empty($config_title) && !empty($config_text))
 						? $config_text : $config_title,
 					'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' =>
 						cot_url('admin', "m=config&n=edit&o=$o&p=$p&a=reset&v=$config_name&sub=$sub"),
