@@ -807,14 +807,14 @@ function cot_extension_add($name, $title, $version = '1.0.0', $is_plug = false)
  */
 function cot_extension_catcmp($ext1, $ext2)
 {
-	global $Lext;
-	if (isset($Lext[$ext1['Category']]))
+	global $L;
+	if (isset($L['ext_cat_' . $ext1['Category']]))
 	{
-		$ext1['Category'] = $Lext[$ext1['Category']];
+		$ext1['Category'] = $L['ext_cat_' . $ext1['Category']];
 	}
-	if (isset($Lext[$ext2['Category']]))
+	if (isset($L['ext_cat_' . $ext2['Category']]))
 	{
-		$ext2['Category'] = $Lext[$ext2['Category']];
+		$ext2['Category'] = $L['ext_cat_' . $ext2['Category']];
 	}
 	if ($ext1['Category'] == $ext2['Category'])
 	{
