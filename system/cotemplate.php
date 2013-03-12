@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.11
+ * @version 2.7.12
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2013
  * @license BSD
@@ -216,7 +216,7 @@ class XTemplate
 	 */
 	private static function restart_include_files($m)
 	{
-		$fname = preg_replace_callback('`\{([\w\.]+)\}`', 'XTemplate::substitute_var', $m[2]);
+		$fname = preg_replace_callback('`\{((?:[\w\.\-]+)(?:\|.+?)?)\}`', 'XTemplate::substitute_var', $m[2]);
 		if (preg_match('`\.tpl$`i', $fname) && file_exists($fname))
 		{
 			$code = cotpl_read_file($fname);
