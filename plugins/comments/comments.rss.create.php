@@ -20,17 +20,19 @@ defined('COT_CODE') or die('Wrong URL');
 /*
 	Example of feeds:
 
-	rss.php?c=comments&id=XX		=== Show comments from page "XX" ===		=== Where XX - is code or alias of page ===
-	rss.php?c=comments				=== Show comments from all page ===
+	cot_url(rss, m=comments&id=XX)		=== Show comments from page "XX" ===
+									=== Where XX - is code or alias of page ===
+	cot_url(rss, m=comments)			=== Show comments from all page ===
 */
 
 require_once cot_incfile('comments', 'plug');
 require_once cot_incfile('page', 'module');
 
-if ($c == 'comments')
+if ($m == 'comments')
 {
-	$defult_c = false;
-	if ($id == 'all')
+	$default_mode = false;
+	$id = cot_import('id', 'G', 'INT');
+	if (!$id)
 	{
 		$rss_title = $L['rss_comments']." ".$cfg['maintitle'];
 		$rss_description = $L['rss_comments_item_desc'];
@@ -50,10 +52,10 @@ if ($c == 'comments')
 				$text .= (cot_string_truncate($text, $cfg['plugin']['comments']['rss_commentmaxsymbols'])) ? '...' : '';
 			}
 			$items[$i]['description'] = $text;
-			
+
 			$pag = $db->query("SELECT page_id, page_alias, page_cat FROM $db_pages WHERE page_id = ?", array(strtr($row['com_code'], 'p', '')))->fetch();
 			$items[$i]['link'] = COT_ABSOLUTE_URL . (empty($pag['page_alias']) ? cot_url('page', 'c='.$pag['page_cat'].'&id='.$pag['page_id']) : cot_url('page', 'c='.$pag['page_cat'].'&al='.$pag['page_alias']));
-			
+
 			$items[$i]['pubDate'] = cot_date('r', $row['com_date']);
 			$i++;
 		}
@@ -61,11 +63,11 @@ if ($c == 'comments')
 	}
 	else
 	{
-		$page_id = (int) $id;
+		$page_id = $id;
 
 		$rss_title = $L['rss_comments']." ".$cfg['maintitle'];
 
-		$sql = $db->query("SELECT * FROM $db_pages WHERE page_id = $page_id LIMIT 1");
+		$sql = $db->query("SELECT * FROM $db_pages WHERE page_id = ? LIMIT 1", $page_id);
 		if ($db->affectedRows > 0)
 		{
 			$row = $sql->fetch();

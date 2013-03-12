@@ -107,6 +107,21 @@ function cot_apply_rwr()
 				return;
 
 			}
+			elseif ($path[0] == 'rss')
+			{
+				// RSS
+				$_GET['e'] = 'rss';
+				$_GET['m'] = $path[1];
+				if ($count == 3)
+				{
+					is_numeric($path[2]) ? $_GET['id'] = $path[2] : $_GET['c'] = $path[2];
+				}
+				else
+				{
+					$_GET['c'] = $path[1];
+				}
+				return;
+			}
 			$last = $count - 1;
 			$ext = (isset($structure['page'][$path[0]])) ? 'page' : $path[0];
 			$_GET['e'] = $ext;
@@ -128,14 +143,15 @@ function cot_apply_rwr()
 				}
 				else
 				{
+					// Can be a cat or al, let the module decide
+					if ($count == 2)
+						$_GET['c'] = $path[$last];
 					$_GET['al'] = $path[$last];
 				}
 			}
 		}
 	}
 }
-
-$cot_url_shortcuts['page']['c=rewbs&filter[foo][bar]=super&filter[boo][baz]=girl'] = 'rewbs/super-girl';
 
 /**
  * Transforms parameters into URL by following user-defined rules.

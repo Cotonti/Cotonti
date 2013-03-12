@@ -12,6 +12,10 @@ login	*						{$_area}
 message	*						{$_area}
 admin	m=*						admin/{$m}
 admin	*						{$_area}
+rss		m=*&c=*					{$_area}/{$m}/{$c}
+rss		m=*&id=*				{$_area}/{$m}/{$id}
+rss		c=*						{$_area}/{$c}
+rss		m=*						{$_area}/{$m}
 *		c=*&al=*				{$_area}/{cot_url_catpath()}/{$al}
 *		c=*&id=*				{$_area}/{cot_url_catpath()}/{$id}
 *		c=*						{$_area}/{cot_url_catpath()}
