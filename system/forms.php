@@ -381,7 +381,7 @@ function cot_selectbox_timezone($chosen, $name, $add_gmt = true, $dst = false, $
  */
 function cot_selectbox_structure($extension, $check, $name, $subcat = '', $hideprivate = true, $is_module = true)
 {
-	global $db, $db_structure, $usr, $structure, $L, $R;
+	global $structure;
 
 	$structure[$extension] = (is_array($structure[$extension])) ? $structure[$extension] : array();
 
@@ -393,7 +393,7 @@ function cot_selectbox_structure($extension, $check, $name, $subcat = '', $hidep
 		{
 			$mtch = $structure[$extension][$subcat]['path'].".";
 			$mtchlen = mb_strlen($mtch);
-			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch);
+			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i === $subcat);
 		}
 
 		if ((!$is_module || cot_auth($extension, $i, 'R')) && $i!='all' && $display)
@@ -419,7 +419,7 @@ function cot_selectbox_structure($extension, $check, $name, $subcat = '', $hidep
  */
 function cot_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
 {
-	global $cot_textarea_count, $R;
+	global $cot_textarea_count, $R, $cfg;
 	$cot_textarea_count++;
 	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
@@ -517,7 +517,7 @@ function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '
  */
 function cot_filebox($name, $value = '', $filepath = '', $delname ='', $attrs = '', $custom_rc = '')
 {
-	global $R, $cfg, $L;
+	global $R, $cfg;
 	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
