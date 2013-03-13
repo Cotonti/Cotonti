@@ -566,7 +566,7 @@ $usr['localtime'] = cot_date('datetime_medium', $sys['now']);
 /* ======== Anti-XSS protection ======== */
 
 $x = cot_import('x', 'P', 'ALP');
-if (empty($x) && COT_AJAX && $_SERVER['REQUEST_METHOD'] == 'POST')
+if (empty($x) && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	$x = cot_import('x', 'G', 'ALP');
 }
