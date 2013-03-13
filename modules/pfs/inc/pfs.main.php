@@ -31,7 +31,7 @@ $sys['parser'] = empty($parser) ? $cfg['parser'] : $parser;
 $pn_c1 = empty($c1) ? '' : '&c1=' . $c1;
 $pn_c2 = empty($c2) ? '' : '&c2=' . $c2;
 
-if (!$usr['isadmin'])
+if (!$usr['isadmin'] || $userid === null)
 {
 	$userid = $usr['id'];
 }
