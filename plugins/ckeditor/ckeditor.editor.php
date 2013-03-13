@@ -24,18 +24,10 @@ defined('COT_CODE') or die('Wrong URL');
 if ($cfg['plugin']['ckeditor']['cdn'])
 {
 	cot_rc_link_footer('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/ckeditor.js');
-	if ($cfg['jquery'])
-	{
-		cot_rc_link_footer('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/adapters/jquery.js');
-	}
 }
 else
 {
 	cot_rc_link_footer($cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js');
-	if ($cfg['jquery'])
-	{
-		cot_rc_link_footer($cfg['plugins_dir'] . '/ckeditor/lib/adapters/jquery.js');
-	}
 }
 
 // Load preset and connector
@@ -54,4 +46,35 @@ else
 }
 cot_rc_link_footer($cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js");
 
-?>
+// Calculate editor timestamp
+
+if (!function_exists('ckeditor_max_timestamp'))
+{
+	function ckeditor_max_timestamp($dir)
+	{
+		$maxtime = 0;
+		$dp = opendir($dir);
+		while ($f = readdir($dp))
+		{
+			if ($f[0] != '.')
+			{
+				$fname = $dir . '/' . $f;
+				if (is_dir($fname))
+					$mtime = ckeditor_max_timestamp($fname);
+				else
+					$mtime = filemtime($fname);
+
+				if ($mtime > $maxtime)
+					$maxtime = $mtime;
+			}
+		}
+		closedir($dp);
+		return $maxtime;
+	}
+}
+
+global $ckeditor_timestamp;
+if (!$ckeditor_timestamp)
+	$ckeditor_timestamp = ckeditor_max_timestamp($cfg['plugins_dir'] . '/ckeditor/lib');
+
+cot_rc_embed_footer("CKEDITOR.timestamp = $ckeditor_timestamp;");

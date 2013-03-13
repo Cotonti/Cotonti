@@ -3,14 +3,14 @@
 CKEDITOR.editorConfig = function( config )
 {
     config.toolbar = 'Full';
-	config.extraPlugins = 'more';
+	config.extraPlugins = 'more,oembed';
 
 	config.toolbar_Full =
 	[
 		['Source','-','Templates'],
 		['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
 		['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-		['Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe'],
+		['Image','oembed','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe'],
 		['Maximize', 'ShowBlocks','-','About'],
 		'/',
 		['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],

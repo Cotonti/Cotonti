@@ -1,4 +1,4 @@
-/* 
+/*
  * Default CKEditor preset and connector
  */
 
@@ -10,7 +10,7 @@ ckeditorClasses['minieditor'] = 'Basic'; // Mini editor
 function ckeditorReplace() {
 	var textareas = document.getElementsByTagName('textarea');
 	for (var i = 0; i < textareas.length; i++) {
-		if (ckeditorClasses[textareas[i].getAttribute('class')] != undefined) {
+		if (ckeditorClasses[textareas[i].getAttribute('class')] !== undefined) {
 			CKEDITOR.replace(textareas[i], {toolbar: ckeditorClasses[textareas[i].getAttribute('class')]});
 		}
 	}

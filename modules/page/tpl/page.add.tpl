@@ -7,7 +7,7 @@
 				<table class="cells">
 					<tr>
 						<td class="width30">{PHP.L.Category}:</td>
-						<td class="width70">{PAGEADD_FORM_CAT}</td>
+						<td class="width70">{PAGEADD_FORM_CAT_SHORT}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Title}:</td>
