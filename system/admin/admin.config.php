@@ -557,6 +557,20 @@ function cot_admin_config_get_titles($config_name, $cfg_params)
 		if (!is_array($L['cfg_'.$config_name.'_params']))
 		{
 			$L['cfg_'.$config_name.'_params'] = preg_split('#\s*,\s*#', $L['cfg_'.$config_name.'_params']);
+			if (preg_match('#^[\w-]+\s*:#', $L['cfg_'.$config_name.'_params'][0]))
+			{
+				// Support for assoc arrays
+				$temp = array();
+				foreach ($L['cfg_'.$config_name.'_params'] as $item)
+				{
+					if (preg_match('#^([\w-]+)\s*:\s*(.*)$#', $item, $mt))
+					{
+						$temp[$mt[1]] = $mt[2];
+					}
+				}
+				if (count($temp) > 0)
+					$L['cfg_'.$config_name.'_params'] = $temp;
+			}
 		}
 		$lang_params_keys = array_keys($L['cfg_'.$config_name.'_params']);
 		if (is_numeric($lang_params_keys[0]))

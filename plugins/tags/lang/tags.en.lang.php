@@ -56,14 +56,7 @@ $L['cfg_order'] = 'Cloud output order &mdash; alphabetical, descending frequency
 $L['cfg_pages'] = 'Enable tags in pages';
 $L['cfg_perpage'] = 'Tags displayed per page in standalone cloud, 0 is all at once';
 $L['cfg_sort'] = 'Default sorting column for tag search results';
-$L['cfg_sort_params'] = array(
-	'ID'       => 'ID',
-	'Title'    => 'Title',
-	'Date'     => 'Date',
-	'Category' => 'Category'
-);
+$L['cfg_sort_params'] = 'ID: ID, Title: Title, Date: Date, Category: Category';
 $L['cfg_title'] = 'Capitalize first letters of keywords';
 $L['cfg_translit'] = 'Transliterate tags in URLs';
 $L['cfg_css'] = 'Use plugin CSS';
-
-?>

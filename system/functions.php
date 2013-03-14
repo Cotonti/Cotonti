@@ -5296,7 +5296,7 @@ function cot_declension($digit, $expr, $onlyword = false, $canfrac = false)
 
 	if (is_string($expr) && isset($Ls[$expr]) && !is_array($Ls[$expr]))
 	{
-		$Ls[$expr] = explode(',', $Ls[$expr]);
+		$Ls[$expr] = preg_split('#\s*,\s*#', $Ls[$expr]);
 	}
 
 	$expr = is_string($expr) ? $Ls[$expr] : $expr;
