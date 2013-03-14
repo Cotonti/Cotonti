@@ -82,7 +82,7 @@ elseif ($filter == 'valqueue')
 }
 elseif ($filter == 'validated')
 {
-	$sqlwhere = "page_state<>1 ";
+	$sqlwhere = "page_state=1";
 }
 elseif ($filter == 'expired')
 {
@@ -201,7 +201,7 @@ elseif ($a == 'delete')
 	$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
 	if ($row = $sql_page->fetch())
 	{
-		if ($row['page_state'] != 1)
+		if ($row['page_state'] == 0)
 		{
 			$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code=".$db->quote($row['page_cat']));
 		}
@@ -321,7 +321,7 @@ elseif ($a == 'update_checked')
 				if ($row = $sql_page->fetch())
 				{
 					$id = $row['page_id'];
-					if ($row['page_state'] != 1)
+					if ($row['page_state'] == 0)
 					{
 						$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code=".$db->quote($row['page_cat']));
 					}

@@ -245,7 +245,7 @@ if (!empty($sq))
 		{
 			$where_and['cat'] = "page_cat IN ('".implode("','", $pag_catauth)."')";
 		}
-		$where_and['state'] = "page_state = '0'";
+		$where_and['state'] = "page_state = 0";
 		$where_and['notcat'] = "page_cat <> 'system'";
 		$where_and['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 		$where_and['date2'] = ($rs['setlimit'] > 0) ? "page_date >= ".$rs['setfrom']." AND page_date <= ".$rs['setto'] : "";
