@@ -44,17 +44,17 @@ $L['tags_Tag_cloud_none'] = 'No tags';
  * Plugin Config
  */
 
-$L['cfg_forums'] = array('Enable tags in forums');
-$L['cfg_index'] = array('Index page tag cloud area');
-$L['cfg_limit'] = array('Max. tags per item, 0 for unlimited');
-$L['cfg_lim_forums'] = array('Tag limit for forums tag cloud, 0 for unlimited');
-$L['cfg_lim_index'] = array('Tag limit for index (homepage) tag cloud, 0 for unlimited');
-$L['cfg_lim_pages'] = array('Tag limit for pages tag cloud, 0 for unlimited');
-$L['cfg_more'] = array('Show &quot;All tags&quot; link in tag clouds');
-$L['cfg_noindex'] = array('Exclude from search engine index');
-$L['cfg_order'] = array('Cloud output order &mdash; alphabetical, descending frequency or random');
-$L['cfg_pages'] = array('Enable tags in pages');
-$L['cfg_perpage'] = array('Tags displayed per page in standalone cloud, 0 is all at once');
+$L['cfg_forums'] = 'Enable tags in forums';
+$L['cfg_index'] = 'Index page tag cloud area';
+$L['cfg_limit'] = 'Max. tags per item, 0 for unlimited';
+$L['cfg_lim_forums'] = 'Tag limit for forums tag cloud, 0 for unlimited';
+$L['cfg_lim_index'] = 'Tag limit for index (homepage) tag cloud, 0 for unlimited';
+$L['cfg_lim_pages'] = 'Tag limit for pages tag cloud, 0 for unlimited';
+$L['cfg_more'] = 'Show &quot;All tags&quot; link in tag clouds';
+$L['cfg_noindex'] = 'Exclude from search engine index';
+$L['cfg_order'] = 'Cloud output order &mdash; alphabetical, descending frequency or random';
+$L['cfg_pages'] = 'Enable tags in pages';
+$L['cfg_perpage'] = 'Tags displayed per page in standalone cloud, 0 is all at once';
 $L['cfg_sort'] = 'Default sorting column for tag search results';
 $L['cfg_sort_params'] = array(
 	'ID'       => 'ID',
@@ -62,8 +62,8 @@ $L['cfg_sort_params'] = array(
 	'Date'     => 'Date',
 	'Category' => 'Category'
 );
-$L['cfg_title'] = array('Capitalize first letters of keywords');
-$L['cfg_translit'] = array('Transliterate tags in URLs');
+$L['cfg_title'] = 'Capitalize first letters of keywords';
+$L['cfg_translit'] = 'Transliterate tags in URLs';
 $L['cfg_css'] = 'Use plugin CSS';
 
 ?>

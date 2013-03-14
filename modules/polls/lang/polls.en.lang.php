@@ -45,12 +45,16 @@ $L['polls_votes'] = 'votes';
 /**
  * Config
  */
-$L['cfg_del_dup_options'] = array('Force duplicate option removal', ' Remove duplicate options even if it is already in the database');
-$L['cfg_ip_id_polls'] = array('Vote counting method', '');
-$L['cfg_max_options_polls'] = array('Max number of options', 'Options above this limit will be automatically removed');
-$L['cfg_maxpolls'] = array('Number of polls displayed on index');
-$L['cfg_mode'] = array('Poll display mode on index', '&quot;Recent polls&quot; displays last poll(s)<br />&quot;Random polls&quot; displays random poll(s)');
-$L['cfg_mode_params'] = array('Recent polls', 'Random polls');
+$L['cfg_del_dup_options'] = 'Force duplicate option removal';
+$L['cfg_del_dup_options_hint'] = ' Remove duplicate options even if it is already in the database';
+$L['cfg_ip_id_polls'] = 'Vote counting method';
+$L['cfg_ip_id_polls_hint'] = '';
+$L['cfg_max_options_polls'] = 'Max number of options';
+$L['cfg_max_options_polls_hint'] = 'Options above this limit will be automatically removed';
+$L['cfg_maxpolls'] = 'Number of polls displayed on index';
+$L['cfg_mode'] = 'Poll display mode on index';
+$L['cfg_mode_hint'] = '&quot;Recent polls&quot; displays last poll(s)<br />&quot;Random polls&quot; displays random poll(s)';
+$L['cfg_mode_params'] = 'Recent polls,Random polls';
 
 $L['info_desc'] = 'Configurable voting system for pages and forums';
 

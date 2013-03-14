@@ -347,29 +347,29 @@ $L['YIM'] = 'Yahoo Messenger';
  * cot_declension arrays
  */
 
-$Ls['Guests'] = array('гость','гостя','гостей');
-$Ls['Members'] = array('пользователь','пользователя','пользователей');
-$Ls['Pages'] = array('страница','страницы','страниц');
-$Ls['Times'] = array('раз','раза','раз');
+$Ls['Guests'] = "гость,гостя,гостей";
+$Ls['Members'] = "пользователь,пользователя,пользователей";
+$Ls['Pages'] = "страница,страницы,страниц";
+$Ls['Times'] = "раз,раза,раз";
 
-$Ls['Milliseconds'] = array('мс', 'мс', 'мс');
-$Ls['Seconds'] = array('секунда','секунды','секунд');
-$Ls['Minutes'] = array('минута','минуты','минут');
-$Ls['Hours'] = array('час','часа','часов');
-$Ls['Days'] = array('день','дня','дней');
-$Ls['Weeks'] = array('неделя','недели', 'недель');
-$Ls['Months'] = array('месяц','месяца', 'месяцев');
-$Ls['Years'] = array('год','года', 'лет');
+$Ls['Milliseconds'] = "мс,мс,мс";
+$Ls['Seconds'] = "секунда,секунды,секунд";
+$Ls['Minutes'] = "минута,минуты,минут";
+$Ls['Hours'] = "час,часа,часов";
+$Ls['Days'] = "день,дня,дней";
+$Ls['Weeks'] = "неделя,недели,недель";
+$Ls['Months'] = "месяц,месяца,месяцев";
+$Ls['Years'] = "год,года,лет";
 
-$Ls['Bytes'] = array('B', 'B');
-$Ls['Kilobytes'] = array('kB', 'kB');
-$Ls['Megabytes'] = array('MB', 'MB');
-$Ls['Gigabytes'] = array('GB', 'GB');
-$Ls['Terabytes'] = array('TB', 'TB');
-$Ls['Kibibytes'] = array('KiB', 'KiB');
-$Ls['Mebibytes'] = array('MiB', 'MiB');
-$Ls['Gibibytes'] = array('GiB', 'GiB');
-$Ls['Tebibytes'] = array('TiB', 'TiB');
+$Ls['Bytes'] = "B,B";
+$Ls['Kilobytes'] = "kB,kB";
+$Ls['Megabytes'] = "MB,MB";
+$Ls['Gigabytes'] = "GB,GB";
+$Ls['Terabytes'] = "TB,TB";
+$Ls['Kibibytes'] = "KiB,KiB";
+$Ls['Mebibytes'] = "MiB,MiB";
+$Ls['Gibibytes'] = "GiB,GiB";
+$Ls['Tebibytes'] = "TiB,TiB";
 
 /**
  * Date / Time formats

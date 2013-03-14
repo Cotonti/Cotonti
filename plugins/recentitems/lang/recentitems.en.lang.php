@@ -21,22 +21,29 @@ $L['info_desc'] = 'Displays recent site additions (pages, topics) on index page'
  * Plugin Config
  */
 
-$L['cfg_recentpages'] = array('Recent pages on index');
-$L['cfg_maxpages'] = array('Recent pages displayed');
-$L['cfg_recentforums'] = array('Recent forums on index');
-$L['cfg_maxtopics'] = array('Recent topics in forums displayed');
-$L['cfg_newpages'] = array('Recent pages in standalone module');
-$L['cfg_newforums'] = array('Recent forums in standalone module');
-$L['cfg_newadditional'] = array('Additional modules in standalone module');
-$L['cfg_itemsperpage'] = array('Elements per page in standalone module');
-$L['cfg_rightscan'] = array('Enable prescanning category rights');
-$L['cfg_recentpagestitle'] = array('Recent pages title length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
-$L['cfg_recentpagestext'] = array('Recent pages text length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
-$L['cfg_recentforumstitle'] = array('Recent forums title length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
-$L['cfg_newpagestext'] = array('New pages text length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
-$L['cfg_whitelist'] = array('White list of categories', 'One code per line. Only these branches will be listed if not empty.');
-$L['cfg_blacklist'] = array('Black list of categories', 'One code per line. Only these branches will be excluded from output if not empty.');
-$L['cfg_cache_ttl'] = array('Cache TTL', '0 - cache off');
+$L['cfg_recentpages'] = 'Recent pages on index';
+$L['cfg_maxpages'] = 'Recent pages displayed';
+$L['cfg_recentforums'] = 'Recent forums on index';
+$L['cfg_maxtopics'] = 'Recent topics in forums displayed';
+$L['cfg_newpages'] = 'Recent pages in standalone module';
+$L['cfg_newforums'] = 'Recent forums in standalone module';
+$L['cfg_newadditional'] = 'Additional modules in standalone module';
+$L['cfg_itemsperpage'] = 'Elements per page in standalone module';
+$L['cfg_rightscan'] = 'Enable prescanning category rights';
+$L['cfg_recentpagestitle'] = 'Recent pages title length limit';
+$L['cfg_recentpagestitle_hint'] = 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.';
+$L['cfg_recentpagestext'] = 'Recent pages text length limit';
+$L['cfg_recentpagestext_hint'] = 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.';
+$L['cfg_recentforumstitle'] = 'Recent forums title length limit';
+$L['cfg_recentforumstitle_hint'] = 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.';
+$L['cfg_newpagestext'] = 'New pages text length limit';
+$L['cfg_newpagestext_hint'] = 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.';
+$L['cfg_whitelist'] = 'White list of categories';
+$L['cfg_whitelist_hint'] = 'One code per line. Only these branches will be listed if not empty.';
+$L['cfg_blacklist'] = 'Black list of categories';
+$L['cfg_blacklist_hint'] = 'One code per line. Only these branches will be excluded from output if not empty.';
+$L['cfg_cache_ttl'] = 'Cache TTL';
+$L['cfg_cache_ttl_hint'] = '0 - cache off';
 
 /**
  * Plugin Body

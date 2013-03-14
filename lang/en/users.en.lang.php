@@ -50,27 +50,13 @@ $L['aut_usernametooshort']= 'The user name must be at least 2 chars long';
  * User registration: messages
  */
 
-$L['aut_regrequest'] = 'Hi %1$s,
-Your account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured. After that you will be able to login with:
-Username = %1$s
-Password = %2$s';
+$L['aut_regrequest'] = "Hi %1\$s,\nYour account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured. After that you will be able to login with:\nUsername = %1\$s\nPassword = %2\$s";
 
-$L['aut_regreqnotice'] = 'You are receiving this email because %1$s requested a new account.
-This user won\'t be able to login until you manually set the account as \'active\', here:
-%2$s';
+$L['aut_regreqnotice'] = "You are receiving this email because %1\$s requested a new account.\nThis user won\'t be able to login until you manually set the account as \'active\', here:\n%2\$s";
 
-$L['aut_emailreg'] = 'Hi %1$s,
-To use your account you need to activate it with this link:
-%3$s
-Then you\'ll be able to login with:
-Username = %1$s
-Password = %2$s
-To cancel the recently inactive membership use this link:
-%4$s';
+$L['aut_emailreg'] = "Hi %1\$s,\nTo use your account you need to activate it with this link:\n%3\$s\nThen you\'ll be able to login with:\nUsername = %1\$s\nPassword = %2\$s\nTo cancel the recently inactive membership use this link:\n%4\$s";
 
-$L['aut_emailchange'] = 'Hi %1$s,
-To change your recent email please use this activation link:
-%2$s';
+$L['aut_emailchange'] = "Hi %1\$s,\nTo change your recent email please use this activation link:\n%2\$s";
 
 /**
  * User list
@@ -100,11 +86,7 @@ $L['use_subtitle'] = 'Registered members';
 $L['use_title'] = 'Users';
 
 $L['pasrec_title'] = 'Password recovery';
-$L['pasrec_email1'] = 'Hi %1$s,
-You may now reset your password using the link below:
-%2$s
-
-Attention: if you did not request this password recovery email, please ignore it. IP of the requester is %3$s, and the date and time of the request is %4$s.';
+$L['pasrec_email1'] = "Hi %1\$s,\nYou may now reset your password using the link below:\n%2\$s\n\nAttention: if you did not request this password recovery email, please ignore it. IP of the requester is %3\$s, and the date and time of the request is %4\$s.";
 $L['pasrec_email2'] = 'Your password has been reset as you requested. Please change it as soon as possible and delete this email. Your new password is';
 $L['pasrec_explain1'] = 'Enter your email.';
 $L['pasrec_explain2'] = 'You will receive an email with an emergency link. Click it to reset your password.';
@@ -141,17 +123,5 @@ $L['users_deleteuser'] = 'Delete this user';
  * Moved from theme.lang
  */
 
-$themelang['usersprofile']['Emailpassword'] = 'Your current password';
-$themelang['usersprofile']['Emailnotes'] = '<p><b>Email transition process (if email transition is available and new email validation is required):</b></p>
-<ol>
-	<li>You can\'t use your current email address</li>
-	<li>For security reasons you have to enter your current password</li>
-	<li>You should re-activate your account via email to prove the new email address is valid</li>
-	<li>Your account will be suspended until you use the validation link</li>
-	<li>Upon email validation your account will immediately become active again</li>
-	<li>Be careful while typing your new email address; you won\'t have a chance to change it later</li>
-	<li>Contact an administrator via email if you made a mistake.</li>
-</ol>
-<p><b>If new email validation is not required, the new email address will become effective immediately.</b></p>';
-
-?>
+$themelang['usersprofile_Emailpassword'] = 'Your current password';
+$themelang['usersprofile_Emailnotes'] = "<p><b>Email transition process (if email transition is available and new email validation is required):</b></p>\n<ol>\n<li>You can\'t use your current email address</li>\n<li>For security reasons you have to enter your current password</li>\n<li>You should re-activate your account via email to prove the new email address is valid</li>\n<li>Your account will be suspended until you use the validation link</li>\n<li>Upon email validation your account will immediately become active again</li>\n<li>Be careful while typing your new email address; you won\'t have a chance to change it later</li>\n<li>Contact an administrator via email if you made a mistake.</li>\n</ol>\n<p><b>If new email validation is not required, the new email address will become effective immediately.</b></p>";

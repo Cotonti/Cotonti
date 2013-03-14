@@ -14,13 +14,15 @@ defined('COT_CODE') or die('Wrong URL');
  * Plugin Config
  */
 
-$L['cfg_email'] = array('E-mail', '(оставить пустым для использования E-mail\'а администратора)');
-$L['cfg_minchars'] = array('Минимальное количество символов в сообщении');
-$L['cfg_map'] = array('Код карты');
-$L['cfg_about'] = array('О сайте');
-$L['cfg_save'] = array('Метод хранения сообщений');
-$L['cfg_save_params'] = array('e-mail', 'база данных', 'e-mail + база данных');
-$L['cfg_template'] = array('Шаблон письма', 'Используемые переменные: {$sitetitle}, {$siteurl}, {$author}, {$email}, {$subject}, {$text}, {$extra}, {$extraXXXX}, {$extraXXXX_title}');
+$L['cfg_email'] = 'E-mail';
+$L['cfg_email_hint'] = '(оставить пустым для использования E-mail\'а администратора)';
+$L['cfg_minchars'] = 'Минимальное количество символов в сообщении';
+$L['cfg_map'] = 'Код карты';
+$L['cfg_about'] = 'О сайте';
+$L['cfg_save'] = 'Метод хранения сообщений';
+$L['cfg_save_params'] = 'e-mail,база данных,e-mail + база данных';
+$L['cfg_template'] = 'Шаблон письма';
+$L['cfg_template_hint'] = 'Используемые переменные: {$sitetitle}, {$siteurl}, {$author}, {$email}, {$subject}, {$text}, {$extra}, {$extraXXXX}, {$extraXXXX_title}';
 $L['info_desc'] = 'Форма обратной связи с отправкой на E-mail и записью сообщений в базу данных';
 
 /**
@@ -49,7 +51,7 @@ $L['contact_subtitle'] = 'Контактная информация';
  */
 
 $L['contact_headercontact'] = 'Обратная связь';
-$Ls['contact_headercontact'] = array('контакт-сообщение', 'контакт-сообщения', 'контакт-сообщений');
+$Ls['contact_headercontact'] = "контакт-сообщение,контакт-сообщения,контакт-сообщений";
 $L['contact_entrytooshort'] = 'Сообщение слишком короткое или отсутствует';
 $L['contact_noname'] = 'Вы не указали имя';
 $L['contact_emailnotvalid'] = 'Некорректно указан E-mail';

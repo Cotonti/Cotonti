@@ -15,11 +15,16 @@ defined('COT_CODE') or die('Wrong URL.');
  * Module Section
  */
 
-$L['cfg_rss_timetolive'] = array('Refresh RSS cache every N seconds', ' ');
-$L['cfg_rss_maxitems'] = array('Max. items in RSS feed', ' ');
-$L['cfg_rss_charset'] = array('RSS charset', ' ');
-$L['cfg_rss_pagemaxsymbols'] = array('Pages. Cut element description longer than N symbols', 'Disabled by default');
-$L['cfg_rss_postmaxsymbols'] = array('Posts. Cut element description longer than N symbols', 'Disabled by default');
+$L['cfg_rss_timetolive'] = 'Refresh RSS cache every N seconds';
+$L['cfg_rss_timetolive_hint'] = ' ';
+$L['cfg_rss_maxitems'] = 'Max. items in RSS feed';
+$L['cfg_rss_maxitems_hint'] = ' ';
+$L['cfg_rss_charset'] = 'RSS charset';
+$L['cfg_rss_charset_hint'] = ' ';
+$L['cfg_rss_pagemaxsymbols'] = 'Pages. Cut element description longer than N symbols';
+$L['cfg_rss_pagemaxsymbols_hint'] = 'Disabled by default';
+$L['cfg_rss_postmaxsymbols'] = 'Posts. Cut element description longer than N symbols';
+$L['cfg_rss_postmaxsymbols_hint'] = 'Disabled by default';
 
 $L['info_desc'] = 'Enables support for RSS/Atom feeds with website content';
 

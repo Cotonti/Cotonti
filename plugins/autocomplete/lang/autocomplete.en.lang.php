@@ -21,7 +21,8 @@ $L['info_desc'] = 'Autocomplete for usernames in forms';
  * Plugin Config
  */
  
-$L['cfg_autocomplete'] = array('Min. chars for autocomplete', '0 - disable autocomplete');
+$L['cfg_autocomplete'] = 'Min. chars for autocomplete';
+$L['cfg_autocomplete_hint'] = '0 - disable autocomplete';
 $L['cfg_css'] = 'Use plugin CSS';
  
 /**

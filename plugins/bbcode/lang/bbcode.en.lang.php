@@ -39,20 +39,9 @@ $L['adm_bbcodes_replacement'] = 'Replacement';
 $L['adm_bbcodes_updated'] = 'Successfully updated changed bbcode(s).';
 $L['adm_bbcodes_notupdated'] = 'Some BBCode(s) not updated.';
 $L['adm_bbcodes_fieldrequired'] = 'Required field not filled in some of BBCodes.';
-$L['adm_help_bbcodes'] = <<<HTM
-<ul>
-<li><strong>Name</strong> - BBcode name (use alphanumerics and underscores only)</li>
-<li><strong>Mode</strong> - Parsing mode, on of the following: 'str' (str_replace), 'ereg' (eregi_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)</li>
-<li><strong>Pattern</strong> - BBcode string or entire regular expression</li>
-<li><strong>Replacement</strong> - Replacement string or regular substitution or callback body</li>
-<li><strong>Container</strong> - Whether bbcode is container (like [bbcode]Something here[/bbcode])</li>
-<li><strong>Priority</strong> - BBcode priority from 0 to 255. Smaller priority bbcodes are parsed first, 128 is default medium priority.</li>
-<li><strong>Plugin</strong> - Plugin/part name this bbcode belongs to. Leave it blank, this is for plugins only.</li>
-<li><strong>Post-render</strong> - Whether this bbcode must be applied on a pre-rendered HTML cache. Use only if your callback does some per-request calculations.</li>
-</ul>
-HTM;
+$L['adm_help_bbcodes'] = "<ul>\n<li><strong>Name</strong> - BBcode name (use alphanumerics and underscores only)</li>\n<li><strong>Mode</strong> - Parsing mode, on of the following: 'str' (str_replace), 'ereg' (eregi_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)</li>\n<li><strong>Pattern</strong> - BBcode string or entire regular expression</li>\n<li><strong>Replacement</strong> - Replacement string or regular substitution or callback body</li>\n<li><strong>Container</strong> - Whether bbcode is container (like [bbcode]Something here[/bbcode])</li>\n<li><strong>Priority</strong> - BBcode priority from 0 to 255. Smaller priority bbcodes are parsed first, 128 is default medium priority.</li>\n<li><strong>Plugin</strong> - Plugin/part name this bbcode belongs to. Leave it blank, this is for plugins only.</li>\n<li><strong>Post-render</strong> - Whether this bbcode must be applied on a pre-rendered HTML cache. Use only if your callback does some per-request calculations.</li>\n</ul>";
 
-$L['cfg_smilies'] = array('Enable smilies', '');
+$L['cfg_smilies'] = 'Enable smilies';
+$L['cfg_smilies_hint'] = '';
 
 $L['info_desc'] = 'Customizable support for BBCodes and smilies parsing';
-

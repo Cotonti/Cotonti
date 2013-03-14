@@ -94,121 +94,188 @@ $L['short_struct'] = 'Struct';
  * Config Section
  * Locale Subsection
  */
-$L['cfg_forcedefaultlang'] = array('Force the default language for all users', '');
-$L['cfg_defaulttimezone'] = array('Default time zone', 'For guests and new members, from -12 to +12');
+$L['cfg_forcedefaultlang'] = 'Force the default language for all users';
+$L['cfg_forcedefaultlang_hint'] = '';
+$L['cfg_defaulttimezone'] = 'Default time zone';
+$L['cfg_defaulttimezone_hint'] = 'For guests and new members, from -12 to +12';
 
 /**
  * Config Section
  * Main Subsection
  */
-$L['cfg_adminemail'] = array('Administrator\'s email', 'Required');
-$L['cfg_clustermode'] = array('Cluster of servers', 'Set to yes if it\'s a load balanced setup.');
-$L['cfg_confirmlinks'] = array('Confirm potentially dangerous actions');
-$L['cfg_easypagenav'] = array('User friendly pagination', 'Uses page numbers in URLs instead of DB offsets');
-$L['cfg_hostip'] = array('Server IP', 'The IP of the server, optional.');
-$L['cfg_maxrowsperpage'] = array('Max. items per page', 'Default item limit for pagination');
-$L['cfg_parser'] = array('Markup parser', 'Default is: plain text');
+$L['cfg_adminemail'] = 'Administrator\'s email';
+$L['cfg_adminemail_hint'] = 'Required';
+$L['cfg_clustermode'] = 'Cluster of servers';
+$L['cfg_clustermode_hint'] = 'Set to yes if it\'s a load balanced setup.';
+$L['cfg_confirmlinks'] = 'Confirm potentially dangerous actions';
+$L['cfg_easypagenav'] = 'User friendly pagination';
+$L['cfg_easypagenav_hint'] = 'Uses page numbers in URLs instead of DB offsets';
+$L['cfg_hostip'] = 'Server IP';
+$L['cfg_hostip_hint'] = 'The IP of the server, optional.';
+$L['cfg_maxrowsperpage'] = 'Max. items per page';
+$L['cfg_maxrowsperpage_hint'] = 'Default item limit for pagination';
+$L['cfg_parser'] = 'Markup parser';
+$L['cfg_parser_hint'] = 'Default is: plain text';
 
 /**
  * Config Section
  * Menus Subsection
  */
-$L['cfg_banner'] = array('Banner<br />{HEADER_BANNER} in header.tpl', '');
-$L['cfg_bottomline'] = array('Bottom line<br />{FOOTER_BOTTOMLINE} in footer.tpl', '');
-$L['cfg_topline'] = array('Top line<br />{HEADER_TOPLINE} in header.tpl', '');
+$L['cfg_banner'] = 'Banner<br />{HEADER_BANNER} in header.tpl';
+$L['cfg_banner_hint'] = '';
+$L['cfg_bottomline'] = 'Bottom line<br />{FOOTER_BOTTOMLINE} in footer.tpl';
+$L['cfg_bottomline_hint'] = '';
+$L['cfg_topline'] = 'Top line<br />{HEADER_TOPLINE} in header.tpl';
+$L['cfg_topline_hint'] = '';
 
-$L['cfg_freetext1'] = array('Freetext Slot #1<br />{PHP.cfg.freetext1} in all tpl files', '');
-$L['cfg_freetext2'] = array('Freetext Slot #2<br />{PHP.cfg.freetext2} in all tpl files', '');
-$L['cfg_freetext3'] = array('Freetext Slot #3<br />{PHP.cfg.freetext3} in all tpl files', '');
-$L['cfg_freetext4'] = array('Freetext Slot #4<br />{PHP.cfg.freetext4} in all tpl files', '');
-$L['cfg_freetext5'] = array('Freetext Slot #5<br />{PHP.cfg.freetext5} in all tpl files', '');
-$L['cfg_freetext6'] = array('Freetext Slot #6<br />{PHP.cfg.freetext6} in all tpl files', '');
-$L['cfg_freetext7'] = array('Freetext Slot #7<br />{PHP.cfg.freetext7} in all tpl files', '');
-$L['cfg_freetext8'] = array('Freetext Slot #8<br />{PHP.cfg.freetext8} in all tpl files', '');
-$L['cfg_freetext9'] = array('Freetext Slot #9<br />{PHP.cfg.freetext9} in all tpl files', '');
+$L['cfg_freetext1'] = 'Freetext Slot #1<br />{PHP.cfg.freetext1} in all tpl files';
+$L['cfg_freetext1_hint'] = '';
+$L['cfg_freetext2'] = 'Freetext Slot #2<br />{PHP.cfg.freetext2} in all tpl files';
+$L['cfg_freetext2_hint'] = '';
+$L['cfg_freetext3'] = 'Freetext Slot #3<br />{PHP.cfg.freetext3} in all tpl files';
+$L['cfg_freetext3_hint'] = '';
+$L['cfg_freetext4'] = 'Freetext Slot #4<br />{PHP.cfg.freetext4} in all tpl files';
+$L['cfg_freetext4_hint'] = '';
+$L['cfg_freetext5'] = 'Freetext Slot #5<br />{PHP.cfg.freetext5} in all tpl files';
+$L['cfg_freetext5_hint'] = '';
+$L['cfg_freetext6'] = 'Freetext Slot #6<br />{PHP.cfg.freetext6} in all tpl files';
+$L['cfg_freetext6_hint'] = '';
+$L['cfg_freetext7'] = 'Freetext Slot #7<br />{PHP.cfg.freetext7} in all tpl files';
+$L['cfg_freetext7_hint'] = '';
+$L['cfg_freetext8'] = 'Freetext Slot #8<br />{PHP.cfg.freetext8} in all tpl files';
+$L['cfg_freetext8_hint'] = '';
+$L['cfg_freetext9'] = 'Freetext Slot #9<br />{PHP.cfg.freetext9} in all tpl files';
+$L['cfg_freetext9_hint'] = '';
 
-$L['cfg_menu1'] = array('Menu slot #1<br />{PHP.cfg.menu1} in all tpl files', '');
-$L['cfg_menu2'] = array('Menu slot #2<br />{PHP.cfg.menu2} in all tpl files', '');
-$L['cfg_menu3'] = array('Menu slot #3<br />{PHP.cfg.menu3} in all tpl files', '');
-$L['cfg_menu4'] = array('Menu slot #4<br />{PHP.cfg.menu4} in all tpl files', '');
-$L['cfg_menu5'] = array('Menu slot #5<br />{PHP.cfg.menu5} in all tpl files', '');
-$L['cfg_menu6'] = array('Menu slot #6<br />{PHP.cfg.menu6} in all tpl files', '');
-$L['cfg_menu7'] = array('Menu slot #7<br />{PHP.cfg.menu7} in all tpl files', '');
-$L['cfg_menu8'] = array('Menu slot #8<br />{PHP.cfg.menu8} in all tpl files', '');
-$L['cfg_menu9'] = array('Menu slot #9<br />{PHP.cfg.menu9} in all tpl files', '');
+$L['cfg_menu1'] = 'Menu slot #1<br />{PHP.cfg.menu1} in all tpl files';
+$L['cfg_menu1_hint'] = '';
+$L['cfg_menu2'] = 'Menu slot #2<br />{PHP.cfg.menu2} in all tpl files';
+$L['cfg_menu2_hint'] = '';
+$L['cfg_menu3'] = 'Menu slot #3<br />{PHP.cfg.menu3} in all tpl files';
+$L['cfg_menu3_hint'] = '';
+$L['cfg_menu4'] = 'Menu slot #4<br />{PHP.cfg.menu4} in all tpl files';
+$L['cfg_menu4_hint'] = '';
+$L['cfg_menu5'] = 'Menu slot #5<br />{PHP.cfg.menu5} in all tpl files';
+$L['cfg_menu5_hint'] = '';
+$L['cfg_menu6'] = 'Menu slot #6<br />{PHP.cfg.menu6} in all tpl files';
+$L['cfg_menu6_hint'] = '';
+$L['cfg_menu7'] = 'Menu slot #7<br />{PHP.cfg.menu7} in all tpl files';
+$L['cfg_menu7_hint'] = '';
+$L['cfg_menu8'] = 'Menu slot #8<br />{PHP.cfg.menu8} in all tpl files';
+$L['cfg_menu8_hint'] = '';
+$L['cfg_menu9'] = 'Menu slot #9<br />{PHP.cfg.menu9} in all tpl files';
+$L['cfg_menu9_hint'] = '';
 
 /**
  * Config Section
  * Performance Subsection
  */
-$L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output. Do not enable it if your server already applies Gzip to your pages. Use this tool to test if Gzip is already enabled on your site: <a href="http://www.whatsmyip.org/http-compression-test/">HTTP Compression Test</a>');
-$L['cfg_headrc_consolidate'] = array('Consolidate header and footer resources (JS/CSS)');
-$L['cfg_headrc_minify'] = array('Minify consolidated JS/CSS');
-$L['cfg_jquery_cdn'] = array('Use jQuery from this CDN URL', 'Example: https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js');
-$L['cfg_jquery'] = array('Enable jQuery', '');
-$L['cfg_turnajax'] = array('Enable Ajax', 'Works only if jQuery is enabled');
+$L['cfg_gzip'] = 'Gzip';
+$L['cfg_gzip_hint'] = 'Gzip compression of the HTML output. Do not enable it if your server already applies Gzip to your pages. Use this tool to test if Gzip is already enabled on your site: <a href="http://www.whatsmyip.org/http-compression-test/">HTTP Compression Test</a>';
+$L['cfg_headrc_consolidate'] = 'Consolidate header and footer resources (JS/CSS)';
+$L['cfg_headrc_minify'] = 'Minify consolidated JS/CSS';
+$L['cfg_jquery_cdn'] = 'Use jQuery from this CDN URL';
+$L['cfg_jquery_cdn_hint'] = 'Example: https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js';
+$L['cfg_jquery'] = 'Enable jQuery';
+$L['cfg_jquery_hint'] = '';
+$L['cfg_turnajax'] = 'Enable Ajax';
+$L['cfg_turnajax_hint'] = 'Works only if jQuery is enabled';
 
 /**
  * Config Section
  * Security Subsection
  */
-$L['cfg_captchamain'] = array('Main captcha');
-$L['cfg_captcharandom'] = array('Random captcha');
-$L['cfg_hashfunc'] = array('Default hash function', 'Used to hash passwords');
-$L['cfg_referercheck'] = array('Referer check for forms', 'Prevents from cross-domain posting');
-$L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
-$L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
-$L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
-$L['cfg_devmode'] = array('Debugging mode', 'Don\'t let this enabled on live sites');
-$L['cfg_maintenance'] = array('Maintenance mode', 'Let only authorized personel access to site');
-$L['cfg_maintenancereason'] = array('Maintenance reason', 'Optional, should better be short');
+$L['cfg_captchamain'] = 'Main captcha';
+$L['cfg_captcharandom'] = 'Random captcha';
+$L['cfg_hashfunc'] = 'Default hash function';
+$L['cfg_hashfunc_hint'] = 'Used to hash passwords';
+$L['cfg_referercheck'] = 'Referer check for forms';
+$L['cfg_referercheck_hint'] = 'Prevents from cross-domain posting';
+$L['cfg_shieldenabled'] = 'Enable the Shield';
+$L['cfg_shieldenabled_hint'] = 'Anti-spamming and anti-hammering';
+$L['cfg_shieldtadjust'] = 'Adjust Shield timers (in %)';
+$L['cfg_shieldtadjust_hint'] = 'The higher, the harder to spam';
+$L['cfg_shieldzhammer'] = 'Anti-hammer after * fast hits';
+$L['cfg_shieldzhammer_hint'] = 'The smaller, the faster the auto-ban 3 minutes happens';
+$L['cfg_devmode'] = 'Debugging mode';
+$L['cfg_devmode_hint'] = 'Don\'t let this enabled on live sites';
+$L['cfg_maintenance'] = 'Maintenance mode';
+$L['cfg_maintenance_hint'] = 'Let only authorized personel access to site';
+$L['cfg_maintenancereason'] = 'Maintenance reason';
+$L['cfg_maintenancereason_hint'] = 'Optional, should better be short';
 
 /**
  * Config Section
  * Sessions Subsection
  */
-$L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
-$L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
-$L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
-$L['cfg_forcerememberme'] = array('Force &quot;remember me&quot;', 'Use it on multi-domain sites or if there are sudden logouts');
-$L['cfg_timedout'] = array('Idle delay, in seconds', 'After this delay, user is away');
-$L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');
-$L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');
+$L['cfg_cookiedomain'] = 'Domain for cookies';
+$L['cfg_cookiedomain_hint'] = 'Default: empty';
+$L['cfg_cookielifetime'] = 'Maximum cookie lifetime';
+$L['cfg_cookielifetime_hint'] = 'In seconds';
+$L['cfg_cookiepath'] = 'Path for cookies';
+$L['cfg_cookiepath_hint'] = 'Default: empty';
+$L['cfg_forcerememberme'] = 'Force &quot;remember me&quot;';
+$L['cfg_forcerememberme_hint'] = 'Use it on multi-domain sites or if there are sudden logouts';
+$L['cfg_timedout'] = 'Idle delay, in seconds';
+$L['cfg_timedout_hint'] = 'After this delay, user is away';
+$L['cfg_redirbkonlogin'] = 'Redirect back on login';
+$L['cfg_redirbkonlogin_hint'] = 'Redirect back to page user viewed before login';
+$L['cfg_redirbkonlogout'] = 'Redirect back on logout';
+$L['cfg_redirbkonlogout_hint'] = 'Redirect back to page user viewed before logout';
 
 /**
  * Config Section
  * Themes Subsection
  */
-$L['cfg_charset'] = array('HTML charset', '');
-$L['cfg_disablesysinfos'] = array('Turn off page creation time', '(used in footer.tpl)');
-$L['cfg_doctypeid'] = array('Document Type', '&lt;!DOCTYPE&gt; of the HTML layout');
-$L['cfg_forcedefaulttheme'] = array('Force the default theme for all users', '');
-$L['cfg_homebreadcrumb'] = array('Show Home in breadcrumb', 'Put the link to the main page in the beginning of breadcrumb');
-$L['cfg_keepcrbottom'] = array('Keep the copyright notice in the tag {FOOTER_BOTTOMLINE}', '(used in footer.tpl)');
-$L['cfg_metakeywords'] = array('HTML Meta keywords', '(comma separated)');
-$L['cfg_msg_separate'] = array('Display messages separately for each source', '');
-$L['cfg_separator'] = array('Generic separator', '(used in breadcrumbs etc)');
-$L['cfg_showsqlstats'] = array('Show SQL queries statistics', '(used in footer.tpl)');
+$L['cfg_charset'] = 'HTML charset';
+$L['cfg_charset_hint'] = '';
+$L['cfg_disablesysinfos'] = 'Turn off page creation time';
+$L['cfg_disablesysinfos_hint'] = '(used in footer.tpl)';
+$L['cfg_doctypeid'] = 'Document Type';
+$L['cfg_doctypeid_hint'] = '&lt;!DOCTYPE&gt; of the HTML layout';
+$L['cfg_forcedefaulttheme'] = 'Force the default theme for all users';
+$L['cfg_forcedefaulttheme_hint'] = '';
+$L['cfg_homebreadcrumb'] = 'Show Home in breadcrumb';
+$L['cfg_homebreadcrumb_hint'] = 'Put the link to the main page in the beginning of breadcrumb';
+$L['cfg_keepcrbottom'] = 'Keep the copyright notice in the tag {FOOTER_BOTTOMLINE}';
+$L['cfg_keepcrbottom_hint'] = '(used in footer.tpl)';
+$L['cfg_metakeywords'] = 'HTML Meta keywords';
+$L['cfg_metakeywords_hint'] = '(comma separated)';
+$L['cfg_msg_separate'] = 'Display messages separately for each source';
+$L['cfg_msg_separate_hint'] = '';
+$L['cfg_separator'] = 'Generic separator';
+$L['cfg_separator_hint'] = '(used in breadcrumbs etc)';
+$L['cfg_showsqlstats'] = 'Show SQL queries statistics';
+$L['cfg_showsqlstats_hint'] = '(used in footer.tpl)';
 
 /**
  * Config Section
  * Title Subsection
  */
-$L['cfg_maintitle'] = array('Site title', 'Main title for the website, required');
-$L['cfg_subtitle'] = array('Description', 'Optional, will be displayed after the title of the site');
-$L['cfg_title_header'] = array('Header title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
-$L['cfg_title_header_index'] = array('Header Index title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
-$L['cfg_title_users_details'] = array('Users Details title', 'Options: {USER}, {NAME}');
-$L['cfg_subject_mail'] = array('Email subject', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}');
-$L['cfg_body_mail'] = array('Email title', 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {SITE_URL}, {ADMIN_EMAIL}, {MAIL_BODY}, {MAIL_SUBJECT}');
+$L['cfg_maintitle'] = 'Site title';
+$L['cfg_maintitle_hint'] = 'Main title for the website, required';
+$L['cfg_subtitle'] = 'Description';
+$L['cfg_subtitle_hint'] = 'Optional, will be displayed after the title of the site';
+$L['cfg_title_header'] = 'Header title';
+$L['cfg_title_header_hint'] = 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}';
+$L['cfg_title_header_index'] = 'Header Index title';
+$L['cfg_title_header_index_hint'] = 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}';
+$L['cfg_title_users_details'] = 'Users Details title';
+$L['cfg_title_users_details_hint'] = 'Options: {USER}, {NAME}';
+$L['cfg_subject_mail'] = 'Email subject';
+$L['cfg_subject_mail_hint'] = 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}';
+$L['cfg_body_mail'] = 'Email title';
+$L['cfg_body_mail_hint'] = 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {SITE_URL}, {ADMIN_EMAIL}, {MAIL_BODY}, {MAIL_SUBJECT}';
 
 /**
  * Config Section
  * Common strings
  */
-$L['cfg_css'] = array('Enable module/plugin CSS');
-$L['cfg_editor'] = array('Rich text editor', '');
-$L['cfg_markup'] = array('Enable markup', 'Enables HTML/BBcode or other parsing which is installed in your system');
+$L['cfg_css'] = 'Enable module/plugin CSS';
+$L['cfg_editor'] = 'Rich text editor';
+$L['cfg_editor_hint'] = '';
+$L['cfg_markup'] = 'Enable markup';
+$L['cfg_markup_hint'] = 'Enables HTML/BBcode or other parsing which is installed in your system';
 
 /**
  * Extension management
@@ -405,9 +472,7 @@ $L['adm_time1'] = '#1: Raw server time';
 $L['adm_time2'] = '#2: GMT time returned by the server';
 $L['adm_time3'] = '#3: GMT time + server offset (Cotonti reference)';
 $L['adm_time4'] = '#4: Your local time, adjusted from your profile';
-$L['adm_help_versions'] = 'Adjust the server time zone to have clock #3 properly set.<br />
-Clock #4 depends on the time zone setting in your profile.<br />
-Clocks #1 and #2 are being ignored by Cotonti.';
+$L['adm_help_versions'] = "Adjust the server time zone to have clock #3 properly set.<br />\nClock #4 depends on the time zone setting in your profile.<br />\nClocks #1 and #2 are being ignored by Cotonti.";
 
 /**
  * Common Entries
@@ -471,5 +536,3 @@ $L['adm_help_cache'] = 'Not available';
 $L['adm_help_check1'] = 'Not available';
 $L['adm_help_check2'] = 'Not available';
 $L['adm_help_config']= 'Not available';
-
-?>

@@ -10,8 +10,10 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['cfg_disable_guests'] = array('Disable guest tracking', '');
-$L['cfg_maxusersperpage'] = array('Users per page in whosonline table', 'Set to 0 for no limitations');
+$L['cfg_disable_guests'] = 'Disable guest tracking';
+$L['cfg_disable_guests_hint'] = '';
+$L['cfg_maxusersperpage'] = 'Users per page in whosonline table';
+$L['cfg_maxusersperpage_hint'] = 'Set to 0 for no limitations';
 $L['info_desc'] = 'Outputs online visitors on index and standalone page with user activity tracking on site';
 
 /**

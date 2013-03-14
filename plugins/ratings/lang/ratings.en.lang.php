@@ -21,8 +21,9 @@ $L['info_desc'] = 'One-click star ratings using jQuery';
  * Plugin Config
  */
 
-$L['cfg_enable_ratings'] = array('Enable ratings');
-$L['cfg_ratings_allowchange'] = array('Allow ratings to be changed?', 'If enabled it will allow users to change their rating.');
+$L['cfg_enable_ratings'] = 'Enable ratings';
+$L['cfg_ratings_allowchange'] = 'Allow ratings to be changed?';
+$L['cfg_ratings_allowchange_hint'] = 'If enabled it will allow users to change their rating.';
 $L['cfg_css'] = 'Use plugin CSS';
 
 /**

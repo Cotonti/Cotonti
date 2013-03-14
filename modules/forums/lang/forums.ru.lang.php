@@ -15,30 +15,43 @@ defined('COT_CODE') or die('Wrong URL.');
  * Forums Config
  */
 
-$L['cfg_antibumpforums'] = array('Защита от &laquo;поднятия&raquo; сообщений (anti-bump)', 'Запретить пользователям создавать 2 сообщения подряд в теме');
-$L['cfg_hideprivateforums'] = array('Скрывать приватные форумы', ' ');
-$L['cfg_hottopictrigger'] = array('Количество сообщений для &laquo;популярной&raquo; темы', ' ');
-$L['cfg_maxpostsperpage'] = array('Макс. количество сообщений на странице', ' ');
-$L['cfg_maxtopicsperpage'] = array('Максимальное количество тем на странице', ' ');
-$L['cfg_mergeforumposts'] = array('Объединять сообщения', 'Объединять идущие подряд сообщения одного пользователя (антибамповая защита должна быть отключена)');
-$L['cfg_mergetimeout'] = array('Время ожидания для объединения сообщений', 'Последовательно опубликованные сообщения одного пользователя не будут объединены при превышении указанного времени (в часах), требует включения установки \'Объединять сообщения\' (0 для отключения)');
-$L['cfg_minpostlength'] = array('Мин. длина сообщения', ' ');
-$L['cfg_mintitlelength'] = array('Мин. длина заголовка темы', ' ');
-$L['cfg_title_posts'] = array('Формат заголовка темы форума', 'Опции: {FORUM}, {SECTION}, {TITLE}');
-$L['cfg_title_topics'] = array('Формат заголовка раздела форума', 'Опции: {FORUM}, {SECTION}');
-$L['cfg_enablereplyform'] = array('Отображать форму ответа на всех страницах', '');
-$L['cfg_edittimeout'] = array('Тайм-аут редактирования', 'Не позволяет пользователям редактировать или удалять собственные сообщения по истечении тайм-аута (в часах, 0 отключает тайм-аут)');
+$L['cfg_antibumpforums'] = 'Защита от &laquo;поднятия&raquo; сообщений (anti-bump)';
+$L['cfg_antibumpforums_hint'] = 'Запретить пользователям создавать 2 сообщения подряд в теме';
+$L['cfg_hideprivateforums'] = 'Скрывать приватные форумы';
+$L['cfg_hideprivateforums_hint'] = ' ';
+$L['cfg_hottopictrigger'] = 'Количество сообщений для &laquo;популярной&raquo; темы';
+$L['cfg_hottopictrigger_hint'] = ' ';
+$L['cfg_maxpostsperpage'] = 'Макс. количество сообщений на странице';
+$L['cfg_maxpostsperpage_hint'] = ' ';
+$L['cfg_maxtopicsperpage'] = 'Максимальное количество тем на странице';
+$L['cfg_maxtopicsperpage_hint'] = ' ';
+$L['cfg_mergeforumposts'] = 'Объединять сообщения';
+$L['cfg_mergeforumposts_hint'] = 'Объединять идущие подряд сообщения одного пользователя (антибамповая защита должна быть отключена)';
+$L['cfg_mergetimeout'] = 'Время ожидания для объединения сообщений';
+$L['cfg_mergetimeout_hint'] = 'Последовательно опубликованные сообщения одного пользователя не будут объединены при превышении указанного времени (в часах), требует включения установки \'Объединять сообщения\' (0 для отключения)';
+$L['cfg_minpostlength'] = 'Мин. длина сообщения';
+$L['cfg_minpostlength_hint'] = ' ';
+$L['cfg_mintitlelength'] = 'Мин. длина заголовка темы';
+$L['cfg_mintitlelength_hint'] = ' ';
+$L['cfg_title_posts'] = 'Формат заголовка темы форума';
+$L['cfg_title_posts_hint'] = 'Опции: {FORUM}, {SECTION}, {TITLE}';
+$L['cfg_title_topics'] = 'Формат заголовка раздела форума';
+$L['cfg_title_topics_hint'] = 'Опции: {FORUM}, {SECTION}';
+$L['cfg_enablereplyform'] = 'Отображать форму ответа на всех страницах';
+$L['cfg_enablereplyform_hint'] = '';
+$L['cfg_edittimeout'] = 'Тайм-аут редактирования';
+$L['cfg_edittimeout_hint'] = 'Не позволяет пользователям редактировать или удалять собственные сообщения по истечении тайм-аута (в часах, 0 отключает тайм-аут)';
 
-$L['cfg_allowusertext'] = array('Показывать подписи');
-$L['cfg_allowbbcodes'] = array('Разрешить BBCodes');
-$L['cfg_allowsmilies'] = array('Разрешить смайлики');
-$L['cfg_allowprvtopics'] = array('Разрешить приватные темы');
-$L['cfg_allowviewers'] = array('Включить отображение просматривающих раздел');
-$L['cfg_allowpolls'] = array('Включить опросы');
-$L['cfg_countposts'] = array('Считать сообщения');
-$L['cfg_autoprune'] = array('Автоочистка тем через * дней');
-$L['cfg_defstate'] = array('По умолчанию');
-$L['cfg_defstate_params'] = array('Свернут', 'Развернут');
+$L['cfg_allowusertext'] = 'Показывать подписи';
+$L['cfg_allowbbcodes'] = 'Разрешить BBCodes';
+$L['cfg_allowsmilies'] = 'Разрешить смайлики';
+$L['cfg_allowprvtopics'] = 'Разрешить приватные темы';
+$L['cfg_allowviewers'] = 'Включить отображение просматривающих раздел';
+$L['cfg_allowpolls'] = 'Включить опросы';
+$L['cfg_countposts'] = 'Считать сообщения';
+$L['cfg_autoprune'] = 'Автоочистка тем через * дней';
+$L['cfg_defstate'] = 'По умолчанию';
+$L['cfg_defstate_params'] = 'Свернут,Развернут';
 
 $L['info_desc'] = 'Модуль форумов для сайтов с сообществом или поддержкой';
 

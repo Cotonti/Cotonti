@@ -15,15 +15,20 @@ defined('COT_CODE') or die('Wrong URL.');
  * Module Config
  */
 
-$L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster has admin rights for page category');
-$L['cfg_count_admin'] = array('Count Administrators\' hits', '');
-$L['cfg_maxlistsperpage'] = array('Max. lists per page', ' ');
-$L['cfg_order'] = array('Sorting column');
-$L['cfg_title_page'] = array('Page title tag format', 'Options: {TITLE}, {CATEGORY}');
-$L['cfg_way'] = array('Sorting direction');
-$L['cfg_truncatetext'] = array('Set truncated page text length in list', 'Zero to disable this feature');
-$L['cfg_allowemptytext'] = array('Allow empty page text');
-$L['cfg_keywords'] = array('Keywords');
+$L['cfg_autovalidate'] = 'Autovalidate page';
+$L['cfg_autovalidate_hint'] = 'Autovalidate page if poster has admin rights for page category';
+$L['cfg_count_admin'] = 'Count Administrators\' hits';
+$L['cfg_count_admin_hint'] = '';
+$L['cfg_maxlistsperpage'] = 'Max. lists per page';
+$L['cfg_maxlistsperpage_hint'] = ' ';
+$L['cfg_order'] = 'Sorting column';
+$L['cfg_title_page'] = 'Page title tag format';
+$L['cfg_title_page_hint'] = 'Options: {TITLE}, {CATEGORY}';
+$L['cfg_way'] = 'Sorting direction';
+$L['cfg_truncatetext'] = 'Set truncated page text length in list';
+$L['cfg_truncatetext_hint'] = 'Zero to disable this feature';
+$L['cfg_allowemptytext'] = 'Allow empty page text';
+$L['cfg_keywords'] = 'Keywords';
 
 $L['info_desc'] = 'Enables website content through pages and page categories';
 
@@ -107,7 +112,7 @@ $L['page_status_expired'] = 'Expired';
 $L['page_linesperpage'] = 'Lines per page';
 $L['page_linesinthissection'] = 'Lines in this section';
 
-$Ls['pages'] = array('pages', 'page');
-$Ls['unvalidated_pages'] = array('unvalidated pages', 'unvalidated page');
+$Ls['pages'] = "pages,page";
+$Ls['unvalidated_pages'] = "unvalidated pages,unvalidated page";
 
 ?>

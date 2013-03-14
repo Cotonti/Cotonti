@@ -15,32 +15,49 @@ defined('COT_CODE') or die('Wrong URL.');
  * Module Config
  */
 
-$L['cfg_maxpfsperpage'] = array('Max. elements on page', ' ');
-$L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the '.$L['PFS'].', or images through the profile. To insure they are valid files. &quot;Yes&quot; recommended, for security reasons.');
-$L['cfg_pfsmaxuploads'] = array('Max. concurrent uploads at a time', '');
-$L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.');
-$L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');
-$L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/FOLDERNAME/... Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded, it\'s too late to change this.');
-$L['cfg_flashupload'] = array('Use flash uploader', 'Allows uploading many files at once.'); // New in 1.0.0
-$L['cfg_pfs_winclose'] = array('Close popup window after bbcode insertion');
-$L['cfg_th_amode'] = array('Thumbnails generation', '');
-$L['cfg_th_border'] = array('Thumbnails, border size', 'Default: 4 pixels');
-$L['cfg_th_colorbg'] = array('Thumbnails, border color', 'Default: 000000, hex color code');
-$L['cfg_th_colortext'] = array('Thumbnails, text color', 'Default: FFFFFF, hex color code');
-$L['cfg_th_dimpriority'] = array('Thumbnails, rescaling priority dimension', '');
-$L['cfg_th_jpeg_quality'] = array('Thumbnails, Jpeg quality', 'Default: 85');
-$L['cfg_th_keepratio'] = array('Thumbnail, keep ratio?', '');
+$L['cfg_maxpfsperpage'] = 'Max. elements on page';
+$L['cfg_maxpfsperpage_hint'] = ' ';
+$L['cfg_pfsfilecheck'] = 'File Check';
+$L['cfg_pfsfilecheck_hint'] = 'If Enabled will check any uploaded files through the '.$L['PFS'].', or images through the profile. To insure they are valid files. &quot;Yes&quot; recommended, for security reasons.';
+$L['cfg_pfsmaxuploads'] = 'Max. concurrent uploads at a time';
+$L['cfg_pfsmaxuploads_hint'] = '';
+$L['cfg_pfsnomimepass'] = 'No Mimetype Pass';
+$L['cfg_pfsnomimepass_hint'] = 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.';
+$L['cfg_pfstimename'] = 'Time-based filenames';
+$L['cfg_pfstimename_hint'] = 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.';
+$L['cfg_pfsuserfolder'] = 'Folder storage mode';
+$L['cfg_pfsuserfolder_hint'] = 'If enabled, will store the user files in subfolders /datas/users/USERID/FOLDERNAME/... Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded, it\'s too late to change this.';
+$L['cfg_flashupload'] = 'Use flash uploader';
+$L['cfg_flashupload_hint'] = 'Allows uploading many files at once.';
+$L['cfg_pfs_winclose'] = 'Close popup window after bbcode insertion';
+$L['cfg_th_amode'] = 'Thumbnails generation';
+$L['cfg_th_amode_hint'] = '';
+$L['cfg_th_border'] = 'Thumbnails, border size';
+$L['cfg_th_border_hint'] = 'Default: 4 pixels';
+$L['cfg_th_colorbg'] = 'Thumbnails, border color';
+$L['cfg_th_colorbg_hint'] = 'Default: 000000, hex color code';
+$L['cfg_th_colortext'] = 'Thumbnails, text color';
+$L['cfg_th_colortext_hint'] = 'Default: FFFFFF, hex color code';
+$L['cfg_th_dimpriority'] = 'Thumbnails, rescaling priority dimension';
+$L['cfg_th_dimpriority_hint'] = '';
+$L['cfg_th_jpeg_quality'] = 'Thumbnails, Jpeg quality';
+$L['cfg_th_jpeg_quality_hint'] = 'Default: 85';
+$L['cfg_th_keepratio'] = 'Thumbnail, keep ratio?';
+$L['cfg_th_keepratio_hint'] = '';
 $L['cfg_th_separator'] = 'Thumbnail Options';
-$L['cfg_th_textsize'] = array('Thumbnails, size of the text', '');
-$L['cfg_th_x'] = array('Thumbnails, width', 'Default: 112 pixels');
-$L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended: Width x 0.75');
+$L['cfg_th_textsize'] = 'Thumbnails, size of the text';
+$L['cfg_th_textsize_hint'] = '';
+$L['cfg_th_x'] = 'Thumbnails, width';
+$L['cfg_th_x_hint'] = 'Default: 112 pixels';
+$L['cfg_th_y'] = 'Thumbnails, height';
+$L['cfg_th_y_hint'] = 'Default: 84 pixel, recommended: Width x 0.75';
 
 /**
  * Other
  */
 
 $L['adm_gd'] = 'GD graphical library';
-$L['adm_allpfs'] = 'All '.$L['PFS'];
+$L['adm_allpfs'] = 'All PFS';
 $L['adm_allfiles'] = 'All files';
 $L['adm_thumbnails'] = 'Thumbnails';
 $L['adm_orphandbentries'] = 'Orphan DB entries';

@@ -15,11 +15,16 @@ defined('COT_CODE') or die('Wrong URL.');
  * Module Section
  */
 
-$L['cfg_rss_timetolive'] = array('Частота обновления RSS кэша', '(в секундах)');
-$L['cfg_rss_maxitems'] = array('Макс. количество элементов в RSS канале', '');
-$L['cfg_rss_charset'] = array('Кодировка RSS каналов', 'Набор символов (кодовая страница)');
-$L['cfg_rss_pagemaxsymbols'] = array('Макс. количество символов для страниц', 'По умолчанию отключено');
-$L['cfg_rss_postmaxsymbols'] = array('Макс. количество символов для сообщений форума', 'По умолчанию отключено');
+$L['cfg_rss_timetolive'] = 'Частота обновления RSS кэша';
+$L['cfg_rss_timetolive_hint'] = '(в секундах)';
+$L['cfg_rss_maxitems'] = 'Макс. количество элементов в RSS канале';
+$L['cfg_rss_maxitems_hint'] = '';
+$L['cfg_rss_charset'] = 'Кодировка RSS каналов';
+$L['cfg_rss_charset_hint'] = 'Набор символов (кодовая страница)';
+$L['cfg_rss_pagemaxsymbols'] = 'Макс. количество символов для страниц';
+$L['cfg_rss_pagemaxsymbols_hint'] = 'По умолчанию отключено';
+$L['cfg_rss_postmaxsymbols'] = 'Макс. количество символов для сообщений форума';
+$L['cfg_rss_postmaxsymbols_hint'] = 'По умолчанию отключено';
 
 $L['info_desc'] = 'Доступ к лентам RSS/Atom с контентом вашего сайта';
 

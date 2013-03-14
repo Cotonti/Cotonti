@@ -15,21 +15,30 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
-$L['cfg_commentsize'] = array('Макс. размер комментария, байт', '0 - без ограничения размера');
-$L['cfg_countcomments'] = array('Считать комментарии', 'Показывать количество комментариев рядом с иконкой');
-$L['cfg_enable_comments'] = array('Включить комментарии');
-$L['cfg_expand_comments'] = array('Открыть комментарии', 'По умолчанию показывать комментарии на странице');
-$L['cfg_mail'] = array('Отсылать email-уведомления администратору о новых комментариях');
-$L['cfg_markitup'] = array('Использовать markitup');
-$L['cfg_markup'] = array('Включить разметку');
-$L['cfg_maxcommentsperpage'] = array('Макс. количество комментариев на странице', ' ');
-$L['cfg_minsize'] = array('Мин. длина комментария');
-$L['cfg_order'] = array('Порядок сортировки', 'Хронологический или самые последние вверху');
-$L['cfg_order_params'] = array('Хронологический', 'Cамые последние вверху');
-$L['cfg_parsebbcodecom'] = array('Парсинг BBCode в комментариях', ' ');
-$L['cfg_parsesmiliescom'] = array('Парсинг смайликов в комментариях', ' ');
-$L['cfg_rss_commentmaxsymbols'] = array('Макс. количество символов для комментариев', 'По умолчанию отключено');
-$L['cfg_time'] = array('Пользователи могут редактировать комментарии в течение', 'минут');
+$L['cfg_commentsize'] = 'Макс. размер комментария, байт';
+$L['cfg_commentsize_hint'] = '0 - без ограничения размера';
+$L['cfg_countcomments'] = 'Считать комментарии';
+$L['cfg_countcomments_hint'] = 'Показывать количество комментариев рядом с иконкой';
+$L['cfg_enable_comments'] = 'Включить комментарии';
+$L['cfg_expand_comments'] = 'Открыть комментарии';
+$L['cfg_expand_comments_hint'] = 'По умолчанию показывать комментарии на странице';
+$L['cfg_mail'] = 'Отсылать email-уведомления администратору о новых комментариях';
+$L['cfg_markitup'] = 'Использовать markitup';
+$L['cfg_markup'] = 'Включить разметку';
+$L['cfg_maxcommentsperpage'] = 'Макс. количество комментариев на странице';
+$L['cfg_maxcommentsperpage_hint'] = ' ';
+$L['cfg_minsize'] = 'Мин. длина комментария';
+$L['cfg_order'] = 'Порядок сортировки';
+$L['cfg_order_hint'] = 'Хронологический или самые последние вверху';
+$L['cfg_order_params'] = 'Хронологический,Cамые последние вверху';
+$L['cfg_parsebbcodecom'] = 'Парсинг BBCode в комментариях';
+$L['cfg_parsebbcodecom_hint'] = ' ';
+$L['cfg_parsesmiliescom'] = 'Парсинг смайликов в комментариях';
+$L['cfg_parsesmiliescom_hint'] = ' ';
+$L['cfg_rss_commentmaxsymbols'] = 'Макс. количество символов для комментариев';
+$L['cfg_rss_commentmaxsymbols_hint'] = 'По умолчанию отключено';
+$L['cfg_time'] = 'Пользователи могут редактировать комментарии в течение';
+$L['cfg_time_hint'] = 'минут';
 
 $L['info_desc'] = 'Комментарии с API и интеграцией со страницами, списками, опросами, RSS и другими расширениями';
 
@@ -76,7 +85,7 @@ $L['adm_comm_already_del'] = 'Комментарий удален';
  * cot_declension arrays
  */
 
-$Ls['Comments'] = array('комментарий','комментария','комментариев');
+$Ls['Comments'] = "комментарий,комментария,комментариев";
 
 /**
  * Comedit

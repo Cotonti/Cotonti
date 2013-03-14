@@ -15,21 +15,30 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
-$L['cfg_enable_comments'] = array('Enable comments');
-$L['cfg_mail'] = array('Notify about new comments via email');
-$L['cfg_markitup'] = array('Use markitup');
-$L['cfg_markup'] = array('Enable markup');
-$L['cfg_minsize'] = array('Min. comment length');
-$L['cfg_time'] = array('Comments editable timeout for users', 'in minutes');
-$L['cfg_rss_commentmaxsymbols'] = array('Comments. Cut element description longer than N symbols', 'Disabled by default');
-$L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by default');
-$L['cfg_maxcommentsperpage'] = array('Max. comments on page', ' ');
-$L['cfg_commentsize'] = array('Max. size of comment, bytes', '0 for unlimited size');
-$L['cfg_countcomments'] = array('Count comments', 'Display number of comments near the icon');
-$L['cfg_order'] = array('Sorting order', 'Chronological or most recent first');
-$L['cfg_order_params'] = array('Chronological', 'Recent');
-$L['cfg_parsebbcodecom'] = array('Parse BBcodes in comments', '');
-$L['cfg_parsesmiliescom'] = array('Parse smilies in comments', '');
+$L['cfg_enable_comments'] = 'Enable comments';
+$L['cfg_mail'] = 'Notify about new comments via email';
+$L['cfg_markitup'] = 'Use markitup';
+$L['cfg_markup'] = 'Enable markup';
+$L['cfg_minsize'] = 'Min. comment length';
+$L['cfg_time'] = 'Comments editable timeout for users';
+$L['cfg_time_hint'] = 'in minutes';
+$L['cfg_rss_commentmaxsymbols'] = 'Comments. Cut element description longer than N symbols';
+$L['cfg_rss_commentmaxsymbols_hint'] = 'Disabled by default';
+$L['cfg_expand_comments'] = 'Expand comments';
+$L['cfg_expand_comments_hint'] = 'Show comments expanded by default';
+$L['cfg_maxcommentsperpage'] = 'Max. comments on page';
+$L['cfg_maxcommentsperpage_hint'] = ' ';
+$L['cfg_commentsize'] = 'Max. size of comment, bytes';
+$L['cfg_commentsize_hint'] = '0 for unlimited size';
+$L['cfg_countcomments'] = 'Count comments';
+$L['cfg_countcomments_hint'] = 'Display number of comments near the icon';
+$L['cfg_order'] = 'Sorting order';
+$L['cfg_order_hint'] = 'Chronological or most recent first';
+$L['cfg_order_params'] = 'Chronological,Recent';
+$L['cfg_parsebbcodecom'] = 'Parse BBcodes in comments';
+$L['cfg_parsebbcodecom_hint'] = '';
+$L['cfg_parsesmiliescom'] = 'Parse smilies in comments';
+$L['cfg_parsesmiliescom_hint'] = '';
 
 $L['info_desc'] = 'Comments system for Cotonti with API and integration with pages, lists, polls, RSS and other extensions';
 
@@ -76,7 +85,7 @@ $L['adm_comm_already_del'] = 'Comment deleted';
  * cot_declension Arrays
  */
 
-$Ls['Comments'] = array('comments','comment');
+$Ls['Comments'] = "comments,comment";
 
 /**
  * Comedit

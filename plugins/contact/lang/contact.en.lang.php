@@ -14,13 +14,15 @@ defined('COT_CODE') or die('Wrong URL');
  * Plugin Config
  */
 
-$L['cfg_email'] = array('Email', '(leave empty to use admin email)');
-$L['cfg_minchars'] = array('Min. chars in message');
-$L['cfg_map'] = array('Map');
-$L['cfg_about'] = array('About');
-$L['cfg_save'] = array('Save method');
-$L['cfg_save_params'] = array('e-mail', 'database', 'e-mail + database');
-$L['cfg_template'] = array('Email template', 'Using variables: {$sitetitle}, {$siteurl}, {$author}, {$email}, {$subject}, {$text}, {$extra}, {$extraXXXX}, {$extraXXXX_title}');
+$L['cfg_email'] = 'Email';
+$L['cfg_email_hint'] = '(leave empty to use admin email)';
+$L['cfg_minchars'] = 'Min. chars in message';
+$L['cfg_map'] = 'Map';
+$L['cfg_about'] = 'About';
+$L['cfg_save'] = 'Save method';
+$L['cfg_save_params'] = 'e-mail,database,e-mail + database';
+$L['cfg_template'] = 'Email template';
+$L['cfg_template_hint'] = 'Using variables: {$sitetitle}, {$siteurl}, {$author}, {$email}, {$subject}, {$text}, {$extra}, {$extraXXXX}, {$extraXXXX_title}';
 $L['info_desc'] = 'Contact form for user feedback delivered via email and recorded in database';
 
 /**
@@ -49,7 +51,7 @@ $L['contact_subtitle'] = 'Contact info';
  */
 
 $L['contact_headercontact'] = 'Contact';
-$Ls['contact_headercontact'] = array('contact message', 'contact messages');
+$Ls['contact_headercontact'] = "contact message,contact messages";
 $L['contact_entrytooshort'] = 'Message too short or missing';
 $L['contact_noname'] = 'Name missing';
 $L['contact_emailnotvalid'] = 'Incorrect email address';

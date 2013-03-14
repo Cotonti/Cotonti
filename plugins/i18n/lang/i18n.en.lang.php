@@ -13,10 +13,13 @@ defined('COT_CODE') or die('Wrong URL.');
 
 // Plugin configuration
 
-$L['cfg_cats'] = array('Root categories to apply i18n on', 'Comma separated category codes');
-$L['cfg_locales'] = array('List of site locales', 'Each locale on new line, format: locale_code|Locale title');
-$L['cfg_omitmain'] = array('Omit language parameter in URLs if pointing to main language');
-$L['cfg_rewrite'] = array('Enable URL overwrite for language parameter', 'Requires manual .htaccess update');
+$L['cfg_cats'] = 'Root categories to apply i18n on';
+$L['cfg_cats_hint'] = 'Comma separated category codes';
+$L['cfg_locales'] = 'List of site locales';
+$L['cfg_locales_hint'] = 'Each locale on new line, format: locale_code|Locale title';
+$L['cfg_omitmain'] = 'Omit language parameter in URLs if pointing to main language';
+$L['cfg_rewrite'] = 'Enable URL overwrite for language parameter';
+$L['cfg_rewrite_hint'] = 'Requires manual .htaccess update';
 
 $L['info_desc'] = 'Localization tool for pages, categories, tags, etc. enabling multilanguage support';
 

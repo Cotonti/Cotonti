@@ -21,8 +21,9 @@ $L['info_desc'] = 'Рейтинги со звездами на базе jQuery, 
  * Plugin Config
  */
 
-$L['cfg_enable_ratings'] = array('Включить рейтинги');
-$L['cfg_ratings_allowchange'] = array('Разрешить изменение рейтинга', 'Разрешить пользователям изменять ранее выставленный рейтинг');
+$L['cfg_enable_ratings'] = 'Включить рейтинги';
+$L['cfg_ratings_allowchange'] = 'Разрешить изменение рейтинга';
+$L['cfg_ratings_allowchange_hint'] = 'Разрешить пользователям изменять ранее выставленный рейтинг';
 $L['cfg_css'] = 'Использовать CSS стили плагина';
 
 /**

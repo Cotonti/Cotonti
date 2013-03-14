@@ -19,124 +19,124 @@ defined('COT_CODE') or die('Wrong URL.');
  * forums.posts.tpl
  */
 
-$themelang['forumspost']['to'] = 'чтобы';	
-$themelang['forumspost']['post'] = 'Ответить';	
-$themelang['forumspost']['jump'] = 'Переход';	
+$themelang['forumspost_to'] = 'чтобы';	
+$themelang['forumspost_post'] = 'Ответить';	
+$themelang['forumspost_jump'] = 'Переход';	
 
 /**
  * forums.topics.tpl
  */
-$themelang['forumstopics']['Legend'] = 'Информация';
-$themelang['forumstopics']['Start'] = 'Создать тему';	
+$themelang['forumstopics_Legend'] = 'Информация';
+$themelang['forumstopics_Start'] = 'Создать тему';	
 
 /**
  * header.tpl
  */
 
-$themelang['header']['user'] = 'Панель пользователя';
+$themelang['header_user'] = 'Панель пользователя';
 
 /**
  * footer.tpl
  */
 
-$themelang['footer']['top'] = 'Наверх';
+$themelang['footer_top'] = 'Наверх';
 
 /**
  * index.tpl
  */
-$themelang['index']['by'] = 'От';
-$themelang['index']['Newinforums'] = 'Свежие <strong>сообщения</strong>';
-$themelang['index']['Recentadditions'] = '<strong>Страницы</strong>';
-$themelang['index']['Recentcomments'] = '<strong>Комментарии</strong>';
+$themelang['index_by'] = 'От';
+$themelang['index_Newinforums'] = 'Свежие <strong>сообщения</strong>';
+$themelang['index_Recentadditions'] = '<strong>Страницы</strong>';
+$themelang['index_Recentcomments'] = '<strong>Комментарии</strong>';
 
 /**
  * page.list.tpl
  */
 
-$themelang['list']['sort'] = 'Сортировка';
-$themelang['list']['asc'] = 'по возрастанию';
-$themelang['list']['desc'] = 'по убыванию';
-$themelang['list']['bread'] = 'Вы здесь';
-$themelang['list']['none'] = 'Здесь еще нет записей.';
-$themelang['list']['rss'] = 'Подписаться на RSS';
-$themelang['list']['all'] = 'Все записи';
+$themelang['list_sort'] = 'Сортировка';
+$themelang['list_asc'] = 'по возрастанию';
+$themelang['list_desc'] = 'по убыванию';
+$themelang['list_bread'] = 'Вы здесь';
+$themelang['list_none'] = 'Здесь еще нет записей.';
+$themelang['list_rss'] = 'Подписаться на RSS';
+$themelang['list_all'] = 'Все записи';
 
 /**
  * page.add.tpl
  */
 
-$themelang['pageadd']['save'] = 'Сохранить в...';
-$themelang['pageadd']['basic'] = 'Основное';
-$themelang['pageadd']['adv'] = 'Дополнительное';
-$themelang['pageadd']['dates'] = 'Даты';
-$themelang['pageadd']['down'] = 'Файл';
+$themelang['pageadd_save'] = 'Сохранить в...';
+$themelang['pageadd_basic'] = 'Основное';
+$themelang['pageadd_adv'] = 'Дополнительное';
+$themelang['pageadd_dates'] = 'Даты';
+$themelang['pageadd_down'] = 'Файл';
 
 /**
  * page.edit.tpl
  */
  
-$themelang['pageedit']['del'] = 'Удалить';
+$themelang['pageedit_del'] = 'Удалить';
  
 /**
  * pm.send.tpl
  */
  
-$themelang['pmsend']['Sendmessagetohint'] = 'up to 10 recipients, separated by commas';
+$themelang['pmsend_Sendmessagetohint'] = 'up to 10 recipients, separated by commas';
  
 /**
  * pm.tpl
  */
 
-$themelang['pm']['pm'] = 'Л.С.';
-$themelang['pm']['to'] = 'Кому';
-$themelang['pm']['Selectall'] = 'Выбрать все';
-$themelang['pm']['Unselectall'] = 'Снять выделение';
+$themelang['pm_pm'] = 'Л.С.';
+$themelang['pm_to'] = 'Кому';
+$themelang['pm_Selectall'] = 'Выбрать все';
+$themelang['pm_Unselectall'] = 'Снять выделение';
 
 /**
  * users.tpl
  */
 
-$themelang['users']['login'] = 'Войти под вашим аккаунтом';
+$themelang['users_login'] = 'Войти под вашим аккаунтом';
 
 /**
  * users.auth.tpl
  */
-$themelang['usersauth']['already'] = 'Вы уже вошли!';
-$themelang['usersauth']['goto'] = 'Перейти к вашему аккаунту';
-$themelang['usersauth']['Maintenancereason'] = 'Причина';
+$themelang['usersauth_already'] = 'Вы уже вошли!';
+$themelang['usersauth_goto'] = 'Перейти к вашему аккаунту';
+$themelang['usersauth_Maintenancereason'] = 'Причина';
 
 /**
  * users.edit.tpl
  */
 
-$themelang['usersedit']['info'] = 'Информация';
+$themelang['usersedit_info'] = 'Информация';
 
 /**
  * users.details.tpl
  */
 
-$themelang['usersdetails']['posts'] = 'Сообщений';
-$themelang['usersdetails']['years'] = 'лет';
+$themelang['usersdetails_posts'] = 'Сообщений';
+$themelang['usersdetails_years'] = 'лет';
 
 /**
  * users.profile.tpl
  */
 
-$themelang['usersprofile']['characters'] = 'символов';
-$themelang['usersprofile']['privacy'] = 'Конфиденциальность';
-$themelang['usersprofile']['settings'] = 'Настройки сайта';
-$themelang['usersprofile']['personal'] = 'Персональная информация';
-$themelang['usersprofile']['contact'] = 'Контактная информация';
-$themelang['usersprofile']['current'] = 'Текущий';
+$themelang['usersprofile_characters'] = 'символов';
+$themelang['usersprofile_privacy'] = 'Конфиденциальность';
+$themelang['usersprofile_settings'] = 'Настройки сайта';
+$themelang['usersprofile_personal'] = 'Персональная информация';
+$themelang['usersprofile_contact'] = 'Контактная информация';
+$themelang['usersprofile_current'] = 'Текущий';
 
 /**
  * users.register.tpl
  */
 
-$themelang['usersregister']['Generalhint'] = 'Все поля обязательны к заполнению.';
-$themelang['usersregister']['Usernamehint'] = 'Имя пользователя не должно быть короче 2 символов.';
+$themelang['usersregister_Generalhint'] = 'Все поля обязательны к заполнению.';
+$themelang['usersregister_Usernamehint'] = 'Имя пользователя не должно быть короче 2 символов.';
 
 
-$themelang['search']['Generalhint'] = 'Вы можете сделать поиск более точным, выбрав необходимые категории и опции поиска. Обратите внимание, что поиск &quot;Везде&quot; не содержит всех опций. Для точного поиска используйте вкладки &quot;Форумы&quot; и &quot;Страницы&quot;.';
+$themelang['search_Generalhint'] = 'Вы можете сделать поиск более точным, выбрав необходимые категории и опции поиска. Обратите внимание, что поиск &quot;Везде&quot; не содержит всех опций. Для точного поиска используйте вкладки &quot;Форумы&quot; и &quot;Страницы&quot;.';
 
 ?>

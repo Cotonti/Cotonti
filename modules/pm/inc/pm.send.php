@@ -46,7 +46,7 @@ if ($a == 'send')
 	}
 	if (mb_strlen($newpmtext) > $cfg['pm']['maxsize'])
 	{
-		cot_error('pm_bodytoolong', 'newpmtext');
+		cot_error(cot_rc('pm_bodytoolong', array('size' => $cfg['pm']['maxsize'])), 'newpmtext');
 	}
 	$newpmtitle .= (mb_strlen($newpmtitle) < 2) ? ' . . . ' : '';
 	/* === Hook === */

@@ -15,30 +15,43 @@ defined('COT_CODE') or die('Wrong URL.');
  * Forums Config
  */
 
-$L['cfg_antibumpforums'] = array('Anti-bump protection', 'Will prevent users from posting twice in a row in the same topic');
-$L['cfg_hideprivateforums'] = array('Hide private forums', '');
-$L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
-$L['cfg_maxpostsperpage'] = array('Max. posts per page', ' ');
-$L['cfg_maxtopicsperpage'] = array('Maximum topics per page', '');
-$L['cfg_mergeforumposts'] = array('Post merge feature', 'Will merge user\'s posts if they are sent consecutively, anti-bump must be off');
-$L['cfg_mergetimeout'] = array('Post merge timeout', 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)');
-$L['cfg_minpostlength'] = array('Min. post length', ' ');
-$L['cfg_mintitlelength'] = array('Min. topic title length', ' ');
-$L['cfg_title_posts'] = array('Forum Posts title format', 'Options: {FORUM}, {SECTION}, {TITLE}');
-$L['cfg_title_topics'] = array('Forum Topics title format', 'Options: {FORUM}, {SECTION}');
-$L['cfg_enablereplyform'] = array('Show reply form on every page', '');
-$L['cfg_edittimeout'] = array('Edit timeout', 'Prevents users from editing or deleting their own posts after the given timeout (in hours, 0 disables timeout)');
+$L['cfg_antibumpforums'] = 'Anti-bump protection';
+$L['cfg_antibumpforums_hint'] = 'Will prevent users from posting twice in a row in the same topic';
+$L['cfg_hideprivateforums'] = 'Hide private forums';
+$L['cfg_hideprivateforums_hint'] = '';
+$L['cfg_hottopictrigger'] = 'Posts for a topic to be \'hot\'';
+$L['cfg_hottopictrigger_hint'] = '';
+$L['cfg_maxpostsperpage'] = 'Max. posts per page';
+$L['cfg_maxpostsperpage_hint'] = ' ';
+$L['cfg_maxtopicsperpage'] = 'Maximum topics per page';
+$L['cfg_maxtopicsperpage_hint'] = '';
+$L['cfg_mergeforumposts'] = 'Post merge feature';
+$L['cfg_mergeforumposts_hint'] = 'Will merge user\'s posts if they are sent consecutively, anti-bump must be off';
+$L['cfg_mergetimeout'] = 'Post merge timeout';
+$L['cfg_mergetimeout_hint'] = 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)';
+$L['cfg_minpostlength'] = 'Min. post length';
+$L['cfg_minpostlength_hint'] = ' ';
+$L['cfg_mintitlelength'] = 'Min. topic title length';
+$L['cfg_mintitlelength_hint'] = ' ';
+$L['cfg_title_posts'] = 'Forum Posts title format';
+$L['cfg_title_posts_hint'] = 'Options: {FORUM}, {SECTION}, {TITLE}';
+$L['cfg_title_topics'] = 'Forum Topics title format';
+$L['cfg_title_topics_hint'] = 'Options: {FORUM}, {SECTION}';
+$L['cfg_enablereplyform'] = 'Show reply form on every page';
+$L['cfg_enablereplyform_hint'] = '';
+$L['cfg_edittimeout'] = 'Edit timeout';
+$L['cfg_edittimeout_hint'] = 'Prevents users from editing or deleting their own posts after the given timeout (in hours, 0 disables timeout)';
 
-$L['cfg_allowusertext'] = array('Display signatures');
-$L['cfg_allowbbcodes'] = array('Enable BBcodes');
-$L['cfg_allowsmilies'] = array('Enable smilies');
-$L['cfg_allowprvtopics'] = array('Allow private topics');
-$L['cfg_allowviewers'] = array('Enable Viewers');
-$L['cfg_allowpolls'] = array('Enable Polls');
-$L['cfg_countposts'] = array('Count posts');
-$L['cfg_autoprune'] = array('Auto-prune topics after * days');
-$L['cfg_defstate'] = array('Default state');
-$L['cfg_defstate_params'] = array('Folded', 'Unfolded');
+$L['cfg_allowusertext'] = 'Display signatures';
+$L['cfg_allowbbcodes'] = 'Enable BBcodes';
+$L['cfg_allowsmilies'] = 'Enable smilies';
+$L['cfg_allowprvtopics'] = 'Allow private topics';
+$L['cfg_allowviewers'] = 'Enable Viewers';
+$L['cfg_allowpolls'] = 'Enable Polls';
+$L['cfg_countposts'] = 'Count posts';
+$L['cfg_autoprune'] = 'Auto-prune topics after * days';
+$L['cfg_defstate'] = 'Default state';
+$L['cfg_defstate_params'] = 'Folded,Unfolded';
 
 $L['info_desc'] = 'Basic forums for community sites with sections, subsections, topics and posts';
 

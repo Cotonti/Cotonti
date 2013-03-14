@@ -15,9 +15,12 @@ defined('COT_CODE') or die('Wrong URL.');
  * Module Config
  */
 
-$L['cfg_allownotifications'] = array('Allow PM notifications by email', '');
-$L['cfg_maxsize'] = array('Maximum length for messages', '');
-$L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');
+$L['cfg_allownotifications'] = 'Allow PM notifications by email';
+$L['cfg_allownotifications_hint'] = '';
+$L['cfg_maxsize'] = 'Maximum length for messages';
+$L['cfg_maxsize_hint'] = '';
+$L['cfg_maxpmperpage'] = 'Max. messages per page';
+$L['cfg_maxpmperpage_hint'] = ' ';
 $L['info_desc'] = 'Private messaging system for on-site user communication';
 
 /**
@@ -34,13 +37,13 @@ $L['adm_pm_totalsent'] = 'Total of private messages ever sent';
 $L['pmsend_title'] = 'Send a new private message';
 $L['pmsend_subtitle'] = 'New private message submission form';
 
-$L['pm_bodytoolong'] = 'The body of the private message is too long, '.$cfg['pm']['pm_maxsize'].' chars maximum';
+$L['pm_bodytoolong'] = 'The body of the private message is too long, {$size} chars maximum';
 $L['pm_bodytooshort'] = 'The body of the private message is too short or missing';
 $L['pm_inbox'] = 'Inbox';
 $L['pm_inboxsubtitle'] = 'Private messages, newest is at top';
 $L['pm_norecipient'] = 'No recipient specified';
 $L['pm_notifytitle'] = 'New private message';
-$Ls['Privatemessages'] = array('new private messages','new private message');
+$Ls['Privatemessages'] = "new private messages,new private message";
 $L['pm_replyto'] = 'Reply to this user';
 $L['pm_sendnew'] = 'Send a new private message';
 $L['pm_sentbox'] = 'Sent-box';
@@ -59,13 +62,9 @@ $L['pm_deletefromstarred'] = 'Delete from Starred';
 $L['pm_putinstarred'] = 'Add to Starred';
 $L['pm_read'] = 'Read';
 $L['pm_selected'] = 'Selected';
-	
+
 /**
  * Private messages: notification
  */
 
-$L['pm_notify'] = 'Hi %1$s,
-You are receiving this email because there is a new private message in your inbox from %2$s
-Click this link to read it: %3$s';
-
-?>
+$L['pm_notify'] = "Hi %1\$s,\nYou are receiving this email because there is a new private message in your inbox from %2\$s\nClick this link to read it: %3\$s";

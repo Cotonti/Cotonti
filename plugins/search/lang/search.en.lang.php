@@ -93,15 +93,17 @@ $L['plu_last_date'] = 'Date updated';
  * Plugin Config
  */
 
-$L['cfg_maxwords']= array('Max. words in search query');
-$L['cfg_maxsigns']= array('Max. latters in search query');
-$L['cfg_maxitems']= array('Max. entries in normal search results');
-$L['cfg_minsigns'] = array('Min. signs in query');
-$L['cfg_pagesearch'] = array('Enable pages search');
-$L['cfg_forumsearch'] = array('Enable forums search');
-$L['cfg_searchurl'] = array('Type of forum post link to use', 'Single uses a Single post view, while Normal uses the traditional thread/jump-to link');
-$L['cfg_addfields']= array('Additional pages fields for search, separated by commas', 'Example "page_extra1,page_extra2,page_key"');
-$L['cfg_extrafilters']= array('Show extrafilters on main search page');
+$L['cfg_maxwords'] = 'Max. words in search query';
+$L['cfg_maxsigns'] = 'Max. latters in search query';
+$L['cfg_maxitems'] = 'Max. entries in normal search results';
+$L['cfg_minsigns'] = 'Min. signs in query';
+$L['cfg_pagesearch'] = 'Enable pages search';
+$L['cfg_forumsearch'] = 'Enable forums search';
+$L['cfg_searchurl'] = 'Type of forum post link to use';
+$L['cfg_searchurl_hint'] = 'Single uses a Single post view, while Normal uses the traditional thread/jump-to link';
+$L['cfg_addfields'] = 'Additional pages fields for search, separated by commas';
+$L['cfg_addfields_hint'] = 'Example "page_extra1,page_extra2,page_key"';
+$L['cfg_extrafilters'] = 'Show extrafilters on main search page';
 
 $L['info_desc'] = 'Advanced search in pages, forums and other loctions';
 

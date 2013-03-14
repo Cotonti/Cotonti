@@ -39,20 +39,9 @@ $L['adm_bbcodes_replacement'] = 'Замена';
 $L['adm_bbcodes_updated'] = 'Измененные BBCode\'ы обновлены.';
 $L['adm_bbcodes_notupdated'] = 'Некоторые BBCode\'ы остались не измененными.';
 $L['adm_bbcodes_fieldrequired'] = 'В одном из BBCode\'ов не заполнено обязательное поле.';
-$L['adm_help_bbcodes'] = <<<HTM
-<ul>
-<li><strong>Имя</strong> - Название BBcode (только буквы латинского алфавита, цифры и подчеркивание)</li>
-<li><strong>Режим</strong> - Режим парсинга, один из: &laquo;str&raquo; (str_replace), &laquo;ereg&raquo; (eregi_replace), &laquo;pcre&raquo; (preg_replace) или &laquo;callback&raquo; (preg_replace_callback)</li>
-<li><strong>Шаблон</strong> - Строка BBCode или регулярное выражение</li>
-<li><strong>Замена</strong> - Строка замены, регулярная замена или тело функции обратного вызова</li>
-<li><strong>Контейнер</strong> - Является ли BBCode контейнером (например, [bbcode]Какой-то текст[/bbcode])</li>
-<li><strong>Приоритет</strong> - Приоритет BBCode от 0 до 255. BBCode с меньшим приоритетом обрабатывается в первую очередь, стандартный средний приоритет -- 128.</li>
-<li><strong>Плагин</strong> - Код плагина/части, которой принадлежит BBCode. Только для плагинов.</li>
-<li><strong>Пост-рендер</strong> - Применять BBCode к сформированному HTML-кэшу. Используйте только если ваш callback-код делает какие-то вычисления на каждом запросе.</li>
-</ul>
-HTM;
+$L['adm_help_bbcodes'] = "<ul>\n<li><strong>Имя</strong> - Название BBcode (только буквы латинского алфавита, цифры и подчеркивание)</li>\n<li><strong>Режим</strong> - Режим парсинга, один из: &laquo;str&raquo; (str_replace), &laquo;ereg&raquo; (eregi_replace), &laquo;pcre&raquo; (preg_replace) или &laquo;callback&raquo; (preg_replace_callback)</li>\n<li><strong>Шаблон</strong> - Строка BBCode или регулярное выражение</li>\n<li><strong>Замена</strong> - Строка замены, регулярная замена или тело функции обратного вызова</li>\n<li><strong>Контейнер</strong> - Является ли BBCode контейнером (например, [bbcode]Какой-то текст[/bbcode])</li>\n<li><strong>Приоритет</strong> - Приоритет BBCode от 0 до 255. BBCode с меньшим приоритетом обрабатывается в первую очередь, стандартный средний приоритет -- 128.</li>\n<li><strong>Плагин</strong> - Код плагина/части, которой принадлежит BBCode. Только для плагинов.</li>\n<li><strong>Пост-рендер</strong> - Применять BBCode к сформированному HTML-кэшу. Используйте только если ваш callback-код делает какие-то вычисления на каждом запросе.</li>\n</ul>";
 
-$L['cfg_smilies'] = array('Включить смайлики', '');
+$L['cfg_smilies'] = 'Включить смайлики';
+$L['cfg_smilies_hint'] = '';
 
 $L['info_desc'] = 'Поддержка и настройка ББ-кодов и смайликов в контенте сайта';
-
