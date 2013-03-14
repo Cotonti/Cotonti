@@ -53,7 +53,7 @@ function cot_apply_rwr()
 
 		if ($count == 1)
 		{
-			if (isset($structure['page'][$path[0]]))
+			if (isset($structure['page'][$path[0]]) || $path[0] == 'unvalidated' || $path[0] == 'saved_drafts')
 			{
 				// Is a category
 				$_GET['e'] = 'page';

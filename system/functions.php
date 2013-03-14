@@ -5294,12 +5294,13 @@ function cot_declension($digit, $expr, $onlyword = false, $canfrac = false)
 {
 	global $lang, $Ls;
 
-	if (is_string($expr) && isset($Ls[$expr]) && !is_array($Ls[$expr]))
+	$expr = isset($Ls[$expr]) ? $Ls[$expr] : $expr;
+
+	if (is_string($expr) && mb_strpos($expr, ',') !== false)
 	{
-		$Ls[$expr] = preg_split('#\s*,\s*#', $Ls[$expr]);
+		$expr = preg_split('#\s*,\s*#', $expr);
 	}
 
-	$expr = is_string($expr) ? $Ls[$expr] : $expr;
 	if (!is_array($expr))
 	{
 		return trim(($onlyword ? '' : "$digit ").$expr);

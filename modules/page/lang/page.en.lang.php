@@ -71,6 +71,8 @@ $L['page_catmissing'] = 'The category code is missing';
 $L['page_confirm_delete'] = 'Do you really want to delete this page?';
 $L['page_confirm_validate'] = 'Do you want to validate this page?';
 $L['page_confirm_unvalidate'] = 'Do you really want to put this page back to the validation queue?';
+$L['page_drafts'] = 'Drafts';
+$L['page_drafts_desc'] = 'Pages saved in your drafts';
 $L['page_notavailable'] = 'This page will be published in ';
 $L['page_textmissing'] = 'Page text must not be empty';
 $L['page_titletooshort'] = 'The title is too short or missing';
@@ -114,5 +116,4 @@ $L['page_linesinthissection'] = 'Lines in this section';
 
 $Ls['pages'] = "pages,page";
 $Ls['unvalidated_pages'] = "unvalidated pages,unvalidated page";
-
-?>
+$Ls['pages_in_drafts'] = "pages in drafts,page in drafts";

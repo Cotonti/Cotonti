@@ -29,7 +29,7 @@ if ($c == 'all' || $c == 'system')
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 	cot_block($usr['isadmin']);
 }
-elseif ($c == 'unvalidated')
+elseif ($c == 'unvalidated' || $c == 'saved_drafts')
 {
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', 'any');
 	cot_block($usr['auth_write']);
@@ -69,12 +69,12 @@ $w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? $cfg['page']['cat___de
 
 $sys['sublocation'] = $cat['title'];
 
-$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ?
+$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
 	$cfg['page']['cat___default']['maxrowsperpage'] :
 	$cfg['page']['cat_' . $c]['maxrowsperpage'];
 $cfg['page']['maxrowsperpage'] = $cfg['page']['maxrowsperpage'] > 0 ? $cfg['page']['maxrowsperpage'] : 1;
 
-$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ?
+$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
 	$cfg['page']['cat___default']['truncatetext'] :
 	$cfg['page']['cat_' . $c]['truncatetext'];
 
@@ -82,15 +82,25 @@ $where = array();
 $params = array();
 
 $where_state = $usr['isadmin'] ? '1' : "page_ownerid = {$usr['id']}";
-$where['state'] = "(page_state=0 OR page_state=2 AND $where_state)";
+$where['state'] = "(page_state=0 AND $where_state)";
 if ($c == 'unvalidated')
 {
 	$cat['tpl'] = 'unvalidated';
-	$where['state'] = 'page_state != 0';
+	$where['state'] = 'page_state = 1';
 	$where['ownerid'] = $usr['isadmin'] ? '1' : 'page_ownerid = ' . $usr['id'];
 	$cat['title'] = $L['page_validation'];
 	$cat['desc'] = $L['page_validation_desc'];
-	$s = 'state';
+	$s = 'date';
+	$w = 'desc';
+}
+elseif ($c == 'saved_drafts')
+{
+	$cat['tpl'] = 'unvalidated';
+	$where['state'] = 'page_state = 2';
+	$where['ownerid'] = $usr['isadmin'] ? '1' : 'page_ownerid = ' . $usr['id'];
+	$cat['title'] = $L['page_drafts'];
+	$cat['desc'] = $L['page_drafts_desc'];
+	$s = 'date';
 	$w = 'desc';
 }
 elseif ($c != 'all')
@@ -118,7 +128,7 @@ if ($o && $p)
 	}
 	empty($where['filter']) || $where['filter'] = implode(' AND ', $where['filter']);
 }
-if (!$usr['isadmin'] && $c != 'unvalidated')
+if (!$usr['isadmin'] && $c != 'unvalidated' && $c !== 'saved_drafts')
 {
 	$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 }
@@ -148,11 +158,11 @@ if ($dcurl > 1)
 }
 
 $catpatharray = cot_structure_buildpath('page', $c);
-$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? $cat['title'] : cot_breadcrumbs($catpatharray, $cfg['homebreadcrumb'], true);
+$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ? $cat['title'] : cot_breadcrumbs($catpatharray, $cfg['homebreadcrumb'], true);
 
 $shortpath = $catpatharray;
 array_pop($shortpath);
-$catpath_short = ($c == 'all' || $c == 'system' || $c == 'unvalidated') ? '' : cot_breadcrumbs($shortpath, $cfg['homebreadcrumb']);
+$catpath_short = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ? '' : cot_breadcrumbs($shortpath, $cfg['homebreadcrumb']);
 
 /* === Hook === */
 foreach (cot_getextplugins('page.list.query') as $pl)
@@ -231,7 +241,7 @@ $t->assign(array(
 	'LIST_TOP_TOTALPAGES' => $pagenav['total']
 ));
 
-if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated')
+if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated' && $c != 'saved_drafts')
 {
 	$t->assign(array(
 		'LIST_SUBMITNEWPAGE' => cot_rc('page_submitnewpage', array('sub_url' => cot_url('page', 'm=add&c='.$c))),

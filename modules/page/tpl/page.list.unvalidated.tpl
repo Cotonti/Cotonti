@@ -8,6 +8,7 @@
 						<tr>
 							<th>{PHP.L.Title}</th>
 							<th>{PHP.L.Status}</th>
+							<th>{PHP.L.Edit}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -15,6 +16,7 @@
 						<tr>
 							<td><strong>{LIST_ROW_TITLE}</strong></td>
 							<td>{LIST_ROW_LOCALSTATUS}</td>
+							<td>{LIST_ROW_ADMIN_EDIT}</td>
 						</tr>
 <!-- END: LIST_ROW -->
 					</tbody>
