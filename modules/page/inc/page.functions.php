@@ -226,6 +226,13 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			$temp_array['ADMIN_EDIT_URL'] = $edit_url;
 		}
 
+		if (cot_auth('page', 'any', 'W'))
+		{
+			$clone_url = cot_url('page', "m=add&c={$page_data['page_cat']}&clone={$page_data['page_id']}");
+			$temp_array['ADMIN_CLONE'] = cot_rc_link($clone_url, $L['page_clone']);
+			$temp_array['ADMIN_CLONE_URL'] = $clone_url;
+		}
+
 		// Extrafields
 		if (isset($cot_extrafields[$db_pages]))
 		{

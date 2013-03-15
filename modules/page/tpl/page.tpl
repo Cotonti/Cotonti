@@ -48,6 +48,7 @@
 					<li><a href="{PAGE_CAT|cot_url('page','m=add&c=$this')}">{PHP.L.page_addtitle}</a></li>
 					<li>{PAGE_ADMIN_UNVALIDATE}</li>
 					<li>{PAGE_ADMIN_EDIT}</li>
+					<li>{PAGE_ADMIN_CLONE}</li>
 					<li>{PAGE_ADMIN_DELETE}</li>
 				</ul>
 			</div>

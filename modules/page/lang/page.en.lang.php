@@ -68,6 +68,7 @@ $L['page_editsubtitle'] = 'Edit all required fields and hit "Sumbit" to continue
 
 $L['page_aliascharacters'] = 'Characters \'+\', \'/\', \'?\', \'%\', \'#\', \'&\' are not allowed in aliases';
 $L['page_catmissing'] = 'The category code is missing';
+$L['page_clone'] = 'Clone page';
 $L['page_confirm_delete'] = 'Do you really want to delete this page?';
 $L['page_confirm_validate'] = 'Do you want to validate this page?';
 $L['page_confirm_unvalidate'] = 'Do you really want to put this page back to the validation queue?';
