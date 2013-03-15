@@ -275,7 +275,7 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 	else
 	{
 		// There's at least 1 post left, let's resync
-		$sql_forums = $db->query("SELECT fp_id, fp_posterid, fp_postername, fp_updated FROM $db_forum_posts
+		$sql_forums = $db->query("SELECT fp_id, fp_posterid, fp_postername, fp_updated, fp_topicid FROM $db_forum_posts
 			WHERE fp_topicid = ? AND fp_cat = ? ORDER BY fp_id DESC LIMIT 1",
 			array($q, $s));
 		if ($row = $sql_forums->fetch())
@@ -287,7 +287,7 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 
 			cot_forums_sectionsetlast($s, 'fs_postcount-1');
 
-			cot_redirect(cot_url('forums', 'm=posts&p=' . $row['fp_id'], '#' . $row['fp_id'], true));
+			cot_redirect(cot_url('forums', 'm=posts&q=' . $row['fp_topicid'] . '&d=' . $durl , '#' . $row['fp_id'], true));
 		}
 	}
 }
@@ -347,9 +347,6 @@ $sql_forums = $db->query("SELECT p.*, u.* $join_columns
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid $join_condition
 	WHERE " . implode(' AND ', $where) . $orderlimit);
 
-$pg = floor($d / $cfg['forums']['maxpostsperpage']) + 1;
-$durl = ($cfg['easypagenav']) ? $pg : $d;
-
 $title_params = array(
 	'FORUM' => $L['Forums'],
 	'SECTION' => $structure['forums'][$s]['title'],
@@ -389,11 +386,11 @@ foreach ($sql_forums->fetchAll() as $row)
 	$row['user_text'] = ($cfg['forums']['cat_' . $s]['allowusertext']) ? $row['user_text'] : '';
 	$fp_num++;
 
-	$rowquote_url = ($usr['id'] > 0) ? cot_url('forums', 'm=posts&s=' . $s . '&q=' . $q . '&quote=' . $row['fp_id'] . '&n=last', '#np') : '';
+	$rowquote_url = ($usr['id'] > 0) ? cot_url('forums', 'm=posts&s=' . $s . '&q=' . $q . '&quote=' . $row['fp_id'] . '&d=' . $durl . '&n=last', '#np') : '';
 	$rowquote = ($usr['id'] > 0) ? cot_rc('forums_rowquote', array('url' => $rowquote_url)) : '';
-	$rowedit_url = (($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < $cfg['forums']['edittimeout'] * 3600))) && $usr['id'] > 0) ? cot_url('forums', 'm=editpost&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&' . cot_xg()) : '';
+	$rowedit_url = (($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < $cfg['forums']['edittimeout'] * 3600))) && $usr['id'] > 0) ? cot_url('forums', 'm=editpost&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&d=' . $durl . '&' . cot_xg()) : '';
 	$rowedit = (($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < $cfg['forums']['edittimeout'] * 3600))) && $usr['id'] > 0) ? cot_rc('forums_rowedit', array('url' => $rowedit_url)) : '';
-	$rowdelete_url = ($usr['id'] > 0 && ($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < $cfg['forums']['edittimeout'] * 3600)))) ? cot_confirm_url(cot_url('forums', 'm=posts&a=delete&' . cot_xg() . '&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id']), 'forums', 'forums_confirm_delete_post') : '';
+	$rowdelete_url = ($usr['id'] > 0 && ($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < $cfg['forums']['edittimeout'] * 3600)))) ? cot_confirm_url(cot_url('forums', 'm=posts&a=delete&' . cot_xg() . '&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&d=' . $durl), 'forums', 'forums_confirm_delete_post') : '';
 	$rowdelete = ($usr['id'] > 0 && ($usr['isadmin'] || ($row['fp_posterid'] == $usr['id'] && ($cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < $cfg['forums']['edittimeout'] * 3600)) && $fp_num > 1)) ? cot_rc('forums_rowdelete', array('url' => $rowdelete_url)) : '';
 
 	if (!empty($row['fp_updater']))
@@ -406,7 +403,7 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_ID' => $row['fp_id'],
 		'FORUMS_POSTS_ROW_POSTID' => 'post_' . $row['fp_id'],
 		'FORUMS_POSTS_ROW_IDURL' => cot_url('forums', 'm=posts&id=' . $row['fp_id']),
-		'FORUMS_POSTS_ROW_URL' => cot_url('forums', 'm=posts&p=' . $row['fp_id'], "#" . $row['fp_id']),
+		'FORUMS_POSTS_ROW_URL' => cot_url('forums', 'm=posts&q=' . $row['fp_topicid'] . '&d=' . $durl, "#" . $row['fp_id']),
 		'FORUMS_POSTS_ROW_CREATION' => cot_date('datetime_medium', $row['fp_creation']),
 		'FORUMS_POSTS_ROW_CREATION_STAMP' => $row['fp_creation'],
 		'FORUMS_POSTS_ROW_UPDATED' => cot_date('datetime_medium', $row['fp_updated']),
@@ -493,7 +490,7 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 		if ($row4 = $sql_forums_quote->fetch())
 		{
 			$rmsg['fp_text'] = cot_rc('forums_code_quote', array(
-				'url' => cot_url('forums', 'm=posts&p=' . $row4['fp_id'], '#' . $row4['fp_id'], $forums_quote_htmlspecialchars_bypass),
+				'url' => cot_url('forums', 'm=posts&q=' . $q . '&d=' . $durl, '#' . $row4['fp_id'], $forums_quote_htmlspecialchars_bypass),
 				'id' => $row4['fp_id'],
 				'date' => cot_date('datetime_medium', $row4['fp_creation']),
 				'postername' => $row4['fp_postername'],
@@ -581,7 +578,7 @@ foreach ($cot_extrafields[$db_forum_topics] as $exfld)
 	$t->assign(array(
 		'FORUMS_POSTS_TOPIC_'.$tag.'_TITLE' => isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
 		'FORUMS_POSTS_TOPIC_'.$tag => cot_build_extrafields_data('forums', $exfld, $rowt['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes'])),
-		'FORUMS_POSTS_TOPIC_'.$tag.'_VALUE' => $rowt['ft_'.$exfld['field_name']]	
+		'FORUMS_POSTS_TOPIC_'.$tag.'_VALUE' => $rowt['ft_'.$exfld['field_name']]
 	));
 }
 

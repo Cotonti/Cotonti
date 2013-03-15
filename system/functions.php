@@ -704,7 +704,7 @@ function cot_import_pagenav($var_name, $max_items = 0)
 			$page = 1;
 		}
 		$offset = ($page - 1) * $max_items;
-		$urlnum = $page <= 1 ? 0 : $page;
+		$urlnum = $page <= 1 ? null : $page;
 	}
 	else
 	{
@@ -719,8 +719,8 @@ function cot_import_pagenav($var_name, $max_items = 0)
 		}
 		$page = floor($offset / $max_items) + 1;
 		$urlnum = $offset;
+		$urlnum = ($urlnum > 0) ? $urlnum : null;
 	}
-	$urlnum = ($urlnum > 0) ? $urlnum : '';
 
 	return array($page, $offset, $urlnum);
 }

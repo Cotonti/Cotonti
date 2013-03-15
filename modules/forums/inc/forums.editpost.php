@@ -14,6 +14,7 @@ defined('COT_CODE') or die('Wrong URL');
 $s = cot_import('s', 'G', 'TXT'); // section cat
 $q = cot_import('q', 'G', 'INT');  // topic id
 $p = cot_import('p', 'G', 'INT'); // post id
+list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['forums']['maxpostsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.editpost.first') as $pl)
@@ -77,10 +78,10 @@ if ($a == 'update')
 	}
 	/* ===== */
 
-	
+
 	$rtopic['ft_title'] = cot_import('rtopictitle', 'P', 'TXT', 255);
 	$rtopic['ft_desc'] = cot_import('rtopicdesc', 'P', 'TXT', 255);
-	
+
 	$rmsg = array();
 	$rmsg['fp_text'] = cot_import('rmsgtext', 'P', 'HTM');
 	$rmsg['fp_updater'] = ($rowpost['fp_posterid'] == $usr['id'] && ($sys['now'] < $rowpost['fp_updated'] + 300) && empty($rowpost['fp_updater']) ) ? '' : $usr['name'];
@@ -99,12 +100,12 @@ if ($a == 'update')
 	{
 		$rtopic['ft_'.$exfld['field_name']] = cot_import_extrafields('rtopic'.$exfld['field_name'], $exfld);
 	}
-	
+
 	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
 	{
 		$rmsg['fp_'.$exfld['field_name']] = cot_import_extrafields('rmsg'.$exfld['field_name'], $exfld);
 	}
-	
+
 	if (!cot_error_found())
 	{
 		$db->update($db_forum_posts, $rmsg, "fp_id=$p");
@@ -118,7 +119,7 @@ if ($a == 'update')
 			$rtopic['ft_preview'] = mb_substr(htmlspecialchars($rmsg['fp_text']), 0, 128);
 			$db->update($db_forum_topics, $rtopic, "ft_id = $q");
 		}
-		
+
 		cot_extrafield_movefiles();
 	}
 
@@ -137,7 +138,7 @@ if ($a == 'update')
 		($cfg['cache_index']) && $cache->page->clear('index');
 	}
 
-	cot_redirect(cot_url('forums', "m=posts&p=" . $p, '#' . $p, true));
+	cot_redirect(cot_url('forums', "m=posts&q=" . $q . '&d=' . $durl, '#' . $p, true));
 }
 require_once cot_incfile('forms');
 
@@ -177,7 +178,7 @@ if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY
 		'FORUMS_EDITPOST_TOPICTITTLE' => cot_inputbox('text', 'rtopictitle', $rowt['ft_title'], array('size' => 56, 'maxlength' => 255)),
 		'FORUMS_EDITPOST_TOPICDESCRIPTION' => cot_inputbox('text', 'rtopicdesc', $rowt['ft_desc'], array('size' => 56, 'maxlength' => 255)),
 	));
-	
+
 	// Extra fields
 	foreach($cot_extrafields[$db_forum_topics] as $exfld)
 	{
@@ -192,7 +193,7 @@ if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY
 		));
 		$t->parse('MAIN.FORUMS_EDITPOST_FIRSTPOST.TOPIC_EXTRAFLD');
 	}
-	
+
 	$t->parse('MAIN.FORUMS_EDITPOST_FIRSTPOST');
 }
 
@@ -202,7 +203,7 @@ $t->assign(array(
 	'FORUMS_EDITPOST_SUBTITLE' => $L['forums_postedby'] . ": <a href=\"users.php?m=details&id=" . $rowpost['fp_posterid'] . "\">" . $rowpost['fp_postername'] . "</a> @ " . cot_date('datetime_medium', $rowpost['fp_updated']),
 	'FORUMS_EDITPOST_UPDATED' => cot_date('datetime_medium', $rowpost['fp_updated']),
 	'FORUMS_EDITPOST_UPDATED_STAMP' => $rowpost['fp_updated'],
-	'FORUMS_EDITPOST_SEND' => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . cot_xg()),
+	'FORUMS_EDITPOST_SEND' => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . '&d=' . $durl . "&" . cot_xg()),
 	'FORUMS_EDITPOST_TEXT' => cot_textarea('rmsgtext', $rowpost['fp_text'], 20, 56, '', 'input_textarea_medieditor'),
 	'FORUMS_EDITPOST_EDITTIMEOUT' => cot_build_timegap(0, $cfg['forums']['edittimeout'] * 3600)
 ));
