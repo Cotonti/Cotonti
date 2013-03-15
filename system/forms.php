@@ -67,7 +67,7 @@ function cot_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
 	$rc = empty($custom_rc)
 		? (empty($R["input_{$type}_{$rc_name}"]) ? "input_$type" : "input_{$type}_{$rc_name}")
 		: $custom_rc;
-	if (!isset($R[$rc]))
+	if (!isset($R[$rc]) && empty($custom_rc))
 	{
 		$rc = 'input_default';
 	}
