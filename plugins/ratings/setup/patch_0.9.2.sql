@@ -1,0 +1,1 @@
+ALTER TABLE `cot_rated` ADD `rated_date` INT NOT NULL DEFAULT 0 AFTER rated_value;

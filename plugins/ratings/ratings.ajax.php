@@ -102,7 +102,8 @@ if ($inr == 'send' && $newrate > 0 && $newrate <= 10 && $auth_write && $enabled)
 		'rated_code' => $code,
 		'rated_area' => $area,
 		'rated_userid' => $usr['id'],
-		'rated_value' => (int) $newrate
+		'rated_value' => (int) $newrate,
+		'rated_date' => $sys['now']
 	));
 	$rating_voters = $db->query("SELECT COUNT(*) FROM $db_rated
 		WHERE rated_area = ? AND rated_code = ?",
