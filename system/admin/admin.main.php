@@ -103,5 +103,3 @@ else
 }
 
 require_once $cfg['system_dir'].'/footer.php';
-
-?>

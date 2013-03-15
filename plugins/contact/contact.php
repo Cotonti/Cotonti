@@ -68,7 +68,7 @@ if (isset($_POST['rtext']))
 	{
 		$rcontact['contact_' . $exfld['field_name']] = cot_import_extrafields('rcontact' . $exfld['field_name'], $exfld);
 	}
-	
+
 	if ($usr['id'] == 0 && isset($cot_captcha))
 	{
 		$rverify = cot_import('rverify', 'P', 'TXT');
@@ -97,12 +97,12 @@ if (isset($_POST['rtext']))
 		$rcontact['contact_authorid'] = (int) $usr['id'];
 		$rcontact['contact_date'] = (int) $sys['now'];
 		$rcontact['contact_val'] = 0;
-		
+
 		if (in_array($cfg['plugin']['contact']['save'], array('db','both')))
 		{
 			$db->insert($db_contact, $rcontact);
 		}
-		
+
 		$semail = (!empty($cfg['plugin']['contact']['email'])) ? $cfg['plugin']['contact']['email'] : $cfg['adminemail'];
 		if (cot_check_email($semail) && in_array($cfg['plugin']['contact']['save'], array('email','both')))
 		{
@@ -113,7 +113,7 @@ if (isset($_POST['rtext']))
 				'author' => $rcontact['contact_author'],
 				'email' => $rcontact['contact_email'],
 				'subject' => $rcontact['contact_subject'],
-				'text' => $rcontact['contact_text']	
+				'text' => $rcontact['contact_text']
 			);
 			foreach ($cot_extrafields[$db_contact] as $exfld)
 			{
@@ -123,7 +123,7 @@ if (isset($_POST['rtext']))
 				$context['extra'.$exfld['field_name']] = $ex_body;
 				$context['extra'.$exfld['field_name'].'_title'] = $ex_title;
 				$context['extra'.$exfld['field_name'].'_value'] = $rcontact['contact_'.$exfld['field_name']];
-				
+
 			}
 			$context['extra'] = $rextras;
 			$rtextm = cot_rc(empty($cfg['plugin']['contact']['template']) ? $R['contact_message'] : $cfg['plugin']['contact']['template'], $context);
@@ -175,4 +175,3 @@ if (!$sent)
 	}
 	$t->parse('MAIN.FORM');
 }
-?>

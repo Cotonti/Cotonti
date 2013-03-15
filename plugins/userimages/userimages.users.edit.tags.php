@@ -24,5 +24,3 @@ foreach($userimages as $code => $settings)
 {
 	$t->assign('USERS_EDIT_'.strtoupper($code), cot_inputbox('text', "ruser$code", $urr["user_$code"], array('size' => 32, 'maxlength' => 255)));
 }
-
-?>

@@ -37,4 +37,3 @@ function cot_trash_page_sync($data)
 	($cache && $cfg['cache_page']) && $cache->page->clear('page');
 	return true;
 }
-?>

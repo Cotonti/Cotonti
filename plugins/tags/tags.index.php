@@ -55,4 +55,3 @@ if ($cfg['plugin']['tags']['pages'] || $cfg['plugin']['tags']['forums'])
 			array('url' => cot_url('plug', 'e=tags&a='.$cfg['plugin']['tags']['index']))));
 	}
 }
-

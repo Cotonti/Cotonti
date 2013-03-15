@@ -127,4 +127,3 @@ cot_display_messages($t);
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
-?>

@@ -294,5 +294,3 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	$recentitems->parse('MAIN');
 	return ($d == 0 || $jj > 0) ? $recentitems->text('MAIN') : '';
 }
-
-?>

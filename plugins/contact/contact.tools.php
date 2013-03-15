@@ -145,7 +145,7 @@ if (($a == '') && !empty($id))
 			$tag = mb_strtoupper($exfld['field_name']);
 			$exfld_val = cot_build_extrafields_data('contact', $exfld, $row['contact_'.$exfld['field_name']]);
 			$exfld_title = isset($L['contact_' . $exfld['field_name'] . '_title']) ? $L['contact_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
-			
+
 			$tuman->assign(array(
 				'CONTACT_' . $tag . '_TITLE' => $exfld_title,
 				'CONTACT_' . $tag => $exfld_val,
@@ -170,4 +170,3 @@ $tuman->assign(array(
 ));
 $tuman->parse('MAIN');
 $plugin_body .= $tuman->text('MAIN');
-?>

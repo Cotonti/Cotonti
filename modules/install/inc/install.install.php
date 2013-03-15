@@ -705,5 +705,3 @@ function cot_install_sort_extensions($selected_extensions, $is_module = FALSE)
 
 	return $ret;
 }
-
-?>

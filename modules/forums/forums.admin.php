@@ -70,5 +70,3 @@ foreach (cot_getextplugins('forums.admin.tags') as $pl)
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
-
-?>

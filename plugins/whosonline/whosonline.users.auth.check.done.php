@@ -27,4 +27,3 @@ $db->insert($db_online, array(
 	'online_shield' => 0,
 	'online_hammer' => 0
 	));
-?>

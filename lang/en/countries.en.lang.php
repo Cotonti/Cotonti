@@ -648,5 +648,3 @@ $Ltz['Pacific/Tarawa']                 = "Pacific/Tarawa";
 $Ltz['Pacific/Tongatapu']              = "Pacific/Tongatapu";
 $Ltz['Pacific/Wake']                   = "Pacific/Wake";
 $Ltz['Pacific/Wallis']                 = "Pacific/Wallis";
-
-?>

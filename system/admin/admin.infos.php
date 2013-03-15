@@ -53,5 +53,3 @@ $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
 
 @error_reporting(7);
-
-?>

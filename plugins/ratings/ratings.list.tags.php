@@ -27,4 +27,3 @@ $t->assign(array(
 	'LIST_RATINGS_AVERAGE' => $ratings_average,
 	'LIST_RATINGS_COUNT'   => $ratings_count
 ));
-

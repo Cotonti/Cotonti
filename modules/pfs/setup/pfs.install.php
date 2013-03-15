@@ -27,4 +27,3 @@ if ($dbres->rowCount() == 0)
 	$db->query("ALTER TABLE `$db_groups` ADD COLUMN `grp_pfs_maxtotal` INT NOT NULL DEFAULT 0");
 }
 $dbres->closeCursor();
-

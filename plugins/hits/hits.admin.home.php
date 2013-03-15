@@ -110,4 +110,3 @@ if (!$cfg['plugin']['hits']['disableactivitystats'] && cot_module_active('page')
 $tt->parse('MAIN');
 
 $line = $tt->text('MAIN');
-

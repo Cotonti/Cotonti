@@ -32,4 +32,3 @@ $extra_whitelist[$db_pages] = array(
 		'recentitems.pages.tpl' => '{PAGE_ROW_XXXXX}',
 	)
 );
-?>

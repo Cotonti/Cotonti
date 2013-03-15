@@ -6,5 +6,3 @@ $R['polls_icon_delete'] = '<img src="images/icons/'.$cfg['defaulticons'].'/delet
 $R['polls_icon_reset'] = '<img src="images/icons/'.$cfg['defaulticons'].'/reset.png" alt="" />';
 $R['polls_icon_bump'] = '<img src="images/icons/'.$cfg['defaulticons'].'/arrow-up.png" alt="" />';
 $R['polls_icon_open'] = '<img src="images/icons/'.$cfg['defaulticons'].'/arrow-jump.png" alt="" />';
-
-?>

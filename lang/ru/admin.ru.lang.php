@@ -535,5 +535,3 @@ $L['adm_help_cache'] = 'Недоступно';
 $L['adm_help_check1'] = 'Недоступно';
 $L['adm_help_check2'] = 'Недоступно';
 $L['adm_help_config']= 'Недоступно';
-
-?>

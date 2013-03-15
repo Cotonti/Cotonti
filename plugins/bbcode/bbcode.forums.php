@@ -22,4 +22,3 @@ if ($cfg['parser'] == 'bbcode')
 	$R['forums_code_quote'] = "[quote]{\$date}[url={\$url}]#{\$id}[/url] [b]{\$postername} :[/b]\n{\$text}\n[/quote]";
 	$R['forums_code_update'] = "\n\n[b]{\$updated}[/b]\n\n";
 }
-

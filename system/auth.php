@@ -264,4 +264,3 @@ function cot_auth_reorder()
 
     $sql = $db->query("ALTER TABLE $db_auth ORDER BY auth_code ASC, auth_option ASC, auth_groupid ASC, auth_code ASC");
 }
-?>

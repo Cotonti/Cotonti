@@ -51,4 +51,3 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'])
 
 	$t->assign('ADMIN_CONFIG_EDIT_CUSTOM', $tt->text('MAIN'));
 }
-?>

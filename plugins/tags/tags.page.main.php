@@ -37,5 +37,3 @@ if ($cfg['plugin']['tags']['pages'])
 		$out['keywords'] = $tag_keywords;
 	}
 }
-
-?>

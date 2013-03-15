@@ -54,7 +54,7 @@ if ($a == 'request' && $email != '')
 	{
 		cot_shield_update(60, "Password recovery email sent");
 		$msg = 'request';
-    }        
+    }
 	else
 	{
 		cot_shield_update(10, "Password recovery requested");
@@ -147,4 +147,3 @@ $t->parse('MAIN');
 $t->out('MAIN');
 
 require_once $cfg['system_dir'].'/footer.php';
-

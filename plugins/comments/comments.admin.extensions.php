@@ -27,4 +27,3 @@ elseif ($is_module && in_array($code, $com_modules_struct_list) && !cot_config_i
 {
 	cot_config_implant($code, $com_options, true, 'comments');
 }
-

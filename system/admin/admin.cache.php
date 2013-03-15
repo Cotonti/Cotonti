@@ -121,5 +121,3 @@ foreach (cot_getextplugins('admin.cache.tags') as $pl)
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
-
-?>

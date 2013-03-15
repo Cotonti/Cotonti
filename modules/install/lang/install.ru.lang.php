@@ -74,4 +74,3 @@ $L['install_ver_invalid'] = '{$ver} &mdash; неудачно!';
 $L['install_ver_valid'] = '{$ver} &mdash; успешно!';
 $L['install_view_site'] = 'Открыть сайт';
 $L['install_writable'] = 'Доступно';
-

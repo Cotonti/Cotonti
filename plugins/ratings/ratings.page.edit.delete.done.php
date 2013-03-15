@@ -20,4 +20,3 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('ratings', 'plug');
 
 cot_ratings_remove('page', $id);
-

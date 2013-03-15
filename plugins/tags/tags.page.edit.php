@@ -72,5 +72,3 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 		cot_tag($new_tags[$i], $id, 'pages', $tags_extra);
 	}
 }
-
-?>

@@ -470,4 +470,3 @@ foreach (cot_getextplugins('search.tags') as $pl)
 	include $pl;
 }
 /* ===== */
-?>

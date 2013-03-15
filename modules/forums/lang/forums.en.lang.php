@@ -123,5 +123,3 @@ $L['forums_confirm_delete_post'] = 'Are you sure want to delete this post?';
 $L['forums_polltooshort'] = 'Poll options must be equal, or greater than 2';
 $L['for_onlinestatus0'] = 'user is offline';
 $L['for_onlinestatus1'] = 'user is online';
-
-?>

@@ -154,5 +154,3 @@ function cot_userimages_build($src, $code='')
 	}
 	return '';
 }
-
-?>

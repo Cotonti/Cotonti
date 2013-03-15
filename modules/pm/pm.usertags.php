@@ -30,5 +30,3 @@ else
 	$temp_array['PM'] = '';
 	$temp_array['PMNOTIFY'] = '';
 }
-
-?>

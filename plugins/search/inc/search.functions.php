@@ -109,5 +109,3 @@ function cot_clear_mark($text, $type, $words)
 	}
 	return ("");
 }
-
-?>

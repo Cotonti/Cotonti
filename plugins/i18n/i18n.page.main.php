@@ -28,7 +28,7 @@ if ($i18n_enabled && $i18n_notmain)
 	{
 		$cat_i18n = &$structure['page'][$pag['page_cat']];
 	}
-	
+
 	if ($pag_i18n)
 	{
 		// Override <title>, subtitle and desc
@@ -38,12 +38,11 @@ if ($i18n_enabled && $i18n_notmain)
 		);
 		$out['subtitle'] = cot_title($cfg['page']['title_page'], $title_params);
 		$out['desc'] = htmlspecialchars(strip_tags($pag_i18n['ipage_desc']));
-		
+
 		// Enable indexing
 		$sys['noindex'] = false;
-		
+
 		// Merge with page data
 		$pag = array_merge($pag, $pag_i18n);
 	}
 }
-

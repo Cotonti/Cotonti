@@ -423,5 +423,3 @@ function cot_smilies_load()
 	}
 	$cache && $cache->db->store('cot_smilies', $cot_smilies, 'system');
 }
-
-?>

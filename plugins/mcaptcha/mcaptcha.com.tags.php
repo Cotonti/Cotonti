@@ -24,4 +24,3 @@ if ($usr['id'] == '0' && $cfg['captchamain'] == 'mcaptcha')
 		'COMMENTS_FORM_VERIFY' => cot_inputbox('text', 'rverify', '', 'size="10" maxlength="20"'),
 	));
 }
-

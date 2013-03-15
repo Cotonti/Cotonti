@@ -35,4 +35,3 @@ if (!in_array($m, array('edit', 'editfolder', 'view')))
 }
 
 require_once cot_incfile('pfs', 'module', $m);
-?>

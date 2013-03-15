@@ -29,4 +29,3 @@ $L['cfg_usertextmax'] = 'Maximum length for user signature';
 $L['cfg_usertextmax_hint'] = '';
 $L['cfg_usertextimg'] = 'Allow images and HTML in user signature';
 $L['cfg_usertextimg_hint'] = '\'No\' recommended, for security reasons';
-

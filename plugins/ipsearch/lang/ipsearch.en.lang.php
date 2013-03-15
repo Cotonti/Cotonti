@@ -25,5 +25,3 @@ $L['ipsearch_found1'] = 'Found';
 $L['ipsearch_found2'] = 'match(es) for';
 
 $L['ipsearch_help'] = 'No help for this plugin yet!';
-
-?>

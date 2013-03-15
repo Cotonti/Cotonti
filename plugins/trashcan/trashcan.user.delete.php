@@ -21,4 +21,3 @@ if ($cfg['plugin']['trashcan']['trash_user'])
 {
 	cot_trash_put('user', $L['User']." #".$id." ".$row['user_name'], $id, $row1);
 }
-

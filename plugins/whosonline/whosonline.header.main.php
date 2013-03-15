@@ -79,5 +79,3 @@ if (!defined('WHOSONLINE_UPDATED'))
 	$t->assign('HEADER_WHOSONLINE', $out['whosonline']);
 	define('WHOSONLINE_UPDATED', true);
 }
-
-?>

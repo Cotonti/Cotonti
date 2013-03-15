@@ -25,5 +25,3 @@ if($grp_id)
 }
 
 $cache && $cache->db->remove('cot_hiddenusers', 'system');
-
-?>

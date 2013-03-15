@@ -22,5 +22,3 @@ $text = cot_import('text', 'P', 'HTM');
 $style = '<link rel="stylesheet" type="text/css" href="'.$cfg['themes_dir'].'/'.$theme.'/'.$theme.'.css" />'."\n";
 cot_sendheaders();
 echo $style . '<body class="preview">' . cot_parse($text) . '</body>';
-
-?>

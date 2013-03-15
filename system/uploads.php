@@ -130,4 +130,3 @@ function cot_safename($basename, $underscore = true, $postfix = '')
 	if(empty($fname)) $fname = cot_unique();
 	return $fname . $postfix . '.' . mb_strtolower($ext);
 }
-?>

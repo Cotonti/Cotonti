@@ -25,4 +25,3 @@ if (!$i18n_structure)
 	cot_i18n_load_structure();
 	$cache && $cache->db->store('structure', $i18n_structure, 'i18n');
 }
-

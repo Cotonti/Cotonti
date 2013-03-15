@@ -32,5 +32,3 @@ foreach($userimages as $code => $settings)
 		}
 	}
 }
-
-?>

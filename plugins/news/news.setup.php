@@ -37,5 +37,3 @@ cache_ttl=04:select:0,60,180,300,600,1800,3600:0:Cache lifetime in seconds, 0 di
  */
 
 defined('COT_CODE') or die('Wrong URL');
-
-?>

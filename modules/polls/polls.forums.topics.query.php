@@ -23,5 +23,3 @@ if($cfg['forums']['cat_' . $s]['allowpolls'])
 	$join_columns = ', p.poll_id, p.poll_type';
 	$join_condition = " LEFT JOIN $db_polls AS p ON t.ft_id=p.poll_code";
 }
-
-?>

@@ -147,7 +147,7 @@ foreach ($sql_polls->fetchAll() as $row)
 	}
 	/* ===== */
 
-	$t->parse('MAIN.POLLS_ROW');	
+	$t->parse('MAIN.POLLS_ROW');
 }
 
 if ($ii == 0)
@@ -226,5 +226,3 @@ foreach (cot_getextplugins('polls.admin.tags') as $pl)
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
-
-?>

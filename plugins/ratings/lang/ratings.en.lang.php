@@ -54,5 +54,3 @@ $L['rat_since'] = 'since';
 $L['rat_notyetrated'] = 'Not yet rated';
 $L['rat_alreadyvoted'] = 'You\'ve already voted for this item.';
 $L['rat_registeredonly'] = 'Only registered users can rate items.';
-
-?>

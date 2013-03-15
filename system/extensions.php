@@ -1075,4 +1075,3 @@ function cot_plugin_resume($name, $binding_id = 0)
 
 	return $db->update($db_plugins, array('pl_active' => 1), $condition);
 }
-

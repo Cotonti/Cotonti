@@ -21,5 +21,3 @@ parse_str($_SERVER['QUERY_STRING'], $params);
 
 $env['status'] = '301 Moved Permanently';
 cot_redirect(cot_url('page', $params, '', true));
-
-?>

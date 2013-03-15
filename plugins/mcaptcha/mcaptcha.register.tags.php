@@ -25,5 +25,3 @@ if ($cfg['captchamain'] == 'mcaptcha')
 		'USERS_REGISTER_VERIFYINPUT' => cot_inputbox('text', 'rverify', '', 'size="10" maxlength="20"'),
 	));
 }
-
-?>

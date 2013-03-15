@@ -599,4 +599,3 @@ foreach (cot_getextplugins('global') as $pl)
 {
 	include $pl;
 }
-

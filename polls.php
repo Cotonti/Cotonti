@@ -13,5 +13,3 @@
 $_GET['e'] = 'polls';
 
 require 'index.php';
-
-?>

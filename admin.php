@@ -39,5 +39,3 @@ if ($cfg['admintheme'])
 require_once cot_incfile('admin', 'module');
 
 include cot_incfile('admin', 'module', 'main');
-
-?>

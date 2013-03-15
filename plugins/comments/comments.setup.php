@@ -44,5 +44,3 @@ order=14:select:Chronological,Recent:Recent:Comment sorting order
  */
 
 defined('COT_CODE') or die('Wrong URL');
-
-?>

@@ -106,5 +106,3 @@ $L['cfg_addfields_hint'] = 'Example "page_extra1,page_extra2,page_key"';
 $L['cfg_extrafilters'] = 'Show extrafilters on main search page';
 
 $L['info_desc'] = 'Advanced search in pages, forums and other loctions';
-
-?>

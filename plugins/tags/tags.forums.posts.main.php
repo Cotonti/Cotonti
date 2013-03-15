@@ -24,5 +24,3 @@ if ($cfg['plugin']['tags']['forums'])
 	$tag_keywords = implode(', ', $tags);
 	$out['keywords'] = $tag_keywords;
 }
-
-?>

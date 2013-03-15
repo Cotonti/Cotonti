@@ -31,4 +31,3 @@ Recommends_plugins=bbcode,comments,ratings,tags,trashcan,userimages
  */
 
 defined('COT_CODE') or die('Wrong URL.');
-

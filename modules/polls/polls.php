@@ -170,5 +170,3 @@ foreach (cot_getextplugins('polls.tags') as $pl)
 $t->parse('MAIN');
 $t->out('MAIN');
 require_once $cfg['system_dir'] . '/footer.php';
-
-?>

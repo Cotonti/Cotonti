@@ -27,5 +27,3 @@ lowercase=05:radio::0:Cast to lower case
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-
-?>

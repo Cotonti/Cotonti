@@ -14,9 +14,7 @@ $R['comments_code_edit'] = '<a href="{$edit_url}">'.$L['Edit'].'</a> {$allowed_t
 $R['comments_code_pages_info'] = $L['Total'].': {$totalitems}, '.$L['comm_on_page'].': {$onpage}';
 $R['comments_link'] = '<a href="{$url}" class="comments_link" alt="'.$L['Comments'].'">'.$R['icon_comments'].' ({$count})</a>';
 
-$R['icon_comments'] = 
+$R['icon_comments'] =
 	'<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/comments.png" alt="'.$L['Comments'].'" />';
-$R['icon_comments_cnt'] = 
+$R['icon_comments_cnt'] =
 	'<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/comments.png" alt="'.$L['Comments'].'" /> ({$cnt})';
-
-?>

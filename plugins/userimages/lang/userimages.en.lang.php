@@ -3,7 +3,7 @@
  * English Language File for Banlist
  *
  * @package Userimages
- * @version 
+ * @version
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
@@ -33,4 +33,3 @@ $L['userimages_sigotvalid'] = 'This signature is not a valid %1$s image.';
 $L['userimages_sigupload'] = 'Upload a signature';
 
 $L['userimages_help'] = '';
-

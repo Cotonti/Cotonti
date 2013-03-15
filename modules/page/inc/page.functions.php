@@ -728,4 +728,3 @@ function cot_page_update($id, &$rpage, $auth = array())
 
 	return true;
 }
-

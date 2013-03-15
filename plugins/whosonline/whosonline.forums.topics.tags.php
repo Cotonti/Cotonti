@@ -40,5 +40,3 @@ if ($cfg['forums']['cat_' . $s]['allowviewers'])
 	));
 	$t->parse('MAIN.FORUMS_SECTIONS_VIEWERS');
 }
-
-?>

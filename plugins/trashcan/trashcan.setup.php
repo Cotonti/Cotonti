@@ -28,5 +28,3 @@ trash_comment=14:radio:0,1:1:
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-
-?>

@@ -27,5 +27,3 @@ $t->assign(array(
 	'PAGE_COMMENTS_COUNT' => cot_comments_count('page', $pag['page_id'], $pag),
 	'PAGE_COMMENTS_RSS' => cot_url('rss', 'c=comments&id=' . $pag['page_id'])
 ));
-
-?>

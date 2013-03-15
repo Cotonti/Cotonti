@@ -27,4 +27,3 @@ if ($dbres->rowCount() == 1)
 	$db->query("ALTER TABLE `$db_groups` DROP COLUMN `grp_pfs_maxtotal`");
 }
 $dbres->closeCursor();
-

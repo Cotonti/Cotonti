@@ -57,5 +57,3 @@ if ($cfg['plugin']['tags']['pages'])
 		$t->parse('MAIN.PAGE_NO_TAGS');
 	}
 }
-
-?>

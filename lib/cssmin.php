@@ -2,7 +2,7 @@
 
 /**
  * Simple CSS minification function
- * 
+ *
  * @param string $css CSS code
  * @return string
  */
@@ -20,4 +20,3 @@ function minify_css($css)
 
 	return trim($css);
 }
-?>

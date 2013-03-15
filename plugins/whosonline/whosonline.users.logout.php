@@ -20,5 +20,3 @@ if ($usr['id'] > 0)
 {
 	$db->delete($db_online, "online_userid='{$usr['id']}'");
 }
-
-?>

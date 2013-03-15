@@ -55,5 +55,3 @@ if ($cfg['plugin']['tags']['forums'])
 			cot_rc('tags_code_cloud_more', array('url' => cot_url('plug', 'e=tags&a=forums'))));
 	}
 }
-
-?>

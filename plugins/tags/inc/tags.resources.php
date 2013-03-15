@@ -17,5 +17,3 @@ $R['tags_input_editpage'] = '<input type="text" name="rtags" size="56" class="au
 $R['tags_input_editpost'] = '<input type="text" name="rtags" size="56" class="autotags" value="{$tags}" />';
 $R['tags_link_cloud_tag'] = '<li><a href="{$url}" class="{$dim}" title="{$tag_title}" rel="tag">{$tag_title}</a></li>';
 $R['tags_link_tag'] = '<a href="{$url}" title="{$tag_title}" rel="tag">{$tag_title}</a>';
-
-?>

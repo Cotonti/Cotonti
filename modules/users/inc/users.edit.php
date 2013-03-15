@@ -331,5 +331,3 @@ $t->parse('MAIN');
 $t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
-
-?>

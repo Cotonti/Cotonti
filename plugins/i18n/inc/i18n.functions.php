@@ -54,7 +54,7 @@ function cot_i18n_build_catpath($area, $cat, $locale)
 
 /**
  * Checks if internationalization is enabled in a selected category
- * 
+ *
  * @param string $cat Category code
  * @return bool TRUE if enabled, FALSE if not
  */
@@ -70,14 +70,14 @@ function cot_i18n_enabled($cat)
 		$i18n_cats = explode(',', $cfg['plugin']['i18n']['cats']);
 		$i18n_cats = array_map('trim', $i18n_cats);
 	}
-	
+
 	return in_array(cot_structure_parents('page', $cat, 'first'), $i18n_cats);
 
 }
 
 /**
  * Fetches translation row for a specific category
- * 
+ *
  * @param string $cat Category code
  * @param string $locale Locale code
  * @return mixed Category translation row or FALSE if not found
@@ -91,7 +91,7 @@ function cot_i18n_get_cat($cat, $locale)
 
 /**
  * Fetches translation row for a specific page
- * 
+ *
  * @param int $page_id Page ID
  * @param string $locale Locale code
  * @return mixed Page translation row (array) on success or FALSE on error
@@ -168,7 +168,7 @@ function cot_i18n_load_locales()
 function cot_i18n_load_structure()
 {
 	global $db, $db_i18n_structure, $i18n_structure;
-	
+
 	$res = $db->query("SELECT * FROM $db_i18n_structure");
 	while ($row = $res->fetch())
 	{
@@ -182,7 +182,7 @@ function cot_i18n_load_structure()
 
 /**
  * Saves a translation for an item
- * 
+ *
  * @param string $table_name Table name
  * @param string $field Column name
  * @param int $item Item ID
@@ -204,4 +204,3 @@ function cot_i18n_save($table_name, $field, $item, $locale, $text, $riched = fal
 
 	return $res->rowCount() == 1;
 }
-

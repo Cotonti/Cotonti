@@ -142,5 +142,3 @@ else
 {
 	include cot_incfile('install', 'module', 'install');
 }
-
-?>

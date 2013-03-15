@@ -25,5 +25,3 @@ disableactivitystats=12:radio::0:
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-
-?>

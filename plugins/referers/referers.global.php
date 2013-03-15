@@ -34,6 +34,3 @@ if (!empty($sys['referer'])
 			ON DUPLICATE KEY UPDATE
 				ref_count=ref_count+1, ref_date={$sys['now']}");
 }
-
-
-

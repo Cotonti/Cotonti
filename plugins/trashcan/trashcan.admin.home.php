@@ -28,4 +28,3 @@ if ($cfg['plugin']['trashcan']['trash_prunedelay'] > 0)
 		cot_log($deleted.' old item(s) removed from the trashcan, older than '.$cfg['plugin']['trashcan']['trash_prunedelay'].' days', 'adm');
 	}
 }
-

@@ -21,5 +21,3 @@ require_once cot_incfile('comments', 'plug');
 
 // Register restoration table
 $trash_types['comment'] = $db_com;
-
-?>

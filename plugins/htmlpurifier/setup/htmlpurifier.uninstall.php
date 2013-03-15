@@ -15,4 +15,3 @@ if (file_exists($cfg['cache_dir'] . '/htmlpurifier'))
 {
 	cot_rmdir($cfg['cache_dir'] . '/htmlpurifier');
 }
-

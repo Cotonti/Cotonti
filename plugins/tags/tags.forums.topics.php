@@ -22,7 +22,7 @@ if ($cfg['plugin']['tags']['forums'])
 {
 	require_once cot_incfile('tags', 'plug');
 	$item_id = $row['ft_id'];
-	
+
 	if (!isset($tags_rowset_list))
 	{
 		// Load tags for all entries with 1 query
@@ -63,5 +63,3 @@ if ($cfg['plugin']['tags']['forums'])
 	}
 }
 // TODO tag cloud with subforums support
-
-?>

@@ -22,5 +22,3 @@ if ($dbres->rowCount() == 1)
 $dbres->closeCursor();
 
 $cache && $cache->db->remove('cot_groups', 'system');
-
-?>

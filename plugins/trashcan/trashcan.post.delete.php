@@ -21,4 +21,3 @@ if ($cfg['plugin']['trashcan']['trash_forum'])
 {
 	cot_trash_put('forumpost', $L['Post']." #".$p." from topic #".$q, $p, $row);
 }
-?>

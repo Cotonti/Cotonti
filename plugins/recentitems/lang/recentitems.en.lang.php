@@ -76,5 +76,3 @@ $L['recentitems_posts_new_locked'] = 'New posts (locked)';
 $L['recentitems_posts_sticky_locked'] = 'Announcement';
 $L['recentitems_posts_new_sticky_locked'] = 'New announcement';
 $L['recentitems_posts_moved'] = 'Moved out of this section';
-
-?>

@@ -66,5 +66,3 @@ $R['icon_warning'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/warni
 
 $R['icon_rss'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/rss.png" alt="" />';
 $R['icon_twitter'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/twitter.png" alt="" />';
-
-?>

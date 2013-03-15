@@ -19,12 +19,12 @@ require_once cot_incfile('page', 'module');
  * @param string $title Title
  * @param int $id Page ID
  * @param bool $duplicate TRUE if duplicate alias was previously detected
- * @return string 
+ * @return string
  */
 function autoalias2_convert($title, $id = 0, $duplicate = false)
 {
 	global $cfg, $cot_translit;
-	
+
 	if($cfg['plugin']['autoalias2']['translit'] && file_exists(cot_langfile('translit', 'core')))
 	{
 		include cot_langfile('translit', 'core');
@@ -91,4 +91,3 @@ function autoalias2_update($title, $id)
 	}
 	while ($duplicate && !$cfg['plugin']['autoalias2']['prepend_id']);
 }
-

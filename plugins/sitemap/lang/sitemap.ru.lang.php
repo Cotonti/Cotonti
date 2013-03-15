@@ -44,4 +44,3 @@ $L['cfg_users']              = 'Включить пользователей';
 $L['cfg_users_freq']         = 'Частота изменения пользователей';
 $L['cfg_users_freq_params']  = $sitemap_freqs;
 $L['cfg_users_prio']         = 'Приоритет пользователей';
-

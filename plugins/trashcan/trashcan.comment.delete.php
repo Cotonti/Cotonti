@@ -21,5 +21,3 @@ if ($cfg['plugin']['trashcan']['trash_comment'])
 {
 	cot_trash_put('comment', $L['Comment']." #".$id." (".$row['com_author'].")", $id, $row);
 }
-
-?>

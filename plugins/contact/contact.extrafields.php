@@ -29,5 +29,3 @@ $extra_whitelist[$db_contact] = array(
 		'contact.tpl' => '{CONTACT_FORM_XXXXX}, {CONTACT_FORM_XXXXX_TITLE}',
 	)
 );
-
-?>

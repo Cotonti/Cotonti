@@ -16,6 +16,3 @@ cot_rc_add_file('themes/symisun-03/js/tabcontent.min.js');
 cot_rc_add_file('themes/symisun-03/js/resizer.min.js');
 cot_rc_add_file('themes/symisun-03/js/scroller.min.js');
 cot_rc_add_file('themes/symisun-03/js/textshadow.min.js');
-
-
-?>

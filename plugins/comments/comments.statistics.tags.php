@@ -24,4 +24,3 @@ $totaldbcomments = $db->countRows($db_com);
 $t->assign(array(
 	'STATISTICS_TOTALDBCOMMENTS' => $totaldbcomments
 ));
-

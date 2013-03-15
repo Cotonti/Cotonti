@@ -74,5 +74,3 @@ $L['install_ver_invalid'] = '{$ver} &mdash; invalid!';
 $L['install_ver_valid'] = '{$ver} &mdash; valid!';
 $L['install_view_site'] = 'View the site';
 $L['install_writable'] = 'Writable';
-
-?>

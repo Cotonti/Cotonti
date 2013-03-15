@@ -42,5 +42,3 @@ extrafilters=09:radio::1:Show extrafilters on main search page
  */
 
 defined('COT_CODE') or die('Wrong URL');
-
-?>

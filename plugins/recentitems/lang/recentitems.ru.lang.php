@@ -78,5 +78,3 @@ $L['recentitems_posts_new_locked'] = 'Тема закрыта (есть новы
 $L['recentitems_posts_sticky_locked'] = 'Обьявление';
 $L['recentitems_posts_new_sticky_locked'] = 'Новые обьявления';
 $L['recentitems_posts_moved'] = 'Перенесена в другой раздел';
-
-?>

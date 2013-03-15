@@ -33,5 +33,3 @@ allowemptytext=05:radio::0:
 keywords=06:string:::
 [END_COT_EXT_CONFIG_STRUCTURE]
 ==================== */
-
-?>

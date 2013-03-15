@@ -25,4 +25,3 @@ if ($row['poll_id'] > 0)
 $t-> assign(array(
 	'FORUMS_TOPICS_ROW_TITLE' => htmlspecialchars($row['ft_title'])
 ));
-?>

@@ -43,4 +43,3 @@ $extra_whitelist[$db_forum_topics] = array(
 		'forums.topics.tpl' => '{FORUMS_TOPICS_ROW_XXXXX}, {FORUMS_TOPICS_ROW_XXXXX_TITLE}',
 	)
 );
-

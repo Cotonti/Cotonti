@@ -65,5 +65,3 @@ if ($cfg['polls']['maxpolls'] > 0)
 	$indexpolls->parse('INDEXPOLLS');
 	$t->assign('INDEX_POLLS', $indexpolls->text('INDEXPOLLS'));
 }
-
-?>

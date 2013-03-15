@@ -40,4 +40,3 @@ if (!empty($row['ipage_title']))
 		'TAGS_RESULT_ROW_TAGS' => $tag_list
 	));
 }
-

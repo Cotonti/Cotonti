@@ -17,4 +17,3 @@ Hooks=parser
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('bbcode', 'plug');
-

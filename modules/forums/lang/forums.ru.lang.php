@@ -123,5 +123,3 @@ $L['forums_confirm_delete_post'] = 'Вы действительно хотите
 $L['forums_polltooshort'] = 'Количество вариантов ответа должно быть не менее двух';
 $L['for_onlinestatus0'] = 'не в сети';
 $L['for_onlinestatus1'] = 'в сети';
-
-?>

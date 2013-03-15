@@ -22,7 +22,7 @@ minchars=12:string::5:Min post length, chars
 map=12:text:::Map
 about=13:text:::About
 save=14:select:email,db,both:both:Save Method
-template=15:textarea:::Email template 
+template=15:textarea:::Email template
 [END_COT_EXT_CONFIG]
 ==================== */
 
@@ -35,5 +35,3 @@ template=15:textarea:::Email template
  * @copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
-
-?>

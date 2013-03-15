@@ -101,5 +101,3 @@ if ($a == 'search')
 }
 $t->parse('MAIN');
 $plugin_body .= $t->text('MAIN');
-
-?>

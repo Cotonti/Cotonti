@@ -213,5 +213,3 @@ function cot_selectbox_gender($check, $name)
 	}
 	return cot_selectbox($check, $name, $genlist, $titlelist, false);
 }
-
-?>

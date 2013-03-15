@@ -97,5 +97,3 @@ else
 		$cache_type->store('whosonline', $whosonline_data, 'system', 30);
 	}
 }
-
-?>

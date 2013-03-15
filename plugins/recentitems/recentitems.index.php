@@ -73,5 +73,3 @@ if ($enpages || $enforums)
 		unset($ri_html);
 	}
 }
-
-?>

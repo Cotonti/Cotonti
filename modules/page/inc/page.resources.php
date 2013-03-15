@@ -35,4 +35,3 @@ $R['page_code_redir'] = '<script type="text/javascript">location.href="{$redir}"
 $R['page_icon_file'] = '<img class="icon" src="{$icon}" alt="'.$L['File'].'" />';
 $R['page_icon_file_default'] = 'images/icons/'.$cfg['defaulticons'].'/page.png';
 $R['page_icon_file_path'] = 'images/filetypes/default/{$type}.png';
-

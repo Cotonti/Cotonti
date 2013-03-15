@@ -31,5 +31,3 @@ if (!empty($highlight) && $cfg['jquery'])
 	$search_embed .= '});});';
 	cot_rc_embed($search_embed);
 }
-
-?>

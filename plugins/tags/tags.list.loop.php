@@ -69,4 +69,3 @@ if ($cfg['plugin']['tags']['pages'])
 		$t->parse('MAIN.LIST_ROW.PAGE_NO_TAGS');
 	}
 }
-?>

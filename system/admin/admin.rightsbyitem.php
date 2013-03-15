@@ -221,5 +221,3 @@ function cot_rights_parseline($row, $title, $link)
 	));
 	$t->parse('MAIN.RIGHTSBYITEM_ROW');
 }
-
-?>

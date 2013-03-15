@@ -3,7 +3,7 @@
  * Russian Language File for Banlist
  *
  * @package Userimages
- * @version 
+ * @version
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
@@ -33,5 +33,3 @@ $L['userimages_sigotvalid'] = 'Эта подпись не является де�
 $L['userimages_sigupload'] = 'Закачать изображение подписи';
 
 $L['userimages_help'] = '';
-
-?>

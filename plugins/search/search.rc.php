@@ -20,4 +20,3 @@ if ($cfg['jquery'])
 {
 	cot_rc_add_file($cfg['plugins_dir'].'/search/js/hl.min.js');
 }
-?>

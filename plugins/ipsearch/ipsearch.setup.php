@@ -29,5 +29,3 @@ Lock_members=RW12345A
  */
 
 defined('COT_CODE') or die('Wrong URL');
-
-?>

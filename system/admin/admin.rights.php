@@ -138,7 +138,7 @@ while ($row = $sql->fetch())
 		$title = $L['Messages'];
 	}
 	else
-	{	
+	{
 		$link = cot_url('admin', "m=extensions&a=details&mod=".$row['auth_code']);
 		$title = $cot_modules[$row['auth_code']]['title'];
 		$ico = $cfg['modules_dir'] . '/' . $row['auth_code'] . '/' . $row['auth_code'] . '.png';
@@ -272,7 +272,7 @@ function cot_rights_parseline($row, $title, $link, $ico = '')
 		$t->assign('ADMIN_RIGHTS_ROW_PRESERVE', $preserve);
 	}
 	$ico = (!empty($ico) && file_exists($ico)) ? $ico : '';
-	
+
 	$t->assign(array(
 		'ADMIN_RIGHTS_ROW_AUTH_CODE' => $row['auth_code'],
 		'ADMIN_RIGHTS_ROW_TITLE' => $title,
@@ -283,5 +283,3 @@ function cot_rights_parseline($row, $title, $link, $ico = '')
 	));
 	$t->parse('MAIN.RIGHTS_SECTION.RIGHTS_ROW');
 }
-
-?>

@@ -28,4 +28,3 @@ if($cfg['plugin']['tags']['css'])
 {
 	cot_rc_add_file($cfg['plugins_dir'] . '/tags/tpl/tags.css');
 }
-?>

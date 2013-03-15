@@ -1472,4 +1472,3 @@ class Cache
 		return $res;
 	}
 }
-

@@ -30,5 +30,3 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 	}
 	cot_tag_remove_all($id, 'pages', $tags_extra);
 }
-
-?>

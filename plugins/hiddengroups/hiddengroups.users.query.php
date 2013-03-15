@@ -27,5 +27,3 @@ if(!cot_auth('plug', 'hiddengroups', '1'))
 		$where[] = "u.user_id NOT IN (".$hiddenusers.")";
 	}
 }
-
-?>

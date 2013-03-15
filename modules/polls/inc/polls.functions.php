@@ -130,7 +130,7 @@ function cot_poll_check()
 	$poll_multiple = cot_import('poll_multiple', 'P', 'BOL');
 	$poll_state = cot_import('poll_state', 'P', 'BOL');
 	$poll_options = cot_import('poll_option', 'P', 'ARR');
-	
+
 	if ($poll_delete && (int) $poll_id > 0)
 	{
 		cot_poll_delete($poll_id);
@@ -493,5 +493,3 @@ function cot_poll_exists($id, $type = '')
 
 	return ($sql->fetchColumn());
 }
-
-?>

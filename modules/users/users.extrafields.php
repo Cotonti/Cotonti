@@ -30,4 +30,3 @@ $extra_whitelist[$db_users] = array(
 		'forums.posts.tpl' => '{FORUMS_POSTS_ROW_USERXXXXX}, {FORUMS_POSTS_ROW_USERXXXXX_TITLE}',
 	)
 );
-?>

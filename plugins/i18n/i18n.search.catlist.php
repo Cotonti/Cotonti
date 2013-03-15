@@ -53,4 +53,3 @@ if (is_array($i18n_structure) && count($i18n_structure) > 0)
 		$rsearch['pag']['sub'] = $tmp;
 	}
 }
-

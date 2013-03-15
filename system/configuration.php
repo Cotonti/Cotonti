@@ -502,5 +502,3 @@ function cot_config_update($name, $options, $is_module = false, $category = '', 
 
 	return $affected;
 }
-
-?>

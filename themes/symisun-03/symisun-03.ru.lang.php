@@ -19,15 +19,15 @@ defined('COT_CODE') or die('Wrong URL.');
  * forums.posts.tpl
  */
 
-$themelang['forumspost_to'] = 'чтобы';	
-$themelang['forumspost_post'] = 'Ответить';	
-$themelang['forumspost_jump'] = 'Переход';	
+$themelang['forumspost_to'] = 'чтобы';
+$themelang['forumspost_post'] = 'Ответить';
+$themelang['forumspost_jump'] = 'Переход';
 
 /**
  * forums.topics.tpl
  */
 $themelang['forumstopics_Legend'] = 'Информация';
-$themelang['forumstopics_Start'] = 'Создать тему';	
+$themelang['forumstopics_Start'] = 'Создать тему';
 
 /**
  * header.tpl
@@ -74,15 +74,15 @@ $themelang['pageadd_down'] = 'Файл';
 /**
  * page.edit.tpl
  */
- 
+
 $themelang['pageedit_del'] = 'Удалить';
- 
+
 /**
  * pm.send.tpl
  */
- 
+
 $themelang['pmsend_Sendmessagetohint'] = 'up to 10 recipients, separated by commas';
- 
+
 /**
  * pm.tpl
  */
@@ -138,5 +138,3 @@ $themelang['usersregister_Usernamehint'] = 'Имя пользователя не
 
 
 $themelang['search_Generalhint'] = 'Вы можете сделать поиск более точным, выбрав необходимые категории и опции поиска. Обратите внимание, что поиск &quot;Везде&quot; не содержит всех опций. Для точного поиска используйте вкладки &quot;Форумы&quot; и &quot;Страницы&quot;.';
-
-?>

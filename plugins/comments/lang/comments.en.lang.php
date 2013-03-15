@@ -92,5 +92,3 @@ $Ls['Comments'] = "comments,comment";
  */
 
 $L['plu_title'] = 'Comment Editing';
-
-?>

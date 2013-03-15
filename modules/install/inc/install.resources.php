@@ -14,4 +14,3 @@ $R['install_code_requires'] = '<p class="requires">'.$L['install_requires'].': '
 	.$L['Modules'].' - {$modules_list}; '.$L['Plugins'].' - {$plugins_list}</p>';
 $R['install_code_valid'] = '<span class="valid">{$text}</span>';
 $R['install_code_writable'] = '<span class="valid">'.$L['install_writable'].'</span>';
-?>

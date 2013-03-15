@@ -35,5 +35,3 @@ if (!in_array($m, array('topics', 'posts', 'editpost', 'newtopic')))
 }
 
 include cot_incfile('forums', 'module', $m);
-
-?>

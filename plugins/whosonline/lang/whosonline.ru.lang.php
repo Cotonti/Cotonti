@@ -32,5 +32,3 @@ $L['LastSeen'] = 'Дата и время';
 $L['Location'] = 'Раздел сайта';
 $L['IPaddress'] = 'IP address';
 $L['Visitor'] = 'Гость';
-
-?>

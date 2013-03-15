@@ -40,5 +40,3 @@ foreach($userimages as $code => $settings)
 		'USERS_PROFILE_'.strtoupper($code)."_SELECT" => $userimg_selectfile
 	));
 }
-
-?>

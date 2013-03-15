@@ -37,5 +37,3 @@ if (!defined('COT_ADMIN') && ($cfg['plugin']['hits']['adminhits'] || $usr['maing
 		cot_stat_update($sys['day']);
 	}
 }
-
-?>

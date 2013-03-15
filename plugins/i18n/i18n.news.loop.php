@@ -29,4 +29,3 @@ if ($i18n_enabled && $i18n_notmain)
 		'PAGE_ROW_CATDESC' => htmlspecialchars($cat_i18n['desc']),
 	));
 }
-

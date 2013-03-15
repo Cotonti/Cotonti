@@ -22,5 +22,3 @@ if(!empty($poll))
 {
 	cot_poll_save('forum', $q);
 }
-
-?>

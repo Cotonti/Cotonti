@@ -138,5 +138,3 @@ foreach (cot_getextplugins('footer.last') as $pl)
 	include $pl;
 }
 /* ===== */
-
-?>

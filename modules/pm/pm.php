@@ -35,4 +35,3 @@ if (!in_array($m, array('send', 'message')))
 }
 
 require_once cot_incfile('pm', 'module', $m);
-?>

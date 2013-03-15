@@ -109,5 +109,3 @@ readfile($src_uri);
 // 	}
 // 	readfile($src_uri . '.gz');
 // }
-
-?>

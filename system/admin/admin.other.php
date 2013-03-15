@@ -100,7 +100,7 @@ else
 			usort($target, 'cot_admin_other_cmp');
 			foreach ($target as $pl)
 			{
-				$ext_info = cot_get_extensionparams($pl['pl_code'], $type == 'module');	
+				$ext_info = cot_get_extensionparams($pl['pl_code'], $type == 'module');
 				$t->assign(array(
 					'ADMIN_OTHER_EXT_URL' => $type == 'plug' ? cot_url('admin', 'm=other&p=' . $pl['pl_code']) :
 						cot_url('admin', 'm=' . $pl['pl_code']),
@@ -137,5 +137,3 @@ else
 	$t->parse('MAIN');
 	$adminmain = $t->text('MAIN');
 }
-
-?>

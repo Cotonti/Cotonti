@@ -22,5 +22,3 @@ if ($is_first_post && $usr['isadmin'] && cot_module_active('polls') && cot_poll_
 {
     $t->parse('MAIN.POLL');
 }
-
-?>

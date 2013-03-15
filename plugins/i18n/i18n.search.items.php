@@ -30,5 +30,3 @@ if (!empty($row['ipage_title']))
 		'PLUGIN_PR_TIMESTAMP' => $row['ipage_date']
 	));
 }
-
-?>

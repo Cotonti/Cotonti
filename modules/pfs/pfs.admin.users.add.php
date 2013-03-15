@@ -19,5 +19,3 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $rgroups['grp_pfs_maxfile'] = (int)min(cot_import('rmaxfile', 'P', 'INT'), cot_get_uploadmax());
 $rgroups['grp_pfs_maxtotal'] = (int)cot_import('rmaxtotal', 'P', 'INT');
-
-?>

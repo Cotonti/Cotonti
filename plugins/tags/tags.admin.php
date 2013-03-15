@@ -43,5 +43,3 @@ if ($cfg['plugin']['tags']['pages'])
 		$t->parse('PAGE.PAGE_ROW.ADMIN_NO_TAGS');
 	}
 }
-
-?>

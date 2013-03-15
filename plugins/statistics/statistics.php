@@ -184,4 +184,3 @@ foreach (cot_getextplugins('statistics.tags') as $pl)
 	include $pl;
 }
 /* ===== */
-?>

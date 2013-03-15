@@ -39,5 +39,3 @@ switch ($a)
 		break;
 }
 cot_redirect(cot_url('users', "m=profile", '', true));
-
-?>

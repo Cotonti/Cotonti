@@ -23,5 +23,3 @@ $L['info_desc'] = 'Visual (WYSIWYG) HTML content editor. Only one content editor
 
 $L['cfg_cdn'] = 'Use CDN-hosted CKEditor';
 $L['cfg_cdn_url'] = 'CDN URL (without protocol part and trailing slash)';
-
-?>

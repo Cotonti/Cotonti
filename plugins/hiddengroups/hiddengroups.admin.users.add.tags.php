@@ -20,5 +20,3 @@ Hooks=admin.users.add.tags
 $hidden_groups = true;
 
 $t->assign('ADMIN_USERS_NGRP_HIDDEN', cot_radiobox(0, 'rhidden', array(1, 0), array($L['Yes'], $L['No'])));
-
-?>

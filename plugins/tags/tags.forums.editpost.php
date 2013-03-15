@@ -62,5 +62,3 @@ if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $is_fir
 		cot_tag($new_tags[$i], $q, 'forums');
 	}
 }
-
-?>

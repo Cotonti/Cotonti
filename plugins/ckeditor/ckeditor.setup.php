@@ -25,5 +25,3 @@ cdn_url=02:string::ckeditor-fluid.appspot.com:CDN URL (without protocol part and
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-
-?>

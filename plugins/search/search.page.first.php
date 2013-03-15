@@ -16,5 +16,3 @@ Hooks=page.first
 defined('COT_CODE') or die('Wrong URL');
 
 $highlight = cot_import('highlight', 'G', 'TXT');
-
-?>

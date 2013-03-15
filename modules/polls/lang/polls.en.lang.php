@@ -64,5 +64,3 @@ $L['info_desc'] = 'Configurable voting system for pages and forums';
 
 $L['polls_voterssince'] = 'voters since';
 $L['polls_allpolls'] = 'All polls';
-
-?>

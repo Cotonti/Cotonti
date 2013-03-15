@@ -34,7 +34,7 @@ $db_pfs_folders = (isset($db_pfs_folders)) ? $db_pfs_folders : $db_x . 'pfs_fold
  * @param string $c2 Input name
  * @param string $title Link title
  * @param string $parser Custom parser (otional)
- * @return string 
+ * @return string
  */
 function cot_build_pfs($id, $c1, $c2, $title, $parser = '')
 {
@@ -643,5 +643,3 @@ function cot_userinfo($id)
 		return ($res);
 	}
 }
-
-?>

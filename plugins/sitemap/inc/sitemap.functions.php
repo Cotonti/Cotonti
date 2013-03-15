@@ -117,5 +117,3 @@ function sitemap_save($xml, $d = 0)
 	$filename = $d > 0 ? $cfg['cache_dir'] . "/sitemap/sitemap.$d.xml" : $cfg['cache_dir'] . "/sitemap/sitemap.xml";
 	file_put_contents($filename, sitemap_compress($xml));
 }
-
-?>

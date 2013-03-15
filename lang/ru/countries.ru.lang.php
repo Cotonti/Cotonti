@@ -648,5 +648,3 @@ $Ltz['Pacific/Tarawa']                 = 'Тихий океан/Тарава';
 $Ltz['Pacific/Tongatapu']              = 'Тихий океан/Тонгатапу';
 $Ltz['Pacific/Wake']                   = 'Тихий океан/Уэйк';
 $Ltz['Pacific/Wallis']                 = 'Тихий океан/Уоллис';
-
-?>

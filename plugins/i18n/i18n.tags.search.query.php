@@ -28,4 +28,3 @@ if (is_array($i18n_structure) && count($i18n_structure) > 0)
 	$join_tables .= "LEFT JOIN $db_i18n_pages AS i18n
 		ON p.page_id = i18n.ipage_id AND r.tag_locale = i18n.ipage_locale";
 }
-

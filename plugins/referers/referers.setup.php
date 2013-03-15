@@ -20,5 +20,3 @@ Recommends_plugins=
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-
-?>

@@ -76,4 +76,3 @@ $t->assign(array(
 	'PAGE_PAGEPREV' => $pagenav['prev'],
 	'PAGE_PAGENEXT' => $pagenav['next']
 ));
-?>

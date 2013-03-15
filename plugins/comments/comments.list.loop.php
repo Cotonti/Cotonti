@@ -23,5 +23,3 @@ $t->assign(array(
 	'LIST_ROW_COMMENTS' => cot_comments_link('page', $page_urlp, 'page', $pag['page_id'], $c, $pag),
 	'LIST_ROW_COMMENTS_COUNT' => cot_comments_count('page', $pag['page_id'], $pag)
 ));
-
-?>

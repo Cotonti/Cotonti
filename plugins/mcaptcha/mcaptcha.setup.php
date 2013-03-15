@@ -22,4 +22,3 @@ delay=01:string::3:Anti-hammer delay in seconds
 attempts=02:string::0:Max captcha attempts per session (0 for unlimited)
 [END_COT_EXT_CONFIG]
 ==================== */
-?>

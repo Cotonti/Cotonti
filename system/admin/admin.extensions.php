@@ -766,5 +766,3 @@ foreach (cot_getextplugins('admin.extensions.tags') as $pl)
 /* ===== */
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
-
-?>

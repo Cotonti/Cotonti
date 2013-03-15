@@ -13,5 +13,3 @@
 $_GET['e'] = 'forums';
 
 require 'index.php';
-
-?>

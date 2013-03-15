@@ -63,5 +63,3 @@ if ($cache && $usr['id'] === 0 && $cfg['cache_index'])
 {
 	$cache->page->write();
 }
-
-?>

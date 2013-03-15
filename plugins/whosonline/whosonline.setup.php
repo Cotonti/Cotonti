@@ -26,5 +26,3 @@ maxusersperpage=02:select:0,5,10,15,25,50,100:25:Users per page in whosonline ta
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-
-?>

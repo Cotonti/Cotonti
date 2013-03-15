@@ -24,5 +24,3 @@ $t->assign(array(
 	'POLLS_COMMENTS' => cot_comments_link('polls', 'id='.$row['poll_id'], 'polls', $row['poll_id']),
 	'POLLS_COMMENTS_COUNT' => cot_comments_count('polls', $row['poll_id'])
 ));
-
-?>

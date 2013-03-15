@@ -11,4 +11,3 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 $L['info_desc'] = 'Поддержка HTML-разметки в контенте сайта';
-

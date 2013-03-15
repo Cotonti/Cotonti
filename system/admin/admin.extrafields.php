@@ -19,8 +19,8 @@ require_once cot_incfile('extrafields');
 $extra_blacklist = array($db_auth, $db_cache, $db_cache_bindings, $db_core, $db_updates, $db_logger, $db_online, $db_extra_fields, $db_config, $db_plugins);
 $extra_whitelist = array(
 	$db_structure => array(
-		'name' => $db_structure, 
-		'caption' => $L['Categories'], 
+		'name' => $db_structure,
+		'caption' => $L['Categories'],
 		'type' => 'system',
 		'code' => 'structure',
 		'tags' => array(
@@ -66,7 +66,7 @@ if (empty($n) || in_array($n, $extra_blacklist))
 	cot_import('alltables', 'G', 'BOL') && $adminpath[] = array(cot_url('admin', 'm=extrafields&alltables=1'), $L['adm_extrafields_all']);
 	$ii = 0;
 	foreach ($tablelist as $table)
-	{	
+	{
 		$name = '';
 		$ext_info = array();
 		if($extra_whitelist[$table]['type'] == 'module' || $extra_whitelist[$table]['type'] == 'plug')
@@ -105,9 +105,9 @@ else
 	$name = cot_import('name', 'G', 'ALP');
 	list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 	$parse_type = array('HTML', 'Text');
-	
-	$adminpath[] = array(cot_url('admin', 'm=extrafields&n='.$n), $L['adm_extrafields_table'].' '.$n . ((isset($extra_whitelist[$n])) ? ' - ' . $extra_whitelist[$n]['caption'] : '')); 
-	
+
+	$adminpath[] = array(cot_url('admin', 'm=extrafields&n='.$n), $L['adm_extrafields_table'].' '.$n . ((isset($extra_whitelist[$n])) ? ' - ' . $extra_whitelist[$n]['caption'] : ''));
+
 	if ($a == 'add' && !empty($_POST))
 	{
 		$field['field_name'] = cot_import('field_name', 'P', 'ALP');
@@ -219,7 +219,7 @@ else
 
 	$cache && $cache->db->remove('cot_extrafields', 'system');
 	cot_load_extrafields(true);
-	
+
 	$totalitems = $db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$n'")->fetchColumn();
 	$res = $db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$n' ORDER BY field_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -273,7 +273,7 @@ else
 			$tags_list_li .= '<li>'.cot_rc('admin_exflds_array', array('tplfile' => $ktags, 'tags' => $vtags)).'</li>';
 		}
 	}
-	
+
 	$t->assign(array(
 		'ADMIN_EXTRAFIELDS_URL_FORM_EDIT' => cot_url('admin', 'm=extrafields&n='.$n.'&a=upd&d='.$durl),
 		'ADMIN_EXTRAFIELDS_NAME' => cot_inputbox('text', 'field_name', '', 'class="exfldname"'),
@@ -298,7 +298,7 @@ else
 	if (isset($extra_whitelist[$n]['help']))
 	{
 		$adminhelp = $extra_whitelist[$n]['help'];
-	}	
+	}
 	else
 	{
 		$adminhelp = $L['adm_help_info'];
@@ -318,4 +318,3 @@ else
 }
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
-?>

@@ -12,5 +12,3 @@
 $_GET['e'] = 'users';
 
 require 'index.php';
-
-?>

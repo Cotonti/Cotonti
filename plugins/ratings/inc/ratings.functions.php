@@ -226,5 +226,3 @@ function cot_ratings_remove($area, $code)
 	$db->delete($db_rated, 'rated_area = ? AND rated_code = ?', array($area, $code));
 	$db->delete($db_ratings, 'rating_area = ? AND rating_code = ?', array($area, $code));
 }
-
-?>

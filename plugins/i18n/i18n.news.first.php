@@ -36,4 +36,3 @@ if ($i18n_enabled && $i18n_notmain)
 	$news_join_columns .= ',i18n.*';
 	$news_join_tables .= " LEFT JOIN $db_i18n_pages AS i18n ON i18n.ipage_id=p.page_id AND i18n.ipage_locale='$i18n_locale' AND i18n.ipage_id IS NOT NULL";
 }
-

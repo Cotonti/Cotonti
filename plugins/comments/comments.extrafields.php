@@ -29,5 +29,3 @@ $extra_whitelist[$db_com] = array(
 		'comments.tpl' => '{COMMENTS_FORM_XXXXX}, {COMMENTS_FORM_XXXXX_TITLE}, {COMMENTS_ROW_XXXXX} {COMMENTS_ROW_XXXXX_TITLE}',
 	)
 );
-
-?>

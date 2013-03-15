@@ -547,5 +547,3 @@ function cot_filebox($name, $value = '', $filepath = '', $delname ='', $attrs = 
 		'error' => $error
 	));
 }
-
-?>

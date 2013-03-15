@@ -25,5 +25,3 @@ $L['banlist_duration'] = 'Duration';
 $L['banlist_neverexpire'] = 'Never expire';
 
 $L['banlist_help'] = 'Samples for IP masks: 194.31.13.41, 194.31.13.*, 194.31.*.*, 194.*.*.*<br />Samples for email masks: @hotmail.com, @yahoo (Wildcards are not supported)<br />A single entry can contain one IP mask or one email mask or both.<br />IPs are filtered for each and every page displayed, and email masks at user registration only.';
-
-?>

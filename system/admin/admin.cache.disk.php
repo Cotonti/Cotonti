@@ -241,5 +241,3 @@ function cot_diskcache_clearall()
 
 	return true;
 }
-
-?>

@@ -18,4 +18,3 @@ $L['cfg_tidylevel'] = 'Tidy Level';
 $L['cfg_tidylevel_hint'] = 'Sets how intensively HTML Purifier will fix markup mistakes';
 
 $L['info_desc'] = 'Makes sure submitted HTML content is valid, clean and secure';
-

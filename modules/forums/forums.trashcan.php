@@ -72,4 +72,3 @@ function cot_trash_forumtopic_sync($data)
 	$db->update($db_structure, array("structure_count" => (int)$items), "structure_code='".$db->prep($data['ft_cat'])."' AND structure_area='forums'");
 	return TRUE;
 }
-

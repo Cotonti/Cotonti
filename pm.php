@@ -13,4 +13,3 @@
 $_GET['e'] = 'pm';
 
 require 'index.php';
-?>

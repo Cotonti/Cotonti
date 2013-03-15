@@ -35,5 +35,3 @@ $maingrpfilters = cot_selectbox($g, 'bymaingroup', $grpfilters_maingrp_values, $
 
 $grpfilters_titles[0] = $L['Group'];
 $grpfilters = cot_selectbox($g, 'bygroupms', $grpfilters_group_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'));
-
-?>

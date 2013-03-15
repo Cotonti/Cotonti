@@ -98,4 +98,3 @@ if ($i18n_enabled)
 		}
 	}
 }
-

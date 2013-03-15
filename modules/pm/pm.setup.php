@@ -33,4 +33,3 @@ css=99:radio:0,1:1:Enable module CSS
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
-

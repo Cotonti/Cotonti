@@ -15,7 +15,7 @@ require_once cot_incfile('auth');
 
 /**
  * Adds a new category
- * 
+ *
  * @global Cache $cache
  * @global CotDB $db
  * @global string $db_structure
@@ -29,7 +29,7 @@ require_once cot_incfile('auth');
 function cot_structure_add($extension, $data, $is_module = true)
 {
 	global $cache, $db, $db_structure;
-	
+
 	/* === Hook === */
 	foreach (cot_getextplugins('structure.add') as $pl)
 	{
@@ -64,7 +64,7 @@ function cot_structure_add($extension, $data, $is_module = true)
 
 /**
  * Removes a category
- * 
+ *
  * @global Cache $cache
  * @global CotDB $db
  * @global string $db_structure
@@ -72,33 +72,33 @@ function cot_structure_add($extension, $data, $is_module = true)
  * @param string $extension Extension code
  * @param string $code Category code
  * @param bool $is_module TRUE for modules, FALSE for plugins
- * @return bool 
+ * @return bool
  * @global CotDB $db
  * @global Cache $cache
  */
 function cot_structure_delete($extension, $code, $is_module = true)
 {
 	global $cache, $db, $db_config, $db_structure, $structure;
-	
+
 	/* === Hook === */
 	foreach (cot_getextplugins('structure.delete') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	
+
 	$db->delete($db_structure, "structure_area=? AND structure_code=?", array($extension, $code));
 	$db->delete($db_config, "config_cat=? AND config_subcat=? AND config_owner='module'", array($extension, $code));
 	$is_module && cot_auth_remove_item($extension, $code);
 	$area_deletecat = 'cot_'.$extension.'_deletecat';
 	(function_exists($area_deletecat)) ? $area_deletecat($code) : FALSE;
-	
+
 	unset($structure[$extension][$code]);
 	if ($cache)
 	{
 		$cache->clear();
 	}
-	
+
 	return true;
 }
 
@@ -114,7 +114,7 @@ function cot_structure_delete($extension, $code, $is_module = true)
  * @param array $old_data Data row already present in the database
  * @param array $new_data Submitted category data
  * @param bool $is_module TRUE for modules, FALSE for plugins
- * @return mixed TRUE on success, cot_error() arguments as array on specific error, FALSE on generic error 
+ * @return mixed TRUE on success, cot_error() arguments as array on specific error, FALSE on generic error
  * @global CotDB $db
  * @global Cache $cache
  */
@@ -153,4 +153,3 @@ function cot_structure_update($extension, $id, $old_data, $new_data, $is_module 
 	$sql1 = $db->update($db_structure, $new_data, 'structure_id=' . (int) $id);
 	return true;
 }
-

@@ -601,5 +601,3 @@ function cot_admin_config_get_titles($config_name, $cfg_params)
 	}
 	return $cfg_params_titles;
 }
-
-?>

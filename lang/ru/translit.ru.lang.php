@@ -85,5 +85,3 @@ $cot_translit = array(
  */
 
 $cot_translitb = array_flip($cot_translit);
-
-?>

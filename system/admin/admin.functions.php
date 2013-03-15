@@ -98,7 +98,7 @@ function cot_get_extensionparams($code, $is_module = false)
 {
 	global $cfg, $cot_modules, $cot_plugins_enabled;
 	$dir = $is_module ? $cfg['modules_dir'] : $cfg['plugins_dir'];
-	
+
 	if($is_module)
 	{
 		$name = $cot_modules[$code]['title'];
@@ -132,4 +132,3 @@ function cot_get_extensionparams($code, $is_module = false)
 	$icon = file_exists($icofile) ? $icofile : '';
 	return array('name' => htmlspecialchars($name), 'icon' => $icon);
 }
-?>

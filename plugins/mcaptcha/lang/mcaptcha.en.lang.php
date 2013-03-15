@@ -17,4 +17,3 @@ $L['cfg_delay'] = 'Anti hammering delay';
 $L['cfg_delay_hint'] = 'sec';
 $L['cfg_attempts'] = 'Max attempts per second';
 $L['cfg_attempts_hint'] = '0 - unlimited';
-

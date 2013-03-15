@@ -102,6 +102,3 @@ function $rnd(s){var r='';for(var i=0;i<s.length;i++){var n=s.charCodeAt(i);if(n
 }
 
 $cot_captcha[] = 'mcaptcha';
-
-
-?>

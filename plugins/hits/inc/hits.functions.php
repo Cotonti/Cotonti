@@ -72,5 +72,3 @@ function cot_stat_update($name, $value = 1)
 		VALUES ('".$db->prep($name)."', 1)
 		ON DUPLICATE KEY UPDATE stat_value=stat_value+$value");
 }
-
-?>

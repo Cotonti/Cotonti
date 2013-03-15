@@ -31,7 +31,7 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 		$tags_extra = null;
 		$item_id = $db->query("SELECT LAST_INSERT_ID()")->fetchColumn();
 	}
-	
+
 	$rtags = cot_import('rtags', 'P', 'TXT');
 	$tags = cot_tag_parse($rtags);
 	$cnt = 0;
@@ -45,5 +45,3 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 		}
 	}
 }
-
-?>

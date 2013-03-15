@@ -37,5 +37,3 @@ if (cot_plugin_active('hits') && $env['ext'] != 'admin')
 		$sql = $db->update($db_stats, array('stat_value' => $sys['whosonline_all_count']), "stat_name='maxusers'");
 	}
 }
-
-

@@ -267,5 +267,3 @@ foreach (cot_getextplugins('admin.users.tags') as $pl)
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
-
-?>

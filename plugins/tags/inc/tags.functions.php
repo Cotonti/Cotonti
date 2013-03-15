@@ -303,7 +303,7 @@ function cot_tag_parse_query($qs, $join_columns)
 					$join_conds = array();
 					foreach ($join_columns as $col)
 					{
-						$join_conds[] = "r{$i}_{$j}.tag_item = $col"; 
+						$join_conds[] = "r{$i}_{$j}.tag_item = $col";
 					}
 					$join_cond = implode(' OR ', $join_conds);
 					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_references AS r{$i}_{$j} WHERE ($join_cond) AND r{$i}_{$j}.tag $op)";
@@ -478,5 +478,3 @@ function cot_tag_search_form($area = 'all')
 		));
 	}
 }
-
-?>

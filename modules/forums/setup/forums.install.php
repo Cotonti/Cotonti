@@ -20,4 +20,3 @@ if ($dbres->rowCount() == 0)
 	$db->query("ALTER TABLE `$db_users` ADD COLUMN `user_postcount` INT DEFAULT 0");
 }
 $dbres->closeCursor();
-

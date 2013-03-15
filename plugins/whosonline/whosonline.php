@@ -150,5 +150,3 @@ $t->assign(array(
 	'USERS' => cot_declension($who_users, $Ls['Members'], true),
 	'GUESTS' => cot_declension($who_guests, $Ls['Guests'], true)
 ));
-
-?>

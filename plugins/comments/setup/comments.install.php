@@ -30,4 +30,3 @@ foreach ($com_modules_struct_list as $mod_name)
 		cot_config_implant($mod_name, $com_options, true, 'comments');
 	}
 }
-?>

@@ -17,4 +17,3 @@ Schemes=default:Default
  */
 
 defined('COT_CODE') or die('Wrong URL');
-

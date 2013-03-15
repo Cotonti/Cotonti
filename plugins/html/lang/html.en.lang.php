@@ -11,5 +11,3 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 $L['info_desc'] = 'Support for HTML-markup in the website content';
-
-?>

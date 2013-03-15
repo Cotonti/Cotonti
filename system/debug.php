@@ -162,5 +162,3 @@ define('COT_CHECKPOINT_LOCALS', 'global $cfg;
 	fputs($debug_fp, "----------------\n");
 	fclose($debug_fp);'
 );
-
-?>

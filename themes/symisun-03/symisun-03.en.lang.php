@@ -19,15 +19,15 @@ defined('COT_CODE') or die('Wrong URL.');
  * forums.posts.tpl
  */
 
-$themelang['forumspost_to'] = 'to';	
-$themelang['forumspost_post'] = 'Post a reply';	
-$themelang['forumspost_jump'] = 'Jumpbox';	
+$themelang['forumspost_to'] = 'to';
+$themelang['forumspost_post'] = 'Post a reply';
+$themelang['forumspost_jump'] = 'Jumpbox';
 
 /**
  * forums.topics.tpl
  */
 $themelang['forumstopics_Legend'] = 'Legend';
-$themelang['forumstopics_Start'] = 'Start a New topic';	
+$themelang['forumstopics_Start'] = 'Start a New topic';
 
 /**
  * header.tpl
@@ -74,15 +74,15 @@ $themelang['pageadd_down'] = 'Downloadable';
 /**
  * page.edit.tpl
  */
- 
+
 $themelang['pageedit_del'] = 'Trash';
- 
+
 /**
  * pm.send.tpl
  */
- 
+
 $themelang['pmsend_Sendmessagetohint'] = 'up to 10 recipients, separated by commas';
- 
+
 /**
  * pm.tpl
  */
@@ -138,5 +138,3 @@ $themelang['usersregister_Usernamehint'] = 'Username must be at least 2 chars lo
 
 
 $themelang['search_Generalhint'] = 'You can make the search more exact by selecting necessary categories and search options only. Please note that "Search All" does not give you all the options. Choose "Forums" or "Pages" for more options.';
-
-?>

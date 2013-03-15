@@ -125,5 +125,3 @@ else
 {
 	require_once $cfg['modules_dir'] . '/' . $env['ext'] . '/' . $env['ext'] . '.php';
 }
-
-?>

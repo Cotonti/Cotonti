@@ -40,4 +40,3 @@ if ($sql->rowCount() > 0)
 		cot_diefatal($disp);
 	}
 }
-

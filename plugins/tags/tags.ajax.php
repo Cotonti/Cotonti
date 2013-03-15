@@ -30,5 +30,3 @@ if (is_array($tagslist))
 
 cot_sendheaders();
 echo $tagstring;
-
-?>

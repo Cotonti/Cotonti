@@ -28,4 +28,3 @@ rewrite=04:radio::0:Enable URL overwrite for language parameter
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-

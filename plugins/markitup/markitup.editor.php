@@ -67,4 +67,3 @@ if ($cfg['jquery'])
 		$("textarea.minieditor").markItUp(miniSettings);
 	});');
 }
-?>

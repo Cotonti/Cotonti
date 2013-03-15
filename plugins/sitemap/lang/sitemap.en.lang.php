@@ -44,5 +44,3 @@ $L['cfg_users']              = 'Enable users';
 $L['cfg_users_freq']         = 'Users update frequency';
 $L['cfg_users_freq_params']  = $sitemap_freqs;
 $L['cfg_users_prio']         = 'Users priority';
-
-?>

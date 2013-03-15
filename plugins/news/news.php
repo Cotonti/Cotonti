@@ -177,4 +177,3 @@ if (count($cats) > 0)
 		$catn++;
 	}
 }
-?>

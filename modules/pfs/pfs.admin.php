@@ -79,4 +79,3 @@ else
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
-

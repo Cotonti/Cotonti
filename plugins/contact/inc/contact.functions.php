@@ -30,5 +30,3 @@ $R['contact_message'] = <<<TXT
 
 {\$extra}
 TXT;
-
-?>

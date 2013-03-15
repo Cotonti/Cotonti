@@ -23,4 +23,3 @@ editor=01:callback:cot_get_editors():ckeditor:
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-?>

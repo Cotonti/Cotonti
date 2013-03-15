@@ -94,7 +94,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 		}
 		$lc_values = array_keys($lc_list);
 		$lc_names = array_values($lc_list);
-		
+
 		if (empty($pag_i18n['ipage_text']))
 		{
 			// Insert original page source into translation tab to keep markup
@@ -194,7 +194,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 				WHERE ipage_id = $id AND ipage_locale = '$i18n_locale'")->fetch();
 			cot_trash_put('i18n_page', $L['i18n_translation']." #$id ($i18n_locale) ".$row['ipage_title'], $id, $row);
 		}
-		
+
 		$db->delete($db_i18n_pages, "ipage_id = $id AND ipage_locale = '$i18n_locale'");
 
 		/* === Hook === */
@@ -213,4 +213,3 @@ else
 {
 	cot_die(true, true);
 }
-

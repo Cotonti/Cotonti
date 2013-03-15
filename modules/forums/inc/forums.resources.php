@@ -60,4 +60,3 @@ $R['forums_noavatar'] = '<img src="datas/defaultav/blank.png" alt="" />';
 $R['forums_code_admin_mark'] = ' *';
 
 $R['forums_code_post_empty'] = '&nbsp;';
-

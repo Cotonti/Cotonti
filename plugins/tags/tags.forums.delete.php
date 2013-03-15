@@ -22,5 +22,3 @@ if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W'))
 	require_once cot_incfile('tags', 'plug');
 	cot_tag_remove_all($q, 'forums');
 }
-
-?>

@@ -30,5 +30,3 @@ require_once cot_incfile('page', 'module');
 $tt->parse('MAIN');
 
 $line = $tt->text('MAIN');
-
-?>

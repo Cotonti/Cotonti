@@ -62,4 +62,3 @@ if ($usr['id'] == 0 && $i18n_notmain && $env['ext'] != 'index')
 {
 	$sys['noindex'] = true;
 }
-

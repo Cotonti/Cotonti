@@ -373,4 +373,3 @@ function cot_url_username(&$params, $spec)
 	unset($params['m'], $params['id'], $params['u']);
 	return $name;
 }
-

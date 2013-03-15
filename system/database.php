@@ -560,5 +560,3 @@ class CotDB extends PDO {
 		return 0;
 	}
 }
-
-?>

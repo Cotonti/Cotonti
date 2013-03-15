@@ -32,5 +32,3 @@ $L['LastSeen'] = 'Last seen';
 $L['Location'] = 'Location';
 $L['IPaddress'] = 'IP address';
 $L['Visitor'] = 'Visitor';
-
-?>

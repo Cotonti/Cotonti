@@ -93,5 +93,3 @@ if (cot_module_active('pm'))
 		}
 	}
 }
-
-?>

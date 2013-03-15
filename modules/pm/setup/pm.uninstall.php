@@ -27,4 +27,3 @@ if ($dbres->rowCount() == 1)
 	$db->query("ALTER TABLE `$db_users` DROP COLUMN `user_newpm`");
 }
 $dbres->closeCursor();
-

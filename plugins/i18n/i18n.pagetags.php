@@ -68,13 +68,13 @@ if ($i18n_enabled && $i18n_notmain)
 	{
 		$cat_i18n = &$structure['page'][$page_data['page_cat']];
 	}
-	
+
 	if (!empty($page_data['ipage_title']))
 	{
 		$text = cot_parse($page_data['ipage_text'], $cfg['page']['markup']);
 		$text_cut = ((int)$textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
 		$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;
-		
+
 		$page_link = array(array(cot_url('page', $urlparams), $page_data['ipage_title']));
 		$i18n_array = array_merge($i18n_array, array(
 			'URL' => cot_url('page', $urlparams),
@@ -100,7 +100,6 @@ if ($i18n_enabled && $i18n_notmain)
 			$i18n_array['ADMIN_EDIT'] = cot_rc_link(cot_url('plug', "e=i18n&m=page&a=edit&id=".$page_data['page_id']."&l=$i18n_locale"), $L['Edit']);
 		}
 	}
-	
+
 	$temp_array = array_merge($temp_array, $i18n_array);
 }
-

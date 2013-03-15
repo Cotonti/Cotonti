@@ -703,4 +703,3 @@ if(!$standalone)
 {
 	require_once $cfg['system_dir'] . '/footer.php';
 }
-

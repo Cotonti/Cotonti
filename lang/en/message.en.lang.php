@@ -140,4 +140,3 @@ $L['msg950_body'] = 'One of the request parameters is invalid or has expired. Pl
 
 $L['msg951_title'] = 'Session expired';
 $L['msg951_body'] = 'Your session is no longer valid. Please try again.';
-

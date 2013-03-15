@@ -20,5 +20,3 @@ $tc_styles = array(
 
 $db_tags	= (isset($db_tags)) ? $db_tags : $db_x . 'tags';
 $db_tag_references = (isset($db_tag_references)) ? $db_tag_references : $db_x . 'tag_references';
-
-?>

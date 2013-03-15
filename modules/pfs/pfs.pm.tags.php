@@ -26,4 +26,3 @@ $pfs .= (cot_auth('pfs', 'a', 'A')) ? ' &nbsp; '.cot_build_pfs(0, 'newlink', 'ne
 $pfs_tag = cot_get_caller() == 'pm.send' ? 'PMSEND_FORM_PFS' : 'PM_FORM_PFS';
 
 $t->assign($pfs_tag, $pfs);
-?>

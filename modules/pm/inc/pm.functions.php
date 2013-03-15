@@ -31,7 +31,7 @@ $cfg['pm']['turnajax'] = ($cfg['jquery'] && $cfg['turnajax'] && $cfg['pm']['turn
 function cot_send_translated_mail($rlang, $remail, $rusername)
 {
 	global $cfg, $usr;
-	
+
 	require_once cot_langfile('pm', 'module', $cfg['defaultlang'], $rlang);
 	if (!$L || !isset($L['pm_notify']))
 	{
@@ -103,7 +103,7 @@ function cot_remove_pm($message_id)
  */
 function cot_star_pm($message_id)
 {
-	
+
 	global $db, $usr, $db_pm, $cfg;
 	if (!is_array($message_id))
 	{
@@ -171,5 +171,3 @@ function cot_build_pm($user)
 	global $L;
 	return cot_rc('pm_link', array('url' => cot_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew']));
 }
-
-?>

@@ -23,5 +23,3 @@ if (!cot_captcha_validate($rverify))
 {
 	cot_error('captcha_verification_failed', 'rverify');
 }
-
-?>

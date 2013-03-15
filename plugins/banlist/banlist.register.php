@@ -30,6 +30,3 @@ if ($row = $sql->fetch())
 	cot_error($L['aut_emailbanned'].$row['banlist_reason']);
 }
 $sql->closeCursor();
-
-
-?>

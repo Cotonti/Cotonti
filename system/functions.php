@@ -5373,5 +5373,3 @@ if (isset($cfg['customfuncs']) && $cfg['customfuncs'])
 {
 	require_once $cfg['system_dir'] . '/functions.custom.php';
 }
-
-?>

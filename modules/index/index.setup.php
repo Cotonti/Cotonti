@@ -26,5 +26,3 @@ Recommends_plugins=news,recentitems
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
-
-?>

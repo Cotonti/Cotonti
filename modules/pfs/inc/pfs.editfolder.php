@@ -29,7 +29,7 @@ else
 }
 
 if ($userid!=$usr['id'])
-{ 
+{
 	cot_block($usr['isadmin']);
 }
 
@@ -88,7 +88,7 @@ if ($row = $sql_pfs->fetch())
 	$title[]= htmlspecialchars($pff_title);
 }
 else
-{ 
+{
 	cot_die();
 }
 
@@ -165,4 +165,3 @@ if (!$standalone)
 {
 	require_once $cfg['system_dir'] . '/footer.php';
 }
-

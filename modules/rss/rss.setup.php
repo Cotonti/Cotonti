@@ -34,4 +34,3 @@ rss_postmaxsymbols=06:string:::
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
-?>

@@ -154,5 +154,3 @@ foreach (cot_getextplugins('banlist.admin.tags') as $pl)
 $tt->parse('MAIN');
 
 $plugin_body = $tt->text('MAIN');
-
-?>

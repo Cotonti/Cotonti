@@ -20,5 +20,3 @@ $L['cfg_chili'] = 'Enable Chili tags';
 $L['cfg_skin'] = 'Skin (plugins/markitup/skins/SKIN_NAME)';
 
 $L['info_desc'] = 'Plain BBcode/HTML content source editor using jQuery. Only one content editor should be enabled or there may be conflicts.';
-
-?>

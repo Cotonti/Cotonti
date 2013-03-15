@@ -29,7 +29,7 @@ else
 }
 
 if ($userid!=$usr['id'])
-{ 
+{
 	cot_block($usr['isadmin']);
 }
 
@@ -67,7 +67,7 @@ foreach (cot_getextplugins('pfs.edit.first') as $pl)
 
 if ($userid != $usr['id'])
 {
-	cot_block($usr['isadmin']);	
+	cot_block($usr['isadmin']);
 	($userid == 0) || $title[] = array(cot_url('users', 'm=details&id='.$user_info['user_id']), $user_info['user_name']);
 }
 
@@ -88,7 +88,7 @@ if ($row = $sql_pfs->fetch())
 	$ff = $pfs_dir_user.$pfs_file;
 }
 else
-{ 
+{
 	cot_die();
 }
 
@@ -165,5 +165,3 @@ if (!$standalone)
 {
 	require_once $cfg['system_dir'] . '/footer.php';
 }
-
-?>

@@ -21,5 +21,3 @@ if(!empty($poll) && $poll_id && $is_first_post && !cot_error_found())
 {
 	$number = cot_poll_save();
 }
-
-?>

@@ -24,4 +24,3 @@ rel2abs=03:radio::0:Turn relative links into absolute
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-

@@ -30,7 +30,7 @@ if ($usr['id'] > 0)
 	$out['pmreminder'] = cot_rc_link(cot_url('pm'),
 		($usr['messages'] > 0) ? cot_declension($usr['messages'], $Ls['Privatemessages']) : $L['hea_noprivatemessages']
 	);
-	
+
 	$t->assign(array(
 		'HEADER_USER_PM_URL' => cot_url('pm'),
 		'HEADER_USER_PMS' => $out['pms'],
@@ -42,4 +42,3 @@ if ($cfg['pm']['css'] && $env['ext'] == 'pm')
 {
 	cot_rc_link_file($cfg['modules_dir'] . '/pm/tpl/pm.css');
 }
-?>

@@ -363,5 +363,3 @@ function cot_get_config($file)
 	}
 	return array($cfg, $db_vars);
 }
-
-?>

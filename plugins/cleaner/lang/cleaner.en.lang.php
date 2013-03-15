@@ -29,5 +29,3 @@ $L['cfg_userprune'] = 'Delete inactive user accounts older than';
 $L['cfg_userprune_hint'] = 'days (0 - disable)';
 
 $L['info_desc'] = 'Scheduled cleanup for logs, private messages, referers and inactive users';
-
-?>

@@ -26,7 +26,7 @@ if (!is_array($cot_urltrans))
 	{
 		$urltrans_preset = file_exists('./datas/' . $cfg['plugin']['urleditor']['preset'] . '.dat') ? './datas/' . $cfg['plugin']['urleditor']['preset'] . '.dat' : $cfg['plugins_dir'] . '/urleditor/presets/' . $cfg['plugin']['urleditor']['preset'] . '.dat';
 	}
-	
+
 	if ($cfg['plugin']['urleditor']['preset'] != 'none' && file_exists($urltrans_preset))
 	{
 		$fp = fopen($urltrans_preset, 'r');
@@ -69,7 +69,7 @@ if (!is_array($cot_urltrans))
 
 if(!in_array($cfg['plugin']['urleditor']['preset'], array('custom', 'none')))
 {
-	if (file_exists('./datas/' . $cfg['plugin']['urleditor']['preset'] . '.dat') 
+	if (file_exists('./datas/' . $cfg['plugin']['urleditor']['preset'] . '.dat')
 		&& file_exists('./datas/' . $cfg['plugin']['urleditor']['preset'] . '.functions.php'))
 	{
 		require_once './datas/' . $cfg['plugin']['urleditor']['preset'] . '.functions.php';
@@ -83,5 +83,3 @@ if(!in_array($cfg['plugin']['urleditor']['preset'], array('custom', 'none')))
 require_once cot_incfile('urleditor', 'plug');
 
 cot_apply_rwr();
-
-?>

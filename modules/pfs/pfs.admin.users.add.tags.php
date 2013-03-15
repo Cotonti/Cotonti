@@ -23,4 +23,3 @@ $t->assign(array(
 	'ADMIN_USERS_NGRP_PFS_MAXFILE' => cot_inputbox('text', 'rmaxfile', '', 'size="16" maxlength="16"'),
 	'ADMIN_USERS_NGRP_PFS_MAXTOTAL' => cot_inputbox('text', 'rmaxtotal', '', 'size="16" maxlength="16"')
 ));
-

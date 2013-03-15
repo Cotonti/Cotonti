@@ -154,5 +154,3 @@ if ($ext_display_header)
 {
 	require_once $cfg['system_dir'] . '/footer.php';
 }
-
-?>

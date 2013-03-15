@@ -9,5 +9,3 @@ $R['userimg_remove'] = '<a href="{$url}" class="button">'.$L['Delete'].'</a>';
 $R['userimg_img'] = '<img src="{$src}" alt="{$alt}" class="userimg {$class}" />';
 
 $R['userimg_default_avatar'] = '<img src="datas/defaultav/blank.png" alt="'.$L['Avatar'].'" class="avatar" />';
-
-?>

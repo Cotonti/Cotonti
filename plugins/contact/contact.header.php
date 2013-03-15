@@ -28,4 +28,3 @@ if (cot_auth('plug', 'contact', 'A'))
 		$out['notices_array'][] = $notify_contact;
 	}
 }
-?>

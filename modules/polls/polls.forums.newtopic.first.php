@@ -23,5 +23,3 @@ if(!empty($poll))
 {
 	cot_poll_check();
 }
-
-?>

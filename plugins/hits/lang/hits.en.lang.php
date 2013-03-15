@@ -35,5 +35,3 @@ $L['hits_byweek'] = 'By week';
 
 $L['hits_hits'] = 'Hits for the past 15 days';
 $L['hits_activity'] = 'Activity for the past 7 days';
-
-?>

@@ -27,4 +27,3 @@ $t->assign(array(
 	'PAGE_RATINGS_AVERAGE' => $ratings_average,
 	'PAGE_RATINGS_COUNT'   => $ratings_count
 ));
-

@@ -28,5 +28,3 @@ if($cot_groups[$grpid]['hidden'])
 		return $L['Hidden'];
 	}
 }
-
-?>

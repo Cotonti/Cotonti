@@ -41,5 +41,3 @@ $mime_type['mp3'][]		= array('audio/mpeg', 'ID3', '0', '0', '3', '0');
 $mime_type['wav'][0]	= array('audio/x-wav', 'WAVEfmt', '0', '8', '7', '0');
 $mime_type['wav'][1]	= array('audio/x-wav', 'RIFF', '0', '0', '4', '0');
 $mime_type['wmv'][]		= array('video/x-ms-wmv', '3026B2758E66CF11A6D900AA0062CE6C', '1', '0', '16', '0');
-
-?>

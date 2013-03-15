@@ -30,7 +30,7 @@ if ($cfg['plugin']['tags']['pages'])
 		$tags_extra = null;
 	}
 	$item_id = $pag['page_id'];
-	
+
 	if (!isset($tags_rowset_list))
 	{
 		// Load tags for all entries with 1 query
@@ -68,4 +68,3 @@ if ($cfg['plugin']['tags']['pages'])
 		$news->parse('NEWS.PAGE_ROW.PAGE_NO_TAGS');
 	}
 }
-?>

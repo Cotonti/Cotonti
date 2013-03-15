@@ -41,5 +41,3 @@ if (!in_array($m, array('add', 'edit')))
 }
 
 require_once cot_incfile('page', 'module', $m);
-
-?>

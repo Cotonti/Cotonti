@@ -35,5 +35,3 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 	}
 	$t->parse('MAIN.TAGS');
 }
-
-?>

@@ -30,5 +30,3 @@ if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $is_fir
 	));
 	$t->parse('MAIN.FORUMS_EDITPOST_TAGS');
 }
-
-?>

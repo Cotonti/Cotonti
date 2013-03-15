@@ -74,5 +74,3 @@ function cot_hiddengroups_get($mode, $type='groups')
 	}
 	return array();
 }
-
-?>

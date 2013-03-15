@@ -28,5 +28,3 @@ rss.php
 $_GET['e'] = 'rss';
 
 require 'index.php';
-
-?>

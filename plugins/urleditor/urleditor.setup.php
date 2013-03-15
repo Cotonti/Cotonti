@@ -22,4 +22,3 @@ preset=01:callback:cot_url_presets():none:URL Preset
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-

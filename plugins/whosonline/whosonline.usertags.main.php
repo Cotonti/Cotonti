@@ -26,5 +26,3 @@ else
 	$temp_array['ONLINE'] = '0';
 	$temp_array['ONLINETITLE'] = '';
 }
-
-?>

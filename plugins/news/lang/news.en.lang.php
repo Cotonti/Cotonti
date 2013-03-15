@@ -39,5 +39,3 @@ $L['Newsautocut']='Post length limit';
 $L['Newsautocutdesc']='This will display only specified number characters with paragraphs from the beginning of news posts. By default the cutting option is disabled.';
 
 $L['news_help'] = '';
-
-?>

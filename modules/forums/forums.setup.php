@@ -56,5 +56,3 @@ defstate=10:select:0,1:1:
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
-
-?>

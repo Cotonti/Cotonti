@@ -23,4 +23,3 @@ require_once cot_incfile('users', 'module');
 $tt->parse('MAIN');
 
 $line = $tt->text('MAIN');
-

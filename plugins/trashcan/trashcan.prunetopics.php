@@ -32,4 +32,3 @@ if ($cfg['plugin']['trashcan']['trash_forum'])
 	}
 	$sql->closeCursor();
 }
-?>

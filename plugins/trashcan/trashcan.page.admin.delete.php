@@ -21,4 +21,3 @@ if ($cfg['plugin']['trashcan']['trash_page'])
 {
 	cot_trash_put('page', $L['Page']." #".$id." ".$row['page_title'], $id, $row);
 }
-

@@ -49,5 +49,3 @@ if ($cfg['plugin']['tags']['forums'])
 		$t->assign('FORUMS_POSTS_TAGS', '');
 	}
 }
-
-?>

@@ -24,5 +24,3 @@ if ($cfg['plugin']['tags']['pages']
 {
 	require_once cot_incfile('tags', 'plug');
 }
-
-?>

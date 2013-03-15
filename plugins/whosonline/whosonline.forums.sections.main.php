@@ -27,5 +27,3 @@ if (!$cot_sections_vw)
 	$sqltmp->closeCursor();
 	$cache && $cache->mem && $cache->mem->store('sections_vw', $cot_sections_vw, 'forums', 120);
 }
-
-?>

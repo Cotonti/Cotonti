@@ -22,5 +22,3 @@ mode=01:select:Group only,Group + Users (maingroup),Group + Users (subgroup):Gro
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-
-?>

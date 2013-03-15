@@ -85,28 +85,28 @@ if (!COT_AJAX)
 		$mtpl_base = 'header';
 	}
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
-	
+
 	/* === Hook === */
 	foreach (cot_getextplugins('header.main') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	
+
 	if(is_array($out['notices_array']))
 	{
 		foreach ($out['notices_array'] as $notice)
 		{
 			$notice = (is_array($notice)) ? cot_rc_link($notice[0], $notice[1]) : $notice;
 			$out['notices'] .= ((!empty($out_notices)) ? ', ' : '').$notice;
-		}	
+		}
 	}
 	$out['canonical_uri'] = empty($out['canonical_uri']) ? str_replace('&', '&amp;', $sys['canonical_url']) : $out['canonical_uri'];
 	if(!preg_match("#^https?://.+#", $out['canonical_uri']))
 	{
 		$out['canonical_uri'] = COT_ABSOLUTE_URL . $out['canonical_uri'];
 	}
-	
+
 	$t->assign(array(
 		'HEADER_TITLE' => $out['fulltitle'],
 		'HEADER_COMPOPUP' => $out['compopup'],
@@ -197,8 +197,7 @@ if (!COT_AJAX)
 		include $pl;
 	}
 	/* ===== */
-	
+
 	$t->parse('HEADER');
 	$t->out('HEADER');
 }
-?>

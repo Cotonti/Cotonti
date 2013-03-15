@@ -28,5 +28,3 @@ $cot_extensions[] = array ('mp3', 'Music', 'mp3');
 $cot_extensions[] = array ('wav', 'Music', 'wav');
 $cot_extensions[] = array ('txt', 'Text', 'txt');
 $cot_extensions[] = array ('pdf', 'Adobe document', 'pdf');
-
-?>

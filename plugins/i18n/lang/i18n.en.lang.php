@@ -37,4 +37,3 @@ $L['i18n_original'] = 'Original';
 $L['i18n_structure'] = 'Structure Internationalization';
 $L['i18n_translate'] = 'Translate';
 $L['i18n_translation'] = 'Translation';
-

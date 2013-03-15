@@ -54,5 +54,3 @@ $L['plu_notloggedin'] = 'Not available: you\'re not logged in';
 $L['plu_membersbycountry'] = 'Registered members by countries';
 $L['plu_flag'] = 'Flag';
 $L['plu_unknown'] = 'Not set';
-
-?>

@@ -158,5 +158,3 @@ $db_plugins 		= $db_x.'plugins';
 $db_structure 		= $db_x.'structure';
 $db_updates			= $db_x.'updates';
 $db_users 			= $db_x.'users';
-
-?>

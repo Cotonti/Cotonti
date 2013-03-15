@@ -75,5 +75,3 @@ foreach (cot_getextplugins('admin.pfs.allpfs.tags') as $pl)
 	include $pl;
 }
 /* ===== */
-
-?>

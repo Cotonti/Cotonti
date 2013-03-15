@@ -13,5 +13,3 @@
 $_GET['e'] = 'page';
 
 require 'index.php';
-
-?>

@@ -22,5 +22,3 @@ if ($cfg['plugin']['trashcan']['trash_page'])
 	global $L;
 	cot_trash_put('page', $L['Page']." #".$id." ".$rpage['page_title'], $id, $rpage);
 }
-
-?>

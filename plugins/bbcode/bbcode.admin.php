@@ -342,5 +342,3 @@ foreach (cot_getextplugins('bbcode.admin.tags') as $pl)
 /* ===== */
 $bb_t->parse('MAIN');
 $plugin_body = $bb_t->text('MAIN');
-
-?>

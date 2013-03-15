@@ -35,7 +35,7 @@ if ($i18n_enabled)
 			'LIST_CATDESC' => $cat_i18n['desc']
 		));
 	}
-	
+
 	// Render language selection
 	$cat_i18n_locales = cot_i18n_list_cat_locales($c);
 	if (count($cat_i18n_locales) > 0)
@@ -74,4 +74,3 @@ if ($i18n_enabled)
 		$t->parse('MAIN.I18N_LANG');
 	}
 }
-

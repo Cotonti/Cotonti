@@ -33,4 +33,3 @@ mode=02:select:Recent polls,Random polls:Recent polls:
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
  */
-?>

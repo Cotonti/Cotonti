@@ -229,5 +229,3 @@ if ($cache && $usr['id'] === 0 && $cfg['cache_forums'])
 {
 	$cache->page->write();
 }
-
-?>

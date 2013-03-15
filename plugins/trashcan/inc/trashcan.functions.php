@@ -35,14 +35,14 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 
 	$trash = array('tr_date' => $sys['now'], 'tr_type' => $type, 'tr_title' => $title, 'tr_itemid' => $itemid,
 		'tr_trashedby' => (int)$usr['id'], 'tr_parentid' => $parentid);
-	
+
 	/* === Hook  === */
 	foreach (cot_getextplugins('trash.put.first') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	
+
 	$i = 0;
 	if (is_array($datas))
 	{
@@ -64,14 +64,14 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 	}
 
 	$id = ($i) ? $db->lastInsertId() : false;
-	
+
 	/* === Hook  === */
 	foreach (cot_getextplugins('trash.put.done') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	
+
 	return $id;
 }
 
@@ -117,7 +117,7 @@ function cot_trash_restore($id)
 			{
 				$restore = false;
 			}
-		}		
+		}
 		if ($restore)
 		{
 			$sql = $db->insert($databasename, $data);
@@ -194,5 +194,3 @@ foreach (cot_getextplugins('trashcan.api') as $pl)
 	include $pl;
 }
 /* ===== */
-
-?>

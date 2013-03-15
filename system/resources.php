@@ -540,5 +540,3 @@ $cot_timezones = array(
 	"Pacific/Wake" => array("um", 43200, 43200),
 	"Pacific/Wallis" => array("wf", 43200, 43200)
 );
-
-?>

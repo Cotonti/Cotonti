@@ -18,5 +18,3 @@ Hooks=admin.users.update
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 $cache && $cache->db->remove('cot_hiddenusers', 'system');
-
-?>

@@ -28,4 +28,3 @@ if ($i18n_notmain && !empty($pag['ipage_title']))
 		'PAGE_ROW_SHORTTITLE' => htmlspecialchars($pag['ipage_title'])
 	));
 }
-

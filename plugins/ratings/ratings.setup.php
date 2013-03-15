@@ -34,4 +34,3 @@ css=99:radio:0,1:1:Enable plugin CSS
  */
 
 defined('COT_CODE') or die('Wrong URL');
-
