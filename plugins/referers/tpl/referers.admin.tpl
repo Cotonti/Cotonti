@@ -4,7 +4,7 @@
 <!-- IF {PHP.usr.isadmin} -->
 			<div class="block button-toolbar">
 				<a href="{ADMIN_REFERERS_URL_PRUNE}" class="button">{PHP.L.adm_purgeall}</a>
-				<a href="{ADMIN_REFERERS_URL_PRUNELOWHITS}" class="button">{PHP.L.adm_ref_lowhits}</a>
+				<a href="{ADMIN_REFERERS_URL_PRUNELOWHITS}" class="button">{PHP.L.adm_ref_prunelowhits}</a>
 			</div>
 <!-- ENDIF -->
 <!-- IF {PHP.is_ref_empty} -->
