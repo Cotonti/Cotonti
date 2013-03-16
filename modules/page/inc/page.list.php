@@ -106,6 +106,7 @@ elseif ($c == 'saved_drafts')
 elseif ($c != 'all')
 {
 	$where['cat'] = 'page_cat=' . $db->quote($c);
+	$where['state'] = "page_state=0";
 }
 
 $c = (empty($cat['title'])) ? 'all' : $c;
