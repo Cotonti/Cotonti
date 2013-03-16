@@ -236,7 +236,7 @@
 				</td>
 			</tr>
 <!-- END: ROW_CAT -->
-<!-- BEGIN: ROW_ERROR_EXT-->
+<!-- BEGIN: ROW_ERROR_EXT -->
 			<tr>
 				<td>{ADMIN_EXTENSIONS_X_ERR}</td>
 				<td colspan="5">{ADMIN_EXTENSIONS_ERROR_MSG}</td>
