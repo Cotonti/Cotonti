@@ -17,7 +17,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 	CKEDITOR.plugins.add('more', {
 		lang: [ 'en', 'ru' ],
 		init: function(editor) {
-			console.log(this.path);
 			editor.addCommand('more', moreCmd);
 			editor.ui.addButton('More', {
 				label: editor.lang.more.title,
