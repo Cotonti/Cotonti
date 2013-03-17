@@ -19,7 +19,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		init: function(editor) {
 			editor.addCommand('more', moreCmd);
 			editor.ui.addButton('More', {
-				label: editor.lang.more.title,
+				label: 'Insert &quot;Read more&quot; page cut',
 				command: 'more',
 				icon: this.path + 'more.gif'
 			});
