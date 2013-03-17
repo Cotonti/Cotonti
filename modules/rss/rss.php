@@ -146,7 +146,7 @@ elseif ($m == "section")
 				//$post_url = ($cfg['plugin']['search']['searchurls'] == 'Single') ? cot_url('forums', 'm=posts&id='.$post_id, "", true) : cot_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
 				$post_url = cot_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
 				$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
-				$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text']);
+				$items[$i]['description'] = cot_parse_post_text($row['fp_text']);
 				$items[$i]['link'] = COT_ABSOLUTE_URL.$post_url;
 				$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
 			}
@@ -185,7 +185,7 @@ elseif ($m == "forums")
 		if (!$flag_private && cot_auth('forums', $forum_id, 'R'))
 		{
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
-			$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text']);
+			$items[$i]['description'] = cot_parse_post_text($row['fp_text']);
 			$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('forums', "m=posts&p=$post_id", "#$post_id", true);
 			$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
 		}
