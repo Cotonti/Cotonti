@@ -144,7 +144,7 @@ function cot_apply_rwr()
 				else
 				{
 					// Can be a cat or al, let the module decide
-					if ($count == 2)
+					if ($count == 2 && !isset($structure[$ext][$_GET['c']]))
 						$_GET['c'] = $path[$last];
 					$_GET['al'] = $path[$last];
 				}
