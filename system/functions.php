@@ -633,7 +633,7 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
 	if (count($date) > 0 && is_null($year) && is_null($month) && is_null($day) && is_null($hour) && is_null($minute))
 	{
 		// Datetime field is present in form but it is set to zero date (empty)
-		return 0;
+		return NULL;
 	}
 
 	if (($month && $day && $year) || ($day && $minute))
