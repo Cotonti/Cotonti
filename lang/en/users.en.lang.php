@@ -50,11 +50,11 @@ $L['aut_usernametooshort']= 'The user name must be at least 2 chars long';
  * User registration: messages
  */
 
-$L['aut_regrequest'] = "Hi %1\$s,\nYour account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured. After that you will be able to login with:\nUsername = %1\$s\nPassword = %2\$s";
+$L['aut_regrequest'] = "Hi %1\$s,\n\nYour account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured.";
 
-$L['aut_regreqnotice'] = "You are receiving this email because %1\$s requested a new account.\nThis user won\'t be able to login until you manually set the account as \'active\', here:\n%2\$s";
+$L['aut_regreqnotice'] = "You are receiving this email because %1\$s requested a new account.\nThis user won't be able to login until you manually set the account as 'active', here:\n%2\$s";
 
-$L['aut_emailreg'] = "Hi %1\$s,\nTo use your account you need to activate it with this link:\n%3\$s\nThen you\'ll be able to login with:\nUsername = %1\$s\nPassword = %2\$s\nTo cancel the recently inactive membership use this link:\n%4\$s";
+$L['aut_emailreg'] = "Hi %1\$s,\n\nTo use your account you need to activate it with this link:\n%2\$s\n\nTo cancel the recently inactive membership use this link:\n%3\$s";
 
 $L['aut_emailchange'] = "Hi %1\$s,\nTo change your recent email please use this activation link:\n%2\$s";
 
@@ -74,7 +74,7 @@ $L['pro_wrongpass'] = 'You didn\'t enter your present password, or it\'s wrong';
 $L['pro_invalidbirthdate'] = 'The birthdate is invalid.';
 
 $L['useed_accountactivated'] = 'Account activated';
-$L['useed_email'] = 'You are receiving this email because an administrator activated your account. You may now login using the username and password you received in a previous email.';
+$L['useed_email'] = 'You are receiving this email because an administrator activated your account. You may now login.';
 $L['useed_subtitle'] = '&nbsp;';
 $L['useed_title'] = 'Edit';
 

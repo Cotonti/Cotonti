@@ -76,6 +76,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_regdate'] = (int)$sys['now'];
 	$ruser['user_logcount'] = 0;
 	$ruser['user_lastip'] = empty($ruser['user_lastip']) ? $usr['ip'] : $ruser['user_lastip'];
+	$ruser['user_token'] = cot_unique(16);
 
 	if (!$db->insert($db_users, $ruser)) return;
 
@@ -96,7 +97,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 		if ($cfg['users']['regrequireadmin'])
 		{
 			$subject = $L['aut_regrequesttitle'];
-			$body = sprintf($L['aut_regrequest'], $ruser['user_name'], $password);
+			$body = sprintf($L['aut_regrequest'], $ruser['user_name']);
 			$body .= "\n\n".$L['aut_contactadmin'];
 			cot_mail($ruser['user_email'], $subject, $body);
 
@@ -108,9 +109,9 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 		else
 		{
 			$subject = $L['Registration'];
-			$activate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['user_lostpass'].'&y=1', '', true);
-			$deactivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['user_lostpass'].'&y=0', '', true);
-			$body = sprintf($L['aut_emailreg'], $ruser['user_name'], $password, $activate, $deactivate);
+			$activate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=1', '', true);
+			$deactivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=0', '', true);
+			$body = sprintf($L['aut_emailreg'], $ruser['user_name'], $activate, $deactivate);
 			$body .= "\n\n".$L['aut_contactadmin'];
 			cot_mail($ruser['user_email'], $subject, $body);
 		}
