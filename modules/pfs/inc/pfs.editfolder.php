@@ -34,7 +34,8 @@ if ($userid!=$usr['id'])
 }
 
 $standalone = FALSE;
-$user_info = cot_userinfo($userid);
+$uid = ($userid > 0) ? $userid : $usr['id'];
+$user_info = cot_userinfo($uid);
 $maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
 
 $pfs_dir_user = cot_pfs_path($userid);

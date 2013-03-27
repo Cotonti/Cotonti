@@ -19,7 +19,7 @@ $userid = cot_import('userid', 'G', 'INT');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
 cot_block($usr['auth_write']);
 
-if (!$usr['isadmin'] || $userid == '')
+if (!$usr['isadmin'] || $userid === null)
 {
 	$userid = $usr['id'];
 }
@@ -34,7 +34,8 @@ if ($userid!=$usr['id'])
 }
 
 $standalone = FALSE;
-$user_info = cot_userinfo($userid);
+$uid = ($userid > 0) ? $userid : $usr['id'];
+$user_info = cot_userinfo($uid);
 $maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
 
 $pfs_dir_user = cot_pfs_path($userid);

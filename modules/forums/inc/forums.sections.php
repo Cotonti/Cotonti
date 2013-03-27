@@ -58,7 +58,7 @@ foreach ($sql_forums->fetchAll() as $row)
 	$cat_top[$row['fs_cat']] = $row;
 	$cat_top[$row['fs_cat']]['topiccount'] = $cat_top[$row['fs_cat']]['fs_topiccount'];
 	$cat_top[$row['fs_cat']]['postcount'] = $cat_top[$row['fs_cat']]['fs_postcount'];
-	$cat_top[$row['fs_cat']]['viewcount'] = $cat_top[$row['fs_cat']]['fs_topiccount'];
+    $cat_top[$row['fs_cat']]['viewcount'] = $cat_top[$row['fs_cat']]['fs_viewcount'];
 }
 
 $fstlvl = array();

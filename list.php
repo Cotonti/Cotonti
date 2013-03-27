@@ -15,6 +15,7 @@ define('COT_CODE', true);
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
+require_once $cfg['system_dir'] . '/cotemplate.php';
 require_once $cfg['system_dir'] . '/common.php';
 
 parse_str($_SERVER['QUERY_STRING'], $params);
