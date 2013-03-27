@@ -16,6 +16,7 @@ require_once cot_incfile('auth');
 
 $v = cot_import('v','G','ALP');
 $y = cot_import('y','G','INT');
+$token = cot_import('token', 'G', 'ALP');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
 
@@ -143,9 +144,15 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 					include $pl;
 				}
 				/* ===== */
-
 				cot_auth_clear($row['user_id']);
-				cot_redirect(cot_url('message', 'msg=106', '', true));
+				if(!empty($token) && $token==$row['user_token'] && $sys['now']<($row['user_regdate']+172800))
+				{
+					cot_redirect(cot_url('login', 'a=check&v='.$v.'&token='.$token, '', true));
+				}
+				else
+				{
+					cot_redirect(cot_url('message', 'msg=106', '', true));
+				}
 			}
 			elseif ($y == 0)
 			{

@@ -93,6 +93,10 @@ if ($a == 'check')
 	$rpassword = cot_import('rpassword','P','HTM', 32, TRUE);
 	$rcookiettl = cot_import('rcookiettl', 'P', 'INT');
 	$rremember = cot_import('rremember', 'P', 'BOL');
+	$token = cot_import('token', 'G', 'ALP');
+	$v = cot_import('v', 'G', 'ALP');
+	$validating = FALSE;
+
 	if(empty($rremember) && $rcookiettl > 0 || $cfg['forcerememberme'])
 	{
 		$rremember = true;
@@ -100,6 +104,12 @@ if ($a == 'check')
 
 	$login_param = !$cfg['useremailduplicate'] && cot_check_email($rusername) ?
 		'user_email' : 'user_name';
+
+	if(!empty($v) && mb_strlen($v)==32)
+	{
+		$validating = TRUE;
+		$login_param = 'user_lostpass';
+	}
 
 	// Load salt and algo from db
 	$sql = $db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE $login_param=".$db->quote($rusername));
@@ -119,7 +129,7 @@ if ($a == 'check')
 	 * Sets user selection criteria for authentication. Override this string in your plugin
 	 * hooking into users.auth.check.query to provide other authentication methods.
 	 */
-	$user_select_condition = "user_password=".$db->quote($rmdpass)." AND $login_param=".$db->quote($rusername);
+	$user_select_condition = (!$validating) ? "user_password=".$db->quote($rmdpass)." AND $login_param=".$db->quote($rusername) : "user_lostpass=".$db->quote($v);
 
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.auth.check.query') as $pl)
@@ -128,7 +138,7 @@ if ($a == 'check')
 	}
 	/* ===== */
 
-	$sql = $db->query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
+	$sql = $db->query("SELECT user_id, user_name, user_token, user_regdate, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
 
 	/* 	Checking if we got any entries with the current login conditions,
 		only may fail when user name has e-mail format or user is not registered,
@@ -140,11 +150,19 @@ if ($a == 'check')
 		$user_select_condition = "user_password=".$db->quote($rmdpass)." AND user_name=".$db->quote($rusername);
 
 		// Query the database
-		$sql = $db->query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
+		$sql = $db->query("SELECT user_id, user_name, user_token, user_regdate, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
 	}
 	if ($row = $sql->fetch())
 	{
 		$rusername = $row['user_name'];
+		
+		// Checking to make sure user doesn't game the free login from
+		if($validating && ($row['user_maingrp']!=4 || $sys['now']>($row['user_regdate']+172800) || $token!=$row['user_token']))
+		{
+			$env['status'] = '403 Forbidden';
+			cot_log('Failed user validation login attempt : '.$rusername, 'usr');
+			cot_redirect(cot_url('message', 'msg=157', '', true));
+		}
 		if ($row['user_maingrp']==-1)
 		{
 			$env['status'] = '403 Forbidden';
@@ -191,7 +209,16 @@ if ($a == 'check')
 			$update_sid = '';
 		}
 
-		$db->query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now']}, user_logcount = user_logcount + 1, user_token = '$token' $update_sid WHERE user_id={$row['user_id']}");
+		if($validating)
+		{
+			$update_lostpass = ', user_lostpass='.$db->quote(md5(microtime()));
+		}
+		else
+		{
+			$update_lostpass = '';
+		}
+
+		$db->query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now']}, user_logcount = user_logcount + 1, user_token = '$token' $update_lostpass $update_sid WHERE user_id={$row['user_id']}");
 
 		// Hash the sid once more so it can't be faked even if you  know user_sid
 		$sid = hash_hmac('sha1', $sid, $cfg['secret_key']);
