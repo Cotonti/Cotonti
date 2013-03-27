@@ -93,6 +93,8 @@ if ($regenerate)
 		$sitemap_join_columns = '';
 		$sitemap_join_tables = '';
 		$sitemap_where = array();
+		$sitemap_where['state'] = 'page_state = 0';
+		$sitemap_where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 
 		/* === Hook === */
 		foreach (cot_getextplugins('sitemap.page.query') as $pl)
