@@ -74,7 +74,7 @@ $L['pro_wrongpass'] = 'You didn\'t enter your present password, or it\'s wrong';
 $L['pro_invalidbirthdate'] = 'The birthdate is invalid.';
 
 $L['useed_accountactivated'] = 'Account activated';
-$L['useed_email'] = 'You are receiving this email because an administrator activated your account. You may now login.';
+$L['useed_email'] = 'You are receiving this email because an administrator activated your account. You may now login using your username and password.';
 $L['useed_subtitle'] = '&nbsp;';
 $L['useed_title'] = 'Edit';
 
