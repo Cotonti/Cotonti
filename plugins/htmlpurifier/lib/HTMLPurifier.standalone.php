@@ -2054,7 +2054,7 @@ class HTMLPurifier_Config
                 break;
             }
         }
-        trigger_error($msg . $extra, $no);
+//        trigger_error($msg . $extra, $no);
     }
 
     /**
