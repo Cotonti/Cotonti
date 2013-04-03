@@ -95,6 +95,15 @@ if ($m == 'edit' && $id > 0)
 
 			cot_extrafield_movefiles();
 
+            if($row["com_area"] == 'page'){
+                if ($cfg['cache_page'])
+                {
+                    $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
+
+                }
+                if ($cfg['cache_index']) $cache->page->clear('index');
+            }
+
 			if ($cfg['plugin']['comments']['mail'])
 			{
 				$sql2 = $db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
@@ -222,6 +231,15 @@ if ($a == 'send' && $usr['auth_write'])
 		$sql = $db->insert($db_com, $comarray);
 		$id = $db->lastInsertId();
 
+        if($area == 'page'){
+            if ($cfg['cache_page'])
+            {
+                $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
+
+            }
+            if ($cfg['cache_index']) $cache->page->clear('index');
+        }
+
 		cot_extrafield_movefiles();
 
 		$_SESSION['cot_comments_edit'][$id] = $sys['now'];
@@ -269,6 +287,15 @@ elseif ($a == 'delete' && $usr['isadmin'])
 		{
 			cot_extrafield_unlinkfiles($row['com_' . $exfld['field_name']], $exfld);
 		}
+
+        if($row['com_area'] == 'page'){
+            if ($cfg['cache_page'])
+            {
+                $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
+
+            }
+            if ($cfg['cache_index']) $cache->page->clear('index');
+        }
 
 		/* == Hook == */
 		foreach (cot_getextplugins('comments.delete') as $pl)
