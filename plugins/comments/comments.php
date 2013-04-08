@@ -239,6 +239,7 @@ if ($a == 'send' && $usr['auth_write'])
             }
             if ($cfg['cache_index']) $cache->page->clear('index');
         }
+        $cfg['cache_page'] = $cfg['cache_index'] = false;
 
 		cot_extrafield_movefiles();
 

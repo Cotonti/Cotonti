@@ -222,8 +222,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 
 			$time_limit = ($sys['now'] < ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE
 				: FALSE;
-			$usr['isowner_com'] = $time_limit && ($usr['id'] > 0 && $row['com_authorid'] == $usr['id']
-				|| $usr['id'] == 0 && $usr['ip'] == $row['com_authorip']);
+            $usr['isowner_com'] = $time_limit && ( ($usr['id'] > 0 && $row['com_authorid'] == $usr['id'] )
+                || ($usr['id'] == 0 && !empty($_SESSION['cot_comments_edit'][$row['com_id']]) && $usr['ip'] == $row['com_authorip']) );
 			$com_gup = $sys['now'] - ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60);
 			$allowed_time = ($usr['isowner_com'] && !$usr['isadmin']) ? ' - '
 				. cot_build_timegap($sys['now'] + $com_gup, $sys['now']) . $L['plu_comgup'] : '';
@@ -232,6 +232,9 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 					'allowed_time' => $allowed_time
 				)) : '';
 
+            if($row['com_area'] == 'page'){
+                if($usr['id'] == 0 && $usr['isowner_com'] && $cfg['cache_page']) $cfg['cache_page'] = $cfg['cache_index'] = false;
+            }
 			$t->assign(array(
 				'COMMENTS_ROW_ID' => $row['com_id'],
 				'COMMENTS_ROW_ORDER' => $cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
