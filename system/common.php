@@ -224,14 +224,16 @@ if (!$cot_modules)
 			{
 				$cot_plugins_enabled[$row['ct_code']] = array(
 					'code' => $row['ct_code'],
-					'title' => $row['ct_title']
+					'title' => $row['ct_title'],
+                    'version' => $row['ct_version']
 				);
 			}
 			else
 			{
 				$cot_modules[$row['ct_code']] = array(
 					'code' => $row['ct_code'],
-					'title' => $row['ct_title']
+					'title' => $row['ct_title'],
+                    'version' => $row['ct_version']
 				);
 			}
 		}
