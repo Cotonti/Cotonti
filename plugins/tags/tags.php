@@ -146,7 +146,7 @@ else
  */
 function cot_tag_search_pages($query)
 {
-	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
+	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row, $sys;
 
 	if (!cot_module_active('page'))
 	{
@@ -178,6 +178,7 @@ function cot_tag_search_pages($query)
 			$order = '';
 	}
 
+
 	/* == Hook == */
 	foreach (cot_getextplugins('tags.search.pages.query') as $pl)
 	{
@@ -192,14 +193,22 @@ function cot_tag_search_pages($query)
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_pages']);
+	$pcount = $sql->rowCount();
 
 	/* == Hook : Part 1 == */
 	$extp = cot_getextplugins('tags.search.pages.loop');
 	/* ===== */
-	if ($sql->rowCount() > 0)
+
+	if ($pcount > 0)
 	{
 		foreach ($sql->fetchAll() as $row)
 		{
+			if(($row['page_begin'] > 0 && $row['page_begin'] > $sys['now']) || ($row['page_expire'] > 0 && $sys['now'] > $row['page_expire']))
+			{
+				--$pcount;
+				continue;
+			}
+
 			$tags = cot_tag_list($row['page_id']);
 			$tag_list = '';
 			$tag_i = 0;
@@ -245,7 +254,8 @@ function cot_tag_search_pages($query)
 		}
 		/* ===== */
 	}
-	else
+	
+	if($pcount == 0)
 	{
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
 	}
