@@ -85,7 +85,7 @@ function cot_comments_count($ext_name, $code, $row = array())
  */
 function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 {
-	global $db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $env, $pg, $cot_extrafields;
+	global $db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $env, $pg, $cot_extrafields, $cache, $structure;
 
 	// Check permissions and enablement
 	list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'comments');
@@ -175,6 +175,15 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		/* ===== */
 
 		$usr['id'] == 0 && $t->parse('COMMENTS.COMMENTS_NEWCOMMENT.GUEST');
+        if ($usr['id'] == 0 && cot_check_messages()){
+            if($ext_name == 'page'){
+                if ($cfg['cache_page'])
+                {
+                    $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$cat]['path']));
+                    $cfg['cache_page'] = false;
+                }
+            }
+        }
 		cot_display_messages($t, 'COMMENTS.COMMENTS_NEWCOMMENT');
 		$t->assign('COMMENTS_FORM_HINT', $com_hint);
 		$t->parse('COMMENTS.COMMENTS_NEWCOMMENT');

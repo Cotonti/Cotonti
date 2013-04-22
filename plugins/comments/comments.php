@@ -272,6 +272,14 @@ if ($a == 'send' && $usr['auth_write'])
 
 		cot_redirect(cot_url($url_area, $url_params, '#c' . $id, true));
 	}
+    if($area == 'page'){
+        if ($cfg['cache_page'])
+        {
+            $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
+
+        }
+        if ($cfg['cache_index']) $cache->page->clear('index');
+    }
 	cot_redirect(cot_url($url_area, $url_params, '#comments', true));
 }
 elseif ($a == 'delete' && $usr['isadmin'])
