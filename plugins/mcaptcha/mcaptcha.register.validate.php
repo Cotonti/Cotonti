@@ -17,9 +17,12 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-$rverify = cot_import('rverify', 'P', 'INT');
-
-if (!cot_captcha_validate($rverify))
+if ($cfg['captchamain'] == 'mcaptcha')
 {
-	cot_error('captcha_verification_failed', 'rverify');
+    $rverify = cot_import('rverify', 'P', 'INT');
+
+    if (!cot_captcha_validate($rverify))
+    {
+        cot_error('captcha_verification_failed', 'rverify');
+    }
 }
