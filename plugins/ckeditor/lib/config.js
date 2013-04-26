@@ -5,6 +5,8 @@ CKEDITOR.editorConfig = function( config )
     config.toolbar = 'Full';
 	config.extraPlugins = 'more,oembed';
 
+	config.allowedContent = true; // disable ACF
+
 	config.toolbar_Full =
 	[
 		['Source','-','Templates'],
