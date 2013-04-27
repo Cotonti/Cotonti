@@ -62,7 +62,7 @@ $L['adm_filesize'] = 'File size';
  */
 
 $L['page_addtitle'] = 'Submit new page';
-$L['page_addsubtitle'] = 'Fill out all required fields and hit "Sumbit" to continue';
+$L['page_addsubtitle'] = 'Fill out all required fields and submit the form to continue';
 $L['page_edittitle'] = 'Page properties';
 $L['page_editsubtitle'] = 'Edit all required fields and hit "Sumbit" to continue';
 
