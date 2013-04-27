@@ -29,6 +29,6 @@ $L['WhosOnline'] = 'Сейчас онлайн';
 $L['MostOnline'] = 'Самое большое количество посетителей в онлайне';
 $L['NowOnline'] = 'Сейчас на сайте';
 $L['LastSeen'] = 'Дата и время';
-$L['Location'] = 'Раздел сайта';
+$L['OnlineLocation'] = 'Раздел сайта';
 $L['IPaddress'] = 'IP address';
 $L['Visitor'] = 'Гость';

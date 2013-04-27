@@ -10,7 +10,7 @@
 					<tr>
 						<th>{PHP.L.User}</th>
 						<th>{PHP.L.Group}</th>
-						<th>{PHP.L.Location}</th>
+						<th>{PHP.L.OnlineLocation}</th>
 						<th>{PHP.L.LastSeen}</th>
 						<!-- IF {PHP.usr.isadmin} --><th>{PHP.L.IPaddress}</th><!-- ENDIF -->
 					</tr>
