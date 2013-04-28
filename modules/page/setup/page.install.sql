@@ -58,8 +58,11 @@ CREATE TABLE IF NOT EXISTS `cot_pages` (
   PRIMARY KEY  (`page_id`),
   KEY `page_cat` (`page_cat`),
   KEY `page_alias` (`page_alias`),
-  KEY `page_state` (`page_state`),
-  KEY `page_date` (`page_date`)
+  KEY `page_date` (`page_date`),
+  KEY `page_ownerid` (`page_ownerid`),
+  KEY `page_begin` (`page_begin`),
+  KEY `page_expire` (`page_expire`),
+  KEY `page_title` (`page_title`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `cot_pages` (`page_state`, `page_cat`, `page_title`, `page_desc`, `page_text`, `page_author`, `page_ownerid`, `page_date`, `page_begin`, `page_expire`, `page_file`, `page_url`, `page_size`, `page_count`, `page_rating`, `page_filecount`, `page_alias`) VALUES

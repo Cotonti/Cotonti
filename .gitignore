@@ -16,3 +16,5 @@
 !/datas/users/index.html
 .DS_Store
 .htaccess
+.tags
+.tags_sorted_by_file

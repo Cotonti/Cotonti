@@ -42,7 +42,7 @@ CREATE TABLE `cot_cache` (
   `c_realm` varchar(64) collate utf8_unicode_ci NOT NULL default 'cot',
   `c_expire` int NOT NULL default '0',
   `c_auto` tinyint NOT NULL default '1',
-  `c_value` text collate utf8_unicode_ci,
+  `c_value` MEDIUMTEXT collate utf8_unicode_ci,
   PRIMARY KEY  (`c_name`, `c_realm`),
   KEY (`c_realm`),
   KEY (`c_name`),
@@ -292,9 +292,14 @@ CREATE TABLE `cot_users` (
   `user_sid` char(64) collate utf8_unicode_ci NOT NULL default '',
   `user_sidtime` int NOT NULL default 0,
   `user_lostpass` char(32) collate utf8_unicode_ci NOT NULL default '',
-  `user_auth` text collate utf8_unicode_ci,
+  `user_auth` MEDIUMTEXT collate utf8_unicode_ci,
   `user_token` char(16) collate utf8_unicode_ci NOT NULL default '',
   PRIMARY KEY  (`user_id`),
   KEY `user_password` (`user_password`),
-  KEY `user_regdate` (`user_regdate`)
+  KEY `user_regdate` (`user_regdate`),
+  KEY `user_name` (`user_name`),
+  KEY `user_maingrp` (`user_maingrp`),
+  KEY `user_email` (`user_email`),
+  KEY `user_sid` (`user_sid`),
+  KEY `user_lostpass` (`user_lostpass`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

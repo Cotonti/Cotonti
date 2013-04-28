@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS `cot_tag_references` (
   `tag_item` int NOT NULL,
   `tag_area` varchar(64) collate utf8_unicode_ci NOT NULL default 'pages',
   PRIMARY KEY  (`tag`,`tag_area`,`tag_item`),
-  KEY `tag_item` (`tag_item`),
-  KEY `tag_area` (`tag_area`)
+  KEY `tag_area` (`tag_area`),
+  KEY `tag_area_item` (`tag_area`, `tag_item`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
