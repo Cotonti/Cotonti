@@ -327,8 +327,8 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				$usr['maingrp'] = $row['user_maingrp'];
 				$usr['lastvisit'] = $row['user_lastvisit'];
 				$usr['lastlog'] = $row['user_lastlog'];
-				$usr['timezone'] = ($row['user_timezone']=='GMT' || empty($row['user_timezone'])) ? (float)$cfg['defaulttimezone'] : cot_timezone_offset($row['user_timezone'], true);
-				$usr['timezonename'] = (!empty($row['user_timezone'])) ? $row['user_timezone'] : 'GMT';
+				$usr['timezone'] = cot_timezone_offset($row['user_timezone'], true);
+				$usr['timezonename'] = $row['user_timezone'];
 				$usr['theme'] = ($cfg['forcedefaulttheme']) ? $cfg['defaulttheme'] : $row['user_theme'];
 				$usr['scheme'] = $row['user_scheme'];
 				$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];
