@@ -3359,7 +3359,7 @@ function cot_timezone_list($withgmt = false, $dst = false)
 		array_multisort($offsets, SORT_ASC, $names, SORT_ASC, $timezonelist);
 		$timezones = $timezonelist;
 	}
-	return $withgmt ? array_merge(array(array('name' => 'GMT', 'offset' => 0, 'description' => 'GMT')), $timezones) : $timezones;
+	return $withgmt ? array_merge(array(array('name' => 'GMT', 'identifier' => 'GMT', 'offset' => 0, 'description' => 'GMT')), $timezones) : $timezones;
 }
 
 /**

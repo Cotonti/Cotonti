@@ -97,7 +97,7 @@ $L['short_struct'] = 'Struct';
 $L['cfg_forcedefaultlang'] = 'Force the default language for all users';
 $L['cfg_forcedefaultlang_hint'] = '';
 $L['cfg_defaulttimezone'] = 'Default time zone';
-$L['cfg_defaulttimezone_hint'] = 'For guests and new members, from -12 to +12';
+$L['cfg_defaulttimezone_hint'] = 'For guests and new members';
 
 /**
  * Config Section
