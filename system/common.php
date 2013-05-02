@@ -301,8 +301,8 @@ $usr['name'] = '';
 $usr['level'] = 0;
 $usr['lastvisit'] = 30000000000;
 $usr['lastlog'] = 0;
-$usr['timezone'] = (float)$cfg['defaulttimezone'];
-$usr['timezonename'] = 'GMT';
+$usr['timezone'] = cot_timezone_offset($cfg['defaulttimezone'], true);
+$usr['timezonename'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
