@@ -33,13 +33,13 @@ if ($enpages || $enforums)
 		if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['recentitems']['cache_ttl'] > 0)
 		{
 			$ri_cache_id = "$theme.$lang.pages";
-			$ri_html = $cache->disk->get($ri_cache_id, 'recentitems', (int) $cfg['plugin']['recentitems']['cache_ttl']);
+			$ri_html = $cache->disk->get($ri_cache_id, 'recentitems', (int)$cfg['plugin']['recentitems']['cache_ttl']);
 		}
 
 		if (empty($ri_html))
 		{
 			$ri_html = cot_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
-			if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['news']['cache_ttl'] > 0)
+			if ($usr['id'] == 0 && $cache && (int)$cfg['plugin']['recentitems']['cache_ttl'] > 0)
 			{
 				$cache->disk->store($ri_cache_id, $ri_html, 'recentitems');
 			}
@@ -54,7 +54,7 @@ if ($enpages || $enforums)
 		require_once cot_incfile('forums', 'module');
 
 		// Try to load from cache for guests
-		if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['recentitems']['cache_ttl'] > 0)
+		if ($usr['id'] == 0 && $cache && (int)$cfg['plugin']['recentitems']['cache_ttl'] > 0)
 		{
 			$ri_cache_id = "$theme.$lang.forums";
 			$ri_html = $cache->disk->get($ri_cache_id, 'recentitems', (int) $cfg['plugin']['recentitems']['cache_ttl']);
@@ -63,7 +63,7 @@ if ($enpages || $enforums)
 		if (empty($ri_html))
 		{
 			$ri_html = cot_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
-			if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['news']['cache_ttl'] > 0)
+			if ($usr['id'] == 0 && $cache && (int)$cfg['plugin']['recentitems']['cache_ttl'] > 0)
 			{
 				$cache->disk->store($ri_cache_id, $ri_html, 'recentitems');
 			}
