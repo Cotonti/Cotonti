@@ -376,8 +376,8 @@ $L['adm_help_newtags'] = '<br /><br /><b>New tags in tpl files:</b>';
  * Users Section
  */
 $L['adm_rightspergroup'] = 'Rights per group';
-$L['adm_maxsizesingle'] = 'Max size for a single file in '.$L['PFS'].' (KB)';
-$L['adm_maxsizeallpfs'] = 'Max size of all files together in '.$L['PFS'].' (KB)';
+$L['adm_maxsizesingle'] = 'Max size for a single file in '.$L['PFS'].' (KiB)';
+$L['adm_maxsizeallpfs'] = 'Max size of all files together in '.$L['PFS'].' (KiB)';
 $L['adm_copyrightsfrom'] = 'Set the same rights as the group';
 $L['adm_rights_maintenance'] = 'Access to site when maintenance mode on';
 $L['adm_skiprights'] = 'Omit rights for this group';

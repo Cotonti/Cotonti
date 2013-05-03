@@ -376,8 +376,8 @@ $L['adm_help_newtags'] = '<br /><br /><b>Новые тэги в tpl-файлах
  * Users Section
  */
 $L['adm_rightspergroup'] = 'Права групп';
-$L['adm_maxsizesingle'] = 'Максимальный размер одного файла в разделе &laquo;'.$L['PFS'].'&raquo; (Кб)';
-$L['adm_maxsizeallpfs'] = 'Максимальный размер всех файлов в разделе &laquo;'.$L['PFS'].'&raquo; (Кб)';
+$L['adm_maxsizesingle'] = 'Максимальный размер одного файла в разделе &laquo;'.$L['PFS'].'&raquo; (KiB)';
+$L['adm_maxsizeallpfs'] = 'Максимальный размер всех файлов в разделе &laquo;'.$L['PFS'].'&raquo; (KiB)';
 $L['adm_copyrightsfrom'] = 'Установить права как в группе';
 $L['adm_rights_maintenance'] = 'Разрешить авторизацию при включенном режиме обслуживания';
 $L['adm_skiprights'] = 'Пропустить права для этой группы';
