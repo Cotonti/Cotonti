@@ -71,6 +71,22 @@ function cot_selectbox_groups($check, $name, $skip=array(0))
 }
 
 /**
+* Returns a list of time zone names used for setting default time zone
+*/
+function cot_config_timezones()
+{
+	global $L;
+	$timezonelist = cot_timezone_list(true, false);
+	foreach($timezonelist as $timezone)
+	{
+		$names[] = $timezone['identifier'];
+		$titles[] = $timezone['description'];
+	}
+	$L['cfg_defaulttimezone_params'] = $titles;
+	return $names;
+}
+
+/**
  * Returns substring position in file
  *
  * @param string $file File path
