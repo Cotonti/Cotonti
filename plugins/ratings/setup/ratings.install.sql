@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `cot_rated` (
   `rated_area` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `rated_userid` int default NULL,
   `rated_value` tinyint unsigned NOT NULL default '0',
+  `rated_date` INT NOT NULL DEFAULT 0,
   PRIMARY KEY  (`rated_id`),
   KEY (`rated_area`, `rated_code`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
