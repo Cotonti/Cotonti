@@ -2374,22 +2374,22 @@ function cot_check($condition, $message, $src = 'default')
  */
 function cot_check_messages($src = '', $class = '')
 {
-	global $error_string;
+	global $error_string, $site_id;
 
 	if (empty($src) && empty($class))
 	{
-		return (is_array($_SESSION['cot_messages']) && count($_SESSION['cot_messages']) > 0)
+		return (is_array($_SESSION['cot_messages'][$site_id]) && count($_SESSION['cot_messages'][$site_id]) > 0)
 			|| !empty($error_string);
 	}
 
-	if (!is_array($_SESSION['cot_messages']))
+	if (!is_array($_SESSION['cot_messages'][$site_id]))
 	{
 		return false;
 	}
 
 	if (empty($src))
 	{
-		foreach ($_SESSION['cot_messages'] as $src => $grp)
+		foreach ($_SESSION['cot_messages'][$site_id] as $src => $grp)
 		{
 			foreach ($grp as $msg)
 			{
@@ -2402,11 +2402,11 @@ function cot_check_messages($src = '', $class = '')
 	}
 	elseif (empty($class))
 	{
-		return count($_SESSION['cot_messages'][$src]) > 0;
+		return count($_SESSION['cot_messages'][$site_id][$src]) > 0;
 	}
 	else
 	{
-		foreach ($_SESSION['cot_messages'][$src] as $msg)
+		foreach ($_SESSION['cot_messages'][$site_id][$src] as $msg)
 		{
 			if ($msg['class'] == $class)
 			{
@@ -2427,22 +2427,22 @@ function cot_check_messages($src = '', $class = '')
  */
 function cot_clear_messages($src = '', $class = '')
 {
-	global $error_string;
+	global $error_string, $site_id;
 
 	if (empty($src) && empty($class))
 	{
-		unset($_SESSION['cot_messages']);
+		unset($_SESSION['cot_messages'][$site_id]);
 		unset($error_string);
 	}
 
-	if (!is_array($_SESSION['cot_messages']))
+	if (!is_array($_SESSION['cot_messages'][$site_id]))
 	{
 		return;
 	}
 
 	if (empty($src))
 	{
-		foreach ($_SESSION['cot_messages'] as $src => $grp)
+		foreach ($_SESSION['cot_messages'][$site_id] as $src => $grp)
 		{
 			$new_grp = array();
 			foreach ($grp as $msg)
@@ -2454,22 +2454,22 @@ function cot_clear_messages($src = '', $class = '')
 			}
 			if (count($new_grp) > 0)
 			{
-				$_SESSION['cot_messages'][$src] = $new_grp;
+				$_SESSION['cot_messages'][$site_id][$src] = $new_grp;
 			}
 			else
 			{
-				unset($_SESSION['cot_messages'][$src]);
+				unset($_SESSION['cot_messages'][$site_id][$src]);
 			}
 		}
 	}
 	elseif (empty($class))
 	{
-		unset($_SESSION['cot_messages'][$src]);
+		unset($_SESSION['cot_messages'][$site_id][$src]);
 	}
 	else
 	{
 		$new_grp = array();
-		foreach ($_SESSION['cot_messages'][$src] as $msg)
+		foreach ($_SESSION['cot_messages'][$site_id][$src] as $msg)
 		{
 			if ($msg['class'] != $class)
 			{
@@ -2478,11 +2478,11 @@ function cot_clear_messages($src = '', $class = '')
 		}
 		if (count($new_grp) > 0)
 		{
-			$_SESSION['cot_messages'][$src] = $new_grp;
+			$_SESSION['cot_messages'][$site_id][$src] = $new_grp;
 		}
 		else
 		{
-			unset($_SESSION['cot_messages'][$src]);
+			unset($_SESSION['cot_messages'][$site_id][$src]);
 		}
 	}
 }
@@ -2757,20 +2757,21 @@ function cot_error_found()
  */
 function cot_get_messages($src = 'default', $class = '')
 {
+	global $site_id;
 	$messages = array();
 	if (empty($src) && empty($class))
 	{
-		return $_SESSION['cot_messages'];
+		return $_SESSION['cot_messages'][$site_id];
 	}
 
-	if (!is_array($_SESSION['cot_messages']))
+	if (!is_array($_SESSION['cot_messages'][$site_id]))
 	{
 		return $messages;
 	}
 
 	if (empty($src))
 	{
-		foreach ($_SESSION['cot_messages'] as $src => $grp)
+		foreach ($_SESSION['cot_messages'][$site_id] as $src => $grp)
 		{
 			foreach ($grp as $msg)
 			{
@@ -2782,15 +2783,15 @@ function cot_get_messages($src = 'default', $class = '')
 			}
 		}
 	}
-	elseif (is_array($_SESSION['cot_messages'][$src]))
+	elseif (is_array($_SESSION['cot_messages'][$site_id][$src]))
 	{
 		if (empty($class))
 		{
-			return $_SESSION['cot_messages'][$src];
+			return $_SESSION['cot_messages'][$site_id][$src];
 		}
 		else
 		{
-			foreach ($_SESSION['cot_messages'][$src] as $msg)
+			foreach ($_SESSION['cot_messages'][$site_id][$src] as $msg)
 			{
 				if ($msg['class'] != $class)
 				{
@@ -2814,10 +2815,10 @@ function cot_get_messages($src = 'default', $class = '')
  */
 function cot_implode_messages($src = 'default', $class = '')
 {
-	global $R, $L, $error_string;
+	global $R, $L, $error_string, $site_id;
 	$res = '';
 
-	if (!is_array($_SESSION['cot_messages']))
+	if (!is_array($_SESSION['cot_messages'][$site_id]))
 	{
 		return;
 	}
@@ -2881,13 +2882,13 @@ function cot_log_import($s, $e, $v, $o)
  */
 function cot_message($text, $class = 'ok', $src = 'default')
 {
-	global $cfg;
+	global $cfg, $site_id;
 	if (!$cfg['msg_separate'])
 	{
 		// Force the src to default if all errors are displayed in the same place
 		$src = 'default';
 	}
-	$_SESSION['cot_messages'][$src][] = array(
+	$_SESSION['cot_messages'][$site_id][$src][] = array(
 		'text' => $text,
 		'class' => $class
 	);
