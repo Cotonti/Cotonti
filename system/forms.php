@@ -267,7 +267,7 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 	$months[11] = $L['November'];
 	$months[12] = $L['December'];
 
-	$year = cot_selectbox($s_year, $name.'[year]', range($min_year, $max_year));
+	$year = cot_selectbox($s_year, $name.'[year]', range($max_year, $min_year, -1));
 	$month = cot_selectbox($s_month, $name.'[month]', array_keys($months), array_values($months));
 	$day = cot_selectbox($s_day, $name.'[day]', range(1, 31));
 
