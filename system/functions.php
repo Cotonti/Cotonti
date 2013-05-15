@@ -5017,7 +5017,16 @@ function cot_redirect($url)
 	if (!cot_url_check($url))
 	{
 		// No redirects to foreign domains
-		$url = $url == '/' || $url == $sys['site_uri'] ? COT_ABSOLUTE_URL : COT_ABSOLUTE_URL . $url;
+		if ($url == '/' || $url == $sys['site_uri'])
+		{
+			$url = COT_ABSOLUTE_URL;
+		}
+		else
+		{
+			if ($url[0] === '/')
+				$url = mb_substr($url, 1);
+			$url = COT_ABSOLUTE_URL . $url;
+		}
 	}
 
 	if (defined('COT_AJAX') && COT_AJAX)
