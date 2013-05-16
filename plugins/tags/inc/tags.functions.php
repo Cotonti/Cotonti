@@ -68,7 +68,8 @@ function cot_tag($tag, $item, $area = 'pages', $extra = null)
 function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 {
 	global $db, $db_tag_references, $cache;
-	$cache_name = 'tag_cloud_cache_' . $area;
+    $cache_name = 'tag_cloud_cache_' . $area.'_order';
+    if($limit) $cache_name .= '_'.$limit;
 	if ($cache && $GLOBALS[$cache_name] && is_array($GLOBALS[$cache_name]))
 	{
 		return $GLOBALS[$cache_name];
