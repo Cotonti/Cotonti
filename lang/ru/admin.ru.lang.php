@@ -17,6 +17,7 @@ defined('COT_CODE') or die('Wrong URL.');
  */
 $L['Extension'] = 'Расширение';
 $L['Extensions'] = 'Расширения';
+$L['Parameter'] = 'Параметр';
 $L['Structure'] = 'Структура';
 
 /**
