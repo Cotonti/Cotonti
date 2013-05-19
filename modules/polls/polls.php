@@ -88,8 +88,8 @@ if (cot_check_messages())
 }
 if ((int)$id > 0)
 {
-	$id = cot_import($id, 'D', 'INT');
-	if ((int) $db->query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id AND poll_type='index' ")->fetchColumn() != 1)
+	$id = (int)cot_import($id, 'D', 'INT');
+	if ((int) $db->query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id AND poll_type='index'")->fetchColumn() != 1)
 	{
 		cot_die_message(404, TRUE);
 	}

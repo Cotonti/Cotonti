@@ -56,11 +56,21 @@ $sql_users = $db->query("
 	$join_condition $where
 	ORDER BY is_user DESC, online_lastseen DESC $limit
 ");
-$sql_users_count = "SELECT COUNT(*), $is_user_check FROM $db_online as o $where GROUP BY is_user";
-$count_total_sq = $db->query($sql_users_count);
-$who_guests = $count_total_sq->fetchColumn();
-$who_users = $count_total_sq->fetchColumn();
-$totallines = (int)$who_users + (int)$who_guests;
+$sql_users_count = $db->query("SELECT COUNT(*) as cnt, $is_user_check FROM $db_online as o $where GROUP BY is_user");
+$who_guests = 0;
+$who_users = 0;
+foreach ($sql_users_count as $row)
+{
+	if ($row['is_user'])
+	{
+		$who_users = (int)$row['cnt'];
+	}
+	else
+	{
+		$who_guests = (int)$row['cnt'];
+	}
+}
+$totallines = $who_users + $who_guests;
 
 if ((!$cfg['easypagenav'] && $durl > 0 && $maxuserssperpage > 0 && $durl % $maxuserssperpage > 0)
 	|| ($d > 0 && $d >= $totallines))

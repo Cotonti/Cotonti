@@ -29,7 +29,7 @@ if ($tl)
 }
 
 list($pg, $d, $durl) = cot_import_pagenav('d',  $cfg['maxrowsperpage']);
-$dt = cot_import('dt', 'G', 'INT');
+$dt = (int)cot_import('dt', 'G', 'INT');
 $perpage = $cfg['plugin']['tags']['perpage'];
 
 // Array to register areas with tag functions provided
@@ -254,7 +254,7 @@ function cot_tag_search_pages($query)
 		}
 		/* ===== */
 	}
-	
+
 	if($pcount == 0)
 	{
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
