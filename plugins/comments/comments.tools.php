@@ -28,6 +28,10 @@ $adminhelp = $L['plu_help_comments'];
 
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
+$admin_comments_join_fields = '';
+$admin_comments_join_tables = '';
+$admin_comments_join_where = '';
+
 /* === Hook  === */
 foreach (cot_getextplugins('admin.comments.first') as $pl)
 {
@@ -49,7 +53,18 @@ $totalitems = $db->countRows($db_com);
 
 $pagenav = cot_pagenav('admin', 'm=other&p=comments', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $db->query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+if (cot_module_active('page'))
+{
+	require_once cot_incfile('page', 'module');
+	$admin_comments_join_fields = ", p.*";
+	$admin_comments_join_tables = " LEFT JOIN $db_pages AS p
+		ON c.com_area = 'page' AND c.com_code = p.page_id";
+}
+
+$sql = $db->query("SELECT c.* $admin_comments_join_fields
+	FROM $db_com AS c $admin_comments_join_tables
+	WHERE 1 $admin_comments_join_where
+	ORDER BY com_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
@@ -64,7 +79,7 @@ foreach ($sql->fetchAll() as $row)
 	switch ($row['com_area'])
 	{
 		case 'page':
-			$row['com_url'] = cot_url('page', "c=system&id=".$row['com_value']."&comments=1", "#c".$row['com_id']);
+			$row['com_url'] = cot_url('page', "c=".$row['page_cat']."&id=".$row['com_code'], "#c".$row['com_id']);
 		break;
 
 		case 'weblogs':
