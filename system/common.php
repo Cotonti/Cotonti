@@ -501,8 +501,12 @@ if (!file_exists($mtheme))
 	}
 }
 
-$usr['def_theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
-$usr['theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.{$usr['lang']}.lang.php";
+$usr['def_theme_lang'] = defined('COT_ADMIN') && !empty($cfg['admintheme'])
+	? "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.en.lang.php"
+	: "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
+$usr['theme_lang'] = defined('COT_ADMIN') && !empty($cfg['admintheme'])
+	? "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.{$usr['lang']}.lang.php"
+	: "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.{$usr['lang']}.lang.php";
 
 if ($usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
 {
@@ -518,11 +522,15 @@ $scheme = $usr['scheme'];
 
 // Resource strings
 require_once $cfg['system_dir'].'/resources.php';
+
 // Theme resources
-if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php"))
+$sys['theme_resources'] = defined('COT_ADMIN') && !empty($cfg['admintheme'])
+	? "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.php"
+	: "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
+if (file_exists($sys['theme_resources']))
 {
 	// Save overridden strings in $theme_reload global
-	list($l_diff, $r_diff) = cot_themerc_list("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php");
+	list($l_diff, $r_diff) = cot_themerc_list($sys['theme_resources']);
 	foreach ($l_diff as $key => $value)
 	{
 		$theme_reload['L'][$key] = $value;
@@ -533,6 +541,7 @@ if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php"))
 	}
 	unset($l_diff, $r_diff);
 }
+
 // Iconpack
 if (empty($cfg['defaulticons']))
 {
