@@ -303,6 +303,13 @@ $kk = 0;
 $allsub = cot_structure_children('page', $c, false, false, true, false);
 $subcat = array_slice($allsub, $dc, $cfg['page']['maxlistsperpage']);
 
+/* === Hook === */
+foreach (cot_getextplugins('page.list.rowcat.first') as $pl)
+{
+	include $pl;
+}
+/* ===== */
+
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.list.rowcat.loop');
 /* ===== */
