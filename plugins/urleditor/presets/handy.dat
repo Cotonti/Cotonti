@@ -8,6 +8,9 @@ plug	e=tags&a=pages&t=*		{$e}/{$t}{!$a}
 plug	e=tags&a=*&t=*			{$e}/{$a}/{$t}
 plug	e=*						{$e}
 users	m=details&u=*			users/{cot_url_username()}
+users	m=register				{$m}
+users	m=profile				{$m}
+users	m=passrecover			{$m}
 login	*						{$_area}
 message	*						{$_area}
 admin	m=*						admin/{$m}

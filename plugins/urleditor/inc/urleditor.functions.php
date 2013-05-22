@@ -64,6 +64,12 @@ function cot_apply_rwr()
 				// Is an extension
 				$_GET['e'] = $path[0];
 			}
+			elseif (in_array($path[0], array('register', 'profile', 'passrecover')))
+			{
+				// Special users shortcuts
+				$_GET['e'] = 'users';
+				$_GET['m'] = $path[0];
+			}
 			else
 			{
 				// Maybe it is a system page, if not 404 will be given
