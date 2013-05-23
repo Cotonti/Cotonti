@@ -529,15 +529,18 @@ $sys['theme_resources'] = defined('COT_ADMIN') && !empty($cfg['admintheme'])
 	: "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
 if (file_exists($sys['theme_resources']))
 {
-	// Save overridden strings in $theme_reload global
+	// Get the keys for overriden strings first
 	list($l_diff, $r_diff) = cot_themerc_list($sys['theme_resources']);
-	foreach ($l_diff as $key => $value)
+	// Include theme resources in the global scope
+	include $sys['theme_resources'];
+	// Save overridden strings in $theme_reload global
+	foreach ($l_diff as $key)
 	{
-		$theme_reload['L'][$key] = $value;
+		$theme_reload['L'][$key] = $L[$key];
 	}
-	foreach ($r_diff as $key => $value)
+	foreach ($r_diff as $key)
 	{
-		$theme_reload['R'][$key] = $value;
+		$theme_reload['R'][$key] = $R[$key];
 	}
 	unset($l_diff, $r_diff);
 }
