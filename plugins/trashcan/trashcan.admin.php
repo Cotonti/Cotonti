@@ -29,6 +29,7 @@ require_once cot_incfile('trashcan', 'plug');
 require_once cot_langfile('trashcan', 'plug');
 
 $adminhelp = $L['adm_help_trashcan'];
+$adminsubtitle = $L['Trashcan'];
 
 $id = cot_import('id', 'G', 'INT');
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);

@@ -33,6 +33,7 @@ $extra_whitelist = array(
 );
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=extrafields'), $L['adm_extrafields']);
+$adminsubtitle = $L['adm_extrafields'];
 
 $t = new XTemplate(cot_tplfile(array('admin', 'extrafields', $n), 'core'));
 

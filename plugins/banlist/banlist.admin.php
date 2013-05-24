@@ -25,6 +25,7 @@ require_once cot_langfile('banlist', 'plug');
 
 $db_banlist = (isset($db_banlist)) ? $db_banlist : $db_x . 'banlist';
 $adminhelp = $L['banlist_help'];
+$adminsubtitle = $L['banlist_title'];
 
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 

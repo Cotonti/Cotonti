@@ -16,6 +16,8 @@ cot_block($usr['isadmin']);
 
 require_once cot_incfile('configuration');
 
+$adminsubtitle = $L['Configuration'];
+
 $t = new XTemplate(cot_tplfile('admin.config', 'core'));
 
 $sub = cot_import('sub', 'G', 'TXT');

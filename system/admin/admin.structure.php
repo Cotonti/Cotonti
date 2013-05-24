@@ -25,7 +25,9 @@ $mode = cot_import('mode', 'G', 'ALP');
 
 $t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
 
-$modules_structure = &$extension_structure; // for capability
+$adminsubtitle = $L['Structure'];
+
+$modules_structure = &$extension_structure; // for compatibility
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.structure.first') as $pl)

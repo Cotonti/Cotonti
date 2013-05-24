@@ -28,6 +28,7 @@ $adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 $adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
 $adminpath[] = array(cot_url('admin', 'm='.$m), $L['Administration']);
 $adminhelp = $L['adm_help_page'];
+$adminsubtitle = $L['Pages'];
 
 $id = cot_import('id', 'G', 'INT');
 

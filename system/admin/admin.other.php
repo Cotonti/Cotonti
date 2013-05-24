@@ -28,6 +28,9 @@ if(!empty($p))
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', $p);
 	cot_block($usr['isadmin']);
 
+	$env['ext'] = $p;
+	$adminsubtitle = $cot_plugins_active[$p]['title'];
+
 	if (file_exists(cot_langfile($p, 'plug')))
 	{
 		require_once cot_langfile($p, 'plug');
@@ -69,6 +72,7 @@ if(!empty($p))
 else
 {
 	$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+	$adminsubtitle = $L['Other'];
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 	cot_block($usr['auth_read']);
 
