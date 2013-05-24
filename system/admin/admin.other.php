@@ -109,7 +109,8 @@ else
 					'ADMIN_OTHER_EXT_URL' => $type == 'plug' ? cot_url('admin', 'm=other&p=' . $pl['pl_code']) :
 						cot_url('admin', 'm=' . $pl['pl_code']),
 					'ADMIN_OTHER_EXT_ICO' => $ext_info['icon'],
-					'ADMIN_OTHER_EXT_NAME' => $ext_info['name']
+					'ADMIN_OTHER_EXT_NAME' => $ext_info['name'],
+					'ADMIN_OTHER_EXT_DESC' => $ext_info['desc']
 				));
 				$t->parse('MAIN.SECTION.ROW');
 			}
