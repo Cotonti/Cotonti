@@ -55,7 +55,7 @@ $L['recentitems_title'] = 'Новое на сайте';
 $L['recentitems_forums'] = 'Новое на форумах';
 $L['recentitems_pages'] = 'Новое в разделах';
 
-$L['recentitems_nonewpages'] = 'Нет совых страниц';
+$L['recentitems_nonewpages'] = 'Нет новых страниц';
 $L['recentitems_nonewposts'] = 'Нет новых сообщений';
 
 $L['recentitems_shownew'] = 'Показать новое на сайте';
@@ -75,6 +75,6 @@ $L['recentitems_posts_sticky'] = 'Тема закреплена (нет новы
 $L['recentitems_posts_new_sticky'] = 'Тема закреплена (есть новые)';
 $L['recentitems_posts_locked'] = 'Тема закрыта (нет новых)';
 $L['recentitems_posts_new_locked'] = 'Тема закрыта (есть новые)';
-$L['recentitems_posts_sticky_locked'] = 'Обьявление';
-$L['recentitems_posts_new_sticky_locked'] = 'Новые обьявления';
+$L['recentitems_posts_sticky_locked'] = 'Объявление';
+$L['recentitems_posts_new_sticky_locked'] = 'Новые объявления';
 $L['recentitems_posts_moved'] = 'Перенесена в другой раздел';
