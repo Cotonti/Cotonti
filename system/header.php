@@ -65,7 +65,7 @@ if ($sys['noindex'])
 }
 if(!headers_sent())
 {
-	cot_sendheaders($out['meta_contenttype'], isset($env['status']) ? $env['status'] : '200 OK');
+	cot_sendheaders($out['meta_contenttype'], isset($env['status']) ? $env['status'] : '200 OK', $env['last_modified']);
 }
 if (!COT_AJAX)
 {

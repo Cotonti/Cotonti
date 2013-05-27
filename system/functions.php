@@ -898,15 +898,35 @@ function cot_rmdir($dir)
  *
  * @param string $content_type Content-Type value (without charset)
  * @param string $response_code HTTP response code, e.g. '404 Not Found'
+ * @param int $last_modified Last modified time
  * @return bool
  */
-function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
+function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK', $last_modified = 0)
 {
+	global $sys;
+	
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+	$last_modified = is_int($last_modified) ? $last_modified : 0;
+	if ($last_modified > 0)
+	{
+		$modified_since = (isset($_ENV['HTTP_IF_MODIFIED_SINCE'])) ? strtotime(substr($_ENV['HTTP_IF_MODIFIED_SINCE'], 5)) : false;
+		$modified_since = (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) ? strtotime(substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 5)) : $modified_since;
+
+		if ($modified_since && $modified_since >= $last_modified)
+		{
+			header($protocol . ' 304 Not Modified');
+			exit;
+		} 
+	}
+	else
+	{
+		$last_modified = $sys['now'];
+	}
+	
 	header($protocol . ' ' . $response_code);
 	
 	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
-	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+	header('Last-Modified: '.gmdate('D, d M Y H:i:s', $last_modified).' GMT');
 	header('Content-Type: '.$content_type.'; charset=UTF-8');
 	header('Cache-Control: no-store,no-cache,must-revalidate');
 	header('Cache-Control: post-check=0,pre-check=0', FALSE);

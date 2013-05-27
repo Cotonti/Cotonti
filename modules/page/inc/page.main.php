@@ -137,6 +137,8 @@ $out['canonical_uri'] = cot_url('page', $pageurl_params);
 
 $mskin = cot_tplfile(array('page', $cat['tpl']));
 
+$env['last_modified'] = $pag['page_updated'];
+
 /* === Hook === */
 foreach (cot_getextplugins('page.main') as $pl)
 {
