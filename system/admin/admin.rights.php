@@ -97,6 +97,7 @@ $adminpath[] = array(cot_url('admin', 'm=users'), $L['Users']);
 $adminpath[] = array(cot_url('admin', 'm=users&n=edit&g='.$g), $cot_groups[$g]['name']);
 $adminpath[] = array(cot_url('admin', 'm=rights&g='.$g), $L['Rights']);
 ($advanced) && $adminpath[] = array(cot_url('admin', 'm=rights&g='.$g.'&advanced=1'), $L['More']);
+$adminsubtitle = $L['Rights'];
 
 $adv_columns = ($advanced) ? 8 : 4;
 

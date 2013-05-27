@@ -40,11 +40,13 @@ $standard_admin = array('cache.disk', 'cache', 'config', 'extrafields', 'home', 
 $inc_file = (empty($m)) ? 'home' : $m;
 $inc_file = (empty($s)) ? $inc_file : $inc_file.'.'.$s;
 if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'module', $inc_file)))
-{
+{ 
 	$inc_file = cot_incfile('admin', 'module', $inc_file);
 }
 else
 {
+	$env['ext'] = $m;
+	$adminsubtitle = $cot_modules[$m]['title'];
 	$inc_file = $cfg['modules_dir'] . "/$m/$m.admin.php";
 }
 
@@ -69,10 +71,11 @@ require $inc_file;
 $adminhelp = (empty($adminhelp)) ? '' : $adminhelp;
 
 $title_params = array(
-	'ADMIN' => $L['Administration']
+	'ADMIN' => $L['Administration'],
+	'SUBTITLE' => $adminsubtitle
 );
 $out['head'] .= $R['code_noindex'];
-$out['subtitle'] = cot_title('{ADMIN}', $title_params);
+$out['subtitle'] = empty($adminsubtitle) ? cot_title('{ADMIN}', $title_params) : cot_title('{SUBTITLE} - {ADMIN}', $title_params);
 
 require_once $cfg['system_dir'].'/header.php';
 

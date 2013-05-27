@@ -19,6 +19,7 @@ $t = new XTemplate(cot_tplfile('admin.infos', 'core'));
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=infos'), $L['adm_infos']);
 $adminhelp = $L['adm_help_versions'];
+$adminsubtitle = $L['adm_infos'];
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.infos.first') as $pl)

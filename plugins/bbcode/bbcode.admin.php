@@ -20,7 +20,7 @@ require_once cot_incfile('bbcode', 'plug');
 
 $bb_t = new XTemplate(cot_tplfile('bbcode.admin', 'plug', true));
 
-$out['subtitle'] = $L['adm_bbcodes'];
+$adminsubtitle = $L['adm_bbcodes'];
 $adminhelp = $L['adm_help_bbcodes'];
 
 $a = cot_import('a', 'G', 'ALP');

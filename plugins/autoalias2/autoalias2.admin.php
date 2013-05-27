@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('autoalias2', 'plug');
 
-$out['subtitle'] = 'AutoAlias';
+$adminsubtitle = 'AutoAlias';
 
 if ($a == 'create')
 {

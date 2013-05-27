@@ -24,6 +24,7 @@ $tt = new XTemplate(cot_tplfile('referers.admin', 'plug', true));
 $db_referers = (isset($db_referers)) ? $db_referers : $db_x . 'referers';
 require_once cot_langfile('referers', 'plug');
 $adminhelp = $L['adm_help_referers'];
+$adminsubtitle = $L['Referers'];
 
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 

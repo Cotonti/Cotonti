@@ -123,6 +123,7 @@ function cot_get_extensionparams($code, $is_module = false)
 	{
 		$name = $cot_plugins_enabled[$code]['title'];
 	}
+
 	if(empty($name))
 	{
 		$ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
@@ -135,6 +136,8 @@ function cot_get_extensionparams($code, $is_module = false)
 				// Try to load old format info
 				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
 			}
+			$name = $info['Name'];
+			$desc = $info['Desc'];
 		}
 		else
 		{
@@ -146,5 +149,18 @@ function cot_get_extensionparams($code, $is_module = false)
 	}
 	$icofile = $dir . '/' . $code . '/' . $code . '.png';
 	$icon = file_exists($icofile) ? $icofile : '';
-	return array('name' => htmlspecialchars($name), 'icon' => $icon);
+
+	$langfile = cot_langfile($code, $is_module ? 'module' : 'plug');
+	if (file_exists($langfile))
+	{
+		include $langfile;
+		if (!empty($L['info_name'])) $name = $L['info_name'];
+		if (!empty($L['info_desc'])) $desc = $L['info_desc'];
+	}
+
+	return array(
+		'name' => htmlspecialchars($name),
+		'desc' => $desc,
+		'icon' => $icon
+	);
 }

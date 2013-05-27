@@ -18,6 +18,8 @@ if (!$cfg['debug_mode'] && file_exists('install.php') && is_writable('datas/conf
 	cot_error('home_installable_error');
 }
 
+$adminsubtitle = ''; // Empty means just "Administration"
+
 //Version Checking
 if ($cfg['check_updates'] && $cache)
 {

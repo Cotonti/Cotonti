@@ -19,6 +19,7 @@ $t = new XTemplate(cot_tplfile('admin.log', 'core'));
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=log'), $L['Log']);
 $adminhelp = $L['adm_help_log'];
+$adminsubtitle = $L['Log'];
 
 $log_groups = array(
 	'all' => $L['All'],
