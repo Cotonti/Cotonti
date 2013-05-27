@@ -63,16 +63,10 @@ if ($sys['noindex'])
 {
 	$out['head_head'] .= $R['code_noindex'];
 }
-
-if (isset($env['status']))
+if(!headers_sent())
 {
-	cot_sendheaders($out['meta_contenttype'], $env['status']);
+	cot_sendheaders($out['meta_contenttype'], isset($env['status']) ? $env['status'] : '200 OK');
 }
-else
-{
-	cot_sendheaders($out['meta_contenttype']);
-}
-
 if (!COT_AJAX)
 {
 	$mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R') ? 'core' : 'module';

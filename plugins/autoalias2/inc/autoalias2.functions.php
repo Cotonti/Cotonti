@@ -23,12 +23,16 @@ require_once cot_incfile('page', 'module');
  */
 function autoalias2_convert($title, $id = 0, $duplicate = false)
 {
-	global $cfg, $cot_translit;
+	global $cfg, $cot_translit, $cot_translit_custom;
 
 	if($cfg['plugin']['autoalias2']['translit'] && file_exists(cot_langfile('translit', 'core')))
 	{
 		include cot_langfile('translit', 'core');
-		if (is_array($cot_translit))
+		if (is_array($cot_translit_custom))
+		{
+			$title = strtr($title, $cot_translit_custom);
+		}		
+		elseif (is_array($cot_translit))
 		{
 			$title = strtr($title, $cot_translit);
 		}
@@ -90,4 +94,5 @@ function autoalias2_update($title, $id)
 		}
 	}
 	while ($duplicate && !$cfg['plugin']['autoalias2']['prepend_id']);
+	return $alias;
 }
