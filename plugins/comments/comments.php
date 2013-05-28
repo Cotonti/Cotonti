@@ -44,8 +44,15 @@ if ($id > 0)
 // Check if comments are enabled for specific category/item
 cot_block(!empty($area) && !empty($item) && cot_comments_enabled($area, $cat, $item));
 
-$url_area = $_SESSION['cot_com_back'][$area][$cat][$item][0];
-$url_params = $_SESSION['cot_com_back'][$area][$cat][$item][1];
+$cot_com_back = cot_import('cb', 'P', 'TXT');
+if(!empty($cot_com_back))
+{
+    $cot_com_back = unserialize(base64_decode($cot_com_back));
+}else{
+    $cot_com_back = $_SESSION['cot_com_back'][$area][$cat][$item];
+}
+$url_area = $cot_com_back[0];
+$url_params = $cot_com_back[1];
 cot_block(!empty($url_area));
 
 // Try to fetch $force_admin from session
@@ -95,7 +102,8 @@ if ($m == 'edit' && $id > 0)
 
 			cot_extrafield_movefiles();
 
-            if($row["com_area"] == 'page'){
+            if($cache && $row["com_area"] == 'page')
+            {
                 if ($cfg['cache_page'])
                 {
                     $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
@@ -231,7 +239,7 @@ if ($a == 'send' && $usr['auth_write'])
 		$sql = $db->insert($db_com, $comarray);
 		$id = $db->lastInsertId();
 
-        if($area == 'page'){
+        if($cache && $area == 'page'){
             if ($cfg['cache_page'])
             {
                 $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
@@ -295,7 +303,8 @@ elseif ($a == 'delete' && $usr['isadmin'])
 			cot_extrafield_unlinkfiles($row['com_' . $exfld['field_name']], $exfld);
 		}
 
-        if($row['com_area'] == 'page'){
+        if($cache && $row['com_area'] == 'page')
+        {
             if ($cfg['cache_page'])
             {
                 $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));

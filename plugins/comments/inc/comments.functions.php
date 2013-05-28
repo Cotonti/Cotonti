@@ -116,7 +116,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		unset($link_params['rwr'], $link_params['e']);
 	}
 
-	$_SESSION['cot_com_back'][$ext_name][$cat][$code] = array($link_area, $link_params);
+    $cot_com_back = array($link_area, $link_params);
+	$_SESSION['cot_com_back'][$ext_name][$cat][$code] = $cot_com_back;
 
 	$d_var = 'dcm';
 	list($pg, $d, $durl) = cot_import_pagenav($d_var, $cfg['plugin']['comments']['maxcommentsperpage']);
@@ -141,7 +142,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		'COMMENTS_FORM_SEND' => cot_url('plug', "e=comments&a=send&area=$ext_name&cat=$cat&item=$code"),
 		'COMMENTS_FORM_AUTHOR' => ($usr['id'] > 0) ? $usr['name'] : cot_inputbox('text', 'rname'),
 		'COMMENTS_FORM_AUTHORID' => $usr['id'],
-		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? cot_textarea('rtext', $rtext, 10, 120, '', 'input_textarea_minieditor')
+		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? cot_textarea('rtext', $rtext, 10, 120, '', 'input_textarea_minieditor').cot_inputbox('hidden', 'cb', base64_encode(serialize($cot_com_back)))
 			: '',
 		'COMMENTS_DISPLAY' => $cfg['plugin']['comments']['expand_comments'] ? '' : 'none'
 	));
