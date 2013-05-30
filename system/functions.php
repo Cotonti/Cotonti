@@ -906,7 +906,7 @@ function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK',
 	global $sys;
 	
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
-	$last_modified = is_int($last_modified) ? $last_modified : 0;
+	$last_modified = (int)$last_modified > 0 ? (int)$last_modified : 0;
 	if ($last_modified > 0)
 	{
 		$modified_since = (isset($_ENV['HTTP_IF_MODIFIED_SINCE'])) ? strtotime(substr($_ENV['HTTP_IF_MODIFIED_SINCE'], 5)) : false;
@@ -920,7 +920,7 @@ function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK',
 	}
 	else
 	{
-		$last_modified = $sys['now'];
+		$last_modified = $sys['now'] - 3600*12;
 	}
 	
 	header($protocol . ' ' . $response_code);
