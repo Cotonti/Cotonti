@@ -244,7 +244,7 @@ switch($n)
 
 		if ($o != 'core' && file_exists(cot_langfile($p, $o)))
 		{
-			require_once cot_langfile($p, $o);
+			require cot_langfile($p, $o);
 		}
 
 		/* === Hook  === */
