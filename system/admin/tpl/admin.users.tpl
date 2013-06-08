@@ -4,7 +4,7 @@
 
 		<div class="block button-toolbar">
 			<a title="{PHP.L.Configuration}" href="{ADMIN_USERS_URL}" class="button">{PHP.L.Configuration}</a>
-			<a href="{ADMIN_USERS_EXTRAFIELDS_URL}" class="button">{PHP.L.adm_extrafields_desc}</a>
+			<a href="{ADMIN_USERS_EXTRAFIELDS_URL}" class="button">{PHP.L.adm_extrafields}</a>
 		</div>
 
 <!-- BEGIN: ADMIN_USERS_DEFAULT -->
