@@ -23,7 +23,10 @@
 					<!-- IF {PHP.hidden_groups} AND {ADMIN_USERS_ROW_GRP_HIDDEN} == Yes -->{PHP.R.admin_icon_usergroup0}<!-- ELSE -->{PHP.R.admin_icon_usergroup1}<!-- ENDIF -->
 					<!-- ENDIF -->
 					</td>
-					<td><a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}" class="ajax" title="{PHP.L.Edit}">{ADMIN_USERS_ROW_GRP_NAME} (#{ADMIN_USERS_ROW_GRP_ID})</a></td>
+					<td>
+						<p class="strong"><a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}" class="ajax" title="{PHP.L.Edit}">{ADMIN_USERS_ROW_GRP_NAME} (#{ADMIN_USERS_ROW_GRP_ID})</a></p>
+						<p class="small">{ADMIN_USERS_ROW_GRP_DESC}</p>
+					</td>
 					<td class="centerall">{ADMIN_USERS_ROW_GRP_COUNT_MEMBERS}</td>
 					<td class="centerall">{ADMIN_USERS_ROW_GRP_DISABLED}</td>
 					<td class="centerall action">

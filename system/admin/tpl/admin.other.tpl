@@ -9,31 +9,36 @@
 			<tr>
 				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/></td>
 				<td>
-					<a href="{ADMIN_OTHER_URL_CACHE}">{PHP.L.adm_internalcache}</a>
+					<p class="strong"><a href="{ADMIN_OTHER_URL_CACHE}">{PHP.L.adm_internalcache}</a></p>
+					<p class="small">{PHP.L.adm_internalcache_desc}</p>
 				</td>
 			</tr>
 			<tr>
 				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/></td>
 				<td>
-					<a href="{ADMIN_OTHER_URL_DISKCACHE}">{PHP.L.adm_diskcache}</a>
+					<p class="strong"><a href="{ADMIN_OTHER_URL_DISKCACHE}">{PHP.L.adm_diskcache}</a></p>
+					<p class="small">{PHP.L.adm_diskcache_desc}</p>
 				</td>
 			</tr>
 			<tr>
 				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/></td>
 				<td>
-					<a href="{ADMIN_OTHER_URL_EXFLDS}">{PHP.L.adm_extrafields}</a>
+					<p class="strong"><a href="{ADMIN_OTHER_URL_EXFLDS}">{PHP.L.adm_extrafields}</a></p>
+					<p class="small">{PHP.L.adm_extrafields_desc}</p>
 				</td>
 			</tr>			
 			<tr>
 				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/></td>
 				<td>
-					<a href="{ADMIN_OTHER_URL_LOG}">{PHP.L.adm_log}</a>
+					<p class="strong"><a href="{ADMIN_OTHER_URL_LOG}">{PHP.L.adm_log}</a></p>
+					<p class="small">{PHP.L.adm_log_desc}</p>
 				</td>
 			</tr>
 			<tr>
 				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/cfg_info.png"/></td>
 				<td>
-					<a href="{ADMIN_OTHER_URL_INFOS}">{PHP.L.adm_infos}</a>
+					<p class="strong"><a href="{ADMIN_OTHER_URL_INFOS}">{PHP.L.adm_infos}</a></p>
+					<p class="small">{PHP.L.adm_infos_desc}</p>
 				</td>
 			</tr>
 		</table>
@@ -52,7 +57,10 @@
 					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/>
 					<!-- ENDIF -->
 				</td>
-				<td class="width90"><a href="{ADMIN_OTHER_EXT_URL}">{ADMIN_OTHER_EXT_NAME}</a></td>
+				<td class="width90">
+					<p class="strong"><a href="{ADMIN_OTHER_EXT_URL}">{ADMIN_OTHER_EXT_NAME}</a></p>
+					<p class="small">{ADMIN_OTHER_EXT_DESC}</p>
+				</td>
 			</tr>
 <!-- END: ROW -->
 <!-- BEGIN: EMPTY -->

@@ -75,6 +75,8 @@ h4		{ font-weight:bold; }
 .upper		{ text-transform:uppercase; }
 .capital	{ text-transform:capitalize; }
 
+.large		{ font-size:1.1em; }
+
 .textleft		{ text-align:left; }
 .textcenter		{ text-align:center; }
 .textright		{ text-align:right; }
