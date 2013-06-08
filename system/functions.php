@@ -904,7 +904,7 @@ function cot_rmdir($dir)
 function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK', $last_modified = 0)
 {
 	global $sys;
-	
+
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
 	$last_modified = (int)$last_modified > 0 ? (int)$last_modified : 0;
 	if ($last_modified > 0)
@@ -916,15 +916,15 @@ function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK',
 		{
 			header($protocol . ' 304 Not Modified');
 			exit;
-		} 
+		}
 	}
 	else
 	{
 		$last_modified = $sys['now'] - 3600*12;
 	}
-	
+
 	header($protocol . ' ' . $response_code);
-	
+
 	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s', $last_modified).' GMT');
 	header('Content-Type: '.$content_type.'; charset=UTF-8');
@@ -1892,6 +1892,10 @@ function cot_build_group($grpid, $title = false)
 	}
 	else
 	{
+		if ($type == 'title' && isset($L['users_grp_' . $grpid . '_title']))
+		{
+			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $L['users_grp_' . $grpid . '_title']);
+		}
 		return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type]);
 	}
 }
