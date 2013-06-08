@@ -207,10 +207,12 @@ if(!isset($showdefault) || $showdefault == true)
 		foreach ($sql->fetchAll() as $row)
 		{
 			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
+			$grp_desc = isset($L['users_grp_' . $row['grp_id'] . '_desc']) ? $L['users_grp_' . $row['grp_id'] . '_desc'] : htmlspecialchars($row['grp_desc']);
 			$t->assign(array(
 				'ADMIN_USERS_ROW_GRP_TITLE_URL' => cot_url('admin', 'm=users&n=edit&g='.$row['grp_id']),
 				'ADMIN_USERS_ROW_GRP_NAME' => htmlspecialchars($row['grp_name']),
 				'ADMIN_USERS_ROW_GRP_TITLE' => htmlspecialchars($row['grp_title']),
+				'ADMIN_USERS_ROW_GRP_DESC' => $grp_desc,
 				'ADMIN_USERS_ROW_GRP_ID' => $row['grp_id'],
 				'ADMIN_USERS_ROW_GRP_COUNT_MEMBERS' => $members[$row['grp_id']],
 				'ADMIN_USERS_ROW_GRP_DISABLED' => $cot_yesno[!$row['grp_disabled']],
