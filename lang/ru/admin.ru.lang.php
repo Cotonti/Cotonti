@@ -61,22 +61,30 @@ $L['home_update_revision'] = 'Текущая версия: <span style="color:#C
  */
 $L['core_forums'] = &$L['Forums'];
 $L['core_locale'] = &$L['Locale'];
+$L['core_locale_desc'] = 'Установка языка и часового пояса по умолчанию';
 $L['core_main'] = 'Настройки сайта';
+$L['core_main_desc'] = 'Настройки сайта, глобальные настройки списков';
 $L['core_menus'] = &$L['Menus'];
+$L['core_menus_desc'] = 'Слоты для публикации простой текстовой информации';
 $L['core_page'] = &$L['Pages'];
 $L['core_parser'] = &$L['Parser'];
 $L['core_performance'] = 'Производительность';
+$L['core_performance_desc'] = 'Gzip-сжатие, консолидатор ресурсов, включение Ajax и jQuery';
 $L['core_pfs'] = &$L['PFS'];
 $L['core_plug'] = &$L['Plugins'];
 $L['core_pm'] = &$L['Private_Messages'];
 $L['core_polls'] = &$L['Polls'];
 $L['core_rss'] = &$L['RSS_Feeds'];
 $L['core_security'] = &$L['Security'];
+$L['core_security_desc'] = 'Защита, CAPTCHA, режимы отладки и обслуживания';
 $L['core_sessions'] = 'Сессии';
+$L['core_sessions_desc'] = 'Настройки cookies и фиксирования авторизаций';
 $L['core_structure'] = &$L['Categories'];
 $L['core_theme'] = &$L['Themes'];
+$L['core_theme_desc'] = 'Настройки темы и элементов ее разметки';
 $L['core_time'] = 'Время и дата';
 $L['core_title'] = 'Заголовки и мета-теги';
+$L['core_title_desc'] = 'Настройка META Title для главной и внутренних страниц сайта';
 
 $L['cfg_struct_defaults'] = 'Настройки по умолчанию для структуры';
 
@@ -360,7 +368,7 @@ $L['adm_help_structure'] = 'Страницы категории &laquo;system&ra
  * Structure Section
  * Extrafields Subsection
  */
-$L['adm_extrafields_desc'] = 'Создание / правка экстраполей';
+$L['adm_extrafields_desc'] = 'Создание / правка экстраполей для хранения пользовательских данных';
 $L['adm_extrafields_all'] = 'Все таблицы';
 $L['adm_extrafields_table'] = 'Таблица';
 $L['adm_extrafields_help_notused'] = 'Не используется';
@@ -384,6 +392,18 @@ $L['adm_rights_maintenance'] = 'Разрешить авторизацию при
 $L['adm_skiprights'] = 'Пропустить права для этой группы';
 $L['adm_groups_name_empty'] = 'Название группы не должно быть пустым';
 $L['adm_groups_title_empty'] = 'Титул члена группы (заголовок) не должен быть пустым';
+$L['users_grp_5_title'] = 'Администраторы';
+$L['users_grp_5_desc'] = 'Администраторы и пользователи с максимальным уровнем доступа';
+$L['users_grp_6_title'] = 'Модераторы';
+$L['users_grp_6_desc'] = 'Контент-менеджеры и доверенные контрибьюторы';
+$L['users_grp_4_title'] = 'Пользователи';
+$L['users_grp_4_desc'] = 'Зарегистрированные пользователи с базовым уровнем доступа';
+$L['users_grp_3_title'] = 'Забанены';
+$L['users_grp_3_desc'] = 'Заблокированные пользовательские учетные записи';
+$L['users_grp_2_title'] = 'Неактивированные';
+$L['users_grp_2_desc'] = 'Учетные записи с незавершенной процедурой регистрации';
+$L['users_grp_1_title'] = 'Посетители';
+$L['users_grp_1_desc'] = 'Незарегистрированные и неавторизованные пользователи';
 
 /**
  * Plug Section
@@ -438,8 +458,10 @@ $L['adm_listisempty'] = 'Элементы списка отсутствуют';
  */
 $L['adm_delcacheitem'] = 'Элемент кэша удален';
 $L['adm_internalcache'] = 'Внутренний кэш';
+$L['adm_internalcache_desc'] = 'Кэш для временного хранения часто изменяемых объектов';
 $L['adm_purgeall_done'] = 'Кэш очищен полностью';
 $L['adm_diskcache'] = 'Дисковый кэш';
+$L['adm_diskcache_desc'] = 'Кэш для хранения сформированных данных в виде файлов';
 $L['adm_cache_showall'] = 'Отобразить все';
 
 /**
@@ -447,7 +469,9 @@ $L['adm_cache_showall'] = 'Отобразить все';
  * Log Subsection
  */
 $L['adm_log'] = 'Системный протокол';
+$L['adm_log_desc'] = 'Информация об активности пользователей на сайте';
 $L['adm_infos'] = 'Информация';
+$L['adm_infos_desc'] = 'Версии PHP/Zend, ОС, часовые пояса сервера';
 $L['adm_versiondclocks'] = 'Версии и таймеры';
 $L['adm_checkcorethemes'] = 'Проверить файлы ядра и скинов';
 $L['adm_checkcorenow'] = 'Проверить файлы ядра!';

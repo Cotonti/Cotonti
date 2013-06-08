@@ -61,22 +61,30 @@ $L['home_update_revision'] = 'Current version: <span style="color:#C00;font-weig
  */
 $L['core_forums'] = &$L['Forums'];
 $L['core_locale'] = &$L['Locale'];
+$L['core_locale_desc'] = 'Default language and time zone settings';
 $L['core_main'] = 'Main Settings';
+$L['core_main_desc'] = 'Website configuration, global list settings';
 $L['core_menus'] = &$L['Menus'];
+$L['core_menus_desc'] = 'Slots for posting plain text information';
 $L['core_page'] = &$L['Pages'];
 $L['core_parser'] = &$L['Parser'];
 $L['core_performance'] = 'Performance';
+$L['core_performance_desc'] = 'Gzip compression, resource consolidation, enable Ajax and jQuery';
 $L['core_pfs'] = &$L['PFS'];
 $L['core_plug'] = &$L['Plugins'];
 $L['core_pm'] = &$L['Private_Messages'];
 $L['core_polls'] = &$L['Polls'];
 $L['core_rss'] = &$L['RSS_Feeds'];
 $L['core_security'] = &$L['Security'];
+$L['core_security_desc'] = 'Protection, CAPTCHA, debug and maintenance modes';
 $L['core_sessions'] = 'Sessions';
+$L['core_sessions_desc'] = 'Setup cookies and remember authorization, login/logout redirects';
 $L['core_structure'] = &$L['Categories'];
 $L['core_theme'] = &$L['Themes'];
+$L['core_theme_desc'] = 'Manage theme defaults and markup elements';
 $L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles and Metas';
+$L['core_title_desc'] = 'Setup META Title for the homepage and internals';
 
 $L['cfg_struct_defaults'] = 'Structure Defaults';
 
@@ -360,7 +368,7 @@ $L['adm_help_structure'] = 'The pages that belong to the category &quot;system&q
  * Structure Section
  * Extrafields Subsection
  */
-$L['adm_extrafields_desc'] = 'Add/Edit extra fields';
+$L['adm_extrafields_desc'] = 'Add/Edit extra fields for custom data';
 $L['adm_extrafields_all'] = 'Show all database tables';
 $L['adm_extrafields_table'] = 'Table';
 $L['adm_extrafields_help_notused'] = 'Not used';
@@ -384,6 +392,18 @@ $L['adm_rights_maintenance'] = 'Access to site when maintenance mode on';
 $L['adm_skiprights'] = 'Omit rights for this group';
 $L['adm_groups_name_empty'] = 'Group name must not be empty';
 $L['adm_groups_title_empty'] = 'Group member title must not be empty';
+$L['users_grp_5_title'] = 'Administrators';
+$L['users_grp_5_desc'] = 'Superusers and website administrators with max authority';
+$L['users_grp_6_title'] = 'Moderators';
+$L['users_grp_6_desc'] = 'Content managers and trusted contributors';
+$L['users_grp_4_title'] = 'Members';
+$L['users_grp_4_desc'] = 'Registered users with basic rights';
+$L['users_grp_3_title'] = 'Banned';
+$L['users_grp_3_desc'] = 'User acounts that have been suspended for improper activities';
+$L['users_grp_2_title'] = 'Inactive';
+$L['users_grp_2_desc'] = 'User accounts for which registration has not been completed';
+$L['users_grp_1_title'] = 'Guests';
+$L['users_grp_1_desc'] = 'Unregisted visitors or logged out users';
 
 /**
  * Plug Section
@@ -447,7 +467,9 @@ $L['adm_cache_showall'] = 'Show all';
  * Log Subsection
  */
 $L['adm_log'] = 'System log';
+$L['adm_log_desc'] = 'Information on the website user activities';
 $L['adm_infos'] = 'Information';
+$L['adm_infos_desc'] = 'PHP/Zend and OS versions, server time zone info';
 $L['adm_versiondclocks'] = 'Versions and clocks';
 $L['adm_checkcorethemes'] = 'Check core files and themes';
 $L['adm_checkcorenow'] = 'Check core files now!';
