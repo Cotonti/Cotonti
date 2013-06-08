@@ -467,6 +467,7 @@ switch($n)
 					'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=core&p='.$row['config_cat']),
 					'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
 					'ADMIN_CONFIG_ROW_NAME' => $L['core_'.$row['config_cat']],
+					'ADMIN_CONFIG_ROW_DESC' => $L['core_'.$row['config_cat'].'_desc'],
 					'ADMIN_CONFIG_ROW_NUM' => $jj,
 					'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 				));
@@ -491,6 +492,7 @@ switch($n)
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=module&p='.$row['config_cat']),
 				'ADMIN_CONFIG_ROW_ICO' => $ext_info['icon'],
 				'ADMIN_CONFIG_ROW_NAME' => $ext_info['name'],
+				'ADMIN_CONFIG_ROW_DESC' => $ext_info['desc'],
 				'ADMIN_CONFIG_ROW_NUM' => $jj,
 				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 			));
@@ -515,6 +517,7 @@ switch($n)
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p='.$row['config_cat']),
 				'ADMIN_CONFIG_ROW_ICO' => $ext_info['icon'],
 				'ADMIN_CONFIG_ROW_NAME' => $ext_info['name'],
+				'ADMIN_CONFIG_ROW_DESC' => $ext_info['desc'],
 				'ADMIN_CONFIG_ROW_NUM' => $jj,
 				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 			));
