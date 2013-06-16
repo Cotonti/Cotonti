@@ -23,7 +23,10 @@
 					</tr>
 					<tr>
 						<td>{PHP.L.Date}:</td>
-						<td>{PAGEEDIT_FORM_DATE}</td>
+						<td>
+							{PAGEEDIT_FORM_DATE}
+							<p class="small">{PAGEEDIT_FORM_DATENOW} {PHP.L.page_date_now}</p>
+						</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Begin}:</td>
