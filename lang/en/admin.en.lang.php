@@ -378,7 +378,7 @@ $L['adm_extrafields_help_data'] = '{min_year},{max_year},{date_format}. If empty
 $L['adm_extrafields_help_regex'] = 'Regex for checking';
 $L['adm_extrafields_help_file'] = 'Upload directory';
 $L['adm_extrafields_help_separator'] = 'Values separator';
-$L['adm_help_info'] = '<b>Base HTML</b> set automaticaly if you leave it blank';
+$L['adm_help_info'] = '<b>Base HTML</b> set automatically if you leave it blank';
 $L['adm_help_newtags'] = '<br /><br /><b>New tags in tpl files:</b>';
 
 /**
