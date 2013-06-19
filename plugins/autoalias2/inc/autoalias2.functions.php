@@ -31,7 +31,7 @@ function autoalias2_convert($title, $id = 0, $duplicate = false)
 		if (is_array($cot_translit_custom))
 		{
 			$title = strtr($title, $cot_translit_custom);
-		}		
+		}
 		elseif (is_array($cot_translit))
 		{
 			$title = strtr($title, $cot_translit);

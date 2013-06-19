@@ -18,8 +18,11 @@ Hooks=tools
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('autoalias2', 'plug');
+require_once cot_langfile('autoalias2', 'plug');
 
-$adminsubtitle = 'AutoAlias';
+$t = new XTemplate(cot_tplfile('autoalias2.admin', 'plug', true));
+
+$adminsubtitle = $L['AutoAlias'];
 
 if ($a == 'create')
 {
@@ -31,14 +34,13 @@ if ($a == 'create')
 		$count++;
 	}
 	$res->closeCursor();
-	$plugin_body .= <<<HTM
-<div class="error">
-	{$L['aliases_written']}: $count
-</div>
-HTM;
+	cot_message(cot_rc('aliases_written', $count));
+	cot_redirect(cot_url('admin', 'm=other&p=autoalias2', '', true));
 }
 
-$create_url = cot_url('admin', 'm=other&p=autoalias2&a=create');
-$plugin_body .= <<<HTM
-<a href="$create_url">{$L['create_aliases']}</a>
-HTM;
+$t->assign('AUTOALIAS_CREATE', cot_url('admin', 'm=other&p=autoalias2&a=create'));
+
+cot_display_messages($t);
+
+$t->parse();
+$plugin_body = $t->text('MAIN');

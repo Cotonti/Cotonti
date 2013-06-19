@@ -15,6 +15,7 @@ defined('COT_CODE') or die('Wrong URL');
  * Plugin Info
  */
 
+$L['AutoAlias2'] = 'AutoAlias 2';
 $L['info_desc'] = 'Automatic alias generation from page title if left empty';
 
 /**
@@ -31,5 +32,5 @@ $L['cfg_lowercase'] = 'Lowercase alias';
  * Plugin Admin
  */
 
-$L['aliases_written'] = 'Aliases written';
+$L['aliases_written'] = 'Aliases written: {$count}';
 $L['create_aliases'] = 'Create aliases from titles if missing';
