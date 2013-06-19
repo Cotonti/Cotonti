@@ -79,11 +79,11 @@ if ($filter == 'all')
 }
 elseif ($filter == 'valqueue')
 {
-	$sqlwhere = "page_state=1 ";
+	$sqlwhere = "page_state=1";
 }
 elseif ($filter == 'validated')
 {
-	$sqlwhere = "page_state=1";
+	$sqlwhere = "page_state=0";
 }
 elseif ($filter == 'expired')
 {
