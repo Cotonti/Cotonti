@@ -246,6 +246,8 @@ foreach ($res->fetchAll() as $row)
 {
 	$id = $row['bbc_id'];
 	$bb_t->assign(array(
+		'ADMIN_BBCODE_ROW_ID' => $row['bbc_id'],
+		'ADMIN_BBCODE_ROW_TITLE' => $row['bbc_name'],
 		'ADMIN_BBCODE_ROW_NAME' => cot_inputbox('text', 'bbca_name['.$id.']', $row['bbc_name']),
 		'ADMIN_BBCODE_ROW_ENABLED' => cot_checkbox($row['bbc_enabled'], 'bbca_enabled['.$id.']'),
 		'ADMIN_BBCODE_ROW_CONTAINER' => cot_checkbox($row['bbc_container'], 'bbca_container['.$id.']'),
