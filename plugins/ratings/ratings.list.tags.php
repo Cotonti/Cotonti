@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('ratings', 'plug');
 
-list ($ratings_display, $ratings_average, $ratings_count) = cot_ratings_display('page', $c, $c, true);
+list ($ratings_display, $ratings_average, $ratings_count) = cot_ratings_display('page', $c, $c);
 
 $t->assign(array(
 	'LIST_RATINGS_DISPLAY' => $ratings_display,
