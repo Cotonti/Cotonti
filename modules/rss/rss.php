@@ -100,7 +100,8 @@ if ($m == "topics")
 			$post_id = $row['fp_id'];
 			$items[$i]['title'] = $row['fp_postername'];
 			$items[$i]['description'] = cot_parse_post_text($row['fp_text']);
-			$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('forums', "m=posts&q=$topic_id&d=$curpage", "#post$post_id", true);
+			$url = cot_url('forums', "m=posts&q=$topic_id&d=$curpage", "#post$post_id", true);
+			$items[$i]['link'] = (strpos($url, '://') === false) ? COT_ABSOLUTE_URL . $url : $url;
 			$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
 			$i++;
 		}
@@ -147,7 +148,7 @@ elseif ($m == "section")
 				$post_url = cot_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
 				$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 				$items[$i]['description'] = cot_parse_post_text($row['fp_text']);
-				$items[$i]['link'] = COT_ABSOLUTE_URL.$post_url;
+				$items[$i]['link'] = (strpos($post_url, '://') === false) ? COT_ABSOLUTE_URL . $post_url : $post_url;;
 				$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
 			}
 
@@ -186,7 +187,8 @@ elseif ($m == "forums")
 		{
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 			$items[$i]['description'] = cot_parse_post_text($row['fp_text']);
-			$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('forums', "m=posts&p=$post_id", "#$post_id", true);
+			$url = cot_url('forums', "m=posts&p=$post_id", "#$post_id", true);
+			$items[$i]['link'] = (strpos($url, '://') === false) ? COT_ABSOLUTE_URL . $url : $url;
 			$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
 		}
 
@@ -227,12 +229,12 @@ elseif ($default_mode)
 	$i = 0;
 	while ($row = $sql->fetch())
 	{
-		$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'], '', true) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'], '', true);
+		$url = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'], '', true) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'], '', true);
 
 		$items[$i]['title'] = $row['page_title'];
-		$items[$i]['link'] = COT_ABSOLUTE_URL . $row['page_pageurl'];
+		$items[$i]['link'] = (strpos($url, '://') === false) ? COT_ABSOLUTE_URL . $url : $url;;
 		$items[$i]['pubDate'] = cot_date('r', $row['page_date']);
-		$items[$i]['description'] = cot_parse_page_text($row['page_text'], $row['page_pageurl'], $row['page_parser']);
+		$items[$i]['description'] = cot_parse_page_text($row['page_text'], $url, $row['page_parser']);
 		$items[$i]['fields'] = cot_generate_pagetags($row);
 
 		$i++;

@@ -83,7 +83,7 @@ function sitemap_parse($t, &$items, $item)
 	}
 	// Parse another row
 	$t->assign(array(
-		'SITEMAP_ROW_URL' => COT_ABSOLUTE_URL . $item['url'],
+		'SITEMAP_ROW_URL' => (strpos($item['url'], '://') === false) ? COT_ABSOLUTE_URL . $item['url'] : $item['url'],
 		'SITEMAP_ROW_DATE' => sitemap_date($item['date']),
 		'SITEMAP_ROW_FREQ' => sitemap_freq($item['freq']),
 		'SITEMAP_ROW_PRIO' => sitemap_prio($item['prio'])
