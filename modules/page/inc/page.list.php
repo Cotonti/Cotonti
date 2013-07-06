@@ -326,7 +326,7 @@ foreach ($subcat as $x)
 	$sub_url_path = $list_url_path;
 	$sub_url_path['c'] = $x;
 	$t->assign(array(
-		'LIST_ROWCAT_ID' => $structure['page'][$x]['title'],
+		'LIST_ROWCAT_ID' => $structure['page'][$x]['id'],
 		'LIST_ROWCAT_URL' => cot_url('page', $sub_url_path),
 		'LIST_ROWCAT_TITLE' => $structure['page'][$x]['title'],
 		'LIST_ROWCAT_DESC' => $structure['page'][$x]['desc'],
