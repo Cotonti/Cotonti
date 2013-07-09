@@ -51,6 +51,38 @@ $sys['now_offset'] = $sys['now'];
 $site_id = 'ct'.substr(md5(empty($cfg['site_id']) ? $cfg['mainurl'] : $cfg['site_id']), 0, 16);
 $sys['site_id'] = $site_id;
 
+// Getting the server-relative path
+$url = parse_url($cfg['mainurl']);
+$sys['scheme'] = strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false && $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 443 && $_SERVER['HTTP_X_FORWARDED_PORT'] !== 443 ? 'http' : 'https';
+$sys['secure'] = $sys['scheme'] == 'https' ? true : false;
+$sys['site_uri'] = $url['path'];
+$sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
+if ($_SERVER['HTTP_HOST'] == $url['host']
+	|| $cfg['multihost']
+	|| $_SERVER['HTTP_HOST'] != 'www.' . $sys['domain']
+		&& preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']))
+{
+	$sys['host'] = preg_match('#^[\w\p{L}\.\-]+$#u', $_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $url['host'];
+	$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
+}
+else
+{
+	$sys['host'] = $url['host'];
+}
+if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+define('COT_SITE_URI', $sys['site_uri']);
+// Absolute site url
+$sys['port'] = empty($url['port']) || $_SERVER['SERVER_PORT'] == 80 ? '' : ($cfg['multihost'] ? '' : ':' . $url['port']);
+$sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
+$sys['canonical_url'] = $sys['scheme'] . '://' . $sys['host'] . $sys['port'] . $_SERVER['REQUEST_URI'];
+define('COT_ABSOLUTE_URL', $sys['abs_url']);
+// Reassemble mainurl if necessary
+if ($cfg['multihost'])
+{
+	$cfg['mainurl'] = mb_substr($sys['abs_url'], 0, -1);
+	session_set_cookie_params(0, $sys['site_uri'], '.'.$sys['domain']);
+}
+
 session_start();
 
 cot_unregister_globals();
@@ -151,35 +183,9 @@ if (!preg_match('#^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$#', $usr['ip']) && !preg_m
 }
 $sys['unique'] = cot_unique(16);
 
-// Getting the server-relative path
-$url = parse_url($cfg['mainurl']);
-$sys['scheme'] = strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false && $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 443 && $_SERVER['HTTP_X_FORWARDED_PORT'] !== 443 ? 'http' : 'https';
-$sys['secure'] = $sys['scheme'] == 'https' ? true : false;
-$sys['site_uri'] = $url['path'];
-$sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
-if ($_SERVER['HTTP_HOST'] == $url['host']
-	|| $cfg['multihost']
-	|| $_SERVER['HTTP_HOST'] != 'www.' . $sys['domain']
-		&& preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']))
-{
-	$sys['host'] = preg_match('#^[\w\p{L}\.\-]+$#u', $_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $url['host'];
-	$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
-}
-else
-{
-	$sys['host'] = $url['host'];
-}
 if (empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
-if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
-define('COT_SITE_URI', $sys['site_uri']);
 if (empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
-// Absolute site url
-$sys['port'] = empty($url['port']) || $_SERVER['SERVER_PORT'] == 80 ? '' : ($cfg['multihost'] ? '' : ':' . $url['port']);
-$sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
-$sys['canonical_url'] = $sys['scheme'] . '://' . $sys['host'] . $sys['port'] . $_SERVER['REQUEST_URI'];
-define('COT_ABSOLUTE_URL', $sys['abs_url']);
-// Reassemble mainurl if necessary
-if ($cfg['multihost']) $cfg['mainurl'] = mb_substr($sys['abs_url'], 0, -1);
+
 // URI redirect appliance
 $sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ?
 	mb_substr($_SERVER['REQUEST_URI'], mb_strlen($sys['site_uri'])) : ltrim($_SERVER['REQUEST_URI'], '/');
