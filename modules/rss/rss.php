@@ -199,7 +199,7 @@ elseif ($default_mode)
 {
 	require_once cot_incfile('page', 'module');
 
-	if (!empty($c))
+	if (!empty($c) && isset($structure['page'][$c]))
 	{
 		$mtch = $structure['page'][$c]['path'].".";
 		$mtchlen = mb_strlen($mtch);
