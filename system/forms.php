@@ -248,6 +248,15 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 	if ($utime == 0)
 	{
 		list($s_year, $s_month, $s_day, $s_hour, $s_minute) = array(null, null, null, null, null);
+		$buffered = cot_import_buffered($name, null);
+		if (is_array($buffered))
+		{
+			$s_year   = $buffered['year'];
+			$s_month  = $buffered['month'];
+			$s_day    = $buffered['day'];
+			$s_hour   = $buffered['hour'] > 0 ? $buffered['hour'] : 1;
+			$s_minute = $buffered['minute'];
+		}
 	}
 	else
 	{
