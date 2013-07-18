@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Name=Pages
 Description=Pages and Categories
-Version=0.9.14
+Version=0.9.15
 Date=2012-12-02
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2013
@@ -31,5 +31,7 @@ maxrowsperpage=03:string::30:
 truncatetext=04:string::0:
 allowemptytext=05:radio::0:
 keywords=06:string:::
+metatitle=07:string:::
+metadesc=08:string:::
 [END_COT_EXT_CONFIG_STRUCTURE]
 ==================== */

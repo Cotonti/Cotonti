@@ -200,6 +200,14 @@ if (!empty($cfg['page']['cat_' . $c]['keywords']))
 {
 	$out['keywords'] = $cfg['page']['cat_' . $c]['keywords'];
 }
+if (!empty($cfg['page']['cat_' . $c]['metadesc']))
+{
+	$out['desc'] = $cfg['page']['cat_' . $c]['metadesc'];
+}
+if (!empty($cfg['page']['cat_' . $c]['metatitle']))
+{
+	$out['subtitle'] = $cfg['page']['cat_' . $c]['metatitle'];
+}
 // Building the canonical URL
 $out['canonical_uri'] = cot_url('page', $pageurl_params);
 

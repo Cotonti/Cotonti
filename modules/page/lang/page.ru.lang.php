@@ -38,6 +38,8 @@ $L['info_desc'] = 'Управление контентом: страницы и 
 
 $L['cfg_order_params'] = array(); // Redefined in cot_page_config_order()
 $L['cfg_way_params'] = array($L['Ascending'], $L['Descending']);
+$L['cfg_metatitle'] = 'Meta-заголовок';
+$L['cfg_metadesc'] = 'Meta-описание';
 
 /**
  * Admin Page Section

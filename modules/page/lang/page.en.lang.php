@@ -38,6 +38,8 @@ $L['info_desc'] = 'Enables website content through pages and page categories';
 
 $L['cfg_order_params'] = array(); // Redefined in cot_page_config_order()
 $L['cfg_way_params'] = array($L['Ascending'], $L['Descending']);
+$L['cfg_metatitle'] = 'Meta title';
+$L['cfg_metadesc'] = 'Meta description';
 
 /**
  * Admin Page Section
