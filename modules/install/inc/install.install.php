@@ -254,6 +254,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 						'gru_userid' => (int) $user['id'],
 						'gru_groupid' => COT_GROUP_SUPERADMINS
 					));
+
+					$db->update($db_x . 'config', array('config_value' => $user['email']), "config_owner = 'core' AND config_name = 'adminemail'");
 				}
 				catch (PDOException $err)
 				{
