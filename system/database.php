@@ -187,7 +187,7 @@ class CotDB extends PDO {
 	 */
 	private function _stopTimer($query)
 	{
-		global $cfg, $usr, $sys;
+		global $cfg, $sys;
 		if ($cfg['showsqlstats'] || $cfg['debug_mode'])
 		{
 			$ytime = microtime();
@@ -292,9 +292,11 @@ class CotDB extends PDO {
 	 * @param string $table_name Table name
 	 * @param array $data Associative or 2D array containing data for insertion.
 	 * @param bool $insert_null Insert SQL NULL for empty values rather than ignoring them.
+	 * @param bool $ignore Ignore duplicate key errors on insert
+	 * @param array $update_fields List of fields to be updated with ON DUPLICATE KEY UPDATE
 	 * @return int The number of affected records
 	 */
-	public function insert($table_name, $data, $insert_null = false)
+	public function insert($table_name, $data, $insert_null = false, $ignore = false, $update_fields = array())
 	{
 		if (!is_array($data))
 		{
@@ -354,7 +356,19 @@ class CotDB extends PDO {
 		}
 		if (!empty($keys) && !empty($vals))
 		{
-			$query = "INSERT INTO `$table_name` ($keys) VALUES $vals";
+			$ignore = $ignore ? 'IGNORE' : '';
+			$query = "INSERT $ignore INTO `$table_name` ($keys) VALUES $vals";
+			if (count($update_fields) > 0)
+			{
+				$query .= ' ON DUPLICATE KEY UPDATE';
+				$j = 0;
+				foreach ($update_fields as $key)
+				{
+					if ($j > 0) $query .= ',';
+					$query .= " `$key` = VALUES(`$key`)";
+					$j++;
+				}
+			}
 			$this->_startTimer();
 			try
 			{
@@ -388,7 +402,7 @@ class CotDB extends PDO {
 	public function runScript($script)
 	{
 		global $db_x;
-		$error = '';
+
 		// Remove comments
 		$script = preg_replace('#^/\*.*?\*/#m', '', $script);
 		$script = preg_replace('#^--.*?$#m', '', $script);
