@@ -340,9 +340,9 @@ else
 		$sql = $db->query("SELECT * FROM $db_structure WHERE $where LIMIT 1");
 		cot_die($sql->rowCount() == 0);
 	}
-	elseif($mode && ($mode=='all' || $structure[$mode]))
+	elseif($mode && ($mode=='all' || $structure[$n][$mode]))
 	{
-		$sqlmask = ($mode == 'all') ? "structure_path NOT LIKE '%.%'" : "structure_path LIKE '".$db->prep($structure[$mode]['rpath']).".%' AND structure_path NOT LIKE '".$db->prep($structure[$mode]['rpath']).".%.%'";
+		$sqlmask = ($mode == 'all') ? "structure_path NOT LIKE '%.%'" : "structure_path LIKE '".$db->prep($structure[$n][$mode]['rpath']).".%' AND structure_path NOT LIKE '".$db->prep($structure[$n][$mode]['rpath']).".%.%'";
 		$sql = $db->query("SELECT * FROM $db_structure WHERE structure_area='".$db->prep($n)."' AND $sqlmask ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 		$totalitems = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area='".$db->prep($n)."' AND $sqlmask")->fetchColumn();
