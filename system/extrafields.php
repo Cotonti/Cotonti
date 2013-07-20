@@ -341,7 +341,8 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			{
 				$exfldsize[$extrafield['field_name']] = 0;
 				$import = '';
-				$file['old'] = (!empty($oldvalue)) ? "{$cfg['extrafield_files_dir']}/$oldvalue" : '';
+				$extrafield['field_params'] = (!empty($extrafield['field_params'])) ? $extrafield['field_params'] : $cfg['extrafield_files_dir'];
+				$file['old'] = (!empty($oldvalue)) ? "{$extrafield['field_params']}/$oldvalue" : '';
 				$file['field'] = $extrafield['field_name'];
 				$uploadfiles[] = $file;
 			}
