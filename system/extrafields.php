@@ -579,7 +579,6 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 	}
 	switch ($type)
 	{
-		case 'checklistbox':
 		case 'select':
 		case 'radio':
 		case 'range':
@@ -592,6 +591,7 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 			break;
 		case 'double': $sqltype = "DOUBLE NOT NULL default '0'";
 			break;
+		case 'checklistbox':
 		case 'textarea': $sqltype = 'TEXT';
 			break;
 		case 'checkbox': $sqltype = 'BOOL';
@@ -687,7 +687,6 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 
 	switch ($type)
 	{
-		case 'checklistbox':
 		case 'select':
 		case 'radio':
 		case 'range':
@@ -700,6 +699,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 			break;
 		case 'double': $sqltype = "DOUBLE NOT NULL default '0'";
 			break;
+		case 'checklistbox':
 		case 'textarea': $sqltype = 'TEXT';
 			break;
 		case 'checkbox': $sqltype = 'BOOL';
