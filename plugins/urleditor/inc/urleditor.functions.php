@@ -344,18 +344,19 @@ function cot_url_catpath(&$params, $spec, $arg = 'c')
  */
 function cot_url_presets()
 {
-	global $cot_urleditor_presets, $cfg;
+	global $cfg;
 	$urleditor_presets = array();
-	foreach (glob('./datas/*.dat') as $filename)
+	$datfiles = glob('./datas/*.dat');
+	if ($datfiles) foreach ($datfiles as $filename)
 	{
 		if($filename != "./datas/urltrans.dat")
 		{
 			$urleditor_presets[] = basename($filename, ".dat");
 		}
 	}
-	foreach (glob($cfg['plugins_dir'] . "/urleditor/presets/*.dat") as $filename)
+	$datfiles = glob($cfg['plugins_dir'] . "/urleditor/presets/*.dat");
+	if ($datfiles) foreach ($datfiles as $filename)
 	{
-
 		$urleditor_presets[] = basename($filename, ".dat");
 	}
 	if (file_exists("./datas/urltrans.dat"))
