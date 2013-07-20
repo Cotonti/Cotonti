@@ -490,6 +490,7 @@ $L['adm_ref_prune'] = 'Очищено';
 $L['adm_phpver'] = 'Версия PHP';
 $L['adm_zendver'] = 'Версия Zend';
 $L['adm_interface'] = 'Интерфейс веб-сервер / PHP';
+$L['adm_cachedrivers'] = 'Драйверы кеша';
 $L['adm_os'] = 'Операционная система';
 $L['adm_clocks'] = 'Таймеры';
 $L['adm_time1'] = '#1 : Чистое время сервера';
