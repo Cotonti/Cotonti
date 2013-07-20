@@ -2959,7 +2959,7 @@ function cot_incfile($name, $type = 'core', $part = 'functions')
  * @param string $type Part type: 'plug', 'module' or 'core'
  * @param string $default Default (fallback) language code
  * @param string $lang Set this to override global $lang
- * @return string
+ * @return mixed       Langfile path or FALSE if no suitable files were found
  */
 function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 {
@@ -2978,7 +2978,7 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 		{
 			return $cfg['modules_dir']."/$name/lang/$name.$lang.lang.php";
 		}
-		else
+		elseif (@file_exists($cfg['modules_dir']."/$name/lang/$name.$default.lang.php"))
 		{
 			return $cfg['modules_dir']."/$name/lang/$name.$default.lang.php";
 		}
@@ -2989,7 +2989,7 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 		{
 			return $cfg['lang_dir']."/$lang/$name.$lang.lang.php";
 		}
-		else
+		elseif (@file_exists($cfg['lang_dir']."/$default/$name.$default.lang.php"))
 		{
 			return $cfg['lang_dir']."/$default/$name.$default.lang.php";
 		}
@@ -3004,11 +3004,12 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 		{
 			return $cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php";
 		}
-		else
+		elseif (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$default.lang.php"))
 		{
 			return $cfg['plugins_dir']."/$name/lang/$name.$default.lang.php";
 		}
 	}
+	return false;
 }
 
 /**
