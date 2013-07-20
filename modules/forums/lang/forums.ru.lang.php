@@ -52,6 +52,9 @@ $L['cfg_countposts'] = 'Считать сообщения';
 $L['cfg_autoprune'] = 'Автоочистка тем через * дней';
 $L['cfg_defstate'] = 'По умолчанию';
 $L['cfg_defstate_params'] = 'Свернут,Развернут';
+$L['cfg_keywords'] = 'Ключевые слова';
+$L['cfg_metatitle'] = 'Meta-заголовок';
+$L['cfg_metadesc'] = 'Meta-описание';
 
 $L['info_desc'] = 'Модуль форумов для сайтов с сообществом или поддержкой';
 

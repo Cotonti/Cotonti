@@ -52,6 +52,9 @@ $L['cfg_countposts'] = 'Count posts';
 $L['cfg_autoprune'] = 'Auto-prune topics after * days';
 $L['cfg_defstate'] = 'Default state';
 $L['cfg_defstate_params'] = 'Folded,Unfolded';
+$L['cfg_keywords'] = 'Keywords';
+$L['cfg_metatitle'] = 'Meta title';
+$L['cfg_metadesc'] = 'Meta description';
 
 $L['info_desc'] = 'Basic forums for community sites with sections, subsections, topics and posts';
 

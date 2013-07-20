@@ -151,6 +151,19 @@ $out['subtitle'] = cot_title($cfg['forums']['title_topics'], $title_params);
 $out['desc'] = htmlspecialchars(strip_tags($structure['forums'][$s]['desc']));
 $sys['sublocation'] = $structure['forums'][$s]['title'];
 
+if (!empty($cfg['forums']['cat_' . $s]['keywords']))
+{
+	$out['keywords'] = $cfg['forums']['cat_' . $s]['keywords'];
+}
+if (!empty($cfg['forums']['cat_' . $s]['metadesc']))
+{
+	$out['desc'] = $cfg['forums']['cat_' . $s]['metadesc'];
+}
+if (!empty($cfg['forums']['cat_' . $s]['metatitle']))
+{
+	$out['subtitle'] = $cfg['forums']['cat_' . $s]['metatitle'];
+}
+
 /* === Hook === */
 foreach (cot_getextplugins('forums.topics.main') as $pl)
 {
