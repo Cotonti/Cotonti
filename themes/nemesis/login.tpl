@@ -3,6 +3,10 @@
 		<div class="col3-2 first">
 			<div class="block">
 				<h2 class="users">{USERS_AUTH_TITLE}</h2>
+				<!-- IF {PHP.usr.id} -->
+				<p>{PHP.L.users_loggedinas} <strong>{PHP.usr.name}</strong>.<br/>{PHP.L.users_logoutfirst}</p>
+				<p><a class="button" href="{PHP.sys.xk|cot_url('login','out=1&x=$this', '', 0, 1)}">{PHP.L.Logout}</a></p>
+				<!-- ELSE -->
 				<form name="login" action="{USERS_AUTH_SEND}" method="post">
 					<table class="list">
 						<tr>
@@ -24,6 +28,7 @@
 						</tr>
 					</table>
 				</form>
+				<!-- ENDIF -->
 			</div>
 		</div>
 

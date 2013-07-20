@@ -21,6 +21,8 @@ $L['users_rememberme'] = 'Remember me';
 $L['users_lostpass'] = 'Lost your password?';
 $L['users_maintenance1'] = 'Site in maintenance mode';
 $L['users_maintenance2'] = 'Access for admins and authorized groups only';
+$L['users_loggedinas'] = 'You are logged in as';
+$L['users_logoutfirst'] = 'If you want to log in with another account you have to log out first.';
 
 /**
  * User registration

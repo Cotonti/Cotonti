@@ -21,6 +21,8 @@ $L['users_rememberme'] = 'Запомнить меня';
 $L['users_lostpass'] = 'Восстановить пароль';
 $L['users_maintenance1'] = 'Сайт в режиме обслуживания';
 $L['users_maintenance2'] = 'Вход только для администраторов и разрешенных групп';
+$L['users_loggedinas'] = 'Вы вошли как';
+$L['users_logoutfirst'] = 'Чтобы войти в другой аккаунт, вам нужно сначала выйти.';
 
 /**
  * User registration
