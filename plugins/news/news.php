@@ -61,6 +61,10 @@ if (count($cats) > 0)
 	{
 		$cat = ($catn == 0) ? $c : $v[0];
 		$tagname = str_replace(array(' ', ',', '.', '-'), '_', strtoupper($v[0]));
+		if (!preg_match('#^\w+$#', $tagname))
+		{
+			$tagname = $structure['page'][$v[0]]['id'];
+		}
 
 		// Cache for guests
 		if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['news']['cache_ttl'] > 0)
