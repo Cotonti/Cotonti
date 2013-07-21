@@ -146,7 +146,7 @@ else
 		foreach ($rstructurecode as $i => $k)
 		{
 			$oldrow = $db->query("SELECT * FROM $db_structure WHERE structure_id=".(int)$i)->fetch();
-			$rstructure['structure_code'] = cot_import($rstructurecode[$i], 'D', 'TXT');
+			$rstructure['structure_code'] = preg_replace('#[^\w\p{L}\-]#u', '', cot_import($rstructurecode[$i], 'D', 'TXT'));
 			$rstructure['structure_path'] = cot_import($rstructurepath[$i], 'D', 'TXT');
 			$rstructure['structure_title'] = cot_import($rstructuretitle[$i], 'D', 'TXT');
 			$rstructure['structure_desc'] = cot_import($rstructuredesc[$i], 'D', 'TXT');
@@ -216,7 +216,7 @@ else
 	}
 	elseif ($a == 'add' && !empty($_POST))
 	{
-		$rstructure['structure_code'] = cot_import('rstructurecode', 'P', 'TXT');
+		$rstructure['structure_code'] = preg_replace('#[^\w\p{L}\-]#u', '', cot_import('rstructurecode', 'P', 'TXT'));
 		$rstructure['structure_path'] = cot_import('rstructurepath', 'P', 'TXT');
 		$rstructure['structure_title'] = cot_import('rstructuretitle', 'P', 'TXT');
 		$rstructure['structure_desc'] = cot_import('rstructuredesc', 'P', 'TXT');
