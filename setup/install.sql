@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.13
+ * Version: 0.9.14
  */
 
 DROP TABLE IF EXISTS `cot_auth`;
@@ -85,6 +85,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','main','05','maxrowsperpage',1,'15','15','',''),
 ('core','main','06','easypagenav',3,'1','1','',''),
 ('core','main','07','confirmlinks',3,'1','1','',''),
+('core','main','91','default_show_installed',3,'0','0','',''),
 ('core','menus','01','topline',0,'','','',''),
 ('core','menus','02','banner',0,'','','',''),
 ('core','menus','03','bottomline',0,'','','',''),
@@ -262,7 +263,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.14-02'),
+('revision', '0.9.14-03'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;

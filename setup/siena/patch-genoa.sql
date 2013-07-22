@@ -1005,8 +1005,16 @@ WHERE `config_owner` = 'core'
 /* 0.9.13-01 remove the obsolete version/revision config */
 DELETE FROM `cot_config` WHERE config_owner = 'core' AND `config_cat` = 'version';
 
+/* 0.9.14-01 update table schema for larger data sets, #981 */
+ALTER TABLE `cot_cache` MODIFY `c_value` MEDIUMTEXT collate utf8_unicode_ci;
+ALTER TABLE `cot_users` MODIFY `user_auth` MEDIUMTEXT collate utf8_unicode_ci;
+
+/* 0.9.14-03 show only installed extensions in admin panel by default option #1009 */
+INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
+('core','main','91','default_show_installed',3,'0','0','','');
+
 -------------------------------------------------------------------------------
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.13-01' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.14-03' WHERE `upd_param` = 'revision';
