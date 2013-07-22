@@ -524,7 +524,20 @@ switch($a)
 	/* =============== */
 		// Params to show only installed extensions
 		$only_installed = cot_import('inst', 'G', 'BOL');
-		$only_installed_urlp = $only_installed ? '&inst=1' : '';
+		if ($cfg['default_show_installed'])
+		{
+			if (is_null($only_installed))
+			{
+				$only_installed = true;
+			}
+			$only_installed_urlp = $only_installed ? '' : '&inst=0';
+			$only_installed_toggle = $only_installed ? '&inst=0' : '';
+		}
+		else
+		{
+			$only_installed_urlp = $only_installed ? '&inst=1' : '';
+			$only_installed_toggle = $only_installed ? '' : '&inst=1';
+		}
 		$sort_urlp = $sort == 'cat' ? '&sort=cat' : '';
 
 		// Filter/sort tags
@@ -535,7 +548,7 @@ switch($a)
 			'ADMIN_EXTENSIONS_SORT_CAT_URL' => cot_url('admin', 'm=extensions&sort=cat'.$only_installed_urlp),
 			'ADMIN_EXTENSIONS_SORT_CAT_SEL' => $sort == 'cat',
 			'ADMIN_EXTENSIONS_ALL_EXTENSIONS_URL' => cot_url('admin', 'm=extensions'.$sort_urlp),
-			'ADMIN_EXTENSIONS_ONLY_INSTALLED_URL' => cot_url('admin', 'm=extensions'.$sort_urlp.'&inst=1'),
+			'ADMIN_EXTENSIONS_ONLY_INSTALLED_URL' => cot_url('admin', 'm=extensions'.$sort_urlp.$only_installed_toggle),
 			'ADMIN_EXTENSIONS_ONLY_INSTALLED_SEL' => $only_installed
 		));
 

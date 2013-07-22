@@ -117,6 +117,7 @@ $L['cfg_adminemail_hint'] = 'Required';
 $L['cfg_clustermode'] = 'Cluster of servers';
 $L['cfg_clustermode_hint'] = 'Set to yes if it\'s a load balanced setup.';
 $L['cfg_confirmlinks'] = 'Confirm potentially dangerous actions';
+$L['cfg_default_show_installed'] = 'Show only installed extensions by default';
 $L['cfg_easypagenav'] = 'User friendly pagination';
 $L['cfg_easypagenav_hint'] = 'Uses page numbers in URLs instead of DB offsets';
 $L['cfg_hostip'] = 'Server IP';
