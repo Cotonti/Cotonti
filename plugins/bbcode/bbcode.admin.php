@@ -183,7 +183,7 @@ elseif ($a == 'convert')
 		while ($row = $res->fetch())
 		{
 			$html = cot_parse_bbcode($row['com_text']);
-			$db->update($db_pm, array('com_text' => $html), 'com_id = ' . $row['com_id']);
+			$db->update($db_com, array('com_text' => $html), 'com_id = ' . $row['com_id']);
 		}
 		$res->closeCursor();
 		if ($has_html)
