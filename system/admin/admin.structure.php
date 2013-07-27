@@ -121,14 +121,13 @@ else
 
 		foreach ($cot_extrafields[$db_structure] as $exfld)
 		{
-			if ($exfld['field_type'] != 'file' || $exfld['field_type'] != 'filesize')
+			if ($exfld['field_type'] != 'file' && $exfld['field_type'] != 'filesize')
 			{
 				$rstructureextrafieldsarr[$exfld['field_name']] = cot_import('rstructure'.$exfld['field_name'], 'P', 'ARR');
 			}
 			elseif($exfld['field_type'] == 'file')
 			{
-				// TODO FIXME!
-				//$rstructureextrafieldsarr[$exfld['field_name']] = cot_import_filesarray('rstructure'.$exfld['field_name']);
+				$rstructureextrafieldsarr[$exfld['field_name']] = cot_import_filesarray('rstructure'.$exfld['field_name']);
 			}
 		}
 
@@ -264,6 +263,7 @@ else
 			$res = cot_structure_add($n, $rstructure, $is_module);
 			if ($res === true)
 			{
+				cot_extrafield_movefiles();
 				/* === Hook === */
 				foreach (cot_getextplugins('admin.structure.add.done') as $pl)
 				{
