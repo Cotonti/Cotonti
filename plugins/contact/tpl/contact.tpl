@@ -11,7 +11,7 @@
 				<!-- ENDIF -->
 					{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 <!-- BEGIN: FORM -->
-				<form action="{CONTACT_FORM_SEND}" method="post" name="contact_form">
+				<form action="{CONTACT_FORM_SEND}" method="post" name="contact_form" enctype="multipart/form-data">
 					<table class="flat">
 						<tr>
 							<td class="width25">{PHP.L.Username}:</td>

@@ -66,7 +66,7 @@ $sql = $db->query("SELECT * FROM $db_contact ORDER BY contact_val ASC, contact_i
 $pagnav = cot_pagenav('admin', 'm=other&p=contact', $d, $totallines, $cfg['maxrowsperpage']);
 
 $i = 0;
-while ($row = $sql->fetch())
+foreach ($sql->fetchAll() as $row)
 {
 	$i++;
 
@@ -107,7 +107,7 @@ while ($row = $sql->fetch())
 				'CONTACT_' . $tag => $exfld_val,
 				'CONTACT_' . $tag . '_VALUE' => $row['contact_'.$exfld['field_name']],
 				'CONTACT_EXTRAFLD_TITLE' => $exfld_title,
-				'CONTACT_EXTRAFLD' => $exfld_val,
+				'CONTACT_EXTRAFLD' => $exfld['field_type'] == 'file' ? cot_rc_link($cfg['extrafield_files_dir'] . '/' . $exfld_val, $exfld_val) : $exfld_val,
 				'CONTACT_EXTRAFLD_VALUE' => $row['contact_'.$exfld['field_name']]
 			));
 			$tuman->parse('MAIN.DATA.EXTRAFLD');
@@ -153,7 +153,7 @@ if (($a == '') && !empty($id))
 				'CONTACT_' . $tag => $exfld_val,
 				'CONTACT_' . $tag . '_VALUE' => $row['contact_'.$exfld['field_name']],
 				'CONTACT_EXTRAFLD_TITLE' => $exfld_title,
-				'CONTACT_EXTRAFLD' => $exfld_val,
+				'CONTACT_EXTRAFLD' => $exfld['field_type'] == 'file' ? cot_rc_link($cfg['extrafield_files_dir'] . '/' . $exfld_val, $exfld_val) : $exfld_val,
 				'CONTACT_EXTRAFLD_VALUE' => $row['contact_'.$exfld['field_name']]
 			));
 			$tuman->parse('MAIN.VIEW.EXTRAFLD');
