@@ -1,10 +1,10 @@
 <!-- BEGIN: MAIN -->
 <h2>{PHP.L.adm_extrafields}</h2>
 		{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
-<!-- BEGIN: TABLELIST -->	
+<!-- BEGIN: TABLELIST -->
 <div class="block">
 	<table class="cells">
-		<!-- BEGIN: ROW -->	
+		<!-- BEGIN: ROW -->
 		<tr>
 			<td><a href="{ADMIN_EXTRAFIELDS_ROW_TABLEURL}">{ADMIN_EXTRAFIELDS_ROW_TABLENAME}</a></td>
 		</tr>
@@ -25,12 +25,16 @@
 	var exseparator = "{PHP.L.adm_extrafields_help_separator}";
 
 	$(document).ready(function(){
-		$('.exfldtype').live("change", function(){
+		$('body').on("change", '.exfldtype', function(){
 			var exParent = $(this).closest('tr');
 			var exvalid =  $(this).attr('value');
-			if(exvalid == 'select' || exvalid == 'radio' || exvalid == 'checklistbox')
+			if(exvalid == 'select' || exvalid == 'radio' || exvalid == 'checklistbox' || exvalid == 'file')
 			{
-				$(exParent).find('.exfldvariants').attr('title',exvariants);
+				if (exvalid == 'file') {
+					$(exParent).find('.exfldvariants').attr('title', 'jpg, png, pdf, zip,..');
+				} else {
+					$(exParent).find('.exfldvariants').attr('title',exvariants);
+				}
 				$(exParent).find('.exfldvariants').removeAttr("disabled");
 			}
 			else
@@ -109,11 +113,11 @@
 		});
 		 $(".exfldtype").change();
 	});
-	
+
 ;
 //]]>
 </script>
-<!-- BEGIN: TABLE -->	
+<!-- BEGIN: TABLE -->
 <div class="block">
 	<form action="{ADMIN_EXTRAFIELDS_URL_FORM_EDIT}" method="post">
 		<table class="cells">
@@ -124,7 +128,7 @@
 				<td class="coltop">{PHP.L.adm_extrafield_params}</td>
 				<td class="coltop"></td>
 			</tr>
-			<!-- BEGIN: EXTRAFIELDS_ROW -->	
+			<!-- BEGIN: EXTRAFIELDS_ROW -->
 			<tr id="ex{ADMIN_EXTRAFIELDS_ROW_ID}">
 				<td class="{ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
 					{ADMIN_EXTRAFIELDS_ROW_ENABLED}
@@ -146,7 +150,7 @@
 				<td class="{ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
 					{ADMIN_EXTRAFIELDS_ROW_PARAMS}
 					<p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
-						{ADMIN_EXTRAFIELDS_ROW_VARIANTS}						
+						{ADMIN_EXTRAFIELDS_ROW_VARIANTS}
 					<p class="small">{PHP.L.adm_extrafield_default}</p>
 						{ADMIN_EXTRAFIELDS_ROW_DEFAULT}
 				</td>
@@ -181,7 +185,7 @@
 					<p class="small">{PHP.L.extf_Description}</p>
 							{ADMIN_EXTRAFIELDS_DESCRIPTION}
 					<p class="small">{PHP.L.extf_Base_HTML}</p>
-						{ADMIN_EXTRAFIELDS_HTML}	
+						{ADMIN_EXTRAFIELDS_HTML}
 				</td>
 				<td>
 							{ADMIN_EXTRAFIELDS_SELECT}
@@ -192,7 +196,7 @@
 				<td>
 							{ADMIN_EXTRAFIELDS_PARAMS}
 					<p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
-							{ADMIN_EXTRAFIELDS_VARIANTS}					
+							{ADMIN_EXTRAFIELDS_VARIANTS}
 					<p class="small">{PHP.L.adm_extrafield_default}</p>
 						{ADMIN_EXTRAFIELDS_DEFAULT}
 				</td>
