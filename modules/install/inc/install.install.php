@@ -15,9 +15,15 @@ $default_plugins = array('ckeditor', 'cleaner', 'html', 'htmlpurifier', 'ipsearc
 
 $step = empty($_SESSION['cot_inst_lang']) ? 0 : (int) $cfg['new_install'];
 
+$mskin = cot_tplfile('install.install');
+
+if(!empty($_SESSION['cot_inst_script']) && file_exists($_SESSION['cot_inst_script']))
+{
+	require_once $_SESSION['cot_inst_script'];
+}
+
 cot_sendheaders();
 
-$mskin = cot_tplfile('install.install');
 $t = new XTemplate($mskin);
 
 $site_url = (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false && $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 443 && $_SERVER['HTTP_X_FORWARDED_PORT'] !== 443 ? 'http://' : 'https://')
@@ -84,6 +90,8 @@ switch ($step)
 		}
 		break;
 }
+$inst_func_name = "cot_install_step".$step."_import";
+function_exists($inst_func_name) && $inst_func_name();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
@@ -93,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		case 0:
 			// Lang selection
 			$_SESSION['cot_inst_lang'] = $lang;
+			$_SESSION['cot_inst_script'] = cot_import('script', 'P', 'TXT');
 			cot_redirect('install.php');
 			break;
 		case 1:
@@ -325,7 +334,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			cot_redirect(cot_url('index'));
 			exit;
 	}
-
+	
+	$inst_func_name = "cot_install_step".$step."_setup";
+	function_exists($inst_func_name) && $inst_func_name();
+	
 	if (cot_error_found())
 	{
 		// One step back
@@ -344,7 +356,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			$config_contents = preg_replace("#^\\\$cfg\['new_install'\]\s*=\s*.*?;#m", "\$cfg['new_install'] = $step;",
 					$config_contents);
-		}
+		}		
+		function_exists("cot_install_stepplusplus") && cot_install_stepplusplus();
+		
 		file_put_contents($file['config'], $config_contents);
 	}
 }
@@ -357,6 +371,22 @@ switch ($step)
 		$t->assign(array(
 			'INSTALL_LANG' => cot_selectbox_lang($lang, 'lang')
 		));
+		
+		$install_files = glob("*.install.php");
+		
+		if (!empty($install_files))
+		{
+			$install_scripts = array();
+			foreach ($install_files as $filename) 
+			{
+				preg_match("#(.*?)\/?(.+)\.install\.php#i", $filename, $mtch);
+				$install_scripts[$filename] = $mtch[2];
+			}
+			$t->assign(array(
+				'INSTALL_SCRIPT' => cot_selectbox('', 'script', array_keys($install_scripts), array_values($install_scripts))
+			));
+			$t->parse("MAIN.STEP_$step.SCRIPT");
+		}
 		break;
 	case 1:
 		// Create missing cache folders
@@ -510,7 +540,7 @@ switch ($step)
 			'INSTALL_MBSTRING' => $status['mbstring'],
 			'INSTALL_HASH' => $status['hash'],
 			'INSTALL_MYSQL' => $status['mysql']
-		));
+		));	
 		break;
 	case 2:
 		// Database form
@@ -520,6 +550,12 @@ switch ($step)
 			'INSTALL_DB_USER' => is_null($db_user) ? $cfg['mysqluser'] : $db_user,
 			'INSTALL_DB_NAME' => is_null($db_name) ? $cfg['mysqldb'] : $db_name,
 			'INSTALL_DB_X' => $db_x,
+			'INSTALL_DB_HOST_INPUT' => cot_inputbox('text', 'db_host', is_null($db_host) ? $cfg['mysqlhost'] : $db_host, 'size="32"'),
+			'INSTALL_DB_PORT_INPUT' => cot_inputbox('text', 'db_port', is_null($db_port) ? $cfg['mysqlport'] : $db_port, 'size="32"'),
+			'INSTALL_DB_USER_INPUT' => cot_inputbox('text', 'db_user',  is_null($db_user) ? $cfg['mysqluser'] : $db_user, 'size="32"'),
+			'INSTALL_DB_NAME_INPUT' => cot_inputbox('text', 'db_name',  is_null($db_name) ? $cfg['mysqldb'] : $db_name, 'size="32"'),
+			'INSTALL_DB_PASS_INPUT' => cot_inputbox('password', 'db_pass', '', 'size="32"'),			
+			'INSTALL_DB_X_INPUT' => cot_inputbox('text', 'db_x',  $db_x, 'size="32"'),			
 		));
 		break;
 	case 3:
@@ -535,7 +571,12 @@ switch ($step)
 		$t->assign(array(
 			'INSTALL_THEME_SELECT' => cot_selectbox_theme($rtheme, $rscheme, 'theme'),
 			'INSTALL_LANG_SELECT' => cot_selectbox_lang($rlang, 'lang'),
-			'INSTALL_COUNTRY_SELECT' => cot_selectbox_countries($user['country'], 'user_country')
+			'INSTALL_COUNTRY_SELECT' => cot_selectbox_countries($user['country'], 'user_country'),
+			'INSTALL_MAINURL' => cot_inputbox('text', 'mainurl', $cfg['mainurl'], 'size="32"'),
+			'INSTALL_USERNAME' => cot_inputbox('text', 'user_name', $user['name'], 'size="32"'),
+			'INSTALL_PASS1' => cot_inputbox('password', 'user_pass', '', 'size="32"'),
+			'INSTALL_PASS2' => cot_inputbox('password', 'user_pass2', '', 'size="32"'),
+			'INSTALL_EMAIL' => cot_inputbox('text', 'user_email', $user['email'], 'size="32"'),
 		));
 	case 4:
 		// Extensions
@@ -547,6 +588,9 @@ switch ($step)
 		break;
 
 }
+
+$inst_func_name = "cot_install_step".$step."_tags";
+function_exists($inst_func_name) && $inst_func_name();
 
 $t->parse("MAIN.STEP_$step");
 

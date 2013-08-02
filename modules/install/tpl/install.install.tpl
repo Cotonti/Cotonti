@@ -32,6 +32,9 @@
 
 					<ul>
 						<li><label>{PHP.L.Language}</label> {INSTALL_LANG}</li>
+						<!-- BEGIN: SCRIPT -->
+						<li><label>Install script</label> {INSTALL_SCRIPT}</li>
+						<!-- END: SCRIPT -->
 					</ul>
 					<div style="text-align: center;"><input type="submit" name="submit" class="submit" value="{PHP.L.Next}" /></div>
 				<!-- END: STEP_0 -->
@@ -70,12 +73,12 @@
 					<input type="hidden" name="step" value="2" />
 					<ul>
 						<li class="title">{PHP.L.install_db}</li>
-						<li><label>{PHP.L.install_db_host}</label>  <input type="text" name="db_host" value="{INSTALL_DB_HOST}" size="32" /></li>
-						<li><label>{PHP.L.install_db_port}</label>  <input type="text" name="db_port" value="{INSTALL_DB_PORT}" size="32" /><div style="text-align:center;margin:3px 0"><small>{PHP.L.install_db_port_hint}</small></div></li>
-						<li><label>{PHP.L.install_db_user}</label> <input type="text" name="db_user" value="{INSTALL_DB_USER}" size="32" /></li>
-						<li><label>{PHP.L.install_db_pass}</label> <input type="password" name="db_pass" size="32" /></li>
-						<li><label>{PHP.L.install_db_name}</label>  <input type="text" name="db_name" value="{INSTALL_DB_NAME}" size="32" /></li>
-						<li><label>{PHP.L.install_db_x}</label> <input type="text" name="db_x" value="{INSTALL_DB_X}" size="32" /></li>
+						<li><label>{PHP.L.install_db_host}</label>  {INSTALL_DB_HOST_INPUT}</li>
+						<li><label>{PHP.L.install_db_port}</label>  {INSTALL_DB_PORT_INPUT}<div style="text-align:center;margin:3px 0"><small>{PHP.L.install_db_port_hint}</small></div></li>
+						<li><label>{PHP.L.install_db_user}</label> {INSTALL_DB_USER_INPUT}</li>
+						<li><label>{PHP.L.install_db_pass}</label> {INSTALL_DB_PASS_INPUT}</li>
+						<li><label>{PHP.L.install_db_name}</label>  {INSTALL_DB_NAME_INPUT}</li>
+						<li><label>{PHP.L.install_db_x}</label> {INSTALL_DB_X_INPUT}</li>
 					</ul>
 
 					<p>{PHP.L.install_body_message3}</p>
@@ -90,15 +93,15 @@
 						<li class="title"><span class="settings">{PHP.L.install_misc}</span></li>
 						<li><label>{PHP.L.install_misc_theme}</label> {INSTALL_THEME_SELECT}</li>
 						<li><label>{PHP.L.install_misc_lng}</label> {INSTALL_LANG_SELECT}</li>
-						<li><label>{PHP.L.install_misc_url}</label> <input type="text" name="mainurl" value="{PHP.cfg.mainurl}" size="32" /></li>
+						<li><label>{PHP.L.install_misc_url}</label> {INSTALL_MAINURL}</li>
 					</ul>
 
 					<ul>
 						<li class="title"><span class="administrator">{PHP.L.install_adminacc}</span></li>
-						<li><label>{PHP.L.Username}</label>  <input type="text" name="user_name" value="{PHP.user.name}" size="32" /></li>
-						<li><label>{PHP.L.Password}</label> <input type="password" name="user_pass" size="32" /></li>
-						<li><label>{PHP.L.install_retype_password}</label> <input type="password" name="user_pass2" size="32" /></li>
-						<li><label>{PHP.L.Email}</label> <input type="text" name="user_email" value="{PHP.user.email}" size="32" /></li>
+						<li><label>{PHP.L.Username}</label>  {INSTALL_USERNAME}</li>
+						<li><label>{PHP.L.Password}</label> {INSTALL_PASS1}</li>
+						<li><label>{PHP.L.install_retype_password}</label> {INSTALL_PASS2}</li>
+						<li><label>{PHP.L.Email}</label> {INSTALL_EMAIL}</li>
 					</ul>
 					<div style="text-align: center;"><input type="submit" name="submit" value="{PHP.L.Install}" /></div>
 				<!-- END: STEP_3 -->
