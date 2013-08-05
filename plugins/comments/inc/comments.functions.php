@@ -136,13 +136,13 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		include $pl;
 	}
 	/* ===== */
-
+    $editor = ($cfg['plugin']['comments']['markup']) ? 'input_textarea_minieditor' : '';
 	$t->assign(array(
 		'COMMENTS_CODE' => $code,
 		'COMMENTS_FORM_SEND' => cot_url('plug', "e=comments&a=send&area=$ext_name&cat=$cat&item=$code"),
 		'COMMENTS_FORM_AUTHOR' => ($usr['id'] > 0) ? $usr['name'] : cot_inputbox('text', 'rname'),
 		'COMMENTS_FORM_AUTHORID' => $usr['id'],
-		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? cot_textarea('rtext', $rtext, 10, 120, '', 'input_textarea_minieditor').cot_inputbox('hidden', 'cb', base64_encode(serialize($cot_com_back)))
+		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? cot_textarea('rtext', $rtext, 10, 120, '', $editor).cot_inputbox('hidden', 'cb', base64_encode(serialize($cot_com_back)))
 			: '',
 		'COMMENTS_DISPLAY' => $cfg['plugin']['comments']['expand_comments'] ? '' : 'none'
 	));
