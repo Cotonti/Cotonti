@@ -161,8 +161,7 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 					cot_extrafield_unlinkfiles($row['user_'.$exfld['field_name']], $exfld);
 				}
 
-				$sql = $db->delete($db_users, "user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");
-				$sql = $db->delete($db_users, "user_id='".$row['user_id']."'");
+				$sql = $db->delete($db_users, "user_id=".(int)$row['user_id']);
 				$sql = $db->delete($db_groups_users, "gru_userid='".$row['user_id']."'");
 
 				/* === Hook for the plugins === */
