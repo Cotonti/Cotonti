@@ -243,7 +243,7 @@ function bindHandlers() {
 
 	if (ajaxEnabled) {
 		// AJAX auto-handling
-		$('form.ajax').on('submit', function() {
+		$('body').on('submit', 'form.ajax', function() {
 			if ($(this).attr('method').toUpperCase() == 'POST') {
 				ajaxFormLoad(ajaxMakeHash($(this).attr('action').replace(/#.*$/, ''), $(this).attr('class'), 'post'), $(this).attr('id'));
 			} else {
@@ -251,13 +251,13 @@ function bindHandlers() {
 			}
 			return ajaxError;
 		});
-		$('a.ajax').on('click', function() {
+		$('body').on('click', 'a.ajax', function() {
 			$.historyLoad(ajaxMakeHash($(this).attr('href').replace(/#.*$/, ''), $(this).attr('rel')));
 			return ajaxError;
 		});
 
 		// AJAX action confirmations
-		$('a.confirmLink').on('click', function() {
+		$('body').on('click', 'a.confirmLink', function() {
 			if ($(this).attr('href').match(/message.+920/i)) {
 				if ($('#confirmBox')) {
 					$('#confirmBox').remove();
@@ -273,7 +273,7 @@ function bindHandlers() {
 				return true;
 			}
 		});
-		$('a#confirmNo').on('click', function() {
+		$('body').on('click', 'a#confirmNo', function() {
 			if ($("#confirmBox").is(".jqmWindow"))
 			{
 				$('#confirmBox').jqmHide();
