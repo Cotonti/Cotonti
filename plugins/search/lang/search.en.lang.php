@@ -94,7 +94,7 @@ $L['plu_last_date'] = 'Date updated';
  */
 
 $L['cfg_maxwords'] = 'Max. words in search query';
-$L['cfg_maxsigns'] = 'Max. latters in search query';
+$L['cfg_maxsigns'] = 'Max. letters in search query';
 $L['cfg_maxitems'] = 'Max. entries in normal search results';
 $L['cfg_minsigns'] = 'Min. signs in query';
 $L['cfg_pagesearch'] = 'Enable pages search';
