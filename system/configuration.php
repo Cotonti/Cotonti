@@ -9,7 +9,6 @@
  * @copyright Copyright (c) Cotonti Team 2010-2013
  * @license BSD
  */
-
 defined('COT_CODE') or die('Wrong URL');
 
 /**
@@ -80,7 +79,7 @@ define('COT_CONFIG_TYPE_CUSTOM', 8);
  *     )
  * );
  *
- * cot_config_add('test', $config_options, true);
+ * cot_config_add('test', $config_options, 'module');
  * </code>
  *
  * @param string $name Extension name (code)
@@ -94,7 +93,7 @@ define('COT_CONFIG_TYPE_CUSTOM', 8);
  * 'order' => A string that determines position of the option in the list,
  * 		e.g. '04'. Or will be assigned automatically if omitted
  * 'text' => Textual description. It is usually omitted and stored in langfiles
- * @param bool $is_module Flag indicating if it is module or plugin config
+ * @param mixed $is_module Flag indicating if it is module or plugin config
  * @param string $category Structure category code. Only for per-category config options
  * @param string $donor Extension name for extension-to-extension config implantations
  * @return bool Operation status
@@ -104,7 +103,14 @@ function cot_config_add($name, $options, $is_module = false, $category = '', $do
 {
 	global $db, $cfg, $db_config;
 	$cnt = count($options);
-	$type = $is_module ? 'module' : 'plug';
+	if (is_bool($is_module))
+	{
+		$type = $is_module ? 'module' : 'plug';
+	}
+	else
+	{
+		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+	}
 	// Check the arguments
 	if (!$cnt)
 	{
@@ -156,14 +162,13 @@ function cot_config_implant($module_name, $options, $into_struct, $donor)
 	$add_options = array();
 	foreach ($options as $opt)
 	{
-		if (!$into_struct && !isset($cfg[$module_name][$opt['name']])
-				|| $into_struct && !isset($cfg[$module_name]['cat___default'][$opt['name']]))
+		if (!$into_struct && !isset($cfg[$module_name][$opt['name']]) || $into_struct && !isset($cfg[$module_name]['cat___default'][$opt['name']]))
 		{
 			$add_options[] = $opt;
 		}
 	}
 
-	return cot_config_add($module_name, $add_options, true, $category, $donor);
+	return cot_config_add($module_name, $add_options, 'module', $category, $donor);
 }
 
 /**
@@ -184,7 +189,7 @@ function cot_config_implanted($acceptor, $donor)
  * Loads config structure from database into an array
  *
  * @param string $name Extension code
- * @param bool $is_module TRUE if module, FALSE if plugin
+ * @param mixed $is_module TRUE if module, FALSE if plugin
  * @param string $category Structure category code. Only for per-category config options
  * @param string $donor Extension name for extension-to-extension config implantations
  * @return array Config options structure
@@ -195,7 +200,14 @@ function cot_config_load($name, $is_module = false, $category = '', $donor = '')
 {
 	global $db, $db_config;
 	$options = array();
-	$type = $is_module ? 'module' : 'plug';
+	if (is_bool($is_module))
+	{
+		$type = $is_module ? 'module' : 'plug';
+	}
+	else
+	{
+		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+	}
 
 	$query = "SELECT config_name, config_type, config_value,
 			config_default, config_variants, config_order
@@ -224,7 +236,7 @@ function cot_config_load($name, $is_module = false, $category = '', $donor = '')
  *
  * @param string $name Extension code
  * @param array $options Configuration entries
- * @param bool $is_module TRUE if module, FALSE if plugin
+ * @param mixed $is_module TRUE if module, FALSE if plugin
  * @param string $category Structure category code. Only for per-category config options
  * @param string $donor Extension name for extension-to-extension config implantations
  * @return int Number of entries updated
@@ -233,7 +245,15 @@ function cot_config_load($name, $is_module = false, $category = '', $donor = '')
 function cot_config_modify($name, $options, $is_module = false, $category = '', $donor = '')
 {
 	global $db, $db_config;
-	$type = $is_module ? 'module' : 'plug';
+
+	if (is_bool($is_module))
+	{
+		$type = $is_module ? 'module' : 'plug';
+	}
+	else
+	{
+		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+	}
 	$affected = 0;
 
 	$where = "config_owner = ? AND config_cat = ? AND config_name = ? AND config_donor = ?";
@@ -323,7 +343,7 @@ function cot_config_parse($info_cfg)
  * Unregisters configuration option(s).
  *
  * @param string $name Extension name (code)
- * @param bool $is_module Flag indicating if it is module or plugin config
+ * @param mixed $is_module Flag indicating if it is module or plugin config
  * @param mixed $option String name of a single configuration option.
  * Or pass an array of option names to remove them at once. If empty or omitted,
  * all options from selected module/plugin will be removed
@@ -336,7 +356,14 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
 {
 	global $db, $db_config;
 
-	$type = $is_module ? 'module' : 'plug';
+	if (is_bool($is_module))
+	{
+		$type = $is_module ? 'module' : 'plug';
+	}
+	else
+	{
+		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+	}
 	$where = "config_owner = '$type' AND config_cat = " . $db->quote($name);
 	if (!empty($category))
 	{
@@ -389,7 +416,7 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
  *
  * @param string $name Extension name config belongs to
  * @param array $options Array of options as 'option name' => 'option value'
- * @param bool $is_module Flag indicating if it is module or plugin config
+ * @param mixed $is_module Flag indicating if it is module or plugin config
  * @param string $category Structure category code. Only for per-category config options
  * @return int Number of entries updated
  * @global CotDB $db
@@ -397,7 +424,15 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
 function cot_config_set($name, $options, $is_module = false, $category = '')
 {
 	global $db, $db_config;
-	$type = $is_module ? 'module' : 'plug';
+
+	if (is_bool($is_module))
+	{
+		$type = $is_module ? 'module' : 'plug';
+	}
+	else
+	{
+		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+	}
 	$upd_cnt = 0;
 
 	$where = 'config_owner = ? AND config_cat = ? AND config_name = ?';
@@ -501,4 +536,262 @@ function cot_config_update($name, $options, $is_module = false, $category = '', 
 	}
 
 	return $affected;
+}
+
+/**
+ * Reset configuration value
+ *
+ * @param string $name Extension name config belongs to
+ * @param string $option Option name
+ * @param mixed $is_module Flag indicating if it is module or plugin config
+ * @param string $category Structure category code. Only for per-category config options
+ * @return int Number of entries updated
+ * @global CotDB $db
+ */
+function cot_config_reset($name, $option, $is_module = false, $category = '')
+{
+	global $db, $db_config;
+	if (is_bool($is_module))
+	{
+		$type = $is_module ? 'module' : 'plug';
+	}
+	else
+	{
+		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+	}
+	if (!empty($category))
+	{
+		$db->delete($db_config, "config_name = ? AND config_owner = ? AND config_cat = ?
+					AND config_subcat = ?", array($option, $type, $name, $category));
+	}
+	else
+	{
+		$db->query("UPDATE $db_config SET config_value = config_default
+			WHERE config_name = ? AND config_owner = ? AND config_cat = ? AND (config_subcat = '' OR config_subcat = '__default')", array($option, $type, $name));
+	}
+}
+
+/**
+ * Get configs from database
+ * @param string Owner ('core', 'plug', 'module')
+ * @param string Extension code (page, forums, etc.) or core subtype (menus, main, performance, etc.)
+ * @param string category for modules if exists
+ * @return array
+ */
+function cot_config_list($owner, $cat, $subcat = "")
+{
+	global $db, $db_config;
+
+	$where = array(
+		'type' => "config_type != '" . COT_CONFIG_TYPE_HIDDEN . "'",
+		'owner' => "config_owner = '" . $db->prep($owner) . "'",
+		'cat' => "config_cat = '" . $db->prep($cat) . "'",
+		'subcat' => empty($subcat) ? "(config_subcat = '' OR config_subcat = '__default')" : "(config_subcat = '" . $db->prep($subcat) . "' OR config_subcat = '__default')"
+	);
+
+	$where_query = implode(" AND ", $where);
+
+	// Attempt to fetch the entire rowset indexed by config_name
+	$sql = $db->query("SELECT * FROM $db_config WHERE $where_query ORDER BY config_subcat ASC, config_order ASC, config_name ASC");
+	$rs = $sql->fetchAll(PDO::FETCH_ASSOC);
+	$rowset = array();
+	$rowset_default = array();
+	foreach ($rs as $row)
+	{
+		$keyx = $row['config_name'];
+		$rowx = array();
+
+		if ($row['config_subcat'] == "'__default'")
+		{
+			$rowset_default[$keyx] = $row;
+		}
+		else
+		{
+			$rowset[$keyx] = $row;
+		}
+	}
+	// Заморочка - для правильного слияния массивов и затем правильного их отображения
+	if (!empty($subcat))
+	{
+		foreach ($rowset_default as $key => $row)
+		{
+			if (!empty($rowset[$key]))
+			{
+				$rowset[$key]['config_subdefault'] = $row['config_value'];
+			}
+		}
+		$rowset = array_merge($rowset_default, $rowset);
+	}
+	else
+	{
+		$rowset = $rowset + $rowset_default;
+	}
+	unset($rs);
+	return $rowset;
+}
+
+/**
+ * Returns config input
+ * @param string $name Config name
+ * @param int $type Config type
+ * @param string $value Config value
+ * @param string $options Config options 
+ * @return string
+ */
+function cot_config_input($name, $type = 0, $value = '', $options = '')
+{
+	$config_input = '';
+	switch ($type)
+	{
+		case COT_CONFIG_TYPE_STRING:
+			$config_input = cot_inputbox('text', $name, $value);
+			break;
+
+		case COT_CONFIG_TYPE_SELECT:
+			if (!empty($options))
+			{
+				$params = explode(',', $options);
+				$params_titles = cot_config_selecttitles($name, $params);
+			}
+			$config_input = (is_array($params)) ? cot_selectbox($value, $name, $params, $params_titles, false) : cot_inputbox('text', $name, $value);
+
+			break;
+
+		case COT_CONFIG_TYPE_RADIO:
+			global $L;
+			$config_input = cot_radiobox($value, $name, array(1, 0), array($L['Yes'], $L['No']), '', ' ');
+			break;
+
+		case COT_CONFIG_TYPE_RANGE:
+			$range = preg_split('#\s*,\s*#', $options);
+			$params = range($range[0], $range[1], empty($range[2]) ? 1 : $range[2]);
+			$config_input = cot_selectbox($value, $name, $params, $params, false);
+			break;
+
+		case COT_CONFIG_TYPE_CUSTOM:
+			if ((preg_match('#^(\w+)\((.*?)\)$#', $options, $mt) && function_exists($mt[1])))
+			{
+				$callback_params = preg_split('#\s*,\s*#', $mt[2]);
+				if (count($callback_params) > 0 && !empty($callback_params[0]))
+				{
+					for ($i = 0; $i < count($callback_params); $i++)
+					{
+						$callback_params[$i] = str_replace(array("'", '"'), array('', ''), $callback_params[$i]);
+					}
+				}
+				$config_input = call_user_func_array($mt[1], array_merge(array($name, $value), $callback_params));
+			}
+			break;
+
+		case COT_CONFIG_TYPE_CALLBACK:
+			if ((preg_match('#^(\w+)\((.*?)\)$#', $options, $mt) && function_exists($mt[1])))
+			{
+				$callback_params = preg_split('#\s*,\s*#', $mt[2]);
+				if (count($callback_params) > 0 && !empty($callback_params[0]))
+				{
+					for ($i = 0; $i < count($callback_params); $i++)
+					{
+						$callback_params[$i] = str_replace("'", '', $callback_params[$i]);
+						$callback_params[$i] = str_replace('"', '', $callback_params[$i]);
+					}
+					$params = call_user_func_array($mt[1], $callback_params);
+				}
+				else
+				{
+					$params = call_user_func($mt[1]);
+				}
+				$params_titles = cot_config_selecttitles($name, $params);
+				$config_input = cot_selectbox($value, $name, $params, $params_titles, false);
+			}
+			break;
+
+		case COT_CONFIG_TYPE_HIDDEN:
+		case COT_CONFIG_TYPE_SEPARATOR:
+			break;
+
+		default :
+			$config_input = cot_textarea($name, $value, 8, 56);
+			break;
+	}
+	return $config_input;
+}
+
+/**
+ * Returns option title and hint
+ * @param string $name Config name
+ * @param string $text Config text
+ * @return array
+ */
+function cot_config_titles($name, $text = '')
+{
+	global $L;
+
+	if (is_array($L['cfg_' . $name]))
+	{
+		$L['cfg_' . $name . '_hint'] = (isset($L['cfg_' . $name][1]) && !isset($L['cfg_' . $name . '_hint'])) ? $L['cfg_' . $name][1] : $L['cfg_' . $name . '_hint'];
+		$L['cfg_' . $name] = $L['cfg_' . $name][0];
+	}
+	$text = !empty($text) ? htmlspecialchars($text) : $name;
+	$title = !empty($L['cfg_' . $name]) ? $L['cfg_' . $name] : $text;
+
+	return array($title, $L['cfg_' . $name . '_hint']);
+}
+
+/**
+ * Helper function that generates selection titles.
+ * @param  string $name Current config name
+ * @param  array  $params  Array of config params
+ * @return array Selection titles
+ */
+function cot_config_selecttitles($name, $params)
+{
+	global $L;
+	if (isset($L['cfg_' . $name . '_params']))
+	{
+		if (!is_array($L['cfg_' . $name . '_params']))
+		{
+			$L['cfg_' . $name . '_params'] = preg_split('#\s*,\s*#', $L['cfg_' . $name . '_params']);
+			if (preg_match('#^[\w-]+\s*:#', $L['cfg_' . $name . '_params'][0]))
+			{
+				// Support for assoc arrays
+				$temp = array();
+				foreach ($L['cfg_' . $name . '_params'] as $item)
+				{
+					if (preg_match('#^([\w-]+)\s*:\s*(.*)$#', $item, $mt))
+					{
+						$temp[$mt[1]] = $mt[2];
+					}
+				}
+				if (count($temp) > 0)
+					$L['cfg_' . $name . '_params'] = $temp;
+			}
+		}
+		$lang_params_keys = array_keys($L['cfg_' . $name . '_params']);
+		if (is_numeric($lang_params_keys[0]))
+		{
+			// Numeric array, simply use it
+			$cfg_params_titles = $L['cfg_' . $name . '_params'];
+		}
+		else
+		{
+			// Associative, match entries
+			$cfg_params_titles = array();
+			foreach ($params as $val)
+			{
+				if (isset($L['cfg_' . $name . '_params'][$val]))
+				{
+					$cfg_params_titles[] = $L['cfg_' . $name . '_params'][$val];
+				}
+				else
+				{
+					$cfg_params_titles[] = $val;
+				}
+			}
+		}
+	}
+	else
+	{
+		$cfg_params_titles = $params;
+	}
+	return $cfg_params_titles;
 }
