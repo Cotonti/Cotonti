@@ -19,12 +19,12 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('page', 'module');
 
-if ($p == 'news' && $config_name == 'category' && $cfg['jquery'])
+if ($p == 'news' && $row['config_name'] == 'category' && $cfg['jquery'])
 {
 	$sskin = cot_tplfile('news.admin', 'plug', true);
 	$tt = new XTemplate($sskin);
 
-	$categories = explode(',', $config_value);
+	$categories = explode(',', $row['config_value']);
 	$jj = 0;
 	foreach ($categories as $k => $v)
 	{
