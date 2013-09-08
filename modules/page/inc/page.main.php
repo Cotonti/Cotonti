@@ -28,8 +28,8 @@ foreach (cot_getextplugins('page.first') as $pl)
 
 if ($id > 0 || !empty($al))
 {
-	$where = (!empty($al)) ? "page_alias='".$al."'" : 'page_id='.$id;
-	if (!empty($c)) $where .= " AND page_cat = " . $db->quote($c);
+	$where = (!empty($al)) ? "p.page_alias='".$al."'" : 'p.page_id='.$id;
+	if (!empty($c)) $where .= " AND p.page_cat = " . $db->quote($c);
 	$sql_page = $db->query("SELECT p.*, u.* $join_columns
 		FROM $db_pages AS p $join_condition
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
