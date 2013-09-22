@@ -1,4 +1,4 @@
-$(function() {
+$(document).on('ready ajaxSuccess', function() {
 	$('.rstar').rating({
 		callback: function(value, link) {
 			var rate_name = $(this).attr('name');
