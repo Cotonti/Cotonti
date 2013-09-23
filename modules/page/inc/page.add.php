@@ -160,7 +160,7 @@ $t->assign($pageadd_array);
 foreach($cot_extrafields[$db_pages] as $exfld)
 {
 	$uname = strtoupper($exfld['field_name']);
-	$exfld_val = cot_build_extrafields('rpage'.$exfld['field_name'], $exfld, $rpage[$exfld['field_name']]);
+	$exfld_val = cot_build_extrafields('rpage'.$exfld['field_name'], $exfld, $rpage['page_'.$exfld['field_name']]);
 	$exfld_title = isset($L['page_'.$exfld['field_name'].'_title']) ?  $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 	$t->assign(array(
 		'PAGEADD_FORM_'.$uname => $exfld_val,
