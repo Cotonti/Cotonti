@@ -558,7 +558,7 @@ $toptitle .= ( $usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $t->assign(array(
 	'FORUMS_POSTS_ID' => $q,
-	'FORUMS_POSTS_RSS' => cot_url('rss', "c=topics&id=$q"),
+	'FORUMS_POSTS_RSS' => cot_url('rss', "m=topics&c=$q"),
 	'FORUMS_POSTS_PAGETITLE' => $toptitle,
 	'FORUMS_POSTS_TOPICDESC' => htmlspecialchars($rowt['ft_desc']),
 	'FORUMS_POSTS_SHORTTITLE' => htmlspecialchars($rowt['ft_title']),

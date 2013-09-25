@@ -401,7 +401,7 @@ foreach (array('title', 'viewcount', 'postcount', 'creationdate', 'updated') as 
 }
 $t->assign(array(
 	'FORUMS_TOPICS_PARENT_SECTION_ID' => $s,
-	'FORUMS_TOPICS_SECTION_RSS' => cot_url('rss', "c=section&id=$s"),
+	'FORUMS_TOPICS_SECTION_RSS' => cot_url('rss', "m=section&c=$s"),
 	'FORUMS_TOPICS_PAGETITLE' => $toptitle,
 	'FORUMS_TOPICS_SHORTTITLE' => htmlspecialchars($structure['forums'][$s]['title']),
 	'FORUMS_TOPICS_SUBTITLE' => $structure['forums'][$s]['desc'],

@@ -9,7 +9,7 @@
 				<!-- IF {PHP.cot_modules.rss} -->
 				<li>{PHP.R.icon_rss} <a href="{PHP|cot_url('rss')}" title="{PHP.L.RSS_Feeds}">RSS</a></li>
 				<!-- IF {PHP.cfg.forums} -->
-				<li>{PHP.R.icon_rss} <a href="{PHP|cot_url('rss','c=forums')}" title="{PHP.L.RSS_Feeds} {PHP.cfg.separator} {PHP.L.Forums}"> RSS (<span class="lower">{PHP.L.Forums}</span>)</a></li>
+				<li>{PHP.R.icon_rss} <a href="{PHP|cot_url('rss','m=forums')}" title="{PHP.L.RSS_Feeds} {PHP.cfg.separator} {PHP.L.Forums}"> RSS (<span class="lower">{PHP.L.Forums}</span>)</a></li>
 				<!-- ENDIF -->
 				<!-- ENDIF -->
 				<li class=""><a href="http://www.seditio.by" title="Free and Commercial Cotonti Themes and Plugins">Nemesis Theme by Seditio.by</a></li>
