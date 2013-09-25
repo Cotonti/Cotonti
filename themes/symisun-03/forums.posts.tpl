@@ -85,7 +85,7 @@
       <!-- ELSE -->
       <h3><a href="{PHP|cot_url('login')}">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.themelang.forumspost.post}</a></h3>
       <!-- ENDIF -->
-      <h3><a href="{PHP.q|cot_url('rss','c=topics&amp;id=$this')}">{PHP.themelang.list.rss}</a></h3>
+      <h3><a href="{FORUMS_POSTS_RSS}">{PHP.themelang.list_rss}</a></h3>
       <h3>{PHP.themelang.forumspost.jump}<br /><span class="colleft whitee jump">{FORUMS_POSTS_JUMPBOX}</span><br /></h3> 
 
       &nbsp; </div>
