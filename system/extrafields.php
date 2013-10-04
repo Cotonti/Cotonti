@@ -222,7 +222,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			$import = cot_import_date($inputname, true, false, $source);
 			if (!is_null($import) && ((int)$min > 0 || (int)$max > 0))
 			{
-				list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $utime));
+				list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $import));
 				if ($min > $s_year)
 				{
 					$import=mktime($s_hour, $s_minute, 0, $s_month, $s_day, $min);
