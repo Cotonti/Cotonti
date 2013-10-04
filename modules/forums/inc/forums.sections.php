@@ -115,7 +115,7 @@ $t = new XTemplate(cot_tplfile('forums.sections'));
 $url_markall = cot_url('forums', "n=markall");
 $title[] = array(cot_url('forums'), $L['Forums']);
 $t->assign(array(
-	'FORUMS_RSS' => cot_url('rss', 'c=forums'),
+	'FORUMS_RSS' => cot_url('rss', 'm=forums'),
 	'FORUMS_SECTIONS_PAGETITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'FORUMS_SECTIONS_MARKALL' =>  ($usr['id'] > 0) ? cot_rc_link($url_markall, $L['forums_markallasread']) : '',
 	'FORUMS_SECTIONS_MARKALL_URL' => ($usr['id'] > 0) ? $url_markall : ''

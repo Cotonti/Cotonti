@@ -229,7 +229,7 @@ $t->assign(array(
 	'LIST_PAGETITLE' => $catpath,
 	'LIST_CATEGORY' => htmlspecialchars($cat['title']),
 	'LIST_CAT' => $c,
-	'LIST_CAT_RSS' => cot_url('rss', "id=$c"),
+	'LIST_CAT_RSS' => cot_url('rss', "c=$c"),
 	'LIST_CATTITLE' => $cat['title'],
 	'LIST_CATPATH' => $catpath,
 	'LIST_CATSHORTPATH' => $catpath_short,
