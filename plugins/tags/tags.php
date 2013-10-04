@@ -22,7 +22,7 @@ if(empty($qs)) $qs = cot_import('t', 'P', 'TXT');
 $qs = str_replace('-', ' ', $qs);
 
 $tl = cot_import('tl', 'G', 'BOL');
-if ($tl)
+if ($tl && file_exists(cot_langfile('translit', 'core')))
 {
 	include_once cot_langfile('translit', 'core');
 	$qs = strtr($qs, $cot_translitb);
