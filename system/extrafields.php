@@ -118,7 +118,9 @@ function cot_build_extrafields($name, $extrafield, $data)
 			break;
 
 		case 'file':
-			$data_filepath = $cfg['extrafield_files_dir'].'/'.htmlspecialchars($data);
+			$extrafield['field_params'] = (!empty($extrafield['field_params'])) ? $extrafield['field_params'] : $cfg['extrafield_files_dir'];
+			$extrafield['field_params'] .= (mb_substr($extrafield['field_params'], -1) == '/') ? '' : '/';
+			$data_filepath = $extrafield['field_params'] . htmlspecialchars($data);
 			/* === Hook === */
 			foreach (cot_getextplugins('extrafields.build.file') as $pl)
 			{
