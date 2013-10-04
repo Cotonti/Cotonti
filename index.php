@@ -61,7 +61,7 @@ else
 	{
 		$module_found = false;
 		$plugin_found = false;
-		if (file_exists($cfg['modules_dir'] . '/' . $_GET['e']))
+		if (file_exists($cfg['modules_dir'] . '/' . $_GET['e']) && isset($cot_modules[$_GET['e']]))
 		{
 			$module_found = true;
 			$found = true;
