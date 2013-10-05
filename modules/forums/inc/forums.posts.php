@@ -318,6 +318,7 @@ if (!empty($p) || !empty($id))
 	$p_id = empty($p) ? $id : $p;
 	$postsbefore = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE " . implode(' AND ', $where) . " AND fp_id < $p_id")->fetchColumn();
 	$d = $cfg['forums']['maxpostsperpage'] * floor($postsbefore / $cfg['forums']['maxpostsperpage']);
+	$durl = $cfg['easypagenav'] ? floor($d / $cfg['forums']['maxpostsperpage']) + 1 : $d;
 }
 
 if (!empty($id))
@@ -358,7 +359,8 @@ $topicurl_params = array(
 	'm' => 'posts',
 	'q' => $q
 );
-if ($durl > 1)
+
+if ( ($durl > 1 && $cfg['easypagenav']) || ($durl > 0 && !$cfg['easypagenav']) )
 {
 	$topicurl_params['d'] = $durl;
 }
