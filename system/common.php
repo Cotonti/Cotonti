@@ -488,6 +488,11 @@ $b = cot_import('b', 'G', 'ALP', 24);
 require_once cot_langfile('main', 'core');
 require_once cot_langfile('users', 'core');
 
+if(defined('COT_ADMIN'))
+{
+	require_once cot_langfile('admin', 'core');
+}
+
 /* ======== Theme / color scheme ======== */
 
 if (empty($cfg['themes_dir']))
@@ -528,6 +533,11 @@ $scheme = $usr['scheme'];
 
 // Resource strings
 require_once $cfg['system_dir'].'/resources.php';
+
+if(defined('COT_ADMIN'))
+{
+	require_once cot_incfile('admin', 'module', 'resources');
+}
 
 // Theme resources
 $sys['theme_resources'] = defined('COT_ADMIN') && !empty($cfg['admintheme'])
