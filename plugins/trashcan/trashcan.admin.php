@@ -85,13 +85,13 @@ elseif($a == 'restore')
 }
 
 $tr_t = new XTemplate(cot_tplfile(($info) ? 'trashcan.info.admin' : 'trashcan.admin', 'plug', true));
-$totalitems = $db->countRows($db_trash);
-$pagenav = cot_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$totalitems = (int)$db->query("SELECT COUNT(*) FROM $db_trash WHERE tr_parentid=0")->fetchColumn();
+$pagenav = cot_pagenav('admin', 'm=other&p=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql_query = ($info) ? "AND tr_id=$id LIMIT 1" : "ORDER by tr_id DESC LIMIT $d, ".$cfg['maxrowsperpage'];
 $sql = $db->query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
-	WHERE tr_parentid='0' $sql_query");
+	WHERE tr_parentid=0 $sql_query");
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
