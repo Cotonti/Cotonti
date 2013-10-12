@@ -172,6 +172,7 @@ abstract class Writeback_cache_driver extends Dynamic_cache_driver
 	public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = 0)
 	{
 		$this->writeback_data[] = array('id' => $id, 'data' => $data, 'realm' =>  $realm, 'ttl' => $ttl);
+		return true;
 	}
 
 	/**
@@ -776,6 +777,26 @@ class MySQL_cache extends Db_cache_driver
 		$db->query("DELETE FROM $db_cache WHERE c_realm = ".$db->quote($realm)." AND c_name = ".$db->quote($id));
 		unset($this->buffer[$realm][$id]);
 		return $db->affectedRows == 1;
+	}
+
+	/**
+	 * Stores data as object image in cache
+	 * @param string $id Object identifier
+	 * @param mixed $data Object value
+	 * @param string $realm Realm name
+	 * @param int $ttl Time to live, 0 for unlimited
+	 * @return bool
+	 * @see Cache_driver::store()
+	 */
+	public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = 0)
+	{
+		global $db;
+		// Check data length
+		if (strlen($db->prep($data)) > 16777215) // MySQL max MEDIUMTEXT size
+		{
+			return false;
+		}
+		return parent::store($id, $data, $realm, $ttl);
 	}
 
 	/**
