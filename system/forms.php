@@ -428,9 +428,10 @@ function cot_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$rc = empty($R["input_textarea_{$rc_name}"]) ? (empty($custom_rc) ? 'input_textarea' : $custom_rc) : "input_textarea_{$rc_name}";
 	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
+	$buffered = cot_import_buffered($name, $value);
 	return cot_rc($rc, array(
 		'name' => $name,
-		'value' => htmlspecialchars(cot_import_buffered($name, $value)),
+		'value' => is_string($buffered) ? htmlspecialchars($buffered) : '',
 		'rows' => $rows,
 		'cols' => $cols,
 		'attrs' => $input_attrs,
