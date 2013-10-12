@@ -545,20 +545,23 @@ $sys['theme_resources'] = defined('COT_ADMIN') && !empty($cfg['admintheme'])
 	: "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
 if (file_exists($sys['theme_resources']))
 {
-	// Get the keys for overriden strings first
-	list($l_diff, $r_diff) = cot_themerc_list($sys['theme_resources']);
-	// Include theme resources in the global scope
+	$L_tmp = $L;
+	$R_tmp = $R;
+	$L = array();
+	$R = array();
 	include $sys['theme_resources'];
 	// Save overridden strings in $theme_reload global
-	foreach ($l_diff as $key)
+	foreach ($L as $key => $val)
 	{
-		$theme_reload['L'][$key] = $L[$key];
+		$theme_reload['L'][$key] = $val;
 	}
-	foreach ($r_diff as $key)
+	foreach ($R as $key => $val)
 	{
-		$theme_reload['R'][$key] = $R[$key];
+		$theme_reload['R'][$key] = $val;
 	}
-	unset($l_diff, $r_diff);
+	$L = array_merge($L_tmp, $L);
+	$R = array_merge($R_tmp, $R);
+	unset($L_tmp, $R_tmp);
 }
 
 // Iconpack
