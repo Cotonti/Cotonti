@@ -19,7 +19,7 @@ $userid = cot_import('userid','G','INT');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
 cot_block($usr['auth_write']);
 
-if (!$usr['isadmin'] || $userid=='')
+if (!$usr['isadmin'] || is_null($userid))
 {
 	$userid = $usr['id'];
 }
