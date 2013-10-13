@@ -551,14 +551,8 @@ if (file_exists($sys['theme_resources']))
 	$R = array();
 	include $sys['theme_resources'];
 	// Save overridden strings in $theme_reload global
-	foreach ($L as $key => $val)
-	{
-		$theme_reload['L'][$key] = $val;
-	}
-	foreach ($R as $key => $val)
-	{
-		$theme_reload['R'][$key] = $val;
-	}
+	$theme_reload['L'] = $L;
+	$theme_reload['R'] = $R;
 	$L = array_merge($L_tmp, $L);
 	$R = array_merge($R_tmp, $R);
 	unset($L_tmp, $R_tmp);
