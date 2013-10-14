@@ -7,10 +7,12 @@ $page_add_indexes = array(
 	'page_title'
 );
 
+require_once cot_incfile('page', 'module');
+
 foreach($page_add_indexes as $index)
 {
-	if(!(bool)$db->query("SHOW INDEXES FROM `cot_pages` WHERE `Key_name`='".$index."'")->fetch())
+	if(!$db->indexExists($db_pages, $index, $index))
 	{
-		$db->query("ALTER TABLE `cot_pages` ADD INDEX `".$index."` (`".$index."`)");
+		$db->addIndex($db_pages, $index);
 	}
 }

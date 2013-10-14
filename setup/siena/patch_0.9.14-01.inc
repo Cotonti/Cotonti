@@ -8,10 +8,12 @@ $users_add_indexes = array(
 	'user_lostpass'
 );
 
+global $db_users;
+
 foreach($users_add_indexes as $index)
 {
-	if(!(bool)$db->query("SHOW INDEXES FROM `cot_users` WHERE `Key_name`='".$index."'")->fetch())
+	if(!$db->indexExists($db_users, $index, $index))
 	{
-		$db->query("ALTER TABLE `cot_users` ADD INDEX `".$index."` (`".$index."`)");
+		$db->addIndex($db_users, $index);
 	}
 }

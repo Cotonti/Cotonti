@@ -284,17 +284,13 @@ class CotDB extends PDO {
 	*
 	* @param string $table_name Table name
 	* @param string $index_name Index/Key name
-	* @param mixed $index_columns Either a string for a single column name or an array for single/multiple columns. $index_name will be used if empty.
+	* @param mixed $index_columns Either a string for a single column name or an array for single/multiple columns. No column check will be preformed if left empty.
 	* @return bool TRUE if the index name or column order exists, FALSE otherwise
 	*/
 	function indexExists($table_name, $index_name, $index_columns = array())
 	{
 		$existing_indexes = $this->query("SHOW INDEXES FROM `$table_name`")->fetchAll();
-		if(empty($index_columns))
-		{
-			$index_columns = array($index_name);
-		}
-		if(!is_array($index_columns))
+		if(!empty($index_columns) && !is_array($index_columns))
 		{
 			$index_columns = array($index_columns);
 		}
@@ -311,7 +307,7 @@ class CotDB extends PDO {
 				$exists = true;
 				break;
 			}
-			if(count(array_diff_assoc($index_columns, $list_columns)) === 0 && count($index_columns) === count($list_columns))
+			if(!empty($index_columns) && count(array_diff_assoc($index_columns, $list_columns)) === 0 && count($index_columns) === count($list_columns))
 			{
 				$exists = true;
 				break;
