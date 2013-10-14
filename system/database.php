@@ -289,6 +289,10 @@ class CotDB extends PDO {
 	*/
 	function indexExists($table_name, $index_name, $index_columns = array())
 	{
+		if(empty($index_columns))
+		{
+			return (bool)$this->query("SHOW INDEXES FROM `$table_name` WHERE Key_name=".$this->quote($index_name))->rowCount();
+		}
 		$existing_indexes = $this->query("SHOW INDEXES FROM `$table_name`")->fetchAll();
 		if(!empty($index_columns) && !is_array($index_columns))
 		{
@@ -307,7 +311,7 @@ class CotDB extends PDO {
 				$exists = true;
 				break;
 			}
-			if(!empty($index_columns) && count(array_diff_assoc($index_columns, $list_columns)) === 0 && count($index_columns) === count($list_columns))
+			if(count(array_diff_assoc($index_columns, $list_columns)) === 0 && count($index_columns) === count($list_columns))
 			{
 				$exists = true;
 				break;
