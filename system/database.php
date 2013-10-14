@@ -280,6 +280,68 @@ class CotDB extends PDO {
 	}
 
 	/**
+	* Checks if an index with the same index name or column order exists
+	*
+	* @param string $table_name Table name
+	* @param string $index_name Index/Key name
+	* @param mixed $index_columns Either a string for a single column name or an array for single/multiple columns. $index_name will be used if empty.
+	* @return bool TRUE if the index name or column order exists, FALSE otherwise
+	*/
+	function indexExists($table_name, $index_name, $index_columns = array())
+	{
+		$existing_indexes = $this->query("SHOW INDEXES FROM `$table_name`")->fetchAll();
+		if(empty($index_columns))
+		{
+			$index_columns = array($index_name);
+		}
+		if(!is_array($index_columns))
+		{
+			$index_columns = array($index_columns);
+		}
+		$exists = false;
+		$index_list = array();
+		foreach($existing_indexes as $existing_index)
+		{
+			$index_list[$existing_index['Key_name']][$existing_index['Seq_in_index'] - 1] = $existing_index['Column_name'];
+		}
+		foreach($index_list as $list_index => $list_columns)
+		{
+			if($list_index == $index_name)
+			{
+				$exists = true;
+				break;
+			}
+			if(count(array_diff_assoc($index_columns, $list_columns)) === 0 && count($index_columns) === count($list_columns))
+			{
+				$exists = true;
+				break;
+			}
+		}
+		return $exists;
+	}
+
+	/**
+	* Adds an index on a table
+	*
+	* @param string $table_name Table name
+	* @param string $index_name Index/Key name
+	* @param mixed Either a string for a single column name or an array for single/multiple columns. $index_name will be used if empty.
+	* @return int Number of rows affected
+	*/
+	function addIndex($table_name, $index_name, $index_columns = array())
+	{
+		if(empty($index_columns))
+		{
+			$index_columns = array($index_name);
+		}
+		if(!is_array($index_columns))
+		{
+			$index_columns = array($index_columns);
+		}
+		return $this->query("ALTER TABLE `$table_name` ADD INDEX `$index_name` (`".implode('`,`', $index_columns)."`)")->rowCount();
+	}
+
+	/**
 	 * Performs SQL INSERT on simple data array. Array keys must match table keys, optionally you can specify
 	 * key prefix as third parameter. Strings get quoted and escaped automatically.
 	 * Ints and floats must be typecasted.
