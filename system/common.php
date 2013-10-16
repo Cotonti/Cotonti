@@ -547,14 +547,10 @@ if (file_exists($sys['theme_resources']))
 {
 	$L_tmp = $L;
 	$R_tmp = $R;
-	$L = array();
-	$R = array();
 	include $sys['theme_resources'];
 	// Save overridden strings in $theme_reload global
-	$theme_reload['L'] = $L;
-	$theme_reload['R'] = $R;
-	$L = array_merge($L_tmp, $L);
-	$R = array_merge($R_tmp, $R);
+	$theme_reload['L'] = array_diff_assoc($L,$L_tmp);
+	$theme_reload['R'] = array_diff_assoc($R,$R_tmp);
 	unset($L_tmp, $R_tmp);
 }
 
