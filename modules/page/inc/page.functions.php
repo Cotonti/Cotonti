@@ -144,7 +144,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 		$text_cut = cot_cut_more($text);
 		if ($textlength > 0 && mb_strlen($text_cut) > $textlength)
 		{
-			$text_cut = cot_string_truncate($text, $textlength);
+			$text_cut = cot_string_truncate($text_cut, $textlength);
 		}
 		$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;
 
