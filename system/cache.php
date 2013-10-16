@@ -792,9 +792,12 @@ class MySQL_cache extends Db_cache_driver
 	{
 		global $db;
 		// Check data length
-		if (strlen($db->prep($data)) > 16777215) // MySQL max MEDIUMTEXT size
+		if ($data)
 		{
-			return false;
+			if (strlen($db->prep($data)) > 16777215) // MySQL max MEDIUMTEXT size
+			{
+				return false;
+			}
 		}
 		return parent::store($id, $data, $realm, $ttl);
 	}
