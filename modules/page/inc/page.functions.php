@@ -141,7 +141,11 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 		$date_format = 'datetime_medium';
 
 		$text = cot_parse($page_data['page_text'], $cfg['page']['markup'], $page_data['page_parser']);
-		$text_cut = ((int)$textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
+		$text_cut = cot_cut_more($text);
+		if ($textlength > 0 && mb_strlen($text_cut) > $textlength)
+		{
+			$text_cut = cot_string_truncate($text, $textlength);
+		}
 		$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;
 
 		$cat_url = cot_url('page', 'c=' . $page_data['page_cat']);
