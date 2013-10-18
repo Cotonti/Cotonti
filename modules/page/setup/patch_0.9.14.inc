@@ -8,6 +8,7 @@ $page_add_indexes = array(
 );
 
 require_once cot_incfile('page', 'module');
+global $db_pages;
 
 foreach($page_add_indexes as $index)
 {
