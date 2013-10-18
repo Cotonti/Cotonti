@@ -548,7 +548,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 			else
 			{
 				cot_error(cot_rc('ext_executed_php',
-					array('ret' => $L['Error'])));
+					array('ret' => $msg ? $msg : $L['Error'])));
 				return false;
 			}
 		}
