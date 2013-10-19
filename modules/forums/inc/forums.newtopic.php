@@ -56,7 +56,7 @@ if ($a == 'newtopic')
 	$rtopic['ft_title'] = cot_import('rtopictitle','P','TXT', 255);
 	$rtopic['ft_desc'] = cot_import('rtopicdesc','P','TXT', 255);
 	$rtopic['ft_mode'] = (int)(cot_import('rtopicmode','P','BOL') && $cfg['forums']['cat_' . $s]['allowprvtopics']) ? 1 : 0;
-	$rtopic['ft_preview'] = mb_substr(htmlspecialchars($rmsg['fp_text']), 0, 128);
+    $rtopic['ft_preview'] = cot_string_truncate($rmsg['fp_text'], 120);
 
 	if (mb_strlen($rtopic['ft_title']) < $cfg['forums']['mintitlelength'])
 	{
