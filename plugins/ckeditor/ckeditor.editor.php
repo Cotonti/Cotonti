@@ -76,4 +76,10 @@ else
 }
 cot_rc_link_footer($cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js?".$ckeditor_timestamp);
 
-cot_rc_embed_footer("CKEDITOR.timestamp = $ckeditor_timestamp;");
+if ($ckeditor_css_to_load && is_array($ckeditor_css_to_load)) {
+	foreach ($ckeditor_css_to_load as $key => $css_file) {
+		if (!file_exists($css_file)) unset($ckeditor_css_to_load[$key]);
+	}
+	if (sizeof($ckeditor_css_to_load)) $ckeditor_css_connector = "CKEDITOR.config.contentsCss = ['".implode("','", $ckeditor_css_to_load)."'];";
+}
+cot_rc_embed_footer("CKEDITOR.timestamp = $ckeditor_timestamp;".$ckeditor_css_connector);
