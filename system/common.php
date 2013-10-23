@@ -194,7 +194,7 @@ $sys['url_redirect'] = 'redirect='.$sys['uri_redir'];
 $redirect = preg_replace('/[^a-zA-Z0-9_=\/]/', '', cot_import('redirect','G','TXT'));
 $out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
-define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER['X-Requested-With']) || $_GET['_ajax'] == 1);
+define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' || !empty($_SERVER['X-Requested-With']) && strtolower($_SERVER['X-Requested-With']) == 'xmlhttprequest' || $_GET['_ajax'] == 1);
 // Other system variables
 $sys['parser'] = $cfg['parser'];
 
