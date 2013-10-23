@@ -16,6 +16,7 @@ Lock_guests=W12345A
 Auth_members=RW
 Lock_members=12345
 Recommends_modules=page,forums
+Recommends_plugins=autocomplete
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
