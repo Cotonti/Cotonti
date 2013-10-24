@@ -5196,12 +5196,12 @@ function cot_translit_encode($str)
 {
 	global $lang, $cot_translit;
 	static $lang_loaded = false;
-	if ($lang != 'en' && !$lang_loaded)
+	if (!$lang_loaded && $lang != 'en')
 	{
 		require_once cot_langfile('translit', 'core');
 		$lang_loaded = true;
 	}
-	if ($lang != 'en' && is_array($cot_translit))
+	if (is_array($cot_translit))
 	{
 		// Apply transliteration
 		$str = strtr($str, $cot_translit);
@@ -5218,7 +5218,13 @@ function cot_translit_encode($str)
 function cot_translit_decode($str)
 {
 	global $lang, $cot_translitb;
-	if ($lang != 'en' && is_array($cot_translitb))
+	static $lang_loaded = false;
+	if (!$lang_loaded && $lang != 'en')
+	{
+		require_once cot_langfile('translit', 'core');
+		$lang_loaded = true;
+	}
+	if (is_array($cot_translitb))
 	{
 		// Apply transliteration
 		$str = strtr($str, $cot_translitb);
