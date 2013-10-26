@@ -130,6 +130,7 @@ if ($a == 'validate')
 
 		if ($cache)
 		{
+			$cache->db->remove('structure', 'system');
 			if ($cfg['cache_page'])
 			{
 				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$row['page_cat']]['path']));
@@ -171,6 +172,7 @@ elseif ($a == 'unvalidate')
 
 		if ($cache)
 		{
+			$cache->db->remove('structure', 'system');
 			if ($cfg['cache_page'])
 			{
 				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$row['page_cat']]['path']));
@@ -225,6 +227,7 @@ elseif ($a == 'delete')
 
 		if ($cache)
 		{
+			$cache->db->remove('structure', 'system');
 			if ($cfg['cache_page'])
 			{
 				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$row['page_cat']]['path']));
@@ -290,6 +293,7 @@ elseif ($a == 'update_checked')
 			}
 		}
 
+		$cache && $cache->db->remove('structure', 'system');
 		if ($cache && $cfg['cache_index'])
 		{
 			$cache->page->clear('index');
@@ -351,6 +355,7 @@ elseif ($a == 'update_checked')
 			}
 		}
 
+		$cache && $cache->db->remove('structure', 'system');
 		if ($cache && $cfg['cache_index'])
 		{
 			$cache->page->clear('index');
