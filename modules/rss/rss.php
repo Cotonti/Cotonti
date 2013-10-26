@@ -292,7 +292,7 @@ function cot_parse_page_text($pag_text, $pag_pageurl, $pag_parser)
 	if ($readmore > 0)
 	{
 		$pag_text = mb_substr($pag_text, 0, $readmore) . ' ';
-		$pag_text .= cot_rc('list_link_more', array('page_url' => $pag_pageurl));
+		$pag_text .= cot_rc('list_more', array('page_url' => $pag_pageurl));
 	}
 
 	$newpage = mb_strpos($pag_text, '[newpage]');
