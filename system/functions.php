@@ -3,7 +3,6 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.9.14
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD License
@@ -2691,6 +2690,14 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 	{
 		echo '</div></body></html>';
 	}
+
+	/* === Hook === */
+	foreach (cot_getextplugins('die.message') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
 	exit;
 }
 
