@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.13
+ * @version 2.7.14
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2013
  * @license BSD
@@ -94,6 +94,7 @@ class XTemplate
 	 * @param mixed $name Variable name or array of values
 	 * @param mixed $val Tag value if $name is not an array
 	 * @param string $prefix An optional prefix for variable keys
+	 * @return XTemplate $this object for call chaining
 	 */
 	public function assign($name, $val = NULL, $prefix = '')
 	{
@@ -108,6 +109,7 @@ class XTemplate
 		{
 			$this->vars[$prefix.$name] = $val;
 		}
+		return $this;
 	}
 
 	/**
@@ -247,6 +249,7 @@ class XTemplate
 	 * Loads template file structure into memory
 	 *
 	 * @param string $path Template file path
+	 * @return XTemplate $this object for call chaining
 	 */
 	public function restart($path)
 	{
@@ -289,6 +292,7 @@ class XTemplate
 			$this->index = unserialize(cotpl_read_file($cache_idx));
 			$this->tags = unserialize(cotpl_read_file($cache_tags));
 		}
+		return $this;
 	}
 
 	/**
@@ -303,6 +307,7 @@ class XTemplate
 	 * </code>
 	 *
 	 * @param  string $code Raw template source code
+	 * @return XTemplate $this object for call chaining
 	 */
 	public function compile($code)
 	{
@@ -317,6 +322,7 @@ class XTemplate
 			$code = preg_replace_callback('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s',
 				array($this, 'restart_root_blocks'), $code);
 		} while($this->found);
+		return $this;
 	}
 
 	/**
@@ -335,6 +341,7 @@ class XTemplate
 	 * Prints a parsed block
 	 *
 	 * @param string $block Block name
+	 * @return XTemplate $this object for call chaining
 	 */
 	public function out($block = 'MAIN')
 	{
@@ -342,12 +349,14 @@ class XTemplate
 		{
 			echo $this->text($block);
 		}
+		return $this;
 	}
 
 	/**
 	 * Parses a block
 	 *
 	 * @param string $block Block name
+	 * @return XTemplate $this object for call chaining
 	 */
 	public function parse($block = 'MAIN')
 	{
@@ -409,12 +418,14 @@ class XTemplate
 				$this->displayed_blocks[] = $block;
 			}
 		}
+		return $this;
 	}
 
 	/**
 	 * Clears a parset block data
 	 *
 	 * @param string $block Block name
+	 * @return XTemplate $this object for call chaining
 	 */
 	public function reset($block = 'MAIN')
 	{
@@ -436,6 +447,7 @@ class XTemplate
 			$blk->reset();
 		}
 		//else throw new Exception("Block $block is not found in " . $this->filename);
+		return $this;
 	}
 
 	/**
