@@ -3,7 +3,6 @@
  * Search functions
  *
  * @package search
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
@@ -11,7 +10,7 @@
 
 defined('COT_CODE') || die('Wrong URL.');
 
-function cot_clear_mark($text, $type, $words)
+function cot_clear_mark($text, $words)
 {
 	global $cfg;
 	$text = trim($text);
