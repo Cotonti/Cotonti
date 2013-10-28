@@ -594,7 +594,7 @@ if (empty($x) && $_SERVER['REQUEST_METHOD'] == 'POST')
 	$x = cot_import('x', 'G', 'ALP');
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST'
-	&& (!defined('COT_NO_ANTIXSS') && !defined('COT_AUTH')
+	&& !defined('COT_NO_ANTIXSS') && (!defined('COT_AUTH')
 			&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev'])
 		|| ($cfg['referercheck'] && !preg_match('`https?://([^/]+\.)?'.preg_quote($sys['domain']).'(/|:|$)`i', $_SERVER['HTTP_REFERER']))))
 {
