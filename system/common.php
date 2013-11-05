@@ -92,7 +92,7 @@ if ($cfg['cache'] && !$cfg['devmode'])
 {
 	require_once $cfg['system_dir'].'/cache.php';
 	$cache = new Cache();
-	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$site_id]) && empty($_SESSION[$site_id]) && !defined('COT_AUTH') && !defined('COT_ADMIN') && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$sys['site_id']]) && empty($_SESSION[$sys['site_id']]) && !defined('COT_AUTH') && !defined('COT_ADMIN') && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
 	{
 		$cache_ext = empty($_GET['e']) ? 'index' : preg_replace('#\W#', '', $_GET['e']);
 		if ($cfg['cache_' . $cache_ext])
@@ -312,9 +312,9 @@ $usr['timezonename'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
-if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
+if (!empty($_COOKIE[$sys['site_id']]) || !empty($_SESSION[$sys['site_id']]))
 {
-	$u = empty($_SESSION[$site_id]) ? explode(':', base64_decode($_COOKIE[$site_id])) : explode(':', base64_decode($_SESSION[$site_id]));
+	$u = empty($_SESSION[$sys['site_id']]) ? explode(':', base64_decode($_COOKIE[$sys['site_id']])) : explode(':', base64_decode($_SESSION[$sys['site_id']]));
 	$u_id = (int) cot_import($u[0], 'D', 'INT');
 	$u_sid = $u[1];
 	if ($u_id > 0)
@@ -395,7 +395,7 @@ if ($usr['id'] == 0)
 	$usr['theme'] = $cfg['defaulttheme'];
 	$usr['scheme'] = $cfg['defaultscheme'];
 	$usr['lang'] = $cfg['defaultlang'];
-	$sys['xk'] = mb_strtoupper(dechex(crc32($site_id))); // Site related key for guests
+	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['site_id']))); // Site related key for guests
 }
 
 $lang = $usr['lang'];
