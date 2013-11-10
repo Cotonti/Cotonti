@@ -66,7 +66,8 @@ function insertText(docObj, fieldName, value) {
 
 // Array of ajax error handlers
 // Example of use:
-// ajaxErrorHandlers.push({divId: 'ajaxBlock', func: myErrorHandler});
+// ajaxErrorHandlers.push({func: myErrorHandler});
+// ajaxSuccessHandlers.push({func: mySuccessHandler});
 var ajaxErrorHandlers = new Array();
 var ajaxSuccessHandlers = new Array();
 // AJAX enablement defaults to false
@@ -107,17 +108,23 @@ function ajaxSend(settings) {
 		},
 		success: function(msg) {
 			if (!settings.nonshowloading) $('#loading').remove();
-			$('#' + settings.divId).hide().html(msg).fadeIn(500);
+			if (!settings.nonshowfadein) $('#' + settings.divId).hide().html(msg).fadeIn(500);
 			for (var i = 0; i < ajaxSuccessHandlers.length; i++) {
-				ajaxSuccessHandlers[i]();
+				if(ajaxSuccessHandlers[i].func)
+					ajaxSuccessHandlers[i].func(msg);
+				else
+					ajaxSuccessHandlers[i](msg);
 			}
 		},
 		error: function(msg) {
 			if (!settings.nonshowloading) $('#loading').remove();
+			if (!settings.nonshowfadein) $('#' + settings.divId).hide().html(msg).fadeIn(500);
 			if (ajaxErrorHandlers.length > 0) {
 				for (var i = 0; i < ajaxErrorHandlers.length; i++) {
-					if (ajaxErrorHandlers[i].divId == settings.divId)
+					if (ajaxErrorHandlers[i].func)
 						ajaxErrorHandlers[i].func(msg);
+					else
+						ajaxErrorHandlers[i](msg);
 				}
 			} else {
 				alert('AJAX error: ' + msg);
