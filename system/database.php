@@ -5,7 +5,7 @@
  * @see http://www.php.net/manual/en/book.pdo.php
  *
  * @package Cotonti
- * @version 0.9.0
+ * @version 0.9.15
  * @author Cotonti Team
  * @copyright (c) Cotonti Team 2010-2013
  * @license BSD
@@ -79,7 +79,7 @@ class CotDB extends PDO {
 		parent::__construct($dsn, $username, $passwd, $options);
 		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		if (version_compare($this->getAttribute(PDO::ATTR_CLIENT_VERSION), '5.1.0', '<'))
+		if (!method_exists($this, 'prepare'))
 		{
 			$this->_prepare_itself = true;
 		}
@@ -137,9 +137,9 @@ class CotDB extends PDO {
 		$pdo_message = $e->getMessage();
 		if (preg_match('#SQLSTATE\[(\w+)\].*?: (.*)#', $pdo_message, $matches))
 		{
-            $err_code = $matches[1];
-            $err_message = $matches[2];
-        }
+			$err_code = $matches[1];
+			$err_message = $matches[2];
+		}
 		else
 		{
 			$err_code = $e->getCode();
@@ -163,7 +163,11 @@ class CotDB extends PDO {
 			{
 				$placeholder = is_int($key) ? '?' : ':' . $key;
 				$value = is_int($val) ? $val : $this->quote($val);
-				$query = preg_replace('`' . preg_quote($placeholder) . '`', $value, $query, 1);
+				$pos = strpos($query, $placeholder);
+				if ($pos !== false)
+				{
+					$query = substr_replace($query, $value, $pos, strlen($placeholder));
+				}
 			}
 		}
 		return $query;
