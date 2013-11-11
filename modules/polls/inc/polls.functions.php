@@ -4,7 +4,6 @@
  * Polls functions
  *
  * @package polls
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD License
@@ -15,11 +14,9 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('forms');
 require_once cot_langfile('polls', 'module');
 
-// Global variables
-global $db_polls, $db_polls_options, $db_polls_voters, $db_x;
-$db_polls = (isset($db_polls)) ? $db_polls : $db_x . 'polls';
-$db_polls_options = (isset($db_polls_options)) ? $db_polls_options : $db_x . 'polls_options';
-$db_polls_voters = (isset($db_polls_voters)) ? $db_polls_voters : $db_x . 'polls_voters';
+cot::$db->registerTable('polls');
+cot::$db->registerTable('polls_options');
+cot::$db->registerTable('polls_voters');
 
 /**
  * Adds form for create/edit Poll

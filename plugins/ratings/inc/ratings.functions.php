@@ -3,7 +3,6 @@
  * Ratings API
  *
  * @package ratings
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2013
  * @license BSD
@@ -17,9 +16,8 @@ require_once cot_langfile('ratings', 'plug');
 require_once cot_incfile('ratings', 'plug', 'resources');
 
 // Table name globals
-global $db_ratings, $db_rated, $db_x;
-$db_ratings = isset($db_ratings) ? $db_ratings : $db_x . 'ratings';
-$db_rated = isset($db_rated) ? $db_rated : $db_x . 'rated';
+cot::$db->registerTable('ratings');
+cot::$db->registerTable('rated');
 
 /**
  * Generates ratings display for a given item

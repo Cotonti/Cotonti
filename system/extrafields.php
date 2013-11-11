@@ -758,6 +758,18 @@ function cot_extrafield_remove($location, $name)
 }
 
 /**
+ * Registers a table in extrafields registry
+ * @param  string $table_name Unprefixed table name
+ */
+function cot_extrafields_register_table($table_name)
+{
+	if (!isset(cot::$extrafields[cot::$db->{$table_name}]))
+	{
+		cot::$extrafields[cot::$db->{$table_name}] = array();
+	}
+}
+
+/**
  * Fixes the indexing of multiple file uploads from the format:
  *
  * $_FILES['field']['key']['index']

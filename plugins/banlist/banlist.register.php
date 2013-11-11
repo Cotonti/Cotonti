@@ -17,7 +17,8 @@ Hooks=users.register.add.first
 defined('COT_CODE') or die('Wrong URL');
 require_once cot_langfile('banlist', 'plug');
 
-$db_banlist = (isset($db_banlist)) ? $db_banlist : $db_x . 'banlist';
+cot::$db->registerTable('banlist');
+
 $ruser['user_email'] = cot_import('ruseremail','P','TXT',64, TRUE);
 $ruser['user_email'] = mb_strtolower($ruser['user_email']);
 $banlist_email_mask = mb_strstr($ruser['user_email'], '@');

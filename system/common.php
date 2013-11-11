@@ -443,6 +443,9 @@ if (!$cache || !$cot_cfg)
 }
 unset($cot_cfg);
 
+// Here we can init our globals facade
+cot::init();
+
 /* === Hook === */
 foreach (cot_getextplugins('input') as $pl)
 {

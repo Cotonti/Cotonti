@@ -56,6 +56,12 @@ class CotDB extends PDO {
 	private $_xtime = 0;
 
 	/**
+	 * Table names registry
+	 * @var array
+	 */
+	private $_tables = array();
+
+	/**
 	 * Creates a PDO instance to represent a connection to the requested database.
 	 *
 	 * @param string $dsn The Data Source Name, or DSN, contains the information required to connect to the database.
@@ -104,7 +110,7 @@ class CotDB extends PDO {
 				return $this->_tcount;
 				break;
 			default:
-				return null;
+				return isset($this->_tables[$name]) ? $this->_tables[$name] : null;
 		}
 	}
 
@@ -453,9 +459,27 @@ class CotDB extends PDO {
 		return 0;
 	}
 
+	/**
+	 * Prepares a param for use in SQL query without wrapping it with quotes
+	 * @param  string $str Param string
+	 * @return string      Escaped param
+	 */
 	public function prep($str)
 	{
 		return preg_replace("#^'(.*)'\$#", '$1', $this->quote($str));
+	}
+
+	/**
+	 * Registers an unprefixed table name in table names registry
+	 * @param  string $table_name Table name without a prefix, e.g. 'pages'
+	 */
+	public function registerTable($table_name)
+	{
+		if (!isset($GLOBALS['db_' . $table_name]))
+		{
+			$GLOBALS['db_' . $table_name] = $GLOBALS['db_x'] . $table_name;
+		}
+		$this->_tables[$table_name] = $GLOBALS['db_' . $table_name];
 	}
 
 	/**

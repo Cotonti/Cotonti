@@ -9,7 +9,6 @@ Hooks=global
  * Referers
  *
  * @package Referers
- * @version 0.9.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
@@ -17,7 +16,7 @@ Hooks=global
 
 defined('COT_CODE') or die('Wrong URL');
 
-$db_referers = (isset($db_referers)) ? $db_referers : $db_x . 'referers';
+cot::$db->registerTable('referers');
 
 $sys['referer'] = mb_substr($_SERVER['HTTP_REFERER'], 0, 255);
 

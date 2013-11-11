@@ -23,7 +23,7 @@ cot_block($usr['isadmin']);
 $tt = new XTemplate(cot_tplfile('banlist.admin', 'plug', true));
 require_once cot_langfile('banlist', 'plug');
 
-$db_banlist = (isset($db_banlist)) ? $db_banlist : $db_x . 'banlist';
+cot::$db->registerTable('banlist');
 $adminhelp = $L['banlist_help'];
 $adminsubtitle = $L['banlist_title'];
 

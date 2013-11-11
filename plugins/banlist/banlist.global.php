@@ -17,7 +17,7 @@ Hooks=global
 
 defined('COT_CODE') or die('Wrong URL');
 
-$db_banlist = (isset($db_banlist)) ? $db_banlist : $db_x . 'banlist';
+cot::$db->registerTable('banlist');
 
 $userip = explode('.', $usr['ip']);
 $ipmasks = "('".$userip[0].'.'.$userip[1].'.'.$userip[2].'.'.$userip[3]."','".$userip[0].'.'.$userip[1].'.'.$userip[2].".*','".$userip[0].'.'.$userip[1].".*.*','".$userip[0].".*.*.*')";

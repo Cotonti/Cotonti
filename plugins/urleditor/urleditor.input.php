@@ -64,7 +64,7 @@ if (!is_array($cot_urltrans))
 		'params' => array(),
 		'trans' => 'index.php?e={$_area}'
 	);
-	$cache && $cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
+	// $cache && $cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
 }
 
 if(!in_array($cfg['plugin']['urleditor']['preset'], array('custom', 'none')))

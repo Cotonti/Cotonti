@@ -3,7 +3,6 @@
  * Page API
  *
  * @package page
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
@@ -17,13 +16,12 @@ require_once cot_incfile('page', 'module', 'resources');
 require_once cot_incfile('forms');
 require_once cot_incfile('extrafields');
 
-// Global variables
-global $cot_extrafields, $db_pages, $db_x;
-$db_pages = (isset($db_pages)) ? $db_pages : $db_x . 'pages';
+// Tables and extras
+cot::$db->registerTable('pages');
 
-$cot_extrafields[$db_pages] = (!empty($cot_extrafields[$db_pages]))	? $cot_extrafields[$db_pages] : array();
+cot_extrafields_register_table('pages');
 
-$structure['page'] = (is_array($structure['page'])) ? $structure['page'] : array();
+is_array(cot::$structure['page']) or cot::$structure['page'] = array();
 
 /**
  * Cuts the page after 'more' tag or after the first page (if multipage)

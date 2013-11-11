@@ -3,7 +3,6 @@
  * Tags API
  *
  * @package tags
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
@@ -16,9 +15,8 @@ require_once cot_langfile('tags', 'plug');
 require_once cot_incfile('tags', 'plug', 'resources');
 
 // Global variables
-global $db_tags, $db_tag_references, $db_x;
-$db_tags = (isset($db_tags)) ? $db_tags : $db_x . 'tags';
-$db_tag_references = (isset($db_tag_references)) ? $db_tag_references : $db_x . 'tag_references';
+cot::$db->registerTable('tags');
+cot::$db->registerTable('tag_references');
 
 /**
  * Tags a given item from a specific area with a keyword

@@ -55,6 +55,12 @@ if (!isset($cfg['dir_perms']))
 $cot_captcha = array();
 
 /**
+ * Registry for extra fields
+ * @var array
+ */
+$cot_extrafields = array();
+
+/**
  * Registry for hash functions
  */
 $cot_hash_funcs = array('md5', 'sha1', 'sha256');
@@ -78,6 +84,93 @@ $cot_parsers = array();
  * Parameters to be automatically appended to all URLs if present
  */
 $cot_url_appendix = array();
+
+/**
+ * Structure tree
+ * @var array
+ */
+$structure = array();
+
+/**
+ * Facade class to access key Cotonti globals regardless of scope
+ */
+class cot
+{
+	/**
+	 * Cotonti cache
+	 * @var Cache
+	 */
+	public static $cache;
+	/**
+	 * Cotonti configuration
+	 * @var array
+	 */
+	public static $cfg;
+	/**
+	 * Database connection
+	 * @var CotDB
+	 */
+	public static $db;
+	/**
+	 * Environment settings
+	 * @var array
+	 */
+	public static $env;
+	/**
+	 * Extra fields
+	 * @var array
+	 */
+	public static $extrafields;
+	/**
+	 * Language strings
+	 * @var array
+	 */
+	public static $L;
+	/**
+	 * Pre-rendered output strings
+	 * @var array
+	 */
+	public static $out;
+	/**
+	 * Resource strings
+	 * @var array
+	 */
+	public static $R;
+	/**
+	 * Structure tree and properties array
+	 * @var array
+	 */
+	public static $structure;
+	/**
+	 * Temporary system variables
+	 * @var array
+	 */
+	public static $sys;
+	/**
+	 * Current user object
+	 * @var array
+	 */
+	public static $usr;
+
+	/**
+	 * Initalizes static members. Call this function once all globals are defined.
+	 */
+	public static function init()
+	{
+		global $cache, $cfg, $cot_extrafields, $db, $env, $L, $out, $R, $structure, $sys, $usr;
+		self::$cache       =& $cache;
+		self::$cfg         =& $cfg;
+		self::$db          =& $db;
+		self::$env         =& $env;
+		self::$extrafields =& $cot_extrafields;
+		self::$L           =& $L;
+		self::$out         =& $out;
+		self::$R           =& $R;
+		self::$structure   =& $structure;
+		self::$sys         =& $sys;
+		self::$usr         =& $usr;
+	}
+}
 
 /*
  * =========================== System Functions ===============================

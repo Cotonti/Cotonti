@@ -37,6 +37,8 @@ if ($step > 2)
 {
 	$dbc_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
 	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbc_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+
+	cot::init();
 }
 
 // Import section
@@ -334,10 +336,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			cot_redirect(cot_url('index'));
 			exit;
 	}
-	
+
 	$inst_func_name = "cot_install_step".$step."_setup";
 	function_exists($inst_func_name) && $inst_func_name();
-	
+
 	if (cot_error_found())
 	{
 		// One step back
@@ -356,9 +358,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			$config_contents = preg_replace("#^\\\$cfg\['new_install'\]\s*=\s*.*?;#m", "\$cfg['new_install'] = $step;",
 					$config_contents);
-		}		
+		}
 		function_exists("cot_install_stepplusplus") && cot_install_stepplusplus();
-		
+
 		file_put_contents($file['config'], $config_contents);
 	}
 }
@@ -371,13 +373,13 @@ switch ($step)
 		$t->assign(array(
 			'INSTALL_LANG' => cot_selectbox_lang($lang, 'lang')
 		));
-		
+
 		$install_files = glob("*.install.php");
-		
+
 		if (!empty($install_files))
 		{
 			$install_scripts = array();
-			foreach ($install_files as $filename) 
+			foreach ($install_files as $filename)
 			{
 				preg_match("#(.*?)\/?(.+)\.install\.php#i", $filename, $mtch);
 				$install_scripts[$filename] = $mtch[2];
@@ -540,7 +542,7 @@ switch ($step)
 			'INSTALL_MBSTRING' => $status['mbstring'],
 			'INSTALL_HASH' => $status['hash'],
 			'INSTALL_MYSQL' => $status['mysql']
-		));	
+		));
 		break;
 	case 2:
 		// Database form
@@ -554,8 +556,8 @@ switch ($step)
 			'INSTALL_DB_PORT_INPUT' => cot_inputbox('text', 'db_port', is_null($db_port) ? $cfg['mysqlport'] : $db_port, 'size="32"'),
 			'INSTALL_DB_USER_INPUT' => cot_inputbox('text', 'db_user',  is_null($db_user) ? $cfg['mysqluser'] : $db_user, 'size="32"'),
 			'INSTALL_DB_NAME_INPUT' => cot_inputbox('text', 'db_name',  is_null($db_name) ? $cfg['mysqldb'] : $db_name, 'size="32"'),
-			'INSTALL_DB_PASS_INPUT' => cot_inputbox('password', 'db_pass', '', 'size="32"'),			
-			'INSTALL_DB_X_INPUT' => cot_inputbox('text', 'db_x',  $db_x, 'size="32"'),			
+			'INSTALL_DB_PASS_INPUT' => cot_inputbox('password', 'db_pass', '', 'size="32"'),
+			'INSTALL_DB_X_INPUT' => cot_inputbox('text', 'db_x',  $db_x, 'size="32"'),
 		));
 		break;
 	case 3:

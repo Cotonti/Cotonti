@@ -4,7 +4,6 @@
  * User Functions
  *
  * @package Cotonti
- * @version 0.9.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
@@ -20,7 +19,7 @@ require_once cot_incfile('users', 'module', 'resources');
 require_once cot_incfile('extrafields');
 
 // Extafield globals
-$cot_extrafields[$db_users] = (!empty($cot_extrafields[$db_users])) ? $cot_extrafields[$db_users] : array();
+cot_extrafields_register_table('users');
 
 /**
  * Adds new user

@@ -4,7 +4,6 @@
  * Forums API
  *
  * @package forums
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD
@@ -16,14 +15,13 @@ require_once cot_langfile('forums', 'module');
 require_once cot_incfile('forums', 'module', 'resources');
 require_once cot_incfile('extrafields');
 
-// Global variables
-global $db_forum_posts, $db_forum_topics, $db_forum_stats, $db_x;
-$db_forum_posts = (isset($db_forum_posts)) ? $db_forum_posts : $db_x . 'forum_posts';
-$db_forum_topics = (isset($db_forum_topics)) ? $db_forum_topics : $db_x . 'forum_topics';
-$db_forum_stats = (isset($db_forum_stats)) ? $db_forum_stats : $db_x . 'forum_stats';
+// Registering tables and fields
+cot::$db->registerTable('forum_posts');
+cot::$db->registerTable('forum_topics');
+cot::$db->registerTable('forum_stats');
 
-$cot_extrafields[$db_forum_posts] = (!empty($cot_extrafields[$db_forum_posts]))	? $cot_extrafields[$db_forum_posts] : array();
-$cot_extrafields[$db_forum_topics] = (!empty($cot_extrafields[$db_forum_topics])) ? $cot_extrafields[$db_forum_topics] : array();
+cot_extrafields_register_table('forum_posts');
+cot_extrafields_register_table('forum_topics');
 
 /**
  * Builds forum category path
