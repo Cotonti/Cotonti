@@ -545,7 +545,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
  * @param mixed $nameslist List of Variables names to import, can be:<br />
  * 				string 'name1, name2 , ...' - list of variable names comma separated.<br />
  * 				array('name1', 'name2', ...) - list of variable names only.
- 	* 				In that case $filter parameter nust be specified.<br />
+	* 				In that case $filter parameter nust be specified.<br />
  * 				array('name1' => 'TYPE1', 'name2' => 'TYPE2' ,...) - list of variable names with their filter types
  * @param string $source Source type: G/GET, P/POST, C/COOKIE, R/REQUEST, PUT, DELETE or D/DIRECT (variable filtering)
  * @param array $origindata Array with origin data that will be extended with imported one
@@ -2163,28 +2163,28 @@ function cot_imageresize($source, $target='return', $target_width=99999, $target
 	$mimetype = $source_size['mime'];
 	if (substr($mimetype, 0, 6) != 'image/') return;
 
-	// Prevent from loading images taking more than 100M of memory
-	if (!isset($source_size['channels'])) $source_size['channels'] = 1;
-	$required_memory = $source_size[0] * $source_size[1] * ($source_size['bits'] / 8) * $source_size['channels'] * 2.5;
-	$memory_limit = trim(ini_get('memory_limit'));
-	$last = strtolower($memory_limit[strlen($memory_limit)-1]);
-	switch ($last)
-	{
-		case 'g':
-			$memory_limit *= 1024;
-		case 'm':
-			$memory_limit *= 1024;
-		case 'k':
-			$memory_limit *= 1024;
-	}
-	if ($memory_limit > 0)
-	{
-		$avail_memory = $memory_limit - memory_get_usage();
-		if ($required_memory > $avail_memory * 0.7)
-		{
-			return;
-		}
-	}
+	// // Prevent from loading images taking more than 100M of memory
+	// if (!isset($source_size['channels'])) $source_size['channels'] = 1;
+	// $required_memory = $source_size[0] * $source_size[1] * ($source_size['bits'] / 8) * $source_size['channels'] * 2.5;
+	// $memory_limit = trim(ini_get('memory_limit'));
+	// $last = strtolower($memory_limit[strlen($memory_limit)-1]);
+	// switch ($last)
+	// {
+	// 	case 'g':
+	// 		$memory_limit *= 1024;
+	// 	case 'm':
+	// 		$memory_limit *= 1024;
+	// 	case 'k':
+	// 		$memory_limit *= 1024;
+	// }
+	// if ($memory_limit > 0)
+	// {
+	// 	$avail_memory = $memory_limit - memory_get_usage();
+	// 	if ($required_memory > $avail_memory * 0.7)
+	// 	{
+	// 		return;
+	// 	}
+	// }
 
 	$source_width = $source_size[0];
 	$source_height = $source_size[1];
@@ -2235,7 +2235,12 @@ function cot_imageresize($source, $target='return', $target_width=99999, $target
 		$target_width = ceil($height_ratio * $source_width);
 	}
 
-	//ini_set('memory_limit', '100M');
+	// Avoid loading images there's not enough memory for
+	if (!cot_img_check_memory($source, (int)ceil($target_width * $target_height * 4 / 1048576)))
+	{
+		return ($return) ? null : false;
+	}
+
 	$canvas = imagecreatetruecolor($target_width, $target_height);
 
 	switch($mimetype)
@@ -2394,6 +2399,96 @@ function cot_imagesharpen($imgdata, $source_width, $target_width)
 	);
 	imageconvolution($imgdata, $sharpenmatrix, $sharpness, 0);
 	return $imgdata;
+}
+
+/**
+ * Checks if PHP can have enough memory to process an image
+ *
+ * @param  string  $file_path  Path to an image
+ * @param  string  $extra_size Extra size to adjust to the estimate (in MB)
+ * @return boolean             TRUE if enough memory is available, FALSE otherwise
+ */
+function cot_img_check_memory($file_path, $extra_size = 0)
+{
+	// Getting memory occupied by the script
+	$usedMem = memory_get_usage(true);
+	// In megabytes
+	$usedMem = round($usedMem / 1048576);
+
+	$haveMem = ini_get('memory_limit');
+	preg_match('/(\d+)(\w+)/', $haveMem, $mtch);
+	// Getting available memory in MBytes
+	if (!empty($mtch[2]))
+	{
+		if ($mtch[2] == 'M')
+		{
+			$haveMem =  $mtch[1];
+		}
+		elseif ($mtch[2] == 'G')
+		{
+			$haveMem =  $mtch[1] * 1024;
+		}
+		elseif ($mtch[2] == 'K')
+		{
+			$haveMem =  $mtch[1] / 1024;
+		}
+	}
+
+	// Gettimg memory size required to process the image
+	$source_size = getimagesize($file_path);
+	if (!$source_size)
+	{
+		// Wrong image
+		return false;
+	}
+	$width_orig = $source_size[0];
+	$height_orig = $source_size[1];
+	$depth_orig = ($source_size['bits'] > 8) ? ($source_size['bits'] / 8) : 1;
+	$channels_orig = $source_size['channels'] > 0 ? $source_size['channels'] : 4;
+
+	// In MBytes too
+	$needMem = $width_orig * $height_orig * $depth_orig * $channels_orig / 1048576;
+	// Adding some offset memory for other image processing and script variables,
+	// otherwise the script fails
+	$needMem = intval($needMem + $usedMem + 15 + $extra_size);
+	// Trying to allocate memory required
+	if ($haveMem < $needMem)
+	{
+		if (!ini_set('memory_limit', $needMem.'M'))
+		{
+			// Could not allocate memory
+			return false;
+		}
+	}
+	else
+	{
+		return true;
+	}
+	// Making sure we could allocate enough memory
+	$haveMem = ini_get('memory_limit');
+	preg_match('/(\d+)(\w+)/', $haveMem, $mtch);
+	// Getting available memory in MBytes
+	if (!empty($mtch[2]))
+	{
+		if ($mtch[2] == 'M')
+		{
+			$haveMem =  $mtch[1];
+		}
+		elseif ($mtch[2] == 'G')
+		{
+			$haveMem =  $mtch[1] * 1024;
+		}
+		elseif ($mtch[2] == 'K')
+		{
+			$haveMem =  $mtch[1] / 1024;
+		}
+	}
+	if ($haveMem < $needMem)
+	{
+		// No, we couldn't allocate enough memory
+		return false;
+	}
+	return true;
 }
 
 /**
@@ -2668,9 +2763,9 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 {
 	// Globals and requirements
 	global $error_string, $out, $L, $R;
-    $LL = is_array($L) ? $L : array();
-    require_once cot_langfile('message', 'core');
-    $L = array_merge($L, $LL);
+	$LL = is_array($L) ? $L : array();
+	require_once cot_langfile('message', 'core');
+	$L = array_merge($L, $LL);
 
 	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST')
 	{
@@ -3432,15 +3527,15 @@ function cot_stamp2date($stamp)
  */
 function cot_date2strftime($format) {
 
-    $chars = array(
-        'd' => '%d', 'D' => '%a', 'j' => '%e', 'l' => '%A',
+	$chars = array(
+		'd' => '%d', 'D' => '%a', 'j' => '%e', 'l' => '%A',
 		'N' => '%u', 'w' => '%w', 'z' => '%j', 'W' => '%V',
 		'F' => '%B', 'm' => '%m', 'M' => '%b', 'o' => '%G',
 		'Y' => '%Y', 'y' => '%y', 'a' => '%P', 'A' => '%p',
 		'g' => '%l', 'h' => '%I', 'H' => '%H', 'i' => '%M',
 		's' => '%S', 'O' => '%z', 'T' => '%Z', 'U' => '%s'
-    );
-    return strtr((string)$format, $chars);
+	);
+	return strtr((string)$format, $chars);
 }
 
 /**
@@ -3520,8 +3615,8 @@ function cot_timezone_offset($tz, $hours = false, $dst = true)
 	{
 		return null;
 	}
-    // $offset = $remote_dtz->getOffset($remote_dt) - $origin_dtz->getOffset($origin_dt) - $dstoffset;
-   	$offset = $dst ? $remote_dtz->getOffset($remote_dt) : $standard_offset;
+	// $offset = $remote_dtz->getOffset($remote_dt) - $origin_dtz->getOffset($origin_dt) - $dstoffset;
+	$offset = $dst ? $remote_dtz->getOffset($remote_dt) : $standard_offset;
 	return $hours ? floatval($offset / 3600) : $offset;
 }
 
