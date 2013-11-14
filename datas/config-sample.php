@@ -144,17 +144,6 @@ $cfg['shield_force'] = FALSE;
 
 $db_x				= 'cot_'; // Default: cot_, prefix for extra fields' table(s)
 
-$db_auth			= $db_x.'auth';
-$db_cache 			= $db_x.'cache';
-$db_cache_bindings	= $db_x.'cache_bindings';
-$db_core			= $db_x.'core';
-$db_config 			= $db_x.'config';
-$db_groups 			= $db_x.'groups';
-$db_groups_users 	= $db_x.'groups_users';
-$db_logger 			= $db_x.'logger';
-$db_online 			= $db_x.'online';
-$db_extra_fields	= $db_x.'extra_fields';
-$db_plugins 		= $db_x.'plugins';
-$db_structure 		= $db_x.'structure';
-$db_updates			= $db_x.'updates';
-$db_users 			= $db_x.'users';
+// Examples:
+// $db_auth			= 'my_custom_auth';
+// $db_cache 		= 'my_custom_cache';
