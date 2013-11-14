@@ -1013,8 +1013,11 @@ ALTER TABLE `cot_users` MODIFY `user_auth` MEDIUMTEXT collate utf8_unicode_ci;
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
 ('core','main','91','default_show_installed',3,'0','0','','');
 
+/* 0.9.15-01 extend config_order size #1237 */
+ALTER TABLE `cot_config` MODIFY `config_order` char(3) collate utf8_unicode_ci NOT NULL default '00';
+
 -------------------------------------------------------------------------------
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.14-03' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.15-01' WHERE `upd_param` = 'revision';

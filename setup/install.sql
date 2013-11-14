@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.14
+ * Version: 0.9.15
  */
 
 DROP TABLE IF EXISTS `cot_auth`;
@@ -63,7 +63,7 @@ CREATE TABLE `cot_config` (
   `config_owner` varchar(24) collate utf8_unicode_ci NOT NULL default 'core',
   `config_cat` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `config_subcat` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `config_order` char(2) collate utf8_unicode_ci NOT NULL default '00',
+  `config_order` char(3) collate utf8_unicode_ci NOT NULL default '00',
   `config_name` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `config_type` tinyint NOT NULL default '0',
   `config_value` text collate utf8_unicode_ci NOT NULL,
@@ -263,7 +263,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.14-03'),
+('revision', '0.9.15-01'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;
