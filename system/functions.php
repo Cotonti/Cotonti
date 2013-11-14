@@ -169,6 +169,22 @@ class cot
 		self::$structure   =& $structure;
 		self::$sys         =& $sys;
 		self::$usr         =& $usr;
+
+		// Register core DB tables
+		$db->registerTable('auth');
+		$db->registerTable('cache');
+		$db->registerTable('cache_bindings');
+		$db->registerTable('core');
+		$db->registerTable('config');
+		$db->registerTable('groups');
+		$db->registerTable('groups_users');
+		$db->registerTable('logger');
+		$db->registerTable('online');
+		$db->registerTable('extra_fields');
+		$db->registerTable('plugins');
+		$db->registerTable('structure');
+		$db->registerTable('updates');
+		$db->registerTable('users');
 	}
 }
 
