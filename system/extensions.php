@@ -585,7 +585,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
  */
 function cot_extension_uninstall($name, $is_module = false)
 {
-	global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins, $cot_plugins_active, $cot_plugins_enabled, $cot_modules, $env;
+	global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins, $cot_plugins_active, $cot_plugins_enabled, $cot_modules, $env, $structure, $db_structure;
 
 	$path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
 		. "/$name";
@@ -615,6 +615,13 @@ function cot_extension_uninstall($name, $is_module = false)
 	}
 	cot_message('ext_auth_uninstalled');
 	cot_message('ext_config_uninstalled');
+
+	// Remove extension structure
+	if ($is_module && isset($structure[$name]))
+	{
+		$db->delete($db_structure, "structure_area = ?", $name);
+		unset($structure[$name]);
+	}
 
 	// Run SQL script if present
 	if (file_exists($path . "/setup/$name.uninstall.sql"))
