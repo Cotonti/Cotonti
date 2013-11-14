@@ -4,7 +4,6 @@
  * Forums posts display.
  *
  * @package forums
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2013
  * @license BSD License
@@ -571,8 +570,42 @@ $t->assign(array(
 	'FORUMS_POSTS_PAGENEXT' => $pagenav['next'],
 	'FORUMS_POSTS_CURRENTPAGE' => $pagenav['current'],
 	'FORUMS_POSTS_TOTALPAGES' => ceil($totalposts / $cfg['forums']['maxpostsperpage']),
-	'FORUMS_POSTS_JUMPBOX' => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"'),
+	'FORUMS_POSTS_JUMPBOX' => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"')
 ));
+
+// Topic icon
+$rowt['ft_icon'] = 'posts';
+if ($rowt['ft_updated'] > $usr['lastvisit'] && $usr['id']>0)
+{
+	$rowt['ft_icon'] .= '_new';
+	$rowt['ft_postisnew'] = TRUE;
+}
+
+if ($rowt['ft_postcount'] >= $cfg['forums']['hottopictrigger'] && !$rowt['ft_state'] && !$rowt['ft_sticky'])
+{
+	$rowt['ft_icon'] = ($rowt['ft_postisnew']) ? 'posts_new_hot' : 'posts_hot';
+}
+else
+{
+	$rowt['ft_icon'] .= ($rowt['ft_sticky']) ? '_sticky' : '';
+	$rowt['ft_icon'] .=  ($rowt['ft_state']) ? '_locked' : '';
+}
+
+$rowt['ft_icon_type'] = $rowt['ft_icon'];
+$rowt['ft_icon'] = cot_rc('forums_icon_topic', array('icon' => $rowt['ft_icon']));
+
+$rowt['ft_icon_type_ex'] = $rowt['ft_icon_type'];
+if ($rowt['ft_user_posted'])
+{
+	$rowt['ft_icon_type_ex'] .= '_posted';
+}
+
+$t->assign(array(
+	'FORUMS_POSTS_ICON' => $rowt['ft_icon'],
+	'FORUMS_POSTS_ICON_TYPE' => $rowt['ft_icon_type'],
+	'FORUMS_POSTS_ICON_TYPE_EX' => $rowt['ft_icon_type_ex']
+));
+
 
 foreach ($cot_extrafields[$db_forum_topics] as $exfld)
 {
