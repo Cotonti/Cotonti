@@ -28,18 +28,19 @@ function cot_file_check($path, $name, $ext)
 		$fcheck = FALSE;
 		if (in_array($ext, array('jpg', 'jpeg', 'png', 'gif')))
 		{
+			$img_size = @getimagesize($path);
 			switch($ext)
 			{
 				case 'gif':
-					$fcheck = @imagecreatefromgif($path);
+					$fcheck = isset($img_size['mime']) && $img_size['mime'] == 'image/gif';
 				break;
 
 				case 'png':
-					$fcheck = @imagecreatefrompng($path);
+					$fcheck = isset($img_size['mime']) && $img_size['mime'] == 'image/png';
 				break;
 
 				default:
-					$fcheck = @imagecreatefromjpeg($path);
+					$fcheck = isset($img_size['mime']) && $img_size['mime'] == 'image/jpeg';
 				break;
 			}
 			$fcheck = $fcheck !== FALSE;
