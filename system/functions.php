@@ -5371,9 +5371,12 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
  */
 function cot_url_modify($params = array(), $tail = '', $htmlspecialchars_bypass = false, $ignore_appendix = false)
 {
+	$area = defined('COT_PLUG') ? 'plug' : cot::$env['ext'];
+	$params = array_merge($_GET, $params);
+	if (!defined('COT_PLUG')) unset($params['e']);
 	return cot_url(
-		cot::$env['ext'],
-		array_merge($_GET, $params),
+		$area,
+		$params,
 		$tail,
 		$htmlspecialchars_bypass,
 		$ignore_appendix
