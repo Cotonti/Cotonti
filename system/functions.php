@@ -5362,6 +5362,25 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 }
 
 /**
+ * Constructs a modified version of a current URL.
+ * @param  array   $params                  Modified params
+ * @param  string  $tail                    URL postfix, e.g. anchor
+ * @param  bool    $htmlspecialchars_bypass If TRUE, will not convert & to &amp; and so on.
+ * @param  bool    $ignore_appendix         If TRUE, $cot_url_appendix will be ignored for this URL
+ * @return string                           Valid HTTP URL
+ */
+function cot_url_modify($params = array(), $tail = '', $htmlspecialchars_bypass = false, $ignore_appendix = false)
+{
+	return cot_url(
+		cot::$env['ext'],
+		array_merge($_GET, $params),
+		$tail,
+		$htmlspecialchars_bypass,
+		$ignore_appendix
+	);
+}
+
+/**
  * Checks if an absolute URL belongs to current site or its subdomains
  *
  * @param string $url Absolute URL
