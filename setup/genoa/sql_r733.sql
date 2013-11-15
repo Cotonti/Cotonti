@@ -1,2 +1,0 @@
-/* r733 Post merge timeout */
-INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'forums', '12', 'mergetimeout', 2, '0');

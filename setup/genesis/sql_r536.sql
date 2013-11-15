@@ -1,2 +1,0 @@
-/* r536 markItUp! skin config */
-INSERT INTO sed_config (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('plug', 'markitup', '1', 'skin', 1, 'markitup', '', ' Skin of editor (plugins/markitup/skins/xxxxx)');

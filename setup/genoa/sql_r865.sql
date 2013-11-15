@@ -1,2 +1,0 @@
-/* r865 News plugin updates */
-INSERT INTO `sed_config` ( `config_owner` , `config_cat` , `config_order` , `config_name` , `config_type` , `config_value` , `config_default` , `config_text` ) VALUES ('plug', 'news', '04', 'addpagination', 3, '0', '', 'Enable pagination for additional categories');

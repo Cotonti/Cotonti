@@ -1,3 +1,0 @@
-/* r91 more fix, hooks fix */
-INSERT INTO `sed_bbcode` VALUES (NULL,'more','str','[more]','<!--more-->',1,1,128,'',0),(NULL,'more','str','[/more]','&nbsp;',1,1,128,'',0);
-INSERT INTO `sed_plugins` VALUES (NULL, 'header.main', 'search', 'header', 'Search', 'search.header', 10, 1), (NULL, 'page.first', 'search', 'page', 'Search', 'search.page.first', 10, 1), (NULL, 'forums.posts.first', 'search', 'forums', 'Search', 'search.forums.posts.first', 10, 1); 
