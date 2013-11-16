@@ -474,7 +474,7 @@ switch($a)
 						$t->assign(array(
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_CODE' => $ext,
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_NAME' => $dep_info['Name'],
-							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_URL' => cot_url('admin', "m=extensions&a=details&$arg=$ext"),
+							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_URL' => ($dep_module && file_exists($cfg['modules_dir'] . '/' . $ext) || !$dep_module && file_exists($cfg['plugins_dir'] . '/' . $ext)) ? cot_url('admin', "m=extensions&a=details&$arg=$ext") : '#',
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_TYPE' => $dep_module ? $L['Module'] : $L['Plugin'],
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_CLASS' => $dep_class
 						));
