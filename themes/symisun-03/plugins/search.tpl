@@ -6,7 +6,8 @@
 		<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('index')}">{PHP.L.Home}</a> {PHP.L.Search}</div>    
 		<p><em>{PHP.themelang.search.Generalhint}</em></p>    &nbsp;	
     <form id='search' action='{PLUGIN_SEARCH_ACTION}' method='post'>		
-		<input type='hidden' name='a' value='search' />		
+		<input type="hidden" name="e" value="search" />
+		<input type="hidden" name="tab" value="{PHP.tab}" />	
 			<div id="adminmenu">
 				<ul>
 					<li>
