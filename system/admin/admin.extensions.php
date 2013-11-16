@@ -29,7 +29,7 @@ $adminsubtitle = $L['Extensions'];
 
 $pl = cot_import('pl', 'G', 'ALP');
 $mod = cot_import('mod', 'G', 'ALP');
-$part = cot_import('part', 'G', 'ALP');
+$part = cot_import('part', 'G', 'TXT');
 $sort = cot_import('sort', 'G', 'ALP');
 
 if (empty($mod))
@@ -338,13 +338,13 @@ switch($a)
 					if ($info_file['Status'] != 3 && $row['pl_active'] == 1)
 					{
 						$t->assign('ADMIN_EXTENSIONS_DETAILS_ROW_PAUSEPART_URL',
-							cot_url('admin', "m=extensions&a=details&$arg=$code&b=pausepart&part=".$row['pl_id']));
+							cot_url('admin', "m=extensions&a=details&$arg=$code&b=pausepart&part=".$info_part));
 						$t->parse('MAIN.DETAILS.ROW_PART.ROW_PART_PAUSE');
 					}
 					if ($info_file['Status'] != 3 && $row['pl_active'] == 0)
 					{
 						$t->assign('ADMIN_EXTENSIONS_DETAILS_ROW_UNPAUSEPART_URL',
-							cot_url('admin', "m=extensions&a=details&$arg=$code&b=unpausepart&part=".$row['pl_id']));
+							cot_url('admin', "m=extensions&a=details&$arg=$code&b=unpausepart&part=".$info_part));
 						$t->parse('MAIN.DETAILS.ROW_PART.ROW_PART_UNPAUSE');
 					}
 

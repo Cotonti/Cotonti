@@ -1023,19 +1023,23 @@ function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
 /**
  * Suspends a plugin or one of its parts
  *
- * @param string $name Module or plugin name
- * @param int $binding_id ID of the binding to supsend or 0 to suspend all
- * @return int Number of bindings suspended
+ * @param  string  $name Module or plugin name
+ * @param  mixed   $part ID of the binding to supsend or 0 to suspend all; if part name is passed, then that part is suspended
+ * @return integer       Number of bindings suspended
  * @global CotDB $db
  */
-function cot_plugin_pause($name, $binding_id = 0)
+function cot_plugin_pause($name, $part = 0)
 {
 	global $db, $db_plugins;
 
 	$condition = "pl_code = '$name'";
-	if ($binding_id > 0)
+	if (is_numeric($part) && $part > 0)
 	{
-		$condition .= " AND pl_id = $binding_id";
+		$condition .= " AND pl_id = $part";
+	}
+	elseif (is_string($part))
+	{
+		$condition .= " AND pl_part = " . $db->quote($part);
 	}
 
 	return $db->update($db_plugins, array('pl_active' => 0), $condition);
@@ -1065,19 +1069,23 @@ function cot_plugin_remove($name, $binding_id = 0)
 /**
  * Resumes a suspended plugin or one of its parts
  *
- * @param string $name Module or plugin name
- * @param int $binding_id ID of the binding to resume or 0 to resume all
- * @return int Number of bindings resumed
+ * @param  string  $name Module or plugin name
+ * @param  mixed   $part ID of the binding to resume or 0 to resume all; if part name is passed, then that part is resumed
+ * @return integer       Number of bindings suspended
  * @global CotDB $db
  */
-function cot_plugin_resume($name, $binding_id = 0)
+function cot_plugin_resume($name, $part = 0)
 {
 	global $db, $db_plugins;
 
 	$condition = "pl_code = '$name'";
-	if ($binding_id > 0)
+	if (is_numeric($part) && $part > 0)
 	{
-		$condition .= " AND pl_id = $binding_id";
+		$condition .= " AND pl_id = $part";
+	}
+	elseif (is_string($part))
+	{
+		$condition .= " AND pl_part = " . $db->quote($part);
 	}
 
 	return $db->update($db_plugins, array('pl_active' => 1), $condition);
