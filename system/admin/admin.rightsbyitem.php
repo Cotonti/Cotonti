@@ -13,6 +13,12 @@
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
 $usr['isadmin'] &= cot_auth('admin', 'a', 'A');
+if ($usr['maingrp'] == COT_GROUP_SUPERADMINS)
+{
+	$usr['auth_read'] = true;
+	$usr['auth_write'] = true;
+	$usr['isadmin'] = true;
+}
 cot_block($usr['isadmin']);
 
 $t = new XTemplate(cot_tplfile('admin.rightsbyitem', 'core'));

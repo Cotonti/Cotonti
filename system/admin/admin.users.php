@@ -12,6 +12,12 @@
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+if ($usr['maingrp'] == COT_GROUP_SUPERADMINS)
+{
+	$usr['auth_read'] = true;
+	$usr['auth_write'] = true;
+	$usr['isadmin'] = true;
+}
 cot_block($usr['isadmin']);
 
 require_once cot_incfile('auth');
