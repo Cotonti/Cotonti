@@ -5,6 +5,7 @@
 				<div>
 					<form id="search" name="search" action="{PLUGIN_SEARCH_ACTION}" method="get">
 						<input type="hidden" name="e" value="search" />
+						<input type="hidden" name="tab" value="{PHP.tab}" />
 						<p class="textcenter">
 							<a href="{PHP|cot_url('plug','e=search')}">{PHP.L.plu_tabs_all}</a> |
 							<a href="{PHP|cot_url('plug','e=search&amp;tab=frm')}">{PHP.L.Forums}</a> |
