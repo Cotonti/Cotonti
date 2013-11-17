@@ -36,8 +36,8 @@ $usr = array();
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.14';
-$cfg['dbversion'] = '0.9.14';
+$cfg['version'] = '0.9.15';
+$cfg['dbversion'] = '0.9.15';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms']))
