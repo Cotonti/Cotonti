@@ -46,10 +46,11 @@ if ((!empty($n) && !empty($q)) || !empty($p) || !empty($id))
 	elseif (!empty($p) || !empty($id))
 	{
 		$p = ($p > 0) ? $p : $id;
-		$sql_forums = $db->query("SELECT fp_id, fp_topicid, fp_cat, fp_posterid, fp_creation FROM $db_forum_posts WHERE fp_id = $p LIMIT 1");
+		$sql_forums = $db->query("SELECT fp_id, fp_topicid, fp_cat, fp_posterid, fp_creation FROM $db_forum_posts WHERE fp_id = ?", $p);
 	}
-	if (isset($sql_forums) && $row = $sql_forums->fetch())
+	if (isset($sql_forums) && is_object($sql_forums) && $sql_forums->rowCount() > 0)
 	{
+		$row = $sql_forums->fetch();
 		$p = $row['fp_id'];
 		$q = $row['fp_topicid'];
 		$s = $row['fp_cat'];
@@ -312,9 +313,9 @@ $order = 'fp_id ASC';
 $join_columns = '';
 $join_condition = '';
 
-if (!empty($p) || !empty($id))
+if (!empty($p))
 {
-	$p_id = empty($p) ? $id : $p;
+	$p_id = $p;
 	$postsbefore = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE " . implode(' AND ', $where) . " AND fp_id < $p_id")->fetchColumn();
 	$d = $cfg['forums']['maxpostsperpage'] * floor($postsbefore / $cfg['forums']['maxpostsperpage']);
 	$durl = $cfg['easypagenav'] ? floor($d / $cfg['forums']['maxpostsperpage']) + 1 : $d;
@@ -336,7 +337,7 @@ $where = array_diff($where, array(''));
 $totalposts = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE " . implode(' AND ', $where))->fetchColumn();
 
 // Disallow accessing non-existent pages
-if ($totalposts > 0 && $d > $totalposts)
+if (empty($id) && $totalposts > 0 && $d > $totalposts)
 {
 	cot_die_message(404);
 }
