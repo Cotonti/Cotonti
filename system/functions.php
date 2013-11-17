@@ -32,6 +32,9 @@ $out = array();
 $plu = array();
 $sys = array();
 $usr = array();
+$env = array();
+$L = array();
+$R = array();
 
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];

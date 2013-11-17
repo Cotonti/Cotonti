@@ -123,6 +123,9 @@ catch (PDOException $e)
 }
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $dbc_port);
 
+// Here we can init our globals facade
+cot::init();
+
 $cache && $cache->init();
 
 /* ======== Configuration settings ======== */
@@ -442,9 +445,6 @@ if (!$cache || !$cot_cfg)
 	$cache && $cache->db->store('cot_cfg', $cfg, 'system');
 }
 unset($cot_cfg);
-
-// Here we can init our globals facade
-cot::init();
 
 /* === Hook === */
 foreach (cot_getextplugins('input') as $pl)
