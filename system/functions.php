@@ -112,6 +112,10 @@ class cot
 	 */
 	public static $db;
 	/**
+	 * Database table name prefix
+	 */
+	public static $db_x;
+	/**
 	 * Environment settings
 	 * @var array
 	 */
@@ -157,10 +161,11 @@ class cot
 	 */
 	public static function init()
 	{
-		global $cache, $cfg, $cot_extrafields, $db, $env, $L, $out, $R, $structure, $sys, $usr;
+		global $cache, $cfg, $cot_extrafields, $db, $db_x, $env, $L, $out, $R, $structure, $sys, $usr;
 		self::$cache       =& $cache;
 		self::$cfg         =& $cfg;
 		self::$db          =& $db;
+		self::$db_x        =& $db_x;
 		self::$env         =& $env;
 		self::$extrafields =& $cot_extrafields;
 		self::$L           =& $L;
