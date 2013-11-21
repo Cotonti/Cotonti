@@ -294,13 +294,28 @@ switch($a)
 								$tpltype = 'module';
 							}
 							$tags = explode(',', $line[1]);
-							$listtags = $line[0].' :<br />';
+							$tpl_file = cot_tplfile($tplbase, $tpltype);
+							$listtags = $tpl_file.' :<br />';
+							if ($cfg['xtpl_cache'])
+							{ // clears cache if exists
+								$cache_file = str_replace(array('./', '/'), '_', $tpl_file);
+								$cache_path = $cfg['cache_dir'] . '/templates/' . pathinfo($cache_file, PATHINFO_FILENAME );
+								$cache_files_ext = array('.tpl','.idx','.tags');
+								foreach ($cache_files_ext as $ext)
+								{
+									if (file_exists($cache_path.$ext)) unlink($cache_path.$ext);
+								}
+							}
+							$tpl_check = new XTemplate($tpl_file);
+							$tpl_tags = $tpl_check->getTags();
+							unset($tpl_tags[array_search('PHP', $tpl_tags)]);
 							foreach($tags as $k => $v)
 							{
 								if(mb_substr(trim($v), 0, 1) == '{')
 								{
+									$tag = str_replace(array('{','}'),'',$v);
+									$found = in_array($tag, $tpl_tags);
 									$listtags .= $v.' : ';
-									$found = cot_stringinfile(cot_tplfile($tplbase, $tpltype), trim($v));
 									$listtags .= $found_txt[$found].'<br />';
 								}
 								else
