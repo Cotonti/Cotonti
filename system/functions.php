@@ -3096,7 +3096,7 @@ function cot_log_import($s, $e, $v, $o)
 /**
  * Records a generic message to be displayed on results page
  * @param string $text Message lang string code or full text
- * @param string $class Message class: 'status', 'error', 'ok', 'notice', etc.
+ * @param string $class Message class: 'error', 'ok', 'warning'
  * @param string $src Message source identifier
  * @see cot_error()
  */
