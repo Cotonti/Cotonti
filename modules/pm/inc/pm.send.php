@@ -171,6 +171,7 @@ if ($a == 'send')
 
 if (!empty($to))
 {
+	$totalrecipients = 0;
 	if (mb_substr(mb_strtolower($to), 0, 1) == 'g' && $usr['maingrp'] == 5)
 	{
 		$group = cot_import(mb_substr($to, 1, 8), 'D', 'INT');
@@ -198,7 +199,7 @@ if (!empty($to))
 			$sql_pm_users = $db->query("SELECT user_id, user_name FROM $db_users WHERE user_id IN $touser_sql");
 		}
 	}
-	$totalrecipients = $sql_pm_users->rowCount();
+	$sql_pm_users && $totalrecipients = $sql_pm_users->rowCount();
 	if ($totalrecipients > 0)
 	{
 		while ($row = $sql_pm_users->fetch())
