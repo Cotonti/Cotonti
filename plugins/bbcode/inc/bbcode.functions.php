@@ -219,7 +219,7 @@ function cot_parse_bbcode($text)
 	$ii = 10000;
 
 	$text = htmlspecialchars($text);
-	$text = cot_parse_autourls($text);
+	cot::$cfg['plugin']['bbcode']['parse_autourls'] && $text = cot_parse_autourls($text);
 
 	$parse_smilies = $cfg['plugin']['bbcode']['smilies'];
 

@@ -43,5 +43,6 @@ $L['adm_help_bbcodes'] = "<ul>\n<li><strong>Name</strong> - BBcode name (use alp
 
 $L['cfg_smilies'] = 'Enable smilies';
 $L['cfg_smilies_hint'] = '';
+$L['cfg_parse_autourls'] = 'Automatically convert URLs into links ?';
 
 $L['info_desc'] = 'Customizable support for BBCodes and smilies parsing';

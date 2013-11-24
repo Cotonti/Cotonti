@@ -5,8 +5,8 @@ Code=bbcode
 Name=BBcode Parser
 Category=editor-parser
 Description=Adds BBcode parser support to the contents
-Version=0.9.3
-Date=2012-12-24
+Version=0.9.16
+Date=2013-11-24
 Author=Cotonti Team
 Copyright=Copyright (c) Cotonti Team 2008-2013
 Notes=BSD License
@@ -21,6 +21,7 @@ Recommends_plugins=markitup
 [BEGIN_COT_EXT_CONFIG]
 smilies=01:radio::1:Enable smilies
 editor=02:callback:cot_get_editors():markitup:
+parse_autourls=03:radio::1:
 [END_COT_EXT_CONFIG]
 ==================== */
 
