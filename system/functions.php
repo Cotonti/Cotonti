@@ -618,8 +618,9 @@ function cot_import_list($nameslist=array(), $source='P', $origindata=array(), $
 	}
 	else
 	{ // namelist exists
-		$index = array_pop(array_keys($nameslist));
-		$types_not_defined = (is_numeric($index) && is_int($index ));
+		$index = array_keys($nameslist);
+		$index = array_pop($index);
+		$types_not_defined = (is_numeric($index) && is_int($index));
 		if ((is_array($filter) && sizeof($filter) != sizeof($nameslist))
 			|| ($types_not_defined && is_null($filter)))
 		{
@@ -649,6 +650,7 @@ function cot_import_tabledata($nameslist=array(), $source='P', $nameprefix='', $
 	$imported_arrays = cot_import_list($nameslist, $source, $origindata, $nameprefix,'ARR', $maxlen, $dieonerror, $buffer);
 	if (!$imported_arrays) return false;
 	$result = array();
+	$na_data = array();
 	foreach ($imported_arrays as $name => $data)
 	{
 		if (!is_array($data))
