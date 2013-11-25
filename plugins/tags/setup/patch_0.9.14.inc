@@ -9,5 +9,5 @@ if(!$db->indexExists($db->tag_references, 'tag_area_item', array('tag_area', 'ta
 
 if($db->indexExists($db->tag_references, 'tag_item'))
 {
-	$db->query("ALTER TABLE `cot_tag_references` DROP INDEX `tag_item`");
+	$db->query("ALTER TABLE {$db->tag_references} DROP INDEX `tag_item`");
 }
