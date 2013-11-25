@@ -43,5 +43,6 @@ $L['adm_help_bbcodes'] = "<ul>\n<li><strong>Имя</strong> - Название B
 
 $L['cfg_smilies'] = 'Включить смайлики';
 $L['cfg_smilies_hint'] = '';
+$L['cfg_parse_autourls'] = 'Автоматически преобразовывать URL в ссылки?';
 
 $L['info_desc'] = 'Поддержка и настройка ББ-кодов и смайликов в контенте сайта';
