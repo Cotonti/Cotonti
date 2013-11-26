@@ -61,7 +61,7 @@ $cot_captcha = array();
  * Registry for extra fields
  * @var array
  */
-$cot_extrafields = array();
+$cot_extrafields = null;
 
 /**
  * Registry for hash functions
