@@ -860,7 +860,7 @@ function cot_extrafield_unlinkfiles($fielddata, $extrafield)
 function cot_load_extrafields($forcibly = false)
 {
 	global $db, $cot_extrafields, $db_extra_fields, $cache;
-	if (!isset($cot_extrafields) || $forcibly)
+	if (empty($cot_extrafields) || $forcibly)
 	{
 		$cot_extrafields = array();
 		$where = (defined('COT_INSTALL')) ? "1" : "field_enabled=1";
