@@ -17,6 +17,8 @@ Hooks=standalone
 
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
+$a = cot_import('a', 'G', 'ALP');
+$a = empty($a) ? 'all' : $a;
 $qs = cot_import('t', 'G', 'TXT');
 if(empty($qs)) $qs = cot_import('t', 'P', 'TXT');
 $qs = str_replace('-', ' ', $qs);
