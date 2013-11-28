@@ -11,7 +11,7 @@ function ckeditorReplace() {
 	var textareas = document.getElementsByTagName('textarea');
 	for (var i = 0; i < textareas.length; i++) {
 		if (ckeditorClasses[textareas[i].getAttribute('class')] !== undefined) {
-			Cvar textareasStyle = getComputedStyle(textareas[i], null) || textareas[i].currentStyle;
+			var textareasStyle = getComputedStyle(textareas[i], null) || textareas[i].currentStyle;
 			CKEDITOR.replace(textareas[i], {height: parseInt(textareasStyle.height,10), width: parseInt(textareasStyle.width,10), toolbar: ckeditorClasses[textareas[i].getAttribute('class')]});
 		}
 	}
