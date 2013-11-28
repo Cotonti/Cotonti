@@ -12,7 +12,7 @@ function ckeditorReplace() {
 	for (var i = 0; i < textareas.length; i++) {
 		if (ckeditorClasses[textareas[i].getAttribute('class')] !== undefined) {
 			var textareasStyle = getComputedStyle(textareas[i], null) || textareas[i].currentStyle;
-			CKEDITOR.replace(textareas[i], {height: parseInt(textareasStyle.height,10), width: parseInt(textareasStyle.width,10), toolbar: ckeditorClasses[textareas[i].getAttribute('class')]});
+			CKEDITOR.replace(textareas[i], {height:parseInt(textareasStyle.height,10), width:parseInt(textareasStyle.width,10), toolbar: ckeditorClasses[textareas[i].getAttribute('class')]});
 		}
 	}
 }
