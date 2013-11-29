@@ -17,13 +17,3 @@ Hooks=users.auth.check.done
 defined('COT_CODE') or die('Wrong URL');
 
 $db->delete($db_online, '(online_ip=\''.$usr['ip'].'\' AND online_name=\'v\') OR online_name='.$db->quote($row['user_name']));
-$db->insert($db_online, array(
-	'online_ip' => $usr['ip'],
-	'online_name' => $row['user_name'],
-	'online_lastseen' => (int)$sys['now'],
-	'online_location' => $env['location'],
-	'online_subloc' => (string) $sys['sublocation'],
-	'online_userid' => (int)$row['user_id'],
-	'online_shield' => 0,
-	'online_hammer' => 0
-	));
