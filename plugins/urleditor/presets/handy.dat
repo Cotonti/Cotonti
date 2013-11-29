@@ -1,5 +1,6 @@
 page	m=*						page?m={$m}
 page	c=system&al=*			{$al}{!$c}
+page	c=all						page
 page	c=*&al=*				{cot_url_catpath()}/{$al}
 page	c=*&id=*				{cot_url_catpath()}/{$id}
 page	c=*						{cot_url_catpath()}
