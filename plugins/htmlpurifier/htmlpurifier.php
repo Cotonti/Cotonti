@@ -61,6 +61,11 @@ function htmlpurifier_filter($value, $name)
 				$preset_name = 'group_1';
 			}
 			require_once  $cfg['plugins_dir'] . "/htmlpurifier/presets/htmlpurifier.$preset_name.preset.php";
+			/* config extension */
+			foreach (cot_getextplugins('htmlpurifier.config') as $pl)
+			{
+				include $pl;
+			}
 			foreach ($htmlpurifier_preset as $key => $val)
 			{
 				$config->set($key, $val);
