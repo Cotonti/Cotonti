@@ -527,6 +527,10 @@ if ($files_count>0 || $folders_count>0)
 		$pagenav = cot_pagenav('pfs', 'userid='.$userid.$pn_c1.$pn_c2, $df, $totalitemsf, $cfg['pfs']['maxpfsperpage'], 'df');
 
 		$t->assign(array(
+            'PFF_FOLDERCOUNT_TITLE' => cot_declension($folders_count, $Ls['Folders']),
+            'PFF_FILESCOUNT_TITLE' =>  cot_declension($subfiles_count, $Ls['Files']),
+            'PFF_ONPAGE_FOLDERS_TITLE' => cot_declension($iki, $Ls['Folders']),
+            'PFF_ONPAGE_FILES_TITLE' => cot_declension($subfiles_count_on_page, $Ls['Files']),
 			'PFF_FOLDERCOUNT' => $folders_count,
 			'PFF_FILESCOUNT' => $subfiles_count,
 			'PFF_ONPAGE_FOLDERS' => $iki,
@@ -547,6 +551,8 @@ if ($files_count>0 || $folders_count>0)
 		$filesinfolder .= ($f>0) ? $L['pfs_filesinthisfolder'] : $L['pfs_filesintheroot'];
 
 		$t->assign(array(
+		    'PFS_FILESCOUNT_TITLE' => cot_declension($files_count, $Ls['Files']),
+		    'PFS_ONPAGE_FILES_TITLE' => cot_declension($iji, $Ls['Files']),
 			'PFS_FILESCOUNT' => $files_count,
 			'PFS_INTHISFOLDER' => $filesinfolder,
 			'PFS_ONPAGE_FILES' => $iji,

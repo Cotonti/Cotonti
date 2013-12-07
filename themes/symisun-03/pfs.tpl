@@ -36,16 +36,16 @@
 				</div>
 				<p>{PHP.L.pfs_maxsize}: {PFS_MAXFILESIZE}</p>
 			</div>
-			
+
 			<!-- BEGIN: PFS_ERRORS -->
 			<!-- BEGIN: PFS_ERRORS_ROW -->
 				<div style="color:red;">{PFS_ERRORS_ROW_MSG}</div>
 				<!-- END: PFS_ERRORS_ROW -->
 			<!-- END: PFS_ERRORS -->
-            
-			
+
+
 			<fieldset>
-			<legend>{PFF_FOLDERCOUNT} {PHP.L.Folders} / {PFF_FILESCOUNT} {PHP.L.Files} ({PHP.L.pfs_onpage}: {PFF_ONPAGE_FOLDERS} {PHP.L.Folders} / {PFF_ONPAGE_FILES} {PHP.L.Files})</legend>
+			<legend>{PFF_FOLDERCOUNT_TITLE} / {PFF_FILESCOUNT_TITLE} ({PHP.L.pfs_onpage}: {PFF_ONPAGE_FOLDERS_TITLE} / {PFF_ONPAGE_FILES_TITLE})</legend>
 			<table class="cells">
 				<tr>
 					<td class="coltop width10">&nbsp;</td>
@@ -76,9 +76,9 @@
 			</table>
 			<p class="paging">{PFF_PAGING_PREV}{PFF_PAGING_CURRENT}{PFF_PAGING_NEXT}</p>
 			</fieldset>
-			
+
 			<fieldset>
-			<legend>{PFS_FILESCOUNT} {PHP.L.Files} {PFS_INTHISFOLDER} ({PHP.L.pfs_onpage}: {PFS_ONPAGE_FILES} {PHP.L.Files}) {PFS_SHOWTHUMBS}</legend>
+			<legend>{PFS_INTHISFOLDER}: {PFS_FILESCOUNT_TITLE}  ({PHP.L.pfs_onpage}: {PFS_ONPAGE_FILES_TITLE}) {PFS_SHOWTHUMBS}</legend>
 			<table class="cells">
 				<tr>
 					<td class="coltop width10">&nbsp;</td>
@@ -109,7 +109,7 @@
 			</table>
 			<p class="paging">{PFS_PAGING_PREV}{PFS_PAGING_CURRENT}{PFS_PAGING_NEXT}</p>
 		</fieldset>
-	
+
 		<fieldset>
 		<legend>{PHP.L.pfs_newfile}</legend>
 		<!-- BEGIN: PFS_UPLOAD_FORM -->
@@ -142,8 +142,8 @@
 		</form>
 		<!-- END: PFS_UPLOAD_FORM -->
 		</fieldset>
-		
-		
+
+
 		<fieldset>
 		<!-- BEGIN: PFS_NEWFOLDER_FORM -->
 		<legend>{PHP.L.pfs_newfolder}</legend>
@@ -164,14 +164,14 @@
 			<tr>
 				<td>{PHP.L.pfs_ispublic}</td>
 				<td>
-					<input type="radio" class="radio" name="nispublic" value="1" />{PHP.L.Yes} 
+					<input type="radio" class="radio" name="nispublic" value="1" />{PHP.L.Yes}
 					<input type="radio" class="radio" name="nispublic" value="0" checked="checked" />{PHP.L.No}
 				</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.pfs_isgallery}</td>
 				<td>
-					<input type="radio" class="radio" name="nisgallery" value="1" />{PHP.L.Yes} 
+					<input type="radio" class="radio" name="nisgallery" value="1" />{PHP.L.Yes}
 					<input type="radio" class="radio" name="nisgallery" value="0" checked="checked" />{PHP.L.No}
 				</td>
 			</tr>
@@ -184,7 +184,7 @@
 		</fieldset>
 
 		<br class="clear" />
-	</div>	
+	</div>
 
             </div>
 
@@ -205,7 +205,7 @@
 				</div>
                 &nbsp;
             </div>
-        </div>    
+        </div>
     </div>
     <br class="clear" />
 <!-- BEGIN: STANDALONE_FOOTER -->
