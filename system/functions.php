@@ -4392,6 +4392,38 @@ function cot_rc_attr_string($attrs)
 }
 
 /**
+ * Modifies rc string
+ * 
+ * @param string $rc A resource string
+ * @param mixed $attrs A string or associative array
+ * @return string
+ */
+function cot_rc_modify($rc, $attrs)
+{
+    if (!is_array($attrs))
+    {
+        preg_match_all("/(([a-z0-9-_]+)=(\"|')(.*?)(\"|'))/", $attrs, $matches);
+        $attrs = array();
+        foreach ($matches[2] as $key => $value)
+        {
+            $attrs[$value] = $matches[4][$key];
+        }
+    }
+    foreach ($attrs as $key => $value) 
+    {
+        if(mb_stripos($rc, " ".$key."=") !== false)
+        {
+            $rc = preg_replace("/".$key."=(\"|')(.*?)(\"|')/", $key.'="'.$value.'"', $rc);
+        }
+        else
+        {
+            $rc = preg_replace("/<([^ ]+)/", "<$1 ".$key.'="'.$value.'"', $rc);
+        }
+    }
+    return($rc);
+}
+
+/**
  * Consolidates local JS and CSS resources used during script execution,
  * prepares cache images and links to them
  *
