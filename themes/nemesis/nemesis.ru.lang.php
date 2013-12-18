@@ -18,4 +18,3 @@ defined('COT_CODE') or die('Wrong URL.');
 $L['Contact'] = 'Контакт';
 $L['Follow_Twitter'] = 'Follow us on Twitter!';
 $L['Sitemap'] = 'Карта сайта';
-$L['Hidden'] = 'Только для зарегистрированных пользователей!';

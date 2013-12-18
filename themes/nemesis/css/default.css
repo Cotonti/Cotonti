@@ -143,14 +143,7 @@ button::-moz-focus-inner		{ padding:0; border:none; }
 .capital	{ text-transform:capitalize; }
 
 .hide		{ display:none; }
-.hidden         {
-			padding: 5px 10px;
-			background: #EDEDED; 
-			text-align:center;
-			border: 3px ridge #fff;
-			box-shadow: 0 0 4px #222;
-			margin: 3px 0;
-			}
+.hidden		{ display:none; }
 .invis		{ visibility:hidden; }
 
 .textleft		{ text-align:left; }
