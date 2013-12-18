@@ -70,7 +70,7 @@ INSERT INTO `cot_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacemen
 ('th', 'str', '[/th]', '</th>', 1, 1, 128, 'markitup', 0),
 ('td', 'str', '[td]', '<td>', 1, 1, 128, 'markitup', 0),
 ('td', 'str', '[/td]', '</td>', 1, 1, 128, 'markitup', 0),
-('hide', 'callback', '\\[hide\\](.+?)\\[/hide\\]', 'return $usr["id"] > 0 ? $input[1] : "<div class=\\"hidden\\">".$L["Hidden"]."</div>";', 1, 1, 150, 'markitup', 1),
+('hide', 'callback', '\\[hide\\](.+?)\\[/hide\\]', 'return $usr["id"] > 0 ? $input[1] : "<div class=\\"hidefromguests\\">".$L["hidefromguests"]."</div>";', 1, 1, 150, 'markitup', 0),
 ('spoiler','pcre','\\[spoiler\\](.+?)\\[/spoiler\\]','<div style=\"margin:4px 0px 4px 0px\"><input type=\"button\" value=\"Show\" onclick=\"if(this.parentNode.getElementsByTagName(''div'')[0].style.display != '''') { this.parentNode.getElementsByTagName(''div'')[0].style.display = ''''; } else { this.parentNode.getElementsByTagName(''div'')[0].style.display = ''none''; }\" /><div style=\"display:none\" class=\"spoiler\">$1</div></div>',1,1,130,'markitup',0),
 ('spoiler', 'pcre', '\\[spoiler=([^\\]]+)\\](.+?)\\[/spoiler\\]', '<div style="margin:4px 0px 4px 0px"><input type="button" value="$1" onclick="if(this.parentNode.getElementsByTagName(''div'')[0].style.display != '''') { this.parentNode.getElementsByTagName(''div'')[0].style.display = ''''; } else { this.parentNode.getElementsByTagName(''div'')[0].style.display = ''none''; }" /><div style="display:none" class="spoiler">$2</div></div>', 1, 1, 130, 'markitup', 0),
 ('thumb', 'pcre', '\\[thumb=(.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/thumb\\]', '<a href="datas/users/$2"><img src="$1" alt="$2" /></a>', 1, 1, 128, '', 0),
