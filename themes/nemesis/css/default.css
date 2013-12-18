@@ -213,7 +213,15 @@ span.readmore		{ display:block; }
 .clearfix:before, .clearfix:after	{ content:'\0020'; display:block; overflow:hidden; visibility:hidden; width:0; height:0; }
 .clearfix:after						{ clear:both; }
 .clearfix							{ zoom:1; }
-
+.hidefromguests         {
+			padding: 5px 10px;
+			background: #EDEDED; 
+			text-align:center;
+			border: 3px ridge #fff;
+			box-shadow: 0 0 4px #222;
+			margin: 3px 0;
+			}
+			
 /* 7. Pagination
 -------------------------------------------------- */
 
