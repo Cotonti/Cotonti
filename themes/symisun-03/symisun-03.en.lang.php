@@ -138,3 +138,4 @@ $themelang['usersregister_Usernamehint'] = 'Username must be at least 2 chars lo
 
 
 $themelang['search_Generalhint'] = 'You can make the search more exact by selecting necessary categories and search options only. Please note that "Search All" does not give you all the options. Choose "Forums" or "Pages" for more options.';
+$L['Hidden'] = 'Only for registered users!';
