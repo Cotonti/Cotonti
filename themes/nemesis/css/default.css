@@ -214,7 +214,7 @@ span.readmore		{ display:block; }
 .clearfix:after						{ clear:both; }
 .clearfix							{ zoom:1; }
 .hidefromguests         {
-			padding: 5px 10px;
+			padding: 3px 10px;
 			background: #EDEDED; 
 			text-align:center;
 			border: 3px ridge #fff;

@@ -46,4 +46,3 @@ $L['cfg_smilies_hint'] = '';
 $L['cfg_parse_autourls'] = 'Automatically convert URLs into links ?';
 
 $L['info_desc'] = 'Customizable support for BBCodes and smilies parsing';
-$L['hidefromguests'] = 'Only for registered users!';
