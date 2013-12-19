@@ -398,6 +398,7 @@ if ($usr['id'] == 0)
 	$usr['theme'] = $cfg['defaulttheme'];
 	$usr['scheme'] = $cfg['defaultscheme'];
 	$usr['lang'] = $cfg['defaultlang'];
+	$usr['maingrp'] = COT_GROUP_GUESTS;
 	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['site_id']))); // Site related key for guests
 }
 
