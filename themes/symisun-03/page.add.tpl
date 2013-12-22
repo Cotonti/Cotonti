@@ -10,7 +10,7 @@
 		<div class="error">{PAGEADD_ERROR_BODY}</div>
 		<!-- END: PAGEADD_ERROR -->
 
-<form action="{PAGEADD_FORM_SEND}" method="post">
+<form action="{PAGEADD_FORM_SEND}" method="post" enctype="multipart/form-data">
 
 	<fieldset>
 		<legend>{PHP.themelang.pageadd.save}</legend>
