@@ -120,6 +120,7 @@ $L['users_oldpasshint'] = '(To set a new password enter your current one)';
 $L['users_lastip'] = 'Last known IP';
 $L['users_logcounter'] = 'Log counter';
 $L['users_deleteuser'] = 'Delete this user';
+$L['users_changeemail'] = 'Change email';
 
 /**
  * Moved from theme.lang
