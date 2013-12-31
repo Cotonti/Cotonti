@@ -1016,7 +1016,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 /* 0.9.15-01 extend config_order size #1237 */
 ALTER TABLE `cot_config` MODIFY `config_order` char(3) collate utf8_unicode_ci NOT NULL default '00';
 
--------------------------------------------------------------------------------
+/* ------------------------------------------------------------------------------- */
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
