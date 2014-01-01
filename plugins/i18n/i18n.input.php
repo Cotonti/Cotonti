@@ -38,8 +38,11 @@ if (file_exists($cfg['lang_dir'] . '/' . $i18n_locale))
 {
 	// Switch interface language for guests
 	$i18n_fallback = $usr['lang'];
-	$usr['lang'] = $i18n_locale;
-	$lang = $i18n_locale;
+	if (!$cfg['forcedefaultlang'])
+	{
+		$usr['lang'] = $i18n_locale;
+		$lang = $i18n_locale;
+	}
 }
 else
 {
