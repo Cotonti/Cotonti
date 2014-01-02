@@ -6,9 +6,9 @@
  * - Cotonti special
  *
  * @package Cotonti
- * @version 2.7.14
+ * @version 2.8.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009-2013
+ * @copyright Copyright (c) Cotonti Team 2009-2014
  * @license BSD
  */
 
@@ -52,9 +52,17 @@ class XTemplate
 	 */
 	protected static $cache_dir = '';
 	/**
-	 * @var bool Enables debug output
+	 * @var array Stores debug data
+	 */
+	protected static $debug_data = array();
+	/**
+	 * @var boolean Enables debug dumping
 	 */
 	protected static $debug_mode = false;
+	/**
+	 * @var boolean Prints debug mode screen
+	 */
+	protected static $debug_output = false;
 	/**
 	 * @var bool Indicates that root-level blocks were found during another run
 	 */
@@ -67,6 +75,15 @@ class XTemplate
 	 */
 	public function __construct($path = NULL)
 	{
+		// Apply theme redefinitions if necessary
+		global $theme_reload;
+		if (is_array($theme_reload))
+		{
+			foreach($theme_reload as $key_reload => $val_reload)
+			{
+				$GLOBALS[$key_reload] = (is_array($GLOBALS[$key_reload]) && is_array($val_reload)) ? array_merge($GLOBALS[$key_reload], $val_reload) : $val_reload;
+			}
+		}
 		if (is_string($path))
 		{
 			$this->restart($path);
@@ -113,14 +130,36 @@ class XTemplate
 	}
 
 	/**
+	 * Returns debug data dumped by CoTemplate if debug option is on.
+	 * Debug data has the following format:
+	 * <code>
+	 * array(
+	 * 	'filename.tpl' => array(
+	 * 		'BLOCK.NAME' => array(
+	 * 			'TAG_NAME' => 'tag value',
+	 * 			// ...
+	 * 		),
+	 * 		// ...
+	 * 	),
+	 * 	// ...
+	 * );
+	 * </code>
+	 *
+	 * @return array Debug dump
+	 */
+	public static function debugData()
+	{
+		return self::$debug_data;
+	}
+
+	/**
 	 * Debugging output of a tag name and current value
 	 *
 	 * @param string $name Tag name
 	 * @param mixed $value Tag value, will be casted to string
-	 * @param int $length_limit Max length of a value in the output
 	 * @return string A list elemented for debug output
 	 */
-	public static function debugVar($name, $value, $length_limit = 60)
+	protected static function debugVar($name, $value)
 	{
 		if (is_numeric($value))
 		{
@@ -131,10 +170,6 @@ class XTemplate
 			if (!is_string($value))
 			{
 				$value = (string) $value;
-			}
-			if (mb_strlen($value) > $length_limit)
-			{
-				$value = mb_substr($value, 0, $length_limit) . '...';
 			}
 			$val_disp = '&quot;' . htmlspecialchars($value) . '&quot;';
 		}
@@ -195,19 +230,45 @@ class XTemplate
 	}
 
 	/**
-	 * Initializes static class configuration
+	 * Initializes static class configuration.
 	 *
-	 * @param bool $enable_cache Enable disk cache for precompiled templates
-	 * @param string $cache_dir Path to system cache directory
-	 * @param bool $debug_mode Enables debug output for designers
-	 * @param bool $cleanup Remove extra spaces and tabs
+	 * Options:
+	 * * cache - Enable template pre-compilation on disk.
+	 * * cache_dir - Directory to store pre-compiled templates.
+	 * * cleanup - Cleanup HTML output removing comments, spaces and blanks.
+	 * * debug - Enable dumping debug information.
+	 * * debug_output - Switch output to TPL-debug mode.
+	 *
+	 * Default values:
+	 * <code>
+	 * $options = array(
+	 *		'cache'        => false,
+	 *		'cache_dir'    => '',
+	 *		'cleanup'      => false,
+	 *		'debug'        => false,
+	 *		'debug_output' => false,
+	 *	);
+	 * </code>
+	 *
+	 * @param array $options CoTemplate options
 	 */
-	public static function init($enable_cache = false, $cache_dir = '', $debug_mode = false, $cleanup = false)
+	public static function init($options = array())
 	{
-		self::$debug_mode = $debug_mode;
-		self::$cache_enabled = $enable_cache && !$debug_mode;
-		self::$cache_dir = $cache_dir;
-		Cotpl_data::init($cleanup);
+		$defaults = array(
+			'cache'        => false,
+			'cache_dir'    => '',
+			'cleanup'      => false,
+			'debug'        => false,
+			'debug_output' => false,
+		);
+
+		$options = array_merge($defaults, $options);
+
+		self::$cache_enabled = $options['cache'];
+		self::$cache_dir     = $options['cache_dir'];
+		self::$debug_mode    = $options['debug'];
+		self::$debug_output  = $options['debug_output'];
+		Cotpl_data::init($options['cleanup']);
 	}
 
 	/**
@@ -345,7 +406,34 @@ class XTemplate
 	 */
 	public function out($block = 'MAIN')
 	{
-		if (!self::$debug_mode)
+		if (self::$debug_mode && self::$debug_output)
+		{
+			// Print debug stuff for current file
+			$file = basename($this->filename);
+			echo "<h1>$file</h1>";
+			foreach (self::$debug_data[$file] as $block => $tags) {
+				$block_name = $file . ' / ' . str_replace('.', ' / ', $block);
+				echo "<h2>$block_name</h2>";
+				echo "<ul>";
+				foreach ($tags as $key => $val)
+				{
+					if (is_array($val))
+					{
+						// One level of nesting is supported
+						foreach ($val as $key2 => $val2)
+						{
+							echo self::debugVar($key . '.' . $key2, $val2);
+						}
+					}
+					else
+					{
+						echo self::debugVar($key, $val);
+					}
+				}
+				echo "</ul>";
+			}
+		}
+		else
 		{
 			echo $this->text($block);
 		}
@@ -360,14 +448,6 @@ class XTemplate
 	 */
 	public function parse($block = 'MAIN')
 	{
-		global $theme_reload;
-		if(is_array($theme_reload))
-		{
-			foreach($theme_reload as $key_reload => $val_reload)
-			{
-				$GLOBALS[$key_reload] = (is_array($GLOBALS[$key_reload]) && is_array($val_reload)) ? array_merge($GLOBALS[$key_reload], $val_reload) : $val_reload;
-			}
-		}
 		$path = $this->index[$block];
 		if ($path)
 		{
@@ -391,12 +471,7 @@ class XTemplate
 		{
 			if (!in_array($block, $this->displayed_blocks))
 			{
-//				$block_level = substr_count($block, '.');
-				$block_name = basename($this->filename) . ' / ' . str_replace('.', ' / ', $block);
-//				$block_offset = 20 * $block_level;
-//				$tags_offset = 20 * ($block_level + 1);
-				echo "<h2>$block_name</h2>";
-				echo "<ul>";
+				$file = basename($this->filename);
 				$tags = $this->vars;
 				ksort($tags);
 				foreach ($tags as $key => $val)
@@ -406,15 +481,23 @@ class XTemplate
 						// One level of nesting is supported
 						foreach ($val as $key2 => $val2)
 						{
-							echo self::debugVar($key . '.' . $key2, $val2);
+							if (is_string($val2) && mb_strlen($val2) > 60)
+							{
+								$val2 = mb_substr($val2, 0, 60) . '...';
+							}
+							self::$debug_data[$file][$block][$key . '.' . $key2] = $val2;
 						}
 					}
 					else
 					{
-						echo self::debugVar($key, $val);
+						if (is_string($val) && mb_strlen($val) > 60)
+						{
+							$val = mb_substr($val, 0, 60) . '...';
+						}
+						self::$debug_data[$file][$block][$key] = $val;
 					}
 				}
-				echo "</ul>";
+				unset($tags);
 				$this->displayed_blocks[] = $block;
 			}
 		}
@@ -1725,7 +1808,8 @@ function cotpl_callback_replace(&$arg, $i, $val)
 function cotpl_read_file($path)
 {
 	$fp = fopen($path, 'r');
-	$code = filesize($path) ? fread($fp, filesize($path)) : '';
+	$size = filesize($path);
+	$code = $size > 0 ? fread($fp, $size) : '';
 	fclose($fp);
 	return $code;
 }

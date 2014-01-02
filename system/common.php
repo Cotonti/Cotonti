@@ -617,7 +617,13 @@ $cot_rc_skip_minification = true;
 // Cotonti-specific XTemplate initialization
 if (class_exists('XTemplate'))
 {
-	XTemplate::init($cfg['xtpl_cache'], $cfg['cache_dir'], $cfg['debug_mode'] && $_GET['tpl_debug'], $cfg['html_cleanup']);
+	XTemplate::init(array(
+		'cache'        => $cfg['xtpl_cache'],
+		'cache_dir'    => $cfg['cache_dir'],
+		'cleanup'      => $cfg['html_cleanup'],
+		'debug'        => $cfg['debug_mode'],
+		'debug_output' => (bool)$_GET['tpl_debug']
+	));
 }
 
 /* ======== Global hook ======== */
