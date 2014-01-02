@@ -567,6 +567,29 @@ switch($a)
 			'ADMIN_EXTENSIONS_ONLY_INSTALLED_SEL' => $only_installed
 		));
 
+		// Prefetch common data to save SQL queries
+		$totalconfigs = array();
+		foreach ($db->query("SELECT COUNT(*) AS cnt, config_owner, config_cat
+			FROM $db_config WHERE config_type != " . COT_CONFIG_TYPE_HIDDEN . "
+			GROUP BY config_owner, config_cat")->fetchAll() as $row)
+		{
+			$totalconfigs[$row['config_owner']][$row['config_cat']] = (int)$row['cnt'];
+		}
+
+		$totalactives = array();
+		$totalinstalleds = array();
+		foreach ($db->query("SELECT SUM(pl_active) AS sum, COUNT(*) AS cnt, pl_code FROM $db_plugins GROUP BY pl_code")->fetchAll() as $row)
+		{
+			$totalactives[$row['pl_code']] = (int)$row['sum'];
+			$totalinstalleds[$row['pl_code']] = (int)$row['cnt'];
+		}
+
+		$installed_vers = array();
+		foreach($db->query("SELECT ct_version, ct_code FROM $db_core")->fetchAll() as $row)
+		{
+			$installed_vers[$row['ct_code']] = $row['ct_version'];
+		}
+
 		foreach (array('module', 'plug') as $type)
 		{
 			$sql = $db->query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config
@@ -680,12 +703,12 @@ switch($a)
 				}
 				else
 				{
-					$totalactive = $db->query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$code'")->fetchColumn();
-					$totalinstalled = $db->query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$code'")->fetchColumn();
+					$totalactive = $totalactives[$code];
+					$totalinstalled = $totalinstalleds[$code];
 
 					$cnt_parts += $totalinstalled;
 
-					if (!cot_extension_installed($code))
+					if (!isset($installed_vers[$code]))
 					{
 						$part_status = 3;
 						$info['Partscount'] = '?';
@@ -710,7 +733,8 @@ switch($a)
 							$part_status = 1;
 						}
 					}
-					$totalconfig = $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$code' AND config_type != " . COT_CONFIG_TYPE_HIDDEN)->fetchColumn();
+
+					$totalconfig = $totalconfigs[$type][$code];
 
 					$ifthistools = $tools[$code];
 					$ent_code = $cfgentries[$code];
@@ -729,7 +753,7 @@ switch($a)
 					}
 					$icofile = (($type == 'module') ? $cfg['modules_dir'] : $cfg['plugins_dir']) . '/' . $code . '/' . $code . '.png';
 
-					$installed_ver = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$code'")->fetchColumn();
+					$installed_ver = $installed_vers[$code];
 
 					$L['info_name'] = '';
 					$L['info_desc'] = '';
