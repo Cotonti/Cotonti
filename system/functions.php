@@ -4897,21 +4897,27 @@ function cot_rc_minify($code, $type = 'js')
  *
  * @global array $cfg
  * @global array $cot_captcha
+ * @param string $use_captcha The CAPTCHA to manually use
  * @return string
  */
-function cot_captcha_generate()
+function cot_captcha_generate($use_captcha = '')
 {
 	global $cfg, $cot_captcha;
-	if (!$cfg['captcharandom'])
+
+	if(!empty($use_captcha))
 	{
-		$captcha = $cfg['captchamain'] . '_generate';
+		$captcha = $use_captcha;
+	}
+	elseif (!$cfg['captcharandom'])
+	{
+		$captcha = $cfg['captchamain'];
 	}
 	else
 	{
 		$captcha = $cot_captcha[rand(0, count($cot_captcha) - 1)];
-		$tepmcap = '<input type="hidden" name="capman" value="' . $captcha . '" />';
-		$captcha .="_generate";
 	}
+	$tepmcap = '<input type="hidden" name="capman" value="' . $captcha . '" />';
+	$captcha .= '_generate';
 
 	if (function_exists($captcha))
 	{
@@ -4942,8 +4948,6 @@ function cot_captcha_list()
  */
 function cot_captcha_validate($value)
 {
-	global $cfg;
-
 	// This function can only be called once per request
 	static $called = false;
 	if ($called)
@@ -4955,14 +4959,12 @@ function cot_captcha_validate($value)
 		$called = true;
 	}
 
-	if (!$cfg['captcharandom'])
+	$captcha = cot_import('capman', 'P', 'TXT');
+	if(!in_array($captcha, cot_captcha_list()))
 	{
-		$captcha = $cfg['captchamain'] . "_validate";
+		return false;
 	}
-	else
-	{
-		$captcha = cot_import('capman', 'P', 'TXT') . "_validate";
-	}
+	$captcha .= '_validate';
 	if (function_exists($captcha))
 	{
 		return $captcha($value);
