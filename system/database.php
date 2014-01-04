@@ -503,9 +503,17 @@ class CotDB extends PDO {
 			$query = trim($query);
 			if (!empty($query))
 			{
-				if ($db_x != 'cot_')
+				if ($db_x != 'cot_' && preg_match('#`cot_(\w+)`#', $query, $mt))
 				{
-					$query = str_replace('`cot_', '`'.$db_x, $query);
+					if (isset($GLOBALS['db_' . $mt[1]]))
+					{
+						$table_name = $GLOBALS['db_' . $mt[1]];
+						$query = str_replace($mt[0], "`$table_name`", $query);
+					}
+					else
+					{
+						$query = str_replace('`cot_', '`'.$db_x, $query);
+					}
 				}
 				$result = $this->query($query);
 				if (!$result)
