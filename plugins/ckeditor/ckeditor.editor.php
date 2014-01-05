@@ -51,14 +51,7 @@ if (!$ckeditor_timestamp)
     $ckeditor_timestamp = ckeditor_max_timestamp($cfg['plugins_dir'] . '/ckeditor/lib');
 
 // Main CKEditor file
-if ($cfg['plugin']['ckeditor']['cdn'])
-{
-    cot_rc_link_footer('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/ckeditor.js');
-}
-else
-{
-    cot_rc_link_footer($cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js?'.$ckeditor_timestamp);
-}
+cot_rc_link_footer($cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js?'.$ckeditor_timestamp);
 
 // Load preset and connector
 if ($usr['id'] > 0)

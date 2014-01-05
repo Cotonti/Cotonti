@@ -3,7 +3,7 @@
 CKEDITOR.editorConfig = function( config )
 {
     config.toolbar = 'Full';
-	config.extraPlugins = 'more,oembed';
+	config.extraPlugins = 'more,oembed,syntaxhighlight';
 
 	config.allowedContent = true; // disable ACF
 
@@ -18,14 +18,14 @@ CKEDITOR.editorConfig = function( config )
 		['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
 		['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
 		['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-		['Link','Unlink','Anchor','More'],
+		['Link','Unlink','Anchor','More','Syntaxhighlight'],
 		['Styles','Format'],
 		['TextColor','BGColor']
 	];
 
 	config.toolbar_Medium = [
 		['Bold','Italic','Underline','Strike'],
-		['NumberedList','BulletedList','-','Blockquote'],
+		['NumberedList','BulletedList','-','Blockquote','Syntaxhighlight'],
 		['Link','Unlink','Anchor','Smiley'],
 		['TextColor','BGColor'],
 		['Cut','Copy','Paste','PasteText','Scayt'],
