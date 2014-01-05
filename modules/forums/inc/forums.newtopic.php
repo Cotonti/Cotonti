@@ -66,6 +66,12 @@ if ($a == 'newtopic')
 	{
 		cot_error('forums_messagetooshort', 'rmsgtext');
 	}
+	if (!strpos($structure['forums'][$s]['path'], '.'))
+	{
+		// Attempting to create a topic in a root category
+		include cot_langfile('message', 'core');
+		cot_error($L['msg602_body']);
+	}
 	foreach ($cot_extrafields[$db_forum_topics] as $exfld)
 	{
 		$rtopic['ft_'.$exfld['field_name']] = cot_import_extrafields('rtopic'.$exfld['field_name'], $exfld);

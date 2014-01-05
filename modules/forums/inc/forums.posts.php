@@ -456,7 +456,7 @@ $pagenav = cot_pagenav('forums', "m=posts&q=$q", $d, $totalposts, $cfg['forums']
 $jumpbox[cot_url('forums')] = $L['Forums'];
 foreach ($structure['forums'] as $key => $val)
 {
-	if (cot_auth('forums', $key, 'R'))
+	if (cot_auth('forums', $key, 'R') && strpos($val['path'], '.'))
 	{
 		($val['tpath'] == $s) || $movebox[$key] = $val['tpath'];
 		$jumpbox[cot_url('forums', 'm=topics&s=' . $key, '', true)] = $val['tpath'];
