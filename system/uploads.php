@@ -22,7 +22,7 @@ defined('COT_CODE') or die('Wrong URL');
 function cot_file_check($path, $name, $ext)
 {
 	global $L, $cfg;
-	if ($cfg['pfsfilecheck'])
+	if ($cfg['pfs']['pfsfilecheck'])
 	{
 		require './datas/mimetype.php';
 		$fcheck = FALSE;
