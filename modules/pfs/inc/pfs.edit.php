@@ -132,6 +132,12 @@ if ($standalone)
 {
 	cot_sendheaders();
 
+    cot_rc_output();
+
+    $t->assign(array(
+        'PFS_HEAD' => $out['head_head'],
+    ));
+
 	$t->parse('MAIN.STANDALONE_HEADER');
 	$t->parse('MAIN.STANDALONE_FOOTER');
 }
