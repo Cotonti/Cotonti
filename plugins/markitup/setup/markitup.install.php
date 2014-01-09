@@ -5,7 +5,7 @@
  * @package markitup
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2013
+ * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
  */
 
@@ -15,7 +15,7 @@ defined('COT_CODE') or die('Wrong URL');
 if (cot_plugin_active('bbcode'))
 {
 	require_once cot_incfile('bbcode', 'plug');
-	
+
 	cot_bbcode_remove(0, 'markitup');
 
 	cot_bbcode_add('size', 'pcre', '\[size=([1-2][0-9])\](.+?)\[/size\]', '<span style="font-size:$1pt">$2</span>', true, 128, 'markitup');

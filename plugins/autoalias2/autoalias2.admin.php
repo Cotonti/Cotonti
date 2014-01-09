@@ -11,7 +11,7 @@ Hooks=tools
  * @package autoalias2
  * @version 2.1.2
  * @author Trustmaster
- * @copyright (c) Cotonti Team 2010-2013
+ * @copyright (c) Cotonti Team 2010-2014
  * @license BSD
  */
 

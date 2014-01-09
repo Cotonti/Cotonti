@@ -6,7 +6,7 @@
  * @package Cotonti
  * @version 0.9.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2013
+ * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
@@ -124,7 +124,7 @@ else
 			{
 				$data = cot_import($key, 'P', sizeof($cot_import_filters[$key]) ? $key : 'NOC');
 				if ($optionslist[$key]['config_value'] != $data)
-				{	
+				{
 					if (!isset($optionslist[$key]['config_subdefault']))
 					{
 						$optionslist[$key]['config_value'] = $data;
@@ -133,7 +133,7 @@ else
 					}
 					else
 					{
-						$db->update($db_config, array('config_value' => $data), "config_name = ? AND config_owner = ? 
+						$db->update($db_config, array('config_value' => $data), "config_name = ? AND config_owner = ?
 						AND config_cat = ?  AND config_subcat = ?)", array($key, $o, $p, $editconfig));
 					}
 				}
@@ -149,7 +149,7 @@ else
 				}
 			}
 		}
-		
+
 		$rstructurecode = cot_import('rstructurecode', 'P', 'ARR');
 		$rstructurepath = cot_import('rstructurepath', 'P', 'ARR');
 		$rstructuretitle = cot_import('rstructuretitle', 'P', 'ARR');

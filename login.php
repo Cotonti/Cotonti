@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.9.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2013
+ * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
  */
 
@@ -155,7 +155,7 @@ if ($a == 'check')
 	if ($row = $sql->fetch())
 	{
 		$rusername = $row['user_name'];
-		
+
 		// Checking to make sure user doesn't game the free login from
 		if($validating && ($row['user_maingrp']!=4 || $sys['now']>($row['user_regdate']+172800) || $token!=$row['user_token']))
 		{
