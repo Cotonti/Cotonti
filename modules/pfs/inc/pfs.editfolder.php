@@ -5,7 +5,7 @@
  * @package pfs
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2013
+ * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD License
  */
 
@@ -127,10 +127,15 @@ $t = new XTemplate(cot_tplfile('pfs.editfolder'));
 
 if ($standalone)
 {
-	$t->assign(array(
-		'PFS_C1' => $c1,
-		'PFS_C2' => $c2
-	));
+    cot_sendheaders();
+
+    cot_rc_output();
+
+    $t->assign(array(
+        'PFS_HEAD' => $out['head_head'],
+        'PFS_C1' => $c1,
+        'PFS_C2' => $c2
+    ));
 
 	$t->parse('MAIN.STANDALONE_HEADER');
 	$t->parse('MAIN.STANDALONE_FOOTER');

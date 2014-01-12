@@ -3,7 +3,7 @@
  * @package install
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009-2013
+ * @copyright Copyright (c) Cotonti Team 2009-2014
  * @license BSD
  */
 
@@ -637,7 +637,7 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 
 	$ext_list = cot_extension_list_info($cfg["{$ext_type_lc}s_dir"]);
 
-	$ext_type_lc == 'plugin' ? usort($ext_list, 'cot_extension_catcmp') : ksort($ext_list);
+	$ext_type_lc == 'plugin' ? uasort($ext_list, 'cot_extension_catcmp') : ksort($ext_list);
 
 	$prev_cat = '';
 	$block_name = $ext_type_lc == 'plugin' ? "{$ext_type_uc}_CAT.{$ext_type_uc}_ROW" : "{$ext_type_uc}_ROW";
@@ -645,7 +645,7 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 	{
 		if (is_array($info))
 		{
-			$code = $ext_type_lc == 'plugin' ? $info['Code'] : $f;
+			$code = $f;
 			if ($ext_type_lc == 'plugin' && $prev_cat != $info['Category'])
 			{
 				if ($prev_cat != '')

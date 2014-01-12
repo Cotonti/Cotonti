@@ -10,7 +10,7 @@ Hooks=users.register.add.first
  *
  * @package Banlist
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2013
+ * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
  */
 

@@ -4,7 +4,7 @@
  *
  * @package Cotonti
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2013
+ * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD License
  */
 
@@ -4393,7 +4393,7 @@ function cot_rc_attr_string($attrs)
 
 /**
  * Modifies rc string
- * 
+ *
  * @param string $rc A resource string
  * @param mixed $attrs A string or associative array
  * @return string
@@ -4409,7 +4409,7 @@ function cot_rc_modify($rc, $attrs)
             $attrs[$value] = $matches[4][$key];
         }
     }
-    foreach ($attrs as $key => $value) 
+    foreach ($attrs as $key => $value)
     {
         if(mb_stripos($rc, " ".$key."=") !== false)
         {

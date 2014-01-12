@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.9.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2013
+ * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
  */
 
@@ -22,7 +22,7 @@ defined('COT_CODE') or die('Wrong URL');
 function cot_file_check($path, $name, $ext)
 {
 	global $L, $cfg;
-	if ($cfg['pfsfilecheck'])
+	if ($cfg['pfs']['pfsfilecheck'])
 	{
 		require './datas/mimetype.php';
 		$fcheck = FALSE;
