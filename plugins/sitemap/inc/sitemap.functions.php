@@ -4,7 +4,7 @@
  *
  * @package sitemap
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2012
+ * @copyright Copyright (c) 2012-2014, Cotonti Team
  * @license BSD
  */
 

@@ -8,7 +8,7 @@
  * Version=1.0
  * Date=2012-05-29
  * Author=Cotonti Team
- * Copyright=Copyright (c) Cotonti Team 2012
+ * Copyright=Copyright (c) 2012-2014, Cotonti Team
  * Notes=BSD License
  * Auth_guests=R
  * Lock_guests=W12345A
