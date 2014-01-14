@@ -4,7 +4,7 @@
  * Contact Plugin for Cotonti CMF (Russian Localization)
  * @version 2.00
  * @author Cotonti Team
- * @copyright (c) Cotonti Team 2008-2013
+ * @copyright (c) Cotonti Team 2008-2014
  * @license BSD
  */
 

@@ -6,7 +6,7 @@
  * @package Cotonti
  * @version 0.9.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2013
+ * @copyright Copyright (c) Cotonti Team 2010-2014
  * @license BSD
  */
 defined('COT_CODE') or die('Wrong URL');
@@ -635,7 +635,7 @@ function cot_config_list($owner, $cat, $subcat = "")
  * @param string $name Config name
  * @param int $type Config type
  * @param string $value Config value
- * @param string $options Config options 
+ * @param string $options Config options
  * @return string
  */
 function cot_config_input($name, $type = 0, $value = '', $options = '')

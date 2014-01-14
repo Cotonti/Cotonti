@@ -4,7 +4,7 @@
  *
  * @package contact
  * @author Cotonti Team
- * @copyright (c) Cotonti Team 2008-2013
+ * @copyright (c) Cotonti Team 2008-2014
  * @license BSD
  */
 

@@ -8,7 +8,7 @@ Description=Ratings plugin with jQuery stars
 Version=0.9.2
 Date=2013-03-15
 Author=Cotonti Team
-Copyright=Copyright (c) Cotonti Team 2008-2013
+Copyright=Copyright (c) Cotonti Team 2008-2014
 Notes=BSD License
 Auth_guests=R
 Lock_guests=12345A
@@ -29,7 +29,7 @@ css=99:radio:0,1:1:Enable plugin CSS
  * @package ratings
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2013
+ * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
  */
 

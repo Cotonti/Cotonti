@@ -159,7 +159,7 @@ class XTemplate
 	 * @param mixed $value Tag value, will be casted to string
 	 * @return string A list elemented for debug output
 	 */
-	protected static function debugVar($name, $value)
+	public static function debugVar($name, $value)
 	{
 		if (is_numeric($value))
 		{

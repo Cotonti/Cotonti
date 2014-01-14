@@ -10,7 +10,7 @@ Hooks=search.page.loop
  *
  * @package i18n
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2013
+ * @copyright Copyright (c) Cotonti Team 2010-2014
  * @license BSD License
  */
 

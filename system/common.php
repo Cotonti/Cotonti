@@ -3,7 +3,7 @@
  * @package Cotonti
  * @version 0.9.8
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2013
+ * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
  */
 
