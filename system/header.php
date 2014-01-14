@@ -195,3 +195,4 @@ if (!COT_AJAX)
 	$t->parse('HEADER');
 	$t->out('HEADER');
 }
+define('COT_HEADER_COMPLETE', TRUE);
