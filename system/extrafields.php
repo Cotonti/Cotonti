@@ -300,7 +300,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 
 				if(empty($extrafield['field_variants']) || in_array($ext, $ext_array))
 				{
-					if ($lang != 'en')
+					if ($lang != 'en' && file_exists(cot_langfile('translit', 'core'))
 					{
 						require_once cot_langfile('translit', 'core');
 						$fname = (is_array($cot_translit)) ? strtr($fname, $cot_translit) : '';
