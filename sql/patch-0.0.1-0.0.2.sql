@@ -1,6 +1,6 @@
 /* r91 more fix, hooks fix */
 INSERT INTO `sed_bbcode` VALUES (NULL,'more','str','[more]','<!--more-->',1,1,128,'',0),(NULL,'more','str','[/more]','&nbsp;',1,1,128,'',0);
-INSERT INTO `sed_plugins` VALUES (NULL, 'header.main', 'search', 'header', 'Search', 'search.header', 10, 1), (NULL, 'page.first', 'search', 'page', 'Search', 'search.page.first', 10, 1), (NULL, 'forums.posts.first', 'search', 'forums', 'Search', 'search.forums.posts.first', 10, 1); 
+INSERT INTO `sed_plugins` VALUES (NULL, 'header.main', 'search', 'header', 'Search', 'search.header', 10, 1), (NULL, 'page.first', 'search', 'page', 'Search', 'search.page.first', 10, 1), (NULL, 'forums.posts.first', 'search', 'forums', 'Search', 'search.forums.posts.first', 10, 1);
 
 /* r103 remove antibump */
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'forums' AND `config_name` = 'antibumpforums' LIMIT 1;
@@ -31,7 +31,7 @@ CREATE TABLE `sed_pages_extra_fields` (
   `field_html` text NOT NULL,
   `field_variants` text NOT NULL,
   UNIQUE KEY `field_name` (`field_name`)
-) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci ENGINE=MyISAM;
 
 /* r193 Some speed up for page listings */
 ALTER TABLE sed_structure ADD COLUMN structure_pagecount mediumint(8) NOT NULL default '0';
@@ -67,7 +67,7 @@ UPDATE `sed_bbcode` SET `bbc_replacement` = '<strong><a href="datas/users/$1">$1
 CREATE TABLE `sed_tags` (
 	`tag` VARCHAR(255) NOT NULL,
 	PRIMARY KEY(`tag`)
-) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci ENGINE=MyISAM;
 
 -- For tag references, search and other needs
 CREATE TABLE `sed_tag_references` (
@@ -77,7 +77,7 @@ CREATE TABLE `sed_tag_references` (
 	PRIMARY KEY (`tag`, `tag_area`, `tag_item`),
 	KEY `tag_item`(`tag_item`),
 	KEY `tag_area`(`tag_area`)
-) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci ENGINE=MyISAM;
 
 /* r206 Hardened auth system */
 ALTER TABLE sed_users ADD user_hashsalt CHAR(16) NOT NULL DEFAULT '';
@@ -105,7 +105,7 @@ DROP TABLE sed_smilies;
 RENAME TABLE sed_pages_extra_fields  TO sed_extra_fields ;
 ALTER TABLE `sed_extra_fields` ADD `field_location` VARCHAR( 255 ) NOT NULL FIRST ;
 ALTER TABLE `sed_extra_fields` ADD `field_description` TEXT NOT NULL ;
-ALTER TABLE `sed_extra_fields` ADD INDEX ( `field_location` ) ; 
+ALTER TABLE `sed_extra_fields` ADD INDEX ( `field_location` ) ;
 ALTER TABLE `sed_extra_fields` DROP INDEX `field_name`  ;
 ALTER TABLE `sed_extra_fields` ADD INDEX ( `field_name` )  ;
 INSERT INTO `sed_extra_fields` (`field_location`, `field_name`, `field_type`, `field_html`, `field_variants`, `field_description`) VALUES('pages', 'extra1', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('pages', 'extra2', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('pages', 'extra3', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('pages', 'extra4', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('pages', 'extra5', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra1', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra2', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra3', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra4', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra5', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''), ('users', 'extra6', 'textarea', '<textarea cols="80" rows="6" ></textarea>', '', ''), ('users', 'extra7', 'textarea', '<textarea cols="80" rows="6" ></textarea>', '', ''), ('users', 'extra8', 'textarea', '<textarea cols="80" rows="6" ></textarea>', '', ''), ('users', 'extra9', 'textarea', '<textarea cols="80" rows="6" ></textarea>', '', '');
@@ -137,7 +137,7 @@ DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users' AND `config_name` = 'sig_resize' LIMIT 1;
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users' AND `config_name` = 'ph_resize' LIMIT 1;
 
-/* r285 24 symbols for user name - not enough */ 
+/* r285 24 symbols for user name - not enough */
 ALTER TABLE `sed_users` CHANGE `user_name` `user_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 
 /* r289 added config option for autovalidate*/
@@ -146,28 +146,28 @@ INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_
 /* r290 indexpolls*/
 DELETE FROM `sed_plugins` WHERE `pl_file` = 'indexpolls.main';
 
-/* r293 Increase size of user_name and page category title (begins in r285)*/ 
-ALTER TABLE `sed_com` CHANGE `com_author` `com_author` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ; 
-ALTER TABLE `sed_forum_posts` CHANGE `fp_postername` `fp_postername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;  
+/* r293 Increase size of user_name and page category title (begins in r285)*/
+ALTER TABLE `sed_com` CHANGE `com_author` `com_author` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
+ALTER TABLE `sed_forum_posts` CHANGE `fp_postername` `fp_postername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 ALTER TABLE `sed_forum_posts` CHANGE `fp_updater` `fp_updater` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  ;
-ALTER TABLE `sed_forum_sections` CHANGE `fs_lt_postername` `fs_lt_postername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;  
-ALTER TABLE `sed_forum_topics` CHANGE `ft_lastpostername` `ft_lastpostername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ; 
-ALTER TABLE `sed_forum_topics` CHANGE `ft_firstpostername` `ft_firstpostername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;  
+ALTER TABLE `sed_forum_sections` CHANGE `fs_lt_postername` `fs_lt_postername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+ALTER TABLE `sed_forum_topics` CHANGE `ft_lastpostername` `ft_lastpostername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
+ALTER TABLE `sed_forum_topics` CHANGE `ft_firstpostername` `ft_firstpostername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 ALTER TABLE `sed_logger` CHANGE `log_name` `log_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  ;
-ALTER TABLE `sed_online` CHANGE `online_name` `online_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;  
+ALTER TABLE `sed_online` CHANGE `online_name` `online_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 ALTER TABLE `sed_pages` CHANGE `page_author` `page_author` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  ;
 ALTER TABLE `sed_pm` CHANGE `pm_fromuser` `pm_fromuser` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  ;
 ALTER TABLE `sed_structure` CHANGE `structure_title` `structure_title` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 
-/* r372 Fix, adding new hook for MarkitUp!, add search url style config */ 
+/* r372 Fix, adding new hook for MarkitUp!, add search url style config */
 DELETE FROM `sed_plugins` WHERE `pl_code` = 'markitup' AND `pl_file` = 'markitup.ajax';
 REPLACE INTO `sed_plugins` (`pl_id` ,`pl_hook` ,`pl_code` ,`pl_part` ,`pl_title` ,`pl_file` ,`pl_order` ,`pl_active`) VALUES (NULL , 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', '10', '1');
 INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('plug', 'search', '1', 'searchurl', 2, 'Normal', 'Normal,Single', 'Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link');
 
-/* r387 Structure page count fix for news */ 
+/* r387 Structure page count fix for news */
 UPDATE sed_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='news';
 
-/* r400 change poll type */ 
+/* r400 change poll type */
 ALTER TABLE sed_polls MODIFY poll_type VARCHAR(100) NOT NULL DEFAULT 'index';
 UPDATE sed_polls SET poll_type = 'index' WHERE poll_type = '0';
 UPDATE sed_polls SET poll_type = 'forum' WHERE poll_type = '1';
