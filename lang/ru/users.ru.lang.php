@@ -119,7 +119,8 @@ $L['users_newpasshint2'] = '(введите новый пароль дважды
 $L['users_oldpasshint'] = '(введите свой текущий пароль чтобы установить новый)';
 $L['users_lastip'] = 'Последний IP';
 $L['users_logcounter'] = 'Всего авторизаций';
-$L['users_deleteuser'] = '!Удалить пользователя!';
+$L['users_deleteuser'] = 'Удалить пользователя';
+$L['users_changeemail'] = 'Изменить E-mail';
 
 /**
  * Moved from theme.lang
