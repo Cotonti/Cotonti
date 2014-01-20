@@ -45,7 +45,6 @@ require_once $cfg['system_dir'].'/functions.php';
 require_once $cfg['system_dir'] . '/cotemplate.php';
 require_once 'system/debug.php';
 
-
 if (isset($cfg['new_install']) && $cfg['new_install'])
 {
 	require_once $cfg['system_dir'].'/database.php';
@@ -106,6 +105,8 @@ else
 
 	$dbc_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
 	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbc_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+
+	cot::init();
 
 	$sql_install = @$db->query("SHOW TABLES LIKE '$db_updates'");
 
