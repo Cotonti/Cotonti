@@ -428,7 +428,7 @@ function cot_page_import($source = 'POST', $rpage = array(), $auth = array())
 	$rpage['page_author']   = cot_import('rpageauthor', $source, 'TXT');
 	$rpage['page_file']     = intval(cot_import('rpagefile', $source, 'INT'));
 	$rpage['page_url']      = cot_import('rpageurl', $source, 'TXT');
-	$rpage['page_size']     = cot_import('rpagesize', $source, 'TXT');
+	$rpage['page_size']     = (int)cot_import('rpagesize', $source, 'INT');
 	$rpage['page_file']     = ($rpage['page_file'] == 0 && !empty($rpage['page_url'])) ? 1 : $rpage['page_file'];
 
 	$rpagedatenow           = cot_import('rpagedatenow', $source, 'BOL');
