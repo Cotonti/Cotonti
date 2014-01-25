@@ -181,7 +181,7 @@ $L['cfg_menu9_hint'] = '';
  * Performance Subsection
  */
 $L['cfg_gzip'] = 'Gzip';
-$L['cfg_gzip_hint'] = 'Gzip compression of the HTML output. Do not enable it if your server already applies Gzip to your pages. Use this tool to test if Gzip is already enabled on your site: <a href="http://www.whatsmyip.org/http-compression-test/">HTTP Compression Test</a>';
+$L['cfg_gzip_hint'] = 'Gzip compression of the HTML output. Do not enable it if your server already applies Gzip to your pages. Use this tool to test if Gzip is already enabled on your site: <a target="_blank" href="http://www.whatsmyip.org/http-compression-test/">HTTP Compression Test</a>';
 $L['cfg_headrc_consolidate'] = 'Consolidate header and footer resources (JS/CSS)';
 $L['cfg_headrc_minify'] = 'Minify consolidated JS/CSS';
 $L['cfg_jquery_cdn'] = 'Use jQuery from this CDN URL';
