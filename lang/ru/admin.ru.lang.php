@@ -181,7 +181,7 @@ $L['cfg_freetext9_hint'] = ' ';
  * Performance Subsection
  */
 $L['cfg_gzip'] = 'Gzip';
-$L['cfg_gzip_hint'] = 'Gzip-сжатие для исходящего HTML-кода. Не включайте эту опцию, если ваш сервер уже применяет Gzip к страницам сайта. Проверьте, включено ли Gzip-сжатие на вашем сайте, с помощью этого инструмента: <a href="http://www.whatsmyip.org/http-compression-test/">HTTP Compression Test</a>';
+$L['cfg_gzip_hint'] = 'Gzip-сжатие для исходящего HTML-кода. Не включайте эту опцию, если ваш сервер уже применяет Gzip к страницам сайта. Проверьте, включено ли Gzip-сжатие на вашем сайте, с помощью этого инструмента: <a target="_blank" href="http://www.whatsmyip.org/http-compression-test/">HTTP Compression Test</a>';
 $L['cfg_headrc_consolidate'] = 'Объединять ресурсы header/footer (JS/CSS)';
 $L['cfg_headrc_minify'] = 'Минифицировать объединённые JS/CSS';
 $L['cfg_jquery_cdn'] = 'Использовать jQuery из CDN по этой ссылке';
