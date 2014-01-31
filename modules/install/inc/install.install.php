@@ -55,8 +55,8 @@ switch ($step)
 	case 3:
 		$cfg['mainurl'] = cot_import('mainurl', 'P', 'TXT', 0, false, true);
 		$user['name'] = cot_import('user_name', 'P', 'TXT', 100, false, true);
-		$user['pass'] = cot_import('user_pass', 'P', 'HTM', 32);
-		$user['pass2'] = cot_import('user_pass2', 'P', 'TXT', 16);
+		$user['pass'] = cot_import('user_pass', 'P', 'TXT', 32);
+		$user['pass2'] = cot_import('user_pass2', 'P', 'TXT', 32);
 		$user['email'] = cot_import('user_email', 'P', 'TXT', 64, false, true);
 		$user['country'] = cot_import('user_country', 'P', 'TXT', 0, false, true);
 		$rtheme = explode(':', cot_import('theme', 'P', 'TXT', 0, false, true));
