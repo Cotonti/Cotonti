@@ -26,7 +26,7 @@ CKEDITOR.editorConfig = function( config )
 	config.toolbar_Medium = [
 		['Bold','Italic','Underline','Strike'],
 		['NumberedList','BulletedList','-','Blockquote','Syntaxhighlight'],
-		['Link','Unlink','Anchor','Smiley'],
+		['Image','Link','Unlink','Anchor','Smiley'],
 		['TextColor','BGColor'],
 		['Cut','Copy','Paste','PasteText','Scayt'],
 		['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],['Source']
