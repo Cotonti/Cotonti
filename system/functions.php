@@ -4486,7 +4486,7 @@ function cot_rc_consolidate()
 			foreach ($scope_data as $scope => $ordered_files)
 			{
 				$target_path = $cfg['cache_dir'] . "/static/$scope.$theme.$type";
-
+                ksort($ordered_files);
 				$files = array();
 				foreach ($ordered_files as $order => $o_files)
 				{
@@ -4607,6 +4607,7 @@ function cot_rc_consolidate()
 			{
 				foreach ($cot_rc_reg[$type]['files'] as $scope => $scope_data)
 				{
+                    ksort($scope_data);
 					foreach ($scope_data as $order => $files)
 					{
 						foreach ($files as $file)
@@ -4624,6 +4625,7 @@ function cot_rc_consolidate()
 			{
 				foreach ($cot_rc_reg[$type]['embed'] as $scope => $scope_data)
 				{
+                    ksort($scope_data);
 					foreach ($scope_data as $order => $code)
 					{
 						$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_embed", array('code' => $code)) . "\n";

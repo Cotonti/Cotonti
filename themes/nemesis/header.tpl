@@ -37,8 +37,8 @@
 		</li>
 		<!-- ENDIF -->
 		<li>
-			<a href="{PHP|cot_url('page','c=news')}" title="{PHP.L.News}">
-				{PHP.L.News}
+			<a href="{PHP|cot_url('page','c=news')}" title="{PHP.structure.page.news.title}">
+				{PHP.structure.page.news.title}
 				<span>Our updates</span>
 			</a>
 		</li>
