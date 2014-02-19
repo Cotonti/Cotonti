@@ -55,7 +55,7 @@ switch ($n)
 				if ($optionslist[$key]['config_value'] != $val)
 				{
 					$db->update($db_config, array('config_value' => $data), "config_name = ? AND config_owner = ?
-					AND config_cat = ?  AND (config_subcat = '' OR config_subcat = '__default')", array($key, $o, $p));
+					AND config_cat = ?  AND (config_subcat = '' OR config_subcat IS NULL OR config_subcat = '__default')", array($key, $o, $p));
 					$optionslist[$key]['config_value'] = $data;
 				}
 			}

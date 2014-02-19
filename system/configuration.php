@@ -567,7 +567,7 @@ function cot_config_reset($name, $option, $is_module = false, $category = '')
 	else
 	{
 		$db->query("UPDATE $db_config SET config_value = config_default
-			WHERE config_name = ? AND config_owner = ? AND config_cat = ? AND (config_subcat = '' OR config_subcat = '__default')", array($option, $type, $name));
+			WHERE config_name = ? AND config_owner = ? AND config_cat = ? AND (config_subcat = '' OR config_subcat IS NULL OR config_subcat = '__default')", array($option, $type, $name));
 	}
 }
 
@@ -586,7 +586,7 @@ function cot_config_list($owner, $cat, $subcat = "")
 		'type' => "config_type != '" . COT_CONFIG_TYPE_HIDDEN . "'",
 		'owner' => "config_owner = '" . $db->prep($owner) . "'",
 		'cat' => "config_cat = '" . $db->prep($cat) . "'",
-		'subcat' => empty($subcat) ? "(config_subcat = '' OR config_subcat = '__default')" : "(config_subcat = '" . $db->prep($subcat) . "' OR config_subcat = '__default')"
+		'subcat' => empty($subcat) ? "(config_subcat = '' OR config_subcat IS NULL OR config_subcat = '__default')" : "(config_subcat = '" . $db->prep($subcat) . "' OR config_subcat = '__default')"
 	);
 
 	$where_query = implode(" AND ", $where);
