@@ -64,7 +64,7 @@ function cot_file_check($path, $name, $ext)
 			}
 			else
 			{
-				$fcheck = ($cfg['pfsnomimepass']) ? 1 : 2;
+				$fcheck = ($cfg['pfs']['pfsnomimepass']) ? 1 : 2;
 				cot_log(sprintf($L['pfs_filechecknomime'], $ext, $name), 'sec');
 			}
 		}
