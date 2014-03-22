@@ -39,9 +39,9 @@
 								//]]>
 							</script>
 							<div>
-								{PHP.themelang.usersprofile.Emailpassword}:<br />{USERS_PROFILE_EMAILPASS}
+								{PHP.themelang.usersprofile_Emailpassword}:<br />{USERS_PROFILE_EMAILPASS}
 							</div>
-							<div class="small" id="emailnotes">{PHP.themelang.usersprofile.Emailnotes}</div>
+							<div class="small" id="emailnotes">{PHP.themelang.usersprofile_Emailnotes}</div>
 <!-- END: USERS_PROFILE_EMAILPROTECTION -->
 						</td>
 					</tr>
