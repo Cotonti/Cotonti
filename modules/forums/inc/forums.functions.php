@@ -316,8 +316,3 @@ function cot_forums_deletecat($cat)
 	$sql = $db->delete($db_forum_topics, 'ft_cat=' . $db->quote($cat));
 	$sql = $db->delete($db_forum_stats, 'fs_cat=' . $db->quote($cat));
 }
-
-if ($cfg['forums']['markup'] == 1)
-{
-  $minimaxieditor = $cfg['forums']['minimaxieditor'];
-}
