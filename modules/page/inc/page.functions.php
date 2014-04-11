@@ -306,7 +306,11 @@ function cot_page_config_order()
 		'file' => $L['adm_fileyesno'],
 		'url' => $L['adm_fileurl'],
 		'size' => $L['adm_filesize'],
-		'filecount' => $L['adm_filecount']
+		'filecount' => $L['adm_filecount'],
+		'count' => $L['Count'],
+		'updated' => $L['Updated'],
+		'rating' => $L['Rating'],
+		'cat' => $L['Category']
 	);
 
 	foreach($cot_extrafields[$db_pages] as $exfld)
