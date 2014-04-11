@@ -32,6 +32,7 @@ enablereplyform=11:radio::0:
 edittimeout=12:select:0,0.25,1,2,4,12,24,48,72,168:0:
 title_posts=31:string::{TITLE} - {SECTION} - {FORUM}:
 title_topics=32:string::{SECTION} - {FORUM}:
+minimaxieditor=33:select:_minieditor,_medieditor,_editor:_medieditor:
 [END_COT_EXT_CONFIG]
 
 [BEGIN_COT_EXT_CONFIG_STRUCTURE]
