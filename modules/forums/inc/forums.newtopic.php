@@ -186,7 +186,7 @@ $t->assign(array(
 foreach($cot_extrafields[$db_forum_posts] as $exfld)
 {
 	$uname = strtoupper($exfld['field_name']);
-	$exfld_val = cot_build_extrafields('rmsg'.$exfld['field_name'], $exfld, $rmsg[$exfld['field_name']]);
+	$exfld_val = cot_build_extrafields('rmsg'.$exfld['field_name'], $exfld, $rmsg['fp_'.$exfld['field_name']]);
 	$exfld_title = isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 	$t->assign(array(
 		'FORUMS_NEWTOPIC_'.$uname => $exfld_val,
@@ -201,7 +201,7 @@ foreach($cot_extrafields[$db_forum_posts] as $exfld)
 foreach($cot_extrafields[$db_forum_topics] as $exfld)
 {
 	$uname = strtoupper($exfld['field_name']);
-	$exfld_val = cot_build_extrafields('rtopic'.$exfld['field_name'], $exfld, $rtopic[$exfld['field_name']]);
+	$exfld_val = cot_build_extrafields('rtopic'.$exfld['field_name'], $exfld, $rtopic['ft_'.$exfld['field_name']]);
 	$exfld_title = isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 	$t->assign(array(
 		'FORUMS_NEWTOPIC_TOPIC_'.$uname => $exfld_val,

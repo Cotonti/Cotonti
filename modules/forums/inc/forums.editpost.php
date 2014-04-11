@@ -212,7 +212,7 @@ $t->assign(array(
 foreach($cot_extrafields[$db_forum_posts] as $exfld)
 {
 	$uname = strtoupper($exfld['field_name']);
-	$exfld_val = cot_build_extrafields('rmsg'.$exfld['field_name'], $exfld, $rowpost[$exfld['field_name']]);
+	$exfld_val = cot_build_extrafields('rmsg'.$exfld['field_name'], $exfld, $rowpost['fp_'.$exfld['field_name']]);
 	$exfld_title = isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 	$t->assign(array(
 		'FORUMS_EDITPOST_'.$uname => $exfld_val,
