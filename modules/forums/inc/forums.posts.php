@@ -518,7 +518,7 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 
 	$t->assign(array(
 		'FORUMS_POSTS_NEWPOST_SEND' => cot_url('forums', "m=posts&a=newpost&s=" . $s . "&q=" . $q),
-		'FORUMS_POSTS_NEWPOST_TEXT' => $R['forums_code_newpost_mark'] . cot_textarea('rmsgtext', $rmsg['fp_text'], 16, 56, '', 'input_textarea_medieditor'),
+		'FORUMS_POSTS_NEWPOST_TEXT' => $R['forums_code_newpost_mark'] . cot_textarea('rmsgtext', $rmsg['fp_text'], 16, 56, '', 'input_textarea_'.$minimaxieditor),
             	'FORUMS_POSTS_NEWPOST_EDITTIMEOUT' => cot_build_timegap(0, $cfg['forums']['edittimeout'] * 3600)
 	));
 
