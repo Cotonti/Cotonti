@@ -62,19 +62,21 @@ if ($_SERVER['HTTP_HOST'] == $url['host']
 	|| $_SERVER['HTTP_HOST'] != 'www.' . $sys['domain']
 		&& preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']))
 {
-	$sys['host'] = preg_match('#^[\w\p{L}\.\-]+$#u', $_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $url['host'];
+	$sys['host'] = preg_match('#^[\w\p{L}\.\-]+(:\d+)?$#u', $_SERVER['HTTP_HOST']) ? preg_replace('#^([\w\p{L}\.\-]+)(:\d+)?$#u', '$1', $_SERVER['HTTP_HOST']) : $url['host'];
 	$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
+	$sys['site_uri'] = substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'],'/'));
+	$sys['port'] = $_SERVER['SERVER_PORT'] == 80 ? '' : $_SERVER['SERVER_PORT'];
 }
 else
 {
 	$sys['host'] = $url['host'];
+	$sys['port'] = empty($url['port']) || $_SERVER['SERVER_PORT'] == 80 ? '' : $url['port'];
 }
 if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
 define('COT_SITE_URI', $sys['site_uri']);
 // Absolute site url
-$sys['port'] = empty($url['port']) || $_SERVER['SERVER_PORT'] == 80 ? '' : ($cfg['multihost'] ? '' : ':' . $url['port']);
-$sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
-$sys['canonical_url'] = $sys['scheme'] . '://' . $sys['host'] . $sys['port'] . $_SERVER['REQUEST_URI'];
+$sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port']?':'.$sys['port']:'') . $sys['site_uri'];
+$sys['canonical_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port']?':'.$sys['port']:'') . $_SERVER['REQUEST_URI'];
 define('COT_ABSOLUTE_URL', $sys['abs_url']);
 // Reassemble mainurl if necessary
 if ($cfg['multihost'])
