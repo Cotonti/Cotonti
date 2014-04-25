@@ -67,7 +67,7 @@
 						<td>{PHP.L.Language}:</td>
 						<td>{USERS_PROFILE_LANG}</td>
 					</tr>
-					<tr class="hidden">
+					<tr>
 						<td>{PHP.L.Country}:</td>
 						<td>{USERS_PROFILE_COUNTRY}</td>
 					</tr>

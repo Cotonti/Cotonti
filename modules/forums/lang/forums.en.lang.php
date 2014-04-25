@@ -41,6 +41,8 @@ $L['cfg_enablereplyform'] = 'Show reply form on every page';
 $L['cfg_enablereplyform_hint'] = '';
 $L['cfg_edittimeout'] = 'Edit timeout';
 $L['cfg_edittimeout_hint'] = 'Prevents users from editing or deleting their own posts after the given timeout (in hours, 0 disables timeout)';
+$L['cfg_minimaxieditor'] = 'Configurable visual editor';
+$L['cfg_minimaxieditor_params'] = 'Minimal set of buttons, Standard set of buttons, Advanced set of buttons';
 
 $L['cfg_allowusertext'] = 'Display signatures';
 $L['cfg_allowbbcodes'] = 'Enable BBcodes';
