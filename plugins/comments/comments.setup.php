@@ -5,8 +5,8 @@ Code=comments
 Name=Comments system
 Category=community-social
 Description=Comments system for Cotonti
-Version=0.9.7
-Date=2011-09-23
+Version=0.9.17
+Date=2014-05-04
 Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2014
 Notes=BSD License
@@ -37,7 +37,7 @@ order=14:select:Chronological,Recent:Recent:Comment sorting order
  * Comments system plugins
  *
  * @package comments
- * @version 0.7.0
+ * @version 0.9.17
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
