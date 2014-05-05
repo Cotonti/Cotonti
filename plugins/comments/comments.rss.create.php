@@ -82,7 +82,7 @@ if ($m == 'comments')
 					WHERE com_area = 'page' AND com_code='$page_id'
 					ORDER BY com_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 				$i = 0;
-				foreach ($sql->fetch() as $row1)
+				while ($row1 = $sql->fetch())
 				{
 					$items[$i]['title'] = $L['rss_comment_of_user']." ".$row1['user_name'];
 					$text = cot_parse($row1['com_text'], $cfg['plugin']['comments']['parsebbcodecom']);
@@ -91,14 +91,14 @@ if ($m == 'comments')
 						$text .= (cot_string_truncate($text, $cfg['plugin']['comments']['rss_commentmaxsymbols'])) ? '...' : '';
 					}
 					$items[$i]['description'] = $text;
-					$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('page', $page_args, '#c'.$row['com_id'], true);
-					$items[$i]['pubDate'] = cot_date('r', $row['com_date']);
+					$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('page', $page_args, '#c'.$row1['com_id'], true);
+					$items[$i]['pubDate'] = cot_date('r', $row1['com_date']);
 					$i++;
 				}
 				// Attach original page text as last item
 				$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']);
 				$items[$i]['title'] = $L['rss_original'];
-				$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_pageurl'], $row['page_parser']);
+				$items[$i]['description'] = cot_parse_page_text($row['page_text'], $row['page_pageurl'], $row['page_parser']);
 				$items[$i]['link'] = COT_ABSOLUTE_URL . ((empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']));
 				$items[$i]['pubDate'] = cot_date('r', $row['page_date']);
 			}
