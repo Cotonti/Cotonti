@@ -14,7 +14,7 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('auth');
 
 $y = cot_import('y','P','TXT');
-$id = cot_import('id','G','INT');
+$id = (int)cot_import('id','G','INT');
 $s = cot_import('s','G','ALP',13);
 $w = cot_import('w','G','ALP',4);
 $d = cot_import('d','G','INT');
