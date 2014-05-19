@@ -286,17 +286,17 @@ $t->assign(array(
 	'PMSEND_AJAX_MARKITUP' => (COT_AJAX && cot_plugin_active('markitup') && $cfg['pm']['turnajax'])
 ));
 
-if (!$id)
-{
-	$t->parse('MAIN.PMSEND_USERLIST');
-}
-
 /* === Hook === */
 foreach (cot_getextplugins('pm.send.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
+
+if (!$id)
+{
+    $t->parse('MAIN.PMSEND_USERLIST');
+}
 
 $t->parse('MAIN');
 $t->out('MAIN');
