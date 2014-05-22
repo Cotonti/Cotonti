@@ -159,7 +159,7 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 	$use_titles = count($values) == count($titles);
 	$input_attrs = cot_rc_attr_string($attrs);
 	$chosen = cot_import_buffered($name, $chosen);
-    $multi = is_array($chosen) && (mb_strpos($input_attrs, 'multiple' !== false));
+    $multi = is_array($chosen) && (mb_strpos($input_attrs, 'multiple') !== false);
 	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
