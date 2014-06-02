@@ -17,7 +17,7 @@
  */
 defined('COT_CODE') or die('Wrong URL');
 
-if (isset($cot_captcha))
+if (!empty($cot_captcha))
 {
 	if (!function_exists(cot_captcha_generate))
 	{
@@ -69,7 +69,7 @@ if (isset($_POST['rtext']))
 		$rcontact['contact_' . $exfld['field_name']] = cot_import_extrafields('rcontact' . $exfld['field_name'], $exfld);
 	}
 
-	if ($usr['id'] == 0 && isset($cot_captcha))
+	if ($usr['id'] == 0 && !empty($cot_captcha))
 	{
 		$rverify = cot_import('rverify', 'P', 'TXT');
 		if (!cot_captcha_validate($rverify))
@@ -164,12 +164,12 @@ if (!$sent)
 			));
 		$t->parse('MAIN.FORM.EXTRAFLD');
 	}
-	if ($usr['id'] == 0 && isset($cot_captcha))
+	if ($usr['id'] == 0 && !empty($cot_captcha))
 	{
 
 		$t->assign(array(
 			'CONTACT_FORM_VERIFY_IMG' => cot_captcha_generate(),
-			'CONTACT_FORM_VERIFY' => cot_inputbox('text', 'rverify', $rverify, 'id="rverify" size="20"')
+			'CONTACT_FORM_VERIFY' => cot_inputbox('text', 'rverify', '', 'id="rverify" size="20"')
 		));
 		$t->parse('MAIN.FORM.CAPTCHA');
 	}
