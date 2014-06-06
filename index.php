@@ -12,7 +12,9 @@
 if (php_sapi_name() == 'cli-server')
 {
 	// Embedded PHP webserver routing
-	$REQUEST_FILENAME = mb_substr(explode('?', $_SERVER['REQUEST_URI'])[0], 1);
+	$tmp = explode('?', $_SERVER['REQUEST_URI']);
+	$REQUEST_FILENAME = mb_substr($tmp[0], 1);
+	unset($tmp);
 	if (file_exists($REQUEST_FILENAME) && !preg_match('#\.php$#', $REQUEST_FILENAME))
 	{
 		// Transfer static file if exists
