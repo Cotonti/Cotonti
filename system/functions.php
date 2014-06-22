@@ -2649,7 +2649,7 @@ function cot_clear_messages($src = '', $class = '')
 		unset($error_string);
 	}
 
-	if (!is_array($_SESSION['cot_messages'][$sys['site_id']]))
+	if (!is_array($_SESSION['cot_messages'][$sys['site_id']]) || (!empty($src) && !is_array($_SESSION['cot_messages'][$sys['site_id']][$src])))
 	{
 		return;
 	}
