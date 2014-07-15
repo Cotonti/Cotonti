@@ -1763,8 +1763,16 @@ function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $
 			else
 			{
 				// Last item gets decimals and rounding.
-				$pieces[] = cot_build_number($num, $decimals, $round). ' ' .
-							cot_declension($num, $expr, true, true);
+				if($decimals > 0)
+				{
+					$pieces[] = cot_build_number($num, $decimals, $round). ' ' .
+					cot_declension($num, $expr, true, true);
+				}
+				else
+				{
+					$pieces[] = floor($num). ' ' .
+					cot_declension(floor($num), $expr, true, true); 
+				}
 				break;
 			}
 			if ($levels == 0)
