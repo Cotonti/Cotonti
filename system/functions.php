@@ -4556,7 +4556,7 @@ function cot_rc_consolidate()
 								$relative_path = mb_substr($relative_path, 1);
 							}
 							// Apply CSS imports
-							if (preg_match_all('#@import\s+url\((\'|")?([^)]+)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
+							if (preg_match_all('#@import\s+url\((\'|")?([^\)"\']+)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
 							{
 								foreach ($mt as $m)
 								{
