@@ -38,5 +38,7 @@ $htmlpurifier_preset = array(
 	'Filter.YouTube'							=> true,
 	// URI
 	'URI.DisableExternal'						=> false,
-	'URI.DisableExternalResources'				=> false
+	'URI.DisableExternalResources'				=> false,
+
+    'Attr.AllowedFrameTargets'                  => array( '_blank', '_self', '_parent', '_top'),
 );
