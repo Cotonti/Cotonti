@@ -3814,7 +3814,14 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		}
 		elseif ($i == $cur_left - 2)
 		{
-			$args[$characters] = $i * $perpage;
+			if ($cfg['easypagenav'])
+            {
+                $args[$characters] = $i+1;     
+            }
+            else
+            {
+                $args[$characters] = $i * $perpage;
+            }
 			if ($ajax_rel)
 			{
 				$ajax_args[$characters] = $args[$characters];
