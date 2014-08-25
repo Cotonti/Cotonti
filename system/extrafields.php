@@ -817,7 +817,7 @@ function cot_extrafield_movefiles()
 			{
 				@unlink($uploadfile['old']);
 			}
-			if (!empty($uploadfile['tmp']) && !empty($uploadfile['tmp']))
+			if (!empty($uploadfile['tmp']) && !empty($uploadfile['new']))
 			{
 				@move_uploaded_file($uploadfile['tmp'], $uploadfile['new']);
 			}
