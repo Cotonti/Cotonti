@@ -1771,7 +1771,7 @@ function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $
 				else
 				{
 					$pieces[] = floor($num). ' ' .
-					cot_declension(floor($num), $expr, true, true); 
+					cot_declension(floor($num), $expr, true, true);
 				}
 				break;
 			}
@@ -1981,6 +1981,10 @@ function cot_build_url($text, $maxlen=64)
  */
 function cot_build_user($id, $user, $extra_attrs = '')
 {
+	if (function_exists('cot_build_user_custom'))
+	{
+		return cot_build_user_custom($id, $user, $extra_attrs);
+	}
 	if (!$id)
 	{
 		return empty($user) ? '' : $user;
@@ -3816,7 +3820,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		{
 			if ($cfg['easypagenav'])
             {
-                $args[$characters] = $i+1;     
+                $args[$characters] = $i+1;
             }
             else
             {
