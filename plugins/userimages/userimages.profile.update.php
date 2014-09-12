@@ -30,7 +30,8 @@ if($_FILES)
 		if (!empty($file['tmp_name']) && $file['size'] > 0 && is_uploaded_file($file['tmp_name']))
 		{
 			$gd_supported = array('jpg', 'jpeg', 'png', 'gif');
-			$file_ext = strtolower(end(explode(".", $file['name'])));
+			$var = explode(".", $file['name']);
+			$file_ext = strtolower(array_pop($var));
 			$fcheck = cot_file_check($file['tmp_name'], $file['name'], $file_ext);
 			if(in_array($file_ext, $gd_supported) && $fcheck == 1)
 			{
