@@ -131,7 +131,7 @@ switch ($n)
 
 		foreach ($optionslist as $key => $row)
 		{
-			list($title, $hint) = cot_config_titles($row['config_name'], $row['config_title']);
+			list($title, $hint) = cot_config_titles($row['config_name'], $row['config_text']);
 
 			if ($row['config_subcat'] == '__default' && $prev_subcat == '' && $row['config_type'] != COT_CONFIG_TYPE_SEPARATOR)
 			{

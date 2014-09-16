@@ -499,7 +499,7 @@ else
 			/* ===== */
 			foreach ($optionslist as $row_c)
 			{
-				list($title, $hint) = cot_config_titles($row_c['config_name'], $row_c['config_title']);
+				list($title, $hint) = cot_config_titles($row_c['config_name'], $row_c['config_text']);
 
 				if ($row_c['config_type'] == COT_CONFIG_TYPE_SEPARATOR)
 				{
