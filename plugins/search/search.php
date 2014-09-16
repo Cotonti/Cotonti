@@ -178,7 +178,7 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugi
 
 if (!empty($sq))
 {
-	$words = explode(' ', $sq);
+	$words = explode(' ', preg_replace("'\s+'", " ", $sq));
 	$sqlsearch = '%'.implode('%', $words).'%';
 	if (mb_strlen($sq) < $cfg['plugin']['search']['minsigns'])
 	{
