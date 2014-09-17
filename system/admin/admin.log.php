@@ -31,7 +31,8 @@ $log_groups = array(
 	'plg' => $L['Plugins']
 );
 
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+$maxrowsperpage = (is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
+list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage);
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.log.first') as $pl)
@@ -72,15 +73,15 @@ foreach($log_groups as $grp_code => $grp_name)
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = ($n == 'all') ? $totaldblog : $db->query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'")->fetchColumn();
-$pagenav = cot_pagenav('admin', 'm=log&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav('admin', 'm=log&n='.$n, $d, $totalitems, $maxrowsperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 if($n == 'all')
 {
-	$sql = $db->query("SELECT * FROM $db_logger WHERE 1 ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$sql = $db->query("SELECT * FROM $db_logger WHERE 1 ORDER by log_id DESC LIMIT $d, ".$maxrowsperpage);
 }
 else
 {
-	$sql = $db->query("SELECT * FROM $db_logger WHERE log_group='$n' ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$sql = $db->query("SELECT * FROM $db_logger WHERE log_group='$n' ORDER by log_id DESC LIMIT $d, ".$maxrowsperpage);
 }
 
 $ii = 0;
