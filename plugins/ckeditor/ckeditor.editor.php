@@ -12,7 +12,6 @@ Hooks=editor
  * does not support consolidation.
  *
  * @package ckeditor
- * @version 0.9.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2010-2014
  * @license BSD
