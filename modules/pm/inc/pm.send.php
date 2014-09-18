@@ -19,8 +19,6 @@ cot_block($usr['auth_write']);
 $to = cot_import('to', 'G', 'TXT');
 $a = cot_import('a','G','TXT');
 $id = cot_import('id','G','INT');
-$parser = ! empty($sys['parser']) ? $sys['parser'] : $cfg['parser'];
-$editor = $cfg['plugin'][$parser]['editor'];
 
 $totalrecipients = 0;
 $touser_sql = array();
@@ -301,7 +299,7 @@ $t->assign(array(
 	'PMSEND_SENTBOX_COUNT' => $totalsentbox,
 	'PMSEND_FORM_SEND' => cot_url('pm', 'm=send&a=send'.$idurl),
 	'PMSEND_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
-	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor').$text_editor_code,
+	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor') . $text_editor_code,
 	'PMSEND_FORM_TOUSER' => cot_textarea('newpmrecipient', $touser, 3, 56, 'class="userinput"'),
 ));
 

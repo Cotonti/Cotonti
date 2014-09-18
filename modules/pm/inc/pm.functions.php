@@ -14,9 +14,12 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_langfile('pm', 'module');
 require_once cot_incfile('pm', 'module', 'resources');
 
+$parser = ! empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
+$editor = cot::$cfg['plugin'][$parser]['editor'];
+
 cot::$db->registerTable('pm');
 
-cot::$cfg['pm']['turnajax'] = cot::$cfg['jquery'] && cot::$cfg['turnajax'] && cot::$cfg['pm']['turnajax'];
+cot::$cfg['pm']['turnajax'] = cot::$cfg['pm']['turnajax'] && cot::$cfg['jquery'] && cot::$cfg['turnajax'] && $editor != 'elrte' && $editor != 'epiceditor';
 
 /**
  * Send an email in the recipient's language
