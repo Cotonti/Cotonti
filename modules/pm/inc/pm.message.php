@@ -4,7 +4,6 @@
  * PM
  *
  * @package pm
- * @version 0.9.6
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
@@ -21,6 +20,8 @@ $id = cot_import('id','G','INT');				// Message ID
 $q = cot_import('q','G','TXT');					// Quote
 $history = cot_import('history','G','BOL');		// Turn on history
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['pm']['maxpmperpage']); //pagination history
+$parser = ! empty($sys['parser']) ? $sys['parser'] : $cfg['parser'];
+$editor = $cfg['plugin'][$parser]['editor'];
 
 if (empty($id))
 {
@@ -189,15 +190,42 @@ if ($usr['auth_write'])
 	{
 		$newpmtitle = 'Re: ' . $row['pm_title'];
 	}
-	$newpmtext = (!empty($q)) ? '[quote]'.htmlspecialchars($row['pm_text']).'[/quote]' : '';
-	$onclick = "insertText(document, 'newpmtext', '[quote]'+$('#pm_text').text()+'[/quote]'); return false;";
+	switch ($editor)
+	{
+		case 'markitup':
+			$newpmtext = (!empty($q)) ? '[quote]'.htmlspecialchars($row['pm_text']).'[/quote]' : '';
+			if ($cfg['jquery']) $onclick = "insertText(document, 'newpmtext', '[quote]'+$('#pm_text').text()+'[/quote]'); return false;";
+			break;
+		case 'ckeditor':
+			if ($cfg['jquery']) $onclick = "CKEDITOR.instances.newpmtext.insertHtml('<blockquote>'+$('#pm_text').text()+'</blockquote><br />'); return false;";
+		default:
+			$newpmtext = (!empty($q)) ? '<blockquote>'.$row['pm_text'].'</blockquote>' : '';
+	}
 
+	if (COT_AJAX)
+	{
+		// Attach rich text editors to AJAX loaded page
+		$rc_tmp = $out['footer_rc'];
+		$out['footer_rc'] = '';
+		if (is_array($cot_plugins['editor']))
+		{
+			foreach ($cot_plugins['editor'] as $k)
+			{
+				if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R'))
+				{
+					include $cfg['plugins_dir'] . '/' . $k['pl_file'];
+					break;
+				}
+			}
+		}
+		$text_editor_code = $out['footer_rc'];
+		$out['footer_rc'] = $rc_tmp;
+	}
 	$t->assign(array(
 		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.(int)$history.'&d='.$durl), $L['Quote'], array('onclick' => $onclick)),
 		'PM_FORM_SEND' => cot_url('pm', 'm=send&a=send&to='.$to),
 		'PM_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
-		'PM_FORM_TEXT' => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
-		'PM_AJAX_MARKITUP' => (COT_AJAX && cot_plugin_active('markitup') && $cfg['pm']['turnajax'])
+		'PM_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor').$text_editor_code,
 	));
 
 	/* === Hook === */
@@ -256,4 +284,5 @@ else
 	$t->parse('MAIN');
 	$t->out('MAIN');
 }
+
 require_once $cfg['system_dir'] . '/footer.php';

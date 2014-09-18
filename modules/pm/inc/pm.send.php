@@ -4,7 +4,6 @@
  * PM
  *
  * @package pm
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
@@ -20,6 +19,8 @@ cot_block($usr['auth_write']);
 $to = cot_import('to', 'G', 'TXT');
 $a = cot_import('a','G','TXT');
 $id = cot_import('id','G','INT');
+$parser = ! empty($sys['parser']) ? $sys['parser'] : $cfg['parser'];
+$editor = $cfg['plugin'][$parser]['editor'];
 
 $totalrecipients = 0;
 $touser_sql = array();
@@ -269,6 +270,25 @@ $url_newpm = cot_url('pm', 'm=send');
 $url_inbox = cot_url('pm');
 $url_sentbox = cot_url('pm', 'f=sentbox');
 
+	if (COT_AJAX)
+	{
+		// Attach rich text editors to AJAX loaded page
+		$rc_tmp = $out['footer_rc'];
+		$out['footer_rc'] = '';
+		if (is_array($cot_plugins['editor']))
+		{
+			foreach ($cot_plugins['editor'] as $k)
+			{
+				if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R'))
+				{
+					include $cfg['plugins_dir'] . '/' . $k['pl_file'];
+					break;
+				}
+			}
+		}
+		$text_editor_code = $out['footer_rc'];
+		$out['footer_rc'] = $rc_tmp;
+	}
 $t->assign(array(
 	'PMSEND_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'PMSEND_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link($url_newpm, $L['pm_sendnew'], array('class'=>$cfg['pm']['turnajax'] ? 'ajax' : '')) : '',
@@ -281,9 +301,8 @@ $t->assign(array(
 	'PMSEND_SENTBOX_COUNT' => $totalsentbox,
 	'PMSEND_FORM_SEND' => cot_url('pm', 'm=send&a=send'.$idurl),
 	'PMSEND_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
-	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor'),
+	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor').$text_editor_code,
 	'PMSEND_FORM_TOUSER' => cot_textarea('newpmrecipient', $touser, 3, 56, 'class="userinput"'),
-	'PMSEND_AJAX_MARKITUP' => (COT_AJAX && cot_plugin_active('markitup') && $cfg['pm']['turnajax'])
 ));
 
 /* === Hook === */

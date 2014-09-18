@@ -6,7 +6,7 @@ Description=On-site user communication like e-mail
 Version=0.9.10
 Date=2011-08-19
 Author=esclkm, Cotonti Team, Neocrome
-Copyright=(c) Cotonti Team 2008-2011
+Copyright=(c) Cotonti Team 2008-2014
 Notes=BSD License
 Auth_guests=
 Lock_guests=W12345A
@@ -28,7 +28,7 @@ css=99:radio:0,1:1:Enable module CSS
  * PM setup file
  *
  * @package pm
- * @version 0.7.0
+ * @version 0.9.16
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD

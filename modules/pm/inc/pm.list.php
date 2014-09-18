@@ -4,7 +4,6 @@
  * PM
  *
  * @package pm
- * @version 0.9.6
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD

@@ -9,7 +9,6 @@ Hooks=module
  * Private messages module main
  *
  * @package pm
- * @version 0.9.2
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD

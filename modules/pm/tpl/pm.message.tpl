@@ -72,9 +72,6 @@
 <!-- END: HISTORY -->
 				</div>
 			</div>
-			<!-- IF {PM_AJAX_MARKITUP} AND {PHP.cfg.pm.turnajax} -->
-			<script type="text/javascript">$(document).ready(function() {$("textarea.editor").markItUp(mySettings);});</script>
-			<!-- ENDIF -->
 
 			<!-- IF {PHP.cfg.jquery} AND {PHP.cfg.pm.turnajax} -->
 			<script type="text/javascript" src="{PHP.cfg.modules_dir}/pm/js/pm.js"></script>

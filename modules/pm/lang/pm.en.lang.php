@@ -3,7 +3,6 @@
  * English Language File for the PM Module (pm.en.lang.php)
  *
  * @package pm
- * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
