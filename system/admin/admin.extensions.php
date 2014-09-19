@@ -241,6 +241,60 @@ switch($a)
 					$info_file = cot_infoget($extplugin_file, 'SED_EXTPLUGIN');
 				}
 				$info_part = preg_match("#^$code\.([\w\.]+).php$#", $x, $mt) ? $mt[1] : 'main';
+				$Hooks = explode(',', str_replace(' ', '', $info_file['Hooks']));
+				// check for not registered Hooks
+				$not_registred = array();
+				foreach ($Hooks as $h)
+				{
+					$regsistred_by_hook = $cot_plugins[$h];
+					if (is_array($regsistred_by_hook) && sizeof($regsistred_by_hook))
+					{
+						$found = false;
+						foreach ($regsistred_by_hook as $reg_data)
+						{
+							if ($reg_data['pl_file'] == $code . '/' . $x)
+							{
+								$found = true;
+								break;
+							}
+						}
+						if (! $found)
+						{
+							array_push($not_registred, $h);
+						}
+					}
+					else
+					{
+						array_push($not_registred, $h);
+					}
+				}
+
+				$deleted = array();
+				// checks for deleted Hooks
+				foreach ($cot_plugins as $registered)
+				{
+					foreach ($registered as $reg_data)
+					{
+						if ($reg_data['pl_file'] == $code . '/' . $x)
+						{
+							if (!in_array($reg_data['pl_hook'], $Hooks)) array_push($deleted, $reg_data['pl_hook']);
+						}
+					}
+				}
+				if (sizeof($not_registred) || sizeof($deleted))
+				{
+					$info_file['Error'] = $L['adm_hook_changed'];
+					if (sizeof($not_registred))
+					{
+						$info_file['Error'] .= cot_rc('adm_hook_notregistered', array('hooks' => implode(', ', $not_registred)));
+					}
+					if (sizeof($deleted))
+					{
+						$info_file['Error'] .= cot_rc('adm_hook_notfound', array('hooks' => implode(', ', $deleted)));
+					}
+
+					$info_file['Error'] .= $L['adm_hook_updatenote'];
+				}
 
 				if(!empty($info_file['Error']))
 				{
