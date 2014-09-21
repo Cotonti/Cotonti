@@ -22,7 +22,7 @@ $al = cot_import('al', 'G', 'ALP');
 $c = cot_import('c', 'G', 'TXT');
 $v = cot_import('v', 'G', 'TXT');
 
-$maxrowsperpage = (is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
+$maxrowsperpage = (is_int($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0 || ctype_digit($cfg['maxrowsperpage'])) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage);
 $mode = cot_import('mode', 'G', 'ALP');
 

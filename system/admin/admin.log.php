@@ -31,7 +31,7 @@ $log_groups = array(
 	'plg' => $L['Plugins']
 );
 
-$maxrowsperpage = (is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
+$maxrowsperpage = (is_int($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0 || ctype_digit($cfg['maxrowsperpage'])) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage);
 
 /* === Hook === */
