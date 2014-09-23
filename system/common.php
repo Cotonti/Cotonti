@@ -415,10 +415,6 @@ else
 {
 	$_SESSION['s_run_admin'] = defined('COT_ADMIN');
 }
-if (!defined('COT_INSTALL')){
-    // User API is available everywhere
-    require_once cot_incfile('users', 'module');
-}
 
 /* ======== Category Structure ======== */
 if (!$structure)

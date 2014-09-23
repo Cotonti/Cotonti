@@ -1996,6 +1996,39 @@ function cot_build_user($id, $user, $extra_attrs = '')
 }
 
 /**
+ * Displays User full name
+ *
+ * Format of full name is language specific and defined by $R['users_full_name']
+ * resource string.
+ *
+ * @param array|int $user User Data or User ID
+ * @return string
+ */
+function cot_user_full_name($user)
+{
+	if (empty($user)) return '';
+	if (is_int($user) && $user > 0 || ctype_digit($user))
+	{
+		require_once cot_incfile('users', 'module');
+		$user = cot_user_data($user);
+	}
+
+	$user_fname = $user['user_firstname'] ? $user['user_firstname'] : $user['user_first_name'];
+	$user_mname = $user['user_middlename'] ? $user['user_middlename'] : $user['user_middle_name'];
+	$user_lname = $user['user_lastname'] ? $user['user_lastname'] : $user['user_last_name'];
+
+	$full_name = trim(cot_rc('users_full_name',
+		array(
+			'firstname' 	=> $user_fname,
+			'middlename'	=> $user_mname,
+			'lastname'		=> $user_lname
+		)
+	));
+
+	return $full_name ? $full_name : $user['user_name'];
+}
+
+/**
  * Returns group link (button)
  *
  * @param int $grpid Group ID
@@ -2097,7 +2130,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'NICKNAME' => htmlspecialchars($user_data['user_name']),
 				'DETAILSLINK' => cot_url('users', 'm=details&id=' . $user_data['user_id'].'&u='.htmlspecialchars($user_data['user_name'])),
 				'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
-                'DISPLAY_NAME' => htmlspecialchars(cot_user_display_name($user_data)),
+				'FULL_NAME' => htmlspecialchars(cot_user_full_name($user_data)),
 				'TITLE' => $cot_groups[$user_data['user_maingrp']]['title'],
 				'MAINGRP' => cot_build_group($user_data['user_maingrp']),
 				'MAINGRPID' => $user_data['user_maingrp'],
@@ -2146,7 +2179,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'ID' => 0,
 				'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
 				'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-                'DISPLAY_NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+				'FULL_NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
 				'MAINGRP' => cot_build_group(1),
 				'MAINGRPID' => 1,
 				'MAINGRPSTARS' => '',
@@ -2181,6 +2214,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 	}
 	return $return_array;
 }
+
 
 /**
  * Resize an image

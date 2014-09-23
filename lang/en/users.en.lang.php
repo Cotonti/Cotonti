@@ -128,3 +128,8 @@ $L['users_changeemail'] = 'Change email';
 
 $themelang['usersprofile_Emailpassword'] = 'Your current password';
 $themelang['usersprofile_Emailnotes'] = '<p><b>Email transition process (if email transition is available and new email validation is required):</b></p><ol><li>You can\'t use your current email address</li><li>For security reasons you have to enter your current password</li><li>You should re-activate your account via email to prove the new email address is valid</li><li>Your account will be suspended until you use the validation link</li><li>Upon email validation your account will immediately become active again</li><li>Be careful while typing your new email address; you won\'t have a chance to change it later</li><li>Contact an administrator via email if you made a mistake.</li></ol><p><b>If new email validation is not required, the new email address will become effective immediately.</b></p>';
+
+/**
+ * Users full name display format
+ */
+$R['users_full_name'] = '{$firstname} {$lastname}';
