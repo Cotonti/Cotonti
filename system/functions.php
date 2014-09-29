@@ -2012,6 +2012,7 @@ function cot_user_full_name($user)
 		require_once cot_incfile('users', 'module');
 		$user = cot_user_data($user);
 	}
+    if (empty($user)) return '';
 
 	$user_fname = $user['user_firstname'] ? $user['user_firstname'] : $user['user_first_name'];
 	$user_mname = $user['user_middlename'] ? $user['user_middlename'] : $user['user_middle_name'];
@@ -2021,7 +2022,8 @@ function cot_user_full_name($user)
 		array(
 			'firstname' 	=> $user_fname,
 			'middlename'	=> $user_mname,
-			'lastname'		=> $user_lname
+			'lastname'		=> $user_lname,
+            'name'          => $user['user_name']
 		)
 	));
 
