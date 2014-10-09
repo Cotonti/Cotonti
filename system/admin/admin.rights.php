@@ -26,10 +26,20 @@ $t = new XTemplate(cot_tplfile('admin.rights', 'core'));
 $g = cot_import('g', 'G', 'INT');
 $advanced = cot_import('advanced', 'G', 'BOL');
 
+if(!$g){
+    cot_error(cot::$L['users_group_not_found']);
+    cot_redirect(cot_url('admin', array('m' => 'users'), '', true));
+}
+$group = $db->query("SELECT * FROM $db_groups WHERE grp_id = ?", $g)->fetch();
+if(!$group) {
+    cot_error(cot::$L['users_group_not_found']);
+    cot_redirect(cot_url('admin', array('m' => 'users'), '', true));
+}
+
 // Check if the group is rightless
-if ($db->query("SELECT grp_skiprights FROM $db_groups WHERE grp_id = $g")->fetchColumn())
-{
-	cot_die();
+if ($group['grp_skiprights'] > 0) {
+	cot_error("«{$group['grp_name']}». ".cot::$L['adm_group_has_no_rights']);
+    cot_redirect(cot_url('admin', array('m' => 'users'), '', true));
 }
 
 /* === Hook === */

@@ -15,7 +15,6 @@ defined('COT_CODE') or die('Wrong URL.');
 /**
  * User authentication
  */
-
 $L['users_nameormail'] = 'Username or email';
 $L['users_rememberme'] = 'Remember me';
 $L['users_lostpass'] = 'Lost your password?';
@@ -27,7 +26,6 @@ $L['users_logoutfirst'] = 'If you want to log in with another account you have t
 /**
  * User registration
  */
-
 $L['users_validemail'] = 'Valid email';
 $L['users_validemailhint'] = '(A valid email is required to complete the registration process)';
 $L['users_confirmpass'] = 'Confirm password';
@@ -51,7 +49,6 @@ $L['aut_usernametooshort']= 'The user name must be at least 2 chars long';
 /**
  * User registration: messages
  */
-
 $L['aut_regrequest'] = "Hi %1\$s,\n\nYour account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured.";
 
 $L['aut_regreqnotice'] = "You are receiving this email because %1\$s requested a new account.\nThis user won't be able to login until you manually set the account as 'active', here:\n%2\$s";
@@ -63,7 +60,6 @@ $L['aut_emailchange'] = "Hi %1\$s,\nTo change your recent email please use this 
 /**
  * User list
  */
-
 $L['users_usersperpage'] = 'Users per page';
 $L['users_usersinthissection'] = 'Users total';
 
@@ -102,7 +98,6 @@ $L['pasrec_youremail'] = 'Your email: ';
 /**
  * User details
  */
-
 $L['users_sendpm'] = 'Send a private message';
 
 /**
@@ -121,6 +116,11 @@ $L['users_lastip'] = 'Last known IP';
 $L['users_logcounter'] = 'Log counter';
 $L['users_deleteuser'] = 'Delete this user';
 $L['users_changeemail'] = 'Change email';
+
+/**
+ * Miscellaneous
+ */
+$L['users_group_not_found'] = 'Group not found';
 
 /**
  * Moved from theme.lang

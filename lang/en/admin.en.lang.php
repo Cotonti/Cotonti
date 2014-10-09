@@ -391,6 +391,7 @@ $L['adm_maxsizeallpfs'] = 'Max size of all files together in '.$L['PFS'].' (KiB)
 $L['adm_copyrightsfrom'] = 'Set the same rights as the group';
 $L['adm_rights_maintenance'] = 'Access to site when maintenance mode on';
 $L['adm_skiprights'] = 'Omit rights for this group';
+$L['adm_group_has_no_rights'] = 'Group has no rights';
 $L['adm_groups_name_empty'] = 'Group name must not be empty';
 $L['adm_groups_title_empty'] = 'Group member title must not be empty';
 $L['users_grp_5_title'] = 'Administrators';
