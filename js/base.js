@@ -303,6 +303,13 @@ function bindHandlers() {
 
 if (typeof jQuery != 'undefined') {
 	$(document).ready(function() {
+        // If page was loaded with hash
+        if (ajaxEnabled) {
+            if(window.location.hash != '') {
+                ajaxPageLoad(window.location.hash.replace(/^#/, ''));
+            }
+        }
+
 		bindHandlers();
 	});
 }

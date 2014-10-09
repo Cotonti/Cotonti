@@ -38,7 +38,7 @@ if(!$group) {
 
 // Check if the group is rightless
 if ($group['grp_skiprights'] > 0) {
-	cot_error("«{$group['grp_name']}». ".cot::$L['adm_group_has_no_rights']);
+    cot_error("«{$group['grp_name']}». ".cot::$L['adm_group_has_no_rights']);
     cot_redirect(cot_url('admin', array('m' => 'users'), '', true));
 }
 
