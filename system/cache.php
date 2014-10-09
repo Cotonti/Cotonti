@@ -832,7 +832,7 @@ if (extension_loaded('memcache'))
 	/**
 	 * Memcache distributed persistent cache driver implementation. Give it a higher priority
 	 * if a cluster of webservers is used and Memcached is running via TCP/IP between them.
-	 * In other circumstances this only should be used if no APC/eAccelerator/XCache available,
+	 * In other circumstances this only should be used if no APC/XCache available,
 	 * keeping in mind that File_cache might be still faster.
 	 * @author Cotonti Team
 	 */
@@ -857,6 +857,16 @@ if (extension_loaded('memcache'))
 			$this->memcache->addServer($host, $port, $persistent);
 		}
 
+        /**
+         * Make unique key for one of different sites on one memcache pool
+         * @param $key
+         * @return string
+         */
+        public static function createKey($key) {
+            if (is_array($key))  $key = serialize($key);
+            return md5(cot::$cfg['site_id'].$key);
+        }
+
 		/**
 		 * @see Cache_driver::clear()
 		 */
@@ -878,6 +888,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function dec($id, $realm = COT_DEFAULT_REALM, $value = 1)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->decrement($realm.'/'.$id, $value);
 		}
 
@@ -886,6 +897,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function exists($id, $realm = COT_DEFAULT_REALM)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->get($realm.'/'.$id) !== FALSE;
 		}
 
@@ -894,6 +906,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function get($id, $realm = COT_DEFAULT_REALM)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->get($realm.'/'.$id);
 		}
 
@@ -915,6 +928,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function inc($id, $realm = COT_DEFAULT_REALM, $value = 1)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->increment($realm.'/'.$id, $value);
 		}
 
@@ -923,6 +937,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function remove($id, $realm = COT_DEFAULT_REALM)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->delete($realm.'/'.$id);
 		}
 
@@ -931,6 +946,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->set($realm.'/'.$id, $data, 0, $ttl);
 		}
 	}

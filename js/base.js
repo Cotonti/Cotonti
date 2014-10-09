@@ -302,7 +302,7 @@ function bindHandlers() {
 }
 
 if (typeof jQuery != 'undefined') {
-	$(document).ready(function() {
+    $(document).ready(function() {
         // If page was loaded with hash
         if (ajaxEnabled) {
             if(window.location.hash != '') {
@@ -310,8 +310,8 @@ if (typeof jQuery != 'undefined') {
             }
         }
 
-		bindHandlers();
-	});
+        bindHandlers();
+    });
 }
 
 window.name = 'main';
