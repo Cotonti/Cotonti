@@ -143,6 +143,7 @@ function ajaxSend(settings) {
  * @type bool
  */
 function ajaxPageLoad(hash) {
+    if(hash != '') hash.replace(/^#/, '');
 	var m = hash.match(/^get(-.*?)?;(.*)$/);
 	if (m) {
 		// ajax bookmark
