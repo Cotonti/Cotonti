@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Administration panel
  *
  * @package Cotonti
- * @version 0.9.0
+ * @version 0.9.17
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
@@ -158,18 +157,6 @@ else
 		$rstructureicon = cot_import('rstructureicon', 'P', 'ARR');
 		$rstructurelocked = cot_import('rstructurelocked', 'P', 'ARR');
 
-		foreach ($cot_extrafields[$db_structure] as $exfld)
-		{
-			if ($exfld['field_type'] != 'file' && $exfld['field_type'] != 'filesize')
-			{
-				$rstructureextrafieldsarr[$exfld['field_name']] = cot_import('rstructure'.$exfld['field_name'], 'P', 'ARR');
-			}
-			elseif ($exfld['field_type'] == 'file')
-			{
-				$rstructureextrafieldsarr[$exfld['field_name']] = cot_import_filesarray('rstructure'.$exfld['field_name']);
-			}
-		}
-
 		$rtplmodearr = cot_import('rstructuretplmode', 'P', 'ARR');
 		$rtplforcedarr = cot_import('rstructuretplforced', 'P', 'ARR');
 		$rtplquickarr = cot_import('rstructuretplquick', 'P', 'ARR');
@@ -196,7 +183,8 @@ else
 
 			foreach ($cot_extrafields[$db_structure] as $exfld)
 			{
-				$rstructure['structure_'.$exfld['field_name']] = cot_import_extrafields($rstructureextrafieldsarr[$exfld['field_name']][$i], $exfld, 'D', $oldrow['structure_'.$exfld['field_name']]);
+                $rstructure['structure_'.$exfld['field_name']] = cot_import_extrafields('rstructure'.$exfld['field_name'].'_'.$i,
+                    $exfld, 'P', $oldrow['structure_'.$exfld['field_name']]);
 			}
 
 			$rtplmode = cot_import($rtplmodearr[$i], 'D', 'INT');
@@ -472,7 +460,7 @@ else
 
 		foreach ($cot_extrafields[$db_structure] as $exfld)
 		{
-			$exfld_val = cot_build_extrafields('rstructure'.$exfld['field_name'].'['.$structure_id.']', $exfld, $row['structure_'.$exfld['field_name']]);
+			$exfld_val = cot_build_extrafields('rstructure'.$exfld['field_name'].'_'.$structure_id, $exfld, $row['structure_'.$exfld['field_name']]);
 			$exfld_title = isset($L['structure_'.$exfld['field_name'].'_title']) ? $L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 			$t->assign(array(
 				'ADMIN_STRUCTURE_'.strtoupper($exfld['field_name']) => $exfld_val,
