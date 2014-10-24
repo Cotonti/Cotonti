@@ -5385,7 +5385,7 @@ function cot_parse_str($str)
 	{
 		if (!empty($item))
 		{
-			list($key, $val) = explode('=', $item);
+			list($key, $val) = explode('=', $item, 2);
 			$res[$key] = $val;
 		}
 	}
