@@ -783,6 +783,8 @@ function cot_extrafields_register_table($table_name)
 function cot_import_filesarray($file_post)
 {
 	$file_post = $_FILES[$file_post];
+    if(empty($file_post)) return null;
+
 	$file_arr = array();
 	$file_keys = array_keys($file_post);
 
