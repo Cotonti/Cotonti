@@ -334,7 +334,10 @@ class XTemplate
 
 			if (self::$cache_enabled)
 			{
-				if (is_writeable(self::$cache_dir . '/templates/'))
+                $cache_dir = self::$cache_dir . '/templates/';
+                if (!empty(self::$cache_dir) && !file_exists($cache_dir)) mkdir($cache_dir, 0755, true);
+
+				if (is_writeable($cache_dir))
 				{
 					file_put_contents($cache_path, serialize($this->blocks));
 					file_put_contents($cache_idx, serialize($this->index));
@@ -343,7 +346,7 @@ class XTemplate
 				}
 				else
 				{
-					throw new Exception('Your "' . self::$cache_dir . '/templates/" is not writable');
+					throw new Exception('Your "' . $cache_dir . '" is not writable');
 				}
 			}
 		}
