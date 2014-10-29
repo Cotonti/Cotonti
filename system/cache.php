@@ -286,15 +286,18 @@ class File_cache extends Static_cache_driver
 	 */
 	private $dir;
 
-	/**
-	 * Cache storage object constructor
-	 * @param string $dir Cache root directory. System default will be used if empty.
-	 * @return File_cache
-	 */
+    /**
+     * Cache storage object constructor
+     * @param string $dir Cache root directory. System default will be used if empty.
+     * @throws Exception
+     * @return File_cache
+     */
 	public function __construct($dir = '')
 	{
 		global $cfg;
 		if (empty($dir)) $dir = $cfg['cache_dir'];
+
+        if (!empty($dir) && !file_exists($dir)) mkdir($dir, 0755, true);
 
 		if (file_exists($dir) && is_writeable($dir))
 		{
