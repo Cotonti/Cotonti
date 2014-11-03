@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.17
+ * Version: 0.9.18
  */
 
 DROP TABLE IF EXISTS `cot_auth`;
@@ -228,9 +228,9 @@ CREATE TABLE `cot_logger` (
 DROP TABLE IF EXISTS `cot_plugins`;
 CREATE TABLE `cot_plugins` (
   `pl_id` mediumint NOT NULL auto_increment,
-  `pl_hook` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `pl_code` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `pl_part` varchar(32) collate utf8_unicode_ci NOT NULL default '',
+  `pl_hook` varchar(255) collate utf8_unicode_ci NOT NULL default '',
+  `pl_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
+  `pl_part` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `pl_title` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `pl_file` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `pl_order` tinyint unsigned NOT NULL default '10',
