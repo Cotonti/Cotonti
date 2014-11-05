@@ -74,4 +74,4 @@ if ($ckeditor_css_to_load && is_array($ckeditor_css_to_load)) {
 	}
 	if (sizeof($ckeditor_css_to_load)) $ckeditor_css_connector = "CKEDITOR.config.contentsCss = ['".implode("','", $ckeditor_css_to_load)."'];";
 }
-cot_rc_embed_footer("CKEDITOR.timestamp = $ckeditor_timestamp;".$ckeditor_css_connector);
+cot_rc_embed_footer("CKEDITOR.timestamp = $ckeditor_timestamp; ".$ckeditor_css_connector);
