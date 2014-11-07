@@ -1092,7 +1092,7 @@ if (extension_loaded('xcache'))
 		 */
 		public function get($id, $realm = COT_DEFAULT_REALM)
 		{
-			return xcache_get($realm.'/'.$id);
+			return unserialize(xcache_get($realm.'/'.$id));
 		}
 
 		/**
@@ -1128,7 +1128,7 @@ if (extension_loaded('xcache'))
 		 */
 		public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 		{
-			return xcache_set($realm.'/'.$id, $data, $ttl);
+			return xcache_set($realm.'/'.$id, serialize($data), $ttl);
 		}
 	}
 }
