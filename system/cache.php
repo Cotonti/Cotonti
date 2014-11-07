@@ -1053,22 +1053,21 @@ if (extension_loaded('xcache'))
 		 */
 		public function clear($realm = '')
 		{
-			if (function_exists('xcache_unset_by_prefix'))
-			{
-				if (empty($realm))
-				{
-					return xcache_unset_by_prefix('');
-				}
-				else
-				{
-					return xcache_unset_by_prefix($realm.'/');
-				}
-			}
-			else
-			{
-				// This does not actually mean success but we can do nothing with it
-				return true;
-			}
+            if(!function_exists('xcache_unset_by_prefix')) {
+                function xcache_unset_by_prefix($prefix) {
+                    // Since we can't clear targetted cache, we'll clear all. :(
+                    xcache_clear_cache(XC_TYPE_VAR, 0);
+                }
+            }
+
+            if (empty($realm)) {
+                xcache_unset_by_prefix('');
+
+            } else {
+                xcache_unset_by_prefix($realm.'/');
+            }
+
+            return true;
 		}
 
 		/**
