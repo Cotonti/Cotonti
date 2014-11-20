@@ -856,6 +856,8 @@ if (extension_loaded('memcache'))
 		 */
 		public function __construct($host = 'localhost', $port = 11211, $persistent = true)
 		{
+            if(empty($host)) $host = 'localhost';
+            if(empty($port)) $port = 11211;
 			$this->memcache = new Memcache;
 			$this->memcache->addServer($host, $port, $persistent);
 		}
@@ -1245,7 +1247,10 @@ class Cache
 		}
 		if (!empty($selected))
 		{
-			$mem = new $selected();
+            $cfg['cache_drv_host'] = !empty($cfg['cache_drv_host']) ? $cfg['cache_drv_host'] : null;
+            $cfg['cache_drv_port'] = !empty($cfg['cache_drv_port']) ? $cfg['cache_drv_port'] : null;
+            /** @var Temporary_cache_driver $mem */
+			$mem = new $selected($cfg['cache_drv_host'], $cfg['cache_drv_port']);
 			// Some drivers may be enabled but without variable cache
 			$info = $mem->get_info();
 			if ($info['max'] > 1024)
