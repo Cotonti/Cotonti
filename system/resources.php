@@ -86,6 +86,11 @@ $R['code_msg_inline'] = '<span class="{$class}">{$text}</span>';
 /**
  * Header/footer resources
  */
+$R['notices_container'] = '{$notices}';
+$R['notices_separator'] = '';
+$R['notices_link'] = '<a href="{$url}" title="{$title}">{$title}</a>';
+$R['notices_plain'] = '{$title}';
+$R['notices_notice'] = '{$notice}';
 $R['code_rc_css_embed'] = '<style type="text/css">
 /*<![CDATA[*/
 {$code}

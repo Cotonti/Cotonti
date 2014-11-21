@@ -87,13 +87,18 @@ if (!COT_AJAX)
 	}
 	/* ===== */
 
+    if(empty($out['notices'])) $out['notices'] = '';
 	if(is_array($out['notices_array']))
 	{
-		foreach ($out['notices_array'] as $notice)
+        $notices = '';
+		foreach ($out['notices_array'] as $noticeRow)
 		{
-			$notice = (is_array($notice)) ? cot_rc_link($notice[0], $notice[1]) : $notice;
-			$out['notices'] .= ((!empty($out_notices)) ? ', ' : '').$notice;
+            $notice = (is_array($noticeRow)) ? cot_rc('notices_link', array('url' => $noticeRow[0], 'title' => $noticeRow[1])) :
+                cot_rc('notices_plain', array('title' => $noticeRow));
+            $notices .= cot_rc('notices_notice', array('notice' => $notice));
+
 		}
+        $out['notices'] .= cot_rc('notices_container', array('notices' => $notices));
 	}
 	$out['canonical_uri'] = empty($out['canonical_uri']) ? str_replace('&', '&amp;', $sys['canonical_url']) : $out['canonical_uri'];
 	if(!preg_match("#^https?://.+#", $out['canonical_uri']))
