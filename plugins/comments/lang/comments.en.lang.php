@@ -66,8 +66,8 @@ $L['com_edithint'] = 'Your comment will be available for editing for {$time}';
 
 $L['plu_comlive'] = 'New comment on our site';
 $L['plu_comlive1'] = 'Edited comment on the site';
-$L['plu_comlive2'] = 'left a comment:';
-$L['plu_comlive3'] = 'has edited the comment:';
+$L['plu_comlive2'] = 'left a comment: ';
+$L['plu_comlive3'] = 'has edited the comment: ';
 $L['rss_comments'] = 'Comments for';
 $L['rss_comment_of_user'] = 'Comment from';
 $L['rss_comments_item_desc'] = 'Last comments on page';

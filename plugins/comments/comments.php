@@ -117,7 +117,7 @@ if ($m == 'edit' && $id > 0)
 				$sql2 = $db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
 
 				$email_title = $L['plu_comlive'];
-				$email_body = $L['User'] . ' ' . preg_replace('#[^\w\p{L}]#u', '', $usr['name']) . ', ' . $L['plu_comlive3'];
+				$email_body = $L['User'] . ' ' . preg_replace('#[^\w\p{L}]#u', '', $usr['name']) . ' ' . $L['plu_comlive3'];
 				$email_body .= COT_ABSOLUTE_URL . cot_url($url_area, $url_params, '#c' . $id, true) . "\n\n";
 
 				while ($adm = $sql2->fetch())
@@ -258,7 +258,7 @@ if ($a == 'send' && $usr['auth_write'])
 		{
 			$sql = $db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
 			$email_title = $L['plu_comlive'];
-			$email_body = $L['User'] . ' ' . preg_replace('#[^\w\p{L}]#u', '', ($usr['id'] == 0 ? $rname : $usr['name'])) . ', ' . $L['plu_comlive2'];
+			$email_body = $L['User'] . ' ' . preg_replace('#[^\w\p{L}]#u', '', ($usr['id'] == 0 ? $rname : $usr['name'])) . ' ' . $L['plu_comlive2'];
 			$email_body .= COT_ABSOLUTE_URL . cot_url($url_area, $url_params, '#c' . $id, true) . "\n\n";
 			while ($adm = $sql->fetch())
 			{
