@@ -201,6 +201,10 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 {
 	global $cfg, $structure, $cot_extrafields, $usr, $sys, $L, $db_structure;
 
+    $stat['fs_lt_date'] = (!empty($stat['fs_lt_date'])) ? $stat['fs_lt_date'] : 0;
+    $stat['fs_lt_posterid'] = (!empty($stat['fs_lt_posterid'])) ? $stat['fs_lt_posterid'] : 0;
+    $usr['lastvisit'] = (!empty($usr['lastvisit'])) ? $usr['lastvisit'] : 0;
+
 	$new_elems = ($usr['id'] > 0 && $stat['fs_lt_date'] > $usr['lastvisit'] && $stat['fs_lt_posterid'] != $usr['id']);
 
 	$sections = array(
@@ -221,38 +225,35 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 
 	if (is_array($stat))
 	{
-		if ($stat['fs_lt_date'] > 0)
-		{
+		if ($stat['fs_lt_date'] > 0) {
 			$sections += array(
 				$tag_prefix . 'LASTPOSTDATE' => cot_date('datetime_short', $stat['fs_lt_date']),
-				$tag_prefix . 'LASTPOSTDATE_STAMP' => $stat['fs_lt_date'],
 				$tag_prefix . 'LASTPOSTER' => cot_build_user($stat['fs_lt_posterid'], htmlspecialchars($stat['fs_lt_postername'])),
 				$tag_prefix . 'LASTPOST' => cot_rc_link($new_elems ? cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=unread', '#unread') : cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=last', '#bottom'), cot_cutstring($stat['fs_lt_title'], 32)),
 				$tag_prefix . 'LASTPOST_URL' => $new_elems ? cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=unread', '#unread') : cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=last', '#bottom'),
 				$tag_prefix . 'TIMEAGO' => cot_build_timegap($stat['fs_lt_date'], $sys['now'])
 			);
+
 		}
 
 		$sections += array(
 			$tag_prefix . 'TOPICCOUNT' => $stat['topiccount'],
+            $tag_prefix . 'LASTPOSTDATE_STAMP' => $stat['fs_lt_date'],
 			$tag_prefix . 'POSTCOUNT' => $stat['postcount'],
 			$tag_prefix . 'VIEWCOUNT' => $stat['viewcount'],
 			$tag_prefix . 'VIEWCOUNT_SHORT' => ($stat['viewcount'] > 9999) ? floor($stat['viewcount'] / 1000) . 'k' : $stat['viewcount'],
 		);
 	}
 
-	if (!is_array($stat) || !$stat['fs_lt_date'])
-	{
-		$sections += array(
-			$tag_prefix . 'LASTPOSTDATE' => '',
-			$tag_prefix . 'LASTPOSTER' => '',
-			$tag_prefix . 'LASTPOST' => '',
-			$tag_prefix . 'TIMEAGO' => '',
-			$tag_prefix . 'TOPICCOUNT' => 0,
-			$tag_prefix . 'POSTCOUNT' => 0,
-			$tag_prefix . 'VIEWCOUNT' => 0,
-			$tag_prefix . 'VIEWCOUNT_SHORT' => 0,
-		);
+	if (!is_array($stat) || !$stat['fs_lt_date']) {
+        $sections[$tag_prefix . 'LASTPOSTDATE'] = '';
+        $sections[$tag_prefix . 'LASTPOSTER'] = '';
+        $sections[$tag_prefix . 'LASTPOST'] = '';
+        $sections[$tag_prefix . 'TIMEAGO'] = '';
+        $sections[$tag_prefix . 'TOPICCOUNT'] = 0;
+        $sections[$tag_prefix . 'POSTCOUNT'] = 0;
+        $sections[$tag_prefix . 'VIEWCOUNT'] = 0;
+        $sections[$tag_prefix . 'VIEWCOUNT_SHORT'] = 0;
 	}
 
 	foreach ($cot_extrafields[$db_structure] as $exfld)
