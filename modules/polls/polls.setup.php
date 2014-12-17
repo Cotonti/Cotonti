@@ -6,7 +6,7 @@ Description=Lets the user vote for specific options
 Version=0.9.1
 Date=2011-08-19
 Author=Neocrome & Cotonti Team
-Copyright=(c) Cotonti Team 2008-2011
+Copyright=(c) Cotonti Team 2008-2015
 Notes=BSD License
 Auth_guests=RW
 Lock_guests=A
@@ -28,8 +28,8 @@ mode=02:select:Recent polls,Random polls:Recent polls:
  * Polls setup file
  *
  * @package polls
- * @version 0.7.0
+ * @version 0.9.1
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
+ * @copyright Copyright (c) Cotonti Team 2008-2015
  * @license BSD
  */

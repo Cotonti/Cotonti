@@ -1,30 +1,47 @@
+/**
+ * Polls
+ *
+ * @package polls
+ * @version 0.9.1
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2015
+ * @license BSD
+ */
 var ansCount = 1;
 var ansMax = 100;
-$(".deloption").live("click",function () {
+$( document ).on( "click", ".deloption", function(e) {
+	e.preventDefault();
+
 	$(this).parent().children('.tbox').attr('value', '');
-	if (ansCount>2)
-	{
+	var optCount = $('.polloptiondiv').length;
+	if (optCount > 1) {
 		ansCount--;
-		$(this).parent().remove();
+		$(this).parents('.polloptiondiv').remove();
 	}
-	if (ansCount<=ansMax)
-	{
+	if (optCount <= ansMax) {
 		$("#addoption").removeAttr('disabled');
 	}
 	return false;
 });
-$("#addoption").live("click",function () {
-	if (ansCount<ansMax)
-	{			
-		$('.polloptiondiv').last().clone().attr("id", '').insertAfter($('.polloptiondiv').last()).show().children('.tbox').attr('value', '');
+
+$( document ).on( "click", "#addoption", function(e) {
+	e.preventDefault();
+
+	var optCount = $('.polloptiondiv').length;
+	if (optCount <= ansMax) {
+		var newOption = $('.polloptiondiv').last().clone().attr("id", '').insertAfter($('.polloptiondiv').last()).show();
+		newOption.find('.tbox').attr('value', '');
+		newOption.find('input[type="text"]').val('');
 		ansCount++;
 	}
-	if (ansCount>=ansMax)
-	{
+	if (optCount >= ansMax) {
 		$("#addoption").attr('disabled', 'disabled');
 	}
+
+	ansCount = $('.polloptiondiv').length;
 	return false;
 });
+
 $(document).ready(function(){
 	ansCount = $('.polloptiondiv').length;
 	$('#addoption').show();

@@ -60,7 +60,7 @@ if ($a == 'newtopic')
 
 	if (mb_strlen($rtopic['ft_title']) < $cfg['forums']['mintitlelength'])
 	{
-		cot_error('forums_titletooshort', 'newtopictitle');
+		cot_error('forums_titletooshort', 'rtopictitle');
 	}
 	if (mb_strlen($rmsg['fp_text']) < $cfg['forums']['minpostlength'])
 	{
@@ -170,8 +170,6 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = cot_tplfile(array('forums', 'newtopic', $structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
 
-cot_display_messages($t);
-
 $t->assign(array(
 	'FORUMS_NEWTOPIC_PAGETITLE' => $toptitle ,
 	'FORUMS_NEWTOPIC_SUBTITLE' => htmlspecialchars(cot_parse_autourls($structure['forums'][$s]['desc'])),
@@ -224,6 +222,8 @@ foreach (cot_getextplugins('forums.newtopic.tags') as $pl)
 	include $pl;
 }
 /* ===== */
+
+cot_display_messages($t);
 
 $t->parse('MAIN');
 $t->out('MAIN');
