@@ -39,6 +39,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 		$poll_full_template = true;
 	}
 	$counter = 0;
+	$multiple = !empty($poll_multiple) ? true : false;
 	if (cot_error_found() && !empty($poll_options))
 	{
 		$id = (int) $poll_id;
@@ -51,15 +52,15 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 				$t->parse($block . ".OPTIONS");
 			}
 		}
-	}
-	elseif ((int) $id > 0)
-	{
+
+	} elseif ((int) $id > 0) {
 		$where = (!$type) ? "poll_id = " . (int) $id : "poll_type = '" . $db->prep($type) . "' AND poll_code = '$id'";
 		$sql = $db->query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
 		if ($row = $sql->fetch())
 		{
 			$id = $row["poll_id"];
 			$poll_text = htmlspecialchars($row["poll_text"]);
+			$multiple = (bool)$row['poll_multiple'];
 
 			$sql1 = $db->query("SELECT * FROM $db_polls_options WHERE po_pollid = $id ORDER by po_id ASC");
 			while ($row1 = $sql1->fetch())
@@ -102,7 +103,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 		'EDIT_POLL_IDFIELD' => cot_inputbox('hidden', 'poll_id', $id),
 		'EDIT_POLL_OPTIONSCOUNT' => $counter,
 		'EDIT_POLL_ID' => $id,
-		'EDIT_POLL_MULTIPLE' => cot_checkbox($poll_multiple, 'poll_multiple', $L['polls_multiple']),
+		'EDIT_POLL_MULTIPLE' => cot_checkbox($multiple, 'poll_multiple', $L['polls_multiple']),
 	));
 	if ($poll_full_template == true)
 	{
