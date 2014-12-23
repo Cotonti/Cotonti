@@ -452,7 +452,8 @@ $L['adm_only_installed'] = 'Installed';
 $L['adm_hook_changed'] = 'Warning! This file is not properly registered in DB or was changed after the installation.<br />';
 $L['adm_hook_notregistered'] = ' — Hook(s): <b>{$hooks}</b> not registered<br />';
 $L['adm_hook_notfound'] = ' — Hook(s): <b>{$hooks}</b> registered but not found in file<br />';
-$L['adm_hook_updatenote'] = 'Please update plugin with «<b>update</b>» button above and reload the page.';
+$L['adm_hook_filenotfound'] = ' — File: <b>{$file}</b> not found!<br />';
+$L['adm_hook_updatenote'] = 'Please update plugin with «<b>update</b>» button above.';
 
 /**
  * Tools Section
