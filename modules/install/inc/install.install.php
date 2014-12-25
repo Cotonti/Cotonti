@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 			try
 			{
-				$dbс_port = empty($db_port) ? '' : ';port='.$db_port;
+				$dbc_port = empty($db_port) ? '' : ';port='.$db_port;
 				$db = new CotDB('mysql:host='.$db_host.$dbc_port.';dbname='.$db_name, $db_user, $db_pass);
 			}
 			catch (PDOException $e)
