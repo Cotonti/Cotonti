@@ -33,7 +33,7 @@
 		</div>
 
 		<div class="col3-1">
-			{FILE "./themes/{PHP.cfg.defaulttheme}/inc/contact.tpl"}
+			{FILE "./{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/inc/contact.tpl"}
 		</div>
 
 <!-- BEGIN: USERS_AUTH_MAINTENANCE -->

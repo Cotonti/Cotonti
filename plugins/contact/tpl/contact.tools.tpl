@@ -2,7 +2,7 @@
 
 	<h2 class="message"><a href="{PHP|cot_url('admin','m=other&amp;p=contact')}">{PHP.L.contact_title}</a></h2>
 
-	{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+	{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 
 	<table class="cells">
 		<tr>

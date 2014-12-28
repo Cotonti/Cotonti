@@ -2,7 +2,7 @@
 
 		<div class="block">
 			<h2 class="users">{USERS_PROFILE_TITLE}</h2>
-			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+			{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 			<form action="{USERS_PROFILE_FORM_SEND}" method="post" enctype="multipart/form-data" name="profile">
 				<input type="hidden" name="userid" value="{USERS_PROFILE_ID}" />
 				<table class="cells">

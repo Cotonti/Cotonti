@@ -87,7 +87,7 @@
 		<div>{FORUMS_POSTS_ANTIBUMP_BODY}</div>
 <!-- END: FORUMS_POSTS_ANTIBUMP -->
 
-{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 
 <!-- BEGIN: FORUMS_POSTS_NEWPOST -->
 		<form action="{FORUMS_POSTS_NEWPOST_SEND}" method="post" name="newpost">

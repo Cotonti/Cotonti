@@ -3,7 +3,7 @@
 		<div class="block">
 			<h2 class="forums">{FORUMS_EDITPOST_PAGETITLE}</h2>
 			<!-- IF {FORUMS_EDITPOST_SUBTITLE} --><p class="marginbottom10 small">{FORUMS_EDITPOST_SUBTITLE}</p><!-- ENDIF -->
-			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+			{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 			<form action="{FORUMS_EDITPOST_SEND}" method="post" name="editpost">
 				<table class="cells">
 					<!-- BEGIN: FORUMS_EDITPOST_FIRSTPOST -->

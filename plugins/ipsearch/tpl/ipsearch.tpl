@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.ipsearch_title}</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+		{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 		<div class="col3-2 first">
 			<div class="block">
 				<h3>{PHP.L.ipsearch_dnsrecord}: {IPSEARCH_RES_DNS}</h3>
