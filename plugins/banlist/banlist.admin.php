@@ -26,8 +26,8 @@ require_once cot_langfile('banlist', 'plug');
 cot::$db->registerTable('banlist');
 $adminhelp = $L['banlist_help'];
 $adminsubtitle = $L['banlist_title'];
-
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+$maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
+list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
 /* === Hook === */
 foreach (cot_getextplugins('banlist.admin.first') as $pl)
@@ -88,9 +88,9 @@ elseif ($a == 'delete')
 
 $totalitems = $db->countRows($db_banlist);
 
-$pagenav = cot_pagenav('admin', 'm=other&p=banlist', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav('admin', 'm=other&p=banlist', $d, $totalitems, $maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $db->query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, banlist_ip LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = $db->query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, banlist_ip LIMIT $d, ".$maxperpage);
 
 $ii = 0;
 

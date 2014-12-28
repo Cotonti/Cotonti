@@ -29,8 +29,8 @@ if ($tl && file_exists(cot_langfile('translit', 'core')))
 	include_once cot_langfile('translit', 'core');
 	$qs = strtr($qs, $cot_translitb);
 }
-
-list($pg, $d, $durl) = cot_import_pagenav('d',  $cfg['maxrowsperpage']);
+$maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
+list($pg, $d, $durl) = cot_import_pagenav('d',  $maxperpage);
 $dt = (int)cot_import('dt', 'G', 'INT');
 $perpage = $cfg['plugin']['tags']['perpage'];
 
@@ -193,7 +193,7 @@ function cot_tag_search_pages($query)
 			ON r.tag_item = p.page_id $join_tables
 		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0 $join_where
 		$order
-		LIMIT $d, {$cfg['maxrowsperpage']}");
+		LIMIT $d, $maxperpage");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_pages']);
 	$pcount = $sql->rowCount();
 
@@ -242,7 +242,7 @@ function cot_tag_search_pages($query)
 		$sql->closeCursor();
 		$qs_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($qs) : $qs;
 		$tl = $lang != 'en' && $qs_u != $qs ? 1 : null;
-		$pagenav = cot_pagenav('plug', array('e' => 'tags', 'a' => 'pages', 't' => $qs_u, 'tl' => $tl), $d, $totalitems, $cfg['maxrowsperpage']);
+		$pagenav = cot_pagenav('plug', array('e' => 'tags', 'a' => 'pages', 't' => $qs_u, 'tl' => $tl), $d, $totalitems, $maxperpage);
 		$t->assign(array(
 			'TAGS_PAGEPREV' => $pagenav['prev'],
 			'TAGS_PAGENEXT' => $pagenav['next'],
@@ -309,7 +309,7 @@ function cot_tag_search_forums($query)
 			ON r.tag_item = t.ft_id
 		WHERE r.tag_area = 'forums' AND ($query) AND t.ft_id IS NOT NULL
 		$order
-		LIMIT $d, {$cfg['maxrowsperpage']}");
+		LIMIT $d, $maxperpage");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
 	if ($sql->rowCount() > 0)
 	{
@@ -339,7 +339,7 @@ function cot_tag_search_forums($query)
 		$sql->closeCursor();
 		$qs_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($qs) : $qs;
 		$tl = $lang != 'en' && $qs_u != $qs ? 1 : null;
-		$pagenav = cot_pagenav('plug', array('e' => 'tags', 'a' => 'forums', 't' => $qs_u, 'tl' => $tl), $d, $totalitems, $cfg['maxrowsperpage']);
+		$pagenav = cot_pagenav('plug', array('e' => 'tags', 'a' => 'forums', 't' => $qs_u, 'tl' => $tl), $d, $totalitems, $maxperpage);
 		$t->assign(array(
 			'TAGS_PAGEPREV' => $pagenav['prev'],
 			'TAGS_PAGENEXT' => $pagenav['next'],

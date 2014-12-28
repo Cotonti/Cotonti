@@ -28,7 +28,8 @@ $adminhelp = $L['adm_help_ratings'];
 $adminsubtitle = $L['Ratings'];
 
 $id = cot_import('id','G','TXT');
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+$maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
+list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
 /* === Hook  === */
 foreach (cot_getextplugins('admin.ratings.first') as $pl)
@@ -48,9 +49,9 @@ if($a == 'delete')
 
 
 $totalitems = $db->countRows($db_ratings);
-$pagenav = cot_pagenav('admin', 'm=other&p=ratings', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav('admin', 'm=other&p=ratings', $d, $totalitems, $maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $db->query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = $db->query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIMIT $d, ".$maxperpage);
 
 $ii = 0;
 $jj = 0;

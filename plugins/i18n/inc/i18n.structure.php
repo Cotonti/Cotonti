@@ -13,6 +13,7 @@ defined('COT_CODE') or die('Wrong URL.');
 
 cot_block($i18n_admin);
 
+$maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 $out['subtitle'] = $L['i18n_structure'];

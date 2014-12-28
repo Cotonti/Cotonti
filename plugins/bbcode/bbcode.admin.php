@@ -25,14 +25,15 @@ $adminhelp = $L['adm_help_bbcodes'];
 
 $a = cot_import('a', 'G', 'ALP');
 $id = (int) cot_import('id', 'G', 'INT');
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+$maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
+list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
 $totalitems = $db->countRows($db_bbcode);
 
 // FIXME AJAX-based pagination doesn't work because of some strange PHP bug
 // Xtpl_block->text() returns 'str' instead of a long string which it has in $text
-//$pagenav = cot_pagenav('admin', 'm=other&p=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
-$pagenav = cot_pagenav('admin', 'm=other&p=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd');
+//$pagenav = cot_pagenav('admin', 'm=other&p=bbcode', $d, $totalitems, $maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav('admin', 'm=other&p=bbcode', $d, $totalitems, $maxperpage, 'd');
 
 
 /* === Hook === */
@@ -237,7 +238,7 @@ elseif ($a == 'convert')
 
 $bbc_modes = array('str', 'pcre', 'callback');
 
-$res = $db->query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
+$res = $db->query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$maxperpage);
 $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('bbcode.admin.loop');

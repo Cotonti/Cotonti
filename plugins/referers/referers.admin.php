@@ -24,8 +24,8 @@ cot::$db->registerTable('referers');
 require_once cot_langfile('referers', 'plug');
 $adminhelp = $L['adm_help_referers'];
 $adminsubtitle = $L['Referers'];
-
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+$maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
+list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
 /* === Hook  === */
 foreach (cot_getextplugins('referers.admin.first') as $pl)
@@ -44,9 +44,9 @@ elseif($a == 'prunelowhits' && $usr['isadmin'])
 }
 
 $totalitems = $db->countRows($db_referers);
-$pagenav = cot_pagenav('admin', 'm=other&p=referers', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav('admin', 'm=other&p=referers', $d, $totalitems, $maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $db->query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = $db->query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$maxperpage);
 
 if($sql->rowCount() > 0)
 {
