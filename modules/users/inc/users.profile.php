@@ -157,6 +157,7 @@ if($a == 'update')
 			include $pl;
 		}
 		/* ===== */
+		cot_message('Updated');
 		cot_redirect(cot_url('users', 'm=profile', '', true));
 	}
 }

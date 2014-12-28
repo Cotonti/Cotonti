@@ -236,6 +236,7 @@ if ($a == 'update')
 
 		cot_auth_clear($id);
 		cot_log("Edited user #".$id,'adm');
+		cot_message('Updated');
 		cot_redirect(cot_url('users', "m=edit&id=".$id, '', true));
 	}
 	else
