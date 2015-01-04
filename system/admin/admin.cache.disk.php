@@ -36,7 +36,6 @@ if ($a == 'purge')
 		cot_message('adm_purgeall_done');
 		// Empty resource consolidation cache
 		$db->delete($db_cache, "c_name = 'cot_rc_html'");
-		cot_rc_consolidate();
 	}
 	else
 	{
@@ -54,7 +53,6 @@ elseif ($a == 'delete')
 		{
 			// Empty resource consolidation cache
 			$db->delete($db_cache, "c_name = 'cot_rc_html'");
-			cot_rc_consolidate();
 		}
 	}
 	else

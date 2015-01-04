@@ -45,6 +45,9 @@ else
 	$out['fulltitle'] = cot_title('title_header', $title_params);
 }
 
+$html = Resources::render();
+if($html) $out['head_head'] = $html.$out['head_head'];
+
 $out['meta_contenttype'] = $cfg['xmlclient'] ? 'application/xml' : 'text/html';
 $out['basehref'] = $R['code_basehref'];
 $out['meta_charset'] = 'UTF-8';
@@ -53,10 +56,10 @@ $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspe
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] .= $out['head'];
 
-cot_rc_output();
+
 if ($cfg['jquery'] && $cfg['jquery_cdn'])
 {
-	cot_rc_link_file($cfg['jquery_cdn'], true);
+	Resources::linkFile($cfg['jquery_cdn'], 'js', 30);
 }
 
 if ($sys['noindex'])

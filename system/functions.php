@@ -4481,219 +4481,6 @@ function cot_rc_modify($rc, $attrs)
 }
 
 /**
- * Consolidates local JS and CSS resources used during script execution,
- * prepares cache images and links to them
- *
- * @global array $cot_rc_html Blocks of HTML tags to be included in the header and footer of the document
- * @global array $cot_rc_reg Header/Footer resource registry
- * @global array $cfg Configuration
- * @global array $env Environment strings
- * @global array $usr User object
- * @global Cache $cache
- */
-function cot_rc_consolidate()
-{
-	global $cache, $cfg, $cot_rc_html, $cot_rc_reg, $L, $R, $usr, $theme;
-
-	$is_admin_section = defined('COT_ADMIN');
-	$cot_rc_reg = array();
-
-	// Load standard resources
-	cot_rc_add_standard();
-
-	// Invoke rc handlers
-	foreach (cot_getextplugins('rc') as $pl)
-	{
-		include $pl;
-	}
-	if (!$is_admin_section)
-	{
-		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php"))
-		{
-			include "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php";
-		}
-	}
-
-	if (!is_array($cot_rc_reg))
-	{
-		return false;
-	}
-
-	// CSS should go first
-	ksort($cot_rc_reg);
-
-	// Build the header outputs
-	$cot_rc_html[$theme] = array();
-
-	// Consolidate resources
-	if ($cache && $cfg['headrc_consolidate'] && !$is_admin_section)
-	{
-		clearstatcache();
-		foreach ($cot_rc_reg as $type => $scope_data)
-		{
-			if ($type == 'css')
-			{
-				$separator = "\n";
-			}
-			elseif ($type == 'js')
-			{
-				$separator = "\n;";
-			}
-			// Consolidation
-			foreach ($scope_data as $scope => $ordered_files)
-			{
-				$target_path = $cfg['cache_dir'] . "/static/$scope.$theme.$type";
-                ksort($ordered_files);
-				$files = array();
-				foreach ($ordered_files as $order => $o_files)
-				{
-					$files = array_merge($files, $o_files);
-				}
-				$files = array_unique($files);
-
-				$code = '';
-				$modified = false;
-
-				if (!file_exists($target_path))
-				{
-					// Just compile a new cache file
-					$file_list = $files;
-					$modified = true;
-				}
-				else
-				{
-					// Load the list of files already cached
-					$file_list = unserialize(file_get_contents("$target_path.idx"));
-
-					// Check presense or modification time for each file
-					foreach ($files as $path)
-					{
-						if (!in_array($path, $file_list) || filemtime($path) >= filemtime($target_path))
-						{
-							$modified = true;
-							break;
-						}
-					}
-				}
-
-				if ($modified)
-				{
-					// Reconsolidate cache
-					$current_path = str_replace('\\', '/', realpath('.'));
-					foreach ($files as $path)
-					{
-						// Get file contents and remove BOM
-						$file_code = str_replace(pack('CCC', 0xef, 0xbb, 0xbf), '', file_get_contents($path));
-
-						if ($type == 'css')
-						{
-							if (strpos($path, '._.') !== false)
-							{
-								// Restore original file path
-								$path = str_replace('._.', '/', basename($path));
-							}
-							if ($path[0] === '/')
-							{
-								$path = mb_substr($path, 1);
-							}
-							$file_path = str_replace('\\', '/', dirname(realpath($path)));
-							$relative_path = str_replace($current_path, '', $file_path);
-							if ($relative_path[0] === '/')
-							{
-								$relative_path = mb_substr($relative_path, 1);
-							}
-							// Apply CSS imports
-							if (preg_match_all('#@import\s+url\((\'|")?([^\)"\']+)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
-							{
-								foreach ($mt as $m)
-								{
-									if (preg_match('#^https?://#i', $m[2]))
-									{
-										$filename = $m[2];
-									}
-									else
-									{
-										$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
-									}
-									$file_code = str_replace($m[0], file_get_contents($filename), $file_code);
-								}
-							}
-							// Fix URLs
-							if (preg_match_all('#\burl\((\'|")?([^\)"\']+)\1?\)#i', $file_code, $mt, PREG_SET_ORDER))
-							{
-								foreach ($mt as $m)
-								{
-									$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
-									$filename = str_replace($current_path, '', str_replace('\\', '/',realpath($filename)));
-									if (!$filename)
-									{
-										continue;
-									}
-									if ($filename[0] === '/')
-									{
-										$filename = mb_substr($filename, 1);
-									}
-									$file_code = str_replace($m[0], 'url("' . $filename . '")', $file_code);
-								}
-							}
-						}
-						$code .= $file_code . $separator;
-					}
-
-					file_put_contents($target_path, $code);
-					if ($cfg['gzip'])
-					{
-						file_put_contents("$target_path.gz", gzencode($code));
-					}
-					file_put_contents("$target_path.idx", serialize($files));
-				}
-
-				$rc_url = "rc.php?rc=$scope.$theme.$type";
-				$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $rc_url));
-			}
-		}
-		// Save the output
-		$cache && $cache->db->store('cot_rc_html', $cot_rc_html);
-	}
-	else
-	{
-		$log = array(); // log paths to avoid duplicates
-		foreach ($cot_rc_reg as $type => $scope_data)
-		{
-			if (is_array($cot_rc_reg[$type]['files']))
-			{
-				foreach ($cot_rc_reg[$type]['files'] as $scope => $scope_data)
-				{
-                    ksort($scope_data);
-					foreach ($scope_data as $order => $files)
-					{
-						foreach ($files as $file)
-						{
-							if (!in_array($file, $log))
-							{
-								$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $file)) . "\n";
-								$log[] = $file;
-							}
-						}
-					}
-				}
-			}
-			if (is_array($cot_rc_reg[$type]['embed']))
-			{
-				foreach ($cot_rc_reg[$type]['embed'] as $scope => $scope_data)
-				{
-                    ksort($scope_data);
-					foreach ($scope_data as $order => $code)
-					{
-						$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_embed", array('code' => $code)) . "\n";
-					}
-				}
-			}
-		}
-	}
-}
-
-/**
  * Puts a portion of embedded code into the header/footer CSS/JS resource registry.
  *
  * It is strongly recommended to use files for CSS/JS whenever possible
@@ -4710,31 +4497,12 @@ function cot_rc_consolidate()
  * @return bool This function always returns TRUE
  * @see cot_rc_add_file()
  * @global Cache $cache
+ *
+ * @deprecated Will be removed in v.1.0. Use Resources::addEmbed() instead
  */
 function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js', $order = 50)
 {
-	global $cache, $cfg, $cot_rc_reg, $cot_rc_skip_minification;
-
-	if ($cfg['headrc_consolidate'] && $cache && !defined('COT_ADMIN'))
-	{
-		// Save as file
-		$path = $cfg['cache_dir'] . '/static/' . $identifier . '.' . $type;
-		if (!file_exists($path) || md5($code) != md5_file($path))
-		{
-			if ($cfg['headrc_minify'] && !$cot_rc_skip_minification)
-			{
-				$code = cot_rc_minify($code, $type);
-			}
-			file_put_contents($path, $code);
-		}
-		$cot_rc_reg[$type][$scope][$order][] = $path;
-	}
-	else
-	{
-		$separator = $type == 'js' ? "\n;" : "\n";
-		$cot_rc_reg[$type]['embed'][$scope][$order] .= $code . $separator;
-	}
-	return true;
+	return Resources::addEmbed($code, $type, $order, $scope, $identifier);
 }
 
 /**
@@ -4759,34 +4527,12 @@ function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js', $
  * @param int $order Order priority number
  * @return bool Returns TRUE normally, FALSE is file was not found
  * @global Cache $cache
+ *
+ * @deprecated Will be removed in v.1.0. Use Resources::addFile() instead
  */
 function cot_rc_add_file($path, $scope = 'global', $order = 50)
 {
-	global $cache, $cfg, $cot_rc_reg, $cot_rc_skip_minification;
-	if (!file_exists($path))
-	{
-		return false;
-	}
-
-	$type = preg_match('#\.(min\.)?(js|css)$#', mb_strtolower($path), $m) ? $m[2] : 'js';
-
-	if ($cache && $cfg['headrc_consolidate'] && !defined('COT_ADMIN') && $cfg['headrc_minify'] && !$cot_rc_skip_minification && $m[1] != 'min.')
-	{
-		$bname = ($type == 'css') ? str_replace('/', '._.', $path) : basename($path) . '.min';
-		$code = cot_rc_minify(file_get_contents($path), $type);
-		$path = $cfg['cache_dir'] . '/static/' . $bname;
-		file_put_contents($path, $code);
-	}
-
-	if ($cfg['headrc_consolidate'] && $cache && !defined('COT_ADMIN'))
-	{
-		$cot_rc_reg[$type][$scope][$order][] = $path;
-	}
-	else
-	{
-		$cot_rc_reg[$type]['files'][$scope][$order][] = $path;
-	}
-	return true;
+	return Resources::addFile($path, '', $order, $scope);
 }
 
 /**
@@ -4798,60 +4544,19 @@ function cot_rc_add_standard()
 
 	if ($cfg['jquery'] && !$cfg['jquery_cdn'])
 	{
-		cot_rc_add_file('js/jquery.min.js');
-	}
-
-	if ($cfg['jquery'] && $cfg['turnajax'])
-	{
-		cot_rc_add_file('js/jquery.history.min.js');
+		Resources::addFile(Resources::jQuery);
 	}
 
 	if ($cfg['jquery'])
 	{
-		cot_rc_add_file('js/jqModal.min.js');
+		Resources::addFile('js/jqModal.min.js');
 	}
 
-	cot_rc_add_file('js/base.js');
+	Resources::addFile('js/base.js');
 
 	if ($cfg['jquery'] && $cfg['turnajax'])
 	{
-		cot_rc_add_file('js/ajax_on.js');
-	}
-}
-
-/**
- * Sends registered header resources to head output
- *
- * @global array $out Output snippets
- * @global array $cot_rc_html Header HTML
- */
-function cot_rc_output()
-{
-	global $cot_rc_html, $out, $usr, $theme;
-	if (is_array($cot_rc_html) && isset($cot_rc_html[$theme]))
-	{
-		foreach ($cot_rc_html[$theme] as $scope => $html)
-		{
-			switch ($scope)
-			{
-				case 'global':
-					$pass = true;
-					break;
-				case 'guest':
-					$pass = $usr['id'] == 0;
-					break;
-				case 'user':
-					$pass = $usr['id'] > 0;
-					break;
-				default:
-					$parts = explode('_', $scope);
-					$pass = count($parts) == 2 && $parts[0] == 'group' && $parts[1] == $usr['maingrp'];
-			}
-			if ($pass)
-			{
-				$out['head_head'] = $html.$out['head_head'];
-			}
-		}
+		Resources::addFile('js/ajax_on.js');
 	}
 }
 
@@ -4862,12 +4567,14 @@ function cot_rc_output()
  * @param string $code Stylesheet or javascript code
  * @param bool $prepend Prepend this file before other head outputs
  * @param string $type Resource type: 'js' or 'css'
+ *
+ * @deprecated Will be removed in v.1.0. Resources::embed() instead
  */
 function cot_rc_embed($code, $prepend = false, $type = 'js')
 {
-	global $out;
-	$embed = cot_rc("code_rc_{$type}_embed", array('code' => $code));
-	$prepend ? $out['head_head'] = $embed . $out['head_head'] : $out['head_head'] .= $embed;
+	$order = 60;
+	if($prepend) $order = 40;
+	Resources::embed($code, $type, $order);
 }
 
 /**
@@ -4876,11 +4583,12 @@ function cot_rc_embed($code, $prepend = false, $type = 'js')
  * @global array $out Output snippets
  * @param string $code Stylesheet or javascript code
  * @param string $type Resource type: 'js' or 'css'
+ *
+ * @deprecated Will be removed in v.1.0. Resources::embedFooter() instead
  */
 function cot_rc_embed_footer($code, $type = 'js')
 {
-	global $out;
-	$out['footer_rc'] .= cot_rc("code_rc_{$type}_embed", array('code' => $code));
+	Resources::embedFooter($code, $type);
 }
 
 /**
@@ -4903,13 +4611,14 @@ function cot_rc_link($url, $text, $attrs = '')
  * @global array $out Output snippets
  * @param string $path Stylesheet *.css or script *.js path/url
  * @param bool $prepend Prepend this file before other header outputs
+ *
+ * @deprecated Will be removed in v.1.0. Use Resources::linkFile() instead
  */
 function cot_rc_link_file($path, $prepend = false)
 {
-	global $out;
-	$type = preg_match('#\.(js|css)$#i', $path, $m) ? strtolower($m[1]) : 'js';
-	$embed = cot_rc("code_rc_{$type}_file", array('url' => $path));
-	$prepend ? $out['head_head'] = $embed . $out['head_head'] : $out['head_head'] .= $embed;
+	$order = 60;
+	if($prepend) $order = 40;
+	Resources::linkFile($path, '', $order);
 }
 
 /**
@@ -4917,12 +4626,12 @@ function cot_rc_link_file($path, $prepend = false)
  *
  * @global array $out Output snippets
  * @param string $path JavaScript or CSS file path
+ *
+ * @deprecated Will be removed in v.1.0. Resources::linkFileFooter() instead
  */
 function cot_rc_link_footer($path)
 {
-	global $out;
-	$type = preg_match('#\.(js|css)$#i', $path, $m) ? strtolower($m[1]) : 'js';
-	$out['footer_rc'] .= cot_rc("code_rc_{$type}_file", array('url' => $path));
+	Resources::linkFileFooter($path);
 }
 
 /**
@@ -4931,20 +4640,12 @@ function cot_rc_link_footer($path)
  * @param string $code Code to minify
  * @param string $type Type: 'js' or 'css'
  * @return string Minified code
+ *
+ * @deprecated Will be removed in v.1.0. Resources::linkFileFooter() instead
  */
 function cot_rc_minify($code, $type = 'js')
 {
-	if ($type == 'js')
-	{
-		require_once './lib/jsmin.php';
-		$code = JSMin::minify($code);
-	}
-	elseif ($type == 'css')
-	{
-		require_once './lib/cssmin.php';
-		$code = minify_css($code);
-	}
-	return $code;
+	return Resources::minify($code, $type);
 }
 
 /*

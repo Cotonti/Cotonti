@@ -40,7 +40,6 @@ if ($a == 'purge' && $cache)
 	if (cot_check_xg() && $cache->clear())
 	{
 		$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
-		cot_rc_consolidate();
 		cot_message('adm_purgeall_done');
 	}
 	else
