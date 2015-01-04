@@ -3,9 +3,9 @@
  * Edit User Profile
  *
  * @package Cotonti
- * @version 0.9.0
+ * @version 0.9.18
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
+ * @copyright Copyright (c) Cotonti Team 2008-2015
  * @license BSD
  */
 
@@ -31,8 +31,10 @@ foreach (cot_getextplugins('users.edit.first') as $pl)
 }
 /* ===== */
 
-$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $id");
-cot_die($sql->rowCount()==0);
+cot_die(empty($id), true);
+
+$sql = $db->query("SELECT * FROM $db_users WHERE user_id = ?", $id);
+cot_die($sql->rowCount()==0, true);
 $urr = $sql->fetch();
 
 $sql1 = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$id and gru_groupid=".COT_GROUP_SUPERADMINS);
