@@ -3850,7 +3850,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		));
 		if ($i < $cur_left - 2)
 		{
-			$before .= $R['link_pagenav_gap'];
+			$before .= cot::$R['link_pagenav_gap'];
 		}
 		elseif ($i == $cur_left - 2)
 		{
@@ -3917,7 +3917,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	{
 		if ($i > $cur_right + 2)
 		{
-			$after .= $R['link_pagenav_gap'];
+			$after .= cot::$R['link_pagenav_gap'];
 		}
 		elseif ($i == $cur_right + 2)
 		{
@@ -4017,6 +4017,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		{
 			$rel = $base_rel;
 		}
+		unset($args[$characters]);
 		$firstlink = cot_url($module, $args, $hash);
 		$first = cot_rc('link_pagenav_first', array(
 			'url' => $firstlink,
@@ -4080,12 +4081,12 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'rel' => $rel,
 			'num' => $last_n + 1
 		));
-		$lastn  = (($last +  $perpage)<$totalpages) ?
+		$lastn  = (($last +  $perpage) < $totalpages) ?
 			cot_rc('link_pagenav_main', array(
-			'url' => cot_url($module, $args, $hash),
-			'event' => $event,
-			'rel' => $rel,
-			'num' => floor($last_n / $perpage) + 1
+				'url' => cot_url($module, $args, $hash),
+				'event' => $event,
+				'rel' => $rel,
+				'num' => floor($last_n / $perpage) + 1
 			)): FALSE;
 	}
 
