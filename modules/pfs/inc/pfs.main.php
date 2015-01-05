@@ -519,12 +519,12 @@ foreach ($sql_pfs->fetchAll() as $row)
 	$iji++;
 }
 
-if ($files_count>0 || $folders_count>0)
+if ($files_count > 0 || $folders_count > 0)
 {
-	if ($folders_count>0)
+	if ($folders_count > 0)
 	{
 		$totalitemsf = $folders_count;
-		$pagenav = cot_pagenav('pfs', 'userid='.$userid.$pn_c1.$pn_c2, $df, $totalitemsf, $cfg['pfs']['maxpfsperpage'], 'df');
+		$pagenav = cot_pagenav('pfs', $more, $df, $totalitemsf, $cfg['pfs']['maxpfsperpage'], 'df');
 
 		$t->assign(array(
             'PFF_FOLDERCOUNT_TITLE' => cot_declension($folders_count, $Ls['Folders']),
@@ -541,12 +541,15 @@ if ($files_count>0 || $folders_count>0)
 		));
 	}
 
-	if ($files_count>0)
+	if ($files_count > 0)
 	{
 		$thumbspagination = ($opt == 'thumbs') ? '&opt=thumbs' : '';
 		$totalitems = $files_count;
-		$pagenav = cot_pagenav('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination, $d,
-			$totalitems, $cfg['pfs']['maxpfsperpage']);
+
+		$pagnavParams = 'f='.$f;
+		if(!empty($more)) $pagnavParams .= '&'.$more;
+		$pagnavParams .= $thumbspagination;
+		$pagenav = cot_pagenav('pfs', $pagnavParams, $d, $totalitems, $cfg['pfs']['maxpfsperpage']);
 
 		$filesinfolder .= ($f>0) ? $L['pfs_filesinthisfolder'] : $L['pfs_filesintheroot'];
 
