@@ -94,7 +94,7 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 	}
 
 	require_once cot_langfile('main', 'core');
-	require_once $cfg['system_dir'] . '/resources.php';
+	require_once $cfg['system_dir'] . '/resources.rc.php';
 }
 else
 {

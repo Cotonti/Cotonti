@@ -213,8 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				cot_error('aut_passwordtooshort', 'user_pass');
 			}
-			if (mb_strlen($user['email']) < 4
-				|| !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $user['email']))
+			if (mb_strlen($user['email']) < 4 || !cot_check_email($user['email']))
 			{
 				cot_error('aut_emailtooshort', 'user_email');
 			}
@@ -584,6 +583,16 @@ switch ($step)
 		// Extensions
 		cot_install_parse_extensions('Module', $default_modules, $selected_modules);
 		cot_install_parse_extensions('Plugin', $default_plugins, $selected_plugins);
+
+		// robots.txt
+		$robotsTxtFilePath = './robots.txt';
+		if(file_exists($robotsTxtFilePath) && is_writable($robotsTxtFilePath)) {
+			$robotsTxtFile = file_get_contents($robotsTxtFilePath);
+			$tmp = 'Host: '.str_replace(array('http://', 'https://'), '', $cfg['mainurl']);
+			$robotsTxtFile = str_replace('# Host: http://your-domain.com', $tmp, $robotsTxtFile);
+			file_put_contents($robotsTxtFilePath, $robotsTxtFile);
+		}
+
 		break;
 	case 5:
 		// End credits
