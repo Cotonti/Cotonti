@@ -188,7 +188,6 @@ switch($a)
 			if ($cache)
 			{
 				$cache->clear();
-				cot_rc_consolidate();
 			}
 			cot_redirect(cot_url('admin', "m=extensions&a=details&$arg=$code", '', true));
 		}
