@@ -14,7 +14,7 @@ defined('COT_CODE') or die('Wrong URL.');
 cot_block($i18n_admin);
 
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
 $out['subtitle'] = $L['i18n_structure'];
 
@@ -139,7 +139,7 @@ else
 		if (cot_i18n_enabled($code))
 		{
 			$k++;
-			if ($k < $d || $ii == $cfg['maxrowsperpage'])
+			if ($k < $d || $ii == $maxperpage)
 			{
 				continue;
 			}
@@ -171,7 +171,7 @@ else
 	$totalitems = $k + 1;
 
 	$pagenav = cot_pagenav('plug', 'e=i18n&m=structure&l='.$i18n_locale, $d, $totalitems,
-		$cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+		$maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 	$t->assign(array(
 		'I18N_ACTION' => cot_url('plug', 'e=i18n&m=structure&l='.$i18n_locale.'&a=update&d='.$durl),
