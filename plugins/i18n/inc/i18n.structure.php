@@ -171,7 +171,7 @@ else
 	$totalitems = $k + 1;
 
 	$pagenav = cot_pagenav('plug', 'e=i18n&m=structure&l='.$i18n_locale, $d, $totalitems,
-		$maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+	$maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 	$t->assign(array(
 		'I18N_ACTION' => cot_url('plug', 'e=i18n&m=structure&l='.$i18n_locale.'&a=update&d='.$durl),

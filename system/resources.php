@@ -20,7 +20,7 @@ class Resources
 
         '@bootstrap.js' => 'lib/bootstrap/js/bootstrap.min.js',
         '@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
-        '@bootstrapTheme.css' => 'lib/bootstrap/css/bootstrap-theme.min.css',
+        '@bootstrapTheme.css' => '',    // lib/bootstrap/css/bootstrap-theme.min.css
 
         '@jQueryUI.js' => 'lib/jquery-ui/jquery-ui.min.js',
         '@jQueryUIstructure.css' => 'lib/jquery-ui/jquery-ui.structure.min.css',

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Form generation API
  *

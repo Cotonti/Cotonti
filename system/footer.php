@@ -49,8 +49,6 @@ if (!COT_AJAX)
 	}
 	/* ===== */
 
-	$out['footer_rc'] .= Resources::renderFooter();
-
 	// Attach rich text editors if any
 	if ($cot_textarea_count > 0)
 	{
@@ -68,6 +66,8 @@ if (!COT_AJAX)
 			}
 		}
 	}
+
+	$out['footer_rc'] .= Resources::renderFooter();
 
 	$t->assign('FOOTER_RC', $out['footer_rc']);
 
