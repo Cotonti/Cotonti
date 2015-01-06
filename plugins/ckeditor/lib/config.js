@@ -2,26 +2,26 @@
 
 CKEDITOR.editorConfig = function( config )
 {
-    config.toolbar = 'Full';
+	config.toolbar = 'Full';
 	config.extraPlugins = 'more,oembed,syntaxhighlight';
 
 	config.allowedContent = true; // disable ACF
 
 	config.toolbar_Full =
-	[
-		['Source'],
-		['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
-		['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-		['Image','oembed','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
-		['Maximize', 'ShowBlocks','-','About'],
-		'/',
-		['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
-		['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
-		['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-		['Link','Unlink','Anchor','More','Syntaxhighlight'],
-		['Styles','Format'],
-		['TextColor','BGColor']
-	];
+		[
+			['Source'],
+			['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
+			['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+			['Image','oembed','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
+			['Maximize', 'ShowBlocks','-','About'],
+			'/',
+			['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
+			['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
+			['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+			['Link','Unlink','Anchor','More','Syntaxhighlight'],
+			['Styles','Format'],
+			['TextColor','BGColor']
+		];
 
 	config.toolbar_Medium = [
 		['Bold','Italic','Underline','Strike'],
@@ -33,7 +33,7 @@ CKEDITOR.editorConfig = function( config )
 	];
 
 	config.toolbar_Basic =
-	[
-		['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink','-','About']
-	];
+		[
+			['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink','-','About']
+		];
 };
