@@ -82,6 +82,7 @@ switch ($n)
 		elseif ($a == 'reset' && !empty($v))
 		{
 			cot_config_reset($p, $v, $o, '');
+			$optionslist = cot_config_list($o, $p, '');
 
 			$optionslist[$v]['config_name'] = $optionslist[$v]['config_defaul'];
 			/* === Hook  === */
