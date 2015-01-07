@@ -18,6 +18,9 @@ class Resources
     protected static $alias = array(
         '@jQuery' => 'js/jquery.min.js',
 
+        '@ckeditor' => 'plugins/ckeditor/lib/ckeditor.js',
+        '@ckeditorPreset.js' => 'plugins/ckeditor/presets/ckeditor.default.set.js',
+
         '@bootstrap.js' => 'lib/bootstrap/js/bootstrap.min.js',
         '@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
         '@bootstrapTheme.css' => '',    // lib/bootstrap/css/bootstrap-theme.min.css
@@ -29,12 +32,6 @@ class Resources
         '@select2.i8n.js' => 'lib/select2/select2_locale_ru.js',
         '@select2.css' => 'lib/select2/select2.css',
         '@select2.bootstrap.css' => 'lib/select2/select2-bootstrap.css',
-
-        '@ckeditor' => 'plugins/ckeditor/lib/ckeditor.js',
-        '@ckeditorPreset.js' => 'plugins/ckeditor/presets/ckeditor.default.set.js',
-
-        '@gritter' => 'lib/gritter/js/jquery.gritter.js',
-        '@gritter.css'=> 'lib/gritter/css/jquery.gritter.css',
     );
 
     // ==== predefined alias constants  ====
