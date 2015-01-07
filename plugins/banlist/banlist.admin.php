@@ -9,7 +9,6 @@ Hooks=tools
  * Banlist Manager
  *
  * @package Cotonti
- * @version 0.9.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2014
  * @license BSD
@@ -26,6 +25,7 @@ require_once cot_langfile('banlist', 'plug');
 cot::$db->registerTable('banlist');
 $adminhelp = $L['banlist_help'];
 $adminsubtitle = $L['banlist_title'];
+
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
@@ -127,8 +127,21 @@ foreach ($sql->fetchAll() as $row)
 
 $time_array = array('0', '3600', '7200', '14400', '28800', '57600', '86400',
 		'172800', '345600', '604800', '1209600', '1814400', '2592000');
-$time_values = array($L['adm_neverexpire'], '1 '.$Ls['Hours']['0'], '2 '.$Ls['Hours']['0'], '4 '.$Ls['Hours']['0'], '8 '.$Ls['Hours']['0'], '16 '.$Ls['Hours']['0'], '1 '.$Ls['Days']['0'],
-		'2 '.$Ls['Days'][0], '4 '.$Ls['Days'][0], '1 '.$L['Week'], '2 '.$L['Weeks'], '3 '.$L['Weeks'], '1 '.$L['Month']);
+$time_values = array(
+	$L['banlist_neverexpire'],
+	cot_declension(1,$Ls['Hours']),
+	cot_declension(2,$Ls['Hours']),
+	cot_declension(4,$Ls['Hours']),
+	cot_declension(8,$Ls['Hours']),
+	cot_declension(16,$Ls['Hours']),
+	cot_declension(1,$Ls['Days']),
+	cot_declension(2,$Ls['Days']),
+	cot_declension(4,$Ls['Days']),
+	cot_declension(1,$Ls['Weeks']),
+	cot_declension(2,$Ls['Weeks']),
+	cot_declension(3,$Ls['Weeks']),
+	cot_declension(1,$Ls['Months'])
+);
 
 $tt->assign(array(
 	'ADMIN_BANLIST_PAGINATION_PREV' => $pagenav['prev'],

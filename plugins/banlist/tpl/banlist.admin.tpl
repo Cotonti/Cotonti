@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 		<h2>{PHP.L.banlist_title}</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
+		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 			<h3>{PHP.L.editdeleteentries}:</h3>
 			<table class="cells">
 				<tr>
@@ -19,7 +19,7 @@
 					<td class="textcenter">{ADMIN_BANLIST_ROW_EXPIRE}</td>
 					<td class="centerall">
 						<button type="submit">{PHP.L.Update}</button>
-						<button type="submit" onclick="parent.location='{ADMIN_BANLIST_ROW_DELURL}'">{PHP.L.Delete}</button>
+						<button type="submit" onclick="window.location.replace('{ADMIN_BANLIST_ROW_DELURL}'); return false;">{PHP.L.Delete}</button>
 					</td>
 				</tr>
 				</form>
