@@ -531,6 +531,11 @@ $L['alreadyaddnewentry'] = 'New entry added';
 $L['alreadyupdatednewentry'] = 'Entry updated';
 $L['alreadydeletednewentry'] = 'Entry deleted';
 
+$L['adm_invalid_input'] = 'Invalid value "{$value}" for variable "{$field_name}"';
+$L['adm_set_default'] = 'Default value used';
+$L['adm_int_max'] = 'Maximum allowed "{$max}"';
+$L['adm_int_min'] = 'Minimum allowed "{$min}"';
+
 /**
  * Extra Fields (Common Entries for Pages & Structure & Users)
  */
