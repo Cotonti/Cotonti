@@ -231,16 +231,15 @@ foreach($cot_extrafields[$db_users] as $exfld)
 	));
 }
 
-// Error and message handling
-cot_display_messages($t);
-
-
 /* === Hook === */
 foreach (cot_getextplugins('users.register.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
+
+// Error and message handling
+cot_display_messages($t);
 
 $t->parse('MAIN');
 $t->out('MAIN');
