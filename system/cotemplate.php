@@ -5,11 +5,10 @@
  * - Compiling into PHP objects
  * - Cotonti special
  *
- * @package Cotonti
+ * @package API - CoTemplate
  * @version 2.8.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 /**

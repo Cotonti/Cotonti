@@ -9,11 +9,9 @@ Tags=page.list.tpl:{LIST_ROW_TAGS_ROW_TAG},{LIST_ROW_TAGS_ROW_URL},{LIST_ROW_NO_
 /**
  * Displays tags in list row
  *
- * @package tags
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Tags
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

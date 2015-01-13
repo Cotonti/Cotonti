@@ -8,11 +8,9 @@ Hooks=global
 /**
  * Loads required data
  *
- * @package i18n
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2014
- * @license BSD License
+ * @package I18n
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

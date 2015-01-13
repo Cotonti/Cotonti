@@ -9,11 +9,9 @@
 /**
  * Admin interface for Contact plugin
  *
- * @package contact
- * @version 2.1.0
- * @author Cotonti Team
- * @copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Contact
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 defined('COT_CODE') or die('Wrong URL');
 

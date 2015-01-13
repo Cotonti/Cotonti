@@ -3,10 +3,8 @@
  * Edit User Profile
  *
  * @package Cotonti
- * @version 0.9.18
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2015
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

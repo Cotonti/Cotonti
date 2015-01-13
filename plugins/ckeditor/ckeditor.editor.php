@@ -11,10 +11,9 @@ Hooks=editor
  * because CKEditor uses dynamic AJAX component loading and
  * does not support consolidation.
  *
- * @package ckeditor
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2014
- * @license BSD
+ * @package CKEditor
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

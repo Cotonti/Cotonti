@@ -3,10 +3,9 @@
 /**
  * Polls functions
  *
- * @package polls
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD License
+ * @package Polls
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 defined('COT_CODE') or die('Wrong URL');
 

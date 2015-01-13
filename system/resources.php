@@ -4,11 +4,9 @@ defined('COT_CODE') or die('Wrong URL');
 /**
  * Cotonti Resource control class
  *
- * @package Cotonti
- * @version 0.9.18
- * @author Cotonti Team
- * @copyright (c) Cotonti Team 2010-2015
- * @license BSD
+ * @package API - Resources
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 class Resources
 {

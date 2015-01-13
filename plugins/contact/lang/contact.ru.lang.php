@@ -2,10 +2,8 @@
 
 /**
  * Contact Plugin for Cotonti CMF (Russian Localization)
- * @version 2.00
- * @author Cotonti Team
- * @copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

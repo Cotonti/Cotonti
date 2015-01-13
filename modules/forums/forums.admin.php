@@ -8,11 +8,9 @@ Hooks=admin
 /**
  * Statistics for the forums
  *
- * @package forumstats
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Forumstats
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 

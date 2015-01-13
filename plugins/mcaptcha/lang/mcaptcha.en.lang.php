@@ -2,8 +2,7 @@
 /**
  * English langfile for mcaptcha
  *
- * @package mcaptcha
- * @author Cotonti Team
+ * @package MathCaptcha
  */
 
 defined('COT_CODE') or die('Wrong URL');

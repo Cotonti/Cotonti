@@ -27,9 +27,7 @@ mode=02:select:Recent polls,Random polls:Recent polls:
 /**
  * Polls setup file
  *
- * @package polls
- * @version 0.9.1
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2015
- * @license BSD
+ * @package Polls
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */

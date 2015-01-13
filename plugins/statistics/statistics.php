@@ -9,11 +9,9 @@
 /**
  * Displays statistics info
  *
- * @package statistics
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Statistics
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 

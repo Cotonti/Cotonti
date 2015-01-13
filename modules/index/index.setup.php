@@ -20,9 +20,7 @@ Recommends_plugins=news,recentitems
 /**
  * Index module setup file
  *
- * @package index
- * @version 0.9.1
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Index
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */

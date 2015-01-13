@@ -2,9 +2,9 @@
 /**
  * BBcode parsing and management API
  *
- * @package bbcode
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD License
+ * @package BBcode
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

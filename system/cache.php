@@ -1,11 +1,10 @@
 <?php
 /**
  * Cache subsystem library
- * @package Cotonti
- * @version 0.9.10
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009-2014
- * @license BSD
+ * 
+ * @package API - Cache
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -52,7 +51,6 @@ define('COT_CACHE_TYPE_DEFAULT', COT_CACHE_TYPE_DB);
 
 /**
  * Abstract class containing code common for all cache drivers
- * @author Cotonti Team
  */
 abstract class Cache_driver
 {
@@ -276,7 +274,6 @@ abstract class Temporary_cache_driver extends Dynamic_cache_driver
  * A persistent cache using local file system tree. It does not use multilevel structure
  * or lexicograph search, so it may slow down when your cache grows very big.
  * But normally it is very fast reads.
- * @author Cotonti Team
  */
 class File_cache extends Static_cache_driver
 {
@@ -603,7 +600,6 @@ class Page_cache
 /**
  * A very popular caching solution using MySQL as a storage. It is quite slow compared to
  * File_cache but may be considered more reliable.
- * @author Cotonti Team
  */
 class MySQL_cache extends Db_cache_driver
 {

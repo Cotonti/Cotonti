@@ -2,11 +2,9 @@
 /**
  * Parameters for comments config implantation into modules
  *
- * @package comments
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Comments
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 // Options for implantation

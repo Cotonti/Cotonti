@@ -3,10 +3,9 @@
  * Array of styles and levels in tag cloud
  * max. entries => CSS class name
  *
- * @package tags
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Tags
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 $tc_styles = array(

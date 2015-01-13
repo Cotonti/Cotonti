@@ -8,11 +8,9 @@ Hooks=admin.config.edit.main,admin.structure.first
 /**
  * Loads language string for enable_ratings option in Admin/Config
  *
- * @package comments
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Ratings
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

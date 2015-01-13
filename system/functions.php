@@ -2,10 +2,9 @@
 /**
  * Main function library.
  *
- * @package Cotonti
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD License
+ * @package API - Functions
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -3573,7 +3572,6 @@ function cot_stamp2date($stamp)
  * Unsupported date formats : S, n, t, L, B, G, u, e, I, P, Z, c, r
  * Unsupported strftime formats : %U, %W, %C, %g, %r, %R, %T, %X, %c, %D, %F, %x
  *
- * @author Cotonti Team
  * @see http://php.net/manual/en/function.strftime.php
  * @param string $format A format for date().
  * @return string Format usable for strftime().

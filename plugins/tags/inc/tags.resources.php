@@ -2,11 +2,9 @@
 /**
  * Resource strings for tags plugin
  *
- * @package tags
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Tags
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 $R['tags_code_cloud_close'] = '</ul>';

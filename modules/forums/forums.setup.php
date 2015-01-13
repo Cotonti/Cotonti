@@ -54,9 +54,7 @@ metadesc=08:string:::
 /**
  * Forums module setup file
  *
- * @package forums
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Forums
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */

@@ -10,11 +10,9 @@ Order=5
  * Modifies page selection query if not in main category
  * to select only translated pages and localize them
  *
- * @package i18n
- * @version 0.7.7
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2014
- * @license BSD License
+ * @package I18n
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

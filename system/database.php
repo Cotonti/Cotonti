@@ -4,11 +4,9 @@
  *
  * @see http://www.php.net/manual/en/book.pdo.php
  *
- * @package Cotonti
- * @version 0.9.15
- * @author Cotonti Team
- * @copyright (c) Cotonti Team 2010-2014
- * @license BSD
+ * @package API - Database
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

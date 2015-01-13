@@ -2,11 +2,9 @@
 /**
  * Installation handler
  *
- * @package sitemap
- * @version 0.9.18
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2015
- * @license BSD License
+ * @package SiteMap
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
  * @todo notifications about robots.txt (if need to add o delete some strings)
  */

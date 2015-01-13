@@ -3,10 +3,8 @@
  * Index loader
  *
  * @package Cotonti
- * @version 0.9.17
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 if (php_sapi_name() == 'cli-server')
