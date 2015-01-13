@@ -4245,7 +4245,7 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 	if ($considerhtml)
 	{
 		// if the plain text is shorter than the maximum length, return the whole text
-		if (mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length)
+		if (!preg_match('/<\s*(pre|plaintext)/', $text) && mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length)
 		{
 			return $text;
 		}
@@ -4255,6 +4255,7 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 		$total_length = 0;
 		$open_tags = array();
 		$truncate = '';
+		$plain_mode = false;
 
 		foreach ($lines as $line_matchings)
 		{
@@ -4265,60 +4266,90 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 				if (preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1]))
 				{
 					// do nothing
-					// if tag is a closing tag (f.e. </b>)
 				}
+				// if tag is a closing tag (f.e. </b>)
 				elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings))
 				{
-					// delete tag from $open_tags list
-					$pos = array_search($tag_matchings[1], $open_tags);
-					if ($pos !== false)
+					$tag = false;
+					if (strtolower($tag_matchings[1]) == $plain_mode)
 					{
-						unset($open_tags[$pos]);
+						$plain_mode = false;
 					}
-					// if tag is an opening tag (f.e. <b>)
+					else
+					{
+						// delete tag from $open_tags list
+						$pos = array_search($tag_matchings[1], $open_tags);
+						if ($pos !== false)
+						{
+							unset($open_tags[$pos]);
+						}
+					}
 				}
+				// if tag is an opening tag (f.e. <b>)
 				elseif (preg_match('/^<\s*([^\s>!]+).*?>$/s', $line_matchings[1], $tag_matchings))
 				{
+					$tag = strtolower($tag_matchings[1]);
+					$plain_tag = in_array($tag, array('pre','plaintext')) ? $tag : false;
 					// add tag to the beginning of $open_tags list
-					array_unshift($open_tags, mb_strtolower($tag_matchings[1]));
+					if (!$plain_mode && !$plain_tag) array_unshift($open_tags, mb_strtolower($tag));
 				}
 				// add html-tag to $truncate'd text
-				$truncate .= $line_matchings[1];
+				if (!$plain_mode) $truncate .= $line_matchings[1];
 			}
 
-			// calculate the length of the plain text part of the line; handle entities as one character
-			$content_length = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', ' ', $line_matchings[2]));
-			if ($total_length+$content_length> $length)
+			// the number of characters which are left
+			$left = $length - $total_length;
+			if ($plain_mode || ($plain_tag && $tag))
 			{
-				// the number of characters which are left
-				$left = $length - $total_length;
-				$entities_length = 0;
-				// search for html entities
-				if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', $line_matchings[2], $entities, PREG_OFFSET_CAPTURE))
+				// treats text as plain in <pre>, <plaintext> tags
+				$content = $plain_mode ? $line_matchings[0] : $line_matchings[2];
+				if (mb_strlen($content) <= $left)
 				{
-					// calculate the real length of all entities in the legal range
-					foreach ($entities[0] as $entity)
-					{
-						if ($entity[1]+1-$entities_length <= $left)
-						{
-							$left--;
-							$entities_length += mb_strlen($entity[0]);
-						}
-						else
-						{
-							// no more characters left
-							break;
-						}
-					}
+					$truncate .= $content;
+					$total_length += mb_strlen($content);
 				}
-				$truncate .= mb_substr($line_matchings[2], 0, $left+$entities_length);
-				// maximum lenght is reached, so get off the loop
-				break;
+				else
+				{
+					$truncate .= mb_substr($content, 0, $left);
+					$total_length += $left;
+				}
+				if ($plain_tag && !$plain_mode) $plain_mode = $plain_tag;
 			}
 			else
 			{
-				$truncate .= $line_matchings[2];
-				$total_length += $content_length;
+				// calculate the length of the plain text part of the line; handle entities as one character
+				$content_length = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};|[\r\n\s]{2,}/i', ' ', $line_matchings[2]));
+				if ($total_length+$content_length> $length)
+				{
+					$entities_length = 0;
+					// search for html entities and spaces
+					if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};|[\r\n\s]{2,}/i', $line_matchings[2], $entities, PREG_OFFSET_CAPTURE))
+					{
+						// calculate the real length of all entities in the legal range
+						foreach ($entities[0] as $entity)
+						{
+							if ($entity[1]+1-$entities_length <= $left)
+							{
+								$left--;
+								$entities_length += mb_strlen($entity[0]);
+							}
+							else
+							{
+								// no more characters left
+								break;
+							}
+						}
+					}
+					$truncate .= mb_substr($line_matchings[2], 0, $left+$entities_length);
+					// maximum lenght is reached, so get off the loop
+					$truncated_by_space = preg_match('/[\r\n\s]/', mb_substr($line_matchings[2], $left+$entities_length, 1));
+					break;
+				}
+				else
+				{
+					$truncate .= $line_matchings[2];
+					$total_length += $content_length;
+				}
 			}
 
 			// if the maximum length is reached, get off the loop
@@ -4340,9 +4371,9 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 		}
 	}
 
-	if (!$exact)
+	if (!$exact && !$truncated_by_space && !$plain_mode)
 	{
-		// ...search the last occurance of a space...
+		// ...search the last occurence of a space...
 		if (mb_strrpos($truncate, ' ') > 0)
 		{
 			$pos1 = mb_strrpos($truncate, ' ');
