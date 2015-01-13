@@ -4390,6 +4390,7 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 	if ($considerhtml)
 	{
 		// close all unclosed html-tags
+		if ($plain_mode) $truncate .= '</'.$plain_mode.'>';
 		foreach ($open_tags as $tag)
 		{
 			$truncate .= '</'.$tag.'>';
