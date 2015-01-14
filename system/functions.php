@@ -4254,7 +4254,7 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 		$open_tags = array();
 		$truncate = '';
 		$plain_mode = false;
-
+		$plain_tag = false;
 		foreach ($lines as $line_matchings)
 		{
 			// if there is any html-tag in this line, handle it and add it (uncounted) to the output
