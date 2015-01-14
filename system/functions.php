@@ -2,9 +2,10 @@
 /**
  * Main function library.
  *
- * @package API - Functions
- * @copyright (c) Cotonti Team
- * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ * @package Cotonti
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2014
+ * @license BSD License
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -3572,6 +3573,7 @@ function cot_stamp2date($stamp)
  * Unsupported date formats : S, n, t, L, B, G, u, e, I, P, Z, c, r
  * Unsupported strftime formats : %U, %W, %C, %g, %r, %R, %T, %X, %c, %D, %F, %x
  *
+ * @author Cotonti Team
  * @see http://php.net/manual/en/function.strftime.php
  * @param string $format A format for date().
  * @return string Format usable for strftime().
@@ -5244,53 +5246,6 @@ function cot_url_check($url)
 }
 
 /**
- * Transliterates a string if transliteration is available
- *
- * @param string $str Source string
- * @return string
- */
-
-function cot_translit_encode($str)
-{
-	global $lang, $cot_translit;
-	static $lang_loaded = false;
-	if (!$lang_loaded && $lang != 'en' && file_exists(cot_langfile('translit', 'core')))
-	{
-		require_once cot_langfile('translit', 'core');
-		$lang_loaded = true;
-	}
-	if (is_array($cot_translit))
-	{
-		// Apply transliteration
-		$str = strtr($str, $cot_translit);
-	}
-	return $str;
-}
-
-/**
- * Backwards transition for cot_translit_encode
- *
- * @param string $str Encoded string
- * @return string
- */
-function cot_translit_decode($str)
-{
-	global $lang, $cot_translitb;
-	static $lang_loaded = false;
-	if (!$lang_loaded && $lang != 'en' && file_exists(cot_langfile('translit', 'core')))
-	{
-		require_once cot_langfile('translit', 'core');
-		$lang_loaded = true;
-	}
-	if (is_array($cot_translitb))
-	{
-		// Apply transliteration
-		$str = strtr($str, $cot_translitb);
-	}
-	return $str;
-}
-
-/**
  * Store URI-redir to session
  *
  * @global $sys
@@ -5365,6 +5320,53 @@ $cot_languages['pt']= 'Portugese';
 $cot_languages['ru']= 'Русский';
 $cot_languages['se']= 'Svenska';
 $cot_languages['ua'] = 'Українська';
+
+/**
+ * Transliterates a string if transliteration is available
+ *
+ * @param string $str Source string
+ * @return string
+ */
+
+function cot_translit_encode($str)
+{
+	global $lang, $cot_translit;
+	static $lang_loaded = false;
+	if (!$lang_loaded && $lang != 'en' && file_exists(cot_langfile('translit', 'core')))
+	{
+		require_once cot_langfile('translit', 'core');
+		$lang_loaded = true;
+	}
+	if (is_array($cot_translit))
+	{
+		// Apply transliteration
+		$str = strtr($str, $cot_translit);
+	}
+	return $str;
+}
+
+/**
+ * Backwards transition for cot_translit_encode
+ *
+ * @param string $str Encoded string
+ * @return string
+ */
+function cot_translit_decode($str)
+{
+	global $lang, $cot_translitb;
+	static $lang_loaded = false;
+	if (!$lang_loaded && $lang != 'en' && file_exists(cot_langfile('translit', 'core')))
+	{
+		require_once cot_langfile('translit', 'core');
+		$lang_loaded = true;
+	}
+	if (is_array($cot_translitb))
+	{
+		// Apply transliteration
+		$str = strtr($str, $cot_translitb);
+	}
+	return $str;
+}
 
 /**
  * Makes correct plural forms of words
