@@ -706,7 +706,7 @@ class Cotpl_block
 				$scope = 1;
 				$loop_code = '';
 				$code = mb_substr($code, $loop_pos + $loop_len);
-				while ($scope > 0 && preg_match('`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*(FOR\s+[^>]|ENDFOR)\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*(FOR\s+.+?|ENDFOR)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`', $code, $m))
+				while ($scope > 0 && preg_match('`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*(?:FOR\s+[^>]|ENDFOR)\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*(FOR\s+.+?|ENDFOR)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`', $code, $m))
 				{
 					$m_pos = mb_strpos($code, $m[0]);
 					$m_len = mb_strlen($m[0]);
