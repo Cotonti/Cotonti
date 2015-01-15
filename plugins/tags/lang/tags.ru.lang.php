@@ -38,6 +38,9 @@ $L['tags_Search_tags'] = 'Поиск тегов';
 $L['tags_Tag_cloud'] = 'Облако тегов';
 $L['tags_Tag_cloud_none'] = 'Нет тегов';
 $L['tags_length'] = 'Длина';
+$L['adm_tag_item_area'] = 'Элементы тега';
+$L['adm_tag_already_del'] = 'Тег удален';
+$L['adm_tag_already_edit'] = 'Тег отредактирован';
 
 /**
  * Plugin Config

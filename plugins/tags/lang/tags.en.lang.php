@@ -38,6 +38,9 @@ $L['tags_Search_tags'] = 'Search Tags';
 $L['tags_Tag_cloud'] = 'Tag Cloud';
 $L['tags_Tag_cloud_none'] = 'No tags';
 $L['tags_length'] = 'Length';
+$L['adm_tag_item_area'] = 'Elements tag';
+$L['adm_tag_already_del'] = 'Tag removed';
+$L['adm_tag_already_edit'] = 'Tag edited';
 
 /**
  * Plugin Config
