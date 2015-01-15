@@ -3,7 +3,7 @@
 CKEDITOR.editorConfig = function( config )
 {
 	config.toolbar = 'Full';
-	config.extraPlugins = 'more,oembed,syntaxhighlight';
+	config.extraPlugins = 'more,oembed,syntaxhighlight,codemirror';
 
 	config.allowedContent = true; // disable ACF
 
