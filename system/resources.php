@@ -512,7 +512,9 @@ class Resources
             $fileName = static::$alias[$fileName];
 
         } elseif (!file_exists($fileName)) {
-            throw new Exception ('Resource file «' . $fileName . '» not exists');
+            if(mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false) {
+                throw new Exception ('Resource file «' . $fileName . '» not exists');
+            }
         }
 
         if (empty($type)) $type = preg_match('#\.(js|css)$#i', $fileName, $m) ? strtolower($m[1]) : 'js';
