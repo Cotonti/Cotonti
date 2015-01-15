@@ -546,7 +546,7 @@ function cot_pfs_upload($userid, $folderid='')
 									hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
 								cot_imageresize($pfs_dir_user . $npath . $u_newname,
 									$cfg['pfs']['thumbs_dir_user'] . $npath . $u_newname,
-									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
+									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], '', $th_colorbg,
 									$cfg['pfs']['th_jpeg_quality'], true);
 							}
 						}

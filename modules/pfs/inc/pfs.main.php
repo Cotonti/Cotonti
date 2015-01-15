@@ -219,7 +219,7 @@ if ($a=='upload')
 								$th_colortext = array(hexdec(substr($cfg['pfs']['th_colortext'],0,2)), hexdec(substr($cfg['pfs']['th_colortext'],2,2)), hexdec(substr($cfg['pfs']['th_colortext'],4,2)));
 								$th_colorbg = array(hexdec(substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
 								cot_imageresize($pfs_dir_user . $u_newname, $thumbs_dir_user  . $u_newname,
-									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
+									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], '', $th_colorbg,
 									$cfg['pfs']['th_jpeg_quality'], true);
 							}
 						}
@@ -471,7 +471,7 @@ foreach ($sql_pfs->fetchAll() as $row)
 			$th_colortext = array(hexdec(mb_substr($cfg['pfs']['th_colortext'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],4,2)));
 			$th_colorbg = array(hexdec(mb_substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],4,2)));
 			cot_imageresize($pfs_dir_user . $pfs_file, $thumbs_dir_user . $pfs_file,
-				$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
+				$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], '', $th_colorbg,
 				$cfg['pfs']['th_jpeg_quality'], true);
 		}
 
