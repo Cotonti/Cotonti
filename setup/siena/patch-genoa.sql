@@ -1016,8 +1016,15 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 /* 0.9.15-01 extend config_order size #1237 */
 ALTER TABLE `cot_config` MODIFY `config_order` char(3) collate utf8_unicode_ci NOT NULL default '00';
 
+/* 0.9.18 */
+ALTER TABLE `cot_plugins` MODIFY `pl_hook` varchar(255) collate utf8_unicode_ci NOT NULL default '';
+ALTER TABLE `cot_plugins` MODIFY `pl_code` varchar(255) collate utf8_unicode_ci NOT NULL default '';
+ALTER TABLE `cot_plugins` MODIFY `pl_part` varchar(255) collate utf8_unicode_ci NOT NULL default '';
+
+UPDATE `cot_config` SET `config_type`=8, `config_default`='', `config_variants`='cot_config_type_int(15,1)' WHERE `config_owner`='core' AND `config_cat`='main' AND `config_name`='maxrowsperpage';
+
 /* ------------------------------------------------------------------------------- */
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.15-01' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.18' WHERE `upd_param` = 'revision';
