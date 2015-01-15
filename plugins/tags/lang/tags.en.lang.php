@@ -37,6 +37,7 @@ $L['tags_Search_results'] = 'Search Results';
 $L['tags_Search_tags'] = 'Search Tags';
 $L['tags_Tag_cloud'] = 'Tag Cloud';
 $L['tags_Tag_cloud_none'] = 'No tags';
+$L['tags_length'] = 'Length';
 
 /**
  * Plugin Config

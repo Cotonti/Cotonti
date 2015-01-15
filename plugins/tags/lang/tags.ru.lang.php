@@ -37,6 +37,7 @@ $L['tags_Search_results'] = 'Результаты поиска';
 $L['tags_Search_tags'] = 'Поиск тегов';
 $L['tags_Tag_cloud'] = 'Облако тегов';
 $L['tags_Tag_cloud_none'] = 'Нет тегов';
+$L['tags_length'] = 'Длина';
 
 /**
  * Plugin Config
