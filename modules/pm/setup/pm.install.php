@@ -15,7 +15,7 @@ global $db_users;
 $dbres = $db->query("SHOW COLUMNS FROM `$db_users` WHERE `Field` = 'user_pmnotify'");
 if ($dbres->rowCount() == 0)
 {
-	$db->query("ALTER TABLE `$db_users` ADD COLUMN `user_pmnotify` TINYINT UNSIGNED NOT NULL DEFAULT 0");
+	$db->query("ALTER TABLE `$db_users` ADD COLUMN `user_pmnotify` TINYINT UNSIGNED NOT NULL DEFAULT 1");
 }
 $dbres->closeCursor();
 
