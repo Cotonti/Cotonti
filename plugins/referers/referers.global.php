@@ -21,10 +21,11 @@ $sys['referer'] = mb_substr($_SERVER['HTTP_REFERER'], 0, 255);
 
 if (!empty($sys['referer'])
 	&& mb_stripos($sys['referer'], $cfg['mainurl']) === false
-	&& mb_stripos($sys['referer'], $cfg['hostip']) === false
+	&& (empty($cfg['hostip']) || mb_stripos($sys['referer'], $cfg['hostip']) === false)
 	&& mb_stripos($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl'])) === false
 	&& mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) === false)
 {
+
 	$db->query("INSERT INTO $db_referers
 				(ref_url, ref_count, ref_date)
 			VALUES
