@@ -772,7 +772,8 @@ function cot_config_update_options($name, &$optionslist, $is_module=false, $chan
 				else
 				{
 					// last part of custom function name treats as built-in filter name
-					$custom_filter = strtoupper(array_reverse(explode('_', $custom_func))[0]);
+					$last_func_name = array_reverse(explode('_', $custom_func));
+					$custom_filter = strtoupper($last_func_name[0]);
 					if (in_array(strtoupper($custom_filter), array('INT','BOL', 'PSW', 'ALP', 'TXT', 'NUM')) || sizeof($cot_import_filters[$custom_filter]))
 					{
 						$filter = $custom_filter;
