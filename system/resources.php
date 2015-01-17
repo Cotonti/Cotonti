@@ -512,7 +512,7 @@ class Resources
             $fileName = static::$alias[$fileName];
 
         } elseif (!file_exists($fileName)) {
-            if(mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false) {
+            if(mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0){
                 throw new Exception ('Resource file «' . $fileName . '» not exists');
             }
         }
