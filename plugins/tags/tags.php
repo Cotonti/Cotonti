@@ -27,9 +27,13 @@ if ($tl && file_exists(cot_langfile('translit', 'core')))
 	include_once cot_langfile('translit', 'core');
 	$qs = strtr($qs, $cot_translitb);
 }
+
+// Results per page
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d',  $maxperpage);
 $dt = (int)cot_import('dt', 'G', 'INT');
+
+// Tags displayed per page in standalone cloud
 $perpage = $cfg['plugin']['tags']['perpage'];
 
 // Array to register areas with tag functions provided
@@ -159,25 +163,27 @@ function cot_tag_search_pages($query)
 		return;
 	}
 
-	$totalitems = $db->query("SELECT DISTINCT COUNT(*)
-		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
-			ON r.tag_item = p.page_id
-		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0")->fetchColumn();
+	$maxperpage = (cot::$cfg['maxrowsperpage'] && is_numeric(cot::$cfg['maxrowsperpage']) && cot::$cfg['maxrowsperpage'] > 0) ?
+		cot::$cfg['maxrowsperpage'] : 15;
+
+	$join_columns = '';
+	$join_tables = '';
+	$join_where = '';
+
 	switch($o)
 	{
 		case 'title':
 			$order = 'ORDER BY `page_title`';
-		break;
+			break;
 		case 'date':
 			$order = 'ORDER BY `page_date` DESC';
-		break;
+			break;
 		case 'category':
 			$order = 'ORDER BY `page_cat`';
-		break;
+			break;
 		default:
 			$order = '';
 	}
-
 
 	/* == Hook == */
 	foreach (cot_getextplugins('tags.search.pages.query') as $pl)
@@ -186,12 +192,18 @@ function cot_tag_search_pages($query)
 	}
 	/* ===== */
 
+	$totalitems = cot::$db->query("SELECT DISTINCT COUNT(*)
+		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
+			ON r.tag_item = p.page_id $join_tables
+		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0 $join_where")->fetchColumn();
+
 	$sql = $db->query("SELECT DISTINCT p.* $join_columns
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id $join_tables
 		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0 $join_where
 		$order
 		LIMIT $d, $maxperpage");
+
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_pages']);
 	$pcount = $sql->rowCount();
 
@@ -214,15 +226,15 @@ function cot_tag_search_pages($query)
 			$tag_i = 0;
 			foreach ($tags as $tag)
 			{
-				$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
-				$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
+				$tag_t = cot::$cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
+				$tag_u = cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 				if ($tag_i > 0) $tag_list .= ', ';
 				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)), htmlspecialchars($tag_t));
 				$tag_i++;
 			}
 
-			$t->assign(cot_generate_pagetags($row, 'TAGS_RESULT_ROW_', $cfg['page']['cat___default']['truncatetext']));
+			$t->assign(cot_generate_pagetags($row, 'TAGS_RESULT_ROW_', cot::$cfg['page']['cat___default']['truncatetext']));
 			$t->assign(array(
 				//'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']),
 				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
@@ -238,7 +250,7 @@ function cot_tag_search_pages($query)
 			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}
 		$sql->closeCursor();
-		$qs_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($qs) : $qs;
+		$qs_u = cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($qs) : $qs;
 		$tl = $lang != 'en' && $qs_u != $qs ? 1 : null;
 		$pagenav = cot_pagenav('plug', array('e' => 'tags', 'a' => 'pages', 't' => $qs_u, 'tl' => $tl), $d, $totalitems, $maxperpage);
 		$t->assign(array(
@@ -284,30 +296,47 @@ function cot_tag_search_forums($query)
 		return;
 	}
 
-	$totalitems = $db->query("SELECT DISTINCT COUNT(*)
-		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
-			ON r.tag_item = t.ft_id
-		WHERE r.tag_area = 'forums' AND ($query)")->fetchColumn();
+	$maxperpage = (cot::$cfg['maxrowsperpage'] && is_numeric(cot::$cfg['maxrowsperpage']) && cot::$cfg['maxrowsperpage'] > 0) ?
+		cot::$cfg['maxrowsperpage'] : 15;
+
+	$join_columns = '';
+	$join_tables = '';
+	$join_where = '';
+
 	switch($o)
 	{
 		case 'title':
 			$order = 'ORDER BY `ft_title`';
-		break;
+			break;
 		case 'date':
 			$order = 'ORDER BY `ft_updated` DESC';
-		break;
+			break;
 		case 'category':
 			$order = 'ORDER BY `ft_cat`';
-		break;
+			break;
 		default:
 			$order = '';
 	}
-	$sql = $db->query("SELECT DISTINCT t.ft_id, t.ft_cat, t.ft_title
+
+	/* == Hook == */
+	foreach (cot_getextplugins('tags.search.forums.query') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
+	$totalitems = $db->query("SELECT DISTINCT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
-			ON r.tag_item = t.ft_id
-		WHERE r.tag_area = 'forums' AND ($query) AND t.ft_id IS NOT NULL
+			ON r.tag_item = t.ft_id $join_tables
+		WHERE r.tag_area = 'forums' AND ($query) $join_where")->fetchColumn();
+
+	$sql = $db->query("SELECT DISTINCT t.ft_id, t.ft_cat, t.ft_title $join_columns
+		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
+			ON r.tag_item = t.ft_id $join_tables
+		WHERE r.tag_area = 'forums' AND ($query) AND t.ft_id IS NOT NULL $join_where
 		$order
 		LIMIT $d, $maxperpage");
+
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
 	if ($sql->rowCount() > 0)
 	{
