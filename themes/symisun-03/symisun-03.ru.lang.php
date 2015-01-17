@@ -79,7 +79,7 @@ $themelang['pageedit_del'] = 'Удалить';
  * pm.send.tpl
  */
 
-$themelang['pmsend_Sendmessagetohint'] = 'up to 10 recipients, separated by commas';
+$themelang['pmsend_Sendmessagetohint'] = 'до 10 получателей, разделяя их запятыми';
 
 /**
  * pm.tpl
