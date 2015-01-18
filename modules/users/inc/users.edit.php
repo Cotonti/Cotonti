@@ -21,6 +21,7 @@ $g = cot_import('g','G','INT');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
 cot_block($usr['isadmin']);
+require_once cot_langfile('users', 'module');
 
 /* === Hook === */
 foreach (cot_getextplugins('users.edit.first') as $pl)
@@ -236,7 +237,7 @@ if ($a == 'update')
 
 		cot_auth_clear($id);
 		cot_log("Edited user #".$id,'adm');
-		cot_message('Updated');
+		cot_message('User_data_updated');
 		cot_redirect(cot_url('users', "m=edit&id=".$id, '', true));
 	}
 	else
