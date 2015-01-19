@@ -130,7 +130,8 @@ if ($standalone)
 {
 	cot_sendheaders();
 
-    cot_rc_output();
+	$html = Resources::render();
+	if($html) $out['head_head'] = $html.$out['head_head'];
 
     $t->assign(array(
         'PFS_HEAD' => $out['head_head'],

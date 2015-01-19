@@ -43,6 +43,10 @@ else
 	$out['fulltitle'] = cot_title('title_header', $title_params);
 }
 
+if ($cfg['jquery'] && $cfg['jquery_cdn'])
+{
+	Resources::linkFile($cfg['jquery_cdn'], 'js', 30);
+}
 $html = Resources::render();
 if($html) $out['head_head'] = $html.$out['head_head'];
 
@@ -54,11 +58,6 @@ $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspe
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] .= $out['head'];
 
-
-if ($cfg['jquery'] && $cfg['jquery_cdn'])
-{
-	Resources::linkFile($cfg['jquery_cdn'], 'js', 30);
-}
 
 if ($sys['noindex'])
 {
