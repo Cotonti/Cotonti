@@ -27,7 +27,7 @@ class Resources
         '@jQueryUIstructure.css' => 'lib/jquery-ui/jquery-ui.structure.min.css',
 
         '@select2.js' => 'lib/select2/select2.min.js',
-        '@select2.i8n.js' => 'lib/select2/select2_locale_ru.js',
+        '@select2.i8n.js' => '',        // lib/select2/select2_locale_en.js
         '@select2.css' => 'lib/select2/select2.css',
         '@select2.bootstrap.css' => 'lib/select2/select2-bootstrap.css',
     );
@@ -65,12 +65,19 @@ class Resources
     protected static $minify = false;
 
     /**
+     * @var bool header.php executed?
+     */
+    protected static $headerComplete = false;
+
+    /**
      * @var string $dir Resources cache dir
      */
     protected static $dir = '';
 
     public static function __init()
     {
+        if(defined('COT_HEADER_COMPLETE')) static::$headerComplete = true;
+
         static::$cacheOn = cot::$cfg['cache'];
         static::$consolidate = (bool)cot::$cfg['headrc_consolidate'];
         static::$dir = cot::$cfg['cache_dir'] . '/static/';
@@ -109,6 +116,9 @@ class Resources
      */
     public static function addFile($path, $type = '', $order = 50, $scope = 'global')
     {
+        // header.php executed. Try add file to footer
+        if(static::$headerComplete) return Resources::linkFileFooter($path, $type, $order);
+
         $tmp = explode('?', $path);
         $fileName = $tmp[0];
 
@@ -197,6 +207,8 @@ class Resources
      */
     public static function addEmbed($code, $type = 'js', $order = 50, $scope = 'global', $identifier = '')
     {
+        // header.php executed. Try add code to footer
+        if(static::$headerComplete) Resources::embedFooter($code, $type, $order);
 
         // Если используем консолидацию и минификацию, сохранить в файл
         if (static::$consolidate && static::$cacheOn && !static::$isAdmin) {
@@ -278,8 +290,9 @@ class Resources
                 }
             }
         }
+        static::$headerComplete = true;
 
-        return $ret;
+        return trim($ret);
     }
 
     /**
@@ -488,7 +501,7 @@ class Resources
             }
         }
 
-        return $ret;
+        return trim($ret);
     }
 
     /**
@@ -503,6 +516,9 @@ class Resources
      */
     public static function linkFile($path, $type = '', $order = 50)
     {
+        // header.php executed. Try add file to footer
+        if(static::$headerComplete) return Resources::linkFileFooter($path, $type, $order);
+
         $tmp = explode('?', $path);
         $fileName = $tmp[0];
 
@@ -548,7 +564,7 @@ class Resources
             $fileName = static::$alias[$fileName];
 
         } elseif (!file_exists($fileName)) {
-            return;
+            return false;
         }
 
         if (empty($type)) $type = preg_match('#\.(js|css)$#i', $fileName, $m) ? strtolower($m[1]) : 'js';
@@ -557,7 +573,12 @@ class Resources
         static::$footerRc[$type][$order][] = $path;
 
         foreach (static::additionalFiles($tmp[0]) as $file) {
-            static::linkFileFooter($file, '', $order);
+            $type = preg_match('#\.(js|css)$#i', $file, $m) ? strtolower($m[1]) : 'js';
+            if($type == 'css' && !static::$headerComplete) {
+                static::linkFile($file, 'css', $order);
+            } else {
+                static::linkFileFooter($file, '', $order);
+            }
         }
     }
 
@@ -573,6 +594,9 @@ class Resources
      */
     public static function embed($code, $type = 'js', $order = 50)
     {
+        // header.php executed. Try add code to footer
+        if(static::$headerComplete) Resources::embedFooter($code, $type, $order);
+
         static::$headerRc[$type.'_embed'][$order][] = cot_rc("code_rc_{$type}_embed", array('code' => $code));
     }
 
@@ -630,5 +654,4 @@ class Resources
     }
 
 }
-
 Resources::__init();
