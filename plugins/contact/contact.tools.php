@@ -61,7 +61,7 @@ $tuman = new XTemplate(cot_tplfile('contact.tools', 'plug', true));
 $totallines = $db->query("SELECT COUNT(*) FROM $db_contact")->fetchColumn();
 $sql = $db->query("SELECT * FROM $db_contact ORDER BY contact_val ASC, contact_id DESC LIMIT $d, " . $cfg['maxrowsperpage']);
 
-$pagnav = cot_pagenav('admin', 'm=other&p=contact', $d, $totallines, $cfg['maxrowsperpage']);
+$pagnav = cot_pagenav('admin', 'm=other&p=contact', $d, $totallines, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $i = 0;
 foreach ($sql->fetchAll() as $row)
@@ -71,16 +71,22 @@ foreach ($sql->fetchAll() as $row)
 	$shorttext = $row['contact_text'];
 	$shorttext = cot_string_truncate($shorttext, 150);
 	$shorttext .= '...';
+	$val = ($row['contact_val'] == 1) ? 'unval' : 'val';
+	$urlParams = array('m' => 'other', 'p' => 'contact');
 
+	$tmp = $urlParams;
+	$tmp['id'] = $row['contact_id'];
+	if($durl > 0) $tmp['d'] = $durl;
+	$viewLink = cot_url('admin', $tmp, '#view');
 	$tuman->assign(array(
 		'CONTACT_DATE' => cot_date('date_full', $row['contact_date']),
 		'CONTACT_DATE_STAMP' => $row['contact_date'],
 		'CONTACT_USER' => ($row['contact_authorid'] > 0) ? cot_build_user($row['contact_authorid'], $row['contact_author']) : $row['contact_author'],
 		'CONTACT_EMAIL' => $row['contact_email'],
 		'CONTACT_ID' => $row['contact_id'],
-		'CONTACT_DELLINK' => cot_url('admin', 'm=other&p=contact&a=del&id=' . $row['contact_id']),
-		'CONTACT_VIEWLINK' => cot_url('admin', 'm=other&p=contact&id=' . $row['contact_id']),
-		'CONTACT_VAL' => ($row['contact_val'] == 1) ? 'unval' : 'val',
+		'CONTACT_DELLINK' => cot_confirm_url(cot_url('admin', 'm=other&p=contact&a=del&id=' . $row['contact_id'])),
+		'CONTACT_VIEWLINK' => $viewLink,
+		'CONTACT_VAL' => $val,
 		'CONTACT_VALLINK' => cot_url('admin', 'm=other&p=contact&a=' . $val . '&id=' . $row['contact_id']),
 		'CONTACT_READLINK' => cot_url('admin', 'm=other&p=contact&a=val&id=' . $row['contact_id']),
 		'CONTACT_UNREADLINK' => cot_url('admin', 'm=other&p=contact&a=unval&id=' . $row['contact_id']),
