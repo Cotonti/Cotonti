@@ -344,19 +344,23 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 {
 	global $cot_import_filters, $_PUT, $_PATCH, $_DELETE;
 
-	if ($_SERVER['REQUEST_METHOD'] == 'PUT' && is_null($_PUT))
+	if(isset($_SERVER['REQUEST_METHOD']))
 	{
-		parse_str(file_get_contents('php://input'), $_PUT);
-	}
-	elseif ($_SERVER['REQUEST_METHOD'] == 'PATCH' && is_null($_PATCH))
-	{
-		parse_str(file_get_contents('php://input'), $_PATCH);
-	}
-	elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE' && is_null($_DELETE))
-	{
-		parse_str(file_get_contents('php://input'), $_DELETE);
+		if ($_SERVER['REQUEST_METHOD'] == 'PUT' && is_null($_PUT))
+		{
+			parse_str(file_get_contents('php://input'), $_PUT);
+		}
+		elseif ($_SERVER['REQUEST_METHOD'] == 'PATCH' && is_null($_PATCH))
+		{
+			parse_str(file_get_contents('php://input'), $_PATCH);
+		}
+		elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE' && is_null($_DELETE))
+		{
+			parse_str(file_get_contents('php://input'), $_DELETE);
+		}
 	}
 
+	$v = NULL;
 	switch($source)
 	{
 		case 'G':
