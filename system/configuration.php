@@ -750,6 +750,10 @@ function cot_config_update_options($name, &$optionslist, $is_module=false, $chan
 	foreach ($optionslist as $key => $val)
 	{
 		$filter = 'NOC';
+
+		// Visual separator/fieldset have no value
+		if($val['config_type'] == COT_CONFIG_TYPE_SEPARATOR) continue;
+
 		if ($val['config_type'] == COT_CONFIG_TYPE_CUSTOM && $val['config_variants'])
 		{
 			if (preg_match('#^(\w+)\((.*?)\)$#', $val['config_variants'], $mt))
