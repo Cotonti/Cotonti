@@ -22,4 +22,4 @@ $L['ipsearch_searchthisuser'] = 'Искать данный IP в базе пол
 $L['ipsearch_found1'] = 'Найдено';
 $L['ipsearch_found2'] = 'совпадение(ий) для';
 
-$L['ipsearch_help'] = 'Никакой помощи для этого плагина еще нет!';
+$L['ipsearch_help'] = 'Справка для этого плагина отсутствует';
