@@ -5,12 +5,12 @@
  */
 
 // Status indicators
-$R['admin_code_missing'] = '<span style="color:#AC5866;font-weight:bold;">'.$L['adm_missing'].'</span>';
-$R['admin_code_notinstalled'] = '<span style="color:#AC5866;font-weight:bold;">'.$L['adm_notinstalled'].'</span>';
-$R['admin_code_partrunning'] = '<span style="color:#A78731;font-weight:bold;">'.$L['adm_partrunning'].'</span>';
-$R['admin_code_paused'] = '<span style="color:#5882AC;font-weight:bold;">'.$L['adm_paused'].'</span>';
-$R['admin_code_present'] = '<span style="color:#739E48;font-weight:bold;">'.$L['adm_present'].'</span>';
-$R['admin_code_running'] = '<span style="color:#739E48;font-weight:bold;">'.$L['adm_running'].'</span>';
+$R['admin_code_missing'] = '<span class="strong extension missing">'.$L['adm_missing'].'</span>';
+$R['admin_code_notinstalled'] = '<span class="strong extension notinstalled">'.$L['adm_notinstalled'].'</span>';
+$R['admin_code_partrunning'] = '<span class="strong extention partrunning">'.$L['adm_partrunning'].'</span>';
+$R['admin_code_paused'] = '<span class="strong extension paused">'.$L['adm_paused'].'</span>';
+$R['admin_code_present'] = '<span class="strong extension present">'.$L['adm_present'].'</span>';
+$R['admin_code_running'] = '<span class="strong extension running">'.$L['adm_running'].'</span>';
 
 // Icons
 $R['admin_icon_pathfieldnoimg'] = '<img class="icon" src="system/admin/img/join1.png" alt="" />';

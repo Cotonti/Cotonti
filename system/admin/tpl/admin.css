@@ -128,6 +128,13 @@ div.help										{ color:#000; background-color:#f2f2f2; background-image:url(.
 .width95	{ width:95%; }
 .width100	{ width:100%; }
 
+.extension.missing		{ color:#ac5866; }
+.extension.notinstalled	{ color:#ac5866; }
+.extension.partrunning	{ color:#a78731; }
+.extension.paused		{ color:#5882ac; }
+.extension.present		{ color:#739e48; }
+.extension.running		{ color:#739e48; }
+
 /* 5. Admin Menu
 -------------------------------------------------- */
 
@@ -153,6 +160,7 @@ a.thumbicons img {
    } 
 
 a.thumbicons:hover {background: #EDEFF4;}
+
 /* 6. Tables
 -------------------------------------------------- */
 
