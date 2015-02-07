@@ -19,10 +19,17 @@ class Resources
         '@ckeditor' => 'plugins/ckeditor/lib/ckeditor.js',
         '@ckeditorPreset.js' => 'plugins/ckeditor/presets/ckeditor.default.set.js',
 
-//		Add new scripts
-//		'@bootstrap.js' => 'lib/bootstrap/js/bootstrap.min.js',
-//		'@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
-//		'@bootstrapTheme.css' => '',    // lib/bootstrap/css/bootstrap-theme.min.css
+        '@bootstrap.js' => 'lib/bootstrap/js/bootstrap.min.js',
+        '@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
+        '@bootstrapTheme.css' => '',    // lib/bootstrap/css/bootstrap-theme.min.css
+
+        '@jQueryUI.js' => 'lib/jquery-ui/jquery-ui.min.js',
+        '@jQueryUIstructure.css' => 'lib/jquery-ui/jquery-ui.structure.min.css',
+
+        '@select2.js' => 'lib/select2/select2.min.js',
+        '@select2.i8n.js' => '',        // lib/select2/select2_locale_en.js
+        '@select2.css' => 'lib/select2/select2.css',
+        '@select2.bootstrap.css' => 'lib/select2/select2-bootstrap.css',
     );
 
     // ==== predefined alias constants  ====
@@ -156,6 +163,24 @@ class Resources
             case '@bootstrap.js':
                 $ret[] = '@bootstrap.css';
                 $ret[] = '@bootstrapTheme.css';
+                break;
+
+            case '@select2.js':
+                $ret[] = '@select2.i8n.js';
+                $ret[] = '@select2.css';
+                $ret[] = '@select2.bootstrap.css';
+                break;
+
+            case '@jQueryUI.js':
+                $ret[] = '@jQueryUIstructure.css';
+                break;
+
+            case '@ckeditor':
+                $ret[] = '@ckeditorPreset.js';
+                break;
+
+            case '@gritter':
+                $ret[] = '@gritter.css';
                 break;
         }
 
