@@ -28,6 +28,11 @@ if (!$i18n_locales)
 
 // Select a locale
 $i18n_locale = cot_import('l', 'G', 'ALP');
+if (empty($i18n_locale) && $cfg['plugin']['i18n']['cookie'])
+{
+	// Try restoring from cookie
+	$i18n_locale = cot_import('i18n_locale', 'C', 'ALP');
+}
 if (empty($i18n_locale) || !isset($i18n_locales[$i18n_locale]))
 {
 	$i18n_locale = $usr['lang'];
@@ -57,6 +62,19 @@ if (!$i18n_omit)
 
 $i18n_notmain = $i18n_locale != $cfg['defaultlang'];
 list($i18n_read, $i18n_write, $i18n_admin, $i18n_edit) = cot_auth('plug', 'i18n', 'RWA1');
+
+// Remember in cookie if needed
+if ($cfg['plugin']['i18n']['cookie'] && $i18n_locale !== $_COOKIE['i18n_locale'])
+{
+	if ($i18n_locale === $cfg['defaultlang'] && isset($_COOKIE['i18n_locale']))
+	{
+		cot_setcookie('i18n_locale', null, -1);
+	}
+	elseif ($i18n_locale !== $cfg['defaultlang'])
+	{
+		cot_setcookie('i18n_locale', $i18n_locale);
+	}
+}
 
 // SEO fix
 if ($usr['id'] == 0 && $i18n_notmain && $env['ext'] != 'index')

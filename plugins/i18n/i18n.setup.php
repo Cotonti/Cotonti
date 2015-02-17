@@ -5,8 +5,8 @@ Code=i18n
 Name=Content Internationalization
 Category=customization-i18n
 Description=Enables site contents translation into multiple languages
-Version=0.9.18
-Date=2015-01-05
+Version=0.9.19
+Date=2015-02-17
 Author=Trustmaster
 Copyright=Copyright (c) Cotonti Team 2010-2015
 Notes=BSD License
@@ -24,6 +24,7 @@ cats=01:string:::Category codes
 locales=02:text::en|English:Site locales
 omitmain=03:radio::1:Omit language parameter in the URL if pointing to main language
 rewrite=04:radio::0:Enable URL overwrite for language parameter
+cookie=05:radio::0:Remember language selection in cookie
 [END_COT_EXT_CONFIG]
 ==================== */
 
