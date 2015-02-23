@@ -175,7 +175,7 @@
 <!-- IF {PHP.g} > 5 -->
 					<tr>
 						<td>{PHP.L.Delete}:</td>
-						<td><a href="{ADMIN_USERS_EDITFORM_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a></td>
+						<td><a href="{ADMIN_USERS_EDITFORM_DEL_CONFIRM_URL}" class="confirmLink">{PHP.R.admin_icon_delete}</a></td>
 					</tr>
 <!-- ENDIF -->
 					<tr>
