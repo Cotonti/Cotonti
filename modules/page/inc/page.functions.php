@@ -510,7 +510,7 @@ function cot_page_validate($rpage)
  */
 function cot_page_add(&$rpage, $auth = array())
 {
-	global $cache, $cfg, $db, $db_pages, $db_structure, $structure, $L;
+	global $cache, $cfg, $db, $db_x, $db_pages, $db_structure, $structure, $L;
 	if (cot_error_found())
 	{
 		return false;
