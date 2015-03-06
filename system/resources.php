@@ -22,22 +22,12 @@ class Resources
         '@bootstrap.js' => 'lib/bootstrap/js/bootstrap.min.js',
         '@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
         '@bootstrapTheme.css' => '',    // lib/bootstrap/css/bootstrap-theme.min.css
-
-        '@jQueryUI.js' => 'lib/jquery-ui/jquery-ui.min.js',
-        '@jQueryUIstructure.css' => 'lib/jquery-ui/jquery-ui.structure.min.css',
-
-        '@select2.js' => 'lib/select2/select2.min.js',
-        '@select2.i8n.js' => '',        // lib/select2/select2_locale_en.js
-        '@select2.css' => 'lib/select2/select2.css',
-        '@select2.bootstrap.css' => 'lib/select2/select2-bootstrap.css',
     );
 
     // ==== predefined alias constants  ====
     const jQuery    = '@jQuery';
     const bootstrap = '@bootstrap.js';
-    const jQueryUI  = '@jQueryUI.js';
     const ckeditor  = '@ckeditor';
-    const select2   = '@select2.js';
     // ==== /predefined alias constants  ====
 
     /**
@@ -165,22 +155,8 @@ class Resources
                 $ret[] = '@bootstrapTheme.css';
                 break;
 
-            case '@select2.js':
-                $ret[] = '@select2.i8n.js';
-                $ret[] = '@select2.css';
-                $ret[] = '@select2.bootstrap.css';
-                break;
-
-            case '@jQueryUI.js':
-                $ret[] = '@jQueryUIstructure.css';
-                break;
-
             case '@ckeditor':
                 $ret[] = '@ckeditorPreset.js';
-                break;
-
-            case '@gritter':
-                $ret[] = '@gritter.css';
                 break;
         }
 
@@ -527,8 +503,8 @@ class Resources
         if (mb_strpos($fileName, '@') === 0){
             $fileName = static::$alias[$fileName];
 
-        } elseif (!file_exists($fileName)) {
-            if(mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0){
+        } elseif(mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0){
+            if (!file_exists($fileName)) {
                 throw new Exception ('Resource file «' . $fileName . '» not exists');
             }
         }
