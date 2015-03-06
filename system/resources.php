@@ -539,8 +539,10 @@ class Resources
         if (mb_strpos($fileName, '@') === 0){
             $fileName = static::$alias[$fileName];
 
-        } elseif (!file_exists($fileName)) {
-            return false;
+        } elseif(mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0){
+            if (!file_exists($fileName)) {
+                return false;
+            }
         }
 
         if (empty($type)) $type = preg_match('#\.(js|css)$#i', $fileName, $m) ? strtolower($m[1]) : 'js';
