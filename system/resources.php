@@ -249,6 +249,7 @@ class Resources
         ksort(static::$headerRc);
         foreach (static::$headerRc as $type => $data) {
             if (!empty(static::$headerRc[$type]) && is_array(static::$headerRc[$type])) {
+                ksort(static::$headerRc[$type]);
                 foreach (static::$headerRc[$type] as $order => $htmlArr) {
                     foreach ($htmlArr as $key => $path) {
                         if(mb_strpos($type, '_embed') !== false){
@@ -459,6 +460,7 @@ class Resources
 
         foreach (static::$footerRc as $type => $data) {
             if (!empty(static::$footerRc[$type]) && is_array(static::$footerRc[$type])) {
+                ksort(static::$footerRc[$type]);
                 foreach (static::$footerRc[$type] as $order => $htmlArr) {
                     foreach ($htmlArr as $key => $path) {
                         if(mb_strpos($type, '_embed') !== false){
