@@ -229,9 +229,12 @@ elseif ($default_mode)
 	{
 		$url = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'], '', true) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'], '', true);
 
+        $rssDate = $row['page_date'];
+        if(!empty(cot::$usr['timezone'])) $rssDate += cot::$usr['timezone'] * 3600;
+
 		$items[$i]['title'] = $row['page_title'];
 		$items[$i]['link'] = (strpos($url, '://') === false) ? COT_ABSOLUTE_URL . $url : $url;
-		$items[$i]['pubDate'] = cot_date('r', $row['page_date']);
+		$items[$i]['pubDate'] = date('r', $rssDate);
 		$items[$i]['description'] = cot_parse_page_text($row['page_text'], $url, $row['page_parser']);
 		$items[$i]['fields'] = cot_generate_pagetags($row);
 
@@ -240,6 +243,9 @@ elseif ($default_mode)
 	$sql->closeCursor();
 }
 
+$rssNow = cot::$sys['now'];
+if(!empty(cot::$usr['timezone'])) $rssNow += cot::$usr['timezone'] * 3600;
+
 $t = new XTemplate(cot_tplfile('rss'));
 $t->assign(array(
 	'RSS_ENCODING' => $cfg['rss']['rss_charset'],
@@ -247,7 +253,7 @@ $t->assign(array(
 	'RSS_LINK' => $rss_link,
 	'RSS_LANG' => $cfg['defaultlang'],
 	'RSS_DESCRIPTION' => htmlspecialchars($rss_description),
-	'RSS_DATE' => cot_fix_pubdate(cot_date("r"))
+	'RSS_DATE' => cot_fix_pubdate(date("r", $rssNow))
 ));
 
 if (count($items) > 0)

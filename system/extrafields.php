@@ -541,9 +541,11 @@ function cot_default_html_construction($type)
  *
  * @global CotDB $db
  */
-function cot_extrafield_add($location, $name, $type, $html='', $variants='', $default='', $required=false, $parse='HTML', $description='', $params = '', $enabled = 1, $noalter = false, $customtype = '')
+function cot_extrafield_add($location, $name, $type, $html='', $variants='', $default='', $required=false, $parse='HTML',
+                            $description='', $params = '', $enabled = 1, $noalter = false, $customtype = '')
 {
 	global $db, $db_extra_fields;
+
 	$checkname = cot_import($name, 'D', 'ALP');
 	$checkname = str_replace(array('-', '.'), array('', ''), $checkname);
 	if($checkname != $name)
@@ -559,19 +561,25 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 	}
 
 	$fieldsres = $db->query("SHOW COLUMNS FROM $location");
+    $prefixFound = false;
 	while ($fieldrow = $fieldsres->fetch())
 	{
 		$column = $fieldrow['Field'];
 		// get column prefix in this table
-		$column_prefix = substr($column, 0, strpos($column, "_"));
+		if(!$prefixFound) {
+            $column_prefix = substr($column, 0, strpos($column, "_"));
+            $fieldName = $column;
+            if(!empty($column_prefix)) $fieldName = str_replace($column_prefix.'_', '', $column);
+            if($fieldName == 'id' || mb_strtolower($fieldrow['Key']) == 'pri') $prefixFound = true;
+        }
 
 		preg_match("#.*?_$name$#", $column, $match);
 		if ($match[1] != "" && !$noalter)
 		{
 			return false; // No adding - fields already exist
 		}
-		$i++;
 	}
+
 	$fieldsres->closeCursor();
 
 	$extf['field_location'] = $location;
@@ -621,7 +629,9 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 	{
 		$sqltype = $customtype;
 	}
-	$step2 = $db->query("ALTER TABLE $location ADD " . $column_prefix . "_$name $sqltype ");
+    $fieldName = $name;
+    if($column_prefix != '') $fieldName = $column_prefix.'_'.$name;
+	$step2 = $db->query("ALTER TABLE $location ADD $fieldName $sqltype ");
 
 	return $step1 && $step2;
 }
@@ -665,11 +675,13 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 	}
 	$field = $fieldsres->fetch();
 	$fieldsres->closeCursor();
+
 	$fieldsres = $db->query("SHOW COLUMNS FROM $location");
 	$fieldrow = $fieldsres->fetch();
 	$fieldsres->closeCursor();
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
+
 	$alter = false;
 	if ($name != $field['field_name'])
 	{
@@ -729,7 +741,12 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 	{
 		$sqltype = $customtype;
 	}
-	$sql = "ALTER TABLE $location CHANGE " . $column_prefix . "_$oldname " . $column_prefix . "_$name $sqltype ";
+
+    if($column_prefix != '') {
+        $oldname = $column_prefix.'_'.$oldname;
+        $name = $column_prefix.'_'.$name;
+    }
+	$sql = "ALTER TABLE $location CHANGE $oldname $name $sqltype ";
 	$step2 = $db->query($sql);
 
 	return $step1 && $step2;
@@ -760,9 +777,12 @@ function cot_extrafield_remove($location, $name)
 	$step1 = $db->delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;
 
 	$step2 = true;
-	if ($db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0)
+    $tmp = $name;
+    if($column_prefix != '') $tmp = '_'.$name;
+    if ($db->query("SHOW COLUMNS FROM $location LIKE '%{$tmp}'")->rowCount() > 0)
 	{
-		$step2 = $db->query("ALTER TABLE $location DROP " . $column_prefix . "_" . $name);
+        if($column_prefix != '') $name = $column_prefix . "_" . $name;
+		$step2 = $db->query("ALTER TABLE $location DROP " . $name);
 	}
 
 	return $step1 && $step2;
