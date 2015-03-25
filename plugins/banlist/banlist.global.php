@@ -9,10 +9,8 @@ Hooks=global
  * Banlist
  *
  * @package Banlist
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -21,8 +19,23 @@ cot::$db->registerTable('banlist');
 
 $userip = explode('.', $usr['ip']);
 $ipmasks = "('".$userip[0].'.'.$userip[1].'.'.$userip[2].'.'.$userip[3]."','".$userip[0].'.'.$userip[1].'.'.$userip[2].".*','".$userip[0].'.'.$userip[1].".*.*','".$userip[0].".*.*.*')";
+$user_email = $usr['profile']['user_email'];
+if ($user_email) {
+	$user_email_mask = mb_strstr($user_email, '@');
+	$user_email_mask_multi = explode('.', $user_email_mask);
+}
+else
+{
+	$user_email = $user_email_mask = $user_email_mask_multi = '-';
+}
 
-$sql = $db->query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks);
+$sql = $db->query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire, banlist_email
+	FROM $db_banlist WHERE banlist_ip IN ".$ipmasks.
+	" OR banlist_email='".$db->prep($user_email_mask).
+	"' OR banlist_email='".$db->prep($user_email_mask_multi[0]).
+	"' OR banlist_email='".$db->prep($user_email).
+	($usr['name'] ? "' OR banlist_email='".$db->prep($usr['name']) : '').
+	"' LIMIT 1");
 
 if ($sql->rowCount() > 0)
 {
@@ -34,9 +47,23 @@ if ($sql->rowCount() > 0)
 	}
 	else
 	{
-		// TODO internationalize this
-		$disp = 'Your IP is banned.<br />Reason: '.$row['banlist_reason'].'<br />Until: ';
-		$disp .= ($row['banlist_expire'] > 0) ? cot_date('datetime_medium', $row['banlist_expire']) : 'Never expire.';
-		cot_diefatal($disp);
+		require_once cot_langfile('banlist', 'plug');
+		$banlist_email_mask = mb_strpos($row['banlist_email'], '.') ? $row['banlist_email'] : $row['banlist_email'].'.';
+		if ($usr['name'] && $row['banlist_email'] == $usr['name'])
+		{
+			$reason = $L['banlist_blocked_login'];
+		}
+		elseif ($row['banlist_email'])
+		{
+			$reason = $L['banlist_blocked_email'];
+		}
+		else
+		{
+			$reason = $L['banlist_blocked_ip'];
+		}
+
+		$expiretime = ($row['banlist_expire'] > 0) ? cot_date('datetime_medium', $row['banlist_expire']) : $L['banlist_foreverbanned'];
+		$disp = cot_rc('banlist_banned', array($reason, $row['banlist_reason'], $expiretime));
+		cot_die_message(403, true, '', $disp);
 	}
 }

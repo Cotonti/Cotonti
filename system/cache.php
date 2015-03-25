@@ -1,11 +1,10 @@
 <?php
 /**
  * Cache subsystem library
- * @package Cotonti
- * @version 0.9.10
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009-2014
- * @license BSD
+ * 
+ * @package API - Cache
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -52,7 +51,6 @@ define('COT_CACHE_TYPE_DEFAULT', COT_CACHE_TYPE_DB);
 
 /**
  * Abstract class containing code common for all cache drivers
- * @author Cotonti Team
  */
 abstract class Cache_driver
 {
@@ -276,7 +274,6 @@ abstract class Temporary_cache_driver extends Dynamic_cache_driver
  * A persistent cache using local file system tree. It does not use multilevel structure
  * or lexicograph search, so it may slow down when your cache grows very big.
  * But normally it is very fast reads.
- * @author Cotonti Team
  */
 class File_cache extends Static_cache_driver
 {
@@ -286,15 +283,18 @@ class File_cache extends Static_cache_driver
 	 */
 	private $dir;
 
-	/**
-	 * Cache storage object constructor
-	 * @param string $dir Cache root directory. System default will be used if empty.
-	 * @return File_cache
-	 */
+    /**
+     * Cache storage object constructor
+     * @param string $dir Cache root directory. System default will be used if empty.
+     * @throws Exception
+     * @return File_cache
+     */
 	public function __construct($dir = '')
 	{
 		global $cfg;
 		if (empty($dir)) $dir = $cfg['cache_dir'];
+
+        if (!empty($dir) && !file_exists($dir)) mkdir($dir, 0755, true);
 
 		if (file_exists($dir) && is_writeable($dir))
 		{
@@ -600,7 +600,6 @@ class Page_cache
 /**
  * A very popular caching solution using MySQL as a storage. It is quite slow compared to
  * File_cache but may be considered more reliable.
- * @author Cotonti Team
  */
 class MySQL_cache extends Db_cache_driver
 {
@@ -832,7 +831,7 @@ if (extension_loaded('memcache'))
 	/**
 	 * Memcache distributed persistent cache driver implementation. Give it a higher priority
 	 * if a cluster of webservers is used and Memcached is running via TCP/IP between them.
-	 * In other circumstances this only should be used if no APC/eAccelerator/XCache available,
+	 * In other circumstances this only should be used if no APC/XCache available,
 	 * keeping in mind that File_cache might be still faster.
 	 * @author Cotonti Team
 	 */
@@ -853,9 +852,21 @@ if (extension_loaded('memcache'))
 		 */
 		public function __construct($host = 'localhost', $port = 11211, $persistent = true)
 		{
+            if(empty($host)) $host = 'localhost';
+            if(empty($port)) $port = 11211;
 			$this->memcache = new Memcache;
 			$this->memcache->addServer($host, $port, $persistent);
 		}
+
+        /**
+         * Make unique key for one of different sites on one memcache pool
+         * @param $key
+         * @return string
+         */
+        public static function createKey($key) {
+            if (is_array($key))  $key = serialize($key);
+            return md5(cot::$cfg['site_id'].$key);
+        }
 
 		/**
 		 * @see Cache_driver::clear()
@@ -878,6 +889,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function dec($id, $realm = COT_DEFAULT_REALM, $value = 1)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->decrement($realm.'/'.$id, $value);
 		}
 
@@ -886,6 +898,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function exists($id, $realm = COT_DEFAULT_REALM)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->get($realm.'/'.$id) !== FALSE;
 		}
 
@@ -894,6 +907,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function get($id, $realm = COT_DEFAULT_REALM)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->get($realm.'/'.$id);
 		}
 
@@ -915,6 +929,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function inc($id, $realm = COT_DEFAULT_REALM, $value = 1)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->increment($realm.'/'.$id, $value);
 		}
 
@@ -923,6 +938,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function remove($id, $realm = COT_DEFAULT_REALM)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->delete($realm.'/'.$id);
 		}
 
@@ -931,6 +947,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 		{
+            $id = self::createKey($id);
 			return $this->memcache->set($realm.'/'.$id, $data, 0, $ttl);
 		}
 	}
@@ -1034,22 +1051,21 @@ if (extension_loaded('xcache'))
 		 */
 		public function clear($realm = '')
 		{
-			if (function_exists('xcache_unset_by_prefix'))
-			{
-				if (empty($realm))
-				{
-					return xcache_unset_by_prefix('');
-				}
-				else
-				{
-					return xcache_unset_by_prefix($realm.'/');
-				}
-			}
-			else
-			{
-				// This does not actually mean success but we can do nothing with it
-				return true;
-			}
+            if(!function_exists('xcache_unset_by_prefix')) {
+                function xcache_unset_by_prefix($prefix) {
+                    // Since we can't clear targetted cache, we'll clear all. :(
+                    xcache_clear_cache(XC_TYPE_VAR, 0);
+                }
+            }
+
+            if (empty($realm)) {
+                xcache_unset_by_prefix('');
+
+            } else {
+                xcache_unset_by_prefix($realm.'/');
+            }
+
+            return true;
 		}
 
 		/**
@@ -1073,7 +1089,7 @@ if (extension_loaded('xcache'))
 		 */
 		public function get($id, $realm = COT_DEFAULT_REALM)
 		{
-			return xcache_get($realm.'/'.$id);
+			return unserialize(xcache_get($realm.'/'.$id));
 		}
 
 		/**
@@ -1109,7 +1125,7 @@ if (extension_loaded('xcache'))
 		 */
 		public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 		{
-			return xcache_set($realm.'/'.$id, $data, $ttl);
+			return xcache_set($realm.'/'.$id, serialize($data), $ttl);
 		}
 	}
 }
@@ -1227,7 +1243,10 @@ class Cache
 		}
 		if (!empty($selected))
 		{
-			$mem = new $selected();
+            $cfg['cache_drv_host'] = !empty($cfg['cache_drv_host']) ? $cfg['cache_drv_host'] : null;
+            $cfg['cache_drv_port'] = !empty($cfg['cache_drv_port']) ? $cfg['cache_drv_port'] : null;
+            /** @var Temporary_cache_driver $mem */
+			$mem = new $selected($cfg['cache_drv_host'], $cfg['cache_drv_port']);
 			// Some drivers may be enabled but without variable cache
 			$info = $mem->get_info();
 			if ($info['max'] > 1024)

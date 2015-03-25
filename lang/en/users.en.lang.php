@@ -4,10 +4,8 @@
  * English Language File for the Users Module (users.en.lang.php)
  *
  * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -15,7 +13,6 @@ defined('COT_CODE') or die('Wrong URL.');
 /**
  * User authentication
  */
-
 $L['users_nameormail'] = 'Username or email';
 $L['users_rememberme'] = 'Remember me';
 $L['users_lostpass'] = 'Lost your password?';
@@ -27,7 +24,6 @@ $L['users_logoutfirst'] = 'If you want to log in with another account you have t
 /**
  * User registration
  */
-
 $L['users_validemail'] = 'Valid email';
 $L['users_validemailhint'] = '(A valid email is required to complete the registration process)';
 $L['users_confirmpass'] = 'Confirm password';
@@ -51,7 +47,6 @@ $L['aut_usernametooshort']= 'The user name must be at least 2 chars long';
 /**
  * User registration: messages
  */
-
 $L['aut_regrequest'] = "Hi %1\$s,\n\nYour account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured.";
 
 $L['aut_regreqnotice'] = "You are receiving this email because %1\$s requested a new account.\nThis user won't be able to login until you manually set the account as 'active', here:\n%2\$s";
@@ -63,7 +58,6 @@ $L['aut_emailchange'] = "Hi %1\$s,\nTo change your recent email please use this 
 /**
  * User list
  */
-
 $L['users_usersperpage'] = 'Users per page';
 $L['users_usersinthissection'] = 'Users total';
 
@@ -102,7 +96,6 @@ $L['pasrec_youremail'] = 'Your email: ';
 /**
  * User details
  */
-
 $L['users_sendpm'] = 'Send a private message';
 
 /**
@@ -123,8 +116,18 @@ $L['users_deleteuser'] = 'Delete this user';
 $L['users_changeemail'] = 'Change email';
 
 /**
+ * Miscellaneous
+ */
+$L['users_group_not_found'] = 'Group not found';
+
+/**
  * Moved from theme.lang
  */
 
 $themelang['usersprofile_Emailpassword'] = 'Your current password';
 $themelang['usersprofile_Emailnotes'] = '<p><b>Email transition process (if email transition is available and new email validation is required):</b></p><ol><li>You can\'t use your current email address</li><li>For security reasons you have to enter your current password</li><li>You should re-activate your account via email to prove the new email address is valid</li><li>Your account will be suspended until you use the validation link</li><li>Upon email validation your account will immediately become active again</li><li>Be careful while typing your new email address; you won\'t have a chance to change it later</li><li>Contact an administrator via email if you made a mistake.</li></ol><p><b>If new email validation is not required, the new email address will become effective immediately.</b></p>';
+
+/**
+ * Users full name display format
+ */
+$R['users_full_name'] = '{$firstname} {$lastname}';

@@ -2,10 +2,9 @@
 /**
  * Page API
  *
- * @package page
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Page
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -511,7 +510,7 @@ function cot_page_validate($rpage)
  */
 function cot_page_add(&$rpage, $auth = array())
 {
-	global $cache, $cfg, $db, $db_pages, $db_structure, $structure, $L;
+	global $cache, $cfg, $db, $db_x, $db_pages, $db_structure, $structure, $L;
 	if (cot_error_found())
 	{
 		return false;

@@ -2,11 +2,9 @@
 /**
  * Russian Language File for Tags Plugin
  *
- * @package tags
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Tags
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -39,6 +37,10 @@ $L['tags_Search_results'] = 'Результаты поиска';
 $L['tags_Search_tags'] = 'Поиск тегов';
 $L['tags_Tag_cloud'] = 'Облако тегов';
 $L['tags_Tag_cloud_none'] = 'Нет тегов';
+$L['tags_length'] = 'Длина';
+$L['adm_tag_item_area'] = 'Элементы тега';
+$L['adm_tag_already_del'] = 'Тег удален';
+$L['adm_tag_already_edit'] = 'Тег отредактирован';
 
 /**
  * Plugin Config

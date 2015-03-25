@@ -143,6 +143,7 @@ function ajaxSend(settings) {
  * @type bool
  */
 function ajaxPageLoad(hash) {
+    if(hash != '') hash.replace(/^#/, '');
 	var m = hash.match(/^get(-.*?)?;(.*)$/);
 	if (m) {
 		// ajax bookmark
@@ -302,9 +303,16 @@ function bindHandlers() {
 }
 
 if (typeof jQuery != 'undefined') {
-	$(document).ready(function() {
-		bindHandlers();
-	});
+    $(document).ready(function() {
+        // If page was loaded with hash
+        if (ajaxEnabled) {
+            if(window.location.hash != '') {
+                ajaxPageLoad(window.location.hash.replace(/^#/, ''));
+            }
+        }
+
+        bindHandlers();
+    });
 }
 
 window.name = 'main';

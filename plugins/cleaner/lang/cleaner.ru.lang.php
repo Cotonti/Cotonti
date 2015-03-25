@@ -2,11 +2,9 @@
 /**
  * Russian Language File for Cleaner Plugin
  *
- * @package cleaner
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Cleaner
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -17,7 +15,7 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['cfg_logprune'] = 'Удаление событий лога через';
 $L['cfg_logprune_hint'] = 'дней (0 - отключить автоудаление)';
-$L['cfg_pmnotarchived'] = 'Удалание неархивированных личных сообщений через';
+$L['cfg_pmnotarchived'] = 'Удаление неархивированных личных сообщений через';
 $L['cfg_pmnotarchived_hint'] = 'дней (0 - отключить автоудаление)';
 $L['cfg_pmnotread'] = 'Удаление непрочитанных личных сообщений через';
 $L['cfg_pmnotread_hint'] = 'дней (0 - отключить автоудаление)';

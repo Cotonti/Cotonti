@@ -9,11 +9,9 @@ Tags=comments.tpl:{COMMENTS_FORM_PFS},{COMMENTS_FORM_SFS}
 /**
  * PFS link on page.add
  *
- * @package pfs
- * @version 0.9.3
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package PFS
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');

@@ -2,11 +2,9 @@
 /**
  * Structure manipulation API
  *
- * @package Cotonti
- * @version 0.9.4
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package API - Structure
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -151,5 +149,15 @@ function cot_structure_update($extension, $id, $old_data, $new_data, $is_module 
 	$new_data['structure_count'] = (function_exists($area_sync)) ? $area_sync($new_data['structure_code']) : 0;
 
 	$sql1 = $db->update($db_structure, $new_data, 'structure_id=' . (int) $id);
-	return true;
+
+	$updated = $sql1 > 0;
+
+	/* === Hook === */
+	foreach (cot_getextplugins('structure.update.done') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
+	return $updated;
 }

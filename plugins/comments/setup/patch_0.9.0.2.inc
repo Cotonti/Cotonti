@@ -2,11 +2,9 @@
 /**
  * Reinstalls module/structure config implantations if necessary
  *
- * @package comments
- * @version 0.9.0.2
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
- * @license BSD
+ * @package Comments
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

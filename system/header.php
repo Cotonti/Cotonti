@@ -3,10 +3,8 @@
  * Global header
  *
  * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -45,6 +43,13 @@ else
 	$out['fulltitle'] = cot_title('title_header', $title_params);
 }
 
+if ($cfg['jquery'] && $cfg['jquery_cdn'])
+{
+	Resources::linkFile($cfg['jquery_cdn'], 'js', 30);
+}
+$html = Resources::render();
+if($html) $out['head_head'] = $html.$out['head_head'];
+
 $out['meta_contenttype'] = $cfg['xmlclient'] ? 'application/xml' : 'text/html';
 $out['basehref'] = $R['code_basehref'];
 $out['meta_charset'] = 'UTF-8';
@@ -53,11 +58,6 @@ $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspe
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] .= $out['head'];
 
-cot_rc_output();
-if ($cfg['jquery'] && $cfg['jquery_cdn'])
-{
-	cot_rc_link_file($cfg['jquery_cdn'], true);
-}
 
 if ($sys['noindex'])
 {
@@ -87,13 +87,18 @@ if (!COT_AJAX)
 	}
 	/* ===== */
 
+    if(empty($out['notices'])) $out['notices'] = '';
 	if(is_array($out['notices_array']))
 	{
-		foreach ($out['notices_array'] as $notice)
+        $notices = '';
+		foreach ($out['notices_array'] as $noticeRow)
 		{
-			$notice = (is_array($notice)) ? cot_rc_link($notice[0], $notice[1]) : $notice;
-			$out['notices'] .= ((!empty($out_notices)) ? ', ' : '').$notice;
+            $notice = (is_array($noticeRow)) ? cot_rc('notices_link', array('url' => $noticeRow[0], 'title' => $noticeRow[1])) :
+                cot_rc('notices_plain', array('title' => $noticeRow));
+            $notices .= cot_rc('notices_notice', array('notice' => $notice));
+
 		}
+        $out['notices'] .= cot_rc('notices_container', array('notices' => $notices));
 	}
 	$out['canonical_uri'] = empty($out['canonical_uri']) ? str_replace('&', '&amp;', $sys['canonical_url']) : $out['canonical_uri'];
 	if(!preg_match("#^https?://.+#", $out['canonical_uri']))

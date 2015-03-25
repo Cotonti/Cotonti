@@ -4,10 +4,8 @@
  * Administration panel - Extra fields editor for structure part
  *
  * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
@@ -34,6 +32,7 @@ $extra_whitelist = array(
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=extrafields'), $L['adm_extrafields']);
 $adminsubtitle = $L['adm_extrafields'];
+$maxperpage = (is_int($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0 || ctype_digit($cfg['maxrowsperpage'])) ? $cfg['maxrowsperpage'] : 15;
 
 $t = new XTemplate(cot_tplfile(array('admin', 'extrafields', $n), 'core'));
 
@@ -104,7 +103,7 @@ else
 	$a = cot_import('a', 'G', 'ALP');
 	$id = (int)cot_import('id', 'G', 'INT');
 	$name = cot_import('name', 'G', 'ALP');
-	list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+	list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 	$parse_type = array('HTML', 'Text');
 
 	$adminpath[] = array(cot_url('admin', 'm=extrafields&n='.$n), $L['adm_extrafields_table'].' '.$n . ((isset($extra_whitelist[$n])) ? ' - ' . $extra_whitelist[$n]['caption'] : ''));
@@ -222,9 +221,9 @@ else
 	cot_load_extrafields(true);
 
 	$totalitems = $db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$n'")->fetchColumn();
-	$res = $db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$n' ORDER BY field_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$res = $db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$n' ORDER BY field_name ASC LIMIT $d, ".$maxperpage);
 
-	$pagenav = cot_pagenav('admin', 'm=extrafields&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+	$pagenav = cot_pagenav('admin', 'm=extrafields&n='.$n, $d, $totalitems, $maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 	$field_types = array('input', 'inputint', 'currency', 'double', 'textarea', 'select', 'checkbox', 'radio', 'datetime', 'country', 'range', 'checklistbox', 'file'/* , 'filesize' */);
 

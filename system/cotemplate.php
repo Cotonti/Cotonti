@@ -5,11 +5,10 @@
  * - Compiling into PHP objects
  * - Cotonti special
  *
- * @package Cotonti
+ * @package API - CoTemplate
  * @version 2.8.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 /**
@@ -334,7 +333,10 @@ class XTemplate
 
 			if (self::$cache_enabled)
 			{
-				if (is_writeable(self::$cache_dir . '/templates/'))
+                $cache_dir = self::$cache_dir . '/templates/';
+                if (!empty(self::$cache_dir) && !file_exists($cache_dir)) mkdir($cache_dir, 0755, true);
+
+				if (is_writeable($cache_dir))
 				{
 					file_put_contents($cache_path, serialize($this->blocks));
 					file_put_contents($cache_idx, serialize($this->index));
@@ -343,7 +345,7 @@ class XTemplate
 				}
 				else
 				{
-					throw new Exception('Your "' . self::$cache_dir . '/templates/" is not writable');
+					throw new Exception('Your "' . $cache_dir . '" is not writable');
 				}
 			}
 		}
@@ -704,7 +706,7 @@ class Cotpl_block
 				$scope = 1;
 				$loop_code = '';
 				$code = mb_substr($code, $loop_pos + $loop_len);
-				while ($scope > 0 && preg_match('`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*(FOR\s+[^>]|ENDFOR)\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*(FOR\s+.+?|ENDFOR)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`', $code, $m))
+				while ($scope > 0 && preg_match('`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*(?:FOR\s+[^>]|ENDFOR)\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*(FOR\s+.+?|ENDFOR)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`', $code, $m))
 				{
 					$m_pos = mb_strpos($code, $m[0]);
 					$m_len = mb_strlen($m[0]);

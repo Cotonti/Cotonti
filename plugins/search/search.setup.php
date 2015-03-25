@@ -34,11 +34,9 @@ extrafilters=09:radio::1:Show extrafilters on main search page
 /**
  * Search plugin
  *
- * @package search
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD License
+ * @package Search
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

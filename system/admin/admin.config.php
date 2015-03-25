@@ -4,10 +4,8 @@
  * Administration panel - Configuration
  *
  * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
@@ -49,16 +47,7 @@ switch ($n)
 
 		if ($a == 'update' && !empty($_POST))
 		{
-			foreach ($optionslist as $key => $val)
-			{
-				$data = cot_import($key, 'P', sizeof($cot_import_filters[$key]) ? $key : 'NOC');
-				if ($optionslist[$key]['config_value'] != $val)
-				{
-					$db->update($db_config, array('config_value' => $data), "config_name = ? AND config_owner = ?
-					AND config_cat = ?  AND (config_subcat = '' OR config_subcat IS NULL OR config_subcat = '__default')", array($key, $o, $p));
-					$optionslist[$key]['config_value'] = $data;
-				}
-			}
+			cot_config_update_options($p, $optionslist, $o);
 
 			if ($o == 'module' || $o == 'plug')
 			{
@@ -82,6 +71,7 @@ switch ($n)
 		elseif ($a == 'reset' && !empty($v))
 		{
 			cot_config_reset($p, $v, $o, '');
+			$optionslist = cot_config_list($o, $p, '');
 
 			$optionslist[$v]['config_name'] = $optionslist[$v]['config_defaul'];
 			/* === Hook  === */
@@ -131,7 +121,7 @@ switch ($n)
 
 		foreach ($optionslist as $key => $row)
 		{
-			list($title, $hint) = cot_config_titles($row['config_name'], $row['config_title']);
+			list($title, $hint) = cot_config_titles($row['config_name'], $row['config_text']);
 
 			if ($row['config_subcat'] == '__default' && $prev_subcat == '' && $row['config_type'] != COT_CONFIG_TYPE_SEPARATOR)
 			{

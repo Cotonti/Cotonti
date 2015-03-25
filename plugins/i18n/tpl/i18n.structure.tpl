@@ -2,7 +2,7 @@
 <div id="ajaxBlock">
 		<div class="block">
 			<h2>{PHP.L.i18n_structure}</h2>
-			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+			{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 			<form action="{I18N_ACTION}" method="post">
 				<table class="cells">
 					<tr>

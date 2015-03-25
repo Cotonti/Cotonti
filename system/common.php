@@ -1,10 +1,8 @@
 <?php
 /**
  * @package Cotonti
- * @version 0.9.8
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -502,6 +500,10 @@ if(defined('COT_ADMIN'))
 
 /* ======== Theme / color scheme ======== */
 
+
+// Resource control object
+require_once $cfg['system_dir'].'/resources.php';
+
 if (empty($cfg['themes_dir']))
 {
 	$cfg['themes_dir'] = 'themes';
@@ -539,7 +541,7 @@ $theme = $usr['theme'];
 $scheme = $usr['scheme'];
 
 // Resource strings
-require_once $cfg['system_dir'].'/resources.php';
+require_once $cfg['system_dir'].'/resources.rc.php';
 
 if(defined('COT_ADMIN'))
 {
@@ -610,12 +612,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 }
 
 /* ============ Head Resources ===========*/
-$cot_rc_skip_minification = false;
-if (!isset($cot_rc_html[$theme]) || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMIN'))
-{
-	cot_rc_consolidate();
+if(!COT_AJAX) {
+	// May Be move it to header.php?
+	if (!isset($cot_rc_html[$theme]) || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMIN')) {
+		// Load standard resources
+		cot_rc_add_standard();
+
+		// Invoke rc handlers
+		foreach (cot_getextplugins('rc') as $pl) {
+			include $pl;
+		}
+	}
+	if (!defined('COT_ADMIN')) {
+		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php")) {
+			include "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php";
+		}
+	}
 }
-$cot_rc_skip_minification = true;
+/* ============ /Head Resources ===========*/
 
 // Cotonti-specific XTemplate initialization
 if (class_exists('XTemplate'))

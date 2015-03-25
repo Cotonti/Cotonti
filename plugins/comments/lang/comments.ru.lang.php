@@ -2,11 +2,9 @@
 /**
  * Russian Language File for Comments Plugin
  *
- * @package comments
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Comments
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -66,8 +64,8 @@ $L['com_edithint'] = 'Для редактирования комментария
 
 $L['plu_comlive'] = 'Новый коментарий на сайте ';
 $L['plu_comlive1'] = 'Отредактирован коментарий на сайте ';
-$L['plu_comlive2'] = 'оставил комментарий:';
-$L['plu_comlive3'] = 'отредактировал свой комментарий:';
+$L['plu_comlive2'] = 'оставил комментарий: ';
+$L['plu_comlive3'] = 'отредактировал свой комментарий: ';
 $L['rss_comments'] = 'Комментарии для';
 $L['rss_comment_of_user'] = 'Комментарий пользователя';
 $L['rss_comments_item_desc'] = 'Лента комментариев страницы';

@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 	<h2>{PHP.L.Trashcan}</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+		{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 	<ul class="follow">
 		<li><a title="{PHP.L.Configuration}" href="{ADMIN_TRASHCAN_CONF_URL}">{PHP.L.Configuration}</a></li>
 		<li><a title="{PHP.L.Wipeall}" href="{ADMIN_TRASHCAN_WIPEALL_URL}">{PHP.L.Wipeall}</a></li>

@@ -2,11 +2,9 @@
 /**
  * Russian Language File for Content Internationalization Plugin
  *
- * @package i18n
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package I18n
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -20,6 +18,7 @@ $L['cfg_locales_hint'] = 'Каждая локаль с новой строки, 
 $L['cfg_omitmain'] = 'Опускать параметр языка в URL, если он указывает на основной язык';
 $L['cfg_rewrite'] = 'Включить ЧПУ для параметра языка в ссылках';
 $L['cfg_rewrite_hint'] = 'Требует ручного обновления .htaccess';
+$L['cfg_cookie'] = 'Запоминать выбранный язык в cookie';
 
 $L['info_desc'] = 'Поддержка многоязычного контента в ядре и расширениях';
 

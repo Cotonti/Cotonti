@@ -2,11 +2,9 @@
 /**
  * Personal File Storage, edit
  *
- * @package pfs
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD License
+ * @package PFS
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -132,7 +130,8 @@ if ($standalone)
 {
 	cot_sendheaders();
 
-    cot_rc_output();
+	$html = Resources::render();
+	if($html) $out['head_head'] = $html.$out['head_head'];
 
     $t->assign(array(
         'PFS_HEAD' => $out['head_head'],

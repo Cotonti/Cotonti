@@ -4,10 +4,8 @@
  * User Profile
  *
  * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -18,6 +16,7 @@ require_once cot_incfile('uploads');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
 cot_block($usr['auth_write']);
+require_once cot_langfile('users', 'module');
 
 /* === Hook === */
 foreach (cot_getextplugins('users.profile.first') as $pl)
@@ -91,7 +90,7 @@ if($a == 'update')
 			$ruserpass['user_password'] = cot_hash($rnewpass1, $ruserpass['user_passsalt'], $ruserpass['user_passfunc']);
 			$db->update($db_users, $ruserpass, "user_id={$usr['id']}");
 			unset($ruserpass);
-			cot_message('Updated');
+			cot_message('Password_updated');
 		}
 	}
 	if (!empty($ruseremail) && (!empty($rmailpass) || $cfg['users']['user_email_noprotection']) && $cfg['users']['useremailchange'] && $ruseremail != $urr['user_email'])
@@ -157,6 +156,7 @@ if($a == 'update')
 			include $pl;
 		}
 		/* ===== */
+		cot_message('Profile_updated');
 		cot_redirect(cot_url('users', 'm=profile', '', true));
 	}
 }

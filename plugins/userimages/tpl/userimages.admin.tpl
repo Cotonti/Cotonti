@@ -3,7 +3,7 @@
 <h2>{PHP.L.userimages_title}</h2>
 
 <div class="block">
-	{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+	{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 
 <table class="cells">
 	<thead>

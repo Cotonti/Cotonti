@@ -2,11 +2,9 @@
 /**
  * Install script
  *
- * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Install
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 // Environment setup
@@ -94,7 +92,7 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 	}
 
 	require_once cot_langfile('main', 'core');
-	require_once $cfg['system_dir'] . '/resources.php';
+	require_once $cfg['system_dir'] . '/resources.rc.php';
 }
 else
 {

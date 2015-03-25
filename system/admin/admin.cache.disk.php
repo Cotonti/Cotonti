@@ -3,10 +3,8 @@
  * Administration panel - Disk cache
  *
  * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
@@ -36,7 +34,6 @@ if ($a == 'purge')
 		cot_message('adm_purgeall_done');
 		// Empty resource consolidation cache
 		$db->delete($db_cache, "c_name = 'cot_rc_html'");
-		cot_rc_consolidate();
 	}
 	else
 	{
@@ -54,7 +51,6 @@ elseif ($a == 'delete')
 		{
 			// Empty resource consolidation cache
 			$db->delete($db_cache, "c_name = 'cot_rc_html'");
-			cot_rc_consolidate();
 		}
 	}
 	else

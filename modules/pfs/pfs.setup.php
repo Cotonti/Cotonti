@@ -39,9 +39,7 @@ th_textsize=18:range:0,5:1:
 /**
  * PFS setup file
  *
- * @package pfs
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package PFS
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */

@@ -2,10 +2,9 @@
 /**
  * Main function library.
  *
- * @package Cotonti
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD License
+ * @package API - Functions
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -39,8 +38,8 @@ $R = array();
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.16';
-$cfg['dbversion'] = '0.9.16';
+$cfg['version'] = '0.9.18';
+$cfg['dbversion'] = '0.9.18';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms']))
@@ -345,19 +344,23 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 {
 	global $cot_import_filters, $_PUT, $_PATCH, $_DELETE;
 
-	if ($_SERVER['REQUEST_METHOD'] == 'PUT' && is_null($_PUT))
+	if(isset($_SERVER['REQUEST_METHOD']))
 	{
-		parse_str(file_get_contents('php://input'), $_PUT);
-	}
-	elseif ($_SERVER['REQUEST_METHOD'] == 'PATCH' && is_null($_PATCH))
-	{
-		parse_str(file_get_contents('php://input'), $_PATCH);
-	}
-	elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE' && is_null($_DELETE))
-	{
-		parse_str(file_get_contents('php://input'), $_DELETE);
+		if ($_SERVER['REQUEST_METHOD'] == 'PUT' && is_null($_PUT))
+		{
+			parse_str(file_get_contents('php://input'), $_PUT);
+		}
+		elseif ($_SERVER['REQUEST_METHOD'] == 'PATCH' && is_null($_PATCH))
+		{
+			parse_str(file_get_contents('php://input'), $_PATCH);
+		}
+		elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE' && is_null($_DELETE))
+		{
+			parse_str(file_get_contents('php://input'), $_DELETE);
+		}
 	}
 
+	$v = NULL;
 	switch($source)
 	{
 		case 'G':
@@ -1771,7 +1774,7 @@ function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $
 				else
 				{
 					$pieces[] = floor($num). ' ' .
-					cot_declension(floor($num), $expr, true, true); 
+					cot_declension(floor($num), $expr, true, true);
 				}
 				break;
 			}
@@ -1981,6 +1984,10 @@ function cot_build_url($text, $maxlen=64)
  */
 function cot_build_user($id, $user, $extra_attrs = '')
 {
+	if (function_exists('cot_build_user_custom'))
+	{
+		return cot_build_user_custom($id, $user, $extra_attrs);
+	}
 	if (!$id)
 	{
 		return empty($user) ? '' : $user;
@@ -1989,6 +1996,41 @@ function cot_build_user($id, $user, $extra_attrs = '')
 	{
 		return empty($user) ? '?' : cot_rc_link(cot_url('users', 'm=details&id='.$id.'&u='.$user), $user, $extra_attrs);
 	}
+}
+
+/**
+ * Displays User full name
+ *
+ * Format of full name is language specific and defined by $R['users_full_name']
+ * resource string.
+ *
+ * @param array|int $user User Data or User ID
+ * @return string
+ */
+function cot_user_full_name($user)
+{
+	if (empty($user)) return '';
+	if (is_int($user) && $user > 0 || ctype_digit($user))
+	{
+		require_once cot_incfile('users', 'module');
+		$user = cot_user_data($user);
+	}
+    if (empty($user)) return '';
+
+	$user_fname = $user['user_firstname'] ? $user['user_firstname'] : $user['user_first_name'];
+	$user_mname = $user['user_middlename'] ? $user['user_middlename'] : $user['user_middle_name'];
+	$user_lname = $user['user_lastname'] ? $user['user_lastname'] : $user['user_last_name'];
+
+	$full_name = trim(cot_rc('users_full_name',
+		array(
+			'firstname' 	=> $user_fname,
+			'middlename'	=> $user_mname,
+			'lastname'		=> $user_lname,
+            'name'          => $user['user_name']
+		)
+	));
+
+	return $full_name ? $full_name : $user['user_name'];
 }
 
 /**
@@ -2093,6 +2135,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'NICKNAME' => htmlspecialchars($user_data['user_name']),
 				'DETAILSLINK' => cot_url('users', 'm=details&id=' . $user_data['user_id'].'&u='.htmlspecialchars($user_data['user_name'])),
 				'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
+				'FULL_NAME' => htmlspecialchars(cot_user_full_name($user_data)),
 				'TITLE' => $cot_groups[$user_data['user_maingrp']]['title'],
 				'MAINGRP' => cot_build_group($user_data['user_maingrp']),
 				'MAINGRPID' => $user_data['user_maingrp'],
@@ -2141,6 +2184,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'ID' => 0,
 				'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
 				'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+				'FULL_NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
 				'MAINGRP' => cot_build_group(1),
 				'MAINGRPID' => 1,
 				'MAINGRPSTARS' => '',
@@ -2175,6 +2219,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 	}
 	return $return_array;
 }
+
 
 /**
  * Resize an image
@@ -3531,7 +3576,6 @@ function cot_stamp2date($stamp)
  * Unsupported date formats : S, n, t, L, B, G, u, e, I, P, Z, c, r
  * Unsupported strftime formats : %U, %W, %C, %g, %r, %R, %T, %X, %c, %D, %F, %x
  *
- * @author Cotonti Team
  * @see http://php.net/manual/en/function.strftime.php
  * @param string $format A format for date().
  * @return string Format usable for strftime().
@@ -3808,11 +3852,18 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		));
 		if ($i < $cur_left - 2)
 		{
-			$before .= $R['link_pagenav_gap'];
+			$before .= cot::$R['link_pagenav_gap'];
 		}
 		elseif ($i == $cur_left - 2)
 		{
-			$args[$characters] = $i * $perpage;
+			if ($cfg['easypagenav'])
+            {
+                $args[$characters] = $i+1;
+            }
+            else
+            {
+                $args[$characters] = $i * $perpage;
+            }
 			if ($ajax_rel)
 			{
 				$ajax_args[$characters] = $args[$characters];
@@ -3868,7 +3919,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	{
 		if ($i > $cur_right + 2)
 		{
-			$after .= $R['link_pagenav_gap'];
+			$after .= cot::$R['link_pagenav_gap'];
 		}
 		elseif ($i == $cur_right + 2)
 		{
@@ -3968,6 +4019,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		{
 			$rel = $base_rel;
 		}
+		unset($args[$characters]);
 		$firstlink = cot_url($module, $args, $hash);
 		$first = cot_rc('link_pagenav_first', array(
 			'url' => $firstlink,
@@ -4031,12 +4083,12 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'rel' => $rel,
 			'num' => $last_n + 1
 		));
-		$lastn  = (($last +  $perpage)<$totalpages) ?
+		$lastn  = (($last +  $perpage) < $totalpages) ?
 			cot_rc('link_pagenav_main', array(
-			'url' => cot_url($module, $args, $hash),
-			'event' => $event,
-			'rel' => $rel,
-			'num' => floor($last_n / $perpage) + 1
+				'url' => cot_url($module, $args, $hash),
+				'event' => $event,
+				'rel' => $rel,
+				'num' => floor($last_n / $perpage) + 1
 			)): FALSE;
 	}
 
@@ -4195,7 +4247,7 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 	if ($considerhtml)
 	{
 		// if the plain text is shorter than the maximum length, return the whole text
-		if (mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length)
+		if (!preg_match('/<\s*(pre|plaintext)/', $text) && mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length)
 		{
 			return $text;
 		}
@@ -4205,7 +4257,8 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 		$total_length = 0;
 		$open_tags = array();
 		$truncate = '';
-
+		$plain_mode = false;
+		$plain_tag = false;
 		foreach ($lines as $line_matchings)
 		{
 			// if there is any html-tag in this line, handle it and add it (uncounted) to the output
@@ -4215,60 +4268,90 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 				if (preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1]))
 				{
 					// do nothing
-					// if tag is a closing tag (f.e. </b>)
 				}
+				// if tag is a closing tag (f.e. </b>)
 				elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings))
 				{
-					// delete tag from $open_tags list
-					$pos = array_search($tag_matchings[1], $open_tags);
-					if ($pos !== false)
+					$tag = false;
+					if (strtolower($tag_matchings[1]) == $plain_mode)
 					{
-						unset($open_tags[$pos]);
+						$plain_mode = false;
 					}
-					// if tag is an opening tag (f.e. <b>)
+					else
+					{
+						// delete tag from $open_tags list
+						$pos = array_search($tag_matchings[1], $open_tags);
+						if ($pos !== false)
+						{
+							unset($open_tags[$pos]);
+						}
+					}
 				}
+				// if tag is an opening tag (f.e. <b>)
 				elseif (preg_match('/^<\s*([^\s>!]+).*?>$/s', $line_matchings[1], $tag_matchings))
 				{
+					$tag = strtolower($tag_matchings[1]);
+					$plain_tag = in_array($tag, array('pre','plaintext')) ? $tag : false;
 					// add tag to the beginning of $open_tags list
-					array_unshift($open_tags, mb_strtolower($tag_matchings[1]));
+					if (!$plain_mode && !$plain_tag) array_unshift($open_tags, mb_strtolower($tag));
 				}
 				// add html-tag to $truncate'd text
-				$truncate .= $line_matchings[1];
+				if (!$plain_mode) $truncate .= $line_matchings[1];
 			}
 
-			// calculate the length of the plain text part of the line; handle entities as one character
-			$content_length = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', ' ', $line_matchings[2]));
-			if ($total_length+$content_length> $length)
+			// the number of characters which are left
+			$left = $length - $total_length;
+			if ($plain_mode || ($plain_tag && $tag))
 			{
-				// the number of characters which are left
-				$left = $length - $total_length;
-				$entities_length = 0;
-				// search for html entities
-				if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', $line_matchings[2], $entities, PREG_OFFSET_CAPTURE))
+				// treats text as plain in <pre>, <plaintext> tags
+				$content = $plain_mode ? $line_matchings[0] : $line_matchings[2];
+				if (mb_strlen($content) <= $left)
 				{
-					// calculate the real length of all entities in the legal range
-					foreach ($entities[0] as $entity)
-					{
-						if ($entity[1]+1-$entities_length <= $left)
-						{
-							$left--;
-							$entities_length += mb_strlen($entity[0]);
-						}
-						else
-						{
-							// no more characters left
-							break;
-						}
-					}
+					$truncate .= $content;
+					$total_length += mb_strlen($content);
 				}
-				$truncate .= mb_substr($line_matchings[2], 0, $left+$entities_length);
-				// maximum lenght is reached, so get off the loop
-				break;
+				else
+				{
+					$truncate .= mb_substr($content, 0, $left);
+					$total_length += $left;
+				}
+				if ($plain_tag && !$plain_mode) $plain_mode = $plain_tag;
 			}
 			else
 			{
-				$truncate .= $line_matchings[2];
-				$total_length += $content_length;
+				// calculate the length of the plain text part of the line; handle entities as one character
+				$content_length = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};|[\r\n\s]{2,}/i', ' ', $line_matchings[2]));
+				if ($total_length+$content_length> $length)
+				{
+					$entities_length = 0;
+					// search for html entities and spaces
+					if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};|[\r\n\s]{2,}/i', $line_matchings[2], $entities, PREG_OFFSET_CAPTURE))
+					{
+						// calculate the real length of all entities in the legal range
+						foreach ($entities[0] as $entity)
+						{
+							if ($entity[1]+1-$entities_length <= $left)
+							{
+								$left--;
+								$entities_length += mb_strlen($entity[0]);
+							}
+							else
+							{
+								// no more characters left
+								break;
+							}
+						}
+					}
+					$truncate .= mb_substr($line_matchings[2], 0, $left+$entities_length);
+					// maximum lenght is reached, so get off the loop
+					$truncated_by_space = preg_match('/[\r\n\s]/', mb_substr($line_matchings[2], $left+$entities_length, 1));
+					break;
+				}
+				else
+				{
+					$truncate .= $line_matchings[2];
+					$total_length += $content_length;
+				}
 			}
 
 			// if the maximum length is reached, get off the loop
@@ -4290,9 +4373,9 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 		}
 	}
 
-	if (!$exact)
+	if (!$exact && !$truncated_by_space && !$plain_mode)
 	{
-		// ...search the last occurance of a space...
+		// ...search the last occurence of a space...
 		if (mb_strrpos($truncate, ' ') > 0)
 		{
 			$pos1 = mb_strrpos($truncate, ' ');
@@ -4309,6 +4392,7 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 	if ($considerhtml)
 	{
 		// close all unclosed html-tags
+		if ($plain_mode) $truncate .= '</'.$plain_mode.'>';
 		foreach ($open_tags as $tag)
 		{
 			$truncate .= '</'.$tag.'>';
@@ -4408,240 +4492,27 @@ function cot_rc_attr_string($attrs)
  */
 function cot_rc_modify($rc, $attrs)
 {
-    if (!is_array($attrs))
-    {
-        preg_match_all("/(([a-z0-9-_]+)=(\"|')(.*?)(\"|'))/", $attrs, $matches);
-        $attrs = array();
-        foreach ($matches[2] as $key => $value)
-        {
-            $attrs[$value] = $matches[4][$key];
-        }
-    }
-    foreach ($attrs as $key => $value)
-    {
-        if(mb_stripos($rc, " ".$key."=") !== false)
-        {
-            $rc = preg_replace("/".$key."=(\"|')(.*?)(\"|')/", $key.'="'.$value.'"', $rc);
-        }
-        else
-        {
-            $rc = preg_replace("/<([^ ]+)/", "<$1 ".$key.'="'.$value.'"', $rc);
-        }
-    }
-    return($rc);
-}
-
-/**
- * Consolidates local JS and CSS resources used during script execution,
- * prepares cache images and links to them
- *
- * @global array $cot_rc_html Blocks of HTML tags to be included in the header and footer of the document
- * @global array $cot_rc_reg Header/Footer resource registry
- * @global array $cfg Configuration
- * @global array $env Environment strings
- * @global array $usr User object
- * @global Cache $cache
- */
-function cot_rc_consolidate()
-{
-	global $cache, $cfg, $cot_rc_html, $cot_rc_reg, $L, $R, $usr, $theme;
-
-	$is_admin_section = defined('COT_ADMIN');
-	$cot_rc_reg = array();
-
-	// Load standard resources
-	cot_rc_add_standard();
-
-	// Invoke rc handlers
-	foreach (cot_getextplugins('rc') as $pl)
+	if (!is_array($attrs))
 	{
-		include $pl;
-	}
-	if (!$is_admin_section)
-	{
-		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php"))
+		preg_match_all("/(([a-z0-9-_]+)=(\"|')(.*?)(\"|'))/", $attrs, $matches);
+		$attrs = array();
+		foreach ($matches[2] as $key => $value)
 		{
-			include "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php";
+			$attrs[$value] = $matches[4][$key];
 		}
 	}
-
-	if (!is_array($cot_rc_reg))
+	foreach ($attrs as $key => $value)
 	{
-		return false;
-	}
-
-	// CSS should go first
-	ksort($cot_rc_reg);
-
-	// Build the header outputs
-	$cot_rc_html[$theme] = array();
-
-	// Consolidate resources
-	if ($cache && $cfg['headrc_consolidate'] && !$is_admin_section)
-	{
-		clearstatcache();
-		foreach ($cot_rc_reg as $type => $scope_data)
+		if(mb_stripos($rc, " ".$key."=") !== false)
 		{
-			if ($type == 'css')
-			{
-				$separator = "\n";
-			}
-			elseif ($type == 'js')
-			{
-				$separator = "\n;";
-			}
-			// Consolidation
-			foreach ($scope_data as $scope => $ordered_files)
-			{
-				$target_path = $cfg['cache_dir'] . "/static/$scope.$theme.$type";
-                ksort($ordered_files);
-				$files = array();
-				foreach ($ordered_files as $order => $o_files)
-				{
-					$files = array_merge($files, $o_files);
-				}
-				$files = array_unique($files);
-
-				$code = '';
-				$modified = false;
-
-				if (!file_exists($target_path))
-				{
-					// Just compile a new cache file
-					$file_list = $files;
-					$modified = true;
-				}
-				else
-				{
-					// Load the list of files already cached
-					$file_list = unserialize(file_get_contents("$target_path.idx"));
-
-					// Check presense or modification time for each file
-					foreach ($files as $path)
-					{
-						if (!in_array($path, $file_list) || filemtime($path) >= filemtime($target_path))
-						{
-							$modified = true;
-							break;
-						}
-					}
-				}
-
-				if ($modified)
-				{
-					// Reconsolidate cache
-					$current_path = str_replace('\\', '/', realpath('.'));
-					foreach ($files as $path)
-					{
-						// Get file contents and remove BOM
-						$file_code = str_replace(pack('CCC', 0xef, 0xbb, 0xbf), '', file_get_contents($path));
-
-						if ($type == 'css')
-						{
-							if (strpos($path, '._.') !== false)
-							{
-								// Restore original file path
-								$path = str_replace('._.', '/', basename($path));
-							}
-							if ($path[0] === '/')
-							{
-								$path = mb_substr($path, 1);
-							}
-							$file_path = str_replace('\\', '/', dirname(realpath($path)));
-							$relative_path = str_replace($current_path, '', $file_path);
-							if ($relative_path[0] === '/')
-							{
-								$relative_path = mb_substr($relative_path, 1);
-							}
-							// Apply CSS imports
-							if (preg_match_all('#@import\s+url\((\'|")?([^)]+)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
-							{
-								foreach ($mt as $m)
-								{
-									if (preg_match('#^https?://#i', $m[2]))
-									{
-										$filename = $m[2];
-									}
-									else
-									{
-										$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
-									}
-									$file_code = str_replace($m[0], file_get_contents($filename), $file_code);
-								}
-							}
-							// Fix URLs
-							if (preg_match_all('#\burl\((\'|")?([^\)"\']+)\1?\)#i', $file_code, $mt, PREG_SET_ORDER))
-							{
-								foreach ($mt as $m)
-								{
-									$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
-									$filename = str_replace($current_path, '', str_replace('\\', '/',realpath($filename)));
-									if (!$filename)
-									{
-										continue;
-									}
-									if ($filename[0] === '/')
-									{
-										$filename = mb_substr($filename, 1);
-									}
-									$file_code = str_replace($m[0], 'url("' . $filename . '")', $file_code);
-								}
-							}
-						}
-						$code .= $file_code . $separator;
-					}
-
-					file_put_contents($target_path, $code);
-					if ($cfg['gzip'])
-					{
-						file_put_contents("$target_path.gz", gzencode($code));
-					}
-					file_put_contents("$target_path.idx", serialize($files));
-				}
-
-				$rc_url = "rc.php?rc=$scope.$theme.$type";
-				$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $rc_url));
-			}
+			$rc = preg_replace("/".$key."=(\"|')(.*?)(\"|')/", $key.'="'.$value.'"', $rc);
 		}
-		// Save the output
-		$cache && $cache->db->store('cot_rc_html', $cot_rc_html);
-	}
-	else
-	{
-		$log = array(); // log paths to avoid duplicates
-		foreach ($cot_rc_reg as $type => $scope_data)
+		else
 		{
-			if (is_array($cot_rc_reg[$type]['files']))
-			{
-				foreach ($cot_rc_reg[$type]['files'] as $scope => $scope_data)
-				{
-                    ksort($scope_data);
-					foreach ($scope_data as $order => $files)
-					{
-						foreach ($files as $file)
-						{
-							if (!in_array($file, $log))
-							{
-								$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $file)) . "\n";
-								$log[] = $file;
-							}
-						}
-					}
-				}
-			}
-			if (is_array($cot_rc_reg[$type]['embed']))
-			{
-				foreach ($cot_rc_reg[$type]['embed'] as $scope => $scope_data)
-				{
-                    ksort($scope_data);
-					foreach ($scope_data as $order => $code)
-					{
-						$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_embed", array('code' => $code)) . "\n";
-					}
-				}
-			}
+			$rc = preg_replace("/<([^\/ ]+)(.+)/", "<$1 ".$key.'="'.$value.'"$2', $rc);
 		}
 	}
+	return($rc);
 }
 
 /**
@@ -4661,31 +4532,12 @@ function cot_rc_consolidate()
  * @return bool This function always returns TRUE
  * @see cot_rc_add_file()
  * @global Cache $cache
+ *
+ * @deprecated Will be removed in v.1.0. Use Resources::addEmbed() instead
  */
 function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js', $order = 50)
 {
-	global $cache, $cfg, $cot_rc_reg, $cot_rc_skip_minification;
-
-	if ($cfg['headrc_consolidate'] && $cache && !defined('COT_ADMIN'))
-	{
-		// Save as file
-		$path = $cfg['cache_dir'] . '/static/' . $identifier . '.' . $type;
-		if (!file_exists($path) || md5($code) != md5_file($path))
-		{
-			if ($cfg['headrc_minify'] && !$cot_rc_skip_minification)
-			{
-				$code = cot_rc_minify($code, $type);
-			}
-			file_put_contents($path, $code);
-		}
-		$cot_rc_reg[$type][$scope][$order][] = $path;
-	}
-	else
-	{
-		$separator = $type == 'js' ? "\n;" : "\n";
-		$cot_rc_reg[$type]['embed'][$scope][$order] .= $code . $separator;
-	}
-	return true;
+	return Resources::addEmbed($code, $type, $order, $scope, $identifier);
 }
 
 /**
@@ -4710,34 +4562,12 @@ function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js', $
  * @param int $order Order priority number
  * @return bool Returns TRUE normally, FALSE is file was not found
  * @global Cache $cache
+ *
+ * @deprecated Will be removed in v.1.0. Use Resources::addFile() instead
  */
 function cot_rc_add_file($path, $scope = 'global', $order = 50)
 {
-	global $cache, $cfg, $cot_rc_reg, $cot_rc_skip_minification;
-	if (!file_exists($path))
-	{
-		return false;
-	}
-
-	$type = preg_match('#\.(min\.)?(js|css)$#', mb_strtolower($path), $m) ? $m[2] : 'js';
-
-	if ($cache && $cfg['headrc_consolidate'] && !defined('COT_ADMIN') && $cfg['headrc_minify'] && !$cot_rc_skip_minification && $m[1] != 'min.')
-	{
-		$bname = ($type == 'css') ? str_replace('/', '._.', $path) : basename($path) . '.min';
-		$code = cot_rc_minify(file_get_contents($path), $type);
-		$path = $cfg['cache_dir'] . '/static/' . $bname;
-		file_put_contents($path, $code);
-	}
-
-	if ($cfg['headrc_consolidate'] && $cache && !defined('COT_ADMIN'))
-	{
-		$cot_rc_reg[$type][$scope][$order][] = $path;
-	}
-	else
-	{
-		$cot_rc_reg[$type]['files'][$scope][$order][] = $path;
-	}
-	return true;
+	return Resources::addFile($path, '', $order, $scope);
 }
 
 /**
@@ -4749,60 +4579,19 @@ function cot_rc_add_standard()
 
 	if ($cfg['jquery'] && !$cfg['jquery_cdn'])
 	{
-		cot_rc_add_file('js/jquery.min.js');
-	}
-
-	if ($cfg['jquery'] && $cfg['turnajax'])
-	{
-		cot_rc_add_file('js/jquery.history.min.js');
+		Resources::addFile(Resources::jQuery);
 	}
 
 	if ($cfg['jquery'])
 	{
-		cot_rc_add_file('js/jqModal.min.js');
+		Resources::addFile('js/jqModal.min.js');
 	}
 
-	cot_rc_add_file('js/base.js');
+	Resources::addFile('js/base.js');
 
 	if ($cfg['jquery'] && $cfg['turnajax'])
 	{
-		cot_rc_add_file('js/ajax_on.js');
-	}
-}
-
-/**
- * Sends registered header resources to head output
- *
- * @global array $out Output snippets
- * @global array $cot_rc_html Header HTML
- */
-function cot_rc_output()
-{
-	global $cot_rc_html, $out, $usr, $theme;
-	if (is_array($cot_rc_html) && isset($cot_rc_html[$theme]))
-	{
-		foreach ($cot_rc_html[$theme] as $scope => $html)
-		{
-			switch ($scope)
-			{
-				case 'global':
-					$pass = true;
-					break;
-				case 'guest':
-					$pass = $usr['id'] == 0;
-					break;
-				case 'user':
-					$pass = $usr['id'] > 0;
-					break;
-				default:
-					$parts = explode('_', $scope);
-					$pass = count($parts) == 2 && $parts[0] == 'group' && $parts[1] == $usr['maingrp'];
-			}
-			if ($pass)
-			{
-				$out['head_head'] = $html.$out['head_head'];
-			}
-		}
+		Resources::addFile('js/ajax_on.js');
 	}
 }
 
@@ -4813,12 +4602,14 @@ function cot_rc_output()
  * @param string $code Stylesheet or javascript code
  * @param bool $prepend Prepend this file before other head outputs
  * @param string $type Resource type: 'js' or 'css'
+ *
+ * @deprecated Will be removed in v.1.0. Resources::embed() instead
  */
 function cot_rc_embed($code, $prepend = false, $type = 'js')
 {
-	global $out;
-	$embed = cot_rc("code_rc_{$type}_embed", array('code' => $code));
-	$prepend ? $out['head_head'] = $embed . $out['head_head'] : $out['head_head'] .= $embed;
+	$order = 60;
+	if($prepend) $order = 40;
+	Resources::embed($code, $type, $order);
 }
 
 /**
@@ -4827,11 +4618,12 @@ function cot_rc_embed($code, $prepend = false, $type = 'js')
  * @global array $out Output snippets
  * @param string $code Stylesheet or javascript code
  * @param string $type Resource type: 'js' or 'css'
+ *
+ * @deprecated Will be removed in v.1.0. Resources::embedFooter() instead
  */
 function cot_rc_embed_footer($code, $type = 'js')
 {
-	global $out;
-	$out['footer_rc'] .= cot_rc("code_rc_{$type}_embed", array('code' => $code));
+	Resources::embedFooter($code, $type);
 }
 
 /**
@@ -4854,13 +4646,14 @@ function cot_rc_link($url, $text, $attrs = '')
  * @global array $out Output snippets
  * @param string $path Stylesheet *.css or script *.js path/url
  * @param bool $prepend Prepend this file before other header outputs
+ *
+ * @deprecated Will be removed in v.1.0. Use Resources::linkFile() instead
  */
 function cot_rc_link_file($path, $prepend = false)
 {
-	global $out;
-	$type = preg_match('#\.(js|css)$#i', $path, $m) ? strtolower($m[1]) : 'js';
-	$embed = cot_rc("code_rc_{$type}_file", array('url' => $path));
-	$prepend ? $out['head_head'] = $embed . $out['head_head'] : $out['head_head'] .= $embed;
+	$order = 60;
+	if($prepend) $order = 40;
+	Resources::linkFile($path, '', $order);
 }
 
 /**
@@ -4868,12 +4661,12 @@ function cot_rc_link_file($path, $prepend = false)
  *
  * @global array $out Output snippets
  * @param string $path JavaScript or CSS file path
+ *
+ * @deprecated Will be removed in v.1.0. Resources::linkFileFooter() instead
  */
 function cot_rc_link_footer($path)
 {
-	global $out;
-	$type = preg_match('#\.(js|css)$#i', $path, $m) ? strtolower($m[1]) : 'js';
-	$out['footer_rc'] .= cot_rc("code_rc_{$type}_file", array('url' => $path));
+	Resources::linkFileFooter($path);
 }
 
 /**
@@ -4882,20 +4675,12 @@ function cot_rc_link_footer($path)
  * @param string $code Code to minify
  * @param string $type Type: 'js' or 'css'
  * @return string Minified code
+ *
+ * @deprecated Will be removed in v.1.0. Resources::linkFileFooter() instead
  */
 function cot_rc_minify($code, $type = 'js')
 {
-	if ($type == 'js')
-	{
-		require_once './lib/jsmin.php';
-		$code = JSMin::minify($code);
-	}
-	elseif ($type == 'css')
-	{
-		require_once './lib/cssmin.php';
-		$code = minify_css($code);
-	}
-	return $code;
+	return Resources::minify($code, $type);
 }
 
 /*
@@ -5336,7 +5121,7 @@ function cot_parse_str($str)
 	{
 		if (!empty($item))
 		{
-			list($key, $val) = explode('=', $item);
+			list($key, $val) = explode('=', $item, 2);
 			$res[$key] = $val;
 		}
 	}
@@ -5463,53 +5248,6 @@ function cot_url_check($url)
 }
 
 /**
- * Transliterates a string if transliteration is available
- *
- * @param string $str Source string
- * @return string
- */
-
-function cot_translit_encode($str)
-{
-	global $lang, $cot_translit;
-	static $lang_loaded = false;
-	if (!$lang_loaded && $lang != 'en' && file_exists(cot_langfile('translit', 'core')))
-	{
-		require_once cot_langfile('translit', 'core');
-		$lang_loaded = true;
-	}
-	if (is_array($cot_translit))
-	{
-		// Apply transliteration
-		$str = strtr($str, $cot_translit);
-	}
-	return $str;
-}
-
-/**
- * Backwards transition for cot_translit_encode
- *
- * @param string $str Encoded string
- * @return string
- */
-function cot_translit_decode($str)
-{
-	global $lang, $cot_translitb;
-	static $lang_loaded = false;
-	if (!$lang_loaded && $lang != 'en' && file_exists(cot_langfile('translit', 'core')))
-	{
-		require_once cot_langfile('translit', 'core');
-		$lang_loaded = true;
-	}
-	if (is_array($cot_translitb))
-	{
-		// Apply transliteration
-		$str = strtr($str, $cot_translitb);
-	}
-	return $str;
-}
-
-/**
  * Store URI-redir to session
  *
  * @global $sys
@@ -5584,6 +5322,53 @@ $cot_languages['pt']= 'Portugese';
 $cot_languages['ru']= 'Русский';
 $cot_languages['se']= 'Svenska';
 $cot_languages['ua'] = 'Українська';
+
+/**
+ * Transliterates a string if transliteration is available
+ *
+ * @param string $str Source string
+ * @return string
+ */
+
+function cot_translit_encode($str)
+{
+	global $lang, $cot_translit;
+	static $lang_loaded = false;
+	if (!$lang_loaded && $lang != 'en' && file_exists(cot_langfile('translit', 'core')))
+	{
+		require_once cot_langfile('translit', 'core');
+		$lang_loaded = true;
+	}
+	if (is_array($cot_translit))
+	{
+		// Apply transliteration
+		$str = strtr($str, $cot_translit);
+	}
+	return $str;
+}
+
+/**
+ * Backwards transition for cot_translit_encode
+ *
+ * @param string $str Encoded string
+ * @return string
+ */
+function cot_translit_decode($str)
+{
+	global $lang, $cot_translitb;
+	static $lang_loaded = false;
+	if (!$lang_loaded && $lang != 'en' && file_exists(cot_langfile('translit', 'core')))
+	{
+		require_once cot_langfile('translit', 'core');
+		$lang_loaded = true;
+	}
+	if (is_array($cot_translitb))
+	{
+		// Apply transliteration
+		$str = strtr($str, $cot_translitb);
+	}
+	return $str;
+}
 
 /**
  * Makes correct plural forms of words

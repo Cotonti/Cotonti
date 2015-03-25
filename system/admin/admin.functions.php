@@ -2,11 +2,9 @@
 /**
  * Admin function library.
  *
- * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD License
+ * @package API - Administration
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -44,28 +42,30 @@ function cot_linkif($url, $text, $cond)
 /**
  * Returns group selection dropdown code
  *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @param array $skip Hidden groups
+ * @param string 	$chosen Seleced value
+ * @param string 	$name Dropdown name
+ * @param array 	$skip Hidden groups
+ * @param bool 		$add_empty Allow empty choice
+ * @param mixed 	$attrs Additional attributes as an associative array or a string
+ * @param string 	$custom_rc Custom resource string name
  * @return string
  */
-function cot_selectbox_groups($check, $name, $skip=array(0))
+function cot_selectbox_groups($chosen, $name, $skip = null, $add_empty = false, $attrs = '', $custom_rc = '')
 {
 	global $cot_groups;
 
-	$res = "<select name=\"$name\" size=\"1\">";
-
+	$opts = array();
+	if(empty($skip)) $skip = array();
+	if(!is_array($skip)) $skip = array($skip);
 	foreach($cot_groups as $k => $i)
 	{
-		if (!$i['skiprights'])
+		if (!$i['skiprights'] && !in_array($k, $skip))
 		{
-			$selected = ($k == $check) ? "selected=\"selected\"" : '';
-			$res .= (in_array($k, $skip)) ? '' : "<option value=\"$k\" $selected>".$cot_groups[$k]['name']."</option>";
+			$opts[$k] = $cot_groups[$k]['name'];
 		}
 	}
-	$res .= "</select>";
 
-	return $res;
+	return cot_selectbox($chosen, $name, array_keys($opts), array_values($opts), $add_empty, $attrs, $custom_rc);
 }
 
 /**

@@ -7,10 +7,8 @@
  * as a .php file and run via web interface.
  *
  * @package Cotonti
- * @version 0.7.0
- * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2010
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 $src_pattern = '#([\t ]*)if\s*\(is_array\(\$extp\)\)\s*\{\s*foreach\s*\(\s*\$extp\s*as\s*(\$k\s*=>\s*)?\$pl\s*\)\s*\{\s*include(_once)?\s*\(?\s*\$cfg\[\'plugins_dir\'\]\s*\.\s*\'/\'\s*\.\s*\$pl\[\'pl_code\'\]\s*\.\s*\'/\'\s*\.\s*\$pl\[\'pl_file\'\]\s*\.\s*\'\.php\'\s*\)?;\s*\}\s*\}#si';

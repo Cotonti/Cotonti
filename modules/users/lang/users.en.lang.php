@@ -2,11 +2,9 @@
 /**
  * English Language File for the Users Module
  *
- * @package users
- * @version 0.9.4
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2011-2014
- * @license BSD
+ * @package Users
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -29,3 +27,7 @@ $L['cfg_usertextmax'] = 'Maximum length for user signature';
 $L['cfg_usertextmax_hint'] = '';
 $L['cfg_usertextimg'] = 'Allow images and HTML in user signature';
 $L['cfg_usertextimg_hint'] = '\'No\' recommended, for security reasons';
+
+$L['Password_updated'] = 'Password has changed';
+$L['Profile_updated'] = 'Profile settings saved';
+$L['User_data_updated'] = 'User data updated';

@@ -3,11 +3,9 @@
 /**
  * Configuration Management API
  *
- * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2014
- * @license BSD
+ * @package API - Configuration
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 defined('COT_CODE') or die('Wrong URL');
 
@@ -49,6 +47,63 @@ define('COT_CONFIG_TYPE_RANGE', 7);
  * Custom type.
  */
 define('COT_CONFIG_TYPE_CUSTOM', 8);
+
+/**
+ * Generates a form input for Integer
+ *
+ * @param string $name Config value name
+ * @param string $value User set value
+ * @param string $defvalue Default value
+ * @param string $min Minimum allowed value
+ * @param string $max Maximum allowed value
+ * @return string
+ */
+function cot_config_type_int($name, $value, $defvalue=null, $min=null, $max=null)
+{
+	$value = cot_config_type_int_filter($name, $value, $defvalue, $min, $max, true);
+	return cot_inputbox('text', $name, $value);
+}
+
+/**
+ * Filters value as Integer
+ *
+ * @see cot_config_type_int()
+ * @param bool $skip_warnings Does not display warnings if set to TRUE
+ */
+function cot_config_type_int_filter($name, $value, $defvalue=null, $min=null, $max=null, $skip_warnings=false)
+{
+	$not_filtered = $value;
+	if (!is_numeric($value) || floor($value) != $value)
+	{
+		if ($defvalue)
+		{
+			$value = $defvalue;
+		}
+		else
+		{
+			$value = '';
+		}
+		$defset = true;
+	}
+	if (isset($min)  && $value < $min)
+	{
+		$value = $min;
+		$valset = true;
+	}
+	if (isset($max) && $value > $max)
+	{
+		$value = $max;
+		$valset = true;
+	}
+
+	// user friendly notification
+	$warning_msg = ($valset || $defset) ? cot_rc('adm_invalid_input', array('value' => $not_filtered, 'field_name' => $name )) : '';
+	$warning_msg .= ($defset) ? '. '.cot_rc('adm_set_default') : '';
+	$warning_msg .= ($valset && isset($min)) ? '. '.cot_rc('adm_int_min', array('min'=>$min)) : '';
+	$warning_msg .= ($valset && isset($max)) ? '. '.cot_rc('adm_int_max', array('max'=>$max)) : '';
+	if ($warning_msg && !$skip_warnings) cot_message($warning_msg, 'warning', $name.'_int_filter');
+	return $value;
+}
 
 /**
  * Registers a set of configuration entries at once.
@@ -628,6 +683,122 @@ function cot_config_list($owner, $cat, $subcat = "")
 	}
 	unset($rs);
 	return $rowset;
+}
+
+/**
+ * Imports data for config values from outer world
+ *
+ * @param string|array $name Name of value or array of names for list of values
+ * @param string $source Source type
+ * @param string $filter Filter type
+ * @param string $defvalue Default value for filtered data
+ * @see cot_import()
+ * @return mixed Filtered value of array of values
+ */
+function cot_config_import($name, $source='POST', $filter='NOC', $defvalue=null)
+{
+	global $cot_import_filters;
+	if (!$name) return null;
+	if (!is_array($name))
+	{
+		$name = array($name);
+		$single_value = true;
+	}
+	$res = array();
+	foreach ($name as $idx => $value_name) {
+		$filter_type = (is_array($filter)) ? ($filter[$value_name] ? $filter[$value_name] : ($filter[$idx] ? $filter[$idx] : 'NOC')) : $filter;
+		$not_filtered = cot_import($value_name, $source, 'NOC');
+		$value = cot_import($value_name, $source, $filter_type);
+		// addition filtering by varname
+		if (sizeof($cot_import_filters[$value_name]))
+		{
+			$value = cot_import($value, 'DIRECT', $value_name);
+		}
+
+		// if invalid value is used
+		if (is_null($value))
+		{
+			$warning_msg = cot_rc('adm_invalid_input', array('value' => $not_filtered, 'field_name' => $value_name ));
+			if (!is_null($defvalue))
+			{
+				$value = !is_array($defvalue) ? $defvalue : (isset($defvalue[$value_name]) ? $defvalue[$value_name] : (isset($defvalue[$idx]) ? $defvalue[$idx] : null));
+				$warning_msg .= '. '.cot_rc('adm_set_default', $value);
+			}
+			cot_message($warning_msg, 'warning', $name.'_int_filter');
+		}
+		$res[$value_name] = $value;
+	}
+	return $single_value ? $value : $res;
+}
+
+/**
+ * Saves updated values of config list in DB
+ *
+ * @param string $name Extension or Section name config belongs to
+ * @param array $optionslist Option list as return by cot_config_list()
+ * @param mixed $is_module Flag indicating if it is module or plugin config
+ * @param string $changed_only Update changes values only
+ * @param string $source Source of imported data
+ * @return boolean|number Number of updated values
+ */
+function cot_config_update_options($name, &$optionslist, $is_module=false, $changed_only = true, $source = 'POST')
+{
+	global $cot_import_filters;
+	if (!is_array($optionslist)) return false;
+
+	$new_options = array();
+	foreach ($optionslist as $key => $val)
+	{
+		$filter = 'NOC';
+
+		// Visual separator/fieldset have no value
+		if($val['config_type'] == COT_CONFIG_TYPE_SEPARATOR) continue;
+
+		if ($val['config_type'] == COT_CONFIG_TYPE_CUSTOM && $val['config_variants'])
+		{
+			if (preg_match('#^(\w+)\((.*?)\)$#', $val['config_variants'], $mt))
+			{
+				$custom_func = $mt[1];
+				$custom_filter_func = $custom_func.'_filter';
+				// use custom filter function or built-in
+				if (function_exists($custom_filter_func))
+				{
+					$callback_params = preg_split('#\s*,\s*#', $mt[2]);
+					if (count($callback_params) > 0 && !empty($callback_params[0]))
+					{
+						for ($i = 0; $i < count($callback_params); $i++)
+						{
+							$callback_params[$i] = str_replace(array("'", '"'), array('', ''), $callback_params[$i]);
+						}
+					}
+					$data = call_user_func_array($custom_filter_func, array_merge(array($key, $val['config_value']), $callback_params));
+				}
+				else
+				{
+					// last part of custom function name treats as built-in filter name
+					$last_func_name = array_reverse(explode('_', $custom_func));
+					$custom_filter = strtoupper($last_func_name[0]);
+					if (in_array(strtoupper($custom_filter), array('INT','BOL', 'PSW', 'ALP', 'TXT', 'NUM')) || sizeof($cot_import_filters[$custom_filter]))
+					{
+						$filter = $custom_filter;
+					}
+					$data = cot_config_import($key, $source, $filter, $val['config_default']);
+				}
+			}
+		}
+		else
+		{
+			$data = cot_config_import($key, $source, $filter, $val['config_default']);
+		}
+
+
+		if ($val['config_value'] != $data || !$changed_only)
+		{
+			$new_options[$key] = $data;
+			$optionslist[$key]['config_value'] = $data;
+		}
+	}
+	return (sizeof($new_options)) ? cot_config_set($name, $new_options, $is_module) : 0;
 }
 
 /**

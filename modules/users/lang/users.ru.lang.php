@@ -2,11 +2,9 @@
 /**
  * Russian Language File for the Users Module
  *
- * @package users
- * @version 0.9.4
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2011-2014
- * @license BSD
+ * @package Users
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -29,3 +27,7 @@ $L['cfg_usertextmax'] = 'Максимальная длина подписи, с�
 $L['cfg_usertextmax_hint'] = '';
 $L['cfg_usertextimg'] = 'Разрешить изображения и HTML-код в подписях пользователей';
 $L['cfg_usertextimg_hint'] = 'По причине безопасности рекомендуется &laquo;Нет&raquo;!';
+
+$L['Password_updated'] = 'Пароль изменен';
+$L['Profile_updated'] = 'Настройки профиля сохранены';
+$L['User_data_updated'] = 'Данные пользователя сохранены';

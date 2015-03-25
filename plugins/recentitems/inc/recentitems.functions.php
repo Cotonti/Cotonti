@@ -3,11 +3,9 @@
 /**
  * Recent pages, topics in forums, users, comments
  *
- * @package recentitems
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package RecentItems
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 defined('COT_CODE') or die("Wrong URL.");
 

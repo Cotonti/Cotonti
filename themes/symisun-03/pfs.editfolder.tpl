@@ -29,7 +29,7 @@
             <!-- IF {PFS_SUBTITLE} == true -->
             <p class="details">{PFS_SUBTITLE}</p>
             <!-- ENDIF -->
-			{FILE "./themes/symisun-03/warnings.tpl"}
+			{FILE "./{PHP.cfg.themes_dir}/symisun-03/warnings.tpl"}
 <form id="editfolder" action="{PFS_ACTION}" method="post">
 			<table class="cells">
 				<!--<tr>

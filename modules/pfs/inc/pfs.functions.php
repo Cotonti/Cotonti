@@ -2,10 +2,9 @@
 /**
  * Personal File Storage, function library
  *
- * @package pfs
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD License
+ * @package PFS
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -547,7 +546,7 @@ function cot_pfs_upload($userid, $folderid='')
 									hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
 								cot_imageresize($pfs_dir_user . $npath . $u_newname,
 									$cfg['pfs']['thumbs_dir_user'] . $npath . $u_newname,
-									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
+									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], '', $th_colorbg,
 									$cfg['pfs']['th_jpeg_quality'], true);
 							}
 						}

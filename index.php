@@ -3,10 +3,8 @@
  * Index loader
  *
  * @package Cotonti
- * @version 0.9.17
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 if (php_sapi_name() == 'cli-server')
@@ -48,13 +46,16 @@ if (php_sapi_name() == 'cli-server')
 		exit;
 	}
 	// PHP files have priority
-	if (preg_match('#\.php$#', $REQUEST_FILENAME))
+	if (preg_match('#\.php$#', $REQUEST_FILENAME) && $REQUEST_FILENAME !== 'index.php')
 	{
 		include $REQUEST_FILENAME;
 		exit;
 	}
 	// All the rest goes through standard rewrite gateway
-	$_GET['rwr'] = $REQUEST_FILENAME;
+	if ($REQUEST_FILENAME !== 'index.php')
+	{
+		$_GET['rwr'] = $REQUEST_FILENAME;
+	}
 	unset($REQUEST_FILENAME, $langs, $mt);
 }
 

@@ -8,20 +8,17 @@ Hooks=rss.create
 /**
  * Comments system for Cotonti
  *
- * @package comments
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Comments
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
-
 defined('COT_CODE') or die('Wrong URL');
 
 /*
 	Example of feeds:
 
 	cot_url(rss, m=comments&id=XX)		=== Show comments from page "XX" ===
-									=== Where XX - is code or alias of page ===
+					 					=== Where XX - is code or alias of page ===
 	cot_url(rss, m=comments)			=== Show comments from all page ===
 */
 
@@ -39,23 +36,30 @@ if ($m == 'comments')
 
 		$sql = $db->query("SELECT c.*, p.*, u.user_name
 			FROM $db_com AS c
-				LEFT JOIN $db_pages AS p ON c.com_code = p.page_id
-				LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
+			LEFT JOIN $db_pages AS p ON c.com_code = p.page_id
+			LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
 			WHERE com_area = 'page' ORDER BY com_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 		$i = 0;
 		foreach ($sql->fetchAll() as $row)
 		{
+			$page_args = array('c' => $row['page_cat']);
+			if(!empty($row['page_alias'])) {
+				$page_args['al'] = $row['page_alias'];
+			} else {
+				$page_args['id'] = $row['page_id'];
+			}
+
 			$items[$i]['title'] = $L['rss_comment_of_user']." ".$row['user_name'];
 
-			$text = cot_parse($row['com_text'], $cfg['plugins']['comments']['markup']);
+//			$text = cot_parse($row['com_text'], $cfg['plugins']['comments']['markup']);
+			$text = cot_parse($row['com_text'], $cfg['plugin']['comments']['parsebbcodecom']);
 			if ((int)$cfg['plugin']['comments']['rss_commentmaxsymbols'] > 0)
 			{
 				$text .= (cot_string_truncate($text, $cfg['plugin']['comments']['rss_commentmaxsymbols'])) ? '...' : '';
 			}
 			$items[$i]['description'] = $text;
-
-			$items[$i]['link'] = COT_ABSOLUTE_URL . (empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']));
-
+			$items[$i]['link'] = cot_url('page', $page_args, '#c'.$row['com_id'], true);
+			if(!cot_url_check($items[$i]['link'])) $items[$i]['link'] = COT_ABSOLUTE_URL.$items[$i]['link'];
 			$items[$i]['pubDate'] = cot_date('r', $row['com_date']);
 			$i++;
 		}
@@ -74,11 +78,16 @@ if ($m == 'comments')
 			{
 				$rss_title = $row['page_title'];
 				$rss_description = $L['rss_comments_item_desc'];
-				$page_args = empty($row['page_alias']) ? "id=$page_id" : 'al=' . $row['page_alias'];
+				$page_args = array('c' => $row['page_cat']);
+				if(!empty($row['page_alias'])) {
+					$page_args['al'] = $row['page_alias'];
+				} else {
+					$page_args['id'] = $row['page_id'];
+				}
 
 				$sql = $db->query("SELECT c.*, u.user_name
 					FROM $db_com AS c
-						LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
+					LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
 					WHERE com_area = 'page' AND com_code='$page_id'
 					ORDER BY com_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 				$i = 0;
@@ -91,15 +100,18 @@ if ($m == 'comments')
 						$text .= (cot_string_truncate($text, $cfg['plugin']['comments']['rss_commentmaxsymbols'])) ? '...' : '';
 					}
 					$items[$i]['description'] = $text;
-					$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('page', $page_args, '#c'.$row1['com_id'], true);
+					$items[$i]['link'] = cot_url('page', $page_args, '#c'.$row1['com_id'], true);
+					if(!cot_url_check($items[$i]['link'])) $items[$i]['link'] = COT_ABSOLUTE_URL.$items[$i]['link'];
 					$items[$i]['pubDate'] = cot_date('r', $row1['com_date']);
 					$i++;
 				}
+
 				// Attach original page text as last item
-				$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']);
+				$row['page_pageurl'] = cot_url('page', $page_args, '', true);
 				$items[$i]['title'] = $L['rss_original'];
 				$items[$i]['description'] = cot_parse_page_text($row['page_text'], $row['page_pageurl'], $row['page_parser']);
-				$items[$i]['link'] = COT_ABSOLUTE_URL . ((empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']));
+				$items[$i]['link'] = $row['page_pageurl'];
+				if(!cot_url_check($items[$i]['link'])) $items[$i]['link'] = COT_ABSOLUTE_URL.$items[$i]['link'];
 				$items[$i]['pubDate'] = cot_date('r', $row['page_date']);
 			}
 		}

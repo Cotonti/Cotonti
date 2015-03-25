@@ -2,11 +2,9 @@
 /**
  * Adds tags support to i18n and vice versa
  *
- * @package i18n
- * @version 0.7.3
- * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2010-2011
- * @license BSD License
+ * @package I18n
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

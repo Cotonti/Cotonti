@@ -9,11 +9,9 @@ Tags=header.tpl:{I18N_LANG_ROW_URL},{I18N_LANG_ROW_CODE},{I18N_LANG_ROW_TITLE},{
 /**
  * Renders language selector
  *
- * @package i18n
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2014
- * @license BSD License
+ * @package I18n
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -33,7 +31,7 @@ if (count($i18n_locales) > 0)
 			$lc_selected = '';
 		}
 		$i18n_urlparams = $_GET;
-		if ($cfg['plugin']['i18n']['omitmain'] && $lc == $i18n_fallback)
+		if ($cfg['plugin']['i18n']['omitmain'] && $lc == $i18n_fallback && (!$cfg['plugin']['i18n']['cookie'] || !isset($_COOKIE['i18n_locale'])))
 		{
 			unset($i18n_urlparams['l']);
 		}

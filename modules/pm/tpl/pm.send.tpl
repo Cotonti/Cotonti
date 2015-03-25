@@ -8,7 +8,7 @@
 				<h2 class="comments">{PMSEND_TITLE}</h2>
 				<p class="small">{PHP.L.pmsend_subtitle}</p>
 				<p class="paging">{PMSEND_INBOX}<span class="spaced">{PHP.cfg.separator}</span>{PMSEND_SENTBOX}<span class="spaced">{PHP.cfg.separator}</span>{PMSEND_SENDNEWPM}
-				{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+				{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 				<form action="{PMSEND_FORM_SEND}" method="post" name="newmessage" id="mewmessage">
 					<table class="cells">
 <!-- BEGIN: PMSEND_USERLIST -->
@@ -38,12 +38,6 @@
 					</table>
 				</form>
 			</div>
-			<!-- IF {PMSEND_AJAX_MARKITUP} AND {PHP.cfg.pm.turnajax} -->
-			<script type="text/javascript">
-				$(document).ready(function() {$("textarea.editor").markItUp(mySettings);});
-			</script>
-			<!-- ENDIF -->
-
 	<!-- BEGIN: AFTER_AJAX -->
 		</div>
 <!-- END: AFTER_AJAX -->

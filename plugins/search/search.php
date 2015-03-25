@@ -9,10 +9,9 @@ Hooks=standalone
 /**
  * Search standalone.
  *
- * @package search
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD License
+ * @package Search
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
@@ -178,7 +177,7 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugi
 
 if (!empty($sq))
 {
-	$words = explode(' ', $sq);
+	$words = explode(' ', preg_replace("'\s+'", " ", $sq));
 	$sqlsearch = '%'.implode('%', $words).'%';
 	if (mb_strlen($sq) < $cfg['plugin']['search']['minsigns'])
 	{

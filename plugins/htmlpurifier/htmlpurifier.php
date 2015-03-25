@@ -8,11 +8,9 @@ Hooks=global
 /**
  * Sets HTML Purifier up and registers a custom filter callback
  *
- * @package htmlpurifier
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2014
- * @license BSD
+ * @package HTML Purifier
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -36,6 +34,10 @@ function htmlpurifier_filter($value, $name)
 			define('HTMLPURIFIER_PREFIX', $cfg['plugins_dir'] . '/htmlpurifier/lib/standalone');
 			require_once $cfg['plugins_dir'] . '/htmlpurifier/lib/HTMLPurifier.standalone.php';
 
+            $cacheDir = $cfg['cache_dir'] . DIRECTORY_SEPARATOR . 'htmlpurifier';
+            if(!file_exists($cacheDir)) mkdir($cacheDir, 0775, true);
+            $cacheDir = realpath($cacheDir);
+
 			$config = HTMLPurifier_Config::createDefault();
 			$config->set('HTML.Doctype', $cfg['plugin']['htmlpurifier']['doctype']);
 			$config->set('HTML.TidyLevel', $cfg['plugin']['htmlpurifier']['tidylevel']);
@@ -45,7 +47,7 @@ function htmlpurifier_filter($value, $name)
 			{
 				$config->set('URI.MakeAbsolute', true);
 			}
-			$config->set('Cache.SerializerPath', realpath($cfg['cache_dir']) . '/htmlpurifier');
+            $config->set('Cache.SerializerPath', $cacheDir);
 
 			// Load preset
 			if ($usr['id'] > 0)

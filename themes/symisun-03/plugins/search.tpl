@@ -132,7 +132,7 @@
 </div>
 
   <!-- BEGIN: ERROR -->
-	{FILE "./themes/symisun-03/warnings.tpl"}
+	{FILE "./{PHP.cfg.themes_dir}/symisun-03/warnings.tpl"}
   <!-- END: ERROR -->    	
   
   <!-- BEGIN: RESULTS -->	

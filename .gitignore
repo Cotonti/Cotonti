@@ -19,3 +19,6 @@
 .tags
 .tags_sorted_by_file
 *.sublime*
+.idea
+nbproject
+Thumbs.db

@@ -2,7 +2,7 @@
 
 		<div class="block">
 			<h2 class="page">{PAGEADD_PAGETITLE}</h2>
-			{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+			{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 			<form action="{PAGEADD_FORM_SEND}" enctype="multipart/form-data" method="post" name="pageform">
 				<table class="cells">
 					<tr>

@@ -3,10 +3,8 @@
  * English Language File (main.lang.php)
  *
  * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -259,7 +257,9 @@ $L['Resynced'] = 'Resynced';
 $L['Right'] = 'Right';
 $L['Rights'] = 'Rights';
 $L['RSS_Feeds'] = 'RSS Feeds';
+$L['Save'] = 'Save';
 $L['Saveasdraft'] = 'Save as Draft';
+$L['Saved'] = 'Saved';
 $L['Scheme'] = 'Color scheme';
 $L['Schemes'] = 'Color schemes';
 $L['Search'] = 'Search';

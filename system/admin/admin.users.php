@@ -3,10 +3,8 @@
  * Administration panel - Users
  *
  * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
@@ -149,6 +147,8 @@ elseif($n == 'edit')
 		$cache && $cache->db->remove('cot_groups', 'system');
 
 		cot_message('Deleted');
+
+        cot_redirect(cot_url('admin', 'm=users', '', true));
 	}
 	else
 	{
@@ -167,6 +167,8 @@ elseif($n == 'edit')
 		$adminpath[] = array (cot_url('admin', 'm=users&n=edit&g='.$g), $row['grp_name']);
 
 		$t->assign(array(
+            'ADMIN_USERS_GRP_NAME' => $row['grp_name'],
+            'ADMIN_USERS_GRP_TITLE' => $row['grp_title'],
 			'ADMIN_USERS_EDITFORM_URL' => cot_url('admin', 'm=users&n=edit&a=update&g='.$g),
 			'ADMIN_USERS_EDITFORM_GRP_NAME' => cot_inputbox('text', 'rname', $row['grp_name'], 'size="40" maxlength="64"'),
 			'ADMIN_USERS_EDITFORM_GRP_TITLE' => cot_inputbox('text', 'rtitle', $row['grp_title'], 'size="40" maxlength="64"'),
@@ -182,6 +184,7 @@ elseif($n == 'edit')
 			'ADMIN_USERS_EDITFORM_SKIPRIGHTS' => $row['grp_skiprights'],
 			'ADMIN_USERS_EDITFORM_RIGHT_URL' => cot_url('admin', 'm=rights&g='.$g),
 			'ADMIN_USERS_EDITFORM_DEL_URL' => cot_url('admin', 'm=users&n=edit&a=delete&g='.$g.'&'.cot_xg()),
+            'ADMIN_USERS_EDITFORM_DEL_CONFIRM_URL' => cot_confirm_url(cot_url('admin', 'm=users&n=edit&a=delete&g='.$g.'&'.cot_xg())),
 		));
 
 		/* === Hook === */

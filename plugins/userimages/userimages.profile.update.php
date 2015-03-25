@@ -9,11 +9,9 @@ Tags=users.profile.tpl:
 /**
  * Avatar and photo for users
  *
- * @package userimages
- * @version 1.1
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package UserImages
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -30,7 +28,8 @@ if($_FILES)
 		if (!empty($file['tmp_name']) && $file['size'] > 0 && is_uploaded_file($file['tmp_name']))
 		{
 			$gd_supported = array('jpg', 'jpeg', 'png', 'gif');
-			$file_ext = strtolower(end(explode(".", $file['name'])));
+			$var = explode(".", $file['name']);
+			$file_ext = strtolower(array_pop($var));
 			$fcheck = cot_file_check($file['tmp_name'], $file['name'], $file_ext);
 			if(in_array($file_ext, $gd_supported) && $fcheck == 1)
 			{

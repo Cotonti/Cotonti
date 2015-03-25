@@ -19,7 +19,7 @@
 					<td class="textcenter">{ADMIN_BANLIST_ROW_EXPIRE}</td>
 					<td class="centerall">
 						<button type="submit">{PHP.L.Update}</button>
-						<button type="submit" onclick="parent.location='{ADMIN_BANLIST_ROW_DELURL}'">{PHP.L.Delete}</button>
+						<button type="submit" onclick="window.location.replace('{ADMIN_BANLIST_ROW_DELURL}'); return false;">{PHP.L.Delete}</button>
 					</td>
 				</tr>
 				</form>

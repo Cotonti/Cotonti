@@ -2,11 +2,9 @@
 /**
  * HTML Purifier preset for Superadmins (MainGroupId=5)
  *
- * @package htmlpurifier
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2014
- * @license BSD
+ * @package HTML Purifier
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -38,5 +36,7 @@ $htmlpurifier_preset = array(
 	'Filter.YouTube'							=> true,
 	// URI
 	'URI.DisableExternal'						=> false,
-	'URI.DisableExternalResources'				=> false
+	'URI.DisableExternalResources'				=> false,
+
+    'Attr.AllowedFrameTargets'                  => array( '_blank', '_self', '_parent', '_top'),
 );

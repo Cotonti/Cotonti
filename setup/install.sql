@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.15
+ * Version: 0.9.18
  */
 
 DROP TABLE IF EXISTS `cot_auth`;
@@ -82,7 +82,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','main','02','clustermode',3,'0','0','',''),
 ('core','main','03','hostip',1,'999.999.999.999','999.999.999.999','',''),
 ('core','main','04','parser',4,'none','none','cot_get_parsers()',''),
-('core','main','05','maxrowsperpage',1,'15','15','',''),
+('core','main','05','maxrowsperpage',8,'15','','cot_config_type_int(15,1)',''),
 ('core','main','06','easypagenav',3,'1','1','',''),
 ('core','main','07','confirmlinks',3,'1','1','',''),
 ('core','main','91','default_show_installed',3,'0','0','',''),
@@ -228,9 +228,9 @@ CREATE TABLE `cot_logger` (
 DROP TABLE IF EXISTS `cot_plugins`;
 CREATE TABLE `cot_plugins` (
   `pl_id` mediumint NOT NULL auto_increment,
-  `pl_hook` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `pl_code` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `pl_part` varchar(32) collate utf8_unicode_ci NOT NULL default '',
+  `pl_hook` varchar(255) collate utf8_unicode_ci NOT NULL default '',
+  `pl_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
+  `pl_part` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `pl_title` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `pl_file` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `pl_order` tinyint unsigned NOT NULL default '10',
@@ -263,7 +263,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.15-01'),
+('revision', '0.9.18'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;

@@ -8,10 +8,9 @@ Hooks=forums.posts.first
 /**
  * Overrides markup in Forums posts
  *
- * @package bbcode
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package BBcode
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

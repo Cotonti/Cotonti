@@ -28,9 +28,7 @@ rss_postmaxsymbols=06:string:::
 /**
  * RSS setup file
  *
- * @package rss
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package RSS
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */

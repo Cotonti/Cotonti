@@ -3,11 +3,9 @@
 /**
  * Extrafields API
  *
- * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package API - Extrafields
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -44,11 +42,13 @@ function cot_build_extrafields($name, $extrafield, $data)
 			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
 			$opt_array = explode(",", $extrafield['field_variants']);
 			$ii = 0;
+			$options_titles = $options_values = array();
 			foreach ($opt_array as $var)
 			{
 				$ii++;
+				$var = trim($var);
 				$options_titles[$ii] = (!empty($L[$extrafield['field_name'] . '_' . $var])) ? $L[$extrafield['field_name'] . '_' . $var] : $var;
-				$options_values[$ii] .= trim($var);
+				$options_values[$ii] = $var;
 			}
 			$result = cot_selectbox(trim($data), $name, $options_values, $options_titles, false, '', $extrafield['field_html']);
 			break;
@@ -56,14 +56,16 @@ function cot_build_extrafields($name, $extrafield, $data)
 		case 'radio':
 			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
 			$opt_array = explode(",", $extrafield['field_variants']);
+			$options_titles = $options_values = array();
 			if (count($opt_array) > 0)
 			{
 				$ii = 0;
 				foreach ($opt_array as $var)
 				{
 					$ii++;
+					$var = trim($var);
 					$options_titles[$ii] = (!empty($L[$extrafield['field_name'] . '_' . $var])) ? $L[$extrafield['field_name'] . '_' . $var] : $var;
-					$options_values[$ii] .= trim($var);
+					$options_values[$ii] = $var;
 				}
 			}
 			$result = cot_radiobox(trim($data), $name, $options_values, $options_titles, '', '', $extrafield['field_html']);
@@ -99,14 +101,16 @@ function cot_build_extrafields($name, $extrafield, $data)
 		case 'checklistbox':
 			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
 			$opt_array = explode(",", $extrafield['field_variants']);
+			$options_titles = $options_values = array();
 			if (count($opt_array) > 0)
 			{
 				$ii = 0;
 				foreach ($opt_array as $var)
 				{
 					$ii++;
+					$var = trim($var);
 					$options_titles[$ii] = (!empty($L[$extrafield['field_name'] . '_' . $var])) ? $L[$extrafield['field_name'] . '_' . $var] : $var;
-					$options_values[$ii] .= trim($var);
+					$options_values[$ii] = $var;
 				}
 			}
 			if (!is_array($data))
@@ -304,12 +308,18 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 					{
 						require_once cot_langfile('translit', 'core');
 						$fname = (is_array($cot_translit)) ? strtr($fname, $cot_translit) : '';
-					}					$fname = str_replace(' ', '_', $fname);
+					}
+					$fname = str_replace(array(' ', '  ', '__'), '_', $fname);
 					$fname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
 					$fname = str_replace('..', '.', $fname);
+					$fname = str_replace('__', '_', $fname);
 					$fname = (empty($fname)) ? cot_unique() : $fname;
 
-					$fname .= (file_exists("{$cfg['extrafield_files_dir']}/$fname.$ext") && $oldvalue != $fname . '.' . $ext) ? date("YmjGis") : '';
+					//$fname .= (file_exists("{$cfg['extrafield_files_dir']}/$fname.$ext") && $oldvalue != $fname . '.' . $ext) ? date("YmjGis") : '';
+					// Generate unique file name. Old file - must be removed any way
+					if(file_exists("{$cfg['extrafield_files_dir']}/$fname.$ext")){
+						$fname = $inputname.'_'.date("YmjGis").'_'.$fname;
+					}
 
 					$fname .= '.' . $ext;
 
@@ -455,7 +465,7 @@ function cot_default_html_construction($type)
 {
 	global $cfg;
 
-	include $cfg['system_dir'].'/resources.php';
+	include $cfg['system_dir'].'/resources.rc.php';
 	if (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaulttheme']}.php"))
 	{
 		include "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaulttheme']}.php";
@@ -499,13 +509,14 @@ function cot_default_html_construction($type)
 			break;
 
 		case 'file':
-			$html = $R['input_file'] . '|' . $R['input_file_empty'];
+			$html = $R['input_filebox'] . '|' . $R['input_filebox_empty'];
 			break;
 
 		case 'filesize':
 			$html = '';
 			break;
 	}
+
 	$html = str_replace('{$attrs}', '', $html);
 	return $html;
 }
@@ -783,6 +794,8 @@ function cot_extrafields_register_table($table_name)
 function cot_import_filesarray($file_post)
 {
 	$file_post = $_FILES[$file_post];
+    if(empty($file_post)) return null;
+
 	$file_arr = array();
 	$file_keys = array_keys($file_post);
 
@@ -817,7 +830,7 @@ function cot_extrafield_movefiles()
 			{
 				@unlink($uploadfile['old']);
 			}
-			if (!empty($uploadfile['tmp']) && !empty($uploadfile['tmp']))
+			if (!empty($uploadfile['tmp']) && !empty($uploadfile['new']))
 			{
 				@move_uploaded_file($uploadfile['tmp'], $uploadfile['new']);
 			}
@@ -860,7 +873,7 @@ function cot_extrafield_unlinkfiles($fielddata, $extrafield)
 function cot_load_extrafields($forcibly = false)
 {
 	global $db, $cot_extrafields, $db_extra_fields, $cache;
-	if (is_null($cot_extrafields) || empty($cot_extrafields) || $forcibly)
+	if (empty($cot_extrafields) || $forcibly)
 	{
 		$cot_extrafields = array();
 		$where = (defined('COT_INSTALL')) ? "1" : "field_enabled=1";

@@ -27,11 +27,9 @@ css=99:radio:0,1:1:Enable plugin CSS
 /**
  * Setup file for Autocomplete plugin
  *
- * @package autocomplete
- * @version 0.8.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2014
- * @license BSD
+ * @package Autocomplete
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');

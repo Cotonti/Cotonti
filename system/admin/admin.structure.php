@@ -1,13 +1,10 @@
 <?php
-
 /**
  * Administration panel
  *
  * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
@@ -22,7 +19,8 @@ $al = cot_import('al', 'G', 'ALP');
 $c = cot_import('c', 'G', 'TXT');
 $v = cot_import('v', 'G', 'TXT');
 
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+$maxrowsperpage = (is_int($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0 || ctype_digit($cfg['maxrowsperpage'])) ? $cfg['maxrowsperpage'] : 15;
+list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage);
 $mode = cot_import('mode', 'G', 'ALP');
 
 $t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
@@ -157,18 +155,6 @@ else
 		$rstructureicon = cot_import('rstructureicon', 'P', 'ARR');
 		$rstructurelocked = cot_import('rstructurelocked', 'P', 'ARR');
 
-		foreach ($cot_extrafields[$db_structure] as $exfld)
-		{
-			if ($exfld['field_type'] != 'file' && $exfld['field_type'] != 'filesize')
-			{
-				$rstructureextrafieldsarr[$exfld['field_name']] = cot_import('rstructure'.$exfld['field_name'], 'P', 'ARR');
-			}
-			elseif ($exfld['field_type'] == 'file')
-			{
-				$rstructureextrafieldsarr[$exfld['field_name']] = cot_import_filesarray('rstructure'.$exfld['field_name']);
-			}
-		}
-
 		$rtplmodearr = cot_import('rstructuretplmode', 'P', 'ARR');
 		$rtplforcedarr = cot_import('rstructuretplforced', 'P', 'ARR');
 		$rtplquickarr = cot_import('rstructuretplquick', 'P', 'ARR');
@@ -195,7 +181,8 @@ else
 
 			foreach ($cot_extrafields[$db_structure] as $exfld)
 			{
-				$rstructure['structure_'.$exfld['field_name']] = cot_import_extrafields($rstructureextrafieldsarr[$exfld['field_name']][$i], $exfld, 'D', $oldrow['structure_'.$exfld['field_name']]);
+                $rstructure['structure_'.$exfld['field_name']] = cot_import_extrafields('rstructure'.$exfld['field_name'].'_'.$i,
+                    $exfld, 'P', $oldrow['structure_'.$exfld['field_name']]);
 			}
 
 			$rtplmode = cot_import($rtplmodearr[$i], 'D', 'INT');
@@ -381,17 +368,17 @@ else
 	elseif ($mode && ($mode == 'all' || $structure[$n][$mode]))
 	{
 		$sqlmask = ($mode == 'all') ? "structure_path NOT LIKE '%.%'" : "structure_path LIKE '".$db->prep($structure[$n][$mode]['rpath']).".%' AND structure_path NOT LIKE '".$db->prep($structure[$n][$mode]['rpath']).".%.%'";
-		$sql = $db->query("SELECT * FROM $db_structure WHERE structure_area='".$db->prep($n)."' AND $sqlmask ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+		$sql = $db->query("SELECT * FROM $db_structure WHERE structure_area='".$db->prep($n)."' AND $sqlmask ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$maxrowsperpage);
 
 		$totalitems = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area='".$db->prep($n)."' AND $sqlmask")->fetchColumn();
-		$pagenav = cot_pagenav('admin', 'm=structure&n='.$n.'&mode='.$mode, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+		$pagenav = cot_pagenav('admin', 'm=structure&n='.$n.'&mode='.$mode, $d, $totalitems, $maxrowsperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 	}
 	else
 	{
-		$sql = $db->query("SELECT * FROM $db_structure WHERE structure_area='".$db->prep($n)."' ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+		$sql = $db->query("SELECT * FROM $db_structure WHERE structure_area='".$db->prep($n)."' ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$maxrowsperpage);
 
 		$totalitems = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area='".$db->prep($n)."'")->fetchColumn();
-		$pagenav = cot_pagenav('admin', 'm=structure&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+		$pagenav = cot_pagenav('admin', 'm=structure&n='.$n, $d, $totalitems, $maxrowsperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 	}
 
 	$t->assign(array(
@@ -452,7 +439,7 @@ else
 			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $structure_code, 'size="10" maxlength="255"'),
 			'ADMIN_STRUCTURE_SPACEIMG' => $pathspaceimg,
 			'ADMIN_STRUCTURE_LEVEL' => ($pathfielddep > 0) ? $pathfielddep - 1 : 0,
-			'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ? $R['admin_icon_pathfieldnoimg'] : $R['admin_icon_pathfieldimg'],
+			'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ? $R['admin_icon_join1'] : $R['admin_icon_join2'],
 			'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath['.$structure_id.']', $row['structure_path'], 'size="12" maxlength="255"'),
 			'ADMIN_STRUCTURE_TPL_SYM' => $structure_tpl_sym,
 			'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox($check_tpl, 'rstructuretplmode['.$structure_id.']', array('1', '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />'),
@@ -471,7 +458,7 @@ else
 
 		foreach ($cot_extrafields[$db_structure] as $exfld)
 		{
-			$exfld_val = cot_build_extrafields('rstructure'.$exfld['field_name'].'['.$structure_id.']', $exfld, $row['structure_'.$exfld['field_name']]);
+			$exfld_val = cot_build_extrafields('rstructure'.$exfld['field_name'].'_'.$structure_id, $exfld, $row['structure_'.$exfld['field_name']]);
 			$exfld_title = isset($L['structure_'.$exfld['field_name'].'_title']) ? $L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 			$t->assign(array(
 				'ADMIN_STRUCTURE_'.strtoupper($exfld['field_name']) => $exfld_val,
@@ -499,7 +486,7 @@ else
 			/* ===== */
 			foreach ($optionslist as $row_c)
 			{
-				list($title, $hint) = cot_config_titles($row_c['config_name'], $row_c['config_title']);
+				list($title, $hint) = cot_config_titles($row_c['config_name'], $row_c['config_text']);
 
 				if ($row_c['config_type'] == COT_CONFIG_TYPE_SEPARATOR)
 				{

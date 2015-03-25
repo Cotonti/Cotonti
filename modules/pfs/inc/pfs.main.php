@@ -2,11 +2,9 @@
 /**
  * Personal File Storage, main usage script.
  *
- * @package pfs
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD License
+ * @package PFS
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -221,7 +219,7 @@ if ($a=='upload')
 								$th_colortext = array(hexdec(substr($cfg['pfs']['th_colortext'],0,2)), hexdec(substr($cfg['pfs']['th_colortext'],2,2)), hexdec(substr($cfg['pfs']['th_colortext'],4,2)));
 								$th_colorbg = array(hexdec(substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
 								cot_imageresize($pfs_dir_user . $u_newname, $thumbs_dir_user  . $u_newname,
-									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
+									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], '', $th_colorbg,
 									$cfg['pfs']['th_jpeg_quality'], true);
 							}
 						}
@@ -473,7 +471,7 @@ foreach ($sql_pfs->fetchAll() as $row)
 			$th_colortext = array(hexdec(mb_substr($cfg['pfs']['th_colortext'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],4,2)));
 			$th_colorbg = array(hexdec(mb_substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],4,2)));
 			cot_imageresize($pfs_dir_user . $pfs_file, $thumbs_dir_user . $pfs_file,
-				$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
+				$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], '', $th_colorbg,
 				$cfg['pfs']['th_jpeg_quality'], true);
 		}
 
@@ -519,12 +517,12 @@ foreach ($sql_pfs->fetchAll() as $row)
 	$iji++;
 }
 
-if ($files_count>0 || $folders_count>0)
+if ($files_count > 0 || $folders_count > 0)
 {
-	if ($folders_count>0)
+	if ($folders_count > 0)
 	{
 		$totalitemsf = $folders_count;
-		$pagenav = cot_pagenav('pfs', 'userid='.$userid.$pn_c1.$pn_c2, $df, $totalitemsf, $cfg['pfs']['maxpfsperpage'], 'df');
+		$pagenav = cot_pagenav('pfs', $more, $df, $totalitemsf, $cfg['pfs']['maxpfsperpage'], 'df');
 
 		$t->assign(array(
             'PFF_FOLDERCOUNT_TITLE' => cot_declension($folders_count, $Ls['Folders']),
@@ -541,12 +539,15 @@ if ($files_count>0 || $folders_count>0)
 		));
 	}
 
-	if ($files_count>0)
+	if ($files_count > 0)
 	{
 		$thumbspagination = ($opt == 'thumbs') ? '&opt=thumbs' : '';
 		$totalitems = $files_count;
-		$pagenav = cot_pagenav('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination, $d,
-			$totalitems, $cfg['pfs']['maxpfsperpage']);
+
+		$pagnavParams = 'f='.$f;
+		if(!empty($more)) $pagnavParams .= '&'.$more;
+		$pagnavParams .= $thumbspagination;
+		$pagenav = cot_pagenav('pfs', $pagnavParams, $d, $totalitems, $cfg['pfs']['maxpfsperpage']);
 
 		$filesinfolder .= ($f>0) ? $L['pfs_filesinthisfolder'] : $L['pfs_filesintheroot'];
 
@@ -659,7 +660,8 @@ if ($standalone)
 
 	cot_sendheaders();
 
-	cot_rc_output();
+	$html = Resources::render();
+	if($html) $out['head_head'] = $html.$out['head_head'];
 
 	$t->assign(array(
 		'PFS_HEAD' => $out['head_head'],

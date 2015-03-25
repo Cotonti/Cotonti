@@ -4,10 +4,8 @@
  * User Registration Script
  *
  * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -231,16 +229,15 @@ foreach($cot_extrafields[$db_users] as $exfld)
 	));
 }
 
-// Error and message handling
-cot_display_messages($t);
-
-
 /* === Hook === */
 foreach (cot_getextplugins('users.register.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
+
+// Error and message handling
+cot_display_messages($t);
 
 $t->parse('MAIN');
 $t->out('MAIN');

@@ -2,11 +2,9 @@
 /**
  * English Language File for Content Internationalization Plugin
  *
- * @package i18n
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package I18n
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -20,6 +18,7 @@ $L['cfg_locales_hint'] = 'Each locale on new line, format: locale_code|Locale ti
 $L['cfg_omitmain'] = 'Omit language parameter in URLs if pointing to main language';
 $L['cfg_rewrite'] = 'Enable URL overwrite for language parameter';
 $L['cfg_rewrite_hint'] = 'Requires manual .htaccess update';
+$L['cfg_cookie'] = 'Remember language selection in cookie';
 
 $L['info_desc'] = 'Localization tool for pages, categories, tags, etc. enabling multilanguage support';
 

@@ -11,11 +11,9 @@ Hooks=editor
  * because CKEditor uses dynamic AJAX component loading and
  * does not support consolidation.
  *
- * @package ckeditor
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2010-2014
- * @license BSD
+ * @package CKEditor
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -75,4 +73,4 @@ if ($ckeditor_css_to_load && is_array($ckeditor_css_to_load)) {
 	}
 	if (sizeof($ckeditor_css_to_load)) $ckeditor_css_connector = "CKEDITOR.config.contentsCss = ['".implode("','", $ckeditor_css_to_load)."'];";
 }
-cot_rc_embed_footer("CKEDITOR.timestamp = $ckeditor_timestamp;".$ckeditor_css_connector);
+cot_rc_embed_footer("CKEDITOR.timestamp = $ckeditor_timestamp; ".$ckeditor_css_connector);

@@ -100,25 +100,22 @@
 	<div class="block">
 		<h3>{PHP.L.Options}:</h3>
 		<div class="button-toolbar">
-<!-- IF !{PHP.isinstalled} AND {PHP.dependencies_satisfied} -->
-
-					<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_INSTALL_URL}" class="ajax button special large">{PHP.L.adm_opt_install}</a>
-<!-- ENDIF -->
-<!-- IF {PHP.isinstalled} -->
+		<!-- IF !{PHP.isinstalled} AND {PHP.dependencies_satisfied} -->
+		<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_INSTALL_URL}" class="button special large">{PHP.L.adm_opt_install}</a>
+		<!-- ENDIF -->
+		<!-- IF {PHP.isinstalled} -->
 			<!-- IF {PHP.exists} -->
-
-					<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_UPDATE_URL}" class="ajax button special large">{PHP.L.adm_opt_update}</a>
+			<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_UPDATE_URL}" class="button special large">{PHP.L.adm_opt_update}</a>
 			<!-- ENDIF -->
-					<a title="{PHP.L.adm_opt_uninstall_explain}" href="{ADMIN_EXTENSIONS_UNINSTALL_URL}" class="ajax button large">{PHP.L.adm_opt_uninstall}</a>
-					<a title="{PHP.L.adm_opt_pauseall_explain}" href="{ADMIN_EXTENSIONS_PAUSE_URL}" class="ajax button large">{PHP.L.adm_opt_pauseall}</a>
+
+			<a title="{PHP.L.adm_opt_uninstall_explain}" href="{ADMIN_EXTENSIONS_UNINSTALL_URL}" class="ajax button large">{PHP.L.adm_opt_uninstall}</a>
+			<a title="{PHP.L.adm_opt_pauseall_explain}" href="{ADMIN_EXTENSIONS_PAUSE_URL}" class="button large">{PHP.L.adm_opt_pauseall}</a>
 
 			<!-- IF {PHP.exists} -->
-
-					<a title="{PHP.L.adm_opt_unpauseall_explain}" href="{ADMIN_EXTENSIONS_UNPAUSE_URL}" class="ajax button large">{PHP.L.adm_opt_unpauseall}</a>
-
+			<a title="{PHP.L.adm_opt_unpauseall_explain}" href="{ADMIN_EXTENSIONS_UNPAUSE_URL}" class="button large">{PHP.L.adm_opt_unpauseall}</a>
 			<!-- ENDIF -->
-<!-- ENDIF -->
-</div>
+		<!-- ENDIF -->
+		</div>
 	</div>
 	<div class="block">
 		<h3>{PHP.L.Parts}:</h3>
@@ -132,13 +129,16 @@
 				<td class="coltop width15">{PHP.L.Status}</td>
 				<td class="coltop width15">{PHP.L.Action}</td>
 			</tr>
-<!-- BEGIN: ROW_ERROR_PART -->
+			<!-- BEGIN: ROW_ERROR_PART -->
 			<tr>
-				<td colspan="3">{ADMIN_EXTENSIONS_DETAILS_ROW_X}</td>
-				<td colspan="4">{ADMIN_EXTENSIONS_DETAILS_ROW_ERROR}</td>
+				<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_I_1}</td>
+				<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_PART}</td>
+				<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_FILE}</td>
+				<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS}</td>
+				<td colspan="3">{ADMIN_EXTENSIONS_DETAILS_ROW_ERROR}</td>
 			</tr>
-<!-- END: ROW_ERROR_PART -->
-<!-- BEGIN: ROW_PART -->
+			<!-- END: ROW_ERROR_PART -->
+			<!-- BEGIN: ROW_PART -->
 			<tr>
 				<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_I_1}</td>
 				<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_PART}</td>
@@ -147,18 +147,18 @@
 				<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_ORDER}</td>
 				<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_STATUS}</td>
 				<td class="centerall">
-<!-- BEGIN: ROW_PART_NOTINSTALLED -->
+					<!-- BEGIN: ROW_PART_NOTINSTALLED -->
 					&ndash;
-<!-- END: ROW_PART_NOTINSTALLED -->
-<!-- BEGIN: ROW_PART_PAUSE -->
+					<!-- END: ROW_PART_NOTINSTALLED -->
+					<!-- BEGIN: ROW_PART_PAUSE -->
 					<a href="{ADMIN_EXTENSIONS_DETAILS_ROW_PAUSEPART_URL}" class="ajax button">{PHP.L.adm_opt_pause}</a>
-<!-- END: ROW_PART_PAUSE -->
-<!-- BEGIN: ROW_PART_UNPAUSE -->
+					<!-- END: ROW_PART_PAUSE -->
+					<!-- BEGIN: ROW_PART_UNPAUSE -->
 					<a href="{ADMIN_EXTENSIONS_DETAILS_ROW_UNPAUSEPART_URL}" class="ajax button">{PHP.L.adm_opt_unpause}</a>
-<!-- END: ROW_PART_UNPAUSE -->
+					<!-- END: ROW_PART_UNPAUSE -->
 				</td>
 			</tr>
-<!-- END: ROW_PART -->
+			<!-- END: ROW_PART -->
 		</table>
 	</div>
 	<div class="block">

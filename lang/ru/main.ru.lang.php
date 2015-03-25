@@ -3,10 +3,8 @@
  * Russian Language File (main.lang.php)
  *
  * @package Cotonti
- * @version 0.9.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -135,7 +133,7 @@ $L['Ipsearch'] = 'Поиск по IP';
 $L['IRC'] = 'IRC';
 $L['Item'] = 'Элемент';
 $L['Items'] = 'Элементы';
-$L['JustNow'] = 'Just now';
+$L['JustNow'] = 'Только что';
 $L['kb'] = 'Кб';
 $L['Key'] = 'Код';
 $L['Keywords'] = 'Ключевые слова';
@@ -144,7 +142,7 @@ $L['Languages'] = 'Языки';
 $L['Lastlogged'] = 'Последняя авторизация';
 $L['Lastpost'] = 'Последнее сообщение';
 $L['Left'] = 'По левому краю';
-$L['LessThan'] = 'Less than';
+$L['LessThan'] = 'Меньше чем';
 $L['Level'] = 'Уровень';
 $L['Levels'] = 'Уровни';
 $L['Link'] = 'Ссылка';
@@ -259,7 +257,9 @@ $L['Resynced'] = 'Синхронизировано';
 $L['Right'] = 'По правому краю';
 $L['Rights'] = 'Права';
 $L['RSS_Feeds'] = 'RSS каналы';
+$L['Save'] = 'Сохранить';
 $L['Saveasdraft'] = 'Сохранить черновик';
+$L['Saved'] = 'Сохранено';
 $L['Scheme'] = 'Цветовая схема';
 $L['Schemes'] = 'Цветовые схемы';
 $L['Search'] = 'Поиск';

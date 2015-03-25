@@ -9,7 +9,7 @@
 				<!-- IF {PHP.cfg.plugin.contact.map} -->
 				<p>{PHP.cfg.plugin.contact.map}</p>
 				<!-- ENDIF -->
-					{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+					{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 <!-- BEGIN: FORM -->
 				<form action="{CONTACT_FORM_SEND}" method="post" name="contact_form" enctype="multipart/form-data">
 					<table class="flat">

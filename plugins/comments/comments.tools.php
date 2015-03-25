@@ -8,11 +8,9 @@ Hooks=tools
 /**
  * Administration panel - Manager of comments
  *
- * @package comments
- * @version 0.7.0
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @package Comments
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
@@ -26,7 +24,7 @@ $t = new XTemplate(cot_tplfile('comments.tools', 'plug', true));
 
 $adminhelp = $L['plu_help_comments'];
 $adminsubtitle = $L['comments_comments'];
-
+$maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 $admin_comments_join_fields = '';

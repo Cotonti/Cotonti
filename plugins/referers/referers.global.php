@@ -9,9 +9,8 @@ Hooks=global
  * Referers
  *
  * @package Referers
- * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2014
- * @license BSD
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -22,10 +21,11 @@ $sys['referer'] = mb_substr($_SERVER['HTTP_REFERER'], 0, 255);
 
 if (!empty($sys['referer'])
 	&& mb_stripos($sys['referer'], $cfg['mainurl']) === false
-	&& mb_stripos($sys['referer'], $cfg['hostip']) === false
+	&& (empty($cfg['hostip']) || mb_stripos($sys['referer'], $cfg['hostip']) === false)
 	&& mb_stripos($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl'])) === false
 	&& mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) === false)
 {
+
 	$db->query("INSERT INTO $db_referers
 				(ref_url, ref_count, ref_date)
 			VALUES

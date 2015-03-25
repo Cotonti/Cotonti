@@ -11,7 +11,7 @@ RewriteEngine On
 RewriteBase "/"
 
 # Language selector
-RewriteRule ^(en|ru|de|nl)/(.*) $2?l=$1 [QSA,NC,NE]
+RewriteRule ^(en|ru|de|nl|ua)/(.*) $2?l=$1 [QSA,NC,NE]
 
 # Sitemap shortcut
 RewriteRule ^sitemap\.xml$ index.php?r=sitemap [L]

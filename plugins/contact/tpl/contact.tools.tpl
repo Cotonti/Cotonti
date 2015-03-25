@@ -2,7 +2,7 @@
 
 	<h2 class="message"><a href="{PHP|cot_url('admin','m=other&amp;p=contact')}">{PHP.L.contact_title}</a></h2>
 
-	{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+	{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 
 	<table class="cells">
 		<tr>
@@ -26,7 +26,8 @@
 	</table>
 	<p class="paging">{CONTACT_PREV}{CONTACT_PAGINATION}{CONTACT_NEXT}</p>
 
-<!-- BEGIN: VIEW -->
+	<!-- BEGIN: VIEW -->
+	<a name="view"></a>
 	<h2 class="users">{PHP.L.contact_view} #{CONTACT_ID} (<!-- IF {CONTACT_SUBJECT} -->{CONTACT_SUBJECT}<!-- ELSE -->{PHP.L.contact_nosubject}<!-- ENDIF -->)</h2>
 	<form action="{CONTACT_FORM_SEND}" method="post" name="contact_form">
 		<table class="cells">
@@ -69,6 +70,6 @@
 			</tr>
 		</table>
 	 </form>
-<!-- END: VIEW -->
+	<!-- END: VIEW -->
 
 <!-- END: MAIN -->
