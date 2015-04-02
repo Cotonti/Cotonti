@@ -315,17 +315,16 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 					$fname = str_replace('__', '_', $fname);
 					$fname = (empty($fname)) ? cot_unique() : $fname;
 
-					//$fname .= (file_exists("{$cfg['extrafield_files_dir']}/$fname.$ext") && $oldvalue != $fname . '.' . $ext) ? date("YmjGis") : '';
 					// Generate unique file name. Old file - must be removed any way
-					if(file_exists("{$cfg['extrafield_files_dir']}/$fname.$ext")){
-						$fname = $inputname.'_'.date("YmjGis").'_'.$fname;
-					}
-
-					$fname .= '.' . $ext;
-
 					$extrafield['field_params'] = (!empty($extrafield['field_params'])) ? $extrafield['field_params'] : $cfg['extrafield_files_dir'];
 					$extrafield['field_params'] .= (mb_substr($extrafield['field_params'], -1) == '/') ? '' : '/';
 
+					if(file_exists("{$extrafield['field_params']}$fname.$ext")){
+						$fname = date("YmjGis").'_'.$fname;
+					}
+
+					$fname .= '.' . $ext;
+					
 					$file['old'] = (!empty($oldvalue) && ($import['delete'] || $import['tmp_name'])) ? $extrafield['field_params'].$oldvalue : '';
 					$file['field'] = $extrafield['field_name'];
 					$file['tmp'] = (!$import['delete']) ? $import['tmp_name'] : '';
