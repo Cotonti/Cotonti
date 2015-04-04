@@ -320,7 +320,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 					$extrafield['field_params'] .= (mb_substr($extrafield['field_params'], -1) == '/') ? '' : '/';
 
 					if(file_exists("{$extrafield['field_params']}$fname.$ext")){
-						$fname = date("YmjGis").'_'.$fname;
+						$fname = $inputname.'_'.date("YmjGis").'_'.$fname;
 					}
 
 					$fname .= '.' . $ext;
