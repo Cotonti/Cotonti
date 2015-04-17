@@ -379,10 +379,14 @@ function cot_selectbox_timezone($chosen, $name, $add_gmt = true, $dst = false, $
  * @param string $subcat Show only subcats of selected category
  * @param bool $hideprivate Hide private categories
  * @param bool $is_module TRUE for modules, FALSE for plugins
+ * @param bool $add_empty Allow empty choice
+ * @param mixed $attrs Additional attributes as an associative array or a string
+ * @param string $custom_rc Custom resource string name
  * @return string
  * @global CotDB $db
  */
-function cot_selectbox_structure($extension, $check, $name, $subcat = '', $hideprivate = true, $is_module = true)
+function cot_selectbox_structure($extension, $check, $name, $subcat = '', $hideprivate = true, $is_module = true,
+                                 $add_empty = false, $attrs = '', $custom_rc = '')
 {
 	global $structure;
 
@@ -404,7 +408,7 @@ function cot_selectbox_structure($extension, $check, $name, $subcat = '', $hidep
 			$result_array[$i] = $x['tpath'];
 		}
 	}
-	$result = cot_selectbox($check, $name, array_keys($result_array), array_values($result_array), false);
+	$result = cot_selectbox($check, $name, array_keys($result_array), array_values($result_array), $add_empty, $attrs, $custom_rc);
 
 	return($result);
 }
