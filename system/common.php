@@ -91,7 +91,7 @@ cot_unregister_globals();
 /* =========== Early page cache ==========*/
 if ($cfg['cache'] && !$cfg['devmode'])
 {
-	require_once $cfg['system_dir'].'/cache.php';
+	require_once $cfg['custom_cache'] ? $cfg['custom_cache'] : $cfg['system_dir'].'/cache.php';
 	$cache = new Cache();
 	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$sys['site_id']]) && empty($_SESSION[$sys['site_id']]) && !defined('COT_AUTH') && !defined('COT_ADMIN') && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
 	{
