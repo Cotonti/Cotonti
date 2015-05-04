@@ -3315,22 +3315,8 @@ function cot_schemefile()
 	}
 
 	$out['notices_array'][] = $L['com_schemefail'];
-	if (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaultscheme']}.css"))
-	{
-		$usr['theme'] = $cfg['defaulttheme'];
-		$usr['scheme'] = $cfg['defaultscheme'];
-		return "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaultscheme']}.css";
-	}
-	elseif (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/css/{$cfg['defaultscheme']}.css"))
-	{
-		$usr['theme'] = $cfg['defaulttheme'];
-		$usr['scheme'] = $cfg['defaultscheme'];
-		return "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/css/{$cfg['defaultscheme']}.css";
-	}
-	else
-	{
-		return false;
-	}
+	return false;
+
 }
 
 /**
