@@ -1689,7 +1689,7 @@ class Cotpl_var
 		else
 		{
 			$val = $tpl->vars[$this->name];
-			if ($this->keys && is_array($val))
+			if ($this->keys && (is_array($val) || is_object($val)))
 			{
 				$var =& $tpl->vars[$this->name];
 			}
@@ -1791,7 +1791,7 @@ function cotpl_callback_replace(&$arg, $i, $val)
 {
 	if (mb_strpos($arg, '$this') !== FALSE)
 	{
-		if (is_array($val))
+		if (is_array($val) || is_object($val))
 		{
 			$arg = $val;
 		}
