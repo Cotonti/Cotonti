@@ -3274,12 +3274,10 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 function cot_schemefile()
 {
 	global $usr, $cfg, $out;
-
 	if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['scheme']}.css"))
 	{
 		return "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['scheme']}.css";
 	}
-
 	if (is_dir("{$cfg['themes_dir']}/{$usr['theme']}/css/"))
 	{
 		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/css/{$usr['scheme']}.css"))
@@ -3293,7 +3291,6 @@ function cot_schemefile()
 			return "{$cfg['themes_dir']}/{$usr['theme']}/css/{$cfg['defaultscheme']}.css";
 		}
 	}
-
 	if (is_dir("{$cfg['themes_dir']}/{$usr['theme']}"))
 	{
 		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$cfg['defaultscheme']}.css"))
@@ -3315,7 +3312,6 @@ function cot_schemefile()
 			return "{$cfg['themes_dir']}/{$usr['theme']}/style.css";
 		}
 	}
-
 	$out['notices_array'][] = $L['com_schemefail'];
 	if (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaultscheme']}.css"))
 	{
@@ -3329,10 +3325,7 @@ function cot_schemefile()
 		$usr['scheme'] = $cfg['defaultscheme'];
 		return "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/css/{$cfg['defaultscheme']}.css";
 	}
-	else
-	{
-		return false;
-	}
+	return false;
 }
 
 /**
