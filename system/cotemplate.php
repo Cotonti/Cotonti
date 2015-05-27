@@ -164,6 +164,10 @@ class XTemplate
 		{
 			$val_disp = (string) $value;
 		}
+		elseif(is_object($value))
+		{
+			$val_disp = get_class ($value). ' ' . json_encode( (array)$value );;
+		}
 		else
 		{
 			if (!is_string($value))
