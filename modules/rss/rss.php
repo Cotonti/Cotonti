@@ -292,27 +292,18 @@ function cot_parse_page_text($pag_text, $pag_pageurl, $pag_parser)
 	global $cfg;
 
 	$pag_text = cot_parse($pag_text, $pag_parser !== 'none', $pag_parser);
-	$readmore = mb_strpos($pag_text, "<!--more-->");
-	if ($readmore > 0)
-	{
-		$pag_text = mb_substr($pag_text, 0, $readmore) . ' ';
-		$pag_text .= cot_rc('list_more', array('page_url' => $pag_pageurl));
+    $text_cut = cot_cut_more($pag_text);
+    $cutted = (mb_strlen($pag_text) > mb_strlen($text_cut)) ? true : false;
+
+    if($cutted) {
+        $text_cut .= cot_rc('list_more', array('page_url' => $pag_pageurl));
+    }
+
+	if ((int)$cfg['rss']['rss_pagemaxsymbols'] > 0 ) {
+        $text_cut = cot_string_truncate($text_cut, $cfg['rss']['rss_pagemaxsymbols'], true, false, '...');
 	}
 
-	$newpage = mb_strpos($pag_text, '[newpage]');
-
-	if ($newpage !== false)
-	{
-		$pag_text = mb_substr($pag_text, 0, $newpage);
-	}
-
-	$pag_text = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $pag_text);
-	$text = $pag_text;
-	if ((int)$cfg['rss']['rss_pagemaxsymbols'] > 0)
-	{
-		$text = cot_string_truncate($text, $cfg['rss']['rss_pagemaxsymbols']) . '...';
-	}
-	return $text;
+	return $text_cut;
 }
 
 function cot_parse_post_text($post_text)
@@ -323,7 +314,7 @@ function cot_parse_post_text($post_text)
 
 	if ((int)$cfg['rss']['rss_postmaxsymbols'] > 0)
 	{
-		$post_text = cot_string_truncate($post_text, $cfg['rss']['rss_postmaxsymbols']) . '...';
+		$post_text = cot_string_truncate($post_text, $cfg['rss']['rss_postmaxsymbols'], true, false, '...');
 	}
 	return $post_text;
 }

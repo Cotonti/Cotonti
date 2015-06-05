@@ -230,4 +230,3 @@ cot_display_messages($tt);
 $tt->parse('MAIN');
 $adminmain = $tt->text('MAIN');
 
-?>
