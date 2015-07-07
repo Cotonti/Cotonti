@@ -147,7 +147,7 @@ function ajaxPageLoad(hash) {
 	var m = hash.match(/^get(-.*?)?;(.*)$/);
 	if (m) {
 		// ajax bookmark
-		var url = m[2].indexOf(';') > 0 ? m[2].replace(';', '?') : ajaxCurrentBase + '?' + m[2];
+        var url = m[2].indexOf(';') > 0 ? m[2].replace(';', '?') : ajaxCurrentBase + '?' + decodeURIComponent(m[2]);
 		ajaxUsed = true;
 		return ajaxSend({
 			method: 'GET',
