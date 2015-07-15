@@ -65,7 +65,8 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 			while ($row1 = $sql1->fetch())
 			{
 				$counter++;
-				$t->assign('EDIT_POLL_OPTION_TEXT', cot_inputbox('text', 'poll_option[id' . $row1['po_id'] . ']', htmlspecialchars($row1['po_text']), 'size="40" maxlength="128"'));
+				$t->assign('EDIT_POLL_OPTION_TEXT', cot_inputbox('text', 'poll_option[id' . $row1['po_id'] . ']', $row1['po_text'],
+                    'size="40" maxlength="128"'));
 				$t->parse($block . ".OPTIONS");
 			}
 			$sql1->closeCursor();

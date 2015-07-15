@@ -128,7 +128,6 @@ foreach ($sql_polls->fetchAll() as $row)
 		'ADMIN_POLLS_ROW_POLL_TYPE' => $variants[htmlspecialchars($row['poll_type'])][0],
 		'ADMIN_POLLS_ROW_POLL_URL' => cot_url('admin', 'm=polls'.$poll_filter.'&n=options&d='.$durl.'&id='.$row['poll_id']),
 		'ADMIN_POLLS_ROW_POLL_TEXT' => htmlspecialchars($row['poll_text']),
-		'ADMIN_POLLS_ROW_POLL_URL_LCK' => cot_url('admin', 'm=polls'.$poll_filter.'&a=lock&id='.$id.'&'.cot_xg()),
 		'ADMIN_POLLS_ROW_POLL_TOTALVOTES' => $totalvotes,
 		'ADMIN_POLLS_ROW_POLL_LOCKED' => ($row['poll_state']) ? '[-] ' : '',
 		'ADMIN_POLLS_ROW_POLL_URL_DEL' => cot_url('admin', 'm=polls'.$poll_filter.'&a=delete&id='.$id.'&'.cot_xg()),
