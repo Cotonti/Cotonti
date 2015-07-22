@@ -317,7 +317,7 @@ class Resources
 
                     $code = '';
                     $modified = false;
-                    $fileTime = filemtime($target_path);
+                    $fileTime = 0;
 
                     if (!file_exists($target_path)) {
                         // Just compile a new cache file
@@ -325,6 +325,8 @@ class Resources
                         $modified = true;
 
                     } else {
+                        $fileTime = filemtime($target_path);
+
                         // Load the list of files already cached
                         $file_list = unserialize(file_get_contents("$target_path.idx"));
 
