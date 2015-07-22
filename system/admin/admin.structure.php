@@ -108,16 +108,18 @@ else
 	{
 		$adminhelp = $L['adm_help_structure'];
 	}
-	if ($a == 'reset' && !empty($_POST))
+
+	if ($a == 'reset' && !empty($al))
 	{
-		cot_config_reset($n, $v, $is_module ? 'module' : 'plug', $structure_code);
+		cot_config_reset($n, $v, $is_module, $al);
 	}
 	if ($a == 'update' && !empty($_POST))
 	{
 		$editconfig = cot_import('editconfig', 'P', 'TXT');
 		if (!empty($editconfig))
 		{
-			$optionslist = cot_config_list($is_module ? 'module' : 'plug', $n, $editconfig);
+            $owner = $is_module ? 'module' : 'plug';
+			$optionslist = cot_config_list($owner, $n, $editconfig);
 			foreach ($optionslist as $key => $val)
 			{
 				$data = cot_import($key, 'P', sizeof($cot_import_filters[$key]) ? $key : 'NOC');
@@ -131,21 +133,20 @@ else
 					}
 					else
 					{
-						$db->update($db_config, array('config_value' => $data), "config_name = ? AND config_owner = ?
-						AND config_cat = ?  AND config_subcat = ?)", array($key, $o, $p, $editconfig));
+						$db->update($db_config, array('config_value' => $data),
+                            "config_name = ? AND config_owner = ? AND config_cat = ?  AND config_subcat = ?",
+                            array($key, $owner, $n, $editconfig));
 					}
 				}
+
 			}
 
-			if ($o == 'module' || $o == 'plug')
-			{
-				$dir = $o == 'module' ? $cfg['modules_dir'] : $cfg['plugins_dir'];
-				// Run configure extension part if present
-				if (file_exists($dir."/".$p."/setup/".$p.".configure.php"))
-				{
-					include $dir."/".$p."/setup/".$p.".configure.php";
-				}
-			}
+            $dir = $owner == 'module' ? $cfg['modules_dir'] : $cfg['plugins_dir'];
+            // Run configure extension part if present
+            if (file_exists($dir."/".$n."/setup/".$n.".configure.php"))
+            {
+                include $dir."/".$n."/setup/".$n.".configure.php";
+            }
 		}
 
 		$rstructurecode = cot_import('rstructurecode', 'P', 'ARR');
