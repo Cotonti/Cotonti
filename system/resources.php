@@ -406,7 +406,7 @@ class Resources
                         $fileTime = filemtime($target_path);
                     }
 
-                    $rc_url = "rc.php?rc=$scope.$theme.$type&nc=".$fileTime;
+                    $rc_url = "rc.php?rc=$scope.$theme.$type&amp;nc=".$fileTime;
 
                     if (empty($cot_rc_html[$theme][$scope])) $cot_rc_html[$theme][$scope] = '';
                     $cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $rc_url))."\n";
