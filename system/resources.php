@@ -21,7 +21,7 @@ class Resources
 
         '@bootstrap.js' => 'lib/bootstrap/js/bootstrap.min.js',
         '@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
-        '@bootstrapTheme.css' => '',    // lib/bootstrap/css/bootstrap-theme.min.css
+        '@bootstrapTheme.css' => null,    // Undefined value. You can set to: lib/bootstrap/css/bootstrap-theme.min.css
     );
 
     // ==== predefined alias constants  ====
@@ -258,7 +258,7 @@ class Resources
                         } else {
                             if (mb_strpos($path, '@') === 0) {
                                 $path = static::$alias[$path];
-                                if ($path == '') continue;
+                                if (empty($path)) continue;
                             }
 
                             $ret .= cot_rc("code_rc_{$type}_file", array('url' => $path)) . "\n";
