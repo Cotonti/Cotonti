@@ -4574,7 +4574,7 @@ function cot_rc_add_standard()
 
 	if ($cfg['jquery'] && !$cfg['jquery_cdn'])
 	{
-		Resources::addFile(Resources::jQuery);
+		Resources::addFile(Resources::jQuery, 'js', 30);
 	}
 
 	if ($cfg['jquery'])
