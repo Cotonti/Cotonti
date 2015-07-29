@@ -130,6 +130,8 @@ elseif($n == 'edit')
 
 			cot_message('Updated');
 		}
+        cot_redirect(cot_url('admin', array('m' => 'users', 'n'=>'edit', 'g'=>$g), '', true));
+
 	}
 	elseif($a == 'delete' && $g > 5)
 	{
