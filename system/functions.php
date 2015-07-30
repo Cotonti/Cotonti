@@ -2211,7 +2211,10 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 		}
 		/* ===== */
 
-		$cacheitem && $user_cache[$user_data['user_id']] = $temp_array;
+		if(is_array($user_data) && isset($user_data['user_id'])) {
+			$cacheitem && $user_cache[$user_data['user_id']] = $temp_array;
+		}
+
 	}
 	foreach ($temp_array as $key => $val)
 	{
