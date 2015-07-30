@@ -73,7 +73,6 @@ switch ($n)
 			cot_config_reset($p, $v, $o, '');
 			$optionslist = cot_config_list($o, $p, '');
 
-			$optionslist[$v]['config_name'] = $optionslist[$v]['config_defaul'];
 			/* === Hook  === */
 			foreach (cot_getextplugins('admin.config.edit.reset.done') as $pl)
 			{
@@ -81,6 +80,8 @@ switch ($n)
 			}
 			/* ===== */
 			$cache && $cache->clear();
+
+            cot_redirect(cot_url('admin', array('m'=>'config', 'n'=>'edit', 'o'=>$o, 'p'=>$p), '', true));
 		}
 
 

@@ -27,9 +27,7 @@
 						<div class="adminconfigmore">{ADMIN_CONFIG_ROW_CONFIG_MORE}</div>
 					</td>
 					<td class="centerall">
-						<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="ajax button">
-							{PHP.L.Reset}
-						</a>
+						<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="button">{PHP.L.Reset}</a>
 					</td>
 				</tr>
 <!-- END: ADMIN_CONFIG_ROW_OPTION -->
