@@ -124,8 +124,8 @@ function cot_safename($basename, $underscore = true, $postfix = '')
 		$fname = strtr($fname, $cot_translit);
 	}
 	if($underscore) $fname = str_replace(' ', '_', $fname);
-	$fname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
 	$fname = str_replace('..', '.', $fname);
-	if(empty($fname)) $fname = cot_unique();
+	$safename = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
+	if(empty($safename) || $safename != $fname) $fname = $safename.cot_unique();
 	return $fname . $postfix . '.' . mb_strtolower($ext);
 }
