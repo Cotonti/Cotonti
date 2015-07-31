@@ -5,7 +5,7 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('configuration');
 
 /**
- * Get confuration for user image types
+ * Get configuration for user image types
  *
  * @return array
  * @global Cache $cache

@@ -33,11 +33,10 @@ if($_FILES)
 			$fcheck = cot_file_check($file['tmp_name'], $file['name'], $file_ext);
 			if(in_array($file_ext, $gd_supported) && $fcheck == 1)
 			{
-			    $file['name']= cot_safename($file['name'], true);
-				$filename_full = $usr['id'].'-'.strtolower($file['name']);
-				$filepath = ($code == 'avatar') ?
-					$cfg['avatars_dir'].'/'.$filename_full:
-					$cfg['photos_dir'].'/'.$filename_full;
+				$file['name']= cot_safename($file['name'], true);
+				$path = ($code == 'avatar') ? $cfg['avatars_dir'] : $cfg['photos_dir'];
+				$filename_full = $usr['id'].'-'.strtolower(($code != 'avatar') ? $code.'-'.$file['name'] : $file['name']);
+				$filepath = $path.'/'.$filename_full;
 
 				if(file_exists($filepath))
 				{
