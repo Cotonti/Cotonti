@@ -53,6 +53,14 @@ if($_FILES)
 					include $pl;
 				}
 				/* ===== */
+				$sql = $db->query("SELECT user_".$db->prep($code)." FROM $db_users WHERE user_id=".$usr['id']);
+				if($oldimage = $sql->fetchColumn())
+				{
+					if (file_exists($oldimage))
+					{
+						unlink($oldimage);
+					}
+				}
 
 				$sql = $db->update($db_users, array("user_".$code => $filepath), "user_id='".$usr['id']."'");
 			}
