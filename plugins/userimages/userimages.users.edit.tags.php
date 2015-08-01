@@ -16,9 +16,6 @@ Hooks=users.edit.tags
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('userimages', 'plug');
-$userimages = cot_userimages_config_get();
+require_once cot_incfile('userimages', 'plug', 'resources');
 
-foreach($userimages as $code => $settings)
-{
-	$t->assign('USERS_EDIT_'.strtoupper($code), cot_inputbox('text', "ruser$code", $urr["user_$code"], array('size' => 32, 'maxlength' => 255)));
-}
+$t->assign(cot_userimages_tags($urr, 'USERS_EDIT_'));

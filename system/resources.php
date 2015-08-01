@@ -21,7 +21,7 @@ class Resources
 
         '@bootstrap.js' => 'lib/bootstrap/js/bootstrap.min.js',
         '@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
-        '@bootstrapTheme.css' => '',    // lib/bootstrap/css/bootstrap-theme.min.css
+        '@bootstrapTheme.css' => null,    // Undefined value. You can set to: lib/bootstrap/css/bootstrap-theme.min.css
     );
 
     // ==== predefined alias constants  ====
@@ -258,7 +258,7 @@ class Resources
                         } else {
                             if (mb_strpos($path, '@') === 0) {
                                 $path = static::$alias[$path];
-                                if ($path == '') continue;
+                                if (empty($path)) continue;
                             }
 
                             $ret .= cot_rc("code_rc_{$type}_file", array('url' => $path)) . "\n";
@@ -317,18 +317,22 @@ class Resources
 
                     $code = '';
                     $modified = false;
+                    $fileTime = 0;
 
                     if (!file_exists($target_path)) {
                         // Just compile a new cache file
                         $file_list = $files;
                         $modified = true;
+
                     } else {
+                        $fileTime = filemtime($target_path);
+
                         // Load the list of files already cached
                         $file_list = unserialize(file_get_contents("$target_path.idx"));
 
                         // Check presense or modification time for each file
                         foreach ($files as $path) {
-                            if (!in_array($path, $file_list) || filemtime($path) >= filemtime($target_path)) {
+                            if (!in_array($path, $file_list) || filemtime($path) >= $fileTime) {
                                 $modified = true;
                                 break;
                             }
@@ -398,9 +402,11 @@ class Resources
                         file_put_contents($target_path, $code);
                         if (cot::$cfg['gzip']) file_put_contents("$target_path.gz", gzencode($code));
                         file_put_contents("$target_path.idx", serialize($files));
+
+                        $fileTime = filemtime($target_path);
                     }
 
-                    $rc_url = "rc.php?rc=$scope.$theme.$type";
+                    $rc_url = "rc.php?rc=$scope.$theme.$type&amp;nc=".$fileTime;
 
                     if (empty($cot_rc_html[$theme][$scope])) $cot_rc_html[$theme][$scope] = '';
                     $cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $rc_url))."\n";

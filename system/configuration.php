@@ -656,7 +656,7 @@ function cot_config_list($owner, $cat, $subcat = "")
 		$keyx = $row['config_name'];
 		$rowx = array();
 
-		if ($row['config_subcat'] == "'__default'")
+		if ($row['config_subcat'] == "__default")
 		{
 			$rowset_default[$keyx] = $row;
 		}

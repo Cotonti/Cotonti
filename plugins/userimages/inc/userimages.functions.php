@@ -5,7 +5,7 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('configuration');
 
 /**
- * Get confuration for user image types
+ * Get configuration for user image types
  *
  * @return array
  * @global Cache $cache
@@ -153,4 +153,138 @@ function cot_userimages_build($src, $code='')
 		return cot_rc("userimg_default_$code");
 	}
 	return '';
+}
+
+/**
+ * Returns UserImages tags for coTemplate
+ *
+ * @param array $user_data User info array
+ * @param string $tag_prefix Prefix for tags
+ * @return array
+ */
+function cot_userimages_tags($user_data, $tag_prefix='')
+{
+	global $m;
+
+	$temp_array = array();
+	$userimages = cot_userimages_config_get();
+	$uid = $user_data['user_id'];
+	$usermode = ($uid != cot::$usr['id']);
+
+	foreach($userimages as $code => $settings)
+	{
+		if (!empty($user_data['user_'.$code]))
+		{
+			$delete_params = 'r=userimages'
+				.'&a=delete'
+				.'&uid='.($usermode ? $uid : '')
+				.'&m='.$m
+				.'&code='.$code
+				.'&'.cot_xg();
+			$userimg_existing = cot_rc('userimg_existing', array(
+				'url_file' => $user_data['user_'.$code],
+				'url_delete' => cot_url('plug', $delete_params)
+			));
+		}
+		else
+		{
+			$userimg_existing = '';
+		}
+		$userimg_selectfile = cot_rc('userimg_selectfile', array(
+			'form_input' => cot_inputbox('file', $usermode ? $code.':'.$uid : $code, '', array('size' => 24))
+		));
+		$userimg_html = cot_rc('userimg_html', array(
+			'code' => $usermode ? $code.' uid_'.$uid: $code,
+			'existing' => $userimg_existing,
+			'selectfile' => $userimg_selectfile
+		));
+
+		$temp_array[$tag_prefix . strtoupper($code)] = $userimg_html;
+		$temp_array[$tag_prefix . strtoupper($code) . '_SELECT'] = $userimg_selectfile;
+	}
+
+	return $temp_array;
+}
+
+/**
+ * Process uploaded user images files for certain User
+ *
+ * @param number $uid User ID for uploads to be attached
+ * @return boolean|number Number of uploaded images or false for incorrect $uid
+ */
+function cot_userimages_process_uploads($uid=null)
+{
+	global $cfg, $usr;
+
+	$files = 0;
+	if ($_FILES)
+	{
+		if (is_null($uid) || empty($uid)) $uid = $usr['id'];
+		if (!is_numeric($uid) || $uid != (int)$uid || $uid < 1) return false;
+
+		if ($uid != $usr['id']) // user edit mode
+		{
+			list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+			if (!$usr['isadmin']) return 0;
+			$usermode = true;
+		}
+
+		@clearstatcache();
+		$userimages = cot_userimages_config_get();
+		foreach ($userimages as $code => $settings)
+		{
+			$file = $_FILES[$usermode ? $code.':'.$uid : $code];
+			if(!$file) continue;
+			if (!empty($file['tmp_name']) && $file['size'] > 0 && is_uploaded_file($file['tmp_name']))
+			{
+				$gd_supported = array('jpg', 'jpeg', 'png', 'gif');
+				$var = explode(".", $file['name']);
+				$file_ext = strtolower(array_pop($var));
+				$fcheck = cot_file_check($file['tmp_name'], $file['name'], $file_ext);
+				if (in_array($file_ext, $gd_supported) && $fcheck == 1)
+				{
+					$file['name'] = cot_safename($file['name'], true);
+					$path = ($code == 'avatar') ? $cfg['avatars_dir'] : $cfg['photos_dir'];
+					$filename_full = $uid . '-' . strtolower(($code != 'avatar') ? $code . '-' . $file['name'] : $file['name']);
+					$filepath = $path . '/' . $filename_full;
+
+					if (file_exists($filepath))
+					{
+						unlink($filepath);
+					}
+
+					move_uploaded_file($file['tmp_name'], $filepath);
+					cot_imageresize($filepath, $filepath, $settings['width'], $settings['height'], $settings['crop'], '', 100);
+					@chmod($filepath, $cfg['file_perms']);
+
+					/* === Hook === */
+					foreach (cot_getextplugins('profile.update.' . $code) as $pl)
+					{
+						include $pl;
+					}
+					/* ===== */
+					$sql = cot::$db->query("SELECT user_" . cot::$db->prep($code) . " FROM ".cot::$db->users." WHERE user_id=" . $uid);
+					if ($oldimage = $sql->fetchColumn())
+					{
+						if (file_exists($oldimage))
+						{
+							unlink($oldimage);
+						}
+					}
+
+					$sql = cot::$db->update(cot::$db->users, array("user_" . $code => $filepath), "user_id='" . $uid . "'");
+					$files++;
+				}
+				elseif ($fcheck == 2)
+				{
+					cot_error(sprintf($L['pfs_filemimemissing'], $file_ext), $code);
+				}
+				else
+				{
+					cot_error(sprintf($L['userimages_' . $code . 'notvalid'], $file_ext), $code);
+				}
+			}
+		}
+	}
+	return $files;
 }
