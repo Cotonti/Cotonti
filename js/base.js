@@ -108,7 +108,10 @@ function ajaxSend(settings) {
 		},
 		success: function(msg) {
 			if (!settings.nonshowloading) $('#loading').remove();
-			if (!settings.nonshowfadein) $('#' + settings.divId).hide().html(msg).fadeIn(500);
+			if (!settings.nonshowfadein) 
+				$('#' + settings.divId).hide().html(msg).fadeIn(500); 
+			else
+				$('#' + settings.divId).html(msg); 
 			for (var i = 0; i < ajaxSuccessHandlers.length; i++) {
 				if(ajaxSuccessHandlers[i].func)
 					ajaxSuccessHandlers[i].func(msg);
@@ -118,7 +121,10 @@ function ajaxSend(settings) {
 		},
 		error: function(msg) {
 			if (!settings.nonshowloading) $('#loading').remove();
-			if (!settings.nonshowfadein) $('#' + settings.divId).hide().html(msg).fadeIn(500);
+			if (!settings.nonshowfadein) 
+				$('#' + settings.divId).hide().html(msg).fadeIn(500);
+			else
+				$('#' + settings.divId).html(msg);
 			if (ajaxErrorHandlers.length > 0) {
 				for (var i = 0; i < ajaxErrorHandlers.length; i++) {
 					if (ajaxErrorHandlers[i].func)
