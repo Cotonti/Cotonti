@@ -4983,7 +4983,7 @@ function cot_unregister_globals()
 /**
  * Returns XSS protection variable for GET URLs
  *
- * @return unknown
+ * @return string
  */
 function cot_xg()
 {
