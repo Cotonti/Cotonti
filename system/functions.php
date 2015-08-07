@@ -2149,6 +2149,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'EMAIL' => cot_build_email($user_data['user_email'], $user_data['user_hideemail']),
 				'THEME' => $user_data['user_theme'],
 				'SCHEME' => $user_data['user_scheme'],
+				'LANG' => $user_data['user_lang'],
 				'GENDER' => ($user_data['user_gender'] == '' || $user_data['user_gender'] == 'U') ? '' : $L['Gender_' . $user_data['user_gender']],
 				'BIRTHDATE' => (is_null($user_data['user_birthdate'])) ? '' : cot_date('date_full', $user_data['user_birthdate']),
 				'BIRTHDATE_STAMP' => (is_null($user_data['user_birthdate'])) ? '' : $user_data['user_birthdate'],

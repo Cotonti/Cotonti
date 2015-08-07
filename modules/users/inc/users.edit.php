@@ -91,9 +91,11 @@ if ($a == 'update')
 	$ruser['user_banexpire'] = cot_import('ruserbanexpire','P','INT');
 	$ruser['user_country'] = cot_import('rusercountry','P','ALP');
 	$ruser['user_text'] = cot_import('rusertext','P','HTM');
+	$rtheme = explode(':', cot_import('rusertheme','P','TXT'));
+	$ruser['user_theme'] = $rtheme[0];
+	$ruser['user_scheme'] = $rtheme[1];
 	$ruser['user_email'] = cot_import('ruseremail','P','TXT');
 	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','INT');
-	$ruser['user_theme'] = cot_import('rusertheme','P','TXT');
 	$ruser['user_lang'] = cot_import('ruserlang','P','ALP');
 	$ruser['user_gender'] = cot_import('rusergender','P','TXT');
 
@@ -287,8 +289,8 @@ $t->assign(array(
 	'USERS_EDIT_NAME' => cot_inputbox('text', 'rusername', $urr['user_name'], array('size' => 32, 'maxlength' => 100) + $protected),
 	'USERS_EDIT_ACTIVE' => $user_form_active,
 	'USERS_EDIT_BANNED' => $user_form_banned,
-	'USERS_EDIT_THEME' => cot_inputbox('text', 'rusertheme', $urr['user_theme'], array('size' => 32, 'maxlength' => 32)),
-	'USERS_EDIT_LANG' => cot_inputbox('text', 'ruserlang', $urr['user_lang'], array('size' => 32, 'maxlength' => 32)),
+	'USERS_EDIT_THEME' => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
+	'USERS_EDIT_LANG' => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	'USERS_EDIT_NEWPASS' => cot_inputbox('password', 'rusernewpass', '', array('size' => 12, 'maxlength' => 32, 'autocomplete' => 'off') + $protected),
 	'USERS_EDIT_MAINGRP' => cot_build_group($urr['user_maingrp']),
 	'USERS_EDIT_GROUPS' => cot_build_groupsms($urr['user_id'], $usr['isadmin'], $urr['user_maingrp']),
