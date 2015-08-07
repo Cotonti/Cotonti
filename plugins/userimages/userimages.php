@@ -45,6 +45,6 @@ switch ($a)
 }
 $redir_param = array(
 	'm'  => (!empty($m)) ? $m : 'profile',
-	'id' => ($uid != $usr['id']) ? $uid : ''
+	'id' => ($m=='edit') ? $uid : ''
 );
 cot_redirect(cot_url('users', $redir_param, '', true));
