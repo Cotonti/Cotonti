@@ -110,6 +110,8 @@ $title_params = array(
 $out['subtitle'] = cot_title('{BOX} ({COUNT}) - {PM}', $title_params);
 $out['head'] .= $R['code_noindex'];
 
+Resources::linkFileFooter(cot::$cfg['modules_dir'].'/pm/js/pm.js');
+
 /* === Title === */
 $totallines = $db->query("SELECT COUNT(*) FROM $db_pm WHERE $sqlfilter")->fetchColumn();
 $elem = ($f == 'sentbox') ? 'pm_touserid' : 'pm_fromuserid';

@@ -169,7 +169,7 @@ function cot_userimages_tags($user_data, $tag_prefix='')
 	$temp_array = array();
 	$userimages = cot_userimages_config_get();
 	$uid = $user_data['user_id'];
-	$usermode = ($uid != cot::$usr['id']);
+	$usermode = $m == 'edit' || ($uid != cot::$usr['id']);
 
 	foreach($userimages as $code => $settings)
 	{
@@ -214,7 +214,7 @@ function cot_userimages_tags($user_data, $tag_prefix='')
  */
 function cot_userimages_process_uploads($uid=null)
 {
-	global $cfg, $usr;
+	global $cfg, $usr, $m;
 
 	$files = 0;
 	if ($_FILES)
@@ -222,7 +222,7 @@ function cot_userimages_process_uploads($uid=null)
 		if (is_null($uid) || empty($uid)) $uid = $usr['id'];
 		if (!is_numeric($uid) || $uid != (int)$uid || $uid < 1) return false;
 
-		if ($uid != $usr['id']) // user edit mode
+		if ($uid != $usr['id'] || $m == 'edit') // user edit mode
 		{
 			list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
 			if (!$usr['isadmin']) return 0;

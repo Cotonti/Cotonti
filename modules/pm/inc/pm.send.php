@@ -300,6 +300,7 @@ $t->assign(array(
 	'PMSEND_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor') . $text_editor_code,
 	'PMSEND_FORM_TOUSER' => cot_textarea('newpmrecipient', $touser, 3, 56, 'class="userinput"'),
+	'PMSEND_FORM_NOT_TO_SENTBOX' => cot_checkbox(false, 'fromstate', cot::$L['pm_notmovetosentbox'], '', '3')
 ));
 
 /* === Hook === */

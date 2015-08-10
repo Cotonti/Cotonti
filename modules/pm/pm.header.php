@@ -38,5 +38,5 @@ if ($usr['id'] > 0)
 
 if ($cfg['pm']['css'] && $env['ext'] == 'pm')
 {
-	cot_rc_link_file($cfg['modules_dir'] . '/pm/tpl/pm.css');
+	Resources::linkFile($cfg['modules_dir'] . '/pm/tpl/pm.css');
 }
