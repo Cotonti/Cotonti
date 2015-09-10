@@ -15,6 +15,8 @@ require_once cot_incfile('forms');
 $id = cot_import('id', 'G', 'INT');
 $l = cot_import('l', 'G', 'ALP');
 
+if (!$id || $id < 1) cot_die_message(404);
+
 /* === Hook === */
 foreach (cot_getextplugins('i18n.page.first') as $pl)
 {
