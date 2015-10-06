@@ -3268,6 +3268,37 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 }
 
 /**
+ * Returns a exists language from HTTP_ACCEPT_LANGUAGE
+ *
+ * @return string
+ */
+function cot_lang_determine()
+{
+	global $cfg;
+	if (($list = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']))) 
+	{
+		if (preg_match_all('/([a-z]{1,8}(?:-[a-z]{1,8})?)(?:;q=([0-9.]+))?/', $list, $list)) 
+		{
+			$language = array_combine($list[1], $list[2]);
+			//
+			foreach ($language as $n => $v)
+			{
+				$language[$n] = $v ? $v : 1;
+			}
+			arsort($language, SORT_NUMERIC);
+			foreach ($language as $n => $v)
+			{
+				if (@file_exists($cfg['lang_dir']."/$n/main.$n.lang.php"))
+				{
+					return $n;
+				}
+			}			
+		}
+	}
+	return 'en';
+}
+
+/**
  * Tries to detect and fetch a user scheme CSS file or returns FALSE on error.
  *
  * @global array $usr User object
