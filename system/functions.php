@@ -413,6 +413,9 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			break;
 	}
 
+	if (is_array($v) && $filter != 'ARR') return null;
+	if (!is_array($v) && $filter == 'ARR') return array();
+
 	if (MQGPC && ($source=='G' || $source=='P' || $source=='C') && $v != NULL && $filter != 'ARR')
 	{
 		$v = stripslashes($v);
