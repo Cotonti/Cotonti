@@ -339,7 +339,7 @@ if (!empty($sq))
 					$tempcat = array_merge(cot_structure_children('forums', $scat), $tempcat);
 				}
 				$tempcat = array_unique($tempcat);
-				$where_and['cat'] = "page_cat IN ('".implode("','", $tempcat)."')";
+				$where_and['cat'] = "t.ft_cat IN ('".implode("','", $tempcat)."')";
 			}
 			else
 			{
