@@ -3128,7 +3128,7 @@ function cot_log($text, $group='def')
 {
 	global $db, $db_logger, $sys, $usr, $_SERVER;
 
-	$db->insert($db_logger, array(
+	$db && $db->insert($db_logger, array(
 		'log_date' => (int)$sys['now'],
 		'log_ip' => $usr['ip'],
 		'log_name' => $usr['name'],
@@ -3275,9 +3275,9 @@ function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
 function cot_lang_determine()
 {
 	global $cfg;
-	if (($list = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']))) 
+	if (($list = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'])))
 	{
-		if (preg_match_all('/([a-z]{1,8}(?:-[a-z]{1,8})?)(?:;q=([0-9.]+))?/', $list, $list)) 
+		if (preg_match_all('/([a-z]{1,8}(?:-[a-z]{1,8})?)(?:;q=([0-9.]+))?/', $list, $list))
 		{
 			$language = array_combine($list[1], $list[2]);
 			//
@@ -3292,7 +3292,7 @@ function cot_lang_determine()
 				{
 					return $n;
 				}
-			}			
+			}
 		}
 	}
 	return 'en';
