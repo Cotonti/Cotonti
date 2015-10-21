@@ -81,8 +81,8 @@ define('COT_ABSOLUTE_URL', $sys['abs_url']);
 if ($cfg['multihost'])
 {
 	$cfg['mainurl'] = mb_substr($sys['abs_url'], 0, -1);
-	session_set_cookie_params(0, $sys['site_uri'], '.'.$sys['domain']);
 }
+session_set_cookie_params(0, $sys['site_uri'], '.'.$sys['domain']);
 
 session_start();
 
