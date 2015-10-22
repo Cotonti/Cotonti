@@ -67,10 +67,9 @@ if ($a == 'update')
 
 		cot_message('Added');
 	}
-	elseif (is_array($_POST['auth']))
+	elseif ($auth = cot_import('auth', 'P', 'ARR'))
 	{
 		$mask = array();
-		$auth = cot_import('auth', 'P', 'ARR');
 
 		$db->update($db_auth, array('auth_rights' => 0), "auth_groupid=$g");
 

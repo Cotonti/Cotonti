@@ -559,7 +559,7 @@ switch ($step)
 		break;
 	case 3:
 		// Settings
-		if ($_POST['step'] != 3 && !cot_check_messages())
+		if (cot_import('step', 'POST', 'INT') != 3 && !cot_check_messages())
 		{
 			$rtheme = $theme;
 			$rscheme = $scheme;

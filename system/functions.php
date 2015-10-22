@@ -5289,14 +5289,15 @@ function cot_uriredir_store()
 {
 	global $sys;
 
+	$m = cot_import('m', 'G', 'ALP');
 	if ($_SERVER['REQUEST_METHOD'] != 'POST' // not form action/POST
 		&& empty($_GET['x']) // not xg, hence not form action/GET and not command from GET
 		&& !defined('COT_MESSAGE') // not message location
 		&& !defined('COT_AUTH') // not login/logout location
 		&&	(!defined('COT_USERS')
-			|| empty($_GET['m'])
-			|| !in_array($_GET['m'], array('auth', 'logout', 'register'))
-	)
+			|| is_null($m)
+			|| !in_array($m, array('auth', 'logout', 'register'))
+		)
 	)
 	{
 		$_SESSION['s_uri_redir'] = $sys['uri_redir'];

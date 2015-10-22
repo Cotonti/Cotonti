@@ -40,7 +40,7 @@ if ($logout)
 		cot_uriredir_apply($cfg['redirbkonlogout']);
 	}
 
-	if(!empty($_COOKIE[$sys['site_id']]))
+	if(cot_import($sys['site_id'], 'COOKIE', 'ALP'))
 	{
 		cot_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 	}
@@ -87,8 +87,8 @@ if ($a == 'check')
 	}
 	/* ===== */
 
-	$rusername = cot_import('rusername','P','TXT', 100, TRUE);
-	$rpassword = cot_import('rpassword','P','HTM', 32, TRUE);
+	$rusername = cot_import('rusername','P','TXT', 100);
+	$rpassword = cot_import('rpassword','P','HTM', 32);
 	$rcookiettl = cot_import('rcookiettl', 'P', 'INT');
 	$rremember = cot_import('rremember', 'P', 'BOL');
 	$token = cot_import('token', 'G', 'ALP');

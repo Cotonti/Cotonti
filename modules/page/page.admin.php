@@ -255,10 +255,10 @@ elseif ($a == 'update_checked')
 {
 	$paction = cot_import('paction', 'P', 'TXT');
 
-	if ($paction == $L['Validate'] && is_array($_POST['s']))
+	$s = cot_import('s', 'P', 'ARR');
+	if ($paction == $L['Validate'] && is_array($s))
 	{
 		cot_check_xp();
-		$s = cot_import('s', 'P', 'ARR');
 
 		$perelik = '';
 		$notfoundet = '';
@@ -310,10 +310,9 @@ elseif ($a == 'update_checked')
 			cot_message($notfoundet.$perelik.' - '.$L['adm_queue_validated']);
 		}
 	}
-	elseif ($paction == $L['Delete'] && is_array($_POST['s']))
+	elseif ($paction == $L['Delete'] && is_array($s))
 	{
 		cot_check_xp();
-		$s = cot_import('s', 'P', 'ARR');
 
 		$perelik = '';
 		$notfoundet = '';

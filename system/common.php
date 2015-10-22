@@ -93,9 +93,10 @@ if ($cfg['cache'] && !$cfg['devmode'])
 {
 	require_once $cfg['custom_cache'] ? $cfg['custom_cache'] : $cfg['system_dir'].'/cache.php';
 	$cache = new Cache();
-	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$sys['site_id']]) && empty($_SESSION[$sys['site_id']]) && !defined('COT_AUTH') && !defined('COT_ADMIN') && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' && !cot_import($sys['site_id'], 'COOKIE', 'ALP') && empty($_SESSION[$sys['site_id']]) && !defined('COT_AUTH') && !defined('COT_ADMIN') && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
 	{
-		$cache_ext = empty($_GET['e']) ? 'index' : preg_replace('#\W#', '', $_GET['e']);
+		$ext = cot_import('e', 'G', 'ALP');
+		$cache_ext = !$ext ? 'index' : preg_replace('#\W#', '', $ext);
 		if ($cfg['cache_' . $cache_ext])
 		{
 			$cache->page->init($cache_ext, $cfg['defaulttheme']);
@@ -198,7 +199,7 @@ $sys['url_redirect'] = 'redirect='.$sys['uri_redir'];
 $redirect = preg_replace('/[^a-zA-Z0-9_=\/]/', '', cot_import('redirect','G','TXT'));
 $out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
-define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' || !empty($_SERVER['X-Requested-With']) && strtolower($_SERVER['X-Requested-With']) == 'xmlhttprequest' || $_GET['_ajax'] == 1);
+define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' || !empty($_SERVER['X-Requested-With']) && strtolower($_SERVER['X-Requested-With']) == 'xmlhttprequest' || cot_import('_ajax', 'G', 'INT') == 1);
 // Other system variables
 $sys['parser'] = $cfg['parser'];
 
@@ -316,9 +317,10 @@ $usr['timezonename'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
-if (!empty($_COOKIE[$sys['site_id']]) || !empty($_SESSION[$sys['site_id']]))
+$csid = cot_import($sys['site_id'], 'COOKIE', 'ALP');
+if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
 {
-	$u = empty($_SESSION[$sys['site_id']]) ? explode(':', base64_decode($_COOKIE[$sys['site_id']])) : explode(':', base64_decode($_SESSION[$sys['site_id']]));
+	$u = empty($_SESSION[$sys['site_id']]) ? explode(':', base64_decode($csid)) : explode(':', base64_decode($_SESSION[$sys['site_id']]));
 	$u_id = (int) cot_import($u[0], 'D', 'INT');
 	$u_sid = $u[1];
 	if ($u_id > 0)

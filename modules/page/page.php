@@ -28,7 +28,9 @@ require_once cot_incfile('page', 'module');
 // Mode choice
 if (!in_array($m, array('add', 'edit')))
 {
-	if (isset($_GET['id']) || isset($_GET['al']))
+	$id = cot_import('id','G','NOC'); // for 404 on bad ID
+	$al = cot_import('al','G','TXT');
+	if (isset($id) || $al)
 	{
 		$m = 'main';
 	}

@@ -134,7 +134,7 @@ function cot_poll_check()
 		cot_poll_delete($poll_id);
 		$poll_id = '';
 	}
-	if (isset($_POST['poll_id']))
+	if (isset($poll_id))
 	{
 		if ($poll_reset && (int) $poll_id > 0)
 		{

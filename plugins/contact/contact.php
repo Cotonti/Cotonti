@@ -53,7 +53,7 @@ $tplfile = cot_import('tpl', 'G', 'TXT');
 $mskin = cot_tplfile(array('contact', $tplfile), 'plug');
 $t = new XTemplate($mskin);
 
-if (isset($_POST['rtext']))
+if (isset(cot_import('rtext', 'P', 'TXT')))
 {
 	//Import the variables
 	$rcontact['contact_text'] = cot_import('rtext', 'P', 'TXT');

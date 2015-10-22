@@ -31,7 +31,7 @@ if (count($i18n_locales) > 0)
 			$lc_selected = '';
 		}
 		$i18n_urlparams = $_GET;
-		if ($cfg['plugin']['i18n']['omitmain'] && $lc == $i18n_fallback && (!$cfg['plugin']['i18n']['cookie'] || !isset($_COOKIE['i18n_locale'])))
+		if ($cfg['plugin']['i18n']['omitmain'] && $lc == $i18n_fallback && (!$cfg['plugin']['i18n']['cookie'] || !cot_import('i18n_locale', 'COOKIE', 'ALP')))
 		{
 			unset($i18n_urlparams['l']);
 		}
