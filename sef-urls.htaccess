@@ -33,3 +33,5 @@ RewriteRule ^system/?$  index.php?rwr=system [QSA,NC,NE,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([^?]+) index.php?rwr=$1 [QSA,NC,NE,L]
+
+Header always append X-Frame-Options SAMEORIGIN
