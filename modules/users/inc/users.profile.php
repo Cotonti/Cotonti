@@ -121,7 +121,7 @@ if($a == 'update')
 				$rbody .= "\n\n".$L['aut_contactadmin'];
 				cot_mail($ruseremail, $rsubject, $rbody);
 
-				if(cot_import([$sys['site_id'], 'COOKIE', 'ALP'))
+				if(cot_import($sys['site_id'], 'COOKIE', 'ALP'))
 				{
 					cot_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 				}
