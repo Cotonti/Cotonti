@@ -133,7 +133,8 @@ function cot_apply_rwr()
 			$last = $count - 1;
 			$ext = (isset($structure['page'][$filtered])) ? 'page' : $filtered;
 			$_GET['e'] = $ext;
-			if (isset($structure[$ext][$path[$last]]))
+			$cat_chain = array_slice($path, 0, -1);
+			if (isset($structure[$ext][$path[$last]]) && !in_array($path[$last], $cat_chain))
 			{
 				// Is a category
 				$_GET['c'] = $path[$last];
