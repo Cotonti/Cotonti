@@ -28,6 +28,3 @@ That option reflects latest revision SQL/PHP patch applied.
 
 Updates prior to Siena are not covered by automatic updater
 and should be applied using files and instructions from Genoa.
-
-You may ask questions and make suggestions in this topic:
-http://www.cotonti.com/forums.php?m=posts&q=488
