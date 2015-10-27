@@ -2479,6 +2479,11 @@ function cot_img_check_memory($file_path, $extra_size = 0)
 	$usedMem = round($usedMem / 1048576);
 
 	$haveMem = ini_get('memory_limit');
+	if ($haveMem == '-1')
+	{
+		// no limit set, so we try any way
+		return true;
+	}
 	preg_match('/(\d+)(\w+)/', $haveMem, $mtch);
 	// Getting available memory in MBytes
 	if (!empty($mtch[2]))
