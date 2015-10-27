@@ -10,9 +10,16 @@ ckeditorClasses['minieditor'] = 'Basic'; // Mini editor
 function ckeditorReplace() {
 	var textareas = document.getElementsByTagName('textarea');
 	for (var i = 0; i < textareas.length; i++) {
-		if (ckeditorClasses[textareas[i].getAttribute('class')] !== undefined) {
-			var textareasStyle = getComputedStyle(textareas[i], null) || textareas[i].currentStyle;
-			CKEDITOR.replace(textareas[i], {height:textareasStyle.height, width:'100%', toolbar: ckeditorClasses[textareas[i].getAttribute('class')]});
+		var classStr = textareas[i].getAttribute('class');
+		if (classStr) {
+			var classes = classStr.split(" ");
+			for (var k = 0; k < classes.length; k++) {
+				textareaClass = classes[k];
+				if (ckeditorClasses[textareaClass] !== undefined) {
+					var textareasStyle = getComputedStyle(textareas[i], null) || textareas[i].currentStyle;
+					CKEDITOR.replace(textareas[i], {height:textareasStyle.height, width:'100%', toolbar: ckeditorClasses[textareaClass]});
+				}
+			}
 		}
 	}
 }
