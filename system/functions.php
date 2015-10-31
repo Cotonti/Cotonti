@@ -2126,6 +2126,10 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 			$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $user_id LIMIT 1");
 			$user_data = $sql->fetch();
 		}
+		else if (!is_array($user_data))
+		{
+			$user_data = array();
+		}
 
 		if (is_array($user_data) && $user_data['user_id'] > 0 && !empty($user_data['user_name']))
 		{
