@@ -22,9 +22,8 @@ class Resources
 
 		'@bootstrap.js' => 'lib/bootstrap/js/bootstrap.min.js',
 		'@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
-		'@bootstrapTheme.css' => null
-	) // Undefined value. You can set to: lib/bootstrap/css/bootstrap-theme.min.css
-;
+		'@bootstrapTheme.css' => null  // Undefined value. You can set to: lib/bootstrap/css/bootstrap-theme.min.css
+	);
 
 	// ==== predefined alias constants ====
 	const jQuery = '@jQuery';
@@ -118,8 +117,12 @@ class Resources
 		$tmp = explode('?', $path);
 		$fileName = $tmp[0];
 
-		if (in_array($fileName, static::$addedFiles)) return false; // Уже добавлено
-		if (mb_strpos($fileName, '@' !== 0) && !file_exists($fileName)) return false; // Файл не найден
+		if (mb_strpos($fileName, '@') === 0)
+		{
+			$fileName = static::$alias[$fileName];
+		}
+
+		if (in_array($fileName, static::$addedFiles) || !file_exists($fileName)) return false;
 
 		if (empty($type)) $type = preg_match('#\.(min\.)?(js|css)$#', mb_strtolower($fileName), $m) ? $m[2] : 'js';
 
@@ -128,8 +131,6 @@ class Resources
 		if (static::$consolidate && static::$minify && !static::$skip_minification && mb_strpos($fileName, '.min.') === false &&
 			 mb_strpos($fileName, '.pack.') === false)
 		{
-
-			if (mb_strpos($fileName, '@') === 0) $fileName = static::$alias[$fileName];
 
 			if ($fileName != '')
 			{
@@ -630,13 +631,14 @@ class Resources
 		$tmp = explode('?', $path);
 		$fileName = $tmp[0];
 
-		if (in_array($fileName, static::$addedFiles)) return false;
-
 		if (mb_strpos($fileName, '@') === 0)
 		{
 			$fileName = static::$alias[$fileName];
 		}
-		elseif (mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0)
+
+		if (in_array($fileName, static::$addedFiles)) return false;
+
+		if (mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0)
 		{
 			if (!file_exists($fileName))
 			{
