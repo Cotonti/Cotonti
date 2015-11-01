@@ -563,7 +563,7 @@ switch ($step)
 		{
 			$rtheme = $theme;
 			$rscheme = $scheme;
-			$rlang = $cfg['defaultlang'];
+			$rlang = $lang;
 			$cfg['mainurl'] = $site_url;
 		}
 
