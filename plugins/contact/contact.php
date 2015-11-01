@@ -52,11 +52,12 @@ if (!empty($cot_captcha))
 $tplfile = cot_import('tpl', 'G', 'TXT');
 $mskin = cot_tplfile(array('contact', $tplfile), 'plug');
 $t = new XTemplate($mskin);
+$rtext = cot_import('rtext', 'P', 'TXT');
 
-if (isset(cot_import('rtext', 'P', 'TXT')))
+if (!empty($rtext))
 {
 	//Import the variables
-	$rcontact['contact_text'] = cot_import('rtext', 'P', 'TXT');
+	$rcontact['contact_text'] = $rtext;
 	$rcontact['contact_author'] = cot_import('ruser', 'P', 'TXT');
 	$rcontact['contact_email'] = cot_import('remail', 'P', 'TXT');
 	$rcontact['contact_subject'] = cot_import('rsubject', 'P', 'TXT');
