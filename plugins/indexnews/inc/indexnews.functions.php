@@ -37,21 +37,23 @@ function cot_pagecat_list()
 
 /**
  * Generates page list widget
- * @param  mixed   $categories     Custom parent categories code
- * @param  integer $count          Number of items to show. 0 - all items
- * @param  string  $template       Path for template file
- * @param  string  $order          Sorting order (SQL)
- * @param  string  $condition      Custom selection filter (SQL)
- * @param  mixed   $only_avaliable Custom parent category code
- * @param  boolean $sub            Include subcategories TRUE/FALSE
- * @param  boolean $noself         Exclude the current page from the rowset for pages.
- * @param  string  $blacklist      Category black list, semicolon separated
- * @param  string  $pagination     Pagination symbol
- * @return string                  Parsed HTML
+ * @param  mixed   $categories       Custom parent categories code
+ * @param  integer $count            Number of items to show. 0 - all items
+ * @param  string  $template         Path for template file
+ * @param  string  $order            Sorting order (SQL)
+ * @param  string  $condition        Custom selection filter (SQL)
+ * @param  mixed   $active_only	     Custom parent category code
+ * @param  boolean $use_subcat       Include subcategories TRUE/FALSE
+ * @param  boolean $exclude_current  Exclude the current page from the rowset for pages.
+ * @param  string  $blacklist        Category black list, semicolon separated
+ * @param  string  $pagination       Pagination symbol
+ * @param  integer $cache_ttl        Cache lifetime in seconds, 0 disables cache
+ * @return string                    Parsed HTML
  */
-function cot_page_enum($categories = '', $count = 0, $template = '', $order = '', $condition = '', $only_avaliable = true, $sub = true, $noself = false, $blacklist = '', $pagination = '')
+function cot_page_enum($categories = '', $count = 0, $template = '', $order = '', $condition = '', 
+	$active_only = true, $use_subcat = true, $exclude_current = false, $blacklist = '', $pagination = '', $cache_ttl=null)
 {
-	global $db, $db_pages, $db_users, $structure, $cfg, $sys;
+	global $db, $db_pages, $db_users, $structure, $cfg, $sys, $lang, $cache;
 	
 	// Compile lists
 	if(!is_array($blacklist))
@@ -69,13 +71,13 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 			$categories = explode(',', $categories);
 		}
 		$categories = array_unique($categories);
-		if ($sub)
+		if ($use_subcat)
 		{
 			
 			$total_categogies = array();
 			foreach ($categories as $cat)
 			{
-				$cats = cot_structure_children('page', $cat, $sub);
+				$cats = cot_structure_children('page', $cat, $use_subcat);
 				$total_categogies = array_merge($total_categogies, $cats);
 			}
 			$categories = array_unique($total_categogies);
@@ -92,12 +94,12 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 
 	$where['condition'] = $condition;
 
-	if ($noself && defined('COT_PAGES') && !defined('COT_LIST'))
+	if ($exclude_current && defined('COT_PAGES') && !defined('COT_LIST'))
 	{
 		global $id;
 		$where['page_id'] = "page_id != $id";
 	}
-	if ($only_avaliable)
+	if ($active_only)
 	{
 		$where['state'] = "page_state=0";
 		$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
@@ -115,8 +117,6 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 
 	// Display the items
 	$mskin = file_exists($template) ? $template : cot_tplfile(array('page', 'enum', $template), 'module');
-
-	$t = new XTemplate($mskin);
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.enum.query') as $pl)
@@ -136,10 +136,26 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	$where = array_filter($where);
 	$where = ($where) ? 'WHERE ' . implode(' AND ', $where) : '';
 	
-	$totalitems = $db->query("SELECT COUNT(*) FROM $db_pages AS p $cns_join_tables $where")->fetchColumn();
+	$sql_total = "SELECT COUNT(*) FROM $db_pages AS p $cns_join_tables $where";
+	$sql_query = "SELECT p.*, u.* $cns_join_columns FROM $db_pages AS p LEFT JOIN $db_users AS u ON p.page_ownerid = u.user_id
+			$cns_join_tables $where $sql_order $sql_limit";
+		
+	$t = new XTemplate($mskin);
+	
+	isset($md5hash) || $md5hash = 'page_enum_'.md5(str_replace($sys['now'], '_time_', $mskin.$lang.$sql_query));
 
-	$sql = $db->query("SELECT p.*, u.* $cns_join_columns FROM $db_pages AS p LEFT JOIN $db_users AS u ON p.page_ownerid = u.user_id
-			$cns_join_tables $where $sql_order $sql_limit");
+	if ($cache && (int)$cache_ttl > 0)
+	{
+		$page_query_html = $cache->disk->get($md5hash, 'page', (int)$cache_ttl);
+		
+		if(!empty($page_query_html))
+		{
+			return $page_query_html;
+		}
+	}
+	
+	$totalitems = $db->query($sql_total)->fetchColumn();
+	$sql = $db->query($sql_query);
 
 	$sql_rowset = $sql->fetchAll();
 	$jj = 0;
@@ -214,5 +230,11 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	/* ===== */
 
 	$t->parse("MAIN");
-	return $t->text("MAIN");
+	$page_query_html = $t->text("MAIN");
+	
+	if ($cache && (int) $cache_ttl > 0)
+	{
+		$cache->disk->store($md5hash, $page_query_html, 'page');
+	}
+	return $page_query_html;
 }
