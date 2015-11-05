@@ -19,7 +19,6 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 require_once cot_incfile('page', 'module');
-require_once cot_incfile('indexnews', 'plug');
 
 $indexnews_html = cot_page_enum($cfg['plugin']['indexnews']['category'], $cfg['plugin']['indexnews']['maxpages'],
 	cot_tplfile('indexnews', 'plug'), '', '', true, true, false, '', 'd', (int)$cfg['plugin']['indexnews']['cache_ttl']);
