@@ -965,10 +965,11 @@ function cot_module_active($name)
 }
 
 /**
- * Standard SED output filters, adds XSS protection to forms
+ * Applies output filters, adds XSS protection to POST forms
+ * Note: XSS can be switched off by adding "xp-off" class to form
  *
- * @param unknown_type $output
- * @return unknown
+ * @param string $output
+ * @return string
  */
 function cot_outputfilters($output)
 {
@@ -979,7 +980,10 @@ function cot_outputfilters($output)
 	}
 	/* ==== */
 
-	$output = preg_replace('#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i', '$0' . cot_xp(), $output);
+	$output = preg_replace_callback('#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i',
+		function ($m) {
+			return $m[0] . (preg_match('/class\s*=\s*["\']?.*?[\s"\']xp-off[\s"\'].*?["\']?/i', $m[0]) ? '' : cot_xp());
+		}, $output);
 
 	return($output);
 }
