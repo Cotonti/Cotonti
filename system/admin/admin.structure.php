@@ -497,7 +497,7 @@ else
 				else
 				{
 					$t->assign(array(
-						'ADMIN_CONFIG_ROW_CONFIG' => cot_config_input($row_c['config_name'], $row_c['config_type'], $row_c['config_value'], $row_c['config_variants']),
+						'ADMIN_CONFIG_ROW_CONFIG' => cot_config_input($row_c),
 						'ADMIN_CONFIG_ROW_CONFIG_TITLE' => $title,
 						'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' => cot_url('admin', 'm=structure&n='.$n.'&d='.$durl.'&id='.$structure_id.'&al='.$structure_code.'&a=reset&v='.$row_c['config_name'].'&'.cot_xg()),
 						'ADMIN_CONFIG_ROW_CONFIG_MORE' => $hint
