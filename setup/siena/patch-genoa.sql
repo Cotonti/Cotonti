@@ -1023,8 +1023,10 @@ ALTER TABLE `cot_plugins` MODIFY `pl_part` varchar(255) collate utf8_unicode_ci 
 
 UPDATE `cot_config` SET `config_type`=8, `config_default`='', `config_variants`='cot_config_type_int(15,1)' WHERE `config_owner`='core' AND `config_cat`='main' AND `config_name`='maxrowsperpage';
 
+/* 0.9.19 */
+UPDATE `cot_config` SET `config_default`='15', `config_variants`='cot_config_type_int(1)' WHERE `config_owner`='core' AND `config_cat`='main' AND `config_name`='maxrowsperpage';
 /* ------------------------------------------------------------------------------- */
 
 /* KEEP THIS AT THE BOTTOM
    AND UPDATE TO THE LATEST PATCH REVISION */
-UPDATE `cot_updates` SET `upd_value` = '0.9.18' WHERE `upd_param` = 'revision';
+UPDATE `cot_updates` SET `upd_value` = '0.9.19' WHERE `upd_param` = 'revision';
