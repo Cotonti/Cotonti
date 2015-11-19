@@ -5326,6 +5326,99 @@ function cot_uriredir_store()
 }
 
 /**
+ * Splits URL for its parts
+ * Same as `parse_str` but with workaround for URL with omitted scheme for old PHP versions
+ *
+ * @param array $url Array of URL parts
+ * @see http://php.net/manual/en/function.parse-str.php
+ */
+function cot_parse_url($url)
+{
+	$urlp = parse_url($url);
+
+	// check for URL with omited scheme on PHP prior 5.4.7 (//somesite.com)
+	if (substr($urlp['path'],0,2) == '//' && empty($urlp['scheme'])) $needfix = true;
+
+	// check for URL with auth credentials (user[:pass]@site.com/)
+	if (empty($urlp['host']) && preg_match('#^(([^@:]+)|([^@:]+:[^@:]+?))@.+/#', $urlp['path'])) $needfix = true;
+
+	if ($needfix)
+	{
+		$fake_scheme = 'fix-url-parsing';
+		$delimiter = (substr($urlp['path'],0,2) == '//') ? ':' : '://';
+		$url = $fake_scheme . $delimiter . $url; // adding fake scheme
+		$urlp = parse_url($url);
+		if ($urlp['scheme'] == $fake_scheme) unset($urlp['scheme']);
+	}
+	return $urlp;
+}
+
+/**
+ * Builds URL string from URL parts
+ *
+ * @param array $urlp
+ * @return string URL Array of URL parts
+ * @see `cot_parse_url()`
+ */
+function cot_http_build_url($urlp)
+{
+	$url = '';
+	$port = (int) $urlp['port'];
+	if ($urlp['port'] != $port) $port = '';
+	if (!empty($urlp['scheme'])) $url .= $urlp['scheme'] . '://';
+	if (!empty($urlp['user'])) {
+		if (!empty($urlp['pass'])) {
+			$url .= $urlp['user'] . ':' . $urlp['pass'] . '@';
+		} else{
+			$url .= $urlp['user'] . '@';
+		}
+	}
+	$url .= $urlp['host'];
+	if ($port && $port != '80' && preg_match('/^\d+$/', $port)) $url .=  ':' . $port;
+	if ( (empty($urlp['path']) && ($urlp['query'] || $urlp['fragment']))
+		|| ((!empty($urlp['path'])) && substr($urlp['path'], 0, 1) != '/') ) $urlp['path'] = '/' . $urlp['path'];
+	$url .=  $urlp['path'];
+	if (!empty($urlp['query'])) $url .=  '?' . $urlp['query'];
+	if (!empty($urlp['fragment'])) $url .=  '#' . $urlp['fragment'];
+	return $url;
+}
+
+/**
+ * Sanitize given URL to prevent XSS
+ *
+ * @param string $url URL to process (absolute or not)
+ */
+function cot_url_sanitize($url)
+{
+	function urlfilter($str)
+	{
+		return rawurlencode(rawurldecode($str));
+	}
+
+	$urlp = cot_parse_url($url);
+	$urlp['fragment'] = urlfilter($urlp['fragment']);
+
+	$path = $urlp['path'];
+	$query = str_replace('&amp;', '&', $urlp['query']);
+
+	$path = explode('/', $path);
+	$path = array_map('urlfilter', $path);
+	$urlp['path'] = implode('/', $path);
+
+	foreach (explode('&', $query) as $item)
+	{
+		if (!empty($item))
+		{
+			list($key, $val) = explode('=', $item, 2);
+			$filtered_query .= urlfilter($key) . '=' . urlfilter($val);
+		}
+	}
+	$urlp['query'] = $filtered_query;
+
+	return cot_http_build_url($urlp);
+}
+
+/**
  * Apply URI-redir that stored in session
  *
  * @param bool $cfg_redir Configuration of redirect back
