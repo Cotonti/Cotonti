@@ -88,8 +88,8 @@ switch ($rs['setlimit'])
 		$rs['setfrom'] = $sys['now'] - 31536000;
 		break;
 	case 5:
-		$rs['setfrom'] = cot_import_date($rs['rfrom']);
-		$rs['setto'] = cot_import_date($rs['rto']);
+		$rs['setfrom'] = cot_import_date('rfrom', true, false, 'G');
+		$rs['setto'] = cot_import_date('rto', true, false, 'G');
 		break;
 	default: break;
 }
@@ -459,8 +459,8 @@ $t->assign(array(
 	'PLUGIN_SEARCH_TEXT' => cot_inputbox('text', 'sq', htmlspecialchars($sq), 'size="32" maxlength="'.$cfg['plugin']['search']['maxsigns'].'"'),
 	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rs[setuser]', htmlspecialchars($rs['setuser']), 'class="userinput" size="32"'),
 	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rs['setlimit'], 'rs[setlimit]', range(0, 5), array($L['plu_any_date'], $L['plu_last_2_weeks'], $L['plu_last_1_month'], $L['plu_last_3_month'], $L['plu_last_1_year'], $L['plu_need_datas']), false),
-	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rs[rfrom]', cot_date('Y', $sys['now']) + 1),
-	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rs[rto]', cot_date('Y', $sys['now']) + 1),
+	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rfrom', cot_date('Y', $sys['now']) + 1),
+	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rto', cot_date('Y', $sys['now']) + 1),
 	'PLUGIN_SEARCH_FOUND' => (array_sum($totalitems) > 0) ? array_sum($totalitems) : '',
 	'PLUGIN_PAGEPREV' => $pagenav['prev'],
 	'PLUGIN_PAGENEXT' => $pagenav['next'],
