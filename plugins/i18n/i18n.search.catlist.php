@@ -32,22 +32,22 @@ if (is_array($i18n_structure) && count($i18n_structure) > 0)
 
 	// Extract previously selected options, they are handled separately
 	$i18n_search_cats = array();
-	if (is_array($rs['pag']['sub']))
+	if (is_array($rs['pagsub']))
 	{
-		$subcnt = count($rs['pag']['sub']);
+		$subcnt = count($rs['pagsub']);
 		$tmp = array();
 		for ($i = 0; $i < $subcnt; $i++)
 		{
-			if (mb_strpos($rs['pag']['sub'][$i], ':') !== false)
+			if (mb_strpos($rs['pagsub'][$i], ':') !== false)
 			{
-				list ($cat, $lc) = explode(':', $rs['pag']['sub'][$i]);
+				list ($cat, $lc) = explode(':', $rs['pagsub'][$i]);
 				$i18n_search_cats[$lc][] = $cat;
 			}
 			else
 			{
-				$tmp[] = $rs['pag']['sub'][$i];
+				$tmp[] = $rs['pagsub'][$i];
 			}
 		}
-		$rs['pag']['sub'] = $tmp;
+		$rs['pagsub'] = $tmp;
 	}
 }
