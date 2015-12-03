@@ -69,7 +69,7 @@ if ($rs['frmtitle'] < 1 && $rs['frmtext'] < 1)
 	$rs['frmtitle'] = 1;
 	$rs['frmtext'] = 1;
 }
-$rs['setuser'] = cot_import($rs['setuser'], 'D', 'INT');
+$rs['setuser'] = cot_import($rs['setuser'], 'D', 'TXT');
 $rs['setlimit'] = cot_import($rs['setlimit'], 'D', 'INT');
 $rs['setfrom'] = $sys['now'] - 31536000;
 $rs['setto'] = $sys['now'];
@@ -113,7 +113,7 @@ if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && $cfg['plugin'
 			$pag_catauth[] = $db->prep($cat);
 		}
 	}
-	if ($rs['pagsub'][0] == 'all' || !is_array($rs['pagsub']))
+	if ($rs['pagsub'][0] == 'all' || !$rs['pagsub'])
 	{
 		$rs['pagsub'] = array();
 		$rs['pagsub'][] = 'all';
@@ -154,7 +154,7 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugi
 		}
 	}
 
-	if ($rs['frmsub'][0] == 'all' || !is_array($rs['frmsub']))
+	if ($rs['frmsub'][0] == 'all' || !$rs['frmsub'])
 	{
 		$rs['frmsub'] = array();
 		$rs['frmsub'][] = 'all';
@@ -248,7 +248,7 @@ if (!empty($sq))
 		$where_and['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 		$where_and['date2'] = ($rs['setlimit'] > 0) ? "page_date >= ".$rs['setfrom']." AND page_date <= ".$rs['setto'] : "";
 		$where_and['file'] = ($rs['pagfile'] == 1) ? "page_file = '1'" : "";
-		$where_and['users'] = (!empty($touser)) ? "page_ownerid ".$touser_ids : "";
+		$where_and['users'] = (!empty($touser)) ? "page_ownerid ".$touser : "";
 
 		$where_or['title'] = ($rs['pagtitle'] == 1) ? "page_title LIKE '".$db->prep($sqlsearch)."'" : "";
 		$where_or['desc'] = (($rs['pagdesc'] == 1)) ? "page_desc LIKE '".$db->prep($sqlsearch)."'" : "";
@@ -357,7 +357,7 @@ if (!empty($sq))
 		}
 		$where_and['reply'] = ($rs['frmreply'] == '1') ? "t.ft_postcount > 1" : "";
 		$where_and['time'] = ($rs['setlimit'] > 0) ? "p.fp_creation >= ".$rs['setfrom']." AND p.fp_updated <= ".$rs['setto'] : "";
-		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid ".$touser_ids : "";
+		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid ".$touser : "";
 
 		$where_or['title'] = ($rs['frmtitle'] == 1) ? "t.ft_title LIKE '".$db->prep($sqlsearch)."'" : "";
 		$where_or['text'] = (($rs['frmtext'] == 1)) ? "p.fp_text LIKE '".$db->prep($sqlsearch)."'" : "";
