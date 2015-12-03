@@ -731,7 +731,7 @@ function cot_file_phpdoc($filename)
 }
 
 /**
- * Extract info from SED file headers
+ * Extract info from COT file headers
  *
  * @param string $file File path
  * @param string $limiter Tag name

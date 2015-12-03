@@ -661,7 +661,6 @@ function cot_config_list($owner, $cat, $subcat = "")
 	foreach ($rs as $row)
 	{
 		$keyx = $row['config_name'];
-		$rowx = array();
 
 		if ($row['config_subcat'] == "__default")
 		{
@@ -672,7 +671,7 @@ function cot_config_list($owner, $cat, $subcat = "")
 			$rowset[$keyx] = $row;
 		}
 	}
-	// Заморочка - для правильного слияния массивов и затем правильного их отображения
+	// merging arrays for proper display
 	if (!empty($subcat))
 	{
 		foreach ($rowset_default as $key => $row)
