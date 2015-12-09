@@ -505,14 +505,31 @@ function cot_config_set($name, $options, $is_module = false, $category = '')
 		{
 			$default_options = cot_config_load($name, $is_module, '__default');
 		}
+		$structure_val = array();
+	}
+	else
+	{
+		$structure_val = cot_config_list($type, $name, '__default');
 	}
 
+	$category_tmp = $category;
 	foreach ($options as $key => $val)
 	{
+		if (is_array($structure_val[$key]))
+		{
+			// roundabout way to update only structure defaults
+			$where_sub = ' AND config_subcat = ?';
+			$category = '__default';
+		}
+		else
+		{
+			$where_sub = '';
+			$category = $category_tmp;
+		}
 		if (empty($category) || $category == '__default' || $val != $default_options[$key])
 		{
 			$params = empty($category) ? array($type, $name, $key) : array($type, $name, $key, $category);
-			$upd_cnt += $db->update($db_config, array('config_value' => $val), $where, $params);
+			$upd_cnt += $db->update($db_config, array('config_value' => $val), $where . $where_sub, $params);
 		}
 	}
 
