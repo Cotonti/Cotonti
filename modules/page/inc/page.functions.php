@@ -284,9 +284,10 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 }
 
 /**
+ * @param $adminpart bool Call from admin part
  * Returns possible values for category sorting order
  */
-function cot_page_config_order()
+function cot_page_config_order($adminpart = false)
 {
 	global $cot_extrafields, $L, $db_pages;
 
@@ -314,8 +315,16 @@ function cot_page_config_order()
 		$options_sort[$exfld['field_name']] = isset($L['page_'.$exfld['field_name'].'_title']) ? $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 	}
 
-	$L['cfg_order_params'] = array_values($options_sort);
-	return array_keys($options_sort);
+	if ($adminpart || version_compare('0.9.19', cot::$cfg['version']) < 1)
+	{
+		return $options_sort;
+	}
+	else
+	{
+		// old style trick, will be removed in next versions
+		$L['cfg_order_params'] = array_values($options_sort);
+		return array_keys($options_sort);
+	}
 }
 
 /**
