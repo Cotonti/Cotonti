@@ -292,8 +292,6 @@ function cot_page_config_order()
 
 	$options_sort = array(
 		'id' => $L['Id'],
-		'type' => $L['Type'],
-		'key' => $L['Key'],
 		'title' => $L['Title'],
 		'desc' => $L['Description'],
 		'text' => $L['Body'],
@@ -308,7 +306,6 @@ function cot_page_config_order()
 		'filecount' => $L['adm_filecount'],
 		'count' => $L['Count'],
 		'updated' => $L['Updated'],
-		'rating' => $L['Rating'],
 		'cat' => $L['Category']
 	);
 
@@ -749,11 +746,11 @@ function cot_page_update($id, &$rpage, $auth = array())
  * @param  integer $cache_ttl        Cache lifetime in seconds, 0 disables cache
  * @return string                    Parsed HTML
  */
-function cot_page_enum($categories = '', $count = 0, $template = '', $order = '', $condition = '', 
+function cot_page_enum($categories = '', $count = 0, $template = '', $order = '', $condition = '',
 	$active_only = true, $use_subcat = true, $exclude_current = false, $blacklist = '', $pagination = '', $cache_ttl=null)
 {
 	global $db, $db_pages, $db_users, $structure, $cfg, $sys, $lang, $cache;
-	
+
 	// Compile lists
 	if(!is_array($blacklist))
 	{
@@ -772,7 +769,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 		$categories = array_unique($categories);
 		if ($use_subcat)
 		{
-			
+
 			$total_categogies = array();
 			foreach ($categories as $cat)
 			{
@@ -783,10 +780,10 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 		}
 		$categories = (count($blacklist) > 0 ) ? array_diff($categories, $blacklist) : $categories;
 		$where['cat'] = "page_cat IN ('" . implode("','", $cats) . "')";
-		
-		
+
+
 	}
-	elseif (count($blacklist)) 
+	elseif (count($blacklist))
 	{
 		$where['cat_black'] = "page_cat NOT IN ('" . implode("','", $blacklist) . "')";
 	}
@@ -823,7 +820,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 		include $pl;
 	}
 	/* ===== */
-	
+
 	if (cot_plugin_active('comments'))
 	{
 		global $db_com;
@@ -834,25 +831,25 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	$sql_limit = ($count > 0) ? "LIMIT $d, $count" : '';
 	$where = array_filter($where);
 	$where = ($where) ? 'WHERE ' . implode(' AND ', $where) : '';
-	
+
 	$sql_total = "SELECT COUNT(*) FROM $db_pages AS p $cns_join_tables $where";
 	$sql_query = "SELECT p.*, u.* $cns_join_columns FROM $db_pages AS p LEFT JOIN $db_users AS u ON p.page_ownerid = u.user_id
 			$cns_join_tables $where $sql_order $sql_limit";
-		
+
 	$t = new XTemplate($mskin);
-	
+
 	isset($md5hash) || $md5hash = 'page_enum_'.md5(str_replace($sys['now'], '_time_', $mskin.$lang.$sql_query));
 
 	if ($cache && (int)$cache_ttl > 0)
 	{
 		$page_query_html = $cache->disk->get($md5hash, 'page', (int)$cache_ttl);
-		
+
 		if(!empty($page_query_html))
 		{
 			return $page_query_html;
 		}
 	}
-	
+
 	$totalitems = $db->query($sql_total)->fetchColumn();
 	$sql = $db->query($sql_query);
 
@@ -877,7 +874,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 			include $pl;
 		}
 		/* ===== */
-		
+
 		if (cot_plugin_active('comments'))
 		{
 			$rowe_urlp = empty($pag['page_alias']) ? array('c' => $pag['page_cat'], 'id' => $pag['page_id']) : array('c' => $pag['page_cat'], 'al' => $pag['page_alias']);
@@ -902,7 +899,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	if(cot_plugin_active($module_name))
 	{
 		$url_area = 'plug';
-	}	
+	}
 	unset($url_params[$pagination]);
 	if(!empty($pagination))
 	{
@@ -930,7 +927,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 
 	$t->parse("MAIN");
 	$page_query_html = $t->text("MAIN");
-	
+
 	if ($cache && (int) $cache_ttl > 0)
 	{
 		$cache->disk->store($md5hash, $page_query_html, 'page');

@@ -55,10 +55,6 @@ if (empty($s))
 {
 	$s = $cfg['page']['cat_' . $c]['order'];
 }
-elseif (!$db->fieldExists($db_pages, "page_$s"))
-{
-	$s = 'title';
-}
 $w = empty($w) ? $cfg['page']['cat_' . $c]['way'] : $w;
 
 $s = empty($s) ? $cfg['page']['cat___default']['order'] : $s;
@@ -132,6 +128,10 @@ if (!$usr['isadmin'] && $c != 'unvalidated' && $c !== 'saved_drafts')
 	$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 }
 
+if (!$db->fieldExists($db_pages, "page_$s"))
+{
+	$s = 'title';
+}
 $orderby = "page_$s $w";
 
 $list_url_path = array('c' =>$c, 'ord' => $o, 'p' => $p);
