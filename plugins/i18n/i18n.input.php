@@ -82,3 +82,5 @@ if ($usr['id'] == 0 && $i18n_notmain && $env['ext'] != 'index')
 {
 	$sys['noindex'] = true;
 }
+
+if ($i18n_locale) require_once cot_langfile('i18n', 'plug', $cfg['defaultlang'], $i18n_locale);
