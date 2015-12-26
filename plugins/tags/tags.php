@@ -30,8 +30,8 @@ if ($tl && file_exists(cot_langfile('translit', 'core')))
 
 // Results per page
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
-list($pg, $d, $durl) = cot_import_pagenav('d',  $maxperpage);
-$dt = (int)cot_import('dt', 'G', 'INT');
+list(	, $d) = cot_import_pagenav('d', $maxperpage);
+list(	, $dt) = cot_import_pagenav('dt', $maxperpage);
 
 // Tags displayed per page in standalone cloud
 $perpage = $cfg['plugin']['tags']['perpage'];
