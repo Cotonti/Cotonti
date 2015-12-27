@@ -31,10 +31,10 @@ if ($tl && file_exists(cot_langfile('translit', 'core')))
 // Results per page
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
 list(	, $d) = cot_import_pagenav('d', $maxperpage);
-list(	, $dt) = cot_import_pagenav('dt', $maxperpage);
 
 // Tags displayed per page in standalone cloud
 $perpage = $cfg['plugin']['tags']['perpage'];
+list(	, $dt) = cot_import_pagenav('dt', $perpage);
 
 // Array to register areas with tag functions provided
 $tag_areas = array();
