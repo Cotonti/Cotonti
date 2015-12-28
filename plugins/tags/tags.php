@@ -77,7 +77,13 @@ if ($cfg['plugin']['tags']['noindex'])
 {
 	$out['head'] .= $R['code_noindex'];
 }
-$out['subtitle'] = empty($qs) ? $L['Tags'] : htmlspecialchars(strip_tags($qs)) . ' - ' . $L['tags_Search_results'];
+
+// meta title
+$out['subtitle'] = empty($qs) ? $L['Tags'] : htmlspecialchars(strip_tags($qs)) . ' - ' . mb_strtolower($L['tags_Search_tags']);
+// meta descriptions
+$out['desc'] = empty($qs) ? $L['Tags'] : mb_strtolower($L['tags_Search_tags'] . ': ' . strip_tags($qs) . ' - ' . $L['tags_Search_results']);
+// meta keywords
+$out['keywords'] = empty($qs) ? $L['Tags'] : mb_strtolower($L['Tag'] . ' ' . strip_tags($qs) . ' ' . $L['tags_Search_tags']);
 
 $t->assign(array(
 	'TAGS_ACTION' => cot_url('plug', 'e=tags&a=' . $a),
