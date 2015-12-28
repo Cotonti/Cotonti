@@ -99,8 +99,8 @@ $L['forums_sticky'] = 'Тема закреплена (нет новых)';
 $L['forums_newpostssticky'] = 'Тема закреплена (есть новые)';
 $L['forums_locked'] = 'Тема закрыта (нет новых)';
 $L['forums_newpostslocked'] = 'Тема закрыта (есть новые)';
-$L['forums_announcment'] = 'Обьявление';
-$L['forums_newannouncment'] = 'Новые обьявления';
+$L['forums_announcment'] = 'Объявление';
+$L['forums_newannouncment'] = 'Новые объявления';
 $L['forums_movedoutofthissection'] = 'Перенесена в другой раздел';
 
 $L['forums_announcement'] = 'Объявление';
