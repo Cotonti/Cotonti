@@ -24,10 +24,8 @@ if (is_array($user_data))
 
 	foreach ($userimages as $code => $settings)
 	{
-		if ($user_data['user_' . $code])
-		{
-			$temp_array[strtoupper($code)] = cot_userimages_build($user_data['user_' . $code], $code);
-			$temp_array[strtoupper($code) . '_SRC'] = $user_data['user_' . $code];
-		}
+		$uimage = $user_data['user_' . $code];
+		$temp_array[strtoupper($code) . '_SRC'] = $uimage;
+		$temp_array[strtoupper($code)] = is_file($uimage) ? cot_userimages_build($user_data['user_' . $code], $code) : '';
 	}
 }
