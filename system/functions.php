@@ -1306,9 +1306,15 @@ function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = tru
 {
 	global $structure, $db;
 
-	$mtch = $structure[$area][$cat]['path'].'.';
-	$mtchlen = mb_strlen($mtch);
-	$mtchlvl = mb_substr_count($mtch,".");
+	$mtch = '';
+	$mtchlen = $mtchlvl = 0;
+
+	if ($cat != '')
+	{
+		$mtch = $structure[$area][$cat]['path'] . '.';
+		$mtchlen = mb_strlen($mtch);
+		$mtchlvl = mb_substr_count($mtch, ".");
+	}
 
 	$catsub = array();
 	if ($cat != '' && $firstcat && (($userrights && cot_auth($area, $cat, 'R') || !$userrights)))
@@ -1321,7 +1327,7 @@ function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = tru
 		if (($cat == '' || mb_substr($x['path'], 0, $mtchlen) == $mtch) && (($userrights && cot_auth($area, $i, 'R') || !$userrights)))
 		{
 			//$subcat = mb_substr($x['path'], $mtchlen + 1);
-			if ($cat == '' || $allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl))
+			if ($allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl))
 			{
 				$i = ($sqlprep) ? $db->prep($i) : $i;
 				$catsub[] = $i;
