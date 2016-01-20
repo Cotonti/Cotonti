@@ -5411,15 +5411,16 @@ function cot_url_sanitize($url)
 	$path = array_map('urlfilter', $path);
 	$urlp['path'] = implode('/', $path);
 
+	$filtered_params = array();
 	foreach (explode('&', $query) as $item)
 	{
 		if (!empty($item))
 		{
 			list($key, $val) = explode('=', $item, 2);
-			$filtered_query .= urlfilter($key) . '=' . urlfilter($val);
+			$filtered_params[] = urlfilter($key) . '=' . urlfilter($val);
 		}
 	}
-	$urlp['query'] = $filtered_query;
+	if (sizeof($filtered_params)) $urlp['query'] = implode('&', $filtered_params);
 
 	return cot_http_build_url($urlp);
 }
