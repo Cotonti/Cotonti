@@ -108,6 +108,7 @@ class Resources
 	 *        'group_123' - for members of a specific group (maingrp), in this example of group with id=123.
 	 *        It is recommended to use 'global' scope whenever possible because it delivers best caching opportunities.
 	 * @return bool Returns TRUE normally, FALSE is file was not found
+	 * @throws Exception
 	 */
 	public static function addFile($path, $type = '', $order = 50, $scope = 'global')
 	{
@@ -117,12 +118,19 @@ class Resources
 		$tmp = explode('?', $path);
 		$fileName = $tmp[0];
 
+		if (in_array($fileName, static::$addedFiles)) return false;
+
 		if (mb_strpos($fileName, '@') === 0)
 		{
 			$fileName = static::$alias[$fileName];
 		}
-
-		if (in_array($fileName, static::$addedFiles) || !file_exists($fileName)) return false;
+		elseif (mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0)
+		{
+			if (!file_exists($fileName))
+			{
+				throw new Exception('Resource file «' . $fileName . '» not exists');
+			}
+		}
 
 		if (empty($type)) $type = preg_match('#\.(min\.)?(js|css)$#', mb_strtolower($fileName), $m) ? $m[2] : 'js';
 
@@ -135,7 +143,9 @@ class Resources
 			if ($fileName != '')
 			{
 				$bname = ($type == 'css') ? str_replace('/', '._.', $fileName) : basename($fileName) . '.min';
-				$code = static::minify(file_get_contents($fileName), $type);
+				$content = file_get_contents($fileName);
+				if($content == '' || $content === false) return false;
+				$code = static::minify($content, $type);
 				$path = static::$dir . $bname;
 				file_put_contents($path, $code);
 			}
