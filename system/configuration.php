@@ -355,6 +355,7 @@ function cot_config_parse($info_cfg)
 		foreach ($info_cfg as $i => $x)
 		{
 			$line = explode(':', $x);
+			$line[1] = trim($line[1]);
 			if (is_array($line) && !empty($line[1]) && !empty($i))
 			{
 				switch ($line[1])
@@ -389,11 +390,11 @@ function cot_config_parse($info_cfg)
 				}
 				$options[] = array(
 					'name' => $i,
-					'order' => $line[0],
+					'order' => trim($line[0]),
 					'type' => $line['Type'],
 					'variants' => $line[2],
 					'default' => $line[3],
-					'text' => $line[4]
+					'text' => trim($line[4])
 				);
 			}
 		}

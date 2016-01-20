@@ -760,12 +760,10 @@ function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
 			foreach ($lines as $line)
 			{
 				$line = ltrim($line, " */");
-				$linex = explode('=', $line);
-				$ii = 1;
-				while (!empty($linex[$ii]))
+				$linex = preg_split('/\s*\=\s*/', trim($line), 2);
+				if ($linex[0])
 				{
-					$result[$linex[0]] .= trim($linex[$ii]);
-					$ii++;
+					$result[$linex[0]] = $linex[1];
 				}
 			}
 		}
