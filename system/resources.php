@@ -633,26 +633,25 @@ class Resources
 	 * @param string $path JavaScript or CSS file path
 	 * @param string $type
 	 * @param int $order
-	 *
 	 * @return bool
+	 * @throws Exception
 	 */
 	public static function linkFileFooter($path, $type = '', $order = 50)
 	{
 		$tmp = explode('?', $path);
 		$fileName = $tmp[0];
 
+		if (in_array($fileName, static::$addedFiles)) return false;
+
 		if (mb_strpos($fileName, '@') === 0)
 		{
 			$fileName = static::$alias[$fileName];
 		}
-
-		if (in_array($fileName, static::$addedFiles)) return false;
-
-		if (mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0)
+		elseif (mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0)
 		{
 			if (!file_exists($fileName))
 			{
-				return false;
+				throw new Exception('Resource file «' . $fileName . '» not exists');
 			}
 		}
 
