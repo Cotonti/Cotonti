@@ -110,7 +110,7 @@ switch ($n)
 		{
 			$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 			$plmod = $o == 'module' ? 'mod' : 'pl';
-			$ext_info = cot_get_extensionparams($p, $o);
+			$ext_info = cot_get_extensionparams($p, $o == 'module');
 			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $ext_info['name']);
 			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o=' . $o . '&p=' . $p), $L['Configuration']);
 		}
