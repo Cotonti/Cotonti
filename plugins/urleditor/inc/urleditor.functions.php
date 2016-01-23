@@ -297,14 +297,12 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	if (!empty($params))
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
-		if (version_compare(PHP_VERSION, '5.4.0', '>='))
+		$url_tail = (version_compare(PHP_VERSION, '5.4.0', '>=')) 
+			? http_build_query($params, '', $sep, PHP_QUERY_RFC3986) : str_replace('+', '%20', http_build_query($params, '', $sep));
+		if (!empty($url_tail))
 		{
-			$url .= (mb_strpos($url, '?') === false ? '?' : $sep) . http_build_query($params, '', $sep, PHP_QUERY_RFC3986);
-		}
-		else
-		{
-			$url .= (mb_strpos($url, '?') === false ? '?' : $sep) . str_replace('+', '%20', http_build_query($params, '', $sep));
-		}
+			$url .= (mb_strpos($url, '?') === false ? '?' : $sep) . $url_tail;
+		}	
 	}
 	// Almost done
 	$url .= $tail;
