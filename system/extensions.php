@@ -40,7 +40,7 @@ $cot_ext_ignore_parts = array('configure', 'install', 'setup', 'uninstall');
  * @param string $sql_pattern SQL patch file name pattern (PCRE)
  * @param string $php_pattern PHP patch file name pattern (PCRE)
  * @return mixed The function returns TRUE if there are not patches to apply,
- * FALSE if an error occured while patching or a string containing version
+ * FALSE if an error occurred while patching or a string containing version
  * number of the latest applied patch if patching was successful.
  */
 function cot_apply_patches($directory, $from_ver,
