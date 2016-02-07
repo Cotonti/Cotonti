@@ -265,12 +265,12 @@ if (!empty($sq))
 		$where_and = array_diff($where_and, array(''));
 		$where = implode(' AND ', $where_and);
 
-        if (!$db->fieldExists($db_pages, 'page_'.$rs['pagsort']))
-        {
-            $rs['pagsort'] = 'date';
-        }
+		if (!$db->fieldExists($db_pages, 'page_' . $rs['pagsort']))
+		{
+			$rs['pagsort'] = 'date';
+		}
 
-        $orderby = 'page_'.$rs['pagsort'].' '.$rs['pagsort2'];
+		$orderby = 'page_' . $rs['pagsort'] . ' ' . $rs['pagsort2'];
 
 		/* === Hook === */
 		foreach (cot_getextplugins('search.page.query') as $pl)
@@ -279,14 +279,14 @@ if (!empty($sq))
 		}
 		/* ===== */
 
-        if(empty($sql_page_string)) {
-            $sql_page_string = "SELECT SQL_CALC_FOUND_ROWS p.* $search_join_columns
+		if (empty($sql_page_string))
+		{
+			$sql_page_string = "SELECT SQL_CALC_FOUND_ROWS p.* $search_join_columns
                 FROM $db_pages AS p $search_join_condition
                 WHERE $where
                 ORDER BY {$orderby}
-                LIMIT $d, ".$cfg_maxitems
-                .$search_union_query;
-        }
+                LIMIT $d, " . $cfg_maxitems . $search_union_query;
+		}
 		$sql = $db->query($sql_page_string);
 		$items = $sql->rowCount();
 		$totalitems[] = $db->query('SELECT FOUND_ROWS()')->fetchColumn();

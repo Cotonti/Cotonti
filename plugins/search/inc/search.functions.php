@@ -9,6 +9,12 @@
 
 defined('COT_CODE') || die('Wrong URL.');
 
+/**
+ * Marks defined words within text
+ * @param string $text
+ * @param array $words Word list
+ * @return string Marked text
+ */
 function cot_clear_mark($text, $words)
 {
 	global $cfg;
@@ -99,10 +105,12 @@ function cot_clear_mark($text, $words)
 			$text_result = mb_substr($text, 0, $len_cut);
 			$text_result = ($len_cut < $len_txt) ? $text_result.'... ' : $text_result;
 		}
+		$search_tag = array();
 		foreach ($words as $k => $i)
 		{
-			$text_result = str_ireplace($i, '<span class="search_hl">'.$i.'</span>', $text_result);
+			$search_tag[] = preg_quote($i);
 		}
+		$text_result = preg_replace('`('.implode('|', $search_tag).')`i', '<span class="search_hl">$1</span>', $text_result);
 		return ($text_result);
 	}
 	return ("");
