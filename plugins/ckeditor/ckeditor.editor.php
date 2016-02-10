@@ -67,11 +67,19 @@ else
 }
 Resources::linkFileFooter(cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js?".$ckeditor_timestamp);
 
-if ($ckeditor_css_to_load && is_array($ckeditor_css_to_load)) {
+if (!empty($ckeditor_css_to_load) && is_array($ckeditor_css_to_load)) {
 	foreach ($ckeditor_css_to_load as $key => $css_file) {
 		if (!file_exists($css_file)) unset($ckeditor_css_to_load[$key]);
 	}
-	if (sizeof($ckeditor_css_to_load)) $ckeditor_css_connector = "CKEDITOR.config.contentsCss = ['".implode("','", $ckeditor_css_to_load)."'];";
+} else {
+    // Default ckeditor content styles
+    $ckeditor_css_connector = "CKEDITOR.config.contentsCss = ['".cot::$cfg['plugins_dir']."/ckeditor/lib/styles.js?'];";
+    $ckeditor_css_to_load = array(
+        cot::$cfg['plugins_dir'].'/ckeditor/lib/styles.js?'.$ckeditor_timestamp,
+        cot::$cfg['plugins_dir'].'/ckeditor/presets/contents.default.css?'.$ckeditor_timestamp
+
+    );
 }
+if (sizeof($ckeditor_css_to_load)) $ckeditor_css_connector = "CKEDITOR.config.contentsCss = ['".implode("','", $ckeditor_css_to_load)."'];";
 
 Resources::embedFooter("CKEDITOR.timestamp = $ckeditor_timestamp; ".$ckeditor_css_connector);
