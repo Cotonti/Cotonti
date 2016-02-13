@@ -62,13 +62,16 @@ if ($_SERVER['HTTP_HOST'] == $url['host']
 {
 	$sys['host'] = preg_match('#^[\w\p{L}\.\-]+(:\d+)?$#u', $_SERVER['HTTP_HOST']) ? preg_replace('#^([\w\p{L}\.\-]+)(:\d+)?$#u', '$1', $_SERVER['HTTP_HOST']) : $url['host'];
 	$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
-	$sys['port'] = $_SERVER['SERVER_PORT'] == 80 ? '' : $_SERVER['SERVER_PORT'];
+	$sys['port'] = $_SERVER['SERVER_PORT'];
 }
 else
 {
 	$sys['host'] = $url['host'];
-	$sys['port'] = empty($url['port']) || $_SERVER['SERVER_PORT'] == 80 ? '' : $url['port'];
+	$sys['port'] = $url['port'];
 }
+$def_port = $sys['secure'] ? 443 : 80;
+$sys['port'] = $sys['port'] == $def_port ? '' : $sys['port'];
+
 if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
 define('COT_SITE_URI', $sys['site_uri']);
 // Absolute site url
