@@ -179,6 +179,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			'TEXT_CUT' => $text_cut,
 			'TEXT_IS_CUT' => $cutted,
 			'DESC_OR_TEXT' => (!empty($page_data['page_desc'])) ? htmlspecialchars($page_data['page_desc']) : $text,
+			'DESC_OR_TEXT_CUT' => (!empty($page_data['page_desc'])) ? htmlspecialchars($page_data['page_desc']) : $text_cut,
 			'MORE' => ($cutted) ? cot_rc('list_more', array('page_url' => $page_data['page_pageurl'])) : '',
 			'AUTHOR' => htmlspecialchars($page_data['page_author']),
 			'OWNERID' => $page_data['page_ownerid'],
