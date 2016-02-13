@@ -341,6 +341,7 @@ foreach ($res->fetchAll() as $row)
 }
 sort($areas);
 
+/* FIXME: check block / actualize as not exists in template --------------------- */
 // New rule contents
 foreach($areas as $ar)
 {
@@ -350,6 +351,7 @@ foreach($areas as $ar)
 	));
 	$t->parse('MAIN.AREABOX');
 }
+/* FIXME: [end_of_block] --------------------------------------------- */
 
 if (is_readable('./datas/urltrans.dat'))
 {
@@ -415,11 +417,4 @@ foreach (cot_getextplugins('admin.urls.tags') as $pl)
 /* ===== */
 
 $t->parse('MAIN');
-if (COT_AJAX)
-{
-	$t->out('MAIN');
-}
-else
-{
-	$adminmain = $t->text('MAIN');
-}
+$adminmain = $t->text('MAIN');
