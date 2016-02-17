@@ -780,16 +780,16 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 		if ($use_subcat)
 		{
 
-			$total_categogies = array();
+			$total_categories = array();
 			foreach ($categories as $cat)
 			{
 				$cats = cot_structure_children('page', $cat, $use_subcat);
-				$total_categogies = array_merge($total_categogies, $cats);
+				$total_categories = array_merge($total_categories, $cats);
 			}
-			$categories = array_unique($total_categogies);
+			$categories = array_unique($total_categories);
 		}
 		$categories = (count($blacklist) > 0 ) ? array_diff($categories, $blacklist) : $categories;
-		$where['cat'] = "page_cat IN ('" . implode("','", $cats) . "')";
+		$where['cat'] = "page_cat IN ('" . implode("','", $categories) . "')";
 
 
 	}
@@ -807,7 +807,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	}
 	if ($active_only)
 	{
-		$where['state'] = "page_state=0";
+		$where['state'] = "page_state = 0";
 		$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 	}
 
@@ -823,6 +823,9 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 
 	// Display the items
 	$mskin = file_exists($template) ? $template : cot_tplfile(array('page', 'enum', $template), 'module');
+
+    $cns_join_tables = '';
+	$cns_join_columns = '';
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.enum.query') as $pl)
@@ -899,6 +902,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 
 	// Render pagination
 	$url_params = $_GET;
+    if(isset($url_params['rwr'])) unset($url_params['rwr']);
 	$url_area = 'index';
 	$module_name = cot_import('e', 'G', 'ALP');
 	if(cot_module_active($module_name))
@@ -906,11 +910,22 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 		$url_area = $url_params['e'];
 		unset($url_params['e']);
 	}
-	if(cot_plugin_active($module_name))
+    elseif (cot_plugin_active($module_name))
 	{
 		$url_area = 'plug';
 	}
 	unset($url_params[$pagination]);
+
+    $pagenav = array(
+        'main' => null,
+        'prev' => null,
+        'next' => null,
+        'first' => null,
+        'last' => null,
+        'current' => 1,
+        'total' => 1,
+    );
+
 	if(!empty($pagination))
 	{
 		$pagenav = cot_pagenav($url_area, $url_params, $d, $totalitems, $count, $pagination);
@@ -929,7 +944,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	));
 
 	/* === Hook === */
-	foreach (cot_getextplugins('pagelist.tags') as $pl)
+	foreach (cot_getextplugins('page.enum.tags') as $pl)
 	{
 		include $pl;
 	}
