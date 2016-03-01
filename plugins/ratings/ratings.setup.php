@@ -18,8 +18,8 @@ Recommends_modules=page
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-ratings_allowchange=01:radio:0,1:0:Allow users to change their ratings
-css=99:radio:0,1:1:Enable plugin CSS
+ratings_allowchange=01:radio::0:Allow users to change their ratings
+css=99:radio::1:Enable plugin CSS
 [END_COT_EXT_CONFIG]
 ==================== */
 

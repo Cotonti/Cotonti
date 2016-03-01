@@ -856,6 +856,7 @@ function cot_config_input($cfg_var)
 	$value = $cfg_var['config_value'];
 	$options = $cfg_var['config_variants'];
 	$config_input = '';
+	$split_re = '#\s*,\s*#';
 	switch ($type)
 	{
 		case COT_CONFIG_TYPE_STRING:
@@ -865,7 +866,7 @@ function cot_config_input($cfg_var)
 		case COT_CONFIG_TYPE_SELECT:
 			if (!empty($options))
 			{
-				$params = explode(',', $options);
+				$params = preg_split($split_re, $options);
 				$params_titles = cot_config_selecttitles($name, $params);
 			}
 			$config_input = (is_array($params)) ? cot_selectbox($value, $name, $params, $params_titles, false) : cot_inputbox('text', $name, $value);
@@ -876,12 +877,14 @@ function cot_config_input($cfg_var)
 			global $L;
 			if (!empty($options))
 			{
-				$params = explode(',', $options);
+				// extending radio to use custom values list
+				$params = preg_split($split_re, $options);
 				$params_titles = cot_config_selecttitles($name, $params);
 				if (empty($value)) $value = $cfg_var['config_default'];
 			}
 			else
 			{
+				// old style definition
 				$params = array(1, 0);
 				$params_titles = array($L['Yes'], $L['No']);
 			}
@@ -889,7 +892,7 @@ function cot_config_input($cfg_var)
 			break;
 
 		case COT_CONFIG_TYPE_RANGE:
-			$range = preg_split('#\s*,\s*#', $options);
+			$range = preg_split($split_re, $options);
 			$params = range($range[0], $range[1], empty($range[2]) ? 1 : $range[2]);
 			$config_input = cot_selectbox($value, $name, $params, $params, false);
 			break;
@@ -897,7 +900,7 @@ function cot_config_input($cfg_var)
 		case COT_CONFIG_TYPE_CUSTOM:
 			if ((preg_match('#^(\w+)\((.*?)\)$#', $options, $mt) && function_exists($mt[1])))
 			{
-				$callback_params = preg_split('#\s*,\s*#', $mt[2]);
+				$callback_params = preg_split($split_re, $mt[2]);
 				if (count($callback_params) > 0 && !empty($callback_params[0]))
 				{
 					for ($i = 0; $i < count($callback_params); $i++)
@@ -916,7 +919,7 @@ function cot_config_input($cfg_var)
 		case COT_CONFIG_TYPE_CALLBACK:
 			if ((preg_match('#^(\w+)\((.*?)\)$#', $options, $mt) && function_exists($mt[1])))
 			{
-				$callback_params = preg_split('#\s*,\s*#', $mt[2]);
+				$callback_params = preg_split($split_re, $mt[2]);
 				if (count($callback_params) > 0 && !empty($callback_params[0]))
 				{
 					for ($i = 0; $i < count($callback_params); $i++)
