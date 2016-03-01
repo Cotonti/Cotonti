@@ -82,4 +82,4 @@ if (!empty($ckeditor_css_to_load) && is_array($ckeditor_css_to_load)) {
 }
 if (sizeof($ckeditor_css_to_load)) $ckeditor_css_connector = "CKEDITOR.config.contentsCss = ['".implode("','", $ckeditor_css_to_load)."'];";
 
-Resources::embedFooter("CKEDITOR.timestamp = $ckeditor_timestamp; ".$ckeditor_css_connector);
+Resources::embedFooter("CKEDITOR.timestamp = $ckeditor_timestamp; CKEDITOR.config.baseHref='{$cfg['mainurl']}/'; ".$ckeditor_css_connector);
