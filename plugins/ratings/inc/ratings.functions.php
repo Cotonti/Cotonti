@@ -53,7 +53,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 		$item_has_rating = true;
 		if ($rating_average < 1)
 		{
-			$rating_average = 1;
+			$rating_average = $rating_average == 0.00 ? 0 : 1;
 		}
 		elseif ($rating_average > 10)
 		{
