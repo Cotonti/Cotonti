@@ -28,7 +28,7 @@ $newrate = (!empty($newrate)) ? $newrate : 0;
 $enabled = cot_ratings_enabled($area, $cat, $code);
 list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'ratings');
 
-if ($inr == 'send' && $newrate > 0 && $newrate <= 10 && $auth_write && $enabled)
+if ($inr == 'send' && $newrate >= 0 && $newrate <= 10 && $auth_write && $enabled)
 {
 	// Get current item rating
 	$sql = $db->query("SELECT * FROM $db_ratings
@@ -71,7 +71,9 @@ if ($inr == 'send' && $newrate > 0 && $newrate <= 10 && $auth_write && $enabled)
 	if (!$cfg['plugin']['ratings']['ratings_allowchange'] && $already_rated)
 	{
 		// Can't vote twice
+            if (!COT_AJAX){
 		cot_die_message(403, TRUE);
+            }   
 		exit;
 	}
 
@@ -81,7 +83,7 @@ if ($inr == 'send' && $newrate > 0 && $newrate <= 10 && $auth_write && $enabled)
 		$db->delete($db_rated, 'rated_userid = ? AND rated_area = ? AND rated_code = ?',
 			array($usr['id'], $area, $code));
 	}
-
+        
 	// Insert new rating for the item if none is present
 	if (!$item_has_rating)
 	{
@@ -94,32 +96,37 @@ if ($inr == 'send' && $newrate > 0 && $newrate <= 10 && $auth_write && $enabled)
 			'rating_text' => ''
 		));
 	}
-
-	// Insert new vote and recalculate average value
-	$db->insert($db_rated, array(
-		'rated_code' => $code,
-		'rated_area' => $area,
-		'rated_userid' => $usr['id'],
-		'rated_value' => (int) $newrate,
-		'rated_date' => $sys['now']
-	));
+        
+        if($newrate > 0){
+            // Insert new vote and recalculate average value
+            $db->insert($db_rated, array(
+                    'rated_code' => $code,
+                    'rated_area' => $area,
+                    'rated_userid' => $usr['id'],
+                    'rated_value' => (int) $newrate,
+                    'rated_date' => $sys['now']
+            ));
+        }
+        
 	$rating_voters = $db->query("SELECT COUNT(*) FROM $db_rated
 		WHERE rated_area = ? AND rated_code = ?",
 		array($area, $code))->fetchColumn();
-
+        
 	if ($rating_voters > 0)
 	{
 		$ratingnewaverage = $db->query("SELECT AVG(rated_value) FROM $db_rated
 			WHERE rated_area = ? AND rated_code = ?",
 			array($area, $code))->fetchColumn();
-		$db->update($db_ratings, array('rating_average' => round($ratingnewaverage, 2)),
-			'rating_area = ? AND rating_code = ?', array($area, $code));
+
 	}
 	else
 	{
 		$ratingnewaverage = 0;
 	}
 
+		$db->update($db_ratings, array('rating_average' => round($ratingnewaverage, 2)),
+			'rating_area = ? AND rating_code = ?', array($area, $code));
+        
 	/* == Hook for the plugins == */
 	foreach (cot_getextplugins('ratings.send.done') as $pl)
 	{
