@@ -2582,21 +2582,21 @@ function cot_img_check_memory($file_path, $extra_size = 0)
 }
 
 /**
- * Returns Theme/Scheme selection dropdown
+ * Returns themes info data for all available themes or a specified one
  *
- * @param string $selected_theme Seleced theme
- * @param string $selected_scheme Seleced color scheme
- * @param string $name Dropdown name
- * @return string
+ * @param string $theme_name Name of theme to get info.
+ *        Returns list for all themes if no name specified.
+ * @return mixed Array of Theme info data or Theme info data or FALSE
  */
-function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
+function cot_themes_info($theme_name = null)
 {
-	global $cfg;
 	require_once cot_incfile('extensions');
-	$handle = opendir($cfg['themes_dir']);
+	$themes_data = array();
+	$themelist = array();
+	$handle = opendir(cot::$cfg['themes_dir']);
 	while ($f = readdir($handle))
 	{
-		if (mb_strpos($f, '.') === FALSE && is_dir("{$cfg['themes_dir']}/$f") && $f != "admin")
+		if (mb_strpos($f, '.') === FALSE && is_dir(cot::$cfg['themes_dir'] . "/$f") && $f != "admin")
 		{
 			$themelist[] = $f;
 		}
@@ -2604,43 +2604,77 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 	closedir($handle);
 	sort($themelist);
 
+	foreach ($themelist as $name)
+	{
+		if ($theme_name && $theme_name != $name) continue;
+		$themeinfo = array();
+		$themeinfo_file = cot::$cfg['themes_dir'] . "/$name/$name.php";
+		if (file_exists($themeinfo_file) && $info = cot_infoget($themeinfo_file, 'COT_THEME'))
+		{
+			$themeinfo = $info;
+			if (!$themeinfo['Title']) $themeinfo['Title'] = ($info['Name'] ? $info['Name'] : $name);
+			$schemes_list = array();
+			if (!empty($info['Schemes']))
+			{
+				$schemes = preg_split('/\s*,\s*/', $info['Schemes']);
+				sort($schemes);
+				foreach ($schemes as $scheme)
+				{
+					list($sc_name, $sc_title) = explode(':', $scheme);
+					$schemes_list[$sc_name] = $sc_title;
+				}
+			}
+			$themeinfo['Schemes'] = $schemes_list;
+		}
+		if (sizeof($themeinfo) > 0) $themes_data[$name] = $themeinfo;
+	}
+	if (is_null($theme_name))
+	{
+		return $themes_data;
+	}
+	elseif ($themes_data[$theme_name])
+	{
+		return $themes_data[$theme_name];
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/**
+ * Returns Theme/Scheme selection dropdown
+ *
+ * @param string $selected_theme Seleced theme
+ * @param string $selected_scheme Seleced color scheme
+ * @param string $title Dropdown name
+ * @return string
+ */
+function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
+{
+	$themes_info = cot_themes_info();
+
 	$values = array();
 	$titles = array();
-	foreach ($themelist as $x)
+	foreach ($themes_info as $name => $info)
 	{
-		$themeinfo = "{$cfg['themes_dir']}/$x/$x.php";
-		if (file_exists($themeinfo))
+		if ($info)
 		{
-			$info = cot_infoget($themeinfo, 'COT_THEME');
-			if ($info)
+			$version = $info['Version'];
+			$title = $info['Title'] . ($version ? " v$version" : '');
+			if (sizeof($info['Schemes']))
 			{
-				if (empty($info['Schemes']))
+				foreach ($info['Schemes'] as $sc_name => $sc_title)
 				{
-					$values[] = "$x:default";
-					$titles[] = $info['Name'];
-				}
-				else
-				{
-					$schemes = explode(',', $info['Schemes']);
-					sort($schemes);
-					foreach ($schemes as $sc)
-					{
-						$sc = explode(':', $sc);
-						$values[] = $x . ':' . $sc[0];
-						$titles[] = count($schemes) > 1 ? $info['Name'] .  ' (' . $sc[1] . ')' : $info['Name'];
-					}
+					$values[] = $name . ':' . $sc_name;
+					$titles[] = count($info['Schemes']) > 1 ? $title . ' (' . $sc_title . ')' : $title;
 				}
 			}
 			else
 			{
-				$values[] = "$x:default";
-				$titles[] = $x;
+				$values[] = "$name:default";
+				$titles[] = $title;
 			}
-		}
-		else
-		{
-			$values[] = "$x:default";
-			$titles[] = $x;
 		}
 	}
 
