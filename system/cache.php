@@ -151,7 +151,7 @@ abstract class Writeback_cache_driver extends Dynamic_cache_driver
 
 	/**
 	 * Removes item immediately, avoiding writeback.
-	 * @param string $id Item identifirer
+	 * @param string $id Item identifier
 	 * @param string $realm Cache realm
 	 * @return bool
 	 * @see Cache_driver::remove()
