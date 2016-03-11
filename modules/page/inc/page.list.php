@@ -174,7 +174,7 @@ if(empty($sql_page_string))
 {
 	$where = array_filter($where);
 	$where = ($where) ? 'WHERE ' . implode(' AND ', $where) : '';
-	$sql_page_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition $where";
+	$sql_page_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid $where";
 	$sql_page_string = "SELECT p.*, u.* $join_columns
 		FROM $db_pages as p $join_condition
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
