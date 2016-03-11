@@ -216,12 +216,13 @@ if (!$cot_plugins && !defined('COT_INSTALL'))
 		while ($row = $sql->fetch())
 		{
 			$cot_plugins[$row['pl_hook']][] = $row;
-                        
-                        if($row['pl_module'] == 0){    
-                            $cot_plugins_active[$row['pl_code']] = true;
-                        }    
+
+			if ($row['pl_module'] == 0)
+			{
+				$cot_plugins_active[$row['pl_code']] = true;
+			}
 		}
-        $sql->closeCursor();
+		$sql->closeCursor();
 	}
 	$cache && $cache->db->store('cot_plugins', $cot_plugins, 'system');
 	$cache && $cache->db->store('cot_plugins_active', $cot_plugins_active, 'system');
@@ -229,8 +230,7 @@ if (!$cot_plugins && !defined('COT_INSTALL'))
 
 if (!$cot_modules)
 {
-    $sql = $db->query("SELECT * FROM $db_core
-		WHERE ct_state = 1 AND ct_lock = 0");
+	$sql = $db->query("SELECT * FROM $db_core WHERE ct_state = 1 AND ct_lock = 0");
 	if ($sql->rowCount() > 0)
 	{
 		while ($row = $sql->fetch())
@@ -240,7 +240,7 @@ if (!$cot_modules)
 				$cot_plugins_enabled[$row['ct_code']] = array(
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],
-                    'version' => $row['ct_version']
+					'version' => $row['ct_version']
 				);
 			}
 			else
@@ -248,11 +248,11 @@ if (!$cot_modules)
 				$cot_modules[$row['ct_code']] = array(
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],
-                    'version' => $row['ct_version']
+					'version' => $row['ct_version']
 				);
 			}
 		}
-        $sql->closeCursor();
+		$sql->closeCursor();
 	}
 	$cache && $cache->db->store('cot_modules', $cot_modules, 'system');
 	$cache && $cache->db->store('cot_plugins_enabled', $cot_plugins_enabled, 'system');
@@ -345,9 +345,9 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
 				$usr['lastlog'] = $row['user_lastlog'];
 				$usr['timezone'] = cot_timezone_offset($row['user_timezone'], true);
 				$usr['timezonename'] = $row['user_timezone'];
-				$usr['theme'] = ($cfg['forcedefaulttheme']) ? $cfg['defaulttheme'] : $row['user_theme'];
-				$usr['scheme'] = $row['user_scheme'];
-				$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];
+				$usr['theme'] = $cfg['forcedefaulttheme'] ? $cfg['defaulttheme'] : $row['user_theme'];
+				$usr['scheme'] = $cfg['forcedefaulttheme'] ? $cfg['defaultscheme'] : $row['user_scheme'];
+				$usr['lang'] = $cfg['forcedefaultlang'] ? $cfg['defaultlang'] : $row['user_lang'];
 				$usr['newpm'] = $row['user_newpm'];
 				$usr['auth'] = unserialize($row['user_auth']);
 				$usr['adminaccess'] = cot_auth('admin', 'any', 'R');
