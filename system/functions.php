@@ -2602,7 +2602,21 @@ function cot_themes_info($theme_name = null)
 		}
 	}
 	closedir($handle);
-	sort($themelist);
+
+	if (!is_null($theme_name))
+	{
+		if (!in_array($theme_name, $themelist))
+		{
+			return false;
+		}
+		else {
+			$themelist = array($theme_name);
+		}
+	}
+	else
+	{
+		sort($themelist);
+	}
 
 	foreach ($themelist as $name)
 	{
@@ -2632,13 +2646,9 @@ function cot_themes_info($theme_name = null)
 	{
 		return $themes_data;
 	}
-	elseif ($themes_data[$theme_name])
-	{
-		return $themes_data[$theme_name];
-	}
 	else
 	{
-		return false;
+		return $themes_data[$theme_name];
 	}
 }
 
