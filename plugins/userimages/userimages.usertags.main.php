@@ -26,6 +26,6 @@ if (is_array($user_data))
 	{
 		$uimage = $user_data['user_' . $code];
 		$temp_array[strtoupper($code) . '_SRC'] = $uimage;
-		$temp_array[strtoupper($code)] = is_file($uimage) ? cot_userimages_build($user_data['user_' . $code], $code) : '';
+		$temp_array[strtoupper($code)] = cot_userimages_build( is_file($uimage) ? $uimage : '', $code );
 	}
 }

@@ -3,7 +3,6 @@
  * English Language File for Banlist
  *
  * @package Userimages
- * @version
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
