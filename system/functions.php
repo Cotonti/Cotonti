@@ -3373,66 +3373,21 @@ function cot_lang_determine()
 }
 
 /**
- * Tries to detect and fetch a user scheme CSS file or returns FALSE on error.
+ * Returns path to a CSS file for user selected color scheme. 
+ * The default search order is:  
+ * 1) `css` subfolder of user selected theme
+ * 2) Main folder of user selected theme
  *
- * @global array $usr User object
- * @global array $cfg Configuration
- * @global array $out Output vars
- * @return mixed
+ * @return mixed Filename with full path to CSS file or FALSE if not found
  */
 function cot_schemefile()
 {
-	global $usr, $cfg, $out;
-	if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['scheme']}.css"))
-	{
-		return "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['scheme']}.css";
-	}
-	if (is_dir("{$cfg['themes_dir']}/{$usr['theme']}/css/"))
-	{
-		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/css/{$usr['scheme']}.css"))
-		{
-			return "{$cfg['themes_dir']}/{$usr['theme']}/css/{$usr['scheme']}.css";
-		}
-		elseif (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/css/{$cfg['defaultscheme']}.css"))
-		{
-			$out['notices_array'][] = $L['com_schemefail'];
-			$usr['scheme'] = $cfg['defaultscheme'];
-			return "{$cfg['themes_dir']}/{$usr['theme']}/css/{$cfg['defaultscheme']}.css";
-		}
-	}
-	if (is_dir("{$cfg['themes_dir']}/{$usr['theme']}"))
-	{
-		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$cfg['defaultscheme']}.css"))
-		{
-			$out['notices_array'][] = $L['com_schemefail'];
-			$usr['scheme'] = $cfg['defaultscheme'];
-			return "{$cfg['themes_dir']}/{$usr['theme']}/{$cfg['defaultscheme']}.css";
-		}
-		elseif (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.css"))
-		{
-			$out['notices_array'][] = $L['com_schemefail'];
-			$usr['scheme'] = $usr['theme'];
-			return "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.css";
-		}
-		elseif (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/style.css"))
-		{
-			$out['notices_array'][] = $L['com_schemefail'];
-			$usr['scheme'] = 'style';
-			return "{$cfg['themes_dir']}/{$usr['theme']}/style.css";
-		}
-	}
-	$out['notices_array'][] = $L['com_schemefail'];
-	if (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaultscheme']}.css"))
-	{
-		$usr['theme'] = $cfg['defaulttheme'];
-		$usr['scheme'] = $cfg['defaultscheme'];
-		return "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaultscheme']}.css";
-	}
-	elseif (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/css/{$cfg['defaultscheme']}.css"))
-	{
-		$usr['theme'] = $cfg['defaulttheme'];
-		$usr['scheme'] = $cfg['defaultscheme'];
-		return "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/css/{$cfg['defaultscheme']}.css";
+	$scheme_css = array();
+	$scheme_css[] = cot::$cfg['themes_dir'] .'/'. cot::$usr['theme'] .'/css/'. cot::$usr['scheme'] .'.css';
+	$scheme_css[] = cot::$cfg['themes_dir'] .'/'. cot::$usr['theme'] .'/'. cot::$usr['scheme'] .'.css';
+
+	foreach ($scheme_css as $filename) {
+		if (is_file($filename)) return $filename;
 	}
 	return false;
 }
