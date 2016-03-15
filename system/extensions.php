@@ -71,7 +71,7 @@ function cot_apply_patches($directory, $from_ver,
 		return true;
 	}
 
-	// Apply patches in verion order
+	// Apply patches in version order
 	uksort($delta, 'version_compare');
 	$max_ver = $from_ver;
 	foreach ($delta as $key => $val)
