@@ -26,8 +26,8 @@ $L['cfg_cache_ttl']          = 'Время жизни кеша в секунда
 $L['cfg_freq']               = 'Частота изменения по умолчанию';
 $L['cfg_freq_params']        = $sitemap_freqs;
 $L['cfg_prio']               = 'Приоритет по умолчанию';
-$L['cfg_perpage'] = 'Макс. ссылок на часть карты';
-$L['cfg_perpage_hint'] = 'Если ссылок больше, то карта разбивается на части, см. http://yoursite/index.php?r=sitemap&a=index';
+$L['cfg_perpage']            = 'Макс. ссылок на часть карты';
+$L['cfg_perpage_hint']       = 'Если ссылок больше, то карта разбивается на части, см. http://yoursite/index.php?r=sitemap&a=index';
 $L['cfg_index_freq']         = 'Частота изменения главной';
 $L['cfg_index_freq_params']  = $sitemap_freqs;
 $L['cfg_index_prio']         = 'Приоритет главной страницы';

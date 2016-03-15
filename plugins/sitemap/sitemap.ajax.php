@@ -1,8 +1,8 @@
 <?php
 /* ====================
- * [BEGIN_COT_EXT]
- * Hooks=ajax
- * [END_COT_EXT]
+[BEGIN_COT_EXT]
+Hooks=ajax
+[END_COT_EXT]
 ==================== */
 
 /**

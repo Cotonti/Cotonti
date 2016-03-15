@@ -16,4 +16,3 @@ $L['cfg_maxpages'] = 'Number of recent pages displayed';
 $L['cfg_cache_ttl'] = 'Cache TTL';
 $L['cfg_cache_ttl_hint'] = '0 - cache off';
 
-?>
