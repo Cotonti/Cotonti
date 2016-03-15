@@ -175,7 +175,7 @@ function cot_apply_rwr()
  */
 function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypass = false)
 {
-	global $cfg, $cot_urltrans, $sys, $cot_url_shortcuts;
+	global $cfg, $cot_urltrans, $sys, $cot_url_shortcuts, $i18n_omit;
 
 	$q_s = str_replace('%5B', '[', str_replace('%5D', ']', http_build_query($params)));
 	if (isset($cot_url_shortcuts[$name][$q_s]))
@@ -270,7 +270,7 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 		}
 	}
 	// Support for i18n parameter
-	if (isset($params['l']) && isset($cfg['plugin']['i18n']['rewrite']) && $cfg['plugin']['i18n']['rewrite'])
+	if (isset($params['l']) && isset($cfg['plugin']['i18n']['rewrite']) && $cfg['plugin']['i18n']['rewrite'] && !$i18n_omit)
 	{
 		// Add with slash at the beginning of the URL
 		$pos = strpos($url, $sys['site_uri']);
@@ -297,12 +297,12 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	if (!empty($params))
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
-		$url_tail = (version_compare(PHP_VERSION, '5.4.0', '>=')) 
+		$url_tail = (version_compare(PHP_VERSION, '5.4.0', '>='))
 			? http_build_query($params, '', $sep, PHP_QUERY_RFC3986) : str_replace('+', '%20', http_build_query($params, '', $sep));
 		if (!empty($url_tail))
 		{
 			$url .= (mb_strpos($url, '?') === false ? '?' : $sep) . $url_tail;
-		}	
+		}
 	}
 	// Almost done
 	$url .= $tail;
