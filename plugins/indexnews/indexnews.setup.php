@@ -8,6 +8,7 @@ Description=Pick up pages from a category and display the newest in the home pag
 Version=1.0.0
 Date=2015-11-01
 Author=esclkm
+Copyright=(c) Cotonti Team 2016
 Auth_guests=R
 Lock_guests=12345A
 Auth_members=RW
