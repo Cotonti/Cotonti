@@ -1212,6 +1212,12 @@ function cot_randomstring($length = 8, $charlist = null)
 function cot_load_structure()
 {
 	global $db, $db_structure, $cfg, $cot_extrafields, $structure;
+
+	if (function_exists('cot_load_structure_custom'))
+	{
+		return cot_load_structure_custom();
+	}
+
 	$structure = array();
 	if (defined('COT_UPGRADE'))
 	{
