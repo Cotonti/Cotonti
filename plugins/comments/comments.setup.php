@@ -1,12 +1,12 @@
-<?php
+	<?php
 /* ====================
 [BEGIN_COT_EXT]
 Code=comments
 Name=Comments system
 Category=community-social
 Description=Comments system for Cotonti
-Version=0.9.17
-Date=2014-05-04
+Version=1.1.1
+Date=2015-03-01
 Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2014
 Notes=BSD License

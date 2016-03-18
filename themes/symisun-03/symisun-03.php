@@ -2,6 +2,7 @@
 /* ====================
 [BEGIN_COT_THEME]
 Name=SymiSun-03
+Version=1.0.0
 [END_COT_THEME]
 ==================== */
 

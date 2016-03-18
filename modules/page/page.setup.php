@@ -3,8 +3,8 @@
 [BEGIN_COT_EXT]
 Name=Pages
 Description=Pages and Categories
-Version=1.0.2
-Date=2015-12-09
+Version=1.0.3
+Date=2016-03-11
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2014
 Notes=BSD License
