@@ -86,18 +86,18 @@ require_once $cfg['system_dir'] . '/cotemplate.php';
 // Bootstrap
 require_once $cfg['system_dir'] . '/common.php';
 
-// Support for ajax and popup hooked plugins
-if (empty($_GET['e']) && !empty($_GET['r']))
+$ext = isset($_GET['e']) ? cot_import('e', 'G', 'ALP') : false;
+$ajax = cot_import('r', 'G', 'ALP');
+$popup = cot_import('o', 'G', 'ALP');
+if (!$ext)
 {
-	$_GET['e'] = $_GET['r'];
+	// Support for ajax and popup hooked plugins
+	$ext = $ajax ? $ajax : ($popup ? $popup : $ext);
 }
-if (empty($_GET['e']) && !empty($_GET['o']))
-{
-	$_GET['e'] = $_GET['o'];
-}
+unset ($ajax, $popup);
 
 // Detect selected extension
-if (empty($_GET['e']))
+if ($ext === false)
 {
 	// Default environment for index module
 	define('COT_MODULE', true);
@@ -107,16 +107,16 @@ if (empty($_GET['e']))
 else
 {
 	$found = false;
-	if (preg_match('`^\w+$`', $_GET['e']))
+	if (preg_match('`^\w+$`', $ext))
 	{
 		$module_found = false;
 		$plugin_found = false;
-		if (file_exists($cfg['modules_dir'] . '/' . $_GET['e']) && isset($cot_modules[$_GET['e']]))
+		if (file_exists($cfg['modules_dir'] . '/' . $ext) && isset($cot_modules[$ext]))
 		{
 			$module_found = true;
 			$found = true;
 		}
-		if (file_exists($cfg['plugins_dir'] . '/' . $_GET['e']))
+		if (file_exists($cfg['plugins_dir'] . '/' . $ext))
 		{
 			$plugin_found = true;
 			$found = true;
@@ -124,7 +124,7 @@ else
 		if ($module_found && $plugin_found)
 		{
 			// Need to query the db to check which one is installed
-			$res = $db->query("SELECT ct_plug FROM $db_core WHERE ct_code = ? LIMIT 1", $_GET['e']);
+			$res = $db->query("SELECT ct_plug FROM $db_core WHERE ct_code = ? LIMIT 1", $ext);
 			if ($res->rowCount() == 1)
 			{
 				if ((int)$res->fetchColumn())
@@ -155,7 +155,7 @@ else
 	}
 	if ($found)
 	{
-		$env['ext'] = $_GET['e'];
+		$env['ext'] = $ext;
 	}
 	else
 	{
@@ -164,7 +164,7 @@ else
 		exit;
 	}
 }
-
+unset($ext);
 
 // Load the requested extension
 if ($env['type'] == 'plug')

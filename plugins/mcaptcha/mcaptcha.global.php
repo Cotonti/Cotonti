@@ -57,7 +57,7 @@ function mcaptcha_validate($res)
 	if(time() - $_SESSION['mcaptcha_time'] > $cfg['plugin']['mcaptcha']['delay'])
 	{
 		// Check salt (form-to-session tie)
-		if($_POST['mcaptcha_salt'] == $_SESSION['mcaptcha_salt'])
+		if(cot_import('mcaptcha_salt', 'POST', 'ALP') == $_SESSION['mcaptcha_salt'])
 		{
 			// Check per-result counter
 			if($_SESSION['mcaptcha_count'] == 0)

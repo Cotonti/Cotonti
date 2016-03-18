@@ -64,9 +64,10 @@ $i18n_notmain = $i18n_locale != $cfg['defaultlang'];
 list($i18n_read, $i18n_write, $i18n_admin, $i18n_edit) = cot_auth('plug', 'i18n', 'RWA1');
 
 // Remember in cookie if needed
-if ($cfg['plugin']['i18n']['cookie'] && $i18n_locale !== $_COOKIE['i18n_locale'])
+$cookie_locale = cot_import('i18n_locale', 'COOKIE', 'ALP');
+if ($cfg['plugin']['i18n']['cookie'] && $i18n_locale !== $cookie_locale)
 {
-	if ($i18n_locale === $cfg['defaultlang'] && isset($_COOKIE['i18n_locale']))
+	if ($i18n_locale === $cfg['defaultlang'] && $cookie_locale)
 	{
 		cot_setcookie('i18n_locale', null, -1);
 	}
@@ -81,3 +82,5 @@ if ($usr['id'] == 0 && $i18n_notmain && $env['ext'] != 'index')
 {
 	$sys['noindex'] = true;
 }
+
+if ($i18n_locale) require_once cot_langfile('i18n', 'plug', $cfg['defaultlang'], $i18n_locale);

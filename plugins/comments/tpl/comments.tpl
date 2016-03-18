@@ -41,7 +41,7 @@
 
 		<a name="comments"></a>
 
-		<div class="block" style="display:{COMMENTS_DISPLAY}">
+		<div class="block" <!-- IF {COMMENTS_DISPLAY} == 'none' -->style="display:none;"<!-- ENDIF -->>
 <!-- BEGIN: COMMENTS_ROW -->
 				<div class="comments1">
 					<p>{COMMENTS_ROW_AUTHOR_AVATAR}</p>

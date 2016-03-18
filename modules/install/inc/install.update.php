@@ -44,10 +44,10 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 					{
 						$val = false;
 					}
-                    elseif ($key == 'site_id' || $key == 'secret_key')
-                    {
-                        $val = cot_unique(32);
-                    }
+					elseif ($key == 'site_id' || $key == 'secret_key')
+					{
+						$val = cot_unique(32);
+					}
 
 					if (is_bool($val))
 					{
@@ -79,7 +79,9 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 		if (!empty($delta))
 		{
 			$config_contents = file_get_contents($file['config']);
-			$config_contents = str_replace('?>', $delta.'?>', $config_contents);
+			// strip PHP closing tag if exists
+			if (substr($config_contents, -2) == '?>') $config_contents = substr($config_contents, 0, -2);
+			$config_contents .= $delta;
 			file_put_contents($file['config'], $config_contents);
 			cot_message('install_update_config_success');
 			$updated_config = true;

@@ -2,6 +2,8 @@
  * Pastel On Dark theme ported from ACE editor
  * @license MIT
  * @copyright AtomicPages LLC 2014
+ * @author Dennis Thompson, AtomicPages LLC
+ * @version 1.1
  * @source https://github.com/atomicpages/codemirror-pastel-on-dark-theme
  */
 
@@ -12,6 +14,9 @@
 	font-size: 14px;
 }
 .cm-s-pastel-on-dark div.CodeMirror-selected { background: rgba(221,240,255,0.2) !important; }
+.cm-s-pastel-on-dark.CodeMirror ::selection { background: rgba(221,240,255,0.2); }
+.cm-s-pastel-on-dark.CodeMirror ::-moz-selection { background: rgba(221,240,255,0.2); }
+
 .cm-s-pastel-on-dark .CodeMirror-gutters {
 	background: #34302f;
 	border-right: 0px;

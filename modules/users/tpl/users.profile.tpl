@@ -59,10 +59,12 @@
 						</td>
 					</tr>
 <!-- ENDIF -->
+<!-- IF !{PHP.cfg.forcedefaulttheme} -->
 					<tr>
 						<td>{PHP.L.Theme}:</td>
 						<td>{USERS_PROFILE_THEME}</td>
 					</tr>
+<!-- ENDIF -->
 					<tr>
 						<td>{PHP.L.Language}:</td>
 						<td>{USERS_PROFILE_LANG}</td>

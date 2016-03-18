@@ -9,7 +9,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 // Modules and plugins checked by default
 $default_modules = array('index', 'page', 'users', 'rss');
-$default_plugins = array('ckeditor', 'cleaner', 'html', 'htmlpurifier', 'ipsearch', 'mcaptcha', 'news', 'search');
+$default_plugins = array('ckeditor', 'cleaner', 'html', 'htmlpurifier', 'ipsearch', 'mcaptcha', 'indexnews', 'search');
 
 $step = empty($_SESSION['cot_inst_lang']) ? 0 : (int) $cfg['new_install'];
 
@@ -559,11 +559,11 @@ switch ($step)
 		break;
 	case 3:
 		// Settings
-		if ($_POST['step'] != 3 && !cot_check_messages())
+		if (cot_import('step', 'POST', 'INT') != 3 && !cot_check_messages())
 		{
 			$rtheme = $theme;
 			$rscheme = $scheme;
-			$rlang = $cfg['defaultlang'];
+			$rlang = $lang;
 			$cfg['mainurl'] = $site_url;
 		}
 

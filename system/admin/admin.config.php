@@ -18,7 +18,6 @@ $adminsubtitle = $L['Configuration'];
 
 $t = new XTemplate(cot_tplfile('admin.config', 'core'));
 
-
 /* === Hook === */
 foreach (cot_getextplugins('admin.config.first') as $pl)
 {
@@ -38,6 +37,15 @@ switch ($n)
 		$optionslist = cot_config_list($o, $p, '');
 		cot_die(!sizeof($optionslist), true);
 
+		if ($o != 'core' && file_exists(cot_langfile($p, $o)))
+		{
+			require cot_langfile($p, $o);
+		}
+		if ($o != 'core' && file_exists(cot_incfile($p, $o)))
+		{
+			require_once cot_incfile($p, $o);
+		}
+
 		/* === Hook  === */
 		foreach (cot_getextplugins('admin.config.edit.first') as $pl)
 		{
@@ -47,7 +55,8 @@ switch ($n)
 
 		if ($a == 'update' && !empty($_POST))
 		{
-			cot_config_update_options($p, $optionslist, $o);
+			$updated = cot_config_update_options($p, $optionslist, $o);
+			$errors = cot_get_messages('', 'error');
 
 			if ($o == 'module' || $o == 'plug')
 			{
@@ -66,7 +75,14 @@ switch ($n)
 			/* ===== */
 			$cache && $cache->clear();
 
-			cot_message('Updated');
+			if ($updated)
+			{
+				$errors ? cot_message('adm_partially_updated', 'warning') : cot_message('Updated');
+			}
+			else
+			{
+				if (!$errors) cot_message('adm_already_updated');
+			}
 		}
 		elseif ($a == 'reset' && !empty($v))
 		{
@@ -81,7 +97,7 @@ switch ($n)
 			/* ===== */
 			$cache && $cache->clear();
 
-            cot_redirect(cot_url('admin', array('m'=>'config', 'n'=>'edit', 'o'=>$o, 'p'=>$p), '', true));
+			cot_redirect(cot_url('admin', array('m'=>'config', 'n'=>'edit', 'o'=>$o, 'p'=>$p), '', true));
 		}
 
 
@@ -94,19 +110,9 @@ switch ($n)
 		{
 			$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 			$plmod = $o == 'module' ? 'mod' : 'pl';
-			$ext_info = cot_get_extensionparams($p, $o);
+			$ext_info = cot_get_extensionparams($p, $o == 'module');
 			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $ext_info['name']);
-
 			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o=' . $o . '&p=' . $p), $L['Configuration']);
-		}
-
-		if ($o != 'core' && file_exists(cot_langfile($p, $o)))
-		{
-			require cot_langfile($p, $o);
-		}
-		if ($o != 'core' && file_exists(cot_incfile($p, $o)))
-		{
-			require_once cot_incfile($p, $o);
 		}
 
 		/* === Hook  === */
@@ -137,7 +143,7 @@ switch ($n)
 			else
 			{
 				$t->assign(array(
-					'ADMIN_CONFIG_ROW_CONFIG' => cot_config_input($row['config_name'], $row['config_type'], $row['config_value'], $row['config_variants']),
+					'ADMIN_CONFIG_ROW_CONFIG' => cot_config_input($row),
 					'ADMIN_CONFIG_ROW_CONFIG_TITLE' => $title,
 					'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' =>
 					cot_url('admin', "m=config&n=edit&o=$o&p=$p&a=reset&v=" . $row['config_name']),

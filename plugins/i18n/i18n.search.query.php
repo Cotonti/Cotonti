@@ -16,7 +16,7 @@ Hooks=search.page.query
 defined('COT_CODE') or die('Wrong URL');
 
 if (is_array($i18n_structure) && count($i18n_structure) > 0
-	&& ($rsearch['pag']['sub'][0] == 'all' || count($i18n_search_cats) > 0))
+	&& ($rs['pagsub'][0] == 'all' || count($i18n_search_cats) > 0))
 {
 	// Add ipage_id IS NULL and rebuild the 1st part
 	$where_and['i18n'] = 'ipage_id IS NULL';
@@ -25,7 +25,7 @@ if (is_array($i18n_structure) && count($i18n_structure) > 0
 	// Build the 2nd part for ipage_id IS NOT NULL
 	$where_and['i18n'] = 'ipage_id IS NOT NULL';
 
-	if ($rsearch['pag']['sub'][0] == 'all' || count($i18n_search_cats) == 0)
+	if ($rs['pagsub'][0] == 'all' || count($i18n_search_cats) == 0)
 	{
 		$where_and['cat'] = "page_cat IN ('".implode("','", $pag_catauth)."')";
 	}
@@ -43,16 +43,16 @@ if (is_array($i18n_structure) && count($i18n_structure) > 0
 		$where_and['cat'] = implode(' OR ', $where_subcats);
 	}
 
-	if ($rsearch['set']['limit'] > 0)
+	if ($rs['setlimit'] > 0)
 	{
-		$where_and['date2'] = "ipage_date >= ".$rsearch['set']['from']." AND ipage_date <= ".$rsearch['set']['to'];
+		$where_and['date2'] = "ipage_date >= ".$rs['setfrom']." AND ipage_date <= ".$rs['setto'];
 	}
 
 	unset($where_or['title'], $where_or['desc'], $where_or['text']);
 
-	$where_or['title'] = $rsearch['pag']['title'] ? "ipage_title LIKE '".$db->prep($sqlsearch)."'" : '';
-	$where_or['desc'] = $rsearch['pag']['desc'] ? "ipage_desc LIKE '".$db->prep($sqlsearch)."'" : '';
-	$where_or['text'] = $rsearch['pag']['text'] ? "ipage_text LIKE '".$db->prep($sqlsearch)."'" : '';
+	$where_or['title'] = $rs['pagtitle'] ? "ipage_title LIKE '".$db->prep($sqlsearch)."'" : '';
+	$where_or['desc'] = $rs['pagdesc'] ? "ipage_desc LIKE '".$db->prep($sqlsearch)."'" : '';
+	$where_or['text'] = $rs['pagtext'] ? "ipage_text LIKE '".$db->prep($sqlsearch)."'" : '';
 
 	$where_or = array_diff($where_or, array(''));
 	count($where_or) || $where_or['title'] = "ipage_title LIKE '".$db->prep($sqlsearch)."'";

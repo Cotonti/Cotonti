@@ -1,0 +1,11 @@
+/**
+ * CKEditor plugin for Cotonti.
+ *
+ * @package CKEditor
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ */
+hr.more {
+    border: none;
+    border-top: 1px dashed  #FF0000;
+}

@@ -82,7 +82,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','main','02','clustermode',3,'0','0','',''),
 ('core','main','03','hostip',1,'999.999.999.999','999.999.999.999','',''),
 ('core','main','04','parser',4,'none','none','cot_get_parsers()',''),
-('core','main','05','maxrowsperpage',8,'15','','cot_config_type_int(15,1)',''),
+('core','main','05','maxrowsperpage',8,'15','','cot_config_type_int(1)',''),
 ('core','main','06','easypagenav',3,'1','1','',''),
 ('core','main','07','confirmlinks',3,'1','1','',''),
 ('core','main','91','default_show_installed',3,'0','0','',''),

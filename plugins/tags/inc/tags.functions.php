@@ -65,8 +65,8 @@ function cot_tag($tag, $item, $area = 'pages', $extra = null)
 function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 {
 	global $db, $db_tag_references, $cache;
-    $cache_name = 'tag_cloud_cache_' . $area.'_'.$order;
-    if($limit) $cache_name .= '_'.$limit;
+	$cache_name = 'tag_cloud_cache_' . $area.'_'.$order;
+	if ($limit) $cache_name .= '_'.$limit;
 	if ($cache && $GLOBALS[$cache_name] && is_array($GLOBALS[$cache_name]))
 	{
 		return $GLOBALS[$cache_name];
@@ -75,6 +75,7 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 	$limit = is_null($limit) ? '' : ' LIMIT '.$limit;
 	switch($order)
 	{
+		case 'tag':
 		case 'Alphabetical':
 			$order = '`tag`';
 		break;
@@ -84,17 +85,36 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 		break;
 
 		default:
-			$order = 'RAND()';
+			if ($limit)
+			{
+				$order = '';
+				$random = true; // pseudo random (within one page)
+			}
+			else
+			{
+				$order = 'RAND()';
+			}
 	}
 	$where = $area == 'all' ? '' : "WHERE tag_area = '$area'";
+	if ($order) $order = "ORDER BY $order";
 	$sql = $db->query("SELECT `tag`, COUNT(*) AS `cnt`
 		FROM $db_tag_references
 		$where
 		GROUP BY `tag`
-		ORDER BY $order $limit");
+		$order $limit");
 	while ($row = $sql->fetch())
 	{
 		$res[$row['tag']] = $row['cnt'];
+	}
+	if ($random)
+	{
+		$rnd_res = array();
+		$rnd_keys = array_keys($res);
+		shuffle($rnd_keys);
+		foreach ($rnd_keys as $key) {
+			$rnd_res[$key] = $res[$key];
+		}
+		$res = $rnd_res;
 	}
 	$sql->closeCursor();
 	$cache && $cache->db->store($cache_name, $res, COT_DEFAULT_REALM, 300);
@@ -438,6 +458,7 @@ function cot_tag_unregister($tag)
 function cot_tag_search_form($area = 'all')
 {
 	global $db, $dt, $perpage, $lang, $tl, $qs, $t, $L, $R, $cfg, $db_tag_references, $tc_styles;
+
 	$limit = ($perpage > 0) ? "$dt, $perpage" : NULL;
 	$tcloud = cot_tag_cloud($area, $cfg['plugin']['tags']['order'], $limit);
 	$tc_html = $R['tags_code_cloud_open'];

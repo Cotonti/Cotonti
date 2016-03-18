@@ -103,6 +103,10 @@ else
 	{
 		$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$io), $cot_plugins_enabled[$io]['title']);
 	}
+	elseif($ic == 'structure')
+	{
+		$adminpath[] = array(cot_url('admin', 'm=structure'), $L['Structure']);
+	}	
 	else
 	{
 		$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$ic), $cot_modules[$ic]['title']);

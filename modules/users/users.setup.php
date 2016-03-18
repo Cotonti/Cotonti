@@ -15,7 +15,7 @@ Lock_members=
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-disablereg=01:radio:0,1:0:
+disablereg=01:radio::0:
 maxusersperpage=02:string::50:
 regrequireadmin=03:radio::0:
 regnoactivation=04:radio::0:

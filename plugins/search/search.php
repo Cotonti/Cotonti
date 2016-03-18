@@ -69,7 +69,7 @@ if ($rs['frmtitle'] < 1 && $rs['frmtext'] < 1)
 	$rs['frmtitle'] = 1;
 	$rs['frmtext'] = 1;
 }
-$rs['setuser'] = cot_import($rs['setuser'], 'D', 'INT');
+$rs['setuser'] = cot_import($rs['setuser'], 'D', 'TXT');
 $rs['setlimit'] = cot_import($rs['setlimit'], 'D', 'INT');
 $rs['setfrom'] = $sys['now'] - 31536000;
 $rs['setto'] = $sys['now'];
@@ -88,8 +88,8 @@ switch ($rs['setlimit'])
 		$rs['setfrom'] = $sys['now'] - 31536000;
 		break;
 	case 5:
-		$rs['setfrom'] = cot_import_date($rs['rfrom']);
-		$rs['setto'] = cot_import_date($rs['rto']);
+		$rs['setfrom'] = cot_import_date('rfrom', true, false, 'G');
+		$rs['setto'] = cot_import_date('rto', true, false, 'G');
 		break;
 	default: break;
 }
@@ -113,7 +113,7 @@ if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && $cfg['plugin'
 			$pag_catauth[] = $db->prep($cat);
 		}
 	}
-	if ($rs['pagsub'][0] == 'all' || !is_array($rs['pagsub']))
+	if ($rs['pagsub'][0] == 'all' || !$rs['pagsub'])
 	{
 		$rs['pagsub'] = array();
 		$rs['pagsub'][] = 'all';
@@ -154,7 +154,7 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugi
 		}
 	}
 
-	if ($rs['frmsub'][0] == 'all' || !is_array($rs['frmsub']))
+	if ($rs['frmsub'][0] == 'all' || !$rs['frmsub'])
 	{
 		$rs['frmsub'] = array();
 		$rs['frmsub'][] = 'all';
@@ -248,7 +248,7 @@ if (!empty($sq))
 		$where_and['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 		$where_and['date2'] = ($rs['setlimit'] > 0) ? "page_date >= ".$rs['setfrom']." AND page_date <= ".$rs['setto'] : "";
 		$where_and['file'] = ($rs['pagfile'] == 1) ? "page_file = '1'" : "";
-		$where_and['users'] = (!empty($touser)) ? "page_ownerid ".$touser_ids : "";
+		$where_and['users'] = (!empty($touser)) ? "page_ownerid ".$touser : "";
 
 		$where_or['title'] = ($rs['pagtitle'] == 1) ? "page_title LIKE '".$db->prep($sqlsearch)."'" : "";
 		$where_or['desc'] = (($rs['pagdesc'] == 1)) ? "page_desc LIKE '".$db->prep($sqlsearch)."'" : "";
@@ -265,12 +265,12 @@ if (!empty($sq))
 		$where_and = array_diff($where_and, array(''));
 		$where = implode(' AND ', $where_and);
 
-        if (!$db->fieldExists($db_pages, 'page_'.$rs['pagsort']))
-        {
-            $rs['pagsort'] = 'date';
-        }
+		if (!$db->fieldExists($db_pages, 'page_' . $rs['pagsort']))
+		{
+			$rs['pagsort'] = 'date';
+		}
 
-        $orderby = 'page_'.$rs['pagsort'].' '.$rs['pagsort2'];
+		$orderby = 'page_' . $rs['pagsort'] . ' ' . $rs['pagsort2'];
 
 		/* === Hook === */
 		foreach (cot_getextplugins('search.page.query') as $pl)
@@ -279,14 +279,14 @@ if (!empty($sq))
 		}
 		/* ===== */
 
-        if(empty($sql_page_string)) {
-            $sql_page_string = "SELECT SQL_CALC_FOUND_ROWS p.* $search_join_columns
+		if (empty($sql_page_string))
+		{
+			$sql_page_string = "SELECT SQL_CALC_FOUND_ROWS p.* $search_join_columns
                 FROM $db_pages AS p $search_join_condition
                 WHERE $where
                 ORDER BY {$orderby}
-                LIMIT $d, ".$cfg_maxitems
-                .$search_union_query;
-        }
+                LIMIT $d, " . $cfg_maxitems . $search_union_query;
+		}
 		$sql = $db->query($sql_page_string);
 		$items = $sql->rowCount();
 		$totalitems[] = $db->query('SELECT FOUND_ROWS()')->fetchColumn();
@@ -339,7 +339,7 @@ if (!empty($sq))
 					$tempcat = array_merge(cot_structure_children('forums', $scat), $tempcat);
 				}
 				$tempcat = array_unique($tempcat);
-				$where_and['cat'] = "page_cat IN ('".implode("','", $tempcat)."')";
+				$where_and['cat'] = "t.ft_cat IN ('".implode("','", $tempcat)."')";
 			}
 			else
 			{
@@ -357,7 +357,7 @@ if (!empty($sq))
 		}
 		$where_and['reply'] = ($rs['frmreply'] == '1') ? "t.ft_postcount > 1" : "";
 		$where_and['time'] = ($rs['setlimit'] > 0) ? "p.fp_creation >= ".$rs['setfrom']." AND p.fp_updated <= ".$rs['setto'] : "";
-		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid ".$touser_ids : "";
+		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid ".$touser : "";
 
 		$where_or['title'] = ($rs['frmtitle'] == 1) ? "t.ft_title LIKE '".$db->prep($sqlsearch)."'" : "";
 		$where_or['text'] = (($rs['frmtext'] == 1)) ? "p.fp_text LIKE '".$db->prep($sqlsearch)."'" : "";
@@ -459,8 +459,8 @@ $t->assign(array(
 	'PLUGIN_SEARCH_TEXT' => cot_inputbox('text', 'sq', htmlspecialchars($sq), 'size="32" maxlength="'.$cfg['plugin']['search']['maxsigns'].'"'),
 	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rs[setuser]', htmlspecialchars($rs['setuser']), 'class="userinput" size="32"'),
 	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rs['setlimit'], 'rs[setlimit]', range(0, 5), array($L['plu_any_date'], $L['plu_last_2_weeks'], $L['plu_last_1_month'], $L['plu_last_3_month'], $L['plu_last_1_year'], $L['plu_need_datas']), false),
-	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rs[rfrom]', cot_date('Y', $sys['now']) + 1),
-	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rs[rto]', cot_date('Y', $sys['now']) + 1),
+	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rfrom', cot_date('Y', $sys['now']) + 1),
+	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rto', cot_date('Y', $sys['now']) + 1),
 	'PLUGIN_SEARCH_FOUND' => (array_sum($totalitems) > 0) ? array_sum($totalitems) : '',
 	'PLUGIN_PAGEPREV' => $pagenav['prev'],
 	'PLUGIN_PAGENEXT' => $pagenav['next'],

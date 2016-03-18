@@ -39,7 +39,16 @@ if ($p == 'news' && $row['config_name'] == 'category' && $cfg['jquery'])
 			$tt->parse('MAIN.ADDITIONAL');
 		}
 	}
-
+	if($jj == 0)
+	{
+		$tt->assign(array(
+			'ADDNUM' => 1,
+			'ADDCATEGORY' => '',
+			'ADDCOUNT' => $cfg['plugin']['news']['maxpages'],
+			'ADDCUT' => ''
+		));
+		$tt->parse('MAIN.ADDITIONAL');		
+	}
 	$jj++;
 	$tt->assign(array(
 		'MAINCATEGORY' => cot_selectbox_structure('page', $index, 'newsmaincat'),

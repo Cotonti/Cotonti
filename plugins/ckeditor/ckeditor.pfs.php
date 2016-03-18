@@ -15,12 +15,12 @@ Hooks=pfs.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-$editor = $cfg['plugin'][$parser]['editor'];
-if (!$parser) $parser = ! empty($sys['parser']) ? $sys['parser'] : $cfg['parser'];
+if (!$parser) $parser = ! empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
+$editor = cot::$cfg['plugin'][$parser]['editor'];
 
 if ($parser == 'html' && $editor == 'ckeditor')
 {
-	$R['pfs_code_header_javascript'] = '
+	cot::$R['pfs_code_header_javascript'] = '
 	function addfile(gfile, c2, gdesc) {
 		if (opener.CKEDITOR.instances.{$c2} != undefined) {
 			opener.CKEDITOR.instances.{$c2}.insertHtml(\'{$pfs_code_addfile}\');

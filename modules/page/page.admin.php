@@ -34,26 +34,13 @@ list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 $sorttype = cot_import('sorttype', 'R', 'ALP');
 $sorttype = empty($sorttype) ? 'id' : $sorttype;
-$sort_type = array(
-	'id' => $L['Id'],
-	'type' => $L['Type'],
-	'key' => $L['Key'],
-	'title' => $L['Title'],
-	'desc' => $L['Description'],
-	'text' => $L['Body'],
-	'author' => $L['Author'],
-	'ownerid' => $L['Owner'],
-	'date' => $L['Date'],
-	'begin' => $L['Begin'],
-	'expire' => $L['Expire'],
-	'rating' => $L['Rating'],
-	'count' => $L['Hits'],
-	'file' => $L['adm_fileyesno'],
-	'url' => $L['adm_fileurl'],
-	'size' => $L['adm_filesize'],
-	'filecount' => $L['adm_filecount']
-);
+if (!$db->fieldExists($db_pages, "page_$sorttype"))
+{
+	$sorttype = 'id';
+}
 $sqlsorttype = 'page_'.$sorttype;
+
+$sort_type = cot_page_config_order(true);
 
 $sortway = cot_import('sortway', 'R', 'ALP');
 $sortway = empty($sortway) ? 'desc' : $sortway;
@@ -255,10 +242,10 @@ elseif ($a == 'update_checked')
 {
 	$paction = cot_import('paction', 'P', 'TXT');
 
-	if ($paction == $L['Validate'] && is_array($_POST['s']))
+	$s = cot_import('s', 'P', 'ARR');
+	if ($paction == $L['Validate'] && is_array($s))
 	{
 		cot_check_xp();
-		$s = cot_import('s', 'P', 'ARR');
 
 		$perelik = '';
 		$notfoundet = '';
@@ -310,10 +297,9 @@ elseif ($a == 'update_checked')
 			cot_message($notfoundet.$perelik.' - '.$L['adm_queue_validated']);
 		}
 	}
-	elseif ($paction == $L['Delete'] && is_array($_POST['s']))
+	elseif ($paction == $L['Delete'] && is_array($s))
 	{
 		cot_check_xp();
-		$s = cot_import('s', 'P', 'ARR');
 
 		$perelik = '';
 		$notfoundet = '';

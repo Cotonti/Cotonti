@@ -20,7 +20,7 @@ maxsize=02:select:200,500,1000,2000,5000,10000,15000,20000,30000,50000,65000:100
 allownotifications=03:radio::1:
 maxpmperpage=04:string::15:
 turnajax=98:radio::0:
-css=99:radio:0,1:1:Enable module CSS
+css=99:radio::1:Enable module CSS
 [END_COT_EXT_CONFIG]
 ==================== */
 

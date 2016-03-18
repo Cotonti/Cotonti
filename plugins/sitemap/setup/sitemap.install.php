@@ -35,7 +35,7 @@ if(file_exists($robotsTxtFilePath) && is_writable($robotsTxtFilePath)) {
 	foreach ($robotsTxtFile as $line) {
 		// Sitemap line. Find it all
 		if ( mb_strpos(mb_strtolower($line), 'sitemap:') !== false){
-			// find all Sitemap links in robots.txt и отмечаем лишние
+			// find all Sitemap links in robots.txt and remove duplicates
 			$found = false;
 			foreach($siteMapLinks as $key => $siteMapLink){
 				if(mb_stripos($line, $siteMapLink) !== false) {

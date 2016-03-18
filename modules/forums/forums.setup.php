@@ -18,7 +18,7 @@ Admin_icon=img/adminmenu_forums.png
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-markup=01:radio:0,1:1:
+markup=01:radio::1:
 hideprivateforums=02:radio::0:
 hottopictrigger=03:select:5,10,15,20,25,30,35,40,50:20:
 maxtopicsperpage=04:string::30:

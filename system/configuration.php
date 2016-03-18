@@ -51,58 +51,65 @@ define('COT_CONFIG_TYPE_CUSTOM', 8);
 /**
  * Generates a form input for Integer
  *
- * @param string $name Config value name
- * @param string $value User set value
- * @param string $defvalue Default value
- * @param string $min Minimum allowed value
- * @param string $max Maximum allowed value
- * @return string
+ * @param array $cfg_var Config Variable data
+ * @param string $min Minimum allowed value as get from callback parameters
+ * @param string $max Maximum allowed value as get from callback parameters
+ * @return string Code of input field
  */
-function cot_config_type_int($name, $value, $defvalue=null, $min=null, $max=null)
+function cot_config_type_int($cfg_var, $min='', $max='')
 {
-	$value = cot_config_type_int_filter($name, $value, $defvalue, $min, $max, true);
-	return cot_inputbox('text', $name, $value);
+	$name = $cfg_var['config_name'];
+	$value = $cfg_var['config_value'];
+	if (!empty($min) && !empty($max)){
+		$placeholder = "$min - $max";
+	} elseif(!empty($min)) {
+		$placeholder = cot_rc('adm_int_min', array('value'=>$min));
+	} elseif(!empty($min)) {
+		$placeholder = cot_rc('adm_int_max', array('value'=>$max));
+	}
+	return cot_inputbox('text', $name, $value, array('placeholder' => $placeholder ));
 }
 
 /**
- * Filters value as Integer
+ * Filters value as Integer in range from Min and Max.
+ * Used as custom config type callback filter function
+ * @see also COT_CONFIG_TYPE_CUSTOM type
  *
- * @see cot_config_type_int()
- * @param bool $skip_warnings Does not display warnings if set to TRUE
+ * @param string $new_value User input value
+ * @param array $cfg_var Config Variable data
+ * @param string $min Minimum allowed value as get from callback parameters
+ * @param string $max Maximum allowed value as get from callback parameters
+ * @param bool $skip_warnings Does not display warnings if set
+ * @return int|NULL Filtered integer value or NULL in case of value can not be filtered / not acceptable
  */
-function cot_config_type_int_filter($name, $value, $defvalue=null, $min=null, $max=null, $skip_warnings=false)
+function cot_config_type_int_filter($new_value, $cfg_var, $min='', $max='', $skip_warnings=false)
 {
-	$not_filtered = $value;
-	if (!is_numeric($value) || floor($value) != $value)
+	$not_filtered = $new_value;
+	$var_name = $cfg_var['config_name'];
+	list($title, $hint) = cot_config_titles($var_name, $cfg_var['config_text']);
+	if (!is_numeric($new_value))
 	{
-		if ($defvalue)
+		$not_num = true;
+	}
+	else
+	{
+		$new_value = floor($new_value);
+		if (!empty($min) && $new_value < $min)
 		{
-			$value = $defvalue;
+			$new_value = $min;
+			$fix_msg = '. '.cot_rc('adm_set').cot_rc('adm_int_min', array('value'=>$min));
 		}
-		else
+		if (!empty($max) && $new_value > $max)
 		{
-			$value = '';
+			$new_value = $max;
+			$fix_msg = '. '.cot_rc('adm_set').cot_rc('adm_int_max', array('value'=>$max));
 		}
-		$defset = true;
 	}
-	if (isset($min)  && $value < $min)
-	{
-		$value = $min;
-		$valset = true;
-	}
-	if (isset($max) && $value > $max)
-	{
-		$value = $max;
-		$valset = true;
-	}
-
 	// user friendly notification
-	$warning_msg = ($valset || $defset) ? cot_rc('adm_invalid_input', array('value' => $not_filtered, 'field_name' => $name )) : '';
-	$warning_msg .= ($defset) ? '. '.cot_rc('adm_set_default') : '';
-	$warning_msg .= ($valset && isset($min)) ? '. '.cot_rc('adm_int_min', array('min'=>$min)) : '';
-	$warning_msg .= ($valset && isset($max)) ? '. '.cot_rc('adm_int_max', array('max'=>$max)) : '';
-	if ($warning_msg && !$skip_warnings) cot_message($warning_msg, 'warning', $name.'_int_filter');
-	return $value;
+	$invalid_value_msg = cot_rc('adm_invalid_input', array('value' => $not_filtered, 'field_name' => $title ));
+	if (!$skip_warnings && ($fix_msg || $not_num)) cot_message($invalid_value_msg . $fix_msg, $not_num ? 'error' : 'warning', $var_name);
+
+	return $not_num ? NULL : (int)$new_value;
 }
 
 /**
@@ -139,7 +146,7 @@ function cot_config_type_int_filter($name, $value, $defvalue=null, $min=null, $m
  *
  * @param string $name Extension name (code)
  * @param array $options An associative array of configuration entries.
- * Each entry of the arrray has the following keys:
+ * Each entry of the array has the following keys:
  * 'name' => Option name, alphanumeric and _. Must be unique for a module/plugin
  * 'type' => Option type, see COT_CONFIG_TYPE_* constants
  * 'default' => Default and initial value, by default is an empty string
@@ -147,7 +154,7 @@ function cot_config_type_int_filter($name, $value, $defvalue=null, $min=null, $m
  * 		only for SELECT options.
  * 'order' => A string that determines position of the option in the list,
  * 		e.g. '04'. Or will be assigned automatically if omitted
- * 'text' => Textual description. It is usually omitted and stored in langfiles
+ * 'text' => Textual description. It is usually omitted and stored in lang files
  * @param mixed $is_module Flag indicating if it is module or plugin config
  * @param string $category Structure category code. Only for per-category config options
  * @param string $donor Extension name for extension-to-extension config implantations
@@ -348,6 +355,7 @@ function cot_config_parse($info_cfg)
 		foreach ($info_cfg as $i => $x)
 		{
 			$line = explode(':', $x);
+			$line[1] = trim($line[1]);
 			if (is_array($line) && !empty($line[1]) && !empty($i))
 			{
 				switch ($line[1])
@@ -382,11 +390,11 @@ function cot_config_parse($info_cfg)
 				}
 				$options[] = array(
 					'name' => $i,
-					'order' => $line[0],
+					'order' => trim($line[0]),
 					'type' => $line['Type'],
 					'variants' => $line[2],
 					'default' => $line[3],
-					'text' => $line[4]
+					'text' => trim($line[4])
 				);
 			}
 		}
@@ -498,14 +506,31 @@ function cot_config_set($name, $options, $is_module = false, $category = '')
 		{
 			$default_options = cot_config_load($name, $is_module, '__default');
 		}
+		$structure_val = array();
+	}
+	else
+	{
+		$structure_val = cot_config_list($type, $name, '__default');
 	}
 
+	$category_tmp = $category;
 	foreach ($options as $key => $val)
 	{
+		if (is_array($structure_val[$key]))
+		{
+			// roundabout way to update only structure defaults
+			$where_sub = ' AND config_subcat = ?';
+			$category = '__default';
+		}
+		else
+		{
+			$where_sub = '';
+			$category = $category_tmp;
+		}
 		if (empty($category) || $category == '__default' || $val != $default_options[$key])
 		{
 			$params = empty($category) ? array($type, $name, $key) : array($type, $name, $key, $category);
-			$upd_cnt += $db->update($db_config, array('config_value' => $val), $where, $params);
+			$upd_cnt += $db->update($db_config, array('config_value' => $val), $where . $where_sub, $params);
 		}
 	}
 
@@ -654,7 +679,6 @@ function cot_config_list($owner, $cat, $subcat = "")
 	foreach ($rs as $row)
 	{
 		$keyx = $row['config_name'];
-		$rowx = array();
 
 		if ($row['config_subcat'] == "__default")
 		{
@@ -665,7 +689,7 @@ function cot_config_list($owner, $cat, $subcat = "")
 			$rowset[$keyx] = $row;
 		}
 	}
-	// Заморочка - для правильного слияния массивов и затем правильного их отображения
+	// merging arrays for proper display
 	if (!empty($subcat))
 	{
 		foreach ($rowset_default as $key => $row)
@@ -705,28 +729,32 @@ function cot_config_import($name, $source='POST', $filter='NOC', $defvalue=null)
 		$single_value = true;
 	}
 	$res = array();
-	foreach ($name as $idx => $value_name) {
-		$filter_type = (is_array($filter)) ? ($filter[$value_name] ? $filter[$value_name] : ($filter[$idx] ? $filter[$idx] : 'NOC')) : $filter;
-		$not_filtered = cot_import($value_name, $source, 'NOC');
-		$value = cot_import($value_name, $source, $filter_type);
+	foreach ($name as $idx => $var_name) {
+		$filter_type = (is_array($filter)) ? ($filter[$var_name] ? $filter[$var_name] : ($filter[$idx] ? $filter[$idx] : 'NOC')) : $filter;
+		$not_filtered = cot_import($var_name, $source, 'NOC');
+		$value = cot_import($var_name, $source, $filter_type);
 		// addition filtering by varname
-		if (sizeof($cot_import_filters[$value_name]))
+		if (sizeof($cot_import_filters[$var_name]))
 		{
-			$value = cot_import($value, 'DIRECT', $value_name);
+			$value = cot_import($value, 'DIRECT', $var_name);
 		}
 
 		// if invalid value is used
 		if (is_null($value))
 		{
-			$warning_msg = cot_rc('adm_invalid_input', array('value' => $not_filtered, 'field_name' => $value_name ));
+			$value_to_show = (in_array($filter_type, array('INT', 'NUM', 'TXT', 'ALP')))
+				? htmlspecialchars(cot_cutstring(strip_tags($not_filtered), 15))
+				: '';
+			list($field_title) = cot_config_titles($var_name);
+			$error_msg = cot_rc('adm_invalid_input', array('value' => $value_to_show, 'field_name' => $field_title));
 			if (!is_null($defvalue))
 			{
-				$value = !is_array($defvalue) ? $defvalue : (isset($defvalue[$value_name]) ? $defvalue[$value_name] : (isset($defvalue[$idx]) ? $defvalue[$idx] : null));
-				$warning_msg .= '. '.cot_rc('adm_set_default', $value);
+				$value = !is_array($defvalue) ? $defvalue : (isset($defvalue[$var_name]) ? $defvalue[$var_name] : (isset($defvalue[$idx]) ? $defvalue[$idx] : null));
+				$error_msg .= $value_to_show ? '. '.cot_rc('adm_set_default', htmlspecialchars(strip_tags($value))) : '';
 			}
-			cot_message($warning_msg, 'warning', $name.'_int_filter');
+			cot_message($error_msg, 'error', $var_name);
 		}
-		$res[$value_name] = $value;
+		$res[$var_name] = $value;
 	}
 	return $single_value ? $value : $res;
 }
@@ -737,110 +765,35 @@ function cot_config_import($name, $source='POST', $filter='NOC', $defvalue=null)
  * @param string $name Extension or Section name config belongs to
  * @param array $optionslist Option list as return by cot_config_list()
  * @param mixed $is_module Flag indicating if it is module or plugin config
- * @param string $changed_only Update changes values only
+ * @param string $update_new_only Update changes values only
  * @param string $source Source of imported data
  * @return boolean|number Number of updated values
  */
-function cot_config_update_options($name, &$optionslist, $is_module=false, $changed_only = true, $source = 'POST')
+function cot_config_update_options($name, &$optionslist, $is_module=false, $update_new_only = true, $source = 'POST')
 {
 	global $cot_import_filters;
 	if (!is_array($optionslist)) return false;
-
 	$new_options = array();
-	foreach ($optionslist as $key => $val)
+	//$cfg_var = $val;
+	foreach ($optionslist as $cfg_name => $cfg_var)
 	{
-		$filter = 'NOC';
-
 		// Visual separator/fieldset have no value
-		if($val['config_type'] == COT_CONFIG_TYPE_SEPARATOR) continue;
+		if ($cfg_var['config_type'] == COT_CONFIG_TYPE_SEPARATOR) continue;
 
-		if ($val['config_type'] == COT_CONFIG_TYPE_CUSTOM && $val['config_variants'])
+		$filtered = FALSE;
+		$builtin_filter = FALSE;
+		$data = $raw_input = cot_import($cfg_name, $source, 'NOC');
+		$custom_type = ($cfg_var['config_type'] == COT_CONFIG_TYPE_CUSTOM)
+			&& $cfg_var['config_variants']
+			&& preg_match('#^(\w+)\((.*?)\)$#', $cfg_var['config_variants'], $mt);
+
+		if ($custom_type)
 		{
-			if (preg_match('#^(\w+)\((.*?)\)$#', $val['config_variants'], $mt))
-			{
-				$custom_func = $mt[1];
-				$custom_filter_func = $custom_func.'_filter';
-				// use custom filter function or built-in
-				if (function_exists($custom_filter_func))
-				{
-					$callback_params = preg_split('#\s*,\s*#', $mt[2]);
-					if (count($callback_params) > 0 && !empty($callback_params[0]))
-					{
-						for ($i = 0; $i < count($callback_params); $i++)
-						{
-							$callback_params[$i] = str_replace(array("'", '"'), array('', ''), $callback_params[$i]);
-						}
-					}
-					$data = call_user_func_array($custom_filter_func, array_merge(array($key, $val['config_value']), $callback_params));
-				}
-				else
-				{
-					// last part of custom function name treats as built-in filter name
-					$last_func_name = array_reverse(explode('_', $custom_func));
-					$custom_filter = strtoupper($last_func_name[0]);
-					if (in_array(strtoupper($custom_filter), array('INT','BOL', 'PSW', 'ALP', 'TXT', 'NUM')) || sizeof($cot_import_filters[$custom_filter]))
-					{
-						$filter = $custom_filter;
-					}
-					$data = cot_config_import($key, $source, $filter, $val['config_default']);
-				}
-			}
-		}
-		else
-		{
-			$data = cot_config_import($key, $source, $filter, $val['config_default']);
-		}
+			$custom_func = $mt[1];
+			$custom_filter_func = $custom_func . '_filter';
 
-
-		if ($val['config_value'] != $data || !$changed_only)
-		{
-			$new_options[$key] = $data;
-			$optionslist[$key]['config_value'] = $data;
-		}
-	}
-	return (sizeof($new_options)) ? cot_config_set($name, $new_options, $is_module) : 0;
-}
-
-/**
- * Returns config input
- * @param string $name Config name
- * @param int $type Config type
- * @param string $value Config value
- * @param string $options Config options
- * @return string
- */
-function cot_config_input($name, $type = 0, $value = '', $options = '')
-{
-	$config_input = '';
-	switch ($type)
-	{
-		case COT_CONFIG_TYPE_STRING:
-			$config_input = cot_inputbox('text', $name, $value);
-			break;
-
-		case COT_CONFIG_TYPE_SELECT:
-			if (!empty($options))
-			{
-				$params = explode(',', $options);
-				$params_titles = cot_config_selecttitles($name, $params);
-			}
-			$config_input = (is_array($params)) ? cot_selectbox($value, $name, $params, $params_titles, false) : cot_inputbox('text', $name, $value);
-
-			break;
-
-		case COT_CONFIG_TYPE_RADIO:
-			global $L;
-			$config_input = cot_radiobox($value, $name, array(1, 0), array($L['Yes'], $L['No']), '', ' ');
-			break;
-
-		case COT_CONFIG_TYPE_RANGE:
-			$range = preg_split('#\s*,\s*#', $options);
-			$params = range($range[0], $range[1], empty($range[2]) ? 1 : $range[2]);
-			$config_input = cot_selectbox($value, $name, $params, $params, false);
-			break;
-
-		case COT_CONFIG_TYPE_CUSTOM:
-			if ((preg_match('#^(\w+)\((.*?)\)$#', $options, $mt) && function_exists($mt[1])))
+			// use addition custom function for filtration if exists
+			if (function_exists($custom_filter_func))
 			{
 				$callback_params = preg_split('#\s*,\s*#', $mt[2]);
 				if (count($callback_params) > 0 && !empty($callback_params[0]))
@@ -850,14 +803,123 @@ function cot_config_input($name, $type = 0, $value = '', $options = '')
 						$callback_params[$i] = str_replace(array("'", '"'), array('', ''), $callback_params[$i]);
 					}
 				}
-				$config_input = call_user_func_array($mt[1], array_merge(array($name, $value), $callback_params));
+				/**
+				* Filters Value with custom function
+				* @param string $data User input value
+				* @param array $cfg_var Config Variable data
+				*  ...   other callback params defined for function
+				* @return NULL|mixed Filtered Value or NULL in case Value can not be filtered.
+				* @see cot_config_type_int_filter() as example
+				*/
+				$filtered = call_user_func_array(
+					$custom_filter_func,
+					array_merge(array(&$raw_input, $cfg_var), $callback_params)
+				);
+			}
+			else // try built-in filters
+			{
+				// last part of custom function name may treats as built-in filter type
+				list($base_filter) = array_reverse(explode('_', strtoupper($custom_func)));
+				if (in_array(strtoupper($base_filter), array('INT', 'BOL', 'PSW', 'ALP', 'TXT', 'NUM'))
+					|| sizeof($cot_import_filters[$base_filter])
+					)
+				{
+					$filtered = cot_config_import($cfg_name, $source, $base_filter);
+					$builtin_filter = true;
+				}
+			}
+		}
+		if (is_null($filtered)) // filtration false
+		{
+			$optionslist[$cfg_name]['config_value'] = $builtin_filter ? '' : $raw_input;
+		}
+		else
+		{
+			if (false !== $filtered) $data = $filtered;
+			if (is_array($data)) $data = serialize($data);
+			if ($data != $cfg_var['config_value'] || !$update_new_only) $new_options[$cfg_name] = $data;
+			$optionslist[$cfg_name]['config_value'] = $data;
+		}
+	}
+	return (sizeof($new_options)) ? cot_config_set($name, $new_options, $is_module) : 0;
+}
+
+/**
+ * Returns config input
+ * @param array $cfg_var Array with config Variable parameters
+ * @return string
+ */
+function cot_config_input($cfg_var)
+{
+	$name = $cfg_var['config_name'];
+	$type = $cfg_var['config_type'];
+	$value = $cfg_var['config_value'];
+	$options = $cfg_var['config_variants'];
+	$config_input = '';
+	$split_re = '#\s*,\s*#';
+	switch ($type)
+	{
+		case COT_CONFIG_TYPE_STRING:
+			$config_input = cot_inputbox('text', $name, $value);
+			break;
+
+		case COT_CONFIG_TYPE_SELECT:
+			if (!empty($options))
+			{
+				$params = preg_split($split_re, $options);
+				$params_titles = cot_config_selecttitles($name, $params);
+			}
+			$config_input = (is_array($params)) ? cot_selectbox($value, $name, $params, $params_titles, false) : cot_inputbox('text', $name, $value);
+
+			break;
+
+		case COT_CONFIG_TYPE_RADIO:
+			global $L;
+			if (!empty($options))
+			{
+				// extending radio to use custom values list
+				$params = preg_split($split_re, $options);
+				$params_titles = cot_config_selecttitles($name, $params);
+				if (empty($value)) $value = $cfg_var['config_default'];
+			}
+			else
+			{
+				// old style definition
+				$params = array(1, 0);
+				$params_titles = array($L['Yes'], $L['No']);
+			}
+			$config_input = cot_radiobox($value, $name, $params, $params_titles, '', ' ');
+			break;
+
+		case COT_CONFIG_TYPE_RANGE:
+			$range = preg_split($split_re, $options);
+			$params = range($range[0], $range[1], empty($range[2]) ? 1 : $range[2]);
+			$config_input = cot_selectbox($value, $name, $params, $params, false);
+			break;
+
+		case COT_CONFIG_TYPE_CUSTOM:
+			if ((preg_match('#^(\w+)\((.*?)\)$#', $options, $mt) && function_exists($mt[1])))
+			{
+				$callback_params = preg_split($split_re, $mt[2]);
+				if (count($callback_params) > 0 && !empty($callback_params[0]))
+				{
+					for ($i = 0; $i < count($callback_params); $i++)
+					{
+						$callback_params[$i] = str_replace(array("'", '"'), array('', ''), $callback_params[$i]);
+					}
+				}
+				$config_input = call_user_func_array($mt[1], array_merge(array($cfg_var), $callback_params));
+			}
+			else
+			{
+				$config_input = cot_inputbox('text', $name, $value);
 			}
 			break;
 
 		case COT_CONFIG_TYPE_CALLBACK:
 			if ((preg_match('#^(\w+)\((.*?)\)$#', $options, $mt) && function_exists($mt[1])))
 			{
-				$callback_params = preg_split('#\s*,\s*#', $mt[2]);
+				$callback_params = preg_split($split_re, $mt[2]);
 				if (count($callback_params) > 0 && !empty($callback_params[0]))
 				{
 					for ($i = 0; $i < count($callback_params); $i++)
@@ -871,7 +933,17 @@ function cot_config_input($name, $type = 0, $value = '', $options = '')
 				{
 					$params = call_user_func($mt[1]);
 				}
+
+				// assume associative array as value=>title
+				$assoc = (range( 0, count($params) -1 ) != array_keys( $params ));
+				if ($assoc)
+				{
+					$assoc_titles = array_values($params);
+					$params = array_keys($params);
+				}
 				$params_titles = cot_config_selecttitles($name, $params);
+				if ($assoc && $params_titles == $params) $params_titles = $assoc_titles;
+
 				$config_input = cot_selectbox($value, $name, $params, $params_titles, false);
 			}
 			break;

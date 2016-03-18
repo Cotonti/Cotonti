@@ -20,7 +20,7 @@ Recommends_plugins=htmlpurifier
 
 [BEGIN_COT_EXT_CONFIG]
 autocomplete=23:select:0,1,2,3,4,5,6:3:Min. chars for autocomplete
-css=99:radio:0,1:1:Enable plugin CSS
+css=99:radio::1:Enable plugin CSS
 [END_COT_EXT_CONFIG]
 ==================== */
 

@@ -62,27 +62,28 @@ if ($_SERVER['HTTP_HOST'] == $url['host']
 {
 	$sys['host'] = preg_match('#^[\w\p{L}\.\-]+(:\d+)?$#u', $_SERVER['HTTP_HOST']) ? preg_replace('#^([\w\p{L}\.\-]+)(:\d+)?$#u', '$1', $_SERVER['HTTP_HOST']) : $url['host'];
 	$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
-	// $sys['site_uri'] = substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'],'/'));
-	// as we can not detect real site base URI assume it's same as $cfg['mainurl']
-	$sys['port'] = $_SERVER['SERVER_PORT'] == 80 ? '' : $_SERVER['SERVER_PORT'];
+	$sys['port'] = $_SERVER['SERVER_PORT'];
 }
 else
 {
 	$sys['host'] = $url['host'];
-	$sys['port'] = empty($url['port']) || $_SERVER['SERVER_PORT'] == 80 ? '' : $url['port'];
+	$sys['port'] = $url['port'];
 }
+$def_port = $sys['secure'] ? 443 : 80;
+$sys['port'] = $sys['port'] == $def_port ? '' : $sys['port'];
+
 if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
 define('COT_SITE_URI', $sys['site_uri']);
 // Absolute site url
 $sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port']?':'.$sys['port']:'') . $sys['site_uri'];
-$sys['canonical_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port']?':'.$sys['port']:'') . $_SERVER['REQUEST_URI'];
+$sys['canonical_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port']?':'.$sys['port']:'') . cot_url_sanitize($_SERVER['REQUEST_URI']);
 define('COT_ABSOLUTE_URL', $sys['abs_url']);
 // Reassemble mainurl if necessary
 if ($cfg['multihost'])
 {
 	$cfg['mainurl'] = mb_substr($sys['abs_url'], 0, -1);
-	session_set_cookie_params(0, $sys['site_uri'], '.'.$sys['domain']);
 }
+session_set_cookie_params(0, $sys['site_uri'], '.'.$sys['domain']);
 
 session_start();
 
@@ -93,9 +94,10 @@ if ($cfg['cache'] && !$cfg['devmode'])
 {
 	require_once $cfg['custom_cache'] ? $cfg['custom_cache'] : $cfg['system_dir'].'/cache.php';
 	$cache = new Cache();
-	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$sys['site_id']]) && empty($_SESSION[$sys['site_id']]) && !defined('COT_AUTH') && !defined('COT_ADMIN') && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' && !cot_import($sys['site_id'], 'COOKIE', 'ALP') && empty($_SESSION[$sys['site_id']]) && !defined('COT_AUTH') && !defined('COT_ADMIN') && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
 	{
-		$cache_ext = empty($_GET['e']) ? 'index' : preg_replace('#\W#', '', $_GET['e']);
+		$ext = cot_import('e', 'G', 'ALP');
+		$cache_ext = !$ext ? 'index' : preg_replace('#\W#', '', $ext);
 		if ($cfg['cache_' . $cache_ext])
 		{
 			$cache->page->init($cache_ext, $cfg['defaulttheme']);
@@ -198,7 +200,7 @@ $sys['url_redirect'] = 'redirect='.$sys['uri_redir'];
 $redirect = preg_replace('/[^a-zA-Z0-9_=\/]/', '', cot_import('redirect','G','TXT'));
 $out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
-define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' || !empty($_SERVER['X-Requested-With']) && strtolower($_SERVER['X-Requested-With']) == 'xmlhttprequest' || $_GET['_ajax'] == 1);
+define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' || !empty($_SERVER['X-Requested-With']) && strtolower($_SERVER['X-Requested-With']) == 'xmlhttprequest' || cot_import('_ajax', 'G', 'INT') == 1);
 // Other system variables
 $sys['parser'] = $cfg['parser'];
 
@@ -214,9 +216,13 @@ if (!$cot_plugins && !defined('COT_INSTALL'))
 		while ($row = $sql->fetch())
 		{
 			$cot_plugins[$row['pl_hook']][] = $row;
-			$cot_plugins_active[$row['pl_code']] = true;
+
+			if ($row['pl_module'] == 0)
+			{
+				$cot_plugins_active[$row['pl_code']] = true;
+			}
 		}
-        $sql->closeCursor();
+		$sql->closeCursor();
 	}
 	$cache && $cache->db->store('cot_plugins', $cot_plugins, 'system');
 	$cache && $cache->db->store('cot_plugins_active', $cot_plugins_active, 'system');
@@ -224,8 +230,7 @@ if (!$cot_plugins && !defined('COT_INSTALL'))
 
 if (!$cot_modules)
 {
-    $sql = $db->query("SELECT * FROM $db_core
-		WHERE ct_state = 1 AND ct_lock = 0");
+	$sql = $db->query("SELECT * FROM $db_core WHERE ct_state = 1 AND ct_lock = 0");
 	if ($sql->rowCount() > 0)
 	{
 		while ($row = $sql->fetch())
@@ -235,7 +240,7 @@ if (!$cot_modules)
 				$cot_plugins_enabled[$row['ct_code']] = array(
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],
-                    'version' => $row['ct_version']
+					'version' => $row['ct_version']
 				);
 			}
 			else
@@ -243,11 +248,11 @@ if (!$cot_modules)
 				$cot_modules[$row['ct_code']] = array(
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],
-                    'version' => $row['ct_version']
+					'version' => $row['ct_version']
 				);
 			}
 		}
-        $sql->closeCursor();
+		$sql->closeCursor();
 	}
 	$cache && $cache->db->store('cot_modules', $cot_modules, 'system');
 	$cache && $cache->db->store('cot_plugins_enabled', $cot_plugins_enabled, 'system');
@@ -280,8 +285,8 @@ if (!$cot_groups )
 				'id' => $row['grp_id'],
 				'alias' => $row['grp_alias'],
 				'level' => $row['grp_level'],
-   				'disabled' => $row['grp_disabled'],
-   				'hidden' => $row['grp_hidden'],
+				'disabled' => $row['grp_disabled'],
+				'hidden' => $row['grp_hidden'],
 				'state' => $row['grp_state'],
 				'name' => htmlspecialchars($row['grp_name']),
 				'title' => htmlspecialchars($row['grp_title']),
@@ -316,9 +321,10 @@ $usr['timezonename'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
-if (!empty($_COOKIE[$sys['site_id']]) || !empty($_SESSION[$sys['site_id']]))
+$csid = cot_import($sys['site_id'], 'COOKIE', 'ALP');
+if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
 {
-	$u = empty($_SESSION[$sys['site_id']]) ? explode(':', base64_decode($_COOKIE[$sys['site_id']])) : explode(':', base64_decode($_SESSION[$sys['site_id']]));
+	$u = empty($_SESSION[$sys['site_id']]) ? explode(':', base64_decode($csid)) : explode(':', base64_decode($_SESSION[$sys['site_id']]));
 	$u_id = (int) cot_import($u[0], 'D', 'INT');
 	$u_sid = $u[1];
 	if ($u_id > 0)
@@ -339,9 +345,9 @@ if (!empty($_COOKIE[$sys['site_id']]) || !empty($_SESSION[$sys['site_id']]))
 				$usr['lastlog'] = $row['user_lastlog'];
 				$usr['timezone'] = cot_timezone_offset($row['user_timezone'], true);
 				$usr['timezonename'] = $row['user_timezone'];
-				$usr['theme'] = ($cfg['forcedefaulttheme']) ? $cfg['defaulttheme'] : $row['user_theme'];
-				$usr['scheme'] = $row['user_scheme'];
-				$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];
+				$usr['theme'] = $cfg['forcedefaulttheme'] ? $cfg['defaulttheme'] : $row['user_theme'];
+				$usr['scheme'] = $cfg['forcedefaulttheme'] ? $cfg['defaultscheme'] : $row['user_scheme'];
+				$usr['lang'] = $cfg['forcedefaultlang'] ? $cfg['defaultlang'] : $row['user_lang'];
 				$usr['newpm'] = $row['user_newpm'];
 				$usr['auth'] = unserialize($row['user_auth']);
 				$usr['adminaccess'] = cot_auth('admin', 'any', 'R');

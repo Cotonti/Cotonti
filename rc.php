@@ -17,9 +17,10 @@ date_default_timezone_set('GMT');
 /*
  * Get the path of the target file.
  */
-if (isset($_GET['rc']) && preg_match('#^[\w\.\-]+\.(js|css)$#', $_GET['rc'], $mt))
+$rc_file = $_GET['rc'];
+if (isset($rc_file) && is_string($rc_file) && preg_match('#^[\w\.\-]+\.(js|css)$#', $rc_file, $mt))
 {
-	$src_uri = $cfg['cache_dir'] . '/static/' . $_GET['rc'];
+	$src_uri = $cfg['cache_dir'] . '/static/' . $rc_file;
 	$content_type = $mt[1] == 'js' ? 'text/javascript' : 'text/css';
 }
 else

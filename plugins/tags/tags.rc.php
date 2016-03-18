@@ -15,7 +15,6 @@ Hooks=rc
 
 defined('COT_CODE') or die('Wrong URL');
 
-//cot_headrc_load_file($cfg['plugins_dir'] . '/tags/style.css', 'global', 'css');
 if ($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['autocomplete']['autocomplete'] > 0)
 {
 	cot_rc_add_embed('tags.autocomplete', '$(document).ready(function(){

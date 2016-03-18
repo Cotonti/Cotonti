@@ -40,7 +40,7 @@ $cot_ext_ignore_parts = array('configure', 'install', 'setup', 'uninstall');
  * @param string $sql_pattern SQL patch file name pattern (PCRE)
  * @param string $php_pattern PHP patch file name pattern (PCRE)
  * @return mixed The function returns TRUE if there are not patches to apply,
- * FALSE if an error occured while patching or a string containing version
+ * FALSE if an error occurred while patching or a string containing version
  * number of the latest applied patch if patching was successful.
  */
 function cot_apply_patches($directory, $from_ver,
@@ -71,7 +71,7 @@ function cot_apply_patches($directory, $from_ver,
 		return true;
 	}
 
-	// Apply patches in verion order
+	// Apply patches in version order
 	uksort($delta, 'version_compare');
 	$max_ver = $from_ver;
 	foreach ($delta as $key => $val)
@@ -731,7 +731,7 @@ function cot_file_phpdoc($filename)
 }
 
 /**
- * Extract info from SED file headers
+ * Extract info from COT file headers
  *
  * @param string $file File path
  * @param string $limiter Tag name
@@ -760,12 +760,10 @@ function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
 			foreach ($lines as $line)
 			{
 				$line = ltrim($line, " */");
-				$linex = explode('=', $line);
-				$ii = 1;
-				while (!empty($linex[$ii]))
+				$linex = preg_split('/\s*\=\s*/', trim($line), 2);
+				if ($linex[0])
 				{
-					$result[$linex[0]] .= trim($linex[$ii]);
-					$ii++;
+					$result[$linex[0]] = $linex[1];
 				}
 			}
 		}

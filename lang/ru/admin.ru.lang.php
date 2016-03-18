@@ -531,10 +531,13 @@ $L['alreadyaddnewentry'] = 'Новая запись добавлена';
 $L['alreadyupdatednewentry'] = 'Запись обновлена';
 $L['alreadydeletednewentry'] = 'Запись удалена';
 
-$L['adm_invalid_input'] = 'Недопустимое значение "{$value}" для переменной "{$field_name}"';
+$L['adm_invalid_input'] = 'Недопустимое значение \'{$value}\' для переменной \'{$field_name}\'';
 $L['adm_set_default'] = 'Установлено значение по умолчанию';
-$L['adm_int_max'] = 'Максимально допустимое значение "{$max}"';
-$L['adm_int_min'] = 'Минимально допустимое значение "{$min}"';
+$L['adm_int_max'] = 'максимально допустимое значение \'{$value}\'';
+$L['adm_int_min'] = 'минимально допустимое значение \'{$value}\'';
+$L['adm_set'] = 'Установлено ';
+$L['adm_partially_updated'] = 'Не все значения обновлены';
+$L['adm_already_updated'] = 'Уже сохранено';
 
 /**
  * Extra Fields (Common Entries for Pages & Structure & Users)

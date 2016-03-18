@@ -30,11 +30,11 @@ if ($tl && file_exists(cot_langfile('translit', 'core')))
 
 // Results per page
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
-list($pg, $d, $durl) = cot_import_pagenav('d',  $maxperpage);
-$dt = (int)cot_import('dt', 'G', 'INT');
+list(	, $d) = cot_import_pagenav('d', $maxperpage);
 
 // Tags displayed per page in standalone cloud
 $perpage = $cfg['plugin']['tags']['perpage'];
+list(	, $dt) = cot_import_pagenav('dt', $perpage);
 
 // Array to register areas with tag functions provided
 $tag_areas = array();
@@ -77,7 +77,13 @@ if ($cfg['plugin']['tags']['noindex'])
 {
 	$out['head'] .= $R['code_noindex'];
 }
-$out['subtitle'] = empty($qs) ? $L['Tags'] : htmlspecialchars(strip_tags($qs)) . ' - ' . $L['tags_Search_results'];
+
+// meta title
+$out['subtitle'] = empty($qs) ? $L['Tags'] : htmlspecialchars(strip_tags($qs)) . ' - ' . mb_strtolower($L['tags_Search_tags']);
+// meta descriptions
+$out['desc'] = empty($qs) ? $L['Tags'] : mb_strtolower($L['tags_Search_tags'] . ': ' . strip_tags($qs) . ' - ' . $L['tags_Search_results']);
+// meta keywords
+$out['keywords'] = empty($qs) ? $L['Tags'] : mb_strtolower($L['Tag'] . ' ' . strip_tags($qs) . ' ' . $L['tags_Search_tags']);
 
 $t->assign(array(
 	'TAGS_ACTION' => cot_url('plug', 'e=tags&a=' . $a),

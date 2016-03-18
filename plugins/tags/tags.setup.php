@@ -5,10 +5,10 @@ Code=tags
 Name=Tags
 Category=navigation-structure
 Description=Provides tags - site content keywords, tag clouds, tag search and API
-Version=0.9.18
-Date=2012-02-19
-Author=Trustmaster
-Copyright=All rights reserved (c) Vladimir Sibirov 2008-2014
+Version=1.0.3
+Date=2015-12-28
+Author=Trustmaster & Cotonti Team
+Copyright=Copyright (c) Cotonti Team 2010-2015
 Notes=BSD License.
 SQL=
 Auth_guests=R
@@ -34,7 +34,7 @@ perpage=21:string::0:Tags displayed per page in standalone cloud, 0 is all at on
 index=22:select:pages,forums,all:pages:Index page tag cloud area
 noindex=23:radio::1:Exclude from search engine index
 sort=31:select:ID,Title,Date,Category:ID:Default sorting column for tag search results
-css=99:radio:0,1:1:Enable plugin CSS
+css=99:radio::1:Enable plugin CSS
 [END_COT_EXT_CONFIG]
 ==================== */
 
