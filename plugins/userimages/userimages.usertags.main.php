@@ -15,6 +15,9 @@ Hooks=usertags.main
 
 defined('COT_CODE') or die('Wrong URL');
 
+// we need globals as it's a cot_generate_usertags() scope
+global $R;
+
 require_once cot_incfile('userimages', 'plug');
 require_once cot_incfile('userimages', 'plug', 'resources');
 
