@@ -20,11 +20,9 @@ $cot_urleditor_presets = array('handy', 'compat', 'custom', 'none');
 
 /**
  * Applies Handly URLs rewrite to current script parameters
- * @global array $cfg
  */
 function cot_apply_rwr()
 {
-	global $cfg, $structure;
 	if (function_exists('cot_apply_rwr_custom'))
 	{
 		return cot_apply_rwr_custom();
@@ -53,13 +51,13 @@ function cot_apply_rwr()
 		$filtered = cot_import($path[0], 'D', 'ALP');
 		if ($count == 1)
 		{
-			if (isset($structure['page'][$filtered]) || $filtered == 'unvalidated' || $filtered == 'saved_drafts')
+			if (isset(cot::$structure['page'][$filtered]) || $filtered == 'unvalidated' || $filtered == 'saved_drafts')
 			{
 				// Is a category
 				$_GET['e'] = 'page';
 				$_GET['c'] = $filtered;
 			}
-			elseif (file_exists($cfg['modules_dir'] . '/' . $filtered) || file_exists($cfg['plugins_dir'] . '/' . $filtered))
+			elseif (file_exists(cot::$cfg['modules_dir'] . '/' . $filtered) || file_exists(cot::$cfg['plugins_dir'] . '/' . $filtered))
 			{
 				// Is an extension
 				$_GET['e'] = $filtered;
@@ -131,10 +129,10 @@ function cot_apply_rwr()
 				return;
 			}
 			$last = $count - 1;
-			$ext = (isset($structure['page'][$filtered])) ? 'page' : $filtered;
+			$ext = (isset(cot::$structure['page'][$filtered])) ? 'page' : $filtered;
 			$_GET['e'] = $ext;
 			$cat_chain = array_slice($path, 0, -1);
-			if (isset($structure[$ext][$path[$last]]) && !in_array($path[$last], $cat_chain))
+			if (isset(cot::$structure[$ext][$path[$last]]) && !in_array($path[$last], $cat_chain))
 			{
 				// Is a category
 				$_GET['c'] = $path[$last];
@@ -153,7 +151,7 @@ function cot_apply_rwr()
 				else
 				{
 					// Can be a cat or al, let the module decide
-					if ($count == 2 && !isset($structure[$ext][$_GET['c']]))
+					if ($count == 2 && !isset(cot::$structure[$ext][$_GET['c']]))
 						$_GET['c'] = $path[$last];
 					$_GET['al'] = $path[$last];
 				}
@@ -175,7 +173,7 @@ function cot_apply_rwr()
  */
 function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypass = false)
 {
-	global $cfg, $cot_urltrans, $sys, $cot_url_shortcuts, $i18n_omit;
+	global $cot_urltrans, $cot_url_shortcuts;
 
 	$q_s = str_replace('%5B', '[', str_replace('%5D', ']', http_build_query($params)));
 	if (isset($cot_url_shortcuts[$name][$q_s]))
@@ -226,7 +224,7 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 
 	// Some special substitutions
 	$spec['_area'] = $name;
-	$spec['_host'] = $sys['host'];
+	$spec['_host'] = cot::$sys['host'];
 	$spec['_rhost'] = $_SERVER['HTTP_HOST'];
 	$spec['_path'] = COT_SITE_URI;
 	// Transform the data into URL
@@ -269,30 +267,39 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 			}
 		}
 	}
+
 	// Support for i18n parameter
-	if (isset($params['l']) && isset($cfg['plugin']['i18n']['rewrite']) && $cfg['plugin']['i18n']['rewrite'] && !$i18n_omit)
+	if (cot_plugin_active('i18n'))
 	{
-		// Add with slash at the beginning of the URL
-		$pos = strpos($url, $sys['site_uri']);
-		if ($sys['site_uri'] != '/' && $pos !== false)
+		$i18n_cfg = cot::$cfg['plugin']['i18n'];
+		$i18n_rewrite = isset($i18n_cfg['rewrite']) && $i18n_cfg['rewrite'];
+		$omit_param = $i18n_cfg['omitmain'] && $params['l'] == cot::$usr['profile']['user_lang'];
+		if (isset($params['l']) && $i18n_rewrite && !$omit_param)
 		{
-			$url = substr_replace($url, $sys['site_uri'] . rawurlencode($params['l']) .'/', $pos, mb_strlen($sys['site_uri']));
-		}
-		else
-		{
-			$p = mb_strpos($url, '://');
-			if ($p === false)
+			// Add with slash at the beginning of the URL
+			$pos = strpos($url, cot::$sys['site_uri']);
+			if (cot::$sys['site_uri'] != '/' && $pos !== false)
 			{
-				$url = mb_strpos($url, '/') === 0 ? '/' . rawurlencode($params['l']) . $url : rawurlencode($params['l']) . '/' . $url;
+				$url = substr_replace($url, cot::$sys['site_uri'] . rawurlencode($params['l']) . '/', $pos, mb_strlen($sys['site_uri']));
 			}
 			else
 			{
-				$p = mb_strpos($url, '/', $p + 3);
-				$url = $p === false ? $url . '/' . rawurlencode($params['l']) : mb_substr($url, 0, $p) . rawurlencode($params['l']) . '/' . mb_substr($url, $p + 1);
+				$p = mb_strpos($url, '://');
+				if ($p === false)
+				{
+					$url = mb_strpos($url, '/') === 0 ? '/' . rawurlencode($params['l']) . $url : rawurlencode($params['l']) . '/' . $url;
+				}
+				else
+				{
+					$p = mb_strpos($url, '/', $p + 3);
+					$url = $p === false ? $url . '/' . rawurlencode($params['l']) : mb_substr($url, 0, $p) . rawurlencode($params['l']) . '/' .
+						 mb_substr($url, $p + 1);
+				}
 			}
+			unset($params['l']);
 		}
-		unset($params['l']);
 	}
+
 	// Append query string if needed
 	if (!empty($params))
 	{
@@ -311,9 +318,8 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 }
 
 /**
- * Category path URL subsitution handler
+ * Category path URL substitution handler
  *
- * @global array $structure Site structure categories
  * @param array $params Link parameters
  * @param array $spec Special parameters
  * @param string $arg Callback argument
@@ -321,12 +327,11 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
  */
 function cot_url_catpath(&$params, $spec, $arg = 'c')
 {
-	global $structure;
 	$cat = '';
 	$name = $spec['_area'] == 'plug' ? $params['e'] : $spec['_area'];
-	if (isset($structure[$name]) && isset($structure[$name][$params[$arg]]))
+	if (isset(cot::$structure[$name]) && isset(cot::$structure[$name][$params[$arg]]))
 	{
-		$parts = explode('.', $structure[$name][$params[$arg]]['path']);
+		$parts = explode('.', cot::$structure[$name][$params[$arg]]['path']);
 		$cat = implode('/', array_map('rawurlencode', $parts));
 	}
 	else
@@ -340,12 +345,10 @@ function cot_url_catpath(&$params, $spec, $arg = 'c')
 /**
  * Returns the list of current presets
  *
- * @global array $cot_urleditor_presets
  * @return array
  */
 function cot_url_presets()
 {
-	global $cfg;
 	$urleditor_presets = array();
 	$datfiles = glob('./datas/*.dat');
 	if ($datfiles) foreach ($datfiles as $filename)
@@ -355,7 +358,7 @@ function cot_url_presets()
 			$urleditor_presets[] = basename($filename, ".dat");
 		}
 	}
-	$datfiles = glob($cfg['plugins_dir'] . "/urleditor/presets/*.dat");
+	$datfiles = glob(cot::$cfg['plugins_dir'] . "/urleditor/presets/*.dat");
 	if ($datfiles) foreach ($datfiles as $filename)
 	{
 		$urleditor_presets[] = basename($filename, ".dat");
