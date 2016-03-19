@@ -159,7 +159,7 @@ class cot
 	public static $usr;
 
 	/**
-	 * Initalizes static members. Call this function once all globals are defined.
+	 * Initializes static members. Call this function once all globals are defined.
 	 */
 	public static function init()
 	{
@@ -583,12 +583,12 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
  * @param mixed $nameslist List of Variables names to import, can be:<br />
  * 				string 'name1, name2 , ...' - list of variable names comma separated.<br />
  * 				array('name1', 'name2', ...) - list of variable names only.
-	* 				In that case $filter parameter nust be specified.<br />
+ * 				In that case $filter parameter must be specified.<br />
  * 				array('name1' => 'TYPE1', 'name2' => 'TYPE2' ,...) - list of variable names with their filter types
  * @param string $source Source type: G/GET, P/POST, C/COOKIE, R/REQUEST, PUT, DELETE or D/DIRECT (variable filtering)
  * @param array $origindata Array with origin data that will be extended with imported one
  * @param string $nameprefix Unified prefix for Variables names
- * @param string $filter Filter type, can be setted as:<br />
+ * @param string $filter Filter type, can be set as:<br />
  * 				string 'FLT' - single filter string for all Variables<br />
  * 				string 'FLT1, FLT2, ...' - comma separated string with filters corresponding to Variable names<br />
  * 				array('FLT1', 'FLT2', ...) - array of filters<br />
@@ -599,7 +599,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
  * @param int $maxlen Length limit
  * @param bool $dieonerror Die with fatal error on wrong input
  * @param bool $buffer Try to load from input buffer (previously submitted) if current value is empty
- * @return boolean|array Returns combined array of data or FALSE if wrong parameters setted
+ * @return boolean|array Returns combined array of data or FALSE if wrong parameters set
  */
 function cot_import_list($nameslist=array(), $source='P', $origindata=array(), $nameprefix='', $filter=null, $arrayprefix=false, $maxlen=0, $dieonerror=false, $buffer=false)
 {
@@ -621,7 +621,7 @@ function cot_import_list($nameslist=array(), $source='P', $origindata=array(), $
 	}
 	if (!$direct && sizeof($nameslist) == 0)
 	{
-		return false; // no propper name list
+		return false; // no proper name list
 	}
 	elseif (sizeof($nameslist) == 0)
 	{ // direct by origin
@@ -3379,8 +3379,8 @@ function cot_lang_determine()
 }
 
 /**
- * Returns path to a CSS file for user selected color scheme. 
- * The default search order is:  
+ * Returns path to a CSS file for user selected color scheme.
+ * The default search order is:
  * 1) `css` subfolder of user selected theme
  * 2) Main folder of user selected theme
  *

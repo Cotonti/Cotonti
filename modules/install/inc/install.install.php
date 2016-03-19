@@ -171,6 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 			if (!cot_error_found())
 			{
+				cot::init();
+
 				$config_contents = file_get_contents($file['config']);
 				cot_install_config_replace($config_contents, 'mysqlhost', $db_host);
 				if (!empty($db_port))
@@ -180,8 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				cot_install_config_replace($config_contents, 'mysqluser', $db_user);
 				cot_install_config_replace($config_contents, 'mysqlpassword', $db_pass);
 				cot_install_config_replace($config_contents, 'mysqldb', $db_name);
-				$config_contents = preg_replace("#^\\\$db_x\s*=\s*'.*?';#m",
-						"\$db_x				= '$db_x';", $config_contents);
+				$config_contents = preg_replace("#^\\\$db_x\s*=\s*'.*?';#m", "\$db_x = '$db_x';", $config_contents);
 				file_put_contents($file['config'], $config_contents);
 
 				$sql_file = file_get_contents($file['sql']);
@@ -311,17 +312,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				foreach ($selected_modules as $ext)
 				{
 					if (!cot_extension_install($ext, true))
-                    {
-                        cot_error("Installing $ext module has failed");
-                    }
+					{
+						cot_error("Installing $ext module has failed");
+					}
 				}
 				$selected_plugins = cot_install_sort_extensions($selected_plugins, false);
 				foreach ($selected_plugins as $ext)
 				{
 					if (!cot_extension_install($ext, false))
-                    {
-                        cot_error("Installing $ext plugin has failed");
-                    }
+					{
+						cot_error("Installing $ext plugin has failed");
+					}
 				}
 			}
 			break;
