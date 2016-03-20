@@ -4,8 +4,8 @@ REQUIREMENTS
 To install Cotonti you need the following server software pre-installed:
 
 * WWW Server (Apache, nginx, etc)
-* PHP 5.2 or higher
-* MySQL 5.0 or higher
+* PHP 5.3.3 or higher
+* MySQL 5.0.7 or higher
 
 
 SERVER CONFIGURATION
