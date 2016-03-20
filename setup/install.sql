@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.18
+ * Version: 0.9.19
  */
 
 DROP TABLE IF EXISTS `cot_auth`;
@@ -263,7 +263,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.18'),
+('revision', '0.9.19'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;
