@@ -13,7 +13,8 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Info
  */
 
-$L['info_desc'] = 'Outputs newsfeed at homepage from selected category pages';
+//$L['info_desc'] = 'Outputs newsfeed at homepage from selected category pages';
+$L['info_desc'] = 'Note! This plugin is outdated and will be changed to `indexnews` in next release.';
 
 /**
  * Plugin Config

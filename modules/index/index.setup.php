@@ -13,7 +13,7 @@ Lock_guests=A
 Auth_members=R
 Lock_members=
 Recommends_modules=page
-Recommends_plugins=news,recentitems
+Recommends_plugins=indexnews,recentitems
 [END_COT_EXT]
 ==================== */
 
