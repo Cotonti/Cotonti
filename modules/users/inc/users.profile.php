@@ -145,7 +145,19 @@ if($a == 'update')
 	}
 	if (!cot_error_found())
 	{
-		$ruser['user_birthdate'] = (is_null($ruser['user_birthdate'])) ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
+		if(is_null($ruser['user_birthdate']))
+		{
+			if(isset($_POST['ruserbirthdate']))
+			{
+				$ruser['user_birthdate'] = 'NULL';
+			} else {
+				unset($ruser['user_birthdate']);
+			}
+            
+		} else {
+			$ruser['user_birthdate'] = cot_stamp2date($ruser['user_birthdate']);
+		}
+        
 		$ruser['user_auth'] = '';
 		$db->update($db_users, $ruser, "user_id='".$usr['id']."'");
 		cot_extrafield_movefiles();

@@ -620,7 +620,7 @@ class CotDB extends PDO {
 				continue;
 			}
 			$upd .= "`$key`=";
-			if (is_null($val))
+            if (is_null($val) || $val === 'NULL')
 			{
 				$upd .= 'NULL,';
 			}

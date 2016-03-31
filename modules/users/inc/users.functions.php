@@ -34,7 +34,7 @@ cot_extrafields_register_table('users');
  */
 function cot_add_user($ruser, $email = null, $name = null, $password = null, $maingrp = null, $sendemail = true)
 {
-	global $cfg, $cot_extrafields, $db, $db_users, $db_groups_users, $db_x, $L, $R, $sys, $uploadfiles, $usr;
+	global $db, $db_users, $db_groups_users, $db_x, $L, $R, $uploadfiles;
 
 	$ruser['user_email'] = (!empty($email)) ? $email : $ruser['user_email'];
 	$ruser['user_name'] = (!empty($name)) ? $name : $ruser['user_name'];
@@ -46,7 +46,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 
 	$user_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_name = ? LIMIT 1", array($ruser['user_name']))->fetch();
 	$email_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_email = ? LIMIT 1", array($ruser['user_email']))->fetch();
-	if(!cot_check_email($ruser['user_email']) || $user_exists || (!$cfg['useremailduplicate'] && $email_exists))
+	if(!cot_check_email($ruser['user_email']) || $user_exists || (!cot::$cfg['useremailduplicate'] && $email_exists))
 	{
 		return false;
 	}
@@ -55,28 +55,37 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_country'] = (mb_strlen($ruser['user_country']) < 4) ? $ruser['user_country'] : '';
 	$ruser['user_timezone'] = (!$ruser['user_timezone']) ? 'GMT' : $ruser['user_timezone'];
 
-	$ruser['user_maingrp'] = ($db->countRows($db_users) == 0) ? 5 : ($cfg['users']['regnoactivation']) ? 4 : 2;
+	$ruser['user_maingrp'] = ($db->countRows($db_users) == 0) ? 5 : (cot::$cfg['users']['regnoactivation']) ? 4 : 2;
 	$ruser['user_maingrp'] = (int)$maingrp > 0 ? $maingrp : $ruser['user_maingrp'];
 
 	$ruser['user_passsalt'] = cot_unique(16);
-	$ruser['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
+	$ruser['user_passfunc'] = empty(cot::$cfg['hashfunc']) ? 'sha256' : cot::$cfg['hashfunc'];
 	$ruser['user_password'] = cot_hash($ruser['user_password'], $ruser['user_passsalt'], $ruser['user_passfunc']);
 
-
-	$ruser['user_birthdate'] = (is_null($ruser['user_birthdate']) || $ruser['user_birthdate'] > $sys['now']) ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
+	if(isset($ruser['user_birthdate']))
+	{
+		if(is_null($ruser['user_birthdate']) || $ruser['user_birthdate'] > cot::$sys['now'])
+		{
+			$ruser['user_birthdate'] = 'NULL';
+		
+		} else {
+			$ruser['user_birthdate'] = cot_stamp2date($ruser['user_birthdate']);
+		}
+	}
+		
 	$ruser['user_lostpass'] = md5(microtime());
 	cot_shield_update(20, "Registration");
 
 	$ruser['user_hideemail'] = 1;
-	$ruser['user_theme'] = $cfg['defaulttheme'];
-	$ruser['user_scheme'] = $cfg['defaultscheme'];
-	$ruser['user_lang'] = empty($ruser['user_lang']) ? $cfg['defaultlang'] : $ruser['user_lang'];
-	$ruser['user_regdate'] = (int)$sys['now'];
+	$ruser['user_theme'] = cot::$cfg['defaulttheme'];
+	$ruser['user_scheme'] = cot::$cfg['defaultscheme'];
+	$ruser['user_lang'] = empty($ruser['user_lang']) ? cot::$cfg['defaultlang'] : $ruser['user_lang'];
+	$ruser['user_regdate'] = (int)cot::$sys['now'];
 	$ruser['user_logcount'] = 0;
-	$ruser['user_lastip'] = empty($ruser['user_lastip']) ? $usr['ip'] : $ruser['user_lastip'];
+	$ruser['user_lastip'] = empty($ruser['user_lastip']) ? cot::$usr['ip'] : $ruser['user_lastip'];
 	$ruser['user_token'] = cot_unique(16);
 
-	if (!$db->insert($db_users, $ruser)) return;
+	if (!$db->insert($db_users, $ruser)) return false;
 
 	$userid = $db->lastInsertId();
 
@@ -92,7 +101,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 
 	if ($ruser['user_maingrp'] == 2 && $sendemail)
 	{
-		if ($cfg['users']['regrequireadmin'])
+		if (cot::$cfg['users']['regrequireadmin'])
 		{
 			$subject = $L['aut_regrequesttitle'];
 			$body = sprintf($L['aut_regrequest'], $ruser['user_name']);
@@ -100,15 +109,15 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 			cot_mail($ruser['user_email'], $subject, $body);
 
 			$subject = $L['aut_regreqnoticetitle'];
-			$inactive = $cfg['mainurl'].'/'.cot_url('users', 'gm=2&s=regdate&w=desc', '', true);
+			$inactive = cot::$cfg['mainurl'].'/'.cot_url('users', 'gm=2&s=regdate&w=desc', '', true);
 			$body = sprintf($L['aut_regreqnotice'], $ruser['user_name'], $inactive);
-			cot_mail($cfg['adminemail'], $subject, $body);
+			cot_mail(cot::$cfg['adminemail'], $subject, $body);
 		}
 		else
 		{
 			$subject = $L['Registration'];
-			$activate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=1', '', true);
-			$deactivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=0', '', true);
+			$activate = cot::$cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=1', '', true);
+			$deactivate = cot::$cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=0', '', true);
 			$body = sprintf($L['aut_emailreg'], $ruser['user_name'], $activate, $deactivate);
 			$body .= "\n\n".$L['aut_contactadmin'];
 			cot_mail($ruser['user_email'], $subject, $body);

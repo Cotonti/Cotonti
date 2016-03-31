@@ -148,7 +148,18 @@ if ($a == 'update')
 
 		$ruser['user_name'] = ($ruser['user_name']=='') ? $urr['user_name'] : $ruser['user_name'];
 
-		$ruser['user_birthdate'] = (is_null($ruser['user_birthdate'])) ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
+		if(is_null($ruser['user_birthdate'])) 
+		{
+			if(isset($_POST['ruserbirthdate']))
+			{
+				$ruser['user_birthdate'] = 'NULL';
+			} else {
+				unset($ruser['user_birthdate']);	
+			}
+            
+		} else {
+			$ruser['user_birthdate'] = cot_stamp2date($ruser['user_birthdate']);
+		}
 
 		if (!$ruserbanned)
 		{
