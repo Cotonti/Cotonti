@@ -3606,7 +3606,7 @@ if (!function_exists('strptime'))
  */
 function cot_date2stamp($date, $format = null)
 {
-	if ($date == '0000-00-00') return null;
+	if ($date == '0000-00-00' || mb_strtolower($date) == 'null' || is_null($date)) return null;
 	if (!$format)
 	{
 		preg_match('#(\d{4})-(\d{2})-(\d{2})#', $date, $m);
