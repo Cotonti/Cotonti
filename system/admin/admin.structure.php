@@ -186,6 +186,11 @@ else
                     $exfld, 'P', $oldrow['structure_'.$exfld['field_name']]);
 			}
 
+			($rstructure['structure_code'] != 'all') || cot_error('adm_structure_code_reserved', 'rstructurecode');
+			$rstructure['structure_code'] || cot_error('adm_structure_code_required', 'rstructurecode');
+			$rstructure['structure_path'] || cot_error('adm_structure_path_required', 'rstructurepath');
+			$rstructure['structure_title'] || cot_error('adm_structure_title_required', 'rstructuretitle');
+
 			$rtplmode = cot_import($rtplmodearr[$i], 'D', 'INT');
 			$rtplquick = cot_import($rtplquickarr[$i], 'D', 'TXT');
 
