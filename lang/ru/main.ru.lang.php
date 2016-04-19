@@ -493,9 +493,10 @@ $L['foo_sqlaverage'] = 'Среднее время SQL';
 /**
  * Extra fields
  */
-
-$L['field_pregmatch'] = 'Значение поля не верно';
+$L['field_extension']  = 'Неразрешенное расширение файла';
 $L['field_notinarray'] = 'Значение поля не верно';
+$L['field_pregmatch']  = 'Значение поля не верно';
+$L['field_range'] = 'Значение поля не верно';
 $L['field_required'] = 'Поле должно быть заполнено';
 
 /**
