@@ -414,6 +414,10 @@ class CotDB extends PDO {
 					{
 						$vals .= $val ? 'TRUE' : 'FALSE';
 					}
+					elseif ($val === 'NOW()')
+					{
+						$vals .= 'NOW()';
+					}
 					elseif (is_int($val) || is_float($val))
 					{
 						$vals .= $val;
