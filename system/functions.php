@@ -1022,28 +1022,27 @@ function cot_rmdir($dir)
 	static $cnt = 0;
 
     if (is_dir($dir)) {
-        if (is_dir($dir)) {
-            $objects = scandir($dir);
-            foreach ($objects as $f) {
-                $path = $dir . DIRECTORY_SEPARATOR . $f;
-                if ($f != "." && $f != "..") 
+        $objects = scandir($dir);
+        foreach ($objects as $f) {
+            $path = $dir . DIRECTORY_SEPARATOR . $f;
+            if ($f != "." && $f != "..")
+            {
+                if (filetype($path) == "dir")
                 {
-                    if (filetype($path) == "dir") 
-                    {
-                        cot_rmdir($path);
-                    } 
-                    else
-                    {
-                        unlink($path);
-                        $cnt++;
-                    }
+                    cot_rmdir($path);
+                }
+                else
+                {
+                    unlink($path);
+                    $cnt++;
                 }
             }
-            reset($objects);
-            rmdir($dir);
-            $cnt++;
         }
+        reset($objects);
+        rmdir($dir);
+        $cnt++;
     }
+
 	return $cnt;
 }
 
