@@ -396,19 +396,23 @@ class CotDB extends PDO {
 			{
 				foreach ($rowset[$i] as $key => $val)
 				{
+					if (is_null($val) && !$insert_null)
+					{
+						continue;
+					}
 					if ($j > 0) $vals .= ',';
 					if (!$keys_built)
 					{
 						if ($j > 0) $keys .= ',';
 						$keys .= "`$key`";
 					}
-					if (is_null($val) && $insert_null)
+                    if (is_null($val) || $val === 'NULL')
 					{
 						$vals .= 'NULL';
 					}
-					elseif ($val === 'NOW()')
+					elseif (is_bool($val))
 					{
-						$vals .= 'NOW()';
+						$vals .= $val ? 'TRUE' : 'FALSE';
 					}
 					elseif (is_int($val) || is_float($val))
 					{
@@ -624,6 +628,10 @@ class CotDB extends PDO {
 			{
 				$upd .= 'NULL,';
 			}
+            elseif (is_bool($val))
+            {
+                $upd .= $val ? 'TRUE' : 'FALSE';
+            }
 			elseif ($val === 'NOW()')
 			{
 				$upd .= 'NOW(),';

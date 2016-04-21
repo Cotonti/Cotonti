@@ -154,10 +154,10 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 {
 	global $L;
 
-    $exfld_title = isset(cot::$L['page_'.$extrafield['field_name'].'_title']) ?
+    $exfld_title = isset(cot::$L['page_'.$extrafield['field_name'].'_title']) ?  
         cot::$L['page_'.$extrafield['field_name'].'_title'] : $extrafield['field_description'];
     if($exfld_title == '') $exfld_title = $extrafield['field_name'];
-
+	
 	switch ($extrafield['field_type'])
 	{
 		case 'input':
@@ -228,7 +228,7 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			break;
 
 		case 'checkbox':
-			$import = cot_import($inputname, $source, 'BOL');
+			$import = (int)cot_import($inputname, $source, 'BOL');
 			break;
 
 		case 'datetime':
@@ -620,20 +620,20 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 		case 'radio':
 		case 'range':
 		case 'file':
-		case 'input': $sqltype = "VARCHAR(255)";
+		case 'input': $sqltype = "VARCHAR(255) DEFAULT ''";
 			break;
-		case 'inputint': $sqltype = "int(11) NOT NULL default '0'";
+		case 'inputint': $sqltype = "int(11) DEFAULT '0'";
 			break;
-		case 'currency': $sqltype = "DOUBLE(13,2) NOT NULL default '0'";
+		case 'currency': $sqltype = "DOUBLE(13,2) DEFAULT '0'";
 			break;
-		case 'double': $sqltype = "DOUBLE NOT NULL default '0'";
+		case 'double': $sqltype = "DOUBLE DEFAULT '0'";
 			break;
 		case 'checklistbox':
-		case 'textarea': $sqltype = 'TEXT';
+		case 'textarea': $sqltype = "TEXT DEFAULT ''";
 			break;
-		case 'checkbox': $sqltype = 'BOOL';
+		case 'checkbox': $sqltype = 'TINYINT(1) UNSIGNED'; //'BOOL';
 			break;
-		case 'datetime': $sqltype = "int(11) NOT NULL default '0'";
+		case 'datetime': $sqltype = "int(11) DEFAULT '0'";
 			break;
 		case 'country': $sqltype = "CHAR(2)";
 			break;
@@ -732,20 +732,20 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 		case 'radio':
 		case 'range':
 		case 'file':
-		case 'input': $sqltype = "VARCHAR(255)";
+		case 'input': $sqltype = "VARCHAR(255) DEFAULT ''";
 			break;
-		case 'inputint': $sqltype = "int(11) NOT NULL default '0'";
+		case 'inputint': $sqltype = "int(11) DEFAULT '0'";
 			break;
-		case 'currency': $sqltype = "DOUBLE(13,2) NOT NULL default '0'";
+		case 'currency': $sqltype = "DOUBLE(13,2) DEFAULT '0'";
 			break;
-		case 'double': $sqltype = "DOUBLE NOT NULL default '0'";
+		case 'double': $sqltype = "DOUBLE DEFAULT '0'";
 			break;
 		case 'checklistbox':
-		case 'textarea': $sqltype = 'TEXT';
+		case 'textarea': $sqltype = "TEXT DEFAULT ''";
 			break;
-		case 'checkbox': $sqltype = 'BOOL';
+		case 'checkbox': $sqltype = 'TINYINT(1) UNSIGNED'; //'BOOL';
 			break;
-		case 'datetime': $sqltype = "int(11) NOT NULL default '0'";
+		case 'datetime': $sqltype = "int(11) DEFAULT '0'";
 			break;
 		case 'country': $sqltype = "CHAR(2)";
 			break;
