@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				cot_error(cot_rc('install_error_missing_file', array('file' => $file['sql'])));
 			}
-			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.2.3', '>='))
+			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.3.3', '>='))
 			{
 				cot_error(cot_rc('install_error_php_ver', array('ver' => PHP_VERSION)));
 			}
@@ -514,7 +514,7 @@ switch ($step)
 		{
 			$status['sql_file'] = $R['install_code_not_found'];
 		}
-		$status['php_ver'] = (function_exists('version_compare') && version_compare(PHP_VERSION, '5.2.3', '>='))
+		$status['php_ver'] = (function_exists('version_compare') && version_compare(PHP_VERSION, '5.3.3', '>='))
 			? cot_rc('install_code_valid', array('text' =>
 				cot_rc('install_ver_valid', array('ver' => PHP_VERSION))))
 			: cot_rc('install_code_invalid', array('text' =>

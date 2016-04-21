@@ -126,6 +126,8 @@ $R['img_structure_cat'] = '<img src="{$icon}" alt="{$title}" title="{$desc}" />'
  * Used for finding timezones based on countrycode or offset.
  * Necessary because the $country param in DateTimeZone::listIdentifiers is not
  * supported in PHP 5.2.
+ *
+ * @deprecated PHP 5.2 don't uses any more
  */
 $cot_timezones = array(
 
