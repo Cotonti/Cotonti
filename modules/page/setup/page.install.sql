@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `cot_pages` (
   `page_keywords` varchar(255) collate utf8_unicode_ci DEFAULT '',
   `page_metatitle` varchar(255) collate utf8_unicode_ci DEFAULT '',
   `page_metadesc` varchar(255) collate utf8_unicode_ci DEFAULT '',
-  `page_text`   MEDIUMTEXT collate utf8_unicode_ci  DEFAULT '',
+  `page_text`   MEDIUMTEXT collate utf8_unicode_ci,
   `page_parser` VARCHAR(64) DEFAULT '',
   `page_author` varchar(100) collate utf8_unicode_ci DEFAULT '',
   `page_ownerid` int(11) DEFAULT '0',

@@ -5,7 +5,7 @@ CHANGE `page_desc`    `page_desc` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_u
 CHANGE `page_keywords` `page_keywords` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '',
 CHANGE `page_metatitle` `page_metatitle` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '',
 CHANGE `page_metadesc` `page_metadesc` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '',
-CHANGE `page_text`    `page_text` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '',
+CHANGE `page_text`    `page_text` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci,
 CHANGE `page_parser`  `page_parser` VARCHAR(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '',
 CHANGE `page_author`  `page_author` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '',
 CHANGE `page_ownerid` `page_ownerid` INT(11) DEFAULT '0',

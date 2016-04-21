@@ -980,12 +980,21 @@ function cot_outputfilters($output)
 	}
 	/* ==== */
 
-	$output = preg_replace_callback('#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i',
-		function ($m) {
-			return $m[0] . (preg_match('/class\s*=\s*["\']?.*?[\s"\']xp-off[\s"\'].*?["\']?/i', $m[0]) ? '' : cot_xp());
-		}, $output);
+	$output = preg_replace_callback('#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i', 'cot_outputfilters_callback', $output);
 
 	return($output);
+}
+
+/**
+ * Used with cot_outputfilters
+ *   It is needed because php 5.2 does not support anonymous functions. So during the installation we can not even show
+ *   an error message.
+ * @param $m
+ * @return string
+ */
+function cot_outputfilters_callback($m)
+{
+	return $m[0] . (preg_match('/class\s*=\s*["\']?.*?[\s"\']xp-off[\s"\'].*?["\']?/i', $m[0]) ? '' : cot_xp());
 }
 
 /**
