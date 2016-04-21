@@ -1017,24 +1017,33 @@ function cot_plugin_active($name)
  */
 function cot_rmdir($dir)
 {
+    if(empty($dir) && $dir != '0') return false;
+
 	static $cnt = 0;
-	$dp = opendir($dir);
-	while ($f = readdir($dp))
-	{
-		$path = $dir . '/' . $f;
-		if ($f != '.' && $f != '..' && is_dir($path))
-		{
-			cot_rmdir($path);
-		}
-		elseif ($f != '.' && $f != '..')
-		{
-			unlink($path);
-			$cnt++;
-		}
-	}
-	closedir($dp);
-	rmdir($dir);
-	$cnt++;
+
+    if (is_dir($dir)) {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $f) {
+                $path = $dir . DIRECTORY_SEPARATOR . $f;
+                if ($f != "." && $f != "..") 
+                {
+                    if (filetype($path) == "dir") 
+                    {
+                        cot_rmdir($path);
+                    } 
+                    else
+                    {
+                        unlink($path);
+                        $cnt++;
+                    }
+                }
+            }
+            reset($objects);
+            rmdir($dir);
+            $cnt++;
+        }
+    }
 	return $cnt;
 }
 
