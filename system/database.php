@@ -634,7 +634,7 @@ class CotDB extends PDO {
 			}
             elseif (is_bool($val))
             {
-                $upd .= $val ? 'TRUE' : 'FALSE';
+                $upd .= $val ? 'TRUE,' : 'FALSE,';
             }
 			elseif ($val === 'NOW()')
 			{
