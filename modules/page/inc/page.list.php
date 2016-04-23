@@ -276,7 +276,7 @@ foreach ($cot_extrafields[$db_pages] + array('title' => 'title', 'key' => 'key',
 	$url_desc = cot_url('page', array('s' => $row_k, 'w' => 'desc') + $list_url_path);
 	$arrows[$row_k]['asc']  = $R['icon_down'];
 	$arrows[$row_k]['desc'] = $R['icon_up'];
-	if ($s == $val)
+	if ($s == $row_k)
 	{
 		$arrows[$s][$w] = $R['icon_vert_active'][$w];
 	}
@@ -284,7 +284,7 @@ foreach ($cot_extrafields[$db_pages] + array('title' => 'title', 'key' => 'key',
 	{
 		$t->assign(array(
 		'LIST_TOP_'.$uname => cot_rc("list_link_$row_k", array(
-			'cot_img_down' => $arrows[$col]['asc'], 'cot_img_up' => $arrows[$col]['desc'],
+			'cot_img_down' => $arrows[$row_k]['asc'], 'cot_img_up' => $arrows[$row_k]['desc'],
 			'list_link_url_down' => $url_asc, 'list_link_url_up' => $url_desc
 		))));
 	}
