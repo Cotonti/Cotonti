@@ -63,8 +63,10 @@
 					<td class="{FORUMS_POSTS_ROW_ODDEVEN}">
 						<div>
 							{FORUMS_POSTS_ROW_TEXT}
-							{FORUMS_POSTS_ROW_UPDATEDBY}
 						</div>
+                        <!-- IF {FORUMS_POSTS_ROW_UPDATEDBY} -->
+                        <div class="italic margintop10 grey">{FORUMS_POSTS_ROW_UPDATEDBY}</div>
+                        <!-- ENDIF -->
 					</td>
 				</tr>
 				<tr>

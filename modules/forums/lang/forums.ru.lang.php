@@ -77,7 +77,7 @@ $L['forums_newpoll'] = 'Новый опрос';
 $L['forums_titletooshort'] = 'Название темы слишком короткое или отсутствует';
 $L['forums_topiclocked'] = 'Тема заблокирована, новые сообщения запрещены';
 $L['forums_topicoptions'] = 'Опции темы';
-$L['forums_updatedby'] = '<br /><em>Отредактировано: %1$s (%2$s, %3$s назад)</em>';
+$L['forums_updatedby'] = 'Отредактировано: %1$s (%2$s, %3$s назад)';
 $L['forums_postedby'] = 'Опубликовал(а)';
 $L['forums_edittimeoutnote'] = 'Время для редактирования или удаления собственного сообщения: ';
 

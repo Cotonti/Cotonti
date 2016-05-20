@@ -77,7 +77,7 @@ $L['forums_newpoll'] = 'New poll';
 $L['forums_titletooshort'] = 'Topic title is too short or missing';
 $L['forums_topiclocked'] = 'This topic is locked, new posts are not allowed.';
 $L['forums_topicoptions'] = 'Topic options';
-$L['forums_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
+$L['forums_updatedby'] = 'This post was edited by %1$s (%2$s, %3$s ago)';
 $L['forums_postedby'] = 'Posted by';
 $L['forums_edittimeoutnote'] = 'Timeout for editing or deleting own post is ';
 
