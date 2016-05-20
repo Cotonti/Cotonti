@@ -749,6 +749,8 @@ class Resources
         if(!$canReWrite && isset(static::$alias[$newAlias]) && static::$alias[$newAlias] !== null) return false;
 
 		static::$alias[$newAlias] = $value;
+
+		return true;
 	}
 
 	public static function getAlias($aliasName)
