@@ -362,7 +362,14 @@ else
 	}
 	$ext_info = cot_get_extensionparams($n, true);
 	$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
-	$adminpath[] = array(($is_module ? cot_url('admin', 'm='.$n) : cot_url('admin', 'm=extensions&a=details&pl='.$n)), $ext_info['name']);
+    $urlParams = array('m' => 'extensions', 'a' => 'details');
+    if($is_module) {
+        $urlParams['mod'] = $n;
+
+    } else {
+        $urlParams['pl'] = $n;
+    }
+	$adminpath[] = array(cot_url('admin', $urlParams), $ext_info['name']);
 	$adminpath[] = array(cot_url('admin', 'm=structure&n='.$n), $L['Structure']);
 
 	if ($id > 0 || !empty($al))
