@@ -14,7 +14,7 @@ class Resources
 	/**
 	 * @var array predefined aliases
 	 */
-	protected static $alias = array(
+	protected static $alias = array (
 		'@jQuery' => 'js/jquery.min.js',
 
 		'@ckeditor' => 'plugins/ckeditor/lib/ckeditor.js',
@@ -733,11 +733,20 @@ class Resources
 		return $code;
 	}
 
-	public static function setAlias($newAlias, $value = '')
+	/**
+	 * Set Resource alias
+	 * @param string $newAlias
+	 * @param string $value
+	 * @param bool   $canReWrite
+	 * @return bool
+	 */
+	public static function setAlias($newAlias, $value = '', $canReWrite = false)
 	{
 		if ($newAlias == '') return false;
 
 		if (mb_strpos($newAlias, '@') === false) $newAlias = '@' . $newAlias;
+
+        if(!$canReWrite && isset(static::$alias[$newAlias]) && static::$alias[$newAlias] !== null) return false;
 
 		static::$alias[$newAlias] = $value;
 	}
