@@ -588,7 +588,7 @@ else
 	require_once './images/icons/' . $cfg['defaulticons'] . '/resources.php';
 }
 
-$out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." Cotonti</a>";
+$out['copyright'] = "<a href=\"//www.cotonti.com\" target=\"_blank\">".$L['foo_poweredby']." Cotonti</a>";
 
 /* ======== Various ======== */
 
