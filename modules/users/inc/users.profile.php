@@ -43,7 +43,7 @@ if($a == 'update')
 	}
 	/* ===== */
 
-	$ruser['user_text'] = cot_import('rusertext','P','HTM', $cfg['users']['usertextmax']);
+	$ruser['user_text'] = cot_import('rusertext','P','HTM', cot::$cfg['users']['usertextmax']);
 	$ruser['user_country'] = cot_import('rusercountry','P','ALP');
 	$rtheme = explode(':', cot_import('rusertheme','P','TXT'));
 	$ruser['user_theme'] = $rtheme[0];
@@ -54,12 +54,14 @@ if($a == 'update')
 	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','BOL');
 
 	// Extra fields
-	foreach($cot_extrafields[$db_users] as $exfld)
-	{
-		$ruser['user_'.$exfld['field_name']] = cot_import_extrafields('ruser'.$exfld['field_name'], $exfld, 'P', $urr['user_'.$exfld['field_name']]);
-	}
+    if (!empty(cot::$extrafields[cot::$db->users])) {
+        foreach (cot::$extrafields[cot::$db->users] as $exfld) {
+            $ruser['user_' . $exfld['field_name']] = cot_import_extrafields('ruser' . $exfld['field_name'], $exfld, 'P',
+                $urr['user_' . $exfld['field_name']], 'user_');
+        }
+    }
 	$ruser['user_birthdate'] = cot_import_date('ruserbirthdate', false);
-	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > $sys['now'])
+	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > cot::$sys['now'])
 	{
 		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
 	}
@@ -78,7 +80,7 @@ if($a == 'update')
 		if (mb_strlen($rnewpass1) < 4) cot_error('pro_passtoshort', 'rnewpass1');
 		if (cot_hash($roldpass, $urr['user_passsalt'], $urr['user_passfunc']) != $urr['user_password']) cot_error('pro_wrongpass', 'roldpass');
 
-		if (!empty($ruseremail) && !empty($rmailpass) && $cfg['users']['useremailchange'] && $ruseremail != $urr['user_email'])
+		if (!empty($ruseremail) && !empty($rmailpass) && cot::$cfg['users']['useremailchange'] && $ruseremail != $urr['user_email'])
 		{
 			cot_error('pro_emailandpass', 'ruseremail');
 		}
@@ -232,13 +234,20 @@ $t->assign(array(
 ));
 
 // Extra fields
-foreach($cot_extrafields[$db_users] as $exfld)
-{
-	$tag = strtoupper($exfld['field_name']);
-	$t->assign(array(
-		'USERS_PROFILE_'.$tag => cot_build_extrafields('ruser'.$exfld['field_name'], $exfld, $urr['user_'.$exfld['field_name']]),
-		'USERS_PROFILE_'.$tag.'_TITLE' => isset($L['user_'.$exfld['field_name'].'_title']) ? $L['user_'.$exfld['field_name'].'_title'] : $exfld['field_description']
-	));
+if (!empty(cot::$extrafields[cot::$db->users])) {
+    foreach (cot::$extrafields[cot::$db->users] as $exfld) {
+        $uname = strtoupper($exfld['field_name']);
+        $exfld_val = cot_build_extrafields('ruser'.$exfld['field_name'], $exfld, $urr['user_'.$exfld['field_name']]);
+        $exfld_title = cot_extrafield_title($exfld, 'user_');
+
+        $t->assign(array(
+            'USERS_PROFILE_' . $uname => $exfld_val,
+            'USERS_PROFILE_' . $uname . '_TITLE' => $exfld_title,
+            'USERS_PROFILE_EXTRAFLD' => $exfld_val,
+            'USERS_PROFILE_EXTRAFLD_TITLE' => $exfld_title
+        ));
+        $t->parse('MAIN.EXTRAFLD');
+    }
 }
 
 /* === Hook === */
@@ -263,4 +272,4 @@ if ($cfg['users']['useremailchange'])
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once $cfg['system_dir'] . '/footer.php';
+require_once cot::$cfg['system_dir'] . '/footer.php';

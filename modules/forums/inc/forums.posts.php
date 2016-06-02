@@ -114,9 +114,11 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	}
 
 	// Extra fields
-	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
-	{
-		$rmsg['fp_'.$exfld['field_name']] = cot_import_extrafields('rmsg'.$exfld['field_name'], $exfld);
+	if(!empty(cot::$extrafields[cot::$db->forum_posts])) {
+		foreach (cot::$extrafields[cot::$db->forum_posts] as $exfld) {
+			$rmsg['fp_' . $exfld['field_name']] = cot_import_extrafields('rmsg' . $exfld['field_name'], $exfld, 'P', '',
+                'forums_post_');
+		}
 	}
 
 	/* === Hook === */
@@ -429,15 +431,19 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_ORDER' => empty($id) ? $d + $fp_num : $id
 	));
 
-	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
-	{
-		$tag = mb_strtoupper($exfld['field_name']);
-		$t->assign(array(
-			'FORUMS_POSTS_ROW_'.$tag.'_TITLE' => isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-			'FORUMS_POSTS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['fp_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes'])),
-			'FORUMS_POSTS_ROW_'.$tag.'_VALUE' => $row['fp_'.$exfld['field_name']]
-		));
-	}
+    if(!empty(cot::$extrafields[cot::$db->forum_posts])) {
+        foreach (cot::$extrafields[cot::$db->forum_posts] as $exfld) {
+            $tag = mb_strtoupper($exfld['field_name']);
+            $exfld_title = cot_extrafield_title($exfld, 'forums_post_');
+            $t->assign(array(
+                'FORUMS_POSTS_ROW_' . $tag . '_TITLE' => $exfld_title,
+                'FORUMS_POSTS_ROW_' . $tag => cot_build_extrafields_data('forums', $exfld,
+                    $row['fp_' . $exfld['field_name']],
+                    (cot::$cfg['forums']['markup'] && cot::$cfg['forums']['cat_' . $s]['allowbbcodes'])),
+                'FORUMS_POSTS_ROW_' . $tag . '_VALUE' => $row['fp_' . $exfld['field_name']]
+            ));
+        }
+    }
 
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
@@ -449,10 +455,10 @@ foreach ($sql_forums->fetchAll() as $row)
 	$t->parse('MAIN.FORUMS_POSTS_ROW');
 }
 
-$lastpage = (($d + $cfg['forums']['maxpostsperpage']) < $totalposts) ? FALSE : TRUE;
-$pagenav = cot_pagenav('forums', "m=posts&q=$q", $d, $totalposts, $cfg['forums']['maxpostsperpage']);
+$lastpage = (($d + cot::$cfg['forums']['maxpostsperpage']) < $totalposts) ? FALSE : TRUE;
+$pagenav = cot_pagenav('forums', "m=posts&q=$q", $d, $totalposts, cot::$cfg['forums']['maxpostsperpage']);
 
-$jumpbox[cot_url('forums')] = $L['Forums'];
+$jumpbox[cot_url('forums')] = cot::$L['Forums'];
 foreach ($structure['forums'] as $key => $val)
 {
 	if (cot_auth('forums', $key, 'R') && strpos($val['path'], '.'))
@@ -500,25 +506,28 @@ if (($cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && $u
 		}
 	}
 
-		// Extra fields
-	foreach($cot_extrafields[$db_forum_posts] as $exfld)
-	{
-		$uname = strtoupper($exfld['field_name']);
-		$exfld_val = cot_build_extrafields('rmsg'.$exfld['field_name'], $exfld, $rmsg[$exfld['field_name']]);
-		$exfld_title = isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
-		$t->assign(array(
-			'FORUMS_POSTS_NEWPOST_'.$uname => $exfld_val,
-			'FORUMS_POSTS_NEWPOST_'.$uname.'_TITLE' => $exfld_title,
-			'FORUMS_POSTS_NEWPOST_EXTRAFLD' => $exfld_val,
-			'FORUMS_POSTS_NEWPOST_EXTRAFLD_TITLE' => $exfld_title
-			));
-		$t->parse('MAIN.FORUMS_POSTS_NEWPOST.EXTRAFLD');
-	}
+	// Extra fields
+    if(!empty(cot::$extrafields[cot::$db->forum_posts])) {
+        foreach (cot::$extrafields[cot::$db->forum_posts] as $exfld) {
+            $uname = strtoupper($exfld['field_name']);
+            $exfld_val = cot_build_extrafields('rmsg' . $exfld['field_name'], $exfld, $rmsg[$exfld['field_name']]);
+            $exfld_title = cot_extrafield_title($exfld, 'forums_post_');
+
+            $t->assign(array(
+                'FORUMS_POSTS_NEWPOST_' . $uname => $exfld_val,
+                'FORUMS_POSTS_NEWPOST_' . $uname . '_TITLE' => $exfld_title,
+                'FORUMS_POSTS_NEWPOST_EXTRAFLD' => $exfld_val,
+                'FORUMS_POSTS_NEWPOST_EXTRAFLD_TITLE' => $exfld_title
+            ));
+            $t->parse('MAIN.FORUMS_POSTS_NEWPOST.EXTRAFLD');
+        }
+    }
 
 	$t->assign(array(
 		'FORUMS_POSTS_NEWPOST_SEND' => cot_url('forums', "m=posts&a=newpost&s=" . $s . "&q=" . $q),
-		'FORUMS_POSTS_NEWPOST_TEXT' => $R['forums_code_newpost_mark'] . cot_textarea('rmsgtext', $rmsg['fp_text'], 16, 56, '', 'input_textarea_'.$minimaxieditor),
-            	'FORUMS_POSTS_NEWPOST_EDITTIMEOUT' => cot_build_timegap(0, $cfg['forums']['edittimeout'] * 3600)
+		'FORUMS_POSTS_NEWPOST_TEXT' => cot::$R['forums_code_newpost_mark'] . cot_textarea('rmsgtext', $rmsg['fp_text'],
+                16, 56, '', 'input_textarea_'.$minimaxieditor),
+        'FORUMS_POSTS_NEWPOST_EDITTIMEOUT' => cot_build_timegap(0, cot::$cfg['forums']['edittimeout'] * 3600)
 	));
 
 	cot_display_messages($t);
@@ -607,14 +616,17 @@ $t->assign(array(
 ));
 
 
-foreach ($cot_extrafields[$db_forum_topics] as $exfld)
-{
-	$tag = mb_strtoupper($exfld['field_name']);
-	$t->assign(array(
-		'FORUMS_POSTS_TOPIC_'.$tag.'_TITLE' => isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-		'FORUMS_POSTS_TOPIC_'.$tag => cot_build_extrafields_data('forums', $exfld, $rowt['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes'])),
-		'FORUMS_POSTS_TOPIC_'.$tag.'_VALUE' => $rowt['ft_'.$exfld['field_name']]
-	));
+if(!empty(cot::$extrafields[cot::$db->forum_topics])) {
+    foreach (cot::$extrafields[cot::$db->forum_topics] as $exfld) {
+        $tag = mb_strtoupper($exfld['field_name']);
+        $exfld_title = cot_extrafield_title($exfld, 'forums_topic_');
+        $t->assign(array(
+            'FORUMS_POSTS_TOPIC_' . $tag . '_TITLE' => $exfld_title,
+            'FORUMS_POSTS_TOPIC_' . $tag => cot_build_extrafields_data('forums', $exfld, $rowt['ft_' . $exfld['field_name']],
+                (cot::$cfg['forums']['markup'] && cot::$cfg['forums']['cat_' . $s]['allowbbcodes'])),
+            'FORUMS_POSTS_TOPIC_' . $tag . '_VALUE' => $rowt['ft_' . $exfld['field_name']]
+        ));
+    }
 }
 
 /* === Hook  === */
@@ -627,9 +639,9 @@ foreach (cot_getextplugins('forums.posts.tags') as $pl)
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once $cfg['system_dir'] . '/footer.php';
+require_once cot::$cfg['system_dir'] . '/footer.php';
 
-if ($cache && $usr['id'] === 0 && $cfg['cache_forums'])
+if (cot::$cache && $usr['id'] === 0 && $cfg['cache_forums'])
 {
-	$cache->page->write();
+    cot::$cache->page->write();
 }

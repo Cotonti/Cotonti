@@ -68,15 +68,19 @@ if ($a == 'newtopic')
 	{
 		// Attempting to create a topic in a root category
 		include cot_langfile('message', 'core');
-		cot_error($L['msg602_body']);
+		cot_error(cot::$L['msg602_body']);
 	}
-	foreach ($cot_extrafields[$db_forum_topics] as $exfld)
-	{
-		$rtopic['ft_'.$exfld['field_name']] = cot_import_extrafields('rtopic'.$exfld['field_name'], $exfld);
+
+	if(!empty(cot::$extrafields[cot::$db->forum_topics])) {
+		foreach (cot::$extrafields[cot::$db->forum_topics] as $exfld) {
+			$rtopic['ft_' . $exfld['field_name']] = cot_import_extrafields('rtopic' . $exfld['field_name'], $exfld, 'P', '', 'forums_topic_');
+		}
 	}
-	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
-	{
-		$rmsg['fp_'.$exfld['field_name']] = cot_import_extrafields('rmsg'.$exfld['field_name'], $exfld);
+
+	if(!empty(cot::$extrafields[cot::$db->forum_posts])) {
+		foreach (cot::$extrafields[cot::$db->forum_posts] as $exfld) {
+			$rmsg['fp_' . $exfld['field_name']] = cot_import_extrafields('rmsg' . $exfld['field_name'], $exfld, 'P', '', 'forums_post_');
+		}
 	}
 
 	if (!cot_error_found())
@@ -98,9 +102,9 @@ if ($a == 'newtopic')
 		$rtopic['ft_lastposterid'] = (int)$usr['id'];
 		$rtopic['ft_lastpostername'] = $usr['name'];
 
-		$db->insert($db_forum_topics, $rtopic);
+		cot::$db->insert(cot::$db->forum_topics, $rtopic);
 
-		$q = $db->lastInsertId();
+		$q = cot::$db->lastInsertId();
 
 		$rmsg['fp_cat'] = $s;
 		$rmsg['fp_topicid'] = (int)$q;
@@ -110,18 +114,19 @@ if ($a == 'newtopic')
 		$rmsg['fp_updated'] = (int)$sys['now'];
 		$rmsg['fp_posterip'] = $usr['ip'];
 
-		$db->insert($db_forum_posts, $rmsg);
+		cot::$db->insert(cot::$db->forum_posts, $rmsg);
 
-		$p = $db->lastInsertId();
+		$p = cot::$db->lastInsertId();
 
-		if ($cfg['forums']['cat_' . $s]['autoprune'] > 0)
+		if (cot::$cfg['forums']['cat_' . $s]['autoprune'] > 0)
 		{
-			cot_forums_prunetopics('updated', $s, $cfg['forums']['cat_' . $s]['autoprune']);
+			cot_forums_prunetopics('updated', $s, cot::$cfg['forums']['cat_' . $s]['autoprune']);
 		}
 
 		if ($cfg['forums']['cat_' . $s]['countposts'])
 		{
-			$sql_forums = $db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'");
+			$sql_forums = cot::$db->query("UPDATE ".cot::$db->users." SET user_postcount=user_postcount+1 WHERE user_id='".
+                cot::$usr['id']."'");
 		}
 
 		if (!$rtopic['ft_mode'])
@@ -138,10 +143,10 @@ if ($a == 'newtopic')
 		}
 		/* ===== */
 
-		if ($cache)
+		if (cot::$cache)
 		{
-			($cfg['cache_forums']) && $cache->page->clear('forums');
-			($cfg['cache_index']) && $cache->page->clear('index');
+			(cot::$cfg['cache_forums']) && cot::$cache->page->clear('forums');
+			(cot::$cfg['cache_index']) && cot::$cache->page->clear('index');
 		}
 
 		cot_shield_update(45, "New topic");
@@ -149,12 +154,12 @@ if ($a == 'newtopic')
 	}
 }
 
-$toptitle = cot_breadcrumbs(cot_forums_buildpath($s), $cfg['homebreadcrumb']);
-$toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
+$toptitle = cot_breadcrumbs(cot_forums_buildpath($s), cot::$cfg['homebreadcrumb']);
+$toptitle .= ($usr['isadmin']) ? cot::$R['forums_code_admin_mark'] : '';
 
-$sys['sublocation'] = $structure['forums'][$s]['title'];
-$out['subtitle'] = $L['forums_newtopic'];
-$out['head'] .= $R['code_noindex'];
+$sys['sublocation'] = cot::$structure['forums'][$s]['title'];
+$out['subtitle'] = cot::$L['forums_newtopic'];
+$out['head'] .= cot::$R['code_noindex'];
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.newtopic.main') as $pl)
@@ -163,7 +168,7 @@ foreach (cot_getextplugins('forums.newtopic.main') as $pl)
 }
 /* ===== */
 require_once cot_incfile('forms');
-require_once $cfg['system_dir'] . '/header.php';
+require_once cot::$cfg['system_dir'] . '/header.php';
 
 $mskin = cot_tplfile(array('forums', 'newtopic', $structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
@@ -175,40 +180,44 @@ $t->assign(array(
 	'FORUMS_NEWTOPIC_TITLE' => cot_inputbox('text', 'rtopictitle', $rtopic['ft_title'], array('size' => 56, 'maxlength' => 255)),
 	'FORUMS_NEWTOPIC_DESC' => cot_inputbox('text', 'rtopicdesc', $rtopic['ft_desc'], array('size' => 56, 'maxlength' => 255)),
 	'FORUMS_NEWTOPIC_TEXT' => cot_textarea('rmsgtext', $rmsg['fp_text'], 20, 56, '', 'input_textarea_'.$minimaxieditor),
-	'FORUMS_NEWTOPIC_EDITTIMEOUT' => cot_build_timegap(0, $cfg['forums']['edittimeout'] * 3600)
+	'FORUMS_NEWTOPIC_EDITTIMEOUT' => cot_build_timegap(0, cot::$cfg['forums']['edittimeout'] * 3600)
 ));
 
 // Extra fields
-foreach($cot_extrafields[$db_forum_posts] as $exfld)
-{
-	$uname = strtoupper($exfld['field_name']);
-	$exfld_val = cot_build_extrafields('rmsg'.$exfld['field_name'], $exfld, $rmsg['fp_'.$exfld['field_name']]);
-	$exfld_title = isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
-	$t->assign(array(
-		'FORUMS_NEWTOPIC_'.$uname => $exfld_val,
-		'FORUMS_NEWTOPIC_'.$uname.'_TITLE' => $exfld_title,
-		'FORUMS_NEWTOPIC_EXTRAFLD' => $exfld_val,
-		'FORUMS_NEWTOPIC_EXTRAFLD_TITLE' => $exfld_title
-	));
-	$t->parse('MAIN.EXTRAFLD');
+if(!empty(cot::$extrafields[cot::$db->forum_posts])) {
+    foreach (cot::$extrafields[cot::$db->forum_posts] as $exfld) {
+        $uname = strtoupper($exfld['field_name']);
+        $exfld_val = cot_build_extrafields('rmsg' . $exfld['field_name'], $exfld, $rmsg['fp_' . $exfld['field_name']]);
+        $exfld_title = cot_extrafield_title($exfld, 'forums_post_');
+
+        $t->assign(array(
+            'FORUMS_NEWTOPIC_' . $uname => $exfld_val,
+            'FORUMS_NEWTOPIC_' . $uname . '_TITLE' => $exfld_title,
+            'FORUMS_NEWTOPIC_EXTRAFLD' => $exfld_val,
+            'FORUMS_NEWTOPIC_EXTRAFLD_TITLE' => $exfld_title
+        ));
+        $t->parse('MAIN.EXTRAFLD');
+    }
 }
 
 // Extra fields
-foreach($cot_extrafields[$db_forum_topics] as $exfld)
-{
-	$uname = strtoupper($exfld['field_name']);
-	$exfld_val = cot_build_extrafields('rtopic'.$exfld['field_name'], $exfld, $rtopic['ft_'.$exfld['field_name']]);
-	$exfld_title = isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
-	$t->assign(array(
-		'FORUMS_NEWTOPIC_TOPIC_'.$uname => $exfld_val,
-		'FORUMS_NEWTOPIC_TOPIC_'.$uname.'_TITLE' => $exfld_title,
-		'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD' => $exfld_val,
-		'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD_TITLE' => $exfld_title
-	));
-	$t->parse('MAIN.TOPIC_EXTRAFLD');
+if(!empty(cot::$extrafields[cot::$db->forum_topics])) {
+    foreach (cot::$extrafields[cot::$db->forum_topics] as $exfld) {
+        $uname = strtoupper($exfld['field_name']);
+        $exfld_val = cot_build_extrafields('rtopic' . $exfld['field_name'], $exfld, $rtopic['ft_' . $exfld['field_name']]);
+        $exfld_title = cot_extrafield_title($exfld, 'forums_topic_');
+        
+        $t->assign(array(
+            'FORUMS_NEWTOPIC_TOPIC_' . $uname => $exfld_val,
+            'FORUMS_NEWTOPIC_TOPIC_' . $uname . '_TITLE' => $exfld_title,
+            'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD' => $exfld_val,
+            'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD_TITLE' => $exfld_title
+        ));
+        $t->parse('MAIN.TOPIC_EXTRAFLD');
+    }
 }
 
-if ($cfg['forums']['cat_' . $s]['allowprvtopics'])
+if (cot::$cfg['forums']['cat_' . $s]['allowprvtopics'])
 {
 	$t->assign('FORUMS_NEWTOPIC_ISPRIVATE', cot_checkbox($rtopic['ft_mode'], 'rtopicmode'));
 	$t->parse('MAIN.PRIVATE');

@@ -257,28 +257,30 @@ if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated' && $c != 'saved_dra
 }
 
 // Extra fields for structure
-foreach ($cot_extrafields[$db_structure] as $exfld)
-{
-	$uname = strtoupper($exfld['field_name']);
-	$t->assign(array(
-		'LIST_CAT_'.$uname.'_TITLE' => isset($L['structure_'.$exfld['field_name'].'_title']) ?
-			$L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-		'LIST_CAT_'.$uname => cot_build_extrafields_data('structure', $exfld, $cat[$exfld['field_name']]),
-		'LIST_CAT_'.$uname.'_VALUE' => $cat[$exfld['field_name']],
-	));
-}
+if (isset(cot::$extrafields[cot::$db->structure])) {
+    foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
+        $uname = strtoupper($exfld['field_name']);
+        $exfld_title = cot_extrafield_title($exfld, 'structure_');
 
+        $t->assign(array(
+            'LIST_CAT_' . $uname . '_TITLE' => $exfld_title,
+            'LIST_CAT_' . $uname => cot_build_extrafields_data('structure', $exfld, $cat[$exfld['field_name']]),
+            'LIST_CAT_' . $uname . '_VALUE' => $cat[$exfld['field_name']],
+        ));
+    }
+}
 $arrows = array();
-foreach ($cot_extrafields[$db_pages] + array('title' => 'title', 'key' => 'key', 'date' => 'date', 'author' => 'author', 'owner' => 'owner', 'count' => 'count', 'filecount' => 'filecount') as $row_k => $row_p)
+foreach (cot::$extrafields[cot::$db->pages] + array('title' => 'title', 'key' => 'key', 'date' => 'date', 'author' => 'author',
+    'owner' => 'owner', 'count' => 'count', 'filecount' => 'filecount') as $row_k => $row_p)
 {
 	$uname = strtoupper($row_k);
 	$url_asc = cot_url('page',  array('s' => $row_k, 'w' => 'asc') + $list_url_path);
 	$url_desc = cot_url('page', array('s' => $row_k, 'w' => 'desc') + $list_url_path);
-	$arrows[$row_k]['asc']  = $R['icon_down'];
-	$arrows[$row_k]['desc'] = $R['icon_up'];
+	$arrows[$row_k]['asc']  = cot::$R['icon_down'];
+	$arrows[$row_k]['desc'] = cot::$R['icon_up'];
 	if ($s == $row_k)
 	{
-		$arrows[$s][$w] = $R['icon_vert_active'][$w];
+		$arrows[$s][$w] = cot::$R['icon_vert_active'][$w];
 	}
 	if(in_array($row_k, array('title', 'key', 'date', 'author', 'owner', 'count', 'filecount')))
 	{
@@ -343,15 +345,19 @@ foreach ($subcat as $x)
 	));
 
 	// Extra fields for structure
-	foreach ($cot_extrafields[$db_structure] as $exfld)
-	{
-		$uname = strtoupper($exfld['field_name']);
-		$t->assign(array(
-			'LIST_ROWCAT_'.$uname.'_TITLE' => isset($L['structure_'.$exfld['field_name'].'_title']) ?  $L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-			'LIST_ROWCAT_'.$uname => cot_build_extrafields_data('structure', $exfld, $structure['page'][$x][$exfld['field_name']]),
-			'LIST_ROWCAT_'.$uname.'_VALUE' => $structure['page'][$x][$exfld['field_name']],
-		));
-	}
+    if (!empty(cot::$extrafields[cot::$db->structure])) {
+        foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
+            $uname = strtoupper($exfld['field_name']);
+            $exfld_title = cot_extrafield_title($exfld, 'structure_');
+
+            $t->assign(array(
+                'LIST_ROWCAT_' . $uname . '_TITLE' => $exfld_title,
+                'LIST_ROWCAT_' . $uname => cot_build_extrafields_data('structure', $exfld,
+                    cot::$structure['page'][$x][$exfld['field_name']]),
+                'LIST_ROWCAT_' . $uname . '_VALUE' => cot::$structure['page'][$x][$exfld['field_name']],
+            ));
+        }
+    }
 
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
@@ -363,7 +369,7 @@ foreach ($subcat as $x)
 	$t->parse('MAIN.LIST_ROWCAT');
 }
 
-$pagenav_cat = cot_pagenav('page', $list_url_path + array('d' => $durl), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
+$pagenav_cat = cot_pagenav('page', $list_url_path + array('d' => $durl), $dc, count($allsub), cot::$cfg['page']['maxlistsperpage'], 'dc');
 
 $t->assign(array(
 	'LISTCAT_PAGEPREV' => $pagenav_cat['prev'],
@@ -418,9 +424,9 @@ foreach (cot_getextplugins('page.list.tags') as $pl)
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once $cfg['system_dir'] . '/footer.php';
+require_once cot::$cfg['system_dir'] . '/footer.php';
 
-if ($cache && $usr['id'] === 0 && $cfg['cache_page'])
+if (cot::$cache && $usr['id'] === 0 && $cfg['cache_page'])
 {
-	$cache->page->write();
+    cot::$cache->page->write();
 }

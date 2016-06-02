@@ -298,8 +298,8 @@ $t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 
-if ($cache && $usr['id'] === 0 && $cfg['cache_page']
-	&& (!isset($cfg['cache_page_blacklist']) || !in_array($pag['page_cat'], $cfg['cache_page_blacklist'])))
+if (cot::$cache && cot::$usr['id'] === 0 && cot::$cfg['cache_page']
+	&& (!isset(cot::$cfg['cache_page_blacklist']) || !in_array($pag['page_cat'], cot::$cfg['cache_page_blacklist'])))
 {
-	$cache->page->write();
+	cot::$cache->page->write();
 }

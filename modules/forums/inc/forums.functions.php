@@ -255,12 +255,16 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
         $sections[$tag_prefix . 'VIEWCOUNT_SHORT'] = 0;
 	}
 
-	foreach ($cot_extrafields[$db_structure] as $exfld)
-	{
-		$uname = strtoupper($exfld['field_name']);
-		$sections[$tag_prefix . $uname . '_TITLE'] = isset($L['structure_' . $exfld['field_name'] . '_title']) ? $L['structure_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
-		$sections[$tag_prefix . $uname] = cot_build_extrafields_data('structure', $exfld, $structure['forums'][$cat][$exfld['field_name']]);
-		$sections[$tag_prefix . $uname . '_VALUE'] = $structure['forums'][$cat][$exfld['field_name']];
+	if(!empty(cot::$extrafields[cot::$db->structure])) {
+		foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
+			$uname = strtoupper($exfld['field_name']);
+            $exfld_title = cot_extrafield_title($exfld, 'structure_');
+            
+			$sections[$tag_prefix . $uname . '_TITLE'] = $exfld_title;
+			$sections[$tag_prefix . $uname] = cot_build_extrafields_data('structure', $exfld,
+				$structure['forums'][$cat][$exfld['field_name']]);
+			$sections[$tag_prefix . $uname . '_VALUE'] = $structure['forums'][$cat][$exfld['field_name']];
+		}
 	}
 
 	return $sections;

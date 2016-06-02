@@ -2217,12 +2217,12 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				$temp_array['GROUPS'] = cot_build_groupsms($user_data['user_id'], FALSE, $user_data['user_maingrp']);
 			}
 			// Extra fields
-			if (isset($cot_extrafields[$db_users]))
-			{
-				foreach ($cot_extrafields[$db_users] as $exfld)
-				{
+			if (!empty(cot::$extrafields[cot::$db->users])) {
+				foreach (cot::$extrafields[cot::$db->users] as $exfld) {
+                    $exfld_title = cot_extrafield_title($exfld, 'user_');
+
 					$temp_array[strtoupper($exfld['field_name'])] = cot_build_extrafields_data('user', $exfld, $user_data['user_' . $exfld['field_name']]);
-					$temp_array[strtoupper($exfld['field_name']) . '_TITLE'] = isset($L['user_' . $exfld['field_name'] . '_title']) ? $L['user_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
+					$temp_array[strtoupper($exfld['field_name']) . '_TITLE'] = $exfld_title;
 					$temp_array[strtoupper($exfld['field_name']) . '_VALUE'] = $user_data['user_' . $exfld['field_name']];
 				}
 			}

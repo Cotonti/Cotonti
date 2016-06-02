@@ -344,14 +344,17 @@ foreach ($sql_forums_rowset as $row)
 		'FORUMS_TOPICS_ROW' => $row,
 	));
 
-	foreach ($cot_extrafields[$db_forum_topics] as $exfld)
-	{
-		$tag = mb_strtoupper($exfld['field_name']);
-		$t->assign(array(
-			'FORUMS_TOPICS_ROW_'.$tag.'_TITLE' => isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'],
-			'FORUMS_TOPICS_ROW_'.$tag => cot_build_extrafields_data('forums', $exfld, $row['ft_'.$exfld['field_name']], ($cfg['forums']['markup'] && $cfg['forums']['cat_' . $s]['allowbbcodes'])),
-			'FORUMS_TOPICS_ROW_'.$tag.'_VALUE' => $row['ft_'.$exfld['field_name']]
-		));
+	if(!empty(cot::$extrafields[cot::$db->forum_topics])) {
+		foreach (cot::$extrafields[cot::$db->forum_topics] as $exfld) {
+			$tag = mb_strtoupper($exfld['field_name']);
+			$exfld_title = cot_extrafield_title($exfld, 'forums_topic_');
+			$t->assign(array(
+				'FORUMS_TOPICS_ROW_' . $tag . '_TITLE' => $exfld_title,
+				'FORUMS_TOPICS_ROW_' . $tag => cot_build_extrafields_data('forums', $exfld, $row['ft_' . $exfld['field_name']],
+					(cot::$cfg['forums']['markup'] && cot::$cfg['forums']['cat_' . $s]['allowbbcodes'])),
+				'FORUMS_TOPICS_ROW_' . $tag . '_VALUE' => $row['ft_' . $exfld['field_name']]
+			));
+		}
 	}
 
 	/* === Hook - Part2 : Include === */
@@ -364,12 +367,12 @@ foreach ($sql_forums_rowset as $row)
 	$t->parse('MAIN.FORUMS_TOPICS_ROW');
 }
 
-$pagenav = cot_pagenav('forums', "m=topics&s=$s&ord=$o&w=$w", $d, $totaltopics, $cfg['forums']['maxtopicsperpage']);
+$pagenav = cot_pagenav('forums', "m=topics&s=$s&ord=$o&w=$w", $d, $totaltopics, cot::$cfg['forums']['maxtopicsperpage']);
 
 $toptitle = cot_breadcrumbs(cot_forums_buildpath($s), $cfg['homebreadcrumb']);
-$toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
+$toptitle .= ($usr['isadmin']) ? cot::$R['forums_code_admin_mark'] : '';
 
-$jumpbox[cot_url('forums')] = $L['Forums'];
+$jumpbox[cot_url('forums')] = cot::$L['Forums'];
 foreach($structure['forums'] as $key => $val)
 {
 	if (cot_auth('forums', $key, 'R'))

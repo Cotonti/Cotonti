@@ -16,7 +16,7 @@ require_once cot_incfile('forms');
  * Returns Extra fields edit fields
  *
  * @param string $name Variable name
- * @param array $extrafields Extra fields data
+ * @param array $extrafield Extra fields data
  * @param string $data Existing data for fields
  * @return string
  */
@@ -145,19 +145,19 @@ function cot_build_extrafields($name, $extrafield, $data)
  * Imports Extra fields data
  *
  * @param string $inputname Variable name (or value for source=D)
- * @param array $extrafields Extra fields data
+ * @param $extrafield
  * @param string $source Source type: G (GET), P (POST), C (COOKIE) or D (variable filtering)
  * @param string $oldvalue Old value of extrafield
+ * @param string $titlePrefix
  * @return string
  */
-function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue='')
+function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalue = '', $titlePrefix = '')
 {
 	global $L;
 
-    $exfld_title = isset(cot::$L['page_'.$extrafield['field_name'].'_title']) ?  
-        cot::$L['page_'.$extrafield['field_name'].'_title'] : $extrafield['field_description'];
-    if($exfld_title == '') $exfld_title = $extrafield['field_name'];
-	
+    $exfld_title = cot_extrafield_title($extrafield, $titlePrefix);
+
+    $import = null;
 	switch ($extrafield['field_type'])
 	{
 		case 'input':
@@ -384,20 +384,49 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			$import = $exfldsize[$extrafield['field_variants']];
 			break;
 	}
+
 	if ((is_null($import) || $import === '') && $extrafield['field_required'])
 	{
-		$fname = (!empty($extrafield['field_description'])) ? $extrafield['field_description'] : $extrafield['field_name'];
-		$msg = (isset($L['field_required_' . $extrafield['field_name']])) ? 'field_required_' . $extrafield['field_name'] : $L['field_required'].': '.$fname;
+		$msg = (isset(cot::$L['field_required_' . $extrafield['field_name']])) ? cot::$L['field_required_' . $extrafield['field_name']] :
+            cot::$L['field_required'].': '.$exfld_title;
 		cot_error($msg, $inputname);
 	}
 	return $import;
 }
 
 /**
+ * Extrafield title
+ *
+ * @param array  $extrafield
+ * @param string $titlePrefix
+ * @return string
+ */
+function cot_extrafield_title($extrafield, $titlePrefix = '') {
+    $title = $extrafield['field_description'];
+
+    $fieldLocation = '';
+    if(isset($extrafield['field_location'])) $fieldLocation = $extrafield['field_location'];
+
+    if($titlePrefix != '' && isset(cot::$L[$titlePrefix.$extrafield['field_name'].'_title'])) {
+        $title = cot::$L[$titlePrefix.$extrafield['field_name'].'_title'];
+
+    } elseif($fieldLocation != '' && isset(cot::$L[$fieldLocation.'_'.$extrafield['field_name'].'_title'])) {
+        $title = cot::$L[$fieldLocation.'_'.$extrafield['field_name'].'_title'];
+
+    } elseif(isset(cot::$L[$extrafield['field_name'].'_title'])) {
+        $title = cot::$L[$extrafield['field_name'].'_title'];
+    }
+    
+    if($title == '') $title = $extrafield['field_name'];
+
+    return $title;
+}
+
+/**
  * Returns Extra fields data
  *
  * @param string $name Lang row
- * @param array $extrafields Extra fields data
+ * @param array $extrafield Extra fields data
  * @param string $value Existing user value
  * @param string $parser Non-default parser to use
  * @return string

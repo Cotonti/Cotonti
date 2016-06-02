@@ -236,26 +236,28 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 		}
 
 		// Extrafields
-		if (isset($cot_extrafields[$db_pages]))
-		{
-			foreach ($cot_extrafields[$db_pages] as $exfld)
-			{
+        if(!empty(cot::$extrafields[cot::$db->pages])) {
+            foreach (cot::$extrafields[cot::$db->pages] as $exfld) {
 				$tag = mb_strtoupper($exfld['field_name']);
-				$temp_array[$tag.'_TITLE'] = isset($L['page_'.$exfld['field_name'].'_title']) ?  $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
-				$temp_array[$tag] = cot_build_extrafields_data('page', $exfld, $page_data['page_'.$exfld['field_name']], $page_data['page_parser']);
+                $exfld_title = cot_extrafield_title($exfld, 'page_');
+
+				$temp_array[$tag.'_TITLE'] = $exfld_title;
+				$temp_array[$tag] = cot_build_extrafields_data('page', $exfld, $page_data['page_'.$exfld['field_name']], 
+                    $page_data['page_parser']);
 				$temp_array[$tag.'_VALUE'] = $page_data['page_'.$exfld['field_name']];
 			}
 		}
 
 		// Extra fields for structure
-		if (isset($cot_extrafields[$db_structure]))
-		{
-			foreach ($cot_extrafields[$db_structure] as $exfld)
-			{
+		if (isset(cot::$extrafields[cot::$db->structure])) {
+			foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
 				$tag = mb_strtoupper($exfld['field_name']);
-				$temp_array['CAT_'.$tag.'_TITLE'] = isset($L['structure_'.$exfld['field_name'].'_title']) ?  $L['structure_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
-				$temp_array['CAT_'.$tag] = cot_build_extrafields_data('structure', $exfld, $structure['page'][$page_data['page_cat']][$exfld['field_name']]);
-				$temp_array['CAT_'.$tag.'_VALUE'] = $structure['page'][$page_data['page_cat']][$exfld['field_name']];
+                $exfld_title = cot_extrafield_title($exfld, 'structure_');
+
+				$temp_array['CAT_'.$tag.'_TITLE'] = $exfld_title;
+				$temp_array['CAT_'.$tag] = cot_build_extrafields_data('structure', $exfld,
+                    cot::$structure['page'][$page_data['page_cat']][$exfld['field_name']]);
+				$temp_array['CAT_'.$tag.'_VALUE'] = cot::$structure['page'][$page_data['page_cat']][$exfld['field_name']];
 			}
 		}
 
@@ -285,8 +287,9 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 }
 
 /**
- * @param $adminpart bool Call from admin part
- * Returns possible values for category sorting order
+ * Possible values for category sorting order
+ * @param bool $adminpart Call from admin part
+ * @return array
  */
 function cot_page_config_order($adminpart = false)
 {
@@ -464,21 +467,24 @@ function cot_page_import($source = 'POST', $rpage = array(), $auth = array())
 	}
 	else
 	{
-		$rpage['page_ownerid'] = $usr['id'];
+		$rpage['page_ownerid'] = cot::$usr['id'];
 	}
 
 	$parser_list = cot_get_parsers();
 
-	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || $rpage['page_parser'] != 'none' && !cot_auth('plug', $rpage['page_parser'], 'W'))
+	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || $rpage['page_parser'] != 'none' &&
+        !cot_auth('plug', $rpage['page_parser'], 'W'))
 	{
-		$rpage['page_parser'] = isset($sys['parser']) ? $sys['parser'] : $cfg['page']['parser'];
+		$rpage['page_parser'] = isset(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['page']['parser'];
 	}
 
 	// Extra fields
-	foreach ($cot_extrafields[$db_pages] as $exfld)
-	{
-		$rpage['page_'.$exfld['field_name']] = cot_import_extrafields('rpage'.$exfld['field_name'], $exfld, $source, $rpage['page_'.$exfld['field_name']]);
-	}
+    if(!empty(cot::$extrafields[cot::$db->pages])) {
+        foreach (cot::$extrafields[cot::$db->pages] as $exfld) {
+            $rpage['page_' . $exfld['field_name']] = cot_import_extrafields('rpage' . $exfld['field_name'], $exfld,
+                $source, $rpage['page_' . $exfld['field_name']], 'page_');
+        }
+    }
 
 	return $rpage;
 }

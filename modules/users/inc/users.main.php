@@ -288,4 +288,4 @@ foreach (cot_getextplugins('users.tags') as $pl)
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once $cfg['system_dir'] . '/footer.php';
+require_once cot::$cfg['system_dir'] . '/footer.php';

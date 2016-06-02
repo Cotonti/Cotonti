@@ -177,19 +177,20 @@ if ($usr['isadmin'])
 $t->assign($pageedit_array);
 
 // Extra fields
-foreach($cot_extrafields[$db_pages] as $exfld)
-{
-	$uname = strtoupper($exfld['field_name']);
-	$exfld_val = cot_build_extrafields('rpage'.$exfld['field_name'], $exfld, $pag['page_'.$exfld['field_name']]);
-	$exfld_title = isset($L['page_'.$exfld['field_name'].'_title']) ?  $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
+if(!empty(cot::$extrafields[cot::$db->pages])) {
+    foreach (cot::$extrafields[cot::$db->pages] as $exfld) {
+        $uname = strtoupper($exfld['field_name']);
+        $exfld_val = cot_build_extrafields('rpage' . $exfld['field_name'], $exfld, $pag['page_' . $exfld['field_name']]);
+        $exfld_title = cot_extrafield_title($exfld, 'page_');
 
-	$t->assign(array(
-		'PAGEEDIT_FORM_'.$uname => $exfld_val,
-		'PAGEEDIT_FORM_'.$uname.'_TITLE' => $exfld_title,
-		'PAGEEDIT_FORM_EXTRAFLD' => $exfld_val,
-		'PAGEEDIT_FORM_EXTRAFLD_TITLE' => $exfld_title
-	));
-	$t->parse('MAIN.EXTRAFLD');
+        $t->assign(array(
+            'PAGEEDIT_FORM_' . $uname => $exfld_val,
+            'PAGEEDIT_FORM_' . $uname . '_TITLE' => $exfld_title,
+            'PAGEEDIT_FORM_EXTRAFLD' => $exfld_val,
+            'PAGEEDIT_FORM_EXTRAFLD_TITLE' => $exfld_title
+        ));
+        $t->parse('MAIN.EXTRAFLD');
+    }
 }
 
 // Error and message handling
@@ -204,11 +205,11 @@ foreach (cot_getextplugins('page.edit.tags') as $pl)
 
 if ($usr['isadmin'])
 {
-	if ($cfg['page']['autovalidate']) $usr_can_publish = TRUE;
+	if (cot::$cfg['page']['autovalidate']) $usr_can_publish = TRUE;
 	$t->parse('MAIN.ADMIN');
 }
 
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once $cfg['system_dir'].'/footer.php';
+require_once cot::$cfg['system_dir'].'/footer.php';

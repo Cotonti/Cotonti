@@ -1,10 +1,9 @@
 <?php
-
 /* ====================
-  [BEGIN_COT_EXT]
-  Hooks=admin.extrafields.first
-  [END_COT_EXT]
-  ==================== */
+[BEGIN_COT_EXT]
+Hooks=admin.extrafields.first
+[END_COT_EXT]
+==================== */
 
 /**
  * Forums module extrafields
@@ -17,9 +16,9 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('forums', 'module');
 
-$extra_whitelist[$db_forum_posts] = array(
-	'name' => $db_forum_posts,
-	'caption' => $L['Module'].' Forums',
+$extra_whitelist[cot::$db->forum_posts] = array(
+	'name' => cot::$db->forum_posts,
+	'caption' => cot::$L['Module'].' Forums',
 	'type' => 'module',
 	'code' => 'forums',
 	'tags' => array(
@@ -29,9 +28,9 @@ $extra_whitelist[$db_forum_posts] = array(
 	)
 );
 
-$extra_whitelist[$db_forum_topics] = array(
-	'name' => $db_forum_topics,
-	'caption' => $L['Module'].' Forums',
+$extra_whitelist[cot::$db->forum_topics] = array(
+	'name' => cot::$db->forum_topics,
+	'caption' => cot::$L['Module'].' Forums',
 	'type' => 'module',
 	'code' => 'forums',
 	'tags' => array(

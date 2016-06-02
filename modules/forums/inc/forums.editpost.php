@@ -12,7 +12,7 @@ defined('COT_CODE') or die('Wrong URL');
 $s = cot_import('s', 'G', 'TXT'); // section cat
 $q = cot_import('q', 'G', 'INT');  // topic id
 $p = cot_import('p', 'G', 'INT'); // post id
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['forums']['maxpostsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', cot::$cfg['forums']['maxpostsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.editpost.first') as $pl)
@@ -24,13 +24,13 @@ foreach (cot_getextplugins('forums.editpost.first') as $pl)
 cot_blockguests();
 cot_check_xg();
 
-isset($structure['forums'][$s]) || cot_die();
+isset(cot::$structure['forums'][$s]) || cot_die();
 
-$sql_forums = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id = ? and fp_topicid = ? and fp_cat = ?",
+$sql_forums = cot::$db->query("SELECT * FROM $db_forum_posts WHERE fp_id = ? and fp_topicid = ? and fp_cat = ?",
 	array($p, $q, $s));
 if ($rowpost = $sql_forums->fetch())
 {
-	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
+	list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('forums', $s);
 
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.editpost.rights') as $pl)
@@ -39,25 +39,26 @@ if ($rowpost = $sql_forums->fetch())
 	}
 	/* ===== */
 
-	if (!$usr['isadmin'] && ($rowpost['fp_posterid'] != $usr['id'] || ($cfg['forums']['edittimeout'] != '0' && $sys['now'] - $rowpost['fp_creation'] > $cfg['forums']['edittimeout'] * 3600)))
+	if (!cot::$usr['isadmin'] && ($rowpost['fp_posterid'] != cot::$usr['id'] ||
+			(cot::$cfg['forums']['edittimeout'] != '0' && cot::$sys['now'] - $rowpost['fp_creation'] > cot::$cfg['forums']['edittimeout'] * 3600)))
 	{
 		cot_log('Attempt to edit a post without rights', 'sec');
 		cot_die();
 	}
-	cot_block($usr['auth_read']);
+	cot_block(cot::$usr['auth_read']);
 }
 else
 {
 	cot_die();
 }
 
-$is_first_post = $p == $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = ? ORDER BY fp_id ASC LIMIT 1", array($q))->fetchColumn();
+$is_first_post = $p == cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = ? ORDER BY fp_id ASC LIMIT 1", array($q))->fetchColumn();
 
-$sql_forums = $db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id = $q LIMIT 1");
+$sql_forums = cot::$db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id = $q LIMIT 1");
 
 if ($rowt = $sql_forums->fetch())
 {
-	if ($rowt['ft_state'] && !$usr['isadmin'])
+	if ($rowt['ft_state'] && !cot::$usr['isadmin'])
 	{
 		cot_die_message(603, true);
 	}
@@ -82,40 +83,42 @@ if ($a == 'update')
 
 	$rmsg = array();
 	$rmsg['fp_text'] = cot_import('rmsgtext', 'P', 'HTM');
-	$rmsg['fp_updater'] = ($rowpost['fp_posterid'] == $usr['id'] && ($sys['now'] < $rowpost['fp_updated'] + 300) && empty($rowpost['fp_updater']) ) ? '' : $usr['name'];
-	$rmsg['fp_updated'] = $sys['now'];
+	$rmsg['fp_updater'] = ($rowpost['fp_posterid'] == cot::$usr['id'] && (cot::$sys['now'] < $rowpost['fp_updated'] + 300)
+        && empty($rowpost['fp_updater']) ) ? '' : cot::$usr['name'];
+	$rmsg['fp_updated'] = cot::$sys['now'];
 
-	if (isset($_POST['rtopictitle']) && mb_strlen($rtopic['ft_title']) < $cfg['forums']['mintitlelength'])
+	if (isset($_POST['rtopictitle']) && mb_strlen($rtopic['ft_title']) < cot::$cfg['forums']['mintitlelength'])
 	{
 		cot_error('forums_titletooshort', 'rtopictitle');
 	}
-	if (mb_strlen($rmsg['fp_text']) < $cfg['forums']['minpostlength'])
+	if (mb_strlen($rmsg['fp_text']) < cot::$cfg['forums']['minpostlength'])
 	{
 		cot_error('forums_messagetooshort', 'rmsgtext');
 	}
 
-	foreach ($cot_extrafields[$db_forum_topics] as $exfld)
-	{
-		$rtopic['ft_'.$exfld['field_name']] = cot_import_extrafields('rtopic'.$exfld['field_name'], $exfld);
-	}
+    if(!empty(cot::$extrafields[cot::$db->forum_topics])) {
+        foreach (cot::$extrafields[cot::$db->forum_topics] as $exfld) {
+            $rtopic['ft_' . $exfld['field_name']] = cot_import_extrafields('rtopic' . $exfld['field_name'], $exfld, 'P', '', 'forums_topic_');
+        }
+    }
 
-	foreach ($cot_extrafields[$db_forum_posts] as $exfld)
-	{
-		$rmsg['fp_'.$exfld['field_name']] = cot_import_extrafields('rmsg'.$exfld['field_name'], $exfld);
-	}
-
+    if(!empty(cot::$extrafields[cot::$db->forum_posts])) {
+        foreach (cot::$extrafields[cot::$db->forum_posts] as $exfld) {
+            $rmsg['fp_'.$exfld['field_name']] = cot_import_extrafields('rmsg'.$exfld['field_name'], $exfld, 'P', '', 'forums_post_');
+        }
+    }
 	if (!cot_error_found())
 	{
-		$db->update($db_forum_posts, $rmsg, "fp_id=$p");
+        cot::$db->update(cot::$db->forum_posts, $rmsg, "fp_id=$p");
 
-		if (!empty($rtopic['ft_title']) && $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
+		if (!empty($rtopic['ft_title']) && cot::$db->query("SELECT fp_id FROM ".cot::$db->forum_posts." WHERE fp_topicid = $q ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
 		{
 			if (mb_substr($rtopic['ft_title'], 0, 1) == "#")
 			{
 				$rtopic['ft_title'] = str_replace('#', '', $rtopic['ft_title']);
 			}
 			$rtopic['ft_preview'] = mb_substr(htmlspecialchars($rmsg['fp_text']), 0, 128);
-			$db->update($db_forum_topics, $rtopic, "ft_id = $q");
+            cot::$db->update(cot::$db->forum_topics, $rtopic, "ft_id = $q");
 		}
 
 		cot_extrafield_movefiles();
@@ -130,10 +133,10 @@ if ($a == 'update')
 
 	cot_forums_sectionsetlast($rowpost['fp_cat']);
 
-	if ($cache)
+	if (cot::$cache)
 	{
-		($cfg['cache_forums']) && $cache->page->clear('forums');
-		($cfg['cache_index']) && $cache->page->clear('index');
+		(cot::$cfg['cache_forums']) && cot::$cache->page->clear('forums');
+		(cot::$cfg['cache_index']) && cot::$cache->page->clear('index');
 	}
 
 	cot_redirect(cot_url('forums', "m=posts&q=" . $q . '&d=' . $durl, '#' . $p, true));
@@ -178,19 +181,21 @@ if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY
 	));
 
 	// Extra fields
-	foreach($cot_extrafields[$db_forum_topics] as $exfld)
-	{
-		$uname = strtoupper($exfld['field_name']);
-		$exfld_val = cot_build_extrafields('rtopic'.$exfld['field_name'], $exfld, $rowt['ft_'.$exfld['field_name']]);
-		$exfld_title = isset($L['forums_topics_'.$exfld['field_name'].'_title']) ?  $L['forums_topics_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
-		$t->assign(array(
-			'FORUMS_EDITPOST_TOPIC_'.$uname => $exfld_val,
-			'FORUMS_EDITPOST_TOPIC_'.$uname.'_TITLE' => $exfld_title,
-			'FORUMS_EDITPOST_TOPIC_EXTRAFLD' => $exfld_val,
-			'FORUMS_EDITPOST_TOPIC_EXTRAFLD_TITLE' => $exfld_title
-		));
-		$t->parse('MAIN.FORUMS_EDITPOST_FIRSTPOST.TOPIC_EXTRAFLD');
-	}
+    if(!empty(cot::$extrafields[cot::$db->forum_topics])) {
+        foreach (cot::$extrafields[cot::$db->forum_topics] as $exfld) {
+            $uname = strtoupper($exfld['field_name']);
+            $exfld_val = cot_build_extrafields('rtopic' . $exfld['field_name'], $exfld, $rowt['ft_' . $exfld['field_name']]);
+            $exfld_title = cot_extrafield_title($exfld, 'forums_topic_');
+
+            $t->assign(array(
+                'FORUMS_EDITPOST_TOPIC_' . $uname => $exfld_val,
+                'FORUMS_EDITPOST_TOPIC_' . $uname . '_TITLE' => $exfld_title,
+                'FORUMS_EDITPOST_TOPIC_EXTRAFLD' => $exfld_val,
+                'FORUMS_EDITPOST_TOPIC_EXTRAFLD_TITLE' => $exfld_title
+            ));
+            $t->parse('MAIN.FORUMS_EDITPOST_FIRSTPOST.TOPIC_EXTRAFLD');
+        }
+    }
 
 	$t->parse('MAIN.FORUMS_EDITPOST_FIRSTPOST');
 }
@@ -207,18 +212,21 @@ $t->assign(array(
 ));
 
 // Extra fields
-foreach($cot_extrafields[$db_forum_posts] as $exfld)
-{
-	$uname = strtoupper($exfld['field_name']);
-	$exfld_val = cot_build_extrafields('rmsg'.$exfld['field_name'], $exfld, $rowpost['fp_'.$exfld['field_name']]);
-	$exfld_title = isset($L['forums_posts_'.$exfld['field_name'].'_title']) ?  $L['forums_posts_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
-	$t->assign(array(
-		'FORUMS_EDITPOST_'.$uname => $exfld_val,
-		'FORUMS_EDITPOST_'.$uname.'_TITLE' => $exfld_title,
-		'FORUMS_EDITPOST_EXTRAFLD' => $exfld_val,
-		'FORUMS_EDITPOST_EXTRAFLD_TITLE' => $exfld_title
-	));
-	$t->parse('MAIN.EXTRAFLD');
+if(!empty(cot::$extrafields[cot::$db->forum_posts])) {
+    foreach (cot::$extrafields[cot::$db->forum_posts] as $exfld) {
+        $uname = strtoupper($exfld['field_name']);
+        $exfld_val = cot_build_extrafields('rmsg' . $exfld['field_name'], $exfld,
+            $rowpost['fp_' . $exfld['field_name']]);
+        $exfld_title = cot_extrafield_title($exfld, 'forums_post_');
+
+        $t->assign(array(
+            'FORUMS_EDITPOST_' . $uname => $exfld_val,
+            'FORUMS_EDITPOST_' . $uname . '_TITLE' => $exfld_title,
+            'FORUMS_EDITPOST_EXTRAFLD' => $exfld_val,
+            'FORUMS_EDITPOST_EXTRAFLD_TITLE' => $exfld_title
+        ));
+        $t->parse('MAIN.EXTRAFLD');
+    }
 }
 
 /* === Hook === */

@@ -56,18 +56,22 @@ if ($a=='add')
 	$ruser['user_email'] = mb_strtolower($ruser['user_email']);
 
 	// Extra fields
-	foreach($cot_extrafields[$db_users] as $exfld)
-	{
-		$ruser['user_'.$exfld['field_name']] = cot_import_extrafields('ruser'.$exfld['field_name'], $exfld);
+	if (!empty(cot::$extrafields[cot::$db->users])) {
+		foreach (cot::$extrafields[cot::$db->users] as $exfld) {
+			$ruser['user_' . $exfld['field_name']] = cot_import_extrafields('ruser' . $exfld['field_name'], $exfld, 'P',
+				'', 'user_');
+		}
 	}
 	$ruser['user_birthdate'] = cot_import_date('ruserbirthdate', false);
-	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > $sys['now'])
+	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > cot::$sys['now'])
 	{
 		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
 	}
 
-	$user_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_name = ? LIMIT 1", array($ruser['user_name']))->fetch();
-	$email_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_email = ? LIMIT 1", array($ruser['user_email']))->fetch();
+	$user_exists = (bool)cot::$db->query("SELECT user_id FROM ".cot::$db->users." WHERE user_name = ? LIMIT 1",
+        array($ruser['user_name']))->fetch();
+	$email_exists = (bool)cot::$db->query("SELECT user_id FROM ".cot::$db->users." WHERE user_email = ? LIMIT 1",
+        array($ruser['user_email']))->fetch();
 
 	if (preg_match('/&#\d+;/', $ruser['user_name']) || preg_match('/[<>#\'"\/]/', $ruser['user_name'])) cot_error('aut_invalidloginchars', 'rusername');
 	if (mb_strlen($ruser['user_name']) < 2) cot_error('aut_usernametooshort', 'rusername');
@@ -220,13 +224,20 @@ $t->assign(array(
 ));
 
 // Extra fields
-foreach($cot_extrafields[$db_users] as $exfld)
-{
-	$tag = strtoupper($exfld['field_name']);
-	$t->assign(array(
-		'USERS_REGISTER_'.$tag => cot_build_extrafields('ruser'.$exfld['field_name'],  $exfld, $ruser['user_'.$exfld['field_name']]),
-		'USERS_REGISTER_'.$tag.'_TITLE' => isset($L['user_'.$exfld['field_name'].'_title']) ? $L['user_'.$exfld['field_name'].'_title'] : $exfld['field_description']
-	));
+if (!empty(cot::$extrafields[cot::$db->users])) {
+    foreach (cot::$extrafields[cot::$db->users] as $exfld) {
+        $uname = strtoupper($exfld['field_name']);
+        $exfld_val = cot_build_extrafields('ruser'.$exfld['field_name'],  $exfld, $ruser['user_'.$exfld['field_name']]);
+        $exfld_title = cot_extrafield_title($exfld, 'user_');
+
+        $t->assign(array(
+            'USERS_REGISTER_' . $uname => $exfld_val,
+            'USERS_REGISTER_' . $uname . '_TITLE' => $exfld_title,
+            'USERS_REGISTER_EXTRAFLD' => $exfld_val,
+            'USERS_REGISTER_EXTRAFLD_TITLE' => $exfld_title
+        ));
+        $t->parse('MAIN.EXTRAFLD');
+    }
 }
 
 /* === Hook === */
@@ -242,4 +253,4 @@ cot_display_messages($t);
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once $cfg['system_dir'] . '/footer.php';
+require_once cot::$cfg['system_dir'] . '/footer.php';
