@@ -63,12 +63,14 @@ if (!empty($rtext))
 	$rcontact['contact_subject'] = cot_import('rsubject', 'P', 'TXT');
 
 	// Extra fields
-	foreach ($cot_extrafields[$db_contact] as $exfld)
-	{
-		$rcontact['contact_' . $exfld['field_name']] = cot_import_extrafields('rcontact' . $exfld['field_name'], $exfld);
-	}
+    if(!empty(cot::$extrafields[cot::$db->contact])) {
+        foreach (cot::$extrafields[cot::$db->contact] as $exfld) {
+            $rcontact['contact_' . $exfld['field_name']] = cot_import_extrafields('rcontact' . $exfld['field_name'],
+                $exfld, 'P', '', 'contact_');
+        }
+    }
 
-	if ($usr['id'] == 0 && !empty($cot_captcha))
+	if (cot::$usr['id'] == 0 && !empty($cot_captcha))
 	{
 		$rverify = cot_import('rverify', 'P', 'TXT');
 		if (!cot_captcha_validate($rverify))
@@ -86,7 +88,7 @@ if (!empty($rtext))
 	{
 		cot_error('contact_emailnotvalid', 'remail');
 	}
-	if (mb_strlen($rcontact['contact_text']) < $cfg['plugin']['contact']['minchars'])
+	if (mb_strlen($rcontact['contact_text']) < cot::$cfg['plugin']['contact']['minchars'])
 	{
 		cot_error('contact_entrytooshort', 'rtext');
 	}
@@ -114,18 +116,21 @@ if (!empty($rtext))
 				'subject' => $rcontact['contact_subject'],
 				'text' => $rcontact['contact_text']
 			);
-			foreach ($cot_extrafields[$db_contact] as $exfld)
-			{
-				$ex_title = isset($L['contact_' . $exfld['field_name'] . '_title']) ? $L['contact_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
-				$ex_body = cot_build_extrafields_data('contact', $exfld, $rcontact['contact_'.$exfld['field_name']]);
-				$rextras .= "\n".$ex_title.": ".$ex_body;
-				$context['extra'.$exfld['field_name']] = $ex_body;
-				$context['extra'.$exfld['field_name'].'_title'] = $ex_title;
-				$context['extra'.$exfld['field_name'].'_value'] = $rcontact['contact_'.$exfld['field_name']];
+            $rextras = '';
+            if(!empty(cot::$extrafields[cot::$db->contact])) {
+                foreach (cot::$extrafields[cot::$db->contact] as $exfld) {
+                    $exfld_title = cot_extrafield_title($exfld, 'contact_');
+                    $ex_body = cot_build_extrafields_data('contact', $exfld, $rcontact['contact_' . $exfld['field_name']]);
+                    $rextras .= "\n" .  $exfld_title . ": " . $ex_body;
 
-			}
+                    $context['extra' . $exfld['field_name']] = $ex_body;
+                    $context['extra' . $exfld['field_name'] . '_title'] =  $exfld_title;
+                    $context['extra' . $exfld['field_name'] . '_value'] = $rcontact['contact_' . $exfld['field_name']];
+
+                }
+            }
 			$context['extra'] = $rextras;
-			$rtextm = cot_rc(empty($cfg['plugin']['contact']['template']) ? $R['contact_message'] : $cfg['plugin']['contact']['template'], $context);
+			$rtextm = cot_rc(empty(cot::$cfg['plugin']['contact']['template']) ? cot::$R['contact_message'] : cot::$cfg['plugin']['contact']['template'], $context);
 			cot_mail($semail, $rcontact['contact_subject'], $rtextm, $headers);
 		}
 		$sent = true;
@@ -135,7 +140,7 @@ if (!empty($rtext))
 	}
 }
 
-$out['subtitle'] = $L['contact_title'];
+cot::$out['subtitle'] = cot::$L['contact_title'];
 
 cot_display_messages($t);
 
@@ -143,27 +148,30 @@ if (!$sent)
 {
 	$t->assign(array(
 		'CONTACT_FORM_SEND' => cot_url('plug', 'e=contact&tpl='.$tplfile),
-		'CONTACT_FORM_AUTHOR' => ($usr['id'] == 0) ? cot_inputbox('text', 'ruser', $rcontact['contact_author'], 'size="24" maxlength="24"') : cot_inputbox('text', 'ruser', $usr['name'], 'size="24" maxlength="24" readonly="readonly"'),
+		'CONTACT_FORM_AUTHOR' => (cot::$usr['id'] == 0) ? cot_inputbox('text', 'ruser', $rcontact['contact_author'], 'size="24" maxlength="24"') :
+            cot_inputbox('text', 'ruser', cot::$usr['name'], 'size="24" maxlength="24" readonly="readonly"'),
 		'CONTACT_FORM_EMAIL' => cot_inputbox('text', 'remail', $rcontact['contact_email'], 'size="24"'),
 		'CONTACT_FORM_SUBJECT' => cot_inputbox('text', 'rsubject', $rcontact['contact_subject'], 'size="24"'),
 		'CONTACT_FORM_TEXT' => cot_textarea('rtext', $rcontact['contact_text'], 8, 50, 'style="width:90%"')
 	));
 
 	// Extra fields
-	foreach ($cot_extrafields[$db_contact] as $exfld)
-	{
-		$uname = strtoupper($exfld['field_name']);
-		$exfld_val = cot_build_extrafields('rcontact' . $exfld['field_name'], $exfld, $rcontact[$exfld['field_name']]);
-		$exfld_title =  isset($L['contact_' . $exfld['field_name'] . '_title']) ? $L['contact_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
-		$t->assign(array(
-			'CONTACT_FORM_' . $uname => $exfld_val,
-			'CONTACT_FORM_' . $uname . '_TITLE' => $exfld_title,
-			'CONTACT_FORM_EXTRAFLD' => $exfld_val,
-			'CONTACT_FORM_EXTRAFLD_TITLE' => $exfld_title
-			));
-		$t->parse('MAIN.FORM.EXTRAFLD');
-	}
-	if ($usr['id'] == 0 && !empty($cot_captcha))
+    if(!empty(cot::$extrafields[cot::$db->contact])) {
+        foreach (cot::$extrafields[cot::$db->contact] as $exfld) {
+            $uname = strtoupper($exfld['field_name']);
+            $exfld_val = cot_build_extrafields('rcontact' . $exfld['field_name'], $exfld, $rcontact[$exfld['field_name']]);
+            $exfld_title = cot_extrafield_title($exfld, 'contact_');
+
+            $t->assign(array(
+                'CONTACT_FORM_' . $uname => $exfld_val,
+                'CONTACT_FORM_' . $uname . '_TITLE' => $exfld_title,
+                'CONTACT_FORM_EXTRAFLD' => $exfld_val,
+                'CONTACT_FORM_EXTRAFLD_TITLE' => $exfld_title
+            ));
+            $t->parse('MAIN.FORM.EXTRAFLD');
+        }
+    }
+	if (cot::$usr['id'] == 0 && !empty($cot_captcha))
 	{
 
 		$t->assign(array(

@@ -119,13 +119,13 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_COMMENTS_ODDEVEN' => cot_build_oddeven($ii)
 	));
 
-	if (isset($cot_extrafields[$db_com]))
-	{
-		foreach ($cot_extrafields[$db_com] as $exfld)
-		{
+    if(!empty(cot::$extrafields[cot::$db->com])) {
+        foreach (cot::$extrafields[cot::$db->com] as $exfld) {
 			$tag = mb_strtoupper($exfld['field_name']);
+            $exfld_title = cot_extrafield_title($exfld, 'comments_');
+
 			$t->assign(array(
-				'ADMIN_COMMENTS_' . $tag . '_TITLE' => isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exfld['field_name'] . '_title'] : $exfld['field_description'],
+				'ADMIN_COMMENTS_' . $tag . '_TITLE' => $exfld_title,
 				'ADMIN_COMMENTS_' . $tag => cot_build_extrafields_data('comments', $exfld, $row['com_'.$exfld['field_name']]),
 				'ADMIN_COMMENTS_' . $tag . '_VALUE' => $row['com_'.$exfld['field_name']],
 			));

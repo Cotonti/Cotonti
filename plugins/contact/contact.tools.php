@@ -99,13 +99,12 @@ foreach ($sql->fetchAll() as $row)
 	));
 
 	// Extrafields
-	if (isset($cot_extrafields[$db_contact]))
-	{
-		foreach ($cot_extrafields[$db_contact] as $exfld)
-		{
+	if(!empty(cot::$extrafields[cot::$db->contact])) {
+		foreach (cot::$extrafields[cot::$db->contact] as $exfld) {
 			$tag = mb_strtoupper($exfld['field_name']);
 			$exfld_val = cot_build_extrafields_data('contact', $exfld, $row['contact_'.$exfld['field_name']]);
-			$exfld_title = isset($L['contact_' . $exfld['field_name'] . '_title']) ? $L['contact_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
+			$exfld_title = cot_extrafield_title($exfld, 'contact_');
+
 			$tuman->assign(array(
 				'CONTACT_' . $tag . '_TITLE' => $exfld_title,
 				'CONTACT_' . $tag => $exfld_val,
@@ -123,7 +122,7 @@ $sql->closeCursor();
 
 if (($a == '') && !empty($id))
 {
-	$row = $db->query("SELECT * FROM $db_contact WHERE contact_id = $id")->fetch();
+	$row = $db->query("SELECT * FROM ".cot::$db->contact." WHERE contact_id = $id")->fetch();
 
 	$tuman->assign(array(
 		'CONTACT_DATE' => cot_date('date_full', $row['contact_date']),
@@ -144,13 +143,11 @@ if (($a == '') && !empty($id))
 	));
 
 	// Extrafields
-	if (isset($cot_extrafields[$db_contact]))
-	{
-		foreach ($cot_extrafields[$db_contact] as $exfld)
-		{
+    if(!empty(cot::$extrafields[cot::$db->contact])) {
+        foreach (cot::$extrafields[cot::$db->contact] as $exfld) {
 			$tag = mb_strtoupper($exfld['field_name']);
 			$exfld_val = cot_build_extrafields_data('contact', $exfld, $row['contact_'.$exfld['field_name']]);
-			$exfld_title = isset($L['contact_' . $exfld['field_name'] . '_title']) ? $L['contact_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
+            $exfld_title = cot_extrafield_title($exfld, 'contact_');
 
 			$tuman->assign(array(
 				'CONTACT_' . $tag . '_TITLE' => $exfld_title,

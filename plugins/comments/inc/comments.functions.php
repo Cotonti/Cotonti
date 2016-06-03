@@ -101,6 +101,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		return '';
 	}
 
+    $comments_join_columns = $comments_join_tables = $comments_join_where = '';
+
 	// Get the URL and parameters
 	$link_area = $env['ext'];
 	$link_params = $_GET;
@@ -134,32 +136,34 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		include $pl;
 	}
 	/* ===== */
-    $editor = ($cfg['plugin']['comments']['markup']) ? 'input_textarea_minieditor' : '';
+    $editor = (cot::$cfg['plugin']['comments']['markup']) ? 'input_textarea_minieditor' : '';
 	$t->assign(array(
 		'COMMENTS_CODE' => $code,
 		'COMMENTS_FORM_SEND' => cot_url('plug', "e=comments&a=send&area=$ext_name&cat=$cat&item=$code"),
 		'COMMENTS_FORM_AUTHOR' => ($usr['id'] > 0) ? $usr['name'] : cot_inputbox('text', 'rname'),
 		'COMMENTS_FORM_AUTHORID' => $usr['id'],
-		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? cot_textarea('rtext', $rtext, 7, 120, '', $editor).cot_inputbox('hidden', 'cb', base64_encode(serialize($cot_com_back)))
-			: '',
+		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? cot_textarea('rtext', $rtext, 7, 120, '', $editor).
+            cot_inputbox('hidden', 'cb', base64_encode(serialize($cot_com_back))) : '',
 		'COMMENTS_DISPLAY' => $cfg['plugin']['comments']['expand_comments'] ? '' : 'none'
 	));
 
 	if ($auth_write && $enabled)
 	{
 		// Extra fields
-		foreach ($cot_extrafields[$db_com] as $exfld)
-		{
-			$uname = strtoupper($exfld['field_name']);
-			$exfld_val = cot_build_extrafields('rcomments' . $exfld['field_name'], $exfld, $rcomments[$exfld['field_name']]);
-			$exfld_title = isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
-			$t->assign(array(
-				'COMMENTS_FORM_' . $uname => $exfld_val,
-				'COMMENTS_FORM_' . $uname . '_TITLE' => $exfld_title,
-				'COMMENTS_FORM_EXTRAFLD' => $exfld_val,
-				'COMMENTS_FORM_EXTRAFLD_TITLE' => $exfld_title
+		if(!empty(cot::$extrafields[cot::$db->com])) {
+			foreach (cot::$extrafields[cot::$db->com] as $exfld) {
+				$uname = strtoupper($exfld['field_name']);
+				$exfld_val = cot_build_extrafields('rcomments' . $exfld['field_name'], $exfld, $rcomments[$exfld['field_name']]);
+                $exfld_title = cot_extrafield_title($exfld, 'comments_');
+
+				$t->assign(array(
+					'COMMENTS_FORM_' . $uname => $exfld_val,
+					'COMMENTS_FORM_' . $uname . '_TITLE' => $exfld_title,
+					'COMMENTS_FORM_EXTRAFLD' => $exfld_val,
+					'COMMENTS_FORM_EXTRAFLD_TITLE' => $exfld_title
 				));
-			$t->parse('COMMENTS.COMMENTS_NEWCOMMENT.EXTRAFLD');
+				$t->parse('COMMENTS.COMMENTS_NEWCOMMENT.EXTRAFLD');
+			}
 		}
 
 		$allowed_time = cot_build_timegap($sys['now'] - $cfg['plugin']['comments']['time'] * 60,
@@ -258,13 +262,13 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			));
 
 				// Extrafields
-			if (isset($cot_extrafields[$db_com]))
-			{
-				foreach ($cot_extrafields[$db_com] as $exfld)
-				{
+            if(!empty(cot::$extrafields[cot::$db->com])) {
+                foreach (cot::$extrafields[cot::$db->com] as $exfld) {
 					$tag = mb_strtoupper($exfld['field_name']);
+                    $exfld_title = cot_extrafield_title($exfld, 'comments_');
+
 					$t->assign(array(
-						'COMMENTS_ROW_' . $tag . '_TITLE' => isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exfld['field_name'] . '_title'] : $exfld['field_description'],
+						'COMMENTS_ROW_' . $tag . '_TITLE' => $exfld_title,
 						'COMMENTS_ROW_' . $tag => cot_build_extrafields_data('comments', $exfld, $row['com_'.$exfld['field_name']]),
 						'COMMENTS_ROW_' . $tag . '_VALUE' => $row['com_'.$exfld['field_name']]
 					));

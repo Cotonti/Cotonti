@@ -89,10 +89,12 @@ if ($m == 'edit' && $id > 0)
 			cot_error($L['com_commenttooshort'], 'comtext');
 		}
 
-		foreach ($cot_extrafields[$db_com] as $exfld)
-		{
-			$comarray['com_' . $exfld['field_name']] = cot_import_extrafields('rcomments' . $exfld['field_name'], $exfld);
-		}
+        if(!empty(cot::$extrafields[cot::$db->com])) {
+            foreach (cot::$extrafields[cot::$db->com] as $exfld) {
+                $comarray['com_' . $exfld['field_name']] = cot_import_extrafields('rcomments' . $exfld['field_name'],
+                    $exfld, 'P', '', 'comments_');
+            }
+        }
 
 		if (!cot_error_found())
 		{
@@ -169,19 +171,21 @@ if ($m == 'edit' && $id > 0)
 	));
 
 	// Extra fields
-	foreach ($cot_extrafields[$db_com] as $exfld)
-	{
-		$uname = strtoupper($exfld['field_name']);
-		$exfld_val = cot_build_extrafields('rcomments' . $exfld['field_name'], $exfld, $com[$exfld['field_name']]);
-		$exfld_title = isset($L['comments_' . $exfld['field_name'] . '_title']) ? $L['comments_' . $exfld['field_name'] . '_title'] : $exfld['field_description'];
-		$t->assign(array(
-			'COMMENTS_FORM_' . $uname =>  $exfld_val,
-			'COMMENTS_FORM_' . $uname . '_TITLE' => $exfld_title,
-			'COMMENTS_FORM_EXTRAFLD' => $exfld_val,
-			'COMMENTS_FORM_EXTRAFLD_TITLE' => $exfld_title
-			));
-		$t->parse('COMMENTS.COMMENTS_FORM_EDIT.EXTRAFLD');
-	}
+    if(!empty(cot::$extrafields[cot::$db->com])) {
+        foreach (cot::$extrafields[cot::$db->com] as $exfld) {
+            $uname = strtoupper($exfld['field_name']);
+            $exfld_val = cot_build_extrafields('rcomments' . $exfld['field_name'], $exfld, $com[$exfld['field_name']]);
+            $exfld_title = cot_extrafield_title($exfld, 'comments_');
+
+            $t->assign(array(
+                'COMMENTS_FORM_' . $uname => $exfld_val,
+                'COMMENTS_FORM_' . $uname . '_TITLE' => $exfld_title,
+                'COMMENTS_FORM_EXTRAFLD' => $exfld_val,
+                'COMMENTS_FORM_EXTRAFLD_TITLE' => $exfld_title
+            ));
+            $t->parse('COMMENTS.COMMENTS_FORM_EDIT.EXTRAFLD');
+        }
+    }
 
 	/* == Hook == */
 	foreach (cot_getextplugins('comments.edit.tags') as $pl)
@@ -193,17 +197,20 @@ if ($m == 'edit' && $id > 0)
 	$t->parse('MAIN.COMMENTS_FORM_EDIT');
 }
 
-if ($a == 'send' && $usr['auth_write'])
+if ($a == 'send' && cot::$usr['auth_write'])
 {
 	cot_shield_protect();
 	$rtext = cot_import('rtext', 'P', 'HTM');
 	$rname = cot_import('rname', 'P', 'TXT');
 	$comarray = array();
+
 	// Extra fields
-	foreach ($cot_extrafields[$db_com] as $exfld)
-	{
-		$comarray['com_' . $exfld['field_name']] = cot_import_extrafields('rcomments' . $exfld['field_name'], $exfld);
-	}
+    if(!empty(cot::$extrafields[cot::$db->com])) {
+        foreach (cot::$extrafields[cot::$db->com] as $exfld) {
+            $comarray['com_' . $exfld['field_name']] = cot_import_extrafields('rcomments' . $exfld['field_name'], $exfld,
+                'P', '', 'comments_');
+        }
+    }
 
 	/* == Hook == */
 	foreach (cot_getextplugins('comments.send.first') as $pl)
@@ -212,15 +219,15 @@ if ($a == 'send' && $usr['auth_write'])
 	}
 	/* ===== */
 
-	if (empty($rname) && $usr['id'] == 0)
+	if (empty($rname) && cot::$usr['id'] == 0)
 	{
 		cot_error($L['com_authortooshort'], 'rname');
 	}
-	if (mb_strlen($rtext) < $cfg['plugin']['comments']['minsize'])
+	if (mb_strlen($rtext) < cot::$cfg['plugin']['comments']['minsize'])
 	{
 		cot_error($L['com_commenttooshort'], 'rtext');
 	}
-	if ($cfg['plugin']['comments']['commentsize'] && mb_strlen($rtext) > $cfg['plugin']['comments']['commentsize'])
+	if (cot::$cfg['plugin']['comments']['commentsize'] && mb_strlen($rtext) > cot::$cfg['plugin']['comments']['commentsize'])
 	{
 		cot_error($L['com_commenttoolong'], 'rtext');
 	}
