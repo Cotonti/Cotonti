@@ -877,7 +877,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	foreach ($sql_rowset as $pag)
 	{
 		$jj++;
-		$t->assign(cot_generate_pagetags($pag, 'PAGE_ROW_'));
+		$t->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $cfg['page']['cat___default']['truncatetext']));
 
 		$t->assign(array(
 			'PAGE_ROW_NUM' => $jj,
