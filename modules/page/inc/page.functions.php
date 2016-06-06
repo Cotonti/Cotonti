@@ -809,7 +809,8 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	if ($exclude_current && defined('COT_PAGES') && !defined('COT_LIST'))
 	{
 		global $id;
-		$tmp = (int)$id;
+        $tmp = 0;
+        if(!empty($id)) $tmp = (int)$id;
 		if(!empty($tmp)) $where['page_id'] = "page_id != $tmp";
 	}
 	if ($active_only)
