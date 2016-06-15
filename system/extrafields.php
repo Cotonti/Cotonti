@@ -72,7 +72,8 @@ function cot_build_extrafields($name, $extrafield, $data)
 			break;
 
 		case 'checkbox':
-			$result = cot_checkbox($data, $name, $extrafield['field_description'], '', '1', $extrafield['field_html']);
+			$title = cot_extrafield_title($extrafield);
+			$result = cot_checkbox($data, $name, $title, '', '1', $extrafield['field_html']);
 			break;
 
 		case 'datetime':
