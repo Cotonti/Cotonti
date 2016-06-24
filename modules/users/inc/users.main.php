@@ -191,7 +191,7 @@ $grpfilters_group_values = array(cot_url('users'));
 $grpfilters_maingrp_values = array(cot_url('users'));
 foreach($cot_groups as $k => $i)
 {
-	if(!in_array(mb_strtolower($cot_groups[$k]['name']),array('guests','guest')))
+	if($cot_groups[$k]['id'] != COT_GROUP_GUESTS)
 	{
 		$grpfilters_titles[] = $cot_groups[$k]['name'];
 		$grpfilters_maingrp_values[] = cot_url('users', 'g='.$k, '', true);
