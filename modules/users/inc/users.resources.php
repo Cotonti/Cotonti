@@ -19,3 +19,9 @@ $R['users_link_sort'] = '<a href="{$asc_url}" rel="nofollow">'.$R['icon_down'].'
 /*
  * User's profile resources
  */
+
+/*
+ * User's selects separator default
+ */
+$R['users_sel_def_r'] = ']';
+$R['users_sel_def_l'] = '[';
