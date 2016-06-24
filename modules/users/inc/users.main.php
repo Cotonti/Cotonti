@@ -174,8 +174,9 @@ require_once cot_incfile('forms');
 $countryfilters_titles = array();
 $countryfilters_values = array();
 $countryfilters_titles[] = $R['users_sel_def_l'].$L['Country'].$R['users_sel_def_r'];
+$countryfilters_values[] = cot_url('users');
+$countryfilters_titles[] = $L['Not_indicated'];
 $countryfilters_values[] = cot_url('users', 'f=country_00');
-
 foreach($cot_countries as $i => $x)
 {
 
@@ -190,9 +191,12 @@ $grpfilters_group_values = array(cot_url('users'));
 $grpfilters_maingrp_values = array(cot_url('users'));
 foreach($cot_groups as $k => $i)
 {
-	$grpfilters_titles[] = $cot_groups[$k]['name'];
-	$grpfilters_maingrp_values[] = cot_url('users', 'g='.$k, '', true);
-	$grpfilters_group_values[] = cot_url('users', 'gm='.$k, '', true);
+	if(!in_array(mb_strtolower($cot_groups[$k]['name']),array('guests','guest')))
+	{
+		$grpfilters_titles[] = $cot_groups[$k]['name'];
+		$grpfilters_maingrp_values[] = cot_url('users', 'g='.$k, '', true);
+		$grpfilters_group_values[] = cot_url('users', 'gm='.$k, '', true);
+	}
 }
 $maingrpfilters = cot_selectbox(cot_url('users', 'g='.$g, '', true), 'bymaingroup', $grpfilters_maingrp_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
 

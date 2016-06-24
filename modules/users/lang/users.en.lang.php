@@ -33,3 +33,4 @@ $L['Profile_updated'] = 'Profile settings saved';
 $L['User_data_updated'] = 'User data updated';
 $L['Filter_search'] = 'Filter search';
 $L['Username_search'] = 'Username search';
+$L['Not_indicated'] = 'Not indicated';

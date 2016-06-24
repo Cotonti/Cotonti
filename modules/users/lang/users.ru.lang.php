@@ -33,3 +33,4 @@ $L['Profile_updated'] = 'Настройки профиля сохранены';
 $L['User_data_updated'] = 'Данные пользователя сохранены';
 $L['Filter_search'] = 'Поиск по параметрам';
 $L['Username_search'] = 'Поиск по имени';
+$L['Not_indicated'] = 'Не указано';
