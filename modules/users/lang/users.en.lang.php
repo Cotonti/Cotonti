@@ -31,3 +31,6 @@ $L['cfg_usertextimg_hint'] = '\'No\' recommended, for security reasons';
 $L['Password_updated'] = 'Password has changed';
 $L['Profile_updated'] = 'Profile settings saved';
 $L['User_data_updated'] = 'User data updated';
+$L['Filter_search'] = 'Filter search';
+$L['Username_search'] = 'Username search';
+$L['Not_indicated'] = 'Not selected';

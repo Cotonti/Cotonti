@@ -17,12 +17,15 @@ list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['users']['maxusersperpage'])
 $f = cot_import('f', 'G', 'ALP', 16);
 $g = cot_import('g', 'G', 'INT');
 $gm = cot_import('gm', 'G', 'INT');
-$y = cot_import('y', 'P', 'TXT', 8);
-$sq = cot_import('sq', 'G', 'TXT', 8);
+$y = cot_import('y', 'P', 'TXT', 16);
+$sq = cot_import('sq', 'G', 'TXT', 16);
 unset($localskin, $grpms);
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
 cot_block($usr['auth_read']);
+
+require_once cot_langfile('users', 'module');
+require_once cot_langfile('countries', 'core');
 
 $users_sort_tags = array(
 	// columns in $db_users table
@@ -167,40 +170,38 @@ require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate($localskin);
 
 require_once cot_incfile('forms');
-require_once cot_langfile('countries', 'core');
 
 $countryfilters_titles = array();
 $countryfilters_values = array();
+$countryfilters_titles[] = $R['users_sel_def_l'].$L['Country'].$R['users_sel_def_r'];
+$countryfilters_values[] = cot_url('users');
+$countryfilters_titles[] = $L['Not_indicated'];
+$countryfilters_values[] = cot_url('users', 'f=country_00');
 foreach($cot_countries as $i => $x)
 {
-	if($i == '00')
-	{
-		$countryfilters_titles[] = $L['Country'];
-		$countryfilters_values[] = cot_url('users');
-		$countryfilters_titles[] = $L['None'];
-		$countryfilters_values[] = cot_url('users', 'f=country_00');
-	}
-	else
-	{
-		$countryfilters_titles[] = cot_cutstring($x,23);
-		$countryfilters_values[] = cot_url('users', 'f=country_'.$i);
-	}
-}
-$countryfilters = cot_selectbox($f, 'bycountry', $countryfilters_values, $countryfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
 
-$grpfilters_titles = array($L['Maingroup']);
+	$countryfilters_titles[] = cot_cutstring($x,23);
+	$countryfilters_values[] = cot_url('users', 'f=country_'.$i);
+
+}
+$countryfilters = cot_selectbox(cot_url('users', 'f='.$f), 'bycountry', $countryfilters_values, $countryfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
+
+$grpfilters_titles = array($R['users_sel_def_l'].$L['Maingroup'].$R['users_sel_def_r']);
 $grpfilters_group_values = array(cot_url('users'));
 $grpfilters_maingrp_values = array(cot_url('users'));
 foreach($cot_groups as $k => $i)
 {
-	$grpfilters_titles[] = $cot_groups[$k]['name'];
-	$grpfilters_maingrp_values[] = cot_url('users', 'g='.$k, '', true);
-	$grpfilters_group_values[] = cot_url('users', 'gm='.$k, '', true);
+	if($cot_groups[$k]['id'] != COT_GROUP_GUESTS)
+	{
+		$grpfilters_titles[] = $cot_groups[$k]['name'];
+		$grpfilters_maingrp_values[] = cot_url('users', 'g='.$k, '', true);
+		$grpfilters_group_values[] = cot_url('users', 'gm='.$k, '', true);
 	}
-$maingrpfilters = cot_selectbox($g, 'bymaingroup', $grpfilters_maingrp_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
+}
+$maingrpfilters = cot_selectbox(cot_url('users', 'g='.$g, '', true), 'bymaingroup', $grpfilters_maingrp_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
 
-$grpfilters_titles[0] = $L['Group'];
-$grpfilters = cot_selectbox($g, 'bygroupms', $grpfilters_group_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
+$grpfilters_titles[0] = $R['users_sel_def_l'].$L['Group'].$R['users_sel_def_r'];
+$grpfilters = cot_selectbox(cot_url('users', 'gm='.$gm, '', true), 'bygroupms', $grpfilters_group_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
 
 /* === Hook === */
 foreach (cot_getextplugins('users.filters') as $pl)
@@ -224,7 +225,7 @@ $t->assign(array(
 	'USERS_TOP_FILTERS_COUNTRY' => $countryfilters,
 	'USERS_TOP_FILTERS_MAINGROUP' => $maingrpfilters,
 	'USERS_TOP_FILTERS_GROUP' => $grpfilters,
-	'USERS_TOP_FILTERS_SEARCH' => cot_inputbox('text', 'y', $y, array('size' => 8, 'maxlength' => 8)),
+	'USERS_TOP_FILTERS_SEARCH' => cot_inputbox('text', 'y', $y, array('size' => 16, 'maxlength' => 16)),
 	'USERS_TOP_FILTERS_SUBMIT' => cot_inputbox('submit', 'submit', $L['Search']),
 	'USERS_TOP_PM' => 'PM',
 ));

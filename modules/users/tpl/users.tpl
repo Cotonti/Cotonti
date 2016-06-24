@@ -26,10 +26,12 @@
 		<div class="block">
 			<h2 class="prefs">{PHP.L.Filters}</h2>
 			<form action="{USERS_TOP_FILTER_ACTION}" method="post">
+				<h3>{PHP.L.Filter_search}:</h3>
 				{USERS_TOP_FILTERS_COUNTRY}
 				{USERS_TOP_FILTERS_MAINGROUP}
 				{USERS_TOP_FILTERS_GROUP}
-				{USERS_TOP_FILTERS_SEARCH}<br />
+				<h3>{PHP.L.Username_search}:</h3>
+				{USERS_TOP_FILTERS_SEARCH}
 				<button type="submit" class="submit">{PHP.L.Submit}</button>
 			</form>
 		</div>
