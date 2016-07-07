@@ -471,7 +471,7 @@ function cot_page_import($source = 'POST', $rpage = array(), $auth = array())
 	}
 	
 	/* === Hook === */
-	foreach (cot_getextplugins('page.import.query') as $pl)
+	foreach (cot_getextplugins('page.functions.import.main') as $pl)
 	{
 		include $pl;
 	}
