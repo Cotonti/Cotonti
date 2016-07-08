@@ -469,13 +469,6 @@ function cot_page_import($source = 'POST', $rpage = array(), $auth = array())
 	{
 		$rpage['page_ownerid'] = cot::$usr['id'];
 	}
-	
-	/* === Hook === */
-	foreach (cot_getextplugins('page.functions.import.main') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
 
 	$parser_list = cot_get_parsers();
 
