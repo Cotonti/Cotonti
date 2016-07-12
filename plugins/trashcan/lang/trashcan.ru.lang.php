@@ -2,7 +2,7 @@
 /**
  * Russian Language File for Trashcan
  *
- * @package Trashcan
+ * @package TrashCan
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
