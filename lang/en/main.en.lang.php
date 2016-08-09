@@ -363,15 +363,15 @@ $Ls['Weeks'] = "weeks,week";
 $Ls['Months'] = "months,month";
 $Ls['Years'] = "years,year";
 
-$Ls['Bytes'] = "B,B";
-$Ls['Kilobytes'] = "kB,kB";
-$Ls['Megabytes'] = "MB,MB";
-$Ls['Gigabytes'] = "GB,GB";
-$Ls['Terabytes'] = "TB,TB";
-$Ls['Kibibytes'] = "KiB,KiB";
-$Ls['Mebibytes'] = "MiB,MiB";
-$Ls['Gibibytes'] = "GiB,GiB";
-$Ls['Tebibytes'] = "TiB,TiB";
+$Ls['Bytes'] = "B";
+$Ls['Kilobytes'] = "kB";
+$Ls['Megabytes'] = "MB";
+$Ls['Gigabytes'] = "GB";
+$Ls['Terabytes'] = "TB";
+$Ls['Kibibytes'] = "KiB";
+$Ls['Mebibytes'] = "MiB";
+$Ls['Gibibytes'] = "GiB";
+$Ls['Tebibytes'] = "TiB";
 
 /**
  * Date / Time formats

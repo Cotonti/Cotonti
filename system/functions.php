@@ -1713,19 +1713,22 @@ function cot_build_email($email, $hide = false)
 function cot_build_filesize($bytes, $decimals = 0, $round = null, $binary = false, $smallestunit = null)
 {
 	global $Ls;
+	$sc_sign = ' '; // leading space for keys index cast as string
 	$units = $binary ? array(
-		'1099511627776' => $Ls['Tebibytes'],
-		'1073741824' => $Ls['Gibibytes'],
-		'1048576' => $Ls['Mebibytes'],
-		'1024' => $Ls['Kibibytes'],
-		'1' => $Ls['Bytes']
+		$sc_sign . 1099511627776 => $Ls['Tebibytes'],
+		$sc_sign . 1073741824 => $Ls['Gibibytes'],
+		$sc_sign . 1048576 => $Ls['Mebibytes'],
+		$sc_sign . 1024 => $Ls['Kibibytes'],
+		$sc_sign . 1 => $Ls['Bytes'],
 	) : array(
-		'1000000000000' => $Ls['Terabytes'],
-		'1000000000' => $Ls['Gigabytes'],
-		'1000000' => $Ls['Megabytes'],
-		'1000' => $Ls['Kilobytes'],
-		'1' => $Ls['Bytes']
+		$sc_sign . 1000000000000 => $Ls['Terabytes'],
+		$sc_sign . 1000000000 => $Ls['Gigabytes'],
+		$sc_sign . 1000000 => $Ls['Megabytes'],
+		$sc_sign . 1000 => $Ls['Kilobytes'],
+		$sc_sign . 1 => $Ls['Bytes']
 	);
+	if ($smallestunit) $smallestunit = $sc_sign . $smallestunit;
+	if ($bytes < array_keys($units)[sizeof($units)-2]) $decimals = 0; // as byte can not be fractional
 	return cot_build_friendlynumber($bytes, $units, 1, $decimals, $round, $smallestunit);
 }
 
