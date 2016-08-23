@@ -67,7 +67,14 @@ if (empty($vote))
 
 $ratings = cot_import('ratings', 'G', 'BOL');
 
-$out['subtitle'] = $L['Polls'];
+if ((int)$id > 0)
+{
+     $out['subtitle'] = $L['Poll'] . ': ' . $db->query("SELECT poll_text FROM $db_polls WHERE poll_id=$id")->fetchColumn();
+}
+else
+{
+     $out['subtitle'] = $L['Polls'];
+}
 
 /* === Hook === */
 foreach (cot_getextplugins('polls.main') as $pl)
