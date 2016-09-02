@@ -24,10 +24,12 @@
 						<td>{PHP.L.users_confirmpass}:</td>
 						<td>{USERS_REGISTER_PASSWORDREPEAT} *</td>
 					</tr>
+<!-- IF {PHP.cfg.captchamain|cot_plugin_active($this)} -->
 					<tr>
 						<td>{USERS_REGISTER_VERIFYIMG}</td>
 						<td>{USERS_REGISTER_VERIFYINPUT} *</td>
 					</tr>
+<!-- ENDIF -->
 					<tr>
 						<td colspan="2" class="valid">
 							<button type="submit">{PHP.L.Submit}</button>
