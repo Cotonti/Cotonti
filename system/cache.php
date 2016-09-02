@@ -1,7 +1,7 @@
 <?php
 /**
  * Cache subsystem library
- * 
+ *
  * @package API - Cache
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
@@ -1141,7 +1141,7 @@ class Cache
 	 * Persistent cache underlayer driver.
 	 * Stores disk-only cache entries. Use it for large objects, which you don't want to put
 	 * into memory cache.
-	 * @var Static_cache_driver
+	 * @var File_cache
 	 */
 	public $disk;
 	/**
