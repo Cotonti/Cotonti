@@ -28,7 +28,7 @@ if (is_numeric($pg) && $pg > 1)
 	// Append page number to subtitle
 	$out['subtitle'] .= cot_rc('code_title_page_num', array('num' => $pg));
 	// Append page number to meta description
-        $out_metadesc_pg .= cot_rc('code_title_page_num', array('num' => $pg));
+	$out_metadesc_pg .= cot_rc('code_title_page_num', array('num' => $pg));
 }
 
 $title_params = array(
