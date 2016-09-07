@@ -27,6 +27,8 @@ if (is_numeric($pg) && $pg > 1)
 {
 	// Append page number to subtitle
 	$out['subtitle'] .= cot_rc('code_title_page_num', array('num' => $pg));
+	// Append page number to meta description
+	$out_metadesc_pg .= cot_rc('code_title_page_num', array('num' => $pg));
 }
 
 $title_params = array(
@@ -53,7 +55,7 @@ if($html) $out['head_head'] = $html.$out['head_head'];
 $out['meta_contenttype'] = $cfg['xmlclient'] ? 'application/xml' : 'text/html';
 $out['basehref'] = $R['code_basehref'];
 $out['meta_charset'] = 'UTF-8';
-$out['meta_desc'] = empty($out['desc']) ? $cfg['subtitle'] : htmlspecialchars($out['desc']);
+$out['meta_desc'] = (empty($out['desc']) ? $cfg['subtitle'] : htmlspecialchars($out['desc'])).$out_metadesc_pg;
 $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspecialchars($out['keywords']);
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] .= $out['head'];
