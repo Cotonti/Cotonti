@@ -92,7 +92,6 @@ if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && $usr['auth_do
 
 	unset($_SESSION['dl']);
 
-	$file_size = @filesize($row['page_url']);
 	if (!$usr['isadmin'] || $cfg['page']['count_admin'])
 	{
 		$pag['page_filecount']++;
