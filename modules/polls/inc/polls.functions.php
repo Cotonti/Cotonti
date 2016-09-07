@@ -344,7 +344,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	{
 		$po_id = $row1['po_id'];
 		$po_count = $row1['po_count'];
-		$percent = @round(100 * ($po_count / $totalvotes), 1);
+		$percent = ($totalvotes > 0) ? round(100 * ($po_count / $totalvotes), 1) : 0;
 
 		$input_type = $row['poll_multiple'] ? 'checkbox' : 'radio';
 		$polloptions_input = ($alreadyvoted || !$canvote) ? "" : '<input type="' . $input_type . '" name="vote[]" value="' . $po_id . '" />&nbsp;'; // TODO - to resorses
