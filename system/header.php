@@ -25,8 +25,9 @@ unset($title_tags, $title_data);
 
 if (is_numeric($pg) && $pg > 1)
 {
-	// Append page number to subtitle
-	$out['subtitle'] .= cot_rc('code_title_page_num', array('num' => $pg));
+	// Appending page number to subtitle and meta description
+	$title_page_num = htmlspecialchars(cot_rc('code_title_page_num', array('num' => $pg)));
+	$out['subtitle'] .= $title_page_num;
 }
 
 $title_params = array(
@@ -53,7 +54,7 @@ if($html) $out['head_head'] = $html.$out['head_head'];
 $out['meta_contenttype'] = $cfg['xmlclient'] ? 'application/xml' : 'text/html';
 $out['basehref'] = $R['code_basehref'];
 $out['meta_charset'] = 'UTF-8';
-$out['meta_desc'] = empty($out['desc']) ? $cfg['subtitle'] : htmlspecialchars($out['desc']);
+$out['meta_desc'] = (empty($out['desc']) ? $cfg['subtitle'] : htmlspecialchars($out['desc'])) . $title_page_num;
 $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspecialchars($out['keywords']);
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] .= $out['head'];
@@ -87,18 +88,18 @@ if (!COT_AJAX)
 	}
 	/* ===== */
 
-    if(empty($out['notices'])) $out['notices'] = '';
+	if(empty($out['notices'])) $out['notices'] = '';
 	if(is_array($out['notices_array']))
 	{
-        $notices = '';
+		$notices = '';
 		foreach ($out['notices_array'] as $noticeRow)
 		{
-            $notice = (is_array($noticeRow)) ? cot_rc('notices_link', array('url' => $noticeRow[0], 'title' => $noticeRow[1])) :
-                cot_rc('notices_plain', array('title' => $noticeRow));
-            $notices .= cot_rc('notices_notice', array('notice' => $notice));
+			$notice = (is_array($noticeRow)) ? cot_rc('notices_link', array('url' => $noticeRow[0], 'title' => $noticeRow[1])) :
+				cot_rc('notices_plain', array('title' => $noticeRow));
+			$notices .= cot_rc('notices_notice', array('notice' => $notice));
 
 		}
-        $out['notices'] .= cot_rc('notices_container', array('notices' => $notices));
+		$out['notices'] .= cot_rc('notices_container', array('notices' => $notices));
 	}
 	$out['canonical_uri'] = empty($out['canonical_uri']) ? str_replace('&', '&amp;', $sys['canonical_url']) : $out['canonical_uri'];
 	if(!preg_match("#^https?://.+#", $out['canonical_uri']))
