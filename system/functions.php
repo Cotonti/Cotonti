@@ -1728,7 +1728,8 @@ function cot_build_filesize($bytes, $decimals = 0, $round = null, $binary = fals
 		$sc_sign . 1 => $Ls['Bytes']
 	);
 	if ($smallestunit) $smallestunit = $sc_sign . $smallestunit;
-	if ($bytes < array_keys($units)[sizeof($units)-2]) $decimals = 0; // as byte can not be fractional
+	$sizes = array_keys($units);
+	if ($bytes < $sizes[sizeof($units)-2]) $decimals = 0; // as byte can not be fractional
 	return cot_build_friendlynumber($bytes, $units, 1, $decimals, $round, $smallestunit);
 }
 
