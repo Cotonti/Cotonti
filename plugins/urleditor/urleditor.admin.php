@@ -38,7 +38,7 @@ if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'apache') !== false)
 	$conf_name = '.htaccess';
 	$hta_prefix = <<<END
 # Rewrite engine options
-Options FollowSymLinks -Indexes
+Options +FollowSymLinks -Indexes
 RewriteEngine On
 # Server-relative path to Cotonti:
 RewriteBase "$site_uri"
