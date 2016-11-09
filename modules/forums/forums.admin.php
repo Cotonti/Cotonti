@@ -8,7 +8,7 @@ Hooks=admin
 /**
  * Statistics for the forums
  *
- * @package Forumstats
+ * @package Forums
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */

@@ -54,7 +54,10 @@
 			<!-- END: CAT -->
 			</table>
 <!-- END: FORUMS_SECTIONS -->
-			<p class="paging"><span><a href="{PHP|cot_url('plug','e=search&amp;tab=frm')}">{PHP.L.forums_searchinforums}</a></span><span><a href="{PHP|cot_url('plug','e=forumstats')}">{PHP.L.Statistics}</a></span><span><a href="{PHP|cot_url('forums','n=markall')}" rel="nofollow">{PHP.L.forums_markasread}</a></span></p>
+			<p class="paging">
+				<!-- IF {PHP.cot_plugins_active.search} --><span><a href="{PHP|cot_url('plug','e=search&amp;tab=frm')}">{PHP.L.forums_searchinforums}</a></span><!-- ENDIF -->
+				<!-- IF {PHP.cot_plugins_active.forumstats} --><span><a href="{PHP|cot_url('plug','e=forumstats')}">{PHP.L.Statistics}</a></span><!-- ENDIF -->
+				<span><a href="{PHP|cot_url('forums','n=markall')}" rel="nofollow">{PHP.L.forums_markasread}</a></span></p>
 		</div>
 		<div class="block">
 			<h2 class="tags">{PHP.L.Tags}</h2>
