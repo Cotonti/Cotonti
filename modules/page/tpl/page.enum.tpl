@@ -16,5 +16,5 @@
 	<hr class="clear divider" />
 <!-- END: PAGE_ROW -->
 
-	<p class="paging">{PAGE_PAGEPREV}{PAGE_PAGENAV}{PAGE_PAGENEXT}</p>
+	<p class="paging">{PAGE_TOP_PAGEPREV}{PAGE_TOP_PAGENAV}{PAGE_TOP_PAGENEXT}</p>
 <!-- END: MAIN -->
