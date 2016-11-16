@@ -28,10 +28,14 @@ function cot_apply_rwr()
 		return cot_apply_rwr_custom();
 	}
 	$rwr = cot_import('rwr', 'G', 'TXT');
-	if (isset($rwr) && !empty($rwr)/* && preg_match('`^[\w\p{L}/\-_\ \+\.]+?$`u', $_GET['rwr'])*/)
+
+    // Remove starting and ending slashes from the path
+    $rwr = trim($rwr, '/');
+
+	if (!empty($rwr)/* && preg_match('`^[\w\p{L}/\-_\ \+\.]+?$`u', $_GET['rwr'])*/)
 	{
-		// Ignore ending slash and split the path into parts
-		$path = explode('/', (mb_strrpos($rwr, '/') === mb_strlen($rwr) - 1) ? mb_substr($rwr, 0, -1) : $rwr);
+		// Split the path into parts
+        $path = explode('/', $rwr);
 		$count = count($path);
 
 		$rwr_continue = true;
@@ -45,7 +49,7 @@ function cot_apply_rwr()
 
 		if (!$rwr_continue)
 		{
-			return;
+			return null;
 		}
 
 		$filtered = cot_import($path[0], 'D', 'ALP');
