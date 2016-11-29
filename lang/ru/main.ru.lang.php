@@ -37,6 +37,7 @@ $L['Author'] = 'Автор';
 $L['Available'] = 'Доступно';
 $L['Avatar'] = 'Аватар';
 $L['Avatars'] = 'Аватары';
+$L['Back'] = 'Назад';
 $L['Banned'] = 'Заблокированные';
 $L['BBcode'] = 'BBCode';
 $L['BBcodes'] = 'BBCodes';
