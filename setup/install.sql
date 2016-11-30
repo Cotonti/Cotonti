@@ -218,10 +218,10 @@ DROP TABLE IF EXISTS `cot_logger`;
 CREATE TABLE `cot_logger` (
   `log_id` mediumint NOT NULL auto_increment,
   `log_date` int NOT NULL default '0',
-  `log_ip` varchar(15) collate utf8_unicode_ci NOT NULL default '',
-  `log_name` varchar(100) collate utf8_unicode_ci NOT NULL,
-  `log_group` varchar(4) collate utf8_unicode_ci NOT NULL default 'def',
-  `log_text` varchar(255) collate utf8_unicode_ci NOT NULL default '',
+  `log_ip` varchar(15) collate utf8_unicode_ci DEFAULT '',
+  `log_name` varchar(100) collate utf8_unicode_ci DEFAULT '',
+  `log_group` varchar(4) collate utf8_unicode_ci DEFAULT 'def',
+  `log_text` varchar(255) collate utf8_unicode_ci DEFAULT '',
   PRIMARY KEY  (`log_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -233,24 +233,24 @@ CREATE TABLE `cot_plugins` (
   `pl_part` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `pl_title` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `pl_file` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `pl_order` tinyint unsigned NOT NULL default '10',
-  `pl_active` tinyint unsigned NOT NULL default '1',
-  `pl_module` tinyint unsigned NOT NULL DEFAULT 0,
+  `pl_order` tinyint unsigned DEFAULT '10',
+  `pl_active` tinyint(1) unsigned DEFAULT '1',
+  `pl_module` tinyint(1) unsigned DEFAULT 0,
   PRIMARY KEY  (`pl_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `cot_structure`;
 CREATE TABLE `cot_structure` (
   `structure_id` mediumint NOT NULL auto_increment,
-  `structure_area` varchar(64) collate utf8_unicode_ci NOT NULL default '',
+  `structure_area` varchar(64) collate utf8_unicode_ci NOT NULL,
   `structure_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `structure_path` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `structure_tpl` varchar(128) collate utf8_unicode_ci NOT NULL default '',
+  `structure_path` varchar(255) collate utf8_unicode_ci default '',
+  `structure_tpl` varchar(128) collate utf8_unicode_ci default '',
   `structure_title` varchar(128) collate utf8_unicode_ci NOT NULL,
-  `structure_desc` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `structure_icon` varchar(128) collate utf8_unicode_ci NOT NULL default '',
-  `structure_locked` tinyint NOT NULL default '0',
-  `structure_count` mediumint NOT NULL default '0',
+  `structure_desc` varchar(255) collate utf8_unicode_ci default '',
+  `structure_icon` varchar(128) collate utf8_unicode_ci default '',
+  `structure_locked` tinyint(1) default '0',
+  `structure_count` mediumint default '0',
   PRIMARY KEY  (`structure_id`),
   KEY `structure_code` (`structure_code`),
   KEY `structure_path` (`structure_path`)

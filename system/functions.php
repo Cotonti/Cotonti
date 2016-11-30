@@ -3225,17 +3225,15 @@ function cot_implode_messages($src = 'default', $class = '')
  * @param string $group Event group
  * @global CotDB $db
  */
-function cot_log($text, $group='def')
+function cot_log($text, $group = 'def')
 {
-	global $db, $db_logger, $sys, $usr, $_SERVER;
-
-	$db && $db->insert($db_logger, array(
-		'log_date' => (int)$sys['now'],
-		'log_ip' => $usr['ip'],
-		'log_name' => $usr['name'],
-		'log_group' => $group,
-		'log_text' => $text.' - '.$_SERVER['REQUEST_URI']
-		));
+    cot::$db && cot::$db->insert(cot::$db->logger, array(
+        'log_date'  => (int)cot::$sys['now'],
+        'log_ip'    => (!empty(cot::$usr['ip'])) ? cot::$usr['ip'] : '',
+        'log_name'  => (!empty(cot::$usr['name']) || cot::$usr['name'] == '0') ? cot::$usr['name'] : '',
+        'log_group' => (!empty($group) || $group == '0') ? $group : '',
+        'log_text'  => $text.' - '.$_SERVER['REQUEST_URI']
+    ));
 }
 
 /**
