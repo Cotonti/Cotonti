@@ -752,7 +752,22 @@ function cot_import_buffered($name, $value, $null = '')
  */
 function cot_import_date($name, $usertimezone = true, $returnarray = false, $source = 'P')
 {
-	global $usr;
+    if (function_exists('cot_import_date_custom'))
+    {
+        return cot_import_date_custom($name, $usertimezone, $returnarray, $source);
+    }
+
+    $result = NULL;
+
+    /* === Hook === */
+    foreach (cot_getextplugins('import.date') as $pl)
+    {
+        include $pl;
+    }
+    /* ===== */
+
+    if($result !== NULL) return $result;
+
 	//$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$date = cot_import($name, $source, 'ARR');
 
@@ -787,7 +802,7 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
 	}
 	if ($usertimezone)
 	{
-		$timestamp -= $usr['timezone'] * 3600;
+		$timestamp -= cot::$usr['timezone'] * 3600;
 	}
 	if ($returnarray)
 	{

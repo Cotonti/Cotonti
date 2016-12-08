@@ -241,6 +241,23 @@ function cot_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '',
 function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030, $min_year = 2000, $usertimezone = true, $custom_rc = '')
 {
 	global $L, $R, $usr;
+
+    if (function_exists('cot_selectbox_date_custom'))
+    {
+        return cot_selectbox_date_custom($utime, $mode, $name, $max_year, $min_year, $usertimezone, $custom_rc);
+    }
+
+    $result = NULL;
+
+    /* === Hook === */
+    foreach (cot_getextplugins('form.date') as $pl)
+    {
+        include $pl;
+    }
+    /* ===== */
+
+    if($result !== NULL) return $result;
+
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
 	$utime = ($usertimezone && $utime > 0) ? ($utime + $usr['timezone'] * 3600) : $utime;
