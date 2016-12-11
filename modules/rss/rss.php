@@ -267,6 +267,14 @@ if (count($items) > 0)
 			'RSS_ROW_LINK' => $item['link'],
 			'RSS_ROW_FIELDS' => $item['fields']
 		));
+                
+          /* === Hook === */
+          foreach (cot_getextplugins('rss.items_row') as $pl)
+          {
+               include $pl;
+          }
+          /* ===== */ 
+                          
 		$t->parse('MAIN.ITEM_ROW');
 	}
 }
