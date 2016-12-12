@@ -269,7 +269,7 @@ if (count($items) > 0)
 		));
                 
           /* === Hook === */
-          foreach (cot_getextplugins('rss.items_row') as $pl)
+          foreach (cot_getextplugins('rss.item.loop') as $pl)
           {
                include $pl;
           }
