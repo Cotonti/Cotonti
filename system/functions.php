@@ -1560,7 +1560,7 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false,
 	if ($home)
 	{
 		$maintitle = (empty($L['breadcrumbmaintitle'])) ? $cfg['maintitle'] : $L['breadcrumbmaintitle'];
-		array_unshift($crumbs, array($cfg['mainurl'], $maintitle));
+		array_unshift($crumbs, array(cot_url('index'), $maintitle));
 	}
 	$cnt = count($crumbs);
 	for ($i = 0; $i < $cnt; $i++)
