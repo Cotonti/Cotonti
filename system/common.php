@@ -321,7 +321,7 @@ $usr['timezonename'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
-$csid = cot_import($sys['site_id'], 'COOKIE', 'ALP');
+$csid = cot_import($sys['site_id'], 'COOKIE', 'TXT');
 if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
 {
 	$u = empty($_SESSION[$sys['site_id']]) ? explode(':', base64_decode($csid)) : explode(':', base64_decode($_SESSION[$sys['site_id']]));

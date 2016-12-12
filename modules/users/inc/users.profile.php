@@ -123,7 +123,7 @@ if($a == 'update')
 				$rbody .= "\n\n".$L['aut_contactadmin'];
 				cot_mail($ruseremail, $rsubject, $rbody);
 
-				if(cot_import($sys['site_id'], 'COOKIE', 'ALP'))
+				if(cot_import($sys['site_id'], 'COOKIE', 'TXT'))
 				{
 					cot_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 				}
@@ -155,11 +155,11 @@ if($a == 'update')
 			} else {
 				unset($ruser['user_birthdate']);
 			}
-            
+
 		} else {
 			$ruser['user_birthdate'] = cot_stamp2date($ruser['user_birthdate']);
 		}
-        
+
 		$ruser['user_auth'] = '';
 		$db->update($db_users, $ruser, "user_id='".$usr['id']."'");
 		cot_extrafield_movefiles();

@@ -40,7 +40,7 @@ if ($logout)
 		cot_uriredir_apply($cfg['redirbkonlogout']);
 	}
 
-	if(cot_import($sys['site_id'], 'COOKIE', 'ALP'))
+	if(cot_import($sys['site_id'], 'COOKIE', 'TXT'))
 	{
 		cot_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 	}
