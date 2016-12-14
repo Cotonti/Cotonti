@@ -276,14 +276,14 @@ elseif ($default_mode)
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('rss.default.main') as $pl)
+	foreach (cot_getextplugins('rss.pages.main') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
 
 	/* === Hook - Part1 : Set === */
-	$extp = cot_getextplugins('rss.default.loop');
+	$extp = cot_getextplugins('rss.pages.loop');
 	/* ===== */
 
 	$i = 0;
