@@ -256,6 +256,9 @@ $t->assign(array(
 	'RSS_DATE' => cot_fix_pubdate(date("r", $rssNow))
 ));
 
+/* === Hook - Part1 : Set === */
+$extp = cot_getextplugins('rss.item.loop');
+/* ===== */
 if (count($items) > 0)
 {
 	foreach ($items as $item)
@@ -267,7 +270,15 @@ if (count($items) > 0)
 			'RSS_ROW_LINK' => $item['link'],
 			'RSS_ROW_FIELDS' => $item['fields']
 		));
-		$t->parse('MAIN.ITEM_ROW');
+        
+	/* === Hook - Part2 : Include === */
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+           
+	$t->parse('MAIN.ITEM_ROW');
 	}
 }
 
