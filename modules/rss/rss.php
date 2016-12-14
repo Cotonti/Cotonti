@@ -325,11 +325,11 @@ $t->assign(array(
 	'RSS_DATE' => cot_fix_pubdate(date("r", $rssNow))
 ));
 
-/* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('rss.item.loop');
-/* ===== */
 if (count($items) > 0)
 {
+	/* === Hook - Part1 : Set === */
+	$extp = cot_getextplugins('rss.item.loop');
+	/* ===== */
 	foreach ($items as $item)
 	{
 		$t->assign(array(
