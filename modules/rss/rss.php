@@ -62,15 +62,12 @@ if ($m == "topics")
 	$default_mode = false;
 	$topic_id = empty($c) ? 0 : (int) $c;
 
-	$sql = "SELECT * FROM $db_forum_topics WHERE ft_id=$topic_id";
-	$res = $db->query($sql);
-	if ($db->affectedRows > 0)
+	$sql = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id = ?", $topic_id);
+	if ($sql->rowCount > 0)
 	{
-		$row = $res->fetch();
+		$row = $sql->fetch();
 		if ($row['ft_mode'] == '1')
-		{
-			die('This topic is private'); // TODO: Need translate
-		}
+			die($L['rss_error_private']);
 
 		$rss_title = $domain." : ".$row['ft_title'];
 		$rss_description = $L['rss_topic_item_desc'];
@@ -78,19 +75,27 @@ if ($m == "topics")
 		// check forum read permission for guests
 		$forum_id = $row['ft_cat'];
 		if (!cot_auth('forums', $forum_id, 'R'))
-		{
-			die('Not readable for guests'); // TODO: Need translate
-		}
+			die($L['rss_error_guests']);
 
 		// get number of posts in topic
-		$sql = "SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid=$topic_id";
-		$res = $db->query($sql);
+		$res = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid = ?", $topic_id);
 		$totalposts = $res->fetchColumn();
 
-		$sql = "SELECT * FROM $db_forum_posts WHERE fp_topicid=$topic_id ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
-		$res = $db->query($sql);
+		$sql = $db->query("SELECT * FROM $db_forum_posts WHERE fp_topicid = ? ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'], $topic_id);
+
+		/* === Hook === */
+		foreach (cot_getextplugins('rss.topics.main') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		/* === Hook - Part1 : Set === */
+		$extp = cot_getextplugins('rss.topics.loop');
+		/* ===== */
+
 		$i = 0;
-		while ($row = $res->fetch())
+		while ($row = $sql->fetch())
 		{
 			$totalposts--;
 			$curpage = $cfg['forums']['maxtopicsperpage'] * floor($totalposts / $cfg['forums']['maxtopicsperpage']);
@@ -101,6 +106,14 @@ if ($m == "topics")
 			$url = cot_url('forums', "m=posts&q=$topic_id&d=$curpage", "#post$post_id", true);
 			$items[$i]['link'] = (strpos($url, '://') === false) ? COT_ABSOLUTE_URL . $url : $url;
 			$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
+
+			/* === Hook - Part2 : Include === */
+			foreach ($extp as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
+
 			$i++;
 		}
 		$res->closeCursor();
@@ -121,19 +134,30 @@ elseif ($m == "section")
 		$all = cot_structure_children('forums', $forum_cat);
 		$where = "fp_cat IN ('".implode("', '", $all)."')";
 
-		$sql = "SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
-		$res = $db->query($sql);
-		$i = 0;
+		$sql = $db->query("SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 
-		foreach ($res->fetchAll() as $row)
+		/* === Hook === */
+		foreach (cot_getextplugins('rss.section.main') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		/* === Hook - Part1 : Set === */
+		$extp = cot_getextplugins('rss.section.loop');
+		/* ===== */
+
+		$i = 0;
+		foreach ($sql->fetchAll() as $row)
 		{
 			$post_id = $row['fp_id'];
 			$topic_id = $row['fp_topicid'];
 
 			$flag_private = 0;
-			$sql = "SELECT * FROM $db_forum_topics WHERE ft_id=$topic_id";
-			$res2 = $db->query($sql);
+
+			$res2 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id = ?", $topic_id);
 			$row2 = $res2->fetch();
+
 			$topic_title = $row2['ft_title'];
 			if ($row2['ft_mode'] == '1')
 			{
@@ -150,6 +174,13 @@ elseif ($m == "section")
 				$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
 			}
 
+			/* === Hook - Part2 : Include === */
+			foreach ($extp as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
+
 			$i++;
 		}
 	}
@@ -162,19 +193,31 @@ elseif ($m == "forums")
 	$rss_title = $domain." : ".$L['rss_allforums_item_title'];
 	$rss_description = "";
 
-	$sql = "SELECT * FROM $db_forum_posts ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
-	$res = $db->query($sql);
+	$sql = $db->query("SELECT * FROM $db_forum_posts ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems']);
+
+	/* === Hook === */
+	foreach (cot_getextplugins('rss.forums.main') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
+	/* === Hook - Part1 : Set === */
+	$extp = cot_getextplugins('rss.forums.loop');
+	/* ===== */
+
 	$i = 0;
-	foreach ($res->fetchAll() as $row)
+	foreach ($sql->fetchAll() as $row)
 	{
 		$post_id = $row['fp_id'];
 		$topic_id = $row['fp_topicid'];
 		$forum_id = $row['fp_cat'];
 
 		$flag_private = 0;
-		$sql = "SELECT * FROM $db_forum_topics WHERE ft_id=$topic_id";
-		$res2 = $db->query($sql);
-		$row2 = $res2->fetch();
+
+		$sql2 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id = ?", $topic_id);
+		$row2 = $sql2->fetch();
+
 		$topic_title = $row2['ft_title'];
 		if ($row2['ft_mode'] == '1')
 		{
@@ -189,6 +232,13 @@ elseif ($m == "forums")
 			$items[$i]['link'] = (strpos($url, '://') === false) ? COT_ABSOLUTE_URL . $url : $url;
 			$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
 		}
+
+		/* === Hook - Part2 : Include === */
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 
 		$i++;
 	}
@@ -224,19 +274,38 @@ elseif ($default_mode)
 			WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat NOT LIKE 'system'
 			ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 	}
+
+	/* === Hook === */
+	foreach (cot_getextplugins('rss.default.main') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
+	/* === Hook - Part1 : Set === */
+	$extp = cot_getextplugins('rss.default.loop');
+	/* ===== */
+
 	$i = 0;
 	while ($row = $sql->fetch())
 	{
 		$url = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'], '', true) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'], '', true);
 
-        $rssDate = $row['page_date'];
-        if(!empty(cot::$usr['timezone'])) $rssDate += cot::$usr['timezone'] * 3600;
+		$rssDate = $row['page_date'];
+		if(!empty(cot::$usr['timezone'])) $rssDate += cot::$usr['timezone'] * 3600;
 
 		$items[$i]['title'] = $row['page_title'];
 		$items[$i]['link'] = (strpos($url, '://') === false) ? COT_ABSOLUTE_URL . $url : $url;
 		$items[$i]['pubDate'] = date('r', $rssDate);
 		$items[$i]['description'] = cot_parse_page_text($row['page_text'], $url, $row['page_parser']);
 		$items[$i]['fields'] = cot_generate_pagetags($row);
+
+		/* === Hook - Part2 : Include === */
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 
 		$i++;
 	}
@@ -270,15 +339,15 @@ if (count($items) > 0)
 			'RSS_ROW_LINK' => $item['link'],
 			'RSS_ROW_FIELDS' => $item['fields']
 		));
-        
-	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
-           
-	$t->parse('MAIN.ITEM_ROW');
+
+		/* === Hook - Part2 : Include === */
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		$t->parse('MAIN.ITEM_ROW');
 	}
 }
 
@@ -303,15 +372,15 @@ function cot_parse_page_text($pag_text, $pag_pageurl, $pag_parser)
 	global $cfg;
 
 	$pag_text = cot_parse($pag_text, $pag_parser !== 'none', $pag_parser);
-    $text_cut = cot_cut_more($pag_text);
-    $cutted = (mb_strlen($pag_text) > mb_strlen($text_cut)) ? true : false;
+	$text_cut = cot_cut_more($pag_text);
+	$cutted = (mb_strlen($pag_text) > mb_strlen($text_cut)) ? true : false;
 
-    if($cutted) {
-        $text_cut .= cot_rc('list_more', array('page_url' => $pag_pageurl));
-    }
+	if($cutted) {
+		$text_cut .= cot_rc('list_more', array('page_url' => $pag_pageurl));
+	}
 
 	if ((int)$cfg['rss']['rss_pagemaxsymbols'] > 0 ) {
-        $text_cut = cot_string_truncate($text_cut, $cfg['rss']['rss_pagemaxsymbols'], true, false, '...');
+		$text_cut = cot_string_truncate($text_cut, $cfg['rss']['rss_pagemaxsymbols'], true, false, '...');
 	}
 
 	return $text_cut;
