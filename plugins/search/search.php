@@ -71,21 +71,21 @@ if ($rs['frmtitle'] < 1 && $rs['frmtext'] < 1)
 }
 $rs['setuser'] = cot_import($rs['setuser'], 'D', 'TXT');
 $rs['setlimit'] = cot_import($rs['setlimit'], 'D', 'INT');
-$rs['setfrom'] = $sys['now'] - 31536000;
+$rs['setfrom'] = cot::$sys['now'] - 31536000;
 $rs['setto'] = $sys['now'];
 switch ($rs['setlimit'])
 {
 	case 1:
-		$rs['setfrom'] = $sys['now'] - 1209600;
+		$rs['setfrom'] = cot::$sys['now'] - 1209600;
 		break;
 	case 2:
-		$rs['setfrom'] = $sys['now'] - 2592000;
+		$rs['setfrom'] = cot::$sys['now'] - 2592000;
 		break;
 	case 3:
-		$rs['setfrom'] = $sys['now'] - 7776000;
+		$rs['setfrom'] = cot::$sys['now'] - 7776000;
 		break;
 	case 4:
-		$rs['setfrom'] = $sys['now'] - 31536000;
+		$rs['setfrom'] = cot::$sys['now'] - 31536000;
 		break;
 	case 5:
 		$rs['setfrom'] = cot_import_date('rfrom', true, false, 'G');
@@ -104,8 +104,8 @@ foreach (cot_getextplugins('search.first') as $pl)
 if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && $cfg['plugin']['search']['pagesearch'])
 {
 	// Making the category list
-	$pages_cat_list['all'] = $L['plu_allcategories'];
-	foreach ($structure['page'] as $cat => $x)
+	$pages_cat_list['all'] = cot::$L['plu_allcategories'];
+	foreach (cot::$structure['page'] as $cat => $x)
 	{
 		if ($cat != 'all' && $cat != 'system' && cot_auth('page', $cat, 'R') && $x['group'] == 0)
 		{
@@ -144,8 +144,8 @@ if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && $cfg['plugin'
 
 if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugin']['search']['forumsearch'])
 {
-	$forum_cat_list['all'] = $L['plu_allsections'];
-	foreach ($structure['forums'] as $key => $val)
+	$forum_cat_list['all'] = cot::$L['plu_allsections'];
+	foreach (cot::$structure['forums'] as $key => $val)
 	{
 		if (cot_auth('forums', $key, 'R'))
 		{
@@ -181,11 +181,11 @@ if (!empty($sq))
 	$sqlsearch = '%'.implode('%', $words).'%';
 	if (mb_strlen($sq) < $cfg['plugin']['search']['minsigns'])
 	{
-		cot_error($L['plu_querytooshort'].$R['code_error_separator'], '');
+		cot_error(cot::$L['plu_querytooshort'].cot::$R['code_error_separator'], '');
 	}
 	if (count($words) > $cfg['plugin']['search']['maxwords'])
 	{
-		cot_error($L['plu_toomanywords'].' '.$cfg['plugin']['search']['maxwords'].$R['code_error_separator']);
+		cot_error(cot::$L['plu_toomanywords'].' '.$cfg['plugin']['search']['maxwords'].cot::$R['code_error_separator']);
 	}
 	// Users LIST
 	$rs['setuser'] = trim($rs['setuser']);
@@ -210,7 +210,7 @@ if (!empty($sq))
 		$sql->closeCursor();
 		if ($totalusers == 0)
 		{
-			cot_error($L['plu_usernotexist'].$R['code_error_separator'], 'rs[setuser]');
+			cot_error(cot::$L['plu_usernotexist'].cot::$R['code_error_separator'], 'rs[setuser]');
 		}
 		$touser = ($totalusers > 0 && !cot_error_found()) ? 'IN ('.implode(',', $touser_ids).')' : '';
 	}
@@ -265,7 +265,7 @@ if (!empty($sq))
 		$where_and = array_diff($where_and, array(''));
 		$where = implode(' AND ', $where_and);
 
-		if (!$db->fieldExists($db_pages, 'page_' . $rs['pagsort']))
+		if (!$db->fieldExists(cot::$db->pages, 'page_' . $rs['pagsort']))
 		{
 			$rs['pagsort'] = 'date';
 		}
@@ -282,14 +282,14 @@ if (!empty($sq))
 		if (empty($sql_page_string))
 		{
 			$sql_page_string = "SELECT SQL_CALC_FOUND_ROWS p.* $search_join_columns
-                FROM $db_pages AS p $search_join_condition
+                FROM ".cot::$db->pages." AS p $search_join_condition
                 WHERE $where
                 ORDER BY {$orderby}
                 LIMIT $d, " . $cfg_maxitems . $search_union_query;
 		}
-		$sql = $db->query($sql_page_string);
+		$sql = cot::$db->query($sql_page_string);
 		$items = $sql->rowCount();
-		$totalitems[] = $db->query('SELECT FOUND_ROWS()')->fetchColumn();
+		$totalitems[] = cot::$db->query('SELECT FOUND_ROWS()')->fetchColumn();
 
 		$jj = 0;
 
@@ -303,7 +303,7 @@ if (!empty($sq))
 			$url_page = empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'].'&highlight='.$hl) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'].'&highlight='.$hl);
 			$t->assign(cot_generate_pagetags($row, 'PLUGIN_PR_'));
 			$t->assign(array(
-				'PLUGIN_PR_CATEGORY' => cot_rc_link($url_cat, $structure['page'][$row['page_cat']]['tpath']),
+				'PLUGIN_PR_CATEGORY' => cot_rc_link($url_cat, cot::$structure['page'][$row['page_cat']]['tpath']),
 				'PLUGIN_PR_CATEGORY_URL' => $url_cat,
 				'PLUGIN_PR_TITLE' => cot_rc_link($url_page, htmlspecialchars($row['page_title'])),
 				'PLUGIN_PR_TEXT' => cot_clear_mark($row['page_text'], $words),
@@ -327,7 +327,8 @@ if (!empty($sq))
 		}
 		unset($where_and, $where_or, $where);
 	}
-	if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugin']['search']['forumsearch'] && !cot_error_found())
+	if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && cot::$cfg['plugin']['search']['forumsearch'] &&
+        !cot_error_found())
 	{
 		if ($rs['frmsub'][0] != 'all' && count($rs['frmsub']) > 0)
 		{
@@ -353,42 +354,59 @@ if (!empty($sq))
 		}
 		else
 		{
-			$where_and['cat'] = "t.ft_cat IN ('".implode("','", $frm_catauth)."')";
+		    if(!empty(cot::$structure['forums'])) {
+                // If exists categories which user can't read
+		        if(!empty($frm_catauth) && count($frm_catauth) != count(array_keys(cot::$structure['forums']))) {
+                    $where_and['cat'] = "t.ft_cat IN ('" . implode("','", $frm_catauth) . "')";
+                }
+            }
 		}
 		$where_and['reply'] = ($rs['frmreply'] == '1') ? "t.ft_postcount > 1" : "";
 		$where_and['time'] = ($rs['setlimit'] > 0) ? "p.fp_creation >= ".$rs['setfrom']." AND p.fp_updated <= ".$rs['setto'] : "";
 		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid ".$touser : "";
 
-		$where_or['title'] = ($rs['frmtitle'] == 1) ? "t.ft_title LIKE '".$db->prep($sqlsearch)."'" : "";
-		$where_or['text'] = (($rs['frmtext'] == 1)) ? "p.fp_text LIKE '".$db->prep($sqlsearch)."'" : "";
+		$where_or['title'] = ($rs['frmtitle'] == 1) ? "t.ft_title LIKE '".cot::$db->prep($sqlsearch)."'" : "";
+		$where_or['text'] = (($rs['frmtext'] == 1)) ? "p.fp_text LIKE '".cot::$db->prep($sqlsearch)."'" : "";
 
 		$where_or = array_diff($where_or, array(''));
-		count($where_or) || $where_or['title'] = "(t.ft_title LIKE '".$db->prep($sqlsearch)."'";
+		count($where_or) || $where_or['title'] = "(t.ft_title LIKE '".cot::$db->prep($sqlsearch)."'";
 		$where_and['or'] = '('.implode(' OR ', $where_or).')';
 		$where_and = array_diff($where_and, array(''));
 		$where = implode(' AND ', $where_and);
+		if(!empty($where)) $where = 'WHERE '.$where;
 
 		$maxitems = $cfg_maxitems - $items;
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
 
-		if (!$db->fieldExists($db_forum_topics, "ft_{$rs['frmsort']}"))
+		if (!$db->fieldExists(cot::$db->forum_topics, "ft_{$rs['frmsort']}"))
 		{
 			$rs['frmsort'] = 'updated';
 		}
 
-		$sql = $db->query("SELECT SQL_CALC_FOUND_ROWS p.*, t.*
-			 	FROM $db_forum_posts AS p, $db_forum_topics AS t
-				WHERE $where AND p.fp_topicid = t.ft_id
-				GROUP BY t.ft_id ORDER BY ft_".$rs['frmsort']." ".$rs['frmsort2']."
-				LIMIT $d, $maxitems");
+		// We need to show only one last post from each found topic
+		$query = "SELECT SQL_CALC_FOUND_ROWS p.*, t.*
+			 	FROM ".cot::$db->forum_posts." AS p
+			 	LEFT JOIN ".cot::$db->forum_topics." AS t ON p.fp_topicid = t.ft_id 
+			 	JOIN (
+                    SELECT fp_topicid, max(fp_creation) as max_created
+                    FROM ".cot::$db->forum_posts." as p
+                    LEFT JOIN ".cot::$db->forum_topics." AS t ON p.fp_topicid = t.ft_id 
+                    $where
+                    GROUP BY fp_topicid
+                )fp ON p.fp_creation = fp.max_created
+				$where
+				ORDER BY ft_".$rs['frmsort']." ".$rs['frmsort2']."
+				LIMIT $d, $maxitems";
+
+		$sql = cot::$db->query($query);
 		$items = $sql->rowCount();
-		$totalitems[] = $db->query('SELECT FOUND_ROWS()')->fetchColumn();
+		$totalitems[] = cot::$db->query('SELECT FOUND_ROWS()')->fetchColumn();
 		$jj = 0;
 		while ($row = $sql->fetch())
 		{
 			if ($row['ft_updated'] > 0)
 			{
-				$post_url = ($cfg['plugin']['search']['searchurl'] == 'Single') ? cot_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : cot_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
+				$post_url = (cot::$cfg['plugin']['search']['searchurl'] == 'Single') ? cot_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : cot_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
 				$t->assign(array(
 					'PLUGIN_FR_CATEGORY' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false),
 					'PLUGIN_FR_TITLE' => cot_rc_link($post_url, htmlspecialchars($row['ft_title'])),
