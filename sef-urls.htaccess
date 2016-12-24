@@ -29,6 +29,15 @@ RewriteRule ^(admin|login|message)(/|\?|$) $1.php [QSA,NC,NE,L]
 # System category has priority over /system folder
 RewriteRule ^system/?$  index.php?rwr=system [QSA,NC,NE,L]
 
+# forums
+ RewriteRule ^forums/([a-zA-Z0-9_./%-]+)/topic([0-9]+)/page([0-9]+)?$ index.php?e=forums&m=posts&q=$2&d=$3 [QSA,NC,NE,L]
+ RewriteRule ^forums/([a-zA-Z0-9_./%-]+)/topic([0-9]+)?$ index.php?e=forums&m=posts&q=$2 [QSA,NC,NE,L]
+ RewriteRule ^forums/([a-zA-Z0-9_./%-]+)/post([0-9]+)?$ index.php?e=forums&m=posts&id=$2 [QSA,NC,NE,L]
+ RewriteRule ^forums/([a-zA-Z0-9_./%-]+)/([a-zA-Z0-9_%-]+)/page([0-9]+)?$ index.php?e=forums&m=topics&s=$2&d=$3 [QSA,NC,NE,L]
+ RewriteRule ^forums/([a-zA-Z0-9_./%-]+)/([a-zA-Z0-9_%-]+)/?$ index.php?e=forums&m=topics&s=$2 [QSA,NC,NE,L]
+ RewriteRule ^forums/([a-zA-Z0-9_%-]+)/?$ index.php?e=forums&c=$1 [QSA,NC,NE,L]
+ RewriteRule ^forums/?$ index.php?e=forums [QSA,NC,NE,L]
+
 # All the rest goes through standard rewrite gateway
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
