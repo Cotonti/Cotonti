@@ -401,7 +401,7 @@ class XTemplate
 	private static function substitute_var($m)
 	{
 		$var = new Cotpl_var($m[1]);
-		return $var->evaluate($this);
+		return $var->evaluate();
 	}
 
 	/**
@@ -1684,13 +1684,13 @@ class Cotpl_var
 	 * @param XTemplate $tpl Reference to CoTemplate storing local variables
 	 * @return mixed Variable value or NULL if variable was not found
 	 */
-	public function evaluate($tpl)
+	public function evaluate($tpl = null)
 	{
 		if ($this->name === 'PHP')
 		{
 			$var =& $GLOBALS;
 		}
-		else
+		elseif(!empty($tpl))
 		{
 			$val = $tpl->vars[$this->name];
 			if ($this->keys && (is_array($val) || is_object($val)))
