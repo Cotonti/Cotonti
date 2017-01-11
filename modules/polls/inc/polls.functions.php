@@ -286,19 +286,17 @@ function cot_poll_vote()
  * @param string $formlink Poll form url
  * @param string $theme Poll template name
  * @param string $type Poll type
- * @return array
- * @global CotDB $db
+ * @return bool|array
  */
 function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 {
-	global $db, $cfg, $db_polls, $db_polls_options, $db_polls_voters, $usr;
 	$canvote = false;
 
 	if (!is_array($id))
 	{
 		$id = (int) $id;
-		$where = (!$type) ? "poll_id = $id" : "poll_type = '" . $db->prep($type) . "' AND poll_code = '$id'";
-		$sql = $db->query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
+		$where = (!$type) ? "poll_id = $id" : "poll_type = '" . cot::$db->prep($type) . "' AND poll_code = '$id'";
+		$sql = cot::$db->query("SELECT * FROM ".cot::$db->polls." WHERE $where LIMIT 1");
 		if (!$row = $sql->fetch())
 		{
 			return false;
@@ -311,71 +309,132 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	$id = $row['poll_id'];
 
 	$alreadyvoted = 0;
-	if ($cfg['polls']['ip_id_polls'] == 'id' && $usr['id'] > 0)
+	if (cot::$cfg['polls']['ip_id_polls'] == 'id' && cot::$usr['id'] > 0)
 	{
-		$where = "pv_userid = '" . $usr['id'] . "'";
+		$where = "pv_userid = '" . cot::$usr['id'] . "'";
 		$canvote = true;
 	}
 	else
 	{
-		$where = ($usr['id'] > 0) ? "(pv_userid = '" . $usr['id'] . "' OR pv_userip = '" . $usr['ip'] . "')" : "pv_userip = '" . $usr['ip'] . "'";
+		$where = (cot::$usr['id'] > 0) ? "(pv_userid = '" . cot::$usr['id'] . "' OR pv_userip = '" .
+            cot::$usr['ip'] . "')" : "pv_userip = '" . cot::$usr['ip'] . "'";
 		$canvote = true;
 	}
-	$sql2 = $db->query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid = $id AND $where LIMIT 1");
+	$sql2 = cot::$db->query("SELECT pv_id FROM ".cot::$db->polls_voters." WHERE pv_pollid = $id AND $where LIMIT 1");
 	$alreadyvoted = ($sql2->rowCount() == 1) ? 1 : 0;
 
 	$themefile = cot_tplfile(array('polls', $theme), 'module');
 	$t = new XTemplate($themefile);
 
-	if ($alreadyvoted)
-		$poll_block = 'POLL_VIEW_VOTED';
+	if ($alreadyvoted) {
+        $poll_block = 'POLL_VIEW_VOTED';
+    }
 	elseif (!$canvote)
-		$poll_block = 'POLL_VIEW_DISABLED';
+    {
+        $poll_block = 'POLL_VIEW_DISABLED';
+    }
 	elseif ($row['poll_state'])
-		$poll_block = 'POLL_VIEW_LOCKED';
+    {
+        $poll_block = 'POLL_VIEW_LOCKED';
+    }
 	else
-		$poll_block = 'POLL_VIEW';
+	{
+        $poll_block = 'POLL_VIEW';
+    }
 
-	$sql2 = $db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid = $id");
-	$totalvotes = $sql2->fetchColumn();
+    $totalVotes = $maxVotes = 0;
 
-	$sql1 = $db->query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid = $id ORDER by po_id ASC");
+	$sql2 = cot::$db->query("SELECT SUM(po_count) as total_votes, MAX(po_count) as max_votes FROM ".
+        cot::$db->polls_options." WHERE po_pollid = $id")->fetch();
+
+	if(!empty($sql2))
+    {
+        // Total votes in the poll
+        $totalVotes = $sql2['total_votes'];
+
+        // Max votes count for one option
+        $maxVotes   = $sql2['max_votes'];
+    }
+
+	$sql1 = cot::$db->query("SELECT po_id, po_text, po_count FROM ".cot::$db->polls_options." WHERE po_pollid = $id ORDER by po_id ASC");
+
+	/* === Hook === */
+    foreach (cot_getextplugins('polls.form.options.first') as $pl)
+    {
+        include $pl;
+    }
+    /* ===== */
+
+    /* === Hook - Part1 : Set === */
+    $extp = cot_getextplugins('polls.form.options.loop');
+    /* ===== */
 	while ($row1 = $sql1->fetch())
 	{
 		$po_id = $row1['po_id'];
 		$po_count = $row1['po_count'];
-		$percent = ($totalvotes > 0) ? round(100 * ($po_count / $totalvotes), 1) : 0;
+
+        // Percentage from the total votes count
+		$percentTotal = ($totalVotes > 0) ? round(100 * ($po_count / $totalVotes), 1) : 0;
+
+        // Percentage from the option with maximum votes count
+        $percentMax   = ($maxVotes   > 0) ? round(100 * ($po_count / $maxVotes),   1) : 0;
+
+        $polloption = cot_parse($row1['po_text'], cot::$cfg['polls']['markup']);
 
 		$input_type = $row['poll_multiple'] ? 'checkbox' : 'radio';
-		$polloptions_input = ($alreadyvoted || !$canvote) ? "" : '<input type="' . $input_type . '" name="vote[]" value="' . $po_id . '" />&nbsp;'; // TODO - to resorses
-		$polloptions = cot_parse($row1['po_text'], $cfg['polls']['markup']);
+        $polloptions_input = '';
+        if (!$alreadyvoted && $canvote)
+        {
+            $polloptions_input = '<input type="' . $input_type . '" name="vote[]" value="' . $po_id . '" />'; // TODO - to resorses
+        }
 
 		$t->assign(array(
-			'POLL_OPTIONS' => $polloptions,
-			'POLL_PER' => $percent,
-			'POLL_COUNT' => $po_count,
-			'POLL_INPUT' => $polloptions_input
+            'POLL_OPTION'       => $polloption,
+            'POLL_VOTES_COUNT'  => $po_count,
+            'POLL_VOTES_TOTAL'  => $totalVotes,
+            'POLL_VOTES_MAX'    => $maxVotes,
+            'POLL_INPUT'        => $polloptions_input,
+            'POLL_PERCENT_FROM_TOTAL' => $percentTotal,
+            'POLL_PERCENT_FROM_MAX'   => $percentMax,
+
+            // Deprecated tags. May be removed in future versions.
+            'POLL_PER'     => $percentTotal, // Deprecated. Use POLL_PERCENT_FROM_TOTAL instead
+            'POLL_COUNT'   => $po_count,     // Deprecated. Use POLL_VOTES_COUNT instead
+            'POLL_OPTIONS' => $polloption,   // Deprecated. Use POLL_OPTION instead
 		));
+
+        /* === Hook - Part2 : Include === */
+        foreach ($extp as $pl)
+        {
+            include $pl;
+        }
+        /* ===== */
+
 		$t->parse($poll_block . ".POLLTABLE");
 	}
 	$sql1->closeCursor();
 
 	$t->assign(array(
-		'POLL_VOTERS' => $totalvotes,
+		'POLL_VOTERS' => $totalVotes,
 		'POLL_SINCE' => cot_date('datetime_medium', $row['poll_creationdate']),
 		'POLL_SINCE_STAMP' => $row['poll_creationdate'],
 		'POLL_SINCE_SHORT' => cot_date('date_short', $row['poll_creationdate']),
-		'POLL_TITLE' => cot_parse($row['poll_text'], $cfg['polls']['markup']),
+		'POLL_TITLE' => cot_parse($row['poll_text'], cot::$cfg['polls']['markup']),
 		'POLL_ID' => $id,
 		'POLL_FORM_URL' => (empty($formlink)) ? cot_url('polls', 'id=' . $id) : $formlink,
-		'POLL_FORM_BUTTON' => $pollbutton
 	));
 	$t->parse($poll_block);
 
 	$row['poll_alreadyvoted'] = $alreadyvoted;
-	$row['poll_count'] = $totalvotes;
+	$row['poll_count'] = $totalVotes;
 	$row['poll_block'] = $t->text($poll_block);
-	;
+
+    /* === Hook === */
+    foreach (cot_getextplugins('polls.form.tags') as $pl)
+    {
+        include $pl;
+    }
+    /* ===== */
 
 	return($row);
 }
