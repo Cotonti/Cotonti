@@ -3868,11 +3868,9 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			$ajax, $target_div, $ajax_module, $ajax_params);
 	}
 
-	global $cfg;
-
 	if (!$perpage)
 	{
-		$perpage = $cfg['maxrowsperpage'] ? $cfg['maxrowsperpage'] : 1;
+		$perpage = cot::$cfg['maxrowsperpage'] ? cot::$cfg['maxrowsperpage'] : 1;
 	}
 
 	$onpage = $entries - $current;
@@ -3926,7 +3924,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	$n = 0;
 	while ($i < $cur_left)
 	{
-		if ($cfg['easypagenav'])
+		if (cot::$cfg['easypagenav'])
 		{
 			$args[$characters] = $i == 1 ? null : $i;
 		}
@@ -3955,7 +3953,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		}
 		elseif ($i == $cur_left - 2)
 		{
-			if ($cfg['easypagenav'])
+			if (cot::$cfg['easypagenav'])
             {
                 $args[$characters] = $i+1;
             }
@@ -3984,7 +3982,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	}
 	for ($j = $cur_left; $j <= $cur_right; $j++)
 	{
-		if ($cfg['easypagenav'])
+		if (cot::$cfg['easypagenav'])
 		{
 			$args[$characters] = $j == 1 ? null : $j;
 		}
@@ -4022,7 +4020,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		}
 		elseif ($i == $cur_right + 2)
 		{
-			if ($cfg['easypagenav'])
+			if (cot::$cfg['easypagenav'])
 			{
 				$args[$characters] = $i == 2 ? null : $i - 1;
 			}
@@ -4046,7 +4044,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 				'num' => $i - 1
 			));
 		}
-		if ($cfg['easypagenav'])
+		if (cot::$cfg['easypagenav'])
 		{
 			$args[$characters] = $i == 1 ? null : $i;
 		}
@@ -4083,7 +4081,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		{
 			$prev_n = 0;
 		}
-		if ($cfg['easypagenav'])
+		if (cot::$cfg['easypagenav'])
 		{
 			$num = floor($prev_n / $perpage) + 1;
 			$args[$characters] = $num == 1 ? null : $num;
@@ -4131,7 +4129,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	if (($current + $perpage) < $entries)
 	{
 		$next_n = $current + $perpage;
-		if ($cfg['easypagenav'])
+		if (cot::$cfg['easypagenav'])
 		{
 			$num = floor($next_n / $perpage) + 1;
 			$args[$characters] = $num == 1 ? null : $num;
@@ -4157,7 +4155,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'num' => $next_n + 1
 		));
 		$last_n = ($totalpages - 1) * $perpage;
-		if ($cfg['easypagenav'])
+		if (cot::$cfg['easypagenav'])
 		{
 			$num = floor($last_n / $perpage) + 1;
 			$args[$characters] = $num == 1 ? null : $num;
@@ -4182,7 +4180,8 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'rel' => $rel,
 			'num' => $last_n + 1
 		));
-		$lastn  = (($last +  $perpage) < $totalpages) ?
+
+		$lastn  = (($last_n + $perpage) < $entries) ?
 			cot_rc('link_pagenav_main', array(
 				'url' => cot_url($module, $args, $hash),
 				'event' => $event,
