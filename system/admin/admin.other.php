@@ -27,7 +27,8 @@ if(!empty($p))
 	cot_block($usr['isadmin']);
 
 	$env['ext'] = $p;
-	$adminsubtitle = $cot_plugins_active[$p]['title'];
+    $adminsubtitle = '';
+    if (isset($cot_plugins_enabled[$p])) $adminsubtitle = $cot_plugins_enabled[$p]['title'];
 
 	if (file_exists(cot_langfile($p, 'plug')))
 	{
