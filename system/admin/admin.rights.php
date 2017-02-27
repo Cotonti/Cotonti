@@ -28,7 +28,7 @@ if(!$g){
     cot_error(cot::$L['users_group_not_found']);
     cot_redirect(cot_url('admin', array('m' => 'users'), '', true));
 }
-$group = $db->query("SELECT * FROM $db_groups WHERE grp_id = ?", $g)->fetch();
+$group = cot::$db->query("SELECT * FROM $db_groups WHERE grp_id = ?", $g)->fetch();
 if(!$group) {
     cot_error(cot::$L['users_group_not_found']);
     cot_redirect(cot_url('admin', array('m' => 'users'), '', true));
@@ -61,7 +61,7 @@ if ($a == 'update')
 
 	if ($ncopyrightsconf && !empty($cot_groups[$ncopyrightsfrom]['name']) && $g > 5)
 	{
-		$db->delete($db_auth, "auth_groupid=$g");
+        cot::$db->delete(cot::$db->auth, "auth_groupid=$g");
 		cot_auth_add_group($g, $ncopyrightsfrom);
 		cot_auth_clear('all');
 
@@ -70,8 +70,6 @@ if ($a == 'update')
 	elseif ($auth = cot_import('auth', 'P', 'ARR'))
 	{
 		$mask = array();
-
-		$db->update($db_auth, array('auth_rights' => 0), "auth_groupid=$g");
 
 		foreach ($auth as $k => $v)
 		{
@@ -84,8 +82,15 @@ if ($a == 'update')
 					{
 						$mask += cot_auth_getvalue($l);
 					}
-					$db->update($db_auth, array('auth_rights' => $mask),
-						"auth_groupid=? AND auth_code=? AND auth_option=?", array($g, $k, $i));
+
+					$oldRights = cot::$db->query("SELECT auth_id, auth_rights FROM ".cot::$db->auth.
+                        " WHERE auth_groupid=? AND auth_code=? AND auth_option=?", array($g, (string)$k, (string)$i))->fetch();
+
+					if (!empty($oldRights) && $oldRights['auth_rights'] != $mask)
+					{
+                        cot::$db->update(cot::$db->auth,  array('auth_rights' => $mask, 'auth_setbyuserid' => cot::$usr['id']),
+                            "auth_id=".$oldRights['auth_id']);
+                    }
 				}
 			}
 		}

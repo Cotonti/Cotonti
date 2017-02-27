@@ -18,3 +18,8 @@ ALTER TABLE `cot_structure`
   CHANGE `structure_icon` `structure_icon` VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '',
   CHANGE `structure_locked` `structure_locked` TINYINT(1) NULL DEFAULT '0',
   CHANGE `structure_count` `structure_count` MEDIUMINT NULL DEFAULT '0';
+
+ALTER TABLE `cot_auth`
+  CHANGE `auth_rights` `auth_rights` TINYINT(1) UNSIGNED NULL DEFAULT '0',
+  CHANGE `auth_rights_lock` `auth_rights_lock` TINYINT(1) UNSIGNED NULL DEFAULT '0',
+  CHANGE `auth_setbyuserid` `auth_setbyuserid` INT(11) UNSIGNED NULL DEFAULT '0';
