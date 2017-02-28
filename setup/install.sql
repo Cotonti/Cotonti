@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.19
+ * Version: 0.9.20
  */
 
 DROP TABLE IF EXISTS `cot_auth`;
@@ -8,9 +8,9 @@ CREATE TABLE `cot_auth` (
   `auth_groupid` int NOT NULL default '0',
   `auth_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `auth_option` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `auth_rights` tinyint unsigned NOT NULL default '0',
-  `auth_rights_lock` tinyint unsigned NOT NULL default '0',
-  `auth_setbyuserid` int unsigned NOT NULL default '0',
+  `auth_rights` TINYINT(1) UNSIGNED NULL DEFAULT '0',
+  `auth_rights_lock` TINYINT(1) UNSIGNED NULL DEFAULT '0',
+  `auth_setbyuserid` INT UNSIGNED NULL DEFAULT '0',
   PRIMARY KEY  (`auth_id`),
   KEY `auth_groupid` (`auth_groupid`),
   KEY `auth_code` (`auth_code`)
