@@ -763,6 +763,20 @@ class Resources
 
 		return static::$alias[$aliasName];
 	}
+
+    /**
+     * Check if file was already added
+     *
+     * File aliases are not resolved. They can be redefined. Use aliases when it is possible.
+     *
+     * @param string $fileName file name or it alias
+     * @return bool
+     */
+	public static function isFileAdded($fileName)
+    {
+        if (in_array($fileName, static::$addedFiles)) return true;
+        return false;
+    }
 }
 
 Resources::__init();
