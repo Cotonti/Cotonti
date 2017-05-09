@@ -197,7 +197,7 @@ class cot
 
 /*
  * =========================== System Functions ===============================
-*/
+ */
 
 /**
  * Strips everything but alphanumeric, hyphens and underscores
@@ -906,7 +906,7 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
 	{
 		return cot_mail_custom($fmail, $subject, $body, $headers, $customtemplate, $additional_parameters, $html);
 	}
-
+    $ret = true;
 	if (is_array($cot_mail_senders) && count($cot_mail_senders) > 0)
 	{
 		foreach ($cot_mail_senders as $func)
@@ -916,54 +916,114 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
 		return $ret;
 	}
 
-	if (empty($fmail))
-	{
-		return false;
-	}
-	else
-	{
-		$sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], 'UTF-8', 'B', "\n");
+    if (empty($fmail)) return false;
 
-		$headers = (empty($headers)) ? "From: \"" . $sitemaintitle . "\" <" . $cfg['adminemail'] . ">\n" . "Reply-To: <" . $cfg['adminemail'] . ">\n"
-				: $headers;
-		$headers .= "Message-ID: <" . md5(uniqid(microtime())) . "@" . $_SERVER['SERVER_NAME'] . ">\n";
+    $sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], 'UTF-8', 'B', "\n");
 
-		$type_body = $html ? "html" : "plain";
-		$headers .= "Content-Type: text/".$type_body."; charset=UTF-8\n";
-		$headers .= "Content-Transfer-Encoding: 8bit\n";
+    $headers = (empty($headers)) ? "From: \"" . $sitemaintitle . "\" <" . $cfg['adminemail'] . ">\n" . "Reply-To: <" . $cfg['adminemail'] . ">\n"
+            : $headers;
+    $headers .= "Message-ID: <" . md5(uniqid(microtime())) . "@" . $_SERVER['SERVER_NAME'] . ">\n";
 
-		if (!$customtemplate)
-		{
-			$body_params = array(
-				'SITE_TITLE' => $cfg['maintitle'],
-				'SITE_URL' => $cfg['mainurl'],
-				'SITE_DESCRIPTION' => $cfg['subtitle'],
-				'ADMIN_EMAIL' => $cfg['adminemail'],
-				'MAIL_SUBJECT' => $subject,
-				'MAIL_BODY' => $body
-			);
+    $type_body = $html ? "html" : "plain";
+    $headers .= "Content-Type: text/".$type_body."; charset=UTF-8\n";
+    $headers .= "Content-Transfer-Encoding: 8bit\n";
 
-			$subject_params = array(
-				'SITE_TITLE' => $cfg['maintitle'],
-				'SITE_DESCRIPTION' => $cfg['subtitle'],
-				'MAIL_SUBJECT' => $subject
-			);
+    if (!$customtemplate)
+    {
+        $body_params = array(
+            'SITE_TITLE' => $cfg['maintitle'],
+            'SITE_URL' => $cfg['mainurl'],
+            'SITE_DESCRIPTION' => $cfg['subtitle'],
+            'ADMIN_EMAIL' => $cfg['adminemail'],
+            'MAIL_SUBJECT' => $subject,
+            'MAIL_BODY' => $body
+        );
 
-			$subject = cot_title($cfg['subject_mail'], $subject_params, false);
-			$body = cot_title(str_replace("\r\n", "\n", $cfg['body_mail']), $body_params, false);
-		}
-		$subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\n");
+        $subject_params = array(
+            'SITE_TITLE' => $cfg['maintitle'],
+            'SITE_DESCRIPTION' => $cfg['subtitle'],
+            'MAIL_SUBJECT' => $subject
+        );
 
-		if (ini_get('safe_mode'))
-		{
-			mail($fmail, $subject, $body, $headers);
-		}
-		else
-		{
-			mail($fmail, $subject, $body, $headers, $additional_parameters);
-		}
-		return true;
-	}
+        $subject = cot_title($cfg['subject_mail'], $subject_params, false);
+        $body = cot_title(str_replace("\r\n", "\n", $cfg['body_mail']), $body_params, false);
+    }
+    $subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\n");
+
+    if (ini_get('safe_mode'))
+    {
+        mail($fmail, $subject, $body, $headers);
+    }
+    else
+    {
+        mail($fmail, $subject, $body, $headers, $additional_parameters);
+    }
+    return true;
+}
+
+/**
+ * Allocate memory
+ *
+ * @param int $needMemory Memory to allocate in bytes
+ * @return bool TRUE if enough memory is available, FALSE otherwise
+ */
+function cot_memory_allocate($needMemory)
+{
+    $needMemory = (int)$needMemory;
+    if(empty($needMemory)) return false;
+
+    // Getting memory occupied by the script (in bytes)
+    $usedMem = memory_get_usage(true);
+
+    $haveMem = ini_get('memory_limit');
+
+    // no limit set, so we try any way
+    if ($haveMem == '-1')  return true;
+
+    preg_match('/(\d+)(\w+)/', $haveMem, $mtch);
+    if (!empty($mtch[2])) {
+        $mtch[2] = mb_strtoupper($mtch[2]);
+        if ($mtch[2] == 'G') {
+            $haveMem =  $mtch[1] * 1073741824;
+
+        } elseif ($mtch[2] == 'M') {
+            $haveMem =  $mtch[1] * 1048576;
+
+        } elseif ($mtch[2] == 'K') {
+            $haveMem =  $mtch[1] * 1024;
+        }
+    }
+
+    $needMem = intval($needMemory + $usedMem);
+
+    if ($haveMem < $needMem) {
+        // Could not allocate memory
+        if (!ini_set('memory_limit', $needMem)) return false;
+
+    } else {
+        return true;
+    }
+
+    // Making sure we could allocate enough memory
+    $haveMem = ini_get('memory_limit');
+    preg_match('/(\d+)(\w+)/', $haveMem, $mtch);
+    if (!empty($mtch[2])) {
+        $mtch[2] = mb_strtoupper($mtch[2]);
+        if ($mtch[2] == 'G') {
+            $haveMem =  $mtch[1] * 1073741824;
+
+        } elseif ($mtch[2] == 'M') {
+            $haveMem =  $mtch[1] * 1048576;
+
+        } elseif ($mtch[2] == 'K') {
+            $haveMem =  $mtch[1] * 1024;
+        }
+    }
+
+    // No, we couldn't allocate enough memory
+    if ($haveMem < $needMem) return false;
+
+    return true;
 }
 
 /**
@@ -1023,42 +1083,6 @@ function cot_plugin_active($name)
 {
 	global $cot_plugins_active;
 	return is_array($cot_plugins_active) && isset($cot_plugins_active[$name]);
-}
-
-/**
- * Removes a directory recursively
- * @param string $dir Directory path
- * @return int Number of files and folders removed
- */
-function cot_rmdir($dir)
-{
-    if(empty($dir) && $dir != '0') return false;
-
-	static $cnt = 0;
-
-    if (is_dir($dir)) {
-        $objects = scandir($dir);
-        foreach ($objects as $f) {
-            $path = $dir . DIRECTORY_SEPARATOR . $f;
-            if ($f != "." && $f != "..")
-            {
-                if (filetype($path) == "dir")
-                {
-                    cot_rmdir($path);
-                }
-                else
-                {
-                    unlink($path);
-                    $cnt++;
-                }
-            }
-        }
-        reset($objects);
-        rmdir($dir);
-        $cnt++;
-    }
-
-	return $cnt;
 }
 
 /**
@@ -1223,9 +1247,9 @@ function cot_unique($length = 16)
  */
 function cot_randomstring($length = 8, $charlist = null)
 {
-	if (!is_string($charlist))
-		$charlist = 'ABCDEFGHIJKLMNOPRSTUVYZabcdefghijklmnoprstuvyz0123456789';
+	if (!is_string($charlist)) $charlist = 'ABCDEFGHIJKLMNOPRSTUVYZabcdefghijklmnoprstuvyz0123456789';
 	$max = strlen($charlist) - 1;
+    $string = '';
 	for ($i=0; $i < $length; $i++)
 	{
 		$string .= $charlist[mt_rand(0, $max)];
@@ -1402,7 +1426,7 @@ function cot_structure_parents($area, $cat, $type = 'full')
 
 /*
  * ================================= Authorization Subsystem ==================================
-*/
+ */
 
 /**
  * Returns specific access permissions
@@ -1917,7 +1941,7 @@ function cot_build_oddeven($number)
  * Returns stars image for user level
  *
  * @param int $level User level
- * @return unknown
+ * @return string
  */
 function cot_build_stars($level)
 {
@@ -2020,7 +2044,7 @@ function cot_build_timezone($offset, $withgmt = true, $short = false)
  *
  * @param string $text URL
  * @param int $maxlen Max. allowed length
- * @return unknown
+ * @return string
  */
 function cot_build_url($text, $maxlen=64)
 {
@@ -2307,11 +2331,11 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
  */
 function cot_imageresize($source, $target='return', $target_width=99999, $target_height=99999, $crop='', $fillcolor='', $quality=90, $sharpen=true)
 {
-	if (!file_exists($source)) return;
+	if (!file_exists($source)) return false;
 	$source_size = getimagesize($source);
-	if(!$source_size) return;
+	if(!$source_size) return false;
 	$mimetype = $source_size['mime'];
-	if (substr($mimetype, 0, 6) != 'image/') return;
+	if (substr($mimetype, 0, 6) != 'image/') return false;
 
 	$source_width = $source_size[0];
 	$source_height = $source_size[1];
@@ -2510,7 +2534,7 @@ if (!function_exists('imageconvolution'))
  * @param image resource $imgdata Image resource from an image creation function
  * @param int $source_width Width of image before resize
  * @param int $target_width Width of image to sharpen (after resize)
- * @return image resource
+ * @return resource - image resource
  */
 function cot_imagesharpen($imgdata, $source_width, $target_width)
 {
@@ -2532,95 +2556,37 @@ function cot_imagesharpen($imgdata, $source_width, $target_width)
  * Checks if PHP can have enough memory to process an image
  *
  * @param  string  $file_path  Path to an image
- * @param  string  $extra_size Extra size to adjust to the estimate (in MB)
+ * @param  int     $extra_size Extra size to adjust to the estimate (in MB)
  * @return boolean             TRUE if enough memory is available, FALSE otherwise
  */
 function cot_img_check_memory($file_path, $extra_size = 0)
 {
-	// Getting memory occupied by the script
-	$usedMem = memory_get_usage(true);
-	// In megabytes
-	$usedMem = round($usedMem / 1048576);
-
-	$haveMem = ini_get('memory_limit');
-	if ($haveMem == '-1')
-	{
-		// no limit set, so we try any way
-		return true;
-	}
-	preg_match('/(\d+)(\w+)/', $haveMem, $mtch);
-	// Getting available memory in MBytes
-	if (!empty($mtch[2]))
-	{
-		if ($mtch[2] == 'M')
-		{
-			$haveMem =  $mtch[1];
-		}
-		elseif ($mtch[2] == 'G')
-		{
-			$haveMem =  $mtch[1] * 1024;
-		}
-		elseif ($mtch[2] == 'K')
-		{
-			$haveMem =  $mtch[1] / 1024;
-		}
-	}
-
 	// Gettimg memory size required to process the image
 	$source_size = getimagesize($file_path);
-	if (!$source_size)
-	{
-		// Wrong image
-		return false;
-	}
+
+	$tweekfactor = 1.4;
+    $K64 = 65536;           // number of bytes in 64K
+    $MB15 = 15 * 1048576;   // 15 Mb
+
+    // Wrong image
+	if (!$source_size) return false;
+
 	$width_orig = $source_size[0];
 	$height_orig = $source_size[1];
 	$depth_orig = ($source_size['bits'] > 8) ? ($source_size['bits'] / 8) : 1;
 	$channels_orig = $source_size['channels'] > 0 ? $source_size['channels'] : 4;
 
-	// In MBytes too
-	$needMem = $width_orig * $height_orig * $depth_orig * $channels_orig / 1048576;
+	// In Bytes
+	$needMem = $width_orig * $height_orig * $depth_orig * $channels_orig + $K64;
+
 	// Adding some offset memory for other image processing and script variables,
 	// otherwise the script fails
-	$needMem = intval($needMem + $usedMem + 15 + $extra_size);
-	// Trying to allocate memory required
-	if ($haveMem < $needMem)
-	{
-		if (!ini_set('memory_limit', $needMem.'M'))
-		{
-			// Could not allocate memory
-			return false;
-		}
-	}
-	else
-	{
-		return true;
-	}
-	// Making sure we could allocate enough memory
-	$haveMem = ini_get('memory_limit');
-	preg_match('/(\d+)(\w+)/', $haveMem, $mtch);
-	// Getting available memory in MBytes
-	if (!empty($mtch[2]))
-	{
-		if ($mtch[2] == 'M')
-		{
-			$haveMem =  $mtch[1];
-		}
-		elseif ($mtch[2] == 'G')
-		{
-			$haveMem =  $mtch[1] * 1024;
-		}
-		elseif ($mtch[2] == 'K')
-		{
-			$haveMem =  $mtch[1] / 1024;
-		}
-	}
-	if ($haveMem < $needMem)
-	{
-		// No, we couldn't allocate enough memory
-		return false;
-	}
-	return true;
+    $tweekSize = $needMem * $tweekfactor;
+    $tweekSize = $tweekSize < $MB15 ? $MB15 : $tweekSize;
+	$needMem = round($needMem + $tweekSize + ($extra_size * 1048576));
+
+    // Trying to allocate memory required
+    return cot_memory_allocate($needMem);
 }
 
 /**
@@ -3291,7 +3257,7 @@ function cot_message($text, $class = 'ok', $src = 'default')
 
 /*
  * =============================== File Path Functions ========================
-*/
+ */
 
 /**
  * Returns path to include file
@@ -3412,6 +3378,42 @@ function cot_lang_determine()
 		}
 	}
 	return 'en';
+}
+
+/**
+ * Removes a directory recursively
+ * @param string $dir Directory path
+ * @return int Number of files and folders removed
+ */
+function cot_rmdir($dir)
+{
+    if(empty($dir) && $dir != '0') return false;
+
+    static $cnt = 0;
+
+    if (is_dir($dir)) {
+        $objects = scandir($dir);
+        foreach ($objects as $f) {
+            $path = $dir . DIRECTORY_SEPARATOR . $f;
+            if ($f != "." && $f != "..")
+            {
+                if (filetype($path) == "dir")
+                {
+                    cot_rmdir($path);
+                }
+                else
+                {
+                    unlink($path);
+                    $cnt++;
+                }
+            }
+        }
+        reset($objects);
+        rmdir($dir);
+        $cnt++;
+    }
+
+    return $cnt;
 }
 
 /**
