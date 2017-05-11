@@ -62,12 +62,12 @@ foreach ($sql->fetchAll() as $row)
 	$sql1 = $db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_code=" . $db->quote($id2));
 	$votes = $sql1->fetchColumn();
 
-	$rat_type = mb_substr($row['rating_code'], 0, 1);
-	$rat_value = mb_substr($row['rating_code'], 1);
+	$rat_type = $row['rating_area'];
+	$rat_value = $row['rating_code'];
 
 	switch($rat_type)
 	{
-		case 'p':
+		case 'page':
 			$rat_url = cot_url('page', 'id='.$rat_value);
 		break;
 		default:
