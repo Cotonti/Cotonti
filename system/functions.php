@@ -2564,7 +2564,7 @@ function cot_img_check_memory($file_path, $extra_size = 0)
 	// Gettimg memory size required to process the image
 	$source_size = getimagesize($file_path);
 
-	$tweekfactor = 1.4;
+    $tweekfactor = 1.2;
     $K64 = 65536;           // number of bytes in 64K
     $MB15 = 15 * 1048576;   // 15 Mb
 
@@ -2583,7 +2583,7 @@ function cot_img_check_memory($file_path, $extra_size = 0)
 	// otherwise the script fails
     $tweekSize = $needMem * $tweekfactor;
     $tweekSize = $tweekSize < $MB15 ? $MB15 : $tweekSize;
-	$needMem = round($needMem + $tweekSize + ($extra_size * 1048576));
+	$needMem = round($needMem + $tweekSize + ($extra_size * 1048576) + filesize($file_path));
 
     // Trying to allocate memory required
     return cot_memory_allocate($needMem);
