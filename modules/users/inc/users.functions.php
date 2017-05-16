@@ -231,8 +231,6 @@ function cot_selectbox_gender($check, $name)
  */
 function cot_user_data($uid = 0, $cacheitem = true)
 {
-	global $db_users;
-
 	$user = false;
 
 	if (! $uid && cot::$usr['id'] > 0)
@@ -266,7 +264,7 @@ function cot_user_data($uid = 0, $cacheitem = true)
 			{
 				$uid = (int) $uid;
 				if (! $uid) return null;
-				$sql = cot::$db->query("SELECT * FROM $db_users WHERE user_id = ? LIMIT 1", $uid);
+				$sql = cot::$db->query("SELECT * FROM ".cot::$db->users." WHERE user_id = ? LIMIT 1", $uid);
 				$user = $sql->fetch();
 			}
 		}

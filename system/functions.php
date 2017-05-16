@@ -1562,6 +1562,102 @@ function cot_blockguests()
 	return FALSE;
 }
 
+/**
+ * Authorize user
+ *
+ * @param int $id User ID
+ * @param bool|null $remember   remember user authorization
+ * @return bool
+ *
+ * @todo May be we should optionally fill user data like in system/common.php on line 336
+ *       It can be useful if we will not redirect user after login, may be we should redirect anyway
+ */
+function cot_user_authorize($id, $remember = null)
+{
+    if(is_null($remember) && cot::$cfg['forcerememberme'])
+    {
+        $remember = true;
+    }
+
+    if(is_array($id) && isset($id['user_id']) && isset($id['user_password']))
+    {
+        $user = $id;
+        $id = $user['user_id'];
+    }
+    else
+    {
+        $id = (int)$id;
+        if($id <= 0) return false;
+
+        $res = cot::$db->query("SELECT user_id, user_password, user_maingrp, user_banexpire, user_sid, ".
+            "user_sidtime, user_passsalt, user_passfunc FROM ".cot::$db->users." WHERE user_id = ? LIMIT 1", $id);
+        $user = $res->fetch();
+
+        if($user <= 0) return false;
+    }
+
+    if ($user['user_maingrp'] == COT_GROUP_BANNED)
+    {
+        if (cot::$sys['now'] > $user['user_banexpire'] && $user['user_banexpire'] > 0)
+        {
+            cot::$db->update(cot::$db->users, array('user_maingrp' => COT_GROUP_MEMBERS),  "user_id={$user['user_id']}");
+            $row['user_maingrp'] = COT_GROUP_MEMBERS;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    $token = cot_unique(16);
+    $sid = hash_hmac('sha256', $user['user_password'] . $user['user_sidtime'], cot::$cfg['secret_key']);
+
+    $update_sid = '';
+    if (empty($user['user_sid']) || $user['user_sid'] != $sid
+        || $user['user_sidtime'] + cot::$cfg['cookielifetime'] < cot::$sys['now'])
+    {
+        // Generate new session identifier
+        $sid = hash_hmac('sha256', $user['user_password'] . cot::$sys['now'], cot::$cfg['secret_key']);
+        $update_sid = ", user_sid = " . cot::$db->quote($sid) . ", user_sidtime = " . cot::$sys['now'];
+    }
+
+    cot::$db->query("UPDATE ".cot::$db->users." SET user_lastip='".cot::$usr['ip']."', user_lastlog = ".cot::$sys['now'].
+        ", user_logcount = user_logcount + 1, user_token = ".cot::$db->quote($token).
+        " $update_sid WHERE user_id={$user['user_id']}");
+
+
+    // Hash the sid once more so it can't be faked even if you  know user_sid
+    $sid = hash_hmac('sha1', $sid, cot::$cfg['secret_key']);
+    $u = base64_encode($user['user_id'].':'.$sid);
+
+    /* === Hook === */
+    foreach (cot_getextplugins('users.authorize') as $pl)
+    {
+        include $pl;
+    }
+    /* ===== */
+
+    if($remember)
+    {
+        cot_setcookie(cot::$sys['site_id'], $u, time()+ cot::$cfg['cookielifetime'], cot::$cfg['cookiepath'],
+            cot::$cfg['cookiedomain'], cot::$sys['secure'], true);
+        unset($_SESSION[cot::$sys['site_id']]);
+    }
+    else
+    {
+        $_SESSION[cot::$sys['site_id']] = $u;
+    }
+
+    /* === Hook === */
+    foreach (cot_getextplugins('users.authorize.done') as $pl)
+    {
+        include $pl;
+    }
+    /* ===== */
+
+    return true;
+}
+
 /*
  * =========================== Output forming functions ===========================
  */

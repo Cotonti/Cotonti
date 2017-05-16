@@ -21,8 +21,8 @@ require_once $cfg['system_dir'] . '/common.php';
 
 require_once cot_langfile('users', 'core');
 
-$logout = cot_import('out', 'G', 'BOL');
 
+$logout = cot_import('out', 'G', 'BOL');
 if ($logout)
 {
 	// Perform logout
@@ -35,28 +35,29 @@ if ($logout)
 	}
 	/* ===== */
 
-	if ($usr['id'] > 0)
+	if (cot::$usr['id'] > 0)
 	{
 		cot_uriredir_apply($cfg['redirbkonlogout']);
 	}
 
-	if(cot_import($sys['site_id'], 'COOKIE', 'TXT'))
+	if(cot_import(cot::$sys['site_id'], 'COOKIE', 'TXT'))
 	{
-		cot_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+		cot_setcookie(cot::$sys['site_id'], '', time()-63072000, cot::$cfg['cookiepath'],
+            cot::$cfg['cookiedomain'], cot::$sys['secure'], true);
 	}
 
 	session_unset();
 	session_destroy();
 
-	if ($usr['id'] > 0)
+	if (cot::$usr['id'] > 0)
 	{
-		$db->update($db_users, array('user_lastvisit' => $sys['now']), "user_id = " . $usr['id']);
+        cot::$db->update(cot::$db->users, array('user_lastvisit' => cot::$sys['now']), "user_id = " . cot::$usr['id']);
 
 		$all = cot_import('all', 'G', 'BOL');
 		if ($all)
 		{
 			// Log out on all devices
-			$db->update($db_users, array('user_sid' => ''), "user_id = " . $usr['id']);
+            cot::$db->update(cot::$db->users, array('user_sid' => ''), "user_id = " . cot::$usr['id']);
 		}
 
 		cot_uriredir_redirect(empty($redirect) ? cot_url('index') : base64_decode($redirect));
@@ -127,7 +128,8 @@ if ($a == 'check')
 	 * Sets user selection criteria for authentication. Override this string in your plugin
 	 * hooking into users.auth.check.query to provide other authentication methods.
 	 */
-	$user_select_condition = (!$validating) ? "user_password=".$db->quote($rmdpass)." AND $login_param=".$db->quote($rusername) : "user_lostpass=".$db->quote($v);
+	$user_select_condition = (!$validating) ? "user_password=".cot::$db->quote($rmdpass)." AND $login_param=".
+        cot::$db->quote($rusername) : "user_lostpass=".cot::$db->quote($v);
 
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.auth.check.query') as $pl)
@@ -136,7 +138,7 @@ if ($a == 'check')
 	}
 	/* ===== */
 
-	$sql = $db->query("SELECT user_id, user_name, user_token, user_regdate, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
+	$sql = cot::$db->query("SELECT user_id, user_name, user_token, user_regdate, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
 
 	/* 	Checking if we got any entries with the current login conditions,
 		only may fail when user name has e-mail format or user is not registered,
@@ -145,43 +147,47 @@ if ($a == 'check')
 	if ( $sql->rowCount() == 0 )
 	{
 		// If login has e-mail format, try to find it as user_name
-		$user_select_condition = "user_password=".$db->quote($rmdpass)." AND user_name=".$db->quote($rusername);
+		$user_select_condition = "user_password=".cot::$db->quote($rmdpass)." AND user_name=".cot::$db->quote($rusername);
 
 		// Query the database
-		$sql = $db->query("SELECT user_id, user_name, user_token, user_regdate, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
+		$sql = cot::$db->query("SELECT user_id, user_name, user_token, user_regdate, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
 	}
 	if ($row = $sql->fetch())
 	{
 		$rusername = $row['user_name'];
 
 		// Checking to make sure user doesn't game the free login from
-		if($validating && ($row['user_maingrp']!=4 || $sys['now']>($row['user_regdate']+172800) || $token!=$row['user_token']))
+		if($validating && ($row['user_maingrp'] != COT_GROUP_MEMBERS ||
+                cot::$sys['now'] > ($row['user_regdate'] + 172800) || $token != $row['user_token']))
 		{
-			$env['status'] = '403 Forbidden';
+            cot::$env['status'] = '403 Forbidden';
 			cot_log('Failed user validation login attempt : '.$rusername, 'usr');
 			cot_redirect(cot_url('message', 'msg=157', '', true));
 		}
-		if ($row['user_maingrp']==-1)
+		if ($row['user_maingrp'] == -1)
 		{
-			$env['status'] = '403 Forbidden';
+            cot::$env['status'] = '403 Forbidden';
 			cot_log("Log in attempt, user inactive : ".$rusername, 'usr');
 			cot_redirect(cot_url('message', 'msg=152', '', true));
 		}
-		if ($row['user_maingrp']==2)
+		if ($row['user_maingrp'] == COT_GROUP_INACTIVE)
 		{
-			$env['status'] = '403 Forbidden';
-			cot_log("Log in attempt, user inactive : ".$rusername, 'usr');
-			cot_redirect(cot_url('message', 'msg=152', '', true));
+		    if(!isset(cot::$cfg['users']['inactive_login']) || !cot::$cfg['users']['inactive_login'])
+		    {
+                cot::$env['status'] = '403 Forbidden';
+                cot_log("Log in attempt, user inactive : " . $rusername, 'usr');
+                cot_redirect(cot_url('message', 'msg=152', '', true));
+            }
 		}
-		elseif ($row['user_maingrp']==3)
+        elseif ($row['user_maingrp'] == COT_GROUP_BANNED)
 		{
-			if ($sys['now'] > $row['user_banexpire'] && $row['user_banexpire']>0)
+			if (cot::$sys['now'] > $row['user_banexpire'] && $row['user_banexpire'] > 0)
 			{
-				$sql = $db->update($db_users, array('user_maingrp' => '4'),  "user_id={$row['user_id']}");
+				$sql = cot::$db->update(cot::$db->users, array('user_maingrp' => '4'),  "user_id={$row['user_id']}");
 			}
 			else
 			{
-				$env['status'] = '403 Forbidden';
+                cot::$env['status'] = '403 Forbidden';
 				cot_log("Log in attempt, user banned : ".$rusername, 'usr');
 				cot_redirect(cot_url('message', 'msg=153&num='.$row['user_banexpire'], '', true));
 			}
@@ -196,11 +202,11 @@ if ($a == 'check')
 		$sid = hash_hmac('sha256', $rmdpass . $row['user_sidtime'], $cfg['secret_key']);
 
 		if (empty($row['user_sid']) || $row['user_sid'] != $sid
-			|| $row['user_sidtime'] + $cfg['cookielifetime'] < $sys['now'])
+			|| $row['user_sidtime'] + cot::$cfg['cookielifetime'] < cot::$sys['now'])
 		{
 			// Generate new session identifier
-			$sid = hash_hmac('sha256', $rmdpass . $sys['now'], $cfg['secret_key']);
-			$update_sid = ", user_sid = " . $db->quote($sid) . ", user_sidtime = " . $sys['now'];
+			$sid = hash_hmac('sha256', $rmdpass . cot::$sys['now'], cot::$cfg['secret_key']);
+			$update_sid = ", user_sid = " . cot::$db->quote($sid) . ", user_sidtime = " . cot::$sys['now'];
 		}
 		else
 		{
@@ -209,28 +215,30 @@ if ($a == 'check')
 
 		if($validating)
 		{
-			$update_lostpass = ', user_lostpass='.$db->quote(md5(microtime()));
+			$update_lostpass = ', user_lostpass='.cot::$db->quote(md5(microtime()));
 		}
 		else
 		{
 			$update_lostpass = '';
 		}
 
-		$db->query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now']}, user_logcount = user_logcount + 1, user_token = '$token' $update_lostpass $update_sid WHERE user_id={$row['user_id']}");
+        cot::$db->query("UPDATE ".cot::$db->users." SET user_lastip='".cot::$usr['ip']."', user_lastlog = ".cot::$sys['now'].
+            ", user_logcount = user_logcount + 1, user_token = '$token' $update_lostpass $update_sid WHERE user_id={$row['user_id']}");
 
 		// Hash the sid once more so it can't be faked even if you  know user_sid
-		$sid = hash_hmac('sha1', $sid, $cfg['secret_key']);
+		$sid = hash_hmac('sha1', $sid, cot::$cfg['secret_key']);
 
 		$u = base64_encode($ruserid.':'.$sid);
 
 		if($rremember)
 		{
-			cot_setcookie($sys['site_id'], $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
-			unset($_SESSION[$sys['site_id']]);
+			cot_setcookie(cot::$sys['site_id'], $u, time()+ cot::$cfg['cookielifetime'], cot::$cfg['cookiepath'],
+                cot::$cfg['cookiedomain'], cot::$sys['secure'], true);
+			unset($_SESSION[cot::$sys['site_id']]);
 		}
 		else
 		{
-			$_SESSION[$sys['site_id']] = $u;
+			$_SESSION[cot::$sys['site_id']] = $u;
 		}
 
 		/* === Hook === */
@@ -240,7 +248,7 @@ if ($a == 'check')
 		}
 		/* ===== */
 
-		cot_uriredir_apply($cfg['redirbkonlogin']);
+		cot_uriredir_apply(cot::$cfg['redirbkonlogin']);
 		cot_uriredir_redirect(empty($redirect) ? cot_url('index') : base64_decode($redirect));
 	}
 	else
@@ -267,9 +275,9 @@ foreach (cot_getextplugins('users.auth.main') as $pl)
 }
 /* ===== */
 
-$out['subtitle'] = $L['aut_logintitle'];
-$out['head'] .= $R['code_noindex'];
-require_once $cfg['system_dir'] . '/header.php';
+$out['subtitle'] = cot::$L['aut_logintitle'];
+$out['head'] .= cot::$R['code_noindex'];
+require_once cot::$cfg['system_dir'] . '/header.php';
 $mskin = file_exists(cot_tplfile('login', 'core')) ? cot_tplfile('login', 'core') : cot_tplfile('users.auth', 'module');
 $t = new XTemplate($mskin);
 
@@ -282,12 +290,12 @@ if ($cfg['maintenance'])
 }
 
 $t->assign(array(
-	'USERS_AUTH_TITLE' => $L['aut_logintitle'],
+	'USERS_AUTH_TITLE' => cot::$L['aut_logintitle'],
 	'USERS_AUTH_SEND' => cot_url('login', 'a=check' . (empty($redirect) ? '' : "&redirect=$redirect")),
 	'USERS_AUTH_USER' => cot_inputbox('text', 'rusername', $rusername, array('size' => '12', 'maxlength' => '100')),
 	'USERS_AUTH_PASSWORD' => cot_inputbox('password', 'rpassword', '', array('size' => '12', 'maxlength' => '32')),
 	'USERS_AUTH_REGISTER' => cot_url('users', 'm=register'),
-	'USERS_AUTH_REMEMBER' => $cfg['forcerememberme'] ? $R['form_guest_remember_forced'] : $R['form_guest_remember']
+	'USERS_AUTH_REMEMBER' => cot::$cfg['forcerememberme'] ? cot::$R['form_guest_remember_forced'] : cot::$R['form_guest_remember']
 ));
 
 /* === Hook === */
@@ -300,4 +308,4 @@ foreach (cot_getextplugins('users.auth.tags') as $pl)
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once $cfg['system_dir'] . '/footer.php';
+require_once cot::$cfg['system_dir'] . '/footer.php';

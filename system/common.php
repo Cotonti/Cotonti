@@ -330,11 +330,12 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
 	if ($u_id > 0)
 	{
 		$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $u_id");
-
 		if ($row = $sql->fetch())
 		{
 			if ($u_sid == hash_hmac('sha1', $row['user_sid'], $cfg['secret_key'])
-				&& $row['user_maingrp'] > 3
+				&& ($row['user_maingrp'] > 3 ||
+                    ($row['user_maingrp'] == COT_GROUP_INACTIVE && isset($cfg['users']['inactive_login']) &&
+                        $cfg['users']['inactive_login']))
 				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip'])
 				&& $row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now'])
 			{
@@ -391,6 +392,17 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
 			}
 		}
 	}
+
+    // User can't log in, destroy authorization cookie and session data
+	if($usr['id'] == 0)
+    {
+        if(!empty($csid))
+        {
+            cot_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'],
+                $cfg['cookiedomain'], $sys['secure'], true);
+        }
+        if(isset($_SESSION[$sys['site_id']])) unset($_SESSION[$sys['site_id']]);
+    }
 }
 
 if ($usr['id'] == 0)
