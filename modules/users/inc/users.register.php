@@ -150,8 +150,12 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 		{
 			if ($y == 1)
 			{
-				$sql = cot::$db->update(cot::$db->users, array('user_maingrp' => 4), "user_id='".$row['user_id']."' AND user_lostpass='$v'");
-				$sql = cot::$db->update(cot::$db->groups_users, array('gru_groupid' => 4), "gru_groupid=2 AND gru_userid='".$row['user_id']."'");
+				$sql = cot::$db->update(cot::$db->users, array('user_maingrp' => COT_GROUP_MEMBERS),
+                    "user_id='".$row['user_id']."' AND user_lostpass='$v'");
+				$sql = cot::$db->update(cot::$db->groups_users, array('gru_groupid' => COT_GROUP_MEMBERS),
+                    "gru_groupid=2 AND gru_userid='".$row['user_id']."'");
+
+                $row['user_maingrp'] = COT_GROUP_MEMBERS;
 
 				/* === Hook for the plugins === */
 				foreach (cot_getextplugins('users.register.validate.done') as $pl)
@@ -161,7 +165,7 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 				/* ===== */
 
 				cot_auth_clear($row['user_id']);
-                if(cot::$usr['id'] == 0 && cot::$cfg['users']['register_auto_login']) cot_user_authorize($row['user_id']);
+                if(cot::$usr['id'] == 0 && cot::$cfg['users']['register_auto_login']) cot_user_authorize($row);
                 cot_redirect(cot_url('message', 'msg=106', '', true));
 			}
 			elseif ($y == 0)
