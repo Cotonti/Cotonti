@@ -207,8 +207,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	}
 	/* ===== */
 
-	$sql = $db->query("SELECT c.*, u.* $comments_join_columns
-		FROM $db_com AS c LEFT JOIN $db_users AS u ON u.user_id = c.com_authorid $comments_join_tables
+	$sql = cot::$db->query("SELECT c.*, u.* $comments_join_columns
+		FROM ".cot::$db->com." AS c LEFT JOIN ".cot::$db->users." AS u ON u.user_id = c.com_authorid $comments_join_tables
 		WHERE com_area = ? AND com_code = ? $comments_join_where ORDER BY $comments_order LIMIT ?, ?",
 		array($ext_name, $code, (int) $d, (int) $cfg['plugin']['comments']['maxcommentsperpage']));
 	if ($sql->rowCount() > 0 && $enabled)
@@ -216,6 +216,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		$i = $d;
 		$kk = 0;
 		$totalitems = cot_comments_count($ext_name, $code);
+
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('comments.loop');
 		/* ===== */
@@ -226,32 +227,38 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			$kk++;
 			$com_admin = ($auth_admin) ? cot_rc('comments_code_admin', array(
 					'ipsearch' => cot_build_ipsearch($row['com_authorip']),
-					'delete_url' => cot_confirm_url(cot_url('plug', 'e=comments&a=delete&cat='.$cat.'&id='.$row['com_id'].'&'.cot_xg()), 'comments', 'comments_confirm_delete')
+					'delete_url' => cot_confirm_url(cot_url('plug', 'e=comments&a=delete&cat='.$cat.
+                        '&id='.$row['com_id'].'&'.cot_xg()), 'comments', 'comments_confirm_delete')
 				)) : '';
 
-			$com_text = cot_parse($row['com_text'], $cfg['plugin']['comments']['markup']);
+            $row['user_id'] = (int)$row['user_id'];
 
-			$time_limit = ($sys['now'] < ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE
-				: FALSE;
-            $usr['isowner_com'] = $time_limit && ( ($usr['id'] > 0 && $row['com_authorid'] == $usr['id'] )
-                || ($usr['id'] == 0 && !empty($_SESSION['cot_comments_edit'][$row['com_id']]) && $usr['ip'] == $row['com_authorip']) );
-			$com_gup = $sys['now'] - ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60);
-			$allowed_time = ($usr['isowner_com'] && !$usr['isadmin']) ? ' - '
-				. cot_build_timegap($sys['now'] + $com_gup, $sys['now']) . $L['plu_comgup'] : '';
-			$com_edit = ($auth_admin || $usr['isowner_com']) ? cot_rc('comments_code_edit', array(
+			$com_text = cot_parse($row['com_text'], cot::$cfg['plugin']['comments']['markup']);
+
+			$time_limit = (cot::$sys['now'] < ($row['com_date'] + cot::$cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
+            $usr['isowner_com'] = $time_limit && ( (cot::$usr['id'] > 0 && $row['com_authorid'] == cot::$usr['id'] )
+                || (cot::$usr['id'] == 0 && !empty($_SESSION['cot_comments_edit'][$row['com_id']]) && cot::$usr['ip'] == $row['com_authorip']) );
+			$com_gup = cot::$sys['now'] - ($row['com_date'] + cot::$cfg['plugin']['comments']['time'] * 60);
+			$allowed_time = (cot::$usr['isowner_com'] && !cot::$usr['isadmin']) ? ' - '
+				. cot_build_timegap(cot::$sys['now'] + $com_gup, cot::$sys['now']) . cot::$L['plu_comgup'] : '';
+			$com_edit = ($auth_admin || cot::$usr['isowner_com']) ? cot_rc('comments_code_edit', array(
 					'edit_url' => cot_url('plug', 'e=comments&m=edit&cat='.$cat.'&id='.$row['com_id']),
 					'allowed_time' => $allowed_time
 				)) : '';
 
-            if($row['com_area'] == 'page'){
-                if($usr['id'] == 0 && $usr['isowner_com'] && $cfg['cache_page']) $cfg['cache_page'] = $cfg['cache_index'] = false;
+            if($row['com_area'] == 'page') {
+                if(cot::$usr['id'] == 0 && cot::$usr['isowner_com'] && cot::$cfg['cache_page']) {
+                    cot::$cfg['cache_page'] = cot::$cfg['cache_index'] = false;
+                }
             }
-			$t->assign(array(
+
+            $t->assign(array(
 				'COMMENTS_ROW_ID' => $row['com_id'],
-				'COMMENTS_ROW_ORDER' => $cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
+				'COMMENTS_ROW_ORDER' => cot::$cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
 				'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#c'.$row['com_id']),
-				'COMMENTS_ROW_AUTHOR' => cot_build_user($row['com_authorid'], htmlspecialchars($row['com_author'])),
-				'COMMENTS_ROW_AUTHORID' => $row['com_authorid'],
+				'COMMENTS_ROW_AUTHOR' => cot_build_user($row['user_id'], htmlspecialchars($row['com_author'])),
+				// User can be deleted. So $row['user_id'] should be used here
+				'COMMENTS_ROW_AUTHORID' => $row['user_id'],
 				'COMMENTS_ROW_TEXT' => $com_text,
 				'COMMENTS_ROW_DATE' => cot_date('datetime_medium', $row['com_date']),
 				'COMMENTS_ROW_DATE_STAMP' => $row['com_date'],
@@ -261,7 +268,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 				'COMMENTS_ROW_NUM' => $kk
 			));
 
-				// Extrafields
+			// Extrafields
             if(!empty(cot::$extrafields[cot::$db->com])) {
                 foreach (cot::$extrafields[cot::$db->com] as $exfld) {
 					$tag = mb_strtoupper($exfld['field_name']);
