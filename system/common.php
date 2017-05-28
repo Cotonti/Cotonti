@@ -43,7 +43,7 @@ register_shutdown_function('cot_shutdown');
 
 // Each user has his own timezone preference based on offset from GMT, so all dates are UTC/GMT by default
 date_default_timezone_set('UTC');
-$sys['day'] = @date('Y-m-d');
+$sys['day'] = date('Y-m-d');
 $sys['now'] = time();
 $sys['now_offset'] = $sys['now'];
 $site_id = 'ct'.substr(md5(empty($cfg['site_id']) ? $cfg['mainurl'] : $cfg['site_id']), 0, 16);
