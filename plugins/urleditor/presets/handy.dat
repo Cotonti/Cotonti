@@ -1,3 +1,10 @@
+forums	m=posts&q=&d=	forums/{forums_url_structure()}/post{$d}
+forums	m=posts&q=*	forums/{forums_url_structure()}
+forums	m=posts&id=*	forums/{forums_url_structure()}
+forums	m=topics&s=&d=	forums/{forums_url_structure()}/post{$d}{!$m}
+forums	m=topics&s=*	forums/{forums_url_structure()}{!$m}
+forums	c=*	forums/{$c}
+forums	*	forums
 page	m=*						page?m={$m}
 page	c=system&al=*			{$al}{!$c}
 page	c=all						page
