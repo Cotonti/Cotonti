@@ -41,6 +41,8 @@ if(cot_plugin_active('hiddengroups'))
 $ipsearch = cot_plugin_active('ipsearch');
 
 $out['subtitle'] = $L['WhosOnline'];
+$out['desc'] = $L['Users'].', '.mb_strtolower($L['Guests'].' '.$L['NowOnline'].' '.$sys['domain'].' - '.$L['Online'].' '. $L['Statistics']);
+$out['keywords'] = mb_strtolower($L['WhosOnline'].' '.$L['Guests'].' '.$L['Users'].' '.$sys['domain']);
 
 $join_condition = "LEFT JOIN $db_users AS u ON u.user_id=o.online_userid";
 if($pl_cfg['disable_guests'])
