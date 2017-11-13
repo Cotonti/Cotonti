@@ -78,12 +78,16 @@ if ($cfg['plugin']['tags']['noindex'])
 	$out['head'] .= $R['code_noindex'];
 }
 
+// the tag you are looking for
+$qs_tag = htmlspecialchars(strip_tags($qs));
+// current pagination page for uniqueness of meta tags
+$qs_pag = $L['tags_All'] . ' ' . $sys['domain'] .= empty($dt) ? '' : ' - ' . mb_strtolower($L['Page']) . ' ' . preg_replace("/[^0-9]/", '', $sys['uri_curr']);
 // meta title
-$out['subtitle'] = empty($qs) ? $L['Tags'] : htmlspecialchars(strip_tags($qs)) . ' - ' . mb_strtolower($L['tags_Search_tags']);
+$out['subtitle'] = empty($qs) ? $qs_pag : $L['tags_Search_tags'] . ': ' . $qs_tag;
 // meta descriptions
-$out['desc'] = empty($qs) ? $L['Tags'] : mb_strtolower($L['tags_Search_tags'] . ': ' . strip_tags($qs) . ' - ' . $L['tags_Search_results']);
+$out['desc'] = empty($qs) ? $qs_pag . '. ' . cot_string_truncate($L['tags_Query_hint'], 143, false, true) : $L['tags_Search_tags'] . ' - ' . $qs_tag . '. ' .cot_string_truncate($L['tags_Query_hint'], 143, false, true);
 // meta keywords
-$out['keywords'] = empty($qs) ? $L['Tags'] : mb_strtolower($L['Tag'] . ' ' . strip_tags($qs) . ' ' . $L['tags_Search_tags']);
+$out['keywords'] = empty($qs) ? preg_replace("/\W\s/u", "", mb_strtolower($qs_pag)) : mb_strtolower($qs_tag . ' ' . $L['tags_Search_tags']);
 
 $t->assign(array(
 	'TAGS_ACTION' => cot_url('plug', 'e=tags&a=' . $a),
