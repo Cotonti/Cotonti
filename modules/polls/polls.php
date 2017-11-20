@@ -69,11 +69,17 @@ $ratings = cot_import('ratings', 'G', 'BOL');
 
 if ((int)$id > 0)
 {
-     $out['subtitle'] = $L['Poll'] . ': ' . $db->query("SELECT poll_text FROM $db_polls WHERE poll_id=$id")->fetchColumn();
+     $subtitle = $db->query("SELECT poll_text FROM $db_polls WHERE poll_id=$id")->fetchColumn();
+     
+     $out['subtitle'] = $L['Poll'] . ': ' . $subtitle;
+     $out['desc'] = $L['polls_id_stat_result'].' «'.$subtitle.'» '.$L['polls_id_stat_formed'];
+     $out['keywords'] = preg_replace("/[^\w\s]/ui","", mb_strtolower($out['subtitle']));
 }
 else
 {
      $out['subtitle'] = $L['Polls'];
+     $out['desc'] = $L['polls_meta_desc'];
+     $out['keywords'] = mb_strtolower($L['polls_allpolls']).' '.$sys['domain'];    
 }
 
 /* === Hook === */
