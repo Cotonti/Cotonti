@@ -41,7 +41,13 @@ if($a == 'delete')
 	cot_check_xg();
 	$db->delete($db_ratings, 'rating_code = ' . $db->quote($id));
 	$db->delete($db_rated, 'rated_code = ' . $db->quote($id));
-
+	/* === Hook  === */
+	foreach (cot_getextplugins('admin.ratings.delete.done') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+	
 	cot_message('adm_ratings_already_del');
 }
 
