@@ -18,13 +18,15 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_langfile('hits', 'plug');
 require_once cot_incfile('hits', 'plug');
 
+$timeback_interval = $cfg['plugin']['hits']['timeback'];
+$timeback_interval_str = cot_declension($timeback_interval, $Ls['Days']);
+
 $tt = new XTemplate(cot_tplfile('hits.admin.home', 'plug', true));
 //Show hit stats
-if (!$cfg['plugin']['hits']['disablehitstats'])
+// INFO: `disablehitstats` var not actually defined in setup file now, but may be used (had been set) by another extension 
+if (!$cfg['plugin']['hits']['disablehitstats']) 
 {
-	$timeback_stats = 15;// 15 days
-
-	$sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT ".$timeback_stats);
+	$sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT ".$timeback_interval);
 	while ($row = $sql->fetch())
 	{
 		$year = mb_substr($row['stat_name'], 0, 4);
@@ -51,13 +53,14 @@ if (!$cfg['plugin']['hits']['disablehitstats'])
 		}
 	}
 	$tt->assign('ADMIN_HOME_MORE_HITS_URL', cot_url('admin', 'm=other&p=hits'));
+	$tt->assign('HITS_STAT_HEADER', cot_rc($L['hits_hits'], "days=$timeback_interval_str") );
 	$tt->parse('MAIN.STAT');
 }
 
 //Show activity stats
 if (!$cfg['plugin']['hits']['disableactivitystats'] && cot_module_active('page'))
 {
-	$timeback = $sys['now'] - (7 * 86400);// 7 days
+	$timeback = $sys['now'] - ($timeback_interval * 86400);
 	require_once cot_incfile('page', 'module');
 	$sql = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_regdate > $timeback");
 	$newusers = $sql->fetchColumn();
@@ -101,6 +104,7 @@ if (!$cfg['plugin']['hits']['disableactivitystats'] && cot_module_active('page')
 		'ADMIN_HOME_NEWCOMMENTS' => $newcomments,
 		'ADMIN_HOME_NEWPMS' => $newpms
 	));
+	$tt->assign('ACTIVITY_STAT_HEADER', cot_rc($L['hits_activity'], "days=$timeback_interval_str") );
 	$tt->parse('MAIN.ACTIVITY');
 }
 

@@ -2,7 +2,7 @@
 
 <!-- BEGIN: STAT -->
 	<div class="block">
-		<h3>{PHP.L.hits_hits}</h3>
+		<h3>{HITS_STAT_HEADER}</h3>
 		<table class="cells">
 <!-- BEGIN: ADMIN_HOME_ROW -->
 			<tr>
@@ -23,7 +23,7 @@
 
 <!-- BEGIN: ACTIVITY -->
 	<div class="block">
-		<h3>{PHP.L.hits_activity}</h3>
+		<h3>{ACTIVITY_STAT_HEADER}</h3>
 		<table class="cells">
 			<tr>
 				<td class="width80"><a href="{ADMIN_HOME_NEWUSERS_URL}">{PHP.L.home_newusers}</a></td>

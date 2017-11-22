@@ -34,48 +34,48 @@ foreach (cot_getextplugins('hits.admin.first') as $pl)
 }
 /* ===== */
 
-if($f == 'year' || $f == 'month')
+if ($f == 'year' || $f == 'month')
 {
-    $adminpath[] = array(cot_url('admin', 'm=other&p=hits&f='.$f.'&v='.$v), '('.$v.')');
-    $sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '".$db->prep($v)."%' ORDER BY stat_name DESC");
-
-    while($row = $sql->fetch())
-    {
-        $y = mb_substr($row['stat_name'], 0, 4);
-        $m = mb_substr($row['stat_name'], 5, 2);
-        $d = mb_substr($row['stat_name'], 8, 2);
-        $dat = cot_date('date_full', mktime(0, 0, 0, $m, $d, $y));
-        $hits_d[$dat] = $row['stat_value'];
-    }
+	$adminpath[] = array(cot_url('admin', 'm=other&p=hits&f=' . $f . '&v=' . $v), '(' . $v . ')');
+	$sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '" . $db->prep($v) . "%' ORDER BY stat_name DESC");
+	
+	while ($row = $sql->fetch())
+	{
+		$y = mb_substr($row['stat_name'], 0, 4);
+		$m = mb_substr($row['stat_name'], 5, 2);
+		$d = mb_substr($row['stat_name'], 8, 2);
+		$dat = cot_date('date_full', mktime(0, 0, 0, $m, $d, $y));
+		$hits_d[$dat] = $row['stat_value'];
+	}
 	$sql->closeCursor();
-
-    $hits_d_max = max($hits_d);
-    $ii = 0;
-    /* === Hook - Part1 : Set === */
-    $extp = cot_getextplugins('hits.admin.loop');
-    /* ===== */
-    foreach($hits_d as $day => $hits)
-    {
-        $percentbar = floor(($hits / $hits_d_max) * 100);
-        $tt->assign(array(
-            'ADMIN_HITS_ROW_DAY' => $day,
-            'ADMIN_HITS_ROW_HITS' => $hits,
-            'ADMIN_HITS_ROW_PERCENTBAR' => $percentbar,
-            'ADMIN_HITS_ROW_ODDEVEN' => cot_build_oddeven($ii)
-            ));
-
-        /* === Hook - Part2 : Include === */
-        foreach ($extp as $pl)
-        {
-        	include $pl;
-        }
-        /* ===== */
-
-        $tt->parse('MAIN.YEAR_OR_MONTH.ROW');
-        $ii++;
-    }
-
-    $tt->parse('MAIN.YEAR_OR_MONTH');
+	$hits_d_max = max($hits_d);
+	$ii = 0;
+	/* === Hook - Part1 : Set === */
+	$extp = cot_getextplugins('hits.admin.loop');
+	/* ===== */
+	foreach ($hits_d as $day => $hits)
+	{
+		$percentbar = floor(($hits / $hits_d_max) * 100);
+		$tt->assign(
+			array(
+				'ADMIN_HITS_ROW_DAY' => $day,
+				'ADMIN_HITS_ROW_HITS' => $hits,
+				'ADMIN_HITS_ROW_PERCENTBAR' => $percentbar,
+				'ADMIN_HITS_ROW_ODDEVEN' => cot_build_oddeven($ii)
+			));
+		
+		/* === Hook - Part2 : Include === */
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+		
+		$tt->parse('MAIN.YEAR_OR_MONTH.ROW');
+		$ii ++;
+	}
+	
+	$tt->parse('MAIN.YEAR_OR_MONTH');
 }
 else
 {
@@ -173,7 +173,7 @@ else
 			'ADMIN_HITS_MAXHITS' => sprintf($L['hits_maxhits'], $max_date, $max_hits)
 		));
 	}
-    $tt->parse('MAIN.DEFAULT');
+	$tt->parse('MAIN.DEFAULT');
 }
 
 /* === Hook  === */

@@ -14,10 +14,12 @@ defined('COT_CODE') or die('Wrong URL.');
  */
 
 $L['cfg_adminhits'] = 'Считать посещения администраторов';
-$L['cfg_disableactivitystats'] = 'Не показывать статистику активности за последние 7 дней';
+$L['cfg_timeback'] = 'Период для подсчета статистики';
+$L['cfg_timeback_hint'] = '(в сутках)';
+$L['cfg_disableactivitystats'] = 'Отключить показ данных об активности за период';
 $L['cfg_disableactivitystats_hint'] = '(отображается на главной странице админ-панели)';
 $L['cfg_hit_precision'] = 'Точность оптимизированного счётчика просмотров';
-$L['cfg_hit_precision_hint'] = '';
+$L['cfg_hit_precision_hint'] = '(чем больше значение, тем меньше нагрузка на сервер)';
 
 $L['info_desc'] = 'Простая статистика просмотров &mdash; для небольших сайтов';
 
@@ -31,5 +33,5 @@ $L['hits_byyear'] = 'По годам';
 $L['hits_bymonth'] = 'По месяцам';
 $L['hits_byweek'] = 'По неделям';
 
-$L['hits_hits'] = 'Посещаемость за последние 7 дней';
-$L['hits_activity'] = 'Активность за последние 7 дней';
+$L['hits_hits'] = 'Посещаемость за последние {$days}';
+$L['hits_activity'] = 'Активность за последние {$days}';
