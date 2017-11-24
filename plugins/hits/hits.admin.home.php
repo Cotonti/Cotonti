@@ -18,13 +18,13 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_langfile('hits', 'plug');
 require_once cot_incfile('hits', 'plug');
 
-$timeback_interval = $cfg['plugin']['hits']['timeback'];
+$timeback_interval = $cfg['plugin']['hits']['timeback'] ? $cfg['plugin']['hits']['timeback'] : 7;
 $timeback_interval_str = cot_declension($timeback_interval, $Ls['Days']);
 
 $tt = new XTemplate(cot_tplfile('hits.admin.home', 'plug', true));
 //Show hit stats
-// INFO: `disablehitstats` var not actually defined in setup file now, but may be used (had been set) by another extension 
-if (!$cfg['plugin']['hits']['disablehitstats']) 
+// INFO: `disablehitstats` var not actually defined in setup file now, but may be used (had been set) by another extension
+if (!$cfg['plugin']['hits']['disablehitstats'])
 {
 	$sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT ".$timeback_interval);
 	while ($row = $sql->fetch())
