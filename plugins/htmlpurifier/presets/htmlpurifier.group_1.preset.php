@@ -26,7 +26,6 @@ $htmlpurifier_preset = array(
 	// HTML & Output
 	'HTML.Allowed' => 'strong,em,p,span[style],a[href|title],img[src|alt],blockquote,code,pre,cite,ul,ol,li',
 	'HTML.FlashAllowFullScreen'					=> false,
-	'HTML.MaxImgLength'							=> 1200,
 	'HTML.SafeObject'							=> false,
 	'HTML.Trusted'								=> false,
 	'Output.FlashCompat'						=> false,

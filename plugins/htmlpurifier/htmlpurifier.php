@@ -33,21 +33,36 @@ function htmlpurifier_filter($value, $name)
 		{
 			define('HTMLPURIFIER_PREFIX', $cfg['plugins_dir'] . '/htmlpurifier/lib/standalone');
 			require_once $cfg['plugins_dir'] . '/htmlpurifier/lib/HTMLPurifier.standalone.php';
-
-            $cacheDir = $cfg['cache_dir'] . DIRECTORY_SEPARATOR . 'htmlpurifier';
-            if(!file_exists($cacheDir)) mkdir($cacheDir, 0775, true);
-            $cacheDir = realpath($cacheDir);
+			$cacheDir = $cfg['cache_dir'] . DIRECTORY_SEPARATOR . 'htmlpurifier';
+			if (!file_exists($cacheDir)) mkdir($cacheDir, 0775, true);
+			$cacheDir = realpath($cacheDir);
 
 			$config = HTMLPurifier_Config::createDefault();
-			$config->set('HTML.Doctype', $cfg['plugin']['htmlpurifier']['doctype']);
 			$config->set('HTML.TidyLevel', $cfg['plugin']['htmlpurifier']['tidylevel']);
+
+			// protects theme IDs from duplication 
+			if ('nemesis' == $usr['theme'])
+			{
+				$config->set('Attr.IDBlacklist', array('main','footer','account','powered','magnifer','search','header','nav','slider','front_image'));
+			}
+
+			if ($cfg['plugin']['htmlpurifier']['videoiframe'] && $usr['id'] > 0)
+			{
+				// Allow iframes from:
+				// o YouTube.com
+				// o Vimeo.com
+				$config->set('HTML.SafeIframe', true);
+				$config->set('URI.SafeIframeRegexp', '%^(http:|https:)?//(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/)%');
+			}
+
 			$config->set('URI.Base', COT_ABSOLUTE_URL);
 			$config->set('URI.Host', $sys['domain']);
+
 			if ($cfg['plugin']['htmlpurifier']['rel2abs'])
 			{
 				$config->set('URI.MakeAbsolute', true);
 			}
-            $config->set('Cache.SerializerPath', $cacheDir);
+			$config->set('Cache.SerializerPath', $cacheDir);
 
 			// Load preset
 			if ($usr['id'] > 0)
@@ -71,6 +86,17 @@ function htmlpurifier_filter($value, $name)
 			foreach ($htmlpurifier_preset as $key => $val)
 			{
 				$config->set($key, $val);
+			}
+
+			$doctype = $cfg['plugin']['htmlpurifier']['doctype'];
+
+			if ('HTML5' == $doctype) {
+				// As HTML Purifier still don't have native HTML5 support emulate it with custom config
+				require_once cot_incfile('htmlpurifier','plug','html5');
+			}
+			else
+			{
+				$config->set('HTML.Doctype', $doctype);
 			}
 
 			$purifier = new HTMLPurifier($config);

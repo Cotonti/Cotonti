@@ -28,15 +28,17 @@ $htmlpurifier_preset = array(
 	// HTML & Output
 	'HTML.Allowed'								=> null, // All from HTML Purifier policy
 	'HTML.FlashAllowFullScreen'					=> true,
-	'HTML.MaxImgLength'							=> 1200,
+	'HTML.Nofollow'								=> true,
 	'HTML.SafeObject'							=> true,
 	'HTML.SafeEmbed'							=> true,
 	'HTML.Trusted'								=> true,
 	'Output.FlashCompat'						=> true,
 	'Filter.YouTube'							=> true,
 	// URI
+	// 'URI.AllowedSchemes'						=> array('data' => true, 'http' => true, 'https' => true, 'mailto' => true, 'ftp' => true, 'tel' => true),
 	'URI.DisableExternal'						=> false,
 	'URI.DisableExternalResources'				=> false,
 
-    'Attr.AllowedFrameTargets'                  => array( '_blank', '_self', '_parent', '_top'),
+	'Attr.AllowedFrameTargets'					=> array( '_blank', '_self', '_parent', '_top'),
+	'Attr.EnableID'								=> true, // to allow anchors
 );

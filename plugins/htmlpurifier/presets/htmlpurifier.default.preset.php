@@ -26,7 +26,6 @@ $htmlpurifier_preset = array(
 	// HTML & Output
 	'HTML.Allowed'								=> null, // All from HTML Purifier policy
 	'HTML.FlashAllowFullScreen'					=> false,
-	'HTML.MaxImgLength'							=> 1200,
 	'HTML.SafeObject'							=> true,
 	'HTML.Trusted'								=> false,
 	'Output.FlashCompat'						=> true,
