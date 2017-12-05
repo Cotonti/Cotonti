@@ -19,6 +19,11 @@ defined('COT_CODE') or die('Wrong URL.');
 define('COT_INDEX', true);
 $env['location'] = 'home';
 
+if(cot_module_active('page'))
+{
+  require_once cot_incfile('page', 'module');  
+}
+
 /* === Hook === */
 foreach (cot_getextplugins('index.first') as $pl)
 {
