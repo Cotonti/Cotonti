@@ -205,7 +205,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 		/* =============*/
 
 		cot_message('Deleted');
-		$page_urlp = empty($pag['page_alias']) ? 'c=' . $pag['page_cat'] . "id=$id" : 'c=' . $pag['page_cat'] . 'al=' . $pag['page_alias'];
+		$page_urlp = '&c=' . $pag['page_cat'] . ( empty($pag['page_alias']) ? "&id=$id" : '&al=' . $pag['page_alias'] );
 		cot_redirect(cot_url('page', $page_urlp, '', true));
 	}
 }
