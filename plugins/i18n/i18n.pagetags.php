@@ -43,7 +43,7 @@ if ($i18n_enabled && $i18n_notmain)
 			'CATTITLE' => htmlspecialchars($cat_i18n['title']),
 			'CATPATH' => $catpath,
 			'CATPATH_SHORT' => cot_rc_link(cot_url('page', 'c='.$page_data['page_cat'] . $append_param),
-			htmlspecialchars($cat_i18n['title'])),
+				htmlspecialchars($cat_i18n['title'])),
 			'CATDESC' => htmlspecialchars($cat_i18n['desc']),
 		));
 		if ($admin_rights)
@@ -85,6 +85,7 @@ if ($i18n_enabled && $i18n_notmain)
 			'DESC_OR_TEXT' => !empty($page_data['ipage_desc'])
 				? htmlspecialchars($page_data['page_desc']) : $text,
 			'MORE' => $cutted ? cot_rc_link($page_data['page_pageurl'], $L['ReadMore']) : '',
+			'UPDATED_STAMP' => $page_data['ipage_date'],
 		));
 	}
 
