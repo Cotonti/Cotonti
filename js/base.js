@@ -1,3 +1,9 @@
+function encodeURIfix(str) {
+	// to prevent twice encoding
+	// and fix '[',']' signs to follow RFC3986 (section-3.2.2)
+	return encodeURI(decodeURI(str)).replace(/%5B/g, '[').replace(/%5D/g, ']');
+}
+
 function getBaseHref() {
 	var href = document.getElementsByTagName('base')[0].href;
 	if (href == null) {
@@ -101,17 +107,17 @@ function ajaxSend(settings) {
 	}
 	$.ajax({
 		type: method,
-		url: encodeURI(url),
+		url: encodeURIfix(url),
 		data: data,
 		beforeSend: function() {
 			if (!settings.nonshowloading) $('#' + settings.divId).append('<span style="position:absolute; left:' + ($('#' + settings.divId).width()/2 - 110) + 'px;top:' + ($('#' + settings.divId).height()/2 - 9) + 'px;" class="loading" id="loading"><img src="./images/spinner.gif" alt="loading"/></span>').css('position', 'relative');
 		},
 		success: function(msg) {
 			if (!settings.nonshowloading) $('#loading').remove();
-			if (!settings.nonshowfadein) 
-				$('#' + settings.divId).hide().html(msg).fadeIn(500); 
+			if (!settings.nonshowfadein)
+				$('#' + settings.divId).hide().html(msg).fadeIn(500);
 			else
-				$('#' + settings.divId).html(msg); 
+				$('#' + settings.divId).html(msg);
 			for (var i = 0; i < ajaxSuccessHandlers.length; i++) {
 				if(ajaxSuccessHandlers[i].func)
 					ajaxSuccessHandlers[i].func(msg);
@@ -121,7 +127,7 @@ function ajaxSend(settings) {
 		},
 		error: function(msg) {
 			if (!settings.nonshowloading) $('#loading').remove();
-			if (!settings.nonshowfadein) 
+			if (!settings.nonshowfadein)
 				$('#' + settings.divId).hide().html(msg).fadeIn(500);
 			else
 				$('#' + settings.divId).html(msg);
