@@ -41,7 +41,7 @@ function cot_clear_mark($text, $words)
 				$p_arr[] = $p;
 			}
 		}
-		if (count($p_arr))
+		if (is_array($p_arr) ? count($p_arr) : $p_arr)
 		{
 			sort($p_arr);
 			$text_result = '';
