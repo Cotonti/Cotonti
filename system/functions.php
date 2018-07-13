@@ -2483,9 +2483,13 @@ function cot_imageresize($source, $target='return', $target_width=99999, $target
 	}
 
 	// Avoid loading images there's not enough memory for
-	if (!cot_img_check_memory($source, (int)ceil($target_width * $target_height * 4 / 1048576)))
+	if (function_exists('cot_img_check_memory') && !cot_img_check_memory($source, (int)ceil($target_width * $target_height * 4 / 1048576)))
 	{
 		return ($return) ? null : false;
+	}
+	else
+	{
+		header('Location: ' . $_SERVER['HTTP_REFERER']);
 	}
 
 	$canvas = imagecreatetruecolor($target_width, $target_height);
