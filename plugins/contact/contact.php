@@ -159,7 +159,7 @@ if (!$sent)
     if(!empty(cot::$extrafields[cot::$db->contact])) {
         foreach (cot::$extrafields[cot::$db->contact] as $exfld) {
             $uname = strtoupper($exfld['field_name']);
-            $exfld_val = cot_build_extrafields('rcontact' . $exfld['field_name'], $exfld, $rcontact[$exfld['field_name']]);
+            $exfld_val = cot_build_extrafields('rcontact' . $exfld['field_name'], $exfld, $rcontact['contact_'.$exfld['field_name']]);
             $exfld_title = cot_extrafield_title($exfld, 'contact_');
 
             $t->assign(array(
