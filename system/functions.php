@@ -2144,11 +2144,12 @@ function cot_build_timezone($offset, $withgmt = true, $short = false)
  */
 function cot_build_url($text, $maxlen=64)
 {
+	global $sys;
 	if (!empty($text))
 	{
-		if (mb_strpos($text, 'http://') !== 0)
+		if (mb_strpos($text, $sys['scheme'] . '://') !== 0)
 		{
-			$text='http://'. $text;
+			$text = $sys['scheme'] . '://' . $text;
 		}
 		$text = htmlspecialchars($text);
 		$text = cot_rc_link($text, cot_cutstring($text, $maxlen));
