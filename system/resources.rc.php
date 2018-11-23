@@ -95,12 +95,12 @@ $R['code_rc_css_embed'] = '<style type="text/css">
 /*]]>*/
 </style>';
 $R['code_rc_css_file'] = '<link href="{$url}" type="text/css" rel="stylesheet" />';
-$R['code_rc_js_embed'] = '<script type="text/javascript">
+$R['code_rc_js_embed'] = '<script>
 //<![CDATA[
 {$code}
 //]]>
 </script>';
-$R['code_rc_js_file'] = '<script type="text/javascript" src="{$url}"></script>';
+$R['code_rc_js_file'] = '<script src="{$url}"></script>';
 
 /**
  * Misc
