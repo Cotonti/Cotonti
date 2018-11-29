@@ -691,7 +691,7 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 			{
 				$recommends = '';
 			}
-			if (count($selected_list) > 0)
+			if ((is_array($selected_list) && count($selected_list)) > 0)
 			{
 				$checked = in_array($code, $selected_list);
 			}
