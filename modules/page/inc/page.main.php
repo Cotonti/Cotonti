@@ -131,6 +131,9 @@ if ($pg > 0)
 	$pageurl_params['pg'] = $pg;
 }
 $out['canonical_uri'] = cot_url('page', $pageurl_params);
+if ($out['uri'] != $out['canonical_uri']) {
+cot_die_message(404, true);
+}
 
 $mskin = cot_tplfile(array('page', $cat['tpl']));
 
