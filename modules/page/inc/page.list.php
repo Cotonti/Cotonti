@@ -208,9 +208,6 @@ if (!empty($cfg['page']['cat_' . $c]['metatitle']))
 }
 // Building the canonical URL
 $out['canonical_uri'] = cot_url('page', $pageurl_params);
-if ($out['uri'] != $out['canonical_uri']) {
-    cot_die_message(404, true);
-}
 
 $_SESSION['cat'] = $c;
 
