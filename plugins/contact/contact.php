@@ -17,7 +17,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (!empty($cot_captcha))
 {
-	if (!function_exists(cot_captcha_generate))
+	if (!function_exists('cot_captcha_generate'))
 	{
 
 		function cot_captcha_generate($func_index = 0)
@@ -32,7 +32,7 @@ if (!empty($cot_captcha))
 		}
 
 	}
-	if (!function_exists(cot_captcha_validate))
+	if (!function_exists('cot_captcha_validate'))
 	{
 
 		function cot_captcha_validate($verify = 0, $func_index = 0)
