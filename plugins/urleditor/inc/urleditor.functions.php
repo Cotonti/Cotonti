@@ -140,6 +140,9 @@ function cot_apply_rwr()
 			{
 				// Is a category
 				$_GET['c'] = $path[$last];
+				if ($rwr !== cot_url($ext, array('c' => $_GET['c']))) {
+					cot_die_message(404, true);
+				}
 			}
 			else
 			{
@@ -158,6 +161,11 @@ function cot_apply_rwr()
 					if ($count == 2 && !isset(cot::$structure[$ext][$_GET['c']]))
 						$_GET['c'] = $path[$last];
 					$_GET['al'] = $path[$last];
+				}
+				if (!empty($_GET['id'] || $_GET['al']) && $_GET['c']) {
+					if ($rwr !== cot_url($ext, array('c' => $_GET['c'], !empty($_GET['al']) ? 'al' : 'id' => $path[$last]))) {
+						cot_die_message(404, true);
+					}
 				}
 			}
 		}
