@@ -141,6 +141,7 @@ function cot_apply_rwr()
 				// Is a category
 				$_GET['c'] = $path[$last];
 				if ($rwr !== cot_url($ext, array('c' => $_GET['c']))) {
+					cot_url_usertheme_files();
 					cot_die_message(404, true);
 				}
 			}
@@ -164,6 +165,7 @@ function cot_apply_rwr()
 				}
 				if (!empty($_GET['id'] || $_GET['al']) && $_GET['c']) {
 					if ($rwr !== cot_url($ext, array('c' => $_GET['c'], !empty($_GET['al']) ? 'al' : 'id' => $path[$last]))) {
+						cot_url_usertheme_files();
 						cot_die_message(404, true);
 					}
 				}
@@ -395,4 +397,26 @@ function cot_url_username(&$params, $spec)
 	$name = rawurlencode($params['u']);
 	unset($params['m'], $params['id'], $params['u']);
 	return $name;
+}
+
+/**
+ * User theme resources ang lang FILES include if exists
+ */
+function cot_url_usertheme_files()
+{
+    global $L, $R, $cfg;
+    $path = cot::$cfg['themes_dir'].'/'.cot::$usr['theme'].'/'.cot::$usr['theme'];
+    $usr_theme_resources = $path.'.resources.php';
+    $usr_theme_lang = $path.'.'.cot::$usr['profile']['user_lang'].'.lang.php';
+    $usr_theme_lang_default = $path.'.'.cot::$cfg['defaultlang'].'.lang.php';
+
+    if (@file_exists($usr_theme_resources)) {
+        include_once cot_rc($usr_theme_resources);
+    }
+    if (@file_exists($usr_theme_lang)) {
+        include_once cot_rc($usr_theme_lang);
+    } elseif (@file_exists($usr_theme_lang_default)) {
+        include_once cot_rc($usr_theme_lang_default);
+    }
+    unset($path, $usr_theme_resources, $usr_theme_lang, $usr_theme_lang_default);
 }
