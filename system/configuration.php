@@ -734,7 +734,7 @@ function cot_config_import($name, $source='POST', $filter='NOC', $defvalue=null)
 		$not_filtered = cot_import($var_name, $source, 'NOC');
 		$value = cot_import($var_name, $source, $filter_type);
 		// addition filtering by varname
-		if (sizeof($cot_import_filters[$var_name]))
+		if (is_array($cot_import_filters[$var_name]) && sizeof($cot_import_filters[$var_name]))
 		{
 			$value = cot_import($value, 'DIRECT', $var_name);
 		}
