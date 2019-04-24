@@ -91,6 +91,8 @@ if ($cfg['plugin']['tags']['pages'])
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 
 	$t->assign('LIST_TAG_CLOUD', $tc_html);
+	
+	$limit = (int) $cfg['plugin']['tags']['lim_pages'];
 	if ($cfg['plugin']['tags']['more'] && $limit > 0 && $tag_count == $limit)
 	{
 		$t->assign('LIST_TAG_CLOUD_ALL_LINK',
