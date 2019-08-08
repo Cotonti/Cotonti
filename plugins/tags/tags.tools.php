@@ -100,9 +100,14 @@ elseif ($action == $L['Edit'])
 		include $pl;
 	}
 	/* ===== */
-	$db->update($db_tags, array("tag" => htmlspecialchars($tag)), "tag='".$db->prep($old_tag)."'");
-	$db->update($db_tag_references, array("tag" => htmlspecialchars($tag)), "tag='".$db->prep($old_tag)."'");
-	$adminwarnings = ($sql) ? cot_message('adm_tag_already_edit') : $L['Error'];
+
+	if (cot_tag_exists($tag)) {
+		cot_message('adm_tag_already exists', 'warning');
+	}else{
+		$db->update($db_tags, array("tag" => htmlspecialchars($tag)), "tag='".$db->prep($old_tag)."'");
+		$db->update($db_tag_references, array("tag" => htmlspecialchars($tag)), "tag='".$db->prep($old_tag)."'");
+		$adminwarnings = ($sql) ? cot_message('adm_tag_already_edit') : $L['Error'];
+	}
 }
 elseif (!empty($tag))
 {
@@ -229,4 +234,3 @@ cot_display_messages($tt);
 
 $tt->parse('MAIN');
 $adminmain = $tt->text('MAIN');
-

@@ -41,6 +41,7 @@ $L['tags_length'] = 'Length';
 $L['adm_tag_item_area'] = 'Elements tag';
 $L['adm_tag_already_del'] = 'Tag removed';
 $L['adm_tag_already_edit'] = 'Tag edited';
+$L['adm_tag_already exists'] = 'Tag already exists';
 
 /**
  * Plugin Config
