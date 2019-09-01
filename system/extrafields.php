@@ -175,11 +175,13 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 		case 'range':
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
 			$import = cot_import($inputname, $source, 'INT');
+                        
+                        list($min, $max) = explode(",", $extrafield['field_params'], 2);
+                        $min = (int) $min;
+                        $max = (int) $max;
+                        
 			if (!is_null($import) && !empty($extrafield['field_params']))
 			{
-				list($min, $max) = explode(",", $extrafield['field_params'], 2);
-				$min = (int) $min;
-				$max = (int) $max;
 				if ($import < $min || $import > $max)
 				{
                     $errMsg = (isset($L['field_range_' . $extrafield['field_name']])) ?
@@ -187,6 +189,16 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 					cot_error($errMsg, $inputname);
 				}
 			}
+                        
+                        if(is_null($import))
+                        {
+                            $import = ($extrafield['field_type'] == 'inputint' || !empty($extrafield['field_default'])) ? (int)$extrafield['field_default'] : '';
+                         
+                            if(is_numeric($import) && !empty($extrafield['field_params'])){
+                                    if($import < $min)$import = $min;
+                                    if($import > $max)$import = $max;
+                            }
+                        }
 			break;
 
 		case 'currency':
@@ -197,11 +209,14 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 			{
 				$import = floatval($import);
 			}
+                        
+                        list($min, $max) = explode(",",$extrafield['field_params'], 2);
+                        $min = (int) $min;
+                        $max = (int) $max;
+                        
 			if (!is_null($import) && !empty($extrafield['field_params']))
 			{
-				list($min, $max) = explode(",",$extrafield['field_params'], 2);
-				$min = (int) $min;
-				$max = (int) $max;
+
 				if ($import < $min || $import > $max)
 				{
                     $errMsg = (isset($L['field_range_' . $extrafield['field_name']])) ?
@@ -209,6 +224,16 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
                     cot_error($errMsg, $inputname);
 				}
 			}
+                        
+                        if(is_null($import))
+                        {
+                            $import =  !empty($extrafield['field_default']) ? floatval($extrafield['field_default']) : floatval(0);
+                
+                            if(is_numeric($import) && !empty($extrafield['field_params'])){
+                                    if($import < $min)$import = $min;
+                                    if($import > $max)$import = $max;
+                            }
+                        }
 			break;
 
 		case 'textarea':
@@ -249,10 +274,19 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 					$import=mktime($s_hour, $s_minute, 0, $s_month, $s_day, $max);
 				}
 			}
+                        if (is_null($import))
+                        {
+                            $import = 0;
+                        }  
 			break;
 
 		case 'country':
 			$import = cot_import($inputname, $source,'ALP');
+                        if($extrafield['field_required'] && $import == '00')
+                        {
+                            $import = null;
+                        }
+
 			break;
 
 		case 'checklistbox':
@@ -306,7 +340,7 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 				include $pl;
 			}
 			/* ===== */
-
+                        
 			if (is_array($import) && !$import['error'] && !empty($import['name']))
 			{
 				$fname = mb_substr($import['name'], 0, mb_strrpos($import['name'], '.'));
@@ -386,7 +420,7 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 			break;
 	}
 
-	if ((is_null($import) || $import === '') && $extrafield['field_required'])
+	if ((is_null($import) || $import === '' || ($extrafield['field_type'] == 'datetime' && $import == 0)) && $extrafield['field_required'])
 	{
 		$msg = (isset(cot::$L['field_required_' . $extrafield['field_name']])) ? cot::$L['field_required_' . $extrafield['field_name']] :
             cot::$L['field_required'].': '.$exfld_title;
@@ -659,7 +693,7 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 		case 'double': $sqltype = "DOUBLE DEFAULT '0'";
 			break;
 		case 'checklistbox':
-		case 'textarea': $sqltype = "TEXT DEFAULT ''";
+		case 'textarea': $sqltype = "TEXT";
 			break;
 		case 'checkbox': $sqltype = 'TINYINT(1) UNSIGNED'; //'BOOL';
 			break;
@@ -771,7 +805,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 		case 'double': $sqltype = "DOUBLE DEFAULT '0'";
 			break;
 		case 'checklistbox':
-		case 'textarea': $sqltype = "TEXT DEFAULT ''";
+		case 'textarea': $sqltype = "TEXT";
 			break;
 		case 'checkbox': $sqltype = 'TINYINT(1) UNSIGNED'; //'BOOL';
 			break;
