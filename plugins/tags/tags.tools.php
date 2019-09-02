@@ -9,6 +9,13 @@ Hooks=tools
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'tags');
 cot_block($usr['isadmin']);
 
+$isused = cot_import('isused', 'G', 'TXT');
+$is_used_prefix = null;
+
+if(!empty($isused) && $isused === 'unused'){
+	$is_used_prefix = '&isused='.$isused;
+}
+
 require_once cot_incfile('tags', 'plug');
 
 $tt = new XTemplate(cot_tplfile('tags.tools', 'plug', true));
@@ -132,13 +139,22 @@ if (cot_module_active('forums'))
 }
 
 $totalitems = $db->query("SELECT distinct(tag) FROM $db_tag_references AS t WHERE 1 ".$admin_tags_join_where)->rowCount();//$totalitems = $db->countRows($db_tags);
-$pagenav = cot_pagenav('admin', 'm=other&p=tags&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
+if (!is_null($is_used_prefix)) {
+    $sql_string = "SELECT t.* FROM $db_tags AS t LEFT JOIN $db_tag_references AS tr ON (t.tag=tr.tag) WHERE tr.tag IS NULL";
+
+    $sql = $db->query($sql_string." LIMIT $d, ".$cfg['maxrowsperpage']);
+    $totalitems = $db->query($sql_string)->rowCount();
+    unset($sql_string);
+} else {
 $sql = $db->query("SELECT t.*,COUNT(*) AS tag_cnt, GROUP_CONCAT(t.tag_area,':',t.tag_item SEPARATOR ',') AS tag_grp $admin_tags_join_fields
 	FROM $db_tag_references AS t $admin_tags_join_tables
 	WHERE 1 $admin_tags_join_where
 	GROUP BY t.tag
 	ORDER BY $admin_tags_join_sorttype $sortway LIMIT $d, ".$cfg['maxrowsperpage']);
+}
+
+$pagenav = cot_pagenav('admin', 'm=other&p=tags'.$is_used_prefix.'&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */

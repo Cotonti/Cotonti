@@ -26,6 +26,7 @@ $L['plu_title'] = 'Tags';
  */
 
 $L['tags_All'] = 'All tags';
+$L['tags_All_unused'] = 'Unused tags';
 $L['tags_comma_separated'] = 'comma separated';
 $L['tags_Found_in_forums'] = 'Found in forums';
 $L['tags_Found_in_pages'] = 'Found in pages';

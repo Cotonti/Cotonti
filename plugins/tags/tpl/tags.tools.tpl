@@ -10,10 +10,15 @@
 				});
 			});
 		</script>
-		<h2>{PHP.L.tags_All}</h2>
+		<h2><!-- IF {PHP.is_used_prefix} -->{PHP.L.tags_All_unused}<!-- ELSE -->{PHP.L.tags_All}<!-- ENDIF --></h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
 			<div class="block button-toolbar">
 				<a title="{PHP.L.Configuration}" href="{ADMIN_TAGS_CONFIG_URL}" class="button">{PHP.L.Configuration}</a>
+				<!-- IF {PHP.is_used_prefix} -->
+				<a href="{ADMIN_TAGS_FORM_ACTION}" class="button">{PHP.L.tags_All}</a>
+				<!-- ELSE -->
+				<a href="{ADMIN_TAGS_FORM_ACTION}&amp;isused=unused" class="button">{PHP.L.tags_All_unused}</a>
+				<!-- ENDIF -->
 			</div>
 			<h3>{PHP.L.viewdeleteentries}:</h3>
 			<table class="cells">
@@ -48,7 +53,7 @@
 						</div>
 					</td>
 					<td class="centerall action">
-						<form name="tagedit{PHP.ii}" action="{ADMIN_TAGS_FORM_ACTION}" method="post">
+						<form name="tagedit{PHP.ii}" action="{ADMIN_TAGS_FORM_ACTION}{PHP.is_used_prefix}" method="post">
 							<input name="old_tag" type="hidden" value="{ADMIN_TAGS_CODE|htmlspecialchars($this)}" />
 							<input name="d" type="hidden" value="{PHP.d}" />
 							<input name="sorttype" type="hidden" value="{PHP.sorttype}" />

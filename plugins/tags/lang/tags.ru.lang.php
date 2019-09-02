@@ -26,6 +26,7 @@ $L['plu_title'] = 'Теги';
  */
 
 $L['tags_All'] = 'Все теги';
+$L['tags_All_unused'] = 'Неиспользуемые теги';
 $L['tags_comma_separated'] = 'разделяя запятой';
 $L['tags_Found_in_forums'] = 'Найдено в форумах';
 $L['tags_Found_in_pages'] = 'Найдено на страницах';
