@@ -227,7 +227,7 @@ switch($a)
 			$info['Version'] = $row['ct_version'];
 		}
 
-		$ext_info = cot_get_extensionparams($code, true);
+		$ext_info = cot_get_extensionparams($code, $is_module);
 		$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$arg=$code"), $ext_info['name']);
 
 		$isinstalled = cot_extension_installed($code);
