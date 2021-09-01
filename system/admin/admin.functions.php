@@ -111,34 +111,31 @@ function cot_stringinfile($file, $str, $maxsize=32768)
 function cot_get_extensionparams($code, $is_module = false)
 {
 	global $cfg, $cot_modules, $cot_plugins_enabled;
-	$dir = $is_module ? $cfg['modules_dir'] : $cfg['plugins_dir'];
 
-	if($is_module)
-	{
-		$name = $cot_modules[$code]['title'];
-	}
-	else
-	{
-		$name = $cot_plugins_enabled[$code]['title'];
+	$dir = $is_module ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir'];
+
+	if($is_module) {
+        if(isset($cot_modules[$code])) $name = $cot_modules[$code]['title'];
+
+	} else {
+	    if(isset($cot_plugins_enabled[$code])) $name = $cot_plugins_enabled[$code]['title'];
 	}
 
-	if(empty($name))
-	{
+    $desc = '';
+
+	if(empty($name)) {
 		$ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
 		$exists = file_exists($ext_info);
-		if ($exists)
-		{
+		if ($exists) {
 			$info = cot_infoget($ext_info, 'COT_EXT');
-			if (!$info && cot_plugin_active('genoa'))
-			{
+			if (!$info && cot_plugin_active('genoa')) {
 				// Try to load old format info
 				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
 			}
-			$name = $info['Name'];
-			$desc = $info['Desc'];
-		}
-		else
-		{
+			$name = isset($info['Name']) ? $info['Name'] : '';
+			$desc = isset($info['Desc']) ? $info['Desc'] : '';
+
+		} else {
 			$info = array(
 				'Name' => $code
 			);
@@ -149,11 +146,10 @@ function cot_get_extensionparams($code, $is_module = false)
 	$icon = file_exists($icofile) ? $icofile : '';
 
 	$langfile = cot_langfile($code, $is_module ? 'module' : 'plug');
-	if (file_exists($langfile))
-	{
+	if (file_exists($langfile)) {
 		include $langfile;
-		if (!empty($L['info_name'])) $name = $L['info_name'];
-		if (!empty($L['info_desc'])) $desc = $L['info_desc'];
+		if (!empty(cot::$L['info_name'])) $name = cot::$L['info_name'];
+		if (!empty(cot::$L['info_desc'])) $desc = cot::$L['info_desc'];
 	}
 
 	return array(

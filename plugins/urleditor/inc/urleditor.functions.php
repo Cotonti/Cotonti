@@ -163,7 +163,7 @@ function cot_apply_rwr()
 						$_GET['c'] = $path[$last];
 					$_GET['al'] = $path[$last];
 				}
-				if (!empty($_GET['id'] || $_GET['al']) && $_GET['c']) {
+                if ((!empty($_GET['id']) || !empty($_GET['al'])) && !empty($_GET['c'])) {
 					if ($rwr !== cot_url($ext, array('c' => $_GET['c'], !empty($_GET['al']) ? 'al' : 'id' => $path[$last]))) {
 						cot_url_usertheme_files();
 						cot_die_message(404, true);

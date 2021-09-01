@@ -556,8 +556,9 @@ else
 		// flush post buffer if it contains Update Table data
 		$uri = str_replace('&_ajax=1', '', $_SERVER['REQUEST_URI']);
 		$hash = md5($uri);
-		if (is_array($_SESSION['cot_buffer'][$hash]['rstructurecode']))
-			unset($_SESSION['cot_buffer'][$hash]);
+		if (isset($_SESSION['cot_buffer']) && isset($_SESSION['cot_buffer'][$hash]) && is_array($_SESSION['cot_buffer'][$hash]['rstructurecode'])) {
+            unset($_SESSION['cot_buffer'][$hash]);
+        }
 
 		$t->assign(array(
 			'ADMIN_STRUCTURE_URL_FORM_ADD' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=add&d='.$durl),

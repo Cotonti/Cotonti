@@ -136,7 +136,8 @@ foreach (cot_getextplugins('users.query') as $pl)
 	include $pl;
 }
 /* ===== */
-
+if(!isset($join_condition)) $join_condition = '';
+if(!isset($join_columns)) $join_columns = '';
 $totalusers = $db->query(
 	"SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where)
 )->fetchColumn();

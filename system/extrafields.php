@@ -653,7 +653,7 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
         }
 
 		preg_match("#.*?_$name$#", $column, $match);
-		if ($match[1] != "" && !$noalter)
+		if (isset($match[1]) && $match[1] != "" && !$noalter)
 		{
 			return false; // No adding - fields already exist
 		}

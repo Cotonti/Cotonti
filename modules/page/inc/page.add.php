@@ -14,7 +14,7 @@ require_once cot_incfile('forms');
 $id = cot_import('id', 'G', 'INT');
 $c = cot_import('c', 'G', 'TXT');
 
-if (!empty($c) && !isset($structure['page'][$c]))
+if (!empty($c) && !isset(cot::$structure['page'][$c]))
 {
 	$c = '';
 }
@@ -64,12 +64,10 @@ if ($a == 'add')
 	}
 	/* ===== */
 
-	if (!cot_error_found())
-	{
+	if (!cot_error_found()) {
 		$id = cot_page_add($rpage, $usr);
 
-		switch ($rpage['page_state'])
-		{
+		switch ($rpage['page_state']) {
 			case 0:
 				$urlparams = empty($rpage['page_alias']) ?
 					array('c' => $rpage['page_cat'], 'id' => $id) :
@@ -85,20 +83,31 @@ if ($a == 'add')
 				break;
 		}
 		cot_redirect($r_url);
-	}
-	else
-	{
+
+	} else {
         $urlParams = array('m' => 'add');
 	    if(!empty($c)) $urlParams['c'] = $c;
 		cot_redirect(cot_url('page', $urlParams, '', true));
 	}
 }
 
+$rpage = array(
+    'page_keywords' => '',
+    'page_metatitle' => '',
+    'page_metadesc' => '',
+    'page_alias' => '',
+    'page_title' => '',
+    'page_desc' => '',
+    'page_author' => '',
+    'page_file' => '',
+    'page_url' => '',
+    'page_size' => '',
+    'page_text' => '',
+);
+
 // Page cloning support
 $clone = cot_import('clone', 'G', 'INT');
-$rpage = array();
-if ($clone > 0)
-{
+if ($clone > 0) {
 	$rpage = cot::$db->query("SELECT * FROM ".cot::$db->pages." WHERE page_id = ?", $clone)->fetch();
 }
 
@@ -112,9 +121,8 @@ if (!empty($rpage['page_cat'])) {
 
     cot::$sys['sublocation'] = cot::$structure['page'][$rpage['page_cat']]['title'];
     $mskin = cot_tplfile(array('page', 'add', cot::$structure['page'][$rpage['page_cat']]['tpl']));
-}
-else
-{
+
+} else {
     if(!cot::$usr['isadmin']) {
         // User can add page to these categories
         $categories = array();
@@ -139,6 +147,7 @@ else
 }
 
 cot::$out['subtitle'] = cot::$L['page_addsubtitle'];
+if(!isset(cot::$out['head'] )) cot::$out['head']  = '';
 cot::$out['head'] .= cot::$R['code_noindex'];
 
 /* === Hook === */

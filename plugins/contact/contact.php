@@ -1,5 +1,4 @@
 <?php
-
 /* ====================
   [BEGIN_COT_EXT]
   Hooks=standalone
@@ -15,16 +14,12 @@
  */
 defined('COT_CODE') or die('Wrong URL');
 
-if (!empty($cot_captcha))
-{
-	if (!function_exists('cot_captcha_generate'))
-	{
+if (!empty($cot_captcha)) {
+	if (!function_exists('cot_captcha_generate')) {
 
-		function cot_captcha_generate($func_index = 0)
-		{
+		function cot_captcha_generate($func_index = 0) {
 			global $cot_captcha;
-			if (!empty($cot_captcha[$func_index]))
-			{
+			if (!empty($cot_captcha[$func_index])) {
 				$captcha = $cot_captcha[$func_index] . '_generate';
 				return $captcha();
 			}
@@ -32,14 +27,12 @@ if (!empty($cot_captcha))
 		}
 
 	}
-	if (!function_exists('cot_captcha_validate'))
-	{
 
-		function cot_captcha_validate($verify = 0, $func_index = 0)
-		{
+	if (!function_exists('cot_captcha_validate')) {
+
+		function cot_captcha_validate($verify = 0, $func_index = 0) {
 			global $cot_captcha;
-			if (!empty($cot_captcha[$func_index]))
-			{
+			if (!empty($cot_captcha[$func_index])) {
 				$captcha = $cot_captcha[$func_index] . '_validate';
 				return $captcha($verify);
 			}
@@ -54,8 +47,14 @@ $mskin = cot_tplfile(array('contact', $tplfile), 'plug');
 $t = new XTemplate($mskin);
 $rtext = cot_import('rtext', 'P', 'TXT');
 
-if (!empty($rtext))
-{
+$sent = false;
+$rcontact = array(
+    'contact_text' => '',
+    'contact_author' => '',
+    'contact_email' => '',
+    'contact_subject' => '',
+);
+if (!empty($rtext)) {
 	//Import the variables
 	$rcontact['contact_text'] = $rtext;
 	$rcontact['contact_author'] = cot_import('ruser', 'P', 'TXT');
@@ -70,47 +69,39 @@ if (!empty($rtext))
         }
     }
 
-	if (cot::$usr['id'] == 0 && !empty($cot_captcha))
-	{
+	if (cot::$usr['id'] == 0 && !empty($cot_captcha)) {
 		$rverify = cot_import('rverify', 'P', 'TXT');
-		if (!cot_captcha_validate($rverify))
-		{
+		if (!cot_captcha_validate($rverify)) {
 			cot_error('captcha_verification_failed', 'rverify');
 		}
 	}
 
 
-	if ($rcontact['contact_author'] == '')
-	{
+	if ($rcontact['contact_author'] == '') {
 		cot_error('contact_noname', 'ruser');
 	}
-	if (!cot_check_email($rcontact['contact_email']))
-	{
+	if (!cot_check_email($rcontact['contact_email'])) {
 		cot_error('contact_emailnotvalid', 'remail');
 	}
-	if (mb_strlen($rcontact['contact_text']) < cot::$cfg['plugin']['contact']['minchars'])
-	{
+	if (mb_strlen($rcontact['contact_text']) < cot::$cfg['plugin']['contact']['minchars']) {
 		cot_error('contact_entrytooshort', 'rtext');
 	}
 
-	if (!cot_error_found())
-	{
-		$rcontact['contact_authorid'] = (int) $usr['id'];
-		$rcontact['contact_date'] = (int) $sys['now'];
+	if (!cot_error_found()) {
+		$rcontact['contact_authorid'] = (int) cot::$usr['id'];
+		$rcontact['contact_date'] = (int) cot::$sys['now'];
 		$rcontact['contact_val'] = 0;
 
-		if (in_array($cfg['plugin']['contact']['save'], array('db','both')))
-		{
-			$db->insert($db_contact, $rcontact);
+		if (in_array(cot::$cfg['plugin']['contact']['save'], array('db','both'))) {
+            cot::$db->insert($db_contact, $rcontact);
 		}
 
-		$semail = (!empty($cfg['plugin']['contact']['email'])) ? $cfg['plugin']['contact']['email'] : $cfg['adminemail'];
-		if (cot_check_email($semail) && in_array($cfg['plugin']['contact']['save'], array('email','both')))
-		{
+		$semail = (!empty(cot::$cfg['plugin']['contact']['email'])) ? cot::$cfg['plugin']['contact']['email'] : cot::$cfg['adminemail'];
+		if (cot_check_email($semail) && in_array(cot::$cfg['plugin']['contact']['save'], array('email','both'))) {
 			$headers = ("From: \"" . $rcontact['contact_author'] . "\" <" . $rcontact['contact_email'] . ">\n");
 			$context = array(
-				'sitetitle' => $cfg["maintitle"],
-				'siteurl' => $cfg['mainurl'],
+				'sitetitle' => cot::$cfg["maintitle"],
+				'siteurl' => cot::$cfg['mainurl'],
 				'author' => $rcontact['contact_author'],
 				'email' => $rcontact['contact_email'],
 				'subject' => $rcontact['contact_subject'],
@@ -144,8 +135,7 @@ cot::$out['subtitle'] = cot::$L['contact_title'];
 
 cot_display_messages($t);
 
-if (!$sent)
-{
+if (!$sent) {
 	$t->assign(array(
 		'CONTACT_FORM_SEND' => cot_url('plug', 'e=contact&tpl='.$tplfile),
 		'CONTACT_FORM_AUTHOR' => (cot::$usr['id'] == 0) ? cot_inputbox('text', 'ruser', $rcontact['contact_author'], 'size="24" maxlength="24"') :

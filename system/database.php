@@ -22,7 +22,8 @@ defined('COT_CODE') or die('Wrong URL');
  * @property-read int $count Total query count
  * @property-read int $timeCount Total query execution time
  */
-class CotDB extends PDO {
+class CotDB extends PDO
+{
 	/**
 	 * Number of rows affected by the most recent query
 	 * @var int
@@ -182,10 +183,11 @@ class CotDB extends PDO {
 	 */
 	private function _startTimer()
 	{
-		global $cfg;
+        // if config is not loaded yet, save stats just in case
+		$showStats = !isset(cot::$cfg['showsqlstats']) || cot::$cfg['showsqlstats'];
+
 		$this->_count++;
-		if ($cfg['showsqlstats'] || $cfg['debug_mode'])
-		{
+		if ($showStats || cot::$cfg['debug_mode']) {
 			$this->_xtime = microtime();
 		}
 	}
@@ -195,24 +197,25 @@ class CotDB extends PDO {
 	 */
 	private function _stopTimer($query)
 	{
-		global $cfg, $sys;
-		if ($cfg['showsqlstats'] || $cfg['debug_mode'])
-		{
+        // if config is not loaded yet, save stats just in case
+        $showStats = !isset(cot::$cfg['showsqlstats']) || cot::$cfg['showsqlstats'];
+        $devMode = !isset(cot::$cfg['devmode']) || cot::$cfg['devmode'];
+
+		if ($showStats || cot::$cfg['debug_mode']) {
 			$ytime = microtime();
 			$xtime = explode(' ',$this->_xtime);
 			$ytime = explode(' ',$ytime);
 			$this->_tcount += $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0];
-			if ($cfg['devmode'] || $cfg['debug_mode'])
-			{
+			if ($devMode || cot::$cfg['debug_mode']) {
 				$calls = '';
 				$bt = debug_backtrace();
-				for ($i = sizeof($bt)-1; $i > 0; $i--)
-				{
-					$call = (($bt[$i]['object'] && $bt[$i]['class']) ? $bt[$i]['class'].$bt[$i]['type'] : '').$bt[$i]['function'].'();';
+				for ($i = sizeof($bt)-1; $i > 0; $i--) {
+				    $object = !empty($bt[$i]['object']);
+					$call = (($object && $bt[$i]['class']) ? $bt[$i]['class'].$bt[$i]['type'] : '').$bt[$i]['function'].'();';
 					$calls .= (empty($calls)?'':"\n → ").basename($bt[$i]['file']).' ['.$bt[$i]['line'].']: '.$call;
 				}
-				$sys['devmode']['queries'][] = array ($this->_count, $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query, $calls);
-				$sys['devmode']['timeline'][] = $xtime[1] + $xtime[0] - $sys['starttime'];
+                cot::$sys['devmode']['queries'][] = array ($this->_count, $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query, $calls);
+                cot::$sys['devmode']['timeline'][] = $xtime[1] + $xtime[0] - cot::$sys['starttime'];
 			}
 		}
 	}
@@ -546,9 +549,14 @@ class CotDB extends PDO {
 	 * @see http://www.php.net/manual/en/pdo.prepare.php
 	 * @param string $query The SQL statement to prepare and execute.
 	 * @param array $parameters An array of values to be binded as input parameters to the query. PHP int parameters will beconsidered as PDO::PARAM_INT, others as PDO::PARAM_STR.
-	 * @return PDOStatement
+     * @param int $mode Fetch mode. See https://www.php.net/manual/ru/pdo.constants.php
+     *
+     * @param mixed ...$fetch_mode_args Just for compatability with php 8.0. Actually not using
+     * @todo There is an another and more right way. Use composition instead of inheritance.
+     *
+     * @return PDOStatement
 	 */
-	public function query($query, $parameters = array())
+	public function query($query, $parameters = [], $mode = PDO::FETCH_ASSOC, ...$fetch_mode_args)
 	{
 		if (!is_array($parameters))
 		{
@@ -572,7 +580,7 @@ class CotDB extends PDO {
 			}
 			else
 			{
-				$result = parent::query($query);
+				$result = parent::query($query, $mode, ...$fetch_mode_args);
 			}
 		}
 		catch (PDOException $err)
@@ -584,7 +592,7 @@ class CotDB extends PDO {
 		}
 		$this->_stopTimer($query);
 		// In Cotonti we use PDO::FETCH_ASSOC by default to save memory
-		$result->setFetchMode(PDO::FETCH_ASSOC);
+		$result->setFetchMode($mode);
 		$this->_affected_rows = $result->rowCount();
 		return $result;
 	}

@@ -16,47 +16,42 @@ Tags=header.tpl:{HEADER_WHOSONLINE}
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (!defined('WHOSONLINE_UPDATED'))
-{
+if (!defined('WHOSONLINE_UPDATED')) {
 	// Update online track
-	if ($env['location'] != $sys['online_location']
-					|| !empty($sys['sublocation']) && $sys['sublocation'] != $sys['online_subloc'])
-	{
-		if ($usr['id'] > 0)
-		{
-			if (empty($sys['online_location']))
-			{
-				$db->insert($db_online, array(
-								'online_ip' => $usr['ip'],
-								'online_name' => $usr['name'],
-								'online_lastseen' => (int)$sys['now'],
-								'online_location' => $env['location'],
-								'online_subloc' => (string) $sys['sublocation'],
-								'online_userid' => (int)$usr['id'],
-								'online_shield' => 0,
-								'online_hammer' => 0
+    $onlineLocation = isset(cot::$sys['online_location']) ? cot::$sys['online_location'] : null;
+    $subLocation = isset(cot::$sys['sublocation']) ? cot::$sys['sublocation'] : 'null';
+	if (cot::$env['location'] != $onlineLocation || $subLocation != cot::$sys['online_subloc']) {
+		if (cot::$usr['id'] > 0) {
+			if (empty($sys['online_location'])) {
+                cot::$db->insert($db_online, array(
+                    'online_ip' => cot::$usr['ip'],
+                    'online_name' => cot::$usr['name'],
+                    'online_lastseen' => (int)cot::$sys['now'],
+                    'online_location' => cot::$env['location'],
+                    'online_subloc' => (string) $subLocation,
+                    'online_userid' => (int)cot::$usr['id'],
+                    'online_shield' => 0,
+                    'online_hammer' => 0
 				));
+
+			} else {
+			    $onlineHummer = isset(cot::$sys['online_hammer']) ? (int)cot::$sys['online_hammer'] : 0;
+                cot::$db->update($db_online, array(
+                    'online_lastseen' => cot::$sys['now'],
+                    'online_location' => cot::$env['location'],
+                    'online_subloc' => (string) $subLocation,
+                    'online_hammer' => $onlineHummer
+				), "online_userid=".cot::$usr['id']);
 			}
-			else
-			{
-				$db->update($db_online, array(
-								'online_lastseen' => $sys['now'],
-								'online_location' => $env['location'],
-								'online_subloc' => (string) $sys['sublocation'],
-								'online_hammer' => (int)$sys['online_hammer']
-				), "online_userid=".$usr['id']);
-			}
-		}
-		elseif(!$cfg['plugin']['whosonline']['disable_guests'])
-		{
-			if (empty($sys['online_location']))
-			{
-				$db->insert($db_online, array(
-								'online_ip' => $usr['ip'],
+
+		} elseif(!cot::$cfg['plugin']['whosonline']['disable_guests']) {
+			if (empty($sys['online_location'])) {
+				cot::$db->insert($db_online, array(
+								'online_ip' => cot::$usr['ip'],
 								'online_name' => 'v',
-								'online_lastseen' => (int)$sys['now'],
-								'online_location' => $env['location'],
-								'online_subloc' => (string) $sys['sublocation'],
+								'online_lastseen' => (int)cot::$sys['now'],
+								'online_location' => cot::$env['location'],
+								'online_subloc' => (string) cot::$sys['sublocation'],
 								'online_userid' => -1,
 								'online_shield' => 0,
 								'online_hammer' => 0
@@ -64,17 +59,17 @@ if (!defined('WHOSONLINE_UPDATED'))
 			}
 			else
 			{
-				$db->update($db_online, array(
-								'online_lastseen' => $sys['now'],
-								'online_location' => $env['location'],
-								'online_subloc' => (string)$sys['sublocation'],
-								'online_hammer' => (int)$sys['online_hammer']
-				), "online_ip='".$usr['ip']."' AND online_userid < 0");
+				cot::$db->update($db_online, array(
+								'online_lastseen' => cot::$sys['now'],
+								'online_location' => cot::$env['location'],
+								'online_subloc' => (string)cot::$sys['sublocation'],
+								'online_hammer' => (int)cot::$sys['online_hammer']
+				), "online_ip='".cot::$usr['ip']."' AND online_userid < 0");
 			}
 		}
 	}
 
 	// Assign online tag
-	$t->assign('HEADER_WHOSONLINE', $out['whosonline']);
+	$t->assign('HEADER_WHOSONLINE', cot::$out['whosonline']);
 	define('WHOSONLINE_UPDATED', true);
 }

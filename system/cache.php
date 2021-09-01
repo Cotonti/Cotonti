@@ -917,6 +917,13 @@ if (extension_loaded('memcache'))
 		public function get_info()
 		{
 			$info = $this->memcache->getstats();
+			if(empty($info)) {
+			    return array(
+                    'available' => 0,
+                    'max' => 0,
+                    'occupied' => 0
+                );
+            }
 			return array(
 				'available' => $info['limit_maxbytes'] - $info['bytes'],
 				'max' => $info['limit_maxbytes'],

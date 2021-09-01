@@ -27,14 +27,14 @@ cot_extrafields_register_table('users');
  * @param string $email Email address
  * @param string $name User name; defaults to $email if omitted
  * @param string $password Password; randomly generated if omitted
- * @param string $maingrp Custom main grp
+ * @param int $maingrp Custom main grp
  * @param float $sendemail Send email if need activation
  * @return int New user ID or false
  * @global CotDB $db
  */
 function cot_add_user($ruser, $email = null, $name = null, $password = null, $maingrp = null, $sendemail = true)
 {
-	global $db, $db_users, $db_groups_users, $db_x, $L, $R, $uploadfiles;
+	global $db, $db_users, $db_groups_users, $L;
 
 	$ruser['user_email'] = (!empty($email)) ? $email : $ruser['user_email'];
 	$ruser['user_name'] = (!empty($name)) ? $name : $ruser['user_name'];
@@ -55,8 +55,21 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_country'] = (mb_strlen($ruser['user_country']) < 4) ? $ruser['user_country'] : '';
 	$ruser['user_timezone'] = (!$ruser['user_timezone']) ? 'GMT' : $ruser['user_timezone'];
 
-	$ruser['user_maingrp'] = ($db->countRows($db_users) == 0) ? 5 : (cot::$cfg['users']['regnoactivation']) ? 4 : 2;
-	$ruser['user_maingrp'] = (int)$maingrp > 0 ? $maingrp : $ruser['user_maingrp'];
+    $maingrp = (int)$maingrp;
+    if($maingrp > 0) {
+        $tmp2 = $maingrp;
+
+    } elseif(cot::$db->countRows($db_users) == 0) {
+        // There is no users in DB.
+        $tmp2 = COT_GROUP_SUPERADMINS;
+
+    } elseif(cot::$cfg['users']['regnoactivation']) {
+        $tmp2 = COT_GROUP_MEMBERS;
+
+    } else {
+        $tmp2 = COT_GROUP_INACTIVE;
+    }
+
 
 	$ruser['user_passsalt'] = cot_unique(16);
 	$ruser['user_passfunc'] = empty(cot::$cfg['hashfunc']) ? 'sha256' : cot::$cfg['hashfunc'];
@@ -140,16 +153,16 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 	global $db, $db_groups, $db_groups_users, $cot_groups, $L, $usr, $R;
 
 	$memberships = $db->query("SELECT gru_groupid FROM $db_groups_users	WHERE gru_userid = ?", array($userid))->fetchAll();
-	foreach ($memberships as $row)
-	{
+	foreach ($memberships as $row) {
 		$member[$row['gru_groupid']] = TRUE;
 	}
 
 	$res = $R['users_code_grplist_begin'];
-	foreach ($cot_groups as $k => $i)
-	{
-		if ($edit)
-		{
+	foreach ($cot_groups as $k => $i) {
+
+        if(!isset($member[$k])) $member[$k] = FALSE;
+
+		if ($edit) {
 			$checked = ($member[$k]) ? ' checked="checked"' : '';
 			$checked_maingrp = ($maingrp == $k) ? ' checked="checked"' : '';
 			$readonly = ($k == COT_GROUP_GUESTS || $k == COT_GROUP_INACTIVE || $k == COT_GROUP_BANNED
@@ -157,13 +170,11 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 			$readonly_maingrp = ( $k == COT_GROUP_GUESTS || ($k == COT_GROUP_INACTIVE && $userid == 1)
 				|| ($k == COT_GROUP_BANNED && $userid == 1)) ? ' disabled="disabled"' : '';
 		}
-		if ($member[$k] || $edit)
-		{
-			if (!$cot_groups[$k]['hidden'] || cot_auth('users', 'a', 'A'))
-			{
+
+		if ($member[$k] || $edit) {
+			if (!$cot_groups[$k]['hidden'] || cot_auth('users', 'a', 'A')) {
 				$item = '';
-				if ($edit)
-				{
+				if ($edit) {
 					$item .= cot_rc('users_input_grplist_radio', array(
 						'value' => $k,
 						'name' => 'rusermaingrp',
@@ -186,7 +197,8 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 			}
 		}
 	}
-	$res .= $R['users_code_grplist_end'];
+
+	$res .= cot::$R['users_code_grplist_end'];
 	return $res;
 }
 

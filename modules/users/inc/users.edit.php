@@ -271,7 +271,8 @@ $title_params = array(
 	'NAME' => $urr['user_name']
 );
 $out['subtitle'] = cot_title('{EDIT} - {NAME}', $title_params);
-$out['head'] .= $R['code_noindex'];
+if(!isset($out['head'])) $out['head'] = '';
+$out['head'] .= cot::$R['code_noindex'];
 
 $mskin = cot_tplfile(array('users', 'edit', $usr['maingrp']), 'module');
 
@@ -282,7 +283,7 @@ foreach (cot_getextplugins('users.edit.main') as $pl)
 }
 /* ===== */
 
-require_once $cfg['system_dir'] . '/header.php';
+require_once cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($mskin);
 
@@ -302,8 +303,8 @@ $t->assign(array(
 	'USERS_EDIT_SEND' => cot_url('users', 'm=edit&a=update&'.cot_xg().'&id='.$urr['user_id']),
 	'USERS_EDIT_ID' => $urr['user_id'],
 	'USERS_EDIT_NAME' => cot_inputbox('text', 'rusername', $urr['user_name'], array('size' => 32, 'maxlength' => 100) + $protected),
-	'USERS_EDIT_ACTIVE' => $user_form_active,
-	'USERS_EDIT_BANNED' => $user_form_banned,
+	//'USERS_EDIT_ACTIVE' => $user_form_active,   // It seems it is obsolete code
+	//'USERS_EDIT_BANNED' => $user_form_banned,   // It seems it is obsolete code
 	'USERS_EDIT_THEME' => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
 	'USERS_EDIT_LANG' => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	'USERS_EDIT_NEWPASS' => cot_inputbox('password', 'rusernewpass', '', array('size' => 12, 'maxlength' => 32, 'autocomplete' => 'off') + $protected),

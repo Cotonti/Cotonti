@@ -11,16 +11,16 @@ defined('COT_CODE') or die('Wrong URL');
 
 // Environment setup
 define('COT_LIST', TRUE);
-$env['location'] = 'list';
+cot::$env['location'] = 'list';
 
 $s = cot_import('s', 'G', 'ALP'); // order field name without 'page_'
 $w = cot_import('w', 'G', 'ALP', 4); // order way (asc, desc)
 $c = cot_import('c', 'G', 'TXT'); // cat code
 $o = cot_import('ord', 'G', 'ARR'); // filter field names without 'page_'
 $p = cot_import('p', 'G', 'ARR'); // filter values
-$maxrowsperpage = ($cfg['page']['cat_' . $c]['maxrowsperpage']) ? $cfg['page']['cat_' . $c]['maxrowsperpage'] : $cfg['page']['cat___default']['maxrowsperpage'];
+$maxrowsperpage = (cot::$cfg['page']['cat_' . $c]['maxrowsperpage']) ? cot::$cfg['page']['cat_' . $c]['maxrowsperpage'] : cot::$cfg['page']['cat___default']['maxrowsperpage'];
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage); //page number for pages list
-list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', $cfg['page']['maxlistsperpage']);// page number for cats list
+list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', cot::$cfg['page']['maxlistsperpage']);// page number for cats list
 
 if ($c == 'all' || $c == 'system')
 {
@@ -53,24 +53,24 @@ $cat = &$structure['page'][$c];
 
 if (empty($s))
 {
-	$s = $cfg['page']['cat_' . $c]['order'];
+	$s = cot::$cfg['page']['cat_' . $c]['order'];
 }
-$w = empty($w) ? $cfg['page']['cat_' . $c]['way'] : $w;
+$w = empty($w) ? cot::$cfg['page']['cat_' . $c]['way'] : $w;
 
-$s = empty($s) ? $cfg['page']['cat___default']['order'] : $s;
-$w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? $cfg['page']['cat___default']['way'] : $w;
+$s = empty($s) ? cot::$cfg['page']['cat___default']['order'] : $s;
+$w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? cot::$cfg['page']['cat___default']['way'] : $w;
 
 
 $sys['sublocation'] = $cat['title'];
 
-$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
-	$cfg['page']['cat___default']['maxrowsperpage'] :
-	$cfg['page']['cat_' . $c]['maxrowsperpage'];
-$cfg['page']['maxrowsperpage'] = $cfg['page']['maxrowsperpage'] > 0 ? $cfg['page']['maxrowsperpage'] : 1;
+cot::$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
+	cot::$cfg['page']['cat___default']['maxrowsperpage'] :
+	cot::$cfg['page']['cat_' . $c]['maxrowsperpage'];
+cot::$cfg['page']['maxrowsperpage'] = cot::$cfg['page']['maxrowsperpage'] > 0 ? cot::$cfg['page']['maxrowsperpage'] : 1;
 
-$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
-	$cfg['page']['cat___default']['truncatetext'] :
-	$cfg['page']['cat_' . $c]['truncatetext'];
+cot::$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
+	cot::$cfg['page']['cat___default']['truncatetext'] :
+	cot::$cfg['page']['cat_' . $c]['truncatetext'];
 
 $where = array();
 $params = array();
@@ -135,11 +135,11 @@ if (!$db->fieldExists($db_pages, "page_$s"))
 $orderby = "page_$s $w";
 
 $list_url_path = array('c' =>$c, 'ord' => $o, 'p' => $p);
-if ($s != $cfg['page']['cat_' . $c]['order'])
+if ($s != cot::$cfg['page']['cat_' . $c]['order'])
 {
 	$list_url_path['s'] = $s;
 }
-if ($w != $cfg['page']['cat_' . $c]['way'])
+if ($w != cot::$cfg['page']['cat_' . $c]['way'])
 {
 	$list_url_path['w'] = $w;
 }
@@ -157,11 +157,14 @@ if ($dcurl > 1)
 }
 
 $catpatharray = cot_structure_buildpath('page', $c);
-$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ? $cat['title'] : cot_breadcrumbs($catpatharray, $cfg['homebreadcrumb'], true);
+$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ? $cat['title'] : cot_breadcrumbs($catpatharray, cot::$cfg['homebreadcrumb'], true);
 
 $shortpath = $catpatharray;
 array_pop($shortpath);
-$catpath_short = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ? '' : cot_breadcrumbs($shortpath, $cfg['homebreadcrumb']);
+$catpath_short = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ? '' : cot_breadcrumbs($shortpath, cot::$cfg['homebreadcrumb']);
+
+$join_columns = isset($join_columns) ? $join_columns : '';
+$join_condition = isset($join_condition) ? $join_condition : '';
 
 /* === Hook === */
 foreach (cot_getextplugins('page.list.query') as $pl)
@@ -179,32 +182,32 @@ if(empty($sql_page_string))
 		FROM $db_pages as p $join_condition
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		$where
-		ORDER BY $orderby LIMIT $d, ".$cfg['page']['maxrowsperpage'];
+		ORDER BY $orderby LIMIT $d, ".cot::$cfg['page']['maxrowsperpage'];
 }
 $totallines = $db->query($sql_page_count, $params)->fetchColumn();
 $sqllist = $db->query($sql_page_string, $params);
 
-if ((!$cfg['easypagenav'] && $durl > 0 && $cfg['page']['maxrowsperpage'] > 0 && $durl % $cfg['page']['maxrowsperpage'] > 0)
+if ((!cot::$cfg['easypagenav'] && $durl > 0 && cot::$cfg['page']['maxrowsperpage'] > 0 && $durl % cot::$cfg['page']['maxrowsperpage'] > 0)
 	|| ($d > 0 && $d >= $totallines))
 {
 	cot_redirect(cot_url('page', $list_url_path + array('dc' => $dcurl)));
 }
 
-$pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $totallines, $cfg['page']['maxrowsperpage']);
+$pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $totallines, cot::$cfg['page']['maxrowsperpage']);
 
 $out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
 $out['subtitle'] = $cat['title'];
-if (!empty($cfg['page']['cat_' . $c]['keywords']))
+if (!empty(cot::$cfg['page']['cat_' . $c]['keywords']))
 {
-	$out['keywords'] = $cfg['page']['cat_' . $c]['keywords'];
+	$out['keywords'] = cot::$cfg['page']['cat_' . $c]['keywords'];
 }
-if (!empty($cfg['page']['cat_' . $c]['metadesc']))
+if (!empty(cot::$cfg['page']['cat_' . $c]['metadesc']))
 {
-	$out['desc'] = $cfg['page']['cat_' . $c]['metadesc'];
+	$out['desc'] = cot::$cfg['page']['cat_' . $c]['metadesc'];
 }
-if (!empty($cfg['page']['cat_' . $c]['metatitle']))
+if (!empty(cot::$cfg['page']['cat_' . $c]['metatitle']))
 {
-	$out['subtitle'] = $cfg['page']['cat_' . $c]['metatitle'];
+	$out['subtitle'] = cot::$cfg['page']['cat_' . $c]['metatitle'];
 }
 // Building the canonical URL
 $out['canonical_uri'] = cot_url('page', $pageurl_params);
@@ -220,7 +223,7 @@ foreach (cot_getextplugins('page.list.main') as $pl)
 }
 /* ===== */
 
-require_once $cfg['system_dir'] . '/header.php';
+require_once cot::$cfg['system_dir'] . '/header.php';
 $t = new XTemplate($mskin);
 
 $t->assign(array(
@@ -238,13 +241,13 @@ $t->assign(array(
 			'title' => htmlspecialchars($cat['title']),
 			'desc' => htmlspecialchars($cat['desc'])
 		)),
-	'LIST_EXTRATEXT' => $extratext,
+	'LIST_EXTRATEXT' => isset($extratext) ? $extratext : '',
 	'LIST_TOP_PAGINATION' => $pagenav['main'],
 	'LIST_TOP_PAGEPREV' => $pagenav['prev'],
 	'LIST_TOP_PAGENEXT' => $pagenav['next'],
 	'LIST_TOP_CURRENTPAGE' => $pagenav['current'],
 	'LIST_TOP_TOTALLINES' => $totallines,
-	'LIST_TOP_MAXPERPAGE' => $cfg['page']['maxrowsperpage'],
+	'LIST_TOP_MAXPERPAGE' => cot::$cfg['page']['maxrowsperpage'],
 	'LIST_TOP_TOTALPAGES' => $pagenav['total']
 ));
 
@@ -309,7 +312,7 @@ foreach (cot::$extrafields[cot::$db->pages] + array('title' => 'title', 'key' =>
 
 $kk = 0;
 $allsub = cot_structure_children('page', $c, false, false, true, false);
-$subcat = array_slice($allsub, $dc, $cfg['page']['maxlistsperpage']);
+$subcat = array_slice($allsub, $dc, cot::$cfg['page']['maxlistsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('page.list.rowcat.first') as $pl)
@@ -396,7 +399,7 @@ if(!$sqllist_rowset_other)
 	foreach ($sqllist_rowset as $pag)
 	{
 		$jj++;
-		$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', $cfg['page']['truncatetext'], $usr['isadmin']));
+		$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', cot::$cfg['page']['truncatetext'], $usr['isadmin']));
 		$t->assign(array(
 			'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
 			'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj),
@@ -426,7 +429,7 @@ $t->out('MAIN');
 
 require_once cot::$cfg['system_dir'] . '/footer.php';
 
-if (cot::$cache && $usr['id'] === 0 && $cfg['cache_page'])
+if (cot::$cache && $usr['id'] === 0 && cot::$cfg['cache_page'])
 {
     cot::$cache->page->write();
 }

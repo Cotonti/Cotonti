@@ -449,28 +449,23 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 	$defret = NULL;
 
 	// Custom filter support
-	if (is_array($cot_import_filters[$filter]))
-	{
-		foreach ($cot_import_filters[$filter] as $func)
-		{
+	if (!empty($cot_import_filters[$filter]) && is_array($cot_import_filters[$filter])) {
+		foreach ($cot_import_filters[$filter] as $func) {
 			$v = $func($v, $name);
 		}
 		return $v;
 	}
 
-	switch($filter)
-	{
+	switch($filter) {
 		case 'INT':
-			if (is_numeric($v) && floor($v)==$v)
-			{
+			if (is_numeric($v) && floor($v)==$v) {
 				$pass = TRUE;
 				$v = (int) $v;
 			}
 			break;
 
 		case 'NUM':
-			if (is_numeric($v))
-			{
+			if (is_numeric($v)) {
 				$pass = TRUE;
 				$v = (float) $v;
 			}
@@ -478,12 +473,10 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 
 		case 'TXT':
 			$v = trim($v);
-			if (mb_strpos($v, '<')===FALSE)
-			{
+			if (mb_strpos($v, '<')===FALSE) {
 				$pass = TRUE;
-			}
-			else
-			{
+
+			} else {
 				$defret = str_replace('<', '&lt;', $v);
 			}
 			break;
@@ -1205,14 +1198,16 @@ function cot_shutdown()
 function cot_title($mask, $params = array(), $escape = true)
 {
 	global $cfg;
-	$res = (!empty($cfg[$mask])) ? $cfg[$mask] : $mask;
+	$res = (!empty(cot::$cfg[$mask])) ? cot::$cfg[$mask] : $mask;
 	is_array($params) ? $args = $params : mb_parse_str($params, $args);
-	if (preg_match_all('#\{(.+?)\}#', $res, $matches, PREG_SET_ORDER))
-	{
-		foreach($matches as $m)
-		{
+	if (preg_match_all('#\{(.+?)\}#', $res, $matches, PREG_SET_ORDER)) {
+		foreach($matches as $m) {
 			$var = $m[1];
-			$val = $escape ? htmlspecialchars($args[$var], ENT_COMPAT, 'UTF-8', false) : $args[$var];
+			if(isset($args[$var])) {
+                $val = $escape ? htmlspecialchars($args[$var], ENT_COMPAT, 'UTF-8', false) : $args[$var];
+            } else {
+                $val = '';
+            }
 			$res = str_replace($m[0], $val, $res);
 		}
 	}
@@ -1452,35 +1447,31 @@ function cot_auth($area, $option, $mask = 'RWA')
 	$masks = str_split($mask);
 	$res = array();
 
-	foreach ($masks as $k => $ml)
-	{
-		if (empty($mn[$ml]))
-		{
-			$sys['auth_log'][] = $area.'.'.$option.'.'.$ml.'=0';
+	foreach ($masks as $k => $ml) {
+		if (empty($mn[$ml])) {
+			cot::$sys['auth_log'][] = $area.'.'.$option.'.'.$ml.'=0';
 			$res[] = FALSE;
-		}
-		elseif ($option == 'any')
-		{
+
+		} elseif ($option == 'any') {
 			$cnt = 0;
+			if(is_array(cot::$usr['auth'])) {
+                if (isset(cot::$usr['auth'][$area]) && is_array(cot::$usr['auth'][$area])) {
+                    foreach (cot::$usr['auth'][$area] as $k => $g) {
+                        $cnt += (($g & $mn[$ml]) == $mn[$ml]);
+                    }
+                }
 
-			if (is_array($usr['auth'][$area]))
-			{
-				foreach ($usr['auth'][$area] as $k => $g)
-				{
-					$cnt += (($g & $mn[$ml]) == $mn[$ml]);
-				}
-			}
-			$cnt = ($cnt == 0 && $usr['auth']['admin']['a'] && $ml == 'A') ? 1 : $cnt;
-
-			$sys['auth_log'][] = ($cnt > 0) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
+                $cnt = ($cnt == 0 && cot::$usr['auth']['admin']['a'] && $ml == 'A') ? 1 : $cnt;
+            }
+            cot::$sys['auth_log'][] = ($cnt > 0) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
 			$res[] = ($cnt > 0) ? TRUE : FALSE;
-		}
-		else
-		{
-			$sys['auth_log'][] = (($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
-			$res[] = (($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? TRUE : FALSE;
+
+		} else {
+            cot::$sys['auth_log'][] = ((cot::$usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
+			$res[] = ((cot::$usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? TRUE : FALSE;
 		}
 	}
+
 	return (count($res) == 1) ? $res[0] : $res;
 }
 
@@ -1499,17 +1490,14 @@ function cot_auth_build($userid, $maingrp = 0)
 	$groups = array();
 	$authgrid = array();
 
-	if ($userid == 0 || $maingrp == 0)
-	{
+	if ($userid == 0 || $maingrp == 0) {
 		$groups[] = 1;
-	}
-	else
-	{
+
+	} else {
 		$groups[] = $maingrp;
 		$sql = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$userid");
 
-		while ($row = $sql->fetch())
-		{
+		while ($row = $sql->fetch()) {
 			$groups[] = $row['gru_groupid'];
 		}
 		$sql->closeCursor();
@@ -1518,8 +1506,8 @@ function cot_auth_build($userid, $maingrp = 0)
 	$sql_groups = implode(',', $groups);
 	$sql = $db->query("SELECT auth_code, auth_option, auth_rights FROM $db_auth WHERE auth_groupid IN (".$sql_groups.") ORDER BY auth_code ASC, auth_option ASC");
 
-	while ($row = $sql->fetch())
-	{
+	while ($row = $sql->fetch()) {
+	    $authgrid[$row['auth_code']][$row['auth_option']] = 0;
 		$authgrid[$row['auth_code']][$row['auth_option']] |= $row['auth_rights'];
 	}
 	$sql->closeCursor();
@@ -2030,6 +2018,7 @@ function cot_build_number($number, $decimals = 0, $round = null)
  */
 function cot_build_oddeven($number)
 {
+    $number = (int)$number;
 	return ($number % 2 == 0 ) ? 'even' : 'odd';
 }
 
@@ -2113,25 +2102,24 @@ function cot_build_timegap($t1, $t2 = null, $levels = 1, $decimals = 0, $round =
  * Returns timezone offset formatted according to ISO 8601
  *
  * @param float $offset Timezone offset in seconds or hours. Set NULL for unknown timezone.
- * @param bool $withgmt Include 'GMT' in the returned string.
+ * @param bool $withgmt Include 'UTC' in the returned string.
  * @param bool $short Use format without minutes, like GMT+1
  * @return string Textual timezone like GMT+1:00
  */
 function cot_build_timezone($offset, $withgmt = true, $short = false)
 {
-	$gmt = $withgmt ? 'GMT' : '';
-	if (is_null($offset))
-	{
+	$gmt = $withgmt ? 'UTC' : '';
+	if (is_null($offset)) {
 		return $short ? "$gmt-00" : "$gmt-00:00";
 	}
-	if ($offset == 0)
-	{
+	if ($offset == 0) {
 		return $short ? "$gmt+00" : "$gmt+00:00";
 	}
 	$format = $short ? 'H' : 'H:i';
 	$abs = abs($offset);
 	$seconds = $abs < 100 ? $abs * 3600 : $abs; // detect hours or seconds
 	$time = gmdate($format, $seconds);
+
 	return ($offset > 0) ? "$gmt+$time" : "$gmt-$time";
 }
 
@@ -2194,27 +2182,52 @@ function cot_build_user($id, $user, $extra_attrs = '')
 function cot_user_full_name($user)
 {
 	if (empty($user)) return '';
-	if (is_int($user) && $user > 0 || ctype_digit($user))
-	{
+
+	if(function_exists('cot_user_full_name_custom')) return cot_user_full_name_custom($user);
+
+	if (is_int($user) && $user > 0 || ctype_digit($user)) {
 		require_once cot_incfile('users', 'module');
 		$user = cot_user_data($user);
 	}
     if (empty($user)) return '';
 
-	$user_fname = $user['user_firstname'] ? $user['user_firstname'] : $user['user_first_name'];
-	$user_mname = $user['user_middlename'] ? $user['user_middlename'] : $user['user_middle_name'];
-	$user_lname = $user['user_lastname'] ? $user['user_lastname'] : $user['user_last_name'];
+    $user_fname = '';
+    if(!empty($user['user_firstname'])) {
+        $user_fname = $user['user_firstname'];
+    } elseif(!empty($user['user_first_name'])) {
+        $user_fname = $user['user_first_name'];
+    }
 
-	$full_name = trim(cot_rc('users_full_name',
-		array(
-			'firstname' 	=> $user_fname,
-			'middlename'	=> $user_mname,
-			'lastname'		=> $user_lname,
-            'name'          => $user['user_name']
-		)
-	));
+    $user_mname = '';
+    if(!empty($user['user_middlename'])) {
+        $user_mname = $user['user_middlename'];
+    } elseif(!empty($user['user_middle_name'])) {
+        $user_mname = $user['user_middle_name'];
+    }
 
-	return $full_name ? $full_name : $user['user_name'];
+    $user_lname = '';
+    if(!empty($user['user_lastname'])) {
+        $user_lname = $user['user_lastname'];
+    } elseif(!empty($user['user_last_name'])) {
+        $user_lname = $user['user_last_name'];
+    }
+
+    if($user_fname != '' || $user_mname != '' || $user_lname != '') {
+        $full_name = trim(
+            cot_rc('users_full_name',
+                   array(
+                       'firstname' => $user_fname,
+                       'middlename' => $user_mname,
+                       'lastname' => $user_lname,
+                       'name' => $user['user_name']
+                   )
+            )
+        );
+    } else {
+        $full_name = $user['user_name'];
+    }
+
+	return $full_name;
 }
 
 /**
@@ -2348,7 +2361,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'LASTLOG' => cot_date('datetime_medium', $user_data['user_lastlog']),
 				'LASTLOG_STAMP' => $user_data['user_lastlog'],
 				'LOGCOUNT' => $user_data['user_logcount'],
-				'POSTCOUNT' => $user_data['user_postcount'],
+				'POSTCOUNT' => !empty($user_data['user_postcount']) ? $user_data['user_postcount'] : 0,
 				'LASTIP' => $user_data['user_lastip']
 			);
 
@@ -2699,60 +2712,53 @@ function cot_themes_info($theme_name = null)
 	$themes_data = array();
 	$themelist = array();
 	$handle = opendir(cot::$cfg['themes_dir']);
-	while ($f = readdir($handle))
-	{
-		if (mb_strpos($f, '.') === FALSE && is_dir(cot::$cfg['themes_dir'] . "/$f") && $f != "admin")
-		{
+	while ($f = readdir($handle)) {
+		if (mb_strpos($f, '.') === FALSE && is_dir(cot::$cfg['themes_dir'] . "/$f") && $f != "admin") {
 			$themelist[] = $f;
 		}
 	}
 	closedir($handle);
 
-	if (!is_null($theme_name))
-	{
-		if (!in_array($theme_name, $themelist))
-		{
+	if (!is_null($theme_name)) {
+		if (!in_array($theme_name, $themelist)) {
 			return false;
-		}
-		else {
+
+		} else {
 			$themelist = array($theme_name);
 		}
-	}
-	else
-	{
+
+	} else {
 		sort($themelist);
 	}
 
-	foreach ($themelist as $name)
-	{
+	foreach ($themelist as $name) {
 		if ($theme_name && $theme_name != $name) continue;
 		$themeinfo = array();
 		$themeinfo_file = cot::$cfg['themes_dir'] . "/$name/$name.php";
-		if (file_exists($themeinfo_file) && $info = cot_infoget($themeinfo_file, 'COT_THEME'))
-		{
+		if (file_exists($themeinfo_file) && $info = cot_infoget($themeinfo_file, 'COT_THEME')) {
 			$themeinfo = $info;
-			if (!$themeinfo['Title']) $themeinfo['Title'] = ($info['Name'] ? $info['Name'] : $name);
+			if (empty($themeinfo['Title'])) {
+			    $themeinfo['Title'] = isset($info['Name']) ? $info['Name'] : $name;
+            }
 			$schemes_list = array();
-			if (!empty($info['Schemes']))
-			{
+			if (!empty($info['Schemes'])) {
 				$schemes = preg_split('/\s*,\s*/', $info['Schemes']);
 				sort($schemes);
-				foreach ($schemes as $scheme)
-				{
+				foreach ($schemes as $scheme) {
 					list($sc_name, $sc_title) = explode(':', $scheme);
 					$schemes_list[$sc_name] = $sc_title;
 				}
 			}
 			$themeinfo['Schemes'] = $schemes_list;
+			if(!isset($themeinfo['Version'])) $themeinfo['Version'] = '';
 		}
 		if (sizeof($themeinfo) > 0) $themes_data[$name] = $themeinfo;
 	}
-	if (is_null($theme_name))
-	{
+
+	if (is_null($theme_name)) {
 		return $themes_data;
-	}
-	else
-	{
+
+	} else {
 		return $themes_data[$theme_name];
 	}
 }
@@ -2771,22 +2777,16 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 
 	$values = array();
 	$titles = array();
-	foreach ($themes_info as $name => $info)
-	{
-		if ($info)
-		{
+	foreach ($themes_info as $name => $info) {
+		if ($info) {
 			$version = $info['Version'];
 			$title = $info['Title'] . ($version ? " v$version" : '');
-			if (sizeof($info['Schemes']))
-			{
-				foreach ($info['Schemes'] as $sc_name => $sc_title)
-				{
+			if (sizeof($info['Schemes'])) {
+				foreach ($info['Schemes'] as $sc_name => $sc_title) {
 					$values[] = $name . ':' . $sc_name;
 					$titles[] = count($info['Schemes']) > 1 ? $title . ' (' . $sc_title . ')' : $title;
 				}
-			}
-			else
-			{
+			} else {
 				$values[] = "$name:default";
 				$titles[] = $title;
 			}
@@ -2826,20 +2826,20 @@ function cot_check_messages($src = '', $class = '')
 {
 	global $error_string, $sys;
 
-	if (empty($src) && empty($class))
-	{
-		return (is_array($_SESSION['cot_messages'][$sys['site_id']]) && count($_SESSION['cot_messages'][$sys['site_id']]) > 0)
+	if (empty($src) && empty($class)) {
+	    if(empty($_SESSION['cot_messages'][cot::$sys['site_id']])) return false;
+		return (is_array($_SESSION['cot_messages'][cot::$sys['site_id']]) && count($_SESSION['cot_messages'][cot::$sys['site_id']]) > 0)
 			|| !empty($error_string);
 	}
 
-	if (!is_array($_SESSION['cot_messages'][$sys['site_id']]))
+	if (!is_array($_SESSION['cot_messages'][cot::$sys['site_id']]))
 	{
 		return false;
 	}
 
 	if (empty($src))
 	{
-		foreach ($_SESSION['cot_messages'][$sys['site_id']] as $src => $grp)
+		foreach ($_SESSION['cot_messages'][cot::$sys['site_id']] as $src => $grp)
 		{
 			foreach ($grp as $msg)
 			{
@@ -2852,11 +2852,11 @@ function cot_check_messages($src = '', $class = '')
 	}
 	elseif (empty($class))
 	{
-		return count($_SESSION['cot_messages'][$sys['site_id']][$src]) > 0;
+		return count($_SESSION['cot_messages'][cot::$sys['site_id']][$src]) > 0;
 	}
 	else
 	{
-		foreach ($_SESSION['cot_messages'][$sys['site_id']][$src] as $msg)
+		foreach ($_SESSION['cot_messages'][cot::$sys['site_id']][$src] as $msg)
 		{
 			if ($msg['class'] == $class)
 			{
@@ -2879,60 +2879,48 @@ function cot_clear_messages($src = '', $class = '')
 {
 	global $error_string, $sys;
 
-	if (empty($src) && empty($class))
-	{
-		unset($_SESSION['cot_messages'][$sys['site_id']]);
+	if (empty($src) && empty($class)) {
+		unset($_SESSION['cot_messages'][cot::$sys['site_id']]);
 		unset($error_string);
 	}
 
-	if (!is_array($_SESSION['cot_messages'][$sys['site_id']]) || (!empty($src) && !is_array($_SESSION['cot_messages'][$sys['site_id']][$src])))
-	{
+    if(empty($_SESSION['cot_messages'][cot::$sys['site_id']])) return;
+
+	if (!is_array($_SESSION['cot_messages'][cot::$sys['site_id']]) || (!empty($src) && !is_array($_SESSION['cot_messages'][cot::$sys['site_id']][$src]))) {
 		return;
 	}
 
-	if (empty($src))
-	{
-		foreach ($_SESSION['cot_messages'][$sys['site_id']] as $src => $grp)
-		{
+	if (empty($src)) {
+		foreach ($_SESSION['cot_messages'][cot::$sys['site_id']] as $src => $grp) {
 			$new_grp = array();
-			foreach ($grp as $msg)
-			{
-				if ($msg['class'] != $class)
-				{
+			foreach ($grp as $msg){
+				if ($msg['class'] != $class) {
 					$new_grp[] = $msg;
 				}
 			}
-			if (count($new_grp) > 0)
-			{
-				$_SESSION['cot_messages'][$sys['site_id']][$src] = $new_grp;
-			}
-			else
-			{
-				unset($_SESSION['cot_messages'][$sys['site_id']][$src]);
+			if (count($new_grp) > 0) {
+				$_SESSION['cot_messages'][cot::$sys['site_id']][$src] = $new_grp;
+
+			} else {
+				unset($_SESSION['cot_messages'][cot::$sys['site_id']][$src]);
 			}
 		}
-	}
-	elseif (empty($class))
-	{
-		unset($_SESSION['cot_messages'][$sys['site_id']][$src]);
-	}
-	else
-	{
+
+	} elseif (empty($class)) {
+		unset($_SESSION['cot_messages'][cot::$sys['site_id']][$src]);
+
+	} else {
 		$new_grp = array();
-		foreach ($_SESSION['cot_messages'][$sys['site_id']][$src] as $msg)
-		{
-			if ($msg['class'] != $class)
-			{
+		foreach ($_SESSION['cot_messages'][cot::$sys['site_id']][$src] as $msg) {
+			if ($msg['class'] != $class) {
 				$new_grp[] = $msg;
 			}
 		}
-		if (count($new_grp) > 0)
-		{
-			$_SESSION['cot_messages'][$sys['site_id']][$src] = $new_grp;
-		}
-		else
-		{
-			unset($_SESSION['cot_messages'][$sys['site_id']][$src]);
+		if (count($new_grp) > 0) {
+			$_SESSION['cot_messages'][cot::$sys['site_id']][$src] = $new_grp;
+
+		} else {
+			unset($_SESSION['cot_messages'][cot::$sys['site_id']][$src]);
 		}
 	}
 }
@@ -3052,8 +3040,7 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 		951 => '503 Service Unavailable'
 	);
 
-	if (!$out['meta_contenttype'])
-	{
+	if (empty($out['meta_contenttype'])) {
 		$out['meta_contenttype'] = 'text/html';
 	}
 	cot_sendheaders($out['meta_contenttype'], $msg_status[$code]);
@@ -3217,48 +3204,38 @@ function cot_get_messages($src = 'default', $class = '')
 {
 	global $sys;
 	$messages = array();
-	if (empty($src) && empty($class))
-	{
+	if (empty($src) && empty($class)) {
 		return $_SESSION['cot_messages'][$sys['site_id']];
 	}
 
-	if (!is_array($_SESSION['cot_messages'][$sys['site_id']]))
-	{
+	if (!is_array($_SESSION['cot_messages'][$sys['site_id']])) {
 		return $messages;
 	}
 
-	if (empty($src))
-	{
-		foreach ($_SESSION['cot_messages'][$sys['site_id']] as $src => $grp)
-		{
-			foreach ($grp as $msg)
-			{
-				if (!empty($class) && $msg['class'] != $class)
-				{
+	if (empty($src)) {
+		foreach ($_SESSION['cot_messages'][$sys['site_id']] as $src => $grp) {
+			foreach ($grp as $msg) {
+				if (!empty($class) && $msg['class'] != $class) {
 					continue;
 				}
 				$messages[] = $msg;
 			}
 		}
-	}
-	elseif (is_array($_SESSION['cot_messages'][$sys['site_id']][$src]))
-	{
-		if (empty($class))
-		{
+
+	} elseif (isset($_SESSION['cot_messages'][$sys['site_id']][$src]) && is_array($_SESSION['cot_messages'][$sys['site_id']][$src])) {
+		if (empty($class)) {
 			return $_SESSION['cot_messages'][$sys['site_id']][$src];
-		}
-		else
-		{
-			foreach ($_SESSION['cot_messages'][$sys['site_id']][$src] as $msg)
-			{
-				if ($msg['class'] != $class)
-				{
+
+		} else {
+			foreach ($_SESSION['cot_messages'][$sys['site_id']][$src] as $msg) {
+				if ($msg['class'] != $class)  {
 					continue;
 				}
 				$messages[] = $msg;
 			}
 		}
 	}
+
 	return $messages;
 }
 
@@ -3276,24 +3253,21 @@ function cot_implode_messages($src = 'default', $class = '')
 	global $R, $L, $error_string, $sys;
 	$res = '';
 
-	if (!is_array($_SESSION['cot_messages'][$sys['site_id']]))
-	{
-		return;
-	}
+    if(empty($_SESSION['cot_messages'][cot::$sys['site_id']])) return '';
+	if (!is_array($_SESSION['cot_messages'][cot::$sys['site_id']])) return '';
 
 	$messages = cot_get_messages($src, $class);
-	foreach ($messages as $msg)
-	{
-		$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
+	foreach ($messages as $msg) {
+		$text = isset(cot::$L[$msg['text']]) ? cot::$L[$msg['text']] : $msg['text'];
 		$res .= cot_rc('code_msg_line', array('class' => $msg['class'], 'text' => $text));
 	}
 
-	if (!empty($error_string) && (empty($class) || $class == 'error'))
-	{
+	if (!empty($error_string) && (empty($class) || $class == 'error')) {
 		$res .= cot_rc('code_msg_line', array('class' => 'error', 'text' => $error_string));
 	}
+
 	return empty($res) ? '' : cot_rc('code_msg_begin', array('class' => empty($class) ? 'message' : $class))
-		. $res . $R['code_msg_end'];
+		. $res . cot::$R['code_msg_end'];
 }
 
 /**
@@ -3549,18 +3523,18 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 	global $usr, $cfg;
 
 	// Get base name parts
-	if (is_string($base) && mb_strpos($base, '.') !== false)
-	{
+	if (is_string($base) && mb_strpos($base, '.') !== false) {
 		$base = explode('.', $base);
 	}
-	if (!is_array($base))
-	{
+
+	if (!is_array($base)) {
 		$base = array($base);
 	}
-	if (is_null($admin))
-	{
-		$admin = ($base[0] == 'admin' || ($base[1] && $base[1] == 'admin'));
+
+	if (is_null($admin)) {
+		$admin = ($base[0] == 'admin' || (isset($base[1]) && $base[1] == 'admin'));
 	}
+
 	$scan_dirs = array();
 
 	// Possible search directories depending on extension type
@@ -3626,15 +3600,13 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 function cot_date($format, $timestamp = null, $usertimezone = true)
 {
 	global $lang, $L, $Ldt, $usr, $sys;
-	if (is_null($timestamp))
-	{
-		$timestamp = $sys['now'];
+	if (is_null($timestamp)) {
+		$timestamp = cot::$sys['now'];
 	}
-	if ($usertimezone)
-	{
-		$timestamp += $usr['timezone'] * 3600;
+	if ($usertimezone) {
+		$timestamp += cot::$usr['timezone'] * 3600;
 	}
-	$datetime = ($Ldt[$format]) ? @date($Ldt[$format], $timestamp) : @date($format, $timestamp);
+	$datetime = (isset($Ldt[$format])) ? @date($Ldt[$format], $timestamp) : @date($format, $timestamp);
 	$search = array(
 		'Monday', 'Tuesday', 'Wednesday', 'Thursday',
 		'Friday', 'Saturday', 'Sunday',
@@ -3650,18 +3622,18 @@ function cot_date($format, $timestamp = null, $usertimezone = true)
 		'Oct', 'Nov', 'Dec'
 	);
 	$replace = array(
-		$L['Monday'], $L['Tuesday'], $L['Wednesday'], $L['Thursday'],
-		$L['Friday'], $L['Saturday'], $L['Sunday'],
-		$L['Monday_s'], $L['Tuesday_s'], $L['Wednesday_s'], $L['Thursday_s'],
-		$L['Friday_s'], $L['Saturday_s'], $L['Sunday_s'],
-		$L['January'], $L['February'], $L['March'],
-		$L['April'], $L['May'], $L['June'],
-		$L['July'], $L['August'], $L['September'],
-		$L['October'], $L['November'], $L['December'],
-		$L['January_s'], $L['February_s'], $L['March_s'],
-		$L['April_s'], $L['May_s'], $L['June_s'],
-		$L['July_s'], $L['August_s'], $L['September_s'],
-		$L['October_s'], $L['November_s'], $L['December_s']
+		cot::$L['Monday'], cot::$L['Tuesday'], cot::$L['Wednesday'], cot::$L['Thursday'],
+		cot::$L['Friday'], cot::$L['Saturday'], cot::$L['Sunday'],
+		cot::$L['Monday_s'], cot::$L['Tuesday_s'], cot::$L['Wednesday_s'], cot::$L['Thursday_s'],
+		cot::$L['Friday_s'], cot::$L['Saturday_s'], cot::$L['Sunday_s'],
+		cot::$L['January'], cot::$L['February'], cot::$L['March'],
+		cot::$L['April'], cot::$L['May'], cot::$L['June'],
+		cot::$L['July'], cot::$L['August'], cot::$L['September'],
+		cot::$L['October'], cot::$L['November'], cot::$L['December'],
+		cot::$L['January_s'], cot::$L['February_s'], cot::$L['March_s'],
+		cot::$L['April_s'], cot::$L['May_s'], cot::$L['June_s'],
+		cot::$L['July_s'], cot::$L['August_s'], cot::$L['September_s'],
+		cot::$L['October_s'], cot::$L['November_s'], cot::$L['December_s']
 	);
 	return ($lang == 'en') ? $datetime : str_replace($search, $replace, $datetime);
 }
@@ -3809,18 +3781,18 @@ function cot_timezone_list($withgmt = false, $dst = false)
 	global $Ltz;
 	if (!$Ltz) include cot_langfile('countries', 'core');
 	static $timezones = array();
-	if (!$timezones)
-	{
+	if (!$timezones) {
 		$timezonelist = array();
 		$regions = array('Africa', 'America', 'Antarctica', 'Asia', 'Atlantic', 'Europe', 'Indian', 'Pacific');
 		$identifiers = DateTimeZone::listIdentifiers();
-		foreach ($identifiers as $timezone)
-		{
-			list ($region, $city) = explode('/', $timezone, 2);
+		foreach ($identifiers as $timezone) {
+		    $tmp = explode('/', $timezone, 2);
+            $region = $tmp[0];
+            $city = isset($tmp[1]) ? $tmp[1] : '';
 			if (!in_array($region, $regions)) continue;
 			$offset = cot_timezone_offset($timezone, false, $dst);
 			$gmtoffset = cot_build_timezone($offset);
-			$title = $Ltz[$timezone] ? $Ltz[$timezone] : $region.'/'.str_replace('_', ' ', $city);
+			$title = isset($Ltz[$timezone]) ? $Ltz[$timezone] : $region.'/'.str_replace('_', ' ', $city);
 			$timezonelist[] = array(
 				'identifier' => $timezone,
 				'offset' => $offset,
@@ -3830,12 +3802,12 @@ function cot_timezone_list($withgmt = false, $dst = false)
 		}
 		foreach ($timezonelist as $k => $tz) {
 			$offsets[$k] = $tz['offset'];
-			$names[$k] = $tz['name'];
+			$names[$k] = $tz['title'];
 		}
 		array_multisort($offsets, SORT_ASC, $names, SORT_ASC, $timezonelist);
 		$timezones = $timezonelist;
 	}
-	return $withgmt ? array_merge(array(array('name' => 'GMT', 'identifier' => 'GMT', 'offset' => 0, 'description' => 'GMT')), $timezones) : $timezones;
+	return $withgmt ? array_merge(array(array('name' => 'UTC', 'identifier' => 'UTC', 'offset' => 0, 'description' => 'UTC')), $timezones) : $timezones;
 }
 
 /**
@@ -3962,24 +3934,31 @@ function cot_timezone_transitions($tz)
 function cot_pagenav($module, $params, $current, $entries, $perpage, $characters = 'd', $hash = '',
 	$ajax = false, $target_div = '', $ajax_module = '', $ajax_params = array())
 {
-	if (function_exists('cot_pagenav_custom'))
-	{
+	if (function_exists('cot_pagenav_custom')) {
 		// For custom pagination functions in plugins
 		return cot_pagenav_custom($module, $params, $current, $entries, $perpage, $characters, $hash,
 			$ajax, $target_div, $ajax_module, $ajax_params);
 	}
 
-	if (!$perpage)
-	{
+	if (!$perpage) {
 		$perpage = cot::$cfg['maxrowsperpage'] ? cot::$cfg['maxrowsperpage'] : 1;
 	}
 
 	$onpage = $entries - $current;
 	if ($onpage > $perpage) $onpage = $perpage;
 
-	if ($entries <= $perpage)
-	{
+	if ($entries <= $perpage) {
 		return array(
+            'prev' => null,
+            'main' => null,
+            'next' => null,
+            'last' => null,
+            'current' => 1,
+            'firstlink' => null,
+            'prevlink' => null,
+            'nextlink' => null,
+            'lastlink' => null,
+            'total' => 1,
 			'onpage' => $onpage,
 			'entries' => $entries
 		);
@@ -4636,26 +4615,38 @@ function cot_wraptext($str, $wrap = 80)
 function cot_rc($name, $params = array())
 {
 	global $R, $L, $theme_reload;
-	if (isset($R[$name]) && is_array($theme_reload) && !empty($theme_reload['R'][$name]))
-	{
+
+	if (isset($R[$name]) && is_array($theme_reload) && !empty($theme_reload['R'][$name])) {
 		$R[$name] = $theme_reload['R'][$name];
-	}
-	elseif (isset($L[$name]) && is_array($theme_reload) && !empty($theme_reload['L'][$name]))
-	{
+
+	} elseif (isset($L[$name]) && is_array($theme_reload) && !empty($theme_reload['L'][$name])) {
 		$L[$name] = $theme_reload['L'][$name];
 	}
 
-	$res = isset($R[$name]) ? $R[$name]
-		: (isset($L[$name]) ? $L[$name] : $name);
+	if(isset($R[$name])) {
+        $res = $R[$name];
+    } elseif(isset($L[$name])) {
+        $res = $R[$name];
+    } else {
+        $res = $name;
+    }
+
 	is_array($params) ? $args = $params : parse_str($params, $args);
-	if (preg_match_all('#\{\$(\w+)\}#', $res, $matches, PREG_SET_ORDER))
-	{
-		foreach($matches as $m)
-		{
+	if (preg_match_all('#\{\$(\w+)\}#', $res, $matches, PREG_SET_ORDER)) {
+		foreach($matches as $m) {
 			$var = $m[1];
-			$res = str_replace($m[0], (isset($args[$var]) ? $args[$var] : $GLOBALS[$var]), $res);
+			$val = null;
+			if(isset($args[$var])) {
+                $val = $args[$var];
+            } elseif(isset($GLOBALS[$var])) {
+                $val = $GLOBALS[$var];
+            }
+			if($val !== null) {
+                $res = str_replace($m[0], $val, $res);
+            }
 		}
 	}
+
 	return $res;
 }
 
@@ -5481,20 +5472,22 @@ function cot_parse_url($url)
 {
 	$urlp = parse_url($url);
 
+    $needfix = false;
+
 	// check for URL with omited scheme on PHP prior 5.4.7 (//somesite.com)
 	if (substr($urlp['path'],0,2) == '//' && empty($urlp['scheme'])) $needfix = true;
 
 	// check for URL with auth credentials (user[:pass]@site.com/)
 	if (empty($urlp['host']) && preg_match('#^(([^@:]+)|([^@:]+:[^@:]+?))@.+/#', $urlp['path'])) $needfix = true;
 
-	if ($needfix)
-	{
+	if ($needfix) {
 		$fake_scheme = 'fix-url-parsing';
 		$delimiter = (substr($urlp['path'],0,2) == '//') ? ':' : '://';
 		$url = $fake_scheme . $delimiter . $url; // adding fake scheme
 		$urlp = parse_url($url);
 		if ($urlp['scheme'] == $fake_scheme) unset($urlp['scheme']);
 	}
+
 	return $urlp;
 }
 
@@ -5508,8 +5501,12 @@ function cot_parse_url($url)
 function cot_http_build_url($urlp)
 {
 	$url = '';
-	$port = (int) $urlp['port'];
-	if ($urlp['port'] != $port) $port = '';
+    $port = '';
+    if(!empty($urlp['port'])) {
+        $port = (string)intval($urlp['port']);
+        if($urlp['port'] != $port) $port = '';
+    }
+
 	if (!empty($urlp['scheme'])) $url .= $urlp['scheme'] . '://';
 	if (!empty($urlp['user'])) {
 		if (!empty($urlp['pass'])) {
@@ -5518,13 +5515,19 @@ function cot_http_build_url($urlp)
 			$url .= $urlp['user'] . '@';
 		}
 	}
-	$url .= $urlp['host'];
+
+    if (!empty($urlp['host'])) $url .= $urlp['host'];
+
 	if ($port && $port != '80' && preg_match('/^\d+$/', $port)) $url .=  ':' . $port;
-	if ( (empty($urlp['path']) && ($urlp['query'] || $urlp['fragment']))
-		|| ((!empty($urlp['path'])) && substr($urlp['path'], 0, 1) != '/') ) $urlp['path'] = '/' . $urlp['path'];
-	$url .=  $urlp['path'];
+
+    if ( (empty($urlp['path']) && ( !empty($urlp['query']) || !empty($urlp['fragment']) ))
+        || ((!empty($urlp['path'])) && substr($urlp['path'], 0, 1) != '/') ) $urlp['path'] = '/' . $urlp['path'];
+
+    if (!empty($urlp['path'])) $url .=  $urlp['path'];
+
 	if (!empty($urlp['query'])) $url .=  '?' . $urlp['query'];
 	if (!empty($urlp['fragment'])) $url .=  '#' . $urlp['fragment'];
+
 	return $url;
 }
 
@@ -5541,10 +5544,10 @@ function cot_url_sanitize($url)
 	}
 
 	$urlp = cot_parse_url($url);
-	$urlp['fragment'] = urlfilter($urlp['fragment']);
+	$urlp['fragment'] = !empty($urlp['fragment']) ? urlfilter($urlp['fragment']) : '';
 
 	$path = $urlp['path'];
-	$query = str_replace('&amp;', '&', $urlp['query']);
+	$query = !empty($urlp['query']) ? str_replace('&amp;', '&', $urlp['query']) : '';
 
 	$path = explode('/', $path);
 	$path = array_map('urlfilter', $path);

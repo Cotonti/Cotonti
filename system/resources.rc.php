@@ -9,6 +9,9 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+// Todo may be use cot::$L, cot::$cfg instead?
+global $L, $cfg;
+
 /**
  * Form generation
  */

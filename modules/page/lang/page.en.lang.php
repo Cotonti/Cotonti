@@ -9,6 +9,12 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+// if lang/en/main.en.lang.php is not loaded
+if(!isset($L['Ascending'])) {
+    $mainLangFile = cot_langfile('main', 'core');
+    if(file_exists($mainLangFile)) include $mainLangFile;
+}
+
 /**
  * Module Config
  */

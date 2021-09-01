@@ -18,57 +18,52 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('whosonline', 'plug');
 
-if ($usr['id'] > 0)
-{
-	$sql = $db->query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
+$not_counted_vis = $not_counted_usr = 0;
 
-	if ($sql->rowCount() == 1)
-	{
+if (cot::$usr['id'] > 0) {
+	$sql = cot::$db->query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
+
+	if ($sql->rowCount() == 1) {
 		$online_row = $sql->fetch();
 		$online_count = 1;
 		$sys['online_location'] = $online_row['online_location'];
 		$sys['online_subloc'] = $online_row['online_subloc'];
-	}
-	else
-	{
+
+	} else {
 		$not_counted_usr = 1;
 	}
 	$sql->closeCursor();
-}
-elseif(!$cfg['plugin']['whosonline']['disable_guests'])
-{
-	$sql = $db->query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."' AND online_userid < 0 LIMIT 1");
 
-	if ($sql->rowCount() > 0)
-	{
+} elseif(!cot::$cfg['plugin']['whosonline']['disable_guests']) {
+	$sql = cot::$db->query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."' AND online_userid < 0 LIMIT 1");
+
+	if ($sql->rowCount() > 0) {
 		$online_row = $sql->fetch();
 		$sys['online_location'] = $online_row['online_location'];
 		$sys['online_subloc'] = $online_row['online_subloc'];
-	}
-	else
-	{
+
+	} else {
 		$not_counted_vis = 1;
 	}
 	$sql->closeCursor();
 }
 
-$cache_type = $cache->mem;
-if ($cache && $cache_type && $cache_type->exists('whosonline', 'system'))
-{
+$cache_type = !empty(cot::$cache->mem) ? cot::$cache->mem : null;
+$out['whosonline_reg_list'] = '';
+if (cot::$cache && $cache_type && $cache_type->exists('whosonline', 'system')) {
 	$whosonline_data = $cache_type->get('whosonline', 'system');
 	$sys['whosonline_vis_count'] = $whosonline_data['vis_count'];
 	$sys['whosonline_reg_count'] = $whosonline_data['reg_count'];
 	$out['whosonline_reg_list'] = $whosonline_data['reg_list'];
 	$cot_usersonline = $whosonline_data['user_list'];
 	unset($whosonline_data);
-}
-else
-{
-	$online_timedout = $sys['now'] - $cfg['timedout'];
-	$db->delete($db_online, "online_lastseen < $online_timedout");
-	if(!$cfg['plugin']['whosonline']['disable_guests'])
-		$sys['whosonline_vis_count'] = $db->query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'")->fetchColumn() + $not_counted_vis;
-	$sql_o = $db->query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
+
+} else {
+	$online_timedout = $sys['now'] - cot::$cfg['timedout'];
+    cot::$db->delete($db_online, "online_lastseen < $online_timedout");
+	if(!cot::$cfg['plugin']['whosonline']['disable_guests'])
+		$sys['whosonline_vis_count'] = cot::$db->query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'")->fetchColumn() + $not_counted_vis;
+	$sql_o = cot::$db->query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
 	$sys['whosonline_reg_count'] = $sql_o->rowCount() + $not_counted_usr;
 	$ii_o = 0;
 	$cot_usersonline = array();
@@ -85,8 +80,8 @@ else
 		$cot_usersonline[] = $usr['id'];
 	}
 	unset($ii_o, $sql_o, $row_o, $not_counted_usr, $not_counted_vis);
-	if ($cache && $cache_type)
-	{
+
+	if (cot::$cache && $cache_type) {
 		$whosonline_data = array(
 			'vis_count' => $sys['whosonline_vis_count'],
 			'reg_count' => $sys['whosonline_reg_count'],

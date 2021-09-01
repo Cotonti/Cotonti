@@ -934,8 +934,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
         'total' => 1,
     );
 
-	if(!empty($pagination))
-	{
+	if(!empty($pagination)) {
 		$pagenav = cot_pagenav($url_area, $url_params, $d, $totalitems, $count, $pagination);
 	}
 
@@ -943,7 +942,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 		'PAGE_TOP_PAGINATION' => $pagenav['main'],
 		'PAGE_TOP_PAGEPREV' => $pagenav['prev'],
 		'PAGE_TOP_PAGENEXT' => $pagenav['next'],
-		'PAGE_TOP_FIRST' => $pagenav['first'],
+		'PAGE_TOP_FIRST' => isset($pagenav['first']) ? $pagenav['first'] : '',
 		'PAGE_TOP_LAST' => $pagenav['last'],
 		'PAGE_TOP_CURRENTPAGE' => $pagenav['current'],
 		'PAGE_TOP_TOTALLINES' => $totalitems,

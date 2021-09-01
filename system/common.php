@@ -51,9 +51,17 @@ $sys['site_id'] = $site_id;
 
 // Getting the server-relative path
 $url = parse_url($cfg['mainurl']);
-$sys['scheme'] = strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false && $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 443 && $_SERVER['HTTP_X_FORWARDED_PORT'] !== 443 ? 'http' : 'https';
+
+$sys['scheme'] = 'http';
+if(strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') !== false ||
+    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ||
+    (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ||
+    (!empty($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT'] == 443))
+{
+    $sys['scheme'] = 'https';
+}
 $sys['secure'] = $sys['scheme'] == 'https' ? true : false;
-$sys['site_uri'] = $url['path'];
+
 $sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
 if ($_SERVER['HTTP_HOST'] == $url['host']
 	|| $cfg['multihost']
@@ -72,7 +80,12 @@ else
 $def_port = $sys['secure'] ? 443 : 80;
 $sys['port'] = $sys['port'] == $def_port ? '' : $sys['port'];
 
-if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+$sys['site_uri'] = '/';
+if(!empty($url['path'])) {
+    $sys['site_uri'] = $url['path'];
+    if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+}
+
 define('COT_SITE_URI', $sys['site_uri']);
 // Absolute site url
 $sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port']?':'.$sys['port']:'') . $sys['site_uri'];
@@ -206,8 +219,7 @@ $sys['parser'] = $cfg['parser'];
 
 /* ======== Plugins ======== */
 
-if (!$cot_plugins && !defined('COT_INSTALL'))
-{
+if (empty($cot_plugins) && !defined('COT_INSTALL')) {
 	$sql = $db->query("SELECT pl_code, pl_file, pl_hook, pl_module, pl_title FROM $db_plugins
 		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
 	$cot_plugins_active = array();
@@ -228,8 +240,7 @@ if (!$cot_plugins && !defined('COT_INSTALL'))
 	$cache && $cache->db->store('cot_plugins_active', $cot_plugins_active, 'system');
 }
 
-if (!$cot_modules)
-{
+if (empty($cot_modules)) {
 	$sql = $db->query("SELECT * FROM $db_core WHERE ct_state = 1 AND ct_lock = 0");
 	if ($sql->rowCount() > 0)
 	{
@@ -273,21 +284,18 @@ ob_start('cot_outputfilters');
 
 /* ======== Groups ======== */
 
-if (!$cot_groups )
-{
+if (empty($cot_groups )) {
 	$sql = $db->query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
 
-	if ($sql->rowCount() > 0)
-	{
-		while ($row = $sql->fetch())
-		{
+	if ($sql->rowCount() > 0) {
+		while ($row = $sql->fetch()) {
 			$cot_groups[$row['grp_id']] = array(
 				'id' => $row['grp_id'],
 				'alias' => $row['grp_alias'],
 				'level' => $row['grp_level'],
 				'disabled' => $row['grp_disabled'],
-				'hidden' => $row['grp_hidden'],
-				'state' => $row['grp_state'],
+				'hidden' => !empty($row['grp_hidden']),
+				'state' => isset($row['grp_state']) ? $row['grp_state'] : null,
 				'name' => htmlspecialchars($row['grp_name']),
 				'title' => htmlspecialchars($row['grp_title']),
 				'desc' => htmlspecialchars($row['grp_desc']),
@@ -349,7 +357,7 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
 				$usr['theme'] = $cfg['forcedefaulttheme'] ? $cfg['defaulttheme'] : $row['user_theme'];
 				$usr['scheme'] = $cfg['forcedefaulttheme'] ? $cfg['defaultscheme'] : $row['user_scheme'];
 				$usr['lang'] = $cfg['forcedefaultlang'] ? $cfg['defaultlang'] : $row['user_lang'];
-				$usr['newpm'] = $row['user_newpm'];
+				$usr['newpm'] = !empty($row['user_newpm']) ? $row['user_newpm'] : false;
 				$usr['auth'] = unserialize($row['user_auth']);
 				$usr['adminaccess'] = cot_auth('admin', 'any', 'R');
 				$usr['level'] = $cot_groups[$usr['maingrp']]['level'];
@@ -576,8 +584,9 @@ if (file_exists($sys['theme_resources']))
 	$R_tmp = $R;
 	include $sys['theme_resources'];
 	// Save overridden strings in $theme_reload global
-	$theme_reload['L'] = array_diff_assoc($L,$L_tmp);
-	$theme_reload['R'] = array_diff_assoc($R,$R_tmp);
+    // Todo more right way
+	$theme_reload['L'] = @array_diff_assoc($L,$L_tmp);
+	$theme_reload['R'] = @array_diff_assoc($R,$R_tmp);
 	unset($L_tmp, $R_tmp);
 }
 
@@ -657,7 +666,7 @@ if (class_exists('XTemplate'))
 		'cache_dir'    => $cfg['cache_dir'],
 		'cleanup'      => $cfg['html_cleanup'],
 		'debug'        => $cfg['debug_mode'],
-		'debug_output' => (bool)$_GET['tpl_debug']
+        'debug_output' => isset($_GET['tpl_debug']) ? (bool)$_GET['tpl_debug'] : false
 	));
 }
 

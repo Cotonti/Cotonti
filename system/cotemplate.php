@@ -317,8 +317,7 @@ class XTemplate
 	 */
 	public function restart($path)
 	{
-		if (!file_exists($path))
-		{
+		if (!file_exists($path)) {
 			throw new Exception("Template file not found: $path");
 			return false;
 		}
@@ -335,26 +334,22 @@ class XTemplate
 
 			$this->compile($code);
 
-			if (self::$cache_enabled)
-			{
+			if (self::$cache_enabled) {
                 $cache_dir = self::$cache_dir . '/templates/';
                 if (!empty(self::$cache_dir) && !file_exists($cache_dir)) mkdir($cache_dir, 0755, true);
 
-				if (is_writeable($cache_dir))
-				{
+				if (is_writeable($cache_dir)) {
 					file_put_contents($cache_path, serialize($this->blocks));
 					file_put_contents($cache_idx, serialize($this->index));
 					$this->getTags();
 					file_put_contents($cache_tags, serialize($this->tags));
-				}
-				else
-				{
+
+				} else {
 					throw new Exception('Your "' . $cache_dir . '" is not writable');
 				}
 			}
-		}
-		else
-		{
+
+		} else {
 			$this->blocks = unserialize(cotpl_read_file($cache_path));
 			$this->index = unserialize(cotpl_read_file($cache_idx));
 			$this->tags = unserialize(cotpl_read_file($cache_tags));
@@ -454,18 +449,14 @@ class XTemplate
 	 */
 	public function parse($block = 'MAIN')
 	{
-		$path = $this->index[$block];
-		if ($path)
-		{
+		$path = isset($this->index[$block]) ? $this->index[$block] : null;
+		if ($path) {
 			$blk = $this->blocks[array_shift($path)];
-			foreach ($path as $node)
-			{
-				if (is_object($blk))
-				{
+			foreach ($path as $node) {
+				if (is_object($blk)) {
 					$blk =& $blk->blocks[$node];
-				}
-				else
-				{
+
+				} else {
 					$blk =& $blk[$node];
 				}
 			}
@@ -650,27 +641,22 @@ class Cotpl_block
 			$log_found = false;
 			// finds first block for further analizing
 			preg_match('`<!--\s*(?:(BEGIN):\s*([\w_]+)|(FOR|IF)\s+).+?-->.*?<!--\s*(?:END:\s*\2|END\3)\s*-->`s', $code,$mt);
-			if ($mt[1])
-			{
-				$block_found = true;
+			if (!empty($mt[1])) {
+                $block_found = true;
+
+			} elseif(!empty($mt[3])) {
+			    if($mt[3]==='IF') {
+                    $log_found = true;
+                } elseif($mt[3]==='FOR') {
+                    $log_found = true;
+                }
+
+			} elseif (!empty($code)) {
+                // No blocks found
+                $blocks[$i++] = new Cotpl_data($code);
+                $code = '';
 			}
-			elseif ($mt[3]==='IF')
-			{
-				$log_found = true;
-			}
-			elseif ($mt[3]==='FOR')
-			{
-				$loop_found = true;
-			}
-			else
-			{
-				// No blocks found
-				if (!empty($code))
-				{
-					$blocks[$i++] = new Cotpl_data($code);
-					$code = '';
-				}
-			}
+
 			if ($block_found && preg_match('`(?:(?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*BEGIN:\s*(?:[\w_]+)\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*BEGIN:\s*([\w_]+)\s*-->(?:\s*(?:\r?\n|\r))?((?:.*?))?((?<=\n|\r)[^\S\n\r]*)?<!--\s*END:\s*\1\s*-->(?(3)(\s*(?:\r?\n|\r))?)`s', $code, $mt))
 			{
 				$block_pos = mb_strpos($code, $mt[0]);
@@ -831,8 +817,8 @@ class Cotpl_block
 	 */
 	public function parse($tpl)
 	{
-		foreach ($this->blocks as $block)
-		{
+	    $data = '';
+		foreach ($this->blocks as $block) {
 			$data .= $block->text($tpl);
 		}
 		$this->data[] = $data;
@@ -841,8 +827,7 @@ class Cotpl_block
 	/**
 	 * Clears parsed block data
 	 */
-	public function reset($path = array())
-	{
+	public function reset($path = array()) {
 		$this->data = array();
 	}
 
@@ -1164,17 +1149,15 @@ class Cotpl_expr
 		}
 		// Infix to postfix
 		$lim = count($tokens) - 1;
-		for ($i = 0; $i < $lim; $i++)
-		{
-			if ($tokens[$i]['prec'] > $tokens[$i + 1]['prec'])
-			{
+		for ($i = 0; $i < $lim; $i++) {
+			if ($tokens[$i]['prec'] > $tokens[$i + 1]['prec']) {
 				$j = $i;
 				$scopes = 0;
-				while ($j < $lim && ($scopes > 0 || $tokens[$j]['prec'] > $tokens[$j + 1]['prec']))
-				{
+				while ($j < $lim && ($scopes > 0 || $tokens[$j]['prec'] > $tokens[$j + 1]['prec'])) {
 					$tmp = $tokens[$j];
 					$tokens[$j] = $tokens[$j + 1];
 					$tokens[$j + 1] = $tmp;
+					if(!isset($tokens[$j]['op'])) $tokens[$j]['op'] = null;
 					$scopes += (($tokens[$j]['op'] == COTPL_OP_OPEN) ? 1 : 0)
 						- (($tokens[$j]['op'] == COTPL_OP_CLOSE) ? 1 : 0);
 					$j++;
@@ -1210,10 +1193,9 @@ class Cotpl_expr
 	public function evaluate($tpl)
 	{
 		$stack = array();
-		foreach ($this->tokens as $token)
-		{
-			switch ($token['op'])
-			{
+		foreach ($this->tokens as $token) {
+		    if(!isset($token['op'])) $token['op'] = null;
+			switch ($token['op']) {
 				case COTPL_OP_ADD:
 					array_push($stack, array_pop($stack) + array_pop($stack));
 					break;
@@ -1404,20 +1386,15 @@ class Cotpl_logical extends Cotpl_block
 	public function text($tpl)
 	{
 		$data = '';
-		if ($this->expr->evaluate($tpl))
-		{
-			if ($this->blocks[0])
-			{
-				foreach ($this->blocks[0] as $block)
-				{
+		if ($this->expr->evaluate($tpl)) {
+			if ($this->blocks[0]) {
+				foreach ($this->blocks[0] as $block) {
 					$data .= $block->text($tpl);
 				}
 			}
-		}
-		elseif ($this->blocks[1])
-		{
-			foreach ($this->blocks[1] as $block)
-			{
+
+		} elseif (!empty($this->blocks[1])) {
+			foreach ($this->blocks[1] as $block) 			{
 				$data .= $block->text($tpl);
 			}
 		}
@@ -1686,65 +1663,53 @@ class Cotpl_var
 	 */
 	public function evaluate($tpl = null)
 	{
-		if ($this->name === 'PHP')
-		{
+        $val = null;
+		if ($this->name === 'PHP') {
 			$var =& $GLOBALS;
-		}
-		elseif(!empty($tpl))
-		{
+
+		} elseif (!empty($tpl)) {
+            if(!isset($tpl->vars[$this->name])) $tpl->vars[$this->name] = null;
 			$val = $tpl->vars[$this->name];
-			if ($this->keys && (is_array($val) || is_object($val)))
-			{
+			if ($this->keys && (is_array($val) || is_object($val))) {
 				$var =& $tpl->vars[$this->name];
 			}
 		}
-		if ($this->keys)
-		{
+
+		if ($this->keys) {
 			$keys = $this->keys;
 			$last_key = array_pop($keys);
-			foreach ($keys as $key)
-			{
-				if (is_object($var))
-				{
+			foreach ($keys as $key) {
+				if (is_object($var)) {
 					$var =& $var->{$key};
-				}
-				elseif (is_array($var))
-				{
+
+				} elseif (is_array($var)) {
 					$var =& $var[$key];
-				}
-				else
-				{
+
+				} else {
 					break;
 				}
 			}
-			if (is_object($var))
-			{
+			if (is_object($var) && isset($var->{$last_key})) {
 				$val = $var->{$last_key};
-			}
-			elseif (is_array($var))
-			{
+
+			} elseif (is_array($var) && isset($var[$last_key]))  {
 				$val = $var[$last_key];
-			}
-			else
-			{
+
+			} else {
 				$val = null;
 			}
 		}
-		if ($this->callbacks)
-		{
-			foreach ($this->callbacks as $func)
-			{
-				if (is_array($func))
-				{
+		if ($this->callbacks) {
+			foreach ($this->callbacks as $func) {
+				if (is_array($func)) {
 					array_walk($func['args'], 'cotpl_callback_replace', $val);
 					$f = $func['name'];
 					$a = $func['args'];
-					if (!function_exists($f))
-					{
+					if (!function_exists($f)) {
 						return $this->__toString();
 					}
-					switch (count($a))
-					{
+
+					switch (count($a)) {
 						case 0:
 							$val = $f();
 							break;
@@ -1764,18 +1729,16 @@ class Cotpl_var
 							$val = call_user_func_array($f, $a);
 							break;
 					}
-				}
-				elseif ($func == 'dump')
-				{
+
+				} elseif ($func == 'dump') {
 					$val = $this->dump($val);
-				}
-				else
-				{
-					if (!function_exists($func))
-					{
+
+				} else {
+					if (!function_exists($func)) {
 						return $this->__toString();
 					}
-					$val = isset($val) || is_null($val) ? $func($val) : $func();
+					// ?? $val = isset($val) || is_null($val) ? $func($val) : $func();
+                    $val = $func($val);
 				}
 			}
 		}
@@ -1854,64 +1817,57 @@ function cotpl_tokenize($str, $delim = array(' '))
 	$quote = '';
 	$prev_delim = false;
 	$len = mb_strlen($str);
-	for ($i = 0; $i < $len; $i++)
-	{
+	for ($i = 0; $i < $len; $i++) {
 		$c = mb_substr($str, $i, 1);
-		if (in_array($c, $delim))
-		{
-			if ($quote)
-			{
+		if (in_array($c, $delim)) {
+			if ($quote) {
+			    if(!isset($tokens[$idx])) $tokens[$idx] = '';
 				$tokens[$idx] .= $c;
 				$prev_delim = false;
-			}
-			elseif ($prev_delim)
-			{
+
+			} elseif ($prev_delim) {
 				continue;
-			}
-			else
-			{
+
+			} else {
 				$idx++;
 				$prev_delim = true;
 			}
-		}
-		elseif ($c == '"' || $c == "'")
-		{
-			if (!$quote)
-			{
+
+		} elseif ($c == '"' || $c == "'") {
+			if (!$quote) {
 				$quote = $c;
-			}
-			elseif ($quote == $c)
-			{
+
+			} elseif ($quote == $c) {
 				$quote = '';
-				if (!isset($tokens[$idx]))
-				{
+				if (!isset($tokens[$idx])) {
 					$tokens[$idx] = '';
 				}
-			}
-			else
-			{
+
+			} else {
+                if(!isset($tokens[$idx])) $tokens[$idx] = '';
 				$tokens[$idx] .= $c;
 			}
 			$prev_delim = false;
-		}
-		elseif ($c == '{' && !$quote)
-		{
+
+		} elseif ($c == '{' && !$quote) {
 			// Avoid variable tokenization
 			$quote = $c;
+            if(!isset($tokens[$idx])) $tokens[$idx] = '';
 			$tokens[$idx] .= $c;
 			$prev_delim = false;
-		}
-		elseif ($c == '}' && $quote)
-		{
+
+		} elseif ($c == '}' && $quote) {
 			$quote = '';
+            if(!isset($tokens[$idx])) $tokens[$idx] = '';
 			$tokens[$idx] .= $c;
 			$prev_delim = false;
-		}
-		else
-		{
+
+		} else {
+            if(!isset($tokens[$idx])) $tokens[$idx] = '';
 			$tokens[$idx] .= $c;
 			$prev_delim = false;
 		}
 	}
+
 	return $tokens;
 }

@@ -17,16 +17,16 @@ Order=5
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (!is_array($cot_urltrans))
-{
+if (empty($cot_urltrans) || !is_array($cot_urltrans)) {
 	$cot_urltrans = array();
 	$urltrans_preset = './datas/urltrans.dat';
-	if(!in_array($cfg['plugin']['urleditor']['preset'], array('custom', 'none')))
-	{
-		$urltrans_preset = file_exists('./datas/' . $cfg['plugin']['urleditor']['preset'] . '.dat') ? './datas/' . $cfg['plugin']['urleditor']['preset'] . '.dat' : $cfg['plugins_dir'] . '/urleditor/presets/' . $cfg['plugin']['urleditor']['preset'] . '.dat';
+	if(!in_array(cot::$cfg['plugin']['urleditor']['preset'], array('custom', 'none'))) {
+		$urltrans_preset = file_exists('./datas/' . cot::$cfg['plugin']['urleditor']['preset'] . '.dat') ? './datas/' .
+            cot::$cfg['plugin']['urleditor']['preset'] . '.dat' : cot::$cfg['plugins_dir'] . '/urleditor/presets/' .
+            cot::$cfg['plugin']['urleditor']['preset'] . '.dat';
 	}
 
-	if ($cfg['plugin']['urleditor']['preset'] != 'none' && file_exists($urltrans_preset))
+	if (cot::$cfg['plugin']['urleditor']['preset'] != 'none' && file_exists($urltrans_preset))
 	{
 		$fp = fopen($urltrans_preset, 'r');
 		while ($line = trim(fgets($fp), " \t\r\n"))

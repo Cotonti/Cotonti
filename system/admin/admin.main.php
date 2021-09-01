@@ -9,11 +9,11 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'any');
-cot_block($usr['auth_read']);
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'any');
+cot_block(cot::$usr['auth_read']);
 
-$enabled[0] = $L['Disabled'];
-$enabled[1] = $L['Enabled'];
+$enabled[0] = cot::$L['Disabled'];
+$enabled[1] = cot::$L['Enabled'];
 
 $id = cot_import('id', 'G', 'TXT');
 $po = cot_import('po', 'G', 'TXT');
@@ -45,7 +45,7 @@ else
 {
 	$env['ext'] = $m;
 	$adminsubtitle = $cot_modules[$m]['title'];
-	$inc_file = $cfg['modules_dir'] . "/$m/$m.admin.php";
+	$inc_file = cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
 }
 
 if (!file_exists($inc_file))
@@ -53,29 +53,30 @@ if (!file_exists($inc_file))
 	cot_die();
 }
 
-$allow_img['0']['0'] = $R['admin_icon_deny'];
-$allow_img['1']['0'] = $R['admin_icon_allow'];
-$allow_img['0']['1'] = $R['admin_icon_deny_locked'];
-$allow_img['1']['1'] = $R['admin_icon_allow_locked'];
+$allow_img['0']['0'] = cot::$R['admin_icon_deny'];
+$allow_img['1']['0'] = cot::$R['admin_icon_allow'];
+$allow_img['0']['1'] = cot::$R['admin_icon_deny_locked'];
+$allow_img['1']['1'] = cot::$R['admin_icon_allow_locked'];
 
-$usr['admin_config'] = cot_auth('admin', 'a', 'A');
-$usr['admin_structure'] = cot_auth('structure', 'a', 'A');
-$usr['admin_users'] = cot_auth('users', 'a', 'A') || $usr['maingrp'] == COT_GROUP_SUPERADMINS;
+cot::$usr['admin_config'] = cot_auth('admin', 'a', 'A');
+cot::$usr['admin_structure'] = cot_auth('structure', 'a', 'A');
+cot::$usr['admin_users'] = cot_auth('users', 'a', 'A') || cot::$usr['maingrp'] == COT_GROUP_SUPERADMINS;
 
-$adminpath = array(array(cot_url('admin'), $L['Adminpanel']));
+$adminpath = array(array(cot_url('admin'), cot::$L['Adminpanel']));
 
 require $inc_file;
 
 $adminhelp = (empty($adminhelp)) ? '' : $adminhelp;
 
 $title_params = array(
-	'ADMIN' => $L['Administration'],
+	'ADMIN' => cot::$L['Administration'],
 	'SUBTITLE' => $adminsubtitle
 );
-$out['head'] .= $R['code_noindex'];
+if(!isset($out['head'] )) $out['head']  = '';
+$out['head'] .= cot::$R['code_noindex'];
 $out['subtitle'] = empty($adminsubtitle) ? cot_title('{ADMIN}', $title_params) : cot_title('{SUBTITLE} - {ADMIN}', $title_params);
 
-require_once $cfg['system_dir'].'/header.php';
+require_once cot::$cfg['system_dir'].'/header.php';
 
 $t = new XTemplate(cot_tplfile('admin', 'core'));
 
@@ -103,4 +104,4 @@ else
 	$t->out('MAIN.BODY');
 }
 
-require_once $cfg['system_dir'].'/footer.php';
+require_once cot::$cfg['system_dir'].'/footer.php';

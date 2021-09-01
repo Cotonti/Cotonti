@@ -14,8 +14,7 @@ foreach (cot_getextplugins('footer.first') as $pl)
 }
 /* ===== */
 
-if (!COT_AJAX)
-{
+if (!COT_AJAX) {
 	$mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R') ? 'core' : 'module';
 	if (cot::$cfg['enablecustomhf'])
 	{
@@ -37,7 +36,7 @@ if (!COT_AJAX)
 	$t->assign(array(
 		'FOOTER_COPYRIGHT'  => cot::$out['copyright'],
 		'FOOTER_LOGSTATUS'  => cot::$out['logstatus'],
-		'FOOTER_PMREMINDER' => cot::$out['pmreminder'],
+		'FOOTER_PMREMINDER' => !empty(cot::$out['pmreminder']) ? cot::$out['pmreminder'] :'',
 		'FOOTER_ADMINPANEL' => cot::$out['adminpanel']
 	));
 
@@ -49,38 +48,34 @@ if (!COT_AJAX)
 	/* ===== */
 
 	// Attach rich text editors if any
-	if ($cot_textarea_count > 0)
-	{
-		if (is_array($cot_plugins['editor']))
-		{
-			$parser = !empty($sys['parser']) ? $sys['parser'] : cot::$cfg['parser'];
-			$editor = cot::$cfg['plugin'][$parser]['editor'];
-			foreach ($cot_plugins['editor'] as $k)
-			{
-				if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R'))
-				{
-					include cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
-					break;
-				}
-			}
+	if ($cot_textarea_count > 0) {
+		if (!empty($cot_plugins['editor']) && is_array($cot_plugins['editor'])) {
+			$parser = !empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
+            if(!empty(cot::$cfg['plugin'][$parser]['editor'])) {
+                $editor = cot::$cfg['plugin'][$parser]['editor'];
+                foreach ($cot_plugins['editor'] as $k) {
+                    if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R')) {
+                        include cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
+                        break;
+                    }
+                }
+            }
 		}
 	}
 
+	if(empty(cot::$out['footer_rc'])) cot::$out['footer_rc'] = '';
     cot::$out['footer_rc'] .= Resources::renderFooter();
 
 	$t->assign('FOOTER_RC', cot::$out['footer_rc']);
 
-	if (cot::$usr['id'] > 0)
-	{
+	if (cot::$usr['id'] > 0) {
 		$t->parse('FOOTER.USER');
-	}
-	else
-	{
+
+	} else {
 		$t->parse('FOOTER.GUEST');
 	}
 
-	if (cot::$cfg['debug_mode'])
-	{
+	if (cot::$cfg['debug_mode']) {
 		$cot_hooks_fired[] = 'footer.last';
 		$cot_hooks_fired[] = 'output';
         cot::$out['hooks'] = '<ol>';
@@ -97,14 +92,14 @@ if (!COT_AJAX)
     cot::$sys['endtime'] = $i[1] + $i[0];
     cot::$sys['creationtime'] = round((cot::$sys['endtime'] - cot::$sys['starttime']), 3);
 
-	$out['creationtime'] = (!cot::$cfg['disablesysinfos']) ? cot::$L['foo_created'].' '.cot_declension(cot::$sys['creationtime'],
+	cot::$out['creationtime'] = (!cot::$cfg['disablesysinfos']) ? cot::$L['foo_created'].' '.cot_declension(cot::$sys['creationtime'],
             $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
-	$out['sqlstatistics'] = (cot::$cfg['showsqlstats']) ? cot::$L['foo_sqltotal'].': '.cot_declension(round(cot::$db->timeCount, 3),
+	cot::$out['sqlstatistics'] = (cot::$cfg['showsqlstats']) ? cot::$L['foo_sqltotal'].': '.cot_declension(round(cot::$db->timeCount, 3),
             $Ls['Seconds'], $onlyword = false, $canfrac = true).' - '.cot::$L['foo_sqlqueries'].': '.cot::$db->count.
             ' - '.cot::$L['foo_sqlaverage'].': '.cot_declension(round((cot::$db->timeCount / cot::$db->count), 5),
             $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
-	$out['bottomline'] = cot::$cfg['bottomline'];
-	$out['bottomline'] .= (cot::$cfg['keepcrbottom']) ? $out['copyright'] : '';
+	cot::$out['bottomline'] = cot::$cfg['bottomline'];
+	cot::$out['bottomline'] .= (cot::$cfg['keepcrbottom']) ? cot::$out['copyright'] : '';
 
 	// Development mode SQL query timings
 	if (cot::$cfg['devmode'] && cot_auth('admin', 'a', 'A'))
@@ -135,7 +130,7 @@ if (!COT_AJAX)
 		'FOOTER_BOTTOMLINE' => cot::$out['bottomline'],
 		'FOOTER_CREATIONTIME' => cot::$out['creationtime'],
 		'FOOTER_SQLSTATISTICS' => cot::$out['sqlstatistics'],
-		'FOOTER_DEVMODE' => cot::$out['devmode']
+		'FOOTER_DEVMODE' => isset(cot::$out['devmode']) ? cot::$out['devmode'] : ''
 	));
 
 	$t->parse('FOOTER');
