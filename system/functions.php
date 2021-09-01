@@ -1789,8 +1789,9 @@ function cot_build_country($flag)
 	global $cot_countries;
 	if (!$cot_countries) include_once cot_langfile('countries', 'core');
 	$flag = (empty($flag)) ? '00' : $flag;
-	return cot_rc_link(cot_url('users', 'f=country_'.$flag), $cot_countries[$flag], array(
-		'title' => $cot_countries[$flag]
+	$country = isset($cot_countries[$flag]) ? $cot_countries[$flag] : cot::$R['code_option_empty'];
+	return cot_rc_link(cot_url('users', 'f=country_'.$flag), $country, array(
+		'title' => $country
 	));
 }
 
@@ -1867,9 +1868,10 @@ function cot_build_flag($flag)
 	global $cot_countries;
 	if (!$cot_countries) include_once cot_langfile('countries', 'core');
 	$flag = (empty($flag)) ? '00' : $flag;
+	$country = isset($cot_countries[$flag]) ? $cot_countries[$flag] : cot::$R['code_option_empty'];
 	return cot_rc_link(cot_url('users', 'f=country_'.$flag),
 		cot_rc('icon_flag', array('code' => $flag, 'alt' => $flag)),
-		array('title' => $cot_countries[$flag])
+		array('title' => $country)
 	);
 }
 
@@ -3965,24 +3967,21 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	}
 
 	$each_side = 3; // Links each side
+    $base_rel = '';
 
 	is_array($params) ? $args = $params : parse_str($params, $args);
-	if ($ajax)
-	{
+	if ($ajax) {
 		$ajax_rel = !empty($ajax_module);
 		$ajax_rel && is_string($ajax_params) ? parse_str($ajax_params, $ajax_args) : $ajax_args = $ajax_params;
 		$event = ' class="ajax"';
-		if (empty($target_div))
-		{
+		if (empty($target_div)) {
 			$base_rel = $ajax_rel ? ' rel="get;' : '';
-		}
-		else
-		{
+
+		} else {
 			$base_rel = $ajax_rel ? ' rel="get-'.$target_div.';' : ' rel="get-'.$target_div.'"';
 		}
-	}
-	else
-	{
+
+	} else {
 		$ajax_rel = false;
 		$event = '';
 	}
@@ -3997,28 +3996,34 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 
 	// Main block
 
+    $first = '';
+    $firstlink = '';
+    $prev = '';
+    $prevlink = '';
+    $next = '';
+    $nextlink = '';
+    $last = '';
+    $lastlink = '';
+    $lastn = FALSE;
+
 	$before = '';
 	$pages = '';
 	$after = '';
 	$i = 1;
 	$n = 0;
-	while ($i < $cur_left)
-	{
-		if (cot::$cfg['easypagenav'])
-		{
+	while ($i < $cur_left) {
+		if (cot::$cfg['easypagenav']) {
 			$args[$characters] = $i == 1 ? null : $i;
-		}
-		else
-		{
+
+		} else {
 			$args[$characters] = ($i - 1) * $perpage;
 		}
-		if ($ajax_rel)
-		{
+
+		if ($ajax_rel) {
 			$ajax_args[$characters] = $args[$characters];
 			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
-		}
-		else
-		{
+
+		} else {
 			$rel = $base_rel;
 		}
 		$before .= cot_rc('link_pagenav_main', array(
@@ -4027,27 +4032,22 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'rel' => $rel,
 			'num' => $i
 		));
-		if ($i < $cur_left - 2)
-		{
+		if ($i < $cur_left - 2) {
 			$before .= cot::$R['link_pagenav_gap'];
-		}
-		elseif ($i == $cur_left - 2)
-		{
-			if (cot::$cfg['easypagenav'])
-            {
+
+		} elseif ($i == $cur_left - 2) {
+			if (cot::$cfg['easypagenav']) {
                 $args[$characters] = $i+1;
-            }
-            else
-            {
+
+			} else {
                 $args[$characters] = $i * $perpage;
             }
-			if ($ajax_rel)
-			{
+
+			if ($ajax_rel) {
 				$ajax_args[$characters] = $args[$characters];
 				$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
-			}
-			else
-			{
+
+			} else {
 				$rel = $base_rel;
 			}
 			$before .= cot_rc('link_pagenav_main', array(
@@ -4206,25 +4206,21 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		));
 	}
 
-	if (($current + $perpage) < $entries)
-	{
+	if (($current + $perpage) < $entries) {
 		$next_n = $current + $perpage;
-		if (cot::$cfg['easypagenav'])
-		{
+		if (cot::$cfg['easypagenav']) {
 			$num = floor($next_n / $perpage) + 1;
 			$args[$characters] = $num == 1 ? null : $num;
-		}
-		else
-		{
+
+		} else {
 			$args[$characters] = $next_n;
 		}
-		if ($ajax_rel)
-		{
+
+		if ($ajax_rel) {
 			$ajax_args[$characters] = $args[$characters];
 			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
-		}
-		else
-		{
+
+		} else {
 			$rel = $base_rel;
 		}
 		$nextlink = cot_url($module, $args, $hash);
@@ -4235,22 +4231,20 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'num' => $next_n + 1
 		));
 		$last_n = ($totalpages - 1) * $perpage;
-		if (cot::$cfg['easypagenav'])
-		{
+
+		if (cot::$cfg['easypagenav']) {
 			$num = floor($last_n / $perpage) + 1;
 			$args[$characters] = $num == 1 ? null : $num;
-		}
-		else
-		{
+
+		} else {
 			$args[$characters] = $last_n;
 		}
-		if ($ajax_rel)
-		{
+
+		if ($ajax_rel) {
 			$ajax_args[$characters] = $args[$characters];
 			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
-		}
-		else
-		{
+
+		} else {
 			$rel = $base_rel;
 		}
 		$lastlink = cot_url($module, $args, $hash);
@@ -4422,11 +4416,10 @@ function cot_parse_autourls($text)
  */
 function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact = false, $cuttext = '')
 {
-	if ($considerhtml)
-	{
+    $truncated_by_space = false;
+	if ($considerhtml) {
 		// if the plain text is shorter than the maximum length, return the whole text
-		if (!preg_match('/<\s*(pre|plaintext)/', $text) && mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length)
-		{
+		if (!preg_match('/<\s*(pre|plaintext)/', $text) && mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length) {
 			return $text;
 		}
 		// splits all html-tags to scanable lines
@@ -4437,11 +4430,9 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 		$truncate = '';
 		$plain_mode = false;
 		$plain_tag = false;
-		foreach ($lines as $line_matchings)
-		{
+		foreach ($lines as $line_matchings) {
 			// if there is any html-tag in this line, handle it and add it (uncounted) to the output
-			if (!empty($line_matchings[1]))
-			{
+			if (!empty($line_matchings[1])) {
 				// if it's an "empty element" with or without xhtml-conform closing slash (f.e. <br/>)
 				if (preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1]))
 				{
@@ -4451,16 +4442,12 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 				elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings))
 				{
 					$tag = false;
-					if (strtolower($tag_matchings[1]) == $plain_mode)
-					{
+					if (strtolower($tag_matchings[1]) == $plain_mode) {
 						$plain_mode = false;
-					}
-					else
-					{
+					} else {
 						// delete tag from $open_tags list
 						$pos = array_search($tag_matchings[1], $open_tags);
-						if ($pos !== false)
-						{
+						if ($pos !== false) {
 							unset($open_tags[$pos]);
 						}
 					}
@@ -4479,24 +4466,20 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 
 			// the number of characters which are left
 			$left = $length - $total_length;
-			if ($plain_mode || ($plain_tag && $tag))
-			{
+			if ($plain_mode || ($plain_tag && $tag)) {
 				// treats text as plain in <pre>, <plaintext> tags
 				$content = $plain_mode ? $line_matchings[0] : $line_matchings[2];
-				if (mb_strlen($content) <= $left)
-				{
+				if (mb_strlen($content) <= $left) {
 					$truncate .= $content;
 					$total_length += mb_strlen($content);
-				}
-				else
-				{
+
+				} else {
 					$truncate .= mb_substr($content, 0, $left);
 					$total_length += $left;
 				}
 				if ($plain_tag && !$plain_mode) $plain_mode = $plain_tag;
-			}
-			else
-			{
+
+			} else {
 				// calculate the length of the plain text part of the line; handle entities as one character
 				$content_length = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};|[\r\n\s]{2,}/i', ' ', $line_matchings[2]));
 				if ($total_length+$content_length> $length)
@@ -4533,46 +4516,37 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 			}
 
 			// if the maximum length is reached, get off the loop
-			if ($total_length >= $length)
-			{
+			if ($total_length >= $length) {
 				break;
 			}
 		}
-	}
-	else
-	{
-		if (mb_strlen($text) <= $length)
-		{
+
+	} else {
+		if (mb_strlen($text) <= $length) {
 			return $text;
-		}
-		else
-		{
+
+		} else {
 			$truncate = mb_substr($text, 0, $length);
 		}
 	}
 
-	if (!$exact && !$truncated_by_space && !$plain_mode)
-	{
+	if (!$exact && !$truncated_by_space && !$plain_mode) {
 		// ...search the last occurence of a space...
-		if (mb_strrpos($truncate, ' ') > 0)
-		{
+		if (mb_strrpos($truncate, ' ') > 0) {
 			$pos1 = mb_strrpos($truncate, ' ');
 			$pos2 = mb_strrpos($truncate, '>');
 			$spos = ($pos2 < $pos1) ? $pos1 : ($pos2+1);
-			if (isset($spos))
-			{
+			if (isset($spos)) {
 				// ...and cut the text in this position
 				$truncate = mb_substr($truncate, 0, $spos);
 			}
 		}
 	}
 	$truncate .= $cuttext;
-	if ($considerhtml)
-	{
+	if ($considerhtml) {
 		// close all unclosed html-tags
 		if ($plain_mode) $truncate .= '</'.$plain_mode.'>';
-		foreach ($open_tags as $tag)
-		{
+		foreach ($open_tags as $tag) {
 			$truncate .= '</'.$tag.'>';
 		}
 	}
@@ -4588,8 +4562,7 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
  */
 function cot_wraptext($str, $wrap = 80)
 {
-	if (!empty($str))
-	{
+	if (!empty($str)) {
 		$str = preg_replace('/([^\n\r ?&\.\/<>\"\\-]{'.$wrap.'})/', " \\1\n", $str);
 	}
 	return $str;
@@ -4626,7 +4599,7 @@ function cot_rc($name, $params = array())
 	if(isset($R[$name])) {
         $res = $R[$name];
     } elseif(isset($L[$name])) {
-        $res = $R[$name];
+        $res = $L[$name];
     } else {
         $res = $name;
     }

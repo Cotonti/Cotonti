@@ -9,12 +9,9 @@ defined('COT_CODE') or die('Wrong URL');
 
 /* ======== First... ======== */
 
-if (version_compare(PHP_VERSION, '6.0.0', '<='))
-{
-	if (get_magic_quotes_gpc())
-	{
-		function cot_disable_mqgpc(&$value, $key)
-		{
+if (version_compare(PHP_VERSION, '6.0.0', '<=')) {
+	if (get_magic_quotes_gpc()) {
+		function cot_disable_mqgpc(&$value, $key) {
 			$value = stripslashes($value);
 		}
 		$gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
@@ -22,13 +19,10 @@ if (version_compare(PHP_VERSION, '6.0.0', '<='))
 	}
 }
 define('MQGPC', FALSE);
-if ($cfg['display_errors'])
-{
+if ($cfg['display_errors']) {
 	error_reporting(E_ALL ^ E_NOTICE);
 	ini_set('display_errors', 1);
-}
-else
-{
+} else {
 	error_reporting(0);
 	ini_set('display_errors', 0);
 }
@@ -413,10 +407,8 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
     }
 }
 
-if ($usr['id'] == 0)
-{
-	if (!$cot_guest_auth)
-	{
+if ($usr['id'] == 0) {
+	if (empty($cot_guest_auth)) {
 		$cot_guest_auth = cot_auth_build(0);
 		$cache && $cache->db->store('cot_guest_auth', $cot_guest_auth, 'system');
 	}
@@ -431,26 +423,21 @@ if ($usr['id'] == 0)
 
 $lang = $usr['lang'];
 
-if (defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R'))
-{
+if (defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R')) {
 	define('COT_ADMIN', TRUE);
-}
-else
-{
+} else {
 	$_SESSION['s_run_admin'] = defined('COT_ADMIN');
 }
 
 /* ======== Category Structure ======== */
-if (!$structure)
-{
+if (empty($structure)) {
 	require_once cot_incfile('extrafields');
 	cot_load_structure();
 	$cache && $cache->db->store('structure', $structure, 'system');
 }
 $cot_cat = &$structure['page'];
 
-if (!$cache || !$cot_cfg)
-{
+if (!$cache || !$cot_cfg) {
 	// Fill missing options with default values
 	foreach ($structure as $module => $mod_struct)
 	{

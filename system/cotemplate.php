@@ -1304,14 +1304,12 @@ class Cotpl_logical extends Cotpl_block
 	public function __construct($expr_str, $if_code, $else_code, &$index, $path)
 	{
 		$this->expr = new Cotpl_expr($expr_str);
-		if (!empty($if_code))
-		{
+		if (!empty($if_code)) {
 			$bpath = $path;
 			array_push($bpath, 0);
 			$this->compile($if_code, $this->blocks[0], $index, $bpath);
 		}
-		if (!empty($else_code))
-		{
+		if (!empty($else_code)) {
 			$bpath = $path;
 			array_push($bpath, 1);
 			$this->compile($else_code, $this->blocks[1], $index, $bpath);
@@ -1327,8 +1325,7 @@ class Cotpl_logical extends Cotpl_block
 	{
 		$str = "<!-- IF " . $this->expr->__toString() . " -->\n";
 		$str .= $this->blocks_toString($this->blocks[0]);
-		if (count($this->blocks[1]) > 0)
-		{
+		if (count($this->blocks[1]) > 0) {
 			$str .= "<!-- ELSE -->\n" . $this->blocks_toString($this->blocks[1]);
 		}
 		$str .= "<!-- ENDIF -->\n";
@@ -1342,19 +1339,16 @@ class Cotpl_logical extends Cotpl_block
 	public function getTags()
 	{
 		$list = array();
-		for ($i = 0; $i < 2; $i++)
-		{
-			if (is_array($this->blocks[$i]))
-			{
-				foreach ($this->blocks[$i] as $block)
-				{
-					if ($block instanceof Cotpl_data || $block instanceof Cotpl_block)
-					{
+		for ($i = 0; $i < 2; $i++) {
+			if (isset($this->blocks[$i]) && is_array($this->blocks[$i])) {
+				foreach ($this->blocks[$i] as $block) {
+					if ($block instanceof Cotpl_data || $block instanceof Cotpl_block) {
 						$list = array_merge($list, $block->getTags());
 					}
 				}
 			}
 		}
+
 		return $list;
 	}
 

@@ -157,7 +157,14 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			$page_data['page_expire']
 		);
 
-		$temp_array = array(
+        $haveFile = $L['No'];
+        $page_data['page_file'] = (int)$page_data['page_file'];
+        if($page_data['page_file'] == 1) {
+            $haveFile = cot::$L['Yes'];
+        } elseif ($page_data['page_file'] == 2) {
+            $haveFile = cot::$L['Members_download'];
+        }
+        $temp_array = array(
 			'URL' => $page_data['page_pageurl'],
 			'ID' => $page_data['page_id'],
 			'TITLE' => $page_data['page_fulltitle'],
@@ -183,7 +190,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			'MORE' => ($cutted) ? cot_rc('list_more', array('page_url' => $page_data['page_pageurl'])) : '',
 			'AUTHOR' => htmlspecialchars($page_data['page_author']),
 			'OWNERID' => $page_data['page_ownerid'],
-			'OWNERNAME' => htmlspecialchars($page_data['user_name']),
+			'OWNERNAME' => isset($page_data['user_name']) ? htmlspecialchars($page_data['user_name']) : '',
 			'DATE' => cot_date($date_format, $page_data['page_date']),
 			'BEGIN' => cot_date($date_format, $page_data['page_begin']),
 			'EXPIRE' => cot_date($date_format, $page_data['page_expire']),
@@ -192,7 +199,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			'BEGIN_STAMP' => $page_data['page_begin'],
 			'EXPIRE_STAMP' => $page_data['page_expire'],
 			'UPDATED_STAMP' => $page_data['page_updated'],
-			'FILE' => $cot_yesno[$page_data['page_file']],
+			'FILE' => $haveFile,
 			'FILE_URL' => empty($page_data['page_url']) ? '' : cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id'].'&a=dl'),
 			'FILE_SIZE' => $page_data['page_size'] / 1024, // in KiB; deprecated but kept for compatibility
 			'FILE_SIZE_BYTES' => $page_data['page_size'],

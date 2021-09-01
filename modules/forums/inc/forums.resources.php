@@ -21,7 +21,7 @@ $R['forums_icon_posts_sticky_locked'] = '<img class="icon" src="images/icons/'.$
 
 $R['forums_icon_subforum'] = '<img class="icon" src="modules/forums/img/subforum.png" alt="{PHP.L.Subforum}" />';
 
-$R['forums_icon_section_activity'] = '<img class="icon" src="modules/forums/img/activity{$secact_num}.png" alt="'.$L['for_activity'].' {$secact_num}" />';
+$R['forums_icon_section_activity'] = '<img class="icon" src="modules/forums/img/activity{$secact_num}.png" alt="'.$L['Activity'].' {$secact_num}" />';
 $R['forums_icon_topic'] = '<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/{$icon}.png" alt="'.$L['forums_topic'].'" />';
 $R['forums_icon_topic_t'] = '<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/{$icon}.png" alt="'.$L['forums_topic'].'" title="{$title}" />';
 

@@ -16,19 +16,16 @@ foreach (cot_getextplugins('footer.first') as $pl)
 
 if (!COT_AJAX) {
 	$mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R') ? 'core' : 'module';
-	if (cot::$cfg['enablecustomhf'])
-	{
+	if (cot::$cfg['enablecustomhf']) {
 		$mtpl_base = (defined('COT_PLUG') && !empty($e)) ? array('footer', $e) : array('footer', cot::$env['location']);
-	}
-	else
-	{
+
+	} else {
 		$mtpl_base = 'footer';
 	}
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 
     /* === Hook === */
-    foreach (cot_getextplugins('footer.main') as $pl)
-    {
+    foreach (cot_getextplugins('footer.main') as $pl) {
         include $pl;
     }
     /* ===== */
@@ -36,8 +33,8 @@ if (!COT_AJAX) {
 	$t->assign(array(
 		'FOOTER_COPYRIGHT'  => cot::$out['copyright'],
 		'FOOTER_LOGSTATUS'  => cot::$out['logstatus'],
-		'FOOTER_PMREMINDER' => !empty(cot::$out['pmreminder']) ? cot::$out['pmreminder'] :'',
-		'FOOTER_ADMINPANEL' => cot::$out['adminpanel']
+		'FOOTER_PMREMINDER' => !empty(cot::$out['pmreminder']) ? cot::$out['pmreminder'] : '',
+		'FOOTER_ADMINPANEL' => !empty(cot::$out['adminpanel']) ? cot::$out['adminpanel'] : ''
 	));
 
 	/* === Hook === */
@@ -48,7 +45,7 @@ if (!COT_AJAX) {
 	/* ===== */
 
 	// Attach rich text editors if any
-	if ($cot_textarea_count > 0) {
+	if (!empty($cot_textarea_count)) {
 		if (!empty($cot_plugins['editor']) && is_array($cot_plugins['editor'])) {
 			$parser = !empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
             if(!empty(cot::$cfg['plugin'][$parser]['editor'])) {

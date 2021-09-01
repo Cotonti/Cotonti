@@ -67,5 +67,5 @@ $L['polls_allpolls'] = 'All polls';
  * For meta tags
  */
 $L['polls_id_stat_result'] = 'Statistics of the results of the online survey'; 
-$L['polls_id_stat_formed'] = 'Is formed on the website '.$sys['domain'].' dynamically taking into account the responses of visitors.';
-$L['polls_meta_desc'] = 'List of the all online polls on the website '.$sys['domain'].'. Taking into account the responses of visitors, general statistics are formed and displayed in percentages.';
+$L['polls_id_stat_formed'] = 'Is formed on the website '.cot::$sys['domain'].' dynamically taking into account the responses of visitors.';
+$L['polls_meta_desc'] = 'List of the all online polls on the website '.cot::$sys['domain'].'. Taking into account the responses of visitors, general statistics are formed and displayed in percentages.';

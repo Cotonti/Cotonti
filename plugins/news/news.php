@@ -37,7 +37,9 @@ foreach ($categories as $v)
 		$v[2] = ((int)$v[2] > 0) ? $v[2] : (int)$cfg['page']['cat_' . $v[0]]['truncatetext'];
 		$v[1] = ((int)$v[1] > 0) ? $v[1] : (int)$cfg['plugin']['news']['maxpages'];
 
-		$_GET[$v[0].'d'] = (empty($c) || ($jj == 0) || $cfg['plugin']['news']['syncpagination']) ? $_GET['d'] : $_GET[$v[0].'d'];
+		$getD = isset($_GET['d']) ? $_GET['d'] : null;
+		$getV0D = isset($_GET[$v[0].'d']) ? $_GET[$v[0].'d'] : null;
+		$_GET[$v[0].'d'] = (empty($c) || ($jj == 0) || $cfg['plugin']['news']['syncpagination']) ? $getD : $getV0D;
 		list($v[3]['pg'], $v[3]['d'], $v[3]['durl']) = cot_import_pagenav($v[0] . 'd', $v[1]);
 
 		$cats[$v[0]] = $v;
@@ -125,7 +127,7 @@ if (count($cats) > 0)
 			$url = cot_url('index', 'c=' . $pag['page_cat']);
 			$news->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $v[2]));
 			$news->assign(array(
-				'PAGE_ROW_NEWSPATH' => cot_rc_link($url, htmlspecialchars($structure['page'][$row['page_cat']]['title'])),
+				'PAGE_ROW_NEWSPATH' => cot_rc_link($url, htmlspecialchars($structure['page'][$pag['page_cat']]['title'])),
 				'PAGE_ROW_NEWSPATH_URL' => $url,
 				'PAGE_ROW_CATDESC' => htmlspecialchars($structure['page'][$pag['page_cat']]['desc']),
 				'PAGE_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),

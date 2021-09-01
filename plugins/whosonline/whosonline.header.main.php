@@ -47,23 +47,22 @@ if (!defined('WHOSONLINE_UPDATED')) {
 		} elseif(!cot::$cfg['plugin']['whosonline']['disable_guests']) {
 			if (empty($sys['online_location'])) {
 				cot::$db->insert($db_online, array(
-								'online_ip' => cot::$usr['ip'],
-								'online_name' => 'v',
-								'online_lastseen' => (int)cot::$sys['now'],
-								'online_location' => cot::$env['location'],
-								'online_subloc' => (string) cot::$sys['sublocation'],
-								'online_userid' => -1,
-								'online_shield' => 0,
-								'online_hammer' => 0
+                    'online_ip' => cot::$usr['ip'],
+                    'online_name' => 'v',
+                    'online_lastseen' => (int)cot::$sys['now'],
+                    'online_location' => cot::$env['location'],
+                    'online_subloc' => isset(cot::$sys['sublocation']) ? (string)cot::$sys['sublocation'] : '',
+                    'online_userid' => -1,
+                    'online_shield' => 0,
+                    'online_hammer' => 0
 				));
-			}
-			else
-			{
+
+			} else {
 				cot::$db->update($db_online, array(
-								'online_lastseen' => cot::$sys['now'],
-								'online_location' => cot::$env['location'],
-								'online_subloc' => (string)cot::$sys['sublocation'],
-								'online_hammer' => (int)cot::$sys['online_hammer']
+                    'online_lastseen' => cot::$sys['now'],
+                    'online_location' => cot::$env['location'],
+                    'online_subloc' => isset(cot::$sys['sublocation']) ? (string)cot::$sys['sublocation'] : '',
+                    'online_hammer' => isset(cot::$sys['online_hammer']) ? (int)cot::$sys['online_hammer'] : 0
 				), "online_ip='".cot::$usr['ip']."' AND online_userid < 0");
 			}
 		}

@@ -210,30 +210,31 @@ class Resources
 		if (static::$headerComplete) Resources::embedFooter($code, $type, $order);
 
 		// Если используем консолидацию и минификацию, сохранить в файл
-		if (static::$consolidate && static::$cacheOn && !static::$isAdmin)
-		{
+		if (static::$consolidate && static::$cacheOn && !static::$isAdmin) {
 			if (!$identifier) $identifier = md5($code . $type);
 			// Save as file
 			$path = static::$dir . $identifier . '.' . $type;
-			if (!file_exists($path) || md5($code) != md5_file($path))
-			{
-				if (static::$minify && !static::$skip_minification)
-				{
+			if (!file_exists($path) || md5($code) != md5_file($path)) {
+				if (static::$minify && !static::$skip_minification) {
 					$code = static::minify($code, $type);
 				}
 				file_put_contents($path, $code);
 			}
 			static::$registry[$type][$scope][$order][] = $path;
-		}
-		else
-		{
+
+		} else {
 			$separator = "\n";
-			if ($type == 'js')
-			{
+			if ($type == 'js') {
 				$code = trim($code);
 				$last = (substr($code, -1));
 				if ($last != ';') $separator = ";\n";
 			}
+			if (!isset(static::$registry[$type]['embed'])) {
+                static::$registry[$type]['embed'] = array();
+            }
+			if (!isset($registry[$type]['embed'][$scope][$order])) {
+                static::$registry[$type]['embed'][$scope][$order] = '';
+            }
 			static::$registry[$type]['embed'][$scope][$order] .= $code . $separator;
 		}
 		return true;
