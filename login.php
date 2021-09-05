@@ -11,8 +11,6 @@
 define('COT_CODE', TRUE);
 define('COT_CORE', TRUE);
 define('COT_AUTH', TRUE);
-$env['location'] = 'users';
-$env['ext'] = 'users';
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'] . '/functions.php';
@@ -21,6 +19,9 @@ require_once $cfg['system_dir'] . '/common.php';
 
 require_once cot_langfile('users', 'core');
 
+cot::$env['ext'] = 'users';
+cot::$env['location'] = 'login';
+cot::$sys['sublocation'] = cot::$L['Login'];
 
 $logout = cot_import('out', 'G', 'BOL');
 if ($logout)
@@ -76,6 +77,8 @@ foreach (cot_getextplugins('users.auth.first') as $pl)
 	include $pl;
 }
 /* ===== */
+
+$rusername = '';
 
 if ($a == 'check')
 {
@@ -276,6 +279,7 @@ foreach (cot_getextplugins('users.auth.main') as $pl)
 /* ===== */
 
 $out['subtitle'] = cot::$L['aut_logintitle'];
+if (!isset($out['head'])) $out['head'] = '';
 $out['head'] .= cot::$R['code_noindex'];
 require_once cot::$cfg['system_dir'] . '/header.php';
 $mskin = file_exists(cot_tplfile('login', 'core')) ? cot_tplfile('login', 'core') : cot_tplfile('users.auth', 'module');

@@ -15,8 +15,9 @@ Hooks=forums.topics.query
 
 defined('COT_CODE') or die('Wrong URL');
 
-if($cfg['forums']['cat_' . $s]['allowpolls'])
+if(cot::$cfg['forums']['cat_' . $s]['allowpolls'])
 {
+    $where['poll'] = isset($where['poll']) ? $where['poll'] : '';
 	$where['poll'] .= "(poll_type='forum' OR poll_id IS NULL)";
 	$join_columns = ', p.poll_id, p.poll_type';
 	$join_condition = " LEFT JOIN $db_polls AS p ON t.ft_id=p.poll_code";

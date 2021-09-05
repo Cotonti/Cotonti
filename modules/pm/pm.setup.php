@@ -3,10 +3,10 @@
 [BEGIN_COT_EXT]
 Name=Private Messages
 Description=On-site user communication like e-mail
-Version=1.0.10
-Date=2016-03-01
+Version=1.0.11
+Date=2021-09-05
 Author=esclkm, Cotonti Team, Neocrome
-Copyright=(c) Cotonti Team 2008-2016
+Copyright=(c) Cotonti Team 2008-2021
 Notes=BSD License
 Auth_guests=
 Lock_guests=W12345A

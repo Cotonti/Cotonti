@@ -31,6 +31,8 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 {
 	$id = (int) $id;
 	global $db, $cfg, $db_polls, $db_polls_options, $poll_id, $R, $L, $poll_options, $poll_multiple, $poll_state, $poll_text;
+
+    $poll_full_template = false;
 	if (gettype($t) != 'object')
 	{
 		$t = new XTemplate(cot_tplfile('polls'));
@@ -105,8 +107,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 		'EDIT_POLL_ID' => $id,
 		'EDIT_POLL_MULTIPLE' => cot_checkbox($multiple, 'poll_multiple', $L['polls_multiple']),
 	));
-	if ($poll_full_template == true)
-	{
+	if ($poll_full_template == true) {
 		$t->parse($block);
 		return ($t->text($block));
 	}

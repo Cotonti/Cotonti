@@ -38,6 +38,14 @@ if ($structure['forums'][$s]['locked'])
 	cot_die_message(602, true);
 }
 
+$rtopic = array(
+    'ft_title' => '',
+    'ft_desc' => '',
+    'ft_mode' => ''
+);
+$rmsg = array(
+    'fp_text' => ''
+);
 if ($a == 'newtopic')
 {
 	cot_shield_protect();
@@ -159,6 +167,7 @@ $toptitle .= ($usr['isadmin']) ? cot::$R['forums_code_admin_mark'] : '';
 
 $sys['sublocation'] = cot::$structure['forums'][$s]['title'];
 $out['subtitle'] = cot::$L['forums_newtopic'];
+if (!isset($out['head'])) $out['head'] = '';
 $out['head'] .= cot::$R['code_noindex'];
 
 /* === Hook === */

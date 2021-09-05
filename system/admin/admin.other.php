@@ -1,4 +1,4 @@
-<?php
+    <?php
 /**
  * Administration panel - Other Admin parts listing
  *
@@ -53,16 +53,17 @@ if(!empty($p))
 		cot_die_message(907, TRUE);
 	}
 
-	$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
+	$adminpath[] = array(cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
 	$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$p), $cot_plugins_enabled[$p]['title']);
-	$adminpath[] = array(cot_url('admin', 'm=other&p='.$p), $L['Administration']);
-	// $adminhelp = $L['Description'].' : '.$info['Description'].'<br />'.$L['Version'].' : '.$info['Version'].'<br />'.$L['Date'].' : '.$info['Date'].'<br />'.$L['Author'].' : '.$info['Author'].'<br />'.$L['Copyright'].' : '.$info['Copyright'].'<br />'.$L['Notes'].' : '.$info['Notes'];
+	$adminpath[] = array(cot_url('admin', 'm=other&p='.$p), cot::$L['Administration']);
+	// $adminhelp = cot::$L['Description'].' : '.$info['Description'].'<br />'.cot::$L['Version'].' : '.$info['Version'].'<br />'.cot::$L['Date'].' : '.$info['Date'].'<br />'.cot::$L['Author'].' : '.$info['Author'].'<br />'.cot::$L['Copyright'].' : '.$info['Copyright'].'<br />'.cot::$L['Notes'].' : '.$info['Notes'];
 
 	if(is_array($extp))
 	{
 		foreach($extp as $k => $pl)
 		{
-			include_once $cfg['plugins_dir'] . '/' . $pl['pl_file'];
+			include_once cot::$cfg['plugins_dir'] . '/' . $pl['pl_file'];
+            if (!isset($adminmain)) $adminmain = '';
 			$adminmain .= $plugin_body;
 		}
 	}
@@ -70,8 +71,8 @@ if(!empty($p))
 }
 else
 {
-	$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-	$adminsubtitle = $L['Other'];
+	$adminpath[] = array(cot_url('admin', 'm=other'), cot::$L['Other']);
+	$adminsubtitle = cot::$L['Other'];
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 	cot_block($usr['auth_read']);
 
@@ -91,12 +92,12 @@ else
 		if ($type == 'module')
 		{
 			$target = $cot_plugins['admin'];
-			$title = $L['Modules'];
+			$title = cot::$L['Modules'];
 		}
 		else
 		{
 			$target = $cot_plugins['tools'];
-			$title = $L['Plugins'];
+			$title = cot::$L['Plugins'];
 		}
 		if (is_array($target))
 		{

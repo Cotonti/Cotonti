@@ -214,9 +214,8 @@ function cot_auth_getvalue($mask)
 	$res = 0;
     $masks = str_split($mask);
 
-    foreach ($masks as $k)
-    {
-        $res += $mn[$k];
+    foreach ($masks as $k) {
+        if(isset($mn[$k])) $res += $mn[$k];
     }
     return $res;
 }

@@ -164,6 +164,8 @@ class cot
 	public static function init()
 	{
 		global $cache, $cfg, $cot_extrafields, $db, $db_x, $env, $L, $out, $R, $structure, $sys, $usr;
+
+        // Todo fill some variables with defoult values
 		self::$cache       =& $cache;
 		self::$cfg         =& $cfg;
 		self::$db          =& $db;
@@ -192,6 +194,11 @@ class cot
 		$db->registerTable('structure');
 		$db->registerTable('updates');
 		$db->registerTable('users');
+
+        // Fill some variables with default values
+        // May be isset() is not needed
+        if(!isset(self::$out['head'])) self::$out['head'] = '';
+        if(!isset(self::$out['subtitle'])) self::$out['subtitle'] = '';
 	}
 }
 
@@ -213,24 +220,25 @@ function cot_alphaonly($text)
 /**
  * Generic autoloader function to be used with spl_autoload_register
  *
+ * @todo PSR-4 autoloader
  * @param string $class Class name
  */
 function cot_autoload($class)
 {
 	global $cfg, $env;
-	if ($env['type'] == 'module')
-	{
+
+	$type = isset(cot::$env['type']) ? cot::$env['type'] : null;
+
+	if ($type == 'module') {
 		$paths[] = "{$cfg['modules_dir']}/{$env['ext']}/classes/$class.php";
-	}
-	elseif ($env['type'] == 'plug')
-	{
+
+	} elseif ($type == 'plug') {
 		$paths[] = "{$cfg['plugins_dir']}/{$env['ext']}/classes/$class.php";
 	}
 	$paths[] = "{$cfg['system_dir']}/classes/$class.php";
-	foreach ($paths as $path)
-	{
-		if (file_exists($path))
-		{
+
+	foreach ($paths as $path) {
+		if (file_exists($path)) {
 			require $path;
 			return;
 		}
@@ -3210,7 +3218,7 @@ function cot_get_messages($src = 'default', $class = '')
 		return $_SESSION['cot_messages'][$sys['site_id']];
 	}
 
-	if (!is_array($_SESSION['cot_messages'][$sys['site_id']])) {
+	if (!isset($_SESSION['cot_messages'][$sys['site_id']]) || !is_array($_SESSION['cot_messages'][$sys['site_id']])) {
 		return $messages;
 	}
 
@@ -4603,6 +4611,8 @@ function cot_rc($name, $params = array())
     } else {
         $res = $name;
     }
+
+
 
 	is_array($params) ? $args = $params : parse_str($params, $args);
 	if (preg_match_all('#\{\$(\w+)\}#', $res, $matches, PREG_SET_ORDER)) {

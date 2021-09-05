@@ -102,36 +102,29 @@ if ($empty)
 	cot_die_message(907, TRUE);
 }
 
-if (empty($out['subtitle']))
-{
-	if (empty($L['plu_title']))
-	{
+if (empty($out['subtitle'])) {
+	if (empty($L['plu_title']) && isset($L[$extname . '_title'])) {
 		$L['plu_title'] = $L[$extname . '_title'];
 	}
 	$out['subtitle'] = empty($L['plu_title']) ? $out['plu_title'] : $L['plu_title'];
 }
 $sys['sublocation'] = $out['subtitle'];
 
-if ($ext_display_header)
-{
+if ($ext_display_header) {
 	$t_plug = $t;
 	require_once $cfg['system_dir'] . '/header.php';
 	$t = $t_plug;
 }
 
-if ($autoassigntags)
-{
+if ($autoassigntags) {
 	array_unshift($pltitle, array(cot_url('plug', "e=$e"), $out['subtitle']));
-	if (empty($o))
-	{
+	if (empty($o)) {
 		$t->assign(array(
 			'PLUGIN_TITLE' => cot_breadcrumbs($pltitle, $cfg['homebreadcrumb']),
 			'PLUGIN_SUBTITLE' => $plugin_subtitle,
 			'PLUGIN_BODY' => $plugin_body
 		));
-	}
-	else
-	{
+	} else {
 		cot_sendheaders();
 
 		$t->assign(array(
@@ -142,13 +135,11 @@ if ($autoassigntags)
 	}
 }
 
-if (is_object($t))
-{
+if (isset($t) && is_object($t)) {
 	$t->parse('MAIN');
 	$t->out('MAIN');
 }
 
-if ($ext_display_header)
-{
+if ($ext_display_header) {
 	require_once $cfg['system_dir'] . '/footer.php';
 }

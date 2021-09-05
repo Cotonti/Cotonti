@@ -8,7 +8,7 @@
  */
 
 $R['tags_code_cloud_close'] = '</ul>';
-$R['tags_code_cloud_more'] = '<a class="more" href="{$url}">'.$L['tags_All'].'</a>';
+$R['tags_code_cloud_more'] = '<a class="more" href="{$url}">'.cot::$L['tags_All'].'</a>';
 $R['tags_code_cloud_open'] = '<ul class="tag_cloud">';
 /*$R['tags_code_style'] = '<link rel="stylesheet" type="text/css" href="'.$cfg['plugins_dir'].'/tags/style.css" />';*/
 $R['tags_input_editpage'] = '<input type="text" name="rtags" size="56" class="autotags" value="{$tags}" />';

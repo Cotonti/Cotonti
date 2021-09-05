@@ -185,19 +185,19 @@ switch ($n)
 		while ($row = $sql->fetch())
 		{
 			$jj++;
-			if ($L['core_' . $row['config_cat']])
-			{
+//			if ($L['core_' . $row['config_cat']])
+//			{
 				$icofile = $cfg['system_dir'] . '/admin/img/cfg_' . $row['config_cat'] . '.png';
 				$t->assign(array(
 					'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=' . $row['config_cat']),
 					'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
-					'ADMIN_CONFIG_ROW_NAME' => $L['core_' . $row['config_cat']],
-					'ADMIN_CONFIG_ROW_DESC' => $L['core_' . $row['config_cat'] . '_desc'],
+					'ADMIN_CONFIG_ROW_NAME' => isset($L['core_' . $row['config_cat']]) ? $L['core_' . $row['config_cat']] : $row['config_cat'],
+					'ADMIN_CONFIG_ROW_DESC' => isset($L['core_' . $row['config_cat'] . '_desc']) ? $L['core_' . $row['config_cat'] . '_desc'] : '',
 					'ADMIN_CONFIG_ROW_NUM' => $jj,
 					'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 				));
 				$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
-			}
+//			}
 		}
 		$sql->closeCursor();
 		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Core']);

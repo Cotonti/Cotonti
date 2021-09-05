@@ -37,33 +37,28 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 
 	$enabled = cot_ratings_enabled($ext_name, $cat, $code);
 
-	if (!$auth_read || !$enabled && !$auth_admin)
-	{
+	if (!$auth_read || !$enabled && !$auth_admin) {
 		return array('', 0);
 	}
 
 	// Get current rating value
-	$sql = $db->query("SELECT r.*, (SELECT COUNT(*) FROM $db_rated WHERE rated_area = ? AND rated_code = ?) AS `cnt` FROM $db_ratings AS r
+	$sql = cot::$db->query("SELECT r.*, (SELECT COUNT(*) FROM $db_rated WHERE rated_area = ? AND rated_code = ?) AS `cnt` FROM $db_ratings AS r
 		WHERE rating_area = ? AND rating_code = ? LIMIT 1",
 		array($ext_name, $code, $ext_name, $code));
 
-	if ($row = $sql->fetch())
-	{
+	if ($row = $sql->fetch()) {
 		$rating_average = $row['rating_average'];
 		$item_has_rating = true;
-		if ($rating_average < 1)
-		{
+		if ($rating_average < 1) {
 			$rating_average = $rating_average == 0.00 ? 0 : 1;
-		}
-		elseif ($rating_average > 10)
-		{
+
+        } elseif ($rating_average > 10) {
 			$rating_average = 10;
 		}
 		$rating_cntround = round($rating_average, 0);
 		$rating_raters_count = $row['cnt'];
-	}
-	else
-	{
+
+    } else {
 		$item_has_rating = false;
 		$rating_average = 0;
 		$rating_cntround = 0;
@@ -72,28 +67,25 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 
 	// Render read-only image
 	$rating_fancy =  cot_rc('icon_rating_stars', array('val' => $rating_cntround));
-	if (!$auth_write || $readonly)
-	{
+	if (!$auth_write || $readonly) {
 		return array($rating_fancy, $rating_cntround, $rating_raters_count);
 	}
 
 	// Check if the user has voted already for this item
 	$already_voted = false;
-	if ($usr['id'] > 0)
-	{
+    $rating_uservote = '';
+	if (cot::$usr['id'] > 0) {
 		$sql1 = $db->query("SELECT rated_value FROM $db_rated
 			WHERE rated_area = ? AND rated_code = ? AND rated_userid = ?",
-			array($ext_name, $code, $usr['id']));
+			array($ext_name, $code, cot::$usr['id']));
 
-		if ($rated_value = $sql1->fetchColumn())
-		{
+		if ($rated_value = $sql1->fetchColumn()) {
 			$already_voted = true;
-			$rating_uservote = $L['rat_alreadyvoted'] . ' (' . $rated_value . ')';
+			$rating_uservote = cot::$L['rat_alreadyvoted'] . ' (' . $rated_value . ')';
 		}
 	}
 
-	if ($already_voted && !$cfg['plugin']['ratings']['ratings_allowchange'])
-	{
+	if ($already_voted && !cot::$cfg['plugin']['ratings']['ratings_allowchange']) {
 		return array($rating_fancy, $rating_cntround, $rating_raters_count);
 	}
 
@@ -107,18 +99,15 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	/* ===== */
 
 	// Get some extra information about votes
-	if ($item_has_rating)
-	{
-		$sql = $db->query("SELECT COUNT(*) FROM $db_rated
-			WHERE rated_area = ? AND rated_code = ?",
+	if ($item_has_rating) {
+		$sql = cot::$db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_area = ? AND rated_code = ?",
 			array($ext_name, $code));
 		$rating_voters = $sql->fetchColumn();
 		$rating_since = $L['rat_since'] . ' ' . cot_date('datetime_medium', $row['rating_creationdate']);
 		$rating_since_stamp = $row['rating_creationdate'];
 		$rating_averageimg = cot_rc('icon_rating_stars', array('val' => $rating_cntround));
-	}
-	else
-	{
+
+    } else {
 		$rating_voters = 0;
 		$rating_since = '';
 		$rating_since_stamp = '';
@@ -145,9 +134,8 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	/* ===== */
 
 	// Render voting form
-	$vote_block = ($auth_write && (!$already_voted || $cfg['plugin']['ratings']['ratings_allowchange'])) ? 'NOTVOTED.' : 'VOTED.';
-	for ($i = 1; $i <= 10; $i++)
-	{
+	$vote_block = ($auth_write && (!$already_voted || cot::$cfg['plugin']['ratings']['ratings_allowchange'])) ? 'NOTVOTED.' : 'VOTED.';
+	for ($i = 1; $i <= 10; $i++) {
 		$checked = ($i <= $rating_cntround) ? 'checked="checked"' : '';
 		$t->assign(array(
 			'RATINGS_ROW_VALUE' => $i,
@@ -157,8 +145,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 		$t->parse('RATINGS.' . $vote_block . 'RATINGS_ROW');
 	}
 
-	if ($vote_block == 'NOTVOTED.')
-	{
+	if ($vote_block == 'NOTVOTED.') {
 		// 'r=ratings&area=' . $ext_name . '&code=' . $code.'&inr=send'
 		$t->assign('RATINGS_FORM_SEND', cot_url('plug', array(
 			'r' => 'ratings',
@@ -168,9 +155,8 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 			'cat' => $cat
 		)));
 		$t->parse('RATINGS.NOTVOTED');
-	}
-	else
-	{
+
+    } else {
 		$t->parse('RATINGS.VOTED');
 	}
 

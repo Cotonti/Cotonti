@@ -316,12 +316,12 @@ function cot_forums_updatecat($oldcat, $newcat)
 function cot_forums_deletecat($cat)
 {
 	global $db_forum_topics, $db_forum_posts, $db_forum_stats, $db;
-	$sql = $db->delete($db_forum_posts, 'fp_cat=' . $db->quote($cat));
-	$sql = $db->delete($db_forum_topics, 'ft_cat=' . $db->quote($cat));
-	$sql = $db->delete($db_forum_stats, 'fs_cat=' . $db->quote($cat));
+	$sql = cot::$db->delete($db_forum_posts, 'fp_cat=' . cot::$db->quote($cat));
+	$sql = cot::$db->delete($db_forum_topics, 'ft_cat=' . cot::$db->quote($cat));
+	$sql = cot::$db->delete($db_forum_stats, 'fs_cat=' . cot::$db->quote($cat));
 }
 
-if ($cfg['forums']['markup'] == 1)
-{
-  $minimaxieditor = $cfg['forums']['minimaxieditor'];
+$minimaxieditor = null;
+if (cot::$cfg['forums']['markup'] == 1) {
+  $minimaxieditor = cot::$cfg['forums']['minimaxieditor'];
 }

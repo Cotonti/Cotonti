@@ -297,8 +297,9 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		}
 
 		$pagenav = cot_pagenav($link_area, $link_params, $d, $totalitems,
-			$cfg['plugin']['comments']['maxcommentsperpage'], $d_var, '#comments',
-			$cfg['jquery'] && $cfg['ajax_enabled'], 'comments', 'plug', "e=comments&area=$ext_name&cat=$cat&item=$code");
+			cot::$cfg['plugin']['comments']['maxcommentsperpage'], $d_var, '#comments',
+            cot::$cfg['jquery'] && cot::$cfg['turnajax'], 'comments', 'plug',
+                               "e=comments&area=$ext_name&cat=$cat&item=$code");
 		$t->assign(array(
 			'COMMENTS_PAGES_INFO' => cot_rc('comments_code_pages_info', array(
 					'totalitems' => $totalitems,
@@ -311,9 +312,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		));
 		$t->parse('COMMENTS.PAGNAVIGATOR');
 
-	}
-	elseif (!$sql->rowCount() && $enabled)
-	{
+	} elseif (!$sql->rowCount() && $enabled) {
 		$t->assign(array(
 			'COMMENTS_EMPTYTEXT' => $L['com_nocommentsyet'],
 		));

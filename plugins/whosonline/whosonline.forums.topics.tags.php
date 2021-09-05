@@ -16,16 +16,14 @@ Tags=forums.topics.tpl:{FORUMS_TOPICS_VIEWERS},{FORUMS_TOPICS_VIEWER_NAMES}
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['forums']['cat_' . $s]['allowviewers'])
-{
-
+if (cot::$cfg['forums']['cat_' . $s]['allowviewers']) {
+    $fs_viewers_names = '';
 	$v = 0;
-	$sql_forums_view = $db->query("SELECT online_name, online_userid FROM $db_online WHERE online_location='Forums' AND online_subloc=".$db->quote($structure['forums'][$s]['title']));
-	while ($rowv = $sql_forums_view->fetch())
-	{
-		if ($rowv['online_name'] != 'v')
-		{
-			$fs_viewers_names .= ($v>0) ? ', ' : '';
+	$sql_forums_view = cot::$db->query("SELECT online_name, online_userid FROM $db_online WHERE online_location='Forums' 
+                                               AND online_subloc=".cot::$db->quote(cot::$structure['forums'][$s]['title']));
+	while ($rowv = $sql_forums_view->fetch()) {
+		if ($rowv['online_name'] != 'v') {
+			$fs_viewers_names .= ($v > 0) ? ', ' : '';
 			$fs_viewers_names .= cot_build_user($rowv['online_userid'], htmlspecialchars($rowv['online_name']));
 			$v++;
 		}

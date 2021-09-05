@@ -16,9 +16,9 @@ $v = cot_import('v','G','ALP');
 $y = cot_import('y','G','INT');
 $token = cot_import('token', 'G', 'ALP');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('users', 'a');
 
-if (cot::$cfg['users']['disablereg'] && !$usr['isadmin'])
+if (cot::$cfg['users']['disablereg'] && !cot::$usr['isadmin'])
 {
 	cot_die_message(117, TRUE);
 }
@@ -30,13 +30,19 @@ foreach (cot_getextplugins('users.register.first') as $pl)
 }
 /* ===== */
 
-cot_block($usr['id'] == 0 || $usr['isadmin']);
+cot_block(cot::$usr['id'] == 0 || cot::$usr['isadmin']);
 
-if ($a == 'add')
-{
+$ruser = array(
+    'user_name' => '',
+    'user_email' => '',
+    'user_country' => '',
+    'user_timezone' => '',
+    'user_gender' => '',
+
+);
+
+if ($a == 'add') {
 	cot_shield_protect();
-
-	$ruser = array();
 
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.register.add.first') as $pl)
@@ -130,10 +136,8 @@ if ($a == 'add')
 	{
 		cot_redirect(cot_url('users', 'm=register', '', true));
 	}
-}
 
-elseif ($a == 'validate' && mb_strlen($v) == 32)
-{
+} elseif ($a == 'validate' && mb_strlen($v) == 32) {
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.register.validate.first') as $pl)
 	{
@@ -214,6 +218,7 @@ foreach (cot_getextplugins('users.register.main') as $pl)
 /* ===== */
 
 $out['subtitle'] = cot::$L['aut_registertitle'];
+if (!isset($out['head'])) $out['head'] = '';
 $out['head'] .= cot::$R['code_noindex'];
 require_once cot::$cfg['system_dir'] . '/header.php';
 
@@ -224,7 +229,7 @@ require_once cot_incfile('forms');
 $t->assign(array(
 	'USERS_REGISTER_TITLE' => cot::$L['aut_registertitle'],
 	'USERS_REGISTER_SUBTITLE' => cot::$L['aut_registersubtitle'],
-	'USERS_REGISTER_ADMINEMAIL' => $cot_adminemail,
+	//'USERS_REGISTER_ADMINEMAIL' => $cot_adminemail, // Obsolete?
 	'USERS_REGISTER_SEND' => cot_url('users', 'm=register&a=add'),
 	'USERS_REGISTER_USER' => cot_inputbox('text', 'rusername', $ruser['user_name'], array('size' => 24, 'maxlength' => 100)),
 	'USERS_REGISTER_EMAIL' => cot_inputbox('text', 'ruseremail', $ruser['user_email'], array('size' => 24, 'maxlength' => 64)),
@@ -240,7 +245,8 @@ $t->assign(array(
 if (!empty(cot::$extrafields[cot::$db->users])) {
     foreach (cot::$extrafields[cot::$db->users] as $exfld) {
         $uname = strtoupper($exfld['field_name']);
-        $exfld_val = cot_build_extrafields('ruser'.$exfld['field_name'],  $exfld, $ruser['user_'.$exfld['field_name']]);
+        $val = isset($ruser['user_'.$exfld['field_name']]) ? $ruser['user_'.$exfld['field_name']] : null;
+        $exfld_val = cot_build_extrafields('ruser'.$exfld['field_name'],  $exfld, $val);
         $exfld_title = cot_extrafield_title($exfld, 'user_');
 
         $t->assign(array(

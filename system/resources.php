@@ -232,11 +232,12 @@ class Resources
 			if (!isset(static::$registry[$type]['embed'])) {
                 static::$registry[$type]['embed'] = array();
             }
-			if (!isset($registry[$type]['embed'][$scope][$order])) {
+			if (!isset(static::$registry[$type]['embed'][$scope][$order])) {
                 static::$registry[$type]['embed'][$scope][$order] = '';
             }
 			static::$registry[$type]['embed'][$scope][$order] .= $code . $separator;
 		}
+
 		return true;
 	}
 

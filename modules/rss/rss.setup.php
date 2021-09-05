@@ -4,9 +4,9 @@
 Name=RSS
 Description=Provides RSS/Atom feeds for your site
 Version=1.0.2
-Date=2015-06-05
+Date=2021-09-03
 Author=Neocrome & Cotonti Team
-Copyright=(c) Cotonti Team 2008-2016
+Copyright=(c) Cotonti Team 2008-2021
 Notes=BSD License
 Auth_guests=R
 Lock_guests=A

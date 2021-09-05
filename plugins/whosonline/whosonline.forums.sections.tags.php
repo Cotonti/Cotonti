@@ -16,4 +16,4 @@ Tags=forums.sections.tpl:{FORUMS_SECTIONS_WHOSONLINE}
 
 defined('COT_CODE') or die('Wrong URL');
 
-$t->assign('FORUMS_SECTIONS_WHOSONLINE', $out['whosonline'] . ' : ' . $out['whosonline_reg_list']);
+$t->assign('FORUMS_SECTIONS_WHOSONLINE', cot::$out['whosonline'] . ' : ' . cot::$out['whosonline_reg_list']);

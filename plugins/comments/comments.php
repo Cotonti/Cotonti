@@ -25,12 +25,12 @@ $item = cot_import('item', 'G', 'TXT');
 $cat = cot_import('cat', 'G', 'TXT');
 $area = cot_import('area', 'G', 'ALP');
 
-$out['subtitle'] = $L['comments_comments'];
+cot::$out['subtitle'] = cot::$L['comments_comments'];
 
 // Get area/item/cat by id
 if ($id > 0)
 {
-	$res = $db->query("SELECT com_code, com_area FROM $db_com WHERE com_id = $id");
+	$res = cot::$db->query("SELECT com_code, com_area FROM $db_com WHERE com_id = $id");
 	if ($res->rowCount() == 1)
 	{
 		$row = $res->fetch();
@@ -71,7 +71,7 @@ if ($m == 'edit' && $id > 0)
 		}
 		/* ===== */
 
-		$sql1 = $db->query("SELECT * FROM $db_com WHERE com_id=? AND com_code=? LIMIT 1", array($id, $item));
+		$sql1 = cot::$db->query("SELECT * FROM $db_com WHERE com_id=? AND com_code=? LIMIT 1", array($id, $item));
 		cot_die($sql1->rowCount() == 0);
 		$row = $sql1->fetch();
 
@@ -98,7 +98,7 @@ if ($m == 'edit' && $id > 0)
 
 		if (!cot_error_found())
 		{
-			$sql = $db->update($db_com, $comarray, 'com_id=? AND com_code=?', array($id, $item));
+			$sql = cot::$db->update($db_com, $comarray, 'com_id=? AND com_code=?', array($id, $item));
 
 			cot_extrafield_movefiles();
 
@@ -114,7 +114,7 @@ if ($m == 'edit' && $id > 0)
 
 			if ($cfg['plugin']['comments']['mail'])
 			{
-				$sql2 = $db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
+				$sql2 = cot::$db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
 
 				$email_title = $L['plu_comlive'];
 				$email_body = $L['User'] . ' ' . preg_replace('#[^\w\p{L}]#u', '', $usr['name']) . ' ' . $L['plu_comlive3'];
@@ -139,12 +139,12 @@ if ($m == 'edit' && $id > 0)
 		}
 	}
 	$t->assign(array(
-		'COMMENTS_TITLE' => $plugin_title,
+		'COMMENTS_TITLE' => cot::$L['plu_title'],
 		'COMMENTS_TITLE_URL' => cot_url('plug', 'e=comments')
 	));
 	$t->parse('MAIN.COMMENTS_TITLE');
 
-	$sql = $db->query("SELECT * FROM $db_com WHERE com_id=? AND com_code=? AND com_area=?", array($id, $item, $area));
+	$sql = cot::$db->query("SELECT * FROM $db_com WHERE com_id=? AND com_code=? AND com_area=?", array($id, $item, $area));
 	cot_die($sql->rowCount() != 1);
 	$com = $sql->fetch();
 
@@ -242,8 +242,8 @@ if ($a == 'send' && cot::$usr['auth_write'])
 		$comarray['com_text'] = $rtext;
 		$comarray['com_date'] = (int) $sys['now'];
 
-		$sql = $db->insert($db_com, $comarray);
-		$id = $db->lastInsertId();
+		$sql = cot::$db->insert($db_com, $comarray);
+		$id = cot::$db->lastInsertId();
 
         if($cache && $area == 'page'){
             if ($cfg['cache_page'])
@@ -261,7 +261,7 @@ if ($a == 'send' && cot::$usr['auth_write'])
 
 		if ($cfg['plugin']['comments']['mail'])
 		{
-			$sql = $db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
+			$sql = cot::$db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
 			$email_title = $L['plu_comlive'];
 			$email_body = $L['User'] . ' ' . preg_replace('#[^\w\p{L}]#u', '', ($usr['id'] == 0 ? $rname : $usr['name'])) . ' ' . $L['plu_comlive2'];
 			$email_body .= COT_ABSOLUTE_URL . cot_url($url_area, $url_params, '#c' . $id, true) . "\n\n";
@@ -298,14 +298,14 @@ if ($a == 'send' && cot::$usr['auth_write'])
 elseif ($a == 'delete' && $usr['isadmin'])
 {
 	cot_check_xg();
-	$sql = $db->query("SELECT * FROM $db_com WHERE com_id=$id AND com_area='$area' LIMIT 1");
+	$sql = cot::$db->query("SELECT * FROM $db_com WHERE com_id=$id AND com_area='$area' LIMIT 1");
 
 	if ($row = $sql->fetch())
 	{
 		$sql->closeCursor();
-		$sql = $db->delete($db_com, "com_id=$id");
+		$sql = cot::$db->delete($db_com, "com_id=$id");
 
-		foreach ($cot_extrafields[$db_com] as $exfld)
+		foreach (cot::$extrafields[$db_com] as $exfld)
 		{
 			cot_extrafield_unlinkfiles($row['com_' . $exfld['field_name']], $exfld);
 		}

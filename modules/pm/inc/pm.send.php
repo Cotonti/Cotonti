@@ -250,6 +250,8 @@ if ($id)
 }
 
 require_once $cfg['system_dir'] . '/header.php';
+
+if (!isset($pmalttpl)) $pmalttpl = null;
 $t = new XTemplate(cot_tplfile(array('pm', 'send', $pmalttpl)));
 
 if (!COT_AJAX)
