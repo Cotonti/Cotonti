@@ -453,12 +453,12 @@ class XTemplate
 		if ($path) {
 			$blk = $this->blocks[array_shift($path)];
 			foreach ($path as $node) {
-				if (is_object($blk)) {
-					$blk =& $blk->blocks[$node];
+				if (is_array($blk)) {
+                    $blk =& $blk[$node];
 
-				} else {
-					$blk =& $blk[$node];
-				}
+                } else {
+                    $blk =& $blk->blocks[$node];
+                }
 			}
 			$blk->parse($this);
 		}
