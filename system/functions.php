@@ -199,6 +199,7 @@ class cot
         // May be isset() is not needed
         if(!isset(self::$out['head'])) self::$out['head'] = '';
         if(!isset(self::$out['subtitle'])) self::$out['subtitle'] = '';
+        if(!isset(self::$env['ext'])) self::$env['ext'] = null;
 	}
 }
 
@@ -1475,8 +1476,11 @@ function cot_auth($area, $option, $mask = 'RWA')
 			$res[] = ($cnt > 0) ? TRUE : FALSE;
 
 		} else {
-            cot::$sys['auth_log'][] = ((cot::$usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
-			$res[] = ((cot::$usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? TRUE : FALSE;
+            $tmpOption = 0;
+            if (isset(cot::$usr['auth'][$area][$option])) $tmpOption = cot::$usr['auth'][$area][$option];
+
+            cot::$sys['auth_log'][] = (($tmpOption & $mn[$ml]) == $mn[$ml]) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
+			$res[] = (($tmpOption & $mn[$ml]) == $mn[$ml]) ? TRUE : FALSE;
 		}
 	}
 
@@ -1775,14 +1779,14 @@ function cot_structure_buildpath($area, $cat)
 {
 	global $structure;
 	$tmp = array();
-	$pathcodes = explode('.', $structure[$area][$cat]['path']);
-	foreach ($pathcodes as $x)
-	{
-		if ($x != 'system')
-		{
-			$tmp[] = array(cot_url($area, 'c='.$x), $structure[$area][$x]['title']);
-		}
-	}
+    if (isset(cot::$structure[$area][$cat]['path'])) {
+        $pathcodes = explode('.', cot::$structure[$area][$cat]['path']);
+        foreach ($pathcodes as $x) {
+            if ($x != 'system') {
+                $tmp[] = array(cot_url($area, 'c=' . $x), cot::$structure[$area][$x]['title']);
+            }
+        }
+    }
 	return $tmp;
 }
 
@@ -3000,16 +3004,14 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 {
 	// Globals and requirements
 	global $error_string, $out, $L, $R;
-	$LL = is_array($L) ? $L : array();
+	$LL = is_array(cot::$L) ? cot::$L : array();
 	require_once cot_langfile('message', 'core');
-	$L = array_merge($L, $LL);
+    cot::$L = array_merge(cot::$L, $LL);
 
-	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST')
-	{
+	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST') {
 		// Save the POST data
 		cot_import_buffer_save();
-		if (!empty($error_string))
-		{
+		if (!empty($error_string)) {
 			// Message should not be lost
 			cot_error($error_string);
 		}
@@ -3050,56 +3052,52 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 		951 => '503 Service Unavailable'
 	);
 
-	if (empty($out['meta_contenttype'])) {
-		$out['meta_contenttype'] = 'text/html';
+	if (empty(cot::$out['meta_contenttype'])) {
+        cot::$out['meta_contenttype'] = 'text/html';
 	}
-	cot_sendheaders($out['meta_contenttype'], $msg_status[$code]);
+	cot_sendheaders(cot::$out['meta_contenttype'], $msg_status[$code]);
 
 	// Determine message title and body
-	$title = empty($message_title) ? $L['msg' . $code . '_title'] : $message_title;
-	$body = empty($message_body) ? $L['msg' . $code . '_body'] : $message_body;
+	$title = empty($message_title) ? cot::$L['msg' . $code . '_title'] : $message_title;
+	$body = empty($message_body) ? cot::$L['msg' . $code . '_body'] : $message_body;
 
 	// Render the message page
 	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
 	$tpl_path = '';
 	$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
 	$redirect_meta = '';
-	if (!empty($redirect))
-	{
-		if (cot_url_check($redirect))
-		{
+	if (!empty($redirect)) {
+		if (cot_url_check($redirect)) {
 			$redirect_meta = '<meta http-equiv="refresh" content="3; url='.$redirect.'" />';
 		}
 	}
-	if ($header)
-	{
+
+    if (!isset(cot::$R['code_basehref'])) {
+        // Resource strings
+        include cot::$cfg['system_dir'].'/resources.rc.php';
+    }
+
+	if ($header) {
 		$tpl_path = cot_tplfile("error.$code", $tpl_type);
-		if ($tpl_path)
-		{
+		if ($tpl_path) {
 			$header = false;
-		}
-		else
-		{
-			echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.$R['code_basehref'].$stylesheet.$redirect_meta.'</head><body><div class="block">';
+		} else {
+			echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.cot::$R['code_basehref'].$stylesheet.$redirect_meta.'</head><body><div class="block">';
 		}
 	}
 
-	if (empty($tpl_path))
-	{
+	if (empty($tpl_path)) {
 		$tpl_path = cot_tplfile('message', $tpl_type);
 	}
 
-	if (empty($tpl_path) || !file_exists($tpl_path))
-	{
+	if (empty($tpl_path) || !file_exists($tpl_path)) {
 		echo $body;
-	}
-	else
-	{
+	} else {
 		$t = new XTemplate($tpl_path);
 
 		$t->assign(array(
 			'AJAX_MODE' => COT_AJAX,
-			'MESSAGE_BASEHREF' => $R['code_basehref'],
+			'MESSAGE_BASEHREF' => cot::$R['code_basehref'],
 			'MESSAGE_STYLESHEET' => $stylesheet,
 			'MESSAGE_REDIRECT' => $redirect_meta,
 			'MESSAGE_TITLE' => $title,
@@ -3110,8 +3108,7 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 		$t->out('MAIN');
 	}
 
-	if ($header)
-	{
+	if ($header) {
 		echo '</div></body></html>';
 	}
 

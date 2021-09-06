@@ -173,10 +173,10 @@ else
 				$field['field_name'] = cot_import($field_name[$k], 'D', 'ALP');
 				$field['field_type'] = cot_import($field_type[$k], 'D', 'ALP');
 				$field['field_html'] = cot_import($field_html[$k], 'D', 'NOC');
-				$field['field_variants'] = cot_import($field_variants[$k], 'D', 'HTM');
-				$field['field_params'] = cot_import($field_params[$k], 'D', 'HTM');
+				$field['field_variants'] = isset($field_variants[$k]) ? cot_import($field_variants[$k], 'D', 'HTM') : null;
+				$field['field_params'] = isset($field_params[$k]) ? cot_import($field_params[$k], 'D', 'HTM') : null;
 				$field['field_description'] = cot_import($field_description[$k], 'D', 'NOC');
-				$field['field_default'] = cot_import($field_default[$k], 'D', 'HTM');
+				$field['field_default'] = isset($field_default[$k]) ? cot_import($field_default[$k], 'D', 'HTM') : null;
 				$field['field_required'] = cot_import($field_required[$k], 'D', 'BOL');
 				$field['field_parse'] = cot_import($field_parse[$k], 'D', 'ALP');
 				$field['field_enabled'] = cot_import($field_enabled[$k], 'D', 'BOL');

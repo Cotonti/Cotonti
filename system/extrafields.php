@@ -159,8 +159,7 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
     $exfld_title = cot_extrafield_title($extrafield, $titlePrefix);
 
     $import = null;
-	switch ($extrafield['field_type'])
-	{
+	switch ($extrafield['field_type']) {
 		case 'input':
 			$import = ($extrafield['field_parse'] == 'Text') ? cot_import($inputname, $source, 'TXT') : cot_import($inputname, $source, 'HTM');
 			if (!empty($extrafield['field_params']) && !is_null($import) && !preg_match($extrafield['field_params'], $import))
@@ -175,30 +174,34 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 		case 'range':
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
 			$import = cot_import($inputname, $source, 'INT');
+
+            $min = $max = null;
+            if(!empty($extrafield['field_params'])) {
+                $tmp = explode(",", $extrafield['field_params'], 2);
+                if(isset($tmp[0]) && is_numeric($tmp[0])) {
+                    $min = (int)trim($tmp[0]);
+                }
+
+                if(isset($tmp[1]) && is_numeric($tmp[1])) {
+                    $min = (int)trim($tmp[1]);
+                }
+
+                if (!is_null($import)) {
+                    if ( (!is_null($min) && ($import < $min)) || (!is_null($max) && ($import > $max)) ) {
+                        $errMsg = (isset(cot::$L['field_range_' . $extrafield['field_name']])) ?
+                            cot::$L['field_range_' . $extrafield['field_name']] : $exfld_title . ': ' . cot::$L['field_range'];
+                        cot_error($errMsg, $inputname);
+                    }
+                }
+            }
                         
-                        list($min, $max) = explode(",", $extrafield['field_params'], 2);
-                        $min = (int) $min;
-                        $max = (int) $max;
-                        
-			if (!is_null($import) && !empty($extrafield['field_params']))
-			{
-				if ($import < $min || $import > $max)
-				{
-                    $errMsg = (isset($L['field_range_' . $extrafield['field_name']])) ?
-                        $L['field_range_' . $extrafield['field_name']] : $exfld_title.': '.$L['field_range'];
-					cot_error($errMsg, $inputname);
-				}
-			}
-                        
-                        if(is_null($import))
-                        {
-                            $import = ($extrafield['field_type'] == 'inputint' || !empty($extrafield['field_default'])) ? (int)$extrafield['field_default'] : '';
-                         
-                            if(is_numeric($import) && !empty($extrafield['field_params'])){
-                                    if($import < $min)$import = $min;
-                                    if($import > $max)$import = $max;
-                            }
-                        }
+            if(is_null($import)) {
+                $import = ($extrafield['field_type'] == 'inputint' || !empty($extrafield['field_default'])) ? (int)$extrafield['field_default'] : '';
+                if(is_numeric($import) && !empty($extrafield['field_params'])) {
+                    if(!is_null($min) && ($import < $min)) $import = $min;
+                    if(!is_null($max) && ($import > $max)) $import = $max;
+                }
+            }
 			break;
 
 		case 'currency':

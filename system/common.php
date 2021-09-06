@@ -97,23 +97,21 @@ session_start();
 cot_unregister_globals();
 
 /* =========== Early page cache ==========*/
-if ($cfg['cache'] && !$cfg['devmode'])
-{
-	require_once $cfg['custom_cache'] ? $cfg['custom_cache'] : $cfg['system_dir'].'/cache.php';
+if ($cfg['cache'] && !$cfg['debug_mode']) {
+	require_once !empty($cfg['custom_cache']) ? $cfg['custom_cache'] : $cfg['system_dir'].'/cache.php';
 	$cache = new Cache();
-	if ($_SERVER['REQUEST_METHOD'] == 'GET' && !cot_import($sys['site_id'], 'COOKIE', 'ALP') && empty($_SESSION[$sys['site_id']]) && !defined('COT_AUTH') && !defined('COT_ADMIN') && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' && !cot_import($sys['site_id'], 'COOKIE', 'ALP')
+        && empty($_SESSION[$sys['site_id']]) && !defined('COT_AUTH') && !defined('COT_ADMIN')
+        && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
 	{
 		$ext = cot_import('e', 'G', 'ALP');
 		$cache_ext = !$ext ? 'index' : preg_replace('#\W#', '', $ext);
-		if ($cfg['cache_' . $cache_ext])
-		{
+		if (isset($cfg['cache_' . $cache_ext]) && $cfg['cache_' . $cache_ext]) {
 			$cache->page->init($cache_ext, $cfg['defaulttheme']);
 			$cache->page->read();
 		}
 	}
-}
-else
-{
+} else {
 	$cache = false;
 }
 
@@ -139,7 +137,7 @@ cot::init();
 $cache && $cache->init();
 
 /* ======== Configuration settings ======== */
-
+if(!isset($cot_cfg)) $cot_cfg = null;
 if ($cache && $cot_cfg)
 {
 	$cfg = array_merge($cot_cfg, $cfg);
@@ -423,7 +421,7 @@ if ($usr['id'] == 0) {
 
 $lang = $usr['lang'];
 
-if (defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R')) {
+if (defined('COT_MESSAGE') && isset($_SESSION['s_run_admin']) && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R')) {
 	define('COT_ADMIN', TRUE);
 } else {
 	$_SESSION['s_run_admin'] = defined('COT_ADMIN');

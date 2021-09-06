@@ -164,6 +164,12 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
         } elseif ($page_data['page_file'] == 2) {
             $haveFile = cot::$L['Members_download'];
         }
+
+        $catTitle = '';
+        if (isset($structure['page'][$page_data['page_cat']]['title'])) {
+            $catTitle = htmlspecialchars($structure['page'][$page_data['page_cat']]['title']);
+        }
+
         $temp_array = array(
 			'URL' => $page_data['page_pageurl'],
 			'ID' => $page_data['page_id'],
@@ -175,18 +181,18 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			'SHORTTITLE' => htmlspecialchars($page_data['page_title'], ENT_COMPAT, 'UTF-8', false),
 			'CAT' => $page_data['page_cat'],
 			'CATURL' => $cat_url,
-			'CATTITLE' => htmlspecialchars($structure['page'][$page_data['page_cat']]['title']),
+			'CATTITLE' => $catTitle,
 			'CATPATH' => $catpath,
-			'CATPATH_SHORT' => cot_rc_link($cat_url, htmlspecialchars($structure['page'][$page_data['page_cat']]['title'])),
-			'CATDESC' => htmlspecialchars($structure['page'][$page_data['page_cat']]['desc']),
-			'CATICON' => $structure['page'][$page_data['page_cat']]['icon'],
+			'CATPATH_SHORT' => cot_rc_link($cat_url, $catTitle),
+			'CATDESC' => isset($structure['page'][$page_data['page_cat']]['desc']) ? htmlspecialchars($structure['page'][$page_data['page_cat']]['desc']) : '',
+			'CATICON' => isset($structure['page'][$page_data['page_cat']]['icon']) ? $structure['page'][$page_data['page_cat']]['icon'] : '',
 			'KEYWORDS' => htmlspecialchars($page_data['page_keywords']),
 			'DESC' => htmlspecialchars($page_data['page_desc']),
 			'TEXT' => $text,
 			'TEXT_CUT' => $text_cut,
 			'TEXT_IS_CUT' => $cutted,
-			'DESC_OR_TEXT' => (!empty($page_data['page_desc'])) ? htmlspecialchars($page_data['page_desc']) : $text,
-			'DESC_OR_TEXT_CUT' => (!empty($page_data['page_desc'])) ? htmlspecialchars($page_data['page_desc']) : $text_cut,
+			'DESC_OR_TEXT' => isset($page_data['page_desc']) ? htmlspecialchars($page_data['page_desc']) : $text,
+			'DESC_OR_TEXT_CUT' => isset($page_data['page_desc']) ? htmlspecialchars($page_data['page_desc']) : $text_cut,
 			'MORE' => ($cutted) ? cot_rc('list_more', array('page_url' => $page_data['page_pageurl'])) : '',
 			'AUTHOR' => htmlspecialchars($page_data['page_author']),
 			'OWNERID' => $page_data['page_ownerid'],
@@ -249,9 +255,12 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
                 $exfld_title = cot_extrafield_title($exfld, 'page_');
 
 				$temp_array[$tag.'_TITLE'] = $exfld_title;
-				$temp_array[$tag] = cot_build_extrafields_data('page', $exfld, $page_data['page_'.$exfld['field_name']], 
-                    $page_data['page_parser']);
-				$temp_array[$tag.'_VALUE'] = $page_data['page_'.$exfld['field_name']];
+                $temp_value = null;
+                if (isset($page_data['page_'.$exfld['field_name']])) {
+                    $temp_value = $page_data['page_'.$exfld['field_name']];
+                }
+				$temp_array[$tag] = cot_build_extrafields_data('page', $exfld, $temp_value, $page_data['page_parser']);
+				$temp_array[$tag.'_VALUE'] = $temp_value;
 			}
 		}
 
@@ -262,9 +271,12 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
                 $exfld_title = cot_extrafield_title($exfld, 'structure_');
 
 				$temp_array['CAT_'.$tag.'_TITLE'] = $exfld_title;
-				$temp_array['CAT_'.$tag] = cot_build_extrafields_data('structure', $exfld,
-                    cot::$structure['page'][$page_data['page_cat']][$exfld['field_name']]);
-				$temp_array['CAT_'.$tag.'_VALUE'] = cot::$structure['page'][$page_data['page_cat']][$exfld['field_name']];
+                $temp_value = null;
+                if (isset(cot::$structure['page'][$page_data['page_cat']][$exfld['field_name']])) {
+                    $temp_value = cot::$structure['page'][$page_data['page_cat']][$exfld['field_name']];
+                }
+				$temp_array['CAT_'.$tag] = cot_build_extrafields_data('structure', $exfld, $temp_value);
+				$temp_array['CAT_'.$tag.'_VALUE'] = $temp_value;
 			}
 		}
 

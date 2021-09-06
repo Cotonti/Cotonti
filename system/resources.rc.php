@@ -12,6 +12,8 @@ defined('COT_CODE') or die('Wrong URL');
 // Todo may be use cot::$L, cot::$cfg instead?
 global $L, $cfg;
 
+if (!isset(cot::$L['Delete'])) include cot_langfile('main', 'core');
+
 /**
  * Form generation
  */

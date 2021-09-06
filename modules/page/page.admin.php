@@ -382,10 +382,13 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.admin.loop');
 /* ===== */
-foreach ($sql_page->fetchAll() as $row)
-{
-	$sql_page_subcount = $db->query("SELECT SUM(structure_count) FROM $db_structure WHERE structure_path LIKE '".$db->prep($structure['page'][$row["page_cat"]]['rpath'])."%' ");
-	$sub_count = $sql_page_subcount->fetchColumn();
+foreach ($sql_page->fetchAll() as $row) {
+    $sub_count = 0;
+    if (isset(cot::$structure['page'][$row["page_cat"]])) {
+        $sql_page_subcount = cot::$db->query("SELECT SUM(structure_count) FROM $db_structure WHERE structure_path LIKE '" .
+                cot::$db->prep(cot::$structure['page'][$row["page_cat"]]['rpath']) . "%' ");
+        $sub_count = $sql_page_subcount->fetchColumn();
+    }
 	$row['page_file'] = intval($row['page_file']);
 	$t->assign(cot_generate_pagetags($row, 'ADMIN_PAGE_', 200));
 	$t->assign(array(
