@@ -45,6 +45,7 @@ if (empty($cot_sections_act)) {
 	cot::$cache && cot::$cache->db->store('cot_sections_act', $cot_sections_act, 'system', 7200);
 }
 
+$cat_top = array();
 $sql_forums = cot::$db->query("SELECT * FROM $db_forum_stats ORDER by fs_cat DESC");
 foreach ($sql_forums->fetchAll() as $row) {
 	if (!$row['fs_lt_id'] && count(explode('.', cot::$structure['forums'][$row['fs_cat']]['rpath'])) > 1 &&
@@ -72,16 +73,19 @@ foreach (cot::$structure['forums'] as $i => $x) {
 		}
 		$depmax = ($depth < 4) ? ($depth - 1) : 3;
 		for ($ii = 0; $ii < $depmax; $ii++) {
-			if($cat_top[$i]['fs_lt_date'] > $cat_top[$parents[$ii]]['fs_lt_date'] || !isset($cat_top[$parents[$ii]]['fs_lt_date'])) {
-				$cat_top[$parents[$ii]]['fs_lt_id'] = $cat_top[$i]['fs_lt_id'];
-				$cat_top[$parents[$ii]]['fs_lt_title'] = $cat_top[$i]['fs_lt_title'];
-				$cat_top[$parents[$ii]]['fs_lt_date'] = $cat_top[$i]['fs_lt_date'];
-				$cat_top[$parents[$ii]]['fs_lt_posterid'] = $cat_top[$i]['fs_lt_posterid'];
-				$cat_top[$parents[$ii]]['fs_lt_postername'] = $cat_top[$i]['fs_lt_postername'];
-			}
-			$cat_top[$parents[$ii]]['topiccount'] += $cat_top[$i]['fs_topiccount'];
-			$cat_top[$parents[$ii]]['postcount'] += $cat_top[$i]['fs_postcount'];
-			$cat_top[$parents[$ii]]['viewcount'] += $cat_top[$i]['fs_viewcount'];
+            if (isset($cat_top[$i]['fs_lt_date'])) {
+                if (!isset($cat_top[$parents[$ii]]['fs_lt_date']) || ($cat_top[$i]['fs_lt_date'] > $cat_top[$parents[$ii]]['fs_lt_date'])) {
+                    $cat_top[$parents[$ii]]['fs_lt_id'] = $cat_top[$i]['fs_lt_id'];
+                    $cat_top[$parents[$ii]]['fs_lt_title'] = $cat_top[$i]['fs_lt_title'];
+                    $cat_top[$parents[$ii]]['fs_lt_date'] = $cat_top[$i]['fs_lt_date'];
+                    $cat_top[$parents[$ii]]['fs_lt_posterid'] = $cat_top[$i]['fs_lt_posterid'];
+                    $cat_top[$parents[$ii]]['fs_lt_postername'] = $cat_top[$i]['fs_lt_postername'];
+                }
+
+                $cat_top[$parents[$ii]]['topiccount'] += $cat_top[$i]['fs_topiccount'];
+                $cat_top[$parents[$ii]]['postcount'] += $cat_top[$i]['fs_postcount'];
+                $cat_top[$parents[$ii]]['viewcount'] += $cat_top[$i]['fs_viewcount'];
+            }
 		}
 		if (isset($cot_sections_act[$i]))  $cot_act[$parents[0]] += $cot_sections_act[$i];
 	}
@@ -146,7 +150,8 @@ foreach ($fstlvl as $x) {
 				}
 			}
 			$yy++;
-			$t->assign(cot_generate_sectiontags($y, 'FORUMS_SECTIONS_ROW_', $cat_top[$y]));
+            $stat = isset($cat_top[$y]) ? $cat_top[$y] : null;
+			$t->assign(cot_generate_sectiontags($y, 'FORUMS_SECTIONS_ROW_', $stat));
 
 			$secact_num = 0;
 			if ($secact_max) {
@@ -178,7 +183,8 @@ foreach ($fstlvl as $x) {
 		$fold = (int)($c=='fold' ? true : ($c=='unfold' ? false : ($c==$x ? false : true)));
 	}
 
-	$t->assign(cot_generate_sectiontags($x, 'FORUMS_SECTIONS_ROW_', $cat_top[$x]));
+    $stat = isset($cat_top[$x]) ? $cat_top[$x] : null;
+	$t->assign(cot_generate_sectiontags($x, 'FORUMS_SECTIONS_ROW_', $stat));
 	$t->assign(array(
 		'FORUMS_SECTIONS_ROW_FOLD' => $fold,
 		'FORUMS_SECTIONS_ROW_SUBITEMS' => (is_array($nxtlvl[$x])) ? 1 : 0,

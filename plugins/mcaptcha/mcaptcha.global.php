@@ -39,6 +39,7 @@ function mcaptcha_generate()
 	$_SESSION['mcaptcha_time'] = time();
 	$_SESSION['mcaptcha_salt'] = $salt;
 	$_SESSION['mcaptcha_count'] = 0;
+    if (!isset($_SESSION['mcaptcha_attempts'])) $_SESSION['mcaptcha_attempts'] = 0;
 	$_SESSION['mcaptcha_attempts']++;
 	$html = $n1 . ' + ' . $n2 . ' = ?';
 	return mcaptcha_obfuscate($html) . '<input type="hidden" name="mcaptcha_salt" value="' . $salt . '" />';

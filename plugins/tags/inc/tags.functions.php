@@ -68,7 +68,7 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 
 	$cache_name = 'tag_cloud_cache_' . $area.'_'.$order;
 	if ($limit) $cache_name .= '_'.$limit;
-	if (cot::$cache && $GLOBALS[$cache_name] && is_array($GLOBALS[$cache_name])) {
+	if (cot::$cache && isset($GLOBALS[$cache_name]) && is_array($GLOBALS[$cache_name])) {
 		return $GLOBALS[$cache_name];
 	}
 	$res = array();

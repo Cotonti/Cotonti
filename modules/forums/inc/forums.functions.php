@@ -200,11 +200,11 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 {
 	global $cfg, $structure, $cot_extrafields, $usr, $sys, $L, $db_structure;
 
-    $stat['fs_lt_date'] = (!empty($stat['fs_lt_date'])) ? $stat['fs_lt_date'] : 0;
-    $stat['fs_lt_posterid'] = (!empty($stat['fs_lt_posterid'])) ? $stat['fs_lt_posterid'] : 0;
-    $usr['lastvisit'] = (!empty($usr['lastvisit'])) ? $usr['lastvisit'] : 0;
+    $statLtDate = !empty($stat['fs_lt_date']) ? $stat['fs_lt_date'] : 0;
+    $statLtPosterId  = !empty($stat['fs_lt_posterid']) ? $stat['fs_lt_posterid'] : 0;
+    $usr['lastvisit'] = !empty($usr['lastvisit']) ? $usr['lastvisit'] : 0;
 
-	$new_elems = ($usr['id'] > 0 && $stat['fs_lt_date'] > $usr['lastvisit'] && $stat['fs_lt_posterid'] != $usr['id']);
+	$new_elems = ($usr['id'] > 0 && $statLtDate > $usr['lastvisit'] && $statLtPosterId != $usr['id']);
 
 	$sections = array(
 		$tag_prefix . 'CAT' => $cat,
@@ -222,8 +222,7 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 		$tag_prefix . 'CAT_DEFSTATE' => htmlspecialchars($cfg['forums']['cat_' . $cat]['defstate']),
 	);
 
-	if (is_array($stat))
-	{
+	if (is_array($stat)) {
 		if ($stat['fs_lt_date'] > 0) {
 			$sections += array(
 				$tag_prefix . 'LASTPOSTDATE' => cot_date('datetime_short', $stat['fs_lt_date']),

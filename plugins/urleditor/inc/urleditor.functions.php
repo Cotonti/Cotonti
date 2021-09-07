@@ -283,28 +283,22 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	}
 
 	// Support for i18n parameter
-	if (cot_plugin_active('i18n'))
-	{
+	if (cot_plugin_active('i18n')) {
 		$i18n_cfg = cot::$cfg['plugin']['i18n'];
 		$i18n_rewrite = isset($i18n_cfg['rewrite']) && $i18n_cfg['rewrite'];
-		$omit_param = $i18n_cfg['omitmain'] && $params['l'] == cot::$usr['profile']['user_lang'];
-		if (isset($params['l']) && $i18n_rewrite && !$omit_param)
-		{
+		$omit_param = $i18n_cfg['omitmain'] && isset($params['l']) && isset(cot::$usr['profile']) && $params['l'] == cot::$usr['profile']['user_lang'];
+		if (isset($params['l']) && $i18n_rewrite && !$omit_param) {
 			// Add with slash at the beginning of the URL
 			$pos = strpos($url, cot::$sys['site_uri']);
-			if (cot::$sys['site_uri'] != '/' && $pos !== false)
-			{
-				$url = substr_replace($url, cot::$sys['site_uri'] . rawurlencode($params['l']) . '/', $pos, mb_strlen($sys['site_uri']));
-			}
-			else
-			{
+			if (cot::$sys['site_uri'] != '/' && $pos !== false) {
+				$url = substr_replace($url, cot::$sys['site_uri'] . rawurlencode($params['l']) . '/', $pos, mb_strlen(cot::$sys['site_uri']));
+
+            } else {
 				$p = mb_strpos($url, '://');
-				if ($p === false)
-				{
+				if ($p === false) {
 					$url = mb_strpos($url, '/') === 0 ? '/' . rawurlencode($params['l']) . $url : rawurlencode($params['l']) . '/' . $url;
-				}
-				else
-				{
+
+                } else {
 					$p = mb_strpos($url, '/', $p + 3);
 					$url = $p === false ? $url . '/' . rawurlencode($params['l']) : mb_substr($url, 0, $p) . rawurlencode($params['l']) . '/' .
 						 mb_substr($url, $p + 1);

@@ -20,7 +20,7 @@ if (php_sapi_name() == 'cli-server')
 	}
 	// Language selector
 	$langs = array_map(
-		create_function('$dir', 'return str_replace("lang/", "", $dir);'),
+        function ($dir) { return str_replace("lang/", "", $dir); },
 		glob('lang/??', GLOB_ONLYDIR)
 	);
 	if (preg_match('#^(' . join('|', $langs) . ')/(.*)$#', $REQUEST_FILENAME, $mt))

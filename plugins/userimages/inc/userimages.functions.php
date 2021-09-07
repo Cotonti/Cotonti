@@ -148,7 +148,7 @@ function cot_userimages_build($src, $code='')
 	{
 		return cot_rc('userimg_img', array('src' => $src, 'alt' => '', 'class' => ''));
 	}
-	if($R["userimg_default_$code"])
+	if(isset($R["userimg_default_$code"]) && $R["userimg_default_$code"] != '')
 	{
 		return cot_rc("userimg_default_$code");
 	}

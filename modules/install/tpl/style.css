@@ -302,6 +302,16 @@ div.error ul li span {
 	color: #BC3B29 !important;
 }
 
+#content ul li ul.error {
+	margin: 0 0 0 150px;
+}
+
+#content ul li ul.error li {
+	color: #BC3B29;
+	background: none;
+	padding: 3px 0;
+}
+
 select  {
 	background: #F4F4F4;
 	width: 278px;

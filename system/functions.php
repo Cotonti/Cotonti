@@ -180,21 +180,23 @@ class cot
 		self::$usr         =& $usr;
 
 		// Register core DB tables
-		$db->registerTable('auth');
-		$db->registerTable('cache');
-		$db->registerTable('cache_bindings');
-		$db->registerTable('core');
-		$db->registerTable('config');
-		$db->registerTable('groups');
-		$db->registerTable('groups_users');
-		$db->registerTable('logger');
-		$db->registerTable('online');
-		$db->registerTable('extra_fields');
-		$db->registerTable('plugins');
-		$db->registerTable('structure');
-		$db->registerTable('updates');
-		$db->registerTable('users');
-
+        // On the first step of installer it is not initialized yet
+        if ( !(empty($db) && isset($env['location']) && $env['location'] == 'install' )) {
+            $db->registerTable('auth');
+            $db->registerTable('cache');
+            $db->registerTable('cache_bindings');
+            $db->registerTable('core');
+            $db->registerTable('config');
+            $db->registerTable('groups');
+            $db->registerTable('groups_users');
+            $db->registerTable('logger');
+            $db->registerTable('online');
+            $db->registerTable('extra_fields');
+            $db->registerTable('plugins');
+            $db->registerTable('structure');
+            $db->registerTable('updates');
+            $db->registerTable('users');
+        }
         // Fill some variables with default values
         // May be isset() is not needed
         if(!isset(self::$out['head'])) self::$out['head'] = '';
@@ -2840,16 +2842,14 @@ function cot_check_messages($src = '', $class = '')
 {
 	global $error_string, $sys;
 
+    if (empty($_SESSION['cot_messages'][cot::$sys['site_id']])) return false;
+
 	if (empty($src) && empty($class)) {
-	    if(empty($_SESSION['cot_messages'][cot::$sys['site_id']])) return false;
 		return (is_array($_SESSION['cot_messages'][cot::$sys['site_id']]) && count($_SESSION['cot_messages'][cot::$sys['site_id']]) > 0)
 			|| !empty($error_string);
 	}
 
-	if (!is_array($_SESSION['cot_messages'][cot::$sys['site_id']]))
-	{
-		return false;
-	}
+	if (!is_array($_SESSION['cot_messages'][cot::$sys['site_id']]))	return false;
 
 	if (empty($src))
 	{
@@ -3322,12 +3322,13 @@ function cot_log_import($s, $e, $v, $o)
 function cot_message($text, $class = 'ok', $src = 'default')
 {
 	global $cfg, $sys;
-	if (!$cfg['msg_separate'])
-	{
+
+    $msgSeparate = isset(cot::$cfg['msg_separate']) ? cot::$cfg['msg_separate'] : false;
+	if (!$msgSeparate) {
 		// Force the src to default if all errors are displayed in the same place
 		$src = 'default';
 	}
-	$_SESSION['cot_messages'][$sys['site_id']][$src][] = array(
+	$_SESSION['cot_messages'][cot::$sys['site_id']][$src][] = array(
 		'text' => $text,
 		'class' => $class
 	);
@@ -3566,9 +3567,11 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 		// Module template paths
 		$admin && !empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/modules/";
 		$admin && $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/modules/";
-		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
-		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
-		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/{$base[0]}/";
+		if (isset(cot::$usr['theme'])) {
+            $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/";
+            $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/";
+            $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/modules/{$base[0]}/";
+        }
 		$scan_dirs[] = "{$cfg['modules_dir']}/{$base[0]}/tpl/";
 	}
 

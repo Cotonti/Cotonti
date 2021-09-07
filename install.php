@@ -11,8 +11,6 @@
 define('COT_CODE', TRUE);
 define('COT_INSTALL', TRUE);
 //define('COT_ADMIN', TRUE);
-$env['location'] = 'install';
-$env['ext'] = 'install';
 
 if (file_exists('./datas/config.php'))
 {
@@ -40,8 +38,14 @@ $cfg['cache'] = false;
 $cfg['xtpl_cache'] = false;
 
 require_once $cfg['system_dir'].'/functions.php';
-require_once $cfg['system_dir'] . '/cotemplate.php';
+require_once $cfg['system_dir'].'/cotemplate.php';
 require_once 'system/debug.php';
+
+date_default_timezone_set('UTC');
+$sys['now'] = time();
+
+$env['location'] = 'install';
+$env['ext'] = 'install';
 
 if (isset($cfg['new_install']) && $cfg['new_install'])
 {
@@ -65,16 +69,21 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 
 	session_start();
 
-	// Getting the server-relative path
-	$url = parse_url($cfg['mainurl']);
+    cot::init();
+
+    // It will be needed when we start to install extensions
+    // Getting the server-relative path
+    $url = parse_url($cfg['mainurl']);
 	$sys['secure'] = $url['scheme'] == 'https' ? true : false;
 	$sys['scheme'] = $url['scheme'];
-	$sys['site_uri'] = $url['path'];
+	$sys['site_uri'] = isset($url['path']) ? $url['path'] : '';
 	$sys['host'] = $url['host'];
 	$sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
-	if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+    $sys['site_uri'] = rtrim($sys['site_uri'], '/').'/';
 	$sys['port'] = empty($url['port']) ? '' : ':' . $url['port'];
 	$sys['abs_url'] = $url['scheme'] . '://' . $sys['host'] . $sys['port'] . $sys['site_uri'];
+
+    $sys['site_id'] = 'install';
 
 	// Installer language selection support
 	if (empty($_SESSION['cot_inst_lang']))

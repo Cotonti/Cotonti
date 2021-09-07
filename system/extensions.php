@@ -274,7 +274,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	while ($f = readdir($dp))
 	{
 		if (preg_match("#^$name(\.([\w\.]+))?.php$#", $f, $mt)
-			&& !in_array($mt[2], $cot_ext_ignore_parts))
+			&& (!isset($mt[2]) || !in_array($mt[2], $cot_ext_ignore_parts)))
 		{
 			$part_info = cot_infoget($path . "/$f", 'COT_EXT');
 			if (!$part_info && cot_plugin_active('genoa'))
@@ -309,7 +309,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 				foreach ($hooks as $hook)
 				{
 					$hook_bindings[] = array(
-						'part' => empty($mt[2]) ? 'main' : $mt[2],
+						'part' => !isset($mt[2]) ? 'main' : $mt[2],
 						'file' => $f,
 						'hook' => $hook,
 						'order' => isset($order[$i]) ? (int) $order[$i] : $order
@@ -389,8 +389,12 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		}
 	}
 
-	if ($update)
-	{
+    // Install / Update Auth
+    if (!isset($info['Auth_guests'])) $info['Auth_guests'] = '';
+    if (!isset($info['Lock_guests'])) $info['Lock_guests'] = '';
+    if (!isset($info['Auth_members'])) $info['Auth_members'] = '';
+    if (!isset($info['Lock_members'])) $info['Lock_members'] = '';
+	if ($update) {
 		// Only update auth locks
 		if ($is_module)
 		{
@@ -420,44 +424,35 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 			"auth_code = '$auth_code' AND auth_option = '$auth_option' AND auth_groupid NOT IN ($ingore_groups)");
 
 		cot_message('ext_auth_locks_updated');
-	}
-	else
-	{
+
+    } else {
 		// Install auth
 		$insert_rows = array();
-		foreach ($cot_groups as $v)
-		{
-			if (!$v['skiprights'])
-			{
-				if ($v['id'] == COT_GROUP_GUESTS || $v['id'] == COT_GROUP_INACTIVE)
-				{
+		foreach ($cot_groups as $v) {
+            $v['skiprights'] = isset($v['skiprights']) ? $v['skiprights'] : false;
+			if (!$v['skiprights']) {
+				if ($v['id'] == COT_GROUP_GUESTS || $v['id'] == COT_GROUP_INACTIVE) {
 					$ins_auth = cot_auth_getvalue($info['Auth_guests']);
 					$ins_lock = cot_auth_getvalue($info['Lock_guests']);
 
-					if ($ins_auth > 128 || $ins_lock < 128)
-					{
+					if ($ins_auth > 128 || $ins_lock < 128) {
 						$ins_auth = ($ins_auth > 127) ? $ins_auth - 128 : $ins_auth;
 						$ins_lock = 128;
 					}
-				}
-				elseif ($v['id'] == COT_GROUP_BANNED)
-				{
+				} elseif ($v['id'] == COT_GROUP_BANNED) {
 					$ins_auth = 0;
 					$ins_lock = 255;
-				}
-				elseif ($v['id'] == COT_GROUP_SUPERADMINS)
-				{
+
+				} elseif ($v['id'] == COT_GROUP_SUPERADMINS) {
 					$ins_auth = 255;
 					$ins_lock = 255;
-				}
-				else
-				{
+
+				} else {
 					$ins_auth = cot_auth_getvalue($info['Auth_members']);
 					$ins_lock = cot_auth_getvalue($info['Lock_members']);
 				}
 
-				if ($is_module)
-				{
+				if ($is_module) {
 					$insert_rows[] = array(
 						'auth_groupid' => $v['id'],
 						'auth_code' => $name,
@@ -466,9 +461,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 						'auth_rights_lock' => $ins_lock,
 						'auth_setbyuserid' => $usr['id']
 					);
-				}
-				else
-				{
+				} else {
 					$insert_rows[] = array(
 						'auth_groupid' => $v['id'],
 						'auth_code' => 'plug',
@@ -480,8 +473,8 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 				}
 			}
 		}
-		if ($db->insert($db_auth, $insert_rows))
-		{
+
+		if ($db->insert($db_auth, $insert_rows)) {
 			$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
 			cot_message('ext_auth_installed');
 		}
@@ -743,40 +736,34 @@ function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
 	$result = array();
 
 	$fp = @fopen($file, 'r');
-	if ($fp)
-	{
+	if ($fp) {
 		$limiter_begin = '[BEGIN_' . $limiter . ']';
 		$limiter_end = '[END_' . $limiter . ']';
 		$data = fread($fp, $maxsize);
 		$begin = mb_strpos($data, $limiter_begin);
 		$end = mb_strpos($data, $limiter_end);
 
-		if ($end > $begin && $begin > 0)
-		{
+		if ($end > $begin && $begin > 0) {
 			$lines = mb_substr($data, $begin + 8 + mb_strlen($limiter),
 				$end - $begin - mb_strlen($limiter) - 8);
 			$lines = explode("\n", $lines);
 
-			foreach ($lines as $line)
-			{
+			foreach ($lines as $line) {
 				$line = ltrim($line, " */");
 				$linex = preg_split('/\s*\=\s*/', trim($line), 2);
-				if ($linex[0])
-				{
-					$result[$linex[0]] = $linex[1];
+				if ($linex[0]) {
+					$result[$linex[0]] = isset($linex[1]) ? $linex[1] : '';
 				}
 			}
-		}
-		else
-		{
+
+		} else {
 			$result = false;
 		}
-	}
-	else
-	{
+	} else {
 		$result = false;
 	}
 	@fclose($fp);
+
 	return $result;
 }
 

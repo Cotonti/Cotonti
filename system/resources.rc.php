@@ -12,7 +12,7 @@ defined('COT_CODE') or die('Wrong URL');
 // Todo may be use cot::$L, cot::$cfg instead?
 global $L, $cfg;
 
-if (!isset(cot::$L['Delete'])) include cot_langfile('main', 'core');
+if (!isset($L['Delete']))  include cot_langfile('main', 'core');
 
 /**
  * Form generation
@@ -32,7 +32,7 @@ $R['input_textarea'] = '<textarea name="{$name}" rows="{$rows}" cols="{$cols}"{$
 $R['input_textarea_editor'] =  '<textarea class="editor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_medieditor'] =  '<textarea class="medieditor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_minieditor'] =  '<textarea class="minieditor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
-$R['input_filebox'] = '<a href="{$filepath}">{$value}</a><br /><input type="file" name="{$name}" {$attrs} /><br /><label><input type="checkbox" name="{$delname}" value="1" /> '.cot::$L['Delete'].'</label>{$error}';
+$R['input_filebox'] = '<a href="{$filepath}">{$value}</a><br /><input type="file" name="{$name}" {$attrs} /><br /><label><input type="checkbox" name="{$delname}" value="1" /> '.$L['Delete'].'</label>{$error}';
 $R['input_filebox_empty'] = '<input type="file" name="{$name}" {$attrs} />{$error}';
 
 $R['input_date'] =  '{$day} {$month} {$year} {$hour}: {$minute}';

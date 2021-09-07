@@ -34,8 +34,8 @@ foreach ($categories as $v)
 		$c = (empty($c)) ? $v[0] : $c;
 		$indexcat = ($jj == 0) ? $v[0] : $indexcat;
 
-		$v[2] = ((int)$v[2] > 0) ? $v[2] : (int)$cfg['page']['cat_' . $v[0]]['truncatetext'];
-		$v[1] = ((int)$v[1] > 0) ? $v[1] : (int)$cfg['plugin']['news']['maxpages'];
+		$v[2] = (isset($v[2]) && ((int)$v[2] > 0)) ? $v[2] : (int)$cfg['page']['cat_' . $v[0]]['truncatetext'];
+		$v[1] = (isset($v[1]) && ((int)$v[1] > 0)) ? $v[1] : (int)$cfg['plugin']['news']['maxpages'];
 
 		$getD = isset($_GET['d']) ? $_GET['d'] : null;
 		$getV0D = isset($_GET[$v[0].'d']) ? $_GET[$v[0].'d'] : null;

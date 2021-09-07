@@ -190,10 +190,10 @@ function cot_config_add($name, $options, $is_module = false, $category = '', $do
 			'config_order' => isset($opt['order']) ? $opt['order'] : str_pad($i, 2, 0, STR_PAD_LEFT),
 			'config_name' => $opt['name'],
 			'config_type' => (int) $opt['type'],
-			'config_value' => $opt['default'],
-			'config_default' => $opt['default'],
-			'config_variants' => $opt['variants'],
-			'config_text' => $opt['text'],
+			'config_value' => isset($opt['default']) ? $opt['default'] : '',
+			'config_default' => isset($opt['default']) ? $opt['default'] : '',
+			'config_variants' => isset($opt['variants']) ? $opt['variants'] : '',
+			'config_text' => isset($opt['text']) ? $opt['text'] : '',
 			'config_donor' => $donor
 		);
 	}

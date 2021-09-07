@@ -60,11 +60,10 @@ function cot_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
 	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$rc = empty($R["input_{$type}_{$rc_name}"]) ? (empty($custom_rc) ? "input_{$type}" : $custom_rc) : "input_{$type}_{$rc_name}";
-	if (!isset($R[$rc]) && empty($custom_rc))
-	{
-		$rc = 'input_default';
-	}
-	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
+	if (!isset($R[$rc]) && empty($custom_rc)) $rc = 'input_default';
+
+    $msgSeparate = isset($cfg['msg_separate']) ? $cfg['msg_separate'] : false;
+	$error = $msgSeparate ? cot_implode_messages($name, 'error') : '';
 	return cot_rc($rc, array(
 		'type' => $type,
 		'name' => $name,
@@ -145,19 +144,20 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 {
 	global $R, $cfg;
 
-	if (!is_array($values))
-	{
+	if (!is_array($values)) {
 		$values = explode(',', $values);
 	}
-	if (!is_array($titles))
-	{
+	if (!is_array($titles)) {
 		$titles = explode(',', $titles);
 	}
+
+    $msgSeparate = isset($cfg['msg_separate'])? $cfg['msg_separate'] : false;
+
 	$use_titles = count($values) == count($titles);
 	$input_attrs = cot_rc_attr_string($attrs);
 	$chosen = cot_import_buffered($name, $chosen);
     $multi = is_array($chosen) && (mb_strpos($input_attrs, 'multiple') !== false);
-	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
+	$error = $msgSeparate ? cot_implode_messages($name, 'error') : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
 	$selected = (is_null($chosen) || $chosen === '' || $chosen == '00') ? ' selected="selected"' : '';
@@ -165,16 +165,14 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 
     $options = '';
 
-	if ($add_empty)
-	{
+	if ($add_empty) {
 		$options .= cot_rc($rc, array(
 			'value' => '',
 			'selected' => $selected,
 			'title' => $R['code_option_empty']
 		));
 	}
-	foreach ($values as $k => $x)
-	{
+	foreach ($values as $k => $x) {
 		$x = trim($x);
 		$selected = ($multi && in_array($x, $chosen)) || (!$multi && $x == $chosen) ? ' selected="selected"' : '';
 		$title = $use_titles ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
@@ -448,7 +446,8 @@ function cot_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
 	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$rc = empty($R["input_textarea_{$rc_name}"]) ? (empty($custom_rc) ? 'input_textarea' : $custom_rc) : "input_textarea_{$rc_name}";
-	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
+    $msgSeparate = isset($cfg['msg_separate']) ? $cfg['msg_separate'] : false;
+	$error = $msgSeparate ? cot_implode_messages($name, 'error') : '';
 	$buffered = cot_import_buffered($name, $value);
 	return cot_rc($rc, array(
 		'name' => $name,
@@ -554,7 +553,8 @@ function cot_filebox($name, $value = '', $filepath = '', $delname ='', $attrs = 
 
 	$filepath = empty($filepath) ? $value : $filepath;
 	$delname = empty($delname) ? 'del'.$name : $delname;
-	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
+    $msgSeparate = isset($cfg['msg_separate']) ? $cfg['msg_separate'] : false;
+	$error = $msgSeparate ? cot_implode_messages($name, 'error') : '';
 	return cot_rc($rc, array(
 		'name' => $name,
 		'filepath' => $filepath,

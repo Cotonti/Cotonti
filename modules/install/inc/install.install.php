@@ -13,6 +13,8 @@ $default_plugins = array('ckeditor', 'cleaner', 'html', 'htmlpurifier', 'ipsearc
 
 $step = empty($_SESSION['cot_inst_lang']) ? 0 : (int) $cfg['new_install'];
 
+$cfg['msg_separate'] = true;
+
 $mskin = cot_tplfile('install.install');
 
 if(!empty($_SESSION['cot_inst_script']) && file_exists($_SESSION['cot_inst_script']))
@@ -36,12 +38,14 @@ if ($step > 2)
 	$dbc_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
 	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbc_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
+    // Need to register DB tables
 	cot::init();
 }
 
 // Import section
 switch ($step)
 {
+    // Step 2. $step will be increased later
 	case 2:
 		$db_host = cot_import('db_host', 'P', 'TXT', 0, false, true);
 		$db_port = cot_import('db_port', 'P', 'TXT', 0, false, true);
@@ -51,18 +55,19 @@ switch ($step)
 		break;
 
 	case 3:
-		$cfg['mainurl'] = cot_import('mainurl', 'P', 'TXT', 0, false, true);
+        $rurl = cot_import('mainurl', 'P', 'TXT', 0, false, true);
 		$user['name'] = cot_import('user_name', 'P', 'TXT', 100, false, true);
 		$user['pass'] = cot_import('user_pass', 'P', 'TXT', 32);
 		$user['pass2'] = cot_import('user_pass2', 'P', 'TXT', 32);
 		$user['email'] = cot_import('user_email', 'P', 'TXT', 64, false, true);
 		$user['country'] = cot_import('user_country', 'P', 'TXT', 0, false, true);
 		$rtheme = explode(':', cot_import('theme', 'P', 'TXT', 0, false, true));
-		$rscheme = $rtheme[1];
+		$rscheme = isset($rtheme[1]) ? : 'default';
 		$rtheme = $rtheme[0];
 		$rlang = cot_import('lang', 'P', 'TXT', 0, false, true);
 		break;
-	case 4:
+
+    case 4:
 		// Extension selection
 		$install_modules = cot_import('install_modules', 'P', 'ARR', 0, false, true);
 		$selected_modules = array();
@@ -126,42 +131,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 			if (!file_exists($file['config']))
 			{
-				if (!is_writable('datas') || !copy($file['config_sample'], $file['config']))
-				{
+				if (!is_writable('datas') || !copy($file['config_sample'], $file['config'])) {
 					cot_error('install_error_config');
-				}
+                }
 			}
 			break;
+
 		case 2:
 			// Database setup
 			$db_x = cot_import('db_x', 'P', 'TXT', 0, false, true);
 
-			try
-			{
-				$dbc_port = empty($db_port) ? '' : ';port='.$db_port;
-				$db = new CotDB('mysql:host='.$db_host.$dbc_port.';dbname='.$db_name, $db_user, $db_pass);
-			}
-			catch (PDOException $e)
-			{
-				if ($e->getCode() == 1049 || mb_strpos($e->getMessage(), '[1049]') !== false)
-				{
-					// Attempt to create a new database
-					try
-					{
-						$db = new CotDB('mysql:host='.$db_host.$dbc_port, $db_user, $db_pass);
-						$db->query("CREATE DATABASE `$db_name`");
-						$db->query("USE `$db_name`");
-					}
-					catch (PDOException $e)
-					{
-						cot_error('install_error_sql_db', 'db_name');
-					}
-				}
-				else
-				{
-					cot_error('install_error_sql', 'db_host');
-				}
-			}
+            if (empty($db_host)) cot_error('install_error_sql_host', 'db_host');
+            if (empty($db_user)) cot_error('install_error_sql_user', 'db_user');
+            if (empty($db_name)) cot_error('install_error_sql_db_name', 'db_name');
+
+            if (!cot_error_found()) {
+                try {
+                    $dbc_port = empty($db_port) ? '' : ';port=' . $db_port;
+                    $db = new CotDB('mysql:host=' . $db_host . $dbc_port . ';dbname=' . $db_name, $db_user, $db_pass);
+
+                } catch (PDOException $e) {
+                    if ($e->getCode() == 1049 || mb_strpos($e->getMessage(), '[1049]') !== false) {
+                        // Attempt to create a new database
+                        try {
+                            $db = new CotDB('mysql:host=' . $db_host . $dbc_port, $db_user, $db_pass);
+                            $db->query("CREATE DATABASE `$db_name`");
+                            $db->query("USE `$db_name`");
+
+                        } catch (PDOException $e) {
+                            cot_error('install_error_sql_db', 'db_name');
+                        }
+                    } else {
+                        cot_error('install_error_sql', 'db_host');
+                    }
+                }
+            }
 
 			if (!cot_error_found() && function_exists('version_compare')
 				&& !version_compare($db->getAttribute(PDO::ATTR_SERVER_VERSION), '5.0.7', '>='))
@@ -169,8 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				cot_error(cot_rc('install_error_sql_ver', array('ver' => $db->getAttribute(PDO::ATTR_SERVER_VERSION))));
 			}
 
-			if (!cot_error_found())
-			{
+			if (!cot_error_found()) {
 				cot::init();
 
 				$config_contents = file_get_contents($file['config']);
@@ -188,15 +191,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				$sql_file = file_get_contents($file['sql']);
 				$error = $db->runScript($sql_file);
 
-				if ($error)
-				{
+				if ($error) {
 					cot_error(cot_rc('install_error_sql_script', array('msg' => $error)));
 				}
 			}
 			break;
+
 		case 3:
 			// Misc settings and admin account
-			if (empty($cfg['mainurl']))
+			if (empty($rurl))
 			{
 				cot_error('install_error_mainurl', 'mainurl');
 			}
@@ -221,13 +224,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				cot_error(cot_rc('install_error_missing_file', array('file' => $file['config_sample'])));
 			}
 
-			if (!cot_error_found())
-			{
+			if (!cot_error_found()) {
 				$config_contents = file_get_contents($file['config']);
 				cot_install_config_replace($config_contents, 'defaultlang', $rlang);
 				cot_install_config_replace($config_contents, 'defaulttheme', $rtheme);
 				cot_install_config_replace($config_contents, 'defaultscheme', $rscheme);
-				cot_install_config_replace($config_contents, 'mainurl', $cfg['mainurl']);
+				cot_install_config_replace($config_contents, 'mainurl', $rurl);
 
 				$new_site_id = cot_unique(32);
 				cot_install_config_replace($config_contents, 'site_id', $new_site_id);
@@ -271,35 +273,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 					cot_error(cot_rc('install_error_sql_script', array('msg' => $err->getMessage())));
 				}
 			}
-
 			break;
+
 		case 4:
 			// Dependency check
 			$install = true;
-			foreach ($selected_modules as $ext)
-			{
+			foreach ($selected_modules as $ext) {
 				$install &= cot_extension_dependencies_statisfied($ext, true, $selected_modules, $selected_plugins);
 			}
-			foreach ($selected_plugins as $ext)
-			{
+			foreach ($selected_plugins as $ext) {
 				$install &= cot_extension_dependencies_statisfied($ext, false, $selected_modules, $selected_plugins);
 			}
 
-			if ($install && !cot_error_found())
-			{
+			if ($install && !cot_error_found()) {
 				// Load groups
 				$cot_groups = array();
-				$res = $db->query("SELECT grp_id FROM $db_groups
-					WHERE grp_disabled=0 ORDER BY grp_level DESC");
-				while ($row = $res->fetch())
-				{
+				$res = $db->query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
+				while ($row = $res->fetch()) {
 					$cot_groups[$row['grp_id']] = array(
 						'id' => $row['grp_id'],
 						'alias' => $row['grp_alias'],
 						'level' => $row['grp_level'],
 						'disabled' => $row['grp_disabled'],
-						'hidden' => $row['grp_hidden'],
-						'state' => $row['grp_state'],
 						'name' => htmlspecialchars($row['grp_name']),
 						'title' => htmlspecialchars($row['grp_title'])
 					);
@@ -309,23 +304,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				// Install all at once
 				// Note: installation statuses are ignored in this installer
 				$selected_modules = cot_install_sort_extensions($selected_modules, true);
-				foreach ($selected_modules as $ext)
-				{
-					if (!cot_extension_install($ext, true))
-					{
+				foreach ($selected_modules as $ext) {
+					if (!cot_extension_install($ext, true)) {
 						cot_error("Installing $ext module has failed");
 					}
 				}
 				$selected_plugins = cot_install_sort_extensions($selected_plugins, false);
-				foreach ($selected_plugins as $ext)
-				{
-					if (!cot_extension_install($ext, false))
-					{
+				foreach ($selected_plugins as $ext) {
+					if (!cot_extension_install($ext, false)) {
 						cot_error("Installing $ext plugin has failed");
 					}
 				}
 			}
 			break;
+
 		case 5:
 			// End credits
 			break;
@@ -388,6 +380,7 @@ switch ($step)
 			$t->parse("MAIN.STEP_$step.SCRIPT");
 		}
 		break;
+
 	case 1:
 		// Create missing cache folders
 		if (is_writable($cfg['cache_dir']))
@@ -542,44 +535,55 @@ switch ($step)
 			'INSTALL_MYSQL' => $status['mysql']
 		));
 		break;
+
 	case 2:
 		// Database form
+        $db_host = !isset($db_host) ? $cfg['mysqlhost'] : $db_host;
+        $db_port = !isset($db_port) ? $cfg['mysqlport'] : $db_port;
+		$db_user = !isset($db_user) ? $cfg['mysqluser'] : $db_user;
+		$db_name = !isset($db_name) ? $cfg['mysqldb'] : $db_name;
+
 		$t->assign(array(
-			'INSTALL_DB_HOST' => is_null($db_host) ? $cfg['mysqlhost'] : $db_host,
-			'INSTALL_DB_PORT' => is_null($db_port) ? $cfg['mysqlport'] : $db_port,
-			'INSTALL_DB_USER' => is_null($db_user) ? $cfg['mysqluser'] : $db_user,
-			'INSTALL_DB_NAME' => is_null($db_name) ? $cfg['mysqldb'] : $db_name,
+			'INSTALL_DB_HOST' => $db_host,
+			'INSTALL_DB_PORT' => $db_port,
+			'INSTALL_DB_USER' => $db_user,
+			'INSTALL_DB_NAME' => $db_name,
 			'INSTALL_DB_X' => $db_x,
-			'INSTALL_DB_HOST_INPUT' => cot_inputbox('text', 'db_host', is_null($db_host) ? $cfg['mysqlhost'] : $db_host, 'size="32"'),
-			'INSTALL_DB_PORT_INPUT' => cot_inputbox('text', 'db_port', is_null($db_port) ? $cfg['mysqlport'] : $db_port, 'size="32"'),
-			'INSTALL_DB_USER_INPUT' => cot_inputbox('text', 'db_user',  is_null($db_user) ? $cfg['mysqluser'] : $db_user, 'size="32"'),
-			'INSTALL_DB_NAME_INPUT' => cot_inputbox('text', 'db_name',  is_null($db_name) ? $cfg['mysqldb'] : $db_name, 'size="32"'),
+			'INSTALL_DB_HOST_INPUT' => cot_inputbox('text', 'db_host', $db_host, 'size="32"'),
+			'INSTALL_DB_PORT_INPUT' => cot_inputbox('text', 'db_port', $db_port, 'size="32"'),
+			'INSTALL_DB_USER_INPUT' => cot_inputbox('text', 'db_user',  $db_user, 'size="32"'),
+			'INSTALL_DB_NAME_INPUT' => cot_inputbox('text', 'db_name',  $db_name, 'size="32"'),
 			'INSTALL_DB_PASS_INPUT' => cot_inputbox('password', 'db_pass', '', 'size="32"'),
 			'INSTALL_DB_X_INPUT' => cot_inputbox('text', 'db_x',  $db_x, 'size="32"'),
 		));
 		break;
+
 	case 3:
 		// Settings
-		if (cot_import('step', 'POST', 'INT') != 3 && !cot_check_messages())
-		{
-			$rtheme = $theme;
-			$rscheme = $scheme;
-			$rlang = $lang;
-			$cfg['mainurl'] = $site_url;
-		}
+        $user['name'] = isset($user['name']) ? $user['name'] : '';
+        $user['email'] = isset($user['email']) ? $user['email'] : '';
+        $user['country'] = isset($user['country']) ? $user['country'] : '';
+        $rtheme = isset($rtheme) ? $rtheme : $theme;
+        $rscheme = isset($rscheme) ? $rscheme : $scheme;
+        $rlang = isset($rlang) ? $rlang : $lang;
+        $rurl = isset($rurl) ? $rurl : $site_url;
 
 		$t->assign(array(
 			'INSTALL_THEME_SELECT' => cot_selectbox_theme($rtheme, $rscheme, 'theme'),
 			'INSTALL_LANG_SELECT' => cot_selectbox_lang($rlang, 'lang'),
 			'INSTALL_COUNTRY_SELECT' => cot_selectbox_countries($user['country'], 'user_country'),
-			'INSTALL_MAINURL' => cot_inputbox('text', 'mainurl', $cfg['mainurl'], 'size="32"'),
+			'INSTALL_MAINURL' => cot_inputbox('text', 'mainurl', $rurl, 'size="32"'),
 			'INSTALL_USERNAME' => cot_inputbox('text', 'user_name', $user['name'], 'size="32"'),
 			'INSTALL_PASS1' => cot_inputbox('password', 'user_pass', '', 'size="32"'),
 			'INSTALL_PASS2' => cot_inputbox('password', 'user_pass2', '', 'size="32"'),
 			'INSTALL_EMAIL' => cot_inputbox('text', 'user_email', $user['email'], 'size="32"'),
 		));
+        break;
+
 	case 4:
 		// Extensions
+        $selected_modules = isset($selected_modules) ? $selected_modules : '';
+        $selected_plugins = isset($selected_plugins) ? $selected_plugins : '';
 		cot_install_parse_extensions('Module', $default_modules, $selected_modules);
 		cot_install_parse_extensions('Plugin', $default_plugins, $selected_plugins);
 
@@ -591,8 +595,8 @@ switch ($step)
 			$robotsTxtFile = str_replace('# Host: http://your-domain.com', $tmp, $robotsTxtFile);
 			file_put_contents($robotsTxtFilePath, $robotsTxtFile);
 		}
-
 		break;
+
 	case 5:
 		// End credits
 		break;
@@ -739,22 +743,18 @@ function cot_install_sort_extensions($selected_extensions, $is_module = FALSE)
 
 	// Split into groups by Order value
 	$extensions = array();
-	foreach ($selected_extensions as $name)
-	{
+	foreach ($selected_extensions as $name) {
 		$info = cot_infoget("$path/$name/$name.setup.php", 'COT_EXT');
 		$order = isset($info['Order']) ? (int) $info['Order'] : COT_PLUGIN_DEFAULT_ORDER;
-		if ($info['Category'] == 'post-install' && $order < 999)
-		{
+		if (isset($info['Category']) && $info['Category'] == 'post-install' && $order < 999) {
 			$order = 999;
 		}
 		$extensions[$order][] = $name;
 	}
 
 	// Merge back into a single array
-	foreach ($extensions as $grp)
-	{
-		foreach ($grp as $name)
-		{
+	foreach ($extensions as $grp) {
+		foreach ($grp as $name) {
 			$ret[] = $name;
 		}
 	}

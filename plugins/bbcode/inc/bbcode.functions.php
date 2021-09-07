@@ -299,8 +299,10 @@ function cot_parse_bbcode($text)
 			break;
 
 			case 'callback':
-				$phpcode = 'global $cfg, $sys, $usr, $L, $theme, $cot_groups;'.$bbcode['replacement'];
-				$text = preg_replace_callback('`'.$bbcode['pattern'].'`mis', create_function('$input', $phpcode), $text);
+                $text = preg_replace_callback('`'.$bbcode['pattern'].'`mis', function ($input) use ($bbcode) {
+                    global $cfg, $sys, $usr, $L, $theme, $cot_groups;
+                    eval($bbcode['replacement']);
+                }, $text);
 			break;
 		}
 	}
