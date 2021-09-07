@@ -490,59 +490,48 @@ class Page_cache
 	{
 		$filename = $this->dir. '/' . $this->path . '/' . $this->name;
 		$args = array();
-		foreach ($_GET as $key => $val)
-		{
-			if (!in_array($key, $this->excl))
-			{
+		foreach ($_GET as $key => $val) {
+			if (!in_array($key, $this->excl)) {
 				$args[$key] = $val;
 			}
 		}
 		ksort($args);
-		if (count($args) > 0)
-		{
+		if (count($args) > 0) {
 			$hashkey = serialize($args);
 			$filename .= '_' . md5($hashkey) . sha1($hashkey);
 		}
-		if (!empty($this->ext))
-		{
+		if (!empty($this->ext)) {
 			$filename .= '.' . $this->ext;
 		}
-		if (file_exists($filename))
-		{
+		if (file_exists($filename)) {
 			// Browser cache headers
             $filemtime = filemtime($filename);
 			$etag = md5($filename . filesize($filename) . $filemtime);
-			if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']))
-            {
+			if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
                 // convert to unix timestamp
                 $if_modified_since = strtotime(preg_replace('#;.*$#', '',
                     stripslashes($_SERVER['HTTP_IF_MODIFIED_SINCE'])));
-            }
-            else
-            {
+            } else {
                 $if_modified_since = false;
             }
-			$if_none_match = stripslashes($_SERVER['HTTP_IF_NONE_MATCH']);
-			if ($if_none_match == $etag
-				&& $if_modified_since >= $filemtime)
-			{
-				$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
-				header($protocol . ' 304 Not Modified');
-				header("Etag: $etag");
-				exit;
-			}
+            if(isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+                $if_none_match = stripslashes($_SERVER['HTTP_IF_NONE_MATCH']);
+                if ($if_none_match == $etag && $if_modified_since >= $filemtime) {
+                    $protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+                    header($protocol . ' 304 Not Modified');
+                    header("Etag: $etag");
+                    exit;
+                }
+            }
 			header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', $filemtime));
 			header("ETag: $etag");
 			header('Expires: Mon, 01 Apr 1974 00:00:00 GMT');
 			header('Cache-Control: must-revalidate, proxy-revalidate');
 			// Page output
 			header('Content-Type: text/html; charset=UTF-8');
-			if (@strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') === FALSE)
-			{
+			if (@strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') === FALSE) {
 				readgzfile($filename);
-			}
-			else
-			{
+			} else {
 				header('Content-Encoding: gzip');
 				echo file_get_contents($filename);
 			}
@@ -1240,7 +1229,7 @@ class Cache
 		$this->db = new MySQL_cache();
 		$cot_cache_autoload = is_array($cot_cache_autoload)
 			? array_merge(array('system', 'cot', $env['ext']), $cot_cache_autoload)
-				: array('system', 'cot', $env['ext']);
+				: array('system', 'cot', cot::$env['ext']);
 		$this->db->get_all($cot_cache_autoload);
 
 		$cfg['cache_drv'] .= '_driver';
