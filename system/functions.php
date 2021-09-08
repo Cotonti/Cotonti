@@ -2965,10 +2965,11 @@ function cot_die($cond = true, $notfound = false)
  */
 function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 {
+    // cot class can be not initialised yet
 	global $cfg;
 
-	if ($cfg['display_errors'])
-	{
+	if ($cfg['display_errors']) {
+        $mainTitle = isset($cfg['maintitle']) ? $cfg['maintitle'] : $cfg['mainurl'];
 		$message_body = '<p><em>'.@date('Y-m-d H:i').'</em></p>';
 		$message_body .= '<p>'.$text.'</p>';
 		ob_clean();
@@ -2976,14 +2977,12 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 		$backtrace = ob_get_contents();
 		ob_clean();
 		$message_body .= '<pre style="overflow:auto">'.$backtrace.'</pre>';
-		$message_body .= '<hr /><a href="'.$cfg['mainurl'].'">'.$cfg['maintitle'].'</a>';
+		$message_body .= '<hr /><a href="'.$cfg['mainurl'].'">'.$mainTitle.'</a>';
 		cot_die_message(500, true, $title, $message_body);
-	}
-	else
-	{
+
+    } else {
 		$backtrace = debug_backtrace();
-		if (isset($backtrace[1]))
-		{
+		if (isset($backtrace[1])) {
 			$text .= ' in file ' . $backtrace[1]['file'] . ' at line ' . $backtrace[1]['line'] . ' function ' . $backtrace[1]['function'] . '(' . implode(', ', $backtrace[1]['args']) . ')';
 		}
 		error_log("$title: $text");
@@ -3003,10 +3002,12 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 function cot_die_message($code, $header = TRUE, $message_title = '', $message_body = '', $redirect = '')
 {
 	// Globals and requirements
-	global $error_string, $out, $L, $R;
-	$LL = is_array(cot::$L) ? cot::$L : array();
+    // cot class can be not initialised yet
+	global $error_string, $out, $L, $R, $cfg;
+
+	$LL = is_array($L) ? $L : array();
 	require_once cot_langfile('message', 'core');
-    cot::$L = array_merge(cot::$L, $LL);
+    $L = array_merge($L, $LL);
 
 	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST') {
 		// Save the POST data
@@ -3052,14 +3053,14 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 		951 => '503 Service Unavailable'
 	);
 
-	if (empty(cot::$out['meta_contenttype'])) {
-        cot::$out['meta_contenttype'] = 'text/html';
+	if (empty($out['meta_contenttype'])) {
+        $out['meta_contenttype'] = 'text/html';
 	}
-	cot_sendheaders(cot::$out['meta_contenttype'], $msg_status[$code]);
+	cot_sendheaders($out['meta_contenttype'], $msg_status[$code]);
 
 	// Determine message title and body
-	$title = empty($message_title) ? cot::$L['msg' . $code . '_title'] : $message_title;
-	$body = empty($message_body) ? cot::$L['msg' . $code . '_body'] : $message_body;
+	$title = empty($message_title) ? $L['msg' . $code . '_title'] : $message_title;
+	$body = empty($message_body) ? $L['msg' . $code . '_body'] : $message_body;
 
 	// Render the message page
 	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
@@ -3072,9 +3073,9 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 		}
 	}
 
-    if (!isset(cot::$R['code_basehref'])) {
+    if (!isset($R['code_basehref'])) {
         // Resource strings
-        include cot::$cfg['system_dir'].'/resources.rc.php';
+        include $cfg['system_dir'].'/resources.rc.php';
     }
 
 	if ($header) {
@@ -3082,7 +3083,7 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 		if ($tpl_path) {
 			$header = false;
 		} else {
-			echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.cot::$R['code_basehref'].$stylesheet.$redirect_meta.'</head><body><div class="block">';
+			echo '<html><head><title>'.$title.'</title><meta name="robots" content="noindex" />'.$R['code_basehref'].$stylesheet.$redirect_meta.'</head><body><div class="block">';
 		}
 	}
 
@@ -3097,7 +3098,7 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 
 		$t->assign(array(
 			'AJAX_MODE' => COT_AJAX,
-			'MESSAGE_BASEHREF' => cot::$R['code_basehref'],
+			'MESSAGE_BASEHREF' => $R['code_basehref'],
 			'MESSAGE_STYLESHEET' => $stylesheet,
 			'MESSAGE_REDIRECT' => $redirect_meta,
 			'MESSAGE_TITLE' => $title,
@@ -3505,9 +3506,15 @@ function cot_rmdir($dir)
  */
 function cot_schemefile()
 {
+    // cot class can be not initialised yet
+    global $cfg, $usr;
+
+    $scheme = isset($usr['scheme']) ? $usr['scheme'] : $cfg['defaultscheme'];
+    $theme = isset($usr['theme']) ? $usr['theme'] : $cfg['defaulttheme'];
+
 	$scheme_css = array();
-	$scheme_css[] = cot::$cfg['themes_dir'] .'/'. cot::$usr['theme'] .'/css/'. cot::$usr['scheme'] .'.css';
-	$scheme_css[] = cot::$cfg['themes_dir'] .'/'. cot::$usr['theme'] .'/'. cot::$usr['scheme'] .'.css';
+	$scheme_css[] = $cfg['themes_dir'] .'/'. $theme .'/css/'. $scheme .'.css';
+	$scheme_css[] = $cfg['themes_dir'] .'/'. $theme .'/'. $scheme .'.css';
 
 	foreach ($scheme_css as $filename) {
 		if (is_file($filename)) return $filename;
