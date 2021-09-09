@@ -292,16 +292,15 @@ if (empty($cot_groups )) {
 				'title' => htmlspecialchars($row['grp_title']),
 				'desc' => htmlspecialchars($row['grp_desc']),
 				'icon' => $row['grp_icon'],
-				'pfs_maxfile' => $row['grp_pfs_maxfile'],
-				'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
+				'pfs_maxfile' => isset($row['grp_pfs_maxfile']) ? $row['grp_pfs_maxfile'] : null,
+				'pfs_maxtotal' => isset($row['grp_pfs_maxtotal']) ? $row['grp_pfs_maxtotal'] : null,
 				'ownerid' => $row['grp_ownerid'],
-				'skiprights' => $row['grp_skiprights']
+				'skiprights' => isset($row['grp_skiprights']) ? $row['grp_skiprights'] : false
 			);
 		}
 		$sql->closeCursor();
-	}
-	else
-	{
+
+    } else {
 		cot_diefatal('No groups found.'); // TODO: Need translate
 	}
 
