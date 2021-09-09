@@ -67,8 +67,11 @@ foreach ($sql->fetchAll(PDO::FETCH_NUM) as $row)
 	$tables[] = $status1;
 }
 
-foreach ($tables as $dat)
-{
+$total_length = 0;
+$total_rows = 0;
+$total_index_length = 0;
+$total_data_length = 0;
+foreach ($tables as $dat) {
 	$table_length = $dat['Index_length'] + $dat['Data_length'];
 	$total_length += $table_length;
 	$total_rows += $dat['Rows'];
