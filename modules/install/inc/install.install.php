@@ -25,9 +25,12 @@ if(!empty($_SESSION['cot_inst_script']) && file_exists($_SESSION['cot_inst_scrip
 cot_sendheaders();
 
 $t = new XTemplate($mskin);
-
-$site_url = (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false && $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 443 && $_SERVER['HTTP_X_FORWARDED_PORT'] !== 443 ? 'http://' : 'https://')
-	. $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);
+$server_SERVER_PROTOCOL = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : null;
+$server_HTTPS = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : null;
+$server_HTTP_X_FORWARDED_PORT = isset($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['HTTP_X_FORWARDED_PORT'] : null;
+$server_REQUEST_URI = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+$site_url = (strpos($server_SERVER_PROTOCOL, 'HTTPS') === false && $server_HTTPS != 'on' && $_SERVER['SERVER_PORT'] != 443 && $server_HTTP_X_FORWARDED_PORT !== 443 ? 'http://' : 'https://')
+	. $_SERVER['HTTP_HOST'] . dirname($server_REQUEST_URI);
 $site_url = str_replace('\\', '/', $site_url);
 $site_url = preg_replace('#/$#', '', $site_url);
 $sys['abs_url'] = $site_url . '/';
@@ -62,7 +65,7 @@ switch ($step)
 		$user['email'] = cot_import('user_email', 'P', 'TXT', 64, false, true);
 		$user['country'] = cot_import('user_country', 'P', 'TXT', 0, false, true);
 		$rtheme = explode(':', cot_import('theme', 'P', 'TXT', 0, false, true));
-		$rscheme = isset($rtheme[1]) ? : $cfg['defaultscheme'];
+		$rscheme = isset($rtheme[1]) ? : 'default';
 		$rtheme = $rtheme[0];
 		$rlang = cot_import('lang', 'P', 'TXT', 0, false, true);
 		break;
