@@ -733,7 +733,33 @@ function cot_file_phpdoc($filename)
  */
 function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
 {
-	$result = array();
+    $result = array();
+
+    // Default data structure
+    if ($limiter == 'COT_EXT' || $limiter == 'SED_EXTPLUGIN') {
+        $result = array(
+            'Code' => '',
+            'Name' => '',
+            'Description' => '',
+            'Category' => '',
+            'Version' => '',
+            'Date' => '',
+            'Author' => '',
+            'Copyright' => '',
+            'Notes' => '',
+            'Auth_members' => '',
+            'Lock_members' => '',
+            'Auth_guests' => '',
+            'Lock_guests' => '',
+        );
+
+        if ($limiter == 'COT_EXT') {
+            $result['Requires_modules'] = '';
+            $result['Requires_plugins'] = '';
+            $result['Recommends_modules'] = '';
+            $result['Recommends_plugins'] = '';
+        }
+    }
 
 	$fp = @fopen($file, 'r');
 	if ($fp) {
@@ -877,19 +903,44 @@ function cot_extension_list_info($dir)
 		if ($f[0] != '.' && is_dir($path) && file_exists("$path/$f.setup.php"))
 		{
 			$info = cot_infoget("$path/$f.setup.php", 'COT_EXT');
-			if (!$info && cot_plugin_active('genoa'))
-			{
+			if (!$info && cot_plugin_active('genoa')) {
 				// Try to load old format info
 				$info = cot_infoget("$path/$f.setup.php", 'SED_EXTPLUGIN');
 			}
-			if (empty($info['Category']))
-			{
+
+			if ($info == false) {
+                // Failed to load info block
+                // Lets use default data
+                $info = array(
+                    'Code' => $f,
+                    'Name' => $f,
+                    'Description' => '',
+                    'Category' => '',
+                    'Version' => '',
+                    'Date' => '',
+                    'Author' => '',
+                    'Copyright' => '',
+                    'Notes' => '',
+                    'Auth_members' => '',
+                    'Lock_members' => '',
+                    'Auth_guests' => '',
+                    'Lock_guests' => '',
+                    'Requires_modules' => '',
+                    'Requires_plugins' => '',
+                    'Recommends_modules' => '',
+                    'Recommends_plugins' => ''
+                );
+            }
+
+			if (empty($info['Category'])) {
 				$info['Category'] = 'misc-ext';
 			}
+
 			$ext_list[$f] = $info;
 		}
 	}
 	closedir($dp);
+
 	return $ext_list;
 }
 

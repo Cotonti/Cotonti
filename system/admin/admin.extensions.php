@@ -74,40 +74,58 @@ switch($a)
 	case 'details':
 	/* =============== */
 		$ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
+        $info = false;
 		$exists = file_exists($ext_info);
-		if ($exists)
-		{
+		if ($exists) {
 			$old_ext_format = false;
 			$info = cot_infoget($ext_info, 'COT_EXT');
-
-			if (!$info && cot_plugin_active('genoa'))
-			{
+			if (!$info && cot_plugin_active('genoa')) {
 				// Try to load old format info
 				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
 				$old_ext_format = true;
 				cot_message('ext_old_format', 'warning');
 			}
 		}
-		else
-		{
-			$info = array(
-				'Name' => $code
-			);
-		}
+
+        if ($info == false) {
+            // Failed to load info block
+            // Lets use default data
+            $info = array(
+                'Code' => $code,
+                'Name' => $code,
+                'Description' => '',
+                'Category' => '',
+                'Version' => '',
+                'Date' => '',
+                'Author' => '',
+                'Copyright' => '',
+                'Notes' => '',
+                'Auth_members' => '',
+                'Lock_members' => '',
+                'Auth_guests' => '',
+                'Lock_guests' => '',
+                'Requires_modules' => '',
+                'Requires_plugins' => '',
+                'Recommends_modules' => '',
+                'Recommends_plugins' => ''
+            );
+        }
+
 		switch($b)
 		{
 			case 'install':
 				$installed_modules = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = 0")->fetchAll(PDO::FETCH_COLUMN);
 				$installed_plugins = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = 1")->fetchAll(PDO::FETCH_COLUMN);
 				$dependencies_satisfied = cot_extension_dependencies_statisfied($code, $is_module, $installed_modules, $installed_plugins);
-				if ($dependencies_satisfied)
-				{
+				if ($dependencies_satisfied) {
 					$result = cot_extension_install($code, $is_module);
 				}
 			break;
+
 			case 'update':
 				$result = cot_extension_install($code, $is_module, true, true);
 				break;
+
 			case 'uninstall':
 				/* === Hook  === */
 				foreach (cot_getextplugins('admin.extensions.uninstall.first') as $pl)
@@ -115,8 +133,7 @@ switch($a)
 					include $pl;
 				}
 				/* ===== */
-				if (cot_check_xg(false))
-				{
+				if (cot_check_xg(false)) {
 					// Check if there are extensions installed depending on this one
 					$dependencies_satisfied = true;
 					$res = $db->query("SELECT ct_code, ct_plug FROM $db_core ORDER BY ct_plug, ct_code");
@@ -145,48 +162,48 @@ switch($a)
 						}
 					}
 
-					if ($dependencies_satisfied)
-					{
+					if ($dependencies_satisfied) {
 						$result = cot_extension_uninstall($code, $is_module);
 					}
 					$adminpath[] = cot::$L['adm_opt_uninstall'];
-				}
-				else
-				{
+
+				} else {
 					$url = cot_url('admin', "m=extensions&a=details&$arg=$code&b=uninstall&x={$sys['xk']}");
 					cot_message(cot_rc('ext_uninstall_confirm', array('url' => $url)), 'error');
 					cot_redirect(cot_url('admin', "m=extensions&a=details&$arg=$code", '', true));
 				}
 				break;
+
 			case 'pause':
 				cot_extension_pause($code);
 				cot_message('adm_paused');
-					break;
+				break;
+
 			case 'unpause':
 				cot_extension_resume($code);
 				cot_message('adm_running');
 				break;
+
 			case 'pausepart':
 				cot_plugin_pause($code, $part);
 				cot_message('adm_partstopped');
 				break;
+
 			case 'unpausepart':
 				cot_plugin_resume($code, $part);
 				cot_message('adm_partrunning');
 				break;
 		}
-		if (!empty($b))
-		{
+
+		if (!empty($b)) {
 			$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
-			if ($cache)
-			{
+			if ($cache) {
 				$cache->clear();
 			}
 			cot_redirect(cot_url('admin', "m=extensions&a=details&$arg=$code", '', true));
 		}
 
-		if ($exists)
-		{
+		if ($exists) {
 			$parts = array();
 			// Collect all parts from extension directory
 			$handle = opendir($dir . '/' . $code);
@@ -214,12 +231,13 @@ switch($a)
 			$info['Lock_members'] = cot_auth_getvalue($info['Lock_members']);
 			$info['Auth_guests'] = cot_auth_getvalue($info['Auth_guests']);
 			$info['Lock_guests'] = cot_auth_getvalue($info['Lock_guests']);
-		}
-		else
-		{
+
+		} else {
 			$row = $db->query("SELECT * FROM $db_core WHERE ct_code = '$code'")->fetch();
-			$info['Name'] = $row['ct_title'];
-			$info['Version'] = $row['ct_version'];
+			if ($row) {
+                $info['Name'] = $row['ct_title'];
+                $info['Version'] = $row['ct_version'];
+            }
 		}
 
 		$ext_info = cot_get_extensionparams($code, $is_module);
@@ -320,20 +338,17 @@ switch($a)
 						'ADMIN_EXTENSIONS_DETAILS_ROW_ERROR' => $info_file['Error']
 					));
 					$t->parse('MAIN.DETAILS.ROW_ERROR_PART');
-				}
-				else
-				{
 
-					if(empty($info_file['Tags']))
-					{
+				} else {
+
+					if (empty($info_file['Tags'])) {
 						$t->assign(array(
 							'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
 							'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part
 						));
 						$t->parse('MAIN.DETAILS.ROW_ERROR_TAGS');
-					}
-					else
-					{
+
+					} else {
 						$taggroups = explode(';', $info_file['Tags']);
 						foreach ($taggroups as $taggroup)
 						{
@@ -463,17 +478,33 @@ switch($a)
 
 		$installed_ver = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$code'")->fetchColumn();
 
+        $name = '';
+        if (cot::$L['info_name'] != '') {
+            $name = cot::$L['info_name'];
+        } elseif ($info['Name'] != '') {
+            $name = $info['Name'];
+        } else {
+            $name = $code;
+        }
+
+        $description = '';
+        if (cot::$L['info_desc'] != '') {
+            $description = cot::$L['info_desc'];
+        } elseif (isset($info['Description'])) {
+            $description = $info['Description'];
+        }
+
 		// Universal tags
 		$t->assign(array(
-			'ADMIN_EXTENSIONS_NAME' => empty(cot::$L['info_name']) ? $info['Name'] : cot::$L['info_name'],
+			'ADMIN_EXTENSIONS_NAME' => $name,
 			'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? cot::$L['Module'] : cot::$L['Plugin'],
 			'ADMIN_EXTENSIONS_CODE' => $code,
 			'ADMIN_EXTENSIONS_ICO' => $icofile,
-			'ADMIN_EXTENSIONS_DESCRIPTION' => empty(cot::$L['info_desc']) ? $info['Description'] : cot::$L['info_desc'],
-			'ADMIN_EXTENSIONS_VERSION' => isset($info['Version']) ? $info['Version'] : '',
+			'ADMIN_EXTENSIONS_DESCRIPTION' => $description,
+			'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 			'ADMIN_EXTENSIONS_VERSION_INSTALLED' => $installed_ver,
 			'ADMIN_EXTENSIONS_VERSION_COMPARE' => version_compare($info['Version'], $installed_ver),
-			'ADMIN_EXTENSIONS_DATE' => isset($info['Date']) ? $info['Date'] : '' ,
+			'ADMIN_EXTENSIONS_DATE' => $info['Date'],
 			'ADMIN_EXTENSIONS_CONFIG_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$code"),
 			'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $tools,
 			'ADMIN_EXTENSIONS_JUMPTO_URL' => $standalone,
@@ -487,8 +518,15 @@ switch($a)
 			'ADMIN_EXTENSIONS_UNPAUSE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=unpause")
 		));
 
-		if ($exists)
-		{
+		if ($exists) {
+
+		    $notes = '';
+		    if (cot::$L['info_notes'] != '') {
+                $notes = cot::$L['info_notes'];
+            } else {
+		        $notes = $info['Notes'];
+            }
+
 			// Tags for existing exts
 			$t->assign(array(
 				'ADMIN_EXTENSIONS_RIGHTS' => $type == 'module' ? cot_url('admin', "m=rightsbyitem&ic=$code&io=a")
@@ -503,7 +541,7 @@ switch($a)
 				'ADMIN_EXTENSIONS_LOCK_MEMBERS' => $info['Lock_members'],
 				'ADMIN_EXTENSIONS_AUTHOR' => $info['Author'],
 				'ADMIN_EXTENSIONS_COPYRIGHT' => $info['Copyright'],
-				'ADMIN_EXTENSIONS_NOTES' => empty(cot::$L['info_notes']) ? $info['Notes'] : cot::$L['info_notes'],
+				'ADMIN_EXTENSIONS_NOTES' => $notes,
 			));
 
 			// Check and display dependencies
@@ -595,6 +633,7 @@ switch($a)
 		));
 		$t->parse('MAIN.HOOKS');
 	break;
+
 	/* =============== */
 	default:
 	/* =============== */
@@ -653,7 +692,7 @@ switch($a)
 
 		foreach (array('module', 'plug') as $type) {
 			$sql = $db->query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config
-			WHERE config_owner='$type' GROUP BY config_cat");
+			    WHERE config_owner='$type' GROUP BY config_cat");
 			while ($row = $sql->fetch(PDO::FETCH_NUM)) {
 				$cfgentries[$row[0]] = $row[1];
 			}
@@ -803,8 +842,7 @@ switch($a)
 
 					cot::$L['info_name'] = '';
 					cot::$L['info_desc'] = '';
-					if (file_exists(cot_langfile($code, $type)))
-					{
+					if (file_exists(cot_langfile($code, $type))) {
 						include cot_langfile($code, $type);
 					}
 

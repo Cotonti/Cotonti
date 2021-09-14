@@ -122,25 +122,27 @@ function cot_get_extensionparams($code, $is_module = false)
 	}
 
     $desc = '';
-
 	if(empty($name)) {
 		$ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
 		$exists = file_exists($ext_info);
+        $info = false;
 		if ($exists) {
 			$info = cot_infoget($ext_info, 'COT_EXT');
 			if (!$info && cot_plugin_active('genoa')) {
 				// Try to load old format info
 				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
 			}
-			$name = isset($info['Name']) ? $info['Name'] : '';
-			$desc = isset($info['Desc']) ? $info['Desc'] : '';
 
-		} else {
-			$info = array(
-				'Name' => $code
-			);
+            $desc = !empty($info) ? $info['Description'] : '';
 		}
-		$name = $info['Name'];
+
+		if ($info == false) {
+            $info = array(
+                'Name' => $code
+            );
+        }
+
+		$name = (isset($info['Name']) && $info['Name'] != '') ? $info['Name'] : $code;
 	}
 	$icofile = $dir . '/' . $code . '/' . $code . '.png';
 	$icon = file_exists($icofile) ? $icofile : '';
