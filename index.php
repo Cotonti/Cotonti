@@ -60,10 +60,17 @@ if (php_sapi_name() == 'cli-server')
 }
 
 // Redirect to install if config is missing
-if (!file_exists('./datas/config.php'))
-{
-	header('Location: install.php');
-	exit;
+if (!file_exists('./datas/config.php')) {
+    if (file_exists('install.php')) {
+        header('Location: install.php');
+        exit;
+    }
+
+    $message_body = '<p><em>'.@date('Y-m-d H:i').'</em></p>';
+    $message_body .= "<p>File 'install.php' not found</p>";
+    echo $message_body;
+    http_response_code(500);
+	exit (1);
 }
 
 // Let the include files know that we are Cotonti
