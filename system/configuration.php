@@ -965,14 +965,15 @@ function cot_config_titles($name, $text = '')
 	global $L;
 
     if(!isset(cot::$L['cfg_' . $name . '_hint'])) cot::$L['cfg_' . $name . '_hint'] = '';
-	if (is_array($L['cfg_' . $name])) {
-        cot::$L['cfg_' . $name . '_hint'] = (isset(cot::$L['cfg_' . $name][1]) && !isset(cot::$L['cfg_' . $name . '_hint'])) ? cot::$L['cfg_' . $name][1] : cot::$L['cfg_' . $name . '_hint'];
-        cot::$L['cfg_' . $name] = $L['cfg_' . $name][0];
+	if (isset(cot::$L['cfg_' . $name]) && is_array(cot::$L['cfg_' . $name])) {
+        cot::$L['cfg_' . $name . '_hint'] = (isset(cot::$L['cfg_' . $name][1]) && !isset(cot::$L['cfg_' . $name . '_hint'])) ?
+                cot::$L['cfg_' . $name][1] : cot::$L['cfg_' . $name . '_hint'];
+        cot::$L['cfg_' . $name] = cot::$L['cfg_' . $name][0];
 	}
 	$text = !empty($text) ? htmlspecialchars($text) : $name;
-	$title = !empty(cot::$L['cfg_' . $name]) ? cot::$L['cfg_' . $name] : $text;
+	$title = isset(cot::$L['cfg_' . $name]) ? cot::$L['cfg_' . $name] : $text;
 
-	return array($title,cot:: $L['cfg_' . $name . '_hint']);
+	return array($title, cot::$L['cfg_' . $name . '_hint']);
 }
 
 /**
