@@ -65,7 +65,7 @@ switch ($step)
 		$user['email'] = cot_import('user_email', 'P', 'TXT', 64, false, true);
 		$user['country'] = cot_import('user_country', 'P', 'TXT', 0, false, true);
 		$rtheme = explode(':', cot_import('theme', 'P', 'TXT', 0, false, true));
-		$rscheme = isset($rtheme[1]) ? : $cfg['defaultscheme'];
+		$rscheme = isset($rtheme[1]) ? $rtheme[1] : $cfg['defaultscheme'];
 		$rtheme = $rtheme[0];
 		$rlang = cot_import('lang', 'P', 'TXT', 0, false, true);
 		break;

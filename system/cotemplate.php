@@ -941,17 +941,21 @@ class Cotpl_data
 	public function text($tpl)
 	{
 		$data = '';
-		foreach ($this->chunks as $chunk)
-		{
-			if ($chunk instanceof Cotpl_var)
-			{
-				$data .= $chunk->evaluate($tpl);
-			}
-			else
-			{
+		foreach ($this->chunks as $chunk) {
+			if ($chunk instanceof Cotpl_var) {
+			    $tmp = $chunk->evaluate($tpl);
+
+			    if (is_array($tmp) || is_object($tmp)) {
+			        $tmp = var_export($tmp, true);
+                }
+
+				$data .= $tmp;
+
+			} else {
 				$data .= $chunk;
 			}
 		}
+
 		return $data;
 	}
 
