@@ -112,28 +112,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			$_SESSION['cot_inst_script'] = cot_import('script', 'P', 'TXT');
 			cot_redirect('install.php');
 			break;
+
 		case 1:
 			// System info
 			clearstatcache();
-			if (!file_exists($file['sql']))
-			{
+			if (!file_exists($file['sql'])) {
 				cot_error(cot_rc('install_error_missing_file', array('file' => $file['sql'])));
 			}
-			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.3.3', '>='))
-			{
+			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.4.0', '>=')) {
 				cot_error(cot_rc('install_error_php_ver', array('ver' => PHP_VERSION)));
 			}
-			if (!extension_loaded('mbstring'))
-			{
+			if (!extension_loaded('mbstring')) {
 				cot_error('install_error_mbstring');
 			}
-			if (!extension_loaded('pdo_mysql'))
-			{
+			if (!extension_loaded('pdo_mysql')) {
 				cot_error('install_error_sql_ext');
 			}
-
-			if (!file_exists($file['config']))
-			{
+			if (!file_exists($file['config'])) {
 				if (!is_writable('datas') || !copy($file['config_sample'], $file['config'])) {
 					cot_error('install_error_config');
                 }

@@ -578,6 +578,8 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			return $defret;
 		}
 	}
+
+    return null;
 }
 
 /**
@@ -659,7 +661,7 @@ function cot_import_list($nameslist=array(), $source='P', $origindata=array(), $
  * Imports data from the outer world as indexed array of records imported by cot_import_list.
  * Used to import table editing data as one array ordered by index (IDs) of table lines.
  *
- * @param For parameters see `cot_import_list`:
+ * @see cot_import_list() for parameters
  *
  * @return  boolean|array Returns indexed array of data or FALSE if wrong parameters setted
  */
@@ -1675,7 +1677,7 @@ function cot_user_authorize($id, $remember = null)
  * @param string $separator Items separator
  * @return string
  */
-function cot_breadcrumbs($crumbs, $home = true, $nolast = false, $plain = false, $inrc = '', $separator = '')
+function cot_breadcrumbs($crumbs, $home = true, $nolast = true, $plain = false, $inrc = '', $separator = '')
 {
 	global $cfg, $L;
 	$tmp = array();
@@ -2513,9 +2515,8 @@ function cot_imageresize($source, $target='return', $target_width=99999, $target
 	}
 
 	// Avoid loading images there's not enough memory for
-	if (!cot_img_check_memory($source, (int)ceil($target_width * $target_height * 4 / 1048576)))
-	{
-		return ($return) ? null : false;
+	if (!cot_img_check_memory($source, (int)ceil($target_width * $target_height * 4 / 1048576))){
+		return false;
 	}
 
 	$canvas = imagecreatetruecolor($target_width, $target_height);
