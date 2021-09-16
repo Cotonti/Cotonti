@@ -79,6 +79,7 @@ $pagenav = cot_pagenav('whosonline', array('d' => $durl), $d, $totallines, $maxu
 $users_loop_hook = cot_getextplugins('whosonline.users.loop');
 $guests_loop_hook = cot_getextplugins('whosonline.guests.loop');
 /* ===== */
+$guest_start_num = 0;
 if ($maxuserssperpage) {
 	$fpu = $who_users/$maxuserssperpage;
 	if ($durl > ceil($fpu)) {

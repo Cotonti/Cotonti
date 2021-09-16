@@ -63,10 +63,10 @@ cot::$usr['admin_structure'] = cot_auth('structure', 'a', 'A');
 cot::$usr['admin_users'] = cot_auth('users', 'a', 'A') || cot::$usr['maingrp'] == COT_GROUP_SUPERADMINS;
 
 $adminpath = array(array(cot_url('admin'), cot::$L['Adminpanel']));
+$adminhelp = isset($adminhelp) ? $adminhelp : '';
+$adminmain = isset($adminmain) ? $adminmain : '';
 
 require $inc_file;
-
-$adminhelp = (empty($adminhelp)) ? '' : $adminhelp;
 
 $title_params = array(
 	'ADMIN' => cot::$L['Administration'],

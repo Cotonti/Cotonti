@@ -65,14 +65,13 @@ if ($_SERVER['HTTP_HOST'] == $url['host']
 	$sys['host'] = preg_match('#^[\w\p{L}\.\-]+(:\d+)?$#u', $_SERVER['HTTP_HOST']) ? preg_replace('#^([\w\p{L}\.\-]+)(:\d+)?$#u', '$1', $_SERVER['HTTP_HOST']) : $url['host'];
 	$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
 	$sys['port'] = $_SERVER['SERVER_PORT'];
-}
-else
-{
+
+} else {
 	$sys['host'] = $url['host'];
-	$sys['port'] = $url['port'];
+	$sys['port'] = isset($url['port']) ? $url['port'] : '';
 }
 $def_port = $sys['secure'] ? 443 : 80;
-$sys['port'] = $sys['port'] == $def_port ? '' : $sys['port'];
+$sys['port'] = ($sys['port'] == $def_port) ? '' : $sys['port'];
 
 $sys['site_uri'] = '/';
 if(!empty($url['path'])) {

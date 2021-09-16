@@ -56,21 +56,19 @@ if(!empty($p))
 	$adminpath[] = array(cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
 	$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$p), $cot_plugins_enabled[$p]['title']);
 	$adminpath[] = array(cot_url('admin', 'm=other&p='.$p), cot::$L['Administration']);
-	// $adminhelp = cot::$L['Description'].' : '.$info['Description'].'<br />'.cot::$L['Version'].' : '.$info['Version'].'<br />'.cot::$L['Date'].' : '.$info['Date'].'<br />'.cot::$L['Author'].' : '.$info['Author'].'<br />'.cot::$L['Copyright'].' : '.$info['Copyright'].'<br />'.cot::$L['Notes'].' : '.$info['Notes'];
 
-	if(is_array($extp))
-	{
-		foreach($extp as $k => $pl)
-		{
+	// $adminhelp = cot::$L['Description'].' : '.$info['Description'].'<br />'.cot::$L['Version'].' : '.$info['Version'].'<br />'.cot::$L['Date'].' : '.$info['Date'].'<br />'.cot::$L['Author'].' : '.$info['Author'].'<br />'.cot::$L['Copyright'].' : '.$info['Copyright'].'<br />'.cot::$L['Notes'].' : '.$info['Notes'];
+    $adminmain = '';
+
+	if(is_array($extp)) {
+		foreach($extp as $k => $pl) {
+            $plugin_body = '';
 			include_once cot::$cfg['plugins_dir'] . '/' . $pl['pl_file'];
-            if (!isset($adminmain)) $adminmain = '';
 			$adminmain .= $plugin_body;
 		}
 	}
 
-}
-else
-{
+} else {
 	$adminpath[] = array(cot_url('admin', 'm=other'), cot::$L['Other']);
 	$adminsubtitle = cot::$L['Other'];
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
@@ -79,7 +77,7 @@ else
 	$target = array();
 
 	function cot_admin_other_cmp($pl_a, $pl_b)
-	{
+    {
 		if($pl_a['pl_code'] == $pl_b['pl_code'])
 		{
 			return 0;

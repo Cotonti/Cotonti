@@ -3098,7 +3098,7 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 		$t = new XTemplate($tpl_path);
 
 		$t->assign(array(
-			'AJAX_MODE' => COT_AJAX,
+			'AJAX_MODE' => defined('COT_AJAX') && COT_AJAX,
 			'MESSAGE_BASEHREF' => $R['code_basehref'],
 			'MESSAGE_STYLESHEET' => $stylesheet,
 			'MESSAGE_REDIRECT' => $redirect_meta,
@@ -3554,24 +3554,25 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 	$scan_dirs = array();
 
 	// Possible search directories depending on extension type
-	if ($type == 'plug')
-	{
+	if ($type == 'plug') {
 		// Plugin template paths
 		$admin && !empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/plugins/";
 		$admin && $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/plugins/";
-		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/";
-		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/plugins/{$base[0]}/";
+        if (isset(cot::$usr['theme'])) {
+            $scan_dirs[] = cot::$cfg['themes_dir']."/{$usr['theme']}/plugins/";
+            $scan_dirs[] = cot::$cfg['themes_dir']."/{$usr['theme']}/plugins/{$base[0]}/";
+        }
 		$scan_dirs[] = "{$cfg['plugins_dir']}/{$base[0]}/tpl/";
-	}
-	elseif ($type == 'core' && in_array($base[0], array('admin', 'header', 'footer', 'message')))
-	{
+
+    } elseif ($type == 'core' && in_array($base[0], array('admin', 'header', 'footer', 'message'))) {
 		// Built-in core modules
 		!empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/";
-		$scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/";
+        if (isset(cot::$usr['theme'])) {
+            $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/";
+        }
 		$scan_dirs[] = "{$cfg['system_dir']}/admin/tpl/";
-	}
-	else
-	{
+
+    } else {
 		// Module template paths
 		$admin && !empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/modules/";
 		$admin && $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/modules/";
