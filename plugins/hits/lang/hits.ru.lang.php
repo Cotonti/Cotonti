@@ -21,6 +21,11 @@ $L['cfg_disableactivitystats_hint'] = '(отображается на главн
 $L['cfg_hit_precision'] = 'Точность оптимизированного счётчика просмотров';
 $L['cfg_hit_precision_hint'] = '(чем больше значение, тем меньше нагрузка на сервер)';
 
+
+/**
+ * Plugin Title & Subtitle
+ */
+$L['hits'] = isset($L['hits']) ? $L['hits'] : 'Просмотры'; // see lang/ru/main.ru.lang.php
 $L['info_desc'] = 'Простая статистика просмотров &mdash; для небольших сайтов';
 
 /**

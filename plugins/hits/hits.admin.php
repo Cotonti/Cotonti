@@ -14,15 +14,15 @@ Hooks=tools
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'hits');
-cot_block($usr['auth_read']);
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('plug', 'hits');
+cot_block(cot::$usr['auth_read']);
 
 require_once cot_langfile('hits', 'plug');
 require_once cot_incfile('hits', 'plug');
 $tt = new XTemplate(cot_tplfile('hits.admin', 'plug', true));
 
-$adminhelp = $L['adm_help_hits'];
-$adminsubtitle = $L['hits_hits'];
+//$adminhelp = $L['adm_help_hits'];
+$adminsubtitle = cot::$L['hits'];
 
 $f = cot_import('f', 'G', 'TXT');
 $v = cot_import('v', 'G', 'TXT');
@@ -34,13 +34,11 @@ foreach (cot_getextplugins('hits.admin.first') as $pl)
 }
 /* ===== */
 
-if ($f == 'year' || $f == 'month')
-{
+if ($f == 'year' || $f == 'month') {
 	$adminpath[] = array(cot_url('admin', 'm=other&p=hits&f=' . $f . '&v=' . $v), '(' . $v . ')');
-	$sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '" . $db->prep($v) . "%' ORDER BY stat_name DESC");
+	$sql = cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '" . cot::$db->prep($v) . "%' ORDER BY stat_name DESC");
 	
-	while ($row = $sql->fetch())
-	{
+	while ($row = $sql->fetch()) {
 		$y = mb_substr($row['stat_name'], 0, 4);
 		$m = mb_substr($row['stat_name'], 5, 2);
 		$d = mb_substr($row['stat_name'], 8, 2);
@@ -53,8 +51,7 @@ if ($f == 'year' || $f == 'month')
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('hits.admin.loop');
 	/* ===== */
-	foreach ($hits_d as $day => $hits)
-	{
+	foreach ($hits_d as $day => $hits) {
 		$percentbar = floor(($hits / $hits_d_max) * 100);
 		$tt->assign(
 			array(
@@ -76,19 +73,16 @@ if ($f == 'year' || $f == 'month')
 	}
 	
 	$tt->parse('MAIN.YEAR_OR_MONTH');
-}
-else
-{
-	$sqlmax = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
-	if ($sqlmax->rowCount() > 0)
-	{
+
+} else {
+	$sqlmax = cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
+	if ($sqlmax->rowCount() > 0) {
 		$rowmax = $sqlmax->fetch();
 		$sqlmax->closeCursor();
 	}
-    $sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC");
+    $sql = cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC");
 
-	if ($sql->rowCount() > 0 && $rowmax)
-	{
+	if ($sql->rowCount() > 0 && $rowmax) {
 		$max_date = $rowmax['stat_name'];
 		$max_hits = $rowmax['stat_value'];
 
@@ -96,13 +90,17 @@ else
 		$hits_m = array();
 		$hits_w = array();
 
-		while ($row = $sql->fetch())
-		{
+		while ($row = $sql->fetch()) {
 			$y = mb_substr($row['stat_name'], 0, 4);
 			$m = mb_substr($row['stat_name'], 5, 2);
 			$d = mb_substr($row['stat_name'], 8, 2);
 			$w = cot_date('W', mktime(0, 0, 0, $m, $d, $y));
-			$hits_w[$y . '-W' . $w] += $row['stat_value'];
+
+            if (!isset($hits_w[$y.'-W'.$w])) $hits_w[$y.'-W'. $w] = 0;
+            if (!isset($hits_m[$y.'-'.$m])) $hits_m[$y.'-'.$m] = 0;
+            if (!isset($hits_y[$y])) $hits_y[$y] = 0;
+
+            $hits_w[$y . '-W' . $w] += $row['stat_value'];
 			$hits_m[$y . '-' . $m] += $row['stat_value'];
 			$hits_y[$y] += $row['stat_value'];
 		}
@@ -115,8 +113,7 @@ else
 		$extp = cot_getextplugins('hits.admin.loop');
 		/* ===== */
 		$ii = 0;
-		foreach ($hits_y as $year => $hits)
-		{
+		foreach ($hits_y as $year => $hits) {
 			$percentbar = floor(($hits / $hits_y_max) * 100);
 			$tt->assign(array(
 				'ADMIN_HITS_ROW_YEAR_URL' => cot_url('admin', 'm=other&p=hits&f=year&v=' . $year),
@@ -133,8 +130,7 @@ else
 			$ii++;
 		}
 		$ii = 0;
-		foreach ($hits_m as $month => $hits)
-		{
+		foreach ($hits_m as $month => $hits) {
 			$percentbar = floor(($hits / $hits_m_max) * 100);
 			$tt->assign(array(
 				'ADMIN_HITS_ROW_MONTH_URL' => cot_url('admin', 'm=other&p=hits&f=month&v=' . $month),
@@ -151,8 +147,7 @@ else
 			$ii++;
 		}
 		$ii = 0;
-		foreach ($hits_w as $week => $hits)
-		{
+		foreach ($hits_w as $week => $hits) {
 			$ex = explode('-W', $week);
 			$percentbar = floor(($hits / $hits_w_max) * 100);
 			$tt->assign(array(
@@ -170,7 +165,7 @@ else
 		}
 
 		$tt->assign(array(
-			'ADMIN_HITS_MAXHITS' => sprintf($L['hits_maxhits'], $max_date, $max_hits)
+			'ADMIN_HITS_MAXHITS' => sprintf(cot::$L['hits_maxhits'], $max_date, $max_hits)
 		));
 	}
 	$tt->parse('MAIN.DEFAULT');
