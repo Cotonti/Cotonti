@@ -1663,6 +1663,7 @@ class Cotpl_var
 	public function evaluate($tpl = null)
 	{
         $val = null;
+        $var = null;
 		if ($this->name === 'PHP') {
 			$var =& $GLOBALS;
 
