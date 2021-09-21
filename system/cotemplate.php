@@ -647,8 +647,9 @@ class Cotpl_block
 			} elseif(!empty($mt[3])) {
 			    if($mt[3]==='IF') {
                     $log_found = true;
+
                 } elseif($mt[3]==='FOR') {
-                    $log_found = true;
+                    $loop_found = true;
                 }
 
 			} elseif (!empty($code)) {
