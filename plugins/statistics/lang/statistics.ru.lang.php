@@ -15,6 +15,7 @@ $L['info_desc'] = 'Простая статистика посещений для
  * Plugin Title & Subtitle
  */
 
+$L['plu_title'] = 'Статистика';
 $L['Statistics'] = 'Статистика';
 
 /**

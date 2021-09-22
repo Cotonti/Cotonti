@@ -62,8 +62,8 @@ while ($row = $sql->fetch()) {
 }
 $sql->closeCursor();
 
-if (cot_module_active('forums'))
-{
+$totaldbviews = 0;
+if (cot_module_active('forums')) {
 	require_once cot_incfile('forums', 'module');
 	$totaldbviews = cot::$db->query("SELECT SUM(fs_viewcount) FROM $db_forum_stats")->fetchColumn();
 	$totaldbposts = cot::$db->countRows($db_forum_posts);
@@ -86,9 +86,9 @@ if (cot_module_active('forums'))
 	));
 }
 
-if (cot_module_active('page'))
-{
+if (cot_module_active('page')) {
 	require_once cot_incfile('page', 'module');
+
 	$totaldbpages = cot::$db->countRows($db_pages);
 	$totalpages = cot_stat_get('totalpages');
 	$t->assign(array(
@@ -97,9 +97,9 @@ if (cot_module_active('page'))
 	));
 }
 
-if (cot_module_active('pfs'))
-{
+if (cot_module_active('pfs')) {
 	require_once cot_incfile('pfs', 'module');
+
 	$totaldbfiles = cot::$db->countRows($db_pfs);
 	$totaldbfilesize = cot::$db->query("SELECT SUM(pfs_size) FROM $db_pfs")->fetchColumn();
 	$t->assign(array(
@@ -108,9 +108,9 @@ if (cot_module_active('pfs'))
 	));
 }
 
-if (cot_module_active('pm'))
-{
+if (cot_module_active('pm')) {
 	require_once cot_incfile('pm', 'module');
+
 	$totalpmsent = cot_stat_get('totalpms');
 	$totalpmactive = cot::$db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate<2")->fetchColumn();
 	$totalpmarchived = cot::$db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate=2")->fetchColumn();
@@ -121,9 +121,9 @@ if (cot_module_active('pm'))
 	));
 }
 
-if (cot_module_active('polls'))
-{
+if (cot_module_active('polls')) {
 	require_once cot_incfile('polls', 'module');
+
 	$totaldbpolls = cot::$db->countRows($db_polls);
 	$totaldbpollsvotes = cot::$db->countRows($db_polls_voters);
 	$t->assign(array(
@@ -132,9 +132,9 @@ if (cot_module_active('polls'))
 	));
 }
 
-if (cot_plugin_active('ratings'))
-{
+if (cot_plugin_active('ratings')) {
 	require_once cot_incfile('ratings', 'plug');
+
 	$totaldbratings = cot::$db->countRows($db_ratings);
 	$totaldbratingsvotes = cot::$db->countRows($db_rated);
 	$t->assign(array(
@@ -156,8 +156,7 @@ $t->assign(array(
 	'STATISTICS_TOTALUSERS' => $totalusers
 ));
 
-if (cot::$usr['id'] > 0)
-{
+if (cot::$usr['id'] > 0) {
 	/* === Hook === */
 	foreach (cot_getextplugins('statistics.user') as $pl)
 	{
@@ -166,9 +165,7 @@ if (cot::$usr['id'] > 0)
 	/* ===== */
 
 	$t->parse('MAIN.IS_USER');
-}
-else
-{
+} else {
 	$t->parse('MAIN.IS_NOT_USER');
 }
 /* === Hook === */
@@ -177,3 +174,4 @@ foreach (cot_getextplugins('statistics.tags') as $pl)
 	include $pl;
 }
 /* ===== */
+cot::$L['plu_title'] = cot::$L['Statistics'];
