@@ -353,11 +353,12 @@ foreach($areas as $ar)
 }
 /* FIXME: [end_of_block] --------------------------------------------- */
 
+$ii = 0;
 if (is_readable('./datas/urltrans.dat'))
 {
 	$fp = fopen('./datas/urltrans.dat', 'r');
+
 	// Rules
-	$ii = 0;
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('admin.urls.loop');
 	/* ===== */
