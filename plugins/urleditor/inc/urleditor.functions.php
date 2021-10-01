@@ -136,31 +136,24 @@ function cot_apply_rwr()
 			$ext = (isset(cot::$structure['page'][$filtered])) ? 'page' : $filtered;
 			$_GET['e'] = $ext;
 			$cat_chain = array_slice($path, 0, -1);
-			if (isset(cot::$structure[$ext][$path[$last]]) && !in_array($path[$last], $cat_chain))
-			{
+			if (isset(cot::$structure[$ext][$path[$last]]) && !in_array($path[$last], $cat_chain)) {
 				// Is a category
 				$_GET['c'] = $path[$last];
 				if ($rwr !== cot_url($ext, array('c' => $_GET['c']))) {
 					cot_url_usertheme_files();
 					cot_die_message(404, true);
 				}
-			}
-			else
-			{
+			} else {
 				// Is a page/item
-				if ($ext == 'page' || $count > 2)
-				{
+				if ($ext == 'page' || $count > 2) {
 					$_GET['c'] = $path[$last - 1];
 				}
-				if (is_numeric($path[$last]))
-				{
+				if (is_numeric($path[$last])) {
 					$_GET['id'] = $path[$last];
-				}
-				else
-				{
+				} else {
 					// Can be a cat or al, let the module decide
-					if ($count == 2 && !isset(cot::$structure[$ext][$_GET['c']]))
-						$_GET['c'] = $path[$last];
+					if ($count == 2 && (!isset($_GET['c']) || !isset(cot::$structure[$ext][$_GET['c']])))  $_GET['c'] = $path[$last];
+
 					$_GET['al'] = $path[$last];
 				}
                 if ((!empty($_GET['id']) || !empty($_GET['al'])) && !empty($_GET['c'])) {
