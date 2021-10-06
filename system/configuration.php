@@ -985,19 +985,14 @@ function cot_config_titles($name, $text = '')
 function cot_config_selecttitles($name, $params)
 {
 	global $L;
-	if (isset($L['cfg_' . $name . '_params']))
-	{
-		if (!is_array($L['cfg_' . $name . '_params']))
-		{
+	if (isset($L['cfg_' . $name . '_params'])) {
+		if (!is_array($L['cfg_' . $name . '_params'])) {
 			$L['cfg_' . $name . '_params'] = preg_split('#\s*,\s*#', $L['cfg_' . $name . '_params']);
-			if (preg_match('#^[\w-]+\s*:#', $L['cfg_' . $name . '_params'][0]))
-			{
+			if (preg_match('#^[\w-]+\s*:#', $L['cfg_' . $name . '_params'][0])) {
 				// Support for assoc arrays
 				$temp = array();
-				foreach ($L['cfg_' . $name . '_params'] as $item)
-				{
-					if (preg_match('#^([\w-]+)\s*:\s*(.*)$#', $item, $mt))
-					{
+				foreach ($L['cfg_' . $name . '_params'] as $item) {
+					if (preg_match('#^([\w-]+)\s*:\s*(.*)$#', $item, $mt)) {
 						$temp[$mt[1]] = $mt[2];
 					}
 				}
@@ -1006,31 +1001,24 @@ function cot_config_selecttitles($name, $params)
 			}
 		}
 		$lang_params_keys = array_keys($L['cfg_' . $name . '_params']);
-		if (is_numeric($lang_params_keys[0]))
-		{
+		if (isset($lang_params_keys[0]) && is_numeric($lang_params_keys[0])) {
 			// Numeric array, simply use it
 			$cfg_params_titles = $L['cfg_' . $name . '_params'];
-		}
-		else
-		{
+
+        } else {
 			// Associative, match entries
 			$cfg_params_titles = array();
-			foreach ($params as $val)
-			{
-				if (isset($L['cfg_' . $name . '_params'][$val]))
-				{
+			foreach ($params as $val) {
+				if (isset($L['cfg_' . $name . '_params'][$val])) {
 					$cfg_params_titles[] = $L['cfg_' . $name . '_params'][$val];
-				}
-				else
-				{
+				} else {
 					$cfg_params_titles[] = $val;
 				}
 			}
 		}
-	}
-	else
-	{
+	} else {
 		$cfg_params_titles = $params;
 	}
+
 	return $cfg_params_titles;
 }
