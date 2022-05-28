@@ -37,7 +37,9 @@ $msg = cot_import('msg', 'G', 'INT');
 $num = cot_import('num', 'G', 'INT');
 $rc = cot_import('rc', 'G', 'INT');
 
-unset($r, $rd, $ru);
+$r = null;
+$rd = 0;
+$ru = '';
 
 $title = $L['msg' . $msg . '_title'];
 $body = $L['msg' . $msg . '_body'];
@@ -114,16 +116,13 @@ switch ($msg)
 		break;
 
 	case '930':
-		if ($usr['id'] > 0)
-		{
+		if ($usr['id'] > 0) {
 			break;
 		}
 		$rd = 2;
-		if (!empty($redirect))
-		{
+		if (!empty($redirect)) {
 			$uri_redirect = base64_decode($redirect);
-			if (mb_strpos($uri_redirect, '&x=') !== false || mb_strpos($uri_redirect, '?x=') !== false)
-			{
+			if (mb_strpos($uri_redirect, '&x=') !== false || mb_strpos($uri_redirect, '?x=') !== false) {
 				// xg, not redirect to form action/GET or to command from GET
 				break;
 			}
@@ -133,14 +132,12 @@ switch ($msg)
 }
 
 /* ============= */
-if (empty($title) || empty($body))
-{
+if (empty($title) || empty($body)) {
 	$title = $L['msg950_title'];
 	$body = $L['msg950_body'];
 	unset($rc, $rd);
 }
-if (empty($rc) && empty($rd))
-{
+if (empty($rc) && empty($rd)) {
 	$rd = '5';
 }
 
@@ -171,19 +168,15 @@ switch ($rc)
 		break;
 }
 
-if ($rc != '')
-{
-	if (mb_strpos($r["$rc"], '://') === false)
-	{
+if (isset($rc) && $rc != '') {
+	if (mb_strpos((string)$r["$rc"], '://') === false) {
 		$r["$rc"] = COT_ABSOLUTE_URL . $r["$rc"];
 	}
 	$out['head'] .= cot_rc('msg_code_redir_head', array('delay' => 2, 'url' => $r["$rc"]));
 	$body .= $R['code_error_separator'] . $L['msgredir'];
-}
-elseif ($rd != '')
-{
-	if (mb_strpos($ru, '://') === false)
-	{
+
+} elseif (isset($rd) && $rd != '') {
+	if (mb_strpos($ru, '://') === false) {
 		$ru = COT_ABSOLUTE_URL . ltrim($ru, '/');
 	}
 	$out['head'] .= cot_rc('msg_code_redir_head', array('delay' => $rd, 'url' => $ru));

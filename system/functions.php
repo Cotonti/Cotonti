@@ -777,41 +777,45 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
 	//$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$date = cot_import($name, $source, 'ARR');
 
+    $date['year']   = isset($date['year']) ? $date['year'] : 0;
+    $date['month']  = isset($date['month']) ? $date['month'] : 0;
+    $date['day']    = isset($date['day']) ? $date['day'] : 0;
+    $date['hour']   = isset($date['hour']) ? $date['hour'] : 0;
+    $date['minute'] = isset($date['minute']) ? $date['minute'] : 0;
+    $date['string'] = isset($date['string']) ? $date['string'] : '';
+    $date['format'] = isset($date['format']) ? $date['format'] : '';
+
 	$year = cot_import($date['year'], 'D', 'INT');
 	$month = cot_import($date['month'], 'D', 'INT');
 	$day = cot_import($date['day'], 'D', 'INT');
 	$hour = cot_import($date['hour'], 'D', 'INT');
 	$minute = cot_import($date['minute'], 'D', 'INT');
 
-	if (count($date) > 0 && is_null($year) && is_null($month) && is_null($day) && is_null($hour) && is_null($minute))
-	{
+	if (count($date) > 0 && is_null($year) && is_null($month) && is_null($day) && is_null($hour) && is_null($minute) && empty($date['string'])) {
 		// Datetime field is present in form but it is set to zero date (empty)
 		return NULL;
 	}
 
-	if (($month && $day && $year) || ($day && $minute))
-	{
+	if (($month && $day && $year) || ($day && $minute)) {
 		$timestamp = cot_mktime($hour, $minute, 0, $month, $day, $year);
-	}
-	else
-	{
+
+    } else {
 		$string = cot_import($date['string'], 'D', 'TXT');
 		$format = cot_import($date['format'], 'D', 'TXT');
-		if ($string && $format)
-		{
+		if ($string) {
+            $format =  !empty($format) ? $format : 'Y-m-d H:i';
 			$timestamp = cot_date2stamp($string, $format);
-		}
-		else
-		{
+
+        } else {
 			return NULL;
 		}
 	}
-	if ($usertimezone)
-	{
+
+	if ($usertimezone) {
 		$timestamp -= cot::$usr['timezone'] * 3600;
 	}
-	if ($returnarray)
-	{
+
+	if ($returnarray) {
 		$result = array();
 		$result['stamp'] = $timestamp;
 		$result['year'] = (int)date('Y', $timestamp);
@@ -821,6 +825,7 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
 		$result['minute'] = (int)date('i', $timestamp);
 		return $result;
 	}
+
 	return $timestamp;
 }
 
@@ -904,7 +909,7 @@ function cot_check_email($res)
  * @param string $additional_parameters Additional parameters passed to sendmail
  * @return bool
  */
-function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false, $additional_parameters = null, $html = false)
+function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false, $additional_parameters = '', $html = false)
 {
 	global $cfg, $cot_mail_senders;
 
@@ -956,12 +961,11 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
     }
     $subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\n");
 
-    if (ini_get('safe_mode'))
-    {
+    if (ini_get('safe_mode')) {
         mail($fmail, $subject, $body, $headers);
-    }
-    else
-    {
+
+    } else {
+        if (empty($additional_parameters)) $additional_parameters = '';
         mail($fmail, $subject, $body, $headers, $additional_parameters);
     }
     return true;
@@ -2203,10 +2207,12 @@ function cot_user_full_name($user)
 
 	if(function_exists('cot_user_full_name_custom')) return cot_user_full_name_custom($user);
 
-	if (is_int($user) && $user > 0 || ctype_digit($user)) {
-		require_once cot_incfile('users', 'module');
-		$user = cot_user_data($user);
-	}
+    if(!is_array($user) && !is_object($user)) {
+        if (is_int($user) && $user > 0 || ctype_digit($user)) {
+            require_once cot_incfile('users', 'module');
+            $user = cot_user_data($user);
+        }
+    }
     if (empty($user)) return '';
 
     $user_fname = '';
@@ -3732,7 +3738,7 @@ if (!function_exists('strptime'))
  */
 function cot_date2stamp($date, $format = null)
 {
-	if ($date == '0000-00-00' || mb_strtolower($date) == 'null' || is_null($date)) return null;
+	if (is_null($date) || $date == '0000-00-00' || mb_strtolower($date) == 'null') return null;
 	if (!$format)
 	{
 		preg_match('#(\d{4})-(\d{2})-(\d{2})#', $date, $m);

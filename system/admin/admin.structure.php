@@ -122,7 +122,7 @@ else
 			$optionslist = cot_config_list($owner, $n, $editconfig);
 			foreach ($optionslist as $key => $val)
 			{
-				$data = cot_import($key, 'P', sizeof($cot_import_filters[$key]) ? $key : 'NOC');
+				$data = cot_import($key, 'P', !empty($cot_import_filters[$key]) ? $key : 'NOC');
 				if ($optionslist[$key]['config_value'] != $data)
 				{
 					if (is_null($optionslist[$key]['config_subdefault']))

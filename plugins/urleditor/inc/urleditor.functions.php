@@ -30,7 +30,7 @@ function cot_apply_rwr()
 	$rwr = cot_import('rwr', 'G', 'TXT');
 
     // Remove starting and ending slashes from the path
-    $rwr = trim($rwr, '/');
+    if (!empty($rwr)) $rwr = trim($rwr, '/');
 
 	if (!empty($rwr)/* && preg_match('`^[\w\p{L}/\-_\ \+\.]+?$`u', $_GET['rwr'])*/)
 	{

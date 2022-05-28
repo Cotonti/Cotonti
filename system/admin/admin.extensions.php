@@ -838,7 +838,7 @@ switch($a)
 					}
 					$icofile = (($type == 'module') ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir']) . '/' . $code . '/' . $code . '.png';
 
-					$installed_ver = isset($installed_vers[$code]) ? $installed_vers[$code] : null;
+					$installed_ver = isset($installed_vers[$code]) ? $installed_vers[$code] : '';
 
 					cot::$L['info_name'] = '';
 					cot::$L['info_desc'] = '';

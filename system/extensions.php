@@ -859,9 +859,9 @@ function cot_extension_catcmp($ext1, $ext2)
  */
 function cot_extension_installed($name)
 {
-	global $db, $db_core;
+	global $db_core;
 
-	$cnt = $db->query("SELECT COUNT(*) FROM $db_core WHERE ct_code = '$name'")->fetchColumn();
+	$cnt = cot::$db->query("SELECT COUNT(*) FROM $db_core WHERE ct_code = '$name'")->fetchColumn();
 	return $cnt > 0;
 }
 

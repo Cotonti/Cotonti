@@ -555,7 +555,10 @@ class CotDB extends PDO
      * @todo There is an another and more right way. Use composition instead of inheritance.
      *
      * @return PDOStatement
+     *
+     * Do not break compatibility with PHP 5. For NOW
 	 */
+    #[\ReturnTypeWillChange]
 	public function query($query, $parameters = [], $mode = PDO::FETCH_ASSOC, ...$fetch_mode_args)
 	{
 		if (!is_array($parameters))

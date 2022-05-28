@@ -69,16 +69,14 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
     } else {
         $tmp2 = COT_GROUP_INACTIVE;
     }
-
+    $ruser['user_maingrp'] = $tmp2;
 
 	$ruser['user_passsalt'] = cot_unique(16);
 	$ruser['user_passfunc'] = empty(cot::$cfg['hashfunc']) ? 'sha256' : cot::$cfg['hashfunc'];
 	$ruser['user_password'] = cot_hash($ruser['user_password'], $ruser['user_passsalt'], $ruser['user_passfunc']);
 
-	if(isset($ruser['user_birthdate']))
-	{
-		if(is_null($ruser['user_birthdate']) || $ruser['user_birthdate'] > cot::$sys['now'])
-		{
+	if(isset($ruser['user_birthdate'])) {
+		if(is_null($ruser['user_birthdate']) || $ruser['user_birthdate'] > cot::$sys['now']) {
 			$ruser['user_birthdate'] = 'NULL';
 		
 		} else {

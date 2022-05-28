@@ -1629,7 +1629,9 @@ class Cotpl_var
 		$key = $this->keys ? $this->name . '.' . implode('.', $this->keys) : $this->name;
 		if ($this->name == 'PHP' && !$this->keys)
 		{
-			$val =& $GLOBALS;
+            // As of PHP 8.1.0, $GLOBALS is now a read-only copy of the global symbol table.
+            // Cannot acquire reference to $GLOBALS in
+            $val = $GLOBALS;
 		}
 		return '<ul class="dump">' . self::dump_r($key, $val, 0) . '</ul>';
 	}
@@ -1675,7 +1677,10 @@ class Cotpl_var
         $val = null;
         $var = null;
 		if ($this->name === 'PHP') {
-			$var =& $GLOBALS;
+            // As of PHP 8.1.0, $GLOBALS is now a read-only copy of the global symbol table.
+            // Cannot acquire reference to $GLOBALS in
+            // @todo may be we need another solution
+			$var = $GLOBALS;
 
 		} elseif (!empty($tpl)) {
             if(!isset($tpl->vars[$this->name])) $tpl->vars[$this->name] = null;

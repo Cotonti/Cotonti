@@ -12,10 +12,11 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 defined('COT_CODE') or die('Wrong URL');
-global $sys;
 
-if (!$plain && $parser == 'html')
-{
+
+if (!$plain && $parser == 'html') {
 	// Replace anchors to use full path URI
-	$text = preg_replace('`<a(\s.*?) href="(#.*?)"`i', '<a$1 href="' . $sys['uri_curr'] . '$2"', $text);
+    if (!empty($text)) {
+        $text = preg_replace('`<a(\s.*?) href="(#.*?)"`i', '<a$1 href="' . cot::$sys['uri_curr'] . '$2"', $text);
+    }
 }
