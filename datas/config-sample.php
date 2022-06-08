@@ -32,6 +32,14 @@ $cfg['site_id'] = 'Some unique string specific to your site';
 $cfg['secret_key'] = 'Secret key used for authentication, make it unique and keep in secret!';
 $cfg['multihost'] = FALSE;			// Allow multiple host names for this site
 
+/**
+ * Email address for the 'From' header for cot_mail() function
+ * Default value is 'mail_sender@domain', where domain is taken from $cfg['mainurl']
+ * Uncomment it if you need to set a custom 'From' email address
+ * Note: 'Reply-To' address can be set here: https://your-domain.com/admin/config?n=edit&o=core&p=main
+ */
+// $cfg['email_from_address'] = 'mail_sender@localhost';
+
 // ========================
 // Default theme, color scheme and default language
 // ========================

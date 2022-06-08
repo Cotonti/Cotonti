@@ -909,7 +909,7 @@ function cot_check_email($res)
  * @param string $additional_parameters Additional parameters passed to sendmail
  * @return bool
  */
-function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false, $additional_parameters = '', $html = false)
+function cot_mail($fmail, $subject, $body, $headers = '', $customtemplate = false, $additional_parameters = '', $html = false)
 {
 	global $cfg, $cot_mail_senders;
 
@@ -931,8 +931,14 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
 
     $sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], 'UTF-8', 'B', "\n");
 
-    $headers = (empty($headers)) ? "From: \"" . $sitemaintitle . "\" <" . $cfg['adminemail'] . ">\n" . "Reply-To: <" . $cfg['adminemail'] . ">\n"
-            : $headers;
+    if (empty($headers)) {
+        if (isset($cfg['email_from_address']) && !empty($cfg['email_from_address'])) {
+            $from = $cfg['email_from_address'];
+        } else {
+            $from = 'mail_sender@' . cot::$sys['domain'];
+        }
+        $headers = "From: \"" . $sitemaintitle . "\" <" . $from . ">\n" . "Reply-To: <" . $cfg['adminemail'] . ">\n";
+    }
     $headers .= "Message-ID: <" . md5(uniqid(microtime())) . "@" . $_SERVER['SERVER_NAME'] . ">\n";
 
     $type_body = $html ? "html" : "plain";
@@ -968,6 +974,7 @@ function cot_mail($fmail, $subject, $body, $headers='', $customtemplate = false,
         if (empty($additional_parameters)) $additional_parameters = '';
         mail($fmail, $subject, $body, $headers, $additional_parameters);
     }
+
     return true;
 }
 
@@ -4398,8 +4405,7 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 		}
 	}
 
-	if ($plain)
-	{
+	if ($plain && !empty($text)) {
 		$text = nl2br(htmlspecialchars($text));
 	}
 

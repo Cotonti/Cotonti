@@ -227,12 +227,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				cot_install_config_replace($config_contents, 'defaultlang', $rlang);
 				cot_install_config_replace($config_contents, 'defaulttheme', $rtheme);
 				cot_install_config_replace($config_contents, 'defaultscheme', $rscheme);
+
+                $rurl = rtrim($rurl, '/');
 				cot_install_config_replace($config_contents, 'mainurl', $rurl);
+                $cfg['mainurl'] = $rurl;
 
 				$new_site_id = cot_unique(32);
 				cot_install_config_replace($config_contents, 'site_id', $new_site_id);
 				$new_secret_key = cot_unique(32);
 				cot_install_config_replace($config_contents, 'secret_key', $new_secret_key);
+
+                $url = parse_url($rurl);
+                $domain = preg_replace('#^www\.#', '', $url['host']);
+                $config_contents = str_replace('mail_sender@localhost', 'mail_sender@'.$domain, $config_contents);
 
 				file_put_contents($file['config'], $config_contents);
 
@@ -270,6 +277,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				{
 					cot_error(cot_rc('install_error_sql_script', array('msg' => $err->getMessage())));
 				}
+
+                // robots.txt
+                $robotsTxtFilePath = './robots.txt';
+                if(file_exists($robotsTxtFilePath) && is_writable($robotsTxtFilePath)) {
+                    $robotsTxtFile = file_get_contents($robotsTxtFilePath);
+                    $tmp = 'Host: '.$domain;
+                    $robotsTxtFile = str_replace('# Host: http://your-domain.com', $tmp, $robotsTxtFile);
+                    file_put_contents($robotsTxtFilePath, $robotsTxtFile);
+                }
 			}
 			break;
 
@@ -584,15 +600,6 @@ switch ($step)
         $selected_plugins = isset($selected_plugins) ? $selected_plugins : '';
 		cot_install_parse_extensions('Module', $default_modules, $selected_modules);
 		cot_install_parse_extensions('Plugin', $default_plugins, $selected_plugins);
-
-		// robots.txt
-		$robotsTxtFilePath = './robots.txt';
-		if(file_exists($robotsTxtFilePath) && is_writable($robotsTxtFilePath)) {
-			$robotsTxtFile = file_get_contents($robotsTxtFilePath);
-			$tmp = 'Host: '.str_replace(array('http://', 'https://'), '', $cfg['mainurl']);
-			$robotsTxtFile = str_replace('# Host: http://your-domain.com', $tmp, $robotsTxtFile);
-			file_put_contents($robotsTxtFilePath, $robotsTxtFile);
-		}
 		break;
 
 	case 5:

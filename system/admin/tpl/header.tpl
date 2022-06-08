@@ -5,7 +5,7 @@
 <meta http-equiv="content-type" content="{HEADER_META_CONTENTTYPE}; charset=UTF-8" />
 <meta name="description" content="{HEADER_META_DESCRIPTION}" />
 <meta name="keywords" content="{HEADER_META_KEYWORDS}" />
-<meta name="generator" content="Cotonti http://www.cotonti.com" />
+<meta name="generator" content="Cotonti https://www.cotonti.com" />
 <meta http-equiv="expires" content="Fri, Apr 01 1974 00:00:00 GMT" />
 <meta http-equiv="pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-cache" />

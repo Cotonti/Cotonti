@@ -8,7 +8,7 @@
 <meta name="description" content="{HEADER_META_DESCRIPTION}" />
 <meta name="keywords" content="{HEADER_META_KEYWORDS}" />
 <!-- 2ndary -->
-<meta name="generator" content="Cotonti http://www.cotonti.com" />
+<meta name="generator" content="Cotonti https://www.cotonti.com" />
 <link rel="canonical" href="{HEADER_CANONICAL_URL}" />
 <!-- files linkage -->
 {HEADER_BASEHREF}

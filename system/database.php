@@ -475,7 +475,7 @@ class CotDB extends PDO
 	 */
 	public function prep($str)
 	{
-		return preg_replace("#^'(.*)'\$#", '$1', $this->quote($str));
+		return preg_replace("#^'(.*)'\$#", '$1', $this->quote((string) $str));
 	}
 
 	/**
