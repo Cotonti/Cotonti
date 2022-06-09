@@ -498,10 +498,11 @@ function cot_page_import($source = 'POST', $rpage = array(), $auth = array())
 	}
 
 	// Extra fields
-    if(!empty(cot::$extrafields[cot::$db->pages])) {
+    if (!empty(cot::$extrafields[cot::$db->pages])) {
         foreach (cot::$extrafields[cot::$db->pages] as $exfld) {
+            $value = isset($rpage['page_' . $exfld['field_name']]) ? $rpage['page_' . $exfld['field_name']] : null ;
             $rpage['page_' . $exfld['field_name']] = cot_import_extrafields('rpage' . $exfld['field_name'], $exfld,
-                $source, $rpage['page_' . $exfld['field_name']], 'page_');
+                $source, $value, 'page_');
         }
     }
 

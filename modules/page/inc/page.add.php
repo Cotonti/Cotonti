@@ -193,7 +193,8 @@ $t->assign($pageadd_array);
 if(!empty(cot::$extrafields[cot::$db->pages])) {
     foreach (cot::$extrafields[cot::$db->pages] as $exfld) {
         $uname = strtoupper($exfld['field_name']);
-        $exfld_val = cot_build_extrafields('rpage' . $exfld['field_name'], $exfld, $rpage['page_' . $exfld['field_name']]);
+        $data = isset($rpage['page_' . $exfld['field_name']]) ? $rpage['page_' . $exfld['field_name']] : null;
+        $exfld_val = cot_build_extrafields('rpage' . $exfld['field_name'], $exfld, $data);
         $exfld_title = cot_extrafield_title($exfld, 'page_');
 
         $t->assign(array(

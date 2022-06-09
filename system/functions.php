@@ -929,15 +929,21 @@ function cot_mail($fmail, $subject, $body, $headers = '', $customtemplate = fals
 
     if (empty($fmail)) return false;
 
-    $sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], 'UTF-8', 'B', "\n");
+    $sitemaintitle = mb_encode_mimeheader(cot::$cfg['maintitle'], 'UTF-8', 'B', "\n");
 
     if (empty($headers)) {
-        if (isset($cfg['email_from_address']) && !empty($cfg['email_from_address'])) {
-            $from = $cfg['email_from_address'];
+        if (isset(cot::$cfg['email_from_address']) && !empty(cot::$cfg['email_from_address'])) {
+            $from = cot::$cfg['email_from_address'];
         } else {
-            $from = 'mail_sender@' . cot::$sys['domain'];
+            // If admin email is on the same domain as site
+            $tmp = explode('@', cot::$cfg['adminemail']);
+            if (!empty($tmp[1]) && $tmp[1] == cot::$sys['domain']) {
+                $from = cot::$cfg['adminemail'];
+            } else {
+                $from = 'mail_sender@' . cot::$sys['domain'];
+            }
         }
-        $headers = "From: \"" . $sitemaintitle . "\" <" . $from . ">\n" . "Reply-To: <" . $cfg['adminemail'] . ">\n";
+        $headers = "From: \"" . $sitemaintitle . "\" <" . $from . ">\n" . "Reply-To: <" . cot::$cfg['adminemail'] . ">\n";
     }
     $headers .= "Message-ID: <" . md5(uniqid(microtime())) . "@" . $_SERVER['SERVER_NAME'] . ">\n";
 
@@ -5689,36 +5695,30 @@ function cot_declension($digit, $expr, $onlyword = false, $canfrac = false)
 
 	$expr = is_string($expr) && isset($Ls[$expr]) ? $Ls[$expr] : $expr;
 
-	if (is_string($expr) && mb_strpos($expr, ',') !== false)
-	{
+	if (is_string($expr) && mb_strpos($expr, ',') !== false) {
 		$expr = preg_split('#\s*,\s*#', $expr);
 	}
 
-	if (!is_array($expr))
-	{
+	if (!is_array($expr)) {
 		return trim(($onlyword ? '' : "$digit ").$expr);
 	}
 
 	$is_frac = false;
-	if ($canfrac)
-	{
+	if ($canfrac) {
 		if ((is_float($digit) && $digit!=floor($digit)) || mb_strpos($digit, '.') !== false)
 		{
 			$i = floatval($digit);
 			$is_frac = true;
-		}
-		else
-		{
+		} else {
 			$i = intval($digit);
 		}
-	}
-	else
-	{
-		$i = intval(preg_replace('#\D+#', '', $digit));
+	} else {
+        $i = !empty($digit) ? intval(preg_replace('#\D+#', '', $digit)) : 0;
 	}
 
 	$plural = cot_get_plural($i, $lang, $is_frac);
 	$cnt = count($expr);
+
 	return trim(($onlyword ? '' : "$digit ").(($cnt > 0 && $plural < $cnt) ? $expr[$plural] : ''));
 }
 
