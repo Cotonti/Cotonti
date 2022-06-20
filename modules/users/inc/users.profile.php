@@ -46,8 +46,8 @@ if($a == 'update')
 	$ruser['user_text'] = cot_import('rusertext','P','HTM', cot::$cfg['users']['usertextmax']);
 	$ruser['user_country'] = cot_import('rusercountry','P','ALP');
 	$rtheme = explode(':', cot_import('rusertheme','P','TXT'));
-	$ruser['user_theme'] = $rtheme[0];
-	$ruser['user_scheme'] = $rtheme[1];
+	$ruser['user_theme'] = isset($rtheme[0]) ? $rtheme[0] : null;
+	$ruser['user_scheme'] = isset($rtheme[1]) ? $rtheme[1] : null;
 	$ruser['user_lang'] = cot_import('ruserlang','P','ALP');
 	$ruser['user_gender'] = cot_import('rusergender','P','ALP');
 	$ruser['user_timezone'] = cot_import('rusertimezone','P','TXT');
