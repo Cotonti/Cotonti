@@ -80,13 +80,11 @@ foreach (cot_getextplugins('users.auth.first') as $pl)
 
 $rusername = '';
 
-if ($a == 'check')
-{
+if ($a == 'check') {
 	cot_shield_protect();
 
 	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('users.auth.check') as $pl)
-	{
+	foreach (cot_getextplugins('users.auth.check') as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -99,29 +97,29 @@ if ($a == 'check')
 	$v = cot_import('v', 'G', 'ALP');
 	$validating = FALSE;
 
-	if(empty($rremember) && $rcookiettl > 0 || $cfg['forcerememberme'])
-	{
+	if(empty($rremember) && $rcookiettl > 0 || $cfg['forcerememberme']) {
 		$rremember = true;
 	}
 
 	$login_param = !$cfg['useremailduplicate'] && cot_check_email($rusername) ?
 		'user_email' : 'user_name';
 
-	if(!empty($v) && mb_strlen($v)==32)
-	{
+	if(!empty($v) && mb_strlen($v) == 32) {
 		$validating = TRUE;
 		$login_param = 'user_lostpass';
 	}
 
 	// Load salt and algo from db
-	$sql = $db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE $login_param=".$db->quote($rusername));
-	if ($sql->rowCount() == 0)
-	{
+	$sql = cot::$db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE $login_param=".
+        cot::$db->quote($rusername));
+	if ($sql->rowCount() == 0) {
 		// If login has e-mail format, try to find it as user_name
-		$sql = $db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE user_name=".$db->quote($rusername));
+		$sql = cot::$db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE user_name=".
+            cot::$db->quote($rusername));
 	}
-	if ($sql->rowCount() == 1)
-	{
+
+    $rmdpass = '';
+	if ($sql->rowCount() == 1) {
 		$hash_params = $sql->fetch();
 		$rmdpass = cot_hash($rpassword, $hash_params['user_passsalt'], $hash_params['user_passfunc']);
 		unset($hash_params);
@@ -147,20 +145,18 @@ if ($a == 'check')
 		only may fail when user name has e-mail format or user is not registered,
 		added for compatibility, because disallowed using e-mail as login on registration
 	*/
-	if ( $sql->rowCount() == 0 )
-	{
+	if ( $sql->rowCount() == 0 ) {
 		// If login has e-mail format, try to find it as user_name
 		$user_select_condition = "user_password=".cot::$db->quote($rmdpass)." AND user_name=".cot::$db->quote($rusername);
 
 		// Query the database
 		$sql = cot::$db->query("SELECT user_id, user_name, user_token, user_regdate, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime FROM $db_users WHERE $user_select_condition");
 	}
-	if ($row = $sql->fetch())
-	{
+	if ($row = $sql->fetch()) {
 		$rusername = $row['user_name'];
 
 		// Checking to make sure user doesn't game the free login from
-		if($validating && ($row['user_maingrp'] != COT_GROUP_MEMBERS ||
+		if ($validating && ($row['user_maingrp'] != COT_GROUP_MEMBERS ||
                 cot::$sys['now'] > ($row['user_regdate'] + 172800) || $token != $row['user_token']))
 		{
             cot::$env['status'] = '403 Forbidden';

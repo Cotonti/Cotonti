@@ -742,8 +742,7 @@ function cot_import_tabledata($nameslist=array(), $source='P', $nameprefix='', $
 function cot_import_buffer_save()
 {
 	// Referer contains an original form link
-	if (cot_url_check($_SERVER['HTTP_REFERER']))
-	{
+	if (isset($_SERVER['HTTP_REFERER']) && cot_url_check($_SERVER['HTTP_REFERER'])) {
 		// Extract the server-relative part
 		$url = parse_url($_SERVER['HTTP_REFERER']);
 		// Strip ajax param from the query

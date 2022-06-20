@@ -348,33 +348,31 @@ function cot_tag_search_forums($query)
 		LIMIT $d, $maxperpage");
 
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
-	if ($sql->rowCount() > 0)
-	{
-		while ($row = $sql->fetch())
-		{
+	if ($sql->rowCount() > 0) {
+		while ($row = $sql->fetch()) {
 			$tags = cot_tag_list($row['ft_id'], 'forums');
 			$tag_list = '';
 			$tag_i = 0;
-			foreach ($tags as $tag)
-			{
-				$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
-				$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
+			foreach ($tags as $tag) {
+				$tag_t = cot::$cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
+				$tag_u = cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 				if ($tag_i > 0) $tag_list .= ', ';
 				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)), htmlspecialchars($tag_t));
 				$tag_i++;
 			}
-			$master = ($row['fs_masterid'] > 0) ? array($row['fs_masterid'], $row['fs_mastername']) : false;
+            // Not using anywhere
+			// $master = (isset($row['fs_masterid']) && $row['fs_masterid'] > 0) ? array($row['fs_masterid'], $row['fs_mastername']) : false;
 			$t->assign(array(
 				'TAGS_RESULT_ROW_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
 				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['ft_title']),
-				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false),
+				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false, false),
 				'TAGS_RESULT_ROW_TAGS' => $tag_list
 			));
 			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}
 		$sql->closeCursor();
-		$qs_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($qs) : $qs;
+		$qs_u = cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($qs) : $qs;
 		$tl = $lang != 'en' && $qs_u != $qs ? 1 : null;
 		$pagenav = cot_pagenav('plug', array('e' => 'tags', 'a' => 'forums', 't' => $qs_u, 'tl' => $tl), $d, $totalitems, $maxperpage);
 		$t->assign(array(
@@ -382,10 +380,10 @@ function cot_tag_search_forums($query)
 			'TAGS_PAGENEXT' => $pagenav['next'],
 			'TAGS_PAGNAV' => $pagenav['main']
 		));
-	}
-	else
-	{
+
+	} else {
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
 	}
+
 	$t->parse('MAIN.TAGS_RESULT');
 }

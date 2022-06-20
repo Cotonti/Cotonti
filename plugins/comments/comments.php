@@ -43,21 +43,34 @@ if ($id > 0)
 cot_block(!empty($area) && !empty($item) && cot_comments_enabled($area, $cat, $item));
 
 $cot_com_back = cot_import('cb', 'P', 'TXT');
-if(!empty($cot_com_back))
-{
+if(!empty($cot_com_back)) {
     $cot_com_back = unserialize(base64_decode($cot_com_back));
-}else{
-    $cot_com_back = $_SESSION['cot_com_back'][$area][$cat][$item];
+
+} else {
+    $cot_com_back = [];
+    if (
+        isset($_SESSION['cot_com_back']) &&
+        isset($_SESSION['cot_com_back'][$area]) &&
+        isset($_SESSION['cot_com_back'][$area][$cat]) &&
+        isset($_SESSION['cot_com_back'][$area][$cat][$item])
+    ) {
+        $cot_com_back = $_SESSION['cot_com_back'][$area][$cat][$item];
+    }
 }
-$url_area = $cot_com_back[0];
-$url_params = $cot_com_back[1];
+$url_area = isset($cot_com_back[0]) ? $cot_com_back[0] : '';
+$url_params = isset($cot_com_back[1]) ? $cot_com_back[1] : [];
 cot_block(!empty($url_area));
 
 // Try to fetch $force_admin from session
-if (isset($_SESSION['cot_comments_force_admin'][$area][$item]) && $_SESSION['cot_comments_force_admin'][$area][$item]
-	&& $usr['auth_read'] && $usr['auth_write'])
-{
-	$usr['isadmin'] = true;
+if (
+    isset($_SESSION['cot_comments_force_admin']) &&
+    isset($_SESSION['cot_comments_force_admin'][$area]) &&
+    isset($_SESSION['cot_comments_force_admin'][$area][$item]) &&
+    $_SESSION['cot_comments_force_admin'][$area][$item] &&
+	cot::$usr['auth_read'] &&
+    cot::$usr['auth_write']
+) {
+    cot::$usr['isadmin'] = true;
 }
 
 if ($m == 'edit' && $id > 0)

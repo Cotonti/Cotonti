@@ -43,26 +43,23 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		$sql = $db->query("SELECT * FROM $db_forum_topics " . $where . " ORDER by ft_updated desc LIMIT $d, " . $maxperpage);
 	}
 	$ft_num = 0;
-	while ($row = $sql->fetch())
-	{
+	while ($row = $sql->fetch()) {
 		$row['ft_icon'] = 'posts';
 		$row['ft_postisnew'] = FALSE;
 		$row['ft_pages'] = '';
 		$ft_num++;
-		if ((int)$titlelength > 0 && mb_strlen($row['ft_title']) > $titlelength)
-		{
+		if ((int) $titlelength > 0 && mb_strlen($row['ft_title']) > $titlelength) {
 			$row['ft_title'] = cot_string_truncate($row['ft_title'], $titlelength, false). "...";
 		}
-		$build_forum = cot_breadcrumbs(cot_forums_buildpath($row['ft_cat'], false), false);
-		$build_forum_short = cot_rc_link(cot_url('forums', 'm=topics&s=' . $row['ft_cat']), htmlspecialchars($structure['forums'][$row['ft_cat']]['title']));
+		$build_forum = cot_breadcrumbs(cot_forums_buildpath($row['ft_cat'], false), false, false);
+		$build_forum_short = cot_rc_link(cot_url('forums', 'm=topics&s=' . $row['ft_cat']),
+            htmlspecialchars($structure['forums'][$row['ft_cat']]['title']));
 
-		if ($row['ft_mode'] == 1)
-		{
+		if ($row['ft_mode'] == 1) {
 			$row['ft_title'] = "# " . $row['ft_title'];
 		}
 
-		if ($row['ft_movedto'] > 0)
-		{
+		if ($row['ft_movedto'] > 0) {
 			$row['ft_url'] = cot_url('forums', 'm=posts&q=' . $row['ft_movedto']);
 			$row['ft_icon'] = $R['forums_icon_posts_moved'];
 			$row['ft_title'] = $L['Moved'] . ": " . $row['ft_title'];
@@ -74,9 +71,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			$row['ft_lastposturl'] = cot_url('forums', 'm=posts&q=' . $row['ft_movedto'] . '&n=last', '#bottom');
 			$row['ft_lastpostlink'] = cot_rc_link($row['ft_lastposturl'], $R['icon_follow']) . ' ' . $L['Moved'];
 			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], $sys['now']);
-		}
-		else
-		{
+		} else {
 			$row['ft_url'] = cot_url('forums', 'm=posts&q=' . $row['ft_id']);
 			$row['ft_lastposturl'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ?
 				cot_url('forums', 'm=posts&q=' . $row['ft_id'] . '&n=unread', '#unread') :

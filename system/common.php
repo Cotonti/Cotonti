@@ -613,13 +613,15 @@ if (empty($x) && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	$x = cot_import('x', 'G', 'ALP');
 }
+
+$referer = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST'
 	&& !defined('COT_NO_ANTIXSS') && (!defined('COT_AUTH')
 			&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev'])
-		|| ($cfg['referercheck'] && !preg_match('`https?://([^/]+\.)?'.preg_quote($sys['domain']).'(/|:|$)`i', $_SERVER['HTTP_REFERER']))))
-{
+		|| ($cfg['referercheck'] && !preg_match('`https?://([^/]+\.)?'.preg_quote($sys['domain']).'(/|:|$)`i', $referer)))
+) {
 	$cot_error = true;
-	cot_die_message(950, TRUE, '', '', $_SERVER['HTTP_REFERER']);
+	cot_die_message(950, TRUE, '', '', $referer);
 }
 
 /* ============ Head Resources ===========*/

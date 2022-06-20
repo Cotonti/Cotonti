@@ -294,7 +294,7 @@ foreach ($sql_forums_rowset as $row) {
 	}
 
 	$row['ft_icon_type_ex'] = $row['ft_icon_type'];
-	if ($row['ft_user_posted']) {
+	if (!empty($row['ft_user_posted'])) {
 		$row['ft_icon_type_ex'] .= '_posted';
 	}
 
@@ -318,7 +318,7 @@ foreach ($sql_forums_rowset as $row) {
 		'FORUMS_TOPICS_ROW_VIEWCOUNT' => $row['ft_viewcount'],
 		'FORUMS_TOPICS_ROW_FIRSTPOSTER' => cot_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername'])),
 		'FORUMS_TOPICS_ROW_LASTPOSTER' => $row['ft_lastpostername'],
-		'FORUMS_TOPICS_ROW_USER_POSTED' => (int) $row['ft_user_posted'],
+		'FORUMS_TOPICS_ROW_USER_POSTED' => isset($row['ft_user_posted']) ? (int) $row['ft_user_posted'] : '',
 		'FORUMS_TOPICS_ROW_URL' => $row['ft_url'],
 		'FORUMS_TOPICS_ROW_PREVIEW' => $row['ft_preview'].'...',
 		'FORUMS_TOPICS_ROW_PAGES' => $row['ft_pages'],
