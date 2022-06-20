@@ -39,7 +39,7 @@ $cot_ext_ignore_parts = array('configure', 'install', 'setup', 'uninstall');
  * @param string $from_ver Current version, to patch starting from
  * @param string $sql_pattern SQL patch file name pattern (PCRE)
  * @param string $php_pattern PHP patch file name pattern (PCRE)
- * @return mixed The function returns TRUE if there are not patches to apply,
+ * @return string|false The function returns TRUE if there are not patches to apply,
  * FALSE if an error occurred while patching or a string containing version
  * number of the latest applied patch if patching was successful.
  */
@@ -52,58 +52,43 @@ function cot_apply_patches($directory, $from_ver,
 	// Find new patches
 	$dp = opendir($directory);
 	$delta = array();
-	while ($f = readdir($dp))
-	{
+	while ($f = readdir($dp)) {
 		if (preg_match('#^' . $sql_pattern . '$#', $f, $mt)
 			|| preg_match('#^' . $php_pattern . '$#', $f, $mt))
 		{
 			$type = $mt[2] == 'sql' ? 'sql' : 'php';
 			$ver = $mt[1];
-			if (version_compare($ver, $from_ver) > 0)
-			{
+			if (version_compare($ver, $from_ver) > 0) {
 				$delta[$ver][$type] = $directory . '/' . $f;
 			}
 		}
 	}
 	closedir($dp);
-	if (count($delta) == 0)
-	{
+	if (count($delta) == 0) {
 		return true;
 	}
 
 	// Apply patches in version order
 	uksort($delta, 'version_compare');
 	$max_ver = $from_ver;
-	foreach ($delta as $key => $val)
-	{
-		if (isset($val['sql']))
-		{
+	foreach ($delta as $key => $val) {
+		if (isset($val['sql'])) {
 			$error = $db->runScript(file_get_contents($val['sql']));
-			if (empty($error))
-			{
+			if (empty($error)) {
 				cot_message(cot_rc('ext_patch_applied',
 					array('f' => $val['sql'], 'msg' => 'OK')));
-			}
-			else
-			{
-				cot_error(cot_rc('ext_patch_error',
-					array('f' => $val['sql'], 'msg' => $error)));
+			} else {
+				cot_error(cot_rc('ext_patch_error', array('f' => $val['sql'], 'msg' => $error)));
 				return false;
 			}
 		}
-		if (isset($val['php']))
-		{
+		if (isset($val['php'])) {
 			$ret = include $val['php'];
-			if ($ret !== false)
-			{
+			if ($ret !== false) {
 				$msg = $ret == 1 ? 'OK' : $ret;
-				cot_message(cot_rc('ext_patch_applied',
-					array('f' => $val['php'], 'msg' => $msg)));
-			}
-			else
-			{
-				cot_error(cot_rc('ext_patch_error',
-					array('f' => $val['php'], 'msg' => $L['Error'])));
+				cot_message(cot_rc('ext_patch_applied', array('f' => $val['php'], 'msg' => $msg)));
+			} else {
+				cot_error(cot_rc('ext_patch_error', array('f' => $val['php'], 'msg' => $L['Error'])));
 				return false;
 			}
 		}
@@ -481,31 +466,23 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	}
 
 
-	if ($update)
-	{
+    $new_ver = '';
+	if ($update) {
 		// Find and apply patches
-		if (file_exists("$path/setup"))
-		{
+		if (file_exists("$path/setup")) {
 			$new_ver = cot_apply_patches("$path/setup", $current_ver);
 		}
-		if (version_compare($info['Version'], $new_ver) > 0 || $new_ver === true)
-		{
+		if (version_compare($info['Version'], $new_ver) > 0 || $new_ver === true) {
 			$new_ver = $info['Version'];
 		}
-	}
-	else
-	{
-		if (file_exists($path . "/setup/$name.install.sql"))
-		{
+	} else {
+		if (file_exists($path . "/setup/$name.install.sql")) {
 			// Run SQL install script
 			$sql_err = $db->runScript(
 				file_get_contents("$path/setup/$name.install.sql"));
-			if (empty($sql_err))
-			{
+			if (empty($sql_err)) {
 				cot_message(cot_rc('ext_executed_sql', array('ret' => 'OK')));
-			}
-			else
-			{
+			} else {
 				cot_error(cot_rc('ext_executed_sql', array('ret' => $sql_err)));
 				return false;
 			}
