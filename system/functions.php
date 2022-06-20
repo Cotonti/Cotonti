@@ -39,7 +39,7 @@ $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
 $cfg['version'] = '0.9.19';
-$cfg['dbversion'] = '0.9.19';
+$cfg['dbversion'] = '0.9.19';   // Not used anywhere
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms']))
@@ -246,6 +246,47 @@ function cot_autoload($class)
 			return;
 		}
 	}
+}
+
+/**
+ * Computes the difference of arrays
+ * array_diff() for n-dimensional arrays
+ *
+ * Native php function array_diff() only checks one dimension of a n-dimensional array.
+ * When trying to compare n-dimensional ones it generates warning: Array to string conversion because it compares
+ * elements by their string representation (if (string) $elem1 === (string) $elem2)
+ * @see https://php.net/manual/en/function.array-diff.php
+ *
+ * @param array $array1 The array to compare from
+ * @param array $array2 The array to compare with
+ * @return array an array containing all the entries from array1 that are not present in any of the other arrays.
+ *
+ * @todo make signature compartaible with native array_diff() function:
+ *       array_diff(array $array, array ...$arrays): array
+ */
+function cot_array_diff($array1, $array2)
+{
+    $return = array();
+
+    foreach ($array1 as $mKey => $mValue) {
+        if (array_key_exists($mKey, $array2)) {
+            if (is_array($mValue)) {
+                $aRecursiveDiff = cot_array_diff($mValue, $array2[$mKey]);
+                if (count($aRecursiveDiff)) {
+                    $return[$mKey] = $aRecursiveDiff;
+                }
+
+            } else {
+                if ($mValue != $array2[$mKey]) {
+                    $return[$mKey] = $mValue;
+                }
+            }
+        } else {
+            $return[$mKey] = $mValue;
+        }
+    }
+
+    return $return;
 }
 
 /**
@@ -2679,7 +2720,7 @@ if (!function_exists('imageconvolution'))
 /**
  * Sharpen an image after resize
  *
- * @param image resource $imgdata Image resource from an image creation function
+ * @param resource $imgdata Image resource from an image creation function
  * @param int $source_width Width of image before resize
  * @param int $target_width Width of image to sharpen (after resize)
  * @return resource - image resource
@@ -2721,8 +2762,8 @@ function cot_img_check_memory($file_path, $extra_size = 0)
 
 	$width_orig = $source_size[0];
 	$height_orig = $source_size[1];
-	$depth_orig = ($source_size['bits'] > 8) ? ($source_size['bits'] / 8) : 1;
-	$channels_orig = $source_size['channels'] > 0 ? $source_size['channels'] : 4;
+	$depth_orig = (isset($source_size['bits']) && $source_size['bits'] > 8) ? ($source_size['bits'] / 8) : 1;
+	$channels_orig = (isset($source_size['channels']) && $source_size['channels'] > 0) ? $source_size['channels'] : 4;
 
 	// In Bytes
 	$needMem = $width_orig * $height_orig * $depth_orig * $channels_orig + $K64;
@@ -5637,6 +5678,8 @@ $cot_languages['ua'] = 'Українська';
  *
  * @param string $str Source string
  * @return string
+ *
+ * @todo use intl php-extension
  */
 
 function cot_translit_encode($str)

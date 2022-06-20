@@ -483,7 +483,10 @@ class CotDB extends PDO
 	/**
 	 * Registers an unprefixed table name in table names registry
 	 * @param  string $table_name Table name without a prefix, e.g. 'pages'
-	 */
+     *
+     * @todo As of PHP 8.1.0, write access to the entire $GLOBALS array is no longer supported:
+     *       https://www.php.net/manual/en/reserved.variables.globals.php
+     */
 	public function registerTable($table_name)
 	{
 		if (!isset($GLOBALS['db_' . $table_name]))
