@@ -5601,6 +5601,7 @@ function cot_url_sanitize($url)
 {
 	function urlfilter($str)
 	{
+        if (!$str) return '';
 		return rawurlencode(rawurldecode($str));
 	}
 
@@ -5618,8 +5619,13 @@ function cot_url_sanitize($url)
 	$filtered_params = array();
 	foreach (explode('&', $query) as $item) {
 		if (!empty($item)) {
-			list($key, $val) = explode('=', $item, 2);
-			$filtered_params[] = urlfilter($key) . '=' . urlfilter($val);
+            if (mb_stripos($item, '=') !== false) {
+                list($key, $val) = explode('=', $item, 2);
+                $filtered_params[] = urlfilter($key) . '=' . urlfilter($val);
+
+            } else {
+                $filtered_params[] = urlfilter($item);
+            }
 		}
 	}
 	if (sizeof($filtered_params)) $urlp['query'] = implode('&', $filtered_params);
