@@ -282,7 +282,7 @@ class JSMin {
       switch($this->peek()) {
         case '/':
           for (;;) {
-            $c = $this->get();
+            $c = (string) $this->get();
 
             if (ord($c) <= self::ORD_LF) {
               return $c;

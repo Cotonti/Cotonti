@@ -165,7 +165,7 @@ class cot
 	{
 		global $cache, $cfg, $cot_extrafields, $db, $db_x, $env, $L, $out, $R, $structure, $sys, $usr;
 
-        // Todo fill some variables with defoult values
+        // Todo fill some variables with default values
 		self::$cache       =& $cache;
 		self::$cfg         =& $cfg;
 		self::$db          =& $db;
@@ -181,7 +181,7 @@ class cot
 
 		// Register core DB tables
         // On the first step of installer it is not initialized yet
-        if ( !(empty($db) && isset($env['location']) && $env['location'] == 'install' )) {
+        if (!(empty($db) && isset($env['location']) && $env['location'] == 'install')) {
             $db->registerTable('auth');
             $db->registerTable('cache');
             $db->registerTable('cache_bindings');
@@ -5527,10 +5527,19 @@ function cot_parse_url($url)
     $needfix = false;
 
 	// check for URL with omited scheme on PHP prior 5.4.7 (//somesite.com)
-	if (substr($urlp['path'],0,2) == '//' && empty($urlp['scheme'])) $needfix = true;
+    // obsolete
+	if (empty($urlp['scheme']) && isset($urlp['path']) && substr($urlp['path'],0,2) == '//') {
+        $needfix = true;
+    }
 
 	// check for URL with auth credentials (user[:pass]@site.com/)
-	if (empty($urlp['host']) && preg_match('#^(([^@:]+)|([^@:]+:[^@:]+?))@.+/#', $urlp['path'])) $needfix = true;
+	if (
+        empty($urlp['host']) &&
+        isset($urlp['path']) &&
+        preg_match('#^(([^@:]+)|([^@:]+:[^@:]+?))@.+/#', $urlp['path'])
+    ) {
+        $needfix = true;
+    }
 
 	if ($needfix) {
 		$fake_scheme = 'fix-url-parsing';
@@ -5596,20 +5605,19 @@ function cot_url_sanitize($url)
 	}
 
 	$urlp = cot_parse_url($url);
+    if (empty($urlp)) $urlp = [];
 	$urlp['fragment'] = !empty($urlp['fragment']) ? urlfilter($urlp['fragment']) : '';
 
-	$path = $urlp['path'];
+	$path = isset($urlp['path']) ? $urlp['path'] : '';
 	$query = !empty($urlp['query']) ? str_replace('&amp;', '&', $urlp['query']) : '';
 
 	$path = explode('/', $path);
-	$path = array_map('urlfilter', $path);
+    if (!empty($path)) $path = array_map('urlfilter', $path);
 	$urlp['path'] = implode('/', $path);
 
 	$filtered_params = array();
-	foreach (explode('&', $query) as $item)
-	{
-		if (!empty($item))
-		{
+	foreach (explode('&', $query) as $item) {
+		if (!empty($item)) {
 			list($key, $val) = explode('=', $item, 2);
 			$filtered_params[] = urlfilter($key) . '=' . urlfilter($val);
 		}

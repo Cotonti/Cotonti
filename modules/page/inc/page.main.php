@@ -65,38 +65,35 @@ if (($pag['page_state'] == 1
 	cot_log("Attempt to directly access an un-validated or future/expired page", 'sec');
 	cot_die_message(403, TRUE);
 }
-if (mb_substr($pag['page_text'], 0, 6) == 'redir:')
-{
+if (mb_substr($pag['page_text'], 0, 6) == 'redir:') {
 	$env['status'] = '303 See Other';
 	$redir = trim(str_replace('redir:', '', $pag['page_text']));
 	$sql_page_update = cot::$db->query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=$id");
 	header('Location: ' . (preg_match('#^(http|ftp)s?://#', $redir) ? '' : COT_ABSOLUTE_URL) . $redir);
 	exit;
-}
-elseif (mb_substr($pag['page_text'], 0, 8) == 'include:')
-{
+} elseif (mb_substr($pag['page_text'], 0, 8) == 'include:') {
 	$pag['page_text'] = cot_readraw('datas/html/'.trim(mb_substr($pag['page_text'], 8, 255)));
 }
-if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && cot::$usr['auth_download']) || $pag['page_file'] == 1))
-{
+if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && cot::$usr['auth_download']) || $pag['page_file'] == 1)) {
 	/* === Hook === */
-	foreach (cot_getextplugins('page.download.first') as $pl)
-	{
+	foreach (cot_getextplugins('page.download.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
 	// Hotlinking protection
-	if ($_SESSION['dl'] != $id
-		&& $_SESSION['cat'] != $pag['page_cat'])
-	{
+	if (
+        isset($_SESSION['dl']) &&
+        $_SESSION['dl'] != $id &&
+        isset($_SESSION['cat']) &&
+        $_SESSION['cat'] != $pag['page_cat']
+    ) {
 		cot_redirect($pag['page_pageurl']);
 	}
 
 	unset($_SESSION['dl']);
 
-	if (!cot::$usr['isadmin'] || cot::$cfg['page']['count_admin'])
-	{
+	if (!cot::$usr['isadmin'] || cot::$cfg['page']['count_admin']) {
 		$pag['page_filecount']++;
 		$sql_page_update = cot::$db->query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=".$id);
 	}
