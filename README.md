@@ -68,7 +68,7 @@ When you're ready to contribute the bugfix or a new feature you can issue a [Pul
 
 ## Copyright
 
-Copyright (c) 2008-2021, Cotonti Team
+Copyright (c) 2008-2022, Cotonti Team
 
 Copyright (c) 2001-2008, Neocrome
 
