@@ -4,17 +4,17 @@
 
 DROP TABLE IF EXISTS `cot_auth`;
 CREATE TABLE `cot_auth` (
-  `auth_id` int NOT NULL auto_increment,
-  `auth_groupid` int NOT NULL default '0',
-  `auth_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `auth_option` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `auth_rights` TINYINT(1) UNSIGNED NULL DEFAULT '0',
-  `auth_rights_lock` TINYINT(1) UNSIGNED NULL DEFAULT '0',
-  `auth_setbyuserid` INT UNSIGNED NULL DEFAULT '0',
+  `auth_id` int UNSIGNED NOT NULL auto_increment,
+  `auth_groupid` mediumint UNSIGNED NOT NULL,
+  `auth_code` varchar(255) NOT NULL,
+  `auth_option` varchar(255) NOT NULL default '',
+  `auth_rights` TINYINT UNSIGNED DEFAULT '0',
+  `auth_rights_lock` TINYINT UNSIGNED DEFAULT '0',
+  `auth_setbyuserid` INT UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY  (`auth_id`),
   KEY `auth_groupid` (`auth_groupid`),
   KEY `auth_code` (`auth_code`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 INSERT INTO `cot_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights`, `auth_rights_lock`, `auth_setbyuserid`) VALUES
 (1, 'admin', 'a', 0, 255, 1),
@@ -38,42 +38,42 @@ INSERT INTO `cot_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights
 
 DROP TABLE IF EXISTS `cot_cache`;
 CREATE TABLE `cot_cache` (
-  `c_name` varchar(120) collate utf8_unicode_ci NOT NULL,
-  `c_realm` varchar(64) collate utf8_unicode_ci NOT NULL default 'cot',
-  `c_expire` int NOT NULL default '0',
-  `c_auto` tinyint NOT NULL default '1',
-  `c_value` MEDIUMTEXT collate utf8_unicode_ci,
+  `c_name` varchar(120) NOT NULL,
+  `c_realm` varchar(64) NOT NULL default 'cot',
+  `c_expire` INT UNSIGNED NOT NULL default '0',
+  `c_auto` TINYINT UNSIGNED NOT NULL default '0',
+  `c_value` MEDIUMTEXT default NULL,
   PRIMARY KEY  (`c_name`, `c_realm`),
   KEY (`c_realm`),
   KEY (`c_name`),
   KEY (`c_expire`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 DROP TABLE IF EXISTS `cot_cache_bindings`;
 CREATE TABLE `cot_cache_bindings` (
-  `c_event` VARCHAR(64) collate utf8_unicode_ci NOT NULL,
-  `c_id` VARCHAR(120) collate utf8_unicode_ci NOT NULL,
-  `c_realm` VARCHAR(64) collate utf8_unicode_ci NOT NULL DEFAULT 'cot',
+  `c_event` VARCHAR(64) NOT NULL,
+  `c_id` VARCHAR(120) NOT NULL,
+  `c_realm` VARCHAR(64) NOT NULL DEFAULT 'cot',
   `c_type` TINYINT NOT NULL DEFAULT '0',
   PRIMARY KEY (`c_event`, `c_id`, `c_realm`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 DROP TABLE IF EXISTS `cot_config`;
 CREATE TABLE `cot_config` (
-  `config_owner` varchar(24) collate utf8_unicode_ci NOT NULL default 'core',
-  `config_cat` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `config_subcat` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `config_order` char(3) collate utf8_unicode_ci NOT NULL default '00',
-  `config_name` varchar(64) collate utf8_unicode_ci NOT NULL default '',
+  `config_owner` varchar(24) NOT NULL default 'core',
+  `config_cat` varchar(64) NOT NULL,
+  `config_subcat` varchar(255) NOT NULL default '',
+  `config_order` char(3) NOT NULL default '00',
+  `config_name` varchar(64) NOT NULL,
   `config_type` tinyint NOT NULL default '0',
-  `config_value` text collate utf8_unicode_ci NOT NULL,
-  `config_default` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `config_variants` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `config_text` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `config_donor` varchar(64) collate utf8_unicode_ci NOT NULL default '',
+  `config_value` text NOT NULL,
+  `config_default` varchar(255) NOT NULL default '',
+  `config_variants` varchar(255) NOT NULL default '',
+  `config_text` varchar(255) NOT NULL default '',
+  `config_donor` varchar(64) NOT NULL default '',
   KEY (`config_owner`, `config_cat`),
   KEY (`config_owner`, `config_cat`, `config_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
 ('core','locale','01','forcedefaultlang',3,'0','0','',''),
@@ -148,16 +148,16 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 
 DROP TABLE IF EXISTS `cot_core`;
 CREATE TABLE `cot_core` (
-  `ct_id` mediumint NOT NULL auto_increment,
-  `ct_code` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `ct_title` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `ct_version` varchar(32) collate utf8_unicode_ci NOT NULL default '',
-  `ct_state` tinyint unsigned NOT NULL default '1',
-  `ct_lock` tinyint unsigned NOT NULL default '0',
-  `ct_plug` tinyint unsigned NOT NULL default '0',
+  `ct_id` mediumint UNSIGNED NOT NULL auto_increment,
+  `ct_code` varchar(64) NOT NULL,
+  `ct_title` varchar(64) NOT NULL,
+  `ct_version` varchar(32) NOT NULL DEFAULT '',
+  `ct_state` tinyint UNSIGNED NOT NULL DEFAULT '1',
+  `ct_lock` tinyint UNSIGNED NOT NULL DEFAULT '0',
+  `ct_plug` tinyint UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY  (`ct_id`),
   KEY `ct_code` (`ct_code`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 INSERT INTO `cot_core` (`ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_lock`) VALUES
 ('admin', 'Administration panel', '0.7.0', 1, 1),
@@ -165,37 +165,36 @@ INSERT INTO `cot_core` (`ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_loc
 
 DROP TABLE IF EXISTS `cot_extra_fields`;
 CREATE TABLE `cot_extra_fields` (
-  `field_location` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `field_name` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `field_type` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `field_html` text collate utf8_unicode_ci NOT NULL,
-  `field_variants` text collate utf8_unicode_ci NOT NULL,
-  `field_params` text collate utf8_unicode_ci NOT NULL,
-  `field_default` text collate utf8_unicode_ci NOT NULL,
-  `field_required` tinyint(1) unsigned NOT NULL default '0',
-  `field_enabled` tinyint(1) unsigned NOT NULL default '1',
-  `field_parse` varchar(32) collate utf8_unicode_ci NOT NULL default 'HTML',
-  `field_description` text collate utf8_unicode_ci NOT NULL,
+  `field_location` varchar(255) NOT NULL,
+  `field_name` varchar(255) NOT NULL,
+  `field_type` varchar(255) NOT NULL,
+  `field_html` text DEFAULT NULL,
+  `field_variants` text DEFAULT NULL,
+  `field_params` text DEFAULT NULL,
+  `field_default` text DEFAULT NULL,
+  `field_required` tinyint UNSIGNED NOT NULL DEFAULT '0',
+  `field_enabled` tinyint UNSIGNED NOT NULL DEFAULT '1',
+  `field_parse` varchar(32) NOT NULL DEFAULT 'HTML',
+  `field_description` text default NULL,
   KEY `field_location` (`field_location`),
   KEY `field_name` (`field_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 DROP TABLE IF EXISTS `cot_groups`;
 CREATE TABLE `cot_groups` (
-  `grp_id` int NOT NULL auto_increment,
-  `grp_alias` varchar(32) collate utf8_unicode_ci NOT NULL default '',
-  `grp_level` tinyint NOT NULL default '1',
-  `grp_disabled` tinyint NOT NULL default '0',
-  `grp_name` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `grp_title` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `grp_desc` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `grp_icon` varchar(128) collate utf8_unicode_ci NOT NULL default '',
-  `grp_ownerid` int NOT NULL default '0',
-  `grp_maintenance` tinyint NOT NULL default '0',
-  `grp_skiprights` tinyint NOT NULL default '0',
+  `grp_id` mediumint UNSIGNED NOT NULL auto_increment,
+  `grp_alias` varchar(32) NOT NULL,
+  `grp_level` tinyint NOT NULL DEFAULT '1',
+  `grp_disabled` tinyint NOT NULL DEFAULT '0',
+  `grp_name` varchar(64) NOT NULL,
+  `grp_title` varchar(64) NOT NULL DEFAULT '',
+  `grp_desc` varchar(255) NOT NULL DEFAULT '',
+  `grp_icon` varchar(128) NOT NULL DEFAULT '',
+  `grp_ownerid` int UNSIGNED NOT NULL DEFAULT '0',
+  `grp_maintenance` tinyint NOT NULL DEFAULT '0',
+  `grp_skiprights` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY  (`grp_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7;
-
+) AUTO_INCREMENT=7;
 
 INSERT INTO `cot_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `grp_name`, `grp_title`, `grp_desc`, `grp_icon`, `grp_ownerid`, `grp_maintenance`) VALUES
 (1, 'guests', 0, 0, 'Guests', 'Guest', '', '', 1, 0),
@@ -207,94 +206,94 @@ INSERT INTO `cot_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `g
 
 DROP TABLE IF EXISTS `cot_groups_users`;
 CREATE TABLE `cot_groups_users` (
-  `gru_userid` int NOT NULL default '0',
-  `gru_groupid` int NOT NULL default '0',
-  `gru_state` tinyint NOT NULL default '0',
+  `gru_userid` int UNSIGNED NOT NULL,
+  `gru_groupid` mediumint UNSIGNED NOT NULL,
+  `gru_state` tinyint NOT NULL default '0', -- NOT USING ANYWHERE
   UNIQUE KEY `gru_groupid` (`gru_groupid`,`gru_userid`),
   KEY `gru_userid` (`gru_userid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 DROP TABLE IF EXISTS `cot_logger`;
 CREATE TABLE `cot_logger` (
-  `log_id` mediumint NOT NULL auto_increment,
-  `log_date` int NOT NULL default '0',
-  `log_ip` varchar(15) collate utf8_unicode_ci DEFAULT '',
-  `log_name` varchar(100) collate utf8_unicode_ci DEFAULT '',
-  `log_group` varchar(4) collate utf8_unicode_ci DEFAULT 'def',
-  `log_text` varchar(255) collate utf8_unicode_ci DEFAULT '',
+  `log_id` int UNSIGNED NOT NULL auto_increment,
+  `log_date` int UNSIGNED NOT NULL,
+  `log_ip` varchar(15) DEFAULT '',
+  `log_name` varchar(100) DEFAULT '',
+  `log_group` varchar(4) DEFAULT 'def',
+  `log_text` varchar(255) NOT NULL,
   PRIMARY KEY  (`log_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 DROP TABLE IF EXISTS `cot_plugins`;
 CREATE TABLE `cot_plugins` (
-  `pl_id` mediumint NOT NULL auto_increment,
-  `pl_hook` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `pl_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `pl_part` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `pl_title` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `pl_file` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `pl_order` tinyint unsigned DEFAULT '10',
-  `pl_active` tinyint(1) unsigned DEFAULT '1',
-  `pl_module` tinyint(1) unsigned DEFAULT 0,
+  `pl_id` mediumint UNSIGNED NOT NULL auto_increment,
+  `pl_hook` varchar(255) NOT NULL,
+  `pl_code` varchar(255) NOT NULL,
+  `pl_part` varchar(255) NOT NULL DEFAULT '',
+  `pl_title` varchar(255) NOT NULL DEFAULT '',
+  `pl_file` varchar(255) NOT NULL,
+  `pl_order` tinyint UNSIGNED NOT NULL DEFAULT '10',
+  `pl_active` tinyint UNSIGNED NOT NULL DEFAULT '1',
+  `pl_module` tinyint UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY  (`pl_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 DROP TABLE IF EXISTS `cot_structure`;
 CREATE TABLE `cot_structure` (
-  `structure_id` mediumint NOT NULL auto_increment,
-  `structure_area` varchar(64) collate utf8_unicode_ci NOT NULL,
-  `structure_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `structure_path` varchar(255) collate utf8_unicode_ci default '',
-  `structure_tpl` varchar(128) collate utf8_unicode_ci default '',
-  `structure_title` varchar(128) collate utf8_unicode_ci NOT NULL,
-  `structure_desc` varchar(255) collate utf8_unicode_ci default '',
-  `structure_icon` varchar(128) collate utf8_unicode_ci default '',
-  `structure_locked` tinyint(1) default '0',
-  `structure_count` mediumint default '0',
+  `structure_id` mediumint UNSIGNED NOT NULL auto_increment,
+  `structure_area` varchar(64) NOT NULL,
+  `structure_code` varchar(255) NOT NULL,
+  `structure_path` varchar(255) NOT NULL,
+  `structure_tpl` varchar(128) DEFAULT '',
+  `structure_title` varchar(128) NOT NULL,
+  `structure_desc` varchar(255) DEFAULT '',
+  `structure_icon` varchar(128) DEFAULT '',
+  `structure_locked` tinyint UNSIGNED NOT NULL DEFAULT '0',
+  `structure_count` mediumint UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY  (`structure_id`),
   KEY `structure_code` (`structure_code`),
   KEY `structure_path` (`structure_path`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 DROP TABLE IF EXISTS `cot_updates`;
 CREATE TABLE `cot_updates` (
   `upd_param` VARCHAR(255) NOT NULL,
   `upd_value` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`upd_param`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.19'),
+('revision', '0.9.19-01'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;
 CREATE TABLE `cot_users` (
-  `user_id` int unsigned NOT NULL auto_increment,
-  `user_banexpire` int default '0',
-  `user_name` varchar(100) collate utf8_unicode_ci NOT NULL,
-  `user_password` varchar(224) collate utf8_unicode_ci NOT NULL default '',
-  `user_passfunc` VARCHAR(32) NOT NULL default 'sha256',
-  `user_passsalt` VARCHAR(16) NOT NULL default '',
-  `user_maingrp` int NOT NULL default '4',
-  `user_country` char(2) collate utf8_unicode_ci default '',
-  `user_timezone` varchar(32) collate utf8_unicode_ci default 'GMT',
-  `user_text` text collate utf8_unicode_ci,
+  `user_id` int UNSIGNED NOT NULL auto_increment,
+  `user_banexpire` int UNSIGNED NOT NULL DEFAULT '0',
+  `user_name` varchar(100) NOT NULL,
+  `user_password` varchar(224) NOT NULL DEFAULT '',
+  `user_passfunc` VARCHAR(32) NOT NULL DEFAULT 'sha256',
+  `user_passsalt` VARCHAR(16) NOT NULL DEFAULT '',
+  `user_maingrp` mediumint UNSIGNED NOT NULL DEFAULT '4',
+  `user_country` char(2) default '',
+  `user_timezone` varchar(32) default 'GMT',
+  `user_text` text DEFAULT NULL,
   `user_birthdate` DATE DEFAULT NULL,
-  `user_gender` char(1) collate utf8_unicode_ci default 'U',
-  `user_email` varchar(64) collate utf8_unicode_ci default '',
-  `user_hideemail` tinyint unsigned default '1',
-  `user_theme` varchar(32) collate utf8_unicode_ci default '',
-  `user_scheme` varchar(32) collate utf8_unicode_ci default '',
-  `user_lang` varchar(16) collate utf8_unicode_ci default '',
-  `user_regdate` int NOT NULL default '0',
-  `user_lastlog` int default '0',
-  `user_lastvisit` int default '0',
-  `user_lastip` varchar(16) collate utf8_unicode_ci default '',
-  `user_logcount` int unsigned default '0',
-  `user_sid` char(64) collate utf8_unicode_ci default '',
-  `user_sidtime` int default 0,
-  `user_lostpass` char(32) collate utf8_unicode_ci default '',
-  `user_auth` MEDIUMTEXT collate utf8_unicode_ci,
-  `user_token` char(16) collate utf8_unicode_ci default '',
+  `user_gender` char(1) default 'U',
+  `user_email` varchar(64) NOT NULL default '',
+  `user_hideemail` tinyint UNSIGNED NOT NULL DEFAULT '1',
+  `user_theme` varchar(32) default '',
+  `user_scheme` varchar(32) default '',
+  `user_lang` varchar(16) default '',
+  `user_regdate` int UNSIGNED NOT NULL DEFAULT '0',
+  `user_lastlog` int UNSIGNED NOT NULL DEFAULT '0',
+  `user_lastvisit` int UNSIGNED NOT NULL DEFAULT '0',
+  `user_lastip` varchar(16) default '',
+  `user_logcount` int UNSIGNED NOT NULL DEFAULT '0',
+  `user_sid` char(64) default '',
+  `user_sidtime` int UNSIGNED NOT NULL DEFAULT 0,
+  `user_lostpass` char(32) DEFAULT '',
+  `user_auth` MEDIUMTEXT DEFAULT NULL,
+  `user_token` char(16) DEFAULT '',
   PRIMARY KEY  (`user_id`),
   KEY `user_password` (`user_password`),
   KEY `user_regdate` (`user_regdate`),
@@ -303,4 +302,4 @@ CREATE TABLE `cot_users` (
   KEY `user_email` (`user_email`),
   KEY `user_sid` (`user_sid`),
   KEY `user_lostpass` (`user_lostpass`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);

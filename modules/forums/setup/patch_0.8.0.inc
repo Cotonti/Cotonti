@@ -15,4 +15,3 @@ foreach ($structure['forums'] as $i => $x)
 	cot_forums_insertcat($i);
 	cot_forums_sync($i);
 }
-?>

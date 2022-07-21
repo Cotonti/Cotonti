@@ -37,6 +37,9 @@ $cfg['customfuncs'] = false;
 $cfg['cache'] = false;
 $cfg['xtpl_cache'] = false;
 
+error_reporting(E_ALL ^ E_NOTICE);
+ini_set('display_errors', 1);
+
 require_once $cfg['system_dir'].'/functions.php';
 require_once $cfg['system_dir'].'/cotemplate.php';
 require_once 'system/debug.php';
@@ -86,24 +89,18 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
     $sys['site_id'] = 'install';
 
 	// Installer language selection support
-	if (empty($_SESSION['cot_inst_lang']))
-	{
+	if (empty($_SESSION['cot_inst_lang'])) {
 		$lang = cot_import('lang', 'P', 'ALP');
-		if (empty($lang))
-		{
+		if (empty($lang)) {
 			$lang = cot_lang_determine();
 		}
-	}
-	else
-	{
+	} else {
 		$lang = $_SESSION['cot_inst_lang'];
 	}
 
 	require_once cot_langfile('main', 'core');
 	require_once $cfg['system_dir'] . '/resources.rc.php';
-}
-else
-{
+} else {
 	$branch = 'siena';
 	$prev_branch = 'genoa';
 
@@ -141,11 +138,8 @@ $file['config'] = './datas/config.php';
 $file['config_sample'] = './datas/config-sample.php';
 $file['sql'] = './setup/install.sql';
 
-if (!$cfg['new_install'])
-{
+if (!$cfg['new_install']) {
 	include cot_incfile('install', 'module', 'update');
-}
-else
-{
+} else {
 	include cot_incfile('install', 'module', 'install');
 }

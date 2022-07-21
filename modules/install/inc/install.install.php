@@ -59,12 +59,16 @@ switch ($step)
 
 	case 3:
         $rurl = cot_import('mainurl', 'P', 'TXT', 0, false, true);
+        $rurl = $rurl ? $rurl : '';
+        $rurl = rtrim($rurl, '/');
 		$user['name'] = cot_import('user_name', 'P', 'TXT', 100, false, true);
 		$user['pass'] = cot_import('user_pass', 'P', 'TXT', 32);
 		$user['pass2'] = cot_import('user_pass2', 'P', 'TXT', 32);
 		$user['email'] = cot_import('user_email', 'P', 'TXT', 64, false, true);
 		$user['country'] = cot_import('user_country', 'P', 'TXT', 0, false, true);
-		$rtheme = explode(':', cot_import('theme', 'P', 'TXT', 0, false, true));
+        $rtheme = cot_import('theme', 'P', 'TXT', 0, false, true);
+        $rtheme = $rtheme ? $rtheme : '';
+		$rtheme = explode(':', $rtheme);
 		$rscheme = isset($rtheme[1]) ? $rtheme[1] : $cfg['defaultscheme'];
 		$rtheme = $rtheme[0];
 		$rlang = cot_import('lang', 'P', 'TXT', 0, false, true);
@@ -162,6 +166,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                     } else {
                         cot_error('install_error_sql', 'db_host');
                     }
+                }
+
+                if (!empty($cfg['mysqlcharset'])) {
+                    $collationQuery = 'ALTER DATABASE `' . $db_name . '` CHARACTER SET ' . $cfg['mysqlcharset'];
+
+                    if (!empty($cfg['mysqlcollate'])) {
+                        $collationQuery .= ' COLLATE ' . $cfg['mysqlcollate'];
+                    }
+                    $collationQuery .= ';';
+                    $db->query($collationQuery);
                 }
             }
 

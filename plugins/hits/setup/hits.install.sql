@@ -1,9 +1,9 @@
 
 CREATE TABLE  IF NOT EXISTS `cot_stats` (
-  `stat_name` varchar(32) collate utf8_unicode_ci NOT NULL default '',
-  `stat_value` int NOT NULL default '0',
+  `stat_name` varchar(32) NOT NULL,
+  `stat_value` int UNSIGNED NOT NULL default '0',
   PRIMARY KEY  (`stat_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 INSERT IGNORE INTO `cot_stats` (`stat_name`, `stat_value`) VALUES
 ('totalpages', 0),

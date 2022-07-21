@@ -28,16 +28,16 @@ if (!defined('WHOSONLINE_UPDATED')) {
                 cot::$db->insert($db_online, array(
                     'online_ip' => cot::$usr['ip'],
                     'online_name' => cot::$usr['name'],
-                    'online_lastseen' => (int)cot::$sys['now'],
+                    'online_lastseen' => (int) cot::$sys['now'],
                     'online_location' => $location,
                     'online_subloc' => (string) $subLocation,
-                    'online_userid' => (int)cot::$usr['id'],
+                    'online_userid' => (int) cot::$usr['id'],
                     'online_shield' => 0,
                     'online_hammer' => 0
 				));
 
 			} else {
-			    $onlineHummer = isset(cot::$sys['online_hammer']) ? (int)cot::$sys['online_hammer'] : 0;
+			    $onlineHummer = isset(cot::$sys['online_hammer']) ? (int) cot::$sys['online_hammer'] : 0;
                 cot::$db->update($db_online, array(
                     'online_lastseen' => cot::$sys['now'],
                     'online_location' => $location,
@@ -51,9 +51,9 @@ if (!defined('WHOSONLINE_UPDATED')) {
 				cot::$db->insert($db_online, array(
                     'online_ip' => cot::$usr['ip'],
                     'online_name' => 'v',
-                    'online_lastseen' => (int)cot::$sys['now'],
+                    'online_lastseen' => (int) cot::$sys['now'],
                     'online_location' => $location,
-                    'online_subloc' => isset(cot::$sys['sublocation']) ? (string)cot::$sys['sublocation'] : '',
+                    'online_subloc' => isset(cot::$sys['sublocation']) ? (string) cot::$sys['sublocation'] : '',
                     'online_userid' => -1,
                     'online_shield' => 0,
                     'online_hammer' => 0
@@ -63,8 +63,8 @@ if (!defined('WHOSONLINE_UPDATED')) {
 				cot::$db->update($db_online, array(
                     'online_lastseen' => cot::$sys['now'],
                     'online_location' => $location,
-                    'online_subloc' => isset(cot::$sys['sublocation']) ? (string)cot::$sys['sublocation'] : '',
-                    'online_hammer' => isset(cot::$sys['online_hammer']) ? (int)cot::$sys['online_hammer'] : 0
+                    'online_subloc' => isset(cot::$sys['sublocation']) ? (string) cot::$sys['sublocation'] : '',
+                    'online_hammer' => isset(cot::$sys['online_hammer']) ? (int) cot::$sys['online_hammer'] : 0
 				), "online_ip='".cot::$usr['ip']."' AND online_userid < 0");
 			}
 		}

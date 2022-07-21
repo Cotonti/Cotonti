@@ -24,60 +24,45 @@ if (!file_exists($mskin))
 }
 $t = new XTemplate($mskin);
 
+$updated_config = false;
+
 // Check for new config options
-if (is_writable($file['config']) && file_exists($file['config_sample']))
-{
+if (is_writable($file['config']) && file_exists($file['config_sample'])) {
 	list($old_cfg, $old_db) = cot_get_config($file['config']);
 	list($new_cfg, $new_db) = cot_get_config($file['config_sample']);
-	if (count(array_diff($new_cfg, $old_cfg)) > 0
-		|| count(array_diff($new_db, $old_db)) > 0)
-	{
+	if (count(cot_array_diff($new_cfg, $old_cfg)) > 0 || count(cot_array_diff($new_db, $old_db)) > 0) {
 		// Add new config options
 		$delta = '';
-		if (count(array_diff($new_cfg, $old_cfg)) > 0)
-		{
-			foreach ($new_cfg as $key => $val)
-			{
-				if (!isset($old_cfg[$key]))
-				{
-					if ($key == 'new_install')
-					{
+		if (count(array_diff($new_cfg, $old_cfg)) > 0) {
+			foreach ($new_cfg as $key => $val) {
+				if (!isset($old_cfg[$key])) {
+					if ($key == 'new_install') {
 						$val = false;
-					}
-					elseif ($key == 'site_id' || $key == 'secret_key')
-					{
+					} elseif ($key == 'site_id' || $key == 'secret_key') {
 						$val = cot_unique(32);
 					}
 
-					if (is_bool($val))
-					{
+					if (is_bool($val)) {
 						$val = $val ? 'TRUE' : 'FALSE';
-					}
-					elseif (is_int($val) || is_float($val))
-					{
+					} elseif (is_int($val) || is_float($val)) {
 						$val = (string) $val;
-					}
-					else
-					{
+					} else {
 						$val = "'$val'";
 					}
 					$delta .= "\$cfg['$key'] = $val;\n";
 				}
 			}
 		}
-		if (count(array_diff($new_db, $old_db)) > 0)
-		{
-			foreach ($new_db as $key => $val)
-			{
-				if (!isset($old_db[$key]))
-				{
+
+		if (count(cot_array_diff($new_db, $old_db)) > 0) {
+			foreach ($new_db as $key => $val) {
+				if (!isset($old_db[$key])) {
 					$val = str_replace("cot_", "\$db_x.'", $val);
 					$delta .= "\${$key} = $val';\n";
 				}
 			}
 		}
-		if (!empty($delta))
-		{
+		if (!empty($delta)) {
 			$config_contents = file_get_contents($file['config']);
 			// strip PHP closing tag if exists
 			if (substr($config_contents, -2) == '?>') $config_contents = substr($config_contents, 0, -2);
@@ -88,9 +73,7 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 			include $file['config'];
 		}
 	}
-}
-else
-{
+} else {
 	// Display some warning
 	cot_error('install_update_config_error');
 }
@@ -100,8 +83,7 @@ $cfg['display_errors'] = true;
 $cfg['debug_mode'] = true;
 $cfg['customfuncs'] = false;
 
-if (defined('COT_UPGRADE') && !cot_error_found())
-{
+if (defined('COT_UPGRADE') && !cot_error_found()) {
 	// Is Genoa, perform upgrade
 
 	// Create missing cache folders
@@ -236,35 +218,25 @@ if (defined('COT_UPGRADE') && !cot_error_found())
 		'UPDATE_FROM' => $prev_branch,
 		'UPDATE_TO' => $branch
 	));
-}
-elseif (!cot_error_found())
-{
+
+} elseif (!cot_error_found()) {
 	// Update the core
 	$sql_install = $db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
 	$upd_rev = $sql_install->fetchColumn();
-	if (preg_match('#\$Rev: (\d+) \$#', $upd_rev, $mt))
-	{
+
+	if (preg_match('#\$Rev: (\d+) \$#', $upd_rev, $mt)) {
 		// Old SVN revision format
-		if ($mt[1] > 2099)
-		{
+		if ($mt[1] > 2099) {
 			$rev = '0.9.3';
-		}
-		elseif ($mt[1] > 2033)
-		{
+		} elseif ($mt[1] > 2033) {
 			$rev = '0.9.2';
-		}
-		elseif ($mt[1] > 1972)
-		{
+		} elseif ($mt[1] > 1972) {
 			$rev = '0.9.1';
-		}
-		else
-		{
+		} else {
 			$rev = '0.9.0';
 		}
 		$rev .=  '-r' . $mt[1];
-	}
-	else
-	{
+	} else {
 		// New revision format
 		$rev = $upd_rev;
 	}
@@ -272,17 +244,12 @@ elseif (!cot_error_found())
 
 	// Update installed modules and plugins
 	$updated_ext = false;
-	if(count($cot_modules)>0)
-	{
-		foreach ($cot_modules as $code => $mod)
-		{
+	if (count($cot_modules) > 0) {
+		foreach ($cot_modules as $code => $mod) {
 			$ret = cot_extension_install($code, true, true);
-			if ($ret === true)
-			{
+			if ($ret === true) {
 				$updated_ext = true;
-			}
-			elseif ($ret === false)
-			{
+			} elseif ($ret === false) {
 				cot_error(cot_rc('ext_update_error', array(
 					'type' => $L['Module'],
 					'name' => $code
@@ -290,17 +257,13 @@ elseif (!cot_error_found())
 			}
 		}
 	}
-	if(count($cot_plugins_enabled)>0)
-	{
-		foreach ($cot_plugins_enabled as $code => $plug)
-		{
+
+	if (count($cot_plugins_enabled) > 0) {
+		foreach ($cot_plugins_enabled as $code => $plug) {
 			$ret = cot_extension_install($code, false, true);
-			if ($ret === true)
-			{
+			if ($ret === true) {
 				$updated_ext = true;
-			}
-			elseif ($ret === false)
-			{
+			} elseif ($ret === false) {
 				cot_error(cot_rc('ext_update_error', array(
 					'type' => $L['Plugin'],
 					'name' => $code
@@ -309,25 +272,17 @@ elseif (!cot_error_found())
 		}
 	}
 
-	if ($new_rev === false || cot_error_found())
-	{
+	if ($new_rev === false || cot_error_found()) {
 		// Display error message
 		$t->assign('UPDATE_TITLE', $L['install_update_error']);
-	}
-	elseif ($new_rev === true && !$updated_config && !$updated_ext)
-	{
+	} elseif ($new_rev === true && !$updated_config && !$updated_ext) {
 		$t->assign('UPDATE_TITLE', $L['install_update_nothing']);
 		$t->assign('UPDATE_COMPLETED_NOTE', '');
 		$t->parse('MAIN.COMPLETED');
-	}
-	else
-	{
-		if ($new_rev === true)
-		{
+	} else {
+		if ($new_rev === true) {
 			$new_rev = $rev;
-		}
-		else
-		{
+		} else {
 			$db->update($db_updates, array('upd_value' => $new_rev), "upd_param = 'revision'");
 		}
 		$t->assign('UPDATE_TITLE', cot_rc('install_update_success', array('rev' => $new_rev)));
@@ -354,10 +309,8 @@ function cot_get_config($file)
 	include $file;
 	$db_vars = array();
 	$vars = get_defined_vars();
-	foreach ($vars as $key => $val)
-	{
-		if (preg_match('#^db_#', $key))
-		{
+	foreach ($vars as $key => $val) {
+		if (preg_match('#^db_#', $key)) {
 			$db_vars[$key] = $val;
 		}
 	}

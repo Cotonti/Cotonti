@@ -49,20 +49,17 @@ function cot_userimages_config_get($ignorecache=false)
 function cot_userimages_config_add($code, $width, $height, $crop='', $force=false)
 {
 	global $cache, $db, $db_users;
-	if (empty($code))
-	{
+
+	if (empty($code)) {
 		return FALSE;
 	}
-	$exists = $db->query("SHOW COLUMNS FROM $db_users LIKE 'user_".$db->prep($code)."'")->rowCount() > 0;
-	if(!$exists)
-	{
-		$db->query("ALTER TABLE $db_users ADD `user_".$db->prep($code)."`
-					varchar(255) collate utf8_unicode_ci NOT NULL default ''");
+	$exists = $db->query("SHOW COLUMNS FROM $db_users LIKE 'user_" . $db->prep($code)."'")->rowCount() > 0;
+	if (!$exists) {
+		$db->query("ALTER TABLE $db_users ADD `user_" . $db->prep($code) . "` varchar(255) NOT NULL default ''");
 	}
-	if(!$exists || $force)
-	{
+	if (!$exists || $force) {
 		$cfg = array(strval($width), strval($height));
-		if($crop) $cfg[] = $crop;
+		if ($crop) $cfg[] = $crop;
 		$options = array(array(
 			'name' => strtolower($code),
 			'type' => COT_CONFIG_TYPE_HIDDEN,

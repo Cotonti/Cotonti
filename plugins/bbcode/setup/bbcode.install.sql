@@ -1,18 +1,18 @@
 CREATE TABLE IF NOT EXISTS `cot_bbcode` (
-  `bbc_id` int NOT NULL auto_increment,
-  `bbc_name` varchar(100) collate utf8_unicode_ci NOT NULL,
-  `bbc_mode` enum('str','ereg','pcre','callback') collate utf8_unicode_ci NOT NULL default 'str',
-  `bbc_pattern` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `bbc_replacement` text collate utf8_unicode_ci NOT NULL,
-  `bbc_container` tinyint NOT NULL default '1',
-  `bbc_enabled` tinyint NOT NULL default '1',
-  `bbc_priority` tinyint unsigned NOT NULL default '128',
-  `bbc_plug` varchar(100) collate utf8_unicode_ci NOT NULL default '',
-  `bbc_postrender` tinyint NOT NULL default '0',
+  `bbc_id` smallint UNSIGNED NOT NULL auto_increment,
+  `bbc_name` varchar(100) NOT NULL,
+  `bbc_mode` enum('str','ereg','pcre','callback') NOT NULL DEFAULT 'str',
+  `bbc_pattern` varchar(255) NOT NULL,
+  `bbc_replacement` text NOT NULL,
+  `bbc_container` tinyint UNSIGNED NOT NULL DEFAULT '1',
+  `bbc_enabled` tinyint UNSIGNED NOT NULL DEFAULT '1',
+  `bbc_priority` tinyint UNSIGNED NOT NULL DEFAULT '128',
+  `bbc_plug` varchar(100) NOT NULL DEFAULT '',
+  `bbc_postrender` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY  (`bbc_id`),
   KEY `bbc_enabled` (`bbc_enabled`),
   KEY `bbc_priority` (`bbc_priority`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+);
 
 DELETE FROM `cot_bbcode` WHERE `bbc_name` IN ('b', 'i', 'u', 's', 'center', 'left', 'right', 'justify', 'pre', 'nbsp',
   'email', 'quote', 'color', 'img', 'url', 'code', 'more', 'size', 'h', 'list', 'ol', 'li', 'li_short', 'table',

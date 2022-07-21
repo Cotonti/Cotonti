@@ -35,7 +35,7 @@ if ($a == 'del') {
 } elseif ($a == 'val') {
 	cot::$db->update(cot::$db->contact, array('contact_val' => 1), "contact_id = $id");
 	cot_message('Updated');
-
+    
 } elseif ($a == 'unval') {
 	cot::$db->update(cot::$db->contact, array('contact_val' => 0), "contact_id = $id");
 	cot_message('Updated');
