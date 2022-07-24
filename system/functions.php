@@ -38,7 +38,7 @@ $R = array();
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.19';
+$cfg['version'] = '0.9.20';
 $cfg['dbversion'] = '0.9.19';   // Not used anywhere
 
 // Set default file permissions if not present in config
