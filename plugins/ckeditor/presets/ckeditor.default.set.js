@@ -1,23 +1,32 @@
-/*
+/**
  * Default CKEditor preset and connector
  */
 
-var ckeditorClasses = Array();
-ckeditorClasses['editor'] = 'Full'; // Full editor
-ckeditorClasses['medieditor'] = 'Medium'; // Medium editor
-ckeditorClasses['minieditor'] = 'Basic'; // Mini editor
+var ckeditorClasses = {
+	// Full editor
+	'editor': 'Full',
+
+	// Medium editor
+	'medieditor': 'Medium',
+
+	// Mini editor
+	'minieditor': 'Basic',
+};
 
 function ckeditorReplace() {
-	var textareas = document.getElementsByTagName('textarea');
-	for (var i = 0; i < textareas.length; i++) {
-		var classStr = textareas[i].getAttribute('class');
-		if (classStr) {
-			var classes = classStr.split(" ");
-			for (var k = 0; k < classes.length; k++) {
-				textareaClass = classes[k];
+	let textareas = document.getElementsByTagName('textarea');
+	for (let i in textareas) {
+		let classList = textareas[i].classList;
+		if (classList !== undefined && classList.length > 0) {
+			for (let key in classList) {
+				let textareaClass = classList[key];
 				if (ckeditorClasses[textareaClass] !== undefined) {
-					var textareasStyle = getComputedStyle(textareas[i], null) || textareas[i].currentStyle;
-					CKEDITOR.replace(textareas[i], {height:textareasStyle.height, width:'100%', toolbar: ckeditorClasses[textareaClass]});
+					let textareasStyle = getComputedStyle(textareas[i], null) || textareas[i].currentStyle;
+					CKEDITOR.replace(textareas[i], {
+						height: textareasStyle.height,
+						width:'100%',
+						toolbar: ckeditorClasses[textareaClass]
+					});
 				}
 			}
 		}

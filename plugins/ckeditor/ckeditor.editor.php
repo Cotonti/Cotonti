@@ -45,41 +45,48 @@ if (!function_exists('ckeditor_max_timestamp'))
 }
 
 global $ckeditor_timestamp;
-if (!$ckeditor_timestamp)
-    $ckeditor_timestamp = ckeditor_max_timestamp($cfg['plugins_dir'] . '/ckeditor/lib');
+
+if (!$ckeditor_timestamp) {
+    $ckeditor_timestamp = ckeditor_max_timestamp(cot::$cfg['plugins_dir'] . '/ckeditor/lib');
+}
 
 // Main CKEditor file
 Resources::linkFileFooter(cot::$cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js?'.$ckeditor_timestamp, 'js');
 
 // Load preset and connector
-if (cot::$usr['id'] > 0)
-{
+if (cot::$usr['id'] > 0) {
     $preset_name = 'group_' . cot::$usr['maingrp'];
-    if (!file_exists(cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js"))
-    {
+    if (!file_exists(cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js")) {
         $preset_name = 'default';
     }
-}
-else
-{
+} else {
     $preset_name = file_exists(cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.group_1.set.js") ? 'group_1'
         : 'default';
 }
-Resources::linkFileFooter(cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js?".$ckeditor_timestamp);
+Resources::linkFileFooter(cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js?" .
+    $ckeditor_timestamp);
+
+// Default ckeditor content styles
+Resources::linkFileFooter(cot::$cfg['plugins_dir'] . "/ckeditor/lib/styles.js?".$ckeditor_timestamp);
+
+$ckeditor_css_connector = '';
 
 if (!empty($ckeditor_css_to_load) && is_array($ckeditor_css_to_load)) {
 	foreach ($ckeditor_css_to_load as $key => $css_file) {
 		if (!file_exists($css_file)) unset($ckeditor_css_to_load[$key]);
 	}
 } else {
-    // Default ckeditor content styles
-    $ckeditor_css_connector = "CKEDITOR.config.contentsCss = ['".cot::$cfg['plugins_dir']."/ckeditor/lib/styles.js?'];";
-    $ckeditor_css_to_load = array(
-        cot::$cfg['plugins_dir'].'/ckeditor/lib/styles.js?'.$ckeditor_timestamp,
+    $ckeditor_css_to_load = [
         cot::$cfg['plugins_dir'].'/ckeditor/presets/contents.default.css?'.$ckeditor_timestamp
+    ];
+}
+if (sizeof($ckeditor_css_to_load)) {
+    $ckeditor_css_connector = "CKEDITOR.config.contentsCss = ['".implode("','", $ckeditor_css_to_load)."'];";
+}
 
+if ($ckeditor_css_connector !== '') {
+    Resources::embedFooter(
+        "CKEDITOR.timestamp = $ckeditor_timestamp; CKEDITOR.config.baseHref='" . cot:: $cfg['mainurl']. "/'; " .
+        $ckeditor_css_connector
     );
 }
-if (sizeof($ckeditor_css_to_load)) $ckeditor_css_connector = "CKEDITOR.config.contentsCss = ['".implode("','", $ckeditor_css_to_load)."'];";
-
-Resources::embedFooter("CKEDITOR.timestamp = $ckeditor_timestamp; CKEDITOR.config.baseHref='{$cfg['mainurl']}/'; ".$ckeditor_css_connector);
