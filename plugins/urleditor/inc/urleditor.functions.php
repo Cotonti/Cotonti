@@ -53,84 +53,66 @@ function cot_apply_rwr()
 		}
 
 		$filtered = cot_import($path[0], 'D', 'ALP');
-		if ($count == 1)
-		{
-			if (isset(cot::$structure['page'][$filtered]) || $filtered == 'unvalidated' || $filtered == 'saved_drafts')
-			{
+		if ($count == 1) {
+			if (isset(cot::$structure['page'][$filtered]) || $filtered == 'unvalidated' || $filtered == 'saved_drafts') {
 				// Is a category
 				$_GET['e'] = 'page';
 				$_GET['c'] = $filtered;
-			}
-			elseif (file_exists(cot::$cfg['modules_dir'] . '/' . $filtered) || file_exists(cot::$cfg['plugins_dir'] . '/' . $filtered))
-			{
+
+			} elseif (file_exists(cot::$cfg['modules_dir'] . '/' . $filtered) || file_exists(cot::$cfg['plugins_dir'] . '/' . $filtered)) {
 				// Is an extension
 				$_GET['e'] = $filtered;
-			}
-			elseif (in_array($filtered, array('register', 'profile', 'passrecover')))
-			{
+
+			} elseif (in_array($filtered, array('register', 'profile', 'passrecover'))) {
 				// Special users shortcuts
 				$_GET['e'] = 'users';
 				$_GET['m'] = $filtered;
-			}
-			else
-			{
+
+            } else {
 				// Maybe it is a system page, if not 404 will be given
 				$_GET['e'] = 'page';
 				$_GET['c'] = 'system';
 				$id = cot_import($path[0], 'D', 'INT');
-				if ($id)
-				{
+				if ($id) {
 					$_GET['id'] = $id;
-				}
-				else
-				{
+
+				} else {
 					$alias = preg_replace('`[+/?%#&]`', '', cot_import($path[0], 'D', 'TXT'));
 					$_GET['al'] = $alias;
 				}
 			}
-		}
-		else
-		{
+		} else {
 			// Special shortcuts
-			if ($filtered == 'users' && $count == 2 && !isset($_GET['m']))
-			{
+			if ($filtered == 'users' && $count == 2 && !isset($_GET['m'])) {
 				// User profiles
 				$_GET['e'] = 'users';
 				$_GET['m'] = 'details';
 				$_GET['u'] = $path[1];
 				return;
-			}
-			elseif ($filtered == 'tags')
-			{
+
+			} elseif ($filtered == 'tags') {
 				// Tags
 				$_GET['e'] = 'tags';
-				if ($count == 3)
-				{
+				if ($count == 3) {
 					$_GET['a'] = $path[1];
 					$_GET['t'] = $path[2];
-				}
-				else
-				{
+				} else {
 					$_GET['a'] = 'pages';
 					$_GET['t'] = $path[1];
 				}
 				return;
 
-			}
-			elseif ($filtered == 'rss')
-			{
+			} elseif ($filtered == 'rss') {
 				// RSS
 				$_GET['e'] = 'rss';
 				$_GET['m'] = $path[1];
-				if ($count == 3)
-				{
+				if ($count == 3) {
 					is_numeric($path[2]) ? $_GET['id'] = $path[2] : $_GET['c'] = $path[2];
-				}
-				else
-				{
+				} else {
 					$_GET['c'] = $path[1];
 				}
 				return;
+
 			}
 			$last = $count - 1;
 			$ext = (isset(cot::$structure['page'][$filtered])) ? 'page' : $filtered;
@@ -139,10 +121,11 @@ function cot_apply_rwr()
 			if (isset(cot::$structure[$ext][$path[$last]]) && !in_array($path[$last], $cat_chain)) {
 				// Is a category
 				$_GET['c'] = $path[$last];
-				if ($rwr !== cot_url($ext, array('c' => $_GET['c']))) {
+				if (trim($rwr, '/') !== trim(cot_url($ext, array('c' => $_GET['c'])), '/')) {
 					cot_url_usertheme_files();
 					cot_die_message(404, true);
 				}
+
 			} else {
 				// Is a page/item
 				if ($ext == 'page' || $count > 2) {
@@ -152,7 +135,9 @@ function cot_apply_rwr()
 					$_GET['id'] = $path[$last];
 				} else {
 					// Can be a cat or al, let the module decide
-					if ($count == 2 && (!isset($_GET['c']) || !isset(cot::$structure[$ext][$_GET['c']])))  $_GET['c'] = $path[$last];
+					if ($count == 2 && (!isset($_GET['c']) || !isset(cot::$structure[$ext][$_GET['c']]))) {
+                        $_GET['c'] = $path[$last];
+                    }
 
 					$_GET['al'] = $path[$last];
 				}

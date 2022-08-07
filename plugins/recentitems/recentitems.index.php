@@ -19,27 +19,30 @@ defined('COT_CODE') or die('Wrong URL');
 
 $enforums = $t->hasTag('RECENT_FORUMS');
 $enpages = $t->hasTag('RECENT_PAGES');
-if ($enpages || $enforums)
-{
+
+if ($enpages || $enforums) {
 	require_once cot_incfile('recentitems', 'plug');
 
-	if ($enpages && $cfg['plugin']['recentitems']['recentpages'] && cot_module_active('page'))
-	{
+	if ($enpages && cot::$cfg['plugin']['recentitems']['recentpages'] && cot_module_active('page')) {
 		require_once cot_incfile('page', 'module');
 
 		// Try to load from cache for guests
-		if ($usr['id'] == 0 && $cache && (int) $cfg['plugin']['recentitems']['cache_ttl'] > 0)
-		{
+		if (cot::$usr['id'] == 0 && cot::$cache && (int) cot::$cfg['plugin']['recentitems']['cache_ttl'] > 0) {
 			$ri_cache_id = "$theme.$lang.pages";
-			$ri_html = $cache->disk->get($ri_cache_id, 'recentitems', (int)$cfg['plugin']['recentitems']['cache_ttl']);
+			$ri_html = cot::$cache->disk->get($ri_cache_id, 'recentitems', (int)$cfg['plugin']['recentitems']['cache_ttl']);
 		}
 
-		if (empty($ri_html))
-		{
-			$ri_html = cot_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
-			if ($usr['id'] == 0 && $cache && (int)$cfg['plugin']['recentitems']['cache_ttl'] > 0)
-			{
-				$cache->disk->store($ri_cache_id, $ri_html, 'recentitems');
+		if (empty($ri_html)) {
+			$ri_html = cot_build_recentpages(
+                'recentitems.pages.index',
+                'recent',
+                cot::$cfg['plugin']['recentitems']['maxpages'],
+                0,
+                cot::$cfg['plugin']['recentitems']['recentpagestitle'],
+                cot::$cfg['plugin']['recentitems']['recentpagestext'], cot::$cfg['plugin']['recentitems']['rightscan']
+            );
+			if (cot::$usr['id'] == 0 && cot::$cache && (int) cot::$cfg['plugin']['recentitems']['cache_ttl'] > 0) {
+                cot::$cache->disk->store($ri_cache_id, $ri_html, 'recentitems');
 			}
 		}
 
@@ -47,8 +50,7 @@ if ($enpages || $enforums)
 		unset($ri_html);
 	}
 
-	if ($enforums && $cfg['plugin']['recentitems']['recentforums'] && cot_module_active('forums'))
-	{
+	if ($enforums && cot::$cfg['plugin']['recentitems']['recentforums'] && cot_module_active('forums')) {
 		require_once cot_incfile('forums', 'module');
 
 		// Try to load from cache for guests

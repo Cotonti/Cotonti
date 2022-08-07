@@ -477,6 +477,9 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 	{
 		case 'select':
 		case 'radio':
+            if ($value === null || $value === '') {
+                return '';
+            }
 			$value = htmlspecialchars($value);
 			return (!empty($L[$extrafield['field_name'] . '_' . $value])) ? $L[$extrafield['field_name'] . '_' . $value] : $value;
 			break;
@@ -493,6 +496,9 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 			break;
 
 		case 'checklistbox':
+            if ($value === null || $value === '') {
+                return '';
+            }
 			$value = htmlspecialchars($value);
 			$value = trim(str_replace(array(' , ', ', ', ' ,'), ',', $value));
 			$value = explode(',', $value);
@@ -528,7 +534,9 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
 		case 'textarea':
 		case 'range':
 		default:
-			$value = (is_null($value)) ? '' : $value;
+            if ($value === null || $value === '') {
+                return '';
+            }
 			$value = cot_parse($value, ($extrafield['field_parse'] == 'Text') ? false : true, $parser);
 			return $value;
 			break;
@@ -623,29 +631,28 @@ function cot_default_html_construction($type)
  *
  * @global CotDB $db
  */
-function cot_extrafield_add($location, $name, $type, $html='', $variants='', $default='', $required=false, $parse='HTML',
-                            $description='', $params = '', $enabled = 1, $noalter = false, $customtype = '')
+function cot_extrafield_add($location, $name, $type, $html = '', $variants = '', $default = '', $required = false,
+                $parse='HTML', $description='', $params = '', $enabled = 1, $noalter = false, $customtype = '')
 {
 	global $db, $db_extra_fields;
 
 	$checkname = cot_import($name, 'D', 'ALP');
 	$checkname = str_replace(array('-', '.'), array('', ''), $checkname);
-	if($checkname != $name)
-	{
+	if($checkname != $name) {
 		return false;
 	}
 
-	if ( $db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
-		($db->query("SHOW COLUMNS FROM $location WHERE SUBSTR(Field, INSTR(Field, '_') + 1) = '$name'")->rowCount() > 0 && !$noalter))
-	{
+	if (
+        cot::$db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
+		(cot::$db->query("SHOW COLUMNS FROM $location WHERE SUBSTR(Field, INSTR(Field, '_') + 1) = '$name'")->rowCount() > 0 && !$noalter)
+    ) {
 		// No adding - fields already exist // Check table cot_$sql_table - if field with same name exists - exit.
 		return false;
 	}
 
-	$fieldsres = $db->query("SHOW COLUMNS FROM $location");
+	$fieldsres = cot::$db->query("SHOW COLUMNS FROM $location");
     $prefixFound = false;
-	while ($fieldrow = $fieldsres->fetch())
-	{
+	while ($fieldrow = $fieldsres->fetch()) {
 		$column = $fieldrow['Field'];
 		// get column prefix in this table
 		if(!$prefixFound) {
@@ -656,8 +663,7 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
         }
 
 		preg_match("#.*?_$name$#", $column, $match);
-		if (isset($match[1]) && $match[1] != "" && !$noalter)
-		{
+		if (isset($match[1]) && $match[1] != "" && !$noalter) {
 			return false; // No adding - fields already exist
 		}
 	}
@@ -677,43 +683,49 @@ function cot_extrafield_add($location, $name, $type, $html='', $variants='', $de
 	$extf['field_description'] = is_null($description) ? '' : $description;
 
 	$step1 = $db->insert($db_extra_fields, $extf) == 1;
-	if ($noalter)
-	{
+	if ($noalter) {
 		return $step1;
 	}
-	switch ($type)
-	{
+	switch ($type) {
 		case 'select':
 		case 'radio':
 		case 'range':
 		case 'file':
-		case 'input': $sqltype = "VARCHAR(255) DEFAULT ''";
+		case 'input':
+            $sqltype = "VARCHAR(255) DEFAULT ''";
 			break;
-		case 'inputint': $sqltype = "int(11) DEFAULT '0'";
+		case 'inputint':
+            $sqltype = "int DEFAULT '0'";
 			break;
-		case 'currency': $sqltype = "DOUBLE(13,2) DEFAULT '0'";
+		case 'currency':
+            $sqltype = "DOUBLE(13,2) DEFAULT '0'";
 			break;
-		case 'double': $sqltype = "DOUBLE DEFAULT '0'";
+		case 'double':
+            $sqltype = "DOUBLE DEFAULT '0'";
 			break;
 		case 'checklistbox':
-		case 'textarea': $sqltype = "TEXT";
+		case 'textarea':
+            $sqltype = "TEXT";
 			break;
-		case 'checkbox': $sqltype = 'TINYINT(1) UNSIGNED'; //'BOOL';
+		case 'checkbox':
+            $sqltype = 'TINYINT UNSIGNED'; //'BOOL';
 			break;
-		case 'datetime': $sqltype = "int(11) DEFAULT '0'";
+		case 'datetime':
+            $sqltype = "int DEFAULT '0'";
 			break;
-		case 'country': $sqltype = "CHAR(2)";
+		case 'country':
+            $sqltype = "CHAR(2)";
 			break;
-		case 'filesize': $sqltype = "int(11) NOT NULL";
+		case 'filesize':
+            $sqltype = "int NOT NULL";
 			break;
 	}
-	if(!empty($customtype))
-	{
+	if(!empty($customtype)) {
 		$sqltype = $customtype;
 	}
     $fieldName = $name;
     if($column_prefix != '') $fieldName = $column_prefix.'_'.$name;
-	$step2 = $db->query("ALTER TABLE $location ADD $fieldName $sqltype ");
+	$step2 = cot::$db->query("ALTER TABLE $location ADD $fieldName $sqltype ");
 
 	return $step1 && $step2;
 }

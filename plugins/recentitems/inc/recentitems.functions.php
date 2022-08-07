@@ -12,10 +12,9 @@ defined('COT_CODE') or die("Wrong URL.");
 require_once cot_incfile('extrafields');
 require_once cot_langfile('recentitems', 'plug');
 
-function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $rightprescan = true)
-{
-	global $db, $L, $cfg, $db_forum_topics, $theme, $usr, $sys, $R, $structure;
-	global $totalrecent;
+function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $rightprescan = true) {
+	global $db, $L, $cfg, $db_forum_topics, $theme, $usr, $sys, $R, $structure, $totalrecent;
+
 	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
 	if ($rightprescan)
@@ -23,21 +22,19 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		$catsub = cot_structure_children('forums', '', true, true, $rightprescan);
 		$incat = "AND ft_cat IN ('" . implode("','", $catsub) . "')";
 	}
-	/* === Hook === */
-	foreach (cot_getextplugins('recentitems.recentforums.first') as $pl)
-	{
+
+    /* === Hook === */
+	foreach (cot_getextplugins('recentitems.recentforums.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
-	if ($mode == 'recent')
-	{
+
+	if ($mode == 'recent') {
 		$sql = $db->query("SELECT * FROM $db_forum_topics
 			WHERE (ft_movedto IS NULL OR ft_movedto = '') AND ft_mode=0 " . $incat . "
 			ORDER by ft_updated DESC LIMIT $maxperpage");
 		$totalrecent['topics'] = $maxperpage;
-	}
-	else
-	{
+	} else {
 		$where = "WHERE ft_updated >= $mode " . $incat;
 		$totalrecent['topics'] = $db->query("SELECT COUNT(*) FROM $db_forum_topics " . $where)->fetchColumn();
 		$sql = $db->query("SELECT * FROM $db_forum_topics " . $where . " ORDER by ft_updated desc LIMIT $d, " . $maxperpage);
@@ -161,90 +158,93 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 	return ($d == 0 || $ft_num > 0) ? $recentitems->text('MAIN') : '';
 }
 
+/**
+ * @param string $template
+ * @param string $mode
+ * @param int $maxperpage
+ * @param int $d
+ * @param int $titlelength
+ * @param int $textlength
+ * @param bool $rightprescan
+ * @param string $cat
+ * @return string
+ */
 function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $textlength = 0, $rightprescan = true, $cat = '')
 {
-	global $db, $structure, $db_pages, $db_users, $sys, $cfg, $L, $cot_extrafields, $usr;
+	global $db_pages, $db_users;
+
 	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
 	// Load all cats and subcats in white list if set
-	if (!empty($cfg['plugin']['recentitems']['whitelist']))
-	{
+	if (!empty(cot::$cfg['plugin']['recentitems']['whitelist'])) {
 		$whitelist = array();
-		foreach (preg_split('#\r?\n#', $cfg['plugin']['recentitems']['whitelist']) as $c)
-		{
+		foreach (preg_split('#\r?\n#', cot::$cfg['plugin']['recentitems']['whitelist']) as $c) {
 			$whitelist = array_merge($whitelist, cot_structure_children('page', $c, true, true, $rightprescan));
 		}
-	}
-	else
-	{
+	} else {
 		$whitelist = false;
 	}
 
 	// Load all cats and subcats in black list if set
-	if (!empty($cfg['plugin']['recentitems']['blacklist']))
-	{
+	if (!empty(cot::$cfg['plugin']['recentitems']['blacklist'])) {
 		$blacklist = array();
-		foreach (preg_split('#\r?\n#', $cfg['plugin']['recentitems']['blacklist']) as $c)
-		{
+		foreach (preg_split('#\r?\n#', cot::$cfg['plugin']['recentitems']['blacklist']) as $c) {
 			$blacklist = array_merge($blacklist, cot_structure_children('page', $c, true, true, $rightprescan));
 		}
-	}
-	else
-	{
+	} else {
 		$blacklist = false;
 	}
 
-	if ($rightprescan || $cat)
-	{
+	if ($rightprescan || $cat) {
 		// Get selected cats
 		$catsub = cot_structure_children('page', $cat, true, true, $rightprescan);
-		if ($whitelist)
-		{
+
+		if ($whitelist) {
 			// Must be both in selected and whitelist
 			$catsub = array_intersect($catsub, $whitelist);
-		}
-		elseif ($blacklist)
-		{
+
+        } elseif ($blacklist) {
 			// Must be in selected but not in blacklist
 			$catsub = array_diff($catsub, $blacklist);
 		}
-		$incat = "AND page_cat IN ('" . implode("','", $catsub) . "')";
-	}
-	elseif ($whitelist)
-	{
+
+        $incat = '';
+        if (!empty($catsub)) {
+            $incat = "AND page_cat IN ('" . implode("','", $catsub) . "')";
+        }
+	} elseif (!empty($whitelist)) {
 		// Only cats from white list
 		$incat = "AND page_cat IN ('" . implode("','", $whitelist) . "')";
-	}
-	elseif ($blacklist)
-	{
+
+	} elseif (!empty($blacklist)) {
 		// All cats but not in black list
 		$incat = "AND page_cat NOT IN ('" . implode("','", $blacklist) . "')";
 	}
 
-	if ($mode == 'recent')
-	{
-		$where = "WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat <> 'system' " . $incat;
-		$totalrecent['pages'] = $cfg['plugin']['recentitems']['maxpages'];
-	}
-	else
-	{
-		$where = "WHERE page_date >= $mode AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_state=0 AND page_cat <> 'system' " . $incat;
-		$totalrecent['pages'] = $db->query("SELECT COUNT(*) FROM $db_pages " . $where)->fetchColumn();
+	if ($mode == 'recent') {
+		$where = "WHERE page_state=0 AND page_begin <= " . cot::$sys['now'] .
+            " AND (page_expire = 0 OR page_expire > " . cot::$sys['now']. ") AND page_cat <> 'system' " . $incat;
+		$totalrecent['pages'] = cot::$cfg['plugin']['recentitems']['maxpages'];
+
+	} else {
+		$where = "WHERE page_date >= $mode AND page_begin <= " . cot::$sys['now'] .
+            " AND (page_expire = 0 OR page_expire > " .
+            cot::$sys['now'] . ") AND page_state=0 AND page_cat <> 'system' " . $incat;
+		$totalrecent['pages'] = cot::$db->query("SELECT COUNT(*) FROM $db_pages " . $where)->fetchColumn();
 	}
 
 	$join_columns = '';
 	$join_tables = '';
 
 	/* === Hook === */
-	foreach (cot_getextplugins('recentitems.recentpages.first') as $pl)
-	{
+	foreach (cot_getextplugins('recentitems.recentpages.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	$sql = $db->query("SELECT p.*, u.* $join_columns
+	$sql = cot::$db->query("SELECT p.*, u.* $join_columns
 		FROM $db_pages AS p
-			LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		$join_tables
 		$where ORDER by page_date desc LIMIT $d, $maxperpage");
 
@@ -253,11 +253,9 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	/* === Hook - Part1 === */
 	$extp = cot_getextplugins('recentitems.recentpages.tags');
 	/* ===== */
-	foreach ($sql->fetchAll() as $pag)
-	{
+	foreach ($sql->fetchAll() as $pag) {
 		$jj++;
-		if ((int)$titlelength > 0 && mb_strlen($pag['page_title']) > $titlelength)
-		{
+		if ((int) $titlelength > 0 && mb_strlen($pag['page_title']) > $titlelength) {
 			$pag['page_title'] = (cot_string_truncate($pag['page_title'], $titlelength, false)) . "...";
 		}
 		$recentitems->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $textlength));
@@ -270,8 +268,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		$recentitems->assign(cot_generate_usertags($pag, 'PAGE_ROW_OWNER_'));
 
 		/* === Hook - Part2 === */
-		foreach ($extp as $pl)
-		{
+		foreach ($extp as $pl) {
 			include $pl;
 		}
 		/* ===== */
@@ -279,11 +276,11 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		$recentitems->parse('MAIN.PAGE_ROW');
 	}
 
-	if ($d == 0 && $jj == 0)
-	{
+	if ($d == 0 && $jj == 0) {
 		$recentitems->parse('MAIN.NO_PAGES_FOUND');
 	}
 
 	$recentitems->parse('MAIN');
+
 	return ($d == 0 || $jj > 0) ? $recentitems->text('MAIN') : '';
 }

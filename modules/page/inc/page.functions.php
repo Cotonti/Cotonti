@@ -157,8 +157,8 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			$page_data['page_expire']
 		);
 
-        $haveFile = $L['No'];
-        $page_data['page_file'] = (int)$page_data['page_file'];
+        $haveFile = cot::$L['No'];
+        $page_data['page_file'] = (int) $page_data['page_file'];
         if($page_data['page_file'] == 1) {
             $haveFile = cot::$L['Yes'];
         } elseif ($page_data['page_file'] == 2) {
@@ -184,19 +184,28 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			'CATTITLE' => $catTitle,
 			'CATPATH' => $catpath,
 			'CATPATH_SHORT' => cot_rc_link($cat_url, $catTitle),
-			'CATDESC' => isset($structure['page'][$page_data['page_cat']]['desc']) ? htmlspecialchars($structure['page'][$page_data['page_cat']]['desc']) : '',
-			'CATICON' => isset($structure['page'][$page_data['page_cat']]['icon']) ? $structure['page'][$page_data['page_cat']]['icon'] : '',
-			'KEYWORDS' => htmlspecialchars($page_data['page_keywords']),
-			'DESC' => htmlspecialchars($page_data['page_desc']),
+			'CATDESC' => (isset($structure['page'][$page_data['page_cat']]['desc'])
+                && $structure['page'][$page_data['page_cat']]['desc'] != '') ?
+                htmlspecialchars($structure['page'][$page_data['page_cat']]['desc']) : '',
+			'CATICON' => isset($structure['page'][$page_data['page_cat']]['icon']) ?
+                $structure['page'][$page_data['page_cat']]['icon'] : '',
+			'KEYWORDS' => (isset($page_data['page_keywords']) && $page_data['page_keywords'] != '') ?
+                htmlspecialchars($page_data['page_keywords']) : '',
+			'DESC' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
+                htmlspecialchars($page_data['page_desc']) : '',
 			'TEXT' => $text,
 			'TEXT_CUT' => $text_cut,
 			'TEXT_IS_CUT' => $cutted,
-			'DESC_OR_TEXT' => isset($page_data['page_desc']) ? htmlspecialchars($page_data['page_desc']) : $text,
-			'DESC_OR_TEXT_CUT' => isset($page_data['page_desc']) ? htmlspecialchars($page_data['page_desc']) : $text_cut,
+			'DESC_OR_TEXT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
+                htmlspecialchars($page_data['page_desc']) : $text,
+			'DESC_OR_TEXT_CUT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
+                htmlspecialchars($page_data['page_desc']) : $text_cut,
 			'MORE' => ($cutted) ? cot_rc('list_more', array('page_url' => $page_data['page_pageurl'])) : '',
-			'AUTHOR' => htmlspecialchars($page_data['page_author']),
+			'AUTHOR' => (isset($page_data['page_author']) && $page_data['page_author'] != '') ?
+                htmlspecialchars($page_data['page_author']) : '',
 			'OWNERID' => $page_data['page_ownerid'],
-			'OWNERNAME' => isset($page_data['user_name']) ? htmlspecialchars($page_data['user_name']) : '',
+			'OWNERNAME' => (isset($page_data['user_name']) && $page_data['user_name'] != '') ?
+                htmlspecialchars($page_data['user_name']) : '',
 			'DATE' => cot_date($date_format, $page_data['page_date']),
 			'BEGIN' => cot_date($date_format, $page_data['page_begin']),
 			'EXPIRE' => cot_date($date_format, $page_data['page_expire']),
@@ -206,7 +215,8 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			'EXPIRE_STAMP' => $page_data['page_expire'],
 			'UPDATED_STAMP' => $page_data['page_updated'],
 			'FILE' => $haveFile,
-			'FILE_URL' => empty($page_data['page_url']) ? '' : cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id'].'&a=dl'),
+			'FILE_URL' => empty($page_data['page_url']) ? '' :
+                cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id'].'&a=dl'),
 			'FILE_SIZE' => $page_data['page_size'] / 1024, // in KiB; deprecated but kept for compatibility
 			'FILE_SIZE_BYTES' => $page_data['page_size'],
 			'FILE_SIZE_READABLE' => cot_build_filesize($page_data['page_size'], 1),
@@ -216,20 +226,20 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			'FILE_NAME' => basename($page_data['page_url']),
 			'COUNT' => $page_data['page_count'],
 			'ADMIN' => $admin_rights ? cot_rc('list_row_admin', array('unvalidate_url' => $unvalidate_url, 'edit_url' => $edit_url)) : '',
-			'NOTAVAILABLE' => ($page_data['page_begin'] > $sys['now']) ? $L['page_notavailable'].cot_build_timegap($sys['now'], $pag['page_begin']) : ''
+			'NOTAVAILABLE' => ($page_data['page_begin'] > cot::$sys['now']) ?
+                cot::$L['page_notavailable'] . cot_build_timegap(cot::$sys['now'], $page_data['page_begin']) : ''
 		);
 
 		// Admin tags
-		if ($admin_rights)
-		{
+		if ($admin_rights) {
 			$validate_confirm_url = cot_confirm_url($validate_url, 'page', 'page_confirm_validate');
 			$unvalidate_confirm_url = cot_confirm_url($unvalidate_url, 'page', 'page_confirm_unvalidate');
 			$delete_confirm_url = cot_confirm_url($delete_url, 'page', 'page_confirm_delete');
-			$temp_array['ADMIN_EDIT'] = cot_rc_link($edit_url, $L['Edit']);
+			$temp_array['ADMIN_EDIT'] = cot_rc_link($edit_url, cot::$L['Edit']);
 			$temp_array['ADMIN_EDIT_URL'] = $edit_url;
 			$temp_array['ADMIN_UNVALIDATE'] = $page_data['page_state'] == 1 ?
-				cot_rc_link($validate_confirm_url, $L['Validate'], 'class="confirmLink"') :
-				cot_rc_link($unvalidate_confirm_url, $L['Putinvalidationqueue'], 'class="confirmLink"');
+				cot_rc_link($validate_confirm_url, cot::$L['Validate'], 'class="confirmLink"') :
+				cot_rc_link($unvalidate_confirm_url, cot::$L['Putinvalidationqueue'], 'class="confirmLink"');
 			$temp_array['ADMIN_UNVALIDATE_URL'] = $page_data['page_state'] == 1 ?
 				$validate_confirm_url : $unvalidate_confirm_url;
 			$temp_array['ADMIN_DELETE'] = cot_rc_link($delete_confirm_url, $L['Delete'], 'class="confirmLink"');

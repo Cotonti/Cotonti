@@ -15,16 +15,14 @@ Hooks=page.list.main
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($i18n_enabled && $i18n_notmain)
-{
+if ($i18n_enabled && $i18n_notmain) {
 	$cat_i18n = cot_i18n_get_cat($c, $i18n_locale);
 
-	if ($cat_i18n)
-	{
-		$out['desc'] = htmlspecialchars(strip_tags($cat_i18n['desc']));
-		$out['subtitle'] = $cat_i18n['title'];
+	if ($cat_i18n) {
+		cot::$out['desc'] = htmlspecialchars(strip_tags($cat_i18n['desc']));
+        cot::$out['subtitle'] = $cat_i18n['title'];
 
 		// Enable indexing
-		$sys['noindex'] = false;
+        cot::$sys['noindex'] = false;
 	}
 }

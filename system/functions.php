@@ -1204,32 +1204,24 @@ function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK',
  */
 function cot_setcookie($name, $value, $expire = '', $path='', $domain='', $secure = false, $httponly = true)
 {
-	global $cfg;
-
-	if (mb_strpos($domain, '.') === FALSE)
-	{
+	if (mb_strpos($domain, '.') === FALSE) {
 		// Some browsers don't support cookies for local domains
 		$domain = '';
 	}
 
-	$domain = (empty($domain)) ? $cfg['cookiedomain'] : $domain;
-	$path = (empty($path)) ? $cfg['cookiepath'] : $path;
-	$expire = (empty($expire)) ? time()+$cfg['cookielifetime'] : $expire;
+	$domain = (empty($domain)) ? cot::$cfg['cookiedomain'] : $domain;
+	$path = (empty($path)) ? cot::$cfg['cookiepath'] : $path;
+	$expire = (empty($expire)) ? time() + cot::$cfg['cookielifetime'] : $expire;
 
-	if ($domain != '' && $domain != 'localhost')
-	{
+	if ($domain != '' && $domain != 'localhost') {
 		// Make sure www. is stripped and leading dot is added for subdomain support on some browsers
-		if (mb_strtolower(mb_substr($domain, 0, 4)) == 'www.')
-		{
+		if (mb_strtolower(mb_substr($domain, 0, 4)) == 'www.') {
 			$domain = mb_substr($domain, 4);
 		}
-		if ($domain[0] != '.')
-		{
+		if ($domain[0] != '.') {
 			$domain = '.'.$domain;
 		}
-	}
-	else
-	{
+	} else {
 		$domain = false;
 	}
 
@@ -1429,41 +1421,41 @@ function cot_load_structure()
  * @param bool $userrights Check userrights
  * @param bool $sqlprep use $db->prep function
  * @return array
- * @global CotDB $db
  */
 function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = true, $userrights = true, $sqlprep = true)
 {
-	global $structure, $db;
+    if (empty($area) || empty(cot::$structure[$area])) {
+        return [];
+    }
 
 	$mtch = '';
 	$mtchlen = $mtchlvl = 0;
 
-	if ($cat != '')
-	{
-		$mtch = $structure[$area][$cat]['path'] . '.';
+	if ($cat != '' && isset(cot::$structure[$area][$cat])) {
+		$mtch = cot::$structure[$area][$cat]['path'] . '.';
 		$mtchlen = mb_strlen($mtch);
 		$mtchlvl = mb_substr_count($mtch, ".");
 	}
 
 	$catsub = array();
-	if ($cat != '' && $firstcat && (($userrights && cot_auth($area, $cat, 'R') || !$userrights)))
-	{
+	if ($cat != '' && $firstcat && (($userrights && cot_auth($area, $cat, 'R') || !$userrights))) {
 		$catsub[] = $cat;
 	}
 
-	foreach ($structure[$area] as $i => $x)
-	{
-		if (($cat == '' || mb_substr($x['path'], 0, $mtchlen) == $mtch) && (($userrights && cot_auth($area, $i, 'R') || !$userrights)))
-		{
+	foreach (cot::$structure[$area] as $i => $x) {
+		if (
+            ($cat == '' || mb_substr($x['path'], 0, $mtchlen) == $mtch) &&
+            (($userrights && cot_auth($area, $i, 'R') || !$userrights))
+        ) {
 			//$subcat = mb_substr($x['path'], $mtchlen + 1);
-			if ($allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl))
-			{
-				$i = ($sqlprep) ? $db->prep($i) : $i;
+			if ($allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl)) {
+				$i = ($sqlprep) ? cot::$db->prep($i) : $i;
 				$catsub[] = $i;
 			}
 		}
 	}
-	return($catsub);
+
+	return $catsub;
 }
 
 /**
@@ -3679,10 +3671,14 @@ function cot_tplfile($base, $type = 'module', $admin = null)
  */
 function cot_date($format, $timestamp = null, $usertimezone = true)
 {
-	global $lang, $L, $Ldt, $usr, $sys;
+	global $lang, $Ldt;
+
 	if (is_null($timestamp)) {
 		$timestamp = cot::$sys['now'];
 	}
+
+    $timestamp = (int) $timestamp;
+
 	if ($usertimezone) {
 		$timestamp += cot::$usr['timezone'] * 3600;
 	}

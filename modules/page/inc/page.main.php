@@ -102,39 +102,34 @@ if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && cot::$usr['au
 	echo cot_rc('page_code_redir');
 	exit;
 }
-if (!cot::$usr['isadmin'] || cot::$cfg['page']['count_admin'])
-{
+if (!cot::$usr['isadmin'] || cot::$cfg['page']['count_admin']) {
 	$pag['page_count']++;
 	$sql_page_update =  cot::$db->query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id=$id");
 }
 
-if ($pag['page_cat'] == 'system')
-{
-	$out['subtitle'] = empty($pag['page_metatitle']) ? $pag['page_title'] : $pag['page_metatitle'];
-}
-else
-{
+if ($pag['page_cat'] == 'system') {
+    cot::$out['subtitle'] = empty($pag['page_metatitle']) ? $pag['page_title'] : $pag['page_metatitle'];
+} else {
 	$title_params = array(
 		'TITLE' => empty($pag['page_metatitle']) ? $pag['page_title'] : $pag['page_metatitle'],
 		'CATEGORY' => $cat['title']
 	);
-	$out['subtitle'] = cot_title(cot::$cfg['page']['title_page'], $title_params);
+    cot::$out['subtitle'] = cot_title(cot::$cfg['page']['title_page'], $title_params);
 }
-$out['desc'] = empty($pag['page_metadesc']) ? strip_tags($pag['page_desc']) : strip_tags($pag['page_metadesc']);
-$out['keywords'] = strip_tags($pag['page_keywords']);
+cot::$out['desc'] = empty($pag['page_metadesc']) ? strip_tags($pag['page_desc']) : strip_tags($pag['page_metadesc']);
+cot::$out['keywords'] = !empty($pag['page_keywords']) ? strip_tags($pag['page_keywords']) : '';
 
 // Building the canonical URL
 $pageurl_params = array('c' => $pag['page_cat']);
 empty($al) ? $pageurl_params['id'] = $id : $pageurl_params['al'] = $al;
-if ($pg > 0)
-{
+if ($pg > 0) {
 	$pageurl_params['pg'] = $pg;
 }
-$out['canonical_uri'] = cot_url('page', $pageurl_params);
+cot::$out['canonical_uri'] = cot_url('page', $pageurl_params);
 
 $mskin = cot_tplfile(array('page', $cat['tpl']));
 
-$env['last_modified'] = $pag['page_updated'];
+cot::$env['last_modified'] = $pag['page_updated'];
 
 /* === Hook === */
 foreach (cot_getextplugins('page.main') as $pl)
