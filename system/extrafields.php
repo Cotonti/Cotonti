@@ -208,35 +208,40 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 		case 'double':
 			$extrafield['field_params'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_params']);
 			$import = cot_import($inputname, $source, 'NUM');
-			if (!is_null($import))
-			{
-				$import = floatval($import);
+			if (!is_null($import)) {
+				$import = (float) $import;
 			}
-                        
-                        list($min, $max) = explode(",",$extrafield['field_params'], 2);
-                        $min = (int) $min;
-                        $max = (int) $max;
-                        
-			if (!is_null($import) && !empty($extrafield['field_params']))
-			{
 
-				if ($import < $min || $import > $max)
-				{
-                    $errMsg = (isset($L['field_range_' . $extrafield['field_name']])) ?
-                        $L['field_range_' . $extrafield['field_name']] : $exfld_title.': '.$L['field_range'];
+            $min = $max = null;
+            if (!empty($extrafield['field_params'])) {
+                $param = explode("," , $extrafield['field_params'], 2);
+                if (isset($param[0])) {
+                    $min = (float) $param[0];
+                }
+                if (isset($param[1])) {
+                    $max = (float) $param[1];
+                }
+            }
+
+			if (!is_null($import) && !empty($extrafield['field_params'])) {
+				if (($min !== null && ($import < $min)) || ($max !== null && ($import > $max))) {
+                    $errMsg = (isset(cot::$L['field_range_' . $extrafield['field_name']])) ?
+                        cot::$L['field_range_' . $extrafield['field_name']] : $exfld_title . ': ' . cot::$L['field_range'];
                     cot_error($errMsg, $inputname);
 				}
 			}
                         
-                        if(is_null($import))
-                        {
-                            $import =  !empty($extrafield['field_default']) ? floatval($extrafield['field_default']) : floatval(0);
-                
-                            if(is_numeric($import) && !empty($extrafield['field_params'])){
-                                    if($import < $min)$import = $min;
-                                    if($import > $max)$import = $max;
-                            }
-                        }
+            if (is_null($import)) {
+                $import =  !empty($extrafield['field_default']) ? (float) $extrafield['field_default'] : 0;
+                if (!empty($extrafield['field_params'])) {
+                    if ($min !== null && ($import < $min)) {
+                        $import = $min;
+                    }
+                    if ($max !== null && ($import > $max)) {
+                        $import = $max;
+                    }
+                }
+            }
 			break;
 
 		case 'textarea':
