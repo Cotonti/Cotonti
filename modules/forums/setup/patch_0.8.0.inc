@@ -3,7 +3,7 @@
  * 0.8.0: sync forums structure
  */
 
-defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 global $db_structure, $db_forum_stats, $structure, $db_x, $db_forum_topics, $db_forum_posts;
 require_once cot_incfile('forums', 'module');

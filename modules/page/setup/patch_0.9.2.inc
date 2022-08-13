@@ -3,7 +3,7 @@
  * 0.9.2: add and fill page_markup field
  */
 
-defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('page', 'module');
 
@@ -36,4 +36,3 @@ else
 	}
 }
 
-?>

@@ -9,7 +9,7 @@
  * Replace table engine MyISAM to InnoDB
  * Some DB tables updates
  */
-defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 global $db_bbcode;
 
