@@ -196,12 +196,10 @@ class XTemplate
 	 */
 	public function getTags()
 	{
-		if (is_null($this->tags))
-		{
+		if (is_null($this->tags)) {
 			// Collect all tags
 			$this->tags = array();
-			foreach ($this->blocks as $block)
-			{
+			foreach ($this->blocks as $block) {
 				$this->tags = array_merge($this->tags, $block->getTags());
 			}
 		}
@@ -741,7 +739,7 @@ class Cotpl_block
 				$log_pos = mb_strpos($code, $mt[0]);
 				$log_len = mb_strlen($mt[0]);
 				$log_mt = $mt;
-							// Extract preceeding plain data chunk
+				// Extract preceeding plain data chunk
 				if ($log_pos > 0)
 				{
 					$chunk = mb_substr($code, 0, $log_pos);
@@ -1720,6 +1718,7 @@ class Cotpl_var
 					array_walk($func['args'], 'cotpl_callback_replace', $val);
 					$f = $func['name'];
 					$a = $func['args'];
+
 					if (!function_exists($f)) {
 						return $this->__toString();
 					}

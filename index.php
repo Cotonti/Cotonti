@@ -174,11 +174,9 @@ else
 unset($ext);
 
 // Load the requested extension
-if ($env['type'] == 'plug')
-{
-	require_once $cfg['system_dir'] . '/plugin.php';
-}
-else
-{
-	require_once $cfg['modules_dir'] . '/' . $env['ext'] . '/' . $env['ext'] . '.php';
+if (cot::$env['type'] == 'plug') {
+	require_once cot::$cfg['system_dir'] . '/plugin.php';
+
+} else {
+	require_once cot::$cfg['modules_dir'] . '/' . cot::$env['ext'] . '/' . cot::$env['ext'] . '.php';
 }

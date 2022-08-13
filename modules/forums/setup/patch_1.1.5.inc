@@ -13,7 +13,7 @@ defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
 
 global $db_users, $db_forum_topics, $db_forum_posts, $db_forum_stats;
 
-if (empty($db_forum_topics)) {
+if (empty($db_forum_topics) || empty($db_forum_topics) || empty($db_forum_stats)) {
     // Registering tables
     cot::$db->registerTable('forum_posts');
     cot::$db->registerTable('forum_topics');
@@ -35,11 +35,34 @@ if (
 
 $dbres = cot::$db->query("SHOW COLUMNS FROM `$db_users` WHERE `Field` = 'user_postcount'");
 if ($dbres->rowCount() > 0) {
-    cot::$db->query("ALTER TABLE `$db_users` MODIFY `user_postcount` INT UNSIGNED NOT NULL DEFAULT 0");
+    cot::$db->query("UPDATE `{$db_users}` SET `user_postcount` = 0 WHERE `user_postcount` IS NULL;
+    ALTER TABLE `$db_users` MODIFY `user_postcount` INT UNSIGNED NOT NULL DEFAULT 0");
 }
 
-cot::$db->query("
-    UPDATE `{$db_forum_posts}` SET `fp_text`='' WHERE `fp_text` IS NULL;
+
+
+if (cot::$db->indexExists($db_forum_posts, 'fp_topicid')) {
+    cot::$db->query("ALTER TABLE `{$db_forum_posts}` DROP INDEX `fp_topicid`");
+}
+if (cot::$db->indexExists($db_forum_posts, 'fp_updated')) {
+    cot::$db->query("ALTER TABLE `{$db_forum_posts}` DROP INDEX `fp_updated`");
+}
+if (cot::$db->indexExists($db_forum_posts, 'fp_updated_2')) {
+    cot::$db->query("ALTER TABLE `{$db_forum_posts}` DROP INDEX `fp_updated_2`");
+}
+if (cot::$db->indexExists($db_forum_posts, 'fp_topicid_id_idx')) {
+    cot::$db->query("ALTER TABLE `{$db_forum_posts}` DROP INDEX `fp_topicid_id_idx`");
+}
+if (cot::$db->indexExists($db_forum_posts, 'fp_topicid_idx')) {
+    cot::$db->query("ALTER TABLE `{$db_forum_posts}` DROP INDEX `fp_topicid_idx`");
+}
+if (cot::$db->indexExists($db_forum_posts, 'fp_sectionid')) {
+    cot::$db->query("ALTER TABLE `{$db_forum_posts}` DROP INDEX `fp_sectionid`");
+}
+if (cot::$db->indexExists($db_forum_posts, 'fp_cat')) {
+    cot::$db->query("ALTER TABLE `{$db_forum_posts}` DROP INDEX `fp_cat`");
+}
+cot::$db->query("UPDATE `{$db_forum_posts}` SET `fp_text`='' WHERE `fp_text` IS NULL;
     UPDATE `{$db_forum_posts}` SET `fp_posterip`='' WHERE `fp_posterip` IS NULL;
     ALTER TABLE `{$db_forum_posts}` 
         MODIFY `fp_id` int UNSIGNED NOT NULL auto_increment,
@@ -48,14 +71,23 @@ cot::$db->query("
         MODIFY `fp_posterid` int UNSIGNED NOT NULL,
         MODIFY `fp_creation` int UNSIGNED NOT NULL DEFAULT '0',
         MODIFY `fp_updated` int UNSIGNED NOT NULL DEFAULT '0',
-        MODIFY `fp_text` text NOT NULL,
+        MODIFY `fp_text` mediumtext NOT NULL,
         MODIFY `fp_posterip` varchar(15) NOT NULL DEFAULT '',
         ENGINE=InnoDB;");
 if ($changeCollation) {
     cot::$db->query("ALTER TABLE `{$db_forum_posts}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+        CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
+        DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
 }
+cot::$db->query("ALTER TABLE `{$db_forum_posts}`
+    ADD UNIQUE `fp_topicid_id_idx` (`fp_topicid`,`fp_id`), 
+    ADD INDEX `fp_created_idx` (`fp_creation`),
+    ADD INDEX `fp_updated_idx` (`fp_updated`),
+    ADD INDEX `fp_topicid_idx` (`fp_topicid`),
+    ADD INDEX `fp_cat_idx` (`fp_cat`);");
+
+
+
 
 cot::$db->query("ALTER TABLE `{$db_forum_stats}` 
     MODIFY `fs_cat` varchar(255) NOT NULL,
@@ -72,8 +104,11 @@ if ($changeCollation) {
     DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
 }
 
-cot::$db->query("
-    UPDATE `{$db_forum_topics}` SET `ft_tag`='' WHERE `ft_tag` IS NULL;
+
+if (cot::$db->indexExists($db_forum_topics, 'ft_sectionid')) {
+    cot::$db->query("ALTER TABLE `{$db_forum_topics}` DROP INDEX `ft_sectionid`");
+}
+cot::$db->query("UPDATE `{$db_forum_topics}` SET `ft_tag`='' WHERE `ft_tag` IS NULL;
     ALTER TABLE `{$db_forum_topics}` 
         MODIFY `ft_id` mediumint UNSIGNED NOT NULL auto_increment,
         MODIFY `ft_mode` tinyint UNSIGNED NOT NULL DEFAULT '0',

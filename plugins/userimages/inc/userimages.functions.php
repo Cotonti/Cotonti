@@ -129,26 +129,28 @@ function cot_userimages_config_remove($code, $dropcolumn=true)
  * @param string $code Userimage code
  * @return string
  */
-function cot_userimages_build($src, $code='')
+function cot_userimages_build($src, $code = '')
 {
-	global $R, $L;
 	require_once cot_incfile('userimages', 'plug', 'resources');
-	if($src && $code && $R["userimg_img_$code"])
-	{
-		return cot_rc("userimg_img_$code", array('src' => $src, 'alt' => $L[$code], 'class' => $code));
+
+	if ($src && $code && isset(cot::$R["userimg_img_$code"])) {
+        $alt =  isset(cot::$L[$code]) ? cot::$L[$code] : '';
+		return cot_rc("userimg_img_$code", array('src' => $src, 'alt' => $alt, 'class' => $code));
 	}
-	if($src && $code)
-	{
-		return cot_rc('userimg_img', array('src' => $src, 'alt' => $L[$code], 'class' => $code));
+
+	if ($src && $code) {
+        $alt =  isset(cot::$L[$code]) ? cot::$L[$code] : '';
+		return cot_rc('userimg_img', array('src' => $src, 'alt' => $alt, 'class' => $code));
 	}
-	if($src)
-	{
+
+	if ($src) {
 		return cot_rc('userimg_img', array('src' => $src, 'alt' => '', 'class' => ''));
 	}
-	if(isset($R["userimg_default_$code"]) && $R["userimg_default_$code"] != '')
-	{
+
+	if (isset(cot::$R["userimg_default_$code"]) && cot::$R["userimg_default_$code"] != '') {
 		return cot_rc("userimg_default_$code");
 	}
+
 	return '';
 }
 
@@ -209,79 +211,87 @@ function cot_userimages_tags($user_data, $tag_prefix='')
  * @param number $uid User ID for uploads to be attached
  * @return boolean|number Number of uploaded images or false for incorrect $uid
  */
-function cot_userimages_process_uploads($uid=null)
+function cot_userimages_process_uploads($uid = null)
 {
-	global $cfg, $usr, $m;
+	global $m;
 
 	$files = 0;
-	if ($_FILES)
-	{
-		if (is_null($uid) || empty($uid)) $uid = $usr['id'];
-		if (!is_numeric($uid) || $uid != (int)$uid || $uid < 1) return false;
+    $usermode = false;
 
-		if ($uid != $usr['id'] || $m == 'edit') // user edit mode
-		{
-			list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
-			if (!$usr['isadmin']) return 0;
+	if (!empty($_FILES)) {
+		if (empty($uid)) {
+            $uid = cot::$usr['id'];
+        }
+		if (!is_numeric($uid) || $uid != (int) $uid || $uid < 1) {
+            return false;
+        }
+
+        // user edit mode
+		if ($uid != cot::$usr['id'] || $m == 'edit') {
+			list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('users', 'a');
+			if (!cot::$usr['isadmin']) {
+                return 0;
+            }
 			$usermode = true;
 		}
 
 		@clearstatcache();
 		$userimages = cot_userimages_config_get();
-		foreach ($userimages as $code => $settings)
-		{
-			$file = $_FILES[$usermode ? $code.':'.$uid : $code];
-			if(!$file) continue;
-			if (!empty($file['tmp_name']) && $file['size'] > 0 && is_uploaded_file($file['tmp_name']))
-			{
+		foreach ($userimages as $code => $settings) {
+            $key = $usermode ? $code . ':' . $uid : $code;
+			$file = isset($_FILES[$key]) ? $_FILES[$key] : null;
+			if (empty($file)) {
+                continue;
+            }
+
+			if (!empty($file['tmp_name']) && $file['size'] > 0 && is_uploaded_file($file['tmp_name'])) {
 				$gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 				$var = explode(".", $file['name']);
 				$file_ext = strtolower(array_pop($var));
 				$fcheck = cot_file_check($file['tmp_name'], $file['name'], $file_ext);
-				if (in_array($file_ext, $gd_supported) && $fcheck == 1)
-				{
+				if (in_array($file_ext, $gd_supported) && $fcheck == 1) {
 					$file['name'] = cot_safename($file['name'], true);
-					$path = ($code == 'avatar') ? $cfg['avatars_dir'] : $cfg['photos_dir'];
+					$path = ($code == 'avatar') ? cot::$cfg['avatars_dir'] : cot::$cfg['photos_dir'];
 					$filename_full = $uid . '-' . strtolower(($code != 'avatar') ? $code . '-' . $file['name'] : $file['name']);
 					$filepath = $path . '/' . $filename_full;
 
-					if (file_exists($filepath))
-					{
+					if (file_exists($filepath)) {
 						unlink($filepath);
 					}
 
 					move_uploaded_file($file['tmp_name'], $filepath);
 					cot_imageresize($filepath, $filepath, $settings['width'], $settings['height'], $settings['crop'], '', 100);
-					@chmod($filepath, $cfg['file_perms']);
+					@chmod($filepath, cot::$cfg['file_perms']);
 
 					/* === Hook === */
-					foreach (cot_getextplugins('profile.update.' . $code) as $pl)
-					{
+					foreach (cot_getextplugins('profile.update.' . $code) as $pl) {
 						include $pl;
 					}
 					/* ===== */
-					$sql = cot::$db->query("SELECT user_" . cot::$db->prep($code) . " FROM ".cot::$db->users." WHERE user_id=" . $uid);
-					if ($oldimage = $sql->fetchColumn())
-					{
-						if (file_exists($oldimage))
-						{
+					$sql = cot::$db->query("SELECT user_" . cot::$db->prep($code) . " FROM " . cot::$db->users .
+                        " WHERE user_id=" . $uid);
+					if ($oldimage = $sql->fetchColumn()) {
+						if (file_exists($oldimage)) {
 							unlink($oldimage);
 						}
 					}
 
-					$sql = cot::$db->update(cot::$db->users, array("user_" . $code => $filepath), "user_id='" . $uid . "'");
+					$sql = cot::$db->update(cot::$db->users, array("user_" . $code => $filepath), "user_id='" .
+                        $uid . "'");
 					$files++;
-				}
-				elseif ($fcheck == 2)
-				{
-					cot_error(sprintf($L['pfs_filemimemissing'], $file_ext), $code);
-				}
-				else
-				{
-					cot_error(sprintf($L['userimages_' . $code . 'notvalid'], $file_ext), $code);
+
+                } elseif ($fcheck == 2) {
+					cot_error(sprintf(cot::$L['pfs_filemimemissing'], $file_ext), $code);
+
+				} else {
+                    $msg = isset(cot::$L['userimages_' . $code . 'notvalid']) ?
+                        cot::$L['userimages_' . $code . 'notvalid'] :
+                        cot::$L['userimages_photonotvalid'];
+					cot_error(sprintf(cot::$L['userimages_' . $code . 'notvalid'], $file_ext), $code);
 				}
 			}
 		}
 	}
+
 	return $files;
 }

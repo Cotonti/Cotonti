@@ -37,13 +37,10 @@ $standard_admin = array('cache.disk', 'cache', 'config', 'extrafields', 'home', 
 
 $inc_file = (empty($m)) ? 'home' : $m;
 $inc_file = (empty($s)) ? $inc_file : $inc_file.'.'.$s;
-if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'module', $inc_file)))
-{
+if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'module', $inc_file))) {
 	$inc_file = cot_incfile('admin', 'module', $inc_file);
-}
-else
-{
-	$env['ext'] = $m;
+} else {
+	cot::$env['ext'] = $m;
 	$adminsubtitle = $cot_modules[$m]['title'];
 	$inc_file = cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
 }

@@ -18,8 +18,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 $i18n_enabled = $i18n_read && cot_i18n_enabled($pag['page_cat']);
 
-if ($i18n_enabled && $i18n_notmain)
-{
+if ($i18n_enabled && $i18n_notmain) {
 	$pag_i18n = cot_i18n_get_page($id, $i18n_locale);
 	$cat_i18n = cot_i18n_get_cat($pag['page_cat'], $i18n_locale);
 	if (!$cat_i18n)

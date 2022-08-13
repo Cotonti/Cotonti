@@ -529,10 +529,10 @@ $L['alreadyaddnewentry'] = 'New entry added';
 $L['alreadyupdatednewentry'] = 'Entry updated';
 $L['alreadydeletednewentry'] = 'Entry deleted';
 
-$L['adm_invalid_input'] = "Invalid value '{$value}' for variable '{$field_name}'";
+$L['adm_invalid_input'] = 'Invalid value \'{$value}\' for variable \'{$field_name}\'';
 $L['adm_set_default'] = 'Default value used';
-$L['adm_max'] = "maximum allowed '{$value}'";
-$L['adm_min'] = "minimum allowed '{$value}'";
+$L['adm_max'] = 'maximum allowed \'{$value}\'';
+$L['adm_min'] = 'minimum allowed \'{$value}\'';
 $L['adm_set'] = 'Using ';
 $L['adm_partially_updated'] = 'Not all values updated';
 $L['adm_already_updated'] = 'Already updated';

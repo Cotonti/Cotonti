@@ -99,6 +99,7 @@ cot_unregister_globals();
 if ($cfg['cache'] && !$cfg['debug_mode']) {
 	require_once !empty($cfg['custom_cache']) ? $cfg['custom_cache'] : $cfg['system_dir'].'/cache.php';
 	$cache = new Cache();
+
 	if ($_SERVER['REQUEST_METHOD'] == 'GET' && !cot_import($sys['site_id'], 'COOKIE', 'ALP')
         && empty($_SESSION[$sys['site_id']]) && !defined('COT_AUTH') && !defined('COT_ADMIN')
         && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
@@ -117,13 +118,10 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
 /* ======== Connect to the SQL DB======== */
 
 require_once $cfg['system_dir'].'/database.php';
-try
-{
+try {
 	$dbc_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
 	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbc_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
-}
-catch (PDOException $e)
-{
+} catch (PDOException $e) {
 	cot_diefatal('Could not connect to database !<br />
 		Please check your settings in the file datas/config.php<br />
 		MySQL error : '.$e->getMessage());
@@ -209,45 +207,60 @@ define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SER
 // Other system variables
 $sys['parser'] = $cfg['parser'];
 
-/* ======== Plugins ======== */
-
+/* ======== Modules and plugins ======== */
+$extensions = [];
+if (
+    (empty($cot_plugins) && !defined('COT_INSTALL')) ||
+    empty($cot_modules)
+) {
+    $extensions = cot::$db->query("SELECT * FROM " . cot::$db->core . " WHERE ct_state = 1 AND ct_lock = 0")
+        ->fetchAll();
+}
 if (empty($cot_plugins) && !defined('COT_INSTALL')) {
-	$sql = $db->query("SELECT pl_code, pl_file, pl_hook, pl_module, pl_title FROM $db_plugins
-		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
-	$cot_plugins_active = array();
-	if ($sql->rowCount() > 0)
-	{
-		while ($row = $sql->fetch())
-		{
-			$cot_plugins[$row['pl_hook']][] = $row;
+	$sql = cot::$db->query("SELECT pl_code, pl_file, pl_hook, pl_module, pl_title FROM " . cot::$db->plugins .
+        " WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
 
-			if ($row['pl_module'] == 0)
-			{
-				$cot_plugins_active[$row['pl_code']] = true;
-			}
+    $cot_plugins = [];
+
+    /**
+     * @var array<string: bool> $cot_plugins_active
+     * @deprecated use $cot_plugins_enabled instead
+     */
+	$cot_plugins_active = [];
+
+	if ($sql->rowCount() > 0) {
+		while ($row = $sql->fetch()) {
+			$cot_plugins[$row['pl_hook']][] = $row;
 		}
-		$sql->closeCursor();
 	}
-	$cache && $cache->db->store('cot_plugins', $cot_plugins, 'system');
-	$cache && $cache->db->store('cot_plugins_active', $cot_plugins_active, 'system');
+    $sql->closeCursor();
+
+    if (!empty($extensions)) {
+        foreach ($extensions as $row) {
+            if ($row['ct_plug']) {
+                $cot_plugins_active[$row['ct_code']] = true;
+            }
+        }
+    }
+
+    if (!empty(cot::$cache)) {
+        cot::$cache->db->store('cot_plugins', $cot_plugins, 'system');
+        cot::$cache->db->store('cot_plugins_active', $cot_plugins_active, 'system');
+    }
 }
 
 if (empty($cot_modules)) {
-	$sql = $db->query("SELECT * FROM $db_core WHERE ct_state = 1 AND ct_lock = 0");
-	if ($sql->rowCount() > 0)
-	{
-		while ($row = $sql->fetch())
-		{
-			if ($row['ct_plug'])
-			{
+    $cot_plugins_enabled = [];
+    $cot_modules = [];
+    if (!empty($extensions)) {
+        foreach ($extensions as $row) {
+			if ($row['ct_plug']) {
 				$cot_plugins_enabled[$row['ct_code']] = array(
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],
 					'version' => $row['ct_version']
 				);
-			}
-			else
-			{
+			} else {
 				$cot_modules[$row['ct_code']] = array(
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],
@@ -255,11 +268,14 @@ if (empty($cot_modules)) {
 				);
 			}
 		}
-		$sql->closeCursor();
 	}
-	$cache && $cache->db->store('cot_modules', $cot_modules, 'system');
-	$cache && $cache->db->store('cot_plugins_enabled', $cot_plugins_enabled, 'system');
+
+    if (!empty(cot::$cache)) {
+        cot::$cache->db->store('cot_modules', $cot_modules, 'system');
+        cot::$cache->db->store('cot_plugins_enabled', $cot_plugins_enabled, 'system');
+    }
 }
+unset($extensions);
 
 /* ======== Gzip and output filtering ======== */
 

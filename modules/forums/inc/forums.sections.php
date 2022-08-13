@@ -10,8 +10,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('forums', 'any');
 /* === Hook === */
-foreach (cot_getextplugins('forums.sections.rights') as $pl)
-{
+foreach (cot_getextplugins('forums.sections.rights') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -23,8 +22,7 @@ $c = cot_import('c','G','TXT');
 cot::$sys['sublocation'] = cot::$L['Home'];
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.sections.first') as $pl)
-{
+foreach (cot_getextplugins('forums.sections.first') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -48,9 +46,12 @@ if (empty($cot_sections_act)) {
 $cat_top = array();
 $sql_forums = cot::$db->query("SELECT * FROM $db_forum_stats ORDER by fs_cat DESC");
 foreach ($sql_forums->fetchAll() as $row) {
-	if (!$row['fs_lt_id'] && count(explode('.', cot::$structure['forums'][$row['fs_cat']]['rpath'])) > 1 &&
-        cot::$structure['forums'][$row['fs_cat']]['count'] > 0)
-	{
+	if (
+        !empty($row['fs_cat']) &&
+        !$row['fs_lt_id'] &&
+        count(explode('.', cot::$structure['forums'][$row['fs_cat']]['rpath'])) > 1 &&
+        cot::$structure['forums'][$row['fs_cat']]['count'] > 0
+    ) {
 		cot_forums_sectionsetlast($row['fs_cat']);
 	}
 	$cat_top[$row['fs_cat']] = $row;

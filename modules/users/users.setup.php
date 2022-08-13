@@ -3,10 +3,10 @@
 [BEGIN_COT_EXT]
 Name=Users
 Description=Users registration and profiles
-Version=1.4.9
-Date=2021-08-22
+Version=1.4.10
+Date=2022-08-13
 Author=Neocrome & Cotonti Team
-Copyright=(c) Cotonti Team 2008-2021
+Copyright=(c) Cotonti Team 2008-2022
 Notes=BSD License
 Auth_guests=R
 Lock_guests=A

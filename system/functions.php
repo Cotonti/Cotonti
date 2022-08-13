@@ -10,10 +10,17 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // System requirements check
-if (!defined('COT_INSTALL'))
-{
-	(function_exists('version_compare') && version_compare(PHP_VERSION, '5.3.3', '>=')) or die('Cotonti system requirements: PHP 5.3.3 or above.'); // TODO: Need translate
-	extension_loaded('mbstring') or die('Cotonti system requirements: mbstring PHP extension must be loaded.'); // TODO: Need translate
+if (!defined('COT_INSTALL')) {
+    if (
+        !function_exists('version_compare') ||
+        !version_compare(PHP_VERSION, '5.4', '>=')
+    ) {
+        die('Cotonti system requirements: PHP 5.4 or above.'); // TODO: Need translate
+    }
+
+    if (!extension_loaded('mbstring')) {
+        die('Cotonti system requirements: mbstring PHP extension must be loaded.'); // TODO: Need translate
+    }
 }
 
 // Group constants
@@ -199,9 +206,9 @@ class cot
         }
         // Fill some variables with default values
         // May be isset() is not needed
-        if(!isset(self::$out['head'])) self::$out['head'] = '';
-        if(!isset(self::$out['subtitle'])) self::$out['subtitle'] = '';
-        if(!isset(self::$env['ext'])) self::$env['ext'] = null;
+        if (!isset(self::$out['head'])) self::$out['head'] = '';
+        if (!isset(self::$out['subtitle'])) self::$out['subtitle'] = '';
+        if (!isset(self::$env['ext'])) self::$env['ext'] = null;
 	}
 }
 
@@ -217,7 +224,7 @@ class cot
  */
 function cot_alphaonly($text)
 {
-	return(preg_replace('/[^a-zA-Z0-9\-_]/', '', $text));
+	return (preg_replace('/[^a-zA-Z0-9\-_]/', '', $text));
 }
 
 /**
@@ -1146,8 +1153,8 @@ function cot_outputfilters_callback($m)
  */
 function cot_plugin_active($name)
 {
-	global $cot_plugins_active;
-	return is_array($cot_plugins_active) && isset($cot_plugins_active[$name]);
+	global $cot_plugins_enabled;
+	return is_array($cot_plugins_enabled) && isset($cot_plugins_enabled[$name]);
 }
 
 /**
@@ -1202,7 +1209,7 @@ function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK',
  * @param bool $httponly HttpOnly flag
  * @return bool
  */
-function cot_setcookie($name, $value, $expire = '', $path='', $domain='', $secure = false, $httponly = true)
+function cot_setcookie($name, $value, $expire = '', $path = '', $domain = '', $secure = false, $httponly = true)
 {
 	if (mb_strpos($domain, '.') === FALSE) {
 		// Some browsers don't support cookies for local domains
@@ -1219,7 +1226,7 @@ function cot_setcookie($name, $value, $expire = '', $path='', $domain='', $secur
 			$domain = mb_substr($domain, 4);
 		}
 		if ($domain[0] != '.') {
-			$domain = '.'.$domain;
+			$domain = '.' . $domain;
 		}
 	} else {
 		$domain = false;
@@ -1497,8 +1504,6 @@ function cot_structure_parents($area, $cat, $type = 'full')
  */
 function cot_auth($area, $option, $mask = 'RWA')
 {
-	global $sys, $usr;
-
 	$mn['R'] = 1;
 	$mn['W'] = 2;
 	$mn['1'] = 4;
@@ -1514,11 +1519,11 @@ function cot_auth($area, $option, $mask = 'RWA')
 	foreach ($masks as $k => $ml) {
 		if (empty($mn[$ml])) {
 			cot::$sys['auth_log'][] = $area.'.'.$option.'.'.$ml.'=0';
-			$res[] = FALSE;
+			$res[] = false;
 
 		} elseif ($option == 'any') {
 			$cnt = 0;
-			if(is_array(cot::$usr['auth'])) {
+			if (is_array(cot::$usr['auth'])) {
                 if (isset(cot::$usr['auth'][$area]) && is_array(cot::$usr['auth'][$area])) {
                     foreach (cot::$usr['auth'][$area] as $k => $g) {
                         $cnt += (($g & $mn[$ml]) == $mn[$ml]);
@@ -1528,14 +1533,14 @@ function cot_auth($area, $option, $mask = 'RWA')
                 $cnt = ($cnt == 0 && cot::$usr['auth']['admin']['a'] && $ml == 'A') ? 1 : $cnt;
             }
             cot::$sys['auth_log'][] = ($cnt > 0) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
-			$res[] = ($cnt > 0) ? TRUE : FALSE;
+			$res[] = ($cnt > 0);
 
 		} else {
             $tmpOption = 0;
             if (isset(cot::$usr['auth'][$area][$option])) $tmpOption = cot::$usr['auth'][$area][$option];
 
             cot::$sys['auth_log'][] = (($tmpOption & $mn[$ml]) == $mn[$ml]) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
-			$res[] = (($tmpOption & $mn[$ml]) == $mn[$ml]) ? TRUE : FALSE;
+			$res[] = (($tmpOption & $mn[$ml]) == $mn[$ml]);
 		}
 	}
 
@@ -1562,7 +1567,7 @@ function cot_auth_build($userid, $maingrp = 0)
 
 	} else {
 		$groups[] = $maingrp;
-		$sql = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$userid");
+		$sql = cot::$db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$userid");
 
 		while ($row = $sql->fetch()) {
 			$groups[] = $row['gru_groupid'];
@@ -1571,10 +1576,16 @@ function cot_auth_build($userid, $maingrp = 0)
 	}
 
 	$sql_groups = implode(',', $groups);
-	$sql = $db->query("SELECT auth_code, auth_option, auth_rights FROM $db_auth WHERE auth_groupid IN (".$sql_groups.") ORDER BY auth_code ASC, auth_option ASC");
+
+	$sql = cot::$db->query("SELECT auth_code, auth_option, auth_rights FROM $db_auth WHERE auth_groupid IN " .
+        "(".$sql_groups.") ORDER BY auth_code ASC, auth_option ASC");
 
 	while ($row = $sql->fetch()) {
-	    $authgrid[$row['auth_code']][$row['auth_option']] = 0;
+        if (!isset($authgrid[$row['auth_code']][$row['auth_option']])) {
+            $authgrid[$row['auth_code']][$row['auth_option']] = 0;
+        }
+
+        // Bitwise OR. We take the most maximum rights that the user groups (roles) give
 		$authgrid[$row['auth_code']][$row['auth_option']] |= $row['auth_rights'];
 	}
 	$sql->closeCursor();
@@ -5227,8 +5238,7 @@ function cot_unregister_globals()
  */
 function cot_xg()
 {
-	global $sys;
-	return ('x='.$sys['xk']);
+	return 'x=' . cot::$sys['xk'];
 }
 
 /**
@@ -5238,8 +5248,8 @@ function cot_xg()
  */
 function cot_xp()
 {
-	global $sys;
-	return '<div style="display:inline;margin:0;padding:0"><input type="hidden" name="x" value="'.$sys['xk'].'" /></div>';
+	return '<div style="display:inline;margin:0;padding:0"><input type="hidden" name="x" value="' . cot::$sys['xk'] .
+        '" /></div>';
 }
 
 /*

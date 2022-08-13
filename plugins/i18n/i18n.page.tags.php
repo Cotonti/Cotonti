@@ -82,15 +82,13 @@ if ($i18n_enabled)
 		}
 	}
 
-	if ($i18n_admin)
-	{
+	if ($i18n_admin) {
 		// Control tags
-		if ($pag_i18n)
-		{
+		if ($pag_i18n) {
 			// Delete translation
 			$url_i18n = cot_url('plug', "e=i18n&m=page&a=delete&id=$id&l=$i18n_locale");
 			$t->assign(array(
-				'PAGE_I18N_DELETE' => cot_rc_link($url_i18n, $L['Delete']),
+				'PAGE_I18N_DELETE' => cot_rc_link($url_i18n, cot::$L['Delete']),
 				'PAGE_I18N_DELETE_URL' => $url_i18n
 			));
 		}
