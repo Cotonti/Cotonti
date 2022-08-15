@@ -23,14 +23,15 @@ $cot_urleditor_presets = array('handy', 'compat', 'custom', 'none');
  */
 function cot_apply_rwr()
 {
-	if (function_exists('cot_apply_rwr_custom'))
-	{
+	if (function_exists('cot_apply_rwr_custom')) {
 		return cot_apply_rwr_custom();
 	}
 	$rwr = cot_import('rwr', 'G', 'TXT');
 
     // Remove starting and ending slashes from the path
-    if (!empty($rwr)) $rwr = trim($rwr, '/');
+    if (!empty($rwr)) {
+        $rwr = trim($rwr, '/');
+    }
 
 	if (!empty($rwr)/* && preg_match('`^[\w\p{L}/\-_\ \+\.]+?$`u', $_GET['rwr'])*/)
 	{
@@ -41,14 +42,12 @@ function cot_apply_rwr()
 		$rwr_continue = true;
 
 		/* === Hook === */
-		foreach (cot_getextplugins('urleditor.rewrite.first') as $pl)
-		{
+		foreach (cot_getextplugins('urleditor.rewrite.first') as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
-		if (!$rwr_continue)
-		{
+		if (!$rwr_continue) {
 			return null;
 		}
 
@@ -59,7 +58,10 @@ function cot_apply_rwr()
 				$_GET['e'] = 'page';
 				$_GET['c'] = $filtered;
 
-			} elseif (file_exists(cot::$cfg['modules_dir'] . '/' . $filtered) || file_exists(cot::$cfg['plugins_dir'] . '/' . $filtered)) {
+			} elseif (
+                file_exists(cot::$cfg['modules_dir'] . '/' . $filtered) ||
+                file_exists(cot::$cfg['plugins_dir'] . '/' . $filtered)
+            ) {
 				// Is an extension
 				$_GET['e'] = $filtered;
 
@@ -128,7 +130,7 @@ function cot_apply_rwr()
 
 			} else {
 				// Is a page/item
-				if ($ext == 'page' || $count > 2) {
+				if (($ext == 'page' || $count > 2)) {
 					$_GET['c'] = $path[$last - 1];
 				}
 				if (is_numeric($path[$last])) {
@@ -136,16 +138,21 @@ function cot_apply_rwr()
 				} else {
 					// Can be a cat or al, let the module decide
 					if ($count == 2 && (!isset($_GET['c']) || !isset(cot::$structure[$ext][$_GET['c']]))) {
-                        $_GET['c'] = $path[$last];
+                       $_GET['c'] = $path[$last];
                     }
 
 					$_GET['al'] = $path[$last];
 				}
                 if ((!empty($_GET['id']) || !empty($_GET['al'])) && !empty($_GET['c'])) {
-					if ($rwr !== cot_url($ext, array('c' => $_GET['c'], !empty($_GET['al']) ? 'al' : 'id' => $path[$last]))) {
-						cot_url_usertheme_files();
-						cot_die_message(404, true);
-					}
+                    if (!isset($_GET['m']) || !in_array($_GET['m'], ['add', 'edit'])) {
+                        if ($rwr !== cot_url(
+                                $ext,
+                                array('c' => $_GET['c'], !empty($_GET['al']) ? 'al' : 'id' => $path[$last])
+                            )) {
+                            cot_url_usertheme_files();
+                            cot_die_message(404, true);
+                        }
+                    }
 				}
 			}
 		}

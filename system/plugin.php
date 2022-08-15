@@ -17,48 +17,41 @@ $c1 = cot_import('c1', 'G', 'ALP');
 $c2 = cot_import('c2', 'G', 'ALP');
 
 
-if (!empty($o))
-{
+if (!empty($o)) {
 	$extname = $o;
     $exthook = 'popup';
     $ext_display_header = false;
     $path_skin = cot_tplfile(array('popup', $extname));
     $autoassigntags = true;
-}
-elseif (!empty($r))
-{
+
+} elseif (!empty($r)) {
 	$extname = $r;
     $exthook = 'ajax';
     $ext_display_header = false;
     $path_skin = '';
     $autoassigntags = false;
-}
-elseif (!empty($e))
-{
+
+} elseif (!empty($e)) {
 	$extname = $e;
     $exthook = 'standalone';
     $ext_display_header = true;
     $path_skin = cot_tplfile($extname, 'plug');
     $autoassigntags = false;
-    if (!file_exists($path_skin))
-    {
+    if (!file_exists($path_skin)) {
         $path_skin = cot_tplfile(array('plugin', $extname));
         $autoassigntags = true;
     }
-}
-else
-{
+} else {
 	cot_die_message(404);
 }
 
-if (!file_exists($cfg['plugins_dir'] . '/' . $extname))
-{
+if (!file_exists(cot::$cfg['plugins_dir'] . '/' . $extname)) {
 	cot_die_message(404);
 }
 
 // Initial permission check
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', $env['ext']);
-cot_block($usr['auth_read']);
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('plug', cot::$env['ext']);
+cot_block(cot::$usr['auth_read']);
 
 // Plugin requirements autoloading
 $req_files = array();
@@ -66,53 +59,50 @@ $req_files[] = cot_langfile($extname, 'plug');
 $req_files[] = cot_incfile($extname, 'plug', 'resources');
 $req_files[] = cot_incfile($extname, 'plug', 'functions');
 
-foreach ($req_files as $req_file)
-{
-	if (file_exists($req_file))
-	{
+foreach ($req_files as $req_file) {
+	if (file_exists($req_file)) {
 		require_once $req_file;
 	}
 }
 
 // Display
 $pltitle = array();
+$plugin_subtitle = '';
+$plugin_body = '';
+$popup_body = '';
 
-if (!empty($path_skin))
-{
+if (!empty($path_skin)) {
 	$t = new XTemplate($path_skin);
 }
 
 $empty = true;
 
-if (is_array($cot_plugins[$exthook]))
-{
-	foreach ($cot_plugins[$exthook] as $k)
-	{
+if (is_array($cot_plugins[$exthook])) {
+	foreach ($cot_plugins[$exthook] as $k) {
 		if ($k['pl_code'] == $extname)
 		{
 			$out['plu_title'] = $k['pl_title'];
-			include $cfg['plugins_dir'] . '/' . $k['pl_file'];
+			include cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
 			$empty = false;
 		}
 	}
 }
 
-if ($empty)
-{
+if ($empty) {
 	cot_die_message(907, TRUE);
 }
 
 if (empty($out['subtitle'])) {
-	if (empty($L['plu_title']) && isset($L[$extname . '_title'])) {
-		$L['plu_title'] = $L[$extname . '_title'];
+	if (empty(cot::$L['plu_title']) && isset(cot::$L[$extname . '_title'])) {
+        cot::$L['plu_title'] = cot::$L[$extname . '_title'];
 	}
-	$out['subtitle'] = empty($L['plu_title']) ? $out['plu_title'] : $L['plu_title'];
+    cot::$out['subtitle'] = empty(cot::$L['plu_title']) ? cot::$out['plu_title'] : cot::$L['plu_title'];
 }
-$sys['sublocation'] = $out['subtitle'];
+cot::$sys['sublocation'] = cot::$out['subtitle'];
 
 if ($ext_display_header) {
 	$t_plug = $t;
-	require_once $cfg['system_dir'] . '/header.php';
+	require_once cot::$cfg['system_dir'] . '/header.php';
 	$t = $t_plug;
 }
 
@@ -120,7 +110,7 @@ if ($autoassigntags) {
 	array_unshift($pltitle, array(cot_url('plug', "e=$e"), $out['subtitle']));
 	if (empty($o)) {
 		$t->assign(array(
-			'PLUGIN_TITLE' => cot_breadcrumbs($pltitle, $cfg['homebreadcrumb']),
+			'PLUGIN_TITLE' => cot_breadcrumbs($pltitle, cot::$cfg['homebreadcrumb']),
 			'PLUGIN_SUBTITLE' => $plugin_subtitle,
 			'PLUGIN_BODY' => $plugin_body
 		));
@@ -141,5 +131,5 @@ if (isset($t) && is_object($t)) {
 }
 
 if ($ext_display_header) {
-	require_once $cfg['system_dir'] . '/footer.php';
+	require_once cot::$cfg['system_dir'] . '/footer.php';
 }
