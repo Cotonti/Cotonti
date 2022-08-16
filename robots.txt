@@ -6,11 +6,8 @@ Disallow: /lang
 Disallow: /lib
 Disallow: /themes
 Disallow: /system
-Host: cotonti.loc
+# Host: http://your-domain.com
 
 # For sitemaps.xml autodiscovery (use only with SiteMap plugin).
 # Change domain name for real one and uncomment line below:
 # Sitemap: http://your-domain.com/sitemap.xml
-
-Sitemap: https://cotonti.loc/index.php?r=sitemap&a=index
-Sitemap: https://cotonti.loc/sitemap.xml
