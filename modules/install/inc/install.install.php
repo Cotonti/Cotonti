@@ -147,11 +147,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             if (empty($db_user)) cot_error('install_error_sql_user', 'db_user');
             if (empty($db_name)) cot_error('install_error_sql_db_name', 'db_name');
 
+            $mySqlVersion = null;
             if (!cot_error_found()) {
+                $mySqlCharset = $cfg['mysqlcharset'];
+                $mySqlCollate = isset($cfg['mysqlcollate']) ? $cfg['mysqlcollate'] : null;
+                // Disable the collation queries until we determine the charset
+                $cfg['mysqlcharset'] = $cfg['mysqlcollate'] = null;
+
                 try {
                     $dbc_port = empty($db_port) ? '' : ';port=' . $db_port;
                     $db = new CotDB('mysql:host=' . $db_host . $dbc_port . ';dbname=' . $db_name, $db_user, $db_pass);
-
                 } catch (PDOException $e) {
                     if ($e->getCode() == 1049 || mb_strpos($e->getMessage(), '[1049]') !== false) {
                         // Attempt to create a new database
@@ -159,29 +164,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             $db = new CotDB('mysql:host=' . $db_host . $dbc_port, $db_user, $db_pass);
                             $db->query("CREATE DATABASE `$db_name`");
                             $db->query("USE `$db_name`");
-
                         } catch (PDOException $e) {
-                            cot_error('install_error_sql_db', 'db_name');
+                            cot_error($L['install_error_sql_db'] . $e->getMessage(), 'db_name');
                         }
                     } else {
-                        cot_error('install_error_sql', 'db_host');
+                        cot_error($L['install_error_sql'] . $e->getMessage(), 'db_host');
                     }
                 }
 
-                if (!empty($cfg['mysqlcharset'])) {
-                    $collationQuery = 'ALTER DATABASE `' . $db_name . '` CHARACTER SET ' . $cfg['mysqlcharset'];
+                if (!cot_error_found()) {
+                    if (empty($mySqlCharset)) {
+                        $mySqlCharset = 'utf8mb4';
+                        $mySqlCollate = 'utf8mb4_unicode_ci';
+                    }
 
+                    $mySqlVersion = $db->getAttribute(PDO::ATTR_SERVER_VERSION);
+                    $setUseUtf8 = false;
+                    if (
+                        $mySqlCharset == 'utf8mb4' &&
+                        (
+                            version_compare($mySqlVersion, '5.7', '<') ||
+                            version_compare(PHP_VERSION, '5.5', '<')
+                        )
+                    ) {
+                        $setUseUtf8 = true;
+                        $mySqlCharset = 'utf8';
+                        $mySqlCollate = 'utf8_unicode_ci';
+                    }
+
+                    $cfg['mysqlcharset'] = $mySqlCharset;
+                    $cfg['mysqlcollate'] = $mySqlCollate;
+
+                    $collationQuery = 'ALTER DATABASE `' . $db_name . '` CHARACTER SET ' . $cfg['mysqlcharset'];
                     if (!empty($cfg['mysqlcollate'])) {
                         $collationQuery .= ' COLLATE ' . $cfg['mysqlcollate'];
                     }
                     $collationQuery .= ';';
+                    $collationQuery .= " SET NAMES '{$cfg['mysqlcharset']}'";
+                    if (!empty($cfg['mysqlcollate']) ) {
+                        $collationQuery .= " COLLATE '{$cfg['mysqlcollate']}'";
+                    }
+
                     $db->query($collationQuery);
                 }
             }
 
-			if (!cot_error_found() && function_exists('version_compare')
-				&& !version_compare($db->getAttribute(PDO::ATTR_SERVER_VERSION), '5.0.7', '>='))
-			{
+			if (!cot_error_found() && !version_compare($mySqlVersion, '5.0.7', '>=')) {
 				cot_error(cot_rc('install_error_sql_ver', array('ver' => $db->getAttribute(PDO::ATTR_SERVER_VERSION))));
 			}
 
@@ -190,13 +218,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 				$config_contents = file_get_contents($file['config']);
 				cot_install_config_replace($config_contents, 'mysqlhost', $db_host);
-				if (!empty($db_port))
-				{
+				if (!empty($db_port)) {
 					cot_install_config_replace($config_contents, 'mysqlport', $db_port);
 				}
 				cot_install_config_replace($config_contents, 'mysqluser', $db_user);
 				cot_install_config_replace($config_contents, 'mysqlpassword', $db_pass);
 				cot_install_config_replace($config_contents, 'mysqldb', $db_name);
+                if ($setUseUtf8) {
+                    cot_install_config_replace($config_contents, 'mysqlcharset', $cfg['mysqlcharset']);
+                    cot_install_config_replace($config_contents, 'mysqlcollate', $cfg['mysqlcollate']);
+                }
+
 				$config_contents = preg_replace("#^\\\$db_x\s*=\s*'.*?';#m", "\$db_x = '$db_x';", $config_contents);
 				file_put_contents($file['config'], $config_contents);
 
