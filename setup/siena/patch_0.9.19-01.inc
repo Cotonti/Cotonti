@@ -35,29 +35,35 @@ if (!function_exists('cot_install_config_replace')) {
  */
 
 $changeCollation = false;
-if (empty(cot::$cfg['mysqlcharset']) || in_array(cot::$cfg['mysqlcharset'], ['utf8', 'utf8mb4'])) {
-    if (empty(cot::$cfg['mysqlcollate']) || in_array(cot::$cfg['mysqlcollate'], ['utf8_unicode_ci', 'utf8mb4_unicode_ci'])) {
-        $changeCollation = true;
+$mySqlVersion = cot::$db->getAttribute(PDO::ATTR_SERVER_VERSION);
+if (
+    version_compare($mySqlVersion, '5.7', '>=') &&
+    version_compare(PHP_VERSION, '5.5', '>=') &&
+    (empty(cot::$cfg['mysqlcharset']) || in_array(cot::$cfg['mysqlcharset'], ['utf8', 'utf8mb4']))  //&&
+    // Not sure about this condition. May be 'mysqlcharset' is enough
+    //(empty(cot::$cfg['mysqlcollate']) || in_array(cot::$cfg['mysqlcollate'], ['utf8_unicode_ci', 'utf8mb4_unicode_ci']))
+) {
+    $changeCollation = true;
 
-        // Update config
-        if (cot::$cfg['mysqlcharset'] != 'utf8mb4' || cot::$cfg['mysqlcollate'] != 'utf8mb4_unicode_ci') {
-            $configContent = file_get_contents($file['config']);
-            if (cot::$cfg['mysqlcharset'] != 'utf8mb4') {
-                cot_install_config_replace($configContent, 'mysqlcharset', 'utf8mb4');
-                cot::$cfg['mysqlcharset'] = 'utf8mb4';
-            }
-            if (cot::$cfg['mysqlcollate'] != 'utf8mb4_unicode_ci') {
-                cot_install_config_replace($configContent, 'mysqlcollate', 'utf8mb4_unicode_ci');
-                cot::$cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';
-            }
-            file_put_contents($file['config'], $configContent);
-            unset($configContent);
-
-            cot::$db->query("SET NAMES '" . cot::$cfg['mysqlcharset'] . "'  COLLATE '" .
-                cot::$cfg['mysqlcollate'] . "'");
+    // Update config
+    if (cot::$cfg['mysqlcharset'] != 'utf8mb4' || cot::$cfg['mysqlcollate'] != 'utf8mb4_unicode_ci') {
+        $configContent = file_get_contents($file['config']);
+        if (cot::$cfg['mysqlcharset'] != 'utf8mb4') {
+            cot_install_config_replace($configContent, 'mysqlcharset', 'utf8mb4');
+            cot::$cfg['mysqlcharset'] = 'utf8mb4';
         }
-    }
+        if (cot::$cfg['mysqlcollate'] != 'utf8mb4_unicode_ci') {
+            cot_install_config_replace($configContent, 'mysqlcollate', 'utf8mb4_unicode_ci');
+            cot::$cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';
+        }
+        file_put_contents($file['config'], $configContent);
+        unset($configContent);
 
+        cot::$db->query(
+            "SET NAMES '" . cot::$cfg['mysqlcharset'] . "'  COLLATE '" .
+            cot::$cfg['mysqlcollate'] . "'"
+        );
+    }
 }
 
 // Changing character set and collation database wide:
