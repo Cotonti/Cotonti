@@ -110,19 +110,23 @@ function cot_stringinfile($file, $str, $maxsize=32768)
 
 function cot_get_extensionparams($code, $is_module = false)
 {
-	global $cfg, $cot_modules, $cot_plugins_enabled;
+	global $cot_modules, $cot_plugins_enabled;
 
 	$dir = $is_module ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir'];
 
-	if($is_module) {
-        if(isset($cot_modules[$code])) $name = $cot_modules[$code]['title'];
+	if ($is_module) {
+        if (isset($cot_modules[$code])) {
+            $name = $cot_modules[$code]['title'];
+        }
 
 	} else {
-	    if(isset($cot_plugins_enabled[$code])) $name = $cot_plugins_enabled[$code]['title'];
+	    if (isset($cot_plugins_enabled[$code])) {
+            $name = $cot_plugins_enabled[$code]['title'];
+        }
 	}
 
     $desc = '';
-	if(empty($name)) {
+	if (empty($name)) {
 		$ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
 		$exists = file_exists($ext_info);
         $info = false;
@@ -150,8 +154,13 @@ function cot_get_extensionparams($code, $is_module = false)
 	$langfile = cot_langfile($code, $is_module ? 'module' : 'plug');
 	if (file_exists($langfile)) {
 		include $langfile;
-		if (!empty(cot::$L['info_name'])) $name = cot::$L['info_name'];
-		if (!empty(cot::$L['info_desc'])) $desc = cot::$L['info_desc'];
+        // We are including lang file, so we should use $L, not cot::$L
+		if (!empty($L['info_name'])) {
+            $name = $L['info_name'];
+        }
+		if (!empty($L['info_desc'])) {
+            $desc = $L['info_desc'];
+        }
 	}
 
 	return array(
