@@ -35,9 +35,9 @@ if (!empty($p)) {
 
 	$extp = array();
 
-	if(is_array($cot_plugins['tools'])) {
-		foreach($cot_plugins['tools'] as $k) {
-			if($k['pl_code'] == $p) {
+	if (is_array($cot_plugins['tools'])) {
+		foreach ($cot_plugins['tools'] as $k) {
+			if ($k['pl_code'] == $p) {
 				$extp[] = $k;
 			}
 		}

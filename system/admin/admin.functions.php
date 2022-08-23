@@ -110,7 +110,8 @@ function cot_stringinfile($file, $str, $maxsize=32768)
 
 function cot_get_extensionparams($code, $is_module = false)
 {
-	global $cot_modules, $cot_plugins_enabled;
+	global $L, $Ls; // We are including lang files. So we need it global.
+    global $cot_modules, $cot_plugins_enabled;
 
 	$dir = $is_module ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir'];
 
