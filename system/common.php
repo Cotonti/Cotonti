@@ -119,8 +119,16 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
 
 require_once $cfg['system_dir'].'/database.php';
 try {
-	$dbc_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
-	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbc_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+    $db = new CotDB([
+        'host' => $cfg['mysqlhost'],
+        'port' => !empty($cfg['mysqlport']) ? $cfg['mysqlport'] : null,
+        'tablePrefix' => $db_x,
+        'user' => $cfg['mysqluser'],
+        'password' => $cfg['mysqlpassword'],
+        'dbName' => $cfg['mysqldb'],
+        'charset' => !empty($cfg['mysqlcharset']) ? $cfg['mysqlcharset'] : null,
+        'collate' => !empty($cfg['mysqlcollate']) ? $cfg['mysqlcollate'] : null,
+    ]);
 } catch (PDOException $e) {
 	cot_diefatal('Could not connect to database !<br />
 		Please check your settings in the file datas/config.php<br />
@@ -134,34 +142,24 @@ cot::init();
 $cache && $cache->init();
 
 /* ======== Configuration settings ======== */
-if(!isset($cot_cfg)) $cot_cfg = null;
-if ($cache && $cot_cfg)
-{
-	$cfg = array_merge($cot_cfg, $cfg);
+if (!isset($cot_cfg)) {
+    $cot_cfg = null;
 }
-else
-{
+if ($cache && $cot_cfg) {
+	$cfg = array_merge($cot_cfg, $cfg);
+} else {
 	// Part 1: Load main configuration
 	$sql_config = $db->query("SELECT * FROM $db_config");
-	while ($row = $sql_config->fetch())
-	{
-		if ($row['config_owner'] == 'core')
-		{
+	while ($row = $sql_config->fetch()) {
+		if ($row['config_owner'] == 'core') {
 			$cfg[$row['config_name']] = $row['config_value'];
-		}
-		elseif ($row['config_owner'] == 'module')
-		{
-			if (empty($row['config_subcat']))
-			{
+		} elseif ($row['config_owner'] == 'module') {
+			if (empty($row['config_subcat'])) {
 				$cfg[$row['config_cat']][$row['config_name']] = $row['config_value'];
-			}
-			else
-			{
+			} else {
 				$cfg[$row['config_cat']]['cat_' . $row['config_subcat']][$row['config_name']] = $row['config_value'];
 			}
-		}
-		else
-		{
+		} else {
 			$cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value'];
 		}
 	}
@@ -337,23 +335,26 @@ $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
 $csid = cot_import($sys['site_id'], 'COOKIE', 'TXT');
-if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
-{
-	$u = empty($_SESSION[$sys['site_id']]) ? explode(':', base64_decode($csid)) : explode(':', base64_decode($_SESSION[$sys['site_id']]));
+if (!empty($csid) || !empty($_SESSION[$sys['site_id']])) {
+	$u = empty($_SESSION[$sys['site_id']]) ?
+        explode(':', base64_decode($csid)) : explode(':', base64_decode($_SESSION[$sys['site_id']]));
 	$u_id = (int) cot_import($u[0], 'D', 'INT');
 	$u_sid = $u[1];
-	if ($u_id > 0)
-	{
+	if ($u_id > 0) {
 		$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $u_id");
-		if ($row = $sql->fetch())
-		{
-			if ($u_sid == hash_hmac('sha1', $row['user_sid'], $cfg['secret_key'])
-				&& ($row['user_maingrp'] > 3 ||
-                    ($row['user_maingrp'] == COT_GROUP_INACTIVE && isset($cfg['users']['inactive_login']) &&
-                        $cfg['users']['inactive_login']))
-				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip'])
-				&& $row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now'])
-			{
+		if ($row = $sql->fetch()) {
+			if (
+                $u_sid == hash_hmac('sha1', $row['user_sid'], $cfg['secret_key']) &&
+                (
+                    $row['user_maingrp'] > 3 ||
+                    (
+                        $row['user_maingrp'] == COT_GROUP_INACTIVE && isset($cfg['users']['inactive_login']) &&
+                        $cfg['users']['inactive_login']
+                    )
+                ) &&
+				($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip']) &&
+                ($row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now'])
+            ) {
 				$usr['id'] = (int) $row['user_id'];
 				$usr['name'] = $row['user_name'];
 				$usr['maingrp'] = $row['user_maingrp'];
@@ -365,23 +366,20 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
 				$usr['scheme'] = $cfg['forcedefaulttheme'] ? $cfg['defaultscheme'] : $row['user_scheme'];
 				$usr['lang'] = $cfg['forcedefaultlang'] ? $cfg['defaultlang'] : $row['user_lang'];
 				$usr['newpm'] = !empty($row['user_newpm']) ? $row['user_newpm'] : false;
-				$usr['auth'] = unserialize($row['user_auth']);
+				$usr['auth'] = isset($row['user_auth']) ? unserialize($row['user_auth']) : null;
 				$usr['adminaccess'] = cot_auth('admin', 'any', 'R');
 				$usr['level'] = $cot_groups[$usr['maingrp']]['level'];
 				$usr['profile'] = $row;
 
 				$sys['xk'] = $row['user_token'];
 
-				if (!isset($_SESSION['cot_user_id']))
-				{
+				if (!isset($_SESSION['cot_user_id'])) {
 					$_SESSION['cot_user_id'] = $usr['id'];
 				}
 
-				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now'])
-				{
+				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now']) {
 					$sys['comingback'] = TRUE;
-					if ($usr['lastlog'] > $usr['lastvisit'])
-					{
+					if ($usr['lastlog'] > $usr['lastvisit']) {
 						$usr['lastvisit'] = $usr['lastlog'];
 						$user_log['user_lastvisit'] = $usr['lastvisit'];
 					}
@@ -393,9 +391,7 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
 					$user_log['user_token'] = $token;
 				}
 
-
-				if (!$cfg['authcache'] || empty($row['user_auth']))
-				{
+				if (!$cfg['authcache'] || empty($row['user_auth'])) {
 					$usr['auth'] = cot_auth_build($usr['id'], $usr['maingrp']);
 					$cfg['authcache'] && $user_log['user_auth'] = serialize($usr['auth']);
 				}
@@ -409,14 +405,21 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
 	}
 
     // User can't log in, destroy authorization cookie and session data
-	if($usr['id'] == 0)
-    {
-        if(!empty($csid))
-        {
-            cot_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'],
-                $cfg['cookiedomain'], $sys['secure'], true);
+	if ($usr['id'] == 0) {
+        if (!empty($csid)) {
+            cot_setcookie(
+                $sys['site_id'],
+                '',
+                time() - 63072000,
+                $cfg['cookiepath'],
+                $cfg['cookiedomain'],
+                $sys['secure'],
+                true
+            );
         }
-        if(isset($_SESSION[$sys['site_id']])) unset($_SESSION[$sys['site_id']]);
+        if (isset($_SESSION[$sys['site_id']])) {
+            unset($_SESSION[$sys['site_id']]);
+        }
     }
 }
 

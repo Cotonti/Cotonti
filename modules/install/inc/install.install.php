@@ -36,10 +36,17 @@ $site_url = preg_replace('#/$#', '', $site_url);
 $sys['abs_url'] = $site_url . '/';
 define('COT_ABSOLUTE_URL', $site_url . '/');
 
-if ($step > 2)
-{
-	$dbc_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
-	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbc_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+if ($step > 2) {
+    $db = new CotDB([
+        'host' => $cfg['mysqlhost'],
+        'port' => $cfg['mysqlport'],
+        'tablePrefix' => $db_x,
+        'user' => $cfg['mysqluser'],
+        'password' => $cfg['mysqlpassword'],
+        'dbName' => $cfg['mysqldb'],
+        'charset' => !empty($cfg['mysqlcharset']) ? $cfg['mysqlcharset'] : null,
+        'collate' => !empty($cfg['mysqlcollate']) ? $cfg['mysqlcollate'] : null,
+    ]);
 
     // Need to register DB tables
 	cot::init();
@@ -105,11 +112,9 @@ switch ($step)
 $inst_func_name = "cot_install_step".$step."_import";
 function_exists($inst_func_name) && $inst_func_name();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST')
-{
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// Form submission handling
-	switch ($step)
-	{
+	switch ($step) {
 		case 0:
 			// Lang selection
 			$_SESSION['cot_inst_lang'] = $lang;
@@ -143,9 +148,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			// Database setup
 			$db_x = cot_import('db_x', 'P', 'TXT', 0, false, true);
 
-            if (empty($db_host)) cot_error('install_error_sql_host', 'db_host');
-            if (empty($db_user)) cot_error('install_error_sql_user', 'db_user');
-            if (empty($db_name)) cot_error('install_error_sql_db_name', 'db_name');
+            if (empty($db_host)) {
+                cot_error('install_error_sql_host', 'db_host');
+            }
+            if (empty($db_user)) {
+                cot_error('install_error_sql_user', 'db_user');
+            }
+            if (empty($db_name)) {
+                cot_error('install_error_sql_db_name', 'db_name');
+            }
 
             $mySqlVersion = null;
             if (!cot_error_found()) {
@@ -155,15 +166,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                 $cfg['mysqlcharset'] = $cfg['mysqlcollate'] = null;
 
                 try {
-                    $dbc_port = empty($db_port) ? '' : ';port=' . $db_port;
-                    $db = new CotDB('mysql:host=' . $db_host . $dbc_port . ';dbname=' . $db_name, $db_user, $db_pass);
+                    $db = new CotDB([
+                        'host' => $db_host,
+                        'port' => !empty($db_port) ? $db_port : null,
+                        'tablePrefix' => $db_x,
+                        'user' => $db_user,
+                        'password' => $db_pass,
+                        'dbName' => $db_name,
+                    ]);
                 } catch (PDOException $e) {
                     if ($e->getCode() == 1049 || mb_strpos($e->getMessage(), '[1049]') !== false) {
                         // Attempt to create a new database
                         try {
-                            $db = new CotDB('mysql:host=' . $db_host . $dbc_port, $db_user, $db_pass);
-                            $db->query("CREATE DATABASE `$db_name`");
-                            $db->query("USE `$db_name`");
+                            $db = new CotDB([
+                                'host' => $db_host,
+                                'port' => !empty($db_port) ? $db_port : null,
+                                'tablePrefix' => $db_x,
+                                'user' => $db_user,
+                                'password' => $db_pass,
+                            ]);
+                            $db->query('CREATE DATABASE ' . $db->quoteTableName($db_name));
+                            $db->query('USE ' . $db->quoteTableName($db_name));
                         } catch (PDOException $e) {
                             cot_error($L['install_error_sql_db'] . $e->getMessage(), 'db_name');
                         }
@@ -178,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         $mySqlCollate = 'utf8mb4_unicode_ci';
                     }
 
-                    $mySqlVersion = $db->getAttribute(PDO::ATTR_SERVER_VERSION);
+                    $mySqlVersion = $db->getConnection()->getAttribute(PDO::ATTR_SERVER_VERSION);
                     $setUseUtf8 = false;
                     if (
                         $mySqlCharset == 'utf8mb4' &&
@@ -195,7 +218,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                     $cfg['mysqlcharset'] = $mySqlCharset;
                     $cfg['mysqlcollate'] = $mySqlCollate;
 
-                    $collationQuery = 'ALTER DATABASE `' . $db_name . '` CHARACTER SET ' . $cfg['mysqlcharset'];
+                    $collationQuery = 'ALTER DATABASE ' . $db->quoteTableName($db_name) . ' CHARACTER SET ' .
+                        $cfg['mysqlcharset'];
                     if (!empty($cfg['mysqlcollate'])) {
                         $collationQuery .= ' COLLATE ' . $cfg['mysqlcollate'];
                     }
@@ -210,7 +234,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             }
 
 			if (!cot_error_found() && !version_compare($mySqlVersion, '5.0.7', '>=')) {
-				cot_error(cot_rc('install_error_sql_ver', array('ver' => $db->getAttribute(PDO::ATTR_SERVER_VERSION))));
+				cot_error(cot_rc(
+                    'install_error_sql_ver',
+                    array('ver' => $db->getConnection()->getAttribute(PDO::ATTR_SERVER_VERSION))
+                ));
 			}
 
 			if (!cot_error_found()) {
@@ -243,28 +270,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 		case 3:
 			// Misc settings and admin account
-			if (empty($rurl))
-			{
+			if (empty($rurl)) {
 				cot_error('install_error_mainurl', 'mainurl');
 			}
-			if ($user['pass'] != $user['pass2'])
-			{
+			if ($user['pass'] != $user['pass2']) {
 				cot_error('aut_passwordmismatch', 'user_pass');
 			}
-			if (mb_strlen($user['name']) < 2)
-			{
+			if (mb_strlen($user['name']) < 2) {
 				cot_error('aut_usernametooshort', 'user_name');
 			}
-			if (mb_strlen($user['pass']) < 4)
-			{
+			if (mb_strlen($user['pass']) < 4) {
 				cot_error('aut_passwordtooshort', 'user_pass');
 			}
-			if (mb_strlen($user['email']) < 4 || !cot_check_email($user['email']))
-			{
+			if (mb_strlen($user['email']) < 4 || !cot_check_email($user['email'])) {
 				cot_error('aut_emailtooshort', 'user_email');
 			}
-			if (!file_exists($file['config_sample']))
-			{
+			if (!file_exists($file['config_sample'])) {
 				cot_error(cot_rc('install_error_missing_file', array('file' => $file['config_sample'])));
 			}
 
@@ -416,8 +437,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 }
 
 // Display
-switch ($step)
-{
+switch ($step) {
 	case 0:
 		// Language selection
 		$t->assign(array(
@@ -426,11 +446,9 @@ switch ($step)
 
 		$install_files = glob("*.install.php");
 
-		if (!empty($install_files))
-		{
+		if (!empty($install_files)) {
 			$install_scripts = array();
-			foreach ($install_files as $filename)
-			{
+			foreach ($install_files as $filename) {
 				preg_match("#(.*?)\/?(.+)\.install\.php#i", $filename, $mtch);
 				$install_scripts[$filename] = $mtch[2];
 			}
@@ -443,13 +461,10 @@ switch ($step)
 
 	case 1:
 		// Create missing cache folders
-		if (is_writable($cfg['cache_dir']))
-		{
+		if (is_writable($cfg['cache_dir'])) {
 			$cache_subfolders = array('cot', 'static', 'system', 'templates');
-			foreach ($cache_subfolders as $sub)
-			{
-				if (!file_exists($cfg['cache_dir'] . '/' . $sub))
-				{
+			foreach ($cache_subfolders as $sub) {
+				if (!file_exists($cfg['cache_dir'] . '/' . $sub)) {
 					mkdir($cfg['cache_dir'] . '/' . $sub, $cfg['dir_perms']);
 				}
 			}
@@ -459,42 +474,33 @@ switch ($step)
 		// Build CHMOD/Exists/Version data
 		clearstatcache();
 
-		if (is_dir($cfg['avatars_dir']))
-		{
+		if (is_dir($cfg['avatars_dir'])) {
 			$status['avatars_dir'] = is_writable($cfg['avatars_dir'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
 						substr(decoct(fileperms($cfg['avatars_dir'])), -4)))));
-		}
-		else
-		{
+		} else {
 			$status['avatars_dir'] = $R['install_code_not_found'];
 		}
 		/* ------------------- */
-		if (is_dir($cfg['cache_dir']))
-		{
+		if (is_dir($cfg['cache_dir'])) {
 			$status['cache_dir'] = is_writable($cfg['cache_dir'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
 						substr(decoct(fileperms($cfg['cache_dir'])), -4)))));
-		}
-		else
-		{
+		} else {
 			$status['cache_dir'] = $R['install_code_not_found'];
 		}
 		/* ------------------- */
-		if (is_dir($cfg['pfs_dir']))
-		{
+		if (is_dir($cfg['pfs_dir'])) {
 			$status['pfs_dir'] = is_writable($cfg['pfs_dir'])
 				? $R['install_code_writable']
 				: cot_rc('install_code_invalid', array('text' =>
 					cot_rc('install_chmod_value', array('chmod' =>
 						substr(decoct(fileperms($cfg['pfs_dir'])), -4)))));
-		}
-		else
-		{
+		} else {
 			$status['pfs_dir'] = $R['install_code_not_found'];
 		}
 		/* ------------------- */

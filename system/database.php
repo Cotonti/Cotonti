@@ -22,8 +22,47 @@ defined('COT_CODE') or die('Wrong URL');
  * @property-read int $count Total query count
  * @property-read int $timeCount Total query execution time
  */
-class CotDB extends PDO
+class CotDB
 {
+    protected $tableQuoteCharacter = '`';
+    protected $columnQuoteCharacter = '`';
+
+    /**
+     * The PDO connection to database
+     * @var \PDO
+     */
+    protected $adapter;
+
+    /**
+     * The database connection configuration options.
+     * @var array{
+     *     adapter: string,
+     *     host: string,
+     *     port?: int,
+     *     tablePrefix?: string,
+     *     user: string,
+     *     password: string,
+     *     dbName?: string,
+     *     charset?: string,
+     *     collate?: string,
+     *     options?: array<int, string>
+     * }
+     */
+    protected $config;
+
+    /**
+     * @var int the default fetch mode for this connection.
+     * In Cotonti we use PDO::FETCH_ASSOC by default to save memory
+     * @see https://www.php.net/manual/en/pdostatement.setfetchmode.php
+     */
+    //public $fetchMode = \PDO::FETCH_ASSOC;
+
+    /**
+     * The table prefix for the connection.
+     * @var string
+     */
+    protected $tablePrefix = '';
+
 	/**
 	 * Number of rows affected by the most recent query
 	 * @var int
@@ -60,35 +99,107 @@ class CotDB extends PDO
 	 */
 	private $_tables = array();
 
+    /**
+     * It is used in runScript() only
+     * @var string
+     */
+    public $error = '';
+
 	/**
 	 * Creates a PDO instance to represent a connection to the requested database.
 	 *
-	 * @param string $dsn The Data Source Name, or DSN, contains the information required to connect to the database.
-	 * @param string $username The user name for the DSN string.
-	 * @param string $passwd The password for the DSN string.
-	 * @param array $options A key=>value array of driver-specific connection options.
-	 * @see http://www.php.net/manual/en/pdo.construct.php
+	 * @param array{
+     *     adapter: string,
+     *     host: string,
+     *     port?: int,
+     *     tablePrefix?: string,
+     *     user: string,
+     *     password: string,
+     *     dbName?: string,
+     *     charset?: string,
+     *     collate?: string,
+     *     options?: array<int, string>
+     * } $config The Data Source Name, or DSN, contains the information required to connect to the database.
+     * Where array keys are:
+     *  'adapter' => 'mysql' db type
+     *  'user' The user name for the DSN string.
+     *  'password' The password for the DSN string.
+     *  'dbName' Optional. Database name
+     *  'options' A key=>value array of driver-specific connection options.
 	 */
-	public function  __construct($dsn, $username, $passwd, $options = array())
+    public function  __construct($config)
 	{
-		global $cfg;
-		if (!empty($cfg['mysqlcharset']) && version_compare(PHP_VERSION, '5.3.0', '!='))
-		{
-			$collation_query = "SET NAMES '{$cfg['mysqlcharset']}'";
-			if (!empty($cfg['mysqlcollate']) )
-			{
-				$collation_query .= " COLLATE '{$cfg['mysqlcollate']}'";
-			}
-			$options[PDO::MYSQL_ATTR_INIT_COMMAND] = $collation_query;
-		}
-		parent::__construct($dsn, $username, $passwd, $options);
-		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->config = $config;
+        if (!empty($config['tablePrefix'])) {
+            $this->tablePrefix = $config['tablePrefix'];
+        }
 
-		if (!method_exists($this, 'prepare'))
-		{
+        $this->adapter = static::connect();
+	}
+
+    /**
+     * Connect to Data Base
+     * @return \PDO
+     *
+     * @see http://www.php.net/manual/en/pdo.construct.php
+     * @todo when multiple connections to databases will be implemented, use connection registry
+     */
+    protected function connect()
+    {
+        if (!empty($this->config['charset'])) {
+            $collation_query = "SET NAMES '{$this->config['charset']}'";
+            if (!empty($this->config['collate'])) {
+                $collation_query .= " COLLATE '{$this->config['collate']}'";
+            }
+            $this->config['options'][PDO::MYSQL_ATTR_INIT_COMMAND] = $collation_query;
+        }
+
+        $this->config['adapter'] = !empty($this->config['adapter']) ? $this->config['adapter'] : 'mysql';
+
+        $port = empty($this->config['port']) ? '' : ';port=' . $this->config;
+        $dsn = $this->config['adapter'] . ':host=' . $this->config['host'] . $port;
+        if (!empty($this->config['dbName'])) {
+            $dsn .= ';dbname=' . $this->config['dbName'];
+        }
+
+        $this->config['options'] = !empty($this->config['options']) ? $this->config['options'] : null;
+        $adapter = new \PDO($dsn, $this->config['user'], $this->config['password'], $this->config['options']);
+
+        $adapter->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+		if (!method_exists($adapter, 'prepare')) {
 			$this->_prepare_itself = true;
 		}
-	}
+
+        return $adapter;
+    }
+
+    /**
+     * @return array{
+     *     adapter: string,
+     *     host: string,
+     *     port?: int,
+     *     tablePrefix?: string,
+     *     user: string,
+     *     password: string,
+     *     dbName?: string,
+     *     charset?: string,
+     *     collate?: string,
+     *     options?: array<int, string>
+     * }
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @return PDO
+     */
+    public function getConnection()
+    {
+        return $this->adapter;
+    }
 
 	/**
 	 * Provides access to properties
@@ -122,8 +233,7 @@ class CotDB extends PDO
 	private function _bindParams($statement, $parameters)
 	{
 		$is_numeric = is_int(key($parameters));
-		foreach ($parameters as $key => $val)
-		{
+		foreach ($parameters as $key => $val) {
 			$type = is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR;
 			$is_numeric ? $statement->bindValue($key + 1, $val, $type) : $statement->bindValue($key, $val, $type);
 		}
@@ -140,16 +250,15 @@ class CotDB extends PDO
 	private function _parseError(PDOException $e, &$err_code, &$err_message)
 	{
 		$pdo_message = $e->getMessage();
-		if (preg_match('#SQLSTATE\[(\w+)\].*?: (.*)#', $pdo_message, $matches))
-		{
+		if (preg_match('#SQLSTATE\[(\w+)\].*?: (.*)#', $pdo_message, $matches)) {
 			$err_code = $matches[1];
 			$err_message = $matches[2];
-		}
-		else
-		{
+
+        } else {
 			$err_code = $e->getCode();
 			$err_message = $pdo_message;
 		}
+
 		return $err_code > '02';
 	}
 
@@ -162,15 +271,12 @@ class CotDB extends PDO
 	 */
 	private function _prepare($query, $parameters = array())
 	{
-		if (count($parameters) > 0)
-		{
-			foreach ($parameters as $key => $val)
-			{
+		if (count($parameters) > 0) {
+			foreach ($parameters as $key => $val) {
 				$placeholder = is_int($key) ? '?' : ':' . $key;
 				$value = is_int($val) ? $val : $this->quote($val);
 				$pos = strpos($query, $placeholder);
-				if ($pos !== false)
-				{
+				if ($pos !== false) {
 					$query = substr_replace($query, $value, $pos, strlen($placeholder));
 				}
 			}
@@ -220,136 +326,192 @@ class CotDB extends PDO
 		}
 	}
 
+    /**
+     * 1) If called with one parameter:
+     * Works like PDO::query()
+     * Executes an SQL statement in a single function call, returning the result set (if any) returned by the statement
+     *     as a PDOStatement object.
+     * 2) If called with second parameter as array of input parameter bindings:
+     * Works like PDO::prepare()->execute()
+     * Prepares an SQL statement and executes it.
+     * @see http://www.php.net/manual/en/pdo.query.php
+     * @see http://www.php.net/manual/en/pdo.prepare.php
+     * @param string $query The SQL statement to prepare and execute.
+     * @param array $parameters An array of values to be binded as input parameters to the query. PHP int parameters
+     *     will beconsidered as PDO::PARAM_INT, others as PDO::PARAM_STR.
+     * @param int $mode Fetch mode. See https://www.php.net/manual/ru/pdo.constants.php
+     *      In Cotonti we use PDO::FETCH_ASSOC by default to save memory
+     *
+     * @return PDOStatement
+     */
+    public function query($query, $parameters = [], $mode = PDO::FETCH_ASSOC)
+    {
+        if (!is_array($parameters)) {
+            $parameters = [$parameters];
+        }
+        $this->_startTimer();
+        $result = null;
+        try {
+            if (count($parameters) > 0) {
+                if ($this->_prepare_itself) {
+                    $result = $this->adapter->query($this->_prepare($query, $parameters));
+                } else {
+                    $result = $this->adapter->prepare($query);
+                    $this->_bindParams($result, $parameters);
+                    $result->execute();
+                }
+            } else {
+                $result = $this->adapter->query($query, $mode);
+            }
+        } catch (\PDOException $err) {
+            if ($this->_parseError($err, $err_code, $err_message)) {
+                cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
+            }
+        }
+        $this->_stopTimer($query);
+        if (!empty($result)) {
+            $result->setFetchMode($mode);
+            $this->_affected_rows = $result->rowCount();
+        }
+        return $result;
+    }
+
 	/**
 	 * Returns total number of records contained in a table
-	 * @param string $table_name Table name
+	 * @param string $tableName Table name
 	 * @return int
 	 */
-	public function countRows($table_name)
+	public function countRows($tableName)
 	{
-		return $this->query("SELECT COUNT(*) FROM `$table_name`")->fetchColumn();
+		return $this->query('SELECT COUNT(*) FROM ' . $this->quoteTableName($tableName))->fetchColumn();
 	}
 
 	/**
 	 * Performs simple SQL DELETE query and returns number of removed items.
 	 *
-	 * @param string $table_name Table name
+	 * @param string $tableName Table name
 	 * @param string $condition Body of WHERE clause
 	 * @param array $parameters Array of statement input parameters, see http://www.php.net/manual/en/pdostatement.execute.php
 	 * @return int Number of records removed on success or FALSE on error
 	 */
-	public function delete($table_name, $condition = '', $parameters = array())
+	public function delete($tableName, $condition = '', $parameters = array())
 	{
-		$query = empty($condition) ? "DELETE FROM `$table_name`" : "DELETE FROM `$table_name` WHERE $condition";
-		if (!is_array($parameters))
-		{
+        $query = 'DELETE FROM ' . $this->quoteTableName($tableName);
+        if (!empty($condition)) {
+            $query .=  ' WHERE ' . $condition;
+        }
+
+		if (!is_array($parameters)) {
 			$parameters = array($parameters);
 		}
+
+        $res = 0;
 		$this->_startTimer();
-		try
-		{
-			if (count($parameters) > 0)
-			{
-				if ($this->_prepare_itself)
-				{
-					$res = $this->exec($this->_prepare($query, $parameters));
-				}
-				else
-				{
+		try {
+			if (count($parameters) > 0) {
+				if ($this->_prepare_itself) {
+					$res = $this->adapter->exec($this->_prepare($query, $parameters));
+				} else {
 					$stmt = $this->prepare($query);
 					$this->_bindParams($stmt, $parameters);
 					$stmt->execute();
 					$res = $stmt->rowCount();
 				}
+			} else {
+				$res = $this->adapter->exec($query);
 			}
-			else
-			{
-				$res = $this->exec($query);
-			}
-		}
-		catch (PDOException $err)
-		{
-			if ($this->_parseError($err, $err_code, $err_message))
-			{
+
+        } catch (PDOException $err) {
+			if ($this->_parseError($err, $err_code, $err_message)) {
 				cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
 			}
 		}
 		$this->_stopTimer($query);
+
 		return $res;
 	}
 
 	/**
 	 * Checks if a field exists in a table
 	 *
-	 * @param string $table_name Table name
-	 * @param string $field_name Field name
+	 * @param string $tableName Table name
+	 * @param string $fieldName Field name
 	 * @return bool TRUE if the field exists, FALSE otherwise
 	 */
-	function fieldExists($table_name, $field_name)
-	{
-		return $this->query("SHOW COLUMNS FROM `$table_name` WHERE Field = " . $this->quote($field_name))->rowCount() == 1;
+	function fieldExists($tableName, $fieldName)
+    {
+		return $this->query("SHOW COLUMNS FROM " . $this->quoteTableName($tableName) .
+                " WHERE Field = " . $this->quote($fieldName))->rowCount() == 1;
 	}
 
 	/**
 	* Checks if an index with the same index name or column order exists
 	*
-	* @param string $table_name Table name
+	* @param string $tableName Table name
 	* @param string $index_name Index/Key name
-	* @param mixed $index_columns Either a string for a single column name or an array for single/multiple columns. No column check will be preformed if left empty.
+	* @param string[]|string $indexColumns Either a string for a single column name or an array for single/multiple
+     *     columns. No column check will be preformed if left empty.
 	* @return bool TRUE if the index name or column order exists, FALSE otherwise
 	*/
-	function indexExists($table_name, $index_name, $index_columns = array())
+	function indexExists($tableName, $index_name, $indexColumns = array())
 	{
-		if(empty($index_columns))
-		{
-			return (bool)$this->query("SHOW INDEXES FROM `$table_name` WHERE Key_name=".$this->quote($index_name))->rowCount();
+		if (empty($indexColumns)) {
+			return (bool) $this->query('SHOW INDEXES FROM ' . $this->quoteTableName($tableName) .
+                ' WHERE Key_name=' . $this->quote($index_name))->rowCount();
 		}
-		$existing_indexes = $this->query("SHOW INDEXES FROM `$table_name`")->fetchAll();
-		if(!empty($index_columns) && !is_array($index_columns))
-		{
-			$index_columns = array($index_columns);
+
+		$existing_indexes = $this->query('SHOW INDEXES FROM ' . $this->quoteTableName($tableName))->fetchAll();
+		if (!is_array($indexColumns)) {
+            $indexColumns = array($indexColumns);
 		}
 		$exists = false;
 		$index_list = array();
-		foreach($existing_indexes as $existing_index)
-		{
+		foreach ($existing_indexes as $existing_index) {
 			$index_list[$existing_index['Key_name']][$existing_index['Seq_in_index'] - 1] = $existing_index['Column_name'];
 		}
-		foreach($index_list as $list_index => $list_columns)
-		{
-			if($list_index == $index_name)
-			{
+		foreach ($index_list as $list_index => $list_columns) {
+			if ($list_index == $index_name) {
 				$exists = true;
 				break;
 			}
-			if(count(array_diff_assoc($index_columns, $list_columns)) === 0 && count($index_columns) === count($list_columns))
-			{
+			if (
+                count(array_diff_assoc($indexColumns, $list_columns)) === 0 &&
+                count($indexColumns) === count($list_columns)
+            ) {
 				$exists = true;
 				break;
 			}
 		}
+
 		return $exists;
 	}
 
 	/**
 	* Adds an index on a table
 	*
-	* @param string $table_name Table name
-	* @param string $index_name Index/Key name
-	* @param mixed Either a string for a single column name or an array for single/multiple columns. $index_name will be used if empty.
+	* @param string $tableName Table name
+	* @param string $indexName Index/Key name
+	* @param string[]|string $indexColumns Either a string for a single column name or an array for single/multiple
+     *     columns. $indexName will be used if empty.
 	* @return int Number of rows affected
 	*/
-	function addIndex($table_name, $index_name, $index_columns = array())
+	function addIndex($tableName, $indexName, $indexColumns = array())
 	{
-		if(empty($index_columns))
-		{
-			$index_columns = array($index_name);
+		if (empty($indexColumns)) {
+            $indexColumns = array($indexName);
 		}
-		if(!is_array($index_columns))
-		{
-			$index_columns = array($index_columns);
+		if (!is_array($indexColumns)) {
+            $indexColumns = array($indexColumns);
 		}
-		return $this->query("ALTER TABLE `$table_name` ADD INDEX `$index_name` (`".implode('`,`', $index_columns)."`)")->rowCount();
+
+        $quotedColumns = [];
+        foreach ($indexColumns as $column) {
+            $quotedColumns[] = $this->quoteColumnName($column);
+        }
+
+		return $this->query('ALTER TABLE ' . $this->quoteTableName($tableName) .
+            ' ADD INDEX ' . $this->quoteColumnName($indexName) . ' (' . implode(',', $quotedColumns) . ')')
+            ->rowCount();
 	}
 
 	/**
@@ -362,71 +524,59 @@ class CotDB extends PDO
 	 * Performs single row INSERT if $data is an associative array,
 	 * performs multi-row INSERT if $data is a 2D array (numeric => assoc)
 	 *
-	 * @param string $table_name Table name
+	 * @param string $tableName Table name
 	 * @param array $data Associative or 2D array containing data for insertion.
-	 * @param bool $insert_null Insert SQL NULL for empty values rather than ignoring them.
+	 * @param bool $insertNull Insert SQL NULL for empty values rather than ignoring them.
 	 * @param bool $ignore Ignore duplicate key errors on insert
-	 * @param array $update_fields List of fields to be updated with ON DUPLICATE KEY UPDATE
+	 * @param array $updateFields List of fields to be updated with ON DUPLICATE KEY UPDATE
 	 * @return int The number of affected records
 	 */
-	public function insert($table_name, $data, $insert_null = false, $ignore = false, $update_fields = array())
+	public function insert($tableName, $data, $insertNull = false, $ignore = false, $updateFields = array())
 	{
-		if (!is_array($data))
-		{
+		if (!is_array($data)) {
 			return 0;
 		}
 		$keys = '';
 		$vals = '';
-		// Check the array type
+
+        // Check the array type
 		$arr_keys = array_keys($data);
 		$multiline = is_numeric($arr_keys[0]);
-		// Build the query
-		if ($multiline)
-		{
+
+        // Build the query
+		if ($multiline) {
 			$rowset = &$data;
-		}
-		else
-		{
-			$rowset = array($data);
+		} else {
+			$rowset = [$data];
 		}
 		$keys_built = false;
 		$cnt = count($rowset);
-		for ($i = 0; $i < $cnt; $i++)
-		{
+		for ($i = 0; $i < $cnt; $i++) {
 			$vals .= ($i > 0) ? ',(' : '(';
 			$j = 0;
-			if (is_array($rowset[$i]))
-			{
-				foreach ($rowset[$i] as $key => $val)
-				{
-					if (is_null($val) && !$insert_null)
-					{
+			if (is_array($rowset[$i])) {
+				foreach ($rowset[$i] as $key => $val) {
+					if (is_null($val) && !$insertNull) {
 						continue;
 					}
-					if ($j > 0) $vals .= ',';
-					if (!$keys_built)
-					{
-						if ($j > 0) $keys .= ',';
-						$keys .= "`$key`";
+					if ($j > 0) {
+                        $vals .= ',';
+                    }
+					if (!$keys_built) {
+						if ($j > 0) {
+                            $keys .= ',';
+                        }
+						$keys .= $this->quoteColumnName($key);
 					}
-                    if (is_null($val) || $val === 'NULL')
-					{
+                    if (is_null($val) || $val === 'NULL') {
 						$vals .= 'NULL';
-					}
-					elseif (is_bool($val))
-					{
+					} elseif (is_bool($val)) {
 						$vals .= $val ? 'TRUE' : 'FALSE';
-					}
-					elseif ($val === 'NOW()')
-					{
+					} elseif ($val === 'NOW()') {
 						$vals .= 'NOW()';
-					}
-					elseif (is_int($val) || is_float($val))
-					{
+					} elseif (is_int($val) || is_float($val)) {
 						$vals .= $val;
-					}
-					else
-					{
+					} else {
 						$vals .= $this->quote($val);
 					}
 					$j++;
@@ -435,38 +585,124 @@ class CotDB extends PDO
 			$vals .= ')';
 			$keys_built = true;
 		}
-		if (!empty($keys) && !empty($vals))
-		{
+
+		if (!empty($keys) && !empty($vals)) {
 			$ignore = $ignore ? 'IGNORE' : '';
-			$query = "INSERT $ignore INTO `$table_name` ($keys) VALUES $vals";
-			if (count($update_fields) > 0)
-			{
+			$query = "INSERT $ignore INTO " . $this->quoteTableName($tableName) . " ($keys) VALUES $vals";
+			if (count($updateFields) > 0) {
 				$query .= ' ON DUPLICATE KEY UPDATE';
 				$j = 0;
-				foreach ($update_fields as $key)
-				{
+				foreach ($updateFields as $key) {
 					if ($j > 0) $query .= ',';
-					$query .= " `$key` = VALUES(`$key`)";
+					$query .= ' ' . $this->quoteColumnName($key) . ' = VALUES(' . $this->quoteColumnName($key) . ')';
 					$j++;
 				}
 			}
+            $res = 0;
 			$this->_startTimer();
-			try
-			{
-				$res = $this->exec($query);
-			}
-			catch (PDOException $err)
-			{
-				if ($this->_parseError($err, $err_code, $err_message))
-				{
+			try {
+				$res = $this->adapter->exec($query);
+			} catch (\PDOException $err) {
+				if ($this->_parseError($err, $err_code, $err_message)) {
 					cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
 				}
 			}
 			$this->_stopTimer($query);
-			return $res;
+
+            return $res;
 		}
+
 		return 0;
 	}
+
+    /**
+     * @param string $name Optional. PostgreSQL need it
+     * @param string $pkey Optional. PostgreSQL need it
+     * @return string
+     *
+     * For example, PDO_PGSQL requires you to specify the name of a sequence object for the name parameter.
+     * "{$table_name}_{$pkey}_seq"
+     *
+     * @see https://www.php.net/manual/en/pdo.lastinsertid.php
+     */
+    public function lastInsertId($name = '', $pkey = '')
+    {
+        return $this->adapter->lastInsertId($name);
+    }
+
+    /**
+     * Performs SQL UPDATE with simple data array. Array keys must match table keys, optionally you can specify
+     * key prefix as fourth parameter. Strings get quoted and escaped automatically.
+     * Ints and floats must be typecasted.
+     * You can use special values in the array:
+     * - PHP NULL => SQL NULL
+     * - 'NOW()' => SQL NOW()
+     *
+     * @param string $tableName Table name
+     * @param array $data Associative array containing data for update
+     * @param string $condition Body of SQL WHERE clause
+     * @param array $parameters Array of statement input parameters, see http://www.php.net/manual/en/pdostatement.execute.php
+     * @param bool $updateNull Nullify cells which have null values in the array. By default they are skipped
+     * @return int The number of affected records or FALSE on error
+     */
+    public function update($tableName, $data, $condition ='', $parameters = [], $updateNull = false)
+    {
+        if (!is_array($data)) {
+            return 0;
+        }
+        $upd = '';
+        if (!is_array($parameters)) {
+            $parameters = [$parameters];
+        }
+        if ($this->_prepare_itself && !empty($condition) && count($parameters) > 0) {
+            $condition = $this->_prepare($condition, $parameters);
+            $parameters = [];
+        }
+        $condition = empty($condition) ? '' : 'WHERE ' . $condition;
+        foreach ($data as $key => $val) {
+            if (is_null($val) && !$updateNull) {
+                continue;
+            }
+            $upd .= $this->quoteColumnName($key) . '=';
+            if (is_null($val) || $val === 'NULL') {
+                $upd .= 'NULL,';
+            } elseif (is_bool($val)) {
+                $upd .= $val ? 'TRUE,' : 'FALSE,';
+            } elseif ($val === 'NOW()') {
+                $upd .= 'NOW(),';
+            } elseif (is_int($val) || is_float($val)) {
+                $upd .= $val.',';
+            } else {
+                $upd .= $this->quote($val) . ',';
+            }
+
+        }
+        if (!empty($upd)) {
+            $upd = mb_substr($upd, 0, -1);
+            $query = 'UPDATE ' . $this->quoteTableName($tableName) . " SET $upd $condition";
+            $res = 0;
+            $this->_startTimer();
+            try {
+                if (count($parameters) > 0) {
+                    $stmt = $this->adapter->prepare($query);
+                    $this->_bindParams($stmt, $parameters);
+                    $stmt->execute();
+                    $res = $stmt->rowCount();
+                } else {
+                    $res = $this->adapter->exec($query);
+                }
+            } catch (PDOException $err) {
+                if ($this->_parseError($err, $err_code, $err_message)) {
+                    cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
+                }
+            }
+            $this->_stopTimer($query);
+
+            return $res;
+        }
+
+        return 0;
+    }
 
 	/**
 	 * Prepares a param for use in SQL query without wrapping it with quotes
@@ -475,7 +711,9 @@ class CotDB extends PDO
 	 */
 	public function prep($str)
 	{
-        if (empty($str)) return '';
+        if (empty($str)) {
+            return '';
+        }
 
 		return preg_replace("#^'(.*)'\$#", '$1', $this->quote((string) $str));
 	}
@@ -483,15 +721,11 @@ class CotDB extends PDO
 	/**
 	 * Registers an unprefixed table name in table names registry
 	 * @param  string $table_name Table name without a prefix, e.g. 'pages'
-     *
-     * @todo As of PHP 8.1.0, write access to the entire $GLOBALS array is no longer supported:
-     *       https://www.php.net/manual/en/reserved.variables.globals.php
      */
 	public function registerTable($table_name)
 	{
-		if (!isset($GLOBALS['db_' . $table_name]))
-		{
-			$GLOBALS['db_' . $table_name] = $GLOBALS['db_x'] . $table_name;
+		if (!isset($GLOBALS['db_' . $table_name])) {
+			$GLOBALS['db_' . $table_name] = $this->tablePrefix . $table_name;
 		}
 		$this->_tables[$table_name] = $GLOBALS['db_' . $table_name];
 	}
@@ -499,202 +733,203 @@ class CotDB extends PDO
 	/**
 	 * Runs an SQL script containing multiple queries.
 	 *
+     * Scripts should be created as before in MySQL format, with table prefix 'cot_'.
+     * The necessary table prefix will be substituted automatically, the necessary quote characters too.
+     *
 	 * @param string $script SQL script body, containing formatted queries separated by semicolons and newlines
-	 * @param resource $conn Custom connection handle
 	 * @return string Error message if an error occurs or empty string on success
+     * @todo process $this->tableQuoteCharacter
 	 */
 	public function runScript($script)
 	{
-		global $db_x;
+        if (empty($script)) {
+            return '';
+        }
 
 		// Remove comments
-		$script = preg_replace('#^/\*.*?\*/#m', '', $script);
+        $script = preg_replace('#^/\*.*?\*/#ms', "", $script);
 		$script = preg_replace('#^--.*?$#m', '', $script);
+
 		// Run queries separated by ; at the end of line
 		$queries =  preg_split('#;\r?\n#', $script);
-		foreach ($queries as $query)
-		{
+		foreach ($queries as $query) {
 			$query = trim($query);
-			if (!empty($query))
-			{
-				if ($db_x != 'cot_' && preg_match('#`cot_(\w+)`#', $query, $mt))
-				{
-					if (isset($GLOBALS['db_' . $mt[1]]))
-					{
-						$table_name = $GLOBALS['db_' . $mt[1]];
-						$query = str_replace($mt[0], "`$table_name`", $query);
-					}
-					else
-					{
-						$query = str_replace('`cot_', '`'.$db_x, $query);
-					}
-				}
-				$result = $this->query($query);
-				if (!$result)
-				{
-					return $this->error . '<br />' . htmlspecialchars($query) . '<hr />';
-				}
-				elseif ($result instanceof PDOStatement)
-				{
-					$result->closeCursor();
-				}
-			}
+            if (empty($query)) {
+                continue;
+            }
+
+            if (preg_match_all('#`cot_(\w+)`#', $query, $matches)) {
+                foreach ($matches[0] as $key => $match) {
+                    $tableName = isset($GLOBALS['db_' . $matches[1][$key]]) ?
+                        $GLOBALS['db_' . $matches[1][$key]] : $this->tablePrefix . $matches[1][$key];
+                    $query = str_replace($match, $this->quoteTableName($tableName), $query);
+                }
+            }
+
+            $query = str_replace('`', $this->columnQuoteCharacter, $query);
+
+            $result = $this->query($query);
+            if (!$result) {
+                return $this->error . '<br />' . htmlspecialchars($query) . '<hr />';
+            } elseif ($result instanceof PDOStatement) {
+                $result->closeCursor();
+            }
 		}
+
 		return '';
 	}
 
-	/**
-	 * 1) If called with one parameter:
-	 * Works like PDO::query()
-	 * Executes an SQL statement in a single function call, returning the result set (if any) returned by the statement as a PDOStatement object.
-	 * 2) If called with second parameter as array of input parameter bindings:
-	 * Works like PDO::prepare()->execute()
-	 * Prepares an SQL statement and executes it.
-	 * @see http://www.php.net/manual/en/pdo.query.php
-	 * @see http://www.php.net/manual/en/pdo.prepare.php
-	 * @param string $query The SQL statement to prepare and execute.
-	 * @param array $parameters An array of values to be binded as input parameters to the query. PHP int parameters will beconsidered as PDO::PARAM_INT, others as PDO::PARAM_STR.
-     * @param int $mode Fetch mode. See https://www.php.net/manual/ru/pdo.constants.php
+    /**
+     * Quotes a string value for use in a query.
      *
-     * @param mixed ...$fetch_mode_args Just for compatability with php 8.0. Actually not using
-     * @todo There is an another and more right way. Use composition instead of inheritance.
-     *
-     * @return PDOStatement
-     *
-     * Do not break compatibility with PHP 5. For NOW
-	 */
-    #[\ReturnTypeWillChange]
-	public function query($query, $parameters = [], $mode = PDO::FETCH_ASSOC, ...$fetch_mode_args)
-	{
-		if (!is_array($parameters))
-		{
-			$parameters = array($parameters);
-		}
-		$this->_startTimer();
-		try
-		{
-			if (count($parameters) > 0)
-			{
-				if ($this->_prepare_itself)
-				{
-					$result = parent::query($this->_prepare($query, $parameters));
-				}
-				else
-				{
-					$result = parent::prepare($query);
-					$this->_bindParams($result, $parameters);
-					$result->execute();
-				}
-			}
-			else
-			{
-				$result = parent::query($query, $mode, ...$fetch_mode_args);
-			}
-		}
-		catch (PDOException $err)
-		{
-			if ($this->_parseError($err, $err_code, $err_message))
-			{
-				cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
-			}
-		}
-		$this->_stopTimer($query);
-		// In Cotonti we use PDO::FETCH_ASSOC by default to save memory
-		$result->setFetchMode($mode);
-		$this->_affected_rows = $result->rowCount();
-		return $result;
-	}
-
-	/**
-	 * Performs SQL UPDATE with simple data array. Array keys must match table keys, optionally you can specify
-	 * key prefix as fourth parameter. Strings get quoted and escaped automatically.
-	 * Ints and floats must be typecasted.
-	 * You can use special values in the array:
-	 * - PHP NULL => SQL NULL
-	 * - 'NOW()' => SQL NOW()
-	 *
-	 * @param string $table_name Table name
-	 * @param array $data Associative array containing data for update
-	 * @param string $condition Body of SQL WHERE clause
-	 * @param array $parameters Array of statement input parameters, see http://www.php.net/manual/en/pdostatement.execute.php
-	 * @param bool $update_null Nullify cells which have null values in the array. By default they are skipped
-	 * @return int The number of affected records or FALSE on error
-	 */
-	public function update($table_name, $data, $condition ='', $parameters = array(), $update_null = false)
-	{
-		if(!is_array($data))
-		{
-			return 0;
-		}
-		$upd = '';
-		if (!is_array($parameters))
-		{
-			$parameters = array($parameters);
-		}
-		if ($this->_prepare_itself && !empty($condition) && count($parameters) > 0)
-		{
-			$condition = $this->_prepare($condition, $parameters);
-			$parameters = array();
-		}
-		$condition = empty($condition) ? '' : 'WHERE '.$condition;
-		foreach ($data as $key => $val)
-		{
-			if (is_null($val) && !$update_null)
-			{
-				continue;
-			}
-			$upd .= "`$key`=";
-            if (is_null($val) || $val === 'NULL')
-			{
-				$upd .= 'NULL,';
-			}
-            elseif (is_bool($val))
-            {
-                $upd .= $val ? 'TRUE,' : 'FALSE,';
+     * @param string|string[] $data string or strings array for quotting
+     * @return string|string[] the properly quoted string or array of strings
+     * @see http://php.net/manual/en/pdo.quote.php
+     */
+    public function quote($data)
+    {
+        if (is_string($data)) {
+            if (($value = $this->adapter->quote($data)) !== false) {
+                return $value;
             }
-			elseif ($val === 'NOW()')
-			{
-				$upd .= 'NOW(),';
-			}
-			elseif (is_int($val) || is_float($val))
-			{
-				$upd .= $val.',';
-			}
-			else
-			{
-				$upd .= $this->quote($val) . ',';
-			}
 
-		}
-		if (!empty($upd))
-		{
-			$upd = mb_substr($upd, 0, -1);
-			$query = "UPDATE `$table_name` SET $upd $condition";
-			$this->_startTimer();
-			try
-			{
-				if (count($parameters) > 0)
-				{
-					$stmt = $this->prepare($query);
-					$this->_bindParams($stmt, $parameters);
-					$stmt->execute();
-					$res = $stmt->rowCount();
-				}
-				else
-				{
-					$res = $this->exec($query);
-				}
-			}
-			catch (PDOException $err)
-			{
-				if ($this->_parseError($err, $err_code, $err_message))
-				{
-					cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
-				}
-			}
-			$this->_stopTimer($query);
-			return $res;
-		}
-		return 0;
-	}
+            // the driver doesn't support quote (e.g. oci)
+            return "'" . addcslashes(str_replace("'", "''", $data), "\000\n\r\\\032") . "'";
+        }
+
+        if (!is_array($data)) {
+            return $data;
+        }
+
+        foreach ($data as $key => $str) {
+            // Don't quote integers
+            if (((string) ((int) $str)) != $str) {
+                $data[$key] = $this->quote($str);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Quotes a table name for use in a query.
+     * If the table name contains schema prefix, the prefix will also be properly quoted.
+     *
+     * If the table name is already quoted or contains special characters including '(',
+     * then this method will do nothing.
+     *
+     * @param string $name table name
+     * @return string the properly quoted table name
+     */
+    public function quoteTableName($name)
+    {
+        if (strncmp($name, '(', 1) === 0 && strpos($name, ')') === strlen($name) - 1) {
+            return $name;
+        }
+
+        if (strpos($name, '.') === false) {
+            return $this->quoteSimpleTableName($name);
+        }
+
+        $parts = explode('.', $name);
+        foreach ($parts as $i => $part) {
+            $parts[$i] = $this->quoteSimpleTableName($part);
+        }
+
+        return implode('.', $parts);
+    }
+
+    /**
+     * Alias for self::quoteTableName()
+     * Short name for ease of use
+     * @param string $name table name
+     * @return string the properly quoted table name
+     */
+    public function quoteT($name)
+    {
+        return $this->quoteTableName($name);
+    }
+
+    /**
+     * Quotes a simple table name for use in a query.
+     * A simple table name should contain the table name only without any schema prefix.
+     * If the table name is already quoted, this method will do nothing.
+     *
+     * @param string $name table name
+     * @return string the properly quoted table name
+     */
+    protected function quoteSimpleTableName($name)
+    {
+        if (is_string($this->tableQuoteCharacter)) {
+            $startChar = $endChar = $this->tableQuoteCharacter;
+
+        } else {
+            list($startChar, $endChar) = $this->tableQuoteCharacter;
+        }
+
+        if (strpos($name, $startChar) !== false) return $name;
+
+        return $startChar . $name . $endChar;
+    }
+
+    /**
+     * Quotes a column name for use in a query.
+     * If the column name contains prefix, the prefix will also be properly quoted.
+     * If the column name is already quoted or contains special characters including '(', '[['
+     * then this method will do nothing.
+     *
+     * @param string $name column name
+     * @return string the properly quoted column name
+     */
+    public function quoteColumnName($name)
+    {
+        if (strpos($name, '(') !== false || strpos($name, '[[') !== false) {
+            return $name;
+        }
+
+        if (($pos = strrpos($name, '.')) !== false) {
+            $prefix = $this->quoteTableName(substr($name, 0, $pos)) . '.';
+            $name = substr($name, $pos + 1);
+
+        } else {
+            $prefix = '';
+        }
+
+        return $prefix . $this->quoteSingleColumnName($name);
+    }
+
+    /**
+     * Alias for self::quoteColumnName()
+     * Short name for ease of use
+     * @param string $name table name
+     * @return string the properly quoted table name
+     */
+    public function quoteC($name)
+    {
+        return $this->quoteColumnName($name);
+    }
+
+    /**
+     * Quotes a simple column name for use in a query.
+     * A simple column name should contain the column name only without any prefix.
+     * If the column name is already quoted or is the asterisk character '*', this method will do nothing.
+     *
+     * @param string $name column name
+     * @return string the properly quoted column name
+     */
+    protected function quoteSingleColumnName($name)
+    {
+        if (is_string($this->tableQuoteCharacter)) {
+            $startChar = $endChar = $this->columnQuoteCharacter;
+
+        } else {
+            list($startChar, $endChar) = $this->columnQuoteCharacter;
+        }
+
+        if ($name === '*' || strpos($name, $startChar) !== false) {
+            return $name;
+        }
+
+        return $startChar . $name . $endChar;
+    }
 }

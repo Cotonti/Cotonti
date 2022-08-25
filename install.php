@@ -106,20 +106,27 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 
 	require_once $cfg['system_dir'].'/database.php';
 
-	$dbc_port = empty($cfg['mysqlport']) ? '' : ';port='.$cfg['mysqlport'];
-	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].$dbc_port.';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+    $db = new CotDB([
+        'host' => $cfg['mysqlhost'],
+        'port' => !empty($cfg['mysqlport']) ? $cfg['mysqlport'] : null,
+        'tablePrefix' => $db_x,
+        'user' => $cfg['mysqluser'],
+        'password' => $cfg['mysqlpassword'],
+        'dbName' => $cfg['mysqldb'],
+        'charset' => !empty($cfg['mysqlcharset']) ? $cfg['mysqlcharset'] : null,
+        'collate' => !empty($cfg['mysqlcollate']) ? $cfg['mysqlcollate'] : null,
+    ]);
 
 	cot::init();
 
 	$sql_install = @$db->query("SHOW TABLES LIKE '$db_updates'");
 
-	if ($sql_install->rowCount() != 1)
-	{
+	if ($sql_install->rowCount() != 1) {
 		define('COT_UPGRADE', true);
 		$cfg['defaulttheme'] = 'nemesis';
 		$cfg['defaultscheme'] = 'default';
 	}
-	require_once $cfg['system_dir'].'/common.php';
+	require_once $cfg['system_dir'] . '/common.php';
 }
 
 require_once cot_incfile('forms');
