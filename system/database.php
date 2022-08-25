@@ -758,7 +758,10 @@ class CotDB
                 continue;
             }
 
-            if (preg_match_all('#`cot_(\w+)`#', $query, $matches)) {
+            if (
+                ($this->tablePrefix != 'cot_' || $this->tableQuoteCharacter != '`') &&
+                preg_match_all('#`cot_(\w+)`#', $query, $matches)
+            ) {
                 foreach ($matches[0] as $key => $match) {
                     $tableName = isset($GLOBALS['db_' . $matches[1][$key]]) ?
                         $GLOBALS['db_' . $matches[1][$key]] : $this->tablePrefix . $matches[1][$key];
@@ -766,7 +769,9 @@ class CotDB
                 }
             }
 
-            $query = str_replace('`', $this->columnQuoteCharacter, $query);
+            if ($this->columnQuoteCharacter != '`') {
+                $query = str_replace('`', $this->columnQuoteCharacter, $query);
+            }
 
             $result = $this->query($query);
             if (!$result) {
