@@ -35,7 +35,7 @@ if (!function_exists('cot_install_config_replace')) {
  */
 
 $changeCollation = false;
-$mySqlVersion = cot::$db->getAttribute(PDO::ATTR_SERVER_VERSION);
+$mySqlVersion = cot::$db->getConnection()->getAttribute(PDO::ATTR_SERVER_VERSION);
 if (
     version_compare($mySqlVersion, '5.7', '>=') &&
     version_compare(PHP_VERSION, '5.5', '>=') &&
