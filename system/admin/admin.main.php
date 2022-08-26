@@ -26,8 +26,7 @@ $u = cot_import('u', 'P', 'TXT');
 $s = cot_import('s', 'G', 'ALP', 24);
 
 /* === Hook for the plugins === */
-foreach (cot_getextplugins('admin.main') as $pl)
-{
+foreach (cot_getextplugins('admin.main') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -45,8 +44,7 @@ if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'mo
 	$inc_file = cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
 }
 
-if (!file_exists($inc_file))
-{
+if (!file_exists($inc_file)) {
 	cot_die();
 }
 
@@ -69,9 +67,12 @@ $title_params = array(
 	'ADMIN' => cot::$L['Administration'],
 	'SUBTITLE' => $adminsubtitle
 );
-if(!isset($out['head'] )) $out['head']  = '';
-$out['head'] .= cot::$R['code_noindex'];
-$out['subtitle'] = empty($adminsubtitle) ? cot_title('{ADMIN}', $title_params) : cot_title('{SUBTITLE} - {ADMIN}', $title_params);
+if (!isset(cot::$out['head'] )) {
+    cot::$out['head']  = '';
+}
+cot::$out['head'] .= cot::$R['code_noindex'];
+cot::$out['subtitle'] = empty($adminsubtitle) ?
+    cot_title('{ADMIN}', $title_params) : cot_title('{SUBTITLE} - {ADMIN}', $title_params);
 
 require_once cot::$cfg['system_dir'].'/header.php';
 
@@ -85,19 +86,15 @@ $t->assign(array(
 ));
 
 /* === Hook for the plugins === */
-foreach (cot_getextplugins('admin.tags') as $pl)
-{
+foreach (cot_getextplugins('admin.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
 $t->parse('MAIN.BODY');
-if(!COT_AJAX)
-{
+if(!COT_AJAX) {
 	$t->parse('MAIN');
 	$t->out('MAIN');
-}
-else
-{
+} else {
 	$t->out('MAIN.BODY');
 }
 
