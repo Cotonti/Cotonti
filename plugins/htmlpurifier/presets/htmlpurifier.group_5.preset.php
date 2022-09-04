@@ -15,7 +15,7 @@ require_once cot::$cfg['plugins_dir'] . '/htmlpurifier/lib/standalone/HTMLPurifi
  * HTML Purifier config set
  * @see http://htmlpurifier.org/live/configdoc/plain.html
  */
-$htmlpurifier_preset = array(
+$htmlpurifier_preset = [
 	// Auto-format
 	'AutoFormat.AutoParagraph'					=> false,
 	'AutoFormat.DisplayLinkURI'					=> false,
@@ -23,15 +23,25 @@ $htmlpurifier_preset = array(
 	'AutoFormat.RemoveEmpty.RemoveNbsp'			=> false,
 	'AutoFormat.RemoveEmpty'					=> true,
 	'AutoFormat.RemoveSpansWithoutAttributes'	=> true,
-	// Filter
-	'Filter.Custom'								=> array(),
+
+    // This directive can be used to add custom filters; it is nearly the equivalent of the now deprecated
+    // HTMLPurifier->addFilter() method. Specify an array of concrete implementations.
+	'Filter.Custom'								=> [],
+
 	// HTML & Output
 	'HTML.Allowed'								=> null, // All from HTML Purifier policy
 	'HTML.FlashAllowFullScreen'					=> true,
 	'HTML.Nofollow'								=> true,
 	'HTML.SafeObject'							=> true,
 	'HTML.SafeEmbed'							=> true,
+
+    // Indicates whether or not the user input is trusted or not. If the input is trusted, a more expansive set of
+    // allowed tags and attributes will be used.
 	'HTML.Trusted'								=> true,
+
+    // 'HTML.Trusted' = true is also enables <script> tags. It is not we really expected.
+    'HTML.ForbiddenElements'                    => ['script'],
+
 	'Output.FlashCompat'						=> true,
 	'Filter.YouTube'							=> true,
 	// URI
@@ -41,4 +51,4 @@ $htmlpurifier_preset = array(
 
 	'Attr.AllowedFrameTargets'					=> array( '_blank', '_self', '_parent', '_top'),
 	'Attr.EnableID'								=> true, // to allow anchors
-);
+];

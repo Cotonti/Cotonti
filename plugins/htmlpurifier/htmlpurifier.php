@@ -19,19 +19,23 @@ defined('COT_CODE') or die('Wrong URL');
  * A HTM filter callback using HTML Purifier
  *
  * @param string $value Unfiltered HTML value
- * @param string $name Input name
+ * @param string $name Deprecated. Input name
  * @return string Purified HTML
  */
-function htmlpurifier_filter($value, $name)
+function htmlpurifier_filter($value, $name = '')
 {
 	if (cot::$sys['parser'] == 'html') {
-		static $purifier = null;
-		// Lazy loading to save performance
+
+        static $purifier = null;
+
+        // Lazy loading to save performance
 		if (is_null($purifier)) {
 			define('HTMLPURIFIER_PREFIX', cot::$cfg['plugins_dir'] . '/htmlpurifier/lib/standalone');
 			require_once cot::$cfg['plugins_dir'] . '/htmlpurifier/lib/HTMLPurifier.standalone.php';
 			$cacheDir = cot::$cfg['cache_dir'] . DIRECTORY_SEPARATOR . 'htmlpurifier';
-			if (!file_exists($cacheDir)) mkdir($cacheDir, 0775, true);
+			if (!file_exists($cacheDir)) {
+                mkdir($cacheDir, 0775, true);
+            }
 			$cacheDir = realpath($cacheDir);
 
 			$config = HTMLPurifier_Config::createDefault();
@@ -95,7 +99,7 @@ function htmlpurifier_filter($value, $name)
 			$purifier = new HTMLPurifier($config);
 		}
 
-		return $purifier->purify($value);
+        return $purifier->purify($value);
         
 	} else {
 		return $value;

@@ -412,7 +412,7 @@ class CotDB
 				if ($this->_prepare_itself) {
 					$res = $this->adapter->exec($this->_prepare($query, $parameters));
 				} else {
-					$stmt = $this->prepare($query);
+					$stmt = $this->adapter->prepare($query);
 					$this->_bindParams($stmt, $parameters);
 					$stmt->execute();
 					$res = $stmt->rowCount();

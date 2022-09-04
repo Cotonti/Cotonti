@@ -16,19 +16,23 @@ Hooks=rc
 defined('COT_CODE') or die('Wrong URL');
 
 
-if ($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['autocomplete']['autocomplete'] > 0)
-{
-	cot_rc_add_file($cfg['plugins_dir'] . '/autocomplete/lib/jquery.autocomplete.min.js');
-	if($cfg['plugin']['autocomplete']['css'])
-	{
-		cot_rc_add_file($cfg['plugins_dir'] . '/autocomplete/lib/jquery.autocomplete.css');
+if (cot::$cfg['jquery'] && cot::$cfg['turnajax'] && cot::$cfg['plugin']['autocomplete']['autocomplete'] > 0) {
+    Resources::addFile(cot::$cfg['plugins_dir'] . '/autocomplete/lib/jquery.autocomplete.min.js');
+
+	if(cot::$cfg['plugin']['autocomplete']['css']) {
+        Resources::addFile(cot::$cfg['plugins_dir'] . '/autocomplete/lib/jquery.autocomplete.css');
 	}
 
-	cot_rc_add_embed('autocomplete', '
-		$(document).ready(function(){
+    Resources::addEmbed(
+        '$(document).ready(function(){
 		    $( document ).on( "focus", ".userinput", function() {
-		        $(".userinput").autocomplete("index.php?r=autocomplete", {multiple: true, minChars: '.$cfg['plugin']['autocomplete']['autocomplete'].'});
+		        $(".userinput").autocomplete("index.php?r=autocomplete", {multiple: true, minChars: ' .
+                    cot::$cfg['plugin']['autocomplete']['autocomplete'] . '});
 		    });
-		});
-	');
+		});',
+        'js',
+        50,
+        'global',
+        'autocomplete'
+    );
 }

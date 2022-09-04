@@ -17,7 +17,6 @@ Tags=
 defined('COT_CODE') or die('Wrong URL');
 $poll = trim(cot_import('poll_text', 'P', 'HTM'));
 
-if(!empty($poll))
-{
+if (!empty($poll)) {
 	cot_poll_check();
 }

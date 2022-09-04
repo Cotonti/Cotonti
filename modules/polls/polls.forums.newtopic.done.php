@@ -16,7 +16,6 @@ Tags=
 
 defined('COT_CODE') or die('Wrong URL');
 
-if(!empty($poll))
-{
+if (!empty($poll)) {
 	cot_poll_save('forum', $q);
 }
