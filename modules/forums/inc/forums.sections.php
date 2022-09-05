@@ -66,6 +66,7 @@ $cot_act = array();
 foreach (cot::$structure['forums'] as $i => $x) {
 	$parents = explode('.', $x['path']);
 	$depth = count($parents);
+    $cot_act[$parents[0]] = 0;
 	if (cot_auth('forums', $i, 'R')) {
 		if ($depth < 2) {
 			$fstlvl[$i] = $i;
@@ -88,17 +89,18 @@ foreach (cot::$structure['forums'] as $i => $x) {
                 $cat_top[$parents[$ii]]['viewcount'] += $cat_top[$i]['fs_viewcount'];
             }
 		}
-		if (isset($cot_sections_act[$i]))  $cot_act[$parents[0]] += $cot_sections_act[$i];
+		if (isset($cot_sections_act[$i])) {
+            $cot_act[$parents[0]] += $cot_sections_act[$i];
+        }
 	}
 }
 
 $secact_max = count($cot_act) > 0 ? (max($cot_act)) : 0;
 
-$out['subtitle'] = cot::$L['Forums'];
+cot::$out['subtitle'] = cot::$L['Forums'];
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.sections.main') as $pl)
-{
+foreach (cot_getextplugins('forums.sections.main') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -121,9 +123,11 @@ $xx = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('forums.sections.loop');
 /* ===== */
+
 /* === Hook - Part1 : Set === */
 $extps = cot_getextplugins('forums.sections.loop.sections');
 /* ===== */
+
 /* === Hook - Part1 : Set === */
 $extpss = cot_getextplugins('forums.sections.loop.subsections');
 /* ===== */
@@ -142,8 +146,7 @@ foreach ($fstlvl as $x) {
 						'FORUMS_SECTIONS_ROW_NUM' => $zz,
 					));
 					/* === Hook - Part2 : Include === */
-					foreach ($extpss as $pl)
-					{
+					foreach ($extpss as $pl) {
 						include $pl;
 					}
 					/* ===== */
@@ -156,11 +159,12 @@ foreach ($fstlvl as $x) {
 
 			$secact_num = 0;
 			if ($secact_max) {
-				$secact_num = round(6.25 * $cot_sections_act[$y] / $secact_max);
-				$secact_num = ($secact_num>5) ? 5 : $secact_num;
-				$secact_num =  (!$secact_num && $cot_sections_act[$y]>1) ? 1 : $secact_num;
-
+				$secact_num = isset($cot_sections_act[$y]) ? round(6.25 * $cot_sections_act[$y] / $secact_max) : 0;
+				$secact_num = ($secact_num > 5) ? 5 : $secact_num;
+				$secact_num = (!$secact_num && !empty($cot_sections_act[$y]) && $cot_sections_act[$y] > 1) ?
+                    1 : $secact_num;
 			}
+
 			$t->assign(array(
 				'FORUMS_SECTIONS_ROW_SUBITEMS' => (isset($nxtlvl[$y]) && cot::$cfg['forums']['cat_' . $y]['defstate']) ? 1 : 0,
 				'FORUMS_SECTIONS_ROW_ACTIVITY' => cot_rc('forums_icon_section_activity', array('secact_num'=>$secact_num)),
@@ -202,8 +206,7 @@ foreach ($fstlvl as $x) {
 $t->parse('MAIN.FORUMS_SECTIONS');
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.sections.tags') as $pl)
-{
+foreach (cot_getextplugins('forums.sections.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

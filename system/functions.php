@@ -797,79 +797,106 @@ function cot_import_buffered($name, $value, $null = '')
 /**
  * Imports date stamp
  *
- * @param string $name Variable name preffix
+ * @param string $name Variable name
  * @param bool $usertimezone Use user timezone
  * @param bool $returnarray Return Date Array
  * @param string $source Source type: P (POST), C (COOKIE) or D (variable filtering)
- * @return mixed
+ * @return int|array{stamp: int, year: int, month: int, day: int, hour: int, minute: int}|null
  */
 function cot_import_date($name, $usertimezone = true, $returnarray = false, $source = 'P')
 {
-    if (function_exists('cot_import_date_custom'))
-    {
+    if (function_exists('cot_import_date_custom')) {
         return cot_import_date_custom($name, $usertimezone, $returnarray, $source);
     }
 
-    $result = NULL;
+    $result = null;
 
     /* === Hook === */
-    foreach (cot_getextplugins('import.date') as $pl)
-    {
+    foreach (cot_getextplugins('import.date') as $pl) {
         include $pl;
     }
     /* ===== */
 
-    if($result !== NULL) return $result;
+    if ($result !== null) {
+        return $result;
+    }
 
 	//$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$date = cot_import($name, $source, 'ARR');
 
-    $date['year']   = isset($date['year']) ? $date['year'] : 0;
-    $date['month']  = isset($date['month']) ? $date['month'] : 0;
-    $date['day']    = isset($date['day']) ? $date['day'] : 0;
-    $date['hour']   = isset($date['hour']) ? $date['hour'] : 0;
-    $date['minute'] = isset($date['minute']) ? $date['minute'] : 0;
-    $date['string'] = isset($date['string']) ? $date['string'] : '';
-    $date['format'] = isset($date['format']) ? $date['format'] : '';
+    $timestamp = null;
 
-	$year = cot_import($date['year'], 'D', 'INT');
-	$month = cot_import($date['month'], 'D', 'INT');
-	$day = cot_import($date['day'], 'D', 'INT');
-	$hour = cot_import($date['hour'], 'D', 'INT');
-	$minute = cot_import($date['minute'], 'D', 'INT');
+    /**
+     * Try to parse textual datetime string into a Unix timestamp
+     * @see https://www.php.net/manual/en/datetime.formats.time.php
+     */
+    if (empty($date)) {
+        $date = cot_import($name, $source, 'TXT');
+        if (empty($date)) {
+            return null;
+        }
 
-	if (count($date) > 0 && is_null($year) && is_null($month) && is_null($day) && is_null($hour) && is_null($minute) && empty($date['string'])) {
-		// Datetime field is present in form but it is set to zero date (empty)
-		return NULL;
-	}
+        $timestamp = strtotime($date);
+        if ($timestamp === false) {
+            return null;
+        }
+    }
 
-	if (($month && $day && $year) || ($day && $minute)) {
-		$timestamp = cot_mktime($hour, $minute, 0, $month, $day, $year);
+    // Parse datetime array
+    if ($timestamp === null) {
+        $date['year'] = isset($date['year']) ? $date['year'] : 0;
+        $date['month'] = isset($date['month']) ? $date['month'] : 0;
+        $date['day'] = isset($date['day']) ? $date['day'] : 0;
+        $date['hour'] = isset($date['hour']) ? $date['hour'] : 0;
+        $date['minute'] = isset($date['minute']) ? $date['minute'] : 0;
+        $date['string'] = isset($date['string']) ? $date['string'] : '';
+        $date['format'] = isset($date['format']) ? $date['format'] : '';
 
-    } else {
-		$string = cot_import($date['string'], 'D', 'TXT');
-		$format = cot_import($date['format'], 'D', 'TXT');
-		if ($string) {
-            $format =  !empty($format) ? $format : 'Y-m-d H:i';
-			$timestamp = cot_date2stamp($string, $format);
+        $year = cot_import($date['year'], 'D', 'INT');
+        $month = cot_import($date['month'], 'D', 'INT');
+        $day = cot_import($date['day'], 'D', 'INT');
+        $hour = cot_import($date['hour'], 'D', 'INT');
+        $minute = cot_import($date['minute'], 'D', 'INT');
 
+        if (
+            count($date) > 0 &&
+            is_null($year) &&
+            is_null($month) &&
+            is_null($day) &&
+            is_null($hour) &&
+            is_null($minute) &&
+            empty($date['string'])
+        ) {
+            // Datetime field is present in form but it is set to zero date (empty)
+            return null;
+        }
+
+        $timestamp = 0;
+        if (($month && $day && $year) || ($day && $minute)) {
+            $timestamp = cot_mktime($hour, $minute, 0, $month, $day, $year);
         } else {
-			return NULL;
-		}
-	}
-
+            $string = cot_import($date['string'], 'D', 'TXT');
+            $format = cot_import($date['format'], 'D', 'TXT');
+            if ($string) {
+                $format = !empty($format) ? $format : 'Y-m-d H:i';
+                $timestamp = cot_date2stamp($string, $format);
+            } else {
+                return null;
+            }
+        }
+    }
 	if ($usertimezone) {
 		$timestamp -= cot::$usr['timezone'] * 3600;
 	}
 
 	if ($returnarray) {
-		$result = array();
+		$result = [];
 		$result['stamp'] = $timestamp;
-		$result['year'] = (int)date('Y', $timestamp);
-		$result['month'] = (int)date('m', $timestamp);
-		$result['day'] = (int)date('d', $timestamp);
-		$result['hour'] = (int)date('H', $timestamp);
-		$result['minute'] = (int)date('i', $timestamp);
+		$result['year'] = (int) date('Y', $timestamp);
+		$result['month'] = (int) date('m', $timestamp);
+		$result['day'] = (int) date('d', $timestamp);
+		$result['hour'] = (int) date('H', $timestamp);
+		$result['minute'] = (int) date('i', $timestamp);
 		return $result;
 	}
 
