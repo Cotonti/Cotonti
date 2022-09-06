@@ -82,34 +82,35 @@ function cot_config_type_int($cfg_var, $min='', $max='')
  * @param bool $skip_warnings Does not display warnings if set
  * @return int|NULL Filtered integer value or NULL in case of value can not be filtered / not acceptable
  */
-function cot_config_type_int_filter($new_value, $cfg_var, $min='', $max='', $skip_warnings=false)
+function cot_config_type_int_filter($new_value, $cfg_var, $min = '', $max = '', $skip_warnings = false)
 {
 	$not_filtered = $new_value;
 	$var_name = $cfg_var['config_name'];
 	list($title, $hint) = cot_config_titles($var_name, $cfg_var['config_text']);
-	if (!is_numeric($new_value))
-	{
+
+    $fix_msg = '';
+    $not_num = false;
+
+	if (!is_numeric($new_value)) {
 		$not_num = true;
-	}
-	else
-	{
+	} else {
 		$new_value = floor($new_value);
-		if (!empty($min) && $new_value < $min)
-		{
+		if (!empty($min) && $new_value < $min) {
 			$new_value = $min;
-			$fix_msg = '. '.cot_rc('adm_set').cot_rc('adm_int_min', array('value'=>$min));
+			$fix_msg = '. '.cot_rc('adm_set') . cot_rc('adm_int_min', array('value' => $min));
 		}
-		if (!empty($max) && $new_value > $max)
-		{
+		if (!empty($max) && $new_value > $max) {
 			$new_value = $max;
-			$fix_msg = '. '.cot_rc('adm_set').cot_rc('adm_int_max', array('value'=>$max));
+			$fix_msg = '. ' . cot_rc('adm_set') . cot_rc('adm_int_max', array('value' => $max));
 		}
 	}
 	// user friendly notification
 	$invalid_value_msg = cot_rc('adm_invalid_input', array('value' => $not_filtered, 'field_name' => $title ));
-	if (!$skip_warnings && ($fix_msg || $not_num)) cot_message($invalid_value_msg . $fix_msg, $not_num ? 'error' : 'warning', $var_name);
+	if (!$skip_warnings && ($fix_msg || $not_num)) {
+        cot_message($invalid_value_msg . $fix_msg, $not_num ? 'error' : 'warning', $var_name);
+    }
 
-	return $not_num ? NULL : (int)$new_value;
+	return $not_num ? null : (int) $new_value;
 }
 
 /**

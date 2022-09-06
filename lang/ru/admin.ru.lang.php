@@ -123,7 +123,7 @@ $L['cfg_hostip_hint'] = 'Необязательно';
 $L['cfg_maxrowsperpage'] = 'Макс. количество элементов на страницу';
 $L['cfg_maxrowsperpage_hint'] = 'Стандартный лимит элементов для паджинации';
 $L['cfg_parser'] = 'Парсер разметки';
-$L['cfg_parser_hint'] = 'По умолчанию: простой текст';
+$L['cfg_parser_hint'] = 'По умолчанию: HTML';
 
 /**
  * Config Section

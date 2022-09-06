@@ -85,13 +85,13 @@ if ($a == 'update') {
 		cot_error('forums_messagetooshort', 'rmsgtext');
 	}
 
-    if(!empty(cot::$extrafields[cot::$db->forum_topics])) {
+    if (!empty(cot::$extrafields[cot::$db->forum_topics])) {
         foreach (cot::$extrafields[cot::$db->forum_topics] as $exfld) {
             $rtopic['ft_' . $exfld['field_name']] = cot_import_extrafields('rtopic' . $exfld['field_name'], $exfld, 'P', '', 'forums_topic_');
         }
     }
 
-    if(!empty(cot::$extrafields[cot::$db->forum_posts])) {
+    if (!empty(cot::$extrafields[cot::$db->forum_posts])) {
         foreach (cot::$extrafields[cot::$db->forum_posts] as $exfld) {
             $rmsg['fp_'.$exfld['field_name']] = cot_import_extrafields('rmsg'.$exfld['field_name'], $exfld, 'P', '', 'forums_post_');
         }
@@ -106,7 +106,7 @@ if ($a == 'update') {
 			if (mb_substr($rtopic['ft_title'], 0, 1) == "#") {
 				$rtopic['ft_title'] = str_replace('#', '', $rtopic['ft_title']);
 			}
-			$rtopic['ft_preview'] = cot_string_truncate($rmsg['fp_text'], 120);
+            $rtopic['ft_preview'] = !empty($rmsg['fp_text']) ? cot_string_truncate($rmsg['fp_text'], 120) : '';
             // If preview string is still too long, let's strip tags and try again
             if (mb_strlen($rtopic['ft_preview']) > 128) {
                 $rtopic['ft_preview'] = cot_string_truncate(strip_tags($rmsg['fp_text']), 120, false);

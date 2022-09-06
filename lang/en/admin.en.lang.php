@@ -123,7 +123,7 @@ $L['cfg_hostip_hint'] = 'The IP of the server, optional.';
 $L['cfg_maxrowsperpage'] = 'Max. items per page';
 $L['cfg_maxrowsperpage_hint'] = 'Default item limit for pagination';
 $L['cfg_parser'] = 'Markup parser';
-$L['cfg_parser_hint'] = 'Default is: plain text';
+$L['cfg_parser_hint'] = 'Default is: HTML';
 
 /**
  * Config Section

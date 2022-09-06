@@ -4527,6 +4527,10 @@ function cot_parse_autourls($text)
  */
 function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact = false, $cuttext = '')
 {
+    if (empty($text)) {
+        return $text;
+    }
+
     $truncated_by_space = false;
     $plain_mode = false;
     $truncate = '';
@@ -4536,7 +4540,10 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 
 	if ($considerhtml) {
 		// if the plain text is shorter than the maximum length, return the whole text
-		if (!preg_match('/<\s*(pre|plaintext)/', $text) && mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length) {
+		if (
+            !preg_match('/<\s*(pre|plaintext)/', $text) &&
+            mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length
+        ) {
 			return $text;
 		}
 		// splits all html-tags to scanable lines
@@ -4547,7 +4554,10 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 			if (!empty($line_matchings[1])) {
 				// if it's an "empty element" with or without xhtml-conform closing slash (f.e. <br/>)
 				if (
-                    preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1])
+                    preg_match(
+                        '/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is',
+                        $line_matchings[1]
+                    )
                 ) {
 					// do nothing
 
@@ -4568,10 +4578,14 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 					$tag = strtolower($tag_matchings[1]);
 					$plain_tag = in_array($tag, array('pre','plaintext')) ? $tag : false;
 					// add tag to the beginning of $open_tags list
-					if (!$plain_mode && !$plain_tag) array_unshift($open_tags, mb_strtolower($tag));
+					if (!$plain_mode && !$plain_tag) {
+                        array_unshift($open_tags, mb_strtolower($tag));
+                    }
 				}
 				// add html-tag to $truncate'd text
-				if (!$plain_mode) $truncate .= $line_matchings[1];
+				if (!$plain_mode) {
+                    $truncate .= $line_matchings[1];
+                }
 			}
 
 			// the number of characters which are left
@@ -4587,7 +4601,9 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 					$truncate .= mb_substr($content, 0, $left);
 					$total_length += $left;
 				}
-				if ($plain_tag && !$plain_mode) $plain_mode = $plain_tag;
+				if ($plain_tag && !$plain_mode) {
+                    $plain_mode = $plain_tag;
+                }
 
 			} else {
 				// calculate the length of the plain text part of the line; handle entities as one character

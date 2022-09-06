@@ -13,8 +13,8 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_langfile('pm', 'module');
 require_once cot_incfile('pm', 'module', 'resources');
 
-$parser = ! empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
-$editor = cot::$cfg['plugin'][$parser]['editor'];
+$parser = !empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
+$editor = isset(cot::$cfg['plugin'][$parser]) ? cot::$cfg['plugin'][$parser]['editor'] : null;
 
 cot::$db->registerTable('pm');
 
