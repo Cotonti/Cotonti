@@ -4,16 +4,16 @@
 		<div class="error">{PHP.L.forums_privatetopic}</div>
 <!-- END: FORUMS_POSTS_TOPICPRIVATE -->
 
-<!-- BEGIN: POLLS_VIEW -->
+		<!-- BEGIN: POLLS_VIEW -->
 		<div class="block">
 			<h2 class="polls">{POLLS_TITLE}</h2>
 			{POLLS_FORM}
 		</div>
-<!-- END: POLLS_VIEW -->
+		<!-- END: POLLS_VIEW -->
 
 		<div class="block">
 			<h2 class="forums">{FORUMS_POSTS_PAGETITLE}</h2>
-<!-- BEGIN: FORUMS_POSTS_ADMIN -->
+			<!-- BEGIN: FORUMS_POSTS_ADMIN -->
 			<form id="movetopic" action="{FORUMS_POSTS_MOVE_URL}" method="post" class="marginbottom10">
 				<table class="flat">
 					<tr>
@@ -34,7 +34,7 @@
 					</tr>
 				</table>
 			</form>
-<!-- END: FORUMS_POSTS_ADMIN -->
+			<!-- END: FORUMS_POSTS_ADMIN -->
 			<table class="cells">
 				<tr>
 					<td class="coltop width20">{PHP.L.Author}</td>

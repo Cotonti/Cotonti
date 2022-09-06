@@ -4450,33 +4450,24 @@ function cot_get_parsers()
  */
 function cot_parse($text, $enable_markup = true, $parser = '')
 {
-	global $cfg, $cot_plugins;
+	global $cot_plugins;
 
 	$plain = true;
-	if ($enable_markup)
-	{
-		if (empty($parser))
-		{
-			$parser = $cfg['parser'];
+	if ($enable_markup) {
+		if (empty($parser)) {
+			$parser = cot::$cfg['parser'];
 		}
-		if (!empty($parser) && $parser != 'none')
-		{
+		if (!empty($parser) && $parser != 'none') {
 			$func = "cot_parse_$parser";
-			if (function_exists($func))
-			{
+			if (function_exists($func)) {
 				$text = $func($text);
 				$plain = false;
-			}
-			else
-			{
+			} else {
 				// Load the appropriate parser
-				if (is_array($cot_plugins['parser']))
-				{
-					foreach ($cot_plugins['parser'] as $k)
-					{
-						if ($k['pl_code'] == $parser && cot_auth('plug', $k['pl_code'], 'R'))
-						{
-							include $cfg['plugins_dir'] . '/' . $k['pl_file'];
+				if (isset($cot_plugins['parser']) && is_array($cot_plugins['parser'])) {
+					foreach ($cot_plugins['parser'] as $k) {
+						if ($k['pl_code'] == $parser && cot_auth('plug', $k['pl_code'], 'R')) {
+							include cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
 							$text = $func($text);
 							$plain = false;
 							break;
@@ -4492,8 +4483,7 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 	}
 
 	/* == Hook == */
-	foreach (cot_getextplugins('parser.last') as $pl)
-	{
+	foreach (cot_getextplugins('parser.last') as $pl) {
 		include $pl;
 	}
 	/* ===== */

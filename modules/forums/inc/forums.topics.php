@@ -298,6 +298,13 @@ foreach ($sql_forums_rowset as $row) {
 		$row['ft_icon_type_ex'] .= '_posted';
 	}
 
+    $topicPreview = '';
+    if (!empty($row['ft_preview'])) {
+        $topicPreview = cot_parse(
+            $row['ft_preview'],
+            (cot::$cfg['forums']['markup'] && cot::$cfg['forums']['cat_' . $s]['allowbbcodes'])
+        ) . '...';
+    }
 	$t->assign(array(
 		'FORUMS_TOPICS_ROW_ID' => $row['ft_id'],
 		'FORUMS_TOPICS_ROW_STATE' => $row['ft_state'],
@@ -320,7 +327,7 @@ foreach ($sql_forums_rowset as $row) {
 		'FORUMS_TOPICS_ROW_LASTPOSTER' => $row['ft_lastpostername'],
 		'FORUMS_TOPICS_ROW_USER_POSTED' => isset($row['ft_user_posted']) ? (int) $row['ft_user_posted'] : '',
 		'FORUMS_TOPICS_ROW_URL' => $row['ft_url'],
-		'FORUMS_TOPICS_ROW_PREVIEW' => $row['ft_preview'].'...',
+		'FORUMS_TOPICS_ROW_PREVIEW' => $topicPreview,
 		'FORUMS_TOPICS_ROW_PAGES' => $row['ft_pages'],
 		'FORUMS_TOPICS_ROW_MAXPAGES' => $row['ft_maxpages'],
 		'FORUMS_TOPICS_ROW_ODDEVEN' => cot_build_oddeven($ft_num),

@@ -84,11 +84,23 @@ foreach (cot::$structure['forums'] as $i => $x) {
                     $cat_top[$parents[$ii]]['fs_lt_postername'] = $cat_top[$i]['fs_lt_postername'];
                 }
 
+                if (!isset($cat_top[$parents[$ii]]['topiccount'])) {
+                    $cat_top[$parents[$ii]]['topiccount'] = 0;
+                }
                 $cat_top[$parents[$ii]]['topiccount'] += $cat_top[$i]['fs_topiccount'];
+
+                if (!isset($cat_top[$parents[$ii]]['postcount'])) {
+                    $cat_top[$parents[$ii]]['postcount'] = 0;
+                }
                 $cat_top[$parents[$ii]]['postcount'] += $cat_top[$i]['fs_postcount'];
+
+                if (!isset($cat_top[$parents[$ii]]['viewcount'])) {
+                    $cat_top[$parents[$ii]]['viewcount'] = 0;
+                }
                 $cat_top[$parents[$ii]]['viewcount'] += $cat_top[$i]['fs_viewcount'];
             }
 		}
+
 		if (isset($cot_sections_act[$i])) {
             $cot_act[$parents[0]] += $cot_sections_act[$i];
         }

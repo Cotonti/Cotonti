@@ -50,7 +50,7 @@
 					<td class="coltop width10">{FORUMS_TOPICS_TITLE_POSTS}</td>
 					<td class="coltop width10">{FORUMS_TOPICS_TITLE_VIEWS}</td>
 				</tr>
-<!-- BEGIN: FORUMS_TOPICS_ROW -->
+				<!-- BEGIN: FORUMS_TOPICS_ROW -->
 				<tr>
 					<td class="centerall {FORUMS_TOPICS_ROW_ODDEVEN}">{FORUMS_TOPICS_ROW_ICON}</td>
 					<td class="{FORUMS_TOPICS_ROW_ODDEVEN}">
@@ -68,7 +68,7 @@
 						{FORUMS_TOPICS_ROW_VIEWCOUNT}
 					</td>
 				</tr>
-<!-- END: FORUMS_TOPICS_ROW -->
+				<!-- END: FORUMS_TOPICS_ROW -->
 			</table>
 
 			<p class="paging">
