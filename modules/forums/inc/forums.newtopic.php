@@ -63,6 +63,10 @@ if ($a == 'newtopic')
 	$rtopic['ft_desc'] = cot_import('rtopicdesc','P','TXT', 255);
 	$rtopic['ft_mode'] = (int)(cot_import('rtopicmode','P','BOL') && $cfg['forums']['cat_' . $s]['allowprvtopics']) ? 1 : 0;
     $rtopic['ft_preview'] = cot_string_truncate($rmsg['fp_text'], 120);
+    // If preview string is still too long, let's strip tags and try again
+    if (mb_strlen($rtopic['ft_preview']) > 128) {
+        $rtopic['ft_preview'] = cot_string_truncate(strip_tags($rmsg['fp_text']), 120, false);
+    }
 
 	if (mb_strlen($rtopic['ft_title']) < $cfg['forums']['mintitlelength'])
 	{

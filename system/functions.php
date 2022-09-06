@@ -4528,6 +4528,12 @@ function cot_parse_autourls($text)
 function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact = false, $cuttext = '')
 {
     $truncated_by_space = false;
+    $plain_mode = false;
+    $truncate = '';
+    $open_tags = [];
+    $total_length = 0;
+    $plain_tag = false;
+
 	if ($considerhtml) {
 		// if the plain text is shorter than the maximum length, return the whole text
 		if (!preg_match('/<\s*(pre|plaintext)/', $text) && mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length) {
@@ -4536,22 +4542,17 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 		// splits all html-tags to scanable lines
 		preg_match_all('/(<.+?>)?([^<>]*)/s', $text, $lines, PREG_SET_ORDER);
 
-		$total_length = 0;
-		$open_tags = array();
-		$truncate = '';
-		$plain_mode = false;
-		$plain_tag = false;
 		foreach ($lines as $line_matchings) {
 			// if there is any html-tag in this line, handle it and add it (uncounted) to the output
 			if (!empty($line_matchings[1])) {
 				// if it's an "empty element" with or without xhtml-conform closing slash (f.e. <br/>)
-				if (preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1]))
-				{
+				if (
+                    preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1])
+                ) {
 					// do nothing
-				}
-				// if tag is a closing tag (f.e. </b>)
-				elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings))
-				{
+
+				} elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings)) {
+                    // if tag is a closing tag (f.e. </b>)
 					$tag = false;
 					if (strtolower($tag_matchings[1]) == $plain_mode) {
 						$plain_mode = false;
@@ -4562,10 +4563,8 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 							unset($open_tags[$pos]);
 						}
 					}
-				}
-				// if tag is an opening tag (f.e. <b>)
-				elseif (preg_match('/^<\s*([^\s>!]+).*?>$/s', $line_matchings[1], $tag_matchings))
-				{
+				} elseif (preg_match('/^<\s*([^\s>!]+).*?>$/s', $line_matchings[1], $tag_matchings)) {
+                    // if tag is an opening tag (f.e. <b>)
 					$tag = strtolower($tag_matchings[1]);
 					$plain_tag = in_array($tag, array('pre','plaintext')) ? $tag : false;
 					// add tag to the beginning of $open_tags list
@@ -4593,22 +4592,23 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 			} else {
 				// calculate the length of the plain text part of the line; handle entities as one character
 				$content_length = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};|[\r\n\s]{2,}/i', ' ', $line_matchings[2]));
-				if ($total_length+$content_length> $length)
-				{
+				if ($total_length+$content_length> $length) {
 					$entities_length = 0;
 					// search for html entities and spaces
-					if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};|[\r\n\s]{2,}/i', $line_matchings[2], $entities, PREG_OFFSET_CAPTURE))
-					{
+					if (
+                        preg_match_all(
+                            '/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};|[\r\n\s]{2,}/i',
+                            $line_matchings[2],
+                            $entities,
+                            PREG_OFFSET_CAPTURE
+                        )
+                    ) {
 						// calculate the real length of all entities in the legal range
-						foreach ($entities[0] as $entity)
-						{
-							if ($entity[1]+1-$entities_length <= $left)
-							{
+						foreach ($entities[0] as $entity) {
+							if ($entity[1]+1-$entities_length <= $left) {
 								$left--;
 								$entities_length += mb_strlen($entity[0]);
-							}
-							else
-							{
+							} else {
 								// no more characters left
 								break;
 							}
@@ -4618,9 +4618,7 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 					// maximum lenght is reached, so get off the loop
 					$truncated_by_space = preg_match('/[\r\n\s]/', mb_substr($line_matchings[2], $left+$entities_length, 1));
 					break;
-				}
-				else
-				{
+				} else {
 					$truncate .= $line_matchings[2];
 					$total_length += $content_length;
 				}
@@ -4656,9 +4654,11 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 	$truncate .= $cuttext;
 	if ($considerhtml) {
 		// close all unclosed html-tags
-		if ($plain_mode) $truncate .= '</'.$plain_mode.'>';
+		if ($plain_mode) {
+            $truncate .= '</' . $plain_mode . '>';
+        }
 		foreach ($open_tags as $tag) {
-			$truncate .= '</'.$tag.'>';
+			$truncate .= '</' . $tag . '>';
 		}
 	}
 	return $truncate;
