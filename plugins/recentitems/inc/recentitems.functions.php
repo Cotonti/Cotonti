@@ -116,6 +116,17 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			$row['ft_pages'] = $L['Pages'] . ":";
 		}
 
+        $topicPreview = '';
+        if (!empty($row['ft_preview'])) {
+            $allowBBCodes = isset(cot::$cfg['forums']['cat_' . $row['ft_cat']]) ?
+                cot::$cfg['forums']['cat_' . $row['ft_cat']]['allowbbcodes'] :
+                cot::$cfg['forums']['cat___default']['allowbbcodes'];
+            $topicPreview = cot_parse($row['ft_preview'], $allowBBCodes);
+            if (!empty($topicPreview)) {
+                $topicPreview .= '...';
+            }
+        }
+
 		$recentitems->assign(array(
 			'FORUM_ROW_ID' => $row['ft_id'],
 			'FORUM_ROW_STATE' => $row['ft_state'],
@@ -125,7 +136,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			'FORUM_ROW_PATH' => $build_forum,
 			'FORUM_ROW_PATH_SHORT' => $build_forum_short,
 			'FORUM_ROW_DESC' => htmlspecialchars($row['ft_desc']),
-			'FORUM_ROW_PREVIEW' => $row['ft_preview'] . '...',
+			'FORUM_ROW_PREVIEW' => $topicPreview,
 			'FORUM_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate']),
 			'FORUM_ROW_CREATIONDATE_STAMP' => $row['ft_creationdate'],
 			'FORUM_ROW_UPDATED' => $row['ft_lastpostlink'],

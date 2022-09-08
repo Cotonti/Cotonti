@@ -455,16 +455,16 @@ $cot_cat = &$structure['page'];
 
 if (!$cache || !$cot_cfg) {
 	// Fill missing options with default values
-	foreach ($structure as $module => $mod_struct)
-	{
-		if (is_array($cfg[$module]['cat___default']) && is_array($mod_struct))
-		{
-			foreach ($mod_struct as $cat => $row)
-			{
-				foreach ($cfg[$module]['cat___default'] as $key => $val)
-				{
-					if (!isset($cfg[$module]['cat_' . $cat][$key]))
-					{
+	foreach ($structure as $module => $mod_struct) {
+		if (
+            isset($cfg[$module]['cat___default']) &&
+            isset($mod_struct) &&
+            is_array($cfg[$module]['cat___default']) &&
+            is_array($mod_struct)
+        ) {
+			foreach ($mod_struct as $cat => $row) {
+				foreach ($cfg[$module]['cat___default'] as $key => $val) {
+					if (!isset($cfg[$module]['cat_' . $cat][$key])) {
 						$cfg[$module]['cat_' . $cat][$key] = $val;
 					}
 				}
@@ -478,8 +478,7 @@ if (!$cache || !$cot_cfg) {
 unset($cot_cfg);
 
 /* === Hook === */
-foreach (cot_getextplugins('input') as $pl)
-{
+foreach (cot_getextplugins('input') as $pl) {
 	include $pl;
 }
 /* ======================== */
@@ -487,13 +486,11 @@ foreach (cot_getextplugins('input') as $pl)
 
 /* ======== Maintenance mode ======== */
 
-if ($cfg['maintenance'] && !defined('COT_INSTALL'))
-{
+if ($cfg['maintenance'] && !defined('COT_INSTALL')) {
 	$sqll = $db->query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
 	$roow = $sqll->fetch();
 
-	if (!$roow['grp_maintenance'] && !defined('COT_AUTH'))
-	{
+	if (!$roow['grp_maintenance'] && !defined('COT_AUTH')) {
 		cot_redirect(cot_url('login'));
 	}
 }

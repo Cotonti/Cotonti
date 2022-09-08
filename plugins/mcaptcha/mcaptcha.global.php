@@ -91,7 +91,7 @@ function mcaptcha_obfuscate($text)
 		$enc_string .= ($enc_char == '\\' ? '\\\\' : $enc_char);
 	}
 	// get a random string to use as a function name
-	srand((float) microtime() * 10000000);
+	srand((int) ((float) microtime() * 10000000));
 	$letters = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 	$rnd = $letters[array_rand($letters)] . md5(time());
 	// the actual js (in one line to confuse)

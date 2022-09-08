@@ -300,10 +300,13 @@ foreach ($sql_forums_rowset as $row) {
 
     $topicPreview = '';
     if (!empty($row['ft_preview'])) {
-        $topicPreview = cot_parse(
-            $row['ft_preview'],
-            (cot::$cfg['forums']['markup'] && cot::$cfg['forums']['cat_' . $s]['allowbbcodes'])
-        ) . '...';
+        $allowBBCodes = isset(cot::$cfg['forums']['cat_' . $s]) ?
+            cot::$cfg['forums']['cat_' . $s]['allowbbcodes'] :
+            cot::$cfg['forums']['cat___default']['allowbbcodes'];
+        $topicPreview = cot_parse($row['ft_preview'], $allowBBCodes);
+        if (!empty($topicPreview)) {
+            $topicPreview .= '...';
+        }
     }
 	$t->assign(array(
 		'FORUMS_TOPICS_ROW_ID' => $row['ft_id'],
