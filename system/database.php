@@ -828,6 +828,10 @@ class CotDB
      */
     public function quoteTableName($name)
     {
+        if (empty($name)) {
+            return '';
+        }
+
         if (strncmp($name, '(', 1) === 0 && strpos($name, ')') === strlen($name) - 1) {
             return $name;
         }

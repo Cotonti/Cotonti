@@ -553,14 +553,14 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
  */
 function cot_extension_uninstall($name, $is_module = false)
 {
-	global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins, $cot_plugins_active, $cot_plugins_enabled, $cot_modules, $env, $structure, $db_structure;
+	global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins,
+           $cot_plugins_active, $cot_plugins_enabled, $cot_modules, $env, $structure, $db_structure, $L;
 
-	$path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
-		. "/$name";
+	$path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 
 	// Emit initial message
 	cot_message(cot_rc('ext_uninstalling', array(
-		'type' => $is_module ? $L['Module'] : $L['Plugin'],
+		'type' => $is_module ? cot::$L['Module'] : cot::$L['Plugin'],
 		'name' => $name
 	)));
 
@@ -568,25 +568,18 @@ function cot_extension_uninstall($name, $is_module = false)
 	cot_plugin_remove($name);
 
 	// Drop auth and config
-	if ($is_module)
-	{
-		$db->delete($db_config, "config_owner = 'module'
-			AND config_cat = '$name'");
-		$db->delete($db_auth, "auth_code = '$name'");
-	}
-	else
-	{
-		$db->delete($db_config, "config_owner = 'plug'
-			AND config_cat = '$name'");
-		$db->delete($db_auth, "auth_code = 'plug'
-			AND auth_option = '$name'");
+	if ($is_module) {
+        cot::$db->delete($db_config, "config_owner = 'module' AND config_cat = '$name'");
+        cot::$db->delete($db_auth, "auth_code = '$name'");
+	} else {
+        cot::$db->delete($db_config, "config_owner = 'plug' AND config_cat = '$name'");
+        cot::$db->delete($db_auth, "auth_code = 'plug' AND auth_option = '$name'");
 	}
 	cot_message('ext_auth_uninstalled');
 	cot_message('ext_config_uninstalled');
 
 	// Remove extension structure
-	if ($is_module && isset($structure[$name]))
-	{
+	if ($is_module && isset($structure[$name])) {
 		$db->delete($db_structure, "structure_area = ?", $name);
 		unset($structure[$name]);
 	}

@@ -121,7 +121,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
             $allowBBCodes = isset(cot::$cfg['forums']['cat_' . $row['ft_cat']]) ?
                 cot::$cfg['forums']['cat_' . $row['ft_cat']]['allowbbcodes'] :
                 cot::$cfg['forums']['cat___default']['allowbbcodes'];
-            $topicPreview = cot_parse($row['ft_preview'], $allowBBCodes);
+            $topicPreview = trim(cot_parse($row['ft_preview'], $allowBBCodes));
             if (!empty($topicPreview)) {
                 $topicPreview .= '...';
             }

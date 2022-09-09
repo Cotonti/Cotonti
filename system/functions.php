@@ -4427,12 +4427,9 @@ function cot_get_parsers()
 {
 	global $cot_plugins;
 	$list = array('none');
-	if (is_array($cot_plugins['parser']))
-	{
-		foreach ($cot_plugins['parser'] as $k)
-		{
-			if (cot_auth('plug', $k['pl_code'], 'W'))
-			{
+	if (isset($cot_plugins['parser']) && is_array($cot_plugins['parser'])) {
+		foreach ($cot_plugins['parser'] as $k) {
+			if (cot_auth('plug', $k['pl_code'], 'W')) {
 				$list[] = $k['pl_code'];
 			}
 		}

@@ -303,7 +303,7 @@ foreach ($sql_forums_rowset as $row) {
         $allowBBCodes = isset(cot::$cfg['forums']['cat_' . $s]) ?
             cot::$cfg['forums']['cat_' . $s]['allowbbcodes'] :
             cot::$cfg['forums']['cat___default']['allowbbcodes'];
-        $topicPreview = cot_parse($row['ft_preview'], $allowBBCodes);
+        $topicPreview = trim(cot_parse($row['ft_preview'], $allowBBCodes));
         if (!empty($topicPreview)) {
             $topicPreview .= '...';
         }
