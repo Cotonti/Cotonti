@@ -53,8 +53,8 @@ if ($a == 'add') {
 
 	$ruser['user_name'] = cot_import('rusername','P','TXT', 100, TRUE);
 	$ruser['user_email'] = cot_import('ruseremail','P','TXT',64, TRUE);
-	$rpassword1 = cot_import('rpassword1','P','HTM',32);
-	$rpassword2 = cot_import('rpassword2','P','HTM',32);
+	$rpassword1 = (string) cot_import('rpassword1','P','NOC',32);
+	$rpassword2 = (string) cot_import('rpassword2','P','NOC',32);
 	$ruser['user_country'] = cot_import('rcountry','P','TXT');
 	$ruser['user_timezone'] = cot_import('rusertimezone','P','TXT');
 	$ruser['user_timezone'] = (!$ruser['user_timezone']) ? cot::$cfg['defaulttimezone'] : $ruser['user_timezone'];

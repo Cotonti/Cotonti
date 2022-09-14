@@ -69,8 +69,8 @@ switch ($step)
         $rurl = $rurl ? $rurl : '';
         $rurl = rtrim($rurl, '/');
 		$user['name'] = cot_import('user_name', 'P', 'TXT', 100, false, true);
-		$user['pass'] = cot_import('user_pass', 'P', 'TXT', 32);
-		$user['pass2'] = cot_import('user_pass2', 'P', 'TXT', 32);
+		$user['pass']  = (string) cot_import('user_pass', 'P', 'NOC', 32);
+		$user['pass2'] = (string) cot_import('user_pass2', 'P', 'NOC', 32);
 		$user['email'] = cot_import('user_email', 'P', 'TXT', 64, false, true);
 		$user['country'] = cot_import('user_country', 'P', 'TXT', 0, false, true);
         $rtheme = cot_import('theme', 'P', 'TXT', 0, false, true);
@@ -314,8 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$ruserpass['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
 				$ruserpass['user_password'] = cot_hash($user['pass'], $ruserpass['user_passsalt'], $ruserpass['user_passfunc']);
 
-				try
-				{
+				try {
 					$db->insert($db_x . 'users', array(
 						'user_name' => $user['name'],
 						'user_password' => $ruserpass['user_password'],
@@ -339,15 +338,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					));
 
 					$db->update($db_x . 'config', array('config_value' => $user['email']), "config_owner = 'core' AND config_name = 'adminemail'");
-				}
-				catch (PDOException $err)
-				{
+				} catch (PDOException $err) {
 					cot_error(cot_rc('install_error_sql_script', array('msg' => $err->getMessage())));
 				}
 
                 // robots.txt
                 $robotsTxtFilePath = './robots.txt';
-                if(file_exists($robotsTxtFilePath) && is_writable($robotsTxtFilePath)) {
+                if (file_exists($robotsTxtFilePath) && is_writable($robotsTxtFilePath)) {
                     $robotsTxtFile = file_get_contents($robotsTxtFilePath);
                     $tmp = 'Host: '.$domain;
                     $robotsTxtFile = str_replace('# Host: http://your-domain.com', $tmp, $robotsTxtFile);

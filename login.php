@@ -81,7 +81,7 @@ if ($a == 'check') {
 	/* ===== */
 
 	$rusername = cot_import('rusername','P','TXT', 100);
-	$rpassword = cot_import('rpassword','P','HTM', 32);
+	$rpassword = (string) cot_import('rpassword','P','NOC', 32);
 	$rcookiettl = cot_import('rcookiettl', 'P', 'INT');
 	$rremember = cot_import('rremember', 'P', 'BOL');
 	$token = cot_import('token', 'G', 'ALP');

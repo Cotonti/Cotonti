@@ -553,6 +553,10 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			}
 			break;
 
+        /**
+         * @deprecated
+         * Old password filter. Not used anymore
+         */
 		case 'PSW':
 			$v = trim($v);
 			$f = preg_replace('#[\'"&<>]#', '', $v);
