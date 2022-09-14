@@ -57,14 +57,11 @@ function cot_i18n_build_catpath($area, $cat, $locale)
  */
 function cot_i18n_enabled($cat)
 {
-	global $cfg, $structure;
-
 	static $i18n_cats = false;
 
-	if (!$i18n_cats)
-	{
+	if (!$i18n_cats) {
 		// Get configured cats
-		$i18n_cats = explode(',', $cfg['plugin']['i18n']['cats']);
+		$i18n_cats = explode(',', cot::$cfg['plugin']['i18n']['cats']);
 		$i18n_cats = array_map('trim', $i18n_cats);
 	}
 

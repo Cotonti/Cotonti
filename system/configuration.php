@@ -715,36 +715,40 @@ function cot_config_list($owner, $cat, $subcat = "")
  * @see cot_import()
  * @return mixed Filtered value of array of values
  */
-function cot_config_import($name, $source='POST', $filter='NOC', $defvalue=null)
+function cot_config_import($name, $source = 'POST', $filter = 'NOC', $defvalue = null)
 {
 	global $cot_import_filters;
-	if (!$name) return null;
-	if (!is_array($name))
-	{
+
+	if (!$name) {
+        return null;
+    }
+	if (!is_array($name)) {
 		$name = array($name);
 		$single_value = true;
 	}
 	$res = array();
 	foreach ($name as $idx => $var_name) {
 		$filter_type = (is_array($filter)) ? ($filter[$var_name] ? $filter[$var_name] : ($filter[$idx] ? $filter[$idx] : 'NOC')) : $filter;
+
 		$not_filtered = cot_import($var_name, $source, 'NOC');
 		$value = cot_import($var_name, $source, $filter_type);
 		// addition filtering by varname
-		if (is_array($cot_import_filters[$var_name]) && sizeof($cot_import_filters[$var_name]))
-		{
+		if (
+            !empty($cot_import_filters[$var_name]) &&
+            is_array($cot_import_filters[$var_name]) &&
+            sizeof($cot_import_filters[$var_name])
+        ) {
 			$value = cot_import($value, 'DIRECT', $var_name);
 		}
 
 		// if invalid value is used
-		if (is_null($value))
-		{
+		if (is_null($value)) {
 			$value_to_show = (in_array($filter_type, array('INT', 'NUM', 'TXT', 'ALP')))
 				? htmlspecialchars(cot_cutstring(strip_tags($not_filtered), 15))
 				: '';
 			list($field_title) = cot_config_titles($var_name);
 			$error_msg = cot_rc('adm_invalid_input', array('value' => $value_to_show, 'field_name' => $field_title));
-			if (!is_null($defvalue))
-			{
+			if (!is_null($defvalue)) {
 				$value = !is_array($defvalue) ? $defvalue : (isset($defvalue[$var_name]) ? $defvalue[$var_name] : (isset($defvalue[$idx]) ? $defvalue[$idx] : null));
 				$error_msg .= $value_to_show ? '. '.cot_rc('adm_set_default', htmlspecialchars(strip_tags($value))) : '';
 			}

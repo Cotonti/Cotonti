@@ -13,6 +13,8 @@ Order=5
  * @package I18n
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @deprecated News plugin is outdated and will be changed to `indexnews`. i18n support for news plugin will be removed.
  */
 
 defined('COT_CODE') or die('Wrong URL');
