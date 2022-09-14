@@ -12,31 +12,30 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('auth');
 
 $y = cot_import('y','P','TXT');
-$id = (int)cot_import('id','G','INT');
+$id = (int) cot_import('id','G','INT');
 $s = cot_import('s','G','ALP',13);
 $w = cot_import('w','G','ALP',4);
 $d = cot_import('d','G','INT');
 $f = cot_import('f','G','TXT');
 $g = cot_import('g','G','INT');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
-cot_block($usr['isadmin']);
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('users', 'a');
+cot_block(cot::$usr['isadmin']);
 require_once cot_langfile('users', 'module');
 
 /* === Hook === */
-foreach (cot_getextplugins('users.edit.first') as $pl)
-{
+foreach (cot_getextplugins('users.edit.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
 cot_die(empty($id), true);
 
-$sql = $db->query("SELECT * FROM $db_users WHERE user_id = ?", $id);
+$sql = cot::$db->query("SELECT * FROM $db_users WHERE user_id = ?", $id);
 cot_die($sql->rowCount()==0, true);
 $urr = $sql->fetch();
 
-$sql1 = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$id and gru_groupid=".COT_GROUP_SUPERADMINS);
+$sql1 = cot::$db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$id and gru_groupid=".COT_GROUP_SUPERADMINS);
 $sys['edited_istopadmin'] = ($sql1->rowCount()>0) ? TRUE : FALSE;
 $sys['user_istopadmin'] = cot_auth('admin', 'a', 'A');
 $sys['protecttopadmin'] = $sys['edited_istopadmin'] && !$sys['user_istopadmin'];
@@ -61,8 +60,8 @@ if ($a == 'update')
 	if ($ruserdelete)
 	{
 
-		$sql = $db->delete($db_users, "user_id=$id");
-		$sql = $db->delete($db_groups_users, "gru_userid=$id");
+		cot::$db->delete($db_users, "user_id=$id");
+		cot::$db->delete($db_groups_users, "gru_userid=$id");
 
 		foreach($cot_extrafields[$db_users] as $exfld)
 		{
@@ -91,7 +90,8 @@ if ($a == 'update')
 	$ruser['user_banexpire'] = cot_import('ruserbanexpire','P','INT');
 	$ruser['user_country'] = cot_import('rusercountry','P','ALP');
 	$ruser['user_text'] = cot_import('rusertext','P','HTM');
-	$rtheme = explode(':', cot_import('rusertheme','P','TXT'));
+    $rtheme = cot_import('rusertheme','P','TXT');
+    $rtheme = !empty($rtheme) ? explode(':', $rtheme) : [];
 	$ruser['user_theme'] = $rtheme[0];
 	$ruser['user_scheme'] = $rtheme[1];
 	$ruser['user_email'] = cot_import('ruseremail','P','TXT');
@@ -106,7 +106,7 @@ if ($a == 'update')
 	}
 
 	$ruser['user_timezone'] = cot_import('rusertimezone','P','TXT');
-	$rusernewpass = cot_import('rusernewpass','P','HTM', 32);
+	$rusernewpass = (string) cot_import('rusernewpass','P','NOC', 32);
 
 	// Extra fields
 	if (!empty(cot::$extrafields[cot::$db->users])) {
@@ -165,19 +165,10 @@ if ($a == 'update')
 			$ruser['user_birthdate'] = cot_stamp2date($ruser['user_birthdate']);
 		}
 
-		if (!$ruserbanned)
-		{
-			$ruser['user_banexpire'] = 0;
-		}
-		if ($ruserbanned && $ruser['user_banexpire']>0)
-		{
-			$ruser['user_banexpire'] += $sys['now'];
-		}
-
-		if ($ruser['user_name'] != $urr['user_name'])
-		{
+		if ($ruser['user_name'] != $urr['user_name']) {
 			$newname = $ruser['user_name'];
 			$oldname = $urr['user_name'];
+            // Todo move code below to related extensions
 			if (cot_module_active('forums'))
 			{
 				require_once cot_incfile('forums', 'module');
