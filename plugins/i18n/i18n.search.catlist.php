@@ -15,39 +15,26 @@ Hooks=search.page.catlist
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (is_array($i18n_structure) && count($i18n_structure) > 0)
-{
-	// Add translated categories into the multiselect
-	foreach ($i18n_structure as $cat => $row)
-	{
-		if (isset($pages_cat_list[$cat]))
-		{
-			// Permissions to main category already checked
-			foreach ($row as $lc => $x)
-			{
-				$pages_cat_list[$cat.':'.$lc] = cot_breadcrumbs(cot_i18n_build_catpath('page', $cat, $lc), false, true, true);
-			}
-		}
-	}
+if ($i18n_read && $i18n_notmain && !empty($i18n_structure) && is_array($i18n_structure) && count($i18n_structure) > 0) {
+    // @see cot_load_structure();
+    cot_load_structure();
+    $separator = (cot::$cfg['separator'] == strip_tags(cot::$cfg['separator'])) ?
+        ' ' . cot::$cfg['separator'] . ' ' : ' / ';
 
-	// Extract previously selected options, they are handled separately
-	$i18n_search_cats = array();
-	if (is_array($rs['pagsub']))
-	{
-		$subcnt = count($rs['pagsub']);
-		$tmp = array();
-		for ($i = 0; $i < $subcnt; $i++)
-		{
-			if (mb_strpos($rs['pagsub'][$i], ':') !== false)
-			{
-				list ($cat, $lc) = explode(':', $rs['pagsub'][$i]);
-				$i18n_search_cats[$lc][] = $cat;
-			}
-			else
-			{
-				$tmp[] = $rs['pagsub'][$i];
-			}
+    // Translate categories in the multiselect
+	foreach ($i18n_structure as $cat => $row) {
+		if (isset($pages_cat_list[$cat])) {
+            $i18nCatPath = cot_i18n_build_catpath('page', $cat, $i18n_locale);
+            $i18nTitlePath = [];
+            if (!empty($i18nCatPath)) {
+                foreach ($i18nCatPath as $row) {
+                    $i18nTitlePath[] = $row['1'];
+                }
+            }
+
+            if (!empty($i18nTitlePath)) {
+                $pages_cat_list[$cat] = implode($separator, $i18nTitlePath);
+            }
 		}
-		$rs['pagsub'] = $tmp;
 	}
 }

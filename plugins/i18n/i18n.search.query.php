@@ -15,55 +15,22 @@ Hooks=search.page.query
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (is_array($i18n_structure) && count($i18n_structure) > 0
-	&& ($rs['pagsub'][0] == 'all' || count($i18n_search_cats) > 0))
-{
-	// Add ipage_id IS NULL and rebuild the 1st part
-	$where_and['i18n'] = 'ipage_id IS NULL';
-	$where = implode(' AND ', $where_and);
+if ($i18n_notmain && $i18n_read) {
+    if ($rs['pagtitle']) {
+        $where_or['title_i18n'] = 'i18n.ipage_title LIKE ' . cot::$db->quote($sqlsearch);
+    }
 
-	// Build the 2nd part for ipage_id IS NOT NULL
-	$where_and['i18n'] = 'ipage_id IS NOT NULL';
+    if ($rs['pagdesc']) {
+        $where_or['desc_i18n'] = 'i18n.ipage_desc LIKE ' . cot::$db->quote($sqlsearch);
+    }
 
-	if ($rs['pagsub'][0] == 'all' || count($i18n_search_cats) == 0)
-	{
-		$where_and['cat'] = "page_cat IN ('".implode("','", $pag_catauth)."')";
-	}
-	else
-	{
-		$where_subcats = array();
-		foreach ($i18n_search_cats as $lc => $cats)
-		{
-			$cats_auth = array_intersect($cats, $pag_catauth);
-			if (count($cats_auth) > 0)
-			{
-				$where_subcats[] = "page_cat IN ('".implode("','", $cats_auth)."') AND ipage_locale = '$lc'";
-			}
-		}
-		$where_and['cat'] = implode(' OR ', $where_subcats);
-	}
+    if ($rs['pagtext']) {
+        $where_or['text_i18n'] = 'i18n.ipage_text LIKE ' . cot::$db->quote($sqlsearch);
+    }
 
-	if ($rs['setlimit'] > 0)
-	{
-		$where_and['date2'] = "ipage_date >= ".$rs['setfrom']." AND ipage_date <= ".$rs['setto'];
-	}
-
-	unset($where_or['title'], $where_or['desc'], $where_or['text']);
-
-	$where_or['title'] = $rs['pagtitle'] ? "ipage_title LIKE '".$db->prep($sqlsearch)."'" : '';
-	$where_or['desc'] = $rs['pagdesc'] ? "ipage_desc LIKE '".$db->prep($sqlsearch)."'" : '';
-	$where_or['text'] = $rs['pagtext'] ? "ipage_text LIKE '".$db->prep($sqlsearch)."'" : '';
-
-	$where_or = array_diff($where_or, array(''));
-	count($where_or) || $where_or['title'] = "ipage_title LIKE '".$db->prep($sqlsearch)."'";
-	$where_and['or'] = '('.implode(' OR ', $where_or).')';
-	$where_and = array_diff($where_and, array(''));
-	$where2 = implode(' AND ', $where_and);
-
-	// Append 2nd to the 1st with OR
-	$where .= ' OR ' . $where2;
-
-	// Join the translation table
-	$search_join_columns .= ', i18n.*';
-	$search_join_condition .= "LEFT JOIN $db_i18n_pages AS i18n ON p.page_id = i18n.ipage_id";
+    // Join the translation table
+    $search_join_columns .= ', i18n.*';
+    $search_join_condition .= "\nLEFT JOIN " . cot::$db->i18n_pages .
+        " AS i18n ON p.page_id = i18n.ipage_id AND i18n.ipage_locale = " .
+        cot::$db->quote($i18n_locale) . ' AND i18n.ipage_id IS NOT NULL';
 }

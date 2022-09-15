@@ -22,7 +22,19 @@ cot::$db->registerTable('i18n_structure');
  * @param string $area Area code
  * @param string $cat Category code
  * @param string $locale Locale code
- * @return string
+ * @return array{int: array{0: string, 1:string}}
+ * [
+ *   0 => [
+ *      0 => 'url',
+ *      1 => 'Title'
+ *   ],
+ *   1 => [
+ *      0 => 'url',
+ *      1 => 'Title'
+ *   ],
+ *   ...
+ * ]
+ *
  */
 function cot_i18n_build_catpath($area, $cat, $locale)
 {

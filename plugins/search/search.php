@@ -106,10 +106,15 @@ foreach (cot_getextplugins('search.first') as $pl)
 if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && cot::$cfg['plugin']['search']['pagesearch']) {
 	// Making the category list
 	$pages_cat_list['all'] = cot::$L['plu_allcategories'];
+    $pagAuthAllCats = true;
 	foreach (cot::$structure['page'] as $cat => $x) {
-		if ($cat != 'all' && $cat != 'system' && cot_auth('page', $cat, 'R')) {
-			$pages_cat_list[$cat] = $x['tpath'];
-			$pag_catauth[] = cot::$db->prep($cat);
+		if ($cat != 'all' && $cat != 'system') {
+            if (cot_auth('page', $cat, 'R')) {
+                $pages_cat_list[$cat] = $x['tpath'];
+                $pag_catauth[] = cot::$db->prep($cat);
+            } else {
+                $pagAuthAllCats = false;
+            }
 		}
 	}
 
@@ -119,8 +124,7 @@ if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && cot::$cfg['pl
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('search.page.catlist') as $pl)
-	{
+	foreach (cot_getextplugins('search.page.catlist') as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -143,10 +147,8 @@ if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && cot::$cfg['pl
 
 if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && cot::$cfg['plugin']['search']['forumsearch']) {
 	$forum_cat_list['all'] = cot::$L['plu_allsections'];
-	foreach (cot::$structure['forums'] as $key => $val)
-	{
-		if (cot_auth('forums', $key, 'R'))
-		{
+	foreach (cot::$structure['forums'] as $key => $val) {
+		if (cot_auth('forums', $key, 'R')) {
 			$forum_cat_list[$key] = $val['tpath'];
 			$frm_catauth[] = cot::$db->prep($key);
 		}
@@ -206,52 +208,68 @@ if (!empty($sq)) {
 
     $items = 0;
 
-	if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && cot::$cfg['plugin']['search']['pagesearch'] && !cot_error_found()) {
-		if ($rs['pagsub'][0] != 'all' && count($rs['pagsub']) > 0) {
+	if (
+        ($tab == 'pag' || empty($tab)) &&
+        cot_module_active('page') &&
+        cot::$cfg['plugin']['search']['pagesearch'] &&
+        !cot_error_found()
+    ) {
+
+        $searchInCategories = [];
+
+        if ($rs['pagsub'][0] != 'all' && count($rs['pagsub']) > 0) {
 			if ($rs['pagsubcat']) {
-				$tempcat = array();
 				foreach ($rs['pagsub'] as $scat) {
-					$tempcat = array_merge(cot_structure_children('page', $scat), $tempcat);
+                    $searchInCategories = array_merge(cot_structure_children('page', $scat), $searchInCategories);
 				}
-				$tempcat = array_unique($tempcat);
-				$where_and['cat'] = "page_cat IN ('".implode("','", $tempcat)."')";
+                $searchInCategories = array_unique($searchInCategories);
 
             } else {
-				$tempcat = array();
-				foreach ($rs['pagsub'] as $scat)
-				{
-					$tempcat[] = cot::$db->prep($scat);
+				foreach ($rs['pagsub'] as $scat) {
+                    $searchInCategories[] = cot::$db->prep($scat);
 				}
-				$where_and['cat'] = "page_cat IN ('".implode("','", $tempcat)."')";
 			}
 		} else {
-			$where_and['cat'] = "page_cat IN ('".implode("','", $pag_catauth)."')";
+            // If user can't read all categories
+            if (!$pagAuthAllCats) {
+                $searchInCategories = $pag_catauth;
+            }
 		}
+
+        if (!empty($searchInCategories)) {
+            $where_and['cat'] = "page_cat IN (" . implode(",", cot::$db->quote($searchInCategories)) . ")";
+        }
+
 		$where_and['state'] = "page_state = 0";
 		$where_and['notcat'] = "page_cat <> 'system'";
 		$where_and['date'] = "page_begin <= ".cot::$sys['now']." AND (page_expire = 0 OR page_expire > ".cot::$sys['now'].")";
 		$where_and['date2'] = ($rs['setlimit'] > 0) ? "page_date >= ".$rs['setfrom']." AND page_date <= ".$rs['setto'] : "";
 		$where_and['file'] = ($rs['pagfile'] == 1) ? "page_file = '1'" : "";
-		$where_and['users'] = (!empty($touser)) ? "page_ownerid ".$touser : "";
+        $where_and['users'] = (!empty($touser)) ? "page_ownerid ".$touser : "";
 
-		$where_or['title'] = ($rs['pagtitle'] == 1) ? "page_title LIKE '".cot::$db->prep($sqlsearch)."'" : "";
-		$where_or['desc'] = (($rs['pagdesc'] == 1)) ? "page_desc LIKE '".cot::$db->prep($sqlsearch)."'" : "";
-		$where_or['text'] = (($rs['pagtext'] == 1)) ? "page_text LIKE '".cot::$db->prep($sqlsearch)."'" : "";
+        $where_or = [];
+        if ($rs['pagtitle']) {
+            $where_or['title'] = 'p.page_title LIKE ' . cot::$db->quote($sqlsearch);
+        }
+
+        if ($rs['pagdesc']) {
+            $where_or['desc'] = 'p.page_desc LIKE ' . cot::$db->quote($sqlsearch);
+        }
+
+        if ($rs['pagtext']) {
+            $where_or['text'] = 'p.page_text LIKE ' . cot::$db->quote($sqlsearch);
+        }
 
         // String query for addition pages fields.
 		foreach (explode(',', trim(cot::$cfg['plugin']['search']['addfields'])) as $addfields_el) {
 			$addfields_el = trim($addfields_el);
             if (!empty($addfields_el)) {
-                if (!isset($where_or[$addfields_el])) $where_or[$addfields_el] = '';
-                $where_or[$addfields_el] .= $addfields_el . " LIKE '" . $sqlsearch . "'";
+                if (!isset($where_or[$addfields_el])) {
+                    $where_or[$addfields_el] = '';
+                }
+                $where_or[$addfields_el] .= $addfields_el . " LIKE " . cot::$db->quote($sqlsearch);
             }
 		}
-
-		$where_or = array_diff($where_or, array(''));
-		count($where_or) || $where_or['title'] = "page_title LIKE '".cot::$db->prep($sqlsearch)."'";
-		$where_and['or'] = '('.implode(' OR ', $where_or).')';
-		$where_and = array_diff($where_and, array(''));
-		$where = implode(' AND ', $where_and);
 
 		if (!cot::$db->fieldExists(cot::$db->pages, 'page_' . $rs['pagsort'])) {
 			$rs['pagsort'] = 'date';
@@ -259,16 +277,27 @@ if (!empty($sq)) {
 
 		$orderby = 'page_' . $rs['pagsort'] . ' ' . $rs['pagsort2'];
 
+        $search_join_columns = isset($search_join_columns) ? $search_join_columns : '';
+        $search_join_condition = isset($search_join_condition) ? $search_join_condition : '';
+        $search_union_query = isset($search_union_query) ? $search_union_query : '';
+
 		/* === Hook === */
-		foreach (cot_getextplugins('search.page.query') as $pl)
-		{
+		foreach (cot_getextplugins('search.page.query') as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
-        $search_join_columns = isset($search_join_columns) ? $search_join_columns : '';
-        $search_join_condition = isset($search_join_condition) ? $search_join_condition : '';
-        $search_union_query = isset($search_union_query) ? $search_union_query : '';
+        $where_or = array_diff($where_or, array(''));
+        if (empty($where_or)) {
+            $where_or['title'] = "p.page_title LIKE " . cot::$db->quote($sqlsearch);
+        }
+        $where_and['or'] = '(' . implode(' OR ', $where_or) . ')';
+        $where_and = array_diff($where_and, array(''));
+
+        // If where condition was not built in hook, lets build it here
+        if (!isset($where)) {
+            $where = implode(" \nAND ", $where_and);
+        }
 
         if (empty($sql_page_string)) {
 			$sql_page_string = "SELECT SQL_CALC_FOUND_ROWS p.* $search_join_columns
@@ -277,6 +306,7 @@ if (!empty($sq)) {
                 ORDER BY {$orderby}
                 LIMIT $d, " . $cfg_maxitems . $search_union_query;
 		}
+
 		$sql = cot::$db->query($sql_page_string);
 		$items = $sql->rowCount();
 		$totalitems[] = cot::$db->query('SELECT FOUND_ROWS()')->fetchColumn();
@@ -287,10 +317,11 @@ if (!empty($sq)) {
 		$extp = cot_getextplugins('search.page.loop');
 		/* ===== */
 
-		foreach ($sql->fetchAll() as $row)
-		{
+		foreach ($sql->fetchAll() as $row) {
 			$url_cat = cot_url('page', 'c='.$row['page_cat']);
-			$url_page = empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'].'&highlight='.$hl) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'].'&highlight='.$hl);
+			$url_page = empty($row['page_alias']) ?
+                cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'].'&highlight='.$hl) :
+                cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'].'&highlight='.$hl);
 			$t->assign(cot_generate_pagetags($row, 'PLUGIN_PR_'));
 			$t->assign(array(
 				'PLUGIN_PR_CATEGORY' => cot_rc_link($url_cat, cot::$structure['page'][$row['page_cat']]['tpath']),
@@ -357,7 +388,9 @@ if (!empty($sq)) {
 		$where_and['or'] = '('.implode(' OR ', $where_or).')';
 		$where_and = array_diff($where_and, array(''));
 		$where = implode(' AND ', $where_and);
-		if(!empty($where)) $where = 'WHERE '.$where;
+		if (!empty($where)) {
+            $where = 'WHERE '.$where;
+        }
 
 		$maxitems = $cfg_maxitems - $items;
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
@@ -385,10 +418,8 @@ if (!empty($sq)) {
 		$items = $sql->rowCount();
 		$totalitems[] = cot::$db->query('SELECT FOUND_ROWS()')->fetchColumn();
 		$jj = 0;
-		while ($row = $sql->fetch())
-		{
-			if ($row['ft_updated'] > 0)
-			{
+		while ($row = $sql->fetch()) {
+			if ($row['ft_updated'] > 0) {
 				$post_url = (cot::$cfg['plugin']['search']['searchurl'] == 'Single') ? cot_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : cot_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
 				$t->assign(array(
 					'PLUGIN_FR_CATEGORY' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false),
@@ -405,8 +436,7 @@ if (!empty($sq)) {
 			$jj++;
 		}
 		$sql->closeCursor();
-		if ($jj > 0)
-		{
+		if ($jj > 0) {
 			$t->parse('MAIN.RESULTS.FORUMS');
 		}
 	}

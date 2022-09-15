@@ -17,8 +17,9 @@ defined('COT_CODE') or die('Wrong URL');
 
 global $i18n_read, $i18n_locale;
 
-if ($i18n_read) {
+if ($i18n_notmain && $i18n_read) {
     $cns_join_columns .= ',i18n.*';
     $cns_join_tables .= ' LEFT JOIN ' . cot::$db->i18n_pages .
-        " AS i18n ON i18n.ipage_id = p.page_id AND i18n.ipage_locale = '$i18n_locale' AND i18n.ipage_id IS NOT NULL";
+        " AS i18n ON i18n.ipage_id = p.page_id AND i18n.ipage_locale = " . cot::$db->quote($i18n_locale) .
+        ' AND i18n.ipage_id IS NOT NULL';
 }

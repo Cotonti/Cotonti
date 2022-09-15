@@ -9,12 +9,6 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-if (!defined('SED_CODE'))
-{
-	// For Sed plugins
-	define('SED_CODE', true);
-}
-
 list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'a');
 cot_block(cot::$usr['isadmin']);
 
@@ -207,23 +201,29 @@ switch($a)
 			$parts = array();
 			// Collect all parts from extension directory
 			$handle = opendir($dir . '/' . $code);
-			while($f = readdir($handle)) {
-				if (preg_match("#^$code(\.([\w\.]+))?.php$#", $f, $mt) &&
-                            (!isset($mt[2]) || !in_array($mt[2], $cot_ext_ignore_parts)))
-				{
+			while ($f = readdir($handle)) {
+				if (
+                    preg_match("#^$code(\.([\w\.]+))?.php$#", $f, $mt) &&
+                    (!isset($mt[2]) || !in_array($mt[2], $cot_ext_ignore_parts))
+                ) {
 					$parts[] = $f;
 				}
 			}
 			closedir($handle);
 
 			// ...And from DB
-			$registeredParts = $db->query("SELECT * FROM $db_plugins WHERE pl_code='$code'")->fetchAll();
-			if(empty($registeredParts)) $registeredParts = array();
+			$registeredParts = cot::$db->query('SELECT * FROM ' . cot::$db->plugins . ' WHERE pl_code = '.
+                cot::$db->quote($code))->fetchAll();
+			if (empty($registeredParts)) {
+                $registeredParts = array();
+            }
 
 			foreach ($registeredParts as $reg_data) {
 				if ($reg_data['pl_code'] == $code) {
 					$f = str_replace($code . '/', '', $reg_data['pl_file']);
-					if(!in_array($f, $parts)) $parts[] = $f;
+					if (!in_array($f, $parts)) {
+                        $parts[] = $f;
+                    }
 				}
 			}
 
@@ -233,7 +233,8 @@ switch($a)
 			$info['Lock_guests'] = cot_auth_getvalue($info['Lock_guests']);
 
 		} else {
-			$row = $db->query("SELECT * FROM $db_core WHERE ct_code = '$code'")->fetch();
+			$row = cot::$db->query('SELECT * FROM ' . cot::$db->core . ' WHERE ct_code = '.
+                cot::$db->quote($code))->fetch();
 			if ($row) {
                 $info['Name'] = $row['ct_title'];
                 $info['Version'] = $row['ct_version'];
@@ -245,25 +246,24 @@ switch($a)
 
 		$isinstalled = cot_extension_installed($code);
 
-		$sql = $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$code' AND config_type != " . COT_CONFIG_TYPE_HIDDEN);
+		$sql = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->config .
+            " WHERE config_owner='$type' AND config_cat='$code' AND config_type != " . COT_CONFIG_TYPE_HIDDEN);
 		$totalconfig = $sql->fetchColumn();
 
-		if (count($parts) > 0)
-		{
+		if (count($parts) > 0) {
 			sort($parts);
 			/* === Hook - Part1 : Set === */
 			$extp = cot_getextplugins('admin.extensions.details.part.loop');
 			/* ===== */
-			foreach ($parts as $i => $x)
-			{
 
+			foreach ($parts as $i => $x) {
 				$extplugin_file = $dir . '/' . $code . '/' . $x;
 				$info_file = array();
 				$Hooks = array();
-				if(file_exists($extplugin_file)){
+				if (file_exists($extplugin_file)){
 					$info_file = cot_infoget($extplugin_file, 'COT_EXT');
-					if (!$info_file && cot_plugin_active('genoa'))
-					{
+                    // Todo obsolete
+					if (!$info_file && cot_plugin_active('genoa')) {
 						// Try to load old format info
 						$info_file = cot_infoget($extplugin_file, 'SED_EXTPLUGIN');
 					}
@@ -272,8 +272,8 @@ switch($a)
 				$info_part = preg_match("#^$code\.([\w\.]+).php$#", $x, $mt) ? $mt[1] : 'main';
 
 				$info_file['Status'] = 3;
-				foreach($registeredParts  as $reg_data){
-					if($reg_data['pl_part'] == $info_part){
+				foreach ($registeredParts  as $reg_data){
+					if ($reg_data['pl_part'] == $info_part) {
 						$info_file['Status'] = $reg_data['pl_active'];
 						break;
 					}
@@ -304,7 +304,7 @@ switch($a)
 				$deleted = array();
 
 				// check for deleted Hooks
-				if(file_exists($extplugin_file)) {
+				if (file_exists($extplugin_file)) {
 					foreach ($registeredParts as $reg_data) {
 						if ($reg_data['pl_file'] == $code . '/' . $x) {
 							if (!in_array($reg_data['pl_hook'], $Hooks)) array_push($deleted, $reg_data['pl_hook']);
@@ -313,34 +313,32 @@ switch($a)
 				}
 
 
-				if($isinstalled && (!file_exists($extplugin_file)) || sizeof($deleted) > 0 || sizeof($not_registred) > 0){
+				if ($isinstalled && (!file_exists($extplugin_file)) || sizeof($deleted) > 0 || sizeof($not_registred) > 0) {
 					$info_file['Error'] = cot::$L['adm_hook_changed'];
-					if (sizeof($not_registred))
-					{
+					if (sizeof($not_registred)) {
 						$info_file['Error'] .= cot_rc('adm_hook_notregistered', array('hooks' => implode(', ', $not_registred)));
 					}
 					if (sizeof($deleted)) {
 						$info_file['Error'] .= cot_rc('adm_hook_notfound', array('hooks' => implode(', ', $deleted)));
 					}
-					if(!file_exists($extplugin_file)) {
+					if (!file_exists($extplugin_file)) {
 						$info_file['Error'] .= cot_rc('adm_hook_filenotfound', array('file' => $extplugin_file));
 					}
 					$info_file['Error'] .= cot::$L['adm_hook_updatenote'];
 				}
 
-				if(!empty($info_file['Error']))
-				{
+				if (!empty($info_file['Error'])) {
 					$t->assign(array(
 						'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part,
-						'ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS' => implode('<br />',explode(',',$info_file['Hooks'])),
+						'ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS' => !empty($info_file['Hooks']) ?
+                            implode('<br />',explode(',',$info_file['Hooks'])) : '',
 						'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $x,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_ERROR' => $info_file['Error']
 					));
 					$t->parse('MAIN.DETAILS.ROW_ERROR_PART');
 
 				} else {
-
 					if (empty($info_file['Tags'])) {
 						$t->assign(array(
 							'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
@@ -350,51 +348,43 @@ switch($a)
 
 					} else {
 						$taggroups = explode(';', $info_file['Tags']);
-						foreach ($taggroups as $taggroup)
-						{
+						foreach ($taggroups as $taggroup) {
 							$line = explode(':', $taggroup);
 							$line[0] = trim($line[0]);
 							$tplbase = explode('.', preg_replace('#\.tpl$#i', '', $line[0]));
 							// Detect template container type
-							if (in_array($tplbase[0], array('admin', 'users')))
-							{
+							if (in_array($tplbase[0], array('admin', 'users'))) {
 								$tpltype = 'core';
-							}
-							elseif (file_exists(cot::$cfg['plugins_dir'] . '/' . $tplbase[0]))
-							{
+							} elseif (file_exists(cot::$cfg['plugins_dir'] . '/' . $tplbase[0])) {
 								$tpltype = 'plug';
-							}
-							else
-							{
+							} else {
 								$tpltype = 'module';
 							}
 							$tags = explode(',', $line[1]);
 							$tpl_file = cot_tplfile($tplbase, $tpltype);
 							$listtags = $tpl_file.' :<br />';
-							if (cot::$cfg['xtpl_cache'])
-							{ // clears cache if exists
+							if (cot::$cfg['xtpl_cache']) {
+							    // clears cache if exists
 								$cache_file = str_replace(array('./', '/'), '_', $tpl_file);
-								$cache_path = cot::$cfg['cache_dir'] . '/templates/' . pathinfo($cache_file, PATHINFO_FILENAME );
+								$cache_path = cot::$cfg['cache_dir'] . '/templates/' .
+                                    pathinfo($cache_file, PATHINFO_FILENAME );
 								$cache_files_ext = array('.tpl','.idx','.tags');
-								foreach ($cache_files_ext as $ext)
-								{
-									if (file_exists($cache_path.$ext)) unlink($cache_path.$ext);
+								foreach ($cache_files_ext as $ext) {
+									if (file_exists($cache_path.$ext)) {
+                                        unlink($cache_path.$ext);
+                                    }
 								}
 							}
 							$tpl_check = new XTemplate($tpl_file);
 							$tpl_tags = $tpl_check->getTags();
 							unset($tpl_tags[array_search('PHP', $tpl_tags)]);
-							foreach($tags as $k => $v)
-							{
-								if(mb_substr(trim($v), 0, 1) == '{')
-								{
+							foreach($tags as $k => $v) {
+								if(mb_substr(trim($v), 0, 1) == '{') {
 									$tag = str_replace(array('{','}'),'',$v);
 									$found = in_array($tag, $tpl_tags);
 									$listtags .= $v.' : ';
 									$listtags .= $found_txt[$found].'<br />';
-								}
-								else
-								{
+								} else {
 									$listtags .= $v.'<br />';
 								}
 							}
@@ -411,11 +401,13 @@ switch($a)
 					}
 
 					$info_order = empty($info_file['Order']) ? COT_PLUGIN_DEFAULT_ORDER : $info_file['Order'];
+                    $info_hooks = !empty($info_file['Hooks']) ?
+                        implode('<br />',explode(',',$info_file['Hooks'])) : '';
 					$t->assign(array(
 						'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $x,
-						'ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS' => implode('<br />',explode(',',$info_file['Hooks'])),
+						'ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS' => $info_hooks,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER' => $info_order,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_STATUS' => $status[$info_file['Status']],
 						//'ADMIN_EXTENSIONS_DETAILS_ROW_PART_ODDEVEN' => cot_build_oddeven($ii)
