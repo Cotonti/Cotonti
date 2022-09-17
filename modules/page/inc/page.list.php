@@ -18,41 +18,40 @@ $w = cot_import('w', 'G', 'ALP', 4); // order way (asc, desc)
 $c = cot_import('c', 'G', 'TXT'); // cat code
 $o = cot_import('ord', 'G', 'ARR'); // filter field names without 'page_'
 $p = cot_import('p', 'G', 'ARR'); // filter values
-$maxrowsperpage = (cot::$cfg['page']['cat_' . $c]['maxrowsperpage']) ? cot::$cfg['page']['cat_' . $c]['maxrowsperpage'] : cot::$cfg['page']['cat___default']['maxrowsperpage'];
+
+$maxrowsperpage = cot::$cfg['page']['cat___default']['maxrowsperpage'];
+if (!empty($c) && !empty(cot::$cfg['page']['cat_' . $c]) && !empty(cot::$cfg['page']['cat_' . $c]['maxrowsperpage'])) {
+    $maxrowsperpage = cot::$cfg['page']['cat_' . $c]['maxrowsperpage'];
+}
+
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage); //page number for pages list
 list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', cot::$cfg['page']['maxlistsperpage']);// page number for cats list
 
-if ($c == 'all' || $c == 'system')
-{
-	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
-	cot_block($usr['isadmin']);
-}
-elseif ($c == 'unvalidated' || $c == 'saved_drafts')
-{
-	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', 'any');
-	cot_block($usr['auth_write']);
-}
-elseif (!isset($structure['page'][$c]))
-{
+if ($c == 'all' || $c == 'system') {
+	list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'a');
+	cot_block(cot::$usr['isadmin']);
+
+} elseif ($c == 'unvalidated' || $c == 'saved_drafts') {
+	list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('page', 'any');
+	cot_block(cot::$usr['auth_write']);
+
+} elseif (!isset(cot::$structure['page'][$c])) {
 	cot_die_message(404, TRUE);
-}
-else
-{
-	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $c);
-	cot_block($usr['auth_read']);
+
+} else {
+	list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('page', $c);
+	cot_block(cot::$usr['auth_read']);
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('page.list.first') as $pl)
-{
+foreach (cot_getextplugins('page.list.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
 $cat = &$structure['page'][$c];
 
-if (empty($s))
-{
+if (empty($s)) {
 	$s = cot::$cfg['page']['cat_' . $c]['order'];
 }
 $w = empty($w) ? cot::$cfg['page']['cat_' . $c]['way'] : $w;

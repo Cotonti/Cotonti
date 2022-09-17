@@ -2552,72 +2552,88 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
  * @param bool $sharpen Sharpen JPEG image after resize.
  * @return mixed Boolean or image resource, depending on $target
  */
-function cot_imageresize($source, $target='return', $target_width=99999, $target_height=99999, $crop='', $fillcolor='', $quality=90, $sharpen=true)
+function cot_imageresize(
+    $source,
+    $target = 'return',
+    $target_width = 99999,
+    $target_height = 99999,
+    $crop = '',
+    $fillcolor = '',
+    $quality = 90,
+    $sharpen = true
+)
 {
-	if (!file_exists($source)) return false;
+	if (!file_exists($source)) {
+        return false;
+    }
 	$source_size = getimagesize($source);
-	if(!$source_size) return false;
+	if (!$source_size) {
+        return false;
+    }
 	$mimetype = $source_size['mime'];
-	if (substr($mimetype, 0, 6) != 'image/') return false;
+	if (substr($mimetype, 0, 6) != 'image/') {
+        return false;
+    }
 
 	$source_width = $source_size[0];
 	$source_height = $source_size[1];
-	if($target_width > $source_width) $target_width = $source_width; $noscaling_x = true;
-	if($target_height > $source_height) $target_height = $source_height; $noscaling_y = true;
+    $noscaling_x = false;
+    $noscaling_y = false;
+	if ($target_width > $source_width) {
+        $target_width = $source_width;
+        $noscaling_x = true;
+    }
+	if ($target_height > $source_height) {
+        $target_height = $source_height;
+        $noscaling_y = true;
+    }
 
-	$fillcolor = preg_replace('/[^0-9a-fA-F]/', '', (string)$fillcolor);
-	if (!$fillcolor && $noscaling_x && $noscaling_y)
-	{
+	$fillcolor = preg_replace('/[^0-9a-fA-F]/', '', (string) $fillcolor);
+	if (!$fillcolor && $noscaling_x && $noscaling_y) {
 		$data = file_get_contents($source);
-		if($target == 'return') return $data;
+		if ($target == 'return') {
+            return $data;
+        }
 	}
 
 	$offsetX = 0;
 	$offsetY = 0;
 
-	if($crop)
-	{
-		$crop = ($crop == 'fit') ? array($target_width, $target_height) : explode(':', (string)$crop);
-		if(count($crop) == 2)
-		{
+	if ($crop) {
+		$crop = ($crop == 'fit') ? array($target_width, $target_height) : explode(':', (string) $crop);
+		if (count($crop) == 2) {
 			$source_ratio = $source_width / $source_height;
-			$target_ratio = (float)$crop[0] / (float)$crop[1];
+			$target_ratio = (float) $crop[0] / (float) $crop[1];
 
-			if ($source_ratio < $target_ratio)
-			{
+			if ($source_ratio < $target_ratio) {
 				$temp = $source_height;
-				$source_height = $source_width / $target_ratio;
-				$offsetY = ($temp - $source_height) / 2;
+				$source_height = (int) ($source_width / $target_ratio);
+				$offsetY = (int) (($temp - $source_height) / 2);
 			}
-			if ($source_ratio > $target_ratio)
-			{
+			if ($source_ratio > $target_ratio) {
 				$temp = $source_width;
-				$source_width = $source_height * $target_ratio;
-				$offsetX = ($temp - $source_width) / 2;
+				$source_width = (int) ($source_height * $target_ratio);
+				$offsetX = (int) (($temp - $source_width) / 2);
 			}
 		}
 	}
 
 	$width_ratio = $target_width / $source_width;
 	$height_ratio = $target_height / $source_height;
-	if ($width_ratio * $source_height < $target_height)
-	{
-		$target_height = ceil($width_ratio * $source_height);
-	}
-	else
-	{
-		$target_width = ceil($height_ratio * $source_width);
+	if ($width_ratio * $source_height < $target_height) {
+		$target_height = (int) ceil($width_ratio * $source_height);
+	} else {
+		$target_width = (int) ceil($height_ratio * $source_width);
 	}
 
 	// Avoid loading images there's not enough memory for
-	if (!cot_img_check_memory($source, (int)ceil($target_width * $target_height * 4 / 1048576))){
+	if (!cot_img_check_memory($source, (int) ceil($target_width * $target_height * 4 / 1048576))){
 		return false;
 	}
 
 	$canvas = imagecreatetruecolor($target_width, $target_height);
 
-	switch($mimetype)
-	{
+	switch($mimetype) {
 		case 'image/gif':
 			$fn_create = 'imagecreatefromgif';
 			$fn_output = 'imagegif';
@@ -2642,36 +2658,52 @@ function cot_imageresize($source, $target='return', $target_width=99999, $target
 	}
 	$source_data = $fn_create($source);
 
-	if (in_array($mimetype, array('image/gif', 'image/png')))
-	{
-		if (!$fillcolor)
-		{
+	if (in_array($mimetype, array('image/gif', 'image/png'))) {
+		if (!$fillcolor) {
 			imagealphablending($canvas, false);
 			imagesavealpha($canvas, true);
-		}
-		elseif(strlen($fillcolor) == 6 || strlen($fillcolor) == 3)
-		{
+
+		} elseif(strlen($fillcolor) == 6 || strlen($fillcolor) == 3) {
 			$background	= (strlen($fillcolor) == 6) ?
-				imagecolorallocate($canvas, hexdec($fillcolor[0].$fillcolor[1]), hexdec($fillcolor[2].$fillcolor[3]), hexdec($fillcolor[4].$fillcolor[5])):
-				imagecolorallocate($canvas, hexdec($fillcolor[0].$fillcolor[0]), hexdec($fillcolor[1].$fillcolor[1]), hexdec($fillcolor[2].$fillcolor[2]));
+				imagecolorallocate(
+                    $canvas,
+                    hexdec($fillcolor[0].$fillcolor[1]),
+                    hexdec($fillcolor[2].$fillcolor[3]),
+                    hexdec($fillcolor[4].$fillcolor[5])
+                ):
+				imagecolorallocate(
+                    $canvas,
+                    hexdec($fillcolor[0].$fillcolor[0]),
+                    hexdec($fillcolor[1].$fillcolor[1]),
+                    hexdec($fillcolor[2].$fillcolor[2])
+                );
 			imagefill($canvas, 0, 0, $background);
 		}
 	}
-	imagecopyresampled($canvas, $source_data, 0, 0, $offsetX, $offsetY, $target_width, $target_height, $source_width, $source_height);
+	imagecopyresampled(
+        $canvas,
+        $source_data,
+        0,
+        0,
+        $offsetX,
+        $offsetY,
+        $target_width,
+        $target_height,
+        $source_width,
+        $source_height
+    );
 	imagedestroy($source_data);
 	$canvas = ($sharpen) ? cot_imagesharpen($canvas, $source_width, $target_width) : $canvas;
 
-	if($target == 'return')
-	{
+	if ($target == 'return') {
 		ob_start();
 		$fn_output($canvas, null, $quality);
 		$data = ob_get_contents();
 		ob_end_clean();
 		imagedestroy($canvas);
 		return $data;
-	}
-	else
-	{
+
+	} else {
 		$result = $fn_output($canvas, $target, $quality);
 		imagedestroy($canvas);
 		return $result;

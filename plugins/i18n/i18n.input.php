@@ -59,7 +59,7 @@ if (!$i18n_omit) {
 	$cot_url_appendix['l'] = $i18n_locale;
 }
 
-$i18n_notmain = $i18n_locale != cot::$cfg['defaultlang'];
+$i18n_notmain = ($i18n_locale != cot::$cfg['defaultlang']);
 list($i18n_read, $i18n_write, $i18n_admin, $i18n_edit) = cot_auth('plug', 'i18n', 'RWA1');
 
 // Remember in cookie if needed
