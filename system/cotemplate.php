@@ -546,28 +546,23 @@ class XTemplate
 	 */
 	public function text($block = 'MAIN')
 	{
-		$path = $this->index[$block];
-		if ($path)
-		{
-			$blk = $this->blocks[array_shift($path)];
-			foreach ($path as $node)
-			{
-				if (is_object($blk))
-				{
-					$blk =& $blk->blocks[$node];
-				}
-				else
-				{
-					$blk =& $blk[$node];
-				}
-			}
-			return $blk->text($this);
-		}
-		else
-		{
-			// throw new Exception("Block $block is not found in " . $this->filename);
-			return '';
-		}
+		$path = isset($this->index[$block]) ? $this->index[$block] : null;
+
+        if (empty($path)) {
+            // throw new Exception("Block $block is not found in " . $this->filename);
+            return '';
+        }
+
+        $blk = $this->blocks[array_shift($path)];
+        foreach ($path as $node) {
+            if (is_object($blk)) {
+                $blk =& $blk->blocks[$node];
+            } else {
+                $blk =& $blk[$node];
+            }
+        }
+        
+        return $blk->text($this);
 	}
 }
 

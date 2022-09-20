@@ -8,8 +8,8 @@
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
-cot_block($usr['isadmin']);
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'a');
+cot_block(cot::$usr['isadmin']);
 
 require_once cot_incfile('extrafields');
 require_once cot_incfile('structure');
@@ -19,19 +19,20 @@ $al = cot_import('al', 'G', 'ALP');
 $c = cot_import('c', 'G', 'TXT');
 $v = cot_import('v', 'G', 'TXT');
 
-$maxrowsperpage = (is_int($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0 || ctype_digit($cfg['maxrowsperpage'])) ? $cfg['maxrowsperpage'] : 15;
+$maxrowsperpage = (is_int(cot::$cfg['maxrowsperpage']) && cot::$cfg['maxrowsperpage'] > 0 || ctype_digit(cot::$cfg['maxrowsperpage'])) ?
+    cot::$cfg['maxrowsperpage'] : 15;
+
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage);
 $mode = cot_import('mode', 'G', 'ALP');
 
 $t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
 
-$adminsubtitle = $L['Structure'];
+$adminsubtitle = cot::$L['Structure'];
 
 $modules_structure = &$extension_structure; // for compatibility
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.structure.first') as $pl)
-{
+foreach (cot_getextplugins('admin.structure.first') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -141,11 +142,10 @@ else
 
 			}
 
-            $dir = $owner == 'module' ? $cfg['modules_dir'] : $cfg['plugins_dir'];
+            $dir = $owner == 'module' ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir'];
             // Run configure extension part if present
-            if (file_exists($dir."/".$n."/setup/".$n.".configure.php"))
-            {
-                include $dir."/".$n."/setup/".$n.".configure.php";
+            if (file_exists($dir . "/" .$n . "/setup/" .$n. ".configure.php")) {
+                include $dir . "/" .$n . "/setup/" . $n . ".configure.php";
             }
 		}
 
@@ -156,34 +156,66 @@ else
 		$rstructureicon = cot_import('rstructureicon', 'P', 'ARR');
 		$rstructurelocked = cot_import('rstructurelocked', 'P', 'ARR');
 
+        $rstructurecode = !empty($rstructurecode) ? $rstructurecode : [];
+        $rstructurepath = !empty($rstructurepath) ? $rstructurepath : [];
+        $rstructuretitle = !empty($rstructuretitle) ? $rstructuretitle : [];
+        $rstructuredesc = !empty($rstructuredesc) ? $rstructuredesc : [];
+        $rstructureicon = !empty($rstructureicon) ? $rstructureicon : [];
+        $rstructurelocked  = !empty($rstructurelocked) ? $rstructurelocked : [];
+
 		$rtplmodearr = cot_import('rstructuretplmode', 'P', 'ARR');
 		$rtplforcedarr = cot_import('rstructuretplforced', 'P', 'ARR');
 		$rtplquickarr = cot_import('rstructuretplquick', 'P', 'ARR');
 
+        $rtplmodearr = !empty($rtplmodearr) ? $rtplmodearr : [];
+        $rtplforcedarr = !empty($rtplforcedarr) ? $rtplforcedarr : [];
+        $rtplquickarr = !empty($rtplquickarr) ? $rtplquickarr : [];
+
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.structure.update.first') as $pl)
-		{
+		foreach (cot_getextplugins('admin.structure.update.first') as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
-		foreach ($rstructurecode as $i => $k)
-		{
-			$oldrow = cot::$db->query("SELECT * FROM ".cot::$db->structure." WHERE structure_id=".(int)$i)->fetch();
-			$rstructure['structure_code'] = preg_replace('#[^\w\p{L}\-]#u', '', cot_import($rstructurecode[$i], 'D', 'TXT'));
-			$rstructure['structure_path'] = cot_import($rstructurepath[$i], 'D', 'TXT');
-			$rstructure['structure_title'] = cot_import($rstructuretitle[$i], 'D', 'TXT');
-			$rstructure['structure_desc'] = cot_import($rstructuredesc[$i], 'D', 'TXT');
-			$rstructure['structure_icon'] = cot_import($rstructureicon[$i], 'D', 'TXT');
-			if (cot_import($rstructurelocked[$i], 'D', 'BOL') !== null)
-			{
+		foreach ($rstructurecode as $i => $k) {
+			$oldrow = cot::$db->query('SELECT * FROM ' . cot::$db->structure .
+                " WHERE structure_id=" . (int) $i)->fetch();
+
+            if (isset($rstructurecode[$i])) {
+                $rstructure['structure_code'] = preg_replace(
+                    '#[^\w\p{L}\-]#u',
+                    '',
+                    cot_import($rstructurecode[$i], 'D', 'TXT')
+                );
+            }
+            if (isset($rstructurepath[$i])) {
+                $rstructure['structure_path'] = cot_import($rstructurepath[$i], 'D', 'TXT');
+            }
+            if (isset($rstructuretitle[$i])) {
+                $rstructure['structure_title'] = cot_import($rstructuretitle[$i], 'D', 'TXT');
+            }
+            if (isset($rstructuredesc[$i])) {
+                $rstructure['structure_desc'] = cot_import($rstructuredesc[$i], 'D', 'TXT');
+            }
+            if (isset($rstructureicon[$i])) {
+                $rstructure['structure_icon'] = cot_import($rstructureicon[$i], 'D', 'TXT');
+            }
+			if (isset($rstructurelocked[$i]) && cot_import($rstructurelocked[$i], 'D', 'BOL') !== null) {
 				$rstructure['structure_locked'] = (cot_import($rstructurelocked[$i], 'D', 'BOL')) ? 1 : 0;
 			}
 
-            if(!empty(cot::$extrafields[cot::$db->structure])) {
+            if (!empty(cot::$extrafields[cot::$db->structure])) {
                 foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
-                    $rstructure['structure_' . $exfld['field_name']] = cot_import_extrafields('rstructure' . $exfld['field_name'] . '_' . $i,
-                        $exfld, 'P', $oldrow['structure_' . $exfld['field_name']], 'structure_');
+                    $inputName = 'rstructure' . $exfld['field_name'] . '_' . $i;
+                    if (isset($_POST[$inputName])) {
+                        $rstructure['structure_' . $exfld['field_name']] = cot_import_extrafields(
+                            $inputName,
+                            $exfld,
+                            'P',
+                            $oldrow['structure_' . $exfld['field_name']],
+                            'structure_'
+                        );
+                    }
                 }
             }
             
@@ -192,61 +224,47 @@ else
 			$rstructure['structure_path'] || cot_error('adm_structure_path_required', 'rstructurepath');
 			$rstructure['structure_title'] || cot_error('adm_structure_title_required', 'rstructuretitle');
 
-			$rtplmode = cot_import($rtplmodearr[$i], 'D', 'INT');
-			$rtplquick = cot_import($rtplquickarr[$i], 'D', 'TXT');
+			$rtplmode = isset($rtplmodearr[$i]) ? cot_import($rtplmodearr[$i], 'D', 'INT') : null;
+			$rtplquick = isset($rtplquickarr[$i]) ? cot_import($rtplquickarr[$i], 'D', 'TXT') : null;
 
-			$rstructure['structure_tpl'] = null;
-			if (!empty($rtplquick) || empty($rtplmode))
-			{
+
+			if (!empty($rtplquick) && empty($rtplmode)) {
 				$rstructure['structure_tpl'] = $rtplquick;
-			}
-			elseif ($rtplmode == 3)
-			{
+			} elseif ($rtplmode == 3 && !empty($rtplforcedarr[$i])) {
 				$rstructure['structure_tpl'] = cot_import($rtplforcedarr[$i], 'D', 'TXT');
-			}
-			elseif ($rtplmode == 2)
-			{
+			} elseif ($rtplmode == 2) {
 				$rstructure['structure_tpl'] = 'same_as_parent';
-			}
-			elseif ($rtplmode == 1)
-			{
+			} elseif ($rtplmode == 1) {
 				$rstructure['structure_tpl'] = '';
 			}
-			if (!cot_error_found())
-			{
+			if (!cot_error_found()) {
 				$res = cot_structure_update($n, $i, $oldrow, $rstructure, $is_module);
-				if (is_array($res))
-				{
+				if (is_array($res)) {
 					cot_error($res[0], $res[1]);
 				}
 			}
 		}
 		cot_extrafield_movefiles();
 		cot_auth_clear('all');
-		if ($cache)
-		{
+		if ($cache) {
 			$cache->clear();
 		}
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.structure.update.done') as $pl)
-		{
+		foreach (cot_getextplugins('admin.structure.update.done') as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
-		if (!cot_error_found())
-		{
+		if (!cot_error_found()) {
 			cot_message('Updated');
-		}
-		else
-		{
+		} else {
 			cot_error('adm_structure_somenotupdated');
 		}
+
 		cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
-	}
-	elseif ($a == 'add' && !empty($_POST))
-	{
+
+    } elseif ($a == 'add' && !empty($_POST)) {
 		$rstructure['structure_code'] = preg_replace('#[^\w\p{L}\-]#u', '', cot_import('rstructurecode', 'P', 'TXT'));
 		$rstructure['structure_path'] = cot_import('rstructurepath', 'P', 'TXT');
 		$rstructure['structure_title'] = cot_import('rstructuretitle', 'P', 'TXT');
@@ -257,10 +275,13 @@ else
 		$rtplmode = cot_import('rtplmode', 'P', 'INT');
 		$rtplquick = cot_import('rtplquick', 'P', 'TXT');
 
-        if(!empty(cot::$extrafields[cot::$db->structure])) {
+        if (!empty(cot::$extrafields[cot::$db->structure])) {
             foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
-                $rstructure['structure_' . $exfld['field_name']] = cot_import_extrafields('rstructure' . $exfld['field_name'],
-                    $exfld, 'P', '', 'structure_');
+                $inputName = 'rstructure' . $exfld['field_name'];
+                if (isset($_POST[$inputName])) {
+                    $rstructure['structure_' . $exfld['field_name']] = cot_import_extrafields($inputName,
+                        $exfld, 'P', '', 'structure_');
+                }
             }
         }
 
@@ -269,56 +290,40 @@ else
 		$rstructure['structure_path'] || cot_error('adm_structure_path_required', 'rstructurepath');
 		$rstructure['structure_title'] || cot_error('adm_structure_title_required', 'rstructuretitle');
 
-		if (!empty($rtplquick))
-		{
+		if (!empty($rtplquick)) {
 			$rstructure['structure_tpl'] = $rtplquick;
-		}
-		elseif ($rtplmode == 3)
-		{
+		} elseif ($rtplmode == 3) {
 			$rstructure['structure_tpl'] = cot_import('rtplforced', 'P', 'TXT');
-		}
-		elseif ($rtplmode == 2)
-		{
+		} elseif ($rtplmode == 2) {
 			$rstructure['structure_tpl'] = 'same_as_parent';
-		}
-		else
-		{
+		} else {
 			$rstructure['structure_tpl'] = '';
 		}
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.structure.add.first') as $pl)
-		{
+		foreach (cot_getextplugins('admin.structure.add.first') as $pl) {
 			include $pl;
 		}
 		/* ===== */
-		if (!cot_error_found())
-		{
+		if (!cot_error_found()) {
 			$res = cot_structure_add($n, $rstructure, $is_module);
-			if ($res === true)
-			{
+			if ($res === true) {
 				cot_extrafield_movefiles();
 				/* === Hook === */
-				foreach (cot_getextplugins('admin.structure.add.done') as $pl)
-				{
+				foreach (cot_getextplugins('admin.structure.add.done') as $pl) {
 					include $pl;
 				}
 				/* ===== */
 				cot_message('Added');
-			}
-			elseif (is_array($res))
-			{
+			} elseif (is_array($res)) {
 				cot_error($res[0], $res[1]);
-			}
-			else
-			{
+			} else {
 				cot_error('Error');
 			}
 		}
 		cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
-	}
-	elseif ($a == 'delete')
-	{
+
+    } elseif ($a == 'delete') {
 		cot_check_xg();
 
 		if (cot_structure_delete($n, $c, $is_module))

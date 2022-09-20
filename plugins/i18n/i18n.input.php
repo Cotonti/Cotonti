@@ -73,6 +73,7 @@ if (cot::$cfg['plugin']['i18n']['cookie'] && $i18n_locale !== $cookie_locale) {
 }
 
 // SEO fix
+// For translated pages it will be enabled in i18n.page.main.php
 if (cot::$usr['id'] == 0 && $i18n_notmain && cot::$env['ext'] != 'index') {
     cot::$sys['noindex'] = true;
 }
