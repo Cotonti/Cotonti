@@ -175,7 +175,7 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 	foreach ($values as $k => $x) {
 		$x = trim($x);
 		$selected = ($multi && in_array($x, $chosen)) || (!$multi && $x == $chosen) ? ' selected="selected"' : '';
-		$title = $use_titles ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
+		$title = ($use_titles && !empty($titles[$k])) ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
 		$options .= cot_rc($rc, array(
 			'value' => $htmlspecialchars_bypass ? $x : htmlspecialchars($x),
 			'selected' => $selected,

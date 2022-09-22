@@ -170,7 +170,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 
 /**
  * @param string $template
- * @param string $mode
+ * @param string|int $mode 'recent' or unix timestamp from which publications should be displayed
  * @param int $maxperpage
  * @param int $d
  * @param int $titlelength
