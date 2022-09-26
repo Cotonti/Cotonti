@@ -207,6 +207,7 @@ else
             if (!empty(cot::$extrafields[cot::$db->structure])) {
                 foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
                     $inputName = 'rstructure' . $exfld['field_name'] . '_' . $i;
+                    // TODO We should ckeck if extrafield has default value or it is required
                     if (isset($_POST[$inputName])) {
                         $rstructure['structure_' . $exfld['field_name']] = cot_import_extrafields(
                             $inputName,
@@ -278,6 +279,7 @@ else
         if (!empty(cot::$extrafields[cot::$db->structure])) {
             foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
                 $inputName = 'rstructure' . $exfld['field_name'];
+                // TODO Add new record. We should ckeck if extrafield has default value or it is required
                 if (isset($_POST[$inputName])) {
                     $rstructure['structure_' . $exfld['field_name']] = cot_import_extrafields($inputName,
                         $exfld, 'P', '', 'structure_');

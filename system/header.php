@@ -12,19 +12,22 @@ defined('COT_CODE') or die('Wrong URL');
 cot_uriredir_store();
 
 /* === Hook === */
-foreach (cot_getextplugins('header.first') as $pl)
-{
+foreach (cot_getextplugins('header.first') as $pl) {
 	include $pl;
 }
 /* ===== */
-cot::$out['logstatus'] = (cot::$usr['id'] > 0) ? cot::$L['hea_youareloggedas'].' '.cot::$usr['name'] : cot::$L['hea_youarenotlogged'];
-cot::$out['userlist'] = (cot_auth('users', 'a', 'R')) ? cot_rc_link(cot_url('users'), cot::$L['Users']) : '';
+
+cot::$out['logstatus'] = (cot::$usr['id'] > 0) ?
+    cot::$L['hea_youareloggedas'] . ' ' . cot::$usr['name'] : cot::$L['hea_youarenotlogged'];
+cot::$out['userlist'] = (cot_auth('users', 'a', 'R')) ?
+    cot_rc_link(cot_url('users'), cot::$L['Users']) : '';
 
 unset($title_tags, $title_data);
 
-if(!isset(cot::$out['subtitle'])) cot::$out['subtitle'] = '';
-if(!isset(cot::$out['head'])) cot::$out['head'] = '';
-if(!isset(cot::$out['head_head'])) cot::$out['head_head'] = '';
+cot::$out['subtitle'] = isset(cot::$out['subtitle']) ? cot::$out['subtitle'] : '';
+cot::$out['head'] = isset(cot::$out['head']) ? cot::$out['head'] : '';
+cot::$out['head_head'] = isset(cot::$out['head_head']) ? cot::$out['head_head'] : '';
+
 $title_page_num = '';
 if (!empty($pg) && is_numeric($pg) && $pg > 1) {
 	// Appending page number to subtitle and meta description
@@ -48,9 +51,13 @@ if (cot::$cfg['jquery'] && cot::$cfg['jquery_cdn']) {
 	Resources::linkFile(cot::$cfg['jquery_cdn'], 'js', 30);
 }
 $html = Resources::render();
-if($html) cot::$out['head_head'] = $html.cot::$out['head_head'];
+if ($html) {
+    cot::$out['head_head'] = $html . cot::$out['head_head'];
+}
 
-cot::$out['meta_contenttype'] = cot::$cfg['xmlclient'] ? 'application/xml' : 'text/html';
+if (empty(cot::$out['meta_contenttype'])) {
+    cot::$out['meta_contenttype'] = cot::$cfg['xmlclient'] ? 'application/xml' : 'text/html';
+}
 cot::$out['basehref'] = cot::$R['code_basehref'];
 cot::$out['meta_charset'] = 'UTF-8';
 cot::$out['meta_desc'] = (empty(cot::$out['desc']) ? cot::$cfg['subtitle'] : htmlspecialchars(cot::$out['desc'])) . $title_page_num;
@@ -61,7 +68,8 @@ cot::$out['head_head'] .= cot::$out['head'];
 if (!empty(cot::$sys['noindex'])) {
 	cot::$out['head_head'] .= cot::$R['code_noindex'];
 }
-if(!headers_sent()) {
+
+if (!headers_sent()) {
     $lastModified = !empty(cot::$env['last_modified']) ? cot::$env['last_modified'] : 0;
 	cot_sendheaders(cot::$out['meta_contenttype'], isset(cot::$env['status']) ? cot::$env['status'] : '200 OK', $lastModified);
 }
@@ -76,14 +84,15 @@ if (!COT_AJAX) {
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 
 	/* === Hook === */
-	foreach (cot_getextplugins('header.main') as $pl)
-	{
+	foreach (cot_getextplugins('header.main') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if(empty(cot::$out['notices'])) cot::$out['notices'] = '';
-	if(!empty(cot::$out['notices_array']) && is_array(cot::$out['notices_array'])) {
+	if (empty(cot::$out['notices'])) {
+        cot::$out['notices'] = '';
+    }
+	if (!empty(cot::$out['notices_array']) && is_array(cot::$out['notices_array'])) {
 		$notices = '';
 		foreach (cot::$out['notices_array'] as $noticeRow) {
 			$notice = (is_array($noticeRow)) ? cot_rc('notices_link', array('url' => $noticeRow[0], 'title' => $noticeRow[1])) :
@@ -94,8 +103,7 @@ if (!COT_AJAX) {
 		cot::$out['notices'] .= cot_rc('notices_container', array('notices' => $notices));
 	}
 	cot::$out['canonical_uri'] = empty(cot::$out['canonical_uri']) ? str_replace('&', '&amp;', cot::$sys['canonical_url']) : cot::$out['canonical_uri'];
-	if(!preg_match("#^https?://.+#", cot::$out['canonical_uri']))
-	{
+	if (!preg_match("#^https?://.+#", cot::$out['canonical_uri'])) {
 		cot::$out['canonical_uri'] = COT_ABSOLUTE_URL . cot::$out['canonical_uri'];
 	}
 
@@ -123,15 +131,14 @@ if (!COT_AJAX) {
 	));
 
 	/* === Hook === */
-	foreach (cot_getextplugins('header.body') as $pl)
-	{
+	foreach (cot_getextplugins('header.body') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if (cot::$usr['id'] > 0)
-	{
-		cot::$out['adminpanel'] = (cot_auth('admin', 'any', 'R')) ? cot_rc_link(cot_url('admin'), cot::$L['Administration']) : '';
+	if (cot::$usr['id'] > 0) {
+		cot::$out['adminpanel'] = (cot_auth('admin', 'any', 'R')) ?
+            cot_rc_link(cot_url('admin'), cot::$L['Administration']) : '';
 		cot::$out['loginout_url'] = cot_url('login', 'out=1&' . cot_xg());
 		cot::$out['loginout'] = cot_rc_link(cot::$out['loginout_url'], cot::$L['Logout']);
 		cot::$out['profile'] = cot_rc_link(cot_url('users', 'm=profile'), cot::$L['Profile']);
@@ -148,16 +155,13 @@ if (!COT_AJAX) {
 		));
 
 		/* === Hook === */
-		foreach (cot_getextplugins('header.user.tags') as $pl)
-		{
+		foreach (cot_getextplugins('header.user.tags') as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
 		$t->parse('HEADER.USER');
-	}
-	else
-	{
+	} else {
 		cot::$out['guest_username'] = cot::$R['form_guest_username'];
 		cot::$out['guest_password'] = cot::$R['form_guest_password'];
 		cot::$out['guest_register'] = cot_rc_link(cot_url('users', 'm=register'), cot::$L['Register']);
@@ -174,8 +178,7 @@ if (!COT_AJAX) {
 		));
 
 		/* === Hook === */
-		foreach (cot_getextplugins('header.guest.tags') as $pl)
-		{
+		foreach (cot_getextplugins('header.guest.tags') as $pl) {
 			include $pl;
 		}
 		/* ===== */
@@ -184,8 +187,7 @@ if (!COT_AJAX) {
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('header.tags') as $pl)
-	{
+	foreach (cot_getextplugins('header.tags') as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -193,4 +195,5 @@ if (!COT_AJAX) {
 	$t->parse('HEADER');
 	$t->out('HEADER');
 }
+
 define('COT_HEADER_COMPLETE', TRUE);

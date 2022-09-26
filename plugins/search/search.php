@@ -130,7 +130,14 @@ if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && cot::$cfg['pl
 	/* ===== */
 
 	$t->assign(array(
-		'PLUGIN_PAGE_SEC_LIST' => cot_selectbox($rs['pagsub'], 'rs[pagsub][]', array_keys($pages_cat_list), array_values($pages_cat_list), false, 'multiple="multiple" style="width:50%"'),
+		'PLUGIN_PAGE_SEC_LIST' => cot_selectbox(
+            $rs['pagsub'],
+            'rs[pagsub][]',
+            array_keys($pages_cat_list),
+            array_values($pages_cat_list),
+            false,
+            'multiple="multiple"'
+        ),
 		'PLUGIN_PAGE_RES_SORT' => cot_selectbox($rs['pagsort'], 'rs[pagsort]', array('date', 'title', 'count', 'cat'), array(cot::$L['plu_pag_res_sort1'], cot::$L['plu_pag_res_sort2'], cot::$L['plu_pag_res_sort3'], cot::$L['plu_pag_res_sort4']), false),
 		'PLUGIN_PAGE_RES_SORT_WAY' => cot_radiobox($rs['pagsort2'], 'rs[pagsort2]', array('DESC', 'ASC'), array(cot::$L['plu_sort_desc'], cot::$L['plu_sort_asc'])),
 		'PLUGIN_PAGE_SEARCH_NAMES' => cot_checkbox(($rs['pagtitle'] == 1 || count($rs['pagsub']) == 0), 'rs[pagtitle]', cot::$L['plu_pag_search_names']),
@@ -160,7 +167,14 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && cot::$cfg['
 	}
 
 	$t->assign(array(
-		'PLUGIN_FORUM_SEC_LIST' => cot_selectbox($rs['frmsub'], 'rs[frmsub][]', array_keys($forum_cat_list), array_values($forum_cat_list), false, 'multiple="multiple" style="width:50%"'),
+		'PLUGIN_FORUM_SEC_LIST' => cot_selectbox(
+            $rs['frmsub'],
+            'rs[frmsub][]',
+            array_keys($forum_cat_list),
+            array_values($forum_cat_list),
+            false,
+            'multiple="multiple"'
+        ),
 		'PLUGIN_FORUM_RES_SORT' => cot_selectbox($rs['frmsort'], 'rs[frmsort]', array('updated', 'creationdate', 'title', 'postcount', 'viewcount', 'sectionid'), array(cot::$L['plu_frm_res_sort1'], cot::$L['plu_frm_res_sort2'], cot::$L['plu_frm_res_sort3'], cot::$L['plu_frm_res_sort4'], cot::$L['plu_frm_res_sort5'], cot::$L['plu_frm_res_sort6']), false),
 		'PLUGIN_FORUM_RES_SORT_WAY' => cot_radiobox($rs['frmsort2'], 'rs[frmsort2]', array('DESC', 'ASC'), array(cot::$L['plu_sort_desc'], cot::$L['plu_sort_asc'])),
 		'PLUGIN_FORUM_SEARCH_NAMES' => cot_checkbox(($rs['frmtitle'] == 1 || count($rs['frmsub']) == 0), 'rs[frmtitle]', cot::$L['plu_frm_search_names']),
@@ -187,15 +201,18 @@ if (!empty($sq)) {
 	$rs['setuser'] = trim($rs['setuser']);
 	if (!empty($rs['setuser'])) {
 		$touser_src = explode(",", $rs['setuser']);
+        $touser_sql = [];
 		foreach ($touser_src as $k => $i) {
 			$user_name = trim(cot_import($i, 'D', 'TXT'));
 			if (!empty($user_name)) {
-				$touser_sql[] = "'".cot::$db->prep($user_name)."'";
+				$touser_sql[] = "'" . cot::$db->prep($user_name) . "'";
 			}
 		}
 		$touser_sql = '('.implode(',', $touser_sql).')';
-		$sql = cot::$db->query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
+		$sql = cot::$db->query('SELECT user_id, user_name FROM ' . cot::$db->users .
+            " WHERE user_name IN $touser_sql");
 		$totalusers = $sql->rowCount();
+        $touser_ids = [];
 		while ($row = $sql->fetch()) {
 			$touser_ids[] = $row['user_id'];
 		}
@@ -477,12 +494,15 @@ if (!empty($sq)) {
 
 // Search title
 $crumbs = array(array(cot_url('plug', 'e=search'), cot::$L['plu_search']));
-if (!empty($tab))
-{
-	$crumbs[] = array(cot_url('plug', 'e=search&tab='.$tab), cot::$L['plu_tabs_'.$tab]);
+if (!empty($tab)) {
+	$crumbs[] = [
+        cot_url('plug', 'e=search&tab='.$tab),
+        !empty(cot::$L['plu_tabs_'.$tab]) ? cot::$L['plu_tabs_'.$tab] : '',
+    ];
 }
 cot::$out['head'] .= cot::$R['code_noindex'];
-$search_subtitle = empty($tab) ? cot::$L['plu_search'] : cot::$L['plu_tabs_'.$tab].' - '.cot::$L['plu_search'];
+$search_subtitle = (empty($tab) || empty(cot::$L['plu_tabs_'.$tab])) ? cot::$L['plu_search'] :
+    cot::$L['plu_tabs_'.$tab].' - '.cot::$L['plu_search'];
 cot::$out['subtitle'] = empty($sq) ? $search_subtitle : htmlspecialchars(strip_tags($sq)).' - '.cot::$L['plu_result'];
 $t->assign(array(
 	'PLUGIN_TITLE' => cot_breadcrumbs($crumbs, cot::$cfg['homebreadcrumb'], true),
@@ -490,8 +510,8 @@ $t->assign(array(
 	'PLUGIN_SEARCH_TEXT' => cot_inputbox('text', 'sq', htmlspecialchars($sq), 'size="32" maxlength="'.cot::$cfg['plugin']['search']['maxsigns'].'"'),
 	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rs[setuser]', htmlspecialchars($rs['setuser']), 'class="userinput" size="32"'),
 	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rs['setlimit'], 'rs[setlimit]', range(0, 5), array(cot::$L['plu_any_date'], cot::$L['plu_last_2_weeks'], cot::$L['plu_last_1_month'], cot::$L['plu_last_3_month'], cot::$L['plu_last_1_year'], cot::$L['plu_need_datas']), false),
-	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rfrom', (int)cot_date('Y', cot::$sys['now']) + 1),
-	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rto', (int)cot_date('Y', cot::$sys['now']) + 1),
+	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rfrom', (int) cot_date('Y', cot::$sys['now']) + 1),
+	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rto', (int) cot_date('Y', cot::$sys['now']) + 1),
 	'PLUGIN_SEARCH_FOUND' => (array_sum($totalitems) > 0) ? array_sum($totalitems) : '',
 ));
 

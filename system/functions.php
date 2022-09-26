@@ -1774,63 +1774,53 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = true, $plain = false, 
 {
 	global $cfg, $L;
 	$tmp = array();
-	if ($home)
-	{
-		$maintitle = (empty($L['breadcrumbmaintitle'])) ? $cfg['maintitle'] : $L['breadcrumbmaintitle'];
+	if ($home) {
+		$maintitle = (empty(cot::$L['breadcrumbmaintitle'])) ? cot::$cfg['maintitle'] : cot::$L['breadcrumbmaintitle'];
 		array_unshift($crumbs, array(cot_url('index'), $maintitle));
 	}
 	$cnt = count($crumbs);
-	for ($i = 0; $i < $cnt; $i++)
-	{
+	for ($i = 0; $i < $cnt; $i++) {
 		$elem = '';
 		$params = is_array($crumbs[$i]) ? array(
 			'url' => (!empty($crumbs[$i][0])) ? $crumbs[$i][0] : '#',
-			'title' => htmlspecialchars($crumbs[$i][1], ENT_COMPAT, 'UTF-8', false)
-		) : $params = array('title' => $crumbs[$i]);
-		if ($plain || ($nolast && $i === $cnt - 1) || !isset($params['url']))
-		{
+			'title' => !empty($crumbs[$i][1]) ?
+                htmlspecialchars($crumbs[$i][1], ENT_COMPAT, 'UTF-8', false) : ''
+		) : array('title' => $crumbs[$i]);
+		if ($plain || ($nolast && $i === $cnt - 1) || !isset($params['url'])) {
 			$crumb = cot_rc('breadcrumbs_plain', $params);
-			if ($crumb == 'breadcrumbs_plain')
-			{
+			if ($crumb == 'breadcrumbs_plain') {
 				$crumb = cot_rc('string_catpath', $params);
 			}
-		}
-		else
-		{
+		} else {
 			$crumb = cot_rc('breadcrumbs_link', $params);
-			if ($crumb == 'breadcrumbs_link')
-			{
+			if ($crumb == 'breadcrumbs_link') {
 				$crumb = cot_rc('link_catpath', $params);
 			}
 		}
-		if ($i == 0)
-		{
+		if ($i == 0) {
 			$elem = cot_rc('breadcrumbs_first', array('crumb' => $crumb));
 		}
-		if ($i == $cnt - 1)
-		{
+		if ($i == $cnt - 1) {
 			$elem = cot_rc('breadcrumbs_last', array('crumb' => $crumb));
 		}
-		if (!$elem || $elem == 'breadcrumbs_first' || $elem == 'breadcrumbs_last')
-		{
+		if (!$elem || $elem == 'breadcrumbs_first' || $elem == 'breadcrumbs_last') {
 			$elem = cot_rc('breadcrumbs_crumb', array('crumb' => $crumb));
 		}
-		if ($elem == 'breadcrumbs_crumb')
-		{
+		if ($elem == 'breadcrumbs_crumb') {
 			$elem = $crumb;
 		}
-		if(!empty($inrc))
-		{
+		if (!empty($inrc)) {
 			$elem = cot_rc($inrc, array('elem' => $elem));
 		}
 		$tmp[] = $elem;
 	}
 	$separator = (!empty($separator) || !empty($inrc)) ? $separator : cot_rc('breadcrumbs_separator');
-	$separator = ($separator == 'breadcrumbs_separator') ? $cfg['separator'] : $separator;
+	$separator = ($separator == 'breadcrumbs_separator') ? cot::$cfg['separator'] : $separator;
 	$separator = (!empty($inrc) && (mb_strlen($separator) > 2 || empty($separator))) ? $separator : ' '.$separator.' ';
 
 	$breadcrumbs = implode($separator, $tmp);
 	$container = cot_rc('breadcrumbs_container', array('crumbs' => $breadcrumbs));
+
 	return ($container == 'breadcrumbs_container') ? $breadcrumbs : $container;
 }
 
