@@ -337,8 +337,8 @@ class CotDB
      * @see http://www.php.net/manual/en/pdo.query.php
      * @see http://www.php.net/manual/en/pdo.prepare.php
      * @param string $query The SQL statement to prepare and execute.
-     * @param array $parameters An array of values to be binded as input parameters to the query. PHP int parameters
-     *     will beconsidered as PDO::PARAM_INT, others as PDO::PARAM_STR.
+     * @param array|string|int|float $parameters An array of values to be binded as input parameters to the query.
+     *     PHP int parameters will beconsidered as PDO::PARAM_INT, others as PDO::PARAM_STR.
      * @param int $mode Fetch mode. See https://www.php.net/manual/ru/pdo.constants.php
      *      In Cotonti we use PDO::FETCH_ASSOC by default to save memory
      *

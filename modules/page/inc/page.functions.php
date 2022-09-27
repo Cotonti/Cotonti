@@ -636,50 +636,44 @@ function cot_page_add(&$rpage, $auth = array())
  */
 function cot_page_delete($id, $rpage = array())
 {
-	global $db, $db_pages, $db_structure, $cache, $cfg, $cot_extrafields, $structure, $L;
-	if (!is_numeric($id) || $id <= 0)
-	{
+	if (!is_numeric($id) || $id <= 0) {
 		return false;
 	}
-	$id = (int)$id;
-	if (count($rpage) == 0)
-	{
-		$rpage = $db->query("SELECT * FROM $db_pages WHERE page_id = ?", $id)->fetch();
-		if (!$rpage)
-		{
+	$id = (int) $id;
+	if (count($rpage) == 0) {
+		$rpage = cot::$db->query('SELECT * FROM ' . cot::$db->pages . " WHERE page_id = ?", $id)->fetch();
+		if (!$rpage) {
 			return false;
 		}
 	}
 
-	if ($rpage['page_state'] == 0)
-	{
-		$db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE  structure_area='page' AND structure_code = ?", $rpage['page_cat']);
+	if ($rpage['page_state'] == 0) {
+        cot::$db->query('UPDATE ' . cot::$db->structure .
+            ' SET structure_count=(SELECT COUNT(*) FROM ' . cot::$db->pages . ' WHERE page_state = 0 AND page_cat = :category) ' .
+            "WHERE structure_area='page' AND structure_code = :category", ['category' => $rpage['page_cat']]);
 	}
 
-	foreach ($cot_extrafields[$db_pages] as $exfld)
-	{
+	foreach (cot::$extrafields[cot::$db->pages] as $exfld) {
 		cot_extrafield_unlinkfiles($rpage['page_' . $exfld['field_name']], $exfld);
 	}
 
-	$db->delete($db_pages, "page_id = ?", $id);
+    cot::$db->delete(cot::$db->pages, "page_id = ?", $id);
 	cot_log("Deleted page #" . $id, 'adm');
 
 	/* === Hook === */
-	foreach (cot_getextplugins('page.edit.delete.done') as $pl)
-	{
+	foreach (cot_getextplugins('page.edit.delete.done') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if ($cache)
-	{
-		if ($cfg['cache_page'])
-		{
-			$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$rpage['page_cat']]['path']));
+	if (cot::$cache) {
+		if (cot::$cfg['cache_page']) {
+            cot::$cache->page->clear(
+                'page/' . str_replace('.', '/', cot::$structure['page'][$rpage['page_cat']]['path'])
+            );
 		}
-		if ($cfg['cache_index'])
-		{
-			$cache->page->clear('index');
+		if (cot::$cfg['cache_index']) {
+            cot::$cache->page->clear('index');
 		}
 	}
 
@@ -695,82 +689,65 @@ function cot_page_delete($id, $rpage = array())
  */
 function cot_page_update($id, &$rpage, $auth = array())
 {
-	global $cache, $cfg, $db, $db_pages, $db_structure, $structure, $L;
-	if (cot_error_found())
-	{
+    if (cot_error_found()) {
 		return false;
 	}
 
-	if (count($auth) == 0)
-	{
+	if (count($auth) == 0) {
 		$auth = cot_page_auth($rpage['page_cat']);
 	}
 
-	if (!empty($rpage['page_alias']))
-	{
-		$page_count = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_alias = ? AND page_id != ?", array($rpage['page_alias'], $id))->fetchColumn();
-		if ($page_count > 0)
-		{
+	if (!empty($rpage['page_alias'])) {
+		$page_count = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->pages .
+            ' WHERE page_alias = ? AND page_id != ?', array($rpage['page_alias'], $id))->fetchColumn();
+		if ($page_count > 0) {
 			$rpage['page_alias'] = $rpage['page_alias'].rand(1000, 9999);
 		}
 	}
 
-	$row_page = $db->query("SELECT * FROM $db_pages WHERE page_id = ?", $id)->fetch();
+	$row_page = cot::$db->query('SELECT * FROM ' . cot::$db->pages . ' WHERE page_id = ?', $id)->fetch();
 
-	if ($row_page['page_cat'] != $rpage['page_cat'] && $row_page['page_state'] == 0)
-	{
-		$db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code = ? AND structure_area = 'page'", $row_page['page_cat']);
-	}
-
-	//$usr['isadmin'] = cot_auth('page', $rpage['page_cat'], 'A');
-	if ($rpage['page_state'] == 0)
-	{
-		if ($auth['isadmin'] && $cfg['page']['autovalidate'])
-		{
-			if ($row_page['page_state'] != 0 || $row_page['page_cat'] != $rpage['page_cat'])
-			{
-				$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code = ? AND structure_area = 'page'", $rpage['page_cat']);
-			}
-		}
-		else
-		{
+	if ($rpage['page_state'] == 0) {
+		if (!($auth['isadmin'] && cot::$cfg['page']['autovalidate']))  {
 			$rpage['page_state'] = 1;
 		}
 	}
 
-	if ($rpage['page_state'] != 0 && $row_page['page_state'] == 0)
-	{
-		$db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code = ?", $rpage['page_cat']);
+	if (
+        ($rpage['page_state'] != 0 && $row_page['page_state'] == 0) ||
+        ($rpage['page_state'] == 0 && $row_page['page_state'] != 0)
+    ) {
+        cot::$db->query('UPDATE ' . cot::$db->structure .
+            ' SET structure_count=(SELECT COUNT(*) FROM ' . cot::$db->pages . ' WHERE page_state = 0 AND page_cat = :category) ' .
+            "WHERE structure_area='page' AND structure_code = :category", ['category' => $rpage['page_cat']]);
 	}
-	$cache && $cache->db->remove('structure', 'system');
+    cot::$cache && cot::$cache->db->remove('structure', 'system');
 
-	if (!$db->update($db_pages, $rpage, 'page_id = ?', $id))
-	{
+	if (!cot::$db->update(cot::$db->pages, $rpage, 'page_id = ?', $id)) {
 		return false;
 	}
 
 	cot_extrafield_movefiles();
 
 	/* === Hook === */
-	foreach (cot_getextplugins('page.edit.update.done') as $pl)
-	{
+	foreach (cot_getextplugins('page.edit.update.done') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if (($rpage['page_state'] == 0  || $rpage['page_cat'] != $row_page['page_cat']) && $cache)
-	{
-		if ($cfg['cache_page'])
-		{
-			$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$rpage['page_cat']]['path']));
-			if ($rpage['page_cat'] != $row_page['page_cat'])
-			{
-				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$row_page['page_cat']]['path']));
+	if (($rpage['page_state'] == 0  || $rpage['page_cat'] != $row_page['page_cat']) && cot::$cache) {
+		if (cot::$cfg['cache_page']) {
+            cot::$cache->page->clear(
+                'page/' . str_replace('.', '/', cot::$structure['page'][$rpage['page_cat']]['path'])
+            );
+			if ($rpage['page_cat'] != $row_page['page_cat']) {
+                cot::$cache->page->clear(
+                    'page/' . str_replace('.', '/', cot::$structure['page'][$row_page['page_cat']]['path'])
+                );
 			}
 		}
-		if ($cfg['cache_index'])
-		{
-			$cache->page->clear('index');
+		if (cot::$cfg['cache_index']) {
+            cot::$cache->page->clear('index');
 		}
 	}
 
