@@ -15,17 +15,13 @@ Hooks=page.edit.update.done,i18n.page.edit.update
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
-{
+if (cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
 	require_once cot_incfile('tags', 'plug');
 	// I18n
-	if (cot_get_caller() == 'i18n.page')
-	{
+	if (cot_get_caller() == 'i18n.page') {
 		global $i18n_locale;
 		$tags_extra = array('tag_locale' => $i18n_locale);
-	}
-	else
-	{
+	} else {
 		$tags_extra = null;
 	}
 	$rtags = cot_import('rtags', 'P', 'TXT');
@@ -35,38 +31,30 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 	$new_tags = array();
 	// Find new tags, count old tags that have been left
 	$cnt = 0;
-	foreach ($tags as $tag)
-	{
+	foreach ($tags as $tag) {
 		$p = array_search($tag, $old_tags);
-		if($p !== false)
-		{
+		if ($p !== false) {
 			$kept_tags[] = $old_tags[$p];
 			$cnt++;
-		}
-		else
-		{
+		} else {
 			$new_tags[] = $tag;
 		}
 	}
+
 	// Remove old tags that have been removed
 	$rem_tags = array_diff($old_tags, $kept_tags);
-	foreach ($rem_tags as $tag)
-	{
+	foreach ($rem_tags as $tag) {
 		cot_tag_remove($tag, $id, 'pages', $tags_extra);
 	}
+
 	// Add new tags
 	$ncnt = count($new_tags);
-	if ($cfg['plugin']['tags']['limit'] > 0
-		&& $ncnt > $cfg['plugin']['tags']['limit'] - $cnt)
-	{
-		$lim = $cfg['plugin']['tags']['limit'] - $cnt;
-	}
-	else
-	{
+	if (cot::$cfg['plugin']['tags']['limit'] > 0 && $ncnt > cot::$cfg['plugin']['tags']['limit'] - $cnt) {
+		$lim = cot::$cfg['plugin']['tags']['limit'] - $cnt;
+	} else {
 		$lim = $ncnt;
 	}
-	for ($i = 0; $i < $lim; $i++)
-	{
+	for ($i = 0; $i < $lim; $i++) {
 		cot_tag($new_tags[$i], $id, 'pages', $tags_extra);
 	}
 }
