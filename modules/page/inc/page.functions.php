@@ -80,6 +80,7 @@ function cot_readraw($file)
  */
 function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = null, $pagepath_home = false, $emptytitle = '')
 {
+    // $L, $Ls, $R are needed for hook includes
 	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $db_pages, $usr, $sys, $cot_yesno, $structure, $db_structure;
 
 	static $extp_first = null, $extp_main = null;
@@ -400,9 +401,9 @@ function cot_page_status($page_state, $page_begin, $page_expire)
  */
 function cot_page_sync($cat)
 {
-	global $db, $db_structure, $db_pages;
-	$sql = $db->query("SELECT COUNT(*) FROM $db_pages
-		WHERE page_cat='".$db->prep($cat)."' AND (page_state = 0 OR page_state=2)");
+	$sql = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->pages . "
+		WHERE page_cat=? AND (page_state = 0 OR page_state = 2)", $cat);
+
 	return (int) $sql->fetchColumn();
 }
 
@@ -553,7 +554,11 @@ function cot_page_validate($rpage)
  */
 function cot_page_add(&$rpage, $auth = array())
 {
-	global $cache, $cfg, $db, $db_x, $db_pages, $db_structure, $structure, $L;
+    // $L, $Ls, $R are needed for hook includes
+    global $L, $Ls, $R;
+
+	global $cache, $cfg, $db, $db_x, $db_pages, $db_structure, $structure;
+
 	if (cot_error_found())
 	{
 		return false;
@@ -636,6 +641,9 @@ function cot_page_add(&$rpage, $auth = array())
  */
 function cot_page_delete($id, $rpage = array())
 {
+    // $L, $Ls, $R are needed for hook includes
+    global $L, $Ls, $R;
+
 	if (!is_numeric($id) || $id <= 0) {
 		return false;
 	}
@@ -689,6 +697,9 @@ function cot_page_delete($id, $rpage = array())
  */
 function cot_page_update($id, &$rpage, $auth = array())
 {
+    // $L, $Ls, $R are needed for hook includes
+    global $L, $Ls, $R;
+
     if (cot_error_found()) {
 		return false;
 	}
@@ -772,6 +783,9 @@ function cot_page_update($id, &$rpage, $auth = array())
 function cot_page_enum($categories = '', $count = 0, $template = '', $order = '', $condition = '',
 	$active_only = true, $use_subcat = true, $exclude_current = false, $blacklist = '', $pagination = '', $cache_ttl=null)
 {
+    // $L, $Ls, $R are needed for hook includes
+    global $L, $Ls, $R;
+
 	global $db, $db_pages, $db_users, $structure, $cfg, $sys, $lang, $cache;
 
 	// Compile lists
@@ -827,7 +841,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	}
 
 	// Get pagination number if necessary
-	if(!empty($pagination))
+	if (!empty($pagination))
 	{
 		list($pg, $d, $durl) = cot_import_pagenav($pagination, $count);
 	}
