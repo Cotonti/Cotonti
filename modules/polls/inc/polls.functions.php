@@ -120,48 +120,46 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 function cot_poll_check()
 {
 	global $cfg, $L, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
-	$poll_id = cot_import('poll_id', 'P', 'INT');
+
+    $poll_id = (int) cot_import('poll_id', 'P', 'INT');
 
 	$poll_delete = cot_import('poll_delete', 'P', 'BOL');
 	$poll_reset = cot_import('poll_reset', 'P', 'BOL');
 
-	$poll_text = trim(cot_import('poll_text', 'P', 'HTM'));
+    $poll_text = cot_import('poll_text', 'P', 'HTM');
+	$poll_text = !empty($poll_text) ? trim($poll_text) : '';
 	$poll_multiple = cot_import('poll_multiple', 'P', 'BOL');
 	$poll_state = cot_import('poll_state', 'P', 'BOL');
 	$poll_options = cot_import('poll_option', 'P', 'ARR');
 
-	if ($poll_delete && (int) $poll_id > 0)
-	{
+	if ($poll_id > 0 && $poll_delete) {
 		cot_poll_delete($poll_id);
-		$poll_id = '';
+		$poll_id = 0;
 	}
-	if (isset($poll_id))
-	{
-		if ($poll_reset && (int) $poll_id > 0)
-		{
+
+	if ($poll_id > 0) {
+		if ($poll_reset) {
 			cot_poll_reset($poll_id);
 		}
 
 		$poll_options_temp = array();
-		foreach ($poll_options as $key => $val)
-		{
+		foreach ($poll_options as $key => $val) {
 			$val = trim(cot_import($val, 'D', 'TXT'));
-			if (!empty($val))
-			{
+			if (!empty($val)) {
 				$poll_options_temp[$key] = $val;
 			}
 		}
+
 		$poll_options = $poll_options_temp;
-		if (is_int($poll_id) || $cfg['polls']['del_dup_options'])
-		{
+		if (is_int($poll_id) || $cfg['polls']['del_dup_options']) {
 			$poll_options = array_unique($poll_options);
 		}
-		if (mb_strlen($poll_text) < 4)
-		{
+
+		if (mb_strlen($poll_text) < 4) {
 			cot_error('polls_error_title', 'poll_text');
 		}
-		if (count($poll_options) < 2)
-		{
+
+		if (count($poll_options) < 2) {
 			cot_error('polls_error_count', 'poll_option');
 		}
 	}

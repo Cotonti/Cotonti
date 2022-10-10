@@ -95,33 +95,55 @@ if ($a == 'check') {
 	$login_param = !cot::$cfg['useremailduplicate'] && cot_check_email($rusername) ?
 		'user_email' : 'user_name';
 
+    // Todo Obsolete? Is it really using? @see modules/users/inc/users.register.php:140
 	if (!empty($v) && mb_strlen($v) == 32) {
 		$validating = TRUE;
 		$login_param = 'user_lostpass';
 	}
 
 	// Load salt and algo from db
-	$sql = cot::$db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE $login_param=".
-        cot::$db->quote($rusername));
-	if ($sql->rowCount() == 0) {
-		// If login has e-mail format, try to find it as user_name
-		$sql = cot::$db->query("SELECT user_passsalt, user_passfunc FROM $db_users WHERE user_name=".
-            cot::$db->quote($rusername));
-	}
-
     $rmdpass = '';
-	if ($sql->rowCount() == 1) {
-		$hash_params = $sql->fetch();
-		$rmdpass = cot_hash($rpassword, $hash_params['user_passsalt'], $hash_params['user_passfunc']);
-		unset($hash_params);
-	}
+    if (!empty($rusername) && !empty($rpassword)) {
+        $sql = cot::$db->query(
+            'SELECT user_passsalt, user_passfunc FROM ' . cot::$db->users . " WHERE {$login_param}=?",
+            $rusername
+        );
+        if ($sql->rowCount() == 0) {
+            // If login has e-mail format, try to find it as user_name
+            $sql = cot::$db->query(
+                'SELECT user_passsalt, user_passfunc FROM ' . cot::$db->users . ' WHERE user_name=?',
+                $rusername
+            );
+        }
+
+        if ($sql->rowCount() == 1) {
+            $hash_params = $sql->fetch();
+            $rmdpass = cot_hash($rpassword, $hash_params['user_passsalt'], $hash_params['user_passfunc']);
+            unset($hash_params);
+        }
+    }
 
 	/**
 	 * Sets user selection criteria for authentication. Override this string in your plugin
 	 * hooking into users.auth.check.query to provide other authentication methods.
 	 */
-	$user_select_condition = (!$validating) ? "user_password=".cot::$db->quote($rmdpass)." AND $login_param=".
-        cot::$db->quote($rusername) : "user_lostpass=".cot::$db->quote($v);
+    $userSelectCondition = null;
+    $userSelectParams = [];
+
+    /** @deprecated Will be removed in 1.0.0 */
+    $user_select_condition = null;
+
+    if (!$validating) {
+        if (!empty($rusername) && !empty($rmdpass)) {
+            $userSelectCondition = "$login_param = :login_param AND user_password = :password";
+            $userSelectParams = ['login_param' => $rusername, 'password' => $rmdpass];
+        }
+    } else {
+        if (!empty($v)) {
+            $userSelectCondition = 'user_lostpass = :lost_pass';
+            $userSelectParams = ['lost_pass' => $v];
+        }
+    }
 
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.auth.check.query') as $pl) {
@@ -129,9 +151,20 @@ if ($a == 'check') {
 	}
 	/* ===== */
 
+    // For backwards compatibility. Will be removed in 1.0.0
+    if (!empty($user_select_condition)) {
+        $userSelectCondition = $user_select_condition;
+    }
+
+    if (empty($userSelectCondition)) {
+        cot::$env['status'] = '401 Unauthorized';
+        cot_log("Log in failed, user : " . $rusername,'usr');
+        cot_redirect(cot_url('message', 'msg=151', '', true));
+    }
+
 	$sql = cot::$db->query('SELECT user_id, user_name, user_token, user_regdate, user_maingrp, user_banexpire, ' .
         'user_theme, user_scheme, user_lang, user_sid, user_sidtime ' .
-         'FROM ' . cot::$db->users . " WHERE $user_select_condition");
+         'FROM ' . cot::$db->users . " WHERE $userSelectCondition", $userSelectParams);
 
 	/* 	Checking if we got any entries with the current login conditions,
 		only may fail when user name has e-mail format or user is not registered,
@@ -152,16 +185,21 @@ if ($a == 'check') {
 		$rusername = $row['user_name'];
 
 		// Checking to make sure user doesn't game the free login from
-		if ($validating && ($row['user_maingrp'] != COT_GROUP_MEMBERS ||
-                cot::$sys['now'] > ($row['user_regdate'] + 172800) || $token != $row['user_token']))
-		{
+		if (
+            $validating &&
+            (
+                $row['user_maingrp'] != COT_GROUP_MEMBERS ||
+                cot::$sys['now'] > ($row['user_regdate'] + 172800) ||
+                $token != $row['user_token']
+            )
+        ) {
             cot::$env['status'] = '403 Forbidden';
-			cot_log('Failed user validation login attempt : '.$rusername, 'usr');
+			cot_log('Failed user validation login attempt : ' . $rusername, 'usr');
 			cot_redirect(cot_url('message', 'msg=157', '', true));
 		}
 		if ($row['user_maingrp'] < 1) {
             cot::$env['status'] = '403 Forbidden';
-			cot_log("Log in attempt, user inactive : ".$rusername, 'usr');
+			cot_log("Log in attempt, user inactive : " . $rusername, 'usr');
 			cot_redirect(cot_url('message', 'msg=152', '', true));
 		}
 		if ($row['user_maingrp'] == COT_GROUP_INACTIVE) {
@@ -175,7 +213,7 @@ if ($a == 'check') {
 				$sql = cot::$db->update(cot::$db->users, array('user_maingrp' => '4'),  "user_id={$row['user_id']}");
 			} else {
                 cot::$env['status'] = '403 Forbidden';
-				cot_log("Log in attempt, user banned : ".$rusername, 'usr');
+				cot_log("Log in attempt, user banned : " . $rusername, 'usr');
 				cot_redirect(cot_url('message', 'msg=153&num='.$row['user_banexpire'], '', true));
 			}
 		}
@@ -189,7 +227,8 @@ if ($a == 'check') {
 		$sid = hash_hmac('sha256', $rmdpass . $row['user_sidtime'], cot::$cfg['secret_key']);
 
 		if (
-            empty($row['user_sid']) || $row['user_sid'] != $sid ||
+            empty($row['user_sid']) ||
+            $row['user_sid'] != $sid ||
             $row['user_sidtime'] + cot::$cfg['cookielifetime'] < cot::$sys['now']
         ) {
 			// Generate new session identifier
@@ -200,7 +239,7 @@ if ($a == 'check') {
 		}
 
 		if ($validating) {
-			$update_lostpass = ', user_lostpass='.cot::$db->quote(md5(microtime()));
+			$update_lostpass = ', user_lostpass=' . cot::$db->quote(md5(microtime()));
 		} else {
 			$update_lostpass = '';
 		}
@@ -215,7 +254,7 @@ if ($a == 'check') {
 		$u = base64_encode($ruserid . ':' . $sid);
 
 		if ($rremember) {
-			cot_setcookie(cot::$sys['site_id'], $u, time()+ cot::$cfg['cookielifetime'], cot::$cfg['cookiepath'],
+			cot_setcookie(cot::$sys['site_id'], $u, time() + cot::$cfg['cookielifetime'], cot::$cfg['cookiepath'],
                 cot::$cfg['cookiedomain'], cot::$sys['secure'], true);
 			unset($_SESSION[cot::$sys['site_id']]);
 		} else {
@@ -253,10 +292,13 @@ foreach (cot_getextplugins('users.auth.main') as $pl) {
 /* ===== */
 
 cot::$out['subtitle'] = cot::$L['aut_logintitle'];
-if (!isset(cot::$out['head'])) cot::$out['head'] = '';
+if (!isset(cot::$out['head'])) {
+    cot::$out['head'] = '';
+}
 cot::$out['head'] .= cot::$R['code_noindex'];
 require_once cot::$cfg['system_dir'] . '/header.php';
-$mskin = file_exists(cot_tplfile('login', 'core')) ? cot_tplfile('login', 'core') : cot_tplfile('users.auth', 'module');
+$mskin = file_exists(cot_tplfile('login', 'core')) ?
+    cot_tplfile('login', 'core') : cot_tplfile('users.auth', 'module');
 $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');

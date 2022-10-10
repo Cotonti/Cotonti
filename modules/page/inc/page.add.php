@@ -107,8 +107,8 @@ if ($clone > 0) {
 	$rpage = cot::$db->query("SELECT * FROM ".cot::$db->pages." WHERE page_id = ?", $clone)->fetch();
 }
 
-if (empty($rpage['page_cat']) && isset($c)) {
-    $rpage['page_cat'] = $c;
+if (empty($rpage['page_cat'])) {
+    $rpage['page_cat'] = isset($c) ? $c : '';
 }
 
 if (!empty($rpage['page_cat'])) {

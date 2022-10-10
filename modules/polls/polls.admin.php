@@ -15,82 +15,72 @@ Hooks=admin
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('polls', 'a');
-cot_block($usr['isadmin']);
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('polls', 'a');
+cot_block(cot::$usr['isadmin']);
 
 require_once cot_incfile('polls', 'module');
 require_once cot_incfile('polls', 'module', 'resources');
 
 $t = new XTemplate(cot_tplfile('polls.admin', 'module', true));
 
-$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
+$adminpath[] = array(cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
 $adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
-$adminpath[] = array(cot_url('admin', 'm='.$m), $L['Administration']);
-$adminhelp = $L['adm_help_polls'];
-$adminsubtitle = $L['Polls'];
+$adminpath[] = array(cot_url('admin', 'm='.$m), cot::$L['Administration']);
+$adminhelp = cot::$L['adm_help_polls'];
+$adminsubtitle = cot::$L['Polls'];
 
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', cot::$cfg['maxrowsperpage']);
 $filter = cot_import('filter', 'G', 'TXT');
 
 //$variant[key]=array("Caption", "filter", "page", "page_get", "sql", "sqlfield")
-$variants[0] = array($L['All'], "");
-$variants['index'] = array($L['Main'], "index");
-$variants['forum'] = array($L['Forums'], "forum");
+$variants[0] = array(cot::$L['All'], "");
+$variants['index'] = array(cot::$L['Main'], "index");
+$variants['forum'] = array(cot::$L['Forums'], "forum");
 
 $id = cot_import('id', 'G', 'INT');
 
 /* === Hook === */
-foreach (cot_getextplugins('polls.admin.first') as $pl)
-{
+foreach (cot_getextplugins('polls.admin.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if($a == 'delete' && $id > 0)
-{
-	cot_check_xg();
-	cot_poll_delete($id);
+if ( $id > 0) {
+    if ($a == 'delete') {
+        cot_check_xg();
+        cot_poll_delete($id);
+        cot_message('adm_polls_msg916_deleted');
 
-	cot_message('adm_polls_msg916_deleted');
+    } elseif ($a == 'reset') {
+        cot_check_xg();
+        cot_poll_reset($id);
+        cot_message('adm_polls_msg916_reset');
+
+    } elseif ($a == 'lock') {
+        cot_check_xg();
+        cot_poll_lock($id, 3);
+        cot_message('Locked');
+
+    } elseif ($a == 'bump') {
+        cot_check_xg();
+        $sql_polls = cot::$db->update(cot::$db->polls, ['poll_creationdate' => cot::$sys['now']], "poll_id=$id");
+
+        cot_message('adm_polls_msg916_bump');
+    }
 }
-elseif($a == 'reset' && $id > 0)
-{
-	cot_check_xg();
-	cot_poll_reset($id);
-
-	cot_message('adm_polls_msg916_reset');
-}
-elseif($a == 'lock' && $id > 0)
-{
-	cot_check_xg();
-	cot_poll_lock($id, 3);
-
-	cot_message('Locked');
-}
-elseif($a == 'bump' && $id > 0)
-{
-	cot_check_xg();
-	$sql_polls = $db->update($db_polls, array('poll_creationdate' => $sys['now']),  "poll_id=$id");
-
-	cot_message('adm_polls_msg916_bump');
-}
-
 cot_poll_check();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && !cot_error_found())
-{
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !cot_error_found()) {
 	$number = cot_poll_save();
 
-	if ($poll_id == 0)
-	{
+	if ($poll_id == 0) {
 		cot_message('polls_created');
-	}
-	elseif (!empty($poll_id))
-	{
+
+    } elseif (!empty($poll_id)) {
 		cot_message('polls_updated');
 	}
 
-	($cache && $cfg['cache_index']) && $cache->page->clear('index');
+	(cot::$cache && cot::$cfg['cache_index']) && cot::$cache->page->clear('index');
 }
 
 if(!$filter)
@@ -201,14 +191,14 @@ cot_poll_edit_form($poll_id, $t, 'MAIN');
 
 $t->assign(array(
 	'ADMIN_POLLS_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=module&p=polls'),
-	'ADMIN_POLLS_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_POLLS_ADMINWARNINGS' => !empty($adminwarnings) ? $adminwarnings : '',
 	'ADMIN_POLLS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_POLLS_PAGNAV' => $pagenav['main'],
 	'ADMIN_POLLS_PAGINATION_NEXT' => $pagenav['next'],
 	'ADMIN_POLLS_TOTALITEMS' => $totalitems,
 	'ADMIN_POLLS_ON_PAGE' => $ii,
 	'ADMIN_POLLS_FORMNAME' => $formname,
-	'ADMIN_POLLS_FORM_URL' => ((int)$poll_id > 0) ? cot_url('admin', 'm=polls'.$poll_filter.'&d='.$durl) : cot_url('admin', 'm=polls'),
+	'ADMIN_POLLS_FORM_URL' => ((int) $poll_id > 0) ? cot_url('admin', 'm=polls'.$poll_filter.'&d='.$durl) : cot_url('admin', 'm=polls'),
 	'ADMIN_POLLS_EDIT_FORM' => $poll_text,
 	'ADMIN_POLLS_SEND_BUTTON' => $send_button
 ));

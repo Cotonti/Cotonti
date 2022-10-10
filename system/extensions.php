@@ -43,9 +43,12 @@ $cot_ext_ignore_parts = array('configure', 'install', 'setup', 'uninstall');
  * FALSE if an error occurred while patching or a string containing version
  * number of the latest applied patch if patching was successful.
  */
-function cot_apply_patches($directory, $from_ver,
+function cot_apply_patches(
+    $directory,
+    $from_ver,
 	$sql_pattern = 'patch_([\w\.\-\_]+)\.(sql)',
-	$php_pattern = 'patch_([\w\.\-\_]+)\.(inc)')
+	$php_pattern = 'patch_([\w\.\-\_]+)\.(inc)'
+)
 {
 	global $L, $db;
 
@@ -177,18 +180,15 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	global $cfg, $L, $cache, $usr, $db_auth, $db_config, $db_users,
 		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x, $env;
 
-	$path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
+	$path = $is_module ? cot::$cfg['modules_dir'] . "/$name" : cot::$cfg['plugins_dir'] . "/$name";
 
 	// Emit initial message
-	if ($update)
-	{
+	if ($update) {
 		cot_message(cot_rc('ext_updating', array(
-			'type' => $is_module ? $L['Module'] : $L['Plugin'],
+			'type' => $is_module ? cot::$L['Module'] : cot::$L['Plugin'],
 			'name' => $name
 		)));
-	}
-	else
-	{
+	} else {
 		cot_message(cot_rc('ext_installing', array(
 			'type' => $is_module ? $L['Module'] : $L['Plugin'],
 			'name' => $name
@@ -197,8 +197,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 
 	// Check setup file and tags
 	$setup_file = $path . "/$name.setup.php";
-	if (!file_exists($setup_file))
-	{
+	if (!file_exists($setup_file)) {
 		cot_error(cot_rc('ext_setup_not_found', array('path' => $setup_file)));
 		return false;
 	}
@@ -206,8 +205,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	$old_ext_format = false;
 
 	$info = cot_infoget($setup_file, 'COT_EXT');
-	if (!$info && cot_plugin_active('genoa'))
-	{
+	if (!$info && cot_plugin_active('genoa')) {
 		// Try load old format info
 		$info = cot_infoget($setup_file, 'SED_EXTPLUGIN');
 		if ($info)
@@ -215,84 +213,73 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 			$old_ext_format = true;
 		}
 	}
-	if ($info === false)
-	{
+
+	if ($info === false) {
 		cot_error('ext_invalid_format');
 		return false;
 	}
 
 	// Check versions
-	$res = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$name'");
-	if ($res->rowCount() == 1)
-	{
+	$res = cot::$db->query('SELECT ct_version FROM ' . cot::$db->core . ' WHERE ct_code = ?', $name);
+	if ($res->rowCount() == 1) {
 		$current_ver = $res->fetchColumn();
 		$res->closeCursor();
-		if ($update)
-		{
-			if (version_compare($current_ver, $info['Version']) == 0 && !$force_update)
-			{
+
+		if ($update) {
+			if (version_compare($current_ver, $info['Version']) == 0 && !$force_update) {
 				// Nothing to update
 				cot_message(cot_rc('ext_up2date', array(
-					'type' => $is_module ? $L['Module'] : $L['Plugin'],
+					'type' => $is_module ? cot::$L['Module'] :cot::$L['Plugin'],
 					'name' => $name
 				)));
+
 				return COT_EXT_NOTHING_TO_UPDATE;
 			}
-		}
-		else
-		{
+		} else {
 			cot_clear_messages();
 			cot_error(cot_rc('ext_already_installed', array('name' => $name)));
 			return false;
 		}
 	}
 
-	if ($update)
-	{
+	if ($update) {
 		// Safely drop existing bindings
 		$bindings_cnt = cot_plugin_remove($name);
 		cot_message(cot_rc('ext_bindings_uninstalled', array('cnt' => $bindings_cnt)));
 	}
+
 	// Install hook parts and bindings
 	$hook_bindings = array();
 	$dp = opendir($path);
-	while ($f = readdir($dp))
-	{
-		if (preg_match("#^$name(\.([\w\.]+))?.php$#", $f, $mt)
-			&& (!isset($mt[2]) || !in_array($mt[2], $cot_ext_ignore_parts)))
-		{
+	while ($f = readdir($dp)) {
+		if (
+            preg_match("#^$name(\.([\w\.]+))?.php$#", $f, $mt) &&
+			(!isset($mt[2]) || !in_array($mt[2], $cot_ext_ignore_parts))
+        ) {
 			$part_info = cot_infoget($path . "/$f", 'COT_EXT');
-			if (!$part_info && cot_plugin_active('genoa'))
-			{
+			if (!$part_info && cot_plugin_active('genoa')) {
 				// Try to load old format info
 				$part_info = cot_infoget($path . "/$f", 'SED_EXTPLUGIN');
 			}
-			if ($part_info)
-			{
-				if (empty($part_info['Hooks']))
-				{
+			if ($part_info) {
+				if (empty($part_info['Hooks'])) {
 					$hooks = $is_module ? array('module') : array('standalone');
-				}
-				else
-				{
+				} else {
 					$hooks = explode(',', $part_info['Hooks']);
 					$hooks = is_array($hooks) ? array_map('trim', $hooks) : array();
 				}
-				if (empty($part_info['Order']))
-				{
+				if (empty($part_info['Order'])) {
 					$order = COT_PLUGIN_DEFAULT_ORDER;
-				}
-				else
-				{
+				} else {
 					$order = array_map('trim', explode(',', $part_info['Order']));
 					if (count($order) == 1 || count($order) < count($hooks))
 					{
 						$order = (int) $order[0];
 					}
 				}
+
 				$i = 0;
-				foreach ($hooks as $hook)
-				{
+				foreach ($hooks as $hook) {
 					$hook_bindings[] = array(
 						'part' => !isset($mt[2]) ? 'main' : $mt[2],
 						'file' => $f,
@@ -304,6 +291,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 			}
 		}
 	}
+
 	closedir($dp);
 	$bindings_cnt = cot_plugin_add($hook_bindings, $name, $info['Name'], $is_module);
 	cot_message(cot_rc('ext_bindings_installed', array('cnt' => $bindings_cnt)));

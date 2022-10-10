@@ -507,8 +507,8 @@ cot::$out['subtitle'] = empty($sq) ? $search_subtitle : htmlspecialchars(strip_t
 $t->assign(array(
 	'PLUGIN_TITLE' => cot_breadcrumbs($crumbs, cot::$cfg['homebreadcrumb'], true),
 	'PLUGIN_SEARCH_ACTION' => cot_url('plug', 'e=search&tab='.$tab),
-	'PLUGIN_SEARCH_TEXT' => cot_inputbox('text', 'sq', htmlspecialchars($sq), 'size="32" maxlength="'.cot::$cfg['plugin']['search']['maxsigns'].'"'),
-	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rs[setuser]', htmlspecialchars($rs['setuser']), 'class="userinput" size="32"'),
+	'PLUGIN_SEARCH_TEXT' => cot_inputbox('text', 'sq', htmlspecialchars($sq), 'maxlength="'.cot::$cfg['plugin']['search']['maxsigns'].'"'),
+	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rs[setuser]', htmlspecialchars($rs['setuser']), 'class="userinput"'),
 	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rs['setlimit'], 'rs[setlimit]', range(0, 5), array(cot::$L['plu_any_date'], cot::$L['plu_last_2_weeks'], cot::$L['plu_last_1_month'], cot::$L['plu_last_3_month'], cot::$L['plu_last_1_year'], cot::$L['plu_need_datas']), false),
 	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rfrom', (int) cot_date('Y', cot::$sys['now']) + 1),
 	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rto', (int) cot_date('Y', cot::$sys['now']) + 1),

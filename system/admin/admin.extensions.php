@@ -56,14 +56,12 @@ $found_txt[1] = $R['admin_code_present'];
 unset($disp_errors);
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.extensions.first') as $pl)
-{
+foreach (cot_getextplugins('admin.extensions.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-switch($a)
-{
+switch($a) {
 	/* =============== */
 	case 'details':
 	/* =============== */
@@ -197,8 +195,9 @@ switch($a)
 			cot_redirect(cot_url('admin', "m=extensions&a=details&$arg=$code", '', true));
 		}
 
+        $registeredParts = [];
+        $parts = [];
 		if ($exists) {
-			$parts = array();
 			// Collect all parts from extension directory
 			$handle = opendir($dir . '/' . $code);
 			while ($f = readdir($handle)) {
@@ -441,12 +440,13 @@ switch($a)
 		cot::$L['info_name'] = '';
 		cot::$L['info_desc'] = '';
 		cot::$L['info_notes'] = '';
-		if (file_exists(cot_langfile($code, $type)))
-		{
+		if (file_exists(cot_langfile($code, $type))) {
 			include cot_langfile($code, $type);
 		}
 		$icofile = (($type == 'module') ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir']) . '/' . $code . '/' . $code . '.png';
-        if(!file_exists($icofile)) $icofile = '';
+        if(!file_exists($icofile)) {
+            $icofile = '';
+        }
 
 		// Search admin parts, standalone parts, struct
         $standalone = null;
@@ -890,10 +890,10 @@ if (!empty($code) && $b == 'install' && $totalconfig > 0)
 cot_display_messages($t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.extensions.tags') as $pl)
-{
+foreach (cot_getextplugins('admin.extensions.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
+
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');
