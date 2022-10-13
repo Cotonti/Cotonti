@@ -69,7 +69,7 @@ function cot_readraw($file)
 /**
  * Returns all page tags for coTemplate
  *
- * @param mixed $page_data Page Info Array or ID
+ * @param int|array $page_data Page Info Array or ID
  * @param string $tag_prefix Prefix for tags
  * @param int $textlength Text truncate
  * @param bool $admin_rights Page Admin Rights
@@ -86,53 +86,54 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 	static $extp_first = null, $extp_main = null;
 	static $pag_auth = array();
 
-	if (is_null($extp_first))
-	{
+	if (is_null($extp_first)) {
 		$extp_first = cot_getextplugins('pagetags.first');
 		$extp_main = cot_getextplugins('pagetags.main');
 	}
 
 	/* === Hook === */
-	foreach ($extp_first as $pl)
-	{
+	foreach ($extp_first as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if (!is_array($page_data))
-	{
-		$sql = $db->query("SELECT * FROM $db_pages WHERE page_id = '" . (int) $page_data . "' LIMIT 1");
-		$page_data = $sql->fetch();
+	if (!empty($page_data) && !is_array($page_data)) {
+        $pageID = (int) $page_data;
+        $page_data = null;
+        if ($pageID > 0) {
+            $sql = cot::$db->query("SELECT * FROM " . cot::$db->pages . 'WHERE page_id = ? LIMIT 1', $pageID);
+            $page_data = $sql->fetch();
+        }
 	}
 
-	if ($page_data['page_id'] > 0 && !empty($page_data['page_title']))
-	{
-		if (is_null($admin_rights))
-		{
-			if (!isset($pag_auth[$page_data['page_cat']]))
-			{
+    if (empty($page_data)) {
+        return '';
+    }
+
+	if ($page_data['page_id'] > 0 && !empty($page_data['page_title'])) {
+		if (is_null($admin_rights)) {
+			if (!isset($pag_auth[$page_data['page_cat']])) {
 				$pag_auth[$page_data['page_cat']] = cot_auth('page', $page_data['page_cat'], 'RWA1');
 			}
 			$admin_rights = (bool) $pag_auth[$page_data['page_cat']][2];
 		}
 		$pagepath = cot_structure_buildpath('page', $page_data['page_cat']);
 		$catpath = cot_breadcrumbs($pagepath, $pagepath_home, false);
-		$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ? cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id']) : cot_url('page', 'c='.$page_data['page_cat'].'&al='.$page_data['page_alias']);
+		$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ?
+            cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id']) :
+            cot_url('page', 'c='.$page_data['page_cat'].'&al='.$page_data['page_alias']);
 		$page_link[] = array($page_data['page_pageurl'], $page_data['page_title']);
 		$page_data['page_fulltitle'] = cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home);
-		if (!empty($page_data['page_url']) && $page_data['page_file'])
-		{
+		if (!empty($page_data['page_url']) && $page_data['page_file']) {
 			$dotpos = mb_strrpos($page_data['page_url'], ".") + 1;
 			$type = mb_strtolower(mb_substr($page_data['page_url'], $dotpos, 5));
 			$page_data['page_fileicon'] = cot_rc('page_icon_file_path', array('type' => $type));
-			if (!file_exists($page_data['page_fileicon']))
-			{
+			if (!file_exists($page_data['page_fileicon'])) {
 				$page_data['page_fileicon'] = cot_rc('page_icon_file_default');
 			}
 			$page_data['page_fileicon'] = cot_rc('page_icon_file', array('icon' => $page_data['page_fileicon']));
-		}
-		else
-		{
+
+        } else {
 			$page_data['page_fileicon'] = '';
 		}
 
@@ -140,8 +141,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 
 		$text = cot_parse($page_data['page_text'], $cfg['page']['markup'], $page_data['page_parser']);
 		$text_cut = cot_cut_more($text);
-		if ($textlength > 0 && mb_strlen($text_cut) > $textlength)
-		{
+		if ($textlength > 0 && mb_strlen($text_cut) > $textlength) {
 			$text_cut = cot_string_truncate($text_cut, $textlength);
 		}
 		$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;

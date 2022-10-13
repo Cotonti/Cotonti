@@ -73,12 +73,15 @@ if ($i18n_enabled) {
 	if ($i18n_admin) {
 		// Control tags
 		if (!empty($pag_i18n)) {
-			// Delete translation
-			$url_i18n = cot_url('plug', "e=i18n&m=page&a=delete&id=$id&l=$i18n_locale");
-			$t->assign(array(
-				'PAGE_I18N_DELETE' => cot_rc_link($url_i18n, cot::$L['Delete']),
-				'PAGE_I18N_DELETE_URL' => $url_i18n
-			));
+			// Delete translation button and URL
+            $i18nDeleteUrl = cot_url(
+                'plug',
+                ['e' => 'i18n', 'm' => 'page', 'a' => 'delete', 'id' => $id, 'l' => $i18n_locale]);
+            $i18nDeleteConfirmUrl = cot_confirm_url($i18nDeleteUrl, 'i18n', 'i18n_confirm_delete');
+			$t->assign([
+				'PAGE_I18N_DELETE' => cot_rc_link($i18nDeleteConfirmUrl, cot::$L['Delete'], 'class="confirmLink"'),
+				'PAGE_I18N_DELETE_URL' => $i18nDeleteConfirmUrl,
+			]);
 		}
 	}
 }

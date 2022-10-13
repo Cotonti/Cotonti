@@ -25,8 +25,7 @@ require_once cot_langfile('message', 'core');
 $L = array_merge($L, $temp_L);
 unset($temp_L);
 
-if (defined('COT_ADMIN'))
-{
+if (defined('COT_ADMIN')) {
 	require_once cot_incfile('admin', 'module');
 }
 
@@ -45,14 +44,12 @@ $title = $L['msg' . $msg . '_title'];
 $body = $L['msg' . $msg . '_body'];
 
 /* === Hook === */
-foreach (cot_getextplugins('message.first') as $pl)
-{
+foreach (cot_getextplugins('message.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-switch ($msg)
-{
+switch ($msg) {
 	/* ======== Users ======== */
 
 	case '100':
@@ -66,8 +63,7 @@ switch ($msg)
 		break;
 
 	case '153':
-		if ($num > 0)
-		{
+		if ($num > 0) {
 			$body .= cot_rc('msg_code_153_date', array('date' => cot_date('datetime_medium', $num)));
 		}
 		break;
@@ -90,25 +86,20 @@ switch ($msg)
 		$ru = cot_url('admin');
 		break;
 
+    // Confirm dialogs
 	case '920':
-		if (!empty($m))
-		{
+		if (!empty($m)) {
 			// Load module or plugin langfile
-			if (file_exists(cot_langfile($m, 'module')))
-			{
+			if (file_exists(cot_langfile($m, 'module'))) {
 				include cot_langfile($m, 'module');
-			}
-			elseif (file_exists(cot_langfile($m, 'plug')))
-			{
+			} elseif (file_exists(cot_langfile($m, 'plug'))) {
 				include cot_langfile($m, 'plug');
 			}
 		}
 		$lng = cot_import('lng', 'G', 'ALP');
-		if (!empty($lng))
-		{
+		if (!empty($lng)) {
 			// Assign custom message
-			if (isset($L[$lng]))
-			{
+			if (isset($L[$lng])) {
 				$body = $L[$lng];
 			}
 		}
@@ -138,11 +129,10 @@ if (empty($title) || empty($body)) {
 	unset($rc, $rd);
 }
 if (empty($rc) && empty($rd)) {
-	$rd = '5';
+	$rd = 5;
 }
 
-switch ($rc)
-{
+switch ($rc) {
 	case '100':
 		$r['100'] = cot_url('admin', 'm=plug');
 		break;
@@ -170,12 +160,12 @@ switch ($rc)
 
 if (isset($rc) && $rc != '') {
 	if (mb_strpos((string)$r["$rc"], '://') === false) {
-		$r["$rc"] = COT_ABSOLUTE_URL . $r["$rc"];
+		$r[$rc] = COT_ABSOLUTE_URL . $r[$rc];
 	}
-	$out['head'] .= cot_rc('msg_code_redir_head', array('delay' => 2, 'url' => $r["$rc"]));
+	$out['head'] .= cot_rc('msg_code_redir_head', array('delay' => 2, 'url' => $r[$rc]));
 	$body .= $R['code_error_separator'] . $L['msgredir'];
 
-} elseif (isset($rd) && $rd != '') {
+} elseif (!empty($rd)) {
 	if (mb_strpos($ru, '://') === false) {
 		$ru = COT_ABSOLUTE_URL . ltrim($ru, '/');
 	}
@@ -184,8 +174,7 @@ if (isset($rc) && $rc != '') {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('message.main') as $pl)
-{
+foreach (cot_getextplugins('message.main') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -197,8 +186,7 @@ require_once $cfg['system_dir'] . '/header.php';
 $tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
 $t = new XTemplate(cot_tplfile('message', $tpl_type));
 
-if (COT_AJAX)
-{
+if (COT_AJAX) {
 	$t->assign('AJAX_MODE', true);
 }
 
@@ -208,12 +196,12 @@ $title .= ($usr['isadmin']) ? ' (#' . $msg . ')' : '';
 $t->assign('MESSAGE_TITLE', $title);
 $t->assign('MESSAGE_BODY', $body);
 
-if ($msg == '920')
-{
-	$confirm_no_url = preg_match("/^.+".preg_quote($sys['domain']."/"), $_SERVER['HTTP_REFERER']) ? str_replace('&', '&amp;', $_SERVER['HTTP_REFERER']) : cot_url('index');
+// Confirm dialogs
+if ($msg == '920') {
+	$confirm_no_url = preg_match("/^.+" . preg_quote($sys['domain']."/"), $_SERVER['HTTP_REFERER']) ?
+        str_replace('&', '&amp;', $_SERVER['HTTP_REFERER']) : cot_url('index');
 
-	if (preg_match('#[ "\':]#', base64_decode($redirect)))
-	{
+	if (preg_match('#[ "\':]#', base64_decode($redirect))) {
 		$redirect = '';
 	}
 
@@ -225,8 +213,7 @@ if ($msg == '920')
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('message.tags') as $pl)
-{
+foreach (cot_getextplugins('message.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

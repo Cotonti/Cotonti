@@ -62,7 +62,7 @@ if ($i18n_enabled && $i18n_notmain) {
 	}
 
 	if (!empty($page_data['ipage_title'])) {
-		$text = cot_parse($page_data['ipage_text'], cot::$cfg['page']['markup']);
+		$text = cot_parse($page_data['ipage_text'], cot::$cfg['page']['markup'], $page_data['page_parser']);
 		$text_cut = ((int) $textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
 		$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;
 
@@ -81,8 +81,6 @@ if ($i18n_enabled && $i18n_notmain) {
 			'UPDATED_STAMP' => $page_data['ipage_date'],
 		));
 	}
-
-	//$i18n_array['ADMIN_EDIT'] = '';
 
 	if ($i18n_write) {
 		if (

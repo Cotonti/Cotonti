@@ -15,7 +15,9 @@ require_once cot_incfile('forms');
 $id = cot_import('id', 'G', 'INT');
 $l = cot_import('l', 'G', 'ALP');
 
-if (!$id || $id < 1) cot_die_message(404);
+if (!$id || $id < 1) {
+    cot_die_message(404);
+}
 
 /* === Hook === */
 foreach (cot_getextplugins('i18n.page.first') as $pl) {
@@ -23,13 +25,13 @@ foreach (cot_getextplugins('i18n.page.first') as $pl) {
 }
 /* =============*/
 
-$stmt = cot::$db->query('SELECT * FROM ' . cot::$db->pages . " WHERE page_id = $id");
+$stmt = cot::$db->query('SELECT * FROM ' . cot::$db->pages . ' WHERE page_id = ?', $id);
 
 if ($id > 0 && $stmt->rowCount() == 1) {
 	$pag = $stmt->fetch();
 	$stmt->closeCursor();
 	$stmt = cot::$db->query('SELECT * FROM ' . cot::$db->i18n_pages . " WHERE ipage_id = ? AND ipage_locale = ?",
-		array($id, $i18n_locale));
+		[$id, $i18n_locale]);
 	$pag_i18n = $stmt->rowCount() == 1 ? $stmt->fetch() : [];
 	$stmt->closeCursor();
 
@@ -180,12 +182,15 @@ if ($id > 0 && $stmt->rowCount() == 1) {
 		if (cot_plugin_active('trashcan') && cot::$cfg['plugin']['trashcan']['trash_page']) {
 			require_once cot_incfile('trashcan', 'plug');
 			$row = cot::$db->query('SELECT * FROM ' . cot::$db->i18n_pages .
-				" WHERE ipage_id = $id AND ipage_locale = '$i18n_locale'")->fetch();
+                ' WHERE ipage_id = ? AND ipage_locale = ?', [$id, $i18n_locale])->fetch();
+
 			cot_trash_put('i18n_page', cot::$L['i18n_translation']." #$id ($i18n_locale) " .
                 $row['ipage_title'], $id, $row);
 		}
 
         cot::$db->delete(cot::$db->i18n_pages, "ipage_id = $id AND ipage_locale = '$i18n_locale'");
+
+        $urlParams = [];
 
 		/* === Hook === */
 		foreach (cot_getextplugins('i18n.page.delete.done') as $pl) {
@@ -194,8 +199,16 @@ if ($id > 0 && $stmt->rowCount() == 1) {
 		/* =============*/
 
 		cot_message(cot::$L['Deleted']);
-		$page_urlp = '&c=' . $pag['page_cat'] . (empty($pag['page_alias']) ? "&id=$id" : '&al=' . $pag['page_alias'] );
-		cot_redirect(cot_url('page', $page_urlp, '', true));
+
+        if (empty($urlParams)) {
+            $urlParams = ['c' => $pag['page_cat']];
+            if (!empty($pag['page_alias'])) {
+                $urlParams['al'] = $pag['page_alias'];
+            } else {
+                $urlParams['id'] = $id;
+            }
+        }
+		cot_redirect(cot_url('page', $urlParams, '', true));
 	}
 
 } else {

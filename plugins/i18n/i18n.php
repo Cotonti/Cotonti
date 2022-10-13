@@ -19,19 +19,15 @@ cot_block($i18n_write);
 
 require_once cot_incfile('forms');
 
-if ($m == 'structure')
-{
+if ($m == 'structure') {
 	include cot_incfile('i18n', 'plug', 'structure');
-}
-elseif ($m == 'page')
-{
+
+} elseif ($m == 'page') {
 	include cot_incfile('i18n', 'plug', 'page');
-}
-else
-{
+
+} else {
 	/* === Hook === */
-	foreach (cot_getextplugins('i18n.standalone') as $pl)
-	{
+	foreach (cot_getextplugins('i18n.standalone') as $pl) {
 		include $pl;
 	}
 	/* =============*/
