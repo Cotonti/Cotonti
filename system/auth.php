@@ -91,16 +91,15 @@ function cot_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
  * @return int Number of rows inserted
  * @global CotDB $db
  */
-function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth_lock = array())
+function cot_auth_add_item($module_name, $item_id, $auth_permit = [], $auth_lock = [])
 {
-	global $db, $cot_groups, $db_auth, $usr, $cot_auth_default_permit, $cot_auth_default_lock;
+	global $cot_groups, $cot_auth_default_permit, $cot_auth_default_lock;
+
 	$auth_permit = $auth_permit + $cot_auth_default_permit;
 	$auth_lock = $auth_lock + $cot_auth_default_lock;
-	$ins_array = array();
-	foreach ($cot_groups as $k => $v)
-	{
-		if (!$v['skiprights'])
-		{
+	$ins_array = [];
+	foreach ($cot_groups as $k => $v) {
+        if (empty($v['skiprights'])) {
 			$base_grp = $k > COT_GROUP_SUPERADMINS ? COT_GROUP_DEFAULT : $k;
 			$ins_array[] = array(
 				'auth_groupid' => $k,
@@ -108,13 +107,18 @@ function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth
 				'auth_option' => $item_id,
 				'auth_rights' => cot_auth_getvalue($auth_permit[$base_grp]),
 				'auth_rights_lock' => cot_auth_getvalue($auth_lock[$base_grp]),
-				'auth_setbyuserid' => $usr['id']
+				'auth_setbyuserid' => cot::$usr['id']
 			);
 		}
 	}
-	$res = $db->insert($db_auth, $ins_array);
+
+    $res = 0;
+    if (!empty($ins_array)) {
+        $res = cot::$db->insert(cot::$db->auth, $ins_array);
+    }
 	cot_auth_reorder();
 	cot_auth_clear('all');
+
 	return $res;
 }
 

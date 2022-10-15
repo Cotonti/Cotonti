@@ -1554,7 +1554,7 @@ function cot_auth($area, $option, $mask = 'RWA')
 
 		} elseif ($option == 'any') {
 			$cnt = 0;
-			if (is_array(cot::$usr['auth'])) {
+			if (isset(cot::$usr['auth']) && is_array(cot::$usr['auth'])) {
                 if (isset(cot::$usr['auth'][$area]) && is_array(cot::$usr['auth'][$area])) {
                     foreach (cot::$usr['auth'][$area] as $k => $g) {
                         $cnt += (($g & $mn[$ml]) == $mn[$ml]);

@@ -108,6 +108,11 @@ function cot_stringinfile($file, $str, $maxsize=32768)
 	return $result;
 }
 
+/**
+ * @param $code
+ * @param $is_module
+ * @return array{name: string, desc: string, icon: string}
+ */
 function cot_get_extensionparams($code, $is_module = false)
 {
 	global $L, $Ls; // We are including lang files. So we need it global.
@@ -115,6 +120,8 @@ function cot_get_extensionparams($code, $is_module = false)
 
 	$dir = $is_module ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir'];
 
+    $name = '';
+    $desc = '';
 	if ($is_module) {
         if (isset($cot_modules[$code])) {
             $name = $cot_modules[$code]['title'];
@@ -126,34 +133,33 @@ function cot_get_extensionparams($code, $is_module = false)
         }
 	}
 
-    $desc = '';
-	if (empty($name)) {
-		$ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
-		$exists = file_exists($ext_info);
-        $info = false;
-		if ($exists) {
-			$info = cot_infoget($ext_info, 'COT_EXT');
-			if (!$info && cot_plugin_active('genoa')) {
-				// Try to load old format info
-				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
-			}
-
-            $desc = !empty($info) ? $info['Description'] : '';
-		}
-
-		if ($info == false) {
-            $info = array(
-                'Name' => $code
-            );
+    $ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
+    $exists = file_exists($ext_info);
+    $info = false;
+    if ($exists) {
+        $info = cot_infoget($ext_info, 'COT_EXT');
+        if (!$info && cot_plugin_active('genoa')) {
+            // Try to load old format info
+            $info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
         }
 
-		$name = (isset($info['Name']) && $info['Name'] != '') ? $info['Name'] : $code;
-	}
+        $desc = !empty($info) ? $info['Description'] : '';
+    }
+
+    if ($info == false) {
+        $info = ['Name' => $code];
+    }
+
+    if ($name == '') {
+        $name = (isset($info['Name']) && $info['Name'] != '') ? $info['Name'] : $code;
+    }
+
 	$icofile = $dir . '/' . $code . '/' . $code . '.png';
 	$icon = file_exists($icofile) ? $icofile : '';
 
 	$langfile = cot_langfile($code, $is_module ? 'module' : 'plug');
 	if (file_exists($langfile)) {
+        $L['info_name'] = $L['info_desc'] = '';
 		include $langfile;
         // We are including lang file, so we should use $L, not cot::$L
 		if (!empty($L['info_name'])) {
@@ -165,7 +171,7 @@ function cot_get_extensionparams($code, $is_module = false)
 	}
 
 	return array(
-		'name' => htmlspecialchars($name),
+		'name' => $name,
 		'desc' => $desc,
 		'icon' => $icon
 	);

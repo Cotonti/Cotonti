@@ -707,35 +707,33 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 
 	$prev_cat = '';
 	$block_name = $ext_type_lc == 'plugin' ? "{$ext_type_uc}_CAT.{$ext_type_uc}_ROW" : "{$ext_type_uc}_ROW";
-	foreach ($ext_list as $f => $info)
-	{
-		if (is_array($info))
-		{
+	foreach ($ext_list as $f => $info) {
+		if (is_array($info)) {
 			$code = $f;
-			if ($ext_type_lc == 'plugin' && $prev_cat != $info['Category'])
-			{
-				if ($prev_cat != '')
-				{
+			if ($ext_type_lc == 'plugin' && $prev_cat != $info['Category']) {
+				if ($prev_cat != '') {
 					// Render previous category
 					$t->parse("MAIN.STEP_4.{$ext_type_uc}_CAT");
 				}
 				// Assign a new one
 				$prev_cat = $info['Category'];
-				$t->assign('PLUGIN_CAT_TITLE', $L['ext_cat_' . $info['Category']]);
+                $catTitle = !empty($L['ext_cat_' . $info['Category']]) ?
+                    $L['ext_cat_' . $info['Category']] : $info['Category'];
+
+				$t->assign('PLUGIN_CAT_TITLE', $catTitle);
 			}
-			if (!empty($info['Requires_modules']) || !empty($info['Requires_plugins']))
-			{
+
+			if (!empty($info['Requires_modules']) || !empty($info['Requires_plugins'])) {
 				$modules_list = empty($info['Requires_modules']) ? $L['None']
 					: implode(', ', explode(',', $info['Requires_modules']));
 				$plugins_list = empty($info['Requires_plugins']) ? $L['None']
 					: implode(', ', explode(',', $info['Requires_plugins']));
 				$requires = cot_rc('install_code_requires',
 						array('modules_list' => $modules_list, 'plugins_list' => $plugins_list));
-			}
-			else
-			{
+			} else {
 				$requires = '';
 			}
+
 			if (!empty($info['Recommends_modules']) || !empty($info['Recommends_plugins']))
 			{
 				$modules_list = empty($info['Recommends_modules']) ? $L['None']

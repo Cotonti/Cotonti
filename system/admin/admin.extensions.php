@@ -103,8 +103,7 @@ switch($a) {
             );
         }
 
-		switch($b)
-		{
+		switch($b) {
 			case 'install':
 				$installed_modules = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = 0")->fetchAll(PDO::FETCH_COLUMN);
 				$installed_plugins = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = 1")->fetchAll(PDO::FETCH_COLUMN);
@@ -188,9 +187,9 @@ switch($a) {
 		}
 
 		if (!empty($b)) {
-			$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
-			if ($cache) {
-				$cache->clear();
+			cot::$db->update(cot::$db->users, array('user_auth' => ''), "user_auth != ''");
+			if (cot::$cache) {
+                cot::$cache->clear();
 			}
 			cot_redirect(cot_url('admin', "m=extensions&a=details&$arg=$code", '', true));
 		}
@@ -241,7 +240,7 @@ switch($a) {
 		}
 
 		$ext_info = cot_get_extensionparams($code, $is_module);
-		$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$arg=$code"), $ext_info['name']);
+		$adminpath[] = [cot_url('admin', ['m' => 'extensions', 'a' => 'details', $arg => $code]), $ext_info['name']];
 
 		$isinstalled = cot_extension_installed($code);
 
@@ -280,7 +279,7 @@ switch($a) {
 
 				// check for not registered Hooks
 				$not_registred = array();
-				if($info_file['Status'] == 1) {
+				if ($info_file['Status'] == 1) {
 					foreach ($Hooks as $h) {
 						$regsistred_by_hook = $cot_plugins[$h];
 						if (is_array($regsistred_by_hook) && sizeof($regsistred_by_hook)) {
@@ -427,8 +426,7 @@ switch($a) {
 					}
 
 					/* === Hook - Part2 : Include === */
-					foreach ($extp as $pl)
-					{
+					foreach ($extp as $pl) {
 						include $pl;
 					}
 					/* ===== */
@@ -444,7 +442,7 @@ switch($a) {
 			include cot_langfile($code, $type);
 		}
 		$icofile = (($type == 'module') ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir']) . '/' . $code . '/' . $code . '.png';
-        if(!file_exists($icofile)) {
+        if (!file_exists($icofile)) {
             $icofile = '';
         }
 
@@ -457,13 +455,13 @@ switch($a) {
 
 		$tool_hook = $type == 'plug' ? 'tools' : 'admin';
         $tools = null;
-		if($db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook' AND pl_code='$code' AND pl_active = 1 LIMIT 1")->rowCount() > 0)
+		if ($db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook' AND pl_code='$code' AND pl_active = 1 LIMIT 1")->rowCount() > 0)
 		{
 			$tools = $type == 'plug' ? cot_url('admin', "m=other&p=$code") : cot_url('admin', "m=$code");
 		}
 
         $struct = null;
-		if($db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='admin.structure.first' AND pl_code='$code' LIMIT 1")->rowCount() > 0)
+		if ($db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='admin.structure.first' AND pl_code='$code' LIMIT 1")->rowCount() > 0)
 		{
 			$struct = cot_url('admin', "m=structure&n=$code");
 		}
@@ -488,7 +486,7 @@ switch($a) {
 
 		// Universal tags
 		$t->assign(array(
-			'ADMIN_EXTENSIONS_NAME' => $name,
+			'ADMIN_EXTENSIONS_NAME' => htmlspecialchars($name),
 			'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? cot::$L['Module'] : cot::$L['Plugin'],
 			'ADMIN_EXTENSIONS_CODE' => $code,
 			'ADMIN_EXTENSIONS_ICO' => $icofile,

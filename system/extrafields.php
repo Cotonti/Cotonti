@@ -992,22 +992,24 @@ function cot_extrafield_unlinkfiles($fielddata, $extrafield)
 function cot_load_extrafields($forcibly = false)
 {
 	global $db, $cot_extrafields, $db_extra_fields, $cache;
-	if (empty($cot_extrafields) || $forcibly)
-	{
-		$cot_extrafields = array();
+
+    if (empty($cot_extrafields) || $forcibly) {
+		$cot_extrafields = [];
 		$where = (defined('COT_INSTALL')) ? "1" : "field_enabled=1";
-		$fieldsres = $db->query("SELECT * FROM $db_extra_fields WHERE $where ORDER BY field_type ASC");
-		while ($row = $fieldsres->fetch())
-		{
+		$fieldsres = cot::$db->query('SELECT * FROM ' . cot::$db->extra_fields .
+            " WHERE $where ORDER BY field_type ASC");
+
+		while ($row = $fieldsres->fetch()) {
 			$cot_extrafields[$row['field_location']][$row['field_name']] = $row;
 		}
 
 		$fieldsres->closeCursor();
-		$cache && $cache->db->store('cot_extrafields', $cot_extrafields, 'system');
+        cot::$cache && cot::$cache->db->store('cot_extrafields', $cot_extrafields, 'system');
 	}
 }
 
 /* ======== Extrafields Pre-load ======== */
 
 cot_load_extrafields();
-$cot_extrafields[$db_structure] = (!empty($cot_extrafields[$db_structure])) ? $cot_extrafields[$db_structure] : array();
+$cot_extrafields[cot::$db->structure] = (!empty($cot_extrafields[cot::$db->structure])) ?
+    $cot_extrafields[cot::$db->structure] : [];
