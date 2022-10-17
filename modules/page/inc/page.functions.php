@@ -851,7 +851,8 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	}
 
 	// Display the items
-	$mskin = file_exists($template) ? $template : cot_tplfile(array('page', 'enum', $template), 'module');
+	$mskin = (!empty($template) && file_exists($template)) ?
+        $template : cot_tplfile(array('page', 'enum', $template), 'module');
 
     $cns_join_tables = '';
 	$cns_join_columns = '';
@@ -863,6 +864,7 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	}
 	/* ===== */
 
+    // Todo move it to comments plugin
 	if (cot_plugin_active('comments'))
 	{
 		global $db_com;

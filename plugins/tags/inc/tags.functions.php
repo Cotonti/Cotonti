@@ -9,7 +9,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-global $L, $R;
+global $L, $R, $tc_styles;
 require_once cot_incfile('tags', 'plug', 'config');
 require_once cot_langfile('tags', 'plug');
 require_once cot_incfile('tags', 'plug', 'resources');

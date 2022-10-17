@@ -16,3 +16,8 @@ Schemes=default:Default
  */
 
 defined('COT_CODE') or die('Wrong URL');
+
+// If you want to use cot_page_enum() function you can uncomment code below to be sure that it is available
+//if (!function_exists('cot_page_enum') && cot_auth('page', 'any', 'R')) {
+//    require_once cot_incfile('page', 'module');
+//}

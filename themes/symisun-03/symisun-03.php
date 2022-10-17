@@ -16,6 +16,11 @@ Version=1.0.0
 
 defined('COT_CODE') or die('Wrong URL');
 
+// If you want to use cot_page_enum() function you can uncomment code below to be sure that it is available
+//if (!function_exists('cot_page_enum') && cot_auth('page', 'any', 'R')) {
+//    require_once cot_incfile('page', 'module');
+//}
+
 $R['icon_down'] = '<img class="icon" src="themes/symisun-03/img/system/arrow-down.gif" alt="" />';
 $R['icon_up'] = '<img class="icon" src="themes/symisun-03/img/system/arrow-up.gif" alt="" />';
 $R['users_link_sort'] = '<a href="{$asc_url}" rel="nofollow"><img class="icon" src="themes/symisun-03/img/system/arrow-down.gif" alt="" /></a> <a href="{$desc_url}" rel="nofollow"><img class="icon" src="themes/symisun-03/img/system/arrow-up.gif" alt="" /></a> {$text}';
