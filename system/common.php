@@ -27,8 +27,7 @@ if ($cfg['display_errors']) {
 	ini_set('display_errors', 0);
 }
 
-if ($cfg['debug_mode'])
-{
+if ($cfg['debug_mode']) {
 	require_once $cfg['system_dir'].'/debug.php';
 }
 

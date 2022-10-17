@@ -45,17 +45,15 @@ $R = array();
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.20';
+$cfg['version'] = '0.9.21';
 $cfg['dbversion'] = '0.9.19';   // Not used anywhere
 
 // Set default file permissions if not present in config
-if (!isset($cfg['file_perms']))
-{
+if (!isset($cfg['file_perms'])) {
 	$cfg['file_perms'] = 0664;
 }
-if (!isset($cfg['dir_perms']))
-{
-	$cfg['dir_perms'] = 0777;
+if (!isset($cfg['dir_perms'])) {
+	$cfg['dir_perms'] = 0775;
 }
 
 /**
