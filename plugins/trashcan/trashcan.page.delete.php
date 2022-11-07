@@ -14,9 +14,11 @@ Hooks=page.edit.delete.done
  */
 
 defined('COT_CODE') or die('Wrong URL');
-require_once cot_incfile('trashcan', 'plug');
-if ($cfg['plugin']['trashcan']['trash_page'])
-{
+
+if (cot::$cfg['plugin']['trashcan']['trash_page']) {
 	global $L;
-	cot_trash_put('page', $L['Page']." #".$id." ".$rpage['page_title'], $id, $rpage);
+
+    require_once cot_incfile('trashcan', 'plug');
+
+	cot_trash_put('page', cot::$L['Page'] . " #" . $id . " " . $rpage['page_title'], $id, $rpage);
 }

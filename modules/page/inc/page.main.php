@@ -27,18 +27,18 @@ foreach (cot_getextplugins('page.first') as $pl)
 }
 /* ===== */
 
-if ($id > 0 || !empty($al))
-{
+if ($id > 0 || !empty($al)) {
 	$where = (!empty($al)) ? "p.page_alias='".$al."'" : 'p.page_id='.$id;
-	if (!empty($c)) $where .= " AND p.page_cat = " . cot::$db->quote($c);
+	if (!empty($c)) {
+        $where .= " AND p.page_cat = " . cot::$db->quote($c);
+    }
 	$sql_page = cot::$db->query("SELECT p.*, u.* $join_columns
 		FROM $db_pages AS p $join_condition
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE $where LIMIT 1");
 }
 
-if(!$id && empty($al) || !$sql_page || $sql_page->rowCount() == 0)
-{
+if(!$id && empty($al) || !$sql_page || $sql_page->rowCount() == 0) {
 	cot_die_message(404, TRUE);
 }
 $pag = $sql_page->fetch();
@@ -48,20 +48,30 @@ cot_block(cot::$usr['auth_read']);
 
 $al = empty($pag['page_alias']) ? '' : $pag['page_alias'];
 $id = (int) $pag['page_id'];
-$cat = $structure['page'][$pag['page_cat']];
+$cat = cot::$structure['page'][$pag['page_cat']];
 
 $sys['sublocation'] = $pag['page_title'];
 
 $pag['page_begin_noformat'] = $pag['page_begin'];
 $pag['page_tab'] = empty($pg) ? 0 : $pg;
-$pag['page_pageurl'] = empty($al) ? cot_url('page', array('c' => $pag['page_cat'], 'id' => $id)) : cot_url('page', array('c' => $pag['page_cat'], 'al' => $al));
 
-if (($pag['page_state'] == 1
-		|| ($pag['page_state'] == 2)
-		|| ($pag['page_begin'] > $sys['now'])
-		|| ($pag['page_expire'] > 0 && $sys['now'] > $pag['page_expire']))
-	&& (!cot::$usr['isadmin'] && cot::$usr['id'] != $pag['page_ownerid']))
-{
+$urlParams = ['c' => $pag['page_cat']];
+if (!empty($al)) {
+    $urlParams['al'] = $al;
+} else {
+    $urlParams['id'] = $id;
+}
+$pag['page_pageurl'] = cot_url('page', $urlParams, '', true);
+
+if (
+    (
+        $pag['page_state'] == COT_PAGE_STATE_PENDING
+	    || $pag['page_state'] == COT_PAGE_STATE_DRAFT
+	    || $pag['page_begin'] > cot::$sys['now']
+	    || ($pag['page_expire'] > 0 && cot::$sys['now'] > $pag['page_expire'])
+    )
+	&& (!cot::$usr['isadmin'] && cot::$usr['id'] != $pag['page_ownerid'])
+) {
 	cot_log("Attempt to directly access an un-validated or future/expired page", 'sec');
 	cot_die_message(403, TRUE);
 }
@@ -148,17 +158,24 @@ require_once cot::$cfg['system_dir'] . '/header.php';
 require_once cot_incfile('users', 'module');
 $t = new XTemplate($mskin);
 
-$t->assign(cot_generate_pagetags($pag, 'PAGE_', 0, cot::$usr['isadmin'], cot::$cfg['homebreadcrumb']));
+$t->assign(
+    cot_generate_pagetags(
+        $pag,
+        'PAGE_',
+        0,
+        cot::$usr['isadmin'],
+        cot::$cfg['homebreadcrumb'],
+        '',
+        $pag['page_pageurl']
+    )
+);
 $t->assign('PAGE_OWNER', cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])));
 $t->assign(cot_generate_usertags($pag, 'PAGE_OWNER_'));
 
 $pag['page_file'] = intval($pag['page_file']);
-if ($pag['page_file'] > 0)
-{
-	if ($sys['now'] > $pag['page_begin'])
-	{
-		if (!empty($pag['page_url']))
-		{
+if ($pag['page_file'] > 0) {
+	if (cot::$sys['now'] > $pag['page_begin']) {
+		if (!empty($pag['page_url'])) {
 			$dotpos = mb_strrpos($pag['page_url'], ".") + 1;
 			$type = mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5));
 			$pag['page_fileicon'] = cot_rc('page_icon_file_path');
@@ -167,9 +184,7 @@ if ($pag['page_file'] > 0)
 				$pag['page_fileicon'] = cot_rc('page_icon_file_default');
 			}
 			$pag['page_fileicon'] = cot_rc('page_icon_file', array('icon' => $pag['page_fileicon']));
-		}
-		else
-		{
+		} else {
 			$pag['page_fileicon'] = '';
 		}
 
@@ -186,7 +201,7 @@ if ($pag['page_file'] > 0)
 		if (($pag['page_file'] === 2 && cot::$usr['id'] == 0) || ($pag['page_file'] === 2 && !cot::$usr['auth_download']))
 		{
 			$t->assign(array(
-				'PAGE_FILETITLE' => $L['Members_download'],
+				'PAGE_FILETITLE' => cot::$L['Members_download'],
 				'PAGE_FILE_URL' => cot_url('users', 'm=register')
 			));
 		}
@@ -265,26 +280,24 @@ if ($pag['page_totaltabs'] > 1)
 	$t->parse('MAIN.PAGE_MULTI');
 }
 
+// Error and message handling
+cot_display_messages($t);
+
 /* === Hook === */
-foreach (cot_getextplugins('page.tags') as $pl)
-{
+foreach (cot_getextplugins('page.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
-if (cot::$usr['isadmin'] || cot::$usr['id'] == $pag['page_ownerid'])
-{
+if (cot::$usr['isadmin'] || cot::$usr['id'] == $pag['page_ownerid']) {
 	$t->parse('MAIN.PAGE_ADMIN');
 }
-if (($pag['page_file'] === 2 && cot::$usr['id'] == 0) || ($pag['page_file'] === 2 && !cot::$usr['auth_download']))
-{
+
+if (($pag['page_file'] === 2 && cot::$usr['id'] == 0) || ($pag['page_file'] === 2 && !cot::$usr['auth_download'])) {
 	$t->parse('MAIN.PAGE_FILE.MEMBERSONLY');
-}
-else
-{
+} else {
 	$t->parse('MAIN.PAGE_FILE.DOWNLOAD');
 }
-if (!empty($pag['page_url']))
-{
+if (!empty($pag['page_url'])) {
 	$t->parse('MAIN.PAGE_FILE');
 }
 $t->parse('MAIN');
@@ -292,8 +305,9 @@ $t->out('MAIN');
 
 require_once cot::$cfg['system_dir'] . '/footer.php';
 
-if (cot::$cache && cot::$usr['id'] === 0 && cot::$cfg['cache_page']
-	&& (!isset(cot::$cfg['cache_page_blacklist']) || !in_array($pag['page_cat'], cot::$cfg['cache_page_blacklist'])))
-{
+if (
+    cot::$cache && cot::$usr['id'] === 0 && cot::$cfg['cache_page']
+	&& (!isset(cot::$cfg['cache_page_blacklist']) || !in_array($pag['page_cat'], cot::$cfg['cache_page_blacklist']))
+) {
 	cot::$cache->page->write();
 }

@@ -348,6 +348,8 @@ $L['ext_cat_post-install'] = 'Пост-установочные скрипты';
 /**
  * Structure Section
  */
+$L['adm_structure_category_not_exists'] = 'Категория не существует';
+$L['adm_structure_category_not_empty'] = 'Категория не пустая. Сначала удалите все элементы из этой категории.';
 $L['adm_structure_code_reserved'] = "Код категории 'all' не может быть использован.";
 $L['adm_structure_code_required'] = 'Не задано поле: Код';
 $L['adm_structure_path_required'] = 'Не задано поле: Путь';

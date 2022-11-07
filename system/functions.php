@@ -401,25 +401,18 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 {
 	global $cot_import_filters, $_PUT, $_PATCH, $_DELETE;
 
-	if(isset($_SERVER['REQUEST_METHOD']))
-	{
-		if ($_SERVER['REQUEST_METHOD'] == 'PUT' && is_null($_PUT))
-		{
+	if (isset($_SERVER['REQUEST_METHOD'])) {
+		if ($_SERVER['REQUEST_METHOD'] == 'PUT' && is_null($_PUT)) {
 			parse_str(file_get_contents('php://input'), $_PUT);
-		}
-		elseif ($_SERVER['REQUEST_METHOD'] == 'PATCH' && is_null($_PATCH))
-		{
+		} elseif ($_SERVER['REQUEST_METHOD'] == 'PATCH' && is_null($_PATCH)) {
 			parse_str(file_get_contents('php://input'), $_PATCH);
-		}
-		elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE' && is_null($_DELETE))
-		{
+		} elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE' && is_null($_DELETE)) {
 			parse_str(file_get_contents('php://input'), $_DELETE);
 		}
 	}
 
 	$v = NULL;
-	switch($source)
-	{
+	switch($source) {
 		case 'G':
 		case 'GET':
 			$v = (isset($_GET[$name])) ? $_GET[$name] : NULL;
@@ -470,35 +463,28 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			break;
 	}
 
-	if (is_array($v))
-	{
+	if (is_array($v)) {
 		if ($filter == 'NOC') $filter = 'ARR';
 		if ($filter != 'ARR') return null;
-	}
-	else
-	{
+	} else {
 		if ($filter == 'ARR') return array();
 	}
 
 
-	if (MQGPC && ($source=='G' || $source=='P' || $source=='C') && $v != NULL && $filter != 'ARR')
-	{
+	if (MQGPC && ($source=='G' || $source=='P' || $source=='C') && $v != NULL && $filter != 'ARR') {
 		$v = stripslashes($v);
 	}
 
-	if (($v === '' || $v === NULL || $filter == 'ARR') && $buffer)
-	{
+	if (($v === '' || $v === NULL || $filter == 'ARR') && $buffer) {
 		$v = cot_import_buffered($name, $v, null);
 		return $v;
 	}
 
-	if ($v === null)
-	{
+	if ($v === null) {
 		return null;
 	}
 
-	if ($maxlen>0)
-	{
+	if ($maxlen>0) {
 		$v = mb_substr($v, 0, $maxlen);
 	}
 
@@ -513,7 +499,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 		return $v;
 	}
 
-	switch($filter) {
+	switch ($filter) {
 		case 'INT':
 			if (is_numeric($v) && floor($v)==$v) {
 				$pass = TRUE;
@@ -541,12 +527,9 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 		case 'ALP':
 			$v = trim($v);
 			$f = cot_alphaonly($v);
-			if ($v == $f)
-			{
+			if ($v == $f) {
 				$pass = TRUE;
-			}
-			else
-			{
+			} else {
 				$defret = $f;
 			}
 			break;
@@ -580,18 +563,13 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			break;
 
 		case 'BOL':
-			if ($v == '1' || $v == 'on')
-			{
+			if ($v == '1' || $v == 'on') {
 				$pass = TRUE;
 				$v = TRUE;
-			}
-			elseif ($v=='0' || $v=='off')
-			{
+			} elseif ($v=='0' || $v=='off') {
 				$pass = TRUE;
 				$v = FALSE;
-			}
-			else
-			{
+			} else {
 				$defret = FALSE;
 			}
 			break;
@@ -1070,8 +1048,10 @@ function cot_mail($fmail, $subject, $body, $headers = '', $customtemplate = fals
  */
 function cot_memory_allocate($needMemory)
 {
-    $needMemory = (int)$needMemory;
-    if(empty($needMemory)) return false;
+    $needMemory = (int) $needMemory;
+    if (empty($needMemory)) {
+        return false;
+    }
 
     // Getting memory occupied by the script (in bytes)
     $usedMem = memory_get_usage(true);
@@ -1079,7 +1059,9 @@ function cot_memory_allocate($needMemory)
     $haveMem = ini_get('memory_limit');
 
     // no limit set, so we try any way
-    if ($haveMem == '-1')  return true;
+    if ($haveMem == '-1')  {
+        return true;
+    }
 
     preg_match('/(\d+)(\w+)/', $haveMem, $mtch);
     if (!empty($mtch[2])) {
@@ -1122,7 +1104,9 @@ function cot_memory_allocate($needMemory)
     }
 
     // No, we couldn't allocate enough memory
-    if ($haveMem < $needMem) return false;
+    if ($haveMem < $needMem) {
+        return false;
+    }
 
     return true;
 }

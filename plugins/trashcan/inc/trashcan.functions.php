@@ -167,15 +167,15 @@ function cot_trash_delete($id)
 	/* ===== */
 	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id=$id LIMIT 1");
 	if ($res = $tsql->fetch())
-	{
-		$db->delete($db_trash, "tr_id='".$res['tr_id']."'");
-		$sql2 = $db->query("SELECT tr_id FROM $db_trash WHERE tr_parentid='".(int)$res['tr_id'] ."'");
-		while ($row2 = $sql2->fetch())
-		{
-			cot_trash_delete($row2['tr_id']);
-		}
-		$sql2->closeCursor();
-	}
+//	{
+//		$db->delete($db_trash, "tr_id='".$res['tr_id']."'");
+//		$sql2 = $db->query("SELECT tr_id FROM $db_trash WHERE tr_parentid='".(int)$res['tr_id'] ."'");
+//		while ($row2 = $sql2->fetch())
+//		{
+//			cot_trash_delete($row2['tr_id']);
+//		}
+//		$sql2->closeCursor();
+//	}
 	/* === Hook  === */
 	foreach (cot_getextplugins('trash.delete.done') as $pl)
 	{

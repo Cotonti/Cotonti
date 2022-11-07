@@ -18,8 +18,8 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('forums', 'module');
 
 // Register restoration table
-$trash_types['forumpost'] = $db_forum_posts;
-$trash_types['forumtopic'] = $db_forum_topics;
+$trash_types['forumpost'] = cot::$db->forum_posts;
+$trash_types['forumtopic'] = cot::$db->forum_topics;
 
 /**
  * Check forumpost action

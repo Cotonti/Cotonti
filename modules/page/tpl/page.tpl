@@ -1,41 +1,41 @@
 <!-- BEGIN: MAIN -->
-
-		<div class="col3-2 first">
-			<div class="block">
-				<h2 class="page">{PAGE_TITLE}</h2>
-				<div class="combox">{PAGE_COMMENTS_COUNT}</div>
-				<h3>{PAGE_SHORTTITLE}</h3>
-				<!-- IF {PAGE_DESC} --><p class="small">{PAGE_DESC}</p><!-- ENDIF -->
-				<div class="clear desc">
-					<p class="column">
-						<strong>{PHP.L.Tags}:</strong>
-<!-- BEGIN: PAGE_TAGS_ROW -->
-						<!-- IF {PHP.tag_i} > 0 -->, <!-- ENDIF --><a href="{PAGE_TAGS_ROW_URL}" title="{PAGE_TAGS_ROW_TAG}" rel="nofollow">{PAGE_TAGS_ROW_TAG}</a>
-<!-- END: PAGE_TAGS_ROW -->
-<!-- BEGIN: PAGE_NO_TAGS -->
-						{PAGE_NO_TAGS}
-<!-- END: PAGE_NO_TAGS -->
-					</p>
-					<p class="column floatright">
-						<strong>{PHP.L.Filedunder}:</strong>{PAGE_CATPATH}
-					</p>
-				</div>
-				<div class="clear textbox">{PAGE_TEXT}</div>
-<!-- BEGIN: PAGE_FILE -->
-				<div class="download">
-<!-- BEGIN: MEMBERSONLY -->
-					<p>{PAGE_SHORTTITLE}</p>
-<!-- END: MEMBERSONLY -->
-<!-- BEGIN: DOWNLOAD -->
-					<p>{PHP.L.Download}: <a class="strong" href="{PAGE_FILE_URL}">{PAGE_SHORTTITLE}</a></p>
-<!-- END: DOWNLOAD -->
-					<p>{PHP.L.Filesize}, kB: {PAGE_FILE_SIZE}{PHP.L.kb}</p>
-					<p>{PHP.L.Downloaded}: {PAGE_FILE_COUNT}</p>
-				</div>
-<!-- END: PAGE_FILE -->
-			</div>
-			{PAGE_COMMENTS_DISPLAY}
+<div class="col3-2 first">
+	<div class="block">
+		<h2 class="page">{PAGE_TITLE}</h2>
+		{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
+		<div class="combox">{PAGE_COMMENTS_COUNT}</div>
+		<h3>{PAGE_SHORTTITLE}</h3>
+		<!-- IF {PAGE_DESC} --><p class="small">{PAGE_DESC}</p><!-- ENDIF -->
+		<div class="clear desc">
+			<p class="column">
+				<strong>{PHP.L.Tags}:</strong>
+				<!-- BEGIN: PAGE_TAGS_ROW -->
+				<!-- IF {PHP.tag_i} > 0 -->, <!-- ENDIF --><a href="{PAGE_TAGS_ROW_URL}" title="{PAGE_TAGS_ROW_TAG}" rel="nofollow">{PAGE_TAGS_ROW_TAG}</a>
+				<!-- END: PAGE_TAGS_ROW -->
+				<!-- BEGIN: PAGE_NO_TAGS -->
+				{PAGE_NO_TAGS}
+				<!-- END: PAGE_NO_TAGS -->
+			</p>
+			<p class="column floatright">
+				<strong>{PHP.L.Filedunder}:</strong>{PAGE_CATPATH}
+			</p>
 		</div>
+		<div class="clear textbox">{PAGE_TEXT}</div>
+		<!-- BEGIN: PAGE_FILE -->
+		<div class="download">
+			<!-- BEGIN: MEMBERSONLY -->
+			<p>{PAGE_SHORTTITLE}</p>
+			<!-- END: MEMBERSONLY -->
+			<!-- BEGIN: DOWNLOAD -->
+			<p>{PHP.L.Download}: <a class="strong" href="{PAGE_FILE_URL}">{PAGE_SHORTTITLE}</a></p>
+			<!-- END: DOWNLOAD -->
+			<p>{PHP.L.Filesize}, kB: {PAGE_FILE_SIZE}{PHP.L.kb}</p>
+			<p>{PHP.L.Downloaded}: {PAGE_FILE_COUNT}</p>
+		</div>
+		<!-- END: PAGE_FILE -->
+	</div>
+	{PAGE_COMMENTS_DISPLAY}
+</div>
 
 		<div class="col3-1">
 <!-- BEGIN: PAGE_ADMIN -->

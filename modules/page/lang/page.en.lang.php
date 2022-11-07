@@ -10,9 +10,11 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 // if lang/en/main.en.lang.php is not loaded
-if(!isset($L['Ascending'])) {
+if (!isset($L['Ascending'])) {
     $mainLangFile = cot_langfile('main', 'core');
-    if(file_exists($mainLangFile)) include $mainLangFile;
+    if (file_exists($mainLangFile)) {
+        include $mainLangFile;
+    }
 }
 
 /**
@@ -114,11 +116,6 @@ $L['page_status_pending'] = 'Pending';
 $L['page_status_approved'] = 'Approved';
 $L['page_status_published'] = 'Published';
 $L['page_status_expired'] = 'Expired';
-
-/**
- * Moved from theme.lang
- */
-
 $L['page_linesperpage'] = 'Lines per page';
 $L['page_linesinthissection'] = 'Lines in this section';
 

@@ -546,19 +546,27 @@ if (!file_exists($mtheme))
 	}
 }
 
-$usr['def_theme_lang'] = defined('COT_ADMIN') && !empty($cfg['admintheme'])
-	? "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.en.lang.php"
-	: "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
-$usr['theme_lang'] = defined('COT_ADMIN') && !empty($cfg['admintheme'])
-	? "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.{$usr['lang']}.lang.php"
-	: "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.{$usr['lang']}.lang.php";
+$cfg['admintheme'] = !empty($cfg['admintheme']) ? $cfg['admintheme'] : '';
 
-if ($usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
-{
-	require_once $usr['theme_lang'];
+$usr['def_theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
+if (defined('COT_ADMIN')) {
+    $usr['def_theme_lang'] = '';
+    if (!empty($cfg['admintheme'])) {
+        $usr['def_theme_lang'] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.en.lang.php";
+    }
 }
-elseif (@file_exists($usr['def_theme_lang']))
-{
+
+$usr['theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.{$usr['lang']}.lang.php";
+if (defined('COT_ADMIN')) {
+    $usr['theme_lang'] = '';
+    if (!empty($cfg['admintheme'])) {
+        $usr['theme_lang'] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.{$usr['lang']}.lang.php";
+    }
+}
+
+if (!empty($usr['theme_lang']) && $usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang'])) {
+	require_once $usr['theme_lang'];
+} elseif (!empty($usr['def_theme_lang']) && @file_exists($usr['def_theme_lang'])) {
 	require_once $usr['def_theme_lang'];
 }
 
@@ -568,17 +576,20 @@ $scheme = $usr['scheme'];
 // Resource strings
 require_once $cfg['system_dir'].'/resources.rc.php';
 
-if(defined('COT_ADMIN'))
-{
+if (defined('COT_ADMIN')) {
 	require_once cot_incfile('admin', 'module', 'resources');
 }
 
 // Theme resources
-$sys['theme_resources'] = defined('COT_ADMIN') && !empty($cfg['admintheme'])
-	? "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.php"
-	: "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
-if (file_exists($sys['theme_resources']))
-{
+$sys['theme_resources'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
+if (defined('COT_ADMIN')) {
+    $sys['theme_resources'] = '';
+    if (!empty($cfg['admintheme'])) {
+        $sys['theme_resources'] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.php";
+    }
+}
+
+if (!empty($sys['theme_resources']) && file_exists($sys['theme_resources'])) {
 	$L_tmp = $L;
 	$R_tmp = $R;
 	include $sys['theme_resources'];

@@ -59,8 +59,7 @@ $w = empty($w) ? cot::$cfg['page']['cat_' . $c]['way'] : $w;
 $s = empty($s) ? cot::$cfg['page']['cat___default']['order'] : $s;
 $w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? cot::$cfg['page']['cat___default']['way'] : $w;
 
-
-$sys['sublocation'] = $cat['title'];
+cot::$sys['sublocation'] = $cat['title'];
 
 cot::$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
 	cot::$cfg['page']['cat___default']['maxrowsperpage'] :
@@ -74,36 +73,31 @@ cot::$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unv
 $where = array();
 $params = array();
 
-$where_state = $usr['isadmin'] ? '1' : "page_ownerid = {$usr['id']}";
+$where_state = cot::$usr['isadmin'] ? '1' : 'page_ownerid = ' . cot::$usr['id'];
 $where['state'] = "(page_state=0 AND $where_state)";
-if ($c == 'unvalidated')
-{
+if ($c == 'unvalidated') {
 	$cat['tpl'] = 'unvalidated';
 	$where['state'] = 'page_state = 1';
-	$where['ownerid'] = $usr['isadmin'] ? '1' : 'page_ownerid = ' . $usr['id'];
-	$cat['title'] = $L['page_validation'];
-	$cat['desc'] = $L['page_validation_desc'];
+	$where['ownerid'] = cot::$usr['isadmin'] ? '1' : 'page_ownerid = ' . cot::$usr['id'];
+	$cat['title'] = cot::$L['page_validation'];
+	$cat['desc'] = cot::$L['page_validation_desc'];
 	$s = 'date';
 	$w = 'desc';
-}
-elseif ($c == 'saved_drafts')
-{
+} elseif ($c == 'saved_drafts') {
 	$cat['tpl'] = 'unvalidated';
 	$where['state'] = 'page_state = 2';
-	$where['ownerid'] = $usr['isadmin'] ? '1' : 'page_ownerid = ' . $usr['id'];
-	$cat['title'] = $L['page_drafts'];
-	$cat['desc'] = $L['page_drafts_desc'];
+	$where['ownerid'] = cot:: $usr['isadmin'] ? '1' : 'page_ownerid = ' . cot::$usr['id'];
+	$cat['title'] = cot::$L['page_drafts'];
+	$cat['desc'] = cot::$L['page_drafts_desc'];
 	$s = 'date';
 	$w = 'desc';
-}
-elseif ($c != 'all')
-{
-	$where['cat'] = 'page_cat=' . $db->quote($c);
+} elseif ($c != 'all') {
+	$where['cat'] = 'page_cat=' . cot::$db->quote($c);
 	$where['state'] = "page_state=0";
 }
 
 $c = (empty($cat['title'])) ? 'all' : $c;
-cot_die((empty($cat['title'])) && !$usr['isadmin']);
+cot_die((empty($cat['title'])) && !cot::$usr['isadmin']);
 
 if ($o && $p)
 {
@@ -127,53 +121,55 @@ if (!$usr['isadmin'] && $c != 'unvalidated' && $c !== 'saved_drafts')
 	$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 }
 
-if (!$db->fieldExists($db_pages, "page_$s"))
-{
+if (!cot::$db->fieldExists(cot::$db->pages, "page_$s")) {
 	$s = 'title';
 }
 $orderby = "page_$s $w";
 
-$list_url_path = array('c' =>$c, 'ord' => $o, 'p' => $p);
-if ($s != cot::$cfg['page']['cat_' . $c]['order'])
-{
+$list_url_path = ['c' => $c];
+if (!empty($o)) {
+    $list_url_path['ord'] = $o;
+}
+if (!empty($p)) {
+    $list_url_path['p'] = $p;
+}
+// For the canonical URL
+$pageurl_params = $list_url_path;
+
+if ($s != cot::$cfg['page']['cat_' . $c]['order']) {
 	$list_url_path['s'] = $s;
 }
-if ($w != cot::$cfg['page']['cat_' . $c]['way'])
-{
+if ($w != cot::$cfg['page']['cat_' . $c]['way']) {
 	$list_url_path['w'] = $w;
 }
 $list_url = cot_url('page', $list_url_path);
 
-// Building the canonical URL
-$pageurl_params = array('c' => $c, 'ord' => $o, 'p' => $p);
-if ($durl > 1)
-{
+if ($durl > 1) {
 	$pageurl_params['d'] = $durl;
 }
-if ($dcurl > 1)
-{
+if ($dcurl > 1) {
 	$pageurl_params['dc'] = $dcurl;
 }
 
 $catpatharray = cot_structure_buildpath('page', $c);
-$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ? $cat['title'] : cot_breadcrumbs($catpatharray, cot::$cfg['homebreadcrumb'], true);
+$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
+    $cat['title'] : cot_breadcrumbs($catpatharray, cot::$cfg['homebreadcrumb'], true);
 
 $shortpath = $catpatharray;
 array_pop($shortpath);
-$catpath_short = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ? '' : cot_breadcrumbs($shortpath, cot::$cfg['homebreadcrumb']);
+$catpath_short = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
+    '' : cot_breadcrumbs($shortpath, cot::$cfg['homebreadcrumb']);
 
 $join_columns = isset($join_columns) ? $join_columns : '';
 $join_condition = isset($join_condition) ? $join_condition : '';
 
 /* === Hook === */
-foreach (cot_getextplugins('page.list.query') as $pl)
-{
+foreach (cot_getextplugins('page.list.query') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if(empty($sql_page_string))
-{
+if (empty($sql_page_string)) {
 	$where = array_filter($where);
 	$where = ($where) ? 'WHERE ' . implode(' AND ', $where) : '';
 	$sql_page_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid $where";
@@ -186,9 +182,15 @@ if(empty($sql_page_string))
 $totallines = $db->query($sql_page_count, $params)->fetchColumn();
 $sqllist = $db->query($sql_page_string, $params);
 
-if ((!cot::$cfg['easypagenav'] && $durl > 0 && cot::$cfg['page']['maxrowsperpage'] > 0 && $durl % cot::$cfg['page']['maxrowsperpage'] > 0)
-	|| ($d > 0 && $d >= $totallines))
-{
+if (
+    (
+        !cot::$cfg['easypagenav'] &&
+        $durl > 0 &&
+        cot::$cfg['page']['maxrowsperpage'] > 0 &&
+        $durl % cot::$cfg['page']['maxrowsperpage'] > 0
+    ) ||
+	($d > 0 && $d >= $totallines)
+) {
 	cot_redirect(cot_url('page', $list_url_path + array('dc' => $dcurl)));
 }
 
@@ -387,18 +389,35 @@ $sqllist_rowset = $sqllist->fetchAll();
 
 $sqllist_rowset_other = false;
 /* === Hook === */
-foreach (cot_getextplugins('page.list.before_loop') as $pl)
-{
+foreach (cot_getextplugins('page.list.before_loop') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if(!$sqllist_rowset_other)
-{
-	foreach ($sqllist_rowset as $pag)
-	{
+if (!$sqllist_rowset_other) {
+    // Validate/Unvalidate page actions are in admin controller. We need to redirect back.
+    $urlParams = $list_url_path;
+    if ($durl > 1) {
+        $urlParams['d'] = $durl;
+    }
+    if ($dcurl > 1) {
+        $urlParams['dc'] = $dcurl;
+    }
+    $backUrl = cot_url('page', $urlParams, '', true);
+
+	foreach ($sqllist_rowset as $pag) {
 		$jj++;
-		$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', cot::$cfg['page']['truncatetext'], $usr['isadmin']));
+		$t->assign(
+            cot_generate_pagetags(
+                $pag,
+                'LIST_ROW_',
+                cot::$cfg['page']['truncatetext'],
+                cot::$usr['isadmin'],
+                false,
+                '',
+                $backUrl
+            )
+        );
 		$t->assign(array(
 			'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
 			'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj),
@@ -407,18 +426,20 @@ if(!$sqllist_rowset_other)
 		$t->assign(cot_generate_usertags($pag, 'LIST_ROW_OWNER_'));
 
 		/* === Hook - Part2 : Include === */
-		foreach ($extp as $pl)
-		{
+		foreach ($extp as $pl) {
 			include $pl;
 		}
 		/* ===== */
+
 		$t->parse('MAIN.LIST_ROW');
 	}
 }
 
+// Error and message handling
+cot_display_messages($t);
+
 /* === Hook === */
-foreach (cot_getextplugins('page.list.tags') as $pl)
-{
+foreach (cot_getextplugins('page.list.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -428,7 +449,6 @@ $t->out('MAIN');
 
 require_once cot::$cfg['system_dir'] . '/footer.php';
 
-if (cot::$cache && $usr['id'] === 0 && cot::$cfg['cache_page'])
-{
+if (cot::$cache && $usr['id'] === 0 && cot::$cfg['cache_page']) {
     cot::$cache->page->write();
 }

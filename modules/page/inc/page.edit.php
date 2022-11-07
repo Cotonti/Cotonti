@@ -85,30 +85,28 @@ if ($a == 'update')
 	}
 	/* ===== */
 
-	if (!cot_error_found())
-	{
+	if (!cot_error_found()) {
 		cot_page_update($id, $rpage);
 
-		switch ($rpage['page_state'])
-		{
-			case 0:
+		switch ($rpage['page_state']) {
+			case COT_PAGE_STATE_PUBLISHED:
 				$urlparams = empty($rpage['page_alias']) ?
 					array('c' => $rpage['page_cat'], 'id' => $id) :
 					array('c' => $rpage['page_cat'], 'al' => $rpage['page_alias']);
 				$r_url = cot_url('page', $urlparams, '', true);
 				break;
-			case 1:
+
+			case COT_PAGE_STATE_PENDING:
 				$r_url = cot_url('message', 'msg=300', '', true);
 				break;
-			case 2:
+
+			case COT_PAGE_STATE_DRAFT:
 				cot_message(cot::$L['page_savedasdraft']);
 				$r_url = cot_url('page', 'm=edit&id=' . $id, '', true);
 				break;
 		}
 		cot_redirect($r_url);
-	}
-	else
-	{
+	} else {
 		cot_redirect(cot_url('page', "m=edit&id=$id", '', true));
 	}
 }
@@ -120,7 +118,9 @@ $pag['page_status'] = cot_page_status($pag['page_state'], $pag['page_begin'],$pa
 cot_block(cot::$usr['isadmin'] || cot::$usr['auth_write'] && cot::$usr['id'] == $pag['page_ownerid']);
 
 cot::$out['subtitle'] = cot::$L['page_edittitle'];
-If(!isset(cot::$out['head'])) cot::$out['head'] = '';
+if (!isset(cot::$out['head'])) {
+    cot::$out['head'] = '';
+}
 cot::$out['head'] .= cot::$R['code_noindex'];
 cot::$sys['sublocation'] = cot::$structure['page'][$pag['page_cat']]['title'];
 

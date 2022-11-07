@@ -15,47 +15,50 @@ Hooks=tools
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'trashcan');
-cot_block($usr['isadmin']);
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('plug', 'trashcan');
+cot_block(cot::$usr['isadmin']);
 
 require_once cot_incfile('users', 'module');
-cot_module_active('page') && require_once cot_incfile('page', 'module');
-cot_module_active('forums') && require_once cot_incfile('forums', 'module');
-$cfg['comments'] && require_once cot_incfile('comments', 'plug');
+if (cot_module_active('page')) {
+    require_once cot_incfile('page', 'module');
+}
+if (cot_module_active('forums')) {
+    require_once cot_incfile('forums', 'module');
+}
+if (cot_plugin_active('comments')) {
+    require_once cot_incfile('comments', 'plug');
+}
 
 require_once cot_incfile('trashcan', 'plug');
 require_once cot_langfile('trashcan', 'plug');
 
-$adminhelp = $L['adm_help_trashcan'];
-$adminsubtitle = $L['Trashcan'];
+$adminhelp = cot::$L['adm_help_trashcan'];
+$adminsubtitle = cot::$L['Trashcan'];
 
 $id = cot_import('id', 'G', 'INT');
-$maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
+$maxperpage = (cot::$cfg['maxrowsperpage'] && is_numeric(cot::$cfg['maxrowsperpage']) && cot::$cfg['maxrowsperpage'] > 0) ?
+    cot::$cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 $info = ($a == 'info') ? 1 : 0;
 
 /* === Hook === */
-foreach (cot_getextplugins('trashcan.admin.first') as $pl)
-{
+foreach (cot_getextplugins('trashcan.admin.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if($a == 'wipe')
-{
+if ($a == 'wipe') {
 	cot_check_xg();
 	/* === Hook === */
-	foreach (cot_getextplugins('trashcan.admin.wipe') as $pl)
-	{
+	foreach (cot_getextplugins('trashcan.admin.wipe') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 	cot_trash_delete($id);
 	cot_message('adm_trashcan_deleted');
 	cot_redirect(cot_url('admin', 'm=other&p=trashcan', '', true));
-}
-elseif($a == 'wipeall')
-{
+
+} elseif($a == 'wipeall') {
 	cot_check_xg();
 	/* === Hook === */
 	foreach (cot_getextplugins('trashcan.admin.wipeall') as $pl)
@@ -190,9 +193,7 @@ $tr_t->assign(array(
 	'ADMIN_TRASHCAN_PAGINATION_NEXT' => $pagenav['next'],
 	'ADMIN_TRASHCAN_TOTALITEMS' => $totalitems,
 	'ADMIN_TRASHCAN_COUNTER_ROW' => $ii,
-	'ADMIN_TRASHCAN_PAGESQUEUED' => $pagesqueued
 ));
-
 
 cot_display_messages($tr_t);
 

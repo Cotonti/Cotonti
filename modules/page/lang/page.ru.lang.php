@@ -10,9 +10,11 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 // if lang/ru/main.ru.lang.php is not loaded
-if(!isset($L['PFS'])) {
+if (!isset($L['PFS'])) {
     $mainLangFile = cot_langfile('main', 'core');
-    if(file_exists($mainLangFile)) include $mainLangFile;
+    if (file_exists($mainLangFile)) {
+        include $mainLangFile;
+    }
 }
 
 /**
@@ -114,11 +116,6 @@ $L['page_status_pending'] = 'На рассмотрении';
 $L['page_status_approved'] = 'Утверждена';
 $L['page_status_published'] = 'Опубликована';
 $L['page_status_expired'] = 'Устарела';
-
-/**
- * Moved from theme.lang
- */
-
 $L['page_linesperpage'] = 'Записей на страницу';
 $L['page_linesinthissection'] = 'Записей в разделе';
 

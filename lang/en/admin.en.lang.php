@@ -348,6 +348,8 @@ $L['ext_cat_post-install'] = 'Post-install Scripts';
 /**
   * Structure Section
  */
+$L['adm_structure_category_not_exists'] = 'Category is not exists';
+$L['adm_structure_category_not_empty'] = 'Category is not empty. Delete its items first.';
 $L['adm_structure_code_reserved'] = "Structure code 'all' is reserved.";
 $L['adm_structure_code_required'] = 'Missing required field: Code';
 $L['adm_structure_path_required'] = 'Missing required field: Path';

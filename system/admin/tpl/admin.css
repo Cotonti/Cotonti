@@ -195,8 +195,8 @@ td.group_end		{ font-size:0; padding:0!important; border:none!important; }
 -------------------------------------------------- */
 
 form							{ }
-input, select, textarea, button	{ font:normal 1em Georgia; }
-input, select, button			{ padding:2px; }
+input, select, textarea/*, button*/	{ font:normal 1em Georgia; }
+input, select/*, button*/		{ padding:2px; }
 
 #saveconfig input[type=text], #saveconfig textarea { width:98%; }
 

@@ -328,54 +328,71 @@ else
     } elseif ($a == 'delete') {
 		cot_check_xg();
 
-		if (cot_structure_delete($n, $c, $is_module))
-		{
-			/* === Hook === */
-			foreach (cot_getextplugins('admin.structure.delete.done') as $pl)
-			{
-				include $pl;
-			}
-			/* ===== */
-			cot_message('Deleted');
-		}
+        $data = cot::$db->query(
+            'SELECT structure_code, structure_count FROM ' . cot::$db->structure .
+            ' WHERE structure_area = :area AND structure_code = :code',
+            ['area' => $n, 'code' => $c]
+        )->fetch();
 
+        if (empty($data)) {
+            cot_error($c . ': ' . cot::$L['adm_structure_category_not_exists']);
+
+        } elseif(
+            $data['structure_count'] > 0 ||
+            !empty(cot_structure_children($n, $c, true, false, false))
+        ) {
+            cot_error($c . ': ' . cot::$L['adm_structure_category_not_empty']);
+        }
+
+        if (!cot_error_found()) {
+            if (cot_structure_delete($n, $c, $is_module)) {
+                /* === Hook === */
+                foreach (cot_getextplugins('admin.structure.delete.done') as $pl) {
+                    include $pl;
+                }
+                /* ===== */
+                cot_message('Deleted');
+            }
+        }
 		cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
-	}
-	elseif ($a == 'resyncall')
-	{
+
+    } elseif ($a == 'resyncall') {
 		cot_check_xg();
 		$res = false;
 		$area_sync = 'cot_'.$n.'_sync';
-		if (function_exists($area_sync))
-		{
+		if (function_exists($area_sync)) {
 			$res = true;
-			$sql = $db->query("SELECT structure_code FROM $db_structure WHERE structure_area='".$db->prep($n)."'");
-			foreach ($sql->fetchAll() as $row)
-			{
+			$sql = cot::$db->query('SELECT structure_code FROM ' . cot::$db->structure . ' WHERE structure_area=?', $n);
+			foreach ($sql->fetchAll() as $row) {
 				$cat = $row['structure_code'];
 				$items = $area_sync($cat);
-				$db->update($db_structure, array("structure_count" => (int)$items), "structure_code='".$db->prep($cat)."' AND structure_area='".$db->prep($n)."'");
+                cot::$db->update(
+                    cot::$db->structure,
+                    ['structure_count' => (int) $items],
+                    'structure_code=? AND structure_area=?',
+                    [$cat, $n]
+                );
 			}
 			$sql->closeCursor();
 		}
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.structure.resync.done') as $pl)
-		{
+		foreach (cot_getextplugins('admin.structure.resync.done') as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
 		$res ? cot_message('Resynced') : cot_message("Error: function $area_sync doesn't exist."); // TODO i18n
-		($cache && $cfg['cache_'.$n]) && $cache->page->clear($n);
-		cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$durl, '', true));
-	}
-	$ext_info = cot_get_extensionparams($n, true);
-	$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
-    $urlParams = array('m' => 'extensions', 'a' => 'details');
-    if($is_module) {
-        $urlParams['mod'] = $n;
+		(cot::$cache && cot::$cfg['cache_'.$n]) && cot::$cache->page->clear($n);
 
+		cot_redirect(cot_url('admin', 'm=structure&n=' . $n . '&mode=' . $mode . '&d=' . $durl, '', true));
+	}
+
+	$ext_info = cot_get_extensionparams($n, true);
+	$adminpath[] = array(cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
+    $urlParams = array('m' => 'extensions', 'a' => 'details');
+    if ($is_module) {
+        $urlParams['mod'] = $n;
     } else {
         $urlParams['pl'] = $n;
     }
@@ -414,72 +431,75 @@ else
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('admin.structure.loop');
 	/* ===== */
-	foreach ($sql->fetchAll() as $row)
-	{
-		($id) && $adminpath[] = array(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&id='.$id), htmlspecialchars($row['structure_title']));
-		($al) && $adminpath[] = array(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&al='.$al), htmlspecialchars($row['structure_title']));
-
+	foreach ($sql->fetchAll() as $row) {
 		$ii++;
 		$structure_id = $row['structure_id'];
 		$structure_code = $row['structure_code'];
 		$pathfielddep = count(explode(".", $row['structure_path']));
-		$dozvil = ($row['structure_count'] > 0) ? false : true;
 
 		$pathspaceimg = '';
-		for ($pathfielddepi = 1; $pathfielddepi < $pathfielddep; $pathfielddepi++)
-		{
-			$pathspaceimg .= '.'.$R['admin_icon_blank'];
+		for ($pathfielddepi = 1; $pathfielddepi < $pathfielddep; $pathfielddepi++) {
+			$pathspaceimg .= '.' . cot::$R['admin_icon_blank'];
 		}
 
-		if (empty($row['structure_tpl']))
-		{
+		if (empty($row['structure_tpl'])) {
 			$structure_tpl_sym = '-';
 			$check_tpl = "1";
-		}
-		elseif ($row['structure_tpl'] == 'same_as_parent')
-		{
+		} elseif ($row['structure_tpl'] == 'same_as_parent') {
 			$structure_tpl_sym = '*';
 			$check_tpl = "2";
-		}
-		else
-		{
+		} else {
 			$structure_tpl_sym = '+';
 			$check_tpl = "3";
 		}
 
-		foreach ($structure[$n] as $i => $x)
-		{
-			if ($i != 'all')
-			{
+		foreach ($structure[$n] as $i => $x) {
+			if ($i != 'all') {
 				$cat_path[$i] = $x['tpath'];
 			}
 		}
 		$cat_selectbox = cot_selectbox($row['structure_tpl'], 'rstructuretplforced['.$structure_id.']', array_keys($cat_path), array_values($cat_path), false);
 
 		$t->assign(array(
-			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_confirm_url(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$durl.'&'.cot_xg()), 'admin'),
+			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_confirm_url(
+                cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$durl.'&'.cot_xg()),
+                'admin'),
 			'ADMIN_STRUCTURE_ID' => $structure_id,
-			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $structure_code, 'size="10" maxlength="255"'),
+			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $row['structure_code'], 'maxlength="255"'),
 			'ADMIN_STRUCTURE_SPACEIMG' => $pathspaceimg,
 			'ADMIN_STRUCTURE_LEVEL' => ($pathfielddep > 0) ? $pathfielddep - 1 : 0,
-			'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ? $R['admin_icon_join1'] : $R['admin_icon_join2'],
+			'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ? cot::$R['admin_icon_join1'] : cot::$R['admin_icon_join2'],
 			'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath['.$structure_id.']', $row['structure_path'], 'size="12" maxlength="255"'),
 			'ADMIN_STRUCTURE_TPL_SYM' => $structure_tpl_sym,
-			'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox($check_tpl, 'rstructuretplmode['.$structure_id.']', array('1', '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />'),
-			'ADMIN_STRUCTURE_TPLQUICK' => cot_inputbox('text', 'rstructuretplquick['.$structure_id.']', $id > 0 && array_key_exists($row['structure_tpl'], $cat_path) ? '' : $row['structure_tpl'], 'size="10" maxlength="255"'),
-			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'size="32" maxlength="255"'),
-			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$structure_id.']', $row['structure_desc'], 'size="64" maxlength="255"'),
-			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$structure_id.']', $row['structure_icon'], 'size="64" maxlength="128"'),
+			'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox(
+                $check_tpl,
+                'rstructuretplmode['.$structure_id.']',
+                array('1', '2', '3'),
+                array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced'],),
+                '',
+                '<br />'
+            ),
+			'ADMIN_STRUCTURE_TPLQUICK' => cot_inputbox(
+                'text',
+                'rstructuretplquick['.$structure_id.']',
+                $id > 0 && array_key_exists($row['structure_tpl'], $cat_path) ? '' : $row['structure_tpl'],
+                'size="10" maxlength="255"'
+            ),
+			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'maxlength="255"'),
+			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$structure_id.']', $row['structure_desc'], 'maxlength="255"'),
+			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$structure_id.']', $row['structure_icon'], 'maxlength="128"'),
 			'ADMIN_STRUCTURE_LOCKED' => cot_checkbox($row['structure_locked'], 'rstructurelocked['.$structure_id.']'),
 			'ADMIN_STRUCTURE_SELECT' => $cat_selectbox,
 			'ADMIN_STRUCTURE_COUNT' => $row['structure_count'],
-			/* TODO */ 'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url($n, 'c='.$structure_code),
-			'ADMIN_STRUCTURE_RIGHTS_URL' => $is_module ? cot_url('admin', 'm=rightsbyitem&ic='.$n.'&io='.$structure_code) : '',
+            'ADMIN_STRUCTURE_CAN_DELETE' => $row['structure_count'] < 1 &&
+                empty(cot_structure_children($row['structure_area'], $row['structure_code'], true, false, false)),
+			/* TODO */ 'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url($n, 'c='.$row['structure_code']),
+			'ADMIN_STRUCTURE_RIGHTS_URL' => $is_module ? cot_url('admin', 'm=rightsbyitem&ic='.$n.'&io='.$row['structure_code']) : '',
 			'ADMIN_STRUCTURE_OPTIONS_URL' => cot_url('admin', 'm=structure&n='.$n.'&d='.$durl.'&id='.$structure_id.'&'.cot_xg()),
 			'ADMIN_STRUCTURE_ODDEVEN' => cot_build_oddeven($ii)
 		));
 
-        if(!empty(cot::$extrafields[cot::$db->structure])) {
+        if (!empty(cot::$extrafields[cot::$db->structure])) {
             foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
                 $exfld_val = cot_build_extrafields('rstructure' . $exfld['field_name'] . '_' . $structure_id, $exfld,
                     $row['structure_' . $exfld['field_name']]);
@@ -496,14 +516,12 @@ else
         }
 
 		/* === Hook - Part2 : Include === */
-		foreach ($extp as $pl)
-		{
+		foreach ($extp as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
-		if ($id || !empty($al))
-		{
+		if ($id || !empty($al)) {
 			require_once cot_incfile('configuration');
 			$optionslist = cot_config_list($is_module ? 'module' : 'plug', $n, $structure_code);
 
