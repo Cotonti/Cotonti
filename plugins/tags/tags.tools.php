@@ -103,6 +103,13 @@ if ($action == cot::$L['Delete']) {
 
 $is_adminwarnings = isset($adminwarnings);
 
+if (cot_module_active('page')) {
+	require_once cot_incfile('page', 'module');
+}
+if (cot_module_active('forums')) {
+	require_once cot_incfile('forums', 'module');
+}
+
 $totalitems = cot::$db->query("SELECT distinct(tag) FROM " . cot::$db->tag_references . " AS t WHERE 1 " .
     $admin_tags_join_where)->rowCount();
 $pagenav = cot_pagenav(
