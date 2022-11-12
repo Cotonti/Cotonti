@@ -118,7 +118,7 @@ function cot_generate_pagetags(
         $pageID = (int) $page_data;
         $page_data = null;
         if ($pageID > 0) {
-            $sql = cot::$db->query('SELECT * FROM ' . cot::$db->pages . 'WHERE page_id = ? LIMIT 1', $pageID);
+            $sql = cot::$db->query('SELECT * FROM ' . cot::$db->pages . ' WHERE page_id = ? LIMIT 1', $pageID);
             $page_data = $sql->fetch();
         }
 	}

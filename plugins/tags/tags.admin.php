@@ -16,8 +16,7 @@ Tags=admin.page.inc.tpl:{ADMIN_TAGS_ROW_TAG},{ADMIN_TAGS_ROW_URL}
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['pages'])
-{
+if (cot::$cfg['plugin']['tags']['pages']) {
 	require_once cot_incfile('tags', 'plug');
 	$item_id = $row['page_id'];
 	$tags = cot_tag_list($item_id);

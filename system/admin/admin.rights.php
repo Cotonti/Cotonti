@@ -50,7 +50,19 @@ if ($a == 'update') {
 	$ncopyrightsfrom = cot_import('ncopyrightsfrom', 'P', 'INT');
     $auth = cot_import('auth', 'P', 'ARR');
     $items = cot_import('items', 'P', 'TXT');
-    $items = !empty($items) ? json_decode($items, true) : [];
+    if (!empty($items)) {
+        // Update rights for these items only
+        $items =  json_decode($items, true);
+        $items = !empty($items) ? $items : [];
+    } else {
+        // Update rights for all items
+        $items = [];
+        $sql = cot::$db->query('SELECT * FROM '. cot::$db->auth . ' AS a ' .
+            "WHERE auth_groupid=? ORDER BY auth_option ASC", $g);
+        while ($row = $sql->fetch()) {
+            $items[$row['auth_code']][$row['auth_option']] = $row['auth_rights'];
+        }
+    }
 
     $urlParams = ['m' => 'rights', 'g' => $g];
     if ($advanced) {
@@ -174,7 +186,7 @@ while ($row = $sql->fetch()) {
 	}
 
 	cot_rights_parseline($row, $title, $link, $ico);
-    $items[$row['auth_code']][$row['auth_option']] = $row['auth_rights'];
+    //$items[$row['auth_code']][$row['auth_option']] = $row['auth_rights'];
 }
 $sql->closeCursor();
 $t->assign('RIGHTS_SECTION_TITLE', cot::$L['Core'] . ' &amp; ' . cot::$L['Modules']);
@@ -204,7 +216,6 @@ while ($row = $sql->fetch()) {
 	$ico = cot::$cfg['modules_dir'] . '/' . $area . '/' . $area . '.png';
 
     cot_rights_parseline($row, $title, $link, $ico);
-    $items[$row['auth_code']][$row['auth_option']] = $row['auth_rights'];
 }
 
 if (!empty($area)) {
@@ -227,7 +238,6 @@ while ($row = $sql->fetch()) {
         $cot_plugins_enabled[$row['auth_option']]['title'] : $row['auth_option'];
 
 	cot_rights_parseline($row, $title, $link, $ico);
-    $items[$row['auth_code']][$row['auth_option']] = $row['auth_rights'];
 }
 $sql->closeCursor();
 $t->assign('RIGHTS_SECTION_TITLE', cot::$L['Plugins']);
@@ -243,8 +253,8 @@ cot_display_messages($t);
 
 $t->assign(array(
     'ADMIN_RIGHTS_FORM_URL' => cot_url('admin', $urlParams),
-    'ADMIN_RIGHTS_FORM_ITEMS' => cot_inputbox('hidden', 'items', json_encode($items)),
-    'ADMIN_RIGHTS_ADVANCED_URL' => cot_url('admin', 'm=rights&g='.$g.'&advanced=1'),
+    'ADMIN_RIGHTS_FORM_ITEMS' => '', // Update rights for all items
+    'ADMIN_RIGHTS_ADVANCED_URL' => cot_url('admin', 'm=rights&g=' . $g . '&advanced=1'),
     'ADMIN_RIGHTS_SELECTBOX_GROUPS' => cot_selectbox_groups(4, 'ncopyrightsfrom', array('5', $g)),
 ));
 

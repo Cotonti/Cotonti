@@ -220,7 +220,7 @@ if (empty($cot_plugins) && !defined('COT_INSTALL')) {
     $cot_plugins = [];
 
     /**
-     * @var array<string: bool> $cot_plugins_active
+     * @var array<string, bool> $cot_plugins_active
      * @deprecated use $cot_plugins_enabled instead
      */
 	$cot_plugins_active = [];

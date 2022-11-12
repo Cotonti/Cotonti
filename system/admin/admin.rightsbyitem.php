@@ -37,7 +37,23 @@ if ($a == 'update') {
 	$mask = array();
 	$auth = cot_import('auth', 'P', 'ARR');
     $items = cot_import('items', 'P', 'TXT');
-    $items = !empty($items) ? json_decode($items, true) : [];
+    if (!empty($items)) {
+        // Update rights for these user groups only
+        $items = json_decode($items, true);
+        $items = !empty($items) ? $items : [];
+    } else {
+        // Update rights for all groups
+        $sql = cot::$db->query(
+            'SELECT a.* FROM ' . cot::$db->auth . ' as a ' .
+            'LEFT JOIN ' . cot::$db->groups . ' AS g ON g.grp_id=a.auth_groupid ' .
+            "WHERE auth_code = ? AND auth_option = ? AND grp_skiprights = 0 ORDER BY grp_level DESC, grp_id DESC",
+            [$ic, $io]
+        );
+        $items = [];
+        while ($row = $sql->fetch()) {
+            $items[$row['auth_groupid']] = $row['auth_rights'];
+        }
+    }
 
 	/* === Hook === */
 	foreach (cot_getextplugins('admin.rightsbyitem.update') as $pl) {
@@ -150,8 +166,9 @@ if (!empty($title)) {
 $t->assign(array(
     'ADMIN_RIGHTSBYITEM_TITLE' => $pageTitle,
 	'ADMIN_RIGHTSBYITEM_FORM_URL' => cot_url('admin', $urlParams),
-    'ADMIN_RIGHTSBYITEM_FORM_ITEMS' => cot_inputbox('hidden', 'items', json_encode($items)),
-	'ADMIN_RIGHTSBYITEM_ADVANCED_URL' => cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'),
+    'ADMIN_RIGHTSBYITEM_FORM_ITEMS' => '', // Update rights for all groups
+	'ADMIN_RIGHTSBYITEM_ADVANCED_URL' => cot_url('admin', 'm=rightsbyitem&ic=' . $ic . '&io=' . $io .
+        '&advanced=1'),
 	'ADMIN_RIGHTSBYITEM_ADV_COLUMNS' => $adv_columns,
 	'ADMIN_RIGHTSBYITEM_4ADV_COLUMNS' => 4 + $adv_columns
 ));
