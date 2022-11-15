@@ -13,6 +13,7 @@ require_once cot_incfile('tags', 'plug');
 
 $tt = new XTemplate(cot_tplfile('tags.tools', 'plug', true));
 
+$adminhelp = cot::$L['info_desc'];
 $adminsubtitle = cot::$L['tags_All'];
 
 $cfg['maxrowsperpage'] = 30;
@@ -190,9 +191,14 @@ foreach ($tags  as $row) {
         }
     }
 		$tt->assign(array(
-			'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags&d='.$durl),
-			'ADMIN_TAGS_DEL_URL' => cot_url('admin', 'm=other&p=tags&a=delete&tag=' .
-                str_replace(' ', '_', $row['tag']) . '&' . cot_xg()),
+			'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags&d=' . $durl),
+            'ADMIN_TAGS_DEL_URL' => cot_url('admin', [
+                'm' => 'other',
+                'p' => 'tags',
+                'a' => 'delete',
+                'tag' => str_replace(' ', '_', $row['tag']),
+                'x' => cot::$sys['xk']
+            ]),
 			'ADMIN_TAGS_CODE' => $row['tag'],
 			'ADMIN_TAGS_TAG' => cot_inputbox('text', 'tag', htmlspecialchars_decode($row['tag']), array('maxlength' => '255')),//['.$row['tag'].']
 			'ADMIN_TAGS_AREA' => implode(', ', $tagArea),

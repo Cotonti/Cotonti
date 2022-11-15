@@ -371,24 +371,20 @@ class Resources
 					$modified = false;
 					$fileTime = 0;
 
-					if (!file_exists($target_path))
-					{
+					if (!file_exists($target_path)) {
 						// Just compile a new cache file
 						$file_list = $files;
 						$modified = true;
-					}
-					else
-					{
+					} else {
 						$fileTime = filemtime($target_path);
 
 						// Load the list of files already cached
-						$file_list = unserialize(file_get_contents("$target_path.idx"));
+						$file_list = unserialize(file_get_contents("{$target_path}.idx"));
+                        $file_list = !empty($file_list) ? $file_list : [];
 
 						// Check presense or modification time for each file
-						foreach ($files as $path)
-						{
-							if (!in_array($path, $file_list) || filemtime($path) >= $fileTime)
-							{
+						foreach ($files as $path) {
+							if (!in_array($path, $file_list) || filemtime($path) >= $fileTime) {
 								$modified = true;
 								break;
 							}

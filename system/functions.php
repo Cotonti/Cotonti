@@ -1484,19 +1484,19 @@ function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = tru
  * @param string $area Area code
  * @param string $cat Cat code
  * @param string $type Type 'full', 'first', 'last'
- * @return mixed
+ * @return string[]|string|null
  */
 function cot_structure_parents($area, $cat, $type = 'full')
 {
-	global $structure;
-	$pathcodes = explode('.', $structure[$area][$cat]['path']);
+    if (empty($area) || empty($cat) || empty(cot::$structure[$area]) || empty(cot::$structure[$area][$cat])) {
+        return null;
+    }
 
-	if ($type == 'first')
-	{
+	$pathcodes = explode('.', cot::$structure[$area][$cat]['path']);
+
+	if ($type == 'first') {
 		return $pathcodes[0];
-	}
-	elseif ($type == 'last')
-	{
+	} elseif ($type == 'last') {
 		return (count($pathcodes) > 1) ? $pathcodes[count($pathcodes) - 2] : null;
 	}
 
@@ -5401,14 +5401,12 @@ HTM;
  */
 function cot_parse_str($str)
 {
-	$res = array();
+	$res = [];
 	$str = str_replace('&amp;', '&', $str);
-	foreach (explode('&', $str) as $item)
-	{
-		if (!empty($item))
-		{
-			list($key, $val) = explode('=', $item, 2);
-			$res[$key] = $val;
+	foreach (explode('&', $str) as $item) {
+		if (!empty($item)) {
+            $tmp = explode('=', $item, 2);
+            $res[$tmp[0]] = isset($tmp[1]) ? $tmp[1] : null;
 		}
 	}
 	return $res;
