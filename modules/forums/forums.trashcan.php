@@ -48,11 +48,17 @@ function cot_trash_forumpost_check($data)
  */
 function cot_trash_forumpost_sync($data)
 {
-	global $db, $db_structure;
-	cot_forums_resynctopic($data['ft_id']);
-	$items = cot_forums_sync($data['ft_cat']);
-	$db->update($db_structure, array("structure_count" => (int)$items), "structure_code='".$db->prep($data['ft_cat'])."' AND structure_area='forums'");
-	return TRUE;
+    cot_forums_resynctopic($data['fp_topicid']);
+	$items = cot_forums_sync($data['fp_cat']);
+
+	cot::$db->update(
+        cot::$db->structure,
+        ['structure_count' => $items],
+        "structure_code=? AND structure_area='forums'",
+        $data['fp_cat']
+    );
+
+	return true;
 }
 
 /**

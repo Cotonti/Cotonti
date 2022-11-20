@@ -15,7 +15,7 @@ Hooks=forums.posts.delete.done
 
 defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('trashcan', 'plug');
-if ($cfg['plugin']['trashcan']['trash_forum'])
-{
-	cot_trash_put('forumpost', $L['Post']." #".$p." from topic #".$q, $p, $row);
+
+if (cot::$cfg['plugin']['trashcan']['trash_forum']) {
+	cot_trash_put('forumpost', cot::$L['forums_post'] . " #" . $p . " from topic #" . $q, $p, $row);
 }

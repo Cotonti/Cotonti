@@ -123,24 +123,36 @@ function cot_forums_prunetopics($mode, $section, $param)
  */
 function cot_forums_resynctopic($id)
 {
-	global $db, $db_forum_topics, $db_forum_posts;
+	$id = (int) $id;
+    if ($id < 1) {
+        return false;
+    }
 
-	if (!is_int($id))
-	{
-		$id = (int) $id;
-	}
+    cot::$db->query(
+        'UPDATE ' . cot::$db->forum_topics .
+            ' SET ft_postcount=(SELECT COUNT(*) FROM ' . cot::$db->forum_posts . ' WHERE fp_topicid=:topicId) ' .
+            'WHERE ft_id=:topicId',
+        ['topicId' => $id]
+    );
 
-	$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid=$id")->fetchColumn();
-	$db->update($db_forum_topics, array("ft_postcount" => $num), "ft_id=$id");
+    $row = cot::$db->query(
+        'SELECT fp_posterid, fp_postername, fp_updated FROM ' . cot::$db->forum_posts .
+            ' WHERE fp_topicid=? ORDER BY fp_id DESC LIMIT 1',
+        $id
+    )->fetch();
+    if ($row) {
+        cot::$db->update(
+            cot::$db->forum_topics,
+            [
+                "ft_lastposterid" => (int) $row['fp_posterid'],
+                "ft_lastpostername" => $row['fp_postername'],
+                "ft_updated" => (int) $row['fp_updated']
+            ],
+            'ft_id=?',
+            $id);
+    }
 
-	$sql = $db->query("SELECT fp_posterid, fp_postername, fp_updated FROM $db_forum_posts WHERE fp_topicid=$id ORDER BY fp_id DESC LIMIT 1");
-	if ($row = $sql->fetch())
-	{
-		$db->update($db_forum_topics, array("ft_lastposterid" => (int)$row['fp_posterid'],
-			"ft_lastpostername" => $row['fp_last_postername'],
-			"ft_updated" => (int)$row['fp_last_updated']
-			), "ft_id=$id");
-	}
+    return true;
 }
 
 /**
@@ -282,11 +294,16 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
  * @return int topiccount
  * @global CotDB $db
  */
-function cot_forums_sync($cat) {
-	global $db, $db_forum_topics, $db_forum_posts, $db_forum_stats;
-	$num1 = cot::$db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_cat=" . cot::$db->quote($cat))->fetchColumn();
-	$num  = cot::$db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat=" . cot::$db->quote($cat))->fetchColumn();
+function cot_forums_sync($cat)
+{
+    if (empty($cat)) {
+        return 0;
+    }
+
+	$num1 = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->forum_topics . ' WHERE ft_cat=?', $cat)->fetchColumn();
+	$num  = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->forum_posts . ' WHERE fp_cat=?', $cat)->fetchColumn();
 	cot_forums_sectionsetlast($cat, $num, $num1);
+
 	return (int) $num1;
 }
 

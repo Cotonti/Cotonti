@@ -105,38 +105,38 @@ foreach ($sql->fetchAll() as $row)
 	switch($row['tr_type'])
 	{
 		case 'comment':
-			$icon = $R['admin_icon_comments'];
-			$typestr = $L['Comment'];
+			$icon = cot::$R['admin_icon_comments'];
+			$typestr = cot::$L['comments_comment'];
 			$enabled = cot_plugin_active('comments') ? 1 : 0;
 			break;
 
 		case 'forumpost':
-			$icon = $R['admin_icon_forums_posts'];
-			$typestr = $L['Post'];
+			$icon = cot::$R['admin_icon_forums_posts'];
+			$typestr = cot::$L['forums_post'];
 			$enabled = cot_module_active('forums') ? 1 : 0;
 			break;
 
 		case 'forumtopic':
-			$icon = $R['admin_icon_forums_topics'];
-			$typestr = $L['Topic'];
+			$icon = cot::$R['admin_icon_forums_topics'];
+			$typestr = cot::$L['Topic'];
 			$enabled = cot_module_active('forums') ? 1 : 0;
 			break;
 
 		case 'page':
-			$icon = $R['admin_icon_page'];
-			$typestr = $L['Page'];
-			$enabled =cot_module_active('page') ? 1 : 0;
+			$icon = cot::$R['admin_icon_page'];
+			$typestr = cot::$L['Page'];
+			$enabled = cot_module_active('page') ? 1 : 0;
 			break;
 
 		case 'user':
-			$icon = $R['admin_icon_user'];
-			$typestr = $L['User'];
+			$icon = cot::$R['admin_icon_user'];
+			$typestr = cot::$L['User'];
 			$enabled = 1;
 			break;
 
 		default:
-			$icon = $R['admin_icon_tools'];
-			$typestr = $row['tr_type'];
+			$icon = cot::$R['admin_icon_tools'];
+			$typestr = cot::$row['tr_type'];
 			$enabled = 1;
 			break;
 	}

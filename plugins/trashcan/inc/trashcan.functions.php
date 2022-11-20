@@ -81,47 +81,53 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 
 function cot_trash_restore($id)
 {
-	global $db, $db_trash, $trash_types;
+    // $L, $Ls, $R are needed for hook includes
+    global $L, $Ls, $R, $cfg, $db, $db_trash, $trash_types;
+
 	/* === Hook  === */
-	foreach (cot_getextplugins('trash.restore.first') as $pl)
-	{
+	foreach (cot_getextplugins('trash.restore.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
+
 	$id = (int) $id;
-	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id=$id LIMIT 1");
-	if ($res = $tsql->fetch())
-	{
+    if ($id < 1) {
+        return false;
+    }
+
+	$tsql = cot::$db->query('SELECT * FROM ' . cot::$db->trash . ' WHERE tr_id=? LIMIT 1', $id);
+	if ($res = $tsql->fetch()) {
 		$data = unserialize($res['tr_datas']);
 		$type = $res['tr_type'];
 		$restore = true;
 		$databasename = isset($trash_types[$type]) ? $trash_types[$type] : $type;
-		if(isset($trash_types[$type]) && function_exists('cot_trash_'.$type.'_check'))
-		{
+		if (isset($trash_types[$type]) && function_exists('cot_trash_'.$type.'_check')) {
 			$check = 'cot_trash_'.$type.'_check';
 			$restore = $check($data);
 		}
 
 		$rsql = $db->query("SELECT * FROM $databasename WHERE 1 LIMIT 1");
-		if ($rrow = $rsql->fetch())
-		{
+		if ($rrow = $rsql->fetch()) {
 			$arraydiff = array_diff_key($data, $rrow);
-			foreach ($arraydiff as $key => $val)
-			{
+			foreach ($arraydiff as $key => $val) {
 				unset($data[$key]);
 			}
-			if (count($data) == 0 && $restore)
-			{
+			if (count($data) == 0 && $restore) {
 				$restore = false;
 			}
 		}
-		if ($restore)
-		{
-			$sql = $db->insert($databasename, $data);
-			cot_log("$type #".$res['tr_itemid']." restored from the trash can.", 'adm');
 
-			if(isset($trash_types[$type]) && function_exists('cot_trash_'.$type.'_sync'))
-			{
+        if ($restore) {
+            try {
+                $sql = $db->insert($databasename, $data);
+            } catch(\Exception $e) {
+                cot_log("$type #" . $res['tr_itemid'] . " failed to restore from the trash can.", 'adm');
+                return false;
+            }
+
+			cot_log("$type #" . $res['tr_itemid'] . " restored from the trash can.", 'adm');
+
+			if (isset($trash_types[$type]) && function_exists('cot_trash_'.$type.'_sync')) {
 				$resync = 'cot_trash_'.$type.'_sync';
 				$resync($data);
 			}

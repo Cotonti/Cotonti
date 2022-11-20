@@ -41,11 +41,14 @@ $users_sort_tags = array(
 	'regdate' => array('USERS_TOP_REGDATE', &$L['Registered'],),
 	'lastlog' => array('USERS_TOP_LASTLOGGED', &$L['Lastlogged'],),
 	'logcount' => array('USERS_TOP_LOGCOUNT', &$L['Count'],),
-	'postcount' => array('USERS_TOP_POSTCOUNT', &$L['Posts'],),
 	// like columns in $db_groups table
 	'grplevel' => array('USERS_TOP_GRPLEVEL', &$L['Level'],),
 	'grpname' => array('USERS_TOP_GRPTITLE', &$L['Maingroup'],),
 );
+/* @todo move to Forums module */
+if (cot_module_active('forums')) {
+    $users_sort_tags['postcount'] = ['USERS_TOP_POSTCOUNT', &$L['forums_posts'],];
+}
 
 $users_sort_blacklist = array('email', 'lastip', 'password', 'sid', 'sidtime', 'lostpass', 'auth', 'token');
 $users_sort_whitelist = array('id', 'name', 'maingrp', 'country', 'timezone', 'birthdate', 'gender', 'lang', 'regdate');
