@@ -586,37 +586,37 @@ class CotDB
 			$keys_built = true;
 		}
 
-		if (!empty($keys) && !empty($vals)) {
-			$ignore = $ignore ? 'IGNORE' : '';
-			$query = "INSERT $ignore INTO " . $this->quoteTableName($tableName) . " ($keys) VALUES $vals";
-			if (count($updateFields) > 0) {
-				$query .= ' ON DUPLICATE KEY UPDATE';
-				$j = 0;
-				foreach ($updateFields as $key) {
-					if ($j > 0) $query .= ',';
-					$query .= ' ' . $this->quoteColumnName($key) . ' = VALUES(' . $this->quoteColumnName($key) . ')';
-					$j++;
-				}
-			}
-            $res = 0;
-			$this->_startTimer();
-			try {
-				$res = $this->adapter->exec($query);
-			} catch (\PDOException $err) {
-                /**
-                 * @todo it should be optional. Sometimes we don't need to catch Exception here, but in another place
-                 * @see plugins/trashcan/inc/trashcan.functions.php:122
-                 */
-				if ($this->_parseError($err, $err_code, $err_message)) {
-					cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
-				}
-			}
-			$this->_stopTimer($query);
+        if (empty($keys) || empty($vals)) {
+            return 0;
+        }
 
-            return $res;
-		}
+        $ignore = $ignore ? 'IGNORE' : '';
+        $query = "INSERT $ignore INTO " . $this->quoteTableName($tableName) . " ($keys) VALUES $vals";
+        if (count($updateFields) > 0) {
+            $query .= ' ON DUPLICATE KEY UPDATE';
+            $j = 0;
+            foreach ($updateFields as $key) {
+                if ($j > 0) $query .= ',';
+                $query .= ' ' . $this->quoteColumnName($key) . ' = VALUES(' . $this->quoteColumnName($key) . ')';
+                $j++;
+            }
+        }
+        $res = 0;
+        $this->_startTimer();
+        try {
+            $res = $this->adapter->exec($query);
+        } catch (\PDOException $err) {
+            /**
+             * @todo it should be optional. Sometimes we don't need to catch Exception here, but in another place
+             * @see plugins/trashcan/inc/trashcan.functions.php:122
+             */
+            if ($this->_parseError($err, $err_code, $err_message)) {
+                cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
+            }
+        }
+        $this->_stopTimer($query);
 
-		return 0;
+        return $res;
 	}
 
     /**

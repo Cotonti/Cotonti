@@ -44,22 +44,22 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	(empty($ruser['user_name'])) && $ruser['user_name'] = $ruser['user_email'];
 	$password = $ruser['user_password'];
 
-	$user_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_name = ? LIMIT 1", array($ruser['user_name']))->fetch();
-	$email_exists = (bool)$db->query("SELECT user_id FROM $db_users WHERE user_email = ? LIMIT 1", array($ruser['user_email']))->fetch();
-	if(!cot_check_email($ruser['user_email']) || $user_exists || (!cot::$cfg['useremailduplicate'] && $email_exists))
-	{
+	$user_exists = (bool) $db->query("SELECT user_id FROM $db_users WHERE user_name = ? LIMIT 1", array($ruser['user_name']))->fetch();
+	$email_exists = (bool) $db->query("SELECT user_id FROM $db_users WHERE user_email = ? LIMIT 1", array($ruser['user_email']))->fetch();
+	if (!cot_check_email($ruser['user_email']) || $user_exists || (!cot::$cfg['useremailduplicate'] && $email_exists)) {
 		return false;
 	}
 
 	$ruser['user_gender'] = (in_array($ruser['user_gender'], array('M', 'F'))) ? $ruser['user_gender'] : 'U';
-	$ruser['user_country'] = (mb_strlen($ruser['user_country']) < 4) ? $ruser['user_country'] : '';
+    $ruser['user_country'] = (!empty($ruser['user_country']) && mb_strlen($ruser['user_country']) < 4) ?
+        $ruser['user_country'] : '';
 	$ruser['user_timezone'] = (!$ruser['user_timezone']) ? 'GMT' : $ruser['user_timezone'];
 
-    $maingrp = (int)$maingrp;
-    if($maingrp > 0) {
+    $maingrp = (int) $maingrp;
+    if ($maingrp > 0) {
         $tmp2 = $maingrp;
 
-    } elseif(cot::$db->countRows($db_users) == 0) {
+    } elseif (cot::$db->countRows($db_users) == 0) {
         // There is no users in DB.
         $tmp2 = COT_GROUP_SUPERADMINS;
 
@@ -237,44 +237,39 @@ function cot_selectbox_gender($check, $name)
  *
  * @param int $uid   User ID
  * @param bool $cacheitem Use one time session cache
- * @return array
+ * @return array|null
  */
 function cot_user_data($uid = 0, $cacheitem = true)
 {
 	$user = false;
 
-	if (! $uid && cot::$usr['id'] > 0)
-	{
+	if (!$uid && cot::$usr['id'] > 0) {
 		$uid = cot::$usr['id'];
 		$user = cot::$usr['profile'];
 	}
-	if (! $uid) return null;
+	if (!$uid) {
+        return null;
+    }
 
 	static $u_cache = array();
 
-	if ($cacheitem && isset($u_cache[$uid]))
-	{
+	if ($cacheitem && isset($u_cache[$uid])) {
 		return $u_cache[$uid];
 	}
 
-	if (! $user)
-	{
-		if (is_array($uid))
-		{
+	if (!$user) {
+		if (is_array($uid)) {
 			$user = $uid;
 			$uid = $user['user_id'];
-		}
-		else
-		{
-			if ($uid > 0 && $uid == cot::$usr['id'])
-			{
+		} else {
+			if ($uid > 0 && $uid == cot::$usr['id']) {
 				$user = cot::$usr['profile'];
-			}
-			else
-			{
+			} else {
 				$uid = (int) $uid;
-				if (! $uid) return null;
-				$sql = cot::$db->query("SELECT * FROM ".cot::$db->users." WHERE user_id = ? LIMIT 1", $uid);
+				if (!$uid) {
+                    return null;
+                }
+				$sql = cot::$db->query('SELECT * FROM ' . cot::$db->users . ' WHERE user_id = ? LIMIT 1', $uid);
 				$user = $sql->fetch();
 			}
 		}

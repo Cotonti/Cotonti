@@ -9,6 +9,18 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+/*
+ * PM States
+ * 0 - new message (Unread)
+ * 1 - read message
+ * 2 - starred message
+ * 3 - deleted message
+*/
+const COT_PM_STATE_UNREAD = 0;
+const COT_PM_STATE_READ = 1;
+const COT_PM_STATE_STARRED = 2;
+const COT_PM_STATE_DELETED = 3;
+
 // Requirements
 require_once cot_langfile('pm', 'module');
 require_once cot_incfile('pm', 'module', 'resources');
@@ -21,24 +33,96 @@ cot::$db->registerTable('pm');
 cot::$cfg['pm']['turnajax'] = cot::$cfg['pm']['turnajax'] && cot::$cfg['jquery'] && cot::$cfg['turnajax'] && $editor != 'elrte' && $editor != 'epiceditor';
 
 /**
+ * Send private message to user
+ * @param int $to Recipient user ID
+ * @param string $subject
+ * @param string $text Message body
+ * @param int $from From user ID
+ * @param int $fromState
+ * @return int|false Message ID or FALSE in fail
+ */
+function cot_send_pm($to, $subject, $text, $from = null, $fromState = 0)
+{
+    if (empty($to)) {
+        return false;
+    }
+
+    if (empty($from)) {
+        $from = cot::$usr['id'];
+    }
+
+    $fromName = cot_user_full_name($from);
+
+    $pm['pm_title'] = $subject;
+    $pm['pm_date'] = cot::$sys['now'];
+    $pm['pm_text'] = $text;
+    $pm['pm_fromstate'] = $fromState;
+    $pm['pm_fromuserid'] = (int) $from;
+    $pm['pm_fromuser'] = $fromName;
+    $pm['pm_touserid'] = $to;
+    $pm['pm_tostate'] = 0;
+
+    /* === Hook === */
+    foreach (cot_getextplugins('pm.send.query') as $pl) {
+        include $pl;
+    }
+    /* ===== */
+
+    $result = cot::$db->insert(cot::$db->pm, $pm);
+    if (!$result) {
+        return false;
+    }
+    $id = cot::$db->lastInsertId();
+
+    cot::$db->update(cot::$db->users, ['user_newpm' => '1'], "user_id=:userId", ['userId' => $to]);
+
+    if (cot::$cfg['pm']['allownotifications']) {
+        $pmsql = cot::$db->query('SELECT user_email, user_name, user_lang FROM ' . cot::$db->users .
+            ' WHERE user_id = ? AND user_pmnotify = 1 AND user_maingrp > 3', $to);
+
+        if ($row = $pmsql->fetch()) {
+            cot_send_translated_mail($row['user_lang'], $row['user_email'], htmlspecialchars($row['user_name']));
+            // Total email PM notifications sent
+            cot_stat_inc('totalmailpmnot');
+        }
+    }
+
+    $stats_enabled = function_exists('cot_stat_inc');
+    if ($stats_enabled) {
+        // Total private messages in DB
+        cot_stat_inc('totalpms');
+    }
+
+    /* === Hook === */
+    foreach (cot_getextplugins('pm.send.done') as $pl) {
+        include $pl;
+    }
+    /* ===== */
+
+    return $id;
+}
+
+/**
  * Send an email in the recipient's language
  *
  * @param string $rlang Recipient language
  * @param string $remail Recipient email
  * @param string $rusername Recipient name
+ * @todo $L should not be global. It will rewriten by cot_langfile()
  */
 function cot_send_translated_mail($rlang, $remail, $rusername)
 {
-	global $cfg, $usr;
+	global $cfg, $usr, $L;
 
-	require_once cot_langfile('pm', 'module', $cfg['defaultlang'], $rlang);
+	require_once cot_langfile('pm', 'module', cot::$cfg['defaultlang'], $rlang);
 	if (!$L || !isset($L['pm_notify']))
 	{
 		global $L;
 	}
 
 	$rsubject = $L['pm_notifytitle'];
-	$rbody = sprintf($L['pm_notify'], $rusername, htmlspecialchars($usr['name']), $cfg['mainurl'] . '/' . cot_url('pm', '', '', true));
+	$rbody = sprintf($L['pm_notify'], $rusername, htmlspecialchars($usr['name']), cot::$cfg['mainurl'] . '/' .
+        cot_url('pm', '', '', true));
 
 	cot_mail($remail, $rsubject, $rbody);
 }
@@ -102,8 +186,8 @@ function cot_remove_pm($message_id)
  */
 function cot_star_pm($message_id)
 {
-
 	global $db, $usr, $db_pm, $cfg;
+
 	if (!is_array($message_id))
 	{
 		return false;
@@ -169,4 +253,32 @@ function cot_build_pm($user)
 {
 	global $L;
 	return cot_rc('pm_link', array('url' => cot_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew']));
+}
+
+/**
+ * Generates message list widget
+ * @param int $userId
+ * @param int $count
+ * @param string $template
+ * @param string $order
+ * @param string $condition
+ * @param string $state 'all', or comma separated states. '0' - unread, '0,2' unread or starred messages
+ * @param bool $senderUnique one message per sender
+ * @param string $pagination Pagination symbol
+ * @param int $cache_ttl Cache lifetime in seconds, 0 disables cache
+ * @return string
+ * @todo
+ */
+function cot_pm_list(
+    $userId,
+    $count = 0,
+    $template = '',
+    $order = '',
+    $condition = '',
+    $state = COT_PM_STATE_UNREAD,
+    $senderUnique = false,
+    $pagination = '',
+    $cache_ttl = null
+) {
+
 }

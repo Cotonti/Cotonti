@@ -18,14 +18,6 @@ list($pg, $d, $durl) = cot_import_pagenav('d', cot::$cfg['pm']['maxpmperpage']);
 $a = cot_import('a','G','TXT');				// Action
 $filter = cot_import('filter','G','TXT');	// filter
 
-/*
- * PM States
- * 0 - new message
- * 1 - inbox message
- * 2 - starred message
- * 3 - deleted message
-*/
-
 /* === Hook === */
 foreach (cot_getextplugins('pm.list.first') as $pl)
 {
@@ -49,7 +41,7 @@ if (count($msg) > 0) {
 
 	} elseif (!empty($a)) {
 		cot_star_pm($msg);
-		if (COT_AJAX && (int)$id > 0) {
+		if (COT_AJAX && (int) $id > 0) {
 			die();
 		}
 	}
@@ -74,17 +66,17 @@ if ($f == 'sentbox') {
 }
 
 if ($filter == 'unread') {
-	$sqlfilter .= " AND pm_tostate = 0";
+	$sqlfilter .= ' AND pm_tostate = ' . COT_PM_STATE_UNREAD;
 	$title[] = cot::$L['pm_unread'];
 
 } elseif ($filter == 'starred') {
-	$sqlfilter .= ($f == 'sentbox') ? " AND pm_fromstate = 2" : " AND pm_tostate = 2";
+	$sqlfilter .= ($f == 'sentbox') ?
+        ' AND pm_fromstate = ' . COT_PM_STATE_STARRED : ' AND pm_tostate = ' . COT_PM_STATE_STARRED;
 	$title[] = cot::$L['pm_starred'];
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.list.main') as $pl)
-{
+foreach (cot_getextplugins('pm.list.main') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -104,8 +96,7 @@ Resources::linkFileFooter(cot::$cfg['modules_dir'].'/pm/js/pm.js');
 $totallines = cot::$db->query("SELECT COUNT(*) FROM $db_pm WHERE $sqlfilter")->fetchColumn();
 $elem = ($f == 'sentbox') ? 'pm_touserid' : 'pm_fromuserid';
 $pm_sql = cot::$db->query("SELECT p.*, u.* FROM $db_pm AS p
-		LEFT JOIN $db_users AS u
-		ON u.user_id = p.$elem
+		LEFT JOIN $db_users AS u ON u.user_id = p.$elem
 		WHERE $sqlfilter
 		ORDER BY pm_date DESC LIMIT  $d,".cot::$cfg['pm']['maxpmperpage']);
 
@@ -114,7 +105,9 @@ $pagenav = cot_pagenav('pm', 'f='.$f.'&filter='.$filter, $d, $totallines, cot::$
 
 require_once cot::$cfg['system_dir'] . '/header.php';
 
-if (!isset($pmalttpl)) $pmalttpl = null;
+if (!isset($pmalttpl)) {
+    $pmalttpl = null;
+}
 $t = new XTemplate(cot_tplfile(array('pm', 'list', $pmalttpl)));
 
 $jj = 0;

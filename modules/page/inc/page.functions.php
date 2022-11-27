@@ -15,6 +15,12 @@ require_once cot_incfile('page', 'module', 'resources');
 require_once cot_incfile('forms');
 require_once cot_incfile('extrafields');
 
+/*
+ * Page States
+ * 0 - published
+ * 1 - waiting for approve by admin (moderator)
+ * 2 - draft
+*/
 const COT_PAGE_STATE_PUBLISHED = 0;
 const COT_PAGE_STATE_PENDING = 1;
 const COT_PAGE_STATE_DRAFT = 2;

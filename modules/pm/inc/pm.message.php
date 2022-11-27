@@ -41,8 +41,8 @@ $title[] = array(cot_url('pm'), cot::$L['Private_Messages']);
 $row['pm_icon_edit'] = $row['pm_edit_url'] = '';
 
 if ($row['pm_touserid'] == cot::$usr['id']) {
-	if ($row['pm_tostate'] == 0) {
-		cot::$db->update($db_pm, array('pm_tostate' => '1'), "pm_id = $id");
+	if ($row['pm_tostate'] == COT_PM_STATE_UNREAD) {
+		cot::$db->update(cot::$db->pm, ['pm_tostate' => COT_PM_STATE_READ], 'pm_id = ?', $id);
 		if (cot::$db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid = '".cot::$usr['id']."' AND pm_tostate = 0")->fetchColumn() == 0) {
 			cot::$db->update($db_users, array('user_newpm' => '0'), "user_id = '".cot::$usr['id']."'");
 		}
@@ -50,7 +50,7 @@ if ($row['pm_touserid'] == cot::$usr['id']) {
 	$f = 'inbox';
 	$title[] = array(cot_url('pm', 'f=inbox'), cot::$L['pm_inbox']);
 	$to = $row['pm_fromuserid'];
-	$star_class = ($row['pm_tostate'] == 2) ?  1 : 0;
+	$star_class = ($row['pm_tostate'] == COT_PM_STATE_STARRED) ?  1 : 0;
 	$totalcount = $totalinbox;
 	$subtitle = cot::$L['pm_inbox'];
 

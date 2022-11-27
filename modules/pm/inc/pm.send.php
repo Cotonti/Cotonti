@@ -35,8 +35,8 @@ $newpmrecipient = '';
 $fromstate = 0;
 if ($a == 'send') {
 	cot_shield_protect();
-	$newpmtitle = cot_import('newpmtitle', 'P', 'TXT');
-	$newpmtext = cot_import('newpmtext', 'P', 'HTM');
+	$newpmtitle = cot_import('newpmtitle', 'P', 'TXT') ?: '';
+	$newpmtext = cot_import('newpmtext', 'P', 'HTM') ?: '';
 	$newpmrecipient = cot_import('newpmrecipient', 'P', 'TXT');
 	$fromstate = (cot_import('fromstate', 'P', 'INT') == 0) ? 0 : 3;
 
@@ -113,40 +113,19 @@ if ($a == 'send') {
 
 		if (!cot_error_found()) {
 			$stats_enabled = function_exists('cot_stat_inc');
-			foreach ($touser_ids as $k => $userid)
-			{
-				$pm['pm_title'] = $newpmtitle;
-				$pm['pm_date'] = (int)$sys['now'];
-				$pm['pm_text'] = $newpmtext;
-				$pm['pm_fromstate'] = $fromstate;
-				$pm['pm_fromuserid'] = (int)$usr['id'];
-				$pm['pm_fromuser'] = $usr['name'];
-				$pm['pm_touserid'] = $userid;
-				$pm['pm_tostate'] = 0;
-				$pmsql = $db->insert($db_pm, $pm);
-				$pmsql = $db->update($db_users, array('user_newpm' => '1'), "user_id = $userid");
-
-				if ($cfg['pm']['allownotifications'])
-				{
-					$pmsql = $db->query("SELECT user_email, user_name, user_lang
-						FROM $db_users WHERE user_id = $userid AND user_pmnotify = 1 AND user_maingrp > 3");
-
-					if ($row = $pmsql->fetch())
-					{
-						cot_send_translated_mail($row['user_lang'], $row['user_email'], htmlspecialchars($row['user_name']));
-						if($stats_enabled) { cot_stat_inc('totalmailpmnot'); }
-					}
-				}
+			foreach ($touser_ids as $k => $userid) {
+                $pmId = cot_send_pm($userid, $newpmtitle, $newpmtext, cot::$usr['id'], $fromstate);
 			}
 
 			/* === Hook === */
-			foreach (cot_getextplugins('pm.send.send.done') as $pl)
-			{
+			foreach (cot_getextplugins('pm.send.send.done') as $pl) {
 				include $pl;
 			}
 			/* ===== */
 
-			if($stats_enabled) { cot_stat_inc('totalpms'); }
+			if ($stats_enabled) {
+                cot_stat_inc('totalpms');
+            }
 			cot_shield_update(30, "New private message (".$totalrecipients.")");
 			cot_redirect(cot_url('pm', 'f=sentbox', '', true));
 		}

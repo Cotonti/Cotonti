@@ -955,7 +955,7 @@ function cot_check_email($res)
  * supported.
  *
  * @global $cfg
- * @param string $fmail Recipient
+ * @param string $to Recipient
  * @param string $subject Subject
  * @param string $body Message body
  * @param string $headers Message headers
@@ -963,25 +963,24 @@ function cot_check_email($res)
  * @param string $additional_parameters Additional parameters passed to sendmail
  * @return bool
  */
-function cot_mail($fmail, $subject, $body, $headers = '', $customtemplate = false, $additional_parameters = '', $html = false)
+function cot_mail($to, $subject, $body, $headers = '', $customtemplate = false, $additional_parameters = '', $html = false)
 {
 	global $cfg, $cot_mail_senders;
 
-	if (function_exists('cot_mail_custom'))
-	{
-		return cot_mail_custom($fmail, $subject, $body, $headers, $customtemplate, $additional_parameters, $html);
+	if (function_exists('cot_mail_custom')) {
+		return cot_mail_custom($to, $subject, $body, $headers, $customtemplate, $additional_parameters, $html);
 	}
     $ret = true;
-	if (is_array($cot_mail_senders) && count($cot_mail_senders) > 0)
-	{
-		foreach ($cot_mail_senders as $func)
-		{
-			$ret &= $func($fmail, $subject, $body, $headers, $additional_parameters, $html);
+	if (is_array($cot_mail_senders) && count($cot_mail_senders) > 0) {
+		foreach ($cot_mail_senders as $func) {
+			$ret &= $func($to, $subject, $body, $headers, $additional_parameters, $html);
 		}
 		return $ret;
 	}
 
-    if (empty($fmail)) return false;
+    if (empty($to)) {
+        return false;
+    }
 
     $sitemaintitle = mb_encode_mimeheader(cot::$cfg['maintitle'], 'UTF-8', 'B', "\n");
 
@@ -1005,8 +1004,7 @@ function cot_mail($fmail, $subject, $body, $headers = '', $customtemplate = fals
     $headers .= "Content-Type: text/".$type_body."; charset=UTF-8\n";
     $headers .= "Content-Transfer-Encoding: 8bit\n";
 
-    if (!$customtemplate)
-    {
+    if (!$customtemplate) {
         $body_params = array(
             'SITE_TITLE' => $cfg['maintitle'],
             'SITE_URL' => $cfg['mainurl'],
@@ -1017,25 +1015,38 @@ function cot_mail($fmail, $subject, $body, $headers = '', $customtemplate = fals
         );
 
         $subject_params = array(
-            'SITE_TITLE' => $cfg['maintitle'],
-            'SITE_DESCRIPTION' => $cfg['subtitle'],
+            'SITE_TITLE' => cot::$cfg['maintitle'],
+            'SITE_DESCRIPTION' => cot::$cfg['subtitle'],
             'MAIL_SUBJECT' => $subject
         );
 
-        $subject = cot_title($cfg['subject_mail'], $subject_params, false);
+        $subjectPrepared = cot_title(cot::$cfg['subject_mail'], $subject_params, false);
         $bodyMail = str_replace("\r\n", "\n", $cfg['body_mail']);
-        if ($html) $bodyMail = str_replace("\n", "<br />\n", $bodyMail);
-        $body = cot_title($bodyMail, $body_params, false);
+        if ($html) {
+            $bodyMail = str_replace("\n", "<br />\n", $bodyMail);
+        }
+        $bodyPrepared = cot_title($bodyMail, $body_params, false);
+    } else {
+        $subjectPrepared = $subject;
+        $bodyPrepared = $body;
     }
-    $subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\n");
+    $subjectPrepared = mb_encode_mimeheader($subjectPrepared, 'UTF-8', 'B', "\n");
 
     if (ini_get('safe_mode')) {
-        mail($fmail, $subject, $body, $headers);
+        mail($to, $subjectPrepared, $bodyPrepared, $headers);
 
     } else {
-        if (empty($additional_parameters)) $additional_parameters = '';
-        mail($fmail, $subject, $body, $headers, $additional_parameters);
+        if (empty($additional_parameters)) {
+            $additional_parameters = '';
+        }
+        mail($to, $subjectPrepared, $bodyPrepared, $headers, $additional_parameters);
     }
+
+    /* === Hook === */
+    foreach (cot_getextplugins('mail.send.done') as $pl) {
+        include $pl;
+    }
+    /* ===== */
 
     return true;
 }
@@ -2264,40 +2275,49 @@ function cot_build_user($id, $user, $extra_attrs = '')
  */
 function cot_user_full_name($user)
 {
-	if (empty($user)) return '';
+    // Need for cot_incfile()
+    global $L, $R, $cfg;
 
-	if(function_exists('cot_user_full_name_custom')) return cot_user_full_name_custom($user);
+	if (empty($user)) {
+        return '';
+    }
 
-    if(!is_array($user) && !is_object($user)) {
+	if (function_exists('cot_user_full_name_custom')) {
+        return cot_user_full_name_custom($user);
+    }
+
+    if (!is_array($user) && !is_object($user)) {
         if (is_int($user) && $user > 0 || ctype_digit($user)) {
             require_once cot_incfile('users', 'module');
             $user = cot_user_data($user);
         }
     }
-    if (empty($user)) return '';
+    if (empty($user)) {
+        return '';
+    }
 
     $user_fname = '';
-    if(!empty($user['user_firstname'])) {
+    if (!empty($user['user_firstname'])) {
         $user_fname = $user['user_firstname'];
-    } elseif(!empty($user['user_first_name'])) {
+    } elseif (!empty($user['user_first_name'])) {
         $user_fname = $user['user_first_name'];
     }
 
     $user_mname = '';
-    if(!empty($user['user_middlename'])) {
+    if (!empty($user['user_middlename'])) {
         $user_mname = $user['user_middlename'];
-    } elseif(!empty($user['user_middle_name'])) {
+    } elseif (!empty($user['user_middle_name'])) {
         $user_mname = $user['user_middle_name'];
     }
 
     $user_lname = '';
-    if(!empty($user['user_lastname'])) {
+    if (!empty($user['user_lastname'])) {
         $user_lname = $user['user_lastname'];
-    } elseif(!empty($user['user_last_name'])) {
+    } elseif (!empty($user['user_last_name'])) {
         $user_lname = $user['user_last_name'];
     }
 
-    if($user_fname != '' || $user_mname != '' || $user_lname != '') {
+    if ($user_fname != '' || $user_mname != '' || $user_lname != '') {
         $full_name = trim(
             cot_rc('users_full_name',
                    array(
@@ -4514,9 +4534,9 @@ function cot_parse_autourls($text)
  * Cuts a string to the length of $length
  *
  * @param string  $text String to truncate.
- * @param integer $length Length of returned string, including ellipsis.
- * @param boolean $considerhtml If true, HTML tags would be handled correctly *
- * @param boolean $exact If false, $text will not be cut mid-word
+ * @param int $length Length of returned string, including ellipsis.
+ * @param bool $considerhtml If true, HTML tags would be handled correctly *
+ * @param bool $exact If false, $text will not be cut mid-word
  * @param string  $cuttext Adds text if truncated
  * @return string trimmed string.
  */
