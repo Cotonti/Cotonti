@@ -76,6 +76,7 @@ function cot_send_pm($to, $subject, $text, $from = null, $fromState = 0)
 
     cot::$db->update(cot::$db->users, ['user_newpm' => '1'], "user_id=:userId", ['userId' => $to]);
 
+    $stats_enabled = function_exists('cot_stat_inc');
     if (cot::$cfg['pm']['allownotifications']) {
         $pmsql = cot::$db->query('SELECT user_email, user_name, user_lang FROM ' . cot::$db->users .
             ' WHERE user_id = ? AND user_pmnotify = 1 AND user_maingrp > 3', $to);
@@ -83,11 +84,12 @@ function cot_send_pm($to, $subject, $text, $from = null, $fromState = 0)
         if ($row = $pmsql->fetch()) {
             cot_send_translated_mail($row['user_lang'], $row['user_email'], htmlspecialchars($row['user_name']));
             // Total email PM notifications sent
-            cot_stat_inc('totalmailpmnot');
+            if ($stats_enabled) {
+                cot_stat_inc('totalmailpmnot');
+            }
         }
     }
 
-    $stats_enabled = function_exists('cot_stat_inc');
     if ($stats_enabled) {
         // Total private messages in DB
         cot_stat_inc('totalpms');

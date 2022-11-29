@@ -9,32 +9,32 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
-cot_block($usr['auth_read']);
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'a');
+cot_block(cot::$usr['auth_read']);
 
 $t = new XTemplate(cot_tplfile('admin.log', 'core'));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=log'), $L['Log']);
-$adminhelp = $L['adm_help_log'];
-$adminsubtitle = $L['Log'];
+$adminpath[] = array(cot_url('admin', 'm=other'), cot::$L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=log'), cot::$L['Log']);
+$adminhelp = cot::$L['adm_log_desc'];
+$adminsubtitle = cot::$L['Log'];
 
 $log_groups = array(
-	'all' => $L['All'],
-	'def' => $L['Default'],
-	'adm' => $L['Administration'],
-	'for' => $L['Forums'],
-	'sec' => $L['Security'],
-	'usr' => $L['Users'],
-	'plg' => $L['Plugins']
+	'all' => cot::$L['All'],
+	'def' => cot::$L['Default'],
+	'adm' => cot::$L['Administration'],
+	'for' => cot::$L['Forums'],
+	'sec' => cot::$L['Security'],
+	'usr' => cot::$L['Users'],
+	'plg' => cot::$L['Plugins']
 );
 
-$maxrowsperpage = (is_int($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0 || ctype_digit($cfg['maxrowsperpage'])) ? $cfg['maxrowsperpage'] : 15;
+$maxrowsperpage = (is_int(cot::$cfg['maxrowsperpage']) && cot::$cfg['maxrowsperpage'] > 0 || ctype_digit(cot::$cfg['maxrowsperpage'])) ?
+    cot::$cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage);
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.log.first') as $pl)
-{
+foreach (cot_getextplugins('admin.log.first') as $pl) {
 	include $pl;
 }
 /* ===== */

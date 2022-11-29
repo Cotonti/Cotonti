@@ -39,10 +39,6 @@ if (cot::$usr['id'] > 0) {
             )->fetchAll();
 
             cot::$out['pm_lastMessages'] = $messages;
-            echo '<pre>';
-            //var_dump(cot::$out['pm_lastMessages']);
-
-            echo '</pre>';
         }
 
         cot::$usr['messages'] = cot::$db->query(
