@@ -21,50 +21,72 @@ $GLOBALS['trash_types'] = array(
  * @param string $type Item type
  * @param string $title Title
  * @param int $itemid Item ID
- * @param mixed $datas Item contents
+ * @param array|string $datas Item contents in array or SQL string condition for deleting records
  * @param int $parentid trashcan parent id
- * @return int Trash insert id
+ * @return int|false Trash insert id
  * @global CotDB $db
  */
 function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 {
 	global $db, $db_trash, $sys, $usr, $trash_types;
 
-	$trash = array('tr_date' => $sys['now'], 'tr_type' => $type, 'tr_title' => $title, 'tr_itemid' => $itemid,
-		'tr_trashedby' => (int)$usr['id'], 'tr_parentid' => $parentid);
+	$trash = [
+        'tr_date' => cot::$sys['now'],
+        'tr_type' => $type,
+        'tr_title' => $title,
+        'tr_itemid' => $itemid,
+		'tr_trashedby' => (int) cot::$usr['id'],
+        'tr_parentid' => $parentid,
+    ];
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('trash.put.first') as $pl)
-	{
+	foreach (cot_getextplugins('trash.put.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
 	$i = 0;
-	if (is_array($datas))
-	{
+    $existId = 0;
+	if (is_array($datas)) {
 		$i++;
 		$trash['tr_datas'] = serialize($datas);
-		$sql = $db->insert($db_trash, $trash);
-	}
-	elseif (is_string($datas))
-	{
+
+        $existId = (int) cot::$db->query(
+            'SELECT tr_id FROM ' . cot::$db->quoteTableName(cot::$db->trash) .
+                ' WHERE tr_type = :type AND tr_itemid = :id ORDER BY tr_date DESC LIMIT 1',
+            ['type' => $type, 'id' => $itemid]
+        )->fetchColumn();
+        if ($existId > 0) {
+            // If for some reason the item is already in the trash (For example because of an error)
+            unset($trash['tr_type'], $trash['tr_itemid']);
+            cot::$db->update(
+                $db_trash,
+                $trash,
+                'tr_type = :type AND tr_itemid = :id',
+                ['type' => $type, 'id' => $itemid]
+            );
+        } else {
+            cot::$db->insert($db_trash, $trash);
+        }
+
+	} elseif (is_string($datas)) {
 		$tablename = isset($trash_types[$type]) ? $trash_types[$type] : $type;
-		$sql_s = $db->query("SELECT * FROM $tablename WHERE $datas");
-		while ($row_s = $sql_s->fetch())
-		{
+		$sql_s = cot::$db->query("SELECT * FROM $tablename WHERE $datas");
+		while ($row_s = $sql_s->fetch()) {
 			$i++;
 			$trash['tr_datas'] = serialize($row_s);
-			$sql = $db->insert($db_trash, $trash);
+			cot::$db->insert($db_trash, $trash);
 		}
 		$sql_s->closeCursor();
 	}
 
-	$id = ($i) ? $db->lastInsertId() : false;
-
+    if ($existId > 0) {
+        $id = $existId;
+    } else {
+        $id = ($i) ? $db->lastInsertId() : false;
+    }
 	/* === Hook  === */
-	foreach (cot_getextplugins('trash.put.done') as $pl)
-	{
+	foreach (cot_getextplugins('trash.put.done') as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -163,31 +185,42 @@ function cot_trash_restore($id)
  */
 function cot_trash_delete($id)
 {
-	global $db, $db_trash;
 	$id = (int) $id;
+    if ($id < 1) {
+        return false;
+    }
+
 	/* === Hook  === */
-	foreach (cot_getextplugins('trash.delete.first') as $pl)
-	{
+	foreach (cot_getextplugins('trash.delete.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
-	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id=$id LIMIT 1");
-	if ($res = $tsql->fetch())
-//	{
-//		$db->delete($db_trash, "tr_id='".$res['tr_id']."'");
-//		$sql2 = $db->query("SELECT tr_id FROM $db_trash WHERE tr_parentid='".(int)$res['tr_id'] ."'");
-//		while ($row2 = $sql2->fetch())
-//		{
-//			cot_trash_delete($row2['tr_id']);
-//		}
-//		$sql2->closeCursor();
-//	}
+
+	$tsql = cot::$db->query(
+        'SELECT * FROM ' . cot::$db->quoteTableName(cot::$db->trash) . ' WHERE tr_id = ? LIMIT 1',
+        $id
+    );
+	if ($res = $tsql->fetch()) {
+		cot::$db->delete(cot::$db->trash, 'tr_id = ' . $res['tr_id']);
+
+		$sql2 = cot::$db->query('SELECT tr_id FROM ' . cot::$db->quoteTableName(cot::$db->trash) .
+            ' WHERE tr_parentid = ' . $res['tr_id']);
+		while ($row2 = $sql2->fetch()) {
+			cot_trash_delete($row2['tr_id']);
+		}
+		$sql2->closeCursor();
+
+        if (cot::$db->countRows(cot::$db->trash) == 0) {
+            cot::$db->query('TRUNCATE ' . cot::$db->quoteTableName(cot::$db->trash));
+        }
+    }
+
 	/* === Hook  === */
-	foreach (cot_getextplugins('trash.delete.done') as $pl)
-	{
+	foreach (cot_getextplugins('trash.delete.done') as $pl) {
 		include $pl;
 	}
 	/* ===== */
+
 	return true;
 }
 

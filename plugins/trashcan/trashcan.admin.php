@@ -49,30 +49,40 @@ foreach (cot_getextplugins('trashcan.admin.first') as $pl) {
 
 if ($a == 'wipe') {
 	cot_check_xg();
+
 	/* === Hook === */
 	foreach (cot_getextplugins('trashcan.admin.wipe') as $pl) {
 		include $pl;
 	}
 	/* ===== */
+
 	cot_trash_delete($id);
 	cot_message('adm_trashcan_deleted');
 	cot_redirect(cot_url('admin', 'm=other&p=trashcan', '', true));
 
-} elseif($a == 'wipeall') {
+} elseif ($a == 'wipeall') {
 	cot_check_xg();
+
 	/* === Hook === */
-	foreach (cot_getextplugins('trashcan.admin.wipeall') as $pl)
-	{
+	foreach (cot_getextplugins('trashcan.admin.wipeall') as $pl) {
 		include $pl;
 	}
 	/* ===== */
-	$sql = $db->query("TRUNCATE $db_trash");
 
-	cot_message('adm_trashcan_prune');
+    $sqlToPrune = cot::$db->query('SELECT tr_id FROM ' . cot::$db->quoteTableName(cot::$db->trash));
+    $pruned = 0;
+    while ($itemToPrune = $sqlToPrune->fetchColumn()) {
+        $pruned++;
+        cot_trash_delete($itemToPrune);
+    }
+    $sqlToPrune->closeCursor();
+
+    if ($pruned > 0) {
+        cot_message('adm_trashcan_prune');
+    }
 	cot_redirect(cot_url('admin', 'm=other&p=trashcan', '', true));
-}
-elseif($a == 'restore')
-{
+
+} elseif($a == 'restore') {
 	cot_check_xg();
 	/* === Hook === */
 	foreach (cot_getextplugins('trashcan.admin.restore') as $pl)
@@ -141,32 +151,34 @@ foreach ($sql->fetchAll() as $row)
 			break;
 	}
 
+    $trashcanWipeUrl = cot_url('admin', 'm=other&p=trashcan&a=wipe&id=' . $row['tr_id'] . '&d=' . $durl .
+        '&' . cot_xg());
 	$tr_t->assign(array(
 		'ADMIN_TRASHCAN_DATE' => cot_date('datetime_medium', $row['tr_date']),
 		'ADMIN_TRASHCAN_DATE_STAMP' => $row['tr_date'],
 		'ADMIN_TRASHCAN_TYPESTR_ICON' => $icon,
 		'ADMIN_TRASHCAN_TYPESTR' => $typestr,
 		'ADMIN_TRASHCAN_TITLE' => htmlspecialchars($row['tr_title']),
-		'ADMIN_TRASHCAN_TRASHEDBY' => ($row['tr_trashedby'] == 0) ? $L['System'] : cot_build_user($row['tr_trashedby'], htmlspecialchars($row['user_name'])),
-		'ADMIN_TRASHCAN_ROW_WIPE_URL' => cot_url('admin', 'm=other&p=trashcan&a=wipe&id='.$row['tr_id'].'&d='.$durl.'&'.cot_xg()),
-		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => cot_url('admin', 'm=other&p=trashcan&a=restore&id='.$row['tr_id'].'&d='.$durl.'&'.cot_xg()),
-		'ADMIN_TRASHCAN_ROW_INFO_URL' => cot_url('admin', 'm=other&p=trashcan&a=info&id='.$row['tr_id']),
+		'ADMIN_TRASHCAN_TRASHEDBY' => ($row['tr_trashedby'] == 0) ?
+            cot::$L['System'] : cot_build_user($row['tr_trashedby'], htmlspecialchars($row['user_name'])),
+		'ADMIN_TRASHCAN_ROW_WIPE_URL' => cot_confirm_url($trashcanWipeUrl, 'admin'),
+		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => cot_url('admin', 'm=other&p=trashcan&a=restore&id=' .
+            $row['tr_id'] . '&d=' . $durl . '&' . cot_xg()),
+		'ADMIN_TRASHCAN_ROW_INFO_URL' => cot_url('admin', 'm=other&p=trashcan&a=info&id=' . $row['tr_id']),
 		'ADMIN_TRASHCAN_ROW_RESTORE_ENABLED' => $enabled,
 	));
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
-	if($info)
-	{
+
+	if ($info) {
 		$adminpath[] = array(cot_url('admin', 'm=other&p=trashcan&a=info&id='.$id), $row['tr_title']);
 		$data = unserialize($row['tr_datas']);
-		{
-			foreach($data as $key => $val)
-			{
+		if (!empty($data)) {
+			foreach ($data as $key => $val) {
 				$tr_t->assign(array(
 					'ADMIN_TRASHCAN_INFO_ROW' => htmlspecialchars($key),
 					'ADMIN_TRASHCAN_INFO_VALUE' => $val,
@@ -178,16 +190,15 @@ foreach ($sql->fetchAll() as $row)
 	}
 	$tr_t->parse('MAIN.TRASHCAN_ROW');
 }
-if($ii == 0)
-{
+
+if ($ii == 0) {
 	$tr_t->parse('MAIN.TRASHCAN_EMPTY');
 }
 
-
-
+$trashcanWipeAllUrl = cot_url('admin', 'm=other&p=trashcan&a=wipeall&' . cot_xg());
 $tr_t->assign(array(
 	'ADMIN_TRASHCAN_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p=trashcan'),
-	'ADMIN_TRASHCAN_WIPEALL_URL' => cot_url('admin', 'm=other&p=trashcan&a=wipeall&'.cot_xg()),
+	'ADMIN_TRASHCAN_WIPEALL_URL' => cot_confirm_url($trashcanWipeAllUrl, 'admin'),
 	'ADMIN_TRASHCAN_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_TRASHCAN_PAGNAV' => $pagenav['main'],
 	'ADMIN_TRASHCAN_PAGINATION_NEXT' => $pagenav['next'],

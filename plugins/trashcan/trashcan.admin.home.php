@@ -15,14 +15,28 @@ Hooks=admin.home
 
 defined('COT_CODE') or die('Wrong URL');
 
-require_once cot_incfile('trashcan', 'plug');
-if ($cfg['plugin']['trashcan']['trash_prunedelay'] > 0)
-{
-	$timeago = $sys['now'] - ($cfg['plugin']['trashcan']['trash_prunedelay'] * 86400);
-	$sqltmp = $db->delete($db_trash, "tr_date < $timeago");
-	$deleted = $db->affectedRows;
-	if ($deleted > 0)
-	{
-		cot_log($deleted.' old item(s) removed from the trashcan, older than '.$cfg['plugin']['trashcan']['trash_prunedelay'].' days', 'adm');
+if (cot::$cfg['plugin']['trashcan']['trash_prunedelay'] > 0) {
+    require_once cot_incfile('trashcan', 'plug');
+
+	$timeago = cot::$sys['now'] - (cot::$cfg['plugin']['trashcan']['trash_prunedelay'] * 86400);
+
+    $sqlToPrune = cot::$db->query('SELECT tr_id FROM ' . cot::$db->quoteTableName(cot::$db->trash) .
+        ' WHERE tr_date < ?', $timeago);
+
+    $pruned = 0;
+    while ($itemToPrune = $sqlToPrune->fetchColumn()) {
+        $pruned++;
+        cot_trash_delete($itemToPrune);
+    }
+    $sqlToPrune->closeCursor();
+
+	if ($pruned > 0) {
+        /** @todo translate */
+        $prumedMsg = $pruned . ' old item(s) removed from the trashcan, older than ' .
+            cot::$cfg['plugin']['trashcan']['trash_prunedelay'] . ' days';
+
+        cot_message($prumedMsg);
+
+		cot_log($prumedMsg, 'adm');
 	}
 }

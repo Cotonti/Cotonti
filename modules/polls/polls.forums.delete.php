@@ -17,4 +17,8 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('polls', 'module');
 
-cot_poll_delete($q, 'forum');
+if (!empty($topicId)) {
+    cot_poll_delete($topicId, 'forum');
+} elseif (!empty($q)) {
+    cot_poll_delete($q, 'forum');
+}
