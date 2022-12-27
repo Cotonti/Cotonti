@@ -59,7 +59,6 @@ if ($a == 'update')
 	$ruserdelete = cot_import('ruserdelete','P','BOL');
 	if ($ruserdelete)
 	{
-
 		cot::$db->delete($db_users, "user_id=$id");
 		cot::$db->delete($db_groups_users, "gru_userid=$id");
 

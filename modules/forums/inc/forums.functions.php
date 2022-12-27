@@ -54,7 +54,7 @@ function cot_forums_buildpath($cat, $forumslink = true)
 }
 
 /**
- * Deletes outdated topics
+ * Deletes (outdated) topics
  *
  * @param string $mode Selection criteria
  * @param string $section Section
@@ -85,11 +85,12 @@ function cot_forums_prunetopics($mode, $section, $param)
 			break;
 	}
 
-	if ($sql1->rowCount() > 0)
-	{
-		foreach ($sql1->fetchAll() as $row1)
-		{
-			$q = $row1['ft_id'];
+	if ($sql1->rowCount() > 0) {
+		foreach ($sql1->fetchAll() as $topic) {
+            $topicId = $topic['ft_id'];
+
+            /** @todo For backward compatibility. Remove after 1.1.6 release  */
+			$q = $topic['ft_id'];
 
 			/* === Hook === */
 			foreach (cot_getextplugins('forums.functions.prunetopics') as $pl)
@@ -99,17 +100,17 @@ function cot_forums_prunetopics($mode, $section, $param)
 			/* ===== */
 
 			// Decrease postcount for users
-			foreach ($db->query("SELECT COUNT(*) AS cnt, fp_posterid FROM $db_forum_posts  WHERE fp_topicid=$q GROUP BY fp_posterid")->fetchAll() as $row2)
+			foreach (cot::$db->query("SELECT COUNT(*) AS cnt, fp_posterid FROM $db_forum_posts  WHERE fp_topicid=$q GROUP BY fp_posterid")->fetchAll() as $row2)
 			{
-				$db->query("UPDATE $db_users SET user_postcount = user_postcount - ? WHERE user_id = ?", array((int)$row2['cnt'], (int)$row2['fp_posterid']));
+                cot::$db->query("UPDATE $db_users SET user_postcount = user_postcount - ? WHERE user_id = ?", array((int)$row2['cnt'], (int)$row2['fp_posterid']));
 			}
 
-			$num += $db->delete($db_forum_posts, "fp_topicid=$q");
-			$num1 += $db->delete($db_forum_topics, "ft_id=$q");
+			$num += cot::$db->delete($db_forum_posts, "fp_topicid=$q");
+			$num1 += cot::$db->delete($db_forum_topics, "ft_id=$q");
 		}
 
-		$sql = $db->delete($db_forum_topics, "ft_movedto=$q");
-		$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-$num1, fs_postcount=fs_postcount-$num WHERE fs_cat=".$db->quote($section));
+		cot::$db->delete($db_forum_topics, "ft_movedto=$q");
+        cot::$db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-$num1, fs_postcount=fs_postcount-$num WHERE fs_cat=".$db->quote($section));
 	}
 	$num1 = ($num1 == '') ? '0' : $num1;
 	return($num1);
