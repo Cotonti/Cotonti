@@ -15,7 +15,10 @@ Hooks=admin.home
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (cot::$cfg['plugin']['trashcan']['trash_prunedelay'] > 0) {
+if (
+    cot::$cfg['plugin']['trashcan']['trash_prunedelay'] > 0 &&
+    (empty($_SESSION['trashcanAutoPruned']) || $_SESSION['trashcanAutoPruned'] < date('Y-m-d'))
+) {
     require_once cot_incfile('trashcan', 'plug');
 
 	$timeago = cot::$sys['now'] - (cot::$cfg['plugin']['trashcan']['trash_prunedelay'] * 86400);
@@ -36,7 +39,8 @@ if (cot::$cfg['plugin']['trashcan']['trash_prunedelay'] > 0) {
             cot::$cfg['plugin']['trashcan']['trash_prunedelay'] . ' days';
 
         cot_message($prumedMsg);
-
 		cot_log($prumedMsg, 'adm');
 	}
+
+    $_SESSION['trashcanAutoPruned'] = date('Y-m-d');
 }
