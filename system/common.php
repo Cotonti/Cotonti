@@ -9,9 +9,12 @@ defined('COT_CODE') or die('Wrong URL');
 
 /* ======== First... ======== */
 
-if (version_compare(PHP_VERSION, '6.0.0', '<=')) {
-	if (get_magic_quotes_gpc()) {
-		function cot_disable_mqgpc(&$value, $key) {
+if (version_compare(PHP_VERSION, '6.0.0', '<='))
+{
+	if (get_magic_quotes_gpc())
+	{
+		function cot_disable_mqgpc(&$value, $key)
+		{
 			$value = stripslashes($value);
 		}
 		$gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
@@ -19,15 +22,19 @@ if (version_compare(PHP_VERSION, '6.0.0', '<=')) {
 	}
 }
 define('MQGPC', FALSE);
-if ($cfg['display_errors']) {
+if ($cfg['display_errors'])
+{
 	error_reporting(E_ALL ^ E_NOTICE);
 	ini_set('display_errors', 1);
-} else {
+}
+else
+{
 	error_reporting(0);
 	ini_set('display_errors', 0);
 }
 
-if ($cfg['debug_mode']) {
+if ($cfg['debug_mode'])
+{
 	require_once $cfg['system_dir'].'/debug.php';
 }
 
@@ -46,12 +53,13 @@ $sys['site_id'] = $site_id;
 $url = parse_url($cfg['mainurl']);
 
 $sys['scheme'] = 'http';
-if(strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') !== false ||
+if (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') !== false ||
     (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ||
     (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ||
-    (!empty($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT'] == 443))
+    (!empty($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT'] == 443)
+)
 {
-    $sys['scheme'] = 'https';
+	$sys['scheme'] = 'https';
 }
 $sys['secure'] = $sys['scheme'] == 'https' ? true : false;
 
@@ -59,13 +67,16 @@ $sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
 if ($_SERVER['HTTP_HOST'] == $url['host']
 	|| $cfg['multihost']
 	|| $_SERVER['HTTP_HOST'] != 'www.' . $sys['domain']
-		&& preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']))
+	&& preg_match('`^.+\.'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST'])
+)
 {
 	$sys['host'] = preg_match('#^[\w\p{L}\.\-]+(:\d+)?$#u', $_SERVER['HTTP_HOST']) ? preg_replace('#^([\w\p{L}\.\-]+)(:\d+)?$#u', '$1', $_SERVER['HTTP_HOST']) : $url['host'];
 	$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
 	$sys['port'] = $_SERVER['SERVER_PORT'];
 
-} else {
+}
+else
+{
 	$sys['host'] = $url['host'];
 	$sys['port'] = isset($url['port']) ? $url['port'] : '';
 }
@@ -73,9 +84,10 @@ $def_port = $sys['secure'] ? 443 : 80;
 $sys['port'] = ($sys['port'] == $def_port) ? '' : $sys['port'];
 
 $sys['site_uri'] = '/';
-if(!empty($url['path'])) {
-    $sys['site_uri'] = $url['path'];
-    if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+if (!empty($url['path']))
+{
+	$sys['site_uri'] = $url['path'];
+	if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
 }
 
 define('COT_SITE_URI', $sys['site_uri']);
@@ -95,40 +107,48 @@ session_start();
 cot_unregister_globals();
 
 /* =========== Early page cache ==========*/
-if ($cfg['cache'] && !$cfg['debug_mode']) {
+if ($cfg['cache'] && !$cfg['debug_mode'])
+{
 	require_once !empty($cfg['custom_cache']) ? $cfg['custom_cache'] : $cfg['system_dir'].'/cache.php';
 	$cache = new Cache();
 
 	if ($_SERVER['REQUEST_METHOD'] == 'GET' && !cot_import($sys['site_id'], 'COOKIE', 'ALP')
-        && empty($_SESSION[$sys['site_id']]) && !defined('COT_AUTH') && !defined('COT_ADMIN')
-        && !defined('COT_INSTALL') && !defined('COT_MESSAGE'))
+		&& empty($_SESSION[$sys['site_id']]) && !defined('COT_AUTH') && !defined('COT_ADMIN')
+		&& !defined('COT_INSTALL') && !defined('COT_MESSAGE')
+	)
 	{
 		$ext = cot_import('e', 'G', 'ALP');
 		$cache_ext = !$ext ? 'index' : preg_replace('#\W#', '', $ext);
-		if (isset($cfg['cache_' . $cache_ext]) && $cfg['cache_' . $cache_ext]) {
+		if (isset($cfg['cache_' . $cache_ext]) && $cfg['cache_' . $cache_ext])
+		{
 			$cache->page->init($cache_ext, $cfg['defaulttheme']);
 			$cache->page->read();
 		}
 	}
-} else {
+}
+else
+{
 	$cache = false;
 }
 
 /* ======== Connect to the SQL DB======== */
 
 require_once $cfg['system_dir'].'/database.php';
-try {
-    $db = new CotDB([
-        'host' => $cfg['mysqlhost'],
-        'port' => !empty($cfg['mysqlport']) ? $cfg['mysqlport'] : null,
-        'tablePrefix' => $db_x,
-        'user' => $cfg['mysqluser'],
-        'password' => $cfg['mysqlpassword'],
-        'dbName' => $cfg['mysqldb'],
-        'charset' => !empty($cfg['mysqlcharset']) ? $cfg['mysqlcharset'] : null,
-        'collate' => !empty($cfg['mysqlcollate']) ? $cfg['mysqlcollate'] : null,
-    ]);
-} catch (PDOException $e) {
+try
+{
+	$db = new CotDB([
+		'host' => $cfg['mysqlhost'],
+		'port' => !empty($cfg['mysqlport']) ? $cfg['mysqlport'] : null,
+		'tablePrefix' => $db_x,
+		'user' => $cfg['mysqluser'],
+		'password' => $cfg['mysqlpassword'],
+		'dbName' => $cfg['mysqldb'],
+		'charset' => !empty($cfg['mysqlcharset']) ? $cfg['mysqlcharset'] : null,
+		'collate' => !empty($cfg['mysqlcollate']) ? $cfg['mysqlcollate'] : null,
+	]);
+}
+catch (PDOException $e)
+{
 	cot_diefatal('Could not connect to database !<br />
 		Please check your settings in the file datas/config.php<br />
 		MySQL error : '.$e->getMessage());
@@ -141,24 +161,37 @@ cot::init();
 $cache && $cache->init();
 
 /* ======== Configuration settings ======== */
-if (!isset($cot_cfg)) {
+if (!isset($cot_cfg))
+{
     $cot_cfg = null;
 }
-if ($cache && $cot_cfg) {
+if ($cache && $cot_cfg)
+{
 	$cfg = array_merge($cot_cfg, $cfg);
-} else {
+}
+else
+{
 	// Part 1: Load main configuration
 	$sql_config = $db->query("SELECT * FROM $db_config");
-	while ($row = $sql_config->fetch()) {
-		if ($row['config_owner'] == 'core') {
+	while ($row = $sql_config->fetch())
+	{
+		if ($row['config_owner'] == 'core')
+		{
 			$cfg[$row['config_name']] = $row['config_value'];
-		} elseif ($row['config_owner'] == 'module') {
-			if (empty($row['config_subcat'])) {
+		}
+		elseif ($row['config_owner'] == 'module')
+		{
+			if (empty($row['config_subcat']))
+			{
 				$cfg[$row['config_cat']][$row['config_name']] = $row['config_value'];
-			} else {
+			}
+			else
+			{
 				$cfg[$row['config_cat']]['cat_' . $row['config_subcat']][$row['config_name']] = $row['config_value'];
 			}
-		} else {
+		}
+		else
+		{
 			$cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value'];
 		}
 	}
@@ -182,7 +215,9 @@ else
 	$usr['ip'] = $_SERVER['REMOTE_ADDR'];
 }
 
-if (!preg_match('#^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$#', $usr['ip']) && !preg_match('#^(((?=(?>.*?(::))(?!.+\3)))\3?|([\dA-F]{1,4}(\3|:(?!$)|$)|\2))(?4){5}((?4){2}|(25[0-5]|(2[0-4]|1\d|[1-9])?\d)(\.(?7)){3})\z#i', $usr['ip']))
+if (!preg_match('#^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$#', $usr['ip'])
+    && !preg_match('#^(((?=(?>.*?(::))(?!.+\3)))\3?|([\dA-F]{1,4}(\3|:(?!$)|$)|\2))(?4){5}((?4){2}|(25[0-5]|(2[0-4]|1\d|[1-9])?\d)(\.(?7)){3})\z#i', $usr['ip'])
+)
 {
 	$usr['ip'] = '0.0.0.0';
 }
@@ -209,55 +244,68 @@ $extensions = [];
 if (
     (empty($cot_plugins) && !defined('COT_INSTALL')) ||
     empty($cot_modules)
-) {
-    $extensions = cot::$db->query("SELECT * FROM " . cot::$db->core . " WHERE ct_state = 1 AND ct_lock = 0")
-        ->fetchAll();
+)
+{
+    $extensions = cot::$db->query("SELECT * FROM " . cot::$db->core . " WHERE ct_state = 1 AND ct_lock = 0")->fetchAll();
 }
-if (empty($cot_plugins) && !defined('COT_INSTALL')) {
+if (empty($cot_plugins) && !defined('COT_INSTALL'))
+{
 	$sql = cot::$db->query("SELECT pl_code, pl_file, pl_hook, pl_module, pl_title FROM " . cot::$db->plugins .
-        " WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
+	" WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
 
-    $cot_plugins = [];
+	$cot_plugins = [];
 
-    /**
-     * @var array<string, bool> $cot_plugins_active
-     * @deprecated use $cot_plugins_enabled instead
-     */
+	/**
+	* @var array<string, bool> $cot_plugins_active
+	* @deprecated use $cot_plugins_enabled instead
+	*/
 	$cot_plugins_active = [];
 
-	if ($sql->rowCount() > 0) {
-		while ($row = $sql->fetch()) {
+	if ($sql->rowCount() > 0)
+	{
+		while ($row = $sql->fetch())
+		{
 			$cot_plugins[$row['pl_hook']][] = $row;
 		}
 	}
-    $sql->closeCursor();
+	$sql->closeCursor();
 
-    if (!empty($extensions)) {
-        foreach ($extensions as $row) {
-            if ($row['ct_plug']) {
-                $cot_plugins_active[$row['ct_code']] = true;
-            }
-        }
-    }
+	if (!empty($extensions))
+	{
+		foreach ($extensions as $row)
+		{
+			if ($row['ct_plug'])
+			{
+				$cot_plugins_active[$row['ct_code']] = true;
+			}
+		}
+	}
 
-    if (!empty(cot::$cache)) {
-        cot::$cache->db->store('cot_plugins', $cot_plugins, 'system');
-        cot::$cache->db->store('cot_plugins_active', $cot_plugins_active, 'system');
-    }
+	if (!empty(cot::$cache))
+	{
+		cot::$cache->db->store('cot_plugins', $cot_plugins, 'system');
+		cot::$cache->db->store('cot_plugins_active', $cot_plugins_active, 'system');
+	}
 }
 
-if (empty($cot_modules)) {
-    $cot_plugins_enabled = [];
-    $cot_modules = [];
-    if (!empty($extensions)) {
-        foreach ($extensions as $row) {
-			if ($row['ct_plug']) {
+if (empty($cot_modules))
+{
+	$cot_plugins_enabled = [];
+	$cot_modules = [];
+	if (!empty($extensions))
+	{
+		foreach ($extensions as $row)
+		{
+			if ($row['ct_plug'])
+			{
 				$cot_plugins_enabled[$row['ct_code']] = array(
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],
 					'version' => $row['ct_version']
 				);
-			} else {
+			}
+			else
+			{
 				$cot_modules[$row['ct_code']] = array(
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],
@@ -267,10 +315,11 @@ if (empty($cot_modules)) {
 		}
 	}
 
-    if (!empty(cot::$cache)) {
-        cot::$cache->db->store('cot_modules', $cot_modules, 'system');
-        cot::$cache->db->store('cot_plugins_enabled', $cot_plugins_enabled, 'system');
-    }
+	if (!empty(cot::$cache))
+	{
+		cot::$cache->db->store('cot_modules', $cot_modules, 'system');
+		cot::$cache->db->store('cot_plugins_enabled', $cot_plugins_enabled, 'system');
+	}
 }
 unset($extensions);
 
@@ -289,11 +338,14 @@ ob_start('cot_outputfilters');
 
 /* ======== Groups ======== */
 
-if (empty($cot_groups )) {
+if (empty($cot_groups ))
+{
 	$sql = $db->query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
 
-	if ($sql->rowCount() > 0) {
-		while ($row = $sql->fetch()) {
+	if ($sql->rowCount() > 0)
+	{
+		while ($row = $sql->fetch())
+		{
 			$cot_groups[$row['grp_id']] = array(
 				'id' => $row['grp_id'],
 				'alias' => $row['grp_alias'],
@@ -312,8 +364,9 @@ if (empty($cot_groups )) {
 			);
 		}
 		$sql->closeCursor();
-
-    } else {
+	}
+	else
+	{
 		cot_diefatal('No groups found.'); // TODO: Need translate
 	}
 
@@ -334,26 +387,29 @@ $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
 $csid = cot_import($sys['site_id'], 'COOKIE', 'TXT');
-if (!empty($csid) || !empty($_SESSION[$sys['site_id']])) {
+if (!empty($csid) || !empty($_SESSION[$sys['site_id']]))
+{
 	$u = empty($_SESSION[$sys['site_id']]) ?
         explode(':', base64_decode($csid)) : explode(':', base64_decode($_SESSION[$sys['site_id']]));
 	$u_id = (int) cot_import($u[0], 'D', 'INT');
 	$u_sid = $u[1];
-	if ($u_id > 0) {
+	if ($u_id > 0)
+	{
 		$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $u_id");
-		if ($row = $sql->fetch()) {
-			if (
-                $u_sid == hash_hmac('sha1', $row['user_sid'], $cfg['secret_key']) &&
-                (
-                    $row['user_maingrp'] > 3 ||
-                    (
-                        $row['user_maingrp'] == COT_GROUP_INACTIVE && isset($cfg['users']['inactive_login']) &&
-                        $cfg['users']['inactive_login']
-                    )
-                ) &&
+		if ($row = $sql->fetch())
+		{
+			if ($u_sid == hash_hmac('sha1', $row['user_sid'], $cfg['secret_key']) &&
+				(
+				    $row['user_maingrp'] > 3 ||
+				    (
+					$row['user_maingrp'] == COT_GROUP_INACTIVE && isset($cfg['users']['inactive_login']) &&
+					$cfg['users']['inactive_login']
+				    )
+				) &&
 				($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip']) &&
-                ($row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now'])
-            ) {
+                		($row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now'])
+            		)
+			{
 				$usr['id'] = (int) $row['user_id'];
 				$usr['name'] = $row['user_name'];
 				$usr['maingrp'] = $row['user_maingrp'];
@@ -372,13 +428,16 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']])) {
 
 				$sys['xk'] = $row['user_token'];
 
-				if (!isset($_SESSION['cot_user_id'])) {
+				if (!isset($_SESSION['cot_user_id']))
+				{
 					$_SESSION['cot_user_id'] = $usr['id'];
 				}
 
-				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now']) {
+				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now'])
+				{
 					$sys['comingback'] = TRUE;
-					if ($usr['lastlog'] > $usr['lastvisit']) {
+					if ($usr['lastlog'] > $usr['lastvisit'])
+					{
 						$usr['lastvisit'] = $usr['lastlog'];
 						$user_log['user_lastvisit'] = $usr['lastvisit'];
 					}
@@ -390,7 +449,8 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']])) {
 					$user_log['user_token'] = $token;
 				}
 
-				if (!$cfg['authcache'] || empty($row['user_auth'])) {
+				if (!$cfg['authcache'] || empty($row['user_auth']))
+				{
 					$usr['auth'] = cot_auth_build($usr['id'], $usr['maingrp']);
 					$cfg['authcache'] && $user_log['user_auth'] = serialize($usr['auth']);
 				}
@@ -403,27 +463,32 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']])) {
 		}
 	}
 
-    // User can't log in, destroy authorization cookie and session data
-	if ($usr['id'] == 0) {
-        if (!empty($csid)) {
-            cot_setcookie(
-                $sys['site_id'],
-                '',
-                time() - 63072000,
-                $cfg['cookiepath'],
-                $cfg['cookiedomain'],
-                $sys['secure'],
-                true
-            );
-        }
-        if (isset($_SESSION[$sys['site_id']])) {
+	// User can't log in, destroy authorization cookie and session data
+	if ($usr['id'] == 0)
+	{
+        	if (!empty($csid))
+		{
+			cot_setcookie(
+				$sys['site_id'],
+				'',
+				time() - 63072000,
+				$cfg['cookiepath'],
+				$cfg['cookiedomain'],
+				$sys['secure'],
+				true
+			);
+        	}
+        if (isset($_SESSION[$sys['site_id']]))
+	{
             unset($_SESSION[$sys['site_id']]);
         }
     }
 }
 
-if ($usr['id'] == 0) {
-	if (empty($cot_guest_auth)) {
+if ($usr['id'] == 0)
+{
+	if (empty($cot_guest_auth))
+	{
 		$cot_guest_auth = cot_auth_build(0);
 		$cache && $cache->db->store('cot_guest_auth', $cot_guest_auth, 'system');
 	}
@@ -438,32 +503,42 @@ if ($usr['id'] == 0) {
 
 $lang = $usr['lang'];
 
-if (defined('COT_MESSAGE') && isset($_SESSION['s_run_admin']) && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R')) {
+if (defined('COT_MESSAGE') && isset($_SESSION['s_run_admin']) && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R'))
+{
 	define('COT_ADMIN', TRUE);
-} else {
+}
+else
+{
 	$_SESSION['s_run_admin'] = defined('COT_ADMIN');
 }
 
 /* ======== Category Structure ======== */
-if (empty($structure)) {
+if (empty($structure))
+{
 	require_once cot_incfile('extrafields');
 	cot_load_structure();
 	$cache && $cache->db->store('structure', $structure, 'system');
 }
 $cot_cat = &$structure['page'];
 
-if (!$cache || !$cot_cfg) {
+if (!$cache || !$cot_cfg)
+{
 	// Fill missing options with default values
-	foreach ($structure as $module => $mod_struct) {
+	foreach ($structure as $module => $mod_struct)
+	{
 		if (
-            isset($cfg[$module]['cat___default']) &&
-            isset($mod_struct) &&
-            is_array($cfg[$module]['cat___default']) &&
-            is_array($mod_struct)
-        ) {
-			foreach ($mod_struct as $cat => $row) {
-				foreach ($cfg[$module]['cat___default'] as $key => $val) {
-					if (!isset($cfg[$module]['cat_' . $cat][$key])) {
+		    isset($cfg[$module]['cat___default']) &&
+		    isset($mod_struct) &&
+		    is_array($cfg[$module]['cat___default']) &&
+		    is_array($mod_struct)
+        	)
+		{
+			foreach ($mod_struct as $cat => $row)
+			{
+				foreach ($cfg[$module]['cat___default'] as $key => $val)
+				{
+					if (!isset($cfg[$module]['cat_' . $cat][$key]))
+					{
 						$cfg[$module]['cat_' . $cat][$key] = $val;
 					}
 				}
@@ -477,7 +552,8 @@ if (!$cache || !$cot_cfg) {
 unset($cot_cfg);
 
 /* === Hook === */
-foreach (cot_getextplugins('input') as $pl) {
+foreach (cot_getextplugins('input') as $pl)
+{
 	include $pl;
 }
 /* ======================== */
@@ -485,24 +561,29 @@ foreach (cot_getextplugins('input') as $pl) {
 
 /* ======== Maintenance mode ======== */
 
-if ($cfg['maintenance'] && !defined('COT_INSTALL')) {
+if ($cfg['maintenance'] && !defined('COT_INSTALL'))
+{
 	$sqll = $db->query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
 	$roow = $sqll->fetch();
 
-	if (!$roow['grp_maintenance'] && !defined('COT_AUTH')) {
+	if (!$roow['grp_maintenance'] && !defined('COT_AUTH'))
+	{
 		cot_redirect(cot_url('login'));
 	}
 }
 
 /* ======== Anti-hammering =========*/
 
-if ($cfg['shieldenabled'] &&
-	($usr['id'] == 0 || !cot_auth('admin', 'a', 'A') || $cfg['shield_force']))
+if ($cfg['shieldenabled'] && ($usr['id'] == 0 || !cot_auth('admin', 'a', 'A') || $cfg['shield_force']))
 {
-	$shield_limit = $_SESSION['online_shield'];
-	$shield_action = $_SESSION['online_action'];
-	$shield_hammer = cot_shield_hammer($_SESSION['online_hammer'], $shield_action, $_SESSION['online_lastseen']);
-	$sys['online_hammer'] = $shield_hammer;
+	$shield_limit = isset($_SESSION['online_shield']) ? $_SESSION['online_shield'] : 0;
+	$shield_action = isset($_SESSION['online_action']) ? $_SESSION['online_action'] : '';
+	$shield_hammer = cot_shield_hammer(
+		isset($_SESSION['online_hammer']) ? $_SESSION['online_hammer'] : 0,
+		$shield_action,
+		isset($_SESSION['online_lastseen']) ? $_SESSION['online_lastseen'] : 0
+	);
+	$_SESSION['online_hammer'] = $sys['online_hammer'] = $shield_hammer;
 	$_SESSION['online_lastseen'] = (int)$sys['now'];
 }
 
@@ -518,7 +599,7 @@ $b = cot_import('b', 'G', 'ALP', 24);
 require_once cot_langfile('main', 'core');
 require_once cot_langfile('users', 'core');
 
-if(defined('COT_ADMIN'))
+if (defined('COT_ADMIN'))
 {
 	require_once cot_langfile('admin', 'core');
 }
@@ -549,24 +630,31 @@ if (!file_exists($mtheme))
 $cfg['admintheme'] = !empty($cfg['admintheme']) ? $cfg['admintheme'] : '';
 
 $usr['def_theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.en.lang.php";
-if (defined('COT_ADMIN')) {
+if (defined('COT_ADMIN'))
+{
     $usr['def_theme_lang'] = '';
-    if (!empty($cfg['admintheme'])) {
+    if (!empty($cfg['admintheme']))
+    {
         $usr['def_theme_lang'] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.en.lang.php";
     }
 }
 
 $usr['theme_lang'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.{$usr['lang']}.lang.php";
-if (defined('COT_ADMIN')) {
+if (defined('COT_ADMIN'))
+{
     $usr['theme_lang'] = '';
-    if (!empty($cfg['admintheme'])) {
+    if (!empty($cfg['admintheme']))
+    {
         $usr['theme_lang'] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.{$usr['lang']}.lang.php";
     }
 }
 
-if (!empty($usr['theme_lang']) && $usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang'])) {
+if (!empty($usr['theme_lang']) && $usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
+{
 	require_once $usr['theme_lang'];
-} elseif (!empty($usr['def_theme_lang']) && @file_exists($usr['def_theme_lang'])) {
+}
+elseif (!empty($usr['def_theme_lang']) && @file_exists($usr['def_theme_lang']))
+{
 	require_once $usr['def_theme_lang'];
 }
 
@@ -576,25 +664,29 @@ $scheme = $usr['scheme'];
 // Resource strings
 require_once $cfg['system_dir'].'/resources.rc.php';
 
-if (defined('COT_ADMIN')) {
+if (defined('COT_ADMIN'))
+{
 	require_once cot_incfile('admin', 'module', 'resources');
 }
 
 // Theme resources
 $sys['theme_resources'] = "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.php";
-if (defined('COT_ADMIN')) {
-    $sys['theme_resources'] = '';
-    if (!empty($cfg['admintheme'])) {
-        $sys['theme_resources'] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.php";
-    }
+if (defined('COT_ADMIN'))
+{
+	$sys['theme_resources'] = '';
+	if (!empty($cfg['admintheme']))
+	{
+		$sys['theme_resources'] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/{$cfg['admintheme']}.php";
+	}
 }
 
-if (!empty($sys['theme_resources']) && file_exists($sys['theme_resources'])) {
+if (!empty($sys['theme_resources']) && file_exists($sys['theme_resources']))
+{
 	$L_tmp = $L;
 	$R_tmp = $R;
 	include $sys['theme_resources'];
 	// Save overridden strings in $theme_reload global
-    // Todo more right way
+	// Todo more right way
 	$theme_reload['L'] = @array_diff_assoc($L,$L_tmp);
 	$theme_reload['R'] = @array_diff_assoc($R,$R_tmp);
 	unset($L_tmp, $R_tmp);
@@ -643,27 +735,33 @@ if (empty($x) && $_SERVER['REQUEST_METHOD'] == 'POST')
 $referer = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST'
 	&& !defined('COT_NO_ANTIXSS') && (!defined('COT_AUTH')
-			&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev'])
-		|| ($cfg['referercheck'] && !preg_match('`https?://([^/]+\.)?'.preg_quote($sys['domain']).'(/|:|$)`i', $referer)))
-) {
+	&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev'])
+	|| ($cfg['referercheck'] && !preg_match('`https?://([^/]+\.)?'.preg_quote($sys['domain']).'(/|:|$)`i', $referer)))
+)
+{
 	$cot_error = true;
 	cot_die_message(950, TRUE, '', '', $referer);
 }
 
 /* ============ Head Resources ===========*/
-if(!COT_AJAX) {
+if (!COT_AJAX)
+{
 	// May Be move it to header.php?
-	if (!isset($cot_rc_html[$theme]) || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMIN')) {
+	if (!isset($cot_rc_html[$theme]) || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMIN'))
+	{
 		// Load standard resources
 		cot_rc_add_standard();
 
 		// Invoke rc handlers
-		foreach (cot_getextplugins('rc') as $pl) {
+		foreach (cot_getextplugins('rc') as $pl)
+		{
 			include $pl;
 		}
 	}
-	if (!defined('COT_ADMIN')) {
-		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php")) {
+	if (!defined('COT_ADMIN'))
+	{
+		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php"))
+		{
 			include "{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php";
 		}
 	}
@@ -678,7 +776,7 @@ if (class_exists('XTemplate'))
 		'cache_dir'    => $cfg['cache_dir'],
 		'cleanup'      => $cfg['html_cleanup'],
 		'debug'        => $cfg['debug_mode'],
-        'debug_output' => isset($_GET['tpl_debug']) ? (bool)$_GET['tpl_debug'] : false
+		'debug_output' => isset($_GET['tpl_debug']) ? (bool)$_GET['tpl_debug'] : false
 	));
 }
 
