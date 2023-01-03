@@ -214,92 +214,92 @@ function cot_parse_bbcode($text)
 {
 	global $cfg, $cot_bbcodes, $cot_bbcode_containers, $sys, $cot_smilies, $L, $usr;
 
-	$code = array();
-	$unique_seed = $sys['unique'];
+	$code = [];
+	$unique_seed = cot::$sys['unique'];
 	$ii = 10000;
 
 	$text = htmlspecialchars($text);
 	cot::$cfg['plugin']['bbcode']['parse_autourls'] && $text = cot_parse_autourls($text);
 
-	$parse_smilies = $cfg['plugin']['bbcode']['smilies'];
+	$parse_smilies = cot::$cfg['plugin']['bbcode']['smilies'];
 
-	if ($parse_smilies && is_array($cot_smilies))
-	{
-		foreach($cot_smilies as $k => $v)
-		{
+	if ($parse_smilies && is_array($cot_smilies)) {
+		foreach ($cot_smilies as $k => $v) {
 			$ii++;
 			$key = '**'.$ii.$unique_seed.'**';
-			$code[$key]= '<img class="aux smiley" src="./images/smilies/'.$v['file'].'" alt="'.htmlspecialchars($v['code']).'" />';
-			$text = preg_replace('#(^|\s)'.preg_quote($v['code']).'(\s|$)#', '$1'.$key.'$2', $text);
-			if (htmlspecialchars($v['code']) != $v['code'])
-			{
+			$code[$key]= '<img class="aux smiley" src="./images/smilies/' . $v['file'] . '" alt="' .
+                htmlspecialchars($v['code']).'" />';
+			$text = preg_replace(
+                '#(^|\s)' . preg_quote($v['code']) . '(\s|$)#',
+                '$1' . $key . '$2',
+                $text
+            );
+			if (htmlspecialchars($v['code']) != $v['code']) {
 				// Fix for cc inserts
-				$text = preg_replace('#(^|\s)'.preg_quote(htmlspecialchars($v['code'])).'(\s|$)#', '$1'.$key.'$2', $text);
+				$text = preg_replace(
+                    '#(^|\s)' . preg_quote(htmlspecialchars($v['code'])) . '(\s|$)#',
+                    '$1' . $key . '$2',
+                    $text
+                );
 			}
 		}
 	}
 
 	// BB auto-close
 	$bbc = array();
-	if (preg_match_all('#\[(/)?('.$cot_bbcode_containers.')(=[^\]]*)?\]#i', $text, $mt, PREG_SET_ORDER))
-	{
+	if (preg_match_all(
+        '#\[(/)?(' . $cot_bbcode_containers . ')(=[^\]]*)?\]#i',
+        $text,
+        $mt,
+        PREG_SET_ORDER
+    )) {
 		$cdata = '';
 		// Count all unclosed bbcode entries
-		for ($i = 0, $cnt = count($mt); $i < $cnt; $i++)
-		{
-				$bb = mb_strtolower($mt[$i][2]);
-				if ($mt[$i][1] == '/')
-				{
-					if (empty($cdata))
-					{
-						// Protect from "[/foo] [/bar][foo][bar]" trick
-						if (isset($bbc[$bb]) && $bbc[$bb] > 0) $bbc[$bb]--;
-						// else echo 'ERROR: invalid closing bbcode detected';
-					}
-					elseif ($bb == $cdata)
-					{
-						isset($bbc[$bb]) ? $bbc[$bb]-- : $bbc[$bb] = 0;
-						$cdata = '';
-					}
-				}
-				elseif (empty($cdata))
-				{
-					// Count opening tag in
-					isset($bbc[$bb]) ? $bbc[$bb]++ : $bbc[$bb] = 1;
-					if ($bb == 'code' || $bb == 'highlight')
-					{
-						// Ignore bbcodes in constant data
-						$cdata = $bb;
-					}
-				}
+		for ($i = 0, $cnt = count($mt); $i < $cnt; $i++) {
+            $bb = mb_strtolower($mt[$i][2]);
+            if ($mt[$i][1] == '/') {
+                if (empty($cdata)) {
+                    // Protect from "[/foo] [/bar][foo][bar]" trick
+                    $bbc[$bb] = !empty($bbc[$bb]) ? $bbc[$bb] - 1 : 0;
+                    // else echo 'ERROR: invalid closing bbcode detected';
+                } elseif ($bb == $cdata) {
+                    $bbc[$bb] = !empty($bbc[$bb]) ? $bbc[$bb] - 1 : 0;
+                    $cdata = '';
+                }
+
+            } elseif (empty($cdata)) {
+                // Count opening tag in
+                $bbc[$bb] = !empty($bbc[$bb]) ? $bbc[$bb] + 1 : 1;
+                if ($bb == 'code' || $bb == 'highlight') {
+                    // Ignore bbcodes in constant data
+                    $cdata = $bb;
+                }
+            }
 		}
 		// Close all unclosed tags. Produces non XHTML-compliant output
 		// (doesn't take tag order and semantics into account) but fixes the layout
-		if (count($bbc) > 0)
-		{
-			foreach($bbc as $bb => $c)
-			{
+		if (count($bbc) > 0) {
+			foreach ($bbc as $bb => $c) {
 				$text .= str_repeat("[/$bb]", $c);
 			}
 		}
 	}
+
 	// Done, ready to parse bbcodes
 	$cnt = count($cot_bbcodes);
-	for ($i = 0; $i < $cnt; $i++)
-	{
+	for ($i = 0; $i < $cnt; $i++) {
 		$bbcode = $cot_bbcodes[$i];
-		switch($bbcode['mode'])
-		{
+		switch ($bbcode['mode']) {
 			case 'str':
 				$text = str_ireplace($bbcode['pattern'], $bbcode['replacement'], $text);
 			break;
 
 			case 'pcre':
-				$text = preg_replace('`'.$bbcode['pattern'].'`mis', $bbcode['replacement'], $text);
+				$text = preg_replace('`' . $bbcode['pattern'] . '`mis', $bbcode['replacement'], $text);
 			break;
 
 			case 'callback':
-                $text = preg_replace_callback('`'.$bbcode['pattern'].'`mis', function ($input) use ($bbcode) {
+                $text = preg_replace_callback('`' . $bbcode['pattern'] . '`mis', function ($input) use ($bbcode) {
                     global $cfg, $sys, $usr, $L, $theme, $cot_groups;
                     eval($bbcode['replacement']);
                 }, $text);
@@ -310,11 +310,14 @@ function cot_parse_bbcode($text)
 	$text = nl2br($text);
 	$text = str_replace("\r", '', $text);
 	// Strip extraneous breaks
-	$text = preg_replace('#<(/?)(p|hr|ul|ol|li|blockquote|table|tr|td|th|div|h1|h2|h3|h4|h5)(.*?)>(\s*)<br />#', '<$1$2$3>', $text);
+	$text = preg_replace(
+        '#<(/?)(p|hr|ul|ol|li|blockquote|table|tr|td|th|div|h1|h2|h3|h4|h5)(.*?)>(\s*)<br />#',
+        '<$1$2$3>',
+        $text
+    );
 	$text = preg_replace_callback('#<pre[^>]*>(.+?)</pre>#sm', 'cot_bbcode_parse_pre', $text);
 
-	foreach ($code as $x => $y)
-	{
+	foreach ($code as $x => $y) {
 		$text = str_replace($x, $y, $text);
 	}
 

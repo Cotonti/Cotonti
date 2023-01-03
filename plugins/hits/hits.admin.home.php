@@ -20,18 +20,18 @@ global $Ls;
 require_once cot_langfile('hits', 'plug');
 require_once cot_incfile('hits', 'plug');
 
-$timeback_interval = cot::$cfg['plugin']['hits']['timeback'] ? cot::$cfg['plugin']['hits']['timeback'] : 7;
+$timeback_interval = isset(cot::$cfg['plugin']['hits']['timeback']) ? cot::$cfg['plugin']['hits']['timeback'] : 7;
 $timeback_interval_str = cot_declension($timeback_interval, $Ls['Days']);
 
 $tt = new XTemplate(cot_tplfile('hits.admin.home', 'plug', true));
 //Show hit stats
 // INFO: `disablehitstats` var not actually defined in setup file now, but may be used (had been set) by another extension
-if (!isset(cot::$cfg['plugin']['hits']['disablehitstats']) || !cot::$cfg['plugin']['hits']['disablehitstats'])
-{
+if (!isset(cot::$cfg['plugin']['hits']['disablehitstats']) || !cot::$cfg['plugin']['hits']['disablehitstats']) {
 	$hits_d = array();
-	$sql = cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT ".$timeback_interval);
-	while ($row = $sql->fetch())
-	{
+	$sql = cot::$db->query(
+        "SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT " . $timeback_interval
+    );
+	while ($row = $sql->fetch()) {
 		$year = mb_substr($row['stat_name'], 0, 4);
 		$mons = mb_substr($row['stat_name'], 5, 2);
 		$day = mb_substr($row['stat_name'], 8, 2);
@@ -40,12 +40,10 @@ if (!isset(cot::$cfg['plugin']['hits']['disablehitstats']) || !cot::$cfg['plugin
 	}
 	$sql->closeCursor();
 
-	if (!empty($hits_d))
-	{
+	if (!empty($hits_d)) {
 		$hits_d_max = max($hits_d);
 
-		foreach ($hits_d as $day => $hits)
-		{
+		foreach ($hits_d as $day => $hits) {
 			$percentbar = floor(($hits / $hits_d_max) * 100);
 			$tt->assign(array(
 				'ADMIN_HOME_DAY' => $day,
@@ -61,13 +59,11 @@ if (!isset(cot::$cfg['plugin']['hits']['disablehitstats']) || !cot::$cfg['plugin
 }
 
 //Show activity stats
-if (!cot::$cfg['plugin']['hits']['disableactivitystats'])
-{
+if (!cot::$cfg['plugin']['hits']['disableactivitystats']) {
 	$timeback = cot::$sys['now'] - ($timeback_interval * 86400);
 
 	$newpages = 0;
-	if (cot_module_active('page'))
-	{
+	if (cot_module_active('page')) {
 		require_once cot_incfile('page', 'module');
 		$sql = cot::$db->query("SELECT COUNT(*) FROM $db_users WHERE user_regdate > $timeback");
 		$newusers = $sql->fetchColumn();
@@ -78,8 +74,7 @@ if (!cot::$cfg['plugin']['hits']['disableactivitystats'])
 
 	$newtopics = 0;
 	$newposts = 0;
-	if (cot_module_active('forums'))
-	{
+	if (cot_module_active('forums')) {
 		require_once cot_incfile('forums', 'module');
 
 		$sql = cot::$db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate > $timeback");
@@ -90,14 +85,12 @@ if (!cot::$cfg['plugin']['hits']['disableactivitystats'])
 	}
 
 	$newcomments = 0;
-	if (function_exists('cot_get_newcomments'))
-	{
+	if (function_exists('cot_get_newcomments')) {
 		$newcomments = cot_get_newcomments($timeback);
 	}
 
 	$newpms = 0;
-	if (cot_module_active('pm'))
-	{
+	if (cot_module_active('pm')) {
 		require_once cot_incfile('pm', 'module');
 		$sql = cot::$db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_date > $timeback");
 		$newpms = $sql->fetchColumn();

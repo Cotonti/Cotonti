@@ -251,8 +251,8 @@ foreach ($res->fetchAll() as $row)
 		'ADMIN_BBCODE_ROW_NAME' => cot_inputbox('text', 'bbca_name['.$id.']', $row['bbc_name']),
 		'ADMIN_BBCODE_ROW_ENABLED' => cot_checkbox($row['bbc_enabled'], 'bbca_enabled['.$id.']'),
 		'ADMIN_BBCODE_ROW_CONTAINER' => cot_checkbox($row['bbc_container'], 'bbca_container['.$id.']'),
-		'ADMIN_BBCODE_ROW_PATTERN' => cot_textarea('bbca_pattern['.$id.']', $row['bbc_pattern'], 2, 20),
-		'ADMIN_BBCODE_ROW_REPLACEMENT' => cot_textarea('bbca_replacement['.$id.']', $row['bbc_replacement'], 2, 20),
+		'ADMIN_BBCODE_ROW_PATTERN' => cot_textarea('bbca_pattern['.$id.']', $row['bbc_pattern'], 2, 30),
+		'ADMIN_BBCODE_ROW_REPLACEMENT' => cot_textarea('bbca_replacement['.$id.']', $row['bbc_replacement'], 2, 30),
 		'ADMIN_BBCODE_ROW_PLUG' => $row['bbc_plug'],
 		'ADMIN_BBCODE_ROW_MODE' => cot_selectbox($row['bbc_mode'], 'bbca_mode['.$id.']', $bbc_modes, $bbc_modes, false),
 		'ADMIN_BBCODE_ROW_PRIO' => cot_selectbox($row['bbc_priority'], 'bbca_priority['.$id.']', range(1, 256), range(1, 256), false),
@@ -280,14 +280,37 @@ $bb_t->assign(array(
 	'ADMIN_BBCODE_TOTALITEMS' => $totalitems,
 	'ADMIN_BBCODE_COUNTER_ROW' => $ii,
 	'ADMIN_BBCODE_FORM_ACTION' => cot_url('admin', 'm=other&p=bbcode&a=add&d='.$durl),
-	'ADMIN_BBCODE_NAME' => cot_inputbox('text', 'bbc_name', $bbc['name']),
-	'ADMIN_BBCODE_ENABLED' => cot_checkbox($bbc['enabled'], 'bbc_enabled'),
-	'ADMIN_BBCODE_CONTAINER' => cot_checkbox($bbc['container'], 'bbc_container'),
-	'ADMIN_BBCODE_PATTERN' => cot_textarea('bbc_pattern', $bbc['pattern'], 2, 20),
-	'ADMIN_BBCODE_REPLACEMENT' => cot_textarea('bbc_replacement', $bbc['replacement'], 2, 20),
-	'ADMIN_BBCODE_MODE' => cot_selectbox(!empty($bbc['mode']) ? $bbc['mode'] : 'pcre', 'bbc_mode', $bbc_modes, $bbc_modes, false),
-	'ADMIN_BBCODE_PRIO' => cot_selectbox(is_numeric($bbc['priority']) ? $bbc['priority'] : '128', 'bbc_priority', range(1, 256), range(1, 256), false),
-	'ADMIN_BBCODE_POSTRENDER' => cot_checkbox($bbc['postrender'], 'bbc_postrender'),
+	'ADMIN_BBCODE_NAME' => cot_inputbox('text', 'bbc_name', isset($bbc['name']) ? $bbc['name'] : ''),
+	'ADMIN_BBCODE_ENABLED' => cot_checkbox(isset($bbc['enabled']) ? $bbc['enabled'] : false, 'bbc_enabled'),
+	'ADMIN_BBCODE_CONTAINER' => cot_checkbox(
+        isset($bbc['container']) ? $bbc['container'] : false,
+        'bbc_container'
+    ),
+	'ADMIN_BBCODE_PATTERN' => cot_textarea('bbc_pattern', isset($bbc['pattern']) ? $bbc['pattern'] : '', 2, 30),
+	'ADMIN_BBCODE_REPLACEMENT' => cot_textarea(
+        'bbc_replacement',
+        isset($bbc['replacement']) ? $bbc['replacement'] : '',
+        2,
+        30
+    ),
+	'ADMIN_BBCODE_MODE' => cot_selectbox(
+        !empty($bbc['mode']) ? $bbc['mode'] : 'pcre',
+        'bbc_mode',
+        $bbc_modes,
+        $bbc_modes,
+        false
+    ),
+	'ADMIN_BBCODE_PRIO' => cot_selectbox(
+        (isset($bbc['priority']) && is_numeric($bbc['priority'])) ? $bbc['priority'] : '128',
+        'bbc_priority',
+        range(1, 256),
+        range(1, 256),
+        false
+    ),
+	'ADMIN_BBCODE_POSTRENDER' => cot_checkbox(
+        isset($bbc['postrender']) ? $bbc['postrender'] : false,
+        'bbc_postrender'
+    ),
 	'ADMIN_BBCODE_URL_CLEAR_CACHE' => cot_url('admin', 'm=other&p=bbcode&a=clearcache&d='.$durl),
 	'ADMIN_BBCODE_UPDATE_URL' => cot_url('admin', 'm=other&p=bbcode&a=upd&d='.$durl)
 ));

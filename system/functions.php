@@ -614,7 +614,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
  * Imports data from the outer world by list of Variable names
  * Relies on `cot_import` function
  *
- * @param mixed $nameslist List of Variables names to import, can be:<br />
+ * @param array|string $nameslist List of Variables names to import, can be:<br />
  * 				string 'name1, name2 , ...' - list of variable names comma separated.<br />
  * 				array('name1', 'name2', ...) - list of variable names only.
  * 				In that case $filter parameter must be specified.<br />
@@ -633,55 +633,81 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
  * @param int $maxlen Length limit
  * @param bool $dieonerror Die with fatal error on wrong input
  * @param bool $buffer Try to load from input buffer (previously submitted) if current value is empty
- * @return boolean|array Returns combined array of data or FALSE if wrong parameters set
+ * @return ?array Returns combined array of data or NULL if wrong parameters set
  */
-function cot_import_list($nameslist=array(), $source='P', $origindata=array(), $nameprefix='', $filter=null, $arrayprefix=false, $maxlen=0, $dieonerror=false, $buffer=false)
-{
+function cot_import_list(
+    $nameslist = [],
+    $source = 'P',
+    $origindata = [],
+    $nameprefix = '',
+    $filter = null,
+    $arrayprefix = false,
+    $maxlen = 0,
+    $dieonerror = false,
+    $buffer = false
+) {
 	$direct = ($source == 'D' || $source == 'DIRECT');
 	$filter = empty($filter) ? null : $filter;
-	$nameslist = empty($nameslist) ? array() : $nameslist;
-	$origindata = !is_array($origindata) ? array() : $origindata;
-	if (!is_array($nameslist) && !empty($nameslist))
-	{
-		$nameslist = array_map('trim', explode(',',$nameslist));
+	$nameslist = empty($nameslist) ? [] : $nameslist;
+	$origindata = (empty($origindata) || !is_array($origindata)) ? [] : $origindata;
+
+    if (empty($nameslist)) {
+        $nameslist = [];
+    } elseif (!is_array($nameslist)) {
+		$nameslist = array_map('trim', explode(',', $nameslist));
 	}
-	if (!is_array($filter) && !is_null($filter) && strpos($filter, ',') !== false)
-	{
-		$filter = array_map('trim', explode(',',$filter));
-	}
-	elseif (!is_array($filter) && !is_null($filter))
-	{
-		$filter = array_fill(0,sizeof($direct && empty($nameslist) ? $origindata : $nameslist),$filter);
-	}
-	if (!$direct && sizeof($nameslist) == 0)
-	{
-		return false; // no proper name list
-	}
-	elseif (sizeof($nameslist) == 0)
-	{ // direct by origin
-		if (is_null($filter)) return false;
+
+    if (!empty($filter) && !is_array($filter)) {
+        if (strpos($filter, ',') !== false) {
+            $filter = array_map('trim', explode(',', $filter));
+        } else {
+            $filter = array_fill(
+                0,
+                sizeof($direct && empty($nameslist) ? $origindata : $nameslist),
+                $filter
+            );
+        }
+    }
+
+	if (!$direct && sizeof($nameslist) == 0) {
+        // no proper name list
+		return null;
+	} elseif (sizeof($nameslist) == 0) {
+        // direct by origin
+		if (is_null($filter)) {
+            return null;
+        }
 		foreach ($origindata as $key => $value) {
 			$origindata[$key] = cot_import($value, 'D', array_shift($filter), $maxlen, $dieonerror);
 		}
-	}
-	else
-	{ // namelist exists
+	} else {
+        // namelist exists
 		$index = array_keys($nameslist);
 		$index = array_pop($index);
 		$types_not_defined = (is_numeric($index) && is_int($index));
-		if ((is_array($filter) && sizeof($filter) != sizeof($nameslist))
-			|| ($types_not_defined && is_null($filter)))
-		{
-			return false; // can't rely on filter or no filter exists
-		}
-		elseif (is_array($filter))
-		{
+
+		if (
+            (is_array($filter) && sizeof($filter) != sizeof($nameslist))
+			|| ($types_not_defined && is_null($filter))
+        ) {
+            // can't rely on filter or no filter exists
+			return null;
+		} elseif (is_array($filter)) {
 			$nameslist = array_combine($types_not_defined ? $nameslist : array_keys($nameslist), $filter);
 		}
+
 		foreach ($nameslist as $name => $filtertype) {
-			$origindata[($arrayprefix) ? $nameprefix.$name : $name] = cot_import($direct ? $origindata[$nameprefix.$name] : $nameprefix.$name, $source, $filtertype, $maxlen, $dieonerror, $buffer);
+			$origindata[($arrayprefix) ? $nameprefix . $name : $name] = cot_import(
+                $direct ? $origindata[$nameprefix . $name] : $nameprefix . $name,
+                $source,
+                $filtertype,
+                $maxlen,
+                $dieonerror,
+                $buffer
+            );
 		}
 	}
+
 	return $origindata;
 }
 
@@ -691,12 +717,14 @@ function cot_import_list($nameslist=array(), $source='P', $origindata=array(), $
  *
  * @see cot_import_list() for parameters
  *
- * @return  boolean|array Returns indexed array of data or FALSE if wrong parameters setted
+ * @return ?array Returns indexed array of data or NULL if wrong parameters setted
  */
 function cot_import_tabledata($nameslist=array(), $source='P', $nameprefix='', $origindata=array(), $maxlen=0, $dieonerror=false, $buffer=false)
 {
 	$imported_arrays = cot_import_list($nameslist, $source, $origindata, $nameprefix,'ARR', $maxlen, $dieonerror, $buffer);
-	if (!$imported_arrays) return false;
+	if (!$imported_arrays) {
+        return null;
+    }
 	$result = array();
 	$na_data = array();
 	foreach ($imported_arrays as $name => $data)

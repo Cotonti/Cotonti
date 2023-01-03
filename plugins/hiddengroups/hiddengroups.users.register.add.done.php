@@ -15,4 +15,6 @@ Hooks=users.adduser.done
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$cache && $cache->db->remove('cot_hiddenusers', 'system');
+if (!empty(cot::$cache) && !empty(cot::$cache->db)) {
+    cot::$cache->db->remove('cot_hiddenusers', 'system');
+}
