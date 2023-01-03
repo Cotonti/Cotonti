@@ -645,7 +645,7 @@ function cot_import_list($nameslist=array(), $source='P', $origindata=array(), $
 	{
 		$nameslist = array_map('trim', explode(',',$nameslist));
 	}
-	if (!is_array($filter) && strpos($filter, ',') !== false)
+	if (!is_array($filter) && !is_null($filter) && strpos($filter, ',') !== false)
 	{
 		$filter = array_map('trim', explode(',',$filter));
 	}
