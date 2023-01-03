@@ -253,19 +253,19 @@ function cot_parse_bbcode($text)
 					if (empty($cdata))
 					{
 						// Protect from "[/foo] [/bar][foo][bar]" trick
-						if ($bbc[$bb] > 0) $bbc[$bb]--;
+						if (isset($bbc[$bb]) && $bbc[$bb] > 0) $bbc[$bb]--;
 						// else echo 'ERROR: invalid closing bbcode detected';
 					}
 					elseif ($bb == $cdata)
 					{
-						$bbc[$bb]--;
+						isset($bbc[$bb]) ? $bbc[$bb]-- : $bbc[$bb] = 0;
 						$cdata = '';
 					}
 				}
 				elseif (empty($cdata))
 				{
 					// Count opening tag in
-					$bbc[$bb]++;
+					isset($bbc[$bb]) ? $bbc[$bb]++ : $bbc[$bb] = 1;
 					if ($bb == 'code' || $bb == 'highlight')
 					{
 						// Ignore bbcodes in constant data
