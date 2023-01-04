@@ -190,26 +190,42 @@ foreach($cot_countries as $i => $x)
 }
 $countryfilters = cot_selectbox(cot_url('users', 'f='.$f), 'bycountry', $countryfilters_values, $countryfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
 
-$grpfilters_titles = array($R['users_sel_def_l'].$L['Maingroup'].$R['users_sel_def_r']);
-$grpfilters_group_values = array(cot_url('users'));
-$grpfilters_maingrp_values = array(cot_url('users'));
-foreach($cot_groups as $k => $i)
-{
-	if($cot_groups[$k]['id'] != COT_GROUP_GUESTS)
-	{
+$grpfilters_titles = [cot::$R['users_sel_def_l'] . cot::$L['Maingroup'] . cot::$R['users_sel_def_r']];
+$grpfilters_group_values = [cot_url('users')];
+$grpfilters_maingrp_values = [cot_url('users')];
+foreach ($cot_groups as $k => $i) {
+	if ($cot_groups[$k]['id'] != COT_GROUP_GUESTS) {
 		$grpfilters_titles[] = $cot_groups[$k]['name'];
 		$grpfilters_maingrp_values[] = cot_url('users', 'g='.$k, '', true);
 		$grpfilters_group_values[] = cot_url('users', 'gm='.$k, '', true);
 	}
 }
-$maingrpfilters = cot_selectbox(cot_url('users', 'g='.$g, '', true), 'bymaingroup', $grpfilters_maingrp_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
 
-$grpfilters_titles[0] = $R['users_sel_def_l'].$L['Group'].$R['users_sel_def_r'];
-$grpfilters = cot_selectbox(cot_url('users', 'gm='.$gm, '', true), 'bygroupms', $grpfilters_group_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
+$maingrpfilters = cot_selectbox(
+    cot_url('users', 'g='.$g, '', true),
+    'bymaingroup',
+    $grpfilters_maingrp_values,
+    $grpfilters_titles,
+    false,
+    ['onchange' => 'redirect(this)',],
+    '',
+    true
+);
+
+$grpfilters_titles[0] = cot::$R['users_sel_def_l'] . cot::$L['Group'] . cot::$R['users_sel_def_r'];
+$grpfilters = cot_selectbox(
+    cot_url('users', 'gm='.$gm, '', true),
+    'bygroupms',
+    $grpfilters_group_values,
+    $grpfilters_titles,
+    false,
+    ['onchange' => 'redirect(this)',],
+    '',
+    true
+);
 
 /* === Hook === */
-foreach (cot_getextplugins('users.filters') as $pl)
-{
+foreach (cot_getextplugins('users.filters') as $pl) {
 	include $pl;
 }
 /* ===== */
