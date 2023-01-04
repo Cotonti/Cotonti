@@ -772,7 +772,11 @@ switch($a) {
 				if ($sort == 'cat' && $type == 'plug' && $prev_cat != $info['Category'])
 				{
 					// Render category heading
-					$t->assign('ADMIN_EXTENSIONS_CAT_TITLE', cot::$L['ext_cat_' . $info['Category']]);
+					$t->assign(
+                        'ADMIN_EXTENSIONS_CAT_TITLE',
+                        isset(cot::$L['ext_cat_' . $info['Category']]) ?
+                            cot::$L['ext_cat_' . $info['Category']] : $info['Category']
+                    );
 					$t->parse('MAIN.DEFAULT.SECTION.ROW.ROW_CAT');
 					// Assign a new one
 					$prev_cat = $info['Category'];
