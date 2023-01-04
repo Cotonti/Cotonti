@@ -253,6 +253,7 @@ foreach ($sql_forums_rowset as $row) {
 
 	if ($row['ft_movedto'] > 0) {
 		$row['ft_url'] = cot_url('forums', "m=posts&q=".$row['ft_movedto']);
+		$row['ft_icon_type'] = 'posts_moved';
 		$row['ft_icon'] = cot::$R['forums_icon_posts_moved'];
 		$row['ft_title']= cot::$L['Moved'].": ".$row['ft_title'];
 		$row['ft_postcount'] = cot::$R['forums_code_post_empty'];
