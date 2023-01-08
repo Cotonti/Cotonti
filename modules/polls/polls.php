@@ -102,7 +102,7 @@ if ($id > 0) {
 	$t->assign(array(
 		'POLLS_TITLE' => cot_parse($poll_form['poll_text'], cot::$cfg['polls']['markup']),
 		'POLLS_FORM' => $poll_form['poll_block'],
-		'POLLS_VIEWALL' => cot_rc_link(cot_url('polls', 'id=viewall'), cot::$L['polls_viewarchives'])
+		'POLLS_VIEWALL' => cot_rc_link(cot_url('polls'), cot::$L['polls_viewarchives'])
 	));
 
 	/* === Hook === */
@@ -122,7 +122,7 @@ if ($id > 0) {
 } else {
 	$jj = 0;
 	$sql = cot::$db->query('SELECT * FROM ' . cot::$db->polls .
-        " WHERE poll_state = 0 AND poll_type = 'index' ORDER BY poll_id DESC");
+        ' WHERE poll_state = ' . COT_POLL_ACTIVE . " AND poll_type = 'index' ORDER BY poll_id DESC");
 
 	/* === Hook - Part1 === */
 	$extp = cot_getextplugins('polls.viewall.tags');

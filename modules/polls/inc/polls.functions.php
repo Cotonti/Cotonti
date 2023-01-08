@@ -13,6 +13,14 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('forms');
 require_once cot_langfile('polls', 'module');
 
+/*
+ * Poll status
+ * 0 - active
+ * 1 - locked
+*/
+const COT_POLL_ACTIVE = 0;
+const COT_POLL_LOCKED = 1;
+
 cot::$db->registerTable('polls');
 cot::$db->registerTable('polls_options');
 cot::$db->registerTable('polls_voters');
@@ -192,7 +200,7 @@ function cot_poll_save($type = 'index', $code = '')
 		{
 			$db->insert($db_polls, array(
 				'poll_type' => $type,
-				'poll_state' => (int) 0,
+				'poll_state' => COT_POLL_ACTIVE,
 				'poll_creationdate' => (int) $sys['now'],
 				'poll_text' => $poll_text,
 				'poll_multiple' => (int) $poll_multiple,
@@ -487,22 +495,19 @@ function cot_poll_delete($id, $type = '')
  */
 function cot_poll_lock($id, $state, $type = '')
 {
-	global $db, $db_polls;
-
 	$id = (int) $id;
-	$where = (!$type) ? "poll_id = $id" : "poll_type = '" . $db->prep($type) . "' AND poll_code = '$id'";
-	if ($state == 3)
-	{
-		$sql = $db->query("SELECT poll_state FROM $db_polls WHERE  $where LIMIT 1");
+	$where = (!$type) ? "poll_id = $id" : "poll_type = " . cot::$db->quote($type) . " AND poll_code = '$id'";
+	if ($state == 3) {
+		$sql = cot::$db->query("SELECT poll_state FROM " . cot::$db->quoteTableName(cot::$db->polls) .
+            " WHERE  $where LIMIT 1");
 		$rstate = ($row = $sql->fetch()) ? $row['poll_state'] : 0;
-		$state = ($rstate) ? 0 : 1;
+		$state = ($rstate) ? COT_POLL_ACTIVE : COT_POLL_LOCKED;
 	}
-	if ((int) $id > 0)
-	{
-		$db->update($db_polls, array('poll_state' => (int) $state), $where);
+	if ($id > 0) {
+        cot::$db->update(cot::$db->polls, array('poll_state' => (int) $state), $where);
 	}
 
-	return (($db->affectedRows > 0) ? true : false);
+	return (cot::$db->affectedRows > 0) ? true : false;
 }
 
 /**
