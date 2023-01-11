@@ -66,7 +66,8 @@ if (empty($n))
 				$t->assign(array(
 					'ADMIN_STRUCTURE_EXT_URL' => cot_url('admin', 'm=structure&n='.$code),
 					'ADMIN_STRUCTURE_EXT_ICO' => $ext_info['icon'],
-					'ADMIN_STRUCTURE_EXT_NAME' => $ext_info['name']
+					'ADMIN_STRUCTURE_EXT_NAME' => $ext_info['name'],
+					'ADMIN_STRUCTURE_EXT_DESC' => $ext_info['desc']
 				));
 				$t->parse('LIST.ADMIN_STRUCTURE_EXT');
 			}
