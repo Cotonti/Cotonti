@@ -782,16 +782,17 @@ class Cotpl_block
 						}
 						$code = mb_substr($code, $m_pos + $m_len);
 				}
-				if ($scope === 0)
-				{
+				if ($scope === 0) {
 					$bpath = $path;
 					array_push($bpath, $i);
 					$blocks[$i++] = new Cotpl_logical($log_mt[2], $if_code, $else_code, $index, $bpath);
-				}
-				else
-				{
+				} else {
 					throw new Exception('Logical block ' . htmlspecialchars($log_mt[0]) . ' not closed');
 				}
+                /**
+                 * @todo Check for excess <!-- ENDIF -->.
+                 * When there is <!-- ENDIF -->, but there is no opening <!-- IF -->
+                 */
 			}
 		}
 		while (!empty($code));
@@ -1389,14 +1390,14 @@ class Cotpl_logical extends Cotpl_block
 	{
 		$data = '';
 		if ($this->expr->evaluate($tpl)) {
-			if ($this->blocks[0]) {
+			if (!empty($this->blocks[0])) {
 				foreach ($this->blocks[0] as $block) {
 					$data .= $block->text($tpl);
 				}
 			}
 
 		} elseif (!empty($this->blocks[1])) {
-			foreach ($this->blocks[1] as $block) 			{
+			foreach ($this->blocks[1] as $block) {
 				$data .= $block->text($tpl);
 			}
 		}
