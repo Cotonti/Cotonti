@@ -22,14 +22,16 @@
 			<table class="cells">
 				<tr>
 					<td class="coltop width20">{PHP.L.Item}</td>
+					<td class="coltop width20">{PHP.L.Section}</td>
 					<td class="coltop width10">{PHP.L.Expire}</td>
 					<td class="coltop width10">{PHP.L.Size}</td>
-					<td class="coltop width50">{PHP.L.Value}</td>
+					<td class="coltop width30">{PHP.L.Value}</td>
 					<td class="coltop width10">{PHP.L.Delete}</td>
 				</tr>
 <!-- BEGIN: ADMIN_CACHE_ROW -->
 				<tr>
 					<td>{ADMIN_CACHE_ITEM_NAME}</td>
+					<td class="textcenter">{ADMIN_CACHE_REALM}</td>
 					<td class="textcenter">{ADMIN_CACHE_EXPIRE}</td>
 					<td class="textcenter">{ADMIN_CACHE_SIZE}</td>
 					<td>{ADMIN_CACHE_VALUE}</td>

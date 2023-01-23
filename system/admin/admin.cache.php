@@ -84,6 +84,7 @@ foreach ($sql->fetchAll() as $row)
 	$t->assign(array(
 		'ADMIN_CACHE_ITEM_DEL_URL' => cot_url('admin', 'm=cache&a=delete&name='.$row['c_name'].'&'.cot_xg()),
 		'ADMIN_CACHE_ITEM_NAME' => $row['c_name'],
+		'ADMIN_CACHE_REALM' => $row['c_realm'],
 		'ADMIN_CACHE_EXPIRE' => $row['c_expire'] > 0 ? cot_date('datetime_short', $row['c_expire']) : '-',
 		'ADMIN_CACHE_SIZE' => $row['size'],
 		'ADMIN_CACHE_VALUE' => ($a == 'showall') ? $row['c_value'] : cot_cutstring($row['c_value'], 80),
