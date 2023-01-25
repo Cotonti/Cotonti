@@ -39,7 +39,7 @@
 				</tr>
 <!-- END: ADMIN_CACHE_ROW -->
 				<tr class="strong">
-					<td class="textcenter" colspan="2">{PHP.L.Total}:</td>
+					<td class="textcenter" colspan="3">{PHP.L.Total}:</td>
 					<td class="textcenter">{ADMIN_CACHE_CACHESIZE}</td>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
