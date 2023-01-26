@@ -159,22 +159,28 @@ function cot_get_extensionparams($code, $is_module = false)
 
     $typeKey = $is_module ? 'module' : 'plug';
 
-    $icon = '';
-    $key = 'icon_' . $typeKey . '_' . $code;
-    if (!empty(cot::$R[$key])) {
-        $icon = cot::$R[$key];
-    }
-    if ($icon == '') {
-        $fileNames = [
-            cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/' . $typeKey . '_' . $code . '.png',
-            $dir . '/' . $code . '/' . $code . '.png'
-        ];
-        foreach ($fileNames as $fileName) {
-            if (file_exists($fileName)) {
-                $icon = $fileName;
-                break;
-            }
-        }
+	$icon = '';
+	$key = 'icon_' . $typeKey . '_' . $code;
+
+	if (!empty(cot::$R[$key])) {
+		$icon = cot::$R[$key];
+	}
+	elseif (empty(cot::$R[$key]) && !empty(cot::$R['icon_extension_default'])) {
+		$icon = cot::$R['icon_extension_default'];
+	}
+	else {
+		$fileNames = [
+			cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/' . $typeKey . '_' . $code . '.png',
+			$dir . '/' . $code . '/' . $code . '.png'
+		];
+		foreach ($fileNames as $fileName) {
+			if (file_exists($fileName)) {
+				$icon = '<img src="'.$fileName.'" alt="" />';
+			}
+			else {
+				$icon = '<img src="images/icons/default/default.png" alt="" />';
+			}
+		}
     }
 
 	$langfile = cot_langfile($code, $is_module ? COT_EXT_TYPE_MODULE : COT_EXT_TYPE_PLUGIN);
