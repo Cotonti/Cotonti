@@ -27,7 +27,7 @@ $mode = cot_import('mode', 'G', 'ALP');
 
 $t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
 
-$adminsubtitle = cot::$L['Structure'];
+$admintitle = cot::$L['Structure'];
 
 $modules_structure = &$extension_structure; // for compatibility
 

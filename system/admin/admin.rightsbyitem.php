@@ -135,7 +135,7 @@ if ($ic == 'message' || $ic == 'admin') {
 //m=extensions&a=details&mod=page
 $adminpath[] = array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), cot::$L['Rights']);
 ($advanced) && $adminpath[] = array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), cot::$L['More']);
-$adminsubtitle = cot::$L['Rights'];
+$admintitle = cot::$L['Rights'];
 
 $adv_columns = ($advanced) ? 8 : 3;
 $adv_columns = (!$advanced && $ic == 'page') ? 4 : $adv_columns;
@@ -159,7 +159,7 @@ if ($advanced) {
     $urlParams['advanced'] = 1;
 }
 
-$pageTitle = $adminsubtitle;
+$pageTitle = $admintitle;
 if (!empty($title)) {
     $pageTitle .= ': ' . $title;
 }

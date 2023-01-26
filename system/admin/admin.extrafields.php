@@ -31,7 +31,7 @@ $extra_whitelist = array(
 );
 $adminpath[] = array(cot_url('admin', 'm=other'), cot::$L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=extrafields'), cot::$L['adm_extrafields']);
-$adminsubtitle = cot::$L['adm_extrafields'];
+$admintitle = cot::$L['adm_extrafields'];
 $maxperpage = (is_int(cot::$cfg['maxrowsperpage']) && cot::$cfg['maxrowsperpage'] > 0 || ctype_digit(cot::$cfg['maxrowsperpage'])) ? cot::$cfg['maxrowsperpage'] : 15;
 
 $t = new XTemplate(cot_tplfile(array('admin', 'extrafields', $n), 'core'));

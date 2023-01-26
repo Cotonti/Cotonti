@@ -24,9 +24,9 @@ if (!empty($p)) {
 	cot_block(cot::$usr['isadmin']);
 
     cot::$env['ext'] = $p;
-    $adminsubtitle = '';
+    $admintitle = '';
     if (isset($cot_plugins_enabled[$p])) {
-        $adminsubtitle = $cot_plugins_enabled[$p]['title'];
+        $admintitle = $cot_plugins_enabled[$p]['title'];
     }
 
 	if (file_exists(cot_langfile($p, 'plug'))) {
@@ -64,7 +64,7 @@ if (!empty($p)) {
 
 } else {
 	$adminpath[] = array(cot_url('admin', 'm=other'), cot::$L['Other']);
-	$adminsubtitle = cot::$L['Other'];
+	$admintitle = cot::$L['Other'];
 	list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'a');
 	cot_block(cot::$usr['auth_read']);
 

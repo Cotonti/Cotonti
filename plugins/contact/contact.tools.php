@@ -47,7 +47,7 @@ if ($a == 'del') {
 	cot_message('Done');
 }
 
-$adminsubtitle = cot::$L['contact_title'];
+$admintitle = cot::$L['contact_title'];
 
 $tuman = new XTemplate(cot_tplfile('contact.tools', 'plug', true));
 $totallines = cot::$db->query("SELECT COUNT(*) FROM $db_contact")->fetchColumn();

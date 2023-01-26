@@ -134,7 +134,7 @@ $adminpath[] = array(cot_url('admin', 'm=rights&g='.$g), cot::$L['Rights']);
 if ($advanced) {
     $adminpath[] = array(cot_url('admin', 'm=rights&g=' . $g . '&advanced=1'), cot::$L['More']);
 }
-$adminsubtitle = cot::$L['Rights'];
+$admintitle = cot::$L['Rights'];
 
 $adv_columns = ($advanced) ? 8 : 4;
 $urlParams = ['m' => 'rights', 'g' => $g, 'a' => 'update',];

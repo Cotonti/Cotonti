@@ -17,7 +17,7 @@ require_once cot_incfile('auth');
 $t = new XTemplate(cot_tplfile('admin.extensions', 'core'));
 
 $adminpath[] = array (cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
-$adminsubtitle = cot::$L['Extensions'];
+$admintitle = cot::$L['Extensions'];
 
 $pl = cot_import('pl', 'G', 'ALP');
 $mod = cot_import('mod', 'G', 'ALP');

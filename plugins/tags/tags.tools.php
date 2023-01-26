@@ -14,7 +14,7 @@ require_once cot_incfile('tags', 'plug');
 $tt = new XTemplate(cot_tplfile('tags.tools', 'plug', true));
 
 $adminhelp = cot::$L['info_desc'];
-$adminsubtitle = cot::$L['tags_All'];
+$admintitle = cot::$L['tags_All'];
 
 $cfg['maxrowsperpage'] = 30;
 

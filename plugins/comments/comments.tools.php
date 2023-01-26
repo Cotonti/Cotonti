@@ -23,7 +23,7 @@ require_once cot_incfile('comments', 'plug');
 $t = new XTemplate(cot_tplfile('comments.tools', 'plug', true));
 
 $adminhelp = $L['plu_help_comments'];
-$adminsubtitle = $L['comments_comments'];
+$admintitle = $L['comments_comments'];
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
