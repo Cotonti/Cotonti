@@ -80,7 +80,7 @@ $t = new XTemplate(cot_tplfile('admin', 'core'));
 
 $t->assign(array(
 	'ADMIN_BREADCRUMBS' => cot_breadcrumbs($adminpath, true),
-	'ADMIN_SUBTITLE' => $admintitle,
+	'ADMIN_TITLE' => $admintitle,
 	'ADMIN_MAIN' => $adminmain,
 	'ADMIN_HELP' => $adminhelp
 ));

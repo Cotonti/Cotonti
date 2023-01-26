@@ -15,7 +15,7 @@ if (!cot::$cfg['debug_mode'] && file_exists('install.php') && is_writable('datas
 	cot_error('home_installable_error');
 }
 
-$admintitle = ''; // Empty means just "Administration"
+$admintitle = $L['Adminpanel'];
 
 //Version Checking
 if (cot::$cfg['check_updates'] && cot::$cache) {
