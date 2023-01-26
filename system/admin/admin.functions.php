@@ -14,8 +14,8 @@ require_once cot_incfile('extrafields');
 require_once cot_incfile('forms');
 require_once cot_incfile('extensions');
 
-define('COT_EXT_TYPE_MODULE', true);
-define('COT_EXT_TYPE_PLUGIN', true);
+define('COT_EXT_TYPE_MODULE', 'module');
+define('COT_EXT_TYPE_PLUGIN', 'plug');
 
 /* ======== Defaulting the admin variables ========= */
 
