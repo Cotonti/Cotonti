@@ -187,6 +187,7 @@ switch ($n)
 			$jj++;
 //			if ($L['core_' . $row['config_cat']])
 //			{
+//				$icofile = $cfg['system_dir'] . '/admin/img/cfg_' . $row['config_cat'] . '.png';
 				$key = 'icon_cfg_'.$row['config_cat'];
 				if (!empty(cot::$R[$key])) {
 					$icofile = cot::$R[$key];
@@ -202,10 +203,9 @@ switch ($n)
 					else
 					$icofile = '<img src="images/icons/default/default.png" alt="" />';
 				}
-				$icofile = $cfg['system_dir'] . '/admin/img/cfg_' . $row['config_cat'] . '.png';
 				$t->assign(array(
 					'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=' . $row['config_cat']),
-					'ADMIN_CONFIG_ROW_ICO' => (file_exists($icofile)) ? $icofile : '',
+					'ADMIN_CONFIG_ROW_ICO' => $icofile,
 					'ADMIN_CONFIG_ROW_NAME' => isset($L['core_' . $row['config_cat']]) ? $L['core_' . $row['config_cat']] : $row['config_cat'],
 					'ADMIN_CONFIG_ROW_DESC' => isset($L['core_' . $row['config_cat'] . '_desc']) ? $L['core_' . $row['config_cat'] . '_desc'] : '',
 					'ADMIN_CONFIG_ROW_NUM' => $jj,
