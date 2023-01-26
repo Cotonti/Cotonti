@@ -40,7 +40,7 @@ if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'mo
 	$inc_file = cot_incfile('admin', 'module', $inc_file);
 } else {
 	cot::$env['ext'] = $m;
-	$adminsubtitle = $cot_modules[$m]['title'];
+	$admintitle = $cot_modules[$m]['title'];
 	$inc_file = cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
 }
 
@@ -65,13 +65,13 @@ require $inc_file;
 
 $title_params = array(
 	'ADMIN' => cot::$L['Administration'],
-	'SUBTITLE' => $adminsubtitle
+	'SUBTITLE' => $admintitle
 );
 if (!isset(cot::$out['head'] )) {
     cot::$out['head']  = '';
 }
 cot::$out['head'] .= cot::$R['code_noindex'];
-cot::$out['subtitle'] = empty($adminsubtitle) ?
+cot::$out['subtitle'] = empty($admintitle) ?
     cot_title('{ADMIN}', $title_params) : cot_title('{SUBTITLE} - {ADMIN}', $title_params);
 
 require_once cot::$cfg['system_dir'].'/header.php';
@@ -79,8 +79,8 @@ require_once cot::$cfg['system_dir'].'/header.php';
 $t = new XTemplate(cot_tplfile('admin', 'core'));
 
 $t->assign(array(
-	'ADMIN_TITLE' => cot_breadcrumbs($adminpath, false),
-	'ADMIN_SUBTITLE' => $adminsubtitle,
+	'ADMIN_BREADCRUMBS' => cot_breadcrumbs($adminpath, true),
+	'ADMIN_TITLE' => $admintitle,
 	'ADMIN_MAIN' => $adminmain,
 	'ADMIN_HELP' => $adminhelp
 ));

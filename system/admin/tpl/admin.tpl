@@ -2,6 +2,7 @@
 	<div id="ajaxBlock">
 	<!-- BEGIN: BODY -->	
 		<h1 class="body">{ADMIN_TITLE}</h1>
+		<div id="breadcrumbs">{ADMIN_BREADCRUMBS}</div>
 
 		<div id="main" class="body clear">
 		
