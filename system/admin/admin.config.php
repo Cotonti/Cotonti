@@ -187,6 +187,21 @@ switch ($n)
 			$jj++;
 //			if ($L['core_' . $row['config_cat']])
 //			{
+				$key = 'icon_cfg_'.$row['config_cat'];
+				if (!empty(cot::$R[$key])) {
+					$icofile = cot::$R[$key];
+				}
+				elseif (empty(cot::$R[$key]) && !empty(cot::$R['icon_extension_default'])) {
+					$icofile = cot::$R['icon_extension_default'];
+				}
+				else {
+					$fileName = $cfg['icons_dir'].'/default/cfg/'.$row['config_cat'].'.png';
+					if (file_exists($fileName)) {
+						$icofile = '<img src="'.$fileName.'" alt="" />';
+					}
+					else
+					$icofile = '<img src="images/icons/default/default.png" alt="" />';
+				}
 				$icofile = $cfg['system_dir'] . '/admin/img/cfg_' . $row['config_cat'] . '.png';
 				$t->assign(array(
 					'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=' . $row['config_cat']),
