@@ -70,7 +70,6 @@ if (empty($n) || in_array($n, $extra_blacklist))
 		$name = '';
 		$ext_info = array();
 		$type = null;
-        $icon = cot::$cfg['system_dir'].'/admin/img/plugins32.png';
 		if(isset($extra_whitelist[$table])) {
             if (isset($extra_whitelist[$table]['type'])) $type = $extra_whitelist[$table]['type'];
             if ($type == 'module' || $type == 'plug') {
