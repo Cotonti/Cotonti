@@ -27,6 +27,12 @@ define('COT_EXT_NOTHING_TO_UPDATE', 2);
 define('COT_PLUGIN_DEFAULT_ORDER', 10);
 
 /**
+ * Extension types
+ */
+define('COT_EXT_TYPE_MODULE', 'module');
+define('COT_EXT_TYPE_PLUGIN', 'plug');
+
+/**
  * These parts ($name.$part.php) are reserved handlers with no hooks
  */
 $cot_ext_ignore_parts = array('configure', 'install', 'setup', 'uninstall');

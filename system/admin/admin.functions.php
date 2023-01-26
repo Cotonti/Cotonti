@@ -154,10 +154,27 @@ function cot_get_extensionparams($code, $is_module = false)
         $name = (isset($info['Name']) && $info['Name'] != '') ? $info['Name'] : $code;
     }
 
-	$icofile = $dir . '/' . $code . '/' . $code . '.png';
-	$icon = file_exists($icofile) ? $icofile : '';
+    $typeKey = $is_module ? 'module' : 'plug';
 
-	$langfile = cot_langfile($code, $is_module ? 'module' : 'plug');
+    $icon = '';
+    $key = 'icon_' . $typeKey . '_' . $code;
+    if (!empty(cot::$R[$key])) {
+        $icon = cot::$R[$key];
+    }
+    if ($icon == '') {
+        $fileNames = [
+            cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/' . $typeKey . '_' . $code . '.png',
+            $dir . '/' . $code . '/' . $code . '.png'
+        ];
+        foreach ($fileNames as $fileName) {
+            if (file_exists($fileName)) {
+                $icon = $fileName;
+                break;
+            }
+        }
+    }
+
+	$langfile = cot_langfile($code, $is_module ? COT_EXT_TYPE_MODULE : COT_EXT_TYPE_PLUGIN);
 	if (file_exists($langfile)) {
         $L['info_name'] = $L['info_desc'] = '';
 		include $langfile;
