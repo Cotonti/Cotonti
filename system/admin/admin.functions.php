@@ -170,7 +170,7 @@ function cot_get_extensionparams($code, $is_module = false)
 	}
 	else {
 		$fileNames = [
-			cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/' . $typeKey . '_' . $code . '.png',
+			cot::$cfg['icons_dir'] . '/default/' . $typeKey . '_' . $code . '.png',
 			$dir . '/' . $code . '/' . $code . '.png'
 		];
 		foreach ($fileNames as $fileName) {
