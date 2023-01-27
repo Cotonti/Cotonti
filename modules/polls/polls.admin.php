@@ -27,7 +27,7 @@ $adminpath[] = array(cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
 $adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
 $adminpath[] = array(cot_url('admin', 'm='.$m), cot::$L['Administration']);
 $adminhelp = cot::$L['adm_help_polls'];
-$admintitle = cot::$L['Polls'];
+$adminTitle = cot::$L['Polls'];
 
 list($pg, $d, $durl) = cot_import_pagenav('d', cot::$cfg['maxrowsperpage']);
 $filter = cot_import('filter', 'G', 'TXT');

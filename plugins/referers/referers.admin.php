@@ -22,7 +22,7 @@ $tt = new XTemplate(cot_tplfile('referers.admin', 'plug', true));
 cot::$db->registerTable('referers');
 require_once cot_langfile('referers', 'plug');
 $adminhelp = $L['adm_help_referers'];
-$admintitle = $L['Referers'];
+$adminTitle = $L['Referers'];
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 

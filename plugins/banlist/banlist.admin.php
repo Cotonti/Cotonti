@@ -23,7 +23,7 @@ require_once cot_langfile('banlist', 'plug');
 
 cot::$db->registerTable('banlist');
 $adminhelp = $L['banlist_help'];
-$admintitle = $L['banlist_title'];
+$adminTitle = $L['banlist_title'];
 
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);

@@ -32,7 +32,7 @@ else
 	$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
 	$adminpath[] = array(cot_url('admin', 'm='.$m), $L['Administration']);
 	$adminhelp = $L['adm_help_pfs'];
-	$admintitle = $L['pfs_title'];
+	$adminTitle = $L['pfs_title'];
 
 	/* === Hook === */
 	foreach (cot_getextplugins('pfs.admin.first') as $pl)

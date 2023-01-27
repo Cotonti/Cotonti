@@ -25,7 +25,7 @@ require_once cot_incfile('forms');
 require_once cot_langfile('urleditor', 'plug');
 
 $adminhelp = $L['adm_help_urls'];
-$admintitle = $L['adm_urls'];
+$adminTitle = $L['adm_urls'];
 
 $a = cot_import('a', 'G', 'ALP');
 

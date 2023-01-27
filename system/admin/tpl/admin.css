@@ -29,6 +29,20 @@ hr		{ margin:4px 0 1px; border:1px solid; border-color:#ddd transparent transpar
 #user a		{ font-weight:bold; }
 #user li#hi	{ position:absolute; top:30px; left:45px; }
 
+#breadcrumbs {
+    font-weight:normal;
+    position:relative;
+    color:#036;
+    margin:0 auto;
+    padding:8px 45px 0;
+    height:52px;
+    width:870px!important;
+    background:url(img/crumbs.png) no-repeat 50% 0;
+}
+#breadcrumbs a	{
+    font-weight:bold; padding:0 10px;
+}
+
 #main		{ }
 
 .block		{ margin:0 10px 25px; }
@@ -53,7 +67,7 @@ hr		{ margin:4px 0 1px; border:1px solid; border-color:#ddd transparent transpar
 -------------------------------------------------- */
 
 h1,h2,h3,h4,h5,h6 { font-weight:normal; font-size:1em; margin:0; padding:0; position:relative; }
-h1		{ color:#036; margin:0 auto; padding:8px 45px 0; height:52px; width:870px!important; background:url(img/crumbs.png) no-repeat 50% 0; }
+h1		{ color:#036; margin:0 auto; padding:8px 45px 0; height:52px; width:870px!important; }
 h1 a		{ font-weight:bold; padding:0 10px; }
 h2		{ font:normal 2em "lucida grande",tahoma,verdana,arial,sans-serif; margin:10px; padding-bottom:2px; border-bottom:1px solid; }
 /*h3		{ color:#4f789f; font:normal 1.6em "Times New Roman"; margin:5px 0; }*/

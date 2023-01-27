@@ -16,7 +16,7 @@ $t = new XTemplate(cot_tplfile('admin.cache', 'core'));
 
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=cache'), $L['adm_internalcache']);
-$admintitle = $L['adm_internalcache'];
+$adminTitle = $L['adm_internalcache'];
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.cache.first') as $pl)

@@ -23,7 +23,7 @@ require_once cot_incfile('ratings', 'plug');
 $t = new XTemplate(cot_tplfile('ratings.admin', 'plug', true));
 
 $adminhelp = $L['adm_help_ratings'];
-$admintitle = $L['Ratings'];
+$adminTitle = $L['Ratings'];
 
 $id = cot_import('id','G','TXT');
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;

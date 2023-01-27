@@ -22,7 +22,7 @@ require_once cot_incfile('hits', 'plug');
 $tt = new XTemplate(cot_tplfile('hits.admin', 'plug', true));
 
 //$adminhelp = $L['adm_help_hits'];
-$admintitle = cot::$L['hits'];
+$adminTitle = cot::$L['hits'];
 
 $f = cot_import('f', 'G', 'TXT');
 $v = cot_import('v', 'G', 'TXT');

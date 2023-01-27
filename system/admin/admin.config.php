@@ -14,7 +14,7 @@ cot_block($usr['isadmin']);
 
 require_once cot_incfile('configuration');
 
-$admintitle = $L['Configuration'];
+$adminTitle = $L['Configuration'];
 
 $t = new XTemplate(cot_tplfile('admin.config', 'core'));
 
@@ -185,36 +185,52 @@ switch ($n)
 		while ($row = $sql->fetch())
 		{
 			$jj++;
-//			if ($L['core_' . $row['config_cat']])
-//			{
-//				$icofile = $cfg['system_dir'] . '/admin/img/cfg_' . $row['config_cat'] . '.png';
-				$key = 'icon_cfg_'.$row['config_cat'];
-				if (!empty(cot::$R[$key])) {
-					$icofile = cot::$R[$key];
-				}
-				elseif (empty(cot::$R[$key]) && !empty(cot::$R['icon_extension_default'])) {
-					$icofile = cot::$R['icon_extension_default'];
-				}
-				else {
-					$fileName = $cfg['icons_dir'].'/default/cfg/'.$row['config_cat'].'.png';
-					if (file_exists($fileName)) {
-						$icofile = '<img src="'.$fileName.'" alt="" />';
-					}
-					else
-					$icofile = '<img src="images/icons/default/default.png" alt="" />';
-				}
-				$t->assign(array(
-					'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=' . $row['config_cat']),
-					'ADMIN_CONFIG_ROW_ICO' => $icofile,
-					'ADMIN_CONFIG_ROW_NAME' => isset($L['core_' . $row['config_cat']]) ? $L['core_' . $row['config_cat']] : $row['config_cat'],
-					'ADMIN_CONFIG_ROW_DESC' => isset($L['core_' . $row['config_cat'] . '_desc']) ? $L['core_' . $row['config_cat'] . '_desc'] : '',
-					'ADMIN_CONFIG_ROW_NUM' => $jj,
-					'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
-				));
-				$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
-//			}
+            /** @deprecated For backward compatibility. Will be removed in future releases */
+            $legacyIcon = '';
+
+            $icon = '';
+            $key = 'icon_cfg_'.$row['config_cat'];
+            if (!empty(cot::$R[$key])) {
+                $icon = cot::$R[$key];
+            } elseif (!empty(cot::$R['icon_extension_default'])) {
+                $icon = cot::$R['icon_extension_default'];
+            } else {
+                $fileName = cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/cfg/' .
+                    $row['config_cat'] . '.png';
+                if (file_exists($fileName)) {
+                    $icon = cot_rc('img_none', ['src' => $fileName]);
+                    $legacyIcon = $fileName;
+                }
+            }
+
+            if (empty($icon) && !empty($R['admin_icon_extension'])) {
+                $icon = $R['admin_icon_extension'];
+            }
+            if (empty($icon)) {
+                $fileName = cot::$cfg['icons_dir'] . '/default/extension.png';
+                if (file_exists($fileName)) {
+                    $icon = cot_rc('img_none', ['src' => $fileName]);
+                    $legacyIcon = $fileName;
+                }
+            }
+
+            $t->assign([
+                'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=' . $row['config_cat']),
+                'ADMIN_CONFIG_ROW_ICON' => $icon,
+                'ADMIN_CONFIG_ROW_NAME' => isset(cot::$L['core_' . $row['config_cat']]) ?
+                    cot::$L['core_' . $row['config_cat']] : $row['config_cat'],
+                'ADMIN_CONFIG_ROW_DESC' => isset(cot::$L['core_' . $row['config_cat'] . '_desc']) ?
+                    cot::$L['core_' . $row['config_cat'] . '_desc'] : '',
+                'ADMIN_CONFIG_ROW_NUM' => $jj,
+                //'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
+
+                // @deprecated For backward compatibility. Will be removed in future releases
+                'ADMIN_CONFIG_ROW_ICO' => $legacyIcon,
+            ]);
+            $t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
 		$sql->closeCursor();
+
 		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Core']);
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
 		$sql = $db->query("
@@ -224,21 +240,24 @@ switch ($n)
 			ORDER BY config_cat ASC
 		");
 		$jj = 0;
-		while ($row = $sql->fetch())
-		{
+		while ($row = $sql->fetch()) {
 			$jj++;
 			$ext_info = cot_get_extensionparams($row['config_cat'], true);
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=module&p=' . $row['config_cat']),
-				'ADMIN_CONFIG_ROW_ICO' => $ext_info['icon'],
+				'ADMIN_CONFIG_ROW_ICON' => $ext_info['icon'],
 				'ADMIN_CONFIG_ROW_NAME' => $ext_info['name'],
 				'ADMIN_CONFIG_ROW_DESC' => $ext_info['desc'],
 				'ADMIN_CONFIG_ROW_NUM' => $jj,
-				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
+				//'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
+
+                // @deprecated For backward compatibility. Will be removed in future releases
+                'ADMIN_CONFIG_ROW_ICO' => $ext_info['legacyIcon'],
 			));
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
 		$sql->closeCursor();
+
 		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Modules']);
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
 		$sql = $db->query("
@@ -255,11 +274,14 @@ switch ($n)
 			$ext_info = cot_get_extensionparams($row['config_cat'], false);
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p=' . $row['config_cat']),
-				'ADMIN_CONFIG_ROW_ICO' => $ext_info['icon'],
+				'ADMIN_CONFIG_ROW_ICON' => $ext_info['icon'],
 				'ADMIN_CONFIG_ROW_NAME' => $ext_info['name'],
 				'ADMIN_CONFIG_ROW_DESC' => $ext_info['desc'],
 				'ADMIN_CONFIG_ROW_NUM' => $jj,
-				'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
+				//'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
+
+                // @deprecated For backward compatibility. Will be removed in future releases
+                'ADMIN_CONFIG_ROW_ICO' => $ext_info['legacyIcon'],
 			));
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}

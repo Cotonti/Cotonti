@@ -14,9 +14,6 @@ require_once cot_incfile('extrafields');
 require_once cot_incfile('forms');
 require_once cot_incfile('extensions');
 
-define('COT_EXT_TYPE_MODULE', 'module');
-define('COT_EXT_TYPE_PLUGIN', 'plug');
-
 /* ======== Defaulting the admin variables ========= */
 
 unset($adminmain, $adminhelp, $admin_icon, $plugin_body, $plugin_title, $plugin_help);
@@ -114,7 +111,7 @@ function cot_stringinfile($file, $str, $maxsize=32768)
 /**
  * @param $code
  * @param $is_module
- * @return array{name: string, desc: string, icon: string}
+ * @return array{name: string, desc: string, notes:string, icon: string}
  */
 function cot_get_extensionparams($code, $is_module = false)
 {
@@ -123,8 +120,7 @@ function cot_get_extensionparams($code, $is_module = false)
 
 	$dir = $is_module ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir'];
 
-    $name = '';
-    $desc = '';
+    $name = $desc = $notes = '';
 	if ($is_module) {
         if (isset($cot_modules[$code])) {
             $name = $cot_modules[$code]['title'];
@@ -141,11 +137,6 @@ function cot_get_extensionparams($code, $is_module = false)
     $info = false;
     if ($exists) {
         $info = cot_infoget($ext_info, 'COT_EXT');
-        if (!$info && cot_plugin_active('genoa')) {
-            // Try to load old format info
-            $info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
-        }
-
         $desc = !empty($info) ? $info['Description'] : '';
     }
 
@@ -159,33 +150,48 @@ function cot_get_extensionparams($code, $is_module = false)
 
     $typeKey = $is_module ? 'module' : 'plug';
 
-	$icon = '';
-	$key = 'icon_' . $typeKey . '_' . $code;
+    /** @deprecated For backward compatibility. Will be removed in future releases */
+    $legacyIcon = '';
 
+    $icon = '';
+	$key = 'icon_' . $typeKey . '_' . $code;
 	if (!empty(cot::$R[$key])) {
 		$icon = cot::$R[$key];
-	}
-	elseif (empty(cot::$R[$key]) && !empty(cot::$R['icon_extension_default'])) {
-		$icon = cot::$R['icon_extension_default'];
-	}
-	else {
+	} elseif (!empty(cot::$R['admin_icon_extension_default'])) {
+		$icon = cot::$R['admin_icon_extension_default'];
+	} else {
 		$fileNames = [
-			cot::$cfg['icons_dir'] . '/default/' . $typeKey . '_' . $code . '.png',
+			cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/' . $typeKey . '_' . $code . '.png',
 			$dir . '/' . $code . '/' . $code . '.png'
 		];
 		foreach ($fileNames as $fileName) {
 			if (file_exists($fileName)) {
-				$icon = '<img src="'.$fileName.'" alt="" />';
-			}
-			else {
-				$icon = '<img src="images/icons/default/default.png" alt="" />';
+                $icon = cot_rc('img_none', ['src' => $fileName]);
+                $legacyIcon = $fileName;
 			}
 		}
     }
 
+    if (empty($icon) && !empty($R['admin_icon_extension'])) {
+        $icon = $R['admin_icon_extension'];
+    }
+
+    if (empty($icon)) {
+        $fileNames = [
+            cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/extension.png',
+            cot::$cfg['icons_dir'] . '/default/extension.png',
+        ];
+        foreach ($fileNames as $fileName) {
+            if (file_exists($fileName)) {
+                $icon = cot_rc('img_none', ['src' => $fileName]);
+                $legacyIcon = $fileName;
+            }
+        }
+    }
+
 	$langfile = cot_langfile($code, $is_module ? COT_EXT_TYPE_MODULE : COT_EXT_TYPE_PLUGIN);
 	if (file_exists($langfile)) {
-        $L['info_name'] = $L['info_desc'] = '';
+        $L['info_name'] = $L['info_desc'] = $L['info_notes'] = '';
 		include $langfile;
         // We are including lang file, so we should use $L, not cot::$L
 		if (!empty($L['info_name'])) {
@@ -196,9 +202,12 @@ function cot_get_extensionparams($code, $is_module = false)
         }
 	}
 
-	return array(
+	return [
 		'name' => $name,
 		'desc' => $desc,
-		'icon' => $icon
-	);
+        'notes' => $notes,
+		'icon' => $icon,
+
+        'legacyIcon' => $legacyIcon,
+	];
 }

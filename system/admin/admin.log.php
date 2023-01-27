@@ -17,7 +17,7 @@ $t = new XTemplate(cot_tplfile('admin.log', 'core'));
 $adminpath[] = array(cot_url('admin', 'm=other'), cot::$L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=log'), cot::$L['Log']);
 $adminhelp = cot::$L['adm_log_desc'];
-$admintitle = cot::$L['Log'];
+$adminTitle = cot::$L['Log'];
 
 $log_groups = array(
 	'all' => cot::$L['All'],

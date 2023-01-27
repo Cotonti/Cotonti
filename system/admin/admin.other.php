@@ -24,9 +24,9 @@ if (!empty($p)) {
 	cot_block(cot::$usr['isadmin']);
 
     cot::$env['ext'] = $p;
-    $admintitle = '';
+    $adminTitle = '';
     if (isset($cot_plugins_enabled[$p])) {
-        $admintitle = $cot_plugins_enabled[$p]['title'];
+        $adminTitle = $cot_plugins_enabled[$p]['title'];
     }
 
 	if (file_exists(cot_langfile($p, 'plug'))) {
@@ -64,7 +64,7 @@ if (!empty($p)) {
 
 } else {
 	$adminpath[] = array(cot_url('admin', 'm=other'), cot::$L['Other']);
-	$admintitle = cot::$L['Other'];
+	$adminTitle = cot::$L['Other'];
 	list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'a');
 	cot_block(cot::$usr['auth_read']);
 
@@ -93,9 +93,12 @@ if (!empty($p)) {
 				$t->assign(array(
 					'ADMIN_OTHER_EXT_URL' => $type == 'plug' ? cot_url('admin', 'm=other&p=' . $pl['pl_code']) :
 						cot_url('admin', 'm=' . $pl['pl_code']),
-					'ADMIN_OTHER_EXT_ICO' => $ext_info['icon'],
+					'ADMIN_OTHER_EXT_ICON' => $ext_info['icon'],
 					'ADMIN_OTHER_EXT_NAME' => $ext_info['name'],
-					'ADMIN_OTHER_EXT_DESC' => $ext_info['desc']
+					'ADMIN_OTHER_EXT_DESC' => $ext_info['desc'],
+
+                    // @deprecated For backward compatibility. Will be removed in future releases
+                    'ADMIN_OTHER_EXT_ICO' => $ext_info['legacyIcon'],
 				));
 				$t->parse('MAIN.SECTION.ROW');
 			}

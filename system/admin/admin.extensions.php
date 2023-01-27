@@ -17,7 +17,7 @@ require_once cot_incfile('auth');
 $t = new XTemplate(cot_tplfile('admin.extensions', 'core'));
 
 $adminpath[] = array (cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
-$admintitle = cot::$L['Extensions'];
+$adminTitle = cot::$L['Extensions'];
 
 $pl = cot_import('pl', 'G', 'ALP');
 $mod = cot_import('mod', 'G', 'ALP');
@@ -201,8 +201,8 @@ switch($a) {
 			$handle = opendir($dir . '/' . $code);
 			while ($f = readdir($handle)) {
 				if (
-                    preg_match("#^$code(\.([\w\.]+))?.php$#", $f, $mt) &&
-                    (!isset($mt[2]) || !in_array($mt[2], $cot_ext_ignore_parts))
+                    preg_match("#^$code(\.([\w\.]+))?.php$#", $f, $mt)
+                    && (!isset($mt[2]) || !in_array($mt[2], $cot_ext_ignore_parts))
                 ) {
 					$parts[] = $f;
 				}
@@ -258,19 +258,14 @@ switch($a) {
 				$extplugin_file = $dir . '/' . $code . '/' . $x;
 				$info_file = array();
 				$Hooks = array();
-				if (file_exists($extplugin_file)){
+				if (file_exists($extplugin_file)) {
 					$info_file = cot_infoget($extplugin_file, 'COT_EXT');
-                    // Todo obsolete
-					if (!$info_file && cot_plugin_active('genoa')) {
-						// Try to load old format info
-						$info_file = cot_infoget($extplugin_file, 'SED_EXTPLUGIN');
-					}
 					$Hooks = explode(',', str_replace(' ', '', $info_file['Hooks']));
 				}
 				$info_part = preg_match("#^$code\.([\w\.]+).php$#", $x, $mt) ? $mt[1] : 'main';
 
 				$info_file['Status'] = 3;
-				foreach ($registeredParts  as $reg_data){
+				foreach ($registeredParts  as $reg_data) {
 					if ($reg_data['pl_part'] == $info_part) {
 						$info_file['Status'] = $reg_data['pl_active'];
 						break;
@@ -305,7 +300,9 @@ switch($a) {
 				if (file_exists($extplugin_file)) {
 					foreach ($registeredParts as $reg_data) {
 						if ($reg_data['pl_file'] == $code . '/' . $x) {
-							if (!in_array($reg_data['pl_hook'], $Hooks)) array_push($deleted, $reg_data['pl_hook']);
+							if (!in_array($reg_data['pl_hook'], $Hooks)) {
+                                array_push($deleted, $reg_data['pl_hook']);
+                            }
 						}
 					}
 				}
@@ -441,10 +438,6 @@ switch($a) {
 		if (file_exists(cot_langfile($code, $type))) {
 			include cot_langfile($code, $type);
 		}
-		$icofile = (($type == 'module') ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir']) . '/' . $code . '/' . $code . '.png';
-        if (!file_exists($icofile)) {
-            $icofile = '';
-        }
 
 		// Search admin parts, standalone parts, struct
         $standalone = null;
@@ -468,29 +461,15 @@ switch($a) {
 
 		$installed_ver = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$code'")->fetchColumn();
 
-        $name = '';
-        if (cot::$L['info_name'] != '') {
-            $name = cot::$L['info_name'];
-        } elseif ($info['Name'] != '') {
-            $name = $info['Name'];
-        } else {
-            $name = $code;
-        }
-
-        $description = '';
-        if (cot::$L['info_desc'] != '') {
-            $description = cot::$L['info_desc'];
-        } elseif (isset($info['Description'])) {
-            $description = $info['Description'];
-        }
+        $params = cot_get_extensionparams($code, $type == COT_EXT_TYPE_MODULE);
 
 		// Universal tags
 		$t->assign(array(
-			'ADMIN_EXTENSIONS_NAME' => htmlspecialchars($name),
-			'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? cot::$L['Module'] : cot::$L['Plugin'],
+			'ADMIN_EXTENSIONS_NAME' => htmlspecialchars($params['name']),
+			'ADMIN_EXTENSIONS_TYPE' => $type == COT_EXT_TYPE_MODULE ? cot::$L['Module'] : cot::$L['Plugin'],
 			'ADMIN_EXTENSIONS_CODE' => $code,
-			'ADMIN_EXTENSIONS_ICO' => $icofile,
-			'ADMIN_EXTENSIONS_DESCRIPTION' => $description,
+            'ADMIN_EXTENSIONS_ICON' => $params['icon'],
+			'ADMIN_EXTENSIONS_DESCRIPTION' => $params['desc'],
 			'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 			'ADMIN_EXTENSIONS_VERSION_INSTALLED' => $installed_ver,
 			'ADMIN_EXTENSIONS_VERSION_COMPARE' => version_compare($info['Version'], $installed_ver),
@@ -505,18 +484,13 @@ switch($a) {
 			'ADMIN_EXTENSIONS_UNINSTALL_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=uninstall"),
 			'ADMIN_EXTENSIONS_UNINSTALL_CONFIRM_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=uninstall&x={$sys['xk']}"),
 			'ADMIN_EXTENSIONS_PAUSE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=pause"),
-			'ADMIN_EXTENSIONS_UNPAUSE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=unpause")
+			'ADMIN_EXTENSIONS_UNPAUSE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=unpause"),
+
+            // @deprecated For backward compatibility. Will be removed in future releases
+            'ADMIN_EXTENSIONS_ICO' => $params['legacyIcon'],
 		));
 
 		if ($exists) {
-
-		    $notes = '';
-		    if (cot::$L['info_notes'] != '') {
-                $notes = cot::$L['info_notes'];
-            } else {
-		        $notes = $info['Notes'];
-            }
-
 			// Tags for existing exts
 			$t->assign(array(
 				'ADMIN_EXTENSIONS_RIGHTS' => $type == 'module' ? cot_url('admin', "m=rightsbyitem&ic=$code&io=a")
@@ -531,7 +505,7 @@ switch($a) {
 				'ADMIN_EXTENSIONS_LOCK_MEMBERS' => $info['Lock_members'],
 				'ADMIN_EXTENSIONS_AUTHOR' => $info['Author'],
 				'ADMIN_EXTENSIONS_COPYRIGHT' => $info['Copyright'],
-				'ADMIN_EXTENSIONS_NOTES' => $notes,
+				'ADMIN_EXTENSIONS_NOTES' => $params['notes'],
 			));
 
 			// Check and display dependencies
@@ -840,13 +814,13 @@ switch($a) {
 						include cot_langfile($code, $type);
 					}
 
-					$t->assign(array(
+					$t->assign([
 						'ADMIN_EXTENSIONS_DETAILS_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code"),
-						'ADMIN_EXTENSIONS_NAME' => $params['name'],
+						'ADMIN_EXTENSIONS_NAME' => htmlspecialchars($params['name']),
 						'ADMIN_EXTENSIONS_TYPE' => $type == COT_EXT_TYPE_MODULE ? cot::$L['Module'] : cot::$L['Plugin'],
 						'ADMIN_EXTENSIONS_CODE_X' => $code,
 						'ADMIN_EXTENSIONS_DESCRIPTION' => $params['desc'],
-						'ADMIN_EXTENSIONS_ICO' => $params['icon'],
+                        'ADMIN_EXTENSIONS_ICON' => $params['icon'],
 						'ADMIN_EXTENSIONS_EDIT_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$code"),
 						'ADMIN_EXTENSIONS_TOTALCONFIG' => $totalconfig,
 						'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
@@ -862,8 +836,11 @@ switch($a) {
                             cot_url('admin', "m=$code"),
 						'ADMIN_EXTENSIONS_JUMPTO_URL' => $jump_url,
 						'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => cot_url('admin', "m=structure&n=$code"),
-						'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i)
-					));
+						'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i),
+
+                         // @deprecated For backward compatibility. Will be removed in future releases
+                        'ADMIN_EXTENSIONS_ICO' => $params['legacyIcon'],
+					]);
 					/* === Hook - Part2 : Include === */
 					foreach ($extp as $pl) {
 						include $pl;

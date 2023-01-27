@@ -33,7 +33,7 @@ require_once cot_incfile('trashcan', 'plug');
 require_once cot_langfile('trashcan', 'plug');
 
 $adminhelp = cot::$L['adm_help_trashcan'];
-$admintitle = cot::$L['Trashcan'];
+$adminTitle = cot::$L['Trashcan'];
 
 $id = cot_import('id', 'G', 'INT');
 $maxperpage = (cot::$cfg['maxrowsperpage'] && is_numeric(cot::$cfg['maxrowsperpage']) && cot::$cfg['maxrowsperpage'] > 0) ?

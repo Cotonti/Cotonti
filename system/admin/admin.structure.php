@@ -27,7 +27,7 @@ $mode = cot_import('mode', 'G', 'ALP');
 
 $t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
 
-$admintitle = cot::$L['Structure'];
+$adminTitle = cot::$L['Structure'];
 
 $modules_structure = &$extension_structure; // for compatibility
 
@@ -65,9 +65,12 @@ if (empty($n))
 				$ext_info = cot_get_extensionparams($code, $is_module);
 				$t->assign(array(
 					'ADMIN_STRUCTURE_EXT_URL' => cot_url('admin', 'm=structure&n='.$code),
-					'ADMIN_STRUCTURE_EXT_ICO' => $ext_info['icon'],
+					'ADMIN_STRUCTURE_EXT_ICON' => $ext_info['icon'],
 					'ADMIN_STRUCTURE_EXT_NAME' => $ext_info['name'],
-					'ADMIN_STRUCTURE_EXT_DESC' => $ext_info['desc']
+					'ADMIN_STRUCTURE_EXT_DESC' => $ext_info['desc'],
+
+                    // @deprecated For backward compatibility. Will be removed in future releases
+                    'ADMIN_STRUCTURE_EXT_ICO' => $ext_info['legacyIcon'],
 				));
 				$t->parse('LIST.ADMIN_STRUCTURE_EXT');
 			}
