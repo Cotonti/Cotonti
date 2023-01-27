@@ -85,7 +85,7 @@ if (empty($n) || in_array($n, $extra_blacklist))
 		$ii++;
 
 		$t->assign(array(
-			'ADMIN_EXTRAFIELDS_ROW_ICO' => $icon,
+			'ADMIN_EXTRAFIELDS_ROW_ICON' => $icon,
 			'ADMIN_EXTRAFIELDS_ROW_ITEMNAME' => $name,
 			'ADMIN_EXTRAFIELDS_ROW_TABLENAME' => $table . ((isset($extra_whitelist[$table])) ? " - " . $extra_whitelist[$table]['caption'] : ''),
 			'ADMIN_EXTRAFIELDS_ROW_TABLE' => $table,
