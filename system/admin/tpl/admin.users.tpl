@@ -20,7 +20,10 @@
 <!-- BEGIN: USERS_ROW -->
 				<tr>
 					<td class="centerall">
-					<!-- IF {PHP.hidden_groups} AND {ADMIN_USERS_ROW_GRP_HIDDEN} == Yes -->{PHP.R.admin_icon_usergroup0}<!-- ELSE -->{PHP.R.admin_icon_usergroup1}<!-- ENDIF -->
+					<!-- IF {PHP.hidden_groups} AND {ADMIN_USERS_ROW_GRP_HIDDEN} == Yes -->
+					{PHP.R.admin_icon_usergroup0}
+					<!-- ELSE -->
+					{PHP.R.admin_icon_usergroup1}
 					<!-- ENDIF -->
 					</td>
 					<td>

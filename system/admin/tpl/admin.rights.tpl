@@ -39,11 +39,11 @@
 		<!-- BEGIN: RIGHTS_ROW -->
 		<tr>
 			<td class="centerall">
-			<!-- IF {ADMIN_RIGHTS_ROW_ICO} -->
-				<img src="{ADMIN_RIGHTS_ROW_ICO}"/>
-			<!-- ELSE -->
-				<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/>
-			<!-- ENDIF -->
+<!-- IF {ADMIN_RIGHTS_ROW_ICON} -->
+				{ADMIN_RIGHTS_ROW_ICON}
+<!-- ELSE -->
+				{PHP.R.admin_icon_extension_default}
+<!-- ENDIF -->
 			</td>
 			<td>
 				<a href="{ADMIN_RIGHTS_ROW_LINK}">{ADMIN_RIGHTS_ROW_TITLE}</a>

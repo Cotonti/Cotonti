@@ -1,11 +1,7 @@
 <!-- BEGIN: MAIN -->
 	{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 <!-- BEGIN: DETAILS -->
-	<h2><!-- IF {ADMIN_EXTENSIONS_ICO} -->
-					<img src="{ADMIN_EXTENSIONS_ICO}" />
-					<!-- ELSE -->
-					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png" />
-					<!-- ENDIF -->{ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:</h2>
+	<h2>{ADMIN_EXTENSIONS_ICON} {ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:</h2>
 	<div class="block">
 		<table class="cells info">
 			<tr>
@@ -244,11 +240,7 @@
 <!-- END: ROW_ERROR_EXT -->
 		<tr>
 			<td>
-				<!-- IF {ADMIN_EXTENSIONS_ICO} -->
-				<img src="{ADMIN_EXTENSIONS_ICO}" />
-				<!-- ELSE -->
-				<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png" />
-				<!-- ENDIF -->
+				{ADMIN_EXTENSIONS_ICON}
 			</td>
 			<td>
 				<a href="{ADMIN_EXTENSIONS_DETAILS_URL}"><strong>{ADMIN_EXTENSIONS_NAME}</strong></a>

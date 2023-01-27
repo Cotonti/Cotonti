@@ -1,4 +1,11 @@
 <?php
+/* ====================
+[BEGIN_COT_THEME]
+Name=Default
+Version=1.00b
+[END_COT_THEME]
+==================== */
+
 /**
  * Resource strings for the default icon pack
  * @package Cotonti
@@ -12,55 +19,116 @@ defined('COT_CODE') or die('Wrong URL');
  * Arrow Icons
  */
 
-$R['icon_down'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/arrow-down.png" alt="" />';
-$R['icon_right'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/arrow-right.png" alt="" />';
-$R['icon_left'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/arrow-left.png" alt="" />';
-$R['icon_up'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/arrow-up.png" alt="" />';
-
-$R['icon_vert_active']['desc'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/arrow-up-active.png" alt="" />';
-$R['icon_vert_active']['asc'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/arrow-down-active.png" alt="" />';;
-
-$R['icon_follow'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/arrow-follow.png" alt="" />';
-$R['icon_unread'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/arrow-unread.png" alt="" />';
+$R['icon_down'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-down.png" alt="" />';
+$R['icon_right'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-right.png" alt="" />';
+$R['icon_left'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-left.png" alt="" />';
+$R['icon_up'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-up.png" alt="" />';
+$R['icon_vert_active']['desc'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-up-active.png" alt="" />';
+$R['icon_vert_active']['asc'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-down-active.png" alt="" />';;
 
 /**
  * Main Icons
  */
 
-$R['icon_admin'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/prefs.png" alt="" />';
-$R['icon_comments'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/comments.png" alt="" />';
-$R['icon_delete'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/delete.png" alt="" />';
-$R['icon_error'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/error.png" alt="" />';
-$R['icon_folder'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/folder.png" alt="" />';
-$R['icon_forums'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/forums.png" alt="" />';
-$R['icon_help'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/help.png" alt="" />';
-$R['icon_info'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/info.png" alt="" />';
-$R['icon_jumpto'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/arrow-jump.png" alt="" />';
-$R['icon_lock'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/lock.png" alt="" />';
-$R['icon_message'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/message.png" alt="" />';
-$R['icon_news'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/news.png" alt="" />';
-$R['icon_online'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/online.png" alt="" />';
-$R['icon_page'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/page.png" alt="" />';
-$R['icon_pfs'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/pfs.png" alt="" />';
-$R['icon_plug'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/plug.png" alt="" />';
-$R['icon_polls'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/polls.png" alt="" />';
-$R['icon_prefs'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/prefs.png" alt="" />';
-$R['icon_reset'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/reset.png" alt="" />';
-$R['icon_rights'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/rights.png" alt="" />';
-$R['icon_search'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/search.png" alt="" />';
-$R['icon_stats'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/stats.png" alt="" />';
-$R['icon_stop'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/stop.png" alt="" />';
-$R['icon_subfolder'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/subfolder.png" alt="" />';
-$R['icon_tags'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/tags.png" alt="" />';
-$R['icon_tool'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/tool.png" alt="" />';
-$R['icon_undo'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/undo.png" alt="" />';
-$R['icon_update'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/update.png" alt="" />';
-$R['icon_users'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/users.png" alt="" />';
-$R['icon_warning'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/warning.png" alt="" />';
+$R['icon_comments'] = '<img src="'.$cfg['icons_dir'].'/default/16/comments.png" alt="" />';
+$R['icon_delete'] = '<img src="'.$cfg['icons_dir'].'/default/16/delete.png" alt="" />';
+$R['icon_folder'] = '<img src="'.$cfg['icons_dir'].'/default/16/folder.png" alt="" />';
+$R['icon_follow'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-follow.png" alt="" />';
+$R['icon_forums'] = '<img src="'.$cfg['icons_dir'].'/default/16/forums.png" alt="" />';
+$R['icon_lock'] = '<img src="'.$cfg['icons_dir'].'/default/16/lock.png" alt="" />';
+$R['icon_page'] = '<img src="'.$cfg['icons_dir'].'/default/16/page.png" alt="" />';
+$R['icon_prefs'] = '<img src="'.$cfg['icons_dir'].'/default/16/prefs.png" alt="" />';
+$R['icon_subfolder'] = '<img src="'.$cfg['icons_dir'].'/default/16/subfolder.png" alt="" />';
+$R['icon_undo'] = '<img src="'.$cfg['icons_dir'].'/default/16/undo.png" alt="" />';
+$R['icon_unread'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-unread.png" alt="" />';
 
 /**
- * Misc
+ * Admin Icons
  */
 
-$R['icon_rss'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/rss.png" alt="" />';
-$R['icon_twitter'] = '<img class="icon" src="'.$cfg['icons_dir'].'/default/twitter.png" alt="" />';
+// Icons 16x16
+$R['admin_icon_blank'] = '<img src="'.$cfg['icons_dir'].'/default/16/blank.png" alt="" />';
+$R['admin_icon_comments'] = '<img src="'.$cfg['icons_dir'].'/default/16/comments2.png" alt="" />'; // Match
+$R['admin_icon_delete'] = '<img src="'.$cfg['icons_dir'].'/default/16/bin.png" alt="" />'; // JUST 1 CASE
+$R['admin_icon_forums'] = '<img src="'.$cfg['icons_dir'].'/default/16/forums2.png" alt="" />'; // Match
+$R['admin_icon_forums_posts'] = '<img src="'.$cfg['icons_dir'].'/default/16/forums2.png" alt="" />'; // Match
+$R['admin_icon_forums_topics'] = '<img src="'.$cfg['icons_dir'].'/default/16/forums2.png" alt="" />'; // Match
+$R['admin_icon_join1'] = '<img src="'.$cfg['icons_dir'].'/default/16/join1.png" alt="" />'; // OUT?
+$R['admin_icon_join2'] = '<img src="'.$cfg['icons_dir'].'/default/16/join2.png" alt="" />'; // OUT?
+$R['admin_icon_page'] = '<img src="'.$cfg['icons_dir'].'/default/16/page.png" alt="" />'; // Match
+$R['admin_icon_tools'] = '<img src="'.$cfg['icons_dir'].'/default/16/yools.png" alt="" />';
+$R['admin_icon_user'] = '<img src="'.$cfg['icons_dir'].'/default/16/user.png" alt="" />';
+
+// Auth Icons
+$R['admin_icon_auth_1'] = '<img src="'.$cfg['icons_dir'].'/default/16/auth_1.png" alt="" />';
+$R['admin_icon_auth_2'] = '<img src="'.$cfg['icons_dir'].'/default/16/auth_2.png" alt="" />';
+$R['admin_icon_auth_3'] = '<img src="'.$cfg['icons_dir'].'/default/16/auth_3.png" alt="" />';
+$R['admin_icon_auth_4'] = '<img src="'.$cfg['icons_dir'].'/default/16/auth_4.png" alt="" />';
+$R['admin_icon_auth_5'] = '<img src="'.$cfg['icons_dir'].'/default/16/auth_5.png" alt="" />';
+$R['admin_icon_auth_a'] = '<img src="'.$cfg['icons_dir'].'/default/16/auth_a.png" alt="" />';
+$R['admin_icon_auth_r'] = '<img src="'.$cfg['icons_dir'].'/default/16/auth_r.png" alt="" />';
+$R['admin_icon_auth_w'] = '<img src="'.$cfg['icons_dir'].'/default/16/auth_w.png" alt="" />';
+$R['admin_icon_discheck0'] = '<img src="'.$cfg['icons_dir'].'/default/16/discheck0.png" alt="" />';
+$R['admin_icon_discheck1'] = '<img src="'.$cfg['icons_dir'].'/default/16/discheck1.png" alt="" />';
+
+// Icons 32x32
+$R['admin_icon_core'] = '<img src="'.$cfg['icons_dir'].'/default/32/core.png" alt="" />';
+$R['admin_icon_plugin'] = '<img src="'.$cfg['icons_dir'].'/default/32/extension.png" alt="" />';
+$R['admin_icon_users'] = '<img src="'.$cfg['icons_dir'].'/default/32/users.png" alt="" />';
+$R['admin_icon_usergroup0'] = '<img src="'.$cfg['icons_dir'].'/default/32/users-off.png" title="'.$L['Group0'].'" alt="'.$L['Group0'].'" />';
+$R['admin_icon_usergroup1'] = '<img src="'.$cfg['icons_dir'].'/default/32/users.png" title="'.$L['Group1'].'" alt="'.$L['Group1'].'" />';
+
+// Default Icon
+$R['admin_icon_extension_default'] = '<img src="'.$cfg['icons_dir'].'/default/default.png" alt="" />';
+
+// Core Config
+
+$R['icon_cfg_info'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/info.png" alt="" />';
+$R['icon_cfg_locale'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/locale.png" alt="" />';
+$R['icon_cfg_main'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/main.png" alt="" />';
+$R['icon_cfg_menus'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/menus.png" alt="" />';
+$R['icon_cfg_performance'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/performance.png" alt="" />';
+$R['icon_cfg_security'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/security.png" alt="" />';
+$R['icon_cfg_sessions'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/sessions.png" alt="" />';
+$R['icon_cfg_theme'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/theme.png" alt="" />';
+$R['icon_cfg_title'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/title.png" alt="" />';
+
+// 1. Modules
+// $R['icon_module_forums'] = '<img src="'.$cfg['icons_dir'].'/default/modules/forums.png" alt="" />';
+// $R['icon_module_index'] = '<img src="'.$cfg['icons_dir'].'/default/modules/index.png" alt="" />';
+// $R['icon_module_page'] = '<img src="'.$cfg['icons_dir'].'/default/modules/page.png" alt="" />';
+// $R['icon_module_pfs'] = '<img src="'.$cfg['icons_dir'].'/default/modules/pfs.png" alt="" />';
+// $R['icon_module_pm'] = '<img src="'.$cfg['icons_dir'].'/default/modules/pm.png" alt="" />';
+// $R['icon_module_polls'] = '<img src="'.$cfg['icons_dir'].'/default/modules/polls.png" alt="" />';
+// $R['icon_module_rss'] = '<img src="'.$cfg['icons_dir'].'/default/modules/rss.png" alt="" />';
+// $R['icon_module_users'] = '<img src="'.$cfg['icons_dir'].'/default/modules/users.png" alt="" />';
+
+// 2. Plugins
+// $R['icon_plug_autoalias2'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/autoalias2.png" alt="" />';
+// $R['icon_plug_autocomplete'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/autocomplete.png" alt="" />';
+// $R['icon_plug_banlist'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/banlist.png" alt="" />';
+// $R['icon_plug_bbcode'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/bbcode.png" alt="" />';
+// $R['icon_plug_ckeditor'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/ckeditor.png" alt="" />';
+// $R['icon_plug_cleaner'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/cleaner.png" alt="" />';
+// $R['icon_plug_comments'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/comments.png" alt="" />';
+// $R['icon_plug_contact'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/contact.png" alt="" />';
+// $R['icon_plug_hiddengroups'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/hiddengroups.png" alt="" />';
+// $R['icon_plug_hits'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/hits.png" alt="" />';
+// $R['icon_plug_html'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/html.png" alt="" />';
+// $R['icon_plug_htmlpurifier'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/htmlpurifier.png" alt="" />';
+// $R['icon_plug_i18n'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/i18n.png" alt="" />';
+// $R['icon_plug_indexnews'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/indexnews.png" alt="" />';
+// $R['icon_plug_ipsearch'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/ipsearch.png" alt="" />';
+// $R['icon_plug_markup'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/markup.png" alt="" />';
+// $R['icon_plug_mcaptcha'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/mcaptcha.png" alt="" />';
+// $R['icon_plug_ratings'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/ratings.png" alt="" />';
+// $R['icon_plug_recentitems'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/recentitems.png" alt="" />';
+// $R['icon_plug_referers'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/referers.png" alt="" />';
+// $R['icon_plug_search'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/search.png" alt="" />';
+// $R['icon_plug_sitemap'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/sitemap.png" alt="" />';
+// $R['icon_plug_statistics'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/statistics.png" alt="" />';
+// $R['icon_plug_tags'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/tags.png" alt="" />';
+// $R['icon_plug_trashcan'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/trashcan.png" alt="" />';
+// $R['icon_plug_urleditor'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/urleditor.png" alt="" />';
+// $R['icon_plug_userimages'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/userimages.png" alt="" />';
+// $R['icon_plug_whosonline'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/whosonline.png" alt="" />';

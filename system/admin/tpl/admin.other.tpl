@@ -7,35 +7,35 @@
 				<td class="coltop width90">{PHP.L.Part} {PHP.L.adm_clicktoedit}</td>
 			</tr>
 			<tr>
-				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/></td>
+				<td class="centerall">{PHP.R.admin_icon_core}</td>
 				<td>
 					<p class="strong"><a href="{ADMIN_OTHER_URL_CACHE}">{PHP.L.adm_internalcache}</a></p>
 					<p class="small">{PHP.L.adm_internalcache_desc}</p>
 				</td>
 			</tr>
 			<tr>
-				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/></td>
+				<td class="centerall">{PHP.R.admin_icon_core}</td>
 				<td>
 					<p class="strong"><a href="{ADMIN_OTHER_URL_DISKCACHE}">{PHP.L.adm_diskcache}</a></p>
 					<p class="small">{PHP.L.adm_diskcache_desc}</p>
 				</td>
 			</tr>
 			<tr>
-				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/></td>
+				<td class="centerall">{PHP.R.admin_icon_core}</td>
 				<td>
 					<p class="strong"><a href="{ADMIN_OTHER_URL_EXFLDS}">{PHP.L.adm_extrafields}</a></p>
 					<p class="small">{PHP.L.adm_extrafields_desc}</p>
 				</td>
-			</tr>			
+			</tr>
 			<tr>
-				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/></td>
+				<td class="centerall">{PHP.R.icon_cfg_info}</td>
 				<td>
 					<p class="strong"><a href="{ADMIN_OTHER_URL_LOG}">{PHP.L.adm_log}</a></p>
 					<p class="small">{PHP.L.adm_log_desc}</p>
 				</td>
 			</tr>
 			<tr>
-				<td class="centerall"><img src="{PHP.cfg.system_dir}/admin/img/cfg_info.png"/></td>
+				<td class="centerall">{PHP.R.icon_cfg_info}</td>
 				<td>
 					<p class="strong"><a href="{ADMIN_OTHER_URL_INFOS}">{PHP.L.adm_infos}</a></p>
 					<p class="small">{PHP.L.adm_infos_desc}</p>
@@ -51,11 +51,7 @@
 <!-- BEGIN: ROW -->
 			<tr>
 				<td class="centerall width10">
-					<!-- IF {ADMIN_OTHER_EXT_ICO} --> 
-					<img src="{ADMIN_OTHER_EXT_ICO}"/>
-					<!-- ELSE -->
-					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/>
-					<!-- ENDIF -->
+					{ADMIN_OTHER_EXT_ICON}
 				</td>
 				<td class="width90">
 					<p class="strong"><a href="{ADMIN_OTHER_EXT_URL}">{ADMIN_OTHER_EXT_NAME}</a></p>

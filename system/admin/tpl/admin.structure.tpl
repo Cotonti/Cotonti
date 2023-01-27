@@ -5,11 +5,7 @@
 			<!-- BEGIN: ADMIN_STRUCTURE_EXT -->
 			<tr>
 				<td class="centerall width10">
-					<!-- IF {ADMIN_STRUCTURE_EXT_ICO} --> 
-					<img src="{ADMIN_STRUCTURE_EXT_ICO}"/>
-					<!-- ELSE -->
-					<img src="{PHP.cfg.system_dir}/admin/img/plugins32.png"/>
-					<!-- ENDIF -->
+					{ADMIN_STRUCTURE_EXT_ICON}
 				</td>
 				<td class="width90"><a href="{ADMIN_STRUCTURE_EXT_URL}">{ADMIN_STRUCTURE_EXT_NAME}</a></td>
 			</tr>
