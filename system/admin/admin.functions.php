@@ -178,8 +178,8 @@ function cot_get_extensionparams($code, $is_module = false)
 
     if (empty($icon)) {
         $fileNames = [
-            cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/extension.png',
-            cot::$cfg['icons_dir'] . '/default/extension.png',
+            cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/default.png',
+            cot::$cfg['icons_dir'] . '/default/default.png',
         ];
         foreach ($fileNames as $fileName) {
             if (file_exists($fileName)) {

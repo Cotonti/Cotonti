@@ -207,7 +207,7 @@ switch ($n)
                 $icon = $R['admin_icon_extension'];
             }
             if (empty($icon)) {
-                $fileName = cot::$cfg['icons_dir'] . '/default/extension.png';
+                $fileName = cot::$cfg['icons_dir'] . '/default/default.png';
                 if (file_exists($fileName)) {
                     $icon = cot_rc('img_none', ['src' => $fileName]);
                     $legacyIcon = $fileName;

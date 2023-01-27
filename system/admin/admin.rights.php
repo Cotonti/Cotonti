@@ -5,6 +5,8 @@
  * @package Cotonti
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @todo don't update locked elements. Don't use form elements for them.
  */
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
@@ -158,6 +160,8 @@ $t->assign([
 // All items that are present in rights edit form
 $items = [];
 
+$extPrams = [];
+
 // The core and modules top-level
 $sql = cot::$db->query('SELECT a.*, u.user_name FROM ' . cot::$db->auth . ' AS a ' .
 'LEFT JOIN ' . cot::$db->core . ' AS c ON c.ct_code=a.auth_code ' .
@@ -165,7 +169,10 @@ $sql = cot::$db->query('SELECT a.*, u.user_name FROM ' . cot::$db->auth . ' AS a
 "WHERE auth_groupid=? AND auth_option = 'a' AND (c.ct_plug = 0 || c.ct_plug IS NULL) " .
 'ORDER BY auth_code ASC', $g);
 while ($row = $sql->fetch()) {
-	$ico = '';
+    /** @deprecated For backward compatibility. Will be removed in future releases */
+    $legacyIcon = '';
+
+    $ico = '';
 	if ($row['auth_code'] == 'admin') {
 		$link = cot_url($row['auth_code']);
 		$title = cot::$L['Administration'];
@@ -179,14 +186,15 @@ while ($row = $sql->fetch()) {
 		$title = cot::$L['Structure'];
 
     } else {
+        // Module
 		$link = cot_url('admin', "m=extensions&a=details&mod=".$row['auth_code']);
-		$title = !empty($cot_modules[$row['auth_code']]['title']) ?
-            $cot_modules[$row['auth_code']]['title'] : $row['auth_code'];
-		$ico = cot::$cfg['modules_dir'] . '/' . $row['auth_code'] . '/' . $row['auth_code'] . '.png';
+        $extPrams[$row['auth_code']] = cot_get_extensionparams($row['auth_code'], true);
+		$title = $extPrams[$row['auth_code']]['name'];
+		$ico = $extPrams[$row['auth_code']]['icon'];
+        $legacyIcon = $extPrams[$row['auth_code']]['legacyIcon'];
 	}
 
-	cot_rights_parseline($row, $title, $link, $ico);
-    //$items[$row['auth_code']][$row['auth_option']] = $row['auth_rights'];
+	cot_rights_parseline($row, $title, $link, $ico, $legacyIcon);
 }
 $sql->closeCursor();
 $t->assign('RIGHTS_SECTION_TITLE', cot::$L['Core'] . ' &amp; ' . cot::$L['Modules']);
@@ -213,9 +221,12 @@ while ($row = $sql->fetch()) {
 	$link = cot_url('admin', 'm=structure&n='.$area.'&al='.$row['auth_option']);
 	$title = !empty(cot::$structure[$row['structure_area']][$row['auth_option']]['tpath']) ?
         cot::$structure[$row['structure_area']][$row['auth_option']]['tpath'] : $row['structure_area'];
-	$ico = cot::$cfg['modules_dir'] . '/' . $area . '/' . $area . '.png';
 
-    cot_rights_parseline($row, $title, $link, $ico);
+    if (empty($extPrams[$area])) {
+        $extPrams[$area] = cot_get_extensionparams($area, true);
+    }
+
+    cot_rights_parseline($row, $title, $link, $extPrams[$area]['icon'], $extPrams[$area]['legacyIcon']);
 }
 
 if (!empty($area)) {
@@ -232,12 +243,11 @@ $sql = cot::$db->query('SELECT a.*, u.user_name FROM '. cot::$db->auth . ' AS a 
 "WHERE auth_groupid=? AND auth_code='plug' ".
 'ORDER BY auth_option ASC', $g);
 while ($row = $sql->fetch()) {
-	$ico = cot::$cfg['plugins_dir'] . '/' . $row['auth_option'] . '/' . $row['auth_option'] . '.png';
 	$link = cot_url('admin', 'm=extensions&a=details&pl='.$row['auth_option']);
-	$title = !empty($cot_plugins_enabled[$row['auth_option']]['title']) ?
-        $cot_plugins_enabled[$row['auth_option']]['title'] : $row['auth_option'];
+    $key = 'plug_' . $row['auth_option'];
+    $extPrams[$key] = cot_get_extensionparams($row['auth_option'], false);
 
-	cot_rights_parseline($row, $title, $link, $ico);
+	cot_rights_parseline($row, $extPrams[$key]['name'], $link, $extPrams[$key]['icon'], $extPrams[$key]['legacyIcon']);
 }
 $sql->closeCursor();
 $t->assign('RIGHTS_SECTION_TITLE', cot::$L['Plugins']);
@@ -270,7 +280,15 @@ $adminmain = $t->text('MAIN');
 $t->parse('RIGHTS_HELP');
 $adminhelp = $t->text('RIGHTS_HELP');
 
-function cot_rights_parseline($row, $title, $link, $ico = '')
+/**
+ * @param array $row
+ * @param string $title
+ * @param string $link
+ * @param string $icon
+ * @param string $legacyIcon deprecated. For backward compatibility. Will be removed in future releases
+ * @return void
+ */
+function cot_rights_parseline($row, $title, $link, $icon = '', $legacyIcon = '')
 {
 	global $L, $advanced, $t, $out;
 
@@ -330,7 +348,8 @@ function cot_rights_parseline($row, $title, $link, $ico = '')
 		}
 		$t->assign('ADMIN_RIGHTS_ROW_PRESERVE', $preserve);
 	}
-	$ico = (!empty($ico) && file_exists($ico)) ? $ico : '';
+
+    $legacyIcon = (!empty($legacyIcon) && file_exists($legacyIcon)) ? $legacyIcon : '';
 
     $row['user_name'] = !empty($row['user_name']) ? $row['user_name'] : 'ID#: ' . $row['auth_setbyuserid'];
 
@@ -338,9 +357,12 @@ function cot_rights_parseline($row, $title, $link, $ico = '')
 		'ADMIN_RIGHTS_ROW_AUTH_CODE' => $row['auth_code'],
 		'ADMIN_RIGHTS_ROW_TITLE' => $title,
 		'ADMIN_RIGHTS_ROW_LINK' => $link,
-		'ADMIN_RIGHTS_ROW_ICO' => $ico,
+		'ADMIN_RIGHTS_ROW_ICON' => $icon,
 		'ADMIN_RIGHTS_ROW_RIGHTSBYITEM' => cot_url('admin', 'm=rightsbyitem&ic='.$row['auth_code'].'&io='.$row['auth_option']),
 		'ADMIN_RIGHTS_ROW_USER' => cot_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
+
+        // @deprecated For backward compatibility. Will be removed in future releases
+        'ADMIN_RIGHTS_ROW_ICO' => $legacyIcon,
 	));
 	$t->parse('MAIN.RIGHTS_SECTION.RIGHTS_ROW');
 }
