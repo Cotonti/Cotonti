@@ -48,11 +48,6 @@ if (!file_exists($inc_file)) {
 	cot_die();
 }
 
-$allow_img['0']['0'] = cot::$R['admin_icon_deny'];
-$allow_img['1']['0'] = cot::$R['admin_icon_allow'];
-$allow_img['0']['1'] = cot::$R['admin_icon_deny_locked'];
-$allow_img['1']['1'] = cot::$R['admin_icon_allow_locked'];
-
 cot::$usr['admin_config'] = cot_auth('admin', 'a', 'A');
 cot::$usr['admin_structure'] = cot_auth('structure', 'a', 'A');
 cot::$usr['admin_users'] = cot_auth('users', 'a', 'A') || cot::$usr['maingrp'] == COT_GROUP_SUPERADMINS;
