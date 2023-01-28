@@ -40,7 +40,6 @@ if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'mo
 	$inc_file = cot_incfile('admin', 'module', $inc_file);
 } else {
 	cot::$env['ext'] = $m;
-    // @todo new var. Should be camelCase
 	$adminTitle = $cot_modules[$m]['title'];
 	$inc_file = cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
 }
@@ -48,11 +47,6 @@ if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'mo
 if (!file_exists($inc_file)) {
 	cot_die();
 }
-
-$allow_img['0']['0'] = cot::$R['admin_icon_deny'];
-$allow_img['1']['0'] = cot::$R['admin_icon_allow'];
-$allow_img['0']['1'] = cot::$R['admin_icon_deny_locked'];
-$allow_img['1']['1'] = cot::$R['admin_icon_allow_locked'];
 
 cot::$usr['admin_config'] = cot_auth('admin', 'a', 'A');
 cot::$usr['admin_structure'] = cot_auth('structure', 'a', 'A');
