@@ -42,7 +42,7 @@
 <!-- IF {ADMIN_RIGHTS_ROW_ICON} -->
 				{ADMIN_RIGHTS_ROW_ICON}
 <!-- ELSE -->
-				{PHP.R.admin_icon_extension_default}
+				<img src="{PHP.cfg.icons_dir}/default/default.png" alt="" />
 <!-- ENDIF -->
 			</td>
 			<td>
