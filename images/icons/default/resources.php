@@ -78,8 +78,8 @@ $R['admin_icon_users'] = '<img src="'.$cfg['icons_dir'].'/default/32/users.png" 
 $R['admin_icon_usergroup0'] = '<img src="'.$cfg['icons_dir'].'/default/32/users-off.png" title="'.$L['Group0'].'" alt="'.$L['Group0'].'" />';
 $R['admin_icon_usergroup1'] = '<img src="'.$cfg['icons_dir'].'/default/32/users.png" title="'.$L['Group1'].'" alt="'.$L['Group1'].'" />';
 
-// Default Icon
-$R['admin_icon_extension_default'] = '<img src="'.$cfg['icons_dir'].'/default/default.png" alt="" />';
+// Default Icon (to be used in custom iconpacks)
+// $R['admin_icon_extension_default'] = '<img src="'.$cfg['icons_dir'].'/default/default.png" alt="" />';
 
 // Core Config
 
