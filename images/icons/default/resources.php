@@ -47,6 +47,11 @@ $R['icon_unread'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-unread.png
  */
 
 // Icons 16x16
+$R['admin_icon_allow'] = '<img class="icon" src="system/admin/img/allow.png" alt="" />'; // need to change for checkbox?
+$R['admin_icon_allow_locked'] = '<img class="icon" src="system/admin/img/allow_locked.png" alt="" />'; // need to change for checkbox?
+$R['admin_icon_deny'] = '<img class="icon" src="system/admin/img/deny.png" alt="" />'; // need to change for checkbox?
+$R['admin_icon_deny_locked'] = '<img class="icon" src="system/admin/img/deny_locked.png" alt="" />'; // need to change for checkbox?
+
 $R['admin_icon_blank'] = '<img src="'.$cfg['icons_dir'].'/default/16/blank.png" alt="" />';
 $R['admin_icon_comments'] = '<img src="'.$cfg['icons_dir'].'/default/16/comments2.png" alt="" />'; // Match
 $R['admin_icon_delete'] = '<img src="'.$cfg['icons_dir'].'/default/16/bin.png" alt="" />'; // JUST 1 CASE
