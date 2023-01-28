@@ -157,6 +157,7 @@ $L['Login'] = 'Login';
 $L['Logout'] = 'Logout';
 $L['Main'] = 'Main';
 $L['Maingroup'] = 'Main group';
+$L['Management'] = 'Management';
 $L['Member'] = 'Member';
 $L['Members'] = 'Members';
 $L['Members_download'] = 'This download is available for registered users only.';
