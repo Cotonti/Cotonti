@@ -93,7 +93,7 @@ $R['icon_cfg_sessions'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/sessions.
 $R['icon_cfg_theme'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/theme.png" alt="" />';
 $R['icon_cfg_title'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/title.png" alt="" />';
 
-// 1. Modules
+// 1. Modules (uncomment to use custom icon)
 // $R['icon_module_forums'] = '<img src="'.$cfg['icons_dir'].'/default/modules/forums.png" alt="" />';
 // $R['icon_module_index'] = '<img src="'.$cfg['icons_dir'].'/default/modules/index.png" alt="" />';
 // $R['icon_module_page'] = '<img src="'.$cfg['icons_dir'].'/default/modules/page.png" alt="" />';
@@ -103,7 +103,7 @@ $R['icon_cfg_title'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/title.png" a
 // $R['icon_module_rss'] = '<img src="'.$cfg['icons_dir'].'/default/modules/rss.png" alt="" />';
 // $R['icon_module_users'] = '<img src="'.$cfg['icons_dir'].'/default/modules/users.png" alt="" />';
 
-// 2. Plugins
+// 2. Plugins (uncomment to use custom icon)
 // $R['icon_plug_autoalias2'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/autoalias2.png" alt="" />';
 // $R['icon_plug_autocomplete'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/autocomplete.png" alt="" />';
 // $R['icon_plug_banlist'] = '<img src="'.$cfg['icons_dir'].'/analogue/plugins/banlist.png" alt="" />';
