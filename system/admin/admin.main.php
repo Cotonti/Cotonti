@@ -40,7 +40,6 @@ if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'mo
 	$inc_file = cot_incfile('admin', 'module', $inc_file);
 } else {
 	cot::$env['ext'] = $m;
-    // @todo new var. Should be camelCase
 	$adminTitle = $cot_modules[$m]['title'];
 	$inc_file = cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
 }
