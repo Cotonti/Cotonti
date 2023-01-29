@@ -1,32 +1,41 @@
 <!-- BEGIN: MAIN -->
-		<h2>Disk Cache</h2>
-		{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
-		<div class="block  button-toolbar">
-				<a href="{ADMIN_DISKCACHE_URL_REFRESH}" class="ajax button large">{PHP.L.Refresh}</a>
-				<a href="{ADMIN_DISKCACHE_URL_PURGE}" class="ajax button large">{PHP.L.adm_purgeall}</a>
-		</div>
-		<div class="block">
-			<table class="cells">
+{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
+<div class="block  button-toolbar">
+	<a href="{ADMIN_DISKCACHE_URL_REFRESH}" class="ajax button large">{PHP.L.Refresh}</a>
+	<a href="{ADMIN_DISKCACHE_URL_PURGE}" class="ajax button large">{PHP.L.adm_purgeall}</a>
+</div>
+
+<div class="block">
+	<h2>Disk Cache</h2>
+	<div class="wrapper">
+		<table class="cells">
+			<thead>
 				<tr>
-					<td class="coltop width25">{PHP.L.Item}</td>
-					<td class="coltop width25">{PHP.L.Files}</td>
-					<td class="coltop width25">{PHP.L.Size}</td>
-					<td class="coltop width25">{PHP.L.Delete}</td>
+					<th class="w-25">{PHP.L.Item}</th>
+					<th class="w-25">{PHP.L.Files}</th>
+					<th class="w-25">{PHP.L.Size}</th>
+					<th class="w-25">{PHP.L.Delete}</th>
 				</tr>
-<!-- BEGIN: ADMIN_DISKCACHE_ROW -->
+			</thead>
+			<tfoot>
+				<tr class="strong">
+					<td class="centerall">{PHP.L.Total}:</td>
+					<td class="centerall">{ADMIN_DISKCACHE_CACHEFILES}</td>
+					<td class="centerall">{ADMIN_DISKCACHE_CACHESIZE}</td>
+					<td class="centerall">&nbsp;</td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!-- BEGIN: ADMIN_DISKCACHE_ROW -->
 				<tr>
 					<td class="textcenter">{ADMIN_DISKCACHE_ITEM_NAME}</td>
 					<td class="textcenter">{ADMIN_DISKCACHE_FILES}</td>
 					<td class="textcenter">{ADMIN_DISKCACHE_SIZE}</td>
 					<td class="centerall"><a title="{PHP.L.Delete}" href="{ADMIN_DISKCACHE_ITEM_DEL_URL}" class="ajax button">{PHP.L.Delete}</a></td>
 				</tr>
-<!-- END: ADMIN_DISKCACHE_ROW -->
-			<tr class="strong">
-				<td class="centerall">{PHP.L.Total}:</td>
-				<td class="centerall">{ADMIN_DISKCACHE_CACHEFILES}</td>
-				<td class="centerall">{ADMIN_DISKCACHE_CACHESIZE}</td>
-				<td class="centerall">&nbsp;</td>
-			</tr>
-			</table>
-		</div>
+				<!-- END: ADMIN_DISKCACHE_ROW -->
+			</tbody>
+		</table>
+	</div>
+</div>
 <!-- END: MAIN -->

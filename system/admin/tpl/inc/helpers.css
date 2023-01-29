@@ -1,0 +1,69 @@
+.clearfix:after		{ content: ''; display: block; clear: both; }
+
+.textleft	  	{ text-align:left; }
+.textcenter		{ text-align:center; }
+.textright		{ text-align:right; }
+.textjustify	{ text-align:justify; }
+
+
+
+
+.small		{ font-size:.9em; line-height:1.4em; }
+.clear		{ clear:both; }
+.strong		{ font-weight:bold; }
+.lhn		{ line-height:normal!important; }
+.leftindent	{ text-indent:1em; }
+
+.lower		{ text-transform:lowercase; }
+.upper		{ text-transform:uppercase; }
+.capital	{ text-transform:capitalize; }
+
+.large		{ font-size:1.1em; }
+
+
+.margintop10	{ margin-top:10px; }
+.marginright10	{ margin-right:10px; }
+.marginbottom10	{ margin-bottom:10px; }
+.marginleft10	{ margin-left:10px; }
+.margin10		{ margin:10px!important; }
+.margin0		{ margin:0!important; }
+
+.paddingtop10	{ padding-top:10px; }
+.paddingright10	{ padding-right:10px; }
+.paddingbottom10{ padding-bottom:10px; }
+.paddingleft10	{ padding-left:10px; }
+.padding10		{ padding:10px!important; }
+.padding0		{ padding:0!important; }
+
+.border0		{ border:0!important; }
+
+.w-0 { width: 0%!important; }
+.w-5 { width: 5%!important; }
+.w-10 { width: 10%!important; }
+.w-15 { width: 15%!important; }
+.w-20 { width: 20%!important; }
+.w-30 { width: 30%!important; }
+.w-35 { width: 35%!important; }
+.w-40 { width: 40%!important; }
+.w-45 { width: 45%!important; }
+.w-55 { width: 55%!important; }
+.w-60 { width: 60%!important; }
+.w-65 { width: 65%!important; }
+.w-70 { width: 70%!important; }
+.w-80 { width: 80%!important; }
+.w-85 { width: 85%!important; }
+.w-90 { width: 90%!important; }
+.w-100 { width: 100%!important; }
+
+
+.col, .col4-1, .col4-2, .col4-3, .col3-1, .col3-2, .col2-1		{ float:left; }
+
+.col		{ width:100%; }
+.col4-1		{ width:25%; /* width:25%; */ }
+.col4-2		{ width:50%; /* width:50%; */ }
+.col4-3		{ width:75%; /* width:75%; */ }
+.col3-1		{ width:35%; /* width:33%; */ }
+.col3-2		{ width:65%; /* width:67%; */ }
+.col2-1		{ width:50%; /* width:50%; */ }
+
+.col.first, .col4-1.first, .col4-2.first, .col4-3.first, .col3-1.first, .col3-2.first, .col2-1.first	{ margin-left:0; clear:left; }

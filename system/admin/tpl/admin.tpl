@@ -6,7 +6,8 @@
 			{ADMIN_BREADCRUMBS}
 		</div>
 	</div>
-<!--<h1>{ADMIN_TITLE}</h1>-->
+
+	<h1>{ADMIN_TITLE}</h1>
 
 	<div id="main">
 		<div class="clearfix">

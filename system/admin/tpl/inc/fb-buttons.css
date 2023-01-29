@@ -12,7 +12,7 @@ http://github.com/necolas/css3-facebook-buttons
     overflow: visible;
     display: inline-block;
     padding: 0.3em 0.6em 0.375em;
-    margin: 0.5em 0 0 0;
+    margin: 0 0 0 0;
     border: 1px solid #999;
     border-bottom-color: #888;
    /* margin: 0;*/
@@ -40,18 +40,18 @@ input[type="submit"].small {
     padding: 0em 0.5em 0em !important;
 }
 
-.button:hover, input[type="submit"]:hover, input[type="button"]:hover, button:hover, 
-.button:focus, input[type="submit"]:focus, input[type="button"]:focus, button:focus, 
+.button:hover, input[type="submit"]:hover, input[type="button"]:hover, button:hover,
+.button:focus, input[type="submit"]:focus, input[type="button"]:focus, button:focus,
 .button:active input[type="submit"]:active, input[type="button"]:active, button:active {
     border-color: #777 #777 #666;
     text-decoration: none;
      filter: none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
-    box-shadow: none;   
+    box-shadow: none;
 }
 
-.button:active, input[type="submit"]:active, input[type="button"]:active, button:active, 
+.button:active, input[type="submit"]:active, input[type="button"]:active, button:active,
 .button.selected, input[type="submit"].selected, input[type="button"].selected, button.selected {
     border-color: #aaa;
     background: #ddd;
@@ -183,8 +183,8 @@ input[type="submit"].small {
 }
 
 .button + .button,
-.button + input[type="submit"], 
-.button + input[type="button"], 
+.button + input[type="submit"],
+.button + input[type="button"],
 .button + button,
 input[type="submit"] + input[type="submit"],
 input[type="button"] + input[type="button"],
@@ -221,10 +221,11 @@ button + button,
 /* For mixing buttons and button groups, e.g., in a navigation bar */
 
 .button-toolbar, h3 {
-    padding: 0 6px 6px;
+    padding: .375rem;
     border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     background: #f2f2f2;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
 }
 
 .button-toolbar .button,

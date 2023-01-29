@@ -1,16 +1,26 @@
 <!-- BEGIN: MAIN -->
-		<h2>{PHP.L.Configuration}</h2>
-		{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
-		<div class="block">
+{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
+
 <!-- BEGIN: EDIT -->
-			{ADMIN_CONFIG_EDIT_CUSTOM}
-			<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post" class="ajax">
-			<table class="cells">
+{ADMIN_CONFIG_EDIT_CUSTOM}
+<div class="block">
+	<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post" class="ajax">
+		<table class="cells">
+			<thead>
 				<tr>
-					<td class="coltop width35">{PHP.L.Parameter}</td>
-					<td class="coltop width60">{PHP.L.Value}</td>
-					<td class="coltop width5">{PHP.L.Reset}</td>
+					<th class="w-35">{PHP.L.Parameter}</th>
+					<th class="w-60">{PHP.L.Value}</th>
+					<th class="w-5">{PHP.L.Reset}</th>
 				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td colspan="3">
+						<input type="submit" value="{PHP.L.Update}" />
+					</td>
+				</tr>
+			</tfoot>
+			<tbody>
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
 <!-- BEGIN: ADMIN_CONFIG_FIELDSET_BEGIN -->
 				<tr>
@@ -32,30 +42,32 @@
 				</tr>
 <!-- END: ADMIN_CONFIG_ROW_OPTION -->
 <!-- END: ADMIN_CONFIG_ROW -->
-				<tr>
-					<td class="valid" colspan="3">
-						<input type="submit" class="submit" value="{PHP.L.Update}" />
-					</td>
-				</tr>
-			</table>
-			</form>
+			</tbody>
+		</table>
+	</form>
+</div>
 <!-- END: EDIT -->
+
 <!-- BEGIN: DEFAULT -->
 
 <!-- BEGIN: ADMIN_CONFIG_COL -->
-<h3 class="clear">{ADMIN_CONFIG_COL_CAPTION}:</h3>
-<div class="container">
+	<div class="block">
+		<h2>{ADMIN_CONFIG_COL_CAPTION}:</h2>
+		<div class="wrapper">
+			<ul class="cfg">
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
-<a href="{ADMIN_CONFIG_ROW_URL}" class="ajax thumbicons">
-	{ADMIN_CONFIG_ROW_ICON}
-	{ADMIN_CONFIG_ROW_NAME}
-</a>
+				<li>
+					<a href="{ADMIN_CONFIG_ROW_URL}" class="ajax">
+						{ADMIN_CONFIG_ROW_ICON}
+						{ADMIN_CONFIG_ROW_NAME}
+					</a>
+				</li>
 <!-- END: ADMIN_CONFIG_ROW -->
-</div>
-<!-- END: ADMIN_CONFIG_COL -->
-<div class="clear">
-  &nbsp;
-</div>
-<!-- END: DEFAULT -->
+			</ul>
 		</div>
+	</div>
+<!-- END: ADMIN_CONFIG_COL -->
+
+<!-- END: DEFAULT -->
+
 <!-- END: MAIN -->
