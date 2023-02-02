@@ -4433,6 +4433,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	}
 
 	return array(
+		'first' => '',
 		'prev' => $first.$prev,
 		'main' => $pages,
 		'next' => $next.$last,
