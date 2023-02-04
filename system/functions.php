@@ -1873,7 +1873,7 @@ function cot_build_age($birthdate)
  * @return array
  * @see cot_breadcrumbs()
  */
-function cot_structure_buildpath($area, $cat)
+function cot_structure_buildpath($area, $cat, $extrafield = 'title')
 {
 	global $structure;
 	$tmp = array();
@@ -1881,7 +1881,7 @@ function cot_structure_buildpath($area, $cat)
         $pathcodes = explode('.', cot::$structure[$area][$cat]['path']);
         foreach ($pathcodes as $x) {
             if ($x != 'system') {
-                $tmp[] = array(cot_url($area, 'c=' . $x), cot::$structure[$area][$x]['title']);
+                $tmp[] = array(cot_url($area, 'c=' . $x), cot::$structure[$area][$x][$extrafield]);
             }
         }
     }
@@ -4423,6 +4423,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	}
 
 	return array(
+		'first' => '',
 		'prev' => $first.$prev,
 		'main' => $pages,
 		'next' => $next.$last,
