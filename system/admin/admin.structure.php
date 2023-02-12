@@ -229,10 +229,10 @@ else
 			$rstructure['structure_path'] || cot_error('adm_structure_path_required', 'rstructurepath');
 			$rstructure['structure_title'] || cot_error('adm_structure_title_required', 'rstructuretitle');
 
-			$rtplmode = isset($rtplmodearr[$i]) ? cot_import($rtplmodearr[$i], 'D', 'INT') : null;
-			$rtplquick = isset($rtplquickarr[$i]) ? cot_import($rtplquickarr[$i], 'D', 'TXT') : null;
+			$rtplmode = isset($rtplmodearr[$i]) ? cot_import($rtplmodearr[$i], 'D', 'INT') : 0;
+			$rtplquick = isset($rtplquickarr[$i]) ? cot_import($rtplquickarr[$i], 'D', 'TXT') : '';
 
-
+            $rstructure['structure_tpl'] = '';
 			if (!empty($rtplquick) && empty($rtplmode)) {
 				$rstructure['structure_tpl'] = $rtplquick;
 			} elseif ($rtplmode == 3 && !empty($rtplforcedarr[$i])) {
@@ -242,6 +242,7 @@ else
 			} elseif ($rtplmode == 1) {
 				$rstructure['structure_tpl'] = '';
 			}
+
 			if (!cot_error_found()) {
 				$res = cot_structure_update($n, $i, $oldrow, $rstructure, $is_module);
 				if (is_array($res)) {
@@ -249,6 +250,7 @@ else
 				}
 			}
 		}
+
 		cot_extrafield_movefiles();
 		cot_auth_clear('all');
 		if ($cache) {
