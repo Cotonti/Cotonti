@@ -33,6 +33,7 @@ $newpmtitle = '';
 $newpmtext = '';
 $newpmrecipient = '';
 $fromstate = 0;
+$touser = '';
 if ($a == 'send') {
 	cot_shield_protect();
 	$newpmtitle = cot_import('newpmtitle', 'P', 'TXT') ?: '';
@@ -132,52 +133,40 @@ if ($a == 'send') {
 	}
 }
 
-if (!empty($to))
-{
+if (!empty($to)) {
 	$totalrecipients = 0;
-	if (mb_substr(mb_strtolower($to), 0, 1) == 'g' && $usr['maingrp'] == 5)
-	{
+	if (mb_substr(mb_strtolower($to), 0, 1) == 'g' && $usr['maingrp'] == 5) {
 		$group = cot_import(mb_substr($to, 1, 8), 'D', 'INT');
-		if ($group > 1)
-		{
+		if ($group > 1) {
 			$sql_pm_users = $db->query("SELECT user_id, user_name FROM $db_users WHERE user_maingrp = $group ORDER BY user_name ASC");
 		}
-	}
-	else
-	{
+	} else {
 		$touser_src = explode('-', $to);
 		$touser_req = count($touser_src);
-		foreach ($touser_src as $k => $i)
-		{
+		foreach ($touser_src as $k => $i) {
 			$userid = cot_import($i, 'D', 'INT');
-			if ($userid > 0)
-			{
+			if ($userid > 0) {
 				$touser_sql[] = $userid;
 			}
 		}
-		if (count($touser_sql) > 0)
-		{
+		if (count($touser_sql) > 0) {
 			$touser_sql = implode(',', $touser_sql);
 			$touser_sql = '('.$touser_sql.')';
 			$sql_pm_users = $db->query("SELECT user_id, user_name FROM $db_users WHERE user_id IN $touser_sql");
 		}
 	}
 	$sql_pm_users && $totalrecipients = $sql_pm_users->rowCount();
-	if ($totalrecipients > 0)
-	{
-		while ($row = $sql_pm_users->fetch())
-		{
+	if ($totalrecipients > 0) {
+		while ($row = $sql_pm_users->fetch()) {
 			$touser_ids[] = $row['user_id'];
 			$touser_names[] = htmlspecialchars($row['user_name']);
 		}
 		$sql_pm_users->closeCursor();
 		$touser = implode(", ", $touser_names);
-		if ($totalrecipients < $touser_req)
-		{
+		if ($totalrecipients < $touser_req) {
 			cot_error('pm_wrongname', 'newpmrecipient');
 		}
-		if (!$usr['isadmin'] && $totalrecipients > 10)
-		{
+		if (!$usr['isadmin'] && $totalrecipients > 10) {
 			cot_error(sprintf($L['pm_toomanyrecipients'], 10), 'newpmrecipient');
 		}
 	}
@@ -189,12 +178,11 @@ $title_params = array(
 	'PM' => $L['Private_Messages'],
 	'SEND_NEW' => $L['pm_sendnew']
 );
-$out['subtitle'] = cot_title('{SEND_NEW} - {PM}', $title_params);
-$out['head'] .= $R['code_noindex'];
+cot::$out['subtitle'] = cot_title('{SEND_NEW} - {PM}', $title_params);
+cot::$out['head'] .= cot::$R['code_noindex'];
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.send.main') as $pl)
-{
+foreach (cot_getextplugins('pm.send.main') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -214,9 +202,11 @@ if ($id) {
 	}
 }
 
-require_once $cfg['system_dir'] . '/header.php';
+require_once cot::$cfg['system_dir'] . '/header.php';
 
-if (!isset($pmalttpl)) $pmalttpl = null;
+if (!isset($pmalttpl)) {
+    $pmalttpl = null;
+}
 $t = new XTemplate(cot_tplfile(array('pm', 'send', $pmalttpl)));
 
 if (!COT_AJAX) {
