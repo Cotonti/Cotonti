@@ -3830,6 +3830,8 @@ if (!function_exists('strptime'))
 	 * @param string $date
 	 * @param string $format
 	 * @return boolean
+     *
+     * @deprecated This function has been DEPRECATED as of PHP 8.1.0. Relying on this function is highly discouraged.
 	 */
 	function strptime($date, $format)
 	{
@@ -3873,21 +3875,22 @@ if (!function_exists('strptime'))
  */
 function cot_date2stamp($date, $format = null)
 {
-	if (is_null($date) || $date == '0000-00-00' || mb_strtolower($date) == 'null') return null;
-	if (!$format)
-	{
-		preg_match('#(\d{4})-(\d{2})-(\d{2})#', $date, $m);
-		return mktime(0, 0, 0, (int) $m[2], (int) $m[3], (int) $m[1]);
-	}
-	if ($format == 'auto')
-	{
-		return strtotime($date);
+	if (empty($date) || $date == '0000-00-00' || mb_strtolower($date) == 'null') {
+        return null;
+    }
+	if (!$format || $format == 'auto') {
+	    $result = strtotime($date);
+		return ($result === false) ? null : $result;
 	}
 	$format = cot_date2strftime($format);
 	$m = strptime($date, $format);
 	return mktime(
-		(int)$m['tm_hour'], (int)$m['tm_min'], (int)$m['tm_sec'],
-		(int)$m['tm_mon']+1, (int)$m['tm_mday'], (int)$m['tm_year']+1900
+        (int) $m['tm_hour'],
+        (int) $m['tm_min'],
+        (int) $m['tm_sec'],
+        (int) $m['tm_mon'] + 1,
+        (int) $m['tm_mday'],
+        (int) $m['tm_year'] + 1900
 	);
 }
 
