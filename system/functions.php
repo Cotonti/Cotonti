@@ -2268,18 +2268,19 @@ function cot_build_url($text, $maxlen=64)
  */
 function cot_build_user($id, $user, $extra_attrs = '')
 {
-	if (function_exists('cot_build_user_custom'))
-	{
+    $id = (int) $id;
+	if (function_exists('cot_build_user_custom')) {
 		return cot_build_user_custom($id, $user, $extra_attrs);
 	}
-	if (!$id)
-	{
+	if (!$id) {
 		return empty($user) ? '' : $user;
 	}
-	else
-	{
-		return empty($user) ? '?' : cot_rc_link(cot_url('users', 'm=details&id='.$id.'&u='.$user), $user, $extra_attrs);
-	}
+
+    return cot_rc_link(
+        cot_url('users', ['m' => 'details', 'id' => $id, 'u' => $user,]),
+        !empty($user) ? $user : '?',
+        $extra_attrs
+    );
 }
 
 /**
@@ -5468,38 +5469,30 @@ function cot_parse_str($str)
 function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = false, $ignore_appendix = false)
 {
 	global $cot_url_appendix;
+
 	// Preprocess arguments
-	if (is_string($params))
-	{
+	if (is_string($params)) {
 		$params = cot_parse_str($params);
+	} elseif (!is_array($params)) {
+		$params = [];
 	}
-	elseif (!is_array($params))
-	{
-		$params = array();
-	}
-	if (!$ignore_appendix && count($cot_url_appendix) > 0)
-	{
+	if (!$ignore_appendix && count($cot_url_appendix) > 0) {
 		$params = $params + $cot_url_appendix;
 	}
 
-	foreach ($params as $k => $param)
-	{
-		if (is_bool($param))
-		{
-			$params[$k] = (int)$param;
+	foreach ($params as $k => $param) {
+		if (is_bool($param)) {
+			$params[$k] = (int) $param;
 		}
-		if (!is_array($param) && !is_object($param))
-		{
+		if (!is_array($param) && !is_object($param)) {
 			$params[$k] = strval($param);
 		}
-		if ($params[$k] === '')
-		{
+		if ($params[$k] === '' || $params[$k] === null) {
 			unset($params[$k]);
 		}
 	}
 
-	if (function_exists('cot_url_custom'))
-	{
+	if (function_exists('cot_url_custom')) {
 		return cot_url_custom($name, $params, $tail, $htmlspecialchars_bypass);
 	}
 
