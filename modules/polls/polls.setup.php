@@ -3,10 +3,10 @@
 [BEGIN_COT_EXT]
 Name=Polls
 Description=Lets the user vote for specific options
-Version=1.0.4
-Date=2022-07-13
+Version=1.0.5
+Date=2023-02-24
 Author=Neocrome & Cotonti Team
-Copyright=(c) Cotonti Team 2008-2022
+Copyright=(c) Cotonti Team 2008-2023
 Notes=BSD License
 Auth_guests=RW
 Lock_guests=A

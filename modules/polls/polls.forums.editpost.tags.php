@@ -12,11 +12,18 @@ Tags=
  * @package Polls
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var bool $is_first_post
+ * @var int $q topic id
+ * @var XTemplate $t
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($is_first_post && $usr['isadmin'] && cot_module_active('polls') && cot_poll_edit_form($q, $t, 'MAIN.POLL', 'forum'))
-{
+if (
+    $is_first_post
+    && cot::$usr['isadmin']
+    && cot_poll_edit_form($q, $t, 'MAIN.POLL', 'forum')
+) {
     $t->parse('MAIN.POLL');
 }

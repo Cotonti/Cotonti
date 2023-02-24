@@ -10,9 +10,9 @@
 defined('COT_CODE') or die('Wrong URL');
 
 $id = cot_import('id', 'G', 'INT'); // post id
-$s = cot_import('s', 'G', 'TXT'); // section cat
-$q = cot_import('q', 'G', 'INT'); // topic id
-$p = cot_import('p', 'G', 'INT'); // post id
+$s = cot_import('s', 'G', 'TXT');   // section category code
+$q = cot_import('q', 'G', 'INT');   // topic id
+$p = cot_import('p', 'G', 'INT');   // post id
 list($pg, $d, $durl) = cot_import_pagenav('d', cot::$cfg['forums']['maxpostsperpage']); // page
 $quote = cot_import('quote', 'G', 'INT');
 

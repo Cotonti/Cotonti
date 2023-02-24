@@ -38,7 +38,7 @@ $L['polls_updated'] = 'Опрос обновлен';
 $L['polls_viewarchives'] = 'Все опросы';
 $L['polls_viewresults'] = 'Результаты';
 $L['polls_Vote'] = 'Голосовать';
-$L['polls_votecasted'] = 'Выполнено, ваш голос записан';
+//$L['polls_votecasted'] = 'Выполнено, ваш голос записан';
 $L['polls_votes'] = 'голосов';
 
 /**

@@ -152,6 +152,8 @@ function cot_auth_clear($id = 'all')
  * @param int $userid User ID
  * @param bool $maingroup Return level of maingroup
  * @return int
+ *
+ * @deprecated It is not used anywhere. Looks like outdated User Level mechanics
  */
 function cot_auth_getlevel($userid, $maingroup = false)
 {

@@ -37,7 +37,7 @@ $L['polls_updated'] = 'The poll has been successfully updated';
 $L['polls_viewarchives'] = 'View all polls';
 $L['polls_viewresults'] = 'View results';
 $L['polls_Vote'] = 'Vote';
-$L['polls_votecasted'] = 'Done, vote succesfully recorded';
+//$L['polls_votecasted'] = 'Done, vote succesfully recorded';
 $L['polls_votes'] = 'votes';
 
 /**

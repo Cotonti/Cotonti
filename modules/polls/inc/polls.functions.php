@@ -28,7 +28,7 @@ cot::$db->registerTable('polls_voters');
 /**
  * Adds form for create/edit Poll
  *
- * @param int $id Poll ID or Poll Code if $type is not epmty or new for new Poll
+ * @param int $id Poll ID or Poll Code if $type is not empty or new for new Poll
  * @param XTemplate $t Template
  * @param string $block Poll block in Template
  * @param string $type Poll type
@@ -62,11 +62,17 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 			}
 		}
 
-	} elseif ((int) $id > 0) {
-		$where = (!$type) ? "poll_id = " . (int) $id : "poll_type = '" . $db->prep($type) . "' AND poll_code = '$id'";
-		$sql = $db->query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
-		if ($row = $sql->fetch())
-		{
+	} elseif (!empty($id)) {
+        if ($type) {
+            $where = "poll_type = :type AND poll_code = :code";
+            $params = ['type' => $type, 'code' => $id];
+        } else {
+            $where = "poll_id = ?";
+            $params = [$id];
+        }
+
+		$sql = cot::$db->query('SELECT * FROM ' . cot::$db->polls . " WHERE $where LIMIT 1", $params);
+		if ($row = $sql->fetch()) {
 			$id = $row["poll_id"];
 			$poll_text = htmlspecialchars($row["poll_text"]);
 			$multiple = (bool)$row['poll_multiple'];
@@ -80,25 +86,24 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 				$t->parse($block . ".OPTIONS");
 			}
 			$sql1->closeCursor();
-		}
+		} else {
+            $id = 0;
+        }
 	}
 
-	while ($counter < 2)
-	{
+	while ($counter < 2) {
 		$counter++;
 		$t->assign('EDIT_POLL_OPTION_TEXT', cot_inputbox('text', 'poll_option[]', '', 'size="40" maxlength="128"'));
 		$t->parse($block . ".OPTIONS");
 	}
 
-	if ($counter < $cfg['polls']['max_options_polls'])
-	{
+	if ($counter < $cfg['polls']['max_options_polls']) {
 		$counter++;
 		$t->assign('EDIT_POLL_OPTION_TEXT', cot_inputbox('text', 'poll_option[]', '', 'size="40" maxlength="128"'));
 		$t->parse($block . ".OPTIONS");
 	}
 
-	if ((int) $id > 0)
-	{
+	if ((int) $id > 0) {
 		$t->assign(array(
 			'EDIT_POLL_LOCKED' => cot_checkbox($poll_state, 'poll_state', $L['Locked']),
 			'EDIT_POLL_RESET' => cot_checkbox(0, 'poll_reset', $L['Reset']),
@@ -115,10 +120,12 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 		'EDIT_POLL_ID' => $id,
 		'EDIT_POLL_MULTIPLE' => cot_checkbox($multiple, 'poll_multiple', $L['polls_multiple']),
 	));
-	if ($poll_full_template == true) {
+
+	if ($poll_full_template) {
 		$t->parse($block);
 		return ($t->text($block));
 	}
+
 	return true;
 }
 
@@ -127,7 +134,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
  */
 function cot_poll_check()
 {
-	global $cfg, $L, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
+	global $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
 
     $poll_id = (int) cot_import('poll_id', 'P', 'INT');
 
@@ -140,37 +147,40 @@ function cot_poll_check()
 	$poll_state = cot_import('poll_state', 'P', 'BOL');
 	$poll_options = cot_import('poll_option', 'P', 'ARR');
 
-	if ($poll_id > 0 && $poll_delete) {
-		cot_poll_delete($poll_id);
-		$poll_id = 0;
-	}
-
 	if ($poll_id > 0) {
+        if ($poll_delete) {
+            cot_poll_delete($poll_id);
+            $poll_id = 0;
+            $poll_text = null;
+            $poll_options = null;
+            return;
+        }
+
 		if ($poll_reset) {
 			cot_poll_reset($poll_id);
 		}
-
-		$poll_options_temp = array();
-		foreach ($poll_options as $key => $val) {
-			$val = trim(cot_import($val, 'D', 'TXT'));
-			if (!empty($val)) {
-				$poll_options_temp[$key] = $val;
-			}
-		}
-
-		$poll_options = $poll_options_temp;
-		if (is_int($poll_id) || $cfg['polls']['del_dup_options']) {
-			$poll_options = array_unique($poll_options);
-		}
-
-		if (mb_strlen($poll_text) < 4) {
-			cot_error('polls_error_title', 'poll_text');
-		}
-
-		if (count($poll_options) < 2) {
-			cot_error('polls_error_count', 'poll_option');
-		}
 	}
+
+    $poll_options_temp = [];
+    foreach ($poll_options as $key => $val) {
+        $val = trim(cot_import($val, 'D', 'TXT'));
+        if (!empty($val)) {
+            $poll_options_temp[$key] = $val;
+        }
+    }
+
+    $poll_options = $poll_options_temp;
+    if (cot::$cfg['polls']['del_dup_options']) {
+        $poll_options = array_unique($poll_options);
+    }
+
+    if (mb_strlen($poll_text) < 4) {
+        cot_error('polls_error_title', 'poll_text');
+    }
+
+    if (count($poll_options) < 2) {
+        cot_error('polls_error_count', 'poll_option');
+    }
 }
 
 /**
@@ -178,65 +188,75 @@ function cot_poll_check()
  *
  * @param string $type Poll type
  * @param int $code Poll Code
- * @return bool
+ * @return int|null Saved poll id or null if it was not saved
  * @global CotDB $db
  */
 function cot_poll_save($type = 'index', $code = '')
 {
-	global $db, $sys, $db_polls, $db_polls_options, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
+	global $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
 
-	if (isset($poll_id) && !cot_error_found() && $poll_options)
-	{
-		if ((int) $poll_id > 0)
-		{
-			$db->update($db_polls, array(
-				'poll_state' => (int) $poll_state,
-				'poll_text' => $poll_text,
-				'poll_multiple' => (int) $poll_multiple
-				), "poll_id = ".(int)$poll_id);
-			$newpoll_id = (int)$poll_id;
-		}
-		else
-		{
-			$db->insert($db_polls, array(
-				'poll_type' => $type,
-				'poll_state' => COT_POLL_ACTIVE,
-				'poll_creationdate' => (int) $sys['now'],
-				'poll_text' => $poll_text,
-				'poll_multiple' => (int) $poll_multiple,
-				'poll_code' => (int) $code
-			));
-			$newpoll_id = $db->lastInsertId();
-		}
+    if (!isset($poll_id) || cot_error_found() || empty($poll_options)) {
+        return null;
+    }
 
-		foreach ($poll_options as $key => $val)
-		{
-			if (!empty($val))
-			{
-				$key = mb_substr($key, 2);
-				if ((int) $key > 0 && (int) $poll_id > 0)
-				{
-					$db->update($db_polls_options, array('po_text' => $val), "po_id = '" . (int) $key . "'");
-					$ids[] = $key;
-				}
-				else
-				{
-					$db->insert($db_polls_options, array(
-						'po_pollid' => $newpoll_id,
-						'po_text' => $val,
-						'po_count' => 0
-					));
-					$ids[] = $db->lastInsertId();
-				}
-			}
-		}
-		if ((int) $poll_id > 0 && count($ids) > 0)
-		{
-			$sql = $db->delete($db_polls_options, "po_pollid = '" . (int) $newpoll_id . "' AND po_id NOT IN ('" . implode("','", $ids) . "')");
-		}
-		return ($newpoll_id);
-	}
-	return (false);
+    $poll_id = (int) $poll_id;
+
+    if ($poll_id > 0) {
+        cot::$db->update(
+            cot::$db->polls,
+            [
+                'poll_state' => (int) $poll_state,
+                'poll_text' => $poll_text,
+                'poll_multiple' => (int) $poll_multiple,
+            ],
+            'poll_id = ?',
+            $poll_id
+        );
+        $newPollId = $poll_id;
+
+    } else {
+        cot::$db->insert(
+            cot::$db->polls,
+            [
+                'poll_type' => $type,
+                'poll_state' => COT_POLL_ACTIVE,
+                'poll_creationdate' => (int) cot::$sys['now'],
+                'poll_text' => $poll_text,
+                'poll_multiple' => (int) $poll_multiple,
+                'poll_code' => $code,
+            ]
+        );
+        $newPollId = cot::$db->lastInsertId();
+    }
+
+    $ids = [];
+    foreach ($poll_options as $key => $val) {
+        if (!empty($val)) {
+            $key = (int) mb_substr($key, 2);
+            if ($key > 0 && $poll_id > 0) {
+                cot::$db->update(cot::$db->polls_options, ['po_text' => $val,], 'po_id = ?', $key);
+                $ids[] = $key;
+            } else {
+                cot::$db->insert(
+                    cot::$db->polls_options,
+                    [
+                        'po_pollid' => $newPollId,
+                        'po_text' => $val,
+                        'po_count' => 0,
+                    ]
+                );
+                $ids[] = cot::$db->lastInsertId();
+            }
+        }
+    }
+
+    if ($poll_id > 0 && count($ids) > 0) {
+        cot::$db->delete(
+            cot::$db->polls_options,
+            "po_pollid = {$newPollId} AND po_id NOT IN (" . implode(", ", $ids) . ")");
+    }
+
+    return $newPollId;
 }
 
 /**
