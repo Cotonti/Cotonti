@@ -66,7 +66,7 @@
 						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_PATH}</td>
 						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
 						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
-						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPLQUICK}</td>
+						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_CODE}</td>
 						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
 						<td class="action {ADMIN_STRUCTURE_ODDEVEN}">
 							<a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax button">{PHP.L.short_config}</a>
@@ -128,17 +128,14 @@
 				</tr>
 				<tr>
 					<td>{PHP.L.adm_tpl_mode}:</td>
-					<td>
-						{ADMIN_STRUCTURE_TPLMODE} {ADMIN_STRUCTURE_SELECT}<br />
-						{PHP.L.adm_tpl_quickcat}: {ADMIN_STRUCTURE_TPLQUICK}
-					</td>
+					<td>{ADMIN_STRUCTURE_TPL}</td>
 				</tr>
-<!-- BEGIN: EXTRAFLD -->
+				<!-- BEGIN: EXTRAFLD -->
 				<tr>
 					<td>{ADMIN_STRUCTURE_EXTRAFLD_TITLE}:</td>
 					<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_EXTRAFLD}</td>
 				</tr>
-<!-- END: EXTRAFLD -->
+				<!-- END: EXTRAFLD -->
 			</table>
 		</div>
 	</div>
@@ -188,54 +185,54 @@
 </form>
 <!-- END: OPTIONS -->
 
-	<!-- BEGIN: NEWCAT -->
-	<div class="block">
-		<h2>{PHP.L.Add}:</h2>
-		<div class="wrapper">
-			<form name="addstructure" id="addstructure" action="{ADMIN_STRUCTURE_URL_FORM_ADD}" method="post" class="ajax" enctype="multipart/form-data">
-				<table class="cells">
-					<tfoot>
-						<tr>
-							<td colspan="2">
-								<input type="submit" class="submit" value="{PHP.L.Add}" />
-							</td>
-						</tr>
-					</tfoot>
-					<tbody>
-						<tr>
-							<td class="w-20">{PHP.L.Path}:</td>
-							<td class="w-80">{ADMIN_STRUCTURE_PATH} {PHP.L.adm_required}</td>
-						</tr>
-						<tr>
-							<td>{PHP.L.Code}:</td>
-							<td>{ADMIN_STRUCTURE_CODE} {PHP.L.adm_required}</td>
-						</tr>
-						<tr>
-							<td>{PHP.L.Title}:</td>
-							<td>{ADMIN_STRUCTURE_TITLE} {PHP.L.adm_required}</td>
-						</tr>
-						<tr>
-							<td>{PHP.L.Description}:</td>
-							<td>{ADMIN_STRUCTURE_DESC}</td>
-						</tr>
-						<tr>
-							<td>{PHP.L.Icon}:</td>
-							<td>{ADMIN_STRUCTURE_ICON}</td>
-						</tr>
-						<tr>
-							<td>{PHP.L.Locked}:</td>
-							<td>{ADMIN_STRUCTURE_LOCKED}</td>
-						</tr>
-<!-- BEGIN: EXTRAFLD -->
-						<tr>
-							<td>{ADMIN_STRUCTURE_EXTRAFLD_TITLE}:</td>
-							<td>{ADMIN_STRUCTURE_EXTRAFLD}</td>
-						</tr>
-<!-- END: EXTRAFLD -->
-					</tbody>
-				</table>
-			</form>
-		</div>
+<!-- BEGIN: NEWCAT -->
+<div class="block">
+	<h2>{PHP.L.Add}:</h2>
+	<div class="wrapper">
+		<form name="addstructure" id="addstructure" action="{ADMIN_STRUCTURE_URL_FORM_ADD}" method="post" class="ajax" enctype="multipart/form-data">
+			<table class="cells">
+				<tfoot>
+					<tr>
+						<td colspan="2">
+							<input type="submit" class="submit" value="{PHP.L.Add}" />
+						</td>
+					</tr>
+				</tfoot>
+				<tbody>
+					<tr>
+						<td class="w-20">{PHP.L.Path}:</td>
+						<td class="w-80">{ADMIN_STRUCTURE_PATH} {PHP.L.adm_required}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.Code}:</td>
+						<td>{ADMIN_STRUCTURE_CODE} {PHP.L.adm_required}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.Title}:</td>
+						<td>{ADMIN_STRUCTURE_TITLE} {PHP.L.adm_required}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.Description}:</td>
+						<td>{ADMIN_STRUCTURE_DESC}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.Icon}:</td>
+						<td>{ADMIN_STRUCTURE_ICON}</td>
+					</tr>
+					<tr>
+						<td>{PHP.L.Locked}:</td>
+						<td>{ADMIN_STRUCTURE_LOCKED}</td>
+					</tr>
+					<!-- BEGIN: EXTRAFLD -->
+					<tr>
+						<td>{ADMIN_STRUCTURE_EXTRAFLD_TITLE}:</td>
+						<td>{ADMIN_STRUCTURE_EXTRAFLD}</td>
+					</tr>
+					<!-- END: EXTRAFLD -->
+				</tbody>
+			</table>
+		</form>
 	</div>
+</div>
 <!-- END: NEWCAT -->
 <!-- END: MAIN -->

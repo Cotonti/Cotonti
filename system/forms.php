@@ -83,40 +83,47 @@ function cot_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @param string $separator Option separator, by default is taken from $R['input_radio_separator']
  * @param string $custom_rc Custom resource string name
+ * @param bool $htmlspecialcharsBypass Bypass htmlspecialchars() in option titles and values
  * @return string
  */
-function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $separator = '', $custom_rc = '')
-{
-	global $R;
-	if (!is_array($values))
-	{
+function cot_radiobox(
+    $chosen,
+    $name,
+    $values,
+    $titles = [],
+    $attrs = '',
+    $separator = '',
+    $custom_rc = '',
+    $htmlspecialcharsBypass = false
+) {
+	if (!is_array($values)) {
 		$values = explode(',', $values);
 	}
-	if (!is_array($titles))
-	{
+	if (!is_array($titles)) {
 		$titles = explode(',', $titles);
 	}
 	$use_titles = count($values) == count($titles);
 	$input_attrs = cot_rc_attr_string($attrs);
 	$chosen = cot_import_buffered($name, $chosen);
-	if (empty($separator))
-	{
-		$separator = $R['input_radio_separator'];
+	if (empty($separator)) {
+		$separator = cot::$R['input_radio_separator'];
 	}
 	$i = 0;
 	$result = '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	$rc = empty($R["input_radio_{$rc_name}"]) ? (empty($custom_rc) ? 'input_radio' : $custom_rc) : "input_radio_{$rc_name}";
-	foreach ($values as $k => $x)
-	{
-		$checked = ($x == $chosen) ? ' checked="checked"' : '';
-		$title = $use_titles ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
-		if ($i > 0)
-		{
+	$rc = empty(cot::$R["input_radio_{$rc_name}"]) ?
+        (empty($custom_rc) ? 'input_radio' : $custom_rc) : "input_radio_{$rc_name}";
+	foreach ($values as $k => $value) {
+		$checked = ($value == $chosen) ? ' checked="checked"' : '';
+		$title = $use_titles ? $titles[$k] : $value;
+            if (!$htmlspecialcharsBypass) {
+                $title = htmlspecialchars($title);
+            }
+		if ($i > 0) {
 			$result .= $separator;
 		}
 		$result .= cot_rc($rc, array(
-			'value' => htmlspecialchars($x),
+			'value' => htmlspecialchars($value),
 			'name' => $name,
 			'checked' => $checked,
 			'title' => $title,
@@ -124,6 +131,7 @@ function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
 		));
 		$i++;
 	}
+
 	return $result;
 }
 
@@ -137,11 +145,19 @@ function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
  * @param bool $add_empty Allow empty choice
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @param string $custom_rc Custom resource string name
- * @param bool $htmlspecialchars_bypass Bypass htmlspecialchars() in values
+ * @param bool $htmlspecialchars_bypass Bypass htmlspecialchars() in option titles and values
  * @return string
  */
-function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = true, $attrs = '', $custom_rc = '', $htmlspecialchars_bypass = false)
-{
+function cot_selectbox(
+    $chosen,
+    $name,
+    $values,
+    $titles = [],
+    $add_empty = true,
+    $attrs = '',
+    $custom_rc = '',
+    $htmlspecialcharsBypass = false
+) {
 	global $R, $cfg;
 
 	if (!is_array($values)) {
@@ -176,8 +192,11 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 		$x = trim($x);
 		$selected = ($multi && in_array($x, $chosen)) || (!$multi && $x == $chosen) ? ' selected="selected"' : '';
 		$title = ($use_titles && !empty($titles[$k])) ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
+        if (!$htmlspecialcharsBypass) {
+            $title = htmlspecialchars($title);
+        }
 		$options .= cot_rc($rc, array(
-			'value' => $htmlspecialchars_bypass ? $x : htmlspecialchars($x),
+			'value' => $htmlspecialcharsBypass ? $x : htmlspecialchars($x),
 			'selected' => $selected,
 			'title' => $title
 		));

@@ -39,7 +39,7 @@ foreach (cot_getextplugins('admin.structure.first') as $pl) {
 
 if (empty($n))
 {
-	$adminpath[] = array(cot_url('admin', 'm=structure'), $L['Structure']);
+	$adminpath[] = [cot_url('admin', 'm=structure'), cot::$L['Structure'],];
 	// Show available module list
 	if (is_array($extension_structure) && count($extension_structure) == 1 && ((cot_plugin_active($extension_structure[0]) || cot_module_active($extension_structure[0]))))
 	{
@@ -109,9 +109,8 @@ else
 	{
 		require_once cot_incfile($n, $is_module ? 'module' : 'plug');
 	}
-	if (empty($adminhelp))
-	{
-		$adminhelp = $L['adm_help_structure'];
+	if (empty($adminhelp)) {
+		$adminhelp = cot::$L['adm_help_structure'];
 	}
 
 	if ($a == 'reset' && !empty($al))
@@ -169,11 +168,11 @@ else
 
 		$rtplmodearr = cot_import('rstructuretplmode', 'P', 'ARR');
 		$rtplforcedarr = cot_import('rstructuretplforced', 'P', 'ARR');
-		$rtplquickarr = cot_import('rstructuretplquick', 'P', 'ARR');
+		$rtplcodearr = cot_import('rstructuretplcode', 'P', 'ARR');
 
         $rtplmodearr = !empty($rtplmodearr) ? $rtplmodearr : [];
         $rtplforcedarr = !empty($rtplforcedarr) ? $rtplforcedarr : [];
-        $rtplquickarr = !empty($rtplquickarr) ? $rtplquickarr : [];
+        $rtplcodearr = !empty($rtplcodearr) ? $rtplcodearr : [];
 
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.structure.update.first') as $pl) {
@@ -230,11 +229,11 @@ else
 			$rstructure['structure_title'] || cot_error('adm_structure_title_required', 'rstructuretitle');
 
 			$rtplmode = isset($rtplmodearr[$i]) ? cot_import($rtplmodearr[$i], 'D', 'INT') : 0;
-			$rtplquick = isset($rtplquickarr[$i]) ? cot_import($rtplquickarr[$i], 'D', 'TXT') : '';
+			$rtplcode = isset($rtplcodearr[$i]) ? cot_import($rtplcodearr[$i], 'D', 'TXT') : '';
 
             $rstructure['structure_tpl'] = '';
-			if (!empty($rtplquick) && empty($rtplmode)) {
-				$rstructure['structure_tpl'] = $rtplquick;
+			if (!empty($rtplcode) && (empty($rtplmode) || $rtplmode == 4)) {
+				$rstructure['structure_tpl'] = $rtplcode;
 			} elseif ($rtplmode == 3 && !empty($rtplforcedarr[$i])) {
 				$rstructure['structure_tpl'] = cot_import($rtplforcedarr[$i], 'D', 'TXT');
 			} elseif ($rtplmode == 2) {
@@ -280,7 +279,7 @@ else
 		$rstructure['structure_locked'] = (cot_import('rstructurelocked', 'P', 'BOL')) ? 1 : 0;
 		$rstructure['structure_area'] = $n;
 		$rtplmode = cot_import('rtplmode', 'P', 'INT');
-		$rtplquick = cot_import('rtplquick', 'P', 'TXT');
+		$rtplcode = cot_import('rtplcode', 'P', 'TXT');
 
         if (!empty(cot::$extrafields[cot::$db->structure])) {
             foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
@@ -298,8 +297,8 @@ else
 		$rstructure['structure_path'] || cot_error('adm_structure_path_required', 'rstructurepath');
 		$rstructure['structure_title'] || cot_error('adm_structure_title_required', 'rstructuretitle');
 
-		if (!empty($rtplquick)) {
-			$rstructure['structure_tpl'] = $rtplquick;
+		if (!empty($rtplcode)) {
+			$rstructure['structure_tpl'] = $rtplcode;
 		} elseif ($rtplmode == 3) {
 			$rstructure['structure_tpl'] = cot_import('rtplforced', 'P', 'TXT');
 		} elseif ($rtplmode == 2) {
@@ -402,25 +401,22 @@ else
     } else {
         $urlParams['pl'] = $n;
     }
-	$adminpath[] = array(cot_url('admin', $urlParams), $ext_info['name']);
-	$adminpath[] = array(cot_url('admin', 'm=structure&n='.$n), $L['Structure']);
+	$adminpath[] = [cot_url('admin', $urlParams), $ext_info['name'],];
+	$adminpath[] = [cot_url('admin', 'm=structure&n='.$n), cot::$L['Structure'],];
 
-	if ($id > 0 || !empty($al))
-	{
+	if ($id > 0 || !empty($al)) {
 		$where = $id > 0 ? 'structure_id='.(int)$id : "structure_code='".$db->prep($al)."'";
-		$sql = $db->query("SELECT * FROM $db_structure WHERE $where LIMIT 1");
+		$sql = cot::$db->query("SELECT * FROM " . cot::$db->structure . " WHERE $where LIMIT 1");
 		cot_die($sql->rowCount() == 0);
-	}
-	elseif ($mode && ($mode == 'all' || $structure[$n][$mode]))
-	{
+
+	} elseif ($mode && ($mode == 'all' || $structure[$n][$mode])) {
 		$sqlmask = ($mode == 'all') ? "structure_path NOT LIKE '%.%'" : "structure_path LIKE '".$db->prep($structure[$n][$mode]['rpath']).".%' AND structure_path NOT LIKE '".$db->prep($structure[$n][$mode]['rpath']).".%.%'";
 		$sql = $db->query("SELECT * FROM $db_structure WHERE structure_area='".$db->prep($n)."' AND $sqlmask ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$maxrowsperpage);
 
 		$totalitems = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area='".$db->prep($n)."' AND $sqlmask")->fetchColumn();
 		$pagenav = cot_pagenav('admin', 'm=structure&n='.$n.'&mode='.$mode, $d, $totalitems, $maxrowsperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
-	}
-	else
-	{
+
+	} else {
 		$sql = $db->query("SELECT * FROM $db_structure WHERE structure_area='".$db->prep($n)."' ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$maxrowsperpage);
 
 		$totalitems = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area='".$db->prep($n)."'")->fetchColumn();
@@ -448,23 +444,63 @@ else
 			$pathspaceimg .= '.' . cot::$R['admin_icon_blank'];
 		}
 
+        $categoryList = [];
+        // @todo don't use category code. Use ID instead
+        foreach ($structure[$n] as $catCode => $x) {
+            if ($catCode != 'all') {
+                $categoryList[$catCode] = $x['tpath'];
+            }
+        }
+
 		if (empty($row['structure_tpl'])) {
-			$structure_tpl_sym = '-';
-			$check_tpl = "1";
+			$tplMode = '1';
 		} elseif ($row['structure_tpl'] == 'same_as_parent') {
-			$structure_tpl_sym = '*';
-			$check_tpl = "2";
+            $tplMode = '2';
 		} else {
-			$structure_tpl_sym = '+';
-			$check_tpl = "3";
+            $tplMode = '3';
+            if (!in_array($row['structure_tpl'], array_keys($categoryList))) {
+                $tplMode = '4';
+            }
 		}
 
-		foreach ($structure[$n] as $i => $x) {
-			if ($i != 'all') {
-				$cat_path[$i] = $x['tpath'];
-			}
-		}
-		$cat_selectbox = cot_selectbox($row['structure_tpl'], 'rstructuretplforced['.$structure_id.']', array_keys($cat_path), array_values($cat_path), false);
+		$categoryTplCodeSelect = cot_selectbox(
+            $row['structure_tpl'],
+            'rstructuretplforced[' . $structure_id . ']',
+            array_keys($categoryList),
+            array_values($categoryList),
+            false
+        );
+
+        $categoryTplCode = cot_inputbox(
+            'text',
+            'rstructuretplcode[' . $structure_id . ']',
+            $row['structure_tpl'],
+            'maxlength="255"'
+        );
+
+        $categoryTpl = cot_radiobox(
+            $tplMode,
+            'rstructuretplmode[' . $structure_id . ']',
+            ['1', '2', '3', '4'],
+            [
+                cot::$L['adm_tpl_empty'],
+                cot::$L['adm_tpl_parent'],
+                cot::$L['adm_tpl_forced'] . ' ' . $categoryTplCodeSelect,
+                cot::$L['adm_tpl_code'] . ' ' . $categoryTplCode,
+            ],
+            '',
+            '<br />',
+            '',
+            true
+        );
+
+        $children = cot_structure_children(
+            $row['structure_area'],
+            $row['structure_code'],
+            true,
+            false,
+            false
+        );
 
 		$t->assign(array(
 			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_confirm_url(
@@ -481,29 +517,19 @@ else
                 $row['structure_path'],
                 'maxlength="255"'
             ),
-			'ADMIN_STRUCTURE_TPL_SYM' => $structure_tpl_sym,
-			'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox(
-                $check_tpl,
-                'rstructuretplmode['.$structure_id.']',
-                array('1', '2', '3'),
-                array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced'],),
-                '',
-                '<br />'
-            ),
-			'ADMIN_STRUCTURE_TPLQUICK' => cot_inputbox(
-                'text',
-                'rstructuretplquick['.$structure_id.']',
-                $id > 0 && array_key_exists($row['structure_tpl'], $cat_path) ? '' : $row['structure_tpl'],
-                'size="10" maxlength="255"'
-            ),
+
+            // @deprecated. Left for backwards compatibility. Actually this is not a template mode, but a
+            // selection (setting) of the template code
+            'ADMIN_STRUCTURE_TPLMODE' => $categoryTpl,
+            'ADMIN_STRUCTURE_TPL' => $categoryTpl,
+            'ADMIN_STRUCTURE_TPL_CODE_SELECT' => $categoryTplCodeSelect,
+            'ADMIN_STRUCTURE_TPL_CODE' => $categoryTplCode,
 			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'maxlength="255"'),
 			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$structure_id.']', $row['structure_desc'], 'maxlength="255"'),
 			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$structure_id.']', $row['structure_icon'], 'maxlength="128"'),
 			'ADMIN_STRUCTURE_LOCKED' => cot_checkbox($row['structure_locked'], 'rstructurelocked['.$structure_id.']'),
-			'ADMIN_STRUCTURE_SELECT' => $cat_selectbox,
 			'ADMIN_STRUCTURE_COUNT' => $row['structure_count'],
-            'ADMIN_STRUCTURE_CAN_DELETE' => $row['structure_count'] < 1 &&
-                empty(cot_structure_children($row['structure_area'], $row['structure_code'], true, false, false)),
+            'ADMIN_STRUCTURE_CAN_DELETE' => $row['structure_count'] < 1 && empty($children),
 			/* TODO */ 'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url($n, 'c='.$row['structure_code']),
 			'ADMIN_STRUCTURE_RIGHTS_URL' => $is_module ? cot_url('admin', 'm=rightsbyitem&ic='.$n.'&io='.$row['structure_code']) : '',
 			'ADMIN_STRUCTURE_OPTIONS_URL' => cot_url('admin', 'm=structure&n='.$n.'&d='.$durl.'&id='.$structure_id.'&'.cot_xg()),
@@ -534,22 +560,25 @@ else
 
 		if ($id || !empty($al)) {
 			require_once cot_incfile('configuration');
+
+            $adminTitle .= ': ' . htmlspecialchars($row['structure_title']);
+            $adminpath[] = [
+                cot_url('admin', ['m' => 'structure', 'n' => $n, 'id' => $id]),
+                $row['structure_title'],
+            ];
+
 			$optionslist = cot_config_list($is_module ? 'module' : 'plug', $n, $structure_code);
 
 			/* === Hook - Part1 : Set === */
 			$extp = cot_getextplugins('admin.config.edit.loop');
 			/* ===== */
-			foreach ($optionslist as $row_c)
-			{
+			foreach ($optionslist as $row_c) {
 				list($title, $hint) = cot_config_titles($row_c['config_name'], $row_c['config_text']);
 
-				if ($row_c['config_type'] == COT_CONFIG_TYPE_SEPARATOR)
-				{
+				if ($row_c['config_type'] == COT_CONFIG_TYPE_SEPARATOR) {
 					$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $title);
 					$t->parse('MAIN.OPTIONS.CONFIG.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_BEGIN');
-				}
-				else
-				{
+				} else {
 					$t->assign(array(
 						'ADMIN_CONFIG_ROW_CONFIG' => cot_config_input($row_c),
 						'ADMIN_CONFIG_ROW_CONFIG_TITLE' => $title,
@@ -557,8 +586,7 @@ else
 						'ADMIN_CONFIG_ROW_CONFIG_MORE' => $hint
 					));
 					/* === Hook - Part2 : Include === */
-					foreach ($extp as $pl)
-					{
+					foreach ($extp as $pl) {
 						include $pl;
 					}
 					/* ===== */
@@ -566,20 +594,21 @@ else
 				}
 				$t->parse('MAIN.OPTIONS.CONFIG.ADMIN_CONFIG_ROW');
 			}
-			/* === Hook  === */
-			foreach (cot_getextplugins('admin.config.edit.tags') as $pl)
-			{
+
+            /* === Hook  === */
+			foreach (cot_getextplugins('admin.config.edit.tags') as $pl) {
 				include $pl;
 			}
 			/* ===== */
+
 			$t->assign('CONFIG_HIDDEN', cot_inputbox('hidden', 'editconfig', $structure_code));
 			$t->parse('MAIN.OPTIONS.CONFIG');
 		}
 		$t->parse(($id || !empty($al)) ? 'MAIN.OPTIONS' : 'MAIN.DEFAULT.ROW');
 	}
 
-	if (!$id && empty($al))
-	{
+    // Edit single category
+	if (!$id && empty($al)) {
 		$t->assign(array(
 			'ADMIN_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],
 			'ADMIN_STRUCTURE_PAGNAV' => $pagenav['main'],
@@ -596,6 +625,31 @@ else
             unset($_SESSION['cot_buffer'][$hash]);
         }
 
+        $categoryTplCodeSelect = cot_selectbox(
+            $row['structure_tpl'],
+            'rtplforced',
+            array_keys($categoryList),
+            array_values($categoryList),
+            false
+        );
+
+        $categoryTplCode = cot_inputbox('text', 'rtplcode', $row['structure_tpl'], 'maxlength="255"');
+        $categoryTpl = cot_radiobox(
+            null,
+            'rtplmode',
+            ['1', '2', '3', '4'],
+            [
+                cot::$L['adm_tpl_empty'],
+                cot::$L['adm_tpl_parent'],
+                cot::$L['adm_tpl_forced'] . ' ' . $categoryTplCodeSelect,
+                cot::$L['adm_tpl_code'] . ' ' . $categoryTplCode,
+            ],
+            '',
+            '<br />',
+            '',
+            true
+        );
+
 		$t->assign(array(
 			'ADMIN_STRUCTURE_URL_FORM_ADD' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=add&d='.$durl),
 			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode', null, 'size="16"'),
@@ -604,11 +658,15 @@ else
 			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc', null, 'size="64" maxlength="255"'),
 			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon', null, 'size="64" maxlength="128"'),
 			'ADMIN_STRUCTURE_LOCKED' => cot_checkbox(null, 'rstructurelocked'),
-			'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox(null, 'rtplmode', array('1', '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />')
+            'ADMIN_STRUCTURE_TPL' => $categoryTpl,
+
+            // @deprecated. Left for backwards compatibility. Actually this is not a template mode, but a
+            // selection (setting) of the template code
+            'ADMIN_STRUCTURE_TPLMODE' => $categoryTpl,
 		));
 
 		// Extra fields
-        if(!empty(cot::$extrafields[cot::$db->structure])) {
+        if (!empty(cot::$extrafields[cot::$db->structure])) {
             foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
                 $exfld_val = cot_build_extrafields('rstructure' . $exfld['field_name'], $exfld, null);
                 $exfld_title = cot_extrafield_title($exfld, 'structure_');
@@ -628,8 +686,7 @@ else
 	cot_display_messages($t);
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('admin.structure.tags') as $pl)
-	{
+	foreach (cot_getextplugins('admin.structure.tags') as $pl) {
 		include $pl;
 	}
 	/* ===== */

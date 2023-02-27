@@ -3824,16 +3824,16 @@ function cot_mktime($hour = false, $minute = false, $second = false, $month = fa
 
 if (!function_exists('strptime'))
 {
-	/**
-	 * strptime() for Windows
-	 * @author ex/yks toolkit
-	 * @license MIT
-	 * @param string $date
-	 * @param string $format
-	 * @return boolean
+    /**
+     * strptime() for Windows
+     * @author ex/yks toolkit
+     * @license MIT
+     * @param string $date
+     * @param string $format
+     * @return boolean
      *
      * @deprecated This function has been DEPRECATED as of PHP 8.1.0. Relying on this function is highly discouraged.
-	 */
+     */
 	function strptime($date, $format)
 	{
 		$masks = array(
