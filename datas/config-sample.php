@@ -28,6 +28,10 @@ $cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';
 // ========================
 
 $cfg['mainurl'] = 'http://localhost';
+
+// Set to TRUE if 'https' is not recognized automatically and it should always use https
+$cfg['force_https'] = false;
+
 $cfg['site_id'] = 'Some unique string specific to your site';
 $cfg['secret_key'] = 'Secret key used for authentication, make it unique and keep in secret!';
 $cfg['multihost'] = false;			// Allow multiple host names for this site

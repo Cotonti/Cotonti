@@ -10,16 +10,14 @@ define('COT_UPDATE', true);
 
 cot_sendheaders();
 
-if (!file_exists("./setup/$branch"))
-{
+if (!file_exists("./setup/$branch")) {
 	cot_diefatal($L['install_dir_not_found']);
 }
 
 // include $file['config'];
 
 $mskin = cot_tplfile('install.update');
-if (!file_exists($mskin))
-{
+if (!file_exists($mskin)) {
 	cot_diefatal($L['install_update_template_not_found']);
 }
 $t = new XTemplate($mskin);
@@ -65,7 +63,9 @@ if (is_writable($file['config']) && file_exists($file['config_sample'])) {
 		if (!empty($delta)) {
 			$config_contents = file_get_contents($file['config']);
 			// strip PHP closing tag if exists
-			if (substr($config_contents, -2) == '?>') $config_contents = substr($config_contents, 0, -2);
+			if (substr($config_contents, -2) == '?>') {
+                $config_contents = substr($config_contents, 0, -2);
+            }
 			$config_contents .= $delta;
 			file_put_contents($file['config'], $config_contents);
 			cot_message('install_update_config_success');

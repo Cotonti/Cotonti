@@ -83,7 +83,7 @@ function cot_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @param string $separator Option separator, by default is taken from $R['input_radio_separator']
  * @param string $custom_rc Custom resource string name
- * @param bool $htmlspecialcharsBypass Bypass htmlspecialchars() in option titles and values
+ * @param bool $htmlspecialcharsBypass Bypass htmlspecialchars() for option titles and values
  * @return string
  */
 function cot_radiobox(
@@ -123,7 +123,7 @@ function cot_radiobox(
 			$result .= $separator;
 		}
 		$result .= cot_rc($rc, array(
-			'value' => htmlspecialchars($value),
+			'value' => $htmlspecialcharsBypass ? $value : htmlspecialchars($value),
 			'name' => $name,
 			'checked' => $checked,
 			'title' => $title,
@@ -145,7 +145,7 @@ function cot_radiobox(
  * @param bool $add_empty Allow empty choice
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @param string $custom_rc Custom resource string name
- * @param bool $htmlspecialchars_bypass Bypass htmlspecialchars() in option titles and values
+ * @param bool $htmlspecialcharsBypass Bypass htmlspecialchars() for option titles and values
  * @return string
  */
 function cot_selectbox(

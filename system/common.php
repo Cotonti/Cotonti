@@ -47,13 +47,18 @@ $url = parse_url($cfg['mainurl']);
 
 $sys['scheme'] = 'http';
 if (
-    strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') !== false
-    || (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')
+    !empty($cfg['force_https'])
+    || mb_strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') !== false
+       // Set to a non-empty value if the script was queried through the HTTPS protocol.
+    || !empty($_SERVER['HTTPS'])
     || (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
+    || (!empty($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https')
     || (!empty($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT'] == 443)
+    || (!empty($_SERVER['X_FORWARDED-PROTO']) && $_SERVER['X_FORWARDED-PROTO'] == 'https')
 ) {
 	$sys['scheme'] = 'https';
 }
+
 $sys['secure'] = $sys['scheme'] == 'https' ? true : false;
 
 $sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
