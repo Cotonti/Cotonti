@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_THEME]
 Name=Nemesis
-Version=1.0.1
+Version=1.0.2
 Schemes=default:Default
 [END_COT_THEME]
 ==================== */
