@@ -1,43 +1,43 @@
 /* 0. Elements
 -------------------------------------------------- */
 
-*	{ margin:0; padding:0; }
-html	{ padding:0; }
+*			{ margin: 0; padding: 0; }
+html	{ padding: 0; }
 
 body	{ color:#667e72; font:normal 76%/1.8em Georgia, serif; background:#f8f8f8; }
 
 a 			{ color:#111; text-decoration:none; border:0; outline:none; }
-a:hover 		{ text-decoration:underline; }
+a:hover { text-decoration:underline; }
 
-hr			{ border:0 dashed #ccc; border-top-width:1px; clear:both; height:0; }
+hr					{ border:0 dashed #ccc; border-top-width:1px; clear:both; height:0; }
 hr.divider	{ margin:10px 0; }
 
 sub, sup	{ font-size:.8em; position:relative; }
-sub			{ top:.5em; }
-sup			{ top:-.5em; }
+sub				{ top:.5em; }
+sup				{ top:-.5em; }
 
 /* 1. Main Navigation
 -------------------------------------------------- */
 
-#nav				{ line-height:1.4em; background:#ddd; overflow:auto; }
-#nav li				{ width:159px; border-right:1px solid #f8f8f8; float:left; }
-#nav li a				{ text-shadow:0 1px 0 #fff; padding:10px 20px; display:block; }
-#nav li a:hover		{ color:#fff; text-decoration:none; text-shadow:0 -1px 0 #000; background:#667e72; }
-#nav li a span			{ color:#999; font-size:.9em; text-transform:lowercase; display:block; }
-#nav li a:hover span	{ color:#ccc; }
+#nav										{ line-height:1.4em; background:#ddd; overflow:auto; }
+	#nav li								{ width:159px; border-right:1px solid #f8f8f8; float:left; }
+	#nav li a							{ text-shadow:0 1px 0 #fff; padding:10px 20px; display:block; }
+	#nav li a:hover				{ color:#fff; text-decoration:none; text-shadow:0 -1px 0 #000; background:#667e72; }
+	#nav li a span				{ color:#999; font-size:.9em; text-transform:lowercase; display:block; }
+	#nav li a:hover span	{ color:#ccc; }
 
 /* 2. Structure
 -------------------------------------------------- */
 
 .body				{ margin:0 auto; width:960px; position:relative; }
-#header				{ border-top:5px solid; }
+#header			{ border-top:5px solid; }
 #main				{ padding:30px 0 15px; }
 
-.block				{ margin:0 10px 25px; }
+.block			{ margin:0 10px 25px; }
 
 .col, .col4-1, .col4-2, .col4-3, .col3-1, .col3-2, .col2-1		{ float:left; }
 
-.col		{ width:100%; }
+.col			{ width:100%; }
 .col4-1		{ width:240px; /* width:25%; */ }
 .col4-2		{ width:480px; /* width:50%; */ }
 .col4-3		{ width:720px; /* width:75%; */ }
@@ -47,12 +47,12 @@ sup			{ top:-.5em; }
 
 .col.first, .col4-1.first, .col4-2.first, .col4-3.first, .col3-1.first, .col3-2.first, .col2-1.first	{ margin-left:0; clear:left; }
 
-#footer				{ font-size:.9em; color:#f8f8f8; margin-bottom:10px; padding:20px 0; background:#667e72; }
-	#footer a				{ color:#fff; }
-	#footer strong			{ color:#a1b3aa; text-shadow:0 -1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
-	#footer ul  img			{ vertical-align:-4px; }
+#footer										{ font-size:.9em; color:#f8f8f8; margin-bottom:10px; padding:20px 0; background:#667e72; }
+	#footer a								{ color:#fff; }
+	#footer strong					{ color:#a1b3aa; text-shadow:0 -1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
+	#footer ul  img					{ vertical-align:-4px; }
 	#footer ul#account img	{ margin-top:5px; }
-	#footer hr				{ border:0!important; }
+	#footer hr							{ border:0!important; }
 
 /* 3. Headings
 -------------------------------------------------- */
@@ -65,6 +65,7 @@ h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-
 
 .forums		{ background-image:url(../../../images/icons/default/24/forums.png); }
 .info			{ background-image:url(../../../images/icons/default/24/info.png); }
+.pfs			{ background-image:url(../../../images/icons/default/24/pfs.png); }
 .tags			{ background-image:url(../../../images/icons/default/24/tags.png); }
 
 .admin		{ background-image:url(../../../images/icons/default/prefs.png); }
@@ -74,7 +75,6 @@ h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-
 .news			{ background-image:url(../../../images/icons/default/news.png); }
 .online		{ background-image:url(../../../images/icons/default/online.png); }
 .page			{ background-image:url(../../../images/icons/default/page.png); }
-.pfs			{ background-image:url(../../../images/icons/default/pfs.png); }
 .plugin		{ background-image:url(../../../images/icons/default/plug.png); }
 .polls		{ background-image:url(../../../images/icons/default/polls.png); }
 .prefs		{ background-image:url(../../../images/icons/default/prefs.png); }

@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
-
 <!-- BEGIN: STANDALONE_HEADER -->
-<html>
+<!DOCTYPE html>
+<html lang="{PHP.cfg.defaultlang}">
 	<head>
 		<title>{PHP.L.pfs_title} - {PHP.cfg.maintitle}</title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
