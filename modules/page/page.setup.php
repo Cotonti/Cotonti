@@ -12,7 +12,7 @@ Auth_guests=R
 Lock_guests=A
 Auth_members=RW1
 Lock_members=
-Admin_icon=img/adminmenu_page.png
+Admin_icon=
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]

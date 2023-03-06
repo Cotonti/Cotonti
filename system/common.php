@@ -85,7 +85,6 @@ if (
 	$sys['host'] = $url['host'];
 	$sys['port'] = isset($url['port']) ? $url['port'] : '';
 }
-
 $def_port = $sys['secure'] ? 443 : 80;
 $sys['port'] = ($sys['port'] == $def_port) ? '' : $sys['port'];
 if (!empty($cfg['force_https']) && empty($url['port']) && $sys['port'] == 80) {

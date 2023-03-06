@@ -65,9 +65,6 @@ CREATE TABLE IF NOT EXISTS `cot_pages` (
   KEY `page_title` (`page_title`)
 );
 
-INSERT INTO `cot_pages` (`page_state`, `page_cat`, `page_title`, `page_desc`, `page_text`, `page_author`, `page_ownerid`, `page_date`, `page_begin`, `page_expire`, `page_file`, `page_url`, `page_size`, `page_count`, `page_rating`, `page_filecount`, `page_alias`) VALUES
-(0, 'news', 'Welcome!', '', 'Congratulations, Cotonti was successfully installed! You can now login with the user account you created during installation. Next step is to go to the Administration panel and change the settings for your website, such as the title, server settings, language, user groups and extensions. You can safely remove this message by clicking its title, then clicking Edit and Delete this page.', '', 1, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 0, '', 0, 27, '0.00', 0, '');
-
 -- Default page categories
 INSERT INTO `cot_structure` (`structure_area`, `structure_code`, `structure_path`, `structure_tpl`, `structure_title`,
    `structure_desc`, `structure_icon`, `structure_locked`, `structure_count`) VALUES
@@ -75,3 +72,6 @@ INSERT INTO `cot_structure` (`structure_area`, `structure_code`, `structure_path
 ('page', 'system', '999', '', 'System', '', '', 0, 0),
 ('page', 'events', '2', '', 'Events', '', '', 0, 0),
 ('page', 'news', '3', '', 'News', '', '', 0, 1);
+
+INSERT INTO `cot_pages` (`page_state`, `page_cat`, `page_title`, `page_desc`, `page_text`, `page_author`, `page_ownerid`, `page_date`, `page_begin`, `page_expire`, `page_file`, `page_url`, `page_size`, `page_count`, `page_rating`, `page_filecount`, `page_alias`) VALUES
+    (0, 'news', 'Welcome!', '', 'Congratulations, Cotonti was successfully installed! You can now login with the user account you created during installation. Next step is to go to the Administration panel and change the settings for your website, such as the title, server settings, language, user groups and extensions. You can safely remove this message by clicking its title, then clicking Edit and Delete this page.', '', 1, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 0, '', 0, 27, '0.00', 0, '');

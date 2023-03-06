@@ -5462,11 +5462,11 @@ function cot_parse_str($str)
  * @param string $name Module or script name
  * @param mixed $params URL parameters as array or parameter string
  * @param string $tail URL postfix, e.g. anchor
- * @param bool $htmlspecialchars_bypass If TRUE, will not convert & to &amp; and so on.
- * @param bool $ignore_appendix If TRUE, $cot_url_appendix will be ignored for this URL
+ * @param bool $htmlspecialcharsBypass If TRUE, will not convert & to &amp; and so on.
+ * @param bool $ignoreAppendixx If TRUE, $cot_url_appendix will be ignored for this URL
  * @return string Valid HTTP URL
  */
-function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = false, $ignore_appendix = false)
+function cot_url($name, $params = '', $tail = '', $htmlspecialcharsBypass = false, $ignoreAppendix = false)
 {
 	global $cot_url_appendix;
 
@@ -5476,7 +5476,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	} elseif (!is_array($params)) {
 		$params = [];
 	}
-	if (!$ignore_appendix && count($cot_url_appendix) > 0) {
+	if (!$ignoreAppendix && count($cot_url_appendix) > 0) {
 		$params = $params + $cot_url_appendix;
 	}
 
@@ -5493,26 +5493,18 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	}
 
 	if (function_exists('cot_url_custom')) {
-		return cot_url_custom($name, $params, $tail, $htmlspecialchars_bypass);
+		return cot_url_custom($name, $params, $tail, $htmlspecialcharsBypass);
 	}
 
 	$url = in_array($name, array('admin', 'login', 'message')) ? "$name.php" : 'index.php';
-	if (!in_array($name, array('admin', 'index', 'login', 'message', 'plug')))
-	{
+	if (!in_array($name, array('admin', 'index', 'login', 'message', 'plug'))) {
 		$params = array('e' => $name) + $params;
 	}
+
 	// Append query string if needed
-	if (count($params) > 0)
-	{
-		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
-		if (version_compare(PHP_VERSION, '5.4.0', '>='))
-		{
-			$url .= '?' . http_build_query($params, '', $sep, PHP_QUERY_RFC3986);
-		}
-		else
-		{
-			$url .= '?' . str_replace('+', '%20', http_build_query($params, '', $sep));
-		}
+	if (count($params) > 0) {
+		$sep = $htmlspecialcharsBypass ? '&' : '&amp;';
+        $url .= '?' . http_build_query($params, '', $sep, PHP_QUERY_RFC3986);
 	}
 	$url .= $tail;
 	//$url = str_replace('&amp;amp;', '&amp;', $url);
