@@ -5,7 +5,7 @@
 	<!-- IF {PAGE_ROW_DESC} --><p class="small">{PAGE_ROW_DESC}</p><!-- ENDIF -->
 
 	<div class="clear desc">
-		<p class="column">
+		<p class="column floatleft">
 			<strong>{PHP.L.Tags}:</strong>
 <!-- BEGIN: PAGE_TAGS -->
 <!-- BEGIN: PAGE_TAGS_ROW -->
