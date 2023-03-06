@@ -1,43 +1,43 @@
 /* 0. Elements
 -------------------------------------------------- */
 
-*	{ margin:0; padding:0; }
-html	{ padding:0; }
+*			{ margin: 0; padding: 0; }
+html	{ padding: 0; }
 
 body	{ color:#667e72; font:normal 76%/1.8em Georgia, serif; background:#f8f8f8; }
 
 a 			{ color:#111; text-decoration:none; border:0; outline:none; }
-a:hover 		{ text-decoration:underline; }
+a:hover { text-decoration:underline; }
 
-hr			{ border:0 dashed #ccc; border-top-width:1px; clear:both; height:0; }
+hr					{ border:0 dashed #ccc; border-top-width:1px; clear:both; height:0; }
 hr.divider	{ margin:10px 0; }
 
 sub, sup	{ font-size:.8em; position:relative; }
-sub			{ top:.5em; }
-sup			{ top:-.5em; }
+sub				{ top:.5em; }
+sup				{ top:-.5em; }
 
 /* 1. Main Navigation
 -------------------------------------------------- */
 
-#nav				{ line-height:1.4em; background:#ddd; overflow:auto; }
-#nav li				{ width:159px; border-right:1px solid #f8f8f8; float:left; }
-#nav li a				{ text-shadow:0 1px 0 #fff; padding:10px 20px; display:block; }
-#nav li a:hover		{ color:#fff; text-decoration:none; text-shadow:0 -1px 0 #000; background:#667e72; }
-#nav li a span			{ color:#999; font-size:.9em; text-transform:lowercase; display:block; }
-#nav li a:hover span	{ color:#ccc; }
+#nav										{ line-height:1.4em; background:#ddd; overflow:auto; }
+	#nav li								{ width:159px; border-right:1px solid #f8f8f8; float:left; }
+	#nav li a							{ text-shadow:0 1px 0 #fff; padding:10px 20px; display:block; }
+	#nav li a:hover				{ color:#fff; text-decoration:none; text-shadow:0 -1px 0 #000; background:#667e72; }
+	#nav li a span				{ color:#999; font-size:.9em; text-transform:lowercase; display:block; }
+	#nav li a:hover span	{ color:#ccc; }
 
 /* 2. Structure
 -------------------------------------------------- */
 
 .body				{ margin:0 auto; width:960px; position:relative; }
-#header				{ border-top:5px solid; }
+#header			{ border-top:5px solid; }
 #main				{ padding:30px 0 15px; }
 
-.block				{ margin:0 10px 25px; }
+.block			{ margin:0 10px 25px; }
 
 .col, .col4-1, .col4-2, .col4-3, .col3-1, .col3-2, .col2-1		{ float:left; }
 
-.col		{ width:100%; }
+.col			{ width:100%; }
 .col4-1		{ width:240px; /* width:25%; */ }
 .col4-2		{ width:480px; /* width:50%; */ }
 .col4-3		{ width:720px; /* width:75%; */ }
@@ -47,12 +47,12 @@ sup			{ top:-.5em; }
 
 .col.first, .col4-1.first, .col4-2.first, .col4-3.first, .col3-1.first, .col3-2.first, .col2-1.first	{ margin-left:0; clear:left; }
 
-#footer				{ font-size:.9em; color:#f8f8f8; margin-bottom:10px; padding:20px 0; background:#667e72; }
-	#footer a				{ color:#fff; }
-	#footer strong			{ color:#a1b3aa; text-shadow:0 -1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
-	#footer ul  img			{ vertical-align:-4px; }
+#footer										{ font-size:.9em; color:#f8f8f8; margin-bottom:10px; padding:20px 0; background:#667e72; }
+	#footer a								{ color:#fff; }
+	#footer strong					{ color:#a1b3aa; text-shadow:0 -1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
+	#footer ul  img					{ vertical-align:-4px; }
 	#footer ul#account img	{ margin-top:5px; }
-	#footer hr				{ border:0!important; }
+	#footer hr							{ border:0!important; }
 
 /* 3. Headings
 -------------------------------------------------- */
@@ -63,23 +63,24 @@ h1	{ color:#333; font-size:2.2em; font-weight:normal; margin:10px 0; padding:10p
 h2	{ color:#a01517; font-size:1.1em; text-shadow:0 1px 0 #fff; margin-bottom:15px; padding:8px 8px 8px 40px; background-color:#ccc; background-position:10px 50%; background-repeat:no-repeat; }
 h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-position:10px 50%; background-repeat:no-repeat; }
 
+.forums		{ background-image:url(../../../images/icons/default/24/forums.png); }
+.info			{ background-image:url(../../../images/icons/default/24/info.png); }
+.pfs			{ background-image:url(../../../images/icons/default/24/pfs.png); }
+.tags			{ background-image:url(../../../images/icons/default/24/tags.png); }
+
 .admin		{ background-image:url(../../../images/icons/default/prefs.png); }
 .comments	{ background-image:url(../../../images/icons/default/comments.png); }
 .folder		{ background-image:url(../../../images/icons/default/folder.png); }
-.forums		{ background-image:url(../../../images/icons/default/forums.png); }
-.info		{ background-image:url(../../../images/icons/default/info.png); }
 .message	{ background-image:url(../../../images/icons/default/message.png); }
-.news		{ background-image:url(../../../images/icons/default/news.png); }
+.news			{ background-image:url(../../../images/icons/default/news.png); }
 .online		{ background-image:url(../../../images/icons/default/online.png); }
-.page		{ background-image:url(../../../images/icons/default/page.png); }
-.pfs		{ background-image:url(../../../images/icons/default/pfs.png); }
+.page			{ background-image:url(../../../images/icons/default/page.png); }
 .plugin		{ background-image:url(../../../images/icons/default/plug.png); }
 .polls		{ background-image:url(../../../images/icons/default/polls.png); }
 .prefs		{ background-image:url(../../../images/icons/default/prefs.png); }
 .queue		{ background-image:url(../../../images/icons/default/update.png); }
 .search		{ background-image:url(../../../images/icons/default/search.png); }
 .stats		{ background-image:url(../../../images/icons/default/stats.png); }
-.tags		{ background-image:url(../../../images/icons/default/tags.png); }
 .users		{ background-image:url(../../../images/icons/default/users.png); }
 .warning	{ background-image:url(../../../images/icons/default/warning.png); }
 
@@ -210,18 +211,17 @@ span.readmore		{ display:block; }
 
 .download	{ margin:10px 0; padding:10px 0 10px 84px; background:url(../img/download.png) no-repeat 10px 12px; border:1px dashed #c00; }
 
-.clearfix:before, .clearfix:after	{ content:'\0020'; display:block; overflow:hidden; visibility:hidden; width:0; height:0; }
-.clearfix:after						{ clear:both; }
-.clearfix							{ zoom:1; }
+.clearfix:after	{ content: ''; display: block; clear: both; }
+
 .hidefromguests         {
 			padding: 3px 10px;
-			background: #EDEDED; 
+			background: #EDEDED;
 			text-align:center;
 			border: 3px ridge #fff;
 			box-shadow: 0 0 4px #222;
 			margin: 3px 0;
 			}
-			
+
 /* 7. Pagination
 -------------------------------------------------- */
 

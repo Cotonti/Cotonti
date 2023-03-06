@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
-
 <!-- BEGIN: STANDALONE_HEADER -->
-<html>
+<!DOCTYPE html>
+<html lang="{PHP.cfg.defaultlang}">
 	<head>
 		<title>{PHP.L.pfs_title} - {PHP.cfg.maintitle}</title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -19,7 +19,10 @@
 
 		<div class="block margin10">
 			<h2 class="pfs">{PFS_TITLE} {PFS_PATH}</h2>
-				<!-- IF {PFS_SUBTITLE} --><p class="small">{PFS_SUBTITLE}</p><!-- ENDIF -->
+				<!-- IF {PFS_SUBTITLE} -->
+				<p class="small">{PFS_SUBTITLE}</p>
+				<!-- ENDIF -->
+
 <!-- BEGIN: PFS_ERRORS -->
 				<ul>
 <!-- BEGIN: PFS_ERRORS_ROW -->
@@ -27,6 +30,7 @@
 <!-- END: PFS_ERRORS_ROW -->
 				</ul>
 <!-- END: PFS_ERRORS -->
+
 				<h3>{PFF_FOLDERCOUNT_TITLE} / {PFF_FILESCOUNT_TITLE} ({PHP.L.pfs_onpage}: {PFF_ONPAGE_FOLDERS_TITLE} / {PFF_ONPAGE_FILES_TITLE})</h3>
 				<table class="cells">
 					<tr>
@@ -172,8 +176,8 @@
 				</div>
 <!-- END: ALLOWED_ROW -->
 				<br class="clear" />
-
 		</div>
+
 <!-- BEGIN: STANDALONE_FOOTER -->
 		<div class="block">
 			{PHP.R.pfs_icon_pastethumb} {PHP.L.pfs_pastethumb} &nbsp;
@@ -184,5 +188,4 @@
 	</body>
 </html>
 <!-- END: STANDALONE_FOOTER -->
-
 <!-- END: MAIN -->

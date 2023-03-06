@@ -1,9 +1,7 @@
 <!-- BEGIN: MAIN -->
-
 <!-- BEGIN: BEFORE_AJAX -->
 <div id="ajaxBlock">
 <!-- END: BEFORE_AJAX -->
-
 	<div class="block">
 		<h2 class="comments">{PMSEND_TITLE}</h2>
 		<p class="small">{PHP.L.pmsend_subtitle}</p>
@@ -41,5 +39,4 @@
 <!-- BEGIN: AFTER_AJAX -->
 </div>
 <!-- END: AFTER_AJAX -->
-
 <!-- END: MAIN -->
