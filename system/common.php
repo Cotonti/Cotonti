@@ -64,38 +64,57 @@ $sys['secure'] = $sys['scheme'] == 'https' ? true : false;
 $sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
 if (
     $_SERVER['HTTP_HOST'] == $url['host']
-	|| $cfg['multihost']
-	|| $_SERVER['HTTP_HOST'] != 'www.' . $sys['domain']
-	&& preg_match('`^.+\.' . preg_quote($sys['domain']) . '$`i', $_SERVER['HTTP_HOST'])
+    || $cfg['multihost']
+    || (
+        $_SERVER['HTTP_HOST'] != 'www.' . $sys['domain']
+    	&& preg_match('`^.+\.' . preg_quote($sys['domain']) . '$`i', $_SERVER['HTTP_HOST'])
+    )
 ) {
 	$sys['host'] = preg_match('#^[\w\p{L}\.\-]+(:\d+)?$#u', $_SERVER['HTTP_HOST']) ?
             preg_replace('#^([\w\p{L}\.\-]+)(:\d+)?$#u', '$1', $_SERVER['HTTP_HOST']) : $url['host'];
-	$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
-	$sys['port'] = $_SERVER['SERVER_PORT'];
+
+    if (isset($url['port'])) {
+        $sys['port'] = $url['port'];
+    } elseif (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+        $sys['port'] = $_SERVER['HTTP_X_FORWARDED_PORT'];
+    } else {
+        $sys['port'] = $_SERVER['SERVER_PORT'];
+    }
 
 } else {
 	$sys['host'] = $url['host'];
 	$sys['port'] = isset($url['port']) ? $url['port'] : '';
 }
+
 $def_port = $sys['secure'] ? 443 : 80;
 $sys['port'] = ($sys['port'] == $def_port) ? '' : $sys['port'];
+if (!empty($cfg['force_https']) && empty($url['port']) && $sys['port'] == 80) {
+    $sys['port'] = '';
+}
+
+$sys['domain'] = preg_replace('#^www\.#', '', $sys['host']);
 
 $sys['site_uri'] = '/';
 if (!empty($url['path'])) {
 	$sys['site_uri'] = $url['path'];
-	if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+	if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') {
+        $sys['site_uri'] .= '/';
+    }
 }
 
 define('COT_SITE_URI', $sys['site_uri']);
 // Absolute site url
-$sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port']?':'.$sys['port']:'') . $sys['site_uri'];
-$sys['canonical_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port']?':'.$sys['port']:'') . cot_url_sanitize($_SERVER['REQUEST_URI']);
+$sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port'] ? ':' . $sys['port'] : '') . $sys['site_uri'];
+$sys['canonical_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port'] ? ':' . $sys['port'] : '') .
+    cot_url_sanitize($_SERVER['REQUEST_URI']);
 define('COT_ABSOLUTE_URL', $sys['abs_url']);
+
 // Reassemble mainurl if necessary
 if ($cfg['multihost']) {
 	$cfg['mainurl'] = mb_substr($sys['abs_url'], 0, -1);
 }
-session_set_cookie_params(0, $sys['site_uri'], '.'.$sys['domain']);
+
+session_set_cookie_params(0, $sys['site_uri'], '.' . $sys['domain']);
 
 session_start();
 
@@ -128,7 +147,7 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
 
 /* ======== Connect to the SQL DB======== */
 
-require_once $cfg['system_dir'].'/database.php';
+require_once $cfg['system_dir'] . '/database.php';
 try {
 	$db = new CotDB([
 		'host' => $cfg['mysqlhost'],
@@ -180,32 +199,43 @@ if ($cache && $cot_cfg) {
 mb_internal_encoding('UTF-8');
 
 /* ======== Extra settings (the other presets are in functions.php) ======== */
-
-if ($cfg['clustermode']) {
-	if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-        $usr['ip'] = $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) {
-        $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
-    } elseif (isset($_SERVER['HTTP_X_REAL_IP'])) {
-        $usr['ip'] = $_SERVER['HTTP_X_REAL_IP'];
-    } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $usr['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    } else {
-        $usr['ip'] = $_SERVER['REMOTE_ADDR'];
-    }
-} else {
-	$usr['ip'] = $_SERVER['REMOTE_ADDR'];
-}
-
 if (
-    !preg_match('#^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$#', $usr['ip'])
-    && !preg_match(
-        '#^(((?=(?>.*?(::))(?!.+\3)))\3?|([\dA-F]{1,4}(\3|:(?!$)|$)|\2))(?4){5}((?4){2}|(25[0-5]|(2[0-4]|1\d|[1-9])?\d)(\.(?7)){3})\z#i',
-        $usr['ip']
-    )
+    isset($_SERVER['HTTP_CLIENT_IP'])
+    && filter_var($_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP)
 ) {
-	$usr['ip'] = '0.0.0.0';
+    $usr['ip'] = $_SERVER['HTTP_CLIENT_IP'];
+} elseif (
+    isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])
+    && filter_var($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'], FILTER_VALIDATE_IP)
+) {
+    $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+} elseif (
+    isset($_SERVER['HTTP_X_REAL_IP'])
+    && filter_var($_SERVER['HTTP_X_REAL_IP'], FILTER_VALIDATE_IP)
+) {
+    $usr['ip'] = $_SERVER['HTTP_X_REAL_IP'];
+} elseif (
+    isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+    && filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP)
+) {
+    $usr['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+} else {
+    $usr['ip'] = $_SERVER['REMOTE_ADDR'];
 }
+/**
+ * We are trying to use filter_var('...', FILTER_VALIDATE_IP) insted. If it will be ok, code below will be removed
+ * @deprecated
+ */
+//if (
+//    !preg_match('#^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$#', $usr['ip'])
+//    && !preg_match(
+/*        '#^(((?=(?>.*?(::))(?!.+\3)))\3?|([\dA-F]{1,4}(\3|:(?!$)|$)|\2))(?4){5}((?4){2}|(25[0-5]|(2[0-4]|1\d|[1-9])?\d)(\.(?7)){3})\z#i',*/
+//        $usr['ip']
+//    )
+//) {
+//	$usr['ip'] = '0.0.0.0';
+//}
+
 $sys['unique'] = cot_unique(16);
 
 if (empty($cfg['cookiedomain'])) {

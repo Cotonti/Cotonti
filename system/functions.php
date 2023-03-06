@@ -5676,24 +5676,29 @@ function cot_http_build_url($urlp)
  */
 function cot_url_sanitize($url)
 {
-	function urlfilter($str)
-	{
-        if (!$str) return '';
+	function urlfilter($str) {
+        if (!$str) {
+            return '';
+        }
 		return rawurlencode(rawurldecode($str));
 	}
 
 	$urlp = cot_parse_url($url);
-    if (empty($urlp)) $urlp = [];
+    if (empty($urlp)) {
+        $urlp = [];
+    }
 	$urlp['fragment'] = !empty($urlp['fragment']) ? urlfilter($urlp['fragment']) : '';
 
 	$path = isset($urlp['path']) ? $urlp['path'] : '';
 	$query = !empty($urlp['query']) ? str_replace('&amp;', '&', $urlp['query']) : '';
 
 	$path = explode('/', $path);
-    if (!empty($path)) $path = array_map('urlfilter', $path);
+    if (!empty($path)) {
+        $path = array_map('urlfilter', $path);
+    }
 	$urlp['path'] = implode('/', $path);
 
-	$filtered_params = array();
+	$filtered_params = [];
 	foreach (explode('&', $query) as $item) {
 		if (!empty($item)) {
             if (mb_stripos($item, '=') !== false) {
@@ -5705,7 +5710,9 @@ function cot_url_sanitize($url)
             }
 		}
 	}
-	if (sizeof($filtered_params)) $urlp['query'] = implode('&', $filtered_params);
+	if (sizeof($filtered_params)) {
+        $urlp['query'] = implode('&', $filtered_params);
+    }
 
 	return cot_http_build_url($urlp);
 }
