@@ -21,7 +21,7 @@
 						<td>{USER_LINK}</td>
 						<td>{USER_MAINGRP}</td>
 						<td>{USER_LOCATION} {USER_SUBLOCATION}</td>
-						<td>{USER_LASTSEEN}</td>
+						<td>{USER_LASTSEEN} {PHP.L.Ago}</td>
 						<!-- IF {PHP.usr.isadmin} --><td>{USER_IP}</td><!-- ENDIF -->
 					</tr>
 					<!-- END: USERS -->
