@@ -253,6 +253,7 @@ $L['Remove'] = 'Remove';
 $L['Replies'] = 'Replies';
 $L['Reply'] = 'Reply';
 $L['Reset'] = 'Reset';
+$L['Residence'] = 'Residence';
 $L['Restore'] = 'Restore';
 $L['Resync'] = 'Resync';
 $L['Resynced'] = 'Resynced';
