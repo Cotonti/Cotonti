@@ -39,13 +39,6 @@ $R['input_date'] =  '{$day} {$month} {$year} {$hour}: {$minute}';
 $R['input_date_short'] =  '{$day} {$month} {$year}';
 
 /**
- * Stars / Votes Icons
- */
-
-$R['icon_rating_stars'] = '<img src="images/icons/'.$cfg['defaulticons'].'/stars/vote{$val}.png" alt="{$val}" />';
-$R['icon_stars'] = '<img src="images/icons/'.$cfg['defaulticons'].'/stars/stars{$val}.png" alt="{$val}" />';
-
-/**
  * Pagination
  */
 

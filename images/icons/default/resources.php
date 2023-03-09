@@ -43,6 +43,13 @@ $R['icon_undo'] = '<img src="'.$cfg['icons_dir'].'/default/16/undo.png" alt="" /
 $R['icon_unread'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-unread.png" alt="" />';
 
 /**
+ * Stars / Votes Icons
+ */
+
+$R['icon_rating_stars'] = '<img src="' . $cfg['icons_dir'] . '/default/stars/vote{$val}.png" alt="{$val}" />';
+$R['icon_stars'] = '<img src="' . $cfg['icons_dir'] . '/default/stars/stars{$val}.png" alt="{$val}" />';
+
+/**
  * Admin Icons
  */
 
