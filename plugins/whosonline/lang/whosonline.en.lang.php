@@ -28,5 +28,3 @@ $L['WhosOnline'] = 'Who\'s Online';
 $L['MostOnline'] = 'Most users ever online';
 $L['NowOnline'] = 'Now online';
 $L['LastSeen'] = 'Last seen';
-$L['IPaddress'] = 'IP address';
-$L['Visitor'] = 'Visitor';
