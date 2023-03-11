@@ -581,9 +581,8 @@ if (defined('COT_ADMIN')) {
 
 /* ======== Theme / color scheme ======== */
 
-
 // Resource control object
-require_once $cfg['system_dir'].'/resources.php';
+require_once $cfg['system_dir'] . '/resources.php';
 
 if (empty($cfg['themes_dir'])) {
 	$cfg['themes_dir'] = 'themes';
@@ -627,7 +626,7 @@ $theme = $usr['theme'];
 $scheme = $usr['scheme'];
 
 // Resource strings
-require_once $cfg['system_dir'].'/resources.rc.php';
+require_once $cfg['system_dir'] . '/resources.rc.php';
 
 if (defined('COT_ADMIN')) {
 	require_once cot_incfile('admin', 'module', 'resources');

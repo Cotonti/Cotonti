@@ -558,17 +558,28 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
  */
 function cot_default_html_construction($type)
 {
-	global $cfg;
+	include cot::$cfg['system_dir'] . '/resources.rc.php';
 
-	include $cfg['system_dir'].'/resources.rc.php';
-	if (file_exists("{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaulttheme']}.php"))
-	{
-		include "{$cfg['themes_dir']}/{$cfg['defaulttheme']}/{$cfg['defaulttheme']}.php";
+    // Theme resources file can use theme lang file
+    // We don't need to load these values globally to not override loaded values
+    $langFile = cot::$cfg['themes_dir'] . '/' . cot::$cfg['defaulttheme'] . '/' . cot::$cfg['defaulttheme'] . '.' .
+        cot::$cfg['defaultlang'] . '.' . 'lang.php';
+    if (!file_exists($langFile)) {
+        $langFile = cot::$cfg['themes_dir'] . '/' . cot::$cfg['defaulttheme'] . '/' . cot::$cfg['defaulttheme'] .
+            '.en.lang.php';
+    }
+    if (file_exists($langFile)) {
+        include $langFile;
+    }
+
+    $resourceFile = cot::$cfg['themes_dir'] . '/' . cot::$cfg['defaulttheme'] . '/' . cot::$cfg['defaulttheme'] .
+        '.php';
+	if (file_exists($resourceFile)) {
+		include $resourceFile;
 	}
 
 	$html = '';
-	switch ($type)
-	{
+	switch ($type) {
 		case 'input':
 		case 'inputint':
 		case 'currency':
@@ -613,6 +624,7 @@ function cot_default_html_construction($type)
 	}
 
 	$html = str_replace('{$attrs}', '', $html);
+
 	return $html;
 }
 
