@@ -148,9 +148,8 @@ else
 			}
 		}
 		//cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
-	}
-	elseif ($a == 'upd' && !empty($_POST))
-	{
+
+    } elseif ($a == 'upd' && !empty($_POST)) {
 		$field_name = cot_import('field_name', 'P', 'ARR');
 		$field_type = cot_import('field_type', 'P', 'ARR');
 		$field_html = cot_import('field_html', 'P', 'ARR');
@@ -165,10 +164,8 @@ else
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('admin.extrafields.update');
 		/* ===== */
-		if (is_array($field_name))
-		{
-			foreach ($field_name as $k => $v)
-			{
+		if (is_array($field_name)) {
+			foreach ($field_name as $k => $v) {
 				$field['field_name'] = cot_import($field_name[$k], 'D', 'ALP');
 				$field['field_type'] = cot_import($field_type[$k], 'D', 'ALP');
 				$field['field_html'] = cot_import($field_html[$k], 'D', 'NOC');
@@ -181,31 +178,48 @@ else
 				$field['field_enabled'] = cot_import($field_enabled[$k], 'D', 'BOL');
 				$field['field_location'] = $n;
 
-				if ($field != $cot_extrafields[$n][$field['field_name']] && !empty($field['field_name']) && !empty($field['field_type']))
-				{
+				if (
+                    !empty($field['field_name'])
+                    && (
+                        empty($cot_extrafields[$n][$field['field_name']])
+                        || $field != $cot_extrafields[$n][$field['field_name']]
+                    )
+                    && !empty($field['field_type'])
+                ) {
 					/* === Hook - Part2 : Include === */
-					foreach ($extp as $pl)
-					{
+					foreach ($extp as $pl) {
 						include $pl;
 					}
 					/* ===== */
 
-					$fieldresult = cot_extrafield_update($n, $k, $field['field_name'], $field['field_type'], $field['field_html'], $field['field_variants'], $field['field_default'], $field['field_required'], $field['field_parse'], $field['field_description'], $field['field_params'], $field['field_enabled']);
-					if ($fieldresult == 1)
-					{
+					$fieldresult = cot_extrafield_update(
+                        $n,
+                        $k,
+                        $field['field_name'],
+                        $field['field_type'],
+                        $field['field_html'],
+                        $field['field_variants'],
+                        $field['field_default'],
+                        $field['field_required'],
+                        $field['field_parse'],
+                        $field['field_description'],
+                        $field['field_params'],
+                        $field['field_enabled']
+                    );
+
+					if ($fieldresult == 1) {
 						cot_message(sprintf(cot::$L['adm_extrafield_updated'], $k));
-					}
-					elseif (!$fieldresult)
-					{
+					} elseif (!$fieldresult) {
 						cot_error(sprintf(cot::$L['adm_extrafield_not_updated'], $k));
 					}
 				}
 			}
 		}
-		//cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
-	}
-	elseif ($a == 'del' && isset($name))
-	{
+
+        cot_redirect(
+            cot_url('admin', ['m' => 'extrafields', 'n' => $n, 'd' => $durl,], '', true)
+        );
+	} elseif ($a == 'del' && isset($name)) {
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.extrafields.delete') as $pl)
 		{
@@ -238,18 +252,48 @@ else
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('admin.extrafields.loop');
 	/* ===== */
-	foreach ($res->fetchAll() as $row)
-	{
+    $cols = 55;
+	foreach ($res->fetchAll() as $row) {
 		$ii++;
 		$t->assign(array(
 			'ADMIN_EXTRAFIELDS_ROW_NAME' => cot_inputbox('text', 'field_name['.$row['field_name'].']', $row['field_name'], 'class="exfldname"'),
 			'ADMIN_EXTRAFIELDS_ROW_FIELDNAME' => htmlspecialchars($row['field_name']),
-			'ADMIN_EXTRAFIELDS_ROW_DESCRIPTION' => cot_textarea('field_description['.$row['field_name'].']', $row['field_description'], 1, 30, 'class="exflddesc"'),
+			'ADMIN_EXTRAFIELDS_ROW_DESCRIPTION' => cot_textarea(
+                'field_description[' . $row['field_name'] . ']',
+                $row['field_description'],
+                1,
+                $cols,
+                'class="exflddesc"'
+            ),
 			'ADMIN_EXTRAFIELDS_ROW_SELECT' => cot_selectbox($row['field_type'], 'field_type['.$row['field_name'].']', $field_types, $field_types, false, 'class="exfldtype"'),
-			'ADMIN_EXTRAFIELDS_ROW_VARIANTS' => cot_textarea('field_variants['.$row['field_name'].']', $row['field_variants'], 1, 60, 'class="exfldvariants"'),
-			'ADMIN_EXTRAFIELDS_ROW_PARAMS' => cot_textarea('field_params['.$row['field_name'].']', $row['field_params'], 1, 60, 'class="exfldparams"'),
-			'ADMIN_EXTRAFIELDS_ROW_HTML' => cot_textarea('field_html['.$row['field_name'].']', $row['field_html'], 1, 60, 'class="exfldhtml"'),
-			'ADMIN_EXTRAFIELDS_ROW_DEFAULT' => cot_textarea('field_default['.$row['field_name'].']', $row['field_default'], 1, 60, 'class="exflddefault"'),
+			'ADMIN_EXTRAFIELDS_ROW_VARIANTS' => cot_textarea(
+                'field_variants[' . $row['field_name'] . ']',
+                $row['field_variants'],
+                1,
+                $cols,
+                'class="exfldvariants"'
+            ),
+			'ADMIN_EXTRAFIELDS_ROW_PARAMS' => cot_textarea(
+                'field_params[' . $row['field_name'] . ']',
+                $row['field_params'],
+                1,
+                $cols,
+                'class="exfldparams"'
+            ),
+			'ADMIN_EXTRAFIELDS_ROW_HTML' => cot_textarea(
+                'field_html[' . $row['field_name'] . ']',
+                $row['field_html'],
+                1,
+                $cols,
+                'class="exfldhtml"'
+            ),
+			'ADMIN_EXTRAFIELDS_ROW_DEFAULT' => cot_textarea(
+                'field_default[' . $row['field_name'] . ']',
+                $row['field_default'],
+                1,
+                $cols,
+                'class="exflddefault"'
+            ),
 			'ADMIN_EXTRAFIELDS_ROW_REQUIRED' => cot_checkbox($row['field_required'], 'field_required['.$row['field_name'].']', '', 'class="exfldrequired"'),
 			'ADMIN_EXTRAFIELDS_ROW_ENABLED' => cot_checkbox($row['field_enabled'], 'field_enabled['.$row['field_name'].']', '', 'title="'.cot::$L['adm_extrafield_enable'].'" class="exfldenabled" '),
 			'ADMIN_EXTRAFIELDS_ROW_PARSE' => cot_selectbox($row['field_parse'], 'field_parse['.$row['field_name'].']', $parse_type, array(cot::$L['Default'], cot::$L['No']), false, 'class="exfldparse"'),

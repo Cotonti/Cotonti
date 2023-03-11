@@ -70,13 +70,14 @@ if (cot::$cache && $cache_type && $cache_type->exists('whosonline', 'system')) {
 	while ($row_o = $sql_o->fetch())
 	{
 		$out['whosonline_reg_list'] .= ($ii_o > 0) ? ', ' : '';
-		$out['whosonline_reg_list'] .= cot_build_user($row_o['online_userid'], htmlspecialchars($row_o['online_name']));
+		$out['whosonline_reg_list'] .= cot_build_user($row_o['online_userid'], $row_o['online_name']);
 		$cot_usersonline[] = $row_o['online_userid'];
 		$ii_o++;
 	}
 	$sql_o->closeCursor();
 	if ($not_counted_usr) {
-		$out['whosonline_reg_list'] .= (!empty($out['whosonline_reg_list']) ? ', ' : '').cot_build_user($usr['id'], htmlspecialchars($usr['name']));
+		$out['whosonline_reg_list'] .= (!empty($out['whosonline_reg_list']) ? ', ' : '') .
+            cot_build_user($usr['id'], $usr['name']);
 		$cot_usersonline[] = $usr['id'];
 	}
 	unset($ii_o, $sql_o, $row_o, $not_counted_usr, $not_counted_vis);

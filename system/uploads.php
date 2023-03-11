@@ -20,6 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 function cot_file_check($path, $name, $ext)
 {
 	global $L, $cfg;
+
 	if ($cfg['pfs']['pfsfilecheck'])
 	{
 		require './datas/mimetype.php';
@@ -85,19 +86,18 @@ function cot_file_check($path, $name, $ext)
  */
 function cot_get_uploadmax()
 {
-	static $par_a = array('upload_max_filesize', 'post_max_size', 'memory_limit');
-	static $opt_a = array('G' => 1073741824, 'M' => 1048576, 'K' => 1024);
-	$val_a = array();
-	foreach ($par_a as $par)
-	{
+	static $par_a = ['upload_max_filesize', 'post_max_size', 'memory_limit',];
+	static $opt_a = ['G' => 1073741824, 'M' => 1048576, 'K' => 1024,];
+	$val_a = [];
+	foreach ($par_a as $par) {
 		$val = ini_get($par);
 		$opt = strtoupper($val[strlen($val) - 1]);
-		$val = isset($opt_a[$opt]) ? $val * $opt_a[$opt] : (int)$val;
-		if ($val > 0)
-		{
+		$val = isset($opt_a[$opt]) ? (int) $val * $opt_a[$opt] : (int) $val;
+		if ($val > 0) {
 			$val_a[] = $val;
 		}
 	}
+
 	return floor(min($val_a) / 1024); // KiB
 }
 

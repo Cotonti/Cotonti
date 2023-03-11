@@ -46,7 +46,7 @@ foreach ($sql_pfs->fetchAll() as $row)
 
 	$t->assign(array(
 		'ADMIN_ALLPFS_ROW_URL' => cot_url('pfs', 'userid='.$row['user_id']),
-		'ADMIN_ALLPFS_ROW_USER' => cot_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
+		'ADMIN_ALLPFS_ROW_USER' => cot_build_user($row['user_id'], $row['user_name']),
 		'ADMIN_ALLPFS_ROW_COUNT' => $row['COUNT(*)']
 	));
 

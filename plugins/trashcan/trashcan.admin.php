@@ -160,7 +160,7 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_TRASHCAN_TYPESTR' => $typestr,
 		'ADMIN_TRASHCAN_TITLE' => htmlspecialchars($row['tr_title']),
 		'ADMIN_TRASHCAN_TRASHEDBY' => ($row['tr_trashedby'] == 0) ?
-            cot::$L['System'] : cot_build_user($row['tr_trashedby'], htmlspecialchars($row['user_name'])),
+            cot::$L['System'] : cot_build_user($row['tr_trashedby'], $row['user_name']),
 		'ADMIN_TRASHCAN_ROW_WIPE_URL' => cot_confirm_url($trashcanWipeUrl, 'admin'),
 		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => cot_url('admin', 'm=other&p=trashcan&a=restore&id=' .
             $row['tr_id'] . '&d=' . $durl . '&' . cot_xg()),

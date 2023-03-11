@@ -105,10 +105,10 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
                 'icon' => $row['ft_icon'],
                 'title' => cot::$L['recentitems_' . $row['ft_icon']]
             ]);
-			$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
+			$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], $row['ft_lastpostername']);
 		}
 
-		$row['ft_firstpostername'] = cot_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername']));
+		$row['ft_firstpostername'] = cot_build_user($row['ft_firstposterid'], $row['ft_firstpostername']);
 
         $row['ft_maxpages'] = 0;
 		if ($row['ft_postcount'] > cot::$cfg['forums']['maxtopicsperpage'] && cot::$cfg['forums']['maxtopicsperpage'] > 0) {
@@ -271,7 +271,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		$recentitems->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $textlength));
 		$recentitems->assign(array(
 			'PAGE_ROW_SHORTTITLE' => htmlspecialchars($pag['page_title']),
-			'PAGE_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
+			'PAGE_ROW_OWNER' => cot_build_user($pag['page_ownerid'], $pag['user_name']),
 			'PAGE_ROW_ODDEVEN' => cot_build_oddeven($jj),
 			'PAGE_ROW_NUM' => $jj
 		));

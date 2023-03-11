@@ -102,7 +102,9 @@ if (!COT_AJAX) {
 		}
 		cot::$out['notices'] .= cot_rc('notices_container', array('notices' => $notices));
 	}
-	cot::$out['canonical_uri'] = empty(cot::$out['canonical_uri']) ? str_replace('&', '&amp;', cot::$sys['canonical_url']) : cot::$out['canonical_uri'];
+	cot::$out['canonical_uri'] = empty(cot::$out['canonical_uri']) ?
+        str_replace('&', '&amp;', cot::$sys['canonical_url']) : cot::$out['canonical_uri'];
+
 	if (!preg_match("#^https?://.+#", cot::$out['canonical_uri'])) {
 		cot::$out['canonical_uri'] = COT_ABSOLUTE_URL . cot::$out['canonical_uri'];
 	}

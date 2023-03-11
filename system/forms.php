@@ -457,10 +457,13 @@ function cot_selectbox_structure($extension, $check, $name, $subcat = '', $hidep
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @param string $custom_rc Custom resource string name
  * @return string
+ *
+ * @todo Don't use  $rows and $cols parameters
  */
-function cot_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
+function cot_textarea($name, $value, $rows = null, $cols = null, $attrs = '', $custom_rc = '')
 {
 	global $cot_textarea_count, $R, $cfg;
+
 	$cot_textarea_count++;
 	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
@@ -468,14 +471,14 @@ function cot_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
     $msgSeparate = isset($cfg['msg_separate']) ? $cfg['msg_separate'] : false;
 	$error = $msgSeparate ? cot_implode_messages($name, 'error') : '';
 	$buffered = cot_import_buffered($name, $value);
-	return cot_rc($rc, array(
+	return cot_rc($rc, [
 		'name' => $name,
 		'value' => is_string($buffered) ? htmlspecialchars($buffered) : '',
 		'rows' => $rows,
 		'cols' => $cols,
 		'attrs' => $input_attrs,
 		'error' => $error
-	));
+	]);
 }
 
 /**

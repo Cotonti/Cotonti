@@ -251,7 +251,7 @@ if (!COT_AJAX)
 	$t->parse('MAIN.AFTER_AJAX');
 }
 
-$pm_username = cot_build_user($row_user['user_id'], htmlspecialchars($row_user['user_name']));
+$pm_username = cot_build_user($row_user['user_id'], $row_user['user_name']);
 $title[] = array(cot_url('users', 'm=details&id='.$row_user['user_id']), $row_user['user_name']);
 $title[] = array(cot_url('pm', 'm=message&id='.$id), $row['pm_title']);
 

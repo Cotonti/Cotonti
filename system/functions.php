@@ -2261,24 +2261,27 @@ function cot_build_url($text, $maxlen=64)
  * Returns link to user profile
  *
  * @param int $id User ID
- * @param string $user User name
+ * @param string $userName User name
  * @param mixed $extra_attrs Extra link tag attributes as a string or associative array,
  *		e.g. array('class' => 'usergrp_admin')
  * @return string
  */
-function cot_build_user($id, $user, $extra_attrs = '')
+function cot_build_user($id, $userName, $extra_attrs = '')
 {
     $id = (int) $id;
 	if (function_exists('cot_build_user_custom')) {
-		return cot_build_user_custom($id, $user, $extra_attrs);
+		return cot_build_user_custom($id, $userName, $extra_attrs);
 	}
+
+    $userName = htmlspecialchars($userName);
+
 	if (!$id) {
-		return empty($user) ? '' : $user;
+		return empty($userName) ? '' : $userName;
 	}
 
     return cot_rc_link(
-        cot_url('users', ['m' => 'details', 'id' => $id, 'u' => $user,]),
-        !empty($user) ? $user : '?',
+        cot_url('users', ['m' => 'details', 'id' => $id, 'u' => $userName,]),
+        !empty($userName) ? $userName : '?',
         $extra_attrs
     );
 }
@@ -2456,7 +2459,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 
 			$temp_array = array(
 				'ID' => $user_data['user_id'],
-				'NAME' => cot_build_user($user_data['user_id'], htmlspecialchars($user_data['user_name'])),
+				'NAME' => cot_build_user($user_data['user_id'], $user_data['user_name']),
 				'NICKNAME' => htmlspecialchars($user_data['user_name']),
 				'DETAILSLINK' => cot_url('users', 'm=details&id=' . $user_data['user_id'].'&u='.htmlspecialchars($user_data['user_name'])),
 				'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
@@ -2511,8 +2514,8 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
 				'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
 				'FULL_NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-				'MAINGRP' => cot_build_group(1),
-				'MAINGRPID' => 1,
+				'MAINGRP' => cot_build_group(COT_GROUP_GUESTS),
+				'MAINGRPID' => COT_GROUP_GUESTS,
 				'MAINGRPSTARS' => '',
 				'MAINGRPICON' => cot_build_groupicon($cot_groups[1]['icon']),
 				'COUNTRY' => cot_build_country(''),
@@ -4750,7 +4753,7 @@ function cot_wraptext($str, $wrap = 80)
  * @param array $params Associative array of arguments or a parameter string
  * @return string Assembled resource string
  */
-function cot_rc($name, $params = array())
+function cot_rc($name, $params = [])
 {
 	global $R, $L, $theme_reload;
 
@@ -4761,7 +4764,7 @@ function cot_rc($name, $params = array())
 		$L[$name] = $theme_reload['L'][$name];
 	}
 
-	if(isset($R[$name])) {
+	if (isset($R[$name])) {
         $res = $R[$name];
     } elseif(isset($L[$name])) {
         $res = $L[$name];
@@ -4769,20 +4772,20 @@ function cot_rc($name, $params = array())
         $res = $name;
     }
 
-
-
 	is_array($params) ? $args = $params : parse_str($params, $args);
 	if (preg_match_all('#\{\$(\w+)\}#', $res, $matches, PREG_SET_ORDER)) {
 		foreach($matches as $m) {
 			$var = $m[1];
 			$val = null;
-			if(isset($args[$var])) {
+			if (isset($args[$var])) {
                 $val = $args[$var];
             } elseif(isset($GLOBALS[$var])) {
                 $val = $GLOBALS[$var];
             }
-			if($val !== null) {
+			if ($val !== null) {
                 $res = str_replace($m[0], $val, $res);
+            } else {
+                $res = str_replace($m[0], '', $res);
             }
 		}
 	}

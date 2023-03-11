@@ -28,7 +28,7 @@ $R['input_radio_separator'] = ' ';
 $R['input_select'] = '<select name="{$name}"{$attrs}>{$options}</select>{$error}';
 $R['input_submit'] = '<button type="submit" name="{$name}" {$attrs}>{$value}</button>';
 $R['input_text'] = '<input type="text" name="{$name}" value="{$value}" {$attrs} />{$error}';
-$R['input_textarea'] = '<textarea name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
+$R['input_textarea'] = '<textarea name="{$name}" rows="{$rows}" cols="{$cols}" {$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_editor'] =  '<textarea class="editor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_medieditor'] =  '<textarea class="medieditor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_minieditor'] =  '<textarea class="minieditor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';

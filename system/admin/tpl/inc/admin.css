@@ -127,13 +127,25 @@ table.cells							{  }
 
 /* 8. Forms
 -------------------------------------------------- */
-
-form																{  }
+form {  }
 input, select, textarea/*, button*/	{ font-size: .8125rem; }
-input, select/*, button*/						{ padding: .125rem; }
+input, select/*, button*/ { padding: .125rem; }
+
+textarea {
+	resize: both;
+}
 
 #saveconfig input[type=text],
-#saveconfig textarea								{ width:98%; }
+#saveconfig textarea { width:98%; }
+
+input[type=text],
+textarea {
+	width:98%;
+}
+
+textarea {
+	min-height: 40px;
+}
 
 /* 9. Pagination
 -------------------------------------------------- */

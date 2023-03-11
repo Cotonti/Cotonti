@@ -419,7 +419,7 @@ if (!$sqllist_rowset_other) {
             )
         );
 		$t->assign(array(
-			'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
+			'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], $pag['user_name']),
 			'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj),
 			'LIST_ROW_NUM' => $jj
 		));

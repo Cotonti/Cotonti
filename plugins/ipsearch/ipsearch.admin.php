@@ -54,7 +54,7 @@ if ($a == 'search')
 	while ($row = $sql->fetch())
 	{
 		$t->assign(array(
-			'IPSEARCH_USER_IPMASK1' => cot_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
+			'IPSEARCH_USER_IPMASK1' => cot_build_user($row['user_id'], $row['user_name']),
 			'IPSEARCH_USER_LASTIP_IPMASK1' => cot_build_ipsearch($row['user_lastip'])
 		));
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK1');
@@ -67,7 +67,7 @@ if ($a == 'search')
 	while ($row = $sql->fetch())
 	{
 		$t->assign(array(
-			'IPSEARCH_USER_IPMASK2' => cot_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
+			'IPSEARCH_USER_IPMASK2' => cot_build_user($row['user_id'], $row['user_name']),
 			'IPSEARCH_USER_LASTIP_IPMASK2' => cot_build_ipsearch($row['user_lastip'])
 		));
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK2');
@@ -80,7 +80,7 @@ if ($a == 'search')
 	while($row = $sql->fetch())
 	{
 		$t->assign(array(
-			'IPSEARCH_USER_IPMASK3' => cot_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
+			'IPSEARCH_USER_IPMASK3' => cot_build_user($row['user_id'], $row['user_name']),
 			'IPSEARCH_USER_LASTIP_IPMASK3' => cot_build_ipsearch($row['user_lastip'])
 		));
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK3');

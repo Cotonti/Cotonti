@@ -36,7 +36,7 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported)
 	}
 	else
 	{
-		$pfs_owner = cot_build_user($row['pfs_userid'], htmlspecialchars($row['user_name']));
+		$pfs_owner = cot_build_user($row['pfs_userid'], $row['user_name']);
 	}
 
 	$pfs_img = "<img src=\"".$imgpath."\" alt=\"".$row['pfs_desc']."\" />";

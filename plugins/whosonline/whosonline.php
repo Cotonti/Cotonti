@@ -105,7 +105,7 @@ foreach ($sql_users->fetchAll() as $row)
 				'USER_SUBLOCATION' => htmlspecialchars($row['online_subloc']),
 				'USER_IP' => $ipsearch ? cot_rc_link($url_ipsearch, $row['online_ip']) : $row['online_ip'],
 				'USER_IP_URL' => $ipsearch ? $url_ipsearch : '',
-				'USER_LINK' => cot_build_user($row['online_userid'], htmlspecialchars($row['online_name'])),
+				'USER_LINK' => cot_build_user($row['online_userid'], $row['online_name']),
 				'USER_LASTSEEN' => cot_build_timegap($row['online_lastseen'], cot::$sys['now'])
 		));
 		$t->assign(cot_generate_usertags($row, 'USER_'));

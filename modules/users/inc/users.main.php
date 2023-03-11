@@ -253,8 +253,7 @@ $t->assign(array(
 $k = '_.__._';
 $asc = explode($k, cot_url('users', array('s' => $k, 'w'=> 'asc') + $users_url_path));
 $desc = explode($k, cot_url('users', array('s' => $k, 'w'=> 'desc') + $users_url_path));
-foreach ($users_sort_tags as $k => $x)
-{
+foreach ($users_sort_tags as $k => $x) {
 	$t->assign($x[0], cot_rc('users_link_sort', array(
 		'asc_url' => implode($k, $asc),
 		'desc_url' => implode($k, $desc),
@@ -280,8 +279,7 @@ $jj = 0;
 $extp = cot_getextplugins('users.loop');
 /* ===== */
 
-foreach ($sqlusers as $urr)
-{
+foreach ($sqlusers as $urr) {
 	$jj++;
 	$t->assign(array(
 		'USERS_ROW_ODDEVEN' => cot_build_oddeven($jj),
@@ -289,9 +287,9 @@ foreach ($sqlusers as $urr)
 		'USERS_ROW' => $urr
 	));
 	$t->assign(cot_generate_usertags($urr, 'USERS_ROW_'));
+
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -300,8 +298,7 @@ foreach ($sqlusers as $urr)
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('users.tags') as $pl)
-{
+foreach (cot_getextplugins('users.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

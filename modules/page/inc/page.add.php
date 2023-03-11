@@ -173,7 +173,7 @@ $pageadd_array = array(
 	'PAGEADD_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', $rpage['page_title'], array('maxlength' => '255')),
 	'PAGEADD_FORM_DESC' => cot_textarea('rpagedesc', $rpage['page_desc'], 2, 64, array('maxlength' => '255')),
 	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('maxlength' => '100')),
-	'PAGEADD_FORM_OWNER' => cot_build_user(cot::$usr['id'], htmlspecialchars(cot::$usr['name'])),
+	'PAGEADD_FORM_OWNER' => cot_build_user(cot::$usr['id'], cot::$usr['name']),
 	'PAGEADD_FORM_OWNERID' => cot::$usr['id'],
 	'PAGEADD_FORM_DATE' => cot_selectbox_date(cot::$sys['now'], 'long', 'rpagedate'),
 	'PAGEADD_FORM_BEGIN' => cot_selectbox_date(cot::$sys['now'], 'long', 'rpagebegin'),

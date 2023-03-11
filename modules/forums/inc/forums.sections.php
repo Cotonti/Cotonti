@@ -145,7 +145,7 @@ $extpss = cot_getextplugins('forums.sections.loop.subsections');
 /* ===== */
 
 foreach ($fstlvl as $x) {
-	if (is_array($nxtlvl[$x])) {
+	if (isset($nxtlvl[$x]) && is_array($nxtlvl[$x])) {
 		$yy = 0;
 		foreach ($nxtlvl[$x] as $y) {
 			if (isset($nxtlvl[$y]) && is_array($nxtlvl[$y]) && cot::$cfg['forums']['cat_' . $y]['defstate']) {
@@ -196,15 +196,15 @@ foreach ($fstlvl as $x) {
 	$xx++;
 
 	$fold = !cot::$cfg['forums']['cat_' . $x]['defstate'];
-	if($c) {
-		$fold = (int)($c=='fold' ? true : ($c=='unfold' ? false : ($c==$x ? false : true)));
+	if ($c) {
+		$fold = (int) ($c == 'fold' ? true : ($c == 'unfold' ? false : ($c == $x ? false : true)));
 	}
 
     $stat = isset($cat_top[$x]) ? $cat_top[$x] : null;
 	$t->assign(cot_generate_sectiontags($x, 'FORUMS_SECTIONS_ROW_', $stat));
 	$t->assign(array(
 		'FORUMS_SECTIONS_ROW_FOLD' => $fold,
-		'FORUMS_SECTIONS_ROW_SUBITEMS' => (is_array($nxtlvl[$x])) ? 1 : 0,
+		'FORUMS_SECTIONS_ROW_SUBITEMS' => (isset($nxtlvl[$x]) && is_array($nxtlvl[$x])) ? 1 : 0,
 		'FORUMS_SECTIONS_ROW_ODDEVEN' => cot_build_oddeven($xx),
 		'FORUMS_SECTIONS_ROW_NUM' => $xx,
 	));

@@ -24,7 +24,7 @@ if (cot::$cfg['forums']['cat_' . $s]['allowviewers']) {
 	while ($rowv = $sql_forums_view->fetch()) {
 		if ($rowv['online_name'] != 'v') {
 			$fs_viewers_names .= ($v > 0) ? ', ' : '';
-			$fs_viewers_names .= cot_build_user($rowv['online_userid'], htmlspecialchars($rowv['online_name']));
+			$fs_viewers_names .= cot_build_user($rowv['online_userid'], $rowv['online_name']);
 			$v++;
 		}
 	}

@@ -245,7 +245,7 @@ function cot_rights_parseline($row, $title, $link)
 	$t->assign(array(
 		'ADMIN_RIGHTSBYITEM_ROW_TITLE' => $title,
 		'ADMIN_RIGHTSBYITEM_ROW_LINK' => $link,
-		'ADMIN_RIGHTSBYITEM_ROW_USER' => cot_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
+		'ADMIN_RIGHTSBYITEM_ROW_USER' => cot_build_user($row['auth_setbyuserid'], $row['user_name']),
 		'ADMIN_RIGHTSBYITEM_ROW_JUMPTO' => cot_url('users', 'g='.$row['auth_groupid']),
 	));
 	$t->parse('MAIN.RIGHTSBYITEM_ROW');

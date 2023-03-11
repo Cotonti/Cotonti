@@ -10,32 +10,30 @@
 defined('COT_CODE') or die('Wrong URL');
 
 $id = cot_import('id','G','INT');					// id (delete file(folder) id
-$opt = cot_import('opt','G','ALP');					// display option
-$f = cot_import('f','G','INT');						// folder id
+$opt = cot_import('opt','G','ALP');				// display option
+$f = cot_import('f','G','INT');					// folder id
 $c1 = cot_import('c1','G','ALP');					// form name
 $c2 = cot_import('c2','G','ALP');					// input name
-$parser = cot_import('parser', 'G', 'ALP');			// custom parser
+$parser = cot_import('parser', 'G', 'ALP');		// custom parser
 $userid = cot_import('userid','G','INT');			// User ID or 0
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['pfs']['maxpfsperpage']);   // Page number files
-list($pgf, $df) = cot_import_pagenav('df', $cfg['pfs']['maxpfsperpage']);   // page number folders
+list($pg, $d, $durl) = cot_import_pagenav('d', cot::$cfg['pfs']['maxpfsperpage']);   // Page number files
+list($pgf, $df) = cot_import_pagenav('df', cot::$cfg['pfs']['maxpfsperpage']);   // page number folders
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
 cot_block($usr['auth_read']);
 
-$sys['parser'] = empty($parser) ? $cfg['parser'] : $parser;
+$sys['parser'] = empty($parser) ? cot::$cfg['parser'] : $parser;
 
 $pn_c1 = empty($c1) ? '' : '&c1=' . $c1;
 $pn_c2 = empty($c2) ? '' : '&c2=' . $c2;
 
-if (!$usr['isadmin'] || $userid === null)
-{
+$more = '';
+if (!cot::$usr['isadmin'] || $userid === null) {
 	$userid = $usr['id'];
-}
-else
-{
-	$more = 'userid='.$userid;
+} else {
+    $more = 'userid='.$userid;
 }
 
 $files_count = 0;
@@ -49,7 +47,7 @@ $pfs_dir_user = cot_pfs_path($userid);
 $thumbs_dir_user = cot_pfs_thumbpath($userid);
 $rel_dir_user = cot_pfs_relpath($userid);
 
-$sql_pfs_max = $db->query("
+$sql_pfs_max = cot::$db->query("
 	SELECT
 		MAX(grp_pfs_maxfile) AS maxfile,
 		SUM(grp_pfs_maxtotal) AS maxtotal
@@ -66,33 +64,40 @@ $maxtotal = (int)$sql_pfs_max['maxtotal'] * 1024; // KiB -> Bytes
 
 cot_block(($maxfile > 0 && $maxtotal > 0) || $usr['isadmin']);
 
-if (!empty($c1) || !empty($c2))
-{
-	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
-	if (!empty($parser))
-	{
-		$more .= '&parser='.$parser;
+if (!empty($c1) || !empty($c2)) {
+    if (!empty($c1)) {
+        $more .= (($more != '') ? '&' : '') . 'c1=' . $c1;
+    }
+    if (!empty($c2)) {
+        $more .= (($more != '') ? '&' : '') . 'c2=' . $c2;
+    }
+	if (!empty($parser)) {
+        $more .= (($more != '') ? '&' : '') . 'parser=' . $parser;
 	}
 	$standalone = TRUE;
 }
 
-foreach ($cot_extensions as $k => $line)
-{
-	$icon[$line[0]] = cot_rc('pfs_icon_type', array('type' => $line[2], 'name' => $line[1]));
+foreach ($cot_extensions as $k => $line) {
+	$icon[$line[0]] = cot_rc('pfs_icon_type', ['type' => $line[2], 'name' => $line[1],]);
 	$filedesc[$line[0]] = $line[1];
 }
 
-$L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title[] = array(cot_url('pfs', $more), $L['pfs_title']);
+$L['pfs_title'] = ($userid == 0) ? cot::$L['SFS'] : cot::$L['pfs_title'];
+$title[] = [cot_url('pfs', $more), cot::$L['pfs_title']];
 
-if ($userid!=$usr['id'])
-{
-	($userid == 0) || $title[] = array(cot_url('users', 'm=details&id='.$user_info['user_id']), $user_info['user_name']);
+if ($userid > 0 && $userid != cot::$usr['id']) {
+	$title[] = [
+        cot_url('users', [
+            'm' => 'details',
+            'id' => $user_info['user_id'],
+            'u' => htmlspecialchars($user_info['user_name']),
+        ]),
+        $user_info['user_name'],
+    ];
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('pfs.first') as $pl)
-{
+foreach (cot_getextplugins('pfs.first') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -371,7 +376,7 @@ else
 	$subfiles_count = $sql_pfs_subfiles->fetchColumn();
 
 	$iki=0;
-	$subfiles_count_on_page=0;
+	$subfiles_count_on_page = 0;
 
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('pfs.rowcat.loop');
@@ -418,7 +423,7 @@ else
 		$t->parse('MAIN.PFF_ROW');
 
 		$iki++;
-		$subfiles_count_on_page+=$pff_fcount;
+		$subfiles_count_on_page += $pff_fcount;
 	}
 	$sql_pfs_folders->closeCursor();
 
@@ -442,8 +447,7 @@ $iji=0;
 $extp = cot_getextplugins('pfs.row.loop');
 /* ===== */
 
-foreach ($sql_pfs->fetchAll() as $row)
-{
+foreach ($sql_pfs->fetchAll() as $row) {
 	$pfs_id = $row['pfs_id'];
 	$pfs_file = $row['pfs_file'];
 	$pfs_date = $row['pfs_date'];
@@ -505,8 +509,7 @@ foreach ($sql_pfs->fetchAll() as $row)
 	));
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -517,46 +520,48 @@ foreach ($sql_pfs->fetchAll() as $row)
 	$iji++;
 }
 
-if ($files_count > 0 || $folders_count > 0)
-{
-	if ($folders_count > 0)
-	{
+$filesinfolder = ($f > 0) ? cot::$L['pfs_filesinthisfolder'] : cot::$L['pfs_filesintheroot'];
+
+$t->assign([
+    'PFF_FOLDERCOUNT_TITLE' => cot_declension($folders_count, $Ls['Folders']),
+    'PFF_FILESCOUNT_TITLE' =>  cot_declension($subfiles_count, $Ls['Files']),
+    'PFF_ONPAGE_FOLDERS_TITLE' => cot_declension($iki, $Ls['Folders']),
+    'PFF_ONPAGE_FILES_TITLE' => cot_declension($subfiles_count_on_page, $Ls['Files']),
+    'PFF_FOLDERCOUNT' => $folders_count,
+    'PFF_FILESCOUNT' => $subfiles_count,
+    'PFF_ONPAGE_FOLDERS' => $iki,
+    'PFF_ONPAGE_FILES' => $subfiles_count_on_page,
+    'PFS_FILESCOUNT_TITLE' => cot_declension($files_count, $Ls['Files']),
+    'PFS_ONPAGE_FILES_TITLE' => cot_declension($iji, $Ls['Files']),
+    'PFS_FILESCOUNT' => $files_count,
+    'PFS_INTHISFOLDER' => $filesinfolder,
+    'PFS_ONPAGE_FILES' => $iji,
+]);
+
+if ($files_count > 0 || $folders_count > 0) {
+	if ($folders_count > 0) {
 		$totalitemsf = $folders_count;
-		$pagenav = cot_pagenav('pfs', $more, $df, $totalitemsf, $cfg['pfs']['maxpfsperpage'], 'df');
+		$pagenav = cot_pagenav('pfs', $more, $df, $totalitemsf, cot::$cfg['pfs']['maxpfsperpage'], 'df');
 
 		$t->assign(array(
-            'PFF_FOLDERCOUNT_TITLE' => cot_declension($folders_count, $Ls['Folders']),
-            'PFF_FILESCOUNT_TITLE' =>  cot_declension($subfiles_count, $Ls['Files']),
-            'PFF_ONPAGE_FOLDERS_TITLE' => cot_declension($iki, $Ls['Folders']),
-            'PFF_ONPAGE_FILES_TITLE' => cot_declension($subfiles_count_on_page, $Ls['Files']),
-			'PFF_FOLDERCOUNT' => $folders_count,
-			'PFF_FILESCOUNT' => $subfiles_count,
-			'PFF_ONPAGE_FOLDERS' => $iki,
-			'PFF_ONPAGE_FILES' => $subfiles_count_on_page,
 			'PFF_PAGING_PREV' => $pagenav['prev'],
 			'PFF_PAGING_CURRENT' => $pagenav['main'],
 			'PFF_PAGING_NEXT' => $pagenav['next']
 		));
 	}
 
-	if ($files_count > 0)
-	{
+	if ($files_count > 0) {
 		$thumbspagination = ($opt == 'thumbs') ? '&opt=thumbs' : '';
 		$totalitems = $files_count;
 
-		$pagnavParams = 'f='.$f;
-		if(!empty($more)) $pagnavParams .= '&'.$more;
+		$pagnavParams = 'f=' . $f;
+		if (!empty($more)) {
+            $pagnavParams .= '&' . $more;
+        }
 		$pagnavParams .= $thumbspagination;
-		$pagenav = cot_pagenav('pfs', $pagnavParams, $d, $totalitems, $cfg['pfs']['maxpfsperpage']);
-
-		$filesinfolder .= ($f>0) ? $L['pfs_filesinthisfolder'] : $L['pfs_filesintheroot'];
+		$pagenav = cot_pagenav('pfs', $pagnavParams, $d, $totalitems, cot::$cfg['pfs']['maxpfsperpage']);
 
 		$t->assign(array(
-		    'PFS_FILESCOUNT_TITLE' => cot_declension($files_count, $Ls['Files']),
-		    'PFS_ONPAGE_FILES_TITLE' => cot_declension($iji, $Ls['Files']),
-			'PFS_FILESCOUNT' => $files_count,
-			'PFS_INTHISFOLDER' => $filesinfolder,
-			'PFS_ONPAGE_FILES' => $iji,
 			'PFS_PAGING_PREV' => $pagenav['prev'],
 			'PFS_PAGING_CURRENT' => $pagenav['main'],
 			'PFS_PAGING_NEXT' => $pagenav['next'],
@@ -565,8 +570,8 @@ if ($files_count > 0 || $folders_count > 0)
 }
 
 // ========== Statistics =========
-
-$showthumbs .= ($opt!='thumbs' && $files_count>0 && $cfg['pfs']['th_amode']!='Disabled') ? cot_rc_link(cot_url('pfs', 'f='.$f.'&'.$more.'&opt=thumbs'), $L['Thumbnails']) : '';
+$showthumbs = ($opt != 'thumbs' && $files_count > 0 && cot::$cfg['pfs']['th_amode']!='Disabled') ?
+    cot_rc_link(cot_url('pfs', 'f='.$f.'&'.$more.'&opt=thumbs'), cot::$L['Thumbnails']) : '';
 
 $t->assign(array(
 	'PFS_TOTALSIZE' => cot_build_filesize($pfs_totalsize, 1),

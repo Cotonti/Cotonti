@@ -359,7 +359,7 @@ function cot_rights_parseline($row, $title, $link, $icon = '', $legacyIcon = '')
 		'ADMIN_RIGHTS_ROW_LINK' => $link,
 		'ADMIN_RIGHTS_ROW_ICON' => $icon,
 		'ADMIN_RIGHTS_ROW_RIGHTSBYITEM' => cot_url('admin', 'm=rightsbyitem&ic='.$row['auth_code'].'&io='.$row['auth_option']),
-		'ADMIN_RIGHTS_ROW_USER' => cot_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
+		'ADMIN_RIGHTS_ROW_USER' => cot_build_user($row['auth_setbyuserid'], $row['user_name']),
 
         // @deprecated For backward compatibility. Will be removed in future releases
         'ADMIN_RIGHTS_ROW_ICO' => $legacyIcon,

@@ -45,12 +45,12 @@
 			<table class="cells">
 				<thead>
 					<tr>
-						<th class="w-">{PHP.L.Path}</th>
+						<th class="">{PHP.L.Path}</th>
 						<th class="w-10">{PHP.L.Code}</th>
 						<th class="w-25">{PHP.L.Title}</th>
-						<th class="w-5">{PHP.L.TPL}</th>
+						<th class="">{PHP.L.TPL}</th>
 						<th class="w-5">{PHP.L.Pages}</th>
-						<th class="w-30">{PHP.L.Action}</th>
+						<th class="w-25">{PHP.L.Action}</th>
 					</tr>
 				</thead>
 				<tfoot>

@@ -258,7 +258,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 				'COMMENTS_ROW_ID' => $row['com_id'],
 				'COMMENTS_ROW_ORDER' => cot::$cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
 				'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#c'.$row['com_id']),
-				'COMMENTS_ROW_AUTHOR' => cot_build_user($row['user_id'], htmlspecialchars($row['com_author'])),
+				'COMMENTS_ROW_AUTHOR' => cot_build_user($row['user_id'], $row['com_author']),
 				// User can be deleted. So $row['user_id'] should be used here
 				'COMMENTS_ROW_AUTHORID' => $row['user_id'],
 				'COMMENTS_ROW_TEXT' => $com_text,

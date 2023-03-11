@@ -284,7 +284,7 @@ foreach ($sql_forums_rowset as $row) {
 
 		$row['ft_icon_type'] = $row['ft_icon'];
 		$row['ft_icon'] = cot_rc('forums_icon_topic', array('icon' => $row['ft_icon']));
-		$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
+		$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], $row['ft_lastpostername']);
 	}
 
 	if ($row['ft_postcount'] > cot::$cfg['forums']['maxpostsperpage'] && !$row['ft_movedto']) {
@@ -327,7 +327,7 @@ foreach ($sql_forums_rowset as $row) {
 		'FORUMS_TOPICS_ROW_POSTCOUNT' => $row['ft_postcount'],
 		'FORUMS_TOPICS_ROW_REPLYCOUNT' => $row['ft_replycount'],
 		'FORUMS_TOPICS_ROW_VIEWCOUNT' => $row['ft_viewcount'],
-		'FORUMS_TOPICS_ROW_FIRSTPOSTER' => cot_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername'])),
+		'FORUMS_TOPICS_ROW_FIRSTPOSTER' => cot_build_user($row['ft_firstposterid'], $row['ft_firstpostername']),
 		'FORUMS_TOPICS_ROW_LASTPOSTER' => $row['ft_lastpostername'],
 		'FORUMS_TOPICS_ROW_USER_POSTED' => isset($row['ft_user_posted']) ? (int) $row['ft_user_posted'] : '',
 		'FORUMS_TOPICS_ROW_URL' => $row['ft_url'],

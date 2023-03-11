@@ -14,7 +14,7 @@ Hooks=admin
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', 'any');
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('forums', 'any');
 cot_block($usr['isadmin']);
 
 $t = new XTemplate(cot_tplfile('forums.admin', 'module', true));
@@ -24,8 +24,8 @@ require_once cot_incfile('forums', 'module');
 $adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 $adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
 $adminpath[] = array(cot_url('admin', 'm='.$m), $L['Administration']);
-$adminhelp = $L['adm_help_forums'];
-$adminTitle = $L['Forums'];
+$adminhelp = isset(cot::$L['adm_help_forums']) ? cot::$L['adm_help_forums'] : '';
+$adminTitle = cot::$L['Forums'];
 
 /* === Hook  === */
 foreach (cot_getextplugins('forums.admin.first') as $pl)

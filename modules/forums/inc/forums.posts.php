@@ -406,7 +406,7 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_UPDATEDBY' => $row['fp_updatedby'],
 		'FORUMS_POSTS_ROW_TEXT' => cot_parse($row['fp_text'], (cot::$cfg['forums']['markup'] && cot::$cfg['forums']['cat_' . $s]['allowbbcodes'])),
 		'FORUMS_POSTS_ROW_ANCHORLINK' => cot_rc('forums_code_post_anchor', array('id' => $row['fp_id'])),
-		'FORUMS_POSTS_ROW_POSTERNAME' => cot_build_user($row['fp_posterid'], htmlspecialchars($row['fp_postername'])),
+		'FORUMS_POSTS_ROW_POSTERNAME' => cot_build_user($row['fp_posterid'], $row['fp_postername']),
 		'FORUMS_POSTS_ROW_POSTERID' => $row['fp_posterid'],
 		'FORUMS_POSTS_ROW_POSTERIP' => (cot::$usr['isadmin']) ? cot_build_ipsearch($row['fp_posterip']) : '',
 		'FORUMS_POSTS_ROW_DELETE' => $rowdelete,

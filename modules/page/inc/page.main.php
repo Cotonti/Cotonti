@@ -169,7 +169,7 @@ $t->assign(
         $pag['page_pageurl']
     )
 );
-$t->assign('PAGE_OWNER', cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])));
+$t->assign('PAGE_OWNER', cot_build_user($pag['page_ownerid'], $pag['user_name']));
 $t->assign(cot_generate_usertags($pag, 'PAGE_OWNER_'));
 
 $pag['page_file'] = intval($pag['page_file']);

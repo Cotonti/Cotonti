@@ -128,8 +128,8 @@
 		<form name="editlevel" id="editlevel" action="{ADMIN_USERS_EDITFORM_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
-					<td class="width40">{PHP.L.Name}:</td>
-					<td class="width60">{ADMIN_USERS_EDITFORM_GRP_NAME} {PHP.L.adm_required}</td>
+					<td class="w-40">{PHP.L.Name}:</td>
+					<td class="w-60">{ADMIN_USERS_EDITFORM_GRP_NAME} {PHP.L.adm_required}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Title}:</td>
