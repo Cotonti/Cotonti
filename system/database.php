@@ -156,7 +156,7 @@ class CotDB
 
         $this->config['adapter'] = !empty($this->config['adapter']) ? $this->config['adapter'] : 'mysql';
 
-        $port = empty($this->config['port']) ? '' : ';port=' . $this->config;
+        $port = empty($this->config['port']) ? '' : ';port=' . $this->config['port'];
         $dsn = $this->config['adapter'] . ':host=' . $this->config['host'] . $port;
         if (!empty($this->config['dbName'])) {
             $dsn .= ';dbname=' . $this->config['dbName'];
