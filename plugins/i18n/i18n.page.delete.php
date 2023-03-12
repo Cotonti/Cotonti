@@ -11,11 +11,12 @@ Hooks=page.edit.delete.done
  * @package I18n
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var int $id Deleting page id
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('i18n', 'plug');
-global $db_i18n_pages;
 
-$db->delete($db_i18n_pages, "ipage_id = ?", array($id));
+cot::$db->delete(cot::$db->i18n_pages, 'ipage_id = ?', $id);

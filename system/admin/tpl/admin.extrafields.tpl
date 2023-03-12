@@ -60,27 +60,31 @@
 							{ADMIN_EXTRAFIELDS_ROW_DEFAULT}
 						</td>
 						<td class="centerall {ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
-							<a title="{PHP.L.Delete}" href="{ADMIN_EXTRAFIELDS_ROW_DEL_URL}" class="ajax button">{PHP.L.Delete}</a>
+							<a href="{ADMIN_EXTRAFIELDS_ROW_DELETE_CONFIRM_URL}" class="confirmLink button">{PHP.L.Delete}</a>
 						</td>
 					</tr>
 					<!-- END: EXTRAFIELDS_ROW -->
+					<!-- IF {ADMIN_EXTRAFIELDS_ON_PAGE_ITEMS} > 0 -->
 					<tr>
 						<td class="valid" colspan="5">
 							<input type="submit" value="{PHP.L.Update}" onclick="location.href='{ADMIN_EXTRAFIELDS_ROW_FORM_URL}'" class="confirm" />
 						</td>
 					</tr>
+					<!-- ENDIF -->
 				</tbody>
 			</table>
 		</div>
 	</form>
 	<p class="paging">
-		{PHP.L.Total}: {ADMIN_EXTRAFIELDS_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_EXTRAFIELDS_COUNTER_ROW}
+		{PHP.L.Total}: {ADMIN_EXTRAFIELDS_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_EXTRAFIELDS_ON_PAGE_ITEMS}
 	</p>
+	<!-- IF {ADMIN_EXTRAFIELDS_PAGNAV} -->
 	<nav class="pagination">
 		<ul>
 			{ADMIN_EXTRAFIELDS_PAGINATION_PREV}{ADMIN_EXTRAFIELDS_PAGNAV}{ADMIN_EXTRAFIELDS_PAGINATION_NEXT}
 		</ul>
 	</nav>
+	<!-- ENDIF -->
 </div>
 
 <div class="block">

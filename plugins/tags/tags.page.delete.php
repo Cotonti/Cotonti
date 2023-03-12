@@ -11,19 +11,18 @@ Hooks=page.edit.delete.done,i18n.page.delete.done
  * @package Tags
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var int $id Deleting page id
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
-{
+if (cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
 	require_once cot_incfile('tags', 'plug');
-	if (cot_get_caller() == 'i18n.page')
-	{
+	if (cot_get_caller() == 'i18n.page') {
+        global $i18n_locale;
 		$tags_extra = array('tag_locale' => $i18n_locale);
-	}
-	else
-	{
+	} else {
 		$tags_extra = null;
 	}
 	cot_tag_remove_all($id, 'pages', $tags_extra);

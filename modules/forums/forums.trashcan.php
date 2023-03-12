@@ -31,9 +31,9 @@ $trash_types['forumtopic'] = cot::$db->forum_topics;
 function cot_trash_forumpost_check($data)
 {
 	global $db_forum_posts, $db_forum_topics, $db;
+
 	$sql = $db->query("SELECT ft_id FROM $db_forum_topics WHERE ft_id='".$data['fp_topicid']."'");
-	if ($row = $sql->fetch())
-	{
+	if ($row = $sql->fetch()) {
 		return true;
 	}
 	return false;

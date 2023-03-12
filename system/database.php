@@ -394,7 +394,7 @@ class CotDB
 	 * @param array $parameters Array of statement input parameters, see http://www.php.net/manual/en/pdostatement.execute.php
 	 * @return int Number of records removed on success or FALSE on error
 	 */
-	public function delete($tableName, $condition = '', $parameters = array())
+	public function delete($tableName, $condition = '', $parameters = [])
 	{
         $query = 'DELETE FROM ' . $this->quoteTableName($tableName);
         if (!empty($condition)) {

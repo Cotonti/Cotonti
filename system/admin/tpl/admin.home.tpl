@@ -1,17 +1,17 @@
 <!-- BEGIN: MAIN -->
 <main class="aside">
-{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
+	{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 
-<!-- BEGIN: UPDATE -->
+	<!-- BEGIN: UPDATE -->
 	<div class="block">
 		<h2>{PHP.L.home_update_notice}:</h2>
 		<p>{ADMIN_HOME_UPDATE_REVISION}. {ADMIN_HOME_UPDATE_MESSAGE}</p>
 	</div>
-<!-- END: UPDATE -->
+	<!-- END: UPDATE -->
 
-<!-- BEGIN: MAINPANEL -->
-{ADMIN_HOME_MAINPANEL}
-<!-- END: MAINPANEL -->
+	<!-- BEGIN: MAINPANEL -->
+	{ADMIN_HOME_MAINPANEL}
+	<!-- END: MAINPANEL -->
 
 	<div class="block">
 		<h2>Cotonti:</h2>
@@ -81,5 +81,4 @@
 		</div>
 	</div>
 </aside>
-
 <!-- END: MAIN -->
