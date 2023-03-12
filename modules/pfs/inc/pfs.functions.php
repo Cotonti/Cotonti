@@ -615,27 +615,3 @@ function cot_selectbox_folders($user, $skip, $check, $name = 'folderid')
 
 	return ($result);
 }
-
-/**
- * Fetches user entry from DB
- *
- * @param int $id User ID
- * @return array
- *
- * @deprecated
- */
-function cot_userinfo($id)
-{
-	global $db, $db_users;
-
-	$sql = $db->query("SELECT * FROM $db_users WHERE user_id=" . (int)$id);
-	if ($res = $sql->fetch())
-	{
-		return ($res);
-	}
-	else
-	{
-		$res['user_name'] = '?';
-		return ($res);
-	}
-}
