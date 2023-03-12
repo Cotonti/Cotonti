@@ -42,4 +42,6 @@ th_textsize=18:range:0,5:1:
  * @package PFS
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @todo User can just view public folder. It can be a guest with read rights
  */

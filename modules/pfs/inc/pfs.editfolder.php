@@ -14,27 +14,24 @@ $c1 = cot_import('c1','G','ALP');
 $c2 = cot_import('c2','G','ALP');
 $userid = cot_import('userid','G','INT');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
-cot_block($usr['auth_write']);
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('pfs', 'a');
+cot_block(cot::$usr['auth_write']);
 
-if (!$usr['isadmin'] || is_null($userid))
-{
-	$userid = $usr['id'];
-}
-else
-{
-	$more = 'userid='.$userid;
+$more = '';
+if (!cot::$usr['isadmin'] || is_null($userid)) {
+	$userid = cot::$usr['id'];
+} else {
+	$more = 'userid=' . $userid;
 }
 
-if ($userid!=$usr['id'])
-{
-	cot_block($usr['isadmin']);
+if ($userid != cot::$usr['id']) {
+	cot_block(cot::$usr['isadmin']);
 }
 
 $standalone = FALSE;
-$uid = ($userid > 0) ? $userid : $usr['id'];
-$user_info = cot_userinfo($uid);
-$maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
+$uid = ($userid > 0) ? $userid : cot::$usr['id'];
+$user_info = cot_user_data($uid);
+$maingroup = ($userid == 0) ? COT_GROUP_SUPERADMINS : $user_info['user_maingrp'];
 
 $pfs_dir_user = cot_pfs_path($userid);
 $thumbs_dir_user = cot_pfs_thumbpath($userid);
@@ -64,7 +61,7 @@ foreach (cot_getextplugins('pfs.editfolder.first') as $pl)
 }
 /* ===== */
 
-if ($userid!=$usr['id'])
+if ($userid != $usr['id'])
 {
 	cot_block($usr['isadmin']);
 	($userid == 0) || $title[] = array(cot_url('users', 'm=details&id='.$user_info['user_id']), $user_info['user_name']);
@@ -123,12 +120,13 @@ if (!$standalone)
 
 $t = new XTemplate(cot_tplfile('pfs.editfolder'));
 
-if ($standalone)
-{
+if ($standalone) {
     cot_sendheaders();
 
 	$html = Resources::render();
-	if($html) $out['head_head'] = $html.$out['head_head'];
+    if ($html) {
+        cot::$out['head_head'] = $html . (isset(cot::$out['head_head']) ? cot::$out['head_head'] : '');
+    }
 
     $t->assign(array(
         'PFS_HEAD' => $out['head_head'],

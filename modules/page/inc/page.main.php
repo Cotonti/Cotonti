@@ -21,8 +21,7 @@ $join_columns = isset($join_columns) ? $join_columns : '';
 $join_condition = isset($join_condition) ? $join_condition : '';
 
 /* === Hook === */
-foreach (cot_getextplugins('page.first') as $pl)
-{
+foreach (cot_getextplugins('page.first') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -38,8 +37,8 @@ if ($id > 0 || !empty($al)) {
 		WHERE $where LIMIT 1");
 }
 
-if(!$id && empty($al) || !$sql_page || $sql_page->rowCount() == 0) {
-	cot_die_message(404, TRUE);
+if (!$id && empty($al) || !$sql_page || $sql_page->rowCount() == 0) {
+	cot_die_message(404);
 }
 $pag = $sql_page->fetch();
 

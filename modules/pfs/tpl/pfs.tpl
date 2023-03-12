@@ -16,22 +16,24 @@
 	</head>
 	<body>
 <!-- END: STANDALONE_HEADER -->
-
 		<div class="block margin10">
 			<h2 class="pfs">{PFS_TITLE} {PFS_PATH}</h2>
 				<!-- IF {PFS_SUBTITLE} -->
 				<p class="small">{PFS_SUBTITLE}</p>
 				<!-- ENDIF -->
 
-<!-- BEGIN: PFS_ERRORS -->
+				<!-- BEGIN: PFS_ERRORS -->
 				<ul>
-<!-- BEGIN: PFS_ERRORS_ROW -->
+					<!-- BEGIN: PFS_ERRORS_ROW -->
 					<li>{PFS_ERRORS_ROW_MSG}</li>
-<!-- END: PFS_ERRORS_ROW -->
+					<!-- END: PFS_ERRORS_ROW -->
 				</ul>
-<!-- END: PFS_ERRORS -->
-
-				<h3>{PFF_FOLDERCOUNT_TITLE} / {PFF_FILESCOUNT_TITLE} ({PHP.L.pfs_onpage}: {PFF_ONPAGE_FOLDERS_TITLE} / {PFF_ONPAGE_FILES_TITLE})</h3>
+				<!-- END: PFS_ERRORS -->
+				<!-- IF {PFS_FOLDER_ID} == 0 -->
+				<h3>
+					{PFF_FOLDERCOUNT_TITLE} / {PFF_FILESCOUNT_TITLE}
+					({PHP.L.pfs_onpage}: {PFF_ONPAGE_FOLDERS_TITLE} / {PFF_ONPAGE_FILES_TITLE})
+				</h3>
 				<table class="cells">
 					<tr>
 						<td class="coltop width10">&nbsp;</td>
@@ -42,7 +44,7 @@
 						<td class="coltop width15">{PHP.L.Updated}</td>
 						<td class="coltop width15">{PHP.L.Action}</td>
 					</tr>
-<!-- BEGIN: PFF_ROW -->
+					<!-- BEGIN: PFF_ROW -->
 					<tr>
 						<td class="centerall"><a href="{PFF_ROW_URL}">{PFF_ROW_ICON}</a></td>
 						<td>
@@ -58,9 +60,10 @@
 							<a href="{PFF_ROW_DELETE_URL}" class="confirmLink">x</a>
 						</td>
 					</tr>
-<!-- END: PFF_ROW -->
+					<!-- END: PFF_ROW -->
 				</table>
 				<p class="paging">{PFF_PAGING_PREV}{PFF_PAGING_CURRENT}{PFF_PAGING_NEXT}</p>
+				<!-- ENDIF -->
 
 				<h3>{PFS_INTHISFOLDER}: {PFS_FILESCOUNT_TITLE}  ({PHP.L.pfs_onpage}: {PFS_ONPAGE_FILES_TITLE}) {PFS_SHOWTHUMBS}</h3>
 				<table class="cells">
@@ -72,7 +75,7 @@
 						<td class="coltop width15">{PHP.L.Date}</td>
 						<td class="coltop width15">{PHP.L.Action}</td>
 					</tr>
-<!-- BEGIN: PFS_ROW -->
+					<!-- BEGIN: PFS_ROW -->
 					<tr>
 						<td class="centerall">{PFS_ROW_ICON}</td>
 						<td>
@@ -83,13 +86,12 @@
 						<td class="centerall">{PFS_ROW_SIZE}</td>
 						<td class="centerall">{PFS_ROW_DATE}</td>
 						<td class="centerall">
-							<input type="checkbox" name="folderid[{PFS_ROW_ID}]" />
 							<a href="{PFS_ROW_DELETE_URL}" class="confirmLink">{PHP.L.Delete}</a>
 							<a href="{PFS_ROW_EDIT_URL}">{PHP.L.Edit}</a>
 							<br />{PFS_ROW_INSERT}
 						</td>
 					</tr>
-<!-- END: PFS_ROW -->
+				<!-- END: PFS_ROW -->
 				</table>
 				<p class="paging">{PFS_PAGING_PREV}{PFS_PAGING_CURRENT}{PFS_PAGING_NEXT}</p>
 
@@ -101,28 +103,23 @@
 					<p>{PHP.L.pfs_maxsize}: {PFS_MAXFILESIZE}</p>
 				</div>
 
+				<!-- BEGIN: PFS_UPLOAD_FORM -->
 				<h3>{PHP.L.pfs_newfile}</h3>
-<!-- BEGIN: PFS_UPLOAD_FORM -->
 				<form enctype="multipart/form-data" action="{PFS_UPLOAD_FORM_ACTION}" method="post">
+					<input type="hidden" name="MAX_FILE_SIZE" value="{PFS_UPLOAD_FORM_MAX_SIZE}" />
 					<table class="cells">
-						<tr>
-							<td colspan="3" class="padding10">
-								<input type="hidden" name="MAX_FILE_SIZE" value="{PFS_UPLOAD_FORM_MAX_SIZE}" />
-								{PHP.L.Folder} : {PFS_UPLOAD_FORM_FOLDERS}
-							</td>
-						</tr>
 						<tr>
 							<td class="coltop">&nbsp;</td>
 							<td class="coltop">{PHP.L.Description}</td>
 							<td style="width:100%" class="coltop">{PHP.L.File}</td>
 						</tr>
-<!-- BEGIN: PFS_UPLOAD_FORM_ROW -->
+						<!-- BEGIN: PFS_UPLOAD_FORM_ROW -->
 						<tr>
 							<td style="text-align:center">#{PFS_UPLOAD_FORM_ROW_NUM}</td>
 							<td><input type="text" class="text" name="ndesc[{PFS_UPLOAD_FORM_ROW_ID}]" value="" size="40" maxlength="255" /></td>
 							<td><input name="userfile[{PFS_UPLOAD_FORM_ROW_ID}]" type="file" class="file" size="24" /></td>
 						</tr>
-<!-- END: PFS_UPLOAD_FORM_ROW -->
+						<!-- END: PFS_UPLOAD_FORM_ROW -->
 						<tr>
 							<td colspan="3" class="valid">
 								<button type="submit">{PHP.L.Upload}</button>
@@ -130,7 +127,7 @@
 						</tr>
 					</table>
 				</form>
-<!-- END: PFS_UPLOAD_FORM -->
+				<!-- END: PFS_UPLOAD_FORM -->
 
 <!-- BEGIN: PFS_NEWFOLDER_FORM -->
 				<h3>{PHP.L.pfs_newfolder}</h3>
@@ -184,7 +181,6 @@
 			{PHP.R.pfs_icon_pasteimage} {PHP.L.pfs_pasteimage} &nbsp;
 			{PHP.R.pfs_icon_pastefile} {PHP.L.pfs_pastefile}
 		</div>
-
 	</body>
 </html>
 <!-- END: STANDALONE_FOOTER -->

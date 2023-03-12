@@ -19,64 +19,52 @@ defined('COT_CODE') or die('Wrong URL');
  */
 function cot_file_check($path, $name, $ext)
 {
-	global $L, $cfg;
+    if (!cot::$cfg['pfs']['pfsfilecheck']) {
+        return true;
+    }
 
-	if ($cfg['pfs']['pfsfilecheck'])
-	{
-		require './datas/mimetype.php';
-		$fcheck = FALSE;
-		if (in_array($ext, array('jpg', 'jpeg', 'png', 'gif')))
-		{
-			$img_size = @getimagesize($path);
-			switch($ext)
-			{
-				case 'gif':
-					$fcheck = isset($img_size['mime']) && $img_size['mime'] == 'image/gif';
-				break;
+    require './datas/mimetype.php';
 
-				case 'png':
-					$fcheck = isset($img_size['mime']) && $img_size['mime'] == 'image/png';
-				break;
+    $fcheck = false;
+    if (in_array($ext, array('jpg', 'jpeg', 'png', 'gif'))) {
+        $img_size = @getimagesize($path);
+        switch($ext) {
+            case 'gif':
+                $fcheck = isset($img_size['mime']) && $img_size['mime'] == 'image/gif';
+            break;
 
-				default:
-					$fcheck = isset($img_size['mime']) && $img_size['mime'] == 'image/jpeg';
-				break;
-			}
-			$fcheck = $fcheck !== FALSE;
-		}
-		else
-		{
-			if (!empty($mime_type[$ext]))
-			{
-				foreach ($mime_type[$ext] as $mime)
-				{
-					$content = file_get_contents($path, 0, NULL, $mime[3], $mime[4]);
-					$content = ($mime[2]) ? bin2hex($content) : $content;
-					$mime[1] = ($mime[2]) ? strtolower($mime[1]) : $mime[1];
-					$i++;
-					if ($content == $mime[1])
-					{
-						$fcheck = TRUE;
-						break;
-					}
-				}
-			}
-			else
-			{
-				$fcheck = ($cfg['pfs']['pfsnomimepass']) ? 1 : 2;
-				cot_log(sprintf($L['pfs_filechecknomime'], $ext, $name), 'sec');
-			}
-		}
-		if (!$fcheck)
-		{
-			cot_log(sprintf($L['pfs_filecheckfail'], $ext, $name), 'sec');
-		}
-	}
-	else
-	{
-		$fcheck = true;
-	}
-	return($fcheck);
+            case 'png':
+                $fcheck = isset($img_size['mime']) && $img_size['mime'] == 'image/png';
+            break;
+
+            default:
+                $fcheck = isset($img_size['mime']) && $img_size['mime'] == 'image/jpeg';
+            break;
+        }
+        $fcheck = $fcheck !== false;
+
+    } else {
+        if (!empty($mime_type[$ext])) {
+            foreach ($mime_type[$ext] as $mime) {
+                $content = file_get_contents($path, 0, NULL, $mime[3], $mime[4]);
+                $content = ($mime[2]) ? bin2hex($content) : $content;
+                $mime[1] = ($mime[2]) ? strtolower($mime[1]) : $mime[1];
+                if ($content == $mime[1]) {
+                    $fcheck = TRUE;
+                    break;
+                }
+            }
+        } else {
+            $fcheck = (cot::$cfg['pfs']['pfsnomimepass']) ? 1 : 2;
+            cot_log(sprintf(cot::$L['pfs_filechecknomime'], $ext, $name), 'sec');
+        }
+    }
+
+    if (!$fcheck) {
+        cot_log(sprintf(cot::$L['pfs_filecheckfail'], $ext, $name), 'sec');
+    }
+
+	return $fcheck;
 }
 
 /**
@@ -98,7 +86,7 @@ function cot_get_uploadmax()
 		}
 	}
 
-	return floor(min($val_a) / 1024); // KiB
+	return (int) floor(min($val_a) / 1024); // KiB
 }
 
 /**
