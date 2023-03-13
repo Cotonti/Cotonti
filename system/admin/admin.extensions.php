@@ -119,11 +119,11 @@ switch($a) {
 
 			case 'uninstall':
 				/* === Hook  === */
-				foreach (cot_getextplugins('admin.extensions.uninstall.first') as $pl)
-				{
+				foreach (cot_getextplugins('admin.extensions.uninstall.first') as $pl) {
 					include $pl;
 				}
 				/* ===== */
+
 				if (cot_check_xg(false)) {
 					// Check if there are extensions installed depending on this one
 					$dependencies_satisfied = true;
@@ -565,14 +565,16 @@ switch($a) {
 				}
 			}
 		}
+
 		/* === Hook  === */
-		foreach (cot_getextplugins('admin.extensions.details') as $pl)
-		{
+		foreach (cot_getextplugins('admin.extensions.details') as $pl) {
 			include $pl;
 		}
 		/* ===== */
+
 		$t->parse('MAIN.DETAILS');
 	break;
+
 	/* =============== */
 	case 'hooks':
 	/* =============== */

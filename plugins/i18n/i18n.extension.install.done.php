@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=admin.extensions.install.tags
+Hooks=extension.install.done
 [END_COT_EXT]
 ==================== */
 
@@ -11,11 +11,16 @@ Hooks=admin.extensions.install.tags
  * @package I18n
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var string $name Extension code
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($code == 'tags' && $result && !cot_error_found())
-{
-	include $cfg['plugins_dir'] . '/i18n/setup/i18n.install.php';
+if ($name == 'tags') {
+    global $L, $R; // for included file
+
+    require_once cot_incfile('i18n', 'plug');
+
+    cot_i18n_installTagsIntegration();
 }
