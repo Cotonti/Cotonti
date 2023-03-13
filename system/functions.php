@@ -2453,10 +2453,10 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 			$user_data = array();
 		}
 
-		if (is_array($user_data) && $user_data['user_id'] > 0 && !empty($user_data['user_name']))
-		{
+		if (is_array($user_data) && $user_data['user_id'] > 0 && !empty($user_data['user_name'])) {
 			$user_data['user_birthdate'] = cot_date2stamp($user_data['user_birthdate']);
-			$user_data['user_text'] = cot_parse($user_data['user_text'], $cfg['users']['usertextimg']);
+            $enableMarkup = isset(cot::$cfg['users']['usertextimg']) ? cot::$cfg['users']['usertextimg'] : false;
+			$user_data['user_text'] = cot_parse($user_data['user_text'], $enableMarkup);
 
 			$temp_array = array(
 				'ID' => $user_data['user_id'],

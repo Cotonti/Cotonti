@@ -9,13 +9,16 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (cot_plugin_active('tags'))
-{
-	// Remove i18n-specific tags
+if (cot_plugin_active('tags')) {
+    global $db_tag_references;
+
 	require_once cot_incfile('tags', 'plug');
-	global $db_tag_references;
-	$db->delete($db_tag_references, "tag_locale != ''");
-	$db->query("ALTER TABLE $db_tag_references DROP PRIMARY KEY");
-	$db->query("ALTER TABLE $db_tag_references ADD PRIMARY KEY (`tag`,`tag_area`,`tag_item`)");
-	$db->query("ALTER TABLE $db_tag_references DROP COLUMN `tag_locale`");
+
+    // Remove i18n-specific data
+    if (cot::$db->fieldExists(cot::$db->tag_references, 'tag_locale')) {
+        cot::$db->delete(cot::$db->tag_references, "tag_locale != ''");
+        cot::$db->query('ALTER TABLE ' . cot::$db->tag_references . ' DROP PRIMARY KEY');
+        cot::$db->query('ALTER TABLE ' . cot::$db->tag_references . ' ADD PRIMARY KEY (tag, tag_area, tag_item)');
+        cot::$db->query('ALTER TABLE ' . cot::$db->tag_references . ' DROP COLUMN tag_locale');
+    }
 }
