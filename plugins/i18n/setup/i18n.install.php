@@ -13,9 +13,9 @@ defined('COT_CODE') or die('Wrong URL');
 if (cot_extension_installed('tags')) {
     global $db_tag_references;
 
-	require_once cot_incfile('tags', 'plug');
+    require_once cot_incfile('tags', 'plug');
 
-	// Add tag_locale column
+    // Add tag_locale column
     if (!cot::$db->fieldExists(cot::$db->tag_references, 'tag_locale')) {
         cot::$db->query('ALTER TABLE ' . cot::$db->tag_references .
             " ADD COLUMN tag_locale VARCHAR(8) NOT NULL DEFAULT ''");

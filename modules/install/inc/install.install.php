@@ -17,8 +17,7 @@ $cfg['msg_separate'] = true;
 
 $mskin = cot_tplfile('install.install');
 
-if(!empty($_SESSION['cot_inst_script']) && file_exists($_SESSION['cot_inst_script']))
-{
+if (!empty($_SESSION['cot_inst_script']) && file_exists($_SESSION['cot_inst_script'])) {
 	require_once $_SESSION['cot_inst_script'];
 }
 
@@ -85,24 +84,18 @@ switch ($step)
 		// Extension selection
 		$install_modules = cot_import('install_modules', 'P', 'ARR', 0, false, true);
 		$selected_modules = array();
-		if (is_array($install_modules))
-		{
-			foreach ($install_modules as $key => $val)
-			{
-				if ($val)
-				{
+		if (is_array($install_modules)) {
+			foreach ($install_modules as $key => $val) {
+				if ($val) {
 					$selected_modules[] = $key;
 				}
 			}
 		}
 		$install_plugins = cot_import('install_plugins', 'P', 'ARR', 0, false, true);
-		$selected_plugins = array();
-		if (is_array($install_plugins))
-		{
-			foreach ($install_plugins as $key => $val)
-			{
-				if ($val)
-				{
+		$selected_plugins = [];
+		if (is_array($install_plugins)) {
+			foreach ($install_plugins as $key => $val) {
+				if ($val) {
 					$selected_plugins[] = $key;
 				}
 			}

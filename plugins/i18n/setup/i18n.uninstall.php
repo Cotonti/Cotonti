@@ -12,7 +12,7 @@ defined('COT_CODE') or die('Wrong URL');
 if (cot_plugin_active('tags')) {
     global $db_tag_references;
 
-	require_once cot_incfile('tags', 'plug');
+    require_once cot_incfile('tags', 'plug');
 
     // Remove i18n-specific data
     if (cot::$db->fieldExists(cot::$db->tag_references, 'tag_locale')) {
