@@ -99,21 +99,29 @@ function cot_get_uploadmax()
  */
 function cot_safename($basename, $underscore = true, $postfix = '')
 {
-	global $lang, $cot_translit;
-	if(!$cot_translit && $lang != 'en' && file_exists(cot_langfile('translit', 'core')))
-	{
-		require_once cot_langfile('translit','core');
-	}
+    global $lang, $cot_translit;
 
-	$fname = mb_substr($basename, 0, mb_strrpos($basename, '.'));
-	$ext = mb_substr($basename, mb_strrpos($basename, '.') + 1);
-	if($lang != 'en' && is_array($cot_translit))
-	{
-		$fname = strtr($fname, $cot_translit);
-	}
-	if($underscore) $fname = str_replace(' ', '_', $fname);
-	$fname = str_replace('..', '.', $fname);
-	$safename = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
-	if(empty($safename) || $safename != $fname) $fname = $safename.cot_unique();
-	return $fname . $postfix . '.' . mb_strtolower($ext);
+    if (!$cot_translit && $lang != 'en' && file_exists(cot_langfile('translit', 'core'))) {
+        require_once cot_langfile('translit','core');
+    }
+
+    $fname = mb_substr($basename, 0, mb_strrpos($basename, '.'));
+    $ext = mb_substr($basename, mb_strrpos($basename, '.') + 1);
+
+    if ($lang != 'en' && is_array($cot_translit)) {
+        $fname = cot_translit_encode($fname);
+    }
+
+    if ($underscore) {
+        $fname = str_replace(' ', '_', $fname);
+    }
+
+    $fname = str_replace('..', '.', $fname);
+    $safename = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
+
+    if (empty($safename)) {
+        $fname = $safename . cot_unique();
+    }
+
+    return $fname . $postfix . '.' . mb_strtolower($ext);
 }

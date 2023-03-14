@@ -439,9 +439,6 @@ foreach (cot_getextplugins('pfs.list.query') as $pl) {
 }
 /* ===== */
 
-$th_colortext = array(hexdec(mb_substr($cfg['pfs']['th_colortext'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],4,2)));
-$th_colorbg = array(hexdec(mb_substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],4,2)));
-
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('pfs.row.loop');
 /* ===== */
@@ -457,12 +454,11 @@ foreach ($sql_pfs->fetchAll() as $row) {
 
 	$dotpos = mb_strrpos($pfs_file, ".")+1;
 	$pfs_realext = mb_strtolower(mb_substr($pfs_file, $dotpos, 5));
-	unset($add_thumbnail, $add_image);
-
+	$add_thumbnail = $add_image = '';
 	$add_file = ($standalone) ? cot_rc('pfs_link_addfile') : '';
 
 	if ($pfs_extension != $pfs_realext) {
-		$db->update($db_pfs, array('pfs_extension' => $pfs_realext), "pfs_id=$pfs_id");
+		cot::$db->update(cot::$db->pfs, ['pfs_extension' => $pfs_realext], 'pfs_id = ?', $pfs_id);
 		$pfs_extension = $pfs_realext;
 	}
 

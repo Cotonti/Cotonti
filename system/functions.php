@@ -5702,7 +5702,6 @@ $cot_languages['ua'] = 'Українська';
  *
  * @todo use intl php-extension
  */
-
 function cot_translit_encode($str)
 {
 	global $lang, $cot_translit;
