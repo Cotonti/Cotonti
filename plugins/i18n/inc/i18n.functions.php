@@ -146,22 +146,24 @@ function cot_i18n_list_page_locales($page_id)
 /**
  * Loads registered locales
  *
- * @global array $i18n_locales Available locale data
- * @global CotDB $db
+ * @global ?array<string, string> $i18n_locales Available locale data
  */
 function cot_i18n_load_locales()
 {
-	global $db, $cfg, $i18n_locales;
+	global $i18n_locales, $cot_languages;
 
-	$lines = preg_split('#\r?\n#', $cfg['plugin']['i18n']['locales']);
-	foreach ($lines as $line)
-	{
+	$lines = preg_split('#\r?\n#', cot::$cfg['plugin']['i18n']['locales']);
+	foreach ($lines as $line) {
 		$lc = explode('|', $line);
 		$lc = array_map('trim', $lc);
-		if (!empty($lc[0]) && !empty($lc[1]))
-		{
+		if (!empty($lc[0]) && !empty($lc[1])) {
 			$i18n_locales[$lc[0]] = $lc[1];
 		}
+
+        if (!array_key_exists(cot::$cfg['defaultlang'], $i18n_locales)) {
+            $i18n_locales[cot::$cfg['defaultlang']] = isset($cot_languages[cot::$cfg['defaultlang']]) ?
+                $cot_languages[cot::$cfg['defaultlang']] : cot::$cfg['defaultlang'];
+        }
 	}
 }
 
@@ -176,8 +178,7 @@ function cot_i18n_load_structure()
 	global $db, $db_i18n_structure, $i18n_structure;
 
 	$res = $db->query("SELECT * FROM $db_i18n_structure");
-	while ($row = $res->fetch())
-	{
+	while ($row = $res->fetch()) {
 		$i18n_structure[$row['istructure_code']][$row['istructure_locale']] = array(
 			'title' => $row['istructure_title'],
 			'desc' => $row['istructure_desc']

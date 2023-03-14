@@ -33,6 +33,7 @@ $L['i18n_items_removed'] = '{$cnt} items removed';
 $L['i18n_items_updated'] = '{$cnt} items updated';
 $L['i18n_locale_selection'] = 'Locale Selection';
 $L['i18n_localized'] = 'Localized';
+$L['i18n_no_categories'] = 'No categories selected for translation. You can set them in <a href="%s">Internationalization settings<a>';
 $L['i18n_original'] = 'Original';
 $L['i18n_structure'] = 'Structure Internationalization';
 $L['i18n_translate'] = 'Translate';

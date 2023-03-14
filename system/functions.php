@@ -2647,7 +2647,7 @@ function cot_imageresize(
 
 	$canvas = imagecreatetruecolor($target_width, $target_height);
 
-	switch($mimetype) {
+	switch ($mimetype) {
 		case 'image/gif':
 			$fn_create = 'imagecreatefromgif';
 			$fn_output = 'imagegif';
@@ -2677,7 +2677,7 @@ function cot_imageresize(
 			imagealphablending($canvas, false);
 			imagesavealpha($canvas, true);
 
-		} elseif(strlen($fillcolor) == 6 || strlen($fillcolor) == 3) {
+		} elseif (strlen($fillcolor) == 6 || strlen($fillcolor) == 3) {
 			$background	= (strlen($fillcolor) == 6) ?
 				imagecolorallocate(
                     $canvas,
