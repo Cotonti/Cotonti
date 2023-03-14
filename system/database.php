@@ -156,7 +156,7 @@ class CotDB
 
         $this->config['adapter'] = !empty($this->config['adapter']) ? $this->config['adapter'] : 'mysql';
 
-        $port = empty($this->config['port']) ? '' : ';port=' . $this->config;
+        $port = empty($this->config['port']) ? '' : ';port=' . $this->config['port'];
         $dsn = $this->config['adapter'] . ':host=' . $this->config['host'] . $port;
         if (!empty($this->config['dbName'])) {
             $dsn .= ';dbname=' . $this->config['dbName'];
@@ -394,7 +394,7 @@ class CotDB
 	 * @param array $parameters Array of statement input parameters, see http://www.php.net/manual/en/pdostatement.execute.php
 	 * @return int Number of records removed on success or FALSE on error
 	 */
-	public function delete($tableName, $condition = '', $parameters = array())
+	public function delete($tableName, $condition = '', $parameters = [])
 	{
         $query = 'DELETE FROM ' . $this->quoteTableName($tableName);
         if (!empty($condition)) {

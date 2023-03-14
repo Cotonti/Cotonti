@@ -5,37 +5,46 @@
  * @package I18n
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var ?array $i18n_structure
+ * @var bool $i18n_admin if user can administrate i18n
+ * @var ?array<string, string> $i18n_locales Locales List ['en' => 'English', 'ru' => 'Русский']
  */
 
 defined('COT_CODE') or die('Wrong URL.');
 
 cot_block($i18n_admin);
 
-$maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
+$maxperpage = (
+    cot::$cfg['maxrowsperpage']
+    && is_numeric(cot::$cfg['maxrowsperpage'])
+    && cot::$cfg['maxrowsperpage'] > 0
+) ? cot::$cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
-$out['subtitle'] = $L['i18n_structure'];
+cot::$out['subtitle'] = cot::$L['i18n_structure'];
 
 /* === Hook === */
-foreach (cot_getextplugins('i18n.structure.first') as $pl)
-{
+foreach (cot_getextplugins('i18n.structure.first') as $pl) {
 	include $pl;
 }
 /* =============*/
 
 // Refresh i18n struct data
 cot_i18n_load_structure();
-$cache && $cache->db->store('structure', $i18n_structure, 'i18n');
+cot::$cache && cot::$cache->db->store('structure', $i18n_structure, 'i18n');
 
-if (empty($i18n_locale) || $i18n_locale == $cfg['defaultlang'])
-{
+if (empty(cot::$cfg['plugin']['i18n']['cats'])) {
+    $url = cot_url('admin', ['m' => 'config', 'n' => 'edit', 'o' => 'plug', 'p' => 'i18n']);
+    cot_message(sprintf(cot::$L['i18n_no_categories'], $url), 'warning');
+}
+
+if (empty($i18n_locale) || $i18n_locale == cot::$cfg['defaultlang']) {
 	// Locale selection
 	$t = new XTemplate(cot_tplfile('i18n.locales', 'plug'));
 
-	foreach ($i18n_locales as $lc => $title)
-	{
-		if ($lc != $cfg['defaultlang'])
-		{
+	foreach ($i18n_locales as $lc => $title) {
+		if ($lc != cot::$cfg['defaultlang']) {
 			$t->assign(array(
 				'I18N_LOCALE_ROW_URL' => cot_url('plug', "e=i18n&m=structure&l=$lc", false, true),
 				'I18N_LOCALE_ROW_TITLE' => $title
@@ -43,12 +52,9 @@ if (empty($i18n_locale) || $i18n_locale == $cfg['defaultlang'])
 			$t->parse('MAIN.I18N_LOCALE_ROW');
 		}
 	}
-}
-else
-{
+} else {
 	// Structure translation for selected locale
-	if ($a == 'update' && $_SERVER['REQUEST_METHOD'] == 'POST')
-	{
+	if ($a == 'update' && $_SERVER['REQUEST_METHOD'] == 'POST') {
 		// Update stucture translations
 		$codes = cot_import('code', 'P', 'ARR');
 		$titles = cot_import('title', 'P', 'ARR');
@@ -99,29 +105,27 @@ else
 				}
 			}
 		}
-
 		// Done
 
 		/* === Hook === */
-		foreach (cot_getextplugins('i18n.structure.update.done') as $pl)
-		{
+		foreach (cot_getextplugins('i18n.structure.update.done') as $pl) {
 			include $pl;
 		}
 		/* =============*/
 
-		if ($inserted_cnt > 0)
-		{
+		if ($inserted_cnt > 0) {
 			cot_message(cot_rc('i18n_items_added', array('cnt' => $inserted_cnt)));
 		}
-		if ($updated_cnt > 0)
-		{
+		if ($updated_cnt > 0) {
 			cot_message(cot_rc('i18n_items_updated', array('cnt' => $updated_cnt)));
 		}
-		if ($removed_cnt > 0)
-		{
+		if ($removed_cnt > 0) {
 			cot_message(cot_rc('i18n_items_removed', array('cnt' => $removed_cnt)));
 		}
-		cot_redirect(cot_url('plug', "e=i18n&m=structure&l=$i18n_locale&d=$durl", '', true));
+
+		cot_redirect(
+            cot_url('plug', "e=i18n&m=structure&l=$i18n_locale&d=$durl", '', true)
+        );
 	}
 
 	$t = new XTemplate(cot_tplfile('i18n.structure', 'plug'));
@@ -132,19 +136,17 @@ else
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('i18n.structure.loop');
 	/* ===== */
-	foreach ($structure['page'] as $code => $row)
-	{
-		if (cot_i18n_enabled($code))
-		{
+	foreach (cot::$structure['page'] as $code => $row) {
+		if (cot_i18n_enabled($code)) {
 			$k++;
-			if ($k < $d || $ii == $maxperpage)
-			{
+			if ($k < $d || $ii == $maxperpage) {
 				continue;
 			}
 
-			$cat_i18n = $i18n_structure[$code][$i18n_locale];
+			$cat_i18n = isset($i18n_structure[$code][$i18n_locale]) ?
+                $i18n_structure[$code][$i18n_locale] : ['title' => '', 'desc' => ''];
 
-			$t->assign(array(
+			$t->assign([
 				'I18N_CATEGORY_ROW_TITLE' => htmlspecialchars($row['title']),
 				'I18N_CATEGORY_ROW_DESC' => htmlspecialchars($row['desc']),
 				'I18N_CATEGORY_ROW_CODE_NAME' => "code[$ii]",
@@ -154,14 +156,14 @@ else
 				'I18N_CATEGORY_ROW_IDESC_NAME' => "desc[$ii]",
 				'I18N_CATEGORY_ROW_IDESC_VALUE' => htmlspecialchars($cat_i18n['desc']),
 				'I18N_CATEGORY_ROW_ODDEVEN' => cot_build_oddeven($ii)
-			));
+			]);
 
 			/* === Hook - Part2 : Include === */
-			foreach ($extp as $pl)
-			{
+			foreach ($extp as $pl) {
 				include $pl;
 			}
 			/* ===== */
+
 			$t->parse('MAIN.I18N_CATEGORY_ROW');
 			$ii++;
 		}
@@ -169,11 +171,12 @@ else
 	$totalitems = $k + 1;
 
 	$pagenav = cot_pagenav('plug', 'e=i18n&m=structure&l='.$i18n_locale, $d, $totalitems,
-	$maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+	$maxperpage, 'd', '', cot::$cfg['jquery'] && cot::$cfg['turnajax']);
 
 	$t->assign(array(
 		'I18N_ACTION' => cot_url('plug', 'e=i18n&m=structure&l='.$i18n_locale.'&a=update&d='.$durl),
-		'I18N_ORIGINAL_LANG' => $i18n_locales[$cfg['defaultlang']],
+		'I18N_ORIGINAL_LANG' => isset($i18n_locales[cot::$cfg['defaultlang']]) ?
+            $i18n_locales[cot::$cfg['defaultlang']] : cot::$cfg['defaultlang'],
 		'I18N_TARGET_LANG' => $i18n_locales[$i18n_locale],
 		'I18N_PAGINATION_PREV' => $pagenav['prev'],
 		'I18N_PAGNAV' => $pagenav['main'],
@@ -183,8 +186,7 @@ else
 	cot_display_messages($t);
 
 	/* === Hook === */
-	foreach (cot_getextplugins('i18n.structure.tags') as $pl)
-	{
+	foreach (cot_getextplugins('i18n.structure.tags') as $pl) {
 		include $pl;
 	}
 	/* =============*/

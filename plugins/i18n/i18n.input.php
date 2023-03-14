@@ -18,6 +18,9 @@ defined('COT_CODE') or die('Wrong URL');
 // Requirements
 require_once cot_incfile('i18n', 'plug');
 
+/**
+ * @var ?array<string, string> $i18n_locales Locales List ['en' => 'English', 'ru' => 'Русский']
+ */
 $i18n_locales = null;
 
 // Load valid locales

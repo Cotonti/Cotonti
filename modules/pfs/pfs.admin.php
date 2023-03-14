@@ -15,43 +15,34 @@ Hooks=admin
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('pfs', 'a');
 cot_block($usr['isadmin']);
 
 require_once cot_incfile('pfs', 'module');
 
-if ($s == 'allpfs')
-{
+if ($s == 'allpfs') {
 	require cot_incfile('pfs', 'module', 'admin.allpfs');
-}
-else
-{
+} else {
 	$t = new XTemplate(cot_tplfile('pfs.admin', 'module', true));
 
-	$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
-	$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
-	$adminpath[] = array(cot_url('admin', 'm='.$m), $L['Administration']);
-	$adminhelp = $L['adm_help_pfs'];
-	$adminTitle = $L['pfs_title'];
+	$adminpath[] = array(cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
+	$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod=' . $m), $cot_modules[$m]['title']);
+	$adminpath[] = array(cot_url('admin', 'm='.$m), cot::$L['Administration']);
+	//$adminhelp = $L['adm_help_pfs'];
+	$adminTitle = cot::$L['pfs_title'];
 
 	/* === Hook === */
-	foreach (cot_getextplugins('pfs.admin.first') as $pl)
-	{
+	foreach (cot_getextplugins('pfs.admin.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if (!function_exists('gd_info'))
-	{
+	if (!function_exists('gd_info')) {
 		$is_adminwarnings = true;
-	}
-	else
-	{
+	} else {
 		$gd_datas = gd_info();
-		foreach ($gd_datas as $k => $i)
-		{
-			if (mb_strlen($i) < 2)
-			{
+		foreach ($gd_datas as $k => $i) {
+			if (mb_strlen($i) < 2) {
 				$i = $cot_yesno[$i];
 			}
 			$t->assign(array(
@@ -69,8 +60,7 @@ else
 	));
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('pfs.admin.tags') as $pl)
-	{
+	foreach (cot_getextplugins('pfs.admin.tags') as $pl) {
 		include $pl;
 	}
 	/* ===== */

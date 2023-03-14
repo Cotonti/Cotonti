@@ -2,25 +2,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta http-equiv="x-ua-compatible" content="ie=edge" />
-
 	<title>{HEADER_TITLE}</title>
 	<meta name="description" content="{HEADER_META_DESCRIPTION}" />
 	<meta name="keywords" content="{HEADER_META_KEYWORDS}" />
-
 	<meta name="generator" content="Cotonti http://www.cotonti.com" />
-
-{HEADER_BASEHREF}
-{HEADER_HEAD}
-{HEADER_COMPOPUP}
-
+	{HEADER_BASEHREF}
+	{HEADER_HEAD}
+	{HEADER_COMPOPUP}
+	<link href="{PHP.cfg.system_dir}/admin/tpl/inc/bootstrap-reboot.min.css" type="text/css" rel="stylesheet" />
+	<link href="{PHP.cfg.system_dir}/admin/tpl/inc/admin.css" type="text/css" rel="stylesheet" />
 	<link rel="shortcut icon" href="favicon.ico" />
 </head>
 <body>
-
 	<div id="user" class="body">
 		<ul>
 			<li>
@@ -108,5 +104,4 @@
 			</a>
 		</li>
 	</ul>
-
 <!-- END: HEADER -->

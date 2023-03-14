@@ -251,7 +251,7 @@ function cot_user_data($uid = 0, $cacheitem = true)
         return null;
     }
 
-	static $u_cache = array();
+	static $u_cache = [];
 
 	if ($cacheitem && isset($u_cache[$uid])) {
 		return $u_cache[$uid];

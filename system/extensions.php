@@ -174,7 +174,7 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
  * Installs or updates a Cotonti extension: module or plugin.
  * Messages emitted during installation can be received through standard
  * Cotonti messages interface.
- * @param string $name Plugin code
+ * @param string $name Module (or plugin) code
  * @param bool $is_module TRUE for modules, FALSE for plugins
  * @param bool $update Perform update rather than new install
  * @param bool $force_update Forces extension update even if version has not changed
@@ -304,29 +304,21 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 
 	// Install config
 	$info_cfg = cot_infoget($setup_file, 'COT_EXT_CONFIG');
-	if (!$info_cfg && cot_plugin_active('genoa'))
-	{
+	if (!$info_cfg && cot_plugin_active('genoa')) {
 		// Try to load old format config
 		$info_cfg = cot_infoget($setup_file, 'SED_EXTPLUGIN_CONFIG');
 	}
 	$options = cot_config_parse($info_cfg, $is_module);
 
-	if ($update)
-	{
+	if ($update) {
 		// Get differential config
-		if (cot_config_update($name, $options, $is_module) > 0)
-		{
+		if (cot_config_update($name, $options, $is_module) > 0) {
 			cot_message('ext_config_updated');
 		}
-	}
-	elseif (count($options) > 0)
-	{
-		if (cot_config_add($name, $options, $is_module))
-		{
+	} elseif (count($options) > 0) {
+		if (cot_config_add($name, $options, $is_module)) {
 			cot_message('ext_config_installed');
-		}
-		else
-		{
+		} else {
 			cot_error('ext_config_error');
 			return false;
 		}
@@ -517,18 +509,28 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	}
 
 	// Register version information
-	if ($update)
-	{
+	if ($update) {
 		cot_extension_update($name, $new_ver, !$is_module);
 		cot_message(cot_rc('ext_updated', array(
 			'type' => $is_module ? $L['Module'] : $L['Plugin'],
 			'name' => $name,
 			'ver' => $new_ver
 		)));
-	}
-	else
-	{
+
+        /* === Hook  === */
+        foreach (cot_getextplugins('extension.update.done') as $pl) {
+            include $pl;
+        }
+        /* ===== */
+
+	} else {
 		cot_extension_add($name, $info['Name'], $info['Version'], !$is_module);
+
+        /* === Hook  === */
+        foreach (cot_getextplugins('extension.install.done') as $pl) {
+            include $pl;
+        }
+        /* ===== */
 	}
 
 	// Cleanup

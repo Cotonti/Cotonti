@@ -11,6 +11,8 @@ Hooks=admin.extensions.install.tags
  * @package Ratings
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @todo Obsolete. This hook is not exists. Use 'extension.install.done' or 'admin.extensions.details' hooks
  */
 
 defined('COT_CODE') or die('Wrong URL');

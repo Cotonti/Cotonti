@@ -14,6 +14,7 @@ require_once cot_langfile('pfs', 'module');
 require_once cot_incfile('pfs', 'module', 'resources');
 
 require_once cot_incfile('forms');
+require_once cot_incfile('users', 'module');
 
 // Registering tables
 cot::$db->registerTable('pfs');
@@ -530,50 +531,46 @@ function cot_pfs_upload($userid, $folderid='')
 							$pfs_totalsize += $u_size;
 
 							/* === Hook === */
-							foreach (cot_getextplugins('pfs.upload.done') as $pl)
-							{
+							foreach (cot_getextplugins('pfs.upload.done') as $pl) {
 								include $pl;
 							}
 							/* ===== */
 
-							if (in_array($f_extension, $gd_supported) && $cfg['pfs']['th_amode']!='Disabled'
-								&& file_exists($pfs_dir_user.$u_newname))
-							{
+							if (
+                                in_array($f_extension, $gd_supported)
+                                && cot::$cfg['pfs']['th_amode']!='Disabled'
+								&& file_exists($pfs_dir_user.$u_newname)
+                            ) {
 								@unlink($thumbs_dir_user.$npath.$u_newname);
-								$th_colortext = array(hexdec(substr($cfg['pfs']['th_colortext'],0,2)),
-									hexdec(substr($cfg['pfs']['th_colortext'],2,2)), hexdec(substr($cfg['pfs']['th_colortext'],4,2)));
-								$th_colorbg = array(hexdec(substr($cfg['pfs']['th_colorbg'],0,2)),
-									hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
-								cot_imageresize($pfs_dir_user . $npath . $u_newname,
+								$th_colortext = cot::$cfg['pfs']['th_colortext'];
+								$th_colorbg = cot::$cfg['pfs']['th_colortext'];
+								cot_imageresize(
+                                    $pfs_dir_user . $npath . $u_newname,
 									$cfg['pfs']['thumbs_dir_user'] . $npath . $u_newname,
-									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], '', $th_colorbg,
-									$cfg['pfs']['th_jpeg_quality'], true);
+                                    cot::$cfg['pfs']['th_x'],
+                                    cot:: $cfg['pfs']['th_y'],
+                                    '',
+                                    $th_colorbg,
+                                    cot::$cfg['pfs']['th_jpeg_quality'],
+                                    true
+                                );
 							}
-						}
-						else
-						{
+						} else {
 							@unlink($pfs_dir_user.$npath.$u_newname);
 							$disp_errors .= $L['pfs_filenotmoved'];
 						}
-					}
-					else
-					{
+					} else {
 						$disp_errors .= $L['pfs_fileexists'];
 					}
-				}
-				elseif($fcheck == 2)
-				{
+				} elseif($fcheck == 2) {
 					$disp_errors .= sprintf($L['pfs_filemimemissing'], $f_extension);
-				}
-				else
-				{
+				} else {
 					$disp_errors .= sprintf($L['pfs_filenotvalid'], $f_extension);
 				}
-			}
-			else
-			{
+			} else {
 				$disp_errors .= $L['pfs_filetoobigorext'];
 			}
+
 			$err_msg[] = $disp_errors;
 		}
 	}
@@ -617,26 +614,4 @@ function cot_selectbox_folders($user, $skip, $check, $name = 'folderid')
 	$result = cot_selectbox($check, $name, array_keys($result_arr), array_values($result_arr), false);
 
 	return ($result);
-}
-
-/**
- * Fetches user entry from DB
- *
- * @param int $id User ID
- * @return array
- */
-function cot_userinfo($id)
-{
-	global $db, $db_users;
-
-	$sql = $db->query("SELECT * FROM $db_users WHERE user_id=" . (int)$id);
-	if ($res = $sql->fetch())
-	{
-		return ($res);
-	}
-	else
-	{
-		$res['user_name'] = '?';
-		return ($res);
-	}
 }
