@@ -435,9 +435,13 @@ else
 	/* ===== */
 	foreach ($sql->fetchAll() as $row) {
 		$ii++;
-		$structure_id = $row['structure_id'];
-		$structure_code = $row['structure_code'];
-		$pathfielddep = count(explode(".", $row['structure_path']));
+
+        $structureId = $row['structure_id'];
+        $structureCode = $row['structure_code'];
+
+        $pathfielddep = explode(".", $row['structure_path']);
+		$pathfielddep = !empty($pathfielddep) ? count($pathfielddep) : 0;
+        $structureLevel = ($pathfielddep > 0) ? $pathfielddep : 0;
 
 		$pathspaceimg = '';
 		for ($pathfielddepi = 1; $pathfielddepi < $pathfielddep; $pathfielddepi++) {
@@ -465,7 +469,7 @@ else
 
 		$categoryTplCodeSelect = cot_selectbox(
             $row['structure_tpl'],
-            'rstructuretplforced[' . $structure_id . ']',
+            'rstructuretplforced[' . $row['structure_id'] . ']',
             array_keys($categoryList),
             array_values($categoryList),
             false
@@ -473,14 +477,14 @@ else
 
         $categoryTplCode = cot_inputbox(
             'text',
-            'rstructuretplcode[' . $structure_id . ']',
+            'rstructuretplcode[' . $row['structure_id'] . ']',
             $row['structure_tpl'],
             'maxlength="255"'
         );
 
         $categoryTpl = cot_radiobox(
             $tplMode,
-            'rstructuretplmode[' . $structure_id . ']',
+            'rstructuretplmode[' . $row['structure_id'] . ']',
             ['1', '2', '3', '4'],
             [
                 cot::$L['adm_tpl_empty'],
@@ -502,43 +506,66 @@ else
             false
         );
 
+        $deleteUrl = cot_url(
+            'admin',
+            [
+                'm' => 'structure',
+                'n' => $n,
+                'mode' => $mode,
+                'a' => 'delete',
+                'id' => $row['structure_id'],
+                'c' => $row['structure_code'],
+                'd' => $durl,
+                'x' => cot::$sys['xk']
+            ]
+        );
+
+        $deleteConfirmUrl = cot_confirm_url($deleteUrl, 'admin');
+
 		$t->assign(array(
-			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_confirm_url(
-                cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$durl.'&'.cot_xg()),
-                'admin'),
-			'ADMIN_STRUCTURE_ID' => $structure_id,
-			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $row['structure_code'], 'maxlength="255"'),
+			'ADMIN_STRUCTURE_ID' => $row['structure_id'],
+			'ADMIN_STRUCTURE_CODE' => cot_inputbox(
+                'text',
+                'rstructurecode[' . $row['structure_id'] . ']',
+                $row['structure_code'],
+                'maxlength="255"'
+            ),
 			'ADMIN_STRUCTURE_SPACEIMG' => $pathspaceimg,
-			'ADMIN_STRUCTURE_LEVEL' => ($pathfielddep > 0) ? $pathfielddep - 1 : 0,
-			'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ? cot::$R['admin_icon_join1'] : cot::$R['admin_icon_join2'],
+			'ADMIN_STRUCTURE_LEVEL' => $structureLevel,
+			'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ?
+                cot::$R['admin_icon_join1'] : cot::$R['admin_icon_join2'],
 			'ADMIN_STRUCTURE_PATH' => cot_inputbox(
                 'text',
-                'rstructurepath['.$structure_id.']',
+                'rstructurepath['.$row['structure_id'].']',
                 $row['structure_path'],
                 'maxlength="255"'
             ),
-
-            // @deprecated. Left for backwards compatibility. Actually this is not a template mode, but a
-            // selection (setting) of the template code
-            'ADMIN_STRUCTURE_TPLMODE' => $categoryTpl,
             'ADMIN_STRUCTURE_TPL' => $categoryTpl,
             'ADMIN_STRUCTURE_TPL_CODE_SELECT' => $categoryTplCodeSelect,
             'ADMIN_STRUCTURE_TPL_CODE' => $categoryTplCode,
-			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'maxlength="255"'),
-			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$structure_id.']', $row['structure_desc'], 'maxlength="255"'),
-			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$structure_id.']', $row['structure_icon'], 'maxlength="128"'),
-			'ADMIN_STRUCTURE_LOCKED' => cot_checkbox($row['structure_locked'], 'rstructurelocked['.$structure_id.']'),
+			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$row['structure_id'].']', $row['structure_title'], 'maxlength="255"'),
+			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$row['structure_id'].']', $row['structure_desc'], 'maxlength="255"'),
+			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$row['structure_id'].']', $row['structure_icon'], 'maxlength="128"'),
+			'ADMIN_STRUCTURE_LOCKED' => cot_checkbox($row['structure_locked'], 'rstructurelocked['.$row['structure_id'].']'),
 			'ADMIN_STRUCTURE_COUNT' => $row['structure_count'],
             'ADMIN_STRUCTURE_CAN_DELETE' => $row['structure_count'] < 1 && empty($children),
 			/* TODO */ 'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url($n, 'c='.$row['structure_code']),
 			'ADMIN_STRUCTURE_RIGHTS_URL' => $is_module ? cot_url('admin', 'm=rightsbyitem&ic='.$n.'&io='.$row['structure_code']) : '',
-			'ADMIN_STRUCTURE_OPTIONS_URL' => cot_url('admin', 'm=structure&n='.$n.'&d='.$durl.'&id='.$structure_id.'&'.cot_xg()),
-			'ADMIN_STRUCTURE_ODDEVEN' => cot_build_oddeven($ii)
+			'ADMIN_STRUCTURE_OPTIONS_URL' => cot_url('admin', 'm=structure&n='.$n.'&d='.$durl.'&id='.$row['structure_id'].'&'.cot_xg()),
+            'ADMIN_STRUCTURE_DELETE_URL' => $deleteUrl,
+            'ADMIN_STRUCTURE_DELETE_CONFIRM_URL' => $deleteConfirmUrl,
+			'ADMIN_STRUCTURE_ODDEVEN' => cot_build_oddeven($ii),
+
+            // @deprecated. Left for backwards compatibility. Actually this is not a template mode, but a
+            // selection (setting) of the template code
+            'ADMIN_STRUCTURE_TPLMODE' => $categoryTpl,
+            // @deprecated. Use ADMIN_STRUCTURE_DELETE_CONFIRM_URL instead
+            'ADMIN_STRUCTURE_UPDATE_DEL_URL' => $deleteConfirmUrl,
 		));
 
         if (!empty(cot::$extrafields[cot::$db->structure])) {
             foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
-                $exfld_val = cot_build_extrafields('rstructure' . $exfld['field_name'] . '_' . $structure_id, $exfld,
+                $exfld_val = cot_build_extrafields('rstructure' . $exfld['field_name'] . '_' . $row['structure_id'], $exfld,
                     $row['structure_' . $exfld['field_name']]);
                 $exfld_title = cot_extrafield_title($exfld, 'structure_');
 
@@ -567,7 +594,7 @@ else
                 $row['structure_title'],
             ];
 
-			$optionslist = cot_config_list($is_module ? 'module' : 'plug', $n, $structure_code);
+			$optionslist = cot_config_list($is_module ? 'module' : 'plug', $n, $row['structure_code']);
 
 			/* === Hook - Part1 : Set === */
 			$extp = cot_getextplugins('admin.config.edit.loop');
@@ -582,7 +609,7 @@ else
 					$t->assign(array(
 						'ADMIN_CONFIG_ROW_CONFIG' => cot_config_input($row_c),
 						'ADMIN_CONFIG_ROW_CONFIG_TITLE' => $title,
-						'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' => cot_url('admin', 'm=structure&n='.$n.'&d='.$durl.'&id='.$structure_id.'&al='.$structure_code.'&a=reset&v='.$row_c['config_name'].'&'.cot_xg()),
+						'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' => cot_url('admin', 'm=structure&n='.$n.'&d='.$durl.'&id='.$row['structure_id'].'&al='.$row['structure_code'].'&a=reset&v='.$row_c['config_name'].'&'.cot_xg()),
 						'ADMIN_CONFIG_ROW_CONFIG_MORE' => $hint
 					));
 					/* === Hook - Part2 : Include === */
@@ -601,7 +628,7 @@ else
 			}
 			/* ===== */
 
-			$t->assign('CONFIG_HIDDEN', cot_inputbox('hidden', 'editconfig', $structure_code));
+			$t->assign('CONFIG_HIDDEN', cot_inputbox('hidden', 'editconfig', $row['structure_code']));
 			$t->parse('MAIN.OPTIONS.CONFIG');
 		}
 		$t->parse(($id || !empty($al)) ? 'MAIN.OPTIONS' : 'MAIN.DEFAULT.ROW');

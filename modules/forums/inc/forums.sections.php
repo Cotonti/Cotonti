@@ -152,7 +152,11 @@ foreach ($fstlvl as $x) {
 				$zz = 0;
 				foreach ($nxtlvl[$y] as $z) {
 					$zz++;
-					$t->assign(cot_generate_sectiontags($z, 'FORUMS_SECTIONS_ROW_', $cat_top[$z]));
+                    $t->assign(cot_generate_sectiontags(
+                        $z,
+                        'FORUMS_SECTIONS_ROW_',
+                        isset($cat_top[$z]) ? $cat_top[$z] : null)
+                    );
 					$t->assign(array(
 						'FORUMS_SECTIONS_ROW_ODDEVEN' => cot_build_oddeven($zz),
 						'FORUMS_SECTIONS_ROW_NUM' => $zz,

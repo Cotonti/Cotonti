@@ -61,7 +61,7 @@
 					</tr>
 				</tfoot>
 				<tbody>
-	<!-- BEGIN: ROW -->
+					<!-- BEGIN: ROW -->
 					<tr>
 						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_PATH}</td>
 						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
@@ -70,28 +70,28 @@
 						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
 						<td class="action {ADMIN_STRUCTURE_ODDEVEN}">
 							<a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax button">{PHP.L.short_config}</a>
-<!-- IF {ADMIN_STRUCTURE_RIGHTS_URL} -->
+							<!-- IF {ADMIN_STRUCTURE_RIGHTS_URL} -->
 							<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a>
-<!-- ENDIF -->
-<!-- IF {ADMIN_STRUCTURE_CAN_DELETE} -->
-							<a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="confirmLink button">{PHP.L.short_delete}</a>
-<!-- ENDIF -->
+							<!-- ENDIF -->
+							<!-- IF {ADMIN_STRUCTURE_CAN_DELETE} -->
+							<a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_DELETE_CONFIRM_URL}" class="confirmLink button">{PHP.L.short_delete}</a>
+							<!-- ENDIF -->
 							<a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" class="button special">{PHP.L.short_open}</a> </td>
 						</tr>
-<!-- END: ROW -->
+						<!-- END: ROW -->
 					</tbody>
 				</table>
 			</form>
 			<p class="pagination-info">
 				{PHP.L.Total}: {ADMIN_STRUCTURE_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_STRUCTURE_COUNTER_ROW}
 			</p>
-<!-- IF {ADMIN_STRUCTURE_PAGNAV} -->
+			<!-- IF {ADMIN_STRUCTURE_PAGNAV} -->
 			<nav class="pagination" aria-label="Structure Pagination">
 				<ul>
 					{ADMIN_STRUCTURE_PAGINATION_PREV}{ADMIN_STRUCTURE_PAGNAV}{ADMIN_STRUCTURE_PAGINATION_NEXT}
 				</ul>
 			</nav>
-<!-- ENDIF -->
+			<!-- ENDIF -->
 	</div>
 </div>
 <!-- END: DEFAULT -->
