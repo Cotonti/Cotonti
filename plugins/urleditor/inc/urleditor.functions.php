@@ -199,28 +199,27 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	$areas[] = '*'; // default area rules
 
 	// Find first matching rule
-	$rule = array();
-	foreach ($areas as $area)
-	{
-		foreach($cot_urltrans[$area] as $rule)
-		{
-			$matched = true;
-			foreach($rule['params'] as $key => $val)
-			{
-				if (!isset($params[$key]) || empty($params[$key])
-					|| (is_array($val) && !in_array($params[$key], $val))
-					|| ($val != '*' && $params[$key] != $val))
-				{
-					$matched = false;
-					break;
-				}
-			}
-			if ($matched)
-			{
-				$url = $rule['trans'];
-				break 2;
-			}
-		}
+	$rule = [];
+	foreach ($areas as $area) {
+        if (!empty($cot_urltrans[$area])) {
+            foreach ($cot_urltrans[$area] as $rule) {
+                $matched = true;
+                foreach ($rule['params'] as $key => $val) {
+                    if (
+                        empty($params[$key])
+                        || (is_array($val) && !in_array($params[$key], $val))
+                        || ($val != '*' && $params[$key] != $val)
+                    ) {
+                        $matched = false;
+                        break;
+                    }
+                }
+                if ($matched) {
+                    $url = $rule['trans'];
+                    break 2;
+                }
+            }
+        }
 	}
 
 	// Some special substitutions
@@ -228,41 +227,30 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	$spec['_host'] = cot::$sys['host'];
 	$spec['_rhost'] = $_SERVER['HTTP_HOST'];
 	$spec['_path'] = COT_SITE_URI;
+
 	// Transform the data into URL
-	if (preg_match_all('#\{(.+?)\}#', $url, $matches, PREG_SET_ORDER))
-	{
-		foreach($matches as $m)
-		{
-			if ($p = mb_strpos($m[1], '('))
-			{
+	if (preg_match_all('#\{(.+?)\}#', $url, $matches, PREG_SET_ORDER)) {
+		foreach($matches as $m) {
+			if ($p = mb_strpos($m[1], '(')) {
 				// Callback
 				$func = mb_substr($m[1], 0, $p);
 				$arg = mb_substr($m[1], $p + 1, mb_strpos($m[1], ')') - $p - 1);
 				$sub = empty($arg) ? $func($params, $spec) : $func($params, $spec, $arg);
 				$url = str_replace($m[0], $sub, $url);
-			}
-			elseif (mb_strpos($m[1], '!$') === 0)
-			{
+			} elseif (mb_strpos($m[1], '!$') === 0) {
 				// Unset
 				$var = mb_substr($m[1], 2);
 				$url = str_replace($m[0], '', $url);
 				unset($params[$var]);
-			}
-			else
-			{
+			} else {
 				// Substitute
 				$var = mb_substr($m[1], 1);
-				if (isset($spec[$var]))
-				{
+				if (isset($spec[$var])) {
 					$url = str_replace($m[0], $spec[$var], $url);
-				}
-				elseif (isset($params[$var]))
-				{
+				} elseif (isset($params[$var])) {
 					$url = str_replace($m[0], rawurlencode($params[$var]), $url);
 					unset($params[$var]);
-				}
-				else
-				{
+				} else {
 					$url = str_replace($m[0], rawurlencode($GLOBALS[$var]), $url);
 				}
 			}
@@ -296,19 +284,17 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	}
 
 	// Append query string if needed
-	if (!empty($params))
-	{
+	if (!empty($params)) {
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
-		$url_tail = (version_compare(PHP_VERSION, '5.4.0', '>='))
-			? http_build_query($params, '', $sep, PHP_QUERY_RFC3986) : str_replace('+', '%20', http_build_query($params, '', $sep));
-		if (!empty($url_tail))
-		{
+		$url_tail = http_build_query($params, '', $sep, PHP_QUERY_RFC3986);
+		if (!empty($url_tail)) {
 			$url .= (mb_strpos($url, '?') === false ? '?' : $sep) . $url_tail;
 		}
 	}
 	// Almost done
 	$url .= $tail;
 	$url = str_replace('&amp;amp;', '&amp;', $url);
+
 	return $url;
 }
 
