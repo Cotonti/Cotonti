@@ -160,6 +160,7 @@ function cot_i18n_load_locales()
 			$i18n_locales[$lc[0]] = $lc[1];
 		}
 
+        // Todo use locale_get_display_language() if $cot_languages[cot::$cfg['defaultlang']] is not set
         if (!array_key_exists(cot::$cfg['defaultlang'], $i18n_locales)) {
             $i18n_locales[cot::$cfg['defaultlang']] = isset($cot_languages[cot::$cfg['defaultlang']]) ?
                 $cot_languages[cot::$cfg['defaultlang']] : cot::$cfg['defaultlang'];

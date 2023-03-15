@@ -12,11 +12,19 @@ Tags=admin.structure.tpl:{ADMIN_STRUCTURE_I18N_LINK}
  * @package I18n
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var XTemplate $t
+ * @var string $n Extension code
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-$t->assign(array(
-	'ADMIN_STRUCTURE_I18N_LINK' => cot_rc_link(cot_url('plug', 'e=i18n&m=structure'), $L['i18n_structure']),
-	'ADMIN_STRUCTURE_I18N_URL' => cot_url('plug', 'e=i18n&m=structure')
-));
+if ($n == 'page') {
+    $t->assign(array(
+        'ADMIN_STRUCTURE_I18N_LINK' => cot_rc_link(
+            cot_url('plug', 'e=i18n&m=structure'),
+            cot::$L['i18n_structure']
+        ),
+        'ADMIN_STRUCTURE_I18N_URL' => cot_url('plug', 'e=i18n&m=structure')
+    ));
+}

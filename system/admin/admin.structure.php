@@ -5,6 +5,8 @@
  * @package Cotonti
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var string $n Extension code
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
@@ -37,31 +39,29 @@ foreach (cot_getextplugins('admin.structure.first') as $pl) {
 }
 /* ===== */
 
-if (empty($n))
-{
+if (empty($n)) {
 	$adminpath[] = [cot_url('admin', 'm=structure'), cot::$L['Structure'],];
 	// Show available module list
-	if (is_array($extension_structure) && count($extension_structure) == 1 && ((cot_plugin_active($extension_structure[0]) || cot_module_active($extension_structure[0]))))
-	{
+	if (
+        is_array($extension_structure)
+        && count($extension_structure) == 1
+        && ((cot_plugin_active($extension_structure[0]) || cot_module_active($extension_structure[0])))
+    ) {
 		cot_redirect(cot_url('admin', 'm=structure&n='.$extension_structure[0], '', true));
 	}
-	if (is_array($extension_structure) && count($extension_structure) > 0)
-	{
-		foreach ($extension_structure as $code)
-		{
+
+	if (is_array($extension_structure) && count($extension_structure) > 0) {
+		foreach ($extension_structure as $code) {
 			$parse = false;
-			if (cot_plugin_active($code))
-			{
+			if (cot_plugin_active($code)) {
 				$is_module = false;
 				$parse = true;
 			}
-			if (cot_module_active($code))
-			{
+			if (cot_module_active($code)) {
 				$is_module = true;
 				$parse = true;
 			}
-			if ($parse)
-			{
+			if ($parse) {
 				$ext_info = cot_get_extensionparams($code, $is_module);
 				$t->assign(array(
 					'ADMIN_STRUCTURE_EXT_URL' => cot_url('admin', 'm=structure&n='.$code),

@@ -2,7 +2,7 @@
 <div class="block">
 	<table class="cells">
 		<tbody>
-<!-- BEGIN: ADMIN_STRUCTURE_EXT -->
+			<!-- BEGIN: ADMIN_STRUCTURE_EXT -->
 			<tr>
 				<td class="start">
 					<figure>
@@ -16,12 +16,12 @@
 					</div>
 				</td>
 			</tr>
-<!-- END: ADMIN_STRUCTURE_EXT -->
-<!-- BEGIN: ADMIN_STRUCTURE_EMPTY -->
+			<!-- END: ADMIN_STRUCTURE_EXT -->
+			<!-- BEGIN: ADMIN_STRUCTURE_EMPTY -->
 			<tr>
 				<td colspan="2">{PHP.L.adm_listisempty}</td>
 			</tr>
-<!-- END: ADMIN_STRUCTURE_EMPTY -->
+			<!-- END: ADMIN_STRUCTURE_EMPTY -->
 		</tbody>
 	</table>
 </div>
@@ -32,9 +32,9 @@
 <div class="button-toolbar">
 	<a href="{ADMIN_STRUCTURE_URL_EXTRAFIELDS}" class="button">{PHP.L.adm_extrafields}</a>
 	<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax button special" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>
-<!-- IF {ADMIN_STRUCTURE_I18N_URL} -->
+	<!-- IF {ADMIN_STRUCTURE_I18N_URL} -->
 	<a href="{ADMIN_STRUCTURE_I18N_URL}" class="button">{PHP.L.i18n_structure}</a>
-<!-- ENDIF -->
+	<!-- ENDIF -->
 </div>
 
 <!-- BEGIN: DEFAULT -->
