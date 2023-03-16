@@ -100,6 +100,11 @@ h1 {
 	border-bottom: 1px solid;
 }
 
+h2 {
+	font-size: 1.3rem;
+	margin: 1rem 0;
+}
+
 /* 4. Misc
 -------------------------------------------------- */
 
@@ -107,13 +112,13 @@ h1 {
 .even	{ background-color:#f1f1f1!important; }
 */
 
-div.alert					{ line-height: 1.3; margin: 0 0 1rem; padding: .75rem; border: 1px solid; border-radius: 3px; }
-	div.error				{ color: #d8000c; background: #ffebe8; }
-	div.warning			{ color: #9f6000; background: #fff9d7; }
-	div.done,
-	div.help		  	{ color: rgb(8,121,144); background: rgb(207,244,252); }
-	div.alert h4		{ font-weight: 700; margin: 0 0 .5rem; }
-	div.alert p			{ margin: 0; }
+div.alert { line-height: 1.3; margin: 0 0 1rem; padding: .75rem; border: 1px solid; border-radius: 3px; }
+div.error { color: #d8000c; background: #ffebe8; }
+div.warning { color: #9f6000; background: #fff9d7; }
+div.done,
+div.help { color: rgb(8,121,144); background: rgb(207,244,252); }
+div.alert h4 { font-weight: 700; margin: 0 0 .5rem; }
+div.alert p	{ margin: 0; }
 
 .highlight_green	{ color:#205000; background-color:#befea8; }
 .highlight_red		{ color:#d8000c; background-color:#feebe8; }
@@ -156,13 +161,8 @@ td.group_end			{ font-size: 0; padding: 0!important; border: none!important; }
 table.cells .coltop		{ text-align:center; line-height:1.4em; vertical-align:middle; font-size:.9em; background-color:#EDEFF4!important; color:#000;}
 table.cells .coltop img	{ vertical-align:middle; }
 
-/* 7. Polls
--------------------------------------------------- */
 
-.bar_front 	{ background: #ffae00; height: .5rem; }
-.bar_back 	{ background: #fff; border: 1px solid #333; }
-
-/* 8. Forms
+/* 7. Forms
 -------------------------------------------------- */
 form {  }
 input, select, textarea/*, button*/	{ font-size: .8125rem; }
@@ -184,7 +184,31 @@ textarea {
 	min-height: 40px;
 }
 
-/* 9. Pagination
+.filter input[type=text]{
+	width: 200px;
+}
+
+/* 8. Polls
+-------------------------------------------------- */
+
+.bar_front 	{ background: #ffae00; height: .5rem; }
+.bar_back 	{ background: #fff; border: 1px solid #333; }
+.polloptiondiv input[type="text"] {
+	width: 90%;
+	margin-bottom: 10px;
+}
+
+
+/* 9. User Images
+-------------------------------------------------- */
+
+input[name=userimg_width],
+input[name=userimg_height] {
+	width: 100px;
+}
+
+
+/* 10. Pagination
 -------------------------------------------------- */
 
 p.pagination-info	{ text-align: center; margin: 1rem 0 0; }
@@ -201,7 +225,7 @@ p.pagination-info	{ text-align: center; margin: 1rem 0 0; }
 
 .spaced				{ margin:0 8px; }
 
-/* 10. Modal box
+/* 11. Modal box
 -------------------------------------------------- */
 
 /* The Window's CSS z-index value is respected (takes priority). If none is supplied,

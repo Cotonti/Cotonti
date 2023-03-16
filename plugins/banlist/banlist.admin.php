@@ -15,8 +15,8 @@ Hooks=tools
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
-cot_block($usr['isadmin']);
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('users', 'a');
+cot_block(cot::$usr['isadmin']);
 
 $tt = new XTemplate(cot_tplfile('banlist.admin', 'plug', true));
 require_once cot_langfile('banlist', 'plug');

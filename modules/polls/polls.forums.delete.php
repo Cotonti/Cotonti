@@ -11,6 +11,9 @@ Hooks=forums.posts.emptytopicdel, forums.functions.prunetopics
  * @package Polls
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @todo don't delete poll when topic deleting to trashcan.
+ * @todo delete poll on topic deleting from trashcan
  */
 
 defined('COT_CODE') or die('Wrong URL');

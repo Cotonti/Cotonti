@@ -1,6 +1,5 @@
 <!-- BEGIN: MAIN -->
-		<h2>{PHP.L.comments_comments}</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
+{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 			<div class="block button-toolbar">
 				<a title="{PHP.L.Configuration}" href="{ADMIN_COMMENTS_CONFIG_URL}" class="button">{PHP.L.Configuration}</a>
 			</div>

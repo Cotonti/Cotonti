@@ -1,8 +1,5 @@
 <!-- BEGIN: MAIN -->
-
-	<h2 class="message"><a href="{PHP|cot_url('admin','m=other&amp;p=contact')}">{PHP.L.contact_title}</a></h2>
-
-	{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
+{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 
 	<table class="cells">
 		<tr>

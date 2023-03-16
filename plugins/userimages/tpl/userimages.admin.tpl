@@ -1,10 +1,7 @@
 <!-- BEGIN: MAIN -->
-
-<h2>{PHP.L.userimages_title}</h2>
+{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 
 <div class="block">
-	{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
-
 <table class="cells">
 	<thead>
 		<tr>
@@ -76,7 +73,5 @@
 		</form>
 	</tfoot>
 </table>
-
 </div>
-
 <!-- END: MAIN -->

@@ -23,6 +23,8 @@ require_once cot_incfile('i18n', 'plug');
  */
 $i18n_locales = null;
 
+$i18n_fallback = '';
+
 // Load valid locales
 if (!empty(cot::$cache)) {
     $i18n_locales = cot::$cache->db->get('locales', 'i18n');

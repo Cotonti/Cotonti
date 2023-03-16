@@ -37,30 +37,32 @@
 	{PAGE_COMMENTS_DISPLAY}
 </div>
 
-		<div class="col3-1">
-<!-- BEGIN: PAGE_ADMIN -->
-			<div class="block">
-				<h2 class="admin">{PHP.L.Adminpanel}</h2>
-				<ul class="bullets">
-					<!-- IF {PHP.usr.isadmin} -->
-					<li><a href="{PHP|cot_url('admin')}">{PHP.L.Adminpanel}</a></li>
-					<!-- ENDIF -->
-					<li><a href="{PAGE_CAT|cot_url('page','m=add&c=$this')}">{PHP.L.page_addtitle}</a></li>
-					<li>{PAGE_ADMIN_UNVALIDATE}</li>
-					<li>{PAGE_ADMIN_EDIT}</li>
-					<li>{PAGE_ADMIN_CLONE}</li>
-					<li>{PAGE_ADMIN_DELETE}</li>
-				</ul>
-			</div>
-<!-- END: PAGE_ADMIN -->
-			{FILE "{PHP.cfg.themes_dir}/{PHP.theme}/inc/contact.tpl"}
-<!-- BEGIN: PAGE_MULTI -->
-			<div class="block">
-				<h2 class="info">{PHP.L.Summary}:</h2>
-				{PAGE_MULTI_TABTITLES}
-				<p class="paging">{PAGE_MULTI_TABNAV}</p>
-			</div>
-<!-- END: PAGE_MULTI -->
-		</div>
-
+<div class="col3-1">
+	<!-- BEGIN: PAGE_ADMIN -->
+	<div class="block">
+		<h2 class="admin">{PHP.L.Adminpanel}</h2>
+		<ul class="bullets">
+			<!-- IF {PHP.usr.isadmin} -->
+			<li><a href="{PHP|cot_url('admin')}">{PHP.L.Adminpanel}</a></li>
+			<!-- ENDIF -->
+			<li><a href="{PAGE_CAT|cot_url('page','m=add&c=$this')}">{PHP.L.page_addtitle}</a></li>
+			<li>{PAGE_ADMIN_UNVALIDATE}</li>
+			<li>{PAGE_ADMIN_EDIT}</li>
+			<li>{PAGE_ADMIN_CLONE}</li>
+			<li>{PAGE_ADMIN_DELETE}</li>
+			<!-- IF {PAGE_I18N_TRANSLATE} -->
+			<li>{PAGE_I18N_TRANSLATE}</li>
+			<!-- ENDIF -->
+		</ul>
+	</div>
+	<!-- END: PAGE_ADMIN -->
+	{FILE "{PHP.cfg.themes_dir}/{PHP.theme}/inc/contact.tpl"}
+	<!-- BEGIN: PAGE_MULTI -->
+	<div class="block">
+		<h2 class="info">{PHP.L.Summary}:</h2>
+		{PAGE_MULTI_TABTITLES}
+		<p class="paging">{PAGE_MULTI_TABNAV}</p>
+	</div>
+	<!-- END: PAGE_MULTI -->
+</div>
 <!-- END: MAIN -->

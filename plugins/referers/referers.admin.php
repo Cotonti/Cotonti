@@ -21,7 +21,7 @@ $tt = new XTemplate(cot_tplfile('referers.admin', 'plug', true));
 
 cot::$db->registerTable('referers');
 require_once cot_langfile('referers', 'plug');
-$adminhelp = $L['adm_help_referers'];
+
 $adminTitle = $L['Referers'];
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
@@ -47,6 +47,7 @@ $pagenav = cot_pagenav('admin', 'm=other&p=referers', $d, $totalitems, $maxperpa
 
 $sql = $db->query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$maxperpage);
 
+$ii = 0;
 if($sql->rowCount() > 0)
 {
 	while($row = $sql->fetch())
@@ -57,7 +58,6 @@ if($sql->rowCount() > 0)
 	}
 	$sql->closeCursor();
 
-	$ii = 0;
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('referers.admin.loop');
 	/* ===== */

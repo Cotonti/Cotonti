@@ -82,11 +82,10 @@ if ($a == 'wipe') {
     }
 	cot_redirect(cot_url('admin', 'm=other&p=trashcan', '', true));
 
-} elseif($a == 'restore') {
+} elseif ($a == 'restore') {
 	cot_check_xg();
 	/* === Hook === */
-	foreach (cot_getextplugins('trashcan.admin.restore') as $pl)
-	{
+	foreach (cot_getextplugins('trashcan.admin.restore') as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -98,7 +97,7 @@ if ($a == 'wipe') {
 
 $tr_t = new XTemplate(cot_tplfile(($info) ? 'trashcan.info.admin' : 'trashcan.admin', 'plug', true));
 
-$totalitems = (int)$db->query("SELECT COUNT(*) FROM $db_trash WHERE tr_parentid=0")->fetchColumn();
+$totalitems = (int) cot::$db->query("SELECT COUNT(*) FROM $db_trash WHERE tr_parentid=0")->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=other&p=trashcan', $d, $totalitems, $maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql_query = ($info) ? "AND tr_id=$id LIMIT 1" : "ORDER by tr_id DESC LIMIT $d, ".$maxperpage;

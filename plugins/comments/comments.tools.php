@@ -22,7 +22,6 @@ require_once cot_incfile('comments', 'plug');
 
 $t = new XTemplate(cot_tplfile('comments.tools', 'plug', true));
 
-$adminhelp = $L['plu_help_comments'];
 $adminTitle = $L['comments_comments'];
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
@@ -144,7 +143,7 @@ foreach ($sql->fetchAll() as $row)
 
 $t->assign(array(
 	'ADMIN_COMMENTS_CONFIG_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p=comments'),
-	'ADMIN_COMMENTS_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_COMMENTS_ADMINWARNINGS' => isset($adminwarnings) ? $adminwarnings : '',
 	'ADMIN_COMMENTS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_COMMENTS_PAGNAV' => $pagenav['main'],
 	'ADMIN_COMMENTS_PAGINATION_NEXT' => $pagenav['next'],

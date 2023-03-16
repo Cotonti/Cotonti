@@ -68,28 +68,28 @@ if ( $id > 0) {
         cot_message('adm_polls_msg916_bump');
     }
 }
-cot_poll_check();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && !cot_error_found()) {
-	$number = cot_poll_save();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    cot_poll_check();
 
-	if ($poll_id == 0) {
-		cot_message('polls_created');
+    if (!cot_error_found()) {
+        $number = cot_poll_save();
 
-    } elseif (!empty($poll_id)) {
-		cot_message('polls_updated');
-	}
+        if ($poll_id == 0) {
+            cot_message('polls_created');
 
-	(cot::$cache && cot::$cfg['cache_index']) && cot::$cache->page->clear('index');
+        } elseif (!empty($poll_id)) {
+            cot_message('polls_updated');
+        }
+
+        (cot::$cache && cot::$cfg['cache_index']) && cot::$cache->page->clear('index');
+    }
 }
 
-if(!$filter)
-{
+if (!$filter) {
     $poll_type = '1';
     $poll_filter = '';
-}
-else
-{
+} else {
     $poll_type = 'poll_type="'.$filter.'"';
     $poll_filter = '"&filter='.$filter;
 }

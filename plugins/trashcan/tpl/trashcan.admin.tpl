@@ -1,5 +1,5 @@
 <!-- BEGIN: MAIN -->
-{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
+{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 <div class="block button-toolbar">
 	<a title="{PHP.L.Configuration}" href="{ADMIN_TRASHCAN_CONF_URL}" class="button">{PHP.L.Configuration}</a>
 	<!-- IF {ADMIN_TRASHCAN_TOTALITEMS} > 0 -->

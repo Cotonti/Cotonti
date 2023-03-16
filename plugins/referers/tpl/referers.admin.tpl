@@ -1,6 +1,5 @@
 <!-- BEGIN: MAIN -->
-		<h2>{PHP.L.Referers}</h2>
-		{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
+{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 <!-- IF {PHP.usr.isadmin} -->
 			<div class="block button-toolbar">
 				<a href="{ADMIN_REFERERS_URL_PRUNE}" class="button">{PHP.L.adm_purgeall}</a>
@@ -39,5 +38,5 @@
 				</tr>
 			</table>
 <!-- ENDIF -->
-
+<p>&nbsp;</p>
 <!-- END: MAIN -->
