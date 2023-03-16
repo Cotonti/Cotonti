@@ -45,7 +45,7 @@ $R = array();
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.21';
+$cfg['version'] = '0.9.22';
 $cfg['dbversion'] = '0.9.19';   // Not used anywhere
 
 // Set default file permissions if not present in config
@@ -4795,7 +4795,7 @@ function cot_rc_modify($rc, $attrs)
  * @see cot_rc_add_file()
  * @global Cache $cache
  *
- * @deprecated Will be removed in v.1.0. Use Resources::addEmbed() instead
+ * @deprecated Will be removed in v.1.0. Use Resources::addEmbed() instead. For box already gone away done
  */
 function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js', $order = 50)
 {
@@ -4825,7 +4825,7 @@ function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js', $
  * @return bool Returns TRUE normally, FALSE is file was not found
  * @global Cache $cache
  *
- * @deprecated Will be removed in v.1.0. Use Resources::addFile() instead
+ * @deprecated Will be removed in v.1.0. Use Resources::addFile() instead. For box already gone away done
  */
 function cot_rc_add_file($path, $scope = 'global', $order = 50)
 {
@@ -4864,14 +4864,15 @@ function cot_rc_add_standard()
  * @param string $code Stylesheet or javascript code
  * @param bool $prepend Prepend this file before other head outputs
  * @param string $type Resource type: 'js' or 'css'
+ * @param string $attr Attribute for output tag
  *
- * @deprecated Will be removed in v.1.0. Resources::embed() instead
+ * @deprecated Will be removed in v.1.0. Resources::embed() instead. For box already gone away done
  */
-function cot_rc_embed($code, $prepend = false, $type = 'js')
+function cot_rc_embed($code, $prepend = false, $type = 'js', $attr = '')
 {
 	$order = 60;
 	if($prepend) $order = 40;
-	Resources::embed($code, $type, $order);
+	Resources::embed($code, $type, $order, $attr);
 }
 
 /**
@@ -4880,12 +4881,13 @@ function cot_rc_embed($code, $prepend = false, $type = 'js')
  * @global array $out Output snippets
  * @param string $code Stylesheet or javascript code
  * @param string $type Resource type: 'js' or 'css'
+ * @param string $attr Attribute for output tag
  *
- * @deprecated Will be removed in v.1.0. Resources::embedFooter() instead
+ * @deprecated Will be removed in v.1.0. Resources::embedFooter() instead. For box already gone away done
  */
-function cot_rc_embed_footer($code, $type = 'js')
+function cot_rc_embed_footer($code, $type = 'js', $attr = '')
 {
-	Resources::embedFooter($code, $type);
+	Resources::embedFooter($code, $type, $attr);
 }
 
 /**
@@ -4909,7 +4911,7 @@ function cot_rc_link($url, $text, $attrs = '')
  * @param string $path Stylesheet *.css or script *.js path/url
  * @param bool $prepend Prepend this file before other header outputs
  *
- * @deprecated Will be removed in v.1.0. Use Resources::linkFile() instead
+ * @deprecated Will be removed in v.1.0. Use Resources::linkFile() instead. For box already gone away done
  */
 function cot_rc_link_file($path, $prepend = false)
 {
@@ -4924,7 +4926,7 @@ function cot_rc_link_file($path, $prepend = false)
  * @global array $out Output snippets
  * @param string $path JavaScript or CSS file path
  *
- * @deprecated Will be removed in v.1.0. Resources::linkFileFooter() instead
+ * @deprecated Will be removed in v.1.0. Resources::linkFileFooter() instead. For box already gone away done
  */
 function cot_rc_link_footer($path)
 {
@@ -4938,7 +4940,7 @@ function cot_rc_link_footer($path)
  * @param string $type Type: 'js' or 'css'
  * @return string Minified code
  *
- * @deprecated Will be removed in v.1.0. Resources::linkFileFooter() instead
+ * @deprecated Will be removed in v.1.0. Resources::linkFileFooter() instead. For box already gone away done
  */
 function cot_rc_minify($code, $type = 'js')
 {

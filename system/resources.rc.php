@@ -87,13 +87,13 @@ $R['notices_separator'] = '';
 $R['notices_link'] = '<a href="{$url}" title="{$title}">{$title}</a>';
 $R['notices_plain'] = '{$title}';
 $R['notices_notice'] = '{$notice}';
-$R['code_rc_css_embed'] = '<style type="text/css">
+$R['code_rc_css_embed'] = '<style type="text/css"{$attr}>
 /*<![CDATA[*/
 {$code}
 /*]]>*/
 </style>';
 $R['code_rc_css_file'] = '<link href="{$url}" type="text/css" rel="stylesheet" />';
-$R['code_rc_js_embed'] = '<script>
+$R['code_rc_js_embed'] = '<script{$attr}>
 //<![CDATA[
 {$code}
 //]]>

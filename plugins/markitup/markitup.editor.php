@@ -38,20 +38,20 @@ if ($cfg['jquery'])
 	$mkup_skin = cot_rc('code_rc_css_file', array('url' => $mkup_skin_path));
 	$mkup_style_path = $cfg['plugins_dir'] . '/markitup/style.css';
 	$mkup_style = cot_rc('code_rc_css_file', array('url' => $mkup_style_path));
-	cot_rc_link_footer($smile_lang);
-	cot_rc_link_footer('images/smilies/set.js');
-	cot_rc_link_footer($cfg['plugins_dir'] . '/markitup/js/jquery.markitup.min.js');
-	cot_rc_link_footer($mkup_lang);
-	cot_rc_link_footer($cfg['plugins_dir'] . "/markitup/js/{$mkup_set}.set.js");
+	Resources::linkFileFooter($smile_lang);
+	Resources::linkFileFooter('images/smilies/set.js');
+	Resources::linkFileFooter($cfg['plugins_dir'] . '/markitup/js/jquery.markitup.min.js');
+	Resources::linkFileFooter($mkup_lang);
+	Resources::linkFileFooter($cfg['plugins_dir'] . "/markitup/js/{$mkup_set}.set.js");
 
 	if ($cfg['plugin']['markitup']['chili'])
 	{
-		cot_rc_link_footer($cfg['plugins_dir'].'/markitup/js/chili.js');
+		Resources::linkFileFooter($cfg['plugins_dir'].'/markitup/js/chili.js');
 	}
 
 	// User-specific setup
 	$autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
-	cot_rc_embed_footer('$(document).ready(function() {
+	Resources::embedFooter('$(document).ready(function() {
 		if (document.createStyleSheet) { document.createStyleSheet("'.$mkup_skin_path.'"); } else { $("head").append(\''.$mkup_skin.'\'); }
 		if (document.createStyleSheet) { document.createStyleSheet("'.$mkup_style_path.'"); } else { $("head").append(\''.$mkup_style.'\'); }
 		mySettings.previewAutorefresh = '.$autorefresh.';
