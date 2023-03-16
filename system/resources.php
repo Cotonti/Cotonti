@@ -681,14 +681,16 @@ class Resources
 	 * @param string $code Stylesheet or javascript code
 	 * @param int $order
 	 * @param string $type Resource type: 'js' or 'css'
+	 * @param string $attr Attribute for output tag
 	 */
-	public static function embed($code, $type = 'js', $order = 50)
+	public static function embed($code, $type = 'js', $order = 50, $attr = '')
 	{
 		// header.php executed. Try add code to footer
-		if (static::$headerComplete) Resources::embedFooter($code, $type, $order);
+		if (static::$headerComplete) Resources::embedFooter($code, $type, $order, $attr);
 
 		static::$headerRc[$type . '_embed'][$order][] = cot_rc("code_rc_{$type}_embed", array(
-			'code' => $code
+			'code' => $code,
+			'attr' => $attr
 		));
 	}
 
@@ -700,11 +702,13 @@ class Resources
 	 * @param string $code Stylesheet or javascript code
 	 * @param string $type Resource type: 'js' or 'css'
 	 * @param int $order
+	 * @param string $attr Attribute for output tag
 	 */
-	public static function embedFooter($code, $type = 'js', $order = 50)
+	public static function embedFooter($code, $type = 'js', $order = 50, $attr = '')
 	{
 		static::$footerRc[$type . '_embed'][$order][] = cot_rc("code_rc_{$type}_embed", array(
-			'code' => $code
+			'code' => $code,
+			'attr' => $attr
 		));
 	}
 
