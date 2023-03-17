@@ -6,7 +6,7 @@
 </div>
 
 <div class="block">
-	<h2>Disk Cache</h2>
+	<h2>{PHP.L.adm_diskcache}</h2>
 	<div class="wrapper">
 		<table class="cells">
 			<thead>

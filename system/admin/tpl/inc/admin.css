@@ -20,24 +20,16 @@ a								{ color:#172973; text-decoration: none; }
 	a:hover				{ text-decoration: underline; }
 
 ul    										{ padding-left: 0; margin: 0; list-style: none; }
-	ul.std { padding-left: 1.5rem; list-style: disc; }
-	ul.std > li { margin-bottom: .25rem; }
-	ul.std > li:last-child{ margin-bottom: 0; }
-	ul.cfg { overflow: hidden; }
-	ul.cfg > li { width: 25%; float: left; }
-	ul.cfg > li > a {
-		padding: .6rem;
-		display: block;
-	}
-	ul.cfg > li > a:hover {
-		background: #DDD;
-		text-decoration: none;
-	}
+	ul.std									{ padding-left: 1.5rem; list-style: disc; }
+	ul.std > li 						{ margin-bottom: .25rem; }
+	ul.std > li:last-child	{ margin-bottom: 0; }
 
-p {
-	margin: 0.6em 0;
-	line-height: 1.6em;
-}
+	ul.cfg 								{ overflow: hidden; }
+	ul.cfg > li 					{ width: 25%; float: left; }
+	ul.cfg > li > a				{ padding: .5rem; display: block; }
+	ul.cfg > li > a:hover { text-decoration: none; background: #DDD; }
+
+p		{ line-height: 1.5; margin: 0 0 1rem; }
 
 
 /* 2. Structure
@@ -86,24 +78,9 @@ main									{  }
 /* 3. Headings
 -------------------------------------------------- */
 
-h1, h2, h3, h4, h5, h6	{
-	font-weight: 400;
-	font-size: 1em;
-	margin: 0;
-	padding: 0;
-}
-h1 {
-	color: #000;
-	font-size: 1.5rem;
-	margin: 1rem 1rem 1.5rem 1rem;
-	padding-bottom: 2px;
-	border-bottom: 1px solid;
-}
-
-h2 {
-	font-size: 1.3rem;
-	margin: 0 0 .5rem;
-}
+h1, h2, h3, h4, h5, h6	{ font-weight: 400; margin: 0; padding: 0; }
+h1		{ color: #000; font-size: 1.5rem; margin: 1rem 1rem 1.5rem 1rem; padding-bottom: 2px; border-bottom: 1px solid; }
+h2		{ font-size: 1.25rem; margin: 0 0 .5rem; }
 
 /* 4. Misc
 -------------------------------------------------- */
@@ -129,8 +106,6 @@ div.alert p	{ margin: 0; }
 .extension.paused				{ color:#5882ac; }
 .extension.present			{ color:#739e48; }
 .extension.running			{ color:#739e48; }
-
-
 
 /* 6. Tables
 -------------------------------------------------- */
@@ -161,67 +136,51 @@ td.group_end			{ font-size: 0; padding: 0!important; border: none!important; }
 table.cells .coltop		{ text-align:center; line-height:1.4em; vertical-align:middle; font-size:.9em; background-color:#EDEFF4!important; color:#000;}
 table.cells .coltop img	{ vertical-align:middle; }
 
-
 /* 7. Forms
 -------------------------------------------------- */
 form {  }
 input, select, textarea/*, button*/	{ font-size: .8125rem; }
 input, select/*, button*/ { padding: .125rem; }
 
-textarea {
-	resize: both;
-}
+textarea { resize: both; }
 
 #saveconfig input[type=text],
 #saveconfig textarea { width:98%; }
 
 input[type=text],
-textarea {
-	width:98%;
-	}
+textarea	{ width:98%; }
 
-textarea {
-	min-height: 40px;
-}
+textarea	{ min-height: 40px; }
 
-.filter input[type=text]{
-	width: 200px;
-}
+.filter input[type=text]	{ width: 200px; }
 
 /* 8. Polls
 -------------------------------------------------- */
 
 .bar_front 	{ background: #ffae00; height: .5rem; }
 .bar_back 	{ background: #fff; border: 1px solid #333; }
-.polloptiondiv input[type="text"] {
-	width: 90%;
-	margin-bottom: 10px;
-}
-
+.polloptiondiv input[type="text"]	{ margin-bottom: 10px; width: 90%; }
 
 /* 9. User Images
 -------------------------------------------------- */
 
 input[name=userimg_width],
-input[name=userimg_height] {
-	width: 100px;
-}
-
+input[name=userimg_height] { width: 100px; }
 
 /* 10. Pagination
 -------------------------------------------------- */
 
 p.pagination-info	{ text-align: center; margin: 1rem 0 0; }
 
-.paging			{ margin:10px 0 20px 0; text-align:center; font-size:.9em; }
+.paging				{ margin:10px 0 20px 0; text-align:center; font-size:.9em; }
 .paging img		{ vertical-align:-3px; }
-.paging span		{ border:1px dashed #7f7772; padding:2px 8px; margin:1px; }
+.paging span	{ border:1px dashed #7f7772; padding:2px 8px; margin:1px; }
 
 .pagenav_prev, .pagenav_next, .pagenav_first, .pagenav_last, .pagenav_pages, .pagenav_current { padding:2px 6px; margin:1px; border:1px dashed #7f7772; }
 .pagenav_prev a, .pagenav_next a, .pagenav_first a, .pagenav_last a, .pagenav_pages a	{ color:#555; }
-.pagenav_current	{ font-weight:bold; color:#fff; background:none!important; border:none!important; }
+.pagenav_current		{ font-weight:bold; color:#fff; background:none!important; border:none!important; }
 .pagenav_current a	{ color:#555; }
-.pagenav_small		{ text-align:right; font-size:.9em; }
+.pagenav_small			{ text-align:right; font-size:.9em; }
 
 .spaced				{ margin:0 8px; }
 
