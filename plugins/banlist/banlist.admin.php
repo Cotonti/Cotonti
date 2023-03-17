@@ -107,7 +107,7 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_BANLIST_ROW_DELURL' => cot_url('admin', 'm=other&p=banlist&a=delete&id='.$row['banlist_id'].'&'.cot_xg()),
 		'ADMIN_BANLIST_ROW_EXPIRE' => ($row['banlist_expire'] > 0) ? cot_date('datetime_medium', $row['banlist_expire']) : $L['banlist_neverexpire'],
 		'ADMIN_BANLIST_ROW_EXPIRE_STAMP' => ($row['banlist_expire'] > 0) ? $row['banlist_expire'] : '',
-		'ADMIN_BANLIST_ROW_IP' => cot_inputbox('text', 'rbanlistip', $row['banlist_ip'], 'size="18" maxlength="16"'),
+		'ADMIN_BANLIST_ROW_IP' => cot_inputbox('text', 'rbanlistip', $row['banlist_ip'], 'size="18" maxlength="64"'),
 		'ADMIN_BANLIST_ROW_EMAIL' => cot_inputbox('text', 'rbanlistemail', $row['banlist_email'], 'size="10" maxlength="64"'),
 		'ADMIN_BANLIST_ROW_REASON' => cot_inputbox('text', 'rbanlistreason', $row['banlist_reason'], 'size="22" maxlength="64"'),
 		'ADMIN_BANLIST_ROW_ODDEVEN' => cot_build_oddeven($ii)
@@ -150,7 +150,7 @@ $tt->assign(array(
 	'ADMIN_BANLIST_COUNTER_ROW' => $ii,
 	'ADMIN_BANLIST_URLFORMADD' => cot_url('admin', 'm=other&p=banlist&a=add'),
 	'ADMIN_BANLIST_EXPIRE' => cot_selectbox('0', 'nexpire', $time_array, $time_values, false),
-	'ADMIN_BANLIST_IP' => cot_inputbox('text', 'nbanlistip', '', 'size="18" maxlength="16"'),
+	'ADMIN_BANLIST_IP' => cot_inputbox('text', 'nbanlistip', '', 'size="18" maxlength="64"'),
 	'ADMIN_BANLIST_EMAIL' => cot_inputbox('text', 'nbanlistemail', '', 'size="24" maxlength="64"'),
 	'ADMIN_BANLIST_REASON' => cot_inputbox('text', 'nbanlistreason', '', 'size="48" maxlength="64"')
 ));

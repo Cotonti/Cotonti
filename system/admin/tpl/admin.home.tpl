@@ -12,46 +12,6 @@
 	<!-- BEGIN: MAINPANEL -->
 	{ADMIN_HOME_MAINPANEL}
 	<!-- END: MAINPANEL -->
-
-	<div class="block">
-		<h2>Cotonti:</h2>
-		<div class="wrapper">
-			<table class="cells">
-				<tr>
-					<td class="w-80">{PHP.L.Version}</td>
-					<td class="textcenter w-20">{ADMIN_HOME_VERSION}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.Database}</td>
-					<td class="textcenter">{ADMIN_HOME_DB_VERSION}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.home_db_rows}</td>
-					<td class="textcenter">{ADMIN_HOME_DB_TOTAL_ROWS}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.home_db_indexsize}</td>
-					<td class="textcenter">{ADMIN_HOME_DB_INDEXSIZE}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.home_db_datassize}</td>
-					<td class="textcenter">{ADMIN_HOME_DB_DATASSIZE}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.home_db_totalsize}</td>
-					<td class="textcenter">{ADMIN_HOME_DB_TOTALSIZE}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.Plugins}</td>
-					<td class="textcenter">{ADMIN_HOME_TOTALPLUGINS}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.Hooks}</td>
-					<td class="textcenter">{ADMIN_HOME_TOTALHOOKS}</td>
-				</tr>
-			</table>
-		</div>
-	</div>
 </main>
 
 <aside>
@@ -80,5 +40,10 @@
 			</ul>
 		</div>
 	</div>
+	<!-- BEGIN: SIDEPANEL -->
+	<div class="block">
+		{ADMIN_HOME_SIDEPANEL}
+	</div>
+	<!-- END: SIDEPANEL -->
 </aside>
 <!-- END: MAIN -->

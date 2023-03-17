@@ -493,6 +493,8 @@ $L['adm_ref_prune'] = 'Cleaned';
  * Other Section
  * Infos Subsection
  */
+$L['adm_core_info'] = 'Info about Cotonti';
+$L['adm_server_info'] = 'Info about server';
 $L['adm_phpver'] = 'PHP engine version';
 $L['adm_zendver'] = 'Zend engine version';
 $L['adm_interface'] = 'Interface between webserver and PHP';

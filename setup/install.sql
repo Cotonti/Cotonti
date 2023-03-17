@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.20
+ * Version: 0.9.22
  */
 
 DROP TABLE IF EXISTS `cot_auth`;
@@ -217,7 +217,7 @@ DROP TABLE IF EXISTS `cot_logger`;
 CREATE TABLE `cot_logger` (
   `log_id` int UNSIGNED NOT NULL auto_increment,
   `log_date` int UNSIGNED NOT NULL,
-  `log_ip` varchar(15) DEFAULT '',
+  `log_ip` varchar(64) DEFAULT '',
   `log_name` varchar(100) DEFAULT '',
   `log_group` varchar(4) DEFAULT 'def',
   `log_text` varchar(255) NOT NULL,
@@ -287,7 +287,7 @@ CREATE TABLE `cot_users` (
   `user_regdate` int UNSIGNED NOT NULL DEFAULT '0',
   `user_lastlog` int UNSIGNED NOT NULL DEFAULT '0',
   `user_lastvisit` int UNSIGNED NOT NULL DEFAULT '0',
-  `user_lastip` varchar(16) default '',
+  `user_lastip` varchar(64) default '',
   `user_logcount` int UNSIGNED NOT NULL DEFAULT '0',
   `user_sid` char(64) default '',
   `user_sidtime` int UNSIGNED NOT NULL DEFAULT 0,

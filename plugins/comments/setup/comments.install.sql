@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `cot_com` (
 	`com_area` varchar(64) NOT NULL,
 	`com_author` varchar(100) NOT NULL DEFAULT '',
 	`com_authorid` int UNSIGNED NOT NULL,
-	`com_authorip` varchar(15) NOT NULL DEFAULT '',
+	`com_authorip` varchar(64) NOT NULL DEFAULT '',
 	`com_text` text NOT NULL,
 	`com_date` int UNSIGNED NOT NULL DEFAULT '0',
 	`com_count` mediumint UNSIGNED NOT NULL DEFAULT '0',  -- Not using anywhere

@@ -2,7 +2,7 @@
 DROP TABLE IF EXISTS `cot_online`;
 CREATE TABLE `cot_online` (
   `online_id` int UNSIGNED NOT NULL auto_increment,
-  `online_ip` varchar(15) NOT NULL default '',
+  `online_ip` varchar(64) NOT NULL default '',
   `online_name` varchar(100) NOT NULL,
   `online_lastseen` int UNSIGNED NOT NULL default '0',
   `online_location` varchar(128) NOT NULL default '',

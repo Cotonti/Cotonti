@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `cot_polls_voters` (
   `pv_id` int UNSIGNED NOT NULL auto_increment,
   `pv_pollid` mediumint UNSIGNED NOT NULL,
   `pv_userid` int UNSIGNED NOT NULL,
-  `pv_userip` varchar(15) NOT NULL default '',
+  `pv_userip` varchar(64) NOT NULL default '',
   PRIMARY KEY  (`pv_id`),
   KEY `pv_pollid` (`pv_pollid`)
 );
