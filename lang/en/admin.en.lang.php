@@ -478,7 +478,7 @@ $L['adm_log'] = 'System log';
 $L['adm_log_desc'] = 'Information on the website user activities';
 $L['adm_infos'] = 'Information';
 $L['adm_infos_desc'] = 'PHP/Zend and OS versions, server time zone info';
-$L['adm_phpinfo'] = 'Information about PHP';
+$L['adm_phpinfo'] = 'PHP info';
 $L['adm_versiondclocks'] = 'Versions and clocks';
 $L['adm_checkcorethemes'] = 'Check core files and themes';
 $L['adm_checkcorenow'] = 'Check core files now!';
@@ -494,10 +494,10 @@ $L['adm_ref_prune'] = 'Cleaned';
  * Other Section
  * Infos Subsection
  */
-$L['adm_core_info'] = 'Info about Cotonti';
-$L['adm_server_info'] = 'Info about server';
-$L['adm_phpver'] = 'PHP engine version';
-$L['adm_zendver'] = 'Zend engine version';
+$L['adm_core_info'] = 'Cotonti info';
+$L['adm_server_info'] = 'Server info';
+$L['adm_phpver'] = 'PHP version';
+$L['adm_zendver'] = 'Zend version';
 $L['adm_interface'] = 'Interface between webserver and PHP';
 $L['adm_cachedrivers'] = 'Cache drivers';
 $L['adm_os'] = 'Operating system';
