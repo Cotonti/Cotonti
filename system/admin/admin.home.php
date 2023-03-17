@@ -65,40 +65,8 @@ if (cot::$cfg['check_updates'] && cot::$cache) {
 	}
 }
 
-$sql = cot::$db->query("SHOW TABLES");
-foreach ($sql->fetchAll(PDO::FETCH_NUM) as $row) {
-	$table_name = $row[0];
-	$status = cot::$db->query("SHOW TABLE STATUS LIKE '$table_name'");
-	$status1 = $status->fetch();
-	$status->closeCursor();
-	$tables[] = $status1;
-}
-
-$total_length = 0;
-$total_rows = 0;
-$total_index_length = 0;
-$total_data_length = 0;
-foreach ($tables as $dat) {
-	$table_length = $dat['Index_length'] + $dat['Data_length'];
-	$total_length += $table_length;
-	$total_rows += $dat['Rows'];
-	$total_index_length += $dat['Index_length'];
-	$total_data_length += $dat['Data_length'];
-}
-
-$totalplugins = cot::$db->query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code")->rowCount();
-$totalhooks = cot::$db->query("SELECT COUNT(*) FROM $db_plugins")->fetchColumn();
-
-$t->assign(array(
-	'ADMIN_HOME_DB_TOTAL_ROWS' => $total_rows,
-	'ADMIN_HOME_DB_INDEXSIZE' => number_format(($total_index_length / 1024), 1, '.', ' '),
-	'ADMIN_HOME_DB_DATASSIZE' => number_format(($total_data_length / 1024), 1, '.', ' '),
-	'ADMIN_HOME_DB_TOTALSIZE' => number_format(($total_length / 1024), 1, '.', ' '),
-	'ADMIN_HOME_TOTALPLUGINS' => $totalplugins,
-	'ADMIN_HOME_TOTALHOOKS' => $totalhooks,
-	'ADMIN_HOME_VERSION' => cot::$cfg['version'],
-	'ADMIN_HOME_DB_VERSION' => htmlspecialchars(cot::$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'")->fetchColumn())
-));
+//Deprecated in this loc?!. Save for backward compatibility old themes. Will be removed in the future
+$t->assign(cot_generate_infotags('ADMIN_HOME_'));
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.home.mainpanel', 'R') as $pl) {

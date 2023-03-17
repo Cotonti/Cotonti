@@ -28,6 +28,8 @@ foreach (cot_getextplugins('admin.infos.first') as $pl)
 
 @error_reporting(0);
 
+$t->assign(cot_generate_infotags('ADMIN_INFOS_'));
+
 $t->assign(array(
 	'ADMIN_INFOS_PHPVER' => (function_exists('phpversion')) ? phpversion() : cot::$L['adm_help_config'],
 	'ADMIN_INFOS_ZENDVER' => (function_exists('zend_version')) ? zend_version() : cot::$L['adm_help_config'],

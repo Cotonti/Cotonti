@@ -214,3 +214,58 @@ function cot_get_extensionparams($code, $is_module = false)
         'legacyIcon' => $legacyIcon,
 	];
 }
+
+/**
+ * Returns short info about Cotonti core
+ *
+ * @param string $tag_prefix Prefix for tags
+ *
+ * @return array
+ */
+function cot_generate_infotags($tag_prefix = '')
+{
+	global $db_plugins, $db_updates;
+
+	$sql = cot::$db->query("SHOW TABLES");
+	foreach ($sql->fetchAll(PDO::FETCH_NUM) as $row) {
+		$table_name = $row[0];
+		$status = cot::$db->query("SHOW TABLE STATUS LIKE '$table_name'");
+		$status1 = $status->fetch();
+		$status->closeCursor();
+		$tables[] = $status1;
+	}
+
+	$total_length = 0;
+	$total_rows = 0;
+	$total_index_length = 0;
+	$total_data_length = 0;
+	foreach ($tables as $dat) {
+		$table_length = $dat['Index_length'] + $dat['Data_length'];
+		$total_length += $table_length;
+		$total_rows += $dat['Rows'];
+		$total_index_length += $dat['Index_length'];
+		$total_data_length += $dat['Data_length'];
+	}
+
+	$totalplugins = cot::$db->query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code")->rowCount();
+	$totalhooks = cot::$db->query("SELECT COUNT(*) FROM $db_plugins")->fetchColumn();
+
+	$temp_array = array(
+		'DB_TOTAL_ROWS' => $total_rows,
+		'DB_INDEXSIZE' => number_format(($total_index_length / 1024), 1, '.', ' '),
+		'DB_DATASSIZE' => number_format(($total_data_length / 1024), 1, '.', ' '),
+		'DB_TOTALSIZE' => number_format(($total_length / 1024), 1, '.', ' '),
+		'TOTALPLUGINS' => $totalplugins,
+		'TOTALHOOKS' => $totalhooks,
+		'VERSION' => cot::$cfg['version'],
+		'DB_VERSION' => htmlspecialchars(cot::$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'")->fetchColumn())
+	);
+
+	$return_array = array();
+	foreach ($temp_array as $key => $val)
+	{
+		$return_array[$tag_prefix . $key] = $val;
+	}
+
+	return $return_array;
+}

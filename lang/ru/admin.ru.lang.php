@@ -495,6 +495,8 @@ $L['adm_ref_prune'] = 'Очищено';
  * Other Section
  * Infos Subsection
  */
+$L['adm_core_info'] = 'Информация о Cotonti';
+$L['adm_server_info'] = 'Информация о сервере';
 $L['adm_phpver'] = 'Версия PHP';
 $L['adm_zendver'] = 'Версия Zend';
 $L['adm_interface'] = 'Интерфейс веб-сервер / PHP';
