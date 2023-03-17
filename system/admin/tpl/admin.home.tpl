@@ -3,8 +3,8 @@
 	{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 
 	<!-- BEGIN: UPDATE -->
-	<div class="block">
-		<h2>{PHP.L.home_update_notice}:</h2>
+	<div class="alert done">
+		<h4>{PHP.L.home_update_notice}</h4>
 		<p>{ADMIN_HOME_UPDATE_REVISION}. {ADMIN_HOME_UPDATE_MESSAGE}</p>
 	</div>
 	<!-- END: UPDATE -->

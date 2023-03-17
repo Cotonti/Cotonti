@@ -14,8 +14,8 @@ cot_block(cot::$usr['auth_read']);
 
 $t = new XTemplate(cot_tplfile('admin.phpinfo', 'core'));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), cot::$L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=phpinfo'), 'PHP');
+$adminpath[] = [cot_url('admin', 'm=other'), cot::$L['Other'],];
+$adminpath[] = [cot_url('admin', 'm=phpinfo'), 'PHP',];
 
 $adminTitle = cot::$L['adm_phpinfo'];
 
