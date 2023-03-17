@@ -15,19 +15,22 @@ var ckeditorClasses = {
 
 function ckeditorReplace() {
 	let textareas = document.getElementsByTagName('textarea');
-	for (let i in textareas) {
-		let classList = textareas[i].classList;
-		if (classList !== undefined && classList.length > 0) {
-			for (let key in classList) {
-				let textareaClass = classList[key];
-				if (ckeditorClasses[textareaClass] !== undefined) {
-					let textareasStyle = getComputedStyle(textareas[i], null) || textareas[i].currentStyle;
-					CKEDITOR.replace(textareas[i], {
-						height: textareasStyle.height,
-						width:'100%',
-						toolbar: ckeditorClasses[textareaClass]
-					});
-				}
+	if (textareas === undefined || textareas.length === 0) {
+		return
+	}
+	for (let textarea of textareas) {
+		let classList = textarea.classList;
+		if (classList === undefined || classList.length === 0) {
+			continue;
+		}
+		for (let key of classList) {
+			if (ckeditorClasses[key] !== undefined) {
+				CKEDITOR.replace(textarea, {
+					height: textarea.clientHeight, // or offsetHeight ?
+					width:'100%',
+					toolbar: ckeditorClasses[key]
+				});
+				break;
 			}
 		}
 	}

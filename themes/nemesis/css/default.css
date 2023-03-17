@@ -67,27 +67,27 @@ h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-
 .comments	{ background-image:url(../../../images/icons/default/24/comments.png); }
 .folder		{ background-image:url(../../../images/icons/default/24/folder.png); }
 .forums		{ background-image:url(../../../images/icons/default/24/forums.png); }
-.info			{ background-image:url(../../../images/icons/default/24/info.png); }
+.info		{ background-image:url(../../../images/icons/default/24/info.png); }
 .message	{ background-image:url(../../../images/icons/default/24/message.png); }
-.news			{ background-image:url(../../../images/icons/default/24/news.png); }
+.news		{ background-image:url(../../../images/icons/default/24/news.png); }
 .online		{ background-image:url(../../../images/icons/default/24/online.png); }
-.page			{ background-image:url(../../../images/icons/default/24/page.png); }
-.pfs			{ background-image:url(../../../images/icons/default/24/pfs.png); }
-.plugin		{ background-image:url(../../../images/icons/default/24/plug.png); }
+.page		{ background-image:url(../../../images/icons/default/24/page.png); }
+.pfs		{ background-image:url(../../../images/icons/default/24/pfs.png); }
+.plugin		{ background-image:url(../../../images/icons/default/24/plugin.png); }
 .polls		{ background-image:url(../../../images/icons/default/24/polls.png); }
 .prefs		{ background-image:url(../../../images/icons/default/24/prefs.png); }
 .queue		{ background-image:url(../../../images/icons/default/24/queue.png); }
 .search		{ background-image:url(../../../images/icons/default/24/search.png); }
 .stats		{ background-image:url(../../../images/icons/default/24/stats.png); }
-.tags			{ background-image:url(../../../images/icons/default/24/tags.png); }
+.tags		{ background-image:url(../../../images/icons/default/24/tags.png); }
 .users		{ background-image:url(../../../images/icons/default/24/users.png); }
 .warning	{ background-image:url(../../../images/icons/default/24/warning.png); }
 
 div.error, div.warning, div.done, div.help	{ line-height:2em; margin:20px 0; padding:10px 50px; background-position:15px 50%; background-repeat:no-repeat; clear:both; }
-div.error			{ color:#d8000c; background-color:#ffbaba; background-image:url(../../../images/icons/default/24/error.png); border:1px solid #d8000c; }
+div.error		{ color:#d8000c; background-color:#ffbaba; background-image:url(../../../images/icons/default/24/error.png); border:1px solid #d8000c; }
 div.warning		{ color:#9f6000; background-color:#feefb3; background-image:url(../../../images/icons/default/24/warning.png); border:1px solid #9f6000; }
-div.done			{ color:#4f8a10; background-color:#dff2bf; background-image:url(../../../images/icons/default/24/done.png); border:1px solid #4f8a10; }
-div.help			{ color:#00529b; background-color:#bde5f8; background-image:url(../../../images/icons/default/24/help.png); border:1px solid #00529b; }
+div.done		{ color:#4f8a10; background-color:#dff2bf; background-image:url(../../../images/icons/default/24/done.png); border:1px solid #4f8a10; }
+div.help		{ color:#00529b; background-color:#bde5f8; background-image:url(../../../images/icons/default/24/help.png); border:1px solid #00529b; }
 
 /* 4. Tables
 -------------------------------------------------- */
