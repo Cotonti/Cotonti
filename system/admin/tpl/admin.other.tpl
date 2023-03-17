@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-
 <div class="block">
 	<h2>{PHP.L.Core}</h2>
 	<div class="wrapper">
@@ -57,6 +56,17 @@
 						<div>
 							<a href="{ADMIN_OTHER_URL_INFOS}">{PHP.L.adm_infos}</a>
 							<p>{PHP.L.adm_infos_desc}</p>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="start">
+						<figure>
+							{PHP.R.icon_cfg_info}
+						</figure>
+						<div>
+							<a href="{ADMIN_OTHER_URL_PHPINFO}">PHP</a>
+							<p>{PHP.L.adm_phpinfo}</p>
 						</div>
 					</td>
 				</tr>

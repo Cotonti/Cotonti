@@ -478,6 +478,7 @@ $L['adm_log'] = 'System log';
 $L['adm_log_desc'] = 'Information on the website user activities';
 $L['adm_infos'] = 'Information';
 $L['adm_infos_desc'] = 'PHP/Zend and OS versions, server time zone info';
+$L['adm_phpinfo'] = 'Information about PHP';
 $L['adm_versiondclocks'] = 'Versions and clocks';
 $L['adm_checkcorethemes'] = 'Check core files and themes';
 $L['adm_checkcorenow'] = 'Check core files now!';

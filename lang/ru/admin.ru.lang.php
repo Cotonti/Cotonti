@@ -480,6 +480,7 @@ $L['adm_log'] = 'Системный протокол';
 $L['adm_log_desc'] = 'Информация об активности пользователей на сайте';
 $L['adm_infos'] = 'Информация';
 $L['adm_infos_desc'] = 'Версии PHP/Zend, ОС, часовые пояса сервера';
+$L['adm_phpinfo'] = 'Информация o PHP';
 $L['adm_versiondclocks'] = 'Версии и таймеры';
 $L['adm_checkcorethemes'] = 'Проверить файлы ядра и скинов';
 $L['adm_checkcorenow'] = 'Проверить файлы ядра!';

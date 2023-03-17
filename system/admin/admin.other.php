@@ -109,15 +109,16 @@ if (!empty($p)) {
 		$t->parse('MAIN.SECTION');
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_OTHER_URL_CACHE' => cot_url('admin', 'm=cache'),
 		'ADMIN_OTHER_URL_DISKCACHE' => cot_url('admin', 'm=cache&s=disk'),
 		'ADMIN_OTHER_URL_EXFLDS' => cot_url('admin', 'm=extrafields'),
 		'ADMIN_OTHER_URL_STRUCTURE' => cot_url('admin', 'm=structure'),
 		'ADMIN_OTHER_URL_BBCODE' => cot_url('admin', 'm=bbcode'),
 		'ADMIN_OTHER_URL_LOG' => cot_url('admin', 'm=log'),
-		'ADMIN_OTHER_URL_INFOS' => cot_url('admin', 'm=infos')
-	));
+		'ADMIN_OTHER_URL_INFOS' => cot_url('admin', 'm=infos'),
+        'ADMIN_OTHER_URL_PHPINFO' => cot_url('admin', 'm=phpinfo'),
+	]);
 
 	/* === Hook === */
 	foreach (cot_getextplugins('admin.other.tags') as $pl) {

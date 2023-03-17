@@ -31,8 +31,8 @@ foreach (cot_getextplugins('admin.main') as $pl) {
 }
 /* ===== */
 
-$standard_admin = array('cache.disk', 'cache', 'config', 'extrafields', 'home', 'infos',
-	'log', 'other', 'extensions', 'rights', 'rightsbyitem', 'structure', 'urls', 'users');
+$standard_admin = ['cache.disk', 'cache', 'config', 'extrafields', 'extensions', 'home', 'infos',
+	'log', 'other', 'phpinfo', 'rights', 'rightsbyitem', 'structure', 'urls', 'users'];
 
 $inc_file = (empty($m)) ? 'home' : $m;
 $inc_file = (empty($s)) ? $inc_file : $inc_file.'.'.$s;
@@ -40,7 +40,7 @@ if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'mo
 	$inc_file = cot_incfile('admin', 'module', $inc_file);
 } else {
 	cot::$env['ext'] = $m;
-	$adminTitle = $cot_modules[$m]['title'];
+	$adminTitle = isset($cot_modules[$m]['title']) ? $cot_modules[$m]['title'] : '';
 	$inc_file = cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
 }
 
