@@ -27,8 +27,8 @@ $t->assign(array(
 if ($a == 'search')
 {
 	cot_check_xg();
-	$id_g = cot_import('id', 'G', 'TXT', 15);
-	$id_p = cot_import('id', 'P', 'TXT', 15);
+	$id_g = cot_import('id', 'G', 'TXT', 64);
+	$id_p = cot_import('id', 'P', 'TXT', 64);
 	if (!empty($id_g))
 	{
 		$id = $id_g;

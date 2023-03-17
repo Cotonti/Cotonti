@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `cot_forum_posts` (
   `fp_updated` int UNSIGNED NOT NULL DEFAULT '0',
   `fp_updater` varchar(100) NOT NULL DEFAULT '',
   `fp_text` mediumtext NOT NULL,
-  `fp_posterip` varchar(15) NOT NULL DEFAULT '',
+  `fp_posterip` varchar(64) NOT NULL DEFAULT '',
   PRIMARY KEY  (`fp_id`),
   UNIQUE KEY `fp_topicid_id_idx` (`fp_topicid`,`fp_id`),
   KEY `fp_created_idx` (`fp_creation`),
