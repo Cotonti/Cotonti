@@ -76,7 +76,7 @@ $L['rss_original'] = 'Original message';
  */
 
 $L['home_newcomments'] = 'New comments';
-$L['core_comments'] = &$L['Comments'];
+$L['core_comments'] = &$L['comments_comments'];
 $L['adm_comm_already_del'] = 'Comment deleted';
 
 /**

@@ -118,10 +118,13 @@ table.fico td img	{ margin-right:10px; vertical-align:middle; }
 /* 5. Forms
 -------------------------------------------------- */
 
-form														{ }
+form { }
 input, select, textarea, button	{ font:normal 1em Georgia; padding:2px; }
-label input											{ vertical-align:middle; }
-button::-moz-focus-inner				{ padding:0; border:none; }
+input, textarea {
+	max-width: 100%;
+}
+label input { vertical-align:middle; }
+button::-moz-focus-inner { padding:0; border:none; }
 
 /* 6. Misc
 -------------------------------------------------- */

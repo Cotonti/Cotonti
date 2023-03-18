@@ -76,7 +76,7 @@ $L['rss_original'] = 'Комментируемая страница';
  */
 
 $L['home_newcomments'] = 'Новые комментарии';
-$L['core_comments'] = &$L['Comments'];
+$L['core_comments'] = &$L['comments_comments'];
 $L['adm_comm_already_del'] = 'Комментарий удален';
 
 /**
