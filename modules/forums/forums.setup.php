@@ -3,8 +3,8 @@
 [BEGIN_COT_EXT]
 Name=Forums
 Description=Cotonti Bulletin Board Module
-Version=1.1.6
-Date=2023-03-06
+Version=1.1.7
+Date=2023-03-17
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2023
 Notes=BSD License
