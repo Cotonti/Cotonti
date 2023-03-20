@@ -65,8 +65,8 @@
 							{PHP.R.icon_cfg_info}
 						</figure>
 						<div>
-							<a href="{ADMIN_OTHER_URL_PHPINFO}">PHP</a>
-							<p>{PHP.L.adm_phpinfo}</p>
+							<a href="{ADMIN_OTHER_URL_PHPINFO}">{PHP.L.adm_phpinfo}</a>
+							<p>{PHP.L.adm_phpinfo_desc}</p>
 						</div>
 					</td>
 				</tr>

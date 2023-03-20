@@ -6,7 +6,7 @@
     #phpinfo pre {margin: 0; font-family: monospace;}
     #phpinfo a:link {color: #009; text-decoration: none; background-color: #fff;}
     #phpinfo a:hover {text-decoration: underline;}
-    #phpinfo table {border-collapse: collapse; border: 0; box-shadow: 1px 2px 3px #ccc;}
+    #phpinfo table {width: 100%;border-collapse: collapse; border: 0; box-shadow: 1px 2px 3px #ccc;}
     #phpinfo .center {text-align: center; padding: 1rem;}
     #phpinfo .center table {margin: 0 0 1rem; text-align: left;}
     #phpinfo .center table:last-child {margin: 0;}
