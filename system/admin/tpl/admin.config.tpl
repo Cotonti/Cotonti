@@ -21,15 +21,15 @@
 				</tr>
 			</tfoot>
 			<tbody>
-<!-- BEGIN: ADMIN_CONFIG_ROW -->
-<!-- BEGIN: ADMIN_CONFIG_FIELDSET_BEGIN -->
+				<!-- BEGIN: ADMIN_CONFIG_ROW -->
+				<!-- BEGIN: ADMIN_CONFIG_FIELDSET_BEGIN -->
 				<tr>
 					<td class="group_begin" colspan="3">
 						<h4>{ADMIN_CONFIG_FIELDSET_TITLE}</h4>
 					</td>
 				</tr>
-<!-- END: ADMIN_CONFIG_FIELDSET_BEGIN -->
-<!-- BEGIN: ADMIN_CONFIG_ROW_OPTION -->
+				<!-- END: ADMIN_CONFIG_FIELDSET_BEGIN -->
+				<!-- BEGIN: ADMIN_CONFIG_ROW_OPTION -->
 				<tr>
 					<td>{ADMIN_CONFIG_ROW_CONFIG_TITLE}:</td>
 					<td>
@@ -40,8 +40,8 @@
 						<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="button">{PHP.L.Reset}</a>
 					</td>
 				</tr>
-<!-- END: ADMIN_CONFIG_ROW_OPTION -->
-<!-- END: ADMIN_CONFIG_ROW -->
+				<!-- END: ADMIN_CONFIG_ROW_OPTION -->
+				<!-- END: ADMIN_CONFIG_ROW -->
 			</tbody>
 		</table>
 	</form>
@@ -51,21 +51,18 @@
 <!-- BEGIN: DEFAULT -->
 
 <!-- BEGIN: ADMIN_CONFIG_COL -->
-	<div class="block">
-		<h2>{ADMIN_CONFIG_COL_CAPTION}:</h2>
-		<div class="wrapper">
-			<ul class="cfg">
-<!-- BEGIN: ADMIN_CONFIG_ROW -->
-				<li>
-					<a href="{ADMIN_CONFIG_ROW_URL}" class="ajax">
-						{ADMIN_CONFIG_ROW_ICON}
-						{ADMIN_CONFIG_ROW_NAME}
-					</a>
-				</li>
-<!-- END: ADMIN_CONFIG_ROW -->
-			</ul>
-		</div>
+<div class="block">
+	<h2>{ADMIN_CONFIG_COL_CAPTION}:</h2>
+	<div class="wrapper">
+		<ul class="cfg">
+			<!-- BEGIN: ADMIN_CONFIG_ROW -->
+			<li>
+				<a href="{ADMIN_CONFIG_ROW_URL}" class="ajax">{ADMIN_CONFIG_ROW_ICON} {ADMIN_CONFIG_ROW_NAME}</a>
+			</li>
+			<!-- END: ADMIN_CONFIG_ROW -->
+		</ul>
 	</div>
+</div>
 <!-- END: ADMIN_CONFIG_COL -->
 
 <!-- END: DEFAULT -->

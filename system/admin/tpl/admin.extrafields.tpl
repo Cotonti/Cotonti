@@ -27,9 +27,9 @@
 				<thead>
 					<tr>
 						<th></th>
-						<th>{PHP.L.extf_Name}</th>
+						<th class="w-40">{PHP.L.extf_Name}</th>
 						<th>{PHP.L.extf_Type}</th>
-						<th>{PHP.L.adm_extrafield_params}</th>
+						<th class="w-40">{PHP.L.adm_extrafield_params}</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -41,16 +41,16 @@
 						</td>
 						<td class="{ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
 							{ADMIN_EXTRAFIELDS_ROW_NAME}
-							<p class="small">{PHP.L.extf_Description}</p>
+							<label class="small margintop10">{PHP.L.extf_Description}</label>
 							{ADMIN_EXTRAFIELDS_ROW_DESCRIPTION}
-							<p class="small">{PHP.L.extf_Base_HTML}</p>
+							<label class="small margintop10">{PHP.L.extf_Base_HTML}</label>
 							{ADMIN_EXTRAFIELDS_ROW_HTML}
 						</td>
 						<td class="{ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
 							{ADMIN_EXTRAFIELDS_ROW_SELECT}
 							<p class="small">{PHP.L.adm_extrafield_parse}</p>
 							{ADMIN_EXTRAFIELDS_ROW_PARSE}
-							<p class="small">{ADMIN_EXTRAFIELDS_ROW_REQUIRED}{PHP.L.adm_extrafield_required}</p>
+							<p class="small">{ADMIN_EXTRAFIELDS_ROW_REQUIRED}</p>
 						</td>
 						<td class="{ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
 							{ADMIN_EXTRAFIELDS_ROW_PARAMS}
@@ -89,51 +89,49 @@
 
 <div class="block">
 	<h2>{PHP.L.adm_extrafield_new}:</h2>
-	<div class="wrapper">
-		<form action="{ADMIN_EXTRAFIELDS_URL_FORM_ADD}" method="post">
-			<table class="cells info">
-				<thead>
-					<tr>
-						<th>{PHP.L.extf_Name}</th>
-						<th>{PHP.L.extf_Type}</th>
-						<th>{PHP.L.adm_extrafield_params}</th>
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
-						<td colspan="3">
-							<input type="checkbox" name="field_noalter" /> {PHP.L.adm_extrafield_noalter}
-							<input type="submit" class="confirm" value="{PHP.L.Add}" />
-						</td>
-					</tr>
-				</tfoot>
-				<tbody>
-					<tr id="exnew">
-						<td>
-							{ADMIN_EXTRAFIELDS_NAME}
-							<p class="small">{PHP.L.extf_Description}</p>
-							{ADMIN_EXTRAFIELDS_DESCRIPTION}
-							<p class="small">{PHP.L.extf_Base_HTML}</p>
-							{ADMIN_EXTRAFIELDS_HTML}
-						</td>
-						<td>
-							{ADMIN_EXTRAFIELDS_SELECT}
-							<p class="small">{PHP.L.adm_extrafield_parse}</p>
-							{ADMIN_EXTRAFIELDS_PARSE}
-							<p class="small">{ADMIN_EXTRAFIELDS_REQUIRED}{PHP.L.adm_extrafield_required}</p>
-						</td>
-						<td>
-							{ADMIN_EXTRAFIELDS_PARAMS}
-							<p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
-							{ADMIN_EXTRAFIELDS_VARIANTS}
-							<p class="small">{PHP.L.adm_extrafield_default}</p>
-							{ADMIN_EXTRAFIELDS_DEFAULT}
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</form>
-	</div>
+	<form action="{ADMIN_EXTRAFIELDS_URL_FORM_ADD}" method="post">
+		<table class="cells info">
+			<thead>
+				<tr>
+					<th class="w-45">{PHP.L.extf_Name}</th>
+					<th>{PHP.L.extf_Type}</th>
+					<th class="w-45">{PHP.L.adm_extrafield_params}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr id="exnew">
+					<td>
+						{ADMIN_EXTRAFIELDS_NAME}
+						<label class="small margintop10">{PHP.L.extf_Description}</label>
+						{ADMIN_EXTRAFIELDS_DESCRIPTION}
+						<label class="small margintop10">{PHP.L.extf_Base_HTML}</label>
+						{ADMIN_EXTRAFIELDS_HTML}
+					</td>
+					<td>
+						{ADMIN_EXTRAFIELDS_SELECT}
+						<p class="small">{PHP.L.adm_extrafield_parse}</p>
+						{ADMIN_EXTRAFIELDS_PARSE}
+						<p class="small">{ADMIN_EXTRAFIELDS_REQUIRED}</p>
+					</td>
+					<td>
+						{ADMIN_EXTRAFIELDS_PARAMS}
+						<p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
+						{ADMIN_EXTRAFIELDS_VARIANTS}
+						<p class="small">{PHP.L.adm_extrafield_default}</p>
+						{ADMIN_EXTRAFIELDS_DEFAULT}
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+			<tr>
+				<td colspan="3">
+					<input type="checkbox" name="field_noalter" /> {PHP.L.adm_extrafield_noalter}
+					<input type="submit" class="confirm" value="{PHP.L.Add}" />
+				</td>
+			</tr>
+			</tfoot>
+		</table>
+	</form>
 </div>
 <!-- END: TABLE -->
 

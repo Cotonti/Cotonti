@@ -183,7 +183,7 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
  */
 function cot_extension_install($name, $is_module = false, $update = false, $force_update = false)
 {
-	global $cfg, $L, $cache, $usr, $db_auth, $db_config, $db_users,
+	global $cfg, $L, $R, $cache, $usr, $db_auth, $db_config, $db_users,
 		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x, $env;
 
 	$path = $is_module ? cot::$cfg['modules_dir'] . "/$name" : cot::$cfg['plugins_dir'] . "/$name";
@@ -326,34 +326,25 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 
 	// Install structure config if present
 	$info_cfg = cot_infoget($setup_file, 'COT_EXT_CONFIG_STRUCTURE');
-	if ($info_cfg)
-	{
+	if ($info_cfg) {
 		$options = cot_config_parse($info_cfg, $is_module);
-		if ($update)
-		{
-			if (cot_config_update($name, $options, $is_module, '__default') > 0)
-			{
+		if ($update) {
+			if (cot_config_update($name, $options, $is_module, '__default') > 0) {
 				// Update all nested categories
 				$type = $is_module ? 'module' : 'plug';
 				$res = $db->query("SELECT DISTINCT config_subcat FROM $db_config
 					WHERE config_owner = '$type' AND config_cat = '$name'
 						AND config_subcat != '' AND config_subcat != '__default'");
 				$cat_list = $res->fetchAll(PDO::FETCH_COLUMN, 0);
-				foreach ($cat_list as $cat)
-				{
+				foreach ($cat_list as $cat) {
 					cot_config_update($name, $options, $is_module, $cat);
 				}
 				cot_message('ext_config_struct_updated');
 			}
-		}
-		elseif (count($options) > 0)
-		{
-			if (cot_config_add($name, $options, $is_module, '__default'))
-			{
+		} elseif (count($options) > 0) {
+			if (cot_config_add($name, $options, $is_module, '__default')) {
 				cot_message('ext_config_struct_installed');
-			}
-			else
-			{
+			} else {
 				cot_error('ext_config_struct_error');
 				return false;
 			}
@@ -361,19 +352,24 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	}
 
     // Install / Update Auth
-    if (!isset($info['Auth_guests'])) $info['Auth_guests'] = '';
-    if (!isset($info['Lock_guests'])) $info['Lock_guests'] = '';
-    if (!isset($info['Auth_members'])) $info['Auth_members'] = '';
-    if (!isset($info['Lock_members'])) $info['Lock_members'] = '';
+    if (!isset($info['Auth_guests'])) {
+        $info['Auth_guests'] = '';
+    }
+    if (!isset($info['Lock_guests'])) {
+        $info['Lock_guests'] = '';
+    }
+    if (!isset($info['Auth_members'])) {
+        $info['Auth_members'] = '';
+    }
+    if (!isset($info['Lock_members'])) {
+        $info['Lock_members'] = '';
+    }
 	if ($update) {
 		// Only update auth locks
-		if ($is_module)
-		{
+		if ($is_module) {
 			$auth_code = $name;
 			$auth_option = 'a';
-		}
-		else
-		{
+		} else {
 			$auth_code = 'plug';
 			$auth_option = $name;
 		}
@@ -550,7 +546,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 function cot_extension_uninstall($name, $is_module = false)
 {
 	global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins,
-           $cot_plugins_active, $cot_plugins_enabled, $cot_modules, $env, $structure, $db_structure, $L;
+           $cot_plugins_active, $cot_plugins_enabled, $cot_modules, $env, $structure, $db_structure, $L, $R;
 
 	$path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 
