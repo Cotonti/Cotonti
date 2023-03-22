@@ -54,9 +54,9 @@
 						</td>
 						<td class="{ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
 							{ADMIN_EXTRAFIELDS_ROW_PARAMS}
-							<p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
+							<label class="small margintop10">{PHP.L.adm_extrafield_selectable_values}</label>
 							{ADMIN_EXTRAFIELDS_ROW_VARIANTS}
-							<p class="small">{PHP.L.adm_extrafield_default}</p>
+							<label class="small margintop10">{PHP.L.adm_extrafield_default}</label>
 							{ADMIN_EXTRAFIELDS_ROW_DEFAULT}
 						</td>
 						<td class="centerall {ADMIN_EXTRAFIELDS_ROW_ODDEVEN}">
