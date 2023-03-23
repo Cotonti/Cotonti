@@ -3358,14 +3358,13 @@ function cot_implode_messages($src = 'default', $class = '')
  */
 function cot_log($text, $group = 'def')
 {
-    $text = cot_cutstring($text.' - '.$_SERVER['REQUEST_URI'], 255);
-
     cot::$db && cot::$db->insert(cot::$db->logger, array(
         'log_date'  => (int)cot::$sys['now'],
         'log_ip'    => (!empty(cot::$usr['ip'])) ? cot::$usr['ip'] : '',
         'log_name'  => (!empty(cot::$usr['name']) || cot::$usr['name'] == '0') ? cot::$usr['name'] : '',
         'log_group' => (!empty($group) || $group == '0') ? $group : '',
-        'log_text'  => $text
+        'log_uri'   => cot_cutstring(cot::$sys['uri_curr'], 255),
+        'log_text'  => cot_cutstring($text, 255)
     ));
 }
 

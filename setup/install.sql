@@ -219,7 +219,8 @@ CREATE TABLE `cot_logger` (
   `log_date` int UNSIGNED NOT NULL,
   `log_ip` varchar(64) DEFAULT '',
   `log_name` varchar(100) DEFAULT '',
-  `log_group` varchar(4) DEFAULT 'def',
+  `log_uri` varchar(255) DEFAULT '',
+  `log_group` varchar(64) DEFAULT 'def',
   `log_text` varchar(255) NOT NULL,
   PRIMARY KEY  (`log_id`)
 );

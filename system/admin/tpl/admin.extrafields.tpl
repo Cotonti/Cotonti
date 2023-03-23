@@ -115,9 +115,9 @@
 					</td>
 					<td>
 						{ADMIN_EXTRAFIELDS_PARAMS}
-						<p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
+						<label class="small margintop10">{PHP.L.adm_extrafield_selectable_values}</label>
 						{ADMIN_EXTRAFIELDS_VARIANTS}
-						<p class="small">{PHP.L.adm_extrafield_default}</p>
+						<label class="small margintop10">{PHP.L.adm_extrafield_default}</label>
 						{ADMIN_EXTRAFIELDS_DEFAULT}
 					</td>
 				</tr>
