@@ -36,13 +36,13 @@ $L['home_db_totalsize'] = 'БД SQL, общий размер (KB)';
 
 $L['home_ql_b1_title'] = 'Настройки сайта';
 $L['home_ql_b1_1'] = 'Основные настройки системы';
-$L['home_ql_b1_2'] = 'Заголовки (тэг &lt;title&gt;)';
-$L['home_ql_b1_3'] = 'Скины и кодировка';
+$L['home_ql_b1_2'] = 'Заголовки';
+$L['home_ql_b1_3'] = 'Темы и кодировка';
 $L['home_ql_b1_4'] = 'Слоты для меню в tpl-файлах';
 $L['home_ql_b1_5'] = 'Язык сайта ';
 $L['home_ql_b1_6'] = 'Время и дата';
 
-$L['home_ql_b2_1'] = 'Структура страниц и категорий';
+$L['home_ql_b2_1'] = 'Структура страниц (разделы)';
 $L['home_ql_b2_2'] = 'Экстраполя для страниц';
 $L['home_ql_b2_3'] = 'Экстраполя для категорий';
 $L['home_ql_b2_4'] = 'Настройки парсинга';
@@ -52,7 +52,7 @@ $L['home_ql_b3_2'] = 'Экстраполя для профиля';
 $L['home_ql_b3_4'] = 'Права групп';
 
 $L['home_update_notice'] = 'Доступно обновление';
-$L['home_update_revision'] = 'Текущая версия: <span style="color:#C00;font-weight:bold;">%1$s</span><br />Новая версия: <span style="color:#4E9A06;font-weight:bold;">%2$s</span>'; // %1/%2 Current Version/Revision %3/%4 Updated Version/Revision
+$L['home_update_revision'] = 'Текущая версия: <span style="color:#C00;font-weight:bold;">%1$s</span><br />Новая версия: <span style="color:#4E9A06;font-weight:bold;">%2$s</span>'; // %1/%2 Current version/revision %3/%4 Updated version/revision
 
 /**
  * Config Section
@@ -102,7 +102,7 @@ $L['short_struct'] = 'Структ';
  * Locale Subsection
  */
 $L['cfg_forcedefaultlang'] = 'Принудительная установка языка по умолчанию для всех пользователей';
-$L['cfg_forcedefaultlang_hint'] = ' ';
+$L['cfg_forcedefaultlang_hint'] = '';
 $L['cfg_defaulttimezone'] = 'Часовой пояс по умолчанию';
 $L['cfg_defaulttimezone_hint'] = 'Для гостей и при регистрации, от -12 до +12';
 
@@ -130,49 +130,49 @@ $L['cfg_parser_hint'] = 'По умолчанию: HTML';
  * Menus Subsection
  */
 $L['cfg_banner'] = 'Баннер<br />{HEADER_BANNER} в header.tpl';
-$L['cfg_banner_hint'] = ' ';
+$L['cfg_banner_hint'] = '';
 $L['cfg_bottomline'] = 'Нижняя строка<br />{FOOTER_BOTTOMLINE} в footer.tpl';
-$L['cfg_bottomline_hint'] = ' ';
+$L['cfg_bottomline_hint'] = '';
 $L['cfg_topline'] = 'Верхняя строка<br />{HEADER_TOPLINE} в header.tpl';
-$L['cfg_topline_hint'] = ' ';
-
-$L['cfg_menu1'] = 'Меню #1<br />{PHP.cfg.menu1} во всех файлах .tpl';
-$L['cfg_menu1_hint'] = ' ';
-$L['cfg_menu2'] = 'Меню #2<br />{PHP.cfg.menu2} во всех файлах .tpl';
-$L['cfg_menu2_hint'] = ' ';
-$L['cfg_menu3'] = 'Меню #3<br />{PHP.cfg.menu3} во всех файлах .tpl';
-$L['cfg_menu3_hint'] = ' ';
-$L['cfg_menu4'] = 'Меню #4<br />{PHP.cfg.menu4} во всех файлах .tpl';
-$L['cfg_menu4_hint'] = ' ';
-$L['cfg_menu5'] = 'Меню #5<br />{PHP.cfg.menu5} во всех файлах .tpl';
-$L['cfg_menu5_hint'] = ' ';
-$L['cfg_menu6'] = 'Меню #6<br />{PHP.cfg.menu6} во всех файлах .tpl';
-$L['cfg_menu6_hint'] = ' ';
-$L['cfg_menu7'] = 'Меню #7<br />{PHP.cfg.menu7} во всех файлах .tpl';
-$L['cfg_menu7_hint'] = ' ';
-$L['cfg_menu8'] = 'Меню #8<br />{PHP.cfg.menu8} во всех файлах .tpl';
-$L['cfg_menu8_hint'] = ' ';
-$L['cfg_menu9'] = 'Меню #9<br />{PHP.cfg.menu9} во всех файлах .tpl';
-$L['cfg_menu9_hint'] = ' ';
+$L['cfg_topline_hint'] = '';
 
 $L['cfg_freetext1'] = 'Текст #1<br />{PHP.cfg.freetext1} во всех файлах .tpl';
-$L['cfg_freetext1_hint'] = ' ';
+$L['cfg_freetext1_hint'] = '';
 $L['cfg_freetext2'] = 'Текст #2<br />{PHP.cfg.freetext2} во всех файлах .tpl';
-$L['cfg_freetext2_hint'] = ' ';
+$L['cfg_freetext2_hint'] = '';
 $L['cfg_freetext3'] = 'Текст #3<br />{PHP.cfg.freetext3} во всех файлах .tpl';
-$L['cfg_freetext3_hint'] = ' ';
+$L['cfg_freetext3_hint'] = '';
 $L['cfg_freetext4'] = 'Текст #4<br />{PHP.cfg.freetext4} во всех файлах .tpl';
-$L['cfg_freetext4_hint'] = ' ';
+$L['cfg_freetext4_hint'] = '';
 $L['cfg_freetext5'] = 'Текст #5<br />{PHP.cfg.freetext5} во всех файлах .tpl';
-$L['cfg_freetext5_hint'] = ' ';
+$L['cfg_freetext5_hint'] = '';
 $L['cfg_freetext6'] = 'Текст #6<br />{PHP.cfg.freetext6} во всех файлах .tpl';
-$L['cfg_freetext6_hint'] = ' ';
+$L['cfg_freetext6_hint'] = '';
 $L['cfg_freetext7'] = 'Текст #7<br />{PHP.cfg.freetext7} во всех файлах .tpl';
-$L['cfg_freetext7_hint'] = ' ';
+$L['cfg_freetext7_hint'] = '';
 $L['cfg_freetext8'] = 'Текст #8<br />{PHP.cfg.freetext8} во всех файлах .tpl';
-$L['cfg_freetext8_hint'] = ' ';
+$L['cfg_freetext8_hint'] = '';
 $L['cfg_freetext9'] = 'Текст #9<br />{PHP.cfg.freetext9} во всех файлах .tpl';
-$L['cfg_freetext9_hint'] = ' ';
+$L['cfg_freetext9_hint'] = '';
+
+$L['cfg_menu1'] = 'Меню #1<br />{PHP.cfg.menu1} во всех файлах .tpl';
+$L['cfg_menu1_hint'] = '';
+$L['cfg_menu2'] = 'Меню #2<br />{PHP.cfg.menu2} во всех файлах .tpl';
+$L['cfg_menu2_hint'] = '';
+$L['cfg_menu3'] = 'Меню #3<br />{PHP.cfg.menu3} во всех файлах .tpl';
+$L['cfg_menu3_hint'] = '';
+$L['cfg_menu4'] = 'Меню #4<br />{PHP.cfg.menu4} во всех файлах .tpl';
+$L['cfg_menu4_hint'] = '';
+$L['cfg_menu5'] = 'Меню #5<br />{PHP.cfg.menu5} во всех файлах .tpl';
+$L['cfg_menu5_hint'] = '';
+$L['cfg_menu6'] = 'Меню #6<br />{PHP.cfg.menu6} во всех файлах .tpl';
+$L['cfg_menu6_hint'] = '';
+$L['cfg_menu7'] = 'Меню #7<br />{PHP.cfg.menu7} во всех файлах .tpl';
+$L['cfg_menu7_hint'] = '';
+$L['cfg_menu8'] = 'Меню #8<br />{PHP.cfg.menu8} во всех файлах .tpl';
+$L['cfg_menu8_hint'] = '';
+$L['cfg_menu9'] = 'Меню #9<br />{PHP.cfg.menu9} во всех файлах .tpl';
+$L['cfg_menu9_hint'] = '';
 
 /**
  * Config Section
@@ -185,7 +185,7 @@ $L['cfg_headrc_minify'] = 'Минифицировать объединённые
 $L['cfg_jquery_cdn'] = 'Использовать jQuery из CDN по этой ссылке';
 $L['cfg_jquery_cdn_hint'] = 'Пример: https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js';
 $L['cfg_jquery'] = 'Включить jQuery';
-$L['cfg_jquery_hint'] = ' ';
+$L['cfg_jquery_hint'] = '';
 $L['cfg_turnajax'] = 'Включить Ajax';
 $L['cfg_turnajax_hint'] = 'Работает только если jQuery включен';
 
@@ -236,13 +236,13 @@ $L['cfg_redirbkonlogout_hint'] = 'Вернуться на страницу, по
  * Themes Subsection
  */
 $L['cfg_charset'] = 'Набор символов (кодовая страница)';
-$L['cfg_charset_hint'] = ' ';
+$L['cfg_charset_hint'] = '';
 $L['cfg_disablesysinfos'] = 'Отключить время создания страницы';
 $L['cfg_disablesysinfos_hint'] = '(в footer.tpl)';
 $L['cfg_doctypeid'] = 'Тип документа';
 $L['cfg_doctypeid_hint'] = '&lt;!DOCTYPE&gt; в HTML-разметке';
 $L['cfg_forcedefaulttheme'] = 'Принудительная установка темы по умолчанию для всех пользователей';
-$L['cfg_forcedefaulttheme_hint'] = ' ';
+$L['cfg_forcedefaulttheme_hint'] = '';
 $L['cfg_homebreadcrumb'] = 'Ссылка на главную страницу в &laquo;навигационной цепочке&raquo;';
 $L['cfg_homebreadcrumb_hint'] = 'Установить ссылку на главную страницу в начале &laquo;навигационной цепочки&raquo;';
 $L['cfg_keepcrbottom'] = 'Оставить копирайт в тэге {FOOTER_BOTTOMLINE}';
@@ -299,7 +299,7 @@ $L['ext_config_installed'] = 'Конфигурация установлена';
 $L['ext_config_uninstalled'] = 'Конфигурация удалена';
 $L['ext_config_updated'] = 'Опции конфигурации обновлены';
 $L['ext_config_struct_error'] = 'Ошибка настройки конфигурации структуры';
-$L['ext_config_struct_installed'] ='Конфигурация структуры установлена';
+$L['ext_config_struct_installed'] = 'Конфигурация структуры установлена';
 $L['ext_config_struct_updated'] = 'Опции конфигурации структуры обновлены';
 $L['ext_dependency_error'] = '{$dep_type} &quot;{$dep_name}&quot;, необходимый для {$type} &quot;{$name}&quot;, не установлен и не выбран для установки';
 $L['ext_dependency_uninstall_error'] = '{$type} &quot;{$name}&quot; использует данное расширение и должен быть удален в первую очередь';
@@ -386,8 +386,8 @@ $L['adm_help_newtags'] = '<br /><br /><b>Новые тэги в tpl-файлах
  * Users Section
  */
 $L['adm_rightspergroup'] = 'Права групп';
-$L['adm_maxsizesingle'] = 'Максимальный размер одного файла в разделе &laquo;'.$L['PFS'].'&raquo; (KiB)';
-$L['adm_maxsizeallpfs'] = 'Максимальный размер всех файлов в разделе &laquo;'.$L['PFS'].'&raquo; (KiB)';
+$L['adm_maxsizesingle'] = 'Максимальный размер одного файла в PFS, KiB';
+$L['adm_maxsizeallpfs'] = 'Максимальный размер всех файлов в PFS, KiB';
 $L['adm_copyrightsfrom'] = 'Установить права как в группе';
 $L['adm_rights_maintenance'] = 'Разрешить авторизацию при включенном режиме обслуживания';
 $L['adm_skiprights'] = 'Пропустить права для этой группы';
@@ -483,12 +483,12 @@ $L['adm_infos_desc'] = 'Версии PHP/Zend, ОС, часовые пояса �
 $L['adm_phpinfo'] = 'PHP Info';
 $L['adm_phpinfo_desc'] = 'Информация o текущей конфигурации PHP';
 $L['adm_versiondclocks'] = 'Версии и таймеры';
-$L['adm_checkcorethemes'] = 'Проверить файлы ядра и скинов';
+$L['adm_checkcorethemes'] = 'Проверить файлы ядра и тем';
 $L['adm_checkcorenow'] = 'Проверить файлы ядра!';
 $L['adm_checkingcore'] = 'Проверяю файлы ядра...';
-$L['adm_checkthemes'] = 'Проверить наличие всех файлов в скине';
-$L['adm_checkskin'] = 'Проверить TPL-файлы скина';
-$L['adm_checkingskin'] = 'Проверяю скин...';
+$L['adm_checkthemes'] = 'Проверить наличие всех файлов в теме';
+$L['adm_checktheme'] = 'Проверить файлы шаблонов темы';
+$L['adm_checkingtheme'] = 'Проверка темы...';
 $L['adm_check_ok'] = 'Ok';
 $L['adm_check_missing'] = 'Отсутствует';
 $L['adm_ref_prune'] = 'Очищено';
@@ -539,8 +539,8 @@ $L['alreadydeletednewentry'] = 'Запись удалена';
 
 $L['adm_invalid_input'] = 'Недопустимое значение \'{$value}\' для переменной \'{$field_name}\'';
 $L['adm_set_default'] = 'Установлено значение по умолчанию';
-$L['adm_int_max'] = 'максимально допустимое значение \'{$value}\'';
-$L['adm_int_min'] = 'минимально допустимое значение \'{$value}\'';
+$L['adm_max'] = 'Допустимый максимум \'{$value}\'';
+$L['adm_min'] = 'Допустимый минимум \'{$value}\'';
 $L['adm_set'] = 'Установлено ';
 $L['adm_partially_updated'] = 'Не все значения обновлены';
 $L['adm_already_updated'] = 'Уже сохранено';

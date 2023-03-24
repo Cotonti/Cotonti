@@ -346,7 +346,7 @@ $L['ext_cat_utilities-tools'] = 'Utilities &amp; Tools';
 $L['ext_cat_post-install'] = 'Post-install Scripts';
 
 /**
-  * Structure Section
+ * Structure Section
  */
 $L['adm_structure_category_not_exists'] = 'Category does not exist';
 $L['adm_structure_category_not_empty'] = 'Category is not empty. Delete its items first.';
@@ -386,8 +386,8 @@ $L['adm_help_newtags'] = '<br /><br /><b>New tags in tpl files:</b>';
  * Users Section
  */
 $L['adm_rightspergroup'] = 'Rights per group';
-$L['adm_maxsizesingle'] = 'Max size for a single file in '.$L['PFS'].' (KiB)';
-$L['adm_maxsizeallpfs'] = 'Max size of all files together in '.$L['PFS'].' (KiB)';
+$L['adm_maxsizesingle'] = 'Max size for a single file in PFS, KiB';
+$L['adm_maxsizeallpfs'] = 'Max size of all files together in PFS, KiB';
 $L['adm_copyrightsfrom'] = 'Set the same rights as the group';
 $L['adm_rights_maintenance'] = 'Access to site when maintenance mode on';
 $L['adm_skiprights'] = 'Omit rights for this group';
@@ -466,8 +466,10 @@ $L['adm_listisempty'] = 'List is empty';
  */
 $L['adm_delcacheitem'] = 'Cache item removed';
 $L['adm_internalcache'] = 'Internal cache';
+$L['adm_internalcache_desc'] = 'Cache for storing frequently changed data';
 $L['adm_purgeall_done'] = 'Cache cleared completely';
 $L['adm_diskcache'] = 'Disk cache';
+$L['adm_diskcache_desc'] = 'Cache for storing file data';
 $L['adm_cache_showall'] = 'Show all';
 
 /**
