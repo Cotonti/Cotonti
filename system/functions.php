@@ -1486,15 +1486,15 @@ function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = tru
 		$mtchlvl = mb_substr_count($mtch, ".");
 	}
 
-	$catsub = array();
-	if ($cat != '' && $firstcat && (($userrights && cot_auth($area, $cat, 'R') || !$userrights))) {
+	$catsub = [];
+	if ($firstcat && $cat != '' && (($userrights && cot_auth($area, $cat, 'R')) || !$userrights)) {
 		$catsub[] = $cat;
 	}
 
 	foreach (cot::$structure[$area] as $i => $x) {
 		if (
-            ($cat == '' || mb_substr($x['path'], 0, $mtchlen) == $mtch) &&
-            (($userrights && cot_auth($area, $i, 'R') || !$userrights))
+            ($cat == '' || (mb_substr($x['path'], 0, $mtchlen) === $mtch))
+            && (($userrights && cot_auth($area, $i, 'R')) || !$userrights)
         ) {
 			//$subcat = mb_substr($x['path'], $mtchlen + 1);
 			if ($allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl)) {
