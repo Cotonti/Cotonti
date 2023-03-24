@@ -33,15 +33,17 @@ if (is_writable($file['config']) && file_exists($file['config_sample'])) {
 		$delta = '';
 		if (count(array_diff($new_cfg, $old_cfg)) > 0) {
 			foreach ($new_cfg as $key => $val) {
-				if (!isset($old_cfg[$key])) {
+				if (!array_key_exists($key, $old_cfg)) {
 					if ($key == 'new_install') {
 						$val = false;
 					} elseif ($key == 'site_id' || $key == 'secret_key') {
 						$val = cot_unique(32);
 					}
 
-					if (is_bool($val)) {
-						$val = $val ? 'TRUE' : 'FALSE';
+                    if (is_null($val)) {
+                        $val = 'null';
+                    } elseif (is_bool($val)) {
+						$val = $val ? 'true' : 'false';
 					} elseif (is_int($val) || is_float($val)) {
 						$val = (string) $val;
 					} else {
@@ -307,12 +309,17 @@ $t->out('MAIN');
 function cot_get_config($file)
 {
 	include $file;
-	$db_vars = array();
+
 	$vars = get_defined_vars();
+    $db_vars = [];
 	foreach ($vars as $key => $val) {
 		if (preg_match('#^db_#', $key)) {
 			$db_vars[$key] = $val;
 		}
 	}
-	return array($cfg, $db_vars);
+
+	return [
+        !empty($cfg) ? $cfg : [],
+        $db_vars,
+    ];
 }

@@ -183,48 +183,46 @@ if ($history)
 	$t->parse('MAIN.HISTORY');
 }
 
-if (cot::$usr['auth_write'])
-{
-	if (preg_match("/Re(\(\d+\))?\:(.+)/", $row['pm_title'], $matches))
-	{
+if (cot::$usr['auth_write']) {
+	if (preg_match("/Re(\(\d+\))?\:(.+)/", $row['pm_title'], $matches)) {
 		$matches[1] = empty($matches[1]) ? 2 : trim($matches[1], '()') + 1;
 		$newpmtitle = 'Re(' . $matches[1] . '): ' . trim($matches[2]);
-	}
-	else
-	{
+	} else {
 		$newpmtitle = 'Re: ' . $row['pm_title'];
 	}
-	switch ($editor)
-	{
+
+	switch ($editor) {
 		case 'markitup':
-			$newpmtext = (! empty($q)) ? '[quote]' . htmlspecialchars($row['pm_text']) . '[/quote]' : '';
-			if (cot::$cfg['jquery']) $onclick = "insertText(document, 'newpmtext', '[quote]'+$('#pm_text').text()+'[/quote]'); return false;";
+			$newpmtext = !empty($q) ? '[quote]' . htmlspecialchars($row['pm_text']) . '[/quote]' : '';
+			if (cot::$cfg['jquery']) {
+                $onclick = "insertText(document, 'newpmtext', '[quote]' + $('#pm_text').text() + '[/quote]'); return false;";
+            }
 			break;
+
 		case 'ckeditor':
-			if (cot::$cfg['jquery']) $onclick = "CKEDITOR.instances.newpmtext.insertHtml('<blockquote>'+$('#pm_text').text()+'</blockquote><br />'); return false;";
+			if (cot::$cfg['jquery']) {
+                $onclick = "CKEDITOR.instances.newpmtext.insertHtml('<blockquote>' + $('#pm_text').text() + '</blockquote><br />'); return false;";
+            }
+
 		default:
-			$newpmtext = (! empty($q)) ? '<blockquote>' . $row['pm_text'] . '</blockquote>' : '';
+			$newpmtext = !empty($q) ? '<blockquote>' . $row['pm_text'] . '</blockquote>' : '';
 	}
 
     $text_editor_code = '';
-	if (COT_AJAX)
-	{
+	if (COT_AJAX) {
 		// Attach rich text editors to AJAX loaded page
-		$rc_tmp = cot::$out['footer_rc'];
+		$rcTmp = isset(cot::$out['footer_rc']) ? cot::$out['footer_rc'] : '';
 		cot::$out['footer_rc'] = '';
-		if (is_array($cot_plugins['editor']))
-		{
-			foreach ($cot_plugins['editor'] as $k)
-			{
-				if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R'))
-				{
+		if (is_array($cot_plugins['editor'])) {
+			foreach ($cot_plugins['editor'] as $k) {
+				if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R')) {
 					include cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
 					break;
 				}
 			}
 		}
 		$text_editor_code = cot::$out['footer_rc'];
-		cot::$out['footer_rc'] = $rc_tmp;
+		cot::$out['footer_rc'] = $rcTmp;
 	}
 	$t->assign(array(
 		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.(int)$history.'&d='.$durl), cot::$L['Quote'], array('onclick' => $onclick)),
@@ -288,18 +286,14 @@ $t->assign(array(
 $t->assign(cot_generate_usertags($row_user, 'PM_USER_'));
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.tags') as $pl)
-{
+foreach (cot_getextplugins('pm.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if (COT_AJAX && $history)
-{
+if (COT_AJAX && $history) {
 	$t->out('MAIN.HISTORY');
-}
-else
-{
+} else {
 	$t->parse('MAIN');
 	$t->out('MAIN');
 }
