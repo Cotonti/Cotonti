@@ -13,9 +13,9 @@ defined('COT_CODE') or die('Wrong URL');
 list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('pm', 'a');
 cot_block(cot::$usr['auth_read']);
 
-$f = cot_import('f','G','ALP');				// Category inbox, sentbox, archive
+$f = cot_import('f','G','ALP'); // Category inbox, sentbox, archive
 list($pg, $d, $durl) = cot_import_pagenav('d', cot::$cfg['pm']['maxpmperpage']); // pagination
-$a = cot_import('a','G','TXT');				// Action
+$a = cot_import('a','G','TXT'); // Action
 $filter = cot_import('filter','G','TXT');	// filter
 
 /* === Hook === */
@@ -27,7 +27,7 @@ foreach (cot_getextplugins('pm.list.first') as $pl)
 
 if (!empty($a)) {
 	$id = cot_import('id','G','INT');		// Message id
-	if ((int)$id > 0) {
+	if ((int) $id > 0) {
 		$msg[$id] = $id;
 	}
 } else {
@@ -52,15 +52,15 @@ list($totalsentbox, $totalinbox) = cot_message_count(cot::$usr['id']);
 $title[] = array(cot_url('pm'), cot::$L['Private_Messages']);
 
 if ($f == 'sentbox') {
-	$sqlfilter = "pm_fromuserid = '".cot::$usr['id']."' AND pm_fromstate <> 3";
-	$title[] = array(cot_url('pm', 'f=sentbox'), cot::$L['pm_sentbox']);
+	$sqlfilter = 'pm_fromuserid = ' . cot::$usr['id'] . ' AND pm_fromstate <> ' . COT_PM_STATE_DELETED;
+	$title[] = [cot_url('pm', 'f=sentbox'), cot::$L['pm_sentbox']];
 	$subtitle = cot::$L['pm_sentboxsubtitle'];
 	$totalcount = $totalsentbox;
 
 } else {
 	$f = 'inbox';
-	$sqlfilter = "pm_touserid = '".cot::$usr['id']."' AND pm_tostate <> 3";
-	$title[] = array(cot_url('pm'), cot::$L['pm_inbox']);
+	$sqlfilter = 'pm_touserid = ' . cot::$usr['id'] . ' AND pm_tostate <> ' . COT_PM_STATE_DELETED;
+	$title[] = [cot_url('pm'), cot::$L['pm_inbox']];
 	$subtitle = cot::$L['pm_inboxsubtitle'];
 	$totalcount = $totalinbox;
 }
@@ -116,8 +116,7 @@ $jj = 0;
 $extp = cot_getextplugins('pm.list.loop');
 /* ===== */
 
-foreach ($pm_sql->fetchAll() as $row)
-{
+foreach ($pm_sql->fetchAll() as $row) {
 	$jj++;
 	$row['pm_icon_readstatus'] = ($row['pm_tostate'] == '0') ?
 			cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), cot::$R['pm_icon_new'], array('title' => cot::$L['pm_unread'], 'class'=> cot::$cfg['pm']['turnajax'] ? 'ajax' : ''))
@@ -126,17 +125,17 @@ foreach ($pm_sql->fetchAll() as $row)
 	$pm_data = cot_parse($row['pm_text'], cot::$cfg['pm']['markup']);
 	$pm_desc = cot_string_truncate($pm_data , 100 , true, false, '...');
 
-	if ($f == 'sentbox')
-	{
+	if ($f == 'sentbox') {
 		$star_class = ($row['pm_fromstate'] == 2) ? 1 : 0;
-	}
-	else
-	{
+	} else {
 		$star_class = ($row['pm_tostate'] == 2) ? 1 : 0;
 	}
 
     $url_star = cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$durl);
-	$url_edit = cot_url('pm', 'm=send&id='.$row['pm_id']);
+    $url_edit = '';
+    if ($row['pm_fromuserid'] == cot::$usr['id'] && $row['pm_tostate'] == COT_PM_STATE_UNREAD) {
+        $url_edit = cot_url('pm', ['m' => 'send', 'id' => $row['pm_id']]);
+    }
 	$url_delete = cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f.'&d='.$durl);
 
 	$t->assign(array(
@@ -155,8 +154,14 @@ foreach ($pm_sql->fetchAll() as $row)
 		'PM_ROW_ICON_DELETE_CONFIRM' => cot_rc_link(cot_confirm_url($url_delete), cot::$R['pm_icon_trashcan'], array('title' => cot::$L['Delete'], 'class'=>cot::$cfg['pm']['turnajax'] ? 'ajax' : '')),
 		'PM_ROW_DELETE_URL' => $url_delete,
 		'PM_ROW_DELETE_CONFIRM_URL' => cot_confirm_url($url_delete),
-		'PM_ROW_ICON_EDIT' => ($row['pm_tostate'] == 0) ? cot_rc_link($url_edit, cot::$R['pm_icon_edit'], array('title' => cot::$L['Edit'], 'class'=> cot::$cfg['pm']['turnajax'] ? 'ajax' : '')) : '',
-		'PM_ROW_EDIT_URL' => ($row['pm_tostate'] == 0) ? $url_edit : '',
+		'PM_ROW_ICON_EDIT' => !empty($url_edit) ?
+            cot_rc_link(
+                $url_edit,
+                cot::$R['pm_icon_edit'],
+                ['title' => cot::$L['Edit'], 'class'=> cot::$cfg['pm']['turnajax'] ? 'ajax' : '',]
+            )
+            : '',
+		'PM_ROW_EDIT_URL' => $url_edit,
 		'PM_ROW_DESC' => $pm_desc,
 		'PM_ROW_ODDEVEN' => cot_build_oddeven($jj),
 		'PM_ROW_NUM' => $jj
@@ -164,8 +169,7 @@ foreach ($pm_sql->fetchAll() as $row)
 	$t->assign(cot_generate_usertags($row, 'PM_ROW_USER_'));
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -173,12 +177,10 @@ foreach ($pm_sql->fetchAll() as $row)
 	$t->parse('MAIN.PM_ROW');
 }
 
-if ($jj == 0)
-{
+if ($jj == 0) {
 	$t->parse('MAIN.PM_ROW_EMPTY');
 }
-if (!COT_AJAX)
-{
+if (!COT_AJAX) {
 	$t->parse('MAIN.BEFORE_AJAX');
 	$t->parse('MAIN.AFTER_AJAX');
 }

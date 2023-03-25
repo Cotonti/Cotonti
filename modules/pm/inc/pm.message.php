@@ -208,29 +208,13 @@ if (cot::$usr['auth_write']) {
 			$newpmtext = !empty($q) ? '<blockquote>' . $row['pm_text'] . '</blockquote>' : '';
 	}
 
-    $text_editor_code = '';
-	if (COT_AJAX) {
-		// Attach rich text editors to AJAX loaded page
-		$rcTmp = isset(cot::$out['footer_rc']) ? cot::$out['footer_rc'] : '';
-		cot::$out['footer_rc'] = '';
-		if (is_array($cot_plugins['editor'])) {
-			foreach ($cot_plugins['editor'] as $k) {
-				if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R')) {
-					include cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
-					break;
-				}
-			}
-		}
-		$text_editor_code = cot::$out['footer_rc'];
-		cot::$out['footer_rc'] = $rcTmp;
-	}
 	$t->assign(array(
 		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.(int)$history.'&d='.$durl), cot::$L['Quote'], array('onclick' => $onclick)),
         'PM_QUOTE_URL' => cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.(int)$history.'&d='.$durl),
         'PM_QUOTE_ONCLICK' => $onclick,
 		'PM_FORM_SEND' => cot_url('pm', 'm=send&a=send&to='.$to),
 		'PM_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
-		'PM_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor') . $text_editor_code,
+		'PM_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor'),
         'PM_FORM_NOT_TO_SENTBOX' => cot_checkbox(false, 'fromstate', cot::$L['pm_notmovetosentbox'], '', '3')
 	));
 

@@ -63,8 +63,12 @@ if ($a == 'send') {
 			$pm['pm_text'] = $newpmtext;
 			$pm['pm_fromstate'] = $fromstate;
 
-			$sql_pm_update = cot::$db->update($db_pm, $pm, "pm_id = $id AND pm_fromuserid = " .
-                cot::$usr['id'] . " AND pm_tostate = '0'");
+			$result = cot::$db->update(
+                cot::$db->pm,
+                $pm,
+                'pm_id = :pmId AND pm_fromuserid = :userId AND pm_tostate = ' . COT_PM_STATE_UNREAD,
+                ['pmId' => $id, 'userId' => cot::$usr['id'],]
+            );
 		}
 
 		/* === Hook === */
@@ -188,18 +192,22 @@ foreach (cot_getextplugins('pm.send.main') as $pl) {
 /* ===== */
 
 $idurl = '';
-if ($id) {
-	$pmsql = cot::$db->query("SELECT *, u.user_name FROM $db_pm AS p 
-        LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid 
-        WHERE pm_id=$id AND pm_tostate=0 LIMIT 1");
-	if ($pmsql->rowCount() != 0) {
-		$row = $pmsql->fetch();
-		$newpmtitle = (!empty($newpmtitle)) ? $newpmtitle : $row['pm_title'];
-		$newpmtext = (!empty($newpmtext)) ? $newpmtext : $row['pm_text'];
-		$idurl = '&id='.$id;
-	} else {
-		cot_die();
-	}
+if ($id > 0) {
+    // It is possible to edit only user's own message, which was not read by the recipient
+    $message = cot::$db->query(
+        'SELECT * FROM ' . cot::$db->pm .
+        ' WHERE pm_id = :pmId AND pm_fromuserid = :userId AND pm_tostate = ' . COT_PM_STATE_UNREAD .
+        ' LIMIT 1',
+        ['pmId' => $id, 'userId' => cot::$usr['id'],]
+    )->fetch();
+
+    if (!$message) {
+        cot_die_message(404);
+    }
+
+    $newpmtitle = !empty($newpmtitle) ? $newpmtitle : $message['pm_title'];
+    $newpmtext = (!empty($newpmtext)) ? $newpmtext : $message['pm_text'];
+    $idurl = '&id=' . $id;
 }
 
 require_once cot::$cfg['system_dir'] . '/header.php';
@@ -223,23 +231,6 @@ $url_newpm = cot_url('pm', 'm=send');
 $url_inbox = cot_url('pm');
 $url_sentbox = cot_url('pm', 'f=sentbox');
 
-$text_editor_code = '';
-if (COT_AJAX) {
-    // Attach rich text editors to AJAX loaded page
-    $rc_tmp = $out['footer_rc'];
-    cot::$out['footer_rc'] = '';
-    if (is_array($cot_plugins['editor'])) {
-        foreach ($cot_plugins['editor'] as $k) {
-            if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R')) {
-                include $cfg['plugins_dir'] . '/' . $k['pl_file'];
-                break;
-            }
-        }
-    }
-    $text_editor_code = $out['footer_rc'];
-    cot::$out['footer_rc'] = $rc_tmp;
-}
-
 $t->assign(array(
 	'PMSEND_TITLE' => cot_breadcrumbs($title, cot::$cfg['homebreadcrumb']),
 	'PMSEND_SENDNEWPM' => (cot::$usr['auth_write']) ?
@@ -253,8 +244,7 @@ $t->assign(array(
 	'PMSEND_SENTBOX_COUNT' => $totalsentbox,
 	'PMSEND_FORM_SEND' => cot_url('pm', 'm=send&a=send'.$idurl),
 	'PMSEND_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
-	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor')
-        . $text_editor_code,
+	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor'),
 	'PMSEND_FORM_TOUSER' => cot_textarea('newpmrecipient', $touser, 3, 56, 'class="userinput"'),
 	'PMSEND_FORM_NOT_TO_SENTBOX' => cot_checkbox(false, 'fromstate', cot::$L['pm_notmovetosentbox'], '', '3')
 ));

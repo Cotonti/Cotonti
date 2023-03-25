@@ -45,22 +45,27 @@ if (!COT_AJAX) {
 	/* ===== */
 
 	// Attach rich text editors if any
-	if (!empty($cot_textarea_count)) {
+	if (!empty($cot_textarea_count) || !empty($cot_turnOnEditor)) {
 		if (!empty($cot_plugins['editor']) && is_array($cot_plugins['editor'])) {
 			$parser = !empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
-            if(!empty(cot::$cfg['plugin'][$parser]['editor'])) {
+            if (!empty(cot::$cfg['plugin'][$parser]['editor'])) {
                 $editor = cot::$cfg['plugin'][$parser]['editor'];
                 foreach ($cot_plugins['editor'] as $k) {
                     if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R')) {
-                        include cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
-                        break;
+                        $fileName = cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
+                        if (is_readable($fileName)) {
+                            include $fileName;
+                            break;
+                        }
                     }
                 }
             }
 		}
 	}
 
-	if(empty(cot::$out['footer_rc'])) cot::$out['footer_rc'] = '';
+	if (empty(cot::$out['footer_rc'])) {
+        cot::$out['footer_rc'] = '';
+    }
     cot::$out['footer_rc'] .= Resources::renderFooter();
 
 	$t->assign('FOOTER_RC', cot::$out['footer_rc']);

@@ -41,7 +41,7 @@
 					</td>
 					<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_USER_NAME}</td>
 					<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_DATE}</td>
-					<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_EDIT} {PM_ROW_ICON_DELETE}</td>
+					<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_EDIT} {PM_ROW_ICON_DELETE_CONFIRM}</td>
 				</tr>
 				<!-- END: PM_ROW -->
 				<!-- BEGIN: PM_ROW_EMPTY -->
