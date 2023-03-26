@@ -119,8 +119,8 @@ $extp = cot_getextplugins('pm.list.loop');
 foreach ($pm_sql->fetchAll() as $row) {
 	$jj++;
 	$row['pm_icon_readstatus'] = ($row['pm_tostate'] == '0') ?
-			cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), cot::$R['pm_icon_new'], array('title' => cot::$L['pm_unread'], 'class'=> cot::$cfg['pm']['turnajax'] ? 'ajax' : ''))
-			: cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), cot::$R['pm_icon'], array('title' => cot::$L['pm_read'], 'class'=>'ajax'));
+			cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), cot::$R['pm_icon_new'], array('title' => cot::$L['pm_unread'], 'class' => cot::$cfg['pm']['turnajax'] ? 'ajax' : ''))
+			: cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), cot::$R['pm_icon'], array('title' => cot::$L['pm_read'], 'class' => cot::$cfg['pm']['turnajax'] ? 'ajax' : ''));
 
 	$pm_data = cot_parse($row['pm_text'], cot::$cfg['pm']['markup']);
 	$pm_desc = cot_string_truncate($pm_data , 100 , true, false, '...');
