@@ -14,7 +14,7 @@ cot_block(cot::$usr['isadmin']);
 
 require_once cot_incfile('extrafields');
 
-$extra_blacklist = array($db_auth, $db_cache, $db_cache_bindings, $db_core, $db_updates, $db_logger, $db_online, $db_extra_fields, $db_config, $db_plugins);
+$extra_blacklist = array($db_auth, $db_cache, $db_cache_bindings, $db_core, $db_updates, $db_online, $db_extra_fields, $db_config, $db_plugins);
 $extra_whitelist = array(
 	$db_structure => array(
 		'name' => $db_structure,

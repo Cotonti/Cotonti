@@ -80,7 +80,7 @@ if ($a == 'update')
 		}
 		/* ===== */
 
-		cot_log("Deleted user #".$id,'adm');
+		cot_log("Deleted user #".$id, 'users', 'delete', 'done');
 		cot_redirect(cot_url('message', "msg=109&rc=200&id=".$id, '', true));
 	}
 
@@ -241,7 +241,7 @@ if ($a == 'update')
 		/* ===== */
 
 		cot_auth_clear($id);
-		cot_log("Edited user #".$id,'adm');
+		cot_log("Edited user #".$id, 'users', 'edit', 'done');
 		cot_message('User_data_updated');
 		cot_redirect(cot_url('users', "m=edit&id=".$id, '', true));
 	}

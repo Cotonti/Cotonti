@@ -56,12 +56,12 @@ function cot_file_check($path, $name, $ext)
             }
         } else {
             $fcheck = (cot::$cfg['pfs']['pfsnomimepass']) ? 1 : 2;
-            cot_log(sprintf(cot::$L['pfs_filechecknomime'], $ext, $name), 'sec');
+            cot_log(sprintf(cot::$L['pfs_filechecknomime'], $ext, $name), 'sec', 'file_upload', 'error');
         }
     }
 
     if (!$fcheck) {
-        cot_log(sprintf(cot::$L['pfs_filecheckfail'], $ext, $name), 'sec');
+        cot_log(sprintf(cot::$L['pfs_filecheckfail'], $ext, $name), 'sec', 'file_upload', 'error');
     }
 
 	return $fcheck;

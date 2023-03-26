@@ -37,7 +37,7 @@ if (cot::$usr['isadmin'] && !empty($q) && !empty($a)) {
 	switch($a) {
 		case 'delete':
 			cot_forums_prunetopics('single', $s, $q);
-			cot_log("Deleted topic #".$q, 'for');
+			cot_log("Deleted topic #".$q, 'forums', 'delete topic', 'done');
 			cot_forums_sectionsetlast($s);
 			/* === Hook === */
 			foreach (cot_getextplugins('forums.topics.delete.done') as $pl)
@@ -88,39 +88,39 @@ if (cot::$usr['isadmin'] && !empty($q) && !empty($a)) {
 
 			cot_forums_sectionsetlast($s, "fs_postcount-$num", "fs_topiccount-1");
 			cot_forums_sectionsetlast($ns, "fs_postcount+$num", "fs_topiccount+1");
-			cot_log("Moved topic #$q from section #$s to section #".$ns, 'for');
+			cot_log("Moved topic #$q from section #$s to section #".$ns, 'forums', 'move topic', 'done');
 			break;
 
 		case 'lock':
 			cot::$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 0 ), "ft_id=$q");
-			cot_log("Locked topic #".$q, 'for');
+			cot_log("Locked topic #".$q, 'forums', 'lock topic', 'done');
 			break;
 
 		case 'sticky':
 			cot::$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 1 ), "ft_id=$q");
-			cot_log("Pinned topic #".$q, 'for');
+			cot_log("Pinned topic #".$q, 'forums', 'pin topic', 'done');
 			break;
 
 		case 'announcement':
 			cot::$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 1 ), "ft_id=$q");
-			cot_log("Announcement topic #".$q, 'for');
+			cot_log("Announcement topic #".$q, 'forums', 'announce topic', 'done');
 			break;
 
 		case 'bump':
 			cot_check_xg();
 			cot::$db->update($db_forum_topics, array("ft_updated" => cot::$sys['now']), "ft_id=$q");
 			cot_forums_sectionsetlast($s);
-			cot_log("Bumped topic #".$q, 'for');
+			cot_log("Bumped topic #".$q, 'forums', 'bump topic', 'done');
 			break;
 
 		case 'private':
-			cot_log("Made topic #".$q." private", 'for');
 			cot::$db->update($db_forum_topics, array("ft_mode" => 1), "ft_id=$q");
+			cot_log("Made topic #".$q." private", 'forums', 'made topic', 'done');
 			break;
 
 		case 'clear':
-			cot_log("Resetted topic #".$q, 'for');
 			cot::$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 0, "ft_mode" => 0), "ft_id=$q");
+			cot_log("Resetted topic #".$q, 'forums', 'reset topic', 'done');
 			break;
 	}
 	cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));

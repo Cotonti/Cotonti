@@ -39,7 +39,7 @@ if (
             cot::$cfg['plugin']['trashcan']['trash_prunedelay'] . ' days';
 
         cot_message($prumedMsg);
-		cot_log($prumedMsg, 'adm');
+		cot_log($prumedMsg, 'trashcan', 'prune', 'done');
 	}
 
     $_SESSION['trashcanAutoPruned'] = date('Y-m-d');

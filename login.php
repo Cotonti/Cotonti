@@ -60,6 +60,8 @@ if ($logout) {
 		cot_redirect(cot_url('index'));
 	}
 
+	cot_log("Logout user : " . $rusername, 'users', 'logout', 'done');
+
 	exit;
 }
 
@@ -158,7 +160,7 @@ if ($a == 'check') {
 
     if (empty($userSelectCondition)) {
         cot::$env['status'] = '401 Unauthorized';
-        cot_log("Log in failed, user : " . $rusername,'usr');
+        cot_log("Log in failed, user : " . $rusername, 'users', 'login', 'error');
         cot_redirect(cot_url('message', 'msg=151', '', true));
     }
 
@@ -194,18 +196,18 @@ if ($a == 'check') {
             )
         ) {
             cot::$env['status'] = '403 Forbidden';
-			cot_log('Failed user validation login attempt : ' . $rusername, 'usr');
+			cot_log('Failed user validation login attempt : ' . $rusername, 'users', 'login', 'error');
 			cot_redirect(cot_url('message', 'msg=157', '', true));
 		}
 		if ($row['user_maingrp'] < 1) {
             cot::$env['status'] = '403 Forbidden';
-			cot_log("Log in attempt, user inactive : " . $rusername, 'usr');
+			cot_log("Log in attempt, user inactive : " . $rusername, 'users', 'login', 'error');
 			cot_redirect(cot_url('message', 'msg=152', '', true));
 		}
 		if ($row['user_maingrp'] == COT_GROUP_INACTIVE) {
 		    if(!isset(cot::$cfg['users']['inactive_login']) || !cot::$cfg['users']['inactive_login']) {
                 cot::$env['status'] = '403 Forbidden';
-                cot_log("Log in attempt, user inactive : " . $rusername, 'usr');
+                cot_log("Log in attempt, user inactive : " . $rusername, 'users', 'login', 'error');
                 cot_redirect(cot_url('message', 'msg=152', '', true));
             }
 		} elseif ($row['user_maingrp'] == COT_GROUP_BANNED) {
@@ -213,7 +215,7 @@ if ($a == 'check') {
 				$sql = cot::$db->update(cot::$db->users, array('user_maingrp' => '4'),  "user_id={$row['user_id']}");
 			} else {
                 cot::$env['status'] = '403 Forbidden';
-				cot_log("Log in attempt, user banned : " . $rusername, 'usr');
+				cot_log("Log in attempt, user banned : " . $rusername, 'users', 'login', 'error');
 				cot_redirect(cot_url('message', 'msg=153&num='.$row['user_banexpire'], '', true));
 			}
 		}
@@ -273,7 +275,7 @@ if ($a == 'check') {
 	} else {
         cot::$env['status'] = '401 Unauthorized';
 		cot_shield_update(7, "Log in");
-		cot_log("Log in failed, user : ".$rusername,'usr');
+		cot_log("Log in failed, user : " . $rusername, 'users', 'login', 'error');
 
 		/* === Hook === */
 		foreach (cot_getextplugins('users.auth.check.fail') as $pl) {

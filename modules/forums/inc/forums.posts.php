@@ -223,7 +223,7 @@ elseif ($a == 'delete' && cot::$usr['id'] > 0 && !empty($s) && !empty($q) && !em
 		$sql_forums = cot::$db->query("UPDATE $db_users SET user_postcount=user_postcount-1 WHERE user_id='" . $fp_posterid . "' AND user_postcount>0");
 	}
 
-	cot_log("Deleted post #" . $p, 'for');
+	cot_log("Deleted post #" . $p, 'forums', 'delete post', 'done');
 
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.posts.delete.done') as $pl)
@@ -258,7 +258,7 @@ elseif ($a == 'delete' && cot::$usr['id'] > 0 && !empty($s) && !empty($q) && !em
 			}
 			/* ===== */
 
-			cot_log('Delete topic #' . $q . " (no post left)", 'for');
+			cot_log('Delete topic #' . $q . " (no post left)", 'forums', 'delete topic', 'done');
 			cot_forums_sectionsetlast($s, 'fs_postcount-1', 'fs_topiccount-1');
 		}
 		cot_redirect(cot_url('forums', 'm=topics&s=' . $s, '', true));

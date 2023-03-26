@@ -669,7 +669,7 @@ function cot_page_add(&$rpage, $auth = array())
 	}
 
 	cot_shield_update(30, "r page");
-	cot_log("Add page #".$id, 'adm');
+	cot_log("Add page #".$id, 'page', 'add', 'done');
 
 	return $id;
 }
@@ -701,7 +701,7 @@ function cot_page_delete($id, $rpage = [])
 	}
 
     cot::$db->delete(cot::$db->pages, "page_id = ?", $id);
-	cot_log("Deleted page #" . $id, 'adm');
+	cot_log("Deleted page #" . $id, 'page', 'delete', 'done');
 
     cot_page_updateStructureCounters($rpage['page_cat']);
 
@@ -767,6 +767,7 @@ function cot_page_update($id, &$rpage, $auth = array())
 	if (!cot::$db->update(cot::$db->pages, $rpage, 'page_id = ?', $id)) {
 		return false;
 	}
+	cot_log("Edited page #" . $id, 'page', 'edit', 'done');
 
 	cot_extrafield_movefiles();
 

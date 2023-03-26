@@ -31,7 +31,7 @@ if (cot::$cfg['plugin']['cleaner']['userprune'] > 0) {
 	$deleted = cot::$db->affectedRows;
 
 	if ($deleted > 0) {
-		cot_log("Cleaner plugin deleted ".$deleted." inactivated user account(s)", 'adm');
+		cot_log("Cleaner plugin deleted ".$deleted." inactivated user account(s)", 'users', 'clear', 'done');
 	}
 }
 
@@ -39,7 +39,7 @@ if (cot::$cfg['plugin']['cleaner']['logprune'] > 0) {
 	$timeago = cot::$sys['now'] - (cot::$cfg['plugin']['cleaner']['logprune'] * 86400);
 	cot::$db->delete($db_logger, "log_date < $timeago");
 	if (cot::$db->affectedRows > 0) {
-		cot_log('Cleaner plugin deleted '.cot::$db->affectedRows.' log entries older than '.cot::$cfg['plugin']['cleaner']['logprune'].' days', 'adm');
+		cot_log('Cleaner plugin deleted '.cot::$db->affectedRows.' log entries older than '.cot::$cfg['plugin']['cleaner']['logprune'].' days', 'adm', 'log', 'delete');
 	}
 }
 
@@ -47,7 +47,7 @@ if (cot::$cfg['plugin']['cleaner']['refprune'] > 0 && cot_plugin_active('referer
 	$timeago = cot::$sys['now'] - (cot::$cfg['plugin']['cleaner']['refprune'] * 86400);
 	cot::$db->delete($db_referers, "ref_date < $timeago");
 	if (cot::$db->affectedRows > 0) {
-		cot_log('Cleaner plugin deleted '.cot::$db->affectedRows.' referers entries older than '.cot::$cfg['plugin']['cleaner']['refprune'].' days', 'adm');
+		cot_log('Cleaner plugin deleted '.cot::$db->affectedRows.' referers entries older than '.cot::$cfg['plugin']['cleaner']['refprune'].' days', 'referers', 'delete', 'done');
 	}
 }
 
@@ -57,7 +57,7 @@ if (cot_module_active('pm')) {
 		$timeago = cot::$sys['now'] - (cot::$cfg['plugin']['cleaner']['pmnotread'] * 86400);
 		$sqltmp = cot::$db->delete($db_pm, "pm_date < $timeago AND pm_tostate=0");
 		if (cot::$db->affectedRows > 0) {
-			cot_log("Cleaner plugin deleted ".cot::$db->affectedRows." PM not read since ".cot::$cfg['plugin']['cleaner']['pmnotread']." days", 'adm');
+			cot_log("Cleaner plugin deleted ".cot::$db->affectedRows." PM not read since ".cot::$cfg['plugin']['cleaner']['pmnotread']." days", 'pm', 'delete', 'done');
 		}
 	}
 
@@ -65,7 +65,7 @@ if (cot_module_active('pm')) {
 		$timeago = cot::$sys['now'] - (cot::$cfg['plugin']['cleaner']['pmnotarchived'] * 86400);
 		$sqltmp = cot::$db->delete($db_pm, "pm_date < $timeago AND pm_tostate=1");
 		if (cot::$db->affectedRows > 0) {
-			cot_log("Cleaner plugin deleted ".cot::$db->affectedRows." PM not archived since ".cot::$cfg['plugin']['cleaner']['pmnotarchived']." days", 'adm');
+			cot_log("Cleaner plugin deleted ".cot::$db->affectedRows." PM not archived since ".cot::$cfg['plugin']['cleaner']['pmnotarchived']." days", 'pm', 'delete', 'done');
 		}
 	}
 
@@ -75,7 +75,7 @@ if (cot_module_active('pm')) {
 
 		$deleted = cot::$db->affectedRows;
 		if ($deleted > 0) {
-			cot_log("Cleaner plugin deleted ".$deleted." PM older than ".cot::$cfg['plugin']['cleaner']['pmold']." days", 'adm');
+			cot_log("Cleaner plugin deleted ".$deleted." PM older than ".cot::$cfg['plugin']['cleaner']['pmold']." days", 'pm', 'delete', 'done');
 		}
 	}
 }

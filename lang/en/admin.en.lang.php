@@ -124,6 +124,9 @@ $L['cfg_maxrowsperpage'] = 'Max. items per page';
 $L['cfg_maxrowsperpage_hint'] = 'Default item limit for pagination';
 $L['cfg_parser'] = 'Markup parser';
 $L['cfg_parser_hint'] = 'Default is: HTML';
+$L['cfg_loggerlevel'] = 'Logger level';
+$L['cfg_loggerlevel_params'] = 'Disabled,'.$L['Security'].','.$L['Administration'].','.$L['Extensions'].','.$L['Security'].'+'.$L['Administration'].','.$L['Security'].'+'.$L['Extensions'].','.$L['Administration'].'+'.$L['Extensions'].','.$L['Security'].'+'.$L['Administration'].'+'.$L['Extensions'].',All';
+$L['cfg_loggerlevel_hint'] = 'If "All" is selected, all actions are logged<br />If "Disabled" is selected, logging disabled completely for all levels<br /><i><small>If you select "Disabled" or "All", the individual extension logging level settings are ignored</small></i>';
 
 /**
  * Config Section
@@ -492,6 +495,7 @@ $L['adm_checkingtheme'] = 'Checking the theme...';
 $L['adm_check_ok'] = 'Ok';
 $L['adm_check_missing'] = 'Missing';
 $L['adm_ref_prune'] = 'Cleaned';
+$L['adm_log_uri'] = 'URL address';
 
 /**
  * Other Section

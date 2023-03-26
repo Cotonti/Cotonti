@@ -41,7 +41,7 @@ if ($rowpost = $sql_forums->fetch()) {
 	if (!cot::$usr['isadmin'] && ($rowpost['fp_posterid'] != cot::$usr['id'] ||
 			(cot::$cfg['forums']['edittimeout'] != '0' && cot::$sys['now'] - $rowpost['fp_creation'] > cot::$cfg['forums']['edittimeout'] * 3600)))
 	{
-		cot_log('Attempt to edit a post without rights', 'sec');
+		cot_log('Attempt to edit a post without rights', 'sec', 'forums', 'error');
 		cot_die();
 	}
 	cot_block(cot::$usr['auth_read']);

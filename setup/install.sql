@@ -85,6 +85,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','main','05','maxrowsperpage',8,'15','','cot_config_type_int(1)',''),
 ('core','main','06','easypagenav',3,'1','1','',''),
 ('core','main','07','confirmlinks',3,'1','1','',''),
+('core','main','08','loggerlevel',2,'sec+adm+ext','sec+adm+ext','none,sec,adm,ext,sec+adm,sec+ext,adm+ext,sec+adm+ext,all',''),
 ('core','main','91','default_show_installed',3,'0','0','',''),
 ('core','menus','01','topline',0,'','','',''),
 ('core','menus','02','banner',0,'','','',''),
@@ -215,12 +216,15 @@ CREATE TABLE `cot_groups_users` (
 
 DROP TABLE IF EXISTS `cot_logger`;
 CREATE TABLE `cot_logger` (
-  `log_id` int UNSIGNED NOT NULL auto_increment,
+  `log_id` mediumint UNSIGNED NOT NULL auto_increment,
   `log_date` int UNSIGNED NOT NULL,
   `log_ip` varchar(64) DEFAULT '',
+  `log_uid` int UNSIGNED NOT NULL DEFAULT '0',
   `log_name` varchar(100) DEFAULT '',
   `log_uri` varchar(255) DEFAULT '',
-  `log_group` varchar(64) DEFAULT 'def',
+  `log_group` varchar(64) DEFAULT 'adm',
+  `log_type` varchar(32) DEFAULT '',
+  `log_status` varchar(24) DEFAULT '',
   `log_text` varchar(255) NOT NULL,
   PRIMARY KEY  (`log_id`)
 );

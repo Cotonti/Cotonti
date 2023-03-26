@@ -146,8 +146,8 @@ if ($m == 'edit' && $id > 0)
 			}
 			/* ===== */
 
-			$com_grp = ($usr['isadmin']) ? 'adm' : 'usr';
-			cot_log('Edited comment #' . $id, $com_grp);
+			//$com_grp = ($usr['isadmin']) ? 'adm' : 'users';//TODO backward compatibility need ?!
+			cot_log('Edited comment #' . $id, 'comments', 'edit', 'done');
 			cot_redirect(cot_url($url_area, $url_params, '#c' . $id, true));
 		}
 	}
@@ -340,7 +340,7 @@ elseif ($a == 'delete' && $usr['isadmin'])
 		}
 		/* ===== */
 
-		cot_log('Deleted comment #' . $id . ' in &quot;' . $item . '&quot;', 'adm');
+		cot_log('Deleted comment #' . $id . ' in &quot;' . $item . '&quot;', 'comments', 'delete', 'done');
 	}
 	cot_redirect(cot_url($url_area, $url_params, '#comments', true));
 }
