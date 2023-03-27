@@ -151,14 +151,19 @@ foreach ($pm_sql->fetchAll() as $row) {
 		'PM_ROW_TEXT' => $pm_data,
 		'PM_ROW_ICON_STATUS' => $row['pm_icon_readstatus'],
 		'PM_ROW_ICON_DELETE' => cot_rc_link($url_delete, cot::$R['pm_icon_trashcan'], array('title' => cot::$L['Delete'], 'class'=>cot::$cfg['pm']['turnajax'] ? 'ajax' : '')),
-		'PM_ROW_ICON_DELETE_CONFIRM' => cot_rc_link(cot_confirm_url($url_delete), cot::$R['pm_icon_trashcan'], array('title' => cot::$L['Delete'], 'class'=>cot::$cfg['pm']['turnajax'] ? 'ajax' : '')),
+        // @todo confirmLink and ajax
+		'PM_ROW_ICON_DELETE_CONFIRM' => cot_rc_link(
+            cot_confirm_url($url_delete),
+            cot::$R['pm_icon_trashcan'],
+            ['title' => cot::$L['Delete'], 'class' => cot::$cfg['pm']['turnajax'] ? 'ajax' : 'confirmLink',]
+        ),
 		'PM_ROW_DELETE_URL' => $url_delete,
 		'PM_ROW_DELETE_CONFIRM_URL' => cot_confirm_url($url_delete),
 		'PM_ROW_ICON_EDIT' => !empty($url_edit) ?
             cot_rc_link(
                 $url_edit,
                 cot::$R['pm_icon_edit'],
-                ['title' => cot::$L['Edit'], 'class'=> cot::$cfg['pm']['turnajax'] ? 'ajax' : '',]
+                ['title' => cot::$L['Edit'], 'class' => cot::$cfg['pm']['turnajax'] ? 'ajax' : '',]
             )
             : '',
 		'PM_ROW_EDIT_URL' => $url_edit,

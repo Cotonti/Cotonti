@@ -38,29 +38,30 @@ if (!COT_AJAX) {
 	));
 
 	/* === Hook === */
-	foreach (cot_getextplugins('footer.tags') as $pl)
-	{
+	foreach (cot_getextplugins('footer.tags') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
 	// Attach rich text editors if any
-	if (!empty($cot_textarea_count) || !empty($cot_turnOnEditor)) {
-		if (!empty($cot_plugins['editor']) && is_array($cot_plugins['editor'])) {
-			$parser = !empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
-            if (!empty(cot::$cfg['plugin'][$parser]['editor'])) {
-                $editor = cot::$cfg['plugin'][$parser]['editor'];
-                foreach ($cot_plugins['editor'] as $k) {
-                    if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R')) {
-                        $fileName = cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
-                        if (is_readable($fileName)) {
-                            include $fileName;
-                            break;
-                        }
+	if (
+        (!empty($cot_textarea_count) || !empty($cot_turnOnEditor))
+        && !empty($cot_plugins['editor'])
+        && is_array($cot_plugins['editor'])
+    ) {
+        $parser = !empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
+        if (!empty(cot::$cfg['plugin'][$parser]['editor'])) {
+            $editor = cot::$cfg['plugin'][$parser]['editor'];
+            foreach ($cot_plugins['editor'] as $k) {
+                if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R')) {
+                    $fileName = cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
+                    if (is_readable($fileName)) {
+                        include $fileName;
+                        break;
                     }
                 }
             }
-		}
+        }
 	}
 
 	if (empty(cot::$out['footer_rc'])) {
