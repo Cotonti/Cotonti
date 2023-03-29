@@ -49,6 +49,7 @@ $L['cfg_allowprvtopics'] = 'Allow private topics';
 $L['cfg_allowviewers'] = 'Enable Viewers';
 $L['cfg_allowpolls'] = 'Enable Polls';
 $L['cfg_countposts'] = 'Count posts';
+$L['cfg_countposts_hint'] = 'Include posts in this category when counting user posts';
 $L['cfg_autoprune'] = 'Auto-prune topics after * days';
 $L['cfg_defstate'] = 'Default state';
 $L['cfg_defstate_params'] = 'Folded,Unfolded';
@@ -80,6 +81,7 @@ $L['forums_topicoptions'] = 'Topic options';
 $L['forums_updatedby'] = 'This post was edited by %1$s (%2$s, %3$s ago)';
 $L['forums_postedby'] = 'Posted by';
 $L['forums_edittimeoutnote'] = 'Timeout for editing or deleting own post is ';
+$L['forums_moveToSameSection'] = 'Can\'t move topic to the same section. Please choose another one.';
 
 $L['forums_privatetopic1'] = 'Mark this topic as private';
 $L['forums_privatetopic2'] = 'only forums moderators and the starter of the topic (you) will be allowed to read and reply';

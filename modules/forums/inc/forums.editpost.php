@@ -118,13 +118,10 @@ if ($a == 'update') {
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('forums.editpost.update.done') as $pl)
-	{
+	foreach (cot_getextplugins('forums.editpost.update.done') as $pl) {
 		include $pl;
 	}
 	/* ===== */
-
-	cot_forums_sectionsetlast($rowpost['fp_cat']);
 
 	if (cot::$cache) {
 		(cot::$cfg['cache_forums']) && cot::$cache->page->clear('forums');

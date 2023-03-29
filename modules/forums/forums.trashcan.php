@@ -44,19 +44,11 @@ function cot_trash_forumpost_check($data)
  *
  * @param array $data trashcan item data
  * @return bool
- * @global CotDB $db
  */
 function cot_trash_forumpost_sync($data)
 {
-    cot_forums_resynctopic($data['fp_topicid']);
-	$items = cot_forums_sync($data['fp_cat']);
-
-	cot::$db->update(
-        cot::$db->structure,
-        ['structure_count' => $items],
-        "structure_code=? AND structure_area='forums'",
-        $data['fp_cat']
-    );
+    cot_forums_resyncTopic($data['fp_topicid']);
+	cot_forums_updateStructureCounters($data['fp_cat']);
 
 	return true;
 }
@@ -70,9 +62,12 @@ function cot_trash_forumpost_sync($data)
  */
 function cot_trash_forumtopic_sync($data)
 {
-	global $db, $db_structure;
-	cot_forums_resynctopic($data['ft_id']);
-	$items = cot_forums_sync($data['ft_cat']);
-	$db->update($db_structure, array("structure_count" => (int)$items), "structure_code='".$db->prep($data['ft_cat'])."' AND structure_area='forums'");
-	return TRUE;
+	cot_forums_resyncTopic($data['ft_id']);
+    cot_forums_updateStructureCounters($data['fp_cat']);
+
+    if (cot::$cache && cot::$cfg['cache_forums']) {
+        cot::$cache->page->clear('forums');
+    }
+
+    return true;
 }

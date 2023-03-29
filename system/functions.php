@@ -2367,27 +2367,22 @@ function cot_user_full_name($user)
  */
 function cot_build_group($grpid, $title = false)
 {
-	if (empty($grpid))
-		return '';
 	global $cot_groups, $L;
 
+    if (empty($grpid) || empty($cot_groups[$grpid])) {
+        return '';
+    }
+
 	$type = ($title) ? 'title' : 'name';
-	if ($cot_groups[$grpid]['hidden'])
-	{
-		if (cot_auth('users', 'a', 'A'))
-		{
+	if ($cot_groups[$grpid]['hidden']) {
+		if (cot_auth('users', 'a', 'A')) {
 			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type] . ' (' . $L['Hidden'] . ')');
+		} else {
+			return cot::$L['Hidden'];
 		}
-		else
-		{
-			return $L['Hidden'];
-		}
-	}
-	else
-	{
-		if ($type == 'title' && isset($L['users_grp_' . $grpid . '_title']))
-		{
-			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $L['users_grp_' . $grpid . '_title']);
+	} else {
+		if ($type == 'title' && isset(cot::$L['users_grp_' . $grpid . '_title'])) {
+			return cot_rc_link(cot_url('users', 'gm=' . $grpid), cot::$L['users_grp_' . $grpid . '_title']);
 		}
 		return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type]);
 	}
@@ -2795,7 +2790,9 @@ function cot_img_check_memory($file_path, $extra_size = 0)
  */
 function cot_themes_info($theme_name = null)
 {
+    global $L, $Ls, $R;
 	require_once cot_incfile('extensions');
+
 	$themes_data = array();
 	$themelist = array();
 	$handle = opendir(cot::$cfg['themes_dir']);
@@ -5111,12 +5108,9 @@ function cot_captcha_validate($value)
  */
 function cot_check_xg($redirect = true)
 {
-	global $sys;
 	$x = cot_import('x', 'G', 'ALP');
-	if ($x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
-	{
-		if ($redirect)
-		{
+	if ($x != cot::$sys['xk'] && (empty(cot::$sys['xk_prev']) || $x != cot::$sys['xk_prev'])) {
+		if ($redirect) {
 			cot_die_message(950, TRUE);
 		}
 		return false;

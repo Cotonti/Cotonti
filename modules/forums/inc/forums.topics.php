@@ -25,8 +25,7 @@ cot_die(empty($s) || !isset(cot::$structure['forums'][$s]), true);
 list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('forums', $s);
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.topics.rights') as $pl)
-{
+foreach (cot_getextplugins('forums.topics.rights') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -37,98 +36,149 @@ if (cot::$usr['isadmin'] && !empty($q) && !empty($a)) {
 	switch($a) {
 		case 'delete':
 			cot_forums_prunetopics('single', $s, $q);
-			cot_log("Deleted topic #".$q, 'forums', 'delete topic', 'done');
-			cot_forums_sectionsetlast($s);
+			cot_log("Deleted topic #" . $q, 'forums', 'delete topic', 'done');
+
 			/* === Hook === */
-			foreach (cot_getextplugins('forums.topics.delete.done') as $pl)
-			{
+			foreach (cot_getextplugins('forums.topics.delete.done') as $pl) {
 				include $pl;
 			}
 			/* ===== */
+
+            cot_message(cot::$L['Deleted']);
+            cot_redirect(cot_url('forums', ['m' => 'topics', 's' => $s,], '', true));
 			break;
 
 		case 'move':
 			$ns = cot_import('ns','P','ALP');
 			$ghost = cot_import('ghost','P','BOL');
 
-			$num = cot::$db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat=".cot::$db->quote($s)." AND fp_topicid = $q")->fetchColumn();
-			if ($num < 1 || $s == $ns || !strpos(cot::$structure['forums'][$ns]['path'], '.')) {
-				cot_die();
+            if (empty($ns) || empty(cot::$structure['forums'][$ns])) {
+                cot_die_message(404);
+            }
+
+            if ($s == $ns) {
+                cot_error(cot::$L['forums_moveToSameSection'], 'ns');
+                cot_redirect(cot_url('forums', ['m' => 'posts', 'q' => $q,], '', true));
+            }
+
+            $topic = cot::$db->query(
+                "SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername" .
+                " FROM " . cot::$db->forum_topics . " WHERE ft_id = :topicId AND ft_cat = :cat",
+                ['cat' => $s, 'topicId' => $q]
+            )->fetch();
+            if (!$topic) {
+               cot_die_message(404);
+            }
+
+			$num = cot::$db->query(
+                'SELECT COUNT(*) FROM ' . cot::$db->forum_posts . ' WHERE fp_topicid = :topicId',
+                ['topicId' => $q]
+            )->fetchColumn();
+
+			if ($num < 1 || !strpos(cot::$structure['forums'][$ns]['path'], '.')) {
+                cot_die_message(404);
 			}
 
-			$sql_forums = cot::$db->delete($db_forum_topics, "ft_movedto = $q");
+			cot::$db->delete(cot::$db->forum_topics, 'ft_movedto = ?', $q);
 
 			if ($ghost) {
-				$sql_forums_ghost = cot::$db->query("SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername 
-                    FROM $db_forum_topics WHERE ft_id= $q AND ft_cat = " . cot::$db->quote($s));
-				$row = $sql_forums_ghost->fetch();
-
-				cot::$db->insert($db_forum_topics, array(
-					'ft_state' => 0,
-					'ft_mode' => (int)$row['ft_mode'],
-					'ft_sticky' => 0,
-					'ft_cat' => $s,
-					'ft_title' => $row['ft_title'],
-					'ft_desc' => $row['ft_desc'],
-					'ft_preview' => $row['ft_preview'],
-					'ft_creationdate' => $row['ft_creationdate'],
-					'ft_updated' => (int)cot::$sys['now'],
-					'ft_postcount' => 0,
-					'ft_viewcount' => 0,
-					'ft_firstposterid' => $row['ft_firstposterid'],
-					'ft_firstpostername' => $row['ft_firstpostername'],
-					'ft_lastposterid' => 0,
-					'ft_lastpostername' => '-',
-					'ft_movedto' => (int)$q
-				));
+				cot::$db->insert(
+                    cot::$db->forum_topics,
+                    [
+                        'ft_state' => 0,
+                        'ft_mode' => (int) $topic['ft_mode'],
+                        'ft_sticky' => 0,
+                        'ft_cat' => $s,
+                        'ft_title' => $topic['ft_title'],
+                        'ft_desc' => $topic['ft_desc'],
+                        'ft_preview' => $topic['ft_preview'],
+                        'ft_creationdate' => $topic['ft_creationdate'],
+                        'ft_updated' => (int) cot::$sys['now'],
+                        'ft_postcount' => 0,
+                        'ft_viewcount' => 0,
+                        'ft_firstposterid' => $topic['ft_firstposterid'],
+                        'ft_firstpostername' => $topic['ft_firstpostername'],
+                        'ft_lastposterid' => 0,
+                        'ft_lastpostername' => '-',
+                        'ft_movedto' => $q,
+                    ]
+                );
 			}
 
-			cot::$db->update($db_forum_topics, array("ft_cat" => $ns), "ft_id=$q AND ft_cat=" . cot::$db->quote($s));
-			cot::$db->update($db_forum_posts, array("fp_cat" => $ns), "fp_topicid=$q AND fp_cat=" . cot::$db->quote($s));
+			cot::$db->update(
+                cot::$db->forum_topics,
+                ['ft_cat' => $ns],
+                'ft_id = :topicId AND ft_cat = :cat',
+                ['topicId' => $q, 'cat' => $s]
+            );
+			cot::$db->update(
+                cot::$db->forum_posts,
+                ['fp_cat' => $ns],
+                'fp_topicid = :topicId',
+                ['topicId' => $q]
+            );
 
-			cot_forums_sectionsetlast($s, "fs_postcount-$num", "fs_topiccount-1");
-			cot_forums_sectionsetlast($ns, "fs_postcount+$num", "fs_topiccount+1");
-			cot_log("Moved topic #$q from section #$s to section #".$ns, 'forums', 'move topic', 'done');
+            cot_forums_updateStructureCounters($s);
+            cot_forums_updateStructureCounters($ns);
+			cot_log(
+                "Moved topic #$q from section #$s to section #" . $ns,
+                'forums',
+                'move topic',
+                'done'
+            );
+
+            cot_message(cot::$L['forums_movedoutofthissection']);
 			break;
 
 		case 'lock':
 			cot::$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 0 ), "ft_id=$q");
+            cot_message(cot::$L['Done']);
 			cot_log("Locked topic #".$q, 'forums', 'lock topic', 'done');
 			break;
 
 		case 'sticky':
 			cot::$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 1 ), "ft_id=$q");
+            cot_message(cot::$L['Done']);
 			cot_log("Pinned topic #".$q, 'forums', 'pin topic', 'done');
 			break;
 
 		case 'announcement':
 			cot::$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 1 ), "ft_id=$q");
+            cot_message(cot::$L['Done']);
 			cot_log("Announcement topic #".$q, 'forums', 'announce topic', 'done');
 			break;
 
 		case 'bump':
-			cot_check_xg();
-			cot::$db->update($db_forum_topics, array("ft_updated" => cot::$sys['now']), "ft_id=$q");
-			cot_forums_sectionsetlast($s);
-			cot_log("Bumped topic #".$q, 'forums', 'bump topic', 'done');
+			cot::$db->update(cot::$db->forum_topics, ['ft_updated' => cot::$sys['now'],], 'ft_id = ?', $q);
+            cot_forums_updateStructureCounters($s);
+			cot_log("Bumped topic #" . $q, 'forums', 'bump topic', 'done');
+            cot_message(cot::$L['Done']);
 			break;
 
 		case 'private':
-			cot::$db->update($db_forum_topics, array("ft_mode" => 1), "ft_id=$q");
-			cot_log("Made topic #".$q." private", 'forums', 'made topic', 'done');
+			cot::$db->update(cot::$db->forum_topics, ['ft_mode' => 1,], 'ft_id = ?', $q);
+            cot_forums_updateStructureCounters($s);
+			cot_log("Made topic #" . $q . " private", 'forums', 'made topic', 'done');
+            cot_message(cot::$L['Done']);
 			break;
 
 		case 'clear':
-			cot::$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 0, "ft_mode" => 0), "ft_id=$q");
-			cot_log("Resetted topic #".$q, 'forums', 'reset topic', 'done');
+			cot::$db->update(
+                cot::$db->forum_topics,
+                ['ft_state' => 0, 'ft_sticky' => 0, 'ft_mode' => 0,],
+                'ft_id = ?',
+                $q
+            );
+            cot_forums_updateStructureCounters($s);
+            cot_log("Resetted topic #".$q, 'forums', 'reset topic', 'done');
+            cot_message(cot::$L['Done']);
 			break;
 	}
-	cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
+    cot_redirect(cot_url('forums', ['m' => 'posts', 'q' => $q,], '', true));
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.topics.first') as $pl)
-{
+foreach (cot_getextplugins('forums.topics.first') as $pl) {
 	include $pl;
 }
 /* ===== */

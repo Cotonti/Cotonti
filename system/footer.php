@@ -15,13 +15,26 @@ foreach (cot_getextplugins('footer.first') as $pl)
 /* ===== */
 
 if (!COT_AJAX) {
-	$mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R') ? 'core' : 'module';
-	if (cot::$cfg['enablecustomhf']) {
-		$mtpl_base = (defined('COT_PLUG') && !empty($e)) ? array('footer', $e) : array('footer', cot::$env['location']);
+	$mtpl_type = (
+        defined('COT_ADMIN')
+        || (
+            defined('COT_MESSAGE')
+            && $_SESSION['s_run_admin']
+            && cot_auth('admin', 'any', 'R')
+        )
+    ) ? 'core' : 'module';
 
-	} else {
-		$mtpl_base = 'footer';
+    $mtpl_base = 'footer';
+	if (cot::$cfg['enablecustomhf']) {
+        if (defined('COT_PLUG') && !empty($e)) {
+            $mtpl_base = ['footer', $e];
+        } elseif (!empty(cot::$env['ext'])) {
+            $mtpl_base = ['footer', cot::$env['ext']];
+        } elseif (!empty(cot::$env['location'])) {
+            $mtpl_base = ['footer', cot::$env['location']];
+        }
 	}
+
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 
     /* === Hook === */

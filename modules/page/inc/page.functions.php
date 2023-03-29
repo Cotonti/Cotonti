@@ -429,16 +429,23 @@ function cot_page_status($page_state, $page_begin, $page_expire)
 }
 
 /**
- * Returns page category counters
+ * Returns page category counter
+ * Used in Admin/Structure/Resync All
  *
  * @param string $category Category code
  * @return int
- * @todo
  */
 function cot_page_sync($category)
 {
-    return (int) cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->quoteTableName(cot::$db->pages) .
-        ' WHERE page_cat=?', $category)->fetchColumn();
+    if (empty($category)) {
+        return 0;
+    }
+
+    return (int) cot::$db->query(
+        'SELECT COUNT(*) FROM ' . cot::$db->quoteTableName(cot::$db->pages) .
+        ' WHERE page_cat=?',
+        $category
+    )->fetchColumn();
 }
 
 /**
@@ -448,6 +455,10 @@ function cot_page_sync($category)
  */
 function cot_page_updateStructureCounters($category)
 {
+    if (empty($category) || empty(cot::$structure['page'][$category])) {
+        return;
+    }
+
     $count = cot_page_sync($category);
 
     cot::$db->query('UPDATE ' . cot::$db->quoteTableName(cot::$db->structure) .
