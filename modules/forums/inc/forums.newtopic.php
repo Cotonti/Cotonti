@@ -125,27 +125,16 @@ if ($a == 'newtopic') {
 			cot_forums_prunetopics('updated', $s, cot::$cfg['forums']['cat_' . $s]['autoprune']);
 		}
 
-		if (cot::$cfg['forums']['cat_' . $s]['countposts']) {
-			$sql_forums = cot::$db->query("UPDATE ". cot::$db->users. " SET user_postcount=user_postcount+1 WHERE user_id='".
-                cot::$usr['id']."'");
-		}
-
-		if (!$rtopic['ft_mode']) {
-			cot_forums_sectionsetlast($s, "fs_postcount+1", "fs_topiccount+1");
-		}
-
 		cot_extrafield_movefiles();
+
+        cot_forums_updateUserPostCount(cot::$usr['id']);
+        cot_forums_updateStructureCounters($s);
 
 		/* === Hook === */
 		foreach (cot_getextplugins('forums.newtopic.newtopic.done') as $pl) {
 			include $pl;
 		}
 		/* ===== */
-
-		if (cot::$cache) {
-			(cot::$cfg['cache_forums']) && cot::$cache->page->clear('forums');
-			(cot::$cfg['cache_index']) && cot::$cache->page->clear('index');
-		}
 
 		cot_shield_update(45, "New topic");
 		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));

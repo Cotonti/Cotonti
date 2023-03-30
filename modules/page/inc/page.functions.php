@@ -429,16 +429,23 @@ function cot_page_status($page_state, $page_begin, $page_expire)
 }
 
 /**
- * Returns page category counters
+ * Returns page category counter
+ * Used in Admin/Structure/Resync All
  *
  * @param string $category Category code
  * @return int
- * @todo
  */
 function cot_page_sync($category)
 {
-    return (int) cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->quoteTableName(cot::$db->pages) .
-        ' WHERE page_cat=?', $category)->fetchColumn();
+    if (empty($category)) {
+        return 0;
+    }
+
+    return (int) cot::$db->query(
+        'SELECT COUNT(*) FROM ' . cot::$db->quoteTableName(cot::$db->pages) .
+        ' WHERE page_cat=?',
+        $category
+    )->fetchColumn();
 }
 
 /**
@@ -448,6 +455,10 @@ function cot_page_sync($category)
  */
 function cot_page_updateStructureCounters($category)
 {
+    if (empty($category) || empty(cot::$structure['page'][$category])) {
+        return;
+    }
+
     $count = cot_page_sync($category);
 
     cot::$db->query('UPDATE ' . cot::$db->quoteTableName(cot::$db->structure) .
@@ -669,7 +680,7 @@ function cot_page_add(&$rpage, $auth = array())
 	}
 
 	cot_shield_update(30, "r page");
-	cot_log("Add page #".$id, 'adm');
+	cot_log("Add page #".$id, 'page', 'add', 'done');
 
 	return $id;
 }
@@ -701,7 +712,7 @@ function cot_page_delete($id, $rpage = [])
 	}
 
     cot::$db->delete(cot::$db->pages, "page_id = ?", $id);
-	cot_log("Deleted page #" . $id, 'adm');
+	cot_log("Deleted page #" . $id, 'page', 'delete', 'done');
 
     cot_page_updateStructureCounters($rpage['page_cat']);
 
@@ -767,6 +778,7 @@ function cot_page_update($id, &$rpage, $auth = array())
 	if (!cot::$db->update(cot::$db->pages, $rpage, 'page_id = ?', $id)) {
 		return false;
 	}
+	cot_log("Edited page #" . $id, 'page', 'edit', 'done');
 
 	cot_extrafield_movefiles();
 

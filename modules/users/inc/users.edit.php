@@ -80,7 +80,7 @@ if ($a == 'update')
 		}
 		/* ===== */
 
-		cot_log("Deleted user #".$id,'adm');
+		cot_log("Deleted user #".$id, 'users', 'delete', 'done');
 		cot_redirect(cot_url('message', "msg=109&rc=200&id=".$id, '', true));
 	}
 
@@ -226,24 +226,22 @@ if ($a == 'update')
 			}
 		}
 
-		if ($ruser['user_maingrp'] == COT_GROUP_MEMBERS && $urr['user_maingrp'] == COT_GROUP_INACTIVE)
-		{
-			$rsubject = $L['useed_accountactivated'];
-			$rbody = $L['Hi']." ".$urr['user_name'].",\n\n";
-			$rbody .= $L['useed_email'];
-			$rbody .= $L['auth_contactadmin'];
+		if ($ruser['user_maingrp'] == COT_GROUP_MEMBERS && $urr['user_maingrp'] == COT_GROUP_INACTIVE) {
+			$rsubject = cot::$L['useed_accountactivated'];
+			$rbody = cot::$L['Hi'] . " " . $urr['user_name'].",\n\n";
+			$rbody .= cot::$L['useed_email'];
+			$rbody .= "\n\n" . cot::$L['aut_contactadmin'];
 			cot_mail($urr['user_email'], $rsubject, $rbody);
 		}
 
 		/* === Hook === */
-		foreach (cot_getextplugins('users.edit.update.done') as $pl)
-		{
+		foreach (cot_getextplugins('users.edit.update.done') as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
 		cot_auth_clear($id);
-		cot_log("Edited user #".$id,'adm');
+		cot_log("Edited user #".$id, 'users', 'edit', 'done');
 		cot_message('User_data_updated');
 		cot_redirect(cot_url('users', "m=edit&id=".$id, '', true));
 	}

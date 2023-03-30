@@ -150,7 +150,11 @@ if ($history)
 			'PM_ROW_URL' => $url_pm,
 			'PM_ROW_TEXT' => $pm_data,
 			'PM_ROW_ICON_STATUS' => $row2['pm_icon_readstatus'],
-			'PM_ROW_ICON_DELETE' => cot_rc_link($url_delete, cot::$R['pm_icon_trashcan'], array('title' => cot::$L['Delete'], 'class' => cot::$cfg['pm']['turnajax'] ? 'ajax' : '')),
+			'PM_ROW_ICON_DELETE' => cot_rc_link(
+                $url_delete,
+                cot::$R['pm_icon_trashcan'],
+                ['title' => cot::$L['Delete'], 'class' => cot::$cfg['pm']['turnajax'] ? 'ajax' : 'confirmLink',]
+            ),
 			'PM_ROW_DELETE_URL' => $url_delete,
 			'PM_ROW_DELETE_CONFIRM_URL' => cot_confirm_url($url_delete),
 			'PM_ROW_ICON_EDIT' => ($row2['pm_tostate'] == 0) ? cot_rc_link($url_edit, cot::$R['pm_icon_edit'], array('title' => cot::$L['Edit'], 'class' => cot::$cfg['pm']['turnajax'] ? 'ajax' : '')) : '',
@@ -183,56 +187,38 @@ if ($history)
 	$t->parse('MAIN.HISTORY');
 }
 
-if (cot::$usr['auth_write'])
-{
-	if (preg_match("/Re(\(\d+\))?\:(.+)/", $row['pm_title'], $matches))
-	{
+if (cot::$usr['auth_write']) {
+	if (preg_match("/Re(\(\d+\))?\:(.+)/", $row['pm_title'], $matches)) {
 		$matches[1] = empty($matches[1]) ? 2 : trim($matches[1], '()') + 1;
 		$newpmtitle = 'Re(' . $matches[1] . '): ' . trim($matches[2]);
-	}
-	else
-	{
+	} else {
 		$newpmtitle = 'Re: ' . $row['pm_title'];
 	}
-	switch ($editor)
-	{
+
+	switch ($editor) {
 		case 'markitup':
-			$newpmtext = (! empty($q)) ? '[quote]' . htmlspecialchars($row['pm_text']) . '[/quote]' : '';
-			if (cot::$cfg['jquery']) $onclick = "insertText(document, 'newpmtext', '[quote]'+$('#pm_text').text()+'[/quote]'); return false;";
+			$newpmtext = !empty($q) ? '[quote]' . htmlspecialchars($row['pm_text']) . '[/quote]' : '';
+			if (cot::$cfg['jquery']) {
+                $onclick = "insertText(document, 'newpmtext', '[quote]' + $('#pm_text').text() + '[/quote]'); return false;";
+            }
 			break;
+
 		case 'ckeditor':
-			if (cot::$cfg['jquery']) $onclick = "CKEDITOR.instances.newpmtext.insertHtml('<blockquote>'+$('#pm_text').text()+'</blockquote><br />'); return false;";
+			if (cot::$cfg['jquery']) {
+                $onclick = "CKEDITOR.instances.newpmtext.insertHtml('<blockquote>' + $('#pm_text').text() + '</blockquote><br />'); return false;";
+            }
+
 		default:
-			$newpmtext = (! empty($q)) ? '<blockquote>' . $row['pm_text'] . '</blockquote>' : '';
+			$newpmtext = !empty($q) ? '<blockquote>' . $row['pm_text'] . '</blockquote>' : '';
 	}
 
-    $text_editor_code = '';
-	if (COT_AJAX)
-	{
-		// Attach rich text editors to AJAX loaded page
-		$rc_tmp = cot::$out['footer_rc'];
-		cot::$out['footer_rc'] = '';
-		if (is_array($cot_plugins['editor']))
-		{
-			foreach ($cot_plugins['editor'] as $k)
-			{
-				if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R'))
-				{
-					include cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
-					break;
-				}
-			}
-		}
-		$text_editor_code = cot::$out['footer_rc'];
-		cot::$out['footer_rc'] = $rc_tmp;
-	}
 	$t->assign(array(
 		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.(int)$history.'&d='.$durl), cot::$L['Quote'], array('onclick' => $onclick)),
         'PM_QUOTE_URL' => cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.(int)$history.'&d='.$durl),
         'PM_QUOTE_ONCLICK' => $onclick,
 		'PM_FORM_SEND' => cot_url('pm', 'm=send&a=send&to='.$to),
 		'PM_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
-		'PM_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor') . $text_editor_code,
+		'PM_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor'),
         'PM_FORM_NOT_TO_SENTBOX' => cot_checkbox(false, 'fromstate', cot::$L['pm_notmovetosentbox'], '', '3')
 	));
 
@@ -288,18 +274,14 @@ $t->assign(array(
 $t->assign(cot_generate_usertags($row_user, 'PM_USER_'));
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.tags') as $pl)
-{
+foreach (cot_getextplugins('pm.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if (COT_AJAX && $history)
-{
+if (COT_AJAX && $history) {
 	$t->out('MAIN.HISTORY');
-}
-else
-{
+} else {
 	$t->parse('MAIN');
 	$t->out('MAIN');
 }

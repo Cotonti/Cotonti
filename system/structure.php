@@ -46,6 +46,9 @@ function cot_structure_add($extension, $data, $is_module = true)
 			$is_module && cot_auth_add_item($extension, $data['structure_code'], $auth_permit, $auth_lock);
 			$area_addcat = 'cot_'.$extension.'_addcat';
 			(function_exists($area_addcat)) ? $area_addcat($data['structure_code']) : FALSE;
+
+			cot_log("Structure. Add category: '$extension' - '".$data['structure_code']."'", 'adm', 'structure', 'add');
+
 			$cache && $cache->clear();
 			return true;
 		}
@@ -110,7 +113,7 @@ function cot_structure_delete($extension, $code, $is_module = true)
 	$area_deletecat = 'cot_'.$extension.'_deletecat';
 	(function_exists($area_deletecat)) ? $area_deletecat($code) : FALSE;
 
-    cot_log("Structure. Deleted category: '$extension' - '$code'", 'adm');
+    cot_log("Structure. Deleted category: '$extension' - '$code'", 'adm', 'structure', 'delete');
 
 	unset(cot::$structure[$extension][$code]);
 	if (cot::$cache) {
@@ -171,6 +174,8 @@ function cot_structure_update($extension, $id, $old_data, $new_data, $is_module 
 	$sql1 = $db->update($db_structure, $new_data, 'structure_id=' . (int) $id);
 
 	$updated = $sql1 > 0;
+
+	if ($updated) cot_log("Structure. Edited category: '$extension' - '".$new_data['structure_code']."'", 'adm', 'structure', 'edit');
 
 	/* === Hook === */
 	foreach (cot_getextplugins('structure.update.done') as $pl)

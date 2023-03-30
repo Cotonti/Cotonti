@@ -57,7 +57,7 @@ if ($a == 'request' && $email != '')
 	{
 		cot_shield_update(10, "Password recovery requested");
 		$env['status'] = '403 Forbidden';
-		cot_log("Pass recovery failed, user : ".$rusername);
+		cot_log("Pass recovery failed, user : ".$rusername, 'users', 'passrecover', 'error');
 		cot_redirect(cot_url('message', 'msg=154', '', true));
 	}
 }
@@ -78,14 +78,14 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 		if ($row['user_maingrp'] == 2)
 		{
 			$env['status'] = '403 Forbidden';
-			cot_log("Password recovery failed, user inactive : ".$rusername);
+			cot_log("Password recovery failed, user inactive : ".$rusername, 'users', 'passrecover', 'error');
 			cot_redirect(cot_url('message', 'msg=152', '', true));
 		}
 
 		if ($row['user_maingrp'] == 3)
 		{
 			$env['status'] = '403 Forbidden';
-			cot_log("Password recovery failed, user banned : ".$rusername);
+			cot_log("Password recovery failed, user banned : ".$rusername, 'users', 'passrecover', 'error');
 			cot_redirect(cot_url('message', 'msg=153&num='.$row['user_banexpire'], '', true));
 		}
 
@@ -108,7 +108,7 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 	{
 		$env['status'] = '403 Forbidden';
 		cot_shield_update(7, "Log in");
-		cot_log("Pass recovery failed, user : ".$rusername);
+		cot_log("Pass recovery failed, user : ".$rusername, 'users', 'passrecover', 'error');
 		cot_redirect(cot_url('message', 'msg=151', '', true));
 	}
 }

@@ -71,7 +71,7 @@ if (
     )
 	&& (!cot::$usr['isadmin'] && cot::$usr['id'] != $pag['page_ownerid'])
 ) {
-	cot_log("Attempt to directly access an un-validated or future/expired page", 'sec');
+	cot_log("Attempt to directly access an un-validated or future/expired page", 'sec', 'page', 'error');
 	cot_die_message(403, TRUE);
 }
 if (mb_substr($pag['page_text'], 0, 6) == 'redir:') {

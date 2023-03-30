@@ -22,6 +22,19 @@ cot::$db->registerTable('forum_stats');
 cot_extrafields_register_table('forum_posts');
 cot_extrafields_register_table('forum_topics');
 
+/*
+ * Topic modes
+ * 0 - Normal. Available for all
+ * 1 - Private. Only moderators and the starter of the topic can read and reply
+ */
+const COT_FORUMS_TOPIC_MODE_NORMAL = 0;
+const COT_FORUMS_TOPIC_MODE_PRIVATE = 1;
+
+// @todo constants for topic states
+// LOCKED: ft_state == 1,  ft_sticky == 0
+// STICKY: ft_state == 0,  ft_sticky == 1
+// ANNOUNCEMENT: ft_state == 1,  ft_sticky == 1
+
 /**
  * Builds forum category path
  *
@@ -61,149 +74,162 @@ function cot_forums_buildpath($cat, $forumslink = true)
  * @param int $param Selection parameter value
  * @return int
  * @global CotDB $db
+ *
+ * @todo To delete single topic we don't need section. Just TopicID
  */
 function cot_forums_prunetopics($mode, $section, $param)
 {
-	global $db, $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_stats, $db_users, $L;
+	global $cfg, $L, $Ls, $R; // For hooks include
 
-	$num = 0;
-	$num1 = 0;
-	if (!is_int($param))
-	{
+    $topicsDeleted = 0;
+	if (!is_int($param)) {
 		$param = (int) $param;
 	}
 
-	switch ($mode)
-	{
+	switch ($mode) {
 		case 'updated':
-			$limit = $sys['now'] - ($param * 86400);
-			$sql1 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_cat=".$db->quote($section)." AND ft_updated < $limit AND ft_sticky='0'");
+			$limit = cot::$sys['now'] - ($param * 86400);
+			$sql1 = cot::$db->query(
+                'SELECT * FROM ' . cot::$db->forum_topics .
+                    " WHERE ft_cat = :cat AND ft_updated < $limit AND ft_sticky = 0",
+                ['cat' => $section]
+            );
 			break;
 
 		case 'single':
-			$sql1 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_cat=".$db->quote($section)." AND ft_id=$param");
+			$sql1 = cot::$db->query(
+                'SELECT * FROM ' . cot::$db->forum_topics . ' WHERE ft_cat = :cat  AND ft_id = :topicId',
+                ['cat' => $section, 'topicId' => $param]
+            );
 			break;
 	}
 
-	if ($sql1->rowCount() > 0) {
-		foreach ($sql1->fetchAll() as $topic) {
-            $topicId = $topic['ft_id'];
+    if ($sql1->rowCount() < 1) {
+        $sql1->closeCursor();
+        return 0;
+    }
 
-            /** @todo For backward compatibility. Remove after 1.1.6 release  */
-			$q = $topic['ft_id'];
+    $posterIds = [];
+    foreach ($sql1->fetchAll() as $topic) {
+        $topicId = $topic['ft_id'];
 
-			/* === Hook === */
-			foreach (cot_getextplugins('forums.functions.prunetopics') as $pl)
-			{
-				include $pl;
-			}
-			/* ===== */
+        /** @todo For backward compatibility. Remove after 1.1.6 release  */
+        $q = $topic['ft_id'];
 
-			// Decrease postcount for users
-			foreach (cot::$db->query("SELECT COUNT(*) AS cnt, fp_posterid FROM $db_forum_posts  WHERE fp_topicid=$q GROUP BY fp_posterid")->fetchAll() as $row2)
-			{
-                cot::$db->query("UPDATE $db_users SET user_postcount = user_postcount - ? WHERE user_id = ?", array((int)$row2['cnt'], (int)$row2['fp_posterid']));
-			}
+        /* === Hook === */
+        foreach (cot_getextplugins('forums.functions.prunetopics') as $pl) {
+            include $pl;
+        }
+        /* ===== */
 
-			$num += cot::$db->delete($db_forum_posts, "fp_topicid=$q");
-			$num1 += cot::$db->delete($db_forum_topics, "ft_id=$q");
-		}
+        $posts = cot::$db->query(
+            'SELECT * FROM ' . cot::$db->forum_posts . ' WHERE fp_topicid = ?',
+            $topic['ft_id']
+        )->fetchAll();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                foreach(cot::$extrafields[cot::$db->forum_posts] as $exfld) {
+                    if (isset($post['fp_' . $exfld['field_name']])) {
+                        cot_extrafield_unlinkfiles($post['fp_' . $exfld['field_name']], $exfld);
+                    }
+                }
+            }
+        }
 
-		cot::$db->delete($db_forum_topics, "ft_movedto=$q");
-        cot::$db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-$num1, fs_postcount=fs_postcount-$num WHERE fs_cat=".$db->quote($section));
-	}
-	$num1 = ($num1 == '') ? '0' : $num1;
-	return($num1);
+        $topicPosterIds = cot::$db->query(
+            'SELECT DISTINCT (fp_posterid) FROM ' . cot::$db->forum_posts . ' WHERE fp_topicid = :topicId',
+            ['topicId' => $topic['ft_id']]
+        )->fetchAll(PDO::FETCH_COLUMN);
+        if (!empty($topicPosterIds)) {
+            $posterIds = array_merge($posterIds, $topicPosterIds);
+        }
+
+        cot::$db->delete(cot::$db->forum_posts, 'fp_topicid = ?', $topic['ft_id']);
+        cot::$db->delete(cot::$db->forum_topics, 'ft_movedto = ?', $topic['ft_id']);
+
+        foreach (cot::$extrafields[cot::$db->forum_topics] as $exfld) {
+            if (isset($topic['ft_' . $exfld['field_name']])) {
+                cot_extrafield_unlinkfiles($topic['ft_' . $exfld['field_name']], $exfld);
+            }
+        }
+
+        $topicsDeleted += cot::$db->delete(cot::$db->forum_topics, 'ft_id = ?', $topic['ft_id']);
+    }
+
+    cot_forums_updateStructureCounters($section);
+
+    // Decrease postcount for users
+    if (!empty($posterIds)) {
+        foreach ($posterIds as $posterId) {
+            cot_forums_updateUserPostCount($posterId);
+        }
+    }
+
+	return $topicsDeleted;
 }
 
 /**
  * Recounts posts in a given topic
  *
- * @param int $id Topic ID
- * @global CotDB $db
+ * @param int $topicId Topic ID
+ * @param int|false|null $userId Poster User ID to update posts count. If 'NULL' posts counters will be updated for all
+ *   posters from this topic. 'FALSE' - not update users posts counters
  */
-function cot_forums_resynctopic($id)
+function cot_forums_resyncTopic($topicId, $userId = null)
 {
-	$id = (int) $id;
-    if ($id < 1) {
+    $topicId = (int) $topicId;
+    if ($topicId < 1) {
         return false;
     }
 
-    cot::$db->query(
-        'UPDATE ' . cot::$db->forum_topics .
-            ' SET ft_postcount=(SELECT COUNT(*) FROM ' . cot::$db->forum_posts . ' WHERE fp_topicid=:topicId) ' .
-            'WHERE ft_id=:topicId',
-        ['topicId' => $id]
-    );
-
+    $lastPost = [
+        'posterId' => 0,
+        'posterName' => '',
+        'updated' => 0,
+    ];
     $row = cot::$db->query(
         'SELECT fp_posterid, fp_postername, fp_updated FROM ' . cot::$db->forum_posts .
             ' WHERE fp_topicid=? ORDER BY fp_id DESC LIMIT 1',
-        $id
+        $topicId
     )->fetch();
     if ($row) {
-        cot::$db->update(
-            cot::$db->forum_topics,
-            [
-                "ft_lastposterid" => (int) $row['fp_posterid'],
-                "ft_lastpostername" => $row['fp_postername'],
-                "ft_updated" => (int) $row['fp_updated']
-            ],
-            'ft_id=?',
-            $id);
+        $lastPost = [
+            'posterId' => (int) $row['fp_posterid'],
+            'posterName' => $row['fp_postername'],
+            'updated' => (int) $row['fp_updated'],
+        ];
+    }
+    cot::$db->query(
+        'UPDATE ' . cot::$db->forum_topics .
+        ' SET ft_postcount = (SELECT COUNT(*) FROM ' . cot::$db->forum_posts . ' WHERE fp_topicid =: topicId) ,' .
+        ' ft_lastposterid = :posterId, ft_lastpostername = :posterName,  ft_updated = :updated ' .
+        ' WHERE ft_id =: topicId',
+        [
+            'topicId' => $topicId,
+            'posterId' => $lastPost['posterId'],
+            'posterName' => $lastPost['posterName'],
+            'updated' => $lastPost['updated'],
+        ]
+    );
+
+    $topicPosterIds = null;
+    if ($userId === null) {
+        // Update posts count for all posters in this topic
+        $topicPosterIds = cot::$db->query(
+            'SELECT DISTINCT (fp_posterid) FROM ' . cot::$db->forum_posts . ' WHERE fp_topicid = ?',
+            $topicId
+        )->fetchAll(PDO::FETCH_COLUMN);
+    } elseif ($userId > 0) {
+        // Update posts count for this user only
+        $topicPosterIds = [$userId];
+    }
+    if (!empty($topicPosterIds)) {
+        foreach ($topicPosterIds as $posterId) {
+            cot_forums_updateUserPostCount($posterId);
+        }
     }
 
     return true;
-}
-
-/**
- * Changes last message for the section
- *
- * @param string $cat Section cat
- * @param string $postcount Post count
- * @param string $topiccount Topic count
- * @param string $viewcount View count
- * @global CotDB $db
- */
-function cot_forums_sectionsetlast($cat, $postcount = '', $topiccount = '', $viewcount = '')
-{
-	$row = cot::$db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM " .
-        cot::$db->forum_topics .
-        " WHERE ft_cat=" . cot::$db->quote($cat) . " AND (ft_movedto IS NULL OR ft_movedto = '') AND ft_mode=0 
-		ORDER BY ft_updated DESC LIMIT 1")->fetch();
-
-    if (empty($row)) {
-        // there are no any topics in category $cat
-        return;
-    }
-
-	$i_postcount = ($postcount != '' && is_int($postcount)) ? $postcount : 0;
-	$i_topiccount = ($topiccount != '' && is_int($topiccount)) ? $topiccount : 0;
-	if (!empty($postcount) && $i_postcount == 0) {
-		$i_postcount = 1;
-	}
-	if (!empty($topiccount) && $i_topiccount == 0) {
-		$i_topiccount = 1;
-	}
-
-	$postcount = ($postcount != '') ? ", fs_postcount = " . $postcount : '';
-	$topiccount = ($topiccount != '') ? ", fs_topiccount = " . $topiccount : '';
-	$viewcount = ($viewcount != '') ? ", fs_viewcount = " . $viewcount : '';
-
-    $sql = 'INSERT INTO ' . cot::$db->forum_stats . "
-		(fs_cat, fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername, fs_topiccount, fs_postcount,
-			fs_viewcount)
-		VALUES (" . cot::$db->quote($cat) . ', ' . (int) $row['ft_id'] . ', ' . cot::$db->quote($row['ft_title']) . ', '
-        . (int) $row['ft_updated'] . ', ' . (int) $row['ft_lastposterid'] . ', ' .
-        cot::$db->quote($row['ft_lastpostername']) . ", $i_topiccount, $i_postcount, 0)
-		ON DUPLICATE KEY UPDATE
-			fs_lt_id = " . (int) $row['ft_id'].",  fs_lt_title = " . cot::$db->quote($row['ft_title']).",
-			fs_lt_date = " . (int) $row['ft_updated'].", fs_lt_posterid = " . (int) $row['ft_lastposterid'] . ",
-			fs_lt_postername = " . cot::$db->quote($row['ft_lastpostername']) . " $postcount $topiccount $viewcount";
-
-	cot::$db->query($sql);
-
-	return true;
 }
 
 /**
@@ -289,23 +315,143 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 }
 
 /**
- * Recounts all counters for a given cat
+ * Recounts all counters for a given category
+ * Used in Admin/Structure/Resync All
+ * Not updates `cot_structure` because it will be updated here: system/admin/admin.structure.php
  *
- * @param string $cat Cat code
- * @return int topiccount
- * @global CotDB $db
+ * @param string $category Category code
+ * @return int Topics Count
  */
-function cot_forums_sync($cat)
+function cot_forums_sync($category)
 {
-    if (empty($cat)) {
+    if (empty($category) || empty(cot::$structure['forums'][$category])) {
         return 0;
     }
 
-	$num1 = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->forum_topics . ' WHERE ft_cat=?', $cat)->fetchColumn();
-	$num  = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->forum_posts . ' WHERE fp_cat=?', $cat)->fetchColumn();
-	cot_forums_sectionsetlast($cat, $num, $num1);
+    $topicWhere = 'ft_cat = :cat AND ft_movedto = 0 AND ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL;
 
-	return (int) $num1;
+    $data = cot::$db->query(
+        'SELECT COUNT(*) as topics_count, SUM(ft_viewcount) as views_count, ' .
+        '(' .
+            'SELECT COUNT(*) FROM ' . cot::$db->forum_posts . ' WHERE fp_topicid IN ' .
+            '(SELECT ft_id FROM ' . cot::$db->forum_topics . " WHERE  $topicWhere)" .
+        ') as posts_count ' .
+        ' FROM ' . cot::$db->forum_topics . " WHERE $topicWhere",
+        ['cat' => $category]
+    )->fetch();
+
+    $lastTopic = cot::$db->query(
+        'SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title' .
+        ' FROM ' . cot::$db->forum_topics . " WHERE $topicWhere ORDER BY ft_updated DESC LIMIT 1",
+        ['cat' => $category]
+    )->fetch();
+    if (!$lastTopic) {
+        $lastTopic = [
+            'ft_id' => 0,
+            'ft_lastposterid' => 0,
+            'ft_lastpostername' => '',
+            'ft_updated' => 0,
+            'ft_title' => '',
+        ];
+    }
+
+    $statData = [
+        'fs_lt_id' => (int) $lastTopic['ft_id'],
+        'fs_lt_title' => $lastTopic['ft_title'],
+        'fs_lt_date' => (int) $lastTopic['ft_updated'],
+        'fs_lt_posterid' => (int) $lastTopic['ft_lastposterid'],
+        'fs_lt_postername' => $lastTopic['ft_lastpostername'],
+        'fs_topiccount' => (int) $data['topics_count'],
+        'fs_postcount' => (int) $data['posts_count'],
+        'fs_viewcount' => (int) $data['views_count'],
+    ];
+
+    $statExists = cot::$db->query(
+        'SELECT COUNT(*) FROM ' . cot::$db->forum_stats . ' WHERE fs_cat = :cat',
+        ['cat' => $category]
+    );
+
+    if (!$statExists) {
+        $insertData = $statData;
+        $insertData['fs_cat'] = $category;
+        try {
+            cot::$db->insert(cot::$db->forum_stats, $insertData);
+        } catch (\Exception $e) {
+            // May be record was just created by another process. Let's try to update
+            cot::$db->update(cot::$db->forum_stats, $statData, 'fs_cat = :cat', ['cat' => $category]);
+        }
+    } else {
+        cot::$db->update(cot::$db->forum_stats, $statData, 'fs_cat = :cat', ['cat' => $category]);
+    }
+
+    return (int) cot::$db->query(
+        'SELECT COUNT(*) FROM ' . cot::$db->quoteTableName(cot::$db->forum_topics) .
+        ' WHERE ft_cat = ?',
+        $category
+    )->fetchColumn();
+}
+
+/**
+ * Recalculate and update structure counters
+ *
+ * @param string $category Category code
+ * @return void
+ */
+function cot_forums_updateStructureCounters($category)
+{
+    if (empty($category) || empty(cot::$structure['forums'][$category])) {
+        return;
+    }
+
+    $count = cot_forums_sync($category);
+    cot::$db->query(
+        'UPDATE ' . cot::$db->quoteTableName(cot::$db->structure) . ' SET structure_count = ' . $count .
+        " WHERE structure_area='forums' AND structure_code = :category",
+        ['category' => $category]
+    );
+
+    if (cot::$cache) {
+        cot::$cache->db->remove('structure', 'system');
+        (cot::$cfg['cache_forums']) && cot::$cache->page->clear('forums');
+        (cot::$cfg['cache_index']) && cot::$cache->page->clear('index');
+    }
+}
+
+/**
+ * Update user posts count
+ * @param int $id User Id
+ * @return void
+ */
+function cot_forums_updateUserPostCount($id)
+{
+    $id = (int) $id;
+    if ($id < 1) {
+        return;
+    }
+
+    $excludeCats = [];
+    if (!empty(cot::$structure['forums'])) {
+        foreach (array_keys(cot::$structure['forums'] )as $cat) {
+            if (!cot::$cfg['forums']['cat_' . $cat]['countposts']) {
+                $excludeCats[] = cot::$db->quote($cat);
+            }
+        }
+    }
+
+    $countPostsDisabled = '';
+    if (!empty($excludeCats)) {
+        $countPostsDisabled = ' OR ft_cat IN (' . implode(', ', $excludeCats) . ')';
+    }
+
+    $sql = 'UPDATE ' . cot::$db->users . ' SET user_postcount = (' .
+        'SELECT COUNT(*) FROM ' . cot::$db->forum_posts .
+        ' WHERE fp_posterid = :posterId ' .
+        'AND fp_topicid NOT IN (SELECT ft_id FROM ' . cot::$db->forum_topics .' WHERE ft_mode = ' .
+            COT_FORUMS_TOPIC_MODE_PRIVATE . $countPostsDisabled . ')' .
+    ') ' .
+    'WHERE user_id = :posterId';
+
+    cot::$db->query($sql, [':posterId' => $id]);
 }
 
 /**

@@ -120,26 +120,23 @@ else
 	if ($a == 'update' && !empty($_POST))
 	{
 		$editconfig = cot_import('editconfig', 'P', 'TXT');
-		if (!empty($editconfig))
-		{
+		if (!empty($editconfig)) {
             $owner = $is_module ? 'module' : 'plug';
 			$optionslist = cot_config_list($owner, $n, $editconfig);
-			foreach ($optionslist as $key => $val)
-			{
+			foreach ($optionslist as $key => $val) {
 				$data = cot_import($key, 'P', !empty($cot_import_filters[$key]) ? $key : 'NOC');
-				if ($optionslist[$key]['config_value'] != $data)
-				{
-					if (is_null($optionslist[$key]['config_subdefault']))
-					{
+				if ($optionslist[$key]['config_value'] != $data) {
+					if (!isset($optionslist[$key]['config_subdefault'])) {
 						$optionslist[$key]['config_value'] = $data;
 						$optionslist[$key]['config_subcat'] = $editconfig;
-						$db->insert($db_config, $optionslist[$key]);
-					}
-					else
-					{
-						$db->update($db_config, array('config_value' => $data),
+						cot::$db->insert($db_config, $optionslist[$key]);
+					} else {
+                        cot::$db->update(
+                            $db_config,
+                            array('config_value' => $data),
                             "config_name = ? AND config_owner = ? AND config_cat = ?  AND config_subcat = ?",
-                            array($key, $owner, $n, $editconfig));
+                            array($key, $owner, $n, $editconfig)
+                        );
 					}
 				}
 

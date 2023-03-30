@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `cot_forum_topics` (
   `ft_firstposterid` int UNSIGNED NOT NULL,
   `ft_firstpostername` varchar(100) NOT NULL,
   `ft_poll` int UNSIGNED default '0',
-  `ft_movedto` varchar(255) NOT NULL default '',
+  `ft_movedto` mediumint UNSIGNED NOT NULL default 0,
   `ft_preview` varchar(128) NOT NULL default '',
   PRIMARY KEY  (`ft_id`),
   KEY `ft_updated` (`ft_updated`),

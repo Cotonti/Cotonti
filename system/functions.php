@@ -2367,27 +2367,22 @@ function cot_user_full_name($user)
  */
 function cot_build_group($grpid, $title = false)
 {
-	if (empty($grpid))
-		return '';
 	global $cot_groups, $L;
 
+    if (empty($grpid) || empty($cot_groups[$grpid])) {
+        return '';
+    }
+
 	$type = ($title) ? 'title' : 'name';
-	if ($cot_groups[$grpid]['hidden'])
-	{
-		if (cot_auth('users', 'a', 'A'))
-		{
+	if ($cot_groups[$grpid]['hidden']) {
+		if (cot_auth('users', 'a', 'A')) {
 			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type] . ' (' . $L['Hidden'] . ')');
+		} else {
+			return cot::$L['Hidden'];
 		}
-		else
-		{
-			return $L['Hidden'];
-		}
-	}
-	else
-	{
-		if ($type == 'title' && isset($L['users_grp_' . $grpid . '_title']))
-		{
-			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $L['users_grp_' . $grpid . '_title']);
+	} else {
+		if ($type == 'title' && isset(cot::$L['users_grp_' . $grpid . '_title'])) {
+			return cot_rc_link(cot_url('users', 'gm=' . $grpid), cot::$L['users_grp_' . $grpid . '_title']);
 		}
 		return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type]);
 	}
@@ -2795,7 +2790,9 @@ function cot_img_check_memory($file_path, $extra_size = 0)
  */
 function cot_themes_info($theme_name = null)
 {
+    global $L, $Ls, $R;
 	require_once cot_incfile('extensions');
+
 	$themes_data = array();
 	$themelist = array();
 	$handle = opendir(cot::$cfg['themes_dir']);
@@ -3353,19 +3350,92 @@ function cot_implode_messages($src = 'default', $class = '')
  * Logs an event
  *
  * @param string $text Event description
- * @param string $group Event group
- * @global CotDB $db
+ * @param string $group Event group (Variants: adm/sec/ext/{ext_code} where {ext_code} is extension code ex. 'forums' or 'comments')
+ * @param string $type Event type
+ * @param string $status Event status
+ * @param array $extradata Event additional data for extrafields
  */
-function cot_log($text, $group = 'def')
+function cot_log($text, $group = 'adm', $type = '', $status = '', $extra_data = [])
 {
-    cot::$db && cot::$db->insert(cot::$db->logger, array(
-        'log_date'  => (int)cot::$sys['now'],
-        'log_ip'    => (!empty(cot::$usr['ip'])) ? cot::$usr['ip'] : '',
-        'log_name'  => (!empty(cot::$usr['name']) || cot::$usr['name'] == '0') ? cot::$usr['name'] : '',
-        'log_group' => (!empty($group) || $group == '0') ? $group : '',
-        'log_uri'   => cot_cutstring(cot::$sys['uri_curr'], 255),
-        'log_text'  => cot_cutstring($text, 255)
-    ));
+	global $cot_plugins_enabled, $cot_modules;
+
+    if (cot::$cfg['loggerlevel'] != 'none') {
+        $log_work = false;
+        if (cot::$cfg['loggerlevel'] == 'all') {
+            $log_work = true;
+        }
+        else {
+            $loggerlevel = [cot::$cfg['loggerlevel']];
+            if (stripos(cot::$cfg['loggerlevel'], '+') !== false) {
+                $loggerlevel = explode('+', cot::$cfg['loggerlevel']);
+            }
+            if (in_array('ext', $loggerlevel)) {
+                foreach (array_merge(array_keys($cot_plugins_enabled), array_keys($cot_modules)) as $ext) {
+                    if ($ext == $group) {
+                        if (isset($cfg[$ext]['loggerlevel'])) {
+	                    	if (cot::$cfg[$ext]['loggerlevel'] != 'none') {
+		                        if (cot::$cfg[$ext]['loggerlevel'] == 'all') {
+		                            $log_work = true;
+		                        }
+		                        else {
+		                        	if ($type) {
+							            if (stripos(cot::$cfg[$ext]['loggerlevel'], '+') !== false) {
+							                $loggerlevel_ext = explode('+', cot::$cfg[$ext]['loggerlevel']);
+							                if (in_array($type, $loggerlevel_ext)) {
+							                    $log_work = true;
+							                }
+							            }
+							            elseif (cot::$cfg[$ext]['loggerlevel'] == $type) {
+							                $log_work = true;
+							            }
+							        }
+		                        }
+		                    }
+	                    }
+		                else {
+	                        $log_work = true;
+		                }
+	                    break;
+	                }
+                }
+            }
+            if (!$log_work && in_array($group, $loggerlevel)) {
+            	$log_work = true;
+            }
+        }
+
+        if ($log_work) {
+            $loger_data = [
+                'log_date'  => (int)cot::$sys['now'],
+                'log_ip'    => (!empty(cot::$usr['ip'])) ? cot::$usr['ip'] : '',
+                'log_uid'   => cot::$usr['id'],
+                'log_name'  => (!empty(cot::$usr['name']) || cot::$usr['name'] == '0') ? cot::$usr['name'] : '',
+                'log_uri'   => cot_cutstring(cot::$sys['uri_curr'], 255),
+                'log_group' => (!empty($group) || $group == '0') ? $group : '',
+                'log_type'  => $type,
+                'log_status'=> $status,
+                'log_text'  => cot_cutstring($text, 255)
+            ];
+
+            if (!empty($extra_data)) {
+		        if (!empty(cot::$extrafields[cot::$db->logger])) {
+		            foreach (cot::$extrafields[cot::$db->logger] as $exfld) {
+		            	if (isset($extra_data[$exfld['field_name']])) {
+		            		$loger_data['log_' . $exfld['field_name']] = $extra_data[$exfld['field_name']];
+		            	}
+		            }
+		        }
+            }
+
+            /* === Hook === */
+            foreach (cot_getextplugins('loger.event') as $pl) {
+                include $pl;
+            }
+            /* ===== */
+
+            cot::$db && cot::$db->insert(cot::$db->logger, $loger_data);
+        }
+    }
 }
 
 /**
@@ -3380,7 +3450,7 @@ function cot_log_import($s, $e, $v, $o)
 {
 	if ($e == 'PSW') $o = str_repeat('*', mb_strlen($o));
 	$text = "A variable type check failed, expecting ".$s."/".$e." for '".$v."' : ".$o;
-	cot_log($text, 'sec');
+	cot_log($text, 'sec', 'input', 'error');
 }
 
 /**
@@ -5038,12 +5108,9 @@ function cot_captcha_validate($value)
  */
 function cot_check_xg($redirect = true)
 {
-	global $sys;
 	$x = cot_import('x', 'G', 'ALP');
-	if ($x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
-	{
-		if ($redirect)
-		{
+	if ($x != cot::$sys['xk'] && (empty(cot::$sys['xk_prev']) || $x != cot::$sys['xk_prev'])) {
+		if ($redirect) {
 			cot_die_message(950, TRUE);
 		}
 		return false;
@@ -5164,7 +5231,7 @@ function cot_shield_hammer($hammer, $action, $lastseen)
 		if ($hammer > $cfg['shieldzhammer'])
 		{
 			cot_shield_update(180, 'Hammering');
-			cot_log('IP banned 3 mins, was hammering', 'sec');
+			cot_log('IP banned 3 mins, was hammering', 'sec', 'hammer', 'error');
 			$hammer = 0;
 		}
 	}

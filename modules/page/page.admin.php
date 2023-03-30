@@ -138,7 +138,7 @@ if ($a == 'validate') {
 		}
 		/* ===== */
 
-		cot_log(cot::$L['Page'].' #' . $id . ' - ' . cot::$L['adm_queue_validated'], 'adm');
+		cot_log(cot::$L['Page'].' #' . $id . ' - ' . cot::$L['adm_queue_validated'], 'page', 'validate', 'done');
 
 		if (cot::$cache) {
             cot::$cache->db->remove('structure', 'system');
@@ -179,7 +179,7 @@ if ($a == 'validate') {
 
 		$sql_page = cot::$db->update(cot::$db->pages, ['page_state' => COT_PAGE_STATE_PENDING], 'page_id=?', $id);
 
-		cot_log(cot::$L['Page'] . ' #' . $id . ' - ' . cot::$L['adm_queue_unvalidated'], 'adm');
+		cot_log(cot::$L['Page'] . ' #' . $id . ' - ' . cot::$L['adm_queue_unvalidated'], 'page', 'unvalidated', 'done');
 
 		if (cot::$cache) {
             cot::$cache->db->remove('structure', 'system');
@@ -249,7 +249,7 @@ if ($a == 'validate') {
 
 					$sql_page = cot::$db->update($db_pages, array('page_state' => 0), "page_id=$id");
 
-					cot_log(cot::$L['Page'].' #'.$id.' - '. cot::$L['adm_queue_validated'], 'adm');
+					cot_log(cot::$L['Page'].' #'.$id.' - '. cot::$L['adm_queue_validated'], 'page', 'validate', 'done');
 
 					if (cot::$cache && cot::$cfg['cache_page']) {
                         cot::$cache->page->clear(

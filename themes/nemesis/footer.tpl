@@ -1,7 +1,5 @@
 <!-- BEGIN: FOOTER -->
-
 	</div>
-
 	<div id="footer" class="body clear">
 		<div class="col4-1">
 			<ul class="block">
@@ -67,7 +65,6 @@
 		</form>
 	</div>
 	<!-- ENDIF -->
-
 {FOOTER_RC}
 </body>
 </html>

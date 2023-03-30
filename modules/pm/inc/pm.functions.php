@@ -30,7 +30,12 @@ $editor = isset(cot::$cfg['plugin'][$parser]) ? cot::$cfg['plugin'][$parser]['ed
 
 cot::$db->registerTable('pm');
 
-cot::$cfg['pm']['turnajax'] = cot::$cfg['pm']['turnajax'] && cot::$cfg['jquery'] && cot::$cfg['turnajax'] && $editor != 'elrte' && $editor != 'epiceditor';
+cot::$cfg['pm']['turnajax'] =
+    cot::$cfg['pm']['turnajax']
+    && cot::$cfg['jquery']
+    && cot::$cfg['turnajax']
+    && $editor != 'elrte'
+    && $editor != 'epiceditor';
 
 /**
  * Send private message to user

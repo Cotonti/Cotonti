@@ -41,7 +41,7 @@ if ($rowpost = $sql_forums->fetch()) {
 	if (!cot::$usr['isadmin'] && ($rowpost['fp_posterid'] != cot::$usr['id'] ||
 			(cot::$cfg['forums']['edittimeout'] != '0' && cot::$sys['now'] - $rowpost['fp_creation'] > cot::$cfg['forums']['edittimeout'] * 3600)))
 	{
-		cot_log('Attempt to edit a post without rights', 'sec');
+		cot_log('Attempt to edit a post without rights', 'sec', 'forums', 'error');
 		cot_die();
 	}
 	cot_block(cot::$usr['auth_read']);
@@ -118,13 +118,10 @@ if ($a == 'update') {
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('forums.editpost.update.done') as $pl)
-	{
+	foreach (cot_getextplugins('forums.editpost.update.done') as $pl) {
 		include $pl;
 	}
 	/* ===== */
-
-	cot_forums_sectionsetlast($rowpost['fp_cat']);
 
 	if (cot::$cache) {
 		(cot::$cfg['cache_forums']) && cot::$cache->page->clear('forums');

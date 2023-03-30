@@ -20,11 +20,13 @@ require_once cot_langfile('countries', 'core');
 require_once cot_incfile('forms');
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.posts.first') as $pl)
-{
+foreach (cot_getextplugins('forums.posts.first') as $pl) {
 	include $pl;
 }
 /* ===== */
+
+$fp_posterid = null;
+
 if ((!empty($n) && !empty($q)) || !empty($p) || !empty($id)) {
 	if (!empty($q) && ($n == 'last' || ($n == 'unread' && cot::$usr['id'] == 0))) {
 		$sql_forums = cot::$db->query("SELECT fp_id, fp_topicid, fp_cat, fp_posterid FROM $db_forum_posts
@@ -118,37 +120,25 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	}
 	/* ===== */
 
-	if (!cot_error_found())
-	{
-		if (!$merge)
-		{
-			$rmsg['fp_topicid'] = (int)$q;
+	if (!cot_error_found()) {
+		if (!$merge) {
+			$rmsg['fp_topicid'] = (int) $q;
 			$rmsg['fp_cat'] = $s;
-			$rmsg['fp_posterid'] = (int)cot::$usr['id'];
+			$rmsg['fp_posterid'] = (int) cot::$usr['id'];
 			$rmsg['fp_postername'] = cot::$usr['name'];
-			$rmsg['fp_creation'] = (int)$sys['now'];
+			$rmsg['fp_creation'] = (int) $sys['now'];
 			$rmsg['fp_updater'] = 0;
 
 			cot::$db->insert($db_forum_posts, $rmsg);
 			$p = cot::$db->lastInsertId();
 
-			$sql_forums = cot::$db->query("UPDATE $db_forum_topics SET
-				ft_postcount=ft_postcount+1, ft_updated=" . $sys['now'] . ",
-				ft_lastposterid=" . cot::$usr['id'] . ", ft_lastpostername=" . cot::$db->quote(cot::$usr['name']) . " WHERE ft_id=$q");
-
-			cot_forums_sectionsetlast($s, 'fs_postcount+1');
-
-			if (cot::$cfg['forums']['cat_' . $s]['countposts'])
-			{
-				$sql_forums = cot::$db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id=" . cot::$usr['id']);
-			}
-		}
-		else
-		{
-			$p = (int)$row['fp_id'];
+            cot_forums_resyncTopic($q, cot::$usr['id']);
+            cot_forums_updateStructureCounters($s);
+		} else {
+			$p = (int) $row['fp_id'];
 
 			$gap_base = empty($row['fp_updated']) ? $row['fp_creation'] : $row['fp_updated'];
-			$updated = sprintf(cot::$L['forums_mergetime'], cot_build_timegap($gap_base, $sys['now']));
+			$updated = sprintf(cot::$L['forums_mergetime'], cot_build_timegap($gap_base, cot::$sys['now']));
 
 			$rmsg['fp_text'] = $row['fp_text'] . cot_rc('forums_code_update', array('updated' => $updated)) . $rmsg['fp_text'];
 			$rmsg['fp_updater'] = ($row['fp_posterid'] == cot::$usr['id'] && ($sys['now'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : cot::$usr['name'];
@@ -156,14 +146,14 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 			cot::$db->update($db_forum_posts, $rmsg, 'fp_id=' . $row['fp_id']);
 			cot::$db->update($db_forum_topics, array('ft_updated' => $sys['now']), "ft_id = $q");
 
-			cot_forums_sectionsetlast($s);
+            cot_forums_resyncTopic($q, false);
+            cot_forums_updateStructureCounters($s);
 		}
 
 		cot_extrafield_movefiles();
 
 		/* === Hook === */
-		foreach (cot_getextplugins('forums.posts.newpost.done') as $pl)
-		{
+		foreach (cot_getextplugins('forums.posts.newpost.done') as $pl) {
 			include $pl;
 		}
 		/* ===== */
@@ -177,16 +167,27 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 		cot_shield_update(30, "New post");
 		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
-}
-elseif ($a == 'delete' && cot::$usr['id'] > 0 && !empty($s) && !empty($q) && !empty($p) && (cot::$usr['isadmin'] || ($fp_posterid == cot::$usr['id'] && (cot::$cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < cot::$cfg['forums']['edittimeout'] * 3600))))
-{
+} elseif (
+    $a == 'delete'
+    && cot::$usr['id'] > 0
+    && !empty($s)
+    && !empty($q)
+    && !empty($p)
+    && (
+        cot::$usr['isadmin']
+        || (
+            $fp_posterid == cot::$usr['id']
+            && (
+                cot::$cfg['forums']['edittimeout'] == '0'
+                || cot::$sys['now'] - $row['fp_creation'] < cot::$cfg['forums']['edittimeout'] * 3600
+            )
+        )
+    )
+) {
 	cot_check_xg();
 
-
-
 	/* === Hook === */
-	foreach (cot_getextplugins('forums.posts.delete.first') as $pl)
-	{
+	foreach (cot_getextplugins('forums.posts.delete.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -211,75 +212,53 @@ elseif ($a == 'delete' && cot::$usr['id'] > 0 && !empty($s) && !empty($q) && !em
 		}
 	}
 
-	foreach($cot_extrafields[$db_forum_posts] as $exfld)
-	{
+	foreach($cot_extrafields[$db_forum_posts] as $exfld) {
 		cot_extrafield_unlinkfiles($row['fp_'.$exfld['field_name']], $exfld);
 	}
 
-	$sql_forums = cot::$db->delete($db_forum_posts, 'fp_id = ? AND fp_topicid = ? AND fp_cat = ?', array($p, $q, $s));
+	cot::$db->delete($db_forum_posts, 'fp_id = ? AND fp_topicid = ? AND fp_cat = ?', array($p, $q, $s));
 
-	if (cot::$cfg['forums']['cat_' . $s]['countposts'])
-	{
-		$sql_forums = cot::$db->query("UPDATE $db_users SET user_postcount=user_postcount-1 WHERE user_id='" . $fp_posterid . "' AND user_postcount>0");
-	}
+    cot_forums_resyncTopic($q, $fp_posterid);
 
-	cot_log("Deleted post #" . $p, 'for');
+	cot_log("Deleted post #" . $p, 'forums', 'delete post', 'done');
 
 	/* === Hook === */
-	foreach (cot_getextplugins('forums.posts.delete.done') as $pl)
-	{
+	foreach (cot_getextplugins('forums.posts.delete.done') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if (cot::$cache)
-	{
-		(cot::$cfg['cache_forums']) && cot::$cache->page->clear('forums');
-		(cot::$cfg['cache_index']) && cot::$cache->page->clear('index');
-	}
-
-	if (cot::$db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid= $q")->fetchColumn() == 0)
-	{
-		$sql_forums = cot::$db->query("SELECT * FROM $db_forum_topics WHERE ft_id = $q");
-		if ($row = $sql_forums->fetch())
-		{
-			$sql_forums = cot::$db->delete($db_forum_topics, "ft_movedto = $q");
-			$sql_forums = cot::$db->delete($db_forum_topics, "ft_id = $q");
-
-			foreach($cot_extrafields[$db_forum_topics] as $exfld)
-			{
-				cot_extrafield_unlinkfiles($row['ft_'.$exfld['field_name']], $exfld);
-			}
+	if (
+        cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->forum_posts . ' WHERE fp_topicid = ?', $q)
+            ->fetchColumn() == 0
+    ) {
+        // There is no posts left, delete topic
+        $sqlTopic = cot::$db->query('SELECT * FROM ' . cot::$db->forum_topics . ' WHERE ft_id = ?', $q);
+		if ($row = $sqlTopic->fetch()) {
+            cot_forums_prunetopics('single', $s, $q);
 
 			/* === Hook === */
-			foreach (cot_getextplugins('forums.posts.emptytopicdel') as $pl)
-			{
+			foreach (cot_getextplugins('forums.posts.emptytopicdel') as $pl) {
 				include $pl;
 			}
 			/* ===== */
 
-			cot_log('Delete topic #' . $q . " (no post left)", 'for');
-			cot_forums_sectionsetlast($s, 'fs_postcount-1', 'fs_topiccount-1');
+			cot_log('Delete topic #' . $q . " (no post left)", 'forums', 'delete topic', 'done');
 		}
-		cot_redirect(cot_url('forums', 'm=topics&s=' . $s, '', true));
-	}
-	else
-	{
-		// There's at least 1 post left, let's resync
-		$sql_forums = cot::$db->query("SELECT fp_id, fp_posterid, fp_postername, fp_updated, fp_topicid FROM $db_forum_posts
-			WHERE fp_topicid = ? AND fp_cat = ? ORDER BY fp_id DESC LIMIT 1",
-			array($q, $s));
-		if ($row = $sql_forums->fetch())
-		{
-			$sql_forums = cot::$db->query("UPDATE $db_forum_topics SET
-				ft_postcount=ft_postcount-1, ft_lastposterid=" . (int)$row['fp_posterid'] . ",
-				ft_lastpostername=" . cot::$db->quote($row['fp_postername']) . ", ft_updated=" . (int)$row['fp_updated'] . "
-				WHERE ft_id = $q");
 
-			cot_forums_sectionsetlast($s, 'fs_postcount-1');
-
-			cot_redirect(cot_url('forums', 'm=posts&q=' . $row['fp_topicid'] . '&d=' . $durl , '#' . $row['fp_id'], true));
-		}
+        cot_forums_updateStructureCounters($s);
+		cot_redirect(cot_url('forums', ['m' => 'topics', 's' => $s], '', true));
+	} else {
+        // There's at least 1 post left
+        cot_forums_updateStructureCounters($s);
+        cot_redirect(
+            cot_url(
+                'forums',
+                ['m' => 'posts', 'q' => $q, 'd' => $durl,],
+                '#' . $row['fp_id'],
+                true
+            )
+        );
 	}
 }
 

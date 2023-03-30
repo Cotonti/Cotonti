@@ -47,12 +47,12 @@ $cat_top = array();
 $sql_forums = cot::$db->query("SELECT * FROM $db_forum_stats ORDER by fs_cat DESC");
 foreach ($sql_forums->fetchAll() as $row) {
 	if (
-        !empty($row['fs_cat']) &&
-        !$row['fs_lt_id'] &&
-        count(explode('.', cot::$structure['forums'][$row['fs_cat']]['rpath'])) > 1 &&
-        cot::$structure['forums'][$row['fs_cat']]['count'] > 0
+        !empty($row['fs_cat'])
+        && !$row['fs_lt_id']
+        && count(explode('.', cot::$structure['forums'][$row['fs_cat']]['rpath'])) > 1
+        && cot::$structure['forums'][$row['fs_cat']]['count'] > 0
     ) {
-		cot_forums_sectionsetlast($row['fs_cat']);
+        cot_forums_updateStructureCounters($row['fs_cat']);
 	}
 	$cat_top[$row['fs_cat']] = $row;
 	$cat_top[$row['fs_cat']]['topiccount'] = $cat_top[$row['fs_cat']]['fs_topiccount'];

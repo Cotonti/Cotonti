@@ -124,6 +124,9 @@ $L['cfg_maxrowsperpage'] = 'Макс. количество элементов н
 $L['cfg_maxrowsperpage_hint'] = 'Стандартный лимит элементов для паджинации';
 $L['cfg_parser'] = 'Парсер разметки';
 $L['cfg_parser_hint'] = 'По умолчанию: HTML';
+$L['cfg_loggerlevel'] = 'Уровень протоколирования';
+$L['cfg_loggerlevel_params'] = 'Отключено,'.$L['Security'].','.$L['Administration'].','.$L['Extensions'].','.$L['Security'].'+'.$L['Administration'].','.$L['Security'].'+'.$L['Extensions'].','.$L['Administration'].'+'.$L['Extensions'].','.$L['Security'].'+'.$L['Administration'].'+'.$L['Extensions'].',Всё';
+$L['cfg_loggerlevel_hint'] = 'При выборе "Всё" ведётся протоколирование всех действий без исключений<br />При выборе "Отключено" протоколирование отключается полностью для всех уровней<br /><i><small>При выборе "Отключено" или "Всё" индивидуальные настройки уровня протоколирования расширений игнорируются</small></i>';
 
 /**
  * Config Section
@@ -391,7 +394,7 @@ $L['adm_maxsizeallpfs'] = 'Максимальный размер всех фай
 $L['adm_copyrightsfrom'] = 'Установить права как в группе';
 $L['adm_rights_maintenance'] = 'Разрешить авторизацию при включенном режиме обслуживания';
 $L['adm_skiprights'] = 'Пропустить права для этой группы';
-$L['adm_group_has_no_rights'] = 'Група не имеет прав';
+$L['adm_group_has_no_rights'] = 'Группа не имеет прав';
 $L['adm_groups_name_empty'] = 'Название группы не должно быть пустым';
 $L['adm_groups_title_empty'] = 'Титул члена группы (заголовок) не должен быть пустым';
 $L['users_grp_5_title'] = 'Администраторы';
@@ -492,6 +495,7 @@ $L['adm_checkingtheme'] = 'Проверка темы...';
 $L['adm_check_ok'] = 'Ok';
 $L['adm_check_missing'] = 'Отсутствует';
 $L['adm_ref_prune'] = 'Очищено';
+$L['adm_log_uri'] = 'URL адрес';
 
 /**
  * Other Section

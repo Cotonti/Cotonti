@@ -15,13 +15,26 @@ foreach (cot_getextplugins('footer.first') as $pl)
 /* ===== */
 
 if (!COT_AJAX) {
-	$mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R') ? 'core' : 'module';
-	if (cot::$cfg['enablecustomhf']) {
-		$mtpl_base = (defined('COT_PLUG') && !empty($e)) ? array('footer', $e) : array('footer', cot::$env['location']);
+	$mtpl_type = (
+        defined('COT_ADMIN')
+        || (
+            defined('COT_MESSAGE')
+            && $_SESSION['s_run_admin']
+            && cot_auth('admin', 'any', 'R')
+        )
+    ) ? 'core' : 'module';
 
-	} else {
-		$mtpl_base = 'footer';
+    $mtpl_base = 'footer';
+	if (cot::$cfg['enablecustomhf']) {
+        if (defined('COT_PLUG') && !empty($e)) {
+            $mtpl_base = ['footer', $e];
+        } elseif (!empty(cot::$env['ext'])) {
+            $mtpl_base = ['footer', cot::$env['ext']];
+        } elseif (!empty(cot::$env['location'])) {
+            $mtpl_base = ['footer', cot::$env['location']];
+        }
 	}
+
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 
     /* === Hook === */
@@ -38,29 +51,35 @@ if (!COT_AJAX) {
 	));
 
 	/* === Hook === */
-	foreach (cot_getextplugins('footer.tags') as $pl)
-	{
+	foreach (cot_getextplugins('footer.tags') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
 	// Attach rich text editors if any
-	if (!empty($cot_textarea_count)) {
-		if (!empty($cot_plugins['editor']) && is_array($cot_plugins['editor'])) {
-			$parser = !empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
-            if(!empty(cot::$cfg['plugin'][$parser]['editor'])) {
-                $editor = cot::$cfg['plugin'][$parser]['editor'];
-                foreach ($cot_plugins['editor'] as $k) {
-                    if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R')) {
-                        include cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
+	if (
+        (!empty($cot_textarea_count) || !empty($cot_turnOnEditor))
+        && !empty($cot_plugins['editor'])
+        && is_array($cot_plugins['editor'])
+    ) {
+        $parser = !empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
+        if (!empty(cot::$cfg['plugin'][$parser]['editor'])) {
+            $editor = cot::$cfg['plugin'][$parser]['editor'];
+            foreach ($cot_plugins['editor'] as $k) {
+                if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R')) {
+                    $fileName = cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
+                    if (is_readable($fileName)) {
+                        include $fileName;
                         break;
                     }
                 }
             }
-		}
+        }
 	}
 
-	if(empty(cot::$out['footer_rc'])) cot::$out['footer_rc'] = '';
+	if (empty(cot::$out['footer_rc'])) {
+        cot::$out['footer_rc'] = '';
+    }
     cot::$out['footer_rc'] .= Resources::renderFooter();
 
 	$t->assign('FOOTER_RC', cot::$out['footer_rc']);

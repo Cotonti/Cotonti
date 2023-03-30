@@ -143,11 +143,11 @@ function cot_trash_restore($id)
             try {
                 $sql = $db->insert($databasename, $data);
             } catch(\Exception $e) {
-                cot_log("$type #" . $res['tr_itemid'] . " failed to restore from the trash can.", 'adm');
+                cot_log("$type #" . $res['tr_itemid'] . " failed to restore from the trash can.", 'trashcan', 'restore', 'error');
                 return false;
             }
 
-			cot_log("$type #" . $res['tr_itemid'] . " restored from the trash can.", 'adm');
+			cot_log("$type #" . $res['tr_itemid'] . " restored from the trash can.", 'trashcan', 'restore', 'done');
 
 			if (isset($trash_types[$type]) && function_exists('cot_trash_'.$type.'_sync')) {
 				$resync = 'cot_trash_'.$type.'_sync';
