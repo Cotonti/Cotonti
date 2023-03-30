@@ -56,7 +56,7 @@ function cot_apply_patches(
 	$php_pattern = 'patch_([\w\.\-\_]+)\.(inc)'
 )
 {
-	global $L, $db;
+    global $L, $Ls, $cfg, $R, $db;
 
 	// Find new patches
 	$dp = opendir($directory);

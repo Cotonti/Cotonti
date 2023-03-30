@@ -364,6 +364,10 @@ class CotDB
                 $result = $this->adapter->query($query, $mode);
             }
         } catch (\PDOException $err) {
+            /**
+             * @todo it should be optional. Sometimes we don't need to catch Exception here, but in another place
+             * @see plugins/trashcan/inc/trashcan.functions.php:122
+             */
             if ($this->_parseError($err, $err_code, $err_message)) {
                 cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
             }
