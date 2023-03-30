@@ -516,7 +516,7 @@ $L['adm_help_versions'] = "Adjust the server time zone to have clock #3 properly
  */
 $L['adm_area'] = 'Area';
 $L['adm_clicktoedit'] = '(Click to edit)';
-$L['adm_confirm'] = 'Press this button to confirm: ';
+$L['adm_confirm'] = 'Press this button to confirm:';
 $L['adm_done'] = 'Done';
 $L['adm_failed'] = 'Failed';
 $L['adm_from'] = 'From';
@@ -541,7 +541,7 @@ $L['adm_invalid_input'] = 'Invalid value \'{$value}\' for variable \'{$field_nam
 $L['adm_set_default'] = 'Default value used';
 $L['adm_max'] = 'maximum allowed \'{$value}\'';
 $L['adm_min'] = 'minimum allowed \'{$value}\'';
-$L['adm_set'] = 'Using ';
+$L['adm_set'] = 'Using';
 $L['adm_partially_updated'] = 'Not all values updated';
 $L['adm_already_updated'] = 'Already updated';
 
