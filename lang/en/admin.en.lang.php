@@ -13,7 +13,7 @@ defined('COT_CODE') or die('Wrong URL.');
 /**
  * Home Section
  */
-$L['home_installable_error'] = 'Please remove install.php until next update or at least protect config.php from being writable';
+$L['home_remove_install'] = 'Please remove install.php until next update or at least protect config.php from being writable';
 
 $L['home_newusers'] = 'New members';
 $L['home_newpages'] = 'New pages';
@@ -26,25 +26,13 @@ $L['home_db_indexsize'] = 'SQL database, index size (KB)';
 $L['home_db_datassize'] = 'SQL database, datas size (KB)';
 $L['home_db_totalsize'] = 'SQL database, total size (KB)';
 
-$L['home_ql_b1_title'] = 'Site properties';
-$L['home_ql_b1_1'] = 'Basic config';
-$L['home_ql_b1_2'] = 'Titles';
-$L['home_ql_b1_3'] = 'Theme and charset';
-$L['home_ql_b1_4'] = 'Menu slots in tpl-files';
-$L['home_ql_b1_5'] = 'Language';
-$L['home_ql_b1_6'] = 'Time and date';
-
-$L['home_ql_b2_1'] = 'Structure of the pages (categories)';
-$L['home_ql_b2_2'] = 'Extra fields for pages';
-$L['home_ql_b2_3'] = 'Extra fields for categories';
-$L['home_ql_b2_4'] = 'Parser config';
-
-$L['home_ql_b3_1'] = 'Basic config';
-$L['home_ql_b3_2'] = 'Extra fields for users';
-$L['home_ql_b3_4'] = 'User rights';
+$L['home_site_props'] = 'Site properties';
+$L['home_extrafields_pages'] = 'Extrafields for pages';
+$L['home_extrafields_users'] = 'Extrafields for users';
+$L['home_users_rights'] = 'User rights';
 
 $L['home_update_notice'] = 'Update available';
-$L['home_update_revision'] = 'Current version: <span style="color:#C00;font-weight:bold;">%1$s</span><br />New version: <span style="color:#4E9A06;font-weight:bold;">%2$s</span>'; // %1/%2 Current version/revision %3/%4 Updated version/revision
+$L['home_update_revision'] = 'Current version: <b>%1$s</b><br />New version: <b>%2$s</b>';
 
 /**
  * Config Section
@@ -544,7 +532,7 @@ $L['adm_already_updated'] = 'Already updated';
 /**
  * Extra Fields (Common Entries for Pages & Structure & Users)
  */
-$L['adm_extrafields'] = 'Extra fields';
+$L['adm_extrafields'] = &$L['Extrafields'];
 $L['adm_extrafield_added'] = 'Successfully added new extra field.';
 $L['adm_extrafield_not_added'] = 'Error! New extra field not added.';
 $L['adm_extrafield_updated'] = 'Successfully updated extra field \'%1$s\'.';

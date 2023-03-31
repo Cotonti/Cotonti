@@ -16,26 +16,26 @@
 
 <aside>
 	<div class="block">
-		<h2>{PHP.L.home_ql_b1_title}</h2>
+		<h2>{PHP.L.home_site_props}</h2>
 		<div class="wrapper">
 			<ul class="std">
 				<li>
-					<a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=main')}">{PHP.L.home_ql_b1_1}</a>
+					<a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=main')}">{PHP.L.core_main}</a>
 				</li>
 				<li>
-					<a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=title')}">{PHP.L.home_ql_b1_2}</a>
+					<a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=title')}">{PHP.L.core_title}</a>
 				</li>
 				<li>
-					<a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=theme')}">{PHP.L.home_ql_b1_3}</a>
+					<a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=theme')}">{PHP.L.core_theme}</a>
 				</li>
 				<li>
-					<a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=menus')}">{PHP.L.home_ql_b1_4}</a>
+					<a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=menus')}">{PHP.L.core_menus}</a>
 				</li>
 				<li>
-					<a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=locale')}">{PHP.L.Locale}</a>
+					<a href="{PHP|cot_url('admin','m=config&n=edit&o=core&p=locale')}">{PHP.L.core_locale}</a>
 				</li>
 				<li>
-					<a href="{PHP|cot_url('admin','m=extrafields')}">{PHP.L.adm_extrafields}</a>
+					<a href="{PHP|cot_url('admin','m=extrafields')}">{PHP.L.Extrafields}</a>
 				</li>
 			</ul>
 		</div>

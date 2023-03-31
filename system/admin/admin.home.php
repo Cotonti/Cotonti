@@ -12,7 +12,7 @@
 $t = new XTemplate(cot_tplfile('admin.home', 'core'));
 
 if (!cot::$cfg['debug_mode'] && file_exists('install.php') && is_writable('datas/config.php')) {
-	cot_error('home_installable_error');
+	cot_error('home_remove_install');
 }
 
 $adminTitle = $L['Adminpanel'];
