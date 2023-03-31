@@ -1540,11 +1540,14 @@ function cot_structure_parents($area, $cat, $type = 'full')
  * Returns specific access permissions
  *
  * @param string $area Cotonti area
- * @param string $option Option to access
+ * @param ?string $option Option to access.
+ *    Empty -  check if user has access to area (extension)
+ *    'any' - if user has access to the extension or to any of its categories
+ *    category code - if user has access to this category of area (extension)
  * @param string $mask Access mask
- * @return mixed
+ * @return bool|array<string, bool>
  */
-function cot_auth($area, $option, $mask = 'RWA')
+function cot_auth($area, $option = null, $mask = 'RWA')
 {
 	$mn['R'] = 1;
 	$mn['W'] = 2;
@@ -1556,11 +1559,16 @@ function cot_auth($area, $option, $mask = 'RWA')
 	$mn['A'] = 128;
 
 	$masks = str_split($mask);
-	$res = array();
+	$res = [];
+
+    if ($option === null || $option == '') {
+        $option = 'a';
+    }
 
 	foreach ($masks as $k => $ml) {
+        $logOption = $area . '.' . $option . '.' . $ml;
 		if (empty($mn[$ml])) {
-			cot::$sys['auth_log'][] = $area.'.'.$option.'.'.$ml.'=0';
+			cot::$sys['auth_log'][] = $logOption . '=0';
 			$res[] = false;
 
 		} elseif ($option == 'any') {
@@ -1574,14 +1582,16 @@ function cot_auth($area, $option, $mask = 'RWA')
 
                 $cnt = ($cnt == 0 && cot::$usr['auth']['admin']['a'] && $ml == 'A') ? 1 : $cnt;
             }
-            cot::$sys['auth_log'][] = ($cnt > 0) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
+            cot::$sys['auth_log'][] = ($cnt > 0) ? $logOption . '=1' : $logOption . '=0';
 			$res[] = ($cnt > 0);
 
 		} else {
             $tmpOption = 0;
-            if (isset(cot::$usr['auth'][$area][$option])) $tmpOption = cot::$usr['auth'][$area][$option];
+            if (isset(cot::$usr['auth'][$area][$option])) {
+                $tmpOption = cot::$usr['auth'][$area][$option];
+            }
 
-            cot::$sys['auth_log'][] = (($tmpOption & $mn[$ml]) == $mn[$ml]) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
+            cot::$sys['auth_log'][] = (($tmpOption & $mn[$ml]) == $mn[$ml]) ? $logOption . '=1' : $logOption . '=0';
 			$res[] = (($tmpOption & $mn[$ml]) == $mn[$ml]);
 		}
 	}

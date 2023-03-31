@@ -59,15 +59,13 @@ if ((!empty($n) && !empty($q)) || !empty($p) || !empty($id)) {
 
 (empty($s)) && cot_die(true, true);
 isset(cot::$structure['forums'][$s]) || cot_die(true, true);
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('forums', $s);
 
+list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('forums', $s);
 /* === Hook === */
-foreach (cot_getextplugins('forums.posts.rights') as $pl)
-{
+foreach (cot_getextplugins('forums.posts.rights') as $pl) {
 	include $pl;
 }
 /* ===== */
-
 cot_block(cot::$usr['auth_read']);
 
 $sys['sublocation'] = cot::$structure['forums'][$s]['title'];

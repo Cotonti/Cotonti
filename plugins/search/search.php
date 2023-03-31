@@ -30,9 +30,14 @@ $hl = urlencode(mb_strtoupper($sq));
 $tab = cot_import('tab', 'R', 'ALP');
 $cfg_maxitems = is_numeric(cot::$cfg['plugin']['search']['maxitems']) ? abs(floor(cot::$cfg['plugin']['search']['maxitems'])) : 50;
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg_maxitems);
-$totalitems = array();
-$pag_catauth = array();
-$frm_catauth = array();
+$totalitems = [];
+$pag_catauth = [];
+$frm_catauth = [];
+$forumCategoryAdmin = [];
+$pagAuthAllCats = false;
+$forumAuthAllCats = false;
+$forumAdminAllCats = false;
+
 $rs = isset($_REQUEST['rs']) ? $_REQUEST['rs'] : null;
 
 $rs['pagtitle']  = isset($rs['pagtitle'])  ? cot_import($rs['pagtitle'], 'D', 'INT') : '';
@@ -106,17 +111,20 @@ foreach (cot_getextplugins('search.first') as $pl)
 if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && cot::$cfg['plugin']['search']['pagesearch']) {
 	// Making the category list
 	$pages_cat_list['all'] = cot::$L['plu_allcategories'];
-    $pagAuthAllCats = true;
-	foreach (cot::$structure['page'] as $cat => $x) {
-		if ($cat != 'all' && $cat != 'system') {
-            if (cot_auth('page', $cat, 'R')) {
-                $pages_cat_list[$cat] = $x['tpath'];
-                $pag_catauth[] = cot::$db->prep($cat);
+    if (!empty(cot::$structure['page'])) {
+        $pagAuthAllCats = true;
+        foreach (cot::$structure['page'] as $code => $cat) {
+            if (in_array($code, ['all', 'system',])) {
+                continue;
+            }
+            if (cot_auth('page', $code, 'R')) {
+                $pages_cat_list[$code] = $cat['tpath'];
+                $pag_catauth[] = $code;
             } else {
                 $pagAuthAllCats = false;
             }
-		}
-	}
+        }
+    }
 
 	if (empty($rs['pagsub']) || $rs['pagsub'][0] == 'all') {
 		$rs['pagsub'] = array();
@@ -154,16 +162,30 @@ if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && cot::$cfg['pl
 
 if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && cot::$cfg['plugin']['search']['forumsearch']) {
 	$forum_cat_list['all'] = cot::$L['plu_allsections'];
-	foreach (cot::$structure['forums'] as $key => $val) {
-		if (cot_auth('forums', $key, 'R')) {
-			$forum_cat_list[$key] = $val['tpath'];
-			$frm_catauth[] = cot::$db->prep($key);
-		}
-	}
+    if (!empty(cot::$structure['forums'])) {
+        $forumAuthAllCats = true;
+        $forumAdminAllCats = true;
+        foreach (cot::$structure['forums'] as $code => $cat) {
+            if (in_array($code, ['all', 'system',])) {
+                continue;
+            }
+            if (cot_auth('forums', $code, 'R')) {
+                $forum_cat_list[$code] = $cat['tpath'];
+                $frm_catauth[] = $code;
+            } else {
+                $forumAuthAllCats = false;
+            }
+
+            if (cot_auth('forums', $code, 'A')) {
+                $forumCategoryAdmin[] = $code;
+            } else {
+                $forumAdminAllCats = false;
+            }
+        }
+    }
 
 	if (empty($rs['frmsub']) || $rs['frmsub'][0] == 'all') {
-		$rs['frmsub'] = array();
-		$rs['frmsub'][] = 'all';
+		$rs['frmsub'] = ['all'];
 	}
 
 	$t->assign(array(
@@ -226,12 +248,12 @@ if (!empty($sq)) {
     $items = 0;
 
 	if (
-        ($tab == 'pag' || empty($tab)) &&
-        cot_module_active('page') &&
-        cot::$cfg['plugin']['search']['pagesearch'] &&
-        !cot_error_found()
+        ($tab == 'pag' || empty($tab))
+        && cot_module_active('page')
+        && cot::$cfg['plugin']['search']['pagesearch']
+        && !empty($pag_catauth)
+        && !cot_error_found()
     ) {
-
         $searchInCategories = [];
 
         if ($rs['pagsub'][0] != 'all' && count($rs['pagsub']) > 0) {
@@ -243,9 +265,11 @@ if (!empty($sq)) {
 
             } else {
 				foreach ($rs['pagsub'] as $scat) {
-                    $searchInCategories[] = cot::$db->prep($scat);
+                    $searchInCategories[] = $scat;
 				}
 			}
+
+            $searchInCategories = array_intersect($searchInCategories, $pag_catauth);
 		} else {
             // If user can't read all categories
             if (!$pagAuthAllCats) {
@@ -254,7 +278,8 @@ if (!empty($sq)) {
 		}
 
         if (!empty($searchInCategories)) {
-            $where_and['cat'] = "page_cat IN (" . implode(",", cot::$db->quote($searchInCategories)) . ")";
+            $searchInCategories = array_map(function ($value) {return cot::$db->quote($value);}, $searchInCategories);
+            $where_and['cat'] = 'page_cat IN (' . implode(', ', $searchInCategories) . ')';
         }
 
 		$where_and['state'] = "page_state = 0";
@@ -366,47 +391,65 @@ if (!empty($sq)) {
 		unset($where_and, $where_or, $where);
 	}
 
-	if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && cot::$cfg['plugin']['search']['forumsearch'] &&
-        !cot_error_found())
-	{
+	if (
+        ($tab == 'frm' || empty($tab))
+        && cot_module_active('forums')
+        && cot::$cfg['plugin']['search']['forumsearch']
+        && !empty($frm_catauth)
+        && !cot_error_found()
+    ) {
+        $searchInCategories = [];
+
 		if ($rs['frmsub'][0] != 'all' && count($rs['frmsub']) > 0) {
 			if ($rs['frmsubcat']) {
-				$tempcat = array();
-				foreach ($rs['frmsub'] as $scat)
-				{
-					$tempcat = array_merge(cot_structure_children('forums', $scat), $tempcat);
-				}
-				$tempcat = array_unique($tempcat);
-				$where_and['cat'] = "t.ft_cat IN ('".implode("','", $tempcat)."')";
-			} else {
-				$tempcat = array();
 				foreach ($rs['frmsub'] as $scat) {
-					$tempcat[] = cot::$db->prep($scat);
+                    $searchInCategories = array_merge(cot_structure_children('forums', $scat), $searchInCategories);
 				}
-				$where_and['cat'] = "t.ft_cat IN ('".implode("','", $tempcat)."')";
+                $searchInCategories = array_unique($searchInCategories);
+			} else {
+				foreach ($rs['frmsub'] as $scat) {
+                    $searchInCategories[] = cot::$db->prep($scat);
+				}
 			}
+
+            $searchInCategories = array_intersect($searchInCategories, $frm_catauth);
 		} else {
-		    if(!empty(cot::$structure['forums'])) {
-                // If exists categories which user can't read
-		        if(!empty($frm_catauth) && count($frm_catauth) != count(array_keys(cot::$structure['forums']))) {
-                    $where_and['cat'] = "t.ft_cat IN ('" . implode("','", $frm_catauth) . "')";
-                }
+            // If user can't read all categories
+            if (!$forumAuthAllCats) {
+                $searchInCategories = $frm_catauth;
             }
 		}
-		$where_and['reply'] = ($rs['frmreply'] == '1') ? "t.ft_postcount > 1" : "";
-		$where_and['time'] = ($rs['setlimit'] > 0) ? "p.fp_creation >= ".$rs['setfrom']." AND p.fp_updated <= ".$rs['setto'] : "";
-		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid ".$touser : "";
+
+        if (!empty($searchInCategories)) {
+            $searchInCategories = array_map(function ($value) {return cot::$db->quote($value);}, $searchInCategories);
+            $where_and['cat'] = 'page_cat IN (' . implode(', ', $searchInCategories) . ')';
+        }
+
+        // Exclude private topics
+        if (!$forumAdminAllCats) {
+            $sqlAdminCats = '';
+            if (!empty($forumCategoryAdmin)) {
+                $sqlAdminCats = array_map(function ($value) {return cot::$db->quote($value);}, $forumCategoryAdmin);
+                $sqlAdminCats = ' OR t.ft_cat IN (' . implode(', ', $sqlAdminCats) . ')';
+            }
+            $where_and['privateTopic'] = '(t.ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL . $sqlAdminCats . ')';
+        }
+
+		$where_and['reply'] = ($rs['frmreply'] == '1') ? 't.ft_postcount > 1' : '';
+		$where_and['time'] = ($rs['setlimit'] > 0) ?
+            'p.fp_creation >= ' . $rs['setfrom'] . ' AND p.fp_updated <= ' . $rs['setto'] : '';
+		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid " . $touser : "";
 
 		$where_or['title'] = ($rs['frmtitle'] == 1) ? "t.ft_title LIKE '".cot::$db->prep($sqlsearch)."'" : "";
 		$where_or['text'] = (($rs['frmtext'] == 1)) ? "p.fp_text LIKE '".cot::$db->prep($sqlsearch)."'" : "";
 
 		$where_or = array_diff($where_or, array(''));
 		count($where_or) || $where_or['title'] = "(t.ft_title LIKE '".cot::$db->prep($sqlsearch)."'";
-		$where_and['or'] = '('.implode(' OR ', $where_or).')';
+		$where_and['or'] = '(' . implode(' OR ', $where_or) . ')';
 		$where_and = array_diff($where_and, array(''));
 		$where = implode(' AND ', $where_and);
 		if (!empty($where)) {
-            $where = 'WHERE '.$where;
+            $where = 'WHERE ' . $where;
         }
 
 		$maxitems = $cfg_maxitems - $items;
