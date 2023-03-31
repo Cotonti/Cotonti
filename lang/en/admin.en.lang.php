@@ -11,14 +11,6 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
- * Common words
- */
-$L['Extension'] = 'Extension';
-$L['Extensions'] = 'Extensions';
-$L['Parameter'] = 'Parameter';
-$L['Structure'] = 'Structure';
-
-/**
  * Home Section
  */
 $L['home_installable_error'] = 'Please remove install.php until next update or at least protect config.php from being writable';
