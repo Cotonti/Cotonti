@@ -58,8 +58,8 @@ $L['core_title_desc'] = 'Setup META Title for the homepage and internals';
  * Config Section
  * Locale Subsection
  */
-$L['cfg_forcedefaultlang'] = 'Force the default language for all users';
-$L['cfg_forcedefaultlang_hint'] = '';
+$L['cfg_forcedefaultlang'] = 'Force default language for all users';
+$L['cfg_forcedefaultlang_hint'] = 'Overides settings in the user profile';
 $L['cfg_defaulttimezone'] = 'Default time zone';
 $L['cfg_defaulttimezone_hint'] = 'For guests and new members';
 
@@ -68,22 +68,22 @@ $L['cfg_defaulttimezone_hint'] = 'For guests and new members';
  * Main Subsection
  */
 $L['cfg_adminemail'] = 'Administrator\'s email';
-$L['cfg_adminemail_hint'] = 'Required';
-$L['cfg_clustermode'] = 'Cluster of servers';
-$L['cfg_clustermode_hint'] = 'Set to yes if it\'s a load balanced setup.';
+$L['cfg_adminemail_hint'] = 'Required for secutity reasons';
+$L['cfg_clustermode'] = 'Server cluster';
+$L['cfg_clustermode_hint'] = 'Set to yes if it\'s a load balanced setup';
 $L['cfg_confirmlinks'] = 'Confirm potentially dangerous actions';
 $L['cfg_default_show_installed'] = 'Show only installed extensions by default';
 $L['cfg_easypagenav'] = 'User friendly pagination';
 $L['cfg_easypagenav_hint'] = 'Uses page numbers in URLs instead of DB offsets';
 $L['cfg_hostip'] = 'Server IP';
-$L['cfg_hostip_hint'] = 'The IP of the server, optional.';
+$L['cfg_hostip_hint'] = 'IP-address of the server, optional';
 $L['cfg_maxrowsperpage'] = 'Max. items per page';
 $L['cfg_maxrowsperpage_hint'] = 'Default item limit for pagination';
 $L['cfg_parser'] = 'Markup parser';
-$L['cfg_parser_hint'] = 'Default is: HTML';
+$L['cfg_parser_hint'] = 'HTML by default';
 $L['cfg_loggerlevel'] = 'Logger level';
 $L['cfg_loggerlevel_params'] = 'Disabled,'.$L['Security'].','.$L['Administration'].','.$L['Extensions'].','.$L['Security'].'+'.$L['Administration'].','.$L['Security'].'+'.$L['Extensions'].','.$L['Administration'].'+'.$L['Extensions'].','.$L['Security'].'+'.$L['Administration'].'+'.$L['Extensions'].',All';
-$L['cfg_loggerlevel_hint'] = 'If "All" is selected, all actions are logged<br />If "Disabled" is selected, logging disabled completely for all levels<br /><i><small>If you select "Disabled" or "All", the individual extension logging level settings are ignored</small></i>';
+$L['cfg_loggerlevel_hint'] = 'All: all actions are logged<br />Disabled: logging is disabled completely for all user levels<br />"Disabled" and "All" modes overide individual settings for extension logging';
 
 /**
  * Config Section
@@ -139,7 +139,7 @@ $L['cfg_menu9_hint'] = '';
  * Performance Subsection
  */
 $L['cfg_gzip'] = 'Gzip';
-$L['cfg_gzip_hint'] = 'Gzip compression of the HTML output. Do not enable it if your server already applies Gzip to your pages. Use this tool to test if Gzip is already enabled on your site: <a target="_blank" href="http://www.whatsmyip.org/http-compression-test/">HTTP Compression Test</a>';
+$L['cfg_gzip_hint'] = 'Gzip compression of the HTML output. Do not enable it if your server already applies Gzip to your pages. To check whether Gzip is already enabled on your site use <a target="_blank" href="http://www.whatsmyip.org/http-compression-test/">HTTP Compression Test</a>';
 $L['cfg_headrc_consolidate'] = 'Consolidate header and footer resources (JS/CSS)';
 $L['cfg_headrc_minify'] = 'Minify consolidated JS/CSS';
 $L['cfg_jquery_cdn'] = 'Use jQuery from this CDN URL';
@@ -158,77 +158,71 @@ $L['cfg_captcharandom'] = 'Random captcha';
 $L['cfg_hashfunc'] = 'Default hash function';
 $L['cfg_hashfunc_hint'] = 'Used to hash passwords';
 $L['cfg_referercheck'] = 'Referer check for forms';
-$L['cfg_referercheck_hint'] = 'Prevents from cross-domain posting';
+$L['cfg_referercheck_hint'] = 'Prevents cross-domain posting';
 $L['cfg_shieldenabled'] = 'Enable the Shield';
 $L['cfg_shieldenabled_hint'] = 'Anti-spamming and anti-hammering';
 $L['cfg_shieldtadjust'] = 'Adjust Shield timers (in %)';
-$L['cfg_shieldtadjust_hint'] = 'The higher, the harder to spam';
+$L['cfg_shieldtadjust_hint'] = 'The higher, the harder it is to spam';
 $L['cfg_shieldzhammer'] = 'Anti-hammer after * fast hits';
-$L['cfg_shieldzhammer_hint'] = 'The smaller, the faster the auto-ban 3 minutes happens';
-$L['cfg_devmode'] = 'Debugging mode';
-$L['cfg_devmode_hint'] = 'Don\'t let this enabled on live sites';
+$L['cfg_shieldzhammer_hint'] = 'The smaller, the faster 3 minute auto-ban occurs';
+$L['cfg_devmode'] = 'Debug mode';
+$L['cfg_devmode_hint'] = 'Disable on production sites';
 $L['cfg_maintenance'] = 'Maintenance mode';
-$L['cfg_maintenance_hint'] = 'Let only authorized personel access to site';
+$L['cfg_maintenance_hint'] = 'Grant access to website for authorized user groups only';
 $L['cfg_maintenancereason'] = 'Maintenance reason';
-$L['cfg_maintenancereason_hint'] = 'Optional, should better be short';
+$L['cfg_maintenancereason_hint'] = 'Optional, keep it short and simple';
 
 /**
  * Config Section
  * Sessions Subsection
  */
 $L['cfg_cookiedomain'] = 'Domain for cookies';
-$L['cfg_cookiedomain_hint'] = 'Default: empty';
+$L['cfg_cookiedomain_hint'] = 'Empty by default';
 $L['cfg_cookielifetime'] = 'Maximum cookie lifetime';
 $L['cfg_cookielifetime_hint'] = 'In seconds';
 $L['cfg_cookiepath'] = 'Path for cookies';
-$L['cfg_cookiepath_hint'] = 'Default: empty';
+$L['cfg_cookiepath_hint'] = 'Empty by default';
 $L['cfg_forcerememberme'] = 'Force &quot;remember me&quot;';
 $L['cfg_forcerememberme_hint'] = 'Use it on multi-domain sites or if there are sudden logouts';
 $L['cfg_timedout'] = 'Idle delay, in seconds';
 $L['cfg_timedout_hint'] = 'After this delay, user is away';
 $L['cfg_redirbkonlogin'] = 'Redirect back on login';
-$L['cfg_redirbkonlogin_hint'] = 'Redirect back to page user viewed before login';
+$L['cfg_redirbkonlogin_hint'] = 'Redirect back to the page user viewed before login';
 $L['cfg_redirbkonlogout'] = 'Redirect back on logout';
-$L['cfg_redirbkonlogout_hint'] = 'Redirect back to page user viewed before logout';
+$L['cfg_redirbkonlogout_hint'] = 'Redirect back to the page user viewed before logout';
 
 /**
  * Config Section
  * Themes Subsection
  */
-$L['cfg_charset'] = 'HTML charset';
-$L['cfg_charset_hint'] = '';
 $L['cfg_disablesysinfos'] = 'Turn off page creation time';
-$L['cfg_disablesysinfos_hint'] = '(used in footer.tpl)';
-$L['cfg_doctypeid'] = 'Document Type';
-$L['cfg_doctypeid_hint'] = '&lt;!DOCTYPE&gt; of the HTML layout';
-$L['cfg_forcedefaulttheme'] = 'Force the default theme for all users';
-$L['cfg_forcedefaulttheme_hint'] = '';
-$L['cfg_homebreadcrumb'] = 'Show Home in breadcrumb';
-$L['cfg_homebreadcrumb_hint'] = 'Put the link to the main page in the beginning of breadcrumb';
-$L['cfg_keepcrbottom'] = 'Keep the copyright notice in the tag {FOOTER_BOTTOMLINE}';
-$L['cfg_keepcrbottom_hint'] = '(used in footer.tpl)';
-$L['cfg_metakeywords'] = 'HTML Meta keywords';
-$L['cfg_metakeywords_hint'] = '(comma separated)';
+$L['cfg_disablesysinfos_hint'] = 'Tag used in footer.tpl';
+$L['cfg_forcedefaulttheme'] = 'Force default theme for all users';
+$L['cfg_forcedefaulttheme_hint'] = 'Overides setting in the user profile';
+$L['cfg_homebreadcrumb'] = 'Display Home link in breadcrumbs';
+$L['cfg_homebreadcrumb_hint'] = 'Force embed link to the homepage in the breadcrumbs';
+$L['cfg_keepcrbottom'] = 'Add copyright notice to {FOOTER_BOTTOMLINE} tag';
+$L['cfg_keepcrbottom_hint'] = 'Used in footer.tpl';
 $L['cfg_msg_separate'] = 'Display messages separately for each source';
 $L['cfg_msg_separate_hint'] = '';
 $L['cfg_separator'] = 'Generic separator';
-$L['cfg_separator_hint'] = '(used in breadcrumbs etc)';
+$L['cfg_separator_hint'] = 'Used in breadcrumbs etc';
 $L['cfg_showsqlstats'] = 'Show SQL queries statistics';
-$L['cfg_showsqlstats_hint'] = '(used in footer.tpl)';
+$L['cfg_showsqlstats_hint'] = 'Used in footer.tpl';
 
 /**
  * Config Section
  * Title Subsection
  */
-$L['cfg_maintitle'] = 'Site title';
+$L['cfg_maintitle'] = 'Website title';
 $L['cfg_maintitle_hint'] = 'Main title for the website, required';
 $L['cfg_subtitle'] = 'Description';
 $L['cfg_subtitle_hint'] = 'Optional, will be displayed after the title of the site';
 $L['cfg_title_header'] = 'Header title';
 $L['cfg_title_header_hint'] = 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}';
-$L['cfg_title_header_index'] = 'Header Index title';
+$L['cfg_title_header_index'] = 'Header title for the homepage';
 $L['cfg_title_header_index_hint'] = 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}';
-$L['cfg_title_users_details'] = 'Users Details title';
+$L['cfg_title_users_details'] = 'User details title';
 $L['cfg_title_users_details_hint'] = 'Options: {USER}, {NAME}';
 $L['cfg_subject_mail'] = 'Email subject';
 $L['cfg_subject_mail_hint'] = 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}';
@@ -240,8 +234,6 @@ $L['cfg_body_mail_hint'] = 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {SITE_URL
  * Common strings
  */
 $L['cfg_css'] = 'Enable module/plugin CSS';
-$L['cfg_editor'] = 'Rich text editor';
-$L['cfg_editor_hint'] = '';
 $L['cfg_markup'] = 'Enable markup';
 $L['cfg_markup_hint'] = 'Enables HTML/BBcode or other parsing which is installed in your system';
 
