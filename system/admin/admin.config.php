@@ -132,7 +132,7 @@ switch ($n)
 
 			if ($row['config_subcat'] == '__default' && $prev_subcat == '' && $row['config_type'] != COT_CONFIG_TYPE_SEPARATOR)
 			{
-				$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $L['cfg_struct_defaults']);
+				$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $L['adm_structure_defaults']);
 				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_BEGIN');
 			}
 			if ($row['config_type'] == COT_CONFIG_TYPE_SEPARATOR)

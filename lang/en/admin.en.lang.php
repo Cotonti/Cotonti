@@ -37,34 +37,22 @@ $L['home_update_revision'] = 'Current version: <b>%1$s</b><br />New version: <b>
 /**
  * Config Section
  */
-$L['core_forums'] = &$L['Forums'];
 $L['core_locale'] = &$L['Locale'];
 $L['core_locale_desc'] = 'Default language and time zone settings';
 $L['core_main'] = 'Main Settings';
 $L['core_main_desc'] = 'Website configuration, global list settings';
 $L['core_menus'] = &$L['Menus'];
 $L['core_menus_desc'] = 'Slots for posting plain text information';
-$L['core_page'] = &$L['Pages'];
-$L['core_parser'] = &$L['Parser'];
 $L['core_performance'] = 'Performance';
 $L['core_performance_desc'] = 'Gzip compression, resource consolidation, enable Ajax and jQuery';
-$L['core_pfs'] = &$L['PFS'];
-$L['core_plug'] = &$L['Plugins'];
-$L['core_pm'] = &$L['Private_Messages'];
-$L['core_polls'] = &$L['Polls'];
-$L['core_rss'] = &$L['RSS_Feeds'];
 $L['core_security'] = &$L['Security'];
 $L['core_security_desc'] = 'Protection, CAPTCHA, debug and maintenance modes';
 $L['core_sessions'] = 'Sessions';
 $L['core_sessions_desc'] = 'Setup cookies and remember authorization, login/logout redirects';
-$L['core_structure'] = &$L['Categories'];
 $L['core_theme'] = &$L['Themes'];
 $L['core_theme_desc'] = 'Manage theme defaults and markup elements';
-$L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles and Metas';
 $L['core_title_desc'] = 'Setup META Title for the homepage and internals';
-
-$L['cfg_struct_defaults'] = 'Structure Defaults';
 
 /**
  * Shortcuts
@@ -335,6 +323,7 @@ $L['adm_structure_category_not_exists'] = 'Category does not exist';
 $L['adm_structure_category_not_empty'] = 'Category is not empty. Delete its items first.';
 $L['adm_structure_code_reserved'] = "Structure code 'all' is reserved.";
 $L['adm_structure_code_required'] = 'Missing required field: Code';
+$L['adm_structure_defaults'] = 'Structure Defaults';
 $L['adm_structure_path_required'] = 'Missing required field: Path';
 $L['adm_structure_title_required'] = 'Missing required field: Title';
 $L['adm_structure_somenotupdated'] = 'Attention! Some values not updated.';
