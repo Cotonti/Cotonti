@@ -201,9 +201,9 @@ function cot_forums_resyncTopic($topicId, $userId = null)
     }
     cot::$db->query(
         'UPDATE ' . cot::$db->forum_topics .
-        ' SET ft_postcount = (SELECT COUNT(*) FROM ' . cot::$db->forum_posts . ' WHERE fp_topicid =: topicId) ,' .
+        ' SET ft_postcount = (SELECT COUNT(*) FROM ' . cot::$db->forum_posts . ' WHERE fp_topicid = :topicId),' .
         ' ft_lastposterid = :posterId, ft_lastpostername = :posterName,  ft_updated = :updated ' .
-        ' WHERE ft_id =: topicId',
+        ' WHERE ft_id = :topicId',
         [
             'topicId' => $topicId,
             'posterId' => $lastPost['posterId'],

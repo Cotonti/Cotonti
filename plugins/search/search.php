@@ -432,7 +432,8 @@ if (!empty($sq)) {
                 $sqlAdminCats = array_map(function ($value) {return cot::$db->quote($value);}, $forumCategoryAdmin);
                 $sqlAdminCats = ' OR t.ft_cat IN (' . implode(', ', $sqlAdminCats) . ')';
             }
-            $where_and['privateTopic'] = '(t.ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL . $sqlAdminCats . ')';
+            $where_and['privateTopic'] = '(t.ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL .
+                ' OR ft_firstposterid = '. cot::$usr['id'] . $sqlAdminCats . ')';
         }
 
 		$where_and['reply'] = ($rs['frmreply'] == '1') ? 't.ft_postcount > 1' : '';
