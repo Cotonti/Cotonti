@@ -215,6 +215,8 @@ $L['cfg_showsqlstats_hint'] = 'Используется в шаблоне footer
  * Title Subsection
  */
 $L['cfg_maintitle'] = 'Название сайта';
+$L['cfg_metakeywords'] = 'Ключевые слова';
+$L['cfg_metakeywords_hint'] = 'Через запятую';
 $L['cfg_maintitle_hint'] = 'Обязательно';
 $L['cfg_subtitle'] = 'Описание сайта';
 $L['cfg_subtitle_hint'] = 'Необязательно';

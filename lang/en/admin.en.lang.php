@@ -215,6 +215,8 @@ $L['cfg_showsqlstats_hint'] = 'Used in footer.tpl';
  * Title Subsection
  */
 $L['cfg_maintitle'] = 'Website title';
+$L['cfg_metakeywords'] = 'HTML Meta keywords';
+$L['cfg_metakeywords_hint'] = 'Comma separated';
 $L['cfg_maintitle_hint'] = 'Main title for the website, required';
 $L['cfg_subtitle'] = 'Description';
 $L['cfg_subtitle_hint'] = 'Optional, will be displayed after the title of the site';

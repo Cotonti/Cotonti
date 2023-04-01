@@ -1,6 +1,6 @@
 <?php
 /**
- * English Language File (main.lang.php)
+ * English Language File (main.en.lang.php)
  *
  * @package Cotonti
  * @copyright (c) Cotonti Team
