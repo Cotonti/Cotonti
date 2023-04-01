@@ -146,24 +146,27 @@ if (!$sent) {
 	));
 
 	// Extra fields
-    if(!empty(cot::$extrafields[cot::$db->contact])) {
+    if (!empty(cot::$extrafields[cot::$db->contact])) {
         foreach (cot::$extrafields[cot::$db->contact] as $exfld) {
             $uname = strtoupper($exfld['field_name']);
-            $exfld_val = cot_build_extrafields('rcontact' . $exfld['field_name'], $exfld, $rcontact['contact_'.$exfld['field_name']]);
+            $exfld_val = cot_build_extrafields(
+                'rcontact' . $exfld['field_name'],
+                $exfld,
+                isset($rcontact['contact_'.$exfld['field_name']]) ? $rcontact['contact_'.$exfld['field_name']] : ''
+            );
             $exfld_title = cot_extrafield_title($exfld, 'contact_');
 
-            $t->assign(array(
+            $t->assign([
                 'CONTACT_FORM_' . $uname => $exfld_val,
                 'CONTACT_FORM_' . $uname . '_TITLE' => $exfld_title,
                 'CONTACT_FORM_EXTRAFLD' => $exfld_val,
                 'CONTACT_FORM_EXTRAFLD_TITLE' => $exfld_title
-            ));
+            ]);
             $t->parse('MAIN.FORM.EXTRAFLD');
         }
     }
-	if (cot::$usr['id'] == 0 && !empty($cot_captcha))
-	{
 
+	if (cot::$usr['id'] == 0 && !empty($cot_captcha)) {
 		$t->assign(array(
 			'CONTACT_FORM_VERIFY_IMG' => cot_captcha_generate(),
 			'CONTACT_FORM_VERIFY' => cot_inputbox('text', 'rverify', '', 'id="rverify" size="20"')
