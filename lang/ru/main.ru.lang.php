@@ -1,6 +1,6 @@
 <?php
 /**
- * Russian Language File (main.lang.php)
+ * Russian Language File (main.ru.lang.php)
  *
  * @package Cotonti
  * @copyright (c) Cotonti Team
@@ -56,6 +56,7 @@ $L['Clearstatus'] = 'Очистить статус';
 $L['Clickhere'] = 'Продолжить...';
 $L['Close'] = 'Закрыть';
 $L['Code'] = 'Код';
+$L['Config'] = 'Конфиг';
 $L['Configuration'] = 'Конфигурация';
 $L['Confirm'] = 'Подтвердить';
 $L['Copyright'] = 'Копирайт';
@@ -89,9 +90,12 @@ $L['Event'] = 'Событие';
 $L['Events'] = 'События';
 $L['Expand'] = 'Развернуть';
 $L['Expire'] = 'Опубликовано по';
-$L['Extrafield'] = 'Дополнительное поле';
-$L['Filedunder'] = 'Опубликовано в';
+$L['Extension'] = 'Расширение';
+$L['Extensions'] = 'Расширения';
+$L['Extrafield'] = 'Экстраполе';
+$L['Extrafields'] = 'Экстраполя';
 $L['File'] = 'Файл';
+$L['Filedunder'] = 'Опубликовано в';
 $L['Files'] = 'Файлы';
 $L['Filesize'] = 'Размер файла';
 $L['Filter'] = 'Фильтр';
@@ -144,10 +148,10 @@ $L['Lastlogged'] = 'Последняя авторизация';
 $L['Lastpost'] = 'Последнее сообщение';
 $L['Left'] = 'По левому краю';
 $L['LessThan'] = 'Меньше чем';
-$L['Level'] = 'Уровень';
+$L['Level']	= 'Уровень';
 $L['Levels'] = 'Уровни';
-$L['Link'] = 'Ссылка';
-$L['Links'] = 'Ссылки';
+$L['Link']	= 'Ссылка';
+$L['Links']	= 'Ссылки';
 $L['Locale'] = 'Локализация';
 $L['Location'] = 'Локация';
 $L['Lock'] = 'Блокировать';
@@ -158,7 +162,6 @@ $L['Logout'] = 'Выход';
 $L['Main'] = 'Главная';
 $L['Maingroup'] = 'Основная группа';
 $L['Management'] = 'Управление';
-$L['Member'] = 'Участник';
 $L['Member'] = 'Участник';
 $L['Members'] = 'Участники';
 $L['Members_download'] = 'Этот файл доступен только для зарегистрированных пользователей';
@@ -197,7 +200,7 @@ $L['Normal'] = 'Норм.';
 $L['Notes'] = 'Примечания';
 $L['No_items'] = 'Нет элементов';
 $L['Occupation'] = 'Профессия';
-$L['Of'] = 'из'; // New in N-x.x.x
+$L['Of'] = 'из';
 $L['Offline'] = 'Оффлайн';
 $L['Online'] = 'Онлайн';
 $L['Onpage'] = 'На странице';
@@ -213,6 +216,8 @@ $L['Overview'] = 'Карта сайта';
 $L['Owner'] = 'Владелец';
 $L['Page'] = 'Страница';
 $L['Pages'] = 'Страницы';
+$L['Parameter'] = 'Параметр';
+$L['Parameters'] = 'Параметры';
 $L['Parser'] = 'Парсер';
 $L['Part'] = 'Часть';
 $L['Parts'] = 'Части';
@@ -312,8 +317,8 @@ $L['Today'] = 'Сегодня';
 $L['Tool'] = 'Утилита';
 $L['Tools'] = 'Утилиты';
 $L['Total'] = 'Всего';
-$L['TPL'] = 'TPL';
 $L['Topic'] = 'Тема';
+$L['TPL'] = 'TPL';
 $L['Type'] = 'Тип';
 $L['Unfold'] = 'Развернуть';
 $L['Unknown'] = '?';
@@ -350,21 +355,21 @@ $L['YIM'] = 'Yahoo Messenger';
 /**
  * cot_declension arrays
  */
-$Ls['Folders'] = "каталог,каталога,каталогов";
-$Ls['Files'] = "файл,файла,файлов";
+$Ls['Folders'] = "Каталоги";
+$Ls['Files'] = "Файлы";
 
-$Ls['Guests'] = "гость,гостя,гостей";
-$Ls['Members'] = "пользователь,пользователя,пользователей";
-$Ls['Pages'] = "страница,страницы,страниц";
+$Ls['Guests'] = "Гости";
+$Ls['Members'] = "Участники";
+$Ls['Pages'] = "Страницы";
 $Ls['Times'] = "раз,раза,раз";
 
 $Ls['Milliseconds'] = "мс,мс,мс";
-$Ls['Seconds'] = "секунда,секунды,секунд";
-$Ls['Minutes'] = "минута,минуты,минут";
-$Ls['Hours'] = "час,часа,часов";
-$Ls['Days'] = "день,дня,дней";
-$Ls['Weeks'] = "неделя,недели,недель";
-$Ls['Months'] = "месяц,месяца,месяцев";
+$Ls['Seconds'] = "Секунды";
+$Ls['Minutes'] = "Минуты";
+$Ls['Hours'] = "Часы";
+$Ls['Days'] = "Дни";
+$Ls['Weeks'] = "недели";
+$Ls['Months'] = "месяцы";
 $Ls['Years'] = "год,года,лет";
 
 $Ls['Bytes'] = "B";
@@ -455,7 +460,7 @@ $L['December_s'] = 'дек';
  */
 
 $Ln['decimal_point'] = ',';
-$Ln['thousands_separator'] = ' ';
+$Ln['thousands_separator'] = ',';
 
 /**
  * Gender
@@ -478,8 +483,8 @@ $L['com_defthemefail'] = 'Ошибка, не найдена стандартна
  */
 
 $L['hea_noprivatemessages'] = 'Личных сообщений нет';
+$L['hea_valqueues'] = 'В очереди на утверждение: ';
 $L['hea_viewsite'] = 'Просмотр сайта';
-$L['hea_valqueues'] = 'В очереди на утверждение: '; // Discuss
 $L['hea_welcome'] = 'Добро пожаловать';
 $L['hea_youareloggedas'] = 'Пользователь';
 $L['hea_youarenotlogged'] = 'Вы не авторизованы';
@@ -499,7 +504,7 @@ $L['foo_sqlaverage'] = 'Среднее время SQL';
  */
 $L['field_extension']  = 'Неразрешенное расширение файла';
 $L['field_notinarray'] = 'Значение поля не верно';
-$L['field_pregmatch']  = 'Значение поля не верно';
+$L['field_pregmatch'] = 'Значение поля не верно';
 $L['field_range'] = 'Значение поля не верно';
 $L['field_required'] = 'Поле должно быть заполнено';
 
