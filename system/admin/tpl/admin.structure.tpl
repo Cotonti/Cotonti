@@ -69,14 +69,14 @@
 						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_CODE}</td>
 						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
 						<td class="action {ADMIN_STRUCTURE_ODDEVEN}">
-							<a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax button">{PHP.L.short_config}</a>
+							<a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax button">{PHP.L.Config}</a>
 							<!-- IF {ADMIN_STRUCTURE_RIGHTS_URL} -->
-							<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a>
+							<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}" class="button">{PHP.L.Rights}</a>
 							<!-- ENDIF -->
 							<!-- IF {ADMIN_STRUCTURE_CAN_DELETE} -->
-							<a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_DELETE_CONFIRM_URL}" class="confirmLink button">{PHP.L.short_delete}</a>
+							<a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_DELETE_CONFIRM_URL}" class="confirmLink button">{PHP.L.Delete}</a>
 							<!-- ENDIF -->
-							<a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" class="button special">{PHP.L.short_open}</a> </td>
+							<a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" class="button special">{PHP.L.Open}</a> </td>
 						</tr>
 						<!-- END: ROW -->
 					</tbody>

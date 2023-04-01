@@ -56,6 +56,7 @@ $L['Clearstatus'] = 'Clear status';
 $L['Clickhere'] = 'Click here to continue...';
 $L['Close'] = 'Close';
 $L['Code'] = 'Code';
+$L['Config'] = 'Config';
 $L['Configuration'] = 'Configuration';
 $L['Confirm'] = 'Confirm';
 $L['Copyright'] = 'Copyright';

@@ -14,7 +14,7 @@
 			<td class="{CONTACT_ODDEVEN}">{CONTACT_USER}<br />{CONTACT_EMAIL}</td>
 			<td class="{CONTACT_ODDEVEN}">{CONTACT_TEXTSHORT}</td>
 			<td class="centerall {CONTACT_ODDEVEN}">
-<a href="{CONTACT_VIEWLINK}" title="{PHP.L.View}" class="button special">{PHP.L.short_open}</a>
+<a href="{CONTACT_VIEWLINK}" title="{PHP.L.View}" class="button special">{PHP.L.Open}</a>
 <!-- IF {CONTACT_VAL} == val --><a href="{CONTACT_READLINK}" title="{PHP.L.contact_markread}" class="button confirm">{PHP.L.contact_read}</a>
 <!-- ELSE --><a href="{CONTACT_UNREADLINK}" title="{PHP.L.contact_markunread}" class="button">{PHP.L.contact_unread}</a><!-- ENDIF --><a href="{CONTACT_DELLINK}" title="{PHP.L.Delete}" class="button">{PHP.L.Delete}</a>
 			</td>

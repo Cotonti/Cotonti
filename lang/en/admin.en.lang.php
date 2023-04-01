@@ -55,17 +55,6 @@ $L['core_title'] = 'Titles and Metas';
 $L['core_title_desc'] = 'Setup META Title for the homepage and internals';
 
 /**
- * Shortcuts
- */
-$L['short_admin'] = 'Admin';
-$L['short_config'] = 'Config';
-$L['short_delete'] = 'Delete';
-$L['short_open'] = 'Open';
-$L['short_options'] = 'Options';
-$L['short_rights'] = 'Rights';
-$L['short_struct'] = 'Struct';
-
-/**
  * Config Section
  * Locale Subsection
  */

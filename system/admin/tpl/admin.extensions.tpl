@@ -68,16 +68,16 @@
 					</td>
 					<td class="action">
 						<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} -->
-						<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_EDIT_URL}" class="button">{PHP.L.short_config}</a>
+						<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_EDIT_URL}" class="button">{PHP.L.Config}</a>
 						<!-- ENDIF -->
 						<!-- IF {PHP.ifstruct} -->
-						<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}" class="button">{PHP.L.short_struct}</a>
+						<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}" class="button">{PHP.L.Structure}</a>
 						<!-- ENDIF -->
 						<!-- IF {PHP.totalinstalled} -->
-						<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a>
+						<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS_URL}" class="button">{PHP.L.Rights}</a>
 						<!-- ENDIF -->
 						<!-- IF {PHP.ifthistools} -->
-						<a title="{PHP.L.Administration}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}" class="button special">{PHP.L.short_admin}</a>
+						<a title="{PHP.L.Administration}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}" class="button special">{PHP.L.Admin}</a>
 						<!-- ENDIF -->
 						<!-- IF {PHP.if_plg_standalone} -->
 						<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL}" class="button special">{PHP.L.Open}</a>
@@ -113,7 +113,7 @@
 			<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} > 0 -->
 			<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_CONFIG_URL}" class="button large">{PHP.L.Configuration} ({ADMIN_EXTENSIONS_TOTALCONFIG})</a>
 			<!-- ENDIF -->
-			<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS}" class="button large">{PHP.L.short_rights}</a>
+			<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS}" class="button large">{PHP.L.Rights}</a>
 			<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT} -->
 			<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}" class="button large">{PHP.L.Structure}</a>
 			<!-- ENDIF -->

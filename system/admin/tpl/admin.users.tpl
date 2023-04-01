@@ -40,9 +40,9 @@
 					<td class="centerall">{ADMIN_USERS_ROW_GRP_DISABLED}</td>
 					<td class="action">
 						<!-- IF !{ADMIN_USERS_ROW_GRP_SKIPRIGHTS} -->
-						<a title="{PHP.L.Rights}" href="{ADMIN_USERS_ROW_GRP_RIGHTS_URL}" class="button">{PHP.L.short_rights}</a>
+						<a title="{PHP.L.Rights}" href="{ADMIN_USERS_ROW_GRP_RIGHTS_URL}" class="button">{PHP.L.Rights}</a>
 						<!-- ENDIF -->
-						<a title="{PHP.L.Open}" href="{ADMIN_USERS_ROW_GRP_JUMPTO_URL}" class="button special">{PHP.L.short_open}</a>
+						<a title="{PHP.L.Open}" href="{ADMIN_USERS_ROW_GRP_JUMPTO_URL}" class="button special">{PHP.L.Open}</a>
 					</td>
 				</tr>
 				<!-- END: USERS_ROW -->
