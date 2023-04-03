@@ -86,23 +86,22 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.log.loop');
 /* ===== */
-foreach ($sql->fetchAll() as $row)
-{
-	$t->assign(array(
+foreach ($sql->fetchAll() as $row) {
+	$t->assign([
 		'ADMIN_LOG_ROW_LOG_ID' => $row['log_id'],
 		'ADMIN_LOG_ROW_DATE' => cot_date('datetime_medium', $row['log_date']),
 		'ADMIN_LOG_ROW_DATE_STAMP' => $row['log_date'],
 		'ADMIN_LOG_ROW_URL_IP_SEARCH' => cot_plugin_active('ipsearch') ?
-			cot_url('admin', 'm=other&p=ipsearch&a=search&id='.$row['log_ip'].'&'.cot_xg()) : '',
+			cot_url('admin', 'm=other&p=ipsearch&a=search&id=' . $row['log_ip'] . '&' . cot_xg()) : '',
 		'ADMIN_LOG_ROW_LOG_IP' => $row['log_ip'],
 		'ADMIN_LOG_ROW_LOG_NAME' => $row['log_name'],
-		'ADMIN_LOG_ROW_URL_LOG_GROUP' => cot_url('admin', 'm=log&n='.$row['log_group']),
-		'ADMIN_LOG_ROW_LOG_GROUP' => $log_groups[$row['log_group']],
+		'ADMIN_LOG_ROW_URL_LOG_GROUP' => cot_url('admin', 'm=log&n=' . $row['log_group']),
+		'ADMIN_LOG_ROW_LOG_GROUP' => isset($log_groups[$row['log_group']]) ?
+            $log_groups[$row['log_group']] : $row['log_group'],
 		'ADMIN_LOG_ROW_LOG_TEXT' => htmlspecialchars($row['log_text'])
-	));
+	]);
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -110,21 +109,20 @@ foreach ($sql->fetchAll() as $row)
 	$ii++;
 }
 
-$t->assign(array(
-	'ADMIN_LOG_URL_PRUNE' => cot_url('admin', 'm=log&a=purge&'.cot_xg()),
+$t->assign([
+	'ADMIN_LOG_URL_PRUNE' => cot_url('admin', 'm=log&a=purge&' . cot_xg()),
 	'ADMIN_LOG_TOTALDBLOG' => $totaldblog,
 	'ADMIN_LOG_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_LOG_PAGNAV' => $pagenav['main'],
 	'ADMIN_LOG_PAGINATION_NEXT' => $pagenav['next'],
 	'ADMIN_LOG_TOTALITEMS' => $totalitems,
 	'ADMIN_LOG_ON_PAGE' => $ii
-));
+]);
 
 cot_display_messages($t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.log.tags') as $pl)
-{
+foreach (cot_getextplugins('admin.log.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
