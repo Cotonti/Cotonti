@@ -14,6 +14,8 @@ $L['Finish'] = 'Завершить';
 $L['Install'] = 'Установить';
 $L['Next'] = 'Далее';
 
+$L['install_another_process'] = 'Другая установка уже запущена';
+$L['install_another_process2'] = 'Другая установка была запущена %s UTC. Пожалуйста дождитесь ее окончания';
 $L['install_adminacc'] = 'Данные администратора';
 $L['install_body_title'] = 'Установщик Cotonti';
 $L['install_body_message1'] = 'Этот скрипт поможет вам осуществить первичную установку и настройку Cotonti.';

@@ -12,21 +12,16 @@ define('COT_CODE', TRUE);
 define('COT_INSTALL', TRUE);
 //define('COT_ADMIN', TRUE);
 
-if (file_exists('./datas/config.php'))
-{
+if (file_exists('./datas/config.php')) {
 	require_once './datas/config.php';
-}
-else
-{
+} else {
 	require_once './datas/config-sample.php';
 }
 
-if (empty($cfg['modules_dir']))
-{
+if (empty($cfg['modules_dir'])) {
 	$cfg['modules_dir'] = './modules';
 }
-if (empty($cfg['lang_dir']))
-{
+if (empty($cfg['lang_dir'])) {
 	$cfg['lang_dir'] = './lang';
 }
 
@@ -145,8 +140,42 @@ $file['config'] = './datas/config.php';
 $file['config_sample'] = './datas/config-sample.php';
 $file['sql'] = './setup/install.sql';
 
-if (!$cfg['new_install']) {
-	include cot_incfile('install', 'module', 'update');
-} else {
-	include cot_incfile('install', 'module', 'install');
+// Check if another install process is running
+$processFileDir =  isset($cfg['cache_dir']) ? $cfg['cache_dir'] : './datas/cache';
+$processFile = $processFileDir . '/install';
+$anotherProcessRunning = false;
+if (is_writable($processFileDir)) {
+    if (file_exists($processFile)) {
+        $anotherProcessStarted = file_get_contents($processFile);
+        if ($sys['now'] - $anotherProcessStarted < 30) {
+            // Another process was recently started
+            cot_die_message(
+                101,
+                true,
+                $L['install_another_process'],
+                sprintf($L['install_another_process2'], date('Y-m-d H:i:s', $anotherProcessStarted))
+            );
+            exit;
+        }
+    }
+
+    file_put_contents($processFile, $sys['now']);
+}
+
+$processError = '';
+try {
+    if (!$cfg['new_install']) {
+        include cot_incfile('install', 'module', 'update');
+    } else {
+        include cot_incfile('install', 'module', 'install');
+    }
+} catch (\Exception $e) {
+    $processError .= $e->getMessage();
+}
+
+if (file_exists($processFile)) {
+    unlink($processFile);
+}
+if ($processError) {
+    cot_diefatal('Error: ' . $processError);
 }

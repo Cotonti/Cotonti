@@ -3134,7 +3134,9 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 	if (empty($out['meta_contenttype'])) {
         $out['meta_contenttype'] = 'text/html';
 	}
-	cot_sendheaders($out['meta_contenttype'], $msg_status[$code]);
+    if (isset($msg_status[$code])) {
+        cot_sendheaders($out['meta_contenttype'], $msg_status[$code]);
+    }
 
 	// Determine message title and body
 	$title = empty($message_title) ? $L['msg' . $code . '_title'] : $message_title;

@@ -14,6 +14,8 @@ $L['Finish'] = 'Finish';
 $L['Install'] = 'Install';
 $L['Next'] = 'Next';
 
+$L['install_another_process'] = 'Another install process is running';
+$L['install_another_process2'] = 'Another install process was started at %s UTC. Please wait until it will be finished';
 $L['install_adminacc'] = 'Administrator Account';
 $L['install_body_title'] = 'Cotonti Web Installer';
 $L['install_body_message1'] = 'This script will setup the basic Cotonti installation and configuration for you.';

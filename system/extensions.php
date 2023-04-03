@@ -60,14 +60,15 @@ function cot_apply_patches(
 
 	// Find new patches
 	$dp = opendir($directory);
-	$delta = array();
+	$delta = [];
 	while ($f = readdir($dp)) {
-		if (preg_match('#^' . $sql_pattern . '$#', $f, $mt)
-			|| preg_match('#^' . $php_pattern . '$#', $f, $mt))
-		{
+		if (
+            preg_match('#^' . $sql_pattern . '$#', $f, $mt)
+			|| preg_match('#^' . $php_pattern . '$#', $f, $mt)
+        ) {
 			$type = $mt[2] == 'sql' ? 'sql' : 'php';
 			$ver = $mt[1];
-			if (version_compare($ver, $from_ver) > 0) {
+			if (version_compare($ver, $from_ver) > 0 && !isset($delta[$ver][$type])) {
 				$delta[$ver][$type] = $directory . '/' . $f;
 			}
 		}
@@ -79,10 +80,13 @@ function cot_apply_patches(
 
 	// Apply patches in version order
 	uksort($delta, 'version_compare');
+
 	$max_ver = $from_ver;
+    static $executed = [];
 	foreach ($delta as $key => $val) {
-		if (isset($val['sql'])) {
+		if (isset($val['sql']) && !in_array($val['sql'], $executed)) {
 			$error = $db->runScript(file_get_contents($val['sql']));
+            $executed[] = $val['sql'];
 			if (empty($error)) {
 				cot_message(cot_rc('ext_patch_applied',
 					array('f' => $val['sql'], 'msg' => 'OK')));
@@ -91,8 +95,9 @@ function cot_apply_patches(
 				return false;
 			}
 		}
-		if (isset($val['php'])) {
+		if (isset($val['php']) && !in_array($val['php'], $executed)) {
 			$ret = include $val['php'];
+            $executed[] = $val['php'];
 			if ($ret !== false) {
 				$msg = $ret == 1 ? 'OK' : $ret;
 				cot_message(cot_rc('ext_patch_applied', array('f' => $val['php'], 'msg' => $msg)));
