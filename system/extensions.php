@@ -45,7 +45,7 @@ $cot_ext_ignore_parts = array('configure', 'install', 'setup', 'uninstall');
  * @param string $from_ver Current version, to patch starting from
  * @param string $sql_pattern SQL patch file name pattern (PCRE)
  * @param string $php_pattern PHP patch file name pattern (PCRE)
- * @return string|false The function returns TRUE if there are not patches to apply,
+ * @return string|bool The function returns TRUE if there are not patches to apply,
  * FALSE if an error occurred while patching or a string containing version
  * number of the latest applied patch if patching was successful.
  */
@@ -85,7 +85,7 @@ function cot_apply_patches(
     static $executed = [];
 	foreach ($delta as $key => $val) {
 		if (isset($val['sql']) && !in_array($val['sql'], $executed)) {
-			$error = $db->runScript(file_get_contents($val['sql']));
+			$error = cot::$db->runScript(file_get_contents($val['sql']));
             $executed[] = $val['sql'];
 			if (empty($error)) {
 				cot_message(cot_rc('ext_patch_applied',
