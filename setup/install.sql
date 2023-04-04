@@ -267,7 +267,7 @@ CREATE TABLE `cot_updates` (
   PRIMARY KEY (`upd_param`)
 );
 INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
-('revision', '0.9.22'),
+('revision', '0.9.23'),
 ('branch', 'siena');
 
 DROP TABLE IF EXISTS `cot_users`;
