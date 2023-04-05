@@ -11,3 +11,11 @@ ALTER TABLE `cot_logger` ADD `log_uri` varchar(255) DEFAULT '';
 UPDATE `cot_logger` SET `log_group` = 'forums' WHERE `log_group` = 'for';
 UPDATE `cot_logger` SET `log_group` = 'users' WHERE `log_group` = 'usr';
 UPDATE `cot_logger` SET `log_group` = 'page' WHERE `log_group` = 'pag';
+
+UPDATE `cot_config` SET `config_default` = 'UTC' WHERE `config_owner` = 'core' AND `config_cat` = 'locale' AND `config_name` = 'defaulttimezone';
+UPDATE `cot_config` SET `config_value` = 'UTC'
+    WHERE `config_owner` = 'core' AND `config_cat` = 'locale' AND `config_name` = 'defaulttimezone'
+      AND (`config_value` = 'GMT' OR `config_value` = '0' OR `config_value` IS NULL);
+
+UPDATE `cot_config` SET `config_value` = 'Europe/Kiev'
+    WHERE `config_owner` = 'core' AND `config_cat` = 'locale' AND `config_name` = 'defaulttimezone'  AND `config_value` = 'Europe/Kyiv';

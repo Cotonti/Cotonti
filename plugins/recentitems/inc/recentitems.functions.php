@@ -16,13 +16,64 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 {
 	global $totalrecent;
 
-	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
+    $where = [];
 
-    $incat = '';
-	if ($rightprescan) {
-		$catsub = cot_structure_children('forums', '', true, true, $rightprescan);
-		$incat = "AND ft_cat IN ('" . implode("','", $catsub) . "')";
-	}
+    $authCats = [];
+    $authAllCats = false;
+    $adminCats = [];
+    $adminAllCats = false;
+    if (!empty(cot::$structure['forums'])) {
+        $authAllCats = true;
+        $adminAllCats = true;
+        foreach (cot::$structure['forums'] as $code => $cat) {
+            if (in_array($code, ['all', 'system',])) {
+                continue;
+            }
+            if (cot_auth('forums', $code, 'R')) {
+                $authCats[] = $code;
+            } else {
+                $authAllCats = false;
+            }
+
+            if (cot_auth('forums', $code, 'A')) {
+                $adminCats[] = $code;
+            } else {
+                $adminAllCats = false;
+            }
+        }
+    }
+
+    if ($rightprescan) {
+        if (!$authAllCats) {
+            $sqlCategories = array_map(
+                function ($value) {return cot::$db->quote($value);},
+                $authCats
+            );
+            $where['cat'] = 'ft_cat IN (' . implode(', ', $sqlCategories) . ')';
+        }
+    }
+
+    // Exclude private topics
+    if (!$adminAllCats) {
+        $sqlAdminCats = '';
+        $sqlFirsPosterId = '';
+        if (cot::$usr > 0) {
+            $sqlFirsPosterId = ' OR ft_firstposterid = ' . cot::$usr['id'];
+            if (!empty($adminCats)) {
+                $sqlAdminCats = array_map(
+                    function ($value) {
+                        return cot::$db->quote($value);
+                    },
+                    $adminCats
+                );
+                $sqlAdminCats = ' OR ft_cat IN (' . implode(', ', $sqlAdminCats) . ')';
+            }
+        }
+        $where['privateTopic'] = '(ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL . $sqlFirsPosterId .
+            $sqlAdminCats . ')';
+    }
+
+	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
     /* === Hook === */
 	foreach (cot_getextplugins('recentitems.recentforums.first') as $pl) {
@@ -30,22 +81,37 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 	}
 	/* ===== */
 
+    $where = array_diff($where, ['']);
+
 	if ($mode == 'recent') {
-		$sql = cot::$db->query('SELECT * FROM ' . cot::$db->forum_topics . "
-			WHERE (ft_movedto IS NULL OR ft_movedto = '') AND ft_mode=0 " . $incat . "
-			ORDER by ft_updated DESC LIMIT $maxperpage");
-		$totalrecent['topics'] = $maxperpage;
-	} else {
-		$where = "WHERE ft_updated >= $mode " . $incat;
-		$totalrecent['topics'] = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->forum_topics . ' ' . $where)
+        $where['movedTo'] = 'ft_movedto = 0';
+        $sqlWhere = ' WHERE ' . implode(' AND ', $where);
+
+        $totalrecent['topics'] = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->forum_topics . $sqlWhere)
             ->fetchColumn();
-		$sql = cot::$db->query('SELECT * FROM ' . cot::$db->forum_topics . ' ' . $where .
-            " ORDER by ft_updated desc LIMIT $d, " . $maxperpage);
+        $sql = cot::$db->query('SELECT * FROM ' . cot::$db->forum_topics . $sqlWhere .
+            " ORDER by ft_updated DESC LIMIT $maxperpage");
+		//$totalrecent['topics'] = $maxperpage;
+
+	} else {
+        $where['updated'] = 'ft_updated >= :updated';
+		$sqlWhere = ' WHERE ' . implode(' AND ', $where);
+
+		$totalrecent['topics'] = cot::$db->query(
+            'SELECT COUNT(*) FROM ' . cot::$db->forum_topics . $sqlWhere,
+            ['updated' => $mode]
+        )->fetchColumn();
+		$sql = cot::$db->query(
+            'SELECT * FROM ' . cot::$db->forum_topics . ' ' . $sqlWhere . " ORDER by ft_updated DESC LIMIT $d, " .
+                $maxperpage,
+            ['updated' => $mode]
+        );
 	}
+
 	$ft_num = 0;
 	while ($row = $sql->fetch()) {
 		$row['ft_icon'] = 'posts';
-		$row['ft_postisnew'] = FALSE;
+		$row['ft_postisnew'] = false;
 		$row['ft_pages'] = '';
 		$ft_num++;
 		if ((int) $titlelength > 0 && mb_strlen($row['ft_title']) > $titlelength) {
@@ -85,7 +151,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 
 			if ($row['ft_updated'] > cot::$usr['lastvisit'] && cot::$usr['id'] > 0) {
 				$row['ft_icon'] .= '_new';
-				$row['ft_postisnew'] = TRUE;
+				$row['ft_postisnew'] = true;
 			}
 
 			if ($row['ft_postcount'] >= cot::$cfg['forums']['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky']) {

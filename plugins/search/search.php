@@ -342,16 +342,24 @@ if (!empty($sq)) {
         }
 
         if (empty($sql_page_string)) {
-			$sql_page_string = "SELECT SQL_CALC_FOUND_ROWS p.* $search_join_columns
-                FROM ".cot::$db->pages." AS p $search_join_condition
-                WHERE $where
-                ORDER BY {$orderby}
-                LIMIT $d, " . $cfg_maxitems . $search_union_query;
+            $queryBody = $search_join_columns . ' FROM ' . cot::$db->pages . ' AS p ' . $search_join_condition .
+                ' WHERE ' . $where;
+
+			$sql_page_string = "SELECT p.* $queryBody ORDER BY $orderby LIMIT $d, " . $cfg_maxitems .
+                $search_union_query;
+
+            $sqlCount = 'SELECT COUNT(*) ' . $queryBody . $search_union_query;
 		}
 
 		$sql = cot::$db->query($sql_page_string);
 		$items = $sql->rowCount();
-		$totalitems[] = cot::$db->query('SELECT FOUND_ROWS()')->fetchColumn();
+        if ($items > 0) {
+            if ($d == 0 && $items < $cfg_maxitems) {
+                $totalitems[] = $items;
+            } elseif (!empty($sqlCount)) {
+                $totalitems[] = cot::$db->query($sqlCount)->fetchColumn();
+            }
+        }
 
 		$jj = 0;
 
@@ -376,16 +384,14 @@ if (!empty($sq)) {
 				'PLUGIN_PR_NUM' => $jj
 			));
 			/* === Hook - Part 2 === */
-			foreach ($extp as $pl)
-			{
+			foreach ($extp as $pl) {
 				include $pl;
 			}
 			/* ===== */
 			$t->parse('MAIN.RESULTS.PAGES.ITEM');
 			$jj++;
 		}
-		if ($jj > 0)
-		{
+		if ($jj > 0) {
 			$t->parse('MAIN.RESULTS.PAGES');
 		}
 		unset($where_and, $where_or, $where);
@@ -422,18 +428,25 @@ if (!empty($sq)) {
 
         if (!empty($searchInCategories)) {
             $searchInCategories = array_map(function ($value) {return cot::$db->quote($value);}, $searchInCategories);
-            $where_and['cat'] = 'page_cat IN (' . implode(', ', $searchInCategories) . ')';
+            $where_and['cat'] = 't.ft_cat IN (' . implode(', ', $searchInCategories) . ')';
         }
 
         // Exclude private topics
         if (!$forumAdminAllCats) {
             $sqlAdminCats = '';
-            if (!empty($forumCategoryAdmin)) {
-                $sqlAdminCats = array_map(function ($value) {return cot::$db->quote($value);}, $forumCategoryAdmin);
-                $sqlAdminCats = ' OR t.ft_cat IN (' . implode(', ', $sqlAdminCats) . ')';
+            $sqlFirsPosterId = '';
+            if (cot::$usr > 0) {
+                if (!empty($forumCategoryAdmin)) {
+                    $sqlFirsPosterId = ' OR ft_firstposterid = ' . cot::$usr['id'];
+                    $sqlAdminCats = array_map(
+                        function ($value) {return cot::$db->quote($value);},
+                        $forumCategoryAdmin
+                    );
+                    $sqlAdminCats = ' OR t.ft_cat IN (' . implode(', ', $sqlAdminCats) . ')';
+                }
             }
-            $where_and['privateTopic'] = '(t.ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL .
-                ' OR ft_firstposterid = '. cot::$usr['id'] . $sqlAdminCats . ')';
+            $where_and['privateTopic'] = '(t.ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL . $sqlFirsPosterId .
+                $sqlAdminCats . ')';
         }
 
 		$where_and['reply'] = ($rs['frmreply'] == '1') ? 't.ft_postcount > 1' : '';
@@ -461,33 +474,42 @@ if (!empty($sq)) {
 		}
 
 		// We need to show only one last post from each found topic
-		$query = "SELECT SQL_CALC_FOUND_ROWS p.*, t.*
-			 	FROM ".cot::$db->forum_posts." AS p
-			 	LEFT JOIN ".cot::$db->forum_topics." AS t ON p.fp_topicid = t.ft_id 
-			 	JOIN (
-                    SELECT fp_topicid, max(fp_creation) as max_created
-                    FROM ".cot::$db->forum_posts." as p
-                    LEFT JOIN ".cot::$db->forum_topics." AS t ON p.fp_topicid = t.ft_id 
-                    $where
-                    GROUP BY fp_topicid
-                )fp ON p.fp_creation = fp.max_created
-				$where
-				ORDER BY ft_".$rs['frmsort']." ".$rs['frmsort2']."
-				LIMIT $d, $maxitems";
+        $queryBody = ' FROM ' . cot::$db->forum_posts . ' AS p ' .
+		    'LEFT JOIN ' . cot::$db->forum_topics . ' AS t ON p.fp_topicid = t.ft_id ' .
+            'JOIN (' .
+               'SELECT fp_topicid, max(fp_creation) as max_created ' .
+               'FROM ' . cot::$db->forum_posts . ' as p ' .
+               'LEFT JOIN ' . cot::$db->forum_topics . ' AS t ON p.fp_topicid = t.ft_id ' .
+               $where . ' GROUP BY fp_topicid' .
+            ')fp ON p.fp_creation = fp.max_created ' .
+			$where;
 
+		$query = "SELECT p.*, t.* $queryBody ORDER BY ft_" . $rs['frmsort'] . ' ' . $rs['frmsort2'] .
+            " LIMIT $d, $maxitems";
 		$sql = cot::$db->query($query);
 		$items = $sql->rowCount();
-		$totalitems[] = cot::$db->query('SELECT FOUND_ROWS()')->fetchColumn();
+        if ($items > 0) {
+            if ($d == 0 && $items < $maxitems) {
+                $totalitems[] = $items;
+            } else {
+                $totalitems[] = cot::$db->query('SELECT COUNT(*) ' . $queryBody)->fetchColumn();
+            }
+        }
+
 		$jj = 0;
 		while ($row = $sql->fetch()) {
 			if ($row['ft_updated'] > 0) {
-				$post_url = (cot::$cfg['plugin']['search']['searchurl'] == 'Single') ? cot_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : cot_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
+				$post_url = (cot::$cfg['plugin']['search']['searchurl'] == 'Single') ?
+                    cot_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) :
+                    cot_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
 				$t->assign(array(
 					'PLUGIN_FR_CATEGORY' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false),
 					'PLUGIN_FR_TITLE' => cot_rc_link($post_url, htmlspecialchars($row['ft_title'])),
 					'PLUGIN_FR_TITLE_URL' => $post_url,
 					'PLUGIN_FR_TEXT' => cot_clear_mark($row['fp_text'], $words),
-					'PLUGIN_FR_TIME' => $row['ft_updated'] > 0 ? cot_date('datetime_medium', $row['ft_updated']) : cot_date('datetime_medium', $row['fp_updated']),
+					'PLUGIN_FR_TIME' => $row['ft_updated'] > 0 ?
+                        cot_date('datetime_medium', $row['ft_updated']) :
+                        cot_date('datetime_medium', $row['fp_updated']),
 					'PLUGIN_FR_TIMESTAMP' => $row['ft_updated'] > 0 ? $row['ft_updated'] : $row['fp_updated'],
 					'PLUGIN_FR_ODDEVEN' => cot_build_oddeven($jj),
 					'PLUGIN_FR_NUM' => $jj,

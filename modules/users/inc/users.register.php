@@ -69,8 +69,7 @@ if ($a == 'add') {
 		}
 	}
 	$ruser['user_birthdate'] = cot_import_date('ruserbirthdate', false);
-	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > cot::$sys['now'])
-	{
+	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > cot::$sys['now']) {
 		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
 	}
 
@@ -79,40 +78,50 @@ if ($a == 'add') {
 	$email_exists = (bool)cot::$db->query("SELECT user_id FROM ".cot::$db->users." WHERE user_email = ? LIMIT 1",
         array($ruser['user_email']))->fetch();
 
-	if (preg_match('/&#\d+;/', $ruser['user_name']) || preg_match('/[<>#\'"\/]/', $ruser['user_name'])) cot_error('aut_invalidloginchars', 'rusername');
-	if (mb_strlen($ruser['user_name']) < 2) cot_error('aut_usernametooshort', 'rusername');
-	if (mb_strlen($rpassword1) < 4) cot_error('aut_passwordtooshort', 'rpassword1');
-	if (!cot_check_email($ruser['user_email']))	cot_error('aut_emailtooshort', 'ruseremail');
-	if ($user_exists) cot_error('aut_usernamealreadyindb', 'rusername');
-	if ($email_exists && !cot::$cfg['useremailduplicate']) cot_error('aut_emailalreadyindb', 'ruseremail');
-	if ($rpassword1 != $rpassword2) cot_error('aut_passwordmismatch', 'rpassword2');
+	if (preg_match('/&#\d+;/', $ruser['user_name']) || preg_match('/[<>#\'"\/]/', $ruser['user_name'])) {
+        cot_error('aut_invalidloginchars', 'rusername');
+    }
+	if (mb_strlen($ruser['user_name']) < 2) {
+        cot_error('aut_usernametooshort', 'rusername');
+    }
+	if (mb_strlen($rpassword1) < 4) {
+        cot_error('aut_passwordtooshort', 'rpassword1');
+    }
+	if (!cot_check_email($ruser['user_email']))	{
+        cot_error('aut_emailtooshort', 'ruseremail');
+    }
+	if ($user_exists) {
+        cot_error('aut_usernamealreadyindb', 'rusername');
+    }
+	if ($email_exists && !cot::$cfg['useremailduplicate']) {
+        cot_error('aut_emailalreadyindb', 'ruseremail');
+    }
+	if ($rpassword1 != $rpassword2) {
+        cot_error('aut_passwordmismatch', 'rpassword2');
+    }
 
 	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('users.register.add.validate') as $pl)
-	{
+	foreach (cot_getextplugins('users.register.add.validate') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if (!cot_error_found())
-	{
+	if (!cot_error_found()) {
 		$ruser['user_password'] = $rpassword1;
 		$userid = cot_add_user($ruser);
 
 		$authorize = false;
-        if (cot::$db->countRows(cot::$db->users) == 1)
-        {
+        if (cot::$db->countRows(cot::$db->users) == 1) {
             $authorize = true;
-        }
-        elseif((cot::$cfg['users']['regnoactivation'] || cot::$cfg['users']['inactive_login'])
-            && cot::$cfg['users']['register_auto_login'])
-        {
+        } elseif (
+            (cot::$cfg['users']['regnoactivation'] || cot::$cfg['users']['inactive_login'])
+            && cot::$cfg['users']['register_auto_login']
+        ) {
             $authorize = true;
         }
 
 		/* === Hook for the plugins === */
-		foreach (cot_getextplugins('users.register.add.done') as $pl)
-		{
+		foreach (cot_getextplugins('users.register.add.done') as $pl)  {
 			include $pl;
 		}
 		/* ===== */

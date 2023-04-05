@@ -77,7 +77,7 @@ CREATE TABLE `cot_config` (
 
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
 ('core','locale','01','forcedefaultlang',3,'0','0','',''),
-('core','locale','11','defaulttimezone',4,'0','0','cot_config_timezones()',''),
+('core','locale','11','defaulttimezone',4,'UTC','UTC','cot_config_timezones()',''),
 ('core','main','01','adminemail',1,'admin@mysite.com','admin@mysite.com','',''),
 ('core','main','02','clustermode',3,'0','0','',''),
 ('core','main','03','hostip',1,'999.999.999.999','999.999.999.999','',''),
@@ -280,7 +280,7 @@ CREATE TABLE `cot_users` (
   `user_passsalt` VARCHAR(16) NOT NULL DEFAULT '',
   `user_maingrp` mediumint UNSIGNED NOT NULL DEFAULT '4',
   `user_country` char(2) default '',
-  `user_timezone` varchar(32) default 'GMT',
+  `user_timezone` VARCHAR(32) NOT NULL default 'UTC',
   `user_text` text DEFAULT NULL,
   `user_birthdate` DATE DEFAULT NULL,
   `user_gender` char(1) default 'U',

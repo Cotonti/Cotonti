@@ -53,7 +53,16 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_gender'] = (in_array($ruser['user_gender'], array('M', 'F'))) ? $ruser['user_gender'] : 'U';
     $ruser['user_country'] = (!empty($ruser['user_country']) && mb_strlen($ruser['user_country']) < 4) ?
         $ruser['user_country'] : '';
-	$ruser['user_timezone'] = (!$ruser['user_timezone']) ? 'GMT' : $ruser['user_timezone'];
+
+    if (!empty($ruser['user_timezone'])) {
+        try {
+            $tmp = new \DateTimeZone($ruser['user_timezone']);
+        } catch (\Exception $e) {
+            $ruser['user_timezone'] = cot::$cfg['defaulttimezone'];
+        }
+    } else {
+        $ruser['user_timezone'] = cot::$cfg['defaulttimezone'];
+    }
 
     $maingrp = (int) $maingrp;
     if ($maingrp > 0) {
@@ -75,15 +84,14 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_passfunc'] = empty(cot::$cfg['hashfunc']) ? 'sha256' : cot::$cfg['hashfunc'];
 	$ruser['user_password'] = cot_hash($ruser['user_password'], $ruser['user_passsalt'], $ruser['user_passfunc']);
 
-	if(isset($ruser['user_birthdate'])) {
-		if(is_null($ruser['user_birthdate']) || $ruser['user_birthdate'] > cot::$sys['now']) {
+	if (isset($ruser['user_birthdate'])) {
+		if (is_null($ruser['user_birthdate']) || $ruser['user_birthdate'] > cot::$sys['now']) {
 			$ruser['user_birthdate'] = 'NULL';
-		
 		} else {
 			$ruser['user_birthdate'] = cot_stamp2date($ruser['user_birthdate']);
 		}
 	}
-		
+
 	$ruser['user_lostpass'] = md5(microtime());
 	cot_shield_update(20, "Registration");
 
