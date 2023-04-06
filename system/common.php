@@ -31,7 +31,8 @@ if ($cfg['debug_mode']) {
 	require_once $cfg['system_dir'] . '/debug.php';
 }
 
-spl_autoload_register('cot_autoload');
+require_once './vendor/autoload.php';
+
 register_shutdown_function('cot_shutdown');
 
 // Each user has his own timezone preference based on offset from GMT, so all dates are UTC/GMT by default
@@ -145,8 +146,6 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
 }
 
 /* ======== Connect to the SQL DB======== */
-
-require_once $cfg['system_dir'] . '/database.php';
 try {
 	$db = new CotDB([
 		'host' => $cfg['mysqlhost'],
@@ -166,7 +165,7 @@ try {
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $dbc_port);
 
 // Here we can init our globals facade
-cot::init();
+Cot::init();
 
 $cache && $cache->init();
 
@@ -580,10 +579,6 @@ if (defined('COT_ADMIN')) {
 }
 
 /* ======== Theme / color scheme ======== */
-
-// Resource control object
-require_once $cfg['system_dir'] . '/resources.php';
-
 if (empty($cfg['themes_dir'])) {
 	$cfg['themes_dir'] = 'themes';
 }

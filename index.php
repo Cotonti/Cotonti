@@ -86,9 +86,8 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 	exit;
 }
 
-// Load the Core API, the template engine
+// Load the Core API
 require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/cotemplate.php';
 
 // Bootstrap
 require_once $cfg['system_dir'] . '/common.php';

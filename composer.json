@@ -1,0 +1,28 @@
+{
+  "name": "cotonti/cotonti",
+  "description": "Cotonti CMF",
+  "homepage": "https://www.cotonti.com/",
+  "license": "BSD 3-Clause",
+  "support": {
+    "source": "https://github.com/Cotonti/Cotonti",
+    "wiki": "https://www.cotonti.com/docs/"
+  },
+
+  "require": {
+    "php": ">=5.4",
+    "ext-gd": "*",
+    "ext-mbstring": "*",
+    "ext-json": "*",
+    "ext-hash": "*",
+    "ext-pdo": "*"
+  },
+
+  "autoload": {
+    "classmap": ["system/Cot.php", "system/cache.php", "system/cotemplate.php", "system/database.php", "system/Resources.php", "lib/cssmin.php", "lib/jsmin.php"],
+
+    "psr-4": {
+      "cot\\": "system/",
+      "": ["lib/"]
+    }
+  }
+}

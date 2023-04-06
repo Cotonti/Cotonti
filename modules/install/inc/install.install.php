@@ -48,7 +48,7 @@ if ($step > 2) {
     ]);
 
     // Need to register DB tables
-	cot::init();
+	Cot::init();
 }
 
 // Import section
@@ -234,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			}
 
 			if (!cot_error_found()) {
-				cot::init();
+				Cot::init();
 
 				$config_contents = file_get_contents($file['config']);
 				cot_install_config_replace($config_contents, 'mysqlhost', $db_host);

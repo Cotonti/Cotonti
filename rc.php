@@ -12,7 +12,7 @@ define('COT_CODE', true);
 
 // Required for PHP 5.3
 require_once './datas/config.php';
-date_default_timezone_set('GMT');
+date_default_timezone_set('UTC');
 
 /*
  * Get the path of the target file.

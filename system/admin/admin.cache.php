@@ -25,8 +25,7 @@ foreach (cot_getextplugins('admin.cache.first') as $pl)
 }
 /* ===== */
 
-if (!$cache)
-{
+if (!$cache) {
 	// Enforce cache loading
 	require_once $cfg['system_dir'].'/cache.php';
 	$cache = new Cache();

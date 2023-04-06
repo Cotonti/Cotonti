@@ -16,7 +16,6 @@ require_once $cfg['system_dir'] . '/functions.php';
 $env['location'] = 'messages';
 $env['ext'] = 'message';
 
-require_once $cfg['system_dir'] . '/cotemplate.php';
 require_once $cfg['system_dir'] . '/common.php';
 
 // This trick allows message strings to be overriden in theme langfiles

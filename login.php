@@ -14,7 +14,6 @@ define('COT_AUTH', TRUE);
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/cotemplate.php';
 require_once $cfg['system_dir'] . '/common.php';
 
 require_once cot_langfile('users', 'core');

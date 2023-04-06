@@ -35,8 +35,9 @@ $cfg['xtpl_cache'] = false;
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', 1);
 
-require_once $cfg['system_dir'].'/functions.php';
-require_once $cfg['system_dir'].'/cotemplate.php';
+require_once $cfg['system_dir'] . '/functions.php';
+require_once './vendor/autoload.php';
+//require_once $cfg['system_dir'].'/cotemplate.php';
 require_once 'system/debug.php';
 
 date_default_timezone_set('UTC');
@@ -45,10 +46,7 @@ $sys['now'] = time();
 $env['location'] = 'install';
 $env['ext'] = 'install';
 
-if (isset($cfg['new_install']) && $cfg['new_install'])
-{
-	require_once $cfg['system_dir'].'/database.php';
-
+if (isset($cfg['new_install']) && $cfg['new_install']) {
 	// A Few basics from common.php
 	if (version_compare(PHP_VERSION, '6.0.0', '<='))
 	{
@@ -67,7 +65,7 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 
 	session_start();
 
-    cot::init();
+    Cot::init();
 
     // It will be needed when we start to install extensions
     // Getting the server-relative path
@@ -99,8 +97,6 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
 	$branch = 'siena';
 	$prev_branch = 'genoa';
 
-	require_once $cfg['system_dir'].'/database.php';
-
     $db = new CotDB([
         'host' => $cfg['mysqlhost'],
         'port' => !empty($cfg['mysqlport']) ? $cfg['mysqlport'] : null,
@@ -112,7 +108,7 @@ if (isset($cfg['new_install']) && $cfg['new_install'])
         'collate' => !empty($cfg['mysqlcollate']) ? $cfg['mysqlcollate'] : null,
     ]);
 
-	cot::init();
+	Cot::init();
 
 	$sql_install = @$db->query("SHOW TABLES LIKE '$db_updates'");
 
