@@ -31,7 +31,7 @@ class ComposerStaticInitb62a2eb53da07861f5b198adce5bd706
     );
 
     public static $fallbackDirsPsr4 = array (
-        0 => 'C:\\OpenServerData\\domains\\cotonti.loc\\public_html\\lib',
+        0 => __DIR__ . '/../..' . '/lib',
     );
 
     public static $classMap = array (
