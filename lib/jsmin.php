@@ -187,7 +187,11 @@ class JSMin {
   /* isAlphanum -- return true if the character is a letter, digit, underscore,
         dollar sign, or non-ASCII character.
   */
-  protected function isAlphaNum($c) {
+  protected function isAlphaNum($c)
+  {
+    if ($c === null || $c === false) {
+        return false;
+    }
     return ord($c) > 126 || $c === '\\' || preg_match('/^[\w\$]$/', $c) === 1;
   }
 
