@@ -20,13 +20,13 @@ defined('COT_CODE') or die('Wrong URL');
 if (empty($cot_urltrans) || !is_array($cot_urltrans)) {
 	$cot_urltrans = array();
 	$urltrans_preset = './datas/urltrans.dat';
-	if (!in_array(cot::$cfg['plugin']['urleditor']['preset'], array('custom', 'none'))) {
-		$urltrans_preset = file_exists('./datas/' . cot::$cfg['plugin']['urleditor']['preset'] . '.dat') ?
-            './datas/' . cot::$cfg['plugin']['urleditor']['preset'] . '.dat' :
-            cot::$cfg['plugins_dir'] . '/urleditor/presets/' . cot::$cfg['plugin']['urleditor']['preset'] . '.dat';
+	if (!in_array(Cot::$cfg['plugin']['urleditor']['preset'], array('custom', 'none'))) {
+		$urltrans_preset = file_exists('./datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.dat') ?
+            './datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.dat' :
+            Cot::$cfg['plugins_dir'] . '/urleditor/presets/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.dat';
 	}
 
-	if (cot::$cfg['plugin']['urleditor']['preset'] != 'none' && file_exists($urltrans_preset)) {
+	if (Cot::$cfg['plugin']['urleditor']['preset'] != 'none' && file_exists($urltrans_preset)) {
 		$fp = fopen($urltrans_preset, 'r');
 		while ($line = trim(fgets($fp), " \t\r\n")) {
 			$parts = preg_split('#\s+#', $line);
@@ -62,16 +62,16 @@ if (empty($cot_urltrans) || !is_array($cot_urltrans)) {
 	// $cache && $cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
 }
 
-if (!in_array(cot::$cfg['plugin']['urleditor']['preset'], array('custom', 'none'))) {
+if (!in_array(Cot::$cfg['plugin']['urleditor']['preset'], array('custom', 'none'))) {
 	if (
-        file_exists('./datas/' . cot::$cfg['plugin']['urleditor']['preset'] . '.dat') &&
-		file_exists('./datas/' . cot::$cfg['plugin']['urleditor']['preset'] . '.functions.php')
+        file_exists('./datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.dat') &&
+		file_exists('./datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.functions.php')
     ) {
-		require_once './datas/' . cot::$cfg['plugin']['urleditor']['preset'] . '.functions.php';
+		require_once './datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.functions.php';
 
-    } elseif (file_exists(cot::$cfg['plugins_dir'] . '/urleditor/presets/' .
-        cot::$cfg['plugin']['urleditor']['preset'] . '.functions.php')) {
-		require_once cot::$cfg['plugins_dir'] . '/urleditor/presets/' . cot::$cfg['plugin']['urleditor']['preset'] .
+    } elseif (file_exists(Cot::$cfg['plugins_dir'] . '/urleditor/presets/' .
+        Cot::$cfg['plugin']['urleditor']['preset'] . '.functions.php')) {
+		require_once Cot::$cfg['plugins_dir'] . '/urleditor/presets/' . Cot::$cfg['plugin']['urleditor']['preset'] .
             '.functions.php';
 	}
 }

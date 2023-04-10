@@ -16,9 +16,9 @@ $v = cot_import('v','G','ALP');
 $y = cot_import('y','G','INT');
 $token = cot_import('token', 'G', 'ALP');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('users', 'a');
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('users', 'a');
 
-if (cot::$cfg['users']['disablereg'] && !cot::$usr['isadmin'])
+if (Cot::$cfg['users']['disablereg'] && !Cot::$usr['isadmin'])
 {
 	cot_die_message(117, TRUE);
 }
@@ -30,7 +30,7 @@ foreach (cot_getextplugins('users.register.first') as $pl)
 }
 /* ===== */
 
-cot_block(cot::$usr['id'] == 0 || cot::$usr['isadmin']);
+cot_block(Cot::$usr['id'] == 0 || Cot::$usr['isadmin']);
 
 $ruser = array(
     'user_name' => '',
@@ -57,25 +57,25 @@ if ($a == 'add') {
 	$rpassword2 = (string) cot_import('rpassword2','P','NOC',32);
 	$ruser['user_country'] = cot_import('rcountry','P','TXT');
 	$ruser['user_timezone'] = cot_import('rusertimezone','P','TXT');
-	$ruser['user_timezone'] = (!$ruser['user_timezone']) ? cot::$cfg['defaulttimezone'] : $ruser['user_timezone'];
+	$ruser['user_timezone'] = (!$ruser['user_timezone']) ? Cot::$cfg['defaulttimezone'] : $ruser['user_timezone'];
 	$ruser['user_gender'] = cot_import('rusergender','P','TXT');
 	$ruser['user_email'] = mb_strtolower($ruser['user_email']);
 
 	// Extra fields
-	if (!empty(cot::$extrafields[cot::$db->users])) {
-		foreach (cot::$extrafields[cot::$db->users] as $exfld) {
+	if (!empty(Cot::$extrafields[Cot::$db->users])) {
+		foreach (Cot::$extrafields[Cot::$db->users] as $exfld) {
 			$ruser['user_' . $exfld['field_name']] = cot_import_extrafields('ruser' . $exfld['field_name'], $exfld, 'P',
 				'', 'user_');
 		}
 	}
 	$ruser['user_birthdate'] = cot_import_date('ruserbirthdate', false);
-	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > cot::$sys['now']) {
+	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > Cot::$sys['now']) {
 		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
 	}
 
-	$user_exists = (bool)cot::$db->query("SELECT user_id FROM ".cot::$db->users." WHERE user_name = ? LIMIT 1",
+	$user_exists = (bool)Cot::$db->query("SELECT user_id FROM ".Cot::$db->users." WHERE user_name = ? LIMIT 1",
         array($ruser['user_name']))->fetch();
-	$email_exists = (bool)cot::$db->query("SELECT user_id FROM ".cot::$db->users." WHERE user_email = ? LIMIT 1",
+	$email_exists = (bool)Cot::$db->query("SELECT user_id FROM ".Cot::$db->users." WHERE user_email = ? LIMIT 1",
         array($ruser['user_email']))->fetch();
 
 	if (preg_match('/&#\d+;/', $ruser['user_name']) || preg_match('/[<>#\'"\/]/', $ruser['user_name'])) {
@@ -93,7 +93,7 @@ if ($a == 'add') {
 	if ($user_exists) {
         cot_error('aut_usernamealreadyindb', 'rusername');
     }
-	if ($email_exists && !cot::$cfg['useremailduplicate']) {
+	if ($email_exists && !Cot::$cfg['useremailduplicate']) {
         cot_error('aut_emailalreadyindb', 'ruseremail');
     }
 	if ($rpassword1 != $rpassword2) {
@@ -111,11 +111,11 @@ if ($a == 'add') {
 		$userid = cot_add_user($ruser);
 
 		$authorize = false;
-        if (cot::$db->countRows(cot::$db->users) == 1) {
+        if (Cot::$db->countRows(Cot::$db->users) == 1) {
             $authorize = true;
         } elseif (
-            (cot::$cfg['users']['regnoactivation'] || cot::$cfg['users']['inactive_login'])
-            && cot::$cfg['users']['register_auto_login']
+            (Cot::$cfg['users']['regnoactivation'] || Cot::$cfg['users']['inactive_login'])
+            && Cot::$cfg['users']['register_auto_login']
         ) {
             $authorize = true;
         }
@@ -128,11 +128,11 @@ if ($a == 'add') {
 
 		if($authorize) cot_user_authorize($userid);
 
-		if (cot::$cfg['users']['regnoactivation'] || cot::$db->countRows(cot::$db->users) == 1)
+		if (Cot::$cfg['users']['regnoactivation'] || Cot::$db->countRows(Cot::$db->users) == 1)
 		{
 			cot_redirect(cot_url('message', 'msg=106', '', true));
 		}
-		elseif (cot::$cfg['users']['regrequireadmin'])
+		elseif (Cot::$cfg['users']['regrequireadmin'])
 		{
 			cot_redirect(cot_url('message', 'msg=118', '', true));
 		}
@@ -155,7 +155,7 @@ if ($a == 'add') {
 	/* ===== */
 
 	cot_shield_protect();
-	$sql = cot::$db->query("SELECT * FROM ".cot::$db->users." WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') LIMIT 1");
+	$sql = Cot::$db->query("SELECT * FROM ".Cot::$db->users." WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') LIMIT 1");
 
 	if ($row = $sql->fetch())
 	{
@@ -163,9 +163,9 @@ if ($a == 'add') {
 		{
 			if ($y == 1)
 			{
-				$sql = cot::$db->update(cot::$db->users, array('user_maingrp' => COT_GROUP_MEMBERS),
+				$sql = Cot::$db->update(Cot::$db->users, array('user_maingrp' => COT_GROUP_MEMBERS),
                     "user_id='".$row['user_id']."' AND user_lostpass='$v'");
-				$sql = cot::$db->update(cot::$db->groups_users, array('gru_groupid' => COT_GROUP_MEMBERS),
+				$sql = Cot::$db->update(Cot::$db->groups_users, array('gru_groupid' => COT_GROUP_MEMBERS),
                     "gru_groupid=2 AND gru_userid='".$row['user_id']."'");
 
                 $row['user_maingrp'] = COT_GROUP_MEMBERS;
@@ -178,18 +178,18 @@ if ($a == 'add') {
 				/* ===== */
 
 				cot_auth_clear($row['user_id']);
-                if(cot::$usr['id'] == 0 && cot::$cfg['users']['register_auto_login']) cot_user_authorize($row);
+                if(Cot::$usr['id'] == 0 && Cot::$cfg['users']['register_auto_login']) cot_user_authorize($row);
                 cot_redirect(cot_url('message', 'msg=106', '', true));
 			}
 			elseif ($y == 0)
 			{
-				foreach(cot::$extrafields[cot::$db->users] as $exfld)
+				foreach(Cot::$extrafields[Cot::$db->users] as $exfld)
 				{
 					cot_extrafield_unlinkfiles($row['user_'.$exfld['field_name']], $exfld);
 				}
 
-				$sql = cot::$db->delete(cot::$db->users, "user_id=".(int)$row['user_id']);
-				$sql = cot::$db->delete(cot::$db->groups_users, "gru_userid='".$row['user_id']."'");
+				$sql = Cot::$db->delete(Cot::$db->users, "user_id=".(int)$row['user_id']);
+				$sql = Cot::$db->delete(Cot::$db->groups_users, "gru_userid='".$row['user_id']."'");
 
 				/* === Hook for the plugins === */
 				foreach (cot_getextplugins('users.register.validate.rejected') as $pl)
@@ -203,14 +203,14 @@ if ($a == 'add') {
 		}
 		elseif ($row['user_maingrp'] == -1)
 		{
-			$sql = cot::$db->update(cot::$db->users, array('user_maingrp' => $row['user_sid']),
+			$sql = Cot::$db->update(Cot::$db->users, array('user_maingrp' => $row['user_sid']),
                 "user_id='".$row['user_id']."' AND user_lostpass='$v'");
 			cot_redirect(cot_url('message', 'msg=106', '', true));
 		}
 	}
 	else
 	{
-        cot::$env['status'] = '403 Forbidden';
+        Cot::$env['status'] = '403 Forbidden';
 		cot_shield_update(7, "Account validation");
 		cot_log("Wrong validation URL", 'sec', 'user', 'error');
 		cot_redirect(cot_url('message', 'msg=157', '', true));
@@ -226,18 +226,18 @@ foreach (cot_getextplugins('users.register.main') as $pl)
 }
 /* ===== */
 
-$out['subtitle'] = cot::$L['aut_registertitle'];
+$out['subtitle'] = Cot::$L['aut_registertitle'];
 if (!isset($out['head'])) $out['head'] = '';
-$out['head'] .= cot::$R['code_noindex'];
-require_once cot::$cfg['system_dir'] . '/header.php';
+$out['head'] .= Cot::$R['code_noindex'];
+require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');
 
 $t->assign(array(
-	'USERS_REGISTER_TITLE' => cot::$L['aut_registertitle'],
-	'USERS_REGISTER_SUBTITLE' => cot::$L['aut_registersubtitle'],
+	'USERS_REGISTER_TITLE' => Cot::$L['aut_registertitle'],
+	'USERS_REGISTER_SUBTITLE' => Cot::$L['aut_registersubtitle'],
 	//'USERS_REGISTER_ADMINEMAIL' => $cot_adminemail, // Obsolete?
 	'USERS_REGISTER_SEND' => cot_url('users', 'm=register&a=add'),
 	'USERS_REGISTER_USER' => cot_inputbox('text', 'rusername', $ruser['user_name'], array('size' => 24, 'maxlength' => 100)),
@@ -251,8 +251,8 @@ $t->assign(array(
 ));
 
 // Extra fields
-if (!empty(cot::$extrafields[cot::$db->users])) {
-    foreach (cot::$extrafields[cot::$db->users] as $exfld) {
+if (!empty(Cot::$extrafields[Cot::$db->users])) {
+    foreach (Cot::$extrafields[Cot::$db->users] as $exfld) {
         $uname = strtoupper($exfld['field_name']);
         $val = isset($ruser['user_'.$exfld['field_name']]) ? $ruser['user_'.$exfld['field_name']] : null;
         $exfld_val = cot_build_extrafields('ruser'.$exfld['field_name'],  $exfld, $val);
@@ -281,4 +281,4 @@ cot_display_messages($t);
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once cot::$cfg['system_dir'] . '/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';

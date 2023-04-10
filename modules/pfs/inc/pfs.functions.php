@@ -17,8 +17,8 @@ require_once cot_incfile('forms');
 require_once cot_incfile('users', 'module');
 
 // Registering tables
-cot::$db->registerTable('pfs');
-cot::$db->registerTable('pfs_folders');
+Cot::$db->registerTable('pfs');
+Cot::$db->registerTable('pfs_folders');
 
 /**
  * Generates a link to PFS
@@ -538,20 +538,20 @@ function cot_pfs_upload($userid, $folderid='')
 
 							if (
                                 in_array($f_extension, $gd_supported)
-                                && cot::$cfg['pfs']['th_amode']!='Disabled'
+                                && Cot::$cfg['pfs']['th_amode']!='Disabled'
 								&& file_exists($pfs_dir_user.$u_newname)
                             ) {
 								@unlink($thumbs_dir_user.$npath.$u_newname);
-								$th_colortext = cot::$cfg['pfs']['th_colortext'];
-								$th_colorbg = cot::$cfg['pfs']['th_colortext'];
+								$th_colortext = Cot::$cfg['pfs']['th_colortext'];
+								$th_colorbg = Cot::$cfg['pfs']['th_colortext'];
 								cot_imageresize(
                                     $pfs_dir_user . $npath . $u_newname,
 									$cfg['pfs']['thumbs_dir_user'] . $npath . $u_newname,
-                                    cot::$cfg['pfs']['th_x'],
-                                    cot:: $cfg['pfs']['th_y'],
+                                    Cot::$cfg['pfs']['th_x'],
+                                    Cot:: $cfg['pfs']['th_y'],
                                     '',
                                     $th_colorbg,
-                                    cot::$cfg['pfs']['th_jpeg_quality'],
+                                    Cot::$cfg['pfs']['th_jpeg_quality'],
                                     true
                                 );
 							}

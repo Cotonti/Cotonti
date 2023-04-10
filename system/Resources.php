@@ -72,18 +72,18 @@ class Resources
 	{
 		if (defined('COT_HEADER_COMPLETE')) static::$headerComplete = true;
 
-		static::$cacheOn = cot::$cfg['cache'];
-		static::$consolidate = (bool) cot::$cfg['headrc_consolidate'];
-		static::$dir = cot::$cfg['cache_dir'] . '/static/';
+		static::$cacheOn = Cot::$cfg['cache'];
+		static::$consolidate = (bool) Cot::$cfg['headrc_consolidate'];
+		static::$dir = Cot::$cfg['cache_dir'] . '/static/';
 		static::$isAdmin = defined('COT_ADMIN');
-		static::$minify = (bool) cot::$cfg['headrc_minify'];
+		static::$minify = (bool) Cot::$cfg['headrc_minify'];
 
 		// Consolidate resources?
 		static::$consolidate = static::$cacheOn && static::$consolidate && !static::$isAdmin;
 		if (static::$consolidate)
 		{
-			if (!file_exists(cot::$cfg['cache_dir'])) mkdir(cot::$cfg['cache_dir'], cot::$cfg['dir_perms']);
-			if (!file_exists(static::$dir)) mkdir(static::$dir, cot::$cfg['dir_perms']);
+			if (!file_exists(Cot::$cfg['cache_dir'])) mkdir(Cot::$cfg['cache_dir'], Cot::$cfg['dir_perms']);
+			if (!file_exists(static::$dir)) mkdir(static::$dir, Cot::$cfg['dir_perms']);
 		}
 	}
 
@@ -263,14 +263,14 @@ class Resources
 						$pass = true;
 						break;
 					case 'guest':
-						$pass = cot::$usr['id'] == 0;
+						$pass = Cot::$usr['id'] == 0;
 						break;
 					case 'user':
-						$pass = cot::$usr['id'] > 0;
+						$pass = Cot::$usr['id'] > 0;
 						break;
 					default:
 						$parts = explode('_', $scope);
-						$pass = count($parts) == 2 && $parts[0] == 'group' && $parts[1] == cot::$usr['maingrp'];
+						$pass = count($parts) == 2 && $parts[0] == 'group' && $parts[1] == Cot::$usr['maingrp'];
 				}
 				if ($pass) $ret = $html . $ret;
 			}
@@ -468,7 +468,7 @@ class Resources
 						}
 
 						file_put_contents($target_path, $code);
-						if (cot::$cfg['gzip']) file_put_contents("$target_path.gz", gzencode($code));
+						if (Cot::$cfg['gzip']) file_put_contents("$target_path.gz", gzencode($code));
 						file_put_contents("$target_path.idx", serialize($files));
 
 						$fileTime = filemtime($target_path);
@@ -483,7 +483,7 @@ class Resources
 				}
 			}
 			// Save the output
-			static::$cacheOn && cot::$cache && cot::$cache->db->store('cot_rc_html', $cot_rc_html);
+			static::$cacheOn && Cot::$cache && Cot::$cache->db->store('cot_rc_html', $cot_rc_html);
 		}
 		else
 		{

@@ -15,7 +15,7 @@ Hooks=standalone
 defined('COT_CODE') or die("Wrong URL.");
 
 $days = cot_import('days', 'G', 'INT');
-list($pg, $d, $durl) = cot_import_pagenav('d', cot::$cfg['plugin']['recentitems']['itemsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['plugin']['recentitems']['itemsperpage']);
 $mode = cot_import('mode', 'G', 'TXT');
 
 $timeback = 0;
@@ -23,8 +23,8 @@ $pagetitlelimit = isset($pagetitlelimit) ? $pagetitlelimit : 0;  // Todo
 
 // From user's last visit
 if ($days == -1) {
-    if (cot::$usr['id'] > 0 && cot::$usr['lastvisit'] > 0) {
-        $timeback = cot::$usr['lastvisit'];
+    if (Cot::$usr['id'] > 0 && Cot::$usr['lastvisit'] > 0) {
+        $timeback = Cot::$usr['lastvisit'];
     } else {
         $days = 1;
     }
@@ -33,14 +33,14 @@ if ($days == -1) {
 // Today. From 00:00 in user timezone
 if ($days == 0) {
     $timeZone = null;
-    $defaultTimeZone = !empty(cot::$cfg['defaulttimezone']) ? cot::$cfg['defaulttimezone'] : 'UTC';
+    $defaultTimeZone = !empty(Cot::$cfg['defaulttimezone']) ? Cot::$cfg['defaulttimezone'] : 'UTC';
     if (
-        cot::$usr['timezone'] != 0 // May be it is not needed
-        && !empty(cot::$usr['timezonename'])
-        && cot::$usr['timezonename'] != $defaultTimeZone)
+        Cot::$usr['timezone'] != 0 // May be it is not needed
+        && !empty(Cot::$usr['timezonename'])
+        && Cot::$usr['timezonename'] != $defaultTimeZone)
     {
         try {
-            $timeZone = new \DateTimeZone(cot::$usr['timezonename']);
+            $timeZone = new \DateTimeZone(Cot::$usr['timezonename']);
         } catch (\Exception $e) { }
     }
     if (empty($timeZone)) {
@@ -50,13 +50,13 @@ if ($days == 0) {
     $timeback = $date->getTimestamp();
 }
 if ($days > 0) {
-	$timeback = cot::$sys['now'] - ($days * 86400);
+	$timeback = Cot::$sys['now'] - ($days * 86400);
 }
 
 require_once cot_incfile('recentitems', 'plug');
 $totalrecent[] = 0;
 if (
-    cot::$cfg['plugin']['recentitems']['newpages']
+    Cot::$cfg['plugin']['recentitems']['newpages']
     && cot_module_active('page')
     && (empty($mode) || $mode == 'pages')
 ) {
@@ -64,17 +64,17 @@ if (
 	$res = cot_build_recentpages(
         'recentitems.pages',
         $timeback,
-        cot::$cfg['plugin']['recentitems']['itemsperpage'],
+        Cot::$cfg['plugin']['recentitems']['itemsperpage'],
         $d,
         $pagetitlelimit,
-        cot::$cfg['plugin']['recentitems']['newpagestext'],
-        cot::$cfg['plugin']['recentitems']['rightscan']
+        Cot::$cfg['plugin']['recentitems']['newpagestext'],
+        Cot::$cfg['plugin']['recentitems']['rightscan']
     );
 	$t->assign('RECENT_PAGES', $res);
 }
 
 if (
-    cot::$cfg['plugin']['recentitems']['newforums']
+    Cot::$cfg['plugin']['recentitems']['newforums']
     && cot_module_active('forums')
     && (empty($mode) || $mode == 'forums')
 ) {
@@ -85,10 +85,10 @@ if (
 	$res = cot_build_recentforums(
         'recentitems.forums',
         $timeback,
-        cot::$cfg['plugin']['recentitems']['itemsperpage'],
+        Cot::$cfg['plugin']['recentitems']['itemsperpage'],
         $d,
         $forumtitlelimit,
-        cot::$cfg['plugin']['recentitems']['rightscan']
+        Cot::$cfg['plugin']['recentitems']['rightscan']
     );
 	$t->assign('RECENT_FORUMS', $res);
 }
@@ -101,7 +101,7 @@ if ($mode != 'pages' || $mode != 'forums') {
 	/* ===== */
 }
 
-cot::$out['subtitle'] = cot::$L['recentitems_title'];
+Cot::$out['subtitle'] = Cot::$L['recentitems_title'];
 
 $totalpages = max($totalrecent);
 $daysUrl = ($days != 0) ? '&days=' . $days : '';
@@ -111,7 +111,7 @@ $pagenav = cot_pagenav(
     'e=recentitems' . $daysUrl . $modeUrl,
     $d,
     $totalpages,
-    cot::$cfg['plugin']['recentitems']['itemsperpage']
+    Cot::$cfg['plugin']['recentitems']['itemsperpage']
 );
 
 $t->assign([

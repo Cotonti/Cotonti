@@ -18,8 +18,8 @@ defined('COT_CODE') or die('Wrong URL');
 
 // So this code should be moved there too and use 'forums.sections.loop.subsections' hook
 $cot_sections_vw_cur = 0;
-if (!empty($cot_sections_vw) && isset($cot_sections_vw[cot::$structure['forums'][$y]['title']])) {
-    $cot_sections_vw_cur = (int) $cot_sections_vw[cot::$structure['forums'][$y]['title']];
+if (!empty($cot_sections_vw) && isset($cot_sections_vw[Cot::$structure['forums'][$y]['title']])) {
+    $cot_sections_vw_cur = (int) $cot_sections_vw[Cot::$structure['forums'][$y]['title']];
 }
 
 $t->assign(array(

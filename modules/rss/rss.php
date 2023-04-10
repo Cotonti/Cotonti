@@ -292,7 +292,7 @@ elseif ($default_mode)
 		$url = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'], '', true) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'], '', true);
 
 		$rssDate = $row['page_date'];
-		if(!empty(cot::$usr['timezone'])) $rssDate += cot::$usr['timezone'] * 3600;
+		if(!empty(Cot::$usr['timezone'])) $rssDate += Cot::$usr['timezone'] * 3600;
 
 		$items[$i]['title'] = $row['page_title'];
 		$items[$i]['link'] = (strpos($url, '://') === false) ? COT_ABSOLUTE_URL . $url : $url;
@@ -312,8 +312,8 @@ elseif ($default_mode)
 	$sql->closeCursor();
 }
 
-$rssNow = cot::$sys['now'];
-if(!empty(cot::$usr['timezone'])) $rssNow += cot::$usr['timezone'] * 3600;
+$rssNow = Cot::$sys['now'];
+if(!empty(Cot::$usr['timezone'])) $rssNow += Cot::$usr['timezone'] * 3600;
 
 $t = new XTemplate(cot_tplfile('rss'));
 $t->assign(array(

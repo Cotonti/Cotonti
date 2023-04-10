@@ -15,18 +15,18 @@ global $db_pages;
 
 if (empty($db_pages)) {
     // Registering tables
-    cot::$db->registerTable('pages');
+    Cot::$db->registerTable('pages');
 }
 
 $changeCollation = false;
 if (
-    cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
-    (empty(cot::$cfg['mysqlcollate']) || cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
+    Cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
+    (empty(Cot::$cfg['mysqlcollate']) || Cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
 ) {
     $changeCollation = true;
 }
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_pages}` SET `page_alias`='' WHERE `page_alias` IS NULL;
     UPDATE `{$db_pages}` SET `page_state`='0' WHERE `page_state` IS NULL;
     UPDATE `{$db_pages}` SET `page_ownerid`='0' WHERE `page_ownerid` IS NULL;
@@ -58,7 +58,7 @@ cot::$db->query("
         MODIFY `page_filecount` mediumint UNSIGNED NOT NULL DEFAULT '0',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_pages}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_pages}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }

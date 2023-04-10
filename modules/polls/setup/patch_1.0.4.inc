@@ -15,20 +15,20 @@ global $db_polls, $db_polls_options, $db_polls_voters;
 
 if (empty($db_polls)) {
     // Registering tables
-    cot::$db->registerTable('polls');
-    cot::$db->registerTable('polls_options');
-    cot::$db->registerTable('polls_voters');
+    Cot::$db->registerTable('polls');
+    Cot::$db->registerTable('polls_options');
+    Cot::$db->registerTable('polls_voters');
 }
 
 $changeCollation = false;
 if (
-    cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
-    (empty(cot::$cfg['mysqlcollate']) || cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
+    Cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
+    (empty(Cot::$cfg['mysqlcollate']) || Cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
 ) {
     $changeCollation = true;
 }
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_polls}` SET `poll_text`='' WHERE `poll_text` IS NULL;
     ALTER TABLE `{$db_polls}` 
         MODIFY `poll_id` mediumint UNSIGNED NOT NULL auto_increment,
@@ -39,12 +39,12 @@ cot::$db->query("
         MODIFY `poll_multiple` tinyint UNSIGNED NOT NULL default '0',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_polls}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_polls}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_polls_options}` SET `po_text`='' WHERE `po_text` IS NULL;
     ALTER TABLE `{$db_polls_options}` 
         MODIFY `po_id` mediumint UNSIGNED NOT NULL auto_increment,
@@ -53,12 +53,12 @@ cot::$db->query("
         MODIFY `po_count` mediumint UNSIGNED NOT NULL default '0',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_polls_options}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_polls_options}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_polls_voters}` SET `pv_userip`='' WHERE `pv_userip` IS NULL;
     ALTER TABLE `{$db_polls_voters}` 
         MODIFY `pv_id` int UNSIGNED NOT NULL auto_increment,
@@ -67,7 +67,7 @@ cot::$db->query("
         MODIFY `pv_userip` varchar(15) NOT NULL default '',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_polls_voters}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_polls_voters}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }

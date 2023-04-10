@@ -35,44 +35,44 @@ if (!function_exists('cot_install_config_replace')) {
  */
 
 $changeCollation = false;
-$mySqlVersion = cot::$db->getConnection()->getAttribute(PDO::ATTR_SERVER_VERSION);
+$mySqlVersion = Cot::$db->getConnection()->getAttribute(PDO::ATTR_SERVER_VERSION);
 if (
     version_compare($mySqlVersion, '5.7', '>=') &&
     version_compare(PHP_VERSION, '5.5', '>=') &&
-    (empty(cot::$cfg['mysqlcharset']) || in_array(cot::$cfg['mysqlcharset'], ['utf8', 'utf8mb4']))  //&&
+    (empty(Cot::$cfg['mysqlcharset']) || in_array(Cot::$cfg['mysqlcharset'], ['utf8', 'utf8mb4']))  //&&
     // Not sure about this condition. May be 'mysqlcharset' is enough
-    //(empty(cot::$cfg['mysqlcollate']) || in_array(cot::$cfg['mysqlcollate'], ['utf8_unicode_ci', 'utf8mb4_unicode_ci']))
+    //(empty(Cot::$cfg['mysqlcollate']) || in_array(Cot::$cfg['mysqlcollate'], ['utf8_unicode_ci', 'utf8mb4_unicode_ci']))
 ) {
     $changeCollation = true;
 
     // Update config
-    if (cot::$cfg['mysqlcharset'] != 'utf8mb4' || cot::$cfg['mysqlcollate'] != 'utf8mb4_unicode_ci') {
+    if (Cot::$cfg['mysqlcharset'] != 'utf8mb4' || Cot::$cfg['mysqlcollate'] != 'utf8mb4_unicode_ci') {
         $configContent = file_get_contents($file['config']);
-        if (cot::$cfg['mysqlcharset'] != 'utf8mb4') {
+        if (Cot::$cfg['mysqlcharset'] != 'utf8mb4') {
             cot_install_config_replace($configContent, 'mysqlcharset', 'utf8mb4');
-            cot::$cfg['mysqlcharset'] = 'utf8mb4';
+            Cot::$cfg['mysqlcharset'] = 'utf8mb4';
         }
-        if (cot::$cfg['mysqlcollate'] != 'utf8mb4_unicode_ci') {
+        if (Cot::$cfg['mysqlcollate'] != 'utf8mb4_unicode_ci') {
             cot_install_config_replace($configContent, 'mysqlcollate', 'utf8mb4_unicode_ci');
-            cot::$cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';
+            Cot::$cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';
         }
         file_put_contents($file['config'], $configContent);
         unset($configContent);
 
-        cot::$db->query(
-            "SET NAMES '" . cot::$cfg['mysqlcharset'] . "'  COLLATE '" .
-            cot::$cfg['mysqlcollate'] . "'"
+        Cot::$db->query(
+            "SET NAMES '" . Cot::$cfg['mysqlcharset'] . "'  COLLATE '" .
+            Cot::$cfg['mysqlcollate'] . "'"
         );
     }
 }
 
 // Changing character set and collation database wide:
 if ($changeCollation) {
-    cot::$db->query( "ALTER DATABASE `" . cot::$cfg['mysqldb'] . "` CHARACTER SET '" . cot::$cfg['mysqlcharset'] .
-        "' COLLATE '" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query( "ALTER DATABASE `" . Cot::$cfg['mysqldb'] . "` CHARACTER SET '" . Cot::$cfg['mysqlcharset'] .
+        "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_auth}` SET `auth_setbyuserid`=0 WHERE `auth_setbyuserid` IS NULL;
     ALTER TABLE `{$db_auth}`  
         MODIFY `auth_id` int UNSIGNED NOT NULL auto_increment,
@@ -84,13 +84,13 @@ cot::$db->query("
         MODIFY `auth_setbyuserid` INT UNSIGNED NOT NULL DEFAULT '0',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_auth}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_auth}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_cache}` SET `c_expire`=0 WHERE `c_expire` IS NULL;
     UPDATE `{$db_cache}` SET `c_auto`=0 WHERE `c_auto` IS NULL;
     ALTER TABLE `{$db_cache}`
@@ -100,13 +100,13 @@ cot::$db->query("
         MODIFY `c_value` MEDIUMTEXT NULL DEFAULT NULL,
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_cache}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_cache}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_cache_bindings}` SET `c_type`=0 WHERE `c_type` IS NULL;
     ALTER TABLE `{$db_cache_bindings}` 
         MODIFY `c_event` VARCHAR(64) NOT NULL,
@@ -114,12 +114,12 @@ cot::$db->query("
         MODIFY `c_type` TINYINT NOT NULL DEFAULT '0',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_cache_bindings}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_cache_bindings}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_config}` SET `config_owner`='core' WHERE `config_owner` IS NULL;
     UPDATE `{$db_config}` SET `config_subcat`='' WHERE `config_subcat` IS NULL;
     UPDATE `{$db_config}` SET `config_type`='0' WHERE `config_type` IS NULL;
@@ -139,12 +139,12 @@ cot::$db->query("
         MODIFY `config_donor` varchar(64) NOT NULL default '',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_config}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_config}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_core}` SET `ct_code`='' WHERE `ct_code` IS NULL;
     UPDATE `{$db_core}` SET `ct_title`='' WHERE `ct_title` IS NULL;
     UPDATE `{$db_core}` SET `ct_version`='' WHERE `ct_version` IS NULL;
@@ -161,13 +161,13 @@ cot::$db->query("
         MODIFY `ct_plug` tinyint UNSIGNED NOT NULL default '0',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_core}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_core}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_extra_fields}` SET `field_required`='0' WHERE `field_required` IS NULL;
     UPDATE `{$db_extra_fields}` SET `field_enabled`='1' WHERE `field_enabled` IS NULL;
     UPDATE `{$db_extra_fields}` SET `field_parse`='HTML' WHERE `field_parse` IS NULL;
@@ -182,13 +182,13 @@ cot::$db->query("
         MODIFY `field_description` text NULL DEFAULT NULL,
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_extra_fields}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_extra_fields}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_groups}` SET `grp_alias`='' WHERE `grp_alias` IS NULL;
     UPDATE `{$db_groups}` SET `grp_level`='1' WHERE `grp_level` IS NULL;
     UPDATE `{$db_groups}` SET `grp_disabled`='0' WHERE `grp_disabled` IS NULL;
@@ -212,13 +212,13 @@ cot::$db->query("
         MODIFY `grp_skiprights` tinyint NOT NULL DEFAULT '0',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_groups}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_groups}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_groups_users}` SET `gru_state`='0' WHERE `gru_state` IS NULL;
     ALTER TABLE `{$db_groups_users}` 
         MODIFY `gru_userid` int UNSIGNED NOT NULL,
@@ -226,13 +226,13 @@ cot::$db->query("
         MODIFY `gru_state` tinyint NOT NULL DEFAULT '0',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_groups_users}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_groups_users}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_logger}` SET `log_text`='' WHERE `log_text` IS NULL;
     ALTER TABLE `{$db_logger}` 
         MODIFY `log_id` int UNSIGNED NOT NULL auto_increment,
@@ -240,13 +240,13 @@ cot::$db->query("
         MODIFY `log_text` VARCHAR(255) NOT NULL,
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_logger}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_logger}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_plugins}` SET `pl_part`='' WHERE `pl_part` IS NULL;
     UPDATE `{$db_plugins}` SET `pl_title`='' WHERE `pl_title` IS NULL;
     UPDATE `{$db_plugins}` SET `pl_file`='' WHERE `pl_file` IS NULL;
@@ -265,13 +265,13 @@ cot::$db->query("
         MODIFY `pl_module` tinyint UNSIGNED NOT NULL DEFAULT '0',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_plugins}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_plugins}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_structure}` SET `structure_locked`='0' WHERE `structure_locked` IS NULL;
     UPDATE `{$db_structure}` SET `structure_count`='0' WHERE `structure_count` IS NULL;
     ALTER TABLE `{$db_structure}` 
@@ -283,15 +283,15 @@ cot::$db->query("
         MODIFY `structure_count` mediumint UNSIGNED NOT NULL DEFAULT '0',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_structure}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_structure}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }
 
 
-cot::$db->query("ALTER TABLE `{$db_updates}` ENGINE=InnoDB;");
+Cot::$db->query("ALTER TABLE `{$db_updates}` ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_updates}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_updates}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }

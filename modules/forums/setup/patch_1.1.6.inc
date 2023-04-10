@@ -4,8 +4,8 @@
  */
 defined('COT_CODE') or die('Wrong URL');
 
-cot::$db->update(
-    cot::$db->structure,
+Cot::$db->update(
+    Cot::$db->structure,
     ['structure_icon' => 'images/icons/default/modules/forums/forum.png',],
     "structure_area='forums' AND structure_icon='images/icons/default/forums.png'"
 );

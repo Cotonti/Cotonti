@@ -9,11 +9,11 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'any');
-cot_block(cot::$usr['auth_read']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'any');
+cot_block(Cot::$usr['auth_read']);
 
-$enabled[0] = cot::$L['Disabled'];
-$enabled[1] = cot::$L['Enabled'];
+$enabled[0] = Cot::$L['Disabled'];
+$enabled[1] = Cot::$L['Enabled'];
 
 $id = cot_import('id', 'G', 'TXT');
 $po = cot_import('po', 'G', 'TXT');
@@ -39,33 +39,33 @@ $inc_file = (empty($s)) ? $inc_file : $inc_file.'.'.$s;
 if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'module', $inc_file))) {
 	$inc_file = cot_incfile('admin', 'module', $inc_file);
 } else {
-	cot::$env['ext'] = $m;
+	Cot::$env['ext'] = $m;
 	$adminTitle = isset($cot_modules[$m]['title']) ? $cot_modules[$m]['title'] : '';
-	$inc_file = cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
+	$inc_file = Cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
 }
 
 if (!file_exists($inc_file)) {
 	cot_die();
 }
 
-$adminpath = array(array(cot_url('admin'), cot::$L['Adminpanel']));
+$adminpath = array(array(cot_url('admin'), Cot::$L['Adminpanel']));
 $adminhelp = isset($adminhelp) ? $adminhelp : '';
 $adminmain = isset($adminmain) ? $adminmain : '';
 
 require $inc_file;
 
 $title_params = array(
-	'ADMIN' => cot::$L['Administration'],
+	'ADMIN' => Cot::$L['Administration'],
 	'SUBTITLE' => $adminTitle
 );
-if (!isset(cot::$out['head'] )) {
-    cot::$out['head']  = '';
+if (!isset(Cot::$out['head'] )) {
+    Cot::$out['head']  = '';
 }
-cot::$out['head'] .= cot::$R['code_noindex'];
-cot::$out['subtitle'] = empty($adminTitle) ?
+Cot::$out['head'] .= Cot::$R['code_noindex'];
+Cot::$out['subtitle'] = empty($adminTitle) ?
     cot_title('{ADMIN}', $title_params) : cot_title('{SUBTITLE} - {ADMIN}', $title_params);
 
-require_once cot::$cfg['system_dir'].'/header.php';
+require_once Cot::$cfg['system_dir'].'/header.php';
 
 $t = new XTemplate(cot_tplfile('admin', 'core'));
 
@@ -89,4 +89,4 @@ if(!COT_AJAX) {
 	$t->out('MAIN.BODY');
 }
 
-require_once cot::$cfg['system_dir'].'/footer.php';
+require_once Cot::$cfg['system_dir'].'/footer.php';

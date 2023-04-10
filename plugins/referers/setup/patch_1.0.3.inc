@@ -15,23 +15,23 @@ global $db_referers;
 
 if (empty($db_referers)) {
     // Registering tables
-    cot::$db->registerTable('referers');
+    Cot::$db->registerTable('referers');
 }
 
 $changeCollation = false;
 if (
-    cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
-    (empty(cot::$cfg['mysqlcollate']) || cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
+    Cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
+    (empty(Cot::$cfg['mysqlcollate']) || Cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
 ) {
     $changeCollation = true;
 }
 
-cot::$db->query("ALTER TABLE `{$db_referers}` 
+Cot::$db->query("ALTER TABLE `{$db_referers}` 
     MODIFY `ref_url` varchar(255) NOT NULL,
     MODIFY `ref_count` mediumint UNSIGNED NOT NULL default '0',
     ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_referers}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_referers}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }

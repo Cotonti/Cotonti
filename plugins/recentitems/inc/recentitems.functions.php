@@ -22,10 +22,10 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
     $authAllCats = false;
     $adminCats = [];
     $adminAllCats = false;
-    if (!empty(cot::$structure['forums'])) {
+    if (!empty(Cot::$structure['forums'])) {
         $authAllCats = true;
         $adminAllCats = true;
-        foreach (cot::$structure['forums'] as $code => $cat) {
+        foreach (Cot::$structure['forums'] as $code => $cat) {
             if (in_array($code, ['all', 'system',])) {
                 continue;
             }
@@ -46,7 +46,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
     if ($rightprescan) {
         if (!$authAllCats) {
             $sqlCategories = array_map(
-                function ($value) {return cot::$db->quote($value);},
+                function ($value) {return Cot::$db->quote($value);},
                 $authCats
             );
             $where['cat'] = 'ft_cat IN (' . implode(', ', $sqlCategories) . ')';
@@ -57,12 +57,12 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
     if (!$adminAllCats) {
         $sqlAdminCats = '';
         $sqlFirsPosterId = '';
-        if (cot::$usr > 0) {
-            $sqlFirsPosterId = ' OR ft_firstposterid = ' . cot::$usr['id'];
+        if (Cot::$usr > 0) {
+            $sqlFirsPosterId = ' OR ft_firstposterid = ' . Cot::$usr['id'];
             if (!empty($adminCats)) {
                 $sqlAdminCats = array_map(
                     function ($value) {
-                        return cot::$db->quote($value);
+                        return Cot::$db->quote($value);
                     },
                     $adminCats
                 );
@@ -87,9 +87,9 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
         $where['movedTo'] = 'ft_movedto = 0';
         $sqlWhere = ' WHERE ' . implode(' AND ', $where);
 
-        $totalrecent['topics'] = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->forum_topics . $sqlWhere)
+        $totalrecent['topics'] = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->forum_topics . $sqlWhere)
             ->fetchColumn();
-        $sql = cot::$db->query('SELECT * FROM ' . cot::$db->forum_topics . $sqlWhere .
+        $sql = Cot::$db->query('SELECT * FROM ' . Cot::$db->forum_topics . $sqlWhere .
             " ORDER by ft_updated DESC LIMIT $maxperpage");
 		//$totalrecent['topics'] = $maxperpage;
 
@@ -97,12 +97,12 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
         $where['updated'] = 'ft_updated >= :updated';
 		$sqlWhere = ' WHERE ' . implode(' AND ', $where);
 
-		$totalrecent['topics'] = cot::$db->query(
-            'SELECT COUNT(*) FROM ' . cot::$db->forum_topics . $sqlWhere,
+		$totalrecent['topics'] = Cot::$db->query(
+            'SELECT COUNT(*) FROM ' . Cot::$db->forum_topics . $sqlWhere,
             ['updated' => $mode]
         )->fetchColumn();
-		$sql = cot::$db->query(
-            'SELECT * FROM ' . cot::$db->forum_topics . ' ' . $sqlWhere . " ORDER by ft_updated DESC LIMIT $d, " .
+		$sql = Cot::$db->query(
+            'SELECT * FROM ' . Cot::$db->forum_topics . ' ' . $sqlWhere . " ORDER by ft_updated DESC LIMIT $d, " .
                 $maxperpage,
             ['updated' => $mode]
         );
@@ -119,7 +119,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		}
 		$build_forum = cot_breadcrumbs(cot_forums_buildpath($row['ft_cat'], false), false, false);
 		$build_forum_short = cot_rc_link(cot_url('forums', 'm=topics&s=' . $row['ft_cat']),
-            htmlspecialchars(cot::$structure['forums'][$row['ft_cat']]['title']));
+            htmlspecialchars(Cot::$structure['forums'][$row['ft_cat']]['title']));
 
 		if ($row['ft_mode'] == 1) {
 			$row['ft_title'] = "# " . $row['ft_title'];
@@ -127,34 +127,34 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 
 		if ($row['ft_movedto'] > 0) {
 			$row['ft_url'] = cot_url('forums', 'm=posts&q=' . $row['ft_movedto']);
-			$row['ft_icon'] = cot::$R['forums_icon_posts_moved'];
-			$row['ft_title'] = cot::$L['Moved'] . ": " . $row['ft_title'];
-			$row['ft_lastpostername'] = cot::$R['forums_code_post_empty'];
-			$row['ft_postcount'] = cot::$R['forums_code_post_empty'];
-			$row['ft_replycount'] = cot::$R['forums_code_post_empty'];
-			$row['ft_viewcount'] = cot::$R['forums_code_post_empty'];
-			$row['ft_lastpostername'] = cot::$R['forums_code_post_empty'];
+			$row['ft_icon'] = Cot::$R['forums_icon_posts_moved'];
+			$row['ft_title'] = Cot::$L['Moved'] . ": " . $row['ft_title'];
+			$row['ft_lastpostername'] = Cot::$R['forums_code_post_empty'];
+			$row['ft_postcount'] = Cot::$R['forums_code_post_empty'];
+			$row['ft_replycount'] = Cot::$R['forums_code_post_empty'];
+			$row['ft_viewcount'] = Cot::$R['forums_code_post_empty'];
+			$row['ft_lastpostername'] = Cot::$R['forums_code_post_empty'];
 			$row['ft_lastposturl'] = cot_url('forums', 'm=posts&q=' . $row['ft_movedto'] . '&n=last', '#bottom');
-			$row['ft_lastpostlink'] = cot_rc_link($row['ft_lastposturl'], cot::$R['icon_follow']) . ' ' . cot::$L['Moved'];
-			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], cot::$sys['now']);
+			$row['ft_lastpostlink'] = cot_rc_link($row['ft_lastposturl'], Cot::$R['icon_follow']) . ' ' . Cot::$L['Moved'];
+			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], Cot::$sys['now']);
 		} else {
 			$row['ft_url'] = cot_url('forums', 'm=posts&q=' . $row['ft_id']);
-			$row['ft_lastposturl'] = (cot::$usr['id'] > 0 && $row['ft_updated'] > cot::$usr['lastvisit']) ?
+			$row['ft_lastposturl'] = (Cot::$usr['id'] > 0 && $row['ft_updated'] > Cot::$usr['lastvisit']) ?
 				cot_url('forums', 'm=posts&q=' . $row['ft_id'] . '&n=unread', '#unread') :
 				cot_url('forums', 'm=posts&q=' . $row['ft_id'] . '&n=last', '#bottom');
-			$row['ft_lastpostlink'] = (cot::$usr['id'] > 0 && $row['ft_updated'] > cot::$usr['lastvisit']) ?
-				cot_rc_link($row['ft_lastposturl'], cot::$R['icon_unread'], 'rel="nofollow"') :
-				cot_rc_link($row['ft_lastposturl'], cot::$R['icon_follow'], 'rel="nofollow"');
+			$row['ft_lastpostlink'] = (Cot::$usr['id'] > 0 && $row['ft_updated'] > Cot::$usr['lastvisit']) ?
+				cot_rc_link($row['ft_lastposturl'], Cot::$R['icon_unread'], 'rel="nofollow"') :
+				cot_rc_link($row['ft_lastposturl'], Cot::$R['icon_follow'], 'rel="nofollow"');
 			$row['ft_lastpostlink'] .= cot_date('datetime_medium', $row['ft_updated']);
-			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], cot::$sys['now']);
+			$row['ft_timeago'] = cot_build_timegap($row['ft_updated'], Cot::$sys['now']);
 			$row['ft_replycount'] = $row['ft_postcount'] - 1;
 
-			if ($row['ft_updated'] > cot::$usr['lastvisit'] && cot::$usr['id'] > 0) {
+			if ($row['ft_updated'] > Cot::$usr['lastvisit'] && Cot::$usr['id'] > 0) {
 				$row['ft_icon'] .= '_new';
 				$row['ft_postisnew'] = true;
 			}
 
-			if ($row['ft_postcount'] >= cot::$cfg['forums']['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky']) {
+			if ($row['ft_postcount'] >= Cot::$cfg['forums']['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky']) {
 				$row['ft_icon'] = ($row['ft_postisnew']) ? 'posts_new_hot' : 'posts_hot';
 			} else {
 				if ($row['ft_sticky']) {
@@ -169,7 +169,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			$row['ft_icon_type'] = $row['ft_icon'];
 			$row['ft_icon'] = cot_rc('forums_icon_topic_t', [
                 'icon' => $row['ft_icon'],
-                'title' => cot::$L['recentitems_' . $row['ft_icon']]
+                'title' => Cot::$L['recentitems_' . $row['ft_icon']]
             ]);
 			$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], $row['ft_lastpostername']);
 		}
@@ -177,16 +177,16 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		$row['ft_firstpostername'] = cot_build_user($row['ft_firstposterid'], $row['ft_firstpostername']);
 
         $row['ft_maxpages'] = 0;
-		if ($row['ft_postcount'] > cot::$cfg['forums']['maxtopicsperpage'] && cot::$cfg['forums']['maxtopicsperpage'] > 0) {
-			$row['ft_maxpages'] = ceil($row['ft_postcount'] / cot::$cfg['forums']['maxtopicsperpage']);
-			$row['ft_pages'] = cot::$L['Pages'] . ":";
+		if ($row['ft_postcount'] > Cot::$cfg['forums']['maxtopicsperpage'] && Cot::$cfg['forums']['maxtopicsperpage'] > 0) {
+			$row['ft_maxpages'] = ceil($row['ft_postcount'] / Cot::$cfg['forums']['maxtopicsperpage']);
+			$row['ft_pages'] = Cot::$L['Pages'] . ":";
 		}
 
         $topicPreview = '';
         if (!empty($row['ft_preview'])) {
-            $allowBBCodes = isset(cot::$cfg['forums']['cat_' . $row['ft_cat']]) ?
-                cot::$cfg['forums']['cat_' . $row['ft_cat']]['allowbbcodes'] :
-                cot::$cfg['forums']['cat___default']['allowbbcodes'];
+            $allowBBCodes = isset(Cot::$cfg['forums']['cat_' . $row['ft_cat']]) ?
+                Cot::$cfg['forums']['cat_' . $row['ft_cat']]['allowbbcodes'] :
+                Cot::$cfg['forums']['cat___default']['allowbbcodes'];
             $topicPreview = trim(cot_parse($row['ft_preview'], $allowBBCodes));
             if (!empty($topicPreview)) {
                 $topicPreview .= '...';
@@ -252,9 +252,9 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
 	// Load all cats and subcats in white list if set
-	if (!empty(cot::$cfg['plugin']['recentitems']['whitelist'])) {
+	if (!empty(Cot::$cfg['plugin']['recentitems']['whitelist'])) {
 		$whitelist = array();
-		foreach (preg_split('#\r?\n#', cot::$cfg['plugin']['recentitems']['whitelist']) as $c) {
+		foreach (preg_split('#\r?\n#', Cot::$cfg['plugin']['recentitems']['whitelist']) as $c) {
 			$whitelist = array_merge($whitelist, cot_structure_children('page', $c, true, true, $rightprescan));
 		}
 	} else {
@@ -262,9 +262,9 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	}
 
 	// Load all cats and subcats in black list if set
-	if (!empty(cot::$cfg['plugin']['recentitems']['blacklist'])) {
+	if (!empty(Cot::$cfg['plugin']['recentitems']['blacklist'])) {
 		$blacklist = array();
-		foreach (preg_split('#\r?\n#', cot::$cfg['plugin']['recentitems']['blacklist']) as $c) {
+		foreach (preg_split('#\r?\n#', Cot::$cfg['plugin']['recentitems']['blacklist']) as $c) {
 			$blacklist = array_merge($blacklist, cot_structure_children('page', $c, true, true, $rightprescan));
 		}
 	} else {
@@ -298,15 +298,15 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	}
 
 	if ($mode == 'recent') {
-		$where = "WHERE page_state=0 AND page_begin <= " . cot::$sys['now'] .
-            " AND (page_expire = 0 OR page_expire > " . cot::$sys['now']. ") AND page_cat <> 'system' " . $incat;
-		$totalrecent['pages'] = cot::$cfg['plugin']['recentitems']['maxpages'];
+		$where = "WHERE page_state=0 AND page_begin <= " . Cot::$sys['now'] .
+            " AND (page_expire = 0 OR page_expire > " . Cot::$sys['now']. ") AND page_cat <> 'system' " . $incat;
+		$totalrecent['pages'] = Cot::$cfg['plugin']['recentitems']['maxpages'];
 
 	} else {
-		$where = "WHERE page_date >= $mode AND page_begin <= " . cot::$sys['now'] .
+		$where = "WHERE page_date >= $mode AND page_begin <= " . Cot::$sys['now'] .
             " AND (page_expire = 0 OR page_expire > " .
-            cot::$sys['now'] . ") AND page_state=0 AND page_cat <> 'system' " . $incat;
-		$totalrecent['pages'] = cot::$db->query("SELECT COUNT(*) FROM $db_pages " . $where)->fetchColumn();
+            Cot::$sys['now'] . ") AND page_state=0 AND page_cat <> 'system' " . $incat;
+		$totalrecent['pages'] = Cot::$db->query("SELECT COUNT(*) FROM $db_pages " . $where)->fetchColumn();
 	}
 
 	$join_columns = '';
@@ -318,7 +318,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	}
 	/* ===== */
 
-	$sql = cot::$db->query("SELECT p.*, u.* $join_columns
+	$sql = Cot::$db->query("SELECT p.*, u.* $join_columns
 		FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		$join_tables

@@ -3,7 +3,7 @@
         'name' => 'cotonti/cotonti',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '78413bc47f21b2f29b5aaa75aaf9bf2c4e81025a',
+        'reference' => '1a3bee2a7e61257ad1997d20a64e0027ae871a1a',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'cotonti/cotonti' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '78413bc47f21b2f29b5aaa75aaf9bf2c4e81025a',
+            'reference' => '1a3bee2a7e61257ad1997d20a64e0027ae871a1a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -15,18 +15,18 @@ Hooks=standalone
 
 (defined('COT_CODE') || defined('COT_PLUG')) or die('Wrong URL.');
 
-cot::$sys['sublocation'] = cot::$L['WhosOnline'];
+Cot::$sys['sublocation'] = Cot::$L['WhosOnline'];
 // to update first
-require_once cot::$cfg['plugins_dir'].'/whosonline/whosonline.header.main.php';
+require_once Cot::$cfg['plugins_dir'].'/whosonline/whosonline.header.main.php';
 require_once cot_incfile('users', 'module');
 
-$pl_cfg = cot::$cfg['plugin']['whosonline'];
+$pl_cfg = Cot::$cfg['plugin']['whosonline'];
 $maxuserssperpage = is_numeric($pl_cfg['maxusersperpage']) ? $pl_cfg['maxusersperpage'] : 0;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxuserssperpage);
 $maxusers = 0;
 if(cot_plugin_active('hits')) {
 	require_once cot_incfile('hits', 'plug');
-	$stats = cot::$db->query("SELECT stat_value FROM $db_stats WHERE stat_name='maxusers' LIMIT 1")->fetch();
+	$stats = Cot::$db->query("SELECT stat_value FROM $db_stats WHERE stat_name='maxusers' LIMIT 1")->fetch();
 	$maxusers = isset($stats['stat_value']) ? (int)$stats['stat_value'] : 0;
 }
 $count_users = 0;
@@ -39,9 +39,9 @@ if(cot_plugin_active('hiddengroups')) {
 }
 $ipsearch = cot_plugin_active('ipsearch');
 
-cot::$out['subtitle'] = cot::$L['WhosOnline'];
-cot::$out['desc'] = cot::$L['Users'].', '.mb_strtolower(cot::$L['Guests'].' '.cot::$L['NowOnline'].' '.cot::$sys['domain'].' - '.cot::$L['Online'].' '. cot::$L['Statistics']);
-cot::$out['keywords'] = mb_strtolower(cot::$L['WhosOnline'].' '.cot::$L['Guests'].' '.cot::$L['Users'].' '.cot::$sys['domain']);
+Cot::$out['subtitle'] = Cot::$L['WhosOnline'];
+Cot::$out['desc'] = Cot::$L['Users'].', '.mb_strtolower(Cot::$L['Guests'].' '.Cot::$L['NowOnline'].' '.Cot::$sys['domain'].' - '.Cot::$L['Online'].' '. Cot::$L['Statistics']);
+Cot::$out['keywords'] = mb_strtolower(Cot::$L['WhosOnline'].' '.Cot::$L['Guests'].' '.Cot::$L['Users'].' '.Cot::$sys['domain']);
 
 $join_condition = "LEFT JOIN $db_users AS u ON u.user_id=o.online_userid";
 $where = '';
@@ -50,13 +50,13 @@ if($pl_cfg['disable_guests']) {
 }
 $is_user_check = 'IF(o.online_userid > 0,1,0) as is_user';
 $limit = $maxuserssperpage ? "LIMIT $d, $maxuserssperpage" : '';
-$sql_users = cot::$db->query("
+$sql_users = Cot::$db->query("
 	SELECT DISTINCT u.*, o.*, $is_user_check
 	FROM $db_online AS o
 	$join_condition $where
 	ORDER BY is_user DESC, online_lastseen DESC $limit
 ");
-$sql_users_count = cot::$db->query("SELECT COUNT(*) as cnt, $is_user_check FROM $db_online as o $where GROUP BY is_user");
+$sql_users_count = Cot::$db->query("SELECT COUNT(*) as cnt, $is_user_check FROM $db_online as o $where GROUP BY is_user");
 $who_guests = 0;
 $who_users = 0;
 foreach ($sql_users_count as $row) {
@@ -68,7 +68,7 @@ foreach ($sql_users_count as $row) {
 }
 $totallines = $who_users + $who_guests;
 
-if ((!cot::$cfg['easypagenav'] && $durl > 0 && $maxuserssperpage > 0 && $durl % $maxuserssperpage > 0)
+if ((!Cot::$cfg['easypagenav'] && $durl > 0 && $maxuserssperpage > 0 && $durl % $maxuserssperpage > 0)
 	|| ($d > 0 && $d >= $totallines))
 {
 	cot_redirect(cot_url('whosonline'));
@@ -92,7 +92,7 @@ foreach ($sql_users->fetchAll() as $row)
 	{
 		if(cot_auth('plug', 'hiddengroups', '1'))
 		{
-			$t->assign('USER_HIDDEN', cot::$L['Hidden']);
+			$t->assign('USER_HIDDEN', Cot::$L['Hidden']);
 		}
 		else continue;
 	}
@@ -106,7 +106,7 @@ foreach ($sql_users->fetchAll() as $row)
 				'USER_IP' => $ipsearch ? cot_rc_link($url_ipsearch, $row['online_ip']) : $row['online_ip'],
 				'USER_IP_URL' => $ipsearch ? $url_ipsearch : '',
 				'USER_LINK' => cot_build_user($row['online_userid'], $row['online_name']),
-				'USER_LASTSEEN' => cot_build_timegap($row['online_lastseen'], cot::$sys['now'])
+				'USER_LASTSEEN' => cot_build_timegap($row['online_lastseen'], Cot::$sys['now'])
 		));
 		$t->assign(cot_generate_usertags($row, 'USER_'));
 		/* === Hook - Part2 : Include === */
@@ -127,7 +127,7 @@ foreach ($sql_users->fetchAll() as $row)
 				'GUEST_IP' => $ipsearch ? cot_rc_link($url_ipsearch, $row['online_ip']) : $row['online_ip'],
 				'GUEST_IP_URL' => $ipsearch ? $url_ipsearch : '',
 				'GUEST_NUMBER' => $count_guests + $guest_start_num,
-				'GUEST_LASTSEEN' => cot_build_timegap($row['online_lastseen'], cot::$sys['now'])
+				'GUEST_LASTSEEN' => cot_build_timegap($row['online_lastseen'], Cot::$sys['now'])
 		));
 		/* === Hook - Part2 : Include === */
 		foreach ($guests_loop_hook as $pl)

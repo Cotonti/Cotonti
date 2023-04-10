@@ -15,8 +15,8 @@ Hooks=tools
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('plug', 'trashcan');
-cot_block(cot::$usr['isadmin']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('plug', 'trashcan');
+cot_block(Cot::$usr['isadmin']);
 
 require_once cot_incfile('users', 'module');
 if (cot_module_active('page')) {
@@ -32,12 +32,12 @@ if (cot_plugin_active('comments')) {
 require_once cot_incfile('trashcan', 'plug');
 require_once cot_langfile('trashcan', 'plug');
 
-$adminhelp = cot::$L['adm_help_trashcan'];
-$adminTitle = cot::$L['Trashcan'];
+$adminhelp = Cot::$L['adm_help_trashcan'];
+$adminTitle = Cot::$L['Trashcan'];
 
 $id = cot_import('id', 'G', 'INT');
-$maxperpage = (cot::$cfg['maxrowsperpage'] && is_numeric(cot::$cfg['maxrowsperpage']) && cot::$cfg['maxrowsperpage'] > 0) ?
-    cot::$cfg['maxrowsperpage'] : 15;
+$maxperpage = (Cot::$cfg['maxrowsperpage'] && is_numeric(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperpage'] > 0) ?
+    Cot::$cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 $info = ($a == 'info') ? 1 : 0;
 
@@ -69,7 +69,7 @@ if ($a == 'wipe') {
 	}
 	/* ===== */
 
-    $sqlToPrune = cot::$db->query('SELECT tr_id FROM ' . cot::$db->quoteTableName(cot::$db->trash));
+    $sqlToPrune = Cot::$db->query('SELECT tr_id FROM ' . Cot::$db->quoteTableName(Cot::$db->trash));
     $pruned = 0;
     while ($itemToPrune = $sqlToPrune->fetchColumn()) {
         $pruned++;
@@ -97,7 +97,7 @@ if ($a == 'wipe') {
 
 $tr_t = new XTemplate(cot_tplfile(($info) ? 'trashcan.info.admin' : 'trashcan.admin', 'plug', true));
 
-$totalitems = (int) cot::$db->query("SELECT COUNT(*) FROM $db_trash WHERE tr_parentid=0")->fetchColumn();
+$totalitems = (int) Cot::$db->query("SELECT COUNT(*) FROM $db_trash WHERE tr_parentid=0")->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=other&p=trashcan', $d, $totalitems, $maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql_query = ($info) ? "AND tr_id=$id LIMIT 1" : "ORDER by tr_id DESC LIMIT $d, ".$maxperpage;
@@ -115,38 +115,38 @@ foreach ($sql->fetchAll() as $row)
 	switch($row['tr_type'])
 	{
 		case 'comment':
-			$icon = cot::$R['admin_icon_comments'];
-			$typestr = cot::$L['comments_comment'];
+			$icon = Cot::$R['admin_icon_comments'];
+			$typestr = Cot::$L['comments_comment'];
 			$enabled = cot_plugin_active('comments') ? 1 : 0;
 			break;
 
 		case 'forumpost':
-			$icon = cot::$R['admin_icon_forums_posts'];
-			$typestr = cot::$L['forums_post'];
+			$icon = Cot::$R['admin_icon_forums_posts'];
+			$typestr = Cot::$L['forums_post'];
 			$enabled = cot_module_active('forums') ? 1 : 0;
 			break;
 
 		case 'forumtopic':
-			$icon = cot::$R['admin_icon_forums_topics'];
-			$typestr = cot::$L['Topic'];
+			$icon = Cot::$R['admin_icon_forums_topics'];
+			$typestr = Cot::$L['Topic'];
 			$enabled = cot_module_active('forums') ? 1 : 0;
 			break;
 
 		case 'page':
-			$icon = cot::$R['admin_icon_page'];
-			$typestr = cot::$L['Page'];
+			$icon = Cot::$R['admin_icon_page'];
+			$typestr = Cot::$L['Page'];
 			$enabled = cot_module_active('page') ? 1 : 0;
 			break;
 
 		case 'user':
-			$icon = cot::$R['admin_icon_user'];
-			$typestr = cot::$L['User'];
+			$icon = Cot::$R['admin_icon_user'];
+			$typestr = Cot::$L['User'];
 			$enabled = 1;
 			break;
 
 		default:
-			$icon = cot::$R['admin_icon_tools'];
-			$typestr = cot::$row['tr_type'];
+			$icon = Cot::$R['admin_icon_tools'];
+			$typestr = Cot::$row['tr_type'];
 			$enabled = 1;
 			break;
 	}
@@ -160,7 +160,7 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_TRASHCAN_TYPESTR' => $typestr,
 		'ADMIN_TRASHCAN_TITLE' => htmlspecialchars($row['tr_title']),
 		'ADMIN_TRASHCAN_TRASHEDBY' => ($row['tr_trashedby'] == 0) ?
-            cot::$L['System'] : cot_build_user($row['tr_trashedby'], $row['user_name']),
+            Cot::$L['System'] : cot_build_user($row['tr_trashedby'], $row['user_name']),
 		'ADMIN_TRASHCAN_ROW_WIPE_URL' => cot_confirm_url($trashcanWipeUrl, 'admin'),
 		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => cot_url('admin', 'm=other&p=trashcan&a=restore&id=' .
             $row['tr_id'] . '&d=' . $durl . '&' . cot_xg()),

@@ -190,7 +190,7 @@ foreach($cot_countries as $i => $x)
 }
 $countryfilters = cot_selectbox(cot_url('users', 'f='.$f), 'bycountry', $countryfilters_values, $countryfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
 
-$grpfilters_titles = [cot::$R['users_sel_def_l'] . cot::$L['Maingroup'] . cot::$R['users_sel_def_r']];
+$grpfilters_titles = [Cot::$R['users_sel_def_l'] . Cot::$L['Maingroup'] . Cot::$R['users_sel_def_r']];
 $grpfilters_group_values = [cot_url('users')];
 $grpfilters_maingrp_values = [cot_url('users')];
 foreach ($cot_groups as $k => $i) {
@@ -212,7 +212,7 @@ $maingrpfilters = cot_selectbox(
     true
 );
 
-$grpfilters_titles[0] = cot::$R['users_sel_def_l'] . cot::$L['Group'] . cot::$R['users_sel_def_r'];
+$grpfilters_titles[0] = Cot::$R['users_sel_def_l'] . Cot::$L['Group'] . Cot::$R['users_sel_def_r'];
 $grpfilters = cot_selectbox(
     cot_url('users', 'gm='.$gm, '', true),
     'bygroupms',
@@ -306,4 +306,4 @@ foreach (cot_getextplugins('users.tags') as $pl) {
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once cot::$cfg['system_dir'] . '/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';

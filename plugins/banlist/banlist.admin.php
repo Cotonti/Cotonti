@@ -15,13 +15,13 @@ Hooks=tools
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('users', 'a');
-cot_block(cot::$usr['isadmin']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('users', 'a');
+cot_block(Cot::$usr['isadmin']);
 
 $tt = new XTemplate(cot_tplfile('banlist.admin', 'plug', true));
 require_once cot_langfile('banlist', 'plug');
 
-cot::$db->registerTable('banlist');
+Cot::$db->registerTable('banlist');
 $adminhelp = $L['banlist_help'];
 $adminTitle = $L['banlist_title'];
 

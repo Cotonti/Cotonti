@@ -19,7 +19,7 @@ Order=7
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (cot::$cfg['plugin']['trashcan']['trash_page']) {
+if (Cot::$cfg['plugin']['trashcan']['trash_page']) {
     // We are inside cot_page_delete() function, so need some globals
     global $trash_types, $db_trash, $db_x, $L, $Ls, $R;
 
@@ -28,7 +28,7 @@ if (cot::$cfg['plugin']['trashcan']['trash_page']) {
     // Add page to trash
     $parentTrashId = cot_trash_put(
         'page',
-        cot::$L['Page'] . " #" . $id . " " . $rpage['page_title'],
+        Cot::$L['Page'] . " #" . $id . " " . $rpage['page_title'],
         $id, $rpage
     );
 
@@ -36,15 +36,15 @@ if (cot::$cfg['plugin']['trashcan']['trash_page']) {
     if (cot_plugin_active('comments')) {
         require_once cot_incfile('comments', 'plug');
 
-        $sql = cot::$db->query(
-            'SELECT * FROM ' . cot::$db->quoteTableName(cot::$db->com) .
+        $sql = Cot::$db->query(
+            'SELECT * FROM ' . Cot::$db->quoteTableName(Cot::$db->com) .
             " WHERE com_area = 'page' AND com_code = ?",
             [$id]
         );
         while ($comment = $sql->fetch()) {
             cot_trash_put(
                 'comment',
-                cot::$L['comments_comment'] . " #" . $comment['com_id'] . " from page #" . $id,
+                Cot::$L['comments_comment'] . " #" . $comment['com_id'] . " from page #" . $id,
                 $comment['com_id'],
                 $comment,
                 $parentTrashId
@@ -57,14 +57,14 @@ if (cot::$cfg['plugin']['trashcan']['trash_page']) {
     if (cot_plugin_active('i18n')) {
         require_once cot_incfile('i18n', 'plug');
 
-        $sql = cot::$db->query(
-            'SELECT * FROM ' . cot::$db->quoteTableName(cot::$db->i18n_pages) . ' WHERE ipage_id = ?',
+        $sql = Cot::$db->query(
+            'SELECT * FROM ' . Cot::$db->quoteTableName(Cot::$db->i18n_pages) . ' WHERE ipage_id = ?',
             [$id]
         );
         while ($row = $sql->fetch()) {
             cot_trash_put(
                 'i18n_page',
-                cot::$L['i18n_translation'] . " #" . $row['ipage_id'] . " for page #" . $id,
+                Cot::$L['i18n_translation'] . " #" . $row['ipage_id'] . " for page #" . $id,
                 $row['ipage_id'],
                 $row,
                 $parentTrashId

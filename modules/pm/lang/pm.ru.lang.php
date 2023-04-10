@@ -28,7 +28,7 @@ $L['cfg_maxpmperpage'] = 'Макс. количество сообщений на
 $L['cfg_maxpmperpage_hint'] = ' ';
 $L['cfg_showlast'] = 'Количество новых сообщений';
 $L['cfg_showlast_hint'] = 'Сколько новых сообщений пользователя выводить в <strong>Header</strong> и в ' .
-    '<strong>cot::$out[\'pm_lastMessages\']</strong>.<br>0 - не выводить';
+    '<strong>Cot::$out[\'pm_lastMessages\']</strong>.<br>0 - не выводить';
 $L['info_desc'] = 'Общение пользователей сайта через систему отправки сообщений';
 
 /**

@@ -11,7 +11,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_langfile('whosonline', 'plug');
 
-cot::$db->registerTable('online');
+Cot::$db->registerTable('online');
 
 /**
  * Checks whether user is online

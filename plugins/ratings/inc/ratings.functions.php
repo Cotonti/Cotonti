@@ -15,8 +15,8 @@ require_once cot_langfile('ratings', 'plug');
 require_once cot_incfile('ratings', 'plug', 'resources');
 
 // Table name globals
-cot::$db->registerTable('ratings');
-cot::$db->registerTable('rated');
+Cot::$db->registerTable('ratings');
+Cot::$db->registerTable('rated');
 
 /**
  * Generates ratings display for a given item
@@ -42,7 +42,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	}
 
 	// Get current rating value
-	$sql = cot::$db->query("SELECT r.*, (SELECT COUNT(*) FROM $db_rated WHERE rated_area = ? AND rated_code = ?) AS `cnt` FROM $db_ratings AS r
+	$sql = Cot::$db->query("SELECT r.*, (SELECT COUNT(*) FROM $db_rated WHERE rated_area = ? AND rated_code = ?) AS `cnt` FROM $db_ratings AS r
 		WHERE rating_area = ? AND rating_code = ? LIMIT 1",
 		array($ext_name, $code, $ext_name, $code));
 
@@ -74,18 +74,18 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	// Check if the user has voted already for this item
 	$already_voted = false;
     $rating_uservote = '';
-	if (cot::$usr['id'] > 0) {
+	if (Cot::$usr['id'] > 0) {
 		$sql1 = $db->query("SELECT rated_value FROM $db_rated
 			WHERE rated_area = ? AND rated_code = ? AND rated_userid = ?",
-			array($ext_name, $code, cot::$usr['id']));
+			array($ext_name, $code, Cot::$usr['id']));
 
 		if ($rated_value = $sql1->fetchColumn()) {
 			$already_voted = true;
-			$rating_uservote = cot::$L['rat_alreadyvoted'] . ' (' . $rated_value . ')';
+			$rating_uservote = Cot::$L['rat_alreadyvoted'] . ' (' . $rated_value . ')';
 		}
 	}
 
-	if ($already_voted && !cot::$cfg['plugin']['ratings']['ratings_allowchange']) {
+	if ($already_voted && !Cot::$cfg['plugin']['ratings']['ratings_allowchange']) {
 		return array($rating_fancy, $rating_cntround, $rating_raters_count);
 	}
 
@@ -100,7 +100,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 
 	// Get some extra information about votes
 	if ($item_has_rating) {
-		$sql = cot::$db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_area = ? AND rated_code = ?",
+		$sql = Cot::$db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_area = ? AND rated_code = ?",
 			array($ext_name, $code));
 		$rating_voters = $sql->fetchColumn();
 		$rating_since = $L['rat_since'] . ' ' . cot_date('datetime_medium', $row['rating_creationdate']);
@@ -134,7 +134,7 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	/* ===== */
 
 	// Render voting form
-	$vote_block = ($auth_write && (!$already_voted || cot::$cfg['plugin']['ratings']['ratings_allowchange'])) ? 'NOTVOTED.' : 'VOTED.';
+	$vote_block = ($auth_write && (!$already_voted || Cot::$cfg['plugin']['ratings']['ratings_allowchange'])) ? 'NOTVOTED.' : 'VOTED.';
 	for ($i = 1; $i <= 10; $i++) {
 		$checked = ($i <= $rating_cntround) ? 'checked="checked"' : '';
 		$t->assign(array(

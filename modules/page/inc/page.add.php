@@ -14,20 +14,20 @@ require_once cot_incfile('forms');
 $id = cot_import('id', 'G', 'INT');
 $c = cot_import('c', 'G', 'TXT');
 
-if (empty($c) && !isset(cot::$structure['page'][$c])) {
+if (empty($c) && !isset(Cot::$structure['page'][$c])) {
 	$c = '';
 }
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('page', 'any');
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', 'any');
 
 /* === Hook === */
 foreach (cot_getextplugins('page.add.first') as $pl) {
 	include $pl;
 }
 /* ===== */
-cot_block(cot::$usr['auth_write']);
+cot_block(Cot::$usr['auth_write']);
 
-cot::$sys['parser'] = cot::$cfg['page']['parser'];
+Cot::$sys['parser'] = Cot::$cfg['page']['parser'];
 $parser_list = cot_get_parsers();
 
 if ($a == 'add') {
@@ -39,10 +39,10 @@ if ($a == 'add') {
 	}
 	/* ===== */
 
-	$rpage = cot_page_import('POST', array(), cot::$usr);
+	$rpage = cot_page_import('POST', array(), Cot::$usr);
 
-	list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
-	cot_block(cot::$usr['auth_write']);
+	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
+	cot_block(Cot::$usr['auth_write']);
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.add.add.import') as $pl) {
@@ -59,7 +59,7 @@ if ($a == 'add') {
 	/* ===== */
 
 	if (!cot_error_found()) {
-		$id = cot_page_add($rpage, cot::$usr);
+		$id = cot_page_add($rpage, Cot::$usr);
 
 		switch ($rpage['page_state']) {
 			case 0:
@@ -104,7 +104,7 @@ $rpage = array(
 // Page cloning support
 $clone = cot_import('clone', 'G', 'INT');
 if ($clone > 0) {
-	$rpage = cot::$db->query("SELECT * FROM ".cot::$db->pages." WHERE page_id = ?", $clone)->fetch();
+	$rpage = Cot::$db->query("SELECT * FROM ".Cot::$db->pages." WHERE page_id = ?", $clone)->fetch();
 }
 
 if (empty($rpage['page_cat'])) {
@@ -112,23 +112,23 @@ if (empty($rpage['page_cat'])) {
 }
 
 if (!empty($rpage['page_cat'])) {
-    list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
-    cot_block(cot::$usr['auth_write']);
+    list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
+    cot_block(Cot::$usr['auth_write']);
 
-    if (!cot::$usr['isadmin'] && cot::$structure['page'][$rpage['page_cat']]['locked']) cot_die_message(602, TRUE);
+    if (!Cot::$usr['isadmin'] && Cot::$structure['page'][$rpage['page_cat']]['locked']) cot_die_message(602, TRUE);
 
-    cot::$sys['sublocation'] = cot::$structure['page'][$rpage['page_cat']]['title'];
-    $mskin = cot_tplfile(array('page', 'add', cot::$structure['page'][$rpage['page_cat']]['tpl']));
+    Cot::$sys['sublocation'] = Cot::$structure['page'][$rpage['page_cat']]['title'];
+    $mskin = cot_tplfile(array('page', 'add', Cot::$structure['page'][$rpage['page_cat']]['tpl']));
 
 } else {
-    if(!cot::$usr['isadmin']) {
+    if(!Cot::$usr['isadmin']) {
         // User can add page to these categories
         $categories = array();
-        if (!empty(cot::$structure['page'])) {
-            foreach (cot::$structure['page'] as $i => $x) {
+        if (!empty(Cot::$structure['page'])) {
+            foreach (Cot::$structure['page'] as $i => $x) {
                 $display = cot_auth('page', $i, 'W');
-                if ($display && !empty($subcat) && isset(cot::$structure['page'][$subcat])) {
-                    $mtch = cot::$structure['page'][$subcat]['path'] . ".";
+                if ($display && !empty($subcat) && isset(Cot::$structure['page'][$subcat])) {
+                    $mtch = Cot::$structure['page'][$subcat]['path'] . ".";
                     $mtchlen = mb_strlen($mtch);
                     $display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i === $subcat);
                 }
@@ -140,15 +140,15 @@ if (!empty($rpage['page_cat'])) {
         cot_block(count($categories) > 0);
     }
 
-    cot::$sys['sublocation'] = cot::$L['page_addtitle'];
+    Cot::$sys['sublocation'] = Cot::$L['page_addtitle'];
     $mskin = cot_tplfile(array('page', 'add'));
 }
 
-cot::$out['subtitle'] = cot::$L['page_addsubtitle'];
-if (!isset(cot::$out['head'] )) {
-    cot::$out['head']  = '';
+Cot::$out['subtitle'] = Cot::$L['page_addsubtitle'];
+if (!isset(Cot::$out['head'] )) {
+    Cot::$out['head']  = '';
 }
-cot::$out['head'] .= cot::$R['code_noindex'];
+Cot::$out['head'] .= Cot::$R['code_noindex'];
 
 /* === Hook === */
 foreach (cot_getextplugins('page.add.main') as $pl) {
@@ -156,13 +156,13 @@ foreach (cot_getextplugins('page.add.main') as $pl) {
 }
 /* ===== */
 
-require_once cot::$cfg['system_dir'].'/header.php';
+require_once Cot::$cfg['system_dir'].'/header.php';
 $t = new XTemplate($mskin);
 
 $pageadd_array = array(
-	'PAGEADD_PAGETITLE' => cot::$L['page_addtitle'],
-	'PAGEADD_SUBTITLE'  => cot::$L['page_addsubtitle'],
-	'PAGEADD_ADMINEMAIL' => "mailto:".cot::$cfg['adminemail'],
+	'PAGEADD_PAGETITLE' => Cot::$L['page_addtitle'],
+	'PAGEADD_SUBTITLE'  => Cot::$L['page_addsubtitle'],
+	'PAGEADD_ADMINEMAIL' => "mailto:".Cot::$cfg['adminemail'],
 	'PAGEADD_FORM_SEND' => cot_url('page', 'm=add&a=add&c=' . $c),
 	'PAGEADD_FORM_CAT' => cot_selectbox_structure('page', $rpage['page_cat'], 'rpagecat'),
 	'PAGEADD_FORM_CAT_SHORT' => cot_selectbox_structure('page', $rpage['page_cat'], 'rpagecat', $c),
@@ -173,29 +173,29 @@ $pageadd_array = array(
 	'PAGEADD_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', $rpage['page_title'], array('maxlength' => '255')),
 	'PAGEADD_FORM_DESC' => cot_textarea('rpagedesc', $rpage['page_desc'], 2, 64, array('maxlength' => '255')),
 	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('maxlength' => '100')),
-	'PAGEADD_FORM_OWNER' => cot_build_user(cot::$usr['id'], cot::$usr['name']),
-	'PAGEADD_FORM_OWNERID' => cot::$usr['id'],
-	'PAGEADD_FORM_DATE' => cot_selectbox_date(cot::$sys['now'], 'long', 'rpagedate'),
-	'PAGEADD_FORM_BEGIN' => cot_selectbox_date(cot::$sys['now'], 'long', 'rpagebegin'),
+	'PAGEADD_FORM_OWNER' => cot_build_user(Cot::$usr['id'], Cot::$usr['name']),
+	'PAGEADD_FORM_OWNERID' => Cot::$usr['id'],
+	'PAGEADD_FORM_DATE' => cot_selectbox_date(Cot::$sys['now'], 'long', 'rpagedate'),
+	'PAGEADD_FORM_BEGIN' => cot_selectbox_date(Cot::$sys['now'], 'long', 'rpagebegin'),
 	'PAGEADD_FORM_EXPIRE' => cot_selectbox_date(0, 'long', 'rpageexpire'),
 	'PAGEADD_FORM_FILE' => cot_selectbox(
         $rpage['page_file'],
         'rpagefile',
         range(0, 2),
-        array(cot::$L['No'], cot::$L['Yes'], cot::$L['Members_only']),
+        array(Cot::$L['No'], Cot::$L['Yes'], Cot::$L['Members_only']),
         false
     ),
 	'PAGEADD_FORM_URL' => cot_inputbox('text', 'rpageurl', $rpage['page_url'], array('maxlength' => '255')),
 	'PAGEADD_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $rpage['page_size'], array('maxlength' => '255')),
 	'PAGEADD_FORM_TEXT' => cot_textarea('rpagetext', $rpage['page_text'], 24, 120, '', 'input_textarea_editor'),
-	'PAGEADD_FORM_PARSER' => cot_selectbox(cot::$cfg['page']['parser'], 'rpageparser', $parser_list, $parser_list, false)
+	'PAGEADD_FORM_PARSER' => cot_selectbox(Cot::$cfg['page']['parser'], 'rpageparser', $parser_list, $parser_list, false)
 );
 
 $t->assign($pageadd_array);
 
 // Extra fields
-if(!empty(cot::$extrafields[cot::$db->pages])) {
-    foreach (cot::$extrafields[cot::$db->pages] as $exfld) {
+if(!empty(Cot::$extrafields[Cot::$db->pages])) {
+    foreach (Cot::$extrafields[Cot::$db->pages] as $exfld) {
         $uname = strtoupper($exfld['field_name']);
         $data = isset($rpage['page_' . $exfld['field_name']]) ? $rpage['page_' . $exfld['field_name']] : null;
         $exfld_val = cot_build_extrafields('rpage' . $exfld['field_name'], $exfld, $data);
@@ -221,13 +221,13 @@ foreach (cot_getextplugins('page.add.tags') as $pl)
 }
 /* ===== */
 
-if (cot::$usr['isadmin'])
+if (Cot::$usr['isadmin'])
 {
-	if (cot::$cfg['page']['autovalidate']) $usr_can_publish = TRUE;
+	if (Cot::$cfg['page']['autovalidate']) $usr_can_publish = TRUE;
 	$t->parse('MAIN.ADMIN');
 }
 
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once cot::$cfg['system_dir'].'/footer.php';
+require_once Cot::$cfg['system_dir'].'/footer.php';

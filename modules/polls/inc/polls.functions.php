@@ -21,9 +21,9 @@ require_once cot_langfile('polls', 'module');
 const COT_POLL_ACTIVE = 0;
 const COT_POLL_LOCKED = 1;
 
-cot::$db->registerTable('polls');
-cot::$db->registerTable('polls_options');
-cot::$db->registerTable('polls_voters');
+Cot::$db->registerTable('polls');
+Cot::$db->registerTable('polls_options');
+Cot::$db->registerTable('polls_voters');
 
 /**
  * Adds form for create/edit Poll
@@ -71,7 +71,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
             $params = [$id];
         }
 
-		$sql = cot::$db->query('SELECT * FROM ' . cot::$db->polls . " WHERE $where LIMIT 1", $params);
+		$sql = Cot::$db->query('SELECT * FROM ' . Cot::$db->polls . " WHERE $where LIMIT 1", $params);
 		if ($row = $sql->fetch()) {
 			$id = $row["poll_id"];
 			$poll_text = htmlspecialchars($row["poll_text"]);
@@ -170,7 +170,7 @@ function cot_poll_check()
     }
 
     $poll_options = $poll_options_temp;
-    if (cot::$cfg['polls']['del_dup_options']) {
+    if (Cot::$cfg['polls']['del_dup_options']) {
         $poll_options = array_unique($poll_options);
     }
 
@@ -202,8 +202,8 @@ function cot_poll_save($type = 'index', $code = '')
     $poll_id = (int) $poll_id;
 
     if ($poll_id > 0) {
-        cot::$db->update(
-            cot::$db->polls,
+        Cot::$db->update(
+            Cot::$db->polls,
             [
                 'poll_state' => (int) $poll_state,
                 'poll_text' => $poll_text,
@@ -215,18 +215,18 @@ function cot_poll_save($type = 'index', $code = '')
         $newPollId = $poll_id;
 
     } else {
-        cot::$db->insert(
-            cot::$db->polls,
+        Cot::$db->insert(
+            Cot::$db->polls,
             [
                 'poll_type' => $type,
                 'poll_state' => COT_POLL_ACTIVE,
-                'poll_creationdate' => (int) cot::$sys['now'],
+                'poll_creationdate' => (int) Cot::$sys['now'],
                 'poll_text' => $poll_text,
                 'poll_multiple' => (int) $poll_multiple,
                 'poll_code' => $code,
             ]
         );
-        $newPollId = cot::$db->lastInsertId();
+        $newPollId = Cot::$db->lastInsertId();
     }
 
     $ids = [];
@@ -234,25 +234,25 @@ function cot_poll_save($type = 'index', $code = '')
         if (!empty($val)) {
             $key = (int) mb_substr($key, 2);
             if ($key > 0 && $poll_id > 0) {
-                cot::$db->update(cot::$db->polls_options, ['po_text' => $val,], 'po_id = ?', $key);
+                Cot::$db->update(Cot::$db->polls_options, ['po_text' => $val,], 'po_id = ?', $key);
                 $ids[] = $key;
             } else {
-                cot::$db->insert(
-                    cot::$db->polls_options,
+                Cot::$db->insert(
+                    Cot::$db->polls_options,
                     [
                         'po_pollid' => $newPollId,
                         'po_text' => $val,
                         'po_count' => 0,
                     ]
                 );
-                $ids[] = cot::$db->lastInsertId();
+                $ids[] = Cot::$db->lastInsertId();
             }
         }
     }
 
     if ($poll_id > 0 && count($ids) > 0) {
-        cot::$db->delete(
-            cot::$db->polls_options,
+        Cot::$db->delete(
+            Cot::$db->polls_options,
             "po_pollid = {$newPollId} AND po_id NOT IN (" . implode(", ", $ids) . ")");
     }
 
@@ -322,8 +322,8 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	if (!is_array($id))
 	{
 		$id = (int) $id;
-		$where = (!$type) ? "poll_id = $id" : "poll_type = '" . cot::$db->prep($type) . "' AND poll_code = '$id'";
-		$sql = cot::$db->query("SELECT * FROM ".cot::$db->polls." WHERE $where LIMIT 1");
+		$where = (!$type) ? "poll_id = $id" : "poll_type = '" . Cot::$db->prep($type) . "' AND poll_code = '$id'";
+		$sql = Cot::$db->query("SELECT * FROM ".Cot::$db->polls." WHERE $where LIMIT 1");
 		if (!$row = $sql->fetch())
 		{
 			return false;
@@ -336,18 +336,18 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	$id = $row['poll_id'];
 
 	$alreadyvoted = 0;
-	if (cot::$cfg['polls']['ip_id_polls'] == 'id' && cot::$usr['id'] > 0)
+	if (Cot::$cfg['polls']['ip_id_polls'] == 'id' && Cot::$usr['id'] > 0)
 	{
-		$where = "pv_userid = '" . cot::$usr['id'] . "'";
+		$where = "pv_userid = '" . Cot::$usr['id'] . "'";
 		$canvote = true;
 	}
 	else
 	{
-		$where = (cot::$usr['id'] > 0) ? "(pv_userid = '" . cot::$usr['id'] . "' OR pv_userip = '" .
-            cot::$usr['ip'] . "')" : "pv_userip = '" . cot::$usr['ip'] . "'";
+		$where = (Cot::$usr['id'] > 0) ? "(pv_userid = '" . Cot::$usr['id'] . "' OR pv_userip = '" .
+            Cot::$usr['ip'] . "')" : "pv_userip = '" . Cot::$usr['ip'] . "'";
 		$canvote = true;
 	}
-	$sql2 = cot::$db->query("SELECT pv_id FROM ".cot::$db->polls_voters." WHERE pv_pollid = $id AND $where LIMIT 1");
+	$sql2 = Cot::$db->query("SELECT pv_id FROM ".Cot::$db->polls_voters." WHERE pv_pollid = $id AND $where LIMIT 1");
 	$alreadyvoted = ($sql2->rowCount() == 1) ? 1 : 0;
 
 	$themefile = cot_tplfile(array('polls', $theme), 'module');
@@ -371,8 +371,8 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 
     $totalVotes = $maxVotes = 0;
 
-	$sql2 = cot::$db->query("SELECT SUM(po_count) as total_votes, MAX(po_count) as max_votes FROM ".
-        cot::$db->polls_options." WHERE po_pollid = $id")->fetch();
+	$sql2 = Cot::$db->query("SELECT SUM(po_count) as total_votes, MAX(po_count) as max_votes FROM ".
+        Cot::$db->polls_options." WHERE po_pollid = $id")->fetch();
 
 	if(!empty($sql2))
     {
@@ -383,7 +383,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
         $maxVotes   = $sql2['max_votes'];
     }
 
-	$sql1 = cot::$db->query("SELECT po_id, po_text, po_count FROM ".cot::$db->polls_options." WHERE po_pollid = $id ORDER by po_id ASC");
+	$sql1 = Cot::$db->query("SELECT po_id, po_text, po_count FROM ".Cot::$db->polls_options." WHERE po_pollid = $id ORDER by po_id ASC");
 
 	/* === Hook === */
     foreach (cot_getextplugins('polls.form.options.first') as $pl)
@@ -406,7 +406,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
         // Percentage from the option with maximum votes count
         $percentMax   = ($maxVotes   > 0) ? round(100 * ($po_count / $maxVotes),   1) : 0;
 
-        $polloption = cot_parse($row1['po_text'], cot::$cfg['polls']['markup']);
+        $polloption = cot_parse($row1['po_text'], Cot::$cfg['polls']['markup']);
 
 		$input_type = $row['poll_multiple'] ? 'checkbox' : 'radio';
         $polloptions_input = '';
@@ -446,7 +446,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 		'POLL_SINCE' => cot_date('datetime_medium', $row['poll_creationdate']),
 		'POLL_SINCE_STAMP' => $row['poll_creationdate'],
 		'POLL_SINCE_SHORT' => cot_date('date_short', $row['poll_creationdate']),
-		'POLL_TITLE' => cot_parse($row['poll_text'], cot::$cfg['polls']['markup']),
+		'POLL_TITLE' => cot_parse($row['poll_text'], Cot::$cfg['polls']['markup']),
 		'POLL_ID' => $id,
 		'POLL_FORM_URL' => (empty($formlink)) ? cot_url('polls', 'id=' . $id) : $formlink,
 	));
@@ -516,18 +516,18 @@ function cot_poll_delete($id, $type = '')
 function cot_poll_lock($id, $state, $type = '')
 {
 	$id = (int) $id;
-	$where = (!$type) ? "poll_id = $id" : "poll_type = " . cot::$db->quote($type) . " AND poll_code = '$id'";
+	$where = (!$type) ? "poll_id = $id" : "poll_type = " . Cot::$db->quote($type) . " AND poll_code = '$id'";
 	if ($state == 3) {
-		$sql = cot::$db->query("SELECT poll_state FROM " . cot::$db->quoteTableName(cot::$db->polls) .
+		$sql = Cot::$db->query("SELECT poll_state FROM " . Cot::$db->quoteTableName(Cot::$db->polls) .
             " WHERE  $where LIMIT 1");
 		$rstate = ($row = $sql->fetch()) ? $row['poll_state'] : 0;
 		$state = ($rstate) ? COT_POLL_ACTIVE : COT_POLL_LOCKED;
 	}
 	if ($id > 0) {
-        cot::$db->update(cot::$db->polls, array('poll_state' => (int) $state), $where);
+        Cot::$db->update(Cot::$db->polls, array('poll_state' => (int) $state), $where);
 	}
 
-	return (cot::$db->affectedRows > 0) ? true : false;
+	return (Cot::$db->affectedRows > 0) ? true : false;
 }
 
 /**

@@ -11,19 +11,19 @@
 
 $t = new XTemplate(cot_tplfile('admin.home', 'core'));
 
-if (!cot::$cfg['debug_mode'] && file_exists('install.php') && is_writable('datas/config.php')) {
+if (!Cot::$cfg['debug_mode'] && file_exists('install.php') && is_writable('datas/config.php')) {
 	cot_error('home_remove_install');
 }
 
 $adminTitle = $L['Adminpanel'];
 
 //Version Checking
-if (cot::$cfg['check_updates'] && cot::$cache) {
-	$updateInfo = cot::$cache->db->get('update_info');
+if (Cot::$cfg['check_updates'] && Cot::$cache) {
+	$updateInfo = Cot::$cache->db->get('update_info');
 	if (empty($updateInfo)) {
         $url = 'https://www.cotonti.com/?r=updatecheck';
         // $url = 'https://www.cotonti.com/update-check';
-        $userAgent = 'Cotonti v.' . cot::$cfg['version'];
+        $userAgent = 'Cotonti v.' . Cot::$cfg['version'];
 		if (ini_get('allow_url_fopen')) {
             $updateInfo = @file_get_contents($url, false, stream_context_create([
                     'http' => ['method'=>"GET", 'header' => 'User-Agent: ' . $userAgent]
@@ -46,17 +46,17 @@ if (cot::$cfg['check_updates'] && cot::$cache) {
             // Negative result should be cached too
             $updateInfo = 'a';
         }
-        cot::$cache->db->store('update_info', $updateInfo, COT_DEFAULT_REALM, 86400);
+        Cot::$cache->db->store('update_info', $updateInfo, COT_DEFAULT_REALM, 86400);
 	}
 	if (
         !empty($updateInfo) &&
         $updateInfo != 'a' &&
-        version_compare($updateInfo['update_ver'], cot::$cfg['version'], '>')
+        version_compare($updateInfo['update_ver'], Cot::$cfg['version'], '>')
     ) {
 		$t->assign(array(
 			'ADMIN_HOME_UPDATE_REVISION' => sprintf(
-                cot::$L['home_update_revision'],
-                cot::$cfg['version'],
+                Cot::$L['home_update_revision'],
+                Cot::$cfg['version'],
                 htmlspecialchars($updateInfo['update_ver'])
             ),
 			'ADMIN_HOME_UPDATE_MESSAGE' => cot_parse($updateInfo['update_message']),

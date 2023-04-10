@@ -47,27 +47,27 @@ if (!function_exists('ckeditor_max_timestamp'))
 global $ckeditor_timestamp;
 
 if (!$ckeditor_timestamp) {
-    $ckeditor_timestamp = ckeditor_max_timestamp(cot::$cfg['plugins_dir'] . '/ckeditor/lib');
+    $ckeditor_timestamp = ckeditor_max_timestamp(Cot::$cfg['plugins_dir'] . '/ckeditor/lib');
 }
 
 // Main CKEditor file
-Resources::linkFileFooter(cot::$cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js?'.$ckeditor_timestamp, 'js');
+Resources::linkFileFooter(Cot::$cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js?'.$ckeditor_timestamp, 'js');
 
 // Load preset and connector
-if (cot::$usr['id'] > 0) {
-    $preset_name = 'group_' . cot::$usr['maingrp'];
-    if (!file_exists(cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js")) {
+if (Cot::$usr['id'] > 0) {
+    $preset_name = 'group_' . Cot::$usr['maingrp'];
+    if (!file_exists(Cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js")) {
         $preset_name = 'default';
     }
 } else {
-    $preset_name = file_exists(cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.group_1.set.js") ? 'group_1'
+    $preset_name = file_exists(Cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.group_1.set.js") ? 'group_1'
         : 'default';
 }
-Resources::linkFileFooter(cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js?" .
+Resources::linkFileFooter(Cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js?" .
     $ckeditor_timestamp);
 
 // Default ckeditor content styles
-Resources::linkFileFooter(cot::$cfg['plugins_dir'] . "/ckeditor/lib/styles.js?".$ckeditor_timestamp);
+Resources::linkFileFooter(Cot::$cfg['plugins_dir'] . "/ckeditor/lib/styles.js?".$ckeditor_timestamp);
 
 $ckeditor_css_connector = '';
 
@@ -77,7 +77,7 @@ if (!empty($ckeditor_css_to_load) && is_array($ckeditor_css_to_load)) {
 	}
 } else {
     $ckeditor_css_to_load = [
-        cot::$cfg['plugins_dir'].'/ckeditor/presets/contents.default.css?'.$ckeditor_timestamp
+        Cot::$cfg['plugins_dir'].'/ckeditor/presets/contents.default.css?'.$ckeditor_timestamp
     ];
 }
 if (sizeof($ckeditor_css_to_load)) {
@@ -86,7 +86,7 @@ if (sizeof($ckeditor_css_to_load)) {
 
 if ($ckeditor_css_connector !== '') {
     Resources::embedFooter(
-        "CKEDITOR.timestamp = $ckeditor_timestamp; CKEDITOR.config.baseHref='" . cot:: $cfg['mainurl']. "/'; " .
+        "CKEDITOR.timestamp = $ckeditor_timestamp; CKEDITOR.config.baseHref='" . Cot:: $cfg['mainurl']. "/'; " .
         $ckeditor_css_connector
     );
 }

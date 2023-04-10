@@ -4,16 +4,26 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit26b1ef88fc50540be4747032c2ffd24b
+class ComposerStaticInitb62a2eb53da07861f5b198adce5bd706
 {
     public static $prefixLengthsPsr4 = array (
         'c' => 
         array (
+            'cot\\plugins\\' => 12,
+            'cot\\modules\\' => 12,
             'cot\\' => 4,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'cot\\plugins\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/plugins',
+        ),
+        'cot\\modules\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules',
+        ),
         'cot\\' => 
         array (
             0 => __DIR__ . '/../..' . '/system',
@@ -21,7 +31,7 @@ class ComposerStaticInit26b1ef88fc50540be4747032c2ffd24b
     );
 
     public static $fallbackDirsPsr4 = array (
-        0 => __DIR__ . '/../..' . '/lib',
+        0 => 'C:\\OpenServerData\\domains\\cotonti.loc\\public_html\\lib',
     );
 
     public static $classMap = array (
@@ -40,8 +50,8 @@ class ComposerStaticInit26b1ef88fc50540be4747032c2ffd24b
         'Db_cache_driver' => __DIR__ . '/../..' . '/system/cache.php',
         'Dynamic_cache_driver' => __DIR__ . '/../..' . '/system/cache.php',
         'File_cache' => __DIR__ . '/../..' . '/system/cache.php',
-        'JSMin' => __DIR__ . '/../..' . '/lib/jsmin.php',
-        'JSMinException' => __DIR__ . '/../..' . '/lib/jsmin.php',
+        'JSMin' => __DIR__ . '/..' . '/jsmin.php',
+        'JSMinException' => __DIR__ . '/..' . '/jsmin.php',
         'Memcache_driver' => __DIR__ . '/../..' . '/system/cache.php',
         'MySQL_cache' => __DIR__ . '/../..' . '/system/cache.php',
         'Page_cache' => __DIR__ . '/../..' . '/system/cache.php',
@@ -56,10 +66,10 @@ class ComposerStaticInit26b1ef88fc50540be4747032c2ffd24b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit26b1ef88fc50540be4747032c2ffd24b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit26b1ef88fc50540be4747032c2ffd24b::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInit26b1ef88fc50540be4747032c2ffd24b::$fallbackDirsPsr4;
-            $loader->classMap = ComposerStaticInit26b1ef88fc50540be4747032c2ffd24b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb62a2eb53da07861f5b198adce5bd706::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb62a2eb53da07861f5b198adce5bd706::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInitb62a2eb53da07861f5b198adce5bd706::$fallbackDirsPsr4;
+            $loader->classMap = ComposerStaticInitb62a2eb53da07861f5b198adce5bd706::$classMap;
 
         }, null, ClassLoader::class);
     }

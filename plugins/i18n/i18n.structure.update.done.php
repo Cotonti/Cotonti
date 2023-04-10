@@ -18,6 +18,6 @@ defined('COT_CODE') or die('Wrong URL');
 global $db_i18n_structure;
 
 if ($extension == 'page' && $old_data['structure_code'] != $new_data['structure_code']) {
-    cot::$db->update($db_i18n_structure, array('istructure_code' => $new_data['structure_code']),
-        "istructure_code=".cot::$db->quote($old_data['structure_code']));
+    Cot::$db->update($db_i18n_structure, array('istructure_code' => $new_data['structure_code']),
+        "istructure_code=".Cot::$db->quote($old_data['structure_code']));
 }

@@ -15,18 +15,18 @@ global $db_pm;
 
 if (empty($db_pm)) {
     // Registering tables
-    cot::$db->registerTable('pm');
+    Cot::$db->registerTable('pm');
 }
 
 $changeCollation = false;
 if (
-    cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
-    (empty(cot::$cfg['mysqlcollate']) || cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
+    Cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
+    (empty(Cot::$cfg['mysqlcollate']) || Cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
 ) {
     $changeCollation = true;
 }
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_pm}` SET `pm_text`='' WHERE `pm_text` IS NULL;
     ALTER TABLE `{$db_pm}` 
         MODIFY `pm_id` int UNSIGNED NOT NULL auto_increment,
@@ -39,7 +39,7 @@ cot::$db->query("
         MODIFY `pm_tostate` tinyint NOT NULL DEFAULT '0',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_pm}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_pm}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }

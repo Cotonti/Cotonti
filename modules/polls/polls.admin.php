@@ -15,27 +15,27 @@ Hooks=admin
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('polls', 'a');
-cot_block(cot::$usr['isadmin']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('polls', 'a');
+cot_block(Cot::$usr['isadmin']);
 
 require_once cot_incfile('polls', 'module');
 require_once cot_incfile('polls', 'module', 'resources');
 
 $t = new XTemplate(cot_tplfile('polls.admin', 'module', true));
 
-$adminpath[] = array(cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
+$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
 $adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
-$adminpath[] = array(cot_url('admin', 'm='.$m), cot::$L['Administration']);
-$adminhelp = cot::$L['adm_help_polls'];
-$adminTitle = cot::$L['Polls'];
+$adminpath[] = array(cot_url('admin', 'm='.$m), Cot::$L['Administration']);
+$adminhelp = Cot::$L['adm_help_polls'];
+$adminTitle = Cot::$L['Polls'];
 
-list($pg, $d, $durl) = cot_import_pagenav('d', cot::$cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['maxrowsperpage']);
 $filter = cot_import('filter', 'G', 'TXT');
 
 //$variant[key]=array("Caption", "filter", "page", "page_get", "sql", "sqlfield")
-$variants[0] = array(cot::$L['All'], "");
-$variants['index'] = array(cot::$L['Main'], "index");
-$variants['forum'] = array(cot::$L['Forums'], "forum");
+$variants[0] = array(Cot::$L['All'], "");
+$variants['index'] = array(Cot::$L['Main'], "index");
+$variants['forum'] = array(Cot::$L['Forums'], "forum");
 
 $id = cot_import('id', 'G', 'INT');
 
@@ -63,7 +63,7 @@ if ( $id > 0) {
 
     } elseif ($a == 'bump') {
         cot_check_xg();
-        $sql_polls = cot::$db->update(cot::$db->polls, ['poll_creationdate' => cot::$sys['now']], "poll_id=$id");
+        $sql_polls = Cot::$db->update(Cot::$db->polls, ['poll_creationdate' => Cot::$sys['now']], "poll_id=$id");
 
         cot_message('adm_polls_msg916_bump');
     }
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             cot_message('polls_updated');
         }
 
-        (cot::$cache && cot::$cfg['cache_index']) && cot::$cache->page->clear('index');
+        (Cot::$cache && Cot::$cfg['cache_index']) && Cot::$cache->page->clear('index');
     }
 }
 

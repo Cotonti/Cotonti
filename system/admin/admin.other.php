@@ -20,10 +20,10 @@ foreach (cot_getextplugins('admin.other.first') as $pl) {
 /* ===== */
 
 if (!empty($p)) {
-	list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('plug', $p);
-	cot_block(cot::$usr['isadmin']);
+	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('plug', $p);
+	cot_block(Cot::$usr['isadmin']);
 
-    cot::$env['ext'] = $p;
+    Cot::$env['ext'] = $p;
     $adminTitle = '';
     if (isset($cot_plugins_enabled[$p])) {
         $adminTitle = $cot_plugins_enabled[$p]['title'];
@@ -47,26 +47,26 @@ if (!empty($p)) {
 		cot_die_message(907, TRUE);
 	}
 
-	$adminpath[] = array(cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
+	$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
 	$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$p), $cot_plugins_enabled[$p]['title']);
-	$adminpath[] = array(cot_url('admin', 'm=other&p='.$p), cot::$L['Administration']);
+	$adminpath[] = array(cot_url('admin', 'm=other&p='.$p), Cot::$L['Administration']);
 
-	// $adminhelp = cot::$L['Description'].' : '.$info['Description'].'<br />'.cot::$L['Version'].' : '.$info['Version'].'<br />'.cot::$L['Date'].' : '.$info['Date'].'<br />'.cot::$L['Author'].' : '.$info['Author'].'<br />'.cot::$L['Copyright'].' : '.$info['Copyright'].'<br />'.cot::$L['Notes'].' : '.$info['Notes'];
+	// $adminhelp = Cot::$L['Description'].' : '.$info['Description'].'<br />'.Cot::$L['Version'].' : '.$info['Version'].'<br />'.Cot::$L['Date'].' : '.$info['Date'].'<br />'.Cot::$L['Author'].' : '.$info['Author'].'<br />'.Cot::$L['Copyright'].' : '.$info['Copyright'].'<br />'.Cot::$L['Notes'].' : '.$info['Notes'];
     $adminmain = '';
 
 	if (is_array($extp)) {
 		foreach($extp as $k => $pl) {
             $plugin_body = '';
-			include_once cot::$cfg['plugins_dir'] . '/' . $pl['pl_file'];
+			include_once Cot::$cfg['plugins_dir'] . '/' . $pl['pl_file'];
 			$adminmain .= $plugin_body;
 		}
 	}
 
 } else {
-	$adminpath[] = array(cot_url('admin', 'm=other'), cot::$L['Other']);
-	$adminTitle = cot::$L['Other'];
-	list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'a');
-	cot_block(cot::$usr['auth_read']);
+	$adminpath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
+	$adminTitle = Cot::$L['Other'];
+	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'a');
+	cot_block(Cot::$usr['auth_read']);
 
 	$target = array();
 
@@ -80,10 +80,10 @@ if (!empty($p)) {
 	foreach (array('module', 'plug') as $type) {
 		if ($type == 'module') {
 			$target = $cot_plugins['admin'];
-			$title = cot::$L['Modules'];
+			$title = Cot::$L['Modules'];
 		} else {
 			$target = $cot_plugins['tools'];
-			$title = cot::$L['Plugins'];
+			$title = Cot::$L['Plugins'];
 		}
 
 		if (is_array($target)) {

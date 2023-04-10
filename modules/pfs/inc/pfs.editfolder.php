@@ -14,22 +14,22 @@ $c1 = cot_import('c1','G','ALP');
 $c2 = cot_import('c2','G','ALP');
 $userid = cot_import('userid','G','INT');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('pfs', 'a');
-cot_block(cot::$usr['auth_write']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('pfs', 'a');
+cot_block(Cot::$usr['auth_write']);
 
 $more = '';
-if (!cot::$usr['isadmin'] || is_null($userid)) {
-	$userid = cot::$usr['id'];
+if (!Cot::$usr['isadmin'] || is_null($userid)) {
+	$userid = Cot::$usr['id'];
 } else {
 	$more = 'userid=' . $userid;
 }
 
-if ($userid != cot::$usr['id']) {
-	cot_block(cot::$usr['isadmin']);
+if ($userid != Cot::$usr['id']) {
+	cot_block(Cot::$usr['isadmin']);
 }
 
 $standalone = FALSE;
-$uid = ($userid > 0) ? $userid : cot::$usr['id'];
+$uid = ($userid > 0) ? $userid : Cot::$usr['id'];
 $user_info = cot_user_data($uid);
 $maingroup = ($userid == 0) ? COT_GROUP_SUPERADMINS : $user_info['user_maingrp'];
 
@@ -125,7 +125,7 @@ if ($standalone) {
 
 	$html = Resources::render();
     if ($html) {
-        cot::$out['head_head'] = $html . (isset(cot::$out['head_head']) ? cot::$out['head_head'] : '');
+        Cot::$out['head_head'] = $html . (isset(Cot::$out['head_head']) ? Cot::$out['head_head'] : '');
     }
 
     $t->assign(array(

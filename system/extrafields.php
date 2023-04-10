@@ -188,8 +188,8 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 
                 if (!is_null($import)) {
                     if ( (!is_null($min) && ($import < $min)) || (!is_null($max) && ($import > $max)) ) {
-                        $errMsg = (isset(cot::$L['field_range_' . $extrafield['field_name']])) ?
-                            cot::$L['field_range_' . $extrafield['field_name']] : $exfld_title . ': ' . cot::$L['field_range'];
+                        $errMsg = (isset(Cot::$L['field_range_' . $extrafield['field_name']])) ?
+                            Cot::$L['field_range_' . $extrafield['field_name']] : $exfld_title . ': ' . Cot::$L['field_range'];
                         cot_error($errMsg, $inputname);
                     }
                 }
@@ -225,8 +225,8 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 
 			if (!is_null($import) && !empty($extrafield['field_params'])) {
 				if (($min !== null && ($import < $min)) || ($max !== null && ($import > $max))) {
-                    $errMsg = (isset(cot::$L['field_range_' . $extrafield['field_name']])) ?
-                        cot::$L['field_range_' . $extrafield['field_name']] : $exfld_title . ': ' . cot::$L['field_range'];
+                    $errMsg = (isset(Cot::$L['field_range_' . $extrafield['field_name']])) ?
+                        Cot::$L['field_range_' . $extrafield['field_name']] : $exfld_title . ': ' . Cot::$L['field_range'];
                     cot_error($errMsg, $inputname);
 				}
 			}
@@ -430,8 +430,8 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 
 	if ((is_null($import) || $import === '' || ($extrafield['field_type'] == 'datetime' && $import == 0)) && $extrafield['field_required'])
 	{
-		$msg = (isset(cot::$L['field_required_' . $extrafield['field_name']])) ? cot::$L['field_required_' . $extrafield['field_name']] :
-            cot::$L['field_required'].': '.$exfld_title;
+		$msg = (isset(Cot::$L['field_required_' . $extrafield['field_name']])) ? Cot::$L['field_required_' . $extrafield['field_name']] :
+            Cot::$L['field_required'].': '.$exfld_title;
 		cot_error($msg, $inputname);
 	}
 	return $import;
@@ -450,14 +450,14 @@ function cot_extrafield_title($extrafield, $titlePrefix = '') {
     $fieldLocation = '';
     if(isset($extrafield['field_location'])) $fieldLocation = $extrafield['field_location'];
 
-    if($titlePrefix != '' && isset(cot::$L[$titlePrefix.$extrafield['field_name'].'_title'])) {
-        $title = cot::$L[$titlePrefix.$extrafield['field_name'].'_title'];
+    if($titlePrefix != '' && isset(Cot::$L[$titlePrefix.$extrafield['field_name'].'_title'])) {
+        $title = Cot::$L[$titlePrefix.$extrafield['field_name'].'_title'];
 
-    } elseif($fieldLocation != '' && isset(cot::$L[$fieldLocation.'_'.$extrafield['field_name'].'_title'])) {
-        $title = cot::$L[$fieldLocation.'_'.$extrafield['field_name'].'_title'];
+    } elseif($fieldLocation != '' && isset(Cot::$L[$fieldLocation.'_'.$extrafield['field_name'].'_title'])) {
+        $title = Cot::$L[$fieldLocation.'_'.$extrafield['field_name'].'_title'];
 
-    } elseif(isset(cot::$L[$extrafield['field_name'].'_title'])) {
-        $title = cot::$L[$extrafield['field_name'].'_title'];
+    } elseif(isset(Cot::$L[$extrafield['field_name'].'_title'])) {
+        $title = Cot::$L[$extrafield['field_name'].'_title'];
     }
     
     if($title == '') $title = $extrafield['field_name'];
@@ -558,21 +558,21 @@ function cot_build_extrafields_data($name, $extrafield, $value, $parser = '')
  */
 function cot_default_html_construction($type)
 {
-	include cot::$cfg['system_dir'] . '/resources.rc.php';
+	include Cot::$cfg['system_dir'] . '/resources.rc.php';
 
     // Theme resources file can use theme lang file
     // We don't need to load these values globally to not override loaded values
-    $langFile = cot::$cfg['themes_dir'] . '/' . cot::$cfg['defaulttheme'] . '/' . cot::$cfg['defaulttheme'] . '.' .
-        cot::$cfg['defaultlang'] . '.' . 'lang.php';
+    $langFile = Cot::$cfg['themes_dir'] . '/' . Cot::$cfg['defaulttheme'] . '/' . Cot::$cfg['defaulttheme'] . '.' .
+        Cot::$cfg['defaultlang'] . '.' . 'lang.php';
     if (!file_exists($langFile)) {
-        $langFile = cot::$cfg['themes_dir'] . '/' . cot::$cfg['defaulttheme'] . '/' . cot::$cfg['defaulttheme'] .
+        $langFile = Cot::$cfg['themes_dir'] . '/' . Cot::$cfg['defaulttheme'] . '/' . Cot::$cfg['defaulttheme'] .
             '.en.lang.php';
     }
     if (file_exists($langFile)) {
         include $langFile;
     }
 
-    $resourceFile = cot::$cfg['themes_dir'] . '/' . cot::$cfg['defaulttheme'] . '/' . cot::$cfg['defaulttheme'] .
+    $resourceFile = Cot::$cfg['themes_dir'] . '/' . Cot::$cfg['defaulttheme'] . '/' . Cot::$cfg['defaulttheme'] .
         '.php';
 	if (file_exists($resourceFile)) {
 		include $resourceFile;
@@ -660,14 +660,14 @@ function cot_extrafield_add($location, $name, $type, $html = '', $variants = '',
 	}
 
 	if (
-        cot::$db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
-		(cot::$db->query("SHOW COLUMNS FROM $location WHERE SUBSTR(Field, INSTR(Field, '_') + 1) = '$name'")->rowCount() > 0 && !$noalter)
+        Cot::$db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0 ||
+		(Cot::$db->query("SHOW COLUMNS FROM $location WHERE SUBSTR(Field, INSTR(Field, '_') + 1) = '$name'")->rowCount() > 0 && !$noalter)
     ) {
 		// No adding - fields already exist // Check table cot_$sql_table - if field with same name exists - exit.
 		return false;
 	}
 
-	$fieldsres = cot::$db->query("SHOW COLUMNS FROM $location");
+	$fieldsres = Cot::$db->query("SHOW COLUMNS FROM $location");
     $prefixFound = false;
 	while ($fieldrow = $fieldsres->fetch()) {
 		$column = $fieldrow['Field'];
@@ -742,7 +742,7 @@ function cot_extrafield_add($location, $name, $type, $html = '', $variants = '',
 	}
     $fieldName = $name;
     if($column_prefix != '') $fieldName = $column_prefix.'_'.$name;
-	$step2 = cot::$db->query("ALTER TABLE $location ADD $fieldName $sqltype ");
+	$step2 = Cot::$db->query("ALTER TABLE $location ADD $fieldName $sqltype ");
 
 	return $step1 && $step2;
 }
@@ -905,9 +905,9 @@ function cot_extrafield_remove($location, $name)
  */
 function cot_extrafields_register_table($table_name)
 {
-	if (!isset(cot::$extrafields[cot::$db->{$table_name}]))
+	if (!isset(Cot::$extrafields[Cot::$db->{$table_name}]))
 	{
-		cot::$extrafields[cot::$db->{$table_name}] = array();
+		Cot::$extrafields[Cot::$db->{$table_name}] = array();
 	}
 }
 
@@ -1008,7 +1008,7 @@ function cot_load_extrafields($forcibly = false)
     if (empty($cot_extrafields) || $forcibly) {
 		$cot_extrafields = [];
 		$where = (defined('COT_INSTALL')) ? "1" : "field_enabled=1";
-		$fieldsres = cot::$db->query('SELECT * FROM ' . cot::$db->extra_fields .
+		$fieldsres = Cot::$db->query('SELECT * FROM ' . Cot::$db->extra_fields .
             " WHERE $where ORDER BY field_type ASC");
 
 		while ($row = $fieldsres->fetch()) {
@@ -1016,12 +1016,12 @@ function cot_load_extrafields($forcibly = false)
 		}
 
 		$fieldsres->closeCursor();
-        cot::$cache && cot::$cache->db->store('cot_extrafields', $cot_extrafields, 'system');
+        Cot::$cache && Cot::$cache->db->store('cot_extrafields', $cot_extrafields, 'system');
 	}
 }
 
 /* ======== Extrafields Pre-load ======== */
 
 cot_load_extrafields();
-$cot_extrafields[cot::$db->structure] = (!empty($cot_extrafields[cot::$db->structure])) ?
-    $cot_extrafields[cot::$db->structure] : [];
+$cot_extrafields[Cot::$db->structure] = (!empty($cot_extrafields[Cot::$db->structure])) ?
+    $cot_extrafields[Cot::$db->structure] : [];

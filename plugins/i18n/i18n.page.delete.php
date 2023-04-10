@@ -19,4 +19,4 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('i18n', 'plug');
 
-cot::$db->delete(cot::$db->i18n_pages, 'ipage_id = ?', $id);
+Cot::$db->delete(Cot::$db->i18n_pages, 'ipage_id = ?', $id);

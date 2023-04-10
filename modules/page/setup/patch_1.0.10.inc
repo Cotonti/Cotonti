@@ -9,7 +9,7 @@ if (!function_exists('cot_page_updateStructureCounters')) {
     require_once cot_incfile('page', 'module');
 }
 
-$categories = cot::$db->query('SELECT structure_code FROM ' . cot::$db->structure . " WHERE structure_area='page'")
+$categories = Cot::$db->query('SELECT structure_code FROM ' . Cot::$db->structure . " WHERE structure_area='page'")
     ->fetchAll();
 if (!empty($categories)) {
     foreach ($categories as $row) {

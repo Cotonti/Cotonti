@@ -16,14 +16,14 @@ Hooks=admin.home
 defined('COT_CODE') or die('Wrong URL');
 
 if (
-    cot::$cfg['plugin']['trashcan']['trash_prunedelay'] > 0 &&
+    Cot::$cfg['plugin']['trashcan']['trash_prunedelay'] > 0 &&
     (empty($_SESSION['trashcanAutoPruned']) || $_SESSION['trashcanAutoPruned'] < date('Y-m-d'))
 ) {
     require_once cot_incfile('trashcan', 'plug');
 
-	$timeago = cot::$sys['now'] - (cot::$cfg['plugin']['trashcan']['trash_prunedelay'] * 86400);
+	$timeago = Cot::$sys['now'] - (Cot::$cfg['plugin']['trashcan']['trash_prunedelay'] * 86400);
 
-    $sqlToPrune = cot::$db->query('SELECT tr_id FROM ' . cot::$db->quoteTableName(cot::$db->trash) .
+    $sqlToPrune = Cot::$db->query('SELECT tr_id FROM ' . Cot::$db->quoteTableName(Cot::$db->trash) .
         ' WHERE tr_date < ?', $timeago);
 
     $pruned = 0;
@@ -36,7 +36,7 @@ if (
 	if ($pruned > 0) {
         /** @todo translate */
         $prumedMsg = $pruned . ' old item(s) removed from the trashcan, older than ' .
-            cot::$cfg['plugin']['trashcan']['trash_prunedelay'] . ' days';
+            Cot::$cfg['plugin']['trashcan']['trash_prunedelay'] . ' days';
 
         cot_message($prumedMsg);
 		cot_log($prumedMsg, 'trashcan', 'prune', 'done');

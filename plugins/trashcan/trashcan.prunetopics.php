@@ -19,23 +19,23 @@ Hooks=forums.functions.prunetopics
 defined('COT_CODE') or die('Wrong URL');
 
 
-if (cot::$cfg['plugin']['trashcan']['trash_forum']) {
+if (Cot::$cfg['plugin']['trashcan']['trash_forum']) {
 	// We are inside cot_forum_prunetopics() function, so need some globals
 	global $trash_types, $db_trash, $db_x;
 	require_once cot_incfile('trashcan', 'plug');
 
     // Add topic to trash
-    $parentTrashId = cot_trash_put('forumtopic', cot::$L['Topic'] . ' #' . $topicId, $topicId, $topic);
+    $parentTrashId = cot_trash_put('forumtopic', Cot::$L['Topic'] . ' #' . $topicId, $topicId, $topic);
 
     // And all it's posts
-    $postsSql = cot::$db->query(
-        'SELECT * FROM ' . cot::$db->quoteTableName(cot::$db->forum_posts) . ' WHERE fp_topicid = ?',
+    $postsSql = Cot::$db->query(
+        'SELECT * FROM ' . Cot::$db->quoteTableName(Cot::$db->forum_posts) . ' WHERE fp_topicid = ?',
         [$topicId]
     );
     while ($post = $postsSql->fetch()) {
         cot_trash_put(
             'forumpost',
-            cot::$L['forums_post'] . " #" . $post['fp_id'] . " from topic #" . $topicId,
+            Cot::$L['forums_post'] . " #" . $post['fp_id'] . " from topic #" . $topicId,
             $post['fp_id'],
             $post,
             $parentTrashId

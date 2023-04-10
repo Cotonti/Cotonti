@@ -9,10 +9,10 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot::$db->registerTable('trash');
+Cot::$db->registerTable('trash');
 
 $GLOBALS['trash_types'] = array(
-	'user' => cot::$db->users
+	'user' => Cot::$db->users
 );
 
 /**
@@ -31,11 +31,11 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 	global $db, $db_trash, $sys, $usr, $trash_types;
 
 	$trash = [
-        'tr_date' => cot::$sys['now'],
+        'tr_date' => Cot::$sys['now'],
         'tr_type' => $type,
         'tr_title' => $title,
         'tr_itemid' => $itemid,
-		'tr_trashedby' => (int) cot::$usr['id'],
+		'tr_trashedby' => (int) Cot::$usr['id'],
         'tr_parentid' => $parentid,
     ];
 
@@ -51,31 +51,31 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 		$i++;
 		$trash['tr_datas'] = serialize($datas);
 
-        $existId = (int) cot::$db->query(
-            'SELECT tr_id FROM ' . cot::$db->quoteTableName(cot::$db->trash) .
+        $existId = (int) Cot::$db->query(
+            'SELECT tr_id FROM ' . Cot::$db->quoteTableName(Cot::$db->trash) .
                 ' WHERE tr_type = :type AND tr_itemid = :id ORDER BY tr_date DESC LIMIT 1',
             ['type' => $type, 'id' => $itemid]
         )->fetchColumn();
         if ($existId > 0) {
             // If for some reason the item is already in the trash (For example because of an error)
             unset($trash['tr_type'], $trash['tr_itemid']);
-            cot::$db->update(
+            Cot::$db->update(
                 $db_trash,
                 $trash,
                 'tr_type = :type AND tr_itemid = :id',
                 ['type' => $type, 'id' => $itemid]
             );
         } else {
-            cot::$db->insert($db_trash, $trash);
+            Cot::$db->insert($db_trash, $trash);
         }
 
 	} elseif (is_string($datas)) {
 		$tablename = isset($trash_types[$type]) ? $trash_types[$type] : $type;
-		$sql_s = cot::$db->query("SELECT * FROM $tablename WHERE $datas");
+		$sql_s = Cot::$db->query("SELECT * FROM $tablename WHERE $datas");
 		while ($row_s = $sql_s->fetch()) {
 			$i++;
 			$trash['tr_datas'] = serialize($row_s);
-			cot::$db->insert($db_trash, $trash);
+			Cot::$db->insert($db_trash, $trash);
 		}
 		$sql_s->closeCursor();
 	}
@@ -117,7 +117,7 @@ function cot_trash_restore($id)
         return false;
     }
 
-	$tsql = cot::$db->query('SELECT * FROM ' . cot::$db->trash . ' WHERE tr_id=? LIMIT 1', $id);
+	$tsql = Cot::$db->query('SELECT * FROM ' . Cot::$db->trash . ' WHERE tr_id=? LIMIT 1', $id);
 	if ($res = $tsql->fetch()) {
 		$data = unserialize($res['tr_datas']);
 		$type = $res['tr_type'];
@@ -196,22 +196,22 @@ function cot_trash_delete($id)
 	}
 	/* ===== */
 
-	$tsql = cot::$db->query(
-        'SELECT * FROM ' . cot::$db->quoteTableName(cot::$db->trash) . ' WHERE tr_id = ? LIMIT 1',
+	$tsql = Cot::$db->query(
+        'SELECT * FROM ' . Cot::$db->quoteTableName(Cot::$db->trash) . ' WHERE tr_id = ? LIMIT 1',
         $id
     );
 	if ($res = $tsql->fetch()) {
-		cot::$db->delete(cot::$db->trash, 'tr_id = ' . $res['tr_id']);
+		Cot::$db->delete(Cot::$db->trash, 'tr_id = ' . $res['tr_id']);
 
-		$sql2 = cot::$db->query('SELECT tr_id FROM ' . cot::$db->quoteTableName(cot::$db->trash) .
+		$sql2 = Cot::$db->query('SELECT tr_id FROM ' . Cot::$db->quoteTableName(Cot::$db->trash) .
             ' WHERE tr_parentid = ' . $res['tr_id']);
 		while ($row2 = $sql2->fetch()) {
 			cot_trash_delete($row2['tr_id']);
 		}
 		$sql2->closeCursor();
 
-        if (cot::$db->countRows(cot::$db->trash) == 0) {
-            cot::$db->query('TRUNCATE ' . cot::$db->quoteTableName(cot::$db->trash));
+        if (Cot::$db->countRows(Cot::$db->trash) == 0) {
+            Cot::$db->query('TRUNCATE ' . Cot::$db->quoteTableName(Cot::$db->trash));
         }
     }
 

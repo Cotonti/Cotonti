@@ -33,5 +33,5 @@ $R['list_more'] =' <span class="readmore"><a href="{$page_url}" title="'.$L['Rea
 
 $R['page_code_redir'] = '<script type="text/javascript">location.href="{$redir}"</script>Redirecting...';
 $R['page_icon_file'] = '<img class="icon" src="{$icon}" alt="'.$L['File'].'" />';
-$R['page_icon_file_default'] = 'images/icons/' . cot::$cfg['defaulticons'] . '/page.png';
+$R['page_icon_file_default'] = 'images/icons/' . Cot::$cfg['defaulticons'] . '/page.png';
 $R['page_icon_file_path'] = 'images/filetypes/default/{$type}.png';

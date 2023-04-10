@@ -25,13 +25,13 @@ if (!COT_AJAX) {
     ) ? 'core' : 'module';
 
     $mtpl_base = 'footer';
-	if (cot::$cfg['enablecustomhf']) {
+	if (Cot::$cfg['enablecustomhf']) {
         if (defined('COT_PLUG') && !empty($e)) {
             $mtpl_base = ['footer', $e];
-        } elseif (!empty(cot::$env['ext'])) {
-            $mtpl_base = ['footer', cot::$env['ext']];
-        } elseif (!empty(cot::$env['location'])) {
-            $mtpl_base = ['footer', cot::$env['location']];
+        } elseif (!empty(Cot::$env['ext'])) {
+            $mtpl_base = ['footer', Cot::$env['ext']];
+        } elseif (!empty(Cot::$env['location'])) {
+            $mtpl_base = ['footer', Cot::$env['location']];
         }
 	}
 
@@ -44,10 +44,10 @@ if (!COT_AJAX) {
     /* ===== */
 
 	$t->assign(array(
-		'FOOTER_COPYRIGHT'  => cot::$out['copyright'],
-		'FOOTER_LOGSTATUS'  => cot::$out['logstatus'],
-		'FOOTER_PMREMINDER' => !empty(cot::$out['pmreminder']) ? cot::$out['pmreminder'] : '',
-		'FOOTER_ADMINPANEL' => !empty(cot::$out['adminpanel']) ? cot::$out['adminpanel'] : ''
+		'FOOTER_COPYRIGHT'  => Cot::$out['copyright'],
+		'FOOTER_LOGSTATUS'  => Cot::$out['logstatus'],
+		'FOOTER_PMREMINDER' => !empty(Cot::$out['pmreminder']) ? Cot::$out['pmreminder'] : '',
+		'FOOTER_ADMINPANEL' => !empty(Cot::$out['adminpanel']) ? Cot::$out['adminpanel'] : ''
 	));
 
 	/* === Hook === */
@@ -62,12 +62,12 @@ if (!COT_AJAX) {
         && !empty($cot_plugins['editor'])
         && is_array($cot_plugins['editor'])
     ) {
-        $parser = !empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
-        if (!empty(cot::$cfg['plugin'][$parser]['editor'])) {
-            $editor = cot::$cfg['plugin'][$parser]['editor'];
+        $parser = !empty(Cot::$sys['parser']) ? Cot::$sys['parser'] : Cot::$cfg['parser'];
+        if (!empty(Cot::$cfg['plugin'][$parser]['editor'])) {
+            $editor = Cot::$cfg['plugin'][$parser]['editor'];
             foreach ($cot_plugins['editor'] as $k) {
                 if ($k['pl_code'] == $editor && cot_auth('plug', $k['pl_code'], 'R')) {
-                    $fileName = cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
+                    $fileName = Cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
                     if (is_readable($fileName)) {
                         include $fileName;
                         break;
@@ -77,76 +77,76 @@ if (!COT_AJAX) {
         }
 	}
 
-	if (empty(cot::$out['footer_rc'])) {
-        cot::$out['footer_rc'] = '';
+	if (empty(Cot::$out['footer_rc'])) {
+        Cot::$out['footer_rc'] = '';
     }
-    cot::$out['footer_rc'] .= Resources::renderFooter();
+    Cot::$out['footer_rc'] .= Resources::renderFooter();
 
-	$t->assign('FOOTER_RC', cot::$out['footer_rc']);
+	$t->assign('FOOTER_RC', Cot::$out['footer_rc']);
 
-	if (cot::$usr['id'] > 0) {
+	if (Cot::$usr['id'] > 0) {
 		$t->parse('FOOTER.USER');
 
 	} else {
 		$t->parse('FOOTER.GUEST');
 	}
 
-	if (cot::$cfg['debug_mode']) {
+	if (Cot::$cfg['debug_mode']) {
 		$cot_hooks_fired[] = 'footer.last';
 		$cot_hooks_fired[] = 'output';
-        cot::$out['hooks'] = '<ol>';
+        Cot::$out['hooks'] = '<ol>';
 		foreach ($cot_hooks_fired as $hook)
 		{
-            cot::$out['hooks'] .= '<li>'.$hook.'</li>';
+            Cot::$out['hooks'] .= '<li>'.$hook.'</li>';
 		}
-        cot::$out['hooks'] .= '</ol>';
-		$t->assign('FOOTER_HOOKS', cot::$out['hooks']);
+        Cot::$out['hooks'] .= '</ol>';
+		$t->assign('FOOTER_HOOKS', Cot::$out['hooks']);
 	}
 
 	// Creation time statistics
 	$i = explode(' ', microtime());
-    cot::$sys['endtime'] = $i[1] + $i[0];
-    cot::$sys['creationtime'] = round((cot::$sys['endtime'] - cot::$sys['starttime']), 3);
+    Cot::$sys['endtime'] = $i[1] + $i[0];
+    Cot::$sys['creationtime'] = round((Cot::$sys['endtime'] - Cot::$sys['starttime']), 3);
 
-	cot::$out['creationtime'] = (!cot::$cfg['disablesysinfos']) ? cot::$L['foo_created'].' '.cot_declension(cot::$sys['creationtime'],
+	Cot::$out['creationtime'] = (!Cot::$cfg['disablesysinfos']) ? Cot::$L['foo_created'].' '.cot_declension(Cot::$sys['creationtime'],
             $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
-	cot::$out['sqlstatistics'] = (cot::$cfg['showsqlstats']) ? cot::$L['foo_sqltotal'].': '.cot_declension(round(cot::$db->timeCount, 3),
-            $Ls['Seconds'], $onlyword = false, $canfrac = true).' - '.cot::$L['foo_sqlqueries'].': '.cot::$db->count.
-            ' - '.cot::$L['foo_sqlaverage'].': '.cot_declension(round((cot::$db->timeCount / cot::$db->count), 5),
+	Cot::$out['sqlstatistics'] = (Cot::$cfg['showsqlstats']) ? Cot::$L['foo_sqltotal'].': '.cot_declension(round(Cot::$db->timeCount, 3),
+            $Ls['Seconds'], $onlyword = false, $canfrac = true).' - '.Cot::$L['foo_sqlqueries'].': '.Cot::$db->count.
+            ' - '.Cot::$L['foo_sqlaverage'].': '.cot_declension(round((Cot::$db->timeCount / Cot::$db->count), 5),
             $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
-	cot::$out['bottomline'] = cot::$cfg['bottomline'];
-	cot::$out['bottomline'] .= (cot::$cfg['keepcrbottom']) ? cot::$out['copyright'] : '';
+	Cot::$out['bottomline'] = Cot::$cfg['bottomline'];
+	Cot::$out['bottomline'] .= (Cot::$cfg['keepcrbottom']) ? Cot::$out['copyright'] : '';
 
 	// Development mode SQL query timings
-	if (cot::$cfg['devmode'] && cot_auth('admin', 'a', 'A'))
+	if (Cot::$cfg['devmode'] && cot_auth('admin', 'a', 'A'))
 	{
-        cot::$out['devmode'] = "<h4>Dev-mode :</h4><table><tr><td><em>SQL query</em></td><td><em>Duration</em></td><td><em>Timeline</em></td><td><em>Execution stack<br />(file[line]: function)</em></td><td><em>Query</em></td></tr>";
-        cot::$out['devmode'] .= "<tr><td colspan=\"2\">BEGIN</td>";
-        cot::$out['devmode'] .= "<td style=\"text-align:right;\">0.000 ms</td><td>&nbsp;</td></tr>";
-		if(is_array(cot::$sys['devmode']['queries']))
+        Cot::$out['devmode'] = "<h4>Dev-mode :</h4><table><tr><td><em>SQL query</em></td><td><em>Duration</em></td><td><em>Timeline</em></td><td><em>Execution stack<br />(file[line]: function)</em></td><td><em>Query</em></td></tr>";
+        Cot::$out['devmode'] .= "<tr><td colspan=\"2\">BEGIN</td>";
+        Cot::$out['devmode'] .= "<td style=\"text-align:right;\">0.000 ms</td><td>&nbsp;</td></tr>";
+		if(is_array(Cot::$sys['devmode']['queries']))
 		{
-			foreach (cot::$sys['devmode']['queries'] as $k => $i)
+			foreach (Cot::$sys['devmode']['queries'] as $k => $i)
 			{
-                cot::$out['devmode'] .= "<tr><td>#".$i[0]." &nbsp;</td>";
-                cot::$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", round($i[1] * 1000, 3))." ms</td>";
-                cot::$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f",
-                        round(cot::$sys['devmode']['timeline'][$k] * 1000, 3))." ms</td>";
-                cot::$out['devmode'] .= "<td style=\"text-align:left;\">".nl2br(htmlspecialchars($i[3]))."</td>";
-                cot::$out['devmode'] .= "<td style=\"text-align:left;\">".htmlspecialchars($i[2])."</td></tr>";
+                Cot::$out['devmode'] .= "<tr><td>#".$i[0]." &nbsp;</td>";
+                Cot::$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", round($i[1] * 1000, 3))." ms</td>";
+                Cot::$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f",
+                        round(Cot::$sys['devmode']['timeline'][$k] * 1000, 3))." ms</td>";
+                Cot::$out['devmode'] .= "<td style=\"text-align:left;\">".nl2br(htmlspecialchars($i[3]))."</td>";
+                Cot::$out['devmode'] .= "<td style=\"text-align:left;\">".htmlspecialchars($i[2])."</td></tr>";
 			}
 		}
-        cot::$out['devmode'] .= "<tr><td colspan=\"2\">END</td>";
-        cot::$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", cot::$sys['creationtime']).
+        Cot::$out['devmode'] .= "<tr><td colspan=\"2\">END</td>";
+        Cot::$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", Cot::$sys['creationtime']).
             " ms</td><td>&nbsp;</td></tr>";
-        cot::$out['devmode'] .= "</table><br />Total:".round(cot::$db->timeCount, 4)."s - Queries:".cot::$db->count.
-            " - Average:".round((cot::$db->timeCount / cot::$db->count), 5)."s/q";
+        Cot::$out['devmode'] .= "</table><br />Total:".round(Cot::$db->timeCount, 4)."s - Queries:".Cot::$db->count.
+            " - Average:".round((Cot::$db->timeCount / Cot::$db->count), 5)."s/q";
 	}
 
 	$t->assign(array(
-		'FOOTER_BOTTOMLINE' => cot::$out['bottomline'],
-		'FOOTER_CREATIONTIME' => cot::$out['creationtime'],
-		'FOOTER_SQLSTATISTICS' => cot::$out['sqlstatistics'],
-		'FOOTER_DEVMODE' => isset(cot::$out['devmode']) ? cot::$out['devmode'] : ''
+		'FOOTER_BOTTOMLINE' => Cot::$out['bottomline'],
+		'FOOTER_CREATIONTIME' => Cot::$out['creationtime'],
+		'FOOTER_SQLSTATISTICS' => Cot::$out['sqlstatistics'],
+		'FOOTER_DEVMODE' => isset(Cot::$out['devmode']) ? Cot::$out['devmode'] : ''
 	));
 
 	$t->parse('FOOTER');

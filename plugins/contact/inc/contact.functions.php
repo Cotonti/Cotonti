@@ -13,7 +13,7 @@ require_once cot_langfile('contact', 'plug');
 require_once cot_incfile('extrafields');
 require_once cot_incfile('forms');
 
-cot::$db->registerTable('contact');
+Cot::$db->registerTable('contact');
 cot_extrafields_register_table('contact');
 
 $R['contact_message'] = <<<TXT

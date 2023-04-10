@@ -53,14 +53,14 @@ function cot_apply_rwr()
 
 		$filtered = cot_import($path[0], 'D', 'ALP');
 		if ($count == 1) {
-			if (isset(cot::$structure['page'][$filtered]) || $filtered == 'unvalidated' || $filtered == 'saved_drafts') {
+			if (isset(Cot::$structure['page'][$filtered]) || $filtered == 'unvalidated' || $filtered == 'saved_drafts') {
 				// Is a category
 				$_GET['e'] = 'page';
 				$_GET['c'] = $filtered;
 
 			} elseif (
-                file_exists(cot::$cfg['modules_dir'] . '/' . $filtered) ||
-                file_exists(cot::$cfg['plugins_dir'] . '/' . $filtered)
+                file_exists(Cot::$cfg['modules_dir'] . '/' . $filtered) ||
+                file_exists(Cot::$cfg['plugins_dir'] . '/' . $filtered)
             ) {
 				// Is an extension
 				$_GET['e'] = $filtered;
@@ -117,10 +117,10 @@ function cot_apply_rwr()
 
 			}
 			$last = $count - 1;
-			$ext = (isset(cot::$structure['page'][$filtered])) ? 'page' : $filtered;
+			$ext = (isset(Cot::$structure['page'][$filtered])) ? 'page' : $filtered;
 			$_GET['e'] = $ext;
 			$cat_chain = array_slice($path, 0, -1);
-			if (isset(cot::$structure[$ext][$path[$last]]) && !in_array($path[$last], $cat_chain)) {
+			if (isset(Cot::$structure[$ext][$path[$last]]) && !in_array($path[$last], $cat_chain)) {
 				// Is a category
 				$_GET['c'] = $path[$last];
 				if (trim($rwr, '/') !== trim(cot_url($ext, array('c' => $_GET['c'])), '/')) {
@@ -137,7 +137,7 @@ function cot_apply_rwr()
 					$_GET['id'] = $path[$last];
 				} else {
 					// Can be a cat or al, let the module decide
-					if ($count == 2 && (!isset($_GET['c']) || !isset(cot::$structure[$ext][$_GET['c']]))) {
+					if ($count == 2 && (!isset($_GET['c']) || !isset(Cot::$structure[$ext][$_GET['c']]))) {
                        $_GET['c'] = $path[$last];
                     }
 
@@ -224,7 +224,7 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 
 	// Some special substitutions
 	$spec['_area'] = $name;
-	$spec['_host'] = cot::$sys['host'];
+	$spec['_host'] = Cot::$sys['host'];
 	$spec['_rhost'] = $_SERVER['HTTP_HOST'];
 	$spec['_path'] = COT_SITE_URI;
 
@@ -259,14 +259,14 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 
 	// Support for i18n parameter
 	if (cot_plugin_active('i18n')) {
-		$i18n_cfg = cot::$cfg['plugin']['i18n'];
+		$i18n_cfg = Cot::$cfg['plugin']['i18n'];
 		$i18n_rewrite = isset($i18n_cfg['rewrite']) && $i18n_cfg['rewrite'];
-		$omit_param = $i18n_cfg['omitmain'] && isset($params['l']) && isset(cot::$usr['profile']) && $params['l'] == cot::$usr['profile']['user_lang'];
+		$omit_param = $i18n_cfg['omitmain'] && isset($params['l']) && isset(Cot::$usr['profile']) && $params['l'] == Cot::$usr['profile']['user_lang'];
 		if (isset($params['l']) && $i18n_rewrite && !$omit_param) {
 			// Add with slash at the beginning of the URL
-			$pos = strpos($url, cot::$sys['site_uri']);
-			if (cot::$sys['site_uri'] != '/' && $pos !== false) {
-				$url = substr_replace($url, cot::$sys['site_uri'] . rawurlencode($params['l']) . '/', $pos, mb_strlen(cot::$sys['site_uri']));
+			$pos = strpos($url, Cot::$sys['site_uri']);
+			if (Cot::$sys['site_uri'] != '/' && $pos !== false) {
+				$url = substr_replace($url, Cot::$sys['site_uri'] . rawurlencode($params['l']) . '/', $pos, mb_strlen(Cot::$sys['site_uri']));
 
             } else {
 				$p = mb_strpos($url, '://');
@@ -310,9 +310,9 @@ function cot_url_catpath(&$params, $spec, $arg = 'c')
 {
 	$cat = '';
 	$name = $spec['_area'] == 'plug' ? $params['e'] : $spec['_area'];
-	if (isset(cot::$structure[$name]) && isset(cot::$structure[$name][$params[$arg]]))
+	if (isset(Cot::$structure[$name]) && isset(Cot::$structure[$name][$params[$arg]]))
 	{
-		$parts = explode('.', cot::$structure[$name][$params[$arg]]['path']);
+		$parts = explode('.', Cot::$structure[$name][$params[$arg]]['path']);
 		$cat = implode('/', array_map('rawurlencode', $parts));
 	}
 	else
@@ -339,7 +339,7 @@ function cot_url_presets()
 			$urleditor_presets[] = basename($filename, ".dat");
 		}
 	}
-	$datfiles = glob(cot::$cfg['plugins_dir'] . "/urleditor/presets/*.dat");
+	$datfiles = glob(Cot::$cfg['plugins_dir'] . "/urleditor/presets/*.dat");
 	if ($datfiles) foreach ($datfiles as $filename)
 	{
 		$urleditor_presets[] = basename($filename, ".dat");
@@ -373,10 +373,10 @@ function cot_url_usertheme_files()
 {
     global $L, $R, $cfg;
 
-    $path = cot::$cfg['themes_dir'].'/'.cot::$usr['theme'].'/'.cot::$usr['theme'];
+    $path = Cot::$cfg['themes_dir'].'/'.Cot::$usr['theme'].'/'.Cot::$usr['theme'];
     $usr_theme_resources = $path.'.resources.php';
-    $usr_theme_lang = $path.'.'.cot::$usr['lang'].'.lang.php';
-    $usr_theme_lang_default = $path.'.'.cot::$cfg['defaultlang'].'.lang.php';
+    $usr_theme_lang = $path.'.'.Cot::$usr['lang'].'.lang.php';
+    $usr_theme_lang_default = $path.'.'.Cot::$cfg['defaultlang'].'.lang.php';
 
     if (@file_exists($usr_theme_resources)) {
         include_once cot_rc($usr_theme_resources);

@@ -21,7 +21,7 @@ if ($i18n_enabled) {
 	// Render language selection
 	$pag_i18n_locales = cot_i18n_list_page_locales($id);
 	if (count($pag_i18n_locales) > 0) {
-		array_unshift($pag_i18n_locales, cot::$cfg['defaultlang']);
+		array_unshift($pag_i18n_locales, Cot::$cfg['defaultlang']);
 		foreach ($pag_i18n_locales as $lc) {
 			if ($lc == $i18n_locale) {
 				$lc_class = 'selected';
@@ -32,7 +32,7 @@ if ($i18n_enabled) {
 			}
 			$urlparams = empty($pag['page_alias']) ? array('c' => $pag['page_cat'], 'id' => $id) :
                 array('c' => $pag['page_cat'], 'al' => $al);
-			if (!cot::$cfg['plugin']['i18n']['omitmain'] || $lc != $i18n_fallback) {
+			if (!Cot::$cfg['plugin']['i18n']['omitmain'] || $lc != $i18n_fallback) {
 				$urlparams += array('l' => $lc);
 			}
 			$t->assign(array(
@@ -50,11 +50,11 @@ if ($i18n_enabled) {
 	if ($i18n_write) {
 		// Translation tags
 		if (!empty($pag_i18n)) {
-			if ($i18n_admin || $pag_i18n['ipage_translatorid'] == cot::$usr['id']) {
+			if ($i18n_admin || $pag_i18n['ipage_translatorid'] == Cot::$usr['id']) {
 				// Edit translation
 				$url_i18n = cot_url('plug', "e=i18n&m=page&a=edit&id=$id&l=$i18n_locale");
 				$t->assign(array(
-					'PAGE_ADMIN_EDIT' => cot_rc_link($url_i18n, cot::$L['Edit']),
+					'PAGE_ADMIN_EDIT' => cot_rc_link($url_i18n, Cot::$L['Edit']),
 					'PAGE_ADMIN_EDIT_URL' => $url_i18n
 				));
 			}
@@ -63,7 +63,7 @@ if ($i18n_enabled) {
 				// Translate button
 				$url_i18n = cot_url('plug', "e=i18n&m=page&a=add&id=$id");
 				$t->assign(array(
-					'PAGE_I18N_TRANSLATE' => cot_rc_link($url_i18n, cot::$L['i18n_translate']),
+					'PAGE_I18N_TRANSLATE' => cot_rc_link($url_i18n, Cot::$L['i18n_translate']),
 					'PAGE_I18N_TRANSLATE_URL' => $url_i18n
 				));
 			}
@@ -79,7 +79,7 @@ if ($i18n_enabled) {
                 ['e' => 'i18n', 'm' => 'page', 'a' => 'delete', 'id' => $id, 'l' => $i18n_locale]);
             $i18nDeleteConfirmUrl = cot_confirm_url($i18nDeleteUrl, 'i18n', 'i18n_confirm_delete');
 			$t->assign([
-				'PAGE_I18N_DELETE' => cot_rc_link($i18nDeleteConfirmUrl, cot::$L['Delete'], 'class="confirmLink"'),
+				'PAGE_I18N_DELETE' => cot_rc_link($i18nDeleteConfirmUrl, Cot::$L['Delete'], 'class="confirmLink"'),
 				'PAGE_I18N_DELETE_URL' => $i18nDeleteConfirmUrl,
 			]);
 		}

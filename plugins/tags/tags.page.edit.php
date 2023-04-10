@@ -15,7 +15,7 @@ Hooks=page.edit.update.done,i18n.page.edit.update
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
+if (Cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
 	require_once cot_incfile('tags', 'plug');
 	// I18n
 	if (cot_get_caller() == 'i18n.page') {
@@ -49,8 +49,8 @@ if (cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
 
 	// Add new tags
 	$ncnt = count($new_tags);
-	if (cot::$cfg['plugin']['tags']['limit'] > 0 && $ncnt > cot::$cfg['plugin']['tags']['limit'] - $cnt) {
-		$lim = cot::$cfg['plugin']['tags']['limit'] - $cnt;
+	if (Cot::$cfg['plugin']['tags']['limit'] > 0 && $ncnt > Cot::$cfg['plugin']['tags']['limit'] - $cnt) {
+		$lim = Cot::$cfg['plugin']['tags']['limit'] - $cnt;
 	} else {
 		$lim = $ncnt;
 	}

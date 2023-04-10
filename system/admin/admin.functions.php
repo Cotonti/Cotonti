@@ -17,9 +17,9 @@ require_once cot_incfile('extensions');
 /* ======== Defaulting the admin variables ========= */
 unset($adminmain, $adminhelp, $admin_icon, $plugin_body, $plugin_title, $plugin_help);
 
-cot::$usr['admin_config'] = cot_auth('admin', 'a', 'A');
-cot::$usr['admin_structure'] = cot_auth('structure', 'a', 'A');
-cot::$usr['admin_users'] = cot_auth('users', 'a', 'A') || cot::$usr['maingrp'] == COT_GROUP_SUPERADMINS;
+Cot::$usr['admin_config'] = cot_auth('admin', 'a', 'A');
+Cot::$usr['admin_structure'] = cot_auth('structure', 'a', 'A');
+Cot::$usr['admin_users'] = cot_auth('users', 'a', 'A') || Cot::$usr['maingrp'] == COT_GROUP_SUPERADMINS;
 
 /**
  * Returns $url as an HTML link if $cond is TRUE or just plain $text otherwise
@@ -121,7 +121,7 @@ function cot_get_extensionparams($code, $is_module = false)
 	global $L, $Ls; // We are including lang files. So we need it global.
     global $cot_modules, $cot_plugins_enabled;
 
-	$dir = $is_module ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir'];
+	$dir = $is_module ? Cot::$cfg['modules_dir'] : Cot::$cfg['plugins_dir'];
 
     $name = $desc = $notes = '';
 	if ($is_module) {
@@ -158,13 +158,13 @@ function cot_get_extensionparams($code, $is_module = false)
 
     $icon = '';
 	$key = 'icon_' . $typeKey . '_' . $code;
-	if (!empty(cot::$R[$key])) {
-		$icon = cot::$R[$key];
-	} elseif (!empty(cot::$R['admin_icon_extension_default'])) {
-		$icon = cot::$R['admin_icon_extension_default'];
+	if (!empty(Cot::$R[$key])) {
+		$icon = Cot::$R[$key];
+	} elseif (!empty(Cot::$R['admin_icon_extension_default'])) {
+		$icon = Cot::$R['admin_icon_extension_default'];
 	} else {
 		$fileNames = [
-			cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/' . $typeKey . '_' . $code . '.png',
+			Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'] . '/' . $typeKey . '_' . $code . '.png',
 			$dir . '/' . $code . '/' . $code . '.png'
 		];
 		foreach ($fileNames as $fileName) {
@@ -181,8 +181,8 @@ function cot_get_extensionparams($code, $is_module = false)
 
     if (empty($icon)) {
         $fileNames = [
-            cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/default.png',
-            cot::$cfg['icons_dir'] . '/default/default.png',
+            Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'] . '/default.png',
+            Cot::$cfg['icons_dir'] . '/default/default.png',
         ];
         foreach ($fileNames as $fileName) {
             if (file_exists($fileName)) {
@@ -196,7 +196,7 @@ function cot_get_extensionparams($code, $is_module = false)
 	if (file_exists($langfile)) {
         $L['info_name'] = $L['info_desc'] = $L['info_notes'] = '';
 		include $langfile;
-        // We are including lang file, so we should use $L, not cot::$L
+        // We are including lang file, so we should use $L, not Cot::$L
 		if (!empty($L['info_name'])) {
             $name = $L['info_name'];
         }
@@ -226,10 +226,10 @@ function cot_generate_infotags($tag_prefix = '')
 {
 	global $db_plugins, $db_updates;
 
-	$sql = cot::$db->query("SHOW TABLES");
+	$sql = Cot::$db->query("SHOW TABLES");
 	foreach ($sql->fetchAll(PDO::FETCH_NUM) as $row) {
 		$table_name = $row[0];
-		$status = cot::$db->query("SHOW TABLE STATUS LIKE '$table_name'");
+		$status = Cot::$db->query("SHOW TABLE STATUS LIKE '$table_name'");
 		$status1 = $status->fetch();
 		$status->closeCursor();
 		$tables[] = $status1;
@@ -247,8 +247,8 @@ function cot_generate_infotags($tag_prefix = '')
 		$total_data_length += $dat['Data_length'];
 	}
 
-	$totalplugins = cot::$db->query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code")->rowCount();
-	$totalhooks = cot::$db->query("SELECT COUNT(*) FROM $db_plugins")->fetchColumn();
+	$totalplugins = Cot::$db->query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code")->rowCount();
+	$totalhooks = Cot::$db->query("SELECT COUNT(*) FROM $db_plugins")->fetchColumn();
 
 	$temp_array = array(
 		'DB_TOTAL_ROWS' => $total_rows,
@@ -257,8 +257,8 @@ function cot_generate_infotags($tag_prefix = '')
 		'DB_TOTALSIZE' => number_format(($total_length / 1024), 1, '.', ' '),
 		'TOTALPLUGINS' => $totalplugins,
 		'TOTALHOOKS' => $totalhooks,
-		'VERSION' => cot::$cfg['version'],
-		'DB_VERSION' => htmlspecialchars(cot::$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'")->fetchColumn())
+		'VERSION' => Cot::$cfg['version'],
+		'DB_VERSION' => htmlspecialchars(Cot::$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'")->fetchColumn())
 	);
 
 	$return_array = array();

@@ -16,5 +16,5 @@ $tc_styles = array(
 	999999999 => 'xl'
 );
 
-cot::$db->registerTable('tags');
-cot::$db->registerTable('tag_references');
+Cot::$db->registerTable('tags');
+Cot::$db->registerTable('tag_references');

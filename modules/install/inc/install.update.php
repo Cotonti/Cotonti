@@ -223,7 +223,7 @@ if (defined('COT_UPGRADE') && !cot_error_found()) {
 
 } elseif (!cot_error_found()) {
 	// Update the core
-	$sql_install = cot::$db->query('SELECT upd_value FROM ' . cot::$db->updates .
+	$sql_install = Cot::$db->query('SELECT upd_value FROM ' . Cot::$db->updates .
         " WHERE upd_param = 'revision'");
 	$upd_rev = $sql_install->fetchColumn();
 
@@ -246,7 +246,7 @@ if (defined('COT_UPGRADE') && !cot_error_found()) {
 	$new_rev = cot_apply_patches("./setup/$branch", $rev);
 
     if (is_string($new_rev) && version_compare($new_rev, $rev) > 0) {
-        cot::$db->update(cot::$db->updates, ['upd_value' => $new_rev], "upd_param = 'revision'");
+        Cot::$db->update(Cot::$db->updates, ['upd_value' => $new_rev], "upd_param = 'revision'");
     }
 
 	// Update installed modules and plugins

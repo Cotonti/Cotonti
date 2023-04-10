@@ -854,7 +854,7 @@ if (extension_loaded('memcache'))
          */
         public static function createKey($key) {
             if (is_array($key))  $key = serialize($key);
-            return md5(cot::$cfg['site_id'].$key);
+            return md5(Cot::$cfg['site_id'].$key);
         }
 
 		/**
@@ -1229,7 +1229,7 @@ class Cache
 		$this->db = new MySQL_cache();
 		$cot_cache_autoload = is_array($cot_cache_autoload)
 			? array_merge(array('system', 'cot', $env['ext']), $cot_cache_autoload)
-				: array('system', 'cot', cot::$env['ext']);
+				: array('system', 'cot', Cot::$env['ext']);
 		$this->db->get_all($cot_cache_autoload);
 
 		$cfg['cache_drv'] .= '_driver';

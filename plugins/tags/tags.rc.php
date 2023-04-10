@@ -16,14 +16,14 @@ Hooks=rc
 defined('COT_CODE') or die('Wrong URL');
 
 if (cot_plugin_active('autocomplete')) {
-    if (cot::$cfg['jquery'] && cot::$cfg['turnajax'] && cot::$cfg['plugin']['autocomplete']['autocomplete'] > 0) {
+    if (Cot::$cfg['jquery'] && Cot::$cfg['turnajax'] && Cot::$cfg['plugin']['autocomplete']['autocomplete'] > 0) {
         Resources::addEmbed(
             '$(document).ready(function() { 
 $(".autotags").autocomplete("' . cot_url('plug','r=tags') . '", {multiple: true, minChars: ' .
-            cot::$cfg['plugin']['autocomplete']['autocomplete'] . '});
+            Cot::$cfg['plugin']['autocomplete']['autocomplete'] . '});
 });', 'js',50,'global','tags.autocomplete');
     }
 }
-if(cot::$cfg['plugin']['tags']['css']) {
-    Resources::addFile(cot::$cfg['plugins_dir'] . '/tags/tpl/tags.css', 'css');
+if(Cot::$cfg['plugin']['tags']['css']) {
+    Resources::addFile(Cot::$cfg['plugins_dir'] . '/tags/tpl/tags.css', 'css');
 }

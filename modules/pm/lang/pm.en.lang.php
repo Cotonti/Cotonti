@@ -21,7 +21,7 @@ $L['cfg_maxpmperpage'] = 'Max. messages per page';
 $L['cfg_maxpmperpage_hint'] = ' ';
 $L['cfg_showlast'] = 'New messages count';
 $L['cfg_showlast_hint'] = 'New user\'s messages count to show in <strong>Header</strong> and in ' .
-    '<strong>cot::$out[\'pm_lastMessages\']</strong>.<br>0 - don\'t show';
+    '<strong>Cot::$out[\'pm_lastMessages\']</strong>.<br>0 - don\'t show';
 $L['info_desc'] = 'Private messaging system for on-site user communication';
 
 /**

@@ -15,7 +15,7 @@ Hooks=forums.topics.query
 
 defined('COT_CODE') or die('Wrong URL');
 
-if(cot::$cfg['forums']['cat_' . $s]['allowpolls'])
+if(Cot::$cfg['forums']['cat_' . $s]['allowpolls'])
 {
     $where['poll'] = isset($where['poll']) ? $where['poll'] : '';
 	$where['poll'] .= "(poll_type='forum' OR poll_id IS NULL)";

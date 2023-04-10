@@ -18,7 +18,7 @@ Tags=news.tpl:{PAGE_TAGS_ROW_TAG},{PAGE_TAGS_ROW_URL},{PAGE_TAGS_ROW_TAG_COUNT}
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (cot::$cfg['plugin']['tags']['pages']) {
+if (Cot::$cfg['plugin']['tags']['pages']) {
 	require_once cot_incfile('tags', 'plug');
 
 	if (cot_plugin_active('i18n') && isset($i18n_enabled) && $i18n_enabled && $i18n_notmain) {
@@ -45,10 +45,10 @@ if (cot::$cfg['plugin']['tags']['pages']) {
 	if (count($tags) > 0) {
 		$tag_ii = 0;
 		foreach ($tags as $tag) {
-			$tag_u = cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
+			$tag_u = Cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 			$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 			$t->assign(array(
-				'PAGE_TAGS_ROW_TAG' => cot::$cfg['plugin']['tags']['title'] ?
+				'PAGE_TAGS_ROW_TAG' => Cot::$cfg['plugin']['tags']['title'] ?
                     htmlspecialchars(cot_tag_title($tag)) : htmlspecialchars($tag),
 				'PAGE_TAGS_ROW_TAG_COUNT' => $tag_ii,
 				'PAGE_TAGS_ROW_URL' => cot_url(

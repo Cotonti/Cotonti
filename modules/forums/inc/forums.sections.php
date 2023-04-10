@@ -8,18 +8,18 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('forums', 'any');
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('forums', 'any');
 /* === Hook === */
 foreach (cot_getextplugins('forums.sections.rights') as $pl) {
 	include $pl;
 }
 /* ===== */
-cot_block(cot::$usr['auth_read']);
+cot_block(Cot::$usr['auth_read']);
 
 $s = cot_import('s','G','TXT');
 $c = cot_import('c','G','TXT');
 
-cot::$sys['sublocation'] = cot::$L['Home'];
+Cot::$sys['sublocation'] = Cot::$L['Home'];
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.sections.first') as $pl) {
@@ -27,30 +27,30 @@ foreach (cot_getextplugins('forums.sections.first') as $pl) {
 }
 /* ===== */
 
-if ($n == 'markall' && cot::$usr['id'] > 0) {
-	cot::$db->update($db_users, array('user_lastvisit' => cot::$sys['now']), "user_id=".cot::$usr['id']);
-	cot::$usr['lastvisit'] = cot::$sys['now'];
+if ($n == 'markall' && Cot::$usr['id'] > 0) {
+	Cot::$db->update($db_users, array('user_lastvisit' => Cot::$sys['now']), "user_id=".Cot::$usr['id']);
+	Cot::$usr['lastvisit'] = Cot::$sys['now'];
 }
 
 if (empty($cot_sections_act)) {
     $cot_sections_act = array();
-	$timeback = cot::$sys['now'] - 604800; // 7 days
-	$sqltmp = cot::$db->query("SELECT fp_cat, COUNT(*) FROM $db_forum_posts WHERE fp_creation > $timeback GROUP BY fp_cat");
+	$timeback = Cot::$sys['now'] - 604800; // 7 days
+	$sqltmp = Cot::$db->query("SELECT fp_cat, COUNT(*) FROM $db_forum_posts WHERE fp_creation > $timeback GROUP BY fp_cat");
 	while ($tmprow = $sqltmp->fetch()) {
 		$cot_sections_act[$tmprow['fp_cat']] = $tmprow['COUNT(*)'];
 	}
 	$sqltmp->closeCursor();
-	cot::$cache && cot::$cache->db->store('cot_sections_act', $cot_sections_act, 'system', 7200);
+	Cot::$cache && Cot::$cache->db->store('cot_sections_act', $cot_sections_act, 'system', 7200);
 }
 
 $cat_top = array();
-$sql_forums = cot::$db->query("SELECT * FROM $db_forum_stats ORDER by fs_cat DESC");
+$sql_forums = Cot::$db->query("SELECT * FROM $db_forum_stats ORDER by fs_cat DESC");
 foreach ($sql_forums->fetchAll() as $row) {
 	if (
         !empty($row['fs_cat'])
         && !$row['fs_lt_id']
-        && count(explode('.', cot::$structure['forums'][$row['fs_cat']]['rpath'])) > 1
-        && cot::$structure['forums'][$row['fs_cat']]['count'] > 0
+        && count(explode('.', Cot::$structure['forums'][$row['fs_cat']]['rpath'])) > 1
+        && Cot::$structure['forums'][$row['fs_cat']]['count'] > 0
     ) {
         cot_forums_updateStructureCounters($row['fs_cat']);
 	}
@@ -63,7 +63,7 @@ foreach ($sql_forums->fetchAll() as $row) {
 $fstlvl = array();
 $nxtlvl = array();
 $cot_act = array();
-foreach (cot::$structure['forums'] as $i => $x) {
+foreach (Cot::$structure['forums'] as $i => $x) {
 	$parents = explode('.', $x['path']);
 	$depth = count($parents);
     $cot_act[$parents[0]] = 0;
@@ -109,7 +109,7 @@ foreach (cot::$structure['forums'] as $i => $x) {
 
 $secact_max = count($cot_act) > 0 ? (max($cot_act)) : 0;
 
-cot::$out['subtitle'] = cot::$L['Forums'];
+Cot::$out['subtitle'] = Cot::$L['Forums'];
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.sections.main') as $pl) {
@@ -117,17 +117,17 @@ foreach (cot_getextplugins('forums.sections.main') as $pl) {
 }
 /* ===== */
 
-require_once cot::$cfg['system_dir'] . '/header.php';
+require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate(cot_tplfile('forums.sections'));
 
 $url_markall = cot_url('forums', "n=markall");
-$title[] = array(cot_url('forums'), cot::$L['Forums']);
+$title[] = array(cot_url('forums'), Cot::$L['Forums']);
 $t->assign(array(
 	'FORUMS_RSS' => cot_url('rss', 'm=forums'),
-	'FORUMS_SECTIONS_PAGETITLE' => cot_breadcrumbs($title, cot::$cfg['homebreadcrumb']),
-	'FORUMS_SECTIONS_MARKALL' =>  (cot::$usr['id'] > 0) ? cot_rc_link($url_markall, cot::$L['forums_markallasread']) : '',
-	'FORUMS_SECTIONS_MARKALL_URL' => (cot::$usr['id'] > 0) ? $url_markall : ''
+	'FORUMS_SECTIONS_PAGETITLE' => cot_breadcrumbs($title, Cot::$cfg['homebreadcrumb']),
+	'FORUMS_SECTIONS_MARKALL' =>  (Cot::$usr['id'] > 0) ? cot_rc_link($url_markall, Cot::$L['forums_markallasread']) : '',
+	'FORUMS_SECTIONS_MARKALL_URL' => (Cot::$usr['id'] > 0) ? $url_markall : ''
 ));
 
 
@@ -148,7 +148,7 @@ foreach ($fstlvl as $x) {
 	if (isset($nxtlvl[$x]) && is_array($nxtlvl[$x])) {
 		$yy = 0;
 		foreach ($nxtlvl[$x] as $y) {
-			if (isset($nxtlvl[$y]) && is_array($nxtlvl[$y]) && cot::$cfg['forums']['cat_' . $y]['defstate']) {
+			if (isset($nxtlvl[$y]) && is_array($nxtlvl[$y]) && Cot::$cfg['forums']['cat_' . $y]['defstate']) {
 				$zz = 0;
 				foreach ($nxtlvl[$y] as $z) {
 					$zz++;
@@ -182,7 +182,7 @@ foreach ($fstlvl as $x) {
 			}
 
 			$t->assign(array(
-				'FORUMS_SECTIONS_ROW_SUBITEMS' => (isset($nxtlvl[$y]) && cot::$cfg['forums']['cat_' . $y]['defstate']) ? 1 : 0,
+				'FORUMS_SECTIONS_ROW_SUBITEMS' => (isset($nxtlvl[$y]) && Cot::$cfg['forums']['cat_' . $y]['defstate']) ? 1 : 0,
 				'FORUMS_SECTIONS_ROW_ACTIVITY' => cot_rc('forums_icon_section_activity', array('secact_num'=>$secact_num)),
 				'FORUMS_SECTIONS_ROW_ACTIVITYVALUE' => $secact_num,
 				'FORUMS_SECTIONS_ROW_ODDEVEN' => cot_build_oddeven($yy),
@@ -199,7 +199,7 @@ foreach ($fstlvl as $x) {
 	}
 	$xx++;
 
-	$fold = !cot::$cfg['forums']['cat_' . $x]['defstate'];
+	$fold = !Cot::$cfg['forums']['cat_' . $x]['defstate'];
 	if ($c) {
 		$fold = (int) ($c == 'fold' ? true : ($c == 'unfold' ? false : ($c == $x ? false : true)));
 	}
@@ -230,8 +230,8 @@ foreach (cot_getextplugins('forums.sections.tags') as $pl) {
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once cot::$cfg['system_dir'] . '/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';
 
-if (cot::$cache && cot::$usr['id'] === 0 && cot::$cfg['cache_forums']) {
-	cot::$cache->page->write();
+if (Cot::$cache && Cot::$usr['id'] === 0 && Cot::$cfg['cache_forums']) {
+	Cot::$cache->page->write();
 }

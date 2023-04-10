@@ -9,12 +9,12 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot::$db->registerTable('bbcode');
+Cot::$db->registerTable('bbcode');
 
 if (!isset($GLOBALS['bbcode_loaded']))
 {
 	cot_bbcode_load();
-	if (cot::$cfg['plugin']['bbcode']['smilies'])
+	if (Cot::$cfg['plugin']['bbcode']['smilies'])
 	{
 		cot_smilies_load();
 	}
@@ -215,13 +215,13 @@ function cot_parse_bbcode($text)
 	global $cfg, $cot_bbcodes, $cot_bbcode_containers, $sys, $cot_smilies, $L, $usr;
 
 	$code = [];
-	$unique_seed = cot::$sys['unique'];
+	$unique_seed = Cot::$sys['unique'];
 	$ii = 10000;
 
 	$text = htmlspecialchars($text);
-	cot::$cfg['plugin']['bbcode']['parse_autourls'] && $text = cot_parse_autourls($text);
+	Cot::$cfg['plugin']['bbcode']['parse_autourls'] && $text = cot_parse_autourls($text);
 
-	$parse_smilies = cot::$cfg['plugin']['bbcode']['smilies'];
+	$parse_smilies = Cot::$cfg['plugin']['bbcode']['smilies'];
 
 	if ($parse_smilies && is_array($cot_smilies)) {
 		foreach ($cot_smilies as $k => $v) {

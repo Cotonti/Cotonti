@@ -9,15 +9,15 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'a');
-cot_block(cot::$usr['auth_read']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'a');
+cot_block(Cot::$usr['auth_read']);
 
 $t = new XTemplate(cot_tplfile('admin.infos', 'core'));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), cot::$L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=infos'), cot::$L['adm_infos']);
-$adminhelp = cot::$L['adm_help_versions'];
-$adminTitle = cot::$L['adm_infos'];
+$adminpath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=infos'), Cot::$L['adm_infos']);
+$adminhelp = Cot::$L['adm_help_versions'];
+$adminTitle = Cot::$L['adm_infos'];
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.infos.first') as $pl)
@@ -31,16 +31,16 @@ foreach (cot_getextplugins('admin.infos.first') as $pl)
 $t->assign(cot_generate_infotags('ADMIN_INFOS_'));
 
 $t->assign(array(
-	'ADMIN_INFOS_PHPVER' => (function_exists('phpversion')) ? phpversion() : cot::$L['adm_help_config'],
-	'ADMIN_INFOS_ZENDVER' => (function_exists('zend_version')) ? zend_version() : cot::$L['adm_help_config'],
-	'ADMIN_INFOS_INTERFACE' => (function_exists('php_sapi_name')) ? php_sapi_name() : cot::$L['adm_help_config'],
+	'ADMIN_INFOS_PHPVER' => (function_exists('phpversion')) ? phpversion() : Cot::$L['adm_help_config'],
+	'ADMIN_INFOS_ZENDVER' => (function_exists('zend_version')) ? zend_version() : Cot::$L['adm_help_config'],
+	'ADMIN_INFOS_INTERFACE' => (function_exists('php_sapi_name')) ? php_sapi_name() : Cot::$L['adm_help_config'],
 	'ADMIN_INFOS_CACHEDRIVERS' => (isset($cot_cache_drivers) && is_array($cot_cache_drivers)) ? implode(', ', $cot_cache_drivers) : '',
 	'ADMIN_INFOS_OS' => (function_exists('php_uname')) ? php_uname() : $L['adm_help_config'],
-	'ADMIN_INFOS_DATE' => cot_date('datetime_medium', cot::$sys['now'], false),
+	'ADMIN_INFOS_DATE' => cot_date('datetime_medium', Cot::$sys['now'], false),
 	'ADMIN_INFOS_GMDATE' => gmdate('Y-m-d H:i'),
-	'ADMIN_INFOS_GMTTIME' => cot::$usr['gmttime'],
-	'ADMIN_INFOS_USRTIME' => cot::$usr['localtime'],
-	'ADMIN_INFOS_TIMETEXT' => cot::$usr['timetext']
+	'ADMIN_INFOS_GMTTIME' => Cot::$usr['gmttime'],
+	'ADMIN_INFOS_USRTIME' => Cot::$usr['localtime'],
+	'ADMIN_INFOS_TIMETEXT' => Cot::$usr['timetext']
 ));
 
 /* === Hook === */

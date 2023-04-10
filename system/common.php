@@ -31,7 +31,8 @@ if ($cfg['debug_mode']) {
 	require_once $cfg['system_dir'] . '/debug.php';
 }
 
-require_once './vendor/autoload.php';
+
+require_once './lib/autoload.php';
 
 register_shutdown_function('cot_shutdown');
 
@@ -262,10 +263,10 @@ if (
     (empty($cot_plugins) && !defined('COT_INSTALL'))
     || empty($cot_modules)
 ) {
-    $extensions = cot::$db->query("SELECT * FROM " . cot::$db->core . " WHERE ct_state = 1 AND ct_lock = 0")->fetchAll();
+    $extensions = Cot::$db->query("SELECT * FROM " . Cot::$db->core . " WHERE ct_state = 1 AND ct_lock = 0")->fetchAll();
 }
 if (empty($cot_plugins) && !defined('COT_INSTALL')) {
-	$sql = cot::$db->query("SELECT pl_code, pl_file, pl_hook, pl_module, pl_title FROM " . cot::$db->plugins .
+	$sql = Cot::$db->query("SELECT pl_code, pl_file, pl_hook, pl_module, pl_title FROM " . Cot::$db->plugins .
 	" WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
 
 	$cot_plugins = [];
@@ -291,9 +292,9 @@ if (empty($cot_plugins) && !defined('COT_INSTALL')) {
 		}
 	}
 
-	if (!empty(cot::$cache)) {
-		cot::$cache->db->store('cot_plugins', $cot_plugins, 'system');
-		cot::$cache->db->store('cot_plugins_active', $cot_plugins_active, 'system');
+	if (!empty(Cot::$cache)) {
+		Cot::$cache->db->store('cot_plugins', $cot_plugins, 'system');
+		Cot::$cache->db->store('cot_plugins_active', $cot_plugins_active, 'system');
 	}
 }
 
@@ -318,9 +319,9 @@ if (empty($cot_modules)) {
 		}
 	}
 
-	if (!empty(cot::$cache)) {
-		cot::$cache->db->store('cot_modules', $cot_modules, 'system');
-		cot::$cache->db->store('cot_plugins_enabled', $cot_plugins_enabled, 'system');
+	if (!empty(Cot::$cache)) {
+		Cot::$cache->db->store('cot_modules', $cot_modules, 'system');
+		Cot::$cache->db->store('cot_plugins_enabled', $cot_plugins_enabled, 'system');
 	}
 }
 unset($extensions);

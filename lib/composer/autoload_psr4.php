@@ -6,6 +6,8 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'cot\\plugins\\' => array($baseDir . '/plugins'),
+    'cot\\modules\\' => array($baseDir . '/modules'),
     'cot\\' => array($baseDir . '/system'),
-    '' => array($baseDir . '/lib'),
+    '' => array($vendorDir . ''),
 );

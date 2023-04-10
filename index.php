@@ -173,8 +173,8 @@ else
 unset($ext);
 
 // Load the requested extension
-if (cot::$env['type'] == 'plug') {
-	require_once cot::$cfg['system_dir'] . '/plugin.php';
+if (Cot::$env['type'] == 'plug') {
+	require_once Cot::$cfg['system_dir'] . '/plugin.php';
 } else {
-	require_once cot::$cfg['modules_dir'] . '/' . cot::$env['ext'] . '/' . cot::$env['ext'] . '.php';
+	require_once Cot::$cfg['modules_dir'] . '/' . Cot::$env['ext'] . '/' . Cot::$env['ext'] . '.php';
 }

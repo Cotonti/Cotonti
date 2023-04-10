@@ -15,18 +15,18 @@ global $db_users;
 
 if (empty($db_users)) {
     // Registering tables
-    cot::$db->registerTable('users');
+    Cot::$db->registerTable('users');
 }
 
 $changeCollation = false;
 if (
-    cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
-    (empty(cot::$cfg['mysqlcollate']) || cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
+    Cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
+    (empty(Cot::$cfg['mysqlcollate']) || Cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
 ) {
     $changeCollation = true;
 }
 
-cot::$db->query("
+Cot::$db->query("
     UPDATE `{$db_users}` SET `user_banexpire`='0' WHERE `user_banexpire` IS NULL;
     UPDATE `{$db_users}` SET `user_password`='' WHERE `user_password` IS NULL;
     UPDATE `{$db_users}` SET `user_passfunc`='' WHERE `user_passfunc` IS NULL;
@@ -65,7 +65,7 @@ cot::$db->query("
         MODIFY `user_token` char(16) DEFAULT '',
         ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_users}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_users}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }

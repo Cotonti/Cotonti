@@ -9,8 +9,8 @@
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'a');
-cot_block(cot::$usr['isadmin']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'a');
+cot_block(Cot::$usr['isadmin']);
 
 require_once cot_incfile('extrafields');
 
@@ -18,7 +18,7 @@ $extra_blacklist = array($db_auth, $db_cache, $db_cache_bindings, $db_core, $db_
 $extra_whitelist = array(
 	$db_structure => array(
 		'name' => $db_structure,
-		'caption' => cot::$L['Categories'],
+		'caption' => Cot::$L['Categories'],
 		'type' => 'system',
 		'code' => 'structure',
 		'tags' => array(
@@ -29,10 +29,10 @@ $extra_whitelist = array(
 			)
 	)
 );
-$adminpath[] = array(cot_url('admin', 'm=other'), cot::$L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=extrafields'), cot::$L['adm_extrafields']);
-$adminTitle = cot::$L['adm_extrafields'];
-$maxperpage = (is_int(cot::$cfg['maxrowsperpage']) && cot::$cfg['maxrowsperpage'] > 0 || ctype_digit(cot::$cfg['maxrowsperpage'])) ? cot::$cfg['maxrowsperpage'] : 15;
+$adminpath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=extrafields'), Cot::$L['adm_extrafields']);
+$adminTitle = Cot::$L['adm_extrafields'];
+$maxperpage = (is_int(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperpage'] > 0 || ctype_digit(Cot::$cfg['maxrowsperpage'])) ? Cot::$cfg['maxrowsperpage'] : 15;
 
 $t = new XTemplate(cot_tplfile(array('admin', 'extrafields', $n), 'core'));
 
@@ -62,7 +62,7 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 			}
 		}
 	}
-	cot_import('alltables', 'G', 'BOL') && $adminpath[] = array(cot_url('admin', 'm=extrafields&alltables=1'), cot::$L['adm_extrafields_all']);
+	cot_import('alltables', 'G', 'BOL') && $adminpath[] = array(cot_url('admin', 'm=extrafields&alltables=1'), Cot::$L['adm_extrafields_all']);
 	$ii = 0;
 	foreach ($tablelist as $table) {
 		$name = '';
@@ -109,7 +109,7 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 	list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 	$parse_type = array('HTML', 'Text');
 
-	$adminpath[] = array(cot_url('admin', 'm=extrafields&n='.$n), cot::$L['adm_extrafields_table'].' '.$n . ((isset($extra_whitelist[$n])) ? ' - ' . $extra_whitelist[$n]['caption'] : ''));
+	$adminpath[] = array(cot_url('admin', 'm=extrafields&n='.$n), Cot::$L['adm_extrafields_table'].' '.$n . ((isset($extra_whitelist[$n])) ? ' - ' . $extra_whitelist[$n]['caption'] : ''));
 
 	if ($a == 'add' && !empty($_POST)) {
 		$field['field_name'] = cot_import('field_name', 'P', 'ALP');
@@ -202,9 +202,9 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
                     );
 
 					if ($fieldresult == 1) {
-						cot_message(sprintf(cot::$L['adm_extrafield_updated'], $k));
+						cot_message(sprintf(Cot::$L['adm_extrafield_updated'], $k));
 					} elseif (!$fieldresult) {
-						cot_error(sprintf(cot::$L['adm_extrafield_not_updated'], $k));
+						cot_error(sprintf(Cot::$L['adm_extrafield_not_updated'], $k));
 					}
 				}
 			}
@@ -232,13 +232,13 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 		//cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
 	}
 
-	cot::$cache && cot::$cache->db->remove('cot_extrafields', 'system');
+	Cot::$cache && Cot::$cache->db->remove('cot_extrafields', 'system');
 	cot_load_extrafields(true);
 
-	$totalitems = cot::$db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$n'")->fetchColumn();
-	$res = cot::$db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$n' ORDER BY field_name ASC LIMIT $d, ".$maxperpage);
+	$totalitems = Cot::$db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$n'")->fetchColumn();
+	$res = Cot::$db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$n' ORDER BY field_name ASC LIMIT $d, ".$maxperpage);
 
-	$pagenav = cot_pagenav('admin', 'm=extrafields&n='.$n, $d, $totalitems, $maxperpage, 'd', '', cot::$cfg['jquery'] && cot::$cfg['turnajax']);
+	$pagenav = cot_pagenav('admin', 'm=extrafields&n='.$n, $d, $totalitems, $maxperpage, 'd', '', Cot::$cfg['jquery'] && Cot::$cfg['turnajax']);
 
 	$field_types = array('input', 'inputint', 'currency', 'double', 'textarea', 'select', 'checkbox', 'radio', 'datetime', 'country', 'range', 'checklistbox', 'file'/* , 'filesize' */);
 
@@ -295,11 +295,11 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 			'ADMIN_EXTRAFIELDS_ROW_REQUIRED' => cot_checkbox(
                 $row['field_required'],
                 'field_required[' . $row['field_name'] . ']',
-                cot::$L['adm_extrafield_required'],
+                Cot::$L['adm_extrafield_required'],
                 'class="exfldrequired"'
             ),
-			'ADMIN_EXTRAFIELDS_ROW_ENABLED' => cot_checkbox($row['field_enabled'], 'field_enabled['.$row['field_name'].']', '', 'title="'.cot::$L['adm_extrafield_enable'].'" class="exfldenabled" '),
-			'ADMIN_EXTRAFIELDS_ROW_PARSE' => cot_selectbox($row['field_parse'], 'field_parse['.$row['field_name'].']', $parse_type, array(cot::$L['Default'], cot::$L['No']), false, 'class="exfldparse"'),
+			'ADMIN_EXTRAFIELDS_ROW_ENABLED' => cot_checkbox($row['field_enabled'], 'field_enabled['.$row['field_name'].']', '', 'title="'.Cot::$L['adm_extrafield_enable'].'" class="exfldenabled" '),
+			'ADMIN_EXTRAFIELDS_ROW_PARSE' => cot_selectbox($row['field_parse'], 'field_parse['.$row['field_name'].']', $parse_type, array(Cot::$L['Default'], Cot::$L['No']), false, 'class="exfldparse"'),
 			'ADMIN_EXTRAFIELDS_ROW_BIGNAME' => strtoupper($row['field_name']),
 			'ADMIN_EXTRAFIELDS_ROW_ID' => $row['field_name'],
 			'ADMIN_EXTRAFIELDS_ROW_DEL_URL' => $deleteUrl,
@@ -341,10 +341,10 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 		'ADMIN_EXTRAFIELDS_REQUIRED' => cot_checkbox(
             0,
             'field_required',
-            cot::$L['adm_extrafield_required'],
+            Cot::$L['adm_extrafield_required'],
             'class="exfldrequired"'
         ),
-		'ADMIN_EXTRAFIELDS_PARSE' => cot_selectbox('HTML', 'field_parse', $parse_type, array(cot::$L['Default'], cot::$L['No']), false, 'class="exfldparse"'),
+		'ADMIN_EXTRAFIELDS_PARSE' => cot_selectbox('HTML', 'field_parse', $parse_type, array(Cot::$L['Default'], Cot::$L['No']), false, 'class="exfldparse"'),
 		'ADMIN_EXTRAFIELDS_URL_FORM_ADD' => cot_url('admin', 'm=extrafields&n='.$n.'&a=add&d='.$durl),
 		'ADMIN_EXTRAFIELDS_PAGINATION_PREV' => $pagenav['prev'],
 		'ADMIN_EXTRAFIELDS_PAGNAV' => $pagenav['main'],
@@ -359,9 +359,9 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 	if (isset($extra_whitelist[$n]['help'])) {
 		$adminhelp = $extra_whitelist[$n]['help'];
 	} else {
-		$adminhelp = cot::$L['adm_help_info'];
+		$adminhelp = Cot::$L['adm_help_info'];
 		if(!empty($tags_list)) {
-			$adminhelp .= cot::$L['adm_help_newtags'].'<ul class="follow">'.$tags_list_li.'</ul>';
+			$adminhelp .= Cot::$L['adm_help_newtags'].'<ul class="follow">'.$tags_list_li.'</ul>';
 		}
 	}
 

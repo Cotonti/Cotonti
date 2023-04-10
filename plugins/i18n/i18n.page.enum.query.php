@@ -19,7 +19,7 @@ global $i18n_read, $i18n_locale;
 
 if (isset($i18n_notmain) && $i18n_notmain && $i18n_read) {
     $cns_join_columns .= ',i18n.*';
-    $cns_join_tables .= ' LEFT JOIN ' . cot::$db->i18n_pages .
-        " AS i18n ON i18n.ipage_id = p.page_id AND i18n.ipage_locale = " . cot::$db->quote($i18n_locale) .
+    $cns_join_tables .= ' LEFT JOIN ' . Cot::$db->i18n_pages .
+        " AS i18n ON i18n.ipage_id = p.page_id AND i18n.ipage_locale = " . Cot::$db->quote($i18n_locale) .
         ' AND i18n.ipage_id IS NOT NULL';
 }

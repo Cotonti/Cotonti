@@ -15,8 +15,8 @@ require_once cot_langfile('tags', 'plug');
 require_once cot_incfile('tags', 'plug', 'resources');
 
 // Global variables
-cot::$db->registerTable('tags');
-cot::$db->registerTable('tag_references');
+Cot::$db->registerTable('tags');
+Cot::$db->registerTable('tag_references');
 
 /**
  * Tags a given item from a specific area with a keyword
@@ -69,7 +69,7 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 
 	$cache_name = 'tag_cloud_cache_' . $area.'_'.$order;
 	if ($limit) $cache_name .= '_'.$limit;
-	if (cot::$cache && isset($GLOBALS[$cache_name]) && is_array($GLOBALS[$cache_name])) {
+	if (Cot::$cache && isset($GLOBALS[$cache_name]) && is_array($GLOBALS[$cache_name])) {
 		return $GLOBALS[$cache_name];
 	}
 	$res = array();
@@ -95,7 +95,7 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 	}
 	$where = $area == 'all' ? '' : "WHERE tag_area = '$area'";
 	if ($order) $order = "ORDER BY $order";
-	$sql = cot::$db->query("SELECT `tag`, COUNT(*) AS `cnt` FROM $db_tag_references $where GROUP BY `tag` $order $limit");
+	$sql = Cot::$db->query("SELECT `tag`, COUNT(*) AS `cnt` FROM $db_tag_references $where GROUP BY `tag` $order $limit");
 	while ($row = $sql->fetch()) {
 		$res[$row['tag']] = $row['cnt'];
 	}
@@ -109,7 +109,7 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 		$res = $rnd_res;
 	}
 	$sql->closeCursor();
-    cot::$cache && cot::$cache->db->store($cache_name, $res, COT_DEFAULT_REALM, 300);
+    Cot::$cache && Cot::$cache->db->store($cache_name, $res, COT_DEFAULT_REALM, 300);
 
 	return $res;
 }

@@ -18,6 +18,6 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('i18n', 'plug');
 
 // Register restoration table
-$trash_types['i18n_page'] = cot::$db->i18n_pages;
+$trash_types['i18n_page'] = Cot::$db->i18n_pages;
 
 // Actually no functions are required so far

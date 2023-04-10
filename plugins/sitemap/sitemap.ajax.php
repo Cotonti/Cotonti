@@ -21,12 +21,12 @@ header('Content-Type: application/xml; charset=utf-8');
 
 // Large sitemaps are split into pages
 $d = cot_import('d', 'G', 'ALP');
-$perpage = (int) cot::$cfg['plugin']['sitemap']['perpage'];
+$perpage = (int) Cot::$cfg['plugin']['sitemap']['perpage'];
 
-$count_file = cot::$cfg['cache_dir'] . '/sitemap/sitemap.count';
+$count_file = Cot::$cfg['cache_dir'] . '/sitemap/sitemap.count';
 if (
     file_exists($count_file) && filesize($count_file) > 0
-	&& (cot::$sys['now'] - filemtime($count_file) < cot::$cfg['plugin']['sitemap']['cache_ttl'])
+	&& (Cot::$sys['now'] - filemtime($count_file) < Cot::$cfg['plugin']['sitemap']['cache_ttl'])
 ) {
 	// Cache is valid
 	$regenerate = false;
@@ -45,18 +45,18 @@ if ($regenerate) {
 	sitemap_parse($t, $items, array(
 		'url'  => '', // root
 		'date' => '', // omit
-		'freq' => cot::$cfg['plugin']['sitemap']['index_freq'],
-		'prio' => cot::$cfg['plugin']['sitemap']['index_prio']
+		'freq' => Cot::$cfg['plugin']['sitemap']['index_freq'],
+		'prio' => Cot::$cfg['plugin']['sitemap']['index_prio']
 	));
 
-	if (cot::$cfg['plugin']['sitemap']['page'] && cot_module_active('page')) {
+	if (Cot::$cfg['plugin']['sitemap']['page'] && cot_module_active('page')) {
 		// Sitemap for page module
 		require_once cot_incfile('page', 'module');
 
 		// Page categories
 		$auth_cache = array();
 
-		$category_list = cot::$structure['page'];
+		$category_list = Cot::$structure['page'];
 
 		/* === Hook === */
 		foreach (cot_getextplugins('sitemap.page.categorylist') as $pl) {
@@ -97,8 +97,8 @@ if ($regenerate) {
 		/* ===== */
 
 		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . join(' AND ', $sitemap_where) : '';
-		$res = cot::$db->query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_updated $sitemap_join_columns
-			FROM " . cot::$db->pages . " AS p $sitemap_join_tables
+		$res = Cot::$db->query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_updated $sitemap_join_columns
+			FROM " . Cot::$db->pages . " AS p $sitemap_join_tables
 			$sitemap_where
 			ORDER BY p.page_cat, p.page_id");
 		foreach ($res->fetchAll() as $row) {
@@ -122,16 +122,16 @@ if ($regenerate) {
 
 		// Get forum stats
 		$cat_top = array();
-		$res = cot::$db->query('SELECT * FROM ' . cot::$db->forum_stats . ' ORDER by fs_cat DESC');
+		$res = Cot::$db->query('SELECT * FROM ' . Cot::$db->forum_stats . ' ORDER by fs_cat DESC');
 		foreach ($res->fetchAll() as $row) {
 			$cat_top[$row['fs_cat']] = $row;
 		}
 
 		// Forums categories
 		$auth_cache = array();
-		$maxrowsperpage = cot::$cfg['forums']['maxtopicsperpage'];
+		$maxrowsperpage = Cot::$cfg['forums']['maxtopicsperpage'];
 
-		$category_list = cot::$structure['forums'];
+		$category_list = Cot::$structure['forums'];
 
 		/* === Hook === */
 		foreach (cot_getextplugins('sitemap.forums.categorylist') as $pl) {

@@ -25,10 +25,10 @@ require_once cot_incfile('forms');
 
 $sq = cot_import('sq', 'R', 'TXT');
 
-$sq = cot::$db->prep($sq);
+$sq = Cot::$db->prep($sq);
 $hl = urlencode(mb_strtoupper($sq));
 $tab = cot_import('tab', 'R', 'ALP');
-$cfg_maxitems = is_numeric(cot::$cfg['plugin']['search']['maxitems']) ? abs(floor(cot::$cfg['plugin']['search']['maxitems'])) : 50;
+$cfg_maxitems = is_numeric(Cot::$cfg['plugin']['search']['maxitems']) ? abs(floor(Cot::$cfg['plugin']['search']['maxitems'])) : 50;
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg_maxitems);
 $totalitems = [];
 $pag_catauth = [];
@@ -72,24 +72,24 @@ if ($rs['frmtitle'] < 1 && $rs['frmtext'] < 1) {
 }
 $rs['setuser']  = isset($rs['setuser'])  ? cot_import($rs['setuser'], 'D', 'TXT') : '';
 $rs['setlimit'] = isset($rs['setlimit']) ? cot_import($rs['setlimit'], 'D', 'INT') : '';
-$rs['setfrom']  = cot::$sys['now'] - 31536000;
-$rs['setto']    = cot::$sys['now'];
+$rs['setfrom']  = Cot::$sys['now'] - 31536000;
+$rs['setto']    = Cot::$sys['now'];
 
 switch ($rs['setlimit']) {
 	case 1:
-		$rs['setfrom'] = cot::$sys['now'] - 1209600;
+		$rs['setfrom'] = Cot::$sys['now'] - 1209600;
 		break;
 
 	case 2:
-		$rs['setfrom'] = cot::$sys['now'] - 2592000;
+		$rs['setfrom'] = Cot::$sys['now'] - 2592000;
 		break;
 
 	case 3:
-		$rs['setfrom'] = cot::$sys['now'] - 7776000;
+		$rs['setfrom'] = Cot::$sys['now'] - 7776000;
 		break;
 
 	case 4:
-		$rs['setfrom'] = cot::$sys['now'] - 31536000;
+		$rs['setfrom'] = Cot::$sys['now'] - 31536000;
 		break;
 
 	case 5:
@@ -108,12 +108,12 @@ foreach (cot_getextplugins('search.first') as $pl)
 }
 /* ===== */
 
-if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && cot::$cfg['plugin']['search']['pagesearch']) {
+if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && Cot::$cfg['plugin']['search']['pagesearch']) {
 	// Making the category list
-	$pages_cat_list['all'] = cot::$L['plu_allcategories'];
-    if (!empty(cot::$structure['page'])) {
+	$pages_cat_list['all'] = Cot::$L['plu_allcategories'];
+    if (!empty(Cot::$structure['page'])) {
         $pagAuthAllCats = true;
-        foreach (cot::$structure['page'] as $code => $cat) {
+        foreach (Cot::$structure['page'] as $code => $cat) {
             if (in_array($code, ['all', 'system',])) {
                 continue;
             }
@@ -146,26 +146,26 @@ if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && cot::$cfg['pl
             false,
             'multiple="multiple"'
         ),
-		'PLUGIN_PAGE_RES_SORT' => cot_selectbox($rs['pagsort'], 'rs[pagsort]', array('date', 'title', 'count', 'cat'), array(cot::$L['plu_pag_res_sort1'], cot::$L['plu_pag_res_sort2'], cot::$L['plu_pag_res_sort3'], cot::$L['plu_pag_res_sort4']), false),
-		'PLUGIN_PAGE_RES_SORT_WAY' => cot_radiobox($rs['pagsort2'], 'rs[pagsort2]', array('DESC', 'ASC'), array(cot::$L['plu_sort_desc'], cot::$L['plu_sort_asc'])),
-		'PLUGIN_PAGE_SEARCH_NAMES' => cot_checkbox(($rs['pagtitle'] == 1 || count($rs['pagsub']) == 0), 'rs[pagtitle]', cot::$L['plu_pag_search_names']),
-		'PLUGIN_PAGE_SEARCH_DESC' => cot_checkbox(($rs['pagdesc'] == 1 || count($rs['pagsub']) == 0), 'rs[pagdesc]', cot::$L['plu_pag_search_desc']),
-		'PLUGIN_PAGE_SEARCH_TEXT' => cot_checkbox(($rs['pagtext'] == 1 || count($rs['pagsub']) == 0), 'rs[pagtext]', cot::$L['plu_pag_search_text']),
-		'PLUGIN_PAGE_SEARCH_SUBCAT' => cot_checkbox($rs['pagsubcat'], 'rs[pagsubcat]', cot::$L['plu_pag_set_subsec']),
-		'PLUGIN_PAGE_SEARCH_FILE' => cot_checkbox($rs['pagfile'] == 1, 'rs[pagfile]', cot::$L['plu_pag_search_file'])
+		'PLUGIN_PAGE_RES_SORT' => cot_selectbox($rs['pagsort'], 'rs[pagsort]', array('date', 'title', 'count', 'cat'), array(Cot::$L['plu_pag_res_sort1'], Cot::$L['plu_pag_res_sort2'], Cot::$L['plu_pag_res_sort3'], Cot::$L['plu_pag_res_sort4']), false),
+		'PLUGIN_PAGE_RES_SORT_WAY' => cot_radiobox($rs['pagsort2'], 'rs[pagsort2]', array('DESC', 'ASC'), array(Cot::$L['plu_sort_desc'], Cot::$L['plu_sort_asc'])),
+		'PLUGIN_PAGE_SEARCH_NAMES' => cot_checkbox(($rs['pagtitle'] == 1 || count($rs['pagsub']) == 0), 'rs[pagtitle]', Cot::$L['plu_pag_search_names']),
+		'PLUGIN_PAGE_SEARCH_DESC' => cot_checkbox(($rs['pagdesc'] == 1 || count($rs['pagsub']) == 0), 'rs[pagdesc]', Cot::$L['plu_pag_search_desc']),
+		'PLUGIN_PAGE_SEARCH_TEXT' => cot_checkbox(($rs['pagtext'] == 1 || count($rs['pagsub']) == 0), 'rs[pagtext]', Cot::$L['plu_pag_search_text']),
+		'PLUGIN_PAGE_SEARCH_SUBCAT' => cot_checkbox($rs['pagsubcat'], 'rs[pagsubcat]', Cot::$L['plu_pag_set_subsec']),
+		'PLUGIN_PAGE_SEARCH_FILE' => cot_checkbox($rs['pagfile'] == 1, 'rs[pagfile]', Cot::$L['plu_pag_search_file'])
 	));
 
-    if ($tab == 'pag' || (empty($tab) && cot::$cfg['plugin']['search']['extrafilters'])) {
+    if ($tab == 'pag' || (empty($tab) && Cot::$cfg['plugin']['search']['extrafilters'])) {
 		$t->parse('MAIN.PAGES_OPTIONS');
 	}
 }
 
-if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && cot::$cfg['plugin']['search']['forumsearch']) {
-	$forum_cat_list['all'] = cot::$L['plu_allsections'];
-    if (!empty(cot::$structure['forums'])) {
+if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && Cot::$cfg['plugin']['search']['forumsearch']) {
+	$forum_cat_list['all'] = Cot::$L['plu_allsections'];
+    if (!empty(Cot::$structure['forums'])) {
         $forumAuthAllCats = true;
         $forumAdminAllCats = true;
-        foreach (cot::$structure['forums'] as $code => $cat) {
+        foreach (Cot::$structure['forums'] as $code => $cat) {
             if (in_array($code, ['all', 'system',])) {
                 continue;
             }
@@ -197,15 +197,15 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && cot::$cfg['
             false,
             'multiple="multiple"'
         ),
-		'PLUGIN_FORUM_RES_SORT' => cot_selectbox($rs['frmsort'], 'rs[frmsort]', array('updated', 'creationdate', 'title', 'postcount', 'viewcount', 'sectionid'), array(cot::$L['plu_frm_res_sort1'], cot::$L['plu_frm_res_sort2'], cot::$L['plu_frm_res_sort3'], cot::$L['plu_frm_res_sort4'], cot::$L['plu_frm_res_sort5'], cot::$L['plu_frm_res_sort6']), false),
-		'PLUGIN_FORUM_RES_SORT_WAY' => cot_radiobox($rs['frmsort2'], 'rs[frmsort2]', array('DESC', 'ASC'), array(cot::$L['plu_sort_desc'], cot::$L['plu_sort_asc'])),
-		'PLUGIN_FORUM_SEARCH_NAMES' => cot_checkbox(($rs['frmtitle'] == 1 || count($rs['frmsub']) == 0), 'rs[frmtitle]', cot::$L['plu_frm_search_names']),
-		'PLUGIN_FORUM_SEARCH_POST' => cot_checkbox(($rs['frmtext'] == 1 || count($rs['frmsub']) == 0), 'rs[frmtext]', cot::$L['plu_frm_search_post']),
-		'PLUGIN_FORUM_SEARCH_ANSW' => cot_checkbox(($rs['frmreply'] == 1 || count($rs['frmsub']) == 0), 'rs[frmreply]', cot::$L['plu_frm_search_answ']),
-		'PLUGIN_FORUM_SEARCH_SUBCAT' => cot_checkbox($rs['frmsubcat'], 'rs[frmsubcat]', cot::$L['plu_frm_set_subsec'])
+		'PLUGIN_FORUM_RES_SORT' => cot_selectbox($rs['frmsort'], 'rs[frmsort]', array('updated', 'creationdate', 'title', 'postcount', 'viewcount', 'sectionid'), array(Cot::$L['plu_frm_res_sort1'], Cot::$L['plu_frm_res_sort2'], Cot::$L['plu_frm_res_sort3'], Cot::$L['plu_frm_res_sort4'], Cot::$L['plu_frm_res_sort5'], Cot::$L['plu_frm_res_sort6']), false),
+		'PLUGIN_FORUM_RES_SORT_WAY' => cot_radiobox($rs['frmsort2'], 'rs[frmsort2]', array('DESC', 'ASC'), array(Cot::$L['plu_sort_desc'], Cot::$L['plu_sort_asc'])),
+		'PLUGIN_FORUM_SEARCH_NAMES' => cot_checkbox(($rs['frmtitle'] == 1 || count($rs['frmsub']) == 0), 'rs[frmtitle]', Cot::$L['plu_frm_search_names']),
+		'PLUGIN_FORUM_SEARCH_POST' => cot_checkbox(($rs['frmtext'] == 1 || count($rs['frmsub']) == 0), 'rs[frmtext]', Cot::$L['plu_frm_search_post']),
+		'PLUGIN_FORUM_SEARCH_ANSW' => cot_checkbox(($rs['frmreply'] == 1 || count($rs['frmsub']) == 0), 'rs[frmreply]', Cot::$L['plu_frm_search_answ']),
+		'PLUGIN_FORUM_SEARCH_SUBCAT' => cot_checkbox($rs['frmsubcat'], 'rs[frmsubcat]', Cot::$L['plu_frm_set_subsec'])
 	));
 
-	if ($tab == 'frm' || (empty($tab) && cot::$cfg['plugin']['search']['extrafilters'])) {
+	if ($tab == 'frm' || (empty($tab) && Cot::$cfg['plugin']['search']['extrafilters'])) {
 		$t->parse('MAIN.FORUMS_OPTIONS');
 	}
 }
@@ -213,11 +213,11 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && cot::$cfg['
 if (!empty($sq)) {
 	$words = explode(' ', preg_replace("'\s+'", " ", $sq));
 	$sqlsearch = '%'.implode('%', $words).'%';
-	if (mb_strlen($sq) < cot::$cfg['plugin']['search']['minsigns']) {
-		cot_error(cot::$L['plu_querytooshort'].cot::$R['code_error_separator'], '');
+	if (mb_strlen($sq) < Cot::$cfg['plugin']['search']['minsigns']) {
+		cot_error(Cot::$L['plu_querytooshort'].Cot::$R['code_error_separator'], '');
 	}
-	if (count($words) > cot::$cfg['plugin']['search']['maxwords']) {
-		cot_error(cot::$L['plu_toomanywords'].' '.cot::$cfg['plugin']['search']['maxwords'].cot::$R['code_error_separator']);
+	if (count($words) > Cot::$cfg['plugin']['search']['maxwords']) {
+		cot_error(Cot::$L['plu_toomanywords'].' '.Cot::$cfg['plugin']['search']['maxwords'].Cot::$R['code_error_separator']);
 	}
 	// Users LIST
 	$rs['setuser'] = trim($rs['setuser']);
@@ -227,11 +227,11 @@ if (!empty($sq)) {
 		foreach ($touser_src as $k => $i) {
 			$user_name = trim(cot_import($i, 'D', 'TXT'));
 			if (!empty($user_name)) {
-				$touser_sql[] = "'" . cot::$db->prep($user_name) . "'";
+				$touser_sql[] = "'" . Cot::$db->prep($user_name) . "'";
 			}
 		}
 		$touser_sql = '('.implode(',', $touser_sql).')';
-		$sql = cot::$db->query('SELECT user_id, user_name FROM ' . cot::$db->users .
+		$sql = Cot::$db->query('SELECT user_id, user_name FROM ' . Cot::$db->users .
             " WHERE user_name IN $touser_sql");
 		$totalusers = $sql->rowCount();
         $touser_ids = [];
@@ -240,7 +240,7 @@ if (!empty($sq)) {
 		}
 		$sql->closeCursor();
 		if ($totalusers == 0) {
-			cot_error(cot::$L['plu_usernotexist'].cot::$R['code_error_separator'], 'rs[setuser]');
+			cot_error(Cot::$L['plu_usernotexist'].Cot::$R['code_error_separator'], 'rs[setuser]');
 		}
 		$touser = ($totalusers > 0 && !cot_error_found()) ? 'IN ('.implode(',', $touser_ids).')' : '';
 	}
@@ -250,7 +250,7 @@ if (!empty($sq)) {
 	if (
         ($tab == 'pag' || empty($tab))
         && cot_module_active('page')
-        && cot::$cfg['plugin']['search']['pagesearch']
+        && Cot::$cfg['plugin']['search']['pagesearch']
         && !empty($pag_catauth)
         && !cot_error_found()
     ) {
@@ -278,42 +278,42 @@ if (!empty($sq)) {
 		}
 
         if (!empty($searchInCategories)) {
-            $searchInCategories = array_map(function ($value) {return cot::$db->quote($value);}, $searchInCategories);
+            $searchInCategories = array_map(function ($value) {return Cot::$db->quote($value);}, $searchInCategories);
             $where_and['cat'] = 'page_cat IN (' . implode(', ', $searchInCategories) . ')';
         }
 
 		$where_and['state'] = "page_state = 0";
 		$where_and['notcat'] = "page_cat <> 'system'";
-		$where_and['date'] = "page_begin <= ".cot::$sys['now']." AND (page_expire = 0 OR page_expire > ".cot::$sys['now'].")";
+		$where_and['date'] = "page_begin <= ".Cot::$sys['now']." AND (page_expire = 0 OR page_expire > ".Cot::$sys['now'].")";
 		$where_and['date2'] = ($rs['setlimit'] > 0) ? "page_date >= ".$rs['setfrom']." AND page_date <= ".$rs['setto'] : "";
 		$where_and['file'] = ($rs['pagfile'] == 1) ? "page_file = '1'" : "";
         $where_and['users'] = (!empty($touser)) ? "page_ownerid ".$touser : "";
 
         $where_or = [];
         if ($rs['pagtitle']) {
-            $where_or['title'] = 'p.page_title LIKE ' . cot::$db->quote($sqlsearch);
+            $where_or['title'] = 'p.page_title LIKE ' . Cot::$db->quote($sqlsearch);
         }
 
         if ($rs['pagdesc']) {
-            $where_or['desc'] = 'p.page_desc LIKE ' . cot::$db->quote($sqlsearch);
+            $where_or['desc'] = 'p.page_desc LIKE ' . Cot::$db->quote($sqlsearch);
         }
 
         if ($rs['pagtext']) {
-            $where_or['text'] = 'p.page_text LIKE ' . cot::$db->quote($sqlsearch);
+            $where_or['text'] = 'p.page_text LIKE ' . Cot::$db->quote($sqlsearch);
         }
 
         // String query for addition pages fields.
-		foreach (explode(',', trim(cot::$cfg['plugin']['search']['addfields'])) as $addfields_el) {
+		foreach (explode(',', trim(Cot::$cfg['plugin']['search']['addfields'])) as $addfields_el) {
 			$addfields_el = trim($addfields_el);
             if (!empty($addfields_el)) {
                 if (!isset($where_or[$addfields_el])) {
                     $where_or[$addfields_el] = '';
                 }
-                $where_or[$addfields_el] .= $addfields_el . " LIKE " . cot::$db->quote($sqlsearch);
+                $where_or[$addfields_el] .= $addfields_el . " LIKE " . Cot::$db->quote($sqlsearch);
             }
 		}
 
-		if (!cot::$db->fieldExists(cot::$db->pages, 'page_' . $rs['pagsort'])) {
+		if (!Cot::$db->fieldExists(Cot::$db->pages, 'page_' . $rs['pagsort'])) {
 			$rs['pagsort'] = 'date';
 		}
 
@@ -331,7 +331,7 @@ if (!empty($sq)) {
 
         $where_or = array_diff($where_or, array(''));
         if (empty($where_or)) {
-            $where_or['title'] = "p.page_title LIKE " . cot::$db->quote($sqlsearch);
+            $where_or['title'] = "p.page_title LIKE " . Cot::$db->quote($sqlsearch);
         }
         $where_and['or'] = '(' . implode(' OR ', $where_or) . ')';
         $where_and = array_diff($where_and, array(''));
@@ -342,7 +342,7 @@ if (!empty($sq)) {
         }
 
         if (empty($sql_page_string)) {
-            $queryBody = $search_join_columns . ' FROM ' . cot::$db->pages . ' AS p ' . $search_join_condition .
+            $queryBody = $search_join_columns . ' FROM ' . Cot::$db->pages . ' AS p ' . $search_join_condition .
                 ' WHERE ' . $where;
 
 			$sql_page_string = "SELECT p.* $queryBody ORDER BY $orderby LIMIT $d, " . $cfg_maxitems .
@@ -351,13 +351,13 @@ if (!empty($sq)) {
             $sqlCount = 'SELECT COUNT(*) ' . $queryBody . $search_union_query;
 		}
 
-		$sql = cot::$db->query($sql_page_string);
+		$sql = Cot::$db->query($sql_page_string);
 		$items = $sql->rowCount();
         if ($items > 0) {
             if ($d == 0 && $items < $cfg_maxitems) {
                 $totalitems[] = $items;
             } elseif (!empty($sqlCount)) {
-                $totalitems[] = cot::$db->query($sqlCount)->fetchColumn();
+                $totalitems[] = Cot::$db->query($sqlCount)->fetchColumn();
             }
         }
 
@@ -374,7 +374,7 @@ if (!empty($sq)) {
                 cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'].'&highlight='.$hl);
 			$t->assign(cot_generate_pagetags($row, 'PLUGIN_PR_'));
 			$t->assign(array(
-				'PLUGIN_PR_CATEGORY' => cot_rc_link($url_cat, cot::$structure['page'][$row['page_cat']]['tpath']),
+				'PLUGIN_PR_CATEGORY' => cot_rc_link($url_cat, Cot::$structure['page'][$row['page_cat']]['tpath']),
 				'PLUGIN_PR_CATEGORY_URL' => $url_cat,
 				'PLUGIN_PR_TITLE' => cot_rc_link($url_page, htmlspecialchars($row['page_title'])),
 				'PLUGIN_PR_TEXT' => cot_clear_mark($row['page_text'], $words),
@@ -400,7 +400,7 @@ if (!empty($sq)) {
 	if (
         ($tab == 'frm' || empty($tab))
         && cot_module_active('forums')
-        && cot::$cfg['plugin']['search']['forumsearch']
+        && Cot::$cfg['plugin']['search']['forumsearch']
         && !empty($frm_catauth)
         && !cot_error_found()
     ) {
@@ -414,7 +414,7 @@ if (!empty($sq)) {
                 $searchInCategories = array_unique($searchInCategories);
 			} else {
 				foreach ($rs['frmsub'] as $scat) {
-                    $searchInCategories[] = cot::$db->prep($scat);
+                    $searchInCategories[] = Cot::$db->prep($scat);
 				}
 			}
 
@@ -427,7 +427,7 @@ if (!empty($sq)) {
 		}
 
         if (!empty($searchInCategories)) {
-            $searchInCategories = array_map(function ($value) {return cot::$db->quote($value);}, $searchInCategories);
+            $searchInCategories = array_map(function ($value) {return Cot::$db->quote($value);}, $searchInCategories);
             $where_and['cat'] = 't.ft_cat IN (' . implode(', ', $searchInCategories) . ')';
         }
 
@@ -435,11 +435,11 @@ if (!empty($sq)) {
         if (!$forumAdminAllCats) {
             $sqlAdminCats = '';
             $sqlFirsPosterId = '';
-            if (cot::$usr > 0) {
+            if (Cot::$usr > 0) {
                 if (!empty($forumCategoryAdmin)) {
-                    $sqlFirsPosterId = ' OR ft_firstposterid = ' . cot::$usr['id'];
+                    $sqlFirsPosterId = ' OR ft_firstposterid = ' . Cot::$usr['id'];
                     $sqlAdminCats = array_map(
-                        function ($value) {return cot::$db->quote($value);},
+                        function ($value) {return Cot::$db->quote($value);},
                         $forumCategoryAdmin
                     );
                     $sqlAdminCats = ' OR t.ft_cat IN (' . implode(', ', $sqlAdminCats) . ')';
@@ -454,11 +454,11 @@ if (!empty($sq)) {
             'p.fp_creation >= ' . $rs['setfrom'] . ' AND p.fp_updated <= ' . $rs['setto'] : '';
 		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid " . $touser : "";
 
-		$where_or['title'] = ($rs['frmtitle'] == 1) ? "t.ft_title LIKE '".cot::$db->prep($sqlsearch)."'" : "";
-		$where_or['text'] = (($rs['frmtext'] == 1)) ? "p.fp_text LIKE '".cot::$db->prep($sqlsearch)."'" : "";
+		$where_or['title'] = ($rs['frmtitle'] == 1) ? "t.ft_title LIKE '".Cot::$db->prep($sqlsearch)."'" : "";
+		$where_or['text'] = (($rs['frmtext'] == 1)) ? "p.fp_text LIKE '".Cot::$db->prep($sqlsearch)."'" : "";
 
 		$where_or = array_diff($where_or, array(''));
-		count($where_or) || $where_or['title'] = "(t.ft_title LIKE '".cot::$db->prep($sqlsearch)."'";
+		count($where_or) || $where_or['title'] = "(t.ft_title LIKE '".Cot::$db->prep($sqlsearch)."'";
 		$where_and['or'] = '(' . implode(' OR ', $where_or) . ')';
 		$where_and = array_diff($where_and, array(''));
 		$where = implode(' AND ', $where_and);
@@ -469,37 +469,37 @@ if (!empty($sq)) {
 		$maxitems = $cfg_maxitems - $items;
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
 
-		if (!cot::$db->fieldExists(cot::$db->forum_topics, "ft_{$rs['frmsort']}")) {
+		if (!Cot::$db->fieldExists(Cot::$db->forum_topics, "ft_{$rs['frmsort']}")) {
 			$rs['frmsort'] = 'updated';
 		}
 
 		// We need to show only one last post from each found topic
-        $queryBody = ' FROM ' . cot::$db->forum_posts . ' AS p ' .
-		    'LEFT JOIN ' . cot::$db->forum_topics . ' AS t ON p.fp_topicid = t.ft_id ' .
+        $queryBody = ' FROM ' . Cot::$db->forum_posts . ' AS p ' .
+		    'LEFT JOIN ' . Cot::$db->forum_topics . ' AS t ON p.fp_topicid = t.ft_id ' .
             'JOIN (' .
                'SELECT fp_topicid, max(fp_creation) as max_created ' .
-               'FROM ' . cot::$db->forum_posts . ' as p ' .
-               'LEFT JOIN ' . cot::$db->forum_topics . ' AS t ON p.fp_topicid = t.ft_id ' .
+               'FROM ' . Cot::$db->forum_posts . ' as p ' .
+               'LEFT JOIN ' . Cot::$db->forum_topics . ' AS t ON p.fp_topicid = t.ft_id ' .
                $where . ' GROUP BY fp_topicid' .
             ')fp ON p.fp_creation = fp.max_created ' .
 			$where;
 
 		$query = "SELECT p.*, t.* $queryBody ORDER BY ft_" . $rs['frmsort'] . ' ' . $rs['frmsort2'] .
             " LIMIT $d, $maxitems";
-		$sql = cot::$db->query($query);
+		$sql = Cot::$db->query($query);
 		$items = $sql->rowCount();
         if ($items > 0) {
             if ($d == 0 && $items < $maxitems) {
                 $totalitems[] = $items;
             } else {
-                $totalitems[] = cot::$db->query('SELECT COUNT(*) ' . $queryBody)->fetchColumn();
+                $totalitems[] = Cot::$db->query('SELECT COUNT(*) ' . $queryBody)->fetchColumn();
             }
         }
 
 		$jj = 0;
 		while ($row = $sql->fetch()) {
 			if ($row['ft_updated'] > 0) {
-				$post_url = (cot::$cfg['plugin']['search']['searchurl'] == 'Single') ?
+				$post_url = (Cot::$cfg['plugin']['search']['searchurl'] == 'Single') ?
                     cot_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) :
                     cot_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
 				$t->assign(array(
@@ -533,7 +533,7 @@ if (!empty($sq)) {
 
 	if (array_sum($totalitems) < 1)
 	{
-		cot_error(cot::$L['plu_noneresult'].cot::$R['code_error_separator']);
+		cot_error(Cot::$L['plu_noneresult'].Cot::$R['code_error_separator']);
 	}
 	if (!cot_error_found())
 	{
@@ -559,25 +559,25 @@ if (!empty($sq)) {
 }
 
 // Search title
-$crumbs = array(array(cot_url('plug', 'e=search'), cot::$L['plu_search']));
+$crumbs = array(array(cot_url('plug', 'e=search'), Cot::$L['plu_search']));
 if (!empty($tab)) {
 	$crumbs[] = [
         cot_url('plug', 'e=search&tab='.$tab),
-        !empty(cot::$L['plu_tabs_'.$tab]) ? cot::$L['plu_tabs_'.$tab] : '',
+        !empty(Cot::$L['plu_tabs_'.$tab]) ? Cot::$L['plu_tabs_'.$tab] : '',
     ];
 }
-cot::$out['head'] .= cot::$R['code_noindex'];
-$search_subtitle = (empty($tab) || empty(cot::$L['plu_tabs_'.$tab])) ? cot::$L['plu_search'] :
-    cot::$L['plu_tabs_'.$tab].' - '.cot::$L['plu_search'];
-cot::$out['subtitle'] = empty($sq) ? $search_subtitle : htmlspecialchars(strip_tags($sq)).' - '.cot::$L['plu_result'];
+Cot::$out['head'] .= Cot::$R['code_noindex'];
+$search_subtitle = (empty($tab) || empty(Cot::$L['plu_tabs_'.$tab])) ? Cot::$L['plu_search'] :
+    Cot::$L['plu_tabs_'.$tab].' - '.Cot::$L['plu_search'];
+Cot::$out['subtitle'] = empty($sq) ? $search_subtitle : htmlspecialchars(strip_tags($sq)).' - '.Cot::$L['plu_result'];
 $t->assign(array(
-	'PLUGIN_TITLE' => cot_breadcrumbs($crumbs, cot::$cfg['homebreadcrumb'], true),
+	'PLUGIN_TITLE' => cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb'], true),
 	'PLUGIN_SEARCH_ACTION' => cot_url('plug', 'e=search&tab='.$tab),
-	'PLUGIN_SEARCH_TEXT' => cot_inputbox('text', 'sq', htmlspecialchars($sq), 'maxlength="'.cot::$cfg['plugin']['search']['maxsigns'].'"'),
+	'PLUGIN_SEARCH_TEXT' => cot_inputbox('text', 'sq', htmlspecialchars($sq), 'maxlength="'.Cot::$cfg['plugin']['search']['maxsigns'].'"'),
 	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rs[setuser]', htmlspecialchars($rs['setuser']), 'class="userinput"'),
-	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rs['setlimit'], 'rs[setlimit]', range(0, 5), array(cot::$L['plu_any_date'], cot::$L['plu_last_2_weeks'], cot::$L['plu_last_1_month'], cot::$L['plu_last_3_month'], cot::$L['plu_last_1_year'], cot::$L['plu_need_datas']), false),
-	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rfrom', (int) cot_date('Y', cot::$sys['now']) + 1),
-	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rto', (int) cot_date('Y', cot::$sys['now']) + 1),
+	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rs['setlimit'], 'rs[setlimit]', range(0, 5), array(Cot::$L['plu_any_date'], Cot::$L['plu_last_2_weeks'], Cot::$L['plu_last_1_month'], Cot::$L['plu_last_3_month'], Cot::$L['plu_last_1_year'], Cot::$L['plu_need_datas']), false),
+	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rfrom', (int) cot_date('Y', Cot::$sys['now']) + 1),
+	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rto', (int) cot_date('Y', Cot::$sys['now']) + 1),
 	'PLUGIN_SEARCH_FOUND' => (array_sum($totalitems) > 0) ? array_sum($totalitems) : '',
 ));
 
@@ -589,7 +589,7 @@ if (!empty($pagenav)) {
        'PLUGIN_PAGENEXT' => $pagenav['next'],
        'PLUGIN_CURRENTPAGE' => $pagenav['current'],
        'PLUGIN_TOTALLINES' => array_sum($totalitems),
-       'PLUGIN_MAXPERPAGE' => cot::$cfg['page']['cat___default']['maxrowsperpage'],
+       'PLUGIN_MAXPERPAGE' => Cot::$cfg['page']['cat___default']['maxrowsperpage'],
        'PLUGIN_TOTALPAGES' => $pagenav['total']
     ));
 }

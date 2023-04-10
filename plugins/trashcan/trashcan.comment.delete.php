@@ -16,6 +16,6 @@ Hooks=comments.delete
 defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('trashcan', 'plug');
 
-if (cot::$cfg['plugin']['trashcan']['trash_comment']) {
-	cot_trash_put('comment', cot::$L['comments_comment'] . " #" . $id . " (" . $row['com_author'].")", $id, $row);
+if (Cot::$cfg['plugin']['trashcan']['trash_comment']) {
+	cot_trash_put('comment', Cot::$L['comments_comment'] . " #" . $id . " (" . $row['com_author'].")", $id, $row);
 }

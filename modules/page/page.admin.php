@@ -15,26 +15,26 @@ Hooks=admin
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('page', 'any');
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', 'any');
 cot_block($usr['isadmin']);
 
 $t = new XTemplate(cot_tplfile('page.admin', 'module', true));
 
 require_once cot_incfile('page', 'module');
 
-$adminpath[] = array(cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
+$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
 $adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
-$adminpath[] = array(cot_url('admin', 'm='.$m), cot::$L['Administration']);
-$adminhelp = cot::$L['adm_help_page'];
-$adminTitle = cot::$L['Pages'];
+$adminpath[] = array(cot_url('admin', 'm='.$m), Cot::$L['Administration']);
+$adminhelp = Cot::$L['adm_help_page'];
+$adminTitle = Cot::$L['Pages'];
 
 $id = cot_import('id', 'G', 'INT');
 
-list($pg, $d, $durl) = cot_import_pagenav('d', cot::$cfg['maxrowsperpage']);
+list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['maxrowsperpage']);
 
 $sorttype = cot_import('sorttype', 'R', 'ALP');
 $sorttype = empty($sorttype) ? 'id' : $sorttype;
-if ($sorttype != 'id' && !cot::$db->fieldExists(cot::$db->pages, "page_$sorttype")) {
+if ($sorttype != 'id' && !Cot::$db->fieldExists(Cot::$db->pages, "page_$sorttype")) {
 	$sorttype = 'id';
 }
 $sqlsorttype = 'page_'.$sorttype;
@@ -44,19 +44,19 @@ $sort_type = cot_page_config_order(true);
 $sortway = cot_import('sortway', 'R', 'ALP');
 $sortway = empty($sortway) ? 'desc' : $sortway;
 $sort_way = array(
-	'asc' => cot::$L['Ascending'],
-	'desc' => cot::$L['Descending']
+	'asc' => Cot::$L['Ascending'],
+	'desc' => Cot::$L['Descending']
 );
 $sqlsortway = $sortway;
 
 $filter = cot_import('filter', 'R', 'ALP');
 $filter = empty($filter) ? 'valqueue' : $filter;
 $filter_type = array(
-	'all' => cot::$L['All'],
-	'valqueue' => cot::$L['adm_valqueue'],
-	'validated' => cot::$L['adm_validated'],
-	'expired' => cot::$L['adm_expired'],
-	'drafts' => cot::$L['page_drafts'],
+	'all' => Cot::$L['All'],
+	'valqueue' => Cot::$L['adm_valqueue'],
+	'validated' => Cot::$L['adm_validated'],
+	'expired' => Cot::$L['adm_expired'],
+	'drafts' => Cot::$L['page_drafts'],
 );
 
 $urlParams = ['m' => 'page'];
@@ -93,7 +93,7 @@ if ($filter == 'all') {
 }
 
 $catsub = cot_structure_children('page', '');
-if (count($catsub) < count(cot::$structure['page'])) {
+if (count($catsub) < count(Cot::$structure['page'])) {
 	$sqlwhere .= " AND page_cat IN ('" . join("','", $catsub) . "')";
 }
 
@@ -116,21 +116,21 @@ if ($a == 'validate') {
 	}
 	/* ===== */
 
-    $row = cot::$db->query('SELECT page_cat, page_begin, page_state FROM ' . cot::$db->pages .
+    $row = Cot::$db->query('SELECT page_cat, page_begin, page_state FROM ' . Cot::$db->pages .
         ' WHERE page_id = ?', $id)->fetch();
 	if ($row) {
         if ($row['page_state'] == COT_PAGE_STATE_PUBLISHED) {
-            cot_message('#' . $id . ' - ' . cot::$L['adm_already_updated']);
+            cot_message('#' . $id . ' - ' . Cot::$L['adm_already_updated']);
             cot_redirect($backUrl);
         }
 
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
         $data = ['page_state' => COT_PAGE_STATE_PUBLISHED];
-		if ($row['page_begin'] < cot::$sys['now']) {
-            $data['page_begin'] = cot::$sys['now'];
+		if ($row['page_begin'] < Cot::$sys['now']) {
+            $data['page_begin'] = Cot::$sys['now'];
 		}
-		$sql_page = cot::$db->update(cot::$db->pages, $data, "page_id = $id");
+		$sql_page = Cot::$db->update(Cot::$db->pages, $data, "page_id = $id");
 
 		/* === Hook  === */
 		foreach (cot_getextplugins('page.admin.validate.done') as $pl) {
@@ -138,21 +138,21 @@ if ($a == 'validate') {
 		}
 		/* ===== */
 
-		cot_log(cot::$L['Page'].' #' . $id . ' - ' . cot::$L['adm_queue_validated'], 'page', 'validate', 'done');
+		cot_log(Cot::$L['Page'].' #' . $id . ' - ' . Cot::$L['adm_queue_validated'], 'page', 'validate', 'done');
 
-		if (cot::$cache) {
-            cot::$cache->db->remove('structure', 'system');
-			if (cot::$cfg['cache_page']) {
-                cot::$cache->page->clear('page/' . str_replace('.', '/', cot::$structure['page'][$row['page_cat']]['path']));
+		if (Cot::$cache) {
+            Cot::$cache->db->remove('structure', 'system');
+			if (Cot::$cfg['cache_page']) {
+                Cot::$cache->page->clear('page/' . str_replace('.', '/', Cot::$structure['page'][$row['page_cat']]['path']));
 			}
-			if (cot::$cfg['cache_index']) {
-                cot::$cache->page->clear('index');
+			if (Cot::$cfg['cache_index']) {
+                Cot::$cache->page->clear('index');
 			}
 		}
-		cot_message('#' . $id . ' - ' . cot::$L['adm_queue_validated']);
+		cot_message('#' . $id . ' - ' . Cot::$L['adm_queue_validated']);
 
 	} else {
-        cot_error('#' . $id . ' - ' . cot::$L['nf']);
+        cot_error('#' . $id . ' - ' . Cot::$L['nf']);
 	}
 
     cot_redirect($backUrl);
@@ -166,35 +166,35 @@ if ($a == 'validate') {
 	}
 	/* ===== */
 
-    $row = cot::$db->query('SELECT page_cat, page_state FROM ' . cot::$db->pages . ' WHERE page_id = ?', $id)
+    $row = Cot::$db->query('SELECT page_cat, page_state FROM ' . Cot::$db->pages . ' WHERE page_id = ?', $id)
         ->fetch();
     if ($row) {
         if ($row['page_state'] == COT_PAGE_STATE_PENDING) {
-            cot_message('#' . $id . ' - ' . cot::$L['adm_already_updated']);
+            cot_message('#' . $id . ' - ' . Cot::$L['adm_already_updated']);
             cot_redirect($backUrl);
         }
 
-		cot::$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
+		Cot::$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
-		$sql_page = cot::$db->update(cot::$db->pages, ['page_state' => COT_PAGE_STATE_PENDING], 'page_id=?', $id);
+		$sql_page = Cot::$db->update(Cot::$db->pages, ['page_state' => COT_PAGE_STATE_PENDING], 'page_id=?', $id);
 
-		cot_log(cot::$L['Page'] . ' #' . $id . ' - ' . cot::$L['adm_queue_unvalidated'], 'page', 'unvalidated', 'done');
+		cot_log(Cot::$L['Page'] . ' #' . $id . ' - ' . Cot::$L['adm_queue_unvalidated'], 'page', 'unvalidated', 'done');
 
-		if (cot::$cache) {
-            cot::$cache->db->remove('structure', 'system');
-			if (cot::$cfg['cache_page']) {
-                cot::$cache->page->clear('page/' . str_replace('.', '/', cot::$structure['page'][$row['page_cat']]['path']));
+		if (Cot::$cache) {
+            Cot::$cache->db->remove('structure', 'system');
+			if (Cot::$cfg['cache_page']) {
+                Cot::$cache->page->clear('page/' . str_replace('.', '/', Cot::$structure['page'][$row['page_cat']]['path']));
 			}
-			if (cot::$cfg['cache_index']) {
-                cot::$cache->page->clear('index');
+			if (Cot::$cfg['cache_index']) {
+                Cot::$cache->page->clear('index');
 			}
 		}
 
-		cot_message('#' . $id . ' - ' . cot::$L['adm_queue_unvalidated']);
+		cot_message('#' . $id . ' - ' . Cot::$L['adm_queue_unvalidated']);
 
     } else {
-        cot_error('#' . $id . ' - ' . cot::$L['nf']);
+        cot_error('#' . $id . ' - ' . Cot::$L['nf']);
 	}
 
     cot_redirect($backUrl);
@@ -216,10 +216,10 @@ if ($a == 'validate') {
 		}
 		/* ===== */
 
-        cot_message('#' . $id . ' - ' . cot::$L['adm_queue_deleted']);
+        cot_message('#' . $id . ' - ' . Cot::$L['adm_queue_deleted']);
 
     } else {
-        cot_error('#' . $id . ' - ' . cot::$L['adm_failed']);
+        cot_error('#' . $id . ' - ' . Cot::$L['adm_failed']);
     }
 
     cot_redirect(cot_url('admin', $urlParams, '', true));
@@ -241,32 +241,32 @@ if ($a == 'validate') {
 				}
 				/* ===== */
 
-				$sql_page = cot::$db->query("SELECT * FROM $db_pages WHERE page_id=".(int)$i);
+				$sql_page = Cot::$db->query("SELECT * FROM $db_pages WHERE page_id=".(int)$i);
 				if ($row = $sql_page->fetch()) {
 					$id = $row['page_id'];
 					$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 					cot_block($usr['isadmin_local']);
 
-					$sql_page = cot::$db->update($db_pages, array('page_state' => 0), "page_id=$id");
+					$sql_page = Cot::$db->update($db_pages, array('page_state' => 0), "page_id=$id");
 
-					cot_log(cot::$L['Page'].' #'.$id.' - '. cot::$L['adm_queue_validated'], 'page', 'validate', 'done');
+					cot_log(Cot::$L['Page'].' #'.$id.' - '. Cot::$L['adm_queue_validated'], 'page', 'validate', 'done');
 
-					if (cot::$cache && cot::$cfg['cache_page']) {
-                        cot::$cache->page->clear(
-                            'page/' . str_replace('.', '/', cot::$structure['page'][$row['page_cat']]['path'])
+					if (Cot::$cache && Cot::$cfg['cache_page']) {
+                        Cot::$cache->page->clear(
+                            'page/' . str_replace('.', '/', Cot::$structure['page'][$row['page_cat']]['path'])
                         );
 					}
 
 					$perelik .= '#' . $id.', ';
 				} else {
-					$notfoundet .= '#' . $id . ' - ' . cot::$L['Error'] . '<br  />';
+					$notfoundet .= '#' . $id . ' - ' . Cot::$L['Error'] . '<br  />';
 				}
 			}
 		}
 
-		cot::$cache && cot::$cache->db->remove('structure', 'system');
-		if (cot::$cache && cot::$cfg['cache_index']) {
-            cot::$cache->page->clear('index');
+		Cot::$cache && Cot::$cache->db->remove('structure', 'system');
+		if (Cot::$cache && Cot::$cfg['cache_index']) {
+            Cot::$cache->page->clear('index');
 		}
 
         if (!empty($notfoundet)) {
@@ -274,7 +274,7 @@ if ($a == 'validate') {
         }
 
 		if (!empty($perelik)) {
-			cot_message($perelik . ' - ' . cot::$L['adm_queue_validated']);
+			cot_message($perelik . ' - ' . Cot::$L['adm_queue_validated']);
 		}
 
         cot_redirect(cot_url('admin', $urlParams, '', true));
@@ -302,7 +302,7 @@ if ($a == 'validate') {
                     $perelik .= '#' . $id . ', ';
 
                 } else {
-                    $notfoundet .= '#'. $id . ' - ' . cot::$L['Error'].'<br  />';
+                    $notfoundet .= '#'. $id . ' - ' . Cot::$L['Error'].'<br  />';
                 }
 			}
 		}
@@ -312,7 +312,7 @@ if ($a == 'validate') {
         }
 
         if (!empty($perelik)) {
-            cot_message($perelik . ' - ' . cot::$L['adm_queue_deleted']);
+            cot_message($perelik . ' - ' . Cot::$L['adm_queue_deleted']);
         }
 
         cot_redirect(cot_url('admin', $urlParams, '', true));
@@ -335,9 +335,9 @@ $extp = cot_getextplugins('page.admin.loop');
 /* ===== */
 foreach ($sql_page->fetchAll() as $row) {
     $sub_count = 0;
-    if (isset(cot::$structure['page'][$row["page_cat"]])) {
-        $sql_page_subcount = cot::$db->query("SELECT SUM(structure_count) FROM $db_structure WHERE structure_path LIKE '" .
-                cot::$db->prep(cot::$structure['page'][$row["page_cat"]]['rpath']) . "%' ");
+    if (isset(Cot::$structure['page'][$row["page_cat"]])) {
+        $sql_page_subcount = Cot::$db->query("SELECT SUM(structure_count) FROM $db_structure WHERE structure_path LIKE '" .
+                Cot::$db->prep(Cot::$structure['page'][$row["page_cat"]]['rpath']) . "%' ");
         $sub_count = $sql_page_subcount->fetchColumn();
     }
 	$row['page_file'] = intval($row['page_file']);
@@ -367,8 +367,8 @@ foreach ($sql_page->fetchAll() as $row) {
 
 $is_row_empty = ($sql_page->rowCount() == 0) ? true : false ;
 
-$totaldbpages = cot::$db->countRows($db_pages);
-$sql_page_queued = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->pages . ' WHERE page_state=' .
+$totaldbpages = Cot::$db->countRows($db_pages);
+$sql_page_queued = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->pages . ' WHERE page_state=' .
     COT_PAGE_STATE_PENDING);
 $sys['pagesqueued'] = $sql_page_queued->fetchColumn();
 

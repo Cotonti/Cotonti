@@ -24,7 +24,7 @@ if(file_exists($robotsTxtFilePath) && is_writable($robotsTxtFilePath)) {
 
 	foreach($siteMapLinks as $key => $val) {
 		if(!cot_url_check($val)){
-			$siteMapLinks[$key] = cot::$cfg['mainurl'].'/'.$siteMapLinks[$key];
+			$siteMapLinks[$key] = Cot::$cfg['mainurl'].'/'.$siteMapLinks[$key];
 		}
 	}
 

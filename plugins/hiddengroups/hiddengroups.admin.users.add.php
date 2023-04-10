@@ -20,9 +20,9 @@ Hooks=admin.users.add
 $rgroups['grp_hidden'] = cot_import('rhidden', 'P', 'BOL');
 
 if ($grp_id) {
-	cot::$db->update(cot::$db->groups, ['grp_hidden' => (int) $rgroups['grp_hidden']], 'grp_id = ?', $grp_id);
+	Cot::$db->update(Cot::$db->groups, ['grp_hidden' => (int) $rgroups['grp_hidden']], 'grp_id = ?', $grp_id);
 }
 
-if (!empty(cot::$cache) && !empty(cot::$cache->db)) {
-    cot::$cache->db->remove('cot_hiddenusers', 'system');
+if (!empty(Cot::$cache) && !empty(Cot::$cache->db)) {
+    Cot::$cache->db->remove('cot_hiddenusers', 'system');
 }

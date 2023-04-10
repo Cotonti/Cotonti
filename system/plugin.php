@@ -45,13 +45,13 @@ if (!empty($o)) {
 	cot_die_message(404);
 }
 
-if (!file_exists(cot::$cfg['plugins_dir'] . '/' . $extname)) {
+if (!file_exists(Cot::$cfg['plugins_dir'] . '/' . $extname)) {
 	cot_die_message(404);
 }
 
 // Initial permission check
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('plug', cot::$env['ext']);
-cot_block(cot::$usr['auth_read']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('plug', Cot::$env['ext']);
+cot_block(Cot::$usr['auth_read']);
 
 // Plugin requirements autoloading
 $req_files = array();
@@ -82,7 +82,7 @@ if (is_array($cot_plugins[$exthook])) {
 		if ($k['pl_code'] == $extname)
 		{
 			$out['plu_title'] = $k['pl_title'];
-			include cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
+			include Cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
 			$empty = false;
 		}
 	}
@@ -93,16 +93,16 @@ if ($empty) {
 }
 
 if (empty($out['subtitle'])) {
-	if (empty(cot::$L['plu_title']) && isset(cot::$L[$extname . '_title'])) {
-        cot::$L['plu_title'] = cot::$L[$extname . '_title'];
+	if (empty(Cot::$L['plu_title']) && isset(Cot::$L[$extname . '_title'])) {
+        Cot::$L['plu_title'] = Cot::$L[$extname . '_title'];
 	}
-    cot::$out['subtitle'] = empty(cot::$L['plu_title']) ? cot::$out['plu_title'] : cot::$L['plu_title'];
+    Cot::$out['subtitle'] = empty(Cot::$L['plu_title']) ? Cot::$out['plu_title'] : Cot::$L['plu_title'];
 }
-cot::$sys['sublocation'] = cot::$out['subtitle'];
+Cot::$sys['sublocation'] = Cot::$out['subtitle'];
 
 if ($ext_display_header) {
 	$t_plug = $t;
-	require_once cot::$cfg['system_dir'] . '/header.php';
+	require_once Cot::$cfg['system_dir'] . '/header.php';
 	$t = $t_plug;
 }
 
@@ -110,7 +110,7 @@ if ($autoassigntags) {
 	array_unshift($pltitle, array(cot_url('plug', "e=$e"), $out['subtitle']));
 	if (empty($o)) {
 		$t->assign(array(
-			'PLUGIN_TITLE' => cot_breadcrumbs($pltitle, cot::$cfg['homebreadcrumb']),
+			'PLUGIN_TITLE' => cot_breadcrumbs($pltitle, Cot::$cfg['homebreadcrumb']),
 			'PLUGIN_SUBTITLE' => $plugin_subtitle,
 			'PLUGIN_BODY' => $plugin_body
 		));
@@ -131,5 +131,5 @@ if (isset($t) && is_object($t)) {
 }
 
 if ($ext_display_header) {
-	require_once cot::$cfg['system_dir'] . '/footer.php';
+	require_once Cot::$cfg['system_dir'] . '/footer.php';
 }

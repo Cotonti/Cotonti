@@ -90,8 +90,8 @@ function cot_structure_delete($extension, $code, $is_module = true)
 	}
 	/* ===== */
 
-    $data = cot::$db->query(
-        'SELECT structure_code, structure_count FROM ' . cot::$db->structure .
+    $data = Cot::$db->query(
+        'SELECT structure_code, structure_count FROM ' . Cot::$db->structure .
         ' WHERE structure_area = :area AND structure_code = :code',
         ['area' => $extension, 'code' => $code]
     )->fetch();
@@ -107,17 +107,17 @@ function cot_structure_delete($extension, $code, $is_module = true)
         return false;
     }
 
-    cot::$db->delete(cot::$db->structure, "structure_area=? AND structure_code=?", [$extension, $code]);
-    cot::$db->delete(cot::$db->config, "config_cat=? AND config_subcat=? AND config_owner='module'", [$extension, $code]);
+    Cot::$db->delete(Cot::$db->structure, "structure_area=? AND structure_code=?", [$extension, $code]);
+    Cot::$db->delete(Cot::$db->config, "config_cat=? AND config_subcat=? AND config_owner='module'", [$extension, $code]);
 	$is_module && cot_auth_remove_item($extension, $code);
 	$area_deletecat = 'cot_'.$extension.'_deletecat';
 	(function_exists($area_deletecat)) ? $area_deletecat($code) : FALSE;
 
     cot_log("Structure. Deleted category: '$extension' - '$code'", 'adm', 'structure', 'delete');
 
-	unset(cot::$structure[$extension][$code]);
-	if (cot::$cache) {
-        cot::$cache->clear();
+	unset(Cot::$structure[$extension][$code]);
+	if (Cot::$cache) {
+        Cot::$cache->clear();
 	}
 
 	return true;

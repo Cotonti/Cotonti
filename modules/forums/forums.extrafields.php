@@ -16,9 +16,9 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('forums', 'module');
 
-$extra_whitelist[cot::$db->forum_posts] = array(
-	'name' => cot::$db->forum_posts,
-	'caption' => cot::$L['Module'].' Forums',
+$extra_whitelist[Cot::$db->forum_posts] = array(
+	'name' => Cot::$db->forum_posts,
+	'caption' => Cot::$L['Module'].' Forums',
 	'type' => 'module',
 	'code' => 'forums',
 	'tags' => array(
@@ -28,9 +28,9 @@ $extra_whitelist[cot::$db->forum_posts] = array(
 	)
 );
 
-$extra_whitelist[cot::$db->forum_topics] = array(
-	'name' => cot::$db->forum_topics,
-	'caption' => cot::$L['Module'].' Forums',
+$extra_whitelist[Cot::$db->forum_topics] = array(
+	'name' => Cot::$db->forum_topics,
+	'caption' => Cot::$L['Module'].' Forums',
 	'type' => 'module',
 	'code' => 'forums',
 	'tags' => array(

@@ -8,8 +8,12 @@
     "wiki": "https://www.cotonti.com/docs/"
   },
 
+  "config": {
+    "vendor-dir": "lib"
+  },
+
   "require": {
-    "php": ">=5.4",
+    "php": ">=5.6",
     "ext-gd": "*",
     "ext-mbstring": "*",
     "ext-json": "*",
@@ -21,6 +25,8 @@
     "classmap": ["system/Cot.php", "system/cache.php", "system/cotemplate.php", "system/database.php", "system/Resources.php", "lib/cssmin.php", "lib/jsmin.php"],
 
     "psr-4": {
+      "cot\\modules\\": "modules/",
+      "cot\\plugins\\": "plugins/",
       "cot\\": "system/",
       "": ["lib/"]
     }

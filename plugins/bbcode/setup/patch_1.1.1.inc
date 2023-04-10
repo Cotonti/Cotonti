@@ -15,18 +15,18 @@ global $db_bbcode;
 
 if (empty($db_bbcode)) {
     // Registering tables
-    cot::$db->registerTable('bbcode');
+    Cot::$db->registerTable('bbcode');
 }
 
 $changeCollation = false;
 if (
-    cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
-    (empty(cot::$cfg['mysqlcollate']) || cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
+    Cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
+    (empty(Cot::$cfg['mysqlcollate']) || Cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
 ) {
     $changeCollation = true;
 }
 
-cot::$db->query("ALTER TABLE `{$db_bbcode}` 
+Cot::$db->query("ALTER TABLE `{$db_bbcode}` 
     MODIFY `bbc_id` smallint UNSIGNED NOT NULL auto_increment,
     MODIFY `bbc_container` tinyint UNSIGNED NOT NULL DEFAULT '1',
     MODIFY `bbc_enabled` tinyint UNSIGNED NOT NULL DEFAULT '1',
@@ -34,7 +34,7 @@ cot::$db->query("ALTER TABLE `{$db_bbcode}`
     MODIFY `bbc_postrender` tinyint NOT NULL DEFAULT '0',
     ENGINE=InnoDB;");
 if ($changeCollation) {
-    cot::$db->query("ALTER TABLE `{$db_bbcode}`
-    CONVERT TO CHARACTER SET '" . cot::$cfg['mysqlcharset'] . "' COLLATE '" . cot::$cfg['mysqlcollate'] . "', 
-    DEFAULT CHARACTER SET='" . cot::$cfg['mysqlcharset'] . "' COLLATE='" . cot::$cfg['mysqlcollate'] . "'");
+    Cot::$db->query("ALTER TABLE `{$db_bbcode}`
+    CONVERT TO CHARACTER SET '" . Cot::$cfg['mysqlcharset'] . "' COLLATE '" . Cot::$cfg['mysqlcollate'] . "', 
+    DEFAULT CHARACTER SET='" . Cot::$cfg['mysqlcharset'] . "' COLLATE='" . Cot::$cfg['mysqlcollate'] . "'");
 }

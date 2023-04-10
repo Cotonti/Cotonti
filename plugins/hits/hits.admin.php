@@ -14,15 +14,15 @@ Hooks=tools
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('plug', 'hits');
-cot_block(cot::$usr['auth_read']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('plug', 'hits');
+cot_block(Cot::$usr['auth_read']);
 
 require_once cot_langfile('hits', 'plug');
 require_once cot_incfile('hits', 'plug');
 $tt = new XTemplate(cot_tplfile('hits.admin', 'plug', true));
 
 //$adminhelp = $L['adm_help_hits'];
-$adminTitle = cot::$L['hits'];
+$adminTitle = Cot::$L['hits'];
 
 $f = cot_import('f', 'G', 'TXT');
 $v = cot_import('v', 'G', 'TXT');
@@ -36,7 +36,7 @@ foreach (cot_getextplugins('hits.admin.first') as $pl)
 
 if ($f == 'year' || $f == 'month') {
 	$adminpath[] = array(cot_url('admin', 'm=other&p=hits&f=' . $f . '&v=' . $v), '(' . $v . ')');
-	$sql = cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '" . cot::$db->prep($v) . "%' ORDER BY stat_name DESC");
+	$sql = Cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '" . Cot::$db->prep($v) . "%' ORDER BY stat_name DESC");
 	
 	while ($row = $sql->fetch()) {
 		$y = mb_substr($row['stat_name'], 0, 4);
@@ -75,12 +75,12 @@ if ($f == 'year' || $f == 'month') {
 	$tt->parse('MAIN.YEAR_OR_MONTH');
 
 } else {
-	$sqlmax = cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
+	$sqlmax = Cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
 	if ($sqlmax->rowCount() > 0) {
 		$rowmax = $sqlmax->fetch();
 		$sqlmax->closeCursor();
 	}
-    $sql = cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC");
+    $sql = Cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC");
 
 	if ($sql->rowCount() > 0 && $rowmax) {
 		$max_date = $rowmax['stat_name'];
@@ -165,7 +165,7 @@ if ($f == 'year' || $f == 'month') {
 		}
 
 		$tt->assign(array(
-			'ADMIN_HITS_MAXHITS' => sprintf(cot::$L['hits_maxhits'], $max_date, $max_hits)
+			'ADMIN_HITS_MAXHITS' => sprintf(Cot::$L['hits_maxhits'], $max_date, $max_hits)
 		));
 	}
 	$tt->parse('MAIN.DEFAULT');

@@ -17,7 +17,7 @@ require_once cot_incfile('comments', 'plug', 'resources');
 require_once cot_incfile('forms');
 
 // Table names
-cot::$db->registerTable('com');
+Cot::$db->registerTable('com');
 cot_extrafields_register_table('com');
 
 /**
@@ -136,7 +136,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		include $pl;
 	}
 	/* ===== */
-    $editor = (cot::$cfg['plugin']['comments']['markup']) ? 'input_textarea_minieditor' : '';
+    $editor = (Cot::$cfg['plugin']['comments']['markup']) ? 'input_textarea_minieditor' : '';
     $rtext = isset($rtext) ? $rtext : '';   // Todo obsolete?
 	$t->assign(array(
 		'COMMENTS_CODE' => $code,
@@ -151,8 +151,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	if ($auth_write && $enabled)
 	{
 		// Extra fields
-		if(!empty(cot::$extrafields[cot::$db->com])) {
-			foreach (cot::$extrafields[cot::$db->com] as $exfld) {
+		if(!empty(Cot::$extrafields[Cot::$db->com])) {
+			foreach (Cot::$extrafields[Cot::$db->com] as $exfld) {
 				$uname = strtoupper($exfld['field_name']);
 				$val = isset($rcomments[$exfld['field_name']]) ? $rcomments[$exfld['field_name']] : null; // Todo obsolete?
 				$exfld_val = cot_build_extrafields('rcomments' . $exfld['field_name'], $exfld, $val);
@@ -209,8 +209,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	}
 	/* ===== */
 
-	$sql = cot::$db->query("SELECT c.*, u.* $comments_join_columns
-		FROM ".cot::$db->com." AS c LEFT JOIN ".cot::$db->users." AS u ON u.user_id = c.com_authorid $comments_join_tables
+	$sql = Cot::$db->query("SELECT c.*, u.* $comments_join_columns
+		FROM ".Cot::$db->com." AS c LEFT JOIN ".Cot::$db->users." AS u ON u.user_id = c.com_authorid $comments_join_tables
 		WHERE com_area = ? AND com_code = ? $comments_join_where ORDER BY $comments_order LIMIT ?, ?",
 		array($ext_name, $code, (int) $d, (int) $cfg['plugin']['comments']['maxcommentsperpage']));
 	if ($sql->rowCount() > 0 && $enabled)
@@ -235,28 +235,28 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 
             $row['user_id'] = (int)$row['user_id'];
 
-			$com_text = cot_parse($row['com_text'], cot::$cfg['plugin']['comments']['markup']);
+			$com_text = cot_parse($row['com_text'], Cot::$cfg['plugin']['comments']['markup']);
 
-			$time_limit = (cot::$sys['now'] < ($row['com_date'] + cot::$cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
-            $usr['isowner_com'] = $time_limit && ( (cot::$usr['id'] > 0 && $row['com_authorid'] == cot::$usr['id'] )
-                || (cot::$usr['id'] == 0 && !empty($_SESSION['cot_comments_edit'][$row['com_id']]) && cot::$usr['ip'] == $row['com_authorip']) );
-			$com_gup = cot::$sys['now'] - ($row['com_date'] + cot::$cfg['plugin']['comments']['time'] * 60);
-			$allowed_time = (cot::$usr['isowner_com'] && !cot::$usr['isadmin']) ? ' - '
-				. cot_build_timegap(cot::$sys['now'] + $com_gup, cot::$sys['now']) . cot::$L['plu_comgup'] : '';
-			$com_edit = ($auth_admin || cot::$usr['isowner_com']) ? cot_rc('comments_code_edit', array(
+			$time_limit = (Cot::$sys['now'] < ($row['com_date'] + Cot::$cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
+            $usr['isowner_com'] = $time_limit && ( (Cot::$usr['id'] > 0 && $row['com_authorid'] == Cot::$usr['id'] )
+                || (Cot::$usr['id'] == 0 && !empty($_SESSION['cot_comments_edit'][$row['com_id']]) && Cot::$usr['ip'] == $row['com_authorip']) );
+			$com_gup = Cot::$sys['now'] - ($row['com_date'] + Cot::$cfg['plugin']['comments']['time'] * 60);
+			$allowed_time = (Cot::$usr['isowner_com'] && !Cot::$usr['isadmin']) ? ' - '
+				. cot_build_timegap(Cot::$sys['now'] + $com_gup, Cot::$sys['now']) . Cot::$L['plu_comgup'] : '';
+			$com_edit = ($auth_admin || Cot::$usr['isowner_com']) ? cot_rc('comments_code_edit', array(
 					'edit_url' => cot_url('plug', 'e=comments&m=edit&cat='.$cat.'&id='.$row['com_id']),
 					'allowed_time' => $allowed_time
 				)) : '';
 
             if($row['com_area'] == 'page') {
-                if(cot::$usr['id'] == 0 && cot::$usr['isowner_com'] && cot::$cfg['cache_page']) {
-                    cot::$cfg['cache_page'] = cot::$cfg['cache_index'] = false;
+                if(Cot::$usr['id'] == 0 && Cot::$usr['isowner_com'] && Cot::$cfg['cache_page']) {
+                    Cot::$cfg['cache_page'] = Cot::$cfg['cache_index'] = false;
                 }
             }
 
             $t->assign(array(
 				'COMMENTS_ROW_ID' => $row['com_id'],
-				'COMMENTS_ROW_ORDER' => cot::$cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
+				'COMMENTS_ROW_ORDER' => Cot::$cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
 				'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#c'.$row['com_id']),
 				'COMMENTS_ROW_AUTHOR' => cot_build_user($row['user_id'], $row['com_author']),
 				// User can be deleted. So $row['user_id'] should be used here
@@ -271,8 +271,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			));
 
 			// Extrafields
-            if(!empty(cot::$extrafields[cot::$db->com])) {
-                foreach (cot::$extrafields[cot::$db->com] as $exfld) {
+            if(!empty(Cot::$extrafields[Cot::$db->com])) {
+                foreach (Cot::$extrafields[Cot::$db->com] as $exfld) {
 					$tag = mb_strtoupper($exfld['field_name']);
                     $exfld_title = cot_extrafield_title($exfld, 'comments_');
 
@@ -297,8 +297,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		}
 
 		$pagenav = cot_pagenav($link_area, $link_params, $d, $totalitems,
-			cot::$cfg['plugin']['comments']['maxcommentsperpage'], $d_var, '#comments',
-            cot::$cfg['jquery'] && cot::$cfg['turnajax'], 'comments', 'plug',
+			Cot::$cfg['plugin']['comments']['maxcommentsperpage'], $d_var, '#comments',
+            Cot::$cfg['jquery'] && Cot::$cfg['turnajax'], 'comments', 'plug',
                                "e=comments&area=$ext_name&cat=$cat&item=$code");
 		$t->assign(array(
 			'COMMENTS_PAGES_INFO' => cot_rc('comments_code_pages_info', array(

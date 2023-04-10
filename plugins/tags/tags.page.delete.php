@@ -17,7 +17,7 @@ Hooks=page.edit.delete.done,i18n.page.delete.done
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
+if (Cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
 	require_once cot_incfile('tags', 'plug');
 	if (cot_get_caller() == 'i18n.page') {
         global $i18n_locale;

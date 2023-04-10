@@ -106,12 +106,12 @@ function cot_radiobox(
 	$input_attrs = cot_rc_attr_string($attrs);
 	$chosen = cot_import_buffered($name, $chosen);
 	if (empty($separator)) {
-		$separator = cot::$R['input_radio_separator'];
+		$separator = Cot::$R['input_radio_separator'];
 	}
 	$i = 0;
 	$result = '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	$rc = empty(cot::$R["input_radio_{$rc_name}"]) ?
+	$rc = empty(Cot::$R["input_radio_{$rc_name}"]) ?
         (empty($custom_rc) ? 'input_radio' : $custom_rc) : "input_radio_{$rc_name}";
 	foreach ($values as $k => $value) {
 		$checked = ($value == $chosen) ? ' checked="checked"' : '';

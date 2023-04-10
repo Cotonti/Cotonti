@@ -18,7 +18,7 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('page', 'module');
 
 // Register restoration table
-$trash_types['page'] = cot::$db->pages;
+$trash_types['page'] = Cot::$db->pages;
 
 /**
  * Sync page action
@@ -32,8 +32,8 @@ $trash_types['page'] = cot::$db->pages;
 function cot_trash_page_sync($data)
 {
     cot_page_updateStructureCounters($data['page_cat']);
-    if (cot::$cache && cot::$cfg['cache_page']) {
-        cot::$cache->page->clear('page');
+    if (Cot::$cache && Cot::$cfg['cache_page']) {
+        Cot::$cache->page->clear('page');
     }
 	return true;
 }

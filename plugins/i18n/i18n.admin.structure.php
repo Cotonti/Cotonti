@@ -23,7 +23,7 @@ if ($n == 'page') {
     $t->assign(array(
         'ADMIN_STRUCTURE_I18N_LINK' => cot_rc_link(
             cot_url('plug', 'e=i18n&m=structure'),
-            cot::$L['i18n_structure']
+            Cot::$L['i18n_structure']
         ),
         'ADMIN_STRUCTURE_I18N_URL' => cot_url('plug', 'e=i18n&m=structure')
     ));

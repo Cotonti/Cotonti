@@ -21,7 +21,7 @@ defined('COT_CODE') or die('Wrong URL.');
 
 require_once cot_incfile('hiddengroups', 'plug');
 
-$grpfilters_titles = [cot::$R['users_sel_def_l'] . cot::$L['Maingroup'] . cot::$R['users_sel_def_r']];
+$grpfilters_titles = [Cot::$R['users_sel_def_l'] . Cot::$L['Maingroup'] . Cot::$R['users_sel_def_r']];
 $grpfilters_group_values = [cot_url('users')];
 $grpfilters_maingrp_values = [cot_url('users')];
 
@@ -47,7 +47,7 @@ $maingrpfilters = cot_selectbox(
     true
 );
 
-$grpfilters_titles[0] = cot::$R['users_sel_def_l'] . cot::$L['Group'] . cot::$R['users_sel_def_r'];
+$grpfilters_titles[0] = Cot::$R['users_sel_def_l'] . Cot::$L['Group'] . Cot::$R['users_sel_def_r'];
 $grpfilters = cot_selectbox(
     cot_url('users', 'gm=' . $gm, '', true),
     'bygroupms',

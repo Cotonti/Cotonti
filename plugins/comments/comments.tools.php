@@ -118,8 +118,8 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_COMMENTS_ODDEVEN' => cot_build_oddeven($ii)
 	));
 
-    if(!empty(cot::$extrafields[cot::$db->com])) {
-        foreach (cot::$extrafields[cot::$db->com] as $exfld) {
+    if(!empty(Cot::$extrafields[Cot::$db->com])) {
+        foreach (Cot::$extrafields[Cot::$db->com] as $exfld) {
 			$tag = mb_strtoupper($exfld['field_name']);
             $exfld_title = cot_extrafield_title($exfld, 'comments_');
 

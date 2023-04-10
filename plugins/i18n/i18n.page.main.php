@@ -22,7 +22,7 @@ if ($i18n_enabled && $i18n_notmain) {
 	$pag_i18n = cot_i18n_get_page($id, $i18n_locale);
 	$cat_i18n = cot_i18n_get_cat($pag['page_cat'], $i18n_locale);
 	if (!$cat_i18n) {
-		$cat_i18n = &cot::$structure['page'][$pag['page_cat']];
+		$cat_i18n = &Cot::$structure['page'][$pag['page_cat']];
 	}
 
 	if ($pag_i18n) {
@@ -31,8 +31,8 @@ if ($i18n_enabled && $i18n_notmain) {
 			'TITLE' => $pag_i18n['ipage_title'],
 			'CATEGORY' => $cat_i18n['title']
 		);
-        cot::$out['subtitle'] = cot_title(cot::$cfg['page']['title_page'], $title_params);
-        cot::$out['desc'] = htmlspecialchars(strip_tags($pag_i18n['ipage_desc']));
+        Cot::$out['subtitle'] = cot_title(Cot::$cfg['page']['title_page'], $title_params);
+        Cot::$out['desc'] = htmlspecialchars(strip_tags($pag_i18n['ipage_desc']));
 
 		// Merge with page data
 		$pag = array_merge($pag, $pag_i18n);

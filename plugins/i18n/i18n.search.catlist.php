@@ -18,8 +18,8 @@ defined('COT_CODE') or die('Wrong URL');
 if ($i18n_read && $i18n_notmain && !empty($i18n_structure) && is_array($i18n_structure) && count($i18n_structure) > 0) {
     // @see cot_load_structure();
     cot_load_structure();
-    $separator = (cot::$cfg['separator'] == strip_tags(cot::$cfg['separator'])) ?
-        ' ' . cot::$cfg['separator'] . ' ' : ' / ';
+    $separator = (Cot::$cfg['separator'] == strip_tags(Cot::$cfg['separator'])) ?
+        ' ' . Cot::$cfg['separator'] . ' ' : ' / ';
 
     // Translate categories in the multiselect
 	foreach ($i18n_structure as $cat => $row) {

@@ -9,7 +9,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-require_once cot::$cfg['plugins_dir'] . '/htmlpurifier/lib/standalone/HTMLPurifier/Filter/YouTube.php';
+require_once Cot::$cfg['plugins_dir'] . '/htmlpurifier/lib/standalone/HTMLPurifier/Filter/YouTube.php';
 
 /**
  * HTML Purifier config set

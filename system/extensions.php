@@ -85,7 +85,7 @@ function cot_apply_patches(
     static $executed = [];
 	foreach ($delta as $key => $val) {
 		if (isset($val['sql']) && !in_array($val['sql'], $executed)) {
-			$error = cot::$db->runScript(file_get_contents($val['sql']));
+			$error = Cot::$db->runScript(file_get_contents($val['sql']));
             $executed[] = $val['sql'];
 			if (empty($error)) {
 				cot_message(cot_rc('ext_patch_applied',
@@ -191,12 +191,12 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	global $cfg, $L, $R, $cache, $usr, $db_auth, $db_config, $db_users,
 		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x, $env;
 
-	$path = $is_module ? cot::$cfg['modules_dir'] . "/$name" : cot::$cfg['plugins_dir'] . "/$name";
+	$path = $is_module ? Cot::$cfg['modules_dir'] . "/$name" : Cot::$cfg['plugins_dir'] . "/$name";
 
 	// Emit initial message
 	if ($update) {
 		cot_message(cot_rc('ext_updating', array(
-			'type' => $is_module ? cot::$L['Module'] : cot::$L['Plugin'],
+			'type' => $is_module ? Cot::$L['Module'] : Cot::$L['Plugin'],
 			'name' => $name
 		)));
 	} else {
@@ -231,7 +231,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	}
 
 	// Check versions
-	$res = cot::$db->query('SELECT ct_version FROM ' . cot::$db->core . ' WHERE ct_code = ?', $name);
+	$res = Cot::$db->query('SELECT ct_version FROM ' . Cot::$db->core . ' WHERE ct_code = ?', $name);
 	if ($res->rowCount() == 1) {
 		$current_ver = $res->fetchColumn();
 		$res->closeCursor();
@@ -240,7 +240,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 			if (version_compare($current_ver, $info['Version']) == 0 && !$force_update) {
 				// Nothing to update
 				cot_message(cot_rc('ext_up2date', array(
-					'type' => $is_module ? cot::$L['Module'] :cot::$L['Plugin'],
+					'type' => $is_module ? Cot::$L['Module'] :Cot::$L['Plugin'],
 					'name' => $name
 				)));
 
@@ -557,7 +557,7 @@ function cot_extension_uninstall($name, $is_module = false)
 
 	// Emit initial message
 	cot_message(cot_rc('ext_uninstalling', array(
-		'type' => $is_module ? cot::$L['Module'] : cot::$L['Plugin'],
+		'type' => $is_module ? Cot::$L['Module'] : Cot::$L['Plugin'],
 		'name' => $name
 	)));
 
@@ -566,11 +566,11 @@ function cot_extension_uninstall($name, $is_module = false)
 
 	// Drop auth and config
 	if ($is_module) {
-        cot::$db->delete($db_config, "config_owner = 'module' AND config_cat = '$name'");
-        cot::$db->delete($db_auth, "auth_code = '$name'");
+        Cot::$db->delete($db_config, "config_owner = 'module' AND config_cat = '$name'");
+        Cot::$db->delete($db_auth, "auth_code = '$name'");
 	} else {
-        cot::$db->delete($db_config, "config_owner = 'plug' AND config_cat = '$name'");
-        cot::$db->delete($db_auth, "auth_code = 'plug' AND auth_option = '$name'");
+        Cot::$db->delete($db_config, "config_owner = 'plug' AND config_cat = '$name'");
+        Cot::$db->delete($db_auth, "auth_code = 'plug' AND auth_option = '$name'");
 	}
 	cot_message('ext_auth_uninstalled');
 	cot_message('ext_config_uninstalled');
@@ -828,7 +828,7 @@ function cot_extension_installed($name)
 {
 	global $db_core;
 
-	$cnt = cot::$db->query("SELECT COUNT(*) FROM $db_core WHERE ct_code = '$name'")->fetchColumn();
+	$cnt = Cot::$db->query("SELECT COUNT(*) FROM $db_core WHERE ct_code = '$name'")->fetchColumn();
 	return $cnt > 0;
 }
 

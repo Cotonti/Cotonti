@@ -46,7 +46,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 
 	$user_exists = (bool) $db->query("SELECT user_id FROM $db_users WHERE user_name = ? LIMIT 1", array($ruser['user_name']))->fetch();
 	$email_exists = (bool) $db->query("SELECT user_id FROM $db_users WHERE user_email = ? LIMIT 1", array($ruser['user_email']))->fetch();
-	if (!cot_check_email($ruser['user_email']) || $user_exists || (!cot::$cfg['useremailduplicate'] && $email_exists)) {
+	if (!cot_check_email($ruser['user_email']) || $user_exists || (!Cot::$cfg['useremailduplicate'] && $email_exists)) {
 		return false;
 	}
 
@@ -58,21 +58,21 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
         try {
             $tmp = new \DateTimeZone($ruser['user_timezone']);
         } catch (\Exception $e) {
-            $ruser['user_timezone'] = cot::$cfg['defaulttimezone'];
+            $ruser['user_timezone'] = Cot::$cfg['defaulttimezone'];
         }
     } else {
-        $ruser['user_timezone'] = cot::$cfg['defaulttimezone'];
+        $ruser['user_timezone'] = Cot::$cfg['defaulttimezone'];
     }
 
     $maingrp = (int) $maingrp;
     if ($maingrp > 0) {
         $tmp2 = $maingrp;
 
-    } elseif (cot::$db->countRows($db_users) == 0) {
+    } elseif (Cot::$db->countRows($db_users) == 0) {
         // There is no users in DB.
         $tmp2 = COT_GROUP_SUPERADMINS;
 
-    } elseif(cot::$cfg['users']['regnoactivation']) {
+    } elseif(Cot::$cfg['users']['regnoactivation']) {
         $tmp2 = COT_GROUP_MEMBERS;
 
     } else {
@@ -81,11 +81,11 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
     $ruser['user_maingrp'] = $tmp2;
 
 	$ruser['user_passsalt'] = cot_unique(16);
-	$ruser['user_passfunc'] = empty(cot::$cfg['hashfunc']) ? 'sha256' : cot::$cfg['hashfunc'];
+	$ruser['user_passfunc'] = empty(Cot::$cfg['hashfunc']) ? 'sha256' : Cot::$cfg['hashfunc'];
 	$ruser['user_password'] = cot_hash($ruser['user_password'], $ruser['user_passsalt'], $ruser['user_passfunc']);
 
 	if (isset($ruser['user_birthdate'])) {
-		if (is_null($ruser['user_birthdate']) || $ruser['user_birthdate'] > cot::$sys['now']) {
+		if (is_null($ruser['user_birthdate']) || $ruser['user_birthdate'] > Cot::$sys['now']) {
 			$ruser['user_birthdate'] = 'NULL';
 		} else {
 			$ruser['user_birthdate'] = cot_stamp2date($ruser['user_birthdate']);
@@ -96,12 +96,12 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	cot_shield_update(20, "Registration");
 
 	$ruser['user_hideemail'] = 1;
-	$ruser['user_theme'] = cot::$cfg['defaulttheme'];
-	$ruser['user_scheme'] = cot::$cfg['defaultscheme'];
-	$ruser['user_lang'] = empty($ruser['user_lang']) ? cot::$cfg['defaultlang'] : $ruser['user_lang'];
-	$ruser['user_regdate'] = (int)cot::$sys['now'];
+	$ruser['user_theme'] = Cot::$cfg['defaulttheme'];
+	$ruser['user_scheme'] = Cot::$cfg['defaultscheme'];
+	$ruser['user_lang'] = empty($ruser['user_lang']) ? Cot::$cfg['defaultlang'] : $ruser['user_lang'];
+	$ruser['user_regdate'] = (int)Cot::$sys['now'];
 	$ruser['user_logcount'] = 0;
-	$ruser['user_lastip'] = empty($ruser['user_lastip']) ? cot::$usr['ip'] : $ruser['user_lastip'];
+	$ruser['user_lastip'] = empty($ruser['user_lastip']) ? Cot::$usr['ip'] : $ruser['user_lastip'];
 	$ruser['user_token'] = cot_unique(16);
 
 	if (!$db->insert($db_users, $ruser)) return false;
@@ -120,7 +120,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 
 	if ($ruser['user_maingrp'] == 2 && $sendemail)
 	{
-		if (cot::$cfg['users']['regrequireadmin'])
+		if (Cot::$cfg['users']['regrequireadmin'])
 		{
 			$subject = $L['aut_regrequesttitle'];
 			$body = sprintf($L['aut_regrequest'], $ruser['user_name']);
@@ -128,15 +128,15 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 			cot_mail($ruser['user_email'], $subject, $body);
 
 			$subject = $L['aut_regreqnoticetitle'];
-			$inactive = cot::$cfg['mainurl'].'/'.cot_url('users', 'gm=2&s=regdate&w=desc', '', true);
+			$inactive = Cot::$cfg['mainurl'].'/'.cot_url('users', 'gm=2&s=regdate&w=desc', '', true);
 			$body = sprintf($L['aut_regreqnotice'], $ruser['user_name'], $inactive);
-			cot_mail(cot::$cfg['adminemail'], $subject, $body);
+			cot_mail(Cot::$cfg['adminemail'], $subject, $body);
 		}
 		else
 		{
 			$subject = $L['Registration'];
-			$activate = cot::$cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=1', '', true);
-			$deactivate = cot::$cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=0', '', true);
+			$activate = Cot::$cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=1', '', true);
+			$deactivate = Cot::$cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=0', '', true);
 			$body = sprintf($L['aut_emailreg'], $ruser['user_name'], $activate, $deactivate);
 			$body .= "\n\n".$L['aut_contactadmin'];
 			cot_mail($ruser['user_email'], $subject, $body);
@@ -204,7 +204,7 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 		}
 	}
 
-	$res .= cot::$R['users_code_grplist_end'];
+	$res .= Cot::$R['users_code_grplist_end'];
 	return $res;
 }
 
@@ -251,9 +251,9 @@ function cot_user_data($uid = 0, $cacheitem = true)
 {
 	$user = false;
 
-	if (!$uid && cot::$usr['id'] > 0) {
-		$uid = cot::$usr['id'];
-		$user = cot::$usr['profile'];
+	if (!$uid && Cot::$usr['id'] > 0) {
+		$uid = Cot::$usr['id'];
+		$user = Cot::$usr['profile'];
 	}
 	if (!$uid) {
         return null;
@@ -270,14 +270,14 @@ function cot_user_data($uid = 0, $cacheitem = true)
 			$user = $uid;
 			$uid = $user['user_id'];
 		} else {
-			if ($uid > 0 && $uid == cot::$usr['id']) {
-				$user = cot::$usr['profile'];
+			if ($uid > 0 && $uid == Cot::$usr['id']) {
+				$user = Cot::$usr['profile'];
 			} else {
 				$uid = (int) $uid;
 				if (!$uid) {
                     return null;
                 }
-				$sql = cot::$db->query('SELECT * FROM ' . cot::$db->users . ' WHERE user_id = ? LIMIT 1', $uid);
+				$sql = Cot::$db->query('SELECT * FROM ' . Cot::$db->users . ' WHERE user_id = ? LIMIT 1', $uid);
 				$user = $sql->fetch();
 			}
 		}

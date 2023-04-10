@@ -18,8 +18,8 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('forums', 'module');
 
 // Register restoration table
-$trash_types['forumpost'] = cot::$db->forum_posts;
-$trash_types['forumtopic'] = cot::$db->forum_topics;
+$trash_types['forumpost'] = Cot::$db->forum_posts;
+$trash_types['forumtopic'] = Cot::$db->forum_topics;
 
 /**
  * Check forumpost action
@@ -65,8 +65,8 @@ function cot_trash_forumtopic_sync($data)
 	cot_forums_resyncTopic($data['ft_id']);
     cot_forums_updateStructureCounters($data['fp_cat']);
 
-    if (cot::$cache && cot::$cfg['cache_forums']) {
-        cot::$cache->page->clear('forums');
+    if (Cot::$cache && Cot::$cfg['cache_forums']) {
+        Cot::$cache->page->clear('forums');
     }
 
     return true;

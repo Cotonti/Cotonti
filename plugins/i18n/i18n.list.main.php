@@ -19,7 +19,7 @@ if ($i18n_enabled && $i18n_notmain) {
 	$cat_i18n = cot_i18n_get_cat($c, $i18n_locale);
 
 	if ($cat_i18n) {
-		cot::$out['desc'] = htmlspecialchars(strip_tags($cat_i18n['desc']));
-        cot::$out['subtitle'] = $cat_i18n['title'];
+		Cot::$out['desc'] = htmlspecialchars(strip_tags($cat_i18n['desc']));
+        Cot::$out['subtitle'] = $cat_i18n['title'];
 	}
 }

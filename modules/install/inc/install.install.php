@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			if (!file_exists($file['sql'])) {
 				cot_error(cot_rc('install_error_missing_file', array('file' => $file['sql'])));
 			}
-			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.4.0', '>=')) {
+			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.6.0', '>=')) {
 				cot_error(cot_rc('install_error_php_ver', array('ver' => PHP_VERSION)));
 			}
 			if (!extension_loaded('mbstring')) {

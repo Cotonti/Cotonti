@@ -12,9 +12,9 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_langfile('i18n', 'plug');
 require_once cot_incfile('i18n', 'plug', 'resources');
 
-cot::$db->registerTable('i18n_locales');
-cot::$db->registerTable('i18n_pages');
-cot::$db->registerTable('i18n_structure');
+Cot::$db->registerTable('i18n_locales');
+Cot::$db->registerTable('i18n_pages');
+Cot::$db->registerTable('i18n_structure');
 
 /**
  * Builds internationalized category path
@@ -73,7 +73,7 @@ function cot_i18n_enabled($cat)
 
 	if (!$i18n_cats) {
 		// Get configured cats
-		$i18n_cats = explode(',', cot::$cfg['plugin']['i18n']['cats']);
+		$i18n_cats = explode(',', Cot::$cfg['plugin']['i18n']['cats']);
 		$i18n_cats = array_map('trim', $i18n_cats);
 	}
 
@@ -152,7 +152,7 @@ function cot_i18n_load_locales()
 {
 	global $i18n_locales, $cot_languages;
 
-	$lines = preg_split('#\r?\n#', cot::$cfg['plugin']['i18n']['locales']);
+	$lines = preg_split('#\r?\n#', Cot::$cfg['plugin']['i18n']['locales']);
 	foreach ($lines as $line) {
 		$lc = explode('|', $line);
 		$lc = array_map('trim', $lc);
@@ -160,10 +160,10 @@ function cot_i18n_load_locales()
 			$i18n_locales[$lc[0]] = $lc[1];
 		}
 
-        // Todo use locale_get_display_language() if $cot_languages[cot::$cfg['defaultlang']] is not set
-        if (!array_key_exists(cot::$cfg['defaultlang'], $i18n_locales)) {
-            $i18n_locales[cot::$cfg['defaultlang']] = isset($cot_languages[cot::$cfg['defaultlang']]) ?
-                $cot_languages[cot::$cfg['defaultlang']] : cot::$cfg['defaultlang'];
+        // Todo use locale_get_display_language() if $cot_languages[Cot::$cfg['defaultlang']] is not set
+        if (!array_key_exists(Cot::$cfg['defaultlang'], $i18n_locales)) {
+            $i18n_locales[Cot::$cfg['defaultlang']] = isset($cot_languages[Cot::$cfg['defaultlang']]) ?
+                $cot_languages[Cot::$cfg['defaultlang']] : Cot::$cfg['defaultlang'];
         }
 	}
 }
@@ -202,12 +202,12 @@ function cot_i18n_installTagsIntegration()
 
     // Add tag_locale column
     if (
-        !cot::$db->fieldExists(cot::$db->tag_references, 'tag_locale')
+        !Cot::$db->fieldExists(Cot::$db->tag_references, 'tag_locale')
     ) {
-        cot::$db->query('ALTER TABLE ' . cot::$db->tag_references .
+        Cot::$db->query('ALTER TABLE ' . Cot::$db->tag_references .
             " ADD COLUMN tag_locale VARCHAR(8) NOT NULL DEFAULT ''");
-        cot::$db->query('ALTER TABLE ' . cot::$db->tag_references . ' DROP PRIMARY KEY');
-        cot::$db->query('ALTER TABLE ' . cot::$db->tag_references .
+        Cot::$db->query('ALTER TABLE ' . Cot::$db->tag_references . ' DROP PRIMARY KEY');
+        Cot::$db->query('ALTER TABLE ' . Cot::$db->tag_references .
             ' ADD PRIMARY KEY (tag, tag_area, tag_item, tag_locale)');
     }
 

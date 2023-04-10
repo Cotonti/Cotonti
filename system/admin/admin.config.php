@@ -190,12 +190,12 @@ switch ($n)
 
             $icon = '';
             $key = 'icon_cfg_'.$row['config_cat'];
-            if (!empty(cot::$R[$key])) {
-                $icon = cot::$R[$key];
-            } elseif (!empty(cot::$R['icon_extension_default'])) {
-                $icon = cot::$R['icon_extension_default'];
+            if (!empty(Cot::$R[$key])) {
+                $icon = Cot::$R[$key];
+            } elseif (!empty(Cot::$R['icon_extension_default'])) {
+                $icon = Cot::$R['icon_extension_default'];
             } else {
-                $fileName = cot::$cfg['icons_dir'] . '/' . cot::$cfg['defaulticons'] . '/cfg/' .
+                $fileName = Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'] . '/cfg/' .
                     $row['config_cat'] . '.png';
                 if (file_exists($fileName)) {
                     $icon = cot_rc('img_none', ['src' => $fileName]);
@@ -207,7 +207,7 @@ switch ($n)
                 $icon = $R['admin_icon_extension'];
             }
             if (empty($icon)) {
-                $fileName = cot::$cfg['icons_dir'] . '/default/default.png';
+                $fileName = Cot::$cfg['icons_dir'] . '/default/default.png';
                 if (file_exists($fileName)) {
                     $icon = cot_rc('img_none', ['src' => $fileName]);
                     $legacyIcon = $fileName;
@@ -217,10 +217,10 @@ switch ($n)
             $t->assign([
                 'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=' . $row['config_cat']),
                 'ADMIN_CONFIG_ROW_ICON' => $icon,
-                'ADMIN_CONFIG_ROW_NAME' => isset(cot::$L['core_' . $row['config_cat']]) ?
-                    cot::$L['core_' . $row['config_cat']] : $row['config_cat'],
-                'ADMIN_CONFIG_ROW_DESC' => isset(cot::$L['core_' . $row['config_cat'] . '_desc']) ?
-                    cot::$L['core_' . $row['config_cat'] . '_desc'] : '',
+                'ADMIN_CONFIG_ROW_NAME' => isset(Cot::$L['core_' . $row['config_cat']]) ?
+                    Cot::$L['core_' . $row['config_cat']] : $row['config_cat'],
+                'ADMIN_CONFIG_ROW_DESC' => isset(Cot::$L['core_' . $row['config_cat'] . '_desc']) ?
+                    Cot::$L['core_' . $row['config_cat'] . '_desc'] : '',
                 'ADMIN_CONFIG_ROW_NUM' => $jj,
                 //'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
 

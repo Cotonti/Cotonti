@@ -9,15 +9,15 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'a');
-cot_block(cot::$usr['auth_read']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'a');
+cot_block(Cot::$usr['auth_read']);
 
 $t = new XTemplate(cot_tplfile('admin.phpinfo', 'core'));
 
-$adminpath[] = [cot_url('admin', 'm=other'), cot::$L['Other'],];
+$adminpath[] = [cot_url('admin', 'm=other'), Cot::$L['Other'],];
 $adminpath[] = [cot_url('admin', 'm=phpinfo'), 'PHP',];
 
-$adminTitle = cot::$L['adm_phpinfo'];
+$adminTitle = Cot::$L['adm_phpinfo'];
 
 ob_start();
 ob_implicit_flush(false);

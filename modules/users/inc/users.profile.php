@@ -14,8 +14,8 @@ require_once cot_incfile('uploads');
 
 @clearstatcache();
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('users', 'a');
-cot_block(cot::$usr['auth_write']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('users', 'a');
+cot_block(Cot::$usr['auth_write']);
 require_once cot_langfile('users', 'module');
 
 /* === Hook === */
@@ -27,7 +27,7 @@ foreach (cot_getextplugins('users.profile.first') as $pl) {
 $id = cot_import('id','G','TXT');
 $a = cot_import('a','G','ALP');
 
-$sql = cot::$db->query("SELECT * FROM " . cot::$db->users . " WHERE user_id='" . cot::$usr['id']."' LIMIT 1");
+$sql = Cot::$db->query("SELECT * FROM " . Cot::$db->users . " WHERE user_id='" . Cot::$usr['id']."' LIMIT 1");
 cot_die($sql->rowCount()==0);
 $urr = $sql->fetch();
 
@@ -40,7 +40,7 @@ if ($a == 'update') {
 	}
 	/* ===== */
 
-	$ruser['user_text'] = cot_import('rusertext','P','HTM', cot::$cfg['users']['usertextmax']);
+	$ruser['user_text'] = cot_import('rusertext','P','HTM', Cot::$cfg['users']['usertextmax']);
 	$ruser['user_country'] = cot_import('rusercountry','P','ALP');
     $rtheme = cot_import('rusertheme','P','TXT');
     $rtheme = !empty($rtheme) ? explode(':', $rtheme) : [];
@@ -52,14 +52,14 @@ if ($a == 'update') {
 	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','BOL');
 
 	// Extra fields
-    if (!empty(cot::$extrafields[cot::$db->users])) {
-        foreach (cot::$extrafields[cot::$db->users] as $exfld) {
+    if (!empty(Cot::$extrafields[Cot::$db->users])) {
+        foreach (Cot::$extrafields[Cot::$db->users] as $exfld) {
             $ruser['user_' . $exfld['field_name']] = cot_import_extrafields('ruser' . $exfld['field_name'], $exfld, 'P',
                 $urr['user_' . $exfld['field_name']], 'user_');
         }
     }
 	$ruser['user_birthdate'] = cot_import_date('ruserbirthdate', false);
-	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > cot::$sys['now']) {
+	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > Cot::$sys['now']) {
 		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
 	}
 
@@ -76,16 +76,16 @@ if ($a == 'update') {
 		if (mb_strlen($rnewpass1) < 4) cot_error('pro_passtoshort', 'rnewpass1');
 		if (cot_hash($roldpass, $urr['user_passsalt'], $urr['user_passfunc']) != $urr['user_password']) cot_error('pro_wrongpass', 'roldpass');
 
-		if (!empty($ruseremail) && !empty($rmailpass) && cot::$cfg['users']['useremailchange'] && $ruseremail != $urr['user_email']) {
+		if (!empty($ruseremail) && !empty($rmailpass) && Cot::$cfg['users']['useremailchange'] && $ruseremail != $urr['user_email']) {
 			cot_error('pro_emailandpass', 'ruseremail');
 		}
 
         if (!cot_error_found()) {
 			$ruserpass = array();
 			$ruserpass['user_passsalt'] = cot_unique(16);
-			$ruserpass['user_passfunc'] = empty(cot::$cfg['hashfunc']) ? 'sha256' : cot::$cfg['hashfunc'];
+			$ruserpass['user_passfunc'] = empty(Cot::$cfg['hashfunc']) ? 'sha256' : Cot::$cfg['hashfunc'];
 			$ruserpass['user_password'] = cot_hash($rnewpass1, $ruserpass['user_passsalt'], $ruserpass['user_passfunc']);
-			cot::$db->update(cot::$db->users, $ruserpass, "user_id=" . cot::$usr['id']);
+			Cot::$db->update(Cot::$db->users, $ruserpass, "user_id=" . Cot::$usr['id']);
 			unset($ruserpass);
 			cot_message('Password_updated');
 		}
@@ -93,15 +93,15 @@ if ($a == 'update') {
 
 	if (
         !empty($ruseremail) &&
-        (!empty($rmailpass) || cot::$cfg['users']['user_email_noprotection']) &&
-        cot::$cfg['users']['useremailchange'] &&
+        (!empty($rmailpass) || Cot::$cfg['users']['user_email_noprotection']) &&
+        Cot::$cfg['users']['useremailchange'] &&
         $ruseremail != $urr['user_email']
     ) {
-		$sqltmp = cot::$db->query('SELECT COUNT(*) FROM ' . cot::$db->users . " WHERE user_email='" .
-            cot::$db->prep($ruseremail)."'");
+		$sqltmp = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->users . " WHERE user_email='" .
+            Cot::$db->prep($ruseremail)."'");
 		$res = $sqltmp->fetchColumn();
 
-		if (!cot::$cfg['users']['user_email_noprotection']) {
+		if (!Cot::$cfg['users']['user_email_noprotection']) {
 			$rmailpass = cot_hash($rmailpass, $urr['user_passsalt'], $urr['user_passfunc']);
 			if ($rmailpass != $urr['user_password']) cot_error('pro_wrongpass', 'rmailpass');
 		}
@@ -112,40 +112,40 @@ if ($a == 'update') {
 		if ($res > 0) cot_error('aut_emailalreadyindb', 'ruseremail');
 
 		if (!cot_error_found()) {
-			if (!cot::$cfg['users']['user_email_noprotection']) {
+			if (!Cot::$cfg['users']['user_email_noprotection']) {
 				$validationkey = md5(microtime());
-                cot::$db->update(cot::$db->users, array(
+                Cot::$db->update(Cot::$db->users, array(
                     'user_email' => $ruseremail,
                     'user_lostpass' => $validationkey,
                     'user_maingrp' => '0',
                     'user_sid' => $urr['user_maingrp']),
-                    "user_id='" . cot::$usr['id']."'"
+                    "user_id='" . Cot::$usr['id']."'"
                 );
 
-				$rsubject = cot::$L['aut_mailnoticetitle'];
-				$ractivate = cot::$cfg['mainurl'] . '/' .
+				$rsubject = Cot::$L['aut_mailnoticetitle'];
+				$ractivate = Cot::$cfg['mainurl'] . '/' .
                     cot_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
-				$rbody = sprintf(cot::$L['aut_emailchange'], cot::$usr['name'], $ractivate);
-				$rbody .= "\n\n" . cot::$L['aut_contactadmin'];
+				$rbody = sprintf(Cot::$L['aut_emailchange'], Cot::$usr['name'], $ractivate);
+				$rbody .= "\n\n" . Cot::$L['aut_contactadmin'];
 				cot_mail($ruseremail, $rsubject, $rbody);
 
-				if (cot_import(cot::$sys['site_id'], 'COOKIE', 'TXT')) {
-					cot_setcookie(cot::$sys['site_id'], '', time() - 63072000, cot::$cfg['cookiepath'],
-                        cot::$cfg['cookiedomain'], cot::$sys['secure'], true);
+				if (cot_import(Cot::$sys['site_id'], 'COOKIE', 'TXT')) {
+					cot_setcookie(Cot::$sys['site_id'], '', time() - 63072000, Cot::$cfg['cookiepath'],
+                        Cot::$cfg['cookiedomain'], Cot::$sys['secure'], true);
 				}
 
-				if (!empty($_SESSION[cot::$sys['site_id']])) {
+				if (!empty($_SESSION[Cot::$sys['site_id']])) {
 					session_unset();
 					session_destroy();
 				}
 				if (cot_plugin_active('whosonline')) {
-                    cot::$db->delete(cot::$db->online, "online_ip='" . cot::$usr['ip'] . "'");
+                    Cot::$db->delete(Cot::$db->online, "online_ip='" . Cot::$usr['ip'] . "'");
 				}
 				cot_redirect(cot_url('message', 'msg=102', '', true));
 
 			} else {
-                cot::$db->update(cot::$db->users, array('user_email' => $ruseremail), "user_id='" .
-                    cot::$usr['id']."'");
+                Cot::$db->update(Cot::$db->users, array('user_email' => $ruseremail), "user_id='" .
+                    Cot::$usr['id']."'");
 			}
 		}
 	}
@@ -163,7 +163,7 @@ if ($a == 'update') {
 		}
 
 		$ruser['user_auth'] = '';
-        cot::$db->update(cot::$db->users, $ruser, "user_id='" . cot::$usr['id']."'");
+        Cot::$db->update(Cot::$db->users, $ruser, "user_id='" . Cot::$usr['id']."'");
 		cot_extrafield_movefiles();
 
 		/* === Hook === */
@@ -176,11 +176,11 @@ if ($a == 'update') {
 	}
 }
 
-$sql = cot::$db->query('SELECT * FROM ' . cot::$db->users . " WHERE user_id='" . cot::$usr['id'] . "' LIMIT 1");
+$sql = Cot::$db->query('SELECT * FROM ' . Cot::$db->users . " WHERE user_id='" . Cot::$usr['id'] . "' LIMIT 1");
 $urr = $sql->fetch();
 
-cot::$out['subtitle'] = cot::$L['Profile'];
-cot::$out['head'] .= cot::$R['code_noindex'];
+Cot::$out['subtitle'] = Cot::$L['Profile'];
+Cot::$out['head'] .= Cot::$R['code_noindex'];
 
 $mskin = cot_tplfile(array('users', 'profile'), 'module');
 
@@ -190,21 +190,21 @@ foreach (cot_getextplugins('users.profile.main') as $pl) {
 }
 /* ===== */
 
-require_once cot::$cfg['system_dir'] . '/header.php';
+require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');
 
-$protected = !cot::$cfg['users']['useremailchange'] ? array('disabled' => 'disabled') : array();
+$protected = !Cot::$cfg['users']['useremailchange'] ? array('disabled' => 'disabled') : array();
 $profile_form_email = cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)
 	+ $protected);
 
-$editor_class = cot::$cfg['users']['usertextimg'] ? 'minieditor' : '';
+$editor_class = Cot::$cfg['users']['usertextimg'] ? 'minieditor' : '';
 
 $t->assign(array(
-	'USERS_PROFILE_TITLE' => cot_rc_link(cot_url('users', 'm=profile'), cot::$L['pro_title']),
-	'USERS_PROFILE_SUBTITLE' => cot::$L['pro_subtitle'],
+	'USERS_PROFILE_TITLE' => cot_rc_link(cot_url('users', 'm=profile'), Cot::$L['pro_title']),
+	'USERS_PROFILE_SUBTITLE' => Cot::$L['pro_subtitle'],
 	'USERS_PROFILE_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
 	'USERS_PROFILE_EDITLINK' => cot_url('users', 'm=edit&id='.$urr['user_id']),
 	'USERS_PROFILE_FORM_SEND' => cot_url('users', "m=profile&a=update&".cot_xg()),
@@ -216,11 +216,11 @@ $t->assign(array(
 	'USERS_PROFILE_TEXT' => cot_textarea('rusertext', $urr['user_text'], 8, 56, array('class' => $editor_class)),
 	'USERS_PROFILE_EMAIL' => $profile_form_email,
 	'USERS_PROFILE_EMAILPASS' => cot_inputbox('password', 'rmailpass', '', array('size' => 12, 'maxlength' => 32, 'autocomplete' => 'off')),
-	'USERS_PROFILE_HIDEEMAIL' => cot_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array(cot::$L['Yes'], cot::$L['No'])),
+	'USERS_PROFILE_HIDEEMAIL' => cot_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array(Cot::$L['Yes'], Cot::$L['No'])),
 	'USERS_PROFILE_THEME' => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
 	'USERS_PROFILE_LANG' => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	'USERS_PROFILE_GENDER' => cot_selectbox_gender($urr['user_gender'] ,'rusergender'),
-	'USERS_PROFILE_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', cot::$sys['now']), cot_date('Y', cot::$sys['now']) - 100, false),
+	'USERS_PROFILE_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', cot_date('Y', Cot::$sys['now']), cot_date('Y', Cot::$sys['now']) - 100, false),
 	'USERS_PROFILE_TIMEZONE' => cot_selectbox_timezone($urr['user_timezone'], 'rusertimezone'),
 	'USERS_PROFILE_REGDATE' => cot_date('datetime_medium', $urr['user_regdate']),
 	'USERS_PROFILE_REGDATE_STAMP' => $urr['user_regdate'],
@@ -234,8 +234,8 @@ $t->assign(array(
 ));
 
 // Extra fields
-if (!empty(cot::$extrafields[cot::$db->users])) {
-    foreach (cot::$extrafields[cot::$db->users] as $exfld) {
+if (!empty(Cot::$extrafields[Cot::$db->users])) {
+    foreach (Cot::$extrafields[Cot::$db->users] as $exfld) {
         $uname = strtoupper($exfld['field_name']);
         $exfld_val = cot_build_extrafields('ruser'.$exfld['field_name'], $exfld, $urr['user_'.$exfld['field_name']]);
         $exfld_title = cot_extrafield_title($exfld, 'user_');
@@ -259,8 +259,8 @@ foreach (cot_getextplugins('users.profile.tags') as $pl) {
 // Error handling
 cot_display_messages($t);
 
-if (cot::$cfg['users']['useremailchange']) {
-	if (!cot::$cfg['users']['user_email_noprotection']) {
+if (Cot::$cfg['users']['useremailchange']) {
+	if (!Cot::$cfg['users']['user_email_noprotection']) {
 		$t->parse('MAIN.USERS_PROFILE_EMAILCHANGE.USERS_PROFILE_EMAILPROTECTION');
 	}
 	$t->parse('MAIN.USERS_PROFILE_EMAILCHANGE');
@@ -269,4 +269,4 @@ if (cot::$cfg['users']['useremailchange']) {
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once cot::$cfg['system_dir'] . '/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';

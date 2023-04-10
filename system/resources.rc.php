@@ -9,7 +9,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-// Todo may be use cot::$L, cot::$cfg instead?
+// Todo may be use Cot::$L, Cot::$cfg instead?
 global $L, $cfg;
 
 if (!isset($L['Delete']))  include cot_langfile('main', 'core');

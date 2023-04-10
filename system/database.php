@@ -290,10 +290,10 @@ class CotDB
 	private function _startTimer()
 	{
         // if config is not loaded yet, save stats just in case
-		$showStats = !isset(cot::$cfg['showsqlstats']) || cot::$cfg['showsqlstats'];
+		$showStats = !isset(Cot::$cfg['showsqlstats']) || Cot::$cfg['showsqlstats'];
 
 		$this->_count++;
-		if ($showStats || cot::$cfg['debug_mode']) {
+		if ($showStats || Cot::$cfg['debug_mode']) {
 			$this->_xtime = microtime();
 		}
 	}
@@ -304,15 +304,15 @@ class CotDB
 	private function _stopTimer($query)
 	{
         // if config is not loaded yet, save stats just in case
-        $showStats = !isset(cot::$cfg['showsqlstats']) || cot::$cfg['showsqlstats'];
-        $devMode = !isset(cot::$cfg['devmode']) || cot::$cfg['devmode'];
+        $showStats = !isset(Cot::$cfg['showsqlstats']) || Cot::$cfg['showsqlstats'];
+        $devMode = !isset(Cot::$cfg['devmode']) || Cot::$cfg['devmode'];
 
-		if ($showStats || cot::$cfg['debug_mode']) {
+		if ($showStats || Cot::$cfg['debug_mode']) {
 			$ytime = microtime();
 			$xtime = explode(' ',$this->_xtime);
 			$ytime = explode(' ',$ytime);
 			$this->_tcount += $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0];
-			if ($devMode || cot::$cfg['debug_mode']) {
+			if ($devMode || Cot::$cfg['debug_mode']) {
 				$calls = '';
 				$bt = debug_backtrace();
 				for ($i = sizeof($bt)-1; $i > 0; $i--) {
@@ -320,8 +320,8 @@ class CotDB
 					$call = (($object && $bt[$i]['class']) ? $bt[$i]['class'].$bt[$i]['type'] : '').$bt[$i]['function'].'();';
 					$calls .= (empty($calls)?'':"\n → ").basename($bt[$i]['file']).' ['.$bt[$i]['line'].']: '.$call;
 				}
-                cot::$sys['devmode']['queries'][] = array ($this->_count, $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query, $calls);
-                cot::$sys['devmode']['timeline'][] = $xtime[1] + $xtime[0] - cot::$sys['starttime'];
+                Cot::$sys['devmode']['queries'][] = array ($this->_count, $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query, $calls);
+                Cot::$sys['devmode']['timeline'][] = $xtime[1] + $xtime[0] - Cot::$sys['starttime'];
 			}
 		}
 	}

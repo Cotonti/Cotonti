@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL.');
 // Environment setup
 define('COT_PM', true);
 
-cot::$env['location'] = 'private_messages';
+Cot::$env['location'] = 'private_messages';
 
 // Additional API requirements
 require_once cot_incfile('extrafields');
@@ -34,7 +34,7 @@ if (!in_array($m, ['send', 'message'])) {
 	$m = 'list';
 }
 
-if (cot::$cfg['pm']['turnajax'] && !empty($editor) && !COT_AJAX) {
+if (Cot::$cfg['pm']['turnajax'] && !empty($editor) && !COT_AJAX) {
     // It is needed to load rich text editor to use it on AJAX loaded pages
     $cot_turnOnEditor = true;
 }

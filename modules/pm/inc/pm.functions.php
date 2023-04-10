@@ -25,15 +25,15 @@ const COT_PM_STATE_DELETED = 3;
 require_once cot_langfile('pm', 'module');
 require_once cot_incfile('pm', 'module', 'resources');
 
-$parser = !empty(cot::$sys['parser']) ? cot::$sys['parser'] : cot::$cfg['parser'];
-$editor = isset(cot::$cfg['plugin'][$parser]) ? cot::$cfg['plugin'][$parser]['editor'] : null;
+$parser = !empty(Cot::$sys['parser']) ? Cot::$sys['parser'] : Cot::$cfg['parser'];
+$editor = isset(Cot::$cfg['plugin'][$parser]) ? Cot::$cfg['plugin'][$parser]['editor'] : null;
 
-cot::$db->registerTable('pm');
+Cot::$db->registerTable('pm');
 
-cot::$cfg['pm']['turnajax'] =
-    cot::$cfg['pm']['turnajax']
-    && cot::$cfg['jquery']
-    && cot::$cfg['turnajax']
+Cot::$cfg['pm']['turnajax'] =
+    Cot::$cfg['pm']['turnajax']
+    && Cot::$cfg['jquery']
+    && Cot::$cfg['turnajax']
     && $editor != 'elrte'
     && $editor != 'epiceditor';
 
@@ -53,13 +53,13 @@ function cot_send_pm($to, $subject, $text, $from = null, $fromState = 0)
     }
 
     if (empty($from)) {
-        $from = cot::$usr['id'];
+        $from = Cot::$usr['id'];
     }
 
     $fromName = cot_user_full_name($from);
 
     $pm['pm_title'] = $subject;
-    $pm['pm_date'] = cot::$sys['now'];
+    $pm['pm_date'] = Cot::$sys['now'];
     $pm['pm_text'] = $text;
     $pm['pm_fromstate'] = $fromState;
     $pm['pm_fromuserid'] = (int) $from;
@@ -73,17 +73,17 @@ function cot_send_pm($to, $subject, $text, $from = null, $fromState = 0)
     }
     /* ===== */
 
-    $result = cot::$db->insert(cot::$db->pm, $pm);
+    $result = Cot::$db->insert(Cot::$db->pm, $pm);
     if (!$result) {
         return false;
     }
-    $id = cot::$db->lastInsertId();
+    $id = Cot::$db->lastInsertId();
 
-    cot::$db->update(cot::$db->users, ['user_newpm' => '1'], "user_id=:userId", ['userId' => $to]);
+    Cot::$db->update(Cot::$db->users, ['user_newpm' => '1'], "user_id=:userId", ['userId' => $to]);
 
     $stats_enabled = function_exists('cot_stat_inc');
-    if (cot::$cfg['pm']['allownotifications']) {
-        $pmsql = cot::$db->query('SELECT user_email, user_name, user_lang FROM ' . cot::$db->users .
+    if (Cot::$cfg['pm']['allownotifications']) {
+        $pmsql = Cot::$db->query('SELECT user_email, user_name, user_lang FROM ' . Cot::$db->users .
             ' WHERE user_id = ? AND user_pmnotify = 1 AND user_maingrp > 3', $to);
 
         if ($row = $pmsql->fetch()) {
@@ -121,14 +121,14 @@ function cot_send_translated_mail($rlang, $remail, $rusername)
 {
 	global $cfg, $usr, $L;
 
-	require_once cot_langfile('pm', 'module', cot::$cfg['defaultlang'], $rlang);
+	require_once cot_langfile('pm', 'module', Cot::$cfg['defaultlang'], $rlang);
 	if (!$L || !isset($L['pm_notify']))
 	{
 		global $L;
 	}
 
 	$rsubject = $L['pm_notifytitle'];
-	$rbody = sprintf($L['pm_notify'], $rusername, htmlspecialchars($usr['name']), cot::$cfg['mainurl'] . '/' .
+	$rbody = sprintf($L['pm_notify'], $rusername, htmlspecialchars($usr['name']), Cot::$cfg['mainurl'] . '/' .
         cot_url('pm', '', '', true));
 
 	cot_mail($remail, $rsubject, $rbody);

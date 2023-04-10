@@ -19,6 +19,6 @@ Hooks=users.edit.update.delete
 defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('trashcan', 'plug');
 
-if (cot::$cfg['plugin']['trashcan']['trash_user']) {
-	cot_trash_put('user', cot::$L['User'] . ' #' . $id . ' ' . $urr['user_name'], $id, $urr);
+if (Cot::$cfg['plugin']['trashcan']['trash_user']) {
+	cot_trash_put('user', Cot::$L['User'] . ' #' . $id . ' ' . $urr['user_name'], $id, $urr);
 }

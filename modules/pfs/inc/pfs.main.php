@@ -18,20 +18,20 @@ $parser = cot_import('parser', 'G', 'ALP');		// custom parser
 $userid = cot_import('userid','G','INT');			// User ID or 0
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
-list($pg, $d, $durl) = cot_import_pagenav('d', cot::$cfg['pfs']['maxpfsperpage']);   // Page number files
-list($pgf, $df) = cot_import_pagenav('df', cot::$cfg['pfs']['maxpfsperpage']);   // page number folders
+list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['pfs']['maxpfsperpage']);   // Page number files
+list($pgf, $df) = cot_import_pagenav('df', Cot::$cfg['pfs']['maxpfsperpage']);   // page number folders
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('pfs', 'a');
-cot_block(cot::$usr['auth_write']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('pfs', 'a');
+cot_block(Cot::$usr['auth_write']);
 
-cot::$sys['parser'] = empty($parser) ? cot::$cfg['parser'] : $parser;
+Cot::$sys['parser'] = empty($parser) ? Cot::$cfg['parser'] : $parser;
 
 $pn_c1 = empty($c1) ? '' : '&c1=' . $c1;
 $pn_c2 = empty($c2) ? '' : '&c2=' . $c2;
 
 $more = '';
-if (!cot::$usr['isadmin'] || $userid === null) {
-	$userid = cot::$usr['id'];
+if (!Cot::$usr['isadmin'] || $userid === null) {
+	$userid = Cot::$usr['id'];
 } else {
     $more = 'userid=' . $userid;
 }
@@ -39,21 +39,21 @@ if (!cot::$usr['isadmin'] || $userid === null) {
 $standalone = FALSE;
 
 $user_info = cot_user_data($userid);
-if (!$user_info && !cot::$usr['isadmin']) {
+if (!$user_info && !Cot::$usr['isadmin']) {
     cot_die_message(404);
 }
 
-$pfs_base_href = cot::$sys['abs_url'];
+$pfs_base_href = Cot::$sys['abs_url'];
 $pfs_dir_user = cot_pfs_path($userid);
 $thumbs_dir_user = cot_pfs_thumbpath($userid);
 $rel_dir_user = cot_pfs_relpath($userid);
 
 $sql_pfs_max = ['maxfile' => 0, 'maxtotal' => 0,];
 if ($user_info) {
-    $sql_pfs_max = cot::$db->query(
+    $sql_pfs_max = Cot::$db->query(
         'SELECT MAX(grp_pfs_maxfile) AS maxfile, SUM(grp_pfs_maxtotal) AS maxtotal ' .
-        'FROM ' . cot::$db->groups .
-        ' WHERE grp_id IN (SELECT gru_groupid FROM ' . cot::$db->groups_users . " WHERE gru_userid = ?)",
+        'FROM ' . Cot::$db->groups .
+        ' WHERE grp_id IN (SELECT gru_groupid FROM ' . Cot::$db->groups_users . " WHERE gru_userid = ?)",
         $user_info['user_id']
     )->fetch();
 }
@@ -61,7 +61,7 @@ $maxfile = min((int) $sql_pfs_max['maxfile'], cot_get_uploadmax()) * 1024; // Ki
 $maxtotal = (int) $sql_pfs_max['maxtotal'] * 1024; // KiB -> Bytes
 
 
-cot_block(($maxfile > 0 && $maxtotal > 0) || cot::$usr['isadmin']);
+cot_block(($maxfile > 0 && $maxtotal > 0) || Cot::$usr['isadmin']);
 if (!empty($c1) || !empty($c2)) {
     if (!empty($c1)) {
         $more .= (($more != '') ? '&' : '') . 'c1=' . $c1;
@@ -80,10 +80,10 @@ foreach ($cot_extensions as $k => $line) {
 	$filedesc[$line[0]] = $line[1];
 }
 
-cot::$L['pfs_title'] = ($userid == 0) ? cot::$L['SFS'] : cot::$L['pfs_title'];
-$title[] = [cot_url('pfs', $more), cot::$L['pfs_title']];
+Cot::$L['pfs_title'] = ($userid == 0) ? Cot::$L['SFS'] : Cot::$L['pfs_title'];
+$title[] = [cot_url('pfs', $more), Cot::$L['pfs_title']];
 
-if ($userid > 0 && $userid != cot::$usr['id']) {
+if ($userid > 0 && $userid != Cot::$usr['id']) {
     if ($user_info) {
         $title[] = [
             cot_url('users', [
@@ -105,8 +105,8 @@ foreach (cot_getextplugins('pfs.first') as $pl) {
 /* ===== */
 
 $u_totalsize = 0;
-$pfs_totalsize = cot::$db->query(
-    'SELECT SUM(pfs_size) FROM ' . cot::$db->pfs . ' WHERE pfs_userid=? ',
+$pfs_totalsize = Cot::$db->query(
+    'SELECT SUM(pfs_size) FROM ' . Cot::$db->pfs . ' WHERE pfs_userid=? ',
     $userid
 )->fetchColumn();
 
@@ -122,8 +122,8 @@ if ($a == 'upload') {
 	/* ===== */
 
     if ($f > 0) {
-        $exists = cot::$db->query(
-            'SELECT pff_id FROM ' . cot::$db->pfs_folders . ' WHERE pff_id = :folder AND pff_userid = :userId',
+        $exists = Cot::$db->query(
+            'SELECT pff_id FROM ' . Cot::$db->pfs_folders . ' WHERE pff_id = :folder AND pff_userid = :userId',
             ['folder' => $f, 'userId' => $userid]
         )->rowCount();
         if (!$exists) {
@@ -131,7 +131,7 @@ if ($a == 'upload') {
         }
     }
 
-	for ($ii = 0; $ii < cot::$cfg['pfs']['pfsmaxuploads']; $ii++) {
+	for ($ii = 0; $ii < Cot::$cfg['pfs']['pfsmaxuploads']; $ii++) {
 		$disp_errors = '';
 		$u_tmp_name = $_FILES['userfile']['tmp_name'][$ii];
 		$u_type = $_FILES['userfile']['type'][$ii];
@@ -147,12 +147,12 @@ if ($a == 'upload') {
 			$f_extension = mb_substr($u_name, $dotpos);
 			$f_extension_ok = 0;
 			$desc = $ndesc[$ii];
-			if (cot::$cfg['pfs']['pfstimename']) {
+			if (Cot::$cfg['pfs']['pfstimename']) {
 				$u_newname = time() . '_' . cot_unique(6) . '_' . $userid . '.' . $f_extension;
 			} else {
 				$u_newname = cot_safename($u_name, true, '_' . $userid);
 			}
-			$u_sqlname = cot::$db->prep($u_newname);
+			$u_sqlname = Cot::$db->prep($u_newname);
 
             if (!in_array($f_extension, ['php', 'php3', 'php4', 'php5'])) {
 				foreach ($cot_extensions as $k => $line) {
@@ -174,17 +174,17 @@ if ($a == 'upload') {
 					if (!file_exists($pfs_dir_user . $u_newname)) {
 						$is_moved = true;
 
-						if (cot::$cfg['pfs']['pfsuserfolder']) {
+						if (Cot::$cfg['pfs']['pfsuserfolder']) {
 							if (!is_dir($pfs_dir_user)) {
-                                $is_moved &= mkdir($pfs_dir_user, cot::$cfg['dir_perms']);
+                                $is_moved &= mkdir($pfs_dir_user, Cot::$cfg['dir_perms']);
                             }
 							if (!is_dir($thumbs_dir_user)) {
-                                $is_moved &= mkdir($thumbs_dir_user, cot::$cfg['dir_perms']);
+                                $is_moved &= mkdir($thumbs_dir_user, Cot::$cfg['dir_perms']);
                             }
 						}
 
 						$is_moved &= move_uploaded_file($u_tmp_name, $pfs_dir_user.$u_newname);
-						$is_moved &= chmod($pfs_dir_user.$u_newname, cot::$cfg['file_perms']);
+						$is_moved &= chmod($pfs_dir_user.$u_newname, Cot::$cfg['file_perms']);
 
 						$u_size = filesize($pfs_dir_user.$u_newname);
 
@@ -195,11 +195,11 @@ if ($a == 'upload') {
 							}
 							/* ===== */
 
-                            cot::$db->insert(
-                                cot::$db->pfs,
+                            Cot::$db->insert(
+                                Cot::$db->pfs,
                                 [
                                     'pfs_userid' => (int) $userid,
-                                    'pfs_date' => (int) cot::$sys['now'],
+                                    'pfs_date' => (int) Cot::$sys['now'],
                                     'pfs_file' => $u_sqlname,
                                     'pfs_extension' => $f_extension,
                                     'pfs_folderid' => $f,
@@ -210,14 +210,14 @@ if ($a == 'upload') {
                             );
 
                             if ($f > 0) {
-                                cot::$db->update(
-                                    cot::$db->pfs_folders,
-                                    ['pff_updated' => cot::$sys['now']],
+                                Cot::$db->update(
+                                    Cot::$db->pfs_folders,
+                                    ['pff_updated' => Cot::$sys['now']],
                                     'pff_id = ' . $f
                                 );
                             }
 
-							$disp_errors .= cot::$L['Yes'];
+							$disp_errors .= Cot::$L['Yes'];
 							$pfs_totalsize += $u_size;
 
 							/* === Hook === */
@@ -228,38 +228,38 @@ if ($a == 'upload') {
 
 							if (
                                 in_array($f_extension, $gd_supported)
-                                && cot::$cfg['pfs']['th_amode'] != 'Disabled'
+                                && Cot::$cfg['pfs']['th_amode'] != 'Disabled'
                                 && file_exists($pfs_dir_user.$u_newname)
                             ) {
 								@unlink($thumbs_dir_user . $u_newname);
-								$th_colortext = cot::$cfg['pfs']['th_colortext'];
-								$th_colorbg = cot::$cfg['pfs']['th_colorbg'];
+								$th_colortext = Cot::$cfg['pfs']['th_colortext'];
+								$th_colorbg = Cot::$cfg['pfs']['th_colorbg'];
 
 								cot_imageresize(
                                     $pfs_dir_user . $u_newname,
                                     $thumbs_dir_user  . $u_newname,
-                                    cot::$cfg['pfs']['th_x'],
-                                    cot::$cfg['pfs']['th_y'],
+                                    Cot::$cfg['pfs']['th_x'],
+                                    Cot::$cfg['pfs']['th_y'],
                                     '',
                                     $th_colorbg,
-                                    cot::$cfg['pfs']['th_jpeg_quality'],
+                                    Cot::$cfg['pfs']['th_jpeg_quality'],
                                     true
                                 );
 							}
 						}  else {
 							@unlink($pfs_dir_user.$u_newname);
-							$disp_errors .= cot::$L['pfs_filenotmoved'];
+							$disp_errors .= Cot::$L['pfs_filenotmoved'];
 						}
 					} else {
-						$disp_errors .= cot::$L['pfs_fileexists'];
+						$disp_errors .= Cot::$L['pfs_fileexists'];
 					}
 				} elseif ($fcheck == 2) {
-					$disp_errors .= sprintf(cot::$L['pfs_filemimemissing'], $f_extension);
+					$disp_errors .= sprintf(Cot::$L['pfs_filemimemissing'], $f_extension);
 				} else {
-					$disp_errors .= sprintf(cot::$L['pfs_filenotvalid'], $f_extension);
+					$disp_errors .= sprintf(Cot::$L['pfs_filenotvalid'], $f_extension);
 				}
 			} else {
-				$disp_errors .= cot::$L['pfs_filetoobigorext'];
+				$disp_errors .= Cot::$L['pfs_filetoobigorext'];
 			}
 
 			$err_msg[] = $disp_errors;
@@ -324,10 +324,10 @@ if ($a == 'upload') {
 }
 
 // Title parameter
-cot::$out['subtitle'] = cot::$L['pfs_title'];
+Cot::$out['subtitle'] = Cot::$L['pfs_title'];
 
 if (!$standalone) {
-    require_once cot::$cfg['system_dir'] . '/header.php';
+    require_once Cot::$cfg['system_dir'] . '/header.php';
 }
 $mskin = ($standalone) ? cot_tplfile(array('pfs', 'standalone')) : cot_tplfile('pfs');
 $t = new XTemplate($mskin);
@@ -339,8 +339,8 @@ $subFilesCount = 0;
 $subFilesOnPageCount = 0;
 
 if ($f > 0) {
-    $row_pff = cot::$db->query(
-        'SELECT * FROM ' . cot::$db->pfs_folders . ' WHERE pff_id = :folder AND pff_userid = :userId',
+    $row_pff = Cot::$db->query(
+        'SELECT * FROM ' . Cot::$db->pfs_folders . ' WHERE pff_id = :folder AND pff_userid = :userId',
         ['folder' => $f, 'userId' => $userid]
     )->fetch();
     if (!$row_pff) {
@@ -350,8 +350,8 @@ if ($f > 0) {
     $title[] = [cot_url('pfs', 'f=' . $row_pff['pff_id'] . '&' . $more), $row_pff['pff_title'],];
 
 } else {
-	$sql_pfs_filesinfo = cot::$db->query(
-        'SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM ' . cot::$db->pfs .
+	$sql_pfs_filesinfo = Cot::$db->query(
+        'SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM ' . Cot::$db->pfs .
             ' WHERE pfs_userid = ? GROUP BY pfs_folderid',
         $userid
     );
@@ -364,12 +364,12 @@ if ($f > 0) {
 	}
 	$sql_pfs_filesinfo->closeCursor();
 
-    $foldersCount = cot::$db->query(
-        'SELECT COUNT(*) FROM ' . cot::$db->pfs_folders . ' WHERE pff_userid = ?',
+    $foldersCount = Cot::$db->query(
+        'SELECT COUNT(*) FROM ' . Cot::$db->pfs_folders . ' WHERE pff_userid = ?',
         $userid
     )->fetchColumn();
 
-    $subFilesCount = cot::$db->query(
+    $subFilesCount = Cot::$db->query(
         'SELECT COUNT(*) FROM ' . $db_pfs . ' WHERE pfs_folderid > 0 AND pfs_userid = ?',
         $userid
     )->fetchColumn();
@@ -389,7 +389,7 @@ if ($f > 0) {
 		$pff_count = $row_pff['pff_count'];
 		$pff_fcount = isset($pff_filescount[$pff_id]) ? (int) $pff_filescount[$pff_id] : 0;
 		$pff_fsize = isset($pff_filessize[$pff_id]) ? (int) $pff_filessize[$pff_id] : 0;
-		$icon_f = ($pff_isgallery) ? cot::$R['pfs_icon_gallery'] : cot::$R['pfs_icon_folder'];
+		$icon_f = ($pff_isgallery) ? Cot::$R['pfs_icon_gallery'] : Cot::$R['pfs_icon_folder'];
 
 		$t->assign(array(
 			'PFF_ROW_ID' => $pff_id,
@@ -422,14 +422,14 @@ if ($f > 0) {
 	$sql_pfs_folders->closeCursor();
 }
 
-$filesCount = cot::$db->query(
-    'SELECT COUNT(*) FROM ' . cot::$db->pfs . ' WHERE pfs_userid = :userId AND pfs_folderid = :folder',
+$filesCount = Cot::$db->query(
+    'SELECT COUNT(*) FROM ' . Cot::$db->pfs . ' WHERE pfs_userid = :userId AND pfs_folderid = :folder',
     ['folder' => $f, 'userId' => $userid]
 )->fetchColumn();
 
-$sql_pfs = cot::$db->query(
-    'SELECT * FROM ' . cot::$db->pfs . ' WHERE pfs_userid = :userId AND pfs_folderid = :folder ' .
-    "ORDER BY pfs_file ASC LIMIT $d, " . cot::$cfg['pfs']['maxpfsperpage'],
+$sql_pfs = Cot::$db->query(
+    'SELECT * FROM ' . Cot::$db->pfs . ' WHERE pfs_userid = :userId AND pfs_folderid = :folder ' .
+    "ORDER BY pfs_file ASC LIMIT $d, " . Cot::$cfg['pfs']['maxpfsperpage'],
     ['folder' => $f, 'userId' => $userid]
 );
 
@@ -458,22 +458,22 @@ foreach ($sql_pfs->fetchAll() as $row) {
 	$add_file = ($standalone) ? cot_rc('pfs_link_addfile') : '';
 
 	if ($pfs_extension != $pfs_realext) {
-		cot::$db->update(cot::$db->pfs, ['pfs_extension' => $pfs_realext], 'pfs_id = ?', $pfs_id);
+		Cot::$db->update(Cot::$db->pfs, ['pfs_extension' => $pfs_realext], 'pfs_id = ?', $pfs_id);
 		$pfs_extension = $pfs_realext;
 	}
 
-	if (in_array($pfs_extension, $gd_supported) && cot::$cfg['pfs']['th_amode']!='Disabled') {
+	if (in_array($pfs_extension, $gd_supported) && Cot::$cfg['pfs']['th_amode']!='Disabled') {
 		if (!file_exists($thumbs_dir_user . $pfs_file) && file_exists($pfs_dir_user . $pfs_file)) {
-			$th_colortext = cot::$cfg['pfs']['th_colortext'];
-			$th_colorbg = cot::$cfg['pfs']['th_colorbg'];
+			$th_colortext = Cot::$cfg['pfs']['th_colortext'];
+			$th_colorbg = Cot::$cfg['pfs']['th_colorbg'];
 			cot_imageresize(
                 $pfs_dir_user . $pfs_file,
                 $thumbs_dir_user . $pfs_file,
-                cot::$cfg['pfs']['th_x'],
-                cot::$cfg['pfs']['th_y'],
+                Cot::$cfg['pfs']['th_x'],
+                Cot::$cfg['pfs']['th_y'],
                 '',
                 $th_colorbg,
-                cot::$cfg['pfs']['th_jpeg_quality'],
+                Cot::$cfg['pfs']['th_jpeg_quality'],
                 true
             );
 		}
@@ -530,13 +530,13 @@ $t->assign([
     'PFS_FILESCOUNT_TITLE' => cot_declension($filesCount, $Ls['Files']),
     'PFS_ONPAGE_FILES_TITLE' => cot_declension($filesOnPageCount, $Ls['Files']),
     'PFS_FILESCOUNT' => $filesCount,
-    'PFS_INTHISFOLDER' => ($f > 0) ? cot::$L['pfs_filesinthisfolder'] : cot::$L['pfs_filesintheroot'],
+    'PFS_INTHISFOLDER' => ($f > 0) ? Cot::$L['pfs_filesinthisfolder'] : Cot::$L['pfs_filesintheroot'],
     'PFS_ONPAGE_FILES' => $filesOnPageCount,
 ]);
 
 if ($filesCount > 0 || $foldersCount > 0) {
 	if ($foldersCount > 0) {
-		$pagenav = cot_pagenav('pfs', $more, $df, $foldersCount, cot::$cfg['pfs']['maxpfsperpage'], 'df');
+		$pagenav = cot_pagenav('pfs', $more, $df, $foldersCount, Cot::$cfg['pfs']['maxpfsperpage'], 'df');
 
 		$t->assign(array(
 			'PFF_PAGING_PREV' => $pagenav['prev'],
@@ -553,7 +553,7 @@ if ($filesCount > 0 || $foldersCount > 0) {
             $pagnavParams .= '&' . $more;
         }
 		$pagnavParams .= $thumbspagination;
-		$pagenav = cot_pagenav('pfs', $pagnavParams, $d, $filesCount, cot::$cfg['pfs']['maxpfsperpage']);
+		$pagenav = cot_pagenav('pfs', $pagnavParams, $d, $filesCount, Cot::$cfg['pfs']['maxpfsperpage']);
 
 		$t->assign(array(
 			'PFS_PAGING_PREV' => $pagenav['prev'],
@@ -564,8 +564,8 @@ if ($filesCount > 0 || $foldersCount > 0) {
 }
 
 // ========== Statistics =========
-$showthumbs = ($opt != 'thumbs' && $filesCount > 0 && cot::$cfg['pfs']['th_amode'] != 'Disabled') ?
-    cot_rc_link(cot_url('pfs', 'f=' . $f . '&' . $more . '&opt=thumbs'), cot::$L['Thumbnails']) : '';
+$showthumbs = ($opt != 'thumbs' && $filesCount > 0 && Cot::$cfg['pfs']['th_amode'] != 'Disabled') ?
+    cot_rc_link(cot_url('pfs', 'f=' . $f . '&' . $more . '&opt=thumbs'), Cot::$L['Thumbnails']) : '';
 
 $t->assign(array(
 	'PFS_TOTALSIZE' => cot_build_filesize($pfs_totalsize, 1),
@@ -582,7 +582,7 @@ $t->assign(array(
 ));
 
 // ========== Upload =========
-if (cot::$usr['auth_write']) {
+if (Cot::$usr['auth_write']) {
     $t->assign([
         'PFS_UPLOAD_FORM_MAX_SIZE' => $maxfile,
         'PFS_UPLOAD_FORM_USERID' => $userid,
@@ -590,7 +590,7 @@ if (cot::$usr['auth_write']) {
         //'PFS_UPLOAD_FORM_FOLDERS' => cot_selectbox_folders($userid, '', $f),
     ]);
 
-    for ($ii = 0; $ii < cot::$cfg['pfs']['pfsmaxuploads']; $ii++) {
+    for ($ii = 0; $ii < Cot::$cfg['pfs']['pfsmaxuploads']; $ii++) {
         $t->assign([
             'PFS_UPLOAD_FORM_ROW_ID' => $ii,
             'PFS_UPLOAD_FORM_ROW_NUM' => $ii + 1
@@ -615,7 +615,7 @@ foreach ($cot_extensions as $k => $line) {
 
 // ========== Create a new folder =========
 
-if (cot::$usr['auth_write']) {
+if (Cot::$usr['auth_write']) {
 	$t->assign(array(
 		'NEWFOLDER_FORM_ACTION' => cot_url('pfs', 'a=newfolder&' . $more),
 //		'NEWFOLDER_FORM_INPUT_PARENT' => cot_selectbox_folders($userid, '', $f, 'nparentid'),
@@ -625,7 +625,7 @@ if (cot::$usr['auth_write']) {
 
 // ========== Putting all together =========
 
-cot::$out['subtitle'] = cot::$L['Mypfs'];
+Cot::$out['subtitle'] = Cot::$L['Mypfs'];
 
 /* ============= */
 
@@ -647,13 +647,13 @@ if ($standalone) {
 		$pfs_code_addthumb = cot_rc('pfs_code_addthumb');
 		$pfs_code_addpix = cot_rc('pfs_code_addpix');
 	}
-	$winclose = cot::$cfg['pfs']['pfs_winclose'] ? "\nwindow.close();" : '';
+	$winclose = Cot::$cfg['pfs']['pfs_winclose'] ? "\nwindow.close();" : '';
 
 	cot_sendheaders();
 
 	$html = Resources::render();
 	if ($html) {
-        $out['head_head'] = $html . (!empty(cot::$out['head_head']) ? cot::$out['head_head'] : '');
+        $out['head_head'] = $html . (!empty(Cot::$out['head_head']) ? Cot::$out['head_head'] : '');
     }
 
 	$t->assign(array(

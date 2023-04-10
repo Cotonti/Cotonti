@@ -24,7 +24,7 @@ if ($i18n_enabled && $i18n_notmain) {
 	$urlparams = empty($page_data['page_alias']) ? array('c' => $page_data['page_cat'], 'id' => $page_data['page_id']) :
         array('c' => $page_data['page_cat'], 'al' => $page_data['page_alias']);
 
-	if (!cot::$cfg['plugin']['i18n']['omitmain'] || $i18n_locale != cot::$cfg['defaultlang']) {
+	if (!Cot::$cfg['plugin']['i18n']['omitmain'] || $i18n_locale != Cot::$cfg['defaultlang']) {
 		$urlparams['l'] = $i18n_locale;
 		$append_param = '&l=' . $i18n_locale;
 	}
@@ -46,15 +46,15 @@ if ($i18n_enabled && $i18n_notmain) {
 			'CATDESC' => htmlspecialchars($cat_i18n['desc']),
 		));
 		if ($admin_rights) {
-			$i18n_array['ADMIN_EDIT'] = cot_rc_link($edit_url, cot::$L['Edit']);
+			$i18n_array['ADMIN_EDIT'] = cot_rc_link($edit_url, Cot::$L['Edit']);
 			$i18n_array['ADMIN_EDIT_URL'] = $edit_url;
 			$i18n_array['ADMIN_UNVALIDATE'] = $page_data['page_state'] == 1 ?
-				cot_rc_link($validate_url, cot::$L['Validate']) :
-				cot_rc_link($unvalidate_url, cot::$L['Putinvalidationqueue']);
+				cot_rc_link($validate_url, Cot::$L['Validate']) :
+				cot_rc_link($unvalidate_url, Cot::$L['Putinvalidationqueue']);
 			$i18n_array['ADMIN_UNVALIDATE_URL'] = $page_data['page_state'] == 1 ?
 				$validate_url : $unvalidate_url;
-		} elseif (cot::$usr['id'] == $page_data['page_ownerid']) {
-			$i18n_array['ADMIN_EDIT'] = cot_rc_link($edit_url, cot::$L['Edit']);
+		} elseif (Cot::$usr['id'] == $page_data['page_ownerid']) {
+			$i18n_array['ADMIN_EDIT'] = cot_rc_link($edit_url, Cot::$L['Edit']);
 			$i18n_array['ADMIN_EDIT_URL'] = $edit_url;
 		}
 	} else {
@@ -62,7 +62,7 @@ if ($i18n_enabled && $i18n_notmain) {
 	}
 
 	if (!empty($page_data['ipage_title'])) {
-		$text = cot_parse($page_data['ipage_text'], cot::$cfg['page']['markup'], $page_data['page_parser']);
+		$text = cot_parse($page_data['ipage_text'], Cot::$cfg['page']['markup'], $page_data['page_parser']);
 		$text_cut = ((int) $textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
 		$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;
 
@@ -77,7 +77,7 @@ if ($i18n_enabled && $i18n_notmain) {
 			'TEXT_IS_CUT' => $cutted,
 			'DESC_OR_TEXT' => !empty($page_data['ipage_desc'])
 				? htmlspecialchars($page_data['page_desc']) : $text,
-			'MORE' => $cutted ? cot_rc_link($page_data['page_pageurl'], cot::$L['ReadMore']) : '',
+			'MORE' => $cutted ? cot_rc_link($page_data['page_pageurl'], Cot::$L['ReadMore']) : '',
 			'UPDATED_STAMP' => $page_data['ipage_date'],
 		));
 	}
@@ -85,12 +85,12 @@ if ($i18n_enabled && $i18n_notmain) {
 	if ($i18n_write) {
 		if (
             !empty($page_data['ipage_id']) &&
-            ($i18n_admin || (isset($pag_i18n) && $pag_i18n['ipage_translatorid'] == cot::$usr['id']))
+            ($i18n_admin || (isset($pag_i18n) && $pag_i18n['ipage_translatorid'] == Cot::$usr['id']))
         ) {
 			// Edit translation
 			$i18n_array['ADMIN_EDIT'] = cot_rc_link(cot_url(
                 'plug',
-                "e=i18n&m=page&a=edit&id=".$page_data['page_id']."&l=$i18n_locale"), cot::$L['Edit']
+                "e=i18n&m=page&a=edit&id=".$page_data['page_id']."&l=$i18n_locale"), Cot::$L['Edit']
             );
 		}
 	}

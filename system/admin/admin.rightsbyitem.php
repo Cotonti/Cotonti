@@ -9,14 +9,14 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('users', 'a');
-cot::$usr['isadmin'] &= cot_auth('admin', 'a', 'A');
-if (cot::$usr['maingrp'] == COT_GROUP_SUPERADMINS) {
-    cot::$usr['auth_read'] = true;
-    cot::$usr['auth_write'] = true;
-    cot::$usr['isadmin'] = true;
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('users', 'a');
+Cot::$usr['isadmin'] &= cot_auth('admin', 'a', 'A');
+if (Cot::$usr['maingrp'] == COT_GROUP_SUPERADMINS) {
+    Cot::$usr['auth_read'] = true;
+    Cot::$usr['auth_write'] = true;
+    Cot::$usr['isadmin'] = true;
 }
-cot_block(cot::$usr['isadmin']);
+cot_block(Cot::$usr['isadmin']);
 
 $t = new XTemplate(cot_tplfile('admin.rightsbyitem', 'core'));
 
@@ -24,8 +24,8 @@ $ic = cot_import('ic', 'G', 'ALP');
 $io = cot_import('io', 'G', 'ALP');
 $advanced = cot_import('advanced', 'G', 'BOL');
 
-cot::$L['adm_code']['admin'] = cot::$L['Administration'];
-cot::$L['adm_code']['message'] = cot::$L['Messages'];
+Cot::$L['adm_code']['admin'] = Cot::$L['Administration'];
+Cot::$L['adm_code']['message'] = Cot::$L['Messages'];
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.rightsbyitem.first') as $pl) {
@@ -43,9 +43,9 @@ if ($a == 'update') {
         $items = !empty($items) ? $items : [];
     } else {
         // Update rights for all groups
-        $sql = cot::$db->query(
-            'SELECT a.* FROM ' . cot::$db->auth . ' as a ' .
-            'LEFT JOIN ' . cot::$db->groups . ' AS g ON g.grp_id=a.auth_groupid ' .
+        $sql = Cot::$db->query(
+            'SELECT a.* FROM ' . Cot::$db->auth . ' as a ' .
+            'LEFT JOIN ' . Cot::$db->groups . ' AS g ON g.grp_id=a.auth_groupid ' .
             "WHERE auth_code = ? AND auth_option = ? AND grp_skiprights = 0 ORDER BY grp_level DESC, grp_id DESC",
             [$ic, $io]
         );
@@ -70,11 +70,11 @@ if ($a == 'update') {
             $mask += cot_auth_getvalue($l);
         }
 
-        $oldRights = cot::$db->query("SELECT auth_id, auth_rights FROM ".cot::$db->auth.
+        $oldRights = Cot::$db->query("SELECT auth_id, auth_rights FROM ".Cot::$db->auth.
             " WHERE auth_groupid=? AND auth_code=? AND auth_option=?", [$groupId, $ic, $io])->fetch();
 
         if (!empty($oldRights) && $oldRights['auth_rights'] != $mask) {
-            cot::$db->update(cot::$db->auth,  array('auth_rights' => $mask, 'auth_setbyuserid' => cot::$usr['id']),
+            Cot::$db->update(Cot::$db->auth,  array('auth_rights' => $mask, 'auth_setbyuserid' => Cot::$usr['id']),
                 "auth_id=".$oldRights['auth_id']);
         }
 	}
@@ -91,9 +91,9 @@ if ($a == 'update') {
     cot_redirect(cot_url('admin', $urlParams, '', true));
 }
 
-$sql = cot::$db->query('SELECT a.*, u.user_name, g.grp_name, g.grp_level FROM ' . cot::$db->auth . ' as a ' .
-'LEFT JOIN ' . cot::$db->users . ' AS u ON u.user_id=a.auth_setbyuserid '.
-'LEFT JOIN ' . cot::$db->groups . ' AS g ON g.grp_id=a.auth_groupid ' .
+$sql = Cot::$db->query('SELECT a.*, u.user_name, g.grp_name, g.grp_level FROM ' . Cot::$db->auth . ' as a ' .
+'LEFT JOIN ' . Cot::$db->users . ' AS u ON u.user_id=a.auth_setbyuserid '.
+'LEFT JOIN ' . Cot::$db->groups . ' AS g ON g.grp_id=a.auth_groupid ' .
 "WHERE auth_code = ? AND auth_option = ? AND grp_skiprights = 0 ORDER BY grp_level DESC, grp_id DESC", [$ic, $io]);
 
 cot_die($sql->rowCount() == 0);
@@ -107,25 +107,25 @@ foreach (cot_getextplugins('admin.rightsbyitem.case') as $pl) {
 /* ===== */
 
 if ($ic == 'message' || $ic == 'admin') {
-	$adminpath[] = array(cot_url('admin'), cot::$L['adm_code'][$ic]);
+	$adminpath[] = array(cot_url('admin'), Cot::$L['adm_code'][$ic]);
 
 } else {
-	$adminpath[] = array(cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
+	$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
 	if ($ic == 'plug') {
         $itemTitle = !empty($cot_plugins_enabled[$io]) ? $cot_plugins_enabled[$io]['title'] : $io;
         $title = $itemTitle;
 		$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$io), $itemTitle);
 
 	} elseif ($ic == 'structure') {
-		$adminpath[] = array(cot_url('admin', 'm=structure'), cot::$L['Structure']);
+		$adminpath[] = array(cot_url('admin', 'm=structure'), Cot::$L['Structure']);
 
 	} else {
         $itemTitle = !empty($cot_modules[$ic]) ? $cot_modules[$ic]['title'] : $ic;
         $title = $itemTitle;
         $adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$ic), $itemTitle);
 		if ($io != 'a') {
-			$adminpath[] = array(cot_url('admin', 'm=structure&n='.$ic), cot::$L['Structure']);
-            $itemTitle = !empty(cot::$structure[$ic][$io]) ? cot::$structure[$ic][$io]['title'] : $io;
+			$adminpath[] = array(cot_url('admin', 'm=structure&n='.$ic), Cot::$L['Structure']);
+            $itemTitle = !empty(Cot::$structure[$ic][$io]) ? Cot::$structure[$ic][$io]['title'] : $io;
             $title .= '(' . $itemTitle . ')';
             $adminpath[] = array(cot_url('admin', 'm=structure&n='.$ic.'&al='.$io), $itemTitle);
 		}
@@ -133,14 +133,14 @@ if ($ic == 'message' || $ic == 'admin') {
 }
 
 //m=extensions&a=details&mod=page
-$adminpath[] = array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), cot::$L['Rights']);
-($advanced) && $adminpath[] = array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), cot::$L['More']);
-$adminTitle = cot::$L['Rights'];
+$adminpath[] = array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), Cot::$L['Rights']);
+($advanced) && $adminpath[] = array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), Cot::$L['More']);
+$adminTitle = Cot::$L['Rights'];
 
 $adv_columns = ($advanced) ? 8 : 3;
 $adv_columns = (!$advanced && $ic == 'page') ? 4 : $adv_columns;
 
-$l_custom1 = ($ic == 'page') ? cot::$L['Download'] : cot::$L['Custom'].' #1';
+$l_custom1 = ($ic == 'page') ? Cot::$L['Download'] : Cot::$L['Custom'].' #1';
 
 
 // All items that are present in rights edit form

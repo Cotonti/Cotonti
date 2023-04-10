@@ -15,10 +15,10 @@ if (cot_plugin_active('tags')) {
     require_once cot_incfile('tags', 'plug');
 
     // Remove i18n-specific data
-    if (cot::$db->fieldExists(cot::$db->tag_references, 'tag_locale')) {
-        cot::$db->delete(cot::$db->tag_references, "tag_locale != ''");
-        cot::$db->query('ALTER TABLE ' . cot::$db->tag_references . ' DROP PRIMARY KEY');
-        cot::$db->query('ALTER TABLE ' . cot::$db->tag_references . ' ADD PRIMARY KEY (tag, tag_area, tag_item)');
-        cot::$db->query('ALTER TABLE ' . cot::$db->tag_references . ' DROP COLUMN tag_locale');
+    if (Cot::$db->fieldExists(Cot::$db->tag_references, 'tag_locale')) {
+        Cot::$db->delete(Cot::$db->tag_references, "tag_locale != ''");
+        Cot::$db->query('ALTER TABLE ' . Cot::$db->tag_references . ' DROP PRIMARY KEY');
+        Cot::$db->query('ALTER TABLE ' . Cot::$db->tag_references . ' ADD PRIMARY KEY (tag, tag_area, tag_item)');
+        Cot::$db->query('ALTER TABLE ' . Cot::$db->tag_references . ' DROP COLUMN tag_locale');
     }
 }

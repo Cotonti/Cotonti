@@ -19,8 +19,8 @@ $d = cot_import('d','G','INT');
 $f = cot_import('f','G','TXT');
 $g = cot_import('g','G','INT');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('users', 'a');
-cot_block(cot::$usr['isadmin']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('users', 'a');
+cot_block(Cot::$usr['isadmin']);
 require_once cot_langfile('users', 'module');
 
 /* === Hook === */
@@ -31,11 +31,11 @@ foreach (cot_getextplugins('users.edit.first') as $pl) {
 
 cot_die(empty($id), true);
 
-$sql = cot::$db->query("SELECT * FROM $db_users WHERE user_id = ?", $id);
+$sql = Cot::$db->query("SELECT * FROM $db_users WHERE user_id = ?", $id);
 cot_die($sql->rowCount()==0, true);
 $urr = $sql->fetch();
 
-$sql1 = cot::$db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$id and gru_groupid=".COT_GROUP_SUPERADMINS);
+$sql1 = Cot::$db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$id and gru_groupid=".COT_GROUP_SUPERADMINS);
 $sys['edited_istopadmin'] = ($sql1->rowCount()>0) ? TRUE : FALSE;
 $sys['user_istopadmin'] = cot_auth('admin', 'a', 'A');
 $sys['protecttopadmin'] = $sys['edited_istopadmin'] && !$sys['user_istopadmin'];
@@ -59,8 +59,8 @@ if ($a == 'update')
 	$ruserdelete = cot_import('ruserdelete','P','BOL');
 	if ($ruserdelete)
 	{
-		cot::$db->delete($db_users, "user_id=$id");
-		cot::$db->delete($db_groups_users, "gru_userid=$id");
+		Cot::$db->delete($db_users, "user_id=$id");
+		Cot::$db->delete($db_groups_users, "gru_userid=$id");
 
 		foreach($cot_extrafields[$db_users] as $exfld)
 		{
@@ -108,8 +108,8 @@ if ($a == 'update')
 	$rusernewpass = (string) cot_import('rusernewpass','P','NOC', 32);
 
 	// Extra fields
-	if (!empty(cot::$extrafields[cot::$db->users])) {
-		foreach (cot::$extrafields[cot::$db->users] as $exfld) {
+	if (!empty(Cot::$extrafields[Cot::$db->users])) {
+		foreach (Cot::$extrafields[Cot::$db->users] as $exfld) {
 			$ruser['user_' . $exfld['field_name']] = cot_import_extrafields('ruser' . $exfld['field_name'], $exfld, 'P',
 				$urr['user_' . $exfld['field_name']], 'user_');
 		}
@@ -121,7 +121,7 @@ if ($a == 'update')
 	{
 		cot_error('aut_usernametooshort', 'rusername');
 	}
-	if ($ruser['user_name'] != $urr['user_name'] && cot::$db->query("SELECT COUNT(*) FROM ".cot::$db->users." WHERE user_name = ?",
+	if ($ruser['user_name'] != $urr['user_name'] && Cot::$db->query("SELECT COUNT(*) FROM ".Cot::$db->users." WHERE user_name = ?",
             array($ruser['user_name']))->fetchColumn() > 0)
 	{
 		cot_error('aut_usernamealreadyindb', 'rusername');
@@ -130,7 +130,7 @@ if ($a == 'update')
 	{
 		cot_error('aut_emailtooshort', 'ruseremail');
 	}
-	if ($ruser['user_email'] != $urr['user_email'] && cot::$db->query("SELECT COUNT(*) FROM ".cot::$db->users." WHERE user_email = ?",
+	if ($ruser['user_email'] != $urr['user_email'] && Cot::$db->query("SELECT COUNT(*) FROM ".Cot::$db->users." WHERE user_email = ?",
             array($ruser['user_email']))->fetchColumn() > 0)
 	{
 		cot_error('aut_emailalreadyindb', 'ruseremail');
@@ -227,10 +227,10 @@ if ($a == 'update')
 		}
 
 		if ($ruser['user_maingrp'] == COT_GROUP_MEMBERS && $urr['user_maingrp'] == COT_GROUP_INACTIVE) {
-			$rsubject = cot::$L['useed_accountactivated'];
-			$rbody = cot::$L['Hi'] . " " . $urr['user_name'].",\n\n";
-			$rbody .= cot::$L['useed_email'];
-			$rbody .= "\n\n" . cot::$L['aut_contactadmin'];
+			$rsubject = Cot::$L['useed_accountactivated'];
+			$rbody = Cot::$L['Hi'] . " " . $urr['user_name'].",\n\n";
+			$rbody .= Cot::$L['useed_email'];
+			$rbody .= "\n\n" . Cot::$L['aut_contactadmin'];
 			cot_mail($urr['user_email'], $rsubject, $rbody);
 		}
 
@@ -260,7 +260,7 @@ $title_params = array(
 );
 $out['subtitle'] = cot_title('{EDIT} - {NAME}', $title_params);
 if(!isset($out['head'])) $out['head'] = '';
-$out['head'] .= cot::$R['code_noindex'];
+$out['head'] .= Cot::$R['code_noindex'];
 
 $mskin = cot_tplfile(array('users', 'edit', $usr['maingrp']), 'module');
 
@@ -271,7 +271,7 @@ foreach (cot_getextplugins('users.edit.main') as $pl)
 }
 /* ===== */
 
-require_once cot::$cfg['system_dir'] . '/header.php';
+require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($mskin);
 
@@ -311,13 +311,13 @@ $t->assign(array(
 	'USERS_EDIT_LASTLOG_STAMP' => $urr['user_lastlog'],
 	'USERS_EDIT_LOGCOUNT' => $urr['user_logcount'],
 	'USERS_EDIT_LASTIP' => cot_build_ipsearch($urr['user_lastip']),
-	'USERS_EDIT_DELETE' => (cot::$sys['user_istopadmin']) ? cot_radiobox(0, 'ruserdelete', array(1, 0), array(cot::$L['Yes'],
-            cot::$L['No'])) . $delete_pfs : cot::$L['na'],
+	'USERS_EDIT_DELETE' => (Cot::$sys['user_istopadmin']) ? cot_radiobox(0, 'ruserdelete', array(1, 0), array(Cot::$L['Yes'],
+            Cot::$L['No'])) . $delete_pfs : Cot::$L['na'],
 ));
 
 // Extra fields
-if (!empty(cot::$extrafields[cot::$db->users])) {
-    foreach (cot::$extrafields[cot::$db->users] as $exfld) {
+if (!empty(Cot::$extrafields[Cot::$db->users])) {
+    foreach (Cot::$extrafields[Cot::$db->users] as $exfld) {
         $uname = strtoupper($exfld['field_name']);
         $exfld_val = cot_build_extrafields('ruser' . $exfld['field_name'], $exfld, $urr['user_' . $exfld['field_name']]);
         $exfld_title = cot_extrafield_title($exfld, 'user_');
@@ -346,4 +346,4 @@ foreach (cot_getextplugins('users.edit.tags') as $pl)
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once cot::$cfg['system_dir'] . '/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';

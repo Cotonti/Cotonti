@@ -9,7 +9,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot::$db->registerTable('stats');
+Cot::$db->registerTable('stats');
 
 /*
  * =============================== Statistics API =============================

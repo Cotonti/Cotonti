@@ -107,14 +107,14 @@ function cot_auth_add_item($module_name, $item_id, $auth_permit = [], $auth_lock
 				'auth_option' => $item_id,
 				'auth_rights' => cot_auth_getvalue($auth_permit[$base_grp]),
 				'auth_rights_lock' => cot_auth_getvalue($auth_lock[$base_grp]),
-				'auth_setbyuserid' => cot::$usr['id']
+				'auth_setbyuserid' => Cot::$usr['id']
 			);
 		}
 	}
 
     $res = 0;
     if (!empty($ins_array)) {
-        $res = cot::$db->insert(cot::$db->auth, $ins_array);
+        $res = Cot::$db->insert(Cot::$db->auth, $ins_array);
     }
 	cot_auth_reorder();
 	cot_auth_clear('all');

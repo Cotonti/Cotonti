@@ -22,7 +22,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (
     $is_first_post
-    && cot::$usr['isadmin']
+    && Cot::$usr['isadmin']
     && cot_poll_edit_form($q, $t, 'MAIN.POLL', 'forum')
 ) {
     $t->parse('MAIN.POLL');

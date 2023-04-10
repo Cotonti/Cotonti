@@ -10,8 +10,8 @@
  */
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('admin', 'a');
-cot_block(cot::$usr['isadmin']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'a');
+cot_block(Cot::$usr['isadmin']);
 
 require_once cot_incfile('extrafields');
 require_once cot_incfile('structure');
@@ -21,15 +21,15 @@ $al = cot_import('al', 'G', 'ALP');
 $c = cot_import('c', 'G', 'TXT');
 $v = cot_import('v', 'G', 'TXT');
 
-$maxrowsperpage = (is_int(cot::$cfg['maxrowsperpage']) && cot::$cfg['maxrowsperpage'] > 0 || ctype_digit(cot::$cfg['maxrowsperpage'])) ?
-    cot::$cfg['maxrowsperpage'] : 15;
+$maxrowsperpage = (is_int(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperpage'] > 0 || ctype_digit(Cot::$cfg['maxrowsperpage'])) ?
+    Cot::$cfg['maxrowsperpage'] : 15;
 
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage);
 $mode = cot_import('mode', 'G', 'ALP');
 
 $t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
 
-$adminTitle = cot::$L['Structure'];
+$adminTitle = Cot::$L['Structure'];
 
 $modules_structure = &$extension_structure; // for compatibility
 
@@ -40,7 +40,7 @@ foreach (cot_getextplugins('admin.structure.first') as $pl) {
 /* ===== */
 
 if (empty($n)) {
-	$adminpath[] = [cot_url('admin', 'm=structure'), cot::$L['Structure'],];
+	$adminpath[] = [cot_url('admin', 'm=structure'), Cot::$L['Structure'],];
 	// Show available module list
 	if (
         is_array($extension_structure)
@@ -110,7 +110,7 @@ else
 		require_once cot_incfile($n, $is_module ? 'module' : 'plug');
 	}
 	if (empty($adminhelp)) {
-		$adminhelp = cot::$L['adm_help_structure'];
+		$adminhelp = Cot::$L['adm_help_structure'];
 	}
 
 	if ($a == 'reset' && !empty($al))
@@ -129,9 +129,9 @@ else
 					if (!isset($optionslist[$key]['config_subdefault'])) {
 						$optionslist[$key]['config_value'] = $data;
 						$optionslist[$key]['config_subcat'] = $editconfig;
-						cot::$db->insert($db_config, $optionslist[$key]);
+						Cot::$db->insert($db_config, $optionslist[$key]);
 					} else {
-                        cot::$db->update(
+                        Cot::$db->update(
                             $db_config,
                             array('config_value' => $data),
                             "config_name = ? AND config_owner = ? AND config_cat = ?  AND config_subcat = ?",
@@ -142,7 +142,7 @@ else
 
 			}
 
-            $dir = $owner == 'module' ? cot::$cfg['modules_dir'] : cot::$cfg['plugins_dir'];
+            $dir = $owner == 'module' ? Cot::$cfg['modules_dir'] : Cot::$cfg['plugins_dir'];
             // Run configure extension part if present
             if (file_exists($dir . "/" .$n . "/setup/" .$n. ".configure.php")) {
                 include $dir . "/" .$n . "/setup/" . $n . ".configure.php";
@@ -178,7 +178,7 @@ else
 		/* ===== */
 
 		foreach ($rstructurecode as $i => $k) {
-			$oldrow = cot::$db->query('SELECT * FROM ' . cot::$db->structure .
+			$oldrow = Cot::$db->query('SELECT * FROM ' . Cot::$db->structure .
                 " WHERE structure_id=" . (int) $i)->fetch();
 
             if (isset($rstructurecode[$i])) {
@@ -204,8 +204,8 @@ else
 				$rstructure['structure_locked'] = (cot_import($rstructurelocked[$i], 'D', 'BOL')) ? 1 : 0;
 			}
 
-            if (!empty(cot::$extrafields[cot::$db->structure])) {
-                foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
+            if (!empty(Cot::$extrafields[Cot::$db->structure])) {
+                foreach (Cot::$extrafields[Cot::$db->structure] as $exfld) {
                     $inputName = 'rstructure' . $exfld['field_name'] . '_' . $i;
                     // TODO We should ckeck if extrafield has default value or it is required
                     if (isset($_POST[$inputName])) {
@@ -278,8 +278,8 @@ else
 		$rtplmode = cot_import('rtplmode', 'P', 'INT');
 		$rtplcode = cot_import('rtplcode', 'P', 'TXT');
 
-        if (!empty(cot::$extrafields[cot::$db->structure])) {
-            foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
+        if (!empty(Cot::$extrafields[Cot::$db->structure])) {
+            foreach (Cot::$extrafields[Cot::$db->structure] as $exfld) {
                 $inputName = 'rstructure' . $exfld['field_name'];
                 // TODO Add new record. We should ckeck if extrafield has default value or it is required
                 if (isset($_POST[$inputName])) {
@@ -330,20 +330,20 @@ else
     } elseif ($a == 'delete') {
 		cot_check_xg();
 
-        $data = cot::$db->query(
-            'SELECT structure_code, structure_count FROM ' . cot::$db->structure .
+        $data = Cot::$db->query(
+            'SELECT structure_code, structure_count FROM ' . Cot::$db->structure .
             ' WHERE structure_area = :area AND structure_code = :code',
             ['area' => $n, 'code' => $c]
         )->fetch();
 
         if (empty($data)) {
-            cot_error($c . ': ' . cot::$L['adm_structure_category_not_exists']);
+            cot_error($c . ': ' . Cot::$L['adm_structure_category_not_exists']);
 
         } elseif(
             $data['structure_count'] > 0 ||
             !empty(cot_structure_children($n, $c, true, false, false))
         ) {
-            cot_error($c . ': ' . cot::$L['adm_structure_category_not_empty']);
+            cot_error($c . ': ' . Cot::$L['adm_structure_category_not_empty']);
         }
 
         if (!cot_error_found()) {
@@ -364,12 +364,12 @@ else
 		$area_sync = 'cot_'.$n.'_sync';
 		if (function_exists($area_sync)) {
 			$res = true;
-			$sql = cot::$db->query('SELECT structure_code FROM ' . cot::$db->structure . ' WHERE structure_area=?', $n);
+			$sql = Cot::$db->query('SELECT structure_code FROM ' . Cot::$db->structure . ' WHERE structure_area=?', $n);
 			foreach ($sql->fetchAll() as $row) {
 				$cat = $row['structure_code'];
 				$items = $area_sync($cat);
-                cot::$db->update(
-                    cot::$db->structure,
+                Cot::$db->update(
+                    Cot::$db->structure,
                     ['structure_count' => (int) $items],
                     'structure_code=? AND structure_area=?',
                     [$cat, $n]
@@ -385,13 +385,13 @@ else
 		/* ===== */
 
 		$res ? cot_message('Resynced') : cot_message("Error: function $area_sync doesn't exist."); // TODO i18n
-		(cot::$cache && cot::$cfg['cache_'.$n]) && cot::$cache->page->clear($n);
+		(Cot::$cache && Cot::$cfg['cache_'.$n]) && Cot::$cache->page->clear($n);
 
 		cot_redirect(cot_url('admin', 'm=structure&n=' . $n . '&mode=' . $mode . '&d=' . $durl, '', true));
 	}
 
 	$ext_info = cot_get_extensionparams($n, true);
-	$adminpath[] = array(cot_url('admin', 'm=extensions'), cot::$L['Extensions']);
+	$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
     $urlParams = array('m' => 'extensions', 'a' => 'details');
     if ($is_module) {
         $urlParams['mod'] = $n;
@@ -399,11 +399,11 @@ else
         $urlParams['pl'] = $n;
     }
 	$adminpath[] = [cot_url('admin', $urlParams), $ext_info['name'],];
-	$adminpath[] = [cot_url('admin', 'm=structure&n='.$n), cot::$L['Structure'],];
+	$adminpath[] = [cot_url('admin', 'm=structure&n='.$n), Cot::$L['Structure'],];
 
 	if ($id > 0 || !empty($al)) {
 		$where = $id > 0 ? 'structure_id='.(int)$id : "structure_code='".$db->prep($al)."'";
-		$sql = cot::$db->query("SELECT * FROM " . cot::$db->structure . " WHERE $where LIMIT 1");
+		$sql = Cot::$db->query("SELECT * FROM " . Cot::$db->structure . " WHERE $where LIMIT 1");
 		cot_die($sql->rowCount() == 0);
 
 	} elseif ($mode && ($mode == 'all' || $structure[$n][$mode])) {
@@ -442,7 +442,7 @@ else
 
 		$pathspaceimg = '';
 		for ($pathfielddepi = 1; $pathfielddepi < $pathfielddep; $pathfielddepi++) {
-			$pathspaceimg .= '.' . cot::$R['admin_icon_blank'];
+			$pathspaceimg .= '.' . Cot::$R['admin_icon_blank'];
 		}
 
         $categoryList = [];
@@ -484,10 +484,10 @@ else
             'rstructuretplmode[' . $row['structure_id'] . ']',
             ['1', '2', '3', '4'],
             [
-                cot::$L['adm_tpl_empty'],
-                cot::$L['adm_tpl_parent'],
-                cot::$L['adm_tpl_forced'] . ' ' . $categoryTplCodeSelect,
-                cot::$L['adm_tpl_code'] . ' ' . $categoryTplCode,
+                Cot::$L['adm_tpl_empty'],
+                Cot::$L['adm_tpl_parent'],
+                Cot::$L['adm_tpl_forced'] . ' ' . $categoryTplCodeSelect,
+                Cot::$L['adm_tpl_code'] . ' ' . $categoryTplCode,
             ],
             '',
             '<br />',
@@ -513,7 +513,7 @@ else
                 'id' => $row['structure_id'],
                 'c' => $row['structure_code'],
                 'd' => $durl,
-                'x' => cot::$sys['xk']
+                'x' => Cot::$sys['xk']
             ]
         );
 
@@ -530,7 +530,7 @@ else
 			'ADMIN_STRUCTURE_SPACEIMG' => $pathspaceimg,
 			'ADMIN_STRUCTURE_LEVEL' => $structureLevel,
 			'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ?
-                cot::$R['admin_icon_join1'] : cot::$R['admin_icon_join2'],
+                Cot::$R['admin_icon_join1'] : Cot::$R['admin_icon_join2'],
 			'ADMIN_STRUCTURE_PATH' => cot_inputbox(
                 'text',
                 'rstructurepath['.$row['structure_id'].']',
@@ -560,8 +560,8 @@ else
             'ADMIN_STRUCTURE_UPDATE_DEL_URL' => $deleteConfirmUrl,
 		));
 
-        if (!empty(cot::$extrafields[cot::$db->structure])) {
-            foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
+        if (!empty(Cot::$extrafields[Cot::$db->structure])) {
+            foreach (Cot::$extrafields[Cot::$db->structure] as $exfld) {
                 $exfld_val = cot_build_extrafields('rstructure' . $exfld['field_name'] . '_' . $row['structure_id'], $exfld,
                     $row['structure_' . $exfld['field_name']]);
                 $exfld_title = cot_extrafield_title($exfld, 'structure_');
@@ -663,10 +663,10 @@ else
             'rtplmode',
             ['1', '2', '3', '4'],
             [
-                cot::$L['adm_tpl_empty'],
-                cot::$L['adm_tpl_parent'],
-                cot::$L['adm_tpl_forced'] . ' ' . $categoryTplCodeSelect,
-                cot::$L['adm_tpl_code'] . ' ' . $categoryTplCode,
+                Cot::$L['adm_tpl_empty'],
+                Cot::$L['adm_tpl_parent'],
+                Cot::$L['adm_tpl_forced'] . ' ' . $categoryTplCodeSelect,
+                Cot::$L['adm_tpl_code'] . ' ' . $categoryTplCode,
             ],
             '',
             '<br />',
@@ -690,8 +690,8 @@ else
 		));
 
 		// Extra fields
-        if (!empty(cot::$extrafields[cot::$db->structure])) {
-            foreach (cot::$extrafields[cot::$db->structure] as $exfld) {
+        if (!empty(Cot::$extrafields[Cot::$db->structure])) {
+            foreach (Cot::$extrafields[Cot::$db->structure] as $exfld) {
                 $exfld_val = cot_build_extrafields('rstructure' . $exfld['field_name'], $exfld, null);
                 $exfld_title = cot_extrafield_title($exfld, 'structure_');
                 

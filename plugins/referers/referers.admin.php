@@ -19,7 +19,7 @@ cot_block($usr['auth_read']);
 
 $tt = new XTemplate(cot_tplfile('referers.admin', 'plug', true));
 
-cot::$db->registerTable('referers');
+Cot::$db->registerTable('referers');
 require_once cot_langfile('referers', 'plug');
 
 $adminTitle = $L['Referers'];

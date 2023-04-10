@@ -11,8 +11,8 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('forms');
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('pm', 'a');
-cot_block(cot::$usr['auth_write']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('pm', 'a');
+cot_block(Cot::$usr['auth_write']);
 
 $to = cot_import('to', 'G', 'TXT');
 $a = cot_import('a','G','TXT');
@@ -44,8 +44,8 @@ if ($a == 'send') {
 	if (mb_strlen($newpmtext) < 2) {
 		cot_error('pm_bodytooshort', 'newpmtext');
 	}
-	if (mb_strlen($newpmtext) > cot::$cfg['pm']['maxsize']) {
-		cot_error(cot_rc('pm_bodytoolong', array('size' => cot::$cfg['pm']['maxsize'])), 'newpmtext');
+	if (mb_strlen($newpmtext) > Cot::$cfg['pm']['maxsize']) {
+		cot_error(cot_rc('pm_bodytoolong', array('size' => Cot::$cfg['pm']['maxsize'])), 'newpmtext');
 	}
 	$newpmtitle .= (mb_strlen($newpmtitle) < 2) ? ' . . . ' : '';
 
@@ -59,15 +59,15 @@ if ($a == 'send') {
         // edit message
 		if (!cot_error_found()) {
 			$pm['pm_title'] = $newpmtitle;
-			$pm['pm_date'] = cot::$sys['now'];
+			$pm['pm_date'] = Cot::$sys['now'];
 			$pm['pm_text'] = $newpmtext;
 			$pm['pm_fromstate'] = $fromstate;
 
-			$result = cot::$db->update(
-                cot::$db->pm,
+			$result = Cot::$db->update(
+                Cot::$db->pm,
                 $pm,
                 'pm_id = :pmId AND pm_fromuserid = :userId AND pm_tostate = ' . COT_PM_STATE_UNREAD,
-                ['pmId' => $id, 'userId' => cot::$usr['id'],]
+                ['pmId' => $id, 'userId' => Cot::$usr['id'],]
             );
 		}
 
@@ -86,13 +86,13 @@ if ($a == 'send') {
 			foreach($touser_src as $k => $i) {
 				$user_name=trim(cot_import($i, 'D', 'TXT'));
 				if (!empty($user_name)) {
-					$touser_sql[] = "'".cot::$db->prep($user_name)."'";
+					$touser_sql[] = "'".Cot::$db->prep($user_name)."'";
 				} else {
 					$touser_req--;
 				}
 			}
 			$touser_sql = '('.implode(',', $touser_sql).')';
-			$sql_pm_users = cot::$db->query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
+			$sql_pm_users = Cot::$db->query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
 			$totalrecipients = $sql_pm_users->rowCount();
 			while($row = $sql_pm_users->fetch()) {
 				$touser_ids[] = (int) $row['user_id'];
@@ -102,8 +102,8 @@ if ($a == 'send') {
 			if ($totalrecipients < $touser_req ) {
 				cot_error('pm_wrongname', 'newpmrecipient');
 			}
-			if (!cot::$usr['isadmin'] && $totalrecipients > 10) {
-				cot_error(sprintf(cot::$L['pm_toomanyrecipients'], 10), 'newpmrecipient');
+			if (!Cot::$usr['isadmin'] && $totalrecipients > 10) {
+				cot_error(sprintf(Cot::$L['pm_toomanyrecipients'], 10), 'newpmrecipient');
 			}
 
 			$touser = ($totalrecipients > 0) ? implode(",", $touser_names) : '';
@@ -119,7 +119,7 @@ if ($a == 'send') {
 		if (!cot_error_found()) {
 			$stats_enabled = function_exists('cot_stat_inc');
 			foreach ($touser_ids as $k => $userid) {
-                $pmId = cot_send_pm($userid, $newpmtitle, $newpmtext, cot::$usr['id'], $fromstate);
+                $pmId = cot_send_pm($userid, $newpmtitle, $newpmtext, Cot::$usr['id'], $fromstate);
 			}
 
 			/* === Hook === */
@@ -182,8 +182,8 @@ $title_params = array(
 	'PM' => $L['Private_Messages'],
 	'SEND_NEW' => $L['pm_sendnew']
 );
-cot::$out['subtitle'] = cot_title('{SEND_NEW} - {PM}', $title_params);
-cot::$out['head'] .= cot::$R['code_noindex'];
+Cot::$out['subtitle'] = cot_title('{SEND_NEW} - {PM}', $title_params);
+Cot::$out['head'] .= Cot::$R['code_noindex'];
 
 /* === Hook === */
 foreach (cot_getextplugins('pm.send.main') as $pl) {
@@ -194,11 +194,11 @@ foreach (cot_getextplugins('pm.send.main') as $pl) {
 $idurl = '';
 if ($id > 0) {
     // It is possible to edit only user's own message, which was not read by the recipient
-    $message = cot::$db->query(
-        'SELECT * FROM ' . cot::$db->pm .
+    $message = Cot::$db->query(
+        'SELECT * FROM ' . Cot::$db->pm .
         ' WHERE pm_id = :pmId AND pm_fromuserid = :userId AND pm_tostate = ' . COT_PM_STATE_UNREAD .
         ' LIMIT 1',
-        ['pmId' => $id, 'userId' => cot::$usr['id'],]
+        ['pmId' => $id, 'userId' => Cot::$usr['id'],]
     )->fetch();
 
     if (!$message) {
@@ -210,7 +210,7 @@ if ($id > 0) {
     $idurl = '&id=' . $id;
 }
 
-require_once cot::$cfg['system_dir'] . '/header.php';
+require_once Cot::$cfg['system_dir'] . '/header.php';
 
 if (!isset($pmalttpl)) {
     $pmalttpl = null;
@@ -232,21 +232,21 @@ $url_inbox = cot_url('pm');
 $url_sentbox = cot_url('pm', 'f=sentbox');
 
 $t->assign(array(
-	'PMSEND_TITLE' => cot_breadcrumbs($title, cot::$cfg['homebreadcrumb']),
-	'PMSEND_SENDNEWPM' => (cot::$usr['auth_write']) ?
-        cot_rc_link($url_newpm, cot::$L['pm_sendnew'], array('class' => cot::$cfg['pm']['turnajax'] ? 'ajax' : '')) : '',
-	'PMSEND_SENDNEWPM_URL' => (cot::$usr['auth_write']) ? $url_newpm : '',
-	'PMSEND_INBOX' => cot_rc_link($url_inbox, cot::$L['pm_inbox'], array('class' => cot::$cfg['pm']['turnajax'] ? 'ajax' : '')),
+	'PMSEND_TITLE' => cot_breadcrumbs($title, Cot::$cfg['homebreadcrumb']),
+	'PMSEND_SENDNEWPM' => (Cot::$usr['auth_write']) ?
+        cot_rc_link($url_newpm, Cot::$L['pm_sendnew'], array('class' => Cot::$cfg['pm']['turnajax'] ? 'ajax' : '')) : '',
+	'PMSEND_SENDNEWPM_URL' => (Cot::$usr['auth_write']) ? $url_newpm : '',
+	'PMSEND_INBOX' => cot_rc_link($url_inbox, Cot::$L['pm_inbox'], array('class' => Cot::$cfg['pm']['turnajax'] ? 'ajax' : '')),
 	'PMSEND_INBOX_URL' => $url_inbox,
 	'PMSEND_INBOX_COUNT' => $totalinbox,
-	'PMSEND_SENTBOX' => cot_rc_link($url_sentbox, cot::$L['pm_sentbox'], array('class' => cot::$cfg['pm']['turnajax'] ? 'ajax' : '')),
+	'PMSEND_SENTBOX' => cot_rc_link($url_sentbox, Cot::$L['pm_sentbox'], array('class' => Cot::$cfg['pm']['turnajax'] ? 'ajax' : '')),
 	'PMSEND_SENTBOX_URL' => $url_sentbox,
 	'PMSEND_SENTBOX_COUNT' => $totalsentbox,
 	'PMSEND_FORM_SEND' => cot_url('pm', 'm=send&a=send'.$idurl),
 	'PMSEND_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor'),
 	'PMSEND_FORM_TOUSER' => cot_textarea('newpmrecipient', $touser, 3, 56, 'class="userinput"'),
-	'PMSEND_FORM_NOT_TO_SENTBOX' => cot_checkbox(false, 'fromstate', cot::$L['pm_notmovetosentbox'], '', '3')
+	'PMSEND_FORM_NOT_TO_SENTBOX' => cot_checkbox(false, 'fromstate', Cot::$L['pm_notmovetosentbox'], '', '3')
 ));
 
 /* === Hook === */
@@ -262,4 +262,4 @@ if (!$id) {
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once cot::$cfg['system_dir'] . '/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';

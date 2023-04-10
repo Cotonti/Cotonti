@@ -30,4 +30,4 @@ cookie=05:radio::0:Remember language selection in cookie
 
 defined('COT_CODE') or die('Wrong URL');
 
-// Todo it seems that cot::$cfg['plugin']['i18n']['cats'] is not used anywhere. Obsolete?
+// Todo it seems that Cot::$cfg['plugin']['i18n']['cats'] is not used anywhere. Obsolete?
