@@ -62,7 +62,7 @@ if (!empty($rtext)) {
 	$rcontact['contact_subject'] = cot_import('rsubject', 'P', 'TXT');
 
 	// Extra fields
-    if(!empty(Cot::$extrafields[Cot::$db->contact])) {
+    if (!empty(Cot::$extrafields[Cot::$db->contact])) {
         foreach (Cot::$extrafields[Cot::$db->contact] as $exfld) {
             $rcontact['contact_' . $exfld['field_name']] = cot_import_extrafields('rcontact' . $exfld['field_name'],
                 $exfld, 'P', '', 'contact_');
@@ -93,12 +93,13 @@ if (!empty($rtext)) {
 		$rcontact['contact_val'] = 0;
 
 		if (in_array(Cot::$cfg['plugin']['contact']['save'], array('db','both'))) {
-            Cot::$db->insert($db_contact, $rcontact);
+            Cot::$db->insert(Cot::$db->contact, $rcontact);
 		}
 
-		$semail = (!empty(Cot::$cfg['plugin']['contact']['email'])) ? Cot::$cfg['plugin']['contact']['email'] : Cot::$cfg['adminemail'];
+		$semail = (!empty(Cot::$cfg['plugin']['contact']['email'])) ?
+            Cot::$cfg['plugin']['contact']['email'] : Cot::$cfg['adminemail'];
+
 		if (cot_check_email($semail) && in_array(Cot::$cfg['plugin']['contact']['save'], array('email','both'))) {
-			$headers = ("From: \"" . $rcontact['contact_author'] . "\" <" . $rcontact['contact_email'] . ">\n");
 			$context = array(
 				'sitetitle' => Cot::$cfg["maintitle"],
 				'siteurl' => Cot::$cfg['mainurl'],
@@ -108,7 +109,7 @@ if (!empty($rtext)) {
 				'text' => $rcontact['contact_text']
 			);
             $rextras = '';
-            if(!empty(Cot::$extrafields[Cot::$db->contact])) {
+            if (!empty(Cot::$extrafields[Cot::$db->contact])) {
                 foreach (Cot::$extrafields[Cot::$db->contact] as $exfld) {
                     $exfld_title = cot_extrafield_title($exfld, 'contact_');
                     $ex_body = cot_build_extrafields_data('contact', $exfld, $rcontact['contact_' . $exfld['field_name']]);
@@ -121,8 +122,20 @@ if (!empty($rtext)) {
                 }
             }
 			$context['extra'] = $rextras;
-			$rtextm = cot_rc(empty(Cot::$cfg['plugin']['contact']['template']) ? Cot::$R['contact_message'] : Cot::$cfg['plugin']['contact']['template'], $context);
-			cot_mail($semail, $rcontact['contact_subject'], $rtextm, $headers);
+			$rtextm = cot_rc(
+                empty(Cot::$cfg['plugin']['contact']['template']) ?
+                    Cot::$R['contact_message'] : Cot::$cfg['plugin']['contact']['template'],
+                $context
+            );
+
+			cot_mail(
+                [
+                    'to' => $semail,
+                    'from' => [$rcontact['contact_email'], $rcontact['contact_author']]
+                ],
+                $rcontact['contact_subject'],
+                $rtextm
+            );
 		}
 		$sent = true;
 		cot_message('contact_message_sent');

@@ -842,55 +842,150 @@ function cot_check_email($res)
  * function. This way custom mail delivery methods, such as SMTP, are
  * supported.
  *
- * @global $cfg
- * @param string $to Recipient
+ * @param array{
+ *   to: array|string,
+ *   from?: array|string,
+ *   cc?: array|string,
+ *   bcc?: array|string
+ * }|string $toOrParams
+ *   if string - recipient email:
+ *       user@example.com
+ *       user@example.com, anotheruser@example.com
+ *       User <user@example.com>
+ *       User <user@example.com>, Another User <anotheruser@example.com>
+ * [
+ *  'to' => [['user@example.com', 'User'], 'user2@example.com', 'User3 <user3@example.com>'],
+ *  'from' => ['admin@site.com', 'SiteTitle'] // (optional) Default value will be used if absent
+ *  'cc' => [['user4@example.com', 'User4'], 'user5@example.com', 'User6 <user6@example.com>'], // (optional)
+ *      Add more recipients
+ *  'bcc' => [['user7@example.com', 'User7'], 'user8@example.com', 'User9 <user9@example.com>'], // (optional)
+ *      Add hidden recipients
+ * ]
+ *
  * @param string $subject Subject
  * @param string $body Message body
- * @param string $headers Message headers
+ * @param string|array $additionalHeaders Additional Message headers
  * @param bool $customtemplate Use custom template
- * @param string $additional_parameters Additional parameters passed to sendmail
+ * @param string $additionalParameters Additional parameters passed to sendmail
  * @return bool
+ *
+ * @see https://www.php.net/manual/en/function.mail.php
+ * @see http://www.faqs.org/rfcs/rfc2822.html
  */
-function cot_mail($to, $subject, $body, $headers = '', $customtemplate = false, $additional_parameters = '', $html = false)
-{
+function cot_mail(
+    $toOrParams,
+    $subject,
+    $body,
+    $additionalHeaders = '',
+    $customtemplate = false,
+    $additionalParameters = '',
+    $html = false
+) {
 	global $cfg, $cot_mail_senders;
 
 	if (function_exists('cot_mail_custom')) {
-		return cot_mail_custom($to, $subject, $body, $headers, $customtemplate, $additional_parameters, $html);
+		return cot_mail_custom(
+            $toOrParams,
+            $subject,
+            $body,
+            $additionalHeaders,
+            $customtemplate,
+            $additionalParameters,
+            $html
+        );
 	}
     $ret = true;
 	if (is_array($cot_mail_senders) && count($cot_mail_senders) > 0) {
 		foreach ($cot_mail_senders as $func) {
-			$ret &= $func($to, $subject, $body, $headers, $additional_parameters, $html);
+			$ret &= $func($toOrParams, $subject, $body, $additionalHeaders, $additionalParameters, $html);
 		}
 		return $ret;
 	}
 
-    if (empty($to)) {
+    $to = $from = $fromName = $cc = $bcc = null;
+
+    if (empty($toOrParams)) {
         return false;
     }
 
-    $sitemaintitle = mb_encode_mimeheader(Cot::$cfg['maintitle'], 'UTF-8', 'B', "\n");
-
-    if (empty($headers)) {
-        if (isset(Cot::$cfg['email_from_address']) && !empty(Cot::$cfg['email_from_address'])) {
-            $from = Cot::$cfg['email_from_address'];
-        } else {
-            // If admin email is on the same domain as site
-            $tmp = explode('@', Cot::$cfg['adminemail']);
-            if (!empty($tmp[1]) && $tmp[1] == Cot::$sys['domain']) {
-                $from = Cot::$cfg['adminemail'];
-            } else {
-                $from = 'mail_sender@' . Cot::$sys['domain'];
-            }
+    if (is_string($toOrParams)) {
+        $to = $toOrParams;
+    } else {
+        if (empty($toOrParams['to'])) {
+            $toOrParams = ['to' => $toOrParams];
         }
-        $headers = "From: \"" . $sitemaintitle . "\" <" . $from . ">\n" . "Reply-To: <" . Cot::$cfg['adminemail'] . ">\n";
+        $to = cot_mailPrepareAddress($toOrParams['to']);
     }
-    $headers .= "Message-ID: <" . md5(uniqid(microtime())) . "@" . $_SERVER['SERVER_NAME'] . ">\n";
 
-    $type_body = $html ? "html" : "plain";
-    $headers .= "Content-Type: text/".$type_body."; charset=UTF-8\n";
-    $headers .= "Content-Transfer-Encoding: 8bit\n";
+    if (!empty($toOrParams['from'])) {
+        if (is_string($toOrParams['from'])) {
+            $from = $toOrParams['from'];
+        } elseif (is_array($toOrParams['from'])) {
+            $from = $toOrParams['from'][0];
+            $fromName = $toOrParams['from'][1];
+        }
+    }
+
+    if (!empty($toOrParams['cc'])) {
+        $cc = cot_mailPrepareAddress($toOrParams['cc']);
+    }
+
+    if (!empty($toOrParams['bcc'])) {
+        $bcc = cot_mailPrepareAddress($toOrParams['cc']);
+    }
+
+    if (isset(Cot::$cfg['email_from_address']) && !empty(Cot::$cfg['email_from_address'])) {
+        $fromHeaderEmail = Cot::$cfg['email_from_address'];
+    } else {
+        // If admin email is on the same domain as site
+        $tmp = explode('@', Cot::$cfg['adminemail']);
+        if (!empty($tmp[1]) && $tmp[1] == Cot::$sys['domain']) {
+            $fromHeaderEmail = Cot::$cfg['adminemail'];
+        } else {
+            $fromHeaderEmail = 'mail_sender@' . Cot::$sys['domain'];
+        }
+    }
+
+    $fromHeaderName = !empty($fromName) ? $fromName : Cot::$cfg['maintitle'];
+    $fromHeaderName = mb_encode_mimeheader($fromHeaderName, 'UTF-8', 'B', "\n");
+
+    if (empty($from)) {
+        $from = Cot::$cfg['adminemail'];
+    }
+
+    $headers = 'From: ' . $fromHeaderName . ' <' . $fromHeaderEmail . ">\r\n";
+    if (!empty($from)) {
+        if (!empty($fromName)) {
+            $fromName = mb_encode_mimeheader($fromName, 'UTF-8', 'B', "\n");
+            $headers .= 'Reply-To: ' . $fromName . ' <' . $from . ">\r\n";
+        } else {
+            $headers .= 'Reply-To: ' . $from . "\r\n";
+        }
+    }
+    if (!empty($cc)) {
+        $headers .= 'Cc: ' . $cc . "\r\n";
+    }
+    if (!empty($bcc)) {
+        $headers .= 'Bcc: ' . $bcc . "\r\n";
+    }
+
+    $headers .= 'Message-ID: ' . md5(uniqid(microtime())) . '@' . $_SERVER['SERVER_NAME'] . "\r\n";
+
+    $type_body = $html ? 'html' : 'plain';
+    $headers .= 'Content-Type: text/' . $type_body . "; charset=UTF-8\r\n";
+    $headers .= "Content-Transfer-Encoding: base64\r\n";
+
+    if (!empty($additionalHeaders)) {
+        if (is_array($additionalHeaders)) {
+            foreach ($additionalHeaders as $key => $header) {
+                $headers .= $key . ': ' . $header . "\r\n";
+            }
+        } else {
+            $headers .= $additionalHeaders . "\r\n";
+        }
+    }
+
+    $headers .= 'X-Mailer: Cotonti v.' .  Cot::$cfg['version'];
 
     if (!$customtemplate) {
         $body_params = array(
@@ -909,8 +1004,11 @@ function cot_mail($to, $subject, $body, $headers = '', $customtemplate = false, 
         );
 
         $subjectPrepared = cot_title(Cot::$cfg['subject_mail'], $subject_params, false);
-        $bodyMail = str_replace("\r\n", "\n", $cfg['body_mail']);
+
+        $bodyMail = Cot::$cfg['body_mail'];
         if ($html) {
+            // Normalise to \n
+            $bodyMail = str_replace(["\r\n", "\r"], "\n", $bodyMail);
             $bodyMail = str_replace("\n", "<br />\n", $bodyMail);
         }
         $bodyPrepared = cot_title($bodyMail, $body_params, false);
@@ -918,16 +1016,26 @@ function cot_mail($to, $subject, $body, $headers = '', $customtemplate = false, 
         $subjectPrepared = $subject;
         $bodyPrepared = $body;
     }
+
+    // Message body line should be separated with a CRLF (\r\n). Lines should not be larger than 70 characters.
+    // (RFC 2822) http://www.faqs.org/rfcs/rfc2822.html
+    // Normalise to \n
+    $bodyPrepared = str_replace(["\r\n", "\r"], "\n", $bodyPrepared);
+    // Now convert LE as needed
+    $bodyPrepared = str_replace("\n", "\r\n", $bodyPrepared);
+    $bodyPrepared = wordwrap($bodyPrepared, 70, "\r\n");
+    $bodyPrepared = base64_encode($bodyPrepared);
+
     $subjectPrepared = mb_encode_mimeheader($subjectPrepared, 'UTF-8', 'B', "\n");
 
     if (ini_get('safe_mode')) {
         mail($to, $subjectPrepared, $bodyPrepared, $headers);
 
     } else {
-        if (empty($additional_parameters)) {
-            $additional_parameters = '';
+        if (empty($additionalParameters)) {
+            $additionalParameters = '';
         }
-        mail($to, $subjectPrepared, $bodyPrepared, $headers, $additional_parameters);
+        mail($to, $subjectPrepared, $bodyPrepared, $headers, $additionalParameters);
     }
 
     /* === Hook === */
@@ -937,6 +1045,58 @@ function cot_mail($to, $subject, $body, $headers = '', $customtemplate = false, 
     /* ===== */
 
     return true;
+}
+
+/**
+ * @param array<int, string[]|string>|string $address
+ *   string - email address:
+ *       user@example.com
+ *       user@example.com, anotheruser@example.com
+ *       User <user@example.com>
+ *       User <user@example.com>, Another User <anotheruser@example.com>
+ *   array:
+ *       [['user@example.com', 'User'], 'user2@example.com', 'User3 <user3@example.com>'],
+ *
+ * @return string
+ */
+function cot_mailPrepareAddress($address)
+{
+    if (is_string($address)) {
+        return $address;
+    }
+
+    if (!is_array($address)) {
+        return '';
+    }
+
+    // $address = ['user@example.com', 'User']
+    if (
+        count($address) == 2
+        && is_string($address[0])
+        && is_string($address[1])
+        && cot_check_email($address[0]) &&
+        !cot_check_email($address[1])
+    ) {
+        $address[1] = mb_encode_mimeheader($address[1], 'UTF-8', 'B', "\n");
+        return $address[1] . ' <' . $address[0] . '>';
+    }
+
+
+    $result = [];
+    foreach ($address as $val) {
+        if (is_string($val)) {
+            $result[] = $val;
+            continue;
+        }
+        $val[1] = mb_encode_mimeheader($val[1], 'UTF-8', 'B', "\n");
+        $result[] = $val[1] . ' <' . $val[0] . '>';
+    }
+
+    if (empty($result)) {
+        return '';
+    }
+
+    return wordwrap(implode(', ', $result), 70, "\r\n");
 }
 
 /**
