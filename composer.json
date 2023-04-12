@@ -22,7 +22,7 @@
   },
 
   "autoload": {
-    "classmap": ["system/Cot.php", "system/cache.php", "system/cotemplate.php", "system/database.php", "system/Resources.php", "lib/cssmin.php", "lib/jsmin.php"],
+    "classmap": ["system/", "lib/cssmin.php", "lib/jsmin.php"],
 
     "psr-4": {
       "cot\\modules\\": "modules/",

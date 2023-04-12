@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Main application class and facade to access key Cotonti globals regardless of scope
  */

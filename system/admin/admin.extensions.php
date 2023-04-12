@@ -510,49 +510,48 @@ switch($a) {
 
 			// Check and display dependencies
 			$dependencies_satisfied = true;
-			foreach (array('Requires_modules', 'Requires_plugins', 'Recommends_modules', 'Recommends_plugins') as $dep_type)
-			{
-				if (!empty($info[$dep_type]))
-				{
+			foreach (['Requires_modules', 'Requires_plugins', 'Recommends_modules', 'Recommends_plugins'] as $dep_type) {
+				if (!empty($info[$dep_type])) {
 					$dep_obligatory = strpos($dep_type, 'Requires') === 0;
 					$dep_module = strpos($dep_type, 'modules') !== false;
 					$arg = $dep_module ? 'mod' : 'pl';
 					$dir = $dep_module ? Cot::$cfg['modules_dir'] : Cot::$cfg['plugins_dir'];
 
-					foreach (explode(',', $info[$dep_type]) as $ext)
-					{
+					foreach (explode(',', $info[$dep_type]) as $ext) {
 						$ext = trim($ext);
 						$dep_installed = cot_extension_installed($ext);
-						if ($dep_obligatory)
-						{
+						if ($dep_obligatory) {
 							$dep_class = $dep_installed ? 'highlight_green' : 'highlight_red';
 							$dependencies_satisfied &= $dep_installed;
-						}
-						else
-						{
+						} else {
 							$dep_class = '';
 						}
 
 						$dep_ext_info = $dir . '/' . $ext . '/' . $ext . '.setup.php';
-						if (file_exists($dep_ext_info))
-						{
+						if (file_exists($dep_ext_info)) {
 							$dep_info = cot_infoget($dep_ext_info, 'COT_EXT');
-							if (!$dep_info && cot_plugin_active('genoa'))
-							{
+							if (!$dep_info && cot_plugin_active('genoa')) {
 								// Try to load old format info
 								$dep_info = cot_infoget($dep_ext_info, 'SED_EXTPLUGIN');
 							}
-						}
-						else
-						{
+						} else {
 							$dep_info = array(
 								'Name' => $ext
 							);
 						}
+
+                        $dependencyUrl = '';
+                        if (
+                            ($dep_module && file_exists(Cot::$cfg['modules_dir'] . '/' . $ext))
+                            || (!$dep_module && file_exists(Cot::$cfg['plugins_dir'] . '/' . $ext))
+                        ) {
+                            $dependencyUrl = cot_url('admin', ['m' => 'extensions', 'a' => 'details', $arg => $ext]);
+                        }
+
 						$t->assign(array(
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_CODE' => $ext,
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_NAME' => $dep_info['Name'],
-							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_URL' => ($dep_module && file_exists(Cot::$cfg['modules_dir'] . '/' . $ext) || !$dep_module && file_exists(Cot::$cfg['plugins_dir'] . '/' . $ext)) ? cot_url('admin', "m=extensions&a=details&$arg=$ext") : '#',
+							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_URL' => $dependencyUrl,
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_TYPE' => $dep_module ? Cot::$L['Module'] : Cot::$L['Plugin'],
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_CLASS' => $dep_class
 						));

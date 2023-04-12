@@ -178,7 +178,11 @@
 						<ul>
 							<!-- BEGIN: DEPENDENCIES_ROW -->
 							<li>
+								<!-- IF {ADMIN_EXTENSIONS_DEPENDENCIES_ROW_URL} != '' -->
 								<a href="{ADMIN_EXTENSIONS_DEPENDENCIES_ROW_URL}" class="{ADMIN_EXTENSIONS_DEPENDENCIES_ROW_CLASS}">{ADMIN_EXTENSIONS_DEPENDENCIES_ROW_NAME}</a>
+								<!-- ELSE -->
+								<span class="{ADMIN_EXTENSIONS_DEPENDENCIES_ROW_CLASS}">{ADMIN_EXTENSIONS_DEPENDENCIES_ROW_NAME}</span>
+								<!-- ENDIF -->
 							</li>
 							<!-- END: DEPENDENCIES_ROW -->
 						</ul>
