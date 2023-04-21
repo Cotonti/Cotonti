@@ -18,15 +18,21 @@ if (!Cot::$cfg['debug_mode'] && file_exists('install.php') && is_writable('datas
 $adminTitle = $L['Adminpanel'];
 
 //Version Checking
-if (Cot::$cfg['check_updates'] && Cot::$cache) {
+if (Cot::$cfg['check_updates']) {
+	if (!Cot::$cache) {
+		require_once !empty($cfg['custom_cache']) ? $cfg['custom_cache'] : $cfg['system_dir'] . '/cache.php';
+		$cache = new Cache();
+		$cache->init();
+	}
 	$updateInfo = Cot::$cache->db->get('update_info');
+
 	if (empty($updateInfo)) {
-        $url = 'https://www.cotonti.com/?r=updatecheck';
-        // $url = 'https://www.cotonti.com/update-check';
-        $userAgent = 'Cotonti v.' . Cot::$cfg['version'];
+        $url = 'https://cotonti.com/index.php?r=updatecheck';
+        $userAgent = 'Cotonti v.' . cot::$cfg['version'];
+
 		if (ini_get('allow_url_fopen')) {
             $updateInfo = @file_get_contents($url, false, stream_context_create([
-                    'http' => ['method'=>"GET", 'header' => 'User-Agent: ' . $userAgent]
+                    'http' => ['method' => "GET", 'header' => 'User-Agent: ' . $userAgent]
                 ])
             );
 		}
@@ -53,13 +59,25 @@ if (Cot::$cfg['check_updates'] && Cot::$cache) {
         $updateInfo != 'a' &&
         version_compare($updateInfo['update_ver'], Cot::$cfg['version'], '>')
     ) {
+		$updateInfo_message = $updateInfo['update_message'];//backward compatibility with non localized updatecheck plug
+		if (is_array($updateInfo['update_message'])) {
+			if (isset($updateInfo['update_message'][$usr['lang']])) {
+				$updateInfo_message = $updateInfo['update_message'][$usr['lang']];
+			}
+			elseif ($usr['lang'] != Cot::$cfg['defaultlang'] && isset($updateInfo['update_message'][Cot::$cfg['defaultlang']])) {
+				$updateInfo_message = $updateInfo['update_message'][Cot::$cfg['defaultlang']];
+			}
+			elseif (isset($updateInfo['update_message']['en'])) {
+				$updateInfo_message = $updateInfo['update_message']['en'];
+			}
+		}
 		$t->assign(array(
 			'ADMIN_HOME_UPDATE_REVISION' => sprintf(
                 Cot::$L['home_update_revision'],
                 Cot::$cfg['version'],
                 htmlspecialchars($updateInfo['update_ver'])
             ),
-			'ADMIN_HOME_UPDATE_MESSAGE' => cot_parse($updateInfo['update_message']),
+			'ADMIN_HOME_UPDATE_MESSAGE' => cot_parse($updateInfo_message),
 		));
 		$t->parse('MAIN.UPDATE');
 	}
