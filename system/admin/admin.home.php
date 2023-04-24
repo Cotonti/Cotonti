@@ -51,6 +51,7 @@ if (Cot::$cfg['check_updates']) {
         if (empty($updateInfo)) {
             // Negative result should be cached too
             $updateInfo = 'a';
+            cot_log('Error getting update info from cotonti.com', 'adm', 'update', 'error');
         }
         Cot::$cache->db->store('update_info', $updateInfo, COT_DEFAULT_REALM, 86400);
 	}
@@ -60,15 +61,15 @@ if (Cot::$cfg['check_updates']) {
         version_compare($updateInfo['update_ver'], Cot::$cfg['version'], '>')
     ) {
 		$updateInfo_message = $updateInfo['update_message'];//backward compatibility with non localized updatecheck plug
-		if (is_array($updateInfo['update_message'])) {
-			if (isset($updateInfo['update_message'][$usr['lang']])) {
-				$updateInfo_message = $updateInfo['update_message'][$usr['lang']];
+		if (is_array($updateInfo['update_message_lng'])) {
+			if (isset($updateInfo['update_message_lng'][$usr['lang']])) {
+				$updateInfo_message = $updateInfo['update_message_lng'][$usr['lang']];
 			}
-			elseif ($usr['lang'] != Cot::$cfg['defaultlang'] && isset($updateInfo['update_message'][Cot::$cfg['defaultlang']])) {
-				$updateInfo_message = $updateInfo['update_message'][Cot::$cfg['defaultlang']];
+			elseif ($usr['lang'] != Cot::$cfg['defaultlang'] && isset($updateInfo['update_message_lng'][Cot::$cfg['defaultlang']])) {
+				$updateInfo_message = $updateInfo['update_message_lng'][Cot::$cfg['defaultlang']];
 			}
-			elseif (isset($updateInfo['update_message']['en'])) {
-				$updateInfo_message = $updateInfo['update_message']['en'];
+			elseif (isset($updateInfo['update_message_lng']['en'])) {
+				$updateInfo_message = $updateInfo['update_message_lng']['en'];
 			}
 		}
 		$t->assign(array(
@@ -80,6 +81,8 @@ if (Cot::$cfg['check_updates']) {
 			'ADMIN_HOME_UPDATE_MESSAGE' => cot_parse($updateInfo_message),
 		));
 		$t->parse('MAIN.UPDATE');
+
+		cot_log('Getting update info - can get new version from cotonti.com', 'adm', 'update', 'info');
 	}
 }
 
