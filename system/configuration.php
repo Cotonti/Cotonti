@@ -299,44 +299,40 @@ function cot_config_load($name, $is_module = false, $category = '', $donor = '')
  *
  * @param string $name Extension code
  * @param array $options Configuration entries
- * @param mixed $is_module TRUE if module, FALSE if plugin
+ * @param bool|string $isModule TRUE if module, FALSE if plugin
  * @param string $category Structure category code. Only for per-category config options
  * @param string $donor Extension name for extension-to-extension config implantations
  * @return int Number of entries updated
  * @global CotDB $db
  */
-function cot_config_modify($name, $options, $is_module = false, $category = '', $donor = '')
+function cot_config_modify($name, $options, $isModule = false, $category = '', $donor = '')
 {
-	global $db, $db_config;
+	global $db_config;
 
-	if (is_bool($is_module))
-	{
-		$type = $is_module ? 'module' : 'plug';
-	}
-	else
-	{
-		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+	if (is_bool($isModule)) {
+		$type = $isModule ? 'module' : 'plug';
+	} else {
+		$type = !in_array($isModule, array('plug', 'core')) ? 'module' : $isModule;
 	}
 	$affected = 0;
 
-	$where = "config_owner = ? AND config_cat = ? AND config_name = ? AND config_donor = ?";
+	$where = 'config_owner = ? AND config_cat = ? AND config_name = ? AND config_donor = ?';
 
-	if (!empty($category))
-	{
-		$where .= " AND config_subcat = ?";
+	if (!empty($category)) {
+		$where .= ' AND config_subcat = ?';
 	}
 
-	foreach ($options as $opt)
-	{
-		$config_name = $opt['name'];
+	foreach ($options as $opt) {
+		$config_name = (string) $opt['name'];
 		unset($opt['name']);
 		$opt_row = array();
-		foreach ($opt as $key => $val)
-		{
+		foreach ($opt as $key => $val) {
 			$opt_row['config_' . $key] = $val;
 		}
-		$params = empty($category) ? array($type, $name, $config_name, $donor) : array($type, $name, $config_name, $donor, $category);
-		$affected += $db->update($db_config, $opt_row, $where, $params);
+		$params = empty($category) ?
+            array($type, $name, $config_name, $donor) : array($type, $name, $config_name, $donor, $category);
+
+		$affected += Cot::$db->update($db_config, $opt_row, $where, $params);
 	}
 
 	return $affected;
@@ -480,37 +476,30 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
  *
  * @param string $name Extension name config belongs to
  * @param array $options Array of options as 'option name' => 'option value'
- * @param mixed $is_module Flag indicating if it is module or plugin config
+ * @param bool|string $isModule Flag indicating if it is module or plugin config
  * @param string $category Structure category code. Only for per-category config options
  * @return int Number of entries updated
  * @global CotDB $db
  */
-function cot_config_set($name, $options, $is_module = false, $category = '')
+function cot_config_set($name, $options, $isModule = false, $category = '')
 {
-	global $db, $db_config;
+	global $db_config;
 
-	if (is_bool($is_module))
-	{
-		$type = $is_module ? 'module' : 'plug';
-	}
-	else
-	{
-		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+	if (is_bool($isModule)) {
+		$type = $isModule ? 'module' : 'plug';
+	} else {
+		$type = !in_array($isModule, array('plug', 'core')) ? 'module' : $isModule;
 	}
 	$upd_cnt = 0;
 
 	$where = 'config_owner = ? AND config_cat = ? AND config_name = ?';
-	if (!empty($category))
-	{
+	if (!empty($category)) {
 		$where .= ' AND config_subcat = ?';
-		if ($category != '__default')
-		{
-			$default_options = cot_config_load($name, $is_module, '__default');
+		if ($category != '__default') {
+			$default_options = cot_config_load($name, $isModule, '__default');
 		}
 		$structure_val = array();
-	}
-	else
-	{
+	} else {
 		$structure_val = cot_config_list($type, $name, '__default');
 	}
 
@@ -525,8 +514,8 @@ function cot_config_set($name, $options, $is_module = false, $category = '')
 			$category = $category_tmp;
 		}
 		if (empty($category) || $category == '__default' || $val != $default_options[$key]) {
-			$params = empty($category) ? array($type, $name, $key) : array($type, $name, $key, $category);
-			$upd_cnt += $db->update($db_config, array('config_value' => $val), $where . $where_sub, $params);
+			$params = empty($category) ? [$type, $name, (string) $key] : [$type, $name, (string) $key, $category];
+			$upd_cnt += Cot::$db->update($db_config, ['config_value' => $val], $where . $where_sub, $params);
 		}
 	}
 
@@ -774,7 +763,7 @@ function cot_config_update_options($name, &$optionslist, $is_module=false, $upda
 	global $cot_import_filters;
 	if (!is_array($optionslist)) return false;
 	$new_options = array();
-	//$cfg_var = $val;
+
 	foreach ($optionslist as $cfg_name => $cfg_var)
 	{
 		// Visual separator/fieldset have no value
@@ -857,15 +846,13 @@ function cot_config_input($cfg_var)
 	$options = $cfg_var['config_variants'];
 	$config_input = '';
 	$split_re = '#\s*,\s*#';
-	switch ($type)
-	{
+	switch ($type) {
 		case COT_CONFIG_TYPE_STRING:
 			$config_input = cot_inputbox('text', $name, $value);
 			break;
 
 		case COT_CONFIG_TYPE_SELECT:
-			if (!empty($options))
-			{
+			if (!empty($options)) {
 				$params = preg_split($split_re, $options);
 				$params_titles = cot_config_selecttitles($name, $params);
 			}
@@ -875,18 +862,15 @@ function cot_config_input($cfg_var)
 
 		case COT_CONFIG_TYPE_RADIO:
 			global $L;
-			if (!empty($options))
-			{
+			if (!empty($options)) {
 				// extending radio to use custom values list
 				$params = preg_split($split_re, $options);
 				$params_titles = cot_config_selecttitles($name, $params);
 				if (empty($value)) $value = $cfg_var['config_default'];
-			}
-			else
-			{
+			} else {
 				// old style definition
 				$params = array(1, 0);
-				$params_titles = array($L['Yes'], $L['No']);
+				$params_titles = array(Cot::$L['Yes'], Cot::$L['No']);
 			}
 			$config_input = cot_radiobox($value, $name, $params, $params_titles, '', ' ');
 			break;
@@ -969,7 +953,9 @@ function cot_config_titles($name, $text = '')
 {
 	global $L;
 
-    if(!isset(Cot::$L['cfg_' . $name . '_hint'])) Cot::$L['cfg_' . $name . '_hint'] = '';
+    if (!isset(Cot::$L['cfg_' . $name . '_hint'])) {
+        Cot::$L['cfg_' . $name . '_hint'] = '';
+    }
 	if (isset(Cot::$L['cfg_' . $name]) && is_array(Cot::$L['cfg_' . $name])) {
         Cot::$L['cfg_' . $name . '_hint'] = (isset(Cot::$L['cfg_' . $name][1]) && !isset(Cot::$L['cfg_' . $name . '_hint'])) ?
                 Cot::$L['cfg_' . $name][1] : Cot::$L['cfg_' . $name . '_hint'];

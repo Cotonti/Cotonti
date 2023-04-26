@@ -19,14 +19,12 @@ $adminTitle = $L['Configuration'];
 $t = new XTemplate(cot_tplfile('admin.config', 'core'));
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.config.first') as $pl)
-{
+foreach (cot_getextplugins('admin.config.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-switch ($n)
-{
+switch ($n) {
 	case 'edit':
 		$o = cot_import('o', 'G', 'ALP');
 		$p = cot_import('p', 'G', 'ALP');
@@ -37,24 +35,20 @@ switch ($n)
 		$optionslist = cot_config_list($o, $p, '');
 		cot_die(!sizeof($optionslist), true);
 
-		if ($o != 'core' && file_exists(cot_langfile($p, $o)))
-		{
+		if ($o != 'core' && file_exists(cot_langfile($p, $o))) {
 			require cot_langfile($p, $o);
 		}
-		if ($o != 'core' && file_exists(cot_incfile($p, $o)))
-		{
+		if ($o != 'core' && file_exists(cot_incfile($p, $o))) {
 			require_once cot_incfile($p, $o);
 		}
 
 		/* === Hook  === */
-		foreach (cot_getextplugins('admin.config.edit.first') as $pl)
-		{
+		foreach (cot_getextplugins('admin.config.edit.first') as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
-		if ($a == 'update' && !empty($_POST))
-		{
+		if ($a == 'update' && !empty($_POST)) {
 			$updated = cot_config_update_options($p, $optionslist, $o);
 			$errors = cot_get_messages('', 'error');
 
@@ -83,31 +77,25 @@ switch ($n)
 			{
 				if (!$errors) cot_message('adm_already_updated');
 			}
-		}
-		elseif ($a == 'reset' && !empty($v))
-		{
+		} elseif ($a == 'reset' && !empty($v)) {
 			cot_config_reset($p, $v, $o, '');
 			$optionslist = cot_config_list($o, $p, '');
 
 			/* === Hook  === */
-			foreach (cot_getextplugins('admin.config.edit.reset.done') as $pl)
-			{
+			foreach (cot_getextplugins('admin.config.edit.reset.done') as $pl) {
 				include $pl;
 			}
 			/* ===== */
-			$cache && $cache->clear();
+			Cot::$cache && Cot::$cache->clear();
 
 			cot_redirect(cot_url('admin', array('m'=>'config', 'n'=>'edit', 'o'=>$o, 'p'=>$p), '', true));
 		}
 
 
-		if ($o == 'core')
-		{
+		if ($o == 'core') {
 			$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
 			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o=' . $o . '&p=' . $p), $L['core_' . $p]);
-		}
-		else
-		{
+		} else {
 			$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 			$plmod = $o == 'module' ? 'mod' : 'pl';
 			$ext_info = cot_get_extensionparams($p, $o == 'module');
@@ -116,8 +104,7 @@ switch ($n)
 		}
 
 		/* === Hook  === */
-		foreach (cot_getextplugins('admin.config.edit.main') as $pl)
-		{
+		foreach (cot_getextplugins('admin.config.edit.main') as $pl) {
 			include $pl;
 		}
 		/* ===== */
@@ -126,22 +113,22 @@ switch ($n)
 		$extp = cot_getextplugins('admin.config.edit.loop');
 		/* ===== */
 
-		foreach ($optionslist as $key => $row)
-		{
+		foreach ($optionslist as $key => $row) {
 			list($title, $hint) = cot_config_titles($row['config_name'], $row['config_text']);
 
-			if ($row['config_subcat'] == '__default' && $prev_subcat == '' && $row['config_type'] != COT_CONFIG_TYPE_SEPARATOR)
-			{
+			if (
+                $row['config_subcat'] == '__default'
+                && $prev_subcat == ''
+                && $row['config_type'] != COT_CONFIG_TYPE_SEPARATOR
+            ) {
 				$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $L['adm_structure_defaults']);
 				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_BEGIN');
 			}
-			if ($row['config_type'] == COT_CONFIG_TYPE_SEPARATOR)
-			{
+
+			if ($row['config_type'] == COT_CONFIG_TYPE_SEPARATOR) {
 				$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $title);
 				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_BEGIN');
-			}
-			else
-			{
+			} else {
 				$t->assign(array(
 					'ADMIN_CONFIG_ROW_CONFIG' => cot_config_input($row),
 					'ADMIN_CONFIG_ROW_CONFIG_TITLE' => $title,

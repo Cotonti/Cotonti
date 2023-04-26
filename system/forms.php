@@ -113,6 +113,7 @@ function cot_radiobox(
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$rc = empty(Cot::$R["input_radio_{$rc_name}"]) ?
         (empty($custom_rc) ? 'input_radio' : $custom_rc) : "input_radio_{$rc_name}";
+
 	foreach ($values as $k => $value) {
 		$checked = ($value == $chosen) ? ' checked="checked"' : '';
 		$title = $use_titles ? $titles[$k] : $value;
