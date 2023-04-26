@@ -128,7 +128,7 @@ if (!empty($rtext)) {
                 $context
             );
 
-			cot_mail(
+            cot_mail(
                 [
                     'to' => $semail,
                     'from' => [$rcontact['contact_email'], $rcontact['contact_author']]

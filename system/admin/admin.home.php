@@ -35,7 +35,7 @@ if (Cot::$cfg['check_updates']) {
                     'http' => ['method' => "GET", 'header' => 'User-Agent: ' . $userAgent]
                 ])
             );
-		}
+        }
         if (empty($updateInfo) && function_exists('curl_init')) {
 			$curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -44,7 +44,6 @@ if (Cot::$cfg['check_updates']) {
             $updateInfo = curl_exec($curl);
 			curl_close($curl);
 		}
-
         if ($updateInfo) {
             $updateInfo = json_decode($updateInfo, TRUE);
         }
@@ -56,19 +55,20 @@ if (Cot::$cfg['check_updates']) {
         Cot::$cache->db->store('update_info', $updateInfo, COT_DEFAULT_REALM, 86400);
 	}
 	if (
-        !empty($updateInfo) &&
-        $updateInfo != 'a' &&
-        version_compare($updateInfo['update_ver'], Cot::$cfg['version'], '>')
+        !empty($updateInfo)
+        && $updateInfo != 'a'
+        && version_compare($updateInfo['update_ver'], Cot::$cfg['version'], '>')
     ) {
 		$updateInfo_message = $updateInfo['update_message'];//backward compatibility with non localized updatecheck plug
 		if (is_array($updateInfo['update_message_lng'])) {
 			if (isset($updateInfo['update_message_lng'][$usr['lang']])) {
-				$updateInfo_message = $updateInfo['update_message_lng'][$usr['lang']];
-			}
-			elseif ($usr['lang'] != Cot::$cfg['defaultlang'] && isset($updateInfo['update_message_lng'][Cot::$cfg['defaultlang']])) {
+				$updateInfo_message = $updateInfo['update_message_lng'][Cot::$usr['lang']];
+			} elseif (
+                Cot::$usr['lang'] != Cot::$cfg['defaultlang']
+                && isset($updateInfo['update_message_lng'][Cot::$cfg['defaultlang']])
+            ) {
 				$updateInfo_message = $updateInfo['update_message_lng'][Cot::$cfg['defaultlang']];
-			}
-			elseif (isset($updateInfo['update_message_lng']['en'])) {
+			} elseif (isset($updateInfo['update_message_lng']['en'])) {
 				$updateInfo_message = $updateInfo['update_message_lng']['en'];
 			}
 		}
@@ -82,7 +82,11 @@ if (Cot::$cfg['check_updates']) {
 		));
 		$t->parse('MAIN.UPDATE');
 
-		cot_log('Getting update info - can get new version from cotonti.com', 'adm', 'update', 'info');
+		cot_log(
+            'Getting update info - can get new version from cotonti.com',
+            'adm',
+            'update', 'info'
+        );
 	}
 }
 

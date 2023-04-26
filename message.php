@@ -182,7 +182,7 @@ $out['head'] .= $R['code_noindex'];
 $out['subtitle'] = $title;
 require_once $cfg['system_dir'] . '/header.php';
 
-$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
+$tpl_type = (defined('COT_ADMIN') || $m == 'admin') ? 'core' : 'module';
 $t = new XTemplate(cot_tplfile('message', $tpl_type));
 
 if (COT_AJAX) {

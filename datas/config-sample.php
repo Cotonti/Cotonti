@@ -79,7 +79,7 @@ $cfg['cache_forums'] = false;   // Static page cache for guests on forums
 // TRUE = enabled / FALSE = disabled
 // ========================
 
-$cfg['check_updates'] = false;		// Automatically check for updates, set it TRUE to enable
+$cfg['check_updates'] = true;		// Automatically check for updates, set it TRUE to enable
 
 $cfg['display_errors'] = true;		// Display error messages. Switch it FALSE on production sites
 

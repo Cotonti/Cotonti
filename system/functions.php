@@ -865,7 +865,7 @@ function cot_check_email($res)
  * @param string $subject Subject
  * @param string $body Message body
  * @param string|array $additionalHeaders Additional Message headers
- * @param bool $customtemplate Use custom template
+ * @param bool $customTemplate Use custom template
  * @param string $additionalParameters Additional parameters passed to sendmail
  * @return bool
  *
@@ -877,7 +877,7 @@ function cot_mail(
     $subject,
     $body,
     $additionalHeaders = '',
-    $customtemplate = false,
+    $customTemplate = false,
     $additionalParameters = '',
     $html = false
 ) {
@@ -889,7 +889,7 @@ function cot_mail(
             $subject,
             $body,
             $additionalHeaders,
-            $customtemplate,
+            $customTemplate,
             $additionalParameters,
             $html
         );
@@ -987,7 +987,7 @@ function cot_mail(
 
     $headers .= 'X-Mailer: Cotonti v.' .  Cot::$cfg['version'];
 
-    if (!$customtemplate) {
+    if (!$customTemplate) {
         $body_params = array(
             'SITE_TITLE' => $cfg['maintitle'],
             'SITE_URL' => $cfg['mainurl'],
@@ -1023,7 +1023,7 @@ function cot_mail(
     $bodyPrepared = str_replace(["\r\n", "\r"], "\n", $bodyPrepared);
     // Now convert LE as needed
     $bodyPrepared = str_replace("\n", "\r\n", $bodyPrepared);
-    $bodyPrepared = wordwrap($bodyPrepared, 70, "\r\n");
+    //$bodyPrepared = wordwrap($bodyPrepared, 70, "\r\n");
     $bodyPrepared = base64_encode($bodyPrepared);
 
     $subjectPrepared = mb_encode_mimeheader($subjectPrepared, 'UTF-8', 'B', "\n");

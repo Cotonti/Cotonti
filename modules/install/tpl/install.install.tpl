@@ -23,7 +23,7 @@
 			</div>
 
 			<div id="content">
-					{FILE "./{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+					{FILE "./{PHP.cfg.modules_dir}/install/tpl/warnings.tpl"}
 
 				<form action="install.php" method="post">
 

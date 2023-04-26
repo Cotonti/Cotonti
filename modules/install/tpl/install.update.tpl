@@ -24,7 +24,7 @@
 
 			<div id="content">
 				<h3>{UPDATE_TITLE}</h3>
-				{FILE "{PHP.cfg.themes_dir}/{PHP.cfg.defaulttheme}/warnings.tpl"}
+				{FILE "./{PHP.cfg.modules_dir}/install/tpl/warnings.tpl"}
 
 				<!-- BEGIN: COMPLETED -->
 				<p class="complete">
