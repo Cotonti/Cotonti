@@ -27,7 +27,7 @@ if (Cot::$cfg['check_updates']) {
 	$updateInfo = Cot::$cache->db->get('update_info');
 
 	if (empty($updateInfo)) {
-        $url = 'https://cotonti.com/index.php?r=updatecheck';
+        $url = 'https://www.cotonti.com/index.php?r=updatecheck';
         $userAgent = 'Cotonti v.' . cot::$cfg['version'];
 
 		if (ini_get('allow_url_fopen')) {
