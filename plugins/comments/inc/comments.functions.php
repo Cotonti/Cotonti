@@ -116,8 +116,10 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		unset($link_params['rwr'], $link_params['e']);
 	}
 
-    $cot_com_back = array($link_area, $link_params);
-	$_SESSION['cot_com_back'][$ext_name][$cat][$code] = $cot_com_back;
+	if (!COT_AJAX) {
+		$cot_com_back = array($link_area, $link_params);
+		$_SESSION['cot_com_back'][$ext_name][$cat][$code] = $cot_com_back;
+	}
 
 	$d_var = 'dcm';
 	list($pg, $d, $durl) = cot_import_pagenav($d_var, $cfg['plugin']['comments']['maxcommentsperpage']);
@@ -144,7 +146,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		'COMMENTS_FORM_AUTHOR' => ($usr['id'] > 0) ? $usr['name'] : cot_inputbox('text', 'rname'),
 		'COMMENTS_FORM_AUTHORID' => $usr['id'],
 		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? cot_textarea('rtext', $rtext, 7, 120, '', $editor).
-            cot_inputbox('hidden', 'cb', base64_encode(serialize($cot_com_back))) : '',
+            (isset($cot_com_back) && !empty($cot_com_back) ? cot_inputbox('hidden', 'cb', base64_encode(serialize($cot_com_back))) : '') : '',
 		'COMMENTS_DISPLAY' => $cfg['plugin']['comments']['expand_comments'] ? '' : 'none'
 	));
 
@@ -257,7 +259,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
             $t->assign(array(
 				'COMMENTS_ROW_ID' => $row['com_id'],
 				'COMMENTS_ROW_ORDER' => Cot::$cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
-				'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#c'.$row['com_id']),
+				'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#com'.$row['com_id']),
 				'COMMENTS_ROW_AUTHOR' => cot_build_user($row['user_id'], $row['com_author']),
 				// User can be deleted. So $row['user_id'] should be used here
 				'COMMENTS_ROW_AUTHORID' => $row['user_id'],
@@ -299,7 +301,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		$pagenav = cot_pagenav($link_area, $link_params, $d, $totalitems,
 			Cot::$cfg['plugin']['comments']['maxcommentsperpage'], $d_var, '#comments',
             Cot::$cfg['jquery'] && Cot::$cfg['turnajax'], 'comments', 'plug',
-                               "e=comments&area=$ext_name&cat=$cat&item=$code");
+                               "r=comments&area=$ext_name&cat=$cat&item=$code");
 		$t->assign(array(
 			'COMMENTS_PAGES_INFO' => cot_rc('comments_code_pages_info', array(
 					'totalitems' => $totalitems,
