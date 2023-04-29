@@ -177,14 +177,12 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	global $cot_urltrans, $cot_url_shortcuts;
 
 	$q_s = str_replace('%5B', '[', str_replace('%5D', ']', http_build_query($params)));
-	if (isset($cot_url_shortcuts[$name][$q_s]))
-	{
+	if (isset($cot_url_shortcuts[$name][$q_s])) {
 		return $cot_url_shortcuts[$name][$q_s];
 	}
 
 	// Preprocess arguments
-	if (is_string($params))
-	{
+	if (is_string($params)) {
 		$params = cot_parse_str($params);
 	}
 
@@ -192,8 +190,7 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	$url = ($name == 'plug') ? 'index.php' : 'index.php?e=' . $name;
 	// Detect search areas
 	$areas = array();
-	if (isset($cot_urltrans[$name]) && count($cot_urltrans[$name]) > 0)
-	{
+	if (isset($cot_urltrans[$name]) && count($cot_urltrans[$name]) > 0) {
 		$areas[] = $name;
 	}
 	$areas[] = '*'; // default area rules
@@ -261,22 +258,32 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	if (cot_plugin_active('i18n')) {
 		$i18n_cfg = Cot::$cfg['plugin']['i18n'];
 		$i18n_rewrite = isset($i18n_cfg['rewrite']) && $i18n_cfg['rewrite'];
-		$omit_param = $i18n_cfg['omitmain'] && isset($params['l']) && isset(Cot::$usr['profile']) && $params['l'] == Cot::$usr['profile']['user_lang'];
+		$omit_param = $i18n_cfg['omitmain']
+            && isset($params['l'])
+            && isset(Cot::$usr['profile'])
+            && $params['l'] == Cot::$usr['profile']['user_lang'];
+
 		if (isset($params['l']) && $i18n_rewrite && !$omit_param) {
-			// Add with slash at the beginning of the URL
+    			// Add with slash at the beginning of the URL
 			$pos = strpos($url, Cot::$sys['site_uri']);
 			if (Cot::$sys['site_uri'] != '/' && $pos !== false) {
-				$url = substr_replace($url, Cot::$sys['site_uri'] . rawurlencode($params['l']) . '/', $pos, mb_strlen(Cot::$sys['site_uri']));
+				$url = substr_replace(
+                    $url,
+                    Cot::$sys['site_uri'] . rawurlencode($params['l']) . '/', $pos,
+                    mb_strlen(Cot::$sys['site_uri'])
+                );
 
             } else {
 				$p = mb_strpos($url, '://');
 				if ($p === false) {
-					$url = mb_strpos($url, '/') === 0 ? '/' . rawurlencode($params['l']) . $url : rawurlencode($params['l']) . '/' . $url;
+					$url = mb_strpos($url, '/') === 0 ?
+                        '/' . rawurlencode($params['l']) . $url : rawurlencode($params['l']) . '/' . $url;
 
                 } else {
 					$p = mb_strpos($url, '/', $p + 3);
-					$url = $p === false ? $url . '/' . rawurlencode($params['l']) : mb_substr($url, 0, $p) . rawurlencode($params['l']) . '/' .
-						 mb_substr($url, $p + 1);
+					$url = $p === false ?
+                        $url . '/' . rawurlencode($params['l'])
+                        : mb_substr($url, 0, $p) . rawurlencode($params['l']) . '/' . mb_substr($url, $p + 1);
 				}
 			}
 			unset($params['l']);
