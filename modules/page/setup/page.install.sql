@@ -53,7 +53,6 @@ CREATE TABLE IF NOT EXISTS `cot_pages` (
   `page_url`    varchar(255) DEFAULT '',
   `page_size`   int UNSIGNED NOT NULL DEFAULT '0',
   `page_count`  mediumint UNSIGNED NOT NULL DEFAULT '0',
-  `page_rating` decimal(5,2) NOT NULL DEFAULT '0.00',
   `page_filecount` mediumint UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY  (`page_id`),
   KEY `page_cat` (`page_cat`),
