@@ -27,133 +27,113 @@ cot_block($usr['auth_read']);
 require_once cot_langfile('users', 'module');
 require_once cot_langfile('countries', 'core');
 
-$users_sort_tags = array(
+$users_sort_tags = [
 	// columns in $db_users table
-	'id' => array('USERS_TOP_USERID', &$L['Userid'],),
-	'name' => array('USERS_TOP_NAME', &$L['Username'],),
-	'maingrp' => array('USERS_TOP_MAINGRP', &$L['Maingroup'],),
-	'country' => array('USERS_TOP_COUNTRY', &$L['Country'],),
-	'occupation' => array('USERS_TOP_OCCUPATION', &$L['Occupation'],),
-	'residence' => array('USERS_TOP_RESIDENCE', &$L['Residence'],),
-	'timezone' => array('USERS_TOP_TIMEZONE', &$L['Timezone'],),
-	'birthdate' => array('USERS_TOP_BIRTHDATE', &$L['Birthdate'],),
-	'gender' => array('USERS_TOP_GENDER', &$L['Gender'],),
-	'regdate' => array('USERS_TOP_REGDATE', &$L['Registered'],),
-	'lastlog' => array('USERS_TOP_LASTLOGGED', &$L['Lastlogged'],),
-	'logcount' => array('USERS_TOP_LOGCOUNT', &$L['Count'],),
+	'id' => ['USERS_TOP_USERID', &$L['Userid'],],
+	'name' => ['USERS_TOP_NAME', &$L['Username'],],
+	'maingrp' => ['USERS_TOP_MAINGRP', &$L['Maingroup'],],
+	'country' => ['USERS_TOP_COUNTRY', &$L['Country'],],
+	'occupation' => ['USERS_TOP_OCCUPATION', &$L['Occupation'],],
+	'residence' => ['USERS_TOP_RESIDENCE', &$L['Residence'],],
+	'timezone' => ['USERS_TOP_TIMEZONE', &$L['Timezone'],],
+	'birthdate' => ['USERS_TOP_BIRTHDATE', &$L['Birthdate'],],
+	'gender' => ['USERS_TOP_GENDER', &$L['Gender'],],
+	'regdate' => ['USERS_TOP_REGDATE', &$L['Registered'],],
+	'lastlog' => ['USERS_TOP_LASTLOGGED', &$L['Lastlogged'],],
+	'logcount' => ['USERS_TOP_LOGCOUNT', &$L['Count'],],
 	// like columns in $db_groups table
-	'grplevel' => array('USERS_TOP_GRPLEVEL', &$L['Level'],),
-	'grpname' => array('USERS_TOP_GRPTITLE', &$L['Maingroup'],),
-);
+	'grplevel' => ['USERS_TOP_GRPLEVEL', &$L['Level'],],
+	'grpname' => ['USERS_TOP_GRPTITLE', &$L['Maingroup'],],
+];
 /* @todo move to Forums module */
 if (cot_module_active('forums')) {
     $users_sort_tags['postcount'] = ['USERS_TOP_POSTCOUNT', &$L['forums_posts'],];
 }
 
-$users_sort_blacklist = array('email', 'lastip', 'password', 'sid', 'sidtime', 'lostpass', 'auth', 'token');
-$users_sort_whitelist = array('id', 'name', 'maingrp', 'country', 'timezone', 'birthdate', 'gender', 'lang', 'regdate');
+$users_sort_blacklist = ['email', 'lastip', 'password', 'sid', 'sidtime', 'lostpass', 'auth', 'token'];
+$users_sort_whitelist = ['id', 'name', 'maingrp', 'country', 'timezone', 'birthdate', 'gender', 'lang', 'regdate', 'grplevel', 'grpname'];
 
 /* === Hook === */
-foreach (cot_getextplugins('users.first') as $pl)
-{
+foreach (cot_getextplugins('users.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if (empty($s) || in_array(mb_strtolower($s), $users_sort_blacklist) || !in_array($s, $users_sort_whitelist) && !$db->fieldExists($db_users, "user_$s"))
-{
+if (empty($s) || in_array(mb_strtolower($s), $users_sort_blacklist) || !in_array($s, $users_sort_whitelist) && !$db->fieldExists($db_users, "user_$s")) {
 	$s = 'name';
 }
-if (!in_array($w, array('asc', 'desc')))
-{
+if (!in_array($w, ['asc', 'desc'])) {
 	$w = 'asc';
 }
-if (empty($f))
-{
+if (empty($f)) {
 	$f = 'all';
 }
-if (empty($d))
-{
+if (empty($d)) {
 	$d = 0;
 }
 
-$title[] = array(cot_url('users'), $L['Users']);
+$title[] = [cot_url('users'), $L['Users']];
 $localskin = cot_tplfile('users', 'module');
 
-if(!empty($sq))
-{
+if (!empty($sq)) {
 	$y = $sq;
 }
 
-if ($s == 'grplevel' || $s == 'grpname' || $gm > 1)
-{
+if ($s == 'grplevel' || $s == 'grpname' || $gm > 1) {
 	$join_condition = "LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp";
 }
 
-if($f == 'search' && mb_strlen($y) > 1)
-{
+if ($f == 'search' && mb_strlen($y) > 1) {
 	$sq = $y;
 	$title[] = $L['Search']." '".htmlspecialchars($y)."'";
 	$where['namelike'] = "user_name LIKE '%".$db->prep($y)."%'";
-}
-elseif($g > 1)
-{
+} elseif ($g > 1) {
 	$title[] = $L['Maingroup']." = ".cot_build_group($g);
 	$where['maingrp'] = "user_maingrp=$g";
-}
-elseif($gm > 1)
-{
+} elseif ($gm > 1) {
 	$title[] = $L['Group']." = ".cot_build_group($gm);
 	$join_condition .= " LEFT JOIN $db_groups_users as m ON m.gru_userid=u.user_id";
 	$where['maingrp'] = "m.gru_groupid=".$gm;
-}
-elseif(mb_substr($f, 0, 8) == 'country_')
-{
+} elseif (mb_substr($f, 0, 8) == 'country_') {
 	$cn = mb_strtolower(mb_substr($f, 8, 2));
 	$title[] = $L['Country']." '" . (($cn == '00') ? $L['None']."'" : $cot_countries[$cn]."'");
 	$where['country'] = "user_country='$cn'";
-}
-else//if($f == 'all')
-{
+} else {// if ($f == 'all')
 	$where['1'] = "1";
 }
 
-switch ($s)
-{
+switch ($s) {
 	case 'grplevel':
 		$sqlorder = "g.grp_level $w";
-	break;
+		break;
 	case 'grpname':
 		$sqlorder = "g.grp_name $w";
-	break;
+		break;
 	default:
 		$sqlorder = "user_$s $w";
-	break;
+		break;
 }
 
-$users_url_path = array('f' => $f, 'g' => $g, 'gm' => $gm, 's' => $s, 'w' => $w, 'sq' => $sq);
+$users_url_path = ['f' => $f, 'g' => $g, 'gm' => $gm, 's' => $s, 'w' => $w, 'sq' => $sq];
 
 /* === Hook === */
-foreach (cot_getextplugins('users.query') as $pl)
-{
+foreach (cot_getextplugins('users.query') as $pl) {
 	include $pl;
 }
 /* ===== */
-if(!isset($join_condition)) $join_condition = '';
-if(!isset($join_columns)) $join_columns = '';
-$totalusers = $db->query(
-	"SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where)
-)->fetchColumn();
+
+if (!isset($join_condition)) $join_condition = '';
+if (!isset($join_columns)) $join_columns = '';
+$totalusers = $db->query("SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where))->fetchColumn();
 
 // Disallow accessing non-existent pages
-if ($totalusers > 0 && $d > $totalusers)
-{
+if ($totalusers > 0 && $d > $totalusers) {
 	cot_die_message(404);
 }
 
 $sqlusers = $db->query(
 	"SELECT u.* $join_columns FROM $db_users AS u $join_condition
-	WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['users']['maxusersperpage']}"
+	WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d, {$cfg['users']['maxusersperpage']}"
 )->fetchAll();
 
 $totalpage = ceil($totalusers / $cfg['users']['maxusersperpage']);
@@ -163,8 +143,7 @@ $pagenav = cot_pagenav('users', $users_url_path, $d, $totalusers, $cfg['users'][
 $out['subtitle'] = $L['Users'];
 
 /* === Hook === */
-foreach (cot_getextplugins('users.main') as $pl)
-{
+foreach (cot_getextplugins('users.main') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -175,18 +154,15 @@ $t = new XTemplate($localskin);
 
 require_once cot_incfile('forms');
 
-$countryfilters_titles = array();
-$countryfilters_values = array();
+$countryfilters_titles = [];
+$countryfilters_values = [];
 $countryfilters_titles[] = $R['users_sel_def_l'].$L['Country'].$R['users_sel_def_r'];
 $countryfilters_values[] = cot_url('users');
 $countryfilters_titles[] = $L['Not_indicated'];
 $countryfilters_values[] = cot_url('users', 'f=country_00');
-foreach($cot_countries as $i => $x)
-{
-
-	$countryfilters_titles[] = cot_cutstring($x,23);
+foreach ($cot_countries as $i => $x) {
+	$countryfilters_titles[] = cot_cutstring($x, 23);
 	$countryfilters_values[] = cot_url('users', 'f=country_'.$i);
-
 }
 $countryfilters = cot_selectbox(cot_url('users', 'f='.$f), 'bycountry', $countryfilters_values, $countryfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
 
@@ -230,7 +206,7 @@ foreach (cot_getextplugins('users.filters') as $pl) {
 }
 /* ===== */
 
-$t->assign(array(
+$t->assign([
 	'USERS_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'USERS_SUBTITLE' => $L['use_subtitle'],
 	'USERS_CURRENTFILTER' => $f,
@@ -245,32 +221,45 @@ $t->assign(array(
 	'USERS_TOP_FILTERS_COUNTRY' => $countryfilters,
 	'USERS_TOP_FILTERS_MAINGROUP' => $maingrpfilters,
 	'USERS_TOP_FILTERS_GROUP' => $grpfilters,
-	'USERS_TOP_FILTERS_SEARCH' => cot_inputbox('text', 'y', $y, array('size' => 16, 'maxlength' => 16)),
+	'USERS_TOP_FILTERS_SEARCH' => cot_inputbox('text', 'y', $y, ['size' => 16, 'maxlength' => 16]),
 	'USERS_TOP_FILTERS_SUBMIT' => cot_inputbox('submit', 'submit', $L['Search']),
-	'USERS_TOP_PM' => 'PM',
-));
+	'USERS_TOP_PM' => 'PM'
+]);
 
 $k = '_.__._';
-$asc = explode($k, cot_url('users', array('s' => $k, 'w'=> 'asc') + $users_url_path));
-$desc = explode($k, cot_url('users', array('s' => $k, 'w'=> 'desc') + $users_url_path));
+$asc = explode($k, cot_url('users', ['s' => $k, 'w'=> 'asc'] + $users_url_path));
+$desc = explode($k, cot_url('users', ['s' => $k, 'w'=> 'desc'] + $users_url_path));
 foreach ($users_sort_tags as $k => $x) {
-	$t->assign($x[0], cot_rc('users_link_sort', array(
-		'asc_url' => implode($k, $asc),
-		'desc_url' => implode($k, $desc),
-		'text' => $x[1]
-	)));
+	$t->assign(
+		$x[0],
+		!in_array($k, $users_sort_blacklist) && in_array($k, $users_sort_whitelist) ?
+			cot_rc('users_link_sort', [
+				'asc_url' => implode($k, $asc),
+				'desc_url' => implode($k, $desc),
+				'text' => $x[1],
+				'icon_down' => $k == $s && $w == 'asc' ? $R['icon_vert_active']['asc'] : $R['icon_down'],
+				'icon_up' => $k == $s && $w == 'desc' ? $R['icon_vert_active']['desc'] : $R['icon_up']
+			])
+		: $x[1]
+	);
 }
 
 // Extra fields for users
-foreach($cot_extrafields[$db_users] as $exfld)
-{
+foreach($cot_extrafields[$db_users] as $exfld) {
 	$uname = strtoupper($exfld['field_name']);
 	$fieldtext = isset($L['user_'.$exfld['field_name'].'_title']) ? $L['user_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
-	$t->assign('USERS_TOP_'.$uname, cot_rc('users_link_sort', array(
-		'asc_url' => cot_url('users', array('s' => $exfld['field_name'], 'w'=> 'asc') + $users_url_path),
-		'desc_url' => cot_url('users', array('s' => $exfld['field_name'], 'w'=> 'desc') + $users_url_path),
-		'text' => $fieldtext
-	)));
+	$t->assign(
+		'USERS_TOP_'.$uname,
+		!in_array($exfld['field_name'], $users_sort_blacklist) && in_array($exfld['field_name'], $users_sort_whitelist) ?
+			cot_rc('users_link_sort', [
+				'asc_url' => cot_url('users', ['s' => $exfld['field_name'], 'w'=> 'asc'] + $users_url_path),
+				'desc_url' => cot_url('users', ['s' => $exfld['field_name'], 'w'=> 'desc'] + $users_url_path),
+				'text' => $fieldtext,
+				'icon_down' => $exfld['field_name'] == $s && $w == 'asc' ? $R['icon_vert_active']['asc'] : $R['icon_down'],
+				'icon_up' => $exfld['field_name'] == $s && $w == 'desc' ? $R['icon_vert_active']['desc'] : $R['icon_up']
+			])
+		: $fieldtext
+	);
 }
 
 $jj = 0;
@@ -281,11 +270,11 @@ $extp = cot_getextplugins('users.loop');
 
 foreach ($sqlusers as $urr) {
 	$jj++;
-	$t->assign(array(
+	$t->assign([
 		'USERS_ROW_ODDEVEN' => cot_build_oddeven($jj),
         'USERS_ROW_NUM' => $jj,
 		'USERS_ROW' => $urr
-	));
+	]);
 	$t->assign(cot_generate_usertags($urr, 'USERS_ROW_'));
 
 	/* === Hook - Part2 : Include === */

@@ -24,9 +24,6 @@ require_once cot_incfile('uploads');
 
 require_once cot_incfile('users', 'module');
 
-if (!in_array($m, array('details', 'edit', 'passrecover', 'profile', 'register')))
-{
-	$m = 'main';
-}
+$m = !in_array($m, ['details', 'edit', 'passrecover', 'profile', 'register']) ? 'main' : $m;
 
 include cot_incfile('users', 'module', $m);

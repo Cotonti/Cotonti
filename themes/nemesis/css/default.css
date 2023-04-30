@@ -1,43 +1,43 @@
 /* 0. Elements
 -------------------------------------------------- */
 
-*			{ margin: 0; padding: 0; }
+*		{ margin: 0; padding: 0; }
 html	{ padding: 0; }
 
 body	{ color:#667e72; font:normal 76%/1.8em Georgia, serif; background:#f8f8f8; }
 
-a 			{ color:#111; text-decoration:none; border:0; outline:none; }
+a 		{ color:#111; text-decoration:none; border:0; outline:none; }
 a:hover { text-decoration:underline; }
 
-hr					{ border:0 dashed #ccc; border-top-width:1px; clear:both; height:0; }
+hr			{ border:0 dashed #ccc; border-top-width:1px; clear:both; height:0; }
 hr.divider	{ margin:10px 0; }
 
 sub, sup	{ font-size:.8em; position:relative; }
-sub				{ top:.5em; }
-sup				{ top:-.5em; }
+sub			{ top:.5em; }
+sup			{ top:-.5em; }
 
 /* 1. Main Navigation
 -------------------------------------------------- */
 
-#nav										{ line-height:1.4em; background:#ddd; overflow:auto; }
-	#nav li								{ width:159px; border-right:1px solid #f8f8f8; float:left; }
-	#nav li a							{ text-shadow:0 1px 0 #fff; padding:10px 20px; display:block; }
-	#nav li a:hover				{ color:#fff; text-decoration:none; text-shadow:0 -1px 0 #000; background:#667e72; }
-	#nav li a span				{ color:#999; font-size:.9em; text-transform:lowercase; display:block; }
-	#nav li a:hover span	{ color:#ccc; }
+#nav					{ line-height:1.4em; background:#ddd; overflow:auto; }
+	#nav li				{ width:159px; border-right:1px solid #f8f8f8; float:left; }
+	#nav li a			{ text-shadow:0 1px 0 #fff; padding:10px 20px; display:block; }
+	#nav li a:hover		{ color:#fff; text-decoration:none; text-shadow:0 -1px 0 #000; background:#667e72; }
+	#nav li a span		{ color:#999; font-size:.9em; text-transform:lowercase; display:block; }
+	#nav li a:hover span{ color:#ccc; }
 
 /* 2. Structure
 -------------------------------------------------- */
 
-.body				{ margin:0 auto; width:960px; position:relative; }
-#header			{ border-top:5px solid; }
-#main				{ padding:30px 0 15px; }
+.body		{ margin:0 auto; width:960px; position:relative; }
+#header		{ border-top:5px solid; }
+#main		{ padding:30px 0 15px; }
 
-.block			{ margin:0 10px 25px; }
+.block		{ margin:0 10px 25px; }
 
 .col, .col4-1, .col4-2, .col4-3, .col3-1, .col3-2, .col2-1		{ float:left; }
 
-.col			{ width:100%; }
+.col		{ width:100%; }
 .col4-1		{ width:240px; /* width:25%; */ }
 .col4-2		{ width:480px; /* width:50%; */ }
 .col4-3		{ width:720px; /* width:75%; */ }
@@ -47,12 +47,12 @@ sup				{ top:-.5em; }
 
 .col.first, .col4-1.first, .col4-2.first, .col4-3.first, .col3-1.first, .col3-2.first, .col2-1.first	{ margin-left:0; clear:left; }
 
-#footer										{ font-size:.9em; color:#f8f8f8; margin-bottom:10px; padding:20px 0; background:#667e72; }
-	#footer a								{ color:#fff; }
-	#footer strong					{ color:#a1b3aa; text-shadow:0 -1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
-	#footer ul  img					{ vertical-align:-4px; }
+#footer						{ font-size:.9em; color:#f8f8f8; margin-bottom:10px; padding:20px 0; background:#667e72; }
+	#footer a				{ color:#fff; }
+	#footer strong			{ color:#a1b3aa; text-shadow:0 -1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
+	#footer ul  img			{ vertical-align:-4px; }
 	#footer ul#account img	{ margin-top:5px; }
-	#footer hr							{ border:0!important; }
+	#footer hr				{ border:0!important; }
 
 /* 3. Headings
 -------------------------------------------------- */
@@ -94,35 +94,33 @@ div.help		{ color:#00529b; background-color:#bde5f8; background-image:url(../../
 
 table td 	{ vertical-align:top; }
 
-table.flat			{ border-collapse:collapse; width:100%; }
+table.flat		{ border-collapse:collapse; width:100%; }
 table.flat td 	{ padding:2px; margin:0; border:0; }
 
-table.main 			{ border-collapse:collapse; width:100%; }
+table.main 		{ border-collapse:collapse; width:100%; }
 table.main td 	{ padding:2px 0; margin:0; border:0; }
 
-table.cells 		{ border-collapse:collapse; width:100%; }
+table.cells 	{ border-collapse:collapse; width:100%; }
 table.cells td	{ padding:4px 8px; border:1px solid #e7e7e7; }
 
-table.list 			{ border-collapse:collapse; width:100%; }
+table.list 		{ border-collapse:collapse; width:100%; }
 table.list td 	{ padding:5px 5px 5px 0; border-bottom:1px dashed #ccc; }
 
-table.fico 				{ border-collapse:collapse; width:100%; }
-table.fico td			{ padding:5px 0; margin:0; border:0; }
+table.fico 			{ border-collapse:collapse; width:100%; }
+table.fico td		{ padding:5px 0; margin:0; border:0; }
 table.fico td img	{ margin-right:10px; vertical-align:middle; }
 
-.coltop			{ text-align:center; vertical-align:middle; font-size:.9em; background-color:#ddd!important; color:#000; }
+.coltop		{ text-align:center; vertical-align:middle; font-size:.9em; background-color:#ddd!important; color:#000; }
 .coltop img	{ vertical-align:middle; }
 .centerall 	{ text-align:center; vertical-align:middle; }
-.valid 			{ height:48px; text-align:center; vertical-align:middle; border:0!important; }
+.valid 		{ height:48px; text-align:center; vertical-align:middle; border:0!important; }
 
 /* 5. Forms
 -------------------------------------------------- */
 
 form { }
 input, select, textarea, button	{ font:normal 1em Georgia; padding:2px; }
-input, textarea {
-	max-width: 100%;
-}
+input, textarea { max-width: 100%; }
 label input { vertical-align:middle; }
 button::-moz-focus-inner { padding:0; border:none; }
 
@@ -131,25 +129,25 @@ button::-moz-focus-inner { padding:0; border:none; }
 
 .odd	{ background-color:#fff!important; }
 .even	{ background-color:#f1f1f1!important; }
-.code { color:#000; background:#e3e3e3; border:1px solid #ccc; padding:2px 15px; margin:5px 0; font-family:monospace; font-size:1.1em; white-space:pre-wrap; }
+.code	{ color:#000; background:#e3e3e3; border:1px solid #ccc; padding:2px 15px; margin:5px 0; font-family:monospace; font-size:1.1em; white-space:pre-wrap; }
 
 .clear	{ clear:both; }
-.lhn		{ line-height:normal; }
+.lhn	{ line-height:normal; }
 .strong	{ font-weight:bold; }
 .italic	{ font-style:italic; }
 
 .small	{ font-size:.9em!important; line-height:1.6em; }
 .large	{ font-size:1.1em!important; }
 
-.lower		{ text-transform:lowercase; }
-.upper		{ text-transform:uppercase; }
-.capital	{ text-transform:capitalize; }
+.lower	{ text-transform:lowercase; }
+.upper	{ text-transform:uppercase; }
+.capital{ text-transform:capitalize; }
 
-.hide			{ display:none; }
-.hidden		{ display:none; }
-.invis		{ visibility:hidden; }
+.hide	{ display:none; }
+.hidden	{ display:none; }
+.invis	{ visibility:hidden; }
 
-.textleft			{ text-align:left; }
+.textleft		{ text-align:left; }
 .textcenter		{ text-align:center; }
 .textright		{ text-align:right; }
 .textjustify	{ text-align:justify; }
@@ -158,26 +156,26 @@ button::-moz-focus-inner { padding:0; border:none; }
 .floatright		{ float:right; }
 
 .black		{ color:#000; }
-.grey			{ color:#999; }
-.red			{ color:#900; }
+.grey		{ color:#999; }
+.red		{ color:#900; }
 .white		{ color:#fff; }
 
 .colleft	{ float:left; margin:5px 15px 0 0; }
 .colright	{ float:right; margin:5px 0 0 15px; }
 
-.margintop10		{ margin-top:10px; }
+.margintop10	{ margin-top:10px; }
 .marginright10	{ margin-right:10px; }
 .marginbottom10	{ margin-bottom:10px; }
-.marginleft10		{ margin-left:10px; }
-.margin10				{ margin:10px!important; }
-.margin0				{ margin:0!important; }
+.marginleft10	{ margin-left:10px; }
+.margin10		{ margin:10px!important; }
+.margin0		{ margin:0!important; }
 
-.paddingtop10		{ padding-top:10px; }
+.paddingtop10	{ padding-top:10px; }
 .paddingright10	{ padding-right:10px; }
 .paddingbottom10{ padding-bottom:10px; }
 .paddingleft10	{ padding-left:10px; }
-.padding10			{ padding:10px!important; }
-.padding0				{ padding:0!important; }
+.padding10		{ padding:10px!important; }
+.padding0		{ padding:0!important; }
 
 .border0	{ border:0!important; }
 
@@ -202,13 +200,13 @@ button::-moz-focus-inner { padding:0; border:none; }
 .width95	{ width:95%; }
 .width100	{ width:100%; }
 
-.desc					{ font-size:.9em; margin:5px 0; padding:5px 10px; background:#e9e9e9; border:1px solid #ccc; border-left:0; border-right:0; overflow:auto; }
+.desc			{ font-size:.9em; margin:5px 0; padding:5px 10px; background:#e9e9e9; border:1px solid #ccc; border-left:0; border-right:0; overflow:auto; }
 .desc strong	{ color:#fff; margin-right:8px; padding:2px 6px; background:#aaa; }
 
 .combox		{ font-size:2em; text-align:center; margin:0 10px 5px 0; padding-top:6px; height:42px; width:48px; background:url(../img/comments.png) no-repeat 0 0; float:left; }
 .textbox	{ margin-bottom:10px; overflow:auto; }
 
-span.readmore			{ display:block; }
+span.readmore		{ display:block; }
 	span.readmore a	{  }
 
 .download	{ margin:10px 0; padding:10px 0 10px 84px; background:url(../img/download.png) no-repeat 10px 12px; border:1px dashed #c00; }
@@ -220,15 +218,15 @@ span.readmore			{ display:block; }
 /* 7. Pagination
 -------------------------------------------------- */
 
-.paging				{ margin:10px 0 20px 0; text-align:center; font-size:.9em; }
+.paging			{ margin:10px 0 20px 0; text-align:center; font-size:.9em; }
 .paging img		{ vertical-align:-3px; }
 .paging span	{ border:1px dashed #7f7772; padding:2px 8px; margin:1px; }
 
 .pagenav_prev, .pagenav_next, .pagenav_first, .pagenav_last, .pagenav_pages, .pagenav_current { padding:2px 6px; margin:1px; border:1px dashed #7f7772; }
 .pagenav_prev a, .pagenav_next a, .pagenav_first a, .pagenav_last a, .pagenav_pages a	{ color:#555; }
-.pagenav_current		{ font-weight:bold; color:#fff; background:none!important; border:none!important; }
+.pagenav_current	{ font-weight:bold; color:#fff; background:none!important; border:none!important; }
 .pagenav_current a	{ color:#555; }
-.pagenav_small			{ text-align:right; font-size:.9em; }
+.pagenav_small		{ text-align:right; font-size:.9em; }
 
 .spaced				{ border:none!important; margin:0 8px!important; padding:0!important; }
 
@@ -249,28 +247,28 @@ span.readmore			{ display:block; }
 /* 10. Forums
 -------------------------------------------------- */
 
-.b1 img					{ margin:0 5px 0 0; vertical-align:-5px!important; }
-.userstatus			{ margin-top:2px; float:right; }
+.b1 img			{ margin:0 5px 0 0; vertical-align:-5px!important; }
+.userstatus		{ margin-top:2px; float:right; }
 .forumssection	{ font-weight:bold; background:#eee; }
 .subforums img	{ vertical-align:-3px; margin-right:5px; }
 
 #newf			{ margin:10px 0; }
-#newf li	{ margin-right:10px; display:inline; }
+#newf li		{ margin-right:10px; display:inline; }
 
 /* 11. Search
 -------------------------------------------------- */
 
-.search-res					{ margin:0 0 10px; overflow:auto; }
+.search-res			{ margin:0 0 10px; overflow:auto; }
 .search-res .small	{ color:#000; }
-.search-hl      		{ font-weight:bold; padding:0 2px; background:yellow; }
+.search-hl      	{ font-weight:bold; padding:0 2px; background:yellow; }
 
 /* 12. Lists
 -------------------------------------------------- */
 
-.endItem			{ margin-right:0!important; }
+.endItem		{ margin-right:0!important; }
 .endItem+li		{ clear:both; }
 
 ul.bullets li	{ padding-left:25px; background:url(../img/bullets.png) no-repeat 5px 2px; }
-ol						{ margin-left:20px; list-style-type:decimal; }
+ol				{ margin-left:20px; list-style-type:decimal; }
 
 #usergrouplist ul li:first-child a	{ color:#900; }

@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-
 		<div class="block">
 			<h2 class="users">{USERS_TITLE}</h2>
 			<table class="cells">
@@ -11,7 +10,7 @@
 					<td class="coltop" class="width15">{USERS_TOP_COUNTRY}</td>
 					<td class="coltop" class="width25">{USERS_TOP_REGDATE}</td>
 				</tr>
-<!-- BEGIN: USERS_ROW -->
+				<!-- BEGIN: USERS_ROW -->
 				<tr>
 					<td class="centerall">{USERS_ROW_PM}</td>
 					<td>{USERS_ROW_NAME}&nbsp;{USERS_ROW_TAG}</td>
@@ -20,7 +19,7 @@
 					<td class="centerall">{USERS_ROW_COUNTRYFLAG} {USERS_ROW_COUNTRY}</td>
 					<td class="centerall">{USERS_ROW_REGDATE}</td>
 				</tr>
-<!-- END: USERS_ROW -->
+				<!-- END: USERS_ROW -->
 			</table>
 		</div>
 		<div class="block">
@@ -36,5 +35,4 @@
 			</form>
 		</div>
 		<p class="paging"><span>{PHP.L.users_usersperpage}: {USERS_TOP_MAXPERPAGE}</span><span>{PHP.L.users_usersinthissection}: {USERS_TOP_TOTALUSERS}</span>{USERS_TOP_PAGEPREV}{USERS_TOP_PAGNAV}{USERS_TOP_PAGENEXT}</p>
-
 <!-- END: MAIN -->

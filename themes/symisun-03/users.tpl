@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	
 <div id="content">
 	<div class="padding20 whitee">
 		<div id="left">
@@ -11,8 +10,9 @@
 			</div>
 			&nbsp;
 			<!-- IF {USERS_TOP_TOTALUSERS} > 0 -->
-			<p style="border-bottom:1px solid #ececec">{PHP.themelang.list.sort}<br />
-                            <strong>{USERS_TOP_NAME} &nbsp; {USERS_TOP_MAINGRP} &nbsp; {USERS_TOP_COUNTRY} &nbsp; {USERS_TOP_LASTLOGGED} &nbsp; {USERS_TOP_REGDATE}</strong>
+			<p style="border-bottom:1px solid #ececec">
+				{PHP.themelang.list.sort}<br />
+				<strong>{USERS_TOP_NAME} &nbsp; {USERS_TOP_MAINGRP} &nbsp; {USERS_TOP_COUNTRY} &nbsp; {USERS_TOP_LASTLOGGED} &nbsp; {USERS_TOP_REGDATE}</strong>
 			</p>
 			<!-- ELSE -->
 			<h4>{PHP.f}</h4>
@@ -21,30 +21,30 @@
 
 			<!-- BEGIN: USERS_ROW -->
 			<div class="{USERS_ROW_ODDEVEN} nou toprow" style="font-size:.9em; padding-left:5px">
-			<div style="float:left; width:137px; font-size:1.2em">
-				<strong>{USERS_ROW_NAME}</strong>
-			</div>
-			<div style="float:left; width:116px;">
-				{USERS_ROW_MAINGRP}
-			</div>
-			<div style="float:left; width:96px;">
-				{USERS_ROW_COUNTRY}
-			</div>
-			<div style="float:left; width:121px;">
-				{USERS_ROW_LASTLOG}
-			</div>
-			<div style="float:left; width:90px;">
-				{USERS_ROW_REGDATE}
-			</div>
-			<div class="clear"></div>
+				<div style="float:left; width:137px; font-size:1.2em">
+					<strong>{USERS_ROW_NAME}</strong>
+				</div>
+				<div style="float:left; width:116px;">
+					{USERS_ROW_MAINGRP}
+				</div>
+				<div style="float:left; width:96px;">
+					{USERS_ROW_COUNTRY}
+				</div>
+				<div style="float:left; width:121px;">
+					{USERS_ROW_LASTLOG}
+				</div>
+				<div style="float:left; width:90px;">
+					{USERS_ROW_REGDATE}
+				</div>
+				<div class="clear"></div>
 			</div>
 			<!-- END: USERS_ROW -->
-		
+
 			<!-- IF {USERS_TOP_PAGNAV} -->
 			<div class="paging">{USERS_TOP_PAGEPREV}{USERS_TOP_PAGNAV}{USERS_TOP_PAGENEXT}</div>
 			<!-- ENDIF -->
 		</div>
-		
+
 		<div id="right">
 			<!-- IF {PHP.usr.id} > 0 -->
 			<h3 style="color:#000">{PHP.L.hea_youareloggedas} {PHP.usr.name}</h3>
@@ -63,10 +63,8 @@
 				<div class="paging">{USERS_TOP_PAGEPREV}{USERS_TOP_PAGNAV}{USERS_TOP_PAGENEXT}</div>
 				<!-- ENDIF -->
 			</div>
-			&nbsp;
 		</div>
 	</div>
 </div>
 <br class="clear" />
-
 <!-- END: MAIN -->
