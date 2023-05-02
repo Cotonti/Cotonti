@@ -302,16 +302,61 @@ if (!empty($sq)) {
             $where_or['text'] = 'p.page_text LIKE ' . Cot::$db->quote($sqlsearch);
         }
 
-        // String query for addition pages fields.
-		foreach (explode(',', trim(Cot::$cfg['plugin']['search']['addfields'])) as $addfields_el) {
-			$addfields_el = trim($addfields_el);
-            if (!empty($addfields_el)) {
-                if (!isset($where_or[$addfields_el])) {
-                    $where_or[$addfields_el] = '';
-                }
-                $where_or[$addfields_el] .= $addfields_el . " LIKE " . Cot::$db->quote($sqlsearch);
+        // TODO add filter nonexisting field in db for search plugin option 'addfields' on saved config in admin panel
+        $addfields = trim(Cot::$cfg['plugin']['search']['addfields']);
+        if (!empty($addfields))
+        {
+            $additional_fields = null;
+            if (Cot::$cache) {
+                $additional_fields = Cot::$cache->db->get('search_page_additional_fields', 'search');
             }
-		}
+
+            if (!$additional_fields) {
+                $additional_fields = explode(',', $addfields);
+                array_walk($additional_fields, 'trim');
+                $additional_fields = array_unique($additional_fields);
+
+                $count_addfields = count($additional_fields);
+                if ($count_addfields == 1) {
+                    if (!Cot::$db->fieldExists(Cot::$db->pages, $additional_fields[0])) {
+                        if ($usr['isadmin']) {
+                            $field_eer_msg = 'Field ' . $additional_fields[0] . ' in page table not found';
+                            cot_error($field_eer_msg);
+                            cot_log($field_eer_msg, 'ext', 'search', 'error');
+                        }
+                        unset($additional_fields[0]);
+                    }
+                } elseif ($count_addfields > 1) {
+                    $sql_pf = Cot::$db->query("SHOW COLUMNS FROM " . Cot::$db->pages);
+                    foreach ($sql_pf->fetchAll() as $field) {
+                        $exists_field[] = $field['Field'];
+                    }
+                    foreach ($additional_fields as $k => $field) {
+                        if (!in_array($field, $exists_field)) {
+                            if ($usr['isadmin']) {
+                                $field_eer_msg = 'Field ' . $additional_fields[$k] . ' in page table not found';
+                                cot_error($field_eer_msg);
+                                cot_log($field_eer_msg, 'ext', 'search', 'error');
+                            }
+                            unset($additional_fields[$k]);
+                        }
+                    }
+                }
+
+                count($additional_fields) && Cot::$cache && Cot::$cache->db->store('search_page_additional_fields', $additional_fields, 'search');
+            }
+
+            if (!empty($additional_fields))
+            {
+                // String query for addition pages fields.
+                foreach ($additional_fields as $addfields_el) {
+                    if (!isset($where_or[$addfields_el])) {
+                        $where_or[$addfields_el] = '';
+                    }
+                    $where_or[$addfields_el] .= $addfields_el . " LIKE " . Cot::$db->quote($sqlsearch);
+                }
+            }
+        }
 
 		if (!Cot::$db->fieldExists(Cot::$db->pages, 'page_' . $rs['pagsort'])) {
 			$rs['pagsort'] = 'date';
