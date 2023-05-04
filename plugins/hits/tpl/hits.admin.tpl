@@ -1,12 +1,11 @@
 <!-- BEGIN: MAIN -->
+<p>{ADMIN_HITS_MAXHITS}</p>
 
-	<h2>{PHP.L.Hits}</h2>
-	<p>{ADMIN_HITS_MAXHITS}</p>
-	<div class="block">
 <!-- BEGIN: YEAR_OR_MONTH -->
-	<h3>{PHP.v}:</h3>
+<div class="block">
+	<h2>{PHP.v}:</h2>
 	<table class="cells">
-<!-- BEGIN: ROW -->
+		<!-- BEGIN: ROW -->
 		<tr>
 			<td class="width15">{ADMIN_HITS_ROW_DAY}</td>
 			<td class="width15">{PHP.L.Hits}: {ADMIN_HITS_ROW_HITS}</td>
@@ -17,14 +16,16 @@
 				</div>
 			</td>
 		</tr>
-<!-- END: ROW -->
+		<!-- END: ROW -->
 	</table>
+</div>
 <!-- END: YEAR_OR_MONTH -->
 
 <!-- BEGIN: DEFAULT -->
-	<h3>{PHP.L.hits_byyear}:</h3>
+<div class="block">
+	<h2>{PHP.L.hits_byyear}:</h2>
 	<table class="cells">
-<!-- BEGIN: ROW_YEAR -->
+		<!-- BEGIN: ROW_YEAR -->
 		<tr>
 			<td class="width10"><a href="{ADMIN_HITS_ROW_YEAR_URL}">{ADMIN_HITS_ROW_YEAR}</a></td>
 			<td class="textcenter width20">{PHP.L.Hits}: {ADMIN_HITS_ROW_YEAR_HITS}</td>
@@ -35,11 +36,14 @@
 				</div>
 			</td>
 		</tr>
-<!-- END: ROW_YEAR -->
+		<!-- END: ROW_YEAR -->
 	</table>
-	<h3>{PHP.L.hits_bymonth}:</h3>
+</div>
+
+<div class="block">
+	<h2>{PHP.L.hits_bymonth}:</h2>
 	<table class="cells">
-<!-- BEGIN: ROW_MONTH -->
+		<!-- BEGIN: ROW_MONTH -->
 		<tr>
 			<td class="width10"><a href="{ADMIN_HITS_ROW_MONTH_URL}">{ADMIN_HITS_ROW_MONTH}</a></td>
 			<td class="textcenter width20">{PHP.L.Hits}: {ADMIN_HITS_ROW_MONTH_HITS}</td>
@@ -50,11 +54,13 @@
 				</div>
 			</td>
 		</tr>
-<!-- END: ROW_MONTH -->
+		<!-- END: ROW_MONTH -->
 	</table>
-	<h3>{PHP.L.hits_byweek}:</h3>
+</div>
+<div class="block">
+	<h2>{PHP.L.hits_byweek}:</h2>
 	<table class="cells">
-<!-- BEGIN: ROW_WEEK -->
+		<!-- BEGIN: ROW_WEEK -->
 		<tr>
 			<td class="width10">{ADMIN_HITS_ROW_WEEK}</td>
 			<td class="textcenter width20">{PHP.L.Hits}: {ADMIN_HITS_ROW_WEEK_HITS}</td>
@@ -65,8 +71,8 @@
 				</div>
 			</td>
 		</tr>
-<!-- END: ROW_WEEK -->
+		<!-- END: ROW_WEEK -->
 	</table>
+</div>
 <!-- END: DEFAULT -->
-	</div>
 <!-- END: MAIN -->

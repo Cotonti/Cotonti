@@ -16,8 +16,7 @@ Tags=page.list.tpl:{LIST_TAG_CLOUD},{LIST_TAG_CLOUD_ALL_LINK}
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (Cot::$cfg['plugin']['tags']['pages'])
-{
+if (Cot::$cfg['plugin']['tags']['pages']) {
 	require_once cot_incfile('tags', 'plug');
 
     $tags_where = '';
@@ -26,18 +25,14 @@ if (Cot::$cfg['plugin']['tags']['pages'])
 	if (cot_plugin_active('i18n') && $i18n_enabled && $i18n_notmain) {
 		$tags_extra = array('tag_locale' => $i18n_locale);
 		$tags_where .= " AND tag_locale = '$i18n_locale'";
-	}
-	else
-	{
+	} else {
 		$tags_extra = null;
 	}
 	// Get all subcategories
 	$tc_cats = array(Cot::$db->quote($c));
-	$tc_path = $structure['page'][$c]['path'] . '.';
-	foreach ($structure['page'] as $key => $val)
-	{
-		if (mb_strpos($val['path'], $tc_path) !== false)
-		{
+	$tc_path = Cot::$structure['page'][$c]['path'] . '.';
+	foreach (Cot::$structure['page'] as $key => $val) {
+		if (!empty($val['path']) && mb_strpos($val['path'], $tc_path) !== false) {
 			$tc_cats[] = Cot::$db->quote($key);
 		}
 	}
@@ -46,8 +41,7 @@ if (Cot::$cfg['plugin']['tags']['pages'])
 	// Get all pages from all subcategories and all tags with counts for them
 	$limit = Cot::$cfg['plugin']['tags']['lim_pages'] == 0 ? '' : ' LIMIT ' . (int) Cot::$cfg['plugin']['tags']['lim_pages'];
 	$order = Cot::$cfg['plugin']['tags']['order'];
-	switch($order)
-	{
+	switch ($order) {
 		case 'Alphabetical':
 			$order = '`tag`';
 		break;

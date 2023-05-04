@@ -4780,7 +4780,7 @@ function cot_wraptext($str, $wrap = 80)
  * @global array $R Resource strings
  * @global array $L Language strings, support resource sequences too
  * @param string $name Name of the $R item or a resource string itself
- * @param array $params Associative array of arguments or a parameter string
+ * @param array<string, string>|string $params Associative array of arguments or a parameter string
  * @return string Assembled resource string
  */
 function cot_rc($name, $params = [])

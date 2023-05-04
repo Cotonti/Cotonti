@@ -90,6 +90,8 @@ if (cot_module_active('page')) {
 	require_once cot_incfile('page', 'module');
 
 	$totaldbpages = Cot::$db->countRows($db_pages);
+
+    // Total pages displayed since site creation
 	$totalpages = cot_stat_get('totalpages');
 	$t->assign(array(
 		'STATISTICS_TOTALDBPAGES' => $totaldbpages,

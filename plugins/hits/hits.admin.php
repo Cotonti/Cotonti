@@ -28,8 +28,7 @@ $f = cot_import('f', 'G', 'TXT');
 $v = cot_import('v', 'G', 'TXT');
 
 /* === Hook === */
-foreach (cot_getextplugins('hits.admin.first') as $pl)
-{
+foreach (cot_getextplugins('hits.admin.first') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -42,7 +41,7 @@ if ($f == 'year' || $f == 'month') {
 		$y = mb_substr($row['stat_name'], 0, 4);
 		$m = mb_substr($row['stat_name'], 5, 2);
 		$d = mb_substr($row['stat_name'], 8, 2);
-		$dat = cot_date('date_full', mktime(0, 0, 0, $m, $d, $y));
+		$dat = cot_date('date_full', mktime(0, 0, 0, $m, $d, $y), false);
 		$hits_d[$dat] = $row['stat_value'];
 	}
 	$sql->closeCursor();
@@ -75,6 +74,7 @@ if ($f == 'year' || $f == 'month') {
 	$tt->parse('MAIN.YEAR_OR_MONTH');
 
 } else {
+    $rowmax = null;
 	$sqlmax = Cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
 	if ($sqlmax->rowCount() > 0) {
 		$rowmax = $sqlmax->fetch();

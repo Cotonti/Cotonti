@@ -19,7 +19,7 @@
 			<!-- END: ADMIN_HOME_ROW -->
 		</table>
 
-		<p><a href="{ADMIN_HOME_MORE_HITS_URL}">{PHP.L.ReadMore}</a></p>
+		<p class="margin0"><a href="{ADMIN_HOME_MORE_HITS_URL}">{PHP.L.ReadMore}</a></p>
 	</div>
 </div>
 <!-- END: STAT -->

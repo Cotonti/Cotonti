@@ -7,9 +7,8 @@ CREATE TABLE  IF NOT EXISTS `cot_stats` (
 
 INSERT IGNORE INTO `cot_stats` (`stat_name`, `stat_value`) VALUES
 ('totalpages', 0),
+('maxusers', 0),
 ('totalmailsent', 0),
 ('totalmailpmnot', 0),
 ('totalpms', 0),
-('totalantihammer', 0),
-('textboxerprev', 0),
-('version', 999);
+('totalantihammer', 0);

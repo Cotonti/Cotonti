@@ -27,34 +27,42 @@ $tt = new XTemplate(cot_tplfile('hits.admin.home', 'plug', true));
 //Show hit stats
 // INFO: `disablehitstats` var not actually defined in setup file now, but may be used (had been set) by another extension
 if (!isset(Cot::$cfg['plugin']['hits']['disablehitstats']) || !Cot::$cfg['plugin']['hits']['disablehitstats']) {
-	$hits_d = array();
+	$hitsPerDay = [];
+
+    $startDate = new \DateTimeImmutable('-' . $timeback_interval . ' days');
+    $start = $startDate->format('Y-m-d');
+
 	$sql = Cot::$db->query(
-        "SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT " . $timeback_interval
+        'SELECT * FROM ' . Cot::$db->stats . " WHERE stat_name LIKE '20%' AND stat_name >= '{$start}' " .
+        'ORDER BY stat_name DESC LIMIT ' . $timeback_interval
     );
 	while ($row = $sql->fetch()) {
-		$year = mb_substr($row['stat_name'], 0, 4);
-		$mons = mb_substr($row['stat_name'], 5, 2);
-		$day = mb_substr($row['stat_name'], 8, 2);
-		$dat = @date('d D', mktime(0, 0, 0, $mons, $day, $year));
-		$hits_d[$dat] = $row['stat_value'];
+        $hitsPerDay[$row['stat_name']] = $row['stat_value'];
 	}
 	$sql->closeCursor();
 
-	if (!empty($hits_d)) {
-		$hits_d_max = max($hits_d);
+	if (!empty($hitsPerDay)) {
+		$hits_d_max = max($hitsPerDay);
+        $date = new \DateTime('now');
+        for ($i = 0; $i < $timeback_interval; $i++) {
+            $dateString = $date->format('Y-m-d');
+            $hits = isset($hitsPerDay[$dateString]) ? (int) $hitsPerDay[$dateString] : 0;
+            $percentbar = floor(($hits / $hits_d_max) * 100);
+            $tt->assign(array(
+                'ADMIN_HOME_DAY' => cot_date('d D', $date->getTimestamp(), false),
+                'ADMIN_HOME_HITS' => $hits,
+                'ADMIN_HOME_PERCENTBAR' => $percentbar
+            ));
+            $tt->parse('MAIN.STAT.ADMIN_HOME_ROW');
 
-		foreach ($hits_d as $day => $hits) {
-			$percentbar = floor(($hits / $hits_d_max) * 100);
-			$tt->assign(array(
-				'ADMIN_HOME_DAY' => $day,
-				'ADMIN_HOME_HITS' => $hits,
-				'ADMIN_HOME_PERCENTBAR' => $percentbar
-			));
-			$tt->parse('MAIN.STAT.ADMIN_HOME_ROW');
-		}
+            $date->modify('-1 day');
+        }
 	}
-	$tt->assign('ADMIN_HOME_MORE_HITS_URL', cot_url('admin', 'm=other&p=hits'));
-	$tt->assign('HITS_STAT_HEADER', cot_rc(Cot::$L['hits_hits'], "days=$timeback_interval_str") );
+
+    $tt->assign([
+        'ADMIN_HOME_MORE_HITS_URL' => cot_url('admin', ['m' => 'other', 'p' => 'hits']),
+        'HITS_STAT_HEADER' => cot_rc(Cot::$L['hits_hits'], ['days' => $timeback_interval_str]),
+    ]);
 	$tt->parse('MAIN.STAT');
 }
 
