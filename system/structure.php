@@ -29,20 +29,17 @@ function cot_structure_add($extension, $data, $is_module = true)
 	global $cache, $db, $db_structure;
 
 	/* === Hook === */
-	foreach (cot_getextplugins('structure.add') as $pl)
-	{
+	foreach (cot_getextplugins('structure.add') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if (!empty($data['structure_title']) && !empty($data['structure_code']) && !empty($data['structure_path']) && $data['structure_code'] != 'all')
-	{
-		$sql = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area=? AND structure_code=?", array($extension, $data['structure_code']));
-		if ($sql->fetchColumn() == 0)
-		{
+	if (!empty($data['structure_title']) && !empty($data['structure_code']) && !empty($data['structure_path']) && $data['structure_code'] != 'all') {
+		$sql = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area=? AND structure_code=?", [$extension, $data['structure_code']]);
+		if ($sql->fetchColumn() == 0) {
 			$sql = $db->insert($db_structure, $data);
-			$auth_permit = array(COT_GROUP_DEFAULT => 'RW', COT_GROUP_GUESTS => 'R', COT_GROUP_MEMBERS => 'RW');
-			$auth_lock = array(COT_GROUP_DEFAULT => '0', COT_GROUP_GUESTS => 'A', COT_GROUP_MEMBERS => '0');
+			$auth_permit = [COT_GROUP_DEFAULT => 'RW', COT_GROUP_GUESTS => 'R', COT_GROUP_MEMBERS => 'RW'];
+			$auth_lock = [COT_GROUP_DEFAULT => '0', COT_GROUP_GUESTS => 'A', COT_GROUP_MEMBERS => '0'];
 			$is_module && cot_auth_add_item($extension, $data['structure_code'], $auth_permit, $auth_lock);
 			$area_addcat = 'cot_'.$extension.'_addcat';
 			(function_exists($area_addcat)) ? $area_addcat($data['structure_code']) : FALSE;
@@ -51,14 +48,10 @@ function cot_structure_add($extension, $data, $is_module = true)
 
 			$cache && $cache->clear();
 			return true;
+		} else {
+			return ['adm_cat_exists', 'rstructurecode'];
 		}
-		else
-		{
-			return array('adm_cat_exists', 'rstructurecode');
-		}
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
@@ -100,9 +93,9 @@ function cot_structure_delete($extension, $code, $is_module = true)
         return false;
     }
 
-    if(
-        $data['structure_count'] > 0 ||
-        !empty(cot_structure_children($extension, $code, true, false, false))
+    if (
+        $data['structure_count'] > 0
+        || !empty(cot_structure_children($extension, $code, true, false, false))
     ) {
         return false;
     }
@@ -143,28 +136,23 @@ function cot_structure_update($extension, $id, $old_data, $new_data, $is_module 
 {
 	global $cache, $db, $db_auth, $db_config, $db_structure;
 	/* === Hook === */
-	foreach (cot_getextplugins('structure.update') as $pl)
-	{
+	foreach (cot_getextplugins('structure.update') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if ($old_data['structure_code'] != $new_data['structure_code'])
-	{
-		if ($db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area=? AND structure_code=?", array($extension, $new_data['structure_code']))->fetchColumn() == 0)
-		{
-			$is_module && $db->update($db_auth, array('auth_option' => $new_data['structure_code']),
-				"auth_code=? AND auth_option=?", array($extension, $old_data['structure_code']));
-			$db->update($db_config, array('config_subcat' => $new_data['structure_code']),
-				"config_cat=? AND config_subcat=? AND config_owner='module'", array($extension, $old_data['structure_code']));
+	if ($old_data['structure_code'] != $new_data['structure_code']) {
+		if ($db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area=? AND structure_code=?", [$extension, $new_data['structure_code']])->fetchColumn() == 0) {
+			$is_module && $db->update($db_auth, ['auth_option' => $new_data['structure_code']],
+				"auth_code=? AND auth_option=?", [$extension, $old_data['structure_code']]);
+			$db->update($db_config, ['config_subcat' => $new_data['structure_code']],
+				"config_cat=? AND config_subcat=? AND config_owner='module'", [$extension, $old_data['structure_code']]);
 			$area_updatecat = 'cot_' . $extension . '_updatecat';
 			(function_exists($area_updatecat)) ? $area_updatecat($old_data['structure_code'], $new_data['structure_code']) : FALSE;
 			cot_auth_reorder();
-		}
-		else
-		{
+		} else {
 			unset($new_data['structure_code']);
-			return array('adm_cat_exists', 'default');
+			return ['adm_cat_exists', 'default'];
 		}
 	}
 
@@ -175,11 +163,10 @@ function cot_structure_update($extension, $id, $old_data, $new_data, $is_module 
 
 	$updated = $sql1 > 0;
 
-	if ($updated) cot_log("Structure. Edited category: '$extension' - '".$new_data['structure_code']."'", 'adm', 'structure', 'edit');
+	if ($updated) cot_log("Structure. Edited category: '$extension' - '".$new_data['structure_code']."'", 'adm', 'structure', 'update');
 
 	/* === Hook === */
-	foreach (cot_getextplugins('structure.update.done') as $pl)
-	{
+	foreach (cot_getextplugins('structure.update.done') as $pl) {
 		include $pl;
 	}
 	/* ===== */
