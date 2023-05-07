@@ -34,7 +34,7 @@ foreach (cot_getextplugins('admin.rightsbyitem.first') as $pl) {
 /* ===== */
 
 if ($a == 'update') {
-	$mask = array();
+	$mask = [];
 	$auth = cot_import('auth', 'P', 'ARR');
     $items = cot_import('items', 'P', 'TXT');
     if (!empty($items)) {
@@ -70,11 +70,11 @@ if ($a == 'update') {
             $mask += cot_auth_getvalue($l);
         }
 
-        $oldRights = Cot::$db->query("SELECT auth_id, auth_rights FROM ".Cot::$db->auth.
+        $oldRights = Cot::$db->query("SELECT auth_id, auth_rights FROM " . Cot::$db->auth .
             " WHERE auth_groupid=? AND auth_code=? AND auth_option=?", [$groupId, $ic, $io])->fetch();
 
         if (!empty($oldRights) && $oldRights['auth_rights'] != $mask) {
-            Cot::$db->update(Cot::$db->auth,  array('auth_rights' => $mask, 'auth_setbyuserid' => Cot::$usr['id']),
+            Cot::$db->update(Cot::$db->auth,  ['auth_rights' => $mask, 'auth_setbyuserid' => Cot::$usr['id']],
                 "auth_id=".$oldRights['auth_id']);
         }
 	}
@@ -83,6 +83,7 @@ if ($a == 'update') {
 	cot_auth_clear('all');
 
 	cot_message('Updated');
+	cot_log('Updated rights for ' . $ic . ' "' . $io . '"', 'adm', 'user_groups_rights', 'update');
 
     $urlParams = ['m' => 'rightsbyitem', 'ic' => $ic, 'io' => $io,];
     if ($advanced) {
@@ -107,34 +108,31 @@ foreach (cot_getextplugins('admin.rightsbyitem.case') as $pl) {
 /* ===== */
 
 if ($ic == 'message' || $ic == 'admin') {
-	$adminpath[] = array(cot_url('admin'), Cot::$L['adm_code'][$ic]);
-
+	$adminpath[] = [cot_url('admin'), Cot::$L['adm_code'][$ic]];
 } else {
-	$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
+	$adminpath[] = [cot_url('admin', 'm=extensions'), Cot::$L['Extensions']];
 	if ($ic == 'plug') {
         $itemTitle = !empty($cot_plugins_enabled[$io]) ? $cot_plugins_enabled[$io]['title'] : $io;
         $title = $itemTitle;
-		$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$io), $itemTitle);
-
+		$adminpath[] = [cot_url('admin', 'm=extensions&a=details&pl='.$io), $itemTitle];
 	} elseif ($ic == 'structure') {
-		$adminpath[] = array(cot_url('admin', 'm=structure'), Cot::$L['Structure']);
-
+		$adminpath[] = [cot_url('admin', 'm=structure'), Cot::$L['Structure']];
 	} else {
         $itemTitle = !empty($cot_modules[$ic]) ? $cot_modules[$ic]['title'] : $ic;
         $title = $itemTitle;
-        $adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$ic), $itemTitle);
+        $adminpath[] = [cot_url('admin', 'm=extensions&a=details&mod='.$ic), $itemTitle];
 		if ($io != 'a') {
-			$adminpath[] = array(cot_url('admin', 'm=structure&n='.$ic), Cot::$L['Structure']);
+			$adminpath[] = [cot_url('admin', 'm=structure&n='.$ic), Cot::$L['Structure']];
             $itemTitle = !empty(Cot::$structure[$ic][$io]) ? Cot::$structure[$ic][$io]['title'] : $io;
             $title .= '(' . $itemTitle . ')';
-            $adminpath[] = array(cot_url('admin', 'm=structure&n='.$ic.'&al='.$io), $itemTitle);
+            $adminpath[] = [cot_url('admin', 'm=structure&n='.$ic.'&al='.$io), $itemTitle];
 		}
 	}
 }
 
 //m=extensions&a=details&mod=page
-$adminpath[] = array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), Cot::$L['Rights']);
-($advanced) && $adminpath[] = array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), Cot::$L['More']);
+$adminpath[] = [cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), Cot::$L['Rights']];
+($advanced) && $adminpath[] = [cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), Cot::$L['More']];
 $adminTitle = Cot::$L['Rights'];
 
 $adv_columns = ($advanced) ? 8 : 3;
@@ -163,7 +161,7 @@ $pageTitle = $adminTitle;
 if (!empty($title)) {
     $pageTitle .= ': ' . $title;
 }
-$t->assign(array(
+$t->assign([
     'ADMIN_RIGHTSBYITEM_TITLE' => $pageTitle,
 	'ADMIN_RIGHTSBYITEM_FORM_URL' => cot_url('admin', $urlParams),
     'ADMIN_RIGHTSBYITEM_FORM_ITEMS' => '', // Update rights for all groups
@@ -171,7 +169,7 @@ $t->assign(array(
         '&advanced=1'),
 	'ADMIN_RIGHTSBYITEM_ADV_COLUMNS' => $adv_columns,
 	'ADMIN_RIGHTSBYITEM_4ADV_COLUMNS' => 4 + $adv_columns
-));
+]);
 
 cot_display_messages($t);
 
@@ -222,13 +220,13 @@ function cot_rights_parseline($row, $title, $link)
         $out['tpl_rights_parseline_locked'] = $locked[$code];
 		$out['tpl_rights_parseline_state'] = $state[$code];
 
-		$t->assign(array(
+		$t->assign([
 			'ADMIN_RIGHTSBYITEM_ROW_ITEMS_NAME' => 'auth['.$row['auth_groupid'].']['.$code.']',
 			'ADMIN_RIGHTSBYITEM_ROW_ITEMS_CHECKED' => ($state[$code]) ? " checked=\"checked\"" : '',
 			'ADMIN_RIGHTSBYITEM_ROW_ITEMS_DISABLED' => ($locked[$code]) ? " disabled=\"disabled\"" : '',
             'ADMIN_RIGHTSBYITEM_ROW_ITEMS_LOCKED' => $locked[$code],
             'ADMIN_RIGHTSBYITEM_ROW_ITEMS_STATE' => $state[$code],
-		));
+		]);
 		$t->parse('MAIN.RIGHTSBYITEM_ROW.ROW_ITEMS');
 	}
 
@@ -242,11 +240,11 @@ function cot_rights_parseline($row, $title, $link)
 		$t->assign('ADMIN_RIGHTSBYITEM_ROW_PRESERVE', $preserve);
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_RIGHTSBYITEM_ROW_TITLE' => $title,
 		'ADMIN_RIGHTSBYITEM_ROW_LINK' => $link,
 		'ADMIN_RIGHTSBYITEM_ROW_USER' => cot_build_user($row['auth_setbyuserid'], $row['user_name']),
 		'ADMIN_RIGHTSBYITEM_ROW_JUMPTO' => cot_url('users', 'g='.$row['auth_groupid']),
-	));
+	]);
 	$t->parse('MAIN.RIGHTSBYITEM_ROW');
 }

@@ -27,18 +27,18 @@ $advanced = cot_import('advanced', 'G', 'BOL');
 
 if (!$g) {
     cot_error(Cot::$L['users_group_not_found']);
-    cot_redirect(cot_url('admin', array('m' => 'users'), '', true));
+    cot_redirect(cot_url('admin', ['m' => 'users'], '', true));
 }
 $group = Cot::$db->query('SELECT * FROM ' . Cot::$db->groups . ' WHERE grp_id = ?', $g)->fetch();
 if (!$group) {
     cot_error(Cot::$L['users_group_not_found']);
-    cot_redirect(cot_url('admin', array('m' => 'users'), '', true));
+    cot_redirect(cot_url('admin', ['m' => 'users'], '', true));
 }
 
 // Check if the group is rightless
 if ($group['grp_skiprights'] > 0) {
     cot_error("«{$group['grp_name']}». ".Cot::$L['adm_group_has_no_rights']);
-    cot_redirect(cot_url('admin', array('m' => 'users'), '', true));
+    cot_redirect(cot_url('admin', ['m' => 'users'], '', true));
 }
 
 /* === Hook === */
@@ -83,10 +83,11 @@ if ($a == 'update') {
 		cot_auth_clear('all');
 
 		cot_message('Added');
-        cot_redirect(cot_url('admin', $urlParams, '', true));
+		cot_log('Added rights for group #' . $g, 'adm', 'user_groups_rights', 'add');
 
+        cot_redirect(cot_url('admin', $urlParams, '', true));
 	} elseif (!empty($items) && !empty($auth)) {
-		$mask = array();
+		$mask = [];
 
         foreach ($items as $code => $v) {
 			foreach ($v as $option => $oldMaskValue) {
@@ -118,6 +119,8 @@ if ($a == 'update') {
 		cot_auth_clear('all');
 
 		cot_message('Updated');
+		cot_log('Updated rights for group #' . $g, 'adm', 'user_groups_rights', 'update');
+
         cot_redirect(cot_url('admin', $urlParams, '', true));
 	}
 }
@@ -130,11 +133,11 @@ foreach (cot_getextplugins('admin.rights.main') as $pl) {
 }
 /* ===== */
 
-$adminpath[] = array(cot_url('admin', 'm=users'), Cot::$L['Users']);
-$adminpath[] = array(cot_url('admin', 'm=users&n=edit&g='.$g), $cot_groups[$g]['name']);
-$adminpath[] = array(cot_url('admin', 'm=rights&g='.$g), Cot::$L['Rights']);
+$adminpath[] = [cot_url('admin', 'm=users'), Cot::$L['Users']];
+$adminpath[] = [cot_url('admin', 'm=users&n=edit&g='.$g), $cot_groups[$g]['name']];
+$adminpath[] = [cot_url('admin', 'm=rights&g='.$g), Cot::$L['Rights']];
 if ($advanced) {
-    $adminpath[] = array(cot_url('admin', 'm=rights&g=' . $g . '&advanced=1'), Cot::$L['More']);
+    $adminpath[] = [cot_url('admin', 'm=rights&g=' . $g . '&advanced=1'), Cot::$L['More']];
 }
 $adminTitle = Cot::$L['Rights'];
 
@@ -261,12 +264,12 @@ foreach (cot_getextplugins('admin.rights.end') as $pl) {
 
 cot_display_messages($t);
 
-$t->assign(array(
+$t->assign([
     'ADMIN_RIGHTS_FORM_URL' => cot_url('admin', $urlParams),
     'ADMIN_RIGHTS_FORM_ITEMS' => '', // Update rights for all items
     'ADMIN_RIGHTS_ADVANCED_URL' => cot_url('admin', 'm=rights&g=' . $g . '&advanced=1'),
-    'ADMIN_RIGHTS_SELECTBOX_GROUPS' => cot_selectbox_groups(4, 'ncopyrightsfrom', array('5', $g)),
-));
+    'ADMIN_RIGHTS_SELECTBOX_GROUPS' => cot_selectbox_groups(4, 'ncopyrightsfrom', ['5', $g]),
+]);
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.rights.tags') as $pl) {
@@ -325,7 +328,7 @@ function cot_rights_parseline($row, $title, $link, $icon = '', $legacyIcon = '')
 
         $formName = 'auth[' . $row['auth_code'] . '][' . $row['auth_option'] . '][' . $code . ']';
 
-		$t->assign(array(
+		$t->assign([
             // This can cause Warning: Unknown: Input variables exceeded 1000 when there are a lot of rights items
             // So it is better to not use it
             'ADMIN_RIGHTS_ROW_ITEMS_CHECK' => cot_checkbox($state[$code], $formName, '', $attributes),
@@ -335,7 +338,7 @@ function cot_rights_parseline($row, $title, $link, $icon = '', $legacyIcon = '')
 			'ADMIN_RIGHTS_ROW_ITEMS_DISABLED' => ($locked[$code]) ? " disabled=\"disabled\"" : '',
             'ADMIN_RIGHTS_ROW_ITEMS_LOCKED' => $locked[$code],
             'ADMIN_RIGHTS_ROW_ITEMS_STATE' => $state[$code],
-		));
+		]);
 		$t->parse('MAIN.RIGHTS_SECTION.RIGHTS_ROW.RIGHTS_ROW_ITEMS');
 	}
 
@@ -353,7 +356,7 @@ function cot_rights_parseline($row, $title, $link, $icon = '', $legacyIcon = '')
 
     $row['user_name'] = !empty($row['user_name']) ? $row['user_name'] : 'ID#: ' . $row['auth_setbyuserid'];
 
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_RIGHTS_ROW_AUTH_CODE' => $row['auth_code'],
 		'ADMIN_RIGHTS_ROW_TITLE' => $title,
 		'ADMIN_RIGHTS_ROW_LINK' => $link,
@@ -363,6 +366,6 @@ function cot_rights_parseline($row, $title, $link, $icon = '', $legacyIcon = '')
 
         // @deprecated For backward compatibility. Will be removed in future releases
         'ADMIN_RIGHTS_ROW_ICO' => $legacyIcon,
-	));
+	]);
 	$t->parse('MAIN.RIGHTS_SECTION.RIGHTS_ROW');
 }
