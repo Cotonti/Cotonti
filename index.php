@@ -143,6 +143,11 @@ if ($ext === false) {
 }
 unset($ext);
 
+require_once cot_incfile('page', 'module');
+$sql = 'SELECT * FROM ' . Cot::$db->pages . ' WHERE page_rating != 0 LIMIT 1';
+var_dump($sql);
+var_dump(Cot::$db->query('SELECT * FROM ' . Cot::$db->pages . ' WHERE page_rating != 0 LIMIT 1')->rowCount());
+
 // Load the requested extension
 if (Cot::$env['type'] == 'plug') {
 	require_once Cot::$cfg['system_dir'] . '/plugin.php';

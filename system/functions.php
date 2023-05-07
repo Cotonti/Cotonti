@@ -2446,39 +2446,33 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 
 	static $extp_first = null, $extp_main = null;
 
-	$return_array = array();
+	$return_array = [];
 
-	if (is_null($extp_first))
-	{
+	if (is_null($extp_first)) {
 		$extp_first = cot_getextplugins('usertags.first');
 		$extp_main = cot_getextplugins('usertags.main');
 	}
 
 	/* === Hook === */
-	foreach ($extp_first as $pl)
-	{
+	foreach ($extp_first as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	$user_id = is_array($user_data) ? (int)$user_data['user_id'] : (is_numeric($user_data) ? (int)$user_data : 0);
-	if (isset($user_cache[$user_id]))
-	{
+	$user_id = (is_array($user_data) && !empty($user_data['user_id'])) ?
+        (int) $user_data['user_id'] : (is_numeric($user_data) ? (int) $user_data : 0);
+
+	if (isset($user_cache[$user_id])) {
 		$temp_array = $user_cache[$user_id];
-	}
-	else
-	{
-		if (!is_array($user_data) && $user_id > 0)
-		{
+	} else {
+		if (!is_array($user_data) && $user_id > 0) {
 			$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $user_id LIMIT 1");
 			$user_data = $sql->fetch();
-		}
-		else if (!is_array($user_data))
-		{
-			$user_data = array();
+		} else if (!is_array($user_data)) {
+			$user_data = [];
 		}
 
-		if (is_array($user_data) && $user_data['user_id'] > 0 && !empty($user_data['user_name'])) {
+		if (is_array($user_data) && !empty($user_data['user_id']) && !empty($user_data['user_name'])) {
 			$user_data['user_birthdate'] = cot_date2stamp($user_data['user_birthdate']);
             $enableMarkup = isset(Cot::$cfg['users']['usertextimg']) ? Cot::$cfg['users']['usertextimg'] : false;
 			$user_data['user_text'] = cot_parse($user_data['user_text'], $enableMarkup);

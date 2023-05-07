@@ -260,9 +260,10 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 				'COMMENTS_ROW_ID' => $row['com_id'],
 				'COMMENTS_ROW_ORDER' => Cot::$cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
 				'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#com'.$row['com_id']),
-				'COMMENTS_ROW_AUTHOR' => cot_build_user($row['user_id'], $row['com_author']),
+				'COMMENTS_ROW_AUTHOR' => !empty($row['user_id']) && !empty($row['user_name']) ?
+                    cot_build_user($row['user_id'], $row['user_name']) : Cot::$L['Deleted'],
 				// User can be deleted. So $row['user_id'] should be used here
-				'COMMENTS_ROW_AUTHORID' => $row['user_id'],
+				'COMMENTS_ROW_AUTHORID' => !empty($row['user_id']) ? $row['user_id'] : 0,
 				'COMMENTS_ROW_TEXT' => $com_text,
 				'COMMENTS_ROW_DATE' => cot_date('datetime_medium', $row['com_date']),
 				'COMMENTS_ROW_DATE_STAMP' => $row['com_date'],
@@ -273,7 +274,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			));
 
 			// Extrafields
-            if(!empty(Cot::$extrafields[Cot::$db->com])) {
+            if (!empty(Cot::$extrafields[Cot::$db->com])) {
                 foreach (Cot::$extrafields[Cot::$db->com] as $exfld) {
 					$tag = mb_strtoupper($exfld['field_name']);
                     $exfld_title = cot_extrafield_title($exfld, 'comments_');

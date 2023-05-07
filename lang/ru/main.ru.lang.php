@@ -355,21 +355,21 @@ $L['YIM'] = 'Yahoo Messenger';
 /**
  * cot_declension arrays
  */
-$Ls['Folders'] = "Каталоги";
-$Ls['Files'] = "Файлы";
+$Ls['Folders'] = "каталог,каталога,каталогов";
+$Ls['Files'] = "файл,файла,файлов";
 
-$Ls['Guests'] = "Гости";
-$Ls['Members'] = "Участники";
-$Ls['Pages'] = "Страницы";
+$Ls['Guests'] = "гость,гостя,гостей";
+$Ls['Members'] = "пользователь,пользователя,пользователей";
+$Ls['Pages'] = "страница,страницы,страниц";
 $Ls['Times'] = "раз,раза,раз";
 
 $Ls['Milliseconds'] = "мс,мс,мс";
-$Ls['Seconds'] = "Секунды";
-$Ls['Minutes'] = "Минуты";
-$Ls['Hours'] = "Часы";
-$Ls['Days'] = "Дни";
-$Ls['Weeks'] = "недели";
-$Ls['Months'] = "месяцы";
+$Ls['Seconds'] = "секунда,секунды,секунд";
+$Ls['Minutes'] = "минута,минуты,минут";
+$Ls['Hours'] = "час,часа,часов";
+$Ls['Days'] = "день,дня,дней";
+$Ls['Weeks'] = "неделя,недели,недель";
+$Ls['Months'] = "месяц,месяца,месяцев";
 $Ls['Years'] = "год,года,лет";
 
 $Ls['Bytes'] = "B";
@@ -460,7 +460,7 @@ $L['December_s'] = 'дек';
  */
 
 $Ln['decimal_point'] = ',';
-$Ln['thousands_separator'] = ',';
+$Ln['thousands_separator'] = ' ';
 
 /**
  * Gender

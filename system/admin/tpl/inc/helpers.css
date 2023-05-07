@@ -1,8 +1,8 @@
 .clearfix:after		{ content: ''; display: block; clear: both; }
 
-.textleft	  	{ text-align:left; }
-.textcenter		{ text-align:center; }
-.textright		{ text-align:right; }
+.textleft, .text-start	  	{ text-align:left; }
+.textcenter, .text-center	{ text-align:center; }
+.textright, .text-end	{ text-align:right; }
 .textjustify	{ text-align:justify; }
 
 
