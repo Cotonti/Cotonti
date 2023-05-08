@@ -45,24 +45,22 @@ const COT_FORUMS_TOPIC_MODE_PRIVATE = 1;
  */
 function cot_forums_buildpath($cat, $forumslink = true)
 {
-	global $structure, $cfg, $L;
-	$tmp = array();
-	if ($forumslink)
-	{
-		$tmp[] = array(cot_url('forums'), $L['Forums']);
+	$tmp = [];
+	if ($forumslink) {
+		$tmp[] = array(cot_url('forums'), Cot::$L['Forums']);
 	}
-	$pathcodes = explode('.', $structure['forums'][$cat]['path']);
-	foreach ($pathcodes as $k => $x)
-	{
-		if ($k == 0)
-		{
-			$tmp[] = array(cot_url('forums', 'c=' . $x, '#' . $x), $structure['forums'][$x]['title']);
-		}
-		else
-		{
-			$tmp[] = array(cot_url('forums', 'm=topics&s=' . $x), $structure['forums'][$x]['title']);
+	$pathcodes = !empty(Cot::$structure['forums'][$cat]['path']) ?
+        explode('.', Cot::$structure['forums'][$cat]['path']) : [];
+
+	foreach ($pathcodes as $k => $x) {
+		if ($k == 0) {
+			$tmp[] = [cot_url('forums', 'c=' . $x, '#' . $x), Cot::$structure['forums'][$x]['title']];
+
+		} else {
+			$tmp[] = [cot_url('forums', 'm=topics&s=' . $x), Cot::$structure['forums'][$x]['title']];
 		}
 	}
+
 	return $tmp;
 }
 

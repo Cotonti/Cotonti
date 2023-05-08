@@ -71,8 +71,9 @@ main									{  }
 	main.aside					{ margin-right: 1rem; width: calc((100% - 1rem) * .65); float: left; }
 	aside								{ width: calc((100% - 1rem) * .35); float: left; }
 
-.block									{ line-height: 1.25; margin: 0 0  1rem; background: #f6f6f6; border-radius: 3px; overflow: hidden; }
-	.block > h2						{ padding: .5rem 1rem; background: #ddd; border-bottom: 1px solid #fff; }
+.block						{ line-height: 1.25; margin: 0 0  1rem; background: #f6f6f6; border-radius: 3px; overflow: hidden; }
+	.block > h2				{ padding: .5rem 1rem; background: #ddd; border-bottom: 1px solid #fff; }
+	.block  h3				{ padding: .3rem 1rem; font-size: 1.22rem; margin-bottom: 13px}
 	.block > div.wrapper	{ padding: .5rem 1rem 1rem; }
 
 /* 3. Headings
@@ -118,16 +119,16 @@ table.cells tr:hover { background: #edeff4; }
 table.cells th { text-align: center; padding: .25rem; background: #eee; border: 1px solid #ccc; vertical-align: middle; }
 
 td.start figure		{ margin: 0 .75rem 0 0; float: left; }
-td.start div			{ overflow: hidden; }
+td.start div		{ overflow: hidden; }
 td.start div a		{ font-weight: 700; display: block; }
 td.start div p		{ margin: 0; }
 
-td.action					{ text-align: center; vertical-align: middle; }
-td.action a				{ margin: 0 2px 0 0; }
-td.centerall 			{ text-align: center; vertical-align: middle; }
+td.action			{ text-align: center; vertical-align: middle; }
+td.action a			{ margin: 0 2px 0 0; }
+td.centerall 		{ text-align: center; vertical-align: middle; }
 
 td.group_begin		{ color: #4f789f; border: none!important; }
-td.group_end			{ font-size: 0; padding: 0!important; border: none!important; }
+td.group_end		{ font-size: 0; padding: 0!important; border: none!important; }
 
 /**
  * For backward compatibility. Will be removed in the future
