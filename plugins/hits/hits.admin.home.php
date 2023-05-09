@@ -41,23 +41,21 @@ if (!isset(Cot::$cfg['plugin']['hits']['disablehitstats']) || !Cot::$cfg['plugin
 	}
 	$sql->closeCursor();
 
-	if (!empty($hitsPerDay)) {
-		$hits_d_max = max($hitsPerDay);
-        $date = new \DateTime('now');
-        for ($i = 0; $i < $timeback_interval; $i++) {
-            $dateString = $date->format('Y-m-d');
-            $hits = isset($hitsPerDay[$dateString]) ? (int) $hitsPerDay[$dateString] : 0;
-            $percentbar = floor(($hits / $hits_d_max) * 100);
-            $tt->assign(array(
-                'ADMIN_HOME_DAY' => cot_date('d D', $date->getTimestamp(), false),
-                'ADMIN_HOME_HITS' => $hits,
-                'ADMIN_HOME_PERCENTBAR' => $percentbar
-            ));
-            $tt->parse('MAIN.STAT.ADMIN_HOME_ROW');
+    $hits_d_max = !empty($hitsPerDay) ? max($hitsPerDay) : 0;
+    $date = new \DateTime('now');
+    for ($i = 0; $i < $timeback_interval; $i++) {
+        $dateString = $date->format('Y-m-d');
+        $hits = isset($hitsPerDay[$dateString]) ? (int) $hitsPerDay[$dateString] : 0;
+        $percentbar = $hits_d_max > 0 ? floor(($hits / $hits_d_max) * 100) : 0;
+        $tt->assign(array(
+            'ADMIN_HOME_DAY' => cot_date('d D', $date->getTimestamp(), false),
+            'ADMIN_HOME_HITS' => $hits,
+            'ADMIN_HOME_PERCENTBAR' => $percentbar
+        ));
+        $tt->parse('MAIN.STAT.ADMIN_HOME_ROW');
 
-            $date->modify('-1 day');
-        }
-	}
+        $date->modify('-1 day');
+    }
 
     $tt->assign([
         'ADMIN_HOME_MORE_HITS_URL' => cot_url('admin', ['m' => 'other', 'p' => 'hits']),

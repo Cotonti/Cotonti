@@ -18,58 +18,35 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 
     $where = [];
 
-    $authCats = [];
-    $authAllCats = false;
-    $adminCats = [];
-    $adminAllCats = false;
-    if (!empty(Cot::$structure['forums'])) {
-        $authAllCats = true;
-        $adminAllCats = true;
-        foreach (Cot::$structure['forums'] as $code => $cat) {
-            if (in_array($code, ['all', 'system',])) {
-                continue;
-            }
-            if (cot_auth('forums', $code, 'R')) {
-                $authCats[] = $code;
-            } else {
-                $authAllCats = false;
-            }
-
-            if (cot_auth('forums', $code, 'A')) {
-                $adminCats[] = $code;
-            } else {
-                $adminAllCats = false;
-            }
-        }
-    }
+    $authCategories = cot_authCategories('forums');
 
     if ($rightprescan) {
-        if (!$authAllCats) {
+        if (!$authCategories['readAll']) {
             $sqlCategories = array_map(
                 function ($value) {return Cot::$db->quote($value);},
-                $authCats
+                $authCategories['read']
             );
             $where['cat'] = 'ft_cat IN (' . implode(', ', $sqlCategories) . ')';
         }
     }
 
     // Exclude private topics
-    if (!$adminAllCats) {
+    if (!$authCategories['adminAll']) {
         $sqlAdminCats = '';
-        $sqlFirsPosterId = '';
+        $sqlFirstPosterId = '';
         if (Cot::$usr > 0) {
-            $sqlFirsPosterId = ' OR ft_firstposterid = ' . Cot::$usr['id'];
-            if (!empty($adminCats)) {
+            $sqlFirstPosterId = ' OR ft_firstposterid = ' . Cot::$usr['id'];
+            if (!empty($authCategories['admin'])) {
                 $sqlAdminCats = array_map(
                     function ($value) {
                         return Cot::$db->quote($value);
                     },
-                    $adminCats
+                    $authCategories['admin']
                 );
                 $sqlAdminCats = ' OR ft_cat IN (' . implode(', ', $sqlAdminCats) . ')';
             }
         }
-        $where['privateTopic'] = '(ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL . $sqlFirsPosterId .
+        $where['privateTopic'] = '(ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL . $sqlFirstPosterId .
             $sqlAdminCats . ')';
     }
 

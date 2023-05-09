@@ -31,12 +31,12 @@ $tab = cot_import('tab', 'R', 'ALP');
 $cfg_maxitems = is_numeric(Cot::$cfg['plugin']['search']['maxitems']) ? abs(floor(Cot::$cfg['plugin']['search']['maxitems'])) : 50;
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg_maxitems);
 $totalitems = [];
-$pag_catauth = [];
-$frm_catauth = [];
-$forumCategoryAdmin = [];
-$pagAuthAllCats = false;
-$forumAuthAllCats = false;
-$forumAdminAllCats = false;
+
+$pageAuthCats = null;
+$forumAuthCats = null;
+
+//$pag_catauth = [];
+//$pagAuthAllCats = false;
 
 $rs = isset($_REQUEST['rs']) ? $_REQUEST['rs'] : null;
 
@@ -108,20 +108,21 @@ foreach (cot_getextplugins('search.first') as $pl)
 }
 /* ===== */
 
-if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && Cot::$cfg['plugin']['search']['pagesearch']) {
-	// Making the category list
+if (
+    ($tab == 'pag' || empty($tab))
+    && cot_module_active('page')
+    && Cot::$cfg['plugin']['search']['pagesearch']
+) {
+    // Making the category list
+    $pageAuthCats = cot_authCategories('page');
 	$pages_cat_list['all'] = Cot::$L['plu_allcategories'];
     if (!empty(Cot::$structure['page'])) {
-        $pagAuthAllCats = true;
         foreach (Cot::$structure['page'] as $code => $cat) {
             if (in_array($code, ['all', 'system',])) {
                 continue;
             }
             if (cot_auth('page', $code, 'R')) {
                 $pages_cat_list[$code] = $cat['tpath'];
-                $pag_catauth[] = $code;
-            } else {
-                $pagAuthAllCats = false;
             }
         }
     }
@@ -160,26 +161,20 @@ if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && Cot::$cfg['pl
 	}
 }
 
-if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && Cot::$cfg['plugin']['search']['forumsearch']) {
+if (
+    ($tab == 'frm' || empty($tab))
+    && cot_module_active('forums')
+    && Cot::$cfg['plugin']['search']['forumsearch']
+) {
+    $forumAuthCats = cot_authCategories('forums');
 	$forum_cat_list['all'] = Cot::$L['plu_allsections'];
     if (!empty(Cot::$structure['forums'])) {
-        $forumAuthAllCats = true;
-        $forumAdminAllCats = true;
         foreach (Cot::$structure['forums'] as $code => $cat) {
             if (in_array($code, ['all', 'system',])) {
                 continue;
             }
             if (cot_auth('forums', $code, 'R')) {
                 $forum_cat_list[$code] = $cat['tpath'];
-                $frm_catauth[] = $code;
-            } else {
-                $forumAuthAllCats = false;
-            }
-
-            if (cot_auth('forums', $code, 'A')) {
-                $forumCategoryAdmin[] = $code;
-            } else {
-                $forumAdminAllCats = false;
             }
         }
     }
@@ -251,7 +246,7 @@ if (!empty($sq)) {
         ($tab == 'pag' || empty($tab))
         && cot_module_active('page')
         && Cot::$cfg['plugin']['search']['pagesearch']
-        && !empty($pag_catauth)
+        && !empty($pageAuthCats['read'])
         && !cot_error_found()
     ) {
         $searchInCategories = [];
@@ -269,11 +264,11 @@ if (!empty($sq)) {
 				}
 			}
 
-            $searchInCategories = array_intersect($searchInCategories, $pag_catauth);
+            $searchInCategories = array_intersect($searchInCategories, $pageAuthCats['read']);
 		} else {
             // If user can't read all categories
-            if (!$pagAuthAllCats) {
-                $searchInCategories = $pag_catauth;
+            if (!$pageAuthCats['readAll']) {
+                $searchInCategories = $pageAuthCats['read'];
             }
 		}
 
@@ -446,12 +441,12 @@ if (!empty($sq)) {
         ($tab == 'frm' || empty($tab))
         && cot_module_active('forums')
         && Cot::$cfg['plugin']['search']['forumsearch']
-        && !empty($frm_catauth)
+        && !empty($forumAuthCats['read'])
         && !cot_error_found()
     ) {
         $searchInCategories = [];
 
-		if ($rs['frmsub'][0] != 'all' && count($rs['frmsub']) > 0) {
+        if ($rs['frmsub'][0] != 'all' && count($rs['frmsub']) > 0) {
 			if ($rs['frmsubcat']) {
 				foreach ($rs['frmsub'] as $scat) {
                     $searchInCategories = array_merge(cot_structure_children('forums', $scat), $searchInCategories);
@@ -459,15 +454,15 @@ if (!empty($sq)) {
                 $searchInCategories = array_unique($searchInCategories);
 			} else {
 				foreach ($rs['frmsub'] as $scat) {
-                    $searchInCategories[] = Cot::$db->prep($scat);
+                    $searchInCategories[] = $scat;
 				}
 			}
 
-            $searchInCategories = array_intersect($searchInCategories, $frm_catauth);
+            $searchInCategories = array_intersect($searchInCategories, $forumAuthCats['read']);
 		} else {
             // If user can't read all categories
-            if (!$forumAuthAllCats) {
-                $searchInCategories = $frm_catauth;
+            if (!$forumAuthCats['readAll']) {
+                $searchInCategories = $forumAuthCats['read'];
             }
 		}
 
@@ -477,20 +472,20 @@ if (!empty($sq)) {
         }
 
         // Exclude private topics
-        if (!$forumAdminAllCats) {
+        if (!$forumAuthCats['adminAll']) {
             $sqlAdminCats = '';
-            $sqlFirsPosterId = '';
+            $sqlFirstPosterId = '';
             if (Cot::$usr > 0) {
-                if (!empty($forumCategoryAdmin)) {
-                    $sqlFirsPosterId = ' OR ft_firstposterid = ' . Cot::$usr['id'];
+                $sqlFirstPosterId = ' OR ft_firstposterid = ' . Cot::$usr['id'];
+                if (!empty($forumAuthCats['admin'])) {
                     $sqlAdminCats = array_map(
                         function ($value) {return Cot::$db->quote($value);},
-                        $forumCategoryAdmin
+                        $forumAuthCats['admin']
                     );
                     $sqlAdminCats = ' OR t.ft_cat IN (' . implode(', ', $sqlAdminCats) . ')';
                 }
             }
-            $where_and['privateTopic'] = '(t.ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL . $sqlFirsPosterId .
+            $where_and['privateTopic'] = '(t.ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL . $sqlFirstPosterId .
                 $sqlAdminCats . ')';
         }
 
@@ -511,7 +506,7 @@ if (!empty($sq)) {
             $where = 'WHERE ' . $where;
         }
 
-		$maxitems = $cfg_maxitems - $items;
+		$maxitems = $cfg_maxitems; // - $items;
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
 
 		if (!Cot::$db->fieldExists(Cot::$db->forum_topics, "ft_{$rs['frmsort']}")) {

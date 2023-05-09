@@ -1559,7 +1559,7 @@ function cot_structure_parents($area, $cat, $type = 'full')
 /**
  * Returns specific access permissions
  *
- * @param string $area Cotonti area
+ * @param string $area Cotonti area or extension code
  * @param ?string $option Option to access.
  *    Empty -  check if user has access to area (extension)
  *    'any' - if user has access to the extension or to any of its categories
@@ -1617,6 +1617,60 @@ function cot_auth($area, $option = null, $mask = 'RWA')
 	}
 
 	return (count($res) == 1) ? $res[0] : $res;
+}
+
+/**
+ * Returns access permissions for categories
+ * Useful in DB queries
+ *
+ * @param string $area Cotonti area or extension code
+ * @param string $mask Access mask
+ *
+ * @param string $accessMask Access mask
+ * @return array<string, bool|string[]>
+ */
+function cot_authCategories($area, $accessMask = 'RA')
+{
+    $masks = str_split($accessMask);
+    if (empty($masks)) {
+        $masks = ['R', 'A'];
+    }
+
+    $maskMap = ['R' => 'read', 'A' => 'admin', 'W' => 'write'];
+
+    $result = [];
+    foreach ($masks as $mask) {
+        $key = isset($maskMap[$mask]) ? $maskMap[$mask] : $mask;
+        $result[$key . 'All'] = false;
+        $result[$key] = [];
+    }
+
+    if (empty(Cot::$structure[$area])) {
+        return $result;
+    }
+
+    foreach ($masks as $mask) {
+        $key = isset($maskMap[$mask]) ? $maskMap[$mask] : $mask;
+        $result[$key . 'All'] = true;
+    }
+
+    foreach (Cot::$structure[$area] as $code => $cat) {
+        if (in_array($code, ['all', 'system',])) {
+            continue;
+        }
+
+        foreach ($masks as $mask) {
+            $key = isset($maskMap[$mask]) ? $maskMap[$mask] : $mask;
+
+            if (cot_auth($area, $code, $mask)) {
+                $result[$key][] = (string) $code;
+            } else {
+                $result[$key . 'All'] = false;
+            }
+        }
+    }
+
+    return $result;
 }
 
 /**
