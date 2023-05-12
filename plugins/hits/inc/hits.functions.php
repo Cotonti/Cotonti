@@ -32,14 +32,10 @@ function cot_stat_create($name, $value = 1)
  *
  * @param string $name Parameter name
  * @return int|null
- * @global CotDB $db
  */
 function cot_stat_get($name)
 {
-	$sql = Cot::$db->query(
-        'SELECT stat_value FROM ' . Cot::$db->stats . ' WHERE stat_name= :name LIMIT 1',
-        ['name' => $name]
-    );
+	$sql = Cot::$db->query('SELECT stat_value FROM ' . Cot::$db->stats . ' WHERE stat_name = ? LIMIT 1', $name);
 	return ($sql->rowCount() > 0) ? (int) $sql->fetchColumn() : null;
 }
 
@@ -48,12 +44,15 @@ function cot_stat_get($name)
  *
  * @param string $name Parameter name
  * @param int $value Increment step
- * @global CotDB $db
+ * @param bool $createIfNotExists
  */
-function cot_stat_inc($name, $value = 1)
+function cot_stat_inc($name, $value = 1, $createIfNotExists = false)
 {
+    if ($createIfNotExists && cot_stat_get($name) === null) {
+        cot_stat_create($name, $value);
+        return;
+    }
     $value = (int) $value;
-
     cot::$db->query(
         'UPDATE ' . cot::$db->stats . " SET stat_value = stat_value + {$value} WHERE stat_name= ?",
         $name
@@ -61,22 +60,20 @@ function cot_stat_inc($name, $value = 1)
 }
 
 /**
- * Inserts new stat or increments value if it is already exists
+ * Updates stat value
  *
  * @param string $name Parameter name
  * @param int $value Increment step
- * @global CotDB $db
- * @todo Do not use MySQL-specific syntax
+ * @param bool $createIfNotExists
  */
-function cot_stat_update($name, $value = 1)
+function cot_stat_update($name, $value = 1, $createIfNotExists = false)
 {
+    if ($createIfNotExists && cot_stat_get($name) === null) {
+        cot_stat_create($name, $value);
+        return;
+    }
     $value = (int) $value;
-
-	cot::$db->query(
-        'INSERT INTO ' . Cot::$db->stats . ' (stat_name, stat_value) ' .
-		"VALUES (:name, $value) ON DUPLICATE KEY UPDATE stat_value = stat_value + $value",
-        ['name' => $name]
-    );
+    Cot::$db->update(Cot::$db->stats, ['stat_value' => $value], 'stat_name= ?', $name);
 }
 
 /**
@@ -84,15 +81,8 @@ function cot_stat_update($name, $value = 1)
  *
  * @param string $name Parameter name
  * @param int $value Increment step
- * @todo Do not use MySQL-specific syntax
  */
 function cot_stat_set($name, $value = 1)
 {
-    cot::$db->insert(
-        Cot::$db->stats,
-        ['stat_name' => $name, 'stat_value' => (int) $value],
-        false,
-        false,
-        ['stat_value']
-    );
+    cot_stat_update($name, $value, true);
 }

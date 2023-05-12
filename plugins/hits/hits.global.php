@@ -21,19 +21,23 @@ if (!defined('COT_ADMIN')) {
 
     // Total number of site visits
     if (Cot::$cfg['plugin']['hits']['adminhits'] || Cot::$usr['maingrp'] != COT_GROUP_SUPERADMINS) {
-        if (Cot::$cache && Cot::$cache->mem) {
+        if (empty(Cot::$cfg['plugin']['hits']['hit_precision'])) {
+            Cot::$cfg['plugin']['hits']['hit_precision'] = 100;
+        }
+
+        if (
+            Cot::$cache
+            && Cot::$cache->mem
+            && Cot::$cfg['plugin']['hits']['hit_precision'] > 1
+        ) {
             $hits = Cot::$cache->mem->get('hits', 'system');
             if (empty($hits) || !is_array($hits)) {
                 $hits = ['date' => Cot::$sys['day'], 'count' => 0,];
             }
 
-            if (empty(Cot::$cfg['plugin']['hits']['hit_precision'])) {
-                Cot::$cfg['plugin']['hits']['hit_precision'] = 100;
-            }
-
             if ($hits['date'] < Cot::$sys['day']) {
                 cot_stat_inc('totalpages', $hits['count']);
-                cot_stat_update($hits['date'], $hits['count']);
+                cot_stat_inc($hits['date'], $hits['count'], true);
                 Cot::$cache->mem->remove('hits', 'system');
                 $hits = ['date' => Cot::$sys['day'], 'count' => 0,];
             }
@@ -42,7 +46,7 @@ if (!defined('COT_ADMIN')) {
 
             if ($hits['count'] >= Cot::$cfg['plugin']['hits']['hit_precision']) {
                 cot_stat_inc('totalpages', $hits['count']);
-                cot_stat_update($hits['date'], $hits['count']);
+                cot_stat_inc($hits['date'], $hits['count'], true);
                 Cot::$cache->mem->remove('hits', 'system');
                 $hits = [
                     'date' => Cot::$sys['day'],
@@ -53,7 +57,7 @@ if (!defined('COT_ADMIN')) {
             Cot::$cache->mem->store('hits', $hits, 'system');
         } else {
             cot_stat_inc('totalpages');
-            cot_stat_update(Cot::$sys['day']);
+            cot_stat_inc(Cot::$sys['day'], 1, true);
         }
     }
 
@@ -74,7 +78,7 @@ if (!defined('COT_ADMIN')) {
             !empty(Cot::$sys['whosonline_all_count'])
             && $maxusers < Cot::$sys['whosonline_all_count']
         ) {
-            cot_stat_set('maxusers', Cot::$sys['whosonline_all_count']);
+            cot_stat_update('maxusers', Cot::$sys['whosonline_all_count']);
             if (Cot::$cache && Cot::$cache->mem) {
                 Cot::$cache->mem->store('maxusers', Cot::$sys['whosonline_all_count'], 'system', 0);
             }
