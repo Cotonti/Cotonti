@@ -21,7 +21,7 @@ $s = cot_import('s', 'G', 'TXT');
 
 Cot::$out['subtitle'] = Cot::$L['Statistics'];
 
-$totaldbusers = Cot::$db->countRows($db_users);
+$totaldbusers = Cot::$db->countRows(Cot::$db->users);
 $totalmailsent = cot_stat_get('totalmailsent');
 
 $sql = Cot::$db->query("SELECT stat_name FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name ASC LIMIT 1");

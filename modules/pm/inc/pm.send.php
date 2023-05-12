@@ -117,7 +117,6 @@ if ($a == 'send') {
 		}
 
 		if (!cot_error_found()) {
-			$stats_enabled = function_exists('cot_stat_inc');
 			foreach ($touser_ids as $k => $userid) {
                 $pmId = cot_send_pm($userid, $newpmtitle, $newpmtext, Cot::$usr['id'], $fromstate);
 			}
@@ -128,9 +127,6 @@ if ($a == 'send') {
 			}
 			/* ===== */
 
-			if ($stats_enabled) {
-                cot_stat_inc('totalpms');
-            }
 			cot_shield_update(30, "New private message (".$totalrecipients.")");
 			cot_redirect(cot_url('pm', 'f=sentbox', '', true));
 		}

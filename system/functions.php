@@ -1038,6 +1038,10 @@ function cot_mail(
         mail($to, $subjectPrepared, $bodyPrepared, $headers, $additionalParameters);
     }
 
+    if (function_exists('cot_stat_inc')) {
+        cot_stat_inc('totalmailsent');
+    }
+
     /* === Hook === */
     foreach (cot_getextplugins('mail.send.done') as $pl) {
         include $pl;
