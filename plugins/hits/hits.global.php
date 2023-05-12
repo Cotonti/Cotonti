@@ -22,15 +22,35 @@ if (!defined('COT_ADMIN')) {
     // Total number of site visits
     if (Cot::$cfg['plugin']['hits']['adminhits'] || Cot::$usr['maingrp'] != COT_GROUP_SUPERADMINS) {
         if (Cot::$cache && Cot::$cache->mem) {
-            $hits = Cot::$cache->mem->inc('hits', 'system');
+            $hits = Cot::$cache->mem->get('hits', 'system');
+            if (empty($hits) || !is_array($hits)) {
+                $hits = ['date' => Cot::$sys['day'], 'count' => 0,];
+            }
+
             if (empty(Cot::$cfg['plugin']['hits']['hit_precision'])) {
                 Cot::$cfg['plugin']['hits']['hit_precision'] = 100;
             }
 
-            if ($hits % Cot::$cfg['plugin']['hits']['hit_precision'] == 0) {
-                cot_stat_inc('totalpages', Cot::$cfg['plugin']['hits']['hit_precision']);
-                cot_stat_update(Cot::$sys['day'], Cot::$cfg['plugin']['hits']['hit_precision']);
+            if ($hits['date'] < Cot::$sys['day']) {
+                cot_stat_inc('totalpages', $hits['count']);
+                cot_stat_update($hits['date'], $hits['count']);
+                Cot::$cache->mem->remove('hits', 'system');
+                $hits = ['date' => Cot::$sys['day'], 'count' => 0,];
             }
+
+            $hits['count']++;
+
+            if ($hits['count'] >= Cot::$cfg['plugin']['hits']['hit_precision']) {
+                cot_stat_inc('totalpages', $hits['count']);
+                cot_stat_update($hits['date'], $hits['count']);
+                Cot::$cache->mem->remove('hits', 'system');
+                $hits = [
+                    'date' => Cot::$sys['day'],
+                    'count' => 0, // Use 0 because we are incrementing value in DB for this number
+                ];
+            }
+
+            Cot::$cache->mem->store('hits', $hits, 'system');
         } else {
             cot_stat_inc('totalpages');
             cot_stat_update(Cot::$sys['day']);
