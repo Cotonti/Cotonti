@@ -25,6 +25,10 @@ if (!defined('COT_ADMIN')) {
             Cot::$cfg['plugin']['hits']['hit_precision'] = 100;
         }
 
+        $defaultTimeZone = !empty(Cot::$cfg['defaulttimezone']) ? Cot::$cfg['defaulttimezone'] : 'UTC';
+        $date = new \DateTimeImmutable('today midnight', new \DateTimeZone($defaultTimeZone));
+        $today = $date->format('Y-m-d');
+
         if (
             Cot::$cache
             && Cot::$cache->mem
@@ -32,14 +36,14 @@ if (!defined('COT_ADMIN')) {
         ) {
             $hits = Cot::$cache->mem->get('hits', 'system');
             if (empty($hits) || !is_array($hits)) {
-                $hits = ['date' => Cot::$sys['day'], 'count' => 0,];
+                $hits = ['date' => $today, 'count' => 0,];
             }
 
-            if ($hits['date'] < Cot::$sys['day']) {
+            if ($hits['date'] < $today) {
                 cot_stat_inc('totalpages', $hits['count']);
                 cot_stat_inc($hits['date'], $hits['count'], true);
                 Cot::$cache->mem->remove('hits', 'system');
-                $hits = ['date' => Cot::$sys['day'], 'count' => 0,];
+                $hits = ['date' => $today, 'count' => 0,];
             }
 
             $hits['count']++;
@@ -49,7 +53,7 @@ if (!defined('COT_ADMIN')) {
                 cot_stat_inc($hits['date'], $hits['count'], true);
                 Cot::$cache->mem->remove('hits', 'system');
                 $hits = [
-                    'date' => Cot::$sys['day'],
+                    'date' => $today,
                     'count' => 0, // Use 0 because we are incrementing value in DB for this number
                 ];
             }
@@ -57,7 +61,7 @@ if (!defined('COT_ADMIN')) {
             Cot::$cache->mem->store('hits', $hits, 'system');
         } else {
             cot_stat_inc('totalpages');
-            cot_stat_inc(Cot::$sys['day'], 1, true);
+            cot_stat_inc($today, 1, true);
         }
     }
 

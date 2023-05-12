@@ -54,14 +54,15 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
     $ruser['user_country'] = (!empty($ruser['user_country']) && mb_strlen($ruser['user_country']) < 4) ?
         $ruser['user_country'] : '';
 
+    $defaultTimeZone = !empty(Cot::$cfg['defaulttimezone']) ? Cot::$cfg['defaulttimezone'] : 'UTC';
     if (!empty($ruser['user_timezone'])) {
         try {
             $tmp = new \DateTimeZone($ruser['user_timezone']);
         } catch (\Exception $e) {
-            $ruser['user_timezone'] = Cot::$cfg['defaulttimezone'];
+            $ruser['user_timezone'] = $defaultTimeZone;
         }
     } else {
-        $ruser['user_timezone'] = Cot::$cfg['defaulttimezone'];
+        $ruser['user_timezone'] = $defaultTimeZone;
     }
 
     $maingrp = (int) $maingrp;

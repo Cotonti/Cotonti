@@ -96,9 +96,15 @@ if ($f == 'year' || $f == 'month') {
 			$d = mb_substr($row['stat_name'], 8, 2);
 			$w = cot_date('W', mktime(0, 0, 0, $m, $d, $y));
 
-            if (!isset($hits_w[$y.'-W'.$w])) $hits_w[$y.'-W'. $w] = 0;
-            if (!isset($hits_m[$y.'-'.$m])) $hits_m[$y.'-'.$m] = 0;
-            if (!isset($hits_y[$y])) $hits_y[$y] = 0;
+            if (!isset($hits_w[$y.'-W'.$w])) {
+                $hits_w[$y.'-W'. $w] = 0;
+            }
+            if (!isset($hits_m[$y.'-'.$m])) {
+                $hits_m[$y.'-'.$m] = 0;
+            }
+            if (!isset($hits_y[$y])) {
+                $hits_y[$y] = 0;
+            }
 
             $hits_w[$y . '-W' . $w] += $row['stat_value'];
 			$hits_m[$y . '-' . $m] += $row['stat_value'];

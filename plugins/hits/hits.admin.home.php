@@ -29,7 +29,9 @@ $tt = new XTemplate(cot_tplfile('hits.admin.home', 'plug', true));
 if (!isset(Cot::$cfg['plugin']['hits']['disablehitstats']) || !Cot::$cfg['plugin']['hits']['disablehitstats']) {
 	$hitsPerDay = [];
 
-    $startDate = new \DateTimeImmutable('-' . $timeback_interval . ' days');
+    $defaultTimeZone = !empty(Cot::$cfg['defaulttimezone']) ? Cot::$cfg['defaulttimezone'] : 'UTC';
+    $timeZone = new \DateTimeZone($defaultTimeZone);
+    $startDate = new \DateTimeImmutable('-' . $timeback_interval . ' days', $timeZone);
     $start = $startDate->format('Y-m-d');
 
 	$sql = Cot::$db->query(
@@ -42,7 +44,7 @@ if (!isset(Cot::$cfg['plugin']['hits']['disablehitstats']) || !Cot::$cfg['plugin
 	$sql->closeCursor();
 
     $hits_d_max = !empty($hitsPerDay) ? max($hitsPerDay) : 0;
-    $date = new \DateTime('now');
+    $date = new \DateTime('now', $timeZone);
     for ($i = 0; $i < $timeback_interval; $i++) {
         $dateString = $date->format('Y-m-d');
         $hits = isset($hitsPerDay[$dateString]) ? (int) $hitsPerDay[$dateString] : 0;
