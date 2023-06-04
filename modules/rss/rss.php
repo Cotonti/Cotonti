@@ -49,22 +49,21 @@ $domain = $sys['domain'];
 $default_mode = true;
 
 /* === Hook === */
-foreach (cot_getextplugins('rss.create') as $pl)
-{
-	include $pl;
+$event = 'rss.create';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
-if ($m == "topics")
-{
+if ($m == "topics") {
 	require_once cot_incfile('forums', 'module');
 
 	$default_mode = false;
 	$topic_id = empty($c) ? 0 : (int) $c;
 
 	$sql = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id = ?", $topic_id);
-	if ($sql->rowCount > 0)
-	{
+	if ($sql->rowCount > 0) {
 		$row = $sql->fetch();
 		if ($row['ft_mode'] == '1')
 			die($L['rss_error_private']);
@@ -84,19 +83,20 @@ if ($m == "topics")
 		$sql = $db->query("SELECT * FROM $db_forum_posts WHERE fp_topicid = ? ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'], $topic_id);
 
 		/* === Hook === */
-		foreach (cot_getextplugins('rss.topics.main') as $pl)
-		{
-			include $pl;
-		}
+        $event = 'rss.topics.main';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
 
 		/* === Hook - Part1 : Set === */
-		$extp = cot_getextplugins('rss.topics.loop');
+        $eventLoop = 'rss.topics.loop';
+		$extp = cot_getextplugins($eventLoop);
 		/* ===== */
 
 		$i = 0;
-		while ($row = $sql->fetch())
-		{
+		while ($row = $sql->fetch()) {
 			$totalposts--;
 			$curpage = $cfg['forums']['maxtopicsperpage'] * floor($totalposts / $cfg['forums']['maxtopicsperpage']);
 
@@ -108,26 +108,24 @@ if ($m == "topics")
 			$items[$i]['pubDate'] = cot_date('r', $row['fp_creation']);
 
 			/* === Hook - Part2 : Include === */
-			foreach ($extp as $pl)
-			{
+            $event = $eventLoop;
+			foreach ($extp as $pl) {
 				include $pl;
 			}
+            unset($event);
 			/* ===== */
 
 			$i++;
 		}
 		$res->closeCursor();
 	}
-}
-elseif ($m == "section")
-{
+} elseif ($m == "section") {
 	require_once cot_incfile('forums', 'module');
 
 	$default_mode = false;
 	$forum_cat = empty($c) ? 0 : $c;;
 
-	if (isset($structure['forums'][$forum_cat]))
-	{
+	if (isset($structure['forums'][$forum_cat])) {
 		$rss_title = $structure['forums'][$forum_cat]['title'];
 		$rss_description = $structure['forums'][$forum_cat]['desc'];
 
@@ -137,19 +135,20 @@ elseif ($m == "section")
 		$sql = $db->query("SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 
 		/* === Hook === */
-		foreach (cot_getextplugins('rss.section.main') as $pl)
-		{
-			include $pl;
-		}
+        $event = 'rss.section.main';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
 
 		/* === Hook - Part1 : Set === */
-		$extp = cot_getextplugins('rss.section.loop');
+        $eventLoop = 'rss.section.loop';
+		$extp = cot_getextplugins($eventLoop);
 		/* ===== */
 
 		$i = 0;
-		foreach ($sql->fetchAll() as $row)
-		{
+		foreach ($sql->fetchAll() as $row) {
 			$post_id = $row['fp_id'];
 			$topic_id = $row['fp_topicid'];
 
@@ -159,13 +158,11 @@ elseif ($m == "section")
 			$row2 = $res2->fetch();
 
 			$topic_title = $row2['ft_title'];
-			if ($row2['ft_mode'] == '1')
-			{
+			if ($row2['ft_mode'] == '1') {
 				$flag_private = 1;
 			}
 
-			if (!$flag_private && cot_auth('forums', $forum_cat, 'R'))
-			{
+			if (!$flag_private && cot_auth('forums', $forum_cat, 'R')) {
 				//$post_url = ($cfg['plugin']['search']['searchurls'] == 'Single') ? cot_url('forums', 'm=posts&id='.$post_id, "", true) : cot_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
 				$post_url = cot_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
 				$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
@@ -175,18 +172,17 @@ elseif ($m == "section")
 			}
 
 			/* === Hook - Part2 : Include === */
-			foreach ($extp as $pl)
-			{
+            $event = $eventLoop;
+			foreach ($extp as $pl) {
 				include $pl;
 			}
+            unset($event);
 			/* ===== */
 
 			$i++;
 		}
 	}
-}
-elseif ($m == "forums")
-{
+} elseif ($m == "forums") {
 	require_once cot_incfile('forums', 'module');
 
 	$default_mode = false;
@@ -196,19 +192,20 @@ elseif ($m == "forums")
 	$sql = $db->query("SELECT * FROM $db_forum_posts ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 
 	/* === Hook === */
-	foreach (cot_getextplugins('rss.forums.main') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'rss.forums.main';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	/* === Hook - Part1 : Set === */
-	$extp = cot_getextplugins('rss.forums.loop');
+    $eventLoop = 'rss.forums.loop';
+	$extp = cot_getextplugins($eventLoop);
 	/* ===== */
 
 	$i = 0;
-	foreach ($sql->fetchAll() as $row)
-	{
+	foreach ($sql->fetchAll() as $row) {
 		$post_id = $row['fp_id'];
 		$topic_id = $row['fp_topicid'];
 		$forum_id = $row['fp_cat'];
@@ -219,13 +216,11 @@ elseif ($m == "forums")
 		$row2 = $sql2->fetch();
 
 		$topic_title = $row2['ft_title'];
-		if ($row2['ft_mode'] == '1')
-		{
+		if ($row2['ft_mode'] == '1') {
 			$flag_private = 1;
 		}
 
-		if (!$flag_private && cot_auth('forums', $forum_id, 'R'))
-		{
+		if (!$flag_private && cot_auth('forums', $forum_id, 'R')) {
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 			$items[$i]['description'] = cot_parse_post_text($row['fp_text']);
 			$url = cot_url('forums', "m=posts&p=$post_id", "#$post_id", true);
@@ -234,30 +229,26 @@ elseif ($m == "forums")
 		}
 
 		/* === Hook - Part2 : Include === */
-		foreach ($extp as $pl)
-		{
+        $event = $eventLoop;
+		foreach ($extp as $pl) {
 			include $pl;
 		}
+        unset($event);
 		/* ===== */
 
 		$i++;
 	}
-}
-elseif ($default_mode)
-{
+} elseif ($default_mode) {
 	require_once cot_incfile('page', 'module');
 
-	if (!empty($c) && isset($structure['page'][$c]))
-	{
+	if (!empty($c) && isset($structure['page'][$c])) {
 		$mtch = $structure['page'][$c]['path'].".";
 		$mtchlen = mb_strlen($mtch);
 		$catsub = array();
 		$catsub[] = $c;
 
-		foreach ($structure['page'] as $i => $x)
-		{
-			if (mb_substr($x['path'], 0, $mtchlen) == $mtch)
-			{
+		foreach ($structure['page'] as $i => $x) {
+			if (mb_substr($x['path'], 0, $mtchlen) == $mtch) {
 				$catsub[] = $i;
 			}
 		}
@@ -266,9 +257,7 @@ elseif ($default_mode)
 				LEFT JOIN $db_users AS u ON p.page_ownerid = u.user_id
 			WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."')
 			ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
-	}
-	else
-	{
+	} else {
 		$sql = $db->query("SELECT p.*, u.* FROM $db_pages AS p
 				LEFT JOIN $db_users AS u ON p.page_ownerid = u.user_id
 			WHERE page_state=0 AND page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']}) AND page_cat NOT LIKE 'system'
@@ -276,23 +265,26 @@ elseif ($default_mode)
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('rss.pages.main') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'rss.pages.main';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	/* === Hook - Part1 : Set === */
-	$extp = cot_getextplugins('rss.pages.loop');
+    $eventLoop = 'rss.pages.loop';
+	$extp = cot_getextplugins($eventLoop);
 	/* ===== */
 
 	$i = 0;
-	while ($row = $sql->fetch())
-	{
+	while ($row = $sql->fetch()) {
 		$url = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'], '', true) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'], '', true);
 
 		$rssDate = $row['page_date'];
-		if(!empty(Cot::$usr['timezone'])) $rssDate += Cot::$usr['timezone'] * 3600;
+		if (!empty(Cot::$usr['timezone'])) {
+            $rssDate += Cot::$usr['timezone'] * 3600;
+        }
 
 		$items[$i]['title'] = $row['page_title'];
 		$items[$i]['link'] = (strpos($url, '://') === false) ? COT_ABSOLUTE_URL . $url : $url;
@@ -301,10 +293,11 @@ elseif ($default_mode)
 		$items[$i]['fields'] = cot_generate_pagetags($row);
 
 		/* === Hook - Part2 : Include === */
-		foreach ($extp as $pl)
-		{
+        $event = $eventLoop;
+		foreach ($extp as $pl) {
 			include $pl;
 		}
+        unset($event);
 		/* ===== */
 
 		$i++;
@@ -313,7 +306,9 @@ elseif ($default_mode)
 }
 
 $rssNow = Cot::$sys['now'];
-if(!empty(Cot::$usr['timezone'])) $rssNow += Cot::$usr['timezone'] * 3600;
+if (!empty(Cot::$usr['timezone'])) {
+    $rssNow += Cot::$usr['timezone'] * 3600;
+}
 
 $t = new XTemplate(cot_tplfile('rss'));
 $t->assign(array(
@@ -327,7 +322,8 @@ $t->assign(array(
 
 if (!empty($items)) {
 	/* === Hook - Part1 : Set === */
-	$extp = cot_getextplugins('rss.item.loop');
+    $eventLoop = 'rss.item.loop';
+	$extp = cot_getextplugins($eventLoop);
 	/* ===== */
 
 	foreach ($items as $item) {
@@ -340,10 +336,11 @@ if (!empty($items)) {
 		));
 
 		/* === Hook - Part2 : Include === */
-		foreach ($extp as $pl)
-		{
+        $event = $eventLoop;
+		foreach ($extp as $pl) {
 			include $pl;
 		}
+        unset($event);
 		/* ===== */
 
 		$t->parse('MAIN.ITEM_ROW');
@@ -351,19 +348,20 @@ if (!empty($items)) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('rss.output') as $pl)
-{
-	include $pl;
+$event = 'rss.output';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $t->parse('MAIN');
 $out_rss = $t->text('MAIN');
 
-if ($usr['id'] === 0 && $cache)
-{
-	$cache->db->store($m . $c, $out_rss, 'rss', $cfg['rss']['rss_timetolive']);
+if (Cot::$usr['id'] === 0 && Cot::$cache) {
+    Cot::$cache->db->store($m . $c, $out_rss, 'rss', $cfg['rss']['rss_timetolive']);
 }
+
 echo $out_rss;
 
 function cot_parse_page_text($pag_text, $pag_pageurl, $pag_parser)

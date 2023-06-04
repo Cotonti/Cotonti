@@ -79,9 +79,14 @@ function htmlpurifier_filter($value, $name = '')
 			require_once  Cot::$cfg['plugins_dir'] . "/htmlpurifier/presets/htmlpurifier.$preset_name.preset.php";
 
             /* config extension */
-			foreach (cot_getextplugins('htmlpurifier.config') as $pl) {
-				include $pl;
-			}
+
+            /* === Hook === */
+            $event = 'htmlpurifier.config';
+            foreach (cot_getextplugins($event) as $pl) {
+                include $pl;
+            }
+            unset($event);
+            /* ============ */
 
 			foreach ($htmlpurifier_preset as $key => $val) {
 				$config->set($key, $val);

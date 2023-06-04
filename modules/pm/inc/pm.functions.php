@@ -68,9 +68,11 @@ function cot_send_pm($to, $subject, $text, $from = null, $fromState = 0)
     $pm['pm_tostate'] = 0;
 
     /* === Hook === */
-    foreach (cot_getextplugins('pm.send.query') as $pl) {
+    $event = 'pm.send.query';
+    foreach (cot_getextplugins($event) as $pl) {
         include $pl;
     }
+    unset($event);
     /* ===== */
 
     $result = Cot::$db->insert(Cot::$db->pm, $pm);
@@ -101,9 +103,11 @@ function cot_send_pm($to, $subject, $text, $from = null, $fromState = 0)
     }
 
     /* === Hook === */
-    foreach (cot_getextplugins('pm.send.done') as $pl) {
+    $event = 'pm.send.done';
+    foreach (cot_getextplugins($event) as $pl) {
         include $pl;
     }
+    unset($event);
     /* ===== */
 
     return $id;

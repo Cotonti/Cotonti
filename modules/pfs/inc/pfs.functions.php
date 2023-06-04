@@ -427,16 +427,23 @@ function cot_pfs_upload($userid, $folderid='')
 	$npath = cot_pfs_folderpath($folderid);
 
 	/* === Hook === */
-	foreach (cot_getextplugins('pfs.upload.first') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'pfs.upload.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
-	cot_die($npath===FALSE);
+	cot_die($npath === FALSE);
 
-	for ($ii = 0; $ii < $cfg['pfs']['pfsmaxuploads']; $ii++)
-	{
+    /* === Hook - Part1 : Set === */
+    $eventMoved = 'pfs.upload.moved';
+    $extPluginsMoved = cot_getextplugins($eventMoved);
+    $eventDone = 'pfs.upload.done';
+    $extPluginsDone = cot_getextplugins($eventDone);
+    /* ===== */
+
+	for ($ii = 0; $ii < $cfg['pfs']['pfsmaxuploads']; $ii++) {
 		$disp_errors = '';
 		$u_tmp_name = $_FILES['userfile']['tmp_name'][$ii];
 		$u_type = $_FILES['userfile']['type'][$ii];
@@ -445,8 +452,7 @@ function cot_pfs_upload($userid, $folderid='')
 		$u_name  = str_replace("\'",'',$u_name );
 		$u_name  = trim(str_replace("\"",'',$u_name ));
 
-		if (!empty($u_name))
-		{
+		if (!empty($u_name)) {
 			$disp_errors .= $u_name . ' : ';
 			$u_name = mb_strtolower($u_name);
 			$dotpos = mb_strrpos($u_name,".")+1;
@@ -454,49 +460,43 @@ function cot_pfs_upload($userid, $folderid='')
 			$f_extension_ok = 0;
 			$desc = $ndesc[$ii];
 
-			if($cfg['pfs']['pfstimename'])
-			{
-				$u_name = time().'_'.$u_name;
+			if ($cfg['pfs']['pfstimename']) {
+				$u_name = time() . '_' . $u_name;
 			}
-			if(!$cfg['pfs']['pfsuserfolder'])
-			{
-				$u_name = $usr['id'].'_'.$u_name;
+			if (!$cfg['pfs']['pfsuserfolder']) {
+				$u_name = Cot::$usr['id'] . '_' . $u_name;
 			}
 
 			$u_newname = cot_safename($u_name, true);
 			$u_sqlname = $db->prep($u_newname);
 
-			if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4' && $f_extension!='php5')
-			{
-				foreach ($cot_extensions as $k => $line)
-				{
-					if (mb_strtolower($f_extension) == $line[0])
-					{
+			if (!in_array($f_extension, ['php', 'php3', 'php4', 'php5'])) {
+				foreach ($cot_extensions as $k => $line) {
+					if (mb_strtolower($f_extension) == $line[0]) {
 						$f_extension_ok = 1;
 					}
 				}
 			}
 
-			if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<$maxfile && $f_extension_ok
-				&& ($pfs_totalsize+$u_size)<$maxtotal)
-			{
+			if (
+                is_uploaded_file($u_tmp_name)
+                && $u_size > 0
+                && $u_size < $maxfile
+                && $f_extension_ok
+				&& ($pfs_totalsize + $u_size) < $maxtotal
+            ) {
 				$fcheck = cot_file_check($u_tmp_name, $u_name, $f_extension);
-				if($fcheck == 1)
-				{
+				if ($fcheck == 1) {
 					$pfs_dir_user = cot_pfs_path($userid);
 					$thumbs_dir_user = cot_pfs_thumbpath($userid);
-					if (!file_exists($pfs_dir_user.$npath.$u_newname))
-					{
+					if (!file_exists($pfs_dir_user.$npath.$u_newname)) {
 						$is_moved = true;
 
-						if ($cfg['pfs']['pfsuserfolder'])
-						{
-							if (!is_dir($pfs_dir_user))
-							{
+						if ($cfg['pfs']['pfsuserfolder']) {
+							if (!is_dir($pfs_dir_user)) {
 								$is_moved &= mkdir($pfs_dir_user, $cfg['dir_perms']);
 							}
-							if (!is_dir($thumbs_dir_user))
-							{
+							if (!is_dir($thumbs_dir_user)) {
 								$is_moved &= mkdir($thumbs_dir_user, $cfg['dir_perms']);
 							}
 						}
@@ -506,14 +506,15 @@ function cot_pfs_upload($userid, $folderid='')
 
 						$u_size = filesize($pfs_dir_user.$npath.$u_newname);
 
-						if ($is_moved && (int)$u_size > 0)
-						{
-							/* === Hook === */
-							foreach (cot_getextplugins('pfs.upload.moved') as $pl)
-							{
-								include $pl;
-							}
+						if ($is_moved && (int) $u_size > 0) {
+							/* === Hook - Part2 : Include === */
+                            $event = $eventMoved;
+                            foreach ($extPluginsMoved as $pl) {
+                                include $pl;
+                            }
+                            unset($event);
 							/* ===== */
+
 							$db->insert($db_pfs, array(
 								'pfs_userid' => (int)$userid,
 								'pfs_date' => (int)$sys['now'],
@@ -530,10 +531,12 @@ function cot_pfs_upload($userid, $folderid='')
 							$disp_errors .= $L['Yes'];
 							$pfs_totalsize += $u_size;
 
-							/* === Hook === */
-							foreach (cot_getextplugins('pfs.upload.done') as $pl) {
-								include $pl;
-							}
+							/* === Hook - Part2 : Include === */
+                            $event = $eventDone;
+                            foreach ($extPluginsDone as $pl) {
+                                include $pl;
+                            }
+                            unset($event);
 							/* ===== */
 
 							if (

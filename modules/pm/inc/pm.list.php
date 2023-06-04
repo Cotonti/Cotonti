@@ -19,10 +19,11 @@ $a = cot_import('a','G','TXT'); // Action
 $filter = cot_import('filter','G','TXT');	// filter
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.list.first') as $pl)
-{
-	include $pl;
+$event = 'pm.list.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 if (!empty($a)) {
@@ -76,9 +77,11 @@ if ($filter == 'unread') {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.list.main') as $pl) {
-	include $pl;
+$event = 'pm.list.main';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 /* === Title === */
@@ -113,7 +116,8 @@ $t = new XTemplate(cot_tplfile(array('pm', 'list', $pmalttpl)));
 $jj = 0;
 
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('pm.list.loop');
+$eventLoop = 'pm.list.loop';
+$extp = cot_getextplugins($eventLoop);
 /* ===== */
 
 foreach ($pm_sql->fetchAll() as $row) {
@@ -174,9 +178,11 @@ foreach ($pm_sql->fetchAll() as $row) {
 	$t->assign(cot_generate_usertags($row, 'PM_ROW_USER_'));
 
 	/* === Hook - Part2 : Include === */
+    $event = $eventLoop;
 	foreach ($extp as $pl) {
 		include $pl;
 	}
+    unset($event);
 	/* ===== */
 
 	$t->parse('MAIN.PM_ROW');
@@ -224,10 +230,11 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.list.tags') as $pl)
-{
-	include $pl;
+$event = 'pm.list.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $t->parse('MAIN');

@@ -160,20 +160,24 @@ $t->assign(array(
 
 if (Cot::$usr['id'] > 0) {
 	/* === Hook === */
-	foreach (cot_getextplugins('statistics.user') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+    $event = 'statistics.user';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	$t->parse('MAIN.IS_USER');
 } else {
 	$t->parse('MAIN.IS_NOT_USER');
 }
+
 /* === Hook === */
-foreach (cot_getextplugins('statistics.tags') as $pl)
-{
-	include $pl;
+$event = 'statistics.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
+
 Cot::$L['plu_title'] = Cot::$L['Statistics'];

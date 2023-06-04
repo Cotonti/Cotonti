@@ -73,15 +73,14 @@ if (
     Cot::$usr['isadmin'] = true;
 }
 
-if ($m == 'edit' && $id > 0)
-{
-	if ($a == 'update' && $id > 0)
-	{
+if ($m == 'edit' && $id > 0) {
+	if ($a == 'update' && $id > 0) {
 		/* == Hook == */
-		foreach (cot_getextplugins('comments.edit.update.first') as $pl)
-		{
-			include $pl;
-		}
+        $event = 'comments.edit.update.first';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
 
 		$sql1 = Cot::$db->query("SELECT * FROM $db_com WHERE com_id=? AND com_code=? LIMIT 1", array($id, $item));
@@ -139,11 +138,13 @@ if ($m == 'edit' && $id > 0)
 				}
 				$sql2->closeCursor();
 			}
+
 			/* == Hook == */
-			foreach (cot_getextplugins('comments.edit.update.done') as $pl)
-			{
-				include $pl;
-			}
+            $event = 'comments.edit.update.done';
+            foreach (cot_getextplugins($event) as $pl) {
+                include $pl;
+            }
+            unset($event);
 			/* ===== */
 
 			//$com_grp = ($usr['isadmin']) ? 'adm' : 'users';//TODO backward compatibility need ?!
@@ -201,10 +202,11 @@ if ($m == 'edit' && $id > 0)
     }
 
 	/* == Hook == */
-	foreach (cot_getextplugins('comments.edit.tags') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'comments.edit.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	$t->parse('MAIN.COMMENTS_FORM_EDIT');
@@ -218,7 +220,7 @@ if ($a == 'send' && Cot::$usr['auth_write'])
 	$comarray = array();
 
 	// Extra fields
-    if(!empty(Cot::$extrafields[Cot::$db->com])) {
+    if (!empty(Cot::$extrafields[Cot::$db->com])) {
         foreach (Cot::$extrafields[Cot::$db->com] as $exfld) {
             $comarray['com_' . $exfld['field_name']] = cot_import_extrafields('rcomments' . $exfld['field_name'], $exfld,
                 'P', '', 'comments_');
@@ -226,27 +228,24 @@ if ($a == 'send' && Cot::$usr['auth_write'])
     }
 
 	/* == Hook == */
-	foreach (cot_getextplugins('comments.send.first') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'comments.send.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
-	if (empty($rname) && Cot::$usr['id'] == 0)
-	{
+	if (empty($rname) && Cot::$usr['id'] == 0) {
 		cot_error($L['com_authortooshort'], 'rname');
 	}
-	if (mb_strlen($rtext) < Cot::$cfg['plugin']['comments']['minsize'])
-	{
+	if (mb_strlen($rtext) < Cot::$cfg['plugin']['comments']['minsize']) {
 		cot_error($L['com_commenttooshort'], 'rtext');
 	}
-	if (Cot::$cfg['plugin']['comments']['commentsize'] && mb_strlen($rtext) > Cot::$cfg['plugin']['comments']['commentsize'])
-	{
+	if (Cot::$cfg['plugin']['comments']['commentsize'] && mb_strlen($rtext) > Cot::$cfg['plugin']['comments']['commentsize']) {
 		cot_error($L['com_commenttoolong'], 'rtext');
 	}
 
-	if (!cot_error_found())
-	{
+	if (!cot_error_found()) {
 		$comarray['com_area'] = $area;
 		$comarray['com_code'] = $item;
 		$comarray['com_author'] = ($usr['id'] == 0) ? $rname : $usr['name'];
@@ -286,12 +285,12 @@ if ($a == 'send' && Cot::$usr['auth_write'])
 		}
 
 		/* == Hook == */
-		foreach (cot_getextplugins('comments.send.new') as $pl)
-		{
-			include $pl;
-		}
+        $event = 'comments.send.new';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
-
 
 		cot_message($L['com_commentadded']);
 
@@ -323,29 +322,27 @@ elseif ($a == 'delete' && $usr['isadmin'])
 			cot_extrafield_unlinkfiles($row['com_' . $exfld['field_name']], $exfld);
 		}
 
-        if($cache && $row['com_area'] == 'page')
-        {
-            if ($cfg['cache_page'])
-            {
+        if ($cache && $row['com_area'] == 'page') {
+            if ($cfg['cache_page']) {
                 $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
-
             }
-            if ($cfg['cache_index']) $cache->page->clear('index');
+            if ($cfg['cache_index']) {
+                $cache->page->clear('index');
+            }
         }
 
 		/* == Hook == */
-		foreach (cot_getextplugins('comments.delete') as $pl)
-		{
-			include $pl;
-		}
+        $event = 'comments.delete';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
 
 		cot_log('Deleted comment #' . $id . ' in &quot;' . $item . '&quot;', 'comments', 'delete', 'done');
 	}
 	cot_redirect(cot_url($url_area, $url_params, '#comments', true));
-}
-elseif ($a == 'enable' && $usr['isadmin'])
-{
+} elseif ($a == 'enable' && $usr['isadmin']) {
 	$area = cot_import('area', 'P', 'ALP');
 	$state = cot_import('state', 'P', 'INT');
 }

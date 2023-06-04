@@ -21,9 +21,11 @@ if (empty($c) && !isset(Cot::$structure['page'][$c])) {
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', 'any');
 
 /* === Hook === */
-foreach (cot_getextplugins('page.add.first') as $pl) {
-	include $pl;
+$event = 'page.add.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 cot_block(Cot::$usr['auth_write']);
 
@@ -34,9 +36,11 @@ if ($a == 'add') {
 	cot_shield_protect();
 
 	/* === Hook === */
-	foreach (cot_getextplugins('page.add.add.first') as $pl) {
-		include $pl;
-	}
+    $event = 'page.add.add.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	$rpage = cot_page_import('POST', array(), Cot::$usr);
@@ -45,17 +49,21 @@ if ($a == 'add') {
 	cot_block(Cot::$usr['auth_write']);
 
 	/* === Hook === */
-	foreach (cot_getextplugins('page.add.add.import') as $pl) {
-		include $pl;
-	}
+    $event = 'page.add.add.import';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	cot_page_validate($rpage);
 
 	/* === Hook === */
-	foreach (cot_getextplugins('page.add.add.error') as $pl) {
-		include $pl;
-	}
+    $event = 'page.add.add.error';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	if (!cot_error_found()) {
@@ -151,9 +159,11 @@ if (!isset(Cot::$out['head'] )) {
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 
 /* === Hook === */
-foreach (cot_getextplugins('page.add.main') as $pl) {
-	include $pl;
+$event = 'page.add.main';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 require_once Cot::$cfg['system_dir'].'/header.php';
@@ -215,19 +225,21 @@ if(!empty(Cot::$extrafields[Cot::$db->pages])) {
 cot_display_messages($t);
 
 /* === Hook === */
-foreach (cot_getextplugins('page.add.tags') as $pl)
-{
-	include $pl;
+$event = 'page.add.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
-if (Cot::$usr['isadmin'])
-{
-	if (Cot::$cfg['page']['autovalidate']) $usr_can_publish = TRUE;
+if (Cot::$usr['isadmin']) {
+	if (Cot::$cfg['page']['autovalidate']) {
+        $usr_can_publish = true;
+    }
 	$t->parse('MAIN.ADMIN');
 }
 
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once Cot::$cfg['system_dir'].'/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';

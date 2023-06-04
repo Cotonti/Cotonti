@@ -29,10 +29,12 @@ function cot_structure_add($extension, $data, $is_module = true)
 	global $cache, $db, $db_structure;
 
 	/* === Hook === */
-	foreach (cot_getextplugins('structure.add') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'structure.add';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	if (!empty($data['structure_title']) && !empty($data['structure_code']) && !empty($data['structure_path']) && $data['structure_code'] != 'all') {
 		$sql = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area=? AND structure_code=?", [$extension, $data['structure_code']]);
@@ -78,10 +80,12 @@ function cot_structure_delete($extension, $code, $is_module = true)
 	global $db, $structure;
 
 	/* === Hook === */
-	foreach (cot_getextplugins('structure.delete') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'structure.delete';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
     $data = Cot::$db->query(
         'SELECT structure_code, structure_count FROM ' . Cot::$db->structure .
@@ -135,11 +139,14 @@ function cot_structure_delete($extension, $code, $is_module = true)
 function cot_structure_update($extension, $id, $old_data, $new_data, $is_module = true)
 {
 	global $cache, $db, $db_auth, $db_config, $db_structure;
-	/* === Hook === */
-	foreach (cot_getextplugins('structure.update') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+
+    /* === Hook === */
+    $event = 'structure.update';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	if ($old_data['structure_code'] != $new_data['structure_code']) {
 		if ($db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area=? AND structure_code=?", [$extension, $new_data['structure_code']])->fetchColumn() == 0) {
@@ -163,13 +170,22 @@ function cot_structure_update($extension, $id, $old_data, $new_data, $is_module 
 
 	$updated = $sql1 > 0;
 
-	if ($updated) cot_log("Structure. Edited category: '$extension' - '".$new_data['structure_code']."'", 'adm', 'structure', 'update');
+	if ($updated) {
+        cot_log(
+            "Structure. Edited category: '$extension' - '" . $new_data['structure_code'] . "'",
+            'adm',
+            'structure',
+            'update'
+        );
+    }
 
 	/* === Hook === */
-	foreach (cot_getextplugins('structure.update.done') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'structure.update.done';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	return $updated;
 }

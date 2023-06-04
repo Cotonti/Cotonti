@@ -20,10 +20,11 @@ $adminTitle = $L['adm_allpfs'];
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.pfs.allpfs.first') as $pl)
-{
-	include $pl;
+$event = 'admin.pfs.allpfs.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 unset($disp_list);
@@ -37,10 +38,10 @@ $sql_pfs = $db->query("SELECT DISTINCT p.pfs_userid, u.user_name, u.user_id, COU
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('admin.pfs.allpfs.loop');
+$eventLoop = 'admin.pfs.allpfs.loop';
+$extp = cot_getextplugins($eventLoop);
 /* ===== */
-foreach ($sql_pfs->fetchAll() as $row)
-{
+foreach ($sql_pfs->fetchAll() as $row) {
 	$row['user_name'] = ($row['user_id'] == 0) ? $L['SFS'] : $row['user_name'];
 	$row['user_id'] = ($row['user_id'] == 0) ? '0' : $row['user_id'];
 
@@ -51,11 +52,13 @@ foreach ($sql_pfs->fetchAll() as $row)
 	));
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+    $event = $eventLoop;
+	foreach ($extp as $pl) {
 		include $pl;
 	}
+    unset($event);
 	/* ===== */
+
 	$t->parse('MAIN.ALLPFS_ROW');
 	$ii++;
 }
@@ -69,8 +72,9 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.pfs.allpfs.tags') as $pl)
-{
-	include $pl;
+$event = 'admin.pfs.allpfs.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */

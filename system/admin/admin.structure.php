@@ -34,10 +34,12 @@ $adminTitle = Cot::$L['Structure'];
 $modules_structure = &$extension_structure; // for compatibility
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.structure.first') as $pl) {
-	include $pl;
+$event = 'admin.structure.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 if (empty($n)) {
 	$adminpath[] = [cot_url('admin', 'm=structure'), Cot::$L['Structure'],];
@@ -172,10 +174,12 @@ else
         $rtplcodearr = !empty($rtplcodearr) ? $rtplcodearr : [];
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.structure.update.first') as $pl) {
-			include $pl;
-		}
-		/* ===== */
+        $event = 'admin.structure.update.first';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+        /* ============ */
 
 		foreach ($rstructurecode as $i => $k) {
 			$oldrow = Cot::$db->query('SELECT * FROM ' . Cot::$db->structure .
@@ -254,10 +258,12 @@ else
 		}
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.structure.update.done') as $pl) {
-			include $pl;
-		}
-		/* ===== */
+        $event = 'admin.structure.update.done';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+        /* ============ */
 
 		if (!cot_error_found()) {
 			cot_message('Updated');
@@ -305,19 +311,26 @@ else
 		}
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.structure.add.first') as $pl) {
-			include $pl;
-		}
-		/* ===== */
+        $event = 'admin.structure.add.first';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+        /* ============ */
+
 		if (!cot_error_found()) {
 			$res = cot_structure_add($n, $rstructure, $is_module);
 			if ($res === true) {
 				cot_extrafield_movefiles();
+
 				/* === Hook === */
-				foreach (cot_getextplugins('admin.structure.add.done') as $pl) {
-					include $pl;
-				}
-				/* ===== */
+                $event = 'admin.structure.add.done';
+                foreach (cot_getextplugins($event) as $pl) {
+                    include $pl;
+                }
+                unset($event);
+                /* ============ */
+
 				cot_message('Added');
 			} elseif (is_array($res)) {
 				cot_error($res[0], $res[1]);
@@ -349,10 +362,13 @@ else
         if (!cot_error_found()) {
             if (cot_structure_delete($n, $c, $is_module)) {
                 /* === Hook === */
-                foreach (cot_getextplugins('admin.structure.delete.done') as $pl) {
+                $event = 'admin.structure.delete.done';
+                foreach (cot_getextplugins($event) as $pl) {
                     include $pl;
                 }
-                /* ===== */
+                unset($event);
+                /* ============ */
+
                 cot_message('Deleted');
             }
         }
@@ -379,10 +395,12 @@ else
 		}
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.structure.resync.done') as $pl) {
-			include $pl;
-		}
-		/* ===== */
+        $event = 'admin.structure.resync.done';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+        /* ============ */
 
 		$res ? cot_message('Resynced') : cot_message("Error: function $area_sync doesn't exist."); // TODO i18n
 		(Cot::$cache && Cot::$cfg['cache_'.$n]) && Cot::$cache->page->clear($n);
@@ -428,8 +446,9 @@ else
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
-	$extp = cot_getextplugins('admin.structure.loop');
-	/* ===== */
+    $eventLoop = 'admin.structure.loop';
+	$extp = cot_getextplugins($eventLoop);
+    /* ============ */
 	foreach ($sql->fetchAll() as $row) {
 		$ii++;
 
@@ -577,10 +596,12 @@ else
         }
 
 		/* === Hook - Part2 : Include === */
+        $event = $eventLoop;
 		foreach ($extp as $pl) {
 			include $pl;
 		}
-		/* ===== */
+        unset($event);
+        /* ============ */
 
 		if ($id || !empty($al)) {
 			require_once cot_incfile('configuration');
@@ -594,8 +615,9 @@ else
 			$optionslist = cot_config_list($is_module ? 'module' : 'plug', $n, $row['structure_code']);
 
 			/* === Hook - Part1 : Set === */
-			$extp = cot_getextplugins('admin.config.edit.loop');
-			/* ===== */
+            $eventLoop = 'admin.config.edit.loop';
+			$extp = cot_getextplugins($eventLoop);
+            /* ============ */
 			foreach ($optionslist as $row_c) {
 				list($title, $hint) = cot_config_titles($row_c['config_name'], $row_c['config_text']);
 
@@ -609,21 +631,27 @@ else
 						'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' => cot_url('admin', 'm=structure&n='.$n.'&d='.$durl.'&id='.$row['structure_id'].'&al='.$row['structure_code'].'&a=reset&v='.$row_c['config_name'].'&'.cot_xg()),
 						'ADMIN_CONFIG_ROW_CONFIG_MORE' => $hint
 					));
+
 					/* === Hook - Part2 : Include === */
+                    $event = $eventLoop;
 					foreach ($extp as $pl) {
 						include $pl;
 					}
-					/* ===== */
+                    unset($event);
+                    /* ============ */
+
 					$t->parse('MAIN.OPTIONS.CONFIG.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_OPTION');
 				}
 				$t->parse('MAIN.OPTIONS.CONFIG.ADMIN_CONFIG_ROW');
 			}
 
             /* === Hook  === */
-			foreach (cot_getextplugins('admin.config.edit.tags') as $pl) {
-				include $pl;
-			}
-			/* ===== */
+            $event = 'admin.config.edit.tags';
+            foreach (cot_getextplugins($event) as $pl) {
+                include $pl;
+            }
+            unset($event);
+            /* ============ */
 
 			$t->assign('CONFIG_HIDDEN', cot_inputbox('hidden', 'editconfig', $row['structure_code']));
 			$t->parse('MAIN.OPTIONS.CONFIG');
@@ -710,10 +738,12 @@ else
 	cot_display_messages($t);
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('admin.structure.tags') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'admin.structure.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	$t->parse('MAIN');
 	$adminmain = $t->text('MAIN');

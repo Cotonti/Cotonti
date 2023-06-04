@@ -19,44 +19,37 @@ $adminpath[] = array(cot_url('admin', 'm=cache'), $L['adm_internalcache']);
 $adminTitle = $L['adm_internalcache'];
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.cache.first') as $pl)
-{
-	include $pl;
+$event = 'admin.cache.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 if (!$cache) {
 	// Enforce cache loading
-	require_once $cfg['system_dir'].'/cache.php';
+	require_once $cfg['system_dir'] . '/cache.php';
 	$cache = new Cache();
 	$cache->init();
 }
 
-if ($a == 'purge' && $cache)
-{
-	if (cot_check_xg() && $cache->clear())
-	{
+if ($a == 'purge' && $cache) {
+	if (cot_check_xg() && $cache->clear()) {
 		$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
 		cot_message('adm_purgeall_done');
-	}
-	else
-	{
+	} else {
 		cot_error('Error');
 	}
-}
-elseif ($a == 'delete')
-{
+} elseif ($a == 'delete') {
 	cot_check_xg();
 	$name = $db->prep(cot_import('name', 'G', 'TXT'));
 
 	$db->delete($db_cache, "c_name = '$name'") ? cot_message('adm_delcacheitem') : cot_error('Error');
 }
 
-if ($cache && $cache->mem)
-{
+if ($cache && $cache->mem) {
 	$info = $cache->get_info();
-	if ($info['available'] < 0)
-	{
+	if ($info['available'] < 0) {
 		$info['available'] = '?';
 	}
 	$t->assign(array(
@@ -73,10 +66,10 @@ $cachesize = 0;
 $ii = 0;
 
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('admin.cache.loop');
-/* ===== */
-foreach ($sql->fetchAll() as $row)
-{
+$eventLoop = 'admin.cache.loop';
+$extp = cot_getextplugins($eventLoop);
+/* ============ */
+foreach ($sql->fetchAll() as $row) {
 	$row['c_value'] = htmlspecialchars($row['c_value']);
 	$row['size'] = mb_strlen($row['c_value']);
 	$cachesize += $row['size'];
@@ -91,11 +84,12 @@ foreach ($sql->fetchAll() as $row)
 	));
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+    $event = $eventLoop;
+    foreach ($extp as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	$t->parse('MAIN.ADMIN_CACHE_ROW');
 	$ii++;
@@ -111,11 +105,12 @@ $t->assign(array(
 cot_display_messages($t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.cache.tags') as $pl)
-{
-	include $pl;
+$event = 'admin.cache.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');

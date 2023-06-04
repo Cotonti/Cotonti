@@ -62,24 +62,23 @@ if ($inr == 'send' && $newrate >= 0 && $newrate <= 10 && $auth_write && $enabled
 		array($usr['id'], $area, $code))->fetchColumn();
 
 	/* == Hook for the plugins == */
-	foreach (cot_getextplugins('ratings.send.first') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+    $event = 'ratings.send.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
-	if (!$cfg['plugin']['ratings']['ratings_allowchange'] && $already_rated)
-	{
+	if (!Cot::$cfg['plugin']['ratings']['ratings_allowchange'] && $already_rated) {
 		// Can't vote twice
-            if (!COT_AJAX){
-		cot_die_message(403, TRUE);
-            }   
+        if (!COT_AJAX) {
+		    cot_die_message(403, TRUE);
+        }
 		exit;
 	}
 
 	// Delete previous votes if any
-	if ($already_rated)
-	{
+	if ($already_rated) {
 		$db->delete($db_rated, 'rated_userid = ? AND rated_area = ? AND rated_code = ?',
 			array($usr['id'], $area, $code));
 	}
@@ -112,36 +111,31 @@ if ($inr == 'send' && $newrate >= 0 && $newrate <= 10 && $auth_write && $enabled
 		WHERE rated_area = ? AND rated_code = ?",
 		array($area, $code))->fetchColumn();
         
-	if ($rating_voters > 0)
-	{
+	if ($rating_voters > 0) {
 		$ratingnewaverage = $db->query("SELECT AVG(rated_value) FROM $db_rated
 			WHERE rated_area = ? AND rated_code = ?",
 			array($area, $code))->fetchColumn();
-
-	}
-	else
-	{
+	} else {
 		$ratingnewaverage = 0;
 	}
 
-		$db->update($db_ratings, array('rating_average' => round($ratingnewaverage, 2)),
+	Cit::$db->update($db_ratings, array('rating_average' => round($ratingnewaverage, 2)),
 			'rating_area = ? AND rating_code = ?', array($area, $code));
         
 	/* == Hook for the plugins == */
-	foreach (cot_getextplugins('ratings.send.done') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+    $event = 'ratings.send.done';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	// Done, output results
-	if (!COT_AJAX && cot_url_check($_SERVER['HTTP_REFERER']))
-	{
+	if (!COT_AJAX && cot_url_check($_SERVER['HTTP_REFERER'])) {
 		cot_redirect($_SERVER['HTTP_REFERER']);
-	}
-	else
-	{
+	} else {
 		echo round($ratingnewaverage);
 	}
+
 	exit;
 }

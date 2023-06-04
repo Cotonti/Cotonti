@@ -44,24 +44,24 @@ function cot_comments_count($ext_name, $code, $row = array())
 	{
 		$cnt = (int) $row['com_count'];
 		$com_cache[$ext_name][$code] = $cnt;
-	}
-	else
-	{
+	} else {
 		$comments_join_columns = '';
 		$comments_join_tables = '';
 		$comments_join_where = '';
+
 		/* == Hook == */
-		foreach (cot_getextplugins('comments.count.query') as $pl)
-		{
-			include $pl;
-		}
+        $event = 'comments.count.query';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
+
 		$sql = $db->query("SELECT COUNT(*) $comments_join_columns
 			FROM $db_com $comments_join_tables
 			WHERE com_area = ? AND com_code = ? $comments_join_where",
 			array($ext_name, $code));
-		if ($sql->rowCount() == 1)
-		{
+		if ($sql->rowCount() == 1) {
 			$cnt = (int) $sql->fetchColumn();
 			$com_cache[$ext_name][$code] = $cnt;
 		}
@@ -125,19 +125,20 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	list($pg, $d, $durl) = cot_import_pagenav($d_var, $cfg['plugin']['comments']['maxcommentsperpage']);
 	$d = empty($d) ? 0 : (int) $d;
 
-	if ($auth_write && $enabled)
-	{
+	if ($auth_write && $enabled) {
 		require_once cot_incfile('forms');
 	}
 
 	$t = new XTemplate(cot_tplfile('comments', 'plug'));
 
 	/* == Hook == */
-	foreach (cot_getextplugins('comments.main') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'comments.main';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
+
     $editor = (Cot::$cfg['plugin']['comments']['markup']) ? 'input_textarea_minieditor' : '';
     $rtext = isset($rtext) ? $rtext : '';   // Todo obsolete?
 	$t->assign(array(
@@ -170,22 +171,20 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			}
 		}
 
-		$allowed_time = cot_build_timegap($sys['now'] - $cfg['plugin']['comments']['time'] * 60,
-			$sys['now']);
+		$allowed_time = cot_build_timegap($sys['now'] - $cfg['plugin']['comments']['time'] * 60, Cot::$sys['now']);
 		$com_hint = cot_rc('com_edithint', array('time' => $allowed_time));
 
 		/* == Hook == */
-		foreach (cot_getextplugins('comments.newcomment.tags') as $pl)
-		{
-			include $pl;
-		}
+        $event = 'comments.newcomment.tags';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
 
 		$usr['id'] == 0 && $t->parse('COMMENTS.COMMENTS_NEWCOMMENT.GUEST');
-		if ($usr['id'] == 0 && cot_check_messages() && $cache)
-		{
-			if($ext_name == 'page' && $cfg['cache_page'])
-			{
+		if ($usr['id'] == 0 && cot_check_messages() && $cache) {
+			if ($ext_name == 'page' && $cfg['cache_page']) {
 				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$cat]['path']));
 				$cfg['cache_page'] = false;
 			}
@@ -193,9 +192,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		cot_display_messages($t, 'COMMENTS.COMMENTS_NEWCOMMENT');
 		$t->assign('COMMENTS_FORM_HINT', $com_hint);
 		$t->parse('COMMENTS.COMMENTS_NEWCOMMENT');
-	}
-	else
-	{
+	} else {
 		$warning = $enabled ? $L['com_regonly'] : $L['com_closed'];
 		$t->assign('COMMENTS_CLOSED', $warning);
 		$t->parse('COMMENTS.COMMENTS_CLOSED');
@@ -205,28 +202,28 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	$comments_order = "com_id $order";
 
 	/* == Hook == */
-	foreach (cot_getextplugins('comments.query') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'comments.query';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	$sql = Cot::$db->query("SELECT c.*, u.* $comments_join_columns
 		FROM ".Cot::$db->com." AS c LEFT JOIN ".Cot::$db->users." AS u ON u.user_id = c.com_authorid $comments_join_tables
 		WHERE com_area = ? AND com_code = ? $comments_join_where ORDER BY $comments_order LIMIT ?, ?",
 		array($ext_name, $code, (int) $d, (int) $cfg['plugin']['comments']['maxcommentsperpage']));
-	if ($sql->rowCount() > 0 && $enabled)
-	{
+	if ($sql->rowCount() > 0 && $enabled) {
 		$i = $d;
 		$kk = 0;
 		$totalitems = cot_comments_count($ext_name, $code);
 
 		/* === Hook - Part1 : Set === */
-		$extp = cot_getextplugins('comments.loop');
+        $eventLoop = 'comments.loop';
+		$extp = cot_getextplugins($eventLoop);
 		/* ===== */
 
-		foreach ($sql->fetchAll() as $row)
-		{
+		foreach ($sql->fetchAll() as $row) {
 			$i++;
 			$kk++;
 			$com_admin = ($auth_admin) ? cot_rc('comments_code_admin', array(
@@ -250,8 +247,8 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 					'allowed_time' => $allowed_time
 				)) : '';
 
-            if($row['com_area'] == 'page') {
-                if(Cot::$usr['id'] == 0 && Cot::$usr['isowner_com'] && Cot::$cfg['cache_page']) {
+            if ($row['com_area'] == 'page') {
+                if (Cot::$usr['id'] == 0 && Cot::$usr['isowner_com'] && Cot::$cfg['cache_page']) {
                     Cot::$cfg['cache_page'] = Cot::$cfg['cache_index'] = false;
                 }
             }
@@ -290,10 +287,11 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 			$t->assign(cot_generate_usertags($row, 'COMMENTS_ROW_AUTHOR_', htmlspecialchars($row['com_author'])));
 
 			/* === Hook - Part2 : Include === */
-			foreach ($extp as $pl)
-			{
+            $event = $eventLoop;
+			foreach ($extp as $pl) {
 				include $pl;
 			}
+            unset($event);
 			/* ===== */
 
 			$t->parse('COMMENTS.COMMENTS_ROW');
@@ -322,13 +320,13 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		$t->parse('COMMENTS.COMMENTS_EMPTY');
 	}
 
-
-	/* == Hook == */
-	foreach (cot_getextplugins('comments.tags') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+    /* === Hook === */
+    $event = 'comments.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	$t->parse('COMMENTS');
 	$res_display = $t->text('COMMENTS');

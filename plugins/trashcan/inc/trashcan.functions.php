@@ -40,10 +40,12 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
     ];
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('trash.put.first') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'trash.put.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	$i = 0;
     $existId = 0;
@@ -85,11 +87,14 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
     } else {
         $id = ($i) ? $db->lastInsertId() : false;
     }
+
 	/* === Hook  === */
-	foreach (cot_getextplugins('trash.put.done') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'trash.put.done';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	return $id;
 }
@@ -191,10 +196,12 @@ function cot_trash_delete($id)
     }
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('trash.delete.first') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'trash.delete.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	$tsql = Cot::$db->query(
         'SELECT * FROM ' . Cot::$db->quoteTableName(Cot::$db->trash) . ' WHERE tr_id = ? LIMIT 1',
@@ -216,17 +223,20 @@ function cot_trash_delete($id)
     }
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('trash.delete.done') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+	$event = 'trash.delete.done';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	return true;
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('trashcan.api') as $pl)
-{
-	include $pl;
+$event = 'trashcan.api';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */

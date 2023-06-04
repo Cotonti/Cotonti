@@ -37,15 +37,17 @@ if (!$group) {
 
 // Check if the group is rightless
 if ($group['grp_skiprights'] > 0) {
-    cot_error("«{$group['grp_name']}». ".Cot::$L['adm_group_has_no_rights']);
+    cot_error("«{$group['grp_name']}». " . Cot::$L['adm_group_has_no_rights']);
     cot_redirect(cot_url('admin', ['m' => 'users'], '', true));
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.rights.first') as $pl) {
-	include $pl;
+$event = 'admin.rights.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 if ($a == 'update') {
 	$ncopyrightsconf = cot_import('ncopyrightsconf', 'P', 'BOL');
@@ -72,10 +74,12 @@ if ($a == 'update') {
     }
 
 	/* === Hook === */
-	foreach (cot_getextplugins('admin.rights.update') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'admin.rights.update';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	if ($ncopyrightsconf && !empty($cot_groups[$ncopyrightsfrom]['name']) && $g > 5) {
         Cot::$db->delete(Cot::$db->auth, "auth_groupid=$g");
@@ -128,10 +132,12 @@ if ($a == 'update') {
 $jj = 1;
 
 /* === Hook for the plugins === */
-foreach (cot_getextplugins('admin.rights.main') as $pl) {
-	include $pl;
+$event = 'admin.rights.main';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 $adminpath[] = [cot_url('admin', 'm=users'), Cot::$L['Users']];
 $adminpath[] = [cot_url('admin', 'm=users&n=edit&g='.$g), $cot_groups[$g]['name']];
@@ -257,10 +263,12 @@ $t->assign('RIGHTS_SECTION_TITLE', Cot::$L['Plugins']);
 $t->parse('MAIN.RIGHTS_SECTION');
 
 /* === Hook for the plugins === */
-foreach (cot_getextplugins('admin.rights.end') as $pl) {
-	include $pl;
+$event = 'admin.rights.end';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 cot_display_messages($t);
 
@@ -272,10 +280,12 @@ $t->assign([
 ]);
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.rights.tags') as $pl) {
-	include $pl;
+$event = 'admin.rights.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');

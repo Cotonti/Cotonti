@@ -260,41 +260,39 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 {
 	global $L, $R, $usr;
 
-    if (function_exists('cot_selectbox_date_custom'))
-    {
+    if (function_exists('cot_selectbox_date_custom')) {
         return cot_selectbox_date_custom($utime, $mode, $name, $max_year, $min_year, $usertimezone, $custom_rc);
     }
 
     $result = NULL;
 
     /* === Hook === */
-    foreach (cot_getextplugins('form.date') as $pl)
-    {
+    $event = 'form.date';
+    foreach (cot_getextplugins($event) as $pl) {
         include $pl;
     }
-    /* ===== */
+    unset($event);
+    /* ============ */
 
-    if($result !== NULL) return $result;
+    if ($result !== NULL) {
+        return $result;
+    }
 
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
 	$utime = ($usertimezone && $utime > 0) ? ($utime + $usr['timezone'] * 3600) : $utime;
 
-	if ($utime == 0)
-	{
+	if ($utime == 0) {
 		list($s_year, $s_month, $s_day, $s_hour, $s_minute) = array(null, null, null, null, null);
 		$buffered = cot_import_buffered($name, null);
-		if (is_array($buffered))
-		{
+		if (is_array($buffered)) {
 			$s_year   = $buffered['year'];
 			$s_month  = $buffered['month'];
 			$s_day    = $buffered['day'];
 			$s_hour   = $buffered['hour'] > 0 ? $buffered['hour'] : 1;
 			$s_minute = $buffered['minute'];
 		}
-	}
-	else
-	{
+	} else {
 		list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $utime));
 	}
 	$months = array();

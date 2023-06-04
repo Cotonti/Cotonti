@@ -34,10 +34,12 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.infos.tags') as $pl) {
-	include $pl;
+$event = 'admin.phpinfo.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');

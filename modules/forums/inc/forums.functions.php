@@ -115,9 +115,11 @@ function cot_forums_prunetopics($mode, $section, $param)
         $q = $topic['ft_id'];
 
         /* === Hook === */
-        foreach (cot_getextplugins('forums.functions.prunetopics') as $pl) {
+        $event = 'forums.functions.prunetopics';
+        foreach (cot_getextplugins($event) as $pl) {
             include $pl;
         }
+        unset($event);
         /* ===== */
 
         $posts = Cot::$db->query(

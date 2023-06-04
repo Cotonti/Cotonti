@@ -20,10 +20,12 @@ if (!$id || $id < 1) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('i18n.page.first') as $pl) {
-	include $pl;
+$event = 'i18n.page.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* =============*/
+unset($event);
+/* ============ */
 
 $stmt = Cot::$db->query('SELECT * FROM ' . Cot::$db->pages . ' WHERE page_id = ?', $id);
 
@@ -62,9 +64,11 @@ if ($id > 0 && $stmt->rowCount() == 1) {
             Cot::$db->insert(Cot::$db->i18n_pages, $pag_i18n);
 
 			/* === Hook === */
-			foreach (cot_getextplugins('i18n.page.add.done') as $pl) {
-				include $pl;
-			}
+            $event = 'i18n.page.add.done';
+            foreach (cot_getextplugins($event) as $pl) {
+                include $pl;
+            }
+            unset($event);
 			/* =============*/
 
 			cot_message('Added');
@@ -112,13 +116,16 @@ if ($id > 0 && $stmt->rowCount() == 1) {
 		cot_display_messages($t);
 
 		/* === Hook === */
-		foreach (cot_getextplugins('i18n.page.translate.tags') as $pl) {
-			include $pl;
-		}
+        $event = 'i18n.page.translate.tags';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* =============*/
 
     } elseif (
-        $a == 'edit' && !empty($pag_i18n)
+        $a == 'edit'
+        && !empty($pag_i18n)
 		&& ($i18n_admin || $i18n_edit || Cot::$usr['id'] == $pag_i18n['ipage_translatorid'])
     ) {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -141,9 +148,11 @@ if ($id > 0 && $stmt->rowCount() == 1) {
                 array($id, $i18n_locale));
 
 			/* === Hook === */
-			foreach (cot_getextplugins('i18n.page.edit.update') as $pl) {
-				include $pl;
-			}
+            $event = 'i18n.page.edit.update';
+            foreach (cot_getextplugins($event) as $pl) {
+                include $pl;
+            }
+            unset($event);
 			/* =============*/
 
 			cot_message('Updated');
@@ -172,9 +181,11 @@ if ($id > 0 && $stmt->rowCount() == 1) {
 		cot_display_messages($t);
 
 		/* === Hook === */
-		foreach (cot_getextplugins('i18n.page.edit.tags') as $pl) {
-			include $pl;
-		}
+        $event = 'i18n.page.edit.tags';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* =============*/
 
     } elseif ($a == 'delete' && ($i18n_admin || Cot::$usr['id'] == $pag['ipage_translatorid'])) {
@@ -193,10 +204,12 @@ if ($id > 0 && $stmt->rowCount() == 1) {
         $urlParams = [];
 
 		/* === Hook === */
-		foreach (cot_getextplugins('i18n.page.delete.done') as $pl) {
-			include $pl;
-		}
-		/* =============*/
+        $event = 'i18n.page.delete.done';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+		/* ============ */
 
 		cot_message(Cot::$L['Deleted']);
 

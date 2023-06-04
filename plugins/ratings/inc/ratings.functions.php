@@ -92,11 +92,12 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	$t = new XTemplate(cot_tplfile('ratings', 'plug'));
 
 	/* == Hook for the plugins == */
-	foreach (cot_getextplugins('ratings.main') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+    $event = 'ratings.main';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	// Get some extra information about votes
 	if ($item_has_rating) {
@@ -127,11 +128,12 @@ function cot_ratings_display($ext_name, $code, $cat = '', $readonly = false)
 	));
 
 	/* == Hook for the plugins == */
-	foreach (cot_getextplugins('ratings.tags') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+    $event = 'ratings.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	// Render voting form
 	$vote_block = ($auth_write && (!$already_voted || Cot::$cfg['plugin']['ratings']['ratings_allowchange'])) ? 'NOTVOTED.' : 'VOTED.';

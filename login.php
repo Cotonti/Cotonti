@@ -28,9 +28,11 @@ if ($logout) {
 	cot_check_xg();
 
 	/* === Hook === */
-	foreach (cot_getextplugins('users.logout') as $pl) {
+    $event = 'users.logout';
+	foreach (cot_getextplugins($event) as $pl) {
 		include $pl;
 	}
+    unset($event);
 	/* ===== */
 
 	if (Cot::$usr['id'] > 0) {
@@ -65,9 +67,11 @@ if ($logout) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('users.auth.first') as $pl) {
-	include $pl;
+$event = 'users.auth.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $rusername = '';
@@ -76,9 +80,11 @@ if ($a == 'check') {
 	cot_shield_protect();
 
 	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('users.auth.check') as $pl) {
-		include $pl;
-	}
+    $event = 'users.auth.check';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	$rusername = cot_import('rusername','P','TXT', 100);
@@ -147,9 +153,11 @@ if ($a == 'check') {
     }
 
 	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('users.auth.check.query') as $pl) {
-		include $pl;
-	}
+    $event = 'users.auth.check.query';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
     // For backwards compatibility. Will be removed in 1.0.0
@@ -263,9 +271,11 @@ if ($a == 'check') {
 		}
 
 		/* === Hook === */
-		foreach (cot_getextplugins('users.auth.check.done') as $pl) {
-			include $pl;
-		}
+        $event = 'users.auth.check.done';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
 
 		cot_uriredir_apply(Cot::$cfg['redirbkonlogin']);
@@ -277,9 +287,11 @@ if ($a == 'check') {
 		cot_log("Log in failed, user : " . $rusername, 'users', 'login', 'error');
 
 		/* === Hook === */
-		foreach (cot_getextplugins('users.auth.check.fail') as $pl) {
-			include $pl;
-		}
+        $event = 'users.auth.check.fail';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
 
 		cot_redirect(cot_url('message', 'msg=151', '', true));
@@ -287,9 +299,11 @@ if ($a == 'check') {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('users.auth.main') as $pl) {
-	include $pl;
+$event = 'users.auth.main';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 Cot::$out['subtitle'] = Cot::$L['aut_logintitle'];
@@ -319,9 +333,11 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-foreach (cot_getextplugins('users.auth.tags') as $pl) {
-	include $pl;
+$event = 'users.auth.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $t->parse('MAIN');

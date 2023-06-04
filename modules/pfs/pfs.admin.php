@@ -32,9 +32,11 @@ if ($s == 'allpfs') {
 	$adminTitle = Cot::$L['pfs_title'];
 
 	/* === Hook === */
-	foreach (cot_getextplugins('pfs.admin.first') as $pl) {
-		include $pl;
-	}
+    $event = 'pfs.admin.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	if (!function_exists('gd_info')) {
@@ -60,9 +62,11 @@ if ($s == 'allpfs') {
 	));
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('pfs.admin.tags') as $pl) {
-		include $pl;
-	}
+    $event = 'pfs.admin.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 }
 

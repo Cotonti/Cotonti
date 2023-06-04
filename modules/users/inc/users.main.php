@@ -54,12 +54,18 @@ $users_sort_blacklist = ['email', 'lastip', 'password', 'sid', 'sidtime', 'lostp
 $users_sort_whitelist = ['id', 'name', 'maingrp', 'country', 'timezone', 'birthdate', 'gender', 'lang', 'regdate', 'grplevel', 'grpname'];
 
 /* === Hook === */
-foreach (cot_getextplugins('users.first') as $pl) {
-	include $pl;
+$event = 'users.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
-if (empty($s) || in_array(mb_strtolower($s), $users_sort_blacklist) || !in_array($s, $users_sort_whitelist) && !$db->fieldExists($db_users, "user_$s")) {
+if (
+    empty($s)
+    || in_array(mb_strtolower($s), $users_sort_blacklist)
+    || (!in_array($s, $users_sort_whitelist) && !Cot::$db->fieldExists($db_users, "user_$s"))
+) {
 	$s = 'name';
 }
 if (!in_array($w, ['asc', 'desc'])) {
@@ -117,13 +123,19 @@ switch ($s) {
 $users_url_path = ['f' => $f, 'g' => $g, 'gm' => $gm, 's' => $s, 'w' => $w, 'sq' => $sq];
 
 /* === Hook === */
-foreach (cot_getextplugins('users.query') as $pl) {
-	include $pl;
+$event = 'users.query';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
-if (!isset($join_condition)) $join_condition = '';
-if (!isset($join_columns)) $join_columns = '';
+if (!isset($join_condition)) {
+    $join_condition = '';
+}
+if (!isset($join_columns)) {
+    $join_columns = '';
+}
 $totalusers = $db->query("SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where))->fetchColumn();
 
 // Disallow accessing non-existent pages
@@ -143,12 +155,14 @@ $pagenav = cot_pagenav('users', $users_url_path, $d, $totalusers, $cfg['users'][
 $out['subtitle'] = $L['Users'];
 
 /* === Hook === */
-foreach (cot_getextplugins('users.main') as $pl) {
-	include $pl;
+$event = 'users.main';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
-require_once $cfg['system_dir'] . '/header.php';
+require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($localskin);
 
@@ -201,9 +215,11 @@ $grpfilters = cot_selectbox(
 );
 
 /* === Hook === */
-foreach (cot_getextplugins('users.filters') as $pl) {
-	include $pl;
+$event = 'users.filters';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $t->assign([
@@ -265,7 +281,8 @@ foreach($cot_extrafields[$db_users] as $exfld) {
 $jj = 0;
 
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('users.loop');
+$eventLoop = 'users.loop';
+$extp = cot_getextplugins($eventLoop);
 /* ===== */
 
 foreach ($sqlusers as $urr) {
@@ -278,18 +295,22 @@ foreach ($sqlusers as $urr) {
 	$t->assign(cot_generate_usertags($urr, 'USERS_ROW_'));
 
 	/* === Hook - Part2 : Include === */
+    $event = $eventLoop;
 	foreach ($extp as $pl) {
 		include $pl;
 	}
+    unset($event);
 	/* ===== */
 
 	$t->parse('MAIN.USERS_ROW');
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('users.tags') as $pl) {
-	include $pl;
+$event = 'users.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $t->parse('MAIN');

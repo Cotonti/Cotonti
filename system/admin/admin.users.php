@@ -31,14 +31,14 @@ $g = cot_import('g', 'G', 'INT');
 $lincif_extfld = cot_auth('admin', 'a', 'A');
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.users.first') as $pl)
-{
-	include $pl;
+$event = 'admin.users.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
-if($n == 'add')
-{
+if ($n == 'add') {
 	$rgroups['grp_name'] = cot_import('rname', 'P', 'TXT');
 	$rgroups['grp_title'] = cot_import('rtitle', 'P', 'TXT');
 	$rgroups['grp_desc'] = cot_import('rdesc', 'P', 'TXT');
@@ -53,30 +53,30 @@ if($n == 'add')
 	$rcopyrightsfrom = cot_import('rcopyrightsfrom', 'P', 'INT');
 
 	/* === Hook === */
-	foreach (cot_getextplugins('admin.users.add.first') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+    $event = 'admin.users.add.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	cot_check(empty($rgroups['grp_name']), 'adm_groups_name_empty', 'rname');
 	cot_check(empty($rgroups['grp_title']), 'adm_groups_title_empty', 'rtitle');
 
-	if (!cot_error_found())
-	{
+	if (!cot_error_found()) {
 		$db->insert($db_groups, $rgroups);
 
 		$grp_id = $db->lastInsertId();
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.users.add') as $pl)
-		{
-			include $pl;
-		}
-		/* ===== */
+        $event = 'admin.users.add';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+        /* ============ */
 
-		if (!$rgroups['grp_skiprights'])
-		{
+		if (!$rgroups['grp_skiprights']) {
 			cot_auth_add_group($grp_id, $rcopyrightsfrom);
 		}
 
@@ -85,43 +85,37 @@ if($n == 'add')
 		cot_message('Added');
 	}
 	cot_redirect(cot_url('admin', 'm=users', '', true));
-}
-elseif($n == 'edit')
-{
-	if($a == 'update')
-	{
+} elseif ($n == 'edit') {
+	if ($a == 'update') {
 		$rgroups['grp_name'] = cot_import('rname', 'P', 'TXT');
 		$rgroups['grp_title'] = cot_import('rtitle', 'P', 'TXT');
 		$rgroups['grp_desc'] = cot_import('rdesc', 'P', 'TXT');
 		$rgroups['grp_icon'] = cot_import('ricon', 'P', 'TXT');
 		$rgroups['grp_alias'] = cot_import('ralias', 'P', 'TXT');
-		$rgroups['grp_level'] = (int)cot_import('rlevel', 'P', 'INT');
+		$rgroups['grp_level'] = (int) cot_import('rlevel', 'P', 'INT');
 		$rgroups['grp_disabled'] = cot_import('rdisabled', 'P', 'BOL') ? 1 : 0;
 		$rgroups['grp_maintenance'] = cot_import('rmtmode', 'P', 'BOL') ? 1 : 0;
 		$rgroups['grp_skiprights'] = cot_import('rskiprights', 'P', 'BOL') ? 1 : 0;
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.users.update') as $pl)
-		{
-			include $pl;
-		}
-		/* ===== */
+        $event = 'admin.users.update';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+        /* ============ */
 
 		cot_check(empty($rgroups['grp_name']), 'adm_groups_name_empty', 'rname');
 		cot_check(empty($rgroups['grp_title']), 'adm_groups_title_empty', 'rtitle');
 
-		if (!cot_error_found())
-		{
+		if (!cot_error_found()) {
 			$db->update($db_groups, $rgroups, "grp_id=$g");
 
 			$was_rightless = $db->query("SELECT grp_skiprights FROM $db_groups WHERE grp_id = $g")->fetchColumn();
-			if ($was_rightless && !$rgroups['grp_skiprights'])
-			{
+			if ($was_rightless && !$rgroups['grp_skiprights']) {
 				// Add missing rights from default group
 				cot_auth_add_group($grp_id, COT_GROUP_MEMBERS);
-			}
-			elseif (!$was_rightless && $rgroups['grp_skiprights'])
-			{
+			} elseif (!$was_rightless && $rgroups['grp_skiprights']) {
 				// Remove rights
 				cot_auth_remove_group($g);
 			}
@@ -131,29 +125,26 @@ elseif($n == 'edit')
 			cot_message('Updated');
 		}
         cot_redirect(cot_url('admin', array('m' => 'users', 'n'=>'edit', 'g'=>$g), '', true));
-
-	}
-	elseif($a == 'delete' && $g > 5)
-	{
+	} elseif ($a == 'delete' && $g > 5) {
 		$sql = $db->delete($db_groups, "grp_id='$g'");
 		$sql = $db->delete($db_groups_users, "gru_groupid='$g'");
 		cot_auth_remove_group($g);
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.users.delete') as $pl)
-		{
-			include $pl;
-		}
-		/* ===== */
+        $event = 'admin.users.delete';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+        /* ============ */
+
 		cot_auth_clear('all');
 		$cache && $cache->db->remove('cot_groups', 'system');
 
 		cot_message('Deleted');
 
         cot_redirect(cot_url('admin', 'm=users', '', true));
-	}
-	else
-	{
+	} else {
        	$showdefault = false;
 
 	    $sql = $db->query("SELECT * FROM $db_groups WHERE grp_id='$g'");
@@ -190,33 +181,32 @@ elseif($n == 'edit')
 		));
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.users.edit.tags') as $pl)
-		{
-			include $pl;
-		}
-		/* ===== */
+        $event = 'admin.users.edit.tags';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+        /* ============ */
+
 		$t->parse('MAIN.ADMIN_USERS_EDIT');
 	}
 }
 
-if(!isset($showdefault) || $showdefault == true)
-{
+if (!isset($showdefault) || $showdefault == true) {
 	$sql = $db->query("SELECT DISTINCT(gru_groupid), COUNT(*) FROM $db_groups_users WHERE 1 GROUP BY gru_groupid");
-	while($row = $sql->fetch())
-	{
+	while ($row = $sql->fetch()) {
 		$members[$row['gru_groupid']] = $row['COUNT(*)'];
 	}
 	$sql->closeCursor();
 
 	$sql = $db->query("SELECT * FROM $db_groups WHERE 1 ORDER BY grp_level DESC, grp_id DESC");
 
-	if($sql->rowCount() > 0)
-	{
+	if ($sql->rowCount() > 0) {
 		/* === Hook - Part1 : Set === */
-		$extp = cot_getextplugins('admin.users.row.tags');
-		/* ===== */
-		foreach ($sql->fetchAll() as $row)
-		{
+        $eventLoop = 'admin.users.row.tags';
+		$extp = cot_getextplugins($eventLoop);
+        /* ============ */
+		foreach ($sql->fetchAll() as $row) {
 			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
 			$grp_title = isset($L['users_grp_' . $row['grp_id'] . '_title']) ? $L['users_grp_' . $row['grp_id'] . '_title'] : htmlspecialchars($row['grp_title']);
 			$grp_desc = isset($L['users_grp_' . $row['grp_id'] . '_desc']) ? $L['users_grp_' . $row['grp_id'] . '_desc'] : htmlspecialchars($row['grp_desc']);
@@ -232,12 +222,15 @@ if(!isset($showdefault) || $showdefault == true)
 				'ADMIN_USERS_ROW_GRP_RIGHTS_URL' => cot_url('admin', 'm=rights&g='.$row['grp_id']),
 				'ADMIN_USERS_ROW_GRP_JUMPTO_URL' => cot_url('users', 'g='.$row['grp_id'])
 			));
+
 			/* === Hook - Part2 : Include === */
-			foreach ($extp as $pl)
-			{
+            $event = $eventLoop;
+			foreach ($extp as $pl) {
 				include $pl;
 			}
-			/* ===== */
+            unset($event);
+            /* ============ */
+
 			$t->parse('MAIN.ADMIN_USERS_DEFAULT.USERS_ROW');
 		}
 	}
@@ -257,28 +250,31 @@ if(!isset($showdefault) || $showdefault == true)
 	));
 
 	/* === Hook === */
-	foreach (cot_getextplugins('admin.users.add.tags') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+    $event = 'admin.users.add.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
+
 	$t->parse('MAIN.ADMIN_USERS_DEFAULT');
 }
 
 $t->assign(array(
 	'ADMIN_USERS_URL' => cot_url('admin', 'm=config&n=edit&o=module&p=users'),
-	'ADMIN_USERS_EXTRAFIELDS_URL' => cot_url('admin', 'm=extrafields&n='.$db_users)
+	'ADMIN_USERS_EXTRAFIELDS_URL' => cot_url('admin', 'm=extrafields&n=' . $db_users)
 ));
 
 
 cot_display_messages($t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.users.tags') as $pl)
-{
-	include $pl;
+$event = 'admin.users.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');

@@ -110,17 +110,23 @@ function cot_build_extrafields($name, $extrafield, $data)
 			}
 			$result = cot_checklistbox($data, $name, $options_values, $options_titles, '', '', true, $extrafield['field_html']);
 			break;
+
 		case 'file':
 			$extrafield['field_params'] = (!empty($extrafield['field_params'])) ? $extrafield['field_params'] : $cfg['extrafield_files_dir'];
 			$extrafield['field_params'] .= (mb_substr($extrafield['field_params'], -1) == '/') ? '' : '/';
 			$data_filepath = $extrafield['field_params'] . htmlspecialchars($data);
+
 			/* === Hook === */
-			foreach (cot_getextplugins('extrafields.build.file') as $pl) {
-				include $pl;
-			}
-			/* ===== */
+            $event = 'extrafields.build.file';
+            foreach (cot_getextplugins($event) as $pl) {
+                include $pl;
+            }
+            unset($event);
+            /* ============ */
+
 			$result = cot_filebox($name, htmlspecialchars($data), $data_filepath, 'rdel_' . $name, '', $extrafield['field_html']);
 			break;
+
 		default:
 			$result = '';
 			break;
@@ -303,10 +309,12 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 			}
 
 			/* === Hook === */
-			foreach (cot_getextplugins('extrafields.import.file.first') as $pl) {
-				include $pl;
-			}
-			/* ===== */
+            $event = 'extrafields.import.file.first';
+            foreach (cot_getextplugins($event) as $pl) {
+                include $pl;
+            }
+            unset($event);
+            /* ============ */
 
 			if (is_array($import) && !$import['error'] && !empty($import['name'])) {
 				$fname = mb_substr($import['name'], 0, mb_strrpos($import['name'], '.'));
@@ -316,10 +324,8 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 				$extrafield['field_variants'] = str_replace([' , ', ', ', ' ,'], ',', mb_strtolower($extrafield['field_variants']));
 				$ext_array = explode(",", trim($extrafield['field_variants']));
 
-				if (empty($extrafield['field_variants']) || in_array($ext, $ext_array))
-				{
-					if ($lang != 'en' && file_exists(cot_langfile('translit', 'core')))
-					{
+				if (empty($extrafield['field_variants']) || in_array($ext, $ext_array)) {
+					if ($lang != 'en' && file_exists(cot_langfile('translit', 'core'))) {
 						require_once cot_langfile('translit', 'core');
 						$fname = (is_array($cot_translit)) ? strtr($fname, $cot_translit) : '';
 					}
@@ -345,10 +351,12 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 					$file['new'] = (!$import['delete']) ? $extrafield['field_params'].$fname : '';
 
 					/* === Hook === */
-					foreach (cot_getextplugins('extrafields.import.file.done') as $pl) {
-						include $pl;
-					}
-					/* ===== */
+                    $event = 'extrafields.import.file.done';
+                    foreach (cot_getextplugins($event) as $pl) {
+                        include $pl;
+                    }
+                    unset($event);
+                    /* ============ */
 
 					$exfldsize[$extrafield['field_name']] = $import['size'];
 					$uploadfiles[] = $file;
@@ -880,10 +888,13 @@ function cot_extrafield_movefiles()
 	if (is_array($uploadfiles)) {
 		foreach ($uploadfiles as $uploadfile) {
 			/* === Hook === */
-			foreach (cot_getextplugins('extrafields.movefiles') as $pl) {
-				include $pl;
-			}
-			/* ===== */
+            $event = 'extrafields.movefiles';
+            foreach (cot_getextplugins($event) as $pl) {
+                include $pl;
+            }
+            unset($event);
+            /* ============ */
+
 			if (!empty($uploadfile['old']) && file_exists($uploadfile['old'])) {
 				@unlink($uploadfile['old']);
 			}
@@ -903,17 +914,19 @@ function cot_extrafield_unlinkfiles($fielddata, $extrafield)
 {
 	global $cfg, $pl;
 
-	if ($extrafield['field_type'] == 'file')
-	{
+	if ($extrafield['field_type'] == 'file') {
 		$extrafield['field_params'] = (!empty($extrafield['field_params'])) ? $extrafield['field_params'] : $cfg['extrafield_files_dir'];
 		$extrafield['field_params'] .= (mb_substr($extrafield['field_params'], -1) == '/') ? '' : '/';
-		if ($extrafield['field_params'].$fielddata) {
+		if ($extrafield['field_params'] . $fielddata) {
 			/* === Hook === */
-			foreach (cot_getextplugins('extrafields.unlinkfiles') as $pl) {
-				include $pl;
-			}
-			/* ===== */
-			@unlink($extrafield['field_params'].$fielddata);
+            $event = 'extrafields.unlinkfiles';
+            foreach (cot_getextplugins($event) as $pl) {
+                include $pl;
+            }
+            unset($event);
+            /* ============ */
+
+			@unlink($extrafield['field_params'] . $fielddata);
 		}
 	}
 }

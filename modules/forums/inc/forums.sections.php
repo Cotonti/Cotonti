@@ -10,9 +10,11 @@ defined('COT_CODE') or die('Wrong URL');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('forums', 'any');
 /* === Hook === */
-foreach (cot_getextplugins('forums.sections.rights') as $pl) {
-	include $pl;
+$event = 'forums.sections.rights';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 cot_block(Cot::$usr['auth_read']);
 
@@ -22,9 +24,11 @@ $c = cot_import('c','G','TXT');
 Cot::$sys['sublocation'] = Cot::$L['Home'];
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.sections.first') as $pl) {
-	include $pl;
+$event = 'forums.sections.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 if ($n == 'markall' && Cot::$usr['id'] > 0) {
@@ -112,9 +116,11 @@ $secact_max = count($cot_act) > 0 ? (max($cot_act)) : 0;
 Cot::$out['subtitle'] = Cot::$L['Forums'];
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.sections.main') as $pl) {
-	include $pl;
+$event = 'forums.sections.main';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
@@ -133,15 +139,18 @@ $t->assign(array(
 
 $xx = 0;
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('forums.sections.loop');
+$eventLoop = 'forums.sections.loop';
+$extp = cot_getextplugins($eventLoop);
 /* ===== */
 
 /* === Hook - Part1 : Set === */
-$extps = cot_getextplugins('forums.sections.loop.sections');
+$eventLoopSections = 'forums.sections.loop.sections';
+$extps = cot_getextplugins($eventLoopSections);
 /* ===== */
 
 /* === Hook - Part1 : Set === */
-$extpss = cot_getextplugins('forums.sections.loop.subsections');
+$eventLoopSubSections = 'forums.sections.loop.subsections';
+$extpss = cot_getextplugins($eventLoopSubSections);
 /* ===== */
 
 foreach ($fstlvl as $x) {
@@ -162,9 +171,11 @@ foreach ($fstlvl as $x) {
 						'FORUMS_SECTIONS_ROW_NUM' => $zz,
 					));
 					/* === Hook - Part2 : Include === */
+                    $event = $eventLoopSubSections;
 					foreach ($extpss as $pl) {
 						include $pl;
 					}
+                    unset($event);
 					/* ===== */
 					$t->parse('MAIN.FORUMS_SECTIONS.CAT.SECTION.SUBSECTION');
 				}
@@ -189,10 +200,11 @@ foreach ($fstlvl as $x) {
 				'FORUMS_SECTIONS_ROW_NUM' => $yy,
 			));
 			/* === Hook - Part2 : Include === */
-			foreach ($extps as $pl)
-			{
+            $event = $eventLoopSections;
+			foreach ($extps as $pl) {
 				include $pl;
 			}
+            unset($event);
 			/* ===== */
 			$t->parse('MAIN.FORUMS_SECTIONS.CAT.SECTION');
 		}
@@ -213,18 +225,22 @@ foreach ($fstlvl as $x) {
 		'FORUMS_SECTIONS_ROW_NUM' => $xx,
 	));
 	/* === Hook - Part2 : Include === */
+    $event = $eventLoop;
 	foreach ($extp as $pl) {
 		include $pl;
 	}
+    unset($event);
 	/* ===== */
 	$t->parse('MAIN.FORUMS_SECTIONS.CAT');
 }
 $t->parse('MAIN.FORUMS_SECTIONS');
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.sections.tags') as $pl) {
-	include $pl;
+$event = 'forums.sections.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $t->parse('MAIN');

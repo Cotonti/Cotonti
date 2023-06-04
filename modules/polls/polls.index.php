@@ -31,8 +31,10 @@ if (Cot::$cfg['polls']['maxpolls'] > 0) {
         " ORDER by $sqlmode LIMIT " . Cot::$cfg['polls']['maxpolls']);
 
 	/* === Hook - Part1 === */
-	$extp = cot_getextplugins('polls.index.tags');
+    $eventLoop = 'polls.index.tags';
+	$extp = cot_getextplugins($eventLoop);
 	/* ===== */
+
     $res = 0;
 	foreach ($sql_polls->fetchAll() as $row_p) {
 		$res++;
@@ -45,9 +47,11 @@ if (Cot::$cfg['polls']['maxpolls'] > 0) {
 		));
 
 		/* === Hook - Part2 === */
+        $event = $eventLoop;
 		foreach ($extp as $pl) {
 			include $pl;
 		}
+        unset($event);
 		/* ===== */
 
 		$indexpolls->parse('INDEXPOLLS.POLL');

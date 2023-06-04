@@ -95,10 +95,12 @@ if (
 
 if ($mode != 'pages' || $mode != 'forums') {
 	/* === Hook === */
-	foreach (cot_getextplugins('recentitems.tags') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'recentitems.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+	/* ============ */
 }
 
 Cot::$out['subtitle'] = Cot::$L['recentitems_title'];

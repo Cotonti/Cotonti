@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=admin.structure.tags
-Tags=admin.structure.tpl:{ADMIN_STRUCTURE_I18N_LINK}
+Tags=admin.structure.tpl:{ADMIN_STRUCTURE_I18N_LINK},{ADMIN_STRUCTURE_I18N_URL}
 [END_COT_EXT]
 ==================== */
 

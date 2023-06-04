@@ -76,28 +76,30 @@ if ((!Cot::$cfg['easypagenav'] && $durl > 0 && $maxuserssperpage > 0 && $durl % 
 $pagenav = cot_pagenav('whosonline', array('d' => $durl), $d, $totallines, $maxuserssperpage);
 
 /* === Hooks - Part1 : Set === */
-$users_loop_hook = cot_getextplugins('whosonline.users.loop');
-$guests_loop_hook = cot_getextplugins('whosonline.guests.loop');
-/* ===== */
+$eventUsersLoop = 'whosonline.users.loop';
+$usersLoopHook = cot_getextplugins($eventUsersLoop);
+$eventGuestsLoop = 'whosonline.guests.loop';
+$guestsLoopHook = cot_getextplugins($eventGuestsLoop);
+/* ============ */
+
 $guest_start_num = 0;
 if ($maxuserssperpage) {
-	$fpu = $who_users/$maxuserssperpage;
+	$fpu = $who_users / $maxuserssperpage;
 	if ($durl > ceil($fpu)) {
 		$guest_start_num = ($maxuserssperpage - ($who_users % $maxuserssperpage)) + ($durl -1 - ceil($fpu)) * $maxuserssperpage;
 	}
 }
-foreach ($sql_users->fetchAll() as $row)
-{
-	if($hiddenusers && in_array($row['user_id'], $hiddenusers))
-	{
-		if(cot_auth('plug', 'hiddengroups', '1'))
-		{
+
+foreach ($sql_users->fetchAll() as $row) {
+	if ($hiddenusers && in_array($row['user_id'], $hiddenusers)) {
+		if (cot_auth('plug', 'hiddengroups', '1')) {
 			$t->assign('USER_HIDDEN', Cot::$L['Hidden']);
-		}
-		else continue;
+		} else {
+            continue;
+        }
 	}
-	if ($row['is_user'])
-	{
+
+	if ($row['is_user']) {
 		$count_users++;
 		$url_ipsearch = cot_url('admin',	'm=other&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg());
 		$t->assign(array(
@@ -109,16 +111,17 @@ foreach ($sql_users->fetchAll() as $row)
 				'USER_LASTSEEN' => cot_build_timegap($row['online_lastseen'], Cot::$sys['now'])
 		));
 		$t->assign(cot_generate_usertags($row, 'USER_'));
+
 		/* === Hook - Part2 : Include === */
-		foreach ($users_loop_hook as $pl)
-		{
+        $event = $eventUsersLoop;
+		foreach ($usersLoopHook as $pl) {
 			include $pl;
 		}
-		/* ===== */
+        unset($event);
+        /* ============ */
+
 		$t->parse('MAIN.USERS');
-	}
-	else
-	{
+	} else {
 		$count_guests++;
 		$url_ipsearch = cot_url('admin', 'm=other&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg());
 		$t->assign(array(
@@ -129,12 +132,15 @@ foreach ($sql_users->fetchAll() as $row)
 				'GUEST_NUMBER' => $count_guests + $guest_start_num,
 				'GUEST_LASTSEEN' => cot_build_timegap($row['online_lastseen'], Cot::$sys['now'])
 		));
+
 		/* === Hook - Part2 : Include === */
-		foreach ($guests_loop_hook as $pl)
-		{
+        $event = $eventGuestsLoop;
+		foreach ($guestsLoopHook as $pl) {
 			include $pl;
 		}
-		/* ===== */
+        unset($event);
+        /* ============ */
+
 		$t->parse('MAIN.GUESTS');
 	}
 	//if (($count_users + $count_guests) >= $maxuserssperpage) break;

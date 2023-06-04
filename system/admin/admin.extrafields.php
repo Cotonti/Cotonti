@@ -47,10 +47,12 @@ $maxperpage = (is_int(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperpage'
 $t = new XTemplate(cot_tplfile(['admin', 'extrafields', $n], 'core'));
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.extrafields.first') as $pl) {
-	include $pl;
+$event = 'admin.extrafields.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 if (empty($n) || in_array($n, $extra_blacklist)) {
 	// no params
@@ -100,10 +102,12 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 	$t->assign('ADMIN_EXTRAFIELDS_ALLTABLES', cot_url('admin', 'm=extrafields&alltables=1'));
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('admin.extrafields.tablelist.tags') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'admin.extrafields.tablelist.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	$t->parse('MAIN.TABLELIST');
 } else {
@@ -129,10 +133,12 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 		$field['field_enabled'] = 1;
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.extrafields.add') as $pl) {
-			include $pl;
-		}
-		/* ===== */
+        $event = 'admin.extrafields.add';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+        /* ============ */
 
 		if (!empty($field['field_name']) && !empty($field['field_type'])) {
 			if (
@@ -171,8 +177,9 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 		$field_enabled = cot_import('field_enabled', 'P', 'ARR');
 
 		/* === Hook - Part1 : Set === */
-		$extp = cot_getextplugins('admin.extrafields.update');
-		/* ===== */
+        $eventLoop = 'admin.extrafields.update';
+		$extp = cot_getextplugins($eventLoop);
+        /* ============ */
 		if (is_array($field_name)) {
 			foreach ($field_name as $k => $v) {
 				$field['field_name'] = cot_import($field_name[$k], 'D', 'ALP');
@@ -196,10 +203,12 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
                     && !empty($field['field_type'])
                 ) {
 					/* === Hook - Part2 : Include === */
+                    $event = $eventLoop;
 					foreach ($extp as $pl) {
 						include $pl;
 					}
-					/* ===== */
+                    unset($event);
+                    /* ============ */
 
 					$fieldresult = cot_extrafield_update(
                         $n,
@@ -228,10 +237,12 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
         cot_redirect(cot_url('admin', ['m' => 'extrafields', 'n' => $n, 'd' => $durl,], '', true));
 	} elseif ($a == 'del' && isset($name)) {
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.extrafields.delete') as $pl) {
-			include $pl;
-		}
-		/* ===== */
+        $event = 'admin.extrafields.delete';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+        /* ============ */
 
 		if (cot_extrafield_remove($n, $name)) {
 			cot_message('adm_extrafield_removed');
@@ -268,8 +279,9 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
-	$extp = cot_getextplugins('admin.extrafields.loop');
-	/* ===== */
+    $eventLoop = 'admin.extrafields.loop';
+	$extp = cot_getextplugins($eventLoop);
+    /* ============ */
     $cols = 55;
 	foreach ($res->fetchAll() as $row) {
 		$ii++;
@@ -333,10 +345,12 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 		]);
 
 		/* === Hook - Part2 : Include === */
+        $event = $eventLoop;
 		foreach ($extp as $pl) {
 			include $pl;
 		}
-		/* ===== */
+        unset($event);
+        /* ============ */
 
 		$t->parse('MAIN.TABLE.EXTRAFIELDS_ROW');
 	}
@@ -388,11 +402,13 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 		}
 	}
 
-	/* === Hook  === */
-	foreach (cot_getextplugins('admin.extrafields.tags') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+	/* === Hook === */
+    $event = 'admin.extrafields.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	$t->parse('MAIN.TABLE');
 }

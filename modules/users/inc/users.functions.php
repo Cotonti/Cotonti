@@ -105,24 +105,25 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 	$ruser['user_lastip'] = empty($ruser['user_lastip']) ? Cot::$usr['ip'] : $ruser['user_lastip'];
 	$ruser['user_token'] = cot_unique(16);
 
-	if (!$db->insert($db_users, $ruser)) return false;
+	if (!$db->insert($db_users, $ruser)) {
+        return false;
+    }
 
 	$userid = $db->lastInsertId();
 
-	$db->insert($db_groups_users, array('gru_userid' => (int)$userid, 'gru_groupid' => (int)$ruser['user_maingrp']));
+	$db->insert($db_groups_users, array('gru_userid' => (int) $userid, 'gru_groupid' => (int) $ruser['user_maingrp']));
 	cot_extrafield_movefiles();
 
 	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('users.adduser.done') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'users.adduser.done';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
-	if ($ruser['user_maingrp'] == 2 && $sendemail)
-	{
-		if (Cot::$cfg['users']['regrequireadmin'])
-		{
+	if ($ruser['user_maingrp'] == COT_GROUP_INACTIVE && $sendemail) {
+		if (Cot::$cfg['users']['regrequireadmin']) {
 			$subject = $L['aut_regrequesttitle'];
 			$body = sprintf($L['aut_regrequest'], $ruser['user_name']);
 			$body .= "\n\n".$L['aut_contactadmin'];
@@ -132,9 +133,7 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
 			$inactive = Cot::$cfg['mainurl'].'/'.cot_url('users', 'gm=2&s=regdate&w=desc', '', true);
 			$body = sprintf($L['aut_regreqnotice'], $ruser['user_name'], $inactive);
 			cot_mail(Cot::$cfg['adminemail'], $subject, $body);
-		}
-		else
-		{
+		} else {
 			$subject = $L['Registration'];
 			$activate = Cot::$cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=1', '', true);
 			$deactivate = Cot::$cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&token='.$ruser['user_token'].'&v='.$ruser['user_lostpass'].'&y=0', '', true);

@@ -42,19 +42,23 @@ list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 $info = ($a == 'info') ? 1 : 0;
 
 /* === Hook === */
-foreach (cot_getextplugins('trashcan.admin.first') as $pl) {
-	include $pl;
+$event = 'trashcan.admin.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 if ($a == 'wipe') {
 	cot_check_xg();
 
 	/* === Hook === */
-	foreach (cot_getextplugins('trashcan.admin.wipe') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'trashcan.admin.wipe';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	cot_trash_delete($id);
 	cot_message('adm_trashcan_deleted');
@@ -64,10 +68,12 @@ if ($a == 'wipe') {
 	cot_check_xg();
 
 	/* === Hook === */
-	foreach (cot_getextplugins('trashcan.admin.wipeall') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'trashcan.admin.wipeall';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
     $sqlToPrune = Cot::$db->query('SELECT tr_id FROM ' . Cot::$db->quoteTableName(Cot::$db->trash));
     $pruned = 0;
@@ -84,11 +90,15 @@ if ($a == 'wipe') {
 
 } elseif ($a == 'restore') {
 	cot_check_xg();
+
 	/* === Hook === */
-	foreach (cot_getextplugins('trashcan.admin.restore') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'trashcan.admin.restore';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
+
 	cot_trash_restore($id);
 
 	cot_message('adm_trashcan_restored');
@@ -107,13 +117,12 @@ $sql = $db->query("SELECT t.*, u.user_name FROM $db_trash AS t
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('trashcan.admin.loop');
-/* ===== */
-foreach ($sql->fetchAll() as $row)
-{
+$eventLoop = 'trashcan.admin.loop';
+$extp = cot_getextplugins($eventLoop);
+/* ============ */
+foreach ($sql->fetchAll() as $row) {
 	$ii++;
-	switch($row['tr_type'])
-	{
+	switch($row['tr_type']) {
 		case 'comment':
 			$icon = Cot::$R['admin_icon_comments'];
 			$typestr = Cot::$L['comments_comment'];
@@ -169,10 +178,12 @@ foreach ($sql->fetchAll() as $row)
 	));
 
 	/* === Hook - Part2 : Include === */
+    $event = $eventLoop;
 	foreach ($extp as $pl) {
 		include $pl;
 	}
-	/* ===== */
+    unset($event);
+    /* ============ */
 
 	if ($info) {
 		$adminpath[] = array(cot_url('admin', 'm=other&p=trashcan&a=info&id='.$id), $row['tr_title']);
@@ -209,11 +220,12 @@ $tr_t->assign(array(
 cot_display_messages($tr_t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('trashcan.admin.tags') as $pl)
-{
-	include $pl;
+$event = 'trashcan.admin.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 $tr_t->parse('MAIN');
 

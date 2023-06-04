@@ -21,10 +21,12 @@ $join_columns = isset($join_columns) ? $join_columns : '';
 $join_condition = isset($join_condition) ? $join_condition : '';
 
 /* === Hook === */
-foreach (cot_getextplugins('page.first') as $pl) {
+$event = 'page.first';
+foreach (cot_getextplugins($event) as $pl) {
 	include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 if ($id > 0 || !empty($al)) {
 	$where = (!empty($al)) ? "p.page_alias='".$al."'" : 'p.page_id='.$id;
@@ -85,17 +87,19 @@ if (mb_substr($pag['page_text'], 0, 6) == 'redir:') {
 }
 if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && Cot::$usr['auth_download']) || $pag['page_file'] == 1)) {
 	/* === Hook === */
-	foreach (cot_getextplugins('page.download.first') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'page.download.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	// Hotlinking protection
 	if (
-        isset($_SESSION['dl']) &&
-        $_SESSION['dl'] != $id &&
-        isset($_SESSION['cat']) &&
-        $_SESSION['cat'] != $pag['page_cat']
+        isset($_SESSION['dl'])
+        && $_SESSION['dl'] != $id
+        && isset($_SESSION['cat'])
+        && $_SESSION['cat'] != $pag['page_cat']
     ) {
 		cot_redirect($pag['page_pageurl']);
 	}
@@ -141,14 +145,14 @@ $mskin = cot_tplfile(array('page', $cat['tpl']));
 Cot::$env['last_modified'] = $pag['page_updated'];
 
 /* === Hook === */
-foreach (cot_getextplugins('page.main') as $pl)
-{
-	include $pl;
+$event = 'page.main';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
-if ($pag['page_file'])
-{
+if ($pag['page_file']) {
 	unset($_SESSION['dl']);
 	$_SESSION['dl'] = $id;
 }
@@ -283,10 +287,13 @@ if ($pag['page_totaltabs'] > 1)
 cot_display_messages($t);
 
 /* === Hook === */
-foreach (cot_getextplugins('page.tags') as $pl) {
-	include $pl;
+$event = 'page.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
+
 if (Cot::$usr['isadmin'] || Cot::$usr['id'] == $pag['page_ownerid']) {
 	$t->parse('MAIN.PAGE_ADMIN');
 }

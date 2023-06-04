@@ -21,40 +21,31 @@ $adminpath[] = array(cot_url('admin', 'm=cache&s=disk'), $L['adm_diskcache']);
 $adminTitle = $L['adm_diskcache'];
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.cache.disk.first') as $pl)
-{
-	include $pl;
+$event = 'admin.cache.disk.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
-if ($a == 'purge')
-{
-	if (cot_check_xg() && cot_diskcache_clearall())
-	{
+if ($a == 'purge') {
+	if (cot_check_xg() && cot_diskcache_clearall()) {
 		cot_message('adm_purgeall_done');
 		// Empty resource consolidation cache
 		$db->delete($db_cache, "c_name = 'cot_rc_html'");
-	}
-	else
-	{
+	} else {
 		cot_message('Error');
 	}
-}
-elseif ($a == 'delete')
-{
+} elseif ($a == 'delete') {
 	$is_id = mb_strpos($id, '/') === false && mb_strpos($id, '\\') === false && $id != '.' && $id != '..';
 	$is_onlyf = $id == COT_DISKCACHE_ONLYFILES;
-	if (cot_check_xg() && $is_id && cot_diskcache_clear($cfg['cache_dir'] . ($is_onlyf ? '' : "/$id"), !$is_onlyf))
-	{
+	if (cot_check_xg() && $is_id && cot_diskcache_clear($cfg['cache_dir'] . ($is_onlyf ? '' : "/$id"), !$is_onlyf)) {
 		cot_message('adm_delcacheitem');
-		if ($id == 'static' || $is_onlyf)
-		{
+		if ($id == 'static' || $is_onlyf) {
 			// Empty resource consolidation cache
 			$db->delete($db_cache, "c_name = 'cot_rc_html'");
 		}
-	}
-	else
-	{
+	} else {
 		cot_message('Error');
 	}
 }
@@ -64,10 +55,10 @@ $cachefiles = $cachesize = 0;
 $ii = 0;
 
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('admin.cache.disk.loop');
-/* ===== */
-foreach ($row as $i => $x)
-{
+$eventLoop = 'admin.cache.disk.loop';
+$extp = cot_getextplugins($eventLoop);
+/* ============ */
+foreach ($row as $i => $x) {
 	$cachefiles += $x[0];
 	$cachesize += $x[1];
 	$t->assign(array(
@@ -79,11 +70,12 @@ foreach ($row as $i => $x)
 	));
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+    $event = $eventLoop;
+	foreach ($extp as $pl) {
 		include $pl;
 	}
-	/* ===== */
+    unset($event);
+    /* ============ */
 
 	$t->parse('MAIN.ADMIN_DISKCACHE_ROW');
 	$ii++;
@@ -99,11 +91,12 @@ $t->assign(array(
 cot_display_messages($t);
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.cache.disk.tags') as $pl)
-{
-	include $pl;
+$event = 'admin.cache.disk.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');

@@ -386,17 +386,19 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	$sql1 = Cot::$db->query("SELECT po_id, po_text, po_count FROM ".Cot::$db->polls_options." WHERE po_pollid = $id ORDER by po_id ASC");
 
 	/* === Hook === */
-    foreach (cot_getextplugins('polls.form.options.first') as $pl)
-    {
+    $event = 'polls.form.options.first';
+    foreach (cot_getextplugins($event) as $pl) {
         include $pl;
     }
+    unset($event);
     /* ===== */
 
     /* === Hook - Part1 : Set === */
-    $extp = cot_getextplugins('polls.form.options.loop');
+    $eventLoop = 'polls.form.options.loop';
+    $extp = cot_getextplugins($eventLoop);
     /* ===== */
-	while ($row1 = $sql1->fetch())
-	{
+
+	while ($row1 = $sql1->fetch()) {
 		$po_id = $row1['po_id'];
 		$po_count = $row1['po_count'];
 
@@ -410,8 +412,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 
 		$input_type = $row['poll_multiple'] ? 'checkbox' : 'radio';
         $polloptions_input = '';
-        if (!$alreadyvoted && $canvote)
-        {
+        if (!$alreadyvoted && $canvote) {
             $polloptions_input = '<input type="' . $input_type . '" name="vote[]" value="' . $po_id . '" />'; // TODO - to resorses
         }
 
@@ -431,10 +432,11 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 		));
 
         /* === Hook - Part2 : Include === */
-        foreach ($extp as $pl)
-        {
+        $event = $eventLoop;
+        foreach ($extp as $pl) {
             include $pl;
         }
+        unset($event);
         /* ===== */
 
 		$t->parse($poll_block . ".POLLTABLE");
@@ -457,13 +459,14 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	$row['poll_block'] = $t->text($poll_block);
 
     /* === Hook === */
-    foreach (cot_getextplugins('polls.form.tags') as $pl)
-    {
+    $event = 'polls.form.tags';
+    foreach (cot_getextplugins($event) as $pl) {
         include $pl;
     }
+    unset($event);
     /* ===== */
 
-	return($row);
+	return $row;
 }
 
 /**
@@ -483,24 +486,22 @@ function cot_poll_delete($id, $type = '')
 		$sql = $db->query("SELECT poll_id FROM $db_polls WHERE poll_type = '" . $db->prep($type) . "' AND poll_code = '$id' LIMIT 1");
 		$id = ($row = $sql->fetch()) ? $row['poll_id'] : 0;
 	}
-	if ((int) $id > 0)
-	{
+	if ((int) $id > 0) {
 		$db->delete($db_polls, "poll_id = " . $id);
 		$db->delete($db_polls_options, "po_pollid = " . $id);
 		$db->delete($db_polls_voters, "pv_pollid = " . $id);
 
 		/* === Hook === */
-		foreach (cot_getextplugins('polls.functions.delete') as $pl)
-		{
-			include $pl;
-		}
+        $event = 'polls.functions.delete';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
 
-		return (true);
-	}
-	else
-	{
-		return (false);
+		return true;
+	} else {
+		return false;
 	}
 }
 

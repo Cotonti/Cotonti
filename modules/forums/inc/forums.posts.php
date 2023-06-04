@@ -20,9 +20,11 @@ require_once cot_langfile('countries', 'core');
 require_once cot_incfile('forms');
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.posts.first') as $pl) {
-	include $pl;
+$event = 'forums.posts.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $fp_posterid = null;
@@ -62,9 +64,11 @@ isset(Cot::$structure['forums'][$s]) || cot_die(true, true);
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('forums', $s);
 /* === Hook === */
-foreach (cot_getextplugins('forums.posts.rights') as $pl) {
-	include $pl;
+$event = 'forums.posts.rights';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 cot_block(Cot::$usr['auth_read']);
 
@@ -112,10 +116,11 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('forums.posts.newpost.first') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'forums.posts.newpost.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	if (!cot_error_found()) {
@@ -151,9 +156,11 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 		cot_extrafield_movefiles();
 
 		/* === Hook === */
-		foreach (cot_getextplugins('forums.posts.newpost.done') as $pl) {
-			include $pl;
-		}
+        $event = 'forums.posts.newpost.done';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
 
 		if (Cot::$cache)
@@ -185,9 +192,11 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	cot_check_xg();
 
 	/* === Hook === */
-	foreach (cot_getextplugins('forums.posts.delete.first') as $pl) {
-		include $pl;
-	}
+    $event = 'forums.posts.delete.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	$row = Cot::$db->query("SELECT * FROM $db_forum_posts WHERE fp_id = ? AND fp_topicid = ? AND fp_cat = ? LIMIT 1",
@@ -221,9 +230,11 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	cot_log("Deleted post #" . $p, 'forums', 'delete post', 'done');
 
 	/* === Hook === */
-	foreach (cot_getextplugins('forums.posts.delete.done') as $pl) {
-		include $pl;
-	}
+    $event = 'forums.posts.delete.done';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	if (
@@ -236,9 +247,11 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
             cot_forums_prunetopics('single', $s, $q);
 
 			/* === Hook === */
-			foreach (cot_getextplugins('forums.posts.emptytopicdel') as $pl) {
-				include $pl;
-			}
+            $event = 'forums.posts.emptytopicdele';
+            foreach (cot_getextplugins($event) as $pl) {
+                include $pl;
+            }
+            unset($event);
 			/* ===== */
 
 			cot_log('Delete topic #' . $q . " (no post left)", 'forums', 'delete topic', 'done');
@@ -295,10 +308,11 @@ if (!empty($id))
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.posts.query') as $pl)
-{
-	include $pl;
+$event = 'forums.posts.query';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $where = array_diff($where, array(''));
@@ -335,10 +349,11 @@ if ( ($durl > 1 && Cot::$cfg['easypagenav']) || ($durl > 0 && !Cot::$cfg['easypa
 $out['canonical_uri'] = cot_url('forums', $topicurl_params);
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.posts.main') as $pl)
-{
-	include $pl;
+$event = 'forums.posts.main';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
@@ -348,7 +363,8 @@ $t = new XTemplate($mskin);
 
 
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('forums.posts.loop');
+$eventLoop = 'forums.posts.loop';
+$extp = cot_getextplugins($eventLoop);
 /* ===== */
 $fp_num = 0;
 foreach ($sql_forums->fetchAll() as $row)
@@ -399,7 +415,7 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_ORDER' => empty($id) ? $d + $fp_num : $id
 	));
 
-    if(!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
+    if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
         foreach (Cot::$extrafields[Cot::$db->forum_posts] as $exfld) {
             $tag = mb_strtoupper($exfld['field_name']);
             $exfld_title = cot_extrafield_title($exfld, 'forums_post_');
@@ -414,10 +430,11 @@ foreach ($sql_forums->fetchAll() as $row)
     }
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+    $event = $eventLoop;
+	foreach ($extp as $pl) {
 		include $pl;
 	}
+    unset($event);
 	/* ===== */
 
 	$t->parse('MAIN.FORUMS_POSTS_ROW');
@@ -504,10 +521,11 @@ if ((Cot::$cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] 
 	cot_display_messages($t);
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('forums.posts.newpost.tags') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'forums.posts.newpost.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	$t->parse('MAIN.FORUMS_POSTS_NEWPOST');
@@ -598,10 +616,11 @@ if(!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
 }
 
 /* === Hook  === */
-foreach (cot_getextplugins('forums.posts.tags') as $pl)
-{
-	include $pl;
+$event = 'forums.posts.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $t->parse('MAIN');

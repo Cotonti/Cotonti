@@ -102,11 +102,12 @@ switch ($rs['setlimit']) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('search.first') as $pl)
-{
-	include $pl;
+$event = 'search.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 if (
     ($tab == 'pag' || empty($tab))
@@ -133,10 +134,12 @@ if (
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('search.page.catlist') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'search.page.catlist';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
 	$t->assign(array(
 		'PLUGIN_PAGE_SEC_LIST' => cot_selectbox(
@@ -364,10 +367,12 @@ if (!empty($sq)) {
         $search_union_query = isset($search_union_query) ? $search_union_query : '';
 
 		/* === Hook === */
-		foreach (cot_getextplugins('search.page.query') as $pl) {
-			include $pl;
-		}
-		/* ===== */
+        $event = 'search.page.query';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
+        /* ============ */
 
         $where_or = array_diff($where_or, array(''));
         if (empty($where_or)) {
@@ -404,8 +409,9 @@ if (!empty($sq)) {
 		$jj = 0;
 
 		/* === Hook - Part 1 === */
-		$extp = cot_getextplugins('search.page.loop');
-		/* ===== */
+        $eventLoop = 'search.page.loop';
+		$extp = cot_getextplugins($eventLoop);
+        /* ============ */
 
 		foreach ($sql->fetchAll() as $row) {
 			$url_cat = cot_url('page', 'c='.$row['page_cat']);
@@ -423,11 +429,15 @@ if (!empty($sq)) {
 				'PLUGIN_PR_ODDEVEN' => cot_build_oddeven($jj),
 				'PLUGIN_PR_NUM' => $jj
 			));
+
 			/* === Hook - Part 2 === */
+            $event = $eventLoop;
 			foreach ($extp as $pl) {
 				include $pl;
 			}
-			/* ===== */
+            unset($event);
+            /* ============ */
+
 			$t->parse('MAIN.RESULTS.PAGES.ITEM');
 			$jj++;
 		}
@@ -565,33 +575,27 @@ if (!empty($sq)) {
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('search.list') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
+    $event = 'search.list';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
 
-	if (array_sum($totalitems) < 1)
-	{
-		cot_error(Cot::$L['plu_noneresult'].Cot::$R['code_error_separator']);
+	if (array_sum($totalitems) < 1) {
+		cot_error(Cot::$L['plu_noneresult'] . Cot::$R['code_error_separator']);
 	}
-	if (!cot_error_found())
-	{
+	if (!cot_error_found()) {
 		$t->parse('MAIN.RESULTS');
 	}
 
 	$rs_url_path = array();
-	foreach ($rs as $k => $v)
-	{
-		if (is_array($v))
-		{
-			foreach ($v as $sk => $sv)
-			{
+	foreach ($rs as $k => $v) {
+		if (is_array($v)) {
+			foreach ($v as $sk => $sv) {
 				$rs_url_path['rs[' . $k . '][' . $sk . ']'] = $sv;
 			}
-		}
-		else
-		{
+		} else {
 			$rs_url_path['rs[' . $k . ']'] = $v;
 		}
 	}
@@ -637,8 +641,9 @@ if (!empty($pagenav)) {
 cot_display_messages($t);
 
 /* === Hook === */
-foreach (cot_getextplugins('search.tags') as $pl)
-{
-	include $pl;
+$event = 'search.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */

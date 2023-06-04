@@ -28,10 +28,11 @@ $adminhelp = isset(Cot::$L['adm_help_forums']) ? Cot::$L['adm_help_forums'] : ''
 $adminTitle = Cot::$L['Forums'];
 
 /* === Hook  === */
-foreach (cot_getextplugins('forums.admin.first') as $pl)
-{
-	include $pl;
+$event = 'forums.admin.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 
@@ -61,10 +62,11 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-foreach (cot_getextplugins('forums.admin.tags') as $pl)
-{
-	include $pl;
+$event = 'forums.admin.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $t->parse('MAIN');

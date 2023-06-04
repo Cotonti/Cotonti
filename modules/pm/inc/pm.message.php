@@ -25,10 +25,11 @@ if (empty($id)) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.first') as $pl)
-{
-	include $pl;
+$event = 'pm.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 list($totalsentbox, $totalinbox) = cot_message_count(Cot::$usr['id']);
@@ -85,10 +86,11 @@ Cot::$out['head'] .= Cot::$R['code_noindex'];
 Resources::linkFileFooter(Cot::$cfg['modules_dir'].'/pm/js/pm.js');
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.main') as $pl)
-{
-	include $pl;
+$event = 'pm.main';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 $pm_maindata = cot_parse($row['pm_text'], Cot::$cfg['pm']['markup']);
@@ -110,11 +112,11 @@ if ($history)
 	$pagenav = cot_pagenav('pm', 'm=message&id='.$id.'&history='.(int)$history.'&q='.$q, $d, $totallines, Cot::$cfg['pm']['maxpmperpage'], 'd', '', Cot::$cfg['pm']['turnajax'], 'ajaxHistory');
 
 	/* === Hook - Part1 : Set === */
-	$extp = cot_getextplugins('pm.history.loop');
+    $eventLoop = 'pm.history.loop';
+	$extp = cot_getextplugins($eventLoop);
 	/* ===== */
 	$jj = 0;
-	foreach ($sql_pm_history->fetchAll() as $row2)
-	{
+	foreach ($sql_pm_history->fetchAll() as $row2) {
 		$jj++;
 		$row2['pm_icon_readstatus'] = ($row2['pm_tostate'] == '0') ?
 				cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), Cot::$R['pm_icon_new'], array('title' => Cot::$L['pm_unread'], 'class'=> Cot::$cfg['pm']['turnajax'] ? 'ajax' : ''))
@@ -165,17 +167,17 @@ if ($history)
 		$t->assign($pm_user);
 
 		/* === Hook - Part2 : Include === */
-		foreach ($extp as $pl)
-		{
+        $event = $eventLoop;
+		foreach ($extp as $pl) {
 			include $pl;
 		}
+        unset($event);
 		/* ===== */
 
 		$t->parse('MAIN.HISTORY.PM_ROW');
 	}
 
-	if ($jj == 0)
-	{
+	if ($jj == 0) {
 		$t->parse('MAIN.HISTORY.PM_ROW_EMPTY');
 	}
 	$t->assign(array(
@@ -223,16 +225,16 @@ if (Cot::$usr['auth_write']) {
 	));
 
 	/* === Hook === */
-	foreach (cot_getextplugins('pm.reply.tags') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'pm.reply.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	$t->parse('MAIN.REPLY');
 }
-if (!COT_AJAX)
-{
+if (!COT_AJAX) {
 	$t->parse('MAIN.BEFORE_AJAX');
 	$t->parse('MAIN.AFTER_AJAX');
 }
@@ -274,10 +276,12 @@ $t->assign(array(
 $t->assign(cot_generate_usertags($row_user, 'PM_USER_'));
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.tags') as $pl) {
-	include $pl;
+$event = 'pm.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 if (COT_AJAX && $history) {
 	$t->out('MAIN.HISTORY');

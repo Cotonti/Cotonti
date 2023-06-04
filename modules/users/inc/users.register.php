@@ -24,10 +24,11 @@ if (Cot::$cfg['users']['disablereg'] && !Cot::$usr['isadmin'])
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('users.register.first') as $pl)
-{
-	include $pl;
+$event = 'users.register.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 cot_block(Cot::$usr['id'] == 0 || Cot::$usr['isadmin']);
@@ -45,10 +46,11 @@ if ($a == 'add') {
 	cot_shield_protect();
 
 	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('users.register.add.first') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'users.register.add.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	$ruser['user_name'] = cot_import('rusername','P','TXT', 100, TRUE);
@@ -73,9 +75,9 @@ if ($a == 'add') {
 		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
 	}
 
-	$user_exists = (bool)Cot::$db->query("SELECT user_id FROM ".Cot::$db->users." WHERE user_name = ? LIMIT 1",
+	$user_exists = (bool) Cot::$db->query("SELECT user_id FROM " . Cot::$db->users . " WHERE user_name = ? LIMIT 1",
         array($ruser['user_name']))->fetch();
-	$email_exists = (bool)Cot::$db->query("SELECT user_id FROM ".Cot::$db->users." WHERE user_email = ? LIMIT 1",
+	$email_exists = (bool) Cot::$db->query("SELECT user_id FROM " . Cot::$db->users . " WHERE user_email = ? LIMIT 1",
         array($ruser['user_email']))->fetch();
 
 	if (preg_match('/&#\d+;/', $ruser['user_name']) || preg_match('/[<>#\'"\/]/', $ruser['user_name'])) {
@@ -101,9 +103,11 @@ if ($a == 'add') {
     }
 
 	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('users.register.add.validate') as $pl) {
-		include $pl;
-	}
+    $event = 'users.register.add.validate';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	if (!cot_error_found()) {
@@ -121,48 +125,42 @@ if ($a == 'add') {
         }
 
 		/* === Hook for the plugins === */
-		foreach (cot_getextplugins('users.register.add.done') as $pl)  {
-			include $pl;
-		}
+        $event = 'users.register.add.done';
+        foreach (cot_getextplugins($event) as $pl) {
+            include $pl;
+        }
+        unset($event);
 		/* ===== */
 
-		if($authorize) cot_user_authorize($userid);
+		if ($authorize) {
+            cot_user_authorize($userid);
+        }
 
-		if (Cot::$cfg['users']['regnoactivation'] || Cot::$db->countRows(Cot::$db->users) == 1)
-		{
+		if (Cot::$cfg['users']['regnoactivation'] || Cot::$db->countRows(Cot::$db->users) == 1) {
 			cot_redirect(cot_url('message', 'msg=106', '', true));
-		}
-		elseif (Cot::$cfg['users']['regrequireadmin'])
-		{
+		} elseif (Cot::$cfg['users']['regrequireadmin']) {
 			cot_redirect(cot_url('message', 'msg=118', '', true));
-		}
-		else
-		{
+		} else {
 			cot_redirect(cot_url('message', 'msg=105', '', true));
 		}
-	}
-	else
-	{
+	} else {
 		cot_redirect(cot_url('users', 'm=register', '', true));
 	}
-
 } elseif ($a == 'validate' && mb_strlen($v) == 32) {
 	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('users.register.validate.first') as $pl)
-	{
-		include $pl;
-	}
+    $event = 'users.register.validate.first';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
 	/* ===== */
 
 	cot_shield_protect();
 	$sql = Cot::$db->query("SELECT * FROM ".Cot::$db->users." WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') LIMIT 1");
 
-	if ($row = $sql->fetch())
-	{
-		if ($row['user_maingrp'] == COT_GROUP_INACTIVE)
-		{
-			if ($y == 1)
-			{
+	if ($row = $sql->fetch()) {
+		if ($row['user_maingrp'] == COT_GROUP_INACTIVE) {
+			if ($y == 1) {
 				$sql = Cot::$db->update(Cot::$db->users, array('user_maingrp' => COT_GROUP_MEMBERS),
                     "user_id='".$row['user_id']."' AND user_lostpass='$v'");
 				$sql = Cot::$db->update(Cot::$db->groups_users, array('gru_groupid' => COT_GROUP_MEMBERS),
@@ -171,20 +169,20 @@ if ($a == 'add') {
                 $row['user_maingrp'] = COT_GROUP_MEMBERS;
 
 				/* === Hook for the plugins === */
-				foreach (cot_getextplugins('users.register.validate.done') as $pl)
-				{
-					include $pl;
-				}
+                $event = 'users.register.validate.done';
+                foreach (cot_getextplugins($event) as $pl) {
+                    include $pl;
+                }
+                unset($event);
 				/* ===== */
 
 				cot_auth_clear($row['user_id']);
-                if(Cot::$usr['id'] == 0 && Cot::$cfg['users']['register_auto_login']) cot_user_authorize($row);
+                if (Cot::$usr['id'] == 0 && Cot::$cfg['users']['register_auto_login']) {
+                    cot_user_authorize($row);
+                }
                 cot_redirect(cot_url('message', 'msg=106', '', true));
-			}
-			elseif ($y == 0)
-			{
-				foreach(Cot::$extrafields[Cot::$db->users] as $exfld)
-				{
+			} elseif ($y == 0) {
+				foreach(Cot::$extrafields[Cot::$db->users] as $exfld) {
 					cot_extrafield_unlinkfiles($row['user_'.$exfld['field_name']], $exfld);
 				}
 
@@ -192,24 +190,22 @@ if ($a == 'add') {
 				$sql = Cot::$db->delete(Cot::$db->groups_users, "gru_userid='".$row['user_id']."'");
 
 				/* === Hook for the plugins === */
-				foreach (cot_getextplugins('users.register.validate.rejected') as $pl)
-				{
-					include $pl;
-				}
+                $event = 'users.register.validate.rejected';
+                foreach (cot_getextplugins($event) as $pl) {
+                    include $pl;
+                }
+                unset($event);
 				/* ===== */
 
 				cot_redirect(cot_url('message', 'msg=109', '', true));
 			}
-		}
-		elseif ($row['user_maingrp'] == -1)
-		{
+
+		} elseif ($row['user_maingrp'] == 0) {
 			$sql = Cot::$db->update(Cot::$db->users, array('user_maingrp' => $row['user_sid']),
                 "user_id='".$row['user_id']."' AND user_lostpass='$v'");
 			cot_redirect(cot_url('message', 'msg=106', '', true));
 		}
-	}
-	else
-	{
+	} else {
         Cot::$env['status'] = '403 Forbidden';
 		cot_shield_update(7, "Account validation");
 		cot_log("Wrong validation URL", 'sec', 'user', 'error');
@@ -220,15 +216,18 @@ if ($a == 'add') {
 $mskin = cot_tplfile('users.register', 'module');
 
 /* === Hook === */
-foreach (cot_getextplugins('users.register.main') as $pl)
-{
-	include $pl;
+$event = 'users.register.main';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
-$out['subtitle'] = Cot::$L['aut_registertitle'];
-if (!isset($out['head'])) $out['head'] = '';
-$out['head'] .= Cot::$R['code_noindex'];
+Cot::$out['subtitle'] = Cot::$L['aut_registertitle'];
+if (!isset(Cot::$out['head'])) {
+    Cot::$out['head'] = '';
+}
+Cot::$out['head'] .= Cot::$R['code_noindex'];
 require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($mskin);
@@ -269,10 +268,11 @@ if (!empty(Cot::$extrafields[Cot::$db->users])) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('users.register.tags') as $pl)
-{
-	include $pl;
+$event = 'users.register.tags';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
+unset($event);
 /* ===== */
 
 // Error and message handling

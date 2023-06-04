@@ -14,10 +14,12 @@ $t = new XTemplate(cot_tplfile('admin.other', 'core'));
 $p = cot_import('p', 'G', 'ALP');
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.other.first') as $pl) {
-	include $pl;
+$event = 'admin.other.first';
+foreach (cot_getextplugins($event) as $pl) {
+    include $pl;
 }
-/* ===== */
+unset($event);
+/* ============ */
 
 if (!empty($p)) {
 	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('plug', $p);
@@ -121,10 +123,13 @@ if (!empty($p)) {
 	]);
 
 	/* === Hook === */
-	foreach (cot_getextplugins('admin.other.tags') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $event = 'admin.other.tags';
+    foreach (cot_getextplugins($event) as $pl) {
+        include $pl;
+    }
+    unset($event);
+    /* ============ */
+
 	$t->parse('MAIN');
 	$adminmain = $t->text('MAIN');
 }
