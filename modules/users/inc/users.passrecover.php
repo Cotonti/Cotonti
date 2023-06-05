@@ -13,18 +13,18 @@ $v = cot_import('v', 'G', 'TXT');
 $email = cot_import('email', 'P', 'TXT');
 
 /* === Hook === */
-$event = 'users.passrecover.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('users.passrecover.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
-cot_block(Cot::$usr['id'] == 0);
+cot_block($usr['id'] == 0);
 
 $msg = '';
 
-if ($a == 'request' && $email != '') {
+if ($a == 'request' && $email != '')
+{
 	cot_shield_protect();
 	$sql = $db->query("SELECT user_id, user_name, user_lostpass FROM $db_users WHERE user_email='".$db->prep($email)."' ORDER BY user_id ASC");
     $email_found= FALSE;
@@ -120,30 +120,28 @@ $title[] = $L['pasrec_title'];
 $mskin = cot_tplfile('users.passrecover', 'module');
 
 /* === Hook === */
-$event = 'users.passrecover.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('users.passrecover.main') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
-require_once Cot::$cfg['system_dir'] . '/header.php';
+require_once $cfg['system_dir'].'/header.php';
 $t = new XTemplate($mskin);
 
 $t->assign(array(
-	'PASSRECOVER_TITLE' => cot_breadcrumbs($title, Cot::$cfg['homebreadcrumb']),
+	'PASSRECOVER_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
 	'PASSRECOVER_URL_FORM' => cot_url('users', 'm=passrecover&a=request')
 ));
 
 /* === Hook === */
-$event = 'users.passrecover.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('users.passrecover.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once Cot::$cfg['system_dir'] . '/footer.php';
+require_once $cfg['system_dir'].'/footer.php';

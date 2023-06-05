@@ -16,22 +16,18 @@ cot_blockguests();
 cot_die(empty($s));
 
 /* === Hook === */
-$event = 'forums.newtopic.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.newtopic.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 isset(Cot::$structure['forums'][$s]) || cot_die();
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('forums', $s);
 /* === Hook === */
-$event = 'forums.newtopic.rights';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.newtopic.rights') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 cot_block(Cot::$usr['auth_write']);
 
@@ -52,11 +48,9 @@ if ($a == 'newtopic') {
 	cot_shield_protect();
 
 	/* === Hook === */
-    $event = 'forums.newtopic.newtopic.first';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('forums.newtopic.newtopic.first') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
 	$rmsg['fp_text'] = cot_import('rmsgtext','P','HTM');
@@ -137,11 +131,9 @@ if ($a == 'newtopic') {
         cot_forums_updateStructureCounters($s);
 
 		/* === Hook === */
-        $event = 'forums.newtopic.newtopic.done';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
+		foreach (cot_getextplugins('forums.newtopic.newtopic.done') as $pl) {
+			include $pl;
+		}
 		/* ===== */
 
 		cot_shield_update(45, "New topic");
@@ -160,11 +152,9 @@ if (!isset(Cot::$out['head'])) {
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 
 /* === Hook === */
-$event = 'forums.newtopic.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.newtopic.main') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 require_once cot_incfile('forms');
 require_once Cot::$cfg['system_dir'] . '/header.php';
@@ -222,11 +212,9 @@ if (Cot::$cfg['forums']['cat_' . $s]['allowprvtopics']) {
 }
 
 /* === Hook === */
-$event = 'forums.newtopic.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.newtopic.tags') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 cot_display_messages($t);

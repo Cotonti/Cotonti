@@ -53,12 +53,10 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
     /* === Hook === */
-    $event = 'recentitems.recentforums.first';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('recentitems.recentforums.first') as $pl) {
+		include $pl;
+	}
+	/* ===== */
 
     $where = array_diff($where, ['']);
 
@@ -292,12 +290,10 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	$join_tables = '';
 
 	/* === Hook === */
-    $event = 'recentitems.recentpages.first';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('recentitems.recentpages.first') as $pl) {
+		include $pl;
+	}
+	/* ===== */
 
 	$sql = Cot::$db->query("SELECT p.*, u.* $join_columns
 		FROM $db_pages AS p
@@ -308,9 +304,8 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	$jj = 0;
 
 	/* === Hook - Part1 === */
-    $eventLoop = 'recentitems.recentpages.tags';
-	$extp = cot_getextplugins($eventLoop);
-    /* ============ */
+	$extp = cot_getextplugins('recentitems.recentpages.tags');
+	/* ===== */
 	foreach ($sql->fetchAll() as $pag) {
 		$jj++;
 		if ((int) $titlelength > 0 && mb_strlen($pag['page_title']) > $titlelength) {
@@ -326,12 +321,10 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		$recentitems->assign(cot_generate_usertags($pag, 'PAGE_ROW_OWNER_'));
 
 		/* === Hook - Part2 === */
-        $event = $eventLoop;
 		foreach ($extp as $pl) {
 			include $pl;
 		}
-        unset($event);
-        /* ============ */
+		/* ===== */
 
 		$recentitems->parse('MAIN.PAGE_ROW');
 	}

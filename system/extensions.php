@@ -519,22 +519,19 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		)));
 
         /* === Hook  === */
-        $event = 'extension.update.done';
-        foreach (cot_getextplugins($event) as $pl) {
+        foreach (cot_getextplugins('extension.update.done') as $pl) {
             include $pl;
         }
-        unset($event);
-        /* ============ */
+        /* ===== */
+
 	} else {
 		cot_extension_add($name, $info['Name'], $info['Version'], !$is_module);
 
         /* === Hook  === */
-        $event = 'extension.install.done';
-        foreach (cot_getextplugins($event) as $pl) {
+        foreach (cot_getextplugins('extension.install.done') as $pl) {
             include $pl;
         }
-        unset($event);
-        /* ============ */
+        /* ===== */
 	}
 
 	// Cleanup

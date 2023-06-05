@@ -94,8 +94,7 @@ if (Cot::$cfg['check_updates']) {
 $t->assign(cot_generate_infotags('ADMIN_HOME_'));
 
 /* === Hook === */
-$event = 'admin.home.mainpanel';
-foreach (cot_getextplugins($event) as $pl) {
+foreach (cot_getextplugins('admin.home.mainpanel', 'R') as $pl) {
 	$line = '';
 	include $pl;
 	if (!empty($line)) {
@@ -103,12 +102,10 @@ foreach (cot_getextplugins($event) as $pl) {
 		$t->parse('MAIN.MAINPANEL');
 	}
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 /* === Hook === */
-$event = 'admin.home.sidepanel';
-foreach (cot_getextplugins($event) as $pl) {
+foreach (cot_getextplugins('admin.home.sidepanel', 'R') as $pl) {
 	$line = '';
 	include $pl;
 	if (!empty($line)) {
@@ -116,16 +113,13 @@ foreach (cot_getextplugins($event) as $pl) {
 		$t->parse('MAIN.SIDEPANEL');
 	}
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 /* === Hook === */
-$event = 'admin.home';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.home', 'R') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 cot_display_messages($t);
 

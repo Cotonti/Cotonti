@@ -201,63 +201,49 @@ function cot_get_caller()
 /**
  * Returns a list of plugins registered for a hook
  *
- * @param string $hook Hook (event) name
- * @param bool $checkExistence Check if hook file exists
- * @param string $permission Permissions
- * @return string[] Hook files list
+ * @param string $hook Hook name
+ * @param string $cond Permissions
+ * @return array
+ * @global Cache $cache
  */
-function cot_getextplugins($hook, $checkExistence = true, $permission='R')
+function cot_getextplugins($hook, $cond='R')
 {
-	global $cot_plugins, $cot_hooks_fired;
+	global $cot_plugins, $cache, $cfg, $cot_hooks_fired;
 
-	if (Cot::$cfg['debug_mode']) {
+	if ($cfg['debug_mode'])
+	{
 		$cot_hooks_fired[] = $hook;
 	}
 
-	$extPlugins = [];
-	if (isset($cot_plugins[$hook]) && is_array($cot_plugins[$hook])) {
-		foreach ($cot_plugins[$hook] as $handler) {
-			if ($handler['pl_module']) {
-				$dir = Cot::$cfg['modules_dir'];
-				$cat = $handler['pl_code'];
+	$extplugins = array();
+
+	if (isset($cot_plugins[$hook]) && is_array($cot_plugins[$hook]))
+	{
+		foreach($cot_plugins[$hook] as $k)
+		{
+			if ($k['pl_module'])
+			{
+				$dir = $cfg['modules_dir'];
+				$cat = $k['pl_code'];
 				$opt = 'a';
-			} else {
-				$dir = Cot::$cfg['plugins_dir'];
-				$cat = 'plug';
-				$opt = $handler['pl_code'];
 			}
-
-            if (!cot_auth($cat, $opt, $permission)) {
-                continue;
-            }
-
-            $fileName = $dir . '/' . $handler['pl_file'];
-            if (
-                $checkExistence
-                && (!isset(Cot::$cfg['checkHookFileExistence']) || Cot::$cfg['checkHookFileExistence'])
-                && !is_readable($fileName)
-            ) {
-                $extType = $handler['pl_module'] ? 'mod' : 'pl';
-                $extUrl = cot_url('admin', ['m' => 'extensions', 'a' => 'details', $extType => $handler['pl_code']]);
-                $message = cot_rc(
-                    Cot::$L['hookFileNotFound'],
-                    ['title' => $handler['pl_title'], 'hook' => $hook, 'fileName' => $fileName, 'url' => $extUrl]
-                );
-                // @todo log one file missing only once. May be use memory cache?
-                cot_log($message, $handler['pl_code'], 'hook-include', 'error');
-                if (!empty(Cot::$usr['isadmin'])) {
-                    cot_message($message, 'warning');
-                }
-                continue;
-            }
-            $extPlugins[] = $fileName;
+			else
+			{
+				$dir = $cfg['plugins_dir'];
+				$cat = 'plug';
+				$opt = $k['pl_code'];
+			}
+			if (cot_auth($cat, $opt, $cond))
+			{
+				$extplugins[] = $dir . '/' . $k['pl_file'];
+			}
 		}
 	}
 
 	// Trigger cache handlers
-	Cot::$cache && Cot::$cache->trigger($hook);
+	$cache && $cache->trigger($hook);
 
-	return $extPlugins;
+	return $extplugins;
 }
 
 /**
@@ -694,12 +680,10 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
     $result = null;
 
     /* === Hook === */
-    $event = 'import.date';
-    foreach (cot_getextplugins($event) as $pl) {
+    foreach (cot_getextplugins('import.date') as $pl) {
         include $pl;
     }
-    unset($event);
-    /* ============ */
+    /* ===== */
 
     if ($result !== null) {
         return $result;
@@ -1059,12 +1043,10 @@ function cot_mail(
     }
 
     /* === Hook === */
-    $event = 'mail.send.done';
-    foreach (cot_getextplugins($event) as $pl) {
+    foreach (cot_getextplugins('mail.send.done') as $pl) {
         include $pl;
     }
-    unset($event);
-    /* ============ */
+    /* ===== */
 
     return true;
 }
@@ -1215,16 +1197,15 @@ function cot_module_active($name)
 function cot_outputfilters($output)
 {
 	/* === Hook === */
-    $event = 'output';
-    foreach (cot_getextplugins($event) as $pl) {
-        include realpath(dirname(__FILE__).'/..') . '/' . $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('output') as $pl)
+	{
+		include realpath(dirname(__FILE__).'/..') . '/' . $pl;
+	}
+	/* ==== */
 
 	$output = preg_replace_callback('#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i', 'cot_outputfilters_callback', $output);
 
-	return $output;
+	return($output);
 }
 
 /**
@@ -1442,9 +1423,8 @@ function cot_load_structure()
             ' ORDER BY structure_area ASC, structure_path ASC');
 	}
 
-	/* == Hook: Part 1 == */
-    $eventLoop = 'structure';
-	$extp = cot_getextplugins($eventLoop);
+	/* == Hook: Part 1 ==*/
+	$extp = cot_getextplugins('structure');
 	/* ================= */
 
 	$path = []; // code path tree
@@ -1496,12 +1476,10 @@ function cot_load_structure()
 			}
 		}
 
-		/* == Hook: Part 2 == */
-        $event = $eventLoop;
+		/* == Hook: Part 2 ==*/
 		foreach ($extp as $pl) {
 			include $pl;
 		}
-        unset($event);
 		/* ================= */
 	}
 }
@@ -1590,8 +1568,8 @@ function cot_structure_parents($area, $cat, $type = 'full')
  *    Empty -  check if user has access to area (extension)
  *    'any' - if user has access to the extension or to any of its categories
  *    category code - if user has access to this category of area (extension)
- * @param string $mask Access mask R - read, W - write, A - admin
- * @return bool|array<string, bool> Boolean if there is single access mask was passed. 
+ * @param string $mask Access mask
+ * @return bool|array<string, bool>
  */
 function cot_auth($area, $option = null, $mask = 'RWA')
 {
@@ -1850,35 +1828,29 @@ function cot_user_authorize($id, $remember = null)
     $u = base64_encode($user['user_id'].':'.$sid);
 
     /* === Hook === */
-    $event = 'users.authorize';
-    foreach (cot_getextplugins($event) as $pl) {
+    foreach (cot_getextplugins('users.authorize') as $pl)
+    {
         include $pl;
     }
-    unset($event);
-    /* ============ */
+    /* ===== */
 
-    if ($remember) {
-        cot_setcookie(
-            Cot::$sys['site_id'],
-            $u,
-            time() + Cot::$cfg['cookielifetime'],
-            Cot::$cfg['cookiepath'],
-            Cot::$cfg['cookiedomain'],
-            Cot::$sys['secure'],
-            true
-        );
+    if($remember)
+    {
+        cot_setcookie(Cot::$sys['site_id'], $u, time()+ Cot::$cfg['cookielifetime'], Cot::$cfg['cookiepath'],
+            Cot::$cfg['cookiedomain'], Cot::$sys['secure'], true);
         unset($_SESSION[Cot::$sys['site_id']]);
-    } else {
+    }
+    else
+    {
         $_SESSION[Cot::$sys['site_id']] = $u;
     }
 
     /* === Hook === */
-    $event = 'users.authorize.done';
-    foreach (cot_getextplugins($event) as $pl) {
+    foreach (cot_getextplugins('users.authorize.done') as $pl)
+    {
         include $pl;
     }
-    unset($event);
-    /* ============ */
+    /* ===== */
 
     return true;
 }
@@ -2530,23 +2502,19 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 {
 	global $db, $cot_extrafields, $cot_groups, $cfg, $L, $user_cache, $db_users;
 
-	static $extpFirst = null, $extpMain = null;
+	static $extp_first = null, $extp_main = null;
 
 	$return_array = [];
 
-    $eventFirst = 'usertags.first';
-    $eventMain = 'usertags.main';
-	if (is_null($extpFirst)) {
-		$extpFirst = cot_getextplugins($eventFirst);
-		$extpMain = cot_getextplugins($eventMain);
+	if (is_null($extp_first)) {
+		$extp_first = cot_getextplugins('usertags.first');
+		$extp_main = cot_getextplugins('usertags.main');
 	}
 
 	/* === Hook === */
-    $event = $eventFirst;
-	foreach ($extpFirst as $pl) {
+	foreach ($extp_first as $pl) {
 		include $pl;
 	}
-    unset($event);
 	/* ===== */
 
 	$user_id = (is_array($user_data) && !empty($user_data['user_id'])) ?
@@ -2602,10 +2570,10 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'LASTIP' => $user_data['user_lastip']
 			);
 
-			if ($allgroups) {
+			if ($allgroups)
+			{
 				$temp_array['GROUPS'] = cot_build_groupsms($user_data['user_id'], FALSE, $user_data['user_maingrp']);
 			}
-
 			// Extra fields
 			if (!empty(Cot::$extrafields[Cot::$db->users])) {
 				foreach (Cot::$extrafields[Cot::$db->users] as $exfld) {
@@ -2616,7 +2584,9 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 					$temp_array[strtoupper($exfld['field_name']) . '_VALUE'] = $user_data['user_' . $exfld['field_name']];
 				}
 			}
-		} else {
+		}
+		else
+		{
 			$temp_array = array(
 				'ID' => 0,
 				'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
@@ -2642,20 +2612,19 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 		}
 
 		/* === Hook === */
-        $event = $eventMain;
-		foreach ($extpMain as $pl) {
+		foreach ($extp_main as $pl)
+		{
 			include $pl;
 		}
-        unset($event);
 		/* ===== */
 
-		if (is_array($user_data) && isset($user_data['user_id'])) {
+		if(is_array($user_data) && isset($user_data['user_id'])) {
 			$cacheitem && $user_cache[$user_data['user_id']] = $temp_array;
 		}
 
 	}
-
-	foreach ($temp_array as $key => $val) {
+	foreach ($temp_array as $key => $val)
+	{
 		$return_array[$tag_prefix . $key] = $val;
 	}
 	return $return_array;
@@ -3297,12 +3266,11 @@ function cot_die_message($code, $header = TRUE, $message_title = '', $message_bo
 	}
 
 	/* === Hook === */
-    $event = 'die.message';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('die.message') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 
 	exit;
 }
@@ -3469,9 +3437,9 @@ function cot_implode_messages($src = 'default', $class = '')
  * @param string $group Event group (Variants: adm/sec/ext/{ext_code} where {ext_code} is extension code ex. 'forums' or 'comments')
  * @param string $type Event type
  * @param string $status Event status
- * @param array $extraData Event additional data for extrafields
+ * @param array $extradata Event additional data for extrafields
  */
-function cot_log($text, $group = 'adm', $type = '', $status = '', $extraData = [])
+function cot_log($text, $group = 'adm', $type = '', $status = '', $extra_data = [])
 {
 	global $cot_plugins_enabled, $cot_modules;
 
@@ -3492,20 +3460,23 @@ function cot_log($text, $group = 'adm', $type = '', $status = '', $extraData = [
 	                    	if (Cot::$cfg[$ext]['loggerlevel'] != 'none') {
 		                        if (Cot::$cfg[$ext]['loggerlevel'] == 'all') {
 		                            $log_work = true;
-		                        } else {
+		                        }
+		                        else {
 		                        	if ($type) {
 							            if (stripos(Cot::$cfg[$ext]['loggerlevel'], '+') !== false) {
 							                $loggerlevel_ext = explode('+', Cot::$cfg[$ext]['loggerlevel']);
 							                if (in_array($type, $loggerlevel_ext)) {
 							                    $log_work = true;
 							                }
-							            } elseif (Cot::$cfg[$ext]['loggerlevel'] == $type) {
+							            }
+							            elseif (Cot::$cfg[$ext]['loggerlevel'] == $type) {
 							                $log_work = true;
 							            }
 							        }
 		                        }
 		                    }
-	                    } else {
+	                    }
+		                else {
 	                        $log_work = true;
 		                }
 	                    break;
@@ -3519,7 +3490,7 @@ function cot_log($text, $group = 'adm', $type = '', $status = '', $extraData = [
 
         if ($log_work) {
             $loger_data = [
-                'log_date'  => (int) Cot::$sys['now'],
+                'log_date'  => (int)Cot::$sys['now'],
                 'log_ip'    => (!empty(Cot::$usr['ip'])) ? Cot::$usr['ip'] : '',
                 'log_uid'   => Cot::$usr['id'],
                 'log_name'  => (!empty(Cot::$usr['name']) || Cot::$usr['name'] == '0') ? Cot::$usr['name'] : '',
@@ -3530,20 +3501,20 @@ function cot_log($text, $group = 'adm', $type = '', $status = '', $extraData = [
                 'log_text'  => cot_cutstring($text, 255)
             ];
 
-            if (!empty($extraData) && !empty(Cot::$extrafields[Cot::$db->logger])) {
-                foreach (Cot::$extrafields[Cot::$db->logger] as $exfld) {
-                    if (isset($extraData[$exfld['field_name']])) {
-                        $loger_data['log_' . $exfld['field_name']] = $extraData[$exfld['field_name']];
-                    }
-                }
+            if (!empty($extra_data)) {
+		        if (!empty(Cot::$extrafields[Cot::$db->logger])) {
+		            foreach (Cot::$extrafields[Cot::$db->logger] as $exfld) {
+		            	if (isset($extra_data[$exfld['field_name']])) {
+		            		$loger_data['log_' . $exfld['field_name']] = $extra_data[$exfld['field_name']];
+		            	}
+		            }
+		        }
             }
 
             /* === Hook === */
-            $event = 'loger.event';
-            foreach (cot_getextplugins($event) as $pl) {
+            foreach (cot_getextplugins('loger.event') as $pl) {
                 include $pl;
             }
-            unset($event);
             /* ===== */
 
             Cot::$db && Cot::$db->insert(Cot::$db->logger, $loger_data);
@@ -4644,13 +4615,11 @@ function cot_parse($text, $enable_markup = true, $parser = '')
 		$text = nl2br(htmlspecialchars($text));
 	}
 
-	/* === Hook === */
-    $event = 'parser.last';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	/* == Hook == */
+	foreach (cot_getextplugins('parser.last') as $pl) {
+		include $pl;
+	}
+	/* ===== */
 
 	return $text;
 }

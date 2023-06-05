@@ -19,12 +19,10 @@ $adminTitle = $L['Configuration'];
 $t = new XTemplate(cot_tplfile('admin.config', 'core'));
 
 /* === Hook === */
-$event = 'admin.config.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.config.first') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 switch ($n) {
 	case 'edit':
@@ -45,38 +43,38 @@ switch ($n) {
 		}
 
 		/* === Hook  === */
-        $event = 'admin.config.edit.first';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
+		foreach (cot_getextplugins('admin.config.edit.first') as $pl) {
+			include $pl;
+		}
+		/* ===== */
 
 		if ($a == 'update' && !empty($_POST)) {
 			$updated = cot_config_update_options($p, $optionslist, $o);
 			$errors = cot_get_messages('', 'error');
 
-			if ($o == 'module' || $o == 'plug') {
+			if ($o == 'module' || $o == 'plug')
+			{
 				$dir = $o == 'module' ? $cfg['modules_dir'] : $cfg['plugins_dir'];
 				// Run configure extension part if present
-				if (file_exists($dir . "/" . $p . "/setup/" . $p . ".configure.php")) {
+				if (file_exists($dir . "/" . $p . "/setup/" . $p . ".configure.php"))
+				{
 					include $dir . "/" . $p . "/setup/" . $p . ".configure.php";
 				}
 			}
-
 			/* === Hook  === */
-            $event = 'admin.config.edit.update.done';
-            foreach (cot_getextplugins($event) as $pl) {
-                include $pl;
-            }
-            unset($event);
-            /* ============ */
-
+			foreach (cot_getextplugins('admin.config.edit.update.done') as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
 			$cache && $cache->clear();
 
-			if ($updated) {
+			if ($updated)
+			{
 				$errors ? cot_message('adm_partially_updated', 'warning') : cot_message('Updated');
-			} else {
+			}
+			else
+			{
 				if (!$errors) cot_message('adm_already_updated');
 			}
 		} elseif ($a == 'reset' && !empty($v)) {
@@ -84,17 +82,15 @@ switch ($n) {
 			$optionslist = cot_config_list($o, $p, '');
 
 			/* === Hook  === */
-            $event = 'admin.config.edit.reset.done';
-            foreach (cot_getextplugins($event) as $pl) {
-                include $pl;
-            }
-            unset($event);
-            /* ============ */
-
+			foreach (cot_getextplugins('admin.config.edit.reset.done') as $pl) {
+				include $pl;
+			}
+			/* ===== */
 			Cot::$cache && Cot::$cache->clear();
 
 			cot_redirect(cot_url('admin', array('m'=>'config', 'n'=>'edit', 'o'=>$o, 'p'=>$p), '', true));
 		}
+
 
 		if ($o == 'core') {
 			$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
@@ -108,17 +104,14 @@ switch ($n) {
 		}
 
 		/* === Hook  === */
-        $event = 'admin.config.edit.main';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
+		foreach (cot_getextplugins('admin.config.edit.main') as $pl) {
+			include $pl;
+		}
+		/* ===== */
 
 		/* === Hook - Part1 : Set === */
-        $eventLoop = 'admin.config.edit.loop';
-		$extp = cot_getextplugins($eventLoop);
-        /* ============ */
+		$extp = cot_getextplugins('admin.config.edit.loop');
+		/* ===== */
 
 		foreach ($optionslist as $key => $row) {
 			list($title, $hint) = cot_config_titles($row['config_name'], $row['config_text']);
@@ -143,15 +136,12 @@ switch ($n) {
 					cot_url('admin', "m=config&n=edit&o=$o&p=$p&a=reset&v=" . $row['config_name']),
 					'ADMIN_CONFIG_ROW_CONFIG_MORE' => $hint
 				));
-
 				/* === Hook - Part2 : Include === */
-                $event = $eventLoop;
-				foreach ($extp as $pl) {
+				foreach ($extp as $pl)
+				{
 					include $pl;
 				}
-                unset($event);
-                /* ============ */
-
+				/* ===== */
 				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_OPTION');
 			}
 			$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW');
@@ -161,15 +151,12 @@ switch ($n) {
 		$t->assign(array(
 			'ADMIN_CONFIG_FORM_URL' => cot_url('admin', 'm=config&n=edit&o=' . $o . '&p=' . $p . '&a=update')
 		));
-
 		/* === Hook  === */
-        $event = 'admin.config.edit.tags';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
-
+		foreach (cot_getextplugins('admin.config.edit.tags') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 		$t->parse('MAIN.EDIT');
 		break;
 
@@ -288,15 +275,12 @@ switch ($n) {
 		$sql->closeCursor();
 		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Plugins']);
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
-
 		/* === Hook  === */
-        $event = 'admin.config.default.tags';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
-
+		foreach (cot_getextplugins('admin.config.default.tags') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 		$t->parse('MAIN.DEFAULT');
 		break;
 }
@@ -304,12 +288,11 @@ switch ($n) {
 cot_display_messages($t);
 
 /* === Hook  === */
-$event = 'admin.config.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.config.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');

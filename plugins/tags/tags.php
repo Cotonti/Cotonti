@@ -67,15 +67,15 @@ foreach ($tag_orders as $order)
 }
 
 /* == Hook for the plugins == */
-$event = 'tags.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('tags.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
-if ($cfg['plugin']['tags']['noindex']) {
-	Cot::$out['head'] .= Cot::$R['code_noindex'];
+if ($cfg['plugin']['tags']['noindex'])
+{
+	$out['head'] .= $R['code_noindex'];
 }
 
 // the tag you are looking for
@@ -121,27 +121,35 @@ elseif ($a == 'forums' && cot_module_active('forums'))
 		// Search results
 		cot_tag_search_forums($qs);
 	}
-} elseif ($a == 'all') {
-	if (empty($qs)) {
+}
+elseif ($a == 'all')
+{
+	if (empty($qs))
+	{
 		// Form and cloud
 		cot_tag_search_form('all');
-	} else {
+	}
+	else
+	{
 		// Search results
-		foreach ($tag_areas as $area) {
+		foreach ($tag_areas as $area)
+		{
 			$tag_search_callback = 'cot_tag_search_' . $area;
-			if (function_exists($tag_search_callback)) {
+			if (function_exists($tag_search_callback))
+			{
 				$tag_search_callback($qs);
 			}
 		}
 	}
-} else {
+}
+else
+{
 	/* == Hook for the plugins == */
-    $event = 'tags.search.custom';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('tags.search.custom') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 }
 
 /**
@@ -321,12 +329,11 @@ function cot_tag_search_forums($query)
 	}
 
 	/* == Hook == */
-    $event = 'tags.search.forums.query';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('tags.search.forums.query') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 
 	$totalitems = $db->query("SELECT DISTINCT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t

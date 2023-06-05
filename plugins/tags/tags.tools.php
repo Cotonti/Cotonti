@@ -64,26 +64,20 @@ $admin_tags_join_fields = '';
 $admin_tags_join_tables = '';
 
 /* === Hook  === */
-$event = 'admin.tags.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.tags.first') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 $adminwarnings = '';
 
 if ($action == Cot::$L['Delete']) {
 	cot_check_xp();
-
-    /* === Hook  === */
-    $event = 'admin.tags.delete';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
-
+	foreach (cot_getextplugins('admin.tags.delete') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 	$db->delete($db_tags, "tag='".htmlspecialchars($tag)."'");
 	$sql = $db->delete($db_tag_references, "tag='".htmlspecialchars($tag)."'");
 	$adminwarnings = ($sql) ? cot_message('adm_tag_already_del') : $L['Error'];
@@ -91,13 +85,11 @@ if ($action == Cot::$L['Delete']) {
 	cot_check_xp();
 	$old_tag = str_replace('_', ' ', cot_import('old_tag', 'R', 'TXT'));
 
-    /* === Hook  === */
-    $event = 'admin.tags.edit';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('admin.tags.edit') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 
 	if (cot_tag_exists($tag)) {
 		cot_message('adm_tag_already exists', 'warning');
@@ -143,9 +135,8 @@ $tags = Cot::$db->query($sql)->fetchAll();
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$eventLoop = 'admin.tags.loop';
-$extp = cot_getextplugins($eventLoop);
-/* ============ */
+$extp = cot_getextplugins('admin.tags.loop');
+/* ===== */
 foreach ($tags  as $row) {
     if (isset($cot_extrafields[$db_tag_references])) {
         foreach ($cot_extrafields[$db_tag_references] as $exfld) {
@@ -199,34 +190,29 @@ foreach ($tags  as $row) {
             }
         }
     }
-
-    $tt->assign(array(
-        'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags&d=' . $durl),
-        'ADMIN_TAGS_DEL_URL' => cot_url('admin', [
-            'm' => 'other',
-            'p' => 'tags',
-            'a' => 'delete',
-            'tag' => str_replace(' ', '_', $row['tag']),
-            'x' => Cot::$sys['xk']
-        ]),
-        'ADMIN_TAGS_CODE' => $row['tag'],
-        'ADMIN_TAGS_TAG' => cot_inputbox('text', 'tag', htmlspecialchars_decode($row['tag']), array('maxlength' => '255')),//['.$row['tag'].']
-        'ADMIN_TAGS_AREA' => implode(', ', $tagArea),
-        'ADMIN_TAGS_COUNT' => $row['tag_cnt'],
-        'ADMIN_TAGS_ITEMS' => str_replace(array('pages:', ','), array('', ', '), $row['tag_grp']),
-        'ADMIN_TAGS_ODDEVEN' => cot_build_oddeven($ii)
-    ));
-
-    /* === Hook - Part2 : Include === */
-    $event = $eventLoop;
-    foreach ($extp as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
-
-    $tt->parse('MAIN.ADMIN_TAGS_ROW');
-    $ii++;
+		$tt->assign(array(
+			'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags&d=' . $durl),
+            'ADMIN_TAGS_DEL_URL' => cot_url('admin', [
+                'm' => 'other',
+                'p' => 'tags',
+                'a' => 'delete',
+                'tag' => str_replace(' ', '_', $row['tag']),
+                'x' => Cot::$sys['xk']
+            ]),
+			'ADMIN_TAGS_CODE' => $row['tag'],
+			'ADMIN_TAGS_TAG' => cot_inputbox('text', 'tag', htmlspecialchars_decode($row['tag']), array('maxlength' => '255')),//['.$row['tag'].']
+			'ADMIN_TAGS_AREA' => implode(', ', $tagArea),
+			'ADMIN_TAGS_COUNT' => $row['tag_cnt'],
+			'ADMIN_TAGS_ITEMS' => str_replace(array('pages:', ','), array('', ', '), $row['tag_grp']),
+			'ADMIN_TAGS_ODDEVEN' => cot_build_oddeven($ii)
+		));
+		/* === Hook - Part2 : Include === */
+		foreach ($extp as $pl) {
+			include $pl;
+		}
+		/* ===== */
+		$tt->parse('MAIN.ADMIN_TAGS_ROW');
+		$ii++;
 }
 
 $tt->assign(array(
@@ -244,12 +230,10 @@ $tt->assign(array(
 ));
 
 /* === Hook  === */
-$event = 'admin.tags.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.tags.tags') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 cot_display_messages($tt);
 

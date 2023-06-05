@@ -102,22 +102,18 @@ $backUrl = !empty($backUrl) ?
     base64_decode($backUrl) : cot_url('admin', $urlParams, '', true);
 
 /* === Hook  === */
-$event = 'page.admin.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('page.admin.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 if ($a == 'validate') {
 	cot_check_xg();
 
 	/* === Hook  === */
-    $event = 'page.admin.validate';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('page.admin.validate') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
     $row = Cot::$db->query('SELECT page_cat, page_begin, page_state FROM ' . Cot::$db->pages .
@@ -137,11 +133,9 @@ if ($a == 'validate') {
 		$sql_page = Cot::$db->update(Cot::$db->pages, $data, "page_id = $id");
 
 		/* === Hook  === */
-        $event = 'page.admin.validate.done';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
+		foreach (cot_getextplugins('page.admin.validate.done') as $pl) {
+			include $pl;
+		}
 		/* ===== */
 
 		cot_log(Cot::$L['Page'].' #' . $id . ' - ' . Cot::$L['adm_queue_validated'], 'page', 'validate', 'done');
@@ -167,11 +161,9 @@ if ($a == 'validate') {
 	cot_check_xg();
 
 	/* === Hook  === */
-    $event = 'page.admin.unvalidate';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('page.admin.unvalidate') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
     $row = Cot::$db->query('SELECT page_cat, page_state FROM ' . Cot::$db->pages . ' WHERE page_id = ?', $id)
@@ -211,21 +203,17 @@ if ($a == 'validate') {
 	cot_check_xg();
 
 	/* === Hook  === */
-    $event = 'page.admin.delete';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('page.admin.delete') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
     $result = cot_page_delete($id);
     if ($result) {
         /* === Hook === */
-        $event = 'page.admin.delete.done';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
+		foreach (cot_getextplugins('page.admin.delete.done') as $pl) {
+			include $pl;
+		}
 		/* ===== */
 
         cot_message('#' . $id . ' - ' . Cot::$L['adm_queue_deleted']);
@@ -248,11 +236,9 @@ if ($a == 'validate') {
 		foreach ($s as $i => $k) {
 			if ($s[$i] == '1' || $s[$i] == 'on') {
 				/* === Hook  === */
-                $event = 'page.admin.checked_validate';
-                foreach (cot_getextplugins($event) as $pl) {
-                    include $pl;
-                }
-                unset($event);
+				foreach (cot_getextplugins('page.admin.checked_validate') as $pl) {
+					include $pl;
+				}
 				/* ===== */
 
 				$sql_page = Cot::$db->query("SELECT * FROM $db_pages WHERE page_id=".(int)$i);
@@ -301,21 +287,17 @@ if ($a == 'validate') {
 		foreach ($s as $i => $k) {
 			if ($s[$i] == '1' || $s[$i] == 'on') {
 				/* === Hook  === */
-                $event = 'page.admin.checked_delete';
-                foreach (cot_getextplugins($event) as $pl) {
-                    include $pl;
-                }
-                unset($event);
+				foreach (cot_getextplugins('page.admin.checked_delete') as $pl) {
+					include $pl;
+				}
 				/* ===== */
 
                 $result = cot_page_delete($id);
                 if ($result) {
                     /* === Hook === */
-                    $event = 'page.admin.delete.done';
-                    foreach (cot_getextplugins($event) as $pl) {
+                    foreach (cot_getextplugins('page.admin.delete.done') as $pl) {
                         include $pl;
                     }
-                    unset($event);
                     /* ===== */
                     $perelik .= '#' . $id . ', ';
 
@@ -349,8 +331,7 @@ $sql_page = $db->query("SELECT p.*, u.user_name
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$eventLoop = 'page.admin.loop';
-$extp = cot_getextplugins($eventLoop);
+$extp = cot_getextplugins('page.admin.loop');
 /* ===== */
 foreach ($sql_page->fetchAll() as $row) {
     $sub_count = 0;
@@ -375,11 +356,9 @@ foreach ($sql_page->fetchAll() as $row) {
 	$t->assign(cot_generate_usertags($row['page_ownerid'], 'ADMIN_PAGE_OWNER_'), htmlspecialchars($row['user_name']));
 
 	/* === Hook - Part2 : Include === */
-    $event = $eventLoop;
 	foreach ($extp as $pl) {
 		include $pl;
 	}
-    unset($event);
 	/* ===== */
 
 	$t->parse('MAIN.PAGE_ROW');
@@ -413,11 +392,9 @@ $t->assign(array(
 cot_display_messages($t);
 
 /* === Hook  === */
-$event = 'page.admin.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('page.admin.tags') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $t->parse('MAIN');

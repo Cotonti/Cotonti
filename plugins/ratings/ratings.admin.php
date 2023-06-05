@@ -29,29 +29,28 @@ $id = cot_import('id','G','TXT');
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
-/* === Hook === */
-$event = 'admin.ratings.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+/* === Hook  === */
+foreach (cot_getextplugins('admin.ratings.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
-if ($a == 'delete') {
+if($a == 'delete')
+{
 	cot_check_xg();
 	$db->delete($db_ratings, 'rating_code = ' . $db->quote($id));
 	$db->delete($db_rated, 'rated_code = ' . $db->quote($id));
-
-    /* === Hook === */
-    $event = 'admin.ratings.delete.done';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	/* === Hook  === */
+	foreach (cot_getextplugins('admin.ratings.delete.done') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 	
 	cot_message('adm_ratings_already_del');
 }
+
 
 $totalitems = $db->countRows($db_ratings);
 $pagenav = cot_pagenav('admin', 'm=other&p=ratings', $d, $totalitems, $maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
@@ -61,10 +60,10 @@ $sql = $db->query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIM
 $ii = 0;
 $jj = 0;
 /* === Hook - Part1 : Set === */
-$eventLoop = 'admin.ratings.loop';
-$extp = cot_getextplugins($eventLoop);
-/* ============ */
-foreach ($sql->fetchAll() as $row) {
+$extp = cot_getextplugins('admin.ratings.loop');
+/* ===== */
+foreach ($sql->fetchAll() as $row)
+{
 	$id2 = $row['rating_code'];
 	$sql1 = $db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_code=" . $db->quote($id2));
 	$votes = $sql1->fetchColumn();
@@ -72,13 +71,14 @@ foreach ($sql->fetchAll() as $row) {
 	$rat_type = $row['rating_area'];
 	$rat_value = $row['rating_code'];
 
-	switch ($rat_type) {
+	switch($rat_type)
+	{
 		case 'page':
 			$rat_url = cot_url('page', 'id='.$rat_value);
-		    break;
-
+		break;
 		default:
 			$rat_url = '';
+		break;
 	}
 
 	$t->assign(array(
@@ -92,15 +92,12 @@ foreach ($sql->fetchAll() as $row) {
 		'ADMIN_RATINGS_ROW_RAT_URL' => $rat_url,
 		'ADMIN_RATINGS_ROW_ODDEVEN' => cot_build_oddeven($ii)
 	));
-
 	/* === Hook - Part2 : Include === */
-    $event = $eventLoop;
-	foreach ($extp as $pl) {
+	foreach ($extp as $pl)
+	{
 		include $pl;
 	}
-    unset($event);
-    /* ============ */
-
+	/* ===== */
 	$t->parse('MAIN.RATINGS_ROW');
 	$ii++;
 	$jj = $jj + $votes;
@@ -118,17 +115,19 @@ $t->assign(array(
 
 cot_display_messages($t);
 
-/* === Hook === */
-$event = 'admin.ratings.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+/* === Hook  === */
+foreach (cot_getextplugins('admin.ratings.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 $t->parse('MAIN');
-if (COT_AJAX) {
+if (COT_AJAX)
+{
 	$t->out('MAIN');
-} else {
+}
+else
+{
 	$adminmain = $t->text('MAIN');
 }

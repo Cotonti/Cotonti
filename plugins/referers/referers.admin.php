@@ -27,16 +27,18 @@ $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
 /* === Hook  === */
-$event = 'referers.admin.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('referers.admin.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
-if($a == 'prune' && $usr['isadmin']) {
+if($a == 'prune' && $usr['isadmin'])
+{
 	$db->query("TRUNCATE $db_referers") ? cot_message('adm_ref_prune') : cot_message('Error');
-} elseif($a == 'prunelowhits' && $usr['isadmin']) {
+}
+elseif($a == 'prunelowhits' && $usr['isadmin'])
+{
 	$db->delete($db_referers, 'ref_count < 6') ? cot_message('adm_ref_prunelowhits') : cot_message('Error');
 }
 
@@ -46,8 +48,10 @@ $pagenav = cot_pagenav('admin', 'm=other&p=referers', $d, $totalitems, $maxperpa
 $sql = $db->query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$maxperpage);
 
 $ii = 0;
-if ($sql->rowCount() > 0) {
-	while ($row = $sql->fetch()) {
+if($sql->rowCount() > 0)
+{
+	while($row = $sql->fetch())
+	{
 		preg_match("#//([^/]+)/#", $row['ref_url'], $a);
 		$host = preg_replace('#^www\.#i', '', $a[1]);
 		$referers[$host][$row['ref_url']] = $row['ref_count'];
@@ -55,33 +59,35 @@ if ($sql->rowCount() > 0) {
 	$sql->closeCursor();
 
 	/* === Hook - Part1 : Set === */
-    $eventLoop = 'referers.admin.loop';
-	$extp = cot_getextplugins($eventLoop);
-    /* ============ */
-	foreach ($referers as $referer => $url) {
+	$extp = cot_getextplugins('referers.admin.loop');
+	/* ===== */
+	foreach($referers as $referer => $url)
+	{
+
 		$tt->assign('ADMIN_REFERERS_REFERER', htmlspecialchars($referer));
 
-		foreach ($url as $uri => $count) {
+		foreach($url as $uri => $count)
+		{
 			$tt->assign(array(
 				'ADMIN_REFERERS_URI' => htmlspecialchars(cot_cutstring($uri, 128)),
 				'ADMIN_REFERERS_COUNT' => $count,
 				'ADMIN_REFERERS_ODDEVEN' => cot_build_oddeven($ii)
 			));
 			/* === Hook - Part2 : Include === */
-            $event = $eventLoop;
-			foreach ($extp as $pl) {
+			foreach ($extp as $pl)
+			{
 				include $pl;
 			}
-            unset($event);
-            /* ============ */
-
+			/* ===== */
 			$tt->parse('MAIN.REFERERS_ROW.REFERERS_URI');
 		}
 		$tt->parse('MAIN.REFERERS_ROW');
 		$ii++;
 	}
 	$is_ref_empty = true;
-} else {
+}
+else
+{
 	$is_ref_empty = false;
 }
 
@@ -98,12 +104,11 @@ $tt->assign(array(
 cot_display_messages($tt);
 
 /* === Hook  === */
-$event = 'referers.admin.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('referers.admin.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 $tt->parse('MAIN');
 $plugin_body = $tt->text('MAIN');

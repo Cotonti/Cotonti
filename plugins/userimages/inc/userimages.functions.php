@@ -264,14 +264,12 @@ function cot_userimages_process_uploads($uid = null)
 					@chmod($filepath, Cot::$cfg['file_perms']);
 
 					/* === Hook === */
-                    $event = 'profile.update.' . $code;
-                    foreach (cot_getextplugins($event) as $pl) {
-                        include $pl;
-                    }
-                    unset($event);
-                    /* ============ */
-
-					$sql = Cot::$db->query('SELECT user_' . Cot::$db->prep($code) . ' FROM ' . Cot::$db->users . ' WHERE user_id = ?', $uid);
+					foreach (cot_getextplugins('profile.update.' . $code) as $pl) {
+						include $pl;
+					}
+					/* ===== */
+					$sql = Cot::$db->query("SELECT user_" . Cot::$db->prep($code) . " FROM " . Cot::$db->users .
+                        " WHERE user_id=" . $uid);
 					if ($oldimage = $sql->fetchColumn()) {
 						if (file_exists($oldimage)) {
 							unlink($oldimage);

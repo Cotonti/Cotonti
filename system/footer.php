@@ -8,12 +8,11 @@
 defined('COT_CODE') or die('Wrong URL');
 
 /* === Hook === */
-$event = 'footer.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('footer.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 if (!COT_AJAX) {
 	$mtpl_type = (
@@ -39,12 +38,10 @@ if (!COT_AJAX) {
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 
     /* === Hook === */
-    $event = 'footer.main';
-    foreach (cot_getextplugins($event) as $pl) {
+    foreach (cot_getextplugins('footer.main') as $pl) {
         include $pl;
     }
-    unset($event);
-    /* ============ */
+    /* ===== */
 
 	$t->assign(array(
 		'FOOTER_COPYRIGHT'  => Cot::$out['copyright'],
@@ -54,12 +51,10 @@ if (!COT_AJAX) {
 	));
 
 	/* === Hook === */
-    $event = 'footer.tags';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('footer.tags') as $pl) {
+		include $pl;
+	}
+	/* ===== */
 
 	// Attach rich text editors if any
 	if (
@@ -100,7 +95,8 @@ if (!COT_AJAX) {
 		$cot_hooks_fired[] = 'footer.last';
 		$cot_hooks_fired[] = 'output';
         Cot::$out['hooks'] = '<ol>';
-		foreach ($cot_hooks_fired as $hook) {
+		foreach ($cot_hooks_fired as $hook)
+		{
             Cot::$out['hooks'] .= '<li>'.$hook.'</li>';
 		}
         Cot::$out['hooks'] .= '</ol>';
@@ -122,12 +118,15 @@ if (!COT_AJAX) {
 	Cot::$out['bottomline'] .= (Cot::$cfg['keepcrbottom']) ? Cot::$out['copyright'] : '';
 
 	// Development mode SQL query timings
-	if (Cot::$cfg['devmode'] && cot_auth('admin', 'a', 'A')) {
+	if (Cot::$cfg['devmode'] && cot_auth('admin', 'a', 'A'))
+	{
         Cot::$out['devmode'] = "<h4>Dev-mode :</h4><table><tr><td><em>SQL query</em></td><td><em>Duration</em></td><td><em>Timeline</em></td><td><em>Execution stack<br />(file[line]: function)</em></td><td><em>Query</em></td></tr>";
         Cot::$out['devmode'] .= "<tr><td colspan=\"2\">BEGIN</td>";
         Cot::$out['devmode'] .= "<td style=\"text-align:right;\">0.000 ms</td><td>&nbsp;</td></tr>";
-		if (is_array(Cot::$sys['devmode']['queries'])) {
-			foreach (Cot::$sys['devmode']['queries'] as $k => $i) {
+		if(is_array(Cot::$sys['devmode']['queries']))
+		{
+			foreach (Cot::$sys['devmode']['queries'] as $k => $i)
+			{
                 Cot::$out['devmode'] .= "<tr><td>#".$i[0]." &nbsp;</td>";
                 Cot::$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", round($i[1] * 1000, 3))." ms</td>";
                 Cot::$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f",
@@ -155,9 +154,8 @@ if (!COT_AJAX) {
 }
 
 /* === Hook === */
-$event = 'footer.last';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('footer.last') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */

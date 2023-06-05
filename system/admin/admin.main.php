@@ -26,12 +26,10 @@ $u = cot_import('u', 'P', 'TXT');
 $s = cot_import('s', 'G', 'ALP', 24);
 
 /* === Hook for the plugins === */
-$event = 'admin.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.main') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 $standard_admin = ['cache.disk', 'cache', 'config', 'extrafields', 'extensions', 'home', 'infos',
 	'log', 'other', 'phpinfo', 'rights', 'rightsbyitem', 'structure', 'urls', 'users'];
@@ -79,20 +77,16 @@ $t->assign(array(
 ));
 
 /* === Hook for the plugins === */
-$event = 'admin.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.tags') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
-
+/* ===== */
 $t->parse('MAIN.BODY');
-
-if (!COT_AJAX) {
+if(!COT_AJAX) {
 	$t->parse('MAIN');
 	$t->out('MAIN');
 } else {
 	$t->out('MAIN.BODY');
 }
 
-require_once Cot::$cfg['system_dir'] . '/footer.php';
+require_once Cot::$cfg['system_dir'].'/footer.php';

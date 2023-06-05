@@ -109,19 +109,15 @@ function cot_generate_pagetags(
 	static $extp_first = null, $extp_main = null;
 	static $pag_auth = array();
 
-    $eventFirst = 'pagetags.first';
-    $eventMain = 'pagetags.main';
 	if (is_null($extp_first)) {
-		$extp_first = cot_getextplugins($eventFirst);
-		$extp_main = cot_getextplugins($eventMain);
+		$extp_first = cot_getextplugins('pagetags.first');
+		$extp_main = cot_getextplugins('pagetags.main');
 	}
 
 	/* === Hook === */
-    $event = $eventFirst;
 	foreach ($extp_first as $pl) {
 		include $pl;
 	}
-    unset($event);
 	/* ===== */
 
 	if (!empty($page_data) && !is_array($page_data)) {
@@ -200,7 +196,7 @@ function cot_generate_pagetags(
 
         $haveFile = Cot::$L['No'];
         $page_data['page_file'] = (int) $page_data['page_file'];
-        if ($page_data['page_file'] == 1) {
+        if($page_data['page_file'] == 1) {
             $haveFile = Cot::$L['Yes'];
         } elseif ($page_data['page_file'] == 2) {
             $haveFile = Cot::$L['Members_download'];
@@ -285,19 +281,22 @@ function cot_generate_pagetags(
 				$validate_confirm_url : $unvalidate_confirm_url;
 			$temp_array['ADMIN_DELETE'] = cot_rc_link($delete_confirm_url, $L['Delete'], 'class="confirmLink"');
 			$temp_array['ADMIN_DELETE_URL'] = $delete_confirm_url;
-		} else if ($usr['id'] == $page_data['page_ownerid']) {
+		}
+		else if ($usr['id'] == $page_data['page_ownerid'])
+		{
 			$temp_array['ADMIN_EDIT'] = cot_rc_link($edit_url, $L['Edit']);
 			$temp_array['ADMIN_EDIT_URL'] = $edit_url;
 		}
 
-		if (cot_auth('page', 'any', 'W')) {
+		if (cot_auth('page', 'any', 'W'))
+		{
 			$clone_url = cot_url('page', "m=add&c={$page_data['page_cat']}&clone={$page_data['page_id']}");
 			$temp_array['ADMIN_CLONE'] = cot_rc_link($clone_url, $L['page_clone']);
 			$temp_array['ADMIN_CLONE_URL'] = $clone_url;
 		}
 
 		// Extrafields
-        if (!empty(Cot::$extrafields[Cot::$db->pages])) {
+        if(!empty(Cot::$extrafields[Cot::$db->pages])) {
             foreach (Cot::$extrafields[Cot::$db->pages] as $exfld) {
 				$tag = mb_strtoupper($exfld['field_name']);
                 $exfld_title = cot_extrafield_title($exfld, 'page_');
@@ -329,22 +328,24 @@ function cot_generate_pagetags(
 		}
 
 		/* === Hook === */
-        $event = $eventMain;
-		foreach ($extp_main as $pl) {
+		foreach ($extp_main as $pl)
+		{
 			include $pl;
 		}
-        unset($event);
 		/* ===== */
 
-	} else {
+	}
+	else
+	{
 		$temp_array = array(
 			'TITLE' => (!empty($emptytitle)) ? $emptytitle : $L['Deleted'],
 			'SHORTTITLE' => (!empty($emptytitle)) ? $emptytitle : $L['Deleted'],
 		);
 	}
 
-	$return_array = [];
-	foreach ($temp_array as $key => $val) {
+	$return_array = array();
+	foreach ($temp_array as $key => $val)
+	{
 		$return_array[$tag_prefix . $key] = $val;
 	}
 
@@ -648,11 +649,9 @@ function cot_page_add(&$rpage, $auth = array())
 	}
 
 	/* === Hook === */
-    $event = 'page.add.add.query';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('page.add.add.query') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
 	if ($db->insert($db_pages, $rpage)) {
@@ -666,11 +665,9 @@ function cot_page_add(&$rpage, $auth = array())
 	}
 
 	/* === Hook === */
-    $event = 'page.add.add.done';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('page.add.add.done') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
 	if ($rpage['page_state'] == COT_PAGE_STATE_PUBLISHED && $cache) {
@@ -720,11 +717,9 @@ function cot_page_delete($id, $rpage = [])
     cot_page_updateStructureCounters($rpage['page_cat']);
 
 	/* === Hook === */
-    $event = 'page.edit.delete.done';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('page.edit.delete.done') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
 	if (Cot::$cache) {
@@ -788,11 +783,9 @@ function cot_page_update($id, &$rpage, $auth = array())
 	cot_extrafield_movefiles();
 
 	/* === Hook === */
-    $event = 'page.edit.update.done';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('page.edit.update.done') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
 	if (($rpage['page_state'] == 0  || $rpage['page_cat'] != $row_page['page_cat']) && Cot::$cache) {
@@ -907,15 +900,15 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	$cns_join_columns = '';
 
 	/* === Hook === */
-    $event = 'page.enum.query';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('page.enum.query') as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
     // Todo move it to comments plugin
-	if (cot_plugin_active('comments')) {
+	if (cot_plugin_active('comments'))
+	{
 		global $db_com;
 		require_once cot_incfile('comments', 'plug');
 		$cns_join_columns .= ", (SELECT COUNT(*) FROM `$db_com` WHERE com_area = 'page' AND com_code = p.page_id) AS com_count";
@@ -947,12 +940,11 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	$sql = $db->query($sql_query);
 
 	$sql_rowset = $sql->fetchAll();
-    $eventLoop = 'page.enum.loop';
-    $extPlugins = cot_getextplugins($eventLoop);
 	$jj = 0;
-	foreach ($sql_rowset as $pag) {
+	foreach ($sql_rowset as $pag)
+	{
 		$jj++;
-		$t->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', Cot::$cfg['page']['cat___default']['truncatetext']));
+		$t->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $cfg['page']['cat___default']['truncatetext']));
 
 		$t->assign(array(
 			'PAGE_ROW_NUM' => $jj,
@@ -963,14 +955,14 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 		$t->assign(cot_generate_usertags($pag, 'PAGE_ROW_OWNER_'));
 
 		/* === Hook === */
-        $event = $eventLoop;
-        foreach ($extPlugins as $pl) {
-            include $pl;
-        }
-        unset($event);
+		foreach (cot_getextplugins('page.enum.loop') as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
-		if (cot_plugin_active('comments')) {
+		if (cot_plugin_active('comments'))
+		{
 			$rowe_urlp = empty($pag['page_alias']) ? array('c' => $pag['page_cat'], 'id' => $pag['page_id']) : array('c' => $pag['page_cat'], 'al' => $pag['page_alias']);
 			$t->assign(array(
 				'PAGE_ROW_COMMENTS' => cot_comments_link('page', $rowe_urlp, 'page', $pag['page_id'], $pag['page_cat'], $pag),
@@ -983,20 +975,21 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 
 	// Render pagination
 	$url_params = $_GET;
-    if (isset($url_params['rwr'])) {
-        unset($url_params['rwr']);
-    }
+    if(isset($url_params['rwr'])) unset($url_params['rwr']);
 	$url_area = 'index';
 	$module_name = cot_import('e', 'G', 'ALP');
-	if (cot_module_active($module_name)) {
+	if(cot_module_active($module_name))
+	{
 		$url_area = $url_params['e'];
 		unset($url_params['e']);
-	} elseif (cot_plugin_active($module_name)) {
+	}
+    elseif (cot_plugin_active($module_name))
+	{
 		$url_area = 'plug';
 	}
 	unset($url_params[$pagination]);
 
-    $pagenav = [
+    $pagenav = array(
         'main' => null,
         'prev' => null,
         'next' => null,
@@ -1004,9 +997,9 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
         'last' => null,
         'current' => 1,
         'total' => 1,
-    ];
+    );
 
-	if (!empty($pagination)) {
+	if(!empty($pagination)) {
 		$pagenav = cot_pagenav($url_area, $url_params, $d, $totalitems, $count, $pagination);
 	}
 
@@ -1023,20 +1016,19 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 	));
 
 	/* === Hook === */
-    $event = 'page.enum.tags';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('page.enum.tags') as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$t->parse("MAIN");
 	$page_query_html = $t->text("MAIN");
 
-	if (Cot::$cache && (int) $cache_ttl > 0) {
-        Cot::$cache->disk->store($md5hash, $page_query_html, 'page');
+	if ($cache && (int) $cache_ttl > 0)
+	{
+		$cache->disk->store($md5hash, $page_query_html, 'page');
 	}
-
 	return $page_query_html;
 }
 

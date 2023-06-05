@@ -24,11 +24,9 @@ $touser_ids = array();
 $touser_names = array();
 
 /* === Hook === */
-$event = 'pm.send.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('pm.send.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $newpmtitle = '';
@@ -52,11 +50,9 @@ if ($a == 'send') {
 	$newpmtitle .= (mb_strlen($newpmtitle) < 2) ? ' . . . ' : '';
 
 	/* === Hook === */
-    $event = 'pm.send.send.first';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('pm.send.send.first') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
 	if (!empty($id)) {
@@ -76,11 +72,9 @@ if ($a == 'send') {
 		}
 
 		/* === Hook === */
-        $event = 'pm.send.update.done';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
+		foreach (cot_getextplugins('pm.send.update.done') as $pl) {
+			include $pl;
+		}
 		/* ===== */
 
 		cot_redirect(cot_url('pm', 'f=sentbox', '', true));
@@ -128,11 +122,9 @@ if ($a == 'send') {
 			}
 
 			/* === Hook === */
-            $event = 'pm.send.send.done';
-            foreach (cot_getextplugins($event) as $pl) {
-                include $pl;
-            }
-            unset($event);
+			foreach (cot_getextplugins('pm.send.send.done') as $pl) {
+				include $pl;
+			}
 			/* ===== */
 
 			cot_shield_update(30, "New private message (".$totalrecipients.")");
@@ -190,11 +182,9 @@ Cot::$out['subtitle'] = cot_title('{SEND_NEW} - {PM}', $title_params);
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 
 /* === Hook === */
-$event = 'pm.send.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('pm.send.main') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $idurl = '';
@@ -256,11 +246,9 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$event = 'pm.send.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('pm.send.tags') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 if (!$id) {

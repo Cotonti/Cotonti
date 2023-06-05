@@ -12,12 +12,10 @@ defined('COT_CODE') or die('Wrong URL');
 cot_uriredir_store();
 
 /* === Hook === */
-$event = 'header.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('header.first') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 Cot::$out['logstatus'] = (Cot::$usr['id'] > 0) ?
     Cot::$L['hea_youareloggedas'] . ' ' . Cot::$usr['name'] : Cot::$L['hea_youarenotlogged'];
@@ -86,12 +84,10 @@ if (!COT_AJAX) {
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 
 	/* === Hook === */
-    $event = 'header.main';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('header.main') as $pl) {
+		include $pl;
+	}
+	/* ===== */
 
 	if (empty(Cot::$out['notices'])) {
         Cot::$out['notices'] = '';
@@ -137,12 +133,10 @@ if (!COT_AJAX) {
 	));
 
 	/* === Hook === */
-    $event = 'header.body';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('header.body') as $pl) {
+		include $pl;
+	}
+	/* ===== */
 
 	if (Cot::$usr['id'] > 0) {
 		Cot::$out['adminpanel'] = (cot_auth('admin', 'any', 'R')) ?
@@ -163,12 +157,10 @@ if (!COT_AJAX) {
 		));
 
 		/* === Hook === */
-        $event = 'header.user.tags';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
+		foreach (cot_getextplugins('header.user.tags') as $pl) {
+			include $pl;
+		}
+		/* ===== */
 
 		$t->parse('HEADER.USER');
 	} else {
@@ -188,23 +180,19 @@ if (!COT_AJAX) {
 		));
 
 		/* === Hook === */
-        $event = 'header.guest.tags';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
+		foreach (cot_getextplugins('header.guest.tags') as $pl) {
+			include $pl;
+		}
+		/* ===== */
 
 		$t->parse('HEADER.GUEST');
 	}
 
 	/* === Hook === */
-    $event = 'header.tags';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('header.tags') as $pl) {
+		include $pl;
+	}
+	/* ===== */
 
 	$t->parse('HEADER');
 	$t->out('HEADER');

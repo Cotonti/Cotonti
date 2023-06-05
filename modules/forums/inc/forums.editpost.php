@@ -15,11 +15,10 @@ $p = cot_import('p', 'G', 'INT'); // post id
 list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['forums']['maxpostsperpage']);
 
 /* === Hook === */
-$event = 'forums.editpost.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.editpost.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 cot_blockguests();
@@ -33,20 +32,15 @@ if ($rowpost = $sql_forums->fetch()) {
 	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('forums', $s);
 
 	/* === Hook === */
-    $event = 'forums.editpost.rights';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('forums.editpost.rights') as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
-	if (
-        !Cot::$usr['isadmin']
-        && (
-            $rowpost['fp_posterid'] != Cot::$usr['id']
-            || (Cot::$cfg['forums']['edittimeout'] != '0' && Cot::$sys['now'] - $rowpost['fp_creation'] > Cot::$cfg['forums']['edittimeout'] * 3600)
-        )
-    ) {
+	if (!Cot::$usr['isadmin'] && ($rowpost['fp_posterid'] != Cot::$usr['id'] ||
+			(Cot::$cfg['forums']['edittimeout'] != '0' && Cot::$sys['now'] - $rowpost['fp_creation'] > Cot::$cfg['forums']['edittimeout'] * 3600)))
+	{
 		cot_log('Attempt to edit a post without rights', 'sec', 'forums', 'error');
 		cot_die();
 	}
@@ -69,11 +63,10 @@ if ($rowt = $sql_forums->fetch()) {
 
 if ($a == 'update') {
 	/* === Hook === */
-    $event = 'forums.editpost.update.first';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('forums.editpost.update.first') as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$rtopic['ft_title'] = cot_import('rtopictitle', 'P', 'TXT', 255);
@@ -125,11 +118,9 @@ if ($a == 'update') {
 	}
 
 	/* === Hook === */
-    $event = 'forums.editpost.update.done';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('forums.editpost.update.done') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
 	if (Cot::$cache) {
@@ -159,11 +150,10 @@ if(!isset(Cot::$out['head'])) Cot::$out['head'] = '';
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 
 /* === Hook === */
-$event = 'forums.editpost.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.editpost.main') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
@@ -229,11 +219,10 @@ if(!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
 }
 
 /* === Hook === */
-$event = 'forums.editpost.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.editpost.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $t->parse('MAIN');

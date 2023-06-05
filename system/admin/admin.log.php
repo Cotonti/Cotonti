@@ -34,22 +34,20 @@ $maxrowsperpage = (is_int(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperp
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage);
 
 /* === Hook === */
-$event = 'admin.log.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.log.first') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
-if ($a == 'purge' && $usr['isadmin']) {
+if($a == 'purge' && $usr['isadmin'])
+{
 	cot_check_xg();
 	/* === Hook === */
-    $event = 'admin.log.purge';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('admin.log.purge') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 
 	$db->query("TRUNCATE $db_logger") ? cot_message('adm_ref_prune') : cot_message('Error');
 }
@@ -86,9 +84,8 @@ else
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$eventLoop = 'admin.log.loop';
-$extp = cot_getextplugins($eventLoop);
-/* ============ */
+$extp = cot_getextplugins('admin.log.loop');
+/* ===== */
 foreach ($sql->fetchAll() as $row) {
 	$t->assign([
 		'ADMIN_LOG_ROW_LOG_ID' => $row['log_id'],
@@ -103,15 +100,11 @@ foreach ($sql->fetchAll() as $row) {
             $log_groups[$row['log_group']] : $row['log_group'],
 		'ADMIN_LOG_ROW_LOG_TEXT' => htmlspecialchars($row['log_text'])
 	]);
-
 	/* === Hook - Part2 : Include === */
-    $event = $eventLoop;
 	foreach ($extp as $pl) {
 		include $pl;
 	}
-    unset($event);
-    /* ============ */
-
+	/* ===== */
 	$t->parse('MAIN.LOG_ROW');
 	$ii++;
 }
@@ -129,12 +122,10 @@ $t->assign([
 cot_display_messages($t);
 
 /* === Hook  === */
-$event = 'admin.log.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.log.tags') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');

@@ -29,14 +29,14 @@ $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
 /* === Hook === */
-$event = 'banlist.admin.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('banlist.admin.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
-if ($a == 'update') {
+if ($a == 'update')
+{
 	$id = cot_import('id', 'G', 'INT');
 	$rbanlistip = cot_import('rbanlistip', 'P', 'TXT');
 	$rbanlistemail = $db->prep(cot_import('rbanlistemail', 'P', 'TXT'));
@@ -94,11 +94,13 @@ $sql = $db->query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, banli
 $ii = 0;
 
 /* === Hook - Part1 : Set === */
-$eventLoop = 'banlist.admin.loop';
-$extp = cot_getextplugins($eventLoop);
+$extp = cot_getextplugins('banlist.admin.loop');
 /* ===== */
 
-foreach ($sql->fetchAll() as $row) {
+
+
+foreach ($sql->fetchAll() as $row)
+{
 	$tt->assign(array(
 		'ADMIN_BANLIST_ROW_ID' => $row['banlist_id'],
 		'ADMIN_BANLIST_ROW_URL' => cot_url('admin', 'm=other&p=banlist&a=update&id='.$row['banlist_id'].'&d='.$durl),
@@ -112,11 +114,10 @@ foreach ($sql->fetchAll() as $row) {
 	));
 
 	/* === Hook - Part2 : Include === */
-    $event = $eventLoop;
-	foreach ($extp as $pl) {
+	foreach ($extp as $pl)
+	{
 		include $pl;
 	}
-    unset($event);
 	/* ===== */
 
 	$tt->parse('MAIN.ADMIN_BANLIST_ROW');
@@ -157,11 +158,10 @@ $tt->assign(array(
 cot_display_messages($tt);
 
 /* === Hook  === */
-$event = 'banlist.admin.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('banlist.admin.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $tt->parse('MAIN');

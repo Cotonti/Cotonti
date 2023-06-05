@@ -40,11 +40,9 @@ $variants['forum'] = array(Cot::$L['Forums'], "forum");
 $id = cot_import('id', 'G', 'INT');
 
 /* === Hook === */
-$event = 'polls.admin.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('polls.admin.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 if ( $id > 0) {
@@ -105,11 +103,11 @@ $sql_polls = $db->query("SELECT * FROM $db_polls
 $ii = 0;
 
 /* === Hook - Part1 : Set === */
-$eventLoop = 'polls.admin.loop';
-$extp = cot_getextplugins($eventLoop);
+$extp = cot_getextplugins('polls.admin.loop');
 /* ===== */
 
-foreach ($sql_polls->fetchAll() as $row) {
+foreach ($sql_polls->fetchAll() as $row)
+{
 	$ii++;
 	$id = $row['poll_id'];
     $totalvotes = $db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid=$id")->fetchColumn();
@@ -131,11 +129,10 @@ foreach ($sql_polls->fetchAll() as $row) {
 	));
 
 	/* === Hook - Part2 : Include === */
-    $event = $eventLoop;
-	foreach ($extp as $pl) {
+	foreach ($extp as $pl)
+	{
 		include $pl;
 	}
-    unset($event);
 	/* ===== */
 
 	$t->parse('MAIN.POLLS_ROW');
@@ -209,11 +206,10 @@ $t->assign(array(
 cot_display_messages($t);
 
 /* === Hook  === */
-$event = 'polls.admin.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('polls.admin.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $t->parse('MAIN');

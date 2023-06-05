@@ -532,11 +532,9 @@ if (!$cache || !$cot_cfg) {
 unset($cot_cfg);
 
 /* === Hook === */
-$event = 'input';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('input') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ======================== */
 
 
@@ -707,13 +705,9 @@ if (!COT_AJAX) {
 		cot_rc_add_standard();
 
 		// Invoke rc handlers
-        /* === Hook: Invoke rc handlers === */
-        $event = 'rc';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
+		foreach (cot_getextplugins('rc') as $pl) {
+			include $pl;
+		}
 	}
 	if (!defined('COT_ADMIN')) {
 		if (file_exists("{$cfg['themes_dir']}/{$usr['theme']}/{$usr['theme']}.rc.php")) {
@@ -735,9 +729,7 @@ if (class_exists('XTemplate')) {
 }
 
 /* ======== Global hook ======== */
-$event = 'global';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+
+foreach (cot_getextplugins('global') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============================= */

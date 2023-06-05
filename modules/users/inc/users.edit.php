@@ -24,11 +24,9 @@ cot_block(Cot::$usr['isadmin']);
 require_once cot_langfile('users', 'module');
 
 /* === Hook === */
-$event = 'users.edit.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('users.edit.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 cot_die(empty($id), true);
@@ -47,37 +45,39 @@ if ($sys['protecttopadmin'])
 	cot_die_message(930, TRUE);
 }
 
-if ($a == 'update') {
+if ($a == 'update')
+{
 	cot_check_xg();
 
 	/* === Hook === */
-    $event = 'users.edit.update.first';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('users.edit.update.first') as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$ruserdelete = cot_import('ruserdelete','P','BOL');
-	if ($ruserdelete) {
+	if ($ruserdelete)
+	{
 		Cot::$db->delete($db_users, "user_id=$id");
 		Cot::$db->delete($db_groups_users, "gru_userid=$id");
 
-		foreach($cot_extrafields[$db_users] as $exfld) {
+		foreach($cot_extrafields[$db_users] as $exfld)
+		{
 			cot_extrafield_unlinkfiles($urr['user_'.$exfld['field_name']], $exfld);
 		}
 
-		if (cot_module_active('pfs') && cot_import('ruserdelpfs','P','BOL')) {
+		if (cot_module_active('pfs') && cot_import('ruserdelpfs','P','BOL'))
+		{
 			require_once cot_incfile('pfs', 'module');
 			cot_pfs_deleteall($id);
 		}
 
 		/* === Hook === */
-        $event = 'users.edit.update.delete';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
+		foreach (cot_getextplugins('users.edit.update.delete') as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		cot_log("Deleted user #".$id, 'users', 'delete', 'done');
@@ -235,18 +235,18 @@ if ($a == 'update') {
 		}
 
 		/* === Hook === */
-        $event = 'users.edit.update.done';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
+		foreach (cot_getextplugins('users.edit.update.done') as $pl) {
+			include $pl;
+		}
 		/* ===== */
 
 		cot_auth_clear($id);
 		cot_log("Edited user #".$id, 'users', 'edit', 'done');
 		cot_message('User_data_updated');
 		cot_redirect(cot_url('users', "m=edit&id=".$id, '', true));
-	} else {
+	}
+	else
+	{
 		cot_redirect(cot_url('users', "m=edit&id=$id", '', true));
 	}
 }
@@ -265,11 +265,10 @@ $out['head'] .= Cot::$R['code_noindex'];
 $mskin = cot_tplfile(array('users', 'edit', $usr['maingrp']), 'module');
 
 /* === Hook === */
-$event = 'users.edit.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('users.edit.main') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
@@ -337,11 +336,10 @@ if (!empty(Cot::$extrafields[Cot::$db->users])) {
 cot_display_messages($t);
 
 /* === Hook === */
-$event = 'users.edit.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('users.edit.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 

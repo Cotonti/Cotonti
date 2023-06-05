@@ -25,11 +25,9 @@ cot_die(empty($s) || !isset(Cot::$structure['forums'][$s]), true);
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('forums', $s);
 
 /* === Hook === */
-$event = 'forums.topics.rights';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.topics.rights') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 cot_block(Cot::$usr['auth_read']);
 
@@ -41,11 +39,9 @@ if (Cot::$usr['isadmin'] && !empty($q) && !empty($a)) {
 			cot_log("Deleted topic #" . $q, 'forums', 'delete topic', 'done');
 
 			/* === Hook === */
-            $event = 'forums.topics.delete.done';
-            foreach (cot_getextplugins($event) as $pl) {
-                include $pl;
-            }
-            unset($event);
+			foreach (cot_getextplugins('forums.topics.delete.done') as $pl) {
+				include $pl;
+			}
 			/* ===== */
 
             cot_message(Cot::$L['Deleted']);
@@ -182,11 +178,9 @@ if (Cot::$usr['isadmin'] && !empty($q) && !empty($a)) {
 }
 
 /* === Hook === */
-$event = 'forums.topics.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.topics.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 require_once cot_incfile('forms');
@@ -212,11 +206,10 @@ if (!empty(Cot::$cfg['forums']['cat_' . $s]['metatitle'])) {
 }
 
 /* === Hook === */
-$event = 'forums.topics.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.topics.main') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
@@ -227,8 +220,7 @@ $t = new XTemplate($mskin);
 $arraychilds = cot_structure_children('forums', $s, false, false);
 if (count($arraychilds) > 0)  {
 	/* === Hook - Part1 : Set === */
-    $eventLoop = 'forums.topics.sections.loop';
-	$extp = cot_getextplugins($eventLoop);
+	$extp = cot_getextplugins('forums.topics.sections.loop');
 	/* ===== */
 	$jj = 0;
 	foreach($arraychilds as $cat) {
@@ -251,11 +243,10 @@ if (count($arraychilds) > 0)  {
 		));
 
 		/* === Hook - Part2 : Include === */
-        $event = $eventLoop;
-		foreach ($extp as $pl) {
+		foreach ($extp as $pl)
+		{
 			include $pl;
 		}
-        unset($event);
 		/* ===== */
 
 		$t->parse('MAIN.FORUMS_SECTIONS.FORUMS_SECTIONS_ROW_SECTION');
@@ -270,11 +261,10 @@ $join_columns = '';
 $join_condition = '';
 
 /* === Hook === */
-$event = 'forums.topics.query';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.topics.query') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 $where = array_diff($where,array(''));
 $where_prv = $where;
@@ -297,8 +287,7 @@ $sql_forums = Cot::$db->query("SELECT t.* $join_columns
 	WHERE ".implode(' AND ', $where)." ORDER BY $order LIMIT $d, ".Cot::$cfg['forums']['maxtopicsperpage']);
 
 /* === Hook - Part1 : Set === */
-$eventLoop = 'forums.topics.loop';
-$extp = cot_getextplugins($eventLoop);
+$extp = cot_getextplugins('forums.topics.loop');
 /* ===== */
 
 $ft_num = 0;
@@ -414,11 +403,10 @@ foreach ($sql_forums_rowset as $row) {
 	}
 
 	/* === Hook - Part2 : Include === */
-    $event = $eventLoop;
-	foreach ($extp as $pl) {
+	foreach ($extp as $pl)
+	{
 		include $pl;
 	}
-    unset($event);
 	/* ===== */
 
 	$t->parse('MAIN.FORUMS_TOPICS_ROW');
@@ -487,11 +475,10 @@ $t->assign(array(
 
 
 /* === Hook === */
-$event = 'forums.topics.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('forums.topics.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $t->parse('MAIN');

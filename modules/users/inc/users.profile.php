@@ -19,11 +19,9 @@ cot_block(Cot::$usr['auth_write']);
 require_once cot_langfile('users', 'module');
 
 /* === Hook === */
-$event = 'users.profile.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('users.profile.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $id = cot_import('id','G','TXT');
@@ -37,11 +35,9 @@ if ($a == 'update') {
 	cot_check_xg();
 
 	/* === Hook === */
-    $event = 'users.profile.update.first';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('users.profile.update.first') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
 	$ruser['user_text'] = cot_import('rusertext','P','HTM', Cot::$cfg['users']['usertextmax']);
@@ -171,11 +167,9 @@ if ($a == 'update') {
 		cot_extrafield_movefiles();
 
 		/* === Hook === */
-        $event = 'users.profile.update.done';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
+		foreach (cot_getextplugins('users.profile.update.done') as $pl) {
+			include $pl;
+		}
 		/* ===== */
 		cot_message('Profile_updated');
 		cot_redirect(cot_url('users', 'm=profile', '', true));
@@ -191,11 +185,9 @@ Cot::$out['head'] .= Cot::$R['code_noindex'];
 $mskin = cot_tplfile(array('users', 'profile'), 'module');
 
 /* === Hook === */
-$event = 'users.profile.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('users.profile.main') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
@@ -259,11 +251,9 @@ if (!empty(Cot::$extrafields[Cot::$db->users])) {
 }
 
 /* === Hook === */
-$event = 'users.profile.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('users.profile.tags') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 // Error handling

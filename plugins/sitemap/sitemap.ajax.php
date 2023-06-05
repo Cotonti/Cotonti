@@ -59,22 +59,19 @@ if ($regenerate) {
 		$category_list = Cot::$structure['page'];
 
 		/* === Hook === */
-        $event = 'sitemap.page.categorylist';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
+		foreach (cot_getextplugins('sitemap.page.categorylist') as $pl) {
+			include $pl;
+		}
+		/* ===== */
 
 		foreach ($category_list as $c => $cat) {
 			$auth_cache[$c] = cot_auth('page', $c, 'R');
-			if (!$auth_cache[$c] || $c === 'system') {
-                continue;
-            }
+			if (!$auth_cache[$c] || $c === 'system') continue;
 			// Pagination support
 			$maxrowsperpage = ($cfg['page']['cat_' . $c]['maxrowsperpage']) ? $cfg['page']['cat_' . $c]['maxrowsperpage'] : $cfg['page']['cat___default']['maxrowsperpage'];
 			$subs = floor($cat['count'] / $maxrowsperpage) + 1;
-			foreach (range(1, $subs) as $pg) {
+			foreach (range(1, $subs) as $pg)
+			{
 				$d = $cfg['easypagenav'] ? $pg : ($pg - 1) * $maxrowsperpage;
 				$urlp = $pg > 1 ? "c=$c&d=$d" : "c=$c";
 				sitemap_parse($t, $items, array(
@@ -94,12 +91,10 @@ if ($regenerate) {
 		$sitemap_where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 
 		/* === Hook === */
-        $event = 'sitemap.page.query';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
+		foreach (cot_getextplugins('sitemap.page.query') as $pl) {
+			include $pl;
+		}
+		/* ===== */
 
 		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . join(' AND ', $sitemap_where) : '';
 		$res = Cot::$db->query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_updated $sitemap_join_columns
@@ -139,18 +134,14 @@ if ($regenerate) {
 		$category_list = Cot::$structure['forums'];
 
 		/* === Hook === */
-        $event = 'sitemap.forums.categorylist';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
+		foreach (cot_getextplugins('sitemap.forums.categorylist') as $pl) {
+			include $pl;
+		}
+		/* ===== */
 
 		foreach ($category_list as $c => $cat) {
 			$auth_cache[$c] = cot_auth('forums', $c, 'R');
-			if (!$auth_cache[$c] || substr_count($cat['path'], '.') == 0) {
-                continue;
-            }
+			if (!$auth_cache[$c] || substr_count($cat['path'], '.') == 0) continue;
 			// Pagination support
 			$count = $cat_top[$c]['fs_topiccount'];
 			$subs = floor($count / $maxrowsperpage) + 1;
@@ -173,12 +164,11 @@ if ($regenerate) {
 		$sitemap_where = array();
 
 		/* === Hook === */
-        $event = 'sitemap.forums.query';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
+		foreach (cot_getextplugins('sitemap.forums.query') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 
 		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . join(' AND ', $sitemap_where) : '';
 		$res = $db->query("SELECT t.ft_id, t.ft_cat, t.ft_updated, t.ft_postcount $sitemap_join_columns
@@ -222,12 +212,11 @@ if ($regenerate) {
 		$sitemap_where = array();
 
 		/* === Hook === */
-        $event = 'sitemap.users.query';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
+		foreach (cot_getextplugins('sitemap.users.query') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 
 		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . join(' AND ', $sitemap_where) : '';
 		$res = $db->query("SELECT u.user_id, u.user_name $sitemap_join_columns
@@ -246,12 +235,11 @@ if ($regenerate) {
 	}
 
 	/* === Hook === */
-    $event = 'sitemap.main';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('sitemap.main') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 
 	// Save the last page
 	$t->parse();
@@ -260,7 +248,8 @@ if ($regenerate) {
 	file_put_contents($count_file, $items);
 }
 
-if ($a == 'index') {
+if ($a == 'index')
+{
 	// Show sitemap index
 	$t = new XTemplate(cot_tplfile('sitemap.index', 'plug'));
 	$pages = (int) ceil($items / $perpage);

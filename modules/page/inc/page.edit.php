@@ -17,11 +17,9 @@ $c = cot_import('c', 'G', 'TXT');
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', 'any');
 
 /* === Hook === */
-$event = 'page.edit.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('page.edit.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 cot_block(Cot::$usr['auth_read']);
@@ -42,13 +40,13 @@ list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = co
 $parser_list = cot_get_parsers();
 Cot::$sys['parser'] = $row_page['page_parser'];
 
-if ($a == 'update') {
+if ($a == 'update')
+{
 	/* === Hook === */
-    $event = 'page.edit.update.first';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('page.edit.update.first') as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	cot_block(Cot::$usr['isadmin'] || Cot::$usr['auth_write'] && Cot::$usr['id'] == $row_page['page_ownerid']);
@@ -65,27 +63,26 @@ if ($a == 'update') {
 		cot_check_xg();
 	}
 
-	if ($rpagedelete) {
+	if ($rpagedelete)
+	{
 		cot_page_delete($id, $row_page);
 		cot_redirect(cot_url('page', "c=" . $row_page['page_cat'], '', true));
 	}
 
-    /* === Hook === */
-    $event = 'page.edit.update.import';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	/* === Hook === */
+	foreach (cot_getextplugins('page.edit.update.import') as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	cot_page_validate($rpage);
 
 	/* === Hook === */
-    $event = 'page.edit.update.error';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('page.edit.update.error') as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	if (!cot_error_found()) {
@@ -130,14 +127,13 @@ Cot::$sys['sublocation'] = Cot::$structure['page'][$pag['page_cat']]['title'];
 $mskin = cot_tplfile(array('page', 'edit', Cot::$structure['page'][$pag['page_cat']]['tpl']));
 
 /* === Hook === */
-$event = 'page.edit.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('page.edit.main') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
-require_once Cot::$cfg['system_dir'] . '/header.php';
+require_once Cot::$cfg['system_dir'].'/header.php';
 $t = new XTemplate($mskin);
 
 $pageedit_array = array(
@@ -206,21 +202,19 @@ if(!empty(Cot::$extrafields[Cot::$db->pages])) {
 cot_display_messages($t);
 
 /* === Hook === */
-$event = 'page.edit.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('page.edit.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
-if (Cot::$usr['isadmin']) {
-	if (Cot::$cfg['page']['autovalidate']) {
-        $usr_can_publish = TRUE;
-    }
+if (Cot::$usr['isadmin'])
+{
+	if (Cot::$cfg['page']['autovalidate']) $usr_can_publish = TRUE;
 	$t->parse('MAIN.ADMIN');
 }
 
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once Cot::$cfg['system_dir'] . '/footer.php';
+require_once Cot::$cfg['system_dir'].'/footer.php';

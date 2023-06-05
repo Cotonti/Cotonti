@@ -28,12 +28,10 @@ Cot::$L['adm_code']['admin'] = Cot::$L['Administration'];
 Cot::$L['adm_code']['message'] = Cot::$L['Messages'];
 
 /* === Hook === */
-$event = 'admin.rightsbyitem.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.rightsbyitem.first') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 if ($a == 'update') {
 	$mask = [];
@@ -58,12 +56,10 @@ if ($a == 'update') {
     }
 
 	/* === Hook === */
-    $event = 'admin.rightsbyitem.update';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('admin.rightsbyitem.update') as $pl) {
+		include $pl;
+	}
+	/* ===== */
 
 	//foreach ($auth as $i => $j) {
     foreach ($items as $groupId => $oldMaskValue) {
@@ -106,12 +102,10 @@ cot_die($sql->rowCount() == 0);
 $title = '';
 
 /* === Hook for the plugins === */
-$event = 'admin.rightsbyitem.case';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.rightsbyitem.case') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 if ($ic == 'message' || $ic == 'admin') {
 	$adminpath[] = [cot_url('admin'), Cot::$L['adm_code'][$ic]];
@@ -180,12 +174,10 @@ $t->assign([
 cot_display_messages($t);
 
 /* === Hook === */
-$event = 'admin.rightsbyitem.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.rightsbyitem.tags') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');

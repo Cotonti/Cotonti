@@ -24,11 +24,9 @@ require_once cot_incfile('polls', 'module');
 require_once cot_incfile('polls', 'module', 'resources');
 
 /* === Hook === */
-$event = 'polls.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('polls.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('polls', 'a');
@@ -38,11 +36,9 @@ $mode = cot_import('mode', 'G', 'ALP');
 
 if ($mode == 'ajax' || COT_AJAX) {
 	/* === Hook === */
-    $event = 'polls.ajax';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('polls.ajax') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
 	$theme = cot_import('poll_theme', 'G', 'TXT');
@@ -86,11 +82,9 @@ if ($id > 0) {
 }
 
 /* === Hook === */
-$event = 'polls.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('polls.main') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
@@ -112,11 +106,9 @@ if ($id > 0) {
 	));
 
 	/* === Hook === */
-	$event = 'polls.view.tags';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('polls.view.tags') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
 	$t->parse('MAIN.POLLS_VIEW');
@@ -133,10 +125,8 @@ if ($id > 0) {
         ' WHERE poll_state = ' . COT_POLL_ACTIVE . " AND poll_type = 'index' ORDER BY poll_id DESC");
 
 	/* === Hook - Part1 === */
-    $eventLoop = 'polls.viewall.tags';
-	$extp = cot_getextplugins($eventLoop);
+	$extp = cot_getextplugins('polls.viewall.tags');
 	/* ===== */
-
 	foreach ($sql->fetchAll() as $row) {
 		$jj++;
 		$t->assign(array(
@@ -149,11 +139,9 @@ if ($id > 0) {
 		));
 
 		/* === Hook - Part2 === */
-        $event = $eventLoop;
 		foreach ($extp as $pl) {
 			include $pl;
 		}
-        unset($event);
 		/* ===== */
 
 		$t->parse('MAIN.POLLS_VIEWALL.POLL_ROW');
@@ -166,11 +154,9 @@ if ($id > 0) {
 }
 
 /* === Hook === */
-$event = 'polls.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('polls.tags') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $t->parse('MAIN');

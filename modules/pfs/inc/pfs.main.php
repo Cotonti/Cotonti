@@ -99,11 +99,9 @@ if ($userid > 0 && $userid != Cot::$usr['id']) {
 }
 
 /* === Hook === */
-$event = 'pfs.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('pfs.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $u_totalsize = 0;
@@ -118,11 +116,9 @@ if ($a == 'upload') {
 	$ndesc = cot_import('ndesc','P','ARR');
 
 	/* === Hook === */
-    $event = 'pfs.upload.first';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('pfs.upload.first') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 
     if ($f > 0) {
@@ -194,11 +190,9 @@ if ($a == 'upload') {
 
 						if ($is_moved && (int) $u_size > 0) {
 							/* === Hook === */
-                            $event = 'pfs.upload.moved';
-                            foreach (cot_getextplugins($event) as $pl) {
-                                include $pl;
-                            }
-                            unset($event);
+							foreach (cot_getextplugins('pfs.upload.moved') as $pl) {
+								include $pl;
+							}
 							/* ===== */
 
                             Cot::$db->insert(
@@ -227,11 +221,9 @@ if ($a == 'upload') {
 							$pfs_totalsize += $u_size;
 
 							/* === Hook === */
-                            $event = 'pfs.upload.done';
-                            foreach (cot_getextplugins($event) as $pl) {
-                                include $pl;
-                            }
-                            unset($event);
+							foreach (cot_getextplugins('pfs.upload.done') as $pl) {
+								include $pl;
+							}
 							/* ===== */
 
 							if (
@@ -383,8 +375,7 @@ if ($f > 0) {
     )->fetchColumn();
 
 	/* === Hook - Part1 : Set === */
-    $eventLoop = 'pfs.rowcat.loop';
-	$extp = cot_getextplugins($eventLoop);
+	$extp = cot_getextplugins('pfs.rowcat.loop');
 	/* ===== */
 
 	$sql_pfs_folders = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid=$userid ORDER BY pff_isgallery ASC, pff_title ASC LIMIT $df, ".$cfg['pfs']['maxpfsperpage']);
@@ -418,11 +409,9 @@ if ($f > 0) {
 		));
 
 		/* === Hook - Part2 : Include === */
-        $event = $eventLoop;
 		foreach ($extp as $pl) {
 			include $pl;
 		}
-        unset($event);
 		/* ===== */
 
 		$t->parse('MAIN.PFF_ROW');
@@ -445,16 +434,13 @@ $sql_pfs = Cot::$db->query(
 );
 
 /* === Hook === */
-$event = 'pfs.list.query';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('pfs.list.query') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 /* === Hook - Part1 : Set === */
-$eventLoop = 'pfs.row.loop';
-$extp = cot_getextplugins($eventLoop);
+$extp = cot_getextplugins('pfs.row.loop');
 /* ===== */
 foreach ($sql_pfs->fetchAll() as $row) {
 	$pfs_id = $row['pfs_id'];
@@ -520,11 +506,9 @@ foreach ($sql_pfs->fetchAll() as $row) {
 	));
 
 	/* === Hook - Part2 : Include === */
-    $event = $eventLoop;
 	foreach ($extp as $pl) {
 		include $pl;
 	}
-    unset($event);
 	/* ===== */
 
 	$t->parse('MAIN.PFS_ROW');
@@ -687,19 +671,15 @@ if ($standalone) {
 	$t->parse('MAIN.STANDALONE_FOOTER');
 
 	/* === Hook === */
-    $event = 'pfs.standalone';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('pfs.standalone') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 } else {
 	/* === Hook === */
-    $event = 'pfs.tags';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
+	foreach (cot_getextplugins('pfs.tags') as $pl) {
+		include $pl;
+	}
 	/* ===== */
 }
 

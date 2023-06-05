@@ -43,7 +43,8 @@ foreach ($cot_extensions as $k => $line)
 	$filedesc[$line[0]] = $line[1];
 }
 
-if (!empty($c1) || !empty($c2)) {
+if (!empty($c1) || !empty($c2))
+{
 	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
 	$standalone = TRUE;
 }
@@ -54,15 +55,15 @@ $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
 $title[] = array(cot_url('pfs', $more), $L['pfs_title']);
 
 /* === Hook === */
-$event = 'pfs.editfolder.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('pfs.editfolder.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
-if ($userid != Cot::$usr['id']) {
-	cot_block(Cot::$usr['isadmin']);
+if ($userid != $usr['id'])
+{
+	cot_block($usr['isadmin']);
 	($userid == 0) || $title[] = array(cot_url('users', 'm=details&id='.$user_info['user_id']), $user_info['user_name']);
 }
 
@@ -154,16 +155,16 @@ $t->assign(array(
 cot_display_messages($t);
 
 /* === Hook === */
-$event = 'pfs.editfolder.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('pfs.editfolder.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $t->parse('MAIN');
 $t->out('MAIN');
 
-if (!$standalone) {
+if (!$standalone)
+{
 	require_once $cfg['system_dir'] . '/footer.php';
 }

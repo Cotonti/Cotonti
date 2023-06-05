@@ -20,12 +20,11 @@ $adminhelp = Cot::$L['adm_help_versions'];
 $adminTitle = Cot::$L['adm_infos'];
 
 /* === Hook === */
-$event = 'admin.infos.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.infos.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 @error_reporting(0);
 
@@ -45,12 +44,11 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$event = 'admin.infos.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.infos.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');

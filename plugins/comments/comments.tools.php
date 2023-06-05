@@ -31,14 +31,14 @@ $admin_comments_join_tables = '';
 $admin_comments_join_where = '';
 
 /* === Hook  === */
-$event = 'admin.comments.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.comments.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
-if ($a == 'delete') {
+if ($a == 'delete')
+{
 	cot_check_xg();
 	$db->delete($db_com, "com_id=$id");
 
@@ -69,8 +69,7 @@ $sql = Cot:: $db->query(
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$eventLoop = 'admin.comments.loop';
-$extp = cot_getextplugins($eventLoop);
+$extp = cot_getextplugins('admin.comments.loop');
 /* ===== */
 foreach ($sql->fetchAll() as $row) {
 	$row['com_type'] = mb_substr($row['com_code'], 0, 1);
@@ -141,11 +140,9 @@ foreach ($sql->fetchAll() as $row) {
     $t->assign(cot_generate_usertags($row, 'ADMIN_COMMENTS_AUTHOR_', htmlspecialchars($row['com_author'])));
 
 	/* === Hook - Part2 : Include === */
-    $event = $eventLoop;
 	foreach ($extp as $pl) {
 		include $pl;
 	}
-    unset($event);
 	/* ===== */
 	$t->parse('MAIN.ADMIN_COMMENTS_ROW');
 	$ii++;
@@ -162,11 +159,10 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$event = 'admin.comments.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.comments.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $t->parse('MAIN');

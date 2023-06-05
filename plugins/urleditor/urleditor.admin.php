@@ -62,35 +62,35 @@ elseif (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'iis') !== false)
 	$rb = '^/';
 	$re = '';
 	$loc = '/';
-} elseif (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false) {
+}
+elseif (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false)
+{
 	$serv_type = 'nginx';
 	$conf_name = 'nginx.conf';
 	$loc = $site_uri;
-	if ($site_uri[0] != '/') {
-        $loc = '/'.$loc;
-    }
-	if ($site_uri[mb_strlen($site_uri) - 1] != '/') {
-        $loc .= '/';
-    }
+	if($site_uri[0] != '/') $loc = '/'.$loc;
+	if($site_uri[mb_strlen($site_uri) - 1] != '/') $loc .= '/';
 	$hta_prefix = '';
 	$hta_flags = 'last;';
 	$hta_rule = 'rewrite';
 	$rb = '"^'.$loc;
 	$re = '"';
 	$hta_error = 'error_page';
-} else {
+}
+else
+{
 	$serv_type = 'unknown';
 }
 
 /* === Hook === */
-$event = 'admin.urls.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.urls.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
-if ($a == 'save' && is_writable('./datas/urltrans.dat')) {
+if ($a == 'save' && is_writable('./datas/urltrans.dat'))
+{
 	// Fetch data
 	$ut_area = cot_import('area', 'P', 'ARR');
 	$ut_params = cot_import('params', 'P', 'ARR');
@@ -98,19 +98,19 @@ if ($a == 'save' && is_writable('./datas/urltrans.dat')) {
 	$htaccess = cot_import('htaccess', 'P', 'BOL');
 
 	/* === Hook === */
-    $event = 'admin.urls.save';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
+	foreach (cot_getextplugins('admin.urls.save') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 
 	// Write header
 	$fp = fopen('./datas/urltrans.dat', 'w');
 	// Process and write
 	$count = count($ut_area);
 	// If the table is empty, restore the default rule
-	if ($count == 0) {
+	if($count == 0)
+	{
 		$ut_area = array('*');
 		$ut_params = array('*');
 		$ut_format = array('{$_area}.php');
@@ -360,10 +360,10 @@ if (is_readable('./datas/urltrans.dat'))
 
 	// Rules
 	/* === Hook - Part1 : Set === */
-    $eventLoop = 'admin.urls.loop';
-	$extp = cot_getextplugins($eventLoop);
-    /* ============ */
-	while ($line = trim(fgets($fp), " \t\r\n")) {
+	$extp = cot_getextplugins('admin.urls.loop');
+	/* ===== */
+	while($line = trim(fgets($fp), " \t\r\n"))
+	{
 		$parts = preg_split('#\s+#', $line);
 
 		$t->assign(array(
@@ -375,12 +375,11 @@ if (is_readable('./datas/urltrans.dat'))
 		));
 
 		/* === Hook - Part2 : Include === */
-        $event = $eventLoop;
-		foreach ($extp as $pl) {
+		foreach ($extp as $pl)
+		{
 			include $pl;
 		}
-        unset($event);
-        /* ============ */
+		/* ===== */
 
 		$t->parse('MAIN.ROW');
 		$ii++;
@@ -389,10 +388,12 @@ if (is_readable('./datas/urltrans.dat'))
 }
 
 $htaccess = ($serv_type == 'apache' && is_writeable('./'.$conf_name)) ? true : false;
-if ($htaccess) {
+if ($htaccess)
+{
 	$htdata = file_get_contents('.htaccess');
 	$htparts = explode("\n### COTONTI URLTRANS ###\n", $htdata);
-	if (count($htparts) == 4) {
+	if (count($htparts) == 4)
+	{
 		$t->assign('ADMIN_URLS_CUSTOM_HTACCESS', $htparts[2]);
 	}
 }
@@ -410,12 +411,11 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$event = 'admin.urls.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.urls.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 $t->parse('MAIN');
 $adminmain = $t->text('MAIN');

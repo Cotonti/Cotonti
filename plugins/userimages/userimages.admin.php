@@ -24,29 +24,30 @@ require_once cot_incfile('userimages', 'plug', 'resources');
 require_once cot_langfile('userimages');
 require_once cot_incfile('configuration');
 
-$adminhelp = Cot::$L['userimages_help'];
-$adminTitle = Cot::$L['userimages_title'];
+$adminhelp = $L['userimages_help'];
+$adminTitle = $L['userimages_title'];
 
 /* === Hook === */
-$event = 'userimages.admin.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('userimages.admin.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
-if ($a == 'add') {
+if($a == 'add')
+{
 	$code = cot_import('userimg_code', 'P', 'ALP');
 	$width = cot_import('userimg_width', 'P', 'INT');
 	$height = cot_import('userimg_height', 'P', 'INT');
 	$crop = cot_import('userimg_crop', 'P', 'TXT');
-	if (!cot_userimages_config_add($code, $width, $height, $crop)) {
+	if (!cot_userimages_config_add($code, $width, $height, $crop))
+	{
 		cot_error('userimages_emptycode', 'userimg_code');
 	}
 	cot_redirect(cot_url('admin', 'm=other&p=userimages', '', true));
 }
-
-if ($a == 'edit') {
+if($a == 'edit')
+{
 	$code = cot_import('code', 'G', 'ALP');
 	$width = cot_import('userimg_width', 'P', 'INT');
 	$height = cot_import('userimg_height', 'P', 'INT');
@@ -84,12 +85,11 @@ foreach($userimg as $code => $settings)
 cot_display_messages($tt); // use cot_message()
 
 /* === Hook  === */
-$event = 'userimages.admin.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('userimages.admin.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 $tt->parse('MAIN');
 $plugin_body = $tt->text('MAIN');

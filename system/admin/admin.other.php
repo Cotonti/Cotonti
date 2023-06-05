@@ -14,12 +14,10 @@ $t = new XTemplate(cot_tplfile('admin.other', 'core'));
 $p = cot_import('p', 'G', 'ALP');
 
 /* === Hook === */
-$event = 'admin.other.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('admin.other.first') as $pl) {
+	include $pl;
 }
-unset($event);
-/* ============ */
+/* ===== */
 
 if (!empty($p)) {
     $extp = [];
@@ -119,13 +117,10 @@ if (!empty($p)) {
 	]);
 
 	/* === Hook === */
-    $event = 'admin.other.tags';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-    /* ============ */
-
+	foreach (cot_getextplugins('admin.other.tags') as $pl) {
+		include $pl;
+	}
+	/* ===== */
 	$t->parse('MAIN');
 	$adminmain = $t->text('MAIN');
 }

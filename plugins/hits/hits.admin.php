@@ -28,11 +28,9 @@ $f = cot_import('f', 'G', 'TXT');
 $v = cot_import('v', 'G', 'TXT');
 
 /* === Hook === */
-$event = 'hits.admin.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('hits.admin.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 if ($f == 'year' || $f == 'month') {
@@ -50,8 +48,7 @@ if ($f == 'year' || $f == 'month') {
 	$hits_d_max = max($hits_d);
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
-    $eventLoop = 'hits.admin.loop';
-	$extp = cot_getextplugins($eventLoop);
+	$extp = cot_getextplugins('hits.admin.loop');
 	/* ===== */
 	foreach ($hits_d as $day => $hits) {
 		$percentbar = floor(($hits / $hits_d_max) * 100);
@@ -64,11 +61,10 @@ if ($f == 'year' || $f == 'month') {
 			));
 		
 		/* === Hook - Part2 : Include === */
-        $event = $eventLoop;
-		foreach ($extp as $pl) {
+		foreach ($extp as $pl)
+		{
 			include $pl;
 		}
-        unset($event);
 		/* ===== */
 		
 		$tt->parse('MAIN.YEAR_OR_MONTH.ROW');
@@ -120,8 +116,7 @@ if ($f == 'year' || $f == 'month') {
 		$hits_m_max = max($hits_m);
 		$hits_y_max = max($hits_y);
 		/* === Hook - Part1 : Set === */
-        $eventLoop = 'hits.admin.loop';
-		$extp = cot_getextplugins($eventLoop);
+		$extp = cot_getextplugins('hits.admin.loop');
 		/* ===== */
 		$ii = 0;
 		foreach ($hits_y as $year => $hits) {
@@ -132,15 +127,11 @@ if ($f == 'year' || $f == 'month') {
 				'ADMIN_HITS_ROW_YEAR_HITS' => $hits,
 				'ADMIN_HITS_ROW_YEAR_PERCENTBAR' => $percentbar
 			));
-
 			/* === Hook - Part2 : Include === */
-            $event = $eventLoop;
 			foreach ($extp as $pl) {
 				include $pl;
 			}
-            unset($event);
 			/* ===== */
-
 			$tt->parse('MAIN.DEFAULT.ROW_YEAR');
 			$ii++;
 		}
@@ -187,11 +178,10 @@ if ($f == 'year' || $f == 'month') {
 }
 
 /* === Hook  === */
-$event = 'hits.admin.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('hits.admin.tags') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $tt->parse('MAIN');

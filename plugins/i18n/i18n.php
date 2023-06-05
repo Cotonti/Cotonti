@@ -27,10 +27,8 @@ if ($m == 'structure') {
 
 } else {
 	/* === Hook === */
-    $event = 'i18n.standalone';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-	/* ============ */
+	foreach (cot_getextplugins('i18n.standalone') as $pl) {
+		include $pl;
+	}
+	/* =============*/
 }

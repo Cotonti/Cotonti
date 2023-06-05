@@ -42,12 +42,10 @@ function cot_apply_rwr()
 		$rwr_continue = true;
 
 		/* === Hook === */
-        $event = 'urleditor.rewrite.first';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-        /* ============ */
+		foreach (cot_getextplugins('urleditor.rewrite.first') as $pl) {
+			include $pl;
+		}
+		/* ===== */
 
 		if (!$rwr_continue) {
 			return null;

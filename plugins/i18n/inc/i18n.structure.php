@@ -25,11 +25,9 @@ list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 Cot::$out['subtitle'] = Cot::$L['i18n_structure'];
 
 /* === Hook === */
-$event = 'i18n.structure.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('i18n.structure.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* =============*/
 
 // Refresh i18n struct data
@@ -110,12 +108,10 @@ if (empty($i18n_locale) || $i18n_locale == Cot::$cfg['defaultlang']) {
 		// Done
 
 		/* === Hook === */
-        $event = 'i18n.structure.update.done';
-        foreach (cot_getextplugins($event) as $pl) {
-            include $pl;
-        }
-        unset($event);
-		/* ============ */
+		foreach (cot_getextplugins('i18n.structure.update.done') as $pl) {
+			include $pl;
+		}
+		/* =============*/
 
 		if ($inserted_cnt > 0) {
 			cot_message(cot_rc('i18n_items_added', array('cnt' => $inserted_cnt)));
@@ -138,8 +134,7 @@ if (empty($i18n_locale) || $i18n_locale == Cot::$cfg['defaultlang']) {
 	$ii = 0;
 	$k = -1;
 	/* === Hook - Part1 : Set === */
-    $eventLoop = 'i18n.structure.loop';
-	$extp = cot_getextplugins($eventLoop);
+	$extp = cot_getextplugins('i18n.structure.loop');
 	/* ===== */
 	foreach (Cot::$structure['page'] as $code => $row) {
 		if (cot_i18n_enabled($code)) {
@@ -164,12 +159,10 @@ if (empty($i18n_locale) || $i18n_locale == Cot::$cfg['defaultlang']) {
 			]);
 
 			/* === Hook - Part2 : Include === */
-            $event = $eventLoop;
 			foreach ($extp as $pl) {
 				include $pl;
 			}
-            unset($event);
-            /* ============ */
+			/* ===== */
 
 			$t->parse('MAIN.I18N_CATEGORY_ROW');
 			$ii++;
@@ -193,10 +186,8 @@ if (empty($i18n_locale) || $i18n_locale == Cot::$cfg['defaultlang']) {
 	cot_display_messages($t);
 
 	/* === Hook === */
-    $event = 'i18n.structure.tags';
-    foreach (cot_getextplugins($event) as $pl) {
-        include $pl;
-    }
-    unset($event);
-	/* ============ */
+	foreach (cot_getextplugins('i18n.structure.tags') as $pl) {
+		include $pl;
+	}
+	/* =============*/
 }

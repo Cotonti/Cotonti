@@ -44,11 +44,9 @@ if ($c == 'all' || $c == 'system') {
 }
 
 /* === Hook === */
-$event = 'page.list.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('page.list.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $cat = &$structure['page'][$c];
@@ -166,11 +164,9 @@ $join_columns = isset($join_columns) ? $join_columns : '';
 $join_condition = isset($join_condition) ? $join_condition : '';
 
 /* === Hook === */
-$event = 'page.list.query';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('page.list.query') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 if (empty($sql_page_string)) {
@@ -222,11 +218,10 @@ $_SESSION['cat'] = $c;
 $mskin = cot_tplfile(array('page', 'list', $cat['tpl']));
 
 /* === Hook === */
-$event = 'page.list.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('page.list.main') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
@@ -321,24 +316,23 @@ $allsub = cot_structure_children('page', $c, false, false, true, false);
 $subcat = array_slice($allsub, $dc, Cot::$cfg['page']['maxlistsperpage']);
 
 /* === Hook === */
-$event = 'page.list.rowcat.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('page.list.rowcat.first') as $pl)
+{
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 /* === Hook - Part1 : Set === */
-$eventLoop = 'page.list.rowcat.loop';
-$extp = cot_getextplugins($eventLoop);
+$extp = cot_getextplugins('page.list.rowcat.loop');
 /* ===== */
-
-foreach ($subcat as $x) {
+foreach ($subcat as $x)
+{
 	$kk++;
 	$cat_childs = cot_structure_children('page', $x);
 	$sub_count = 0;
-	foreach ($cat_childs as $cat_child) {
-		$sub_count += (int) $structure['page'][$cat_child]['count'];
+	foreach ($cat_childs as $cat_child)
+	{
+		$sub_count += (int)$structure['page'][$cat_child]['count'];
 	}
 
 	$sub_url_path = $list_url_path;
@@ -370,11 +364,10 @@ foreach ($subcat as $x) {
     }
 
 	/* === Hook - Part2 : Include === */
-    $event = $eventLoop;
-	foreach ($extp as $pl) {
+	foreach ($extp as $pl)
+	{
 		include $pl;
 	}
-    unset($event);
 	/* ===== */
 
 	$t->parse('MAIN.LIST_ROWCAT');
@@ -389,22 +382,16 @@ $t->assign(array(
 ));
 
 $jj = 0;
-
 /* === Hook - Part1 : Set === */
-$eventLoop = 'page.list.loop';
-$extp = cot_getextplugins($eventLoop);
+$extp = cot_getextplugins('page.list.loop');
 /* ===== */
-
 $sqllist_rowset = $sqllist->fetchAll();
 
 $sqllist_rowset_other = false;
-
 /* === Hook === */
-$event = 'page.list.before_loop';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('page.list.before_loop') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 if (!$sqllist_rowset_other) {
@@ -439,11 +426,9 @@ if (!$sqllist_rowset_other) {
 		$t->assign(cot_generate_usertags($pag, 'LIST_ROW_OWNER_'));
 
 		/* === Hook - Part2 : Include === */
-        $event = $eventLoop;
 		foreach ($extp as $pl) {
 			include $pl;
 		}
-        unset($event);
 		/* ===== */
 
 		$t->parse('MAIN.LIST_ROW');
@@ -454,11 +439,9 @@ if (!$sqllist_rowset_other) {
 cot_display_messages($t);
 
 /* === Hook === */
-$event = 'page.list.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('page.list.tags') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $t->parse('MAIN');

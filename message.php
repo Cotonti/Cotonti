@@ -43,11 +43,9 @@ $title = $L['msg' . $msg . '_title'];
 $body = $L['msg' . $msg . '_body'];
 
 /* === Hook === */
-$event = 'message.first';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('message.first') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 switch ($msg) {
@@ -175,11 +173,9 @@ if (isset($rc) && $rc != '') {
 }
 
 /* === Hook === */
-$event = 'message.main';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('message.main') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $out['head'] .= $R['code_noindex'];
@@ -216,11 +212,9 @@ if ($msg == '920') {
 }
 
 /* === Hook === */
-$event = 'message.tags';
-foreach (cot_getextplugins($event) as $pl) {
-    include $pl;
+foreach (cot_getextplugins('message.tags') as $pl) {
+	include $pl;
 }
-unset($event);
 /* ===== */
 
 $t->parse('MAIN');
