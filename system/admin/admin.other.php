@@ -22,47 +22,43 @@ unset($event);
 /* ============ */
 
 if (!empty($p)) {
+    $extp = [];
+    if (is_array($cot_plugins['tools'])) {
+        foreach ($cot_plugins['tools'] as $k) {
+            if ($k['pl_code'] == $p) {
+                $extp[] = $k;
+            }
+        }
+    }
+
+    if (count($extp) == 0) {
+        cot_die_message(907, TRUE);
+    }
+
 	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('plug', $p);
 	cot_block(Cot::$usr['isadmin']);
 
     Cot::$env['ext'] = $p;
-    $adminTitle = '';
-    if (isset($cot_plugins_enabled[$p])) {
-        $adminTitle = $cot_plugins_enabled[$p]['title'];
+
+    if (file_exists(cot_langfile($p, 'plug'))) {
+        require_once cot_langfile($p, 'plug');
     }
 
-	if (file_exists(cot_langfile($p, 'plug'))) {
-		require_once cot_langfile($p, 'plug');
-	}
-
-	$extp = array();
-
-	if (is_array($cot_plugins['tools'])) {
-		foreach ($cot_plugins['tools'] as $k) {
-			if ($k['pl_code'] == $p) {
-				$extp[] = $k;
-			}
-		}
-	}
-
-	if (count($extp) == 0) {
-		cot_die_message(907, TRUE);
-	}
+    $extInfo = cot_get_extensionparams($p, false);
+    $adminTitle = $extInfo['name'];
 
 	$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
-	$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$p), $cot_plugins_enabled[$p]['title']);
+	$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$p), $adminTitle);
 	$adminpath[] = array(cot_url('admin', 'm=other&p='.$p), Cot::$L['Administration']);
 
 	// $adminhelp = Cot::$L['Description'].' : '.$info['Description'].'<br />'.Cot::$L['Version'].' : '.$info['Version'].'<br />'.Cot::$L['Date'].' : '.$info['Date'].'<br />'.Cot::$L['Author'].' : '.$info['Author'].'<br />'.Cot::$L['Copyright'].' : '.$info['Copyright'].'<br />'.Cot::$L['Notes'].' : '.$info['Notes'];
-    $adminmain = '';
 
-	if (is_array($extp)) {
-		foreach($extp as $k => $pl) {
-            $plugin_body = '';
-			include_once Cot::$cfg['plugins_dir'] . '/' . $pl['pl_file'];
-			$adminmain .= $plugin_body;
-		}
-	}
+    $adminmain = '';
+    foreach ($extp as $k => $pl) {
+        $plugin_body = '';
+        include_once Cot::$cfg['plugins_dir'] . '/' . $pl['pl_file'];
+        $adminmain .= $plugin_body;
+    }
 
 } else {
 	$adminpath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
@@ -91,7 +87,7 @@ if (!empty($p)) {
 		if (is_array($target)) {
 			usort($target, 'cot_admin_other_cmp');
 			foreach ($target as $pl) {
-				$ext_info = cot_get_extensionparams($pl['pl_code'], $type == 'module');
+				$ext_info = cot_get_extensionparams($pl['pl_code'], $type == COT_EXT_TYPE_MODULE);
 				$t->assign(array(
 					'ADMIN_OTHER_EXT_URL' => $type == 'plug' ? cot_url('admin', 'm=other&p=' . $pl['pl_code']) :
 						cot_url('admin', 'm=' . $pl['pl_code']),
