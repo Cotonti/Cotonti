@@ -201,49 +201,63 @@ function cot_get_caller()
 /**
  * Returns a list of plugins registered for a hook
  *
- * @param string $hook Hook name
- * @param string $cond Permissions
- * @return array
- * @global Cache $cache
+ * @param string $hook Hook (event) name
+ * @param bool $checkExistence Check if hook file exists
+ * @param string $permission Permissions
+ * @return string[] Hook files list
  */
-function cot_getextplugins($hook, $cond='R')
+function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
 {
-	global $cot_plugins, $cache, $cfg, $cot_hooks_fired;
+    global $cot_plugins, $cot_hooks_fired;
 
-	if ($cfg['debug_mode'])
-	{
-		$cot_hooks_fired[] = $hook;
-	}
+    if (Cot::$cfg['debug_mode']) {
+        $cot_hooks_fired[] = $hook;
+    }
 
-	$extplugins = array();
+    $extPlugins = [];
+    if (isset($cot_plugins[$hook]) && is_array($cot_plugins[$hook])) {
+        foreach ($cot_plugins[$hook] as $handler) {
+            if ($handler['pl_module']) {
+                $dir = Cot::$cfg['modules_dir'];
+                $cat = $handler['pl_code'];
+                $opt = 'a';
+            } else {
+                $dir = Cot::$cfg['plugins_dir'];
+                $cat = 'plug';
+                $opt = $handler['pl_code'];
+            }
 
-	if (isset($cot_plugins[$hook]) && is_array($cot_plugins[$hook]))
-	{
-		foreach($cot_plugins[$hook] as $k)
-		{
-			if ($k['pl_module'])
-			{
-				$dir = $cfg['modules_dir'];
-				$cat = $k['pl_code'];
-				$opt = 'a';
-			}
-			else
-			{
-				$dir = $cfg['plugins_dir'];
-				$cat = 'plug';
-				$opt = $k['pl_code'];
-			}
-			if (cot_auth($cat, $opt, $cond))
-			{
-				$extplugins[] = $dir . '/' . $k['pl_file'];
-			}
-		}
-	}
+            if (!cot_auth($cat, $opt, $permission)) {
+                continue;
+            }
 
-	// Trigger cache handlers
-	$cache && $cache->trigger($hook);
+            $fileName = $dir . '/' . $handler['pl_file'];
+            if (
+                $checkExistence
+                && (!isset(Cot::$cfg['checkHookFileExistence']) || Cot::$cfg['checkHookFileExistence'])
+                && !is_readable($fileName)
+            ) {
+                $extType = $handler['pl_module'] ? 'mod' : 'pl';
+                $extUrl = cot_url('admin', ['m' => 'extensions', 'a' => 'details', $extType => $handler['pl_code']]);
+                $message = cot_rc(
+                    Cot::$L['hookFileNotFound'],
+                    ['title' => $handler['pl_title'], 'hook' => $hook, 'fileName' => $fileName, 'url' => $extUrl]
+                );
+                // @todo log one file missing only once. May be use memory cache?
+                cot_log($message, $handler['pl_code'], 'hook-include', 'error');
+                if (!empty(Cot::$usr['isadmin'])) {
+                    cot_message($message, 'warning');
+                }
+                continue;
+            }
+            $extPlugins[] = $fileName;
+        }
+    }
 
-	return $extplugins;
+    // Trigger cache handlers
+    Cot::$cache && Cot::$cache->trigger($hook);
+
+    return $extPlugins;
 }
 
 /**

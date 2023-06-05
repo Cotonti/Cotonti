@@ -94,7 +94,7 @@ if (Cot::$cfg['check_updates']) {
 $t->assign(cot_generate_infotags('ADMIN_HOME_'));
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.home.mainpanel', 'R') as $pl) {
+foreach (cot_getextplugins('admin.home.mainpanel') as $pl) {
 	$line = '';
 	include $pl;
 	if (!empty($line)) {
@@ -105,7 +105,7 @@ foreach (cot_getextplugins('admin.home.mainpanel', 'R') as $pl) {
 /* ===== */
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.home.sidepanel', 'R') as $pl) {
+foreach (cot_getextplugins('admin.home.sidepanel') as $pl) {
 	$line = '';
 	include $pl;
 	if (!empty($line)) {
@@ -116,7 +116,7 @@ foreach (cot_getextplugins('admin.home.sidepanel', 'R') as $pl) {
 /* ===== */
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.home', 'R') as $pl) {
+foreach (cot_getextplugins('admin.home') as $pl) {
 	include $pl;
 }
 /* ===== */
