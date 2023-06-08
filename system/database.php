@@ -435,6 +435,26 @@ class CotDB
 		return $res;
 	}
 
+    /**
+     * Checks if a table exists in schema
+     *
+     * @param string $tableName Table name
+     * @return bool TRUE if the table exists, FALSE otherwise
+     */
+    public function tableExists($tableName)
+    {
+        if (mb_strpos($tableName, '.') !== false) {
+            list($schema, $tableName) = explode('.', $tableName);
+        } else {
+            $schema = $this->config['dbName'];
+        }
+        $query = 'SELECT * FROM ' . $this->quoteTableName('information_schema.tables')
+            . ' WHERE ' . $this->quoteColumnName('table_schema') . ' = :schema AND ' . $this->quoteColumnName('table_name')
+            . ' = :table LIMIT 1';
+
+        return $this->query($query, ['schema' => $schema, 'table' => $tableName])->rowCount() === 1;
+    }
+
 	/**
 	 * Checks if a field exists in a table
 	 *
@@ -442,7 +462,7 @@ class CotDB
 	 * @param string $fieldName Field name
 	 * @return bool TRUE if the field exists, FALSE otherwise
 	 */
-	function fieldExists($tableName, $fieldName)
+    public function fieldExists($tableName, $fieldName)
     {
 		return $this->query("SHOW COLUMNS FROM " . $this->quoteTableName($tableName) .
                 " WHERE Field = " . $this->quote($fieldName))->rowCount() == 1;
@@ -457,7 +477,7 @@ class CotDB
      *     columns. No column check will be preformed if left empty.
 	* @return bool TRUE if the index name or column order exists, FALSE otherwise
 	*/
-	function indexExists($tableName, $index_name, $indexColumns = array())
+    public function indexExists($tableName, $index_name, $indexColumns = array())
 	{
 		if (empty($indexColumns)) {
 			return (bool) $this->query('SHOW INDEXES FROM ' . $this->quoteTableName($tableName) .
@@ -499,7 +519,7 @@ class CotDB
      *     columns. $indexName will be used if empty.
 	* @return int Number of rows affected
 	*/
-	function addIndex($tableName, $indexName, $indexColumns = array())
+    public function addIndex($tableName, $indexName, $indexColumns = array())
 	{
 		if (empty($indexColumns)) {
             $indexColumns = array($indexName);
