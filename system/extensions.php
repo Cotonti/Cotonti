@@ -608,8 +608,7 @@ function cot_extension_uninstall($name, $is_module = false)
 		$uninstall_handler = $path . "/setup/$name.uninstall.php";
 	}
 
-	if (file_exists($uninstall_handler))
-	{
+	if (file_exists($uninstall_handler)) {
 		$envtmp = $env;
 		$env = array(
 			'ext' => $name,
@@ -619,12 +618,9 @@ function cot_extension_uninstall($name, $is_module = false)
 		$ret = include $uninstall_handler;
 		$env = $envtmp;
 
-		if ($ret !== false)
-		{
+		if ($ret !== false) {
 			cot_message(cot_rc('ext_executed_php', array('ret' => $ret)));
-		}
-		else
-		{
+		} else {
 			cot_error(cot_rc('ext_executed_php', array('ret' => $L['Error'])));
 		}
 	}
@@ -635,24 +631,26 @@ function cot_extension_uninstall($name, $is_module = false)
 	$sql = $db->query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
 		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
 	$cot_plugins = array();
-	if ($sql->rowCount() > 0)
-	{
-		while ($row = $sql->fetch())
-		{
+	if ($sql->rowCount() > 0) {
+		while ($row = $sql->fetch()) {
 			$cot_plugins[$row['pl_hook']][] = $row;
 		}
 		$sql->closeCursor();
 	}
 
 	$cot_plugins_active[$name] = false;
-	if (!$is_module)
-	{
+	if (!$is_module) {
 		unset($cot_plugins_enabled[$name]);
-	}
-	else
-	{
+	} else {
 		unset($cot_modules[$name]);
 	}
+
+    /* === Hook  === */
+    foreach (cot_getextplugins('extension.uninstall.done') as $pl) {
+        include $pl;
+    }
+    /* ===== */
+
 	// Clear cache
 	$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
 	$cache && $cache->clear();
