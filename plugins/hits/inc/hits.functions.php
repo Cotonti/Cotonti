@@ -54,7 +54,7 @@ function cot_stat_inc($name, $value = 1, $createIfNotExists = false)
     }
     $value = (int) $value;
     cot::$db->query(
-        'UPDATE ' . cot::$db->stats . " SET stat_value = stat_value + {$value} WHERE stat_name= ?",
+        'UPDATE ' . cot::$db->stats . " SET stat_value = stat_value + {$value} WHERE stat_name = ?",
         $name
     );
 }

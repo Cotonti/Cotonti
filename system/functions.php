@@ -5316,30 +5316,31 @@ function cot_shield_hammer($hammer, $action, $lastseen)
 {
 	global $cfg, $sys;
 
-	if ($action == 'Hammering')
-	{
+	if ($action == 'Hammering') {
 		cot_shield_protect();
 		cot_shield_clearaction();
-		cot_plugin_active('hits') && cot_stat_inc('totalantihammer');
+
+		if (cot_plugin_active('hits') ) {
+            if (!function_exists('cot_stat_inc')) {
+                require_once cot_incfile('hits', 'plug');
+            }
+            cot_stat_inc('totalantihammer');
+        }
 	}
 
-	if (($sys['now'] - $lastseen) < 4)
-	{
+	if ((Cot::$sys['now'] - $lastseen) < 4) {
 		$hammer++;
-		if ($hammer > $cfg['shieldzhammer'])
-		{
+		if ($hammer > Cot::$cfg['shieldzhammer']) {
 			cot_shield_update(180, 'Hammering');
 			cot_log('IP banned 3 mins, was hammering', 'sec', 'hammer', 'error');
 			$hammer = 0;
 		}
-	}
-	else
-	{
-		if ($hammer > 0)
-		{
+	} else {
+		if ($hammer > 0) {
 			$hammer--;
 		}
 	}
+
 	return $hammer;
 }
 
