@@ -718,7 +718,7 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
             return null;
         }
 
-        $timestamp = strtotime($date);
+        $timestamp = cot_date2stamp($date);
         if ($timestamp === false) {
             return null;
         }
@@ -741,13 +741,13 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
         $minute = cot_import($date['minute'], 'D', 'INT');
 
         if (
-            count($date) > 0 &&
-            is_null($year) &&
-            is_null($month) &&
-            is_null($day) &&
-            is_null($hour) &&
-            is_null($minute) &&
-            empty($date['string'])
+            count($date) > 0
+            && is_null($year)
+            && is_null($month)
+            && is_null($day)
+            && is_null($hour)
+            && is_null($minute)
+            && empty($date['string'])
         ) {
             // Datetime field is present in form but it is set to zero date (empty)
             return null;
@@ -3962,35 +3962,40 @@ if (!function_exists('strptime'))
 
 /**
  * Converts date into UNIX timestamp.
- * Like strptime() but using formatting as specified for date().
+ * @param string $date Formatted date as a string.
+ * @param string $format Format on which to base the conversion. Defaults to MySQL date format.
+ * @see https://www.php.net/manual/en/datetimeimmutable.createfromformat.php for more information about format.
  *
- * @param string $date
- *	Formatted date as a string.
- * @param string $format
- *	Format on which to base the conversion.
- *	Defaults to MySQL date format.
- *	Can also be set to 'auto', in which case
- *	it will rely on strtotime for parsing.
  * @return int UNIX timestamp or NULL for 0000-00-00
+ *
+ * @todo use IntlDateFormatter::parse() for locale-dependent parsing
+ * @see https://www.php.net/manual/en/intldateformatter.parse.php
  */
 function cot_date2stamp($date, $format = null)
 {
-	if (empty($date) || $date == '0000-00-00' || mb_strtolower($date) == 'null') {
+	if (
+        empty($date)
+        || in_array($date, ['0000-00-00', '0000-00-00 00:00:00', '0000-00-00 00:00'])
+        || mb_strtolower($date) === 'null'
+    ) {
         return null;
     }
-	if (!$format || $format == 'auto') {
+
+    if (!$format || $format == 'auto') {
 	    $result = strtotime($date);
 		return ($result === false) ? null : $result;
 	}
-	$format = cot_date2strftime($format);
-	$m = strptime($date, $format);
+
+    // for locale-independent parsing
+    $dateTime = date_parse_from_format($format, $date);
+
 	return mktime(
-        (int) $m['tm_hour'],
-        (int) $m['tm_min'],
-        (int) $m['tm_sec'],
-        (int) $m['tm_mon'] + 1,
-        (int) $m['tm_mday'],
-        (int) $m['tm_year'] + 1900
+        (int) $dateTime['hour'],
+        (int) $dateTime['minute'],
+        (int) $dateTime['second'],
+        (int) $dateTime['month'],
+        (int) $dateTime['day'],
+        (int) $dateTime['year']
 	);
 }
 
@@ -4003,29 +4008,6 @@ function cot_date2stamp($date, $format = null)
 function cot_stamp2date($stamp)
 {
 	return date('Y-m-d', $stamp);
-}
-
-/**
- * Convert a date format to a strftime format.
- * Timezone conversion is done for unix. Windows users must exchange %z and %Z.
- * Unsupported date formats : S, n, t, L, B, G, u, e, I, P, Z, c, r
- * Unsupported strftime formats : %U, %W, %C, %g, %r, %R, %T, %X, %c, %D, %F, %x
- *
- * @see http://php.net/manual/en/function.strftime.php
- * @param string $format A format for date().
- * @return string Format usable for strftime().
- */
-function cot_date2strftime($format) {
-
-	$chars = array(
-		'd' => '%d', 'D' => '%a', 'j' => '%e', 'l' => '%A',
-		'N' => '%u', 'w' => '%w', 'z' => '%j', 'W' => '%V',
-		'F' => '%B', 'm' => '%m', 'M' => '%b', 'o' => '%G',
-		'Y' => '%Y', 'y' => '%y', 'a' => '%P', 'A' => '%p',
-		'g' => '%l', 'h' => '%I', 'H' => '%H', 'i' => '%M',
-		's' => '%S', 'O' => '%z', 'T' => '%Z', 'U' => '%s'
-	);
-	return strtr((string)$format, $chars);
 }
 
 /**
