@@ -99,7 +99,7 @@ function cot_clear_mark($text, $words)
     }
 
     return  preg_replace(
-        '`(' . implode('|', $search_tag) . ')`i',
+        '`(' . implode('|', $search_tag) . ')`iu',
         '<span class="search-hl">$1</span>',
         $text_result
     );
