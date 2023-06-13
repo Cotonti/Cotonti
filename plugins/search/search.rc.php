@@ -14,7 +14,6 @@ Hooks=rc
  */
 
 defined('COT_CODE') or die('Wrong URL');
-if ($cfg['jquery'])
-{
-	Resources::addFile($cfg['plugins_dir'].'/search/js/hl.min.js');
+if (Cot::$cfg['jquery']) {
+	Resources::addFile(Cot::$cfg['plugins_dir'] . '/search/js/hl.min.js');
 }

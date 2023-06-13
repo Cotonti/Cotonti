@@ -26,7 +26,7 @@ require_once cot_incfile('forms');
 $sq = cot_import('sq', 'R', 'TXT');
 
 $sq = Cot::$db->prep($sq);
-$hl = urlencode(mb_strtoupper($sq));
+$hl = mb_strtoupper($sq);
 $tab = cot_import('tab', 'R', 'ALP');
 $cfg_maxitems = is_numeric(Cot::$cfg['plugin']['search']['maxitems']) ? abs(floor(Cot::$cfg['plugin']['search']['maxitems'])) : 50;
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg_maxitems);
@@ -637,8 +637,7 @@ if (!empty($pagenav)) {
 cot_display_messages($t);
 
 /* === Hook === */
-foreach (cot_getextplugins('search.tags') as $pl)
-{
+foreach (cot_getextplugins('search.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

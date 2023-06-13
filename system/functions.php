@@ -3974,7 +3974,7 @@ function cot_stamp2date($stamp)
 /**
  * Returns a list of timezones sorted by GMT offset.
  *
- * @param bool $withgmt Return 'GMT' as the first option, otherwise it won't be included
+ * @param bool $withUtc Return 'UTC' as the first option, otherwise it won't be included
  * @param bool $dst Include DST in timezone offsets, if DST is in effect there right now
  * @return array Multidimensional array. Each timezone has the following keys:
  *  'identifier' - PHP timezone name, e.g. "America/El_Salvador"
@@ -3982,30 +3982,38 @@ function cot_stamp2date($stamp)
  *  'title' - Localized timezone name, e.g. "America/El Salvador"
  *  'description' - Hourly GMT offset and localized name, e.g. "GMT-06:00 America/El Salvador"
  */
-function cot_timezone_list($withgmt = false, $dst = false)
+function cot_timezone_list($withUtc = false, $dst = false)
 {
 	global $Ltz;
-	if (!$Ltz) include cot_langfile('countries', 'core');
-	static $timezones = array();
+	if (!$Ltz) {
+        include cot_langfile('countries', 'core');
+    }
+	static $timezones = [];
 	if (!$timezones) {
-		$timezonelist = array();
-		$regions = array('Africa', 'America', 'Antarctica', 'Asia', 'Atlantic', 'Europe', 'Indian', 'Pacific');
+		$timezonelist = [];
+		$regions = ['Africa', 'America', 'Antarctica', 'Asia', 'Atlantic', 'Europe', 'Indian', 'Pacific'];
 		$identifiers = DateTimeZone::listIdentifiers();
 		foreach ($identifiers as $timezone) {
 		    $tmp = explode('/', $timezone, 2);
             $region = $tmp[0];
             $city = isset($tmp[1]) ? $tmp[1] : '';
-			if (!in_array($region, $regions)) continue;
+			if (!in_array($region, $regions)) {
+                continue;
+            }
 			$offset = cot_timezone_offset($timezone, false, $dst);
 			$gmtoffset = cot_build_timezone($offset);
-			$title = isset($Ltz[$timezone]) ? $Ltz[$timezone] : $region.'/'.str_replace('_', ' ', $city);
-			$timezonelist[] = array(
+			$title = isset($Ltz[$timezone])
+                ? $Ltz[$timezone]
+                : $region . '/' . str_replace('_', ' ', $city);
+			$timezonelist[] = [
 				'identifier' => $timezone,
 				'offset' => $offset,
 				'title' => $title,
-				'description' => "$gmtoffset $title"
-			);
+				'description' => "$gmtoffset $title",
+			];
 		}
+        $offsets = [];
+        $names = [];
 		foreach ($timezonelist as $k => $tz) {
 			$offsets[$k] = $tz['offset'];
 			$names[$k] = $tz['title'];
@@ -4013,7 +4021,10 @@ function cot_timezone_list($withgmt = false, $dst = false)
 		array_multisort($offsets, SORT_ASC, $names, SORT_ASC, $timezonelist);
 		$timezones = $timezonelist;
 	}
-	return $withgmt ? array_merge(array(array('name' => 'UTC', 'identifier' => 'UTC', 'offset' => 0, 'description' => 'UTC')), $timezones) : $timezones;
+
+	return $withUtc
+        ? array_merge([['name' => 'UTC', 'identifier' => 'UTC', 'offset' => 0, 'description' => 'UTC']], $timezones)
+        : $timezones;
 }
 
 /**

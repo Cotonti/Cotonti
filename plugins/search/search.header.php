@@ -16,14 +16,12 @@ Tags=header.tpl:{HEADER_HEAD}
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (!empty($highlight) && $cfg['jquery'])
-{
+if (!empty($highlight) && Cot::$cfg['jquery']) {
 	$search_embed = '$(document).ready(function() {$("body").each(function() {';
 
 	$highlight = explode(' ', $highlight);
-	foreach ($highlight as $key=>$value)
-	{
-		$search_embed .= '$.highlight(this, "'.mb_strtoupper($value).'");';
+	foreach ($highlight as $key => $value) {
+		$search_embed .= '$.highlight(this, "' . mb_strtoupper($value) . '");';
 	}
 
 	$search_embed .= '});});';

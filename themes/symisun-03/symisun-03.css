@@ -943,7 +943,7 @@ div.star-rating-readonly a { cursor: default !important; } /* Read Only CSS */
 .coltop { color: #555; padding: 5px 0; font-weight: bold; height: 25px; vertical-align: middle; }
 .desc { font-size: 95%; padding: 3px; color: #646464; }
 .spoiler { padding: 8px; margin: 8px; border: 1px dashed #CCCCCC; background-color: #DBE5E9; }
-.searchhighlight { background-color: #ef0; }
+.search-hl, .search-highlight { background-color: #ef0; }
 .bbcodes a img, .smilies a img { border: 0; background-color: transparent; }
 .loading { position: relative; left: 45%; top: -50px; z-index: 99; }
 /* tables */
