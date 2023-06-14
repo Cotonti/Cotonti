@@ -7,7 +7,7 @@ defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
 global $file, $db_auth, $db_cache, $db_cache_bindings, $db_core, $db_config, $db_groups, $db_groups_users, $db_logger,
         $db_online, $db_extra_fields, $db_plugins, $db_structure, $db_updates, $db_users;
 
-if (!function_exists('cot_install_config_replace')) {
+if (!function_exists('cot_installConfigReplace')) {
     /**
      * Replaces a sample config with its actual value
      *
@@ -16,7 +16,7 @@ if (!function_exists('cot_install_config_replace')) {
      * @param string $config_value Config value to set
      * @return string Modified file contents
      */
-    function cot_install_config_replace(&$file_contents, $config_name, $config_value)
+    function cot_installConfigReplace(&$file_contents, $config_name, $config_value)
     {
         $file_contents = preg_replace(
             "#^\\\$cfg\['$config_name'\]\s*=\s*'.*?';#m",
@@ -49,11 +49,11 @@ if (
     if (Cot::$cfg['mysqlcharset'] != 'utf8mb4' || Cot::$cfg['mysqlcollate'] != 'utf8mb4_unicode_ci') {
         $configContent = file_get_contents($file['config']);
         if (Cot::$cfg['mysqlcharset'] != 'utf8mb4') {
-            cot_install_config_replace($configContent, 'mysqlcharset', 'utf8mb4');
+            cot_installConfigReplace($configContent, 'mysqlcharset', 'utf8mb4');
             Cot::$cfg['mysqlcharset'] = 'utf8mb4';
         }
         if (Cot::$cfg['mysqlcollate'] != 'utf8mb4_unicode_ci') {
-            cot_install_config_replace($configContent, 'mysqlcollate', 'utf8mb4_unicode_ci');
+            cot_installConfigReplace($configContent, 'mysqlcollate', 'utf8mb4_unicode_ci');
             Cot::$cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';
         }
         file_put_contents($file['config'], $configContent);

@@ -237,16 +237,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				Cot::init();
 
 				$config_contents = file_get_contents($file['config']);
-				cot_install_config_replace($config_contents, 'mysqlhost', $db_host);
+				cot_installConfigReplace($config_contents, 'mysqlhost', $db_host);
 				if (!empty($db_port)) {
-					cot_install_config_replace($config_contents, 'mysqlport', $db_port);
+					cot_installConfigReplace($config_contents, 'mysqlport', $db_port);
 				}
-				cot_install_config_replace($config_contents, 'mysqluser', $db_user);
-				cot_install_config_replace($config_contents, 'mysqlpassword', $db_pass);
-				cot_install_config_replace($config_contents, 'mysqldb', $db_name);
+				cot_installConfigReplace($config_contents, 'mysqluser', $db_user);
+				cot_installConfigReplace($config_contents, 'mysqlpassword', $db_pass);
+				cot_installConfigReplace($config_contents, 'mysqldb', $db_name);
                 if ($setUseUtf8) {
-                    cot_install_config_replace($config_contents, 'mysqlcharset', $cfg['mysqlcharset']);
-                    cot_install_config_replace($config_contents, 'mysqlcollate', $cfg['mysqlcollate']);
+                    cot_installConfigReplace($config_contents, 'mysqlcharset', $cfg['mysqlcharset']);
+                    cot_installConfigReplace($config_contents, 'mysqlcollate', $cfg['mysqlcollate']);
                 }
 
 				$config_contents = preg_replace("#^\\\$db_x\s*=\s*'.*?';#m", "\$db_x = '$db_x';", $config_contents);
@@ -284,18 +284,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			if (!cot_error_found()) {
 				$config_contents = file_get_contents($file['config']);
-				cot_install_config_replace($config_contents, 'defaultlang', $rlang);
-				cot_install_config_replace($config_contents, 'defaulttheme', $rtheme);
-				cot_install_config_replace($config_contents, 'defaultscheme', $rscheme);
+				cot_installConfigReplace($config_contents, 'defaultlang', $rlang);
+				cot_installConfigReplace($config_contents, 'defaulttheme', $rtheme);
+				cot_installConfigReplace($config_contents, 'defaultscheme', $rscheme);
 
                 $rurl = rtrim($rurl, '/');
-				cot_install_config_replace($config_contents, 'mainurl', $rurl);
+				cot_installConfigReplace($config_contents, 'mainurl', $rurl);
                 $cfg['mainurl'] = $rurl;
 
 				$new_site_id = cot_unique(32);
-				cot_install_config_replace($config_contents, 'site_id', $new_site_id);
+				cot_installConfigReplace($config_contents, 'site_id', $new_site_id);
 				$new_secret_key = cot_unique(32);
-				cot_install_config_replace($config_contents, 'secret_key', $new_secret_key);
+				cot_installConfigReplace($config_contents, 'secret_key', $new_secret_key);
 
                 $url = parse_url($rurl);
                 $domain = preg_replace('#^www\.#', '', $url['host']);
@@ -340,7 +340,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (file_exists($robotsTxtFilePath) && is_writable($robotsTxtFilePath)) {
                     $robotsTxtFile = file_get_contents($robotsTxtFilePath);
                     $tmp = 'Host: '.$domain;
-                    $robotsTxtFile = str_replace('# Host: http://your-domain.com', $tmp, $robotsTxtFile);
+                    $robotsTxtFile = str_replace('# Host: https://your-domain.com', $tmp, $robotsTxtFile);
                     file_put_contents($robotsTxtFilePath, $robotsTxtFile);
                 }
 			}
@@ -374,13 +374,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$usr['id'] = 1;
 				// Install all at once
 				// Note: installation statuses are ignored in this installer
-				$selected_modules = cot_install_sort_extensions($selected_modules, true);
+				$selected_modules = cot_installSortExtensions($selected_modules, true);
 				foreach ($selected_modules as $ext) {
 					if (!cot_extension_install($ext, true)) {
 						cot_error("Installing $ext module has failed");
 					}
 				}
-				$selected_plugins = cot_install_sort_extensions($selected_plugins, false);
+				$selected_plugins = cot_installSortExtensions($selected_plugins, false);
 				foreach ($selected_plugins as $ext) {
 					if (!cot_extension_install($ext, false)) {
 						cot_error("Installing $ext plugin has failed");
@@ -623,7 +623,7 @@ switch ($step) {
         $rtheme = isset($rtheme) ? $rtheme : $theme;
         $rscheme = isset($rscheme) ? $rscheme : $scheme;
         $rlang = isset($rlang) ? $rlang : $lang;
-        $rurl = isset($rurl) ? $rurl : $site_url;
+        $rurl = (isset($rurl) && $rurl !== '') ? $rurl : $site_url;
 
 		$t->assign(array(
 			'INSTALL_THEME_SELECT' => cot_selectbox_theme($rtheme, $rscheme, 'theme'),
@@ -641,8 +641,8 @@ switch ($step) {
 		// Extensions
         $selected_modules = isset($selected_modules) ? $selected_modules : '';
         $selected_plugins = isset($selected_plugins) ? $selected_plugins : '';
-		cot_install_parse_extensions('Module', $default_modules, $selected_modules);
-		cot_install_parse_extensions('Plugin', $default_plugins, $selected_plugins);
+		cot_installParseExtensions('Module', $default_modules, $selected_modules);
+		cot_installParseExtensions('Plugin', $default_plugins, $selected_plugins);
 		break;
 
 	case 5:

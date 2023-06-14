@@ -59,7 +59,7 @@ function cot_get_config($file)
  * @param string $config_value Config value to set
  * @return string Modified file contents
  */
-function cot_install_config_replace(&$file_contents, $config_name, $config_value)
+function cot_installConfigReplace(&$file_contents, $config_name, $config_value)
 {
     $file_contents = preg_replace("#^\\\$cfg\['$config_name'\]\s*=\s*'.*?';#m",
         "\$cfg['$config_name'] = '$config_value';", $file_contents);
@@ -72,7 +72,7 @@ function cot_install_config_replace(&$file_contents, $config_name, $config_value
  * @param array $default_list A list of recommended extensions (checked by default)
  * @param array $selected_list A list of previously selected extensions
  */
-function cot_install_parse_extensions($ext_type, $default_list = array(), $selected_list = array())
+function cot_installParseExtensions($ext_type, $default_list = array(), $selected_list = array())
 {
     global $t, $cfg, $L;
     $ext_type_lc = strtolower($ext_type);
@@ -164,7 +164,7 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
  * @param bool $is_module TRUE if sorting modules, FALSE if sorting plugins
  * @return array Sorted list of extension names
  */
-function cot_install_sort_extensions($selected_extensions, $is_module = FALSE)
+function cot_installSortExtensions($selected_extensions, $is_module = FALSE)
 {
     global $cfg;
     $path = $is_module ? $cfg['modules_dir'] : $cfg['plugins_dir'];
