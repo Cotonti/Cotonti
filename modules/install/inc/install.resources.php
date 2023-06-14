@@ -1,7 +1,12 @@
 <?php
-/*
+/**
  * Installer resources
+ *
+ * @package Install
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
+
 
 $R['install_code_available'] = '<span class="valid">'.$L['Available'].'</span>';
 $R['install_code_found'] = '<span class="valid">'.$L['Found'].'</span>';

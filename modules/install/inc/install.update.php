@@ -309,20 +309,4 @@ cot_display_messages($t);
 $t->parse('MAIN');
 $t->out('MAIN');
 
-function cot_get_config($file)
-{
-	include $file;
 
-	$vars = get_defined_vars();
-    $db_vars = [];
-	foreach ($vars as $key => $val) {
-		if (preg_match('#^db_#', $key)) {
-			$db_vars[$key] = $val;
-		}
-	}
-
-	return [
-        !empty($cfg) ? $cfg : [],
-        $db_vars,
-    ];
-}

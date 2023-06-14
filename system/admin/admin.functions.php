@@ -261,11 +261,10 @@ function cot_generate_infotags($tag_prefix = '')
 		'DB_VERSION' => htmlspecialchars(Cot::$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'")->fetchColumn())
 	);
 
-	$return_array = array();
-	foreach ($temp_array as $key => $val)
-	{
-		$return_array[$tag_prefix . $key] = $val;
+	$returnArray = [];
+	foreach ($temp_array as $key => $val) {
+        $returnArray[$tag_prefix . $key] = $val;
 	}
 
-	return $return_array;
+	return $returnArray;
 }

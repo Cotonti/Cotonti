@@ -47,12 +47,9 @@ $env['ext'] = 'install';
 
 if (isset($cfg['new_install']) && $cfg['new_install']) {
 	// A Few basics from common.php
-	if (version_compare(PHP_VERSION, '6.0.0', '<='))
-	{
-		if (get_magic_quotes_gpc())
-		{
-			function cot_disable_mqgpc(&$value, $key)
-			{
+	if (version_compare(PHP_VERSION, '6.0.0', '<=')) {
+		if (get_magic_quotes_gpc()) {
+			function cot_disable_mqgpc(&$value, $key) {
 				$value = stripslashes($value);
 			}
 			$gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
@@ -109,9 +106,7 @@ if (isset($cfg['new_install']) && $cfg['new_install']) {
 
 	Cot::init();
 
-	$sql_install = @$db->query("SHOW TABLES LIKE '$db_updates'");
-
-	if ($sql_install->rowCount() != 1) {
+    if (!$db->tableExists(Cot::$db->updates)) {
 		define('COT_UPGRADE', true);
 		$cfg['defaulttheme'] = 'nemesis';
 		$cfg['defaultscheme'] = 'default';
@@ -121,6 +116,7 @@ if (isset($cfg['new_install']) && $cfg['new_install']) {
 
 require_once cot_incfile('forms');
 require_once cot_incfile('extensions');
+require_once cot_incfile('install', 'module');
 require_once cot_langfile('install', 'module');
 require_once cot_langfile('users', 'core');
 require_once cot_langfile('admin', 'core');
@@ -136,13 +132,13 @@ $file['config_sample'] = './datas/config-sample.php';
 $file['sql'] = './setup/install.sql';
 
 // Check if another install process is running
-$processFileDir =  isset($cfg['cache_dir']) ? $cfg['cache_dir'] : './datas/cache';
-$processFile = $processFileDir . '/install';
+$processFile = cot_installProcessFile();
+$processFileDir = dirname($processFile);
 $anotherProcessRunning = false;
 if (is_writable($processFileDir)) {
     if (file_exists($processFile)) {
-        $anotherProcessStarted = file_get_contents($processFile);
-        if ($sys['now'] - $anotherProcessStarted < 30) {
+        $anotherProcessStarted = (int) file_get_contents($processFile);
+        if (time() - $anotherProcessStarted < 30) {
             // Another process was recently started
             cot_die_message(
                 101,
