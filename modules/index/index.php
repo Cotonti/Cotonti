@@ -16,7 +16,8 @@ Hooks=module
 defined('COT_CODE') or die('Wrong URL.');
 
 // Environment
-define('COT_INDEX', true);
+const COT_INDEX = true;
+
 $env['location'] = 'home';
 
 /* === Hook === */

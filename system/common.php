@@ -18,7 +18,9 @@ if (version_compare(PHP_VERSION, '6.0.0', '<=')) {
 		array_walk_recursive($gpc, 'cot_disable_mqgpc');
 	}
 }
-define('MQGPC', FALSE);
+
+const MQGPC = false;
+
 if ($cfg['display_errors']) {
 	error_reporting(E_ALL ^ E_NOTICE);
 	ini_set('display_errors', 1);

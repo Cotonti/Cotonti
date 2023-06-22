@@ -24,29 +24,29 @@ if (!defined('COT_INSTALL')) {
 }
 
 // Group constants
-define('COT_GROUP_DEFAULT', 0);
-define('COT_GROUP_GUESTS', 1);
-define('COT_GROUP_INACTIVE', 2);
-define('COT_GROUP_BANNED', 3);
-define('COT_GROUP_MEMBERS', 4);
-define('COT_GROUP_SUPERADMINS', 5);
-define('COT_GROUP_MODERATORS', 6);
+const COT_GROUP_DEFAULT = 0;
+const COT_GROUP_GUESTS = 1;
+const COT_GROUP_INACTIVE = 2;
+const COT_GROUP_BANNED = 3;
+const COT_GROUP_MEMBERS = 4;
+const COT_GROUP_SUPERADMINS = 5;
+const COT_GROUP_MODERATORS = 6;
 
 /* ======== Pre-sets ========= */
 
-$out = array();
-$plu = array();
-$sys = array();
-$usr = array();
-$env = array();
-$L = array();
-$R = array();
+$out = [];
+$plu = []; // @todo Not used anywhere
+$sys = [];
+$usr = [];
+$env = [];
+$L = [];
+$R = [];
 
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.23 beta';
-$cfg['dbversion'] = '0.9.19';   // Not used anywhere
+$cfg['version'] = '0.9.23';
+$cfg['dbversion'] = '0.9.19';   // @todo Not used anywhere
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms'])) {
@@ -59,44 +59,42 @@ if (!isset($cfg['dir_perms'])) {
 /**
  * Registry for captcha functions
  */
-$cot_captcha = array();
+$cot_captcha = [];
 
 /**
  * Registry for extra fields
- * @var array
- */
+  */
 $cot_extrafields = null;
 
 /**
  * Registry for hash functions
  */
-$cot_hash_funcs = array('md5', 'sha1', 'sha256');
+$cot_hash_funcs = ['md5', 'sha1', 'sha256'];
 
 /**
  * Array of custom cot_import() filter callbacks
  */
-$cot_import_filters = array();
+$cot_import_filters = [];
 
 /**
  * Custom e-mail send callbacks
  */
-$cot_mail_senders = array();
+$cot_mail_senders = [];
 
 /**
  * Custom parser functions registry
  */
-$cot_parsers = array();
+$cot_parsers = [];
 
 /**
  * Parameters to be automatically appended to all URLs if present
  */
-$cot_url_appendix = array();
+$cot_url_appendix = [];
 
 /**
  * Structure tree
- * @var array
  */
-$structure = array();
+$structure = [];
 
 /*
  * =========================== System Functions ===============================

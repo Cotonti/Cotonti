@@ -7,9 +7,10 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
-define('COT_CODE', TRUE);
-define('COT_MESSAGE', TRUE);
-define('COT_CORE', TRUE);
+const COT_CODE = true;
+const COT_MESSAGE = true;
+const COT_CORE = true;
+
 require_once './datas/config.php';
 require_once $cfg['system_dir'] . '/functions.php';
 

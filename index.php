@@ -66,7 +66,7 @@ if (!file_exists('./datas/config.php')) {
 }
 
 // Let the include files know that we are Cotonti
-define('COT_CODE', true);
+const COT_CODE = true;
 
 // Load vital core configuration from file
 require_once './datas/config.php';

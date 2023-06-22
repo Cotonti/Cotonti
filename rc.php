@@ -8,7 +8,7 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
-define('COT_CODE', true);
+const COT_CODE = true;
 
 // Required for PHP 5.3
 require_once './datas/config.php';

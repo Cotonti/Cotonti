@@ -8,8 +8,8 @@
  */
 
 // Environment setup
-define('COT_CODE', TRUE);
-define('COT_INSTALL', TRUE);
+const COT_CODE = true;
+const COT_INSTALL = true;
 //define('COT_ADMIN', TRUE);
 
 if (file_exists('./datas/config.php')) {

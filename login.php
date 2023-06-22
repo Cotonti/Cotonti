@@ -8,9 +8,9 @@
  */
 
 // Environment
-define('COT_CODE', TRUE);
-define('COT_CORE', TRUE);
-define('COT_AUTH', TRUE);
+const COT_CODE = true;
+const COT_CORE = true;
+const COT_AUTH = true;
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'] . '/functions.php';
