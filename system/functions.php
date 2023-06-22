@@ -3449,7 +3449,7 @@ function cot_implode_messages($src = 'default', $class = '')
  * @param string $group Event group (Variants: adm/sec/ext/{ext_code} where {ext_code} is extension code ex. 'forums' or 'comments')
  * @param string $type Event type
  * @param string $status Event status
- * @param array $extradata Event additional data for extrafields
+ * @param array $extra_data Event additional data for extrafields
  */
 function cot_log($text, $group = 'adm', $type = '', $status = '', $extra_data = [])
 {
