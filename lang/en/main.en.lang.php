@@ -513,7 +513,7 @@ $L['field_required'] = 'Field must be filled';
  */
 $L['ajaxSenderror'] = 'The server encountered an internal error or misconfiguration and was unable to complete your request. Please contact the administrator and inform them of the time the error occurred, and anything you might have done that may have caused the error.';
 $L['captcha_verification_failed'] = 'Wrong bot protection code';
-$L['hookFileNotFound'] = '<strong>{$title}</strong>, event - «{$hook}»: file «{$fileName}» found. Please <a href="{$url}">update the extension</a>';
+$L['hookFileNotFound'] = '<strong>{$title}</strong>, event - «{$hook}»: file «{$fileName}» not found. Please <a href="{$url}">update the extension</a>';
 
 $L['pagenav_first'] = '&lt;&lt;';
 $L['pagenav_prev'] = '&lt;';
