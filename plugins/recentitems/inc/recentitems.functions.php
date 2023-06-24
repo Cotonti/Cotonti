@@ -31,23 +31,9 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
     }
 
     // Exclude private topics
-    if (!$authCategories['adminAll']) {
-        $sqlAdminCats = '';
-        $sqlFirstPosterId = '';
-        if (Cot::$usr > 0) {
-            $sqlFirstPosterId = ' OR ft_firstposterid = ' . Cot::$usr['id'];
-            if (!empty($authCategories['admin'])) {
-                $sqlAdminCats = array_map(
-                    function ($value) {
-                        return Cot::$db->quote($value);
-                    },
-                    $authCategories['admin']
-                );
-                $sqlAdminCats = ' OR ft_cat IN (' . implode(', ', $sqlAdminCats) . ')';
-            }
-        }
-        $where['privateTopic'] = '(ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL . $sqlFirstPosterId .
-            $sqlAdminCats . ')';
+    $where['privateTopic'] = cot_forums_sqlExcludePrivateTopics();
+    if ($where['privateTopic'] === '') {
+        unset($where['privateTopic']);
     }
 
 	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));

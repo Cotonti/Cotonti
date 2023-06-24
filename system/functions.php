@@ -1647,6 +1647,13 @@ function cot_auth($area, $option = null, $mask = 'RWA')
  */
 function cot_authCategories($area, $accessMask = 'RA')
 {
+    static $cache = [];
+
+    $cacheKey = $area . '-' . $accessMask;
+    if (isset($cache[$cacheKey])) {
+        return $cache[$cacheKey];
+    }
+
     $masks = str_split($accessMask);
     if (empty($masks)) {
         $masks = ['R', 'A'];
@@ -1671,7 +1678,8 @@ function cot_authCategories($area, $accessMask = 'RA')
     }
 
     foreach (Cot::$structure[$area] as $code => $cat) {
-        if (in_array($code, ['all', 'system',])) {
+        $code = (string) $code;
+        if (in_array($code, ['all', '']) || empty($cat)) {
             continue;
         }
 
@@ -1679,12 +1687,14 @@ function cot_authCategories($area, $accessMask = 'RA')
             $key = isset($maskMap[$mask]) ? $maskMap[$mask] : $mask;
 
             if (cot_auth($area, $code, $mask)) {
-                $result[$key][] = (string) $code;
+                $result[$key][] = $code;
             } else {
                 $result[$key . 'All'] = false;
             }
         }
     }
+
+    $cache[$cacheKey] = $result;
 
     return $result;
 }

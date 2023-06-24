@@ -102,19 +102,22 @@ switch ($rs['setlimit']) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('search.first') as $pl)
-{
+foreach (cot_getextplugins('search.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if (
-    ($tab == 'pag' || empty($tab))
+$searchInPages = ($tab == 'pag' || empty($tab))
     && cot_module_active('page')
     && Cot::$cfg['plugin']['search']['pagesearch']
-) {
-    // Making the category list
+    && cot_auth('page', 'any');
+if ($searchInPages) {
     $pageAuthCats = cot_authCategories('page');
+    $searchInPages = $searchInPages && !empty($pageAuthCats['read']);
+}
+
+if ($searchInPages) {
+    // Making the category list
 	$pages_cat_list['all'] = Cot::$L['plu_allcategories'];
     if (!empty(Cot::$structure['page'])) {
         foreach (Cot::$structure['page'] as $code => $cat) {
@@ -161,12 +164,16 @@ if (
 	}
 }
 
-if (
-    ($tab == 'frm' || empty($tab))
+$searchInForums = ($tab == 'frm' || empty($tab))
     && cot_module_active('forums')
     && Cot::$cfg['plugin']['search']['forumsearch']
-) {
+    && cot_auth('forums', 'any');
+if ($searchInForums) {
     $forumAuthCats = cot_authCategories('forums');
+    $searchInForums = $searchInForums && !empty($forumAuthCats['read']);
+}
+
+if ($searchInForums) {
 	$forum_cat_list['all'] = Cot::$L['plu_allsections'];
     if (!empty(Cot::$structure['forums'])) {
         foreach (Cot::$structure['forums'] as $code => $cat) {
@@ -242,13 +249,7 @@ if (!empty($sq)) {
 
     $items = 0;
 
-	if (
-        ($tab == 'pag' || empty($tab))
-        && cot_module_active('page')
-        && Cot::$cfg['plugin']['search']['pagesearch']
-        && !empty($pageAuthCats['read'])
-        && !cot_error_found()
-    ) {
+	if ($searchInPages && !cot_error_found()) {
         $searchInCategories = [];
 
         if ($rs['pagsub'][0] != 'all' && count($rs['pagsub']) > 0) {
@@ -437,13 +438,7 @@ if (!empty($sq)) {
 		unset($where_and, $where_or, $where);
 	}
 
-	if (
-        ($tab == 'frm' || empty($tab))
-        && cot_module_active('forums')
-        && Cot::$cfg['plugin']['search']['forumsearch']
-        && !empty($forumAuthCats['read'])
-        && !cot_error_found()
-    ) {
+	if ($searchInForums && !cot_error_found() ) {
         $searchInCategories = [];
 
         if ($rs['frmsub'][0] != 'all' && count($rs['frmsub']) > 0) {
@@ -472,21 +467,9 @@ if (!empty($sq)) {
         }
 
         // Exclude private topics
-        if (!$forumAuthCats['adminAll']) {
-            $sqlAdminCats = '';
-            $sqlFirstPosterId = '';
-            if (Cot::$usr > 0) {
-                $sqlFirstPosterId = ' OR ft_firstposterid = ' . Cot::$usr['id'];
-                if (!empty($forumAuthCats['admin'])) {
-                    $sqlAdminCats = array_map(
-                        function ($value) {return Cot::$db->quote($value);},
-                        $forumAuthCats['admin']
-                    );
-                    $sqlAdminCats = ' OR t.ft_cat IN (' . implode(', ', $sqlAdminCats) . ')';
-                }
-            }
-            $where_and['privateTopic'] = '(t.ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL . $sqlFirstPosterId .
-                $sqlAdminCats . ')';
+        $where_and['privateTopic'] = cot_forums_sqlExcludePrivateTopics('t');
+        if ($where_and['privateTopic'] === '') {
+            unset($where_and['privateTopic']);
         }
 
 		$where_and['reply'] = ($rs['frmreply'] == '1') ? 't.ft_postcount > 1' : '';

@@ -1,5 +1,4 @@
 <?php
-
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=index.tags,header.tags,footer.tags
@@ -14,6 +13,8 @@ Order=10,20,20
  * @package RecentItems
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var XTemplate $t
  */
 defined('COT_CODE') or die('Wrong URL');
 
@@ -23,17 +24,29 @@ $enpages = $t->hasTag('RECENT_PAGES');
 if ($enpages || $enforums) {
 	require_once cot_incfile('recentitems', 'plug');
 
-	if ($enpages && Cot::$cfg['plugin']['recentitems']['recentpages'] && cot_module_active('page')) {
+	if (
+        $enpages
+        && Cot::$cfg['plugin']['recentitems']['recentpages']
+        && cot_module_active('page')
+        && cot_auth('page', 'any')
+    ) {
 		require_once cot_incfile('page', 'module');
 
+        $riPageCacheKey = null;
+        $riPageUseCache = false;
 		// Try to load from cache for guests
 		if (Cot::$usr['id'] == 0 && Cot::$cache && (int) Cot::$cfg['plugin']['recentitems']['cache_ttl'] > 0) {
-			$ri_cache_id = "$theme.$lang.pages";
-			$ri_html = Cot::$cache->disk->get($ri_cache_id, 'recentitems', (int)$cfg['plugin']['recentitems']['cache_ttl']);
+            $riPageUseCache = true;
+            $riPageCacheKey = "$theme.$lang.pages";
+            $riHtml = Cot::$cache->disk->get(
+                $riPageCacheKey,
+                'recentitems',
+                (int) Cot::$cfg['plugin']['recentitems']['cache_ttl']
+            );
 		}
 
-		if (empty($ri_html)) {
-			$ri_html = cot_build_recentpages(
+		if (empty($riHtml)) {
+            $riHtml = cot_build_recentpages(
                 'recentitems.pages.index',
                 'recent',
                 Cot::$cfg['plugin']['recentitems']['maxpages'],
@@ -42,34 +55,51 @@ if ($enpages || $enforums) {
                 Cot::$cfg['plugin']['recentitems']['recentpagestext'], Cot::$cfg['plugin']['recentitems']['rightscan']
             );
 			if (Cot::$usr['id'] == 0 && Cot::$cache && (int) Cot::$cfg['plugin']['recentitems']['cache_ttl'] > 0) {
-                Cot::$cache->disk->store($ri_cache_id, $ri_html, 'recentitems');
+                Cot::$cache->disk->store($riPageCacheKey, $riHtml, 'recentitems');
 			}
 		}
 
-		$t->assign('RECENT_PAGES', $ri_html);
-		unset($ri_html);
+		$t->assign('RECENT_PAGES', $riHtml);
+		unset($riHtml);
 	}
 
-	if ($enforums && Cot::$cfg['plugin']['recentitems']['recentforums'] && cot_module_active('forums')) {
+	if (
+        $enforums
+        && Cot::$cfg['plugin']['recentitems']['recentforums']
+        && cot_module_active('forums')
+        && cot_auth('forums', 'any')
+    ) {
 		require_once cot_incfile('forums', 'module');
 
+        $riForumsCacheKey = null;
+        $riForumsUseCache = false;
 		// Try to load from cache for guests
-		if ($usr['id'] == 0 && $cache && (int)$cfg['plugin']['recentitems']['cache_ttl'] > 0)
-		{
-			$ri_cache_id = "$theme.$lang.forums";
-			$ri_html = $cache->disk->get($ri_cache_id, 'recentitems', (int) $cfg['plugin']['recentitems']['cache_ttl']);
+		if (Cot::$usr['id'] == 0 && Cot::$cache && (int) Cot::$cfg['plugin']['recentitems']['cache_ttl'] > 0) {
+            $riForumsUseCache = true;
+            $riForumsCacheKey = "$theme.$lang.forums";
+			$riHtml = Cot::$cache->disk->get(
+                $riForumsCacheKey,
+                'recentitems',
+                (int) Cot::$cfg['plugin']['recentitems']['cache_ttl']
+            );
 		}
 
-		if (empty($ri_html))
-		{
-			$ri_html = cot_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
-			if ($usr['id'] == 0 && $cache && (int)$cfg['plugin']['recentitems']['cache_ttl'] > 0)
-			{
-				$cache->disk->store($ri_cache_id, $ri_html, 'recentitems');
+		if (empty($riHtml)) {
+            $riHtml = cot_build_recentforums(
+                'recentitems.forums.index',
+                'recent',
+                Cot::$cfg['plugin']['recentitems']['maxtopics'],
+                0,
+                Cot::$cfg['plugin']['recentitems']['recentforumstitle'],
+                Cot::$cfg['plugin']['recentitems']['rightscan']
+            );
+
+            if ($riForumsUseCache) {
+                Cot::$cache->disk->store($riForumsCacheKey, $riHtml, 'recentitems');
 			}
 		}
 
-		$t->assign('RECENT_FORUMS', $ri_html);
-		unset($ri_html);
+		$t->assign('RECENT_FORUMS', $riHtml);
+		unset($riHtml);
 	}
 }

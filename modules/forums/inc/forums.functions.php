@@ -167,6 +167,47 @@ function cot_forums_prunetopics($mode, $section, $param)
 }
 
 /**
+ * SQL condition to exclude private topics from the topics list
+ * @return string
+ */
+function cot_forums_sqlExcludePrivateTopics($tableAlias = null)
+{
+    $authCategories = cot_authCategories('forums');
+
+    if ($authCategories['adminAll']) {
+        return '';
+    }
+
+    if ($tableAlias === null || $tableAlias === 'cot_forum_topics') {
+        $tableAlias = Cot::$db->forum_topics . '.';
+    } elseif ($tableAlias != '') {
+        $tableAlias .= '.';
+    }
+
+    $sqlAdminCats = '';
+    $sqlFirstPosterId = '';
+    if (Cot::$usr['id'] > 0) {
+        $sqlFirstPosterId = ' OR ' . Cot::$db->quoteC($tableAlias . 'ft_firstposterid') .' = ' . Cot::$usr['id'];
+        if (!empty($authCategories['admin'])) {
+            $categories = [];
+            foreach ($authCategories['admin'] as $category) {
+                $category = (string) $category;
+                if ($category !== '') {
+                    $categories[] = Cot::$db->quote($category);
+                }
+            }
+            if (!empty($categories)) {
+                $sqlAdminCats = ' OR ' . Cot::$db->quoteC($tableAlias . 'ft_cat')
+                    . ' IN (' . implode(', ', $categories) . ')';
+            }
+        }
+    }
+
+    return '(' . Cot::$db->quoteC($tableAlias . 'ft_mode') . ' = ' . COT_FORUMS_TOPIC_MODE_NORMAL
+        . $sqlFirstPosterId . $sqlAdminCats . ')';
+}
+
+/**
  * Recounts posts in a given topic
  *
  * @param int $topicId Topic ID
