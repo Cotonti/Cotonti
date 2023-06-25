@@ -1,6 +1,6 @@
 <?php
 /**
- * Update to v. 0.9.19-01
+ * Update to v. 0.9.24
  */
 defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
 
