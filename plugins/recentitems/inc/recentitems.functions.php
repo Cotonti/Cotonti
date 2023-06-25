@@ -12,15 +12,37 @@ defined('COT_CODE') or die("Wrong URL.");
 require_once cot_incfile('extrafields');
 require_once cot_langfile('recentitems', 'plug');
 
-function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $rightprescan = true)
-{
+/**
+ * @param string $template
+ * @param string $mode
+ * @param int $maxperpage
+ * @param int $d
+ * @param int $titlelength
+ * @param bool $rightprescan Consider user rights
+ * @return string
+ */
+function cot_build_recentforums(
+    $template,
+    $mode = 'recent',
+    $maxperpage = 5,
+    $d = 0,
+    $titlelength = 0,
+    $rightprescan = true
+) {
 	global $totalrecent;
 
     $where = [];
 
     $authCategories = cot_authCategories('forums');
 
+    $recentitems = new XTemplate(cot_tplfile($template, 'plug'));
+
     if ($rightprescan) {
+        if (empty($authCategories['read'])) {
+            $recentitems->parse('MAIN.NO_TOPICS_FOUND');
+            $recentitems->parse('MAIN');
+            return $recentitems->text('MAIN');
+        }
         if (!$authCategories['readAll']) {
             $sqlCategories = array_map(
                 function ($value) {return Cot::$db->quote($value);},
@@ -35,8 +57,6 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
     if ($where['privateTopic'] === '') {
         unset($where['privateTopic']);
     }
-
-	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
     /* === Hook === */
 	foreach (cot_getextplugins('recentitems.recentforums.first') as $pl) {

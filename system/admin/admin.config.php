@@ -94,7 +94,10 @@ switch ($n) {
 
 		if ($o == 'core') {
 			$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
-			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o=' . $o . '&p=' . $p), $L['core_' . $p]);
+			$adminpath[] = [
+                cot_url('admin', 'm=config&n=edit&o=' . $o . '&p=' . $p),
+                isset(Cot::$L['core_' . $p]) ? Cot::$L['core_' . $p] : $p,
+            ];
 		} else {
 			$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
 			$plmod = $o == 'module' ? 'mod' : 'pl';
@@ -162,15 +165,13 @@ switch ($n) {
 
 	default:
 		$adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
-		$sql = $db->query("
-			SELECT DISTINCT(config_cat) FROM $db_config
-			WHERE config_owner='core'
-			AND config_type != '" . COT_CONFIG_TYPE_HIDDEN . "'
-			ORDER BY config_cat ASC
-		");
+		$sql = Cot::$db->query(
+			'SELECT DISTINCT(config_cat) FROM ' . Cot::$db->quoteTableName(Cot::$db->config) . ' '
+			. "WHERE config_owner = 'core' AND config_type <> '" . COT_CONFIG_TYPE_HIDDEN . "' "
+			. 'ORDER BY config_cat ASC'
+        );
 		$jj = 0;
-		while ($row = $sql->fetch())
-		{
+		while ($row = $sql->fetch()) {
 			$jj++;
             /** @deprecated For backward compatibility. Will be removed in future releases */
             $legacyIcon = '';
