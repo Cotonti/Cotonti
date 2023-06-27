@@ -33,5 +33,6 @@ if (!Cot::$db->indexExists(Cot::$db->config, 'config_owner_cat_name_subcat_key')
         . ' (config_owner, config_cat, config_name, config_subcat)'
     );
 }
+
 // Remove obsolete core ratings configs. It can be found on very old sites
 Cot::$db->delete(Cot::$db->config, "config_owner = 'core' AND config_cat = 'ratings'");
