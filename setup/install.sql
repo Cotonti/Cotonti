@@ -71,7 +71,7 @@ CREATE TABLE `cot_config` (
   `config_variants` varchar(255) NOT NULL default '',
   `config_text` varchar(255) NOT NULL default '',
   `config_donor` varchar(64) NOT NULL default '',
-  UNIQUE INDEX `config_owner_cat_name_subcat_key` (`config_owner`, `config_cat`, `config_name`, `config_subcat`) USING BTREE,
+  UNIQUE INDEX `config_owner_cat_name_subcat_key` (`config_owner`, `config_cat`, `config_name`, `config_subcat`),
   KEY (`config_owner`, `config_cat`),
   KEY (`config_owner`, `config_cat`, `config_name`)
 );

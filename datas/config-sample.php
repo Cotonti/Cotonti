@@ -100,7 +100,6 @@ $cfg['useremailduplicate'] = false; // Allow users to register new accounts with
 // Set it to custom if you want to share
 // folders among different hosts.
 // ========================
-
 $cfg['avatars_dir'] = 'datas/avatars';
 $cfg['cache_dir'] = 'datas/cache';
 $cfg['lang_dir'] = 'lang';

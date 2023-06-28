@@ -207,6 +207,11 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
 {
     global $cot_plugins, $cot_hooks_fired;
 
+    static $applicationDir = null;
+    if ($applicationDir === null) {
+        $applicationDir = realpath(dirname(__DIR__)) . '/';
+    }
+
     if (Cot::$cfg['debug_mode']) {
         $cot_hooks_fired[] = $hook;
     }
@@ -229,10 +234,11 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
             }
 
             $fileName = $dir . '/' . $handler['pl_file'];
+            $fullFileName = $applicationDir . $fileName;
             if (
                 $checkExistence
                 && (!isset(Cot::$cfg['checkHookFileExistence']) || Cot::$cfg['checkHookFileExistence'])
-                && !is_readable($fileName)
+                && !is_readable($fullFileName)
             ) {
                 $extType = $handler['pl_module'] ? 'mod' : 'pl';
                 $extUrl = cot_url('admin', ['m' => 'extensions', 'a' => 'details', $extType => $handler['pl_code']]);
@@ -247,7 +253,7 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
                 }
                 continue;
             }
-            $extPlugins[] = $fileName;
+            $extPlugins[] = $fullFileName;
         }
     }
 
@@ -1208,9 +1214,8 @@ function cot_module_active($name)
 function cot_outputfilters($output)
 {
 	/* === Hook === */
-	foreach (cot_getextplugins('output') as $pl)
-	{
-		include realpath(dirname(__FILE__).'/..') . '/' . $pl;
+	foreach (cot_getextplugins('output') as $pl) {
+		include $pl;
 	}
 	/* ==== */
 
