@@ -28,6 +28,12 @@ if (!empty($duplicates)) {
 
 // Create unique index on `cot_config`
 if (!Cot::$db->indexExists(Cot::$db->config, 'config_owner_cat_name_subcat_key')) {
+    $tableData = Cot::$db->query('SHOW TABLE STATUS WHERE Name = ' . Cot::$db->quote(Cot::$db->config))
+        ->fetch();
+    if ($tableData['Engine'] !== 'InnoDB') {
+        Cot::$db->query('ALTER TABLE ' . Cot::$db->quoteTableName(Cot::$db->config) . ' ENGINE = InnoDB');
+    }
+
     Cot::$db->query(
         'CREATE UNIQUE INDEX config_owner_cat_name_subcat_key ON ' . Cot::$db->quoteTableName(Cot::$db->config)
         . ' (config_owner, config_cat, config_name, config_subcat)'

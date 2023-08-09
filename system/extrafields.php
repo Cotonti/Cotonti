@@ -296,7 +296,7 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 			global $lang, $cot_translit, $exfldfiles, $exfldsize, $cfg, $uploadfiles, $pl;
 
 			if ($source == 'P' || $source == 'POST') {
-				$import = $_FILES[$inputname];
+				$import = isset($_FILES[$inputname]) ? $_FILES[$inputname] : [];
 				$import['delete'] = cot_import('rdel_' . $inputname, 'P', 'BOL') ? 1 : 0;
 			} elseif ($source == 'D') {
 				$import = $inputname;
@@ -308,7 +308,7 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 			}
 			/* ===== */
 
-			if (is_array($import) && !$import['error'] && !empty($import['name'])) {
+			if (is_array($import) && empty($import['error']) && !empty($import['name'])) {
 				$fname = mb_substr($import['name'], 0, mb_strrpos($import['name'], '.'));
 				$ext = mb_strtolower(mb_substr($import['name'], mb_strrpos($import['name'], '.') + 1));
 

@@ -638,7 +638,7 @@ function cot_import_buffer_save()
 		// Extract the server-relative part
 		$url = parse_url($_SERVER['HTTP_REFERER']);
 		// Strip ajax param from the query
-		$url['query'] = str_replace('&_ajax=1', '', $url['query']);
+		$url['query'] = !empty($url['query']) ? str_replace('&_ajax=1', '', $url['query']) : '';
 		$path = empty($url['query']) ? $url['path'] : $url['path'] . '?' . $url['query'];
 		$hash = md5($path);
 		// Save the buffer
@@ -1528,7 +1528,7 @@ function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = tru
 
 	$catsub = [];
 	if ($firstcat && $cat != '' && (($userrights && cot_auth($area, $cat, 'R')) || !$userrights)) {
-		$catsub[] = $cat;
+		$catsub[] = ($sqlprep) ? Cot::$db->prep($cat) : $cat;
 	}
 
 	foreach (Cot::$structure[$area] as $i => $x) {
@@ -5073,7 +5073,8 @@ function cot_rc_link_footer($path)
  * @param string $type Type: 'js' or 'css'
  * @return string Minified code
  *
- * @deprecated Will be removed in v.1.0. Resources::linkFileFooter() instead. For box already gone away done
+ * @deprecated Will be removed in v.1.0. Use Resources::minify() instead. For box already gone away done
+ * @see Resources::minify()
  */
 function cot_rc_minify($code, $type = 'js')
 {

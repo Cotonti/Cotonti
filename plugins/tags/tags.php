@@ -18,12 +18,13 @@ defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 $a = cot_import('a', 'G', 'ALP');
 $a = empty($a) ? 'all' : $a;
 $qs = cot_import('t', 'G', 'TXT');
-if(empty($qs)) $qs = cot_import('t', 'P', 'TXT');
-$qs = str_replace('-', ' ', $qs);
+if (empty($qs)) {
+    $qs = cot_import('t', 'P', 'TXT');
+}
+$qs = !empty($qs) ? str_replace('-', ' ', $qs) : '';
 
 $tl = cot_import('tl', 'G', 'BOL');
-if ($tl && file_exists(cot_langfile('translit', 'core')))
-{
+if ($tl && file_exists(cot_langfile('translit', 'core'))) {
 	include_once cot_langfile('translit', 'core');
 	$qs = strtr($qs, $cot_translitb);
 }

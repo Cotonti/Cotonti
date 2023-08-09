@@ -142,10 +142,10 @@ function cot_generate_pagetags(
 		}
 		$pagepath = cot_structure_buildpath('page', $page_data['page_cat']);
 		$catpath = cot_breadcrumbs($pagepath, $pagepath_home, false);
-		$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ?
-            cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id']) :
-            cot_url('page', 'c='.$page_data['page_cat'].'&al='.$page_data['page_alias']);
-		$page_link[] = array($page_data['page_pageurl'], $page_data['page_title']);
+		$page_data['page_pageurl'] = (empty($page_data['page_alias']))
+            ? cot_url('page', ['c' => $page_data['page_cat'], 'id' => $page_data['page_id']])
+            : cot_url('page', ['c' => $page_data['page_cat'], 'al' => $page_data['page_alias']]);
+		$page_link[] = [$page_data['page_pageurl'], $page_data['page_title']];
 		$page_data['page_fulltitle'] = cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home);
 		if (!empty($page_data['page_url']) && $page_data['page_file']) {
 			$dotpos = mb_strrpos($page_data['page_url'], ".") + 1;
@@ -252,15 +252,16 @@ function cot_generate_pagetags(
 			'EXPIRE_STAMP' => $page_data['page_expire'],
 			'UPDATED_STAMP' => $page_data['page_updated'],
 			'FILE' => $haveFile,
-			'FILE_URL' => empty($page_data['page_url']) ? '' :
-                cot_url('page', 'c='.$page_data['page_cat'].'&id='.$page_data['page_id'].'&a=dl'),
+			'FILE_URL' => !empty($page_data['page_url'])
+                ? cot_url('page', ['c' => $page_data['page_cat'], 'id' => $page_data['page_id'], 'a' => 'dl'])
+                : '',
 			'FILE_SIZE' => $page_data['page_size'] / 1024, // in KiB; deprecated but kept for compatibility
 			'FILE_SIZE_BYTES' => $page_data['page_size'],
 			'FILE_SIZE_READABLE' => cot_build_filesize($page_data['page_size'], 1),
 			'FILE_ICON' => $page_data['page_fileicon'],
 			'FILE_COUNT' => $page_data['page_filecount'],
 			'FILE_COUNTTIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
-			'FILE_NAME' => basename($page_data['page_url']),
+			'FILE_NAME' => !empty($page_data['page_url']) ? basename($page_data['page_url']) : '',
 			'COUNT' => $page_data['page_count'],
                 'ADMIN' => $admin_rights ? cot_rc('list_row_admin', array('unvalidate_url' => $unvalidate_url, 'edit_url' => $edit_url)) : '',
 			'NOTAVAILABLE' => ($page_data['page_begin'] > Cot::$sys['now']) ?

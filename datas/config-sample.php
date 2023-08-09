@@ -12,7 +12,6 @@ defined('COT_CODE') or die('Wrong URL');
 // ========================
 // MySQL database parameters. Change to fit your host.
 // ========================
-
 $cfg['mysqlhost'] = 'localhost';	// Database host URL
 $cfg['mysqlport'] = '';				// Database port, if non-default
 $cfg['mysqluser'] = 'root';			// Database user
@@ -26,7 +25,6 @@ $cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';
 // ========================
 // Main site URL without trailing slash.
 // ========================
-
 $cfg['mainurl'] = 'http://localhost';
 
 // Set to TRUE if 'https' is not recognized automatically and it should always use https
@@ -47,7 +45,6 @@ $cfg['multihost'] = false;			// Allow multiple host names for this site
 // ========================
 // Default theme, color scheme and default language
 // ========================
-
 $cfg['defaulttheme'] = 'nemesis';	// Default theme code. Be SURE it's pointing to a valid folder in ./themes/... !!
 $cfg['defaultscheme'] = 'default';	// Default color scheme, only name, not like themename.css. Be SURE it's pointing to a valid folder in ./themes/defaulttheme/... !!
 $cfg['defaulticons'] = 'default';	// Default icon pack
@@ -58,7 +55,6 @@ $cfg['admintheme'] = '';			// Put custom administration theme name here
 // ========================
 // Performance-related settings
 // ========================
-
 $cfg['cache'] = true;			// Enable data caching
 $cfg['cache_drv'] = '';			// Cache driver name to use on your server (if available)
 								// Possible values: APC, Memcache, Xcache
@@ -119,7 +115,6 @@ $cfg['icons_dir'] = 'images/icons';
 // You can set it to values which deliver highest
 // security and comfort on your host.
 // ========================
-
 $cfg['dir_perms'] = 0775;
 $cfg['file_perms'] = 0664;
 
@@ -155,7 +150,6 @@ $cfg['shield_force'] = false;
 // or you'd like to share some tables between 2 sites.
 // Else do not change.
 // ========================
-
 $db_x				= 'cot_'; // Default: cot_, prefix for extra fields' table(s)
 
 // Examples:
