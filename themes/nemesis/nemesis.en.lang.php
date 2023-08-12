@@ -1,6 +1,6 @@
 <?php
 /**
- * User English Language File for Nemesis Skin
+ * User English Language File for Nemesis Theme
  *
  * @package Cotonti
  * @copyright (c) Cotonti Team

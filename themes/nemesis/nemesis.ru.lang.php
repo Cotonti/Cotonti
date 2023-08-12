@@ -1,6 +1,6 @@
 <?php
 /**
- * Пользовательский файл локализации скина Nemesis
+ * Пользовательский файл локализации темы Nemesis
  *
  * @package Cotonti
  * @copyright (c) Cotonti Team
