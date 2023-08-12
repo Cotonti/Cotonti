@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
-{PHP.cfg.doctype}
-<html>
+<!DOCTYPE html>
+<html lang="{PHP.cfg.defaultlang}">
 <head>
 {POPUP_METAS}
 <base href="{PHP.cfg.mainurl}/" />
