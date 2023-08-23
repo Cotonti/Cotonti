@@ -52,13 +52,14 @@ ul#yesno > li > a {
 	opacity: .85;
 	transition: opacity 0.1s ease-in-out;
 	text-decoration: none;
+	text-align: center;
 }
 ul#yesno > li > a:hover,
 ul#yesno > li > a:active {
 	opacity: 1;
 }
-a#confirmYes									{ background: rgb(25,135,84); border: 1px solid rgb(5,27,17); }
-a#confirmNo										{ background: rgb(220, 53, 69); border: 1px solid rgb(44, 11, 14); }
+a#confirmYes { background: rgb(25,135,84); border: 1px solid rgb(5,27,17); }
+a#confirmNo { background: rgb(220, 53, 69); border: 1px solid rgb(44, 11, 14); }
 
 div#user												{ margin-bottom: 1rem; padding: 0 1px 1px 1px; background: rgb(153,153,153); background: linear-gradient(0deg, rgba(153,153,153,1) 0%, rgba(255,255,255,0) 100%); border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; }
 	div#user > ul									{ background: #fff; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; overflow: hidden; }
@@ -114,6 +115,10 @@ div.done,
 div.help { color: rgb(8,121,144); background: rgb(207,244,252); }
 div.alert h4 { font-weight: 700; margin: 0 0 .5rem; }
 div.alert p	{ margin: 0; }
+
+.jqmWindow > .alert {
+	margin: 0;
+}
 
 .highlight_green	{ color:#205000; background-color:#befea8; }
 .highlight_red		{ color:#d8000c; background-color:#feebe8; }
