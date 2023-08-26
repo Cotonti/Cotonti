@@ -723,36 +723,43 @@ class MySQL_cache extends Db_cache_driver
 	}
 
 	/**
+     * @inheritdoc
 	 * @see Db_cache_driver::get_all()
 	 */
-	public function get_all($realms = COT_DEFAULT_REALM)
+	public function get_all($realm = COT_DEFAULT_REALM)
 	{
-		global $db, $db_cache;
-		if (is_array($realms))
-		{
-			$r_where = "c_realm IN(";
-			$i = 0;
-			foreach ($realms as $realm)
-			{
-				$glue = $i == 0 ? "'" : ",'";
-				$r_where .= $glue.$db->prep($realm)."'";
-				$i++;
-			}
-			$r_where .= ')';
-		}
-		else
-		{
-			$r_where = "c_realm = '".$db->prep($realms)."'";
-		}
-		$sql = $db->query("SELECT c_name, c_value FROM `$db_cache` WHERE c_auto=1 AND $r_where");
+        $where = '';
+        if (!empty($realm)) {
+            if (is_array($realm)) {
+                $realm = array_map(
+                    function($value)
+                    {
+                        return \Cot::$db->quote($value);
+                    },
+                    $realm
+                );
+                $where = 'c_realm IN(' . implode(', ', $realm) . ')';
+            } else {
+                $where = 'c_realm = ' . \Cot::$db->quote($realm);
+            }
+        }
+
+        // c_auto is never written
+        // $sql = $db->query("SELECT c_name, c_value FROM `$db_cache` WHERE c_auto=1 AND $r_where");
+
+        if ($where !== '') {
+            $where .= ' OR ';
+        }
+        $where .= 'c_auto = 1';
+        $sql = \Cot::$db->query('SELECT c_name, c_value FROM ' . \Cot::$db->quoteTableName(\Cot::$db->cache) . " WHERE $where");
 		$i = 0;
-		while ($row = $sql->fetch())
-		{
+		while ($row = $sql->fetch()) {
 			global ${$row['c_name']};
 			${$row['c_name']} = unserialize($row['c_value']);
 			$i++;
 		}
 		$sql->closeCursor();
+
 		return $i;
 	}
 
@@ -778,12 +785,16 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = 0)
 	{
-		global $db;
 		// Check data length
-		if ($data)
-		{
-			if (strlen($db->prep(serialize($data))) > 16777215) // MySQL max MEDIUMTEXT size
-			{
+		if ($data) {
+            /**
+             *       Type | Maximum length
+             * MEDIUMTEXT |    16,777,215 (224−1) bytes = 16 MiB
+             * LONGTEXT   | 4,294,967,295 (232−1) bytes =  4 GiB
+             */
+
+            // MySQL max MEDIUMTEXT size
+			if (strlen(\Cot::$db->prep(serialize($data))) > 16777215) {
 				return false;
 			}
 		}
@@ -1225,17 +1236,21 @@ class Cache
     {
         global $cfg, $cot_cache_autoload, $cot_cache_drivers, $cot_cache_bindings, $env;
 
-        $this->disk = new File_cache($cfg['cache_dir']);
+        $this->disk = new File_cache(\Cot::$cfg['cache_dir']);
 		$this->db = new MySQL_cache();
-		$cot_cache_autoload = is_array($cot_cache_autoload)
-			? array_merge(array('system', 'cot', $env['ext']), $cot_cache_autoload)
-				: array('system', 'cot', Cot::$env['ext']);
+        $defaultRealms = ['system', 'cot'];
+        if (!empty(\Cot::$env['ext'])) {
+            $defaultRealms[] = \Cot::$env['ext'];
+        }
+		$cot_cache_autoload = !empty($cot_cache_autoload) && is_array($cot_cache_autoload)
+			? array_merge($defaultRealms, $cot_cache_autoload)
+			: $defaultRealms;
+
 		$this->db->get_all($cot_cache_autoload);
 
-		$cfg['cache_drv'] .= '_driver';
-		if (in_array($cfg['cache_drv'], $cot_cache_drivers))
-		{
-			$selected = $cfg['cache_drv'];
+        \Cot::$cfg['cache_drv'] .= '_driver';
+		if (in_array(\Cot::$cfg['cache_drv'], $cot_cache_drivers)) {
+			$selected = \Cot::$cfg['cache_drv'];
 		}
 		if (!empty($selected))
 		{

@@ -124,6 +124,7 @@ session_start();
 cot_unregister_globals();
 
 /* =========== Early page cache ==========*/
+$cache = null;
 if ($cfg['cache'] && !$cfg['debug_mode']) {
 	require_once !empty($cfg['custom_cache']) ? $cfg['custom_cache'] : $cfg['system_dir'] . '/cache.php';
 	$cache = new Cache();
@@ -144,8 +145,6 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
 			$cache->page->read();
 		}
 	}
-} else {
-	$cache = false;
 }
 
 /* ======== Connect to the SQL DB======== */
@@ -507,16 +506,15 @@ if (empty($structure)) {
 	cot_load_structure();
 	$cache && $cache->db->store('structure', $structure, 'system');
 }
-$cot_cat = &$structure['page'];
 
 if (!$cache || !$cot_cfg) {
 	// Fill missing options with default values
 	foreach ($structure as $module => $mod_struct) {
 		if (
-		    isset($cfg[$module]['cat___default']) &&
-		    isset($mod_struct) &&
-		    is_array($cfg[$module]['cat___default']) &&
-		    is_array($mod_struct)
+		    isset($cfg[$module]['cat___default'])
+		    && isset($mod_struct)
+		    && is_array($cfg[$module]['cat___default'])
+		    && is_array($mod_struct)
         ) {
 			foreach ($mod_struct as $cat => $row) {
 				foreach ($cfg[$module]['cat___default'] as $key => $val) {
