@@ -3593,29 +3593,22 @@ function cot_message($text, $class = 'ok', $src = 'default')
  * Returns path to include file
  *
  * @param string $name Extension or API name
- * @param string $type Extension type: 'module', 'plug' or 'core' for core API
+ * @param string $type Extension type: 'module', 'plug', 'admin', 'theme' or 'core' for core API
  * @param string $part Name of the extension part
  * @return string File path
  */
-function cot_incfile($name, $type = 'core', $part = 'functions')
-{
-	global $cfg;
-	if ($type == 'core')
-	{
-		return $cfg['system_dir'] . "/$name.php";
-	}
-	elseif ($type == 'plug')
-	{
-		return $cfg['plugins_dir']."/$name/inc/$name.$part.php";
-	}
-	elseif ($name == 'admin')
-	{
+function cot_incfile($name, $type = 'core', $part = 'functions') {
+	if ($type == 'core') {
+		return Cot::$cfg['system_dir'] . "/$name.php";
+	} elseif ($type == 'plug') {
+		return Cot::$cfg['plugins_dir']."/$name/inc/$name.$part.php";
+	} elseif ($type == 'theme') {
+		return Cot::$cfg['themes_dir']."/$name/$name.$part.php";
+	} elseif ($name == 'admin') {
 		// Built-in extensions
-		return $cfg['system_dir']."/$name/$name.$part.php";
-	}
-	else
-	{
-		return $cfg['modules_dir']."/$name/inc/$name.$part.php";
+		return Cot::$cfg['system_dir']."/$name/$name.$part.php";
+	} else {
+		return Cot::$cfg['modules_dir']."/$name/inc/$name.$part.php";
 	}
 }
 
