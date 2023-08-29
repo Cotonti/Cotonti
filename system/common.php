@@ -131,11 +131,11 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
 
 	if (
         $_SERVER['REQUEST_METHOD'] == 'GET'
-        && !cot_import($sys['site_id'], 'COOKIE', 'ALP')
-		&& empty($_SESSION[$sys['site_id']])
+        && !cot_import($sys['site_id'], 'COOKIE', 'TXT')
+        && empty($_SESSION[$sys['site_id']])
         && !defined('COT_AUTH')
         && !defined('COT_ADMIN')
-		&& !defined('COT_INSTALL')
+        && !defined('COT_INSTALL')
         && !defined('COT_MESSAGE')
 	) {
 		$ext = cot_import('e', 'G', 'ALP');

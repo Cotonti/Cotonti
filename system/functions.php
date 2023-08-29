@@ -3467,85 +3467,88 @@ function cot_implode_messages($src = 'default', $class = '')
  */
 function cot_log($text, $group = 'adm', $type = '', $status = '', $extra_data = [])
 {
-	global $cot_plugins_enabled, $cot_modules;
+    global $cot_plugins_enabled, $cot_modules;
 
-    if (Cot::$cfg['loggerlevel'] != 'none') {
-        $log_work = false;
-        if (Cot::$cfg['loggerlevel'] == 'all') {
-            $log_work = true;
+    // If the application has not been initialized yet
+    if (empty(\Cot::$cfg) || empty(\Cot::$db) || \Cot::$cfg['loggerlevel'] === 'none') {
+        return false;
+    }
+
+    $log_work = false;
+    if (Cot::$cfg['loggerlevel'] == 'all') {
+        $log_work = true;
+    } else {
+        $loggerlevel = [Cot::$cfg['loggerlevel']];
+        if (stripos(Cot::$cfg['loggerlevel'], '+') !== false) {
+            $loggerlevel = explode('+', Cot::$cfg['loggerlevel']);
         }
-        else {
-            $loggerlevel = [Cot::$cfg['loggerlevel']];
-            if (stripos(Cot::$cfg['loggerlevel'], '+') !== false) {
-                $loggerlevel = explode('+', Cot::$cfg['loggerlevel']);
-            }
-            if (in_array('ext', $loggerlevel)) {
-                foreach (array_merge(array_keys($cot_plugins_enabled), array_keys($cot_modules)) as $ext) {
-                    if ($ext == $group) {
-                        if (isset($cfg[$ext]['loggerlevel'])) {
-	                    	if (Cot::$cfg[$ext]['loggerlevel'] != 'none') {
-		                        if (Cot::$cfg[$ext]['loggerlevel'] == 'all') {
-		                            $log_work = true;
-		                        }
-		                        else {
-		                        	if ($type) {
-							            if (stripos(Cot::$cfg[$ext]['loggerlevel'], '+') !== false) {
-							                $loggerlevel_ext = explode('+', Cot::$cfg[$ext]['loggerlevel']);
-							                if (in_array($type, $loggerlevel_ext)) {
-							                    $log_work = true;
-							                }
-							            }
-							            elseif (Cot::$cfg[$ext]['loggerlevel'] == $type) {
-							                $log_work = true;
-							            }
-							        }
-		                        }
-		                    }
-	                    }
-		                else {
-	                        $log_work = true;
-		                }
-	                    break;
-	                }
+        if (in_array('ext', $loggerlevel)) {
+            foreach (array_merge(array_keys($cot_plugins_enabled), array_keys($cot_modules)) as $ext) {
+                if ($ext == $group) {
+                    if (isset($cfg[$ext]['loggerlevel'])) {
+                        if (Cot::$cfg[$ext]['loggerlevel'] != 'none') {
+                            if (Cot::$cfg[$ext]['loggerlevel'] == 'all') {
+                                $log_work = true;
+                            } else {
+                                if ($type) {
+                                    if (stripos(Cot::$cfg[$ext]['loggerlevel'], '+') !== false) {
+                                        $loggerlevel_ext = explode('+', Cot::$cfg[$ext]['loggerlevel']);
+                                        if (in_array($type, $loggerlevel_ext)) {
+                                            $log_work = true;
+                                        }
+                                    } elseif (Cot::$cfg[$ext]['loggerlevel'] == $type) {
+                                        $log_work = true;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        $log_work = true;
+                    }
+                    break;
                 }
             }
-            if (!$log_work && in_array($group, $loggerlevel)) {
-            	$log_work = true;
-            }
         }
-
-        if ($log_work) {
-            $loger_data = [
-                'log_date'  => (int)Cot::$sys['now'],
-                'log_ip'    => (!empty(Cot::$usr['ip'])) ? Cot::$usr['ip'] : '',
-                'log_uid'   => Cot::$usr['id'],
-                'log_name'  => (!empty(Cot::$usr['name']) || Cot::$usr['name'] == '0') ? Cot::$usr['name'] : '',
-                'log_uri'   => cot_cutstring(Cot::$sys['uri_curr'], 255),
-                'log_group' => (!empty($group) || $group == '0') ? $group : '',
-                'log_type'  => $type,
-                'log_status'=> $status,
-                'log_text'  => cot_cutstring($text, 255)
-            ];
-
-            if (!empty($extra_data)) {
-		        if (!empty(Cot::$extrafields[Cot::$db->logger])) {
-		            foreach (Cot::$extrafields[Cot::$db->logger] as $exfld) {
-		            	if (isset($extra_data[$exfld['field_name']])) {
-		            		$loger_data['log_' . $exfld['field_name']] = $extra_data[$exfld['field_name']];
-		            	}
-		            }
-		        }
-            }
-
-            /* === Hook === */
-            foreach (cot_getextplugins('loger.event') as $pl) {
-                include $pl;
-            }
-            /* ===== */
-
-            Cot::$db && Cot::$db->insert(Cot::$db->logger, $loger_data);
+        if (!$log_work && in_array($group, $loggerlevel)) {
+            $log_work = true;
         }
     }
+
+    if (!$log_work) {
+        return false;
+    }
+
+    $loger_data = [
+        'log_date'  => (int) Cot::$sys['now'],
+        'log_ip'    => (!empty(Cot::$usr['ip'])) ? Cot::$usr['ip'] : '',
+        'log_uid'   => Cot::$usr['id'],
+        'log_name'  => (!empty(Cot::$usr['name']) || Cot::$usr['name'] == '0') ? Cot::$usr['name'] : '',
+        'log_uri'   => cot_cutstring(Cot::$sys['uri_curr'], 255),
+        'log_group' => (!empty($group) || $group == '0') ? $group : '',
+        'log_type'  => $type,
+        'log_status'=> $status,
+        'log_text'  => cot_cutstring($text, 255)
+    ];
+
+    if (!empty($extra_data)) {
+        if (!empty(Cot::$extrafields[Cot::$db->logger])) {
+            foreach (Cot::$extrafields[Cot::$db->logger] as $exfld) {
+                if (isset($extra_data[$exfld['field_name']])) {
+                    $loger_data['log_' . $exfld['field_name']] = $extra_data[$exfld['field_name']];
+                }
+            }
+        }
+    }
+
+    /* === Hook === */
+    foreach (cot_getextplugins('loger.event') as $pl) {
+        include $pl;
+    }
+    /* ===== */
+
+    \Cot::$db->insert(\Cot::$db->logger, $loger_data);
+
+    return true;
 }
 
 /**
@@ -3597,18 +3600,19 @@ function cot_message($text, $class = 'ok', $src = 'default')
  * @param string $part Name of the extension part
  * @return string File path
  */
-function cot_incfile($name, $type = 'core', $part = 'functions') {
+function cot_incfile($name, $type = 'core', $part = 'functions')
+{
 	if ($type == 'core') {
 		return Cot::$cfg['system_dir'] . "/$name.php";
 	} elseif ($type == 'plug') {
-		return Cot::$cfg['plugins_dir']."/$name/inc/$name.$part.php";
+		return Cot::$cfg['plugins_dir'] . "/$name/inc/$name.$part.php";
 	} elseif ($type == 'theme') {
-		return Cot::$cfg['themes_dir']."/$name/$name.$part.php";
+		return Cot::$cfg['themes_dir'] . "/$name/$name.$part.php";
 	} elseif ($name == 'admin') {
 		// Built-in extensions
-		return Cot::$cfg['system_dir']."/$name/$name.$part.php";
+		return Cot::$cfg['system_dir'] . "/$name/$name.$part.php";
 	} else {
-		return Cot::$cfg['modules_dir']."/$name/inc/$name.$part.php";
+		return Cot::$cfg['modules_dir'] . "/$name/inc/$name.$part.php";
 	}
 }
 
