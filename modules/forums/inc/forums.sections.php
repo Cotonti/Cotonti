@@ -111,15 +111,15 @@ $secact_max = count($cot_act) > 0 ? (max($cot_act)) : 0;
 
 Cot::$out['subtitle'] = Cot::$L['Forums'];
 
+require_once Cot::$cfg['system_dir'] . '/header.php';
+
+$t = new XTemplate(cot_tplfile('forums.sections'));
+
 /* === Hook === */
 foreach (cot_getextplugins('forums.sections.main') as $pl) {
 	include $pl;
 }
 /* ===== */
-
-require_once Cot::$cfg['system_dir'] . '/header.php';
-
-$t = new XTemplate(cot_tplfile('forums.sections'));
 
 $url_markall = cot_url('forums', "n=markall");
 $title[] = array(cot_url('forums'), Cot::$L['Forums']);
