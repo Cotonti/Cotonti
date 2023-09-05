@@ -43,13 +43,13 @@ $R['input_date_short'] =  '{$day} {$month} {$year}';
  */
 
 $R['code_title_page_num'] = ' (' . $L['Page'] . ' {$num})';
-$R['link_pagenav_current'] = '<span class="pagenav pagenav_current"><a href="{$url}"{$event}{$rel}>{$num}</a></span>';
-$R['link_pagenav_first'] = '<span class="pagenav pagenav_first"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_first'].'</a></span>';
+$R['link_pagenav_current'] = '<span class="pagenav pagenav_current"><a href="{$url}" class="{$ajax_class}" {$rel}>{$num}</a></span>';
+$R['link_pagenav_first'] = '<span class="pagenav pagenav_first"><a href="{$url}" class="{$ajax_class}" {$rel}>'.$L['pagenav_first'].'</a></span>';
 $R['link_pagenav_gap'] = '<span class="pagenav pagenav_gap">...</span>';
-$R['link_pagenav_last'] = '<span class="pagenav pagenav pagenav_last"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_last'].'</a></span>';
-$R['link_pagenav_main'] = '<span class="pagenav pagenav_pages"><a href="{$url}"{$event}{$rel}>{$num}</a></span>';
-$R['link_pagenav_next'] = '<span class="pagenav pagenav_next"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_next'].'</a></span>';
-$R['link_pagenav_prev'] = '<span class="pagenav pagenav_prev"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_prev'].'</a></span>';
+$R['link_pagenav_last'] = '<span class="pagenav pagenav pagenav_last"><a href="{$url}" class="{$ajax_class}" {$rel}>'.$L['pagenav_last'].'</a></span>';
+$R['link_pagenav_main'] = '<span class="pagenav pagenav_pages"><a href="{$url}" class="{$ajax_class}" {$rel}>{$num}</a></span>';
+$R['link_pagenav_next'] = '<span class="pagenav pagenav_next"><a href="{$url}" class="{$ajax_class}" {$rel}>'.$L['pagenav_next'].'</a></span>';
+$R['link_pagenav_prev'] = '<span class="pagenav pagenav_prev"><a href="{$url}" class="{$ajax_class}" {$rel}>'.$L['pagenav_prev'].'</a></span>';
 
 /**
  * Header

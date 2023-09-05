@@ -4197,7 +4197,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	if ($ajax) {
 		$ajax_rel = !empty($ajax_module);
 		$ajax_rel && is_string($ajax_params) ? parse_str($ajax_params, $ajax_args) : $ajax_args = $ajax_params;
-		$event = ' class="ajax"';
+		$ajax_class = 'ajax';
 		if (empty($target_div)) {
 			$base_rel = $ajax_rel ? ' rel="get;' : '';
 
@@ -4207,7 +4207,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 
 	} else {
 		$ajax_rel = false;
-		$event = '';
+		$ajax_class = '';
 	}
 	$rel = '';
 
@@ -4252,7 +4252,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		}
 		$before .= cot_rc('link_pagenav_main', array(
 			'url' => cot_url($module, $args, $hash),
-			'event' => $event,
+			'ajax_class' => $ajax_class,
 			'rel' => $rel,
 			'num' => $i
 		));
@@ -4276,7 +4276,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			}
 			$before .= cot_rc('link_pagenav_main', array(
 				'url' => cot_url($module, $args, $hash),
-				'event' => $event,
+				'ajax_class' => $ajax_class,
 				'rel' => $rel,
 				'num' => $i + 1
 			));
@@ -4306,7 +4306,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$rc = $j == $currentpage ? 'current' : 'main';
 		$pages .= cot_rc('link_pagenav_'.$rc, array(
 			'url' => cot_url($module, $args, $hash),
-			'event' => $event,
+			'ajax_class' => $ajax_class,
 			'rel' => $rel,
 			'num' => $j
 		));
@@ -4343,7 +4343,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			}
 			$after .= cot_rc('link_pagenav_main', array(
 				'url' => cot_url($module, $args, $hash),
-				'event' => $event,
+				'ajax_class' => $ajax_class,
 				'rel' => $rel,
 				'num' => $i - 1
 			));
@@ -4367,7 +4367,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		}
 		$after .= cot_rc('link_pagenav_main', array(
 			'url' => cot_url($module, $args, $hash),
-			'event' => $event,
+			'ajax_class' => $ajax_class,
 			'rel' => $rel,
 			'num' => $i
 		));
@@ -4406,7 +4406,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$prevlink = cot_url($module, $args, $hash);
 		$prev = cot_rc('link_pagenav_prev', array(
 			'url' => $prevlink,
-			'event' => $event,
+			'ajax_class' => $ajax_class,
 			'rel' => $rel,
 			'num' => $prev_n + 1
 		));
@@ -4424,7 +4424,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$firstlink = cot_url($module, $args, $hash);
 		$first = cot_rc('link_pagenav_first', array(
 			'url' => $firstlink,
-			'event' => $event,
+			'ajax_class' => $ajax_class,
 			'rel' => $rel,
 			'num' => 1
 		));
@@ -4450,7 +4450,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$nextlink = cot_url($module, $args, $hash);
 		$next = cot_rc('link_pagenav_next', array(
 			'url' => $nextlink,
-			'event' => $event,
+			'ajax_class' => $ajax_class,
 			'rel' => $rel,
 			'num' => $next_n + 1
 		));
@@ -4474,7 +4474,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$lastlink = cot_url($module, $args, $hash);
 		$last = cot_rc('link_pagenav_last', array(
 			'url' => $lastlink,
-			'event' => $event,
+			'ajax_class' => $ajax_class,
 			'rel' => $rel,
 			'num' => $last_n + 1
 		));
@@ -4482,7 +4482,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$lastn  = (($last_n + $perpage) < $entries) ?
 			cot_rc('link_pagenav_main', array(
 				'url' => cot_url($module, $args, $hash),
-				'event' => $event,
+				'ajax_class' => $ajax_class,
 				'rel' => $rel,
 				'num' => floor($last_n / $perpage) + 1
 			)): FALSE;
