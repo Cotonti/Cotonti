@@ -4197,7 +4197,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	if ($ajax) {
 		$ajax_rel = !empty($ajax_module);
 		$ajax_rel && is_string($ajax_params) ? parse_str($ajax_params, $ajax_args) : $ajax_args = $ajax_params;
-		$ajax_class = 'ajax';
+		$ajaxClass = 'ajax';
 		if (empty($target_div)) {
 			$base_rel = $ajax_rel ? ' rel="get;' : '';
 
@@ -4207,16 +4207,19 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 
 	} else {
 		$ajax_rel = false;
-		$ajax_class = '';
+		$ajaxClass = '';
 	}
-	$rel = '';
 
 	$totalpages = ceil($entries / $perpage);
 	$currentpage = floor($current / $perpage) + 1;
 	$cur_left = $currentpage - $each_side;
-	if ($cur_left < 1) $cur_left = 1;
+	if ($cur_left < 1) {
+        $cur_left = 1;
+    }
 	$cur_right = $currentpage + $each_side;
-	if ($cur_right > $totalpages) $cur_right = $totalpages;
+	if ($cur_right > $totalpages) {
+        $cur_right = $totalpages;
+    }
 
 	// Main block
 
@@ -4252,7 +4255,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		}
 		$before .= cot_rc('link_pagenav_main', array(
 			'url' => cot_url($module, $args, $hash),
-			'ajax_class' => $ajax_class,
+			'class' => $ajaxClass,
 			'rel' => $rel,
 			'num' => $i
 		));
@@ -4276,7 +4279,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			}
 			$before .= cot_rc('link_pagenav_main', array(
 				'url' => cot_url($module, $args, $hash),
-				'ajax_class' => $ajax_class,
+				'class' => $ajaxClass,
 				'rel' => $rel,
 				'num' => $i + 1
 			));
@@ -4306,7 +4309,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$rc = $j == $currentpage ? 'current' : 'main';
 		$pages .= cot_rc('link_pagenav_'.$rc, array(
 			'url' => cot_url($module, $args, $hash),
-			'ajax_class' => $ajax_class,
+			'class' => $ajaxClass,
 			'rel' => $rel,
 			'num' => $j
 		));
@@ -4343,7 +4346,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			}
 			$after .= cot_rc('link_pagenav_main', array(
 				'url' => cot_url($module, $args, $hash),
-				'ajax_class' => $ajax_class,
+				'class' => $ajaxClass,
 				'rel' => $rel,
 				'num' => $i - 1
 			));
@@ -4367,7 +4370,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		}
 		$after .= cot_rc('link_pagenav_main', array(
 			'url' => cot_url($module, $args, $hash),
-			'ajax_class' => $ajax_class,
+			'class' => $ajaxClass,
 			'rel' => $rel,
 			'num' => $i
 		));
@@ -4378,56 +4381,51 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 
 	// Previous/next
 
-	if ($current > 0)
-	{
+	if ($current > 0) {
 		$prev_n = $current - $perpage;
-		if ($prev_n < 0)
-		{
+		if ($prev_n < 0) {
 			$prev_n = 0;
 		}
-		if (Cot::$cfg['easypagenav'])
-		{
+		if (\Cot::$cfg['easypagenav']) {
 			$num = floor($prev_n / $perpage) + 1;
 			$args[$characters] = $num == 1 ? null : $num;
-		}
-		else
-		{
+		} else {
 			$args[$characters] = $prev_n;
 		}
-		if ($ajax_rel)
-		{
+		if ($ajax_rel) {
 			$ajax_args[$characters] = $args[$characters];
 			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
-		}
-		else
-		{
+		} else {
 			$rel = $base_rel;
 		}
 		$prevlink = cot_url($module, $args, $hash);
-		$prev = cot_rc('link_pagenav_prev', array(
-			'url' => $prevlink,
-			'ajax_class' => $ajax_class,
-			'rel' => $rel,
-			'num' => $prev_n + 1
-		));
+		$prev = cot_rc(
+            'link_pagenav_prev',
+            [
+                'url' => $prevlink,
+                'class' => $ajaxClass,
+                'rel' => $rel,
+                'num' => $prev_n + 1,
+            ]
+        );
 		$args[$characters] = 0;
-		if ($ajax_rel)
-		{
+		if ($ajax_rel) {
 			$ajax_args[$characters] = $args[$characters];
 			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
-		}
-		else
-		{
+		} else {
 			$rel = $base_rel;
 		}
 		unset($args[$characters]);
 		$firstlink = cot_url($module, $args, $hash);
-		$first = cot_rc('link_pagenav_first', array(
-			'url' => $firstlink,
-			'ajax_class' => $ajax_class,
-			'rel' => $rel,
-			'num' => 1
-		));
+		$first = cot_rc(
+            'link_pagenav_first',
+            [
+                'url' => $firstlink,
+                'class' => $ajaxClass,
+                'rel' => $rel,
+                'num' => 1,
+            ]
+        );
 	}
 
 	if (($current + $perpage) < $entries) {
@@ -4450,9 +4448,9 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$nextlink = cot_url($module, $args, $hash);
 		$next = cot_rc('link_pagenav_next', array(
 			'url' => $nextlink,
-			'ajax_class' => $ajax_class,
+			'class' => $ajaxClass,
 			'rel' => $rel,
-			'num' => $next_n + 1
+			'num' => $next_n + 1,
 		));
 		$last_n = ($totalpages - 1) * $perpage;
 
@@ -4474,25 +4472,25 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$lastlink = cot_url($module, $args, $hash);
 		$last = cot_rc('link_pagenav_last', array(
 			'url' => $lastlink,
-			'ajax_class' => $ajax_class,
+			'class' => $ajaxClass,
 			'rel' => $rel,
-			'num' => $last_n + 1
+			'num' => $last_n + 1,
 		));
 
 		$lastn  = (($last_n + $perpage) < $entries) ?
 			cot_rc('link_pagenav_main', array(
 				'url' => cot_url($module, $args, $hash),
-				'ajax_class' => $ajax_class,
+				'class' => $ajaxClass,
 				'rel' => $rel,
 				'num' => floor($last_n / $perpage) + 1
 			)): FALSE;
 	}
 
-	return array(
+	return [
 		'first' => '',
-		'prev' => $first.$prev,
+		'prev' => $first . $prev,
 		'main' => $pages,
-		'next' => $next.$last,
+		'next' => $next . $last,
 		'last' => $lastn,
 		'current' => $currentpage,
 		'firstlink' => $firstlink,
@@ -4501,8 +4499,8 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		'lastlink' => $lastlink,
 		'total' => $totalpages,
 		'onpage' => $onpage,
-		'entries' => $entries
-	);
+		'entries' => $entries,
+	];
 }
 
 /*
