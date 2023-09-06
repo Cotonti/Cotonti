@@ -499,7 +499,11 @@ function cot_page_url($data, $params = [], $tail = '', $htmlspecialcharsBypass =
     if (!empty($data['page_alias'])) {
         $urlParams['al'] = $data['page_alias'];
     } elseif (!empty($data['page_id'])) {
-        $urlParams['id'] = $data['page_id'];
+        $id = (int) $data['page_id'];
+        if ($id <= 0) {
+            return '';
+        }
+        $urlParams['id'] = $id;
     } else {
         return '';
     }
