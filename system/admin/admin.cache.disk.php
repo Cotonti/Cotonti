@@ -27,36 +27,33 @@ foreach (cot_getextplugins('admin.cache.disk.first') as $pl)
 }
 /* ===== */
 
-if ($a == 'purge')
-{
-	if (cot_check_xg() && cot_diskcache_clearall())
-	{
+if ($a == 'purge') {
+	if (cot_check_xg() && cot_diskcache_clearall()) {
 		cot_message('adm_purgeall_done');
 		// Empty resource consolidation cache
-		$db->delete($db_cache, "c_name = 'cot_rc_html'");
-	}
-	else
-	{
+        \Cot::$db->delete(\Cot::$db->cache, "c_name = 'cot_rc_html'");
+	} else {
 		cot_message('Error');
 	}
-}
-elseif ($a == 'delete')
-{
+    cot_redirect(cot_url('admin', ['m' => 'cache', 's' => 'disk'], '', true));
+
+} elseif ($a == 'delete') {
 	$is_id = mb_strpos($id, '/') === false && mb_strpos($id, '\\') === false && $id != '.' && $id != '..';
 	$is_onlyf = $id == COT_DISKCACHE_ONLYFILES;
-	if (cot_check_xg() && $is_id && cot_diskcache_clear($cfg['cache_dir'] . ($is_onlyf ? '' : "/$id"), !$is_onlyf))
-	{
+	if (
+        cot_check_xg()
+        && $is_id
+        && cot_diskcache_clear(\Cot::$cfg['cache_dir'] . ($is_onlyf ? '' : "/$id"), !$is_onlyf)
+    ) {
 		cot_message('adm_delcacheitem');
-		if ($id == 'static' || $is_onlyf)
-		{
+		if ($id == 'static' || $is_onlyf) {
 			// Empty resource consolidation cache
-			$db->delete($db_cache, "c_name = 'cot_rc_html'");
+            \Cot::$db->delete(\Cot::$db->cache, "c_name = 'cot_rc_html'");
 		}
-	}
-	else
-	{
+	} else {
 		cot_message('Error');
 	}
+    cot_redirect(cot_url('admin', ['m' => 'cache', 's' => 'disk'], '', true));
 }
 
 $row = cot_diskcache_list();
@@ -118,28 +115,26 @@ $adminmain = $t->text('MAIN');
  */
 function cot_diskcache_calc($dir, $do_subdirs = true)
 {
-	$cnt = $sz = 0;
+	$count = $size = 0;
 
 	$glob = glob("$dir/*");
-	if (is_array($glob))
-	{
-		foreach ($glob as $f)
-		{
-			if (is_file($f))
-			{
-				$cnt++;
-				$sz += @filesize($f);
-			}
-			elseif (is_dir($f) && $do_subdirs)
-			{
+	if (is_array($glob)) {
+		foreach ($glob as $f) {
+			if (
+                is_file($f)
+                && !in_array($f, [\Cot::$cfg['cache_dir'] . '/index.html', \Cot::$cfg['cache_dir'] . '/.htaccess'])
+            ) {
+				$count++;
+				$size += @filesize($f);
+			} elseif (is_dir($f) && $do_subdirs) {
 				$a = cot_diskcache_calc($f);
-				$cnt += $a[0]/*files*/ + 1/*directory*/;
-				$sz += $a[1];
+				$count += $a[0]/*files*/ + 1/*directory*/;
+				$size += $a[1];
 			}
 		}
 	}
 
-	return array($cnt, $sz);
+	return [$count, $size];
 }
 
 /**
@@ -187,29 +182,25 @@ function cot_diskcache_list()
  */
 function cot_diskcache_clear($dir, $do_subdirs = true, $rm_dir = false)
 {
-	if (!is_dir($dir) || !is_writable($dir))
-	{
+	if (!is_dir($dir) || !is_writable($dir)) {
 		return false;
 	}
 
 	$glob = glob("$dir/*");
-	if (is_array($glob))
-	{
-		foreach ($glob as $f)
-		{
-			if (is_file($f))
-			{
+	if (is_array($glob)) {
+		foreach ($glob as $f) {
+			if (
+                is_file($f)
+                && !in_array($f, [\Cot::$cfg['cache_dir'] . '/index.html', \Cot::$cfg['cache_dir'] . '/.htaccess'])
+            ) {
 				@unlink($f);
-			}
-			elseif (is_dir($f) && $do_subdirs)
-			{
+			} elseif (is_dir($f) && $do_subdirs) {
 				cot_diskcache_clear($f, true, true);
 			}
 		}
 	}
 
-	if ($rm_dir)
-	{
+	if ($rm_dir) {
 		@rmdir($dir);
 	}
 
@@ -224,14 +215,10 @@ function cot_diskcache_clear($dir, $do_subdirs = true, $rm_dir = false)
  */
 function cot_diskcache_clearall()
 {
-	global $cfg;
-
-	cot_diskcache_clear($cfg['cache_dir'], false);
-	$glob = glob("{$cfg['cache_dir']}/*", GLOB_ONLYDIR);
-	if (is_array($glob))
-	{
-		foreach ($glob as $dir)
-		{
+	cot_diskcache_clear(\Cot::$cfg['cache_dir'], false);
+	$glob = glob(\Cot::$cfg['cache_dir'] . '/*', GLOB_ONLYDIR);
+	if (is_array($glob)) {
+		foreach ($glob as $dir) {
 			cot_diskcache_clear($dir);
 		}
 	}
