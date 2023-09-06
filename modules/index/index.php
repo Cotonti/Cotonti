@@ -60,5 +60,5 @@ require_once $cfg['system_dir'].'/footer.php';
 
 if ($cache && $usr['id'] === 0 && $cfg['cache_index'])
 {
-	$cache->page->write();
+	$cache->static->write();
 }

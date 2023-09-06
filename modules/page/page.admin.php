@@ -150,10 +150,10 @@ if ($a == 'validate') {
 		if (\Cot::$cache) {
             \Cot::$cache->db->remove('structure', 'system');
 			if (\Cot::$cfg['cache_page']) {
-                \Cot::$cache->page->clearByUri(cot_page_url($row));
+                \Cot::$cache->static->clearByUri(cot_page_url($row));
 			}
 			if (\Cot::$cfg['cache_index']) {
-                \Cot::$cache->page->clear('index');
+                \Cot::$cache->static->clear('index');
 			}
 		}
 		cot_message('#' . $id . ' - ' . \Cot::$L['adm_queue_validated']);
@@ -196,10 +196,10 @@ if ($a == 'validate') {
 		if (\Cot::$cache) {
             \Cot::$cache->db->remove('structure', 'system');
 			if (Cot::$cfg['cache_page']) {
-                \Cot::$cache->page->clearByUri(cot_page_url($row));
+                \Cot::$cache->static->clearByUri(cot_page_url($row));
 			}
 			if (\Cot::$cfg['cache_index']) {
-                \Cot::$cache->page->clear('index');
+                \Cot::$cache->static->clear('index');
 			}
 		}
 
@@ -274,7 +274,7 @@ if ($a == 'validate') {
                     );
 
 					if (\Cot::$cache && \Cot::$cfg['cache_page']) {
-                        \Cot::$cache->page->clearByUri(cot_page_url($row));
+                        \Cot::$cache->static->clearByUri(cot_page_url($row));
 					}
 
 					$perelik .= '#' . $id.', ';
@@ -287,7 +287,7 @@ if ($a == 'validate') {
         if (\Cot::$cache) {
             Cot::$cache->db->remove('structure', 'system');
             if (Cot::$cfg['cache_index']) {
-                Cot::$cache->page->clear('index');
+                Cot::$cache->static->clear('index');
             }
         }
 

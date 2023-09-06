@@ -159,10 +159,10 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 		if (\Cot::$cache) {
             if (\Cot::$cfg['cache_forums']) {
                 //\Cot::$cache->page->clearByUri(cot_url('forums', ['m' => 'posts', 'q' => $q]));
-                \Cot::$cache->page->clearByUri(cot_url('forums'));
+                \Cot::$cache->static->clearByUri(cot_url('forums'));
             }
             if (\Cot::$cfg['cache_index']) {
-                \Cot::$cache->page->clear('index');
+                \Cot::$cache->static->clear('index');
             }
 		}
 
@@ -616,5 +616,5 @@ $t->out('MAIN');
 require_once Cot::$cfg['system_dir'] . '/footer.php';
 
 if (Cot::$cache && Cot::$usr['id'] === 0 && Cot::$cfg['cache_forums']) {
-    Cot::$cache->page->write();
+    Cot::$cache->static->write();
 }

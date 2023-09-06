@@ -30,10 +30,10 @@ function cot_trash_page_sync($data)
     cot_page_updateStructureCounters($data['page_cat']);
     if (\Cot::$cache) {
         if (\Cot::$cfg['cache_page']) {
-            \Cot::$cache->page->clearByUri(cot_page_url($data));
+            \Cot::$cache->static->clearByUri(cot_page_url($data));
         }
         if (Cot::$cfg['cache_index']) {
-            Cot::$cache->page->clear('index');
+            Cot::$cache->static->clear('index');
         }
     }
 	return true;

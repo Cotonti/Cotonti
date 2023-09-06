@@ -694,10 +694,10 @@ function cot_page_add(&$rpage, $auth = array())
 
 	if ($rpage['page_state'] == COT_PAGE_STATE_PUBLISHED && \Cot::$cache) {
 		if (\Cot::$cfg['cache_page']) {
-            \Cot::$cache->page->clearByUri(cot_page_url($rpage));
+            \Cot::$cache->static->clearByUri(cot_page_url($rpage));
 		}
 		if (\Cot::$cfg['cache_index']) {
-            \Cot::$cache->page->clear('index');
+            \Cot::$cache->static->clear('index');
 		}
 	}
 
@@ -746,10 +746,10 @@ function cot_page_delete($id, $rpage = [])
 
 	if (\Cot::$cache) {
 		if (\Cot::$cfg['cache_page']) {
-            \Cot::$cache->page->clearByUri(cot_page_url($rpage));
+            \Cot::$cache->static->clearByUri(cot_page_url($rpage));
 		}
 		if (\Cot::$cfg['cache_index']) {
-            \Cot::$cache->page->clear('index');
+            \Cot::$cache->static->clear('index');
 		}
 	}
 
@@ -813,13 +813,13 @@ function cot_page_update($id, &$rpage, $auth = [])
         && Cot::$cache
     ) {
 		if (\Cot::$cfg['cache_page']) {
-            \Cot::$cache->page->clearByUri(cot_page_url($rpage));
+            \Cot::$cache->static->clearByUri(cot_page_url($rpage));
 			if ($rpage['page_cat'] != $row_page['page_cat']) {
-                \Cot::$cache->page->clearByUri(cot_page_url($row_page));
+                \Cot::$cache->static->clearByUri(cot_page_url($row_page));
 			}
 		}
 		if (\Cot::$cfg['cache_index']) {
-            \Cot::$cache->page->clear('index');
+            \Cot::$cache->static->clear('index');
 		}
 	}
 

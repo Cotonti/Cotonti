@@ -487,5 +487,5 @@ $t->out('MAIN');
 require_once Cot::$cfg['system_dir'] . '/footer.php';
 
 if (Cot::$cache && Cot::$usr['id'] === 0 && Cot::$cfg['cache_forums']) {
-	Cot::$cache->page->write();
+	Cot::$cache->static->write();
 }

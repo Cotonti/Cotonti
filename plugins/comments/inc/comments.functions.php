@@ -186,7 +186,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		{
 			if($ext_name == 'page' && $cfg['cache_page'])
 			{
-				$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$cat]['path']));
+				$cache->static->clear('page/' . str_replace('.', '/', $structure['page'][$cat]['path']));
 				$cfg['cache_page'] = false;
 			}
 		}

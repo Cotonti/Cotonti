@@ -312,5 +312,5 @@ if (
     && \Cot::$cfg['cache_page']
     && (!isset(\Cot::$cfg['cache_page_blacklist']) || !in_array($pag['page_cat'], \Cot::$cfg['cache_page_blacklist']))
 ) {
-	Cot::$cache->page->write();
+	Cot::$cache->static->write();
 }

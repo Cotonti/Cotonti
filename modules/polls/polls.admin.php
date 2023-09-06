@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         if (\Cot::$cache && \Cot::$cfg['cache_index']) {
-            \Cot::$cache->page->clear('index');
+            \Cot::$cache->static->clear('index');
         }
     }
 }

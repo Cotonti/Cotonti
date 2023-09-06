@@ -125,10 +125,10 @@ if ($a == 'update') {
 
 	if (\Cot::$cache) {
         if (\Cot::$cfg['cache_forums']) {
-            \Cot::$cache->page->clearByUri(cot_url('forums'));
+            \Cot::$cache->static->clearByUri(cot_url('forums'));
         }
         if (\Cot::$cfg['cache_index']) {
-            \Cot::$cache->page->clear('index');
+            \Cot::$cache->static->clear('index');
         }
 	}
 

@@ -171,9 +171,9 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
             if ($sys['query'] !== '') {
                 $cacheRequest .= '?' . $sys['query'];
             }
-            $cache->page->initByUri($cacheRequest, $cfg['defaulttheme']);
+            $cache->static->initByUri($cacheRequest, $cfg['defaulttheme']);
             unset($cacheRequest);
-            $cache->page->read();
+            $cache->static->read();
         }
         unset($ext, $cache_ext);
     }

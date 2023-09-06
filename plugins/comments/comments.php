@@ -119,10 +119,10 @@ if ($m == 'edit' && $id > 0)
             {
                 if ($cfg['cache_page'])
                 {
-                    $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
+                    $cache->static->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
 
                 }
-                if ($cfg['cache_index']) $cache->page->clear('index');
+                if ($cfg['cache_index']) $cache->static->clear('index');
             }
 
 			if ($cfg['plugin']['comments']['mail'])
@@ -261,10 +261,10 @@ if ($a == 'send' && Cot::$usr['auth_write'])
         if($cache && $area == 'page'){
             if ($cfg['cache_page'])
             {
-                $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
+                $cache->static->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
 
             }
-            if ($cfg['cache_index']) $cache->page->clear('index');
+            if ($cfg['cache_index']) $cache->static->clear('index');
         }
         $cfg['cache_page'] = $cfg['cache_index'] = false;
 
@@ -303,7 +303,7 @@ if ($a == 'send' && Cot::$usr['auth_write'])
 	{
 		if ($cfg['cache_page'])
 		{
-			$cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
+			$cache->static->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
 		}
 	}
 	cot_redirect(cot_url($url_area, $url_params, '#comments', true));
@@ -327,10 +327,10 @@ elseif ($a == 'delete' && $usr['isadmin'])
         {
             if ($cfg['cache_page'])
             {
-                $cache->page->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
+                $cache->static->clear('page/' . str_replace('.', '/', $structure['page'][$url_params['c']]['path']));
 
             }
-            if ($cfg['cache_index']) $cache->page->clear('index');
+            if ($cfg['cache_index']) $cache->static->clear('index');
         }
 
 		/* == Hook == */

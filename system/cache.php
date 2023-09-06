@@ -1273,12 +1273,13 @@ class Cache
 	 * @var Temporary_cache_driver
 	 */
 	public $mem;
+
 	/**
-	 * Page cache driver.
-	 * Is FALSE if page cache is disabled
+	 * Static cache driver. For caching entire site pages.
 	 * @var Page_cache
 	 */
-	public $page;
+	public $static;
+
 	/**
 	 * Event bindings
 	 * @var array
@@ -1302,7 +1303,7 @@ class Cache
 	{
 		global $cfg;
 
-		$this->page = new Page_cache($cfg['cache_dir'] . '/page', $cfg['dir_perms']);
+		$this->static = new Page_cache($cfg['cache_dir'] . '/static', $cfg['dir_perms']);
 	}
 
 	/**
@@ -1533,7 +1534,7 @@ class Cache
 
 			case COT_CACHE_TYPE_PAGE:
                 // @todo
-				$this->page->clear($realm);
+				$this->static->clear($realm);
 			break;
 
 			default:
@@ -1542,7 +1543,7 @@ class Cache
 				}
 				$this->db->clear($realm);
 				$this->disk->clear($realm);
-				$this->page->clear($realm);
+				$this->static->clear($realm);
 		}
 	}
 
@@ -1593,7 +1594,7 @@ class Cache
 
 					case COT_CACHE_TYPE_PAGE:
                         // @todo
-						$this->page->clear($cell['realm'] . '/' . $cell['id']);
+						$this->static->clear($cell['realm'] . '/' . $cell['id']);
 					break;
 
 					default:
@@ -1603,7 +1604,7 @@ class Cache
 						}
 						$this->disk->remove($cell['id'], $cell['realm']);
 						$this->db->remove($cell['id'], $cell['realm']);
-						$this->page->clear($cell['realm'] . '/' . $cell['id']);
+						$this->static->clear($cell['realm'] . '/' . $cell['id']);
 				}
 				$cnt++;
 			}

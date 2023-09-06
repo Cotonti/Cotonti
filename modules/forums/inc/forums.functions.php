@@ -453,10 +453,10 @@ function cot_forums_updateStructureCounters($category)
         \Cot::$cache->db->remove('structure', 'system');
         if (\Cot::$cfg['cache_forums']) {
             //\Cot::$cache->page->clearByUri(cot_url('forums', ['m' => 'topics', 's' => $category]));
-            \Cot::$cache->page->clearByUri(cot_url('forums'));
+            \Cot::$cache->static->clearByUri(cot_url('forums'));
         }
         if (\Cot::$cfg['cache_index']) {
-            \Cot::$cache->page->clear('index');
+            \Cot::$cache->static->clear('index');
         }
     }
 }
