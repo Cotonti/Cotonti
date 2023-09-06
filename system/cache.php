@@ -522,7 +522,6 @@ class Page_cache
         if (empty($path)) {
             return false;
         }
-        var_dump($path);
         $this->init($path, $name, $exclude, $ext);
     }
 

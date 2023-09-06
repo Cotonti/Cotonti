@@ -157,8 +157,8 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
 
     if (
         $_SERVER['REQUEST_METHOD'] == 'GET'
-//        && empty($_COOKIE[$sys['site_id']])
-//        && empty($_SESSION[$sys['site_id']])
+        && empty($_COOKIE[$sys['site_id']])
+        && empty($_SESSION[$sys['site_id']])
         && !defined('COT_AUTH')
         && !defined('COT_ADMIN')
         && !defined('COT_INSTALL')
