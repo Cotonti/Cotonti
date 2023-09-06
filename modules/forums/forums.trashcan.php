@@ -55,18 +55,16 @@ function cot_trash_forumpost_sync($data)
 
 /**
  * Sync forumtopic action
- *
  * @param array $data trashcan item data
  * @return bool
- * @global CotDB $db
  */
 function cot_trash_forumtopic_sync($data)
 {
 	cot_forums_resyncTopic($data['ft_id']);
     cot_forums_updateStructureCounters($data['fp_cat']);
 
-    if (Cot::$cache && Cot::$cfg['cache_forums']) {
-        Cot::$cache->page->clear('forums');
+    if (\Cot::$cache && Cot::$cfg['cache_forums']) {
+        \Cot::$cache->page->clearByUri(cot_url('forums'));
     }
 
     return true;

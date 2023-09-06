@@ -5523,10 +5523,10 @@ function cot_parse_str($str)
  * This function can be overloaded by cot_url_custom().
  *
  * @param string $name Module or script name
- * @param mixed $params URL parameters as array or parameter string
+ * @param array|string $params URL parameters as array or parameter string
  * @param string $tail URL postfix, e.g. anchor
  * @param bool $htmlspecialcharsBypass If TRUE, will not convert & to &amp; and so on.
- * @param bool $ignoreAppendixx If TRUE, $cot_url_appendix will be ignored for this URL
+ * @param bool $ignoreAppendix If TRUE, $cot_url_appendix will be ignored for this URL
  * @return string Valid HTTP URL
  */
 function cot_url($name, $params = '', $tail = '', $htmlspecialcharsBypass = false, $ignoreAppendix = false)
@@ -5647,10 +5647,9 @@ function cot_uriredir_store()
 
 /**
  * Splits URL for its parts
- * Same as `parse_str` but with workaround for URL with omitted scheme for old PHP versions
- *
- * @param array $url Array of URL parts
- * @see http://php.net/manual/en/function.parse-str.php
+ * Same as `parse_url` but with workaround for URL with omitted scheme for old PHP versions
+ * @param string $url URL to parse
+ * @see https://www.php.net/manual/en/function.parse-url.php
  */
 function cot_parse_url($url)
 {

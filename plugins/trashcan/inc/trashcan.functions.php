@@ -150,7 +150,7 @@ function cot_trash_restore($id)
 			cot_log("$type #" . $res['tr_itemid'] . " restored from the trash can.", 'trashcan', 'restore', 'done');
 
 			if (isset($trash_types[$type]) && function_exists('cot_trash_'.$type.'_sync')) {
-				$resync = 'cot_trash_'.$type.'_sync';
+				$resync = 'cot_trash_' . $type . '_sync';
 				$resync($data);
 			}
 

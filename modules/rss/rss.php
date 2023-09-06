@@ -287,13 +287,12 @@ elseif ($default_mode)
 	/* ===== */
 
 	$i = 0;
-	while ($row = $sql->fetch())
-	{
-		$url = (empty($row['page_alias'])) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'], '', true) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'], '', true);
-
-		$rssDate = $row['page_date'];
-		if(!empty(Cot::$usr['timezone'])) $rssDate += Cot::$usr['timezone'] * 3600;
-
+	while ($row = $sql->fetch()) {
+        $url = cot_page_url($row, [], '', true);
+        $rssDate = $row['page_date'];
+		if (!empty(\Cot::$usr['timezone'])) {
+            $rssDate += \Cot::$usr['timezone'] * 3600;
+        }
 		$items[$i]['title'] = $row['page_title'];
 		$items[$i]['link'] = (strpos($url, '://') === false) ? COT_ABSOLUTE_URL . $url : $url;
 		$items[$i]['pubDate'] = date('r', $rssDate);
@@ -301,8 +300,7 @@ elseif ($default_mode)
 		$items[$i]['fields'] = cot_generate_pagetags($row);
 
 		/* === Hook - Part2 : Include === */
-		foreach ($extp as $pl)
-		{
+		foreach ($extp as $pl) {
 			include $pl;
 		}
 		/* ===== */

@@ -106,6 +106,32 @@ if (!empty($url['path'])) {
 }
 
 define('COT_SITE_URI', $sys['site_uri']);
+
+// Request URI relative to $sys['abs_url']
+$sys['uri'] = '/';
+// Request query after the question mark '?'
+$sys['query'] = '';
+if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] !== '/') {
+    $parsedUri = cot_parse_url($_SERVER['REQUEST_URI']);
+    $sys['query'] = isset($parsedUri['query']) ? $parsedUri['query'] : '';
+    $sys['uri'] = $parsedUri['path'];
+    if ($sys['site_uri'] !== '/') {
+        $tmpRequestUri = '/' . trim($parsedUri['path'], '/') . '/';
+        $tmpSiteUri = '/' . trim($sys['site_uri'], '/') . '/';
+
+        $position = mb_strrpos($tmpRequestUri, $tmpSiteUri);
+        if ($position !== false) {
+            $startString = mb_substr($tmpRequestUri, 0, $position);
+            $endString = mb_substr($tmpRequestUri, $position + mb_strlen($tmpSiteUri), mb_strlen($tmpRequestUri));
+
+            $sys['uri'] = '/' . trim($startString . $endString,  '/') . '/';
+            unset($startString, $endString);
+        }
+        unset($tmpRequestUri, $tmpSiteUri, $position);
+    }
+    unset($parsedUri);
+}
+
 // Absolute site url
 $sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port'] ? ':' . $sys['port'] : '') . $sys['site_uri'];
 $sys['canonical_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port'] ? ':' . $sys['port'] : '') .
@@ -129,22 +155,28 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
 	require_once !empty($cfg['custom_cache']) ? $cfg['custom_cache'] : $cfg['system_dir'] . '/cache.php';
 	$cache = new Cache();
 
-	if (
+    if (
         $_SERVER['REQUEST_METHOD'] == 'GET'
-        && !cot_import($sys['site_id'], 'COOKIE', 'TXT')
-        && empty($_SESSION[$sys['site_id']])
+//        && empty($_COOKIE[$sys['site_id']])
+//        && empty($_SESSION[$sys['site_id']])
         && !defined('COT_AUTH')
         && !defined('COT_ADMIN')
         && !defined('COT_INSTALL')
         && !defined('COT_MESSAGE')
-	) {
-		$ext = cot_import('e', 'G', 'ALP');
-		$cache_ext = !$ext ? 'index' : preg_replace('#\W#', '', $ext);
-		if (isset($cfg['cache_' . $cache_ext]) && $cfg['cache_' . $cache_ext]) {
-			$cache->page->init($cache_ext, $cfg['defaulttheme']);
-			$cache->page->read();
-		}
-	}
+    ) {
+        $ext = cot_import('e', 'G', 'ALP');
+        $cache_ext = empty($ext) ? 'index' : preg_replace('#\W#', '', $ext);
+        if (isset($cfg['cache_' . $cache_ext]) && $cfg['cache_' . $cache_ext]) {
+            $cacheRequest = $sys['uri'];
+            if ($sys['query'] !== '') {
+                $cacheRequest .= '?' . $sys['query'];
+            }
+            $cache->page->initByUri($cacheRequest, $cfg['defaulttheme']);
+            unset($cacheRequest);
+            $cache->page->read();
+        }
+        unset($ext, $cache_ext);
+    }
 }
 
 /* ======== Connect to the SQL DB======== */

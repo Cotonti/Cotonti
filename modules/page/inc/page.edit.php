@@ -90,10 +90,7 @@ if ($a == 'update')
 
 		switch ($rpage['page_state']) {
 			case COT_PAGE_STATE_PUBLISHED:
-				$urlparams = empty($rpage['page_alias']) ?
-					array('c' => $rpage['page_cat'], 'id' => $id) :
-					array('c' => $rpage['page_cat'], 'al' => $rpage['page_alias']);
-				$r_url = cot_url('page', $urlparams, '', true);
+                $r_url = cot_page_url($rpage, [], '', true);
 				break;
 
 			case COT_PAGE_STATE_PENDING:

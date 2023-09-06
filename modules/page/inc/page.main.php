@@ -251,7 +251,9 @@ if ($pag['page_totaltabs'] > 1)
 		{
 			$pag['page_tabtitle'][$i] = $i == 0 ? $pag['page_title'] : $L['Page'] . ' ' . ($i + 1);
 		}
-		$tab_url = empty($al) ? cot_url('page', 'c='.$pag['page_cat'].'&id='.$id.'&pg='.$i) : cot_url('page', 'c='.$pag['page_cat'].'&al='.$al.'&pg='.$i);
+		$tab_url = empty($al)
+            ? cot_url('page', 'c='.$pag['page_cat'].'&id='.$id.'&pg='.$i)
+            : cot_url('page', 'c='.$pag['page_cat'].'&al='.$al.'&pg='.$i);
 		$pag['page_tabtitles'][] .= cot_rc_link($tab_url, ($i+1).'. '.$pag['page_tabtitle'][$i],
 			array('class' => 'page_tabtitle'));
 		$pag['page_tabs'][$i] = str_replace('[newpage]', '', $pag['page_tabs'][$i]);
@@ -302,11 +304,13 @@ if (!empty($pag['page_url'])) {
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once Cot::$cfg['system_dir'] . '/footer.php';
+require_once \Cot::$cfg['system_dir'] . '/footer.php';
 
 if (
-    Cot::$cache && Cot::$usr['id'] === 0 && Cot::$cfg['cache_page']
-	&& (!isset(Cot::$cfg['cache_page_blacklist']) || !in_array($pag['page_cat'], Cot::$cfg['cache_page_blacklist']))
+    \Cot::$cache
+    && \Cot::$usr['id'] === 0
+    && \Cot::$cfg['cache_page']
+    && (!isset(\Cot::$cfg['cache_page_blacklist']) || !in_array($pag['page_cat'], \Cot::$cfg['cache_page_blacklist']))
 ) {
 	Cot::$cache->page->write();
 }

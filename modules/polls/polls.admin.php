@@ -82,7 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             cot_message('polls_updated');
         }
 
-        (Cot::$cache && Cot::$cfg['cache_index']) && Cot::$cache->page->clear('index');
+        if (\Cot::$cache && \Cot::$cfg['cache_index']) {
+            \Cot::$cache->page->clear('index');
+        }
     }
 }
 

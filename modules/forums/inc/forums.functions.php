@@ -438,21 +438,26 @@ function cot_forums_sync($category)
  */
 function cot_forums_updateStructureCounters($category)
 {
-    if (empty($category) || empty(Cot::$structure['forums'][$category])) {
+    if (empty($category) || empty(\Cot::$structure['forums'][$category])) {
         return;
     }
 
     $count = cot_forums_sync($category);
     Cot::$db->query(
-        'UPDATE ' . Cot::$db->quoteTableName(Cot::$db->structure) . ' SET structure_count = ' . $count .
+        'UPDATE ' . \Cot::$db->quoteTableName(\Cot::$db->structure) . ' SET structure_count = ' . $count .
         " WHERE structure_area='forums' AND structure_code = :category",
         ['category' => $category]
     );
 
-    if (Cot::$cache) {
-        Cot::$cache->db->remove('structure', 'system');
-        (Cot::$cfg['cache_forums']) && Cot::$cache->page->clear('forums');
-        (Cot::$cfg['cache_index']) && Cot::$cache->page->clear('index');
+    if (\Cot::$cache) {
+        \Cot::$cache->db->remove('structure', 'system');
+        if (\Cot::$cfg['cache_forums']) {
+            //\Cot::$cache->page->clearByUri(cot_url('forums', ['m' => 'topics', 's' => $category]));
+            \Cot::$cache->page->clearByUri(cot_url('forums'));
+        }
+        if (\Cot::$cfg['cache_index']) {
+            \Cot::$cache->page->clear('index');
+        }
     }
 }
 

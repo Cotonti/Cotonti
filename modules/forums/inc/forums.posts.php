@@ -156,14 +156,20 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 		}
 		/* ===== */
 
-		if (Cot::$cache)
-		{
-			(Cot::$cfg['cache_forums']) && Cot::$cache->page->clear('forums');
-			(Cot::$cfg['cache_index']) && Cot::$cache->page->clear('index');
+		if (\Cot::$cache) {
+            if (\Cot::$cfg['cache_forums']) {
+                //\Cot::$cache->page->clearByUri(cot_url('forums', ['m' => 'posts', 'q' => $q]));
+                \Cot::$cache->page->clearByUri(cot_url('forums'));
+            }
+            if (\Cot::$cfg['cache_index']) {
+                \Cot::$cache->page->clear('index');
+            }
 		}
 
 		cot_shield_update(30, "New post");
-		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
+		cot_redirect(
+            cot_url('forums', ['m' => 'posts', 'q' => $q, 'n' => 'last'], '#bottom', true)
+        );
 	}
 } elseif (
     $a == 'delete'

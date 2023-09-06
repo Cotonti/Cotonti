@@ -142,19 +142,17 @@ function cot_generate_pagetags(
 		}
 		$pagepath = cot_structure_buildpath('page', $page_data['page_cat']);
 		$catpath = cot_breadcrumbs($pagepath, $pagepath_home, false);
-		$page_data['page_pageurl'] = (empty($page_data['page_alias']))
-            ? cot_url('page', ['c' => $page_data['page_cat'], 'id' => $page_data['page_id']])
-            : cot_url('page', ['c' => $page_data['page_cat'], 'al' => $page_data['page_alias']]);
+        $page_data['page_pageurl'] = cot_page_url($page_data);
 		$page_link[] = [$page_data['page_pageurl'], $page_data['page_title']];
 		$page_data['page_fulltitle'] = cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home);
 		if (!empty($page_data['page_url']) && $page_data['page_file']) {
 			$dotpos = mb_strrpos($page_data['page_url'], ".") + 1;
 			$type = mb_strtolower(mb_substr($page_data['page_url'], $dotpos, 5));
-			$page_data['page_fileicon'] = cot_rc('page_icon_file_path', array('type' => $type));
+			$page_data['page_fileicon'] = cot_rc('page_icon_file_path', ['type' => $type]);
 			if (!file_exists($page_data['page_fileicon'])) {
 				$page_data['page_fileicon'] = cot_rc('page_icon_file_default');
 			}
-			$page_data['page_fileicon'] = cot_rc('page_icon_file', array('icon' => $page_data['page_fileicon']));
+			$page_data['page_fileicon'] = cot_rc('page_icon_file', ['icon' => $page_data['page_fileicon']]);
 
         } else {
 			$page_data['page_fileicon'] = '';
@@ -167,9 +165,9 @@ function cot_generate_pagetags(
 		if ($textlength > 0 && mb_strlen($text_cut) > $textlength) {
 			$text_cut = cot_string_truncate($text_cut, $textlength);
 		}
-		$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;
+		$cutted = mb_strlen($text) > mb_strlen($text_cut);
 
-		$cat_url = cot_url('page', 'c=' . $page_data['page_cat']);
+		$cat_url = cot_url('page', ['c' => $page_data['page_cat']]);
 
         $urlParams = [
             'm' => 'page',
@@ -486,6 +484,34 @@ function cot_page_updatecat($oldcat, $newcat)
 }
 
 /**
+ * Url address of the page
+ *
+ * @param array $data Page data as array
+ * @param array $params Additional URL Parameters
+ * @param string $tail URL postfix, e.g. anchor
+ * @param bool $htmlspecialcharsBypass If TRUE, will not convert & to &amp; and so on.
+ * @param bool $ignoreAppendix If TRUE, $cot_url_appendix will be ignored for this URL
+ * @return string Valid HTTP URL
+ */
+function cot_page_url($data, $params = [], $tail = '', $htmlspecialcharsBypass = false, $ignoreAppendix = false)
+{
+    $urlParams = ['c' => $data['page_cat']];
+    if (!empty($data['page_alias'])) {
+        $urlParams['al'] = $data['page_alias'];
+    } elseif (!empty($page_data['page_id'])) {
+        $urlParams['id'] = $data['page_id'];
+    } else {
+        return '';
+    }
+
+    if (!empty($params)) {
+        $urlParams = array_merge($urlParams, $params);
+    }
+
+    return cot_url('page', $urlParams, $tail, $htmlspecialcharsBypass, $ignoreAppendix);
+}
+
+/**
  * Returns permissions for a page category.
  * @param  string $cat Category code
  * @return array       Permissions array with keys: 'auth_read', 'auth_write', 'isadmin', 'auth_download'
@@ -621,30 +647,27 @@ function cot_page_add(&$rpage, $auth = array())
     // $L, $Ls, $R are needed for hook includes
     global $L, $Ls, $R;
 
-	global $cache, $cfg, $db, $db_x, $db_pages, $db_structure, $structure;
-
-	if (cot_error_found())
-	{
+	if (cot_error_found()) {
 		return false;
 	}
 
-	if (count($auth) == 0)
-	{
+	if (count($auth) == 0) {
 		$auth = cot_page_auth($rpage['page_cat']);
 	}
 
-	if (!empty($rpage['page_alias']))
-	{
-		$page_count = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_alias = ?", $rpage['page_alias'])->fetchColumn();
-		if ($page_count > 0)
-		{
-			$rpage['page_alias'] = $rpage['page_alias'].rand(1000, 9999);
+	if (!empty($rpage['page_alias'])) {
+		$page_count = \Cot::$db->query(
+            'SELECT COUNT(*) FROM ' . \Cot::$db->pages . ' WHERE page_alias = ?',
+            $rpage['page_alias']
+        )->fetchColumn();
+		if ($page_count > 0) {
+			$rpage['page_alias'] = $rpage['page_alias'] . rand(1000, 9999);
 		}
 	}
 
 	if (
-        $rpage['page_state'] == COT_PAGE_STATE_PUBLISHED &&
-        !($auth['isadmin'] && $cfg['page']['autovalidate'])
+        $rpage['page_state'] == COT_PAGE_STATE_PUBLISHED
+        && !($auth['isadmin'] && \Cot::$cfg['page']['autovalidate'])
     ) {
         $rpage['page_state'] = COT_PAGE_STATE_PENDING;
 	}
@@ -655,12 +678,10 @@ function cot_page_add(&$rpage, $auth = array())
 	}
 	/* ===== */
 
-	if ($db->insert($db_pages, $rpage)) {
-		$id = $db->lastInsertId();
-
+	if (\Cot::$db->insert(\Cot::$db->pages, $rpage)) {
+		$id = \Cot::$db->lastInsertId();
 		cot_extrafield_movefiles();
         cot_page_updateStructureCounters($rpage['page_cat']);
-
 	} else {
 		$id = false;
 	}
@@ -671,12 +692,12 @@ function cot_page_add(&$rpage, $auth = array())
 	}
 	/* ===== */
 
-	if ($rpage['page_state'] == COT_PAGE_STATE_PUBLISHED && $cache) {
-		if (Cot::$cfg['cache_page']) {
-            Cot::$cache->page->clear('page/' . str_replace('.', '/', Cot::$structure['page'][$rpage['page_cat']]['path']));
+	if ($rpage['page_state'] == COT_PAGE_STATE_PUBLISHED && \Cot::$cache) {
+		if (\Cot::$cfg['cache_page']) {
+            \Cot::$cache->page->clearByUri(cot_page_url($rpage));
 		}
-		if (Cot::$cfg['cache_index']) {
-            Cot::$cache->page->clear('index');
+		if (\Cot::$cfg['cache_index']) {
+            \Cot::$cache->page->clear('index');
 		}
 	}
 
@@ -712,7 +733,7 @@ function cot_page_delete($id, $rpage = [])
 		cot_extrafield_unlinkfiles($rpage['page_' . $exfld['field_name']], $exfld);
 	}
 
-    Cot::$db->delete(Cot::$db->pages, "page_id = ?", $id);
+    \Cot::$db->delete(Cot::$db->pages, 'page_id = ?', $id);
 	cot_log("Deleted page #" . $id, 'page', 'delete', 'done');
 
     cot_page_updateStructureCounters($rpage['page_cat']);
@@ -723,14 +744,12 @@ function cot_page_delete($id, $rpage = [])
 	}
 	/* ===== */
 
-	if (Cot::$cache) {
-		if (Cot::$cfg['cache_page']) {
-            Cot::$cache->page->clear(
-                'page/' . str_replace('.', '/', Cot::$structure['page'][$rpage['page_cat']]['path'])
-            );
+	if (\Cot::$cache) {
+		if (\Cot::$cfg['cache_page']) {
+            \Cot::$cache->page->clearByUri(cot_page_url($rpage));
 		}
-		if (Cot::$cfg['cache_index']) {
-            Cot::$cache->page->clear('index');
+		if (\Cot::$cfg['cache_index']) {
+            \Cot::$cache->page->clear('index');
 		}
 	}
 
@@ -739,12 +758,12 @@ function cot_page_delete($id, $rpage = [])
 
 /**
  * Updates a page in the CMS.
- * @param  integer $id    Page ID
- * @param  array   $rpage Page data
- * @param  array   $auth  Permissions array
- * @return boolean        TRUE on success, FALSE on error
+ * @param int $id Page ID
+ * @param array $rpage Page data
+ * @param array $auth  Permissions array
+ * @return bool TRUE on success, FALSE on error
  */
-function cot_page_update($id, &$rpage, $auth = array())
+function cot_page_update($id, &$rpage, $auth = [])
 {
     // $L, $Ls, $R are needed for hook includes
     global $L, $Ls, $R;
@@ -765,18 +784,18 @@ function cot_page_update($id, &$rpage, $auth = array())
 		}
 	}
 
-	$row_page = Cot::$db->query('SELECT * FROM ' . Cot::$db->pages . ' WHERE page_id = ?', $id)->fetch();
+	$row_page = \Cot::$db->query('SELECT * FROM ' . \Cot::$db->pages . ' WHERE page_id = ?', $id)->fetch();
 
     if (
-        $rpage['page_state'] == COT_PAGE_STATE_PUBLISHED &&
-        !($auth['isadmin'] && Cot::$cfg['page']['autovalidate'])
+        $rpage['page_state'] == COT_PAGE_STATE_PUBLISHED
+        && !($auth['isadmin'] && \Cot::$cfg['page']['autovalidate'])
     ) {
         $rpage['page_state'] = COT_PAGE_STATE_PENDING;
     }
 
-    Cot::$cache && Cot::$cache->db->remove('structure', 'system');
+    \Cot::$cache && \Cot::$cache->db->remove('structure', 'system');
 
-	if (!Cot::$db->update(Cot::$db->pages, $rpage, 'page_id = ?', $id)) {
+	if (!\Cot::$db->update(\Cot::$db->pages, $rpage, 'page_id = ?', $id)) {
 		return false;
 	}
 	cot_log("Edited page #" . $id, 'page', 'edit', 'done');
@@ -789,19 +808,18 @@ function cot_page_update($id, &$rpage, $auth = array())
 	}
 	/* ===== */
 
-	if (($rpage['page_state'] == 0  || $rpage['page_cat'] != $row_page['page_cat']) && Cot::$cache) {
-		if (Cot::$cfg['cache_page']) {
-            Cot::$cache->page->clear(
-                'page/' . str_replace('.', '/', Cot::$structure['page'][$rpage['page_cat']]['path'])
-            );
+	if (
+        ($rpage['page_state'] == COT_PAGE_STATE_PUBLISHED  || $rpage['page_cat'] != $row_page['page_cat'])
+        && Cot::$cache
+    ) {
+		if (\Cot::$cfg['cache_page']) {
+            \Cot::$cache->page->clearByUri(cot_page_url($rpage));
 			if ($rpage['page_cat'] != $row_page['page_cat']) {
-                Cot::$cache->page->clear(
-                    'page/' . str_replace('.', '/', Cot::$structure['page'][$row_page['page_cat']]['path'])
-                );
+                \Cot::$cache->page->clearByUri(cot_page_url($row_page));
 			}
 		}
-		if (Cot::$cfg['cache_index']) {
-            Cot::$cache->page->clear('index');
+		if (\Cot::$cfg['cache_index']) {
+            \Cot::$cache->page->clear('index');
 		}
 	}
 

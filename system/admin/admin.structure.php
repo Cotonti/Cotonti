@@ -385,9 +385,14 @@ else
 		/* ===== */
 
 		$res ? cot_message('Resynced') : cot_message("Error: function $area_sync doesn't exist."); // TODO i18n
-		(Cot::$cache && Cot::$cfg['cache_'.$n]) && Cot::$cache->page->clear($n);
 
-		cot_redirect(cot_url('admin', 'm=structure&n=' . $n . '&mode=' . $mode . '&d=' . $durl, '', true));
+        if (\Cot::$cache && !empty(\Cot::$cfg['cache_' . $n])) {
+            \Cot::$cache->page->clearByUri(cot_url($n));
+        }
+
+		cot_redirect(
+            cot_url('admin', ['m' => 'structure', 'n' => $n, 'mode' => $mode, 'd' => $durl], '', true)
+        );
 	}
 
 	$ext_info = cot_get_extensionparams($n, true);

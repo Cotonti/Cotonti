@@ -123,12 +123,18 @@ if ($a == 'update') {
 	}
 	/* ===== */
 
-	if (Cot::$cache) {
-		(Cot::$cfg['cache_forums']) && Cot::$cache->page->clear('forums');
-		(Cot::$cfg['cache_index']) && Cot::$cache->page->clear('index');
+	if (\Cot::$cache) {
+        if (\Cot::$cfg['cache_forums']) {
+            \Cot::$cache->page->clearByUri(cot_url('forums'));
+        }
+        if (\Cot::$cfg['cache_index']) {
+            \Cot::$cache->page->clear('index');
+        }
 	}
 
-	cot_redirect(cot_url('forums', "m=posts&q=" . $q . '&d=' . $durl, '#' . $p, true));
+    cot_redirect(
+        cot_url('forums', ['m' => 'posts', 'q' => $q , 'd' => $durl], '#' . $p, true)
+    );
 }
 require_once cot_incfile('forms');
 

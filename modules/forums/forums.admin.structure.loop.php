@@ -23,7 +23,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($n == 'forums' && $structureLevel > 1) {
     $t->assign([
-        'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url('forums', ['m' => 'topics', 's' =>  $structureCode]),
+        'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url('forums', ['m' => 'topics', 's' => $structureCode]),
     ]);
 }
 

@@ -22,18 +22,19 @@ $trash_types['page'] = Cot::$db->pages;
 
 /**
  * Sync page action
- *
- * @param array $data trashcan item data
+ * @param array $data Page data as array (trashcan item data)
  * @return bool
- * @global Cache $cache
- *
- * @todo проверить
  */
 function cot_trash_page_sync($data)
 {
     cot_page_updateStructureCounters($data['page_cat']);
-    if (Cot::$cache && Cot::$cfg['cache_page']) {
-        Cot::$cache->page->clear('page');
+    if (\Cot::$cache) {
+        if (\Cot::$cfg['cache_page']) {
+            \Cot::$cache->page->clearByUri(cot_page_url($data));
+        }
+        if (Cot::$cfg['cache_index']) {
+            Cot::$cache->page->clear('index');
+        }
     }
 	return true;
 }

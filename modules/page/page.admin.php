@@ -116,11 +116,13 @@ if ($a == 'validate') {
 	}
 	/* ===== */
 
-    $row = Cot::$db->query('SELECT page_cat, page_begin, page_state FROM ' . Cot::$db->pages .
-        ' WHERE page_id = ?', $id)->fetch();
+    $row = \Cot::$db->query(
+        'SELECT page_cat, page_begin, page_state FROM ' . \Cot::$db->pages . ' WHERE page_id = ?',
+        $id
+    )->fetch();
 	if ($row) {
         if ($row['page_state'] == COT_PAGE_STATE_PUBLISHED) {
-            cot_message('#' . $id . ' - ' . Cot::$L['adm_already_updated']);
+            cot_message('#' . $id . ' - ' . \Cot::$L['adm_already_updated']);
             cot_redirect($backUrl);
         }
 
@@ -138,21 +140,26 @@ if ($a == 'validate') {
 		}
 		/* ===== */
 
-		cot_log(Cot::$L['Page'].' #' . $id . ' - ' . Cot::$L['adm_queue_validated'], 'page', 'validate', 'done');
+		cot_log(
+            \Cot::$L['Page'].' #' . $id . ' - ' . \Cot::$L['adm_queue_validated'],
+            'page',
+            'validate',
+            'done'
+        );
 
-		if (Cot::$cache) {
-            Cot::$cache->db->remove('structure', 'system');
-			if (Cot::$cfg['cache_page']) {
-                Cot::$cache->page->clear('page/' . str_replace('.', '/', Cot::$structure['page'][$row['page_cat']]['path']));
+		if (\Cot::$cache) {
+            \Cot::$cache->db->remove('structure', 'system');
+			if (\Cot::$cfg['cache_page']) {
+                \Cot::$cache->page->clearByUri(cot_page_url($row));
 			}
-			if (Cot::$cfg['cache_index']) {
-                Cot::$cache->page->clear('index');
+			if (\Cot::$cfg['cache_index']) {
+                \Cot::$cache->page->clear('index');
 			}
 		}
-		cot_message('#' . $id . ' - ' . Cot::$L['adm_queue_validated']);
+		cot_message('#' . $id . ' - ' . \Cot::$L['adm_queue_validated']);
 
 	} else {
-        cot_error('#' . $id . ' - ' . Cot::$L['nf']);
+        cot_error('#' . $id . ' - ' . \Cot::$L['nf']);
 	}
 
     cot_redirect($backUrl);
@@ -174,27 +181,32 @@ if ($a == 'validate') {
             cot_redirect($backUrl);
         }
 
-		Cot::$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
+		\Cot::$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
-		$sql_page = Cot::$db->update(Cot::$db->pages, ['page_state' => COT_PAGE_STATE_PENDING], 'page_id=?', $id);
+		$sql_page = \Cot::$db->update(
+            \Cot::$db->pages,
+            ['page_state' => COT_PAGE_STATE_PENDING],
+            'page_id = ?',
+            $id
+        );
 
-		cot_log(Cot::$L['Page'] . ' #' . $id . ' - ' . Cot::$L['adm_queue_unvalidated'], 'page', 'unvalidated', 'done');
+		cot_log(Cot::$L['Page'] . ' #' . $id . ' - ' . \Cot::$L['adm_queue_unvalidated'], 'page', 'unvalidated', 'done');
 
-		if (Cot::$cache) {
-            Cot::$cache->db->remove('structure', 'system');
+		if (\Cot::$cache) {
+            \Cot::$cache->db->remove('structure', 'system');
 			if (Cot::$cfg['cache_page']) {
-                Cot::$cache->page->clear('page/' . str_replace('.', '/', Cot::$structure['page'][$row['page_cat']]['path']));
+                \Cot::$cache->page->clearByUri(cot_page_url($row));
 			}
-			if (Cot::$cfg['cache_index']) {
-                Cot::$cache->page->clear('index');
+			if (\Cot::$cfg['cache_index']) {
+                \Cot::$cache->page->clear('index');
 			}
 		}
 
-		cot_message('#' . $id . ' - ' . Cot::$L['adm_queue_unvalidated']);
+		cot_message('#' . $id . ' - ' . \Cot::$L['adm_queue_unvalidated']);
 
     } else {
-        cot_error('#' . $id . ' - ' . Cot::$L['nf']);
+        cot_error('#' . $id . ' - ' . \Cot::$L['nf']);
 	}
 
     cot_redirect($backUrl);
@@ -241,20 +253,28 @@ if ($a == 'validate') {
 				}
 				/* ===== */
 
-				$sql_page = Cot::$db->query("SELECT * FROM $db_pages WHERE page_id=".(int)$i);
+				$sql_page = \Cot::$db->query('SELECT * FROM ' . \Cot::$db->pages . ' WHERE page_id = ?', $i);
 				if ($row = $sql_page->fetch()) {
 					$id = $row['page_id'];
 					$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 					cot_block($usr['isadmin_local']);
 
-					$sql_page = Cot::$db->update($db_pages, array('page_state' => 0), "page_id=$id");
+					$sql_page = \Cot::$db->update(
+                        \Cot::$db->pages,
+                        ['page_state' => COT_PAGE_STATE_PUBLISHED],
+                        'page_id= ?',
+                        $id
+                    );
 
-					cot_log(Cot::$L['Page'].' #'.$id.' - '. Cot::$L['adm_queue_validated'], 'page', 'validate', 'done');
+					cot_log(
+                        \Cot::$L['Page'] . ' #'.$id . ' - ' . Cot::$L['adm_queue_validated'],
+                        'page',
+                        'validate',
+                        'done'
+                    );
 
-					if (Cot::$cache && Cot::$cfg['cache_page']) {
-                        Cot::$cache->page->clear(
-                            'page/' . str_replace('.', '/', Cot::$structure['page'][$row['page_cat']]['path'])
-                        );
+					if (\Cot::$cache && \Cot::$cfg['cache_page']) {
+                        \Cot::$cache->page->clearByUri(cot_page_url($row));
 					}
 
 					$perelik .= '#' . $id.', ';
@@ -264,10 +284,12 @@ if ($a == 'validate') {
 			}
 		}
 
-		Cot::$cache && Cot::$cache->db->remove('structure', 'system');
-		if (Cot::$cache && Cot::$cfg['cache_index']) {
-            Cot::$cache->page->clear('index');
-		}
+        if (\Cot::$cache) {
+            Cot::$cache->db->remove('structure', 'system');
+            if (Cot::$cfg['cache_index']) {
+                Cot::$cache->page->clear('index');
+            }
+        }
 
         if (!empty($notfoundet)) {
             cot_error($notfoundet);

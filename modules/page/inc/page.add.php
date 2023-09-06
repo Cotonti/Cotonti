@@ -63,10 +63,7 @@ if ($a == 'add') {
 
 		switch ($rpage['page_state']) {
 			case 0:
-				$urlparams = empty($rpage['page_alias']) ?
-					array('c' => $rpage['page_cat'], 'id' => $id) :
-					array('c' => $rpage['page_cat'], 'al' => $rpage['page_alias']);
-				$r_url = cot_url('page', $urlparams, '', true);
+                $r_url = cot_page_url($rpage, [], '', true);
 				break;
 			case 1:
 				$r_url = cot_url('message', 'msg=300', '', true);

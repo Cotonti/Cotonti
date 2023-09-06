@@ -417,33 +417,52 @@ class File_cache extends Static_cache_driver
 class Page_cache
 {
 	/**
-	 * Cache root
+     * Cache root
+	 * @var string
 	 */
 	private $dir;
+
 	/**
-	 * Relative page (item) path
+     * Relative page (item) path
+	 * @var string
 	 */
 	private $path;
+
 	/**
 	 * Short file name
-	 */
+     * @var string
+     */
 	private $name;
+
 	/**
 	 * Parameters to exclude
-	 */
+     * @var string[]
+     */
 	private $excl;
+
 	/**
 	 * Filename extension
+     * @var string
 	 */
 	private $ext;
+
 	/**
 	 * Full path to page cache image
+     * @var string
+     * @todo relative to $this->dir
 	 */
-	private $filename;
+	private $filename = null;
+
 	/**
 	 * Directory permissions
+     * @var string
 	 */
 	private $perms;
+
+    /**
+     * @var bool
+     */
+    private $enabled = false;
 
 	/**
 	 * Constructs controller object and sets basic configuration
@@ -456,30 +475,142 @@ class Page_cache
 		$this->perms = $perms;
 	}
 
-	/**
-	 * Removes an item and all contained items and cache files
-	 * @param string $path Item path
-	 * @return int Number of files removed
-	 */
-	public function clear($path)
-	{
-		return $this->rm_r($this->dir . '/' . $path);
-	}
+    /**
+     * Initializes actual page cache
+     * @param string $path Page path string
+     * @param string $name Short name for the cache file
+     * @param array $exclude A list of GET params to be excluded from consideration
+     * @param string $ext File extension
+     */
+    public function init($path, $name, $exclude = [], $ext = '')
+    {
+        $this->path = $path;
+        $this->name = $name;
+        $this->excl = $exclude;
+        $this->ext = $ext;
+        $this->enabled = true;
+
+        $filename = $this->path . '/' . $this->name;
+        $args = [];
+        foreach ($_GET as $key => $val) {
+            if (!in_array($key, $this->excl)) {
+                $args[$key] = $val;
+            }
+        }
+        ksort($args);
+        if (count($args) > 0) {
+            $hashkey = serialize($args);
+            $filename .= '_' . md5($hashkey) . sha1($hashkey);
+        }
+        if (!empty($this->ext)) {
+            $filename .= '.' . $this->ext;
+        }
+
+        $this->filename = $filename;
+    }
+
+    /**
+     * Initializes actual page cache by given page uri
+     * @param string $uri Relative page uri (relative to $sys['abs_url'])
+     * @param string $name Short name for the cache file
+     * @param array $exclude A list of GET params to be excluded from consideration
+     * @param string $ext File extension
+     */
+    public function initByUri($uri, $name, $exclude = [], $ext = '')
+    {
+        $path = $this->getPathByUri($uri);
+        if (empty($path)) {
+            return false;
+        }
+        var_dump($path);
+        $this->init($path, $name, $exclude, $ext);
+    }
+
+    /**
+     * @param string $uri Relative page uri (relative to $sys['abs_url'])
+     * @return string
+     */
+    protected function getPathByUri($uri)
+    {
+        $parsedUrl = cot_parse_url($uri);
+        $get = [];
+        if (!empty($parsedUrl['query'])) {
+            $parsedUrl['query'] = str_replace('&amp;', '&', $parsedUrl['query']);
+            parse_str($parsedUrl['query'], $get);
+        }
+
+        if (!empty($get['e'])) {
+            $path = preg_replace('#\W#', '', $get['e']);
+        } elseif ($parsedUrl['path'] !== '/') {
+            $path = trim($parsedUrl['path'], '/');
+            // Trim last uri part. It can be page alias or id
+            $lastPosition = mb_strrpos($path, '/');
+            if ($lastPosition > 0) {
+                $path = mb_substr($path, 0, $lastPosition);
+            }
+        }
+
+        if (!empty($path)) {
+            // @todo may be add id(or alias) for pages?
+            // Тут проблема со страницами в том, что если сменился алияс, надо правильно сбросить
+            // и учесть еще ЧПУ и списки страниц тоже могут поменяться. Пока сбрасываем кеш всей категории и баста
+            // Остается проблема сброса кеша при смене категрии  и ЧПУ. Надо сбрсывать кеш по старым путям (код категрии, путь)
+            // и также по новым. Общий метод pathByUrl() - полезен при инициализации и сбросе кеша
+            $c = isset($get['c']) ? trim($get['c']) : null;
+            if (!empty($c)) {
+                $path .= '/' . $c;
+            }
+        } else {
+            $path = 'index';
+        }
+
+        return $path;
+    }
+
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @return ?string
+     */
+    public function getFileName()
+    {
+        return $this->filename;
+    }
+
+    public function disable()
+    {
+        return $this->enabled = false;
+    }
 
 	/**
-	 * Initializes actual page cache
-	 * @param string $path Page path string
-	 * @param string $name Short name for the cache file
-	 * @param array $exclude A list of GET params to be excluded from consideration
-	 * @param string $ext File extension
+	 * Removes an item and/or all contained items and cache files
+	 * @param string $path Item path
+     * @param bool $withSubDirectories Remove all contained items (subdirectories)
+	 * @return int Number of files removed
 	 */
-	public function init($path, $name, $exclude = array(), $ext = '')
+	public function clear($path, $withSubDirectories = false)
 	{
-		$this->path = $path;
-		$this->name = $name;
-		$this->excl = $exclude;
-		$this->ext = $ext;
+		return $this->removeDir($this->dir . '/' . $path, $withSubDirectories);
 	}
+
+    /**
+     * Removes an item and all contained items and cache files by given page uri
+     * @param string $uri Relative page uri (relative to $sys['abs_url'])
+     * @param bool $withSubDirectories Remove all contained items (subdirectories)
+     * @return int Number of files removed
+     */
+    public function clearByUri($uri, $withSubDirectories = false)
+    {
+        $path = $this->getPathByUri($uri);
+        if (empty($path)) {
+            return 0;
+        }
+
+        return $this->clear($path, $withSubDirectories);
+    }
 
 	/**
 	 * Reads the page cache object from disk and sends it to output.
@@ -488,25 +619,11 @@ class Page_cache
 	 */
 	public function read()
 	{
-		$filename = $this->dir. '/' . $this->path . '/' . $this->name;
-		$args = array();
-		foreach ($_GET as $key => $val) {
-			if (!in_array($key, $this->excl)) {
-				$args[$key] = $val;
-			}
-		}
-		ksort($args);
-		if (count($args) > 0) {
-			$hashkey = serialize($args);
-			$filename .= '_' . md5($hashkey) . sha1($hashkey);
-		}
-		if (!empty($this->ext)) {
-			$filename .= '.' . $this->ext;
-		}
-		if (file_exists($filename)) {
+        $fileFullName = $this->dir. '/' . $this->filename;
+		if (file_exists($fileFullName)) {
 			// Browser cache headers
-            $filemtime = filemtime($filename);
-			$etag = md5($filename . filesize($filename) . $filemtime);
+            $filemtime = filemtime($fileFullName);
+			$etag = md5($fileFullName . filesize($fileFullName) . $filemtime);
 			if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
                 // convert to unix timestamp
                 $if_modified_since = strtotime(preg_replace('#;.*$#', '',
@@ -514,7 +631,7 @@ class Page_cache
             } else {
                 $if_modified_since = false;
             }
-            if(isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+            if (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
                 $if_none_match = stripslashes($_SERVER['HTTP_IF_NONE_MATCH']);
                 if ($if_none_match == $etag && $if_modified_since >= $filemtime) {
                     $protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
@@ -530,14 +647,13 @@ class Page_cache
 			// Page output
 			header('Content-Type: text/html; charset=UTF-8');
 			if (@strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') === FALSE) {
-				readgzfile($filename);
+				readgzfile($fileFullName);
 			} else {
 				header('Content-Encoding: gzip');
-				echo file_get_contents($filename);
+				echo file_get_contents($fileFullName);
 			}
 			exit;
 		}
-		$this->filename = $filename;
 	}
 
 	/**
@@ -545,38 +661,33 @@ class Page_cache
 	 */
 	public function write()
 	{
-		if (!empty($this->filename))
-		{
-			if (!file_exists($this->dir . '/' . $this->path))
-			{
-				mkdir($this->dir . '/' . $this->path, $this->perms, true);
-			}
-			file_put_contents($this->filename, gzencode(cot_outputfilters(ob_get_contents())));
-		}
+        if (!$this->enabled || empty($this->filename)) {
+            return;
+        }
+        if (!file_exists($this->dir . '/' . $this->path)) {
+            mkdir($this->dir . '/' . $this->path, $this->perms, true);
+        }
+        file_put_contents($this->dir . '/' . $this->filename, gzencode(cot_outputfilters(ob_get_contents())));
 	}
 
 	/**
 	 * Removes a directory with all its contents recursively
 	 * @param string $path Directory path
+     * @param bool $withSubDirectories Remove subdirectories
 	 * @return int Number of items removed
 	 */
-	private function rm_r($path)
+	private function removeDir($path, $withSubDirectories = false)
 	{
 		$cnt = 0;
-		if(is_dir($path))
-		{
+		if (is_dir($path)) {
 			$dp = opendir($path);
-			while ($f = readdir($dp))
-			{
+			while ($f = readdir($dp)) {
 				$fpath = $path . '/' . $f;
-				if (is_dir($fpath) && $f != '.' && $f != '..')
-				{
-					$cnt += $this->rm_r($fpath);
-				}
-				elseif (is_file($fpath))
-				{
+				if (is_dir($fpath) && $f != '.' && $f != '..' && $withSubDirectories) {
+					$cnt += $this->removeDir($fpath);
+				} elseif (is_file($fpath)) {
 					unlink($fpath);
-					++$cnt;
+					$cnt++;
 				}
 			}
 			closedir($dp);
@@ -1192,7 +1303,7 @@ class Cache
 	{
 		global $cfg;
 
-		$this->page = new Page_cache($cfg['cache_dir'], $cfg['dir_perms']);
+		$this->page = new Page_cache($cfg['cache_dir'] . '/page', $cfg['dir_perms']);
 	}
 
 	/**
@@ -1416,19 +1527,18 @@ class Cache
 			break;
 
 			case COT_CACHE_TYPE_MEMORY:
-				if ($this->mem)
-				{
+				if ($this->mem) {
 					$this->mem->clear($realm);
 				}
 			break;
 
 			case COT_CACHE_TYPE_PAGE:
+                // @todo
 				$this->page->clear($realm);
 			break;
 
 			default:
-				if ($this->mem)
-				{
+				if ($this->mem) {
 					$this->mem->clear($realm);
 				}
 				$this->db->clear($realm);
@@ -1483,6 +1593,7 @@ class Cache
 					break;
 
 					case COT_CACHE_TYPE_PAGE:
+                        // @todo
 						$this->page->clear($cell['realm'] . '/' . $cell['id']);
 					break;
 

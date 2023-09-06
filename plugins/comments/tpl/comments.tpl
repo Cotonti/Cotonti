@@ -66,7 +66,7 @@
 				{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 				<form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
 					<!-- BEGIN: GUEST -->
-					<div>{PHP.L.Name}: {COMMENTS_FORM_AUTHOR}</div>
+					<div class="marginbottom10">{PHP.L.Name}: {COMMENTS_FORM_AUTHOR}</div>
 					<!-- END: GUEST -->
 					<div>
 						{COMMENTS_FORM_TEXT}
