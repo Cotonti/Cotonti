@@ -538,6 +538,11 @@ class Page_cache
             parse_str($parsedUrl['query'], $get);
         }
 
+        if (function_exists('cot_staticCacheGetPathByUri')) {
+            $path = cot_staticCacheGetPathByUri($parsedUrl);
+            return !empty($path) ? $path : 'index';
+        }
+
         if (!empty($get['e'])) {
             $path = preg_replace('#\W#', '', $get['e']);
         } elseif ($parsedUrl['path'] !== '/') {
@@ -550,11 +555,6 @@ class Page_cache
         }
 
         if (!empty($path)) {
-            // @todo may be add id(or alias) for pages?
-            // Тут проблема со страницами в том, что если сменился алияс, надо правильно сбросить
-            // и учесть еще ЧПУ и списки страниц тоже могут поменяться. Пока сбрасываем кеш всей категории и баста
-            // Остается проблема сброса кеша при смене категрии  и ЧПУ. Надо сбрсывать кеш по старым путям (код категрии, путь)
-            // и также по новым. Общий метод pathByUrl() - полезен при инициализации и сбросе кеша
             $c = isset($get['c']) ? trim($get['c']) : null;
             if (!empty($c)) {
                 $path .= '/' . $c;
