@@ -470,6 +470,7 @@ switch($a) {
 			'ADMIN_EXTENSIONS_CODE' => $code,
             'ADMIN_EXTENSIONS_ICON' => $params['icon'],
 			'ADMIN_EXTENSIONS_DESCRIPTION' => $params['desc'],
+			'ADMIN_EXTENSIONS_NOTES' => $params['notes'],
 			'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 			'ADMIN_EXTENSIONS_VERSION_INSTALLED' => $installed_ver,
 			'ADMIN_EXTENSIONS_VERSION_COMPARE' => version_compare($info['Version'], $installed_ver),
@@ -505,7 +506,6 @@ switch($a) {
 				'ADMIN_EXTENSIONS_LOCK_MEMBERS' => $info['Lock_members'],
 				'ADMIN_EXTENSIONS_AUTHOR' => $info['Author'],
 				'ADMIN_EXTENSIONS_COPYRIGHT' => $info['Copyright'],
-				'ADMIN_EXTENSIONS_NOTES' => $info['Notes'],
 			));
 
 			// Check and display dependencies

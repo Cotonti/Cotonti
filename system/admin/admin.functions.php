@@ -203,6 +203,9 @@ function cot_get_extensionparams($code, $is_module = false)
 		if (!empty($L['info_desc'])) {
             $desc = $L['info_desc'];
         }
+		if (!empty($L['info_notes'])) {
+            $notes = $L['info_notes'];
+        }
 	}
 
 	return [
