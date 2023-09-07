@@ -581,7 +581,7 @@ class Page_cache
 
     public function disable()
     {
-        return $this->enabled = false;
+        $this->enabled = false;
     }
 
 	/**
