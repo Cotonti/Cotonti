@@ -138,18 +138,13 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 
     $editor = (\Cot::$cfg['plugin']['comments']['markup']) ? 'input_textarea_minieditor' : '';
 
-    $staticCacheIsEnabled = '';
-    if (!in_array($link_area, ['admin', 'index', 'login', 'message', 'plug'])) {
-        $staticCacheIsEnabled = 'cache_' . $link_area;
-    }
-
     // This parameter is needed only for guests and when the static cache is enabled.
     // Otherwise use session.
     $hiddenParam = '';
     if (
         \Cot::$usr['id'] === 0
         && \Cot::$cache
-        && ($staticCacheIsEnabled === '' || !empty(\Cot::$cfg[$staticCacheIsEnabled]))
+        && \Cot::$cache->static->isEnabled()
     ) {
         if (!empty($cot_com_back)) {
             $hiddenParam .= cot_inputbox('hidden', 'cb', base64_encode(serialize($cot_com_back)));

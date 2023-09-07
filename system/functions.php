@@ -5090,29 +5090,30 @@ function cot_rc_minify($code, $type = 'js')
  */
 function cot_captcha_generate($use_captcha = '')
 {
-	global $cfg, $cot_captcha;
+	global $cot_captcha;
 
-	if(!empty($use_captcha))
-	{
+	if (!empty($use_captcha)) {
 		$captcha = $use_captcha;
+	} elseif (!\Cot::$cfg['captcharandom']) {
+		$captcha = \Cot::$cfg['captchamain'];
+	} else {
+        $list = cot_captcha_list();
+        if (empty($list)) {
+            return '';
+        }
+		$captcha = $cot_captcha[rand(0, count($list) - 1)];
 	}
-	elseif (!$cfg['captcharandom'])
-	{
-		$captcha = $cfg['captchamain'];
-	}
-	else
-	{
-		$captcha = $cot_captcha[rand(0, count($cot_captcha) - 1)];
-	}
+
+    if (empty($captcha)) {
+        return '';
+    }
+
 	$tepmcap = '<input type="hidden" name="capman" value="' . $captcha . '" />';
 	$captcha .= '_generate';
 
-	if (function_exists($captcha))
-	{
+	if (function_exists($captcha)) {
 		return $captcha() . $tepmcap;
-	}
-	else
-	{
+	} else {
 		return '';
 	}
 }
