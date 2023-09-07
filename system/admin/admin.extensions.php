@@ -811,6 +811,7 @@ switch($a) {
 
 					Cot::$L['info_name'] = '';
 					Cot::$L['info_desc'] = '';
+					Cot::$L['info_notes'] = '';
 					if (file_exists(cot_langfile($code, $type))) {
 						include cot_langfile($code, $type);
 					}
@@ -820,6 +821,7 @@ switch($a) {
 						'ADMIN_EXTENSIONS_NAME' => htmlspecialchars($params['name']),
 						'ADMIN_EXTENSIONS_TYPE' => $type == COT_EXT_TYPE_MODULE ? Cot::$L['Module'] : Cot::$L['Plugin'],
 						'ADMIN_EXTENSIONS_CODE_X' => $code,
+						'ADMIN_EXTENSIONS_NOTES' => $params['notes'],
 						'ADMIN_EXTENSIONS_DESCRIPTION' => $params['desc'],
                         'ADMIN_EXTENSIONS_ICON' => $params['icon'],
 						'ADMIN_EXTENSIONS_EDIT_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$code"),
