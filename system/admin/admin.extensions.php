@@ -432,9 +432,7 @@ switch($a) {
 			}
 		}
 
-		Cot::$L['info_name'] = '';
-		Cot::$L['info_desc'] = '';
-		Cot::$L['info_notes'] = '';
+		Cot::$L['info_name'] = Cot::$L['info_desc'] = Cot::$L['info_notes'] = '';
 		if (file_exists(cot_langfile($code, $type))) {
 			include cot_langfile($code, $type);
 		}
@@ -809,9 +807,7 @@ switch($a) {
 
                     $params = cot_get_extensionparams($code, $type == COT_EXT_TYPE_MODULE);
 
-					Cot::$L['info_name'] = '';
-					Cot::$L['info_desc'] = '';
-					Cot::$L['info_notes'] = '';
+					Cot::$L['info_name'] = Cot::$L['info_desc'] = Cot::$L['info_notes'] = '';
 					if (file_exists(cot_langfile($code, $type))) {
 						include cot_langfile($code, $type);
 					}
