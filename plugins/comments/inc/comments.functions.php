@@ -298,19 +298,19 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
             }
 
             if (!empty($row['user_id']) && !empty($row['user_name'])) {
-                $author = cot_build_user($row['user_id'], $row['user_name']);
-            } elseif ($row['com_authorid'] === 0 && !empty($row['com_author'])) {
+                $com_author = cot_build_user($row['user_id'], $row['user_name']);
+            } elseif ($row['com_authorid'] == 0 && !empty($row['com_author'])) {
                 // Comment from guest
-                $author = htmlspecialchars($row['com_author']);
+                $com_author = htmlspecialchars($row['com_author']);
             } else {
-                $author = \Cot::$L['Deleted'];
+                $com_author = \Cot::$L['Deleted'];
             }
 
             $t->assign(array(
 				'COMMENTS_ROW_ID' => $row['com_id'],
 				'COMMENTS_ROW_ORDER' => Cot::$cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
 				'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#com'.$row['com_id']),
-				'COMMENTS_ROW_AUTHOR' => $author,
+				'COMMENTS_ROW_AUTHOR' => $com_author,
 				// User can be deleted. So $row['user_id'] should be used here
 				'COMMENTS_ROW_AUTHORID' => !empty($row['user_id']) ? $row['user_id'] : 0,
 				'COMMENTS_ROW_TEXT' => $com_text,
