@@ -34,18 +34,17 @@
 					{USERS_REGISTER_COUNTRY} 
 				</div>	  
 				<div>        
-					<label>{USERS_REGISTER_VERIFYIMG}</label>        
-					{USERS_REGISTER_VERIFYINPUT} * 
+					<label>{USERS_REGISTER_VERIFY_IMG}</label>
+					{USERS_REGISTER_VERIFY_INPUT} *
 				</div>
 				<div>
-                                        <label>&nbsp;</label>
-                                        <input type="submit" value="{PHP.L.Submit}" class="submit" />
-                                </div>
+						<label>&nbsp;</label>
+						<input type="submit" value="{PHP.L.Submit}" class="submit" />
+				</div>
 			</fieldset>
 		  </form>
 		  <!-- ENDIF -->
 	</div>
 </div>
 <br class="clear" />
-
 <!-- END: MAIN -->

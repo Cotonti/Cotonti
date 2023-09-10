@@ -74,8 +74,8 @@
 						<!-- IF {COMMENTS_FORM_SFS} --><span class="spaced">{PHP.cfg.separator}</span>{COMMENTS_FORM_SFS}<!-- ENDIF -->
 					</div>
 
-					<!-- IF {PHP.usr.id} == 0 AND {COMMENTS_FORM_VERIFYIMG} -->
-					<div>{COMMENTS_FORM_VERIFYIMG}: {COMMENTS_FORM_VERIFY}</div>
+					<!-- IF {PHP.usr.id} == 0 AND {COMMENTS_FORM_VERIFY_IMG} -->
+					<div>{COMMENTS_FORM_VERIFY_IMG}: {COMMENTS_FORM_VERIFY_INPUT}</div>
 					<!-- ENDIF -->
 					<div class="margin10 textcenter">
 						<button type="submit">{PHP.L.Submit}</button>

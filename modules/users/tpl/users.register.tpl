@@ -26,8 +26,8 @@
 					</tr>
 <!-- IF {PHP.cfg.captchamain|cot_plugin_active($this)} -->
 					<tr>
-						<td>{USERS_REGISTER_VERIFYIMG}</td>
-						<td>{USERS_REGISTER_VERIFYINPUT} *</td>
+						<td>{USERS_REGISTER_VERIFY_IMG}</td>
+						<td>{USERS_REGISTER_VERIFY_INPUT} *</td>
 					</tr>
 <!-- ENDIF -->
 					<tr>

@@ -38,7 +38,7 @@
 <!-- BEGIN: CAPTCHA -->
 						<tr>
 							<td>{CONTACT_FORM_VERIFY_IMG}</td>
-							<td>{CONTACT_FORM_VERIFY}</td>
+							<td>{CONTACT_FORM_VERIFY_INPUT}</td>
 						</tr>
 <!-- END: CAPTCHA -->
 						<tr>

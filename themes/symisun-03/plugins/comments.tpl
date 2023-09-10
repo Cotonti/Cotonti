@@ -93,8 +93,8 @@
 			<div style="width:100%;">	{PHP.L.Name}: {COMMENTS_FORM_AUTHOR}</div>
 			<!-- END: GUEST -->
 			<div style="width:100%;">{COMMENTS_FORM_TEXT}<br />{COMMENTS_FORM_HINT}</div>
-			<!-- IF {PHP.usr.id} == 0 AND {COMMENTS_FORM_VERIFYIMG} -->
-			<div style="width:100%;">	{COMMENTS_FORM_VERIFYIMG} : {COMMENTS_FORM_VERIFY}</div>
+			<!-- IF {PHP.usr.id} == 0 AND {COMMENTS_FORM_VERIFY_IMG} -->
+			<div style="width:100%;">	{COMMENTS_FORM_VERIFY_IMG} : {COMMENTS_FORM_VERIFY_INPUT}</div>
 			<!-- ENDIF -->
 			<p><input type="submit" value="{PHP.L.Submit}" class="submit" /></p>
 		</form>

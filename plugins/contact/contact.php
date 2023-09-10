@@ -151,11 +151,11 @@ if (!$sent) {
         }
     }
 
-	if (Cot::$usr['id'] == 0 && !empty($cot_captcha)) {
-		$t->assign(array(
+	if (\Cot::$usr['id'] == 0 && !empty($cot_captcha)) {
+		$t->assign([
 			'CONTACT_FORM_VERIFY_IMG' => cot_captcha_generate(),
-			'CONTACT_FORM_VERIFY' => cot_inputbox('text', 'rverify', '', 'id="rverify" size="20"')
-		));
+			'CONTACT_FORM_VERIFY_INPUT' => cot_inputbox('text', 'rverify', '', 'id="rverify" size="20"')
+		]);
 		$t->parse('MAIN.FORM.CAPTCHA');
 	}
 	$t->parse('MAIN.FORM');
