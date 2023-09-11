@@ -299,7 +299,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 
             if (!empty($row['user_id']) && !empty($row['user_name'])) {
                 $comAuthor = cot_build_user($row['user_id'], $row['user_name']);
-            } elseif ($row['com_authorid'] === 0 && !empty($row['com_author'])) {
+            } elseif ($row['com_authorid'] == 0 && !empty($row['com_author'])) {
                 // Comment from guest
                 $comAuthor = htmlspecialchars($row['com_author']);
             } else {
