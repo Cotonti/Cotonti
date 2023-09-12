@@ -31,6 +31,7 @@ function cot_trash_page_sync($data)
     if (\Cot::$cache) {
         if (\Cot::$cfg['cache_page']) {
             \Cot::$cache->static->clearByUri(cot_page_url($data));
+            \Cot::$cache->static->clearByUri(cot_url('page', ['c' => $data['page_cat']]));
         }
         if (Cot::$cfg['cache_index']) {
             Cot::$cache->static->clear('index');

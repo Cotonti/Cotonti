@@ -26,6 +26,9 @@ require_once cot_incfile('auth');
  */
 function cot_structure_add($extension, $data, $is_module = true)
 {
+    // $L, $Ls, $R are needed for hook includes
+    global $L, $Ls, $R;
+
 	global $cache, $db, $db_structure;
 
 	/* === Hook === */
@@ -46,7 +49,10 @@ function cot_structure_add($extension, $data, $is_module = true)
 
 			cot_log("Structure. Add category: '$extension' - '".$data['structure_code']."'", 'adm', 'structure', 'add');
 
-			$cache && $cache->clear();
+			if (\Cot::$cache) {
+                $cache->clear();
+            }
+
 			return true;
 		} else {
 			return ['adm_cat_exists', 'rstructurecode'];

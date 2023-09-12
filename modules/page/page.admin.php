@@ -117,7 +117,8 @@ if ($a == 'validate') {
 	/* ===== */
 
     $row = \Cot::$db->query(
-        'SELECT page_cat, page_begin, page_state FROM ' . \Cot::$db->pages . ' WHERE page_id = ?',
+        'SELECT page_id, page_alias, page_cat, page_begin, page_state FROM ' . \Cot::$db->pages
+        . ' WHERE page_id = ?',
         $id
     )->fetch();
 	if ($row) {
@@ -151,6 +152,7 @@ if ($a == 'validate') {
             \Cot::$cache->db->remove('structure', 'system');
 			if (\Cot::$cfg['cache_page']) {
                 \Cot::$cache->static->clearByUri(cot_page_url($row));
+                \Cot::$cache->static->clearByUri(cot_url('page', ['c' => $row['page_cat']]));
 			}
 			if (\Cot::$cfg['cache_index']) {
                 \Cot::$cache->static->clear('index');
@@ -173,8 +175,10 @@ if ($a == 'validate') {
 	}
 	/* ===== */
 
-    $row = Cot::$db->query('SELECT page_cat, page_state FROM ' . Cot::$db->pages . ' WHERE page_id = ?', $id)
-        ->fetch();
+    $row = Cot::$db->query(
+        'SELECT page_id, page_alias, page_cat, page_state FROM ' . Cot::$db->pages . ' WHERE page_id = ?',
+        $id
+    )->fetch();
     if ($row) {
         if ($row['page_state'] == COT_PAGE_STATE_PENDING) {
             cot_message('#' . $id . ' - ' . Cot::$L['adm_already_updated']);
@@ -197,6 +201,7 @@ if ($a == 'validate') {
             \Cot::$cache->db->remove('structure', 'system');
 			if (Cot::$cfg['cache_page']) {
                 \Cot::$cache->static->clearByUri(cot_page_url($row));
+                \Cot::$cache->static->clearByUri(cot_url('page', ['c' => $row['page_cat']]));
 			}
 			if (\Cot::$cfg['cache_index']) {
                 \Cot::$cache->static->clear('index');
@@ -267,7 +272,7 @@ if ($a == 'validate') {
                     );
 
 					cot_log(
-                        \Cot::$L['Page'] . ' #'.$id . ' - ' . Cot::$L['adm_queue_validated'],
+                        \Cot::$L['Page'] . ' #' . $id . ' - ' . \Cot::$L['adm_queue_validated'],
                         'page',
                         'validate',
                         'done'
@@ -275,11 +280,12 @@ if ($a == 'validate') {
 
 					if (\Cot::$cache && \Cot::$cfg['cache_page']) {
                         \Cot::$cache->static->clearByUri(cot_page_url($row));
+                        \Cot::$cache->static->clearByUri(cot_url('page', ['c' => $row['page_cat']]));
 					}
 
 					$perelik .= '#' . $id.', ';
 				} else {
-					$notfoundet .= '#' . $id . ' - ' . Cot::$L['Error'] . '<br  />';
+					$notfoundet .= '#' . $id . ' - ' . \Cot::$L['Error'] . '<br  />';
 				}
 			}
 		}

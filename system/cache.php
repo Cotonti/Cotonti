@@ -546,12 +546,13 @@ class Page_cache
         if (!empty($get['e'])) {
             $path = preg_replace('#\W#', '', $get['e']);
         } elseif ($parsedUrl['path'] !== '/') {
+            $parsedUrl['path'] = rawurldecode($parsedUrl['path']);
             $path = trim($parsedUrl['path'], '/');
             // Trim last uri part. It can be page alias or id
-            $lastPosition = mb_strrpos($path, '/');
-            if ($lastPosition > 0) {
-                $path = mb_substr($path, 0, $lastPosition);
-            }
+//            $lastPosition = mb_strrpos($path, '/');
+//            if ($lastPosition > 0) {
+//                $path = mb_substr($path, 0, $lastPosition);
+//            }
         }
 
         if (!empty($path)) {
