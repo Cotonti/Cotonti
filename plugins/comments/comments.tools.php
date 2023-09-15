@@ -104,6 +104,15 @@ foreach ($sql->fetchAll() as $row) {
 			$row['com_url'] = '';
 		break;
 	}
+	
+	if (!empty($row['user_id']) && !empty($row['user_name'])) {
+		$author = cot_build_user($row['user_id'], $row['user_name']);
+	} elseif ($row['com_authorid'] == 0 && !empty($row['com_author'])) {
+		// Comment from guest
+		$author = htmlspecialchars($row['com_author']);
+	} else {
+		$author = \Cot::$L['Deleted'];
+	}
 
 	$t->assign(array(
 		'ADMIN_COMMENTS_ITEM_DEL_URL' => cot_url(
@@ -113,8 +122,7 @@ foreach ($sql->fetchAll() as $row) {
 		'ADMIN_COMMENTS_ITEM_ID' => $row['com_id'],
 		'ADMIN_COMMENTS_CODE' => $row['com_code'],
 		'ADMIN_COMMENTS_AREA' => $row['com_area'],
-        'ADMIN_COMMENTS_AUTHOR' => !empty($row['user_id']) && !empty($row['user_name']) ?
-            cot_build_user($row['user_id'], $row['user_name']) : Cot::$L['Deleted'],
+        'ADMIN_COMMENTS_AUTHOR' => $author,
         'ADMIN_COMMENTS_AUTHORID' => !empty($row['user_id']) ? $row['user_id'] : 0,
 		'ADMIN_COMMENTS_DATE' => cot_date('datetime_medium', $row['com_date']),
 		'ADMIN_COMMENTS_DATE_STAMP' => $row['com_date'],
