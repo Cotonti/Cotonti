@@ -15,6 +15,12 @@ Hooks=module
 
 defined('COT_CODE') or die('Wrong URL.');
 
+// @todo move to system controller when it will be implemented
+if ($a === 'get') {
+    require_once cot_incfile('index', 'module', 'get-data');
+    exit();
+}
+
 // Environment
 const COT_INDEX = true;
 

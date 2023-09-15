@@ -11,6 +11,8 @@ Hooks=module
  * @package Page
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var string $m
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -26,16 +28,12 @@ require_once cot_incfile('extrafields');
 require_once cot_incfile('page', 'module');
 
 // Mode choice
-if (!in_array($m, array('add', 'edit')))
-{
+if (!in_array($m, ['add', 'edit', 'counter'])) {
 	$id = cot_import('id','G','NOC'); // for 404 on bad ID
 	$al = cot_import('al','G','TXT');
-	if (isset($id) || $al)
-	{
+	if (isset($id) || $al) {
 		$m = 'main';
-	}
-	else
-	{
+	} else {
 		$m = 'list';
 	}
 }

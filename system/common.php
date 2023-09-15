@@ -163,8 +163,12 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
         && !defined('COT_ADMIN')
         && !defined('COT_INSTALL')
         && !defined('COT_MESSAGE')
+
+        // @todo move to system controller when it will be implemented
+        && !(empty($_GET['e']) &&  $sys['uri'] === '/' && !empty($_GET['a']) && $_GET['a'] === 'get')
     ) {
         $ext = cot_import('e', 'G', 'ALP');
+
         $cache_ext = empty($ext) ? 'index' : preg_replace('#\W#', '', $ext);
         if (isset($cfg['cache_' . $cache_ext]) && $cfg['cache_' . $cache_ext]) {
             $cacheRequest = $sys['uri'];
@@ -286,7 +290,13 @@ $redirect = cot_import('redirect','G','TXT');
 if (!empty($redirect)) $redirect = preg_replace('/[^a-zA-Z0-9_=\/]/', '', $redirect);
 $out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
-define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' || !empty($_SERVER['X-Requested-With']) && strtolower($_SERVER['X-Requested-With']) == 'xmlhttprequest' || cot_import('_ajax', 'G', 'INT') == 1);
+define(
+    'COT_AJAX',
+    (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+    || (!empty($_SERVER['X-Requested-With']) && strtolower($_SERVER['X-Requested-With']) == 'xmlhttprequest')
+    || cot_import('_ajax', 'G', 'INT') == 1
+);
+
 // Other system variables
 $sys['parser'] = $cfg['parser'];
 

@@ -3,10 +3,10 @@
 [BEGIN_COT_EXT]
 Name=Index
 Description=Home Page
-Version=1.0.1
-Date=2015-01-13
+Version=1.0.2
+Date=2023-09-15
 Author=Cotonti Team
-Copyright=(c) Cotonti Team 2008-2016
+Copyright=(c) Cotonti Team 2008-2023
 Notes=BSD License
 Auth_guests=R
 Lock_guests=A

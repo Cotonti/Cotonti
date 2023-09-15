@@ -5108,14 +5108,30 @@ function cot_captcha_generate($use_captcha = '')
         return '';
     }
 
-	$tepmcap = '<input type="hidden" name="capman" value="' . $captcha . '" />';
-	$captcha .= '_generate';
+    $tepmcap = '<input type="hidden" name="capman" value="' . $captcha . '" />';
 
-	if (function_exists($captcha)) {
-		return $captcha() . $tepmcap;
-	} else {
-		return '';
-	}
+    $captcha .= '_generate';
+    if (!function_exists($captcha)) {
+        return '';
+    }
+
+    if (
+        !COT_AJAX
+        && \Cot::$cfg['cache']
+        && !empty(\Cot::$cfg['cache_' . \Cot::$env['ext']])
+        && \Cot::$cache
+    ) {
+        \Resources::embedFooter(
+"document.addEventListener('DOMContentLoaded', function () { 
+    if (typeof cot !== 'undefined') {
+        cot.loadCaptcha();
+    } 
+});"
+        );
+        return '<span class="captcha-place-holder loading"></span>';
+    }
+
+	return $captcha() . $tepmcap;
 }
 
 /**
@@ -5391,7 +5407,7 @@ function cot_xg()
  */
 function cot_xp()
 {
-	return '<div style="display:inline;margin:0;padding:0"><input type="hidden" name="x" value="' . Cot::$sys['xk'] .
+	return '<div style="display:inline;margin:0;padding:0"><input type="hidden" name="x" value="' . \Cot::$sys['xk'] .
         '" /></div>';
 }
 

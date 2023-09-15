@@ -92,10 +92,10 @@ if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && Cot::$usr['au
 
 	// Hotlinking protection
 	if (
-        isset($_SESSION['dl']) &&
-        $_SESSION['dl'] != $id &&
-        isset($_SESSION['cat']) &&
-        $_SESSION['cat'] != $pag['page_cat']
+        isset($_SESSION['dl'])
+        && $_SESSION['dl'] != $id
+        && isset($_SESSION['cat'])
+        && $_SESSION['cat'] != $pag['page_cat']
     ) {
 		cot_redirect($pag['page_pageurl']);
 	}
@@ -111,9 +111,35 @@ if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && Cot::$usr['au
 	echo cot_rc('page_code_redir');
 	exit;
 }
-if (!Cot::$usr['isadmin'] || Cot::$cfg['page']['count_admin']) {
-	$pag['page_count']++;
-	$sql_page_update =  Cot::$db->query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id=$id");
+
+$pageHasMessages = cot_check_messages();
+
+$pageStaticCacheEnabled = \Cot::$cache
+    && \Cot::$usr['id'] === 0
+    && \Cot::$cfg['cache_page']
+    && !$pageHasMessages
+    && (!isset(\Cot::$cfg['cache_page_blacklist']) || !in_array($pag['page_cat'], \Cot::$cfg['cache_page_blacklist']));
+
+// Page views counter
+if (!\Cot::$usr['isadmin'] || \Cot::$cfg['page']['count_admin']) {
+    if (!$pageStaticCacheEnabled) {
+        $pag['page_count']++;
+        \Cot::$db->update(
+            Cot::$db->pages,
+            ['page_count' => $pag['page_count']],
+            'page_id = ?',
+            $pag['page_id']
+        );
+    } else {
+        Resources::embedFooter(
+            'fetch("' . cot_url(
+                'page',
+                ['e' => 'page', 'm' => 'counter', 'a' => 'views', 'id' => $pag['page_id']],
+                '',
+                true
+            ) . '")'
+        );
+    }
 }
 
 if ($pag['page_cat'] == 'system') {
@@ -141,11 +167,10 @@ $mskin = cot_tplfile(array('page', $cat['tpl']));
 Cot::$env['last_modified'] = $pag['page_updated'];
 
 /* === Hook === */
-foreach (cot_getextplugins('page.main') as $pl)
-{
+foreach (cot_getextplugins('page.main') as $pl) {
 	include $pl;
 }
-/* ===== */
+/* ============ */
 
 if ($pag['page_file'])
 {
@@ -306,11 +331,6 @@ $t->out('MAIN');
 
 require_once \Cot::$cfg['system_dir'] . '/footer.php';
 
-if (
-    \Cot::$cache
-    && \Cot::$usr['id'] === 0
-    && \Cot::$cfg['cache_page']
-    && (!isset(\Cot::$cfg['cache_page_blacklist']) || !in_array($pag['page_cat'], \Cot::$cfg['cache_page_blacklist']))
-) {
+if ($pageStaticCacheEnabled) {
 	Cot::$cache->static->write();
 }
