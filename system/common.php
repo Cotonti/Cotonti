@@ -165,7 +165,7 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
         && !defined('COT_MESSAGE')
 
         // @todo move to system controller when it will be implemented
-        && !(empty($_GET['e']) &&  $sys['uri'] === '/' && !empty($_GET['a']) && $_GET['a'] === 'get')
+        && !(empty($_GET['e']) && $sys['uri'] === '/' && !empty($_GET['a']) && $_GET['a'] === 'get')
     ) {
         $ext = cot_import('e', 'G', 'ALP');
 

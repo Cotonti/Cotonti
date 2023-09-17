@@ -12,14 +12,18 @@ Tags=polls.tpl:{POLLS_COMMENTS},{POLLS_COMMENTS_DISPLAY}
  * @package Comments
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var XTemplate $t
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('comments', 'plug');
 
-$t->assign(array(
-	'POLLS_COMMENTS' => cot_comments_link('polls', 'id='.$id, 'polls', $id),
-	'POLLS_COMMENTS_COUNT' => cot_comments_count('polls', $id),
-	'POLLS_COMMENTS_DISPLAY' => cot_comments_display('polls', $id)
-));
+if ($t->hasTag('POLLS_COMMENTS') || $t->hasTag('POLLS_COMMENTS_DISPLAY')) {
+    $t->assign([
+        'POLLS_COMMENTS' => cot_comments_link('polls', 'id=' . $id, 'polls', $id),
+        'POLLS_COMMENTS_COUNT' => cot_comments_count('polls', $id),
+        'POLLS_COMMENTS_DISPLAY' => cot_comments_display('polls', $id)
+    ]);
+}
