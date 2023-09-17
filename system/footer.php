@@ -105,8 +105,8 @@ if (!COT_AJAX) {
 
 	// Creation time statistics
 	$i = explode(' ', microtime());
-    Cot::$sys['endtime'] = $i[1] + $i[0];
-    Cot::$sys['creationtime'] = round((Cot::$sys['endtime'] - Cot::$sys['starttime']), 3);
+    \Cot::$sys['endtime'] = bcadd($i[1], $i[0], 8);
+    \Cot::$sys['creationtime'] = bcsub(\Cot::$sys['endtime'], \Cot::$sys['starttime'], 3);
 
 	Cot::$out['creationtime'] = (!Cot::$cfg['disablesysinfos']) ? Cot::$L['foo_created'].' '.cot_declension(Cot::$sys['creationtime'],
             $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
@@ -118,21 +118,19 @@ if (!COT_AJAX) {
 	Cot::$out['bottomline'] .= (Cot::$cfg['keepcrbottom']) ? Cot::$out['copyright'] : '';
 
 	// Development mode SQL query timings
-	if (Cot::$cfg['devmode'] && cot_auth('admin', 'a', 'A'))
-	{
+	if (\Cot::$cfg['devmode'] && cot_auth('admin', 'a', 'A')) {
         Cot::$out['devmode'] = "<h4>Dev-mode :</h4><table><tr><td><em>SQL query</em></td><td><em>Duration</em></td><td><em>Timeline</em></td><td><em>Execution stack<br />(file[line]: function)</em></td><td><em>Query</em></td></tr>";
         Cot::$out['devmode'] .= "<tr><td colspan=\"2\">BEGIN</td>";
         Cot::$out['devmode'] .= "<td style=\"text-align:right;\">0.000 ms</td><td>&nbsp;</td></tr>";
-		if(is_array(Cot::$sys['devmode']['queries']))
-		{
-			foreach (Cot::$sys['devmode']['queries'] as $k => $i)
-			{
-                Cot::$out['devmode'] .= "<tr><td>#".$i[0]." &nbsp;</td>";
-                Cot::$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", round($i[1] * 1000, 3))." ms</td>";
-                Cot::$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f",
+        $tdStyle = 'vertical-align: top; padding: 0 10px 10px 0';
+		if (is_array(Cot::$sys['devmode']['queries'])) {
+			foreach (Cot::$sys['devmode']['queries'] as $k => $i) {
+                Cot::$out['devmode'] .= "<tr><td style=\"vertical-align: top\">#".$i[0]." &nbsp;</td>";
+                Cot::$out['devmode'] .= "<td style=\"text-align:right; {$tdStyle}\">".sprintf("%.3f", round($i[1] * 1000, 3))." ms</td>";
+                Cot::$out['devmode'] .= "<td style=\"text-align:right; {$tdStyle}\">".sprintf("%.3f",
                         round(Cot::$sys['devmode']['timeline'][$k] * 1000, 3))." ms</td>";
-                Cot::$out['devmode'] .= "<td style=\"text-align:left;\">".nl2br(htmlspecialchars($i[3]))."</td>";
-                Cot::$out['devmode'] .= "<td style=\"text-align:left;\">".htmlspecialchars($i[2])."</td></tr>";
+                Cot::$out['devmode'] .= "<td style=\"text-align:left; {$tdStyle}\">".nl2br(htmlspecialchars($i[3]))."</td>";
+                Cot::$out['devmode'] .= "<td style=\"text-align:left; {$tdStyle}\">".htmlspecialchars($i[2])."</td></tr>";
 			}
 		}
         Cot::$out['devmode'] .= "<tr><td colspan=\"2\">END</td>";
@@ -142,20 +140,19 @@ if (!COT_AJAX) {
             " - Average:".round((Cot::$db->timeCount / Cot::$db->count), 5)."s/q";
 	}
 
-	$t->assign(array(
-		'FOOTER_BOTTOMLINE' => Cot::$out['bottomline'],
-		'FOOTER_CREATIONTIME' => Cot::$out['creationtime'],
-		'FOOTER_SQLSTATISTICS' => Cot::$out['sqlstatistics'],
-		'FOOTER_DEVMODE' => isset(Cot::$out['devmode']) ? Cot::$out['devmode'] : ''
-	));
+	$t->assign([
+		'FOOTER_BOTTOMLINE' => \Cot::$out['bottomline'],
+		'FOOTER_CREATIONTIME' => \Cot::$out['creationtime'],
+		'FOOTER_SQLSTATISTICS' => \Cot::$out['sqlstatistics'],
+		'FOOTER_DEVMODE' => isset(\Cot::$out['devmode']) ? \Cot::$out['devmode'] : ''
+	]);
 
 	$t->parse('FOOTER');
 	$t->out('FOOTER');
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('footer.last') as $pl)
-{
+foreach (cot_getextplugins('footer.last') as $pl) {
 	include $pl;
 }
 /* ===== */

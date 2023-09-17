@@ -82,16 +82,16 @@ class CotDB
 	private $_prepare_itself = false;
 
 	/**
-	 * Total query execution time
-	 * @var int
+	 * Total query execution time in microseconds as string
+	 * @var numeric-string
 	 */
-	private $_tcount = 0;
+	private $_tcount = '0';
 
 	/**
 	 * Timer start microtime
 	 * @var string
 	 */
-	private $_xtime = 0;
+	private $_xtime = '0';
 
 	/**
 	 * Table names registry
@@ -290,10 +290,10 @@ class CotDB
 	private function _startTimer()
 	{
         // if config is not loaded yet, save stats just in case
-		$showStats = !isset(Cot::$cfg['showsqlstats']) || Cot::$cfg['showsqlstats'];
+		$showStats = !isset(\Cot::$cfg['showsqlstats']) || \Cot::$cfg['showsqlstats'];
 
 		$this->_count++;
-		if ($showStats || Cot::$cfg['debug_mode']) {
+		if ($showStats || \Cot::$cfg['debug_mode']) {
 			$this->_xtime = microtime();
 		}
 	}
@@ -304,24 +304,33 @@ class CotDB
 	private function _stopTimer($query)
 	{
         // if config is not loaded yet, save stats just in case
-        $showStats = !isset(Cot::$cfg['showsqlstats']) || Cot::$cfg['showsqlstats'];
-        $devMode = !isset(Cot::$cfg['devmode']) || Cot::$cfg['devmode'];
+        $showStats = !isset(\Cot::$cfg['showsqlstats']) || \Cot::$cfg['showsqlstats'];
+        $devMode = !isset(\Cot::$cfg['devmode']) || \Cot::$cfg['devmode'];
 
-		if ($showStats || Cot::$cfg['debug_mode']) {
-			$ytime = microtime();
-			$xtime = explode(' ',$this->_xtime);
-			$ytime = explode(' ',$ytime);
-			$this->_tcount += $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0];
-			if ($devMode || Cot::$cfg['debug_mode']) {
+		if ($showStats || \Cot::$cfg['debug_mode']) {
+			$now = microtime();
+			$xtime = explode(' ', $this->_xtime);
+			$ytime = explode(' ', $now);
+
+            $startTime = bcadd($xtime[1], $xtime[0], 8);
+            $stopTime = bcadd($ytime[1], $ytime[0], 8);
+            $executionTime = bcsub($stopTime, $startTime, 8);
+
+			$this->_tcount = bcadd($this->_tcount, $executionTime, 8);
+			if ($devMode || \Cot::$cfg['debug_mode']) {
 				$calls = '';
 				$bt = debug_backtrace();
-				for ($i = sizeof($bt)-1; $i > 0; $i--) {
+				for ($i = sizeof($bt) - 1; $i > 0; $i--) {
 				    $object = !empty($bt[$i]['object']);
-					$call = (($object && $bt[$i]['class']) ? $bt[$i]['class'].$bt[$i]['type'] : '').$bt[$i]['function'].'();';
-					$calls .= (empty($calls)?'':"\n → ").basename($bt[$i]['file']).' ['.$bt[$i]['line'].']: '.$call;
+					$call = (($object && $bt[$i]['class']) ? $bt[$i]['class'] . $bt[$i]['type'] : '') . $bt[$i]['function'] . '();';
+					$calls .= (empty($calls) ? '' : "\n → ")
+                        . (!empty($bt[$i]['file']) ? basename($bt[$i]['file']) : '-')
+                        . ' [' . (!empty($bt[$i]['line']) ? $bt[$i]['line'] : '-') . ']: '
+                        . $call;
 				}
-                Cot::$sys['devmode']['queries'][] = array ($this->_count, $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query, $calls);
-                Cot::$sys['devmode']['timeline'][] = $xtime[1] + $xtime[0] - Cot::$sys['starttime'];
+
+                \Cot::$sys['devmode']['queries'][] = [$this->_count, $executionTime, $query, $calls];
+                \Cot::$sys['devmode']['timeline'][] = bcsub($startTime, \Cot::$sys['starttime'], 8);
 			}
 		}
 	}
