@@ -564,17 +564,24 @@ switch ($step) {
 		{
 			$status['sql_file'] = $R['install_code_not_found'];
 		}
-		$status['php_ver'] = (function_exists('version_compare') && version_compare(PHP_VERSION, '5.3.3', '>='))
-			? cot_rc('install_code_valid', array('text' =>
-				cot_rc('install_ver_valid', array('ver' => PHP_VERSION))))
-			: cot_rc('install_code_invalid', array('text' =>
-				cot_rc('install_ver_invalid', array('ver' => PHP_VERSION))));
+		$status['php_ver'] = (function_exists('version_compare')
+            && version_compare(PHP_VERSION, '5.6.0', '>='))
+			? cot_rc(
+                'install_code_valid',
+                ['text' => cot_rc('install_ver_valid', ['ver' => PHP_VERSION])]
+            )
+			: cot_rc(
+                'install_code_invalid',
+                ['text' => cot_rc('install_ver_invalid', ['ver' => PHP_VERSION])]
+            );
 		$status['mbstring'] = (extension_loaded('mbstring'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
 		$status['hash'] = (extension_loaded('hash') && function_exists('hash_hmac'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
 		$status['mysql'] = (extension_loaded('pdo_mysql'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
+
+        // TODO проверить PDO json bcmath
 
 		$t->assign(array(
 			'INSTALL_AV_DIR' => $status['avatars_dir'],

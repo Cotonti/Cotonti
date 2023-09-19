@@ -18,7 +18,8 @@
     "ext-mbstring": "*",
     "ext-json": "*",
     "ext-hash": "*",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "ext-bcmath": "*"
   },
 
   "autoload": {

@@ -172,8 +172,7 @@ foreach (cot_getextplugins('page.main') as $pl) {
 }
 /* ============ */
 
-if ($pag['page_file'])
-{
+if ($pag['page_file']) {
 	unset($_SESSION['dl']);
 	$_SESSION['dl'] = $id;
 }
@@ -314,11 +313,11 @@ foreach (cot_getextplugins('page.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
-if (Cot::$usr['isadmin'] || Cot::$usr['id'] == $pag['page_ownerid']) {
+if (\Cot::$usr['isadmin'] || \Cot::$usr['id'] == $pag['page_ownerid']) {
 	$t->parse('MAIN.PAGE_ADMIN');
 }
 
-if (($pag['page_file'] === 2 && Cot::$usr['id'] == 0) || ($pag['page_file'] === 2 && !Cot::$usr['auth_download'])) {
+if (($pag['page_file'] == 2 && \Cot::$usr['id'] == 0) || ($pag['page_file'] == 2 && !\Cot::$usr['auth_download'])) {
 	$t->parse('MAIN.PAGE_FILE.MEMBERSONLY');
 } else {
 	$t->parse('MAIN.PAGE_FILE.DOWNLOAD');
@@ -332,5 +331,5 @@ $t->out('MAIN');
 require_once \Cot::$cfg['system_dir'] . '/footer.php';
 
 if ($pageStaticCacheEnabled) {
-	Cot::$cache->static->write();
+	\Cot::$cache->static->write();
 }
