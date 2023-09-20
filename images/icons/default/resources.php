@@ -95,10 +95,16 @@ $R['icon_cfg_locale'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/locale.png"
 $R['icon_cfg_main'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/main.png" alt="" />';
 $R['icon_cfg_menus'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/menus.png" alt="" />';
 $R['icon_cfg_performance'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/performance.png" alt="" />';
+$R['icon_cfg_phpinfo'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/info.png" alt="" />';
 $R['icon_cfg_security'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/security.png" alt="" />';
 $R['icon_cfg_sessions'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/sessions.png" alt="" />';
 $R['icon_cfg_theme'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/theme.png" alt="" />';
 $R['icon_cfg_title'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/title.png" alt="" />';
+
+
+$R['admin_icon_cache'] = '<img src="'.$cfg['icons_dir'].'/default/default.png" alt="" />';
+$R['admin_icon_cache_disk'] = '<img src="'.$cfg['icons_dir'].'/default/default.png" alt="" />';
+$R['admin_icon_log'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/info.png" alt="" />';
 
 // 1. Modules (uncomment to use custom icon)
 // $R['icon_module_forums'] = '<img src="'.$cfg['icons_dir'].'/default/modules/forums.png" alt="" />';
