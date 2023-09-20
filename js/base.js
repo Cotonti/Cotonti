@@ -163,6 +163,18 @@ function toggleblock(id){
 	return false;
 }
 
+function toggleAll(action) {
+	var blks = document.querySelectorAll('[id^="blk_"]');
+	for (i = 0; i < blks.length; i++) {
+		if (action == 'hide') {
+			blks[i].style.display = 'none';
+		} else if (action == 'show') {
+			blks[i].style.display = 'table-row-group';
+		}
+	}
+	return false;
+}
+
 // Inserts text into textarea at cursor position
 function insertText(docObj, fieldName, value) {
 	var field = null;

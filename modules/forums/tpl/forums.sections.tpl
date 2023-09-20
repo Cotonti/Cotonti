@@ -8,7 +8,7 @@
 					<tr>
 						<td class="coltop" class="width10">&nbsp;</td>
 						<td class="coltop" class="width40">
-							<a href="{PHP|cot_url('forums','c=fold#top')}" rel="nofollow">{PHP.L.forums_foldall}</a><span class="spaced">/</span><a href="{PHP|cot_url('forums','c=unfold#top')}" rel="nofollow">{PHP.L.forums_unfoldall}</a>
+							<a href="{PHP|cot_url('forums','c=fold#top')}" rel="nofollow" onclick="return toggleAll('hide')">{PHP.L.forums_foldall}</a><span class="spaced">/</span><a href="{PHP|cot_url('forums','c=unfold#top')}" rel="nofollow" onclick="return toggleAll('show')">{PHP.L.forums_unfoldall}</a>
 						</td>
 						<td class="coltop" class="width20">{PHP.L.Lastpost}</td>
 						<td class="coltop" class="width10">{PHP.L.forums_topics}</td>
