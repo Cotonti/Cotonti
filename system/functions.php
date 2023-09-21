@@ -1670,6 +1670,8 @@ function cot_authCategories($area, $accessMask = 'RA')
         $key = isset($maskMap[$mask]) ? $maskMap[$mask] : $mask;
         $result[$key . 'All'] = false;
         $result[$key] = [];
+        $result[$key . 'NotAllowedAll'] = false;
+        $result[$key . 'NotAllowed'] = [];
     }
 
     if (empty(Cot::$structure[$area])) {
@@ -1679,6 +1681,7 @@ function cot_authCategories($area, $accessMask = 'RA')
     foreach ($masks as $mask) {
         $key = isset($maskMap[$mask]) ? $maskMap[$mask] : $mask;
         $result[$key . 'All'] = true;
+        $result[$key . 'NotAllowedAll'] = true;
     }
 
     foreach (Cot::$structure[$area] as $code => $cat) {
@@ -1692,7 +1695,9 @@ function cot_authCategories($area, $accessMask = 'RA')
 
             if (cot_auth($area, $code, $mask)) {
                 $result[$key][] = $code;
+                $result[$key . 'NotAllowedAll'] = false;
             } else {
+                $result[$key . 'NotAllowed'][] = $code;
                 $result[$key . 'All'] = false;
             }
         }

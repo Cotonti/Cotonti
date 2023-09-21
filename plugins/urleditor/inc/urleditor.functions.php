@@ -19,7 +19,8 @@ require_once cot_langfile('urleditor', 'plug');
 $cot_urleditor_presets = array('handy', 'compat', 'custom', 'none');
 
 /**
- * Applies Handly URLs rewrite to current script parameters
+ * Applies Handy URLs rewrite to current script parameters
+ * @return void
  */
 function cot_apply_rwr()
 {
@@ -33,132 +34,133 @@ function cot_apply_rwr()
         $rwr = trim($rwr, '/');
     }
 
-	if (!empty($rwr)/* && preg_match('`^[\w\p{L}/\-_\ \+\.]+?$`u', $_GET['rwr'])*/)
-	{
-		// Split the path into parts
-        $path = explode('/', $rwr);
-		$count = count($path);
+    if (empty($rwr)) {
+        return;
+    }
 
-		$rwr_continue = true;
+    // Split the path into parts
+    $path = explode('/', $rwr);
+    $count = count($path);
 
-		/* === Hook === */
-		foreach (cot_getextplugins('urleditor.rewrite.first') as $pl) {
-			include $pl;
-		}
-		/* ===== */
+    $rwr_continue = true;
 
-		if (!$rwr_continue) {
-			return null;
-		}
+    /* === Hook === */
+    foreach (cot_getextplugins('urleditor.rewrite.first') as $pl) {
+        include $pl;
+    }
+    /* ============ */
 
-		$filtered = cot_import($path[0], 'D', 'ALP');
-		if ($count == 1) {
-			if (isset(Cot::$structure['page'][$filtered]) || $filtered == 'unvalidated' || $filtered == 'saved_drafts') {
-				// Is a category
-				$_GET['e'] = 'page';
-				$_GET['c'] = $filtered;
+    if (!$rwr_continue) {
+        return null;
+    }
 
-			} elseif (
-                file_exists(Cot::$cfg['modules_dir'] . '/' . $filtered) ||
-                file_exists(Cot::$cfg['plugins_dir'] . '/' . $filtered)
-            ) {
-				// Is an extension
-				$_GET['e'] = $filtered;
+    $filtered = cot_import($path[0], 'D', 'ALP');
+    if ($count == 1) {
+        if (isset(Cot::$structure['page'][$filtered]) || $filtered == 'unvalidated' || $filtered == 'saved_drafts') {
+            // Is a category
+            $_GET['e'] = 'page';
+            $_GET['c'] = $filtered;
 
-			} elseif (in_array($filtered, array('register', 'profile', 'passrecover'))) {
-				// Special users shortcuts
-				$_GET['e'] = 'users';
-				$_GET['m'] = $filtered;
+        } elseif (
+            file_exists(Cot::$cfg['modules_dir'] . '/' . $filtered) ||
+            file_exists(Cot::$cfg['plugins_dir'] . '/' . $filtered)
+        ) {
+            // Is an extension
+            $_GET['e'] = $filtered;
+
+        } elseif (in_array($filtered, array('register', 'profile', 'passrecover'))) {
+            // Special users shortcuts
+            $_GET['e'] = 'users';
+            $_GET['m'] = $filtered;
+
+        } else {
+            // Maybe it is a system page, if not 404 will be given
+            $_GET['e'] = 'page';
+            $_GET['c'] = 'system';
+            $id = cot_import($path[0], 'D', 'INT');
+            if ($id) {
+                $_GET['id'] = $id;
 
             } else {
-				// Maybe it is a system page, if not 404 will be given
-				$_GET['e'] = 'page';
-				$_GET['c'] = 'system';
-				$id = cot_import($path[0], 'D', 'INT');
-				if ($id) {
-					$_GET['id'] = $id;
+                $alias = preg_replace('`[+/?%#&]`', '', cot_import($path[0], 'D', 'TXT'));
+                $_GET['al'] = $alias;
+            }
+        }
+    } else {
+        // Special shortcuts
+        if ($filtered == 'users' && $count == 2 && !isset($_GET['m'])) {
+            // User profiles
+            $_GET['e'] = 'users';
+            $_GET['m'] = 'details';
+            $_GET['u'] = $path[1];
+            return;
 
-				} else {
-					$alias = preg_replace('`[+/?%#&]`', '', cot_import($path[0], 'D', 'TXT'));
-					$_GET['al'] = $alias;
-				}
-			}
-		} else {
-			// Special shortcuts
-			if ($filtered == 'users' && $count == 2 && !isset($_GET['m'])) {
-				// User profiles
-				$_GET['e'] = 'users';
-				$_GET['m'] = 'details';
-				$_GET['u'] = $path[1];
-				return;
+        } elseif ($filtered == 'tags') {
+            // Tags
+            $_GET['e'] = 'tags';
+            if ($count == 3) {
+                $_GET['a'] = $path[1];
+                $_GET['t'] = $path[2];
+            } else {
+                $_GET['a'] = 'pages';
+                $_GET['t'] = $path[1];
+            }
+            return;
 
-			} elseif ($filtered == 'tags') {
-				// Tags
-				$_GET['e'] = 'tags';
-				if ($count == 3) {
-					$_GET['a'] = $path[1];
-					$_GET['t'] = $path[2];
-				} else {
-					$_GET['a'] = 'pages';
-					$_GET['t'] = $path[1];
-				}
-				return;
+        } elseif ($filtered == 'rss') {
+            // RSS
+            $_GET['e'] = 'rss';
+            $_GET['m'] = $path[1];
+            if ($count == 3) {
+                is_numeric($path[2]) ? $_GET['id'] = $path[2] : $_GET['c'] = $path[2];
+            } else {
+                $_GET['c'] = $path[1];
+            }
+            return;
 
-			} elseif ($filtered == 'rss') {
-				// RSS
-				$_GET['e'] = 'rss';
-				$_GET['m'] = $path[1];
-				if ($count == 3) {
-					is_numeric($path[2]) ? $_GET['id'] = $path[2] : $_GET['c'] = $path[2];
-				} else {
-					$_GET['c'] = $path[1];
-				}
-				return;
+        }
+        $last = $count - 1;
+        $ext = (isset(Cot::$structure['page'][$filtered])) ? 'page' : $filtered;
+        $_GET['e'] = $ext;
+        $cat_chain = array_slice($path, 0, -1);
+        if (isset(Cot::$structure[$ext][$path[$last]]) && !in_array($path[$last], $cat_chain)) {
+            // Is a category
+            $_GET['c'] = $path[$last];
+            if (trim($rwr, '/') !== trim(cot_url($ext, array('c' => $_GET['c'])), '/')) {
+                cot_url_usertheme_files();
+                cot_die_message(404, true);
+            }
 
-			}
-			$last = $count - 1;
-			$ext = (isset(Cot::$structure['page'][$filtered])) ? 'page' : $filtered;
-			$_GET['e'] = $ext;
-			$cat_chain = array_slice($path, 0, -1);
-			if (isset(Cot::$structure[$ext][$path[$last]]) && !in_array($path[$last], $cat_chain)) {
-				// Is a category
-				$_GET['c'] = $path[$last];
-				if (trim($rwr, '/') !== trim(cot_url($ext, array('c' => $_GET['c'])), '/')) {
-					cot_url_usertheme_files();
-					cot_die_message(404, true);
-				}
+        } else {
+            // Is a page/item
+            if (($ext == 'page' || $count > 2)) {
+                $_GET['c'] = $path[$last - 1];
+            }
+            if (is_numeric($path[$last])) {
+                $_GET['id'] = $path[$last];
+            } else {
+                // Can be a cat or al, let the module decide
+                if ($count == 2 && (!isset($_GET['c']) || !isset(Cot::$structure[$ext][$_GET['c']]))) {
+                   $_GET['c'] = $path[$last];
+                }
 
-			} else {
-				// Is a page/item
-				if (($ext == 'page' || $count > 2)) {
-					$_GET['c'] = $path[$last - 1];
-				}
-				if (is_numeric($path[$last])) {
-					$_GET['id'] = $path[$last];
-				} else {
-					// Can be a cat or al, let the module decide
-					if ($count == 2 && (!isset($_GET['c']) || !isset(Cot::$structure[$ext][$_GET['c']]))) {
-                       $_GET['c'] = $path[$last];
+                $_GET['al'] = $path[$last];
+            }
+            if ((!empty($_GET['id']) || !empty($_GET['al'])) && !empty($_GET['c'])) {
+                if (!isset($_GET['m']) || !in_array($_GET['m'], ['add', 'edit'])) {
+                    $tmpUrl = cot_url(
+                        $ext,
+                        ['c' => $_GET['c'], (!empty($_GET['al']) ? 'al' : 'id') => $path[$last]]
+                    );
+                    // @todo $rwr can contain encoded data. Need to check and optimize
+                    if ($rwr != $tmpUrl && $rwr != urldecode($tmpUrl)) {
+                        cot_url_usertheme_files();
+                        cot_die_message(404, true);
                     }
-
-					$_GET['al'] = $path[$last];
-				}
-                if ((!empty($_GET['id']) || !empty($_GET['al'])) && !empty($_GET['c'])) {
-                    if (!isset($_GET['m']) || !in_array($_GET['m'], ['add', 'edit'])) {
-                        $tmpUrl = cot_url(
-                            $ext,
-                            ['c' => $_GET['c'], (!empty($_GET['al']) ? 'al' : 'id') => $path[$last]]
-                        );
-                        // @todo $rwr can contain encoded data. Need to check and optimize
-                        if ($rwr != $tmpUrl && $rwr != urldecode($tmpUrl)) {
-                            cot_url_usertheme_files();
-                            cot_die_message(404, true);
-                        }
-                    }
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 }
 
 /**
