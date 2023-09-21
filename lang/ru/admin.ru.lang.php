@@ -29,6 +29,8 @@ $L['home_db_totalsize'] = 'БД SQL, общий размер (KB)';
 $L['home_site_props'] = 'Настройки сайта';
 $L['home_extrafields_pages'] = 'Экстраполя для страниц';
 $L['home_extrafields_users'] = 'Экстраполя для пользователей';
+$L['home_extrafields_forums_topics'] = 'Экстраполя для тем';
+$L['home_extrafields_forums_posts'] = 'Экстраполя для сообщений';
 $L['home_users_rights'] = 'Права групп';
 
 $L['home_update_notice'] = 'Доступно обновление';

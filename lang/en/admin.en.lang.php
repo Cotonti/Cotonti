@@ -29,6 +29,8 @@ $L['home_db_totalsize'] = 'SQL database, total size (KB)';
 $L['home_site_props'] = 'Site properties';
 $L['home_extrafields_pages'] = 'Extrafields for pages';
 $L['home_extrafields_users'] = 'Extrafields for users';
+$L['home_extrafields_forums_topics'] = 'Extrafields for topics';
+$L['home_extrafields_forums_posts'] = 'Extrafields for posts';
 $L['home_users_rights'] = 'User rights';
 
 $L['home_update_notice'] = 'Update available';
