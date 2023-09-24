@@ -355,9 +355,11 @@ $L['YIM'] = 'Yahoo Messenger';
 /**
  * cot_declension arrays
  */
+$Ls['Entries'] = "entries,entry";
 $Ls['Folders'] = "folders,folder";
 $Ls['Files'] = "files,file";
 
+$Ls['Accounts'] = 'accounts,account';
 $Ls['Guests'] = "guests,guest";
 $Ls['Members'] = "members,member";
 $Ls['Pages'] = "pages,page";
