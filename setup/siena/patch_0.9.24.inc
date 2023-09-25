@@ -42,3 +42,11 @@ if (!Cot::$db->indexExists(Cot::$db->config, 'config_owner_cat_name_subcat_key')
 
 // Remove obsolete core ratings configs. It can be found on very old sites
 Cot::$db->delete(Cot::$db->config, "config_owner = 'core' AND config_cat = 'ratings'");
+
+// Create index on pl_active field of `cot_plugins`
+if (!Cot::$db->indexExists(Cot::$db->plugins, 'plugins_active_idx')) {
+    Cot::$db->query(
+        'ALTER TABLE ' . Cot::$db->quoteTableName(Cot::$db->plugins)
+        . ' ADD INDEX plugins_active_idx (pl_active)'
+    );
+}

@@ -38,6 +38,7 @@
 </div>
 
 <!-- BEGIN: DEFAULT -->
+<!-- IF {ADMIN_STRUCTURE_TOTALITEMS} > 0 -->
 <div class="block">
 	<h2>{PHP.L.editdeleteentries}:</h2>
 	<div class="wrapper">
@@ -54,11 +55,11 @@
 					</tr>
 				</thead>
 				<tfoot>
-					<tr>
-						<td colspan="8">
-							<input type="submit" class="submit" value="{PHP.L.Update}" />
-						</td>
-					</tr>
+				<tr>
+					<td colspan="8">
+						<input type="submit" class="submit" value="{PHP.L.Update}" />
+					</td>
+				</tr>
 				</tfoot>
 				<tbody>
 					<!-- BEGIN: ROW -->
@@ -76,10 +77,11 @@
 							<!-- IF {ADMIN_STRUCTURE_CAN_DELETE} -->
 							<a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_DELETE_CONFIRM_URL}" class="confirmLink button">{PHP.L.Delete}</a>
 							<!-- ENDIF -->
-							<a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" class="button special">{PHP.L.Open}</a> </td>
-						</tr>
-						<!-- END: ROW -->
-					</tbody>
+							<a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" class="button special">{PHP.L.Open}</a>
+						</td>
+					</tr>
+					<!-- END: ROW -->
+				</tbody>
 				</table>
 			</form>
 			<p class="pagination-info">
@@ -94,6 +96,7 @@
 			<!-- ENDIF -->
 	</div>
 </div>
+<!-- ENDIF -->
 <!-- END: DEFAULT -->
 
 <!-- BEGIN: OPTIONS -->
@@ -219,6 +222,12 @@
 						<td>{PHP.L.Icon}:</td>
 						<td>{ADMIN_STRUCTURE_ICON}</td>
 					</tr>
+					<!-- IF {ADMIN_STRUCTURE_TPL} -->
+					<tr>
+						<td>{PHP.L.adm_tpl_mode}:</td>
+						<td>{ADMIN_STRUCTURE_TPL}</td>
+					</tr>
+					<!-- ENDIF -->
 					<tr>
 						<td>{PHP.L.Locked}:</td>
 						<td>{ADMIN_STRUCTURE_LOCKED}</td>

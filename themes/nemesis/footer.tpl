@@ -65,6 +65,11 @@
 		</form>
 	</div>
 	<!-- ENDIF -->
+	<!-- IF {FOOTER_DEVMODE} -->
+	<div>
+		{FOOTER_CREATIONTIME} {FOOTER_SQLSTATISTICS} {FOOTER_DEVMODE}
+	</div>
+	<!-- ENDIF -->
 {FOOTER_RC}
 </body>
 </html>

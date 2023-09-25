@@ -241,7 +241,8 @@ CREATE TABLE `cot_plugins` (
   `pl_order` tinyint UNSIGNED NOT NULL DEFAULT '10',
   `pl_active` tinyint UNSIGNED NOT NULL DEFAULT '1',
   `pl_module` tinyint UNSIGNED NOT NULL DEFAULT '0',
-  PRIMARY KEY  (`pl_id`)
+  PRIMARY KEY  (`pl_id`),
+  INDEX `plugins_active_idx` (`pl_active`)
 );
 
 DROP TABLE IF EXISTS `cot_structure`;

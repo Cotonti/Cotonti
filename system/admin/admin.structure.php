@@ -431,6 +431,8 @@ else
 		'ADMIN_STRUCTURE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n='.$db_structure)
 	));
 
+    $categoryList = [];
+
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('admin.structure.loop');
@@ -450,7 +452,6 @@ else
 			$pathspaceimg .= '.' . Cot::$R['admin_icon_blank'];
 		}
 
-        $categoryList = [];
         // @todo don't use category code. Use ID instead
         foreach ($structure[$n] as $catCode => $x) {
             if ($catCode != 'all') {
@@ -635,8 +636,8 @@ else
 		}
 		$t->parse(($id || !empty($al)) ? 'MAIN.OPTIONS' : 'MAIN.DEFAULT.ROW');
 	}
+    unset($row);
 
-    // Edit single category
 	if (!$id && empty($al)) {
 		$t->assign(array(
 			'ADMIN_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],
@@ -654,45 +655,53 @@ else
             unset($_SESSION['cot_buffer'][$hash]);
         }
 
-        $categoryTplCodeSelect = cot_selectbox(
-            $row['structure_tpl'],
-            'rtplforced',
-            array_keys($categoryList),
-            array_values($categoryList),
-            false
-        );
+        // New category form
+        $categoryTplCodeSelect = !empty($categoryList)
+            ? cot_selectbox(
+                null,
+                'rtplforced',
+                array_keys($categoryList),
+                array_values($categoryList),
+                false
+            )
+            : '';
 
-        $categoryTplCode = cot_inputbox('text', 'rtplcode', $row['structure_tpl'], 'maxlength="255"');
-        $categoryTpl = cot_radiobox(
-            null,
-            'rtplmode',
-            ['1', '2', '3', '4'],
-            [
-                Cot::$L['adm_tpl_empty'],
-                Cot::$L['adm_tpl_parent'],
-                Cot::$L['adm_tpl_forced'] . ' ' . $categoryTplCodeSelect,
-                Cot::$L['adm_tpl_code'] . ' ' . $categoryTplCode,
-            ],
-            '',
-            '<br />',
-            '',
-            true
-        );
+        $categoryTplCode = cot_inputbox('text', 'rtplcode', null, 'maxlength="255"');
+        $categoryTpl = !empty($categoryList)
+            ? cot_radiobox(
+                null,
+                'rtplmode',
+                ['1', '2', '3', '4'],
+                [
+                    Cot::$L['adm_tpl_empty'],
+                    Cot::$L['adm_tpl_parent'],
+                    Cot::$L['adm_tpl_forced'] . ' ' . $categoryTplCodeSelect,
+                    Cot::$L['adm_tpl_code'] . ' ' . $categoryTplCode,
+                ],
+                '',
+                '<br />',
+                '',
+                true
+            )
+            : '';
 
-		$t->assign(array(
-			'ADMIN_STRUCTURE_URL_FORM_ADD' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=add&d='.$durl),
-			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode', null, 'size="16"'),
-			'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath', null, 'size="16" maxlength="16"'),
-			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle', null, 'size="64" maxlength="100"'),
-			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc', null, 'size="64" maxlength="255"'),
-			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon', null, 'size="64" maxlength="128"'),
+		$t->assign([
+			'ADMIN_STRUCTURE_URL_FORM_ADD' => cot_url(
+                'admin',
+                ['m' => 'structure', 'n' => $n, 'mode' => $mode, 'a' => 'add', 'd' => $durl]
+            ),
+			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode', null),
+			'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath', null, 'maxlength="16"'),
+			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle', null, 'maxlength="100"'),
+			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc', null, 'maxlength="255"'),
+			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon', null, 'maxlength="128"'),
 			'ADMIN_STRUCTURE_LOCKED' => cot_checkbox(null, 'rstructurelocked'),
             'ADMIN_STRUCTURE_TPL' => $categoryTpl,
 
             // @deprecated. Left for backwards compatibility. Actually this is not a template mode, but a
             // selection (setting) of the template code
             'ADMIN_STRUCTURE_TPLMODE' => $categoryTpl,
-		));
+		]);
 
 		// Extra fields
         if (!empty(Cot::$extrafields[Cot::$db->structure])) {
