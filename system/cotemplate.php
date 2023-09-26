@@ -1537,28 +1537,26 @@ class Cotpl_var
 	 */
 	public function __construct($text)
 	{
-		if (mb_strpos($text, '|') !== false)
-		{
+		if (mb_strpos($text, '|') !== false) {
 			$chain = explode('|', $text);
 			$text = array_shift($chain);
-			foreach ($chain as $cbk)
-			{
-				if (mb_strpos($cbk, '(') !== false
-					&& preg_match('`(\w+)\s*\((.+)\)`', $cbk, $mt))
-				{
-					$this->callbacks[] = array(
+
+			foreach ($chain as $cbk) {
+				if (
+                    mb_strpos($cbk, '(') !== false
+					&& preg_match('`(\w+)\s*\((.*)\)`', $cbk, $mt)
+                ) {
+					$this->callbacks[] = [
 						'name' => $mt[1],
-						'args' => cotpl_tokenize(trim($mt[2]), array(',', ' '))
-					);
-				}
-				else
-				{
+						'args' => cotpl_tokenize(trim($mt[2]), [',', ' ']),
+					];
+				} else {
 					$this->callbacks[] = str_replace('()', '', $cbk);
 				}
 			}
 		}
-		if (mb_strpos($text, '.') !== false)
-		{
+
+		if (mb_strpos($text, '.') !== false) {
 			$keys = explode('.', $text);
 			$text = array_shift($keys);
 			$this->keys = $keys;
@@ -1668,7 +1666,6 @@ class Cotpl_var
 	 */
 	public function evaluate($tpl = null)
 	{
-        $val = null;
         $var = null;
 		if ($this->name === 'PHP') {
             // As of PHP 8.1.0, $GLOBALS is now a read-only copy of the global symbol table.
@@ -1677,7 +1674,9 @@ class Cotpl_var
 			$var = $GLOBALS;
 
 		} elseif (!empty($tpl)) {
-            if(!isset($tpl->vars[$this->name])) $tpl->vars[$this->name] = null;
+            if (!isset($tpl->vars[$this->name])) {
+                $tpl->vars[$this->name] = null;
+            }
 			$val = $tpl->vars[$this->name];
 			if ($this->keys && (is_array($val) || is_object($val))) {
 				$var =& $tpl->vars[$this->name];
@@ -1711,7 +1710,7 @@ class Cotpl_var
 		if ($this->callbacks) {
 			foreach ($this->callbacks as $func) {
 				if (is_array($func)) {
-					array_walk($func['args'], 'cotpl_callback_replace', $val);
+					array_walk($func['args'], 'cotpl_callback_replace', isset($val) ? $val : null);
 					$f = $func['name'];
 					$a = $func['args'];
 
@@ -1741,18 +1740,19 @@ class Cotpl_var
 					}
 
 				} elseif ($func == 'dump') {
-					$val = $this->dump($val);
+					$val = $this->dump(isset($val) ? $val : null);
 
 				} else {
 					if (!function_exists($func)) {
 						return $this->__toString();
 					}
-					// ?? $val = isset($val) || is_null($val) ? $func($val) : $func();
-                    $val = $func($val);
+
+                    $val = (array_key_exists('val', get_defined_vars())) ? $func($val) : $func();
 				}
 			}
 		}
-		return $val;
+
+		return isset($val) ? $val : null;
 	}
 }
 
