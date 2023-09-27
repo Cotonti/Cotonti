@@ -74,16 +74,16 @@ class Resources
 
 		static::$cacheOn = Cot::$cfg['cache'];
 		static::$consolidate = (bool) Cot::$cfg['headrc_consolidate'];
-		static::$dir = Cot::$cfg['cache_dir'] . '/static/';
+		static::$dir = Cot::$cfg['cache_dir'] . '/assets/';
 		static::$isAdmin = defined('COT_ADMIN');
 		static::$minify = (bool) Cot::$cfg['headrc_minify'];
 
 		// Consolidate resources?
 		static::$consolidate = static::$cacheOn && static::$consolidate && !static::$isAdmin;
-		if (static::$consolidate)
-		{
-			if (!file_exists(Cot::$cfg['cache_dir'])) mkdir(Cot::$cfg['cache_dir'], Cot::$cfg['dir_perms']);
-			if (!file_exists(static::$dir)) mkdir(static::$dir, Cot::$cfg['dir_perms']);
+		if (static::$consolidate) {
+			if (!file_exists(static::$dir)) {
+                mkdir(static::$dir, Cot::$cfg['dir_perms'], true);
+            }
 		}
 	}
 
@@ -113,7 +113,9 @@ class Resources
 	public static function addFile($path, $type = '', $order = 50, $scope = 'global')
 	{
 		// header.php executed. Try add file to footer
-		if (static::$headerComplete) return Resources::linkFileFooter($path, $type, $order);
+		if (static::$headerComplete) {
+            return Resources::linkFileFooter($path, $type, $order);
+        }
 
 		$tmp = explode('?', $path);
 		$fileName = $tmp[0];
@@ -207,11 +209,15 @@ class Resources
 	public static function addEmbed($code, $type = 'js', $order = 50, $scope = 'global', $identifier = '')
 	{
 		// header.php executed. Try add code to footer
-		if (static::$headerComplete) Resources::embedFooter($code, $type, $order);
+		if (static::$headerComplete) {
+            static::embedFooter($code, $type, $order);
+        }
 
 		// Если используем консолидацию и минификацию, сохранить в файл
 		if (static::$consolidate && static::$cacheOn && !static::$isAdmin) {
-			if (!$identifier) $identifier = md5($code . $type);
+			if (!$identifier) {
+                $identifier = md5($code . $type);
+            }
 			// Save as file
 			$path = static::$dir . $identifier . '.' . $type;
 			if (!file_exists($path) || md5($code) != md5_file($path)) {
@@ -245,20 +251,15 @@ class Resources
 	{
 		global $theme, $cot_rc_html;
 
-		if (!isset($cot_rc_html[$theme]) || !static::$consolidate)
-		{
+		if (!isset($cot_rc_html[$theme]) || !static::$consolidate) {
 			$cot_rc_html = static::consolidate();
 		}
 
 		$ret = '';
 		$pass = true;
-		if (is_array($cot_rc_html) && isset($cot_rc_html[$theme]))
-		{
-
-			foreach ($cot_rc_html[$theme] as $scope => $html)
-			{
-				switch ($scope)
-				{
+		if (is_array($cot_rc_html) && isset($cot_rc_html[$theme])) {
+			foreach ($cot_rc_html[$theme] as $scope => $html) {
+				switch ($scope) {
 					case 'global':
 						$pass = true;
 						break;
@@ -272,32 +273,28 @@ class Resources
 						$parts = explode('_', $scope);
 						$pass = count($parts) == 2 && $parts[0] == 'group' && $parts[1] == Cot::$usr['maingrp'];
 				}
-				if ($pass) $ret = $html . $ret;
+				if ($pass) {
+                    $ret = $html . $ret;
+                }
 			}
 		}
 
 		// Now collect resources should not be minified
-		if (!is_array(static::$headerRc)) return $ret;
+		if (!is_array(static::$headerRc)) {
+            return $ret;
+        }
 
 		// CSS should go first
 		ksort(static::$headerRc);
-		foreach (static::$headerRc as $type => $data)
-		{
-			if (!empty(static::$headerRc[$type]) && is_array(static::$headerRc[$type]))
-			{
+		foreach (static::$headerRc as $type => $data) {
+			if (!empty(static::$headerRc[$type]) && is_array(static::$headerRc[$type])) {
 				ksort(static::$headerRc[$type]);
-				foreach (static::$headerRc[$type] as $order => $htmlArr)
-				{
-					foreach ($htmlArr as $key => $path)
-					{
-						if (mb_strpos($type, '_embed') !== false)
-						{
+				foreach (static::$headerRc[$type] as $order => $htmlArr) {
+					foreach ($htmlArr as $key => $path) {
+						if (mb_strpos($type, '_embed') !== false) {
 							$ret .= $path . "\n";
-						}
-						else
-						{
-							if (mb_strpos($path, '@') === 0)
-							{
+						} else {
+							if (mb_strpos($path, '@') === 0) {
 								$path = static::$alias[$path];
 								if (empty($path)) continue;
 							}
