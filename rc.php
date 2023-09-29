@@ -18,13 +18,10 @@ date_default_timezone_set('UTC');
  * Get the path of the target file.
  */
 $rc_file = $_GET['rc'];
-if (isset($rc_file) && is_string($rc_file) && preg_match('#^[\w\.\-]+\.(js|css)$#', $rc_file, $mt))
-{
-	$src_uri = $cfg['cache_dir'] . '/static/' . $rc_file;
+if (isset($rc_file) && is_string($rc_file) && preg_match('#^[\w\.\-]+\.(js|css)$#', $rc_file, $mt)) {
+	$src_uri = $cfg['cache_dir'] . '/assets/' . $rc_file;
 	$content_type = $mt[1] == 'js' ? 'text/javascript' : 'text/css';
-}
-else
-{
+} else {
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
 	header($protocol . ' 400 Bad Request');
 	echo '<html><body><h1>HTTP 400 - Bad Request</h1></body></html>';
@@ -35,9 +32,7 @@ else
  * Verify the existence of the target file.
  * Return HTTP 404 if needed.
  */
-
-if (!file_exists($src_uri))
-{
+if (!file_exists($src_uri)) {
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
 	header($protocol . ' 404 Not Found');
 	echo '<html><body><h1>HTTP 404 - Not Found</h1></body></html>';
@@ -69,19 +64,18 @@ header('Vary: Accept-Encoding');
  * Return HTTP 304 if needed.
  */
 
-if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']))
-{
+if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
 	// convert to unix timestamp
 	$if_modified_since = strtotime(preg_replace('#;.*$#', '', stripslashes($_SERVER['HTTP_IF_MODIFIED_SINCE'])));
-}
-else
-{
+} else {
 	$if_modified_since = false;
 }
 
-if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) == $etag
-	&& $if_modified_since >= $file_last_modified)
-{
+if (
+    isset($_SERVER['HTTP_IF_NONE_MATCH'])
+    && stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) == $etag
+	&& $if_modified_since >= $file_last_modified
+) {
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
 	header($protocol . ' 304 Not Modified');
 	exit;

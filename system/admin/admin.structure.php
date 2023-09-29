@@ -602,24 +602,38 @@ else
 			/* === Hook - Part1 : Set === */
 			$extp = cot_getextplugins('admin.config.edit.loop');
 			/* ===== */
-			foreach ($optionslist as $row_c) {
-				list($title, $hint) = cot_config_titles($row_c['config_name'], $row_c['config_text']);
+			foreach ($optionslist as $configRow) {
+				list($title, $hint) = cot_config_titles($configRow['config_name'], $configRow['config_text']);
 
-				if ($row_c['config_type'] == COT_CONFIG_TYPE_SEPARATOR) {
+				if ($configRow['config_type'] == COT_CONFIG_TYPE_SEPARATOR) {
 					$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $title);
 					$t->parse('MAIN.OPTIONS.CONFIG.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_BEGIN');
 				} else {
-					$t->assign(array(
-						'ADMIN_CONFIG_ROW_CONFIG' => cot_config_input($row_c),
+					$t->assign([
+						'ADMIN_CONFIG_ROW_CONFIG' => cot_config_input($configRow),
 						'ADMIN_CONFIG_ROW_CONFIG_TITLE' => $title,
-						'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' => cot_url('admin', 'm=structure&n='.$n.'&d='.$durl.'&id='.$row['structure_id'].'&al='.$row['structure_code'].'&a=reset&v='.$row_c['config_name'].'&'.cot_xg()),
+						'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' => cot_url(
+                            'admin',
+                            [
+                                'm' => 'structure',
+                                'n' => $n,
+                                'd' => $durl,
+                                'id' => $row['structure_id'],
+                                'al' => $row['structure_code'],
+                                'a' => 'reset',
+                                'v' => $configRow['config_name'],
+                                'x' => Cot::$sys['xk'],
+                            ]
+                        ),
 						'ADMIN_CONFIG_ROW_CONFIG_MORE' => $hint
-					));
+					]);
+
 					/* === Hook - Part2 : Include === */
 					foreach ($extp as $pl) {
 						include $pl;
 					}
 					/* ===== */
+
 					$t->parse('MAIN.OPTIONS.CONFIG.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_OPTION');
 				}
 				$t->parse('MAIN.OPTIONS.CONFIG.ADMIN_CONFIG_ROW');

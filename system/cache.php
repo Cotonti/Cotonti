@@ -849,7 +849,7 @@ class MySQL_cache extends Db_cache_driver
                     },
                     $realm
                 );
-                $where = 'c_realm IN(' . implode(', ', $realm) . ')';
+                $where = 'c_realm IN (' . implode(', ', $realm) . ')';
             } else {
                 $where = 'c_realm = ' . \Cot::$db->quote($realm);
             }
@@ -862,6 +862,7 @@ class MySQL_cache extends Db_cache_driver
             $where .= ' OR ';
         }
         $where .= 'c_auto = 1';
+
         $sql = \Cot::$db->query('SELECT c_name, c_value FROM ' . \Cot::$db->quoteTableName(\Cot::$db->cache) . " WHERE $where");
 		$i = 0;
 		while ($row = $sql->fetch()) {
