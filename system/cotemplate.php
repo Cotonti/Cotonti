@@ -6,7 +6,7 @@
  * - Cotonti special
  *
  * @package API - CoTemplate
- * @version 2.8.0
+ * @version 2.8.5
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
@@ -1780,6 +1780,10 @@ class Cotpl_var
 
         if ($argumentLC === 'false') {
             return false;
+        }
+
+        if ($argumentLC === 'null') {
+            return null;
         }
 
         if (is_numeric($argument)) {
