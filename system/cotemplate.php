@@ -605,7 +605,7 @@ class Cotpl_block
 	/**
 	 * Generates string representation for given set of blocks
 	 *
-	 * @param array $blocks Cotpl block objects (logical and data too)
+	 * @param array<int, Cotpl_block|Cotpl_data> $blocks $blocks Cotpl block objects (logical and data too)
 	 * @return string
 	 */
 	protected function blocks_toString(&$blocks)
@@ -629,9 +629,11 @@ class Cotpl_block
 	 * Compiles TPL text into CoTemplate objects
 	 *
 	 * @param string $code TPL source
-	 * @param array $blocks Array of Ctpl_block/Ctpl_data objects
+	 * @param array<int, Cotpl_block|Cotpl_data> $blocks Array of Cotpl_block/Cotpl_data objects
 	 * @param array $index CoTemplate index
 	 * @param array $path Current path
+     * @see Cotpl_block
+     * @see Cotpl_data
 	 */
 	protected function compile($code, &$blocks, &$index, $path)
 	{
@@ -648,10 +650,10 @@ class Cotpl_block
                 $block_found = true;
 
 			} elseif(!empty($mt[3])) {
-			    if($mt[3]==='IF') {
+			    if ($mt[3] === 'IF') {
                     $log_found = true;
 
-                } elseif($mt[3]==='FOR') {
+                } elseif($mt[3] === 'FOR') {
                     $loop_found = true;
                 }
 
@@ -729,17 +731,22 @@ class Cotpl_block
 				}
 
 			}
-			if ($log_found && preg_match('`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*IF\s+[^>]+\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*IF\s+(.+?)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`', $code, $mt))
-			{
+			if (
+                $log_found
+                && preg_match(
+                    '`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*IF\s+[^>]+\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*IF\s+(.+?)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`',
+                    $code,
+                    $mt
+                )
+            ) {
 				$log_pos = mb_strpos($code, $mt[0]);
 				$log_len = mb_strlen($mt[0]);
 				$log_mt = $mt;
+
 				// Extract preceeding plain data chunk
-				if ($log_pos > 0)
-				{
+				if ($log_pos > 0) {
 					$chunk = mb_substr($code, 0, $log_pos);
-					if (!empty($chunk))
-					{
+					if (!empty($chunk)) {
 						$blocks[$i++] = new Cotpl_data($chunk);
 					}
 				}
@@ -749,35 +756,32 @@ class Cotpl_block
 				$else_code = '';
 				$else = false;
 				$code = mb_substr($code, $log_pos + $log_len);
-				while ($scope > 0 && preg_match('`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*(?:IF\s+[^>]+?|ELSE|ENDIF)\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*(IF\s+.+?|ELSE|ENDIF)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`', $code, $m))
-				{
+				while (
+                    $scope > 0
+                    && preg_match(
+                        '`((?:(?<=\n|\r)[^\S\n\r]*)(?=<!--\s*(?:IF\s+[^>]+?|ELSE|ENDIF)\s*-->(?:\s*(?:\r?\n|\r))))?<!--\s*(IF\s+.+?|ELSE|ENDIF)\s*-->(?(1)(?:\s*(?:\r?\n|\r))?)`',
+                        $code,
+                        $m
+                    )
+                ) {
 						$m_pos = mb_strpos($code, $m[0]);
 						$m_len = mb_strlen($m[0]);
-						if ($m[2] === 'ENDIF')
-						{
+						if ($m[2] === 'ENDIF') {
 							$scope--;
-						}
-						elseif ($m[2] === 'ELSE')
-						{
-							if ($scope === 1)
-							{
+						} elseif ($m[2] === 'ELSE') {
+							if ($scope === 1) {
 								$if_code .= mb_substr($code, 0, $m_pos);
 								$else = true;
 								$code = mb_substr($code, $m_pos + $m_len);
 								continue;
 							}
-						}
-						else
-						{
+						} else {
 							$scope++;
 						}
 						$postfix_len = $scope === 0 ? 0 : $m_len;
-						if ($else === false)
-						{
+						if ($else === false) {
 							$if_code .= mb_substr($code, 0, $m_pos + $postfix_len);
-						}
-						else
-						{
+						} else {
 							$else_code .= mb_substr($code, 0, $m_pos + $postfix_len);
 						}
 						$code = mb_substr($code, $m_pos + $m_len);
@@ -875,15 +879,18 @@ class Cotpl_data
 		{
 			$code = $this->cleanup($code);
 		}
-		$chunks = preg_split('`(?<!\{)(\{(?:[\w\.\-]+)(?:\|.+?)?\})`', $code, -1, PREG_SPLIT_DELIM_CAPTURE);
-		foreach ($chunks as $chunk)
-		{
-			if (preg_match('`^(?<!\{)\{((?:[\w\.\-]+)(?:\|.+?)?)\}$`', $chunk, $m))
-			{
-				$this->chunks[] = new Cotpl_var($m[1]);
-			}
-			else
-			{
+		//$chunks = preg_split('`(?<!\{)(\{(?:[\w\.\-]+)(?:\|.+?)?\})`', $code, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $chunks = preg_split(
+            '`(?<!\{)(\{(?:[\w\.\-]+)(?:[^{}]+|(?R))*(?:\|.+?)?\})`',
+            $code,
+            -1,
+            PREG_SPLIT_DELIM_CAPTURE
+        );
+
+		foreach ($chunks as $chunk) {
+			if (preg_match('`^(?<!\{)\{((?:[\w\.\-]+)(?:\|.+?)?)\}$`', $chunk, $m)) {
+                $this->chunks[] = new Cotpl_var($m[1]);
+			} else {
 				$this->chunks[] = $chunk;
 			}
 		}
@@ -1125,31 +1132,20 @@ class Cotpl_expr
 		$operators = array_keys(self::$operators);
 		// Splitting infix into tokens
 		$tokens = array();
-		foreach ($words as $word)
-		{
-			$token = array();
-			if (in_array($word, $operators, true))
-			{
+		foreach ($words as $word) {
+			$token = [];
+			if (in_array($word, $operators, true)) {
 				$op = self::$operators[$word];
 				$token['op'] = $op;
 				$token['prec'] = self::$precedence[$op];
-			}
-			else
-			{
-				if (preg_match('`^{(.+?)}$`', $word, $mt))
-				{
+			} else {
+				if (preg_match('`^{(.+?)}$`', $word, $mt)) {
 					$token['var'] = new Cotpl_var($mt[1]);
-				}
-				elseif (preg_match('`("|\')(.+?)\1`', $word, $mt))
-				{
+				} elseif (preg_match('`("|\')(.+?)\1`', $word, $mt)) {
 					$token['var'] = $mt[2];
-				}
-				elseif (is_numeric($word))
-				{
+				} elseif (is_numeric($word)) {
 					$token['var'] = (double) $word;
-				}
-				else
-				{
+				} else {
 					$token['var'] = $word;
 				}
 				$token['prec'] = 0;
@@ -1166,7 +1162,9 @@ class Cotpl_expr
 					$tmp = $tokens[$j];
 					$tokens[$j] = $tokens[$j + 1];
 					$tokens[$j + 1] = $tmp;
-					if(!isset($tokens[$j]['op'])) $tokens[$j]['op'] = null;
+					if (!isset($tokens[$j]['op'])) {
+                        $tokens[$j]['op'] = null;
+                    }
 					$scopes += (($tokens[$j]['op'] == COTPL_OP_OPEN) ? 1 : 0)
 						- (($tokens[$j]['op'] == COTPL_OP_CLOSE) ? 1 : 0);
 					$j++;
@@ -1538,7 +1536,11 @@ class Cotpl_var
 	public function __construct($text)
 	{
 		if (mb_strpos($text, '|') !== false) {
-			$chain = explode('|', $text);
+			$chain = explode('|', str_replace('{PHP|', '{PHP#$%&!', $text));
+            array_walk(
+                $chain,
+                function(&$val) { $val = str_replace('{PHP#$%&!', '{PHP|', $val); }
+            );
 			$text = array_shift($chain);
 
 			foreach ($chain as $cbk) {
@@ -1546,9 +1548,13 @@ class Cotpl_var
                     mb_strpos($cbk, '(') !== false
 					&& preg_match('`(\w+)\s*\((.*)\)`', $cbk, $mt)
                 ) {
+                    // Don't trim quotes from arguments to we can parse them types
+                    $args = cotpl_tokenize(trim($mt[2]), [',', ' '], false);
+                    $args = array_map([$this, 'parseCallbackArgument'], $args);
+
 					$this->callbacks[] = [
 						'name' => $mt[1],
-						'args' => cotpl_tokenize(trim($mt[2]), [',', ' ']),
+						'args' => $args,
 					];
 				} else {
 					$this->callbacks[] = str_replace('()', '', $cbk);
@@ -1710,7 +1716,12 @@ class Cotpl_var
 		if ($this->callbacks) {
 			foreach ($this->callbacks as $func) {
 				if (is_array($func)) {
-					array_walk($func['args'], 'cotpl_callback_replace', isset($val) ? $val : null);
+                    array_walk(
+                        $func['args'],
+                        [$this, 'processCallbackArgument'],
+                        ['value' => isset($val) ? $val : null, 'tpl' => $tpl]
+                    );
+
 					$f = $func['name'];
 					$a = $func['args'];
 
@@ -1754,29 +1765,71 @@ class Cotpl_var
 
 		return isset($val) ? $val : null;
 	}
-}
 
-/**
- * Replaces $this in callback arguments with the template tag value.
- * To be used with array_walk.
- *
- * @param string $arg Callback function argument value
- * @param int $i Callback function argument key
- * @param string $val Tag value
- */
-function cotpl_callback_replace(&$arg, $i, $val)
-{
-	if (mb_strpos($arg, '$this') !== FALSE)
-	{
-		if (is_array($val) || is_object($val))
-		{
-			$arg = $val;
-		}
-		else
-		{
-			$arg = str_replace('$this', (string)$val, $arg);
-		}
-	}
+    /**
+     * Parse function argument
+     * @param string $argument
+     * @return bool|Cotpl_var|float|int|string
+     */
+    protected function parseCallbackArgument($argument)
+    {
+        $argumentLC = mb_strtolower($argument);
+        if ($argumentLC === 'true') {
+            return true;
+        }
+
+        if ($argumentLC === 'false') {
+            return false;
+        }
+
+        if (is_numeric($argument)) {
+            if ((float) $argument == (int) $argument) {
+                return (int) $argument;
+            }
+            //if (mb_strpos($argument, '.') !== false) {
+                return (float) $argument;
+            //}
+        }
+
+        $firstSymbol = mb_substr($argument, 0, 1);
+        $lastSymbol = mb_substr($argument, -1, 1);
+
+//        if (preg_match('`^{(.+?)}$`', $argument, $mt)) {
+//            return new Cotpl_var($mt[1]);
+//        }
+        if ($firstSymbol === '{' &&  $lastSymbol === '}') {
+            return new Cotpl_var(mb_substr($argument, 1, mb_strlen($argument) -2));
+        }
+
+        if ($firstSymbol === $lastSymbol && in_array($firstSymbol, ['"', "'"])) {
+            return trim($argument, $firstSymbol);
+        }
+
+        return $argument;
+    }
+
+    /**
+     * @param $argument Callback Function argument value
+     * @param $i Callback Function argument key
+     * @param array{value: mixed, tpl: XTemplate} $params
+     * @return void
+     */
+    protected function processCallbackArgument(&$argument, $i, $params)
+    {
+        if ($argument instanceof Cotpl_var) {
+            $argument = $argument->evaluate($params['tpl']);
+            return;
+        }
+
+        // Replaces '$this' in callback arguments with the template tag value.
+        if (mb_strpos($argument, '$this') !== FALSE) {
+            if (is_array($params['value']) || is_object($params['value'])) {
+                $argument = $params['value'];
+            } else {
+                $argument = str_replace('$this', (string) $params['value'], $argument);
+            }
+        }
+    }
 }
 
 /**
@@ -1816,13 +1869,15 @@ function cotpl_index_glue($path)
  * Splits a string into tokens by delimiter characters with double and single quotes support.
  * Unicode-aware.
  *
- * @param string $str   Source string
+ * @param string $str Source string
  * @param string $delim Delimiter characters
- * @return array
+ * @param bool $trimQuotes Remove quotes at the beginning and end of the token
+ * @return string[]
+ * @see https://www.php.net/manual/ru/function.strtok.php
  */
-function cotpl_tokenize($str, $delim = array(' '))
+function cotpl_tokenize($str, $delim = [' '], $trimQuotes = true)
 {
-	$tokens = array();
+	$tokens = [];
 	$idx = 0;
 	$quote = '';
 	$prev_delim = false;
@@ -1831,7 +1886,9 @@ function cotpl_tokenize($str, $delim = array(' '))
 		$c = mb_substr($str, $i, 1);
 		if (in_array($c, $delim)) {
 			if ($quote) {
-			    if(!isset($tokens[$idx])) $tokens[$idx] = '';
+			    if (!isset($tokens[$idx])) {
+                    $tokens[$idx] = '';
+                }
 				$tokens[$idx] .= $c;
 				$prev_delim = false;
 
@@ -1846,15 +1903,26 @@ function cotpl_tokenize($str, $delim = array(' '))
 		} elseif ($c == '"' || $c == "'") {
 			if (!$quote) {
 				$quote = $c;
+                if (!$trimQuotes) {
+                    if (!isset($tokens[$idx])) {
+                        $tokens[$idx] = '';
+                    }
+                    $tokens[$idx] .= $c;
+                }
 
 			} elseif ($quote == $c) {
 				$quote = '';
 				if (!isset($tokens[$idx])) {
 					$tokens[$idx] = '';
 				}
+                if (!$trimQuotes) {
+                    $tokens[$idx] .= $c;
+                }
 
 			} else {
-                if(!isset($tokens[$idx])) $tokens[$idx] = '';
+                if (!isset($tokens[$idx])) {
+                    $tokens[$idx] = '';
+                }
 				$tokens[$idx] .= $c;
 			}
 			$prev_delim = false;
@@ -1862,7 +1930,9 @@ function cotpl_tokenize($str, $delim = array(' '))
 		} elseif ($c == '{' && !$quote) {
 			// Avoid variable tokenization
 			$quote = $c;
-            if(!isset($tokens[$idx])) $tokens[$idx] = '';
+            if(!isset($tokens[$idx])) {
+                $tokens[$idx] = '';
+            }
 			$tokens[$idx] .= $c;
 			$prev_delim = false;
 
