@@ -1075,12 +1075,12 @@ class Cotpl_expr
 	/**
 	 * @var array Postfix expression stack
 	 */
-	protected $tokens = array();
+	protected $tokens = [];
 
 	/**
 	 * @var array Operator encoding map
 	 */
-	protected static $operators = array(
+	protected static $operators = [
 		'('		=> COTPL_OP_OPEN,
 		')'		=> COTPL_OP_CLOSE,
 		'AND'	=> COTPL_OP_AND,
@@ -1099,13 +1099,13 @@ class Cotpl_expr
 		'-'		=> COTPL_OP_SUB,
 		'*'		=> COTPL_OP_MUL,
 		'/'		=> COTPL_OP_DIV,
-		'%'		=> COTPL_OP_MOD
-	);
+		'%'		=> COTPL_OP_MOD,
+	];
 
 	/**
 	 * @var array Operator precedence (priority) mapping
 	 */
-	protected static $precedence = array(
+	protected static $precedence = [
 		COTPL_OP_OPEN => -1,
 		COTPL_OP_MUL => 1, COTPL_OP_DIV => 1, COTPL_OP_MOD => 1,
 		COTPL_OP_ADD => 2, COTPL_OP_SUB => 2,
@@ -1114,8 +1114,8 @@ class Cotpl_expr
 		COTPL_OP_NOT => 5,
 		COTPL_OP_AND => 6,
 		COTPL_OP_OR => 7, COTPL_OP_XOR => 7,
-		COTPL_OP_CLOSE => 99
-	);
+		COTPL_OP_CLOSE => 99,
+	];
 
 	/**
 	 * Constructs postfix expression from infix string
@@ -1129,7 +1129,9 @@ class Cotpl_expr
 		$text = str_replace('!{', ' ! {', $text);
 		$text = str_replace('!(', ' ! (', $text);
 		// Splitting into words
-		$words = cotpl_tokenize($text, array(' ', "\t"));
+		$words = cotpl_tokenize($text, array(' ', "\t"), false);
+        $words = array_map('cotpl_parseArgument', $words);
+
 		$operators = array_keys(self::$operators);
 		// Splitting infix into tokens
 		$tokens = array();
@@ -1140,19 +1142,22 @@ class Cotpl_expr
 				$token['op'] = $op;
 				$token['prec'] = self::$precedence[$op];
 			} else {
-				if (preg_match('`^{(.+?)}$`', $word, $mt)) {
-					$token['var'] = new Cotpl_var($mt[1]);
-				} elseif (preg_match('`("|\')(.+?)\1`', $word, $mt)) {
-					$token['var'] = $mt[2];
-				} elseif (is_numeric($word)) {
-					$token['var'] = (double) $word;
-				} else {
-					$token['var'] = $word;
-				}
+                // @Todo delete after test
+//				if (preg_match('`^{(.+?)}$`', $word, $mt)) {
+//					$token['var'] = new Cotpl_var($mt[1]);
+//				} elseif (preg_match('`("|\')(.+?)\1`', $word, $mt)) {
+//					$token['var'] = $mt[2];
+//				} elseif (is_numeric($word)) {
+//					$token['var'] = (double) $word;
+//				} else {
+//					$token['var'] = $word;
+//				}
+                $token['var'] = $word;
 				$token['prec'] = 0;
 			}
 			$tokens[] = $token;
 		}
+
 		// Infix to postfix
 		$lim = count($tokens) - 1;
 		for ($i = 0; $i < $lim; $i++) {
@@ -1185,8 +1190,7 @@ class Cotpl_expr
 	public function  __toString()
 	{
 		$str = '';
-		foreach ($this->tokens as $tok)
-		{
+		foreach ($this->tokens as $tok) {
 			$str .= $tok['var'] ? (string) $tok['var'] : array_search($tok['op'], self::$operators);
 		}
 		return $str;
@@ -1200,89 +1204,91 @@ class Cotpl_expr
 	 */
 	public function evaluate($tpl)
 	{
-		$stack = array();
+		$stack = [];
 		foreach ($this->tokens as $token) {
-		    if(!isset($token['op'])) $token['op'] = null;
+		    if (!isset($token['op'])) {
+                $token['op'] = null;
+            }
 			switch ($token['op']) {
 				case COTPL_OP_ADD:
-					array_push($stack, array_pop($stack) + array_pop($stack));
+					$stack[] = array_pop($stack) + array_pop($stack);
 					break;
 				case COTPL_OP_AND:
-					array_push($stack, array_pop($stack) && array_pop($stack));
+					$stack[] = array_pop($stack) && array_pop($stack);
 					break;
 				case COTPL_OP_CONTAINS:
 					$needle = array_pop($stack);
 					$haystack = array_pop($stack);
-					array_push($stack, is_string($haystack) && is_string($needle)
-						&& mb_strpos($haystack, $needle) !== false);
+					$stack[] = is_string($haystack) && is_string($needle)
+                        && mb_strpos($haystack, $needle) !== false;
 					break;
 				case COTPL_OP_DIV:
 					$divisor = array_pop($stack);
 					$dividend = array_pop($stack);
-					array_push($stack, $dividend / $divisor);
+					$stack[] = $dividend / $divisor;
 					break;
 				case COTPL_OP_EQ:
-					array_push($stack, array_pop($stack) == array_pop($stack));
+					$stack[] = array_pop($stack) == array_pop($stack);
 					break;
 				case COTPL_OP_GE:
 					$arg2 = array_pop($stack);
 					$arg1 = array_pop($stack);
-					array_push($stack, $arg1 >= $arg2);
+					$stack[] = $arg1 >= $arg2;
 					break;
 				case COTPL_OP_GT:
 					$arg2 = array_pop($stack);
 					$arg1 = array_pop($stack);
-					array_push($stack, $arg1 > $arg2);
+					$stack[] = $arg1 > $arg2;
 					break;
 				case COTPL_OP_HAS:
 					$needle = array_pop($stack);
 					$haystack = array_pop($stack);
-					array_push($stack, is_array($haystack) && in_array($needle, $haystack));
+					$stack[] = is_array($haystack) && in_array($needle, $haystack);
 					break;
 				case COTPL_OP_LE:
 					$arg2 = array_pop($stack);
 					$arg1 = array_pop($stack);
-					array_push($stack, $arg1 <= $arg2);
+					$stack[] = $arg1 <= $arg2;
 					break;
 				case COTPL_OP_LT:
 					$arg2 = array_pop($stack);
 					$arg1 = array_pop($stack);
-					array_push($stack, $arg1 < $arg2);
+					$stack[] = $arg1 < $arg2;
 					break;
 				case COTPL_OP_MOD:
 					$arg2 = array_pop($stack);
 					$arg1 = array_pop($stack);
-					array_push($stack, $arg1 % $arg2);
+					$stack[] = $arg1 % $arg2;
 					break;
 				case COTPL_OP_MUL:
-					array_push($stack, array_pop($stack) * array_pop($stack));
+					$stack[] = array_pop($stack) * array_pop($stack);
 					break;
 				case COTPL_OP_NE:
-					array_push($stack, array_pop($stack) != array_pop($stack));
+					$stack[] = array_pop($stack) != array_pop($stack);
 					break;
 				case COTPL_OP_NOT:
-					array_push($stack, !array_pop($stack));
+					$stack[] = !array_pop($stack);
 					break;
 				case COTPL_OP_OR:
 					$arg2 = array_pop($stack);
 					$arg1 = array_pop($stack);
-					array_push($stack, ($arg1 || $arg2));
+					$stack[] = ($arg1 || $arg2);
 					break;
 				case COTPL_OP_SUB:
 					$sub = array_pop($stack);
 					$min = array_pop($stack);
-					array_push($stack, $min - $sub);
+					$stack[] = $min - $sub;
 					break;
 				case COTPL_OP_XOR:
 					$arg2 = array_pop($stack);
 					$arg1 = array_pop($stack);
-					array_push($stack, ($arg1 xor $arg2));
+					$stack[] = ($arg1 xor $arg2);
 					break;
 				case COTPL_OP_OPEN:
 				case COTPL_OP_CLOSE:
 					break;
 				default:
-					array_push($stack, is_object($token['var']) ? $token['var']->evaluate($tpl) : $token['var']);
+					$stack[] = is_object($token['var']) ? $token['var']->evaluate($tpl) : $token['var'];
 					break;
 			}
 		}
@@ -1551,7 +1557,7 @@ class Cotpl_var
                 ) {
                     // Don't trim quotes from arguments to we can parse them types
                     $args = cotpl_tokenize(trim($mt[2]), [',', ' '], false);
-                    $args = array_map([$this, 'parseCallbackArgument'], $args);
+                    $args = array_map('cotpl_parseArgument', $args);
 
 					$this->callbacks[] = [
 						'name' => $mt[1],
@@ -1768,52 +1774,6 @@ class Cotpl_var
 	}
 
     /**
-     * Parse function argument
-     * @param string $argument
-     * @return bool|Cotpl_var|float|int|string
-     */
-    protected function parseCallbackArgument($argument)
-    {
-        $argumentLC = mb_strtolower($argument);
-        if ($argumentLC === 'true') {
-            return true;
-        }
-
-        if ($argumentLC === 'false') {
-            return false;
-        }
-
-        if ($argumentLC === 'null') {
-            return null;
-        }
-
-        if (is_numeric($argument)) {
-            if ((float) $argument == (int) $argument) {
-                return (int) $argument;
-            }
-            //if (mb_strpos($argument, '.') !== false) {
-                return (float) $argument;
-            //}
-        }
-
-        $firstSymbol = mb_substr($argument, 0, 1);
-        $lastSymbol = mb_substr($argument, -1, 1);
-
-//        if (preg_match('`^{(.+?)}$`', $argument, $mt)) {
-//            return new Cotpl_var($mt[1]);
-//        }
-        if ($firstSymbol === '{' &&  $lastSymbol === '}') {
-            return new Cotpl_var(mb_substr($argument, 1, mb_strlen($argument) -2));
-        }
-
-        if ($firstSymbol === $lastSymbol && in_array($firstSymbol, ['"', "'"])) {
-            return trim($argument, $firstSymbol);
-        }
-
-        return $argument;
-    }
-
-    /**
      * @param $argument Callback Function argument value
      * @param $i Callback Function argument key
      * @param array{value: mixed, tpl: XTemplate} $params
@@ -1955,4 +1915,51 @@ function cotpl_tokenize($str, $delim = [' '], $trimQuotes = true)
 	}
 
 	return $tokens;
+}
+
+/**
+ * Parse function argument
+ * @param string $argument
+ * @return bool|Cotpl_var|float|int|string
+ * @todo move to helper
+ */
+function cotpl_parseArgument($argument)
+{
+    $argumentLC = mb_strtolower($argument);
+    if ($argumentLC === 'true') {
+        return true;
+    }
+
+    if ($argumentLC === 'false') {
+        return false;
+    }
+
+    if ($argumentLC === 'null') {
+        return null;
+    }
+
+    if (is_numeric($argument)) {
+        if ((float) $argument == (int) $argument) {
+            return (int) $argument;
+        }
+        //if (mb_strpos($argument, '.') !== false) {
+        return (float) $argument;
+        //}
+    }
+
+    $firstSymbol = mb_substr($argument, 0, 1);
+    $lastSymbol = mb_substr($argument, -1, 1);
+
+//        if (preg_match('`^{(.+?)}$`', $argument, $mt)) {
+//            return new Cotpl_var($mt[1]);
+//        }
+    if ($firstSymbol === '{' &&  $lastSymbol === '}') {
+        return new Cotpl_var(mb_substr($argument, 1, mb_strlen($argument) -2));
+    }
+
+    if ($firstSymbol === $lastSymbol && in_array($firstSymbol, ['"', "'"])) {
+        return trim($argument, $firstSymbol);
+    }
+
+    return $argument;
 }
