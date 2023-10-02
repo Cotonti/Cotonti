@@ -33,7 +33,7 @@ if ($n == 'markall' && Cot::$usr['id'] > 0) {
 }
 
 if (empty($cot_sections_act)) {
-    $cot_sections_act = array();
+    $cot_sections_act = [];
 	$timeback = Cot::$sys['now'] - 604800; // 7 days
 	$sqltmp = Cot::$db->query("SELECT fp_cat, COUNT(*) FROM $db_forum_posts WHERE fp_creation > $timeback GROUP BY fp_cat");
 	while ($tmprow = $sqltmp->fetch()) {
@@ -43,9 +43,9 @@ if (empty($cot_sections_act)) {
 	Cot::$cache && Cot::$cache->db->store('cot_sections_act', $cot_sections_act, 'system', 7200);
 }
 
-$cat_top = array();
-$sql_forums = Cot::$db->query("SELECT * FROM $db_forum_stats ORDER by fs_cat DESC");
-foreach ($sql_forums->fetchAll() as $row) {
+$cat_top = [];
+$sqlForums = Cot::$db->query('SELECT * FROM ' . Cot::$db->forum_stats . ' ORDER by fs_cat DESC');
+while ($row = $sqlForums->fetch()) {
 	if (
         !empty($row['fs_cat'])
         && !$row['fs_lt_id']
@@ -59,14 +59,17 @@ foreach ($sql_forums->fetchAll() as $row) {
 	$cat_top[$row['fs_cat']]['postcount'] = $cat_top[$row['fs_cat']]['fs_postcount'];
     $cat_top[$row['fs_cat']]['viewcount'] = $cat_top[$row['fs_cat']]['fs_viewcount'];
 }
+$sqlForums->closeCursor();
 
-$fstlvl = array();
-$nxtlvl = array();
-$cot_act = array();
+$fstlvl = [];
+$nxtlvl = [];
+$cot_act = [];
 foreach (Cot::$structure['forums'] as $i => $x) {
 	$parents = explode('.', $x['path']);
 	$depth = count($parents);
-    $cot_act[$parents[0]] = 0;
+    if (!isset($cot_act[$parents[0]])) {
+        $cot_act[$parents[0]] = 0;
+    }
 	if (cot_auth('forums', $i, 'R')) {
 		if ($depth < 2) {
 			$fstlvl[$i] = $i;
@@ -189,8 +192,7 @@ foreach ($fstlvl as $x) {
 				'FORUMS_SECTIONS_ROW_NUM' => $yy,
 			));
 			/* === Hook - Part2 : Include === */
-			foreach ($extps as $pl)
-			{
+			foreach ($extps as $pl) {
 				include $pl;
 			}
 			/* ===== */

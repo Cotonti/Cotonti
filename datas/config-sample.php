@@ -90,6 +90,11 @@ $cfg['new_install'] = 1;			// This setting denotes a new install step and redire
 $cfg['useremailduplicate'] = false; // Allow users to register new accounts with duplicate email.
                                     // DO NOT ENABLE this setting unless you know for sure that you need it or it may
                                     // make your database inconsistent.
+/**
+ * Turn on/off hook (event) handler file. 'On' by default.
+ * Uncomment it on production site to improve performance a bit
+ */
+// $cfg['checkHookFileExistence'] = false;
 
 // ========================
 // Directory paths

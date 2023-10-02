@@ -408,7 +408,7 @@ function cot_forums_sync($category)
     $statExists = Cot::$db->query(
         'SELECT COUNT(*) FROM ' . Cot::$db->forum_stats . ' WHERE fs_cat = :cat',
         ['cat' => $category]
-    );
+    )->fetchColumn();
 
     if (!$statExists) {
         $insertData = $statData;
@@ -438,7 +438,7 @@ function cot_forums_sync($category)
  */
 function cot_forums_updateStructureCounters($category)
 {
-    if (empty($category) || empty(\Cot::$structure['forums'][$category])) {
+    if (empty($category) || empty(Cot::$structure['forums'][$category])) {
         return;
     }
 
