@@ -253,15 +253,15 @@ class XTemplate
 	 *
 	 * @param array $options CoTemplate options
 	 */
-	public static function init($options = array())
+	public static function init($options = [])
 	{
-		$defaults = array(
+		$defaults = [
 			'cache'        => false,
 			'cache_dir'    => '',
 			'cleanup'      => false,
 			'debug'        => false,
 			'debug_output' => false,
-		);
+		];
 
 		$options = array_merge($defaults, $options);
 
@@ -297,12 +297,12 @@ class XTemplate
 	 * @param array $m PCRE matches
 	 * @return string
 	 */
-	private function restart_root_blocks($m)
+	private function restartRootBlocks($m)
 	{
 		$name = $m[1];
 		$text = trim($m[2]);
-		$this->index[$name] = array($name);
-		$this->blocks[$name] = new Cotpl_block($text, $this->index, array($name));
+		$this->index[$name] = [$name];
+		$this->blocks[$name] = new Cotpl_block($text, $this->index, [$name]);
 		$this->found = true;
 		return '';
 	}
@@ -372,16 +372,23 @@ class XTemplate
 	public function compile($code)
 	{
 		// Remove BOM if present
-		if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) $code = mb_substr($code, 0);
+		if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) {
+            $code = mb_substr($code, 0);
+        }
+
 		// FILE includes
 		$code = preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restart_include_files', $code);
+
 		// Get root-level blocks
-		do
-		{
+		do {
 			$this->found = false;
-			$code = preg_replace_callback('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s',
-				array($this, 'restart_root_blocks'), $code);
+			$code = preg_replace_callback(
+                '`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s',
+				[$this, 'restartRootBlocks'],
+                $code
+            );
 		} while($this->found);
+
 		return $this;
 	}
 
@@ -862,7 +869,7 @@ class Cotpl_data
 	/**
 	 * @var array Block data consisting of strings and Cotpl_vars
 	 */
-	protected $chunks = array();
+	protected $chunks = [];
 	/**
 	 * @var bool Enables space removal for compact output
 	 */
@@ -878,9 +885,9 @@ class Cotpl_data
 		if (self::$cleanup_enabled) {
 			$code = $this->cleanup($code);
 		}
-		//$chunks = preg_split('`(?<!\{)(\{(?:[\w\.\-]+)(?:\|.+?)?\})`', $code, -1, PREG_SPLIT_DELIM_CAPTURE);
-        $chunks = preg_split(
-            '`(?<!\{)(\{(?:[\w\.\-]+)(?:[^{}]+|(?R))*(?:\|.+?)?\})`',
+
+		$chunks = preg_split(
+            '`(?<!\{)(\{(?:[\w\.\-]+)(?:\|.+?)?\})`U',
             $code,
             -1,
             PREG_SPLIT_DELIM_CAPTURE
