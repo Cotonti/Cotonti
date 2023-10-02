@@ -875,8 +875,7 @@ class Cotpl_data
 	 */
 	public function __construct($code)
 	{
-		if (self::$cleanup_enabled)
-		{
+		if (self::$cleanup_enabled) {
 			$code = $this->cleanup($code);
 		}
 		//$chunks = preg_split('`(?<!\{)(\{(?:[\w\.\-]+)(?:\|.+?)?\})`', $code, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -887,13 +886,15 @@ class Cotpl_data
             PREG_SPLIT_DELIM_CAPTURE
         );
 
-		foreach ($chunks as $chunk) {
-			if (preg_match('`^(?<!\{)\{((?:[\w\.\-]+)(?:\|.+?)?)\}$`', $chunk, $m)) {
-                $this->chunks[] = new Cotpl_var($m[1]);
-			} else {
-				$this->chunks[] = $chunk;
-			}
-		}
+        if (!empty($chunks)) {
+            foreach ($chunks as $chunk) {
+                if (preg_match('`^(?<!\{)\{((?:[\w\.\-]+)(?:\|.+?)?)\}$`', $chunk, $m)) {
+                    $this->chunks[] = new Cotpl_var($m[1]);
+                } else {
+                    $this->chunks[] = $chunk;
+                }
+            }
+        }
 	}
 
 	/**

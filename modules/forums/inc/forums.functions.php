@@ -422,6 +422,9 @@ function cot_forums_sync($category)
     } else {
         Cot::$db->update(Cot::$db->forum_stats, $statData, 'fs_cat = :cat', ['cat' => $category]);
     }
+    if (!empty(Cot::$cache)) {
+        Cot::$cache->db->remove('cot_sections_act', 'system');
+    }
 
     return (int) Cot::$db->query(
         'SELECT COUNT(*) FROM ' . Cot::$db->quoteTableName(Cot::$db->forum_topics) .
@@ -514,16 +517,17 @@ function cot_forums_updatecat($oldcat, $newcat)
 	$upd &= (bool)$db->update($db_forum_posts, array('fp_cat' => $newcat), 'fp_cat=' . $db->quote($oldcat));
 	$upd &= (bool)$db->update($db_forum_stats, array('fs_cat' => $newcat), 'fs_cat=' . $db->quote($oldcat));
 
+    if (!empty(Cot::$cache)) {
+        Cot::$cache->db->remove('cot_sections_act', 'system');
+    }
+
 	return $upd;
 }
 
 /**
  * Delete forums category
  *
- * @param string $oldcat Old Cat code
- * @param string $newcat New Cat code
- * @return bool
- * @global CotDB $db
+ * @param string $cat Category code
  */
 function cot_forums_deletecat($cat)
 {
@@ -531,6 +535,10 @@ function cot_forums_deletecat($cat)
 	$sql = Cot::$db->delete($db_forum_posts, 'fp_cat=' . Cot::$db->quote($cat));
 	$sql = Cot::$db->delete($db_forum_topics, 'ft_cat=' . Cot::$db->quote($cat));
 	$sql = Cot::$db->delete($db_forum_stats, 'fs_cat=' . Cot::$db->quote($cat));
+
+    if (!empty(Cot::$cache)) {
+        Cot::$cache->db->remove('cot_sections_act', 'system');
+    }
 }
 
 $minimaxieditor = null;

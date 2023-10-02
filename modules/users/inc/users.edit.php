@@ -175,6 +175,9 @@ if ($a == 'update')
 				$db->update($db_forum_topics, array('ft_firstpostername' => $newname), 'ft_firstpostername = ?', array($oldname));
 				$db->update($db_forum_posts, array('fp_postername' => $newname), 'fp_postername = ?', array($oldname));
 				$db->update($db_forum_stats, array('fs_lt_postername' => $newname), 'fs_lt_postername = ?', array($oldname));
+                if (!empty(Cot::$cache)) {
+                    Cot::$cache->db->remove('cot_sections_act', 'system');
+                }
 			}
 			if (cot_module_active('page'))
 			{

@@ -35,12 +35,18 @@ if ($n == 'markall' && Cot::$usr['id'] > 0) {
 if (empty($cot_sections_act)) {
     $cot_sections_act = [];
 	$timeback = Cot::$sys['now'] - 604800; // 7 days
-	$sqltmp = Cot::$db->query("SELECT fp_cat, COUNT(*) FROM $db_forum_posts WHERE fp_creation > $timeback GROUP BY fp_cat");
+	$sqltmp = Cot::$db->query(
+        'SELECT fp_cat, COUNT(*) FROM ' . Cot::$db->forum_posts . " WHERE fp_creation > $timeback GROUP BY fp_cat"
+    );
 	while ($tmprow = $sqltmp->fetch()) {
 		$cot_sections_act[$tmprow['fp_cat']] = $tmprow['COUNT(*)'];
 	}
 	$sqltmp->closeCursor();
-	Cot::$cache && Cot::$cache->db->store('cot_sections_act', $cot_sections_act, 'system', 7200);
+    if (!empty(Cot::$cache)) {
+        // Two hours. Because when cot_forum_stats.fs_viewcount is updated, the cache is not reset.
+        // Otherwise, caching makes no sense
+        Cot::$cache->db->store('cot_sections_act', $cot_sections_act, 'system', 7200);
+    }
 }
 
 $cat_top = [];
@@ -61,9 +67,7 @@ while ($row = $sqlForums->fetch()) {
 }
 $sqlForums->closeCursor();
 
-$fstlvl = [];
-$nxtlvl = [];
-$cot_act = [];
+$fstlvl = $nxtlvl = $cot_act = [];
 foreach (Cot::$structure['forums'] as $i => $x) {
 	$parents = explode('.', $x['path']);
 	$depth = count($parents);
