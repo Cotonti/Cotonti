@@ -886,18 +886,11 @@ class Cotpl_data
 			$code = $this->cleanup($code);
 		}
 
-        // Original: `(?<!\{)(\{(?:[\w\.\-]+)(?:\|.+?)?\})` from 0.9.23
-
-		$chunks = preg_split(
-            //'`(?<!\{)(\{(?:[\w\.\-]+)(?:\|.+?)?\})`U',
-            '`(?<!\{)(\{(?:[\w\.\-]+)(?:\|.+?)?\})`',
-            $code,
-            -1,
-            PREG_SPLIT_DELIM_CAPTURE
-        );
-
+		$chunks = $this->splitToChunks($code);
         if (!empty($chunks)) {
             foreach ($chunks as $chunk) {
+                // Original from 0.9.23: if (preg_match('`^(?<!\{)\{((?:[\w\.\-]+)(?:\|.+?)?)\}$`', $chunk, $m)) {
+                // Does not support multiline function calls
                 if (preg_match('`^(?<!\{)\{((?:[\w\.\-]+)(?:\|.+?)?)\}$`', $chunk, $m)) {
                     $this->chunks[] = new Cotpl_var($m[1]);
                 } else {
@@ -906,6 +899,18 @@ class Cotpl_data
             }
         }
 	}
+
+    private function splitToChunks($code)
+    {
+        // Original: `(?<!\{)(\{(?:[\w\.\-]+)(?:\|.+?)?\})` from 0.9.23
+        // @see https://code911.top/howto/php-find-multiple-curly-braces-in-a-string-and-replace-the-text-inside
+        return preg_split(
+            '`({(?>[^{}]|(?0))*?})`',
+            $code,
+            -1,
+            PREG_SPLIT_DELIM_CAPTURE
+        );
+    }
 
 	/**
 	 * TPL representation for debugging
