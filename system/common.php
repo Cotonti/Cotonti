@@ -42,7 +42,6 @@ register_shutdown_function('cot_shutdown');
 date_default_timezone_set('UTC');
 $sys['day'] = date('Y-m-d');
 $sys['now'] = time();
-$sys['now_offset'] = $sys['now'];
 $site_id = 'ct' . substr(md5(empty($cfg['site_id']) ? $cfg['mainurl'] : $cfg['site_id']), 0, 16);
 $sys['site_id'] = $site_id;
 
@@ -212,7 +211,7 @@ if (!isset($cot_cfg)) {
     $cot_cfg = null;
 }
 if ($cache && $cot_cfg) {
-	$cfg = array_merge($cot_cfg, $cfg);
+	$cfg = cot_arrayMergeRecursive($cot_cfg, $cfg);
 } else {
 	// Part 1: Load main configuration
 	$sql_config = $db->query("SELECT * FROM $db_config");

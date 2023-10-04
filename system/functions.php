@@ -117,18 +117,20 @@ function cot_alphaonly($text)
  * Native php function array_diff() only checks one dimension of a n-dimensional array.
  * When trying to compare n-dimensional ones it generates warning: Array to string conversion because it compares
  * elements by their string representation (if (string) $elem1 === (string) $elem2)
- * @see https://php.net/manual/en/function.array-diff.php
  *
  * @param array $array1 The array to compare from
  * @param array $array2 The array to compare with
  * @return array an array containing all the entries from array1 that are not present in any of the other arrays.
  *
+ * @see array_diff()
+ * @see https://php.net/manual/en/function.array-diff.php
+ *
  * @todo make signature compartaible with native array_diff() function:
  *       array_diff(array $array, array ...$arrays): array
  */
-function cot_array_diff($array1, $array2)
+function cot_array_diff(array $array1, array $array2)
 {
-    $return = array();
+    $return = [];
 
     foreach ($array1 as $mKey => $mValue) {
         if (array_key_exists($mKey, $array2)) {
@@ -149,6 +151,33 @@ function cot_array_diff($array1, $array2)
     }
 
     return $return;
+}
+
+/**
+ * Native php function array_merge_recursive() does indeed merge arrays, but it converts values with duplicate
+ * keys to arrays rather than overwriting the value in the first array with the duplicate value in the second array,
+ * as array_merge() does.
+ *
+ * @param array $array1
+ * @param array $array2
+ * @return array
+ *
+ * @see array_merge()
+ * @see array_merge_recursive()
+ * @see https://www.php.net/manual/en/function.array-merge-recursive.php
+ * @see https://www.php.net/manual/en/function.array-merge.php
+ */
+function cot_arrayMergeRecursive(array &$array1, array &$array2)
+{
+    $merged = $array1;
+    foreach ($array2 as $key => &$value) {
+        if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+            $merged [$key] = cot_arrayMergeRecursive($merged[$key], $value);
+        } else {
+            $merged[$key] = $value;
+        }
+    }
+    return $merged;
 }
 
 /**

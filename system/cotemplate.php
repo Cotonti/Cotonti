@@ -459,20 +459,20 @@ class XTemplate
 			$blk = $this->blocks[array_shift($path)];
 			foreach ($path as $node) {
 				if (is_array($blk)) {
-                    /* if (is_array($blk[$node])) {
+                    if (is_array($blk[$node])) {
 						$blk = &$blk[$node];
 					} else {
-						$blk = $blk[$node];
-					} */
-                    $blk = $blk[$node];
+                        $blk = $blk[$node];
+                    }
+                   // $blk = $blk[$node];
 
                 } else {
-                    /* if (is_array($blk->blocks[$node])) {
+                    if (is_array($blk->blocks[$node])) {
 						$blk = &$blk->blocks[$node];
 					} else {
 						$blk = $blk->blocks[$node];
-					} */
-                    $blk = $blk->blocks[$node];
+					}
+                    //$blk = $blk->blocks[$node];
                 }
 			}
 			$blk->parse($this);
