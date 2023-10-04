@@ -47,7 +47,7 @@ $rs['pagfile']   = isset($rs['pagfile'])   ? cot_import($rs['pagfile'], 'D', 'IN
 $rs['pagsort']   = isset($rs['pagsort'])   ? cot_import($rs['pagsort'], 'D', 'ALP') : '';
 $rs['pagsort']   = ($rs['pagsort'] != '')  ? $rs['pagsort'] : 'date';
 $rs['pagsort2']  = isset($rs['pagsort2'])  ? mb_strtolower(cot_import($rs['pagsort2'], 'D', 'ALP', 4)) : '';
-$rs['pagsort2']  = ($rs['pagsort2'] == 'desc')  ? 'DESC' : 'ASC';
+$rs['pagsort2']  = ($rs['pagsort2'] === 'asc')  ? 'ASC' : 'DESC';
 $rs['pagsub']    = isset($rs['pagsub'])    ? cot_import($rs['pagsub'], 'D', 'ARR') : [];
 $rs['pagsubcat'] = (isset($rs['pagsubcat']) && cot_import($rs['pagsubcat'], 'D', 'BOL')) ? 1 : 0;
 
@@ -57,7 +57,7 @@ $rs['frmreply']  = isset($rs['frmreply'])  ? cot_import($rs['frmreply'], 'D', 'I
 $rs['frmsort']   = isset($rs['frmsort'])   ? cot_import($rs['frmsort'], 'D', 'ALP') : '';
 $rs['frmsort']   = ($rs['frmsort'] != '')  ? $rs['frmsort'] : 'updated';
 $rs['frmsort2']  = isset($rs['frmsort2'])  ? mb_strtolower(cot_import($rs['frmsort2'], 'D', 'ALP', 4)) : '';
-$rs['frmsort2']  = ($rs['frmsort2'] == 'desc')  ? 'DESC' : 'ASC';
+$rs['frmsort2']  = ($rs['frmsort2'] === 'asc')  ? 'ASC' : 'DESC';
 $rs['frmsub']    = isset($rs['frmsub'])    ? cot_import($rs['frmsub'], 'D', 'ARR') : [];
 $rs['frmsubcat'] = (isset($rs['frmsubcat']) && cot_import($rs['frmsubcat'], 'D', 'BOL')) ? 1 : 0;
 
