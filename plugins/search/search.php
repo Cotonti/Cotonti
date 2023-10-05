@@ -421,8 +421,8 @@ if (!empty($sq)) {
 				'PLUGIN_PR_TEXT' => cot_clear_mark($row['page_text'], $words),
 				'PLUGIN_PR_TIME' => cot_date('datetime_medium', $row['page_date']),
 				'PLUGIN_PR_TIMESTAMP' => $row['page_date'],
-				'PLUGIN_PR_ODDEVEN' => cot_build_oddeven($jj),
-				'PLUGIN_PR_NUM' => $jj
+				'PLUGIN_PR_ODDEVEN' => cot_build_oddeven($jj + 1),
+				'PLUGIN_PR_NUM' => $jj + 1
 			));
 			/* === Hook - Part 2 === */
 			foreach ($extp as $pl) {
@@ -534,8 +534,8 @@ if (!empty($sq)) {
                         cot_date('datetime_medium', $row['ft_updated']) :
                         cot_date('datetime_medium', $row['fp_updated']),
 					'PLUGIN_FR_TIMESTAMP' => $row['ft_updated'] > 0 ? $row['ft_updated'] : $row['fp_updated'],
-					'PLUGIN_FR_ODDEVEN' => cot_build_oddeven($jj),
-					'PLUGIN_FR_NUM' => $jj,
+					'PLUGIN_FR_ODDEVEN' => cot_build_oddeven($jj + 1),
+					'PLUGIN_FR_NUM' => $jj + 1,
 				));
 				$t->parse('MAIN.RESULTS.FORUMS.ITEM');
 			}
