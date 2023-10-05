@@ -261,7 +261,7 @@ span.readmore		{ display:block; }
 
 .search-res			{ margin:0 0 10px; overflow:auto; }
 .search-res .small	{ color:#000; }
-.search-hl, .search-highlight { font-weight:bold; padding:0 2px; background:yellow; }
+.search-highlight	{ font-weight:bold; padding:0 2px; background:yellow; }
 
 /* 12. Lists
 -------------------------------------------------- */
