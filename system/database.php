@@ -18,6 +18,21 @@ defined('COT_CODE') or die('Wrong URL');
  *
  * @see http://www.php.net/manual/en/class.pdo.php
  *
+ * @property-read string $auth 'cot_auth' table name
+ * @property-read string $cache 'cot_cache' table name
+ * @property-read string $cache_bindings 'cot_cache_bindings' table name
+ * @property-read string $core 'cot_core' table name
+ * @property-read string $config 'cot_config' table name
+ * @property-read string $groups 'cot_groups' table name
+ * @property-read string $groups_users 'cot_groups_users' table name
+ * @property-read string $logger 'cot_logger' table name
+ * @property-read string $online 'cot_online' table name
+ * @property-read string $extra_fields 'cot_extra_fields' table name
+ * @property-read string $plugins 'cot_plugins' table name
+ * @property-read string $structure 'cot_structure' table name
+ * @property-read string $updates 'cot_updates' table name
+ * @property-read string $users 'cot_users' table name
+ *
  * @property-read int $affectedRows Number of rows affected by the most recent query
  * @property-read int $count Total query count
  * @property-read int $timeCount Total query execution time

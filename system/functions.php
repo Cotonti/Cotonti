@@ -3504,7 +3504,7 @@ function cot_log($text, $group = 'adm', $type = '', $status = '', $extra_data = 
     global $cot_plugins_enabled, $cot_modules;
 
     // If the application has not been initialized yet
-    if (empty(\Cot::$cfg) || empty(\Cot::$db) || \Cot::$cfg['loggerlevel'] === 'none') {
+    if (empty(Cot::$cfg) || empty(Cot::$db) || Cot::$cfg['loggerlevel'] === 'none') {
         return false;
     }
 
@@ -3516,7 +3516,13 @@ function cot_log($text, $group = 'adm', $type = '', $status = '', $extra_data = 
         if (stripos(Cot::$cfg['loggerlevel'], '+') !== false) {
             $loggerlevel = explode('+', Cot::$cfg['loggerlevel']);
         }
-        if (in_array('ext', $loggerlevel)) {
+        if (
+            in_array('ext', $loggerlevel)
+            && isset($cot_plugins_enabled)
+            && is_array($cot_plugins_enabled)
+            && isset($cot_modules)
+            && is_array($cot_modules)
+        ) {
             foreach (array_merge(array_keys($cot_plugins_enabled), array_keys($cot_modules)) as $ext) {
                 if ($ext == $group) {
                     if (isset($cfg[$ext]['loggerlevel'])) {
@@ -3555,8 +3561,8 @@ function cot_log($text, $group = 'adm', $type = '', $status = '', $extra_data = 
     $loger_data = [
         'log_date'  => (int) Cot::$sys['now'],
         'log_ip'    => (!empty(Cot::$usr['ip'])) ? Cot::$usr['ip'] : '',
-        'log_uid'   => Cot::$usr['id'],
-        'log_name'  => (!empty(Cot::$usr['name']) || Cot::$usr['name'] == '0') ? Cot::$usr['name'] : '',
+        'log_uid'   => isset(Cot::$usr['id']) ? Cot::$usr['id'] : 0,
+        'log_name'  => isset(Cot::$usr['name']) ? Cot::$usr['name'] : '',
         'log_uri'   => cot_cutstring(Cot::$sys['uri_curr'], 255),
         'log_group' => (!empty($group) || $group == '0') ? $group : '',
         'log_type'  => $type,
@@ -3580,7 +3586,7 @@ function cot_log($text, $group = 'adm', $type = '', $status = '', $extra_data = 
     }
     /* ===== */
 
-    \Cot::$db->insert(\Cot::$db->logger, $loger_data);
+    Cot::$db->insert(Cot::$db->logger, $loger_data);
 
     return true;
 }
