@@ -904,8 +904,9 @@ class Cotpl_data
     {
         // Original: `(?<!\{)(\{(?:[\w\.\-]+)(?:\|.+?)?\})` from 0.9.23
         // @see https://code911.top/howto/php-find-multiple-curly-braces-in-a-string-and-replace-the-text-inside
+        // only a-zA-Z0-9_$ allowed after {
         return preg_split(
-            '`({(?>[^{}]|(?0))*?})`',
+            '`({[\w\$](?>[^{}]|(?0))*?})`',
             $code,
             -1,
             PREG_SPLIT_DELIM_CAPTURE
