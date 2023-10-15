@@ -119,10 +119,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			// System info
 			clearstatcache();
 			if (!file_exists($file['sql'])) {
-				cot_error(cot_rc('install_error_missing_file', array('file' => $file['sql'])));
+				cot_error(cot_rc('install_error_missing_file', ['file' => $file['sql']]));
 			}
 			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.6.0', '>=')) {
-				cot_error(cot_rc('install_error_php_ver', array('ver' => PHP_VERSION)));
+				cot_error(cot_rc('install_error_php_ver', ['ver' => PHP_VERSION]));
 			}
 			if (!extension_loaded('mbstring')) {
 				cot_error('install_error_mbstring');
@@ -453,7 +453,7 @@ switch ($step) {
 	case 1:
 		// Create missing cache folders
 		if (is_writable($cfg['cache_dir'])) {
-			$cache_subfolders = array('cot', 'static', 'system', 'templates');
+			$cache_subfolders = ['cot', 'static', 'system', 'templates'];
 			foreach ($cache_subfolders as $sub) {
 				if (!file_exists($cfg['cache_dir'] . '/' . $sub)) {
 					mkdir($cfg['cache_dir'] . '/' . $sub, $cfg['dir_perms']);
@@ -583,7 +583,7 @@ switch ($step) {
 
         // TODO проверить PDO json bcmath
 
-		$t->assign(array(
+		$t->assign([
 			'INSTALL_AV_DIR' => $status['avatars_dir'],
 			'INSTALL_CACHE_DIR' => $status['cache_dir'],
 			'INSTALL_PFS_DIR' => $status['pfs_dir'],
@@ -597,7 +597,7 @@ switch ($step) {
 			'INSTALL_MBSTRING' => $status['mbstring'],
 			'INSTALL_HASH' => $status['hash'],
 			'INSTALL_MYSQL' => $status['mysql']
-		));
+		]);
 		break;
 
 	case 2:

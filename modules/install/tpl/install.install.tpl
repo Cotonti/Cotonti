@@ -23,11 +23,11 @@
 			</div>
 
 			<div id="content">
-					{FILE "./{PHP.cfg.modules_dir}/install/tpl/warnings.tpl"}
+				{FILE "./{PHP.cfg.modules_dir}/install/tpl/warnings.tpl"}
 
 				<form action="install.php" method="post">
 
-				<!-- BEGIN: STEP_0 -->
+					<!-- BEGIN: STEP_0 -->
 					<input type="hidden" name="step" value="0" />
 
 					<ul>
@@ -37,9 +37,9 @@
 						<!-- END: SCRIPT -->
 					</ul>
 					<div style="text-align: center;"><input type="submit" name="submit" class="submit" value="{PHP.L.Next}" /></div>
-				<!-- END: STEP_0 -->
+					<!-- END: STEP_0 -->
 
-				<!-- BEGIN: STEP_1 -->
+					<!-- BEGIN: STEP_1 -->
 					<input type="hidden" name="step" value="1" />
 
 					<p>{PHP.L.install_body_message1}</p>

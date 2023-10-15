@@ -456,26 +456,28 @@ class XTemplate
 	{
 		$path = isset($this->index[$block]) ? $this->index[$block] : null;
 		if ($path) {
-			$blk = $this->blocks[array_shift($path)];
-			foreach ($path as $node) {
-				if (is_array($blk)) {
-                    /* if (is_array($blk[$node])) {
-						$blk = &$blk[$node];
-					} else {
+            $blockIndex = array_shift($path);
+			$blk = isset($this->blocks[$blockIndex]) ? $this->blocks[$blockIndex] : null;
+            if (!empty($blk)) {
+                foreach ($path as $node) {
+                    if (is_array($blk)) {
+                        /* if (is_array($blk[$node])) {
+                            $blk = &$blk[$node];
+                        } else {
+                            $blk = $blk[$node];
+                        } */
                         $blk = $blk[$node];
-                    } */
-                   $blk = $blk[$node];
-
-                } else {
-                    /* if (is_array($blk->blocks[$node])) {
-						$blk = &$blk->blocks[$node];
-					} else {
-						$blk = $blk->blocks[$node];
-					} */
-                    $blk = $blk->blocks[$node];
+                    } else {
+                        /* if (is_array($blk->blocks[$node])) {
+                            $blk = &$blk->blocks[$node];
+                        } else {
+                            $blk = $blk->blocks[$node];
+                        } */
+                        $blk = $blk->blocks[$node];
+                    }
                 }
-			}
-			$blk->parse($this);
+                $blk->parse($this);
+            }
 		}
 		//else throw new Exception("Block $block is not found in " . $this->filename);
 
@@ -560,7 +562,12 @@ class XTemplate
             return '';
         }
 
-        $blk = $this->blocks[array_shift($path)];
+        $blockIndex = array_shift($path);
+        $blk = isset($this->blocks[$blockIndex]) ? $this->blocks[$blockIndex] : null;
+        if (empty($blk)) {
+            return '';
+        }
+
         foreach ($path as $node) {
             if (is_object($blk)) {
                 $blk =& $blk->blocks[$node];
@@ -568,7 +575,7 @@ class XTemplate
                 $blk =& $blk[$node];
             }
         }
-        
+
         return $blk->text($this);
 	}
 }
@@ -907,7 +914,7 @@ class Cotpl_data
          * @see https://code911.top/howto/php-find-multiple-curly-braces-in-a-string-and-replace-the-text-inside (\{(?>[^{}]|(?0))*?})
          *
          * (\{{1,2}[\w\$](?>[^{}]|(?0))*?}{1,2}) - allows {tag} and {{tag}}
-         * (\{[\w\$](?>[^{}]|(?0))*?}) - allows allows {tag}
+         * (\{[\w\$](?>[^{}]|(?0))*?}) - allows {tag}
          *
          * Allowed {tag}. Only a-zA-Z0-9_$ allowed after {
          */
