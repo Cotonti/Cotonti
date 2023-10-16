@@ -15,7 +15,7 @@ $R['comments_code_pages_info'] = Cot::$L['Total'] . ': {$totalitems}, ' . Cot::$
 $R['comments_link'] = '<a href="{$url}" class="comments_link" title="' . Cot::$L['comments_comments'] . '">' .
     Cot::$R['icon_comments'] . ' ({$count})</a>';
 
-$R['icon_comments'] = '<img class="icon" src="images/icons/' . Cot::$cfg['defaulticons'] . '/24/comments.png" alt="'
-    . Cot::$L['comments_comments'] . '" />';
-$R['icon_comments_cnt'] = '<img class="icon" src="images/icons/' . Cot::$cfg['defaulticons'] . '/24/comments.png" alt="'
-    . Cot::$L['comments_comments'] . '" /> ({$cnt})';
+$R['icon_comments'] = '<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/'  . Cot::$cfg['defaulticons'] .
+    '/24/comments.png" alt="'. Cot::$L['comments_comments'] . '" />';
+$R['icon_comments_cnt'] = '<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/'  . Cot::$cfg['defaulticons'] .
+    '/24/comments.png" alt="' . Cot::$L['comments_comments'] . '" /> ({$cnt})';

@@ -202,11 +202,10 @@ if ($pag['page_file'] > 0) {
 			$dotpos = mb_strrpos($pag['page_url'], ".") + 1;
 			$type = mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5));
 			$pag['page_fileicon'] = cot_rc('page_icon_file_path');
-			if (!file_exists($pag['page_fileicon']))
-			{
+			if (!file_exists($pag['page_fileicon'])) {
 				$pag['page_fileicon'] = cot_rc('page_icon_file_default');
 			}
-			$pag['page_fileicon'] = cot_rc('page_icon_file', array('icon' => $pag['page_fileicon']));
+			$pag['page_fileicon'] = cot_rc('page_icon_file', ['icon' => $pag['page_fileicon']]);
 		} else {
 			$pag['page_fileicon'] = '';
 		}

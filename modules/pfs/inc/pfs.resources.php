@@ -23,16 +23,16 @@ $R['pfs_link_thumbnail'] =
  * PFS Folder Types
  */
 
-$R['pfs_icon_gallery'] = '<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/modules/pfs/gallery.png" alt="'.$L['Gallery'].'" />';
-$R['pfs_icon_folder'] = '<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/modules/pfs/folder.png" alt="'.$L['Folder'].'" />';
+$R['pfs_icon_gallery'] = '<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'].'/modules/pfs/gallery.png" alt="'.$L['Gallery'].'" />';
+$R['pfs_icon_folder'] = '<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'].'/modules/pfs/folder.png" alt="'.$L['Folder'].'" />';
 
 /**
  * Image / Thumb / Link Insert Icons
  */
 
-$R['pfs_icon_pastefile'] = '<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/modules/pfs/link.png" title="'.$L['pfs_pastefile'].'" />';
-$R['pfs_icon_pasteimage'] = '<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/modules/pfs/image.png" title="'.$L['pfs_pasteimage'].'" />';
-$R['pfs_icon_pastethumb'] = '<img class="icon" src="images/icons/'.$cfg['defaulticons'].'/modules/pfs/thumbnail.png" title="'.$L['pfs_pastethumb'].'" />';
+$R['pfs_icon_pastefile'] = '<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'].'/modules/pfs/link.png" title="'.$L['pfs_pastefile'].'" />';
+$R['pfs_icon_pasteimage'] = '<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'].'/modules/pfs/image.png" title="'.$L['pfs_pasteimage'].'" />';
+$R['pfs_icon_pastethumb'] = '<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'].'/modules/pfs/thumbnail.png" title="'.$L['pfs_pastethumb'].'" />';
 
 /**
  * Image / Thumb / Link Add Icons

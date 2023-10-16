@@ -699,6 +699,8 @@ if (empty($usr['icons'])) {
 
 if (file_exists($cfg['icons_dir'] . '/' . $usr['icons'] . '/resources.php')) {
 	require_once $cfg['icons_dir'] . '/' . $usr['icons'] . '/resources.php';
+} elseif (file_exists($cfg['icons_dir'] . '/' . $cfg['defaulticons'] . '/resources.php')) {
+    require_once $cfg['icons_dir'] . '/' . $cfg['defaulticons'] . '/resources.php';
 } else {
 	require_once './images/icons/' . $cfg['defaulticons'] . '/resources.php';
 }

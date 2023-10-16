@@ -36,11 +36,11 @@
 			</li>
 			<li>
 				<a href="{PHP.cfg.mainurl}" title="{PHP.L.hea_viewsite}">
-<!-- IF {PHP.cfg.maintitle} && {PHP.cfg.maintitle|mb_strlen} < 50 -->
+				<!-- IF {PHP.cfg.maintitle} && {PHP.cfg.maintitle|mb_strlen} < 50 -->
 					{PHP.cfg.maintitle}
-<!-- ELSE -->
+				<!-- ELSE -->
 					{PHP.L.hea_viewsite}
-<!-- ENDIF -->
+				<!-- ENDIF -->
 				</a>
 			</li>
 		</ul>
@@ -50,55 +50,55 @@
 		<li>
 			<a href="{PHP|cot_url('admin')}" class="<!-- IF !{PHP.m} -->sel<!-- ENDIF -->" title="{PHP.L.Administration}">
 				<figure>
-					<img src="{PHP.cfg.icons_dir}/default/modules/index.png" alt="{PHP.L.Home}" />
+					<img src="{PHP.cfg.icons_dir}/{PHP.cfg.defaulticons}/modules/index.png" alt="{PHP.L.Home}" />
 				</figure>
 				<span>{PHP.L.Home}</span>
 			</a>
 		</li>
-<!-- IF {PHP.usr.admin_config} -->
+		<!-- IF {PHP.usr.admin_config} -->
 		<li>
 			<a href="{PHP|cot_url('admin', 'm=config')}" class="<!-- IF {PHP.m} == 'config' -->sel<!-- ENDIF -->" title="{PHP.L.Configuration}">
 				<figure>
-					<img src="/images/icons/default/32/core.png" alt="{PHP.L.Configuration}" />
+					<img src="{PHP.cfg.icons_dir}/{PHP.cfg.defaulticons}/32/core.png" alt="{PHP.L.Configuration}" />
 				</figure>
 				<span>{PHP.L.Configuration}</span>
 			</a>
 		</li>
-<!-- ENDIF -->
-<!-- IF {PHP.usr.admin_structure} -->
+		<!-- ENDIF -->
+		<!-- IF {PHP.usr.admin_structure} -->
 		<li>
 			<a href="{PHP|cot_url('admin', 'm=structure')}" class="<!-- IF {PHP.m} == 'structure' -->sel<!-- ENDIF -->" title="{PHP.L.Structure}">
 				<figure>
-					<img src="/images/icons/default/32/folder.png" alt="{PHP.L.Structure}" />
+					<img src="{PHP.cfg.icons_dir}/{PHP.cfg.defaulticons}/32/folder.png" alt="{PHP.L.Structure}" />
 				</figure>
 				<span>{PHP.L.Structure}</span>
 			</a>
 		</li>
-<!-- ENDIF -->
-<!-- IF {PHP.usr.admin_config} -->
+		<!-- ENDIF -->
+		<!-- IF {PHP.usr.admin_config} -->
 		<li>
 			<a href="{PHP|cot_url('admin', 'm=extensions')}" class="<!-- IF {PHP.m} == 'extensions' -->sel<!-- ENDIF -->" title="{PHP.L.Extensions}">
 				<figure>
-					<img src="/images/icons/default/32/extension.png" alt="{PHP.L.Extensions}" />
+					<img src="{PHP.cfg.icons_dir}/{PHP.cfg.defaulticons}/32/extension.png" alt="{PHP.L.Extensions}" />
 				</figure>
 				<span>{PHP.L.Extensions}</span>
 			</a>
 		</li>
-<!-- ENDIF -->
-<!-- IF {PHP.usr.admin_users} -->
+		<!-- ENDIF -->
+		<!-- IF {PHP.usr.admin_users} -->
 		<li>
 			<a href="{PHP|cot_url('admin', 'm=users')}" class="<!-- IF {PHP.m} == 'users' -->sel<!-- ENDIF -->" title="{PHP.L.Users}">
 				<figure>
-					<img src="{PHP.cfg.icons_dir}/default/modules/users.png" alt="{PHP.L.Users}" />
+					<img src="{PHP.cfg.icons_dir}/{PHP.cfg.defaulticons}/modules/users.png" alt="{PHP.L.Users}" />
 				</figure>
 				<span>{PHP.L.Users}</span>
 			</a>
 		</li>
-<!-- ENDIF -->
+		<!-- ENDIF -->
 		<li>
 			<a href="{PHP|cot_url('admin', 'm=other')}" class="<!-- IF {PHP.m} == 'other' -->sel<!-- ENDIF -->" title="{PHP.L.Other}">
 				<figure>
-					<img src="/images/icons/default/32/wrench.png" alt="{PHP.L.Other}" />
+					<img src="{PHP.cfg.icons_dir}/{PHP.cfg.defaulticons}/32/wrench.png" alt="{PHP.L.Other}" />
 				</figure>
 				<span>{PHP.L.Other}</span>
 			</a>
