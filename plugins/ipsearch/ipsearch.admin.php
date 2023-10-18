@@ -8,7 +8,7 @@ Hooks=tools
 /**
  * Search for an IP in the user database
  *
- * 
+ *
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
@@ -21,20 +21,16 @@ $adminTitle = $L['ipsearch_title'];
 $t = new XTemplate(cot_tplfile('ipsearch', 'plug', true));
 $t->assign(array(
 	'IPSEARCH_FORM_URL' => cot_url('admin', 'm=other&p=ipsearch&a=search&'.cot_xg()),
-	'IPSEARCH_ID' => $id
+	'IPSEARCH_ID' => ''
 ));
 
-if ($a == 'search')
-{
+if ($a == 'search') {
 	cot_check_xg();
 	$id_g = cot_import('id', 'G', 'TXT', 64);
 	$id_p = cot_import('id', 'P', 'TXT', 64);
-	if (!empty($id_g))
-	{
+	if (!empty($id_g)) {
 		$id = $id_g;
-	}
-	else
-	{
+	} else {
 		$id = $id_p;
 	}
 
@@ -51,8 +47,7 @@ if ($a == 'search')
 	$sql = $db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip='$ipmask1' ");
 	$totalmatches1 = $sql->rowCount();
 
-	while ($row = $sql->fetch())
-	{
+	while ($row = $sql->fetch()) {
 		$t->assign(array(
 			'IPSEARCH_USER_IPMASK1' => cot_build_user($row['user_id'], $row['user_name']),
 			'IPSEARCH_USER_LASTIP_IPMASK1' => cot_build_ipsearch($row['user_lastip'])
@@ -64,8 +59,7 @@ if ($a == 'search')
 	$sql = $db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask2.%' ");
 	$totalmatches2 = $sql->rowCount();
 
-	while ($row = $sql->fetch())
-	{
+	while ($row = $sql->fetch()) {
 		$t->assign(array(
 			'IPSEARCH_USER_IPMASK2' => cot_build_user($row['user_id'], $row['user_name']),
 			'IPSEARCH_USER_LASTIP_IPMASK2' => cot_build_ipsearch($row['user_lastip'])
@@ -77,8 +71,7 @@ if ($a == 'search')
 	$sql = $db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask3.%.%' ");
 	$totalmatches3 = $sql->rowCount();
 
-	while($row = $sql->fetch())
-	{
+	while($row = $sql->fetch()) {
 		$t->assign(array(
 			'IPSEARCH_USER_IPMASK3' => cot_build_user($row['user_id'], $row['user_name']),
 			'IPSEARCH_USER_LASTIP_IPMASK3' => cot_build_ipsearch($row['user_lastip'])
@@ -88,6 +81,7 @@ if ($a == 'search')
 	$sql->closeCursor();
 
 	$t->assign(array(
+		'IPSEARCH_ID' => $id,
 		'IPSEARCH_RES_DNS' => $res_dns,
 		'IPSEARCH_TOTALMATCHES1' => $totalmatches1,
 		'IPSEARCH_IPMASK1' => $ipmask1,
