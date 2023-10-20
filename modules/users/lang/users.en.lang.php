@@ -32,7 +32,7 @@ $L['cfg_usertextmax_hint'] = '';
 $L['cfg_usertextimg'] = 'Allow images and HTML in user signature';
 $L['cfg_usertextimg_hint'] = '\'No\' recommended, for security reasons';
 
-$L['Password_updated'] = 'Password has changed';
+$L['Password_updated'] = 'Password changed';
 $L['Profile_updated'] = 'Profile settings saved';
 $L['User_data_updated'] = 'User data updated';
 $L['Filter_search'] = 'Filter search';
