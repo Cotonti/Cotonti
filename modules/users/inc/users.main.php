@@ -140,7 +140,15 @@ $totalpage = ceil($totalusers / $cfg['users']['maxusersperpage']);
 $currentpage = ceil($d / $cfg['users']['maxusersperpage']) + 1;
 $pagenav = cot_pagenav('users', $users_url_path, $d, $totalusers, $cfg['users']['maxusersperpage']);
 
-$out['subtitle'] = $L['Users'];
+$out['subtitle'] = $L['users_meta_title'];
+$out['desc'] = $L['users_meta_desc'];
+if (!empty($g)) {
+	$out['subtitle'] .= " (" . $L['Group'] . " " . $g . ")";
+	$out['desc'] .= " (" . $L['Group'] . " " . $g . ")";
+} elseif (!empty($gm)) {
+	$out['subtitle'] .= " (" . $L['Maingroup'] . " " . $gm . ")";
+	$out['desc'] .= " (" . $L['Maingroup'] . " " . $gm . ")";
+}
 
 /* === Hook === */
 foreach (cot_getextplugins('users.main') as $pl) {

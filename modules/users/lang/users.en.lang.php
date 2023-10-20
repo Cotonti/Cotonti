@@ -38,3 +38,6 @@ $L['User_data_updated'] = 'User data updated';
 $L['Filter_search'] = 'Filter search';
 $L['Username_search'] = 'Username search';
 $L['Not_indicated'] = 'Not selected';
+
+$L['users_meta_title'] = 'List of user accounts';
+$L['users_meta_desc'] = 'List of registered user accounts';
