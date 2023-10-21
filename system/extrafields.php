@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Extrafields API
+ * Extra fields API
  *
  * @package API - Extrafields
  * @copyright (c) Cotonti Team
@@ -15,16 +15,18 @@ require_once cot_incfile('forms');
 /**
  * Returns Extra fields edit fields
  *
- * @param string $name Variable name
- * @param array $extrafield Extra fields data
- * @param string $data Existing data for fields
+ * @param string $name Form input name
+ * @param array $extrafield Extra field config
+ * @param string $data Existing value for extra field
  * @return string
+ *
+ * @todo use constants for extra field types
  */
 function cot_build_extrafields($name, $extrafield, $data)
 {
 	global $L, $R, $cfg, $pl;
 
-	$data = ($data == null) ? $extrafield['field_default'] : $data;
+	$data = ($data === null) ? $extrafield['field_default'] : $data;
 
 	switch ($extrafield['field_type']) {
 		case 'input':

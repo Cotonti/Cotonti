@@ -179,18 +179,22 @@ if (Cot::$usr['isadmin']) {
 $t->assign($pageedit_array);
 
 // Extra fields
-if(!empty(Cot::$extrafields[Cot::$db->pages])) {
+if (!empty(Cot::$extrafields[Cot::$db->pages])) {
     foreach (Cot::$extrafields[Cot::$db->pages] as $exfld) {
         $uname = strtoupper($exfld['field_name']);
-        $exfld_val = cot_build_extrafields('rpage' . $exfld['field_name'], $exfld, $pag['page_' . $exfld['field_name']]);
-        $exfld_title = cot_extrafield_title($exfld, 'page_');
+        $extrafieldElement = cot_build_extrafields(
+            'rpage' . $exfld['field_name'],
+            $exfld,
+            $pag['page_' . $exfld['field_name']]
+        );
+        $extrafieldTitle = cot_extrafield_title($exfld, 'page_');
 
-        $t->assign(array(
-            'PAGEEDIT_FORM_' . $uname => $exfld_val,
-            'PAGEEDIT_FORM_' . $uname . '_TITLE' => $exfld_title,
-            'PAGEEDIT_FORM_EXTRAFLD' => $exfld_val,
-            'PAGEEDIT_FORM_EXTRAFLD_TITLE' => $exfld_title
-        ));
+        $t->assign([
+            'PAGEEDIT_FORM_' . $uname => $extrafieldElement,
+            'PAGEEDIT_FORM_' . $uname . '_TITLE' => $extrafieldTitle,
+            'PAGEEDIT_FORM_EXTRAFLD' => $extrafieldElement,
+            'PAGEEDIT_FORM_EXTRAFLD_TITLE' => $extrafieldTitle
+        ]);
         $t->parse('MAIN.EXTRAFLD');
     }
 }

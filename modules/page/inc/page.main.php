@@ -114,17 +114,17 @@ if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && Cot::$usr['au
 
 $pageHasMessages = cot_check_messages();
 
-$pageStaticCacheEnabled = \Cot::$cache
-    && \Cot::$usr['id'] === 0
-    && \Cot::$cfg['cache_page']
+$pageStaticCacheEnabled = Cot::$cache
+    && Cot::$usr['id'] === 0
+    && Cot::$cfg['cache_page']
     && !$pageHasMessages
-    && (!isset(\Cot::$cfg['cache_page_blacklist']) || !in_array($pag['page_cat'], \Cot::$cfg['cache_page_blacklist']));
+    && (!isset(Cot::$cfg['cache_page_blacklist']) || !in_array($pag['page_cat'], Cot::$cfg['cache_page_blacklist']));
 
 // Page views counter
-if (!\Cot::$usr['isadmin'] || \Cot::$cfg['page']['count_admin']) {
+if (!Cot::$usr['isadmin'] || Cot::$cfg['page']['count_admin']) {
     if (!$pageStaticCacheEnabled) {
         $pag['page_count']++;
-        \Cot::$db->update(
+        Cot::$db->update(
             Cot::$db->pages,
             ['page_count' => $pag['page_count']],
             'page_id = ?',
