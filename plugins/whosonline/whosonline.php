@@ -39,9 +39,8 @@ if(cot_plugin_active('hiddengroups')) {
 }
 $ipsearch = cot_plugin_active('ipsearch');
 
-Cot::$out['subtitle'] = Cot::$L['WhosOnline'];
-Cot::$out['desc'] = Cot::$L['Users'].', '.mb_strtolower(Cot::$L['Guests'].' '.Cot::$L['NowOnline'].' '.Cot::$sys['domain'].' - '.Cot::$L['Online'].' '. Cot::$L['Statistics']);
-Cot::$out['keywords'] = mb_strtolower(Cot::$L['WhosOnline'].' '.Cot::$L['Guests'].' '.Cot::$L['Users'].' '.Cot::$sys['domain']);
+Cot::$out['subtitle'] = Cot::$L['whosonline_metaTitle'];
+Cot::$out['desc'] = Cot::$L['whosonline_metaDesc'];
 
 $join_condition = "LEFT JOIN $db_users AS u ON u.user_id=o.online_userid";
 $where = '';

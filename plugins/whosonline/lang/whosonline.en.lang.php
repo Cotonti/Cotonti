@@ -9,22 +9,29 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+/**
+ * Plugin Config
+ */
+ 
 $L['cfg_disable_guests'] = 'Disable guest tracking';
-$L['cfg_disable_guests_hint'] = '';
 $L['cfg_maxusersperpage'] = 'Users per page in whosonline table';
 $L['cfg_maxusersperpage_hint'] = 'Set to 0 for no limitations';
-$L['info_desc'] = 'Outputs online visitors on index and standalone page with user activity tracking on site';
 
 /**
  * Plugin Title & Subtitle
  */
 
-$L['WhosOnline'] = 'Who\'s Online';
+$L['info_name'] &= $L['WhosOnline'];
+$L['info_desc'] = 'Outputs online visitors on index and as standalone page with user activity tracking on site';
+
+$L['whosonline_metaTitle'] = 'Now online';
+$L['whosonline_metaDesc'] = 'List of registered users and guests viewing site right now';
 
 /**
  * Plugin Body
  */
 
+$L['WhosOnline'] = 'Who\'s Online';
 $L['MostOnline'] = 'Most users ever online';
 $L['NowOnline'] = 'Now online';
 $L['LastSeen'] = 'Last seen';
