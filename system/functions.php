@@ -4215,15 +4215,16 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 
 	if ($entries <= $perpage) {
 		return array(
-            'prev' => null,
-            'main' => null,
-            'next' => null,
-            'last' => null,
+            'first' => '',
+            'prev' => '',
+            'main' => '',
+            'next' => '',
+            'last' => '',
             'current' => 1,
-            'firstlink' => null,
-            'prevlink' => null,
-            'nextlink' => null,
-            'lastlink' => null,
+            'firstlink' => '',
+            'prevlink' => '',
+            'nextlink' => '',
+            'lastlink' => '',
             'total' => 1,
 			'onpage' => $onpage,
 			'entries' => $entries
