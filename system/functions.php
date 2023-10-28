@@ -43,7 +43,7 @@ $L = [];
 $R = [];
 
 $i = explode(' ', microtime());
-$sys['starttime'] = bcadd($i[1], $i[0], 8);
+$sys['starttime'] = $i[1] + $i[0];
 
 $cfg['version'] = '0.9.24 beta';
 
