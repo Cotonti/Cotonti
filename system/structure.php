@@ -29,7 +29,7 @@ function cot_structure_add($extension, $data, $is_module = true)
     // $L, $Ls, $R are needed for hook includes
     global $L, $Ls, $R;
 
-	global $cache, $db, $db_structure;
+	global $db, $db_structure;
 
 	/* === Hook === */
 	foreach (cot_getextplugins('structure.add') as $pl) {
@@ -49,8 +49,9 @@ function cot_structure_add($extension, $data, $is_module = true)
 
 			cot_log("Structure. Add category: '$extension' - '".$data['structure_code']."'", 'adm', 'structure', 'add');
 
-			if (\Cot::$cache) {
-                $cache->clear();
+			if (Cot::$cache) {
+                // @todo it is not efficient to flush the entire cache
+                Cot::$cache->clear();
             }
 
 			return true;
@@ -116,6 +117,7 @@ function cot_structure_delete($extension, $code, $is_module = true)
 
 	unset(Cot::$structure[$extension][$code]);
 	if (Cot::$cache) {
+        // @todo it is not efficient to flush the entire cache
         Cot::$cache->clear();
 	}
 

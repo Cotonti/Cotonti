@@ -27,25 +27,20 @@ foreach (cot_getextplugins('admin.cache.first') as $pl)
 
 if (!$cache) {
 	// Enforce cache loading
-	require_once $cfg['system_dir'].'/cache.php';
+	require_once Cot::$cfg['system_dir'] . '/cache.php';
 	$cache = new Cache();
 	$cache->init();
 }
 
-if ($a == 'purge' && $cache)
-{
-	if (cot_check_xg() && $cache->clear())
-	{
-		$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
+if ($a == 'purge' && $cache) {
+	if (cot_check_xg() && $cache->clear([COT_CACHE_TYPE_DB, COT_CACHE_TYPE_MEMORY])) {
+		Cot::$db->update(Cot::$db->users, ['user_auth' => ''], "user_auth <> ''");
 		cot_message('adm_purgeall_done');
-	}
-	else
-	{
+	} else {
 		cot_error('Error');
 	}
-}
-elseif ($a == 'delete')
-{
+
+} elseif ($a == 'delete') {
 	cot_check_xg();
 	$name = $db->prep(cot_import('name', 'G', 'TXT'));
 

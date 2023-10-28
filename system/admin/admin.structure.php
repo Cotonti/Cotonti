@@ -386,8 +386,8 @@ else
 
 		$res ? cot_message('Resynced') : cot_message("Error: function $area_sync doesn't exist."); // TODO i18n
 
-        if (\Cot::$cache && !empty(\Cot::$cfg['cache_' . $n])) {
-            \Cot::$cache->static->clearByUri(cot_url($n));
+        if (Cot::$cache && !empty(Cot::$cfg['cache_' . $n])) {
+            Cot::$cache->static->clearByUri(cot_url($n));
         }
 
 		cot_redirect(

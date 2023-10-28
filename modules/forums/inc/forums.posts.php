@@ -156,13 +156,13 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 		}
 		/* ===== */
 
-		if (\Cot::$cache) {
-            if (\Cot::$cfg['cache_forums']) {
-                //\Cot::$cache->page->clearByUri(cot_url('forums', ['m' => 'posts', 'q' => $q]));
-                \Cot::$cache->static->clearByUri(cot_url('forums'));
+		if (Cot::$cache) {
+            if (Cot::$cfg['cache_forums']) {
+                //Cot::$cache->page->clearByUri(cot_url('forums', ['m' => 'posts', 'q' => $q]));
+                Cot::$cache->static->clearByUri(cot_url('forums'));
             }
-            if (\Cot::$cfg['cache_index']) {
-                \Cot::$cache->static->clear('index');
+            if (Cot::$cfg['cache_index']) {
+                Cot::$cache->static->clear('index');
             }
 		}
 

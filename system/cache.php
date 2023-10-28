@@ -13,41 +13,42 @@ defined('COT_CODE') or die('Wrong URL');
  * Stores the list of advanced cachers provided by the host
  * @var array
  */
-$cot_cache_drivers = array();
+$cot_cache_drivers = [];
 
 /**
  * Default cache realm
  */
-define('COT_DEFAULT_REALM', 'cot');
+const COT_DEFAULT_REALM = 'cot';
+
 /**
  * Default time to live for temporary cache objects
  */
-define('COT_DEFAULT_TTL', 3600);
+const COT_DEFAULT_TTL = 3600;
 /**
  * Default cache type, uneffective
  */
-define('COT_CACHE_TYPE_ALL', 0);
+const COT_CACHE_TYPE_ALL = 0;
 /**
  * Disk cache type
  */
-define('COT_CACHE_TYPE_DISK', 1);
+const COT_CACHE_TYPE_DISK = 1;
 /**
  * Database cache type
  */
-define('COT_CACHE_TYPE_DB', 2);
+const COT_CACHE_TYPE_DB = 2;
 /**
  * Shared memory cache type
  */
-define('COT_CACHE_TYPE_MEMORY', 3);
+const COT_CACHE_TYPE_MEMORY = 3;
 /**
- * Page cache type
+ * Static cache type
  */
-define('COT_CACHE_TYPE_PAGE', 4);
+const COT_CACHE_TYPE_STATIC = 4;
 
 /**
  * Default cache type
  */
-define('COT_CACHE_TYPE_DEFAULT', COT_CACHE_TYPE_DB);
+const COT_CACHE_TYPE_DEFAULT = COT_CACHE_TYPE_DB;
 
 /**
  * Abstract class containing code common for all cache drivers
@@ -89,7 +90,7 @@ abstract class Cache_driver
 /**
  * Static cache is used to store large amounts of rarely modified data
  */
-abstract class Static_cache_driver
+abstract class Static_cache_driver extends Cache_driver
 {
 	/**
 	 * Stores data as object image in cache
@@ -105,7 +106,7 @@ abstract class Static_cache_driver
  * Dynamic cache is used to store data that is not too large
  * and is modified more or less frequently
  */
-abstract class Dynamic_cache_driver
+abstract class Dynamic_cache_driver extends Cache_driver
 {
 	/**
 	 * Stores data as object image in cache
@@ -309,42 +310,70 @@ class File_cache extends Static_cache_driver
 	/**
 	 * @see Cache_driver::clear()
 	 */
-	public function clear($realm = COT_DEFAULT_REALM)
+	public function clear($realm = '', $exceptRealms = ['assets', 'static', 'htmlpurifier', 'templates'])
 	{
-		if (empty($realm))
-		{
-			if(is_dir($this->dir))
-			{
-				$dp = opendir($this->dir);
-				while ($f = readdir($dp))
-				{
-					$dname = $this->dir.'/'.$f;
-					if ($f[0] != '.' && is_dir($dname))
-					{
-						$this->clear($f);
-					}
-				}
-				closedir($dp);
-			}
-		}
-		else
-		{
-			if(is_dir($this->dir.'/'.$realm))
-			{
-				$dp = opendir($this->dir.'/'.$realm);
-				while ($f = readdir($dp))
-				{
-					$fname = $this->dir.'/'.$realm.'/'.$f;
-					if (is_file($fname))
-					{
-						unlink($fname);
-					}
-				}
-				closedir($dp);
-			}
-		}
-		return TRUE;
+        if (!empty($realm)) {
+            $directory = $this->dir . '/' . $realm;
+            if (is_dir($this->dir . '/' . $realm)) {
+                return $this->doClear($directory, true, true);
+            }
+
+            return true;
+        }
+
+        if (is_dir($this->dir)) {
+            $this->doClear(Cot::$cfg['cache_dir'], false);
+
+            $directory = opendir($this->dir);
+            while ($f = readdir($directory)) {
+                $dname = $this->dir . '/' . $f;
+                if (
+                    is_dir($dname)
+                    && $f[0] !== '.'
+                    && (empty($exceptRealms) || !in_array($f, $exceptRealms))
+                ) {
+                    $this->clear($f);
+                }
+            }
+            closedir($directory);
+
+        }
+        return true;
 	}
+
+    /**
+     * Clears disk cache directory
+     * @param string $directory Directory name
+     * @param bool $clearSubDirectories true when enter subdirectories, otherwise false
+     * @param bool $deleteDirectory true when remove directory, otherwise false
+     * @return bool
+     */
+    private function doClear($directory, $clearSubDirectories = true, $deleteDirectory = false)
+    {
+        if (!is_dir($directory) || !is_writable($directory)) {
+            return false;
+        }
+
+        $glob = glob("$directory/*");
+        if (is_array($glob)) {
+            foreach ($glob as $f) {
+                if (
+                    is_file($f)
+                    && !in_array($f, [$this->dir . '/index.html', $this->dir . '/.htaccess'])
+                ) {
+                    @unlink($f);
+                } elseif (is_dir($f) && $clearSubDirectories) {
+                    $this->doClear($f, true, true);
+                }
+            }
+        }
+
+        if ($this->dir !== $directory && $deleteDirectory) {
+            @rmdir($directory);
+        }
+
+        return true;
+    }
 
 	/**
 	 * Checks if an object is stored in disk cache
@@ -471,7 +500,7 @@ class Page_cache
 	 */
 	public function __construct($dir, $perms = 0777)
 	{
-		$this->dir = $dir;
+		$this->dir = rtrim($dir, '\\/');
 		$this->perms = $perms;
 	}
 
@@ -593,7 +622,11 @@ class Page_cache
 	 */
 	public function clear($path, $withSubDirectories = false)
 	{
-		return $this->removeDir($this->dir . '/' . $path, $withSubDirectories);
+        $directory = $this->dir;
+        if (!empty($path)) {
+            $directory .= '/' . rtrim($path, '\\/');
+        }
+		return $this->removeDir($directory, $withSubDirectories);
 	}
 
     /**
@@ -684,7 +717,7 @@ class Page_cache
 			while ($f = readdir($dp)) {
 				$fpath = $path . '/' . $f;
 				if (is_dir($fpath) && $f != '.' && $f != '..' && $withSubDirectories) {
-					$cnt += $this->removeDir($fpath);
+					$cnt += $this->removeDir($fpath, true);
 				} elseif (is_file($fpath)) {
 					unlink($fpath);
 					$cnt++;
@@ -776,16 +809,15 @@ class MySQL_cache extends Db_cache_driver
 	public function clear($realm = '')
 	{
 		global $db, $db_cache;
-		if (empty($realm))
-		{
+
+		if (empty($realm)) {
 			$db->query("TRUNCATE $db_cache");
-		}
-		else
-		{
+		} else {
 			$db->query("DELETE FROM $db_cache WHERE c_realm = " . $db->quote($realm));
 		}
-		$this->buffer = array();
-		return TRUE;
+		$this->buffer = [];
+
+		return true;
 	}
 
 	/**
@@ -1349,11 +1381,11 @@ class Cache
     {
         global $cfg, $cot_cache_autoload, $cot_cache_drivers, $cot_cache_bindings, $env;
 
-        $this->disk = new File_cache(\Cot::$cfg['cache_dir']);
+        $this->disk = new File_cache(Cot::$cfg['cache_dir']);
 		$this->db = new MySQL_cache();
         $defaultRealms = ['system', 'cot'];
-        if (!empty(\Cot::$env['ext'])) {
-            $defaultRealms[] = \Cot::$env['ext'];
+        if (!empty(Cot::$env['ext'])) {
+            $defaultRealms[] = Cot::$env['ext'];
         }
 		$cot_cache_autoload = !empty($cot_cache_autoload) && is_array($cot_cache_autoload)
 			? array_merge($defaultRealms, $cot_cache_autoload)
@@ -1361,12 +1393,11 @@ class Cache
 
 		$this->db->get_all($cot_cache_autoload);
 
-        \Cot::$cfg['cache_drv'] .= '_driver';
-		if (in_array(\Cot::$cfg['cache_drv'], $cot_cache_drivers)) {
-			$selected = \Cot::$cfg['cache_drv'];
+        Cot::$cfg['cache_drv'] .= '_driver';
+		if (in_array(Cot::$cfg['cache_drv'], $cot_cache_drivers)) {
+			$selected = Cot::$cfg['cache_drv'];
 		}
-		if (!empty($selected))
-		{
+		if (!empty($selected)) {
             $cfg['cache_drv_host'] = !empty($cfg['cache_drv_host']) ? $cfg['cache_drv_host'] : null;
             $cfg['cache_drv_port'] = !empty($cfg['cache_drv_port']) ? $cfg['cache_drv_port'] : null;
             /** @var Temporary_cache_driver $mem */
@@ -1378,18 +1409,13 @@ class Cache
 				$this->mem = $mem;
 				$this->selected_drv = $selected;
 			}
-		}
-		else
-		{
+		} else {
 			$this->mem = false;
 		}
 
-        if (!$cot_cache_bindings)
-		{
+        if (!$cot_cache_bindings) {
 			$this->resync_bindings();
-		}
-		else
-		{
+		} else {
 			unset($cot_cache_bindings);
 		}
     }
@@ -1400,7 +1426,7 @@ class Cache
 	private function resync_bindings()
 	{
 		// global $db, $db_cache_bindings;
-		$this->bindings = array();
+		$this->bindings = [];
 		// $sql = $db->query("SELECT * FROM `$db_cache_bindings`");
 		// while ($row = $sql->fetch())
 		// {
@@ -1471,42 +1497,45 @@ class Cache
 
 	/**
 	 * Clears all cache entries
-	 * @param int $type Cache storage type:
+	 * @param int|int[] $type Cache storage type:
 	 * COT_CACHE_TYPE_ALL, COT_CACHE_TYPE_DB, COT_CACHE_TYPE_DISK, COT_CACHE_TYPE_MEMORY.
 	 * @return bool
 	 */
 	public function clear($type = COT_CACHE_TYPE_ALL)
 	{
 		$res = true;
-		switch ($type)
-		{
-			case COT_CACHE_TYPE_DB:
-				$res = $this->db->clear();
-			break;
 
-			case COT_CACHE_TYPE_DISK:
-				$res = $this->disk->clear();
-			break;
+        $cacheTypesToClear = is_array($type) ? $type : [$type];
+        if (in_array(COT_CACHE_TYPE_ALL, $cacheTypesToClear)) {
+            // Clear All Caches
+            if ($this->mem) {
+                $res &= $this->mem->clear();
+            }
+            $res &= $this->db->clear();
+            $res &= $this->disk->clear();
+            $res &= $this->static->clear('', true);
 
-			case COT_CACHE_TYPE_MEMORY:
-				if ($this->mem)
-				{
-					$res = $this->mem->clear();
-				}
-			break;
+            return $res;
+        }
 
-			case COT_CACHE_TYPE_PAGE:
-				$res = $this->disk->clear();
-			break;
+        if (in_array(COT_CACHE_TYPE_DB, $cacheTypesToClear)) {
+            $res &= $this->db->clear();
+        }
 
-			default:
-				if ($this->mem)
-				{
-					$res &= $this->mem->clear();
-				}
-				$res &= $this->db->clear();
-				$res &= $this->disk->clear();
-		}
+        if (in_array(COT_CACHE_TYPE_DISK, $cacheTypesToClear)) {
+            $res &= $this->disk->clear();
+        }
+
+        if (in_array(COT_CACHE_TYPE_MEMORY, $cacheTypesToClear)) {
+            if ($this->mem) {
+                $res &= $this->mem->clear();
+            }
+        }
+
+        if (in_array(COT_CACHE_TYPE_STATIC, $cacheTypesToClear)) {
+            $res &= $this->static->clear('', true);
+        }
+
 		return $res;
 	}
 
@@ -1534,7 +1563,7 @@ class Cache
 				}
 			break;
 
-			case COT_CACHE_TYPE_PAGE:
+			case COT_CACHE_TYPE_STATIC:
                 // @todo
 				$this->static->clear($realm);
 			break;
@@ -1594,7 +1623,7 @@ class Cache
 						}
 					break;
 
-					case COT_CACHE_TYPE_PAGE:
+					case COT_CACHE_TYPE_STATIC:
                         // @todo
 						$this->static->clear($cell['realm'] . '/' . $cell['id']);
 					break;

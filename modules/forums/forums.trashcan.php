@@ -63,8 +63,8 @@ function cot_trash_forumtopic_sync($data)
 	cot_forums_resyncTopic($data['ft_id']);
     cot_forums_updateStructureCounters($data['fp_cat']);
 
-    if (\Cot::$cache && Cot::$cfg['cache_forums']) {
-        \Cot::$cache->static->clearByUri(cot_url('forums'));
+    if (Cot::$cache && Cot::$cfg['cache_forums']) {
+        Cot::$cache->static->clearByUri(cot_url('forums'));
     }
 
     return true;

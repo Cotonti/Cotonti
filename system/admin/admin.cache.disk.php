@@ -27,11 +27,11 @@ foreach (cot_getextplugins('admin.cache.disk.first') as $pl)
 }
 /* ===== */
 
-if ($a == 'purge') {
+if ($a === 'purge') {
 	if (cot_check_xg() && cot_diskcache_clearall()) {
 		cot_message('adm_purgeall_done');
 		// Empty resource consolidation cache
-        \Cot::$db->delete(\Cot::$db->cache, "c_name = 'cot_rc_html'");
+        Cot::$db->delete(Cot::$db->cache, "c_name = 'cot_rc_html'");
 	} else {
 		cot_message('Error');
 	}
@@ -173,13 +173,13 @@ function cot_diskcache_list()
 }
 
 /**
- * Clears disk cache directory
+ * Clears disk cache directory. Even cache is turned off
  *
  * @param string $dir Directory name
  * @param bool $do_subdirs true when enter subdirectories, otherwise false
  * @param bool $rm_dir true when remove directory, otherwise false
  * @return bool
- */
+  */
 function cot_diskcache_clear($dir, $do_subdirs = true, $rm_dir = false)
 {
 	if (!is_dir($dir) || !is_writable($dir)) {
@@ -191,7 +191,7 @@ function cot_diskcache_clear($dir, $do_subdirs = true, $rm_dir = false)
 		foreach ($glob as $f) {
 			if (
                 is_file($f)
-                && !in_array($f, [\Cot::$cfg['cache_dir'] . '/index.html', \Cot::$cfg['cache_dir'] . '/.htaccess'])
+                && !in_array($f, [Cot::$cfg['cache_dir'] . '/index.html', Cot::$cfg['cache_dir'] . '/.htaccess'])
             ) {
 				@unlink($f);
 			} elseif (is_dir($f) && $do_subdirs) {
@@ -208,18 +208,17 @@ function cot_diskcache_clear($dir, $do_subdirs = true, $rm_dir = false)
 }
 
 /**
- * Clears disk cache completely
- *
+ * Clears disk cache completely. Even cache is turned off
  * @global $cfg
  * @return bool
  */
 function cot_diskcache_clearall()
 {
-	cot_diskcache_clear(\Cot::$cfg['cache_dir'], false);
-	$glob = glob(\Cot::$cfg['cache_dir'] . '/*', GLOB_ONLYDIR);
+	cot_diskcache_clear(Cot::$cfg['cache_dir'], false);
+	$glob = glob(Cot::$cfg['cache_dir'] . '/*', GLOB_ONLYDIR);
 	if (is_array($glob)) {
 		foreach ($glob as $dir) {
-			cot_diskcache_clear($dir);
+			cot_diskcache_clear($dir, true, true);
 		}
 	}
 
