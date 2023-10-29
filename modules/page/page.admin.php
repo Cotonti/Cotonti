@@ -148,20 +148,20 @@ if ($a == 'validate') {
             'done'
         );
 
-		if (\Cot::$cache) {
-            \Cot::$cache->db->remove('structure', 'system');
-			if (\Cot::$cfg['cache_page']) {
-                \Cot::$cache->static->clearByUri(cot_page_url($row));
-                \Cot::$cache->static->clearByUri(cot_url('page', ['c' => $row['page_cat']]));
+		if (Cot::$cache) {
+            Cot::$cache->db->remove('structure', 'system');
+			if (Cot::$cfg['cache_page']) {
+                Cot::$cache->static->clearByUri(cot_page_url($row));
+                Cot::$cache->static->clearByUri(cot_url('page', ['c' => $row['page_cat']]));
 			}
-			if (\Cot::$cfg['cache_index']) {
-                \Cot::$cache->static->clear('index');
+			if (Cot::$cfg['cache_index']) {
+                Cot::$cache->static->clear('index');
 			}
 		}
-		cot_message('#' . $id . ' - ' . \Cot::$L['adm_queue_validated']);
+		cot_message('#' . $id . ' - ' . Cot::$L['adm_queue_validated']);
 
 	} else {
-        cot_error('#' . $id . ' - ' . \Cot::$L['nf']);
+        cot_error('#' . $id . ' - ' . Cot::$L['nf']);
 	}
 
     cot_redirect($backUrl);

@@ -678,9 +678,21 @@ function cot_extrafield_add($location, $name, $type, $html = '', $variants = '',
 		$sqltype = $customtype;
 	}
     $fieldName = $name;
-    if ($column_prefix != '') $fieldName = $column_prefix.'_'.$name;
+    if ($column_prefix != '') {
+        $fieldName = $column_prefix.'_'.$name;
+    }
 	$step2 = Cot::$db->query("ALTER TABLE $location ADD $fieldName $sqltype ");
-	if ($step2) cot_log("Add extrafield '" . $name . "' in DB table '" . $location . "'", 'adm', 'extrafield', 'add');
+	if ($step2) {
+        cot_log(
+            "Add extrafield '" . $name . "' in DB table '" . $location . "'",
+            'adm', 'extrafield',
+            'add'
+        );
+    }
+
+    if ($step1 || $step2) {
+        Cot::$cache && Cot::$cache->db->remove('cot_extrafields', 'system');
+    }
 
 	return $step1 && $step2;
 }
@@ -809,7 +821,7 @@ function cot_extrafield_remove($location, $name)
 {
 	global $db, $db_extra_fields;
 
-	if ((int)$db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->fetchColumn() <= 0) {
+	if ((int) $db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->fetchColumn() <= 0) {
 		// Attempt to remove non-extra field
 		return false;
 	}
@@ -823,12 +835,26 @@ function cot_extrafield_remove($location, $name)
 
 	$step2 = true;
     $tmp = $name;
-    if ($column_prefix != '') $tmp = '_'.$name;
-    if ($db->query("SHOW COLUMNS FROM $location LIKE '%{$tmp}'")->rowCount() > 0) {
-        if ($column_prefix != '') $name = $column_prefix . "_" . $name;
-		$step2 = $db->query("ALTER TABLE $location DROP " . $name);
-		if ($step2) cot_log("Deleted extrafield '" . $name . "' from DB table '" . $location . "'", 'adm', 'extrafield', 'delete');
+    if ($column_prefix != '') {
+        $tmp = '_'.$name;
+    }
+    if (Cot::$db->query("SHOW COLUMNS FROM $location LIKE '%{$tmp}'")->rowCount() > 0) {
+        if ($column_prefix != '') {
+            $name = $column_prefix . "_" . $name;
+        }
+		$step2 = Cot::$db->query("ALTER TABLE $location DROP " . $name);
+		if ($step2) {
+            cot_log(
+                "Deleted extrafield '" . $name . "' from DB table '" . $location . "'",
+                'adm', 'extrafield',
+                'delete'
+            );
+        }
 	}
+
+    if ($step1 || $step2) {
+        Cot::$cache && Cot::$cache->db->remove('cot_extrafields', 'system');
+    }
 
 	return $step1 && $step2;
 }

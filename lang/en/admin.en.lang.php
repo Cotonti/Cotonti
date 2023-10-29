@@ -508,6 +508,8 @@ $L['adm_already_updated'] = 'Already updated';
  */
 $L['adm_extrafields'] = &$L['Extrafields'];
 $L['adm_extrafield_added'] = 'Successfully added new extra field.';
+$L['adm_extrafield_error_name'] = 'The field name is filled in incorrectly. Only Latin letters, numbers and underscores are allowed.';
+$L['adm_extrafield_error_name_missing'] = 'Field name should not be empty.';
 $L['adm_extrafield_not_added'] = 'Error! New extra field not added.';
 $L['adm_extrafield_updated'] = 'Successfully updated extra field \'%1$s\'.';
 $L['adm_extrafield_not_updated'] = 'Error! Extra field \'%1$s\' not updated.';

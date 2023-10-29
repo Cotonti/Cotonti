@@ -508,6 +508,8 @@ $L['adm_already_updated'] = 'Уже сохранено';
  */
 $L['adm_extrafields'] = &$L['Extrafields'];
 $L['adm_extrafield_added'] = 'Экстраполе добавлено';
+$L['adm_extrafield_error_name'] = 'Название поля заполнено неверно. Допускаются только латинские буквы, цифры и знак подчеркивания.';
+$L['adm_extrafield_error_name_missing'] = 'Не заполнено название поля.';
 $L['adm_extrafield_not_added'] = 'Ошибка! Экстраполе не добавлено';
 $L['adm_extrafield_updated'] = 'Поле "%1$s" отредактировано';
 $L['adm_extrafield_not_updated'] = 'Ошибка! Поле "%1$s" не отредактировано';

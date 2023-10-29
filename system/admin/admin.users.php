@@ -186,12 +186,14 @@ elseif($n == 'edit')
 			'ADMIN_USERS_EDITFORM_SKIPRIGHTS' => $row['grp_skiprights'],
 			'ADMIN_USERS_EDITFORM_RIGHT_URL' => cot_url('admin', 'm=rights&g='.$g),
 			'ADMIN_USERS_EDITFORM_DEL_URL' => cot_url('admin', 'm=users&n=edit&a=delete&g='.$g.'&'.cot_xg()),
-            'ADMIN_USERS_EDITFORM_DEL_CONFIRM_URL' => cot_confirm_url(cot_url('admin', 'm=users&n=edit&a=delete&g='.$g.'&'.cot_xg())),
+            'ADMIN_USERS_EDITFORM_DEL_CONFIRM_URL' => cot_confirm_url(
+                cot_url('admin', 'm=users&n=edit&a=delete&g='.$g.'&'.cot_xg()),
+                'admin'
+            ),
 		));
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.users.edit.tags') as $pl)
-		{
+		foreach (cot_getextplugins('admin.users.edit.tags') as $pl) {
 			include $pl;
 		}
 		/* ===== */
@@ -199,8 +201,7 @@ elseif($n == 'edit')
 	}
 }
 
-if(!isset($showdefault) || $showdefault == true)
-{
+if (!isset($showdefault) || $showdefault == true) {
 	$sql = $db->query("SELECT DISTINCT(gru_groupid), COUNT(*) FROM $db_groups_users WHERE 1 GROUP BY gru_groupid");
 	while($row = $sql->fetch())
 	{

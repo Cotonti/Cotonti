@@ -108,15 +108,18 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 	$t->parse('MAIN.TABLELIST');
 } else {
 	$a = cot_import('a', 'G', 'ALP');
-	$id = (int)cot_import('id', 'G', 'INT');
+	$id = (int) cot_import('id', 'G', 'INT');
 	$name = cot_import('name', 'G', 'ALP');
 	list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 	$parse_type = ['HTML', 'Text'];
 
-	$adminpath[] = [cot_url('admin', 'm=extrafields&n='.$n), Cot::$L['adm_extrafields_table'].' '.$n . ((isset($extra_whitelist[$n])) ? ' - ' . $extra_whitelist[$n]['caption'] : '')];
+	$adminpath[] = [cot_url('admin', 'm=extrafields&n='.$n), Cot::$L['adm_extrafields_table'] . ' '
+        . $n . ((isset($extra_whitelist[$n])) ? ' - ' . $extra_whitelist[$n]['caption'] : '')];
+
+    $redirectUrl = cot_url('admin', ['m' => 'extrafields', 'n' => $n, 'd' => $durl,], '', true);
 
 	if ($a == 'add' && !empty($_POST)) {
-		$field['field_name'] = cot_import('field_name', 'P', 'ALP');
+		$field['field_name'] = cot_import('field_name', 'P', 'TXT');
 		$field['field_type'] = cot_import('field_type', 'P', 'ALP');
 		$field['field_html'] = cot_import('field_html', 'P', 'NOC');
 		$field['field_variants'] = cot_import('field_variants', 'P', 'HTM');
@@ -134,29 +137,42 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 		}
 		/* ===== */
 
-		if (!empty($field['field_name']) && !empty($field['field_type'])) {
-			if (
-				cot_extrafield_add(
-					$n,
-					$field['field_name'],
-					$field['field_type'],
-					$field['field_html'],
-					$field['field_variants'],
-					$field['field_default'],
-					$field['field_required'],
-					$field['field_parse'],
-					$field['field_description'],
-					$field['field_params'],
-					$field['field_enabled'],
-					$field['field_noalter']
-				)
-			) {
-				cot_message('adm_extrafield_added');
-			} else {
-				cot_error('adm_extrafield_not_added');
-			}
-		}
-		//cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
+        if (empty($field['field_name'])) {
+            cot_error(Cot::$L['adm_extrafield_error_name_missing']);
+        } elseif (!preg_match('/^\d*[A-Za-z\d_]+$/', $field['field_name'])) {
+            cot_error(Cot::$L['adm_extrafield_error_name']);
+        }
+
+        if (empty($field['field_type'])) {
+            cot_error('adm_extrafield_not_added');
+        }
+
+        if (cot_error_found()) {
+            cot_redirect($redirectUrl);
+        }
+
+        if (
+            cot_extrafield_add(
+                $n,
+                $field['field_name'],
+                $field['field_type'],
+                $field['field_html'],
+                $field['field_variants'],
+                $field['field_default'],
+                $field['field_required'],
+                $field['field_parse'],
+                $field['field_description'],
+                $field['field_params'],
+                $field['field_enabled'],
+                $field['field_noalter']
+            )
+        ) {
+            cot_message('adm_extrafield_added');
+        } else {
+            cot_error('adm_extrafield_not_added');
+        }
+
+        cot_redirect($redirectUrl);
 
     } elseif ($a == 'upd' && !empty($_POST)) {
 		$field_name = cot_import('field_name', 'P', 'ARR');
@@ -225,7 +241,7 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 			}
 		}
 
-        cot_redirect(cot_url('admin', ['m' => 'extrafields', 'n' => $n, 'd' => $durl,], '', true));
+        cot_redirect($redirectUrl);
 	} elseif ($a == 'del' && isset($name)) {
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.extrafields.delete') as $pl) {
@@ -238,10 +254,9 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 		} else {
 			cot_error('adm_extrafield_not_removed');
 		}
-		//cot_redirect(cot_url('admin', "m=extrafields&n=$n&d=$durl", '', true));
+        cot_redirect($redirectUrl);
 	}
 
-	Cot::$cache && Cot::$cache->db->remove('cot_extrafields', 'system');
 	cot_load_extrafields(true);
 
 	$totalitems = Cot::$db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$n'")->fetchColumn();
@@ -275,7 +290,7 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 		$ii++;
 
         $deleteUrl = cot_url('admin', ['m' => 'extrafields', 'n' => $n, 'a' => 'del', 'name' => $row['field_name']]);
-        $deleteConfirmUrl = cot_confirm_url($deleteUrl);
+        $deleteConfirmUrl = cot_confirm_url($deleteUrl, 'admin');
 
 		$t->assign([
 			'ADMIN_EXTRAFIELDS_ROW_NAME' => cot_inputbox('text', 'field_name['.$row['field_name'].']', $row['field_name'], 'class="exfldname"'),
