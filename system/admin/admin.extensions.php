@@ -9,6 +9,10 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
+/**
+ * @var array $cot_plugins
+ */
+
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'a');
 cot_block(Cot::$usr['isadmin']);
 
@@ -273,10 +277,10 @@ switch($a) {
 				}
 
 				// check for not registered Hooks
-				$not_registred = array();
+				$not_registred = [];
 				if ($info_file['Status'] == 1) {
 					foreach ($Hooks as $h) {
-						$regsistred_by_hook = $cot_plugins[$h];
+						$regsistred_by_hook = isset($cot_plugins[$h]) ? $cot_plugins[$h] : null;
 						if (is_array($regsistred_by_hook) && sizeof($regsistred_by_hook)) {
 							$found = false;
 							foreach ($regsistred_by_hook as $reg_data) {
@@ -294,7 +298,7 @@ switch($a) {
 					}
 				}
 
-				$deleted = array();
+				$deleted = [];
 
 				// check for deleted Hooks
 				if (file_exists($extplugin_file)) {

@@ -30,65 +30,75 @@ if ($tl && file_exists(cot_langfile('translit', 'core'))) {
 }
 
 // Results per page
-$maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
-list(	, $d) = cot_import_pagenav('d', $maxperpage);
+$maxperpage = (!empty(Cot::$cfg['maxrowsperpage']) && is_numeric(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperpage'] > 0) ?
+    Cot::$cfg['maxrowsperpage']
+    : 15;
+
+list($resultPageNum, $d) = cot_import_pagenav('d', $maxperpage);
 
 // Tags displayed per page in standalone cloud
-$perpage = $cfg['plugin']['tags']['perpage'];
-list(	, $dt) = cot_import_pagenav('dt', $perpage);
+$perpage = Cot::$cfg['plugin']['tags']['perpage'];
+list($tagsPageNum, $dt) = cot_import_pagenav('dt', $perpage);
 
 // Array to register areas with tag functions provided
-$tag_areas = array();
+$tag_areas = [];
 
-if (cot_module_active('page'))
-{
+if (cot_module_active('page')) {
 	require_once cot_incfile('page', 'module');
 	$tag_areas[] = 'pages';
 }
 
-if (cot_module_active('forums'))
-{
+if (cot_module_active('forums')) {
 	require_once cot_incfile('forums', 'module');
 	$tag_areas[] = 'forums';
 }
 
 // Sorting order
 $o = cot_import('order', 'P', 'ALP');
-if (empty($o))
-{
-	$o = mb_strtolower($cfg['plugin']['tags']['sort']);
+if (empty($o)) {
+	$o = mb_strtolower(Cot::$cfg['plugin']['tags']['sort']);
 }
 $tag_order = '';
 $tag_orders = array('Title', 'Date', 'Category');
-foreach ($tag_orders as $order)
-{
+foreach ($tag_orders as $order) {
 	$ord = mb_strtolower($order);
 	$selected = $ord == $o ? 'selected="selected"' : '';
 	$tag_order .= cot_rc('input_option', array('value' => $ord, 'selected' => $selected, 'title' => $L[$order]));
 }
 
 /* == Hook for the plugins == */
-foreach (cot_getextplugins('tags.first') as $pl)
-{
+foreach (cot_getextplugins('tags.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if ($cfg['plugin']['tags']['noindex'])
-{
-	$out['head'] .= $R['code_noindex'];
+if (Cot::$cfg['plugin']['tags']['noindex']) {
+    Cot::$out['head'] .= Cot::$R['code_noindex'];
 }
 
 // the tag you are looking for
 $qs_tag = htmlspecialchars(strip_tags($qs));
 // current pagination page for uniqueness of meta tags
-$qs_pag = $L['tags_All'] . ' ' . $sys['domain'] .= empty($dt) ? '' : ' - ' . mb_strtolower($L['Page']) . ' ' . preg_replace("/[^0-9]/", '', $sys['uri_curr']);
+$metaPageNumbers = [];
+if ($tagsPageNum > 1) {
+    $metaPageNumbers[] = $tagsPageNum;
+}
+if ($resultPageNum > 1) {
+    $metaPageNumbers[] = $resultPageNum;
+}
+$metaPageNumber = implode(' - ', $metaPageNumbers);
+$metaTitle = empty($qs) ? Cot::$L['tags_All'] . ' ' . Cot::$sys['domain'] : Cot::$L['tags_Search_tags'] . ': ' . $qs_tag;
+if (!empty($metaPageNumber)) {
+    $metaTitle .= ' - ' . mb_strtolower($L['Page']) . ' ' . $metaPageNumber;
+}
 // meta title
-$out['subtitle'] = empty($qs) ? $qs_pag : $L['tags_Search_tags'] . ': ' . $qs_tag;
+Cot::$out['subtitle'] = $metaTitle;
 // meta descriptions
-$out['desc'] = empty($qs) ? $qs_pag . '. ' . cot_string_truncate($L['tags_Query_hint'], 143, false, true) : $L['tags_Search_tags'] . ' - ' . $qs_tag . '. ' .cot_string_truncate($L['tags_Query_hint'], 143, false, true);
+Cot::$out['desc'] = $metaTitle . '. ' . cot_string_truncate($L['tags_Query_hint'], 143, false, true);
 // meta keywords
-$out['keywords'] = empty($qs) ? preg_replace("/\W\s/u", "", mb_strtolower($qs_pag)) : mb_strtolower($qs_tag . ' ' . $L['tags_Search_tags']);
+Cot::$out['keywords'] = empty($qs)
+    ? preg_replace("/\W\s/u", "", mb_strtolower($metaTitle))
+    : mb_strtolower($qs_tag . ' ' . Cot::$L['tags_Search_tags']);
 
 $t->assign(array(
 	'TAGS_ACTION' => cot_url('plug', 'e=tags&a=' . $a),
@@ -97,15 +107,11 @@ $t->assign(array(
 	'TAGS_ORDER' => $tag_order
 ));
 
-if ($a == 'pages' && cot_module_active('page'))
-{
-	if(empty($qs))
-	{
+if ($a == 'pages' && cot_module_active('page')) {
+	if (empty($qs)) {
 		// Form and cloud
 		cot_tag_search_form('pages');
-	}
-	else
-	{
+	} else {
 		// Search results
 		cot_tag_search_pages($qs);
 	}
