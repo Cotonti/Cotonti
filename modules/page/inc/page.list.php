@@ -70,8 +70,8 @@ Cot::$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unv
 	Cot::$cfg['page']['cat___default']['truncatetext'] :
 	Cot::$cfg['page']['cat_' . $c]['truncatetext'];
 
-$where = array();
-$params = array();
+$where = [];
+$params = [];
 
 $where_state = Cot::$usr['isadmin'] ? '1' : 'page_ownerid = ' . Cot::$usr['id'];
 $where['state'] = "(page_state=0 AND $where_state)";
@@ -198,28 +198,28 @@ $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $tota
 
 $out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
 $out['subtitle'] = $cat['title'];
-if (!empty(Cot::$cfg['page']['cat_' . $c]['keywords']))
-{
-	$out['keywords'] = Cot::$cfg['page']['cat_' . $c]['keywords'];
+if (!empty(Cot::$cfg['page']['cat_' . $c]['keywords'])) {
+    Cot::$out['keywords'] = Cot::$cfg['page']['cat_' . $c]['keywords'];
 }
-if (!empty(Cot::$cfg['page']['cat_' . $c]['metadesc']))
-{
-	$out['desc'] = Cot::$cfg['page']['cat_' . $c]['metadesc'];
+if (!empty(Cot::$cfg['page']['cat_' . $c]['metadesc'])) {
+    Cot::$out['desc'] = Cot::$cfg['page']['cat_' . $c]['metadesc'];
 }
-if (!empty(Cot::$cfg['page']['cat_' . $c]['metatitle']))
-{
-	$out['subtitle'] = Cot::$cfg['page']['cat_' . $c]['metatitle'];
+if (!empty(Cot::$cfg['page']['cat_' . $c]['metatitle'])) {
+    Cot::$out['subtitle'] = Cot::$cfg['page']['cat_' . $c]['metatitle'];
 }
 // Building the canonical URL
 $out['canonical_uri'] = cot_url('page', $pageurl_params);
 
 $_SESSION['cat'] = $c;
 
-$mskin = cot_tplfile(array('page', 'list', $cat['tpl']));
+$mskin = cot_tplfile(['page', 'list', $cat['tpl']]);
+
+if (!empty($pgc) && $pgc > 1) {
+    Cot::$out['subtitle'] .= ' (' . $pgc . ')';
+}
 
 /* === Hook === */
-foreach (cot_getextplugins('page.list.main') as $pl)
-{
+foreach (cot_getextplugins('page.list.main') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -364,8 +364,7 @@ foreach ($subcat as $x)
     }
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -373,13 +372,27 @@ foreach ($subcat as $x)
 	$t->parse('MAIN.LIST_ROWCAT');
 }
 
-$pagenav_cat = cot_pagenav('page', $list_url_path + array('d' => $durl), $dc, count($allsub), Cot::$cfg['page']['maxlistsperpage'], 'dc');
+$pagenav_cat = cot_pagenav(
+    'page',
+    $list_url_path + ['d' => $durl],
+    $dc,
+    count($allsub),
+    Cot::$cfg['page']['maxlistsperpage'],
+    'dc'
+);
 
-$t->assign(array(
-	'LISTCAT_PAGEPREV' => $pagenav_cat['prev'],
-	'LISTCAT_PAGENEXT' => $pagenav_cat['next'],
-	'LISTCAT_PAGNAV' => $pagenav_cat['main']
-));
+$t->assign([
+    // @deprecated
+	'LISTCAT_PAGNAV' => $pagenav_cat['main'],
+
+    'LISTCAT_PAGINATION' => $pagenav_cat['main'],
+    'LISTCAT_PAGEPREV' => $pagenav_cat['prev'],
+    'LISTCAT_PAGENEXT' => $pagenav_cat['next'],
+    'LISTCAT_CURRENTPAGE' => $pagenav_cat['current'],
+    'LISTCAT_TOTALLINES' => count($allsub),
+    'LISTCAT_MAXPERPAGE' => Cot::$cfg['page']['maxlistsperpage'],
+    'LISTCAT_TOTALPAGES' => $pagenav_cat['total']
+]);
 
 $jj = 0;
 /* === Hook - Part1 : Set === */

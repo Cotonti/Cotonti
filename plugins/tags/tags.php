@@ -89,7 +89,7 @@ if ($resultPageNum > 1) {
 $metaPageNumber = implode(' - ', $metaPageNumbers);
 $metaTitle = empty($qs) ? Cot::$L['tags_All'] . ' ' . Cot::$sys['domain'] : Cot::$L['tags_Search_tags'] . ': ' . $qs_tag;
 if (!empty($metaPageNumber)) {
-    $metaTitle .= ' - ' . mb_strtolower($L['Page']) . ' ' . $metaPageNumber;
+    $metaTitle .= htmlspecialchars(cot_rc('code_title_page_num', ['num' => $metaPageNumber]));
 }
 // meta title
 Cot::$out['subtitle'] = $metaTitle;
