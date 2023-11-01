@@ -16,6 +16,42 @@ sub, sup	{ font-size:.8em; position:relative; }
 sub			{ top:.5em; }
 sup			{ top:-.5em; }
 
+blockquote {
+	margin: 16px 5px;
+	padding: 0 1em;
+	color: #656d76;
+	border-left: .25em solid #d0d7de;
+}
+
+code, pre {
+	font-family: Monaco, Menlo, Consolas, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
+}
+
+code, kbd {
+	margin: 0 2px;
+	padding: 2px 4px;
+	border-radius: 3px;
+	background-color: rgba(149, 119, 80, 0.06)
+}
+
+code {
+	color: #f17e32;
+}
+kbd {
+	font-size: 1.2em;
+}
+pre {
+	color: #333;
+	background: #fafafa url(../img/code-blueprint.png) repeat left top;
+	padding: 6px 10px 8px;
+	line-height: normal;
+	overflow: auto;
+	margin: 5px;
+	border: 1px solid #eee;
+	border-left: .25em solid #d0d7de;
+	position: relative;
+}
+
 /* 1. Main Navigation
 -------------------------------------------------- */
 

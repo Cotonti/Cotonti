@@ -11,13 +11,16 @@ CKEDITOR.editorConfig = function( config ) {
 	config.toolbar = 'Full';
 	config.extraPlugins = 'more,oembed,syntaxhighlight,codemirror';
 
+	// It has a bug in FireFox
+	config.removePlugins = 'emoji';
+
 	config.allowedContent = true; // disable ACF
 
 	// CKEditor toolbar sets for Cotonti
 	config.toolbar_Full = [
 		['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
 		['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-		['Image','oembed','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
+		['Image','oembed','Table','HorizontalRule','Smiley','EmojiPanel','SpecialChar','PageBreak'],
 		['Maximize', 'ShowBlocks','-', 'Source', '-', 'About'],
 		'/',
 		['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
@@ -31,7 +34,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.toolbar_Medium = [
 		['Bold','Italic','Underline','Strike'],
 		['NumberedList','BulletedList','-','Blockquote','Syntaxhighlight'],
-		['Image','Link','Unlink','Anchor','Smiley'],
+		['Image','Link','Unlink','Anchor','Smiley','EmojiPanel'],
 		['TextColor','BGColor'],
 		['Cut','Copy','Paste','PasteText','Scayt'],
 		['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],['Source']
@@ -66,7 +69,7 @@ CKEDITOR.editorConfig = function( config ) {
 	//config.removeButtons = 'Underline,Subscript,Superscript';
 
 	// Set the most common block elements.
-	config.format_tags = 'p;h1;h2;h3;pre';
+	config.format_tags = 'p;h1;h2;h3;h4;pre';
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';

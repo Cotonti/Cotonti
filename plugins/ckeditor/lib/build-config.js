@@ -13,10 +13,10 @@
  * (1) https://ckeditor.com/cke4/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) https://ckeditor.com/cke4/builder/e540ccdee5b8adc09ecaa23d32ef8c5b
+ * (2) https://ckeditor.com/cke4/builder/04ccbe54cd0294d9feb2283d988398bb
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) https://ckeditor.com/cke4/builder/download/e540ccdee5b8adc09ecaa23d32ef8c5b
+ * (3) https://ckeditor.com/cke4/builder/download/04ccbe54cd0294d9feb2283d988398bb
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -44,6 +44,7 @@ var CKBUILDER_CONFIG = {
 		'README.md',
 		'bender-err.log',
 		'bender-out.log',
+		'bender-runner.config.json',
 		'bender.ci.js',
 		'bender.js',
 		'dev',
@@ -64,6 +65,7 @@ var CKBUILDER_CONFIG = {
 		'colorbutton' : 1,
 		'contextmenu' : 1,
 		'elementspath' : 1,
+		'emoji' : 1,
 		'enterkey' : 1,
 		'entities' : 1,
 		'filebrowser' : 1,
@@ -79,7 +81,6 @@ var CKBUILDER_CONFIG = {
 		'list' : 1,
 		'magicline' : 1,
 		'maximize' : 1,
-		'oembed' : 1,
 		'pagebreak' : 1,
 		'pastefromword' : 1,
 		'pastetext' : 1,
@@ -100,6 +101,7 @@ var CKBUILDER_CONFIG = {
 		'tabletools' : 1,
 		'toolbar' : 1,
 		'undo' : 1,
+		'widget' : 1,
 		'wysiwygarea' : 1
 	},
 	languages : {
