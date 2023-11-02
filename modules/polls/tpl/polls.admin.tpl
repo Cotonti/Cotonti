@@ -30,7 +30,7 @@
 			<!-- ELSE -->
 			<a title="{PHP.L.Unlock}" href="{ADMIN_POLLS_ROW_POLL_URL_LCK}" class="button">{PHP.L.Unlock}</a>
 			<!-- ENDIF -->
-			<a title="{PHP.L.Delete}" href="{ADMIN_POLLS_ROW_POLL_URL_DEL}" class="button">{PHP.L.Delete}</a>
+			<a title="{PHP.L.Delete}" href="{ADMIN_POLLS_ROW_POLL_DELETE_CONFIRM_URL}" class="button confirmLink">{PHP.L.Delete}</a>
 			<a title="{PHP.L.Reset}" href="{ADMIN_POLLS_ROW_POLL_URL_RES}" class="button">{PHP.L.Reset}</a>
 			<a title="{PHP.L.adm_polls_bump}" href="{ADMIN_POLLS_ROW_POLL_URL_BMP}" class="button">{PHP.L.adm_polls_bump}</a>
 			<a title="{PHP.L.Open}" href="{ADMIN_POLLS_ROW_POLL_URL_OPN}" class="button special">{PHP.L.Open}</a>

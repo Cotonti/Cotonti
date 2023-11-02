@@ -4211,7 +4211,12 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	}
 
 	$onpage = $entries - $current;
-	if ($onpage > $perpage) $onpage = $perpage;
+	if ($onpage > $perpage) {
+        $onpage = $perpage;
+    }
+    if ($onpage < 0) {
+        $onpage = 0;
+    }
 
 	if ($entries <= $perpage) {
 		return array(
@@ -4251,8 +4256,8 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$ajaxClass = '';
 	}
 
-	$totalpages = ceil($entries / $perpage);
-	$currentpage = floor($current / $perpage) + 1;
+	$totalpages = (int) ceil($entries / $perpage);
+	$currentpage = (int) floor($current / $perpage) + 1;
 	$cur_left = $currentpage - $each_side;
 	if ($cur_left < 1) {
         $cur_left = 1;
@@ -4305,7 +4310,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 
 		} elseif ($i == $cur_left - 2) {
 			if (Cot::$cfg['easypagenav']) {
-                $args[$characters] = $i+1;
+                $args[$characters] = $i + 1;
 
 			} else {
                 $args[$characters] = $i * $perpage;
@@ -4313,7 +4318,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 
 			if ($ajax_rel) {
 				$ajax_args[$characters] = $args[$characters];
-				$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
+				$rel = $base_rel . str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
 
 			} else {
 				$rel = $base_rel;
@@ -4427,7 +4432,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($prev_n < 0) {
 			$prev_n = 0;
 		}
-		if (\Cot::$cfg['easypagenav']) {
+		if (Cot::$cfg['easypagenav']) {
 			$num = floor($prev_n / $perpage) + 1;
 			$args[$characters] = $num == 1 ? null : $num;
 		} else {

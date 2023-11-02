@@ -123,7 +123,7 @@ if ($a == 'validate') {
     )->fetch();
 	if ($row) {
         if ($row['page_state'] == COT_PAGE_STATE_PUBLISHED) {
-            cot_message('#' . $id . ' - ' . \Cot::$L['adm_already_updated']);
+            cot_message('#' . $id . ' - ' . Cot::$L['adm_already_updated']);
             cot_redirect($backUrl);
         }
 

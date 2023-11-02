@@ -45,27 +45,38 @@ foreach (cot_getextplugins('polls.admin.first') as $pl) {
 }
 /* ===== */
 
-if ( $id > 0) {
+$urlParams = ['m' => 'polls'];
+if (!empty($filter)) {
+    $urlParams['filter'] = $filter;
+}
+if (!empty($durl)) {
+    $urlParams['d'] = $durl;
+}
+
+if ($id > 0) {
     if ($a == 'delete') {
         cot_check_xg();
         cot_poll_delete($id);
         cot_message('adm_polls_msg916_deleted');
+        cot_redirect(cot_url('admin', $urlParams, '', true));
 
     } elseif ($a == 'reset') {
         cot_check_xg();
         cot_poll_reset($id);
         cot_message('adm_polls_msg916_reset');
+        cot_redirect(cot_url('admin', $urlParams, '', true));
 
     } elseif ($a == 'lock') {
         cot_check_xg();
         cot_poll_lock($id, 3);
         cot_message('Locked');
+        cot_redirect(cot_url('admin', $urlParams, '', true));
 
     } elseif ($a == 'bump') {
         cot_check_xg();
         $sql_polls = Cot::$db->update(Cot::$db->polls, ['poll_creationdate' => Cot::$sys['now']], "poll_id=$id");
-
         cot_message('adm_polls_msg916_bump');
+        cot_redirect(cot_url('admin', $urlParams, '', true));
     }
 }
 
@@ -82,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             cot_message('polls_updated');
         }
 
-        if (\Cot::$cache && \Cot::$cfg['cache_index']) {
-            \Cot::$cache->static->clear('index');
+        if (Cot::$cache && Cot::$cfg['cache_index']) {
+            Cot::$cache->static->clear('index');
         }
     }
 }
@@ -96,11 +107,32 @@ if (!$filter) {
     $poll_filter = '"&filter='.$filter;
 }
 
-$totalitems = $db->query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type")->fetchColumn();
-$pagenav = cot_pagenav('admin', 'm=polls'.$poll_filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$totalitems = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->polls . " WHERE $poll_type")->fetchColumn();
+if ($totalitems <= Cot::$cfg['maxrowsperpage'] && !empty($d)) {
+    unset($urlParams['d']);
+    cot_redirect(cot_url('admin', $urlParams, '', true));
+}
 
-$sql_polls = $db->query("SELECT * FROM $db_polls
-					WHERE $poll_type ORDER BY poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+$pagenav = cot_pagenav(
+    'admin',
+    'm=polls' . $poll_filter,
+    $d,
+    $totalitems,
+    Cot::$cfg['maxrowsperpage'],
+    'd',
+    '',
+    Cot::$cfg['jquery'] && Cot::$cfg['turnajax']
+);
+if ($pagenav['current'] > $pagenav['total']) {
+    $urlParams['d'] = Cot::$cfg['easypagenav']
+        ? $pagenav['total']
+        : ($pagenav['total'] - 1) * Cot::$cfg['maxrowsperpage'];
+    cot_redirect(cot_url('admin', $urlParams, '', true));
+}
+
+$sql_polls = Cot::$db->query(
+    "SELECT * FROM $db_polls WHERE $poll_type ORDER BY poll_id DESC LIMIT $d, " . Cot::$cfg['maxrowsperpage']
+);
 
 $ii = 0;
 
@@ -108,52 +140,60 @@ $ii = 0;
 $extp = cot_getextplugins('polls.admin.loop');
 /* ===== */
 
-foreach ($sql_polls->fetchAll() as $row)
-{
+while ($row = $sql_polls->fetch()) {
 	$ii++;
 	$id = $row['poll_id'];
-    $totalvotes = $db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid=$id")->fetchColumn();
+    $totalvotes = Cot::$db->query('SELECT SUM(po_count) FROM ' . Cot::$db->polls_options . " WHERE po_pollid=$id")
+        ->fetchColumn();
 
-	$t->assign(array(
+    $actionUrlParams = $urlParams + ['id' => $id, 'x' => Cot::$sys['xk']];
+
+    $deleteUrl = cot_url('admin', $actionUrlParams + ['a' => 'delete']);
+    $deleteConfirmUrl = cot_confirm_url($deleteUrl, 'admin');
+
+	$t->assign([
 		'ADMIN_POLLS_ROW_POLL_CREATIONDATE' => cot_date('date_full', $row['poll_creationdate']),
 		'ADMIN_POLLS_ROW_POLL_CREATIONDATE_STAMP' => $row['poll_creationdate'],
 		'ADMIN_POLLS_ROW_POLL_TYPE' => $variants[htmlspecialchars($row['poll_type'])][0],
 		'ADMIN_POLLS_ROW_POLL_URL' => cot_url('admin', 'm=polls'.$poll_filter.'&n=options&d='.$durl.'&id='.$row['poll_id']),
 		'ADMIN_POLLS_ROW_POLL_TEXT' => htmlspecialchars($row['poll_text']),
 		'ADMIN_POLLS_ROW_POLL_TOTALVOTES' => $totalvotes,
-		'ADMIN_POLLS_ROW_POLL_LOCKED' => ($row['poll_state']) ? $R['polls_icon_locked'] : '',
-		'ADMIN_POLLS_ROW_POLL_URL_DEL' => cot_url('admin', 'm=polls'.$poll_filter.'&a=delete&id='.$id.'&'.cot_xg()),
-		'ADMIN_POLLS_ROW_POLL_URL_LCK' => cot_url('admin', 'm=polls'.$poll_filter.'&a=lock&id='.$id.'&'.cot_xg()),
-		'ADMIN_POLLS_ROW_POLL_URL_RES' => cot_url('admin', 'm=polls'.$poll_filter.'&a=reset&d='.$durl.'&id='.$id.'&'.cot_xg()),
-		'ADMIN_POLLS_ROW_POLL_URL_BMP' => cot_url('admin', 'm=polls'.$poll_filter.'&a=bump&id='.$id.'&'.cot_xg()),
-		'ADMIN_POLLS_ROW_POLL_URL_OPN' => ($row['poll_type'] == 'index') ? cot_url('polls', 'id='.$id) : cot_url('forums', 'm=posts&q='.$id),
-		'ADMIN_POLLS_ROW_POLL_ODDEVEN' => cot_build_oddeven($ii)
-	));
+		'ADMIN_POLLS_ROW_POLL_LOCKED' => ($row['poll_state']) ? Cot::$R['polls_icon_locked'] : '',
+
+        /** @deprecated  */
+		'ADMIN_POLLS_ROW_POLL_URL_DEL' => $deleteUrl,
+
+        'ADMIN_POLLS_ROW_POLL_DELETE_URL' => $deleteUrl,
+        'ADMIN_POLLS_ROW_POLL_DELETE_CONFIRM_URL' => $deleteConfirmUrl,
+        'ADMIN_POLLS_ROW_POLL_URL_LCK' => cot_url('admin', $actionUrlParams + ['a' => 'lock']),
+        'ADMIN_POLLS_ROW_POLL_URL_RES' => cot_url('admin', $actionUrlParams + ['a' => 'reset']),
+		'ADMIN_POLLS_ROW_POLL_URL_BMP' => cot_url('admin', $actionUrlParams + ['a' => 'bump']),
+		'ADMIN_POLLS_ROW_POLL_URL_OPN' => ($row['poll_type'] == 'index')
+            ? cot_url('polls', ['id' => $id])
+            : cot_url('forums', ['m' => 'posts', 'q' => $row['poll_code']]),
+		'ADMIN_POLLS_ROW_POLL_ODDEVEN' => cot_build_oddeven($ii),
+	]);
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
 	$t->parse('MAIN.POLLS_ROW');
 }
+$sql_polls->closeCursor();
 
-if ($ii == 0)
-{
+if ($ii == 0) {
 	$t->parse('MAIN.POLLS_ROW_EMPTY');
 }
 
-if ($n == 'options')
-{
+if ($n == 'options') {
 	$poll_id = cot_import('id', 'G', 'INT');
 	$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");
 	$formname = $L['editdeleteentries'];
 	$send_button = $L['Update'];
-}
-elseif (cot_error_found())
-{
+} elseif (cot_error_found()) {
 	if ((int)$poll_id > 0)
 	{
 		$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");

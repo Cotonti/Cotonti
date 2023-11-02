@@ -123,12 +123,12 @@ if ($a == 'update') {
 	}
 	/* ===== */
 
-	if (\Cot::$cache) {
-        if (\Cot::$cfg['cache_forums']) {
-            \Cot::$cache->static->clearByUri(cot_url('forums'));
+	if (Cot::$cache) {
+        if (Cot::$cfg['cache_forums']) {
+            Cot::$cache->static->clearByUri(cot_url('forums'));
         }
-        if (\Cot::$cfg['cache_index']) {
-            \Cot::$cache->static->clear('index');
+        if (Cot::$cfg['cache_index']) {
+            Cot::$cache->static->clear('index');
         }
 	}
 

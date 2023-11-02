@@ -158,7 +158,7 @@ form { }
 input, select, textarea, button	{ font:normal 1em Georgia; padding:2px; }
 textarea { width: 99%; min-height: 120px }
 input, textarea { max-width: 100%; }
-label input { vertical-align:middle; }
+label input { vertical-align:middle; margin-right: 3px }
 button::-moz-focus-inner { padding:0; border:none; }
 
 /* 6. Misc
