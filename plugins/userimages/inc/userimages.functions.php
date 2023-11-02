@@ -8,31 +8,36 @@ require_once cot_incfile('configuration');
  * Get configuration for user image types
  *
  * @return array
- * @global Cache $cache
  */
-function cot_userimages_config_get($ignorecache=false)
+function cot_userimages_config_get($ignorecache = false)
 {
-	global $cache;
+    static $config = null;
 
-	if($cache && !$ignorecache && $cache->db->exists('cot_userimages_config', 'users'))
-	{
-		$cfg = $cache->db->get('cot_userimages_config', 'users');
-		if(is_array($cfg)) return $cfg;
-	}
+    if ($config !== null && !$ignorecache) {
+        return $config;
+    }
 
-	$cfg = array();
-	$cot_cfg = cot_config_load('userimages');
-	foreach($cot_cfg as $entry)
-	{
-		$imagesettings = explode('x', $entry['value']);
-		$cfg[$entry['name']] = array(
-			'width' => $imagesettings[0],
-			'height' => $imagesettings[1],
-			'crop' => (isset($imagesettings[2])) ? $imagesettings[2] : ''
-		);
-	}
-	$cache && $cache->db->store('cot_userimages_config', $cfg, 'users');
-	return $cfg;
+    if (Cot::$cache && !$ignorecache && Cot::$cache->db->exists('cot_userimages_config', 'users')) {
+        $cfg = Cot::$cache->db->get('cot_userimages_config', 'users');
+        if (is_array($cfg)) {
+            $config = $cfg;
+            return $config;
+        }
+    }
+
+    $cotCfg = cot_config_load('userimages');
+    foreach($cotCfg as $entry) {
+        $imageSettings = explode('x', $entry['value']);
+        $config[$entry['name']] = [
+            'width' => $imageSettings[0],
+            'height' => $imageSettings[1],
+            'crop' => isset($imageSettings[2]) ? $imageSettings[2] : ''
+        ];
+    }
+
+    Cot::$cache && Cot::$cache->db->store('cot_userimages_config', $config, 'users');
+
+    return $config;
 }
 
 /**

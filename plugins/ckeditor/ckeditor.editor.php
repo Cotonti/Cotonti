@@ -19,24 +19,21 @@ Hooks=editor
 defined('COT_CODE') or die('Wrong URL');
 
 // Calculate editor timestamp
-if (!function_exists('ckeditor_max_timestamp'))
-{
-    function ckeditor_max_timestamp($dir)
-    {
+if (!function_exists('ckeditor_max_timestamp')) {
+    function ckeditor_max_timestamp($dir) {
         $maxtime = 0;
         $dp = opendir($dir);
-        while ($f = readdir($dp))
-        {
-            if ($f[0] != '.')
-            {
+        while ($f = readdir($dp)) {
+            if ($f[0] != '.') {
                 $fname = $dir . '/' . $f;
-                if (is_dir($fname))
+                if (is_dir($fname)) {
                     $mtime = ckeditor_max_timestamp($fname);
-                else
+                } else {
                     $mtime = filemtime($fname);
-
-                if ($mtime > $maxtime)
+                }
+                if ($mtime > $maxtime) {
                     $maxtime = $mtime;
+                }
             }
         }
         closedir($dp);
@@ -73,11 +70,13 @@ $ckeditor_css_connector = '';
 
 if (!empty($ckeditor_css_to_load) && is_array($ckeditor_css_to_load)) {
 	foreach ($ckeditor_css_to_load as $key => $css_file) {
-		if (!file_exists($css_file)) unset($ckeditor_css_to_load[$key]);
+		if (!file_exists($css_file)) {
+            unset($ckeditor_css_to_load[$key]);
+        }
 	}
 } else {
     $ckeditor_css_to_load = [
-        Cot::$cfg['plugins_dir'].'/ckeditor/presets/contents.default.css?'.$ckeditor_timestamp
+        Cot::$cfg['plugins_dir'] . '/ckeditor/presets/contents.default.css?' . $ckeditor_timestamp
     ];
 }
 if (sizeof($ckeditor_css_to_load)) {
@@ -86,7 +85,7 @@ if (sizeof($ckeditor_css_to_load)) {
 
 if ($ckeditor_css_connector !== '') {
     Resources::embedFooter(
-        "CKEDITOR.timestamp = $ckeditor_timestamp; CKEDITOR.config.baseHref='" . Cot:: $cfg['mainurl']. "/'; " .
-        $ckeditor_css_connector
+        "CKEDITOR.timestamp = $ckeditor_timestamp; CKEDITOR.config.baseHref='" . Cot:: $cfg['mainurl']. "/'; "
+        . $ckeditor_css_connector
     );
 }
