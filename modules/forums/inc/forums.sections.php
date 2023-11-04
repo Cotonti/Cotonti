@@ -9,17 +9,30 @@
 defined('COT_CODE') or die('Wrong URL');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('forums', 'any');
-/* === Hook === */
-foreach (cot_getextplugins('forums.sections.rights') as $pl) {
-	include $pl;
-}
-/* ===== */
-cot_block(Cot::$usr['auth_read']);
 
 $s = cot_import('s','G','TXT');
 $c = cot_import('c','G','TXT');
 
 Cot::$sys['sublocation'] = Cot::$L['Home'];
+
+if (!empty($c)) {
+    if (!isset(Cot::$structure['forums'][$c])) {
+        cot_die_message(404, TRUE);
+    }
+    list($canRead, $canWrite, $isAdmin) = cot_auth('forums', $c);
+    Cot::$usr['auth_read'] = Cot::$usr['auth_read'] && $canRead;
+    Cot::$usr['auth_write'] = Cot::$usr['auth_write'] && $canWrite;
+    Cot::$usr['isadmin'] = Cot::$usr['isadmin'] && $isAdmin;
+
+    Cot::$sys['sublocation'] = Cot::$structure['forums'][$c]['title'];
+}
+
+/* === Hook === */
+foreach (cot_getextplugins('forums.sections.rights') as $pl) {
+    include $pl;
+}
+/* ===== */
+cot_block(Cot::$usr['auth_read']);
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.sections.first') as $pl) {
@@ -117,6 +130,29 @@ foreach (Cot::$structure['forums'] as $i => $x) {
 $secact_max = count($cot_act) > 0 ? (max($cot_act)) : 0;
 
 Cot::$out['subtitle'] = Cot::$L['Forums'];
+if (!empty($c)) {
+    $catTitle = htmlspecialchars(strip_tags(Cot::$structure['forums'][$c]['title']));
+
+    if (!empty(Cot::$cfg['forums']['cat_' . $c]['metadesc'])) {
+        Cot::$out['desc'] = Cot::$cfg['forums']['cat_' . $c]['metadesc'];
+    } elseif (!empty(Cot::$structure['forums'][$c]['desc'])) {
+        Cot::$out['desc'] = htmlspecialchars(strip_tags(Cot::$structure['forums'][$c]['desc']));
+    } elseif (!empty(Cot::$cfg['forums']['cat___default']['metadesc'])) {
+        Cot::$out['desc'] = Cot::$cfg['forums']['cat___default']['metadesc'] . ' - ' . $catTitle;
+    }
+
+    if (!empty(Cot::$cfg['forums']['cat_' . $c]['metatitle'])) {
+        Cot::$out['subtitle'] = Cot::$cfg['forums']['cat_' . $c]['metatitle'];
+    } else {
+        Cot::$out['subtitle'] = $catTitle . ' - ' . Cot::$L['Forums'];
+    }
+
+    if (!empty(Cot::$cfg['forums']['cat_' . $c]['keywords'])) {
+        Cot::$out['keywords'] = Cot::$cfg['forums']['cat_' . $c]['keywords'];
+    } elseif (!empty(Cot::$cfg['forums']['cat___default']['keywords'])) {
+        Cot::$out['keywords'] = Cot::$cfg['forums']['cat___default']['keywords'];
+    }
+}
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
 

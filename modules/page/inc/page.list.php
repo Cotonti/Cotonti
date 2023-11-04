@@ -196,17 +196,26 @@ if (
 
 $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $totallines, Cot::$cfg['page']['maxrowsperpage']);
 
-$out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
-$out['subtitle'] = $cat['title'];
+$catTitle = htmlspecialchars(strip_tags(Cot::$structure['forums'][$c]['title']));
+Cot::$out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
+Cot::$out['subtitle'] = $catTitle;
 if (!empty(Cot::$cfg['page']['cat_' . $c]['keywords'])) {
     Cot::$out['keywords'] = Cot::$cfg['page']['cat_' . $c]['keywords'];
+} elseif (!empty(Cot::$cfg['page']['cat___default']['keywords'])) {
+    Cot::$out['keywords'] = Cot::$cfg['page']['cat___default']['keywords'];
 }
+
 if (!empty(Cot::$cfg['page']['cat_' . $c]['metadesc'])) {
     Cot::$out['desc'] = Cot::$cfg['page']['cat_' . $c]['metadesc'];
 }
+if (empty(Cot::$out['desc']) && !empty(Cot::$cfg['page']['cat___default']['metadesc'])) {
+    Cot::$out['desc'] = Cot::$cfg['page']['cat___default']['metadesc'] . ' - ' . $catTitle;
+}
+
 if (!empty(Cot::$cfg['page']['cat_' . $c]['metatitle'])) {
     Cot::$out['subtitle'] = Cot::$cfg['page']['cat_' . $c]['metatitle'];
 }
+
 // Building the canonical URL
 $out['canonical_uri'] = cot_url('page', $pageurl_params);
 

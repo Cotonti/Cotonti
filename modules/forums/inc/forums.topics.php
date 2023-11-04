@@ -201,6 +201,11 @@ if (!empty(Cot::$cfg['forums']['cat_' . $s]['keywords'])) {
 if (!empty(Cot::$cfg['forums']['cat_' . $s]['metadesc'])) {
 	Cot::$out['desc'] = Cot::$cfg['forums']['cat_' . $s]['metadesc'];
 }
+if (empty(Cot::$out['desc']) && !empty(Cot::$cfg['forums']['cat___default']['metadesc'])) {
+    Cot::$out['desc'] = Cot::$cfg['forums']['cat___default']['metadesc'] . ' - '
+        . htmlspecialchars(strip_tags(Cot::$structure['forums'][$s]['title']));
+}
+
 if (!empty(Cot::$cfg['forums']['cat_' . $s]['metatitle'])) {
 	Cot::$out['subtitle'] = Cot::$cfg['forums']['cat_' . $s]['metatitle'];
 }

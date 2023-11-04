@@ -160,7 +160,7 @@ while ($row = $sql_polls->fetch()) {
 		'ADMIN_POLLS_ROW_POLL_TOTALVOTES' => $totalvotes,
 		'ADMIN_POLLS_ROW_POLL_LOCKED' => ($row['poll_state']) ? Cot::$R['polls_icon_locked'] : '',
 
-        /** @deprecated  */
+        /** @deprecated Delete in Cotonti Siena 0.9.25  */
 		'ADMIN_POLLS_ROW_POLL_URL_DEL' => $deleteUrl,
 
         'ADMIN_POLLS_ROW_POLL_DELETE_URL' => $deleteUrl,
