@@ -196,7 +196,7 @@ if (
 
 $pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $totallines, Cot::$cfg['page']['maxrowsperpage']);
 
-$catTitle = htmlspecialchars(strip_tags(Cot::$structure['forums'][$c]['title']));
+$catTitle = htmlspecialchars(strip_tags(Cot::$structure['page'][$c]['title']));
 Cot::$out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
 Cot::$out['subtitle'] = $catTitle;
 if (!empty(Cot::$cfg['page']['cat_' . $c]['keywords'])) {
