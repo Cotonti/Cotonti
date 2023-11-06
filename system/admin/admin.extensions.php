@@ -214,11 +214,22 @@ switch($a) {
 			closedir($handle);
 
 			// ...And from DB
-			$registeredParts = Cot::$db->query('SELECT * FROM ' . Cot::$db->plugins . ' WHERE pl_code = '.
-                Cot::$db->quote($code))->fetchAll();
-			if (empty($registeredParts)) {
-                $registeredParts = array();
+            // There may be multiple entries with the same pl_part. One for each hook (for parts with multiple hooks).
+            // But they all contain information about a same extension file. The table is not normalized.
+            $registeredParts = [];
+            $query = Cot::$db->query(
+                'SELECT * FROM ' . Cot::$db->plugins . ' WHERE pl_code = :code',
+                ['code' => $code]
+            );
+            while ($row = $query->fetch()) {
+                if (!isset($registeredParts[$row['pl_part']]['hooks'])) {
+                    $registeredParts[$row['pl_part']]['hooks'] = [];
+                }
+                $registeredParts[$row['pl_part']]['hooks'][] = $row['pl_hook'];
+                unset($row['pl_hook']);
+                $registeredParts[$row['pl_part']] = array_merge($registeredParts[$row['pl_part']], $row);
             }
+            $query->closeCursor();
 
 			foreach ($registeredParts as $reg_data) {
 				if ($reg_data['pl_code'] == $code) {
@@ -260,26 +271,40 @@ switch($a) {
 
 			foreach ($parts as $i => $x) {
 				$extplugin_file = $dir . '/' . $code . '/' . $x;
-				$info_file = array();
-				$Hooks = array();
+				$extensionPart = [];
 				if (file_exists($extplugin_file)) {
-					$info_file = cot_infoget($extplugin_file, 'COT_EXT');
-					$Hooks = explode(',', str_replace(' ', '', $info_file['Hooks']));
+					$extensionPart = cot_infoget($extplugin_file, 'COT_EXT');
+                    $hooks = explode(',', $extensionPart['Hooks']);
+                    $extensionPart['Hooks'] = [];
+                    foreach ($hooks as $key => $hook) {
+                        $hook = trim($hook);
+                        if (empty($hook)) {
+                            continue;
+                        }
+                        $extensionPart['Hooks'][] = $hook;
+                    }
+                    unset($hooks);
 				}
+                if (empty($extensionPart['Hooks'])) {
+                    $extensionPart['Hooks'] = [];
+                }
+                $extensionPart['Order'] = (isset($extensionPart['Order']) && (int) $extensionPart['Order'] >= 0)
+                    ? (int) $extensionPart['Order']
+                    : COT_PLUGIN_DEFAULT_ORDER;
+
 				$info_part = preg_match("#^$code\.([\w\.]+).php$#", $x, $mt) ? $mt[1] : 'main';
 
-				$info_file['Status'] = 3;
-				foreach ($registeredParts  as $reg_data) {
-					if ($reg_data['pl_part'] == $info_part) {
-						$info_file['Status'] = $reg_data['pl_active'];
-						break;
-					}
-				}
+				$extensionPart['Status'] = 3;
+                $extensionPart['installedOrder'] = null;
+                if (isset($registeredParts[$info_part])) {
+                    $extensionPart['Status'] = $registeredParts[$info_part]['pl_active'];
+                    $extensionPart['installedOrder'] = (int) $registeredParts[$info_part]['pl_order'];
+                }
 
 				// check for not registered Hooks
 				$not_registred = [];
-				if ($info_file['Status'] == 1) {
-					foreach ($Hooks as $h) {
+				if ($extensionPart['Status'] == 1) {
+					foreach ($extensionPart['Hooks'] as $h) {
 						$regsistred_by_hook = isset($cot_plugins[$h]) ? $cot_plugins[$h] : null;
 						if (is_array($regsistred_by_hook) && sizeof($regsistred_by_hook)) {
 							$found = false;
@@ -290,55 +315,57 @@ switch($a) {
 								}
 							}
 							if (!$found) {
-								array_push($not_registred, $h);
+								$not_registred[] = $h;
 							}
 						} else {
-							array_push($not_registred, $h);
+							$not_registred[] = $h;
 						}
 					}
 				}
 
 				$deleted = [];
-
 				// check for deleted Hooks
 				if (file_exists($extplugin_file)) {
 					foreach ($registeredParts as $reg_data) {
-						if ($reg_data['pl_file'] == $code . '/' . $x) {
-							if (!in_array($reg_data['pl_hook'], $Hooks)) {
-                                array_push($deleted, $reg_data['pl_hook']);
+                        if ($reg_data['pl_file'] !== $code . '/' . $x) {
+                            continue;
+                        }
+                        foreach ($reg_data['hooks'] as $registeredHook) {
+                            if (!in_array($registeredHook, $extensionPart['Hooks'])) {
+                                $deleted[] = $registeredHook;
                             }
-						}
+                        }
 					}
 				}
-
 
 				if ($isinstalled && (!file_exists($extplugin_file)) || sizeof($deleted) > 0 || sizeof($not_registred) > 0) {
-					$info_file['Error'] = Cot::$L['adm_hook_changed'];
+					$extensionPart['Error'] = Cot::$L['adm_hook_changed'];
 					if (sizeof($not_registred)) {
-						$info_file['Error'] .= cot_rc('adm_hook_notregistered', array('hooks' => implode(', ', $not_registred)));
+						$extensionPart['Error'] .= cot_rc('adm_hook_notregistered', array('hooks' => implode(', ', $not_registred)));
 					}
 					if (sizeof($deleted)) {
-						$info_file['Error'] .= cot_rc('adm_hook_notfound', array('hooks' => implode(', ', $deleted)));
+						$extensionPart['Error'] .= cot_rc('adm_hook_notfound', array('hooks' => implode(', ', $deleted)));
 					}
 					if (!file_exists($extplugin_file)) {
-						$info_file['Error'] .= cot_rc('adm_hook_filenotfound', array('file' => $extplugin_file));
+						$extensionPart['Error'] .= cot_rc('adm_hook_filenotfound', array('file' => $extplugin_file));
 					}
-					$info_file['Error'] .= Cot::$L['adm_hook_updatenote'];
+					$extensionPart['Error'] .= Cot::$L['adm_hook_updatenote'];
 				}
 
-				if (!empty($info_file['Error'])) {
-					$t->assign(array(
+				if (!empty($extensionPart['Error'])) {
+					$t->assign([
 						'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part,
-						'ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS' => !empty($info_file['Hooks']) ?
-                            implode('<br />',explode(',',$info_file['Hooks'])) : '',
+						'ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS' => !empty($extensionPart['Hooks'])
+                            ? implode('<br />', $extensionPart['Hooks'])
+                            : '',
 						'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $x,
-						'ADMIN_EXTENSIONS_DETAILS_ROW_ERROR' => $info_file['Error']
-					));
+						'ADMIN_EXTENSIONS_DETAILS_ROW_ERROR' => $extensionPart['Error'],
+					]);
 					$t->parse('MAIN.DETAILS.ROW_ERROR_PART');
 
 				} else {
-					if (empty($info_file['Tags'])) {
+					if (empty($extensionPart['Tags'])) {
 						$t->assign(array(
 							'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
 							'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part
@@ -346,7 +373,7 @@ switch($a) {
 						$t->parse('MAIN.DETAILS.ROW_ERROR_TAGS');
 
 					} else {
-						$taggroups = explode(';', $info_file['Tags']);
+						$taggroups = explode(';', $extensionPart['Tags']);
 						foreach ($taggroups as $taggroup) {
 							$line = explode(':', $taggroup);
 							$line[0] = trim($line[0]);
@@ -388,39 +415,40 @@ switch($a) {
 								}
 							}
 
-							$t->assign(array(
-								'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
+							$t->assign([
+								'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i + 1,
 								'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part,
 								'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $line[0].' :<br />',
 								'ADMIN_EXTENSIONS_DETAILS_ROW_LISTTAGS' => $listtags,
 								//'ADMIN_EXTENSIONS_DETAILS_ROW_TAGS_ODDEVEN' => cot_build_oddeven($ii)
-							));
+							]);
 							$t->parse('MAIN.DETAILS.ROW_TAGS');
 						}
 					}
 
-					$info_order = empty($info_file['Order']) ? COT_PLUGIN_DEFAULT_ORDER : $info_file['Order'];
-                    $info_hooks = !empty($info_file['Hooks']) ?
-                        implode('<br />',explode(',',$info_file['Hooks'])) : '';
-					$t->assign(array(
-						'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
+                    $info_hooks = !empty($extensionPart['Hooks'])
+                        ? implode('<br />', $extensionPart['Hooks'])
+                        : '';
+					$t->assign([
+						'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i + 1,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $x,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS' => $info_hooks,
-						'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER' => $info_order,
-						'ADMIN_EXTENSIONS_DETAILS_ROW_STATUS' => $status[$info_file['Status']],
+						'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER' => $extensionPart['Order'],
+                        'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER_INSTALLED' => $extensionPart['installedOrder'],
+						'ADMIN_EXTENSIONS_DETAILS_ROW_STATUS' => $status[$extensionPart['Status']],
 						//'ADMIN_EXTENSIONS_DETAILS_ROW_PART_ODDEVEN' => cot_build_oddeven($ii)
-					));
+					]);
 
-					if ($info_file['Status'] == 3) {
+					if ($extensionPart['Status'] == 3) {
 						$t->parse('MAIN.DETAILS.ROW_PART.ROW_PART_NOTINSTALLED');
 
-					} elseif ($info_file['Status'] == 1) {
+					} elseif ($extensionPart['Status'] == 1) {
 						$t->assign('ADMIN_EXTENSIONS_DETAILS_ROW_PAUSEPART_URL',
 							cot_url('admin', "m=extensions&a=details&$arg=$code&b=pausepart&part=".$info_part));
 						$t->parse('MAIN.DETAILS.ROW_PART.ROW_PART_PAUSE');
 
-					} elseif($info_file['Status'] == 0) {
+					} elseif($extensionPart['Status'] == 0) {
 						$t->assign('ADMIN_EXTENSIONS_DETAILS_ROW_UNPAUSEPART_URL',
 							cot_url('admin', "m=extensions&a=details&$arg=$code&b=unpausepart&part=".$info_part));
 						$t->parse('MAIN.DETAILS.ROW_PART.ROW_PART_UNPAUSE');

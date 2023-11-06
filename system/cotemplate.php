@@ -1022,79 +1022,87 @@ class Cotpl_data
 /**
  * Operator "(" opening parenthesis
  */
-define('COTPL_OP_OPEN', 1);
+const COTPL_OP_OPEN = 1;
 /**
  * Operator ")" closing parenthesis
  */
-define('COTPL_OP_CLOSE', 2);
+const COTPL_OP_CLOSE = 2;
 /**
  * Operator "AND"
  */
-define('COTPL_OP_AND', 11);
+const COTPL_OP_AND = 11;
 /**
  * Operator "OR"
  */
-define('COTPL_OP_OR', 12);
+const COTPL_OP_OR = 12;
 /**
  * Operator "XOR"
  */
-define('COTPL_OP_XOR', 13);
+const COTPL_OP_XOR = 13;
 /**
  * Operator "!" negation
  */
-define('COTPL_OP_NOT', 14);
+const COTPL_OP_NOT = 14;
 /**
  * Operator "=="
  */
-define('COTPL_OP_EQ', 21);
+const COTPL_OP_EQ = 21;
+/**
+ * Operator "==="
+ */
+const COTPL_OP_STRICT_EQ = 22;
 /**
  * Operator "!="
  */
-define('COTPL_OP_NE', 22);
+const COTPL_OP_NE = 23;
+/**
+ * Operator "!=="
+ */
+const COTPL_OP_STRICT_NE = 24;
 /**
  * Operator "<"
  */
-define('COTPL_OP_LT', 23);
+const COTPL_OP_LT = 25;
 /**
  * Operator ">"
  */
-define('COTPL_OP_GT', 24);
+const COTPL_OP_GT = 26;
 /**
  * Operator "<="
  */
-define('COTPL_OP_LE', 25);
+const COTPL_OP_LE = 27;
 /**
  * Operator ">="
  */
-define('COTPL_OP_GE', 26);
+const COTPL_OP_GE = 28;
 /**
  * Operator "HAS"
  */
-define('COTPL_OP_HAS', 31);
+const COTPL_OP_HAS = 31;
 /**
  * Operator "~=" contains substring
  */
-define('COTPL_OP_CONTAINS', 32);
+const COTPL_OP_CONTAINS = 32;
 /**
  * Operator "+"
  */
-define('COTPL_OP_ADD', 41);
+const COTPL_OP_ADD = 41;
 /**
  * Operator "-"
  */
-define('COTPL_OP_SUB', 42);
+const COTPL_OP_SUB = 42;
 /**
  * Operator "*"
  */
-define('COTPL_OP_MUL', 43);
+const COTPL_OP_MUL = 43;
 /**
  * Operator "/"
  */
-define('COTPL_OP_DIV', 44);
+const COTPL_OP_DIV = 44;
 /**
  * Operator "%"
  */
-define('COTPL_OP_MOD', 45);
+const COTPL_OP_MOD = 45;
 
 /**
  * CoTemplate logical expression
@@ -1117,7 +1125,9 @@ class Cotpl_expr
 		'XOR'	=> COTPL_OP_XOR,
 		'!'		=> COTPL_OP_NOT,
 		'=='	=> COTPL_OP_EQ,
+        '==='	=> COTPL_OP_STRICT_EQ,
 		'!='	=> COTPL_OP_NE,
+        '!=='	=> COTPL_OP_STRICT_NE,
 		'<'		=> COTPL_OP_LT,
 		'>'		=> COTPL_OP_GT,
 		'<='	=> COTPL_OP_LE,
@@ -1136,13 +1146,31 @@ class Cotpl_expr
 	 */
 	protected static $precedence = [
 		COTPL_OP_OPEN => -1,
-		COTPL_OP_MUL => 1, COTPL_OP_DIV => 1, COTPL_OP_MOD => 1,
-		COTPL_OP_ADD => 2, COTPL_OP_SUB => 2,
-		COTPL_OP_HAS => 3, COTPL_OP_CONTAINS => 3,
-		COTPL_OP_EQ => 4, COTPL_OP_NE => 4, COTPL_OP_LT => 4, COTPL_OP_GT => 4, COTPL_OP_LE => 4, COTPL_OP_GE => 4,
+		COTPL_OP_MUL => 1,
+        COTPL_OP_DIV => 1,
+        COTPL_OP_MOD => 1,
+
+		COTPL_OP_ADD => 2,
+        COTPL_OP_SUB => 2,
+
+		COTPL_OP_HAS => 3,
+        COTPL_OP_CONTAINS => 3,
+
+		COTPL_OP_EQ => 4,
+        COTPL_OP_STRICT_EQ => 4,
+        COTPL_OP_NE => 4,
+        COTPL_OP_STRICT_NE => 4,
+        COTPL_OP_LT => 4,
+        COTPL_OP_GT => 4,
+        COTPL_OP_LE => 4,
+        COTPL_OP_GE => 4,
+
 		COTPL_OP_NOT => 5,
 		COTPL_OP_AND => 6,
-		COTPL_OP_OR => 7, COTPL_OP_XOR => 7,
+
+        COTPL_OP_OR => 7,
+        COTPL_OP_XOR => 7,
+
 		COTPL_OP_CLOSE => 99,
 	];
 
@@ -1259,6 +1287,9 @@ class Cotpl_expr
 				case COTPL_OP_EQ:
 					$stack[] = array_pop($stack) == array_pop($stack);
 					break;
+                case COTPL_OP_STRICT_EQ:
+                    $stack[] = array_pop($stack) === array_pop($stack);
+                    break;
 				case COTPL_OP_GE:
 					$arg2 = array_pop($stack);
 					$arg1 = array_pop($stack);
@@ -1295,6 +1326,9 @@ class Cotpl_expr
 				case COTPL_OP_NE:
 					$stack[] = array_pop($stack) != array_pop($stack);
 					break;
+                case COTPL_OP_STRICT_NE:
+                    $stack[] = array_pop($stack) !== array_pop($stack);
+                    break;
 				case COTPL_OP_NOT:
 					$stack[] = !array_pop($stack);
 					break;
