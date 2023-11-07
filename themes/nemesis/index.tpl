@@ -1,5 +1,6 @@
 <!-- BEGIN: MAIN -->
 <div class="col3-2 first">
+	{FILE "{PHP.cfg.themes_dir}/{PHP.theme}/warnings.tpl"}
 	<!-- IF {INDEX_NEWS} -->
 	<div class="block">
 		<h2 class="news">{PHP.L.News}</h2>
