@@ -59,6 +59,8 @@ foreach (cot_getextplugins('index.tags') as $pl)
 }
 /* ===== */
 
+cot_display_messages($t);
+
 $t->parse('MAIN');
 $t->out('MAIN');
 
