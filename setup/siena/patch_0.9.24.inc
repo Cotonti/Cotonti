@@ -50,3 +50,17 @@ if (!Cot::$db->indexExists(Cot::$db->plugins, 'plugins_active_idx')) {
         . ' ADD INDEX plugins_active_idx (pl_active)'
     );
 }
+
+$exists = (int) Cot::$db->query(
+    'SELECT COUNT(*) FROM ' . Cot::$db->quoteTableName(Cot::$db->config)
+    . " WHERE `config_owner` = 'core' AND `config_cat` = 'title' AND `config_name` = 'no_canonical_no_index'"
+)->fetchColumn();
+if (!$exists) {
+    Cot::$db->query(
+        'INSERT INTO ' . Cot::$db->quoteTableName(Cot::$db->config)
+        . ' (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, '
+        . '`config_default`, `config_variants`, `config_text`) '
+        . " VALUES "
+        . "('core', 'title', '30', 'no_canonical_no_index', 3, '0', '0', '', '')"
+    );
+}

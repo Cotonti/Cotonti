@@ -31,7 +31,7 @@ Cot::$out['head_head'] = isset(Cot::$out['head_head']) ? Cot::$out['head_head'] 
 $title_page_num = '';
 if (!empty($pg) && is_numeric($pg) && $pg > 1) {
 	// Appending page number to subtitle and meta description
-	$title_page_num = htmlspecialchars(cot_rc('code_title_page_num', array('num' => $pg)));
+	$title_page_num = htmlspecialchars(cot_rc('code_title_page_num', ['num' => $pg]));
 	Cot::$out['subtitle'] .= $title_page_num;
 }
 
@@ -64,6 +64,26 @@ Cot::$out['meta_desc'] = (empty(Cot::$out['desc']) ? Cot::$cfg['subtitle'] : htm
 Cot::$out['meta_keywords'] = empty(Cot::$out['keywords']) ? Cot::$cfg['metakeywords'] : htmlspecialchars(Cot::$out['keywords']);
 Cot::$out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 Cot::$out['head_head'] .= Cot::$out['head'];
+
+if (Cot::$cfg['no_canonical_no_index'] && !empty(Cot::$out['canonical_uri'])) {
+    $preparedUri = trim(Cot::$sys['uri'], '/');
+    $preparedQuery = !empty(Cot::$sys['query']) ? str_replace('&amp;', '&', Cot::$sys['query']) : '';
+    $preparedCanonical = trim(str_replace('&amp;', '&', Cot::$out['canonical_uri']), '/');
+    $tempUrls = [$preparedUri, $preparedUri . '/'];
+    if (!empty(Cot::$sys['query'])) {
+        $tempUrls[0] .= '?' . $preparedQuery;
+        $tempUrls[1] .= '?' . $preparedQuery;
+    }
+
+    $tempUrls[] = rawurldecode($tempUrls[0]);
+    $tempUrls[] = rawurldecode($tempUrls[1]);
+
+
+    if (!in_array($preparedCanonical, $tempUrls)) {
+        Cot::$sys['noindex'] = true;
+    }
+    unset($preparedUri, $preparedQuery, $preparedCanonical, $tempUrls);
+}
 
 if (!empty(Cot::$sys['noindex'])) {
 	Cot::$out['head_head'] .= Cot::$R['code_noindex'];

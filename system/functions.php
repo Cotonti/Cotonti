@@ -5791,12 +5791,15 @@ function cot_http_build_url($urlp)
  */
 function cot_url_sanitize($url)
 {
-	function urlfilter($str) {
-        if (!$str) {
-            return '';
+    if (!function_exists('urlfilter')) {
+        function urlfilter($str)
+        {
+            if (!$str) {
+                return '';
+            }
+            return rawurlencode(rawurldecode($str));
         }
-		return rawurlencode(rawurldecode($str));
-	}
+    }
 
 	$urlp = cot_parse_url($url);
     if (empty($urlp)) {

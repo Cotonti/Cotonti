@@ -62,10 +62,10 @@ if (empty($cot_urltrans) || !is_array($cot_urltrans)) {
 	// $cache && $cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
 }
 
-if (!in_array(Cot::$cfg['plugin']['urleditor']['preset'], array('custom', 'none'))) {
+if (!in_array(Cot::$cfg['plugin']['urleditor']['preset'], ['custom', 'none'])) {
 	if (
-        file_exists('./datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.dat') &&
-		file_exists('./datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.functions.php')
+        file_exists('./datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.dat')
+		&& file_exists('./datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.functions.php')
     ) {
 		require_once './datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.functions.php';
 
