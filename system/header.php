@@ -60,15 +60,21 @@ if (empty(Cot::$out['meta_contenttype'])) {
 }
 Cot::$out['basehref'] = Cot::$R['code_basehref'];
 Cot::$out['meta_charset'] = 'UTF-8';
-Cot::$out['meta_desc'] = (empty(Cot::$out['desc']) ? Cot::$cfg['subtitle'] : htmlspecialchars(Cot::$out['desc'])) . $title_page_num;
-Cot::$out['meta_keywords'] = empty(Cot::$out['keywords']) ? Cot::$cfg['metakeywords'] : htmlspecialchars(Cot::$out['keywords']);
+Cot::$out['meta_desc'] = (empty(Cot::$out['desc'])
+    ? Cot::$cfg['subtitle']
+    : htmlspecialchars(Cot::$out['desc'])) . $title_page_num;
+Cot::$out['meta_keywords'] = empty(Cot::$out['keywords'])
+    ? Cot::$cfg['metakeywords']
+    : htmlspecialchars(Cot::$out['keywords']);
 Cot::$out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 Cot::$out['head_head'] .= Cot::$out['head'];
 
+Cot::$out['canonical_uri'] = rtrim(Cot::$out['canonical_uri'], '/');
 if (Cot::$cfg['no_canonical_no_index'] && !empty(Cot::$out['canonical_uri'])) {
     $preparedUri = trim(Cot::$sys['uri'], '/');
     $preparedQuery = !empty(Cot::$sys['query']) ? str_replace('&amp;', '&', Cot::$sys['query']) : '';
-    $preparedCanonical = trim(str_replace('&amp;', '&', Cot::$out['canonical_uri']), '/');
+    $preparedCanonical = str_replace(rtrim(COT_ABSOLUTE_URL, '/'), '', Cot::$out['canonical_uri']);
+    $preparedCanonical = trim(str_replace('&amp;', '&', $preparedCanonical), '/');
     $tempUrls = [$preparedUri, $preparedUri . '/'];
     if (!empty(Cot::$sys['query'])) {
         $tempUrls[0] .= '?' . $preparedQuery;
@@ -122,14 +128,12 @@ if (!COT_AJAX) {
 		}
 		Cot::$out['notices'] .= cot_rc('notices_container', array('notices' => $notices));
 	}
-	Cot::$out['canonical_uri'] = empty(Cot::$out['canonical_uri']) ?
-        str_replace('&', '&amp;', Cot::$sys['canonical_url']) : Cot::$out['canonical_uri'];
 
-	if (!preg_match("#^https?://.+#", Cot::$out['canonical_uri'])) {
-		Cot::$out['canonical_uri'] = COT_ABSOLUTE_URL . Cot::$out['canonical_uri'];
+	if (!empty(Cot::$out['canonical_uri']) && !preg_match("#^https?://.+#", Cot::$out['canonical_uri'])) {
+		Cot::$out['canonical_uri'] = rtrim(COT_ABSOLUTE_URL, '/') . trim(Cot::$out['canonical_uri'], '/');
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'HEADER_TITLE' => Cot::$out['fulltitle'],
 		'HEADER_COMPOPUP' => !empty(Cot::$out['compopup']) ? Cot::$out['compopup'] : '',
 		'HEADER_LOGSTATUS' => Cot::$out['logstatus'],
@@ -138,7 +142,7 @@ if (!COT_AJAX) {
 		'HEADER_GMTTIME' => Cot::$usr['gmttime'],
 		'HEADER_USERLIST' => Cot::$out['userlist'],
 		'HEADER_NOTICES' => Cot::$out['notices'],
-		'HEADER_NOTICES_ARRAY' => !empty(Cot::$out['notices_array']) ? Cot::$out['notices_array'] : array(),
+		'HEADER_NOTICES_ARRAY' => !empty(Cot::$out['notices_array']) ? Cot::$out['notices_array'] : [],
 		'HEADER_BASEHREF' => Cot::$out['basehref'],
 		'HEADER_META_CONTENTTYPE' => Cot::$out['meta_contenttype'],
 		'HEADER_META_CHARSET' => Cot::$out['meta_charset'],
@@ -146,11 +150,11 @@ if (!COT_AJAX) {
 		'HEADER_META_KEYWORDS' => Cot::$out['meta_keywords'],
 		'HEADER_META_LASTMODIFIED' => Cot::$out['meta_lastmod'],
 		'HEADER_HEAD' => Cot::$out['head_head'],
-		'HEADER_CANONICAL_URL' => Cot::$out['canonical_uri'],
+		'HEADER_CANONICAL_URL' => !empty(Cot::$out['canonical_uri']) ? Cot::$out['canonical_uri'] : '',
 		'HEADER_PREV_URL' => !empty(Cot::$out['prev_uri']) ? Cot::$out['prev_uri'] : '',
 		'HEADER_NEXT_URL' => !empty(Cot::$out['next_uri']) ? Cot::$out['next_uri'] : '',
 		'HEADER_COLOR_SCHEME' => cot_schemefile()
-	));
+	]);
 
 	/* === Hook === */
 	foreach (cot_getextplugins('header.body') as $pl) {

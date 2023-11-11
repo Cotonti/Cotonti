@@ -133,8 +133,7 @@ if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] !== '/') {
 
 // Absolute site url
 $sys['abs_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port'] ? ':' . $sys['port'] : '') . $sys['site_uri'];
-$sys['canonical_url'] = $sys['scheme'] . '://' . $sys['host'] . ($sys['port'] ? ':' . $sys['port'] : '') .
-    cot_url_sanitize($_SERVER['REQUEST_URI']);
+
 define('COT_ABSOLUTE_URL', $sys['abs_url']);
 
 // Reassemble mainurl if necessary

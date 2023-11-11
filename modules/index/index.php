@@ -33,28 +33,25 @@ foreach (cot_getextplugins('index.first') as $pl)
 }
 /* ===== */
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('index', 'a');
-cot_block($usr['auth_read']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('index', 'a');
+cot_block(Cot::$usr['auth_read']);
 
 /* === Hook === */
-foreach (cot_getextplugins('index.main') as $pl)
-{
+foreach (cot_getextplugins('index.main') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if ($_SERVER['REQUEST_URI'] == COT_SITE_URI . 'index.php')
-{
-	$sys['canonical_url'] = COT_ABSOLUTE_URL;
+if (empty(Cot::$out['canonical_uri'])) {
+    Cot::$out['canonical_uri'] = COT_ABSOLUTE_URL;
 }
 
-require_once $cfg['system_dir'].'/header.php';
+require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate(cot_tplfile('index'));
 
 /* === Hook === */
-foreach (cot_getextplugins('index.tags') as $pl)
-{
+foreach (cot_getextplugins('index.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
