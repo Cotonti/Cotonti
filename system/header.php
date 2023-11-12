@@ -74,7 +74,9 @@ if (!headers_sent()) {
 	cot_sendheaders(Cot::$out['meta_contenttype'], isset(Cot::$env['status']) ? Cot::$env['status'] : '200 OK', $lastModified);
 }
 if (!COT_AJAX) {
-    Cot::$out['canonical_uri'] = rtrim(Cot::$out['canonical_uri'], '/');
+    Cot::$out['canonical_uri'] = !empty(Cot::$out['canonical_uri'])
+        ? rtrim(Cot::$out['canonical_uri'], '/')
+        : '';
     if (Cot::$cfg['no_canonical_no_index'] && !empty(Cot::$out['canonical_uri'])) {
         $preparedUri = trim(Cot::$sys['uri'], '/');
         $preparedQuery = !empty(Cot::$sys['query']) ? str_replace('&amp;', '&', Cot::$sys['query']) : '';
