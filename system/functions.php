@@ -4905,17 +4905,14 @@ function cot_rc($name, $params = [])
 function cot_rc_attr_string($attrs)
 {
 	$attr_str = '';
-	if (is_array($attrs))
-	{
-		foreach ($attrs as $key => $val)
-		{
+	if (is_array($attrs)) {
+		foreach ($attrs as $key => $val) {
 			$attr_str .= ' ' . $key . '="' . htmlspecialchars($val) . '"';
 		}
-	}
-	elseif ($attrs)
-	{
+	} elseif ($attrs) {
 		$attr_str = ' ' . $attrs;
 	}
+
 	return $attr_str;
 }
 
@@ -4928,27 +4925,23 @@ function cot_rc_attr_string($attrs)
  */
 function cot_rc_modify($rc, $attrs)
 {
-	if (!is_array($attrs))
-	{
-		preg_match_all("/(([a-z0-9-_]+)=(\"|')(.*?)(\"|'))/", $attrs, $matches);
-		$attrs = array();
-		foreach ($matches[2] as $key => $value)
-		{
-			$attrs[$value] = $matches[4][$key];
-		}
-	}
-	foreach ($attrs as $key => $value)
-	{
-		if(mb_stripos($rc, " ".$key."=") !== false)
-		{
-			$rc = preg_replace("/".$key."=(\"|')(.*?)(\"|')/", $key.'="'.$value.'"', $rc);
-		}
-		else
-		{
-			$rc = preg_replace("/<([^\/ ]+)(.+)/", "<$1 ".$key.'="'.$value.'"$2', $rc);
-		}
-	}
-	return($rc);
+    if (!is_array($attrs)) {
+        preg_match_all("/((?<key>[a-z0-9-_]+)=(['\"])(?<value>.*?)\g{3})/", $attrs, $matches);
+        $attrs = [];
+        foreach ($matches['key'] as $num => $key) {
+            $attrs[$key] = $matches['value'][$num];
+        }
+    }
+
+    foreach ($attrs as $key => $value) {
+        if (mb_stripos($rc, " " . $key . "=") !== false) {
+            $rc = preg_replace("/" . $key . "=(\"|')(.*?)(\"|')/", $key . '="' . $value . '"', $rc);
+        } else {
+            $rc = preg_replace("/<([^\/ ]+)(.+)/", "<$1 " . $key . '="' . $value . '"$2', $rc);
+        }
+    }
+
+    return $rc;
 }
 
 /**

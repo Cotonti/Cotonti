@@ -23,20 +23,20 @@ class XTemplate
 	/**
 	 * @var array Assigned template vars
 	 */
-	public $vars = array();
+	public $vars = [];
 	/**
-	 * @var array Blocks
+	 * @var Cotpl_block[] Blocks
 	 */
-	protected $blocks = array();
+	protected $blocks = [];
 	/**
 	 * @var array Blocks already displayed (for debug mode)
 	 */
-	protected $displayed_blocks = array();
+	protected $displayed_blocks = [];
 	/**
 	 * Maps block paths to actual array indices.
 	 * @var array Index for quick block search.
 	 */
-	protected $index = array();
+	protected $index = [];
 	/**
 	 * Contains a list of names of all tags present in the template
 	 * @var array
@@ -412,8 +412,7 @@ class XTemplate
 	 */
 	public function out($block = 'MAIN')
 	{
-		if (self::$debug_mode && self::$debug_output)
-		{
+		if (self::$debug_mode && self::$debug_output) {
 			// Print debug stuff for current file
 			$file = basename($this->filename);
 			echo "<h1>$file</h1>";
@@ -421,26 +420,19 @@ class XTemplate
 				$block_name = $file . ' / ' . str_replace('.', ' / ', $block);
 				echo "<h2>$block_name</h2>";
 				echo "<ul>";
-				foreach ($tags as $key => $val)
-				{
-					if (is_array($val))
-					{
+				foreach ($tags as $key => $val) {
+					if (is_array($val)) {
 						// One level of nesting is supported
-						foreach ($val as $key2 => $val2)
-						{
+						foreach ($val as $key2 => $val2) {
 							echo self::debugVar($key . '.' . $key2, $val2);
 						}
-					}
-					else
-					{
+					} else {
 						echo self::debugVar($key, $val);
 					}
 				}
 				echo "</ul>";
 			}
-		}
-		else
-		{
+		} else {
 			echo $this->text($block);
 		}
 		return $this;
@@ -588,11 +580,11 @@ class Cotpl_block
 	/**
 	 * @var array Parsed block instances
 	 */
-	protected $data = array();
+	protected $data = [];
 	/**
 	 * @var array Contained blocks
 	 */
-	public $blocks = array();
+	public $blocks = [];
 
 	/**
 	 * Block constructor
@@ -863,7 +855,7 @@ class Cotpl_block
 	public function text($tpl)
 	{
 		$text = implode('', $this->data);
-		$this->data = array();
+		$this->data = [];
 		return $text;
 	}
 }
@@ -1191,7 +1183,7 @@ class Cotpl_expr
 
 		$operators = array_keys(self::$operators);
 		// Splitting infix into tokens
-		$tokens = array();
+		$tokens = [];
 		foreach ($words as $word) {
 			$token = [];
 			if (in_array($word, $operators, true)) {
@@ -1209,6 +1201,7 @@ class Cotpl_expr
 //				} else {
 //					$token['var'] = $word;
 //				}
+
                 $token['var'] = $word;
 				$token['prec'] = 0;
 			}
@@ -1285,7 +1278,7 @@ class Cotpl_expr
 					$stack[] = $dividend / $divisor;
 					break;
 				case COTPL_OP_EQ:
-					$stack[] = array_pop($stack) == array_pop($stack);
+                    $stack[] = array_pop($stack) == array_pop($stack);
 					break;
                 case COTPL_OP_STRICT_EQ:
                     $stack[] = array_pop($stack) === array_pop($stack);
@@ -1351,8 +1344,20 @@ class Cotpl_expr
 				case COTPL_OP_CLOSE:
 					break;
 				default:
-					$stack[] = is_object($token['var']) ? $token['var']->evaluate($tpl) : $token['var'];
-					break;
+                    if (is_object($token['var'])) {
+                        $stack[] = $token['var']->evaluate($tpl);
+                    } elseif (is_string($token['var']) && mb_strpos($token['var'], '{') !== false) {
+                        $stack[] = preg_replace_callback(
+                            '`(?<!\{)\{(?<expression>[\w\.\-]+[\|.+?]?)\}`',
+                            function($matches) use ($tpl) {
+                                $var = new Cotpl_var($matches['expression']);
+                                return $var->evaluate($tpl);
+                            },
+                            $token['var']
+                        );
+                    } else {
+                        $stack[] = $token['var'];
+                    }
 			}
 		}
 		return (bool) array_pop($stack);
@@ -1850,12 +1855,23 @@ class Cotpl_var
         }
 
         // Replaces '$this' in callback arguments with the template tag value.
-        if (mb_strpos($argument, '$this') !== FALSE) {
-            if (is_array($params['value']) || is_object($params['value'])) {
+        if (is_string($argument) && mb_strpos($argument, '$this') !== false) {
+            if (is_array($params['value']) || is_object($params['value']) || $argument === '$this') {
                 $argument = $params['value'];
             } else {
-                $argument = str_replace('$this', (string) $params['value'], $argument);
+                $argument = str_replace('$this', (string)$params['value'], $argument);
             }
+        }
+
+        if (is_string($argument) && mb_strpos($argument, '{') !== false) {
+            $argument = preg_replace_callback(
+                '`(?<!\{)\{(?<expression>[\w\.\-]+[\|.+?]?)\}`',
+                function ($matches) use ($params) {
+                    $var = new Cotpl_var($matches['expression']);
+                    return $var->evaluate($params['tpl']);
+                },
+                $argument
+            );
         }
     }
 }
@@ -2005,17 +2021,12 @@ function cotpl_parseArgument($argument)
         if ((float) $argument == (int) $argument) {
             return (int) $argument;
         }
-        //if (mb_strpos($argument, '.') !== false) {
         return (float) $argument;
-        //}
     }
 
     $firstSymbol = mb_substr($argument, 0, 1);
     $lastSymbol = mb_substr($argument, -1, 1);
 
-//        if (preg_match('`^{(.+?)}$`', $argument, $mt)) {
-//            return new Cotpl_var($mt[1]);
-//        }
     if ($firstSymbol === '{' &&  $lastSymbol === '}') {
         return new Cotpl_var(mb_substr($argument, 1, mb_strlen($argument) -2));
     }

@@ -69,38 +69,43 @@ Cot::$out['meta_keywords'] = empty(Cot::$out['keywords'])
 Cot::$out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 Cot::$out['head_head'] .= Cot::$out['head'];
 
-Cot::$out['canonical_uri'] = rtrim(Cot::$out['canonical_uri'], '/');
-if (Cot::$cfg['no_canonical_no_index'] && !empty(Cot::$out['canonical_uri'])) {
-    $preparedUri = trim(Cot::$sys['uri'], '/');
-    $preparedQuery = !empty(Cot::$sys['query']) ? str_replace('&amp;', '&', Cot::$sys['query']) : '';
-    $preparedCanonical = str_replace(rtrim(COT_ABSOLUTE_URL, '/'), '', Cot::$out['canonical_uri']);
-    $preparedCanonical = trim(str_replace('&amp;', '&', $preparedCanonical), '/');
-    $tempUrls = [$preparedUri, $preparedUri . '/'];
-    if (!empty(Cot::$sys['query'])) {
-        $tempUrls[0] .= '?' . $preparedQuery;
-        $tempUrls[1] .= '?' . $preparedQuery;
-    }
-
-    $tempUrls[] = rawurldecode($tempUrls[0]);
-    $tempUrls[] = rawurldecode($tempUrls[1]);
-
-
-    if (!in_array($preparedCanonical, $tempUrls)) {
-        Cot::$sys['noindex'] = true;
-    }
-    unset($preparedUri, $preparedQuery, $preparedCanonical, $tempUrls);
-}
-
-if (!empty(Cot::$sys['noindex'])) {
-	Cot::$out['head_head'] .= Cot::$R['code_noindex'];
-}
-
 if (!headers_sent()) {
     $lastModified = !empty(Cot::$env['last_modified']) ? Cot::$env['last_modified'] : 0;
 	cot_sendheaders(Cot::$out['meta_contenttype'], isset(Cot::$env['status']) ? Cot::$env['status'] : '200 OK', $lastModified);
 }
 if (!COT_AJAX) {
-	$mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R') ? 'core' : 'module';
+    Cot::$out['canonical_uri'] = rtrim(Cot::$out['canonical_uri'], '/');
+    if (Cot::$cfg['no_canonical_no_index'] && !empty(Cot::$out['canonical_uri'])) {
+        $preparedUri = trim(Cot::$sys['uri'], '/');
+        $preparedQuery = !empty(Cot::$sys['query']) ? str_replace('&amp;', '&', Cot::$sys['query']) : '';
+        $preparedCanonical = str_replace(rtrim(COT_ABSOLUTE_URL, '/'), '', Cot::$out['canonical_uri']);
+        $preparedCanonical = trim(str_replace('&amp;', '&', $preparedCanonical), '/');
+        $tempUrls = [$preparedUri, $preparedUri . '/'];
+        if (!empty(Cot::$sys['query'])) {
+            $tempUrls[0] .= '?' . $preparedQuery;
+            $tempUrls[1] .= '?' . $preparedQuery;
+        }
+
+        $tempUrls[] = rawurldecode($tempUrls[0]);
+        $tempUrls[] = rawurldecode($tempUrls[1]);
+
+
+        if (!in_array($preparedCanonical, $tempUrls)) {
+            Cot::$sys['noindex'] = true;
+        }
+        unset($preparedUri, $preparedQuery, $preparedCanonical, $tempUrls);
+    }
+
+    if (!empty(Cot::$out['canonical_uri']) && !preg_match("#^https?://.+#", Cot::$out['canonical_uri'])) {
+        Cot::$out['canonical_uri'] = rtrim(COT_ABSOLUTE_URL, '/') . trim(Cot::$out['canonical_uri'], '/');
+    }
+
+    if (!empty(Cot::$sys['noindex'])) {
+        Cot::$out['head_head'] .= Cot::$R['code_noindex'];
+    }
+
+
+    $mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R') ? 'core' : 'module';
 	if (Cot::$cfg['enablecustomhf']) {
 		$mtpl_base = (defined('COT_PLUG') && !empty($e)) ? array('header', $e) : array('header', Cot::$env['location']);
 
@@ -129,10 +134,6 @@ if (!COT_AJAX) {
 		Cot::$out['notices'] .= cot_rc('notices_container', array('notices' => $notices));
 	}
 
-	if (!empty(Cot::$out['canonical_uri']) && !preg_match("#^https?://.+#", Cot::$out['canonical_uri'])) {
-		Cot::$out['canonical_uri'] = rtrim(COT_ABSOLUTE_URL, '/') . trim(Cot::$out['canonical_uri'], '/');
-	}
-
 	$t->assign([
 		'HEADER_TITLE' => Cot::$out['fulltitle'],
 		'HEADER_COMPOPUP' => !empty(Cot::$out['compopup']) ? Cot::$out['compopup'] : '',
@@ -153,7 +154,7 @@ if (!COT_AJAX) {
 		'HEADER_CANONICAL_URL' => !empty(Cot::$out['canonical_uri']) ? Cot::$out['canonical_uri'] : '',
 		'HEADER_PREV_URL' => !empty(Cot::$out['prev_uri']) ? Cot::$out['prev_uri'] : '',
 		'HEADER_NEXT_URL' => !empty(Cot::$out['next_uri']) ? Cot::$out['next_uri'] : '',
-		'HEADER_COLOR_SCHEME' => cot_schemefile()
+		'HEADER_COLOR_SCHEME' => cot_schemefile(),
 	]);
 
 	/* === Hook === */
