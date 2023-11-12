@@ -228,17 +228,16 @@ function cot_build_usertext($text)
  * @param string $name Input name
  * @return string
  */
-function cot_selectbox_gender($check, $name)
+function cot_selectbox_gender($check, $name, $custom_rc)
 {
 	global $L;
 
-	$genlist = array('U', 'M', 'F');
-	$titlelist = array();
-	foreach ($genlist as $i)
-	{
+	$genlist = ['U', 'M', 'F'];
+	$titlelist = [];
+	foreach ($genlist as $i) {
 		$titlelist[] = $L['Gender_' . $i];
 	}
-	return cot_selectbox($check, $name, $genlist, $titlelist, false);
+	return cot_selectbox($check, $name, $genlist, $titlelist, false, '', $custom_rc);
 }
 
 /**
