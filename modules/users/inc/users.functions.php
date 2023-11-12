@@ -228,7 +228,7 @@ function cot_build_usertext($text)
  * @param string $name Input name
  * @return string
  */
-function cot_selectbox_gender($check, $name, $custom_rc)
+function cot_selectbox_gender($check, $name, $custom_rc = '')
 {
 	global $L;
 
