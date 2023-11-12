@@ -225,8 +225,12 @@ switch($a) {
                 if (!isset($registeredParts[$row['pl_part']]['hooks'])) {
                     $registeredParts[$row['pl_part']]['hooks'] = [];
                 }
+                if (!isset($registeredParts[$row['pl_part']]['order'])) {
+                    $registeredParts[$row['pl_part']]['order'] = [];
+                }
                 $registeredParts[$row['pl_part']]['hooks'][] = $row['pl_hook'];
-                unset($row['pl_hook']);
+                $registeredParts[$row['pl_part']]['order'][] = (int) $row['pl_order'];
+                unset($row['pl_hook'], $row['pl_order']);
                 $registeredParts[$row['pl_part']] = array_merge($registeredParts[$row['pl_part']], $row);
             }
             $query->closeCursor();
@@ -288,9 +292,10 @@ switch($a) {
                 if (empty($extensionPart['Hooks'])) {
                     $extensionPart['Hooks'] = [];
                 }
-                $extensionPart['Order'] = (isset($extensionPart['Order']) && (int) $extensionPart['Order'] >= 0)
-                    ? (int) $extensionPart['Order']
-                    : COT_PLUGIN_DEFAULT_ORDER;
+                $extensionPart['Order'] = (isset($extensionPart['Order']) && $extensionPart['Order'] !== '')
+                    ? explode(',', $extensionPart['Order'])
+                    : [COT_PLUGIN_DEFAULT_ORDER];
+                $extensionPart['Order'] = array_map(function($el) { return (int) trim($el); }, $extensionPart['Order']);
 
 				$info_part = preg_match("#^$code\.([\w\.]+).php$#", $x, $mt) ? $mt[1] : 'main';
 
@@ -298,7 +303,7 @@ switch($a) {
                 $extensionPart['installedOrder'] = null;
                 if (isset($registeredParts[$info_part])) {
                     $extensionPart['Status'] = $registeredParts[$info_part]['pl_active'];
-                    $extensionPart['installedOrder'] = (int) $registeredParts[$info_part]['pl_order'];
+                    $extensionPart['installedOrder'] = $registeredParts[$info_part]['order'];
                 }
 
 				// check for not registered Hooks
@@ -434,8 +439,8 @@ switch($a) {
 						'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $x,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS' => $info_hooks,
-						'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER' => $extensionPart['Order'],
-                        'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER_INSTALLED' => $extensionPart['installedOrder'],
+						'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER' => implode(', ', $extensionPart['Order']),
+                        'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER_INSTALLED' => implode(', ', $extensionPart['installedOrder']),
 						'ADMIN_EXTENSIONS_DETAILS_ROW_STATUS' => $status[$extensionPart['Status']],
 						//'ADMIN_EXTENSIONS_DETAILS_ROW_PART_ODDEVEN' => cot_build_oddeven($ii)
 					]);
