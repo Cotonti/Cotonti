@@ -106,7 +106,7 @@ if (!COT_AJAX) {
 	// Creation time statistics
 	$i = explode(' ', microtime());
     Cot::$sys['endtime'] = $i[1] + $i[0];
-    Cot::$sys['creationtime'] = Cot::$sys['endtime'] - Cot::$sys['starttime'];
+    Cot::$sys['creationtime'] = round(Cot::$sys['endtime'] - Cot::$sys['starttime'], 5);
 
 	Cot::$out['creationtime'] = (!Cot::$cfg['disablesysinfos']) ? Cot::$L['foo_created'].' '.cot_declension(Cot::$sys['creationtime'],
             $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
@@ -136,15 +136,16 @@ if (!COT_AJAX) {
         Cot::$out['devmode'] .= "<tr><td colspan=\"2\">END</td>";
         Cot::$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", Cot::$sys['creationtime']).
             " ms</td><td>&nbsp;</td></tr>";
-        Cot::$out['devmode'] .= "</table><br />Total:".round(Cot::$db->timeCount, 4)."s - Queries:".Cot::$db->count.
-            " - Average:".round((Cot::$db->timeCount / Cot::$db->count), 5)."s/q";
+        Cot::$out['devmode'] .= "</table><br />Total: " . round(Cot::$db->timeCount, 4) . "s - Queries:"
+            . Cot::$db->count
+            . " - Average: " . round((Cot::$db->timeCount / Cot::$db->count), 5) . "s/q";
 	}
 
 	$t->assign([
-		'FOOTER_BOTTOMLINE' => \Cot::$out['bottomline'],
-		'FOOTER_CREATIONTIME' => \Cot::$out['creationtime'],
-		'FOOTER_SQLSTATISTICS' => \Cot::$out['sqlstatistics'],
-		'FOOTER_DEVMODE' => isset(\Cot::$out['devmode']) ? \Cot::$out['devmode'] : ''
+		'FOOTER_BOTTOMLINE' => Cot::$out['bottomline'],
+		'FOOTER_CREATIONTIME' => Cot::$out['creationtime'],
+		'FOOTER_SQLSTATISTICS' => Cot::$out['sqlstatistics'],
+		'FOOTER_DEVMODE' => isset(Cot::$out['devmode']) ? Cot::$out['devmode'] : ''
 	]);
 
 	$t->parse('FOOTER');

@@ -66,7 +66,7 @@
 	</div>
 	<!-- ENDIF -->
 	<!-- IF {FOOTER_DEVMODE} -->
-	<div>
+	<div class="body">
 		{FOOTER_CREATIONTIME} {FOOTER_SQLSTATISTICS} {FOOTER_DEVMODE}
 	</div>
 	<!-- ENDIF -->

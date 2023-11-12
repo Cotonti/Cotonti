@@ -35,7 +35,7 @@ defined('COT_CODE') or die('Wrong URL');
  *
  * @property-read int $affectedRows Number of rows affected by the most recent query
  * @property-read int $count Total query count
- * @property-read int $timeCount Total query execution time
+ * @property-read float $timeCount Total query execution time
  */
 class CotDB
 {
@@ -100,7 +100,7 @@ class CotDB
 	 * Total query execution time in microseconds as string
 	 * @var float
 	 */
-	private $_tcount = 0;
+	private $_tcount = .0;
 
 	/**
 	 * Timer start microtime
