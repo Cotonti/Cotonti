@@ -99,7 +99,8 @@ if (!COT_AJAX) {
     }
 
     if (!empty(Cot::$out['canonical_uri']) && !preg_match("#^https?://.+#", Cot::$out['canonical_uri'])) {
-        Cot::$out['canonical_uri'] = rtrim(COT_ABSOLUTE_URL, '/') . trim(Cot::$out['canonical_uri'], '/');
+        Cot::$out['canonical_uri'] = rtrim(COT_ABSOLUTE_URL, '/') . '/'
+            . trim(Cot::$out['canonical_uri'], '/');
     }
 
     if (!empty(Cot::$sys['noindex'])) {
