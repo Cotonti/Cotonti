@@ -440,7 +440,9 @@ switch($a) {
 						'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $x,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS' => $info_hooks,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER' => implode(', ', $extensionPart['Order']),
-                        'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER_INSTALLED' => implode(', ', $extensionPart['installedOrder']),
+                        'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER_INSTALLED' => !empty($extensionPart['installedOrder'])
+                            ? implode(', ', $extensionPart['installedOrder'])
+                            : null,
 						'ADMIN_EXTENSIONS_DETAILS_ROW_STATUS' => $status[$extensionPart['Status']],
 						//'ADMIN_EXTENSIONS_DETAILS_ROW_PART_ODDEVEN' => cot_build_oddeven($ii)
 					]);
