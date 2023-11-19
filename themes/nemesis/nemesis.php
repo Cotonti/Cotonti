@@ -21,3 +21,6 @@ defined('COT_CODE') or die('Wrong URL');
 //if (!function_exists('cot_page_enum') && cot_auth('page', 'any', 'R')) {
 //    require_once cot_incfile('page', 'module');
 //}
+
+// Resource strings
+$R['content_container_selector'] = 'div#main .first';

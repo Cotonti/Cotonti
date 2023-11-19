@@ -2,7 +2,6 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=header.main
-Tags=header.tpl:{HEADER_HEAD}
 [END_COT_EXT]
 ==================== */
 
@@ -16,14 +15,26 @@ Tags=header.tpl:{HEADER_HEAD}
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (!empty($highlight) && Cot::$cfg['jquery']) {
-	$search_embed = '$(document).ready(function() {$("body").each(function() {';
-
+if (!empty($highlight) && !defined('COT_ADMIN')) {
 	$highlight = explode(' ', $highlight);
 	foreach ($highlight as $key => $value) {
-		$search_embed .= '$.highlight(this, "' . mb_strtoupper($value) . '");';
+        $value = trim($value);
+        if ($value === '') {
+            unset($highlight[$key]);
+        }
 	}
 
-	$search_embed .= '});});';
-	Resources::embed($search_embed);
+    $wordsToHighlight = implode('|', $highlight);
+    $contentNodeSelector = isset(Cot::$R['content_container_selector'])
+        ? str_replace("'", "\'", Cot::$R['content_container_selector'])
+        : 'body';
+
+    Resources::embedFooter(
+<<<JS
+let contentNode = document.querySelector('{$contentNodeSelector}');
+if (contentNode !== null) {
+    highlightWords(contentNode, new RegExp('{$wordsToHighlight}', "gi"));
+}
+JS
+    );
 }

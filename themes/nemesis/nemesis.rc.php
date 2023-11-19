@@ -9,8 +9,8 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-Resources::addFile($cfg['themes_dir'].'/'.$usr['theme'].'/css/reset.css');
-Resources::addFile($cfg['themes_dir'].'/'.$usr['theme'].'/css/extras.css');
-Resources::addFile($cfg['themes_dir'].'/'.$usr['theme'].'/css/default.css');
-Resources::addFile($cfg['themes_dir'].'/'.$usr['theme'].'/css/modalbox.css');
-Resources::addFile($cfg['themes_dir'].'/'.$usr['theme'].'/js/js.js');
+Resources::addFile(Cot::$cfg['themes_dir'] . '/' . Cot::$usr['theme'] . '/css/reset.css');
+Resources::addFile(Cot::$cfg['themes_dir'] . '/' . Cot::$usr['theme'] . '/css/extras.css');
+Resources::addFile(Cot::$cfg['themes_dir'] . '/' . Cot::$usr['theme'] . '/css/default.css');
+Resources::addFile(Cot::$cfg['themes_dir'] . '/' . Cot::$usr['theme'] . '/css/modalbox.css');
+Resources::addFile(Cot::$cfg['themes_dir'] . '/' . Cot::$usr['theme'] . '/js/js.js');

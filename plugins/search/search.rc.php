@@ -14,6 +14,11 @@ Hooks=rc
  */
 
 defined('COT_CODE') or die('Wrong URL');
-if (Cot::$cfg['jquery']) {
-	Resources::addFile(Cot::$cfg['plugins_dir'] . '/search/js/hl.min.js');
+
+if (!defined('COT_ADMIN')) {
+    if (Cot::$cfg['headrc_consolidate']) {
+        Resources::addFile(Cot::$cfg['plugins_dir'] . '/search/js/highlight.js');
+    } elseif (!empty($_GET['highlight'])) {
+        Resources::linkFileFooter(Cot::$cfg['plugins_dir'] . '/search/js/highlight.js');
+    }
 }
