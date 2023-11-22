@@ -128,14 +128,14 @@ function cot_alphaonly($text)
  * @todo make signature compartaible with native array_diff() function:
  *       array_diff(array $array, array ...$arrays): array
  */
-function cot_array_diff(array $array1, array $array2)
+function cot_arrayDiff(array $array1, array $array2)
 {
     $return = [];
 
     foreach ($array1 as $mKey => $mValue) {
         if (array_key_exists($mKey, $array2)) {
             if (is_array($mValue)) {
-                $aRecursiveDiff = cot_array_diff($mValue, $array2[$mKey]);
+                $aRecursiveDiff = cot_arrayDiff($mValue, $array2[$mKey]);
                 if (count($aRecursiveDiff)) {
                     $return[$mKey] = $aRecursiveDiff;
                 }
@@ -1330,12 +1330,14 @@ function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK',
  * @param bool $httponly HttpOnly flag
  * @return bool
  */
-function cot_setcookie($name, $value, $expire = '', $path = '', $domain = '', $secure = false, $httponly = true)
+function cot_setcookie($name, $value = '', $expire = '', $path = '', $domain = '', $secure = false, $httponly = true)
 {
-	if (mb_strpos($domain, '.') === FALSE) {
+	if (mb_strpos($domain, '.') === false) {
 		// Some browsers don't support cookies for local domains
 		$domain = '';
 	}
+
+    $value = (string) $value;
 
 	$domain = (empty($domain)) ? Cot::$cfg['cookiedomain'] : $domain;
 	$path = (empty($path)) ? Cot::$cfg['cookiepath'] : $path;

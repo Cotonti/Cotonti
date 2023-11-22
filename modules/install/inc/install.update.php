@@ -28,10 +28,10 @@ $updated_config = false;
 if (is_writable($file['config']) && file_exists($file['config_sample'])) {
 	list($old_cfg, $old_db) = cot_get_config($file['config']);
 	list($new_cfg, $new_db) = cot_get_config($file['config_sample']);
-	if (count(cot_array_diff($new_cfg, $old_cfg)) > 0 || count(cot_array_diff($new_db, $old_db)) > 0) {
+	if (count(cot_arrayDiff($new_cfg, $old_cfg)) > 0 || count(cot_arrayDiff($new_db, $old_db)) > 0) {
 		// Add new config options
 		$delta = '';
-		if (count(array_diff($new_cfg, $old_cfg)) > 0) {
+		if (count(cot_arrayDiff($new_cfg, $old_cfg)) > 0) {
 			foreach ($new_cfg as $key => $val) {
 				if (!array_key_exists($key, $old_cfg)) {
 					if ($key == 'new_install') {
@@ -54,7 +54,7 @@ if (is_writable($file['config']) && file_exists($file['config_sample'])) {
 			}
 		}
 
-		if (count(cot_array_diff($new_db, $old_db)) > 0) {
+		if (count(cot_arrayDiff($new_db, $old_db)) > 0) {
 			foreach ($new_db as $key => $val) {
 				if (!isset($old_db[$key])) {
 					$val = str_replace("cot_", "\$db_x.'", $val);

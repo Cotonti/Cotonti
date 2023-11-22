@@ -56,11 +56,18 @@ $exists = (int) Cot::$db->query(
     . " WHERE `config_owner` = 'core' AND `config_cat` = 'title' AND `config_name` = 'no_canonical_no_index'"
 )->fetchColumn();
 if (!$exists) {
-    Cot::$db->query(
-        'INSERT INTO ' . Cot::$db->quoteTableName(Cot::$db->config)
-        . ' (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, '
-        . '`config_default`, `config_variants`, `config_text`) '
-        . " VALUES "
-        . "('core', 'title', '30', 'no_canonical_no_index', 3, '0', '0', '', '')"
+    Cot::$db->insert(
+        Cot::$db->config,
+        [
+            'config_owner' => 'core',
+            'config_cat' => 'title',
+            'config_order' => '30',
+            'config_name' => 'no_canonical_no_index',
+            'config_type' => 3,
+            'config_value' => '0',
+            'config_default' => '0',
+            'config_variants' => '',
+            'config_text' => '',
+        ]
     );
 }
