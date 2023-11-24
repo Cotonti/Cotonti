@@ -19,7 +19,7 @@ http://github.com/necolas/css3-facebook-buttons
     text-decoration: none;
     text-align: center;
     font: bold 10px/normal 'lucida grande', tahoma, verdana, arial, sans-serif;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     cursor: pointer;
     /* outline: none; */
     color: #333;

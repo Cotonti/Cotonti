@@ -219,8 +219,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	if (!$info && cot_plugin_active('genoa')) {
 		// Try load old format info
 		$info = cot_infoget($setup_file, 'SED_EXTPLUGIN');
-		if ($info)
-		{
+		if ($info) {
 			$old_ext_format = true;
 		}
 	}
@@ -253,19 +252,37 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 		}
 	}
 
+    $registeredParts = [];
 	if ($update) {
+        $query = $query = Cot::$db->query(
+            'SELECT * FROM ' . Cot::$db->plugins . ' WHERE pl_code = :code',
+            ['code' => $name]
+        );
+        while ($row = $query->fetch()) {
+            if (!isset($registeredParts[$row['pl_part']]['hooks'])) {
+                $registeredParts[$row['pl_part']]['hooks'] = [];
+            }
+            $registeredParts[$row['pl_part']]['hooks'][$row['pl_hook']] = [
+                'hook' => $row['pl_hook'],
+                'order' => (int) $row['pl_order'],
+            ];
+            unset($row['pl_hook'], $row['pl_order']);
+            $registeredParts[$row['pl_part']] = array_merge($registeredParts[$row['pl_part']], $row);
+        }
+        $query->closeCursor();
+
 		// Safely drop existing bindings
 		$bindings_cnt = cot_plugin_remove($name);
 		cot_message(cot_rc('ext_bindings_uninstalled', array('cnt' => $bindings_cnt)));
 	}
 
 	// Install hook parts and bindings
-	$hook_bindings = array();
+	$hookBindings = [];
 	$dp = opendir($path);
 	while ($f = readdir($dp)) {
 		if (
-            preg_match("#^$name(\.([\w\.]+))?.php$#", $f, $mt) &&
-			(!isset($mt[2]) || !in_array($mt[2], $cot_ext_ignore_parts))
+            preg_match("#^$name(\.([\w\.]+))?.php$#", $f, $mt)
+			&& (!isset($mt[2]) || !in_array($mt[2], $cot_ext_ignore_parts))
         ) {
 			$part_info = cot_infoget($path . "/$f", 'COT_EXT');
 			if (!$part_info && cot_plugin_active('genoa')) {
@@ -274,7 +291,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 			}
 			if ($part_info) {
 				if (empty($part_info['Hooks'])) {
-					$hooks = $is_module ? array('module') : array('standalone');
+					$hooks = $is_module ? ['module'] : ['standalone'];
 				} else {
 					$hooks = explode(',', $part_info['Hooks']);
 					$hooks = is_array($hooks) ? array_map('trim', $hooks) : array();
@@ -283,20 +300,23 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 					$order = COT_PLUGIN_DEFAULT_ORDER;
 				} else {
 					$order = array_map('trim', explode(',', $part_info['Order']));
-					if (count($order) == 1 || count($order) < count($hooks))
-					{
+					if (count($order) == 1 || count($order) < count($hooks)) {
 						$order = (int) $order[0];
 					}
 				}
 
 				$i = 0;
 				foreach ($hooks as $hook) {
-					$hook_bindings[] = array(
-						'part' => !isset($mt[2]) ? 'main' : $mt[2],
-						'file' => $f,
-						'hook' => $hook,
-						'order' => isset($order[$i]) ? (int) $order[$i] : $order
-					);
+                    $hookBinding = [
+                        'part' => !isset($mt[2]) ? 'main' : $mt[2],
+                        'file' => $f,
+                        'hook' => $hook,
+                        'order' => isset($order[$i]) ? (int) $order[$i] : $order,
+                    ];
+                    if (isset($registeredParts[$hookBinding['part']])) {
+                        $hookBinding['active'] = $registeredParts[$hookBinding['part']]['pl_active'];
+                    }
+					$hookBindings[] = $hookBinding;
 					++$i;
 				}
 			}
@@ -304,7 +324,7 @@ function cot_extension_install($name, $is_module = false, $update = false, $forc
 	}
 
 	closedir($dp);
-	$bindings_cnt = cot_plugin_add($hook_bindings, $name, $info['Name'], $is_module);
+	$bindings_cnt = cot_plugin_add($hookBindings, $name, $info['Name'], $is_module);
 	cot_message(cot_rc('ext_bindings_installed', array('cnt' => $bindings_cnt)));
 
 	// Install config
@@ -995,28 +1015,28 @@ function cot_extension_update($name, $version)
  */
 function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
 {
-	global $db, $db_plugins;
-
-	if (empty($title))
-	{
+	if (empty($title)) {
 		$title = $name;
 	}
 
-	$insert_rows = array();
-	foreach ($hook_bindings as $binding)
-	{
-		$insert_rows[] = array(
+	$insert_rows = [];
+	foreach ($hook_bindings as $binding) {
+        $active = 1;
+        if (isset($binding['active']) && !$binding['active']) {
+            $active = 0;
+        }
+		$insert_rows[] = [
 			'pl_hook' => $binding['hook'],
 			'pl_code' => $name,
 			'pl_part' => $binding['part'],
 			'pl_title' => $title,
 			'pl_file' => empty($binding['file']) ? "$name/$name.{$binding['part']}.php" : $name . '/' . $binding['file'],
 			'pl_order' => $binding['order'],
-			'pl_active' => 1,
+			'pl_active' => $active,
 			'pl_module' => (int) $is_module
-		);
+		];
 	}
-	return $db->insert($db_plugins, $insert_rows);
+	return Cot::$db->insert(Cot::$db->plugins, $insert_rows);
 }
 
 /**
@@ -1057,8 +1077,7 @@ function cot_plugin_remove($name, $binding_id = 0)
 	global $db, $db_plugins;
 
 	$condition = "pl_code = '$name'";
-	if ($binding_id > 0)
-	{
+	if ($binding_id > 0) {
 		$condition .= " AND pl_id = $binding_id";
 	}
 
@@ -1068,9 +1087,9 @@ function cot_plugin_remove($name, $binding_id = 0)
 /**
  * Resumes a suspended plugin or one of its parts
  *
- * @param  string  $name Module or plugin name
- * @param  mixed   $part ID of the binding to resume or 0 to resume all; if part name is passed, then that part is resumed
- * @return integer       Number of bindings suspended
+ * @param string $name Module or plugin name
+ * @param mixed  $part ID of the binding to resume or 0 to resume all; if part name is passed, then that part is resumed
+ * @return int Number of bindings suspended
  * @global CotDB $db
  */
 function cot_plugin_resume($name, $part = 0)
