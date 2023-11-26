@@ -1,29 +1,23 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=admin.extensions.install.tags
+Hooks=admin.extensions.details,admin.extensions.plug.list.loop
 [END_COT_EXT]
 ==================== */
 
 /**
- * Implants missing enablement configs when a new module is installed
+ * Comments plugin has no standalone page
  *
  * @package Comments
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
- * @todo Obsolete. This hook is not exists
+ * @var XTemplate $t
+ * @var string $code Extension code
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-require cot_incfile('comments', 'plug', 'enablement');
-
-if ($is_module && in_array($code, $com_modules_list) && !cot_config_implanted($code, 'comments'))
-{
-	cot_config_implant($code, $com_options, false, 'comments');
-}
-elseif ($is_module && in_array($code, $com_modules_struct_list) && !cot_config_implanted($code, 'comments'))
-{
-	cot_config_implant($code, $com_options, true, 'comments');
+if ($code === 'comments') {
+    $t->assign(['ADMIN_EXTENSIONS_JUMPTO_URL' => '']);
 }

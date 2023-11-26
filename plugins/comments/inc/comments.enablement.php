@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Parameters for comments config implantation into modules
  *
@@ -8,16 +9,16 @@
  */
 
 // Options for implantation
-$com_options = array(
-	array(
+$commentsOptions = [
+	[
 		'name' => 'enable_comments',
 		'type' => COT_CONFIG_TYPE_RADIO,
-		'default' => '1'
-	)
-);
+		'default' => '1',
+	],
+];
 
 // Modules list to implant into their root config
-$com_modules_list = array('polls');
+$commentsModulesList = ['polls'];
 
 // Module list to implant into their structure config
-$com_modules_struct_list = array('page');
+$commentsModulesStructList = ['page'];

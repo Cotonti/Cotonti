@@ -71,3 +71,14 @@ if (!$exists) {
         ]
     );
 }
+
+Cot::$db->update(
+    Cot::$db->config,
+    [
+        'config_default' => "<li><a href=\"index.php\">Home</a></li>\n"
+            . "<li><a href=\"index.php?e=forums\">Forums</a></li>\n"
+            . "<li><a href=\"index.php?e=page&c=articles\">Articles</a></li>\n"
+            . "<li><a href=\"index.php?e=search\">Search</a></li>",
+    ],
+    "`config_owner` = 'core' AND `config_cat` = 'menus' AND `config_name` = 'menu1'"
+);

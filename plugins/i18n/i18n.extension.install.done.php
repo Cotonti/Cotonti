@@ -12,12 +12,12 @@ Hooks=extension.install.done
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
- * @var string $name Extension code
+ * @var string $code Extension code
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($name == 'tags') {
+if ($code === 'tags') {
     global $L, $R; // for included file
 
     require_once cot_incfile('i18n', 'plug');

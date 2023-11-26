@@ -780,27 +780,30 @@ switch($a) {
 			$cnt_extp = count($extensions);
 			$cnt_parts = 0;
 
-			$standalone = array();
-			$sql3 = $db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone' OR pl_hook='module'");
-			while ($row3 = $sql3->fetch())
-			{
-				$standalone[$row3['pl_code']] = TRUE;
+			$standalone = [];
+			$sql3 = Cot::$db->query(
+                'SELECT pl_code, pl_module FROM ' . Cot::$db->plugins
+                . " WHERE pl_hook='standalone' OR pl_hook='module'"
+            );
+			while ($row3 = $sql3->fetch()) {
+				$standalone[$row3['pl_code']] = $row3['pl_module']
+                    ? cot_url($row3['pl_code'])
+                    : cot_url('plug', ['e' => $row3['pl_code']]);
 			}
 			$sql3->closeCursor();
 
-			$tools = array();
+			$tools = [];
 			$tool_hook = $type == 'plug' ? 'tools' : 'admin';
 			$sql3 = $db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook'");
-			while ($row3 = $sql3->fetch())
-			{
-				$tools[$row3['pl_code']] = TRUE;
+			while ($row3 = $sql3->fetch()) {
+				$tools[$row3['pl_code']] = true;
 			}
 			$sql3->closeCursor();
 
-			$struct = array();
+			$struct = [];
 			$sql3 = $db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='admin.structure.first'");
 			while ($row3 = $sql3->fetch()) {
-				$struct[$row3['pl_code']] = TRUE;
+				$struct[$row3['pl_code']] = true;
 			}
 			$sql3->closeCursor();
 
@@ -861,15 +864,13 @@ switch($a) {
 
 					$ifthistools = isset($tools[$code]) && $tools[$code];
 					$ent_code = isset($cfgentries[$code]) ? $cfgentries[$code] : 0;
-					$if_plg_standalone = isset($standalone[$code]) && $standalone[$code];
+					$isExtensionStandalone = isset($standalone[$code]) && $standalone[$code];
+
 					$ifstruct = isset($struct[$code]) && $struct[$code];
 
 					if ($type == COT_EXT_TYPE_MODULE) {
-						$jump_url = cot_url($code);
 						$arg = 'mod';
-
 					} else {
-						$jump_url = cot_url('plug', 'e=' . $code);
 						$arg = 'pl';
 					}
 
@@ -903,7 +904,7 @@ switch($a) {
 						'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == COT_EXT_TYPE_PLUGIN ?
                             cot_url('admin', "m=other&p=$code") :
                             cot_url('admin', "m=$code"),
-						'ADMIN_EXTENSIONS_JUMPTO_URL' => $jump_url,
+						'ADMIN_EXTENSIONS_JUMPTO_URL' => isset($standalone[$code]) ? $standalone[$code] : '',
 						'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => cot_url('admin', "m=structure&n=$code"),
 						'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i),
 

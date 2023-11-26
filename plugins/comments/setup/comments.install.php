@@ -12,19 +12,19 @@ defined('COT_CODE') or die('Wrong URL');
 require cot_incfile('comments', 'plug', 'enablement');
 
 // Add options into module configs
-foreach ($com_modules_list as $mod_name)
+foreach ($commentsModulesList as $mod_name)
 {
 	if (cot_extension_installed($mod_name) && !cot_config_implanted($mod_name, 'comments'))
 	{
-		cot_config_implant($mod_name, $com_options, false, 'comments');
+		cot_config_implant($mod_name, $commentsOptions, false, 'comments');
 	}
 }
 
 // Add options into module structure configs
-foreach ($com_modules_struct_list as $mod_name)
+foreach ($commentsModulesStructList as $mod_name)
 {
 	if (cot_extension_installed($mod_name) && !cot_config_implanted($mod_name, 'comments'))
 	{
-		cot_config_implant($mod_name, $com_options, true, 'comments');
+		cot_config_implant($mod_name, $commentsOptions, true, 'comments');
 	}
 }

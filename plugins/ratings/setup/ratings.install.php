@@ -12,19 +12,19 @@ defined('COT_CODE') or die('Wrong URL');
 require cot_incfile('ratings', 'plug', 'enablement');
 
 // Add options into module configs
-foreach ($rat_modules_list as $mod_name)
+foreach ($ratingsModulesList as $mod_name)
 {
 	if (cot_extension_installed($mod_name) && !cot_config_implanted($mod_name, 'ratings'))
 	{
-		cot_config_implant($mod_name, $rat_options, false, 'ratings');
+		cot_config_implant($mod_name, $ratingsOptions, false, 'ratings');
 	}
 }
 
 // Add options into module structure configs
-foreach ($rat_modules_struct_list as $mod_name)
+foreach ($ratingsModulesStructList as $mod_name)
 {
 	if (cot_extension_installed($mod_name) && !cot_config_implanted($mod_name, 'ratings'))
 	{
-		cot_config_implant($mod_name, $rat_options, true, 'ratings');
+		cot_config_implant($mod_name, $ratingsOptions, true, 'ratings');
 	}
 }

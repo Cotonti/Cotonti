@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Parameters for ratings config implantation into modules
  *
@@ -8,16 +9,16 @@
  */
 
 // Options for implantation
-$rat_options = array(
-	array(
+$ratingsOptions = [
+	[
 		'name' => 'enable_ratings',
 		'type' => COT_CONFIG_TYPE_RADIO,
-		'default' => '1'
-	)
-);
+		'default' => '1',
+	],
+];
 
 // Modules list to implant into their root config
-$rat_modules_list = array();
+$ratingsModulesList = [];
 
 // Module list to implant into their structure config
-$rat_modules_struct_list = array('page');
+$ratingsModulesStructList = ['page'];
