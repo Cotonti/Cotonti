@@ -262,12 +262,17 @@ switch($a) {
 
 		$isinstalled = cot_extension_installed($code);
 
-		$sql = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->config .
-            " WHERE config_owner='$type' AND config_cat='$code' AND config_type != " . COT_CONFIG_TYPE_HIDDEN);
-		$totalconfig = $sql->fetchColumn();
+		$sql = Cot::$db->query(
+            'SELECT COUNT(*) FROM ' . Cot::$db->config . ' WHERE config_owner = :type AND config_cat = :code '
+            . 'AND config_type NOT IN (' . COT_CONFIG_TYPE_HIDDEN . ', ' . COT_CONFIG_TYPE_SEPARATOR . ') '
+            . "AND (config_subcat IN ('', '__default') OR config_subcat IS NULL)",
+            ['type' => $type, 'code' => $code]
+        );
+		$totalConfig = $sql->fetchColumn();
 
 		if (count($parts) > 0) {
 			sort($parts);
+
 			/* === Hook - Part1 : Set === */
 			$extp = cot_getextplugins('admin.extensions.details.part.loop');
 			/* ===== */
@@ -532,7 +537,7 @@ switch($a) {
         $params = cot_get_extensionparams($code, $type == COT_EXT_TYPE_MODULE);
 
 		// Universal tags
-		$t->assign(array(
+		$t->assign([
 			'ADMIN_EXTENSIONS_NAME' => htmlspecialchars($params['name']),
 			'ADMIN_EXTENSIONS_TYPE' => $type == COT_EXT_TYPE_MODULE ? Cot::$L['Module'] : Cot::$L['Plugin'],
 			'ADMIN_EXTENSIONS_CODE' => $code,
@@ -547,7 +552,7 @@ switch($a) {
 			'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $tools,
 			'ADMIN_EXTENSIONS_JUMPTO_URL' => $standalone,
 			'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => $struct,
-			'ADMIN_EXTENSIONS_TOTALCONFIG' => $totalconfig,
+			'ADMIN_EXTENSIONS_TOTALCONFIG' => $totalConfig,
 			'ADMIN_EXTENSIONS_INSTALL_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=install"),
 			'ADMIN_EXTENSIONS_UPDATE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=update"),
 			'ADMIN_EXTENSIONS_UNINSTALL_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=uninstall"),
@@ -557,7 +562,7 @@ switch($a) {
 
             // @deprecated For backward compatibility. Will be removed in future releases
             'ADMIN_EXTENSIONS_ICO' => $params['legacyIcon'],
-		));
+		]);
 
 		if ($exists) {
 			// Tags for existing exts
@@ -701,16 +706,19 @@ switch($a) {
 		));
 
 		// Prefetch common data to save SQL queries
-		$totalconfigs = array();
-		foreach ($db->query("SELECT COUNT(*) AS cnt, config_owner, config_cat
-			FROM $db_config WHERE config_type != " . COT_CONFIG_TYPE_HIDDEN . "
-			GROUP BY config_owner, config_cat")->fetchAll() as $row)
-		{
-			$totalconfigs[$row['config_owner']][$row['config_cat']] = (int)$row['cnt'];
-		}
+		$totalConfigs = [];
+        $sql = Cot::$db->query(
+            'SELECT COUNT(*) AS cnt, config_owner, config_cat FROM ' . Cot::$db->config
+            . ' WHERE config_type NOT IN (' . COT_CONFIG_TYPE_HIDDEN . ', ' . COT_CONFIG_TYPE_SEPARATOR . ') '
+            . "AND (config_subcat IN ('', '__default') OR config_subcat IS NULL) "
+            . 'GROUP BY config_owner, config_cat');
 
-		$totalactives = array();
-		$totalinstalleds = array();
+        while ($row = $sql->fetch())    {
+            $totalConfigs[$row['config_owner']][$row['config_cat']] = (int) $row['cnt'];
+        }
+
+		$totalactives = [];
+		$totalinstalleds = [];
 		foreach ($db->query("SELECT SUM(pl_active) AS sum, COUNT(*) AS cnt, pl_code FROM $db_plugins GROUP BY pl_code")->fetchAll() as $row)
 		{
 			$totalactives[$row['pl_code']] = (int)$row['sum'];
@@ -860,7 +868,7 @@ switch($a) {
 						}
 					}
 
-					$totalconfig = !empty($totalconfigs[$type][$code]) ? $totalconfigs[$type][$code] : 0;
+					$totalConfig = !empty($totalConfigs[$type][$code]) ? $totalConfigs[$type][$code] : 0;
 
 					$ifthistools = isset($tools[$code]) && $tools[$code];
 					$ent_code = isset($cfgentries[$code]) ? $cfgentries[$code] : 0;
@@ -892,7 +900,7 @@ switch($a) {
 						'ADMIN_EXTENSIONS_DESCRIPTION' => $params['desc'],
                         'ADMIN_EXTENSIONS_ICON' => $params['icon'],
 						'ADMIN_EXTENSIONS_EDIT_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$code"),
-						'ADMIN_EXTENSIONS_TOTALCONFIG' => $totalconfig,
+						'ADMIN_EXTENSIONS_TOTALCONFIG' => $totalConfig,
 						'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
 						'ADMIN_EXTENSIONS_STATUS' => $status[$part_status],
 						'ADMIN_EXTENSIONS_VERSION' => $info['Version'],

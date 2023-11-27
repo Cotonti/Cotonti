@@ -13,40 +13,40 @@ defined('COT_CODE') or die('Wrong URL');
  * Generic text configuration. Is displayed as textarea. Contains text.
  * Is used by default.
  */
-define('COT_CONFIG_TYPE_TEXT', 0);
+const COT_CONFIG_TYPE_TEXT = 0;
 /**
  * A string, max length is 255 chars. Is displayed as a single line of input.
  * The list of variants is ignored for this type.
  */
-define('COT_CONFIG_TYPE_STRING', 1);
+const COT_CONFIG_TYPE_STRING = 1;
 /**
  * Selection from the list of possible variants. Is displayed as a dropdown.
  */
-define('COT_CONFIG_TYPE_SELECT', 2);
+const COT_CONFIG_TYPE_SELECT = 2;
 /**
  * Radio yes/no selection.
  */
-define('COT_CONFIG_TYPE_RADIO', 3);
+const COT_CONFIG_TYPE_RADIO = 3;
 /**
  * Callback function type
  */
-define('COT_CONFIG_TYPE_CALLBACK', 4);
+const COT_CONFIG_TYPE_CALLBACK = 4;
 /**
  * Hidden config. It is actually a text string, but it is not displayed anywhere
  */
-define('COT_CONFIG_TYPE_HIDDEN', 5);
+const COT_CONFIG_TYPE_HIDDEN = 5;
 /**
  * Visual separator/fieldset
  */
-define('COT_CONFIG_TYPE_SEPARATOR', 6);
+const COT_CONFIG_TYPE_SEPARATOR = 6;
 /**
  * Integer range
  */
-define('COT_CONFIG_TYPE_RANGE', 7);
+const COT_CONFIG_TYPE_RANGE = 7;
 /**
  * Custom type.
  */
-define('COT_CONFIG_TYPE_CUSTOM', 8);
+const COT_CONFIG_TYPE_CUSTOM = 8;
 
 /**
  * Generates a form input for Integer
