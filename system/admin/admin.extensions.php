@@ -716,6 +716,7 @@ switch($a) {
         while ($row = $sql->fetch())    {
             $totalConfigs[$row['config_owner']][$row['config_cat']] = (int) $row['cnt'];
         }
+        $sql->closeCursor();
 
 		$totalactives = [];
 		$totalinstalleds = [];
