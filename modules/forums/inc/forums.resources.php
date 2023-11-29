@@ -17,7 +17,7 @@ $R['forums_icon_posts_new_sticky_locked'] = '<img src="' . Cot::$cfg['icons_dir'
 $R['forums_icon_posts_sticky'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts_sticky.png" alt="'.Cot::$L['forums_sticky'].'" />';
 $R['forums_icon_posts_sticky_locked'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts_sticky_locked.png" alt="'.Cot::$L['forums_announcment'].'" />';
 
-$R['forums_icon_subforum'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/subforum.png" alt="{PHP.L.Subforum}" />';
+$R['forums_icon_subforum'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'] . '/modules/forums/subforum.png" alt="' . Cot::$L['Subforum'] . '" />';
 
 $R['forums_icon_section_activity'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/activity{$secact_num}.png" alt="'.Cot::$L['Activity'].' {$secact_num}" />';
 
