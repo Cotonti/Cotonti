@@ -100,12 +100,12 @@ Cot::$out['keywords'] = empty($qs)
     ? preg_replace("/\W\s/u", "", mb_strtolower($metaTitle))
     : mb_strtolower($qs_tag . ' ' . Cot::$L['tags_Search_tags']);
 
-$t->assign(array(
+$t->assign([
 	'TAGS_ACTION' => cot_url('plug', 'e=tags&a=' . $a),
-	'TAGS_HINT' => $L['tags_Query_hint'],
+	'TAGS_HINT' => Cot::$L['tags_Query_hint'],
 	'TAGS_QUERY' => htmlspecialchars($qs),
-	'TAGS_ORDER' => $tag_order
-));
+	'TAGS_ORDER' => $tag_order,
+]);
 
 if ($a == 'pages' && cot_module_active('page')) {
 	if (empty($qs)) {

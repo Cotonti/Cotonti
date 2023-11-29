@@ -76,7 +76,7 @@ if ($a == 'add') {
 		cot_redirect($r_url);
 
 	} else {
-        $urlParams = array('m' => 'add');
+        $urlParams = ['m' => 'add'];
 	    if (!empty($c)) {
             $urlParams['c'] = $c;
         }
@@ -84,7 +84,7 @@ if ($a == 'add') {
 	}
 }
 
-$rpage = array(
+$rpage = [
     'page_keywords' => '',
     'page_metatitle' => '',
     'page_metadesc' => '',
@@ -96,12 +96,15 @@ $rpage = array(
     'page_url' => '',
     'page_size' => '',
     'page_text' => '',
-);
+];
 
 // Page cloning support
 $clone = cot_import('clone', 'G', 'INT');
 if ($clone > 0) {
-	$rpage = Cot::$db->query("SELECT * FROM ".Cot::$db->pages." WHERE page_id = ?", $clone)->fetch();
+	$rpage = Cot::$db->query('SELECT * FROM ' . Cot::$db->pages . ' WHERE page_id = ?', $clone)->fetch();
+    if (!$rpage) {
+        cot_die_message(404);
+    }
 }
 
 if (empty($rpage['page_cat'])) {
@@ -112,13 +115,15 @@ if (!empty($rpage['page_cat'])) {
     list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
     cot_block(Cot::$usr['auth_write']);
 
-    if (!Cot::$usr['isadmin'] && Cot::$structure['page'][$rpage['page_cat']]['locked']) cot_die_message(602, TRUE);
+    if (!Cot::$usr['isadmin'] && Cot::$structure['page'][$rpage['page_cat']]['locked']) {
+        cot_die_message(602, TRUE);
+    }
 
     Cot::$sys['sublocation'] = Cot::$structure['page'][$rpage['page_cat']]['title'];
-    $mskin = cot_tplfile(array('page', 'add', Cot::$structure['page'][$rpage['page_cat']]['tpl']));
+    $mskin = cot_tplfile(['page', 'add', Cot::$structure['page'][$rpage['page_cat']]['tpl']]);
 
 } else {
-    if(!Cot::$usr['isadmin']) {
+    if (!Cot::$usr['isadmin']) {
         // User can add page to these categories
         $categories = array();
         if (!empty(Cot::$structure['page'])) {
@@ -138,7 +143,7 @@ if (!empty($rpage['page_cat'])) {
     }
 
     Cot::$sys['sublocation'] = Cot::$L['page_addtitle'];
-    $mskin = cot_tplfile(array('page', 'add'));
+    $mskin = cot_tplfile(['page', 'add']);
 }
 
 Cot::$out['subtitle'] = Cot::$L['page_addsubtitle'];

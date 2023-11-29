@@ -22,8 +22,11 @@
 					</tbody>
 				</table>
 			</div>
-			<!-- IF {LIST_TOP_PAGINATION} -->
-			<p class="paging clear"><span>{PHP.L.Page} {LIST_TOP_CURRENTPAGE} {PHP.L.Of} {LIST_TOP_TOTALPAGES}</span>{LIST_TOP_PAGEPREV}{LIST_TOP_PAGINATION}{LIST_TOP_PAGENEXT}</p>
+			<!-- IF {LIST_PAGINATION} -->
+			<p class="paging clear">
+				<span>{PHP.L.Page} {LIST_CURRENT_PAGE} {PHP.L.Of} {LISTCAT_TOTAL_PAGES}</span>
+				{LIST_PREVIOUS_PAGE}{LIST_PAGINATION}{LIST_NEXT_PAGE}
+			</p>
 			<!-- ENDIF -->
 		</div>
 

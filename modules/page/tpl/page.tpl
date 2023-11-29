@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
 <div class="col3-2 first">
 	<div class="block">
-		<h2 class="page">{PAGE_TITLE}</h2>
+		<h2 class="page">{PAGE_BREADCRUMBS}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 		<div class="combox">{PAGE_COMMENTS_COUNT}</div>
 		<h3>{PAGE_SHORTTITLE}</h3>

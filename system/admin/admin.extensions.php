@@ -694,7 +694,7 @@ switch($a) {
 		$sort_urlp = $sort == 'cat' ? '&sort=cat' : '';
 
 		// Filter/sort tags
-		$t->assign(array(
+		$t->assign([
 			'ADMIN_EXTENSIONS_HOOKS_URL' => cot_url('admin', 'm=extensions&a=hooks'),
 			'ADMIN_EXTENSIONS_SORT_ALP_URL' => cot_url('admin', 'm=extensions'.$only_installed_urlp),
 			'ADMIN_EXTENSIONS_SORT_ALP_SEL' => $sort != 'cat',
@@ -702,8 +702,8 @@ switch($a) {
 			'ADMIN_EXTENSIONS_SORT_CAT_SEL' => $sort == 'cat',
 			'ADMIN_EXTENSIONS_ALL_EXTENSIONS_URL' => cot_url('admin', 'm=extensions'.$sort_urlp),
 			'ADMIN_EXTENSIONS_ONLY_INSTALLED_URL' => cot_url('admin', 'm=extensions'.$sort_urlp.$only_installed_toggle),
-			'ADMIN_EXTENSIONS_ONLY_INSTALLED_SEL' => $only_installed
-		));
+			'ADMIN_EXTENSIONS_ONLY_INSTALLED_SEL' => $only_installed,
+		]);
 
 		// Prefetch common data to save SQL queries
 		$totalConfigs = [];

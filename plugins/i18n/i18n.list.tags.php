@@ -23,14 +23,18 @@ if ($i18n_enabled) {
 		$urlparams = (!Cot::$cfg['plugin']['i18n']['omitmain'] || $i18n_locale != Cot::$cfg['defaultlang'])
 			? "c=$c&l=$i18n_locale" : "c=$c";
 
-		$t->assign(array(
-			'LIST_PAGETITLE' => $catpath,
+		$t->assign([
 			'LIST_CATEGORY' => htmlspecialchars($cat_i18n['title']),
 			'LIST_CAT_RSS' => cot_url('rss', $urlparams),
 			'LIST_CATTITLE' => $cat_i18n['title'],
+            'LIST_BREADCRUMBS' => $catpath,
 			'LIST_CATPATH' => $catpath,
-			'LIST_CATDESC' => $cat_i18n['desc']
-		));
+			'LIST_CATDESC' => $cat_i18n['desc'],
+
+            // @deprecated in 0.9.24
+            'LIST_PAGETITLE' => $catpath,
+            // /@deprecated
+		]);
 	}
 
 	// Render language selection

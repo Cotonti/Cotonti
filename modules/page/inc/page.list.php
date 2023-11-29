@@ -158,7 +158,7 @@ $catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved
 $shortpath = $catpatharray;
 array_pop($shortpath);
 $catpath_short = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
-    '' : cot_breadcrumbs($shortpath, Cot::$cfg['homebreadcrumb']);
+    '' : cot_breadcrumbs($shortpath, Cot::$cfg['homebreadcrumb'], false);
 
 $join_columns = isset($join_columns) ? $join_columns : '';
 $join_condition = isset($join_condition) ? $join_condition : '';
@@ -236,33 +236,52 @@ foreach (cot_getextplugins('page.list.main') as $pl) {
 require_once Cot::$cfg['system_dir'] . '/header.php';
 $t = new XTemplate($mskin);
 
-$t->assign(array(
-	'LIST_PAGETITLE' => $catpath,
+$t->assign([
 	'LIST_CATEGORY' => htmlspecialchars($cat['title']),
 	'LIST_CAT' => $c,
 	'LIST_CAT_RSS' => cot_url('rss', "c=$c"),
 	'LIST_CATTITLE' => $cat['title'],
-	'LIST_CATPATH' => $catpath,
-	'LIST_CATSHORTPATH' => $catpath_short,
+
+    'LIST_BREADCRUMBS' => $catpath,
+    'LIST_BREADCRUMBS_SHORT' => $catpath_short,
+    'LIST_CATPATH' => $catpath,
+    'LIST_CATSHORTPATH' => $catpath_short,
+
 	'LIST_CATURL' => cot_url('page', $list_url_path),
 	'LIST_CATDESC' => $cat['desc'],
-	'LIST_CATICON' => empty($cat['icon']) ? '' : cot_rc('img_structure_cat', array(
-			'icon' => $cat['icon'],
-			'title' => htmlspecialchars($cat['title']),
-			'desc' => htmlspecialchars($cat['desc'])
-		)),
+	'LIST_CATICON' => empty($cat['icon'])
+        ? ''
+        : cot_rc(
+            'img_structure_cat',
+            [
+                'icon' => $cat['icon'],
+                'title' => htmlspecialchars($cat['title']),
+                'desc' => htmlspecialchars($cat['desc']),
+		    ]
+        ),
 	'LIST_EXTRATEXT' => isset($extratext) ? $extratext : '',
-	'LIST_TOP_PAGINATION' => $pagenav['main'],
+
+    'LIST_PAGINATION' => $pagenav['main'],
+    'LIST_PREVIOUS_PAGE' => $pagenav['prev'],
+    'LIST_NEXT_PAGE' => $pagenav['next'],
+    'LIST_CURRENT_PAGE' => $pagenav['current'],
+    'LIST_TOTAL_ITEMS' => $totallines,
+    'LIST_MAX_ITEMS_PER_PAGE' => Cot::$cfg['page']['maxrowsperpage'],
+    'LIST_TOTAL_PAGES' => $pagenav['total'],
+
+    // @deprecated in 0.9.24
+    'LIST_PAGETITLE' => $catpath,
+    'LIST_TOP_PAGINATION' => $pagenav['main'],
 	'LIST_TOP_PAGEPREV' => $pagenav['prev'],
 	'LIST_TOP_PAGENEXT' => $pagenav['next'],
 	'LIST_TOP_CURRENTPAGE' => $pagenav['current'],
 	'LIST_TOP_TOTALLINES' => $totallines,
 	'LIST_TOP_MAXPERPAGE' => Cot::$cfg['page']['maxrowsperpage'],
-	'LIST_TOP_TOTALPAGES' => $pagenav['total']
-));
+	'LIST_TOP_TOTALPAGES' => $pagenav['total'],
+    // /@deprecated
+]);
 
-if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated' && $c != 'saved_drafts')
-{
+if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated' && $c != 'saved_drafts') {
 	$t->assign(array(
 		'LIST_SUBMITNEWPAGE' => cot_rc('page_submitnewpage', array('sub_url' => cot_url('page', 'm=add&c='.$c))),
 		'LIST_SUBMITNEWPAGE_URL' => cot_url('page', 'm=add&c='.$c)
@@ -391,16 +410,23 @@ $pagenav_cat = cot_pagenav(
 );
 
 $t->assign([
-    // @deprecated
-	'LISTCAT_PAGNAV' => $pagenav_cat['main'],
-
     'LISTCAT_PAGINATION' => $pagenav_cat['main'],
+    'LISTCAT_PREVIOUS_PAGE' => $pagenav_cat['prev'],
+    'LISTCAT_NEXT_PAGE' => $pagenav_cat['next'],
+    'LISTCAT_CURRENT_PAGE' => $pagenav_cat['current'],
+    'LISTCAT_TOTAL_ITEMS' => count($allsub),
+    'LISTCAT_MAX_ITEMS_PER_PAGE' => Cot::$cfg['page']['maxlistsperpage'],
+    'LISTCAT_TOTAL_PAGES' => $pagenav_cat['total'],
+
+    // @deprecated in 0.9.24
+    'LISTCAT_PAGNAV' => $pagenav_cat['main'],
     'LISTCAT_PAGEPREV' => $pagenav_cat['prev'],
     'LISTCAT_PAGENEXT' => $pagenav_cat['next'],
     'LISTCAT_CURRENTPAGE' => $pagenav_cat['current'],
     'LISTCAT_TOTALLINES' => count($allsub),
     'LISTCAT_MAXPERPAGE' => Cot::$cfg['page']['maxlistsperpage'],
-    'LISTCAT_TOTALPAGES' => $pagenav_cat['total']
+    'LISTCAT_TOTALPAGES' => $pagenav_cat['total'],
+    // /@deprecated
 ]);
 
 $jj = 0;

@@ -10,8 +10,8 @@
 		<!-- END: LIST_ROWCAT -->
 		<!-- IF {LISTCAT_PAGINATION} -->
 		<p class="paging clear">
-			<span>{PHP.L.Page} {LISTCAT_CURRENTPAGE} {PHP.L.Of} {LISTCAT_TOTALPAGES}</span>
-			{LISTCAT_PAGEPREV}{LISTCAT_PAGINATION}{LISTCAT_PAGENEXT}
+			<span>{PHP.L.Page} {LISTCAT_CURRENT_PAGE} {PHP.L.Of} {LISTCAT_TOTAL_PAGES}</span>
+			{LISTCAT_PREVIOUS_PAGE}{LISTCAT_PAGINATION}{LISTCAT_NEXT_PAGE}
 		</p>
 		<!-- ENDIF -->
 
@@ -25,11 +25,18 @@
 				<!-- IF {LIST_ROW_TEXT_IS_CUT} -->{LIST_ROW_MORE}<!-- ENDIF -->
 			</div>
 		<!-- ENDIF -->
-		<!-- IF {PHP.usr.isadmin} --><p class="small marginbottom10">{LIST_ROW_ADMIN} ({LIST_ROW_COUNT})</p><!-- ENDIF -->
+		<p class="small marginbottom10">
+			{LIST_ROW_ADMIN_CLONE}
+			<!-- IF {LIST_ROW_ADMIN} -->{LIST_ROW_ADMIN} {LIST_ROW_ADMIN_DELETE} ({LIST_ROW_COUNT})<!-- ENDIF -->
+		</p>
+
 		<!-- END: LIST_ROW -->
 	</div>
-	<!-- IF {LIST_TOP_PAGINATION} -->
-	<p class="paging clear"><span>{PHP.L.Page} {LIST_TOP_CURRENTPAGE} {PHP.L.Of} {LIST_TOP_TOTALPAGES}</span>{LIST_TOP_PAGEPREV}{LIST_TOP_PAGINATION}{LIST_TOP_PAGENEXT}</p>
+	<!-- IF {LIST_PAGINATION} -->
+	<p class="paging clear">
+		<span>{PHP.L.Page} {LIST_CURRENT_PAGE} {PHP.L.Of} {LIST_TOTAL_PAGES}</span>
+		{LIST_PREVIOUS_PAGE}{LIST_PAGINATION}{LIST_NEXT_PAGE}
+	</p>
 	<!-- ENDIF -->
 </div>
 

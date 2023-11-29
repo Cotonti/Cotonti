@@ -144,7 +144,7 @@ function cot_generate_pagetags(
 		$catpath = cot_breadcrumbs($pagepath, $pagepath_home, false);
         $page_data['page_pageurl'] = cot_page_url($page_data);
 		$page_link[] = [$page_data['page_pageurl'], $page_data['page_title']];
-		$page_data['page_fulltitle'] = cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home);
+		$breadcrumbs = cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home);
 		if (!empty($page_data['page_url']) && $page_data['page_file']) {
 			$dotpos = mb_strrpos($page_data['page_url'], ".") + 1;
 			$type = mb_strtolower(mb_substr($page_data['page_url'], $dotpos, 5));
@@ -194,7 +194,7 @@ function cot_generate_pagetags(
 
         $haveFile = Cot::$L['No'];
         $page_data['page_file'] = (int) $page_data['page_file'];
-        if($page_data['page_file'] == 1) {
+        if ($page_data['page_file'] == 1) {
             $haveFile = Cot::$L['Yes'];
         } elseif ($page_data['page_file'] == 2) {
             $haveFile = Cot::$L['Members_download'];
@@ -208,11 +208,12 @@ function cot_generate_pagetags(
         $temp_array = array(
 			'URL' => $page_data['page_pageurl'],
 			'ID' => $page_data['page_id'],
-			'TITLE' => $page_data['page_fulltitle'],
+			'TITLE' => $breadcrumbs,
+            'BREADCRUMBS' => $breadcrumbs,
 			'ALIAS' => $page_data['page_alias'],
 			'STATE' => $page_data['page_state'],
 			'STATUS' => $page_data['page_status'],
-			'LOCALSTATUS' => $L['page_status_'.$page_data['page_status']],
+			'LOCALSTATUS' => $L['page_status_' . $page_data['page_status']],
 			'SHORTTITLE' => htmlspecialchars($page_data['page_title'], ENT_COMPAT, 'UTF-8', false),
 			'CAT' => $page_data['page_cat'],
 			'CATURL' => $cat_url,
@@ -261,9 +262,12 @@ function cot_generate_pagetags(
 			'FILE_COUNTTIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
 			'FILE_NAME' => !empty($page_data['page_url']) ? basename($page_data['page_url']) : '',
 			'COUNT' => $page_data['page_count'],
-                'ADMIN' => $admin_rights ? cot_rc('list_row_admin', array('unvalidate_url' => $unvalidate_url, 'edit_url' => $edit_url)) : '',
-			'NOTAVAILABLE' => ($page_data['page_begin'] > Cot::$sys['now']) ?
-                Cot::$L['page_notavailable'] . cot_build_timegap(Cot::$sys['now'], $page_data['page_begin']) : ''
+            'ADMIN' => $admin_rights
+                ? cot_rc('list_row_admin', ['unvalidate_url' => $unvalidate_url, 'edit_url' => $edit_url])
+                : '',
+			'NOTAVAILABLE' => ($page_data['page_begin'] > Cot::$sys['now'])
+                ? Cot::$L['page_notavailable'] . cot_build_timegap(Cot::$sys['now'], $page_data['page_begin'])
+                : '',
 		);
 
 		// Admin tags
@@ -280,22 +284,19 @@ function cot_generate_pagetags(
 				$validate_confirm_url : $unvalidate_confirm_url;
 			$temp_array['ADMIN_DELETE'] = cot_rc_link($delete_confirm_url, $L['Delete'], 'class="confirmLink"');
 			$temp_array['ADMIN_DELETE_URL'] = $delete_confirm_url;
-		}
-		else if ($usr['id'] == $page_data['page_ownerid'])
-		{
+		} elseif ($usr['id'] == $page_data['page_ownerid']) {
 			$temp_array['ADMIN_EDIT'] = cot_rc_link($edit_url, $L['Edit']);
 			$temp_array['ADMIN_EDIT_URL'] = $edit_url;
 		}
 
-		if (cot_auth('page', 'any', 'W'))
-		{
+		if (cot_auth('page', 'any', 'W')) {
 			$clone_url = cot_url('page', "m=add&c={$page_data['page_cat']}&clone={$page_data['page_id']}");
 			$temp_array['ADMIN_CLONE'] = cot_rc_link($clone_url, $L['page_clone']);
 			$temp_array['ADMIN_CLONE_URL'] = $clone_url;
 		}
 
 		// Extrafields
-        if(!empty(Cot::$extrafields[Cot::$db->pages])) {
+        if (!empty(Cot::$extrafields[Cot::$db->pages])) {
             foreach (Cot::$extrafields[Cot::$db->pages] as $exfld) {
 				$tag = mb_strtoupper($exfld['field_name']);
                 $exfld_title = cot_extrafield_title($exfld, 'page_');
@@ -327,8 +328,7 @@ function cot_generate_pagetags(
 		}
 
 		/* === Hook === */
-		foreach ($extp_main as $pl)
-		{
+		foreach ($extp_main as $pl) {
 			include $pl;
 		}
 		/* ===== */
