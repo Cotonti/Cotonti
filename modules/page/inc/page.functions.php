@@ -1027,11 +1027,22 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
         'total' => 1,
     );
 
-	if(!empty($pagination)) {
+	if (!empty($pagination)) {
 		$pagenav = cot_pagenav($url_area, $url_params, $d, $totalitems, $count, $pagination);
 	}
 
-	$t->assign(array(
+	$t->assign([
+        'PAGE_PAGINATION' => $pagenav['main'],
+        'PAGE_PREVIOUS_PAGE' => $pagenav['prev'],
+        'PAGE_NEXT_PAGE' => $pagenav['next'],
+        'PAGE_FIRST_PAGE' => isset($pagenav['first']) ? $pagenav['first'] : '',
+        'PAGE_LAST_PAGE' => $pagenav['last'],
+        'PAGE_CURRENT_PAGE' => $pagenav['current'],
+        'PAGE_TOTAL_ITEMS' => $totalitems,
+        'PAGE_MAX_ITEMS_PER_PAGE' => $count,
+        'PAGE_TOTAL_PAGES' => $pagenav['total'],
+
+        // @deprecated in 0.9.24
 		'PAGE_TOP_PAGINATION' => $pagenav['main'],
 		'PAGE_TOP_PAGEPREV' => $pagenav['prev'],
 		'PAGE_TOP_PAGENEXT' => $pagenav['next'],
@@ -1040,8 +1051,9 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
 		'PAGE_TOP_CURRENTPAGE' => $pagenav['current'],
 		'PAGE_TOP_TOTALLINES' => $totalitems,
 		'PAGE_TOP_MAXPERPAGE' => $count,
-		'PAGE_TOP_TOTALPAGES' => $pagenav['total']
-	));
+		'PAGE_TOP_TOTALPAGES' => $pagenav['total'],
+        // /@deprecated
+	]);
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.enum.tags') as $pl)
