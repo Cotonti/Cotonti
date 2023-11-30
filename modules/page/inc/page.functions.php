@@ -200,48 +200,63 @@ function cot_generate_pagetags(
             $haveFile = Cot::$L['Members_download'];
         }
 
-        $catTitle = '';
-        if (isset($structure['page'][$page_data['page_cat']]['title'])) {
-            $catTitle = htmlspecialchars($structure['page'][$page_data['page_cat']]['title']);
-        }
-
-        $temp_array = array(
+        $catTitle = isset($structure['page'][$page_data['page_cat']]['title'])
+            ? htmlspecialchars($structure['page'][$page_data['page_cat']]['title'])
+            : '';
+        $catDescription = isset($structure['page'][$page_data['page_cat']]['desc'])
+            ? $structure['page'][$page_data['page_cat']]['desc']
+            : '';
+        $temp_array = [
 			'URL' => $page_data['page_pageurl'],
 			'ID' => $page_data['page_id'],
-			'TITLE' => $breadcrumbs,
+			'TITLE' => htmlspecialchars($page_data['page_title'], ENT_COMPAT, 'UTF-8', false),
             'BREADCRUMBS' => $breadcrumbs,
 			'ALIAS' => $page_data['page_alias'],
 			'STATE' => $page_data['page_state'],
 			'STATUS' => $page_data['page_status'],
-			'LOCALSTATUS' => $L['page_status_' . $page_data['page_status']],
-			'SHORTTITLE' => htmlspecialchars($page_data['page_title'], ENT_COMPAT, 'UTF-8', false),
+			'LOCAL_STATUS' => $L['page_status_' . $page_data['page_status']],
 			'CAT' => $page_data['page_cat'],
-			'CATURL' => $cat_url,
-			'CATTITLE' => $catTitle,
-			'CATPATH' => $catpath,
-			'CATPATH_SHORT' => cot_rc_link($cat_url, $catTitle),
-			'CATDESC' => (isset($structure['page'][$page_data['page_cat']]['desc'])
-                && $structure['page'][$page_data['page_cat']]['desc'] != '') ?
-                htmlspecialchars($structure['page'][$page_data['page_cat']]['desc']) : '',
-			'CATICON' => isset($structure['page'][$page_data['page_cat']]['icon']) ?
-                $structure['page'][$page_data['page_cat']]['icon'] : '',
-			'KEYWORDS' => (isset($page_data['page_keywords']) && $page_data['page_keywords'] != '') ?
-                htmlspecialchars($page_data['page_keywords']) : '',
-			'DESC' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
-                htmlspecialchars($page_data['page_desc']) : '',
+			'CAT_URL' => $cat_url,
+			'CAT_TITLE' => $catTitle,
+			'CAT_PATH' => $catpath,
+			'CAT_PATH_SHORT' => cot_rc_link($cat_url, $catTitle),
+			'CAT_DESCRIPTION' => $catDescription,
+			'CAT_ICON' => !empty($structure['page'][$page_data['page_cat']]['icon'])
+                ? cot_rc(
+                    'img_structure_cat',
+                    [
+                        'icon' => $structure['page'][$page_data['page_cat']]['icon'],
+                        'title' => $catTitle,
+                        'desc' => htmlspecialchars($catDescription),
+                    ]
+                )
+                : '',
+            'CAT_ICON_RAW' => isset($structure['page'][$page_data['page_cat']]['icon'])
+                ? $structure['page'][$page_data['page_cat']]['icon']
+                : '',
+			'KEYWORDS' => (isset($page_data['page_keywords']) && $page_data['page_keywords'] != '')
+                ? htmlspecialchars($page_data['page_keywords'])
+                : '',
+			'DESCRIPTION' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '')
+                ? htmlspecialchars($page_data['page_desc'])
+                : '',
 			'TEXT' => $text,
 			'TEXT_CUT' => $text_cut,
 			'TEXT_IS_CUT' => $cutted,
-			'DESC_OR_TEXT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
-                htmlspecialchars($page_data['page_desc']) : $text,
-			'DESC_OR_TEXT_CUT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
-                htmlspecialchars($page_data['page_desc']) : $text_cut,
-			'MORE' => ($cutted) ? cot_rc('list_more', array('page_url' => $page_data['page_pageurl'])) : '',
-			'AUTHOR' => (isset($page_data['page_author']) && $page_data['page_author'] != '') ?
-                htmlspecialchars($page_data['page_author']) : '',
-			'OWNERID' => $page_data['page_ownerid'],
-			'OWNERNAME' => (isset($page_data['user_name']) && $page_data['user_name'] != '') ?
-                htmlspecialchars($page_data['user_name']) : '',
+			'DESCRIPTION_OR_TEXT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '')
+                ? htmlspecialchars($page_data['page_desc'])
+                : $text,
+			'DESCRIPTION_OR_TEXT_CUT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '')
+                ? htmlspecialchars($page_data['page_desc'])
+                : $text_cut,
+			'MORE' => ($cutted) ? cot_rc('list_more', ['page_url' => $page_data['page_pageurl']]) : '',
+			'AUTHOR' => (isset($page_data['page_author']) && $page_data['page_author'] != '')
+                ? htmlspecialchars($page_data['page_author'])
+                : '',
+			'OWNER_ID' => $page_data['page_ownerid'],
+			'OWNER_NAME' => (isset($page_data['user_name']) && $page_data['user_name'] != '')
+                ? htmlspecialchars($page_data['user_name'])
+                : '',
 			'DATE' => cot_date($date_format, $page_data['page_date']),
 			'BEGIN' => cot_date($date_format, $page_data['page_begin']),
 			'EXPIRE' => cot_date($date_format, $page_data['page_expire']),
@@ -258,17 +273,45 @@ function cot_generate_pagetags(
 			'FILE_SIZE_BYTES' => $page_data['page_size'],
 			'FILE_SIZE_READABLE' => cot_build_filesize($page_data['page_size'], 1),
 			'FILE_ICON' => $page_data['page_fileicon'],
-			'FILE_COUNT' => $page_data['page_filecount'],
-			'FILE_COUNTTIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
+			'FILE_DOWNLOADS' => $page_data['page_filecount'],
+			'FILE_DOWNLOAD_TIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
 			'FILE_NAME' => !empty($page_data['page_url']) ? basename($page_data['page_url']) : '',
 			'COUNT' => $page_data['page_count'],
             'ADMIN' => $admin_rights
                 ? cot_rc('list_row_admin', ['unvalidate_url' => $unvalidate_url, 'edit_url' => $edit_url])
                 : '',
-			'NOTAVAILABLE' => ($page_data['page_begin'] > Cot::$sys['now'])
+			'NOT_AVAILABLE' => ($page_data['page_begin'] > Cot::$sys['now'])
                 ? Cot::$L['page_notavailable'] . cot_build_timegap(Cot::$sys['now'], $page_data['page_begin'])
                 : '',
-		);
+
+            // @deprecated in 0.9.24
+            'SHORTTITLE' => htmlspecialchars($page_data['page_title'], ENT_COMPAT, 'UTF-8', false),
+            'LOCALSTATUS' => $L['page_status_' . $page_data['page_status']],
+            'CATURL' => $cat_url,
+            'CATTITLE' => $catTitle,
+            'CATPATH' => $catpath,
+            'CATPATH_SHORT' => cot_rc_link($cat_url, $catTitle),
+            'CATDESC' => (isset($structure['page'][$page_data['page_cat']]['desc'])
+                && $structure['page'][$page_data['page_cat']]['desc'] != '') ?
+                htmlspecialchars($structure['page'][$page_data['page_cat']]['desc']) : '',
+            'CATICON' => isset($structure['page'][$page_data['page_cat']]['icon']) ?
+                $structure['page'][$page_data['page_cat']]['icon'] : '',
+            'OWNERID' => $page_data['page_ownerid'],
+            'OWNERNAME' => (isset($page_data['user_name']) && $page_data['user_name'] != '') ?
+                htmlspecialchars($page_data['user_name']) : '',
+            'DESC' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
+                htmlspecialchars($page_data['page_desc']) : '',
+            'DESC_OR_TEXT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
+                htmlspecialchars($page_data['page_desc']) : $text,
+            'DESC_OR_TEXT_CUT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
+                htmlspecialchars($page_data['page_desc']) : $text_cut,
+            'FILE_COUNT' => $page_data['page_filecount'],
+            'FILE_COUNTTIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
+            'NOTAVAILABLE' => ($page_data['page_begin'] > Cot::$sys['now'])
+                ? Cot::$L['page_notavailable'] . cot_build_timegap(Cot::$sys['now'], $page_data['page_begin'])
+                : '',
+            // /@deprecated
+		];
 
 		// Admin tags
 		if ($admin_rights) {
@@ -1038,8 +1081,8 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
         'PAGE_FIRST_PAGE' => isset($pagenav['first']) ? $pagenav['first'] : '',
         'PAGE_LAST_PAGE' => $pagenav['last'],
         'PAGE_CURRENT_PAGE' => $pagenav['current'],
-        'PAGE_TOTAL_ITEMS' => $totalitems,
-        'PAGE_MAX_ITEMS_PER_PAGE' => $count,
+        'PAGE_TOTAL_ENTRIES' => $totalitems,
+        'PAGE_ENTRIES_PER_PAGE' => $count,
         'PAGE_TOTAL_PAGES' => $pagenav['total'],
 
         // @deprecated in 0.9.24

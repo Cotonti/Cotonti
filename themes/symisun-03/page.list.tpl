@@ -2,9 +2,9 @@
 <div id="content">
     <div class="padding20">
         <div id="left">
-            <h1>{LIST_CATTITLE}</h1>
-            <p class="details">{LIST_CATDESC}</p>
-            <!-- IF {LIST_TOP_TOTALLINES} != 0 -->
+            <h1>{LIST_CAT_TITLE}</h1>
+            <p class="details">{LIST_CAT_DESCRIPTION}</p>
+            <!-- IF {LIST_TOTAL_ENTRIES} != 0 -->
             <p> {PHP.themelang.list.sort} <strong>{PHP.L.Title}</strong>
                 <a href="index.php?e=page&c={PHP.c}&amp;s=title&amp;w=desc&amp;o={PHP.o}&amp;p={PHP.p}"><img
                             src="themes/{PHP.theme}/img/system/arrow-up.gif" alt=""/></a>
@@ -25,19 +25,19 @@
 			<!-- IF {PHP.usr.id} == 0 -->
 			<a href="{PHP|cot_url('login')}">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.lis_submitnew}</a>
 			<!-- ELSE -->
-			{LIST_SUBMITNEWPAGE}
+			{LIST_SUBMIT_NEW_PAGE}
 			<!-- ENDIF -->
             <!-- ENDIF -->
 
-            <!-- BEGIN: LIST_ROWCAT -->
-            <p><strong><a href="{LIST_ROWCAT_URL}">{LIST_ROWCAT_TITLE}...</a></strong><br/>
-                <!-- IF {LIST_ROWCAT_DESC} -->
-                <span class="desc">{LIST_ROWCAT_DESC}</span>
+            <!-- BEGIN: LIST_CAT_ROW -->
+            <p><strong><a href="{LIST_CAT_ROW_URL}">{LIST_CAT_ROW_TITLE}...</a></strong><br/>
+                <!-- IF {LIST_CAT_ROW_DESCRIPTION} -->
+                <span class="desc">{LIST_CAT_ROW_DESCRIPTION}</span>
                 <!-- ENDIF -->
             </p>
-            <!-- END: LIST_ROWCAT -->
-            <!-- IF {LISTCAT_PAGINATION} -->
-            <div class="pagnav">{LISTCAT_PREVIOUS_PAGE}{LISTCAT_PAGINATION}{LISTCAT_NEXT_PAGE}</div>
+            <!-- END: LIST_CAT_ROW -->
+            <!-- IF {LIST_CAT_PAGINATION} -->
+            <div class="pagnav">{LIST_CAT_PREVIOUS_PAGE}{LIST_CAT_PAGINATION}{LIST_CAT_NEXT_PAGE}</div>
             <!-- ENDIF -->
             <div class="secrow">&nbsp;</div>
 
@@ -70,21 +70,21 @@
             <h3><a href="{PHP|cot_url('login')}">{PHP.L.Login} {PHP.themelang.forumspost.to} {PHP.L.page_addtitle}</a>
             </h3>
             <!-- ELSE -->
-            <h3>{LIST_SUBMITNEWPAGE}</h3>
+            <h3>{LIST_SUBMIT_NEW_PAGE}</h3>
             <!-- ENDIF -->
             <h3><a href="{LIST_CAT_RSS}">{PHP.themelang.list.rss}</a></h3>
             <!-- IF {LIST_TAG_CLOUD} != {PHP.L.tags_Tag_cloud_none} -->
             <h3>{PHP.L.Tags}</h3>
             <div class="box padding15"> {LIST_TAG_CLOUD} </div>
             <!-- ENDIF -->
-            <!-- IF {LIST_TOTAL_ITEMS} != 0 -->
+            <!-- IF {LIST_TOTAL_ENTRIES} != 0 -->
             <h3>{PHP.L.Category} {PHP.L.Entries}</h3>
             <div class="box padding15">
                 <!-- IF {LIST_PAGINATION}-->
                 {PHP.L.Page}: <strong>{LIST_CURRENT_PAGE}/{LIST_TOTAL_PAGES}</strong><br/>
                 <!-- ENDIF -->
-                {PHP.L.page_linesperpage}: <strong>{LIST_MAX_ITEMS_PER_PAGE}</strong><br/>
-                {PHP.L.page_linesinthissection}: <strong>{LIST_TOTAL_ITEMS}</strong>
+                {PHP.L.page_linesperpage}: <strong>{LIST_ENTRIES_PER_PAGE}</strong><br/>
+                {PHP.L.page_linesinthissection}: <strong>{LIST_TOTAL_ENTRIES}</strong>
             </div>
             <!-- ENDIF -->
             &nbsp;

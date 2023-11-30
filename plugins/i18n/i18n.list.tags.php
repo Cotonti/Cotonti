@@ -12,6 +12,8 @@ Tags=page.list.tpl:{I18N_LANG_ROW_URL},{I18N_LANG_ROW_CODE},{I18N_LANG_ROW_TITLE
  * @package I18n
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var XTemplate $t
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -24,14 +26,17 @@ if ($i18n_enabled) {
 			? "c=$c&l=$i18n_locale" : "c=$c";
 
 		$t->assign([
-			'LIST_CATEGORY' => htmlspecialchars($cat_i18n['title']),
+			'LIST_CAT_TITLE' => htmlspecialchars($cat_i18n['title']),
 			'LIST_CAT_RSS' => cot_url('rss', $urlparams),
-			'LIST_CATTITLE' => $cat_i18n['title'],
             'LIST_BREADCRUMBS' => $catpath,
-			'LIST_CATPATH' => $catpath,
-			'LIST_CATDESC' => $cat_i18n['desc'],
+			'LIST_CAT_PATH' => $catpath,
+			'LIST_CAT_DESCRIPTION' => $cat_i18n['desc'],
 
             // @deprecated in 0.9.24
+            'LIST_CATEGORY' => htmlspecialchars($cat_i18n['title']),
+            'LIST_CATTITLE' => $cat_i18n['title'],
+            'LIST_CATPATH' => $catpath,
+            'LIST_CATDESC' => $cat_i18n['desc'],
             'LIST_PAGETITLE' => $catpath,
             // /@deprecated
 		]);

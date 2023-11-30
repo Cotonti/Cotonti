@@ -1,17 +1,17 @@
 <!-- BEGIN: MAIN -->
 <div class="col3-2 first">
 	<div class="block">
-		<h2 class="folder">{LIST_CATTITLE}</h2>
-		<!-- BEGIN: LIST_ROWCAT -->
-		<h3><a href="{LIST_ROWCAT_URL}" title="{LIST_ROWCAT_TITLE}">{LIST_ROWCAT_TITLE}</a> ({LIST_ROWCAT_COUNT})</h3>
-		<!-- IF {LIST_ROWCAT_DESC} -->
-		<p class="small">{LIST_ROWCAT_DESC}</p>
+		<h2 class="folder">{LIST_BREADCRUMBS}</h2>
+		<!-- BEGIN: LIST_CAT_ROW -->
+		<h3><a href="{LIST_CAT_ROW_URL}" title="{LIST_CAT_ROW_TITLE}">{LIST_CAT_ROW_TITLE}</a> ({LIST_CAT_ROW_COUNT})</h3>
+		<!-- IF {LIST_CAT_ROW_DESCRIPTION} -->
+		<p class="small">{LIST_CAT_ROW_DESCRIPTION}</p>
 		<!-- ENDIF -->
-		<!-- END: LIST_ROWCAT -->
-		<!-- IF {LISTCAT_PAGINATION} -->
+		<!-- END: LIST_CAT_ROW -->
+		<!-- IF {LIST_CAT_PAGINATION} -->
 		<p class="paging clear">
-			<span>{PHP.L.Page} {LISTCAT_CURRENT_PAGE} {PHP.L.Of} {LISTCAT_TOTAL_PAGES}</span>
-			{LISTCAT_PREVIOUS_PAGE}{LISTCAT_PAGINATION}{LISTCAT_NEXT_PAGE}
+			<span>{PHP.L.Page} {LIST_CAT_CURRENT_PAGE} {PHP.L.Of} {LIST_CAT_TOTAL_PAGES}</span>
+			{LIST_CAT_PREVIOUS_PAGE}{LIST_CAT_PAGINATION}{LIST_CAT_NEXT_PAGE}
 		</p>
 		<!-- ENDIF -->
 
@@ -48,7 +48,7 @@
 			<!-- IF {PHP.usr.isadmin} -->
 			<li><a href="{PHP|cot_url('admin')}">{PHP.L.Adminpanel}</a></li>
 			<!-- ENDIF -->
-			<li>{LIST_SUBMITNEWPAGE}</li>
+			<li>{LIST_SUBMIT_NEW_PAGE}</li>
 		</ul>
 	</div>
 	<!-- ENDIF -->

@@ -26,6 +26,7 @@
 
 <hr class="clear divider" />
 <!-- END: PAGE_ROW -->
-
+<!-- IF {PAGE_PAGINATION} -->
 <p class="paging">{PAGE_PREVIOUS_PAGE}{PAGE_PAGINATION}{PAGE_NEXT_PAGE}</p>
+<!-- ENDIF -->
 <!-- END: MAIN -->

@@ -32,8 +32,8 @@ $extra_whitelist = [
 		'type' => 'system',
 		'code' => 'structure',
 		'tags' => [
-			'page.list.tpl' => '{LIST_ROWCAT_XXXXX}, {LIST_CAT_XXXXX}',
-			'page.list.group.tpl' => '{LIST_ROWCAT_XXXXX}, {LIST_CAT_XXXXX}',
+			'page.list.tpl' => '{LIST_CAT_ROW_XXXXX}, {LIST_CAT_XXXXX}',
+			'page.list.group.tpl' => '{LIST_CAT_ROW_XXXXX}, {LIST_CAT_XXXXX}',
 			'page.tpl' => '{PAGE_CAT_XXXXX}, {PAGE_CAT_XXXXX_TITLE}',
 			'admin.structure.inc.tpl' => '{ADMIN_STRUCTURE_XXXXX}, {ADMIN_STRUCTURE_XXXXX_TITLE},{ADMIN_STRUCTURE_FORMADD_XXXXX}, {ADMIN_STRUCTURE_FORMADD_XXXXX_TITLE}'
 		]
