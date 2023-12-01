@@ -4,8 +4,8 @@
 		<h2 class="page">{PAGE_BREADCRUMBS}</h2>
 		{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 		<div class="combox">{PAGE_COMMENTS_COUNT}</div>
-		<h3>{PAGE_SHORTTITLE}</h3>
-		<!-- IF {PAGE_DESC} --><p class="small">{PAGE_DESC}</p><!-- ENDIF -->
+		<h3>{PAGE_TITLE}</h3>
+		<!-- IF {PAGE_DESCRIPTION} --><p class="small">{PAGE_DESCRIPTION}</p><!-- ENDIF -->
 		<div class="clear desc">
 			<p class="column">
 				<strong>{PHP.L.Tags}:</strong>
@@ -17,20 +17,20 @@
 				<!-- END: PAGE_NO_TAGS -->
 			</p>
 			<p class="column floatright">
-				<strong>{PHP.L.Filedunder}:</strong>{PAGE_CATPATH}
+				<strong>{PHP.L.Filedunder}:</strong>{PAGE_CAT_PATH}
 			</p>
 		</div>
 		<div class="clear textbox">{PAGE_TEXT}</div>
 		<!-- BEGIN: PAGE_FILE -->
 		<div class="download">
 			<!-- BEGIN: MEMBERSONLY -->
-			<p>{PAGE_SHORTTITLE}</p>
+			<p>{PAGE_TITLE}</p>
 			<!-- END: MEMBERSONLY -->
 			<!-- BEGIN: DOWNLOAD -->
-			<p>{PHP.L.Download}: <a class="strong" href="{PAGE_FILE_URL}">{PAGE_SHORTTITLE}</a></p>
+			<p>{PHP.L.Download}: <a class="strong" href="{PAGE_FILE_URL}">{PAGE_TITLE}</a></p>
 			<!-- END: DOWNLOAD -->
 			<p>{PHP.L.Filesize}, kB: {PAGE_FILE_SIZE}{PHP.L.kb}</p>
-			<p>{PHP.L.Downloaded}: {PAGE_FILE_COUNT}</p>
+			<p>{PHP.L.Downloaded}: {FILE_DOWNLOAD_TIMES}</p>
 		</div>
 		<!-- END: PAGE_FILE -->
 	</div>

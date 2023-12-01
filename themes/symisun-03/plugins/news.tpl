@@ -3,8 +3,8 @@
 <h4 class="none">{PHP.L.News}</h4>
 
 <!-- BEGIN: PAGE_ROW -->
-<h2><a href="{PAGE_ROW_URL}">{PAGE_ROW_SHORTTITLE}</a></h2>
-<p class="details">{PAGE_ROW_OWNER}, {PAGE_ROW_DATE} in {PAGE_ROW_CATPATH}</p>
+<h2><a href="{PAGE_ROW_URL}">{PAGE_ROW_TITLE}</a></h2>
+<p class="details">{PAGE_ROW_OWNER}, {PAGE_ROW_DATE} in {PAGE_ROW_CAT_PATH}</p>
 <div>{PAGE_ROW_TEXT_CUT}</div>
 <div class="clear">&nbsp;</div>
 <!-- IF {PAGE_ROW_TEXT_IS_CUT} --><a href="{PAGE_ROW_URL}" class="more"><span>{PHP.L.ReadMore}</span></a> &nbsp;<!-- ENDIF --> 
@@ -12,6 +12,7 @@
 <div class="hr"><hr />&nbsp;</div>
 <!-- END: PAGE_ROW -->
 
-<div class="pagnav">{PAGE_PAGEPREV} {PAGE_PAGNAV} {PAGE_PAGENEXT}</div>
-
+<!-- IF {PAGE_PAGINATION} -->
+<div class="pagnav">{PAGE_PREVIOUS_PAGE} {PAGE_PAGINATION} {PAGE_NEXT_PAGE}</div>
+<!-- ENDIF -->
 <!-- END: NEWS -->

@@ -176,7 +176,7 @@ $pageadd_array = array(
 	'PAGEADD_FORM_DESC' => cot_textarea('rpagedesc', $rpage['page_desc'], 2, 64, array('maxlength' => '255')),
 	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('maxlength' => '100')),
 	'PAGEADD_FORM_OWNER' => cot_build_user(Cot::$usr['id'], Cot::$usr['name']),
-	'PAGEADD_FORM_OWNERID' => Cot::$usr['id'],
+	'PAGEADD_FORM_OWNER_ID' => Cot::$usr['id'],
 	'PAGEADD_FORM_DATE' => cot_selectbox_date(Cot::$sys['now'], 'long', 'rpagedate'),
 	'PAGEADD_FORM_BEGIN' => cot_selectbox_date(Cot::$sys['now'], 'long', 'rpagebegin'),
 	'PAGEADD_FORM_EXPIRE' => cot_selectbox_date(0, 'long', 'rpageexpire'),
@@ -190,7 +190,11 @@ $pageadd_array = array(
 	'PAGEADD_FORM_URL' => cot_inputbox('text', 'rpageurl', $rpage['page_url'], array('maxlength' => '255')),
 	'PAGEADD_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $rpage['page_size'], array('maxlength' => '255')),
 	'PAGEADD_FORM_TEXT' => cot_textarea('rpagetext', $rpage['page_text'], 24, 120, '', 'input_textarea_editor'),
-	'PAGEADD_FORM_PARSER' => cot_selectbox(Cot::$cfg['page']['parser'], 'rpageparser', $parser_list, $parser_list, false)
+	'PAGEADD_FORM_PARSER' => cot_selectbox(Cot::$cfg['page']['parser'], 'rpageparser', $parser_list, $parser_list, false),
+
+    // @deprecated in 0.9.24
+    'PAGEADD_FORM_OWNERID' => Cot::$usr['id'],
+    // /@deprecated
 );
 
 $t->assign($pageadd_array);

@@ -256,7 +256,7 @@ $t->assign([
     'LIST_CAT_URL' => cot_url('page', $list_url_path),
     'LIST_CAT_DESCRIPTION' => $cat['desc'],
     'LIST_CAT_ICON' => $categoryIcon,
-    'LIST_CAT_ICON_RAW' => !empty($cat['icon']) ? $cat['icon'] : '',
+    'LIST_CAT_ICON_SRC' => !empty($cat['icon']) ? $cat['icon'] : '',
 
     'LIST_BREADCRUMBS' => $catpath,
     'LIST_BREADCRUMBS_SHORT' => $catpath_short,
@@ -391,7 +391,7 @@ foreach ($subcat as $x) {
                 ]
             )
             : '',
-        'LIST_CAT_ROW_ICON_RAW' => !empty($structure['page'][$x]['icon']) ? $structure['page'][$x]['icon'] : '',
+        'LIST_CAT_ROW_ICON_SRC' => !empty($structure['page'][$x]['icon']) ? $structure['page'][$x]['icon'] : '',
         'LIST_CAT_ROW_COUNT' => $subCategoriesCount,
         'LIST_CAT_ROW_NUM' => $kk,
 
@@ -504,11 +504,11 @@ if (!$sqllist_rowset_other) {
                 $backUrl
             )
         );
-		$t->assign(array(
+		$t->assign([
 			'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], $pag['user_name']),
 			'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj),
-			'LIST_ROW_NUM' => $jj
-		));
+			'LIST_ROW_NUM' => $jj,
+		]);
 		$t->assign(cot_generate_usertags($pag, 'LIST_ROW_OWNER_'));
 
 		/* === Hook - Part2 : Include === */

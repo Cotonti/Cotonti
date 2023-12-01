@@ -51,7 +51,7 @@
 		<!-- BEGIN: ADMIN -->
 		<div>
 			<label>{PHP.L.Owner}</label>
-			{PAGEEDIT_FORM_OWNERID}
+			{PAGEEDIT_FORM_OWNER_ID}
 		</div>
 		<div>
 			<label>{PHP.L.Hits}</label>

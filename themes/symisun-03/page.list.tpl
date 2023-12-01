@@ -45,15 +45,14 @@
             <div class="seccat">
                 <div style="float:left; width:85px; color:#639814; text-align:center; border-right:1px solid #ececec; margin-right:7px"> {LIST_ROW_DATE_STAMP|cot_date('date_full', $this)} </div>
                 <div style="float:left; width:250px; border-right:1px solid #ececec; margin-right:7px"><strong><a
-                                href="{LIST_ROW_URL}">{LIST_ROW_SHORTTITLE}</a></strong> {LIST_ROW_FILEICON}<br/>
-                    <span style="font-size:11px; color:#888">{LIST_ROW_DESC}</span></div>
+                                href="{LIST_ROW_URL}">{LIST_ROW_TITLE}</a></strong> {LIST_ROW_FILE_ICON}<br/>
+                    <span style="font-size:11px; color:#888">{LIST_ROW_DESCRIPTION}</span></div>
                 <div style="float:left; width:27px; position:relative; border-right:1px solid #ececec; margin-right:7px">
-                    <a href="{LIST_ROW_URL}#com"><img src="themes/{PHP.theme}/img/system/icon-comment.gif"
-                                                      alt="S????a"/> <span
-                                style="position:absolute; top:-4px; left:2px; font-size:10px">{LIST_ROW_COMMENTS_COUNT}</span></a>
+                    <a href="{LIST_ROW_URL}#com"><img src="themes/{PHP.theme}/img/system/icon-comment.gif" />
+                        <span style="position:absolute; top:-4px; left:2px; font-size:10px">{LIST_ROW_COMMENTS_COUNT}</span></a>
                 </div>
                 <div style="float:left; width:90px; border-right:1px solid #ececec; margin-right:7px"> {LIST_ROW_RATINGS} </div>
-                <div style="float:left; width:85px; font-size:11px"> {LIST_ROW_COUNT} {PHP.L.Views} </div>
+                <div style="float:left; width:85px; font-size:11px"> {LIST_ROW_VIEWS_COUNT} {PHP.L.Views} </div>
                 <div class="clear"></div>
             </div>
             <!-- END: LIST_ROW -->

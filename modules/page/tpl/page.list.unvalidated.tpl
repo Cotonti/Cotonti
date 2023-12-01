@@ -14,7 +14,7 @@
             <!-- BEGIN: LIST_ROW -->
             <tr>
                 <td><strong>{LIST_ROW_TITLE}</strong></td>
-                <td>{LIST_ROW_LOCALSTATUS}</td>
+                <td>{LIST_ROW_LOCAL_STATUS}</td>
                 <td>{LIST_ROW_ADMIN_EDIT}</td>
             </tr>
             <!-- END: LIST_ROW -->

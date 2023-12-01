@@ -318,12 +318,16 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 			$pag['page_title'] = (cot_string_truncate($pag['page_title'], $titlelength, false)) . "...";
 		}
 		$recentitems->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $textlength));
-		$recentitems->assign(array(
-			'PAGE_ROW_SHORTTITLE' => htmlspecialchars($pag['page_title']),
+		$recentitems->assign([
+			'PAGE_ROW_TITLE' => htmlspecialchars($pag['page_title']),
 			'PAGE_ROW_OWNER' => cot_build_user($pag['page_ownerid'], $pag['user_name']),
 			'PAGE_ROW_ODDEVEN' => cot_build_oddeven($jj),
-			'PAGE_ROW_NUM' => $jj
-		));
+			'PAGE_ROW_NUM' => $jj,
+
+            // @deprecated in 0.9.24
+            'PAGE_ROW_SHORTTITLE' => htmlspecialchars($pag['page_title']),
+            // /@deprecated
+		]);
 		$recentitems->assign(cot_generate_usertags($pag, 'PAGE_ROW_OWNER_'));
 
 		/* === Hook - Part2 === */

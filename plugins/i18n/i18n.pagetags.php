@@ -37,14 +37,27 @@ if ($i18n_enabled && $i18n_notmain) {
 		$pagepath = cot_i18n_build_catpath('page', $page_data['page_cat'], $i18n_locale);
 		$catpath = cot_breadcrumbs($pagepath, $pagepath_home);
 		$page_link = array(array(cot_url('page', $urlparams), $page_data['page_title']));
-		$i18n_array = array_merge($i18n_array, array(
-			'TITLE' => cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home),
-			'CATTITLE' => htmlspecialchars($cat_i18n['title']),
-			'CATPATH' => $catpath,
-			'CATPATH_SHORT' => cot_rc_link(cot_url('page', 'c='.$page_data['page_cat'] . $append_param),
-				htmlspecialchars($cat_i18n['title'])),
-			'CATDESC' => htmlspecialchars($cat_i18n['desc']),
-		));
+		$i18n_array = array_merge(
+            $i18n_array,
+            [
+                'BREADCRUMBS' => cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home),
+                'CAT_TITLE' => htmlspecialchars($cat_i18n['title']),
+                'CAT_PATH' => $catpath,
+                'CAT_PATH_SHORT' => cot_rc_link(
+                    cot_url('page', 'c=' . $page_data['page_cat'] . $append_param),
+                    htmlspecialchars($cat_i18n['title'])
+                ),
+                'CAT_DESCRIPTION' =>  htmlspecialchars($cat_i18n['desc']),
+
+                // @deprecated in 0.9.24
+                'CATTITLE' => htmlspecialchars($cat_i18n['title']),
+                'CATPATH' => $catpath,
+                'CATPATH_SHORT' => cot_rc_link(cot_url('page', 'c='.$page_data['page_cat'] . $append_param),
+                    htmlspecialchars($cat_i18n['title'])),
+                'CATDESC' => htmlspecialchars($cat_i18n['desc']),
+                // /@deprecated
+            ]
+        );
 		if ($admin_rights) {
 			$i18n_array['ADMIN_EDIT'] = cot_rc_link($edit_url, Cot::$L['Edit']);
 			$i18n_array['ADMIN_EDIT_URL'] = $edit_url;
@@ -64,28 +77,39 @@ if ($i18n_enabled && $i18n_notmain) {
 	if (!empty($page_data['ipage_title'])) {
 		$text = cot_parse($page_data['ipage_text'], Cot::$cfg['page']['markup'], $page_data['page_parser']);
 		$text_cut = ((int) $textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
-		$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;
+		$cutted = mb_strlen($text) > mb_strlen($text_cut);
+
+        $pageDescription = !empty($page_data['ipage_desc'])
+            ? htmlspecialchars($page_data['ipage_desc'])
+            : '';
 
 		$page_link = array(array(cot_url('page', $urlparams), $page_data['ipage_title']));
 		$i18n_array = array_merge($i18n_array, array(
 			'URL' => cot_url('page', $urlparams),
-			'TITLE' => cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home),
-			'SHORTTITLE' => htmlspecialchars($page_data['ipage_title']),
-			'DESC' => htmlspecialchars($page_data['ipage_desc']),
+            'TITLE' => htmlspecialchars($page_data['ipage_title']),
+            'BREADCRUMBS' => cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home),
+			'DESCRIPTION' => $pageDescription,
 			'TEXT' => $text,
 			'TEXT_CUT' => $text_cut,
 			'TEXT_IS_CUT' => $cutted,
-			'DESC_OR_TEXT' => !empty($page_data['ipage_desc'])
-				? htmlspecialchars($page_data['page_desc']) : $text,
+			'DESCRIPTION_OR_TEXT' => $pageDescription !== '' ? $pageDescription : $text,
+            'DESCRIPTION_OR_TEXT_CUT' => $pageDescription !== '' ? $pageDescription : $text_cut,
 			'MORE' => $cutted ? cot_rc_link($page_data['page_pageurl'], Cot::$L['ReadMore']) : '',
 			'UPDATED_STAMP' => $page_data['ipage_date'],
+
+            // @deprecated in 0.9.24
+            'SHORTTITLE' => htmlspecialchars($page_data['ipage_title']),
+            'DESC' => htmlspecialchars($page_data['ipage_desc']),
+            'DESC_OR_TEXT' => !empty($page_data['ipage_desc'])
+                ? htmlspecialchars($page_data['page_desc']) : $text,
+            // /@deprecated
 		));
 	}
 
 	if ($i18n_write) {
 		if (
-            !empty($page_data['ipage_id']) &&
-            ($i18n_admin || (isset($pag_i18n) && $pag_i18n['ipage_translatorid'] == Cot::$usr['id']))
+            !empty($page_data['ipage_id'])
+            && ($i18n_admin || (isset($pag_i18n) && $pag_i18n['ipage_translatorid'] == Cot::$usr['id']))
         ) {
 			// Edit translation
 			$i18n_array['ADMIN_EDIT'] = cot_rc_link(cot_url(

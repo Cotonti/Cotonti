@@ -45,17 +45,17 @@
 			</td>
 			<td class="{ADMIN_PAGE_ODDEVEN}">
 				<div id="mor_{PHP.ii}" class='mor_info_on_off'>
-					<span class="strong" style="cursor:hand;">{ADMIN_PAGE_SHORTTITLE}</span>
+					<span class="strong" style="cursor:hand;">{ADMIN_PAGE_TITLE}</span>
 					<div class="moreinfo">
 						<hr />
 						<table class="flat">
 							<tr>
 								<td class="width20">{PHP.L.Category}:</td>
-								<td class="width80">{ADMIN_PAGE_CATPATH_SHORT}</td>
+								<td class="width80">{ADMIN_PAGE_CAT_PATH_SHORT}</td>
 							</tr>
 							<tr>
 								<td>{PHP.L.Description}:</td>
-								<td>{ADMIN_PAGE_DESC}</td>
+								<td>{ADMIN_PAGE_DESCRIPTION}</td>
 							</tr>
 							<tr>
 								<td>{PHP.L.Text}:</td>

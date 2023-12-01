@@ -140,7 +140,7 @@ $pageedit_array = array(
 	'PAGEEDIT_FORM_ID' => $pag['page_id'],
 	'PAGEEDIT_FORM_STATE' => $pag['page_state'],
 	'PAGEEDIT_FORM_STATUS' => $pag['page_status'],
-	'PAGEEDIT_FORM_LOCALSTATUS' => Cot::$L['page_status_'.$pag['page_status']],
+	'PAGEEDIT_FORM_LOCAL_STATUS' => Cot::$L['page_status_'.$pag['page_status']],
 	'PAGEEDIT_FORM_CAT' => cot_selectbox_structure('page', $pag['page_cat'], 'rpagecat'),
 	'PAGEEDIT_FORM_CAT_SHORT' => cot_selectbox_structure('page', $pag['page_cat'], 'rpagecat', $c),
 	'PAGEEDIT_FORM_KEYWORDS' => cot_inputbox('text', 'rpagekeywords', $pag['page_keywords'], array('maxlength' => '255')),
@@ -166,14 +166,22 @@ $pageedit_array = array(
 	'PAGEEDIT_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $pag['page_size'], array('maxlength' => '255')),
 	'PAGEEDIT_FORM_TEXT' => cot_textarea('rpagetext', $pag['page_text'], 24, 120, '', 'input_textarea_editor'),
 	'PAGEEDIT_FORM_DELETE' => cot_radiobox(0, 'rpagedelete', array(1, 0), array(Cot::$L['Yes'], Cot::$L['No'])),
-	'PAGEEDIT_FORM_PARSER' => cot_selectbox($pag['page_parser'], 'rpageparser', cot_get_parsers(), cot_get_parsers(), false)
+	'PAGEEDIT_FORM_PARSER' => cot_selectbox($pag['page_parser'], 'rpageparser', cot_get_parsers(), cot_get_parsers(), false),
+
+    // @deprecated in 0.9.24
+    'PAGEEDIT_FORM_LOCALSTATUS' => Cot::$L['page_status_'.$pag['page_status']],
+    // /@deprecated
 );
 if (Cot::$usr['isadmin']) {
-	$pageedit_array += array(
-		'PAGEEDIT_FORM_OWNERID' => cot_inputbox('text', 'rpageownerid', $pag['page_ownerid'], array('maxlength' => '24')),
+	$pageedit_array += [
+		'PAGEEDIT_FORM_OWNER_ID' => cot_inputbox('text', 'rpageownerid', $pag['page_ownerid'], ['maxlength' => '24']),
 		'PAGEEDIT_FORM_PAGECOUNT' => cot_inputbox('text', 'rpagecount', $pag['page_count'], array('maxlength' => '8')),
-		'PAGEEDIT_FORM_FILECOUNT' => cot_inputbox('text', 'rpagefilecount', $pag['page_filecount'], array('maxlength' => '8'))
-	);
+		'PAGEEDIT_FORM_FILECOUNT' => cot_inputbox('text', 'rpagefilecount', $pag['page_filecount'], array('maxlength' => '8')),
+
+        // @deprecated in 0.9.24
+        'PAGEEDIT_FORM_OWNERID' => cot_inputbox('text', 'rpageownerid', $pag['page_ownerid'], array('maxlength' => '24')),
+        // /@deprecated
+	];
 }
 
 $t->assign($pageedit_array);

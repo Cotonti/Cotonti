@@ -16,9 +16,9 @@
 		<!-- ENDIF -->
 
 		<!-- BEGIN: LIST_ROW -->
-		<h3><a href="{LIST_ROW_URL}">{LIST_ROW_SHORTTITLE}</a></h3>
-		<!-- IF {LIST_ROW_DESC} -->
-			<p class="small marginbottom10">{LIST_ROW_DESC}</p>
+		<h3><a href="{LIST_ROW_URL}">{LIST_ROW_TITLE}</a></h3>
+		<!-- IF {LIST_ROW_DESCRIPTION} -->
+			<p class="small marginbottom10">{LIST_ROW_DESCRIPTION}</p>
 		<!-- ELSE -->
 			<div class="marginbottom10">
 				{LIST_ROW_TEXT_CUT}
@@ -27,7 +27,7 @@
 		<!-- ENDIF -->
 		<p class="small marginbottom10">
 			{LIST_ROW_ADMIN_CLONE}
-			<!-- IF {LIST_ROW_ADMIN} -->{LIST_ROW_ADMIN} {LIST_ROW_ADMIN_DELETE} ({LIST_ROW_COUNT})<!-- ENDIF -->
+			<!-- IF {LIST_ROW_ADMIN} -->{LIST_ROW_ADMIN} {LIST_ROW_ADMIN_DELETE} ({LIST_ROW_VIEWS_COUNT})<!-- ENDIF -->
 		</p>
 
 		<!-- END: LIST_ROW -->
