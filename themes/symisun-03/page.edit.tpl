@@ -55,7 +55,7 @@
 		</div>
 		<div>
 			<label>{PHP.L.Hits}</label>
-			{PAGEEDIT_FORM_PAGECOUNT}
+			{PAGEEDIT_FORM_VIEWS_COUNT}
 		</div>
 		<!-- END: ADMIN -->
 		<div>
@@ -104,7 +104,7 @@
 		</div>
 		<div>
 			<label>{PHP.L.page_filehitcount}</label>
-			{PAGEEDIT_FORM_FILECOUNT} &nbsp; <span class="hint">{PHP.L.page_filehitcounthint}</span>
+			{PAGEEDIT_FORM_FILE_DOWNLOADS} &nbsp; <span class="hint">{PHP.L.page_filehitcounthint}</span>
 		</div>
 	</fieldset>
 

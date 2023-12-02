@@ -173,7 +173,7 @@ $pageadd_array = array(
 	'PAGEADD_FORM_METADESC' => cot_textarea('rpagemetadesc', $rpage['page_metadesc'], 2, 64, array('maxlength' => '255')),
 	'PAGEADD_FORM_ALIAS' => cot_inputbox('text', 'rpagealias', $rpage['page_alias'], array('maxlength' => '255')),
 	'PAGEADD_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', $rpage['page_title'], array('maxlength' => '255')),
-	'PAGEADD_FORM_DESC' => cot_textarea('rpagedesc', $rpage['page_desc'], 2, 64, array('maxlength' => '255')),
+	'PAGEADD_FORM_DESCRIPTION' => cot_textarea('rpagedesc', $rpage['page_desc'], 2, 64, array('maxlength' => '255')),
 	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('maxlength' => '100')),
 	'PAGEADD_FORM_OWNER' => cot_build_user(Cot::$usr['id'], Cot::$usr['name']),
 	'PAGEADD_FORM_OWNER_ID' => Cot::$usr['id'],
@@ -184,7 +184,7 @@ $pageadd_array = array(
         $rpage['page_file'],
         'rpagefile',
         range(0, 2),
-        array(Cot::$L['No'], Cot::$L['Yes'], Cot::$L['Members_only']),
+        [Cot::$L['No'], Cot::$L['Yes'], Cot::$L['Members_only']],
         false
     ),
 	'PAGEADD_FORM_URL' => cot_inputbox('text', 'rpageurl', $rpage['page_url'], array('maxlength' => '255')),
@@ -194,6 +194,7 @@ $pageadd_array = array(
 
     // @deprecated in 0.9.24
     'PAGEADD_FORM_OWNERID' => Cot::$usr['id'],
+    'PAGEADD_FORM_DESC' => cot_textarea('rpagedesc', $rpage['page_desc'], 2, 64, array('maxlength' => '255')),
     // /@deprecated
 );
 
@@ -221,19 +222,20 @@ if(!empty(Cot::$extrafields[Cot::$db->pages])) {
 cot_display_messages($t);
 
 /* === Hook === */
-foreach (cot_getextplugins('page.add.tags') as $pl)
-{
+foreach (cot_getextplugins('page.add.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if (Cot::$usr['isadmin'])
-{
-	if (Cot::$cfg['page']['autovalidate']) $usr_can_publish = TRUE;
+$usr_can_publish = false;
+if (Cot::$usr['isadmin']) {
+	if (Cot::$cfg['page']['autovalidate']) {
+        $usr_can_publish = true;
+    }
 	$t->parse('MAIN.ADMIN');
 }
 
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once Cot::$cfg['system_dir'].'/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';

@@ -28,7 +28,7 @@
 		</div>
 		<div>
 			<label>{PHP.L.Description}</label>
-			{PAGEADD_FORM_DESC}
+			{PAGEADD_FORM_DESCRIPTION}
 		</div>
 	</fieldset>
 

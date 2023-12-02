@@ -68,7 +68,7 @@
             </tr>
             <tr>
                 <td>{PHP.L.Hits}:</td>
-                <td>{PAGEEDIT_FORM_PAGECOUNT}</td>
+                <td>{PAGEEDIT_FORM_VIEWS_COUNT}</td>
             </tr>
             <!-- END: ADMIN -->
             <tr>
@@ -98,7 +98,7 @@
             </tr>
             <tr>
                 <td>{PHP.L.page_filehitcount}:<br/>{PHP.L.page_filehitcounthint}</td>
-                <td>{PAGEEDIT_FORM_FILECOUNT}</td>
+                <td>{PAGEEDIT_FORM_FILE_DOWNLOADS}</td>
             </tr>
             <tr>
                 <td>{PHP.L.page_deletepage}:</td>

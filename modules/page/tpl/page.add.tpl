@@ -14,7 +14,7 @@
             </tr>
             <tr>
                 <td>{PHP.L.Description}:</td>
-                <td>{PAGEADD_FORM_DESC}</td>
+                <td>{PAGEADD_FORM_DESCRIPTION}</td>
             </tr>
             <tr>
                 <td>{PHP.L.Author}:</td>

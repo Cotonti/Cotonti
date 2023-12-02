@@ -1927,29 +1927,39 @@ function cot_user_authorize($id, $remember = null)
  *
  * @param array $crumbs Path crumbs as an array: { {$url1, $title1}, {$url2, $title2},..}
  * @param bool $home Whether to include link to home page in the root
- * @param bool $nolast If TRUE, last crumb will be rendered as plain text rather than hyperlink
+ * @param bool $noLinkOnLastCrumb If TRUE, last crumb will be rendered as plain text rather than hyperlink
  * @param bool $plain If TRUE plain titles will be rendered instead of hyperlinks
- * @param string $inrc Item template
+ * @param string $itemRcTpl Item template
  * @param string $separator Items separator
  * @return string
  */
-function cot_breadcrumbs($crumbs, $home = true, $nolast = true, $plain = false, $inrc = '', $separator = '')
-{
+function cot_breadcrumbs(
+    $crumbs,
+    $home = true,
+    $noLinkOnLastCrumb = true,
+    $plain = false,
+    $itemRcTpl = '',
+    $separator = ''
+) {
 	global $cfg, $L;
-	$tmp = array();
+
+	$tmp = [];
 	if ($home) {
-		$maintitle = (empty(Cot::$L['breadcrumbmaintitle'])) ? Cot::$cfg['maintitle'] : Cot::$L['breadcrumbmaintitle'];
-		array_unshift($crumbs, array(cot_url('index'), $maintitle));
+		$mainTitle = !empty(Cot::$L['breadcrumbMainTitle']) ? Cot::$L['breadcrumbMainTitle'] : Cot::$L['Home'];
+		array_unshift($crumbs, [cot_url('index'), $mainTitle]);
 	}
 	$cnt = count($crumbs);
 	for ($i = 0; $i < $cnt; $i++) {
 		$elem = '';
-		$params = is_array($crumbs[$i]) ? array(
-			'url' => (!empty($crumbs[$i][0])) ? $crumbs[$i][0] : '#',
-			'title' => !empty($crumbs[$i][1]) ?
-                htmlspecialchars($crumbs[$i][1], ENT_COMPAT, 'UTF-8', false) : ''
-		) : array('title' => $crumbs[$i]);
-		if ($plain || ($nolast && $i === $cnt - 1) || !isset($params['url'])) {
+		$params = is_array($crumbs[$i])
+            ? [
+                'url' => (!empty($crumbs[$i][0])) ? $crumbs[$i][0] : '#',
+                'title' => !empty($crumbs[$i][1])
+                    ? htmlspecialchars($crumbs[$i][1], ENT_COMPAT, 'UTF-8', false)
+                    : '',
+            ]
+            : ['title' => $crumbs[$i]];
+		if ($plain || ($noLinkOnLastCrumb && $i === $cnt - 1) || !isset($params['url'])) {
 			$crumb = cot_rc('breadcrumbs_plain', $params);
 			if ($crumb == 'breadcrumbs_plain') {
 				$crumb = cot_rc('string_catpath', $params);
@@ -1972,14 +1982,16 @@ function cot_breadcrumbs($crumbs, $home = true, $nolast = true, $plain = false, 
 		if ($elem == 'breadcrumbs_crumb') {
 			$elem = $crumb;
 		}
-		if (!empty($inrc)) {
-			$elem = cot_rc($inrc, array('elem' => $elem));
+		if (!empty($itemRcTpl)) {
+			$elem = cot_rc($itemRcTpl, array('elem' => $elem));
 		}
 		$tmp[] = $elem;
 	}
-	$separator = (!empty($separator) || !empty($inrc)) ? $separator : cot_rc('breadcrumbs_separator');
+	$separator = (!empty($separator) || !empty($itemRcTpl)) ? $separator : cot_rc('breadcrumbs_separator');
 	$separator = ($separator == 'breadcrumbs_separator') ? Cot::$cfg['separator'] : $separator;
-	$separator = (!empty($inrc) && (mb_strlen($separator) > 2 || empty($separator))) ? $separator : ' '.$separator.' ';
+	$separator = (!empty($itemRcTpl) && (mb_strlen($separator) > 2 || empty($separator)))
+        ? $separator
+        : ' ' . $separator . ' ';
 
 	$breadcrumbs = implode($separator, $tmp);
 	$container = cot_rc('breadcrumbs_container', array('crumbs' => $breadcrumbs));

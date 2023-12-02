@@ -409,7 +409,7 @@ function cot_selectbox_timezone($chosen, $name, $add_gmt = true, $dst = false, $
  * Renders stucture dropdown
  *
  * @param string $extension Extension code
- * @param string $check Seleced value
+ * @param string $check Selected value
  * @param string $name Dropdown name
  * @param string $subcat Show only subcats of selected category
  * @param bool $hideprivate Hide private categories
