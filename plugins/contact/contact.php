@@ -127,7 +127,7 @@ if (!$sent) {
             cot_inputbox('text', 'ruser', Cot::$usr['name'], 'size="24" maxlength="24" readonly="readonly"'),
 		'CONTACT_FORM_EMAIL' => cot_inputbox('text', 'remail', $rcontact['contact_email'], 'size="24"'),
 		'CONTACT_FORM_SUBJECT' => cot_inputbox('text', 'rsubject', $rcontact['contact_subject'], 'size="24"'),
-		'CONTACT_FORM_TEXT' => cot_textarea('rtext', $rcontact['contact_text'], 8, 50, 'style="width:90%"')
+		'CONTACT_FORM_TEXT' => cot_textarea('rtext', $rcontact['contact_text'], 8, 50)
 	));
 
 	// Extra fields
