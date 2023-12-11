@@ -16,7 +16,7 @@
             <p class="small">{PAGE_ROW_CAT_PATH}</p>
         </td>
         <td class="centerall {PAGE_ROW_ODDEVEN}">{PAGE_ROW_DATE}: {PAGE_ROW_OWNER}</td>
-        <td class="centerall {PAGE_ROW_ODDEVEN}">{PAGE_ROW_VIEWS_COUNT}</td>
+        <td class="centerall {PAGE_ROW_ODDEVEN}">{PAGE_ROW_HITS}</td>
     </tr>
     <!-- END: PAGE_ROW -->
     <!-- BEGIN: NO_PAGES_FOUND -->

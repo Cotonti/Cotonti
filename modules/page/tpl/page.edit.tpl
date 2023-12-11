@@ -68,7 +68,7 @@
             </tr>
             <tr>
                 <td>{PHP.L.Hits}:</td>
-                <td>{PAGEEDIT_FORM_VIEWS_COUNT}</td>
+                <td>{PAGEEDIT_FORM_HITS}</td>
             </tr>
             <!-- END: ADMIN -->
             <tr>

@@ -176,7 +176,7 @@ $pageedit_array = array(
 if (Cot::$usr['isadmin']) {
 	$pageedit_array += [
 		'PAGEEDIT_FORM_OWNER_ID' => cot_inputbox('text', 'rpageownerid', $pag['page_ownerid'], ['maxlength' => '24']),
-		'PAGEEDIT_FORM_VIEWS_COUNT' => cot_inputbox('text', 'rpagecount', $pag['page_count'], ['maxlength' => '8']),
+		'PAGEEDIT_FORM_HITS' => cot_inputbox('text', 'rpagecount', $pag['page_count'], ['maxlength' => '8']),
 		'PAGEEDIT_FORM_FILE_DOWNLOADS' => cot_inputbox('text', 'rpagefilecount', $pag['page_filecount'], ['maxlength' => '8']),
 
         // @deprecated in 0.9.24

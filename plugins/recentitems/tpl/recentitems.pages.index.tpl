@@ -10,7 +10,7 @@
 	<tr>
 		<td class="centerall {PAGE_ROW_ODDEVEN}">{PHP.R.icon_page}</td>
 		<td class="{PAGE_ROW_ODDEVEN}">
-			<p class="strong"><a href="{PAGE_ROW_URL}">{PAGE_ROW_TITLE} ({PAGE_ROW_VIEWS_COUNT})</a></p>
+			<p class="strong"><a href="{PAGE_ROW_URL}">{PAGE_ROW_TITLE} ({PAGE_ROW_HITS})</a></p>
 			<!-- IF {PAGE_ROW_DESCRIPTION} --><p class="small">{PAGE_ROW_DESCRIPTION}</p><!-- ENDIF -->
 		</td>
 		<td class="centerall {PAGE_ROW_ODDEVEN}">{PAGE_ROW_CAT_PATH_SHORT}</td>

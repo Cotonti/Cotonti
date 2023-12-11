@@ -52,7 +52,7 @@
                         <span style="position:absolute; top:-4px; left:2px; font-size:10px">{LIST_ROW_COMMENTS_COUNT}</span></a>
                 </div>
                 <div style="float:left; width:90px; border-right:1px solid #ececec; margin-right:7px"> {LIST_ROW_RATINGS} </div>
-                <div style="float:left; width:85px; font-size:11px"> {LIST_ROW_VIEWS_COUNT} {PHP.L.Views} </div>
+                <div style="float:left; width:85px; font-size:11px"> {LIST_ROW_HITS} {PHP.L.Views} </div>
                 <div class="clear"></div>
             </div>
             <!-- END: LIST_ROW -->

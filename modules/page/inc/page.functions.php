@@ -273,7 +273,7 @@ function cot_generate_pagetags(
 			'FILE_DOWNLOADS' => $page_data['page_filecount'],
 			'FILE_DOWNLOAD_TIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
 			'FILE_NAME' => !empty($page_data['page_url']) ? basename($page_data['page_url']) : '',
-			'VIEWS_COUNT' => $page_data['page_count'],
+			'HITS' => $page_data['page_count'],
             'ADMIN' => $admin_rights
                 ? cot_rc('list_row_admin', ['unvalidate_url' => $unvalidate_url, 'edit_url' => $edit_url])
                 : '',
@@ -683,11 +683,11 @@ function cot_page_validate($rpage)
 
 /**
  * Adds a new page to the CMS.
- * @param  array   $rpage Page data
- * @param  array   $auth  Permissions array
- * @return integer        New page ID or FALSE on error
+ * @param array $rpage Page data
+ * @param array $auth Permissions array
+ * @return ?int New page ID or NULL on error
  */
-function cot_page_add(&$rpage, $auth = array())
+function cot_page_add(&$rpage, $auth = [])
 {
     // $L, $Ls, $R are needed for hook includes
     global $L, $Ls, $R;
@@ -702,7 +702,7 @@ function cot_page_add(&$rpage, $auth = array())
 
 	if (!empty($rpage['page_alias'])) {
 		$page_count = Cot::$db->query(
-            'SELECT COUNT(*) FROM ' . \Cot::$db->pages . ' WHERE page_alias = ?',
+            'SELECT COUNT(*) FROM ' . Cot::$db->pages . ' WHERE page_alias = ?',
             $rpage['page_alias']
         )->fetchColumn();
 		if ($page_count > 0) {
@@ -724,11 +724,11 @@ function cot_page_add(&$rpage, $auth = array())
 	/* ===== */
 
 	if (Cot::$db->insert(Cot::$db->pages, $rpage)) {
-		$id = Cot::$db->lastInsertId();
+		$id = (int) Cot::$db->lastInsertId();
 		cot_extrafield_movefiles();
         cot_page_updateStructureCounters($rpage['page_cat']);
 	} else {
-		$id = false;
+		$id = null;
 	}
 
 	/* === Hook === */
@@ -748,7 +748,7 @@ function cot_page_add(&$rpage, $auth = array())
 	}
 
 	cot_shield_update(30, "r page");
-	cot_log("Add page #".$id, 'page', 'add', 'done');
+	cot_log('Add page #' . $id, 'page', 'add', 'done');
 
 	return $id;
 }

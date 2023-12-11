@@ -2592,8 +2592,9 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 	}
 	/* ===== */
 
-	$user_id = (is_array($user_data) && !empty($user_data['user_id'])) ?
-        (int) $user_data['user_id'] : (is_numeric($user_data) ? (int) $user_data : 0);
+	$user_id = (is_array($user_data) && !empty($user_data['user_id']))
+        ? (int) $user_data['user_id']
+        : (is_numeric($user_data) ? (int) $user_data : 0);
 
 	if (isset($user_cache[$user_id])) {
 		$temp_array = $user_cache[$user_id];
@@ -2601,7 +2602,8 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 		if (!is_array($user_data) && $user_id > 0) {
 			$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $user_id LIMIT 1");
 			$user_data = $sql->fetch();
-		} else if (!is_array($user_data)) {
+		}
+        if (empty($user_data) || !is_array($user_data)) {
 			$user_data = [];
 		}
 
@@ -2610,7 +2612,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
             $enableMarkup = isset(Cot::$cfg['users']['usertextimg']) ? Cot::$cfg['users']['usertextimg'] : false;
 			$user_data['user_text'] = cot_parse($user_data['user_text'], $enableMarkup);
 
-			$temp_array = array(
+			$temp_array = [
 				'ID' => $user_data['user_id'],
 				'NAME' => cot_build_user($user_data['user_id'], $user_data['user_name']),
 				'NICKNAME' => htmlspecialchars($user_data['user_name']),
@@ -2634,74 +2636,79 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'GENDER' => ($user_data['user_gender'] == '' || $user_data['user_gender'] == 'U') ? '' : $L['Gender_' . $user_data['user_gender']],
 				'BIRTHDATE' => (is_null($user_data['user_birthdate'])) ? '' : cot_date('date_full', $user_data['user_birthdate']),
 				'BIRTHDATE_STAMP' => (is_null($user_data['user_birthdate'])) ? '' : $user_data['user_birthdate'],
-				'AGE' => (is_null($user_data['user_birthdate'])) ? '' : cot_build_age($user_data['user_birthdate']),
-				'TIMEZONE' => cot_build_timezone(cot_timezone_offset($user_data['user_timezone'], false, false)) . ' ' .str_replace('_', ' ', $user_data['user_timezone']),
-				'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate']),
+                'AGE' => (is_null($user_data['user_birthdate'])) ? '' : cot_build_age($user_data['user_birthdate']),
+                'TIMEZONE' => cot_build_timezone(
+                        cot_timezone_offset($user_data['user_timezone'], false, false)
+                    ) . ' '
+                    . str_replace('_', ' ', $user_data['user_timezone']),
+                'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate']),
 				'REGDATE_STAMP' => $user_data['user_regdate'],
 				'LASTLOG' => cot_date('datetime_medium', $user_data['user_lastlog']),
 				'LASTLOG_STAMP' => $user_data['user_lastlog'],
 				'LOGCOUNT' => $user_data['user_logcount'],
 				'POSTCOUNT' => !empty($user_data['user_postcount']) ? $user_data['user_postcount'] : 0,
-				'LASTIP' => $user_data['user_lastip']
-			);
+				'LASTIP' => $user_data['user_lastip'],
+			];
 
-			if ($allgroups)
-			{
-				$temp_array['GROUPS'] = cot_build_groupsms($user_data['user_id'], FALSE, $user_data['user_maingrp']);
+			if ($allgroups) {
+				$temp_array['GROUPS'] = cot_build_groupsms($user_data['user_id'], false, $user_data['user_maingrp']);
 			}
-			// Extra fields
-			if (!empty(Cot::$extrafields[Cot::$db->users])) {
-				foreach (Cot::$extrafields[Cot::$db->users] as $exfld) {
-                    $exfld_title = cot_extrafield_title($exfld, 'user_');
 
-					$temp_array[strtoupper($exfld['field_name'])] = cot_build_extrafields_data('user', $exfld, $user_data['user_' . $exfld['field_name']]);
-					$temp_array[strtoupper($exfld['field_name']) . '_TITLE'] = $exfld_title;
-					$temp_array[strtoupper($exfld['field_name']) . '_VALUE'] = $user_data['user_' . $exfld['field_name']];
-				}
-			}
-		}
-		else
-		{
-			$temp_array = array(
-				'ID' => 0,
-				'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-				'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-				'FULL_NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-				'MAINGRP' => cot_build_group(COT_GROUP_GUESTS),
-				'MAINGRPID' => COT_GROUP_GUESTS,
-				'MAINGRPSTARS' => '',
-				'MAINGRPICON' => cot_build_groupicon($cot_groups[1]['icon']),
-				'COUNTRY' => cot_build_country(''),
-				'COUNTRYFLAG' => cot_build_flag(''),
-				'TEXT' => '',
-				'EMAIL' => '',
-				'GENDER' => '',
-				'BIRTHDATE' => '',
-				'BIRTHDATE_STAMP' => '',
-				'AGE' => '',
-				'REGDATE' => '',
-				'REGDATE_STAMP' => '',
-				'POSTCOUNT' => '',
-				'LASTIP' => ''
-			);
+            // Extra fields
+            if (!empty(Cot::$extrafields[Cot::$db->users])) {
+                foreach (Cot::$extrafields[Cot::$db->users] as $extrafield) {
+                    $extrafieldTitle = cot_extrafield_title($extrafield, 'user_');
+                    $extrafieldTag = strtoupper($extrafield['field_name']);
+                    $temp_array[$extrafieldTag] = cot_build_extrafields_data(
+                        'user',
+                        $extrafield,
+                        $user_data['user_' . $extrafield['field_name']]
+                    );
+                    $temp_array[$extrafieldTag . '_TITLE'] = $extrafieldTitle;
+                    $temp_array[$extrafieldTag . '_VALUE'] = $user_data['user_' . $extrafield['field_name']];
+                }
+            }
+        } else {
+            $temp_array = [
+                'ID' => 0,
+                'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+                'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+                'FULL_NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+                'MAINGRP' => cot_build_group(COT_GROUP_GUESTS),
+                'MAINGRPID' => COT_GROUP_GUESTS,
+                'MAINGRPSTARS' => '',
+                'MAINGRPICON' => cot_build_groupicon($cot_groups[1]['icon']),
+                'COUNTRY' => cot_build_country(''),
+                'COUNTRYFLAG' => cot_build_flag(''),
+                'TEXT' => '',
+                'EMAIL' => '',
+                'GENDER' => '',
+                'BIRTHDATE' => '',
+                'BIRTHDATE_STAMP' => '',
+                'AGE' => '',
+                'REGDATE' => '',
+                'REGDATE_STAMP' => '',
+                'POSTCOUNT' => '',
+                'LASTIP' => '',
+            ];
 		}
 
 		/* === Hook === */
-		foreach ($extp_main as $pl)
-		{
+		foreach ($extp_main as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
-		if(is_array($user_data) && isset($user_data['user_id'])) {
+		if (is_array($user_data) && isset($user_data['user_id'])) {
 			$cacheitem && $user_cache[$user_data['user_id']] = $temp_array;
 		}
 
 	}
-	foreach ($temp_array as $key => $val)
-	{
+
+	foreach ($temp_array as $key => $val) {
 		$return_array[$tag_prefix . $key] = $val;
 	}
+
 	return $return_array;
 }
 

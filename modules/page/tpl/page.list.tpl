@@ -3,10 +3,12 @@
 	<div class="block">
 		<h2 class="folder">{LIST_BREADCRUMBS}</h2>
 		<!-- BEGIN: LIST_CAT_ROW -->
-		<h3><a href="{LIST_CAT_ROW_URL}" title="{LIST_CAT_ROW_TITLE}">{LIST_CAT_ROW_TITLE}</a> ({LIST_CAT_ROW_COUNT})</h3>
-		<!-- IF {LIST_CAT_ROW_DESCRIPTION} -->
-		<p class="small">{LIST_CAT_ROW_DESCRIPTION}</p>
-		<!-- ENDIF -->
+		<div class="list-row category-row">
+			<h3><a href="{LIST_CAT_ROW_URL}" title="{LIST_CAT_ROW_TITLE}">{LIST_CAT_ROW_TITLE}</a> ({LIST_CAT_ROW_COUNT})</h3>
+			<!-- IF {LIST_CAT_ROW_DESCRIPTION} -->
+			<p class="small">{LIST_CAT_ROW_DESCRIPTION}</p>
+			<!-- ENDIF -->
+		</div>
 		<!-- END: LIST_CAT_ROW -->
 		<!-- IF {LIST_CAT_PAGINATION} -->
 		<p class="paging clear">
@@ -16,20 +18,21 @@
 		<!-- ENDIF -->
 
 		<!-- BEGIN: LIST_ROW -->
-		<h3><a href="{LIST_ROW_URL}">{LIST_ROW_TITLE}</a></h3>
-		<!-- IF {LIST_ROW_DESCRIPTION} -->
-			<p class="small marginbottom10">{LIST_ROW_DESCRIPTION}</p>
-		<!-- ELSE -->
-			<div class="marginbottom10">
-				{LIST_ROW_TEXT_CUT}
-				<!-- IF {LIST_ROW_TEXT_IS_CUT} -->{LIST_ROW_MORE}<!-- ENDIF -->
-			</div>
-		<!-- ENDIF -->
-		<p class="small marginbottom10">
-			{LIST_ROW_ADMIN_CLONE}
-			<!-- IF {LIST_ROW_ADMIN} -->{LIST_ROW_ADMIN} {LIST_ROW_ADMIN_DELETE} ({LIST_ROW_VIEWS_COUNT})<!-- ENDIF -->
-		</p>
-
+		<div class="list-row page-row">
+			<h3><a href="{LIST_ROW_URL}">{LIST_ROW_TITLE}</a></h3>
+			<!-- IF {LIST_ROW_DESCRIPTION} -->
+				<p class="small marginbottom10">{LIST_ROW_DESCRIPTION}</p>
+			<!-- ELSE -->
+				<div class="marginbottom10">
+					{LIST_ROW_TEXT_CUT}
+					<!-- IF {LIST_ROW_TEXT_IS_CUT} -->{LIST_ROW_MORE}<!-- ENDIF -->
+				</div>
+			<!-- ENDIF -->
+			<p class="small marginbottom10">
+				{LIST_ROW_ADMIN_CLONE}
+				<!-- IF {LIST_ROW_ADMIN} -->{LIST_ROW_ADMIN} {LIST_ROW_ADMIN_DELETE} ({LIST_ROW_HITS})<!-- ENDIF -->
+			</p>
+		</div>
 		<!-- END: LIST_ROW -->
 	</div>
 	<!-- IF {LIST_PAGINATION} -->

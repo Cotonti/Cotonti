@@ -93,11 +93,27 @@ pre {
 /* 3. Headings
 -------------------------------------------------- */
 
-h1	{ color:#333; font-size:2.2em; font-weight:normal; margin:10px 0; padding:10px; }
+h1 { color: #333; font-size: 2.2em; font-weight: normal; margin: 10px 0; padding: 10px; }
 .subtitle	{ position:absolute; top:15px; left:650px; width:300px; }
 
-h2	{ color:#a01517; font-size:1.1em; text-shadow:0 1px 0 #fff; margin-bottom:15px; padding:8px 8px 8px 40px; background-color:#ccc; background-position:10px 50%; background-repeat:no-repeat; }
-h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-position:10px 50%; background-repeat:no-repeat; }
+h2	{
+	color: #a01517;
+	font-size: 1.2em;
+	text-shadow: 0 1px 0 #fff;
+	margin-bottom: 15px;
+	padding: 8px 8px 8px 40px;
+	background-color: #ccc;
+	background-position: 10px 50%;
+	background-repeat: no-repeat;
+}
+h3	{
+	color: #000;
+	font-size: 1.2em;
+	font-weight: bold;
+	margin: 10px 0 5px;
+	background-position: 10px 50%;
+	background-repeat: no-repeat;
+}
 
 .admin		{ background-image:url(../../../images/icons/default/24/prefs.png); }
 .comments	{ background-image:url(../../../images/icons/default/24/comments.png); }
@@ -251,6 +267,11 @@ span.readmore		{ display:block; }
 .clearfix:after	{ content: ''; display: block; clear: both; }
 
 .hidefromguests	{ text-align: center; margin: 3px 0; padding: 3px 10px; background: #ededed; border: 3px ridge #fff; box-shadow: 0 0 4px #222; }
+
+
+.list-row {
+	margin-bottom: 25px;
+}
 
 /* 7. Pagination
 -------------------------------------------------- */

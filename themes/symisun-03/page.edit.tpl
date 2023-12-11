@@ -55,7 +55,7 @@
 		</div>
 		<div>
 			<label>{PHP.L.Hits}</label>
-			{PAGEEDIT_FORM_VIEWS_COUNT}
+			{PAGEEDIT_FORM_HITS}
 		</div>
 		<!-- END: ADMIN -->
 		<div>
