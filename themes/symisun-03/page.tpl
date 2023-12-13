@@ -29,7 +29,7 @@
             {PAGE_FILE_ICON} <a href="{PAGE_FILE_URL}"> {PAGE_TITLE}</a><br/>
             <!-- END: DOWNLOAD -->
 
-            {PHP.L.Filesize}: {PAGE_FILE_SIZE}{PHP.L.kb}, {PHP.L.Downloaded}: {PAGE_FILE_DOWNLOAD_TIMES}
+            {PHP.L.Filesize}: {PAGE_FILE_SIZE}{PHP.L.kb}, {PHP.L.Downloaded}: {PAGE_FILE_DOWNLOADS_TIMES}
             </div>
             <!-- END: PAGE_FILE -->
 

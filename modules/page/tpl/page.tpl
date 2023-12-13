@@ -30,7 +30,7 @@
 			<p>{PHP.L.Download}: <a class="strong" href="{PAGE_FILE_URL}">{PAGE_TITLE}</a></p>
 			<!-- END: DOWNLOAD -->
 			<p>{PHP.L.Filesize}, kB: {PAGE_FILE_SIZE}{PHP.L.kb}</p>
-			<p>{PHP.L.Downloaded}: {FILE_DOWNLOAD_TIMES}</p>
+			<p>{PHP.L.Downloaded}: {FILE_DOWNLOADS_TIMES}</p>
 		</div>
 		<!-- END: PAGE_FILE -->
 	</div>

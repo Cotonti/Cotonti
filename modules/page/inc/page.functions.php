@@ -271,7 +271,7 @@ function cot_generate_pagetags(
 			'FILE_SIZE_READABLE' => cot_build_filesize($page_data['page_size'], 1),
 			'FILE_ICON' => $page_data['page_fileicon'],
 			'FILE_DOWNLOADS' => $page_data['page_filecount'],
-			'FILE_DOWNLOAD_TIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
+			'FILE_DOWNLOADS_TIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
 			'FILE_NAME' => !empty($page_data['page_url']) ? basename($page_data['page_url']) : '',
 			'HITS' => $page_data['page_count'],
             'ADMIN' => $admin_rights
