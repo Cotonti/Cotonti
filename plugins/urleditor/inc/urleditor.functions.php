@@ -27,6 +27,7 @@ function cot_apply_rwr()
 	if (function_exists('cot_apply_rwr_custom')) {
 		return cot_apply_rwr_custom();
 	}
+    // @todo use Cot::$sys['uri']. see https://github.com/Cotonti/Cotonti/issues/1731
 	$rwr = cot_import('rwr', 'G', 'TXT');
 
     // Remove starting and ending slashes from the path

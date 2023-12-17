@@ -261,15 +261,16 @@ $title_params = array(
 	'EDIT' => $L['Edit'],
 	'NAME' => $urr['user_name']
 );
-$out['subtitle'] = cot_title('{EDIT} - {NAME}', $title_params);
-if(!isset($out['head'])) $out['head'] = '';
-$out['head'] .= Cot::$R['code_noindex'];
+Cot::$out['subtitle'] = cot_title('{EDIT} - {NAME}', $title_params);
+if (!isset($out['head'])) {
+    Cot::$out['head'] = '';
+}
+Cot::$out['head'] .= Cot::$R['code_noindex'];
 
-$mskin = cot_tplfile(array('users', 'edit', $usr['maingrp']), 'module');
+$mskin = cot_tplfile(['users', 'edit', $urr['user_maingrp']], 'module');
 
 /* === Hook === */
-foreach (cot_getextplugins('users.edit.main') as $pl)
-{
+foreach (cot_getextplugins('users.edit.main') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -286,11 +287,24 @@ $editor_class = $cfg['users']['usertextimg'] ? 'minieditor' : '';
 
 $delete_pfs = cot_module_active('pfs') ? cot_checkbox(false, 'ruserdelpfs', $L['PFS']) : '';
 
+$breadCrumbs = [
+    [cot_url('users'), Cot::$L['Users']],
+    [
+        cot_url('users', ['m' => 'details', 'id' => $urr['user_id'], 'u' => $urr['user_name']]),
+        cot_user_full_name($urr),
+    ],
+    [cot_url('users', ['m' => 'edit', 'id' => $urr['user_id']]), Cot::$L['Edit']]
+];
+
 $t->assign(array(
-	'USERS_EDIT_TITLE' => cot_breadcrumbs(array(array(cot_url('users'), $L['Users']), array(cot_url('users', 'm=details&id='.$urr['user_id'].'&u='.$urr['user_name']), $urr['user_name']), array(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit'])), $cfg['homebreadcrumb']),
-	'USERS_EDIT_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
-	'USERS_EDIT_EDITLINK' => cot_url('users', 'm=edit&id='.$urr['user_id']),
-	'USERS_EDIT_SUBTITLE' => $L['useed_subtitle'],
+	'USERS_EDIT_TITLE' => htmlspecialchars(cot_user_full_name($urr)),
+    'USERS_EDIT_SUBTITLE' => $L['useed_subtitle'],
+    'USERS_EDIT_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
+    'USERS_EDIT_DETAILS_URL' => cot_url(
+        'users',
+        ['m' => 'details', 'id' => $urr['user_id'], 'u' => $urr['user_name']]
+    ),
+	'USERS_EDIT_EDIT_URL' => cot_url('users', ['m' => 'edit', 'id' => $urr['user_id']]),
 	'USERS_EDIT_SEND' => cot_url('users', 'm=edit&a=update&'.cot_xg().'&id='.$urr['user_id']),
 	'USERS_EDIT_ID' => $urr['user_id'],
 	'USERS_EDIT_NAME' => cot_inputbox('text', 'rusername', $urr['user_name'], array('size' => 32, 'maxlength' => 100) + $protected),
@@ -299,7 +313,7 @@ $t->assign(array(
 	'USERS_EDIT_THEME' => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
 	'USERS_EDIT_LANG' => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	'USERS_EDIT_NEWPASS' => cot_inputbox('password', 'rusernewpass', '', array('size' => 12, 'maxlength' => 32, 'autocomplete' => 'off') + $protected),
-	'USERS_EDIT_MAINGRP' => cot_build_group($urr['user_maingrp']),
+	'USERS_EDIT_MAIN_GROUP' => cot_build_group($urr['user_maingrp']),
 	'USERS_EDIT_GROUPS' => cot_build_groupsms($urr['user_id'], $usr['isadmin'], $urr['user_maingrp']),
 	'USERS_EDIT_COUNTRY' => cot_selectbox_countries($urr['user_country'], 'rusercountry'),
 	'USERS_EDIT_EMAIL' => cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)),
@@ -316,6 +330,12 @@ $t->assign(array(
 	'USERS_EDIT_LASTIP' => cot_build_ipsearch($urr['user_lastip']),
 	'USERS_EDIT_DELETE' => (Cot::$sys['user_istopadmin']) ? cot_radiobox(0, 'ruserdelete', array(1, 0), array(Cot::$L['Yes'],
             Cot::$L['No'])) . $delete_pfs : Cot::$L['na'],
+
+    // @deprecated in 0.9.24
+    'USERS_EDIT_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
+    'USERS_EDIT_EDITLINK' => cot_url('users', 'm=edit&id='.$urr['user_id']),
+    'USERS_EDIT_MAINGRP' => cot_build_group($urr['user_maingrp']),
+    // /@deprecated in 0.9.24
 ));
 
 // Extra fields

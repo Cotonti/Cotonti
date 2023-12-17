@@ -38,7 +38,6 @@ $ruser = array(
     'user_country' => '',
     'user_timezone' => '',
     'user_gender' => '',
-
 );
 
 if ($a == 'add') {

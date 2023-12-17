@@ -20,7 +20,7 @@
 					<!-- BEGIN: USERS -->
 					<tr>
 						<td>{USER_LINK}</td>
-						<td>{USER_MAINGRP}</td>
+						<td>{USER_MAIN_GROUP}</td>
 						<td>{USER_LOCATION}</td>
 						<td>{USER_SUBLOCATION}</td>
 						<td>{USER_LASTSEEN} {PHP.L.Ago}</td>

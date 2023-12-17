@@ -2616,18 +2616,21 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'ID' => $user_data['user_id'],
 				'NAME' => cot_build_user($user_data['user_id'], $user_data['user_name']),
 				'NICKNAME' => htmlspecialchars($user_data['user_name']),
-				'DETAILSLINK' => cot_url('users', 'm=details&id=' . $user_data['user_id'].'&u='.htmlspecialchars($user_data['user_name'])),
-				'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
+				'DETAILS_URL' => cot_url(
+                    'users',
+                    ['m' => 'details', 'id' => $user_data['user_id'], 'u' => $user_data['user_name']]
+                ),
+				'DETAILS_URL_SHORT' => cot_url('users', ['m' => 'details', 'id' => $user_data['user_id']]),
 				'FULL_NAME' => htmlspecialchars(cot_user_full_name($user_data)),
 				'TITLE' => $cot_groups[$user_data['user_maingrp']]['title'],
-				'MAINGRP' => cot_build_group($user_data['user_maingrp']),
-				'MAINGRPID' => $user_data['user_maingrp'],
-				'MAINGRPNAME' => $cot_groups[$user_data['user_maingrp']]['name'],
-				'MAINGRPTITLE' => cot_build_group($user_data['user_maingrp'], true),
-				'MAINGRPSTARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
-				'MAINGRPICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
+				'MAIN_GROUP' => cot_build_group($user_data['user_maingrp']),
+				'MAIN_GROUP_ID' => $user_data['user_maingrp'],
+				'MAIN_GROUP_NAME' => $cot_groups[$user_data['user_maingrp']]['name'],
+				'MAIN_GROUP_TITLE' => cot_build_group($user_data['user_maingrp'], true),
+				'MAIN_GROUP_STARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
+				'MAIN_GROUP_ICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
 				'COUNTRY' => cot_build_country($user_data['user_country']),
-				'COUNTRYFLAG' => cot_build_flag($user_data['user_country']),
+				'COUNTRY_FLAG' => cot_build_flag($user_data['user_country']),
 				'TEXT' => $user_data['user_text'],
 				'EMAIL' => cot_build_email($user_data['user_email'], $user_data['user_hideemail']),
 				'THEME' => $user_data['user_theme'],
@@ -2648,6 +2651,18 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'LOGCOUNT' => $user_data['user_logcount'],
 				'POSTCOUNT' => !empty($user_data['user_postcount']) ? $user_data['user_postcount'] : 0,
 				'LASTIP' => $user_data['user_lastip'],
+
+                // @deprecated in 0.9.24
+                'DETAILSLINK' => cot_url('users', ['m' => 'details', 'id' => $user_data['user_id'], 'u' => $user_data['user_name']]),
+                'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
+                'MAINGRP' => cot_build_group($user_data['user_maingrp']),
+                'MAINGRPID' => $user_data['user_maingrp'],
+                'MAINGRPNAME' => $cot_groups[$user_data['user_maingrp']]['name'],
+                'MAINGRPTITLE' => cot_build_group($user_data['user_maingrp'], true),
+                'MAINGRPSTARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
+                'MAINGRPICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
+                'COUNTRYFLAG' => cot_build_flag($user_data['user_country']),
+                // /@deprecated in 0.9.24
 			];
 
 			if ($allgroups) {
@@ -2674,12 +2689,12 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
                 'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
                 'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
                 'FULL_NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-                'MAINGRP' => cot_build_group(COT_GROUP_GUESTS),
-                'MAINGRPID' => COT_GROUP_GUESTS,
-                'MAINGRPSTARS' => '',
-                'MAINGRPICON' => cot_build_groupicon($cot_groups[1]['icon']),
+                'MAIN_GROUP' => cot_build_group(COT_GROUP_GUESTS),
+                'MAIN_GROUP_ID' => COT_GROUP_GUESTS,
+                'MAIN_GROUP_STARS' => '',
+                'MAIN_GROUP_ICON' => cot_build_groupicon($cot_groups[1]['icon']),
                 'COUNTRY' => cot_build_country(''),
-                'COUNTRYFLAG' => cot_build_flag(''),
+                'COUNTRY_FLAG' => cot_build_flag(''),
                 'TEXT' => '',
                 'EMAIL' => '',
                 'GENDER' => '',
@@ -2690,6 +2705,14 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
                 'REGDATE_STAMP' => '',
                 'POSTCOUNT' => '',
                 'LASTIP' => '',
+
+                // @deprecated in 0.9.24
+                'MAINGRP' => cot_build_group(COT_GROUP_GUESTS),
+                'MAINGRPID' => COT_GROUP_GUESTS,
+                'MAINGRPSTARS' => '',
+                'MAINGRPICON' => cot_build_groupicon($cot_groups[1]['icon']),
+                'COUNTRYFLAG' => cot_build_flag(''),
+                // /@deprecated in 0.9.24
             ];
 		}
 

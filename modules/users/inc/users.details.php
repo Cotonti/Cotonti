@@ -21,62 +21,71 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users',
 cot_block($usr['auth_read']);
 
 /* === Hook === */
-foreach (cot_getextplugins('users.details.first') as $pl)
-{
+foreach (cot_getextplugins('users.details.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if(!empty($u) && empty($id))
-{
-	$u = $db->query("SELECT user_id FROM $db_users WHERE user_name=".$db->quote($u)." LIMIT 1")->fetch();
-	$id = $u['user_id'];
-}
-elseif(empty($id) && empty($u) && $usr['id']>0)
-{
-	$id = $usr['id'];
+if (!empty($u) && empty($id)) {
+	$u = Cot::$db->query(
+        'SELECT user_id FROM ' . Cot::$db->users . ' WHERE user_name = :name  LIMIT 1',
+        ['name' => $u]
+    )->fetch();
+	$id = !empty($u) ? $u['user_id'] : null;
+} elseif(empty($id) && empty($u) && Cot::$usr['id'] > 0) {
+	$id = Cot::$usr['id'];
 }
 cot_die(empty($id), true);
 
-$sql = $db->query("SELECT * FROM $db_users WHERE user_id=$id LIMIT 1");
-cot_die($sql->rowCount()==0, true);
+$sql = Cot::$db->query('SELECT * FROM ' . Cot::$db->users . ' WHERE user_id = ? LIMIT 1', $id);
+cot_die($sql->rowCount() == 0, true);
 $urr = $sql->fetch();
 
 $title_params = array(
-	'USER' => $L['User'],
+	'USER' => Cot::$L['User'],
 	'NAME' => $urr['user_name']
 );
-$out['subtitle'] = cot_title('title_users_details', $title_params);
+Cot::$out['subtitle'] = cot_title('title_users_details', $title_params);
 
-$mskin = cot_tplfile(array('users', 'details'), 'module');
+$mskin = cot_tplfile(['users', 'details'], 'module');
 
 /* === Hook === */
-foreach (cot_getextplugins('users.details.main') as $pl)
-{
+foreach (cot_getextplugins('users.details.main') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-require_once $cfg['system_dir'] . '/header.php';
+Cot::$out['canonical_uri'] = cot_url(
+    'users',
+    ['m' => 'details', 'id' => $urr['user_id'], 'u' => htmlspecialchars($urr['user_name'])]
+);
+
+require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($mskin);
 
 $t->assign(cot_generate_usertags($urr, 'USERS_DETAILS_', '', true));
 
-$t->assign(array(
-	'USERS_DETAILS_TITLE' => cot_breadcrumbs(array(array(cot_url('users'), $L['Users']), array(cot_url('users', 'm=details&id='.$urr['user_id'].'&u='.$urr['user_name']), $urr['user_name'])), $cfg['homebreadcrumb']),
-	'USERS_DETAILS_SUBTITLE' => $L['use_subtitle'],
-));
+$breadCrumbs = [
+    [cot_url('users'), Cot::$L['Users']],
+    [
+        cot_url('users', ['m' => 'details', 'id' => $urr['user_id'], 'u' => $urr['user_name']]),
+        cot_user_full_name($urr),
+    ],
+];
+$t->assign([
+    'USERS_DETAILS_TITLE' => htmlspecialchars(cot_user_full_name($urr)),
+	'USERS_DETAILS_SUBTITLE' => Cot::$L['use_subtitle'],
+    'USERS_DETAILS_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
+]);
 
 /* === Hook === */
-foreach (cot_getextplugins('users.details.tags') as $pl)
-{
+foreach (cot_getextplugins('users.details.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if ($usr['isadmin'])
-{
+if ($usr['isadmin']) {
 	$t-> assign(array(
 		'USERS_DETAILS_ADMIN_EDIT' => cot_rc_link(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit']),
 		'USERS_DETAILS_ADMIN_EDIT_URL' => cot_url('users', 'm=edit&id='.$urr['user_id'])

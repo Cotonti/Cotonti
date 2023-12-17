@@ -21,7 +21,7 @@
     <!-- ENDIF -->
     <!-- post -->
     <div class="post">
-      <h4 class="ug{FORUMS_POSTS_ROW_MAINGRPID}">{FORUMS_POSTS_ROW_POSTERNAME}</h4>
+      <h4 class="ug{FORUMS_POSTS_ROW_MAIN_GROUP_ID}">{FORUMS_POSTS_ROW_POSTERNAME}</h4>
       <span class="postinfo colright"> <a href="{FORUMS_POSTS_ROW_ID|cot_url('forums','m=posts&p=$this')}#p{FORUMS_POSTS_ROW_ID}">#{FORUMS_POSTS_ROW_ORDER}</a> || <strong>{FORUMS_POSTS_ROW_CREATION}</strong> </span> <br class="clear" />
       <!-- user details -->
       <div class="posusr nou">
@@ -29,7 +29,7 @@
           <div class="avatar_border abs0"></div>
           <div class="ost{FORUMS_POSTS_ROW_USERONLINE} abs0"></div>
         </div>
-        {FORUMS_POSTS_ROW_USERMAINGRP}<br />
+        {FORUMS_POSTS_ROW_USERMAIN_GROUP}<br />
         <!-- IF {FORUMS_POSTS_ROW_USERCOUNTRY} != "---" -->
         {FORUMS_POSTS_ROW_USERCOUNTRY}<br />
         <!-- ENDIF -->

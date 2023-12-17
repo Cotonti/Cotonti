@@ -23,8 +23,8 @@
 		<tbody>					
 		<!-- BEGIN: USERS -->					
 			<tr>						
-				<td class="ug{WHOSONlINE_ROW1_USER_MAINGRPID}">{USER_LINK}</td>						
-				<td>{USER_MAINGRP}</td>						
+				<td class="ug{WHOSONlINE_ROW1_USER_MAIN_GROUP}">{USER_LINK}</td>
+				<td>{USER_MAIN_GROUP}</td>
 				<td>{USER_LOCATION} {USER_SUBLOCATION}</td>						
 				<td>{USER_LASTSEEN}</td>						
 				<!-- IF {PHP.usr.isadmin} -->

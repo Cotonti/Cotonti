@@ -182,7 +182,7 @@ $urr = $sql->fetch();
 Cot::$out['subtitle'] = Cot::$L['Profile'];
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 
-$mskin = cot_tplfile(array('users', 'profile'), 'module');
+$mskin = cot_tplfile(['users', 'profile', $urr['user_maingrp']], 'module');
 
 /* === Hook === */
 foreach (cot_getextplugins('users.profile.main') as $pl) {
@@ -202,15 +202,23 @@ $profile_form_email = cot_inputbox('text', 'ruseremail', $urr['user_email'], arr
 
 $editor_class = Cot::$cfg['users']['usertextimg'] ? 'minieditor' : '';
 
-$t->assign(array(
-	'USERS_PROFILE_TITLE' => cot_rc_link(cot_url('users', 'm=profile'), Cot::$L['pro_title']),
+$breadCrumbs = [
+    [cot_url('users', ['m' => 'profile']), Cot::$L['pro_title']],
+];
+
+$t->assign([
+	'USERS_PROFILE_TITLE' => Cot::$L['pro_title'],
 	'USERS_PROFILE_SUBTITLE' => Cot::$L['pro_subtitle'],
-	'USERS_PROFILE_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
-	'USERS_PROFILE_EDITLINK' => cot_url('users', 'm=edit&id='.$urr['user_id']),
+    'USERS_PROFILE_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
+	'USERS_PROFILE_DETAILS_URL' => cot_url(
+        'users',
+        ['m' => 'details', 'id' => $urr['user_id'], 'u' => $urr['user_name']]
+    ),
+	'USERS_PROFILE_EDIT_URL' => cot_url('users', ['m' => 'edit', 'id' => $urr['user_id']]),
 	'USERS_PROFILE_FORM_SEND' => cot_url('users', "m=profile&a=update&".cot_xg()),
 	'USERS_PROFILE_ID' => $urr['user_id'],
 	'USERS_PROFILE_NAME' => htmlspecialchars($urr['user_name']),
-	'USERS_PROFILE_MAINGRP' => cot_build_group($urr['user_maingrp']),
+	'USERS_PROFILE_MAIN_GROUP' => cot_build_group($urr['user_maingrp']),
 	'USERS_PROFILE_GROUPS' => cot_build_groupsms($urr['user_id'], FALSE, $urr['user_maingrp']),
 	'USERS_PROFILE_COUNTRY' => cot_selectbox_countries($urr['user_country'], 'rusercountry'),
 	'USERS_PROFILE_TEXT' => cot_textarea('rusertext', $urr['user_text'], 8, 56, array('class' => $editor_class)),
@@ -231,7 +239,13 @@ $t->assign(array(
 	'USERS_PROFILE_OLDPASS' => cot_inputbox('password', 'roldpass', '', array('size' => 12, 'maxlength' => 32)),
 	'USERS_PROFILE_NEWPASS1' => cot_inputbox('password', 'rnewpass1', '', array('size' => 12, 'maxlength' => 32, 'autocomplete' => 'off')),
 	'USERS_PROFILE_NEWPASS2' => cot_inputbox('password', 'rnewpass2', '', array('size' => 12, 'maxlength' => 32, 'autocomplete' => 'off')),
-));
+
+    // @deprecated in 0.9.24
+    'USERS_PROFILE_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
+    'USERS_PROFILE_EDITLINK' => cot_url('users', 'm=edit&id='.$urr['user_id']),
+    'USERS_PROFILE_MAINGRP' => cot_build_group($urr['user_maingrp']),
+    // /@deprecated in 0.9.24
+]);
 
 // Extra fields
 if (!empty(Cot::$extrafields[Cot::$db->users])) {

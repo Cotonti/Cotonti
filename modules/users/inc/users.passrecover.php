@@ -116,27 +116,30 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 $out['subtitle'] = $L['pasrec_title'];
 $out['head'] .= $R['code_noindex'];
 
-$title[] = $L['pasrec_title'];
 $mskin = cot_tplfile('users.passrecover', 'module');
 
 /* === Hook === */
-foreach (cot_getextplugins('users.passrecover.main') as $pl)
-{
+foreach (cot_getextplugins('users.passrecover.main') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-require_once $cfg['system_dir'].'/header.php';
+require_once Cot::$cfg['system_dir'] . '/header.php';
+
 $t = new XTemplate($mskin);
 
-$t->assign(array(
-	'PASSRECOVER_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
-	'PASSRECOVER_URL_FORM' => cot_url('users', 'm=passrecover&a=request')
-));
+$breadCrumbs = [
+    [cot_url('users', ['m' => 'profile']), Cot::$L['pasrec_title']],
+];
+
+$t->assign([
+	'PASSRECOVER_TITLE' => Cot::$L['pasrec_title'],
+    'PASSRECOVER_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
+	'PASSRECOVER_URL_FORM' => cot_url('users', ['m' => 'passrecover', 'a' => 'request']),
+]);
 
 /* === Hook === */
-foreach (cot_getextplugins('users.passrecover.tags') as $pl)
-{
+foreach (cot_getextplugins('users.passrecover.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -144,4 +147,4 @@ foreach (cot_getextplugins('users.passrecover.tags') as $pl)
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once $cfg['system_dir'].'/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';

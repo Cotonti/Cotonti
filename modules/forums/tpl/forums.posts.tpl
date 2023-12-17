@@ -67,7 +67,7 @@
 		<tr>
 			<td class="{FORUMS_POSTS_ROW_ODDEVEN}">
 				<p><!-- IF {FORUMS_POSTS_ROW_USERAVATAR} -->{FORUMS_POSTS_ROW_USERAVATAR}<!-- ELSE -->{PHP.R.forums_noavatar}<!-- ENDIF -->
-				<p>{FORUMS_POSTS_ROW_USERMAINGRPTITLE}</p>
+				<p>{FORUMS_POSTS_ROW_USERMAIN_GROUP_TITLE}</p>
 			</td>
 			<td class="{FORUMS_POSTS_ROW_ODDEVEN}">
 				<div>

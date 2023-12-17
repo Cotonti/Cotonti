@@ -3,7 +3,7 @@
     <div id="content">
     	<div class="padding20 whitee">    	            
 			<h1>{PHP.L.Edit} {PHP.L.User}</h1>
-			<div class="breadcrumb">{USERS_EDIT_TITLE}</div>
+			<div class="breadcrumb">{USERS_EDIT_BREADCRUMBS}</div>
 
 			<!-- BEGIN: USERS_EDIT_ERROR -->		
 			<div class="error">{USERS_EDIT_ERROR_BODY}</div>		

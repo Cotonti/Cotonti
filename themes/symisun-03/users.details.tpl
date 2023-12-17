@@ -41,7 +41,7 @@
 		<div class="padding15" style="padding-bottom:0">
 			<ul>
 			  <li><a href="{USERS_DETAILS_ID|cot_url('pm','m=send&amp;to=$this')}">{PHP.L.users_sendpm}</a></li>
-			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAINGRP}</li>
+			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAIN_GROUP}</li>
 			  <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>
 			  <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>
 			  <li><em>{PHP.L.Lastlogged}</em>: {USERS_DETAILS_LASTLOG}</li>
@@ -61,7 +61,7 @@
 			<span class="colright">{USERS_DETAILS_AVATAR}</span>
 			<ul>
 			  <li><a href="{USERS_DETAILS_ID|cot_url('pm','m=send&amp;to=$this')}">{PHP.L.users_sendpm}</a></li>
-			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAINGRP}</li>
+			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAIN_GROUP}</li>
                           <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>
                           <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>
                           <li><em>{PHP.L.Lastlogged}</em>: {USERS_DETAILS_LASTLOG}</li>
@@ -83,10 +83,10 @@
 			<span class="colright">{USERS_DETAILS_AVATAR}</span>
 			<ul>
 			  <li><a href="{USERS_DETAILS_ID|cot_url('pm','m=send&amp;to=$this')}">{PHP.L.users_sendpm}</a></li>
-			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAINGRP}</li>
-                          <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>
-                          <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>
-                          <li><em>{PHP.L.Lastlogged}</em>: {USERS_DETAILS_LASTLOG}</li>
+			  <li><em>{PHP.L.Maingroup}</em>: {USERS_DETAILS_MAIN_GROUP}</li>
+			  <li><em>{PHP.themelang.usersdetails.posts}</em>: {USERS_DETAILS_POSTCOUNT}</li>
+			  <li><em>{PHP.L.Registered}</em>: {USERS_DETAILS_REGDATE}</li>
+			  <li><em>{PHP.L.Lastlogged}</em>: {USERS_DETAILS_LASTLOG}</li>
 			</ul>
 		</div>
 		<!-- ENDIF -->

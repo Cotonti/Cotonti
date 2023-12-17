@@ -6,13 +6,14 @@
 			<div class="breadcrumb">{PHP.themelang.list.bread}: <a href="{PHP|cot_url('users')}">{PHP.L.Users}</a></div>
 			&nbsp;
 			<div class="nou">
-				{USERS_TOP_FILTERS_COUNTRY} {USERS_TOP_FILTERS_MAINGROUP} {USERS_TOP_FILTERS_GROUP}
+				{USERS_FILTERS_COUNTRY} {USERS_FILTERS_MAIN_GROUP} {USERS_FILTERS_GROUP}
 			</div>
 			&nbsp;
-			<!-- IF {USERS_TOP_TOTALUSERS} > 0 -->
+			<!-- IF {USERS_TOTAL_ENTRIES} > 0 -->
 			<p style="border-bottom:1px solid #ececec">
 				{PHP.themelang.list.sort}<br />
-				<strong>{USERS_TOP_NAME} &nbsp; {USERS_TOP_MAINGRP} &nbsp; {USERS_TOP_COUNTRY} &nbsp; {USERS_TOP_LASTLOGGED} &nbsp; {USERS_TOP_REGDATE}</strong>
+				<strong>{USERS_SORT_NAME} &nbsp; {USERS_SORT_MAIN_GROUP} &nbsp; {USERS_SORT_COUNTRY} &nbsp;
+					{USERS_SORT_LAST_LOGGED} &nbsp; {USERS_SORT_REGISTRATION_DATE}</strong>
 			</p>
 			<!-- ELSE -->
 			<h4>{PHP.f}</h4>
@@ -25,7 +26,7 @@
 					<strong>{USERS_ROW_NAME}</strong>
 				</div>
 				<div style="float:left; width:116px;">
-					{USERS_ROW_MAINGRP}
+					{USERS_ROW_MAIN_GROUP}
 				</div>
 				<div style="float:left; width:96px;">
 					{USERS_ROW_COUNTRY}
@@ -57,10 +58,10 @@
 			<h3><span style="background-color:#94af66; color:#fff">{PHP.L.Users}</span></h3>
 			<div class="padding15 admin nou scrabble" style="padding-bottom:0">
 				{USERS_TOP_FILTERS_OTHERS}<a href="{PHP|cot_url('users')}"><strong>{PHP.L.All}</strong></a><br />.....<br />
-				{PHP.L.users_usersperpage}: <strong>{USERS_TOP_MAXPERPAGE}</strong><br />
+				{PHP.L.users_usersperpage}: <strong>{USERS_ENTRIES_PER_PAGE}</strong><br />
 				{PHP.L.users_usersinthissection} (<em>{PHP.f}</em>): <strong>{USERS_TOP_TOTALUSERS}</strong>
-				<!-- IF {USERS_TOP_PAGNAV} -->
-				<div class="paging">{USERS_TOP_PAGEPREV}{USERS_TOP_PAGNAV}{USERS_TOP_PAGENEXT}</div>
+				<!-- IF {USERS_PAGINATION} -->
+				<div class="paging">{USERS_PREVIOUS_PAGE}{USERS_PAGINATION}{USERS_NEXT_PAGE}</div>
 				<!-- ENDIF -->
 			</div>
 		</div>
