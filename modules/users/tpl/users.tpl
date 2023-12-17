@@ -1,14 +1,14 @@
 <!-- BEGIN: MAIN -->
 <div class="block">
-    <h2 class="users">{USERS_TITLE} {USERS_BREADCRUMBS}</h2>
+    <h2 class="users">{USERS_BREADCRUMBS}</h2>
     <table class="cells">
         <tr>
-            <td class="coltop" class="width5">{USERS_TOP_PM}</td>
-            <td class="coltop" class="width20">{USERS_TOP_NAME}</td>
-            <td class="coltop" class="width20">{USERS_TOP_GRPTITLE}</td>
-            <td class="coltop" class="width15">{USERS_TOP_GRPLEVEL}</td>
-            <td class="coltop" class="width15">{USERS_TOP_COUNTRY}</td>
-            <td class="coltop" class="width25">{USERS_TOP_REGDATE}</td>
+            <td class="coltop" class="width5"></td>
+            <td class="coltop" class="width20">{USERS_SORT_NAME}</td>
+            <td class="coltop" class="width20">{USERS_SORT_GROUP_TITLE}</td>
+            <td class="coltop" class="width15">{USERS_SORT_GROUP_LEVEL}</td>
+            <td class="coltop" class="width15">{USERS_SORT_COUNTRY}</td>
+            <td class="coltop" class="width25">{USERS_SORT_REGISTRATION_DATE}</td>
         </tr>
         <!-- BEGIN: USERS_ROW -->
         <tr>
