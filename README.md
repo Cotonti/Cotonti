@@ -61,7 +61,7 @@ For step-by-step instructions see [Install.txt](https://github.com/Cotonti/Coton
 
 Cotonti is only as good as it is because of many individual community members and users that take the time to [report issues and request new features](https://github.com/Cotonti/Cotonti/issues), write the [documentation](https://www.cotonti.com/docs/), post feedback in the Cotonti [community forums](https://www.cotonti.com/forums). To be one of our developer community, become a Contributor.
 
-Be sure you are familiar with Cotonti [technical concepts](https://www.cotonti.com/docs/devel/technical_concepts), coding [guidelines](https://www.cotonti.com/docs/devel/coding_guide) and [style](https://www.cotonti.com/docs/devel/coding_style) we use.
+Be sure you are familiar with Cotonti [technical concepts](https://www.cotonti.com/docs/devel/technical_concepts), coding [guidelines](https://www.cotonti.com/docs/devel/coding_guide) and [style](https://www.cotonti.com/docs/devel/code-style) we use.
 
 When you're ready to contribute the bugfix or a new feature you can issue a [Pull Request](https://help.github.com/articles/using-pull-requests/) with related commit(s) from your GitHub account.
 
