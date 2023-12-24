@@ -9,7 +9,7 @@
   },
 
   "config": {
-    "vendor-dir": "lib"
+    "vendor-dir": "lib/vendor"
   },
 
   "require": {

@@ -34,7 +34,7 @@ if ($cfg['debug_mode']) {
 }
 
 
-require_once './lib/autoload.php';
+require_once './lib/vendor/autoload.php';
 
 register_shutdown_function('cot_shutdown');
 

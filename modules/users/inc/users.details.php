@@ -57,7 +57,7 @@ foreach (cot_getextplugins('users.details.main') as $pl) {
 
 Cot::$out['canonical_uri'] = cot_url(
     'users',
-    ['m' => 'details', 'id' => $urr['user_id'], 'u' => htmlspecialchars($urr['user_name'])]
+    ['m' => 'details', 'id' => $urr['user_id'], 'u' => $urr['user_name']]
 );
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
@@ -75,7 +75,7 @@ $breadCrumbs = [
 ];
 $t->assign([
     'USERS_DETAILS_TITLE' => htmlspecialchars(cot_user_full_name($urr)),
-	'USERS_DETAILS_SUBTITLE' => Cot::$L['use_subtitle'],
+    'USERS_DETAILS_SUBTITLE' => Cot::$L['use_subtitle'],
     'USERS_DETAILS_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
 ]);
 
