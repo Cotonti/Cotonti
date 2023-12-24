@@ -370,13 +370,15 @@ foreach ($sql_forums->fetchAll() as $row)
 	$rowdelete_url = (Cot::$usr['id'] > 0 && (Cot::$usr['isadmin'] || ($row['fp_posterid'] == Cot::$usr['id'] && (Cot::$cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < Cot::$cfg['forums']['edittimeout'] * 3600)))) ? cot_confirm_url(cot_url('forums', 'm=posts&a=delete&' . cot_xg() . '&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&d=' . $durl), 'forums', 'forums_confirm_delete_post') : '';
 	$rowdelete = (Cot::$usr['id'] > 0 && (Cot::$usr['isadmin'] || ($row['fp_posterid'] == Cot::$usr['id'] && (Cot::$cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < Cot::$cfg['forums']['edittimeout'] * 3600)) && $fp_num > 1)) ? cot_rc('forums_rowdelete', array('url' => $rowdelete_url)) : '';
 
-	if (!empty($row['fp_updater']))
-	{
+	if (!empty($row['fp_updater'])) {
 		$row['fp_updatedby'] = sprintf(Cot::$L['forums_updatedby'], htmlspecialchars($row['fp_updater']), cot_date('datetime_medium', $row['fp_updated']), cot_build_timegap($row['fp_updated'], $sys['now']));
 	}
 
+    // @deprecated in 0.9.24
 	$t->assign(cot_generate_usertags($row, 'FORUMS_POSTS_ROW_USER'));
-	$t->assign(array(
+
+    $t->assign(cot_generate_usertags($row, 'FORUMS_POSTS_ROW_USER_'));
+	$t->assign([
 		'FORUMS_POSTS_ROW_ID' => $row['fp_id'],
 		'FORUMS_POSTS_ROW_POSTID' => 'post_' . $row['fp_id'],
 		'FORUMS_POSTS_ROW_IDURL' => cot_url('forums', 'm=posts&id=' . $row['fp_id']),
@@ -403,25 +405,24 @@ foreach ($sql_forums->fetchAll() as $row)
 		'FORUMS_POSTS_ROW_ODDEVEN' => cot_build_oddeven($fp_num),
 		'FORUMS_POSTS_ROW_NUM' => $fp_num,
 		'FORUMS_POSTS_ROW_ORDER' => empty($id) ? $d + $fp_num : $id
-	));
+	]);
 
-    if(!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
+    if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
         foreach (Cot::$extrafields[Cot::$db->forum_posts] as $exfld) {
             $tag = mb_strtoupper($exfld['field_name']);
             $exfld_title = cot_extrafield_title($exfld, 'forums_post_');
-            $t->assign(array(
+            $t->assign([
                 'FORUMS_POSTS_ROW_' . $tag . '_TITLE' => $exfld_title,
                 'FORUMS_POSTS_ROW_' . $tag => cot_build_extrafields_data('forums', $exfld,
                     $row['fp_' . $exfld['field_name']],
                     (Cot::$cfg['forums']['markup'] && Cot::$cfg['forums']['cat_' . $s]['allowbbcodes'])),
                 'FORUMS_POSTS_ROW_' . $tag . '_VALUE' => $row['fp_' . $exfld['field_name']]
-            ));
+            ]);
         }
     }
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */

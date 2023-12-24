@@ -19,8 +19,14 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (is_array($user_data) && !empty($user_data['user_id']) && !empty($user_data['user_name'])) {
 	$temp_array['ONLINE'] = (cot_userisonline($user_data['user_id'])) ? '1' : '0';
+    $temp_array['ONLINE_TITLE'] = (cot_userisonline($user_data['user_id'])) ? Cot::$L['Online'] : Cot::$L['Offline'];
+
+    // @deprecated in 0.9.24
 	$temp_array['ONLINETITLE'] = (cot_userisonline($user_data['user_id'])) ? Cot::$L['Online'] : Cot::$L['Offline'];
 } else {
 	$temp_array['ONLINE'] = '0';
+    $temp_array['ONLINE_TITLE'] = '';
+
+    // @deprecated in 0.9.24
 	$temp_array['ONLINETITLE'] = '';
 }

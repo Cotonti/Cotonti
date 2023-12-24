@@ -55,9 +55,11 @@
 				{FORUMS_POSTS_ROW_ANCHORLINK}
 				<h4>
 					<!-- IF {PHP.cot_plugins_active.whosonline} -->
-					<img src="themes/{PHP.theme}/img/online{FORUMS_POSTS_ROW_USERONLINE}.png" title="{PHP.L.Status}: {FORUMS_POSTS_ROW_USERONLINETITLE}" alt="" class="userstatus" />
+					<img
+						src="themes/{PHP.theme}/img/online{FORUMS_POSTS_ROW_USER_ONLINE}.png"
+						title="{PHP.L.Status}: {FORUMS_POSTS_ROW_USER_ONLINE_TITLE}" alt="" class="userstatus" />
 					<!-- ENDIF -->
-					{FORUMS_POSTS_ROW_USERNAME}
+					{FORUMS_POSTS_ROW_USER_NAME}
 				</h4>
 			</td>
 			<td class="small centerall textright {FORUMS_POSTS_ROW_ODDEVEN}">
@@ -66,8 +68,8 @@
 		</tr>
 		<tr>
 			<td class="{FORUMS_POSTS_ROW_ODDEVEN}">
-				<p><!-- IF {FORUMS_POSTS_ROW_USERAVATAR} -->{FORUMS_POSTS_ROW_USERAVATAR}<!-- ELSE -->{PHP.R.forums_noavatar}<!-- ENDIF -->
-				<p>{FORUMS_POSTS_ROW_USERMAIN_GROUP_TITLE}</p>
+				<p><!-- IF {FORUMS_POSTS_ROW_USER_AVATAR} -->{FORUMS_POSTS_ROW_USER_AVATAR}<!-- ELSE -->{PHP.R.forums_noavatar}<!-- ENDIF -->
+				<p>{FORUMS_POSTS_ROW_USER_MAIN_GROUP_TITLE}</p>
 			</td>
 			<td class="{FORUMS_POSTS_ROW_ODDEVEN}">
 				<div>
@@ -80,10 +82,10 @@
 		</tr>
 		<tr>
 			<td class="small {FORUMS_POSTS_ROW_ODDEVEN}">
-				{PHP.L.forums_posts}: {FORUMS_POSTS_ROW_USERPOSTCOUNT}
+				{PHP.L.forums_posts}: {FORUMS_POSTS_ROW_USER_POSTCOUNT}
 			</td>
 			<td class="small {FORUMS_POSTS_ROW_ODDEVEN}">
-				{FORUMS_POSTS_ROW_USERTEXT}
+				{FORUMS_POSTS_ROW_USER_TEXT}
 			</td>
 		</tr>
 		<!-- END: FORUMS_POSTS_ROW -->

@@ -25,15 +25,15 @@
       <span class="postinfo colright"> <a href="{FORUMS_POSTS_ROW_ID|cot_url('forums','m=posts&p=$this')}#p{FORUMS_POSTS_ROW_ID}">#{FORUMS_POSTS_ROW_ORDER}</a> || <strong>{FORUMS_POSTS_ROW_CREATION}</strong> </span> <br class="clear" />
       <!-- user details -->
       <div class="posusr nou">
-        <div class="avatarious"> {FORUMS_POSTS_ROW_USERAVATAR}
+        <div class="avatarious"> {FORUMS_POSTS_ROW_USER_AVATAR}
           <div class="avatar_border abs0"></div>
-          <div class="ost{FORUMS_POSTS_ROW_USERONLINE} abs0"></div>
+          <div class="ost{FORUMS_POSTS_ROW_USER_ONLINE} abs0"></div>
         </div>
-        {FORUMS_POSTS_ROW_USERMAIN_GROUP}<br />
-        <!-- IF {FORUMS_POSTS_ROW_USERCOUNTRY} != "---" -->
-        {FORUMS_POSTS_ROW_USERCOUNTRY}<br />
+        {FORUMS_POSTS_ROW_USER_MAIN_GROUP}<br />
+        <!-- IF {FORUMS_POSTS_ROW_USER_COUNTRY} != "---" -->
+        {FORUMS_POSTS_ROW_USER_COUNTRY}<br />
         <!-- ENDIF -->
-        {PHP.L.forums_posts}: {FORUMS_POSTS_ROW_USERPOSTCOUNT} </div>
+        {PHP.L.forums_posts}: {FORUMS_POSTS_ROW_USER_POSTCOUNT} </div>
       <!-- user details -->
       <!-- actual post -->
       <div class="postxt">
@@ -58,8 +58,8 @@
             <!-- ENDIF -->
           </p>
           <!-- action buttons -->
-          <!-- IF {FORUMS_POSTS_ROW_USERTEXT} != '' -->
-          <span class="sig">{FORUMS_POSTS_ROW_USERTEXT}</span>
+          <!-- IF {FORUMS_POSTS_ROW_USER_TEXT} != '' -->
+          <span class="sig">{FORUMS_POSTS_ROW_USER_TEXT}</span>
           <!-- ELSE -->
           &nbsp;
           <!-- ENDIF -->
