@@ -29,7 +29,7 @@ To install Cotonti you need the following server software pre-installed:
 
 * WWW Server (Apache, nginx, etc)
 * PHP 5.6.0 or higher
-* MySQL 5.0.7 or higher
+* MySQL 5.0.8 or higher
 
 
 ## Server configuration
