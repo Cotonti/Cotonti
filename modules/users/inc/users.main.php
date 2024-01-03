@@ -14,44 +14,69 @@ $s = cot_import('s', 'G', 'ALP', 16);
 $w = cot_import('w', 'G', 'ALP', 4);
 
 list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['users']['maxusersperpage']);
-$f = cot_import('f', 'G', 'ALP', 16);
 $g = cot_import('g', 'G', 'INT');
 $gm = cot_import('gm', 'G', 'INT');
-$y = cot_import('y', 'P', 'TXT', 16);
 $sq = cot_import('sq', 'G', 'TXT', 16);
+$country = cot_import('country', 'G', 'ALP', 2);
+if (!empty($country)) {
+    $country = mb_strtolower($country);
+}
 unset($localskin, $grpms);
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
-cot_block($usr['auth_read']);
+list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('users', 'a');
+cot_block(Cot::$usr['auth_read']);
 
 require_once cot_langfile('users', 'module');
 require_once cot_langfile('countries', 'core');
 
+$defaultSortField = 'name';
+$defaultSortWay = 'asc';
+
 $users_sort_tags = [
 	// columns in $db_users table
-	'id' => ['USERS_SORT_USER_ID', &$L['Userid'],],
-	'name' => ['USERS_SORT_NAME', &$L['Username'],],
-	'maingrp' => ['USERS_SORT_MAIN_GROUP', &$L['Maingroup'],],
-	'country' => ['USERS_SORT_COUNTRY', &$L['Country'],],
-	'occupation' => ['USERS_SORT_OCCUPATION', &$L['Occupation'],],
-	'residence' => ['USERS_SORT_RESIDENCE', &$L['Residence'],],
-	'timezone' => ['USERS_SORT_TIMEZONE', &$L['Timezone'],],
-	'birthdate' => ['USERS_SORT_BIRTHDATE', &$L['Birthdate'],],
-	'gender' => ['USERS_SORT_GENDER', &$L['Gender'],],
-	'regdate' => ['USERS_SORT_REGISTRATION_DATE', &$L['Registered'],],
-	'lastlog' => ['USERS_SORT_LAST_LOGGED', &$L['Lastlogged'],],
-	'logcount' => ['USERS_SORT_LOGINS_COUNT', &$L['Count'],],
+	'id' => ['USERS_TOP_USER_ID', &Cot::$L['Userid']],
+	'name' => ['USERS_TOP_NAME', Cot::$L['Username'] . ' (login)'],
+	'maingrp' => ['USERS_TOP_MAIN_GROUP', &Cot::$L['Maingroup']],
+	'country' => ['USERS_TOP_COUNTRY', &Cot::$L['Country']],
+	'timezone' => ['USERS_TOP_TIMEZONE', &Cot::$L['Timezone']],
+	'birthdate' => ['USERS_TOP_BIRTHDATE', &Cot::$L['Birthdate']],
+	'gender' => ['USERS_TOP_GENDER', &Cot::$L['Gender']],
+	'regdate' => ['USERS_TOP_REGISTRATION_DATE', &Cot::$L['Registered']],
+	'lastlog' => ['USERS_TOP_LAST_LOGGED', &Cot::$L['Lastlogged']],
+	'logcount' => ['USERS_TOP_LOGINS_COUNT', &Cot::$L['users_logcounter']],
 	// like columns in $db_groups table
-	'grplevel' => ['USERS_SORT_GROUP_LEVEL', &$L['Level'],],
-	'grpname' => ['USERS_SORT_GROUP_TITLE', &$L['Maingroup'],],
+	'grplevel' => ['USERS_TOP_GROUP_LEVEL', &Cot::$L['Level']],
+	//'grpname' => ['USERS_TOP_GROUP_TITLE', &Cot::$L['Maingroup']],
 ];
 /* @todo move to Forums module */
 if (cot_module_active('forums')) {
-    $users_sort_tags['postcount'] = ['USERS_SORT_POSTS_COUNT', &$L['forums_posts'],];
+    if (empty(Cot::$L['forums_posts'])) {
+        include_once cot_langfile('forums', 'module');
+    }
+    $users_sort_tags['postcount'] = ['USERS_TOP_POSTS_COUNT', &Cot::$L['forums_posts']];
 }
 
-$users_sort_blacklist = ['email', 'lastip', 'password', 'sid', 'sidtime', 'lostpass', 'auth', 'token'];
-$users_sort_whitelist = ['id', 'name', 'maingrp', 'country', 'timezone', 'birthdate', 'gender', 'lang', 'regdate', 'grplevel', 'grpname'];
+$usersSortFields = [];
+
+$usersSortFieldsBlacklist = [
+    'banexpire',
+    'password',
+    'passfunc',
+    'passsalt',
+    'email',
+    'lastip',
+    'sid',
+    'sidtime',
+    'lostpass',
+    'auth',
+    'token'
+];
+
+$users_url_path = [];
+$where = [];
+$params = [];
+$joinColumns = [];
+$joinCondition = [];
 
 /* === Hook === */
 foreach (cot_getextplugins('users.first') as $pl) {
@@ -59,63 +84,155 @@ foreach (cot_getextplugins('users.first') as $pl) {
 }
 /* ===== */
 
-$users_url_path = [];
-
-if (empty($f)) {
-    $f = 'all';
-} else {
-    $users_url_path['f'] = $f;
-}
-
-if (
-    empty($s)
-    || in_array(mb_strtolower($s), $users_sort_blacklist)
-    || (!in_array($s, $users_sort_whitelist) && !Cot::$db->fieldExists(Cot::$db->users, "user_$s"))
-) {
-	$s = 'name';
-} else {
-    $users_url_path['s'] = $s;
-}
-
-if (!in_array($w, ['asc', 'desc'])) {
-	$w = 'asc';
-} else {
-    $users_url_path['w'] = $w;
-}
-
 if (empty($d)) {
 	$d = 0;
 }
 
-$title[] = [cot_url('users'), $L['Users']];
+$title = [];
+$metaTitle = [];
+$metaDesc = [];
 $localskin = cot_tplfile('users', 'module');
 
-$y = !empty($y) ? $y : '';
-if (!empty($sq)) {
-	$y = $sq;
+if ($s === 'grplevel' || $s === 'grpname' || $gm > 1) {
+	$joinCondition['mainGroup'] = 'LEFT JOIN ' . Cot::$db->groups . ' as g ON g.grp_id = u.user_maingrp';
 }
 
-if ($s == 'grplevel' || $s == 'grpname' || $gm > 1) {
-	$join_condition = "LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp";
+if ($sq !== null && $sq !== '') {
+    $titleString = Cot::$L['Search'] . " '{$sq}'";
+	$title[] = htmlspecialchars($titleString);
+    $metaTitle[] = $titleString;
+    $metaDesc[] = $titleString;
+
+    $searchCondition = ['name' => 'user_name LIKE :search'];
+    $params['search'] = "%{$sq}%";
+
+    if (!empty(Cot::$extrafields[Cot::$db->users])) {
+        $searchFields = ['first_name', 'firstname', 'last_name', 'lastname', 'middle_name', 'middlename'];
+        foreach ($searchFields as $searchField) {
+            if (!isset(Cot::$extrafields[Cot::$db->users][$searchField])) {
+                continue;
+            }
+            $searchCondition[$searchField] =  "user_{$searchField} LIKE :search";
+        }
+    }
+    $where['namelike'] = '(' . implode(' OR ', $searchCondition) . ')';
+
+    $users_url_path['sq'] = $sq;
 }
 
-if ($f == 'search' && mb_strlen($y) > 1) {
-	$sq = $y;
-	$title[] = $L['Search']." '".htmlspecialchars($y)."'";
-	$where['namelike'] = "user_name LIKE '%".$db->prep($y)."%'";
-} elseif ($g > 1) {
-	$title[] = $L['Maingroup']." = ".cot_build_group($g);
-	$where['maingrp'] = "user_maingrp=$g";
-} elseif ($gm > 1) {
-	$title[] = $L['Group']." = ".cot_build_group($gm);
-	$join_condition .= " LEFT JOIN $db_groups_users as m ON m.gru_userid=u.user_id";
-	$where['maingrp'] = "m.gru_groupid=".$gm;
-} elseif (mb_substr($f, 0, 8) == 'country_') {
-	$cn = mb_strtolower(mb_substr($f, 8, 2));
-	$title[] = $L['Country']." '" . (($cn == '00') ? $L['None']."'" : $cot_countries[$cn]."'");
-	$where['country'] = "user_country='$cn'";
-} else {// if ($f == 'all')
-	$where['1'] = "1";
+if (
+    !empty($g)
+    && (
+        !isset($cot_groups[$g])
+        || (!Cot::$usr['isadmin'] && ($cot_groups[$g]['hidden'] || $cot_groups[$g]['disabled']))
+    )
+) {
+    cot_die_message(404);
+}
+if (!empty($gm)
+    && (
+        !isset($cot_groups[$gm])
+        || (!Cot::$usr['isadmin'] && ($cot_groups[$gm]['hidden'] || $cot_groups[$gm]['disabled']))
+    )) {
+    cot_die_message(404);
+}
+
+if ($g > 1) {
+    $grpTitle = Cot::$L['Group'] . ": '" . cot_build_group($g) . "'";
+    $grpTitleDesc = [];
+    if ($cot_groups[$g]['hidden']) {
+        $grpTitleDesc[] = Cot::$L['Hidden'];
+    }
+    if ($cot_groups[$g]['disabled']) {
+        $grpTitleDesc[] = Cot::$L['Disabled'];
+    }
+    if (!empty($grpTitleDesc)) {
+        $grpTitle .= ' (' . implode(', ', $grpTitleDesc) . ')';
+    }
+    $title[] = $grpTitle;
+    $titleString = strip_tags($grpTitle);
+    $metaTitle[] = $titleString;
+    $metaDesc[] = $titleString
+        . (!empty($cot_groups[$g]['desc']) ? ' - ' . $cot_groups[$g]['desc'] : '');
+
+    $joinCondition['groupsUsers'] = ' LEFT JOIN ' . Cot::$db->groups_users . ' as m ON m.gru_userid = u.user_id ';
+    $where['group'] = 'm.gru_groupid = ' . $g;
+    $users_url_path['g'] = $g;
+}
+
+if ($gm > 1) {
+    $grpTitle = Cot::$L['Maingroup'] . ": '" . cot_build_group($gm) . "'";
+    $grpTitleDesc = [];
+    if ($cot_groups[$gm]['hidden']) {
+        $grpTitleDesc[] = Cot::$L['Hidden'];
+    }
+    if ($cot_groups[$gm]['disabled']) {
+        $grpTitleDesc[] = Cot::$L['Disabled'];
+    }
+    if (!empty($grpTitleDesc)) {
+        $grpTitle .= ' (' . implode(', ', $grpTitleDesc) . ')';
+    }
+    $title[] = $grpTitle;
+    $titleString = strip_tags($grpTitle);
+    $metaTitle[] = $titleString;
+    $metaDesc[] = $titleString
+        . (!empty($cot_groups[$gm]['desc']) ? ' - ' . $cot_groups[$gm]['desc'] : '');
+
+    $where['mainGroup'] = 'user_maingrp = ' . $gm;
+    $users_url_path['gm'] = $gm;
+}
+
+if ($country !== null && $country !== '') {
+    if ($country !== '00' && !isset($cot_countries[$country])) {
+        cot_die_message(404);
+    }
+    $titleString = Cot::$L['Country'] . ": '" . ($country === '00' ? Cot::$L['None'] : $cot_countries[$country]) . "'";
+    $title[] = htmlspecialchars($titleString);
+    $metaTitle[] = $titleString;
+    $metaDesc[] = $titleString;
+
+    $where['country'] = "user_country = :country";
+    $params['country'] = $country;
+    $users_url_path['country'] = $country;
+}
+
+$titleString = '';
+if (empty($s)) {
+    $s = $defaultSortField;
+} elseif (
+    in_array(mb_strtolower($s), $usersSortFieldsBlacklist)
+    || (!isset($users_sort_tags[$s]) && !Cot::$db->fieldExists(Cot::$db->users, "user_$s"))
+) {
+    cot_die_message(404);
+} elseif ($s !== $defaultSortField) {
+    $users_url_path['s'] = $s;
+
+    $fieldTitle = $s;
+    if (isset($users_sort_tags[$s])) {
+        $fieldTitle = $users_sort_tags[$s][1];
+    } elseif (isset(Cot::$L['user_' . $s . '_title'])) {
+        $fieldTitle = Cot::$L['user_' . $s . '_title'];
+    } elseif (
+        isset(Cot::$extrafields[Cot::$db->users][$s])
+        && !empty(Cot::$extrafields[Cot::$db->users][$s]['field_description'])
+    ) {
+        $fieldTitle = Cot::$extrafields[Cot::$db->users][$s]['field_description'];
+    }
+
+    $titleString = Cot::$L['OrderBy'] . " '" . $fieldTitle ."'";
+}
+if (!in_array($w, ['asc', 'desc'])) {
+    $w = $defaultSortWay;
+} elseif ($w !== $defaultSortWay) {
+    $users_url_path['w'] = $w;
+
+    // @todo translate
+    $titleString .= ($titleString === '' ? Cot::$L['Order'] : '') . ' descending';
+}
+if ($titleString !== '') {
+    //$title[] = $titleString;
+    $metaTitle[] = $titleString;
+    $metaDesc[] = $titleString;
 }
 
 switch ($s) {
@@ -130,16 +247,6 @@ switch ($s) {
 		break;
 }
 
-if (!empty($g)) {
-    $users_url_path['g'] = $g;
-}
-if (!empty($gm)) {
-    $users_url_path['gm'] = $gm;
-}
-if (!empty($g)) {
-    $users_url_path['sq'] = $sq;
-}
-
 /* === Hook === */
 foreach (cot_getextplugins('users.query') as $pl) {
 	include $pl;
@@ -149,11 +256,30 @@ foreach (cot_getextplugins('users.query') as $pl) {
 if (!isset($join_condition)) {
     $join_condition = '';
 }
+if (!empty($joinCondition)) {
+    if ($join_condition !== '') {
+        $join_condition .= " \n";
+    }
+    $join_condition .= implode(" \n", $joinCondition);
+}
 if (!isset($join_columns)) {
     $join_columns = '';
 }
+if (!empty($joinColumns)) {
+    if ($join_columns !== '') {
+        $join_columns .= ", ";
+    }
+    $join_columns .= implode(", ", $joinColumns);
+}
+
+$sqlWhere = '';
+if (!empty($where)) {
+    $sqlWhere = ' WHERE ' . implode(' AND ', $where);
+}
+
 $totalusers = Cot::$db->query(
-    "SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE " . implode(" AND ", $where)
+    'SELECT COUNT(*) FROM ' . Cot::$db->users . ' AS u ' . $join_condition . $sqlWhere,
+    $params
 )->fetchColumn();
 
 // Disallow accessing non-existent pages
@@ -161,49 +287,24 @@ if ($totalusers > 0 && $d > $totalusers) {
 	cot_die_message(404);
 }
 
-$sqlusers = $db->query(
-	"SELECT u.* $join_columns FROM $db_users AS u $join_condition
-	WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d, {$cfg['users']['maxusersperpage']}"
+$users = Cot::$db->query(
+	"SELECT u.* $join_columns FROM " . Cot::$db->users . ' AS u ' . $join_condition . $sqlWhere
+	. " ORDER BY $sqlorder LIMIT $d, " . Cot::$cfg['users']['maxusersperpage'],
+    $params
 )->fetchAll();
+
+/** @deprecated in 0.9.24 */
+$sqlusers = &$users;
 
 $pagenav = cot_pagenav('users', $users_url_path, $d, $totalusers, Cot::$cfg['users']['maxusersperpage']);
 
 Cot::$out['subtitle'] = Cot::$L['users_meta_title'];
 Cot::$out['desc'] = Cot::$L['users_meta_desc'];
-if (!empty($g)) {
-    $filterGroup = $filterGroupDesc = $g;
-    if (!empty($cot_groups[$g])) {
-        $filterGroup = isset(Cot::$L['users_grp_' . $g . '_title'])
-            ? Cot::$L['users_grp_' . $g . '_title']
-            : $cot_groups[$g]['name'];
-        if ($cot_groups[$g]['hidden']) {
-            $filterGroup .= ' (' . Cot::$L['Hidden'] . ')';
-        }
-        $filterGroupDesc = $filterGroup;
-        if (!empty($cot_groups[$g]['desc'])) {
-            $filterGroupDesc .= ' - ' . $cot_groups[$g]['desc'];
-        }
-    }
-    Cot::$out['subtitle'] .= ' (' . Cot::$L['Group'] . ' ' . htmlspecialchars($filterGroup) . ')';
-    Cot::$out['desc'] .= ' (' . Cot::$L['Group'] . ' ' . htmlspecialchars($filterGroupDesc) . ')';
+if (!empty($metaTitle)) {
+    Cot::$out['subtitle'] .= '. ' . implode(', ', $metaTitle);
 }
-
-if (!empty($gm)) {
-    $filterGroup = $filterGroupDesc = $gm;
-    if (!empty($cot_groups[$gm])) {
-        $filterGroup = isset(Cot::$L['users_grp_' . $gm . '_title'])
-            ? Cot::$L['users_grp_' . $gm . '_title']
-            : $cot_groups[$gm]['name'];
-        if ($cot_groups[$gm]['hidden']) {
-            $filterGroup .= ' (' . Cot::$L['Hidden'] . ')';
-        }
-        $filterGroupDesc = $filterGroup;
-        if (!empty($cot_groups[$gm]['desc'])) {
-            $filterGroupDesc .= ' - ' . $cot_groups[$gm]['desc'];
-        }
-    }
-    Cot::$out['subtitle'] .= " (" . Cot::$L['Maingroup'] . " " . htmlspecialchars($filterGroup) . ")";
-    Cot::$out['desc'] .= " (" . Cot::$L['Maingroup'] . " " . htmlspecialchars($filterGroupDesc) . ")";
+if (!empty($metaDesc)) {
+    Cot::$out['desc'] .= '. ' . implode(', ', $metaDesc);
 }
 
 // Building the canonical URL
@@ -212,6 +313,9 @@ if ($durl > 1) {
     $canonicalUrlParams['d'] = $durl;
 }
 Cot::$out['canonical_uri'] = cot_url('users', $canonicalUrlParams);
+//if (isset($_GET['country']) || isset($_GET['sq']) || isset($_GET['g']) || isset($_GET['gm'])) {
+//    Cot::$cfg['no_canonical_no_index'] = false;
+//}
 
 /* === Hook === */
 foreach (cot_getextplugins('users.main') as $pl) {
@@ -219,57 +323,76 @@ foreach (cot_getextplugins('users.main') as $pl) {
 }
 /* ===== */
 
-require_once $cfg['system_dir'] . '/header.php';
+require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($localskin);
 
 require_once cot_incfile('forms');
 
-$countryfilters_titles = [];
-$countryfilters_values = [];
-$countryfilters_titles[] = $R['users_sel_def_l'].$L['Country'].$R['users_sel_def_r'];
-$countryfilters_values[] = cot_url('users');
-$countryfilters_titles[] = $L['Not_indicated'];
-$countryfilters_values[] = cot_url('users', 'f=country_00');
-foreach ($cot_countries as $i => $x) {
-	$countryfilters_titles[] = cot_cutstring($x, 23);
-	$countryfilters_values[] = cot_url('users', 'f=country_'.$i);
-}
-$countryfilters = cot_selectbox(cot_url('users', 'f='.$f), 'bycountry', $countryfilters_values, $countryfilters_titles, false, array('onchange' => 'redirect(this)'), '', true);
+$filtersCountryTitles = [
+    Cot::$R['users_sel_def_l'] . Cot::$L['Country'] . Cot::$R['users_sel_def_r'],
+    Cot::$L['Not_indicated'],
+];
+$filtersCountryValues = ['', '00'];
 
-$grpfilters_titles = [Cot::$R['users_sel_def_l'] . Cot::$L['Maingroup'] . Cot::$R['users_sel_def_r']];
-$grpfilters_group_values = [cot_url('users')];
-$grpfilters_maingrp_values = [cot_url('users')];
-foreach ($cot_groups as $k => $i) {
-	if ($cot_groups[$k]['id'] != COT_GROUP_GUESTS) {
-		$grpfilters_titles[] = $cot_groups[$k]['name'];
-		$grpfilters_maingrp_values[] = cot_url('users', 'g='.$k, '', true);
-		$grpfilters_group_values[] = cot_url('users', 'gm='.$k, '', true);
-	}
+foreach ($cot_countries as $id => $countryRow) {
+    $filtersCountryTitles[] = cot_cutstring($countryRow, 23);
+    $filtersCountryValues[] = $id;
 }
-
-$maingrpfilters = cot_selectbox(
-    cot_url('users', 'g='.$g, '', true),
-    'bymaingroup',
-    $grpfilters_maingrp_values,
-    $grpfilters_titles,
+$filtersFormCountry = cot_selectbox(
+    $country,
+    'country',
+    $filtersCountryValues,
+    $filtersCountryTitles,
     false,
-    ['onchange' => 'redirect(this)',],
-    '',
-    true
+    ['class' => 'filter-submit']
 );
 
-$grpfilters_titles[0] = Cot::$R['users_sel_def_l'] . Cot::$L['Group'] . Cot::$R['users_sel_def_r'];
-$grpfilters = cot_selectbox(
-    cot_url('users', 'gm='.$gm, '', true),
-    'bygroupms',
-    $grpfilters_group_values,
-    $grpfilters_titles,
+$filtersGroupTitles = [Cot::$R['users_sel_def_l'] . Cot::$L['Maingroup'] . Cot::$R['users_sel_def_r']];
+$filtersGroupValues = [''];
+foreach ($cot_groups as $groupId => $group) {
+    if (
+        (($group['hidden'] || $group['disabled']) && !Cot::$usr['isadmin'])
+        || $group['id'] == COT_GROUP_GUESTS
+    ) {
+        continue;
+    }
+
+    $filtersGroupTitles[] = $group['name'];
+    $filtersGroupValues[] = $group['id'];
+}
+
+$filtersFormMainGroup = cot_selectbox(
+    $gm,
+    'gm',
+    $filtersGroupValues,
+    $filtersGroupTitles,
     false,
-    ['onchange' => 'redirect(this)',],
-    '',
-    true
+    ['class' => 'filter-submit']
 );
+
+$filtersGroupTitles[0] = Cot::$R['users_sel_def_l'] . Cot::$L['Group'] . Cot::$R['users_sel_def_r'];
+$filtersFormGroup = cot_selectbox(
+    $g,
+    'g',
+    $filtersGroupValues,
+    $filtersGroupTitles,
+    false,
+    ['class' => 'filter-submit']
+);
+
+$filtersFormAction = cot_url('users');
+$filtersFormParams = '';
+$parts = explode('?', $filtersFormAction);
+if (mb_stripos($parts[0], 'users') === false) {
+    $filtersFormParams .= cot_inputbox('hidden', 'e', 'users');
+}
+if (isset($users_url_path['s']) && !$t->hasTag('USERS_FILTERS_SORT')) {
+    $filtersFormParams .= cot_inputbox('hidden', 's', $users_url_path['s']);
+}
+if (isset($users_url_path['w'])) {
+    $filtersFormParams .= cot_inputbox('hidden', 'w', $users_url_path['w']);
+}
 
 /* === Hook === */
 foreach (cot_getextplugins('users.filters') as $pl) {
@@ -277,79 +400,166 @@ foreach (cot_getextplugins('users.filters') as $pl) {
 }
 /* ===== */
 
+$breadCrumbs = [[cot_url('users'), Cot::$L['Users']]];
+if (!empty($title)) {
+    $breadCrumbs[] = implode(', ', $title);
+}
+
 $t->assign([
-	'USERS_TITLE' => Cot::$L['use_title'],
+	'USERS_TITLE' => Cot::$L['use_title'] . implode(', ', $title),
 	'USERS_SUBTITLE' => Cot::$L['use_subtitle'],
-    'USERS_BREADCRUMBS' => cot_breadcrumbs($title, Cot::$cfg['homebreadcrumb']),
-    'USERS_CURRENT_FILTER' => $f,
-    'USERS_PAGINATION' => $pagenav['main'],
-    'USERS_PREVIOUS_PAGE' => $pagenav['prev'],
-    'USERS_NEXT_PAGE' => $pagenav['next'],
-    'USERS_CURRENT_PAGE' => $pagenav['current'],
-    'USERS_TOTAL_ENTRIES' => $totalusers,
-    'USERS_ENTRIES_PER_PAGE' => Cot::$cfg['users']['maxusersperpage'],
-    'USERS_TOTAL_PAGES' => $pagenav['total'],
-    'USERS_FILTERS_ACTION' => cot_url('users', ['f' => 'search']),
-    'USERS_FILTERS_COUNTRY' => $countryfilters,
-    'USERS_FILTERS_MAIN_GROUP' => $maingrpfilters,
-    'USERS_FILTERS_GROUP' => $grpfilters,
-    'USERS_FILTERS_SEARCH' => cot_inputbox('text', 'y', $y, ['maxlength' => 16]),
+    'USERS_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
+    'USERS_FILTERS_ACTION' => $filtersFormAction,
+    'USERS_FILTERS_PARAMS' => $filtersFormParams,
+    'USERS_FILTERS_COUNTRY' => $filtersFormCountry,
+    'USERS_FILTERS_MAIN_GROUP' => $filtersFormMainGroup,
+    'USERS_FILTERS_GROUP' => $filtersFormGroup,
+    'USERS_FILTERS_SEARCH' => cot_inputbox('text', 'sq', $sq, ['maxlength' => 16]),
     'USERS_FILTERS_SUBMIT' => cot_inputbox('submit', 'submit', Cot::$L['Search']),
 
     // @deprecated in 0.9.24
-	'USERS_CURRENTFILTER' => $f,
+	//'USERS_CURRENTFILTER' => $f,
 	'USERS_TOP_CURRENTPAGE' => $pagenav['current'],
 	'USERS_TOP_TOTALPAGE' => $pagenav['total'],
-	'USERS_TOP_MAXPERPAGE' => $cfg['users']['maxusersperpage'],
+	'USERS_TOP_MAXPERPAGE' => Cot::$cfg['users']['maxusersperpage'],
 	'USERS_TOP_TOTALUSERS' => $totalusers,
 	'USERS_TOP_PAGNAV' => $pagenav['main'],
 	'USERS_TOP_PAGEPREV' => $pagenav['prev'],
 	'USERS_TOP_PAGENEXT' => $pagenav['next'],
-	'USERS_TOP_FILTER_ACTION' => cot_url('users', 'f=search'),
-	'USERS_TOP_FILTERS_COUNTRY' => $countryfilters,
-	'USERS_TOP_FILTERS_MAINGROUP' => $maingrpfilters,
-	'USERS_TOP_FILTERS_GROUP' => $grpfilters,
-	'USERS_TOP_FILTERS_SEARCH' => cot_inputbox('text', 'y', $y, ['size' => 16, 'maxlength' => 16]),
+	'USERS_TOP_FILTER_ACTION' => $filtersFormAction,
+	'USERS_TOP_FILTERS_COUNTRY' => $filtersFormCountry,
+	'USERS_TOP_FILTERS_MAINGROUP' => $filtersFormMainGroup,
+	'USERS_TOP_FILTERS_GROUP' => $filtersFormGroup,
+	'USERS_TOP_FILTERS_SEARCH' => cot_inputbox('text', 'sq', $sq, ['size' => 16, 'maxlength' => 16]),
 	'USERS_TOP_FILTERS_SUBMIT' => cot_inputbox('submit', 'submit', Cot::$L['Search']),
 	//'USERS_TOP_PM' => 'PM',
     // /@deprecated in 0.9.24
 ]);
 
+$t->assign(cot_generatePaginationTags($pagenav, 'USERS_'));
+
 $k = '_.__._';
-$asc = explode($k, cot_url('users', ['s' => $k, 'w' => 'asc'] + $users_url_path));
-$desc = explode($k, cot_url('users', ['s' => $k, 'w' => 'desc'] + $users_url_path));
+$asc = explode($k, cot_url('users', array_merge($users_url_path, ['s' => $k, 'w' => 'asc'])));
+$desc = explode($k, cot_url('users', array_merge($users_url_path, ['s' => $k, 'w' => 'desc'])));
 foreach ($users_sort_tags as $k => $x) {
+    if (!in_array($k, $usersSortFieldsBlacklist)) {
+        if ($k === $defaultSortField) {
+            $usersSortFields[''] = $x[1];
+        } else {
+            $usersSortFields[$k] = $x[1];
+        }
+    }
 	$t->assign(
 		$x[0],
-		!in_array($k, $users_sort_blacklist) && in_array($k, $users_sort_whitelist) ?
-			cot_rc('users_link_sort', [
+		!in_array($k, $usersSortFieldsBlacklist)
+            ? cot_rc('users_link_sort', [
 				'asc_url' => implode($k, $asc),
 				'desc_url' => implode($k, $desc),
 				'text' => $x[1],
-				'icon_down' => $k == $s && $w == 'asc' ? $R['icon_vert_active']['asc'] : $R['icon_down'],
-				'icon_up' => $k == $s && $w == 'desc' ? $R['icon_vert_active']['desc'] : $R['icon_up']
+				'icon_down' => $k == $s && $w == 'asc' ? Cot::$R['icon_vert_active']['asc'] : Cot::$R['icon_down'],
+				'icon_up' => $k == $s && $w == 'desc' ? Cot::$R['icon_vert_active']['desc'] : Cot::$R['icon_up']
 			])
-		: $x[1]
+		    : $x[1]
 	);
 }
 
 // Extra fields for users
-foreach($cot_extrafields[$db_users] as $exfld) {
-	$uname = strtoupper($exfld['field_name']);
-	$fieldtext = isset($L['user_'.$exfld['field_name'].'_title']) ? $L['user_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
+foreach(Cot::$extrafields[Cot::$db->users] as $extraField) {
+	$uname = strtoupper($extraField['field_name']);
+	$fieldTitle = isset(Cot::$L['user_' . $extraField['field_name'] . '_title'])
+        ? Cot::$L['user_' . $extraField['field_name'] . '_title']
+        : $extraField['field_description'];
+
+    if (!in_array($extraField['field_name'], $usersSortFieldsBlacklist)) {
+        if ($k === $defaultSortField) {
+            $usersSortFields[$extraField['field_name']] = $fieldTitle;
+        } else {
+            $usersSortFields[$extraField['field_name']] = $fieldTitle;
+        }
+    }
+
 	$t->assign(
-		'USERS_TOP_'.$uname,
-		!in_array($exfld['field_name'], $users_sort_blacklist) && in_array($exfld['field_name'], $users_sort_whitelist) ?
-			cot_rc('users_link_sort', [
-				'asc_url' => cot_url('users', ['s' => $exfld['field_name'], 'w'=> 'asc'] + $users_url_path),
-				'desc_url' => cot_url('users', ['s' => $exfld['field_name'], 'w'=> 'desc'] + $users_url_path),
-				'text' => $fieldtext,
-				'icon_down' => $exfld['field_name'] == $s && $w == 'asc' ? $R['icon_vert_active']['asc'] : $R['icon_down'],
-				'icon_up' => $exfld['field_name'] == $s && $w == 'desc' ? $R['icon_vert_active']['desc'] : $R['icon_up']
+		'USERS_TOP_' . $uname,
+		!in_array($extraField['field_name'], $usersSortFieldsBlacklist)
+            ? cot_rc('users_link_sort', [
+				'asc_url' => cot_url(
+                    'users',
+                    array_merge($users_url_path, ['s' => $extraField['field_name'], 'w'=> 'asc'])
+                ),
+				'desc_url' => cot_url(
+                    'users',
+                    array_merge($users_url_path, ['s' => $extraField['field_name'], 'w'=> 'desc'])
+                ),
+				'text' => $fieldTitle,
+				'icon_down' => $s === $extraField['field_name'] && $w === 'asc'
+                    ? Cot::$R['icon_vert_active']['asc']
+                    : Cot::$R['icon_down'],
+				'icon_up' => $s === $extraField['field_name'] && $w === 'desc'
+                    ? Cot::$R['icon_vert_active']['desc']
+                    : Cot::$R['icon_up']
 			])
-		: $fieldtext
+		    : $fieldTitle
 	);
 }
+
+if (!isset($usersSortFields[''])) {
+    $usersSortFields[''] = isset(Cot::$L['user_' . $defaultSortField . '_title'])
+        ? Cot::$L['user_' . $defaultSortField . '_title']
+        : $defaultSortField;
+}
+
+$sortWayParams = $users_url_path;
+if ($w === 'desc') {
+    unset($sortWayParams['w']);
+    $sortWayIcon = Cot::$R['icon_down'];
+} else {
+    $sortWayParams['w'] = 'desc';
+    $sortWayIcon = Cot::$R['icon_up'];
+}
+$sortWayUrl = cot_url('users', $sortWayParams);
+
+$t->assign([
+    'USERS_FILTERS_SORT' => cot_selectbox(
+        $s !== $defaultSortField ? $s : '',
+        's',
+        array_keys($usersSortFields),
+        array_values($usersSortFields),
+        false,
+        ['class' => 'filter-submit']
+    ),
+    'USERS_FILTERS_SORT_WAY_URL' => $sortWayUrl,
+    'USERS_FILTERS_SORT_WAY' => cot_rc_link($sortWayUrl,  $sortWayIcon, ['rel' => 'nofollow']),
+]);
+
+Resources::embedFooter(
+    <<<JS
+const filterForm = document.getElementById('filter-form');
+if (filterForm) {
+    const filterElements = filterForm.querySelectorAll('input:not([type="hidden"]), select');
+    
+    function processFilterForm() {
+        for (let elem of filterElements) {
+            if (elem.value === '') {
+                elem.disabled = true;
+            }
+        }
+    }
+    
+    for (let elem of filterElements) {
+        if (elem.classList.contains('filter-submit')) {
+            elem.addEventListener('change', function (e) {
+                processFilterForm();
+                filterForm.submit();
+            });
+        }
+    }
+    
+    filterForm.addEventListener('submit', function (e) {
+        processFilterForm();
+    });
+}
+JS
+);
 
 $jj = 0;
 
@@ -357,7 +567,7 @@ $jj = 0;
 $extp = cot_getextplugins('users.loop');
 /* ===== */
 
-foreach ($sqlusers as $urr) {
+foreach ($users as $urr) {
 	$jj++;
 	$t->assign([
 		'USERS_ROW_ODDEVEN' => cot_build_oddeven($jj),

@@ -125,7 +125,7 @@ $R['img_structure_cat'] = '<img src="{$icon}" alt="{$title}" title="{$desc}" />'
  * Necessary because the $country param in DateTimeZone::listIdentifiers is not
  * supported in PHP 5.2.
  *
- * @deprecated PHP 5.2 don't uses any more
+ * @deprecated PHP 5.2 don't using anymore
  */
 $cot_timezones = array(
 

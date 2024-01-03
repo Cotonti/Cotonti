@@ -19,12 +19,21 @@ $c = cot_import('c', 'G', 'TXT'); // cat code
 $o = cot_import('ord', 'G', 'ARR'); // filter field names without 'page_'
 $p = cot_import('p', 'G', 'ARR'); // filter values
 
-$maxrowsperpage = Cot::$cfg['page']['cat___default']['maxrowsperpage'];
-if (!empty($c) && !empty(Cot::$cfg['page']['cat_' . $c]) && !empty(Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'])) {
-    $maxrowsperpage = Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'];
+$maxPageRowsPerPage = (int) Cot::$cfg['page']['cat___default']['maxrowsperpage'];
+if ($maxPageRowsPerPage <= 0) {
+    $maxPageRowsPerPage = Cot::$cfg['maxrowsperpage'];
+}
+if (
+    !empty($c)
+    && !empty(Cot::$cfg['page']['cat_' . $c])
+    && !empty(Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'])
+//    && isset(Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'])
+//    && ((string) Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'] !== '')
+) {
+    $maxPageRowsPerPage = (int) Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'];
 }
 
-list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage); //page number for pages list
+list($pg, $d, $durl) = cot_import_pagenav('d', $maxPageRowsPerPage); //page number for pages list
 list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', Cot::$cfg['page']['maxlistsperpage']);// page number for cats list
 
 if ($c == 'all' || $c == 'system') {
@@ -61,14 +70,15 @@ $w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? Cot::$cfg['page']['cat
 
 Cot::$sys['sublocation'] = $cat['title'];
 
-Cot::$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
-	Cot::$cfg['page']['cat___default']['maxrowsperpage'] :
-	Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'];
-Cot::$cfg['page']['maxrowsperpage'] = Cot::$cfg['page']['maxrowsperpage'] > 0 ? Cot::$cfg['page']['maxrowsperpage'] : 1;
-
-Cot::$cfg['page']['truncatetext'] = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
-	Cot::$cfg['page']['cat___default']['truncatetext'] :
-	Cot::$cfg['page']['cat_' . $c]['truncatetext'];
+$pageListTruncateText = (int) Cot::$cfg['page']['cat___default']['truncatetext'];
+if (
+    !empty($c)
+    && !empty(Cot::$cfg['page']['cat_' . $c])
+    && isset(Cot::$cfg['page']['cat_' . $c]['truncatetext'])
+    && ((string) Cot::$cfg['page']['cat_' . $c]['truncatetext'] !== '')
+) {
+    $pageListTruncateText = (int) Cot::$cfg['page']['cat_' . $c]['truncatetext'];
+}
 
 $where = [];
 $params = [];
@@ -173,11 +183,17 @@ if (empty($sql_page_string)) {
 	$where = array_filter($where);
 	$where = ($where) ? 'WHERE ' . implode(' AND ', $where) : '';
 	$sql_page_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid $where";
-	$sql_page_string = "SELECT p.*, u.* $join_columns
+
+    $limit = '';
+    if ($maxPageRowsPerPage > 0) {
+        $limit = "LIMIT $d, $maxPageRowsPerPage";
+    }
+
+    $sql_page_string = "SELECT p.*, u.* $join_columns
 		FROM $db_pages as p $join_condition
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		$where
-		ORDER BY $orderby LIMIT $d, ".Cot::$cfg['page']['maxrowsperpage'];
+		ORDER BY $orderby $limit";
 }
 $totallines = $db->query($sql_page_count, $params)->fetchColumn();
 $sqllist = $db->query($sql_page_string, $params);
@@ -186,15 +202,21 @@ if (
     (
         !Cot::$cfg['easypagenav']
         && $durl > 0
-        && Cot::$cfg['page']['maxrowsperpage'] > 0
-        && $durl % Cot::$cfg['page']['maxrowsperpage'] > 0
+        && $maxPageRowsPerPage > 0
+        && $durl % $maxPageRowsPerPage > 0
     )
     || ($d > 0 && $d >= $totallines)
 ) {
-	cot_redirect(cot_url('page', $list_url_path + array('dc' => $dcurl)));
+	cot_redirect(cot_url('page', $list_url_path + ['dc' => $dcurl]));
 }
 
-$pagenav = cot_pagenav('page', $list_url_path + array('dc' => $dcurl), $d, $totallines, Cot::$cfg['page']['maxrowsperpage']);
+$pagenav = cot_pagenav(
+    'page',
+    $list_url_path + ['dc' => $dcurl],
+    $d,
+    $totallines,
+    $maxPageRowsPerPage
+);
 
 $catTitle = htmlspecialchars(strip_tags(Cot::$structure['page'][$c]['title']));
 Cot::$out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
@@ -260,13 +282,6 @@ $t->assign([
 
     'LIST_BREADCRUMBS' => $catpath,
     'LIST_BREADCRUMBS_SHORT' => $catpath_short,
-    'LIST_PAGINATION' => $pagenav['main'],
-    'LIST_PREVIOUS_PAGE' => $pagenav['prev'],
-    'LIST_NEXT_PAGE' => $pagenav['next'],
-    'LIST_CURRENT_PAGE' => $pagenav['current'],
-    'LIST_TOTAL_ENTRIES' => $totallines,
-    'LIST_ENTRIES_PER_PAGE' => Cot::$cfg['page']['maxrowsperpage'],
-    'LIST_TOTAL_PAGES' => $pagenav['total'],
 
     // @deprecated in 0.9.24
     'LIST_CAT' => $c,
@@ -284,10 +299,12 @@ $t->assign([
     'LIST_TOP_PAGENEXT' => $pagenav['next'],
     'LIST_TOP_CURRENTPAGE' => $pagenav['current'],
     'LIST_TOP_TOTALLINES' => $totallines,
-    'LIST_TOP_MAXPERPAGE' => Cot::$cfg['page']['maxrowsperpage'],
+    'LIST_TOP_MAXPERPAGE' => $maxPageRowsPerPage,
     'LIST_TOP_TOTALPAGES' => $pagenav['total'],
     // /@deprecated
 ]);
+
+$t->assign(cot_generatePaginationTags($pagenav, 'LIST_'));
 
 if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated' && $c != 'saved_drafts') {
     $submitNewPageUrl = cot_url('page', ['c' => $c, 'm' => 'add']);
@@ -448,14 +465,6 @@ $pagenav_cat = cot_pagenav(
 );
 
 $t->assign([
-    'LIST_CAT_PAGINATION' => $pagenav_cat['main'],
-    'LIST_CAT_PREVIOUS_PAGE' => $pagenav_cat['prev'],
-    'LIST_CAT_NEXT_PAGE' => $pagenav_cat['next'],
-    'LIST_CAT_CURRENT_PAGE' => $pagenav_cat['current'],
-    'LIST_CAT_TOTAL_ENTRIES' => count($allsub),
-    'LIST_CAT_ENTRIES_PER_PAGE' => Cot::$cfg['page']['maxlistsperpage'],
-    'LIST_CAT_TOTAL_PAGES' => $pagenav_cat['total'],
-
     // @deprecated in 0.9.24
     'LISTCAT_PAGNAV' => $pagenav_cat['main'],
     'LISTCAT_PAGEPREV' => $pagenav_cat['prev'],
@@ -466,6 +475,8 @@ $t->assign([
     'LISTCAT_TOTALPAGES' => $pagenav_cat['total'],
     // /@deprecated
 ]);
+
+$t->assign(cot_generatePaginationTags($pagenav_cat, 'LIST_CAT_'));
 
 $jj = 0;
 /* === Hook - Part1 : Set === */
@@ -497,7 +508,7 @@ if (!$sqllist_rowset_other) {
             cot_generate_pagetags(
                 $pag,
                 'LIST_ROW_',
-                Cot::$cfg['page']['truncatetext'],
+                $pageListTruncateText,
                 Cot::$usr['isadmin'],
                 false,
                 '',

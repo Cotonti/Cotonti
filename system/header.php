@@ -91,7 +91,6 @@ if (!COT_AJAX) {
         $tempUrls[] = rawurldecode($tempUrls[0]);
         $tempUrls[] = rawurldecode($tempUrls[1]);
 
-
         if (!in_array($preparedCanonical, $tempUrls)) {
             Cot::$sys['noindex'] = true;
         }

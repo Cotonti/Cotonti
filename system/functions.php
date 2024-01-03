@@ -184,14 +184,13 @@ function cot_arrayMergeRecursive(array &$array1, array &$array2)
  * Truncates a string
  *
  * @param string $res Source string
- * @param int $l Length
+ * @param int $length Length
  * @return string
  */
-function cot_cutstring($res, $l)
+function cot_cutstring($res, $length)
 {
-	if (mb_strlen($res)>$l)
-	{
-		$res = mb_substr($res, 0, ($l-3)).'...';
+	if (mb_strlen($res) > $length) {
+		$res = mb_substr($res, 0, ($length - 3)) . '...';
 	}
 	return $res;
 }
@@ -1385,23 +1384,23 @@ function cot_shutdown()
 /**
  * Generates a title string by replacing submasks with assigned values
  *
- * @param string $area Area maskname or actual mask
+ * @param string $mask Area maskname or actual mask
  * @param array $params An associative array of available parameters
  * @param bool $escape Escape HTML special characters
  * @return string
  */
 function cot_title($mask, $params = array(), $escape = true)
 {
-	global $cfg;
 	$res = (!empty(Cot::$cfg[$mask])) ? Cot::$cfg[$mask] : $mask;
 	is_array($params) ? $args = $params : mb_parse_str($params, $args);
 	if (preg_match_all('#\{(.+?)\}#', $res, $matches, PREG_SET_ORDER)) {
 		foreach($matches as $m) {
 			$var = $m[1];
-			if(isset($args[$var])) {
-                $val = $escape ? htmlspecialchars($args[$var], ENT_COMPAT, 'UTF-8', false) : $args[$var];
-            } else {
-                $val = '';
+            $val = '';
+			if (isset($args[$var])) {
+                $val = $escape
+                    ? htmlspecialchars($args[$var], ENT_COMPAT, 'UTF-8', false)
+                    : $args[$var];
             }
 			$res = str_replace($m[0], $val, $res);
 		}
@@ -3203,13 +3202,12 @@ function cot_clear_messages($src = '', $class = '')
  */
 function cot_die($cond = true, $notfound = false)
 {
-	if ($cond)
-	{
+	if ($cond) {
 		$msg = $notfound ? '404' : '950';
-
 		cot_die_message($msg, true);
 	}
-	return FALSE;
+
+	return false;
 }
 
 /**
@@ -3248,11 +3246,11 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 /**
  * Terminates script execution and displays message page
  *
- * @param integer $code          Message code
- * @param boolean $header        Render page header
- * @param string  $message_title Custom page title
- * @param string  $message_body  Custom message body
- * @param string  $redirect      Optional URL to redirect after 3 seconds
+ * @param int $code Message code
+ * @param bool $header Render page header
+ * @param string $message_title Custom page title
+ * @param string $message_body Custom message body
+ * @param string $redirect Optional URL to redirect after 3 seconds
  */
 function cot_die_message($code, $header = TRUE, $message_title = '', $message_body = '', $redirect = '')
 {
@@ -4219,7 +4217,7 @@ function cot_timezone_transitions($tz)
 
 /*
  * ================================== Pagination ==============================
-*/
+ */
 
 /**
  * Page navigation (pagination) builder. Uses URL transformation and resource strings,
@@ -4242,9 +4240,19 @@ function cot_timezone_transitions($tz)
  * @param string $ajax_params URL parameters for ajax if $ajax_module is not empty
  * @return array
  */
-function cot_pagenav($module, $params, $current, $entries, $perpage, $characters = 'd', $hash = '',
-	$ajax = false, $target_div = '', $ajax_module = '', $ajax_params = array())
-{
+function cot_pagenav(
+    $module,
+    $params,
+    $current,
+    $entries,
+    $perpage,
+    $characters = 'd',
+    $hash = '',
+	$ajax = false,
+    $target_div = '',
+    $ajax_module = '',
+    $ajax_params = []
+) {
 	if (function_exists('cot_pagenav_custom')) {
 		// For custom pagination functions in plugins
 		return cot_pagenav_custom($module, $params, $current, $entries, $perpage, $characters, $hash,
@@ -4264,7 +4272,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
     }
 
 	if ($entries <= $perpage) {
-		return array(
+		return [
             'first' => '',
             'prev' => '',
             'main' => '',
@@ -4277,8 +4285,9 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
             'lastlink' => '',
             'total' => 1,
 			'onpage' => $onpage,
+            'perPage' => $perpage,
 			'entries' => $entries
-		);
+		];
 	}
 
 	$each_side = 3; // Links each side
@@ -4590,8 +4599,33 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		'lastlink' => $lastlink,
 		'total' => $totalpages,
 		'onpage' => $onpage,
+        'perPage' => $perpage,
 		'entries' => $entries,
 	];
+}
+
+/**
+ * @param array $pagination cot_pagenav() result array
+ * @param string $prefix
+ * @return array
+ * @see cot_pagenav()
+ */
+function cot_generatePaginationTags($pagination, $prefix = '')
+{
+    return [
+        $prefix . 'PAGINATION' => $pagination['main'],
+        $prefix . 'PREVIOUS_PAGE' => $pagination['prev'],
+        $prefix . 'NEXT_PAGE' => $pagination['next'],
+        $prefix . 'CURRENT_PAGE' => $pagination['current'],
+        $prefix . 'TOTAL_ENTRIES' => $pagination['entries'],
+        $prefix . 'ENTRIES_ON_CURRENT_PAGE' => $pagination['onpage'],
+        $prefix . 'ENTRIES_PER_PAGE' => $pagination['perPage'],
+        $prefix . 'TOTAL_PAGES' => $pagination['total'],
+
+        // @todo what are they needed for? $pagination['first'] is always empty. $pagination['last'] too
+        $prefix . 'FIRST_PAGE' => isset($pagination['first']) ? $pagination['first'] : '',
+        $prefix . 'LAST_PAGE' => $pagination['last'],
+    ];
 }
 
 /*
@@ -5107,7 +5141,7 @@ function cot_rc_embed_footer($code, $type = 'js', $attr = '')
  *
  * @param string $url Link href
  * @param string $text Tag contents
- * @param mixed $attrs Additional attributes as a string or an associative array
+ * @param string|array<string, string> $attrs Additional attributes as a string or an associative array
  * @return string HTML link
  */
 function cot_rc_link($url, $text, $attrs = '')
