@@ -357,6 +357,7 @@ $L['YIM'] = 'Yahoo Messenger';
 $Ls['Entries'] = "entries,entry";
 $Ls['Folders'] = "folders,folder";
 $Ls['Files'] = "files,file";
+$Ls['Items'] = "items,item";
 
 $Ls['Accounts'] = 'accounts,account';
 $Ls['Guests'] = "guests,guest";

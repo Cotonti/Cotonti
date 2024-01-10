@@ -15,62 +15,100 @@ Hooks=standalone
 
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
-$a = cot_import('a', 'G', 'ALP');
-$a = empty($a) ? 'all' : $a;
+$urlParams = [];
+
+$area = cot_import('a', 'G', 'ALP');
+if (empty($area)) {
+    $area = 'all';
+} elseif ($area !== 'all') {
+    $urlParams['a'] = $area;
+}
+
 $qs = cot_import('t', 'G', 'TXT');
 if (empty($qs)) {
     $qs = cot_import('t', 'P', 'TXT');
 }
-$qs = !empty($qs) ? str_replace('-', ' ', $qs) : '';
+if (!empty($qs)) {
+    $urlParams['t'] = $qs;
+    $qs = str_replace('-', ' ', $qs);
+} else {
+    $qs = '';
+}
 
 $tl = cot_import('tl', 'G', 'BOL');
-if ($tl && file_exists(cot_langfile('translit', 'core'))) {
-	include_once cot_langfile('translit', 'core');
-	$qs = strtr($qs, $cot_translitb);
+if ($tl) {
+    if (file_exists(cot_langfile('translit', 'core'))) {
+        include_once cot_langfile('translit', 'core');
+        $qs = strtr($qs, $cot_translitb);
+    }
+    $urlParams['tl'] = 1;
+}
+
+// Check if tag exists
+// Be sure this is not a tag search query
+$needCheck = $qs !== '' && mb_strpos($qs, '*') === false;
+if ($needCheck) {
+    $allTagsInQuery = [];
+    $tokens1 = explode(';', $qs);
+    $tokens1 = array_map('trim', $tokens1);
+    foreach ($tokens1 as $token1) {
+        $tokens2 = explode(',', $token1);
+        $tokens2 = array_map('trim', $tokens2);
+        foreach ($tokens2 as $token) {
+            $allTagsInQuery[] = $token;
+        }
+    }
+
+    $allTagsInQuery = array_map(function ($tag) { return Cot::$db->quote(cot_tag_prep($tag)); }, $allTagsInQuery);
+
+    $sql = 'SELECT COUNT(*) FROM ' . Cot::$db->quoteTableName(Cot::$db->tags)
+        . ' WHERE tag IN (' . implode(',', $allTagsInQuery) . ')';
+
+    $exists = (int) Cot::$db->query($sql)->fetchColumn();
+    if (!$exists) {
+        Cot::$env['status'] = 404;
+    }
 }
 
 // Results per page
-$maxperpage = (!empty(Cot::$cfg['maxrowsperpage']) && is_numeric(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperpage'] > 0) ?
-    Cot::$cfg['maxrowsperpage']
+$maxPerPage = !empty(Cot::$cfg['maxrowsperpage']) && is_numeric(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperpage'] > 0
+    ? (int) Cot::$cfg['maxrowsperpage']
     : 15;
 
-list($resultPageNum, $d) = cot_import_pagenav('d', $maxperpage);
+list($resultPageNum, $d, $resultPageUrlParam) = cot_import_pagenav('d', $maxPerPage);
 
 // Tags displayed per page in standalone cloud
-$perpage = Cot::$cfg['plugin']['tags']['perpage'];
-list($tagsPageNum, $dt) = cot_import_pagenav('dt', $perpage);
+$tagsPerPage = (int) Cot::$cfg['plugin']['tags']['perpage'];
+list($tagsPageNum, $dt, $tagsPageUrlParam) = cot_import_pagenav('dt', $tagsPerPage);
 
-// Array to register areas with tag functions provided
-$tag_areas = [];
-
-if (cot_module_active('page')) {
-	require_once cot_incfile('page', 'module');
-	$tag_areas[] = 'pages';
-}
-
-if (cot_module_active('forums')) {
-	require_once cot_incfile('forums', 'module');
-	$tag_areas[] = 'forums';
-}
+// Areas with tag functions provided
+$tagAreas = cot_tagAreas();
 
 // Sorting order
-$o = cot_import('order', 'P', 'ALP');
-if (empty($o)) {
-	$o = mb_strtolower(Cot::$cfg['plugin']['tags']['sort']);
-}
-$tag_order = '';
-$tag_orders = array('Title', 'Date', 'Category');
-foreach ($tag_orders as $order) {
-	$ord = mb_strtolower($order);
-	$selected = $ord == $o ? 'selected="selected"' : '';
-	$tag_order .= cot_rc('input_option', array('value' => $ord, 'selected' => $selected, 'title' => $L[$order]));
+$order = cot_import('order', 'G', 'ALP');
+$defaultOrder = mb_strtolower(Cot::$cfg['plugin']['tags']['sort']);
+if (empty($order)) {
+	$order = $defaultOrder;
+} elseif ($order !== $defaultOrder) {
+    $urlParams['order'] = $order;
 }
 
-/* == Hook for the plugins == */
+// @todo sorting way
+
+$tagOrders = ['title' => Cot::$L['Title'], 'date' => Cot::$L['Date'], 'category' => Cot::$L['Category']];
+
+/* === Hook === */
 foreach (cot_getextplugins('tags.first') as $pl) {
 	include $pl;
 }
 /* ===== */
+
+if (
+    (isset($urlParams['a']) && !isset($tagAreas[$urlParams['a']]))
+    || (isset($urlParams['order']) && !isset($tagOrders[$urlParams['order']]))
+) {
+    cot_die_message(404);
+}
 
 if (Cot::$cfg['plugin']['tags']['noindex']) {
     Cot::$out['head'] .= Cot::$R['code_noindex'];
@@ -88,75 +126,112 @@ if ($resultPageNum > 1) {
 }
 $metaPageNumber = implode(' - ', $metaPageNumbers);
 $metaTitle = empty($qs) ? Cot::$L['tags_All'] . ' ' . Cot::$sys['domain'] : Cot::$L['tags_Search_tags'] . ': ' . $qs_tag;
+if (isset($urlParams['a'])) {
+    $metaTitle .= '. ' . $tagAreas[$urlParams['a']];
+}
 if (!empty($metaPageNumber)) {
     $metaTitle .= htmlspecialchars(cot_rc('code_title_page_num', ['num' => $metaPageNumber]));
 }
+
 // meta title
 Cot::$out['subtitle'] = $metaTitle;
 // meta descriptions
-Cot::$out['desc'] = $metaTitle . '. ' . cot_string_truncate($L['tags_Query_hint'], 143, false, true);
+Cot::$out['desc'] = $metaTitle . '. '
+    . cot_string_truncate(Cot::$L['tags_Query_hint'], 143, false, true);
 // meta keywords
 Cot::$out['keywords'] = empty($qs)
     ? preg_replace("/\W\s/u", "", mb_strtolower($metaTitle))
     : mb_strtolower($qs_tag . ' ' . Cot::$L['tags_Search_tags']);
 
+// Canonical
+// Building the canonical URL
+$canonicalUrlParams = $urlParams;
+if ($resultPageNum > 1) {
+    $canonicalUrlParams['d'] = $resultPageUrlParam;
+}
+if ($tagsPageNum > 1) {
+    $canonicalUrlParams['dt'] = $tagsPageUrlParam;
+}
+Cot::$out['canonical_uri'] = cot_url('tags', $canonicalUrlParams);
+
+$formUrlParams = $urlParams;
+unset($formUrlParams['t'], $formUrlParams['order']);
+$formAction = cot_url('tags', $formUrlParams, '', true);
+$parts = explode('?', $formAction);
+$formAction = $parts[0];
+$actionVars = [];
+if (isset($parts[1])) {
+    parse_str($parts[1], $actionVars);
+}
+$formParams = '';
+foreach ($actionVars as $key => $val) {
+    $formParams .= cot_inputbox('hidden', $key, $val);
+}
+
+$formOrderOptions = ['' => Cot::$L['tags_Orderby']];
+foreach ($tagOrders as $option => $optionTitle) {
+    $formOrderOptions[$option] = $optionTitle;
+}
+
 $t->assign([
-	'TAGS_ACTION' => cot_url('plug', 'e=tags&a=' . $a),
+	'TAGS_FORM_ACTION' => $formAction,
+    'TAGS_FORM_PARAMS' => $formParams,
+    'TAGS_FORM_ORDER' => cot_selectbox(
+        $order,
+        'order',
+        array_keys($formOrderOptions),
+        array_values($formOrderOptions),
+        false
+    ),
 	'TAGS_HINT' => Cot::$L['tags_Query_hint'],
 	'TAGS_QUERY' => htmlspecialchars($qs),
-	'TAGS_ORDER' => $tag_order,
+
+    // @deprecated in 0.9.24
+    'TAGS_ACTION' => $formAction,
 ]);
 
-if ($a == 'pages' && cot_module_active('page')) {
+$entriesCount = [];
+if ($area == 'pages' && cot_module_active('page')) {
 	if (empty($qs)) {
 		// Form and cloud
 		cot_tag_search_form('pages');
 	} else {
 		// Search results
-		cot_tag_search_pages($qs);
+        $entriesCount['pages'] = cot_tag_search_pages($qs);
 	}
-}
-elseif ($a == 'forums' && cot_module_active('forums'))
-{
-	if (empty($qs))
-	{
+} elseif ($area == 'forums' && cot_module_active('forums')) {
+	if (empty($qs)) {
 		// Form and cloud
 		cot_tag_search_form('forums');
-	}
-	else
-	{
+	} else {
 		// Search results
-		cot_tag_search_forums($qs);
+        $entriesCount['forums'] = cot_tag_search_forums($qs);
 	}
-}
-elseif ($a == 'all')
-{
-	if (empty($qs))
-	{
+} elseif ($area === 'all') {
+	if (empty($qs)) {
 		// Form and cloud
 		cot_tag_search_form('all');
-	}
-	else
-	{
+	} else {
 		// Search results
-		foreach ($tag_areas as $area)
-		{
-			$tag_search_callback = 'cot_tag_search_' . $area;
-			if (function_exists($tag_search_callback))
-			{
-				$tag_search_callback($qs);
+		foreach ($tagAreas as $areaCode => $areaTitle) {
+			$tag_search_callback = 'cot_tag_search_' . $areaCode;
+			if (function_exists($tag_search_callback)) {
+                $entriesCount[$areaCode] = $tag_search_callback($qs);
 			}
 		}
 	}
-}
-else
-{
-	/* == Hook for the plugins == */
-	foreach (cot_getextplugins('tags.search.custom') as $pl)
-	{
+} else {
+	/* === Hook === */
+	foreach (cot_getextplugins('tags.search.custom') as $pl) {
 		include $pl;
 	}
 	/* ===== */
+}
+
+// Pagination for search results
+if (!empty($qs)) {
+    $pagination = cot_pagenav('tags', $urlParams, $d, !empty($entriesCount) ? max($entriesCount) : 0, $maxPerPage);
+    $t->assign(cot_generatePaginationTags($pagination, 'TAGS_'));
 }
 
 /**
@@ -167,28 +242,22 @@ else
  */
 function cot_tag_search_pages($query)
 {
-	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row, $sys;
+	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $order, $row, $sys, $maxPerPage;
 
-	if (!cot_module_active('page'))
-	{
-		return;
+	if (!cot_module_active('page')) {
+		return 0;
 	}
 
 	$query = cot_tag_parse_query($query, 'p.page_id');
-	if (empty($query))
-	{
-		return;
+	if (empty($query)) {
+		return 0;
 	}
 
-	$maxperpage = (Cot::$cfg['maxrowsperpage'] && is_numeric(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperpage'] > 0) ?
-		Cot::$cfg['maxrowsperpage'] : 15;
+	$joinColumns = '';
+	$joinTables = '';
+	$joinWhere = '';
 
-	$join_columns = '';
-	$join_tables = '';
-	$join_where = '';
-
-	switch($o)
-	{
+	switch ($order) {
 		case 'title':
 			$order = 'ORDER BY `page_title`';
 			break;
@@ -203,37 +272,34 @@ function cot_tag_search_pages($query)
 	}
 
 	/* == Hook == */
-	foreach (cot_getextplugins('tags.search.pages.query') as $pl)
-	{
+	foreach (cot_getextplugins('tags.search.pages.query') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	$totalitems = Cot::$db->query("SELECT DISTINCT COUNT(*)
+	$totalItems = Cot::$db->query("SELECT DISTINCT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
-			ON r.tag_item = p.page_id $join_tables
-		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0 $join_where")->fetchColumn();
+			ON r.tag_item = p.page_id $joinTables
+		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0 $joinWhere")->fetchColumn();
 
-	$sql = $db->query("SELECT DISTINCT p.* $join_columns
+	$sql = $db->query("SELECT DISTINCT p.* $joinColumns
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
-			ON r.tag_item = p.page_id $join_tables
-		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0 $join_where
+			ON r.tag_item = p.page_id $joinTables
+		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0 $joinWhere
 		$order
-		LIMIT $d, $maxperpage");
+		LIMIT $d, $maxPerPage");
 
-	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_pages']);
+	$t->assign('TAGS_RESULT_TITLE', Cot::$L['tags_Found_in_pages']);
+
 	$pcount = $sql->rowCount();
 
 	/* == Hook : Part 1 == */
 	$extp = cot_getextplugins('tags.search.pages.loop');
 	/* ===== */
 
-	if ($pcount > 0)
-	{
-		foreach ($sql->fetchAll() as $row)
-		{
-			if(($row['page_begin'] > 0 && $row['page_begin'] > $sys['now']) || ($row['page_expire'] > 0 && $sys['now'] > $row['page_expire']))
-			{
+	if ($pcount > 0) {
+		foreach ($sql->fetchAll() as $row) {
+			if(($row['page_begin'] > 0 && $row['page_begin'] > $sys['now']) || ($row['page_expire'] > 0 && $sys['now'] > $row['page_expire'])) {
 				--$pcount;
 				continue;
 			}
@@ -241,13 +307,12 @@ function cot_tag_search_pages($query)
 			$tags = cot_tag_list($row['page_id']);
 			$tag_list = '';
 			$tag_i = 0;
-			foreach ($tags as $tag)
-			{
+			foreach ($tags as $tag) {
 				$tag_t = Cot::$cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
 				$tag_u = Cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 				if ($tag_i > 0) $tag_list .= ', ';
-				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'pages', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)), htmlspecialchars($tag_t));
+				$tag_list .= cot_rc_link(cot_url('tags', array('a' => 'pages', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)), htmlspecialchars($tag_t));
 				$tag_i++;
 			}
 
@@ -259,37 +324,28 @@ function cot_tag_search_pages($query)
 				'TAGS_RESULT_ROW_TAGS' => $tag_list
 			));
 			/* == Hook : Part 2 == */
-			foreach ($extp as $pl)
-			{
+			foreach ($extp as $pl) {
 				include $pl;
 			}
 			/* ===== */
 			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}
 		$sql->closeCursor();
-		$qs_u = Cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($qs) : $qs;
-		$tl = $lang != 'en' && $qs_u != $qs ? 1 : null;
-		$pagenav = cot_pagenav('plug', array('e' => 'tags', 'a' => 'pages', 't' => $qs_u, 'tl' => $tl), $d, $totalitems, $maxperpage);
-		$t->assign(array(
-			'TAGS_PAGEPREV' => $pagenav['prev'],
-			'TAGS_PAGENEXT' => $pagenav['next'],
-			'TAGS_PAGNAV' => $pagenav['main']
-		));
 
 		/* == Hook == */
-		foreach (cot_getextplugins('tags.search.pages.tags') as $pl)
-		{
+		foreach (cot_getextplugins('tags.search.pages.tags') as $pl) {
 			include $pl;
 		}
 		/* ===== */
 	}
 
-	if($pcount == 0)
-	{
+	if ($pcount == 0) {
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
 	}
 
 	$t->parse('MAIN.TAGS_RESULT');
+
+    return $totalItems;
 }
 
 /**
@@ -300,28 +356,22 @@ function cot_tag_search_pages($query)
  */
 function cot_tag_search_forums($query)
 {
-	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $o, $row;
+	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $order, $row, $maxPerPage;
 
-	if (!cot_module_active('forums'))
-	{
-		return;
+	if (!cot_module_active('forums')) {
+		return 0;
 	}
 
 	$query = cot_tag_parse_query($query, 't.ft_id');
-	if (empty($query))
-	{
-		return;
+	if (empty($query)) {
+		return 0;
 	}
-
-	$maxperpage = (Cot::$cfg['maxrowsperpage'] && is_numeric(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperpage'] > 0) ?
-		Cot::$cfg['maxrowsperpage'] : 15;
 
 	$join_columns = '';
 	$join_tables = '';
 	$join_where = '';
 
-	switch($o)
-	{
+	switch($order) {
 		case 'title':
 			$order = 'ORDER BY `ft_title`';
 			break;
@@ -347,12 +397,12 @@ function cot_tag_search_forums($query)
 			ON r.tag_item = t.ft_id $join_tables
 		WHERE r.tag_area = 'forums' AND ($query) $join_where")->fetchColumn();
 
-	$sql = $db->query("SELECT DISTINCT t.ft_id, t.ft_cat, t.ft_title $join_columns
+	$sql = $db->query("SELECT DISTINCT t.ft_id, t.ft_cat, t.ft_title, t.ft_updated $join_columns
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id $join_tables
 		WHERE r.tag_area = 'forums' AND ($query) AND t.ft_id IS NOT NULL $join_where
 		$order
-		LIMIT $d, $maxperpage");
+		LIMIT $d, $maxPerPage");
 
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
 	if ($sql->rowCount() > 0) {
@@ -365,7 +415,7 @@ function cot_tag_search_forums($query)
 				$tag_u = Cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 				if ($tag_i > 0) $tag_list .= ', ';
-				$tag_list .= cot_rc_link(cot_url('plug', array('e' => 'tags', 'a' => 'forums', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)), htmlspecialchars($tag_t));
+				$tag_list .= cot_rc_link(cot_url('tags', array('a' => 'forums', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)), htmlspecialchars($tag_t));
 				$tag_i++;
 			}
             // Not using anywhere
@@ -379,18 +429,11 @@ function cot_tag_search_forums($query)
 			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}
 		$sql->closeCursor();
-		$qs_u = Cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($qs) : $qs;
-		$tl = $lang != 'en' && $qs_u != $qs ? 1 : null;
-		$pagenav = cot_pagenav('plug', array('e' => 'tags', 'a' => 'forums', 't' => $qs_u, 'tl' => $tl), $d, $totalitems, $maxperpage);
-		$t->assign(array(
-			'TAGS_PAGEPREV' => $pagenav['prev'],
-			'TAGS_PAGENEXT' => $pagenav['next'],
-			'TAGS_PAGNAV' => $pagenav['main']
-		));
-
 	} else {
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
 	}
 
 	$t->parse('MAIN.TAGS_RESULT');
+
+    return $totalitems;
 }

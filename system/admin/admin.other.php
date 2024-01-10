@@ -45,21 +45,21 @@ if (!empty($p)) {
     $extInfo = cot_get_extensionparams($p, false);
     $adminTitle = $extInfo['name'];
 
-	$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
-	$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$p), $adminTitle);
-	$adminpath[] = array(cot_url('admin', 'm=other&p='.$p), Cot::$L['Administration']);
+	$adminPath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
+	$adminPath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$p), $adminTitle);
+	$adminPath[] = array(cot_url('admin', 'm=other&p='.$p), Cot::$L['Administration']);
 
-	// $adminhelp = Cot::$L['Description'].' : '.$info['Description'].'<br />'.Cot::$L['Version'].' : '.$info['Version'].'<br />'.Cot::$L['Date'].' : '.$info['Date'].'<br />'.Cot::$L['Author'].' : '.$info['Author'].'<br />'.Cot::$L['Copyright'].' : '.$info['Copyright'].'<br />'.Cot::$L['Notes'].' : '.$info['Notes'];
+	// $adminHelp = Cot::$L['Description'].' : '.$info['Description'].'<br />'.Cot::$L['Version'].' : '.$info['Version'].'<br />'.Cot::$L['Date'].' : '.$info['Date'].'<br />'.Cot::$L['Author'].' : '.$info['Author'].'<br />'.Cot::$L['Copyright'].' : '.$info['Copyright'].'<br />'.Cot::$L['Notes'].' : '.$info['Notes'];
 
-    $adminmain = '';
+    $adminMain = '';
     foreach ($extp as $k => $pl) {
         $plugin_body = '';
         include_once Cot::$cfg['plugins_dir'] . '/' . $pl['pl_file'];
-        $adminmain .= $plugin_body;
+        $adminMain .= $plugin_body;
     }
 
 } else {
-	$adminpath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
+	$adminPath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
 	$adminTitle = Cot::$L['Other'];
 	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'a');
 	cot_block(Cot::$usr['auth_read']);
@@ -122,5 +122,5 @@ if (!empty($p)) {
 	}
 	/* ===== */
 	$t->parse('MAIN');
-	$adminmain = $t->text('MAIN');
+	$adminMain = $t->text('MAIN');
 }

@@ -14,9 +14,9 @@ cot_block(Cot::$usr['auth_read']);
 
 $t = new XTemplate(cot_tplfile('admin.log', 'core'));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=log'), Cot::$L['Log']);
-$adminhelp = Cot::$L['adm_log_desc'];
+$adminPath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
+$adminPath[] = array(cot_url('admin', 'm=log'), Cot::$L['Log']);
+$adminHelp = Cot::$L['adm_log_desc'];
 $adminTitle = Cot::$L['Log'];
 
 $log_groups = array(
@@ -128,4 +128,4 @@ foreach (cot_getextplugins('admin.log.tags') as $pl) {
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');

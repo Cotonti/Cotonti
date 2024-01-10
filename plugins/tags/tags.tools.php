@@ -4,6 +4,7 @@
 Hooks=tools
 [END_COT_EXT]
 ==================== */
+
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('plug', 'tags');
@@ -13,55 +14,80 @@ require_once cot_incfile('tags', 'plug');
 
 $tt = new XTemplate(cot_tplfile('tags.tools', 'plug', true));
 
-$adminhelp = Cot::$L['info_desc'];
+$adminHelp = Cot::$L['info_desc'];
 $adminTitle = Cot::$L['tags_All'];
 
-$cfg['maxrowsperpage'] = 30;
+$perPage = 30;
 
-$action = cot_import('action', 'P', 'TXT');
+$action = cot_import('action', 'R', 'TXT');
 $tag = cot_import('tag', 'R', 'TXT');
 $tag = !empty($tag) ? str_replace('_', ' ', $tag) : '';
-list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
-$sorttype = cot_import('sorttype', 'R', 'ALP');
-$sorttype = empty($sorttype) ? 'tag' : $sorttype;
-$sort_type = array(
-	'tag' => Cot::$L['Code'],
-	'tag_cnt' => Cot::$L['Count'],
-	'length' => Cot::$L['tags_length']
-);
-if ($sorttype == 'tag') {
-	$admin_tags_join_sorttype = "t.tag";
-} elseif ($sorttype == 'length') {
-	$admin_tags_join_sorttype = "length(t.tag)";
-} else {
-	$admin_tags_join_sorttype = $sorttype;
+list($pg, $d, $durl) = cot_import_pagenav('d', $perPage);
+
+$sortTypes = [
+    'tag' => Cot::$L['Code'],
+    'tag_cnt' => Cot::$L['Count'],
+    'length' => Cot::$L['tags_length']
+];
+$sortWays = [
+    'asc' => Cot::$L['Ascending'],
+    'desc' => Cot::$L['Descending']
+];
+
+$queryJoinFields = '';
+$queryJoinTables = '';
+$where = [];
+$params = [];
+
+$urlParams = ['m' => 'other', 'p' => 'tags'];
+
+$sortType = cot_import('sorttype', 'G', 'ALP');
+if (empty($sortType)) {
+    $sortType = 'tag';
+} elseif ($sortType !== 'tag') {
+    $urlParams['sorttype'] = $sortType;
 }
 
-$sortway = cot_import('sortway', 'R', 'ALP');
-$sortway = empty($sortway) ? 'asc' : $sortway;
-$sort_way = array(
-	'asc' => Cot::$L['Ascending'],
-	'desc' => Cot::$L['Descending']
-);
+if ($sortType === 'tag') {
+	$queryOrder = "t.tag";
+} elseif ($sortType === 'length') {
+	$queryOrder = "length(t.tag)";
+} else {
+	$queryOrder = $sortType;
+}
 
-$filter = cot_import('filter', 'R', 'TXT');
-$filter = empty($filter) ? 'all' : $filter;
-$filter_type = array(
-	'all' => Cot::$L['All'],
-);
+$queryOrderWay = cot_import('sortway', 'G', 'ALP');
+if (!in_array($queryOrderWay, ['asc', 'desc'])) {
+    $queryOrderWay = 'asc';
+} elseif ($queryOrderWay !== 'asc') {
+    $urlParams['sortway'] = $queryOrderWay;
+}
+
+$filter = cot_import('filter', 'G', 'TXT');
+if (empty($filter)) {
+    $filter = 'all';
+} elseif ($filter !== 'all') {
+    $urlParams['filter'] = $filter;
+}
+
+$characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+    'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '_'];
+$filterTypes = ['all' => Cot::$L['All']];
+foreach ($characters as $char) {
+    $filterTypes[$char] = $char;
+}
+
+// @todo Cyrillic characters should be only if site uses Russian language...
 foreach(range(chr(0xC0), chr(0xDF)) as $i) {
 	$i = iconv('CP1251', 'UTF-8', $i);
-	$filter_type[$i] = $i;
-}
-if ($filter == 'all') {
-	$admin_tags_join_where = "";
-} else {
-	$admin_tags_join_where = "AND t.tag LIKE '".$filter."%'";
+	$filterTypes[$i] = $i;
 }
 
-$admin_tags_join_fields = '';
-$admin_tags_join_tables = '';
+if ($filter !== 'all') {
+	$where['filter'] = 't.tag LIKE :filter';
+    $params['filter'] = "{$filter}%";
+}
 
 /* === Hook  === */
 foreach (cot_getextplugins('admin.tags.first') as $pl) {
@@ -69,40 +95,70 @@ foreach (cot_getextplugins('admin.tags.first') as $pl) {
 }
 /* ===== */
 
-$adminwarnings = '';
+$redirectUrl = cot_url('admin', $urlParams, '', true);
 
-if ($action == Cot::$L['Delete']) {
-	cot_check_xp();
-	foreach (cot_getextplugins('admin.tags.delete') as $pl)
-	{
+if ($action === 'delete') {
+    cot_check_xg();
+
+    /* === Hook  === */
+	foreach (cot_getextplugins('admin.tags.delete') as $pl) {
 		include $pl;
 	}
 	/* ===== */
-	$db->delete($db_tags, "tag='".htmlspecialchars($tag)."'");
-	$sql = $db->delete($db_tag_references, "tag='".htmlspecialchars($tag)."'");
-	$adminwarnings = ($sql) ? cot_message('adm_tag_already_del') : $L['Error'];
-} elseif ($action == $L['Edit']) {
-	cot_check_xp();
-	$old_tag = str_replace('_', ' ', cot_import('old_tag', 'R', 'TXT'));
 
-	foreach (cot_getextplugins('admin.tags.edit') as $pl)
-	{
+    if (!cot_error_found()) {
+        Cot::$db->delete(Cot::$db->tag_references, 'tag = :tag', ['tag' => $tag]);
+        $result = Cot::$db->delete(Cot::$db->tags, 'tag = :tag', ['tag' => $tag]);
+        if ($result) {
+            cot_message(cot_rc(Cot::$L['tags_tag_deleted'], ['tag' => $tag]));
+        } else {
+            cot_error(Cot::$L['Error']);
+        }
+    }
+
+    cot_redirect($redirectUrl);
+}
+
+if ($action === 'edit') {
+	cot_check_xp();
+
+	$oldTag = str_replace('_', ' ', cot_import('old_tag', 'P', 'TXT'));
+
+    if ($oldTag === $tag) {
+        cot_redirect($redirectUrl);
+    }
+
+    /* === Hook  === */
+	foreach (cot_getextplugins('admin.tags.edit') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
 	if (cot_tag_exists($tag)) {
-		cot_message('adm_tag_already exists', 'warning');
-	} else {
-		$db->update($db_tags, array("tag" => htmlspecialchars($tag)), "tag='".$db->prep($old_tag)."'");
-		$db->update($db_tag_references, array("tag" => htmlspecialchars($tag)), "tag='".$db->prep($old_tag)."'");
-		$adminwarnings = ($sql) ? cot_message('adm_tag_already_edit') : $L['Error'];
+		cot_message('tags_tag_exists', 'warning');
+        cot_redirect($redirectUrl);
 	}
-} elseif (!empty($tag)) {
-	$admin_tags_join_where = "AND t.tag LIKE '".$tag."'";
+
+    Cot::$db->getConnection()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    Cot::$db->getConnection()->beginTransaction();
+    try {
+        Cot::$db->update(Cot::$db->tags, ['tag' => $tag], 'tag = :oldTag', ['oldTag' => $oldTag]);
+        Cot::$db->update(Cot::$db->tag_references, ['tag' => $tag], 'tag = :oldTag', ['oldTag' => $oldTag]);
+        Cot::$db->getConnection()->commit();
+    } catch (Exception $e) {
+        Cot::$db->getConnection()->rollBack();
+        cot_error(Cot::$L['Error'] . ': ' . $e->getMessage());
+        cot_redirect($redirectUrl);
+    }
+
+    cot_message(Cot::$L['tags_tag_edited']);
+    cot_redirect($redirectUrl);
 }
 
-$is_adminwarnings = isset($adminwarnings);
+if (!empty($tag)) {
+	$where['tag'] = 't.tag LIKE :tag';
+    $params['tag'] = $tag;
+}
 
 if (cot_module_active('page')) {
 	require_once cot_incfile('page', 'module');
@@ -111,123 +167,220 @@ if (cot_module_active('forums')) {
 	require_once cot_incfile('forums', 'module');
 }
 
-$totalitems = Cot::$db->query("SELECT distinct(tag) FROM " . Cot::$db->tag_references . " AS t WHERE 1 " .
-    $admin_tags_join_where)->rowCount();
-$pagenav = cot_pagenav(
+$queryWhere = '';
+if (!empty($where)) {
+    $queryWhere = ' WHERE ' . implode(' AND ', $where);
+}
+
+$totalItems = Cot::$db->query(
+    'SELECT distinct(tag) FROM ' . Cot::$db->tag_references . ' AS t ' . $queryWhere,
+    $params
+)->rowCount();
+
+$pageNav = cot_pagenav(
     'admin',
-    'm=other&p=tags&sorttype=' . $sorttype . '&sortway=' . $sortway . '&filter=' . $filter,
+    $urlParams,
     $d,
-    $totalitems,
-    Cot::$cfg['maxrowsperpage'],
+    $totalItems,
+    $perPage,
     'd',
     '',
-    Cot::$cfg['jquery'] && $cfg['turnajax']
+    Cot::$cfg['jquery'] && Cot::$cfg['turnajax']
 );
 
-$sql = "SELECT t.tag, COUNT(*) AS tag_cnt, GROUP_CONCAT(t.tag_area,':',t.tag_item SEPARATOR ',') AS tag_grp $admin_tags_join_fields
-	FROM " . Cot::$db->tag_references . " AS t 
-	$admin_tags_join_tables
-	WHERE 1 $admin_tags_join_where
-	GROUP BY t.tag
-	ORDER BY $admin_tags_join_sorttype $sortway LIMIT $d, " . $cfg['maxrowsperpage'];
+if ($pg > $pageNav['total']) {
+    cot_redirect(str_replace('&amp;', '&', $pageNav['lastlink']));
+}
 
-$tags = Cot::$db->query($sql)->fetchAll();
+$sql = "SELECT t.tag, COUNT(*) AS tag_cnt, GROUP_CONCAT(t.tag_area,':',t.tag_item SEPARATOR ',') AS tag_grp "
+    . $queryJoinFields
+	. ' FROM ' . Cot::$db->tag_references . ' AS t ' . $queryJoinTables . ' '
+	. $queryWhere . " GROUP BY t.tag ORDER BY $queryOrder $queryOrderWay LIMIT $d, $perPage";
+
+$tags = Cot::$db->query($sql, $params)->fetchAll();
+
+$rowUrlParams = $urlParams;
+if (!empty($durl)) {
+    $rowUrlParams['d'] = $durl;
+}
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.tags.loop');
 /* ===== */
 foreach ($tags  as $row) {
-    if (isset($cot_extrafields[$db_tag_references])) {
-        foreach ($cot_extrafields[$db_tag_references] as $exfld) {
-            $tag = mb_strtoupper($exfld['field_name']);
+    if (isset($cot_extrafields[Cot::$db->tag_references])) {
+        foreach ($cot_extrafields[Cot::$db->tag_references] as $extraField) {
+            $tag = mb_strtoupper($extraField['field_name']);
             $tt->assign(array(
-                'ADMIN_TAGS_' . $tag . '_TITLE' => isset($L['tags_' . $exfld['field_name'] . '_title']) ? $L['tags_' . $exfld['field_name'] . '_title'] : $exfld['field_description'],
-                'ADMIN_TAGS_' . $tag => cot_build_extrafields_data('tags', $exfld, $row['tag_'.$exfld['field_name']]),
-                'ADMIN_TAGS_' . $tag . '_VALUE' => $row['tag_'.$exfld['field_name']],
+                'ADMIN_TAGS_' . $tag . '_TITLE' => isset(Cot::$L['tags_' . $extraField['field_name'] . '_title'])
+                    ? Cot::$L['tags_' . $extraField['field_name'] . '_title']
+                    : $extraField['field_description'],
+                'ADMIN_TAGS_' . $tag => cot_build_extrafields_data(
+                    'tags',
+                    $extraField,
+                    $row['tag_' . $extraField['field_name']]
+                ),
+                'ADMIN_TAGS_' . $tag . '_VALUE' => $row['tag_' . $extraField['field_name']],
             ));
         }
     }
+
+    // Areas with tag functions provided
+    $tagAreas = cot_tagAreas();
     $tagArea = [];
     if (!empty($row['tag_grp'])) {
-        $item_mas = array();
+        $item_mas = [];
         $items = explode(',', $row['tag_grp']);
         foreach ($items as $val) {
             $item = explode(':', $val);
             $item_mas[$item[0]][] = $item[1];
         }
-        foreach ($item_mas as $k => $v) {
-            $area = $k;
-            if (!empty(Cot::$L[$k])) {
-                $area = Cot::$L[$k];
+        foreach ($item_mas as $area => $v) {
+            $areaTitle = $area;
+            if (isset($tagAreas[$area])) {
+                $areaTitle = $tagAreas[$area];
+            } elseif (!empty(Cot::$L[$area])) {
+                // Old behavior
+                $areaTitle = Cot::$L[$area];
             } else {
-                $tmp = mb_strtoupper(mb_substr($k, 0, 1));
-                $tmp .= mb_substr($k, 1);
+                // Old behavior
+                $tmp = mb_strtoupper(mb_substr($area, 0, 1));
+                $tmp .= mb_substr($area, 1);
                 if (!empty(Cot::$L[$tmp])) {
-                    $area = Cot::$L[$tmp];
+                    $areaTitle = Cot::$L[$tmp];
                 }
             }
 
-            if (!in_array($k, $tagArea)) {
-                $tagArea[] = $area;
+            if (!in_array($area, $tagArea)) {
+                $tagArea[] = $areaTitle;
             }
             // Todo load all pages with one query
-            if ($k == 'pages') {
+            if ($area === 'pages') {
                 foreach ($v as $kk => $vv) {
-                    $row_item = cot_generate_pagetags($vv, 'ADMIN_TAGS_ITEM_', 200);
-                    if (!empty($row_item)) {
-                        $tt->assign($row_item);
-                        //$tt->assign(cot_generate_usertags($row_item['page_ownerid'], 'ADMIN_TAGS_PAGE_OWNER_'), htmlspecialchars($row['user_name']));
-                    } else {
-                        $row_item['ADMIN_TAGS_ITEM_ID'] = $vv;
-                        $row_item['ADMIN_TAGS_ITEM_TITLE'] = Cot::$L['Deleted'];
+                    $itemRow = cot_generate_pagetags($vv, 'ADMIN_TAGS_ROW_ITEM_', 200);
+                    if (empty($itemRow)) {
+                        $itemRow['ADMIN_TAGS_ROW_ITEM_ID'] = $vv;
+                        $itemRow['ADMIN_TAGS_ROW_ITEM_TITLE'] = Cot::$L['Deleted'];
+                        $itemRow['ADMIN_TAGS_ROW_ITEM_URL'] = '';
                     }
-
+                    $tt->assign($itemRow);
                     $tt->parse('MAIN.ADMIN_TAGS_ROW.ADMIN_TAGS_ROW_ITEMS');
                 }
-            } elseif ($k == 'forum') {
+            } elseif ($area === 'forums') {
 
             }
         }
     }
-		$tt->assign(array(
-			'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags&d=' . $durl),
-            'ADMIN_TAGS_DEL_URL' => cot_url('admin', [
-                'm' => 'other',
-                'p' => 'tags',
-                'a' => 'delete',
-                'tag' => str_replace(' ', '_', $row['tag']),
-                'x' => Cot::$sys['xk']
-            ]),
-			'ADMIN_TAGS_CODE' => $row['tag'],
-			'ADMIN_TAGS_TAG' => cot_inputbox('text', 'tag', htmlspecialchars_decode($row['tag']), array('maxlength' => '255')),//['.$row['tag'].']
-			'ADMIN_TAGS_AREA' => implode(', ', $tagArea),
-			'ADMIN_TAGS_COUNT' => $row['tag_cnt'],
-			'ADMIN_TAGS_ITEMS' => str_replace(array('pages:', ','), array('', ', '), $row['tag_grp']),
-			'ADMIN_TAGS_ODDEVEN' => cot_build_oddeven($ii)
-		));
-		/* === Hook - Part2 : Include === */
-		foreach ($extp as $pl) {
-			include $pl;
-		}
-		/* ===== */
-		$tt->parse('MAIN.ADMIN_TAGS_ROW');
-		$ii++;
+
+    $deleteUrl = cot_url(
+        'admin',
+        array_merge($rowUrlParams, ['action' => 'delete', 'tag' => $row['tag'], 'x' => Cot::$sys['xk']])
+    );
+    $confirmMessage = $row['tag_cnt'] > 0
+        ? cot_rc(
+            'tags_delete_confirm',
+            ['tag' => $row['tag'], 'count' => cot_declension($row['tag_cnt'], 'Items')]
+        )
+        : '';
+    $deleteConfirmUrl = cot_confirm_url($deleteUrl, 'admin', $confirmMessage);
+
+    $tt->assign([
+        'ADMIN_TAGS_ROW_FORM_ACTION' => cot_url('admin', $rowUrlParams),
+        'ADMIN_TAGS_ROW_CODE' => $row['tag'],
+
+        // Buffered value can replace values for all tags with last edited one
+        'ADMIN_TAGS_ROW_TAG' => cot_inputbox('text', 'tag', $row['tag'], ['maxlength' => '255']),
+
+        'ADMIN_TAGS_ROW_AREA' => implode(', ', $tagArea),
+        'ADMIN_TAGS_ROW_COUNT' => $row['tag_cnt'],
+        'ADMIN_TAGS_ROW_ITEMS' => str_replace(['pages:', ','], ['', ', '], $row['tag_grp']),
+        'ADMIN_TAGS_ROW_DELETE' => cot_rc_link(
+            $deleteConfirmUrl,
+            Cot::$L['Delete'],
+            ['class' => 'confirmLink']
+        ),
+        'ADMIN_TAGS_ROW_DELETE_URL' => $deleteUrl,
+        'ADMIN_TAGS_ROW_DELETE_CONFIRM_URL' => $deleteConfirmUrl,
+
+        // @deprecated in 0.9.24
+        'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags&d=' . $durl),
+        'ADMIN_TAGS_DEL_URL' => cot_url('admin', [
+            'm' => 'other',
+            'p' => 'tags',
+            'a' => 'delete',
+            'tag' => str_replace(' ', '_', $row['tag']),
+            'x' => Cot::$sys['xk']
+        ]),
+        'ADMIN_TAGS_CODE' => $row['tag'],
+        'ADMIN_TAGS_TAG' => cot_inputbox('text', 'tag', htmlspecialchars_decode($row['tag']), array('maxlength' => '255')),//['.$row['tag'].']
+        'ADMIN_TAGS_AREA' => implode(', ', $tagArea),
+        'ADMIN_TAGS_COUNT' => $row['tag_cnt'],
+        'ADMIN_TAGS_ITEMS' => str_replace(['pages:', ','], ['', ', '], $row['tag_grp']),
+        //'ADMIN_TAGS_ODDEVEN' => cot_build_oddeven($ii),
+    ]);
+
+    /* === Hook - Part2 : Include === */
+    foreach ($extp as $pl) {
+        include $pl;
+    }
+    /* ===== */
+
+    $tt->parse('MAIN.ADMIN_TAGS_ROW');
+    $ii++;
 }
 
-$tt->assign(array(
-	'ADMIN_TAGS_CONFIG_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p=tags'),
-	'ADMIN_TAGS_ADMINWARNINGS' => $adminwarnings,
-	'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags'),
-	'ADMIN_TAGS_ORDER' => cot_selectbox($sorttype, 'sorttype', array_keys($sort_type), array_values($sort_type), false),
-	'ADMIN_TAGS_WAY' => cot_selectbox($sortway, 'sortway', array_keys($sort_way), array_values($sort_way), false),
-	'ADMIN_TAGS_FILTER' => cot_selectbox($filter, 'filter', array_keys($filter_type), array_values($filter_type), false),
-	'ADMIN_TAGS_PAGINATION_PREV' => $pagenav['prev'],
-	'ADMIN_TAGS_PAGNAV' => $pagenav['main'],
-	'ADMIN_TAGS_PAGINATION_NEXT' => $pagenav['next'],
-	'ADMIN_TAGS_TOTALITEMS' => $totalitems,
-	'ADMIN_TAGS_COUNTER_ROW' => $ii
-));
+$filtersFormAction = cot_url('admin', ['m'=> 'other', 'p' => 'tags'], '', true);
+$parts = explode('?', $filtersFormAction);
+$filtersFormAction = $parts[0];
+$actionVars = [];
+if (isset($parts[1])) {
+    parse_str($parts[1], $actionVars);
+}
+$filtersFormParams = '';
+foreach ($actionVars as $key => $val) {
+    $filtersFormParams .= cot_inputbox('hidden', $key, $val);
+}
+
+$tt->assign([
+	'ADMIN_TAGS_CONFIG_URL' => cot_url('admin', ['m' => 'config', 'n' => 'edit', 'o' => 'plug', 'p' => 'tags']),
+	'ADMIN_TAGS_FILTERS_ACTION' => $filtersFormAction,
+    'ADMIN_TAGS_FILTERS_PARAMS' => $filtersFormParams,
+    'ADMIN_TAGS_FILTERS_SEARCH' => cot_inputbox('text', 'tag', $tag),
+	'ADMIN_TAGS_FILTERS_ORDER' => cot_selectbox(
+        $sortType,
+        'sorttype',
+        array_keys($sortTypes),
+        array_values($sortTypes),
+        false
+    ),
+	'ADMIN_TAGS_FILTERS_WAY' => cot_selectbox(
+        $queryOrderWay,
+        'sortway',
+        array_keys($sortWays),
+        array_values($sortWays),
+        false
+    ),
+	'ADMIN_TAGS_FILTERS_FILTER' => cot_selectbox(
+        $filter,
+        'filter',
+        array_keys($filterTypes),
+        array_values($filterTypes), false
+    ),
+	'ADMIN_TAGS_COUNTER_ROW' => $ii,
+
+    // @deprecated in 0.9.24
+    'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags'),
+    'ADMIN_TAGS_ORDER' => cot_selectbox($sortType, 'sorttype', array_keys($sortTypes), array_values($sortTypes), false),
+    'ADMIN_TAGS_WAY' => cot_selectbox($queryOrderWay, 'sortway', array_keys($sortWays), array_values($sortWays), false),
+    'ADMIN_TAGS_FILTER' => cot_selectbox($filter, 'filter', array_keys($filterTypes), array_values($filterTypes), false),
+    'ADMIN_TAGS_PAGINATION_PREV' => $pageNav['prev'],
+    'ADMIN_TAGS_PAGNAV' => $pageNav['main'],
+    'ADMIN_TAGS_PAGINATION_NEXT' => $pageNav['next'],
+    'ADMIN_TAGS_TOTALITEMS' => $totalItems,
+]);
+
+$tt->assign(cot_generatePaginationTags($pageNav, 'ADMIN_TAGS_'));
 
 /* === Hook  === */
 foreach (cot_getextplugins('admin.tags.tags') as $pl) {
@@ -238,4 +391,4 @@ foreach (cot_getextplugins('admin.tags.tags') as $pl) {
 cot_display_messages($tt);
 
 $tt->parse('MAIN');
-$adminmain = $tt->text('MAIN');
+$adminMain = $tt->text('MAIN');

@@ -25,10 +25,10 @@ if ($s == 'allpfs') {
 } else {
 	$t = new XTemplate(cot_tplfile('pfs.admin', 'module', true));
 
-	$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
-	$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod=' . $m), $cot_modules[$m]['title']);
-	$adminpath[] = array(cot_url('admin', 'm='.$m), Cot::$L['Administration']);
-	//$adminhelp = $L['adm_help_pfs'];
+	$adminPath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
+	$adminPath[] = array(cot_url('admin', 'm=extensions&a=details&mod=' . $m), $cot_modules[$m]['title']);
+	$adminPath[] = array(cot_url('admin', 'm='.$m), Cot::$L['Administration']);
+	//$adminHelp = $L['adm_help_pfs'];
 	$adminTitle = Cot::$L['pfs_title'];
 
 	/* === Hook === */
@@ -67,4 +67,4 @@ if ($s == 'allpfs') {
 }
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');

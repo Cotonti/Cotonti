@@ -79,7 +79,7 @@ $cfg['check_updates'] = true;		// Automatically check for updates, set it TRUE t
 
 $cfg['display_errors'] = true;		// Display error messages. Switch it FALSE on production sites
 
-$cfg['redirmode'] = false;			// 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
+$cfg['redirmode'] = false;			//Set to TRUE if you cannot successfully log in (IIS servers)
 $cfg['xmlclient'] = false;  		// For testing-purposes only, else keep it off.
 $cfg['ipcheck'] = false;  			// Will kill the logged-in session if the IP has changed
 $cfg['authcache'] = true;			// Auth cache in SQL tables. Set it FALSE if your huge database

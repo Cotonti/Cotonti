@@ -22,7 +22,7 @@ $tt = new XTemplate(cot_tplfile('banlist.admin', 'plug', true));
 require_once cot_langfile('banlist', 'plug');
 
 Cot::$db->registerTable('banlist');
-$adminhelp = $L['banlist_help'];
+$adminHelp = $L['banlist_help'];
 $adminTitle = $L['banlist_title'];
 
 $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;

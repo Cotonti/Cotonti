@@ -23,7 +23,7 @@ require_once cot_incfile('uploads');
 
 $t = new XTemplate(cot_tplfile('admin.users', 'core'));
 
-$adminpath[] = array(cot_url('admin', 'm=users'), $L['Users']);
+$adminPath[] = array(cot_url('admin', 'm=users'), $L['Users']);
 $adminTitle = $L['Users'];
 
 $g = cot_import('g', 'G', 'INT');
@@ -166,7 +166,7 @@ elseif($n == 'edit')
 		$row['grp_name'] = htmlspecialchars($row['grp_name']);
 		$row['grp_title'] = htmlspecialchars($row['grp_title']);
 
-		$adminpath[] = array (cot_url('admin', 'm=users&n=edit&g='.$g), $row['grp_name']);
+		$adminPath[] = array (cot_url('admin', 'm=users&n=edit&g='.$g), $row['grp_name']);
 
 		$t->assign(array(
             'ADMIN_USERS_GRP_NAME' => $row['grp_name'],
@@ -282,4 +282,4 @@ foreach (cot_getextplugins('admin.users.tags') as $pl)
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');

@@ -15,7 +15,7 @@ Hooks=tools
 
 defined('COT_CODE') or die('Wrong URL');
 
-$adminhelp = $L['ipsearch_help'];
+$adminHelp = $L['ipsearch_help'];
 $adminTitle = $L['ipsearch_title'];
 
 $t = new XTemplate(cot_tplfile('ipsearch', 'plug', true));

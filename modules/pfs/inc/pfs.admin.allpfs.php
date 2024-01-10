@@ -11,10 +11,10 @@
 
 $t = new XTemplate(cot_tplfile('pfs.admin.allpfs'));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=pfs'), $L['PFS']);
-$adminpath[] = array(cot_url('admin', 'm=pfs&s=allpfs'), $L['adm_allpfs']);
-$adminhelp = $L['adm_help_allpfs'];
+$adminPath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminPath[] = array(cot_url('admin', 'm=pfs'), $L['PFS']);
+$adminPath[] = array(cot_url('admin', 'm=pfs&s=allpfs'), $L['adm_allpfs']);
+$adminHelp = $L['adm_help_allpfs'];
 $adminTitle = $L['adm_allpfs'];
 
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg['maxrowsperpage']);

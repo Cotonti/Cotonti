@@ -18,21 +18,31 @@ Order=5
 defined('COT_CODE') or die('Wrong URL');
 
 if (empty($cot_urltrans) || !is_array($cot_urltrans)) {
-	$cot_urltrans = array();
-	$urltrans_preset = './datas/urltrans.dat';
-	if (!in_array(Cot::$cfg['plugin']['urleditor']['preset'], array('custom', 'none'))) {
-		$urltrans_preset = file_exists('./datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.dat') ?
-            './datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.dat' :
-            Cot::$cfg['plugins_dir'] . '/urleditor/presets/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.dat';
+	$cot_urltrans = [];
+	$urlTransPreset = './datas/urltrans.dat';
+	if (
+        !empty(Cot::$cfg['plugin']['urleditor']['preset'])
+        && !in_array(Cot::$cfg['plugin']['urleditor']['preset'], ['custom', 'none'], true)
+    ) {
+        $urlTransFileName = './datas/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.dat';
+		$urlTransPreset = file_exists($urlTransFileName)
+            ? $urlTransFileName
+            : Cot::$cfg['plugins_dir'] . '/urleditor/presets/' . Cot::$cfg['plugin']['urleditor']['preset'] . '.dat';
 	}
 
-	if (Cot::$cfg['plugin']['urleditor']['preset'] != 'none' && file_exists($urltrans_preset)) {
-		$fp = fopen($urltrans_preset, 'r');
-		while ($line = trim(fgets($fp), " \t\r\n")) {
+	if (Cot::$cfg['plugin']['urleditor']['preset'] !== 'none' && file_exists($urlTransPreset)) {
+		$fp = fopen($urlTransPreset, 'r');
+		while ($line = fgets($fp)) {
+            $line = trim($line, " \t\r\n");
+
+            if ($line === '' || mb_strpos($line, '#') === 0) {
+                continue;
+            }
+
 			$parts = preg_split('#\s+#', $line);
-			$rule = array();
+			$rule = [];
 			$rule['trans'] = $parts[2];
-			$parts[1] == '*' ? $rule['params'] = array() : parse_str($parts[1], $rule['params']);
+			$parts[1] === '*' ? $rule['params'] = [] : parse_str($parts[1], $rule['params']);
 			foreach($rule['params'] as $key => $val) {
 				if (mb_strpos($val, '|') !== false) {
 					$rule['params'][$key] = explode('|', $val);

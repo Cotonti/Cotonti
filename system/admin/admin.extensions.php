@@ -20,7 +20,7 @@ require_once cot_incfile('auth');
 
 $t = new XTemplate(cot_tplfile('admin.extensions', 'core'));
 
-$adminpath[] = array (cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
+$adminPath[] = array (cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
 $adminTitle = Cot::$L['Extensions'];
 
 $pl = cot_import('pl', 'G', 'ALP');
@@ -160,7 +160,7 @@ switch($a) {
 					if ($dependencies_satisfied) {
 						$result = cot_extension_uninstall($code, $is_module);
 					}
-					$adminpath[] = Cot::$L['adm_opt_uninstall'];
+					$adminPath[] = Cot::$L['adm_opt_uninstall'];
 
 				} else {
 					$url = cot_url('admin', "m=extensions&a=details&$arg=$code&b=uninstall&x={$sys['xk']}");
@@ -258,7 +258,7 @@ switch($a) {
 		}
 
 		$ext_info = cot_get_extensionparams($code, $is_module);
-		$adminpath[] = [cot_url('admin', ['m' => 'extensions', 'a' => 'details', $arg => $code]), $ext_info['name']];
+		$adminPath[] = [cot_url('admin', ['m' => 'extensions', 'a' => 'details', $arg => $code]), $ext_info['name']];
 
 		$isinstalled = cot_extension_installed($code);
 
@@ -650,7 +650,7 @@ switch($a) {
 	/* =============== */
 	case 'hooks':
 	/* =============== */
-		$adminpath[] = array(cot_url('admin', 'm=extensions&a=hooks'), Cot::$L['Hooks']);
+		$adminPath[] = array(cot_url('admin', 'm=extensions&a=hooks'), Cot::$L['Hooks']);
 
 		$sql = $db->query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC");
 
@@ -956,4 +956,4 @@ foreach (cot_getextplugins('admin.extensions.tags') as $pl) {
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');

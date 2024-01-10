@@ -96,14 +96,14 @@ function cot_apply_rwr()
             $_GET['u'] = $path[1];
             return;
 
-        } elseif ($filtered == 'tags') {
+        } elseif ($filtered === 'tags') {
             // Tags
             $_GET['e'] = 'tags';
             if ($count == 3) {
                 $_GET['a'] = $path[1];
                 $_GET['t'] = $path[2];
             } else {
-                $_GET['a'] = 'pages';
+                //$_GET['a'] = 'pages';
                 $_GET['t'] = $path[1];
             }
             return;

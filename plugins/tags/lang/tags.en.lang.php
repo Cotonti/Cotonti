@@ -24,9 +24,10 @@ $L['plu_title'] = 'Tags';
 /**
  * Plugin Body
  */
-
 $L['tags_All'] = 'All tags';
 $L['tags_comma_separated'] = 'comma separated';
+$L['tags_delete_confirm'] = '"{$tag}" tag has {$count} associated with it. Please confirm deletion.';
+$L['tags_tag_deleted'] = 'Tag "{$tag}" removed';
 $L['tags_Found_in_forums'] = 'Found in forums';
 $L['tags_Found_in_pages'] = 'Found in pages';
 $L['tags_Keyword'] = 'Keyword';
@@ -37,16 +38,14 @@ $L['tags_Search_results'] = 'Search Results';
 $L['tags_Search_tags'] = 'Search Tags';
 $L['tags_Tag_cloud'] = 'Tag Cloud';
 $L['tags_Tag_cloud_none'] = 'No tags';
+$L['tags_tag_edited'] = 'Tag edited';
+$L['tags_tag_exists'] = 'Tag already exists';
 $L['tags_length'] = 'Length';
 $L['adm_tag_item_area'] = 'Elements tag';
-$L['adm_tag_already_del'] = 'Tag removed';
-$L['adm_tag_already_edit'] = 'Tag edited';
-$L['adm_tag_already exists'] = 'Tag already exists';
 
 /**
  * Plugin Config
  */
-
 $L['cfg_forums'] = 'Enable tags in forums';
 $L['cfg_index'] = 'Index page tag cloud area';
 $L['cfg_limit'] = 'Max. tags per item, 0 for unlimited';

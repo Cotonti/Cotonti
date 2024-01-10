@@ -32,7 +32,7 @@ if (cot_plugin_active('comments')) {
 require_once cot_incfile('trashcan', 'plug');
 require_once cot_langfile('trashcan', 'plug');
 
-$adminhelp = Cot::$L['adm_help_trashcan'];
+$adminHelp = Cot::$L['adm_help_trashcan'];
 $adminTitle = Cot::$L['Trashcan'];
 
 $id = cot_import('id', 'G', 'INT');
@@ -175,7 +175,7 @@ foreach ($sql->fetchAll() as $row)
 	/* ===== */
 
 	if ($info) {
-		$adminpath[] = array(cot_url('admin', 'm=other&p=trashcan&a=info&id='.$id), $row['tr_title']);
+		$adminPath[] = array(cot_url('admin', 'm=other&p=trashcan&a=info&id='.$id), $row['tr_title']);
 		$data = unserialize($row['tr_datas']);
 		if (!empty($data)) {
 			foreach ($data as $key => $val) {

@@ -108,31 +108,31 @@ foreach (cot_getextplugins('admin.rightsbyitem.case') as $pl) {
 /* ===== */
 
 if ($ic == 'message' || $ic == 'admin') {
-	$adminpath[] = [cot_url('admin'), Cot::$L['adm_code'][$ic]];
+	$adminPath[] = [cot_url('admin'), Cot::$L['adm_code'][$ic]];
 } else {
-	$adminpath[] = [cot_url('admin', 'm=extensions'), Cot::$L['Extensions']];
+	$adminPath[] = [cot_url('admin', 'm=extensions'), Cot::$L['Extensions']];
 	if ($ic == 'plug') {
         $itemTitle = !empty($cot_plugins_enabled[$io]) ? $cot_plugins_enabled[$io]['title'] : $io;
         $title = $itemTitle;
-		$adminpath[] = [cot_url('admin', 'm=extensions&a=details&pl='.$io), $itemTitle];
+		$adminPath[] = [cot_url('admin', 'm=extensions&a=details&pl='.$io), $itemTitle];
 	} elseif ($ic == 'structure') {
-		$adminpath[] = [cot_url('admin', 'm=structure'), Cot::$L['Structure']];
+		$adminPath[] = [cot_url('admin', 'm=structure'), Cot::$L['Structure']];
 	} else {
         $itemTitle = !empty($cot_modules[$ic]) ? $cot_modules[$ic]['title'] : $ic;
         $title = $itemTitle;
-        $adminpath[] = [cot_url('admin', 'm=extensions&a=details&mod='.$ic), $itemTitle];
+        $adminPath[] = [cot_url('admin', 'm=extensions&a=details&mod='.$ic), $itemTitle];
 		if ($io != 'a') {
-			$adminpath[] = [cot_url('admin', 'm=structure&n='.$ic), Cot::$L['Structure']];
+			$adminPath[] = [cot_url('admin', 'm=structure&n='.$ic), Cot::$L['Structure']];
             $itemTitle = !empty(Cot::$structure[$ic][$io]) ? Cot::$structure[$ic][$io]['title'] : $io;
             $title .= '(' . $itemTitle . ')';
-            $adminpath[] = [cot_url('admin', 'm=structure&n='.$ic.'&al='.$io), $itemTitle];
+            $adminPath[] = [cot_url('admin', 'm=structure&n='.$ic.'&al='.$io), $itemTitle];
 		}
 	}
 }
 
 //m=extensions&a=details&mod=page
-$adminpath[] = [cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), Cot::$L['Rights']];
-($advanced) && $adminpath[] = [cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), Cot::$L['More']];
+$adminPath[] = [cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), Cot::$L['Rights']];
+($advanced) && $adminPath[] = [cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), Cot::$L['More']];
 $adminTitle = Cot::$L['Rights'];
 
 $adv_columns = ($advanced) ? 8 : 3;
@@ -180,10 +180,10 @@ foreach (cot_getextplugins('admin.rightsbyitem.tags') as $pl) {
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');
 
 $t->parse('RIGHTSBYITEM_HELP');
-$adminhelp = $t->text('RIGHTSBYITEM_HELP');
+$adminHelp = $t->text('RIGHTSBYITEM_HELP');
 
 function cot_rights_parseline($row, $title, $link)
 {

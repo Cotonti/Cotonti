@@ -133,11 +133,11 @@ foreach (cot_getextplugins('admin.rights.main') as $pl) {
 }
 /* ===== */
 
-$adminpath[] = [cot_url('admin', 'm=users'), Cot::$L['Users']];
-$adminpath[] = [cot_url('admin', 'm=users&n=edit&g='.$g), $cot_groups[$g]['name']];
-$adminpath[] = [cot_url('admin', 'm=rights&g='.$g), Cot::$L['Rights']];
+$adminPath[] = [cot_url('admin', 'm=users'), Cot::$L['Users']];
+$adminPath[] = [cot_url('admin', 'm=users&n=edit&g='.$g), $cot_groups[$g]['name']];
+$adminPath[] = [cot_url('admin', 'm=rights&g='.$g), Cot::$L['Rights']];
 if ($advanced) {
-    $adminpath[] = [cot_url('admin', 'm=rights&g=' . $g . '&advanced=1'), Cot::$L['More']];
+    $adminPath[] = [cot_url('admin', 'm=rights&g=' . $g . '&advanced=1'), Cot::$L['More']];
 }
 $adminTitle = Cot::$L['Rights'];
 
@@ -278,10 +278,10 @@ foreach (cot_getextplugins('admin.rights.tags') as $pl) {
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');
 
 $t->parse('RIGHTS_HELP');
-$adminhelp = $t->text('RIGHTS_HELP');
+$adminHelp = $t->text('RIGHTS_HELP');
 
 /**
  * @param array $row

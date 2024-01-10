@@ -1,6 +1,6 @@
 <?php
 /**
- * Static and dynamic resource (e.g. HTML) strings. Can be overriden by skin files and other code.
+ * Static and dynamic resource (e.g. HTML) strings. Can be overriden by theme files and other code.
  *
  * @package Cotonti
  * @copyright (c) Cotonti Team
@@ -12,7 +12,9 @@ defined('COT_CODE') or die('Wrong URL');
 // Todo may be use Cot::$L, Cot::$cfg instead?
 global $L, $cfg;
 
-if (!isset($L['Delete']))  include cot_langfile('main', 'core');
+if (!isset($L['Delete']))  {
+    include cot_langfile('main', 'core');
+}
 
 /**
  * Form generation
@@ -41,7 +43,6 @@ $R['input_date_short'] =  '{$day} {$month} {$year}';
 /**
  * Pagination
  */
-
 $R['code_title_page_num'] = ' (' . $L['Page'] . ' {$num})';
 $R['link_pagenav_current'] = '<span class="pagenav pagenav_current"><a href="{$url}" class="{$class}" {$rel}>{$num}</a></span>';
 $R['link_pagenav_first'] = '<span class="pagenav pagenav_first"><a href="{$url}" class="{$class}" {$rel}>'.$L['pagenav_first'].'</a></span>';
@@ -54,7 +55,6 @@ $R['link_pagenav_prev'] = '<span class="pagenav pagenav_prev"><a href="{$url}" c
 /**
  * Header
  */
-
 $R['code_basehref'] = '<base href="'.$cfg['mainurl'].'/" />';
 $R['code_noindex'] = '<meta name="robots" content="noindex" />';
 
@@ -72,7 +72,6 @@ $R['msg_code_redir_head'] = '<meta http-equiv="refresh" content="{$delay};url={$
 /**
  * Error handling
  */
-
 $R['code_error_separator'] = '<br />';
 $R['code_msg_begin'] = '<ul class="{$class}">';
 $R['code_msg_end'] = '</ul>';
@@ -103,10 +102,10 @@ $R['code_rc_js_file'] = '<script src="{$url}"></script>';
 /**
  * Misc
  */
-
 $R['icon_flag'] = '<img class="flag" src="images/flags/{$code}.png" alt="{$alt}" />';
-$R['icon_group'] = '<img src="{$src}" alt="'.$L['Group'].'" />';
-$R['img_none'] = '<img src="{$src}" alt="'.$L['Image'].'" />';
+$R['icon_group'] = '<img src="{$src}" alt="' . $L['Group'] . '" />';
+$R['icon_group'] = '<img src="{$src}" alt="' . $L['Group'] . '" />';
+$R['img_none'] = '<img src="{$src}" alt="' . $L['Image'] . '" />';
 $R['img_pixel'] = '<img src="images/pixel.gif" width="{$x}" height="{$y}" alt="" />';
 $R['img_smilie'] = '<img src="{$src}" alt="{$name}" class="icon" />';
 $R['link_catpath'] = '<a href="{$url}" title="{$title}">{$title}</a>';

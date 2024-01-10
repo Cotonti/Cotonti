@@ -40,7 +40,7 @@ foreach (cot_getextplugins('admin.structure.first') as $pl) {
 /* ===== */
 
 if (empty($n)) {
-	$adminpath[] = [cot_url('admin', 'm=structure'), Cot::$L['Structure'],];
+	$adminPath[] = [cot_url('admin', 'm=structure'), Cot::$L['Structure'],];
 	// Show available module list
 	if (
         is_array($extension_structure)
@@ -85,7 +85,7 @@ if (empty($n)) {
 		'ADMIN_STRUCTURE_EXFLDS_URL' => cot_url('admin', 'm=extrafields')
 	));
 	$t->parse('LIST');
-	$adminmain = $t->text('LIST');
+	$adminMain = $t->text('LIST');
 }
 else
 {
@@ -109,8 +109,8 @@ else
 	{
 		require_once cot_incfile($n, $is_module ? 'module' : 'plug');
 	}
-	if (empty($adminhelp)) {
-		$adminhelp = Cot::$L['adm_help_structure'];
+	if (empty($adminHelp)) {
+		$adminHelp = Cot::$L['adm_help_structure'];
 	}
 
 	if ($a == 'reset' && !empty($al))
@@ -396,15 +396,15 @@ else
 	}
 
 	$ext_info = cot_get_extensionparams($n, true);
-	$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
+	$adminPath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
     $urlParams = array('m' => 'extensions', 'a' => 'details');
     if ($is_module) {
         $urlParams['mod'] = $n;
     } else {
         $urlParams['pl'] = $n;
     }
-	$adminpath[] = [cot_url('admin', $urlParams), $ext_info['name'],];
-	$adminpath[] = [cot_url('admin', 'm=structure&n='.$n), Cot::$L['Structure'],];
+	$adminPath[] = [cot_url('admin', $urlParams), $ext_info['name'],];
+	$adminPath[] = [cot_url('admin', 'm=structure&n='.$n), Cot::$L['Structure'],];
 
 	if ($id > 0 || !empty($al)) {
 		$where = $id > 0 ? 'structure_id='.(int)$id : "structure_code='".$db->prep($al)."'";
@@ -592,7 +592,7 @@ else
 			require_once cot_incfile('configuration');
 
             $adminTitle .= ': ' . htmlspecialchars($row['structure_title']);
-            $adminpath[] = [
+            $adminPath[] = [
                 cot_url('admin', ['m' => 'structure', 'n' => $n, 'id' => $id]),
                 $row['structure_title'],
             ];
@@ -744,5 +744,5 @@ else
 	/* ===== */
 
 	$t->parse('MAIN');
-	$adminmain = $t->text('MAIN');
+	$adminMain = $t->text('MAIN');
 }

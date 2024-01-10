@@ -21,10 +21,10 @@ $t = new XTemplate(cot_tplfile('forums.admin', 'module', true));
 
 require_once cot_incfile('forums', 'module');
 
-$adminpath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
-$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
-$adminpath[] = array(cot_url('admin', 'm='.$m), $L['Administration']);
-$adminhelp = isset(Cot::$L['adm_help_forums']) ? Cot::$L['adm_help_forums'] : '';
+$adminPath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
+$adminPath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
+$adminPath[] = array(cot_url('admin', 'm='.$m), $L['Administration']);
+$adminHelp = isset(Cot::$L['adm_help_forums']) ? Cot::$L['adm_help_forums'] : '';
 $adminTitle = Cot::$L['Forums'];
 
 /* === Hook  === */
@@ -68,4 +68,4 @@ foreach (cot_getextplugins('forums.admin.tags') as $pl)
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');

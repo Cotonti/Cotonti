@@ -96,12 +96,10 @@ switch ($msg) {
 				include cot_langfile($m, 'plug');
 			}
 		}
-		$lng = cot_import('lng', 'G', 'ALP');
+		$lng = cot_import('lng', 'G', 'TXT');
 		if (!empty($lng)) {
 			// Assign custom message
-			if (isset($L[$lng])) {
-				$body = $L[$lng];
-			}
+            $body = isset($L[$lng]) ? $L[$lng] : $lng;
 		}
 		$rc = '920';
 		break;

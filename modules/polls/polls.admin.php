@@ -23,10 +23,10 @@ require_once cot_incfile('polls', 'module', 'resources');
 
 $t = new XTemplate(cot_tplfile('polls.admin', 'module', true));
 
-$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
-$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
-$adminpath[] = array(cot_url('admin', 'm='.$m), Cot::$L['Administration']);
-$adminhelp = Cot::$L['adm_help_polls'];
+$adminPath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
+$adminPath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
+$adminPath[] = array(cot_url('admin', 'm='.$m), Cot::$L['Administration']);
+$adminHelp = Cot::$L['adm_help_polls'];
 $adminTitle = Cot::$L['Polls'];
 
 list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['maxrowsperpage']);
@@ -160,9 +160,6 @@ while ($row = $sql_polls->fetch()) {
 		'ADMIN_POLLS_ROW_POLL_TOTALVOTES' => $totalvotes,
 		'ADMIN_POLLS_ROW_POLL_LOCKED' => ($row['poll_state']) ? Cot::$R['polls_icon_locked'] : '',
 
-        /** @deprecated Delete in Cotonti Siena 0.9.25  */
-		'ADMIN_POLLS_ROW_POLL_URL_DEL' => $deleteUrl,
-
         'ADMIN_POLLS_ROW_POLL_DELETE_URL' => $deleteUrl,
         'ADMIN_POLLS_ROW_POLL_DELETE_CONFIRM_URL' => $deleteConfirmUrl,
         'ADMIN_POLLS_ROW_POLL_URL_LCK' => cot_url('admin', $actionUrlParams + ['a' => 'lock']),
@@ -172,6 +169,9 @@ while ($row = $sql_polls->fetch()) {
             ? cot_url('polls', ['id' => $id])
             : cot_url('forums', ['m' => 'posts', 'q' => $row['poll_code']]),
 		'ADMIN_POLLS_ROW_POLL_ODDEVEN' => cot_build_oddeven($ii),
+
+        /** @deprecated in 0.9.24  */
+        'ADMIN_POLLS_ROW_POLL_URL_DEL' => $deleteUrl,
 	]);
 
 	/* === Hook - Part2 : Include === */
@@ -190,13 +190,13 @@ if ($ii == 0) {
 
 if ($n == 'options') {
 	$poll_id = cot_import('id', 'G', 'INT');
-	$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");
+	$adminPath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");
 	$formname = $L['editdeleteentries'];
 	$send_button = $L['Update'];
 } elseif (cot_error_found()) {
 	if ((int)$poll_id > 0)
 	{
-		$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");
+		$adminPath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");
 		$formname = $L['editdeleteentries'];
 		$send_button = $L['Update'];
 	}
@@ -255,4 +255,4 @@ foreach (cot_getextplugins('polls.admin.tags') as $pl)
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');

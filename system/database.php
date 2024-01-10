@@ -374,7 +374,7 @@ class CotDB
         }
         $this->_startTimer();
         $result = null;
-        try {
+        //try {
             if (count($parameters) > 0) {
                 if ($this->_prepare_itself) {
                     $result = $this->adapter->query($this->_prepare($query, $parameters));
@@ -386,15 +386,15 @@ class CotDB
             } else {
                 $result = $this->adapter->query($query, $mode);
             }
-        } catch (\PDOException $err) {
-            /**
-             * @todo it should be optional. Sometimes we don't need to catch Exception here, but in another place
-             * @see plugins/trashcan/inc/trashcan.functions.php:122
-             */
-            if ($this->_parseError($err, $err_code, $err_message)) {
-                cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
-            }
-        }
+//        } catch (\PDOException $err) {
+//            /**
+//             * @todo it should be optional. Sometimes we don't need to catch Exception here, but in another place
+//             * @see plugins/trashcan/inc/trashcan.functions.php:122
+//             */
+//            if ($this->_parseError($err, $err_code, $err_message)) {
+//                cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
+//            }
+//        }
         $this->_stopTimer($query);
         if (!empty($result)) {
             $result->setFetchMode($mode);
@@ -434,7 +434,7 @@ class CotDB
 
         $res = 0;
 		$this->_startTimer();
-		try {
+		//try {
 			if (count($parameters) > 0) {
 				if ($this->_prepare_itself) {
 					$res = $this->adapter->exec($this->_prepare($query, $parameters));
@@ -448,11 +448,11 @@ class CotDB
 				$res = $this->adapter->exec($query);
 			}
 
-        } catch (PDOException $err) {
-			if ($this->_parseError($err, $err_code, $err_message)) {
-				cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
-			}
-		}
+//        } catch (PDOException $err) {
+//			if ($this->_parseError($err, $err_code, $err_message)) {
+//				cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
+//			}
+//		}
 		$this->_stopTimer($query);
 
 		return $res;
@@ -650,17 +650,17 @@ class CotDB
         }
         $res = 0;
         $this->_startTimer();
-        try {
+        //try {
             $res = $this->adapter->exec($query);
-        } catch (\PDOException $err) {
-            /**
-             * @todo it should be optional. Sometimes we don't need to catch Exception here, but in another place
-             * @see plugins/trashcan/inc/trashcan.functions.php:122
-             */
-            if ($this->_parseError($err, $err_code, $err_message)) {
-                cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
-            }
-        }
+//        } catch (\PDOException $err) {
+//            /**
+//             * @todo it should be optional. Sometimes we don't need to catch Exception here, but in another place
+//             * @see plugins/trashcan/inc/trashcan.functions.php:122
+//             */
+//            if ($this->_parseError($err, $err_code, $err_message)) {
+//                cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
+//            }
+//        }
         $this->_stopTimer($query);
 
         return $res;
@@ -733,7 +733,7 @@ class CotDB
             $query = 'UPDATE ' . $this->quoteTableName($tableName) . " SET $upd $condition";
             $res = 0;
             $this->_startTimer();
-            try {
+            //try {
                 if (count($parameters) > 0) {
                     $stmt = $this->adapter->prepare($query);
                     $this->_bindParams($stmt, $parameters);
@@ -742,11 +742,11 @@ class CotDB
                 } else {
                     $res = $this->adapter->exec($query);
                 }
-            } catch (PDOException $err) {
-                if ($this->_parseError($err, $err_code, $err_message)) {
-                    cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
-                }
-            }
+//            } catch (PDOException $err) {
+//                if ($this->_parseError($err, $err_code, $err_message)) {
+//                    cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
+//                }
+//            }
             $this->_stopTimer($query);
 
             return $res;

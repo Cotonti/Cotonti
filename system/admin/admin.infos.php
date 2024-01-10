@@ -14,9 +14,9 @@ cot_block(Cot::$usr['auth_read']);
 
 $t = new XTemplate(cot_tplfile('admin.infos', 'core'));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=infos'), Cot::$L['adm_infos']);
-$adminhelp = Cot::$L['adm_help_versions'];
+$adminPath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
+$adminPath[] = array(cot_url('admin', 'm=infos'), Cot::$L['adm_infos']);
+$adminHelp = Cot::$L['adm_help_versions'];
 $adminTitle = Cot::$L['adm_infos'];
 
 /* === Hook === */
@@ -51,6 +51,6 @@ foreach (cot_getextplugins('admin.infos.tags') as $pl)
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');
 
 @error_reporting(7);

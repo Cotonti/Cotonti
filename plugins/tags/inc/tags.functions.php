@@ -10,6 +10,11 @@
 defined('COT_CODE') or die('Wrong URL');
 
 global $L, $R, $tc_styles;
+
+const TAGS_ORDER_ALPHABETICAL = 'Alphabetical';
+const TAGS_ORDER_FREQUENCY = 'Frequency';
+const TAGS_ORDER_RANDOM = 'Random';
+
 require_once cot_incfile('tags', 'plug', 'config');
 require_once cot_langfile('tags', 'plug');
 require_once cot_incfile('tags', 'plug', 'resources');
@@ -51,67 +56,108 @@ function cot_tag($tag, $item, $area = 'pages', $extra = null)
 }
 
 /**
+ * Register areas with tag functions provided
+ * @return array<string, string>
+ */
+function cot_tagAreas()
+{
+    // For include files
+    global $L, $Ls, $R;
+
+    $areas = [];
+    if (cot_module_active('page')) {
+        require_once cot_incfile('page', 'module');
+        $areas['pages'] = Cot::$L['Pages'];
+    }
+
+    if (cot_module_active('forums')) {
+        require_once cot_incfile('forums', 'module');
+        $areas['forums'] = Cot::$L['Forums'];
+    }
+
+    /* === Hook === */
+    foreach (cot_getextplugins('tags.areas') as $pl) {
+        include $pl;
+    }
+    /* ===== */
+
+    return $areas;
+}
+
+/**
  * Collects data for a tag cloud in some area. The result is an associative array with
  * tags as keys and count of entries as values.
  *
- * @global CotDB $db
- * @global Cache $cache
  * @param string $area Site area
- * @param string $order Should be 'tag' to order the result set by tag (alphabetical) or 'cnt' to order it by item count (descending)
- * @param int $limit Use this parameter to limit number of rows in the result set
+ * @param string $order Should be 'tag' to order the result set by tag (alphabetical) or one of TAGS_ORDER_XXX constants
+ * @param int $limit SQL LIMIT syntax. Use this parameter to limit number of rows in the result set.
  * @return array
- * @global CotDB $db
- * @global Cache $cache
  */
 function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 {
-	global $db, $db_tag_references, $cache;
+    $cacheKey = 'tag_cloud_cache_' . $area . '_' . $order;
+    if ($limit) {
+        $cacheKey .= '_' . $limit;
+    }
+    if (Cot::$cache && isset($GLOBALS[$cacheKey]) && is_array($GLOBALS[$cacheKey])) {
+        return $GLOBALS[$cacheKey];
+    }
+    $res = [];
+    $limit = is_null($limit) ? '' : ' LIMIT ' . $limit;
+    $random = false;
+    switch ($order) {
+        case 'tag':
+        case TAGS_ORDER_ALPHABETICAL:
+            $order = Cot::$db->quoteColumnName('tag');
+            break;
 
-	$cache_name = 'tag_cloud_cache_' . $area.'_'.$order;
-	if ($limit) $cache_name .= '_'.$limit;
-	if (Cot::$cache && isset($GLOBALS[$cache_name]) && is_array($GLOBALS[$cache_name])) {
-		return $GLOBALS[$cache_name];
-	}
-	$res = array();
-	$limit = is_null($limit) ? '' : ' LIMIT '.$limit;
-	$random = false;
-	switch($order) {
-		case 'tag':
-		case 'Alphabetical':
-			$order = '`tag`';
-		break;
+        case TAGS_ORDER_FREQUENCY:
+            $order = Cot::$db->quoteColumnName('cnt') . ' DESC';
+            break;
 
-		case 'Frequency':
-			$order = '`cnt` DESC';
-		break;
+        default:
+            if ($limit) {
+                $order = '';
+                $random = true; // pseudo random (within one page)
+            } else {
+                $order = 'RAND()';
+            }
+    }
 
-		default:
-			if ($limit) {
-				$order = '';
-				$random = true; // pseudo random (within one page)
-			} else {
-				$order = 'RAND()';
-			}
-	}
-	$where = $area == 'all' ? '' : "WHERE tag_area = '$area'";
-	if ($order) $order = "ORDER BY $order";
-	$sql = Cot::$db->query("SELECT `tag`, COUNT(*) AS `cnt` FROM $db_tag_references $where GROUP BY `tag` $order $limit");
-	while ($row = $sql->fetch()) {
-		$res[$row['tag']] = $row['cnt'];
-	}
-	if ($random) {
-		$rnd_res = array();
-		$rnd_keys = array_keys($res);
-		shuffle($rnd_keys);
-		foreach ($rnd_keys as $key) {
-			$rnd_res[$key] = $res[$key];
-		}
-		$res = $rnd_res;
-	}
-	$sql->closeCursor();
-    Cot::$cache && Cot::$cache->db->store($cache_name, $res, COT_DEFAULT_REALM, 300);
+    $where = '';
+    $params = [];
+    if ($area !== 'all') {
+        $where = 'WHERE tag_area = :area';
+        $params = ['area' => $area];
+    }
 
-	return $res;
+    if ($order) {
+        $order = "ORDER BY $order";
+    }
+
+    $sql = 'SELECT ' . Cot::$db->quoteColumnName('tag') . ', COUNT(*) AS '
+        . Cot::$db->quoteColumnName('cnt')
+        . ' FROM ' . Cot::$db->tag_references . " $where GROUP BY " . Cot::$db->quoteColumnName('tag')
+        . " $order $limit";
+    $query = Cot::$db->query($sql, $params);
+
+    while ($row = $query->fetch()) {
+        $res[$row['tag']] = $row['cnt'];
+    }
+    if ($random) {
+        $rnd_res = [];
+        $rnd_keys = array_keys($res);
+        shuffle($rnd_keys);
+        foreach ($rnd_keys as $key) {
+            $rnd_res[$key] = $res[$key];
+        }
+        $res = $rnd_res;
+    }
+    $query->closeCursor();
+
+    Cot::$cache && Cot::$cache->db->store($cacheKey, $res, COT_DEFAULT_REALM, 300);
+
+    return $res;
 }
 
 /**
@@ -444,49 +490,76 @@ function cot_tag_unregister($tag)
 
 /**
  * Global tag cloud and search form
- *
  * @param string $area Site area
- * @global CotDB $db
  */
 function cot_tag_search_form($area = 'all')
 {
-	global $db, $dt, $perpage, $lang, $tl, $qs, $t, $L, $R, $cfg, $db_tag_references, $tc_styles;
+	global $dt, $tagsPerPage, $urlParams, $lang, $resultPageUrlParam, $tl, $t, $L, $R, $tc_styles;
 
-	$limit = ($perpage > 0) ? "$dt, $perpage" : NULL;
-	$tcloud = cot_tag_cloud($area, $cfg['plugin']['tags']['order'], $limit);
-	$tc_html = $R['tags_code_cloud_open'];
-	foreach ($tcloud as $tag => $cnt)
-	{
-		$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
-		$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
+	$limit = ($tagsPerPage > 0) ? "$dt, $tagsPerPage" : null;
+    $order = Cot::$cfg['plugin']['tags']['order'];
+    if ($limit && in_array($order, [TAGS_ORDER_RANDOM, ''], true)) {
+        $order = TAGS_ORDER_ALPHABETICAL;
+    }
+
+	$tagCloud = cot_tag_cloud($area, $order, $limit);
+	$tagCloudHtml = Cot::$R['tags_code_cloud_open'];
+
+	foreach ($tagCloud as $tag => $cnt) {
+		$tag_t = Cot::$cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
+		$tag_u = Cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 		$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
-		foreach ($tc_styles as $key => $val)
-		{
-			if ($cnt <= $key)
-			{
+		foreach ($tc_styles as $key => $val) {
+			if ($cnt <= $key) {
 				$dim = $val;
 				break;
 			}
 		}
-		$tc_html .= cot_rc('tags_link_cloud_tag', array(
-			'url' => cot_url('plug', array('e' => 'tags', 'a' => $area, 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)),
-			'tag_title' => htmlspecialchars($tag_t),
-			'dim' => $dim
-		));
+		$tagCloudHtml .= cot_rc(
+            'tags_link_cloud_tag',
+            [
+                'url' => cot_url(
+                    'tags',
+                    ['t' => str_replace(' ', '-', $tag_u), 'tl' => $tl]
+                ),
+                'tag_title' => htmlspecialchars($tag_t),
+                'dim' => $dim,
+		    ]
+        );
 	}
-	$tc_html .= $R['tags_code_cloud_close'];
-	$t->assign('TAGS_CLOUD_BODY', $tc_html);
+
+	$tagCloudHtml .= Cot::$R['tags_code_cloud_close'];
+	$t->assign('TAGS_CLOUD_BODY', $tagCloudHtml);
 	$t->parse('MAIN.TAGS_CLOUD');
-	if ($perpage > 0)
-	{
-		$where = $area == 'all' ? '' : "WHERE tag_area = '$area'";
-		$sql = $db->query("SELECT COUNT(DISTINCT `tag`) FROM $db_tag_references $where");
-		$totalitems = (int) $sql->fetchColumn();
-		$pagenav = cot_pagenav('plug','e=tags&a=' . $area, $dt, $totalitems, $perpage, 'dt');
-		$t->assign(array(
-			'TAGS_PAGEPREV' => $pagenav['prev'],
-			'TAGS_PAGENEXT' => $pagenav['next'],
-			'TAGS_PAGNAV' => $pagenav['main']
-		));
+
+	if ($tagsPerPage > 0) {
+        $where = '';
+        $params = [];
+        if (!empty($area) && $area !== 'all') {
+            $where = 'WHERE tag_area = :area';
+            $params['area'] = $area;
+        }
+
+		$sql = Cot::$db->query(
+            'SELECT COUNT(DISTINCT ' . Cot::$db->quoteColumnName('tag') . ') '
+                . ' FROM ' . Cot::$db->tag_references . ' ' . $where,
+            $params
+        );
+		$totalItems = (int) $sql->fetchColumn();
+
+        $paginationUrlParams = $urlParams;
+        if ($resultPageUrlParam > 0) {
+            $paginationUrlParams['d'] = $resultPageUrlParam;
+        }
+
+        $pageNav = cot_pagenav('tags', $paginationUrlParams, $dt, $totalItems, $tagsPerPage, 'dt');
+        $t->assign(cot_generatePaginationTags($pageNav, 'TAGS_'));
+
+        // @deprecated in 0.9.24
+		$t->assign([
+			'TAGS_PAGEPREV' => $pageNav['prev'],
+			'TAGS_PAGENEXT' => $pageNav['next'],
+			'TAGS_PAGNAV' => $pageNav['main'],
+		]);
 	}
 }

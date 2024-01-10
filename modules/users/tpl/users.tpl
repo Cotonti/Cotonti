@@ -30,7 +30,7 @@
         <tr>
             <td class="coltop width5"></td>
             <td class="coltop width20">{USERS_TOP_NAME}</td>
-            <td class="coltop width20">{USERS_TOP_GROUP_TITLE}</td>
+            <td class="coltop width20">{USERS_TOP_MAIN_GROUP}</td>
             <td class="coltop width15">{USERS_TOP_GROUP_LEVEL}</td>
             <td class="coltop width15">{USERS_TOP_COUNTRY}</td>
             <td class="coltop width25">{USERS_TOP_REGISTRATION_DATE}</td>

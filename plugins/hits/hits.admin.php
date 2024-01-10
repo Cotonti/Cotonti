@@ -21,7 +21,7 @@ require_once cot_langfile('hits', 'plug');
 require_once cot_incfile('hits', 'plug');
 $tt = new XTemplate(cot_tplfile('hits.admin', 'plug', true));
 
-//$adminhelp = $L['adm_help_hits'];
+//$adminHelp = $L['adm_help_hits'];
 $adminTitle = Cot::$L['hits'];
 
 $f = cot_import('f', 'G', 'TXT');
@@ -34,7 +34,7 @@ foreach (cot_getextplugins('hits.admin.first') as $pl) {
 /* ===== */
 
 if ($f == 'year' || $f == 'month') {
-	$adminpath[] = array(cot_url('admin', 'm=other&p=hits&f=' . $f . '&v=' . $v), '(' . $v . ')');
+	$adminPath[] = array(cot_url('admin', 'm=other&p=hits&f=' . $f . '&v=' . $v), '(' . $v . ')');
 	$sql = Cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '" . Cot::$db->prep($v) . "%' ORDER BY stat_name DESC");
 	
 	while ($row = $sql->fetch()) {

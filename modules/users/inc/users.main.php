@@ -381,11 +381,16 @@ $filtersFormGroup = cot_selectbox(
     ['class' => 'filter-submit']
 );
 
-$filtersFormAction = cot_url('users');
-$filtersFormParams = '';
+$filtersFormAction = cot_url('users', '', '', true);
 $parts = explode('?', $filtersFormAction);
-if (mb_stripos($parts[0], 'users') === false) {
-    $filtersFormParams .= cot_inputbox('hidden', 'e', 'users');
+$filtersFormAction = $parts[0];
+$actionVars = [];
+if (isset($parts[1])) {
+    parse_str($parts[1], $actionVars);
+}
+$filtersFormParams = '';
+foreach ($actionVars as $key => $val) {
+    $filtersFormParams .= cot_inputbox('hidden', $key, $val);
 }
 if (isset($users_url_path['s']) && !$t->hasTag('USERS_FILTERS_SORT')) {
     $filtersFormParams .= cot_inputbox('hidden', 's', $users_url_path['s']);
@@ -511,10 +516,10 @@ if (!isset($usersSortFields[''])) {
 $sortWayParams = $users_url_path;
 if ($w === 'desc') {
     unset($sortWayParams['w']);
-    $sortWayIcon = Cot::$R['icon_down'];
+    $sortWayIcon = Cot::$R['icon_order_desc'];
 } else {
     $sortWayParams['w'] = 'desc';
-    $sortWayIcon = Cot::$R['icon_up'];
+    $sortWayIcon = Cot::$R['icon_order_asc'];
 }
 $sortWayUrl = cot_url('users', $sortWayParams);
 
@@ -531,6 +536,7 @@ $t->assign([
     'USERS_FILTERS_SORT_WAY' => cot_rc_link($sortWayUrl,  $sortWayIcon, ['rel' => 'nofollow']),
 ]);
 
+// @todo move to common JS file. To other extensions can use it
 Resources::embedFooter(
     <<<JS
 const filterForm = document.getElementById('filter-form');

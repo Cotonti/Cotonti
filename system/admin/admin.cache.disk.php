@@ -16,8 +16,8 @@ cot_block($usr['isadmin']);
 
 $t = new XTemplate(cot_tplfile('admin.cache.disk', 'core'));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=cache&s=disk'), $L['adm_diskcache']);
+$adminPath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminPath[] = array(cot_url('admin', 'm=cache&s=disk'), $L['adm_diskcache']);
 $adminTitle = $L['adm_diskcache'];
 
 /* === Hook === */
@@ -103,7 +103,7 @@ foreach (cot_getextplugins('admin.cache.disk.tags') as $pl)
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');
 
 /**
  * Calculates directory size

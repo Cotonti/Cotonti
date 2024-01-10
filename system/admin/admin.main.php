@@ -48,32 +48,46 @@ if (!file_exists($inc_file)) {
 	cot_die();
 }
 
-$adminpath = array(array(cot_url('admin'), Cot::$L['Adminpanel']));
-$adminhelp = isset($adminhelp) ? $adminhelp : '';
-$adminmain = isset($adminmain) ? $adminmain : '';
+$adminPath = array(array(cot_url('admin'), Cot::$L['Adminpanel']));
+$adminTitle = isset($adminTitle) ? $adminTitle : '';
+$adminHelp = isset($adminHelp) ? $adminHelp : '';
+$adminMain = isset($adminMain) ? $adminMain : '';
+
+// @deprecated in 0.9.24 (for backward compatibility)
+if (!empty($adminhelp)) {
+    $adminHelp = $adminhelp;
+}
+if (!empty($adminmain)) {
+    $adminMain = $adminmain;
+}
+if (!empty($adminpath)) {
+    $adminPath = $adminpath;
+}
+// /@deprecated in 0.9.24
 
 require $inc_file;
 
-$title_params = array(
+$title_params = [
 	'ADMIN' => Cot::$L['Administration'],
-	'SUBTITLE' => $adminTitle
-);
+	'SUBTITLE' => $adminTitle,
+];
 if (!isset(Cot::$out['head'] )) {
     Cot::$out['head']  = '';
 }
 Cot::$out['head'] .= Cot::$R['code_noindex'];
-Cot::$out['subtitle'] = empty($adminTitle) ?
-    cot_title('{ADMIN}', $title_params) : cot_title('{SUBTITLE} - {ADMIN}', $title_params);
+Cot::$out['subtitle'] = empty($adminTitle)
+    ? cot_title('{ADMIN}', $title_params)
+    : cot_title('{SUBTITLE} - {ADMIN}', $title_params);
 
-require_once Cot::$cfg['system_dir'].'/header.php';
+require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate(cot_tplfile('admin', 'core'));
 
 $t->assign(array(
-	'ADMIN_BREADCRUMBS' => cot_breadcrumbs($adminpath, false),
+	'ADMIN_BREADCRUMBS' => cot_breadcrumbs($adminPath, false),
 	'ADMIN_TITLE' => $adminTitle,
-	'ADMIN_MAIN' => $adminmain,
-	'ADMIN_HELP' => $adminhelp
+	'ADMIN_MAIN' => $adminMain,
+	'ADMIN_HELP' => $adminHelp
 ));
 
 /* === Hook for the plugins === */
@@ -81,12 +95,13 @@ foreach (cot_getextplugins('admin.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
+
 $t->parse('MAIN.BODY');
-if(!COT_AJAX) {
+if (!COT_AJAX) {
 	$t->parse('MAIN');
 	$t->out('MAIN');
 } else {
 	$t->out('MAIN.BODY');
 }
 
-require_once Cot::$cfg['system_dir'].'/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';

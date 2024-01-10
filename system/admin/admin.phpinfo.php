@@ -14,8 +14,8 @@ cot_block(Cot::$usr['auth_read']);
 
 $t = new XTemplate(cot_tplfile('admin.phpinfo', 'core'));
 
-$adminpath[] = [cot_url('admin', 'm=other'), Cot::$L['Other'],];
-$adminpath[] = [cot_url('admin', 'm=phpinfo'), 'PHP',];
+$adminPath[] = [cot_url('admin', 'm=other'), Cot::$L['Other'],];
+$adminPath[] = [cot_url('admin', 'm=phpinfo'), 'PHP',];
 
 $adminTitle = Cot::$L['adm_phpinfo'];
 
@@ -40,4 +40,4 @@ foreach (cot_getextplugins('admin.infos.tags') as $pl) {
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');

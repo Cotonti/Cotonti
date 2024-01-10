@@ -39,8 +39,8 @@ $extra_whitelist = [
 		]
 	]
 ];
-$adminpath[] = [cot_url('admin', 'm=other'), Cot::$L['Other']];
-$adminpath[] = [cot_url('admin', 'm=extrafields'), Cot::$L['adm_extrafields']];
+$adminPath[] = [cot_url('admin', 'm=other'), Cot::$L['Other']];
+$adminPath[] = [cot_url('admin', 'm=extrafields'), Cot::$L['adm_extrafields']];
 $adminTitle = Cot::$L['adm_extrafields'];
 $maxperpage = (is_int(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperpage'] > 0 || ctype_digit(Cot::$cfg['maxrowsperpage'])) ? Cot::$cfg['maxrowsperpage'] : 15;
 
@@ -66,7 +66,7 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 			}
 		}
 	}
-	cot_import('alltables', 'G', 'BOL') && $adminpath[] = [cot_url('admin', 'm=extrafields&alltables=1'), Cot::$L['adm_extrafields_all']];
+	cot_import('alltables', 'G', 'BOL') && $adminPath[] = [cot_url('admin', 'm=extrafields&alltables=1'), Cot::$L['adm_extrafields_all']];
 	$ii = 0;
 	foreach ($tablelist as $table) {
 		$name = '';
@@ -113,7 +113,7 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 	list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 	$parse_type = ['HTML', 'Text'];
 
-	$adminpath[] = [cot_url('admin', 'm=extrafields&n='.$n), Cot::$L['adm_extrafields_table'] . ' '
+	$adminPath[] = [cot_url('admin', 'm=extrafields&n='.$n), Cot::$L['adm_extrafields_table'] . ' '
         . $n . ((isset($extra_whitelist[$n])) ? ' - ' . $extra_whitelist[$n]['caption'] : '')];
 
     $redirectUrl = cot_url('admin', ['m' => 'extrafields', 'n' => $n, 'd' => $durl,], '', true);
@@ -395,11 +395,11 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 	cot_display_messages($t);
 
 	if (isset($extra_whitelist[$n]['help'])) {
-		$adminhelp = $extra_whitelist[$n]['help'];
+		$adminHelp = $extra_whitelist[$n]['help'];
 	} else {
-		$adminhelp = Cot::$L['adm_help_info'];
+		$adminHelp = Cot::$L['adm_help_info'];
 		if (!empty($tags_list)) {
-			$adminhelp .= Cot::$L['adm_help_newtags'].'<ul class="follow">'.$tags_list_li.'</ul>';
+			$adminHelp .= Cot::$L['adm_help_newtags'].'<ul class="follow">'.$tags_list_li.'</ul>';
 		}
 	}
 
@@ -412,4 +412,4 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 	$t->parse('MAIN.TABLE');
 }
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');

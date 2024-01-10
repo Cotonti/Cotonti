@@ -24,9 +24,10 @@ $L['plu_title'] = 'Теги';
 /**
  * Plugin Body
  */
-
 $L['tags_All'] = 'Все теги';
 $L['tags_comma_separated'] = 'разделяя запятой';
+$L['tags_delete_confirm'] = 'К тегу "{$tag}" привязано: {$count}. Подтвердите удаление.';
+$L['tags_tag_deleted'] = 'Тег "{$tag}" удален';
 $L['tags_Found_in_forums'] = 'Найдено в форумах';
 $L['tags_Found_in_pages'] = 'Найдено на страницах';
 $L['tags_Keyword'] = 'Ключевое слово';
@@ -37,16 +38,14 @@ $L['tags_Search_results'] = 'Результаты поиска';
 $L['tags_Search_tags'] = 'Поиск тегов';
 $L['tags_Tag_cloud'] = 'Облако тегов';
 $L['tags_Tag_cloud_none'] = 'Нет тегов';
+$L['tags_tag_edited'] = 'Тег отредактирован';
+$L['tags_tag_exists'] = 'Такой тег уже есть';
 $L['tags_length'] = 'Длина';
 $L['adm_tag_item_area'] = 'Элементы тега';
-$L['adm_tag_already_del'] = 'Тег удален';
-$L['adm_tag_already_edit'] = 'Тег отредактирован';
-$L['adm_tag_already exists'] = 'Такой тег уже есть';
 
 /**
  * Plugin Config
  */
-
 $L['cfg_forums'] = 'Включить теги для форумов';
 $L['cfg_index'] = 'Раздел тегов для главной страницы';
 $L['cfg_limit'] = 'Максимальное количество тегов';

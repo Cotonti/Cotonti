@@ -24,7 +24,7 @@ require_once cot_incfile('userimages', 'plug', 'resources');
 require_once cot_langfile('userimages');
 require_once cot_incfile('configuration');
 
-$adminhelp = $L['userimages_help'];
+$adminHelp = $L['userimages_help'];
 $adminTitle = $L['userimages_title'];
 
 /* === Hook === */

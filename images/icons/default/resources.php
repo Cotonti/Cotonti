@@ -29,18 +29,19 @@ $R['icon_vert_active']['asc'] = '<img src="'.$cfg['icons_dir'].'/default/16/arro
 /**
  * Main Icons
  */
-
-$R['icon_comments'] = '<img src="'.$cfg['icons_dir'].'/default/16/comments.png" alt="" />';
-$R['icon_delete'] = '<img src="'.$cfg['icons_dir'].'/default/16/delete.png" alt="" />';
-$R['icon_folder'] = '<img src="'.$cfg['icons_dir'].'/default/16/folder.png" alt="" />';
-$R['icon_follow'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-follow.png" alt="" />';
-$R['icon_forums'] = '<img src="'.$cfg['icons_dir'].'/default/16/forums.png" alt="" />';
-$R['icon_lock'] = '<img src="'.$cfg['icons_dir'].'/default/16/lock.png" alt="" />';
-$R['icon_page'] = '<img src="'.$cfg['icons_dir'].'/default/16/page.png" alt="" />';
-$R['icon_prefs'] = '<img src="'.$cfg['icons_dir'].'/default/16/prefs.png" alt="" />';
-$R['icon_subfolder'] = '<img src="'.$cfg['icons_dir'].'/default/16/subfolder.png" alt="" />';
-$R['icon_undo'] = '<img src="'.$cfg['icons_dir'].'/default/16/undo.png" alt="" />';
-$R['icon_unread'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-unread.png" alt="" />';
+$R['icon_comments'] = '<img src="' . $cfg['icons_dir'] . '/default/16/comments.png" alt="" />';
+$R['icon_delete'] = '<img src="' . $cfg['icons_dir'] . '/default/16/delete.png" alt="" />';
+$R['icon_folder'] = '<img src="' . $cfg['icons_dir'] . '/default/16/folder.png" alt="" />';
+$R['icon_follow'] = '<img src="' . $cfg['icons_dir'] . '/default/16/arrow-follow.png" alt="" />';
+$R['icon_forums'] = '<img src="' . $cfg['icons_dir'] . '/default/16/forums.png" alt="" />';
+$R['icon_lock'] = '<img src="' . $cfg['icons_dir'] . '/default/16/lock.png" alt="" />';
+$R['icon_order_asc'] = $R['icon_down'];
+$R['icon_order_desc'] = $R['icon_up'];
+$R['icon_page'] = '<img src="' . $cfg['icons_dir'] . '/default/16/page.png" alt="" />';
+$R['icon_prefs'] = '<img src="' . $cfg['icons_dir'] . '/default/16/prefs.png" alt="" />';
+$R['icon_subfolder'] = '<img src="' . $cfg['icons_dir'] . '/default/16/subfolder.png" alt="" />';
+$R['icon_undo'] = '<img src="' . $cfg['icons_dir'] . '/default/16/undo.png" alt="" />';
+$R['icon_unread'] = '<img src="' . $cfg['icons_dir'] . '/default/16/arrow-unread.png" alt="" />';
 
 /**
  * Stars / Votes Icons

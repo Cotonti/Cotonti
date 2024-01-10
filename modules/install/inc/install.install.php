@@ -581,7 +581,7 @@ switch ($step) {
 		$status['mysql'] = (extension_loaded('pdo_mysql'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
 
-        // TODO проверить PDO json bcmath
+        // TODO проверить PDO json
 
 		$t->assign([
 			'INSTALL_AV_DIR' => $status['avatars_dir'],

@@ -9,12 +9,12 @@
 <!-- BEGIN: ADMIN_CACHE_MEMORY -->
 <div class="block">
 	<h2>{ADMIN_CACHE_MEMORY_DRIVER}</h2>
-	<p>
+	<div class="wrapper">
 		<div class="bar_back">
-			<div class="bar_front" style="width:{ADMIN_CACHE_MEMORY_PERCENTBAR}%;"></div>
+			<div class="bar_front" style="width: {ADMIN_CACHE_MEMORY_PERCENTBAR}%;"></div>
 		</div>
 		{PHP.L.Available}: {ADMIN_CACHE_MEMORY_AVAILABLE} / {ADMIN_CACHE_MEMORY_MAX} {PHP.L.bytes}
-	</p>
+	</div>
 </div>
 <!-- END: ADMIN_CACHE_MEMORY -->
 

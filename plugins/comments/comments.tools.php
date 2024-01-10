@@ -175,4 +175,4 @@ foreach (cot_getextplugins('admin.comments.tags') as $pl)
 
 $t->parse('MAIN');
 
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');

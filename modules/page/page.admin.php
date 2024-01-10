@@ -22,10 +22,10 @@ $t = new XTemplate(cot_tplfile('page.admin', 'module', true));
 
 require_once cot_incfile('page', 'module');
 
-$adminpath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
-$adminpath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
-$adminpath[] = array(cot_url('admin', 'm='.$m), Cot::$L['Administration']);
-$adminhelp = Cot::$L['adm_help_page'];
+$adminPath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
+$adminPath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
+$adminPath[] = array(cot_url('admin', 'm='.$m), Cot::$L['Administration']);
+$adminHelp = Cot::$L['adm_help_page'];
 $adminTitle = Cot::$L['Pages'];
 
 $id = cot_import('id', 'G', 'INT');
@@ -400,7 +400,7 @@ $sql_page_queued = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->pages . '
     COT_PAGE_STATE_PENDING);
 $sys['pagesqueued'] = $sql_page_queued->fetchColumn();
 
-$t->assign(array(
+$t->assign([
 	'ADMIN_PAGE_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=module&p=page'),
 	'ADMIN_PAGE_URL_ADD' => cot_url('page', 'm=add'),
 	'ADMIN_PAGE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n='.$db_pages),
@@ -410,12 +410,16 @@ $t->assign(array(
 	'ADMIN_PAGE_WAY' => cot_selectbox($sortway, 'sortway', array_keys($sort_way), array_values($sort_way), false),
 	'ADMIN_PAGE_FILTER' => cot_selectbox($filter, 'filter', array_keys($filter_type), array_values($filter_type), false),
 	'ADMIN_PAGE_TOTALDBPAGES' => $totaldbpages,
-	'ADMIN_PAGE_PAGINATION_PREV' => $pagenav['prev'],
+    'ADMIN_PAGE_ON_PAGE' => $ii,
+
+    // @deprecated in 0.9.24
+    'ADMIN_PAGE_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_PAGE_PAGNAV' => $pagenav['main'],
 	'ADMIN_PAGE_PAGINATION_NEXT' => $pagenav['next'],
 	'ADMIN_PAGE_TOTALITEMS' => $totalitems,
-	'ADMIN_PAGE_ON_PAGE' => $ii
-));
+]);
+
+$t->assign(cot_generatePaginationTags($pagenav, 'ADMIN_PAGE_'));
 
 cot_display_messages($t);
 
@@ -426,4 +430,4 @@ foreach (cot_getextplugins('page.admin.tags') as $pl) {
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');
