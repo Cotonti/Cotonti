@@ -36,7 +36,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', 1);
 
 require_once $cfg['system_dir'] . '/functions.php';
-require_once './lib/autoload.php';
+require_once './lib/vendor/autoload.php';
 require_once './system/debug.php';
 
 date_default_timezone_set('UTC');
