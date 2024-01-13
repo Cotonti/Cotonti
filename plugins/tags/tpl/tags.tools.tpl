@@ -1,14 +1,4 @@
 <!-- BEGIN: MAIN -->
-<script type="text/javascript">
-	// @todo перенести в подвал. Избавиться от jQuery
-	$(document).ready(function() {
-		$('.moreinfo').hide();
-		$(".mor_info_on_off").click(function() {
-			var kk = $(this).attr('id');
-			$('#'+kk).children('.moreinfo').slideToggle(100);
-		});
-	});
-</script>
 {FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 <div class="block button-toolbar">
 	<a title="{PHP.L.Configuration}" href="{ADMIN_TAGS_CONFIG_URL}" class="button">{PHP.L.Configuration}</a>
@@ -70,4 +60,11 @@
 		<span>{PHP.L.Total}: {ADMIN_TAGS_TOTAL_ENTRIES}, {PHP.L.Onpage}: {ADMIN_TAGS_COUNTER_ROW}</span>
 	</p>
 </div>
+<script type="text/javascript">
+$('.moreinfo').hide();
+$('.mor_info_on_off').click(function() {
+	let kk = $(this).attr('id');
+	$('#' + kk).children('.moreinfo').slideToggle(100);
+});
+</script>
 <!-- END: MAIN -->

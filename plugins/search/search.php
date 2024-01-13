@@ -35,9 +35,6 @@ $totalitems = [];
 $pageAuthCats = null;
 $forumAuthCats = null;
 
-//$pag_catauth = [];
-//$pagAuthAllCats = false;
-
 $rs = isset($_REQUEST['rs']) ? $_REQUEST['rs'] : null;
 
 $rs['pagtitle']  = isset($rs['pagtitle'])  ? cot_import($rs['pagtitle'], 'D', 'INT') : '';

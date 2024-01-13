@@ -238,24 +238,48 @@ if (!empty($qs)) {
  * Search by tag in pages
  *
  * @param string $query User-entered query string
- * @global CotDB $db
  */
 function cot_tag_search_pages($query)
 {
-	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $order, $row, $sys, $maxPerPage;
+    // For plugin includes
+    global $L, $R, $Ls;
 
-	if (!cot_module_active('page')) {
+	global $t, $lang, $urlParams, $d, $order, $row, $maxPerPage;
+
+	if (!cot_module_active('page') || !cot_auth('page', 'any')) {
 		return 0;
 	}
 
-	$query = cot_tag_parse_query($query, 'p.page_id');
-	if (empty($query)) {
+    $pageAuthCats = cot_authCategories('page');
+    if (empty($pageAuthCats['read'])) {
+        return 0;
+    }
+
+    $searchInCategories = [];
+    // If user can't read all categories
+    if (!$pageAuthCats['readAll']) {
+        $searchInCategories = $pageAuthCats['read'];
+    }
+
+    $where = [
+        'area' => "r.tag_area = 'pages'",
+        'itemId' => "p.page_id IS NOT NULL", // Only existing pages
+    ];
+
+    $where['query'] = cot_tag_parse_query($query, 'p.page_id');
+	if (empty($where['query'])) {
 		return 0;
 	}
 
-	$joinColumns = '';
-	$joinTables = '';
-	$joinWhere = '';
+    $where['pageState'] = 'p.page_state = ' . COT_PAGE_STATE_PUBLISHED;
+
+    if (!empty($searchInCategories)) {
+        $searchInCategories = array_map(function ($value) {return Cot::$db->quote($value);}, $searchInCategories);
+        $where['category'] = 'p.page_cat IN (' . implode(', ', $searchInCategories) . ')';
+    }
+
+	$joinColumns = [];
+	$joinTables = [];
 
 	switch ($order) {
 		case 'title':
@@ -277,17 +301,36 @@ function cot_tag_search_pages($query)
 	}
 	/* ===== */
 
-	$totalItems = Cot::$db->query("SELECT DISTINCT COUNT(*)
-		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
-			ON r.tag_item = p.page_id $joinTables
-		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0 $joinWhere")->fetchColumn();
+    $sqlJoinColumns = '';
+    if (!empty($joinColumns)) {
+        if (is_array($joinColumns)) {
+            $sqlJoinColumns = ", " . implode(", ", $joinColumns);
+        }
+    }
 
-	$sql = $db->query("SELECT DISTINCT p.* $joinColumns
-		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
-			ON r.tag_item = p.page_id $joinTables
-		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0 $joinWhere
-		$order
-		LIMIT $d, $maxPerPage");
+    $sqlJoinTables = '';
+    if (!empty($joinTables)) {
+        if (is_array($joinTables)) {
+            $sqlJoinTables = "\n " . implode("\n ", $joinTables) . "\n ";
+        }
+    }
+
+    $sqlWhere = '';
+    if (!empty($where)) {
+        $sqlWhere = ' WHERE (' . implode(') AND (', $where) . ')';
+    }
+
+	$totalItems = Cot::$db->query(
+        'SELECT DISTINCT COUNT(*) FROM ' . Cot::$db->quoteT(Cot::$db->tag_references) . ' AS r '
+        . ' INNER JOIN ' . Cot::$db->quoteT(Cot::$db->pages) . ' AS p ON r.tag_item = p.page_id '
+        . " $sqlJoinTables $sqlWhere"
+    )->fetchColumn();
+
+	$sql = Cot::$db->query(
+        "SELECT DISTINCT p.*{$sqlJoinColumns} FROM " . Cot::$db->quoteT(Cot::$db->tag_references) . ' AS r '
+        . ' INNER JOIN ' . Cot::$db->quoteT(Cot::$db->pages) . ' AS p ON r.tag_item = p.page_id '
+        . " $sqlJoinTables $sqlWhere $order LIMIT $d, $maxPerPage"
+    );
 
 	$t->assign('TAGS_RESULT_TITLE', Cot::$L['tags_Found_in_pages']);
 
@@ -299,7 +342,10 @@ function cot_tag_search_pages($query)
 
 	if ($pcount > 0) {
 		foreach ($sql->fetchAll() as $row) {
-			if(($row['page_begin'] > 0 && $row['page_begin'] > $sys['now']) || ($row['page_expire'] > 0 && $sys['now'] > $row['page_expire'])) {
+			if (
+                ($row['page_begin'] > 0 && $row['page_begin'] > Cot::$sys['now'])
+                || ($row['page_expire'] > 0 && Cot::$sys['now'] > $row['page_expire'])
+            ) {
 				--$pcount;
 				continue;
 			}
@@ -311,18 +357,29 @@ function cot_tag_search_pages($query)
 				$tag_t = Cot::$cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
 				$tag_u = Cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
-				if ($tag_i > 0) $tag_list .= ', ';
-				$tag_list .= cot_rc_link(cot_url('tags', array('a' => 'pages', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)), htmlspecialchars($tag_t));
+				if ($tag_i > 0) {
+                    $tag_list .= ', ';
+                }
+
+                $linkUrlParams = [];
+                if (!empty($urlParams['a'])) {
+                    $linkUrlParams['a'] = $urlParams['a'];
+                }
+                $linkUrlParams['t'] = str_replace(' ', '-', $tag_u);
+                if (!empty($tl)) {
+                    $linkUrlParams['tl'] = $tl;
+                }
+				$tag_list .= cot_rc_link(cot_url('tags', $linkUrlParams), htmlspecialchars($tag_t));
 				$tag_i++;
 			}
 
 			$t->assign(cot_generate_pagetags($row, 'TAGS_RESULT_ROW_', Cot::$cfg['page']['cat___default']['truncatetext']));
-			$t->assign(array(
+			$t->assign([
 				//'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']),
 				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
 				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_structure_buildpath('page', $row['page_cat']), false),
-				'TAGS_RESULT_ROW_TAGS' => $tag_list
-			));
+				'TAGS_RESULT_ROW_TAGS' => $tag_list,
+			]);
 			/* == Hook : Part 2 == */
 			foreach ($extp as $pl) {
 				include $pl;
@@ -356,20 +413,50 @@ function cot_tag_search_pages($query)
  */
 function cot_tag_search_forums($query)
 {
-	global $db, $t, $L, $lang, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $order, $row, $maxPerPage;
+    // For plugin includes
+    global $L, $R, $Ls;
 
-	if (!cot_module_active('forums')) {
+	global $db, $t, $lang, $urlParams, $d, $db_tag_references, $db_forum_topics, $order, $row, $maxPerPage;
+
+	if (!cot_module_active('forums') || !cot_auth('forums', 'any')) {
 		return 0;
 	}
 
-	$query = cot_tag_parse_query($query, 't.ft_id');
-	if (empty($query)) {
+    $forumAuthCats = cot_authCategories('forums');
+    if (empty($forumAuthCats['read'])) {
+        return 0;
+    }
+
+    $searchInCategories = [];
+    // If user can't read all categories
+    if (!$forumAuthCats['readAll']) {
+        $searchInCategories = $forumAuthCats['read'];
+    }
+
+    $where = [
+        'area' => "r.tag_area = 'forums'",
+        'notMoved' => 't.ft_movedto = 0',
+        'itemId' => "t.ft_id IS NOT NULL", // Only existing topics
+    ];
+
+    $where['query'] = cot_tag_parse_query($query, 't.ft_id');
+	if (empty($where['query'])) {
 		return 0;
 	}
 
-	$join_columns = '';
-	$join_tables = '';
-	$join_where = '';
+    if (!empty($searchInCategories)) {
+        $searchInCategories = array_map(function ($value) {return Cot::$db->quote($value);}, $searchInCategories);
+        $where['category'] = 't.ft_cat IN (' . implode(', ', $searchInCategories) . ')';
+    }
+
+    // Exclude private topics
+    $where['privateTopic'] = cot_forums_sqlExcludePrivateTopics('t');
+    if ($where['privateTopic'] === '') {
+        unset($where['privateTopic']);
+    }
+
+    $joinColumns = [];
+    $joinTables = [];
 
 	switch($order) {
 		case 'title':
@@ -386,23 +473,42 @@ function cot_tag_search_forums($query)
 	}
 
 	/* == Hook == */
-	foreach (cot_getextplugins('tags.search.forums.query') as $pl)
-	{
+	foreach (cot_getextplugins('tags.search.forums.query') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	$totalitems = $db->query("SELECT DISTINCT COUNT(*)
-		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
-			ON r.tag_item = t.ft_id $join_tables
-		WHERE r.tag_area = 'forums' AND ($query) $join_where")->fetchColumn();
+    $sqlJoinColumns = '';
+    if (!empty($joinColumns)) {
+        if (is_array($joinColumns)) {
+            $sqlJoinColumns = ", " . implode(", ", $joinColumns);
+        }
+    }
 
-	$sql = $db->query("SELECT DISTINCT t.ft_id, t.ft_cat, t.ft_title, t.ft_updated $join_columns
-		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
-			ON r.tag_item = t.ft_id $join_tables
-		WHERE r.tag_area = 'forums' AND ($query) AND t.ft_id IS NOT NULL $join_where
-		$order
-		LIMIT $d, $maxPerPage");
+    $sqlJoinTables = '';
+    if (!empty($joinTables)) {
+        if (is_array($joinTables)) {
+            $sqlJoinTables = "\n " . implode("\n ", $joinTables) . "\n ";
+        }
+    }
+
+    $sqlWhere = '';
+    if (!empty($where)) {
+        $sqlWhere = ' WHERE (' . implode(') AND (', $where) . ')';
+    }
+
+	$totalItems = Cot::$db->query(
+        'SELECT DISTINCT COUNT(*) FROM ' . Cot::$db->quoteT(Cot::$db->tag_references) . ' AS r '
+        . ' INNER JOIN ' . Cot::$db->quoteT(Cot::$db->forum_topics) . ' AS t ON r.tag_item = t.ft_id '
+        . " $sqlJoinTables $sqlWhere"
+    )->fetchColumn();
+
+	$sql = Cot::$db->query(
+        "SELECT DISTINCT t.ft_id, t.ft_cat, t.ft_title, t.ft_updated{$sqlJoinColumns} "
+		. ' FROM ' . Cot::$db->quoteT(Cot::$db->tag_references) . ' AS r '
+		. ' INNER JOIN ' . Cot::$db->quoteT(Cot::$db->forum_topics) . ' AS t ON r.tag_item = t.ft_id '
+        . " $sqlJoinTables $sqlWhere $order LIMIT $d, $maxPerPage"
+    );
 
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
 	if ($sql->rowCount() > 0) {
@@ -414,18 +520,29 @@ function cot_tag_search_forums($query)
 				$tag_t = Cot::$cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
 				$tag_u = Cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
-				if ($tag_i > 0) $tag_list .= ', ';
-				$tag_list .= cot_rc_link(cot_url('tags', array('a' => 'forums', 't' => str_replace(' ', '-', $tag_u), 'tl' => $tl)), htmlspecialchars($tag_t));
+				if ($tag_i > 0) {
+                    $tag_list .= ', ';
+                }
+
+                $linkUrlParams = [];
+                if (!empty($urlParams['a'])) {
+                    $linkUrlParams['a'] = $urlParams['a'];
+                }
+                $linkUrlParams['t'] = str_replace(' ', '-', $tag_u);
+                if (!empty($tl)) {
+                    $linkUrlParams['tl'] = $tl;
+                }
+				$tag_list .= cot_rc_link(cot_url('tags', $linkUrlParams), htmlspecialchars($tag_t));
 				$tag_i++;
 			}
             // Not using anywhere
 			// $master = (isset($row['fs_masterid']) && $row['fs_masterid'] > 0) ? array($row['fs_masterid'], $row['fs_mastername']) : false;
-			$t->assign(array(
+			$t->assign([
 				'TAGS_RESULT_ROW_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
 				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['ft_title']),
 				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false, false),
-				'TAGS_RESULT_ROW_TAGS' => $tag_list
-			));
+				'TAGS_RESULT_ROW_TAGS' => $tag_list,
+			]);
 			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}
 		$sql->closeCursor();
@@ -435,5 +552,5 @@ function cot_tag_search_forums($query)
 
 	$t->parse('MAIN.TAGS_RESULT');
 
-    return $totalitems;
+    return $totalItems;
 }
