@@ -20,10 +20,6 @@ require_once cot_langfile('recentitems', 'plug');
  * @param int $titleLength
  * @param bool $rightprescan Consider user rights
  * @return string
- *
- * @see https://www.php.net/manual/dateinterval.construct.php
- *
- * @todo проверить все с хуком recentitems.recentforums.first
  */
 function cot_build_recentforums(
     $template,
@@ -301,11 +297,6 @@ function cot_build_recentforums(
  * @param bool $rightprescan
  * @param string $cat
  * @return string
- *
- * @see https://www.php.net/manual/dateinterval.construct.php
- *
- * @todo соотвественно поправить plugins\comments\comments.recentitems.recentpages.first.php on line 22
- * @todo а также все, что содержит хук recentitems.recentpages.first
  */
 function cot_build_recentpages(
     $template,
