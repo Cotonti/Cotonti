@@ -46,13 +46,24 @@ if ($enpages || $enforums) {
 		}
 
 		if (empty($riHtml)) {
+            $period = !empty(Cot::$cfg['plugin']['recentitems']['pagesPeriod'])
+                ? trim(Cot::$cfg['plugin']['recentitems']['pagesPeriod'])
+                : null;
+            $timeBack = null;
+            if ($period) {
+                $startDateTime = new DateTime();
+                $startDateTime->sub(new DateInterval('P' . trim($period)));
+                $timeBack = $startDateTime->getTimestamp();
+            }
+
             $riHtml = cot_build_recentpages(
                 'recentitems.pages.index',
-                'recent',
+                $timeBack,
                 Cot::$cfg['plugin']['recentitems']['maxpages'],
                 0,
                 Cot::$cfg['plugin']['recentitems']['recentpagestitle'],
-                Cot::$cfg['plugin']['recentitems']['recentpagestext'], Cot::$cfg['plugin']['recentitems']['rightscan']
+                Cot::$cfg['plugin']['recentitems']['recentpagestext'],
+                Cot::$cfg['plugin']['recentitems']['rightscan']
             );
 			if (Cot::$usr['id'] == 0 && Cot::$cache && (int) Cot::$cfg['plugin']['recentitems']['cache_ttl'] > 0) {
                 Cot::$cache->disk->store($riPageCacheKey, $riHtml, 'recentitems');
@@ -85,9 +96,19 @@ if ($enpages || $enforums) {
 		}
 
 		if (empty($riHtml)) {
+            $period = !empty(Cot::$cfg['plugin']['recentitems']['forumsPeriod'])
+                ? trim(Cot::$cfg['plugin']['recentitems']['forumsPeriod'])
+                : null;
+            $timeBack = null;
+            if ($period) {
+                $startDateTime = new DateTime();
+                $startDateTime->sub(new DateInterval('P' . trim($period)));
+                $timeBack = $startDateTime->getTimestamp();
+            }
+
             $riHtml = cot_build_recentforums(
                 'recentitems.forums.index',
-                'recent',
+                $timeBack,
                 Cot::$cfg['plugin']['recentitems']['maxtopics'],
                 0,
                 Cot::$cfg['plugin']['recentitems']['recentforumstitle'],

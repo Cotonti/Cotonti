@@ -14,30 +14,34 @@ require_once cot_langfile('recentitems', 'plug');
 
 /**
  * @param string $template
- * @param string $mode
- * @param int $maxperpage
+ * @param ?int $timeBack Unix timestamp from which publications should be displayed
+ * @param int $maxEntriesPerPage
  * @param int $d
- * @param int $titlelength
+ * @param int $titleLength
  * @param bool $rightprescan Consider user rights
  * @return string
+ *
+ * @see https://www.php.net/manual/dateinterval.construct.php
+ *
+ * @todo проверить все с хуком recentitems.recentforums.first
  */
 function cot_build_recentforums(
     $template,
-    $mode = 'recent',
-    $maxperpage = 5,
+    $timeBack = null,
+    $maxEntriesPerPage = 5,
     $d = 0,
-    $titlelength = 0,
+    $titleLength = 0,
     $rightprescan = true
 ) {
 	global $totalrecent;
 
     $where = [];
-
-    $authCategories = cot_authCategories('forums');
+    $params = [];
 
     $recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
     if ($rightprescan) {
+        $authCategories = cot_authCategories('forums');
         if (empty($authCategories['read'])) {
             $recentitems->parse('MAIN.NO_TOPICS_FOUND');
             $recentitems->parse('MAIN');
@@ -58,47 +62,95 @@ function cot_build_recentforums(
         unset($where['privateTopic']);
     }
 
+    if ($timeBack) {
+        $timeBack = (int) $timeBack;
+    }
+    if ($timeBack) {
+        $where['period'] = "ft_updated >= {$timeBack}";
+    } else {
+        $where['movedTo'] = 'ft_movedto = 0';
+    }
+
+    $joinColumns = [];
+    $joinTables = [];
+
     /* === Hook === */
-	foreach (cot_getextplugins('recentitems.recentforums.first') as $pl) {
+	foreach (cot_getextplugins('recentitems.recentforums.query') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-    $where = array_diff($where, ['']);
+    $sqlJoinColumns = '';
+    if (!empty($joinColumns)) {
+        $sqlJoinColumns = ', ' . implode(', ', $joinColumns);
+    }
 
-	if ($mode == 'recent') {
-        $where['movedTo'] = 'ft_movedto = 0';
-        $sqlWhere = ' WHERE ' . implode(' AND ', $where);
+    $sqlJoinTables = '';
+    if (!empty($joinTables)) {
+        $sqlJoinTables = "\n " . implode("\n ", $joinTables) . "\n ";
+    }
 
-        $totalrecent['topics'] = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->forum_topics . $sqlWhere)
-            ->fetchColumn();
-        $sql = Cot::$db->query('SELECT * FROM ' . Cot::$db->forum_topics . $sqlWhere .
-            " ORDER by ft_updated DESC LIMIT $maxperpage");
-		//$totalrecent['topics'] = $maxperpage;
+    $sqlWhere = '';
+    if (!empty($where)) {
+        $sqlWhere = 'WHERE (' . implode(') AND (', $where) . ')';
+    }
 
-	} else {
-        $where['updated'] = 'ft_updated >= :updated';
-		$sqlWhere = ' WHERE ' . implode(' AND ', $where);
+    $totalrecent['topics'] = Cot::$db->query(
+        'SELECT COUNT(*) FROM ' . Cot::$db->forum_topics . "  $sqlJoinTables $sqlWhere",
+        $params
+    )->fetchColumn();
 
-		$totalrecent['topics'] = Cot::$db->query(
-            'SELECT COUNT(*) FROM ' . Cot::$db->forum_topics . $sqlWhere,
-            ['updated' => $mode]
-        )->fetchColumn();
-		$sql = Cot::$db->query(
-            'SELECT * FROM ' . Cot::$db->forum_topics . ' ' . $sqlWhere . " ORDER by ft_updated DESC LIMIT $d, " .
-                $maxperpage,
-            ['updated' => $mode]
+    if (empty($where['period']) && empty($maxEntriesPerPage)) {
+        $maxEntriesPerPage = 5;
+    }
+
+    $sql = Cot::$db->query(
+        "SELECT t.* $sqlJoinColumns FROM " . Cot::$db->forum_topics . ' AS t '
+        . " $sqlJoinTables $sqlWhere ORDER by ft_updated DESC LIMIT $d, $maxEntriesPerPage",
+        $params
+    );
+
+    $recentTopics = $sql->fetchAll();
+    if (empty($recentTopics)) {
+        if ($d === 0) {
+            $recentitems->parse('MAIN.NO_TOPICS_FOUND');
+            return $recentitems->text('MAIN');
+        }
+        return '';
+    }
+
+    $usersIds = [];
+    foreach ($recentTopics as $row) {
+        if (!empty($row['ft_firstposterid']) && !in_array($row['ft_firstposterid'], $usersIds)) {
+            $usersIds[] = $row['ft_firstposterid'];
+        }
+        if (!empty($row['ft_lastposterid']) && !in_array($row['ft_lastposterid'], $usersIds)) {
+            $usersIds[] = $row['ft_lastposterid'];
+        }
+    }
+
+    $users = [];
+    if (!empty($usersIds)) {
+        $sql = Cot::$db->query(
+            'SELECT * FROM ' . Cot::$db->quoteTableName(Cot::$db->users)
+            . ' WHERE user_id IN (' . implode(',', $usersIds) . ')'
         );
-	}
+        $result = $sql->fetchAll();
+        if (!empty($result)) {
+            foreach ($result as $row) {
+                $users[$row['user_id']] = $row;
+            }
+        }
+    }
 
 	$ft_num = 0;
-	while ($row = $sql->fetch()) {
+    foreach ($recentTopics as $row) {
 		$row['ft_icon'] = 'posts';
 		$row['ft_postisnew'] = false;
 		$row['ft_pages'] = '';
 		$ft_num++;
-		if ((int) $titlelength > 0 && mb_strlen($row['ft_title']) > $titlelength) {
-			$row['ft_title'] = cot_string_truncate($row['ft_title'], $titlelength, false). "...";
+		if ((int) $titleLength > 0 && mb_strlen($row['ft_title']) > $titleLength) {
+			$row['ft_title'] = cot_string_truncate($row['ft_title'], $titleLength, false). "...";
 		}
 		$build_forum = cot_breadcrumbs(cot_forums_buildpath($row['ft_cat'], false), false, false);
 		$build_forum_short = cot_rc_link(cot_url('forums', 'm=topics&s=' . $row['ft_cat']),
@@ -112,7 +164,6 @@ function cot_build_recentforums(
 			$row['ft_url'] = cot_url('forums', 'm=posts&q=' . $row['ft_movedto']);
 			$row['ft_icon'] = Cot::$R['forums_icon_posts_moved'];
 			$row['ft_title'] = Cot::$L['Moved'] . ": " . $row['ft_title'];
-			$row['ft_lastpostername'] = Cot::$R['forums_code_post_empty'];
 			$row['ft_postcount'] = Cot::$R['forums_code_post_empty'];
 			$row['ft_replycount'] = Cot::$R['forums_code_post_empty'];
 			$row['ft_viewcount'] = Cot::$R['forums_code_post_empty'];
@@ -149,7 +200,6 @@ function cot_build_recentforums(
 				}
 			}
 
-			$row['ft_icon_type'] = $row['ft_icon'];
 			$row['ft_icon'] = cot_rc('forums_icon_topic_t', [
                 'icon' => $row['ft_icon'],
                 'title' => Cot::$L['recentitems_' . $row['ft_icon']]
@@ -157,6 +207,7 @@ function cot_build_recentforums(
 			$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], $row['ft_lastpostername']);
 		}
 
+        $row['ft_icon_type'] = $row['ft_icon'];
 		$row['ft_firstpostername'] = cot_build_user($row['ft_firstposterid'], $row['ft_firstpostername']);
 
         $row['ft_maxpages'] = 0;
@@ -176,69 +227,122 @@ function cot_build_recentforums(
             }
         }
 
-		$recentitems->assign(array(
-			'FORUM_ROW_ID' => $row['ft_id'],
-			'FORUM_ROW_STATE' => $row['ft_state'],
-			'FORUM_ROW_ICON' => $row['ft_icon'],
-			'FORUM_ROW_ICON_TYPE' => $row['ft_icon_type'],
-			'FORUM_ROW_TITLE' => htmlspecialchars($row['ft_title']),
-			'FORUM_ROW_PATH' => $build_forum,
-			'FORUM_ROW_PATH_SHORT' => $build_forum_short,
-			'FORUM_ROW_DESC' => htmlspecialchars($row['ft_desc']),
-			'FORUM_ROW_PREVIEW' => $topicPreview,
-			'FORUM_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate']),
-			'FORUM_ROW_CREATIONDATE_STAMP' => $row['ft_creationdate'],
-			'FORUM_ROW_UPDATED' => $row['ft_lastpostlink'],
-			'FORUM_ROW_UPDATED_STAMP' => $row['ft_updated'],
-			'FORUM_ROW_TIMEAGO' => $row['ft_timeago'],
-			'FORUM_ROW_POSTCOUNT' => $row['ft_postcount'],
-			'FORUM_ROW_REPLYCOUNT' => $row['ft_replycount'],
-			'FORUM_ROW_VIEWCOUNT' => $row['ft_viewcount'],
-			'FORUM_ROW_FIRSTPOSTER' => $row['ft_firstpostername'],
-			'FORUM_ROW_LASTPOSTER' => $row['ft_lastpostername'],
-			'FORUM_ROW_LASTPOSTURL' => $row['ft_lastposturl'],
-			'FORUM_ROW_URL' => $row['ft_url'],
-			'FORUM_ROW_PAGES' => $row['ft_pages'],
-			'FORUM_ROW_MAXPAGES' => $row['ft_maxpages'],
-			'FORUM_ROW_NUM' => $ft_num,
-			'FORUM_ROW_ODDEVEN' => cot_build_oddeven($ft_num),
-			'FORUM_ROW' => $row
-		));
-		$recentitems->parse('MAIN.TOPICS_ROW');
-	}
-	$sql->closeCursor();
+        $recentitems->assign([
+            'FORUM_ROW_ID' => $row['ft_id'],
+            'FORUM_ROW_STATE' => $row['ft_state'],
+            'FORUM_ROW_ICON' => $row['ft_icon'],
+            'FORUM_ROW_ICON_TYPE' => $row['ft_icon_type'],
+            'FORUM_ROW_TITLE' => htmlspecialchars($row['ft_title']),
+            'FORUM_ROW_PATH' => $build_forum,
+            'FORUM_ROW_PATH_SHORT' => $build_forum_short,
+            'FORUM_ROW_DESCRIPTION' => htmlspecialchars($row['ft_desc']),
+            'FORUM_ROW_PREVIEW' => $topicPreview,
+            'FORUM_ROW_CREATED' => cot_date('datetime_short', $row['ft_creationdate']),
+            'FORUM_ROW_CREATED_STAMP' => $row['ft_creationdate'],
+            'FORUM_ROW_UPDATED' => $row['ft_lastpostlink'],
+            'FORUM_ROW_UPDATED_STAMP' => $row['ft_updated'],
+            'FORUM_ROW_TIME_AGO' => $row['ft_timeago'],
+            'FORUM_ROW_POSTS_COUNT' => $row['ft_postcount'],
+            'FORUM_ROW_REPLY_COUNT' => $row['ft_replycount'],
+            'FORUM_ROW_VIEWS_COUNT' => $row['ft_viewcount'],
+            'FORUM_ROW_FIRST_POSTER' => $row['ft_firstpostername'],
+            'FORUM_ROW_LAST_POSTER' => $row['ft_lastpostername'],
+            'FORUM_ROW_LAST_POST_URL' => $row['ft_lastposturl'],
+            'FORUM_ROW_URL' => $row['ft_url'],
+            'FORUM_ROW_PAGES' => $row['ft_pages'],
+            'FORUM_ROW_MAX_PAGES' => $row['ft_maxpages'],
+            'FORUM_ROW_NUM' => $ft_num,
+            'FORUM_ROW_ODDEVEN' => cot_build_oddeven($ft_num),
+            'FORUM_ROW' => $row,
 
-	if ($d == 0 && $ft_num == 0) {
-		$recentitems->parse('MAIN.NO_TOPICS_FOUND');
+            // @deprecated in 0.9.24
+            'FORUM_ROW_FIRSTPOSTER' => $row['ft_firstpostername'],
+            'FORUM_ROW_LASTPOSTER' => $row['ft_lastpostername'],
+            'FORUM_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate']),
+            'FORUM_ROW_CREATIONDATE_STAMP' => $row['ft_creationdate'],
+            'FORUM_ROW_TIMEAGO' => $row['ft_timeago'],
+            'FORUM_ROW_POSTCOUNT' => $row['ft_postcount'],
+            'FORUM_ROW_REPLYCOUNT' => $row['ft_replycount'],
+            'FORUM_ROW_VIEWCOUNT' => $row['ft_viewcount'],
+            'FORUM_ROW_LASTPOSTURL' => $row['ft_lastposturl'],
+            'FORUM_ROW_MAXPAGES' => $row['ft_maxpages'],
+            'FORUM_ROW_DESC' => htmlspecialchars($row['ft_desc']),
+        ]);
+
+        $userData = (!empty($row['ft_firstposterid']) && isset($users[$row['ft_firstposterid']]))
+            ? cot_generate_usertags($users[$row['ft_firstposterid']], 'FORUM_ROW_FIRST_POSTER_')
+            : cot_generate_usertags([], 'FORUM_ROW_FIRST_POSTER_');
+        $recentitems->assign($userData);
+
+        $userData = (
+            !empty($row['ft_lastposterid'])
+            && isset($users[$row['ft_lastposterid']])
+            && (int) $row['ft_movedto'] === 0
+        )
+            ? cot_generate_usertags($users[$row['ft_lastposterid']], 'FORUM_ROW_LAST_POSTER_')
+            : cot_generate_usertags([], 'FORUM_ROW_LAST_POSTER_');
+        $recentitems->assign($userData);
+
+		$recentitems->parse('MAIN.TOPICS_ROW');
 	}
 
 	$recentitems->parse('MAIN');
 
-	return ($d == 0 || $ft_num > 0) ? $recentitems->text('MAIN') : '';
+	return $recentitems->text('MAIN');
 }
 
 /**
  * @param string $template
- * @param string|int $mode 'recent' or unix timestamp from which publications should be displayed
- * @param int $maxperpage
+ * @param ?int $timeBack Unix timestamp from which publications should be displayed
+ * @param int $maxEntriesPerPage
  * @param int $d
- * @param int $titlelength
- * @param int $textlength
+ * @param int $titleLength
+ * @param int $textLength
  * @param bool $rightprescan
  * @param string $cat
  * @return string
+ *
+ * @see https://www.php.net/manual/dateinterval.construct.php
+ *
+ * @todo соотвественно поправить plugins\comments\comments.recentitems.recentpages.first.php on line 22
+ * @todo а также все, что содержит хук recentitems.recentpages.first
  */
-function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $textlength = 0, $rightprescan = true, $cat = '')
-{
-	global $db_pages, $db_users;
+function cot_build_recentpages(
+    $template,
+    $timeBack = null,
+    $maxEntriesPerPage = 5,
+    $d = 0,
+    $titleLength = 0,
+    $textLength = 0,
+    $rightprescan = true,
+    $cat = ''
+) {
+    global $totalrecent;
 
 	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
+    $where = [];
+    $params = [];
+
+    $where['state'] = 'page_state = ' . COT_PAGE_STATE_PUBLISHED;
+    $where['begin'] = 'page_begin <= ' . Cot::$sys['now'];
+    $where['notExpire'] = '(page_expire = 0 OR page_expire > ' . Cot::$sys['now'] . ')';
+
+    if (!empty(Cot::$structure['page']['system'])) {
+        $systemCats = cot_structure_children('page', 'system');
+        if (!empty($systemCats)) {
+            $where['notSystem'] = "page_cat NOT IN ('" . implode("','", $systemCats) . "')";
+        }
+    }
+
 	// Load all cats and subcats in white list if set
 	if (!empty(Cot::$cfg['plugin']['recentitems']['whitelist'])) {
-		$whitelist = array();
+		$whitelist = [];
 		foreach (preg_split('#\r?\n#', Cot::$cfg['plugin']['recentitems']['whitelist']) as $c) {
-			$whitelist = array_merge($whitelist, cot_structure_children('page', $c, true, true, $rightprescan));
+			$whitelist = array_merge(
+                $whitelist,
+                cot_structure_children('page', $c, true, true, $rightprescan)
+            );
 		}
 	} else {
 		$whitelist = false;
@@ -246,15 +350,17 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 
 	// Load all cats and subcats in black list if set
 	if (!empty(Cot::$cfg['plugin']['recentitems']['blacklist'])) {
-		$blacklist = array();
+		$blacklist = [];
 		foreach (preg_split('#\r?\n#', Cot::$cfg['plugin']['recentitems']['blacklist']) as $c) {
-			$blacklist = array_merge($blacklist, cot_structure_children('page', $c, true, true, $rightprescan));
+			$blacklist = array_merge(
+                $blacklist,
+                cot_structure_children('page', $c, true, true, $rightprescan)
+            );
 		}
 	} else {
 		$blacklist = false;
 	}
 
-    $incat = '';
 	if ($rightprescan || $cat) {
 		// Get selected cats
 		$catsub = cot_structure_children('page', $cat, true, true, $rightprescan);
@@ -269,55 +375,78 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		}
 
         if (!empty($catsub)) {
-            $incat = "AND page_cat IN ('" . implode("','", $catsub) . "')";
+            $where['category'] = "p.page_cat IN ('" . implode("','", $catsub) . "')";
         }
 	} elseif (!empty($whitelist)) {
 		// Only cats from white list
-		$incat = "AND page_cat IN ('" . implode("','", $whitelist) . "')";
+        $where['category'] = "p.page_cat IN ('" . implode("','", $whitelist) . "')";
 
 	} elseif (!empty($blacklist)) {
 		// All cats but not in black list
-		$incat = "AND page_cat NOT IN ('" . implode("','", $blacklist) . "')";
+        $where['category'] = "p.page_cat NOT IN ('" . implode("','", $blacklist) . "')";
 	}
 
-	if ($mode == 'recent') {
-		$where = "WHERE page_state=0 AND page_begin <= " . Cot::$sys['now'] .
-            " AND (page_expire = 0 OR page_expire > " . Cot::$sys['now']. ") AND page_cat <> 'system' " . $incat;
-		$totalrecent['pages'] = Cot::$cfg['plugin']['recentitems']['maxpages'];
+    $order = !empty(Cot::$cfg['plugin']['recentitems']['pagesOrder'])
+        && in_array(Cot::$cfg['plugin']['recentitems']['pagesOrder'], ['date', 'begin', 'updated'])
+        ? Cot::$cfg['plugin']['recentitems']['pagesOrder']
+        : 'date';
 
-	} else {
-		$where = "WHERE page_date >= $mode AND page_begin <= " . Cot::$sys['now'] .
-            " AND (page_expire = 0 OR page_expire > " .
-            Cot::$sys['now'] . ") AND page_state=0 AND page_cat <> 'system' " . $incat;
-		$totalrecent['pages'] = Cot::$db->query("SELECT COUNT(*) FROM $db_pages " . $where)->fetchColumn();
-	}
+    if ($timeBack) {
+        $timeBack = (int) $timeBack;
+    }
+    if ($timeBack) {
+        $where['period'] = "p.page_{$order} >= {$timeBack}";
+    }
 
-	$join_columns = '';
-	$join_tables = '';
+	$joinColumns = [];
+	$joinTables = [];
 
 	/* === Hook === */
-	foreach (cot_getextplugins('recentitems.recentpages.first') as $pl) {
+	foreach (cot_getextplugins('recentitems.recentpages.query') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	$sql = Cot::$db->query("SELECT p.*, u.* $join_columns
-		FROM $db_pages AS p
-		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		$join_tables
-		$where ORDER by page_date desc LIMIT $d, $maxperpage");
+    $sqlJoinColumns = '';
+    if (!empty($joinColumns)) {
+        $sqlJoinColumns = ', ' . implode(', ', $joinColumns);
+    }
 
-	$jj = 0;
+    $sqlJoinTables = '';
+    if (!empty($joinTables)) {
+        $sqlJoinTables = "\n " . implode("\n ", $joinTables) . "\n ";
+    }
+
+    $sqlWhere = '';
+    if (!empty($where)) {
+        $sqlWhere = 'WHERE (' . implode(') AND (', $where) . ')';
+    }
+
+    $totalrecent['pages'] = Cot::$db->query(
+        'SELECT COUNT(*) FROM ' . Cot::$db->pages . " AS p $sqlJoinTables $sqlWhere",
+        $params
+    )->fetchColumn();
+
+    if (empty($where['period']) && empty($maxEntriesPerPage)) {
+        $maxEntriesPerPage = 5;
+    }
+
+    $query = "SELECT p.*, u.* $sqlJoinColumns FROM " . Cot::$db->pages . ' AS p '
+        . ' LEFT JOIN ' . Cot::$db->users . ' AS u ON u.user_id = p.page_ownerid '
+        . " $sqlJoinTables $sqlWhere ORDER by p.page_{$order} desc LIMIT $d, $maxEntriesPerPage";
+
+	$sql = Cot::$db->query($query, $params);
 
 	/* === Hook - Part1 === */
 	$extp = cot_getextplugins('recentitems.recentpages.tags');
 	/* ===== */
-	foreach ($sql->fetchAll() as $pag) {
+    $jj = 0;
+    while ($pag = $sql->fetch()) {
 		$jj++;
-		if ((int) $titlelength > 0 && mb_strlen($pag['page_title']) > $titlelength) {
-			$pag['page_title'] = (cot_string_truncate($pag['page_title'], $titlelength, false)) . "...";
+		if ((int) $titleLength > 0 && mb_strlen($pag['page_title']) > $titleLength) {
+			$pag['page_title'] = (cot_string_truncate($pag['page_title'], $titleLength, false)) . "...";
 		}
-		$recentitems->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $textlength));
+		$recentitems->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $textLength));
 		$recentitems->assign([
 			'PAGE_ROW_TITLE' => htmlspecialchars($pag['page_title']),
 			'PAGE_ROW_OWNER' => cot_build_user($pag['page_ownerid'], $pag['user_name']),
@@ -338,6 +467,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 
 		$recentitems->parse('MAIN.PAGE_ROW');
 	}
+    $sql->closeCursor();
 
 	if ($d == 0 && $jj == 0) {
 		$recentitems->parse('MAIN.NO_PAGES_FOUND');

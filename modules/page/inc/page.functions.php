@@ -254,11 +254,11 @@ function cot_generate_pagetags(
 			'OWNER_NAME' => (isset($page_data['user_name']) && $page_data['user_name'] != '')
                 ? htmlspecialchars($page_data['user_name'])
                 : '',
-			'DATE' => cot_date($date_format, $page_data['page_date']),
+            'CREATED' => cot_date($date_format, $page_data['page_date']),
 			'BEGIN' => cot_date($date_format, $page_data['page_begin']),
 			'EXPIRE' => cot_date($date_format, $page_data['page_expire']),
 			'UPDATED' => cot_date($date_format, $page_data['page_updated']),
-			'DATE_STAMP' => $page_data['page_date'],
+            'CREATED_STAMP' => $page_data['page_date'],
 			'BEGIN_STAMP' => $page_data['page_begin'],
 			'EXPIRE_STAMP' => $page_data['page_expire'],
 			'UPDATED_STAMP' => $page_data['page_updated'],
@@ -302,6 +302,8 @@ function cot_generate_pagetags(
                 htmlspecialchars($page_data['page_desc']) : $text,
             'DESC_OR_TEXT_CUT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
                 htmlspecialchars($page_data['page_desc']) : $text_cut,
+            'DATE' => cot_date($date_format, $page_data['page_date']),
+            'DATE_STAMP' => $page_data['page_date'],
             'FILE_COUNT' => $page_data['page_filecount'],
             'FILE_COUNTTIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
             'COUNT' => $page_data['page_count'],

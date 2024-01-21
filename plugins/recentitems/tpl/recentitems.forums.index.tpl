@@ -16,10 +16,10 @@
 			<p class="small">{FORUM_ROW_PATH}</p>
 		</td>
 		<td class="centerall b1 {FORUM_ROW_ODDEVEN}">
-			{FORUM_ROW_UPDATED} {FORUM_ROW_LASTPOSTER}<br />
-			{FORUM_ROW_TIMEAGO}
+			{FORUM_ROW_UPDATED} {FORUM_ROW_LAST_POSTER}<br />
+			{FORUM_ROW_TIME_AGO}
 		</td>
-		<td class="centerall {FORUM_ROW_ODDEVEN}">{FORUM_ROW_POSTCOUNT}</td>
+		<td class="centerall {FORUM_ROW_ODDEVEN}">{FORUM_ROW_POSTS_COUNT}</td>
 	</tr>
 <!-- END: TOPICS_ROW -->
 <!-- BEGIN: NO_TOPICS_FOUND -->

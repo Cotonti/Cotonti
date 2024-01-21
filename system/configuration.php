@@ -975,41 +975,44 @@ function cot_config_titles($name, $text = '')
  */
 function cot_config_selecttitles($name, $params)
 {
-	global $L;
-	if (isset($L['cfg_' . $name . '_params'])) {
-		if (!is_array($L['cfg_' . $name . '_params'])) {
-			$L['cfg_' . $name . '_params'] = preg_split('#\s*,\s*#', $L['cfg_' . $name . '_params']);
-			if (preg_match('#^[\w-]+\s*:#', $L['cfg_' . $name . '_params'][0])) {
-				// Support for assoc arrays
-				$temp = array();
-				foreach ($L['cfg_' . $name . '_params'] as $item) {
-					if (preg_match('#^([\w-]+)\s*:\s*(.*)$#', $item, $mt)) {
-						$temp[$mt[1]] = $mt[2];
-					}
-				}
-				if (count($temp) > 0)
-					$L['cfg_' . $name . '_params'] = $temp;
-			}
-		}
-		$lang_params_keys = array_keys($L['cfg_' . $name . '_params']);
-		if (isset($lang_params_keys[0]) && is_numeric($lang_params_keys[0])) {
-			// Numeric array, simply use it
-			$cfg_params_titles = $L['cfg_' . $name . '_params'];
+    if (!isset(Cot::$L['cfg_' . $name . '_params'])) {
+        return $params;
+    }
 
-        } else {
-			// Associative, match entries
-			$cfg_params_titles = array();
-			foreach ($params as $val) {
-				if (isset($L['cfg_' . $name . '_params'][$val])) {
-					$cfg_params_titles[] = $L['cfg_' . $name . '_params'][$val];
-				} else {
-					$cfg_params_titles[] = $val;
-				}
-			}
-		}
-	} else {
-		$cfg_params_titles = $params;
-	}
+    $langParam =  Cot::$L['cfg_' . $name . '_params'];
 
-	return $cfg_params_titles;
+    if (!is_array($langParam)) {
+        $langParam = preg_split('#\s*,\s*#', $langParam);
+        if (preg_match('#^[\w-]+\s*:#', $langParam[0])) {
+            // Support for assoc arrays
+            $temp = [];
+            foreach ($langParam as $item) {
+                if (preg_match('/^(?P<key>[\w-]+)\s*:\s*(?P<value>.*)$/', $item, $matches)) {
+                    $temp[$matches['key']] = $matches['value'];
+                }
+            }
+            if (count($temp) > 0) {
+                $langParam = $temp;
+            }
+        }
+    }
+
+    $cfgParamsTitles = [];
+    $langParamsKeys = array_keys($langParam);
+    if (isset($langParamsKeys[0]) && is_numeric($langParamsKeys[0])) {
+        // Numeric array, simply use it
+        $cfgParamsTitles = $langParam;
+
+    } else {
+        // Associative, match entries
+        foreach ($params as $val) {
+            if (isset($langParam[$val])) {
+                $cfgParamsTitles[] = $langParam[$val];
+            } else {
+                $cfgParamsTitles[] = $val;
+            }
+        }
+    }
+
+	return $cfgParamsTitles;
 }

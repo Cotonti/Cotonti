@@ -34,7 +34,9 @@
 					<td>{ADMIN_CONFIG_ROW_CONFIG_TITLE}:</td>
 					<td>
 						{ADMIN_CONFIG_ROW_CONFIG}
+						<!-- IF {ADMIN_CONFIG_ROW_CONFIG_MORE} -->
 						<div class="adminconfigmore">{ADMIN_CONFIG_ROW_CONFIG_MORE}</div>
+						<!-- ENDIF -->
 					</td>
 					<td class="centerall">
 						<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="button">{PHP.L.Reset}</a>

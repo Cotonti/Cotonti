@@ -12,17 +12,22 @@ defined('COT_CODE') or die('Wrong URL.');
 /**
  * Plugin Info
  */
-
 $L['info_desc'] = 'Displays recent site additions (pages, topics) on index page';
 
 /**
  * Plugin Config
  */
-
 $L['cfg_recentpages'] = 'Recent pages on index';
+$L['cfg_pagesOrder'] = 'Sort pages by';
+$L['cfg_pagesOrder_params'] = 'date:Creation date,begin:Publication date,updated:Last update date';
+$L['cfg_pagesPeriod'] = 'Display pages for';
+$L['cfg_pagesPeriod_params'] = 'all:--,1D:1 day,2D:2 days,4D: 4 days,1W: 1 week,2W:2 weeks,3W:3 weeks,1M:1 month,'
+    . '2M:2 months,3M:3 months,4M:4 months,5M:5 months,6M:6 months,7M:7 months,8M:8 months,9M:9 months,1Y:1 year';
 $L['cfg_maxpages'] = 'Recent pages displayed';
 $L['cfg_recentforums'] = 'Recent forums on index';
 $L['cfg_maxtopics'] = 'Recent topics in forums displayed';
+$L['cfg_forumsPeriod'] = 'Display topics for';
+$L['cfg_forumsPeriod_params'] = $L['cfg_pagesPeriod_params'];
 $L['cfg_newpages'] = 'Recent pages in standalone module';
 $L['cfg_newforums'] = 'Recent forums in standalone module';
 $L['cfg_newadditional'] = 'Additional modules in standalone module';

@@ -11,62 +11,127 @@ Hooks=standalone
  * @package RecentItems
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var array $Ls
  */
+
 defined('COT_CODE') or die("Wrong URL.");
 
-$days = cot_import('days', 'G', 'INT');
-list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['plugin']['recentitems']['itemsperpage']);
+$days = cot_import('days', 'G', 'TXT');
 $mode = cot_import('mode', 'G', 'TXT');
 
-$timeback = 0;
-$pagetitlelimit = isset($pagetitlelimit) ? $pagetitlelimit : 0;  // Todo
+list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['plugin']['recentitems']['itemsperpage']);
 
-// From user's last visit
-if ($days == -1) {
-    if (Cot::$usr['id'] > 0 && Cot::$usr['lastvisit'] > 0) {
-        $timeback = Cot::$usr['lastvisit'];
-    } else {
-        $days = 1;
-    }
+$timeBack = null;
+$periodToShow = '';
+$pageTitleLimit = isset($pageTitleLimit) ? $pageTitleLimit : 0;  // Todo
+
+$urlParams = [];
+if (!empty($days)) {
+    $urlParams['days'] = $days;
+}
+if (!empty($mode)) {
+    $urlParams['mode'] = $mode;
 }
 
-// Today. From 00:00 in user timezone
-if ($days == 0) {
-    $timeZone = null;
-    $defaultTimeZone = !empty(Cot::$cfg['defaulttimezone']) ? Cot::$cfg['defaulttimezone'] : 'UTC';
-    if (
-        Cot::$usr['timezone'] != 0 // May be it is not needed
-        && !empty(Cot::$usr['timezonename'])
-        && Cot::$usr['timezonename'] != $defaultTimeZone)
-    {
+$recentItemsModes = [];
+if (cot_module_active('page')) {
+    $recentItemsModes[] = 'pages';
+}
+if (cot_module_active('forums')) {
+    $recentItemsModes[] = 'forums';
+}
+
+if (empty($days) || is_numeric($days)) {
+    $days = (int) $days;
+
+    // From user's last visit
+    if ($days === -1) {
+        if (Cot::$usr['id'] > 0 && Cot::$usr['lastvisit'] > 0) {
+            $timeBack = Cot::$usr['lastvisit'];
+            $periodToShow = Cot::$L['recentitems_fromlastvisit'];
+        } else {
+            $days = 1;
+            $urlParams['days'] = $days;
+        }
+    }
+
+    if ($days === 0) {
+        // Today. From 00:00 in user timezone
+        $timeZone = null;
+        $defaultTimeZone = !empty(Cot::$cfg['defaulttimezone']) ? Cot::$cfg['defaulttimezone'] : 'UTC';
+        if (
+            Cot::$usr['timezone'] != 0 // May be it is not needed
+            && !empty(Cot::$usr['timezonename'])
+            && Cot::$usr['timezonename'] != $defaultTimeZone) {
+            try {
+                $timeZone = new DateTimeZone(Cot::$usr['timezonename']);
+            } catch (Exception $e) {
+            }
+        }
+        if (empty($timeZone)) {
+            $timeZone = new DateTimeZone($defaultTimeZone);
+        }
+        $date = new DateTime('today midnight', $timeZone);
+        $timeBack = $date->getTimestamp();
+        $periodToShow = Cot::$L['Today'];
+    } elseif ($days > 0) {
+        $timeBack = Cot::$sys['now'] - ($days * 86400);
+        $periodToShow = cot_declension($days, $Ls['Days']);
+    }
+
+} else {
+    if (preg_match('/^(?P<count>\d{1,2})(?P<unit>[YMDW])$/i', $days, $matches)) {
+        $matches['unit'] = mb_strtoupper($matches['unit']);
+
+        if ($matches['unit'] === 'D') {
+            $redirectUrlParams = $urlParams;
+            $redirectUrlParams['days'] = $matches['count'];
+            if (!empty($d)) {
+                $redirectUrlParams['d'] = $durl;
+            }
+            cot_redirect(cot_url('recentitems', $redirectUrlParams, '', true));
+        }
+
         try {
-            $timeZone = new \DateTimeZone(Cot::$usr['timezonename']);
-        } catch (\Exception $e) { }
+            $startDateTime = new DateTime();
+            $startDateTime->sub(new DateInterval('P' . $matches['count'] . $matches['unit']));
+            $timeBack = $startDateTime->getTimestamp();
+        } catch (Exception $e) {
+            cot_die_message('404');
+        }
+
+        switch ($matches['unit']) {
+            case 'W':
+                $periodToShow = cot_declension($matches['count'], $Ls['Weeks']);
+                break;
+            case 'M':
+                $periodToShow = cot_declension($matches['count'], $Ls['Months']);
+                break;
+            case 'Y':
+                $periodToShow = cot_declension($matches['count'], $Ls['Years']);
+                break;
+        }
+    } else {
+        cot_die_message('404');
     }
-    if (empty($timeZone)) {
-        $timeZone = new \DateTimeZone($defaultTimeZone);
-    }
-    $date = new \DateTime('today midnight', $timeZone);
-    $timeback = $date->getTimestamp();
-}
-if ($days > 0) {
-	$timeback = Cot::$sys['now'] - ($days * 86400);
 }
 
 require_once cot_incfile('recentitems', 'plug');
+
 $totalrecent[] = 0;
 if (
     Cot::$cfg['plugin']['recentitems']['newpages']
     && cot_module_active('page')
-    && (empty($mode) || $mode == 'pages')
+    && (empty($mode) || $mode === 'pages')
 ) {
 	require_once cot_incfile('page', 'module');
 	$res = cot_build_recentpages(
         'recentitems.pages',
-        $timeback,
+        $timeBack,
         Cot::$cfg['plugin']['recentitems']['itemsperpage'],
         $d,
-        $pagetitlelimit,
+        $pageTitleLimit,
         Cot::$cfg['plugin']['recentitems']['newpagestext'],
         Cot::$cfg['plugin']['recentitems']['rightscan']
     );
@@ -84,7 +149,7 @@ if (
 
 	$res = cot_build_recentforums(
         'recentitems.forums',
-        $timeback,
+        $timeBack,
         Cot::$cfg['plugin']['recentitems']['itemsperpage'],
         $d,
         $forumtitlelimit,
@@ -93,7 +158,14 @@ if (
 	$t->assign('RECENT_FORUMS', $res);
 }
 
-if ($mode != 'pages' || $mode != 'forums') {
+$titleParams = [Cot::$L['recentitems_title']];
+if ($mode === 'pages') {
+    $titleParams[] = Cot::$L['Pages'];
+} elseif ($mode === 'forums') {
+    $titleParams[] = Cot::$L['Forums'];
+}
+
+if ($mode !== 'pages' || $mode !== 'forums') {
 	/* === Hook === */
 	foreach (cot_getextplugins('recentitems.tags') as $pl) {
 		include $pl;
@@ -101,21 +173,45 @@ if ($mode != 'pages' || $mode != 'forums') {
 	/* ===== */
 }
 
-Cot::$out['subtitle'] = Cot::$L['recentitems_title'];
+if (!empty($mode) && !in_array($mode, $recentItemsModes)) {
+    cot_die_message(404);
+}
 
-$totalpages = max($totalrecent);
-$daysUrl = ($days != 0) ? '&days=' . $days : '';
-$modeUrl = (!empty($mode)) ? '&mode=' . $mode : '';
-$pagenav = cot_pagenav(
-    'plug',
-    'e=recentitems' . $daysUrl . $modeUrl,
+if ($periodToShow !== '') {
+    $titleParams[] = $periodToShow;
+}
+
+$canonicalUrlParams = $urlParams;
+if (!empty($d)) {
+    $canonicalUrlParams['d'] = $durl;
+}
+Cot::$out['canonical_uri'] = cot_url('recentitems', $canonicalUrlParams);
+Cot::$out['subtitle'] = implode(' - ', $titleParams);
+
+$totalEntries = max($totalrecent);
+
+$daysUrl = '';
+$modeUrl = '';
+if (!empty($days) && !empty($timeBack)) {
+    $daysUrl = 'days=' . $days;
+}
+if (!empty($mode)) {
+    $modeUrl = 'mode=' . $mode;
+}
+
+$pagination = cot_pagenav(
+    'recentitems',
+    $urlParams,
     $d,
-    $totalpages,
+    $totalEntries,
     Cot::$cfg['plugin']['recentitems']['itemsperpage']
 );
 
+$t->assign(cot_generatePaginationTags($pagination));
+
+// @deprecated in 0.9.24
 $t->assign([
-	'PAGE_PAGENAV' => $pagenav['main'],
-	'PAGE_PAGEPREV' => $pagenav['prev'],
-	'PAGE_PAGENEXT' => $pagenav['next']
+	'PAGE_PAGENAV' => $pagination['main'],
+	'PAGE_PAGEPREV' => $pagination['prev'],
+	'PAGE_PAGENEXT' => $pagination['next']
 ]);

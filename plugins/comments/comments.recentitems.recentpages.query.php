@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=recentitems.recentpages.first
+Hooks=recentitems.recentpages.query
 [END_COT_EXT]
 ==================== */
 
@@ -15,8 +15,9 @@ Hooks=recentitems.recentpages.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-global $db_com;
+global $L;
 
 require_once cot_incfile('comments', 'plug');
 
-$join_columns .= ", (SELECT COUNT(*) FROM `$db_com` WHERE com_area = 'page' AND com_code = p.page_id) AS com_count";
+$joinColumns[] = '(SELECT COUNT(*) FROM ' . Cot::$db->quoteT(Cot::$db->com)
+    . " WHERE com_area = 'page' AND com_code = p.page_id) AS com_count";

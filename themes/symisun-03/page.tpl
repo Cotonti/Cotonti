@@ -3,7 +3,7 @@
     <div class="padding20">
         <div id="left">
             <h1>{PAGE_TITLE}</h1>
-            <p class="details">{PHP.themelang.index.by} {PAGE_OWNER}, {PAGE_DATE} in {PAGE_CAT_PATH}
+            <p class="details">{PHP.themelang.index.by} {PAGE_OWNER}, {PAGE_CREATED} in {PAGE_CAT_PATH}
             <!-- IF {PHP.usr.isadmin} -->
             | {PAGE_ADMIN_COUNT} {PHP.themelang.page.views}
             <!-- ENDIF -->

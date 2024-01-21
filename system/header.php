@@ -100,6 +100,9 @@ if (!COT_AJAX) {
     if (!empty(Cot::$out['canonical_uri']) && !preg_match("#^https?://.+#", Cot::$out['canonical_uri'])) {
         Cot::$out['canonical_uri'] = rtrim(COT_ABSOLUTE_URL, '/') . '/'
             . trim(Cot::$out['canonical_uri'], '/');
+
+        header('Link: <' . str_replace('&amp;', '&', Cot::$out['canonical_uri'])
+            . '>; rel="canonical"');
     }
 
     if (!empty(Cot::$sys['noindex'])) {

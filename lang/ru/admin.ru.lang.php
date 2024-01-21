@@ -229,7 +229,9 @@ $L['cfg_title_header_index_hint'] = 'Опции: {MAINTITLE}, {DESCRIPTION}, {SU
 $L['cfg_title_users_details'] = 'Заголовок страницы с информацией о пользователе';
 $L['cfg_title_users_details_hint'] = 'Опции: {USER}, {NAME}';
 $L['cfg_no_canonical_no_index'] = 'Исключить из индекса поисковых систем страницы, у которых URL не совпадает с каноническим';
-$L['cfg_no_canonical_no_index_hint'] = 'Добавить мета тег "noindex" к таким страницам';
+$L['cfg_no_canonical_no_index_hint'] = 'Добавить мета тег "noindex" к таким страницам.<br>'
+    . '<b>Google не рекомендует</b> использовать директиву noindex, чтобы запретить выбирать ту или иную страницу '
+    . 'в качестве канонической на одном сайте, поскольку это приведет к полной блокировке страницы в Поиске';
 $L['cfg_subject_mail'] = 'Заголовок email';
 $L['cfg_subject_mail_hint'] = 'Опции: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}';
 $L['cfg_body_mail'] = 'Текст email';

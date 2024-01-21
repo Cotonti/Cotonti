@@ -2,7 +2,7 @@
 <!-- BEGIN: PAGE_ROW -->
 <img src="themes/{PHP.theme}/img/system/arrow-right.gif" width="12" height="12" alt="read" />
 
-<span class="time">{PAGE_ROW_DATE}</span> &nbsp;
+<span class="time">{PAGE_ROW_CREATED}</span> &nbsp;
 <span class="title"><b><a href="{PAGE_ROW_URL}">{PAGE_ROW_TITLE}</a></b></span>
 @
 <span class="cat"><b>{PAGE_ROW_CAT_PATH_SHORT}</b></span>
