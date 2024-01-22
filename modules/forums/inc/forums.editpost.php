@@ -139,8 +139,11 @@ if ($a == 'update') {
 require_once cot_incfile('forms');
 
 $crumbs = cot_forums_buildpath($s);
-$crumbs[] = array(cot_url('forums', "m=posts&p=" . $p, "#" . $p), (($rowt['ft_mode'] == 1) ? '# ' : '') . htmlspecialchars($rowt['ft_title']));
-$crumbs[] = array(cot_url('forums', "m=editpost&s=$s&q=" . $q . "&p=" . $p . "&" . cot_xg()), Cot::$L['Edit']);
+$crumbs[] = [
+    cot_url('forums', "m=posts&p=" . $p, "#" . $p),
+    (($rowt['ft_mode'] == 1) ? '# ' : '') . $rowt['ft_title']
+];
+$crumbs[] =[cot_url('forums', "m=editpost&s=$s&q=" . $q . "&p=" . $p . "&" . cot_xg()), Cot::$L['Edit']];
 $toptitle = cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb']);
 $toptitle .= Cot::$usr['isadmin'] ? Cot::$R['forums_code_admin_mark'] : '';
 

@@ -304,13 +304,13 @@ foreach ($sql_forums_rowset as $row) {
     $row['ft_maxpages'] = '';   // Todo what is it ?
 	$ft_num++;
 
-	$row['ft_title'] = ($row['ft_mode'] == 1) ? "# ".$row['ft_title'] : $row['ft_title'];
+	$row['ft_title'] = ($row['ft_mode'] == 1) ? "# ". $row['ft_title'] : $row['ft_title'];
 
 	if ($row['ft_movedto'] > 0) {
 		$row['ft_url'] = cot_url('forums', "m=posts&q=".$row['ft_movedto']);
 		$row['ft_icon_type'] = 'posts_moved';
 		$row['ft_icon'] = Cot::$R['forums_icon_posts_moved'];
-		$row['ft_title']= Cot::$L['Moved'].": ".$row['ft_title'];
+		$row['ft_title'] = Cot::$L['Moved'] . ": " . $row['ft_title'];
 		$row['ft_postcount'] = Cot::$R['forums_code_post_empty'];
 		$row['ft_replycount'] = Cot::$R['forums_code_post_empty'];
 		$row['ft_viewcount'] = Cot::$R['forums_code_post_empty'];
@@ -364,7 +364,8 @@ foreach ($sql_forums_rowset as $row) {
             $topicPreview .= '...';
         }
     }
-	$t->assign(array(
+
+	$t->assign([
 		'FORUMS_TOPICS_ROW_ID' => $row['ft_id'],
 		'FORUMS_TOPICS_ROW_STATE' => $row['ft_state'],
 		'FORUMS_TOPICS_ROW_ICON' => $row['ft_icon'],
@@ -392,7 +393,7 @@ foreach ($sql_forums_rowset as $row) {
 		'FORUMS_TOPICS_ROW_ODDEVEN' => cot_build_oddeven($ft_num),
 		'FORUMS_TOPICS_ROW_NUM' => $ft_num,
 		'FORUMS_TOPICS_ROW' => $row,
-	));
+	]);
 
 	if (!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
 		foreach (Cot::$extrafields[Cot::$db->forum_topics] as $exfld) {
