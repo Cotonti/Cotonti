@@ -24,13 +24,11 @@ foreach (cot_getextplugins('page.edit.first') as $pl) {
 
 cot_block(Cot::$usr['auth_read']);
 
-if (!$id || $id < 0)
-{
+if (!$id || $id < 0) {
 	cot_die_message(404);
 }
 $sql_page = Cot::$db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
-if($sql_page->rowCount() == 0)
-{
+if ($sql_page->rowCount() == 0) {
 	cot_die_message(404);
 }
 $row_page = $sql_page->fetch();
@@ -130,10 +128,10 @@ foreach (cot_getextplugins('page.edit.main') as $pl)
 }
 /* ===== */
 
-require_once Cot::$cfg['system_dir'].'/header.php';
+require_once Cot::$cfg['system_dir'] . '/header.php';
 $t = new XTemplate($mskin);
 
-$pageedit_array = array(
+$pageedit_array = [
 	'PAGEEDIT_PAGETITLE' => Cot::$L['page_edittitle'],
 	'PAGEEDIT_SUBTITLE' => Cot::$L['page_editsubtitle'],
 	'PAGEEDIT_FORM_SEND' => cot_url('page', "m=edit&a=update&id=".$pag['page_id']),
@@ -172,7 +170,7 @@ $pageedit_array = array(
     'PAGEEDIT_FORM_DESC' => cot_textarea('rpagedesc', $pag['page_desc'], 2, 64, array('maxlength' => '255')),
     'PAGEEDIT_FORM_LOCALSTATUS' => Cot::$L['page_status_'.$pag['page_status']],
     // /@deprecated
-);
+];
 if (Cot::$usr['isadmin']) {
 	$pageedit_array += [
 		'PAGEEDIT_FORM_OWNER_ID' => cot_inputbox('text', 'rpageownerid', $pag['page_ownerid'], ['maxlength' => '24']),

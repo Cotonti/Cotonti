@@ -298,11 +298,11 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
  * @param string $source Source type: G/GET, P/POST, C/COOKIE, R/REQUEST, PUT, DELETE or D/DIRECT (variable filtering)
  * @param string $filter Filter type
  * @param int $maxlen Length limit
- * @param bool $dieonerror Die with fatal error on wrong input
+ * @param bool $dieOnError Die with fatal error on wrong input
  * @param bool $buffer Try to load from input buffer (previously submitted) if current value is empty
  * @return mixed
  */
-function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $buffer = false)
+function cot_import($name, $source, $filter, $maxlen = 0, $dieOnError = false, $buffer = false)
 {
 	global $cot_import_filters, $_PUT, $_PATCH, $_DELETE;
 
@@ -316,72 +316,80 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 		}
 	}
 
-	$v = NULL;
+	$v = null;
 	switch($source) {
 		case 'G':
 		case 'GET':
-			$v = (isset($_GET[$name])) ? $_GET[$name] : NULL;
-			$log = TRUE;
+			$v = (isset($_GET[$name])) ? $_GET[$name] : null;
+			$log = true;
 			break;
 
 		case 'P':
 		case 'POST':
-			$v = (isset($_POST[$name])) ? $_POST[$name] : NULL;
-			$log = TRUE;
+			$v = (isset($_POST[$name])) ? $_POST[$name] : null;
+			$log = true;
 			break;
 
 		case 'PUT':
-			$v = (isset($_PUT[$name])) ? $_PUT[$name] : NULL;
-			$log = TRUE;
+			$v = (isset($_PUT[$name])) ? $_PUT[$name] : null;
+			$log = true;
 			break;
 
 		case 'PATCH':
-			$v = (isset($_PATCH[$name])) ? $_PATCH[$name] : NULL;
-			$log = TRUE;
+			$v = (isset($_PATCH[$name])) ? $_PATCH[$name] : null;
+			$log = true;
 			break;
 
 		case 'DELETE':
-			$v = (isset($_DELETE[$name])) ? $_DELETE[$name] : NULL;
-			$log = TRUE;
+			$v = (isset($_DELETE[$name])) ? $_DELETE[$name] : null;
+			$log = true;
 			break;
 
 		case 'R':
 		case 'REQUEST':
-			$v = (isset($_REQUEST[$name])) ? $_REQUEST[$name] : NULL;
-			$log = TRUE;
+			$v = (isset($_REQUEST[$name])) ? $_REQUEST[$name] : null;
+			$log = true;
 			break;
 
 		case 'C':
 		case 'COOKIE':
-			$v = (isset($_COOKIE[$name])) ? $_COOKIE[$name] : NULL;
-			$log = TRUE;
+			$v = (isset($_COOKIE[$name])) ? $_COOKIE[$name] : null;
+			$log = true;
 			break;
 
 		case 'D':
 		case 'DIRECT':
 			$v = $name;
-			$log = FALSE;
+			$log = false;
 			break;
 
 		default:
-            // @todo throw an Exception instead
-			cot_diefatal('Unknown source for a variable : <br />Name = '.$name.'<br />Source = '.$source.' ? (must be G, P, C or D)');
+			cot_diefatal(
+                'Unknown source for a variable : <br />Name = ' . $name . '<br />Source = ' . $source
+                . ' ? (must be G, P, C or D)'
+            );
 			break;
 	}
 
 	if (is_array($v)) {
-		if ($filter == 'NOC') $filter = 'ARR';
-		if ($filter != 'ARR') return null;
+		if ($filter === 'NOC') {
+            $filter = 'ARR';
+        }
+		if ($filter !== 'ARR') {
+            return null;
+        }
 	} else {
-		if ($filter == 'ARR') return array();
+		if ($filter === 'ARR') {
+            return [];
+        }
 	}
 
 
-	if (MQGPC && ($source=='G' || $source=='P' || $source=='C') && $v != NULL && $filter != 'ARR') {
+	if (MQGPC && ($source === 'G' || $source === 'P' || $source === 'C') && $v !== null && $filter !== 'ARR') {
 		$v = stripslashes($v);
 	}
 
-	if (($v === '' || $v === NULL || $filter == 'ARR') && $buffer) {
+	if (($v === '' || $v === null || $filter === 'ARR') && $buffer) {
 		$v = cot_import_buffered($name, $v, null);
 		return $v;
 	}
@@ -390,12 +398,12 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 		return null;
 	}
 
-	if ($maxlen>0) {
+	if ($maxlen > 0) {
 		$v = mb_substr($v, 0, $maxlen);
 	}
 
-	$pass = FALSE;
-	$defret = NULL;
+	$pass = false;
+	$defret = null;
 
 	// Custom filter support
 	if (!empty($cot_import_filters[$filter]) && is_array($cot_import_filters[$filter])) {
@@ -407,26 +415,25 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 
 	switch ($filter) {
 		case 'INT':
-			if (is_numeric($v) && floor($v)==$v) {
-				$pass = TRUE;
+			if (is_numeric($v) && floor($v) == $v) {
+				$pass = true;
 				$v = (int) $v;
 			}
 			break;
 
 		case 'NUM':
 			if (is_numeric($v)) {
-				$pass = TRUE;
+				$pass = true;
 				$v = (float) $v;
 			}
 			break;
 
 		case 'TXT':
 			$v = trim($v);
-			if (mb_strpos($v, '<')===FALSE) {
-				$pass = TRUE;
-
+			if (mb_strpos($v, '<') === false) {
+				$pass = true;
 			} else {
-				$defret = str_replace('<', '&lt;', $v);
+				$defret = $v;
 			}
 			break;
 
@@ -434,82 +441,56 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			$v = trim($v);
 			$f = cot_alphaonly($v);
 			if ($v == $f) {
-				$pass = TRUE;
+				$pass = true;
 			} else {
 				$defret = $f;
 			}
 			break;
 
-        /**
-         * @deprecated
-         * Old password filter. Not used anymore
-         */
-//		case 'PSW':
-//			$v = trim($v);
-//			$f = preg_replace('#[\'"&<>]#', '', $v);
-//			$f = mb_substr($f, 0 ,32);
-//
-//			if ($v == $f)
-//			{
-//				$pass = TRUE;
-//			}
-//			else
-//			{
-//				$defret = $f;
-//			}
-//			break;
-
 		case 'HTM':
 			$v = trim($v);
-			$pass = TRUE;
+			$pass = true;
 			break;
 
 		case 'ARR':
-			$pass = TRUE;
+			$pass = true;
 			break;
 
 		case 'BOL':
-			if ($v == '1' || $v == 'on') {
-				$pass = TRUE;
-				$v = TRUE;
-			} elseif ($v=='0' || $v=='off') {
-				$pass = TRUE;
-				$v = FALSE;
+            if (in_array($v, [true, 1, '1', 'on'], true)) {
+				$pass = true;
+				$v = true;
+            } elseif (in_array($v, [false, 0, '0', 'off'], true)) {
+				$pass = true;
+				$v = false;
 			} else {
-				$defret = FALSE;
+				$defret = false;
 			}
 			break;
 
 		case 'NOC':
-			$pass = TRUE;
+			$pass = true;
 			break;
 
 		default:
-            // @todo throw an exception instead of cot_diefatal()
-			cot_diefatal('Unknown filter for a variable : <br />Var = '.$v.'<br />Filter = &quot;'.$filter.'&quot; ?');
+			cot_diefatal(
+                'Unknown filter for a variable : <br />Var = '.$v.'<br />Filter = &quot;'.$filter.'&quot; ?'
+            );
 			break;
 	}
 
-	if (!$pass || !in_array($filter, array('INT', 'NUM', 'BOL', 'ARR')))
-	{
+	if (!$pass || !in_array($filter, ['INT', 'NUM', 'BOL', 'ARR'], true)) {
 		$v = preg_replace('/(&#\d+)(?![\d;])/', '$1;', $v);
 	}
-	if ($pass)
-	{
+	if ($pass) {
 		return $v;
-	}
-	else
-	{
-		if ($log)
-		{
+	} else {
+		if ($log) {
 			cot_log_import($source, $filter, $name, $v);
 		}
-		if ($dieonerror)
-		{
+		if ($dieOnError) {
 			cot_diefatal('Wrong input.');
-		}
-		else
-		{
+		} else {
 			return $defret;
 		}
 	}
@@ -1270,42 +1251,41 @@ function cot_plugin_active($name)
 /**
  * Sends standard HTTP headers and disables browser cache
  *
- * @param string $content_type Content-Type value (without charset)
- * @param string $response_code HTTP response code, e.g. '404 Not Found'
- * @param int $last_modified Last modified time
+ * @param string $contentType Content-Type value (without charset)
+ * @param string $responseCode HTTP response code, e.g. '404 Not Found'
+ * @param int $lastModified Last modified time
  * @return bool
  */
-function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK', $last_modified = 0)
+function cot_sendheaders($contentType = 'text/html', $responseCode = '200 OK', $lastModified = 0)
 {
-	global $sys;
-
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
-	$last_modified = (int)$last_modified > 0 ? (int)$last_modified : 0;
-	if ($last_modified > 0)
-	{
-		$modified_since = (isset($_ENV['HTTP_IF_MODIFIED_SINCE'])) ? strtotime(substr($_ENV['HTTP_IF_MODIFIED_SINCE'], 5)) : false;
-		$modified_since = (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) ? strtotime(substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 5)) : $modified_since;
+	$lastModified = max((int) $lastModified, 0);
+	if ($lastModified > 0) {
+		$modifiedSince = isset($_ENV['HTTP_IF_MODIFIED_SINCE'])
+            ? strtotime(substr($_ENV['HTTP_IF_MODIFIED_SINCE'], 5))
+            : false;
+		$modifiedSince = isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
+            ? strtotime(substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 5))
+            : $modifiedSince;
 
-		if ($modified_since && $modified_since >= $last_modified)
-		{
+		if ($modifiedSince && $modifiedSince >= $lastModified) {
 			header($protocol . ' 304 Not Modified');
 			exit;
 		}
-	}
-	else
-	{
-		$last_modified = $sys['now'] - 3600*12;
+	} else {
+		$lastModified = Cot::$sys['now'] - 3600 * 12;
 	}
 
-	header($protocol . ' ' . $response_code);
+	header($protocol . ' ' . $responseCode);
 
 	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
-	header('Last-Modified: '.gmdate('D, d M Y H:i:s', $last_modified).' GMT');
-	header('Content-Type: '.$content_type.'; charset=UTF-8');
+	header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
+	header('Content-Type: ' . $contentType . '; charset=UTF-8');
 	header('Cache-Control: no-store,no-cache,must-revalidate');
-	header('Cache-Control: post-check=0,pre-check=0', FALSE);
+	header('Cache-Control: post-check=0,pre-check=0', false);
 	header('Pragma: no-cache');
-	return TRUE;
+
+	return true;
 }
 
 /**
@@ -3205,7 +3185,6 @@ function cot_die($cond = true, $notfound = false)
  *
  * @param string $text Reason
  * @param string $title Message title
- * @deprecated Throw an exception instead of cot_diefatal()
  */
 function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 {

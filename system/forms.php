@@ -59,8 +59,12 @@ function cot_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
 	global $R, $cfg;
 	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	$rc = empty($R["input_{$type}_{$rc_name}"]) ? (empty($custom_rc) ? "input_{$type}" : $custom_rc) : "input_{$type}_{$rc_name}";
-	if (!isset($R[$rc]) && empty($custom_rc)) $rc = 'input_default';
+	$rc = empty($R["input_{$type}_{$rc_name}"])
+        ? (empty($custom_rc) ? "input_{$type}" : $custom_rc)
+        : "input_{$type}_{$rc_name}";
+	if (!isset($R[$rc]) && empty($custom_rc)) {
+        $rc = 'input_default';
+    }
 
     $msgSeparate = isset($cfg['msg_separate']) ? $cfg['msg_separate'] : false;
 	$error = $msgSeparate ? cot_implode_messages($name, 'error') : '';
@@ -468,17 +472,20 @@ function cot_textarea($name, $value, $rows = null, $cols = null, $attrs = '', $c
 	$cot_textarea_count++;
 	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	$rc = empty($R["input_textarea_{$rc_name}"]) ? (empty($custom_rc) ? 'input_textarea' : $custom_rc) : "input_textarea_{$rc_name}";
+	$rc = empty($R["input_textarea_{$rc_name}"])
+        ? (empty($custom_rc) ? 'input_textarea' : $custom_rc)
+        : "input_textarea_{$rc_name}";
     $msgSeparate = isset($cfg['msg_separate']) ? $cfg['msg_separate'] : false;
 	$error = $msgSeparate ? cot_implode_messages($name, 'error') : '';
 	$buffered = cot_import_buffered($name, $value);
+
 	return cot_rc($rc, [
 		'name' => $name,
 		'value' => is_string($buffered) ? htmlspecialchars($buffered) : '',
 		'rows' => $rows,
 		'cols' => $cols,
 		'attrs' => $input_attrs,
-		'error' => $error
+		'error' => $error,
 	]);
 }
 
