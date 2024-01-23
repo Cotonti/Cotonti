@@ -419,7 +419,7 @@ $t->assign([
 	'ADMIN_PAGE_TOTALITEMS' => $totalitems,
 ]);
 
-$t->assign(cot_generatePaginationTags($pagenav, 'ADMIN_PAGE_'));
+$t->assign(cot_generatePaginationTags($pagenav));
 
 cot_display_messages($t);
 

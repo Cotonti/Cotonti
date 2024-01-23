@@ -553,7 +553,7 @@ function cot_tag_search_form($area = 'all')
         }
 
         $pageNav = cot_pagenav('tags', $paginationUrlParams, $dt, $totalItems, $tagsPerPage, 'dt');
-        $t->assign(cot_generatePaginationTags($pageNav, 'TAGS_'));
+        $t->assign(cot_generatePaginationTags($pageNav));
 
         // @deprecated in 0.9.24
 		$t->assign([

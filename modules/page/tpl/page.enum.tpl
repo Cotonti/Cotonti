@@ -29,7 +29,7 @@
 
 <hr class="clear divider" />
 <!-- END: PAGE_ROW -->
-<!-- IF {PAGE_PAGINATION} -->
-<p class="paging">{PAGE_PREVIOUS_PAGE}{PAGE_PAGINATION}{PAGE_NEXT_PAGE}</p>
+<!-- IF {PAGINATION} -->
+<p class="paging">{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}</p>
 <!-- ENDIF -->
 <!-- END: MAIN -->

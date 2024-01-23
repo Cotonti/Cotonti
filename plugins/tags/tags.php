@@ -231,7 +231,7 @@ if ($area == 'pages' && cot_module_active('page')) {
 // Pagination for search results
 if (!empty($qs)) {
     $pagination = cot_pagenav('tags', $urlParams, $d, !empty($entriesCount) ? max($entriesCount) : 0, $maxPerPage);
-    $t->assign(cot_generatePaginationTags($pagination, 'TAGS_'));
+    $t->assign(cot_generatePaginationTags($pagination));
 }
 
 /**

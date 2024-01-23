@@ -49,8 +49,8 @@
 </div>
 
 <p class="paging">
-    <span>{PHP.L.users_usersperpage}: {USERS_ENTRIES_PER_PAGE}</span>
-    <span>{PHP.L.users_usersinthissection}: {USERS_TOTAL_ENTRIES}</span>
-    {USERS_PREVIOUS_PAGE}{USERS_PAGINATION}{USERS_NEXT_PAGE}
+    <span>{PHP.L.users_usersperpage}: {ENTRIES_PER_PAGE}</span>
+    <span>{PHP.L.users_usersinthissection}: {TOTAL_ENTRIES}</span>
+    {PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}
 </p>
 <!-- END: MAIN -->

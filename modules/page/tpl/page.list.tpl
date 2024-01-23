@@ -35,10 +35,10 @@
 		</div>
 		<!-- END: LIST_ROW -->
 	</div>
-	<!-- IF {LIST_PAGINATION} -->
+	<!-- IF {PAGINATION} -->
 	<p class="paging clear">
-		<span>{PHP.L.Page} {LIST_CURRENT_PAGE} {PHP.L.Of} {LIST_TOTAL_PAGES}</span>
-		{LIST_PREVIOUS_PAGE}{LIST_PAGINATION}{LIST_NEXT_PAGE}
+		<span>{PHP.L.Page} {CURRENT_PAGE} {PHP.L.Of} {TOTAL_PAGES}</span>
+		{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}
 	</p>
 	<!-- ENDIF -->
 </div>

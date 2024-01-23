@@ -304,7 +304,7 @@ $t->assign([
     // /@deprecated
 ]);
 
-$t->assign(cot_generatePaginationTags($pagenav, 'LIST_'));
+$t->assign(cot_generatePaginationTags($pagenav));
 
 if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated' && $c != 'saved_drafts') {
     $submitNewPageUrl = cot_url('page', ['c' => $c, 'm' => 'add']);

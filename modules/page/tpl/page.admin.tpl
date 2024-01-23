@@ -88,8 +88,8 @@
 		</tr>
 	</table>
 	<p class="paging">
-		{ADMIN_PAGE_PREVIOUS_PAGE}{ADMIN_PAGE_PAGINATION}{ADMIN_PAGE_NEXT_PAGE}
-		<span>{PHP.L.Total}: {ADMIN_PAGE_TOTAL_ENTRIES}, {PHP.L.Onpage}: {ADMIN_PAGE_ON_PAGE}</span>
+		{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}
+		<span>{PHP.L.Total}: {TOTAL_ENTRIES}, {PHP.L.Onpage}: {ON_PAGE}</span>
 	</p>
 	</form>
 </div>

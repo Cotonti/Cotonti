@@ -56,8 +56,8 @@
 		<!-- END: ADMIN_TAGS_ROW -->
 	</table>
 	<p class="paging">
-		{ADMIN_TAGS_PREVIOUS_PAGE}{ADMIN_TAGS_PAGINATION}{ADMIN_TAGS_NEXT_PAGE}
-		<span>{PHP.L.Total}: {ADMIN_TAGS_TOTAL_ENTRIES}, {PHP.L.Onpage}: {ADMIN_TAGS_COUNTER_ROW}</span>
+		{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}
+		<span>{PHP.L.Total}: {TOTAL_ENTRIES}, {PHP.L.Onpage}: {ADMIN_TAGS_COUNTER_ROW}</span>
 	</p>
 </div>
 <script type="text/javascript">

@@ -58,7 +58,6 @@ $pagenav = cot_pagenav('admin', 'm=other&p=contact', $d, $totallines, Cot::$cfg[
 $i = 0;
 foreach ($sql->fetchAll() as $row) {
 	$i++;
-
 	$shorttext = $row['contact_text'];
 	$shorttext = cot_string_truncate($shorttext, 150);
 	$shorttext .= '...';
@@ -67,13 +66,17 @@ foreach ($sql->fetchAll() as $row) {
 
 	$tmp = $urlParams;
 	$tmp['id'] = $row['contact_id'];
-	if($durl > 0) $tmp['d'] = $durl;
+	if ($durl > 0) {
+        $tmp['d'] = $durl;
+    }
 	$viewLink = cot_url('admin', $tmp, '#view');
-	$tuman->assign(array(
+	$tuman->assign([
 		'CONTACT_DATE' => cot_date('date_full', $row['contact_date']),
 		'CONTACT_DATE_STAMP' => $row['contact_date'],
-		'CONTACT_USER' => ($row['contact_authorid'] > 0) ? cot_build_user($row['contact_authorid'], $row['contact_author']) : $row['contact_author'],
-		'CONTACT_EMAIL' => $row['contact_email'],
+		'CONTACT_USER' => ($row['contact_authorid'] > 0)
+            ? cot_build_user($row['contact_authorid'], $row['contact_author'])
+            : htmlspecialchars($row['contact_author']),
+		'CONTACT_EMAIL' => htmlspecialchars($row['contact_email']),
 		'CONTACT_ID' => $row['contact_id'],
 		'CONTACT_DELLINK' => cot_confirm_url(cot_url('admin', 'm=other&p=contact&a=del&id=' . $row['contact_id'])),
 		'CONTACT_VIEWLINK' => $viewLink,
@@ -81,16 +84,16 @@ foreach ($sql->fetchAll() as $row) {
 		'CONTACT_VALLINK' => cot_url('admin', 'm=other&p=contact&a=' . $val . '&id=' . $row['contact_id']),
 		'CONTACT_READLINK' => cot_url('admin', 'm=other&p=contact&a=val&id=' . $row['contact_id']),
 		'CONTACT_UNREADLINK' => cot_url('admin', 'm=other&p=contact&a=unval&id=' . $row['contact_id']),
-		'CONTACT_SUBJECT' => $row['contact_subject'],
-		'CONTACT_TEXT' => $row['contact_text'],
+		'CONTACT_SUBJECT' => htmlspecialchars($row['contact_subject']),
+		'CONTACT_TEXT' => htmlspecialchars($row['contact_text']),
 		'CONTACT_REPLY' => !empty($row['contact_reply']),
-		'CONTACT_TEXTSHORT' => $shorttext,
+		'CONTACT_TEXTSHORT' => htmlspecialchars($shorttext),
 		'CONTACT_ODDEVEN' => cot_build_oddeven($i),
 		'CONTACT_I' => $i,
-	));
+	]);
 
 	// Extrafields
-	if(!empty(Cot::$extrafields[Cot::$db->contact])) {
+	if (!empty(Cot::$extrafields[Cot::$db->contact])) {
 		foreach (Cot::$extrafields[Cot::$db->contact] as $exfld) {
 			$tag = mb_strtoupper($exfld['field_name']);
 			$exfld_val = cot_build_extrafields_data('contact', $exfld, $row['contact_'.$exfld['field_name']]);
@@ -114,26 +117,28 @@ $sql->closeCursor();
 if (($a == '') && !empty($id)) {
 	$row = Cot::$db->query("SELECT * FROM ".Cot::$db->contact." WHERE contact_id = $id")->fetch();
 
-	$tuman->assign(array(
+	$tuman->assign([
 		'CONTACT_DATE' => cot_date('date_full', $row['contact_date']),
 		'CONTACT_DATE_STAMP' => $row['contact_date'],
-		'CONTACT_USER' => ($row['contact_authorid'] > 0) ? cot_build_user($row['contact_authorid'], $row['contact_author']) : $row['contact_author'],
-		'CONTACT_EMAIL' => $row['contact_email'],
+		'CONTACT_USER' => ($row['contact_authorid'] > 0)
+            ? cot_build_user($row['contact_authorid'], $row['contact_author'])
+            : htmlspecialchars($row['contact_author']),
+		'CONTACT_EMAIL' => htmlspecialchars($row['contact_email']),
 		'CONTACT_ID' => $row['contact_id'],
 		'CONTACT_DELLINK' => cot_url('admin', 'm=other&p=contact&a=del&id=' . $row['contact_id']),
 		'CONTACT_VAL' => ($row['contact_val'] == 1) ? 'unval' : 'val',
 		'CONTACT_VALLINK' => cot_url('admin', 'm=other&p=contact&a=' . $val . '&id=' . $row['contact_id']),
 		'CONTACT_READLINK' => cot_url('admin', 'm=other&p=contact&a=val&id=' . $row['contact_id']),
 		'CONTACT_UNREADLINK' => cot_url('admin', 'm=other&p=contact&a=unval&id=' . $row['contact_id']),
-		'CONTACT_SUBJECT' => $row['contact_subject'],
-		'CONTACT_TEXT' => $row['contact_text'],
+		'CONTACT_SUBJECT' => htmlspecialchars($row['contact_subject']),
+		'CONTACT_TEXT' => htmlspecialchars($row['contact_text']),
 		'CONTACT_REPLY' => $row['contact_reply'],
 		'CONTACT_FORM_SEND' => cot_url("admin", 'm=other&p=contact&a=send&id=' . $row['contact_id']),
 		'CONTACT_FORM_TEXT' => cot_textarea('rtext', $rtext, 8, 64),
-	));
+	]);
 
 	// Extrafields
-    if(!empty(Cot::$extrafields[Cot::$db->contact])) {
+    if (!empty(Cot::$extrafields[Cot::$db->contact])) {
         foreach (Cot::$extrafields[Cot::$db->contact] as $exfld) {
 			$tag = mb_strtoupper($exfld['field_name']);
 			$exfld_val = cot_build_extrafields_data('contact', $exfld, $row['contact_'.$exfld['field_name']]);
@@ -156,7 +161,10 @@ if (($a == '') && !empty($id)) {
 
 cot_display_messages($tuman);
 
-$tuman->assign(array(
+$tuman->assign(cot_generatePaginationTags($pagenav));
+
+// @deprected in 0.9.24
+$tuman->assign([
 	'CONTACT_PAGINATION' => $pagenav['main'],
 	'CONTACT_PREV' => $pagenav['prev'],
 	'CONTACT_NEXT' => $pagenav['next'],
@@ -164,7 +172,7 @@ $tuman->assign(array(
     'CONTACT_TOTALLINES' => $pagenav['entries'],
     'CONTACT_PERPAGE' => $pagenav['onpage'],
     'CONTACT_TOTALPAGES' => $pagenav['total'],
-));
+]);
 
 $tuman->parse('MAIN');
 $plugin_body .= $tuman->text('MAIN');

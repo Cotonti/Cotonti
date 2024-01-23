@@ -438,7 +438,7 @@ $t->assign([
     // /@deprecated in 0.9.24
 ]);
 
-$t->assign(cot_generatePaginationTags($pagenav, 'USERS_'));
+$t->assign(cot_generatePaginationTags($pagenav));
 
 $k = '_.__._';
 $asc = explode($k, cot_url('users', array_merge($users_url_path, ['s' => $k, 'w' => 'asc'])));

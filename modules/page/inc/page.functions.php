@@ -1049,13 +1049,10 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
     if(isset($url_params['rwr'])) unset($url_params['rwr']);
 	$url_area = 'index';
 	$module_name = cot_import('e', 'G', 'ALP');
-	if(cot_module_active($module_name))
-	{
+	if (cot_module_active($module_name)) {
 		$url_area = $url_params['e'];
 		unset($url_params['e']);
-	}
-    elseif (cot_plugin_active($module_name))
-	{
+	}  elseif (cot_plugin_active($module_name)) {
 		$url_area = 'plug';
 	}
 	unset($url_params[$pagination]);
@@ -1088,11 +1085,10 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
         // /@deprecated
 	]);
 
-    $t->assign(cot_generatePaginationTags($pagenav, 'PAGE_'));
+    $t->assign(cot_generatePaginationTags($pagenav));
 
 	/* === Hook === */
-	foreach (cot_getextplugins('page.enum.tags') as $pl)
-	{
+	foreach (cot_getextplugins('page.enum.tags') as $pl) {
 		include $pl;
 	}
 	/* ===== */

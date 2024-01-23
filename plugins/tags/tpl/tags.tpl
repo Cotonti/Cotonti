@@ -38,8 +38,8 @@
     </div>
     <!-- END: TAGS_RESULT -->
 
-    <!-- IF {TAGS_PAGINATION} -->
-    <p class="paging">{TAGS_PREVIOUS_PAGE}{TAGS_PAGINATION}{TAGS_NEXT_PAGE}</p>
+    <!-- IF {PAGINATION} -->
+    <p class="paging">{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}</p>
     <!-- ENDIF -->
 </div>
 

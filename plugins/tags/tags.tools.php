@@ -380,7 +380,7 @@ $tt->assign([
     'ADMIN_TAGS_TOTALITEMS' => $totalItems,
 ]);
 
-$tt->assign(cot_generatePaginationTags($pageNav, 'ADMIN_TAGS_'));
+$tt->assign(cot_generatePaginationTags($pageNav));
 
 /* === Hook  === */
 foreach (cot_getextplugins('admin.tags.tags') as $pl) {

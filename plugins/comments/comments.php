@@ -163,18 +163,21 @@ if ($m == 'edit' && $id > 0) {
 	cot_block($usr['allow_write']);
 
     $editor = ($cfg['plugin']['comments']['markup']) ? 'input_textarea_minieditor' : '';
-	$t->assign(array(
-		'COMMENTS_FORM_POST' => cot_url('plug', 'e=comments&m=edit&a=update&area=' . $area . '&cat=' . $cat . '&item=' . $com['com_code'] . '&id=' . $com['com_id']),
+	$t->assign([
+		'COMMENTS_FORM_POST' => cot_url(
+            'plug',
+            'e=comments&m=edit&a=update&area=' . $area . '&cat=' . $cat . '&item=' . $com['com_code'] . '&id=' . $com['com_id']
+        ),
 		'COMMENTS_POSTER_TITLE' => $L['Poster'],
-		'COMMENTS_POSTER' => $com['com_author'],
+		'COMMENTS_POSTER' => htmlspecialchars($com['com_author']),
 		'COMMENTS_IP_TITLE' => $L['Ip'],
 		'COMMENTS_IP' => $com['com_authorip'],
 		'COMMENTS_DATE_TITLE' => $L['Date'],
 		'COMMENTS_DATE' => cot_date('datetime_medium', $com['com_date']),
 		'COMMENTS_DATE_STAMP' => $com['com_date'],
 		'COMMENTS_FORM_UPDATE_BUTTON' => $L['Update'],
-		'COMMENTS_FORM_TEXT' => cot_textarea('comtext', $com['com_text'], 8, 64, '', $editor)
-	));
+		'COMMENTS_FORM_TEXT' => cot_textarea('comtext', $com['com_text'], 8, 64, '', $editor),
+	]);
 
 	// Extra fields
     if (!empty(Cot::$extrafields[Cot::$db->com])) {
