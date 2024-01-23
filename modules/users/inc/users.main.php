@@ -313,9 +313,6 @@ if ($durl > 1) {
     $canonicalUrlParams['d'] = $durl;
 }
 Cot::$out['canonical_uri'] = cot_url('users', $canonicalUrlParams);
-//if (isset($_GET['country']) || isset($_GET['sq']) || isset($_GET['g']) || isset($_GET['gm'])) {
-//    Cot::$cfg['no_canonical_no_index'] = false;
-//}
 
 /* === Hook === */
 foreach (cot_getextplugins('users.main') as $pl) {

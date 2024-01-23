@@ -228,10 +228,6 @@ $L['cfg_title_header_index'] = 'Header title for the homepage';
 $L['cfg_title_header_index_hint'] = 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}';
 $L['cfg_title_users_details'] = 'User details title';
 $L['cfg_title_users_details_hint'] = 'Options: {USER}, {NAME}';
-$L['cfg_no_canonical_no_index'] = 'Exclude from search engine index pages whose URL does not match the canonical one';
-$L['cfg_no_canonical_no_index_hint'] = 'Add "noindex" meta tag to such pages.<br>'
-    . "<b>Google doesn't recommend</b> using noindex to prevent selection of a canonical page within a single site, "
-    . 'because it will completely block the page from Search.';
 $L['cfg_subject_mail'] = 'Email subject';
 $L['cfg_subject_mail_hint'] = 'Options: {SITE_TITLE}, {SITE_DESCRIPTION}, {MAIL_SUBJECT}';
 $L['cfg_body_mail'] = 'Email title';

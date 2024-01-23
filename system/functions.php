@@ -364,6 +364,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			break;
 
 		default:
+            // @todo throw an Exception instead
 			cot_diefatal('Unknown source for a variable : <br />Name = '.$name.'<br />Source = '.$source.' ? (must be G, P, C or D)');
 			break;
 	}
@@ -443,20 +444,20 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
          * @deprecated
          * Old password filter. Not used anymore
          */
-		case 'PSW':
-			$v = trim($v);
-			$f = preg_replace('#[\'"&<>]#', '', $v);
-			$f = mb_substr($f, 0 ,32);
-
-			if ($v == $f)
-			{
-				$pass = TRUE;
-			}
-			else
-			{
-				$defret = $f;
-			}
-			break;
+//		case 'PSW':
+//			$v = trim($v);
+//			$f = preg_replace('#[\'"&<>]#', '', $v);
+//			$f = mb_substr($f, 0 ,32);
+//
+//			if ($v == $f)
+//			{
+//				$pass = TRUE;
+//			}
+//			else
+//			{
+//				$defret = $f;
+//			}
+//			break;
 
 		case 'HTM':
 			$v = trim($v);
@@ -484,6 +485,7 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $
 			break;
 
 		default:
+            // @todo throw an exception instead of cot_diefatal()
 			cot_diefatal('Unknown filter for a variable : <br />Var = '.$v.'<br />Filter = &quot;'.$filter.'&quot; ?');
 			break;
 	}
@@ -3203,6 +3205,7 @@ function cot_die($cond = true, $notfound = false)
  *
  * @param string $text Reason
  * @param string $title Message title
+ * @deprecated Throw an exception instead of cot_diefatal()
  */
 function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 {

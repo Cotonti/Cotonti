@@ -77,30 +77,13 @@ if (!COT_AJAX) {
     Cot::$out['canonical_uri'] = !empty(Cot::$out['canonical_uri'])
         ? rtrim(Cot::$out['canonical_uri'], '/')
         : '';
-    if (Cot::$cfg['no_canonical_no_index'] && !empty(Cot::$out['canonical_uri'])) {
-        $preparedUri = trim(Cot::$sys['uri'], '/');
-        $preparedQuery = !empty(Cot::$sys['query']) ? str_replace('&amp;', '&', Cot::$sys['query']) : '';
-        $preparedCanonical = str_replace(rtrim(COT_ABSOLUTE_URL, '/'), '', Cot::$out['canonical_uri']);
-        $preparedCanonical = trim(str_replace('&amp;', '&', $preparedCanonical), '/');
-        $tempUrls = [$preparedUri, $preparedUri . '/'];
-        if (!empty(Cot::$sys['query'])) {
-            $tempUrls[0] .= '?' . $preparedQuery;
-            $tempUrls[1] .= '?' . $preparedQuery;
-        }
-
-        $tempUrls[] = rawurldecode($tempUrls[0]);
-        $tempUrls[] = rawurldecode($tempUrls[1]);
-
-        if (!in_array($preparedCanonical, $tempUrls)) {
-            Cot::$sys['noindex'] = true;
-        }
-        unset($preparedUri, $preparedQuery, $preparedCanonical, $tempUrls);
-    }
 
     if (!empty(Cot::$out['canonical_uri']) && !preg_match("#^https?://.+#", Cot::$out['canonical_uri'])) {
         Cot::$out['canonical_uri'] = rtrim(COT_ABSOLUTE_URL, '/') . '/'
             . trim(Cot::$out['canonical_uri'], '/');
+    }
 
+    if (Cot::$out['canonical_uri'] !== '') {
         header('Link: <' . str_replace('&amp;', '&', Cot::$out['canonical_uri'])
             . '>; rel="canonical"');
     }

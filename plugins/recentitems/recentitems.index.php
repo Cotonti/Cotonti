@@ -47,6 +47,7 @@ if ($enpages || $enforums) {
 
 		if (empty($riHtml)) {
             $period = !empty(Cot::$cfg['plugin']['recentitems']['pagesPeriod'])
+                && Cot::$cfg['plugin']['recentitems']['pagesPeriod'] !== 'all'
                 ? trim(Cot::$cfg['plugin']['recentitems']['pagesPeriod'])
                 : null;
             $timeBack = null;
@@ -97,6 +98,7 @@ if ($enpages || $enforums) {
 
 		if (empty($riHtml)) {
             $period = !empty(Cot::$cfg['plugin']['recentitems']['forumsPeriod'])
+                && Cot::$cfg['plugin']['recentitems']['forumsPeriod'] !== 'all'
                 ? trim(Cot::$cfg['plugin']['recentitems']['forumsPeriod'])
                 : null;
             $timeBack = null;
