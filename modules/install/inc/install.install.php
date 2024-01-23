@@ -83,7 +83,7 @@ switch ($step)
     case 4:
 		// Extension selection
 		$install_modules = cot_import('install_modules', 'P', 'ARR', 0, false, true);
-		$selected_modules = array();
+		$selected_modules = [];
 		if (is_array($install_modules)) {
 			foreach ($install_modules as $key => $val) {
 				if ($val) {
@@ -358,7 +358,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			if ($install && !cot_error_found()) {
 				// Load groups
-				$cot_groups = array();
+				$cot_groups = [];
 				$res = $db->query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
 				while ($row = $res->fetch()) {
 					$cot_groups[$row['grp_id']] = array(

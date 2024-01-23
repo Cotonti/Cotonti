@@ -378,10 +378,6 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieOnError = false, $
 		if ($filter !== 'ARR') {
             return null;
         }
-	} else {
-		if ($filter === 'ARR') {
-            return [];
-        }
 	}
 
 
@@ -389,9 +385,11 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieOnError = false, $
 		$v = stripslashes($v);
 	}
 
-	if (($v === '' || $v === null || $filter === 'ARR') && $buffer) {
-		$v = cot_import_buffered($name, $v, null);
-		return $v;
+	if (
+        $buffer
+        && (($v === null || $v === '') || ($filter === 'ARR' && $v === []))
+    ) {
+        return cot_import_buffered($name, $v, null);
 	}
 
 	if ($v === null) {
@@ -672,20 +670,17 @@ function cot_import_buffered($name, $value, $null = '')
 	// Params hash for current form
 	$uri = str_replace('&_ajax=1', '', $_SERVER['REQUEST_URI']);
 	$hash = md5($uri);
-	if ($value === '' || $value === null
-		|| isset($_SESSION['cot_buffer'][$hash][$name]) && !empty($_SESSION['cot_buffer'][$hash][$name]))
-	{
-		if (isset($_SESSION['cot_buffer'][$hash][$name]))
-		{
+	if (
+        $value === ''
+        || $value === null
+		|| !empty($_SESSION['cot_buffer'][$hash][$name])
+    ) {
+		if (isset($_SESSION['cot_buffer'][$hash][$name])) {
 			return $_SESSION['cot_buffer'][$hash][$name];
-		}
-		else
-		{
+		} else {
 			return $null;
 		}
-	}
-	else
-	{
+	} else {
 		return $value;
 	}
 }

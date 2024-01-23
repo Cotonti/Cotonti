@@ -68,6 +68,7 @@ while ($row = $sqlForums->fetch()) {
 	if (
         !empty($row['fs_cat'])
         && !$row['fs_lt_id']
+        && !empty(Cot::$structure['forums'][$row['fs_cat']])
         && count(explode('.', Cot::$structure['forums'][$row['fs_cat']]['rpath'])) > 1
         && Cot::$structure['forums'][$row['fs_cat']]['count'] > 0
     ) {
