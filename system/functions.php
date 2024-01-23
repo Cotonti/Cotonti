@@ -5245,23 +5245,18 @@ function cot_captcha_validate($value)
 {
 	// This function can only be called once per request
 	static $called = false;
-	if ($called)
-	{
+	if ($called) {
 		return true;
-	}
-	else
-	{
+	} else {
 		$called = true;
 	}
 
 	$captcha = cot_import('capman', 'P', 'TXT');
-	if(!in_array($captcha, cot_captcha_list()))
-	{
+	if (!in_array($captcha, cot_captcha_list())) {
 		return false;
 	}
 	$captcha .= '_validate';
-	if (function_exists($captcha))
-	{
+	if (function_exists($captcha)) {
 		return $captcha($value);
 	}
 	return true;

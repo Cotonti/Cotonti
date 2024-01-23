@@ -12,11 +12,13 @@ Tags=users.register.tpl:{USERS_REGISTER_VERIFY_IMG},{USERS_REGISTER_VERIFY_INPUT
  * @package MathCaptcha
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var XTemplate $t
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (\Cot::$cfg['captchamain'] === 'mcaptcha') {
+if (Cot::$cfg['captchamain'] === 'mcaptcha') {
 	$t->assign([
 		'USERS_REGISTER_VERIFY_IMG' => cot_captcha_generate(),
 		'USERS_REGISTER_VERIFY_INPUT' => cot_inputbox('text', 'rverify', '', 'size="10" maxlength="20"'),

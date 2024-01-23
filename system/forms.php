@@ -50,7 +50,7 @@ function cot_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1', $c
  * @param string $type Input type: text, checkbox, button, file, hidden, image, password, radio, reset, submit
  * @param string $name Input name
  * @param string $value Entered value
- * @param mixed $attrs Additional attributes as an associative array or a string
+ * @param string|array<string, string> $attrs Additional attributes as an associative array or a string
  * @param string $custom_rc Custom resource string name
  * @return string
  */
@@ -196,7 +196,7 @@ function cot_selectbox(
 	foreach ($values as $k => $x) {
 		$x = trim($x);
 		$selected = ($multi && in_array($x, $chosen)) || (!$multi && $x == $chosen) ? ' selected="selected"' : '';
-		$title = ($use_titles && !empty($titles[$k])) ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
+		$title = ($use_titles && !empty($titles[$k])) ? $titles[$k] : $x;
         if (!$htmlspecialcharsBypass) {
             $title = htmlspecialchars($title);
         }
