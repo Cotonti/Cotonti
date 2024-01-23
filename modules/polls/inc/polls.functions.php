@@ -270,8 +270,7 @@ function cot_poll_vote()
 	$vote = cot_import('vote', 'P', 'ARR');
 	$id = (int) cot_import('poll_id', 'P', 'INT');
 
-	if (count($vote) > 0)
-	{
+	if (!empty($vote)) {
 		$alreadyvoted = 0;
 		$sql = $db->query("SELECT * FROM $db_polls WHERE poll_id = $id");
 		if ($row = $sql->fetch())

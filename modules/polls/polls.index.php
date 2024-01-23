@@ -51,7 +51,6 @@ if (Cot::$cfg['polls']['maxpolls'] > 0) {
 		/* ===== */
 
 		$indexpolls->parse('INDEXPOLLS.POLL');
-
 	}
 
 	$indexpolls->assign('IPOLLS_ALL', cot_url('polls'));

@@ -1918,11 +1918,12 @@ function cot_breadcrumbs(
 		$params = is_array($crumbs[$i])
             ? [
                 'url' => (!empty($crumbs[$i][0])) ? $crumbs[$i][0] : '#',
-                'title' => !empty($crumbs[$i][1])
-                    ? htmlspecialchars($crumbs[$i][1], ENT_COMPAT, 'UTF-8', false)
-                    : '',
+                'title' => !empty($crumbs[$i][1]) ? $crumbs[$i][1] : '',
             ]
             : ['title' => $crumbs[$i]];
+
+        $params['title'] = htmlspecialchars($params['title'], ENT_COMPAT, 'UTF-8', false);
+
 		if ($plain || ($noLinkOnLastCrumb && $i === $cnt - 1) || !isset($params['url'])) {
 			$crumb = cot_rc('breadcrumbs_plain', $params);
 			if ($crumb == 'breadcrumbs_plain') {
@@ -1935,19 +1936,19 @@ function cot_breadcrumbs(
 			}
 		}
 		if ($i == 0) {
-			$elem = cot_rc('breadcrumbs_first', array('crumb' => $crumb));
+			$elem = cot_rc('breadcrumbs_first', ['crumb' => $crumb]);
 		}
 		if ($i == $cnt - 1) {
-			$elem = cot_rc('breadcrumbs_last', array('crumb' => $crumb));
+			$elem = cot_rc('breadcrumbs_last', ['crumb' => $crumb]);
 		}
 		if (!$elem || $elem == 'breadcrumbs_first' || $elem == 'breadcrumbs_last') {
-			$elem = cot_rc('breadcrumbs_crumb', array('crumb' => $crumb));
+			$elem = cot_rc('breadcrumbs_crumb', ['crumb' => $crumb]);
 		}
 		if ($elem == 'breadcrumbs_crumb') {
 			$elem = $crumb;
 		}
 		if (!empty($itemRcTpl)) {
-			$elem = cot_rc($itemRcTpl, array('elem' => $elem));
+			$elem = cot_rc($itemRcTpl, ['elem' => $elem]);
 		}
 		$tmp[] = $elem;
 	}
