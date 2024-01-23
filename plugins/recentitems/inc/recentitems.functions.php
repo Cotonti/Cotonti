@@ -53,7 +53,7 @@ function cot_build_recentforums(
     }
 
     // Exclude private topics
-    $where['privateTopic'] = cot_forums_sqlExcludePrivateTopics();
+    $where['privateTopic'] = cot_forums_sqlExcludePrivateTopics('t');
     if ($where['privateTopic'] === '') {
         unset($where['privateTopic']);
     }
@@ -92,7 +92,7 @@ function cot_build_recentforums(
     }
 
     $totalrecent['topics'] = Cot::$db->query(
-        'SELECT COUNT(*) FROM ' . Cot::$db->forum_topics . "  $sqlJoinTables $sqlWhere",
+        'SELECT COUNT(*) FROM ' . Cot::$db->forum_topics . " AS t  $sqlJoinTables $sqlWhere",
         $params
     )->fetchColumn();
 
@@ -100,13 +100,11 @@ function cot_build_recentforums(
         $maxEntriesPerPage = 5;
     }
 
-    $sql = Cot::$db->query(
-        "SELECT t.* $sqlJoinColumns FROM " . Cot::$db->forum_topics . ' AS t '
-        . " $sqlJoinTables $sqlWhere ORDER by ft_updated DESC LIMIT $d, $maxEntriesPerPage",
-        $params
-    );
+    $query = "SELECT * $sqlJoinColumns FROM " . Cot::$db->forum_topics . ' AS t '
+        . " $sqlJoinTables $sqlWhere ORDER by ft_updated DESC LIMIT $d, $maxEntriesPerPage";
 
-    $recentTopics = $sql->fetchAll();
+    $recentTopics = Cot::$db->query($query, $params)->fetchAll();
+
     if (empty($recentTopics)) {
         if ($d === 0) {
             $recentitems->parse('MAIN.NO_TOPICS_FOUND');

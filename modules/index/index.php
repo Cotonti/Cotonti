@@ -24,11 +24,12 @@ if ($a === 'get') {
 // Environment
 const COT_INDEX = true;
 
-$env['location'] = 'home';
+Cot::$env['location'] = 'home';
+
+$canonicalUrlParams = [];
 
 /* === Hook === */
-foreach (cot_getextplugins('index.first') as $pl)
-{
+foreach (cot_getextplugins('index.first') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -43,7 +44,11 @@ foreach (cot_getextplugins('index.main') as $pl) {
 /* ===== */
 
 if (empty(Cot::$out['canonical_uri'])) {
-    Cot::$out['canonical_uri'] = COT_ABSOLUTE_URL;
+    if (!empty($canonicalUrlParams)) {
+        Cot::$out['canonical_uri'] = cot_url('index', $canonicalUrlParams);
+    } else {
+        Cot::$out['canonical_uri'] = COT_ABSOLUTE_URL;
+    }
 }
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
@@ -61,9 +66,8 @@ cot_display_messages($t);
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once $cfg['system_dir'].'/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';
 
-if ($cache && $usr['id'] === 0 && $cfg['cache_index'])
-{
-	$cache->static->write();
+if (Cot::$cache && Cot::$usr['id'] === 0 && Cot::$cfg['cache_index']) {
+    Cot::$cache->static->write();
 }
