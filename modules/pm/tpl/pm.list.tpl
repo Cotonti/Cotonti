@@ -51,21 +51,21 @@
 				<!-- END: PM_ROW_EMPTY -->
 			</table>
 			<!-- IF {PHP.jj} > 0 -->
-			<p class="paging">
-				<span class="strong">{PHP.L.pm_selected}:</span>
-				<select name="action" size="1">
-					<option value="delete" >{PHP.L.Delete}</option>
-					<option value="star" selected="selected">{PHP.L.pm_putinstarred}</option>
-				</select>
-				<button type="submit" name="delete">{PHP.L.Confirm}</button>
-			</p>
-			<p class="paging">{PM_PAGEPREV}{PM_PAGES}{PM_PAGENEXT}</p>
+				<p class="paging">
+					<span class="strong">{PHP.L.pm_selected}:</span>
+					<select name="action" size="1">
+						<option value="delete" >{PHP.L.Delete}</option>
+						<option value="star" selected="selected">{PHP.L.pm_putinstarred}</option>
+					</select>
+					<button type="submit" name="delete">{PHP.L.Confirm}</button>
+				</p>
+				<!-- IF {PAGINATION} -->
+				<p class="paging">{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}</p>
+				<!-- ENDIF -->
 			<!-- ENDIF -->
 		</form>
 	</div>
-
 <!-- BEGIN: AFTER_AJAX -->
 </div>
 <!-- END: AFTER_AJAX -->
-
 <!-- END: MAIN -->

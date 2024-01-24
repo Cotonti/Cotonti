@@ -19,8 +19,7 @@ $a = cot_import('a','G','TXT'); // Action
 $filter = cot_import('filter','G','TXT');	// filter
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.list.first') as $pl)
-{
+foreach (cot_getextplugins('pm.list.first') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -28,13 +27,13 @@ foreach (cot_getextplugins('pm.list.first') as $pl)
 if (!empty($a)) {
 	$id = cot_import('id','G','INT');		// Message id
 	if ((int) $id > 0) {
-		$msg[$id] = $id;
+        $msg = [$id => $id];
 	}
 } else {
 	$msg = cot_import('msg', 'P', 'ARR');
 	$a = cot_import('action', 'P', 'TXT');
 }
-if (count($msg) > 0) {
+if (is_array($msg) && count($msg) > 0) {
 	if ($a == 'delete') {
 		cot_check_xg();
 		cot_remove_pm($msg);
@@ -215,6 +214,8 @@ $t->assign(array(
 	'PM_FILTER_UNREAD_URL' => $url_unread,
 	'PM_FILTER_STARRED' => cot_rc_link($url_starred, Cot::$L['pm_starred'], Cot::$cfg['pm']['turnajax'] ? array('class'=>'ajax') : ''),
 	'PM_FILTER_STARRED_URL' => $url_starred,
+
+    // deprecated in 0.9.24
 	'PM_PAGEPREV' => $pagenav['prev'],
 	'PM_PAGENEXT' => $pagenav['next'],
 	'PM_PAGES' => $pagenav['main'],
@@ -223,9 +224,10 @@ $t->assign(array(
 	'PM_SENT_TYPE' => ($f == 'sentbox') ? Cot::$L['Recipient'] : Cot::$L['Sender']
 ));
 
+$t->assign(cot_generatePaginationTags($pagenav));
+
 /* === Hook === */
-foreach (cot_getextplugins('pm.list.tags') as $pl)
-{
+foreach (cot_getextplugins('pm.list.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

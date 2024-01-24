@@ -68,7 +68,7 @@
 				</tr>
 				<!-- END: PM_ROW_EMPTY -->
 			</table>
-			<!-- IF {PM_PAGES} --><p class="paging">{PM_PAGEPREV}{PM_PAGES}{PM_PAGENEXT}</p><!-- ENDIF -->
+			<!-- IF {PAGINATION} --><p class="paging">{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}</p><!-- ENDIF -->
 			<!-- END: HISTORY -->
 		</div>
 	</div>

@@ -25,8 +25,7 @@ if (empty($id)) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('pm.first') as $pl)
-{
+foreach (cot_getextplugins('pm.first') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -113,20 +112,18 @@ if ($history)
 	$extp = cot_getextplugins('pm.history.loop');
 	/* ===== */
 	$jj = 0;
-	foreach ($sql_pm_history->fetchAll() as $row2)
-	{
+	foreach ($sql_pm_history->fetchAll() as $row2) {
 		$jj++;
 		$row2['pm_icon_readstatus'] = ($row2['pm_tostate'] == '0') ?
 				cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), Cot::$R['pm_icon_new'], array('title' => Cot::$L['pm_unread'], 'class'=> Cot::$cfg['pm']['turnajax'] ? 'ajax' : ''))
 				: cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), Cot::$R['pm_icon'], array('title' => Cot::$L['pm_read'], 'class'=> Cot::$cfg['pm']['turnajax'] ? 'ajax' : ''));
 
-		if ($row2['pm_fromuserid'] == Cot::$usr['id'])
-		{// sentbox
+		if ($row2['pm_fromuserid'] == Cot::$usr['id']) {
+            // sentbox
 			$pm_user = cot_generate_usertags(Cot::$usr['profile'], 'PM_ROW_USER_');
 			$star_class2 = ($row2['pm_fromstate'] == 2) ? 1 : 0;
-		}
-		else
-		{//inbox
+		} else {
+            //inbox
 			$pm_user = cot_generate_usertags($row_user, 'PM_ROW_USER_');
 			$star_class2 = ($row2['pm_tostate'] == 2) ? 1 : 0;
 		}
@@ -174,16 +171,20 @@ if ($history)
 		$t->parse('MAIN.HISTORY.PM_ROW');
 	}
 
-	if ($jj == 0)
-	{
+	if ($jj == 0) {
 		$t->parse('MAIN.HISTORY.PM_ROW_EMPTY');
 	}
-	$t->assign(array(
+
+    $t->assign(cot_generatePaginationTags($pagenav));
+
+	$t->assign([
 		'PM_FORM_UPDATE' => cot_url('pm', cot_xg()),
-		'PM_PAGEPREV' => $pagenav['prev'],
+
+        // @deprecated in 0.9.24
+        'PM_PAGEPREV' => $pagenav['prev'],
 		'PM_PAGENEXT' => $pagenav['next'],
 		'PM_PAGES' => $pagenav['main']
-	));
+	]);
 	$t->parse('MAIN.HISTORY');
 }
 
@@ -212,27 +213,25 @@ if (Cot::$usr['auth_write']) {
 			$newpmtext = !empty($q) ? '<blockquote>' . $row['pm_text'] . '</blockquote>' : '';
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.(int)$history.'&d='.$durl), Cot::$L['Quote'], array('onclick' => $onclick)),
         'PM_QUOTE_URL' => cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.(int)$history.'&d='.$durl),
         'PM_QUOTE_ONCLICK' => $onclick,
 		'PM_FORM_SEND' => cot_url('pm', 'm=send&a=send&to='.$to),
-		'PM_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
+		'PM_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', $newpmtitle, 'size="56" maxlength="255"'),
 		'PM_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor'),
-        'PM_FORM_NOT_TO_SENTBOX' => cot_checkbox(false, 'fromstate', Cot::$L['pm_notmovetosentbox'], '', '3')
-	));
+        'PM_FORM_NOT_TO_SENTBOX' => cot_checkbox(false, 'fromstate', Cot::$L['pm_notmovetosentbox'], '', '3'),
+	]);
 
 	/* === Hook === */
-	foreach (cot_getextplugins('pm.reply.tags') as $pl)
-	{
+	foreach (cot_getextplugins('pm.reply.tags') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
 	$t->parse('MAIN.REPLY');
 }
-if (!COT_AJAX)
-{
+if (!COT_AJAX) {
 	$t->parse('MAIN.BEFORE_AJAX');
 	$t->parse('MAIN.AFTER_AJAX');
 }

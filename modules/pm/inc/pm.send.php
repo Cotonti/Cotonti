@@ -19,9 +19,9 @@ $a = cot_import('a','G','TXT');
 $id = cot_import('id','G','INT');
 
 $totalrecipients = 0;
-$touser_sql = array();
-$touser_ids = array();
-$touser_names = array();
+$touser_sql = [];
+$touser_ids = [];
+$touser_names = [];
 
 /* === Hook === */
 foreach (cot_getextplugins('pm.send.first') as $pl) {
@@ -227,7 +227,7 @@ $url_newpm = cot_url('pm', 'm=send');
 $url_inbox = cot_url('pm');
 $url_sentbox = cot_url('pm', 'f=sentbox');
 
-$t->assign(array(
+$t->assign([
 	'PMSEND_TITLE' => cot_breadcrumbs($title, Cot::$cfg['homebreadcrumb']),
 	'PMSEND_SENDNEWPM' => (Cot::$usr['auth_write']) ?
         cot_rc_link($url_newpm, Cot::$L['pm_sendnew'], array('class' => Cot::$cfg['pm']['turnajax'] ? 'ajax' : '')) : '',
@@ -239,11 +239,11 @@ $t->assign(array(
 	'PMSEND_SENTBOX_URL' => $url_sentbox,
 	'PMSEND_SENTBOX_COUNT' => $totalsentbox,
 	'PMSEND_FORM_SEND' => cot_url('pm', 'm=send&a=send'.$idurl),
-	'PMSEND_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
+	'PMSEND_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', $newpmtitle, 'size="56" maxlength="255"'),
 	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', $newpmtext, 8, 56, '', 'input_textarea_editor'),
 	'PMSEND_FORM_TOUSER' => cot_textarea('newpmrecipient', $touser, 3, 56, 'class="userinput"'),
-	'PMSEND_FORM_NOT_TO_SENTBOX' => cot_checkbox(false, 'fromstate', Cot::$L['pm_notmovetosentbox'], '', '3')
-));
+	'PMSEND_FORM_NOT_TO_SENTBOX' => cot_checkbox(false, 'fromstate', Cot::$L['pm_notmovetosentbox'], '', '3'),
+]);
 
 /* === Hook === */
 foreach (cot_getextplugins('pm.send.tags') as $pl) {
