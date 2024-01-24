@@ -97,7 +97,10 @@ foreach (Cot::$structure['forums'] as $i => $x) {
 		$depmax = ($depth < 4) ? ($depth - 1) : 3;
 		for ($ii = 0; $ii < $depmax; $ii++) {
             if (isset($cat_top[$i]['fs_lt_date'])) {
-                if (!isset($cat_top[$parents[$ii]]['fs_lt_date']) || ($cat_top[$i]['fs_lt_date'] > $cat_top[$parents[$ii]]['fs_lt_date'])) {
+                if (
+                    !isset($cat_top[$parents[$ii]]['fs_lt_date'])
+                    || ($cat_top[$i]['fs_lt_date'] > $cat_top[$parents[$ii]]['fs_lt_date'])
+                ) {
                     $cat_top[$parents[$ii]]['fs_lt_id'] = $cat_top[$i]['fs_lt_id'];
                     $cat_top[$parents[$ii]]['fs_lt_title'] = $cat_top[$i]['fs_lt_title'];
                     $cat_top[$parents[$ii]]['fs_lt_date'] = $cat_top[$i]['fs_lt_date'];
@@ -166,13 +169,13 @@ foreach (cot_getextplugins('forums.sections.main') as $pl) {
 /* ===== */
 
 $url_markall = cot_url('forums', "n=markall");
-$title[] = array(cot_url('forums'), Cot::$L['Forums']);
-$t->assign(array(
+$title[] = [cot_url('forums'), Cot::$L['Forums']];
+$t->assign([
 	'FORUMS_RSS' => cot_url('rss', 'm=forums'),
 	'FORUMS_SECTIONS_PAGETITLE' => cot_breadcrumbs($title, Cot::$cfg['homebreadcrumb']),
 	'FORUMS_SECTIONS_MARKALL' =>  (Cot::$usr['id'] > 0) ? cot_rc_link($url_markall, Cot::$L['forums_markallasread']) : '',
-	'FORUMS_SECTIONS_MARKALL_URL' => (Cot::$usr['id'] > 0) ? $url_markall : ''
-));
+	'FORUMS_SECTIONS_MARKALL_URL' => (Cot::$usr['id'] > 0) ? $url_markall : '',
+]);
 
 
 $xx = 0;
@@ -249,17 +252,19 @@ foreach ($fstlvl as $x) {
 
     $stat = isset($cat_top[$x]) ? $cat_top[$x] : null;
 	$t->assign(cot_generate_sectiontags($x, 'FORUMS_SECTIONS_ROW_', $stat));
-	$t->assign(array(
+	$t->assign([
 		'FORUMS_SECTIONS_ROW_FOLD' => $fold,
 		'FORUMS_SECTIONS_ROW_SUBITEMS' => (isset($nxtlvl[$x]) && is_array($nxtlvl[$x])) ? 1 : 0,
 		'FORUMS_SECTIONS_ROW_ODDEVEN' => cot_build_oddeven($xx),
 		'FORUMS_SECTIONS_ROW_NUM' => $xx,
-	));
+	]);
+
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
+
 	$t->parse('MAIN.FORUMS_SECTIONS.CAT');
 }
 $t->parse('MAIN.FORUMS_SECTIONS');

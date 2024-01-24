@@ -49,8 +49,9 @@ function cot_forums_buildpath($cat, $forumslink = true)
 	if ($forumslink) {
 		$tmp[] = array(cot_url('forums'), Cot::$L['Forums']);
 	}
-	$pathcodes = !empty(Cot::$structure['forums'][$cat]['path']) ?
-        explode('.', Cot::$structure['forums'][$cat]['path']) : [];
+	$pathcodes = !empty(Cot::$structure['forums'][$cat]['path'])
+        ? explode('.', Cot::$structure['forums'][$cat]['path'])
+        : [];
 
 	foreach ($pathcodes as $k => $x) {
 		if ($k == 0) {
@@ -282,29 +283,30 @@ function cot_forums_resyncTopic($topicId, $userId = null)
  */
 function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 {
-	global $cfg, $structure, $cot_extrafields, $usr, $sys, $L, $db_structure;
-
     $statLtDate = !empty($stat['fs_lt_date']) ? $stat['fs_lt_date'] : 0;
     $statLtPosterId  = !empty($stat['fs_lt_posterid']) ? $stat['fs_lt_posterid'] : 0;
-    $usr['lastvisit'] = !empty($usr['lastvisit']) ? $usr['lastvisit'] : 0;
+    Cot::$usr['lastvisit'] = !empty(Cot::$usr['lastvisit']) ? Cot::$usr['lastvisit'] : 0;
 
-	$new_elems = ($usr['id'] > 0 && $statLtDate > $usr['lastvisit'] && $statLtPosterId != $usr['id']);
+	$new_elems = (Cot::$usr['id'] > 0 && $statLtDate > Cot::$usr['lastvisit'] && $statLtPosterId != Cot::$usr['id']);
 
-	$sections = array(
+	$sections = [
 		$tag_prefix . 'CAT' => $cat,
-		$tag_prefix . 'LOCKED' => $structure['forums'][$cat]['locked'],
-		$tag_prefix . 'TITLE' => $structure['forums'][$cat]['title'],
-		$tag_prefix . 'DESC' => cot_parse_autourls($structure['forums'][$cat]['desc']).(($structure['forums'][$cat]['locked'])? ' '.$L['Locked'] : ''),
-		$tag_prefix . 'ICON' => empty($structure['forums'][$cat]['icon']) ? '' : cot_rc('img_structure_cat', array(
-				'icon' => $structure['forums'][$cat]['icon'],
-				'title' => htmlspecialchars($structure['forums'][$cat]['title']),
-				'desc' => htmlspecialchars($structure['forums'][$cat]['desc'])
-			)),
+		$tag_prefix . 'LOCKED' => Cot::$structure['forums'][$cat]['locked'],
+		$tag_prefix . 'TITLE' => htmlspecialchars(Cot::$structure['forums'][$cat]['title']),
+        $tag_prefix . 'DESC' => htmlspecialchars(Cot::$structure['forums'][$cat]['desc']) .
+            ((Cot::$structure['forums'][$cat]['locked']) ? ' ' . Cot::$L['Locked'] : ''),
+		$tag_prefix . 'ICON' => empty(Cot::$structure['forums'][$cat]['icon'])
+            ? ''
+            : cot_rc('img_structure_cat', [
+				'icon' => Cot::$structure['forums'][$cat]['icon'],
+				'title' => htmlspecialchars(Cot::$structure['forums'][$cat]['title']),
+				'desc' => htmlspecialchars(Cot::$structure['forums'][$cat]['desc']),
+			]),
 		$tag_prefix . 'URL' => cot_url('forums', 'm=topics&s=' . $cat),
 		$tag_prefix . 'SECTIONSURL' => cot_url('forums', 'c=' . $cat),
 		$tag_prefix . 'NEWPOSTS' => $new_elems,
-		$tag_prefix . 'CAT_DEFSTATE' => htmlspecialchars($cfg['forums']['cat_' . $cat]['defstate']),
-	);
+		$tag_prefix . 'CAT_DEFSTATE' => htmlspecialchars(Cot::$cfg['forums']['cat_' . $cat]['defstate']),
+	];
 
 	if (is_array($stat)) {
 		if ($stat['fs_lt_date'] > 0) {
@@ -317,10 +319,11 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
                         : cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=last', '#bottom'),
                     htmlspecialchars(cot_cutstring($stat['fs_lt_title'], 32))
                 ),
-				$tag_prefix . 'LASTPOST_URL' => $new_elems ? cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=unread', '#unread') : cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=last', '#bottom'),
-				$tag_prefix . 'TIMEAGO' => cot_build_timegap($stat['fs_lt_date'], $sys['now'])
+				$tag_prefix . 'LASTPOST_URL' => $new_elems
+                    ? cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=unread', '#unread')
+                    : cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=last', '#bottom'),
+				$tag_prefix . 'TIMEAGO' => cot_build_timegap($stat['fs_lt_date'], Cot::$sys['now'])
 			);
-
 		}
 
 		$sections += array(
@@ -349,9 +352,12 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
             $exfld_title = cot_extrafield_title($exfld, 'structure_');
             
 			$sections[$tag_prefix . $uname . '_TITLE'] = $exfld_title;
-			$sections[$tag_prefix . $uname] = cot_build_extrafields_data('structure', $exfld,
-				$structure['forums'][$cat][$exfld['field_name']]);
-			$sections[$tag_prefix . $uname . '_VALUE'] = $structure['forums'][$cat][$exfld['field_name']];
+			$sections[$tag_prefix . $uname] = cot_build_extrafields_data(
+                'structure',
+                $exfld,
+                Cot::$structure['forums'][$cat][$exfld['field_name']]
+            );
+			$sections[$tag_prefix . $uname . '_VALUE'] = Cot::$structure['forums'][$cat][$exfld['field_name']];
 		}
 	}
 

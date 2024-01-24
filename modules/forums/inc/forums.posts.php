@@ -78,18 +78,19 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 
 	$sql_forums = Cot::$db->query("SELECT fp_id, fp_text, fp_posterid, fp_creation, fp_updated, fp_updater FROM $db_forum_posts
 		WHERE fp_topicid = $q ORDER BY fp_creation DESC LIMIT 1");
-	if ($row = $sql_forums->fetch())
-	{
-		if (Cot::$cfg['forums']['antibumpforums'] && ( (Cot::$usr['id'] == 0 && $row['fp_posterid'] == 0 &&
-			$row['fp_posterip'] == Cot::$usr['ip']) || ($row['fp_posterid'] > 0 && $row['fp_posterid'] == Cot::$usr['id']) ))
-		{
+	if ($row = $sql_forums->fetch()) {
+		if (
+            Cot::$cfg['forums']['antibumpforums']
+            && (
+                (Cot::$usr['id'] == 0 && $row['fp_posterid'] == 0 && $row['fp_posterip'] == Cot::$usr['ip'])
+                || ($row['fp_posterid'] > 0 && $row['fp_posterid'] == Cot::$usr['id'])
+            )
+        ) {
 			cot_die();
 		}
 		$merge = (!Cot::$cfg['forums']['antibumpforums'] && Cot::$cfg['forums']['mergeforumposts'] && $row['fp_posterid'] == Cot::$usr['id']) ? true : false;
 		$merge = ($merge && Cot::$cfg['forums']['mergetimeout'] > 0 && (($sys['now'] - $row['fp_updated']) > (Cot::$cfg['forums']['mergetimeout'] * 3600))) ? false : $merge;
-	}
-	else
-	{
+	} else {
 		cot_die();
 	}
 	$rmsg = array();
@@ -97,14 +98,13 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	$rmsg['fp_updated'] = (int)$sys['now'];
 	$rmsg['fp_posterip'] = Cot::$usr['ip'];
 
-	if (mb_strlen($rmsg['fp_text']) < Cot::$cfg['forums']['minpostlength'])
-	{
+	if (mb_strlen($rmsg['fp_text']) < Cot::$cfg['forums']['minpostlength']) {
 		cot_error('forums_messagetooshort', 'rmsgtext');
 		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
 
 	// Extra fields
-	if(!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
+	if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
 		foreach (Cot::$extrafields[Cot::$db->forum_posts] as $exfld) {
 			$rmsg['fp_' . $exfld['field_name']] = cot_import_extrafields('rmsg' . $exfld['field_name'], $exfld, 'P', '',
                 'forums_post_');
@@ -112,8 +112,7 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('forums.posts.newpost.first') as $pl)
-	{
+	foreach (cot_getextplugins('forums.posts.newpost.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -311,8 +310,7 @@ $where = array_diff($where, array(''));
 $totalposts = Cot::$db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE " . implode(' AND ', $where))->fetchColumn();
 
 // Disallow accessing non-existent pages
-if (empty($id) && $totalposts > 0 && $d > $totalposts)
-{
+if (empty($id) && $totalposts > 0 && $d > $totalposts) {
 	cot_die_message(404);
 }
 
@@ -334,15 +332,13 @@ $topicurl_params = array(
 	'q' => $q
 );
 
-if ( ($durl > 1 && Cot::$cfg['easypagenav']) || ($durl > 0 && !Cot::$cfg['easypagenav']) )
-{
+if (($durl > 1 && Cot::$cfg['easypagenav']) || ($durl > 0 && !Cot::$cfg['easypagenav'])) {
 	$topicurl_params['d'] = $durl;
 }
-$out['canonical_uri'] = cot_url('forums', $topicurl_params);
+Cot::$out['canonical_uri'] = cot_url('forums', $topicurl_params);
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.posts.main') as $pl)
-{
+foreach (cot_getextplugins('forums.posts.main') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -357,8 +353,7 @@ $t = new XTemplate($mskin);
 $extp = cot_getextplugins('forums.posts.loop');
 /* ===== */
 $fp_num = 0;
-foreach ($sql_forums->fetchAll() as $row)
-{
+foreach ($sql_forums->fetchAll() as $row) {
 	$row['user_text'] = (Cot::$cfg['forums']['cat_' . $s]['allowusertext']) ? $row['user_text'] : '';
     $row['fp_updatedby'] = '';
 	$fp_num++;
@@ -443,8 +438,7 @@ foreach (Cot::$structure['forums'] as $key => $val)
 	}
 }
 
-if (Cot::$usr['isadmin'])
-{
+if (Cot::$usr['isadmin']) {
 	$t->assign(array(
 		'FORUMS_POSTS_MOVE_URL' => cot_url('forums', 'm=topics&a=move&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_BUMP_URL' => cot_url('forums', 'm=topics&a=bump&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
@@ -483,7 +477,7 @@ if ((Cot::$cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] 
 	}
 
 	// Extra fields
-    if(!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
+    if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
         foreach (Cot::$extrafields[Cot::$db->forum_posts] as $exfld) {
             $uname = strtoupper($exfld['field_name']);
             $exfld_val = cot_build_extrafields('rmsg' . $exfld['field_name'], $exfld, $rmsg[$exfld['field_name']]);
@@ -511,8 +505,7 @@ if ((Cot::$cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] 
 	cot_display_messages($t);
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('forums.posts.newpost.tags') as $pl)
-	{
+	foreach (cot_getextplugins('forums.posts.newpost.tags') as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -541,21 +534,34 @@ $crumbs[] = $rowt['ft_title'];
 $toptitle = cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb'], true);
 $toptitle .= ( Cot::$usr['isadmin']) ? Cot::$R['forums_code_admin_mark'] : '';
 
-$t->assign(array(
+$t->assign([
 	'FORUMS_POSTS_ID' => $q,
 	'FORUMS_POSTS_RSS' => cot_url('rss', "m=topics&c=$q"),
-	'FORUMS_POSTS_PAGETITLE' => $toptitle,
+    'FORUMS_POSTS_BREADCRUMBS' => $toptitle,
+    'FORUMS_POSTS_TITLE' => htmlspecialchars($rowt['ft_title']),
 	'FORUMS_POSTS_TOPICDESC' => htmlspecialchars($rowt['ft_desc']),
-	'FORUMS_POSTS_SHORTTITLE' => htmlspecialchars($rowt['ft_title']),
 	'FORUMS_POSTS_CATTITLE' => htmlspecialchars(Cot::$structure['forums'][$s]['title']),
 	'FORUMS_POSTS_PATH' => $toppath,
-	'FORUMS_POSTS_PAGES' => $pagenav['main'],
+    'FORUMS_POSTS_JUMPBOX' => cot_selectbox(
+        $s,
+        'jumpbox',
+        array_keys($jumpbox),
+        array_values($jumpbox),
+        false,
+        'onchange="redirect(this)"'
+    ),
+
+    // @deprecated in 0.9.24
+    'FORUMS_POSTS_PAGES' => $pagenav['main'],
 	'FORUMS_POSTS_PAGEPREV' => $pagenav['prev'],
 	'FORUMS_POSTS_PAGENEXT' => $pagenav['next'],
 	'FORUMS_POSTS_CURRENTPAGE' => $pagenav['current'],
 	'FORUMS_POSTS_TOTALPAGES' => ceil($totalposts / Cot::$cfg['forums']['maxpostsperpage']),
-	'FORUMS_POSTS_JUMPBOX' => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"')
-));
+    'FORUMS_POSTS_PAGETITLE' => $toptitle,
+    'FORUMS_POSTS_SHORTTITLE' => htmlspecialchars($rowt['ft_title']),
+]);
+
+$t->assign(cot_generatePaginationTags($pagenav));
 
 // Topic icon
 $rowt['ft_icon'] = 'posts';

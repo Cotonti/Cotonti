@@ -12,7 +12,7 @@
 <!-- END: POLLS_VIEW -->
 
 <div class="block">
-	<h2 class="forums">{FORUMS_POSTS_PAGETITLE}</h2>
+	<h2 class="forums">{FORUMS_POSTS_BREADCRUMBS}</h2>
 	<!-- BEGIN: FORUMS_POSTS_ADMIN -->
 	<table class="flat">
 		<tr>
@@ -90,7 +90,9 @@
 		</tr>
 		<!-- END: FORUMS_POSTS_ROW -->
 	</table>
-	<!-- IF {FORUMS_POSTS_PAGES} --><p class="paging">{FORUMS_POSTS_PAGEPREV}{FORUMS_POSTS_PAGENEXT}{FORUMS_POSTS_PAGES}</p><!-- ENDIF -->
+	<!-- IF {PAGINATION} -->
+	<p class="paging">{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}</p>
+	<!-- ENDIF -->
 </div>
 <!-- BEGIN: FORUMS_POSTS_TOPICLOCKED -->
 <div class="error">{FORUMS_POSTS_TOPICLOCKED_BODY}</div>

@@ -44,12 +44,15 @@ if ($poll_form) {
 
 	$crumbs = cot_forums_buildpath($s);
 	$toppath = cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb']);
-	$crumbs[] = $rowt['ft_title'];
-	$toptitle = cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb'], true);
-
+    $crumbs[] = $rowt['ft_title'];
+    $toptitle = cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb'], true);
 	$toptitle .= (Cot::$usr['isadmin']) ? Cot::$R['forums_code_admin_mark'] : '';
 
 	$t->assign([
+        'FORUMS_POSTS_BREADCRUMBS' => $toptitle,
+        'FORUMS_POSTS_TITLE' => htmlspecialchars($rowt['ft_title']),
+
+        // @deprecated in 0.9.24
 		'FORUMS_POSTS_PAGETITLE' => $toptitle,
 		'FORUMS_POSTS_SHORTTITLE' => htmlspecialchars($rowt['ft_title'])
 	]);

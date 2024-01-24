@@ -3,13 +3,13 @@
 <div id="content">
 <div class="padding20">
   <div id="left" class="forums">
-    <h1>{FORUMS_POSTS_SHORTTITLE}</h1>
-    <p class="breadcrumb">{PHP.themelang.list.bread}: {FORUMS_POSTS_PAGETITLE}</p>
+    <h1>{FORUMS_POSTS_TITLE}</h1>
+    <p class="breadcrumb">{PHP.themelang.list.bread}: {FORUMS_POSTS_BREADCRUMBS}</p>
     <!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
     <div class="error">{PHP.L.forums_privatetopic}</div>
     <!-- END: FORUMS_POSTS_TOPICPRIVATE -->
-    <!-- IF {FORUMS_POSTS_PAGES} -->
-    <div class="paging">{FORUMS_POSTS_PAGEPREV}{FORUMS_POSTS_PAGES}{FORUMS_POSTS_PAGENEXT}</div>
+    <!-- IF {PAGINATION} -->
+    <div class="paging">{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}</div>
     <!-- ENDIF -->
     <!-- BEGIN: POLLS_VIEW -->
     {POLLS_TITLE}{POLLS_FORM}
@@ -69,8 +69,8 @@
       </div>
       <!-- post -->
       <!-- END: FORUMS_POSTS_ROW -->
-      <!-- IF {FORUMS_POSTS_PAGES} -->
-      <div class="paging">{FORUMS_POSTS_PAGEPREV}{FORUMS_POSTS_PAGES}{FORUMS_POSTS_PAGENEXT}</div>
+      <!-- IF {PAGINATION} -->
+      <div class="paging">{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}</div>
       <!-- ENDIF -->
       <!-- BEGIN: FORUMS_POSTS_TOPICLOCKED -->
       <div class="error">{FORUMS_POSTS_TOPICLOCKED_BODY}</div>
