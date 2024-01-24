@@ -25,7 +25,7 @@ require_once cot_incfile('forms');
 
 $sq = cot_import('sq', 'R', 'TXT');
 
-$hl = mb_strtoupper($sq);
+$hl = !empty($sq) ? mb_strtoupper($sq) : '';
 $tab = cot_import('tab', 'R', 'ALP');
 $cfg_maxitems = is_numeric(Cot::$cfg['plugin']['search']['maxitems']) ? abs(floor(Cot::$cfg['plugin']['search']['maxitems'])) : 50;
 list($pg, $d, $durl) = cot_import_pagenav('d', $cfg_maxitems);

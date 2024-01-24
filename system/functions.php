@@ -428,11 +428,12 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieOnError = false, $
 
 		case 'TXT':
 			$v = trim($v);
-			if (mb_strpos($v, '<') === false) {
-				$pass = true;
-			} else {
-				$defret = $v;
-			}
+            $pass = true;
+//			if (mb_strpos($v, '<') === false) {
+//				$pass = true;
+//			} else {
+//				$defret = $v;
+//			}
 			break;
 
 		case 'ALP':
