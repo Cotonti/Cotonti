@@ -788,10 +788,11 @@ class CotDB
      * The necessary table prefix will be substituted automatically, the necessary quote characters too.
      *
 	 * @param string $script SQL script body, containing formatted queries separated by semicolons and newlines
+     * @param bool $inTransaction
 	 * @return string Error message if an error occurs or empty string on success
      * @todo process $this->tableQuoteCharacter
 	 */
-	public function runScript($script)
+	public function runScript($script, $inTransaction = false)
 	{
         if (empty($script)) {
             return '';
@@ -803,34 +804,53 @@ class CotDB
 
 		// Run queries separated by ; at the end of line
 		$queries =  preg_split('#;\r?\n#', $script);
-		foreach ($queries as $query) {
-			$query = trim($query);
-            if (empty($query)) {
-                continue;
-            }
 
-            if (
-                ($this->tablePrefix != 'cot_' || $this->tableQuoteCharacter != '`') &&
-                preg_match_all('#`cot_(\w+)`#', $query, $matches)
-            ) {
-                foreach ($matches[0] as $key => $match) {
-                    $tableName = isset($GLOBALS['db_' . $matches[1][$key]]) ?
-                        $GLOBALS['db_' . $matches[1][$key]] : $this->tablePrefix . $matches[1][$key];
-                    $query = str_replace($match, $this->quoteTableName($tableName), $query);
+        if ($inTransaction) {
+            $this->adapter->beginTransaction();
+        }
+        try {
+            foreach ($queries as $query) {
+                $query = trim($query);
+                if (empty($query)) {
+                    continue;
+                }
+
+                if (
+                    ($this->tablePrefix !== 'cot_' || $this->tableQuoteCharacter !== '`')
+                    && preg_match_all('#`cot_(\w+)`#', $query, $matches)
+                ) {
+                    foreach ($matches[0] as $key => $match) {
+                        $tableName = isset($GLOBALS['db_' . $matches[1][$key]]) ?
+                            $GLOBALS['db_' . $matches[1][$key]] : $this->tablePrefix . $matches[1][$key];
+                        $query = str_replace($match, $this->quoteTableName($tableName), $query);
+                    }
+                }
+
+                if ($this->columnQuoteCharacter != '`') {
+                    $query = str_replace('`', $this->columnQuoteCharacter, $query);
+                }
+
+                $result = $this->query($query);
+                if (!$result) {
+                    $message = !empty($this->error) ? $this->error : 'Error while executing:';
+                    $message .= ' "' . $query . '"';
+                    throw new Exception ($message);
+                }
+
+                if ($result instanceof PDOStatement) {
+                    $result->closeCursor();
                 }
             }
 
-            if ($this->columnQuoteCharacter != '`') {
-                $query = str_replace('`', $this->columnQuoteCharacter, $query);
+            if ($inTransaction) {
+                $this->adapter->commit();
             }
-
-            $result = $this->query($query);
-            if (!$result) {
-                return $this->error . '<br />' . htmlspecialchars($query) . '<hr />';
-            } elseif ($result instanceof PDOStatement) {
-                $result->closeCursor();
+        } catch (Exception $e) {
+            if ($inTransaction) {
+                $this->adapter->rollBack();
             }
-		}
+            return $e->getMessage();
+        }
 
 		return '';
 	}

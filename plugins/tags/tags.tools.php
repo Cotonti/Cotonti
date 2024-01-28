@@ -139,7 +139,6 @@ if ($action === 'edit') {
         cot_redirect($redirectUrl);
 	}
 
-    Cot::$db->getConnection()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     Cot::$db->getConnection()->beginTransaction();
     try {
         Cot::$db->update(Cot::$db->tags, ['tag' => $tag], 'tag = :oldTag', ['oldTag' => $oldTag]);

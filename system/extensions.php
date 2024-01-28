@@ -191,9 +191,9 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 	global $cfg, $L, $R, $cache, $usr, $db_auth, $db_config, $db_users,
 		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x, $env;
 
-    /** @deprecated for backward compatibility */
+    /** @deprecated in 0.9.24 for backward compatibility */
     $is_module = $isModule;
-    /** @deprecated for backward compatibility */
+    /** @deprecatedin 0.9.24 for backward compatibility */
     $name = $code;
 
 	$path = $isModule ? Cot::$cfg['modules_dir'] . "/$code" : Cot::$cfg['plugins_dir'] . "/$code";
@@ -1041,7 +1041,17 @@ function cot_plugin_add($hook_bindings, $code, $title, $isModule = false)
 			'pl_module' => (int) $isModule
 		];
 	}
-	return Cot::$db->insert(Cot::$db->plugins, $insertRows);
+
+    Cot::$db->getConnection()->beginTransaction();
+    try {
+        $result = Cot::$db->insert(Cot::$db->plugins, $insertRows);
+        Cot::$db->getConnection()->commit();
+    } catch (Exception $e) {
+        Cot::$db->getConnection()->rollBack();
+        return 0;
+    }
+
+	return $result;
 }
 
 /**

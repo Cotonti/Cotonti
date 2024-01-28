@@ -45,7 +45,7 @@ $R = [];
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.24 beta';
+$cfg['version'] = '0.9.24';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms'])) {
@@ -2392,27 +2392,27 @@ function cot_build_url($text, $maxlen=64)
  *
  * @param int $id User ID
  * @param string $userName User name
- * @param mixed $extra_attrs Extra link tag attributes as a string or associative array,
- *		e.g. array('class' => 'usergrp_admin')
+ * @param mixed $extraAttributes Extra link tag attributes as a string or associative array,
+ *		e.g. ['class' => 'user-group-admin']
  * @return string
  */
-function cot_build_user($id, $userName, $extra_attrs = '')
+function cot_build_user($id, $userName, $extraAttributes = '')
 {
     $id = (int) $id;
 	if (function_exists('cot_build_user_custom')) {
-		return cot_build_user_custom($id, $userName, $extra_attrs);
+		return cot_build_user_custom($id, $userName, $extraAttributes);
 	}
 
-    $userName = htmlspecialchars($userName);
+    $userName = !empty($userName) ? htmlspecialchars($userName) : '?';
 
 	if (!$id) {
-		return empty($userName) ? '?' : $userName;
+		return $userName;
 	}
 
     return cot_rc_link(
         cot_url('users', ['m' => 'details', 'id' => $id, 'u' => $userName,]),
-        !empty($userName) ? $userName : '?',
-        $extra_attrs
+        $userName,
+        $extraAttributes
     );
 }
 

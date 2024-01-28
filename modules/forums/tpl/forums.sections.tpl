@@ -30,9 +30,7 @@
         <tbody id="blk_{FORUMS_SECTIONS_ROW_CAT}"<!-- IF {FORUMS_SECTIONS_ROW_FOLD} --> style="display:none;"<!-- ENDIF --> >
 			<!-- BEGIN: SECTION -->
 			<tr>
-				<td class="centerall">
-					{FORUMS_SECTIONS_ROW_ICON}
-				</td>
+				<td class="centerall">{FORUMS_SECTIONS_ROW_ICON}</td>
 				<td>
 					<h4><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h4>
 					<!-- IF {FORUMS_SECTIONS_ROW_DESC} -->

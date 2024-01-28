@@ -9,7 +9,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 /* ======== First... ======== */
 
-if (version_compare(PHP_VERSION, '6.0.0', '<=')) {
+if (version_compare(PHP_VERSION, '7.0.0', '<=')) {
 	if (get_magic_quotes_gpc()) {
 		function cot_disable_mqgpc(&$value, $key) {
 			$value = stripslashes($value);

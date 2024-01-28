@@ -256,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$error = $db->runScript($sql_file);
 
 				if ($error) {
-					cot_error(cot_rc('install_error_sql_script', array('msg' => $error)));
+					cot_error(cot_rc('install_error_sql_script', ['msg' => $error]));
 				}
 			}
 			break;
@@ -279,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				cot_error('aut_emailtooshort', 'user_email');
 			}
 			if (!file_exists($file['config_sample'])) {
-				cot_error(cot_rc('install_error_missing_file', array('file' => $file['config_sample'])));
+				cot_error(cot_rc('install_error_missing_file', ['file' => $file['config_sample']]));
 			}
 
 			if (!cot_error_found()) {
@@ -307,32 +307,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$ruserpass['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
 				$ruserpass['user_password'] = cot_hash($user['pass'], $ruserpass['user_passsalt'], $ruserpass['user_passfunc']);
 
+                $db->getConnection()->beginTransaction();
 				try {
-					$db->insert($db_x . 'users', array(
-						'user_name' => $user['name'],
-						'user_password' => $ruserpass['user_password'],
-						'user_passsalt' => $ruserpass['user_passsalt'],
-						'user_passfunc' => $ruserpass['user_passfunc'],
-						'user_maingrp' => COT_GROUP_SUPERADMINS,
-						'user_country' => (string) $user['country'],
-						'user_email' => $user['email'],
-						'user_theme' => $rtheme,
-						'user_scheme' => $rscheme,
-						'user_lang' => $rlang,
-						'user_regdate' => time(),
-						'user_lastip' => $_SERVER['REMOTE_ADDR']
-					));
+					$db->insert(
+                        $db_x . 'users',
+                        [
+                            'user_name' => $user['name'],
+                            'user_password' => $ruserpass['user_password'],
+                            'user_passsalt' => $ruserpass['user_passsalt'],
+                            'user_passfunc' => $ruserpass['user_passfunc'],
+                            'user_maingrp' => COT_GROUP_SUPERADMINS,
+                            'user_country' => (string) $user['country'],
+                            'user_email' => $user['email'],
+                            'user_theme' => $rtheme,
+                            'user_scheme' => $rscheme,
+                            'user_lang' => $rlang,
+                            'user_regdate' => time(),
+                            'user_lastip' => $_SERVER['REMOTE_ADDR'],
+                        ]
+                    );
 
 					$user['id'] = $db->lastInsertId();
 
-					$db->insert($db_x . 'groups_users', array(
-						'gru_userid' => (int) $user['id'],
-						'gru_groupid' => COT_GROUP_SUPERADMINS
-					));
+					$db->insert(
+                        $db_x . 'groups_users',
+                        [
+                            'gru_userid' => (int) $user['id'],
+                            'gru_groupid' => COT_GROUP_SUPERADMINS,
+                        ]
+                    );
 
-					$db->update($db_x . 'config', array('config_value' => $user['email']), "config_owner = 'core' AND config_name = 'adminemail'");
+					$db->update(
+                        $db_x . 'config',
+                        ['config_value' => $user['email']],
+                        "config_owner = 'core' AND config_name = 'adminemail'"
+                    );
+
+                    $db->getConnection()->commit();
 				} catch (PDOException $err) {
-					cot_error(cot_rc('install_error_sql_script', array('msg' => $err->getMessage())));
+                    $db->getConnection()->rollBack();
+					cot_error(cot_rc('install_error_sql_script', ['msg' => $err->getMessage()]));
 				}
 
                 // robots.txt
