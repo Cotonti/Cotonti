@@ -7,9 +7,6 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-//throw new Exception('asadsas');
-//cot_die(true, true);
-
 $result = ['success' => true, 'data' => []];
 
 if (!is_array($_GET['data'])) {
@@ -20,7 +17,7 @@ if (!is_array($_GET['data'])) {
 }
 
 if (empty($dataToGet)) {
-    cot_sendheaders('application/json', '200 OK', \Cot::$sys['now']);
+    cot_sendheaders('application/json', '200 OK', Cot::$sys['now']);
     echo json_encode($result);
     exit();
 }
@@ -29,7 +26,7 @@ foreach ($dataToGet as $dataRow) {
     $dataRow = trim($dataRow);
     switch ($dataRow) {
         case 'x':
-            $result['data'][$dataRow] = \Cot::$sys['xk'];
+            $result['data'][$dataRow] = Cot::$sys['xk'];
             break;
 
         case 'captcha':
@@ -44,6 +41,6 @@ foreach (cot_getextplugins('system.get-data') as $pl) {
 }
 /* ============ */
 
-cot_sendheaders('application/json', '200 OK', \Cot::$sys['now']);
+cot_sendheaders('application/json', '200 OK', Cot::$sys['now']);
 echo json_encode($result);
 exit();

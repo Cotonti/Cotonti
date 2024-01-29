@@ -1982,8 +1982,8 @@ function cot_build_age($birthdate)
 		return null;
 	}
 
-	[$birth_y, $birth_m, $birth_d] = explode('-', cot_date('Y-m-d', $birthdate));
-	[$now_y, $now_m, $now_d] = explode('-', cot_date('Y-m-d'));
+	list($birth_y, $birth_m, $birth_d) = explode('-', cot_date('Y-m-d', $birthdate));
+	list($now_y, $now_m, $now_d) = explode('-', cot_date('Y-m-d'));
 
 	$age = $now_y - $birth_y - 1;
 
@@ -2977,12 +2977,12 @@ function cot_themes_info($theme_name = null)
 			if (empty($themeinfo['Title'])) {
 			    $themeinfo['Title'] = isset($info['Name']) ? $info['Name'] : $name;
             }
-			$schemes_list = array();
+			$schemes_list = [];
 			if (!empty($info['Schemes'])) {
 				$schemes = preg_split('/\s*,\s*/', $info['Schemes']);
 				sort($schemes);
 				foreach ($schemes as $scheme) {
-					[$sc_name, $sc_title] = explode(':', $scheme);
+					list($sc_name, $sc_title) = explode(':', $scheme);
 					$schemes_list[$sc_name] = $sc_title;
 				}
 			}
@@ -5858,7 +5858,7 @@ function cot_url_sanitize($url)
 	foreach (explode('&', $query) as $item) {
 		if (!empty($item)) {
             if (mb_stripos($item, '=') !== false) {
-                [$key, $val] = explode('=', $item, 2);
+                list($key, $val) = explode('=', $item, 2);
                 $filtered_params[] = urlfilter($key) . '=' . urlfilter($val);
 
             } else {
