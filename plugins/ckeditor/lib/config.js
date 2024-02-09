@@ -8,6 +8,8 @@ CKEDITOR.editorConfig = function( config ) {
 	// For complete reference see:
 	// https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html
 
+	config.versionCheck = false;
+
 	config.toolbar = 'Full';
 	config.extraPlugins = 'more,oembed,syntaxhighlight,codemirror';
 

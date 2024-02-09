@@ -890,9 +890,11 @@ class Cotpl_data
             foreach ($chunks as $chunk) {
                 // Original from 0.9.23: if (preg_match('`^(?<!\{)\{((?:[\w\.\-]+)(?:\|.+?)?)\}$`', $chunk, $m)) {
                 // Does not support multiline function calls
-                if (preg_match('`^(?<!\{)\{((?:[\w\.\-]+)(?:\|.+?)?)\}$`', $chunk, $m)) {
-                    $this->chunks[] = new Cotpl_var($m[1]);
-                } else {
+                $firstSymbol = mb_substr($chunk, 0, 1);
+                $lastSymbol = mb_substr($chunk, -1, 1);
+                if ($firstSymbol === '{' &&  $lastSymbol === '}') {
+                    $this->chunks[] = new Cotpl_var(mb_substr($chunk, 1, mb_strlen($chunk) -2));
+                } elseif ($chunk !== '' && $chunk !== null) {
                     $this->chunks[] = $chunk;
                 }
             }
@@ -1178,7 +1180,7 @@ class Cotpl_expr
 		$text = str_replace('!{', ' ! {', $text);
 		$text = str_replace('!(', ' ! (', $text);
 		// Splitting into words
-		$words = cotpl_tokenize($text, array(' ', "\t"), false);
+		$words = cotpl_tokenize($text, [' ', "\t"], false);
         $words = array_map('cotpl_parseArgument', $words);
 
 		$operators = array_keys(self::$operators);
@@ -1611,24 +1613,37 @@ class Cotpl_var
 	public function __construct($text)
 	{
 		if (mb_strpos($text, '|') !== false) {
+            /**
+             * @todo use a regular expression to split only the first level of nesting into a chain of calls
+             * do not split nested tags
+             * example: {CATEGORY|cot_url('page', 'c=$this')|var_dump({PHP.L.Home}, $this, {PHP.cfg.mainurl}, {PHP|cot_url('page', 'c=news ')}, {HEADER_TITLE})}
+             * should be splitted to
+             *  CATEGORY, cot_url('page', 'c=$this') and var_dump({PHP.L.Home}, $this, {PHP.cfg.mainurl}, {PHP|cot_url('page', 'c=news ')}, {HEADER_TITLE})
+             *
+             * The solution below works good, but supports only one level of tag nesting
+             */
 			$chain = explode('|', str_replace('{PHP|', '{PHP#$%&!', $text));
             array_walk(
                 $chain,
                 function(&$val) { $val = str_replace('{PHP#$%&!', '{PHP|', $val); }
             );
 			$text = array_shift($chain);
-
 			foreach ($chain as $cbk) {
 				if (
                     mb_strpos($cbk, '(') !== false
-					&& preg_match('`(\w+)\s*\((.*)\)`', $cbk, $mt)
+                    /**
+                     * @todo control the correspondence of opening brackets to closing ones,
+                     * taking into account tokenization
+                     */
+					//&& preg_match('`(?<functionName>\w+)\s*\((?<argumetns>.*)\)`', $cbk, $mt)
+                    && preg_match('/(?<functionName>\w+)\s*\((?<argumetns>(?>.|\n)*)\)/', $cbk, $mt)
                 ) {
                     // Don't trim quotes from arguments to we can parse them types
-                    $args = cotpl_tokenize(trim($mt[2]), [',', ' '], false);
+                    $args = cotpl_tokenize(trim($mt['argumetns']), [',', ' ', "\n", "\r", "\t"], false);
                     $args = array_map('cotpl_parseArgument', $args);
 
 					$this->callbacks[] = [
-						'name' => $mt[1],
+						'name' => $mt['functionName'],
 						'args' => $args,
 					];
 				} else {
@@ -1652,14 +1667,10 @@ class Cotpl_var
 	 */
 	public function __get($name)
 	{
-		if (isset($this->{$name}))
-		{
+		if (isset($this->{$name})) {
 			return $this->{$name};
 		}
-		else
-		{
-			return null;
-		}
+		return null;
 	}
 
 	/**
@@ -1669,20 +1680,14 @@ class Cotpl_var
 	public function  __toString()
 	{
 		$str = '{' . $this->name;
-		if (is_array($this->keys))
-		{
+		if (is_array($this->keys)) {
 			$str .= '.' . implode('.', $this->keys);
 		}
-		if (is_array($this->callbacks))
-		{
-			foreach ($this->callbacks as $cb)
-			{
-				if (is_array($cb))
-				{
+		if (is_array($this->callbacks)) {
+			foreach ($this->callbacks as $cb) {
+				if (is_array($cb)) {
 					$str .= '|' . $cb['name'] . '(' . implode(',', $cb['args']) . ')';
-				}
-				else
-				{
+				} else {
 					$str .= '|' . $cb;
 				}
 			}
@@ -1842,10 +1847,17 @@ class Cotpl_var
 	}
 
     /**
-     * @param $argument Callback Function argument value
-     * @param $i Callback Function argument key
+     * Process function arguments before function call
+     *
+     * @param mixed $argument Callback Function argument value. All arguments processed by cotpl_parseArgument()
+     *   Possible values: scalar (null, bool, int, float, string), array, object
+     * @param int $i Callback Function argument key set by array_walk()
      * @param array{value: mixed, tpl: XTemplate} $params
+     *   value - previous call chain value to replace '$this' keyword
      * @return void
+     *
+     * @see array_walk()
+     * @see cotpl_parseArgument()
      */
     protected function processCallbackArgument(&$argument, $i, $params)
     {
@@ -1854,24 +1866,39 @@ class Cotpl_var
             return;
         }
 
-        // Replaces '$this' in callback arguments with the template tag value.
-        if (is_string($argument) && mb_strpos($argument, '$this') !== false) {
-            if (is_array($params['value']) || is_object($params['value']) || $argument === '$this') {
-                $argument = $params['value'];
-            } else {
-                $argument = str_replace('$this', (string)$params['value'], $argument);
-            }
+        if (!is_string($argument)) {
+            return;
         }
 
-        if (is_string($argument) && mb_strpos($argument, '{') !== false) {
+        $thisPlaceHolder = '~~=={this-placeholder}==~~';
+
+        // Parse string like this: m=posts&q=$this&n={SOME_TAG}&b={PHP.someVar}&d={PHP|someFunc(...args)} for tags
+        if (mb_strpos($argument, '{') !== false) {
             $argument = preg_replace_callback(
-                '`(?<!\{)\{(?<expression>[\w\.\-]+[\|.+?]?)\}`',
-                function ($matches) use ($params) {
-                    $var = new Cotpl_var($matches['expression']);
-                    return $var->evaluate($params['tpl']);
+               // '`(?<!\{)\{(?<tag>[\w\.\-]+[\|.+?]?)\}`',
+                '`\{(?<tag>[\w$](?>[^{}]|(?0))*?)}`',
+                function ($matches) use ($params, $thisPlaceHolder) {
+                    $var = new Cotpl_var($matches['tag']);
+                    // Если слово '$this' содержится в результатах отработки тега, его не надо менять ниже
+                    return str_replace('$this', $thisPlaceHolder, $var->evaluate($params['tpl']));
                 },
                 $argument
             );
+        }
+
+        // Finally replaces '$this' in callback arguments with the template tag calls chain last value.
+        if (mb_strpos($argument, '$this') !== false) {
+            if ($argument === '$this' || is_array($params['value']) || is_object($params['value'])) {
+                $argument = $params['value'];
+            } else {
+                // argument can be a string, containing '$this'
+                // e.g. {PHP.q|cot_url('forums','m=posts&q=$this&n=last')}
+                $argument = str_replace('$this', (string) $params['value'], $argument);
+            }
+        }
+
+        if (is_string($argument) && $argument !== '') {
+            $argument = str_replace($thisPlaceHolder, '$this', $argument);
         }
     }
 }
@@ -1917,79 +1944,70 @@ function cotpl_index_glue($path)
  * @param string $delim Delimiter characters
  * @param bool $trimQuotes Remove quotes at the beginning and end of the token
  * @return string[]
- * @see https://www.php.net/manual/ru/function.strtok.php
+ * @see https://www.php.net/manual/function.strtok.php
+ * @todo move to service
  */
 function cotpl_tokenize($str, $delim = [' '], $trimQuotes = true)
 {
 	$tokens = [];
 	$idx = 0;
 	$quote = '';
-	$prev_delim = false;
+	$previousDelimiter = false;
 	$len = mb_strlen($str);
 	for ($i = 0; $i < $len; $i++) {
-		$c = mb_substr($str, $i, 1);
-		if (in_array($c, $delim)) {
+		$char = mb_substr($str, $i, 1);
+		if (in_array($char, $delim, true)) {
 			if ($quote) {
 			    if (!isset($tokens[$idx])) {
                     $tokens[$idx] = '';
                 }
-				$tokens[$idx] .= $c;
-				$prev_delim = false;
+				$tokens[$idx] .= $char;
+				$previousDelimiter = false;
 
-			} elseif ($prev_delim) {
+			} elseif ($previousDelimiter) {
 				continue;
 
 			} else {
 				$idx++;
-				$prev_delim = true;
+				$previousDelimiter = true;
 			}
 
-		} elseif ($c == '"' || $c == "'") {
+        // Avoid tokenization of tags (variables) and inside quotes
+        } elseif (in_array($char, ['"', "'", '{', '}'], true)) {
 			if (!$quote) {
-				$quote = $c;
+				$quote = $char;
                 if (!$trimQuotes) {
                     if (!isset($tokens[$idx])) {
                         $tokens[$idx] = '';
                     }
-                    $tokens[$idx] .= $c;
+                    $tokens[$idx] .= $char;
                 }
 
-			} elseif ($quote == $c) {
+			} elseif (
+                (in_array($char, ['"', "'"], true) && $char === $quote)
+                || ($quote === '{' && $char === '}')
+            ) {
 				$quote = '';
 				if (!isset($tokens[$idx])) {
 					$tokens[$idx] = '';
 				}
                 if (!$trimQuotes) {
-                    $tokens[$idx] .= $c;
+                    $tokens[$idx] .= $char;
                 }
 
 			} else {
                 if (!isset($tokens[$idx])) {
                     $tokens[$idx] = '';
                 }
-				$tokens[$idx] .= $c;
+				$tokens[$idx] .= $char;
 			}
-			$prev_delim = false;
-
-		} elseif ($c == '{' && !$quote) {
-			// Avoid variable tokenization
-			$quote = $c;
-            if(!isset($tokens[$idx])) {
+			$previousDelimiter = false;
+		} else {
+            if (!isset($tokens[$idx])) {
                 $tokens[$idx] = '';
             }
-			$tokens[$idx] .= $c;
-			$prev_delim = false;
-
-		} elseif ($c == '}' && $quote) {
-			$quote = '';
-            if(!isset($tokens[$idx])) $tokens[$idx] = '';
-			$tokens[$idx] .= $c;
-			$prev_delim = false;
-
-		} else {
-            if(!isset($tokens[$idx])) $tokens[$idx] = '';
-			$tokens[$idx] .= $c;
-			$prev_delim = false;
+			$tokens[$idx] .= $char;
+			$previousDelimiter = false;
 		}
 	}
 
@@ -1997,10 +2015,12 @@ function cotpl_tokenize($str, $delim = [' '], $trimQuotes = true)
 }
 
 /**
- * Parse function argument
+ * Parse function argument.
+ * Only parse. Not any processing.
  * @param string $argument
+ *
  * @return bool|Cotpl_var|float|int|string
- * @todo move to helper
+ * @todo move to service
  */
 function cotpl_parseArgument($argument)
 {
