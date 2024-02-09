@@ -4585,19 +4585,23 @@ function cot_pagenav(
  */
 function cot_generatePaginationTags($pagination, $prefix = '')
 {
+    if (empty($pagination)) {
+        $pagination = [];
+    }
+
     return [
-        $prefix . 'PAGINATION' => $pagination['main'],
-        $prefix . 'PREVIOUS_PAGE' => $pagination['prev'],
-        $prefix . 'NEXT_PAGE' => $pagination['next'],
-        $prefix . 'CURRENT_PAGE' => $pagination['current'],
-        $prefix . 'TOTAL_ENTRIES' => $pagination['entries'],
-        $prefix . 'ENTRIES_ON_CURRENT_PAGE' => $pagination['onpage'],
-        $prefix . 'ENTRIES_PER_PAGE' => $pagination['perPage'],
-        $prefix . 'TOTAL_PAGES' => $pagination['total'],
+        $prefix . 'PAGINATION' => isset($pagination['main']) ? $pagination['main'] : '',
+        $prefix . 'PREVIOUS_PAGE' => isset($pagination['prev']) ? $pagination['prev'] : '',
+        $prefix . 'NEXT_PAGE' => isset($pagination['next']) ? $pagination['next'] : '',
+        $prefix . 'CURRENT_PAGE' => isset($pagination['current']) ? $pagination['current'] : 1,
+        $prefix . 'TOTAL_ENTRIES' => isset($pagination['entries']) ? $pagination['entries'] : 0,
+        $prefix . 'ENTRIES_ON_CURRENT_PAGE' => isset($pagination['onpage']) ? $pagination['onpage'] : 0,
+        $prefix . 'ENTRIES_PER_PAGE' => isset($pagination['perPage']) ? $pagination['perPage'] : 0,
+        $prefix . 'TOTAL_PAGES' => isset($pagination['total']) ? $pagination['total'] : 0,
 
         // @todo what are they needed for? $pagination['first'] is always empty. $pagination['last'] too
         $prefix . 'FIRST_PAGE' => isset($pagination['first']) ? $pagination['first'] : '',
-        $prefix . 'LAST_PAGE' => $pagination['last'],
+        $prefix . 'LAST_PAGE' => isset($pagination['last']) ? $pagination['last'] : '',
     ];
 }
 
