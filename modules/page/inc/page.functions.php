@@ -107,7 +107,7 @@ function cot_generate_pagetags(
 	global $db, $cot_extrafields, $db_pages, $usr, $sys, $cot_yesno, $structure, $db_structure;
 
 	static $extp_first = null, $extp_main = null;
-	static $pag_auth = array();
+	static $pag_auth = [];
 
 	if (is_null($extp_first)) {
 		$extp_first = cot_getextplugins('pagetags.first');

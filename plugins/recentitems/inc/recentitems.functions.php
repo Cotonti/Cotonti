@@ -308,7 +308,7 @@ function cot_build_recentpages(
 ) {
     global $totalrecent;
 
-	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
+	$recentItems = new XTemplate(cot_tplfile($template, 'plug'));
 
     $where = [];
     $params = [];
@@ -426,17 +426,19 @@ function cot_build_recentpages(
 
 	$sql = Cot::$db->query($query, $params);
 
+    $titleLength = (int) $titleLength;
+
 	/* === Hook - Part1 === */
 	$extp = cot_getextplugins('recentitems.recentpages.tags');
 	/* ===== */
     $jj = 0;
     while ($pag = $sql->fetch()) {
 		$jj++;
-		if ((int) $titleLength > 0 && mb_strlen($pag['page_title']) > $titleLength) {
+		if ($titleLength > 0 && mb_strlen($pag['page_title']) > $titleLength) {
 			$pag['page_title'] = (cot_string_truncate($pag['page_title'], $titleLength, false)) . "...";
 		}
-		$recentitems->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $textLength));
-		$recentitems->assign([
+		$recentItems->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $textLength));
+		$recentItems->assign([
 			'PAGE_ROW_TITLE' => htmlspecialchars($pag['page_title']),
 			'PAGE_ROW_OWNER' => cot_build_user($pag['page_ownerid'], $pag['user_name']),
 			'PAGE_ROW_ODDEVEN' => cot_build_oddeven($jj),
@@ -446,7 +448,7 @@ function cot_build_recentpages(
             'PAGE_ROW_SHORTTITLE' => htmlspecialchars($pag['page_title']),
             // /@deprecated
 		]);
-		$recentitems->assign(cot_generate_usertags($pag, 'PAGE_ROW_OWNER_'));
+		$recentItems->assign(cot_generate_usertags($pag, 'PAGE_ROW_OWNER_'));
 
 		/* === Hook - Part2 === */
 		foreach ($extp as $pl) {
@@ -454,15 +456,15 @@ function cot_build_recentpages(
 		}
 		/* ===== */
 
-		$recentitems->parse('MAIN.PAGE_ROW');
+		$recentItems->parse('MAIN.PAGE_ROW');
 	}
     $sql->closeCursor();
 
 	if ($d == 0 && $jj == 0) {
-		$recentitems->parse('MAIN.NO_PAGES_FOUND');
+		$recentItems->parse('MAIN.NO_PAGES_FOUND');
 	}
 
-	$recentitems->parse('MAIN');
+	$recentItems->parse('MAIN');
 
-	return ($d == 0 || $jj > 0) ? $recentitems->text('MAIN') : '';
+	return ($d == 0 || $jj > 0) ? $recentItems->text('MAIN') : '';
 }

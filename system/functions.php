@@ -4975,29 +4975,51 @@ function cot_rc_attr_string($attrs)
 /**
  * Modifies rc string
  *
- * @param string $rc A resource string
- * @param mixed $attrs A string or associative array
+ * Example:
+ *   $R['input_text'] = cot_rc_modify($R['input_text'], ['class' => 'form-control'])
+ *   or in template:
+ *   {PAGEADD_FORM_TITLE|cot_rc_modify($this, 'class="form-control"')}
+ *
+ * @param string $resourceString A resource string
+ * @param array<string, string>|string $attributes A string or associative array
  * @return string
  */
-function cot_rc_modify($rc, $attrs)
+function cot_rc_modify($resourceString, $attributes)
 {
-    if (!is_array($attrs)) {
-        preg_match_all("/((?<key>[a-z0-9-_]+)=(['\"])(?<value>.*?)\g{3})/", $attrs, $matches);
-        $attrs = [];
+    $resourceString = (string) $resourceString;
+    if ($resourceString === '' || empty($attributes)) {
+        return $resourceString;
+    }
+
+    if (!is_array($attributes)) {
+        preg_match_all("/((?<key>[a-z0-9-_]+)=(['\"])(?<value>.*?)\g{3})/", $attributes, $matches);
+        $attributes = [];
         foreach ($matches['key'] as $num => $key) {
-            $attrs[$key] = $matches['value'][$num];
+            $attributes[$key] = $matches['value'][$num];
         }
     }
 
-    foreach ($attrs as $key => $value) {
-        if (mb_stripos($rc, " " . $key . "=") !== false) {
-            $rc = preg_replace("/" . $key . "=(\"|')(.*?)(\"|')/", $key . '="' . $value . '"', $rc);
+    if (empty($attributes)) {
+        return $resourceString;
+    }
+
+    foreach ($attributes as $key => $value) {
+        if (mb_stripos($resourceString, " " . $key . "=") !== false) {
+            $resourceString = preg_replace(
+                "/" . $key . "=(\"|')(.*?)(\"|')/",
+                $key . '="' . $value . '"',
+                $resourceString
+            );
         } else {
-            $rc = preg_replace("/<([^\/ ]+)(.+)/", "<$1 " . $key . '="' . $value . '"$2', $rc);
+            $resourceString = preg_replace(
+                "/<([^\/ ]+)(.+)/",
+                "<$1 " . $key . '="' . $value . '"$2',
+                $resourceString
+            );
         }
     }
 
-    return $rc;
+    return $resourceString;
 }
 
 /**

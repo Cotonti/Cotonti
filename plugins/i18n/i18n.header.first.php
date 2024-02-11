@@ -16,8 +16,8 @@ defined('COT_CODE') or die('Wrong URL');
 // SEO. To avoid page duplicate by search engines
 if (!empty($i18n_notmain)) {
     if (
-        Cot::$env['ext'] != 'index' &&
-        (Cot::$env['ext'] != 'page' || empty($i18n_enabled))
+        Cot::$env['ext'] !== 'index'
+        && (Cot::$env['ext'] !== 'page' || empty($i18n_enabled))
     ) {
         Cot::$sys['noindex'] = true;
     }

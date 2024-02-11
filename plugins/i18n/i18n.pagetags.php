@@ -12,17 +12,22 @@ Hooks=pagetags.main
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  * @see cot_generate_pagetags()
+ *
+ * @var array<string, mixed> $page_data
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-global $i18n_enabled, $i18n_notmain, $i18n_locale, $i18n_write, $i18n_admin;
+global $i18n_enabled, $i18n_notmain, $i18n_locale, $i18n_write, $i18n_admin, $i18n_read;
+
+$i18n_enabled = $i18n_read && cot_i18n_enabled($page_data['page_cat']);
 
 if ($i18n_enabled && $i18n_notmain) {
-	$i18n_array = array();
+	$i18n_array = [];
 	$append_param = '';
-	$urlparams = empty($page_data['page_alias']) ? array('c' => $page_data['page_cat'], 'id' => $page_data['page_id']) :
-        array('c' => $page_data['page_cat'], 'al' => $page_data['page_alias']);
+	$urlparams = empty($page_data['page_alias'])
+        ? ['c' => $page_data['page_cat'], 'id' => $page_data['page_id']]
+        : ['c' => $page_data['page_cat'], 'al' => $page_data['page_alias']];
 
 	if (!Cot::$cfg['plugin']['i18n']['omitmain'] || $i18n_locale != Cot::$cfg['defaultlang']) {
 		$urlparams['l'] = $i18n_locale;

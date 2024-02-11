@@ -15,7 +15,7 @@ Hooks=page.enum.query
 
 defined('COT_CODE') or die('Wrong URL');
 
-global $i18n_read, $i18n_locale;
+global $i18n_read, $i18n_notmain, $i18n_locale;
 
 if (isset($i18n_notmain) && $i18n_notmain && $i18n_read) {
     $cns_join_columns .= ',i18n.*';

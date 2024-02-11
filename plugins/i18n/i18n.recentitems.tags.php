@@ -11,16 +11,21 @@ Hooks=recentitems.recentpages.tags
  * @package I18n
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var int $titleLength
+ * @var XTemplate $recentItems
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
+global $i18n_notmain;
+
 if ($i18n_notmain && !empty($pag['ipage_title'])) {
 	// Overwrite some tags
-	if ((int) $titlelength > 0 && mb_strlen($pag['ipage_title']) > $titlelength) {
-			$pag['ipage_title'] = (cot_string_truncate($pag['ipage_title'], $titlelength, false)) . '...';
+	if ($titleLength > 0 && mb_strlen($pag['ipage_title']) > $titleLength) {
+			$pag['ipage_title'] = (cot_string_truncate($pag['ipage_title'], $titleLength, false)) . '...';
 	}
-	$recentitems->assign([
+    $recentItems->assign([
 		'PAGE_ROW_TITLE' => htmlspecialchars($pag['ipage_title']),
 
         // @deprecated in 0.9.24
