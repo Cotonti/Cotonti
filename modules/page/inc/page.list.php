@@ -10,7 +10,7 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Environment setup
-define('COT_LIST', TRUE);
+const COT_LIST = true;
 Cot::$env['location'] = 'list';
 
 $s = cot_import('s', 'G', 'ALP'); // order field name without 'page_'
@@ -27,25 +27,26 @@ if (
     !empty($c)
     && !empty(Cot::$cfg['page']['cat_' . $c])
     && !empty(Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'])
-//    && isset(Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'])
-//    && ((string) Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'] !== '')
 ) {
     $maxPageRowsPerPage = (int) Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'];
 }
 
-list($pg, $d, $durl) = cot_import_pagenav('d', $maxPageRowsPerPage); //page number for pages list
-list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', Cot::$cfg['page']['maxlistsperpage']);// page number for cats list
+//page number for pages list
+list($pg, $d, $durl) = cot_import_pagenav('d', $maxPageRowsPerPage);
 
-if ($c == 'all' || $c == 'system') {
+// page number for cats list
+list($pgc, $dc, $dcurl) = cot_import_pagenav('dc', Cot::$cfg['page']['maxlistsperpage']);
+
+if ($c === 'all' || $c === 'system') {
 	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'a');
 	cot_block(Cot::$usr['isadmin']);
 
-} elseif ($c == 'unvalidated' || $c == 'saved_drafts') {
+} elseif ($c === 'unvalidated' || $c === 'saved_drafts') {
 	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', 'any');
 	cot_block(Cot::$usr['auth_write']);
 
 } elseif (!isset(Cot::$structure['page'][$c])) {
-	cot_die_message(404, TRUE);
+	cot_die_message(404);
 
 } else {
 	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', $c);
@@ -58,17 +59,24 @@ foreach (cot_getextplugins('page.list.first') as $pl) {
 }
 /* ===== */
 
-$cat = &$structure['page'][$c];
-
-if (empty($s)) {
-	$s = Cot::$cfg['page']['cat_' . $c]['order'];
+$cat = [];
+if (isset(Cot::$structure['page'][$c])) {
+    $cat = &Cot::$structure['page'][$c];
 }
-$w = empty($w) ? Cot::$cfg['page']['cat_' . $c]['way'] : $w;
 
-$s = empty($s) ? Cot::$cfg['page']['cat___default']['order'] : $s;
-$w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? Cot::$cfg['page']['cat___default']['way'] : $w;
+$defaultOrder = !empty(Cot::$cfg['page']['cat_' . $c]['order'])
+    ? empty(Cot::$cfg['page']['cat_' . $c]['order'])
+    : Cot::$cfg['page']['cat___default']['order'];
+if (empty($s)) {
+	$s = $defaultOrder;
+}
 
-Cot::$sys['sublocation'] = $cat['title'];
+$defaultOrderWay = !empty(Cot::$cfg['page']['cat_' . $c]['way'])
+    ? Cot::$cfg['page']['cat_' . $c]['way']
+    : Cot::$cfg['page']['cat___default']['way'];
+if (empty($w) || !in_array($w, ['asc', 'desc'])) {
+    $w = $defaultOrderWay;
+}
 
 $pageListTruncateText = (int) Cot::$cfg['page']['cat___default']['truncatetext'];
 if (
@@ -85,49 +93,54 @@ $params = [];
 
 $where_state = Cot::$usr['isadmin'] ? '1' : 'page_ownerid = ' . Cot::$usr['id'];
 $where['state'] = "(page_state=0 AND $where_state)";
-if ($c == 'unvalidated') {
+if ($c === 'unvalidated') {
 	$cat['tpl'] = 'unvalidated';
-	$where['state'] = 'page_state = 1';
+	$where['state'] = 'page_state = ' . COT_PAGE_STATE_PENDING;
 	$where['ownerid'] = Cot::$usr['isadmin'] ? '1' : 'page_ownerid = ' . Cot::$usr['id'];
 	$cat['title'] = Cot::$L['page_validation'];
 	$cat['desc'] = Cot::$L['page_validation_desc'];
 	$s = 'date';
 	$w = 'desc';
-} elseif ($c == 'saved_drafts') {
+} elseif ($c === 'saved_drafts') {
 	$cat['tpl'] = 'unvalidated';
-	$where['state'] = 'page_state = 2';
+	$where['state'] = 'page_state = ' . COT_PAGE_STATE_DRAFT;
 	$where['ownerid'] = Cot:: $usr['isadmin'] ? '1' : 'page_ownerid = ' . Cot::$usr['id'];
 	$cat['title'] = Cot::$L['page_drafts'];
 	$cat['desc'] = Cot::$L['page_drafts_desc'];
 	$s = 'date';
 	$w = 'desc';
-} elseif ($c != 'all') {
-	$where['cat'] = 'page_cat=' . Cot::$db->quote($c);
-	$where['state'] = "page_state=0";
+} elseif ($c === 'all') {
+    $cat['title'] = 'All'; // @todo
+    $cat['desc'] = 'All';
+    $cat['tpl'] = 'all';
+
+} else {
+	$where['cat'] = 'page_cat = ' . Cot::$db->quote($c);
+	$where['state'] = 'page_state = ' . COT_PAGE_STATE_PUBLISHED;
 }
 
-$c = (empty($cat['title'])) ? 'all' : $c;
-cot_die((empty($cat['title'])) && !Cot::$usr['isadmin']);
+Cot::$sys['sublocation'] = $cat['title'];
 
-if ($o && $p)
-{
-	if (!is_array($o)) $o = array($o);
-	if (!is_array($p)) $p = array($p);
+if ($o && $p) {
+	if (!is_array($o)) {
+        $o = [$o];
+    }
+	if (!is_array($p)) {
+        $p = [$p];
+    }
 	$filters = array_combine($o, $p);
-	foreach ($filters as $key => $val)
-	{
+	foreach ($filters as $key => $val) {
 		$key = cot_import($key, 'D', 'ALP', 16);
 		$val = cot_import($val, 'D', 'TXT', 16);
-		if ($key && $val && $db->fieldExists($db_pages, "page_$key"))
-		{
+        // @todo don't make requests in the loop
+		if ($key && $val && Cot::$db->fieldExists(Cot::$db->pages, "page_$key")) {
 			$params[$key] = $val;
 			$where['filter'][] = "page_$key = :$key";
 		}
 	}
 	empty($where['filter']) || $where['filter'] = implode(' AND ', $where['filter']);
 }
-if (!$usr['isadmin'] && $c != 'unvalidated' && $c !== 'saved_drafts')
-{
+if (!Cot::$usr['isadmin'] && $c !== 'unvalidated' && $c !== 'saved_drafts') {
 	$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 }
 
@@ -146,12 +159,13 @@ if (!empty($p)) {
 // For the canonical URL
 $pageurl_params = $list_url_path;
 
-if ($s != Cot::$cfg['page']['cat_' . $c]['order']) {
-	$list_url_path['s'] = $s;
+if ($s !== $defaultOrder) {
+    $list_url_path['s'] = $s;
 }
-if ($w != Cot::$cfg['page']['cat_' . $c]['way']) {
-	$list_url_path['w'] = $w;
+if ($w !== $defaultOrderWay) {
+    $list_url_path['w'] = $w;
 }
+
 $list_url = cot_url('page', $list_url_path);
 
 if ($durl > 1) {
@@ -162,13 +176,15 @@ if ($dcurl > 1) {
 }
 
 $catpatharray = cot_structure_buildpath('page', $c);
-$catpath = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
-    $cat['title'] : cot_breadcrumbs($catpatharray, Cot::$cfg['homebreadcrumb'], true);
+$catpath = in_array($c, ['all', 'system', 'unvalidated', 'saved_drafts'], true)
+    ? $cat['title']
+    : cot_breadcrumbs($catpatharray, Cot::$cfg['homebreadcrumb'], true);
 
 $shortpath = $catpatharray;
 array_pop($shortpath);
-$catpath_short = ($c == 'all' || $c == 'system' || $c == 'unvalidated' || $c == 'saved_drafts') ?
-    '' : cot_breadcrumbs($shortpath, Cot::$cfg['homebreadcrumb'], false);
+$catpath_short = in_array($c, ['all', 'system', 'unvalidated', 'saved_drafts'], true)
+    ? ''
+    : cot_breadcrumbs($shortpath, Cot::$cfg['homebreadcrumb'], false);
 
 $join_columns = isset($join_columns) ? $join_columns : '';
 $join_condition = isset($join_condition) ? $join_condition : '';
@@ -218,7 +234,7 @@ $pagenav = cot_pagenav(
     $maxPageRowsPerPage
 );
 
-$catTitle = htmlspecialchars(strip_tags(Cot::$structure['page'][$c]['title']));
+$catTitle = htmlspecialchars(strip_tags($cat['title']));
 Cot::$out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
 Cot::$out['subtitle'] = $catTitle;
 if (!empty(Cot::$cfg['page']['cat_' . $c]['keywords'])) {

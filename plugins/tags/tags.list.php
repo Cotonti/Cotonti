@@ -12,11 +12,16 @@ Tags=page.list.tpl:{LIST_TAG_CLOUD},{LIST_TAG_CLOUD_ALL_LINK}
  * @package Tags
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var string $c
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (Cot::$cfg['plugin']['tags']['pages']) {
+if (
+    Cot::$cfg['plugin']['tags']['pages']
+    && !in_array($c, ['all', 'system', 'unvalidated', 'saved_drafts'], true)
+) {
 	require_once cot_incfile('tags', 'plug');
 
     $tags_where = '';
@@ -39,7 +44,9 @@ if (Cot::$cfg['plugin']['tags']['pages']) {
 	$tc_cats = implode(',', $tc_cats);
 
 	// Get all pages from all subcategories and all tags with counts for them
-	$limit = Cot::$cfg['plugin']['tags']['lim_pages'] == 0 ? '' : ' LIMIT ' . (int) Cot::$cfg['plugin']['tags']['lim_pages'];
+	$limit = Cot::$cfg['plugin']['tags']['lim_pages'] == 0
+        ? ''
+        : ' LIMIT ' . (int) Cot::$cfg['plugin']['tags']['lim_pages'];
 	$order = Cot::$cfg['plugin']['tags']['order'];
 	switch ($order) {
 		case 'Alphabetical':

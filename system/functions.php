@@ -3219,7 +3219,7 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
  * @param string $message_body Custom message body
  * @param string $redirect Optional URL to redirect after 3 seconds
  */
-function cot_die_message($code, $header = TRUE, $message_title = '', $message_body = '', $redirect = '')
+function cot_die_message($code, $header = true, $message_title = '', $message_body = '', $redirect = '')
 {
 	// Globals and requirements
     // cot class can be not initialised yet
