@@ -5,8 +5,8 @@ Code=i18n
 Name=Content Internationalization
 Category=customization-i18n
 Description=Enables site contents translation into multiple languages
-Version=1.0.9
-Date=2024-01-21
+Version=1.0.10
+Date=2024-02-12
 Author=Trustmaster
 Copyright=Copyright (c) Cotonti Team 2010-2024
 Notes=BSD License
@@ -29,5 +29,3 @@ cookie=05:radio::0:Remember language selection in cookie
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');
-
-// Todo it seems that Cot::$cfg['plugin']['i18n']['cats'] is not used anywhere. Obsolete?
