@@ -65,7 +65,7 @@ if (isset(Cot::$structure['page'][$c])) {
 }
 
 $defaultOrder = !empty(Cot::$cfg['page']['cat_' . $c]['order'])
-    ? empty(Cot::$cfg['page']['cat_' . $c]['order'])
+    ? Cot::$cfg['page']['cat_' . $c]['order']
     : Cot::$cfg['page']['cat___default']['order'];
 if (empty($s)) {
 	$s = $defaultOrder;
