@@ -71,16 +71,20 @@ Cot::$out['head_head'] .= Cot::$out['head'];
 
 if (!headers_sent()) {
     $lastModified = !empty(Cot::$env['last_modified']) ? Cot::$env['last_modified'] : 0;
-	cot_sendheaders(Cot::$out['meta_contenttype'], isset(Cot::$env['status']) ? Cot::$env['status'] : '200 OK', $lastModified);
+	cot_sendheaders(
+        Cot::$out['meta_contenttype'],
+        isset(Cot::$env['status']) ? Cot::$env['status'] : '200 OK'
+        , $lastModified
+    );
 }
 if (!COT_AJAX) {
-    Cot::$out['canonical_uri'] = !empty(Cot::$out['canonical_uri'])
-        ? rtrim(Cot::$out['canonical_uri'], '/')
-        : '';
+    Cot::$out['canonical_uri'] = !empty(Cot::$out['canonical_uri']) ? Cot::$out['canonical_uri'] : '';
 
     if (!empty(Cot::$out['canonical_uri']) && !preg_match("#^https?://.+#", Cot::$out['canonical_uri'])) {
         Cot::$out['canonical_uri'] = rtrim(COT_ABSOLUTE_URL, '/') . '/'
-            . trim(Cot::$out['canonical_uri'], '/');
+            . (
+                (Cot::$out['canonical_uri'] !== '/') ? ltrim(Cot::$out['canonical_uri'], '/') : ''
+            );
     }
 
     if (Cot::$out['canonical_uri'] !== '') {
