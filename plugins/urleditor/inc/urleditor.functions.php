@@ -284,8 +284,8 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 
                 } else {
 					$p = mb_strpos($url, '/', $p + 3);
-					$url = $p === false ?
-                        $url . '/' . rawurlencode($params['l'])
+					$url = ($p === false)
+                        ? $url . '/' . rawurlencode($params['l'])
                         : mb_substr($url, 0, $p) . rawurlencode($params['l']) . '/' . mb_substr($url, $p + 1);
 				}
 			}

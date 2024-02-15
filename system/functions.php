@@ -2026,15 +2026,15 @@ function cot_structure_buildpath($area, $cat, $extrafield = 'title')
  */
 function cot_build_country($flag)
 {
-	global $cot_countries;
+    global $cot_countries;
 
-	if (!$cot_countries) {
+    if (empty($cot_countries)) {
         include_once cot_langfile('countries', 'core');
     }
-	$flag = empty($flag) ? '00' : $flag;
-	$country = isset($cot_countries[$flag]) ? $cot_countries[$flag] : Cot::$R['code_option_empty'];
+    $flag = empty($flag) ? '00' : $flag;
+    $country = isset($cot_countries[$flag]) ? $cot_countries[$flag] : Cot::$R['code_option_empty'];
 
-	return cot_rc_link(cot_url('users', ['country' => $flag]), $country, ['title' => $country]);
+    return cot_rc_link(cot_url('users', ['country' => $flag]), $country, ['title' => $country]);
 }
 
 /**

@@ -44,11 +44,10 @@ foreach (cot_getextplugins('index.main') as $pl) {
 /* ===== */
 
 if (empty(Cot::$out['canonical_uri'])) {
-    if (!empty($canonicalUrlParams)) {
-        Cot::$out['canonical_uri'] = cot_url('index', $canonicalUrlParams);
-    } else {
-        Cot::$out['canonical_uri'] = COT_ABSOLUTE_URL;
-    }
+    $canonicalUri = cot_url('index', $canonicalUrlParams);
+    Cot::$out['canonical_uri'] = !in_array($canonicalUri, ['', '/', 'index.php'], true)
+        ? $canonicalUri
+        : COT_ABSOLUTE_URL;
 }
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
