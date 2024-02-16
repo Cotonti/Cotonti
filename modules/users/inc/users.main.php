@@ -298,7 +298,15 @@ $sqlusers = &$users;
 
 $pagenav = cot_pagenav('users', $users_url_path, $d, $totalusers, Cot::$cfg['users']['maxusersperpage']);
 
-Cot::$out['subtitle'] = Cot::$L['users_meta_title'];
+$titleAddon = '';
+if (!empty($title)) {
+    $titleAddon = implode(', ', $title);
+    if ($titleAddon !== '') {
+        $titleAddon = ', ' . $titleAddon;
+    }
+}
+
+Cot::$out['subtitle'] = Cot::$L['users_meta_title'] . $titleAddon;
 Cot::$out['desc'] = Cot::$L['users_meta_desc'];
 if (!empty($metaTitle)) {
     Cot::$out['subtitle'] .= '. ' . implode(', ', $metaTitle);
@@ -395,6 +403,13 @@ if (isset($users_url_path['s']) && !$t->hasTag('USERS_FILTERS_SORT')) {
 if (isset($users_url_path['w'])) {
     $filtersFormParams .= cot_inputbox('hidden', 'w', $users_url_path['w']);
 }
+$excludeParams = ['gm', 'g', 'country', 's', 'w'];
+foreach ($users_url_path as $key => $val) {
+    if (in_array($key, $excludeParams)) {
+        continue;
+    }
+    $filtersFormParams .= cot_inputbox('hidden', $key, $val);
+}
 
 /* === Hook === */
 foreach (cot_getextplugins('users.filters') as $pl) {
@@ -408,7 +423,7 @@ if (!empty($title)) {
 }
 
 $t->assign([
-	'USERS_TITLE' => Cot::$L['use_title'] . implode(', ', $title),
+	'USERS_TITLE' => Cot::$L['use_title'] . $titleAddon,
 	'USERS_SUBTITLE' => Cot::$L['use_subtitle'],
     'USERS_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
     'USERS_FILTERS_ACTION' => $filtersFormAction,
