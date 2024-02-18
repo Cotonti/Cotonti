@@ -686,8 +686,8 @@ if (!empty($sys['theme_resources']) && file_exists($sys['theme_resources'])) {
 	include $sys['theme_resources'];
 	// Save overridden strings in $theme_reload global
 	// Todo more right way
-	$theme_reload['L'] = @array_diff_assoc($L,$L_tmp);
-	$theme_reload['R'] = @array_diff_assoc($R,$R_tmp);
+	$theme_reload['L'] = @array_diff_assoc($L, $L_tmp);
+	$theme_reload['R'] = @array_diff_assoc($R, $R_tmp);
 	unset($L_tmp, $R_tmp);
 }
 

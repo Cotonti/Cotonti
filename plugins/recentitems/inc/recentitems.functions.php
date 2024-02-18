@@ -328,26 +328,34 @@ function cot_build_recentpages(
 	if (!empty(Cot::$cfg['plugin']['recentitems']['whitelist'])) {
 		$whitelist = [];
 		foreach (preg_split('#\r?\n#', Cot::$cfg['plugin']['recentitems']['whitelist']) as $c) {
+            $c = trim($c);
+            if ($c === '') {
+                continue;
+            }
 			$whitelist = array_merge(
                 $whitelist,
                 cot_structure_children('page', $c, true, true, $rightprescan)
             );
 		}
 	} else {
-		$whitelist = false;
+		$whitelist = null;
 	}
 
 	// Load all cats and subcats in black list if set
 	if (!empty(Cot::$cfg['plugin']['recentitems']['blacklist'])) {
 		$blacklist = [];
 		foreach (preg_split('#\r?\n#', Cot::$cfg['plugin']['recentitems']['blacklist']) as $c) {
+            $c = trim($c);
+            if ($c === '') {
+                continue;
+            }
 			$blacklist = array_merge(
                 $blacklist,
                 cot_structure_children('page', $c, true, true, $rightprescan)
             );
 		}
 	} else {
-		$blacklist = false;
+		$blacklist = null;
 	}
 
 	if ($rightprescan || $cat) {
@@ -365,6 +373,8 @@ function cot_build_recentpages(
 
         if (!empty($catsub)) {
             $where['category'] = "p.page_cat IN ('" . implode("','", $catsub) . "')";
+        } else {
+            $where['category'] = 'FALSE';
         }
 	} elseif (!empty($whitelist)) {
 		// Only cats from white list

@@ -1517,11 +1517,15 @@ function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = tru
 	$mtch = '';
 	$mtchlen = $mtchlvl = 0;
 
-	if ($cat != '' && isset(Cot::$structure[$area][$cat])) {
-		$mtch = Cot::$structure[$area][$cat]['path'] . '.';
-		$mtchlen = mb_strlen($mtch);
-		$mtchlvl = mb_substr_count($mtch, ".");
-	}
+    if ($cat !== '') {
+        if (!isset(Cot::$structure[$area][$cat])) {
+            return [];
+        }
+
+        $mtch = Cot::$structure[$area][$cat]['path'] . '.';
+        $mtchlen = mb_strlen($mtch);
+        $mtchlvl = mb_substr_count($mtch, ".");
+    }
 
 	$catsub = [];
 	if ($firstcat && $cat != '' && (($userrights && cot_auth($area, $cat, 'R')) || !$userrights)) {
@@ -1530,7 +1534,7 @@ function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = tru
 
 	foreach (Cot::$structure[$area] as $i => $x) {
 		if (
-            ($cat == '' || (mb_substr($x['path'], 0, $mtchlen) === $mtch))
+            ($cat === '' || (mb_substr($x['path'], 0, $mtchlen) === $mtch))
             && (($userrights && cot_auth($area, $i, 'R')) || !$userrights)
         ) {
 			//$subcat = mb_substr($x['path'], $mtchlen + 1);
