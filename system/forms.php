@@ -479,14 +479,17 @@ function cot_textarea($name, $value, $rows = null, $cols = null, $attrs = '', $c
 	$error = $msgSeparate ? cot_implode_messages($name, 'error') : '';
 	$buffered = cot_import_buffered($name, $value);
 
-	return cot_rc($rc, [
-		'name' => $name,
-		'value' => is_string($buffered) ? htmlspecialchars($buffered) : '',
-		'rows' => $rows,
-		'cols' => $cols,
-		'attrs' => $input_attrs,
-		'error' => $error,
-	]);
+    return cot_rc(
+        $rc,
+        [
+            'name' => $name,
+            'value' => is_string($buffered) ? htmlspecialchars($buffered) : '',
+            'rows' => $rows,
+            'cols' => $cols,
+            'attrs' => $input_attrs,
+            'error' => $error,
+	    ]
+    );
 }
 
 /**

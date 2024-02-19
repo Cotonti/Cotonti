@@ -136,15 +136,15 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 	}
 	/* ===== */
 
-    $editor = (\Cot::$cfg['plugin']['comments']['markup']) ? 'input_textarea_minieditor' : '';
+    $editor = (Cot::$cfg['plugin']['comments']['markup']) ? 'input_textarea_minieditor' : '';
 
     // This parameter is needed only for guests and when the static cache is enabled.
     // Otherwise use session.
     $hiddenParam = '';
     if (
-        \Cot::$usr['id'] === 0
-        && \Cot::$cache
-        && \Cot::$cache->static->isEnabled()
+        Cot::$usr['id'] === 0
+        && Cot::$cache
+        && Cot::$cache->static->isEnabled()
     ) {
         if (!empty($cot_com_back)) {
             $hiddenParam .= cot_inputbox('hidden', 'cb', base64_encode(serialize($cot_com_back)));
@@ -161,18 +161,18 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
         // Use it if you are using custom textarea without {COMMENTS_FORM_TEXT} tag
         'COMMENTS_FORM_HIDDEN' => $hiddenParam,
 
-        'COMMENTS_FORM_AUTHOR' => (\Cot::$usr['id'] > 0) ? \Cot::$usr['name'] : cot_inputbox('text', 'rname'),
-		'COMMENTS_FORM_AUTHORID' => \Cot::$usr['id'],
+        'COMMENTS_FORM_AUTHOR' => (Cot::$usr['id'] > 0) ? Cot::$usr['name'] : cot_inputbox('text', 'rname'),
+		'COMMENTS_FORM_AUTHORID' => Cot::$usr['id'],
 		'COMMENTS_FORM_TEXT' => $auth_write && $enabled
             ? cot_textarea('rtext', '', null, null, '', $editor) . $hiddenParam
             : '',
-		'COMMENTS_DISPLAY' => \Cot::$cfg['plugin']['comments']['expand_comments'] ? '' : 'none'
+		'COMMENTS_DISPLAY' => Cot::$cfg['plugin']['comments']['expand_comments'] ? '' : 'none',
 	]);
 
 	if ($auth_write && $enabled) {
 		// Extra fields
-		if (!empty(\Cot::$extrafields[Cot::$db->com])) {
-			foreach (\Cot::$extrafields[Cot::$db->com] as $exfld) {
+		if (!empty(Cot::$extrafields[Cot::$db->com])) {
+			foreach (Cot::$extrafields[Cot::$db->com] as $exfld) {
 				$uname = strtoupper($exfld['field_name']);
 				$exfld_val = cot_build_extrafields('rcomments' . $exfld['field_name'], $exfld, '');
                 $exfld_title = cot_extrafield_title($exfld, 'comments_');

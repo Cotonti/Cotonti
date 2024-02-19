@@ -4944,8 +4944,9 @@ function cot_rc($name, $params = [])
 			$val = null;
 			if (isset($args[$var])) {
                 $val = $args[$var];
-            } elseif(isset($GLOBALS[$var])) {
-                $val = $GLOBALS[$var];
+              // We should not use global vars
+//            } elseif(isset($GLOBALS[$var])) {
+//                $val = $GLOBALS[$var];
             }
 			if ($val !== null) {
                 $res = str_replace($m[0], $val, $res);
