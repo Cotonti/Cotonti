@@ -35,11 +35,11 @@ if (!empty($pg) && is_numeric($pg) && $pg > 1) {
 	Cot::$out['subtitle'] .= $title_page_num;
 }
 
-$title_params = array(
+$title_params = [
 	'MAINTITLE' => Cot::$cfg['maintitle'],
 	'DESCRIPTION' => Cot::$cfg['subtitle'],
-	'SUBTITLE' => Cot::$out['subtitle']
-);
+	'SUBTITLE' => Cot::$out['subtitle'],
+];
 if (defined('COT_INDEX')) {
 	Cot::$out['fulltitle'] = cot_title('title_header_index', $title_params);
 

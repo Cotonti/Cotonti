@@ -144,7 +144,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','title','03','metakeywords',1,'','','',''),
 ('core','title','14','title_users_details',1,'{USER}: {NAME}','{USER} - {NAME}','',''),
 ('core','title','18','title_header',1,'{SUBTITLE} - {MAINTITLE}','{SUBTITLE} - {MAINTITLE}','',''),
-('core','title','19','title_header_index',1,'{MAINTITLE} - {DESCRIPTION}','{MAINTITLE} - {DESCRIPTION}','',''),
+('core','title','19','title_header_index',1,'{MAINTITLE} - {DESCRIPTION} {SUBTITLE}','{MAINTITLE} - {DESCRIPTION} {SUBTITLE}','',''),
 ('core','title','98','subject_mail',1,'{SITE_TITLE} - {MAIL_SUBJECT}','{SITE_TITLE} - {MAIL_SUBJECT}','',''),
 ('core','title','99','body_mail',0,'{MAIL_BODY}\n\n{SITE_TITLE} - {SITE_URL}\n{SITE_DESCRIPTION}','{MAIL_BODY}\n\n{SITE_TITLE} - {SITE_URL}\n{SITE_DESCRIPTION}','','');
 

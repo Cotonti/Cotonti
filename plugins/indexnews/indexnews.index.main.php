@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=index.tags
+Hooks=index.main
 [END_COT_EXT]
 ==================== */
  
@@ -17,18 +17,8 @@ defined('COT_CODE') or die('Wrong URL.');
 
 require_once cot_incfile('page', 'module');
 
-$indexnews_html = cot_page_enum(
-    Cot::$cfg['plugin']['indexnews']['category'],
-    Cot::$cfg['plugin']['indexnews']['maxpages'],
-	cot_tplfile('indexnews', 'plug'),
-    '',
-    '',
-    true,
-    true,
-    false,
-    '',
-    'd',
-    (int) Cot::$cfg['plugin']['indexnews']['cache_ttl']
-);
+list($pg, $d, $durl) = cot_import_pagenav('d');
 
-$t->assign('INDEX_NEWS', $indexnews_html);
+if ($durl > 0) {
+    $canonicalUrlParams['d'] = $durl;
+}

@@ -1355,7 +1355,7 @@ function cot_shutdown()
  * @param bool $escape Escape HTML special characters
  * @return string
  */
-function cot_title($mask, $params = array(), $escape = true)
+function cot_title($mask, $params = [], $escape = true)
 {
 	$res = (!empty(Cot::$cfg[$mask])) ? Cot::$cfg[$mask] : $mask;
 	is_array($params) ? $args = $params : mb_parse_str($params, $args);
@@ -1371,7 +1371,8 @@ function cot_title($mask, $params = array(), $escape = true)
 			$res = str_replace($m[0], $val, $res);
 		}
 	}
-	return $res;
+
+	return trim($res);
 }
 
 /**
