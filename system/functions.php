@@ -45,7 +45,7 @@ $R = [];
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.24.1';
+$cfg['version'] = '0.9.24.2';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms'])) {
