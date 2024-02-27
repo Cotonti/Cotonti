@@ -448,7 +448,7 @@ foreach (array('title', 'viewcount', 'postcount', 'creationdate', 'updated') as 
 	$title_urls[$ord] = cot_url('forums', "m=topics&s=$s&ord=$ord&w=".rev($w));
 }
 
-$t->assign(array(
+$t->assign([
 	'FORUMS_TOPICS_PARENT_SECTION_ID' => $s,
 	'FORUMS_TOPICS_SECTION_RSS' => cot_url('rss', "m=section&c=$s"),
 	'FORUMS_TOPICS_PAGETITLE' => $toptitle,
@@ -476,8 +476,8 @@ $t->assign(array(
 	'FORUMS_TOPICS_TITLE_STARTED' => cot_rc_link($title_urls['creationdate'], Cot::$L['Started']." ".cursort($o == 'creationdate', $w), 'rel="nofollow"'),
 	'FORUMS_TOPICS_TITLE_STARTED_URL' => $title_urls['creationdate'],
 	'FORUMS_TOPICS_TITLE_LASTPOST' => cot_rc_link($title_urls['updated'], Cot::$L['Lastpost']." ".cursort($o == 'updated', $w), 'rel="nofollow"'),
-	'FORUMS_TOPICS_TITLE_LASTPOST_URL' => $title_urls['updated']
-));
+	'FORUMS_TOPICS_TITLE_LASTPOST_URL' => $title_urls['updated'],
+]);
 
 
 /* === Hook === */

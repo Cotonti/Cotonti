@@ -251,7 +251,10 @@ if (!empty($sq)) {
         if ($rs['pagsub'][0] != 'all' && count($rs['pagsub']) > 0) {
 			if ($rs['pagsubcat']) {
 				foreach ($rs['pagsub'] as $scat) {
-                    $searchInCategories = array_merge(cot_structure_children('page', $scat), $searchInCategories);
+                    $searchInCategories = array_merge(
+                        cot_structure_children('page', $scat, true, true, true, false),
+                        $searchInCategories
+                    );
 				}
                 $searchInCategories = array_unique($searchInCategories);
 
@@ -262,6 +265,9 @@ if (!empty($sq)) {
 			}
 
             $searchInCategories = array_intersect($searchInCategories, $pageAuthCats['read']);
+            if (empty($searchInCategories)) {
+                $where_and['cat'] = 'FALSE';
+            }
 		} else {
             // If user can't read all categories
             if (!$pageAuthCats['readAll']) {
@@ -271,15 +277,20 @@ if (!empty($sq)) {
 
         if (!empty($searchInCategories)) {
             $searchInCategories = array_map(function ($value) {return Cot::$db->quote($value);}, $searchInCategories);
-            $where_and['cat'] = 'page_cat IN (' . implode(', ', $searchInCategories) . ')';
+            $where_and['cat'] = 'p.page_cat IN (' . implode(', ', $searchInCategories) . ')';
         }
 
-		$where_and['state'] = "page_state = 0";
-		$where_and['notcat'] = "page_cat <> 'system'";
-		$where_and['date'] = "page_begin <= ".Cot::$sys['now']." AND (page_expire = 0 OR page_expire > ".Cot::$sys['now'].")";
-		$where_and['date2'] = ($rs['setlimit'] > 0) ? "page_date >= ".$rs['setfrom']." AND page_date <= ".$rs['setto'] : "";
-		$where_and['file'] = ($rs['pagfile'] == 1) ? "page_file = '1'" : "";
-        $where_and['users'] = (!empty($touser)) ? "page_ownerid ".$touser : "";
+        if (isset(Cot::$structure['page']['system'])) {
+            $systemCategories = cot_structure_children('page', 'system', true, true, false, false);
+            $systemCategories = array_map(function ($value) {return Cot::$db->quote($value);}, $systemCategories);
+            $where_and['notcat'] = 'p.page_cat NOT IN (' . implode(', ', $systemCategories) . ')';
+        }
+
+		$where_and['state'] = 'p.page_state = ' . COT_PAGE_STATE_PUBLISHED;
+		$where_and['date'] = 'p.page_begin <= ' . Cot::$sys['now'] . ' AND (p.page_expire = 0 OR p.page_expire > ' . Cot::$sys['now'] . ')';
+		$where_and['date2'] = ($rs['setlimit'] > 0) ? 'p.page_date >= ' . $rs['setfrom'] . ' AND p.page_date <= ' . $rs['setto'] : '';
+		$where_and['file'] = ($rs['pagfile'] == 1) ? "p.page_file = '1'" : '';
+        $where_and['users'] = (!empty($touser)) ? 'p.page_ownerid ' . $touser : '';
 
         $where_or = [];
         if ($rs['pagtitle']) {
@@ -439,7 +450,10 @@ if (!empty($sq)) {
         if ($rs['frmsub'][0] != 'all' && count($rs['frmsub']) > 0) {
 			if ($rs['frmsubcat']) {
 				foreach ($rs['frmsub'] as $scat) {
-                    $searchInCategories = array_merge(cot_structure_children('forums', $scat), $searchInCategories);
+                    $searchInCategories = array_merge(
+                        cot_structure_children('forums', $scat, true, true, true, false),
+                        $searchInCategories
+                    );
 				}
                 $searchInCategories = array_unique($searchInCategories);
 			} else {
@@ -449,6 +463,9 @@ if (!empty($sq)) {
 			}
 
             $searchInCategories = array_intersect($searchInCategories, $forumAuthCats['read']);
+            if (empty($searchInCategories)) {
+                $where_and['cat'] = 'FALSE';
+            }
 		} else {
             // If user can't read all categories
             if (!$forumAuthCats['readAll']) {

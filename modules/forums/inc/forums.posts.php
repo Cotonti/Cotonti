@@ -439,7 +439,7 @@ foreach (Cot::$structure['forums'] as $key => $val)
 }
 
 if (Cot::$usr['isadmin']) {
-	$t->assign(array(
+	$t->assign([
 		'FORUMS_POSTS_MOVE_URL' => cot_url('forums', 'm=topics&a=move&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_BUMP_URL' => cot_url('forums', 'm=topics&a=bump&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_LOCK_URL' => cot_url('forums', 'm=topics&a=lock&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
@@ -449,8 +449,8 @@ if (Cot::$usr['isadmin']) {
 		'FORUMS_POSTS_CLEAR_URL' => cot_url('forums', 'm=topics&a=clear&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_DELETE_URL' => cot_confirm_url(cot_url('forums', 'm=topics&a=delete&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']), 'forums', 'forums_confirm_delete_topic'),
 		'FORUMS_POSTS_MOVEBOX_SELECT' => cot_selectbox('', 'ns', array_keys($movebox), array_values($movebox), false),
-		'FORUMS_POSTS_MOVEBOX_KEEP' => cot_checkbox('0', 'ghost')
-	));
+		'FORUMS_POSTS_MOVEBOX_KEEP' => cot_checkbox('0', 'ghost'),
+	]);
 	$t->parse('MAIN.FORUMS_POSTS_ADMIN');
 }
 
@@ -536,7 +536,7 @@ $toptitle .= ( Cot::$usr['isadmin']) ? Cot::$R['forums_code_admin_mark'] : '';
 
 $t->assign([
 	'FORUMS_POSTS_ID' => $q,
-	'FORUMS_POSTS_RSS' => cot_url('rss', "m=topics&c=$q"),
+	'FORUMS_POSTS_RSS' => cot_url('rss', ['m' => 'topics', 'c' => $q]),
     'FORUMS_POSTS_BREADCRUMBS' => $toptitle,
     'FORUMS_POSTS_TITLE' => htmlspecialchars($rowt['ft_title']),
 	'FORUMS_POSTS_TOPICDESC' => htmlspecialchars($rowt['ft_desc']),

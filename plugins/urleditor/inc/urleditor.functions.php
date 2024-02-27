@@ -89,7 +89,7 @@ function cot_apply_rwr()
         }
     } else {
         // Special shortcuts
-        if ($filtered == 'users' && $count == 2 && !isset($_GET['m'])) {
+        if ($filtered === 'users' && $count === 2 && !isset($_GET['m'])) {
             // User profiles
             $_GET['e'] = 'users';
             $_GET['m'] = 'details';
@@ -108,12 +108,19 @@ function cot_apply_rwr()
             }
             return;
 
-        } elseif ($filtered == 'rss') {
+        } elseif ($filtered === 'rss') {
             // RSS
             $_GET['e'] = 'rss';
             $_GET['m'] = $path[1];
-            if ($count == 3) {
-                is_numeric($path[2]) ? $_GET['id'] = $path[2] : $_GET['c'] = $path[2];
+            if ($count === 3) {
+                if (in_array($path[1], ['section', 'topics'], true)) {
+                    // If $path[1] is 'section', third parameter is always category
+                    // If is 'topics', topic id is passed in 'c' parameter
+                    $_GET['c'] = $path[2];
+                } else {
+                    // @todo It doesn't make sense because the category code can be a number
+                    is_numeric($path[2]) ? $_GET['id'] = $path[2] : $_GET['c'] = $path[2];
+                }
             } else {
                 $_GET['c'] = $path[1];
             }

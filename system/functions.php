@@ -3190,7 +3190,7 @@ function cot_die($cond = true, $notfound = false)
  * @param string $text Reason
  * @param string $title Message title
  */
-function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
+function cot_diefatal($text = 'Reason is unknown.', $title = 'Fatal error')
 {
     // cot class can be not initialised yet
 	global $cfg;
