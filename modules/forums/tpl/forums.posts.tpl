@@ -12,7 +12,11 @@
 <!-- END: POLLS_VIEW -->
 
 <div class="block">
-	<h2 class="forums">{FORUMS_POSTS_BREADCRUMBS}</h2>
+	<h2 class="forums">
+		{FORUMS_POSTS_BREADCRUMBS}
+		<a href="{FORUMS_POSTS_RSS}" style="float: right"><img
+					src="{PHP.cfg.themes_dir}/nemesis/img/rss.png" alt="RSS" style="vertical-align: middle"></a>
+	</h2>
 	<!-- BEGIN: FORUMS_POSTS_ADMIN -->
 	<table class="flat">
 		<tr>
