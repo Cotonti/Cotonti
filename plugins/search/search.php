@@ -364,10 +364,10 @@ if (!empty($sq)) {
 			$rs['pagsort'] = 'date';
 		}
 
-		$orderby = 'page_' . $rs['pagsort'] . ' ' . $rs['pagsort2'];
+		$orderby = 'p.page_' . $rs['pagsort'] . ' ' . $rs['pagsort2'];
 
         $search_join_columns = isset($search_join_columns) ? $search_join_columns : '';
-        $search_join_condition = isset($search_join_condition) ? $search_join_condition : '';
+        $searchJoinTables = isset($searchJoinTables) ? $searchJoinTables : [];
         $search_union_query = isset($search_union_query) ? $search_union_query : '';
 
 		/* === Hook === */
@@ -388,24 +388,23 @@ if (!empty($sq)) {
             $where = implode(" \nAND ", $where_and);
         }
 
-        if (empty($sql_page_string)) {
-            $queryBody = $search_join_columns . ' FROM ' . Cot::$db->pages . ' AS p ' . $search_join_condition .
-                ' WHERE ' . $where;
+        if (empty($sqlPageString)) {
+            $sqlJoinTables = '';
+            if (!empty($searchJoinTables)) {
+                $sqlJoinTables = "\n" . implode("\n", $searchJoinTables);
+            }
 
-			$sql_page_string = "SELECT p.* $queryBody ORDER BY $orderby LIMIT $d, " . $cfg_maxitems .
-                $search_union_query;
-
+            $queryBody = ' FROM ' . Cot::$db->pages . ' AS p ' . $sqlJoinTables . ' WHERE ' . $where;
+			$sqlPageString = "SELECT p.* $search_join_columns $queryBody ORDER BY $orderby LIMIT $d, " . $cfg_maxitems . $search_union_query;
             $sqlCount = 'SELECT COUNT(*) ' . $queryBody . $search_union_query;
 		}
 
-		$sql = Cot::$db->query($sql_page_string);
+		$sql = Cot::$db->query($sqlPageString);
 		$items = $sql->rowCount();
-        if ($items > 0) {
-            if ($d == 0 && $items < $cfg_maxitems) {
-                $totalitems[] = $items;
-            } elseif (!empty($sqlCount)) {
-                $totalitems[] = Cot::$db->query($sqlCount)->fetchColumn();
-            }
+        if ($d == 0 && $items < $cfg_maxitems) {
+            $totalitems[] = $items;
+        } elseif (!empty($sqlCount)) {
+            $totalitems[] = Cot::$db->query($sqlCount)->fetchColumn();
         }
 
 		$jj = 0;
@@ -420,7 +419,7 @@ if (!empty($sq)) {
                 cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id'].'&highlight='.$hl) :
                 cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias'].'&highlight='.$hl);
 			$t->assign(cot_generate_pagetags($row, 'PLUGIN_PR_'));
-			$t->assign(array(
+			$t->assign([
 				'PLUGIN_PR_CATEGORY' => cot_rc_link($url_cat, Cot::$structure['page'][$row['page_cat']]['tpath']),
 				'PLUGIN_PR_CATEGORY_URL' => $url_cat,
 				'PLUGIN_PR_TITLE' => cot_rc_link($url_page, htmlspecialchars($row['page_title'])),
@@ -428,13 +427,15 @@ if (!empty($sq)) {
 				'PLUGIN_PR_TIME' => cot_date('datetime_medium', $row['page_date']),
 				'PLUGIN_PR_TIMESTAMP' => $row['page_date'],
 				'PLUGIN_PR_ODDEVEN' => cot_build_oddeven($jj + 1),
-				'PLUGIN_PR_NUM' => $jj + 1
-			));
+				'PLUGIN_PR_NUM' => $jj + 1,
+			]);
+
 			/* === Hook - Part 2 === */
 			foreach ($extp as $pl) {
 				include $pl;
 			}
 			/* ===== */
+
 			$t->parse('MAIN.RESULTS.PAGES.ITEM');
 			$jj++;
 		}
@@ -523,12 +524,10 @@ if (!empty($sq)) {
             " LIMIT $d, $maxitems";
 		$sql = Cot::$db->query($query);
 		$items = $sql->rowCount();
-        if ($items > 0) {
-            if ($d == 0 && $items < $maxitems) {
-                $totalitems[] = $items;
-            } else {
-                $totalitems[] = Cot::$db->query('SELECT COUNT(*) ' . $queryBody)->fetchColumn();
-            }
+        if ($d == 0 && $items < $maxitems) {
+            $totalitems[] = $items;
+        } else {
+            $totalitems[] = Cot::$db->query('SELECT COUNT(*) ' . $queryBody)->fetchColumn();
         }
 
 		$jj = 0;
@@ -590,20 +589,21 @@ if (!empty($sq)) {
 			$rs_url_path['rs[' . $k . ']'] = $v;
 		}
 	}
-	$pagenav = cot_pagenav('plug', array('e' => 'search', 'sq' => $sq, 'tab' => $tab)+$rs_url_path, $d, array_sum($totalitems), $cfg_maxitems);
+	$pagenav = cot_pagenav('plug', ['e' => 'search', 'sq' => $sq, 'tab' => $tab] + $rs_url_path, $d, array_sum($totalitems), $cfg_maxitems);
 }
 
 // Search title
-$crumbs = array(array(cot_url('plug', 'e=search'), Cot::$L['plu_search']));
+$crumbs = [[cot_url('plug', 'e=search'), Cot::$L['plu_search']]];
 if (!empty($tab)) {
 	$crumbs[] = [
-        cot_url('plug', 'e=search&tab='.$tab),
-        !empty(Cot::$L['plu_tabs_'.$tab]) ? Cot::$L['plu_tabs_'.$tab] : '',
+        cot_url('plug', 'e=search&tab=' . $tab),
+        !empty(Cot::$L['plu_tabs_' . $tab]) ? Cot::$L['plu_tabs_'.$tab] : '',
     ];
 }
 Cot::$out['head'] .= Cot::$R['code_noindex'];
-$search_subtitle = (empty($tab) || empty(Cot::$L['plu_tabs_'.$tab])) ? Cot::$L['plu_search'] :
-    Cot::$L['plu_tabs_'.$tab].' - '.Cot::$L['plu_search'];
+$search_subtitle = (empty($tab) || empty(Cot::$L['plu_tabs_' . $tab]))
+    ? Cot::$L['plu_search']
+    : Cot::$L['plu_tabs_' . $tab] . ' - ' . Cot::$L['plu_search'];
 Cot::$out['subtitle'] = empty($sq) ? $search_subtitle : htmlspecialchars(strip_tags($sq)).' - '.Cot::$L['plu_result'];
 $t->assign([
 	'PLUGIN_TITLE' => cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb'], true),
@@ -612,13 +612,16 @@ $t->assign([
         'text',
         'sq',
         $sq,
-        ['maxlength' => Cot::$cfg['plugin']['search']['maxsigns']]
+        [
+            'id' => 'search-query',
+            'maxlength' => Cot::$cfg['plugin']['search']['maxsigns'],
+        ]
     ),
 	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rs[setuser]', $rs['setuser'], 'class="userinput"'),
 	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rs['setlimit'], 'rs[setlimit]', range(0, 5), array(Cot::$L['plu_any_date'], Cot::$L['plu_last_2_weeks'], Cot::$L['plu_last_1_month'], Cot::$L['plu_last_3_month'], Cot::$L['plu_last_1_year'], Cot::$L['plu_need_datas']), false),
 	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rfrom', (int) cot_date('Y', Cot::$sys['now']) + 1),
 	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rto', (int) cot_date('Y', Cot::$sys['now']) + 1),
-	'PLUGIN_SEARCH_FOUND' => (array_sum($totalitems) > 0) ? array_sum($totalitems) : '',
+	'PLUGIN_SEARCH_FOUND' => (array_sum($totalitems) > 0) ? array_sum($totalitems) : 0,
 ]);
 
 if (!empty($pagenav)) {

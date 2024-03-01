@@ -6,9 +6,9 @@
             <input type="hidden" name="e" value="search"/>
             <input type="hidden" name="tab" value="{PHP.tab}"/>
             <p class="textcenter">
-                <a href="{PHP|cot_url('plug','e=search')}">{PHP.L.plu_tabs_all}</a> |
-                <a href="{PHP|cot_url('plug','e=search&amp;tab=frm')}">{PHP.L.Forums}</a> |
-                <a href="{PHP|cot_url('plug','e=search&amp;tab=pag')}">{PHP.L.Pages}</a>
+                <a href="{PHP.sq|cot_url('plug','e=search&sq=$this')}">{PHP.L.plu_tabs_all}</a> |
+                <a href="{PHP.sq|cot_url('plug','e=search&tab=frm&sq=$this')}">{PHP.L.Forums}</a> |
+                <a href="{PHP.sq|cot_url('plug','e=search&tab=pag&sq=$this')}">{PHP.L.Pages}</a>
             </p>
 
             <p class="margin10 textcenter">
