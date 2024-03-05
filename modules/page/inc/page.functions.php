@@ -280,38 +280,40 @@ function cot_generate_pagetags(
 			'NOT_AVAILABLE' => ($page_data['page_begin'] > Cot::$sys['now'])
                 ? Cot::$L['page_notavailable'] . cot_build_timegap(Cot::$sys['now'], $page_data['page_begin'])
                 : '',
-
-            // @deprecated in 0.9.24
-            'SHORTTITLE' => htmlspecialchars($page_data['page_title'], ENT_COMPAT, 'UTF-8', false),
-            'LOCALSTATUS' => $L['page_status_' . $page_data['page_status']],
-            'CATURL' => $cat_url,
-            'CATTITLE' => $catTitle,
-            'CATPATH' => $catpath,
-            'CATPATH_SHORT' => cot_rc_link($cat_url, $catTitle),
-            'CATDESC' => (isset($structure['page'][$page_data['page_cat']]['desc'])
-                && $structure['page'][$page_data['page_cat']]['desc'] != '') ?
-                htmlspecialchars($structure['page'][$page_data['page_cat']]['desc']) : '',
-            'CATICON' => isset($structure['page'][$page_data['page_cat']]['icon']) ?
-                $structure['page'][$page_data['page_cat']]['icon'] : '',
-            'OWNERID' => $page_data['page_ownerid'],
-            'OWNERNAME' => (isset($page_data['user_name']) && $page_data['user_name'] != '') ?
-                htmlspecialchars($page_data['user_name']) : '',
-            'DESC' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
-                htmlspecialchars($page_data['page_desc']) : '',
-            'DESC_OR_TEXT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
-                htmlspecialchars($page_data['page_desc']) : $text,
-            'DESC_OR_TEXT_CUT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
-                htmlspecialchars($page_data['page_desc']) : $text_cut,
-            'DATE' => cot_date($date_format, $page_data['page_date']),
-            'DATE_STAMP' => $page_data['page_date'],
-            'FILE_COUNT' => $page_data['page_filecount'],
-            'FILE_COUNTTIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
-            'COUNT' => $page_data['page_count'],
-            'NOTAVAILABLE' => ($page_data['page_begin'] > Cot::$sys['now'])
-                ? Cot::$L['page_notavailable'] . cot_build_timegap(Cot::$sys['now'], $page_data['page_begin'])
-                : '',
-            // /@deprecated
 		];
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.24
+            $temp_array += [
+                'SHORTTITLE' => htmlspecialchars($page_data['page_title'], ENT_COMPAT, 'UTF-8', false),
+                'LOCALSTATUS' => $L['page_status_' . $page_data['page_status']],
+                'CATURL' => $cat_url,
+                'CATTITLE' => $catTitle,
+                'CATPATH' => $catpath,
+                'CATPATH_SHORT' => cot_rc_link($cat_url, $catTitle),
+                'CATDESC' => (isset($structure['page'][$page_data['page_cat']]['desc'])
+                    && $structure['page'][$page_data['page_cat']]['desc'] != '') ?
+                    htmlspecialchars($structure['page'][$page_data['page_cat']]['desc']) : '',
+                'CATICON' => isset($structure['page'][$page_data['page_cat']]['icon']) ?
+                    $structure['page'][$page_data['page_cat']]['icon'] : '',
+                'OWNERID' => $page_data['page_ownerid'],
+                'OWNERNAME' => (isset($page_data['user_name']) && $page_data['user_name'] != '') ?
+                    htmlspecialchars($page_data['user_name']) : '',
+                'DESC' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
+                    htmlspecialchars($page_data['page_desc']) : '',
+                'DESC_OR_TEXT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
+                    htmlspecialchars($page_data['page_desc']) : $text,
+                'DESC_OR_TEXT_CUT' => (isset($page_data['page_desc']) && $page_data['page_desc'] != '') ?
+                    htmlspecialchars($page_data['page_desc']) : $text_cut,
+                'DATE' => cot_date($date_format, $page_data['page_date']),
+                'DATE_STAMP' => $page_data['page_date'],
+                'FILE_COUNT' => $page_data['page_filecount'],
+                'FILE_COUNTTIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
+                'COUNT' => $page_data['page_count'],
+                'NOTAVAILABLE' => ($page_data['page_begin'] > Cot::$sys['now'])
+                    ? Cot::$L['page_notavailable'] . cot_build_timegap(Cot::$sys['now'], $page_data['page_begin'])
+                    : '',
+            ];
+        }
 
 		// Admin tags
 		if ($admin_rights) {
@@ -379,11 +381,13 @@ function cot_generate_pagetags(
 	} else {
 		$temp_array = [
 			'TITLE' => (!empty($emptytitle)) ? $emptytitle : Cot::$L['Deleted'],
-
-            // @deprecated in 0.9.24
-			'SHORTTITLE' => (!empty($emptytitle)) ? $emptytitle : Cot::$L['Deleted'],
-            // /@deprecated
 		];
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.24
+            $temp_array += [
+                'SHORTTITLE' => (!empty($emptytitle)) ? $emptytitle : Cot::$L['Deleted'],
+            ];
+        }
 	}
 
 	$return_array = [];
@@ -1068,19 +1072,20 @@ function cot_page_enum(
 		$pagenav = cot_pagenav($url_area, $url_params, $d, $totalitems, $count, $pagination);
 	}
 
-	$t->assign([
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
         // @deprecated in 0.9.24
-		'PAGE_TOP_PAGINATION' => $pagenav['main'],
-		'PAGE_TOP_PAGEPREV' => $pagenav['prev'],
-		'PAGE_TOP_PAGENEXT' => $pagenav['next'],
-		'PAGE_TOP_FIRST' => isset($pagenav['first']) ? $pagenav['first'] : '',
-		'PAGE_TOP_LAST' => $pagenav['last'],
-		'PAGE_TOP_CURRENTPAGE' => $pagenav['current'],
-		'PAGE_TOP_TOTALLINES' => $totalitems,
-		'PAGE_TOP_MAXPERPAGE' => $count,
-		'PAGE_TOP_TOTALPAGES' => $pagenav['total'],
-        // /@deprecated
-	]);
+        $t->assign([
+            'PAGE_TOP_PAGINATION' => $pagenav['main'],
+            'PAGE_TOP_PAGEPREV' => $pagenav['prev'],
+            'PAGE_TOP_PAGENEXT' => $pagenav['next'],
+            'PAGE_TOP_FIRST' => isset($pagenav['first']) ? $pagenav['first'] : '',
+            'PAGE_TOP_LAST' => $pagenav['last'],
+            'PAGE_TOP_CURRENTPAGE' => $pagenav['current'],
+            'PAGE_TOP_TOTALLINES' => $totalitems,
+            'PAGE_TOP_MAXPERPAGE' => $count,
+            'PAGE_TOP_TOTALPAGES' => $pagenav['total'],
+        ]);
+    }
 
     $t->assign(cot_generatePaginationTags($pagenav));
 

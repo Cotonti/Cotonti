@@ -125,6 +125,8 @@ $R['img_structure_cat'] = '<img src="{$icon}" alt="{$title}" title="{$desc}" />'
  * supported in PHP 5.2.
  *
  * @deprecated PHP 5.2 don't using anymore
+ * @see https://www.php.net/manual/ru/datetimezone.listidentifiers.php
+ * @see DateTimeZone::listIdentifiers()
  */
 $cot_timezones = array(
 

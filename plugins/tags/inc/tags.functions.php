@@ -555,11 +555,13 @@ function cot_tag_search_form($area = 'all')
         $pageNav = cot_pagenav('tags', $paginationUrlParams, $dt, $totalItems, $tagsPerPage, 'dt');
         $t->assign(cot_generatePaginationTags($pageNav));
 
-        // @deprecated in 0.9.24
-		$t->assign([
-			'TAGS_PAGEPREV' => $pageNav['prev'],
-			'TAGS_PAGENEXT' => $pageNav['next'],
-			'TAGS_PAGNAV' => $pageNav['main'],
-		]);
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.24
+            $t->assign([
+                'TAGS_PAGEPREV' => $pageNav['prev'],
+                'TAGS_PAGENEXT' => $pageNav['next'],
+                'TAGS_PAGNAV' => $pageNav['main'],
+            ]);
+        }
 	}
 }

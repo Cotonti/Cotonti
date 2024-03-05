@@ -169,10 +169,14 @@ while ($row = $sql_polls->fetch()) {
             ? cot_url('polls', ['id' => $id])
             : cot_url('forums', ['m' => 'posts', 'q' => $row['poll_code']]),
 		'ADMIN_POLLS_ROW_POLL_ODDEVEN' => cot_build_oddeven($ii),
-
-        /** @deprecated in 0.9.24  */
-        'ADMIN_POLLS_ROW_POLL_URL_DEL' => $deleteUrl,
 	]);
+
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.24
+        $t->assign([
+            'ADMIN_POLLS_ROW_POLL_URL_DEL' => $deleteUrl,
+        ]);
+    }
 
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl) {

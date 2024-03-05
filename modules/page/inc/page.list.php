@@ -298,41 +298,45 @@ $t->assign([
 
     'LIST_BREADCRUMBS' => $catpath,
     'LIST_BREADCRUMBS_SHORT' => $catpath_short,
-
-    // @deprecated in 0.9.24
-    'LIST_CAT' => $c,
-    'LIST_CATTITLE' => $cat['title'],
-    'LIST_CATEGORY' => htmlspecialchars($cat['title']),
-    'LIST_CATPATH' => $catpath,
-    'LIST_CATSHORTPATH' => $catpath_short,
-    'LIST_CATURL' => cot_url('page', $list_url_path),
-    'LIST_CATDESC' => $cat['desc'],
-    'LIST_CATICON' => $categoryIcon,
-    'LIST_PAGETITLE' => $catpath,
-    'LIST_EXTRATEXT' => isset($extratext) ? $extratext : '',
-    'LIST_TOP_PAGINATION' => $pagenav['main'],
-    'LIST_TOP_PAGEPREV' => $pagenav['prev'],
-    'LIST_TOP_PAGENEXT' => $pagenav['next'],
-    'LIST_TOP_CURRENTPAGE' => $pagenav['current'],
-    'LIST_TOP_TOTALLINES' => $totallines,
-    'LIST_TOP_MAXPERPAGE' => $maxPageRowsPerPage,
-    'LIST_TOP_TOTALPAGES' => $pagenav['total'],
-    // /@deprecated
 ]);
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.24
+    $t->assign([
+        'LIST_CAT' => $c,
+        'LIST_CATTITLE' => $cat['title'],
+        'LIST_CATEGORY' => htmlspecialchars($cat['title']),
+        'LIST_CATPATH' => $catpath,
+        'LIST_CATSHORTPATH' => $catpath_short,
+        'LIST_CATURL' => cot_url('page', $list_url_path),
+        'LIST_CATDESC' => $cat['desc'],
+        'LIST_CATICON' => $categoryIcon,
+        'LIST_PAGETITLE' => $catpath,
+        'LIST_EXTRATEXT' => isset($extratext) ? $extratext : '',
+        'LIST_TOP_PAGINATION' => $pagenav['main'],
+        'LIST_TOP_PAGEPREV' => $pagenav['prev'],
+        'LIST_TOP_PAGENEXT' => $pagenav['next'],
+        'LIST_TOP_CURRENTPAGE' => $pagenav['current'],
+        'LIST_TOP_TOTALLINES' => $totallines,
+        'LIST_TOP_MAXPERPAGE' => $maxPageRowsPerPage,
+        'LIST_TOP_TOTALPAGES' => $pagenav['total'],
+    ]);
+}
 
 $t->assign(cot_generatePaginationTags($pagenav));
 
-if ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated' && $c != 'saved_drafts') {
+if (Cot::$usr['auth_write'] && $c != 'all' && $c != 'unvalidated' && $c != 'saved_drafts') {
     $submitNewPageUrl = cot_url('page', ['c' => $c, 'm' => 'add']);
 	$t->assign([
         'LIST_SUBMIT_NEW_PAGE' => cot_rc('page_submitnewpage', ['sub_url' => $submitNewPageUrl]),
         'LIST_SUBMIT_NEW_PAGE_URL' => $submitNewPageUrl,
-
-        // @deprecated in 0.9.24
-		'LIST_SUBMITNEWPAGE' => cot_rc('page_submitnewpage', array('sub_url' => cot_url('page', 'm=add&c='.$c))),
-		'LIST_SUBMITNEWPAGE_URL' => cot_url('page', 'm=add&c='.$c),
-        // /@deprecated
 	]);
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.24
+        $t->assign([
+            'LIST_SUBMITNEWPAGE' => cot_rc('page_submitnewpage', ['sub_url' => $submitNewPageUrl]),
+            'LIST_SUBMITNEWPAGE_URL' => $submitNewPageUrl,
+        ]);
+    }
 }
 
 // Extra fields for structure
@@ -427,18 +431,20 @@ foreach ($subcat as $x) {
         'LIST_CAT_ROW_ICON_SRC' => !empty($structure['page'][$x]['icon']) ? $structure['page'][$x]['icon'] : '',
         'LIST_CAT_ROW_COUNT' => $subCategoriesCount,
         'LIST_CAT_ROW_NUM' => $kk,
-
-        // @deprecated in 0.9.24
-		'LIST_ROWCAT_ID' => $structure['page'][$x]['id'],
-		'LIST_ROWCAT_URL' => cot_url('page', $sub_url_path),
-		'LIST_ROWCAT_TITLE' => $structure['page'][$x]['title'],
-		'LIST_ROWCAT_DESC' => $structure['page'][$x]['desc'],
-		'LIST_ROWCAT_ICON' => $structure['page'][$x]['icon'],
-		'LIST_ROWCAT_COUNT' => $subCategoriesCount,
-		'LIST_ROWCAT_ODDEVEN' => cot_build_oddeven($kk),
-		'LIST_ROWCAT_NUM' => $kk,
-        // /@deprecated
 	]);
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.24
+        $t->assign([
+            'LIST_ROWCAT_ID' => $structure['page'][$x]['id'],
+            'LIST_ROWCAT_URL' => cot_url('page', $sub_url_path),
+            'LIST_ROWCAT_TITLE' => $structure['page'][$x]['title'],
+            'LIST_ROWCAT_DESC' => $structure['page'][$x]['desc'],
+            'LIST_ROWCAT_ICON' => $structure['page'][$x]['icon'],
+            'LIST_ROWCAT_COUNT' => $subCategoriesCount,
+            'LIST_ROWCAT_ODDEVEN' => cot_build_oddeven($kk),
+            'LIST_ROWCAT_NUM' => $kk,
+        ]);
+    }
 
 	// Extra fields for structure
     if (!empty(Cot::$extrafields[Cot::$db->structure])) {
@@ -451,14 +457,16 @@ foreach ($subcat as $x) {
                 'LIST_CAT_ROW_' . $uname => cot_build_extrafields_data('structure', $exfld,
                     Cot::$structure['page'][$x][$exfld['field_name']]),
                 'LIST_CAT_ROW_' . $uname . '_VALUE' => Cot::$structure['page'][$x][$exfld['field_name']],
-
-                // @deprecated in 0.9.24
-                'LIST_ROWCAT_' . $uname . '_TITLE' => $exfld_title,
-                'LIST_ROWCAT_' . $uname => cot_build_extrafields_data('structure', $exfld,
-                    Cot::$structure['page'][$x][$exfld['field_name']]),
-                'LIST_ROWCAT_' . $uname . '_VALUE' => Cot::$structure['page'][$x][$exfld['field_name']],
-                // /@deprecated
             ]);
+            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                // @deprecated in 0.9.24
+                $t->assign([
+                    'LIST_ROWCAT_' . $uname . '_TITLE' => $exfld_title,
+                    'LIST_ROWCAT_' . $uname => cot_build_extrafields_data('structure', $exfld,
+                        Cot::$structure['page'][$x][$exfld['field_name']]),
+                    'LIST_ROWCAT_' . $uname . '_VALUE' => Cot::$structure['page'][$x][$exfld['field_name']],
+                ]);
+            }
         }
     }
 
@@ -480,17 +488,18 @@ $pagenav_cat = cot_pagenav(
     'dc'
 );
 
-$t->assign([
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
     // @deprecated in 0.9.24
-    'LISTCAT_PAGNAV' => $pagenav_cat['main'],
-    'LISTCAT_PAGEPREV' => $pagenav_cat['prev'],
-    'LISTCAT_PAGENEXT' => $pagenav_cat['next'],
-    'LISTCAT_CURRENTPAGE' => $pagenav_cat['current'],
-    'LISTCAT_TOTALLINES' => count($allsub),
-    'LISTCAT_MAXPERPAGE' => Cot::$cfg['page']['maxlistsperpage'],
-    'LISTCAT_TOTALPAGES' => $pagenav_cat['total'],
-    // /@deprecated
-]);
+    $t->assign([
+        'LISTCAT_PAGNAV' => $pagenav_cat['main'],
+        'LISTCAT_PAGEPREV' => $pagenav_cat['prev'],
+        'LISTCAT_PAGENEXT' => $pagenav_cat['next'],
+        'LISTCAT_CURRENTPAGE' => $pagenav_cat['current'],
+        'LISTCAT_TOTALLINES' => count($allsub),
+        'LISTCAT_MAXPERPAGE' => Cot::$cfg['page']['maxlistsperpage'],
+        'LISTCAT_TOTALPAGES' => $pagenav_cat['total'],
+    ]);
+}
 
 $t->assign(cot_generatePaginationTags($pagenav_cat, 'LIST_CAT_'));
 

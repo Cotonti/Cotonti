@@ -86,16 +86,21 @@ if (!empty($p)) {
 			usort($target, 'cot_admin_other_cmp');
 			foreach ($target as $pl) {
 				$ext_info = cot_get_extensionparams($pl['pl_code'], $type == COT_EXT_TYPE_MODULE);
-				$t->assign(array(
-					'ADMIN_OTHER_EXT_URL' => $type == 'plug' ? cot_url('admin', 'm=other&p=' . $pl['pl_code']) :
-						cot_url('admin', 'm=' . $pl['pl_code']),
+				$t->assign([
+					'ADMIN_OTHER_EXT_URL' => $type == 'plug'
+                        ? cot_url('admin', 'm=other&p=' . $pl['pl_code'])
+                        : cot_url('admin', 'm=' . $pl['pl_code']),
 					'ADMIN_OTHER_EXT_ICON' => $ext_info['icon'],
 					'ADMIN_OTHER_EXT_NAME' => $ext_info['name'],
 					'ADMIN_OTHER_EXT_DESC' => $ext_info['desc'],
+				]);
+                if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                    $t->assign([
+                        // @deprecated For backward compatibility. Will be removed in future releases
+                        'ADMIN_OTHER_EXT_ICO' => $ext_info['legacyIcon'],
+                    ]);
+                }
 
-                    // @deprecated For backward compatibility. Will be removed in future releases
-                    'ADMIN_OTHER_EXT_ICO' => $ext_info['legacyIcon'],
-				));
 				$t->parse('MAIN.SECTION.ROW');
 			}
 		} else {
@@ -121,6 +126,7 @@ if (!empty($p)) {
 		include $pl;
 	}
 	/* ===== */
+
 	$t->parse('MAIN');
 	$adminMain = $t->text('MAIN');
 }

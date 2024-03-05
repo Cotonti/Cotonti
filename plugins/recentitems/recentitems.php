@@ -209,9 +209,11 @@ $pagination = cot_pagenav(
 
 $t->assign(cot_generatePaginationTags($pagination));
 
-// @deprecated in 0.9.24
-$t->assign([
-	'PAGE_PAGENAV' => $pagination['main'],
-	'PAGE_PAGEPREV' => $pagination['prev'],
-	'PAGE_PAGENEXT' => $pagination['next']
-]);
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.24
+    $t->assign([
+        'PAGE_PAGENAV' => $pagination['main'],
+        'PAGE_PAGEPREV' => $pagination['prev'],
+        'PAGE_PAGENEXT' => $pagination['next'],
+    ]);
+}

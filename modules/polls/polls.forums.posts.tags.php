@@ -51,9 +51,14 @@ if ($poll_form) {
 	$t->assign([
         'FORUMS_POSTS_BREADCRUMBS' => $toptitle,
         'FORUMS_POSTS_TITLE' => htmlspecialchars($rowt['ft_title']),
-
-        // @deprecated in 0.9.24
-		'FORUMS_POSTS_PAGETITLE' => $toptitle,
-		'FORUMS_POSTS_SHORTTITLE' => htmlspecialchars($rowt['ft_title'])
 	]);
+
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.24
+        $t->assign([
+            // @deprecated in 0.9.24
+            'FORUMS_POSTS_PAGETITLE' => $toptitle,
+            'FORUMS_POSTS_SHORTTITLE' => htmlspecialchars($rowt['ft_title'])
+        ]);
+    }
 }

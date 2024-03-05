@@ -185,10 +185,13 @@ $t->assign([
     ),
 	'TAGS_HINT' => Cot::$L['tags_Query_hint'],
 	'TAGS_QUERY' => htmlspecialchars($qs),
-
-    // @deprecated in 0.9.24
-    'TAGS_ACTION' => $formAction,
 ]);
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    $t->assign([
+        // @deprecated in 0.9.24
+        'TAGS_ACTION' => $formAction,
+    ]);
+}
 
 $entriesCount = [];
 if ($area == 'pages' && cot_module_active('page')) {

@@ -29,12 +29,14 @@ if ($i18n_enabled && $i18n_notmain) {
             'LIST_CAT_ROW_URL' => cot_url('page', $urlparams),
             'LIST_CAT_ROW_TITLE' => htmlspecialchars($x_i18n['title']),
             'LIST_CAT_ROW_DESCRIPTION' => $x_i18n['desc'],
-
-            // @deprecated in 0.9.24
-			'LIST_ROWCAT_URL' => cot_url('page', $urlparams),
-			'LIST_ROWCAT_TITLE' => $x_i18n['title'],
-			'LIST_ROWCAT_DESC' => $x_i18n['desc'],
-            // /@deprecated
 		]);
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $t->assign([
+                // @deprecated in 0.9.24
+                'LIST_ROWCAT_URL' => cot_url('page', $urlparams),
+                'LIST_ROWCAT_TITLE' => $x_i18n['title'],
+                'LIST_ROWCAT_DESC' => $x_i18n['desc'],
+            ]);
+        }
 	}
 }

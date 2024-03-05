@@ -45,7 +45,7 @@ $R = [];
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.24.2';
+$cfg['version'] = '0.9.25 beta';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms'])) {
@@ -2624,19 +2624,24 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'LOGCOUNT' => $user_data['user_logcount'],
 				'POSTCOUNT' => !empty($user_data['user_postcount']) ? $user_data['user_postcount'] : 0,
 				'LASTIP' => $user_data['user_lastip'],
-
-                // @deprecated in 0.9.24
-                'DETAILSLINK' => cot_url('users', ['m' => 'details', 'id' => $user_data['user_id'], 'u' => $user_data['user_name']]),
-                'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
-                'MAINGRP' => cot_build_group($user_data['user_maingrp']),
-                'MAINGRPID' => $user_data['user_maingrp'],
-                'MAINGRPNAME' => $cot_groups[$user_data['user_maingrp']]['name'],
-                'MAINGRPTITLE' => cot_build_group($user_data['user_maingrp'], true),
-                'MAINGRPSTARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
-                'MAINGRPICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
-                'COUNTRYFLAG' => cot_build_flag($user_data['user_country']),
-                // /@deprecated in 0.9.24
 			];
+            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                // @deprecated in 0.9.24
+                $temp_array = array_merge(
+                    $temp_array,
+                    [
+                        'DETAILSLINK' => cot_url('users', ['m' => 'details', 'id' => $user_data['user_id'], 'u' => $user_data['user_name']]),
+                        'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
+                        'MAINGRP' => cot_build_group($user_data['user_maingrp']),
+                        'MAINGRPID' => $user_data['user_maingrp'],
+                        'MAINGRPNAME' => $cot_groups[$user_data['user_maingrp']]['name'],
+                        'MAINGRPTITLE' => cot_build_group($user_data['user_maingrp'], true),
+                        'MAINGRPSTARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
+                        'MAINGRPICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
+                        'COUNTRYFLAG' => cot_build_flag($user_data['user_country']),
+                    ]
+                );
+            }
 
 			if ($allgroups) {
 				$temp_array['GROUPS'] = cot_build_groupsms($user_data['user_id'], false, $user_data['user_maingrp']);
@@ -2678,15 +2683,20 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
                 'REGDATE_STAMP' => '',
                 'POSTCOUNT' => '',
                 'LASTIP' => '',
-
-                // @deprecated in 0.9.24
-                'MAINGRP' => cot_build_group(COT_GROUP_GUESTS),
-                'MAINGRPID' => COT_GROUP_GUESTS,
-                'MAINGRPSTARS' => '',
-                'MAINGRPICON' => cot_build_groupicon($cot_groups[1]['icon']),
-                'COUNTRYFLAG' => cot_build_flag(''),
-                // /@deprecated in 0.9.24
             ];
+            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                // @deprecated in 0.9.24
+                $temp_array = array_merge(
+                    $temp_array,
+                    [
+                        'MAINGRP' => cot_build_group(COT_GROUP_GUESTS),
+                        'MAINGRPID' => COT_GROUP_GUESTS,
+                        'MAINGRPSTARS' => '',
+                        'MAINGRPICON' => cot_build_groupicon($cot_groups[1]['icon']),
+                        'COUNTRYFLAG' => cot_build_flag(''),
+                    ]
+                );
+            }
 		}
 
 		/* === Hook === */

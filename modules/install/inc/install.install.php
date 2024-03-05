@@ -52,8 +52,7 @@ if ($step > 2) {
 }
 
 // Import section
-switch ($step)
-{
+switch ($step) {
     // Step 2. $step will be increased later
 	case 2:
 		$db_host = cot_import('db_host', 'P', 'TXT', 0, false, true);
@@ -181,10 +180,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $db->query('CREATE DATABASE ' . $db->quoteTableName($db_name));
                             $db->query('USE ' . $db->quoteTableName($db_name));
                         } catch (PDOException $e) {
-                            cot_error($L['install_error_sql_db'] . $e->getMessage(), 'db_name');
+                            cot_error($L['install_error_sql_db'] . ' ' . $e->getMessage(), 'db_name');
                         }
                     } else {
-                        cot_error($L['install_error_sql'] . $e->getMessage(), 'db_host');
+                        cot_error($L['install_error_sql'] . ' ' . $e->getMessage(), 'db_host');
                     }
                 }
 

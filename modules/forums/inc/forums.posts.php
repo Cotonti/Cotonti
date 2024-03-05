@@ -369,8 +369,10 @@ foreach ($sql_forums->fetchAll() as $row) {
 		$row['fp_updatedby'] = sprintf(Cot::$L['forums_updatedby'], htmlspecialchars($row['fp_updater']), cot_date('datetime_medium', $row['fp_updated']), cot_build_timegap($row['fp_updated'], $sys['now']));
 	}
 
-    // @deprecated in 0.9.24
-	$t->assign(cot_generate_usertags($row, 'FORUMS_POSTS_ROW_USER'));
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.24
+        $t->assign(cot_generate_usertags($row, 'FORUMS_POSTS_ROW_USER'));
+    }
 
     $t->assign(cot_generate_usertags($row, 'FORUMS_POSTS_ROW_USER_'));
 	$t->assign([
@@ -550,34 +552,33 @@ $t->assign([
         false,
         'onchange="redirect(this)"'
     ),
-
-    // @deprecated in 0.9.24
-    'FORUMS_POSTS_PAGES' => $pagenav['main'],
-	'FORUMS_POSTS_PAGEPREV' => $pagenav['prev'],
-	'FORUMS_POSTS_PAGENEXT' => $pagenav['next'],
-	'FORUMS_POSTS_CURRENTPAGE' => $pagenav['current'],
-	'FORUMS_POSTS_TOTALPAGES' => ceil($totalposts / Cot::$cfg['forums']['maxpostsperpage']),
-    'FORUMS_POSTS_PAGETITLE' => $toptitle,
-    'FORUMS_POSTS_SHORTTITLE' => htmlspecialchars($rowt['ft_title']),
 ]);
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.24
+    $t->assign([
+        'FORUMS_POSTS_PAGES' => $pagenav['main'],
+        'FORUMS_POSTS_PAGEPREV' => $pagenav['prev'],
+        'FORUMS_POSTS_PAGENEXT' => $pagenav['next'],
+        'FORUMS_POSTS_CURRENTPAGE' => $pagenav['current'],
+        'FORUMS_POSTS_TOTALPAGES' => ceil($totalposts / Cot::$cfg['forums']['maxpostsperpage']),
+        'FORUMS_POSTS_PAGETITLE' => $toptitle,
+        'FORUMS_POSTS_SHORTTITLE' => htmlspecialchars($rowt['ft_title']),
+    ]);
+}
 
 $t->assign(cot_generatePaginationTags($pagenav));
 
 // Topic icon
 $rowt['ft_icon'] = 'posts';
 $rowt['ft_postisnew'] = FALSE;
-if ($rowt['ft_updated'] > Cot::$usr['lastvisit'] && Cot::$usr['id']>0)
-{
+if ($rowt['ft_updated'] > Cot::$usr['lastvisit'] && Cot::$usr['id'] > 0) {
 	$rowt['ft_icon'] .= '_new';
 	$rowt['ft_postisnew'] = TRUE;
 }
 
-if ($rowt['ft_postcount'] >= Cot::$cfg['forums']['hottopictrigger'] && !$rowt['ft_state'] && !$rowt['ft_sticky'])
-{
+if ($rowt['ft_postcount'] >= Cot::$cfg['forums']['hottopictrigger'] && !$rowt['ft_state'] && !$rowt['ft_sticky']) {
 	$rowt['ft_icon'] = ($rowt['ft_postisnew']) ? 'posts_new_hot' : 'posts_hot';
-}
-else
-{
+} else {
 	$rowt['ft_icon'] .= ($rowt['ft_sticky']) ? '_sticky' : '';
 	$rowt['ft_icon'] .=  ($rowt['ft_state']) ? '_locked' : '';
 }

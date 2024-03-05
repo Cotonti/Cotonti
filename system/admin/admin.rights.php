@@ -171,9 +171,12 @@ $sql = Cot::$db->query('SELECT a.*, u.user_name FROM ' . Cot::$db->auth . ' AS a
 'LEFT JOIN ' . Cot::$db->users . ' AS u ON u.user_id=a.auth_setbyuserid ' .
 "WHERE auth_groupid=? AND auth_option = 'a' AND (c.ct_plug = 0 || c.ct_plug IS NULL) " .
 'ORDER BY auth_code ASC', $g);
+
 while ($row = $sql->fetch()) {
-    /** @deprecated For backward compatibility. Will be removed in future releases */
-    $legacyIcon = '';
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        /** @deprecated For backward compatibility. Will be removed in future releases */
+        $legacyIcon = '';
+    }
 
     $ico = '';
 	if ($row['auth_code'] == 'admin') {
@@ -194,7 +197,12 @@ while ($row = $sql->fetch()) {
         $extPrams[$row['auth_code']] = cot_get_extensionparams($row['auth_code'], true);
 		$title = $extPrams[$row['auth_code']]['name'];
 		$ico = $extPrams[$row['auth_code']]['icon'];
-        $legacyIcon = $extPrams[$row['auth_code']]['legacyIcon'];
+
+        // @deprecated
+        $legacyIcon = null;
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $legacyIcon = $extPrams[$row['auth_code']]['legacyIcon'];
+        }
 	}
 
 	cot_rights_parseline($row, $title, $link, $ico, $legacyIcon);
@@ -212,6 +220,7 @@ $sql = Cot::$db->query('SELECT a.*, u.user_name, s.structure_path, s.structure_a
 'LEFT JOIN ' . Cot::$db->users . ' AS u ON a.auth_setbyuserid=u.user_id ' .
 "WHERE a.auth_groupid=? AND a.auth_option != 'a' " .
 'ORDER BY s.structure_area ASC, s.structure_path ASC', $g);
+
 while ($row = $sql->fetch()) {
 	if (!empty($area) && $area != $row['structure_area']) {
 		$t->assign(
@@ -229,7 +238,13 @@ while ($row = $sql->fetch()) {
         $extPrams[$area] = cot_get_extensionparams($area, true);
     }
 
-    cot_rights_parseline($row, $title, $link, $extPrams[$area]['icon'], $extPrams[$area]['legacyIcon']);
+    // @deprecated
+    $legacyIcon = null;
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        $legacyIcon = $extPrams[$area]['legacyIcon'];
+    }
+
+    cot_rights_parseline($row, $title, $link, $extPrams[$area]['icon'], $legacyIcon);
 }
 
 if (!empty($area)) {
@@ -245,12 +260,19 @@ $sql = Cot::$db->query('SELECT a.*, u.user_name FROM '. Cot::$db->auth . ' AS a 
 'LEFT JOIN ' . Cot::$db->users . ' AS u ON u.user_id=a.auth_setbyuserid ' .
 "WHERE auth_groupid=? AND auth_code='plug' ".
 'ORDER BY auth_option ASC', $g);
+
 while ($row = $sql->fetch()) {
 	$link = cot_url('admin', 'm=extensions&a=details&pl='.$row['auth_option']);
     $key = 'plug_' . $row['auth_option'];
     $extPrams[$key] = cot_get_extensionparams($row['auth_option'], false);
 
-	cot_rights_parseline($row, $extPrams[$key]['name'], $link, $extPrams[$key]['icon'], $extPrams[$key]['legacyIcon']);
+    // @deprecated
+    $legacyIcon = null;
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        $legacyIcon = $extPrams[$key]['legacyIcon'];
+    }
+
+	cot_rights_parseline($row, $extPrams[$key]['name'], $link, $extPrams[$key]['icon'], $legacyIcon);
 }
 $sql->closeCursor();
 $t->assign('RIGHTS_SECTION_TITLE', Cot::$L['Plugins']);
@@ -352,7 +374,9 @@ function cot_rights_parseline($row, $title, $link, $icon = '', $legacyIcon = '')
 		$t->assign('ADMIN_RIGHTS_ROW_PRESERVE', $preserve);
 	}
 
-    $legacyIcon = (!empty($legacyIcon) && file_exists($legacyIcon)) ? $legacyIcon : '';
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        $legacyIcon = (!empty($legacyIcon) && file_exists($legacyIcon)) ? $legacyIcon : '';
+    }
 
     $row['user_name'] = !empty($row['user_name']) ? $row['user_name'] : 'ID#: ' . $row['auth_setbyuserid'];
 
@@ -363,9 +387,14 @@ function cot_rights_parseline($row, $title, $link, $icon = '', $legacyIcon = '')
 		'ADMIN_RIGHTS_ROW_ICON' => $icon,
 		'ADMIN_RIGHTS_ROW_RIGHTSBYITEM' => cot_url('admin', 'm=rightsbyitem&ic='.$row['auth_code'].'&io='.$row['auth_option']),
 		'ADMIN_RIGHTS_ROW_USER' => cot_build_user($row['auth_setbyuserid'], $row['user_name']),
-
-        // @deprecated For backward compatibility. Will be removed in future releases
-        'ADMIN_RIGHTS_ROW_ICO' => $legacyIcon,
 	]);
+
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        $t->assign([
+            // @deprecated For backward compatibility. Will be removed in future releases
+            'ADMIN_RIGHTS_ROW_ICO' => $legacyIcon,
+        ]);
+    }
+
 	$t->parse('MAIN.RIGHTS_SECTION.RIGHTS_ROW');
 }

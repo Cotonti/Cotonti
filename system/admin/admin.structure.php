@@ -63,15 +63,19 @@ if (empty($n)) {
 			}
 			if ($parse) {
 				$ext_info = cot_get_extensionparams($code, $is_module);
-				$t->assign(array(
+				$t->assign([
 					'ADMIN_STRUCTURE_EXT_URL' => cot_url('admin', 'm=structure&n='.$code),
 					'ADMIN_STRUCTURE_EXT_ICON' => $ext_info['icon'],
 					'ADMIN_STRUCTURE_EXT_NAME' => $ext_info['name'],
 					'ADMIN_STRUCTURE_EXT_DESC' => $ext_info['desc'],
+				]);
+                if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                    $t->assign([
+                        // @deprecated For backward compatibility. Will be removed in future releases
+                        'ADMIN_STRUCTURE_EXT_ICO' => $ext_info['legacyIcon'],
+                    ]);
+                }
 
-                    // @deprecated For backward compatibility. Will be removed in future releases
-                    'ADMIN_STRUCTURE_EXT_ICO' => $ext_info['legacyIcon'],
-				));
 				$t->parse('LIST.ADMIN_STRUCTURE_EXT');
 			}
 		}
@@ -525,7 +529,7 @@ else
 
         $deleteConfirmUrl = cot_confirm_url($deleteUrl, 'admin');
 
-		$t->assign(array(
+		$t->assign([
 			'ADMIN_STRUCTURE_ID' => $row['structure_id'],
 			'ADMIN_STRUCTURE_CODE' => cot_inputbox(
                 'text',
@@ -558,13 +562,16 @@ else
             'ADMIN_STRUCTURE_DELETE_URL' => $deleteUrl,
             'ADMIN_STRUCTURE_DELETE_CONFIRM_URL' => $deleteConfirmUrl,
 			'ADMIN_STRUCTURE_ODDEVEN' => cot_build_oddeven($ii),
-
-            // @deprecated. Left for backwards compatibility. Actually this is not a template mode, but a
-            // selection (setting) of the template code
-            'ADMIN_STRUCTURE_TPLMODE' => $categoryTpl,
-            // @deprecated. Use ADMIN_STRUCTURE_DELETE_CONFIRM_URL instead
-            'ADMIN_STRUCTURE_UPDATE_DEL_URL' => $deleteConfirmUrl,
-		));
+		]);
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $t->assign([
+                // @deprecated. Left for backwards compatibility. Actually this is not a template mode, but a
+                // selection (setting) of the template code
+                'ADMIN_STRUCTURE_TPLMODE' => $categoryTpl,
+                // @deprecated. Use ADMIN_STRUCTURE_DELETE_CONFIRM_URL instead
+                'ADMIN_STRUCTURE_UPDATE_DEL_URL' => $deleteConfirmUrl,
+            ]);
+        }
 
         if (!empty(Cot::$extrafields[Cot::$db->structure])) {
             foreach (Cot::$extrafields[Cot::$db->structure] as $exfld) {
@@ -711,11 +718,14 @@ else
 			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon', null, 'maxlength="128"'),
 			'ADMIN_STRUCTURE_LOCKED' => cot_checkbox(null, 'rstructurelocked'),
             'ADMIN_STRUCTURE_TPL' => $categoryTpl,
-
-            // @deprecated. Left for backwards compatibility. Actually this is not a template mode, but a
-            // selection (setting) of the template code
-            'ADMIN_STRUCTURE_TPLMODE' => $categoryTpl,
 		]);
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $t->assign([
+                // @deprecated. Left for backwards compatibility. Actually this is not a template mode, but a
+                // selection (setting) of the template code
+                'ADMIN_STRUCTURE_TPLMODE' => $categoryTpl,
+            ]);
+        }
 
 		// Extra fields
         if (!empty(Cot::$extrafields[Cot::$db->structure])) {

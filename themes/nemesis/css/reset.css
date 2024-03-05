@@ -14,6 +14,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	font-size: 100%;
 	vertical-align: baseline;
 	background: transparent;
+	box-sizing: border-box;
 }
 body {
 	line-height: 1;
@@ -47,4 +48,7 @@ del {
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
+}
+input, select, textarea, button, label {
+	box-sizing: border-box;
 }

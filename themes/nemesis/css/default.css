@@ -172,9 +172,11 @@ table.fico td img	{ margin-right:10px; vertical-align:middle; }
 
 form { }
 input, select, textarea, button	{ font:normal 1em Georgia; padding:2px; }
-textarea { width: 99%; min-height: 120px }
-input, textarea { max-width: 100%; }
-label input { vertical-align:middle; margin-right: 3px }
+textarea { width: 99%; min-height: 100px }
+input[type="text"], input[type="password"], textarea {
+	width: 100%; max-width: 100%;
+}
+label input { vertical-align: middle; margin-right: 3px }
 button::-moz-focus-inner { padding:0; border:none; }
 
 /* 6. Misc
@@ -330,3 +332,11 @@ ul.bullets li	{ padding-left:25px; background:url(../img/bullets.png) no-repeat 
 ol				{ margin-left:20px; list-style-type:decimal; }
 
 #usergrouplist ul li:first-child a	{ color:#900; }
+
+/* 13. Users
+-------------------------------------------------- */
+#user-register input[type="text"], #user-register input[type="password"],
+#password-recover input[type="text"],
+#login input[type="text"], #login input[type="password"]{
+	width: 50%;
+}

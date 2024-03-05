@@ -559,10 +559,13 @@ switch($a) {
 			'ADMIN_EXTENSIONS_UNINSTALL_CONFIRM_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=uninstall&x={$sys['xk']}"),
 			'ADMIN_EXTENSIONS_PAUSE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=pause"),
 			'ADMIN_EXTENSIONS_UNPAUSE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=unpause"),
-
-            // @deprecated For backward compatibility. Will be removed in future releases
-            'ADMIN_EXTENSIONS_ICO' => $params['legacyIcon'],
 		]);
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $t->assign([
+                // @deprecated For backward compatibility. Will be removed in future releases
+                'ADMIN_EXTENSIONS_ICO' => $params['legacyIcon'],
+            ]);
+        }
 
 		if ($exists) {
 			// Tags for existing exts
@@ -915,11 +918,15 @@ switch($a) {
                             cot_url('admin', "m=$code"),
 						'ADMIN_EXTENSIONS_JUMPTO_URL' => isset($standalone[$code]) ? $standalone[$code] : '',
 						'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => cot_url('admin', "m=structure&n=$code"),
-						'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i),
-
-                         // @deprecated For backward compatibility. Will be removed in future releases
-                        'ADMIN_EXTENSIONS_ICO' => $params['legacyIcon'],
+						//'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i),
 					]);
+                    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                        $t->assign([
+                            // @deprecated For backward compatibility. Will be removed in future releases
+                            'ADMIN_EXTENSIONS_ICO' => $params['legacyIcon'],
+                        ]);
+                    }
+
 					/* === Hook - Part2 : Include === */
 					foreach ($extp as $pl) {
 						include $pl;

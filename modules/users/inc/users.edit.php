@@ -308,8 +308,6 @@ $t->assign(array(
 	'USERS_EDIT_SEND' => cot_url('users', 'm=edit&a=update&'.cot_xg().'&id='.$urr['user_id']),
 	'USERS_EDIT_ID' => $urr['user_id'],
 	'USERS_EDIT_NAME' => cot_inputbox('text', 'rusername', $urr['user_name'], array('size' => 32, 'maxlength' => 100) + $protected),
-	//'USERS_EDIT_ACTIVE' => $user_form_active,   // It seems it is obsolete code
-	//'USERS_EDIT_BANNED' => $user_form_banned,   // It seems it is obsolete code
 	'USERS_EDIT_THEME' => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
 	'USERS_EDIT_LANG' => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	'USERS_EDIT_NEWPASS' => cot_inputbox('password', 'rusernewpass', '', array('size' => 12, 'maxlength' => 32, 'autocomplete' => 'off') + $protected),
@@ -328,15 +326,20 @@ $t->assign(array(
 	'USERS_EDIT_LASTLOG_STAMP' => $urr['user_lastlog'],
 	'USERS_EDIT_LOGCOUNT' => $urr['user_logcount'],
 	'USERS_EDIT_LASTIP' => cot_build_ipsearch($urr['user_lastip']),
-	'USERS_EDIT_DELETE' => (Cot::$sys['user_istopadmin']) ? cot_radiobox(0, 'ruserdelete', array(1, 0), array(Cot::$L['Yes'],
-            Cot::$L['No'])) . $delete_pfs : Cot::$L['na'],
-
-    // @deprecated in 0.9.24
-    'USERS_EDIT_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
-    'USERS_EDIT_EDITLINK' => cot_url('users', 'm=edit&id='.$urr['user_id']),
-    'USERS_EDIT_MAINGRP' => cot_build_group($urr['user_maingrp']),
-    // /@deprecated in 0.9.24
+	'USERS_EDIT_DELETE' => (Cot::$sys['user_istopadmin'])
+        ? cot_radiobox(0, 'ruserdelete', [1, 0], [Cot::$L['Yes'], Cot::$L['No']]) . $delete_pfs
+        : Cot::$L['na'],
 ));
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.24
+    $t->assign([
+        //'USERS_EDIT_ACTIVE' => $user_form_active,   // It seems it is obsolete code
+        //'USERS_EDIT_BANNED' => $user_form_banned,   // It seems it is obsolete code
+        'USERS_EDIT_DETAILSLINK' => cot_url('users', 'm=details&id=' . $urr['user_id']),
+        'USERS_EDIT_EDITLINK' => cot_url('users', 'm=edit&id=' . $urr['user_id']),
+        'USERS_EDIT_MAINGRP' => cot_build_group($urr['user_maingrp']),
+    ]);
+}
 
 // Extra fields
 if (!empty(Cot::$extrafields[Cot::$db->users])) {
@@ -345,12 +348,12 @@ if (!empty(Cot::$extrafields[Cot::$db->users])) {
         $exfld_val = cot_build_extrafields('ruser' . $exfld['field_name'], $exfld, $urr['user_' . $exfld['field_name']]);
         $exfld_title = cot_extrafield_title($exfld, 'user_');
 
-        $t->assign(array(
+        $t->assign([
             'USERS_EDIT_' . $uname => $exfld_val,
             'USERS_EDIT_' . $uname . '_TITLE' => $exfld_title,
             'USERS_EDIT_EXTRAFLD' => $exfld_val,
-            'USERS_EDIT_EXTRAFLD_TITLE' => $exfld_title
-        ));
+            'USERS_EDIT_EXTRAFLD_TITLE' => $exfld_title,
+        ]);
         $t->parse('MAIN.EXTRAFLD');
     }
 }

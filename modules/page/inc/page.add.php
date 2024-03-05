@@ -168,13 +168,13 @@ $pageadd_array = array(
 	'PAGEADD_FORM_SEND' => cot_url('page', 'm=add&a=add&c=' . $c),
 	'PAGEADD_FORM_CAT' => cot_selectbox_structure('page', $rpage['page_cat'], 'rpagecat'),
 	'PAGEADD_FORM_CAT_SHORT' => cot_selectbox_structure('page', $rpage['page_cat'], 'rpagecat', $c),
-	'PAGEADD_FORM_KEYWORDS' => cot_inputbox('text', 'rpagekeywords', $rpage['page_keywords'], array('maxlength' => '255')),
-	'PAGEADD_FORM_METATITLE' => cot_inputbox('text', 'rpagemetatitle', $rpage['page_metatitle'], array('maxlength' => '255')),
-	'PAGEADD_FORM_METADESC' => cot_textarea('rpagemetadesc', $rpage['page_metadesc'], 2, 64, array('maxlength' => '255')),
-	'PAGEADD_FORM_ALIAS' => cot_inputbox('text', 'rpagealias', $rpage['page_alias'], array('maxlength' => '255')),
-	'PAGEADD_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', $rpage['page_title'], array('maxlength' => '255')),
-	'PAGEADD_FORM_DESCRIPTION' => cot_textarea('rpagedesc', $rpage['page_desc'], 2, 64, array('maxlength' => '255')),
-	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('maxlength' => '100')),
+	'PAGEADD_FORM_KEYWORDS' => cot_inputbox('text', 'rpagekeywords', $rpage['page_keywords'], ['maxlength' => '255']),
+	'PAGEADD_FORM_METATITLE' => cot_inputbox('text', 'rpagemetatitle', $rpage['page_metatitle'], ['maxlength' => '255']),
+	'PAGEADD_FORM_METADESC' => cot_textarea('rpagemetadesc', $rpage['page_metadesc'], 2, 64, ['maxlength' => '255']),
+	'PAGEADD_FORM_ALIAS' => cot_inputbox('text', 'rpagealias', $rpage['page_alias'], ['maxlength' => '255']),
+	'PAGEADD_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', $rpage['page_title'], ['maxlength' => '255']),
+	'PAGEADD_FORM_DESCRIPTION' => cot_textarea('rpagedesc', $rpage['page_desc'], 2, 64, ['maxlength' => '255']),
+	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], ['maxlength' => '100']),
 	'PAGEADD_FORM_OWNER' => cot_build_user(Cot::$usr['id'], Cot::$usr['name']),
 	'PAGEADD_FORM_OWNER_ID' => Cot::$usr['id'],
 	'PAGEADD_FORM_DATE' => cot_selectbox_date(Cot::$sys['now'], 'long', 'rpagedate'),
@@ -187,33 +187,35 @@ $pageadd_array = array(
         [Cot::$L['No'], Cot::$L['Yes'], Cot::$L['Members_only']],
         false
     ),
-	'PAGEADD_FORM_URL' => cot_inputbox('text', 'rpageurl', $rpage['page_url'], array('maxlength' => '255')),
-	'PAGEADD_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $rpage['page_size'], array('maxlength' => '255')),
+	'PAGEADD_FORM_URL' => cot_inputbox('text', 'rpageurl', $rpage['page_url'], ['maxlength' => '255']),
+	'PAGEADD_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $rpage['page_size'], ['maxlength' => '255']),
 	'PAGEADD_FORM_TEXT' => cot_textarea('rpagetext', $rpage['page_text'], 24, 120, '', 'input_textarea_editor'),
 	'PAGEADD_FORM_PARSER' => cot_selectbox(Cot::$cfg['page']['parser'], 'rpageparser', $parser_list, $parser_list, false),
-
-    // @deprecated in 0.9.24
-    'PAGEADD_FORM_OWNERID' => Cot::$usr['id'],
-    'PAGEADD_FORM_DESC' => cot_textarea('rpagedesc', $rpage['page_desc'], 2, 64, array('maxlength' => '255')),
-    // /@deprecated
 );
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.24
+    $t->assign([
+        'PAGEADD_FORM_OWNERID' => Cot::$usr['id'],
+        'PAGEADD_FORM_DESC' => cot_textarea('rpagedesc', $rpage['page_desc'], 2, 64, ['maxlength' => '255']),
+    ]);
+}
 
 $t->assign($pageadd_array);
 
 // Extra fields
-if(!empty(Cot::$extrafields[Cot::$db->pages])) {
+if (!empty(Cot::$extrafields[Cot::$db->pages])) {
     foreach (Cot::$extrafields[Cot::$db->pages] as $exfld) {
         $uname = strtoupper($exfld['field_name']);
         $data = isset($rpage['page_' . $exfld['field_name']]) ? $rpage['page_' . $exfld['field_name']] : null;
         $exfld_val = cot_build_extrafields('rpage' . $exfld['field_name'], $exfld, $data);
         $exfld_title = cot_extrafield_title($exfld, 'page_');
 
-        $t->assign(array(
+        $t->assign([
             'PAGEADD_FORM_' . $uname => $exfld_val,
             'PAGEADD_FORM_' . $uname . '_TITLE' => $exfld_title,
             'PAGEADD_FORM_EXTRAFLD' => $exfld_val,
-            'PAGEADD_FORM_EXTRAFLD_TITLE' => $exfld_title
-        ));
+            'PAGEADD_FORM_EXTRAFLD_TITLE' => $exfld_title,
+        ]);
         $t->parse('MAIN.EXTRAFLD');
     }
 }

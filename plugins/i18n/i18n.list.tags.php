@@ -31,15 +31,17 @@ if ($i18n_enabled) {
             'LIST_BREADCRUMBS' => $catpath,
 			'LIST_CAT_PATH' => $catpath,
 			'LIST_CAT_DESCRIPTION' => $cat_i18n['desc'],
-
-            // @deprecated in 0.9.24
-            'LIST_CATEGORY' => htmlspecialchars($cat_i18n['title']),
-            'LIST_CATTITLE' => $cat_i18n['title'],
-            'LIST_CATPATH' => $catpath,
-            'LIST_CATDESC' => $cat_i18n['desc'],
-            'LIST_PAGETITLE' => $catpath,
-            // /@deprecated
 		]);
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $t->assign([
+                // @deprecated in 0.9.24
+                'LIST_CATEGORY' => htmlspecialchars($cat_i18n['title']),
+                'LIST_CATTITLE' => $cat_i18n['title'],
+                'LIST_CATPATH' => $catpath,
+                'LIST_CATDESC' => $cat_i18n['desc'],
+                'LIST_PAGETITLE' => $catpath,
+            ]);
+        }
 	}
 
 	// Render language selection

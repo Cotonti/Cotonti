@@ -173,8 +173,10 @@ switch ($n) {
 		$jj = 0;
 		while ($row = $sql->fetch()) {
 			$jj++;
-            /** @deprecated For backward compatibility. Will be removed in future releases */
-            $legacyIcon = '';
+            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                /** @deprecated For backward compatibility. Will be removed in future releases */
+                $legacyIcon = '';
+            }
 
             $icon = '';
             $key = 'icon_cfg_'.$row['config_cat'];
@@ -187,7 +189,9 @@ switch ($n) {
                     $row['config_cat'] . '.png';
                 if (file_exists($fileName)) {
                     $icon = cot_rc('img_none', ['src' => $fileName]);
-                    $legacyIcon = $fileName;
+                    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                        $legacyIcon = $fileName;
+                    }
                 }
             }
 
@@ -198,7 +202,9 @@ switch ($n) {
                 $fileName = Cot::$cfg['icons_dir'] . '/default/default.png';
                 if (file_exists($fileName)) {
                     $icon = cot_rc('img_none', ['src' => $fileName]);
-                    $legacyIcon = $fileName;
+                    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                        $legacyIcon = $fileName;
+                    }
                 }
             }
 
@@ -211,10 +217,14 @@ switch ($n) {
                     Cot::$L['core_' . $row['config_cat'] . '_desc'] : '',
                 'ADMIN_CONFIG_ROW_NUM' => $jj,
                 //'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
-
-                // @deprecated For backward compatibility. Will be removed in future releases
-                'ADMIN_CONFIG_ROW_ICO' => $legacyIcon,
             ]);
+            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                $t->assign([
+                    // @deprecated For backward compatibility. Will be removed in future releases
+                    'ADMIN_CONFIG_ROW_ICO' => $legacyIcon,
+                ]);
+            }
+
             $t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
 		$sql->closeCursor();
@@ -231,17 +241,21 @@ switch ($n) {
 		while ($row = $sql->fetch()) {
 			$jj++;
 			$ext_info = cot_get_extensionparams($row['config_cat'], true);
-			$t->assign(array(
+			$t->assign([
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=module&p=' . $row['config_cat']),
 				'ADMIN_CONFIG_ROW_ICON' => $ext_info['icon'],
 				'ADMIN_CONFIG_ROW_NAME' => $ext_info['name'],
 				'ADMIN_CONFIG_ROW_DESC' => $ext_info['desc'],
 				'ADMIN_CONFIG_ROW_NUM' => $jj,
 				//'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
+			]);
+            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                $t->assign([
+                    // @deprecated For backward compatibility. Will be removed in future releases
+                    'ADMIN_CONFIG_ROW_ICO' => $ext_info['legacyIcon'],
+                ]);
+            }
 
-                // @deprecated For backward compatibility. Will be removed in future releases
-                'ADMIN_CONFIG_ROW_ICO' => $ext_info['legacyIcon'],
-			));
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
 		$sql->closeCursor();
@@ -260,28 +274,33 @@ switch ($n) {
 		{
 			$jj++;
 			$ext_info = cot_get_extensionparams($row['config_cat'], false);
-			$t->assign(array(
+			$t->assign([
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p=' . $row['config_cat']),
 				'ADMIN_CONFIG_ROW_ICON' => $ext_info['icon'],
 				'ADMIN_CONFIG_ROW_NAME' => $ext_info['name'],
 				'ADMIN_CONFIG_ROW_DESC' => $ext_info['desc'],
 				'ADMIN_CONFIG_ROW_NUM' => $jj,
 				//'ADMIN_CONFIG_ROW_ODDEVEN' => cot_build_oddeven($jj)
+			]);
+            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                $t->assign([
+                    // @deprecated For backward compatibility. Will be removed in future releases
+                    'ADMIN_CONFIG_ROW_ICO' => $ext_info['legacyIcon'],
+                ]);
+            }
 
-                // @deprecated For backward compatibility. Will be removed in future releases
-                'ADMIN_CONFIG_ROW_ICO' => $ext_info['legacyIcon'],
-			));
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
 		$sql->closeCursor();
 		$t->assign('ADMIN_CONFIG_COL_CAPTION', $L['Plugins']);
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
+
 		/* === Hook  === */
-		foreach (cot_getextplugins('admin.config.default.tags') as $pl)
-		{
+		foreach (cot_getextplugins('admin.config.default.tags') as $pl) {
 			include $pl;
 		}
 		/* ===== */
+
 		$t->parse('MAIN.DEFAULT');
 		break;
 }
@@ -289,8 +308,7 @@ switch ($n) {
 cot_display_messages($t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.config.tags') as $pl)
-{
+foreach (cot_getextplugins('admin.config.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

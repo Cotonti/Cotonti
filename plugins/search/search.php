@@ -627,16 +627,18 @@ $t->assign([
 if (!empty($pagenav)) {
     $t->assign(cot_generatePaginationTags($pagenav));
 
-    // @deprecated in 0.9.24
-    $t->assign(array(
-       'PLUGIN_PAGENAV' => $pagenav['main'],
-       'PLUGIN_PAGEPREV' => $pagenav['prev'],
-       'PLUGIN_PAGENEXT' => $pagenav['next'],
-       'PLUGIN_CURRENTPAGE' => $pagenav['current'],
-       'PLUGIN_TOTALLINES' => array_sum($totalitems),
-       'PLUGIN_MAXPERPAGE' => Cot::$cfg['page']['cat___default']['maxrowsperpage'],
-       'PLUGIN_TOTALPAGES' => $pagenav['total']
-    ));
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.24
+        $t->assign([
+            'PLUGIN_PAGENAV' => $pagenav['main'],
+            'PLUGIN_PAGEPREV' => $pagenav['prev'],
+            'PLUGIN_PAGENEXT' => $pagenav['next'],
+            'PLUGIN_CURRENTPAGE' => $pagenav['current'],
+            'PLUGIN_TOTALLINES' => array_sum($totalitems),
+            'PLUGIN_MAXPERPAGE' => Cot::$cfg['page']['cat___default']['maxrowsperpage'],
+            'PLUGIN_TOTALPAGES' => $pagenav['total'],
+        ]);
+    }
 }
 
 cot_display_messages($t);

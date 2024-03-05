@@ -153,8 +153,10 @@ function cot_get_extensionparams($code, $is_module = false)
 
     $typeKey = $is_module ? 'module' : 'plug';
 
-    /** @deprecated For backward compatibility. Will be removed in future releases */
-    $legacyIcon = '';
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        /** @deprecated For backward compatibility. Will be removed in future releases */
+        $legacyIcon = '';
+    }
 
     $icon = '';
 	$key = 'icon_' . $typeKey . '_' . $code;
@@ -170,7 +172,9 @@ function cot_get_extensionparams($code, $is_module = false)
 		foreach ($fileNames as $fileName) {
 			if (file_exists($fileName)) {
                 $icon = cot_rc('img_none', ['src' => $fileName]);
-                $legacyIcon = $fileName;
+                if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                    $legacyIcon = $fileName;
+                }
 			}
 		}
     }
@@ -187,7 +191,9 @@ function cot_get_extensionparams($code, $is_module = false)
         foreach ($fileNames as $fileName) {
             if (file_exists($fileName)) {
                 $icon = cot_rc('img_none', ['src' => $fileName]);
-                $legacyIcon = $fileName;
+                if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                    $legacyIcon = $fileName;
+                }
             }
         }
     }
@@ -208,14 +214,18 @@ function cot_get_extensionparams($code, $is_module = false)
         }
 	}
 
-	return [
+	$result = [
 		'name' => $name,
 		'desc' => $desc,
         'notes' => $notes,
 		'icon' => $icon,
-
-        'legacyIcon' => $legacyIcon,
 	];
+
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        $result['legacyIcon'] = $legacyIcon;
+    }
+
+    return $result;
 }
 
 /**

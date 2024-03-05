@@ -301,23 +301,20 @@ foreach ($tags  as $row) {
         ),
         'ADMIN_TAGS_ROW_DELETE_URL' => $deleteUrl,
         'ADMIN_TAGS_ROW_DELETE_CONFIRM_URL' => $deleteConfirmUrl,
-
-        // @deprecated in 0.9.24
-        'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags&d=' . $durl),
-        'ADMIN_TAGS_DEL_URL' => cot_url('admin', [
-            'm' => 'other',
-            'p' => 'tags',
-            'a' => 'delete',
-            'tag' => str_replace(' ', '_', $row['tag']),
-            'x' => Cot::$sys['xk']
-        ]),
-        'ADMIN_TAGS_CODE' => $row['tag'],
-        'ADMIN_TAGS_TAG' => cot_inputbox('text', 'tag', htmlspecialchars_decode($row['tag']), array('maxlength' => '255')),//['.$row['tag'].']
-        'ADMIN_TAGS_AREA' => implode(', ', $tagArea),
-        'ADMIN_TAGS_COUNT' => $row['tag_cnt'],
-        'ADMIN_TAGS_ITEMS' => str_replace(['pages:', ','], ['', ', '], $row['tag_grp']),
-        //'ADMIN_TAGS_ODDEVEN' => cot_build_oddeven($ii),
     ]);
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        $tt->assign([
+            // @deprecated in 0.9.24
+            'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags&d=' . $durl),
+            'ADMIN_TAGS_DEL_URL' => $deleteUrl,
+            'ADMIN_TAGS_CODE' => $row['tag'],
+            'ADMIN_TAGS_TAG' => cot_inputbox('text', 'tag', htmlspecialchars_decode($row['tag']), ['maxlength' => '255']),//['.$row['tag'].']
+            'ADMIN_TAGS_AREA' => implode(', ', $tagArea),
+            'ADMIN_TAGS_COUNT' => $row['tag_cnt'],
+            'ADMIN_TAGS_ITEMS' => str_replace(['pages:', ','], ['', ', '], $row['tag_grp']),
+            //'ADMIN_TAGS_ODDEVEN' => cot_build_oddeven($ii),
+        ]);
+    }
 
     /* === Hook - Part2 : Include === */
     foreach ($extp as $pl) {
@@ -367,17 +364,20 @@ $tt->assign([
         array_values($filterTypes), false
     ),
 	'ADMIN_TAGS_COUNTER_ROW' => $ii,
-
-    // @deprecated in 0.9.24
-    'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags'),
-    'ADMIN_TAGS_ORDER' => cot_selectbox($sortType, 'sorttype', array_keys($sortTypes), array_values($sortTypes), false),
-    'ADMIN_TAGS_WAY' => cot_selectbox($queryOrderWay, 'sortway', array_keys($sortWays), array_values($sortWays), false),
-    'ADMIN_TAGS_FILTER' => cot_selectbox($filter, 'filter', array_keys($filterTypes), array_values($filterTypes), false),
-    'ADMIN_TAGS_PAGINATION_PREV' => $pageNav['prev'],
-    'ADMIN_TAGS_PAGNAV' => $pageNav['main'],
-    'ADMIN_TAGS_PAGINATION_NEXT' => $pageNav['next'],
-    'ADMIN_TAGS_TOTALITEMS' => $totalItems,
 ]);
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    $tt->assign([
+        // @deprecated in 0.9.24
+        'ADMIN_TAGS_FORM_ACTION' => cot_url('admin', 'm=other&p=tags'),
+        'ADMIN_TAGS_ORDER' => cot_selectbox($sortType, 'sorttype', array_keys($sortTypes), array_values($sortTypes), false),
+        'ADMIN_TAGS_WAY' => cot_selectbox($queryOrderWay, 'sortway', array_keys($sortWays), array_values($sortWays), false),
+        'ADMIN_TAGS_FILTER' => cot_selectbox($filter, 'filter', array_keys($filterTypes), array_values($filterTypes), false),
+        'ADMIN_TAGS_PAGINATION_PREV' => $pageNav['prev'],
+        'ADMIN_TAGS_PAGNAV' => $pageNav['main'],
+        'ADMIN_TAGS_PAGINATION_NEXT' => $pageNav['next'],
+        'ADMIN_TAGS_TOTALITEMS' => $totalItems,
+    ]);
+}
 
 $tt->assign(cot_generatePaginationTags($pageNav));
 

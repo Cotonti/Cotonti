@@ -248,20 +248,23 @@ function cot_build_recentforums(
             'FORUM_ROW_NUM' => $ft_num,
             'FORUM_ROW_ODDEVEN' => cot_build_oddeven($ft_num),
             'FORUM_ROW' => $row,
-
-            // @deprecated in 0.9.24
-            'FORUM_ROW_FIRSTPOSTER' => $row['ft_firstpostername'],
-            'FORUM_ROW_LASTPOSTER' => $row['ft_lastpostername'],
-            'FORUM_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate']),
-            'FORUM_ROW_CREATIONDATE_STAMP' => $row['ft_creationdate'],
-            'FORUM_ROW_TIMEAGO' => $row['ft_timeago'],
-            'FORUM_ROW_POSTCOUNT' => $row['ft_postcount'],
-            'FORUM_ROW_REPLYCOUNT' => $row['ft_replycount'],
-            'FORUM_ROW_VIEWCOUNT' => $row['ft_viewcount'],
-            'FORUM_ROW_LASTPOSTURL' => $row['ft_lastposturl'],
-            'FORUM_ROW_MAXPAGES' => $row['ft_maxpages'],
-            'FORUM_ROW_DESC' => htmlspecialchars($row['ft_desc']),
         ]);
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $recentitems->assign([
+                // @deprecated in 0.9.24
+                'FORUM_ROW_FIRSTPOSTER' => $row['ft_firstpostername'],
+                'FORUM_ROW_LASTPOSTER' => $row['ft_lastpostername'],
+                'FORUM_ROW_CREATIONDATE' => cot_date('datetime_short', $row['ft_creationdate']),
+                'FORUM_ROW_CREATIONDATE_STAMP' => $row['ft_creationdate'],
+                'FORUM_ROW_TIMEAGO' => $row['ft_timeago'],
+                'FORUM_ROW_POSTCOUNT' => $row['ft_postcount'],
+                'FORUM_ROW_REPLYCOUNT' => $row['ft_replycount'],
+                'FORUM_ROW_VIEWCOUNT' => $row['ft_viewcount'],
+                'FORUM_ROW_LASTPOSTURL' => $row['ft_lastposturl'],
+                'FORUM_ROW_MAXPAGES' => $row['ft_maxpages'],
+                'FORUM_ROW_DESC' => htmlspecialchars($row['ft_desc']),
+            ]);
+        }
 
         $userData = (!empty($row['ft_firstposterid']) && isset($users[$row['ft_firstposterid']]))
             ? cot_generate_usertags($users[$row['ft_firstposterid']], 'FORUM_ROW_FIRST_POSTER_')
@@ -453,11 +456,14 @@ function cot_build_recentpages(
 			'PAGE_ROW_OWNER' => cot_build_user($pag['page_ownerid'], $pag['user_name']),
 			'PAGE_ROW_ODDEVEN' => cot_build_oddeven($jj),
 			'PAGE_ROW_NUM' => $jj,
-
-            // @deprecated in 0.9.24
-            'PAGE_ROW_SHORTTITLE' => htmlspecialchars($pag['page_title']),
-            // /@deprecated
 		]);
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $recentItems->assign([
+                // @deprecated in 0.9.24
+                'PAGE_ROW_SHORTTITLE' => htmlspecialchars($pag['page_title']),
+            ]);
+        }
+
 		$recentItems->assign(cot_generate_usertags($pag, 'PAGE_ROW_OWNER_'));
 
 		/* === Hook - Part2 === */

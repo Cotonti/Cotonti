@@ -27,9 +27,11 @@ if ($i18n_notmain && !empty($pag['ipage_title'])) {
 	}
     $recentItems->assign([
 		'PAGE_ROW_TITLE' => htmlspecialchars($pag['ipage_title']),
-
-        // @deprecated in 0.9.24
-        'PAGE_ROW_SHORTTITLE' => htmlspecialchars($pag['ipage_title']),
-        // /@deprecated
 	]);
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        $recentItems->assign([
+            // @deprecated in 0.9.24
+            'PAGE_ROW_SHORTTITLE' => htmlspecialchars($pag['ipage_title']),
+        ]);
+    }
 }

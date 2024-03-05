@@ -293,8 +293,10 @@ $users = Cot::$db->query(
     $params
 )->fetchAll();
 
-/** @deprecated in 0.9.24 */
-$sqlusers = &$users;
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    /** @deprecated in 0.9.24 */
+    $sqlusers = &$users;
+}
 
 $pagenav = cot_pagenav('users', $users_url_path, $d, $totalusers, Cot::$cfg['users']['maxusersperpage']);
 
@@ -433,25 +435,28 @@ $t->assign([
     'USERS_FILTERS_GROUP' => $filtersFormGroup,
     'USERS_FILTERS_SEARCH' => cot_inputbox('text', 'sq', $sq, ['maxlength' => 16]),
     'USERS_FILTERS_SUBMIT' => cot_inputbox('submit', 'submit', Cot::$L['Search']),
-
-    // @deprecated in 0.9.24
-	//'USERS_CURRENTFILTER' => $f,
-	'USERS_TOP_CURRENTPAGE' => $pagenav['current'],
-	'USERS_TOP_TOTALPAGE' => $pagenav['total'],
-	'USERS_TOP_MAXPERPAGE' => Cot::$cfg['users']['maxusersperpage'],
-	'USERS_TOP_TOTALUSERS' => $totalusers,
-	'USERS_TOP_PAGNAV' => $pagenav['main'],
-	'USERS_TOP_PAGEPREV' => $pagenav['prev'],
-	'USERS_TOP_PAGENEXT' => $pagenav['next'],
-	'USERS_TOP_FILTER_ACTION' => $filtersFormAction,
-	'USERS_TOP_FILTERS_COUNTRY' => $filtersFormCountry,
-	'USERS_TOP_FILTERS_MAINGROUP' => $filtersFormMainGroup,
-	'USERS_TOP_FILTERS_GROUP' => $filtersFormGroup,
-	'USERS_TOP_FILTERS_SEARCH' => cot_inputbox('text', 'sq', $sq, ['size' => 16, 'maxlength' => 16]),
-	'USERS_TOP_FILTERS_SUBMIT' => cot_inputbox('submit', 'submit', Cot::$L['Search']),
-	//'USERS_TOP_PM' => 'PM',
-    // /@deprecated in 0.9.24
 ]);
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.24
+    $t->assign([
+        //'USERS_CURRENTFILTER' => $f,
+        'USERS_TOP_CURRENTPAGE' => $pagenav['current'],
+        'USERS_TOP_TOTALPAGE' => $pagenav['total'],
+        'USERS_TOP_MAXPERPAGE' => Cot::$cfg['users']['maxusersperpage'],
+        'USERS_TOP_TOTALUSERS' => $totalusers,
+        'USERS_TOP_PAGNAV' => $pagenav['main'],
+        'USERS_TOP_PAGEPREV' => $pagenav['prev'],
+        'USERS_TOP_PAGENEXT' => $pagenav['next'],
+        'USERS_TOP_FILTER_ACTION' => $filtersFormAction,
+        'USERS_TOP_FILTERS_COUNTRY' => $filtersFormCountry,
+        'USERS_TOP_FILTERS_MAINGROUP' => $filtersFormMainGroup,
+        'USERS_TOP_FILTERS_GROUP' => $filtersFormGroup,
+        'USERS_TOP_FILTERS_SEARCH' => cot_inputbox('text', 'sq', $sq, ['size' => 16, 'maxlength' => 16]),
+        'USERS_TOP_FILTERS_SUBMIT' => cot_inputbox('submit', 'submit', Cot::$L['Search']),
+        //'USERS_TOP_PM' => 'PM',
+    ]);
+}
+
 
 $t->assign(cot_generatePaginationTags($pagenav));
 

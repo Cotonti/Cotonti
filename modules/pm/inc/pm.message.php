@@ -179,12 +179,17 @@ if ($history)
 
 	$t->assign([
 		'PM_FORM_UPDATE' => cot_url('pm', cot_xg()),
-
-        // @deprecated in 0.9.24
-        'PM_PAGEPREV' => $pagenav['prev'],
-		'PM_PAGENEXT' => $pagenav['next'],
-		'PM_PAGES' => $pagenav['main']
 	]);
+
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.24
+        $t->assign([
+            'PM_PAGEPREV' => $pagenav['prev'],
+            'PM_PAGENEXT' => $pagenav['next'],
+            'PM_PAGES' => $pagenav['main'],
+        ]);
+    }
+
 	$t->parse('MAIN.HISTORY');
 }
 

@@ -193,7 +193,7 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 
     /** @deprecated in 0.9.24 for backward compatibility */
     $is_module = $isModule;
-    /** @deprecatedin 0.9.24 for backward compatibility */
+    /** @deprecated in 0.9.24 for backward compatibility */
     $name = $code;
 
 	$path = $isModule ? Cot::$cfg['modules_dir'] . "/$code" : Cot::$cfg['plugins_dir'] . "/$code";

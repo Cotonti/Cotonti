@@ -236,16 +236,18 @@ $t->assign([
 	'USERS_PROFILE_LASTLOG_STAMP' => $urr['user_lastlog'],
 	'USERS_PROFILE_LOGCOUNT' => $urr['user_logcount'],
 	'USERS_PROFILE_ADMINRIGHTS' => '',
-	'USERS_PROFILE_OLDPASS' => cot_inputbox('password', 'roldpass', '', array('size' => 12, 'maxlength' => 32)),
-	'USERS_PROFILE_NEWPASS1' => cot_inputbox('password', 'rnewpass1', '', array('size' => 12, 'maxlength' => 32, 'autocomplete' => 'off')),
-	'USERS_PROFILE_NEWPASS2' => cot_inputbox('password', 'rnewpass2', '', array('size' => 12, 'maxlength' => 32, 'autocomplete' => 'off')),
-
-    // @deprecated in 0.9.24
-    'USERS_PROFILE_DETAILSLINK' => cot_url('users', 'm=details&id='.$urr['user_id']),
-    'USERS_PROFILE_EDITLINK' => cot_url('users', 'm=edit&id='.$urr['user_id']),
-    'USERS_PROFILE_MAINGRP' => cot_build_group($urr['user_maingrp']),
-    // /@deprecated in 0.9.24
+	'USERS_PROFILE_OLDPASS' => cot_inputbox('password', 'roldpass', '', ['size' => 12, 'maxlength' => 32]),
+	'USERS_PROFILE_NEWPASS1' => cot_inputbox('password', 'rnewpass1', '', ['size' => 12, 'maxlength' => 32, 'autocomplete' => 'off']),
+	'USERS_PROFILE_NEWPASS2' => cot_inputbox('password', 'rnewpass2', '', ['size' => 12, 'maxlength' => 32, 'autocomplete' => 'off']),
 ]);
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.24
+    $t->assign([
+        'USERS_PROFILE_DETAILSLINK' => cot_url('users', 'm=details&id=' . $urr['user_id']),
+        'USERS_PROFILE_EDITLINK' => cot_url('users', 'm=edit&id=' . $urr['user_id']),
+        'USERS_PROFILE_MAINGRP' => cot_build_group($urr['user_maingrp']),
+    ]);
+}
 
 // Extra fields
 if (!empty(Cot::$extrafields[Cot::$db->users])) {

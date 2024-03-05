@@ -116,8 +116,8 @@ if ($a == 'validate') {
 	}
 	/* ===== */
 
-    $row = \Cot::$db->query(
-        'SELECT page_id, page_alias, page_cat, page_begin, page_state FROM ' . \Cot::$db->pages
+    $row = Cot::$db->query(
+        'SELECT page_id, page_alias, page_cat, page_begin, page_state FROM ' . Cot::$db->pages
         . ' WHERE page_id = ?',
         $id
     )->fetch();
@@ -411,13 +411,16 @@ $t->assign([
 	'ADMIN_PAGE_FILTER' => cot_selectbox($filter, 'filter', array_keys($filter_type), array_values($filter_type), false),
 	'ADMIN_PAGE_TOTALDBPAGES' => $totaldbpages,
     'ADMIN_PAGE_ON_PAGE' => $ii,
-
-    // @deprecated in 0.9.24
-    'ADMIN_PAGE_PAGINATION_PREV' => $pagenav['prev'],
-	'ADMIN_PAGE_PAGNAV' => $pagenav['main'],
-	'ADMIN_PAGE_PAGINATION_NEXT' => $pagenav['next'],
-	'ADMIN_PAGE_TOTALITEMS' => $totalitems,
 ]);
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.24
+    $t->assign([
+        'ADMIN_PAGE_PAGINATION_PREV' => $pagenav['prev'],
+        'ADMIN_PAGE_PAGNAV' => $pagenav['main'],
+        'ADMIN_PAGE_PAGINATION_NEXT' => $pagenav['next'],
+        'ADMIN_PAGE_TOTALITEMS' => $totalitems,
+    ]);
+}
 
 $t->assign(cot_generatePaginationTags($pagenav));
 

@@ -53,16 +53,24 @@ if ($i18n_enabled && $i18n_notmain) {
                     htmlspecialchars($cat_i18n['title'])
                 ),
                 'CAT_DESCRIPTION' =>  htmlspecialchars($cat_i18n['desc']),
-
-                // @deprecated in 0.9.24
-                'CATTITLE' => htmlspecialchars($cat_i18n['title']),
-                'CATPATH' => $catpath,
-                'CATPATH_SHORT' => cot_rc_link(cot_url('page', 'c='.$page_data['page_cat'] . $append_param),
-                    htmlspecialchars($cat_i18n['title'])),
-                'CATDESC' => htmlspecialchars($cat_i18n['desc']),
-                // /@deprecated
             ]
         );
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $i18n_array = array_merge(
+                $i18n_array,
+                [
+                    // @deprecated in 0.9.24
+                    'CATTITLE' => htmlspecialchars($cat_i18n['title']),
+                    'CATPATH' => $catpath,
+                    'CATPATH_SHORT' => cot_rc_link(
+                        cot_url('page', 'c='.$page_data['page_cat'] . $append_param),
+                        htmlspecialchars($cat_i18n['title'])
+                    ),
+                    'CATDESC' => htmlspecialchars($cat_i18n['desc']),
+                ]
+            );
+        }
+
 		if ($admin_rights) {
 			$i18n_array['ADMIN_EDIT'] = cot_rc_link($edit_url, Cot::$L['Edit']);
 			$i18n_array['ADMIN_EDIT_URL'] = $edit_url;
@@ -89,26 +97,33 @@ if ($i18n_enabled && $i18n_notmain) {
             : '';
 
 		$page_link = array(array(cot_url('page', $urlparams), $page_data['ipage_title']));
-		$i18n_array = array_merge($i18n_array, array(
-			'URL' => cot_url('page', $urlparams),
-            'TITLE' => htmlspecialchars($page_data['ipage_title']),
-            'BREADCRUMBS' => cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home),
-			'DESCRIPTION' => $pageDescription,
-			'TEXT' => $text,
-			'TEXT_CUT' => $text_cut,
-			'TEXT_IS_CUT' => $cutted,
-			'DESCRIPTION_OR_TEXT' => $pageDescription !== '' ? $pageDescription : $text,
-            'DESCRIPTION_OR_TEXT_CUT' => $pageDescription !== '' ? $pageDescription : $text_cut,
-			'MORE' => $cutted ? cot_rc_link($page_data['page_pageurl'], Cot::$L['ReadMore']) : '',
-			'UPDATED_STAMP' => $page_data['ipage_date'],
-
-            // @deprecated in 0.9.24
-            'SHORTTITLE' => htmlspecialchars($page_data['ipage_title']),
-            'DESC' => htmlspecialchars($page_data['ipage_desc']),
-            'DESC_OR_TEXT' => !empty($page_data['ipage_desc'])
-                ? htmlspecialchars($page_data['page_desc']) : $text,
-            // /@deprecated
-		));
+		$i18n_array = array_merge(
+            $i18n_array,
+            [
+                'URL' => cot_url('page', $urlparams),
+                'TITLE' => htmlspecialchars($page_data['ipage_title']),
+                'BREADCRUMBS' => cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home),
+                'DESCRIPTION' => $pageDescription,
+                'TEXT' => $text,
+                'TEXT_CUT' => $text_cut,
+                'TEXT_IS_CUT' => $cutted,
+                'DESCRIPTION_OR_TEXT' => $pageDescription !== '' ? $pageDescription : $text,
+                'DESCRIPTION_OR_TEXT_CUT' => $pageDescription !== '' ? $pageDescription : $text_cut,
+                'MORE' => $cutted ? cot_rc_link($page_data['page_pageurl'], Cot::$L['ReadMore']) : '',
+                'UPDATED_STAMP' => $page_data['ipage_date'],
+            ]
+        );
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $i18n_array = array_merge(
+                $i18n_array,
+                [
+                    // @deprecated in 0.9.24
+                    'SHORTTITLE' => htmlspecialchars($page_data['ipage_title']),
+                    'DESC' => $pageDescription,
+                    'DESC_OR_TEXT' => $pageDescription !== '' ? $pageDescription : $text,
+                ]
+            );
+        }
 	}
 
 	if ($i18n_write) {

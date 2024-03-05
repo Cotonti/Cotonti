@@ -131,8 +131,10 @@ if ($a == 'check') {
     $userSelectCondition = null;
     $userSelectParams = [];
 
-    /** @deprecated Will be removed in 1.0.0 */
-    $user_select_condition = null;
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        /** @deprecated Will be removed in 1.0.0 */
+        $user_select_condition = null;
+    }
 
     if (!$validating) {
         if (!empty($rusername) && !empty($rmdpass)) {
@@ -152,9 +154,11 @@ if ($a == 'check') {
 	}
 	/* ===== */
 
-    // For backwards compatibility. Will be removed in 1.0.0
-    if (!empty($user_select_condition)) {
-        $userSelectCondition = $user_select_condition;
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // For backwards compatibility. Will be removed in 1.0.0
+        if (!empty($user_select_condition)) {
+            $userSelectCondition = $user_select_condition;
+        }
     }
 
     if (empty($userSelectCondition)) {
@@ -167,19 +171,21 @@ if ($a == 'check') {
         'user_theme, user_scheme, user_lang, user_sid, user_sidtime ' .
          'FROM ' . Cot::$db->users . " WHERE $userSelectCondition", $userSelectParams);
 
-	/* 	Checking if we got any entries with the current login conditions,
+	/*
+	    Checking if we got any entries with the current login conditions,
 		only may fail when user name has e-mail format or user is not registered,
 		added for compatibility, because disallowed using e-mail as login on registration
 	*/
 	if ($sql->rowCount() == 0) {
 		// If login has e-mail format, try to find it as user_name
-		$user_select_condition = "user_password=".Cot::$db->quote($rmdpass)." AND user_name=".Cot::$db->quote($rusername);
+		$userSelectCondition2 = "user_password = " . Cot::$db->quote($rmdpass)
+            . " AND user_name = " . Cot::$db->quote($rusername);
 
 		// Query the database
 		$sql = Cot::$db->query('SELECT user_id, user_name, user_token, user_regdate, user_maingrp, ' .
             'user_banexpire, user_theme, user_scheme, user_lang, user_sid, user_sidtime ' .
             'FROM ' . Cot::$db->users .
-            " WHERE $user_select_condition");
+            " WHERE $userSelectCondition2");
 	}
 
 	if ($row = $sql->fetch()) {
