@@ -733,12 +733,12 @@ else
                 $exfld_val = cot_build_extrafields('rstructure' . $exfld['field_name'], $exfld, null);
                 $exfld_title = cot_extrafield_title($exfld, 'structure_');
                 
-                $t->assign(array(
+                $t->assign([
                     'ADMIN_STRUCTURE_' . strtoupper($exfld['field_name']) => $exfld_val,
                     'ADMIN_STRUCTURE_' . strtoupper($exfld['field_name']) . '_TITLE' => $exfld_title,
                     'ADMIN_STRUCTURE_EXTRAFLD' => $exfld_val,
-                    'ADMIN_STRUCTURE_EXTRAFLD_TITLE' => $exfld_title
-                ));
+                    'ADMIN_STRUCTURE_EXTRAFLD_TITLE' => $exfld_title,
+                ]);
                 $t->parse('MAIN.NEWCAT.EXTRAFLD');
             }
         }

@@ -268,6 +268,7 @@ function cot_tag_search_pages($query)
         'area' => "r.tag_area = 'pages'",
         'itemId' => "p.page_id IS NOT NULL", // Only existing pages
     ];
+    $queryParams = [];
 
     $where['query'] = cot_tag_parse_query($query, 'p.page_id');
 	if (empty($where['query'])) {
@@ -326,25 +327,27 @@ function cot_tag_search_pages($query)
 	$totalItems = Cot::$db->query(
         'SELECT DISTINCT COUNT(*) FROM ' . Cot::$db->quoteT(Cot::$db->tag_references) . ' AS r '
         . ' INNER JOIN ' . Cot::$db->quoteT(Cot::$db->pages) . ' AS p ON r.tag_item = p.page_id '
-        . " $sqlJoinTables $sqlWhere"
+        . " $sqlJoinTables $sqlWhere",
+        $queryParams
     )->fetchColumn();
 
-	$sql = Cot::$db->query(
-        "SELECT DISTINCT p.*{$sqlJoinColumns} FROM " . Cot::$db->quoteT(Cot::$db->tag_references) . ' AS r '
+    $sql = "SELECT DISTINCT p.*{$sqlJoinColumns} FROM " . Cot::$db->quoteT(Cot::$db->tag_references) . ' AS r '
         . ' INNER JOIN ' . Cot::$db->quoteT(Cot::$db->pages) . ' AS p ON r.tag_item = p.page_id '
-        . " $sqlJoinTables $sqlWhere $order LIMIT $d, $maxPerPage"
-    );
+        . " $sqlJoinTables $sqlWhere $order LIMIT $d, $maxPerPage";
+
+
+	$dbQuery = Cot::$db->query($sql, $queryParams);
 
 	$t->assign('TAGS_RESULT_TITLE', Cot::$L['tags_Found_in_pages']);
 
-	$pcount = $sql->rowCount();
+	$pcount = $dbQuery->rowCount();
 
 	/* == Hook : Part 1 == */
 	$extp = cot_getextplugins('tags.search.pages.loop');
 	/* ===== */
 
 	if ($pcount > 0) {
-		foreach ($sql->fetchAll() as $row) {
+		foreach ($dbQuery->fetchAll() as $row) {
 			if (
                 ($row['page_begin'] > 0 && $row['page_begin'] > Cot::$sys['now'])
                 || ($row['page_expire'] > 0 && Cot::$sys['now'] > $row['page_expire'])
@@ -359,7 +362,7 @@ function cot_tag_search_pages($query)
 			foreach ($tags as $tag) {
 				$tag_t = Cot::$cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
 				$tag_u = Cot::$cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
-				$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
+				$tl = $lang !== 'en' && $tag_u !== $tag ? 1 : null;
 				if ($tag_i > 0) {
                     $tag_list .= ', ';
                 }
@@ -380,17 +383,19 @@ function cot_tag_search_pages($query)
 			$t->assign([
 				//'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']),
 				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
-				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_structure_buildpath('page', $row['page_cat']), false),
+				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_structure_buildpath('page', $row['page_cat']), false, false),
 				'TAGS_RESULT_ROW_TAGS' => $tag_list,
 			]);
+
 			/* == Hook : Part 2 == */
 			foreach ($extp as $pl) {
 				include $pl;
 			}
 			/* ===== */
+
 			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}
-		$sql->closeCursor();
+        $dbQuery->closeCursor();
 
 		/* == Hook == */
 		foreach (cot_getextplugins('tags.search.pages.tags') as $pl) {
@@ -441,6 +446,7 @@ function cot_tag_search_forums($query)
         'notMoved' => 't.ft_movedto = 0',
         'itemId' => "t.ft_id IS NOT NULL", // Only existing topics
     ];
+    $queryParams = [];
 
     $where['query'] = cot_tag_parse_query($query, 't.ft_id');
 	if (empty($where['query'])) {
@@ -503,14 +509,16 @@ function cot_tag_search_forums($query)
 	$totalItems = Cot::$db->query(
         'SELECT DISTINCT COUNT(*) FROM ' . Cot::$db->quoteT(Cot::$db->tag_references) . ' AS r '
         . ' INNER JOIN ' . Cot::$db->quoteT(Cot::$db->forum_topics) . ' AS t ON r.tag_item = t.ft_id '
-        . " $sqlJoinTables $sqlWhere"
+        . " $sqlJoinTables $sqlWhere",
+        $queryParams
     )->fetchColumn();
 
 	$sql = Cot::$db->query(
         "SELECT DISTINCT t.ft_id, t.ft_cat, t.ft_title, t.ft_updated{$sqlJoinColumns} "
 		. ' FROM ' . Cot::$db->quoteT(Cot::$db->tag_references) . ' AS r '
 		. ' INNER JOIN ' . Cot::$db->quoteT(Cot::$db->forum_topics) . ' AS t ON r.tag_item = t.ft_id '
-        . " $sqlJoinTables $sqlWhere $order LIMIT $d, $maxPerPage"
+        . " $sqlJoinTables $sqlWhere $order LIMIT $d, $maxPerPage",
+        $queryParams
     );
 
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
