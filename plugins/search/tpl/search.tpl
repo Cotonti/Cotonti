@@ -2,14 +2,23 @@
 <div class="block">
     <h2 class="stats">{PLUGIN_TITLE}</h2>
     <div>
-        <form id="search" name="search" action="{PLUGIN_SEARCH_ACTION}" method="get">
+        <p class="search-areas">
+            <a href="{PHP.sq|cot_url('search','sq=$this')}"
+            <!-- IF {PHP.tab} == '' -->  class="active"<!-- ENDIF -->>{PHP.L.plu_tabs_all}</a>
+            | <a href="{PHP.sq|cot_url('search','tab=pag&sq=$this')}"
+            <!-- IF {PHP.tab} === 'pag' -->  class="active"<!-- ENDIF -->>{PHP.L.Pages}</a>
+
+            <!-- IF {PHP|cot_module_active('forums')} -->
+            | <a href="{PHP.sq|cot_url('search','tab=frm&sq=$this')}"
+            <!-- IF {PHP.tab} === 'frm' -->  class="active"<!-- ENDIF -->>{PHP.L.Forums}</a>
+            <!-- ENDIF -->
+        </p>
+
+        <form id="search" name="search" action="{PLUGIN_SEARCH_ACTION}" method="GET">
+            <!-- IF {PHP.cfg.plugin.urleditor.preset} !== 'handy' -->
             <input type="hidden" name="e" value="search"/>
+            <!-- ENDIF -->
             <input type="hidden" name="tab" value="{PHP.tab}"/>
-            <p class="textcenter">
-                <a href="{PHP.sq|cot_url('plug','e=search&sq=$this')}">{PHP.L.plu_tabs_all}</a> |
-                <a href="{PHP.sq|cot_url('plug','e=search&tab=frm&sq=$this')}">{PHP.L.Forums}</a> |
-                <a href="{PHP.sq|cot_url('plug','e=search&tab=pag&sq=$this')}">{PHP.L.Pages}</a>
-            </p>
 
             <p class="margin10 textcenter">
 				{PHP.L.plu_search_req}: {PLUGIN_SEARCH_TEXT}

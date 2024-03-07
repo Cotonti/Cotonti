@@ -536,18 +536,18 @@ if (!empty($sq)) {
 				$post_url = (Cot::$cfg['plugin']['search']['searchurl'] == 'Single') ?
                     cot_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) :
                     cot_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
-				$t->assign(array(
-					'PLUGIN_FR_CATEGORY' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false),
+				$t->assign([
+					'PLUGIN_FR_CATEGORY' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false, false),
 					'PLUGIN_FR_TITLE' => cot_rc_link($post_url, htmlspecialchars($row['ft_title'])),
 					'PLUGIN_FR_TITLE_URL' => $post_url,
 					'PLUGIN_FR_TEXT' => cot_clear_mark($row['fp_text'], $words),
-					'PLUGIN_FR_TIME' => $row['ft_updated'] > 0 ?
-                        cot_date('datetime_medium', $row['ft_updated']) :
-                        cot_date('datetime_medium', $row['fp_updated']),
+					'PLUGIN_FR_TIME' => $row['ft_updated'] > 0
+                        ? cot_date('datetime_medium', $row['ft_updated'])
+                        : cot_date('datetime_medium', $row['fp_updated']),
 					'PLUGIN_FR_TIMESTAMP' => $row['ft_updated'] > 0 ? $row['ft_updated'] : $row['fp_updated'],
 					'PLUGIN_FR_ODDEVEN' => cot_build_oddeven($jj + 1),
 					'PLUGIN_FR_NUM' => $jj + 1,
-				));
+				]);
 				$t->parse('MAIN.RESULTS.FORUMS.ITEM');
 			}
 			$jj++;
@@ -559,33 +559,25 @@ if (!empty($sq)) {
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('search.list') as $pl)
-	{
+	foreach (cot_getextplugins('search.list') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if (array_sum($totalitems) < 1)
-	{
+	if (array_sum($totalitems) < 1) {
 		cot_error(Cot::$L['plu_noneresult'].Cot::$R['code_error_separator']);
 	}
-	if (!cot_error_found())
-	{
+	if (!cot_error_found()) {
 		$t->parse('MAIN.RESULTS');
 	}
 
 	$rs_url_path = array();
-	foreach ($rs as $k => $v)
-	{
-		if (is_array($v))
-		{
-			foreach ($v as $sk => $sv)
-			{
+	foreach ($rs as $k => $v) {
+		if (is_array($v)) {
+			foreach ($v as $sk => $sv) {
 				$rs_url_path['rs[' . $k . '][' . $sk . ']'] = $sv;
 			}
-		}
-		else
-		{
+		} else {
 			$rs_url_path['rs[' . $k . ']'] = $v;
 		}
 	}
@@ -604,10 +596,10 @@ Cot::$out['head'] .= Cot::$R['code_noindex'];
 $search_subtitle = (empty($tab) || empty(Cot::$L['plu_tabs_' . $tab]))
     ? Cot::$L['plu_search']
     : Cot::$L['plu_tabs_' . $tab] . ' - ' . Cot::$L['plu_search'];
-Cot::$out['subtitle'] = empty($sq) ? $search_subtitle : htmlspecialchars(strip_tags($sq)).' - '.Cot::$L['plu_result'];
+Cot::$out['subtitle'] = empty($sq) ? $search_subtitle : htmlspecialchars(strip_tags($sq)) . ' - ' . Cot::$L['plu_result'];
 $t->assign([
 	'PLUGIN_TITLE' => cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb'], true),
-	'PLUGIN_SEARCH_ACTION' => cot_url('plug', 'e=search&tab='.$tab),
+	'PLUGIN_SEARCH_ACTION' => cot_url('search', ['tab' => $tab]),
 	'PLUGIN_SEARCH_TEXT' => cot_inputbox(
         'text',
         'sq',

@@ -152,7 +152,7 @@ $cfg['shield_force'] = false;
  * Turn on/off deprecated features that has not yet been removed.
  * In particular, it turns on/off deprecated template engine tags for ease of development.
  */
-$cfg['legacyMode'] = false;
+$cfg['legacyMode'] = true;
 
 // ========================
 // Names for MySQL tables

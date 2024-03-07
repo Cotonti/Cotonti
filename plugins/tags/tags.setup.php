@@ -33,7 +33,7 @@ more=20:radio::1:Show 'All tags' link in tag clouds
 perpage=21:string::0:Tags displayed per page in standalone cloud, 0 is all at once
 index=22:select:pages,forums,all:pages:Index page tag cloud area
 noindex=23:radio::1:Exclude from search engine index
-sort=31:select:ID,Title,Date,Category:ID:Default sorting column for tag search results
+sort=31:select:ID,Title,Date,Category:Date:Default sorting column for tag search results
 css=99:radio::1:Enable plugin CSS
 [END_COT_EXT_CONFIG]
 ==================== */

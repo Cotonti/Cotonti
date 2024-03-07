@@ -2,12 +2,24 @@
 <div class="col3-2 first">
     <div class="block">
         <h2 class="tags">{PHP.L.tags_Search_tags}</h2>
-        <form action="{TAGS_FORM_ACTION}" method="GET">
+        <form id="tags-search-form" action="{TAGS_FORM_ACTION}" method="GET">
 			{TAGS_FORM_PARAMS}
             <input type="text" name="t" value="{TAGS_QUERY}"/>
             <button type="submit">&raquo;&raquo;</button>
             {TAGS_FORM_ORDER}
         </form>
+
+        <!-- {PHP|count({PHP.tagAreas})} > 1 -->
+        <p class="search-areas margintop10">
+            <a href="{PHP.urlParams.t|cot_url('tags', 't=$this')}"
+            <!-- IF {PHP.area} === 'all' --> class="active"<!-- ENDIF -->>{PHP.L.tags_All}</a>
+
+            <!-- FOR {AREA}, {TITLE} IN {PHP.tagAreas} -->
+                | <a href="{PHP.urlParams.t|cot_url('tags','a={AREA}&t=$this')}"
+                    <!-- IF {PHP.area} === {AREA} --> class="active"<!-- ENDIF -->>{PHP|htmlspecialchars({TITLE})}</a>
+            <!-- ENDFOR -->
+        </p>
+        <!-- ENDIF -->
     </div>
     <!-- BEGIN: TAGS_CLOUD -->
     <div class="block">

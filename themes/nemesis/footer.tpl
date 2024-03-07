@@ -50,16 +50,23 @@
 		</ul>
 		</div>
 		<hr />
-<!-- While keeping copyright notice is optional, you can place a backlink to cotonti.com to support the Developers Team -->
+		<!-- While keeping copyright notice is optional, you can place a backlink to cotonti.com to support the Developers Team -->
 		<div id="powered">{FOOTER_COPYRIGHT}</div>
-<!-- Thanks! -->
+	<!-- Thanks! -->
 	</div>
 
 	<!-- IF {PHP.cot_plugins_active.search} -->
 	<div id="magnifier">
-		<form id="search" action="{PHP|cot_url('plug','e=search')}" method="post">
+		<form id="search" action="{PHP|cot_url('search')}" method="GET">
+			<!-- IF {PHP.cfg.plugin.urleditor.preset} !== 'handy' --><input type="hidden" name="e" value="search" /><!-- ENDIF -->
 			<p>
-				<input type="text" name="sq" value="{PHP.L.Search}..." onblur="if(this.value=='') this.value='{PHP.L.Search}...';" onfocus="if(this.value=='{PHP.L.Search}...') this.value='';" />
+				<input
+					type="text"
+					name="sq"
+					value="{PHP.L.Search}..."
+					onblur="if (this.value == '') this.value = '{PHP.L.Search}...';"
+					onfocus="if (this.value == '{PHP.L.Search}...') this.value = '';"
+				/>
 				<button type="submit" title="{PHP.L.Search}!">{PHP.L.Search}</button>
 			</p>
 		</form>

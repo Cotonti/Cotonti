@@ -17,6 +17,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (Cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
 	require_once cot_incfile('tags', 'plug');
+
 	// I18n
 	if (cot_get_caller() == 'i18n.page') {
 		global $i18n_locale;

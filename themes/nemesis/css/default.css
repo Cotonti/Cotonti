@@ -318,9 +318,14 @@ span.readmore		{ display:block; }
 /* 11. Search
 -------------------------------------------------- */
 
-.search-res			{ margin:0 0 10px; overflow:auto; }
-.search-res .small	{ color:#000; }
-.search-highlight	{ font-weight:bold; padding:0 2px; background:yellow; }
+.search-res { margin:0 0 10px; overflow:auto; }
+.search-res .small { color:#000; }
+.search-highlight { font-weight:bold; padding:0 2px; background:yellow; }
+.search-areas { text-align: center }
+.search-areas .active { font-weight: bold }
+form#search #search-query {width: 59%}
+form#search .userinput {width: 53%}
+form#search select[multiple] {min-width: 60%; max-width: 100%}
 
 /* 12. Lists
 -------------------------------------------------- */
@@ -337,6 +342,12 @@ ol				{ margin-left:20px; list-style-type:decimal; }
 -------------------------------------------------- */
 #user-register input[type="text"], #user-register input[type="password"],
 #password-recover input[type="text"],
-#login input[type="text"], #login input[type="password"]{
+#login input[type="text"], #login input[type="password"] {
 	width: 50%;
+}
+
+/* 13. Tags
+-------------------------------------------------- */
+#tags-search-form input[type="text"] {
+	width: 64%;
 }

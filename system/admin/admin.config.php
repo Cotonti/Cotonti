@@ -35,9 +35,13 @@ switch ($n) {
 		$optionslist = cot_config_list($o, $p, '');
 		cot_die(!sizeof($optionslist), true);
 
-		if ($o != 'core' && file_exists(cot_langfile($p, $o))) {
-			require cot_langfile($p, $o);
-		}
+        $configExtensionLangFile = cot_langfile($p, $o);
+		if ($o !== 'core' && file_exists($configExtensionLangFile)) {
+			require $configExtensionLangFile;
+		} else {
+            $configExtensionLangFile = null;
+        }
+
 		if ($o != 'core' && file_exists(cot_incfile($p, $o))) {
 			require_once cot_incfile($p, $o);
 		}
@@ -112,6 +116,11 @@ switch ($n) {
 		}
 		/* ===== */
 
+        // Prevent lang strings was overwritten by another extensions
+        if ($configExtensionLangFile) {
+            require $configExtensionLangFile;
+        }
+
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('admin.config.edit.loop');
 		/* ===== */
@@ -132,16 +141,24 @@ switch ($n) {
 				$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $title);
 				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_BEGIN');
 			} else {
-				$t->assign(array(
+				$t->assign([
 					'ADMIN_CONFIG_ROW_CONFIG' => cot_config_input($row),
 					'ADMIN_CONFIG_ROW_CONFIG_TITLE' => $title,
-					'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' =>
-					cot_url('admin', "m=config&n=edit&o=$o&p=$p&a=reset&v=" . $row['config_name']),
-					'ADMIN_CONFIG_ROW_CONFIG_MORE' => $hint
-				));
+					'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' => cot_url(
+                        'admin',
+                        [
+                            'm' => 'config',
+                            'n' => 'edit',
+                            'o' => $o,
+                            'p' => $p,
+                            'a' => 'reset',
+                            'v' => $row['config_name'],
+                        ]
+                    ),
+					'ADMIN_CONFIG_ROW_CONFIG_MORE' => $hint,
+				]);
 				/* === Hook - Part2 : Include === */
-				foreach ($extp as $pl)
-				{
+				foreach ($extp as $pl) {
 					include $pl;
 				}
 				/* ===== */

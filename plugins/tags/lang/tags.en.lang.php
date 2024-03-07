@@ -48,6 +48,7 @@ $L['adm_tag_item_area'] = 'Elements tag';
  */
 $L['cfg_forums'] = 'Enable tags in forums';
 $L['cfg_index'] = 'Index page tag cloud area';
+$L['cfg_index_params'] = 'pages: Pages, forums: Forums, all: All';
 $L['cfg_limit'] = 'Max. tags per item, 0 for unlimited';
 $L['cfg_limit_hint'] = '0 for unlimited';
 $L['cfg_lim_forums'] = 'Tag limit for forums tag cloud';
@@ -59,6 +60,7 @@ $L['cfg_lim_pages_hint'] = '0 for unlimited';
 $L['cfg_more'] = 'Show &quot;All tags&quot; link in tag clouds';
 $L['cfg_noindex'] = 'Exclude from search engine index';
 $L['cfg_order'] = 'Cloud output order';
+$L['cfg_order_params'] = 'Alphabetical: Alphabetical, Frequency: Descending frequency, Random: Random';
 $L['cfg_order_hint'] = 'Alphabetical, descending frequency or random';
 $L['cfg_pages'] = 'Enable tags in pages';
 $L['cfg_perpage'] = 'Tags displayed per page in standalone cloud';
