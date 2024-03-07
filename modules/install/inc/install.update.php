@@ -28,17 +28,26 @@ $updated_config = false;
 if (is_writable($file['config']) && file_exists($file['config_sample'])) {
 	list($old_cfg, $old_db) = cot_get_config($file['config']);
 	list($new_cfg, $new_db) = cot_get_config($file['config_sample']);
-	if (count(cot_arrayDiff($new_cfg, $old_cfg)) > 0 || count(cot_arrayDiff($new_db, $old_db)) > 0) {
+
+    $configDiff = cot_arrayDiff($new_cfg, $old_cfg);
+    $dbDiff = cot_arrayDiff($new_db, $old_db);
+	if (count($configDiff) > 0 || count($dbDiff) > 0) {
 		// Add new config options
 		$delta = '';
-		if (count(cot_arrayDiff($new_cfg, $old_cfg)) > 0) {
+		if (count($configDiff) > 0) {
 			foreach ($new_cfg as $key => $val) {
 				if (!array_key_exists($key, $old_cfg)) {
-					if ($key == 'new_install') {
+					if ($key === 'new_install') {
 						$val = false;
-					} elseif ($key == 'site_id' || $key == 'secret_key') {
+					} elseif ($key === 'site_id' || $key === 'secret_key') {
 						$val = cot_unique(32);
 					}
+
+                    // If the "legacy mode" option is added for the first time,
+                    // will enable it to not break the site after the update.
+                    if ($key === 'legacyMode') {
+                        $val = true;
+                    }
 
                     if (is_null($val)) {
                         $val = 'null';
@@ -54,7 +63,7 @@ if (is_writable($file['config']) && file_exists($file['config_sample'])) {
 			}
 		}
 
-		if (count(cot_arrayDiff($new_db, $old_db)) > 0) {
+		if (count($dbDiff) > 0) {
 			foreach ($new_db as $key => $val) {
 				if (!isset($old_db[$key])) {
 					$val = str_replace("cot_", "\$db_x.'", $val);
