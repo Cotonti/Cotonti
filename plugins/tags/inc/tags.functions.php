@@ -299,18 +299,15 @@ function cot_tag_list($item, $area = 'pages', $extra = null)
  */
 function cot_tag_parse($input)
 {
-	$res = array();
-	$tags = explode(',', $input);
-	foreach ($tags as $tag)
-	{
+	$result = [];
+	$tags = !empty($input) ? explode(',', $input) : '';
+	foreach ($tags as $tag) {
 		$tag = cot_tag_prep($tag);
-		if (!empty($tag))
-		{
-			$res[] = $tag;
+		if (!empty($tag)) {
+			$result[] = $tag;
 		}
 	}
-	$res = array_unique($res);
-	return $res;
+    return array_unique($result);
 }
 
 /**

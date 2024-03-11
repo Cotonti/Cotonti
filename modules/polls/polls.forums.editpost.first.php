@@ -14,7 +14,10 @@ Hooks=forums.editpost.update.first
  */
 defined('COT_CODE') or die('Wrong URL');
 
-$poll = trim(cot_import('poll_text', 'P', 'HTM'));
+$poll = cot_import('poll_text', 'P', 'HTM');
+if (!empty($poll)) {
+    $poll = trim($poll);
+}
 $poll_id = cot_import('poll_id','P','TXT');
 
 if (!empty($poll)) {

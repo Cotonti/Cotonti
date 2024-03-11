@@ -13,7 +13,7 @@ Tags=
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
- * @var bool $is_first_post
+ * @var bool $isFirstPost
  * @var int $q topic id
  * @var XTemplate $t
  */
@@ -21,7 +21,7 @@ Tags=
 defined('COT_CODE') or die('Wrong URL');
 
 if (
-    $is_first_post
+    $isFirstPost
     && Cot::$usr['isadmin']
     && cot_poll_edit_form($q, $t, 'MAIN.POLL', 'forum')
 ) {

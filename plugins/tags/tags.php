@@ -237,6 +237,19 @@ if (!empty($qs)) {
     $t->assign(cot_generatePaginationTags($pagination));
 }
 
+$resultsCount = array_sum($entriesCount);
+$resultsCount = $resultsCount > 0 ? $resultsCount : 0;
+
+$t->assign([
+    'TAGS_RESULTS_COUNT' => $resultsCount,
+]);
+
+/* === Hook === */
+foreach (cot_getextplugins('tags.tags') as $pl) {
+    include $pl;
+}
+/* ===== */
+
 /**
  * Search by tag in pages
  *
@@ -379,12 +392,16 @@ function cot_tag_search_pages($query)
 				$tag_i++;
 			}
 
-			$t->assign(cot_generate_pagetags($row, 'TAGS_RESULT_ROW_', Cot::$cfg['page']['cat___default']['truncatetext']));
+            $pageTags = cot_generate_pagetags($row, 'TAGS_RESULT_ROW_', Cot::$cfg['page']['cat___default']['truncatetext']);
+			$t->assign($pageTags);
 			$t->assign([
 				//'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']) : cot_url('page', 'c='.$row['page_cat'].'&al='.$row['page_alias']),
 				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
 				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_structure_buildpath('page', $row['page_cat']), false, false),
 				'TAGS_RESULT_ROW_TAGS' => $tag_list,
+                'TAGS_RESULT_ROW_ITEM_TYPE' => 'page',
+                'TAGS_RESULT_ROW_PREVIEW' => $pageTags['TAGS_RESULT_ROW_TEXT_CUT'],
+                'TAGS_RESULT_ROW_DESCRIPTION_OR_PREVIEW' => $pageTags['TAGS_RESULT_ROW_DESCRIPTION_OR_TEXT_CUT'],
 			]);
 
 			/* == Hook : Part 2 == */
@@ -514,7 +531,7 @@ function cot_tag_search_forums($query)
     )->fetchColumn();
 
 	$sql = Cot::$db->query(
-        "SELECT DISTINCT t.ft_id, t.ft_cat, t.ft_title, t.ft_updated{$sqlJoinColumns} "
+        "SELECT DISTINCT t.ft_id, t.ft_cat, t.ft_title, t.ft_desc, t.ft_preview, t.ft_updated{$sqlJoinColumns} "
 		. ' FROM ' . Cot::$db->quoteT(Cot::$db->tag_references) . ' AS r '
 		. ' INNER JOIN ' . Cot::$db->quoteT(Cot::$db->forum_topics) . ' AS t ON r.tag_item = t.ft_id '
         . " $sqlJoinTables $sqlWhere $order LIMIT $d, $maxPerPage",
@@ -548,11 +565,30 @@ function cot_tag_search_forums($query)
 			}
             // Not using anywhere
 			// $master = (isset($row['fs_masterid']) && $row['fs_masterid'] > 0) ? array($row['fs_masterid'], $row['fs_mastername']) : false;
+
+            $topicPreview = '';
+            if (!empty($row['ft_preview'])) {
+                $allowBBCodes = isset(Cot::$cfg['forums']['cat_' . $row['ft_cat']])
+                    ? Cot::$cfg['forums']['cat_' . $row['ft_cat']]['allowbbcodes']
+                    : Cot::$cfg['forums']['cat___default']['allowbbcodes'];
+                $topicPreview = trim(cot_parse($row['ft_preview'], $allowBBCodes));
+                if (!empty($topicPreview)) {
+                    $topicPreview .= '...';
+                }
+            }
+
+            $description = htmlspecialchars($row['ft_desc']);
+
 			$t->assign([
 				'TAGS_RESULT_ROW_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
 				'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['ft_title']),
 				'TAGS_RESULT_ROW_PATH' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false, false),
 				'TAGS_RESULT_ROW_TAGS' => $tag_list,
+                'TAGS_RESULT_ROW_ITEM_TYPE' => 'forums.topics',
+                'TAGS_RESULT_ROW_DESCRIPTION' => htmlspecialchars($row['ft_desc']),
+                'TAGS_RESULT_ROW_PREVIEW' => $topicPreview,
+                'TAGS_RESULT_ROW_DESCRIPTION_OR_PREVIEW' => $description !== '' ? $description : $topicPreview,
+
 			]);
 			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 		}

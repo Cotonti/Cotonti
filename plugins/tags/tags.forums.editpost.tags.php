@@ -12,19 +12,22 @@ Tags=forums.editpost.tpl:{FORUMS_EDITPOST_FORM_TAGS},{FORUMS_EDITPOST_TOP_TAGS},
  * @package Tags
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var XTemplate $t
+ * @var int $q Topic id
+ * @var bool $isFirstPost
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $is_first_post)
-{
+if (Cot::$cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $isFirstPost) {
 	require_once cot_incfile('tags', 'plug');
 	$tags = cot_tag_list($q, 'forums');
 	$tags = implode(', ', $tags);
-	$t->assign(array(
-		'FORUMS_EDITPOST_TOP_TAGS' => $L['Tags'],
-		'FORUMS_EDITPOST_TOP_TAGS_HINT' => $L['tags_comma_separated'],
-		'FORUMS_EDITPOST_FORM_TAGS' => cot_rc('tags_input_editpost')
-	));
+	$t->assign([
+		'FORUMS_EDITPOST_TOP_TAGS' => Cot::$L['Tags'],
+		'FORUMS_EDITPOST_TOP_TAGS_HINT' => Cot::$L['tags_comma_separated'],
+		'FORUMS_EDITPOST_FORM_TAGS' => cot_rc('tags_input_editpost', ['tags' => $tags]),
+	]);
 	$t->parse('MAIN.FORUMS_EDITPOST_TAGS');
 }

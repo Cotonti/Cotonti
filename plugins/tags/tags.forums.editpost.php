@@ -11,52 +11,46 @@ Hooks=forums.editpost.update.done
  * @package Tags
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var int $q Topic id
+ * @var bool $isFirstPost
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $is_first_post)
-{
+if (Cot::$cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $isFirstPost) {
 	require_once cot_incfile('tags', 'plug');
+
 	$rtags = cot_import('rtags', 'P', 'TXT');
 	$tags = cot_tag_parse($rtags);
 	$old_tags = cot_tag_list($q, 'forums');
-	$kept_tags = array();
-	$new_tags = array();
+	$kept_tags = [];
+	$new_tags = [];
 	// Find new tags, count old tags that have been left
 	$cnt = 0;
-	foreach ($tags as $tag)
-	{
+	foreach ($tags as $tag) {
 		$ps = array_search($tag, $old_tags);
-		if ($ps !== false)
-		{
+		if ($ps !== false) {
 			$kept_tags[] = $old_tags[$ps];
 			$cnt++;
-		}
-		else
-		{
+		} else {
 			$new_tags[] = $tag;
 		}
 	}
 	// Remove old tags that have been removed
 	$rem_tags = array_diff($old_tags, $kept_tags);
-	foreach ($rem_tags as $tag)
-	{
+
+	foreach ($rem_tags as $tag) {
 		cot_tag_remove($tag, $q, 'forums');
 	}
 	// Add new tags
 	$ncnt = count($new_tags);
-	if ($cfg['plugin']['tags']['limit'] > 0
-		&& $ncnt > $cfg['plugin']['tags']['limit'] - $cnt)
-	{
-		$lim = $cfg['plugin']['tags']['limit'] - $cnt;
-	}
-	else
-	{
+	if (Cot::$cfg['plugin']['tags']['limit'] > 0 && $ncnt > Cot::$cfg['plugin']['tags']['limit'] - $cnt) {
+		$lim = Cot::$cfg['plugin']['tags']['limit'] - $cnt;
+	} else {
 		$lim = $ncnt;
 	}
-	for($i = 0; $i < $lim; $i++)
-	{
+	for($i = 0; $i < $lim; $i++) {
 		cot_tag($new_tags[$i], $q, 'forums');
 	}
 }

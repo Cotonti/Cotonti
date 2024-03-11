@@ -571,7 +571,7 @@ if (!empty($sq)) {
 		$t->parse('MAIN.RESULTS');
 	}
 
-	$rs_url_path = array();
+	$rs_url_path = [];
 	foreach ($rs as $k => $v) {
 		if (is_array($v)) {
 			foreach ($v as $sk => $sv) {
@@ -597,6 +597,9 @@ $search_subtitle = (empty($tab) || empty(Cot::$L['plu_tabs_' . $tab]))
     ? Cot::$L['plu_search']
     : Cot::$L['plu_tabs_' . $tab] . ' - ' . Cot::$L['plu_search'];
 Cot::$out['subtitle'] = empty($sq) ? $search_subtitle : htmlspecialchars(strip_tags($sq)) . ' - ' . Cot::$L['plu_result'];
+
+$resultsCount = array_sum($totalitems);
+$resultsCount = $resultsCount > 0 ? $resultsCount : 0;
 $t->assign([
 	'PLUGIN_TITLE' => cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb'], true),
 	'PLUGIN_SEARCH_ACTION' => cot_url('search', ['tab' => $tab]),
@@ -613,7 +616,7 @@ $t->assign([
 	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rs['setlimit'], 'rs[setlimit]', range(0, 5), array(Cot::$L['plu_any_date'], Cot::$L['plu_last_2_weeks'], Cot::$L['plu_last_1_month'], Cot::$L['plu_last_3_month'], Cot::$L['plu_last_1_year'], Cot::$L['plu_need_datas']), false),
 	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rfrom', (int) cot_date('Y', Cot::$sys['now']) + 1),
 	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rto', (int) cot_date('Y', Cot::$sys['now']) + 1),
-	'PLUGIN_SEARCH_FOUND' => (array_sum($totalitems) > 0) ? array_sum($totalitems) : 0,
+	'PLUGIN_SEARCH_FOUND' => $resultsCount,
 ]);
 
 if (!empty($pagenav)) {

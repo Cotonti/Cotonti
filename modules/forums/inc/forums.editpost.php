@@ -10,13 +10,12 @@
 defined('COT_CODE') or die('Wrong URL');
 
 $s = cot_import('s', 'G', 'TXT'); // section cat
-$q = cot_import('q', 'G', 'INT');  // topic id
-$p = cot_import('p', 'G', 'INT'); // post id
+$q = cot_import('q', 'G', 'INT');  // Topic id
+$p = cot_import('p', 'G', 'INT'); // Post id
 list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['forums']['maxpostsperpage']);
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.editpost.first') as $pl)
-{
+foreach (cot_getextplugins('forums.editpost.first') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -26,21 +25,26 @@ cot_check_xg();
 
 isset(Cot::$structure['forums'][$s]) || cot_die();
 
-$sql_forums = Cot::$db->query("SELECT * FROM $db_forum_posts WHERE fp_id = ? and fp_topicid = ? and fp_cat = ?",
-	array($p, $q, $s));
+$sql_forums = Cot::$db->query(
+    'SELECT * FROM ' . Cot::$db->forum_posts . ' WHERE fp_id = ? and fp_topicid = ? and fp_cat = ?',
+	[$p, $q, $s]
+);
 if ($rowpost = $sql_forums->fetch()) {
 	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('forums', $s);
 
 	/* === Hook === */
-	foreach (cot_getextplugins('forums.editpost.rights') as $pl)
-	{
+	foreach (cot_getextplugins('forums.editpost.rights') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	if (!Cot::$usr['isadmin'] && ($rowpost['fp_posterid'] != Cot::$usr['id'] ||
-			(Cot::$cfg['forums']['edittimeout'] != '0' && Cot::$sys['now'] - $rowpost['fp_creation'] > Cot::$cfg['forums']['edittimeout'] * 3600)))
-	{
+	if (
+        !Cot::$usr['isadmin']
+        && (
+            $rowpost['fp_posterid'] != Cot::$usr['id']
+            || (Cot::$cfg['forums']['edittimeout'] != '0' && Cot::$sys['now'] - $rowpost['fp_creation'] > Cot::$cfg['forums']['edittimeout'] * 3600)
+        )
+    ) {
 		cot_log('Attempt to edit a post without rights', 'sec', 'forums', 'error');
 		cot_die();
 	}
@@ -49,7 +53,7 @@ if ($rowpost = $sql_forums->fetch()) {
 	cot_die();
 }
 
-$is_first_post = $p == Cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = ? ORDER BY fp_id ASC LIMIT 1", array($q))->fetchColumn();
+$isFirstPost = $p == Cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = ? ORDER BY fp_id ASC LIMIT 1", [$q])->fetchColumn();
 
 $sql_forums = Cot::$db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id = $q LIMIT 1");
 
@@ -72,10 +76,16 @@ if ($a == 'update') {
 	$rtopic['ft_title'] = cot_import('rtopictitle', 'P', 'TXT', 255);
 	$rtopic['ft_desc'] = cot_import('rtopicdesc', 'P', 'TXT', 255);
 
-	$rmsg = array();
+	$rmsg = [];
 	$rmsg['fp_text'] = cot_import('rmsgtext', 'P', 'HTM');
-	$rmsg['fp_updater'] = ($rowpost['fp_posterid'] == Cot::$usr['id'] && (Cot::$sys['now'] < $rowpost['fp_updated'] + 300)
-        && empty($rowpost['fp_updater']) ) ? '' : Cot::$usr['name'];
+    if (empty($rmsg['fp_text'])) {
+        $rmsg['fp_text'] = '';
+    }
+	$rmsg['fp_updater'] = (
+        $rowpost['fp_posterid'] == Cot::$usr['id']
+        && (Cot::$sys['now'] < $rowpost['fp_updated'] + 300)
+        && empty($rowpost['fp_updater'])
+    ) ? '' : Cot::$usr['name'];
 	$rmsg['fp_updated'] = Cot::$sys['now'];
 
 	if (isset($_POST['rtopictitle']) && mb_strlen($rtopic['ft_title']) < Cot::$cfg['forums']['mintitlelength']) {
@@ -100,8 +110,9 @@ if ($a == 'update') {
         Cot::$db->update(Cot::$db->forum_posts, $rmsg, "fp_id=$p");
 
 		if (
-            !empty($rtopic['ft_title']) &&
-            Cot::$db->query("SELECT fp_id FROM ".Cot::$db->forum_posts." WHERE fp_topicid = $q ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p
+            !empty($rtopic['ft_title'])
+            && Cot::$db->query("SELECT fp_id FROM " . Cot::$db->forum_posts . " WHERE fp_topicid = $q ORDER BY fp_id ASC LIMIT 1")
+                ->fetchColumn() == $p
         ) {
 			if (mb_substr($rtopic['ft_title'], 0, 1) == "#") {
 				$rtopic['ft_title'] = str_replace('#', '', $rtopic['ft_title']);

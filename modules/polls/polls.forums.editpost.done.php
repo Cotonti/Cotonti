@@ -12,12 +12,12 @@ Hooks=forums.editpost.update.done
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
- * @var bool $is_first_post
+ * @var bool $isFirstPost
  * @var int $q topic ID
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (!empty($poll) && $is_first_post && !cot_error_found()) {
+if (!empty($poll) && $isFirstPost && !cot_error_found()) {
 	$number = cot_poll_save('forum', $q);
 }

@@ -11,6 +11,8 @@ Hooks=tags.search.pages.loop
  * @package I18n
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var XTemplate $t
  */
 
 defined('COT_CODE') or die('Wrong URL');

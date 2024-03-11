@@ -356,9 +356,9 @@ foreach ($sql_forums_rowset as $row) {
 
     $topicPreview = '';
     if (!empty($row['ft_preview'])) {
-        $allowBBCodes = isset(Cot::$cfg['forums']['cat_' . $s]) ?
-            Cot::$cfg['forums']['cat_' . $s]['allowbbcodes'] :
-            Cot::$cfg['forums']['cat___default']['allowbbcodes'];
+        $allowBBCodes = isset(Cot::$cfg['forums']['cat_' . $s])
+            ? Cot::$cfg['forums']['cat_' . $s]['allowbbcodes']
+            : Cot::$cfg['forums']['cat___default']['allowbbcodes'];
         $topicPreview = trim(cot_parse($row['ft_preview'], $allowBBCodes));
         if (!empty($topicPreview)) {
             $topicPreview .= '...';

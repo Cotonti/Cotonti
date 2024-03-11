@@ -212,9 +212,9 @@ function cot_build_recentforums(
 
         $topicPreview = '';
         if (!empty($row['ft_preview'])) {
-            $allowBBCodes = isset(Cot::$cfg['forums']['cat_' . $row['ft_cat']]) ?
-                Cot::$cfg['forums']['cat_' . $row['ft_cat']]['allowbbcodes'] :
-                Cot::$cfg['forums']['cat___default']['allowbbcodes'];
+            $allowBBCodes = isset(Cot::$cfg['forums']['cat_' . $row['ft_cat']])
+                ? Cot::$cfg['forums']['cat_' . $row['ft_cat']]['allowbbcodes']
+                : Cot::$cfg['forums']['cat___default']['allowbbcodes'];
             $topicPreview = trim(cot_parse($row['ft_preview'], $allowBBCodes));
             if (!empty($topicPreview)) {
                 $topicPreview .= '...';

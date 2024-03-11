@@ -89,7 +89,7 @@ if ($i18n_enabled && $i18n_notmain) {
 
 	if (!empty($page_data['ipage_title'])) {
 		$text = cot_parse($page_data['ipage_text'], Cot::$cfg['page']['markup'], $page_data['page_parser']);
-		$text_cut = ((int) $textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
+		$text_cut = ((int) $textLength > 0) ? cot_string_truncate($text, $textLength) : cot_cut_more($text);
 		$cutted = mb_strlen($text) > mb_strlen($text_cut);
 
         $pageDescription = !empty($page_data['ipage_desc'])

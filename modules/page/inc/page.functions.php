@@ -83,7 +83,7 @@ function cot_readraw($file)
  *
  * @param int|array $page_data Page Info Array or ID
  * @param string $tag_prefix Prefix for tags
- * @param int $textlength Text truncate
+ * @param int $textLength Text truncate
  * @param bool $admin_rights Page Admin Rights
  * @param bool $pagepath_home Add home link for page path
  * @param string $emptytitle Page title text if page does not exist
@@ -95,7 +95,7 @@ function cot_readraw($file)
 function cot_generate_pagetags(
     $page_data,
     $tag_prefix = '',
-    $textlength = 0,
+    $textLength = 0,
     $admin_rights = null,
     $pagepath_home = false,
     $emptytitle = '',
@@ -162,8 +162,8 @@ function cot_generate_pagetags(
 
 		$text = cot_parse($page_data['page_text'], $cfg['page']['markup'], $page_data['page_parser']);
 		$text_cut = cot_cut_more($text);
-		if ($textlength > 0 && mb_strlen($text_cut) > $textlength) {
-			$text_cut = cot_string_truncate($text_cut, $textlength);
+		if ($textLength > 0 && mb_strlen($text_cut) > $textLength) {
+			$text_cut = cot_string_truncate($text_cut, $textLength);
 		}
 		$cutted = mb_strlen($text) > mb_strlen($text_cut);
 
