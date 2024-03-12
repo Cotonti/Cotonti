@@ -10,15 +10,14 @@
 
 const COT_CODE = true;
 
-// Required for PHP 5.3
 require_once './datas/config.php';
 date_default_timezone_set('UTC');
 
 /*
  * Get the path of the target file.
  */
-$rc_file = $_GET['rc'];
-if (isset($rc_file) && is_string($rc_file) && preg_match('#^[\w\.\-]+\.(js|css)$#', $rc_file, $mt)) {
+$rc_file = isset($_GET['rc']) ? $_GET['rc'] : null;
+if (!empty($rc_file) && is_string($rc_file) && preg_match('#^[\w\.\-]+\.(js|css)$#', $rc_file, $mt)) {
 	$src_uri = $cfg['cache_dir'] . '/assets/' . $rc_file;
 	$content_type = $mt[1] == 'js' ? 'text/javascript' : 'text/css';
 } else {
@@ -45,17 +44,17 @@ if (!file_exists($src_uri)) {
  */
 
 $file_last_modified = filemtime($src_uri);
-header('Last-Modified: '.date('r', $file_last_modified));
+header('Last-Modified: '. date('r', $file_last_modified));
 
 $max_age = 5 * 365 * 24 * 60 * 60; // ~5 years
 
 $expires = $file_last_modified + $max_age;
-header('Expires: '.date('r', $expires));
+header('Expires: ' . date('r', $expires));
 
 $etag = md5(realpath($src_uri) . filesize($src_uri) . filemtime($src_uri));
 header('ETag: ' . $etag);
 
-$cache_control = 'must-revalidate, proxy-revalidate, max-age='.$max_age.', s-maxage='.$max_age;
+$cache_control = 'must-revalidate, proxy-revalidate, max-age=' . $max_age.', s-maxage=' . $max_age;
 header('Cache-Control: '.$cache_control);
 header('Vary: Accept-Encoding');
 

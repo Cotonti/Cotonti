@@ -4758,8 +4758,8 @@ function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact 
 	if ($considerhtml) {
 		// if the plain text is shorter than the maximum length, return the whole text
 		if (
-            !preg_match('/<\s*(pre|plaintext)/', $text) &&
-            mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length
+            !preg_match('/<\s*(pre|plaintext)/', $text)
+            && mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length
         ) {
 			return $text;
 		}

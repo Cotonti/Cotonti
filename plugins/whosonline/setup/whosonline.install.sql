@@ -7,6 +7,7 @@ CREATE TABLE `cot_online` (
   `online_lastseen` int UNSIGNED NOT NULL default '0',
   `online_location` varchar(128) NOT NULL default '',
   `online_subloc` varchar(255) NOT NULL default '',
+  `online_url` varchar(500) NOT NULL default '',
   `online_userid` int NOT NULL default '0', -- using '-1' value for guests
   `online_shield` int NOT NULL default '0',
   `online_action` varchar(64) NOT NULL default '',
