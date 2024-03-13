@@ -19,26 +19,23 @@ defined('COT_CODE') or die('Wrong URL.');
 require_once cot_incfile('pfs', 'module');
 
 $pfs_caller = cot_get_caller();
-if ($pfs_caller == 'forums.posts')
-{
+if ($pfs_caller == 'forums.posts') {
 	$pfs_src = 'newpost';
 	$pfs_name = 'rmsgtext';
 	$pfs_tag = 'POSTS_NEWPOST';
-}
-elseif ($pfs_caller == 'forums.newtopic')
-{
+} elseif ($pfs_caller == 'forums.newtopic') {
 	$pfs_src = 'newtopic';
 	$pfs_name = 'rmsgtext';
 	$pfs_tag = 'NEWTOPIC';
-}
-else
-{
+} else {
 	$pfs_src = 'editpost';
 	$pfs_name = 'rmsgtext';
 	$pfs_tag = 'EDITPOST';
 }
 
-$pfs = cot_build_pfs($usr['id'], $pfs_src, $pfs_name, $L['Mypfs'], $sys['parser']);
-$pfs .= (cot_auth('pfs', 'a', 'A')) ? ' &nbsp; '.cot_build_pfs(0, $pfs_src, $pfs_name, $L['SFS'], $sys['parser']) : '';
+$pfs = cot_build_pfs(Cot::$usr['id'], $pfs_src, $pfs_name, Cot::$L['Mypfs'], Cot::$sys['parser']);
+$pfs .= (cot_auth('pfs', 'a', 'A'))
+    ? ' &nbsp; ' . cot_build_pfs(0, $pfs_src, $pfs_name, Cot::$L['SFS'], Cot::$sys['parser'])
+    : '';
 
 $t->assign('FORUMS_' . $pfs_tag . '_MYPFS', $pfs);

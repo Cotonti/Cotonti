@@ -27,7 +27,10 @@ cot_block(Cot::$usr['auth_read']);
 if (!$id || $id < 0) {
 	cot_die_message(404);
 }
-$sql_page = Cot::$db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
+$sql_page = Cot::$db->query(
+    'SELECT * FROM ' . Cot::$db->pages . ' WHERE page_id = :pageId LIMIT 1',
+    ['pageId' => $id]
+);
 if ($sql_page->rowCount() == 0) {
 	cot_die_message(404);
 }
@@ -38,11 +41,9 @@ list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = co
 $parser_list = cot_get_parsers();
 Cot::$sys['parser'] = $row_page['page_parser'];
 
-if ($a == 'update')
-{
+if ($a == 'update') {
 	/* === Hook === */
-	foreach (cot_getextplugins('page.edit.update.first') as $pl)
-	{
+	foreach (cot_getextplugins('page.edit.update.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -51,25 +52,20 @@ if ($a == 'update')
 
 	$rpage = cot_page_import('POST', $row_page, Cot::$usr);
 
-	if ($_SERVER['REQUEST_METHOD'] == 'POST')
-	{
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$rpagedelete = cot_import('rpagedelete', 'P', 'BOL');
-	}
-	else
-	{
+	} else {
 		$rpagedelete = cot_import('delete', 'G', 'BOL');
 		cot_check_xg();
 	}
 
-	if ($rpagedelete)
-	{
+	if ($rpagedelete) {
 		cot_page_delete($id, $row_page);
 		cot_redirect(cot_url('page', "c=" . $row_page['page_cat'], '', true));
 	}
 
 	/* === Hook === */
-	foreach (cot_getextplugins('page.edit.update.import') as $pl)
-	{
+	foreach (cot_getextplugins('page.edit.update.import') as $pl) {
 		include $pl;
 	}
 	/* ===== */

@@ -452,10 +452,12 @@ foreach ($sql_pfs->fetchAll() as $row) {
 	$pfs_filesize = $row['pfs_size'];
 	$pfs_icon = $icon[$pfs_extension];
 
-	$dotpos = mb_strrpos($pfs_file, ".")+1;
+	$dotpos = mb_strrpos($pfs_file, ".") + 1;
 	$pfs_realext = mb_strtolower(mb_substr($pfs_file, $dotpos, 5));
 	$add_thumbnail = $add_image = '';
-	$add_file = ($standalone) ? cot_rc('pfs_link_addfile') : '';
+	$add_file = ($standalone)
+        ? cot_rc('pfs_link_addfile', ['c2' => $c2, 'pfs_file' => $pfs_file, 'pfs_desc' => $pfs_desc])
+        : '';
 
 	if ($pfs_extension != $pfs_realext) {
 		Cot::$db->update(Cot::$db->pfs, ['pfs_extension' => $pfs_realext], 'pfs_id = ?', $pfs_id);
@@ -479,15 +481,29 @@ foreach ($sql_pfs->fetchAll() as $row) {
 		}
 
 		if ($standalone) {
-			$add_thumbnail = cot_rc('pfs_link_addthumb');
-			$add_image = cot_rc('pfs_link_addpix');
+			$add_thumbnail = cot_rc(
+                'pfs_link_addthumb',
+                ['c2' => $c2, 'pfs_file' => $pfs_file, 'pfs_desc' => $pfs_desc]
+            );
+			$add_image = cot_rc(
+                'pfs_link_addpix',
+                ['c2' => $c2, 'pfs_file' => $pfs_file, 'pfs_desc' => $pfs_desc]
+            );
 		}
 		if ($opt == 'thumbs') {
-			$pfs_icon = cot_rc('pfs_link_thumbnail', array('thumbpath' => $thumbs_dir_user));
+			$pfs_icon = cot_rc(
+                'pfs_link_thumbnail',
+                [
+                    'thumbpath' => $thumbs_dir_user,
+                    'pfs_fullfile' => $pfs_fullfile,
+                    'pfs_file' => $pfs_file,
+                    'pfs_desc' => $pfs_desc,
+                ]
+            );
 		}
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'PFS_ROW_ID' => $pfs_id,
 		'PFS_ROW_FILE' => $pfs_file,
 		'PFS_ROW_DATE' => cot_date('datetime_medium', $pfs_date),
@@ -502,8 +518,8 @@ foreach ($sql_pfs->fetchAll() as $row) {
 		'PFS_ROW_DELETE_URL' => cot_confirm_url(cot_url('pfs', 'a=delete&'.cot_xg().'&id='.$pfs_id.'&'.$more.'&opt='.$opt), 'pfs', 'pfs_confirm_delete_file'),
 		'PFS_ROW_EDIT_URL' => cot_url('pfs', 'm=edit&id='.$pfs_id.'&'.$more),
 		'PFS_ROW_COUNT' => $row['pfs_count'],
-		'PFS_ROW_INSERT' => $standalone ? $add_thumbnail . $add_image . $add_file : ''
-	));
+		'PFS_ROW_INSERT' => $standalone ? $add_thumbnail . $add_image . $add_file : '',
+	]);
 
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl) {
@@ -643,9 +659,18 @@ if ($standalone) {
 		$addthumb = $R['pfs_code_addthumb'];
 		$addpix = $R['pfs_code_addpix'];
 		$addfile = $R['pfs_code_addfile'];
-		$pfs_code_addfile = cot_rc('pfs_code_addfile');
-		$pfs_code_addthumb = cot_rc('pfs_code_addthumb');
-		$pfs_code_addpix = cot_rc('pfs_code_addpix');
+		$pfs_code_addfile = cot_rc(
+            'pfs_code_addfile',
+            ['pfs_base_href' => $pfs_base_href, 'pfs_dir_user' => $pfs_dir_user]
+        );
+		$pfs_code_addthumb = cot_rc(
+            'pfs_code_addthumb',
+            ['pfs_base_href' => $pfs_base_href, 'thumbs_dir_user' => $thumbs_dir_user]
+        );
+		$pfs_code_addpix = cot_rc(
+            'pfs_code_addpix',
+            ['pfs_base_href' => $pfs_base_href, 'pfs_dir_user' => $pfs_dir_user]
+        );
 	}
 	$winclose = Cot::$cfg['pfs']['pfs_winclose'] ? "\nwindow.close();" : '';
 
@@ -653,19 +678,29 @@ if ($standalone) {
 
 	$html = Resources::render();
 	if ($html) {
-        $out['head_head'] = $html . (!empty(Cot::$out['head_head']) ? Cot::$out['head_head'] : '');
+        Cot::$out['head_head'] = $html . (!empty(Cot::$out['head_head']) ? Cot::$out['head_head'] : '');
     }
 
-	$t->assign(array(
-		'PFS_HEAD' => $out['head_head'],
-		'PFS_HEADER_JAVASCRIPT' => cot_rc('pfs_code_header_javascript'),
+    $t->assign([
+		'PFS_HEAD' => Cot::$out['head_head'],
+		'PFS_HEADER_JAVASCRIPT' => cot_rc(
+            'pfs_code_header_javascript',
+            [
+                'c1' => $c1,
+                'c2' => $c2,
+                'pfs_code_addfile' => $pfs_code_addfile,
+                'pfs_code_addthumb' => $pfs_code_addthumb,
+                'pfs_code_addpix' => $pfs_code_addpix,
+                'winclose' => $winclose,
+            ]
+        ),
 		'PFS_C1' => $c1,
 		'PFS_C2' => $c2,
 		'PFS_ADDTHUMB' => $addthumb,
 		'PFS_ADDPIX' => $addpix,
 		'PFS_ADDFILE' => $addfile,
-		'PFS_WINCLOSE' => $winclose
-	));
+		'PFS_WINCLOSE' => $winclose,
+	]);
 
 	$t->parse('MAIN.STANDALONE_HEADER');
 	$t->parse('MAIN.STANDALONE_FOOTER');

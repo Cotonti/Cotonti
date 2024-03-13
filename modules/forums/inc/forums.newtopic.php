@@ -141,7 +141,7 @@ if ($a == 'newtopic') {
 	}
 }
 
-$toptitle = cot_breadcrumbs(cot_forums_buildpath($s), Cot::$cfg['homebreadcrumb']);
+$toptitle = cot_breadcrumbs(cot_forums_buildpath($s), Cot::$cfg['homebreadcrumb'], false);
 $toptitle .= (Cot::$usr['isadmin']) ? Cot::$R['forums_code_admin_mark'] : '';
 
 Cot::$sys['sublocation'] = Cot::$structure['forums'][$s]['title'];

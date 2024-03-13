@@ -170,10 +170,8 @@ textarea { resize: both; }
 #saveconfig input[type=text],
 #saveconfig textarea { width:98%; }
 
-input[type=text],
-textarea	{ width:98%; }
-
-textarea	{ min-height: 40px; }
+input[type=text], textarea	{ width: 100%; max-width: 100%; }
+textarea { min-height: 40px; }
 
 .filter input[type=text]	{ width: 200px; }
 
@@ -182,7 +180,13 @@ textarea	{ min-height: 40px; }
 
 .bar_front 	{ background: #ffae00; height: .5rem; }
 .bar_back 	{ background: #fff; border: 1px solid #333; }
-.polloptiondiv input[type="text"]	{ margin-bottom: 10px; width: 90%; }
+.polloptiondiv {
+	display: flex;
+	margin-bottom: 10px;
+}
+.polloptiondiv input[type="text"] {
+	margin-right: 10px;
+}
 
 /* 9. User Images
 -------------------------------------------------- */

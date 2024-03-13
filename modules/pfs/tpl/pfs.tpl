@@ -129,7 +129,7 @@
 				</form>
 				<!-- END: PFS_UPLOAD_FORM -->
 
-<!-- BEGIN: PFS_NEWFOLDER_FORM -->
+				<!-- BEGIN: PFS_NEWFOLDER_FORM -->
 				<h3>{PHP.L.pfs_newfolder}</h3>
 				<form id="newfolder" action="{NEWFOLDER_FORM_ACTION}" method="post">
 					<table class="cells">
@@ -164,14 +164,14 @@
 						</tr>
 					</table>
 				</form>
-<!-- END: PFS_NEWFOLDER_FORM -->
+				<!-- END: PFS_NEWFOLDER_FORM -->
 
 				<h3>{PHP.L.pfs_extallowed}</h3>
-<!-- BEGIN: ALLOWED_ROW -->
+				<!-- BEGIN: ALLOWED_ROW -->
 				<div class="floatleft small width20">
 					<span style="vertical-align:-15px;">{ALLOWED_ROW_ICON}</span> {ALLOWED_ROW_EXT} {ALLOWED_ROW_DESC}
 				</div>
-<!-- END: ALLOWED_ROW -->
+				<!-- END: ALLOWED_ROW -->
 				<br class="clear" />
 		</div>
 

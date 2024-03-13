@@ -297,11 +297,14 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
             ((Cot::$structure['forums'][$cat]['locked']) ? ' ' . Cot::$L['Locked'] : ''),
 		$tag_prefix . 'ICON' => empty(Cot::$structure['forums'][$cat]['icon'])
             ? ''
-            : cot_rc('img_structure_cat', [
-				'icon' => Cot::$structure['forums'][$cat]['icon'],
-				'title' => htmlspecialchars(Cot::$structure['forums'][$cat]['title']),
-				'desc' => htmlspecialchars(Cot::$structure['forums'][$cat]['desc']),
-			]),
+            : cot_rc(
+                'img_structure_cat',
+                [
+                    'icon' => Cot::$structure['forums'][$cat]['icon'],
+                    'title' => htmlspecialchars(Cot::$structure['forums'][$cat]['title']),
+                    'desc' => htmlspecialchars(Cot::$structure['forums'][$cat]['desc']),
+                ]
+            ),
 		$tag_prefix . 'URL' => cot_url('forums', 'm=topics&s=' . $cat),
 		$tag_prefix . 'SECTIONSURL' => cot_url('forums', 'c=' . $cat),
 		$tag_prefix . 'NEWPOSTS' => $new_elems,

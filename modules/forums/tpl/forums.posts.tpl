@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-
 <!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
 <div class="error">{PHP.L.forums_privatetopic}</div>
 <!-- END: FORUMS_POSTS_TOPICPRIVATE -->
@@ -110,10 +109,12 @@
 <form action="{FORUMS_POSTS_NEWPOST_SEND}" method="post" name="newpost">
 	<table class="flat">
 		<tr>
-			<td>{FORUMS_POSTS_NEWPOST_TEXT}
-			<!-- IF {PHP.cfg.forums.edittimeout} != 0 -->
-			{PHP.L.forums_edittimeoutnote} {FORUMS_POSTS_NEWPOST_EDITTIMEOUT}
-			<!-- ENDIF -->
+			<td>
+				{FORUMS_POSTS_NEWPOST_TEXT}
+				<!-- IF {FORUMS_POSTS_NEWPOST_MYPFS} -->{FORUMS_POSTS_NEWPOST_MYPFS}<!-- ENDIF -->
+				<!-- IF {PHP.cfg.forums.edittimeout} != 0 -->
+				{PHP.L.forums_edittimeoutnote} {FORUMS_POSTS_NEWPOST_EDITTIMEOUT}
+				<!-- ENDIF -->
 			</td>
 		</tr>
 		<tr>
@@ -122,5 +123,4 @@
 	</table>
 </form>
 <!-- END: FORUMS_POSTS_NEWPOST -->
-
 <!-- END: MAIN -->
