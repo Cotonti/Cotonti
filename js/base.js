@@ -238,7 +238,7 @@ function ajaxSend(settings) {
 	var method = settings.method ? settings.method.toUpperCase() : 'GET';
 	var data = settings.data || '';
 	var url = settings.url || $('#' + settings.formId).attr('action');
-	if (method == 'POST') {
+	if (method === 'POST') {
 		data += '&' + $('#' + settings.formId).serialize();
 	} else if (settings.formId) {
 		var sep = url.indexOf('?') > 0 ? '&' : '?';
@@ -249,14 +249,20 @@ function ajaxSend(settings) {
 		url: encodeURIfix(url),
 		data: data,
 		beforeSend: function() {
-			if (!settings.nonshowloading) $('#' + settings.divId).append('<span style="position:absolute; left:' + ($('#' + settings.divId).width()/2 - 110) + 'px;top:' + ($('#' + settings.divId).height()/2 - 9) + 'px;" class="loading" id="loading"><img src="./images/spinner.gif" alt="loading"/></span>').css('position', 'relative');
+			if (!settings.nonshowloading) {
+				$('#' + settings.divId)
+					.append('<span style="position:absolute; left:' + ($('#' + settings.divId).width()/2 - 110) + 'px;top:' + ($('#' + settings.divId).height()/2 - 9) + 'px;" class="loading" id="loading"><img src="./images/spinner.gif" alt="loading"/></span>').css('position', 'relative');
+			}
 		},
 		success: function(msg) {
-			if (!settings.nonshowloading) $('#loading').remove();
-			if (!settings.nonshowfadein)
+			if (!settings.nonshowloading) {
+				$('#loading').remove();
+			}
+			if (!settings.nonshowfadein) {
 				$('#' + settings.divId).hide().html(msg).fadeIn(500);
-			else
+			} else {
 				$('#' + settings.divId).html(msg);
+			}
 			for (var i = 0; i < ajaxSuccessHandlers.length; i++) {
 				if(ajaxSuccessHandlers[i].func)
 					ajaxSuccessHandlers[i].func(msg);
@@ -265,11 +271,14 @@ function ajaxSend(settings) {
 			}
 		},
 		error: function(msg) {
-			if (!settings.nonshowloading) $('#loading').remove();
-			if (!settings.nonshowfadein)
+			if (!settings.nonshowloading) {
+				$('#loading').remove();
+			}
+			if (!settings.nonshowfadein) {
 				$('#' + settings.divId).hide().html(msg).fadeIn(500);
-			else
+			} else {
 				$('#' + settings.divId).html(msg);
+			}
 			if (ajaxErrorHandlers.length > 0) {
 				for (var i = 0; i < ajaxErrorHandlers.length; i++) {
 					if (ajaxErrorHandlers[i].func)
@@ -294,7 +303,9 @@ function ajaxSend(settings) {
  * @type bool
  */
 function ajaxPageLoad(hash) {
-    if(hash != '') hash.replace(/^#/, '');
+    if (hash !== '') {
+		hash.replace(/^#/, '');
+	}
 	var m = hash.match(/^get(-.*?)?;(.*)$/);
 	if (m) {
 		// ajax bookmark
@@ -305,7 +316,7 @@ function ajaxPageLoad(hash) {
 			url: url,
 			divId: m[1] ? m[1].substr(1) : 'ajaxBlock'
 		});
-	} else if (hash == '' && ajaxUsed) {
+	} else if (hash === '' && ajaxUsed) {
 		// ajax home
 		return ajaxSend ({
 			url: location.href.replace(/#.*$/, ''),

@@ -20,7 +20,7 @@ function ckeditorReplace() {
 	}
 	for (let textarea of textareas) {
 		let classList = textarea.classList;
-		if (classList === undefined || classList.length === 0) {
+		if (classList === undefined || classList.length === 0 || classList.contains('editor-initialized')) {
 			continue;
 		}
 		for (let key of classList) {
@@ -30,6 +30,7 @@ function ckeditorReplace() {
 					width:'100%',
 					toolbar: ckeditorClasses[key]
 				});
+				textarea.classList.add('editor-initialized');
 				break;
 			}
 		}

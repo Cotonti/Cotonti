@@ -115,25 +115,29 @@ function cot_radiobox(
 	$i = 0;
 	$result = '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	$rc = empty(Cot::$R["input_radio_{$rc_name}"]) ?
-        (empty($custom_rc) ? 'input_radio' : $custom_rc) : "input_radio_{$rc_name}";
+	$rc = empty(Cot::$R["input_radio_{$rc_name}"])
+        ? (empty($custom_rc) ? 'input_radio' : $custom_rc)
+        : "input_radio_{$rc_name}";
 
 	foreach ($values as $k => $value) {
 		$checked = ($value == $chosen) ? ' checked="checked"' : '';
 		$title = $use_titles ? $titles[$k] : $value;
-            if (!$htmlspecialcharsBypass) {
-                $title = htmlspecialchars($title);
-            }
+        if (!$htmlspecialcharsBypass) {
+            $title = htmlspecialchars($title);
+        }
 		if ($i > 0) {
 			$result .= $separator;
 		}
-		$result .= cot_rc($rc, array(
-			'value' => $htmlspecialcharsBypass ? $value : htmlspecialchars($value),
-			'name' => $name,
-			'checked' => $checked,
-			'title' => $title,
-			'attrs' => $input_attrs
-		));
+		$result .= cot_rc(
+            $rc,
+            [
+                'value' => $htmlspecialcharsBypass ? $value : htmlspecialchars($value),
+                'name' => $name,
+                'checked' => $checked,
+                'title' => $title,
+                'attrs' => $input_attrs,
+            ]
+        );
 		$i++;
 	}
 

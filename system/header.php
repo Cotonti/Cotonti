@@ -146,7 +146,7 @@ if (!COT_AJAX) {
 		'HEADER_CANONICAL_URL' => !empty(Cot::$out['canonical_uri']) ? Cot::$out['canonical_uri'] : '',
 		'HEADER_PREV_URL' => !empty(Cot::$out['prev_uri']) ? Cot::$out['prev_uri'] : '',
 		'HEADER_NEXT_URL' => !empty(Cot::$out['next_uri']) ? Cot::$out['next_uri'] : '',
-		'HEADER_COLOR_SCHEME' => cot_schemefile(),
+		'HEADER_COLOR_SCHEME' => cot_schemeFile(),
 	]);
 
 	/* === Hook === */

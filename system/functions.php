@@ -3304,7 +3304,10 @@ function cot_die_message($code, $header = true, $message_title = '', $message_bo
 	// Render the message page
 	$tpl_type = defined('COT_ADMIN') ? 'core' : 'module';
 	$tpl_path = '';
-	$stylesheet = file_exists(cot_schemefile()) ? '<link rel="stylesheet" type="text/css" href="'.cot_schemefile().'"/>' : '';
+    $schemeFile = cot_schemeFile();
+	$stylesheet = $schemeFile && file_exists($schemeFile)
+        ? '<link rel="stylesheet" type="text/css" href="' . $schemeFile . '"/>'
+        : '';
 	$redirect_meta = '';
 	if (!empty($redirect)) {
 		if (cot_url_check($redirect)) {
@@ -3816,9 +3819,9 @@ function cot_rmdir($dir)
  * 1) `css` subfolder of user selected theme
  * 2) Main folder of user selected theme
  *
- * @return mixed Filename with full path to CSS file or FALSE if not found
+ * @return ?string Filename with full path to CSS file or NULL if not found
  */
-function cot_schemefile()
+function cot_schemeFile()
 {
     // cot class can be not initialised yet
     global $cfg, $usr;
@@ -3826,14 +3829,17 @@ function cot_schemefile()
     $scheme = isset($usr['scheme']) ? $usr['scheme'] : $cfg['defaultscheme'];
     $theme = isset($usr['theme']) ? $usr['theme'] : $cfg['defaulttheme'];
 
-	$scheme_css = array();
-	$scheme_css[] = $cfg['themes_dir'] .'/'. $theme .'/css/'. $scheme .'.css';
-	$scheme_css[] = $cfg['themes_dir'] .'/'. $theme .'/'. $scheme .'.css';
+	$schemeCss = [];
+    $schemeCss[] = $cfg['themes_dir'] . '/' . $theme . '/css/' . $scheme . '.css';
+    $schemeCss[] = $cfg['themes_dir'] . '/' . $theme . '/' . $scheme . '.css';
 
-	foreach ($scheme_css as $filename) {
-		if (is_file($filename)) return $filename;
+	foreach ($schemeCss as $filename) {
+		if (is_file($filename)) {
+            return $filename;
+        }
 	}
-	return false;
+
+	return null;
 }
 
 /**
@@ -3872,8 +3878,8 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 		$admin && !empty($cfg['admintheme']) && $scan_dirs[] = "{$cfg['themes_dir']}/admin/{$cfg['admintheme']}/plugins/";
 		$admin && $scan_dirs[] = "{$cfg['themes_dir']}/{$usr['theme']}/admin/plugins/";
         if (isset(Cot::$usr['theme'])) {
-            $scan_dirs[] = Cot::$cfg['themes_dir']."/{$usr['theme']}/plugins/";
-            $scan_dirs[] = Cot::$cfg['themes_dir']."/{$usr['theme']}/plugins/{$base[0]}/";
+            $scan_dirs[] = Cot::$cfg['themes_dir'] . "/{$usr['theme']}/plugins/";
+            $scan_dirs[] = Cot::$cfg['themes_dir'] . "/{$usr['theme']}/plugins/{$base[0]}/";
         }
 		$scan_dirs[] = "{$cfg['plugins_dir']}/{$base[0]}/tpl/";
 
@@ -5252,11 +5258,11 @@ function cot_captcha_generate($use_captcha = '')
 
     if (
         !COT_AJAX
-        && \Cot::$cfg['cache']
+        && Cot::$cfg['cache']
         && !empty(\Cot::$cfg['cache_' . \Cot::$env['ext']])
-        && \Cot::$cache
+        && Cot::$cache
     ) {
-        \Resources::embedFooter(
+        Resources::embedFooter(
 "document.addEventListener('DOMContentLoaded', function () { 
     if (typeof cot !== 'undefined') {
         cot.loadCaptcha();

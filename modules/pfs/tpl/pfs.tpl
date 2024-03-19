@@ -116,7 +116,9 @@
 						<!-- BEGIN: PFS_UPLOAD_FORM_ROW -->
 						<tr>
 							<td style="text-align:center">#{PFS_UPLOAD_FORM_ROW_NUM}</td>
-							<td><input type="text" class="text" name="ndesc[{PFS_UPLOAD_FORM_ROW_ID}]" value="" size="40" maxlength="255" /></td>
+							<td style="width: 50%">
+								<input type="text" class="text" name="ndesc[{PFS_UPLOAD_FORM_ROW_ID}]" value="" maxlength="255" />
+							</td>
 							<td><input name="userfile[{PFS_UPLOAD_FORM_ROW_ID}]" type="file" class="file" size="24" /></td>
 						</tr>
 						<!-- END: PFS_UPLOAD_FORM_ROW -->
@@ -148,15 +150,25 @@
 						<tr>
 							<td>{PHP.L.pfs_ispublic}</td>
 							<td>
-								<input type="radio" class="radio" name="nispublic" value="1" />{PHP.L.Yes}
-								<input type="radio" class="radio" name="nispublic" value="0" checked="checked" />{PHP.L.No}
+								<label class="radio-label">
+									<input type="radio" class="radio" name="nispublic" value="1" /> {PHP.L.Yes}
+								</label>
+								<label class="radio-label">
+									<input type="radio" class="radio" name="nispublic" value="0" checked="checked" />
+									{PHP.L.No}
+								</label>
 							</td>
 						</tr>
 						<tr>
 							<td>{PHP.L.pfs_isgallery}</td>
 							<td>
-								<input type="radio" class="radio" name="nisgallery" value="1" />{PHP.L.Yes}
-								<input type="radio" class="radio" name="nisgallery" value="0" checked="checked" />{PHP.L.No}
+								<label class="radio-label">
+									<input type="radio" class="radio" name="nisgallery" value="1" /> {PHP.L.Yes}
+								</label>
+								<label class="radio-label">
+									<input type="radio" class="radio" name="nisgallery" value="0" checked="checked" />
+									{PHP.L.No}
+								</label>
 							</td>
 						</tr>
 						<tr>

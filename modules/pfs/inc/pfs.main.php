@@ -43,7 +43,7 @@ if (!$user_info && !Cot::$usr['isadmin']) {
     cot_die_message(404);
 }
 
-$pfs_base_href = Cot::$sys['abs_url'];
+$pfs_base_href = Cot::$cfg['multihost'] ? Cot::$sys['abs_url'] : '';
 $pfs_dir_user = cot_pfs_path($userid);
 $thumbs_dir_user = cot_pfs_thumbpath($userid);
 $rel_dir_user = cot_pfs_relpath($userid);
@@ -583,7 +583,7 @@ if ($filesCount > 0 || $foldersCount > 0) {
 $showthumbs = ($opt != 'thumbs' && $filesCount > 0 && Cot::$cfg['pfs']['th_amode'] != 'Disabled') ?
     cot_rc_link(cot_url('pfs', 'f=' . $f . '&' . $more . '&opt=thumbs'), Cot::$L['Thumbnails']) : '';
 
-$t->assign(array(
+$t->assign([
 	'PFS_TOTALSIZE' => cot_build_filesize($pfs_totalsize, 1),
 	'PFS_TOTALSIZE_BYTES' => $pfs_totalsize,
 	'PFS_TOTALSIZE_KB' => floor($pfs_totalsize / 1024), // in KiB; deprecated but kept for compatibility
@@ -594,8 +594,8 @@ $t->assign(array(
 	'PFS_MAXFILESIZE' => cot_build_filesize($maxfile, 1),
 	'PFS_MAXFILESIZE_BYTES' => $maxfile,
 	'PFS_MAXFILESIZE_KB' => $maxfile / 1024, // in KiB; deprecated but kept for compatibility
-	'PFS_SHOWTHUMBS' => $showthumbs
-));
+	'PFS_SHOWTHUMBS' => $showthumbs,
+]);
 
 // ========== Upload =========
 if (Cot::$usr['auth_write']) {
@@ -648,31 +648,31 @@ Cot::$out['subtitle'] = Cot::$L['Mypfs'];
 $t->assign('PFS_TITLE', cot_breadcrumbs($title, $cfg['homebreadcrumb']));
 
 if ($standalone) {
-	if ($c1 == 'pageform' && $c2 == 'rpageurl') {
-		$addthumb = $thumbs_dir_user."' + gfile + '";
-		$addpix = "' + gfile + '";
-		$addfile = $pfs_dir_user."' + gfile + '";
-		$pfs_code_addfile = $addfile;
-		$pfs_code_addthumb = $addthumb;
-		$pfs_code_addpix = $addpix;
-	} else {
-		$addthumb = $R['pfs_code_addthumb'];
-		$addpix = $R['pfs_code_addpix'];
-		$addfile = $R['pfs_code_addfile'];
-		$pfs_code_addfile = cot_rc(
+    if ($c1 == 'pageform' && $c2 == 'rpageurl') {
+        $addthumb = $thumbs_dir_user . "' + gfile + '";
+        $addpix = "' + gfile + '";
+        $addfile = $pfs_dir_user . "' + gfile + '";
+        $pfs_code_addfile = $addfile;
+        $pfs_code_addthumb = $addthumb;
+        $pfs_code_addpix = $addpix;
+    } else {
+        $addthumb = Cot::$R['pfs_code_addthumb'];
+        $addpix = Cot::$R['pfs_code_addpix'];
+        $addfile = Cot::$R['pfs_code_addfile'];
+        $pfs_code_addfile = cot_rc(
             'pfs_code_addfile',
             ['pfs_base_href' => $pfs_base_href, 'pfs_dir_user' => $pfs_dir_user]
         );
-		$pfs_code_addthumb = cot_rc(
+        $pfs_code_addthumb = cot_rc(
             'pfs_code_addthumb',
-            ['pfs_base_href' => $pfs_base_href, 'thumbs_dir_user' => $thumbs_dir_user]
+            ['pfs_base_href' => $pfs_base_href, 'pfs_dir_user' => $pfs_dir_user, 'thumbs_dir_user' => $thumbs_dir_user]
         );
-		$pfs_code_addpix = cot_rc(
+        $pfs_code_addpix = cot_rc(
             'pfs_code_addpix',
             ['pfs_base_href' => $pfs_base_href, 'pfs_dir_user' => $pfs_dir_user]
         );
-	}
-	$winclose = Cot::$cfg['pfs']['pfs_winclose'] ? "\nwindow.close();" : '';
+    }
+    $winclose = Cot::$cfg['pfs']['pfs_winclose'] ? "\nwindow.close();" : '';
 
 	cot_sendheaders();
 

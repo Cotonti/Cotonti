@@ -25,7 +25,7 @@ $R['input_checkbox'] = '<input type="hidden" name="{$name}" value="{$value_off}"
 $R['input_check'] = '<label><input type="checkbox" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
 $R['input_default'] = '<input type="{$type}" name="{$name}" value="{$value}"{$attrs} />{$error}';
 $R['input_option'] = '<option value="{$value}"{$selected}>{$title}</option>';
-$R['input_radio'] = '<label><input type="radio" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
+$R['input_radio'] = '<label class="radio-label"><input type="radio" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
 $R['input_radio_separator'] = ' ';
 $R['input_select'] = '<select name="{$name}"{$attrs}>{$options}</select>{$error}';
 $R['input_submit'] = '<button type="submit" name="{$name}" {$attrs}>{$value}</button>';

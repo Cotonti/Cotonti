@@ -57,7 +57,8 @@ if (Cot::$usr['id'] > 0) {
         $preset_name = 'default';
     }
 } else {
-    $preset_name = file_exists(Cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.group_1.set.js") ? 'group_1'
+    $preset_name = file_exists(Cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.group_1.set.js")
+        ? 'group_1'
         : 'default';
 }
 Resources::linkFileFooter(Cot::$cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js?" .

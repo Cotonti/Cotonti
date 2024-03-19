@@ -179,7 +179,11 @@ input[type="text"], input[type="password"], textarea {
 input[type="button"], button {
 	padding: 2px 4px;
 }
-label input { vertical-align: middle; margin-right: 3px }
+/*label input { vertical-align: middle; margin-right: 3px }*/
+label input { margin-right: 1px }
+label.radio-label {
+	margin-right: 8px;
+}
 button::-moz-focus-inner { padding:0; border:none; }
 
 /* 6. Misc
