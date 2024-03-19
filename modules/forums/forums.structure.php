@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=admin.structure.first
+Hooks=structure.extensions
 [END_COT_EXT]
 ==================== */
 
@@ -15,4 +15,4 @@ Hooks=admin.structure.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-$extension_structure[] = 'forums';
+$extensionsWithStructure[] = 'forums';

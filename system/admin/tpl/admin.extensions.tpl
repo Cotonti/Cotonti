@@ -70,7 +70,7 @@
 						<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} -->
 						<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_EDIT_URL}" class="button">{PHP.L.Config}</a>
 						<!-- ENDIF -->
-						<!-- IF {PHP.ifstruct} -->
+						<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT} -->
 						<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}" class="button">{PHP.L.Structure}</a>
 						<!-- ENDIF -->
 						<!-- IF {PHP.totalinstalled} -->

@@ -514,25 +514,40 @@ switch($a) {
 
 		// Search admin parts, standalone parts, struct
         $standalone = null;
-		if( $db->query("SELECT pl_code FROM $db_plugins WHERE (pl_hook='standalone' OR pl_hook='module') AND pl_code='$code' LIMIT 1")->rowCount() > 0)
-		{
+		if (
+            Cot::$db->query(
+                'SELECT pl_code FROM ' . Cot::$db->plugins .
+                " WHERE (pl_hook = 'standalone' OR pl_hook = 'module') AND pl_code = :code AND pl_active = 1 LIMIT 1",
+                ['code' => $code]
+            )->rowCount() > 0
+        ) {
 			$standalone = ($type == 'module') ? cot_url($code) : cot_url('plug', 'e=' . $code);
 		}
 
-		$tool_hook = $type == 'plug' ? 'tools' : 'admin';
+		$tool_hook = $type === 'plug' ? 'tools' : 'admin';
         $tools = null;
-		if ($db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook' AND pl_code='$code' AND pl_active = 1 LIMIT 1")->rowCount() > 0)
-		{
-			$tools = $type == 'plug' ? cot_url('admin', "m=other&p=$code") : cot_url('admin', "m=$code");
-		}
+		if (
+            Cot::$db->query(
+                'SELECT pl_code FROM ' . Cot::$db->plugins .
+                " WHERE pl_hook = :hook AND pl_code = :code AND pl_active = 1 LIMIT 1",
+                ['hook' =>  $tool_hook, 'code' => $code]
+            )->rowCount() > 0
+        ) {
+            $tools = $type === 'plug'
+                ? cot_url('admin', ['m' => 'other', 'p' => $code])
+                : cot_url('admin', ['m' => $code]);
+        }
 
         $struct = null;
-		if ($db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='admin.structure.first' AND pl_code='$code' LIMIT 1")->rowCount() > 0)
-		{
-			$struct = cot_url('admin', "m=structure&n=$code");
+        $extensionsWithStructure = cot_getExtensionsWithStructure();
+		if (in_array($code, $extensionsWithStructure, true)) {
+			$struct = cot_url('admin', ['m' => 'structure', 'n' => $code]);
 		}
 
-		$installed_ver = $db->query("SELECT ct_version FROM $db_core WHERE ct_code = '$code'")->fetchColumn();
+		$installed_ver = Cot::$db->query(
+            'SELECT ct_version FROM ' . Cot::$db->core . ' WHERE ct_code = :code',
+            ['code' => $code]
+        )->fetchColumn();
 
         $params = cot_get_extensionparams($code, $type == COT_EXT_TYPE_MODULE);
 
@@ -657,8 +672,7 @@ switch($a) {
 
 		$sql = $db->query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC");
 
-		while($row = $sql->fetch())
-		{
+		while($row = $sql->fetch()) {
 			$t->assign(array(
 				'ADMIN_EXTENSIONS_HOOK' => $row['pl_hook'],
 				'ADMIN_EXTENSIONS_CODE' => $row['pl_code'],
@@ -680,17 +694,13 @@ switch($a) {
 	/* =============== */
 		// Params to show only installed extensions
 		$only_installed = cot_import('inst', 'G', 'BOL');
-		if (Cot::$cfg['default_show_installed'])
-		{
-			if (is_null($only_installed))
-			{
+		if (Cot::$cfg['default_show_installed']) {
+			if (is_null($only_installed)) {
 				$only_installed = true;
 			}
 			$only_installed_urlp = $only_installed ? '' : '&inst=0';
 			$only_installed_toggle = $only_installed ? '&inst=0' : '';
-		}
-		else
-		{
+		} else {
 			$only_installed_urlp = $only_installed ? '&inst=1' : '';
 			$only_installed_toggle = $only_installed ? '' : '&inst=1';
 		}
@@ -723,19 +733,19 @@ switch($a) {
 
 		$totalactives = [];
 		$totalinstalleds = [];
-		foreach ($db->query("SELECT SUM(pl_active) AS sum, COUNT(*) AS cnt, pl_code FROM $db_plugins GROUP BY pl_code")->fetchAll() as $row)
-		{
+		foreach ($db->query("SELECT SUM(pl_active) AS sum, COUNT(*) AS cnt, pl_code FROM $db_plugins GROUP BY pl_code")->fetchAll() as $row) {
 			$totalactives[$row['pl_code']] = (int)$row['sum'];
 			$totalinstalleds[$row['pl_code']] = (int)$row['cnt'];
 		}
 
 		$installed_vers = array();
-		foreach($db->query("SELECT ct_version, ct_code FROM $db_core")->fetchAll() as $row)
-		{
+		foreach($db->query("SELECT ct_version, ct_code FROM $db_core")->fetchAll() as $row) {
 			$installed_vers[$row['ct_code']] = $row['ct_version'];
 		}
 
-		foreach (array('module', 'plug') as $type) {
+        $extensionsWithStructure = cot_getExtensionsWithStructure();
+
+		foreach (['module', 'plug'] as $type) {
 			$sql = $db->query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config
 			    WHERE config_owner='$type' GROUP BY config_cat");
 			while ($row = $sql->fetch(PDO::FETCH_NUM)) {
@@ -747,15 +757,12 @@ switch($a) {
 			$extensions = cot_extension_list_info($dir);
 			$ctplug = $type == 'module' ? '0' : '1';
 
-			if ($only_installed)
-			{
+			if ($only_installed) {
 				// Filter only installed exts
 				$tmp = array();
 				$installed_exts = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = $ctplug")->fetchAll(PDO::FETCH_COLUMN);
-				foreach ($extensions as $key => $val)
-				{
-					if (in_array($key, $installed_exts))
-					{
+				foreach ($extensions as $key => $val) {
+					if (in_array($key, $installed_exts)) {
 						$tmp[$key] = $val;
 					}
 				}
@@ -765,10 +772,8 @@ switch($a) {
 			// Find missing extensions
 			$extlist = count($extensions) > 0 ? "ct_code NOT IN('" . implode("','", array_keys($extensions)) . "')" : '1';
 			$sql = $db->query("SELECT * FROM $db_core WHERE $extlist AND ct_plug = $ctplug");
-			foreach ($sql->fetchAll() as $row)
-			{
-				if ($type ==  'module' && in_array($row['ct_code'], array('admin', 'message', 'users')))
-				{
+			foreach ($sql->fetchAll() as $row) {
+				if ($type ==  'module' && in_array($row['ct_code'], array('admin', 'message', 'users'))) {
 					continue;
 				}
 				$extensions[$row['ct_code']] = array(
@@ -780,12 +785,9 @@ switch($a) {
 				);
 			}
 
-			if ($type == 'plug' && $sort == 'cat')
-			{
+			if ($type == 'plug' && $sort == 'cat') {
 				uasort($extensions, 'cot_extension_catcmp');
-			}
-			else
-			{
+			} else {
 				ksort($extensions);
 			}
 
@@ -812,13 +814,6 @@ switch($a) {
 			}
 			$sql3->closeCursor();
 
-			$struct = [];
-			$sql3 = $db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='admin.structure.first'");
-			while ($row3 = $sql3->fetch()) {
-				$struct[$row3['pl_code']] = true;
-			}
-			$sql3->closeCursor();
-
 			$prev_cat = '';
 
 			/* === Hook - Part1 : Set === */
@@ -842,10 +837,10 @@ switch($a) {
 				$exists = !isset($info['NotFound']);
 
 				if (!empty($info['Error'])) {
-					$t->assign(array(
+					$t->assign([
 						'ADMIN_EXTENSIONS_X_ERR' => $code,
-						'ADMIN_EXTENSIONS_ERROR_MSG' => $info['Error']
-					));
+						'ADMIN_EXTENSIONS_ERROR_MSG' => $info['Error'],
+					]);
 					$t->parse('MAIN.DEFAULT.ROW.ROW_ERROR_EXT');
 					$t->parse('MAIN.DEFAULT.ROW');
 
@@ -878,7 +873,7 @@ switch($a) {
 					$ent_code = isset($cfgentries[$code]) ? $cfgentries[$code] : 0;
 					$isExtensionStandalone = isset($standalone[$code]) && $standalone[$code];
 
-					$ifstruct = isset($struct[$code]) && $struct[$code];
+					$hasStructure = in_array($code, $extensionsWithStructure, true);
 
 					if ($type == COT_EXT_TYPE_MODULE) {
 						$arg = 'mod';
@@ -917,7 +912,9 @@ switch($a) {
                             cot_url('admin', "m=other&p=$code") :
                             cot_url('admin', "m=$code"),
 						'ADMIN_EXTENSIONS_JUMPTO_URL' => isset($standalone[$code]) ? $standalone[$code] : '',
-						'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => cot_url('admin', "m=structure&n=$code"),
+						'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => $hasStructure
+                            ? cot_url('admin', ['m' => 'structure', 'n' => $code])
+                            : '',
 						//'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i),
 					]);
                     if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {

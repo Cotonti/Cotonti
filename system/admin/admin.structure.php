@@ -31,7 +31,7 @@ $t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
 
 $adminTitle = Cot::$L['Structure'];
 
-$modules_structure = &$extension_structure; // for compatibility
+$extensionsWithStructure = cot_getExtensionsWithStructure();
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.structure.first') as $pl) {
@@ -43,15 +43,15 @@ if (empty($n)) {
 	$adminPath[] = [cot_url('admin', 'm=structure'), Cot::$L['Structure'],];
 	// Show available module list
 	if (
-        is_array($extension_structure)
-        && count($extension_structure) == 1
-        && ((cot_plugin_active($extension_structure[0]) || cot_module_active($extension_structure[0])))
+        is_array($extensionsWithStructure)
+        && count($extensionsWithStructure) == 1
+        && ((cot_plugin_active($extensionsWithStructure[0]) || cot_module_active($extensionsWithStructure[0])))
     ) {
-		cot_redirect(cot_url('admin', 'm=structure&n='.$extension_structure[0], '', true));
+		cot_redirect(cot_url('admin', 'm=structure&n='.$extensionsWithStructure[0], '', true));
 	}
 
-	if (is_array($extension_structure) && count($extension_structure) > 0) {
-		foreach ($extension_structure as $code) {
+	if (is_array($extensionsWithStructure) && count($extensionsWithStructure) > 0) {
+		foreach ($extensionsWithStructure as $code) {
 			$parse = false;
 			if (cot_plugin_active($code)) {
 				$is_module = false;
@@ -90,35 +90,35 @@ if (empty($n)) {
 	));
 	$t->parse('LIST');
 	$adminMain = $t->text('LIST');
-}
-else
-{
+} else {
 	$parse = false;
-	if (cot_plugin_active($n))
-	{
+
+    if (!in_array($n, $extensionsWithStructure, true)) {
+        cot_die_message(404);
+    }
+
+	if (cot_plugin_active($n)) {
 		$is_module = false;
 		$parse = true;
 	}
-	if (cot_module_active($n))
-	{
+	if (cot_module_active($n)) {
 		$is_module = true;
 		$parse = true;
 	}
-	if (!$parse)
-	{
+	if (!$parse) {
 		cot_redirect(cot_url('admin', 'm=structure', '', true));
 	}
+
 	// Edit structure for a module
-	if (file_exists(cot_incfile($n, $is_module ? 'module' : 'plug')))
-	{
+	if (file_exists(cot_incfile($n, $is_module ? 'module' : 'plug'))) {
 		require_once cot_incfile($n, $is_module ? 'module' : 'plug');
 	}
+
 	if (empty($adminHelp)) {
 		$adminHelp = Cot::$L['adm_help_structure'];
 	}
 
-	if ($a == 'reset' && !empty($al))
-	{
+	if ($a == 'reset' && !empty($al)) {
 		cot_config_reset($n, $v, $is_module, $al);
 	}
 	if ($a == 'update' && !empty($_POST))

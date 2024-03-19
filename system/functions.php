@@ -1418,7 +1418,23 @@ function cot_randomstring($length = 8, $charlist = null)
  */
 
 /**
- * Loads comlete category structure into array
+ * @return string[] Extension codes which have structure
+ */
+function cot_getExtensionsWithStructure()
+{
+    $extensionsWithStructure = [];
+
+    /* === Hook === */
+    foreach (cot_getextplugins('structure.extensions') as $pl) {
+        include $pl;
+    }
+    /* ===== */
+
+    return $extensionsWithStructure;
+}
+
+/**
+ * Loads complete category structure into array
  */
 function cot_load_structure()
 {
