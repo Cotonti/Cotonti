@@ -5069,7 +5069,7 @@ function cot_rc_modify($resourceString, $attributes)
     return $resourceString;
 }
 
-if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+if (!isset($cfg) || (isset($cfg['legacyMode']) && $cfg['legacyMode'])) {
     /**
      * Puts a portion of embedded code into the header/footer CSS/JS resource registry.
      *
@@ -5094,7 +5094,6 @@ if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
     {
         return Resources::addEmbed($code, $type, $order, $scope, $identifier);
     }
-
 
     /**
      * Puts a JS/CSS file into the footer resource registry to be consolidated with other
