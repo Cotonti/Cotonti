@@ -8,8 +8,7 @@
  */
 
 $R['comments_code_admin'] = Cot::$L['Ip'] . ': {$ipsearch}<span class="spaced">' . Cot::$cfg['separator'] .
-    '</span><a href="{$delete_url}" class="confirmLink">' . Cot::$L['Delete'] . '</a><span class="spaced">' .
-    Cot::$cfg['separator'].'</span>';
+    '</span><a href="{$delete_url}" class="confirmLink">' . Cot::$L['Delete'] . '</a>';
 $R['comments_code_edit'] = '<a href="{$edit_url}">' . Cot::$L['Edit'] . '</a> {$allowed_time}';
 $R['comments_code_pages_info'] = Cot::$L['Total'] . ': {$totalitems}, ' . Cot::$L['comm_on_page'] . ': {$onpage}';
 $R['comments_link'] = '<a href="{$url}" class="comments_link" title="' . Cot::$L['comments_comments'] . '">' .

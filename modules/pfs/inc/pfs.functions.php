@@ -37,19 +37,16 @@ Cot::$db->registerTable('pfs_folders');
 function cot_build_pfs($id, $c1, $c2, $title, $parser = '')
 {
 	global $L, $cfg, $usr, $cot_groups;
-	if ($id == 0)
-	{
+	if ($id == 0) {
 		$res = "<a href=\"javascript:pfs('0','" . $c1 . "','" . $c2 . "','" . $parser . "')\">" . $title . "</a>";
-	}
-	elseif (/*$cot_groups[$usr['maingrp']]['pfs_maxtotal'] > 0 && $cot_groups[$usr['maingrp']]['pfs_maxfile'] > 0 && */cot_auth('pfs', 'a', 'R'))
+	} elseif (/*$cot_groups[$usr['maingrp']]['pfs_maxtotal'] > 0 && $cot_groups[$usr['maingrp']]['pfs_maxfile'] > 0 && */cot_auth('pfs', 'a', 'R'))
 	{
 		$res = "<a href=\"javascript:pfs('" . $id . "','" . $c1 . "','" . $c2 . "','" . $parser . "')\">" . $title . "</a>";
-	}
-	else
-	{
+	} else {
 		$res = '';
 	}
-	return($res);
+
+	return $res;
 }
 
 /**

@@ -1422,13 +1422,20 @@ function cot_randomstring($length = 8, $charlist = null)
  */
 function cot_getExtensionsWithStructure()
 {
-    $extensionsWithStructure = [];
+    static $extensionsWithStructure = [];
+    static $loaded = false;
+
+    if ($loaded) {
+        return $extensionsWithStructure;
+    }
 
     /* === Hook === */
     foreach (cot_getextplugins('structure.extensions') as $pl) {
         include $pl;
     }
     /* ===== */
+
+    $loaded = true;
 
     return $extensionsWithStructure;
 }
@@ -5062,61 +5069,140 @@ function cot_rc_modify($resourceString, $attributes)
     return $resourceString;
 }
 
-/**
- * Puts a portion of embedded code into the header/footer CSS/JS resource registry.
- *
- * It is strongly recommended to use files for CSS/JS whenever possible
- * and call cot_rc_add_file() function for them instead of embedding code
- * into the page and using this function. This function should be used for
- * dynamically generated code, which cannot be stored in static files.
- *
- * @global array $cot_rc_reg_css Header CSS resource registry
- * @param string $identifier Alphanumeric identifier for the piece, used to control updates, etc.
- * @param string $code Embedded stylesheet or script code
- * @param string $scope Resource scope. See description of this parameter in cot_rc_add_file() docs.
- * @param string $type Resource type: 'js' or 'css'
- * @param int $order Order priority number
- * @return bool This function always returns TRUE
- * @see cot_rc_add_file()
- * @global Cache $cache
- *
- * @deprecated Will be removed in v.1.0. Use Resources::addEmbed() instead. For box already gone away done
- */
-function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js', $order = 50)
-{
-	return Resources::addEmbed($code, $type, $order, $scope, $identifier);
-}
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    /**
+     * Puts a portion of embedded code into the header/footer CSS/JS resource registry.
+     *
+     * It is strongly recommended to use files for CSS/JS whenever possible
+     * and call cot_rc_add_file() function for them instead of embedding code
+     * into the page and using this function. This function should be used for
+     * dynamically generated code, which cannot be stored in static files.
+     *
+     * @param string $identifier Alphanumeric identifier for the piece, used to control updates, etc.
+     * @param string $code Embedded stylesheet or script code
+     * @param string $scope Resource scope. See description of this parameter in cot_rc_add_file() docs.
+     * @param string $type Resource type: 'js' or 'css'
+     * @param int $order Order priority number
+     * @return bool This function always returns TRUE
+     * @global array $cot_rc_reg_css Header CSS resource registry
+     * @see cot_rc_add_file()
+     * @global Cache $cache
+     *
+     * @deprecated Will be removed in v.1.0. Use Resources::addEmbed() instead. For box already gone away done
+     */
+    function cot_rc_add_embed($identifier, $code, $scope = 'global', $type = 'js', $order = 50)
+    {
+        return Resources::addEmbed($code, $type, $order, $scope, $identifier);
+    }
 
-/**
- * Puts a JS/CSS file into the footer resource registry to be consolidated with other
- * such resources and stored in cache.
- *
- * It is recommened to use files instead of embedded code and use this function
- * instead of cot_rc_add_js_embed(). Use this way for any sort of static JavaScript or
- * CSS linking.
- *
- * Do not put any private data in any of resource files - it is not secure. If you really need it,
- * then use direct output instead.
- *
- * @global array $cot_rc_reg JavaScript/CSS footer/header resource registry
- * @param string $path Path to a *.js script or *.css stylesheet
- * @param mixed $scope Resource scope. Scope is a selector of domain where resource is used. Valid scopes are:
- *	'global' - global for entire site, will be included everywhere, this is the most static and persistent scope;
- *	'guest' - for unregistered visitors only;
- *	'user' - for registered members only;
- *	'group_123' - for members of a specific group (maingrp), in this example of group with id=123.
- * It is recommended to use 'global' scope whenever possible because it delivers best caching opportunities.
- * @param int $order Order priority number
- * @return bool Returns TRUE normally, FALSE is file was not found
- * @global Cache $cache
- *
- * @deprecated Will be removed in v.1.0. Use Resources::addFile() instead. For box already gone away done
- */
-function cot_rc_add_file($path, $scope = 'global', $order = 50)
-{
-	return Resources::addFile($path, '', $order, $scope);
-}
 
+    /**
+     * Puts a JS/CSS file into the footer resource registry to be consolidated with other
+     * such resources and stored in cache.
+     *
+     * It is recommened to use files instead of embedded code and use this function
+     * instead of cot_rc_add_js_embed(). Use this way for any sort of static JavaScript or
+     * CSS linking.
+     *
+     * Do not put any private data in any of resource files - it is not secure. If you really need it,
+     * then use direct output instead.
+     *
+     * @param string $path Path to a *.js script or *.css stylesheet
+     * @param mixed $scope Resource scope. Scope is a selector of domain where resource is used. Valid scopes are:
+     *    'global' - global for entire site, will be included everywhere, this is the most static and persistent scope;
+     *    'guest' - for unregistered visitors only;
+     *    'user' - for registered members only;
+     *    'group_123' - for members of a specific group (maingrp), in this example of group with id=123.
+     * It is recommended to use 'global' scope whenever possible because it delivers best caching opportunities.
+     * @param int $order Order priority number
+     * @return bool Returns TRUE normally, FALSE is file was not found
+     * @global array $cot_rc_reg JavaScript/CSS footer/header resource registry
+     * @global Cache $cache
+     *
+     * @deprecated Will be removed in v.1.0. Use Resources::addFile() instead. For box already gone away done
+     */
+    function cot_rc_add_file($path, $scope = 'global', $order = 50)
+    {
+        return Resources::addFile($path, '', $order, $scope);
+    }
+
+    /**
+     * A shortcut for plain output of an embedded stylesheet/javascript in the header of the page
+     *
+     * @global array $out Output snippets
+     * @param string $code Stylesheet or javascript code
+     * @param bool $prepend Prepend this file before other head outputs
+     * @param string $type Resource type: 'js' or 'css'
+     * @param string $attr Attribute for output tag
+     *
+     * @deprecated Will be removed in v.1.0. Resources::embed() instead. For box already gone away done
+     */
+    function cot_rc_embed($code, $prepend = false, $type = 'js', $attr = '')
+    {
+        $order = 60;
+        if($prepend) $order = 40;
+        Resources::embed($code, $type, $order, $attr);
+    }
+
+    /**
+     * A shortcut for plain output of an embedded stylesheet/javascript in the footer of the page
+     *
+     * @global array $out Output snippets
+     * @param string $code Stylesheet or javascript code
+     * @param string $type Resource type: 'js' or 'css'
+     * @param string $attr Attribute for output tag
+     *
+     * @deprecated Will be removed in v.1.0. Resources::embedFooter() instead. For box already gone away done
+     */
+    function cot_rc_embed_footer($code, $type = 'js', $attr = '')
+    {
+        Resources::embedFooter($code, $type, $attr);
+    }
+
+    /**
+     * A shortcut for plain output of a link to a CSS/JS file in the header of the page
+     *
+     * @global array $out Output snippets
+     * @param string $path Stylesheet *.css or script *.js path/url
+     * @param bool $prepend Prepend this file before other header outputs
+     *
+     * @deprecated Will be removed in v.1.0. Use Resources::linkFile() instead. For box already gone away done
+     */
+    function cot_rc_link_file($path, $prepend = false)
+    {
+        $order = 60;
+        if($prepend) $order = 40;
+        Resources::linkFile($path, '', $order);
+    }
+
+    /**
+     * A shortcut to append a JavaScript or CSS file to {FOOTER_JS} tag
+     *
+     * @global array $out Output snippets
+     * @param string $path JavaScript or CSS file path
+     *
+     * @deprecated Will be removed in v.1.0. Resources::linkFileFooter() instead. For box already gone away done
+     */
+    function cot_rc_link_footer($path)
+    {
+        Resources::linkFileFooter($path);
+    }
+
+    /**
+     * JS/CSS minification function
+     *
+     * @param string $code Code to minify
+     * @param string $type Type: 'js' or 'css'
+     * @return string Minified code
+     *
+     * @deprecated Will be removed in v.1.0. Use Resources::minify() instead. For box already gone away done
+     * @see Resources::minify()
+     */
+    function cot_rc_minify($code, $type = 'js')
+    {
+        return Resources::minify($code, $type);
+    }
+}
 /**
  * Registers standard resources
  */
@@ -5124,55 +5210,19 @@ function cot_rc_add_standard()
 {
 	global $cfg;
 
-	if ($cfg['jquery'] && !$cfg['jquery_cdn'])
-	{
+	if ($cfg['jquery'] && !$cfg['jquery_cdn']) {
 		Resources::addFile(Resources::jQuery, 'js', 30);
 	}
 
-	if ($cfg['jquery'])
-	{
+	if ($cfg['jquery']) {
 		Resources::addFile('js/jqModal.min.js');
 	}
 
 	Resources::addFile('js/base.js');
 
-	if ($cfg['jquery'] && $cfg['turnajax'])
-	{
+	if ($cfg['jquery'] && $cfg['turnajax']) {
 		Resources::addFile('js/ajax_on.js');
 	}
-}
-
-/**
- * A shortcut for plain output of an embedded stylesheet/javascript in the header of the page
- *
- * @global array $out Output snippets
- * @param string $code Stylesheet or javascript code
- * @param bool $prepend Prepend this file before other head outputs
- * @param string $type Resource type: 'js' or 'css'
- * @param string $attr Attribute for output tag
- *
- * @deprecated Will be removed in v.1.0. Resources::embed() instead. For box already gone away done
- */
-function cot_rc_embed($code, $prepend = false, $type = 'js', $attr = '')
-{
-	$order = 60;
-	if($prepend) $order = 40;
-	Resources::embed($code, $type, $order, $attr);
-}
-
-/**
- * A shortcut for plain output of an embedded stylesheet/javascript in the footer of the page
- *
- * @global array $out Output snippets
- * @param string $code Stylesheet or javascript code
- * @param string $type Resource type: 'js' or 'css'
- * @param string $attr Attribute for output tag
- *
- * @deprecated Will be removed in v.1.0. Resources::embedFooter() instead. For box already gone away done
- */
-function cot_rc_embed_footer($code, $type = 'js', $attr = '')
-{
-	Resources::embedFooter($code, $type, $attr);
 }
 
 /**
@@ -5187,50 +5237,6 @@ function cot_rc_link($url, $text, $attrs = '')
 {
 	$link_attrs = cot_rc_attr_string($attrs);
 	return '<a href="' . $url . '"' . $link_attrs . '>' . $text . '</a>';
-}
-
-/**
- * A shortcut for plain output of a link to a CSS/JS file in the header of the page
- *
- * @global array $out Output snippets
- * @param string $path Stylesheet *.css or script *.js path/url
- * @param bool $prepend Prepend this file before other header outputs
- *
- * @deprecated Will be removed in v.1.0. Use Resources::linkFile() instead. For box already gone away done
- */
-function cot_rc_link_file($path, $prepend = false)
-{
-	$order = 60;
-	if($prepend) $order = 40;
-	Resources::linkFile($path, '', $order);
-}
-
-/**
- * A shortcut to append a JavaScript or CSS file to {FOOTER_JS} tag
- *
- * @global array $out Output snippets
- * @param string $path JavaScript or CSS file path
- *
- * @deprecated Will be removed in v.1.0. Resources::linkFileFooter() instead. For box already gone away done
- */
-function cot_rc_link_footer($path)
-{
-	Resources::linkFileFooter($path);
-}
-
-/**
- * JS/CSS minification function
- *
- * @param string $code Code to minify
- * @param string $type Type: 'js' or 'css'
- * @return string Minified code
- *
- * @deprecated Will be removed in v.1.0. Use Resources::minify() instead. For box already gone away done
- * @see Resources::minify()
- */
-function cot_rc_minify($code, $type = 'js')
-{
-	return Resources::minify($code, $type);
 }
 
 /*
@@ -5560,7 +5566,7 @@ function cot_xg()
  */
 function cot_xp()
 {
-	return '<div style="display:inline;margin:0;padding:0"><input type="hidden" name="x" value="' . \Cot::$sys['xk'] .
+	return '<div style="display:inline;margin:0;padding:0"><input type="hidden" name="x" value="' . Cot::$sys['xk'] .
         '" /></div>';
 }
 

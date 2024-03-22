@@ -144,8 +144,15 @@ function popup(code, w, h){
     window.open(getBaseHref() + 'index.php?o=' + code, '', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=' + w + ',height=' + h + ',left=32,top=16');
 }
 
+/**
+ * @todo move to pfs module
+ */
 function pfs(id, c1, c2, parser){
-    window.open(getBaseHref() + 'index.php?e=pfs&userid=' + id + '&c1=' + c1 + '&c2=' + c2 + '&parser=' + parser, 'PFS', 'status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16');
+    window.open(
+		getBaseHref() + 'index.php?e=pfs&userid=' + id + '&c1=' + c1 + '&c2=' + c2 + '&parser=' + parser,
+		'PFS',
+		'status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16'
+	);
 }
 
 function redirect(url){
@@ -281,10 +288,11 @@ function ajaxSend(settings) {
 			}
 			if (ajaxErrorHandlers.length > 0) {
 				for (var i = 0; i < ajaxErrorHandlers.length; i++) {
-					if (ajaxErrorHandlers[i].func)
+					if (ajaxErrorHandlers[i].func) {
 						ajaxErrorHandlers[i].func(msg);
-					else
+					} else {
 						ajaxErrorHandlers[i](msg);
+					}
 				}
 			} else {
 				alert('AJAX error: ' + msg);

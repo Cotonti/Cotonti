@@ -12,16 +12,17 @@ Tags=header.tpl:{HEADER_USER_PFS}
  * @package PFS
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var XTemplate $t;
  */
 
 defined('COT_CODE') or die('Wrong URL.');
 
-if ($usr['id'] > 0 && $cot_groups[$usr['maingrp']]['pfs_maxtotal'] > 0 && $cot_groups[$usr['maingrp']]['pfs_maxfile'] > 0)
-{
+if (Cot::$usr['id'] > 0 && $cot_groups[Cot::$usr['maingrp']]['pfs_maxtotal'] > 0 && $cot_groups[Cot::$usr['maingrp']]['pfs_maxfile'] > 0) {
 	$pfs_url = cot_url('pfs');
-	$out['pfs'] = cot_rc_link($pfs_url, $L['Mypfs']);
-	$t->assign(array(
+	$out['pfs'] = cot_rc_link($pfs_url, Cot::$L['Mypfs']);
+	$t->assign([
 		'HEADER_USER_PFS' => $out['pfs'],
-		'HEADER_USER_PFS_URL' => $pfs_url
-	));
+		'HEADER_USER_PFS_URL' => $pfs_url,
+	]);
 }

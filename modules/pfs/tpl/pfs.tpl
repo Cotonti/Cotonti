@@ -12,7 +12,7 @@
 			{PFS_HEADER_JAVASCRIPT}
 			//]]>
 		</script>
-		<link href="themes/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
+		<link href="{PHP.cfg.themes_dir}/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
 <!-- END: STANDALONE_HEADER -->

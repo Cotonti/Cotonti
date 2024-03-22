@@ -254,11 +254,19 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		foreach ($sql->fetchAll() as $row) {
 			$i++;
 			$kk++;
-			$com_admin = ($auth_admin) ? cot_rc('comments_code_admin', array(
-					'ipsearch' => cot_build_ipsearch($row['com_authorip']),
-					'delete_url' => cot_confirm_url(cot_url('plug', 'e=comments&a=delete&cat='.$cat.
-                        '&id='.$row['com_id'].'&'.cot_xg()), 'comments', 'comments_confirm_delete')
-				)) : '';
+			$com_admin = $auth_admin ?
+                cot_rc(
+                    'comments_code_admin',
+                    [
+                        'ipsearch' => cot_build_ipsearch($row['com_authorip']),
+                        'delete_url' => cot_confirm_url(
+                            cot_url('comments', ['a' => 'delete', 'cat' => $cat, 'id' => $row['com_id'], 'x' => Cot::$sys['xk']]),
+                            'comments',
+                            'comments_confirm_delete'
+                        ),
+                    ]
+                )
+                : '';
 
             $row['user_id'] = (int) $row['user_id'];
 

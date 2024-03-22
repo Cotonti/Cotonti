@@ -23,4 +23,12 @@ if (Cot::$cfg['captchamain'] === 'mcaptcha') {
 		'USERS_REGISTER_VERIFY_IMG' => cot_captcha_generate(),
 		'USERS_REGISTER_VERIFY_INPUT' => cot_inputbox('text', 'rverify', '', 'size="10" maxlength="20"'),
 	]);
+
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.24
+        $t->assign([
+            'USERS_REGISTER_VERIFYIMG' => cot_captcha_generate(),
+            'USERS_REGISTER_VERIFYINPUT' => cot_inputbox('text', 'rverify', '', 'size="10" maxlength="20"'),
+        ]);
+    }
 }
