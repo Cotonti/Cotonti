@@ -19,13 +19,13 @@ Tags=users.register.tpl:{USERS_REGISTER_VERIFY_IMG},{USERS_REGISTER_VERIFY_INPUT
 defined('COT_CODE') or die('Wrong URL');
 
 if (Cot::$cfg['captchamain'] === 'mcaptcha') {
-    $captcha = cot_captcha_generate();
-    $t->assign(cot_generateCaptchaTags(null, 'rverify', 'USERS_REGISTER_'));
+    $captchaTags = cot_generateCaptchaTags(null, 'rverify', 'USERS_REGISTER_');
+    $t->assign($captchaTags);
 
     if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
         // @deprecated in 0.9.24
         $t->assign([
-            'USERS_REGISTER_VERIFYIMG' => $captcha,
+            'USERS_REGISTER_VERIFYIMG' => $captchaTags['USERS_REGISTER_VERIFY_IMG'],
             'USERS_REGISTER_VERIFYINPUT' => cot_inputbox('text', 'rverify', '', 'size="10" maxlength="20"'),
         ]);
     }

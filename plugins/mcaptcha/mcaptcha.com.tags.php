@@ -19,13 +19,13 @@ Tags=comments.tpl: {COMMENTS_FORM_VERIFY_IMG}, {COMMENTS_FORM_VERIFY_INPUT}
 defined('COT_CODE') or die("Wrong URL.");
 
 if (Cot::$usr['id'] === 0 && Cot::$cfg['captchamain'] === 'mcaptcha') {
-    $captcha = cot_captcha_generate();
-    $t->assign(cot_generateCaptchaTags(null, 'rverify', 'COMMENTS_FORM_'));
+    $captchaTags = cot_generateCaptchaTags(null, 'rverify', 'COMMENTS_FORM_');
+    $t->assign($captchaTags);
 
     if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
         // @deprecated in 0.9.24
         $t->assign([
-            'COMMENTS_FORM_VERIFYIMG' => $captcha,
+            'COMMENTS_FORM_VERIFYIMG' => $captchaTags['COMMENTS_FORM_VERIFY_IMG'],
             'COMMENTS_FORM_VERIFY' => cot_inputbox('text', 'rverify', '', 'size="10" maxlength="20"'),
         ]);
     }
