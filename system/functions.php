@@ -4624,6 +4624,7 @@ function cot_pagenav(
 }
 
 /**
+ * Generate pagination XTemplate tags
  * @param array $pagination cot_pagenav() result array
  * @param string $prefix
  * @return array
@@ -5245,19 +5246,18 @@ function cot_rc_link($url, $text, $attrs = '')
 /**
  * Generates a captcha
  *
- * @global array $cfg
- * @global array $cot_captcha
- * @param string $use_captcha The CAPTCHA to manually use
+ * @param ?string $useCaptcha The CAPTCHA to manually use
  * @return string
+ * @global array $cot_captcha
  */
-function cot_captcha_generate($use_captcha = '')
+function cot_captcha_generate($useCaptcha = null)
 {
 	global $cot_captcha;
 
-	if (!empty($use_captcha)) {
-		$captcha = $use_captcha;
-	} elseif (!\Cot::$cfg['captcharandom']) {
-		$captcha = \Cot::$cfg['captchamain'];
+	if (!empty($useCaptcha)) {
+		$captcha = $useCaptcha;
+	} elseif (!Cot::$cfg['captcharandom']) {
+		$captcha = Cot::$cfg['captchamain'];
 	} else {
         $list = cot_captcha_list();
         if (empty($list)) {
@@ -5280,7 +5280,7 @@ function cot_captcha_generate($use_captcha = '')
     if (
         !COT_AJAX
         && Cot::$cfg['cache']
-        && !empty(\Cot::$cfg['cache_' . \Cot::$env['ext']])
+        && !empty(Cot::$cfg['cache_' . Cot::$env['ext']])
         && Cot::$cache
     ) {
         Resources::embedFooter(
@@ -5308,10 +5308,9 @@ function cot_captcha_list()
 }
 
 /**
- * Valides a captcha value
- * @global array $cfg
+ * Validates a captcha value
  * @param string $value Captcha input for validation
- * @return boolean
+ * @return bool
  */
 function cot_captcha_validate($value)
 {
@@ -5332,6 +5331,23 @@ function cot_captcha_validate($value)
 		return $captcha($value);
 	}
 	return true;
+}
+
+/**
+ * Generate captcha XTemplate tags
+ * @param string $captcha Captcha type
+ * @param string $inputName
+ * @param string $prefix
+ * @return array
+ */
+function cot_generateCaptchaTags($captcha = null, $inputName = 'rverify', $prefix = '')
+{
+    return [
+        $prefix . 'VERIFY_IMG' => cot_captcha_generate($captcha),
+        $prefix . 'VERIFY_INPUT' => !empty($inputName)
+            ? cot_inputbox('text', $inputName, '', 'id="' . $inputName . '" maxlength="20"')
+            : '',
+    ];
 }
 
 /**

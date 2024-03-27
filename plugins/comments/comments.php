@@ -108,23 +108,23 @@ if ($m == 'edit' && $id > 0) {
 
 			cot_extrafield_movefiles();
 
-            if (\Cot::$cache) {
-                if ($staticCacheIsEnabled === '' || !empty(\Cot::$cfg[$staticCacheIsEnabled])) {
-                    \Cot::$cache->static->clearByUri(cot_url($url_area, $url_params));
+            if (Cot::$cache) {
+                if ($staticCacheIsEnabled === '' || !empty(Cot::$cfg[$staticCacheIsEnabled])) {
+                    Cot::$cache->static->clearByUri(cot_url($url_area, $url_params));
 
                 }
-                if (\Cot::$cfg['cache_index']) {
-                    \Cot::$cache->static->clear('index');
+                if (Cot::$cfg['cache_index']) {
+                    Cot::$cache->static->clear('index');
                 }
             }
 
-			if (\Cot::$cfg['plugin']['comments']['mail']) {
-				$sql2 = \Cot::$db->query(
-                    'SELECT * FROM ' . \Cot::$db->users . ' WHERE user_maingrp = ' . COT_GROUP_SUPERADMINS
+			if (Cot::$cfg['plugin']['comments']['mail']) {
+				$sql2 = Cot::$db->query(
+                    'SELECT * FROM ' . Cot::$db->users . ' WHERE user_maingrp = ' . COT_GROUP_SUPERADMINS
                 );
 
 				$email_title = $L['plu_comlive'];
-				$email_body = $L['User'] . ' ' . preg_replace('#[^\w\p{L}]#u', '', $usr['name']) . ' ' . $L['plu_comlive3'];
+				$email_body = $L['User'] . ' ' . preg_replace('#[^\w\p{L}]#u', '', Cot::$usr['name']) . ' ' . Cot::$L['plu_comlive3'];
 				$email_body .= COT_ABSOLUTE_URL . cot_url($url_area, $url_params, '#com' . $id, true) . "\n\n";
 
 				while ($adm = $sql2->fetch()) {
@@ -144,10 +144,10 @@ if ($m == 'edit' && $id > 0) {
 			cot_redirect(cot_url($url_area, $url_params, '#com' . $id, true));
 		}
 	}
-	$t->assign(array(
+	$t->assign([
 		'COMMENTS_TITLE' => Cot::$L['plu_title'],
-		'COMMENTS_TITLE_URL' => cot_url('plug', 'e=comments')
-	));
+		'COMMENTS_TITLE_URL' => cot_url('plug', 'e=comments'),
+	]);
 	$t->parse('MAIN.COMMENTS_TITLE');
 
 	$sql = Cot::$db->query("SELECT * FROM $db_com WHERE com_id=? AND com_code=? AND com_area=?", array($id, $item, $area));

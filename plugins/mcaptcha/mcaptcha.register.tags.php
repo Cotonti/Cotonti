@@ -20,10 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (Cot::$cfg['captchamain'] === 'mcaptcha') {
     $captcha = cot_captcha_generate();
-	$t->assign([
-		'USERS_REGISTER_VERIFY_IMG' => $captcha,
-		'USERS_REGISTER_VERIFY_INPUT' => cot_inputbox('text', 'rverify', '', 'size="10" maxlength="20"'),
-	]);
+    $t->assign(cot_generateCaptchaTags(null, 'rverify', 'USERS_REGISTER_'));
 
     if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
         // @deprecated in 0.9.24

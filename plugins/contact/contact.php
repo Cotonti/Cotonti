@@ -151,10 +151,7 @@ if (!$sent) {
     }
 
 	if (Cot::$usr['id'] == 0 && !empty($cot_captcha)) {
-		$t->assign([
-			'CONTACT_FORM_VERIFY_IMG' => cot_captcha_generate(),
-			'CONTACT_FORM_VERIFY_INPUT' => cot_inputbox('text', 'rverify', '', 'id="rverify" size="20"'),
-		]);
+        $t->assign(cot_generateCaptchaTags(null, 'rverify', 'CONTACT_FORM_'));
 
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
             // @deprecated in 0.9.24
