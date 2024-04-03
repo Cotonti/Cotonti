@@ -12,6 +12,8 @@ Tags=page.add.tpl:{PAGEADD_FORM_PFS},{PAGEADD_FORM_SFS},{PAGEADD_FORM_URL_PFS},{
  * @package PFS
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var XTemplate $t
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -25,8 +27,12 @@ if (cot_get_caller() == 'page.add') {
 }
 
 $t->assign([
-	$pfs_tag . '_FORM_PFS' => cot_build_pfs($usr['id'], 'pageform', 'rpagetext',$L['Mypfs'], $sys['parser']),
-	$pfs_tag . '_FORM_SFS' => (cot_auth('pfs', 'a', 'A')) ? ' &nbsp; '.cot_build_pfs(0, 'pageform', 'rpagetext', $L['SFS'], $sys['parser']) : '',
-	$pfs_tag . '_FORM_URL_PFS' => cot_build_pfs($usr['id'], 'pageform', 'rpageurl', $L['Mypfs']),
-	$pfs_tag . '_FORM_URL_SFS' => (cot_auth('pfs', 'a', 'A')) ? ' '.cot_build_pfs(0, 'pageform', 'rpageurl', $L['SFS']) : ''
+	$pfs_tag . '_FORM_PFS' => cot_build_pfs(Cot::$usr['id'], 'pageform', 'rpagetext', Cot::$L['Mypfs'], Cot::$sys['parser']),
+	$pfs_tag . '_FORM_SFS' => cot_auth('pfs', 'a', 'A')
+        ? cot_build_pfs(0, 'pageform', 'rpagetext', Cot::$L['SFS'], Cot::$sys['parser'])
+        : '',
+	$pfs_tag . '_FORM_URL_PFS' => cot_build_pfs(Cot::$usr['id'], 'pageform', 'rpageurl', Cot::$L['Mypfs']),
+	$pfs_tag . '_FORM_URL_SFS' => cot_auth('pfs', 'a', 'A')
+        ? cot_build_pfs(0, 'pageform', 'rpageurl', Cot::$L['SFS'])
+        : ''
 ]);

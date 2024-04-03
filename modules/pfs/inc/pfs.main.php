@@ -36,7 +36,7 @@ if (!Cot::$usr['isadmin'] || $userid === null) {
     $more = 'userid=' . $userid;
 }
 
-$standalone = FALSE;
+$standalone = false;
 
 $user_info = cot_user_data($userid);
 if (!$user_info && !Cot::$usr['isadmin']) {
@@ -72,7 +72,7 @@ if (!empty($c1) || !empty($c2)) {
 	if (!empty($parser)) {
         $more .= (($more != '') ? '&' : '') . 'parser=' . $parser;
 	}
-	$standalone = TRUE;
+	$standalone = true;
 }
 
 foreach ($cot_extensions as $k => $line) {
@@ -548,17 +548,23 @@ $t->assign([
     'PFS_FILESCOUNT' => $filesCount,
     'PFS_INTHISFOLDER' => ($f > 0) ? Cot::$L['pfs_filesinthisfolder'] : Cot::$L['pfs_filesintheroot'],
     'PFS_ONPAGE_FILES' => $filesOnPageCount,
+    'PFS_IS_STANDALONE' => $standalone,
 ]);
 
 if ($filesCount > 0 || $foldersCount > 0) {
 	if ($foldersCount > 0) {
 		$pagenav = cot_pagenav('pfs', $more, $df, $foldersCount, Cot::$cfg['pfs']['maxpfsperpage'], 'df');
 
-		$t->assign(array(
-			'PFF_PAGING_PREV' => $pagenav['prev'],
-			'PFF_PAGING_CURRENT' => $pagenav['main'],
-			'PFF_PAGING_NEXT' => $pagenav['next']
-		));
+        $t->assign(cot_generatePaginationTags($pagenav, 'PFF_'));
+
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.25
+            $t->assign([
+                'PFF_PAGING_PREV' => $pagenav['prev'],
+                'PFF_PAGING_CURRENT' => $pagenav['main'],
+                'PFF_PAGING_NEXT' => $pagenav['next'],
+            ]);
+        }
 	}
 
 	if ($filesCount > 0) {
@@ -571,11 +577,15 @@ if ($filesCount > 0 || $foldersCount > 0) {
 		$pagnavParams .= $thumbspagination;
 		$pagenav = cot_pagenav('pfs', $pagnavParams, $d, $filesCount, Cot::$cfg['pfs']['maxpfsperpage']);
 
-		$t->assign(array(
-			'PFS_PAGING_PREV' => $pagenav['prev'],
-			'PFS_PAGING_CURRENT' => $pagenav['main'],
-			'PFS_PAGING_NEXT' => $pagenav['next'],
-		));
+        $t->assign(cot_generatePaginationTags($pagenav));
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.25
+            $t->assign([
+                'PFS_PAGING_PREV' => $pagenav['prev'],
+                'PFS_PAGING_CURRENT' => $pagenav['main'],
+                'PFS_PAGING_NEXT' => $pagenav['next'],
+            ]);
+        }
 	}
 }
 
@@ -609,7 +619,7 @@ if (Cot::$usr['auth_write']) {
     for ($ii = 0; $ii < Cot::$cfg['pfs']['pfsmaxuploads']; $ii++) {
         $t->assign([
             'PFS_UPLOAD_FORM_ROW_ID' => $ii,
-            'PFS_UPLOAD_FORM_ROW_NUM' => $ii + 1
+            'PFS_UPLOAD_FORM_ROW_NUM' => $ii + 1,
         ]);
         $t->parse('MAIN.PFS_UPLOAD_FORM.PFS_UPLOAD_FORM_ROW');
     }
@@ -645,7 +655,7 @@ Cot::$out['subtitle'] = Cot::$L['Mypfs'];
 
 /* ============= */
 
-$t->assign('PFS_TITLE', cot_breadcrumbs($title, $cfg['homebreadcrumb']));
+$t->assign('PFS_TITLE', cot_breadcrumbs($title, Cot::$cfg['homebreadcrumb']));
 
 if ($standalone) {
     if ($c1 == 'pageform' && $c2 == 'rpageurl') {
@@ -731,5 +741,5 @@ $t->parse('MAIN');
 $t->out('MAIN');
 
 if (!$standalone) {
-	require_once $cfg['system_dir'] . '/footer.php';
+	require_once Cot::$cfg['system_dir'] . '/footer.php';
 }

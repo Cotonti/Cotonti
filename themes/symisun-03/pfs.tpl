@@ -43,42 +43,49 @@
 				<!-- END: PFS_ERRORS_ROW -->
 			<!-- END: PFS_ERRORS -->
 
-
+			<!-- IF {PFS_FOLDER_ID} == 0 AND {PFF_FOLDERCOUNT} > 0 -->
 			<fieldset>
-			<legend>{PFF_FOLDERCOUNT_TITLE} / {PFF_FILESCOUNT_TITLE} ({PHP.L.pfs_onpage}: {PFF_ONPAGE_FOLDERS_TITLE} / {PFF_ONPAGE_FILES_TITLE})</legend>
-			<table class="cells">
-				<tr>
-					<td class="coltop width10">&nbsp;</td>
-					<td class="coltop width30">{PHP.L.Folder} / {PHP.L.Gallery}</td>
-					<td class="coltop width10">{PHP.L.Public}</td>
-					<td class="coltop width10">{PHP.L.Files}</td>
-					<td class="coltop width10">{PHP.L.Size}</td>
-					<td class="coltop width15">{PHP.L.Updated}</td>
-					<td class="coltop width15">{PHP.L.Action}</td>
-				</tr>
-				<!-- BEGIN: PFF_ROW -->
-				<tr>
-					<td class="centerall"><a href="{PFF_ROW_URL}">{PFF_ROW_ICON}</a></td>
-					<td>
-						<p class="strong"><a href="{PFF_ROW_URL}">{PFF_ROW_TITLE}</a></p>
-						<p class="small">{PFF_ROW_DESC}</p>
-					</td>
-					<td class="centerall">{PFF_ROW_ISPUBLIC}</td>
-					<td class="centerall">{PFF_ROW_FCOUNT}</td>
-					<td class="centerall">{PFF_ROW_FSIZE}</td>
-					<td class="centerall">{PFF_ROW_UPDATED}</td>
-					<td class="centerall">
-						<a href="{PFF_ROW_EDIT_URL}">{PHP.L.Edit}</a>
-						<a href="{PFF_ROW_DELETE_URL}" class="confirmLink">x</a>
-					</td>
-				</tr>
-				<!-- END: PFF_ROW -->
-			</table>
-			<p class="paging">{PFF_PAGING_PREV}{PFF_PAGING_CURRENT}{PFF_PAGING_NEXT}</p>
+				<legend>{PFF_FOLDERCOUNT_TITLE} / {PFF_FILESCOUNT_TITLE} ({PHP.L.pfs_onpage}: {PFF_ONPAGE_FOLDERS_TITLE} / {PFF_ONPAGE_FILES_TITLE})</legend>
+				<table class="cells">
+					<tr>
+						<td class="coltop width10">&nbsp;</td>
+						<td class="coltop width30">{PHP.L.Folder} / {PHP.L.Gallery}</td>
+						<td class="coltop width10">{PHP.L.Public}</td>
+						<td class="coltop width10">{PHP.L.Files}</td>
+						<td class="coltop width10">{PHP.L.Size}</td>
+						<td class="coltop width15">{PHP.L.Updated}</td>
+						<td class="coltop width15">{PHP.L.Action}</td>
+					</tr>
+					<!-- BEGIN: PFF_ROW -->
+					<tr>
+						<td class="centerall"><a href="{PFF_ROW_URL}">{PFF_ROW_ICON}</a></td>
+						<td>
+							<p class="strong"><a href="{PFF_ROW_URL}">{PFF_ROW_TITLE}</a></p>
+							<p class="small">{PFF_ROW_DESC}</p>
+						</td>
+						<td class="centerall">{PFF_ROW_ISPUBLIC}</td>
+						<td class="centerall">{PFF_ROW_FCOUNT}</td>
+						<td class="centerall">{PFF_ROW_FSIZE}</td>
+						<td class="centerall">{PFF_ROW_UPDATED}</td>
+						<td class="centerall">
+							<a href="{PFF_ROW_EDIT_URL}">{PHP.L.Edit}</a>
+							<a href="{PFF_ROW_DELETE_URL}" class="confirmLink">x</a>
+						</td>
+					</tr>
+					<!-- END: PFF_ROW -->
+				</table>
+				<!-- IF {PFF_PAGINATION} -->
+				<p class="paging">{PFF_PREVIOUS_PAGE}{PFF_PAGINATION}{PFF_NEXT_PAGE}</p>
+				<!-- ENDIF -->
 			</fieldset>
+			<!-- ENDIF -->
 
+			<!-- IF {PFS_FILESCOUNT} > 0 -->
 			<fieldset>
-			<legend>{PFS_INTHISFOLDER}: {PFS_FILESCOUNT_TITLE}  ({PHP.L.pfs_onpage}: {PFS_ONPAGE_FILES_TITLE}) {PFS_SHOWTHUMBS}</legend>
+			<legend>
+				{PFS_INTHISFOLDER}: {PFS_FILESCOUNT_TITLE}
+				({PHP.L.pfs_onpage}: {PFS_ONPAGE_FILES_TITLE}) {PFS_SHOWTHUMBS}
+			</legend>
 			<table class="cells">
 				<tr>
 					<td class="coltop width10">&nbsp;</td>
@@ -88,7 +95,7 @@
 					<td class="coltop width15">{PHP.L.Date}</td>
 					<td class="coltop width15">{PHP.L.Action}</td>
 				</tr>
-			<!-- BEGIN: PFS_ROW -->
+				<!-- BEGIN: PFS_ROW -->
 				<tr>
 					<td class="centerall">{PFS_ROW_ICON}</td>
 					<td>
@@ -105,10 +112,13 @@
 						<br />{PFS_ROW_INSERT}
 					</td>
 				</tr>
-			<!-- END: PFS_ROW -->
+				<!-- END: PFS_ROW -->
 			</table>
-			<p class="paging">{PFS_PAGING_PREV}{PFS_PAGING_CURRENT}{PFS_PAGING_NEXT}</p>
+			<!-- IF {PAGINATION} -->
+			<p class="paging">{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}</p>
+			<!-- ENDIF -->
 		</fieldset>
+		<!-- ENDIF -->
 
 		<fieldset>
 		<legend>{PHP.L.pfs_newfile}</legend>

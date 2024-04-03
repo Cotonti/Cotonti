@@ -4,9 +4,9 @@
 Name=PFS
 Description=Personal File Space
 Version=1.0.13
-Date=2023-03-11
+Date=2024-04-03
 Author=Neocrome & Cotonti Team
-Copyright=(c) Cotonti Team 2008-2023
+Copyright=(c) Cotonti Team 2008-2024
 Notes=BSD License
 Auth_guests=R
 Lock_guests=W12345A
