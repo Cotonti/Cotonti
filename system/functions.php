@@ -1468,6 +1468,10 @@ function cot_load_structure()
 	$tpath = []; // title path tree
 	$tpls = []; // tpl codes tree
 
+    $separator = Cot::$cfg['separator'] === strip_tags(Cot::$cfg['separator'])
+        ? ' ' . Cot::$cfg['separator'] . ' '
+        : ' / ';
+
 	foreach ($sql->fetchAll() as $row) {
 		$last_dot = mb_strrpos($row['structure_path'], '.');
 
@@ -1476,8 +1480,6 @@ function cot_load_structure()
 		if ($last_dot > 0) {
 			$path1 = mb_substr($row['structure_path'], 0, $last_dot);
 			$path[$row['structure_path']] = $path[$path1] . '.' . $row['structure_code'];
-			$separator = (Cot::$cfg['separator'] == strip_tags(Cot::$cfg['separator'])) ?
-                ' ' . Cot::$cfg['separator'] . ' ' : ' / ';
 			$tpath[$row['structure_path']] = $tpath[$path1] . $separator . $row['structure_title'];
 			$parent_dot = mb_strrpos($path[$path1], '.');
 			$parent = ($parent_dot > 0) ? mb_substr($path[$path1], $parent_dot + 1) : $path[$path1];
@@ -5323,12 +5325,14 @@ function cot_captcha_validate($value)
 	}
 
 	$captcha = cot_import('capman', 'P', 'TXT');
+
 	if (!in_array($captcha, cot_captcha_list())) {
 		return false;
 	}
-	$captcha .= '_validate';
-	if (function_exists($captcha)) {
-		return $captcha($value);
+	$validateFunction = $captcha . '_validate';
+
+	if (function_exists($validateFunction)) {
+		return $validateFunction($value);
 	}
 	return true;
 }

@@ -420,40 +420,47 @@ function cot_selectbox_timezone($chosen, $name, $add_gmt = true, $dst = false, $
  * @param string $check Selected value
  * @param string $name Dropdown name
  * @param string $subcat Show only subcats of selected category
- * @param bool $hideprivate Hide private categories
- * @param bool $is_module TRUE for modules, FALSE for plugins
- * @param bool $add_empty Allow empty choice
+ * @param bool $hidePrivate Hide private categories
+ * @param bool $isModule TRUE for modules, FALSE for plugins
+ * @param bool $addEmpty Allow empty choice
  * @param mixed $attrs Additional attributes as an associative array or a string
- * @param string $custom_rc Custom resource string name
+ * @param string $customRC Custom resource string name
  * @return string
- * @global CotDB $db
  */
-function cot_selectbox_structure($extension, $check, $name, $subcat = '', $hideprivate = true, $is_module = true,
-                                 $add_empty = false, $attrs = '', $custom_rc = '')
-{
-	global $structure;
+function cot_selectbox_structure(
+    $extension,
+    $check,
+    $name,
+    $subcat = '',
+    $hidePrivate = true,
+    $isModule = true,
+    $addEmpty = false,
+    $attrs = '',
+    $customRC = ''
+) {
+	$categories = is_array(Cot::$structure[$extension]) ? Cot::$structure[$extension] : [];
 
-	$structure[$extension] = (is_array($structure[$extension])) ? $structure[$extension] : array();
-
-	$result_array = array();
-	foreach ($structure[$extension] as $i => $x)
-	{
-		$display = ($hideprivate && $is_module) ? cot_auth($extension, $i, 'W') : true;
-		if ($display && !empty($subcat) && isset($structure[$extension][$subcat]))
-		{
-			$mtch = $structure[$extension][$subcat]['path'].".";
+	$categoryList = [];
+	foreach ($categories as $code => $category) {
+		$display = ($hidePrivate && $isModule) ? cot_auth($extension, $code, 'W') : true;
+		if ($display && !empty($subcat) && isset(Cot::$structure[$extension][$subcat])) {
+			$mtch = Cot::$structure[$extension][$subcat]['path'] . '.';
 			$mtchlen = mb_strlen($mtch);
-			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i === $subcat);
+			$display = (mb_substr($category['path'], 0, $mtchlen) == $mtch || $code === $subcat);
 		}
 
-		if ((!$is_module || cot_auth($extension, $i, 'R')) && $i!='all' && $display)
-		{
-			$result_array[$i] = $x['tpath'];
+		if ((!$isModule || cot_auth($extension, $code, 'R')) && $code !== 'all' && $display) {
+			$categoryList[$code] = $category['tpath'];
 		}
 	}
-	$result = cot_selectbox($check, $name, array_keys($result_array), array_values($result_array), $add_empty, $attrs, $custom_rc);
 
-	return($result);
+    /* === Hook === */
+    foreach (cot_getextplugins('selectBox.structure') as $pl) {
+        include $pl;
+    }
+    /* ===== */
+
+    return cot_selectbox($check, $name, array_keys($categoryList), array_values($categoryList), $addEmpty, $attrs, $customRC);
 }
 
 /**

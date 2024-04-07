@@ -37,42 +37,40 @@ $pfs_dir_user = cot_pfs_path($userid);
 $thumbs_dir_user = cot_pfs_thumbpath($userid);
 
 reset($cot_extensions);
-foreach ($cot_extensions as $k => $line)
-{
+foreach ($cot_extensions as $k => $line) {
 	$icon[$line[0]] = cot_rc('pfs_icon_type', array('type' => $line[2], 'name' => $line[1]));
 	$filedesc[$line[0]] = $line[1];
 }
 
-if (!empty($c1) || !empty($c2))
-{
+if (!empty($c1) || !empty($c2)) {
 	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
 	$standalone = TRUE;
 }
 
 /* ============= */
 
-$L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title[] = array(cot_url('pfs', $more), $L['pfs_title']);
+$L['pfs_title'] = ($userid==0) ? Cot::$L['SFS'] : Cot::$L['pfs_title'];
+$breadcrumbs = [
+    [cot_url('pfs', $more), Cot::$L['pfs_title']],
+];
 
 /* === Hook === */
-foreach (cot_getextplugins('pfs.editfolder.first') as $pl)
-{
+foreach (cot_getextplugins('pfs.editfolder.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if ($userid != $usr['id'])
-{
-	cot_block($usr['isadmin']);
-	($userid == 0) || $title[] = array(cot_url('users', 'm=details&id='.$user_info['user_id']), $user_info['user_name']);
+if ($userid != Cot::$usr['id']) {
+	cot_block(Cot::$usr['isadmin']);
+	($userid == 0) || $breadcrumbs[] = array(cot_url('users', 'm=details&id='.$user_info['user_id']), $user_info['user_name']);
 }
 
-$title[] = $L['Edit'];
+$sql_pfs = Cot::$db->query(
+    'SELECT * FROM ' . Cot::$db->pfs_folders . " WHERE pff_userid = :userId AND pff_id = :folderId LIMIT 1",
+    ['userId' => $userid, 'folderId' => $f]
+);
 
-$sql_pfs = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid=$userid AND pff_id=$f LIMIT 1");
-
-if ($row = $sql_pfs->fetch())
-{
+if ($row = $sql_pfs->fetch()) {
 	$pff_id=$row['pff_id'];
 	$pff_date = $row['pff_date'];
 	$pff_updated = $row['pff_updated'];
@@ -81,15 +79,13 @@ if ($row = $sql_pfs->fetch())
 	$pff_ispublic = $row['pff_ispublic'];
 	$pff_isgallery = $row['pff_isgallery'];
 	$pff_count = $row['pff_count'];
-	$title[]= htmlspecialchars($pff_title);
-}
-else
-{
+} else {
 	cot_die();
 }
 
-if ($a=='update' && !empty($f))
-{
+$breadcrumbs[] = htmlspecialchars($pff_title) . ' (' . Cot::$L['Edit'] . ')';
+
+if ($a === 'update' && !empty($f)) {
 	$rtitle = cot_import('rtitle','P','TXT');
 	$rdesc = cot_import('rdesc','P','TXT');
 	$folderid = cot_import('folderid','P','INT');
@@ -113,9 +109,8 @@ if ($a=='update' && !empty($f))
 
 $out['subtitle'] = $L['pfs_title'];
 
-if (!$standalone)
-{
-	require_once $cfg['system_dir'] . '/header.php';
+if (!$standalone) {
+	require_once Cot::$cfg['system_dir'] . '/header.php';
 }
 
 $t = new XTemplate(cot_tplfile('pfs.editfolder'));
@@ -139,7 +134,8 @@ if ($standalone) {
 }
 
 $t->assign(array(
-	'PFS_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
+	'PFS_TITLE' => cot_breadcrumbs($breadcrumbs, $cfg['homebreadcrumb']),
+    'PFS_BREADCRUMBS' => cot_breadcrumbs($breadcrumbs, Cot::$cfg['homebreadcrumb']),
 	'PFS_ACTION' => cot_url('pfs', 'm=editfolder&a=update&f=' . $pff_id . '&' . $more),
 //	'PFF_FOLDER' => cot_selectbox_folders($userid, '', $row['pff_parentid'], 'rparentid'),
 	'PFF_TITLE' => cot_inputbox('text', 'rtitle', htmlspecialchars($pff_title), 'size="56" maxlength="255"'),
@@ -149,7 +145,8 @@ $t->assign(array(
 	'PFF_ISGALLERY' => cot_radiobox($pff_isgallery, 'risgallery', array('1', '0'), array($L['Yes'], $L['No']), '', ' '),
 	'PFF_ISPUBLIC' => cot_radiobox($pff_ispublic, 'rispublic', array('1', '0'), array($L['Yes'], $L['No']), '', ' '),
 	'PFF_UPDATED' => cot_date('datetime_medium', $row['pff_updated']),
-	'PFF_UPDATED_STAMP' => $row['pff_updated']
+	'PFF_UPDATED_STAMP' => $row['pff_updated'],
+    'PFS_IS_STANDALONE' => $standalone,
 ));
 
 cot_display_messages($t);

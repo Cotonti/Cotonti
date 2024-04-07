@@ -7,13 +7,12 @@
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 		<base href="{PHP.cfg.mainurl}/" />
         {PFS_HEAD}
-		<link href="themes/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
+		<link href="{PHP.cfg.themes_dir}/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
 <!-- END: STANDALONE_HEADER -->
-
 		<div class="block">
-			<h2 class="pfs">{PFS_TITLE}</h2>
+			<h2 class="pfs">{PFS_BREADCRUMBS}</h2>
 			<p class="small">{PFS_SUBTITLE}</p>
 			{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 			<form id="edit" action="{PFS_ACTION}" method="post">

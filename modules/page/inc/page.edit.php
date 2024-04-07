@@ -118,8 +118,7 @@ Cot::$sys['sublocation'] = Cot::$structure['page'][$pag['page_cat']]['title'];
 $mskin = cot_tplfile(array('page', 'edit', Cot::$structure['page'][$pag['page_cat']]['tpl']));
 
 /* === Hook === */
-foreach (cot_getextplugins('page.edit.main') as $pl)
-{
+foreach (cot_getextplugins('page.edit.main') as $pl) {
 	include $pl;
 }
 /* ===== */

@@ -22,7 +22,7 @@ Cot::$db->registerTable('i18n_structure');
  * @param string $area Area code
  * @param string $cat Category code
  * @param string $locale Locale code
- * @return array{int: array{0: string, 1:string}}
+ * @return list<array{0: string, 1:string}>
  * [
  *   0 => [
  *      0 => 'url',
@@ -38,27 +38,24 @@ Cot::$db->registerTable('i18n_structure');
  */
 function cot_i18n_build_catpath($area, $cat, $locale)
 {
-	global $structure, $cfg, $i18n_structure;
-	$tmp = array();
-	$pathcodes = explode('.', $structure[$area][$cat]['path']);
-	foreach ($pathcodes as $k => $x)
-	{
-		if ($x != 'system')
-		{
-			if (empty($i18n_structure[$x][$locale]['title']))
-			{
-				$title = $structure[$area][$x]['title'];
-				$url = cot_url($area, 'c=' . $x);
+	global $i18n_structure;
+
+	$result = [];
+	$pathCodes = explode('.', Cot::$structure[$area][$cat]['path']);
+	foreach ($pathCodes as $code) {
+		if ($code !== 'system') {
+			if (empty($i18n_structure[$code][$locale]['title'])) {
+				$title = Cot::$structure[$area][$code]['title'];
+				$url = cot_url($area, ['c' => $code]);
+			} else {
+				$title = $i18n_structure[$code][$locale]['title'];
+				$url = cot_url($area, ['c' =>  $code, 'l' => $locale]);
 			}
-			else
-			{
-				$title = $i18n_structure[$x][$locale]['title'];
-				$url = cot_url($area, 'c=' . $x . '&l=' . $locale);
-			}
-			$tmp[] = array($url, $title);
+			$result[] = [$url, $title];
 		}
 	}
-	return $tmp;
+
+	return $result;
 }
 
 /**

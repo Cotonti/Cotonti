@@ -50,28 +50,28 @@ if (!empty($c1) || !empty($c2)) {
 
 /* ============= */
 
-$L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title[] = array(cot_url('pfs', $more), $L['pfs_title']);
+$L['pfs_title'] = ($userid==0) ? Cot::$L['SFS'] : Cot::$L['pfs_title'];
+$breadcrumbs = [
+    [cot_url('pfs', $more), Cot::$L['pfs_title']],
+];
 
 /* === Hook === */
-foreach (cot_getextplugins('pfs.edit.first') as $pl)
-{
+foreach (cot_getextplugins('pfs.edit.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if ($userid != $usr['id'])
-{
-	cot_block($usr['isadmin']);
-	($userid == 0) || $title[] = array(cot_url('users', 'm=details&id='.$user_info['user_id']), $user_info['user_name']);
+if ($userid != Cot::$usr['id']) {
+	cot_block(Cot::$usr['isadmin']);
+	($userid == 0) || $breadcrumbs[] = array(cot_url('users', 'm=details&id='.$user_info['user_id']), $user_info['user_name']);
 }
 
-$title[] = $L['Edit'];
+$sql_pfs = Cot::$db->query(
+    'SELECT * FROM ' . Cot::$db->pfs . ' WHERE pfs_userid = :userId AND pfs_id = :pfsId LIMIT 1',
+    ['userId' => $userid, 'pfsId' =>$id]
+);
 
-$sql_pfs = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid=$userid AND pfs_id=$id LIMIT 1");
-
-if ($row = $sql_pfs->fetch())
-{
+if ($row = $sql_pfs->fetch()) {
 	$pfs_id = $row['pfs_id'];
 	$pfs_file = $row['pfs_file'];
 	$pfs_date = $row['pfs_date'];
@@ -81,25 +81,19 @@ if ($row = $sql_pfs->fetch())
 	$pfs_size = floor($row['pfs_size'] / 1024); // in KiB; deprecated but kept for compatibility
 	$pfs_size_bytes = $row['pfs_size'];
 	$ff = $pfs_dir_user.$pfs_file;
-}
-else
-{
+} else {
 	cot_die();
 }
 
-$title[] = htmlspecialchars($pfs_file);
+$breadcrumbs[] = htmlspecialchars($pfs_file) . ' (' . Cot::$L['Edit'] . ')';
 
-if ($a=='update' && !empty($id))
-{
+if ($a === 'update' && !empty($id)) {
 	$rdesc = cot_import('rdesc','P','TXT');
 	$folderid = cot_import('folderid','P','INT');
-	if ($folderid>0)
-	{
+	if ($folderid>0) {
 		$sql_pfs_pffcount = $db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid=$userid AND pff_id=$folderid");
 		cot_die($sql_pfs_pffcount->rowCount()==0);
-	}
-	else
-	{
+	} else {
 		$folderid = 0;
 	}
 
@@ -115,9 +109,8 @@ if ($a=='update' && !empty($id))
 
 $out['subtitle'] = $L['pfs_title'];
 
-if (!$standalone)
-{
-	require_once $cfg['system_dir'] . '/header.php';
+if (!$standalone) {
+	require_once Cot::$cfg['system_dir'] . '/header.php';
 }
 
 $t = new XTemplate(cot_tplfile('pfs.edit'));
@@ -130,27 +123,29 @@ if ($standalone) {
         Cot::$out['head_head'] = $html . (isset(Cot::$out['head_head']) ? Cot::$out['head_head'] : '');
     }
 
-    $t->assign(array(
-        'PFS_HEAD' => $out['head_head'],
-    ));
+    $t->assign([
+        'PFS_HEAD' => Cot::$out['head_head'],
+    ]);
 
 	$t->parse('MAIN.STANDALONE_HEADER');
 	$t->parse('MAIN.STANDALONE_FOOTER');
 }
 
-$t->assign(array(
-	'PFS_TITLE' => cot_breadcrumbs($title, $cfg['homebreadcrumb']),
+$t->assign([
+	'PFS_TITLE' => cot_breadcrumbs($breadcrumbs, $cfg['homebreadcrumb']),
+    'PFS_BREADCRUMBS' => cot_breadcrumbs($breadcrumbs, Cot::$cfg['homebreadcrumb']),
 	'PFS_ACTION'=> cot_url('pfs', 'm=edit&a=update&id='.$pfs_id.'&'.$more),
-	'PFS_FILE' => $pfs_file,
+	'PFS_FILE' => htmlspecialchars($pfs_file),
 	'PFS_DATE' => cot_date('datetime_medium', $pfs_date),
 	'PFS_DATE_STAMP' => $pfs_date,
 	'PFS_FOLDER' => cot_selectbox_folders($userid, '', $pfs_folderid),
 	'PFS_URL' => $ff,
-	'PFS_DESC' => cot_inputbox('text', 'rdesc', $pfs_desc, 'size="56" maxlength="255"'),
+	'PFS_DESC' => cot_inputbox('text', 'rdesc', $pfs_desc, 'maxlength="255"'),
 	'PFS_SIZE' => cot_build_filesize($pfs_size_bytes, 1),
 	'PFS_SIZE_BYTES' => $pfs_size_bytes,
-	'PFS_SIZE_KB' => $pfs_size_bytes / 1024 // in KiB; deprecated but kept for compatibility
-));
+    'PFS_IS_STANDALONE' => $standalone,
+	'PFS_SIZE_KB' => $pfs_size_bytes / 1024, // in KiB; deprecated but kept for compatibility
+]);
 
 cot_display_messages($t);
 

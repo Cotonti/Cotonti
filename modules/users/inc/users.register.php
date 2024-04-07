@@ -18,34 +18,31 @@ $token = cot_import('token', 'G', 'ALP');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('users', 'a');
 
-if (Cot::$cfg['users']['disablereg'] && !Cot::$usr['isadmin'])
-{
+if (Cot::$cfg['users']['disablereg'] && !Cot::$usr['isadmin']) {
 	cot_die_message(117, TRUE);
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('users.register.first') as $pl)
-{
+foreach (cot_getextplugins('users.register.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
 cot_block(Cot::$usr['id'] == 0 || Cot::$usr['isadmin']);
 
-$ruser = array(
+$ruser = [
     'user_name' => '',
     'user_email' => '',
     'user_country' => '',
     'user_timezone' => '',
     'user_gender' => '',
-);
+];
 
 if ($a == 'add') {
 	cot_shield_protect();
 
 	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('users.register.add.first') as $pl)
-	{
+	foreach (cot_getextplugins('users.register.add.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */

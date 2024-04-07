@@ -87,7 +87,7 @@
 						<td class="centerall">{PFS_ROW_ICON}</td>
 						<td>
 							<p class="strong"><a href={PFS_ROW_FILE_URL}>{PFS_ROW_FILE}</a></p>
-							<p class="small">{PFS_ROW_TYPE} / {PFS_ROW_DESC}</p>
+							<p class="small">{PFS_ROW_TYPE} <!-- IF {PFS_ROW_DESC} -->/ {PFS_ROW_DESC}</p>
 						</td>
 						<td class="centerall">{PFS_ROW_COUNT}</td>
 						<td class="centerall">{PFS_ROW_SIZE}</td>
