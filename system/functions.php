@@ -663,27 +663,24 @@ function cot_import_buffer_save()
  *
  * @param string $name Input name
  * @param mixed $value Currently imported value
- * @param mixed $null null import
+ * @param mixed $default Default value
  * @return mixed Input value or NULL if the variable is not in the buffer
  */
-function cot_import_buffered($name, $value, $null = '')
+function cot_import_buffered($name, $value, $default = null)
 {
+    if (!empty($value)) {
+        return $value;
+    }
+
 	// Params hash for current form
 	$uri = str_replace('&_ajax=1', '', $_SERVER['REQUEST_URI']);
 	$hash = md5($uri);
-	if (
-        $value === ''
-        || $value === null
-		|| !empty($_SESSION['cot_buffer'][$hash][$name])
-    ) {
-		if (isset($_SESSION['cot_buffer'][$hash][$name])) {
-			return $_SESSION['cot_buffer'][$hash][$name];
-		} else {
-			return $null;
-		}
-	} else {
-		return $value;
-	}
+
+    if (isset($_SESSION['cot_buffer'][$hash][$name])) {
+        return $_SESSION['cot_buffer'][$hash][$name];
+    }
+
+    return $default;
 }
 
 /**
