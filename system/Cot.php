@@ -106,8 +106,14 @@ class Cot
         }
         // Fill some variables with default values
         // May be isset() is not needed
-        if (!isset(self::$out['head'])) self::$out['head'] = '';
-        if (!isset(self::$out['subtitle'])) self::$out['subtitle'] = '';
-        if (!isset(self::$env['ext'])) self::$env['ext'] = null;
+        if (!isset(self::$out['head'])) {
+            self::$out['head'] = '';
+        }
+        if (!isset(self::$out['subtitle'])) {
+            self::$out['subtitle'] = '';
+        }
+        if (!isset(self::$env['ext'])) {
+            self::$env['ext'] = null;
+        }
     }
 }

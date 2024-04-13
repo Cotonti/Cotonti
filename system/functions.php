@@ -643,18 +643,36 @@ function cot_import_tabledata($nameslist=array(), $source='P', $nameprefix='', $
  */
 function cot_import_buffer_save()
 {
-	// Referer contains an original form link
-	if (isset($_SERVER['HTTP_REFERER']) && cot_url_check($_SERVER['HTTP_REFERER'])) {
-		// Extract the server-relative part
-		$url = parse_url($_SERVER['HTTP_REFERER']);
-		// Strip ajax param from the query
-		$url['query'] = !empty($url['query']) ? str_replace('&_ajax=1', '', $url['query']) : '';
-		$path = empty($url['query']) ? $url['path'] : $url['path'] . '?' . $url['query'];
-		$hash = md5($path);
-		// Save the buffer
-		$_SESSION['cot_buffer'][$hash] = $_POST;
-	}
+    // Clear old data
+    if (!empty($_SESSION['cot_buffer']) && is_array($_SESSION['cot_buffer'])) {
+        $validTime = Cot::$sys['now'] - 86400; // 24 hours
+        foreach ($_SESSION['cot_buffer'] as $hash => $buffer) {
+            if (!isset($buffer['createdAt']) || $buffer['createdAt'] < $validTime) {
+                unset($_SESSION['cot_buffer'][$hash]);
+            }
+        }
+    }
 
+    if (
+        $_SERVER['REQUEST_METHOD'] !== 'POST'
+        || !isset($_SERVER['HTTP_REFERER'])
+        || !cot_url_check($_SERVER['HTTP_REFERER'])
+    ) {
+        return;
+    }
+
+    $hash = cot_importBufferKey($_SERVER['HTTP_REFERER']);
+
+    if (empty($_POST)) {
+        unset($_SESSION['cot_buffer'][$hash]);
+        return;
+    }
+
+    // Save the buffer
+    $_SESSION['cot_buffer'][$hash] = [
+        'createdAt' => Cot::$sys['now'],
+        'data' => $_POST,
+    ];
 }
 
 /**
@@ -673,14 +691,37 @@ function cot_import_buffered($name, $value, $default = null)
     }
 
 	// Params hash for current form
-	$uri = str_replace('&_ajax=1', '', $_SERVER['REQUEST_URI']);
-	$hash = md5($uri);
+	$hash = cot_importBufferKey($_SERVER['REQUEST_URI']);
 
-    if (isset($_SESSION['cot_buffer'][$hash][$name])) {
-        return $_SESSION['cot_buffer'][$hash][$name];
+    if (isset($_SESSION['cot_buffer'][$hash]['data'][$name])) {
+        return $_SESSION['cot_buffer'][$hash]['data'][$name];
     }
 
     return $default;
+}
+
+/**
+ * @param string $uri
+ * @return string
+ */
+function cot_importBufferKey($uri)
+{
+    $parsedUri = parse_url($uri);
+    $path = trim($parsedUri['path'], '/');
+    $query = [];
+    if (!empty($parsedUri['query'])) {
+        parse_str($parsedUri['query'], $query);
+    }
+
+    $normalisedUri = $path;
+    if (!empty($query)) {
+        // Strip ajax param from the query
+        unset($query['_ajax']);
+        ksort($query);
+        $normalisedUri .= '?' . http_build_query($query);
+    }
+
+    return md5($normalisedUri);
 }
 
 /**
@@ -3268,7 +3309,7 @@ function cot_die_message($code, $header = true, $message_title = '', $message_bo
 	require_once cot_langfile('message', 'core');
     $L = array_merge($L, $LL);
 
-	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST') {
+	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Save the POST data
 		cot_import_buffer_save();
 		if (!empty($error_string)) {
@@ -3276,8 +3317,9 @@ function cot_die_message($code, $header = true, $message_title = '', $message_bo
 			cot_error($error_string);
 		}
 	}
+
 	// Determine response header
-	static $msg_status = array(
+	static $msg_status = [
 		100 => '403 Forbidden',
 		101 => '200 OK',
 		102 => '200 OK',
@@ -3309,8 +3351,8 @@ function cot_die_message($code, $header = true, $message_title = '', $message_bo
 		930 => '403 Forbidden',
 		940 => '403 Forbidden',
 		950 => '403 Forbidden',
-		951 => '503 Service Unavailable'
-	);
+		951 => '503 Service Unavailable',
+	];
 
 	if (empty($out['meta_contenttype'])) {
         $out['meta_contenttype'] = 'text/html';
@@ -5622,47 +5664,38 @@ function cot_redirect($url)
 {
 	global $cfg, $env, $error_string, $sys;
 
-	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST')
-	{
+	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Save the POST data
-		if (!empty($error_string))
-		{
+		if (!empty($error_string)) {
 			// Message should not be lost
 			cot_error($error_string);
 		}
 		cot_import_buffer_save();
 	}
 
-	if (!cot_url_check($url))
-	{
+	if (!cot_url_check($url)) {
 		// No redirects to foreign domains
-		if ($url == '/' || $url == $sys['site_uri'])
-		{
+		if ($url == '/' || $url == $sys['site_uri']) {
 			$url = COT_ABSOLUTE_URL;
-		}
-		else
-		{
+		} else {
 			if ($url[0] === '/')
 				$url = mb_substr($url, 1);
 			$url = COT_ABSOLUTE_URL . $url;
 		}
 	}
 
-	if (defined('COT_AJAX') && COT_AJAX)
-	{
+	if (defined('COT_AJAX') && COT_AJAX) {
 		// Save AJAX state, some browsers loose it after redirect (e.g. FireFox 3.6)
 		$sep = strpos($url, '?') === false ? '?' : '&';
 		$url .= $sep . '_ajax=1';
 	}
 
-	if (isset($env['status']))
-	{
+	if (isset($env['status'])) {
 		$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
 		header($protocol . ' ' . $env['status']);
 	}
 
-	if ($cfg['redirmode'])
-	{
+	if ($cfg['redirmode']) {
 		$output = $cfg['doctype'].<<<HTM
 		<html>
 		<head>

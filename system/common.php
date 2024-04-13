@@ -171,7 +171,10 @@ if ($cfg['cache'] && !$cfg['debug_mode']) {
         if (isset($cfg['cache_' . $cache_ext]) && $cfg['cache_' . $cache_ext]) {
             $cacheRequest = $sys['uri'];
             if ($sys['query'] !== '') {
-                $cacheRequest .= '?' . $sys['query'];
+                $query = [];
+                parse_str($sys['query'], $query);
+                ksort($query);
+                $cacheRequest .= '?' . http_build_query($query);
             }
             $cache->static->initByUri($cacheRequest, $cfg['defaulttheme']);
             unset($cacheRequest);

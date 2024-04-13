@@ -56,25 +56,28 @@ function cot_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1', $c
  */
 function cot_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
 {
-	global $R, $cfg;
 	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-	$rc = empty($R["input_{$type}_{$rc_name}"])
+	$rc = empty(Cot::$R["input_{$type}_{$rc_name}"])
         ? (empty($custom_rc) ? "input_{$type}" : $custom_rc)
         : "input_{$type}_{$rc_name}";
-	if (!isset($R[$rc]) && empty($custom_rc)) {
+	if (!isset(Cot::$R[$rc]) && empty($custom_rc)) {
         $rc = 'input_default';
     }
 
-    $msgSeparate = isset($cfg['msg_separate']) ? $cfg['msg_separate'] : false;
+    $msgSeparate = isset(Cot::$cfg['msg_separate']) ? Cot::$cfg['msg_separate'] : false;
 	$error = $msgSeparate ? cot_implode_messages($name, 'error') : '';
-	return cot_rc($rc, array(
-		'type' => $type,
-		'name' => $name,
-		'value' => htmlspecialchars((string) cot_import_buffered($name, $value)),
-		'attrs' => $input_attrs,
-		'error' => $error
-	));
+
+	return cot_rc(
+        $rc,
+        [
+            'type' => $type,
+            'name' => $name,
+            'value' => htmlspecialchars((string) cot_import_buffered($name, $value)),
+            'attrs' => $input_attrs,
+            'error' => $error,
+        ]
+    );
 }
 
 /**

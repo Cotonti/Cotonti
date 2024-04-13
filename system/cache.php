@@ -549,7 +549,7 @@ class Page_cache
     {
         $path = $this->getPathByUri($uri);
         if (empty($path)) {
-            return false;
+            return;
         }
         $this->init($path, $name, $exclude, $ext);
     }
