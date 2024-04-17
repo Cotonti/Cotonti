@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Code=recentitems
-Name=Recent items
+Name=Recent Items
 Category=publications-events
 Description=Recent pages, topics in forums, users, comments
 Version=1.0.4
