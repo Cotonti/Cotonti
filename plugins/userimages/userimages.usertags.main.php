@@ -26,7 +26,7 @@ require_once cot_incfile('userimages', 'plug', 'resources');
 $userimages = cot_userimages_config_get();
 
 foreach ($userimages as $code => $settings) {
-    $uimage = isset($user_data['user_' . $code]) ? $user_data['user_' . $code] : '';
+    $uimage = isset($user_data['user_' . $code]) && file_exists($user_data['user_' . $code]) ? $user_data['user_' . $code] : '';
     $temp_array[strtoupper($code) . '_SRC'] = $uimage;
     $temp_array[strtoupper($code)] = cot_userimages_build($uimage, $code);
 }

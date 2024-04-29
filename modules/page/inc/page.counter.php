@@ -12,7 +12,7 @@
 defined('COT_CODE') or die('Wrong URL');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', 'any');
-cot_block(\Cot::$usr['auth_read']);
+cot_block(Cot::$usr['auth_read']);
 
 $id = cot_import('id', 'G', 'INT');
 cot_die(empty($id) || empty($a), true);

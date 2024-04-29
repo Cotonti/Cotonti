@@ -302,28 +302,28 @@ if ($a == 'send' && \Cot::$usr['auth_write']) {
 	}
 	cot_redirect(cot_url($url_area, $url_params, '#comments', true));
 
-} elseif ($a == 'delete' && \Cot::$usr['isadmin']) {
+} elseif ($a == 'delete' && Cot::$usr['isadmin']) {
 	cot_check_xg();
-	$sql = \Cot::$db->query(
-        'SELECT * FROM ' . \Cot::$db->com . ' WHERE com_id = :id AND com_area = :area LIMIT 1',
+	$sql = Cot::$db->query(
+        'SELECT * FROM ' . Cot::$db->com . ' WHERE com_id = :id AND com_area = :area LIMIT 1',
         ['id' => $id, 'area' => $area]
     );
 
 	if ($row = $sql->fetch()) {
 		$sql->closeCursor();
-		$sql = \Cot::$db->delete(\Cot::$db->com, 'com_id = ?', $id);
+		$sql = Cot::$db->delete(Cot::$db->com, 'com_id = ?', $id);
 
 		foreach (Cot::$extrafields[$db_com] as $exfld) {
 			cot_extrafield_unlinkfiles($row['com_' . $exfld['field_name']], $exfld);
 		}
 
-        if (\Cot::$cache) {
-            if ($staticCacheIsEnabled === '' || !empty(\Cot::$cfg[$staticCacheIsEnabled])) {
-                \Cot::$cache->static->clearByUri(cot_url($url_area, $url_params));
+        if (Cot::$cache) {
+            if ($staticCacheIsEnabled === '' || !empty(Cot::$cfg[$staticCacheIsEnabled])) {
+                Cot::$cache->static->clearByUri(cot_url($url_area, $url_params));
 
             }
-            if (\Cot::$cfg['cache_index']) {
-                \Cot::$cache->static->clear('index');
+            if (Cot::$cfg['cache_index']) {
+                Cot::$cache->static->clear('index');
             }
         }
 
@@ -340,7 +340,7 @@ if ($a == 'send' && \Cot::$usr['auth_write']) {
 	}
 	cot_redirect(cot_url($url_area, $url_params, '#comments', true));
 
-} elseif ($a == 'enable' && \Cot::$usr['isadmin']) {
+} elseif ($a == 'enable' && Cot::$usr['isadmin']) {
 	$area = cot_import('area', 'P', 'ALP');
 	$state = cot_import('state', 'P', 'INT');
 }

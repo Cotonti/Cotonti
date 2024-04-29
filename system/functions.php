@@ -2595,7 +2595,7 @@ function cot_build_group($grpid, $title = false)
  */
 function cot_build_groupicon($src)
 {
-	return ($src) ? cot_rc("icon_group", array('src' => $src)) : '';
+	return $src ? cot_rc('icon_group', ['src' => $src]) : '';
 }
 
 /**

@@ -63,7 +63,8 @@ if (empty($days) || is_numeric($days)) {
         if (
             Cot::$usr['timezone'] != 0 // May be it is not needed
             && !empty(Cot::$usr['timezonename'])
-            && Cot::$usr['timezonename'] != $defaultTimeZone) {
+            && Cot::$usr['timezonename'] != $defaultTimeZone
+        ) {
             try {
                 $timeZone = new DateTimeZone(Cot::$usr['timezonename']);
             } catch (Exception $e) {

@@ -99,8 +99,20 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		return '';
 	}
 
-    $comments_join_columns = $comments_join_tables = $comments_join_where = '';
-    $commentsWhereParams = [];
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        /**
+         * @deprecated $comments_join_columns in 0.9.25
+         * @deprecated $comments_join_tables in 0.9.25
+         * @deprecated $comments_join_where in 0.9.25
+         */
+        $comments_join_columns = $comments_join_tables = $comments_join_where = '';
+    }
+
+    $queryColumns = [];
+    $queryJoinTables = [];
+    $queryWhere = [];
+    $queryParams = [];
+    $queryOrder = [];
 
 	// Get the URL and parameters
 	$link_area = Cot::$env['ext'];
@@ -219,187 +231,210 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
 		$t->parse('COMMENTS.COMMENTS_CLOSED');
 	}
 
-	$order = Cot::$cfg['plugin']['comments']['order'] == 'Chronological' ? 'ASC' : 'DESC';
-	$comments_order = "com_id $order";
+    if ($enabled) {
+        $queryWhere['area'] = 'com_area = :itemArea';
+        $queryWhere['code'] = 'com_code = :itemCode';
+        $queryParams['itemArea'] = $ext_name;
+        $queryParams['itemCode'] = $code;
 
-	/* == Hook == */
-	foreach (cot_getextplugins('comments.query') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+        $order = Cot::$cfg['plugin']['comments']['order'] == 'Chronological' ? 'ASC' : 'DESC';
+        $queryOrder[] = "com_id $order";
 
-    $commentsWhereParams['itemArea'] = $ext_name;
-    $commentsWhereParams['itemCode'] = $code;
+        /* == Hook == */
+        foreach (cot_getextplugins('comments.query') as $pl) {
+            include $pl;
+        }
+        /* ===== */
 
-	$sql = Cot::$db->query(
-        "SELECT c.*, u.* $comments_join_columns "
-		. 'FROM ' . Cot::$db->com . ' AS c '
-		. 'LEFT JOIN ' . Cot::$db->users . ' AS u ON u.user_id = c.com_authorid '
-		. $comments_join_tables
-		. " WHERE com_area = :itemArea AND com_code = :itemCode $comments_join_where "
-        . "ORDER BY $comments_order "
-        . 'LIMIT ' . (int) Cot::$cfg['plugin']['comments']['maxcommentsperpage'] . ' OFFSET ' . (int) $d,
-        $commentsWhereParams
-    );
-
-	if ($sql->rowCount() > 0 && $enabled) {
-		$i = $d;
-		$kk = 0;
-		$totalitems = cot_comments_count($ext_name, $code);
-
-		/* === Hook - Part1 : Set === */
-		$extp = cot_getextplugins('comments.loop');
-		/* ===== */
-
-		foreach ($sql->fetchAll() as $row) {
-			$i++;
-			$kk++;
-			$com_admin = $auth_admin ?
-                cot_rc(
-                    'comments_code_admin',
-                    [
-                        'ipsearch' => cot_build_ipsearch($row['com_authorip']),
-                        'delete_url' => cot_confirm_url(
-                            cot_url('comments', ['a' => 'delete', 'cat' => $cat, 'id' => $row['com_id'], 'x' => Cot::$sys['xk']]),
-                            'comments',
-                            'comments_confirm_delete'
-                        ),
-                    ]
-                )
-                : '';
-
-            $row['user_id'] = (int) $row['user_id'];
-
-			$com_text = cot_parse($row['com_text'], Cot::$cfg['plugin']['comments']['markup']);
-
-			$time_limit = Cot::$sys['now'] < ($row['com_date'] + Cot::$cfg['plugin']['comments']['time'] * 60);
-            $usr['isowner_com'] =
-                $time_limit
-                && (
-                    (Cot::$usr['id'] > 0 && $row['com_authorid'] == Cot::$usr['id'])
-                    || (
-                        Cot::$usr['id'] == 0
-                        && !empty($_SESSION['cot_comments_edit'][$row['com_id']])
-                        && Cot::$usr['ip'] == $row['com_authorip']
-                    )
-                );
-			$com_gup = Cot::$sys['now'] - ($row['com_date'] + Cot::$cfg['plugin']['comments']['time'] * 60);
-			$allowed_time = (Cot::$usr['isowner_com'] && !Cot::$usr['isadmin'])
-                ? ' - ' . cot_build_timegap(Cot::$sys['now'] + $com_gup, Cot::$sys['now']) . Cot::$L['plu_comgup']
-                : '';
-			$com_edit = ($auth_admin || Cot::$usr['isowner_com'])
-                ? cot_rc(
-                    'comments_code_edit',
-                    [
-					    'edit_url' => cot_url(
-                            'plug',
-                            ['e' => 'comments', 'm' => 'edit', 'cat' => $cat, 'id' => $row['com_id']]
-                        ),
-					    'allowed_time' => $allowed_time,
-				    ]
-                )
-                : '';
-
-            if ($row['com_area'] == 'page') {
-                if (Cot::$usr['id'] == 0 && Cot::$usr['isowner_com'] && Cot::$cfg['cache_page']) {
-                    Cot::$cfg['cache_page'] = Cot::$cfg['cache_index'] = false;
-                }
-            }
-
-            if (!empty($row['user_id']) && !empty($row['user_name'])) {
-                $comAuthor = cot_build_user($row['user_id'], $row['user_name']);
-            } elseif ($row['com_authorid'] == 0 && !empty($row['com_author'])) {
-                // Comment from guest
-                $comAuthor = htmlspecialchars($row['com_author']);
-            } else {
-                $comAuthor = Cot::$L['Deleted'];
-            }
-
-            $t->assign([
-				'COMMENTS_ROW_ID' => $row['com_id'],
-				'COMMENTS_ROW_ORDER' => Cot::$cfg['plugin']['comments']['order'] == 'Recent' ? $totalitems - $i + 1 : $i,
-				'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#com'.$row['com_id']),
-				'COMMENTS_ROW_AUTHOR' => $comAuthor,
-				// User can be deleted. So $row['user_id'] should be used here
-				'COMMENTS_ROW_AUTHORID' => !empty($row['user_id']) ? $row['user_id'] : 0,
-				'COMMENTS_ROW_TEXT' => $com_text,
-				'COMMENTS_ROW_DATE' => cot_date('datetime_medium', $row['com_date']),
-				'COMMENTS_ROW_DATE_STAMP' => $row['com_date'],
-				'COMMENTS_ROW_ADMIN' => $com_admin,
-				'COMMENTS_ROW_EDIT' => $com_edit,
-				'COMMENTS_ROW_ODDEVEN' => cot_build_oddeven($kk),
-				'COMMENTS_ROW_NUM' => $kk,
-			]);
-
-			// Extrafields
-            if (!empty(Cot::$extrafields[Cot::$db->com])) {
-                foreach (Cot::$extrafields[Cot::$db->com] as $exfld) {
-					$tag = mb_strtoupper($exfld['field_name']);
-                    $exfld_title = cot_extrafield_title($exfld, 'comments_');
-
-					$t->assign([
-						'COMMENTS_ROW_' . $tag . '_TITLE' => $exfld_title,
-						'COMMENTS_ROW_' . $tag => cot_build_extrafields_data('comments', $exfld, $row['com_'.$exfld['field_name']]),
-						'COMMENTS_ROW_' . $tag . '_VALUE' => $row['com_'.$exfld['field_name']]
-					]);
-				}
-			}
-
-			$t->assign(cot_generate_usertags($row, 'COMMENTS_ROW_AUTHOR_', htmlspecialchars($row['com_author'])));
-
-			/* === Hook - Part2 : Include === */
-			foreach ($extp as $pl) {
-				include $pl;
-			}
-			/* ===== */
-
-			$t->parse('COMMENTS.COMMENTS_ROW');
-		}
-
-		$pagenav = cot_pagenav(
-            $link_area,
-            $link_params,
-            $d,
-            $totalitems,
-			Cot::$cfg['plugin']['comments']['maxcommentsperpage'],
-            $d_var,
-            '#comments',
-            Cot::$cfg['jquery'] && Cot::$cfg['turnajax'],
-            'comments',
-            'plug',
-            "r=comments&area=$ext_name&cat=$cat&item=$code"
-        );
-
-        $t->assign([
-            'COMMENTS_PAGES_INFO' => cot_rc(
-                'comments_code_pages_info',
-                ['totalitems' => $totalitems, 'onpage' => $i - $d]
-            ),
-        ]);
-
-        $t->assign(cot_generatePaginationTags($pagenav, 'COMMENTS_'));
-
+        $sqlColumns = !empty($queryColumns) ? ', ' . implode(', ', $queryColumns) : '';
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
-            /** @deprecated in 0.9.25 */
+            $sqlColumns .= $comments_join_columns;
+        }
+
+        $sqlWhere = !empty($queryWhere) ? "\nWHERE (" . implode(') AND (', $queryWhere) . ')' : '';
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $sqlWhere .= $comments_join_where;
+        }
+
+        $sqlOrder = !empty($queryOrder) ? "\nORDER BY " . implode(', ', $queryOrder) : '';
+
+        $sqlJoinTables = !empty($queryJoinTables) ? "\n" . implode("\n", $queryJoinTables) : '';
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            $sqlJoinTables .= $comments_join_tables;
+        }
+
+        $sql = "SELECT c.*, u.* $sqlColumns "
+            . 'FROM ' . Cot::$db->com . ' AS c '
+            . 'LEFT JOIN ' . Cot::$db->users . ' AS u ON u.user_id = c.com_authorid '
+            . $sqlJoinTables . $sqlWhere . $sqlOrder
+            . ' LIMIT ' . (int) Cot::$cfg['plugin']['comments']['maxcommentsperpage'] . ' OFFSET ' . (int) $d;
+
+        $commentsList = Cot::$db->query($sql, $queryParams)->fetchAll();
+
+        /* == Hook == */
+        foreach (cot_getextplugins('comments.query.done') as $pl) {
+            include $pl;
+        }
+        /* ===== */
+
+        if (!empty($commentsList)) {
+            $i = $d;
+            $kk = 0;
+            $totalItems = cot_comments_count($ext_name, $code);
+
+            /* === Hook - Part1 : Set === */
+            $extp = cot_getextplugins('comments.loop');
+            /* ===== */
+
+            foreach ($commentsList as $row) {
+                $i++;
+                $kk++;
+                $com_admin = $auth_admin ?
+                    cot_rc(
+                        'comments_code_admin',
+                        [
+                            'ipsearch' => cot_build_ipsearch($row['com_authorip']),
+                            'delete_url' => cot_confirm_url(
+                                cot_url('comments', ['a' => 'delete', 'cat' => $cat, 'id' => $row['com_id'], 'x' => Cot::$sys['xk']]),
+                                'comments',
+                                'comments_confirm_delete'
+                            ),
+                        ]
+                    )
+                    : '';
+
+                $row['user_id'] = (int)$row['user_id'];
+
+                $com_text = cot_parse($row['com_text'], Cot::$cfg['plugin']['comments']['markup']);
+
+                $time_limit = Cot::$sys['now'] < ($row['com_date'] + Cot::$cfg['plugin']['comments']['time'] * 60);
+                $usr['isowner_com'] =
+                    $time_limit
+                    && (
+                        (Cot::$usr['id'] > 0 && $row['com_authorid'] == Cot::$usr['id'])
+                        || (
+                            Cot::$usr['id'] == 0
+                            && !empty($_SESSION['cot_comments_edit'][$row['com_id']])
+                            && Cot::$usr['ip'] == $row['com_authorip']
+                        )
+                    );
+                $com_gup = Cot::$sys['now'] - ($row['com_date'] + Cot::$cfg['plugin']['comments']['time'] * 60);
+                $allowed_time = (Cot::$usr['isowner_com'] && !Cot::$usr['isadmin'])
+                    ? ' - ' . cot_build_timegap(Cot::$sys['now'] + $com_gup, Cot::$sys['now']) . Cot::$L['plu_comgup']
+                    : '';
+                $com_edit = ($auth_admin || Cot::$usr['isowner_com'])
+                    ? cot_rc(
+                        'comments_code_edit',
+                        [
+                            'edit_url' => cot_url(
+                                'plug',
+                                ['e' => 'comments', 'm' => 'edit', 'cat' => $cat, 'id' => $row['com_id']]
+                            ),
+                            'allowed_time' => $allowed_time,
+                        ]
+                    )
+                    : '';
+
+                if ($row['com_area'] == 'page') {
+                    if (Cot::$usr['id'] == 0 && Cot::$usr['isowner_com'] && Cot::$cfg['cache_page']) {
+                        Cot::$cfg['cache_page'] = Cot::$cfg['cache_index'] = false;
+                    }
+                }
+
+                if (!empty($row['user_id']) && !empty($row['user_name'])) {
+                    $comAuthor = cot_build_user($row['user_id'], $row['user_name']);
+                } elseif ($row['com_authorid'] == 0 && !empty($row['com_author'])) {
+                    // Comment from guest
+                    $comAuthor = htmlspecialchars($row['com_author']);
+                } else {
+                    $comAuthor = Cot::$L['Deleted'];
+                }
+
+                $t->assign([
+                    'COMMENTS_ROW_ID' => $row['com_id'],
+                    'COMMENTS_ROW_ORDER' => Cot::$cfg['plugin']['comments']['order'] == 'Recent' ? $totalItems - $i + 1 : $i,
+                    'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#com' . $row['com_id']),
+                    'COMMENTS_ROW_AUTHOR' => $comAuthor,
+                    // User can be deleted. So $row['user_id'] should be used here
+                    'COMMENTS_ROW_AUTHORID' => !empty($row['user_id']) ? $row['user_id'] : 0,
+                    'COMMENTS_ROW_TEXT' => $com_text,
+                    'COMMENTS_ROW_DATE' => cot_date('datetime_medium', $row['com_date']),
+                    'COMMENTS_ROW_DATE_STAMP' => $row['com_date'],
+                    'COMMENTS_ROW_ADMIN' => $com_admin,
+                    'COMMENTS_ROW_EDIT' => $com_edit,
+                    'COMMENTS_ROW_ODDEVEN' => cot_build_oddeven($kk),
+                    'COMMENTS_ROW_NUM' => $kk,
+                ]);
+
+                // Extrafields
+                if (!empty(Cot::$extrafields[Cot::$db->com])) {
+                    foreach (Cot::$extrafields[Cot::$db->com] as $exfld) {
+                        $tag = mb_strtoupper($exfld['field_name']);
+                        $exfld_title = cot_extrafield_title($exfld, 'comments_');
+
+                        $t->assign([
+                            'COMMENTS_ROW_' . $tag . '_TITLE' => $exfld_title,
+                            'COMMENTS_ROW_' . $tag => cot_build_extrafields_data('comments', $exfld, $row['com_' . $exfld['field_name']]),
+                            'COMMENTS_ROW_' . $tag . '_VALUE' => $row['com_' . $exfld['field_name']]
+                        ]);
+                    }
+                }
+
+                $t->assign(cot_generate_usertags($row, 'COMMENTS_ROW_AUTHOR_', htmlspecialchars($row['com_author'])));
+
+                /* === Hook - Part2 : Include === */
+                foreach ($extp as $pl) {
+                    include $pl;
+                }
+                /* ===== */
+
+                $t->parse('COMMENTS.COMMENTS_ROW');
+            }
+
+            $pagenav = cot_pagenav(
+                $link_area,
+                $link_params,
+                $d,
+                $totalItems,
+                Cot::$cfg['plugin']['comments']['maxcommentsperpage'],
+                $d_var,
+                '#comments',
+                Cot::$cfg['jquery'] && Cot::$cfg['turnajax'],
+                'comments',
+                'plug',
+                "r=comments&area=$ext_name&cat=$cat&item=$code"
+            );
+
             $t->assign([
                 'COMMENTS_PAGES_INFO' => cot_rc(
                     'comments_code_pages_info',
-                    ['totalitems' => $totalitems, 'onpage' => $i - $d]
+                    ['totalitems' => $totalItems, 'onpage' => $i - $d]
                 ),
-                'COMMENTS_PAGES_TOTALITEMS' => $totalitems,
-                'COMMENTS_PAGES_PAGESPREV' => $pagenav['prev'],
-                'COMMENTS_PAGES_PAGNAV' => $pagenav['main'],
-                'COMMENTS_PAGES_PAGESNEXT' => $pagenav['next']
             ]);
-            $t->parse('COMMENTS.PAGNAVIGATOR');
-        }
 
-	} elseif (!$sql->rowCount() && $enabled) {
-		$t->assign([
-			'COMMENTS_EMPTYTEXT' => Cot::$L['com_nocommentsyet'],
-		]);
-		$t->parse('COMMENTS.COMMENTS_EMPTY');
-	}
+            $t->assign(cot_generatePaginationTags($pagenav, 'COMMENTS_'));
+
+            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                /** @deprecated in 0.9.25 */
+                $t->assign([
+                    'COMMENTS_PAGES_INFO' => cot_rc(
+                        'comments_code_pages_info',
+                        ['totalitems' => $totalItems, 'onpage' => $i - $d]
+                    ),
+                    'COMMENTS_PAGES_TOTALITEMS' => $totalItems,
+                    'COMMENTS_PAGES_PAGESPREV' => $pagenav['prev'],
+                    'COMMENTS_PAGES_PAGNAV' => $pagenav['main'],
+                    'COMMENTS_PAGES_PAGESNEXT' => $pagenav['next']
+                ]);
+                $t->parse('COMMENTS.PAGNAVIGATOR');
+            }
+        } else {
+            $t->assign([
+                'COMMENTS_EMPTYTEXT' => Cot::$L['com_nocommentsyet'],
+            ]);
+            $t->parse('COMMENTS.COMMENTS_EMPTY');
+        }
+    }
 
 	/* == Hook == */
 	foreach (cot_getextplugins('comments.tags') as $pl) {

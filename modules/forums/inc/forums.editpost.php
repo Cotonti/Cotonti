@@ -166,7 +166,9 @@ $title_params = array(
 	'EDIT' => Cot::$L['Edit']
 );
 Cot::$out['subtitle'] = cot_title('{EDIT} - {TOPIC}', $title_params);
-if(!isset(Cot::$out['head'])) Cot::$out['head'] = '';
+if (!isset(Cot::$out['head'])) {
+    Cot::$out['head'] = '';
+}
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 
 /* === Hook === */

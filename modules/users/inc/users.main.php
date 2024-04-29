@@ -77,6 +77,7 @@ $where = [];
 $params = [];
 $joinColumns = [];
 $joinCondition = [];
+$filterOrSortActive = false;
 
 /* === Hook === */
 foreach (cot_getextplugins('users.first') as $pl) {
@@ -116,8 +117,8 @@ if ($sq !== null && $sq !== '') {
         }
     }
     $where['namelike'] = '(' . implode(' OR ', $searchCondition) . ')';
-
     $users_url_path['sq'] = $sq;
+    $filterOrSortActive = true;
 }
 
 if (
@@ -129,11 +130,13 @@ if (
 ) {
     cot_die_message(404);
 }
-if (!empty($gm)
+if (
+    !empty($gm)
     && (
         !isset($cot_groups[$gm])
         || (!Cot::$usr['isadmin'] && ($cot_groups[$gm]['hidden'] || $cot_groups[$gm]['disabled']))
-    )) {
+    )
+) {
     cot_die_message(404);
 }
 
@@ -158,6 +161,7 @@ if ($g > 1) {
     $joinCondition['groupsUsers'] = ' LEFT JOIN ' . Cot::$db->groups_users . ' as m ON m.gru_userid = u.user_id ';
     $where['group'] = 'm.gru_groupid = ' . $g;
     $users_url_path['g'] = $g;
+    $filterOrSortActive = true;
 }
 
 if ($gm > 1) {
@@ -180,6 +184,7 @@ if ($gm > 1) {
 
     $where['mainGroup'] = 'user_maingrp = ' . $gm;
     $users_url_path['gm'] = $gm;
+    $filterOrSortActive = true;
 }
 
 if ($country !== null && $country !== '') {
@@ -194,6 +199,7 @@ if ($country !== null && $country !== '') {
     $where['country'] = "user_country = :country";
     $params['country'] = $country;
     $users_url_path['country'] = $country;
+    $filterOrSortActive = true;
 }
 
 $titleString = '';
@@ -220,6 +226,7 @@ if (empty($s)) {
     }
 
     $titleString = Cot::$L['OrderBy'] . " '" . $fieldTitle ."'";
+    $filterOrSortActive = true;
 }
 if (!in_array($w, ['asc', 'desc'])) {
     $w = $defaultSortWay;
@@ -228,6 +235,7 @@ if (!in_array($w, ['asc', 'desc'])) {
 
     // @todo translate
     $titleString .= ($titleString === '' ? Cot::$L['Order'] : '') . ' descending';
+    $filterOrSortActive = true;
 }
 if ($titleString !== '') {
     //$title[] = $titleString;
@@ -324,6 +332,13 @@ if ($durl > 1) {
 }
 Cot::$out['canonical_uri'] = cot_url('users', $canonicalUrlParams);
 
+if ($filterOrSortActive === true) {
+    if (!isset(Cot::$out['head'])) {
+        Cot::$out['head'] = '';
+    }
+    Cot::$out['head'] .= Cot::$R['code_noindex'];
+}
+
 /* === Hook === */
 foreach (cot_getextplugins('users.main') as $pl) {
 	include $pl;
@@ -405,7 +420,7 @@ if (isset($users_url_path['s']) && !$t->hasTag('USERS_FILTERS_SORT')) {
 if (isset($users_url_path['w'])) {
     $filtersFormParams .= cot_inputbox('hidden', 'w', $users_url_path['w']);
 }
-$excludeParams = ['gm', 'g', 'country', 's', 'w'];
+$excludeParams = ['sq', 'gm', 'g', 'country', 's', 'w'];
 foreach ($users_url_path as $key => $val) {
     if (in_array($key, $excludeParams)) {
         continue;

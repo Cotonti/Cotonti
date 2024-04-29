@@ -16,8 +16,8 @@ Hooks=header.main
 defined('COT_CODE') or die('Wrong URL');
 
 if (
-    Cot::$usr['id'] > 0 &&
-    (cot_auth('page', 'any', 'A') || cot_auth('page', 'any', 'W'))
+    Cot::$usr['id'] > 0
+    && (cot_auth('page', 'any', 'A') || cot_auth('page', 'any', 'W'))
 ) {
     require_once cot_incfile('page', 'module');
 }
