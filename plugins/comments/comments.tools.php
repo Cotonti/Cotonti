@@ -42,10 +42,10 @@ if ($a == 'delete')
 	cot_check_xg();
 	$db->delete($db_com, "com_id=$id");
 
-	$adminwarnings = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];
+	$adminwarnings = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];//TODO: May by need deprecate adminwarnings ?
 }
 
-$is_adminwarnings = isset($adminwarnings);
+$is_adminwarnings = isset($adminwarnings);//TODO: May by need deprecate adminwarnings ?
 
 $totalitems = $db->countRows($db_com);
 
@@ -158,7 +158,7 @@ foreach ($sql->fetchAll() as $row) {
 
 $t->assign(array(
 	'ADMIN_COMMENTS_CONFIG_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p=comments'),
-	'ADMIN_COMMENTS_ADMINWARNINGS' => isset($adminwarnings) ? $adminwarnings : '',
+	'ADMIN_COMMENTS_ADMINWARNINGS' => isset($adminwarnings) ? $adminwarnings : '',//TODO: May by need deprecate adminwarnings ?
 	'ADMIN_COMMENTS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_COMMENTS_PAGNAV' => $pagenav['main'],
 	'ADMIN_COMMENTS_PAGINATION_NEXT' => $pagenav['next'],

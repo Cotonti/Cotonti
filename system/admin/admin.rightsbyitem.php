@@ -150,7 +150,7 @@ while ($row = $sql->fetch()) {
 }
 $sql->closeCursor();
 
-$is_adminwarnings = isset($adminwarnings);
+$is_adminwarnings = isset($adminwarnings);//TODO: May by need deprecate adminwarnings ?
 
 $urlParams = ['m' => 'rightsbyitem', 'ic' => $ic, 'io' => $io, 'a' => 'update',];
 if ($advanced) {

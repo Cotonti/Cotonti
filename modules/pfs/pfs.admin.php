@@ -38,7 +38,7 @@ if ($s == 'allpfs') {
 	/* ===== */
 
 	if (!function_exists('gd_info')) {
-		$is_adminwarnings = true;
+		$is_adminwarnings = true;//TODO: May by need deprecate adminwarnings ?
 	} else {
 		$gd_datas = gd_info();
 		foreach ($gd_datas as $k => $i) {

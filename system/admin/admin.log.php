@@ -68,7 +68,7 @@ foreach($log_groups as $grp_code => $grp_name)
 	$t->parse('MAIN.GROUP_SELECT_OPTION');
 }
 
-$is_adminwarnings = isset($adminwarnings);
+$is_adminwarnings = isset($adminwarnings);//TODO: May by need deprecate adminwarnings ?
 
 $totalitems = ($n == 'all') ? $totaldblog : $db->query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'")->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=log&n='.$n, $d, $totalitems, $maxrowsperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
