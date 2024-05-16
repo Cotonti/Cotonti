@@ -19,7 +19,7 @@ require_once cot_langfile('banlist', 'plug');
 
 Cot::$db->registerTable('banlist');
 
-$ruser['user_email'] = cot_import('ruseremail','P','TXT',64, TRUE);
+$ruser['user_email'] = cot_import('ruseremail', 'P', 'TXT', 64, TRUE);
 if (!empty($ruser['user_email'])) {
     $ruser['user_email'] = mb_strtolower($ruser['user_email']);
     $banlist_email_mask = mb_strstr($ruser['user_email'], '@');

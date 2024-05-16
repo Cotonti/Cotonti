@@ -29,14 +29,12 @@ $maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
 /* === Hook === */
-foreach (cot_getextplugins('banlist.admin.first') as $pl)
-{
+foreach (cot_getextplugins('banlist.admin.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if ($a == 'update')
-{
+if ($a == 'update') {
 	$id = cot_import('id', 'G', 'INT');
 	$rbanlistip = cot_import('rbanlistip', 'P', 'TXT');
 	$rbanlistemail = $db->prep(cot_import('rbanlistemail', 'P', 'TXT'));
@@ -51,34 +49,30 @@ if ($a == 'update')
 		: '';
 
 	($sql) ? cot_message('alreadyupdatednewentry') : cot_message('Error');
-}
-elseif ($a == 'add')
-{
+} elseif ($a == 'add') {
 	$nbanlistip = cot_import('nbanlistip', 'P', 'TXT');
 	$nbanlistemail = $db->prep(cot_import('nbanlistemail', 'P', 'TXT'));
 	$nbanlistreason = $db->prep(cot_import('nbanlistreason', 'P', 'TXT'));
 	$nexpire = cot_import('nexpire', 'P', 'INT');
 
 	$nbanlistip_cnt = explode('.', $nbanlistip);
-	$nbanlistip = (count($nbanlistip_cnt)==4) ? $nbanlistip : '';
+	$nbanlistip = (count($nbanlistip_cnt) == 4) ? $nbanlistip : '';
 
-	if ($nexpire > 0)
-	{
+	if ($nexpire > 0) {
 		$nexpire += $sys['now'];
 	}
 	$sql = (!empty($nbanlistip) || !empty($nbanlistemail))
-		? $db->insert($db_banlist, array(
+		? $db->insert($db_banlist, [
+			'banlist_date' => $sys['now'],
 			'banlist_ip' => $nbanlistip,
 			'banlist_email' => $nbanlistemail,
 			'banlist_reason' => $nbanlistreason,
 			'banlist_expire' => (int) $nexpire
-			))
+			])
 		: '';
 
 	($sql) ? cot_message('alreadyaddnewentry') : cot_message('Error');
-}
-elseif ($a == 'delete')
-{
+} elseif ($a == 'delete') {
 	cot_check_xg();
 	$id = cot_import('id', 'G', 'INT');
 
@@ -89,7 +83,7 @@ $totalitems = $db->countRows($db_banlist);
 
 $pagenav = cot_pagenav('admin', 'm=other&p=banlist', $d, $totalitems, $maxperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $db->query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, banlist_ip LIMIT $d, ".$maxperpage);
+$sql = $db->query("SELECT * FROM $db_banlist ORDER BY banlist_date DESC LIMIT $d, ".$maxperpage);
 
 $ii = 0;
 
@@ -97,11 +91,8 @@ $ii = 0;
 $extp = cot_getextplugins('banlist.admin.loop');
 /* ===== */
 
-
-
-foreach ($sql->fetchAll() as $row)
-{
-	$tt->assign(array(
+foreach ($sql->fetchAll() as $row) {
+	$tt->assign([
 		'ADMIN_BANLIST_ROW_ID' => $row['banlist_id'],
 		'ADMIN_BANLIST_ROW_URL' => cot_url('admin', 'm=other&p=banlist&a=update&id='.$row['banlist_id'].'&d='.$durl),
 		'ADMIN_BANLIST_ROW_DELURL' => cot_url('admin', 'm=other&p=banlist&a=delete&id='.$row['banlist_id'].'&'.cot_xg()),
@@ -111,11 +102,10 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_BANLIST_ROW_EMAIL' => cot_inputbox('text', 'rbanlistemail', $row['banlist_email'], 'size="10" maxlength="64"'),
 		'ADMIN_BANLIST_ROW_REASON' => cot_inputbox('text', 'rbanlistreason', $row['banlist_reason'], 'size="22" maxlength="64"'),
 		'ADMIN_BANLIST_ROW_ODDEVEN' => cot_build_oddeven($ii)
-	));
+	]);
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -124,25 +114,38 @@ foreach ($sql->fetchAll() as $row)
 	$ii++;
 }
 
-$time_array = array('0', '3600', '7200', '14400', '28800', '57600', '86400',
-		'172800', '345600', '604800', '1209600', '1814400', '2592000');
-$time_values = array(
+$time_array = [
+	'0',
+	'3600',
+	'7200',
+	'14400',
+	'28800',
+	'57600',
+	'86400',
+	'172800',
+	'345600',
+	'604800',
+	'1209600',
+	'1814400',
+	'2592000'
+];
+$time_values = [
 	$L['banlist_neverexpire'],
-	cot_declension(1,$Ls['Hours']),
-	cot_declension(2,$Ls['Hours']),
-	cot_declension(4,$Ls['Hours']),
-	cot_declension(8,$Ls['Hours']),
-	cot_declension(16,$Ls['Hours']),
-	cot_declension(1,$Ls['Days']),
-	cot_declension(2,$Ls['Days']),
-	cot_declension(4,$Ls['Days']),
-	cot_declension(1,$Ls['Weeks']),
-	cot_declension(2,$Ls['Weeks']),
-	cot_declension(3,$Ls['Weeks']),
-	cot_declension(1,$Ls['Months'])
-);
+	cot_declension(1, $Ls['Hours']),
+	cot_declension(2, $Ls['Hours']),
+	cot_declension(4, $Ls['Hours']),
+	cot_declension(8, $Ls['Hours']),
+	cot_declension(16, $Ls['Hours']),
+	cot_declension(1, $Ls['Days']),
+	cot_declension(2, $Ls['Days']),
+	cot_declension(4, $Ls['Days']),
+	cot_declension(1, $Ls['Weeks']),
+	cot_declension(2, $Ls['Weeks']),
+	cot_declension(3, $Ls['Weeks']),
+	cot_declension(1, $Ls['Months'])
+];
 
-$tt->assign(array(
+$tt->assign([
 	'ADMIN_BANLIST_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_BANLIST_PAGNAV' => $pagenav['main'],
 	'ADMIN_BANLIST_PAGINATION_NEXT' => $pagenav['next'],
@@ -153,13 +156,12 @@ $tt->assign(array(
 	'ADMIN_BANLIST_IP' => cot_inputbox('text', 'nbanlistip', '', 'size="18" maxlength="64"'),
 	'ADMIN_BANLIST_EMAIL' => cot_inputbox('text', 'nbanlistemail', '', 'size="24" maxlength="64"'),
 	'ADMIN_BANLIST_REASON' => cot_inputbox('text', 'nbanlistreason', '', 'size="48" maxlength="64"')
-));
+]);
 
 cot_display_messages($tt);
 
 /* === Hook  === */
-foreach (cot_getextplugins('banlist.admin.tags') as $pl)
-{
+foreach (cot_getextplugins('banlist.admin.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
