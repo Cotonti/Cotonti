@@ -18,7 +18,7 @@ $cfg['mysqluser'] = 'root';			// Database user
 $cfg['mysqlpassword'] = '';			// Database password
 $cfg['mysqldb'] = 'cotonti';		// Database name
 // MySQL database charset and collate. Very useful when MySQL server uses different charset rather than site
-// See the list of valid values here: https://dev.mysql.com/doc/refman/8.0/en/charset-charsets.html
+// See the list of valid values here: https://dev.mysql.com/doc/refman/8.4/en/charset-charsets.html
 $cfg['mysqlcharset'] = 'utf8mb4';
 $cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';
 
@@ -55,7 +55,7 @@ $cfg['admintheme'] = '';			// Put custom administration theme name here
 // ========================
 // Performance-related settings
 // ========================
-$cfg['cache'] = false;			// Enable data caching
+$cfg['cache'] = false;			// Enable static site page data caching for guests
 $cfg['cache_drv'] = '';			// Cache driver name to use on your server (if available)
 								// Possible values: APC, Memcache, Xcache
 $cfg['cache_drv_host'] = 'localhost';
@@ -64,9 +64,9 @@ $cfg['cache_drv_port'] = '';
 $cfg['xtpl_cache'] = false;		// Enable XTemplate structure disk cache. Should be TRUE on production sites
 $cfg['html_cleanup'] = false;	// Wipe extra spaces and breaks from HTML to get smaller footprint
 
-$cfg['cache_index'] = false;    // Static page cache for guests on index
-$cfg['cache_page'] = false;     // Static page cache for guests on pages and categories
-$cfg['cache_forums'] = false;   // Static page cache for guests on forums
+$cfg['cache_index'] = false;    // Static site page cache for guests on index
+$cfg['cache_page'] = false;     // Static site page cache for guests on pages and page lists
+$cfg['cache_forums'] = false;   // Static site page cache for guests on forums
 
 // ========================
 // More settings

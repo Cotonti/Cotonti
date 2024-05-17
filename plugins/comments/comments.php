@@ -264,11 +264,11 @@ if ($a == 'send' && \Cot::$usr['auth_write']) {
 
 		cot_extrafield_movefiles();
 
-		$_SESSION['cot_comments_edit'][$id] = \Cot::$sys['now'];
+		$_SESSION['cot_comments_edit'][$id] = Cot::$sys['now'];
 
 		if (\Cot::$cfg['plugin']['comments']['mail']) {
             $sql = \Cot::$db->query(
-                'SELECT * FROM ' . \Cot::$db->users . ' WHERE user_maingrp = ' . COT_GROUP_SUPERADMINS
+                'SELECT * FROM ' . Cot::$db->users . ' WHERE user_maingrp = ' . COT_GROUP_SUPERADMINS
             );
 
 			$email_title = $L['plu_comlive'];

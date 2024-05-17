@@ -16,7 +16,15 @@
 					</tr>
 					<tr>
 						<td>{PHP.L.Groupsmembership}:</td>
-						<td>{PHP.L.Maingroup}:<br />&nbsp;{PHP.out.img_down}<br />{USERS_EDIT_GROUPS}</td>
+						<td class=user-groups">
+							{PHP.L.Maingroup}:<br />
+							{PHP.R.icon_vert_active.asc}<br />
+							{USERS_EDIT_GROUPS}
+						</td>
+					</tr>
+					<tr id="users-ban-expire">
+						<td>{PHP.L.Country}:</td>
+						<td>{USERS_EDIT_COUNTRY}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Country}:</td>

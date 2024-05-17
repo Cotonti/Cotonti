@@ -1252,9 +1252,13 @@ function cot_outputfilters($output)
 	}
 	/* ==== */
 
-	$output = preg_replace_callback('#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i', 'cot_outputfilters_callback', $output);
+	$output = preg_replace_callback(
+        '#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i',
+        'cot_outputfilters_callback',
+        $output
+    );
 
-	return($output);
+	return $output;
 }
 
 /**
@@ -1307,7 +1311,7 @@ function cot_sendheaders($contentType = 'text/html', $responseCode = '200 OK', $
 			exit;
 		}
 	} else {
-		$lastModified = Cot::$sys['now'] - 3600 * 12;
+		$lastModified = time() - 3600 * 12;
 	}
 
 	header($protocol . ' ' . $responseCode);
@@ -1638,7 +1642,7 @@ function cot_structure_parents($area, $cat, $type = 'full')
 }
 
 /*
- * ================================= Authorization Subsystem ==================================
+ * ================================= User and Authorization Subsystem ==================================
  */
 
 /**
@@ -1837,7 +1841,6 @@ function cot_block($allowed)
 	return FALSE;
 }
 
-
 /**
  * Block guests from viewing the page
  *
@@ -1856,99 +1859,636 @@ function cot_blockguests()
 }
 
 /**
- * Authorize user
+ * Returns group link (button)
+ *
+ * @param int $grpid Group ID
+ * @param bool $title Return group title instead of name
+ * @return string
+ */
+function cot_build_group($grpid, $title = false)
+{
+    global $cot_groups, $L;
+
+    if (empty($grpid) || empty($cot_groups[$grpid])) {
+        return '';
+    }
+
+    $type = ($title) ? 'title' : 'name';
+    if ($cot_groups[$grpid]['hidden']) {
+        if (cot_auth('users', 'a', 'A')) {
+            return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type] . ' (' . $L['Hidden'] . ')');
+        } else {
+            return Cot::$L['Hidden'];
+        }
+    } else {
+        if ($type == 'title' && isset(Cot::$L['users_grp_' . $grpid . '_title'])) {
+            return cot_rc_link(cot_url('users', 'gm=' . $grpid), Cot::$L['users_grp_' . $grpid . '_title']);
+        }
+        return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type]);
+    }
+}
+
+/**
+ * Returns user group icon
+ *
+ * @param string $src Image file path
+ * @return string
+ */
+function cot_build_groupicon($src)
+{
+    return $src ? cot_rc('icon_group', ['src' => $src]) : '';
+}
+
+/**
+ * Returns link to user profile
  *
  * @param int $id User ID
- * @param bool|null $remember   remember user authorization
- * @return bool
+ * @param string $userName User name
+ * @param mixed $extraAttributes Extra link tag attributes as a string or associative array,
+ *		e.g. ['class' => 'user-group-admin']
+ * @return string
+ */
+function cot_build_user($id, $userName, $extraAttributes = '')
+{
+    $id = (int) $id;
+    if (function_exists('cot_build_user_custom')) {
+        return cot_build_user_custom($id, $userName, $extraAttributes);
+    }
+
+    $userName = !empty($userName) ? htmlspecialchars($userName) : '?';
+
+    if (!$id) {
+        return $userName;
+    }
+
+    return cot_rc_link(
+        cot_url('users', ['m' => 'details', 'id' => $id, 'u' => $userName,]),
+        $userName,
+        $extraAttributes
+    );
+}
+
+/**
+ * Returns all user tags for XTemplate
  *
+ * @param mixed $user_data User Info Array
+ * @param string $tag_prefix Prefix for tags
+ * @param string $emptyname Name text if user is not exist
+ * @param bool $allgroups Build info about all user groups
+ * @param bool $cacheitem Cache tags
+ * @return array
+ * @global CotDB $db
+ */
+function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false, $cacheitem = true)
+{
+    global $db, $cot_extrafields, $cot_groups, $cfg, $L, $user_cache, $db_users;
+
+    static $extp_first = null, $extp_main = null;
+
+    $return_array = [];
+
+    if (is_null($extp_first)) {
+        $extp_first = cot_getextplugins('usertags.first');
+        $extp_main = cot_getextplugins('usertags.main');
+    }
+
+    /* === Hook === */
+    foreach ($extp_first as $pl) {
+        include $pl;
+    }
+    /* ===== */
+
+    $user_id = (is_array($user_data) && !empty($user_data['user_id']))
+        ? (int) $user_data['user_id']
+        : (is_numeric($user_data) ? (int) $user_data : 0);
+
+    if (isset($user_cache[$user_id])) {
+        $temp_array = $user_cache[$user_id];
+    } else {
+        if (!is_array($user_data) && $user_id > 0) {
+            $sql = $db->query("SELECT * FROM $db_users WHERE user_id = $user_id LIMIT 1");
+            $user_data = $sql->fetch();
+        }
+        if (empty($user_data) || !is_array($user_data)) {
+            $user_data = [];
+        }
+
+        if (is_array($user_data) && !empty($user_data['user_id']) && !empty($user_data['user_name'])) {
+            $user_data['user_birthdate'] = cot_date2stamp($user_data['user_birthdate']);
+            $enableMarkup = isset(Cot::$cfg['users']['usertextimg']) ? Cot::$cfg['users']['usertextimg'] : false;
+            $user_data['user_text'] = cot_parse($user_data['user_text'], $enableMarkup);
+
+            $temp_array = [
+                'ID' => $user_data['user_id'],
+                'NAME' => cot_build_user($user_data['user_id'], $user_data['user_name']),
+                'NICKNAME' => htmlspecialchars($user_data['user_name']),
+                'DETAILS_URL' => cot_url(
+                    'users',
+                    ['m' => 'details', 'id' => $user_data['user_id'], 'u' => $user_data['user_name']]
+                ),
+                'DETAILS_URL_SHORT' => cot_url('users', ['m' => 'details', 'id' => $user_data['user_id']]),
+                'FULL_NAME' => htmlspecialchars(cot_user_full_name($user_data)),
+                'TITLE' => $cot_groups[$user_data['user_maingrp']]['title'],
+                'MAIN_GROUP' => cot_build_group($user_data['user_maingrp']),
+                'MAIN_GROUP_ID' => $user_data['user_maingrp'],
+                'MAIN_GROUP_NAME' => $cot_groups[$user_data['user_maingrp']]['name'],
+                'MAIN_GROUP_TITLE' => cot_build_group($user_data['user_maingrp'], true),
+                'MAIN_GROUP_STARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
+                'MAIN_GROUP_ICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
+                'COUNTRY' => cot_build_country($user_data['user_country']),
+                'COUNTRY_FLAG' => cot_build_flag($user_data['user_country']),
+                'TEXT' => $user_data['user_text'],
+                'EMAIL' => cot_build_email($user_data['user_email'], $user_data['user_hideemail']),
+                'THEME' => $user_data['user_theme'],
+                'SCHEME' => $user_data['user_scheme'],
+                'LANG' => $user_data['user_lang'],
+                'GENDER' => ($user_data['user_gender'] == '' || $user_data['user_gender'] == 'U') ? '' : $L['Gender_' . $user_data['user_gender']],
+                'BIRTHDATE' => (is_null($user_data['user_birthdate'])) ? '' : cot_date('date_full', $user_data['user_birthdate']),
+                'BIRTHDATE_STAMP' => (is_null($user_data['user_birthdate'])) ? '' : $user_data['user_birthdate'],
+                'AGE' => (is_null($user_data['user_birthdate'])) ? '' : cot_build_age($user_data['user_birthdate']),
+                'TIMEZONE' => cot_build_timezone(
+                        cot_timezone_offset($user_data['user_timezone'], false, false)
+                    ) . ' '
+                    . str_replace('_', ' ', $user_data['user_timezone']),
+                'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate']),
+                'REGDATE_STAMP' => $user_data['user_regdate'],
+                'LASTLOG' => cot_date('datetime_medium', $user_data['user_lastlog']),
+                'LASTLOG_STAMP' => $user_data['user_lastlog'],
+                'LOGCOUNT' => $user_data['user_logcount'],
+                'POSTCOUNT' => !empty($user_data['user_postcount']) ? $user_data['user_postcount'] : 0,
+                'LASTIP' => $user_data['user_lastip'],
+            ];
+            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                // @deprecated in 0.9.24
+                $temp_array = array_merge(
+                    $temp_array,
+                    [
+                        'DETAILSLINK' => cot_url('users', ['m' => 'details', 'id' => $user_data['user_id'], 'u' => $user_data['user_name']]),
+                        'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
+                        'MAINGRP' => cot_build_group($user_data['user_maingrp']),
+                        'MAINGRPID' => $user_data['user_maingrp'],
+                        'MAINGRPNAME' => $cot_groups[$user_data['user_maingrp']]['name'],
+                        'MAINGRPTITLE' => cot_build_group($user_data['user_maingrp'], true),
+                        'MAINGRPSTARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
+                        'MAINGRPICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
+                        'COUNTRYFLAG' => cot_build_flag($user_data['user_country']),
+                    ]
+                );
+            }
+
+            if ($allgroups) {
+                $temp_array['GROUPS'] = cot_build_groupsms($user_data['user_id'], false, $user_data['user_maingrp']);
+            }
+
+            // Extra fields
+            if (!empty(Cot::$extrafields[Cot::$db->users])) {
+                foreach (Cot::$extrafields[Cot::$db->users] as $extrafield) {
+                    $extrafieldTitle = cot_extrafield_title($extrafield, 'user_');
+                    $extrafieldTag = strtoupper($extrafield['field_name']);
+                    $temp_array[$extrafieldTag] = cot_build_extrafields_data(
+                        'user',
+                        $extrafield,
+                        $user_data['user_' . $extrafield['field_name']]
+                    );
+                    $temp_array[$extrafieldTag . '_TITLE'] = $extrafieldTitle;
+                    $temp_array[$extrafieldTag . '_VALUE'] = $user_data['user_' . $extrafield['field_name']];
+                }
+            }
+        } else {
+            $temp_array = [
+                'ID' => 0,
+                'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+                'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+                'FULL_NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+                'MAIN_GROUP' => cot_build_group(COT_GROUP_GUESTS),
+                'MAIN_GROUP_ID' => COT_GROUP_GUESTS,
+                'MAIN_GROUP_STARS' => '',
+                'MAIN_GROUP_ICON' => cot_build_groupicon($cot_groups[1]['icon']),
+                'COUNTRY' => cot_build_country(''),
+                'COUNTRY_FLAG' => cot_build_flag(''),
+                'TEXT' => '',
+                'EMAIL' => '',
+                'GENDER' => '',
+                'BIRTHDATE' => '',
+                'BIRTHDATE_STAMP' => '',
+                'AGE' => '',
+                'REGDATE' => '',
+                'REGDATE_STAMP' => '',
+                'POSTCOUNT' => '',
+                'LASTIP' => '',
+            ];
+            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                // @deprecated in 0.9.24
+                $temp_array = array_merge(
+                    $temp_array,
+                    [
+                        'MAINGRP' => cot_build_group(COT_GROUP_GUESTS),
+                        'MAINGRPID' => COT_GROUP_GUESTS,
+                        'MAINGRPSTARS' => '',
+                        'MAINGRPICON' => cot_build_groupicon($cot_groups[1]['icon']),
+                        'COUNTRYFLAG' => cot_build_flag(''),
+                    ]
+                );
+            }
+        }
+
+        /* === Hook === */
+        foreach ($extp_main as $pl) {
+            include $pl;
+        }
+        /* ===== */
+
+        if (is_array($user_data) && isset($user_data['user_id'])) {
+            $cacheitem && $user_cache[$user_data['user_id']] = $temp_array;
+        }
+
+    }
+
+    foreach ($temp_array as $key => $val) {
+        $return_array[$tag_prefix . $key] = $val;
+    }
+
+    return $return_array;
+}
+
+/**
+ * @return ?string
+ */
+function cot_getCurrentUserIp()
+{
+    if (
+        isset($_SERVER['HTTP_CLIENT_IP'])
+        && filter_var($_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP)
+    ) {
+        return $_SERVER['HTTP_CLIENT_IP'];
+    }
+    if (
+        isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])
+        && filter_var($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'], FILTER_VALIDATE_IP)
+    ) {
+        return $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+    }
+    if (
+        isset($_SERVER['HTTP_X_REAL_IP'])
+        && filter_var($_SERVER['HTTP_X_REAL_IP'], FILTER_VALIDATE_IP)
+    ) {
+        return $_SERVER['HTTP_X_REAL_IP'];
+    }
+    if (
+        isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+        && filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP)
+    ) {
+        return $_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+
+    if (isset($_SERVER['REMOTE_ADDR'])) {
+        return $_SERVER['REMOTE_ADDR'];
+    }
+
+    return null;
+}
+
+/**
+ * @return list<int>
+ */
+function cot_getUserGroupIds($userId, $mainGroup = null, $withMainGroup = true)
+{
+    $result = [];
+
+    $userId = (int) $userId;
+    if (!$userId) {
+        return $result;
+    }
+
+    if ($withMainGroup) {
+        $mainGroup = (int) $mainGroup;
+        if ($mainGroup) {
+            $result[] = $mainGroup;
+        } else {
+            $mainGroup = (int) cot::$db->query(
+                'SELECT user_maingrp FROM ' . Cot::$db->users . ' WHERE user_id = ?',
+                $userId
+            )->fetchColumn();
+            if ($mainGroup) {
+                $result[] = $mainGroup;
+            }
+        }
+    }
+
+    $groups = Cot::$db->query('SELECT gru_groupid FROM ' . Cot::$db->groups_users . ' WHERE gru_userid = ?', $userId)
+        ->fetchAll(PDO::FETCH_COLUMN);
+    if (!empty($groups)) {
+        foreach ($groups as $groupId) {
+            $groupId = (int) $groupId;
+            if ($groupId > 0) {
+                $result[] = $groupId;
+            }
+        }
+
+        $result = array_unique($result);
+    }
+
+    return $result;
+}
+
+/**
+ * Function validates and fills, if necessary, user data array with the his groups IDs.
+ * If passed user data array does not contain data about user groups, they will be retrieved from the database.
+ *
+ * When using this function in a loop, it is recommended to pass all the necessary data so as not to make a lot
+ * of queries to the database
+ *
+ * @param array{user_id: int, user_maingrp?: int, groups?: list<int>, user_banexpire?: int} $user
+ * @return void
+ */
+function cot_fillGroupsForUser(&$user)
+{
+    if (empty($user['user_id'])) {
+        return;
+    }
+
+    if (!array_key_exists('user_maingrp', $user) || !array_key_exists('user_banexpire', $user)) {
+        $result = Cot::$db->query(
+            'SELECT user_maingrp, user_banexpire FROM ' . Cot::$db->users . ' WHERE user_id = ? LIMIT 1',
+            $user['user_id']
+        )->fetch();
+        if (!$result) {
+            return;
+        }
+        $user['user_maingrp'] = $result['user_maingrp'];
+        $user['user_banexpire'] = $result['user_banexpire'];
+    }
+
+    $user['user_maingrp'] = (int) $user['user_maingrp'];
+    $user['user_banexpire'] = (int) $user['user_banexpire'];
+
+    if (!array_key_exists('groups', $user)) {
+        $user['groups'] = cot_getUserGroupIds($user['user_id'], $user['user_maingrp']);
+    }
+
+    if (
+        in_array(COT_GROUP_BANNED, $user['groups'], true)
+        && $user['user_banexpire'] > 0
+        && Cot::$sys['now'] > $user['user_banexpire']
+    ) {
+        $update = ['user_banexpire' => 0];
+        if ($user['user_maingrp'] === COT_GROUP_BANNED) {
+            $update['user_maingrp'] = COT_GROUP_MEMBERS;
+            $user['user_maingrp'] = COT_GROUP_MEMBERS;
+        }
+        Cot::$db->update(Cot::$db->users, $update, 'user_id = :userId', ['userId' => $user['user_id']]);
+        Cot::$db->delete(
+            Cot::$db->groups_users,
+            'gru_userid = :userId AND gru_groupid = ' . COT_GROUP_BANNED,
+            ['userId' => $user['user_id']]
+        );
+        $user['groups'] = array_diff($user['groups'], [COT_GROUP_BANNED]);
+    }
+
+    /* === Hook === */
+    foreach (cot_getextplugins('users.fillGroups') as $pl) {
+        include $pl;
+    }
+    /* ===== */
+}
+
+const COT_USER_AUTH_ERROR_NOT_FOUND = 1;
+const COT_USER_AUTH_ERROR_FORBIDDEN = 2;
+const COT_USER_AUTH_ERROR_BANNED = 3;
+
+/**
+ * Authorize user
+ *
+ * @param int|array $id User ID or user data
+ * @param ?bool $remember Remember user authorization
+ * @return array{error?: int, success?: true}
+ *
+ * @todo move cot\User\UserService in future)
  * @todo May be we should optionally fill user data like in system/common.php on line 336
  *       It can be useful if we will not redirect user after login, may be we should redirect anyway
  */
 function cot_user_authorize($id, $remember = null)
 {
-    if(is_null($remember) && Cot::$cfg['forcerememberme'])
-    {
+    if ($remember === null && Cot::$cfg['forcerememberme']) {
         $remember = true;
     }
 
-    if(is_array($id) && isset($id['user_id']) && isset($id['user_password']))
-    {
+    if (is_array($id) && isset($id['user_id']) && isset($id['user_password'])) {
         $user = $id;
         $id = $user['user_id'];
-    }
-    else
-    {
-        $id = (int)$id;
-        if($id <= 0) return false;
-
-        $res = Cot::$db->query("SELECT user_id, user_password, user_maingrp, user_banexpire, user_sid, ".
-            "user_sidtime, user_passsalt, user_passfunc FROM ".Cot::$db->users." WHERE user_id = ? LIMIT 1", $id);
-        $user = $res->fetch();
-
-        if($user <= 0) return false;
-    }
-
-    if ($user['user_maingrp'] == COT_GROUP_BANNED)
-    {
-        if (Cot::$sys['now'] > $user['user_banexpire'] && $user['user_banexpire'] > 0)
-        {
-            Cot::$db->update(Cot::$db->users, array('user_maingrp' => COT_GROUP_MEMBERS),  "user_id={$user['user_id']}");
-            $row['user_maingrp'] = COT_GROUP_MEMBERS;
+    } else {
+        $id = is_numeric($id) ? (int) $id : 0;
+        if ($id <= 0) {
+            return ['error' => COT_USER_AUTH_ERROR_NOT_FOUND];
         }
-        else
-        {
-            return false;
+
+        $user = Cot::$db->query(
+            'SELECT user_id, user_password, user_maingrp, user_banexpire, user_sid, user_sidtime, '
+            . 'user_passsalt, user_passfunc FROM ' . Cot::$db->users . ' WHERE user_id = ? LIMIT 1',
+            $id
+        )->fetch();
+
+        if (empty($user)) {
+            return ['error' => COT_USER_AUTH_ERROR_NOT_FOUND];
         }
+    }
+
+    $user['user_id'] = (int) $user['user_id'];
+    $user['user_maingrp'] = (int) $user['user_maingrp'];
+
+    cot_fillGroupsForUser($user);
+
+    if (empty($user['groups']) || array_intersect([COT_GROUP_DEFAULT, COT_GROUP_GUESTS], $user['groups'])) {
+        return ['error' => COT_USER_AUTH_ERROR_FORBIDDEN];
+    }
+
+    if (in_array(COT_GROUP_INACTIVE, $user['groups'], true)) {
+        if (!isset(Cot::$cfg['users']['inactive_login']) || !Cot::$cfg['users']['inactive_login']) {
+            return ['error' => COT_USER_AUTH_ERROR_FORBIDDEN];
+        }
+    }
+
+    if (in_array(COT_GROUP_BANNED, $user['groups'], true)) {
+        return ['error' => COT_USER_AUTH_ERROR_BANNED];
     }
 
     $token = cot_unique(16);
     $sid = hash_hmac('sha256', $user['user_password'] . $user['user_sidtime'], Cot::$cfg['secret_key']);
 
-    $update_sid = '';
-    if (empty($user['user_sid']) || $user['user_sid'] != $sid
-        || $user['user_sidtime'] + Cot::$cfg['cookielifetime'] < Cot::$sys['now'])
-    {
+    $updateSid = '';
+    if (
+        empty($user['user_sid'])
+        || $user['user_sid'] !== $sid
+        || $user['user_sidtime'] + Cot::$cfg['cookielifetime'] < Cot::$sys['now']
+    ) {
         // Generate new session identifier
         $sid = hash_hmac('sha256', $user['user_password'] . Cot::$sys['now'], Cot::$cfg['secret_key']);
-        $update_sid = ", user_sid = " . Cot::$db->quote($sid) . ", user_sidtime = " . Cot::$sys['now'];
+        $updateSid = ', user_sid = ' . Cot::$db->quote($sid) . ', user_sidtime = ' . Cot::$sys['now'];
     }
 
-    Cot::$db->query("UPDATE ".Cot::$db->users." SET user_lastip='".Cot::$usr['ip']."', user_lastlog = ".Cot::$sys['now'].
-        ", user_logcount = user_logcount + 1, user_token = ".Cot::$db->quote($token).
-        " $update_sid WHERE user_id={$user['user_id']}");
-
+    Cot::$db->query(
+        'UPDATE ' . Cot::$db->users . " SET user_lastip='" . Cot::$usr['ip'] . "', "
+        . 'user_lastlog = ' . Cot::$sys['now'] . ', user_logcount = user_logcount + 1, '
+        . ' user_token = ' . Cot::$db->quote($token) . " $updateSid WHERE user_id = ?",
+        $user['user_id']
+    );
 
     // Hash the sid once more so it can't be faked even if you  know user_sid
     $sid = hash_hmac('sha1', $sid, Cot::$cfg['secret_key']);
-    $u = base64_encode($user['user_id'].':'.$sid);
+    $u = base64_encode($user['user_id'] . ':' . $sid);
 
     /* === Hook === */
-    foreach (cot_getextplugins('users.authorize') as $pl)
-    {
+    foreach (cot_getextplugins('users.authorize') as $pl) {
         include $pl;
     }
     /* ===== */
 
-    if($remember)
-    {
-        cot_setcookie(Cot::$sys['site_id'], $u, time()+ Cot::$cfg['cookielifetime'], Cot::$cfg['cookiepath'],
-            Cot::$cfg['cookiedomain'], Cot::$sys['secure'], true);
+    if ($remember) {
+        cot_setcookie(
+            Cot::$sys['site_id'],
+            $u,
+            time() + Cot::$cfg['cookielifetime'],
+            Cot::$cfg['cookiepath'],
+            Cot::$cfg['cookiedomain'],
+            Cot::$sys['secure'],
+            true
+        );
         unset($_SESSION[Cot::$sys['site_id']]);
-    }
-    else
-    {
+    } else {
         $_SESSION[Cot::$sys['site_id']] = $u;
     }
 
     /* === Hook === */
-    foreach (cot_getextplugins('users.authorize.done') as $pl)
-    {
+    foreach (cot_getextplugins('users.authorize.done') as $pl) {
         include $pl;
     }
     /* ===== */
 
-    return true;
+    return ['success' => true];
+}
+
+/**
+ * Fetches user entry from DB
+ *
+ * @param int $uid User ID
+ * @param bool $cacheItem Use one time session cache
+ * @return ?array
+ */
+function cot_user_data($uid = 0, $cacheItem = true)
+{
+    $user = null;
+
+    if (!$uid && Cot::$usr['id'] > 0) {
+        $uid = Cot::$usr['id'];
+        $user = Cot::$usr['profile'];
+    }
+    if (!$uid) {
+        return null;
+    }
+
+    static $userCache = [];
+
+    if ($cacheItem && isset($userCache[$uid])) {
+        return $userCache[$uid] !== false ? $userCache[$uid] : null;
+    }
+
+    if (!$user) {
+        if (is_array($uid)) {
+            $user = $uid;
+            $uid = $user['user_id'];
+        } else {
+            if ($uid > 0 && $uid == Cot::$usr['id']) {
+                $user = Cot::$usr['profile'];
+            } else {
+                $uid = (int) $uid;
+                if (!$uid) {
+                    return null;
+                }
+                $sql = Cot::$db->query('SELECT * FROM ' . Cot::$db->users . ' WHERE user_id = ? LIMIT 1', $uid);
+                $user = $sql->fetch();
+                if (empty($user)) {
+                    $user = null;
+                }
+            }
+        }
+    }
+
+    if ($cacheItem) {
+        $userCache[$uid] = !empty($user) ? $user : false;
+    }
+
+    return $user;
+}
+
+/**
+ * Displays User full name
+ *
+ * Format of full name is language specific and defined by $R['users_full_name']
+ * resource string.
+ *
+ * @param array|int $user User Data or User ID
+ * @return string
+ */
+function cot_user_full_name($user)
+{
+    // Need for cot_incfile()
+    global $L, $R, $cfg;
+
+    if (empty($user)) {
+        return '';
+    }
+
+    if (function_exists('cot_user_full_name_custom')) {
+        return cot_user_full_name_custom($user);
+    }
+
+    if (!is_array($user) && !is_object($user)) {
+        if (is_int($user) && $user > 0 || ctype_digit($user)) {
+            require_once cot_incfile('users', 'module');
+            $user = cot_user_data($user);
+        }
+    }
+    if (empty($user)) {
+        return '';
+    }
+
+    $user_fname = '';
+    if (!empty($user['user_firstname'])) {
+        $user_fname = $user['user_firstname'];
+    } elseif (!empty($user['user_first_name'])) {
+        $user_fname = $user['user_first_name'];
+    }
+
+    $user_mname = '';
+    if (!empty($user['user_middlename'])) {
+        $user_mname = $user['user_middlename'];
+    } elseif (!empty($user['user_middle_name'])) {
+        $user_mname = $user['user_middle_name'];
+    }
+
+    $user_lname = '';
+    if (!empty($user['user_lastname'])) {
+        $user_lname = $user['user_lastname'];
+    } elseif (!empty($user['user_last_name'])) {
+        $user_lname = $user['user_last_name'];
+    }
+
+    if ($user_fname != '' || $user_mname != '' || $user_lname != '') {
+        $full_name = trim(
+            cot_rc('users_full_name',
+                array(
+                    'firstname' => $user_fname,
+                    'middlename' => $user_mname,
+                    'lastname' => $user_lname,
+                    'name' => $user['user_name']
+                )
+            )
+        );
+    } else {
+        $full_name = $user['user_name'];
+    }
+
+    return $full_name;
 }
 
 /*
@@ -2456,331 +2996,6 @@ function cot_build_url($text, $maxlen=64)
 	}
 	return $text;
 }
-
-/**
- * Returns link to user profile
- *
- * @param int $id User ID
- * @param string $userName User name
- * @param mixed $extraAttributes Extra link tag attributes as a string or associative array,
- *		e.g. ['class' => 'user-group-admin']
- * @return string
- */
-function cot_build_user($id, $userName, $extraAttributes = '')
-{
-    $id = (int) $id;
-	if (function_exists('cot_build_user_custom')) {
-		return cot_build_user_custom($id, $userName, $extraAttributes);
-	}
-
-    $userName = !empty($userName) ? htmlspecialchars($userName) : '?';
-
-	if (!$id) {
-		return $userName;
-	}
-
-    return cot_rc_link(
-        cot_url('users', ['m' => 'details', 'id' => $id, 'u' => $userName,]),
-        $userName,
-        $extraAttributes
-    );
-}
-
-/**
- * Displays User full name
- *
- * Format of full name is language specific and defined by $R['users_full_name']
- * resource string.
- *
- * @param array|int $user User Data or User ID
- * @return string
- */
-function cot_user_full_name($user)
-{
-    // Need for cot_incfile()
-    global $L, $R, $cfg;
-
-	if (empty($user)) {
-        return '';
-    }
-
-	if (function_exists('cot_user_full_name_custom')) {
-        return cot_user_full_name_custom($user);
-    }
-
-    if (!is_array($user) && !is_object($user)) {
-        if (is_int($user) && $user > 0 || ctype_digit($user)) {
-            require_once cot_incfile('users', 'module');
-            $user = cot_user_data($user);
-        }
-    }
-    if (empty($user)) {
-        return '';
-    }
-
-    $user_fname = '';
-    if (!empty($user['user_firstname'])) {
-        $user_fname = $user['user_firstname'];
-    } elseif (!empty($user['user_first_name'])) {
-        $user_fname = $user['user_first_name'];
-    }
-
-    $user_mname = '';
-    if (!empty($user['user_middlename'])) {
-        $user_mname = $user['user_middlename'];
-    } elseif (!empty($user['user_middle_name'])) {
-        $user_mname = $user['user_middle_name'];
-    }
-
-    $user_lname = '';
-    if (!empty($user['user_lastname'])) {
-        $user_lname = $user['user_lastname'];
-    } elseif (!empty($user['user_last_name'])) {
-        $user_lname = $user['user_last_name'];
-    }
-
-    if ($user_fname != '' || $user_mname != '' || $user_lname != '') {
-        $full_name = trim(
-            cot_rc('users_full_name',
-                   array(
-                       'firstname' => $user_fname,
-                       'middlename' => $user_mname,
-                       'lastname' => $user_lname,
-                       'name' => $user['user_name']
-                   )
-            )
-        );
-    } else {
-        $full_name = $user['user_name'];
-    }
-
-	return $full_name;
-}
-
-/**
- * Returns group link (button)
- *
- * @param int $grpid Group ID
- * @param bool $title Return group title instead of name
- * @return string
- */
-function cot_build_group($grpid, $title = false)
-{
-	global $cot_groups, $L;
-
-    if (empty($grpid) || empty($cot_groups[$grpid])) {
-        return '';
-    }
-
-	$type = ($title) ? 'title' : 'name';
-	if ($cot_groups[$grpid]['hidden']) {
-		if (cot_auth('users', 'a', 'A')) {
-			return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type] . ' (' . $L['Hidden'] . ')');
-		} else {
-			return Cot::$L['Hidden'];
-		}
-	} else {
-		if ($type == 'title' && isset(Cot::$L['users_grp_' . $grpid . '_title'])) {
-			return cot_rc_link(cot_url('users', 'gm=' . $grpid), Cot::$L['users_grp_' . $grpid . '_title']);
-		}
-		return cot_rc_link(cot_url('users', 'gm=' . $grpid), $cot_groups[$grpid][$type]);
-	}
-}
-
-/**
- * Returns user group icon
- *
- * @param string $src Image file path
- * @return string
- */
-function cot_build_groupicon($src)
-{
-	return $src ? cot_rc('icon_group', ['src' => $src]) : '';
-}
-
-/**
- * Returns all user tags for XTemplate
- *
- * @param mixed $user_data User Info Array
- * @param string $tag_prefix Prefix for tags
- * @param string $emptyname Name text if user is not exist
- * @param bool $allgroups Build info about all user groups
- * @param bool $cacheitem Cache tags
- * @return array
- * @global CotDB $db
- */
-function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false, $cacheitem = true)
-{
-	global $db, $cot_extrafields, $cot_groups, $cfg, $L, $user_cache, $db_users;
-
-	static $extp_first = null, $extp_main = null;
-
-	$return_array = [];
-
-	if (is_null($extp_first)) {
-		$extp_first = cot_getextplugins('usertags.first');
-		$extp_main = cot_getextplugins('usertags.main');
-	}
-
-	/* === Hook === */
-	foreach ($extp_first as $pl) {
-		include $pl;
-	}
-	/* ===== */
-
-	$user_id = (is_array($user_data) && !empty($user_data['user_id']))
-        ? (int) $user_data['user_id']
-        : (is_numeric($user_data) ? (int) $user_data : 0);
-
-	if (isset($user_cache[$user_id])) {
-		$temp_array = $user_cache[$user_id];
-	} else {
-		if (!is_array($user_data) && $user_id > 0) {
-			$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $user_id LIMIT 1");
-			$user_data = $sql->fetch();
-		}
-        if (empty($user_data) || !is_array($user_data)) {
-			$user_data = [];
-		}
-
-		if (is_array($user_data) && !empty($user_data['user_id']) && !empty($user_data['user_name'])) {
-			$user_data['user_birthdate'] = cot_date2stamp($user_data['user_birthdate']);
-            $enableMarkup = isset(Cot::$cfg['users']['usertextimg']) ? Cot::$cfg['users']['usertextimg'] : false;
-			$user_data['user_text'] = cot_parse($user_data['user_text'], $enableMarkup);
-
-			$temp_array = [
-				'ID' => $user_data['user_id'],
-				'NAME' => cot_build_user($user_data['user_id'], $user_data['user_name']),
-				'NICKNAME' => htmlspecialchars($user_data['user_name']),
-				'DETAILS_URL' => cot_url(
-                    'users',
-                    ['m' => 'details', 'id' => $user_data['user_id'], 'u' => $user_data['user_name']]
-                ),
-				'DETAILS_URL_SHORT' => cot_url('users', ['m' => 'details', 'id' => $user_data['user_id']]),
-				'FULL_NAME' => htmlspecialchars(cot_user_full_name($user_data)),
-				'TITLE' => $cot_groups[$user_data['user_maingrp']]['title'],
-				'MAIN_GROUP' => cot_build_group($user_data['user_maingrp']),
-				'MAIN_GROUP_ID' => $user_data['user_maingrp'],
-				'MAIN_GROUP_NAME' => $cot_groups[$user_data['user_maingrp']]['name'],
-				'MAIN_GROUP_TITLE' => cot_build_group($user_data['user_maingrp'], true),
-				'MAIN_GROUP_STARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
-				'MAIN_GROUP_ICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
-				'COUNTRY' => cot_build_country($user_data['user_country']),
-				'COUNTRY_FLAG' => cot_build_flag($user_data['user_country']),
-				'TEXT' => $user_data['user_text'],
-				'EMAIL' => cot_build_email($user_data['user_email'], $user_data['user_hideemail']),
-				'THEME' => $user_data['user_theme'],
-				'SCHEME' => $user_data['user_scheme'],
-				'LANG' => $user_data['user_lang'],
-				'GENDER' => ($user_data['user_gender'] == '' || $user_data['user_gender'] == 'U') ? '' : $L['Gender_' . $user_data['user_gender']],
-				'BIRTHDATE' => (is_null($user_data['user_birthdate'])) ? '' : cot_date('date_full', $user_data['user_birthdate']),
-				'BIRTHDATE_STAMP' => (is_null($user_data['user_birthdate'])) ? '' : $user_data['user_birthdate'],
-                'AGE' => (is_null($user_data['user_birthdate'])) ? '' : cot_build_age($user_data['user_birthdate']),
-                'TIMEZONE' => cot_build_timezone(
-                        cot_timezone_offset($user_data['user_timezone'], false, false)
-                    ) . ' '
-                    . str_replace('_', ' ', $user_data['user_timezone']),
-                'REGDATE' => cot_date('datetime_medium', $user_data['user_regdate']),
-				'REGDATE_STAMP' => $user_data['user_regdate'],
-				'LASTLOG' => cot_date('datetime_medium', $user_data['user_lastlog']),
-				'LASTLOG_STAMP' => $user_data['user_lastlog'],
-				'LOGCOUNT' => $user_data['user_logcount'],
-				'POSTCOUNT' => !empty($user_data['user_postcount']) ? $user_data['user_postcount'] : 0,
-				'LASTIP' => $user_data['user_lastip'],
-			];
-            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
-                // @deprecated in 0.9.24
-                $temp_array = array_merge(
-                    $temp_array,
-                    [
-                        'DETAILSLINK' => cot_url('users', ['m' => 'details', 'id' => $user_data['user_id'], 'u' => $user_data['user_name']]),
-                        'DETAILSLINKSHORT' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
-                        'MAINGRP' => cot_build_group($user_data['user_maingrp']),
-                        'MAINGRPID' => $user_data['user_maingrp'],
-                        'MAINGRPNAME' => $cot_groups[$user_data['user_maingrp']]['name'],
-                        'MAINGRPTITLE' => cot_build_group($user_data['user_maingrp'], true),
-                        'MAINGRPSTARS' => cot_build_stars($cot_groups[$user_data['user_maingrp']]['level']),
-                        'MAINGRPICON' => cot_build_groupicon($cot_groups[$user_data['user_maingrp']]['icon']),
-                        'COUNTRYFLAG' => cot_build_flag($user_data['user_country']),
-                    ]
-                );
-            }
-
-			if ($allgroups) {
-				$temp_array['GROUPS'] = cot_build_groupsms($user_data['user_id'], false, $user_data['user_maingrp']);
-			}
-
-            // Extra fields
-            if (!empty(Cot::$extrafields[Cot::$db->users])) {
-                foreach (Cot::$extrafields[Cot::$db->users] as $extrafield) {
-                    $extrafieldTitle = cot_extrafield_title($extrafield, 'user_');
-                    $extrafieldTag = strtoupper($extrafield['field_name']);
-                    $temp_array[$extrafieldTag] = cot_build_extrafields_data(
-                        'user',
-                        $extrafield,
-                        $user_data['user_' . $extrafield['field_name']]
-                    );
-                    $temp_array[$extrafieldTag . '_TITLE'] = $extrafieldTitle;
-                    $temp_array[$extrafieldTag . '_VALUE'] = $user_data['user_' . $extrafield['field_name']];
-                }
-            }
-        } else {
-            $temp_array = [
-                'ID' => 0,
-                'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-                'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-                'FULL_NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-                'MAIN_GROUP' => cot_build_group(COT_GROUP_GUESTS),
-                'MAIN_GROUP_ID' => COT_GROUP_GUESTS,
-                'MAIN_GROUP_STARS' => '',
-                'MAIN_GROUP_ICON' => cot_build_groupicon($cot_groups[1]['icon']),
-                'COUNTRY' => cot_build_country(''),
-                'COUNTRY_FLAG' => cot_build_flag(''),
-                'TEXT' => '',
-                'EMAIL' => '',
-                'GENDER' => '',
-                'BIRTHDATE' => '',
-                'BIRTHDATE_STAMP' => '',
-                'AGE' => '',
-                'REGDATE' => '',
-                'REGDATE_STAMP' => '',
-                'POSTCOUNT' => '',
-                'LASTIP' => '',
-            ];
-            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
-                // @deprecated in 0.9.24
-                $temp_array = array_merge(
-                    $temp_array,
-                    [
-                        'MAINGRP' => cot_build_group(COT_GROUP_GUESTS),
-                        'MAINGRPID' => COT_GROUP_GUESTS,
-                        'MAINGRPSTARS' => '',
-                        'MAINGRPICON' => cot_build_groupicon($cot_groups[1]['icon']),
-                        'COUNTRYFLAG' => cot_build_flag(''),
-                    ]
-                );
-            }
-		}
-
-		/* === Hook === */
-		foreach ($extp_main as $pl) {
-			include $pl;
-		}
-		/* ===== */
-
-		if (is_array($user_data) && isset($user_data['user_id'])) {
-			$cacheitem && $user_cache[$user_data['user_id']] = $temp_array;
-		}
-
-	}
-
-	foreach ($temp_array as $key => $val) {
-		$return_array[$tag_prefix . $key] = $val;
-	}
-
-	return $return_array;
-}
-
 
 /**
  * Resize an image
@@ -5843,25 +6058,24 @@ function cot_url_check($url)
 
 /**
  * Store URI-redir to session
- *
- * @global $sys
  */
 function cot_uriredir_store()
 {
-	global $sys;
-
 	$m = cot_import('m', 'G', 'ALP');
-	if ($_SERVER['REQUEST_METHOD'] != 'POST' // not form action/POST
+	if (
+        $_SERVER['REQUEST_METHOD'] !== 'POST' // not form action/POST
 		&& empty($_GET['x']) // not xg, hence not form action/GET and not command from GET
 		&& !defined('COT_MESSAGE') // not message location
 		&& !defined('COT_AUTH') // not login/logout location
-		&&	(!defined('COT_USERS')
+
+        // @todo move to users module
+		&&	(
+            !defined('COT_USERS')
 			|| is_null($m)
-			|| !in_array($m, array('auth', 'logout', 'register'))
+			|| !in_array($m, ['register', 'passrecover'])
 		)
-	)
-	{
-		$_SESSION['s_uri_redir'] = $sys['uri_redir'];
+	) {
+		$_SESSION['s_uri_redir'] = Cot::$sys['uri_redir'];
 	}
 }
 
@@ -5997,15 +6211,14 @@ function cot_url_sanitize($url)
 /**
  * Apply URI-redir that stored in session
  *
- * @param bool $cfg_redir Configuration of redirect back
+ * @param bool $cfgRedirect Configuration of redirect back
  * @global $redirect
  */
-function cot_uriredir_apply($cfg_redir = true)
+function cot_uriredir_apply($cfgRedirect = true)
 {
 	global $redirect;
 
-	if ($cfg_redir && empty($redirect) && !empty($_SESSION['s_uri_redir']))
-	{
+	if ($cfgRedirect && empty($redirect) && !empty($_SESSION['s_uri_redir'])) {
 		$redirect = $_SESSION['s_uri_redir'];
 	}
 }
@@ -6017,8 +6230,7 @@ function cot_uriredir_apply($cfg_redir = true)
  */
 function cot_uriredir_redirect($uri)
 {
-	if (mb_strpos($uri, '&x=') !== false || mb_strpos($uri, '?x=') !== false)
-	{
+	if (mb_strpos($uri, '&x=') !== false || mb_strpos($uri, '?x=') !== false) {
 		$uri = cot_url('index'); // xg, not redirect to form action/GET or to command from GET
 	}
 	cot_redirect($uri);
@@ -6148,8 +6360,7 @@ function cot_declension($digit, $expr, $onlyword = false, $canfrac = false)
  */
 function cot_get_plural($plural, $lang, $is_frac = false)
 {
-	switch ($lang)
-	{
+	switch ($lang) {
 		case 'en':
 		case 'de':
 		case 'nl':
@@ -6178,7 +6389,6 @@ function cot_get_plural($plural, $lang, $is_frac = false)
  * ============================================================================
 */
 
-if (isset($cfg['customfuncs']) && $cfg['customfuncs'])
-{
+if (isset($cfg['customfuncs']) && $cfg['customfuncs']) {
 	require_once $cfg['system_dir'] . '/functions.custom.php';
 }

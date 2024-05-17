@@ -108,10 +108,10 @@
                     {PHP.L.users_newpass}:
                     <p class="small">{PHP.L.users_newpasshint1}</p>
                 </td>
-                <td>
+                <td id="change-password">
                     {USERS_PROFILE_OLDPASS}
-                    <p class="small">{PHP.L.users_oldpasshint}</p>
-                    {USERS_PROFILE_NEWPASS1} {USERS_PROFILE_NEWPASS2}
+                    <p class="small marginbottom10">{PHP.L.users_oldpasshint}</p>
+                    {USERS_PROFILE_NEWPASS1} &nbsp; {USERS_PROFILE_NEWPASS2}
                     <p class="small">{PHP.L.users_newpasshint2}</p>
                 </td>
             </tr>

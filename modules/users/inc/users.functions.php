@@ -153,59 +153,80 @@ function cot_add_user($ruser, $email = null, $name = null, $password = null, $ma
  * @param bool $edit Permission
  * @param int $maingrp User main group
  * @return string
- * @global CotDB $db
  */
-function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
+function cot_build_groupsms($userid, $edit = false, $maingrp = 0)
 {
-	global $db, $db_groups, $db_groups_users, $cot_groups, $L, $usr, $R;
+	global $cot_groups;
 
-	$memberships = $db->query("SELECT gru_groupid FROM $db_groups_users	WHERE gru_userid = ?", array($userid))->fetchAll();
+	$memberships = Cot::$db->query(
+        'SELECT gru_groupid FROM ' . Cot::$db->groups_users . ' WHERE gru_userid = ?',
+        [$userid]
+    )->fetchAll();
 	foreach ($memberships as $row) {
-		$member[$row['gru_groupid']] = TRUE;
+		$member[(int) $row['gru_groupid']] = true;
 	}
 
-	$res = $R['users_code_grplist_begin'];
-	foreach ($cot_groups as $k => $i) {
-
-        if(!isset($member[$k])) $member[$k] = FALSE;
+	$res = Cot::$R['users_code_grplist_begin'];
+	foreach ($cot_groups as $groupId => $i) {
+        if (!isset($member[$groupId])) {
+            $member[$groupId] = false;
+        }
 
 		if ($edit) {
-			$checked = ($member[$k]) ? ' checked="checked"' : '';
-			$checked_maingrp = ($maingrp == $k) ? ' checked="checked"' : '';
-			$readonly = ($k == COT_GROUP_GUESTS || $k == COT_GROUP_INACTIVE || $k == COT_GROUP_BANNED
-				|| ($k == COT_GROUP_SUPERADMINS && $userid == 1)) ? ' disabled="disabled"' : '';
-			$readonly_maingrp = ( $k == COT_GROUP_GUESTS || ($k == COT_GROUP_INACTIVE && $userid == 1)
-				|| ($k == COT_GROUP_BANNED && $userid == 1)) ? ' disabled="disabled"' : '';
+			$checked = ($member[$groupId]) ? ' checked="checked"' : '';
+			$checked_maingrp = ($maingrp == $groupId) ? ' checked="checked"' : '';
+			$readonly = (
+                in_array($groupId, [COT_GROUP_GUESTS, COT_GROUP_INACTIVE], true)
+				|| ($groupId === COT_GROUP_SUPERADMINS && $userid == 1)
+            )
+                ? ' disabled="disabled"'
+                : '';
+			$readonly_maingrp = (
+                $groupId === COT_GROUP_GUESTS
+                || ($groupId === COT_GROUP_INACTIVE && $userid == 1)
+				|| ($groupId === COT_GROUP_BANNED && $userid == 1)
+            )
+                ? ' disabled="disabled"'
+                : '';
 		}
 
-		if ($member[$k] || $edit) {
-			if (!$cot_groups[$k]['hidden'] || cot_auth('users', 'a', 'A')) {
+		if ($member[$groupId] || $edit) {
+			if (!$cot_groups[$groupId]['hidden'] || cot_auth('users', 'a', 'A')) {
 				$item = '';
 				if ($edit) {
-					$item .= cot_rc('users_input_grplist_radio', array(
-						'value' => $k,
-						'name' => 'rusermaingrp',
-						'checked' => $checked_maingrp,
-						'title' => '',
-						'attrs' => $readonly_maingrp
-					));
-					$item .= cot_rc('users_input_grplist_checkbox', array(
-						'value' => '1',
-						'name' => "rusergroupsms[$k]",
-						'checked' => $checked,
-						'title' => '',
-						'attrs' => $readonly
-					));
+					$item .= cot_rc(
+                        'users_input_grplist_radio',
+                        [
+                            'value' => $groupId,
+                            'name' => 'rusermaingrp',
+                            'checked' => $checked_maingrp,
+                            'title' => '',
+                            'attrs' => $readonly_maingrp,
+                        ]
+                    );
+					$item .= cot_rc(
+                       'users_input_grplist_checkbox',
+                        [
+                            'value' => '1',
+                            'name' => "rusergroupsms[$groupId]",
+                            'checked' => $checked,
+                            'title' => '',
+                            'attrs' => $readonly,
+                        ]
+                    );
 				}
-				$item .= ( $k == COT_GROUP_GUESTS) ? $cot_groups[$k]['name'] : cot_rc_link(cot_url('users', 'gm=' . $k), $cot_groups[$k]['name']);
-				$item .= ( $cot_groups[$k]['hidden']) ? ' (' . $L['Hidden'] . ')' : '';
-				$rc = ($maingrp == $k) ? 'users_code_grplist_item_main' : 'users_code_grplist_item';
-				$res .= cot_rc($rc, array('item' => $item));
+				$item .= ( $groupId == COT_GROUP_GUESTS)
+                    ? $cot_groups[$groupId]['name']
+                    : cot_rc_link(cot_url('users', 'gm=' . $groupId), $cot_groups[$groupId]['name']);
+				$item .= ( $cot_groups[$groupId]['hidden']) ? ' (' . Cot::$L['Hidden'] . ')' : '';
+				$rc = ($maingrp == $groupId) ? 'users_code_grplist_item_main' : 'users_code_grplist_item';
+				$res .= cot_rc($rc, ['item' => $item]);
 			}
 		}
 	}
 
 	$res .= Cot::$R['users_code_grplist_end'];
+
 	return $res;
 }
 
@@ -238,52 +259,4 @@ function cot_selectbox_gender($check, $name, $custom_rc = '')
 		$titlelist[] = $L['Gender_' . $i];
 	}
 	return cot_selectbox($check, $name, $genlist, $titlelist, false, '', $custom_rc);
-}
-
-/**
- * Fetches user entry from DB
- *
- * @param int $uid   User ID
- * @param bool $cacheitem Use one time session cache
- * @return array|null
- */
-function cot_user_data($uid = 0, $cacheitem = true)
-{
-	$user = false;
-
-	if (!$uid && Cot::$usr['id'] > 0) {
-		$uid = Cot::$usr['id'];
-		$user = Cot::$usr['profile'];
-	}
-	if (!$uid) {
-        return null;
-    }
-
-	static $u_cache = [];
-
-	if ($cacheitem && isset($u_cache[$uid])) {
-		return $u_cache[$uid];
-	}
-
-	if (!$user) {
-		if (is_array($uid)) {
-			$user = $uid;
-			$uid = $user['user_id'];
-		} else {
-			if ($uid > 0 && $uid == Cot::$usr['id']) {
-				$user = Cot::$usr['profile'];
-			} else {
-				$uid = (int) $uid;
-				if (!$uid) {
-                    return null;
-                }
-				$sql = Cot::$db->query('SELECT * FROM ' . Cot::$db->users . ' WHERE user_id = ? LIMIT 1', $uid);
-				$user = $sql->fetch();
-			}
-		}
-	}
-
-	$cacheitem && $u_cache[$uid] = $user;
-
-	return $user;
 }

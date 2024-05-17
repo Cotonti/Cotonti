@@ -236,43 +236,6 @@ if ($cache && $cot_cfg) {
 mb_internal_encoding('UTF-8');
 
 /* ======== Extra settings (the other presets are in functions.php) ======== */
-if (
-    isset($_SERVER['HTTP_CLIENT_IP'])
-    && filter_var($_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP)
-) {
-    $usr['ip'] = $_SERVER['HTTP_CLIENT_IP'];
-} elseif (
-    isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])
-    && filter_var($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'], FILTER_VALIDATE_IP)
-) {
-    $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
-} elseif (
-    isset($_SERVER['HTTP_X_REAL_IP'])
-    && filter_var($_SERVER['HTTP_X_REAL_IP'], FILTER_VALIDATE_IP)
-) {
-    $usr['ip'] = $_SERVER['HTTP_X_REAL_IP'];
-} elseif (
-    isset($_SERVER['HTTP_X_FORWARDED_FOR'])
-    && filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP)
-) {
-    $usr['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
-} else {
-    $usr['ip'] = $_SERVER['REMOTE_ADDR'];
-}
-/**
- * We are trying to use filter_var('...', FILTER_VALIDATE_IP) insted. If it will be ok, code below will be removed
- * @deprecated
- */
-//if (
-//    !preg_match('#^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$#', $usr['ip'])
-//    && !preg_match(
-/*        '#^(((?=(?>.*?(::))(?!.+\3)))\3?|([\dA-F]{1,4}(\3|:(?!$)|$)|\2))(?4){5}((?4){2}|(25[0-5]|(2[0-4]|1\d|[1-9])?\d)(\.(?7)){3})\z#i',*/
-//        $usr['ip']
-//    )
-//) {
-//	$usr['ip'] = '0.0.0.0';
-//}
-
 $sys['unique'] = cot_unique(16);
 
 if (empty($cfg['cookiedomain'])) {
@@ -417,37 +380,46 @@ if (empty($cot_groups )) {
 
 /* ======== User/Guest ======== */
 
-$usr['id'] = 0;
-$usr['sessionid'] = '';
-$usr['name'] = '';
-$usr['level'] = 0;
-$usr['lastvisit'] = 30000000000;
-$usr['lastlog'] = 0;
-$usr['timezone'] = cot_timezone_offset($cfg['defaulttimezone'], true);
-$usr['timezonename'] = $cfg['defaulttimezone'];
-$usr['newpm'] = 0;
-$usr['messages'] = 0;
+$usr = [
+    'id' => 0,
+    'name' => '',
+    'ip' => cot_getCurrentUserIp(),
+    'level' => 0,
+    'sessionid' => '',
+    'lastvisit' => 30000000000,
+    'lastlog' => 0,
+    'timezone' => cot_timezone_offset($cfg['defaulttimezone'], true),
+    'timezonename' => $cfg['defaulttimezone'],
+    'newpm' => 0,
+    'messages' => 0,
+    'theme' => $cfg['defaulttheme'],
+    'scheme' => $cfg['defaultscheme'],
+    'lang' => $cfg['defaultlang'],
+    'maingrp' => COT_GROUP_GUESTS,
+    'groups' => [COT_GROUP_GUESTS]
+];
 
 $csid = cot_import($sys['site_id'], 'COOKIE', 'TXT');
 if (!empty($csid) || !empty($_SESSION[$sys['site_id']])) {
-	$u = empty($_SESSION[$sys['site_id']]) ?
-        explode(':', base64_decode($csid)) : explode(':', base64_decode($_SESSION[$sys['site_id']]));
+	$u = empty($_SESSION[$sys['site_id']])
+        ? explode(':', base64_decode($csid))
+        : explode(':', base64_decode($_SESSION[$sys['site_id']]));
 	$u_id = (int) cot_import($u[0], 'D', 'INT');
 	$u_sid = $u[1];
 	if ($u_id > 0) {
 		$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $u_id");
 		if ($row = $sql->fetch()) {
+            cot_fillGroupsForUser($row);
+
 			if (
-                $u_sid == hash_hmac('sha1', $row['user_sid'], $cfg['secret_key'])
-				&& (
-				    $row['user_maingrp'] > 3
-                    || (
-					    $row['user_maingrp'] == COT_GROUP_INACTIVE
-                        && isset($cfg['users']['inactive_login'])
-                        && $cfg['users']['inactive_login']
-				    )
+                $u_sid === hash_hmac('sha1', $row['user_sid'], $cfg['secret_key'])
+                && !empty($usr['groups'])
+				&& empty(array_intersect([COT_GROUP_DEFAULT, COT_GROUP_GUESTS, COT_GROUP_BANNED], $row['groups']))
+                && (
+                    !in_array(COT_GROUP_INACTIVE, $row['groups'], true)
+                    || (isset($cfg['users']['inactive_login']) && $cfg['users']['inactive_login'])
 				)
-                && ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip'])
+                && (!$cfg['ipcheck'] || $row['user_lastip'] === $usr['ip'])
                 && ($row['user_sidtime'] + $cfg['cookielifetime'] > $sys['now'])
             ) {
 				$usr['id'] = (int) $row['user_id'];
@@ -464,6 +436,7 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']])) {
 				$usr['auth'] = isset($row['user_auth']) ? unserialize($row['user_auth']) : null;
 				$usr['adminaccess'] = cot_auth('admin', 'any', 'R');
 				$usr['level'] = $cot_groups[$usr['maingrp']]['level'];
+                $usr['groups'] = &$row['groups'];
 				$usr['profile'] = $row;
 
 				$sys['xk'] = $row['user_token'];
@@ -500,7 +473,7 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']])) {
 	}
 
 	// User can't log in, destroy authorization cookie and session data
-	if ($usr['id'] == 0) {
+	if ($usr['id'] === 0) {
         if (!empty($csid)) {
 			cot_setcookie(
 				$sys['site_id'],
@@ -526,10 +499,6 @@ if ($usr['id'] == 0) {
 	}
 	$usr['auth'] = $cot_guest_auth;
 	unset($cot_guest_auth);
-	$usr['theme'] = $cfg['defaulttheme'];
-	$usr['scheme'] = $cfg['defaultscheme'];
-	$usr['lang'] = $cfg['defaultlang'];
-	$usr['maingrp'] = COT_GROUP_GUESTS;
 	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['site_id']))); // Site related key for guests
 }
 
@@ -732,7 +701,7 @@ if (empty($x) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $referer = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 if (
-    $_SERVER['REQUEST_METHOD'] == 'POST'
+    $_SERVER['REQUEST_METHOD'] === 'POST'
     && !defined('COT_NO_ANTIXSS')
     && (
         !defined('COT_AUTH')

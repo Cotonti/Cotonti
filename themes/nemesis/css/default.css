@@ -176,11 +176,14 @@ textarea { width: 99%; min-height: 100px }
 input[type="text"], input[type="password"], textarea {
 	width: 100%; max-width: 100%;
 }
+input[type="radio"], input[type="checkbox"] {
+	margin-right: 5px;
+}
 input[type="button"], button {
 	padding: 2px 4px;
 }
 /*label input { vertical-align: middle; margin-right: 3px }*/
-label input { margin-right: 1px }
+label input, label input[type="radio"], label input[type="checkbox"] { margin-right: 1px }
 label.radio-label {
 	margin-right: 8px;
 }
@@ -357,6 +360,10 @@ ol				{ margin-left:20px; list-style-type:decimal; }
 #password-recover input[type="text"],
 #login input[type="text"], #login input[type="password"] {
 	width: 50%;
+}
+
+#change-password input {
+	width: 45%;
 }
 
 /* 13. Tags

@@ -99,8 +99,7 @@ if ($a == 'update')
 	$ruser['user_gender'] = cot_import('rusergender','P','TXT');
 
 	$ruser['user_birthdate'] = cot_import_date('ruserbirthdate', false);
-	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > $sys['now'])
-	{
+	if (!is_null($ruser['user_birthdate']) && $ruser['user_birthdate'] > Cot::$sys['now']) {
 		cot_error('pro_invalidbirthdate', 'ruserbirthdate');
 	}
 

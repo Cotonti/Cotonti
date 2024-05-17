@@ -2,16 +2,17 @@
 <!DOCTYPE html>
 <html lang="{PHP.cfg.defaultlang}">
 <head>
-<title>{HEADER_TITLE}</title>
-<!-- IF {HEADER_META_DESCRIPTION} --><meta name="description" content="{HEADER_META_DESCRIPTION}" /><!-- ENDIF -->
-<!-- IF {HEADER_META_KEYWORDS} --><meta name="keywords" content="{HEADER_META_KEYWORDS}" /><!-- ENDIF -->
-<meta http-equiv="content-type" content="{HEADER_META_CONTENTTYPE}; charset=UTF-8" />
-<meta name="generator" content="Cotonti https://www.cotonti.com" />
-<!-- IF {HEADER_CANONICAL_URL} --><link rel="canonical" href="{HEADER_CANONICAL_URL}" /><!-- ENDIF -->
-{HEADER_BASEHREF}
-{HEADER_HEAD}
-<link rel="shortcut icon" href="favicon.ico" />
-<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+	<title>{HEADER_TITLE}</title>
+	<!-- IF {HEADER_META_DESCRIPTION} --><meta name="description" content="{HEADER_META_DESCRIPTION}" /><!-- ENDIF -->
+	<!-- IF {HEADER_META_KEYWORDS} --><meta name="keywords" content="{HEADER_META_KEYWORDS}" /><!-- ENDIF -->
+	<meta http-equiv="content-type" content="{HEADER_META_CONTENTTYPE}; charset=UTF-8" />
+	<meta name="generator" content="Cotonti https://www.cotonti.com" />
+	<!-- IF {HEADER_CANONICAL_URL} --><link rel="canonical" href="{HEADER_CANONICAL_URL}" /><!-- ENDIF -->
+	{HEADER_BASEHREF}
+	{HEADER_HEAD}
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="icon" href="{PHP.cfg.themes_dir}/{PHP.theme}/img/favicon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="apple-touch-icon.png" />
 </head>
 
 <body>

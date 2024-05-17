@@ -17,21 +17,41 @@ defined('COT_CODE') or die('Wrong URL');
 
 global $cot_plugins;
 
+$cleanerCache = Cot::$cache->mem ?: Cot::$cache->disk;
+$cleanerCacheKey = 'cleaner-last-executed';
+if ($cleanerCache) {
+    $cleanerLastExecuted = $cleanerCache->get($cleanerCacheKey);
+    if ($cleanerLastExecuted && $cleanerLastExecuted > Cot::$sys['now'] - 86400) {
+        return;
+    }
+    $cleanerCache->store($cleanerCacheKey, Cot::$sys['now']);
+}
+
 if (Cot::$cfg['plugin']['cleaner']['userprune'] > 0) {
-	$timeago = Cot::$sys['now'] - (Cot::$cfg['plugin']['cleaner']['userprune'] * 86400);
-	$sqltmp1 = Cot::$db->query("SELECT user_id FROM $db_users WHERE user_maingrp = '2' AND user_lastlog = '0' AND user_regdate < $timeago");
+	$timeAgo = Cot::$sys['now'] - (Cot::$cfg['plugin']['cleaner']['userprune'] * 86400);
 
-	while ($row = $sqltmp1->fetch()) {
-		Cot::$db->delete($db_users, "user_id='".$row['user_id']."'");
-		Cot::$db->delete($db_groups_users, "gru_userid='".$row['user_id']."'");
-	}
-	$sqltmp1->closeCursor();
+    $sql = 'SELECT user_id FROM ' . Cot::$db->users
+        . ' WHERE (user_maingrp = ' . COT_GROUP_INACTIVE
+        . ' OR user_id IN (SELECT gru_userid FROM ' . Cot::$db->groups_users . ' WHERE gru_groupid = ' . COT_GROUP_INACTIVE . ')) '
+        . " AND user_lastlog = 0 AND user_regdate < $timeAgo";
 
-	Cot::$db->delete($db_users, "user_maingrp = '2' AND user_lastlog = '0' AND user_regdate < $timeago");
-	$deleted = Cot::$db->affectedRows;
+	$usersIds = Cot::$db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+
+    $deleted = 0;
+    if (!empty($usersIds)) {
+        Cot::$db->getConnection()->beginTransaction();
+        try {
+            Cot::$db->delete(Cot::$db->users, 'user_id IN (' . implode(',', $usersIds) . ')');
+            Cot::$db->delete(Cot::$db->groups_users, 'gru_userid IN (' . implode(',', $usersIds) . ')');
+            $deleted = count($usersIds);
+            Cot::$db->getConnection()->commit();
+        } catch (PDOException $err) {
+            Cot::$db->getConnection()->rollBack();
+        }
+    }
 
 	if ($deleted > 0) {
-		cot_log("Cleaner plugin deleted ".$deleted." inactivated user account(s)", 'users', 'clear', 'done');
+		cot_log("Cleaner plugin deleted $deleted inactivated user account(s)", 'users', 'clear', 'done');
 	}
 }
 

@@ -16,7 +16,8 @@ Hooks=module
 defined('COT_CODE') or die('Wrong URL.');
 
 // Environment
-define('COT_USERS', TRUE);
+const COT_USERS = true;
+
 $env['location'] = 'users';
 
 require_once cot_incfile('extrafields');
