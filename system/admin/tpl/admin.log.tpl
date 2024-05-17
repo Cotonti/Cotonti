@@ -18,37 +18,29 @@
 			</select>
 		</form>
 		<table class="cells">
-			<thead>
-				<tr>
-					<th class="w-5">#</th>
-					<th class="w-15">{PHP.L.Date} (GMT)</th>
-					<th class="w-10">{PHP.L.Ip}</th>
-					<th class="w-15">{PHP.L.User}</th>
-					<th class="w-15">{PHP.L.Group}</th>
-					<th class="w-40">{PHP.L.Log}</th>
-				</tr>
-			</thead>
-			<tbody>
+			<tr>
+				<td class="coltop w-5">#</td>
+				<td class="coltop w-15">{PHP.L.Date} (GMT)</td>
+				<td class="coltop w-10">{PHP.L.Ip}</td>
+				<td class="coltop w-15">{PHP.L.User}</td>
+				<td class="coltop w-15">{PHP.L.Group}</td>
+				<td class="coltop w-40">{PHP.L.Log}</td>
+			</tr>
 			<!-- BEGIN: LOG_ROW -->
-				<tr>
-					<td class="textcenter">{ADMIN_LOG_ROW_LOG_ID}</td>
-					<td class="textcenter">{ADMIN_LOG_ROW_DATE}</td>
-					<td class="textcenter"><a href="{ADMIN_LOG_ROW_URL_IP_SEARCH}">{ADMIN_LOG_ROW_LOG_IP}</a></td>
-					<td class="textcenter">{ADMIN_LOG_ROW_LOG_NAME}&nbsp;</td>
-					<td class="textcenter"><a href="{ADMIN_LOG_ROW_URL_LOG_GROUP}" class="ajax">{ADMIN_LOG_ROW_LOG_GROUP}</a></td>
-					<td>{ADMIN_LOG_ROW_LOG_TEXT}</td>
-				</tr>
+			<tr>
+				<td class="textcenter">{ADMIN_LOG_ROW_LOG_ID}</td>
+				<td class="textcenter">{ADMIN_LOG_ROW_DATE}</td>
+				<td class="textcenter"><a href="{ADMIN_LOG_ROW_URL_IP_SEARCH}">{ADMIN_LOG_ROW_LOG_IP}</a></td>
+				<td class="textcenter">{ADMIN_LOG_ROW_LOG_NAME}&nbsp;</td>
+				<td class="textcenter"><a href="{ADMIN_LOG_ROW_URL_LOG_GROUP}" class="ajax">{ADMIN_LOG_ROW_LOG_GROUP}</a></td>
+				<td>{ADMIN_LOG_ROW_LOG_TEXT}</td>
+			</tr>
 			<!-- END: LOG_ROW -->
-			</tbody>
 		</table>
-		<p class="pagination-info">
-			{PHP.L.Total}: {ADMIN_LOG_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_LOG_ON_PAGE}
+		<p class="paging">
+			{ADMIN_LOG_PAGINATION_PREV}{ADMIN_LOG_PAGNAV}{ADMIN_LOG_PAGINATION_NEXT}
+			<span>{PHP.L.Total}: {ADMIN_LOG_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_LOG_ON_PAGE}</span>
 		</p>
-		<nav class="pagination">
-			<ul>
-				{ADMIN_LOG_PAGINATION_PREV}{ADMIN_LOG_PAGNAV}{ADMIN_LOG_PAGINATION_NEXT}
-			</ul>
-		</nav>
 	</div>
 </div>
 <!-- END: MAIN -->

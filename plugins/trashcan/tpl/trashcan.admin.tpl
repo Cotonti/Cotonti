@@ -8,11 +8,11 @@
 </div>
 <table class="cells">
 	<tr>
-		<th class="w-5">{PHP.L.Type}</th>
-		<th class="w-15">{PHP.L.Date}</th>
-		<th class="w-45">{PHP.L.Title}</th>
-		<th class="w-20">{PHP.L.adm_setby}</th>
-		<th class="w-15">{PHP.L.Action}</th>
+		<td class="coltop w-5">{PHP.L.Type}</td>
+		<td class="coltop w-15">{PHP.L.Date}</td>
+		<td class="coltop w-45">{PHP.L.Title}</td>
+		<td class="coltop w-20">{PHP.L.adm_setby}</td>
+		<td class="coltop w-15">{PHP.L.Action}</td>
 	</tr>
 	<!-- BEGIN: TRASHCAN_EMPTY -->
 	<tr>

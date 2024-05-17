@@ -1,5 +1,5 @@
 <!-- BEGIN: MAIN -->
-{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
+{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 <div class="block button-toolbar">
 	<a title="{PHP.L.Configuration}" href="{ADMIN_TRASHCAN_CONF_URL}" class="button">{PHP.L.Configuration}</a>
 	<!-- IF {ADMIN_TRASHCAN_TOTALITEMS} > 0 -->
@@ -9,11 +9,11 @@
 <!-- BEGIN: TRASHCAN_ROW -->
 <table class="cells">
 	<tr>
-		<th class="w-5">{PHP.L.Type}</th>
-		<th class="w-15">{PHP.L.Date}</th>
-		<th class="w-45">{PHP.L.Title}</th>
-		<th class="w-20">{PHP.L.adm_setby}</th>
-		<th class="w-15">{PHP.L.Action}</th>
+		<td class="coltop w-5">{PHP.L.Type}</td>
+		<td class="coltop w-15">{PHP.L.Date}</td>
+		<td class="coltop w-45">{PHP.L.Title}</td>
+		<td class="coltop w-20">{PHP.L.adm_setby}</td>
+		<td class="coltop w-15">{PHP.L.Action}</td>
 	</tr>
 	<tr>
 		<td class="centerall">{ADMIN_TRASHCAN_TYPESTR_ICON}</td>
@@ -31,8 +31,8 @@
 <br />
 <table class="cells">
 	<tr>
-		<th class="w-20">{PHP.L.Key}</th>
-		<th class="w-80">{PHP.L.Value}</th>
+		<td class="coltop w-20">{PHP.L.Key}</td>
+		<td class="coltop w-80">{PHP.L.Value}</td>
 	</tr>
 	<!-- BEGIN: TRASHCAN_INFOROW -->
 	<tr>
@@ -42,5 +42,7 @@
 	<!-- END: TRASHCAN_INFOROW -->
 </table>
 <!-- END: TRASHCAN_ROW -->
-<p class="paging"><span>{PHP.L.Total}: {ADMIN_TRASHCAN_TOTALITEMS}</span></p>
+<p class="paging">
+	<span>{PHP.L.Total}: {ADMIN_TRASHCAN_TOTALITEMS}</span>
+</p>
 <!-- END: MAIN -->
