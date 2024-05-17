@@ -775,22 +775,22 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html='', $var
 		case 'file':
 		case 'input': $sqltype = "VARCHAR(255) DEFAULT ''";
 			break;
-		case 'inputint': $sqltype = "int(11) DEFAULT '0'";
+		case 'inputint': $sqltype = "int DEFAULT 0";
 			break;
-		case 'currency': $sqltype = "DOUBLE(13,2) DEFAULT '0'";
+		case 'currency': $sqltype = "DOUBLE(13,2) DEFAULT 0";
 			break;
-		case 'double': $sqltype = "DOUBLE DEFAULT '0'";
+		case 'double': $sqltype = "DOUBLE DEFAULT 0";
 			break;
 		case 'checklistbox':
 		case 'textarea': $sqltype = "TEXT";
 			break;
 		case 'checkbox': $sqltype = 'TINYINT(1) UNSIGNED'; //'BOOL';
 			break;
-		case 'datetime': $sqltype = "int(11) DEFAULT '0'";
+		case 'datetime': $sqltype = "int DEFAULT 0";
 			break;
 		case 'country': $sqltype = "CHAR(2)";
 			break;
-		case 'filesize': $sqltype = "int(11) NOT NULL";
+		case 'filesize': $sqltype = "int NOT NULL";
 			break;
 	}
 	if (!empty($customtype)) {
