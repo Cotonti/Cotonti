@@ -89,7 +89,7 @@
 	</table>
 	<p class="paging">
 		{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}
-		<span>{PHP.L.Total}: {TOTAL_ENTRIES}, {PHP.L.Onpage}: {ON_PAGE}</span>
+		<span>{PHP.L.Total}: {TOTAL_ENTRIES}, {PHP.L.Onpage}: {ENTRIES_ON_CURRENT_PAGE}</span>
 	</p>
 	</form>
 </div>
