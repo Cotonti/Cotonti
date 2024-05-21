@@ -2408,6 +2408,11 @@ function cot_user_data($uid = 0, $cacheItem = true)
                 $user = $sql->fetch();
                 if (empty($user)) {
                     $user = null;
+                } else {
+                    // In PHP below version 8, all fields are fetching as strings
+                    $user['user_id'] = (int) $user['user_id'];
+                    $user['user_maingrp'] = (int) $user['user_maingrp'];
+                    $user['user_banexpire'] = (int) $user['user_banexpire'];
                 }
             }
         }
@@ -2431,9 +2436,6 @@ function cot_user_data($uid = 0, $cacheItem = true)
  */
 function cot_user_full_name($user)
 {
-    // Need for cot_incfile()
-    global $L, $R, $cfg;
-
     if (empty($user)) {
         return '';
     }
@@ -2442,13 +2444,12 @@ function cot_user_full_name($user)
         return cot_user_full_name_custom($user);
     }
 
-    if (!is_array($user) && !is_object($user)) {
-        if (is_int($user) && $user > 0 || ctype_digit($user)) {
-            require_once cot_incfile('users', 'module');
-            $user = cot_user_data($user);
-        }
+    if (is_numeric($user)) {
+        $userId = (int) $user;
+        $user = cot_user_data($userId);
     }
-    if (empty($user)) {
+
+    if (empty($user) || !is_array($user) || empty($user['user_name'])) {
         return '';
     }
 

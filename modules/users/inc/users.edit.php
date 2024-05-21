@@ -292,7 +292,7 @@ $breadCrumbs = [
         cot_url('users', ['m' => 'details', 'id' => $urr['user_id'], 'u' => $urr['user_name']]),
         cot_user_full_name($urr),
     ],
-    [cot_url('users', ['m' => 'edit', 'id' => $urr['user_id']]), Cot::$L['Edit']]
+    [cot_url('users', ['m' => 'edit', 'id' => $urr['user_id']]), Cot::$L['Edit']],
 ];
 
 $t->assign(array(

@@ -55,7 +55,7 @@
 
 	<!-- IF {PHP.env.ext} == "index" -->
 	<div id="slider" class="body">
-		<img src="themes/{PHP.theme}/img/front_image.png" alt="" id="front_image" />
+		<img src="{PHP.cfg.themes_dir}/{PHP.theme}/img/front_image.png" alt="" id="front_image" />
 	</div>
 	<!-- ENDIF -->
 

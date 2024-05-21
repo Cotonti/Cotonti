@@ -260,3 +260,34 @@ function cot_selectbox_gender($check, $name, $custom_rc = '')
 	}
 	return cot_selectbox($check, $name, $genlist, $titlelist, false, '', $custom_rc);
 }
+
+/**
+ * @param string $usersTableAlias
+ * return string
+ */
+function cot_user_sqlExcludeBanned($usersTableAlias = null)
+{
+    if ($usersTableAlias === null) {
+        $usersTableAlias = Cot::$db->users;
+    }
+    $usersTablePrefix = '';
+    if (!empty($usersTableAlias)) {
+        $usersTablePrefix = Cot::$db->quoteTableName($usersTableAlias) . '.';
+    }
+
+    $groupUsersTable = Cot::$db->quoteTableName(Cot::$db->groups_users);
+
+    $condition = '('
+        . "({$usersTablePrefix}user_maingrp <> " . COT_GROUP_BANNED
+        . " AND {$usersTablePrefix}user_id NOT IN (SELECT gru_userid FROM {$groupUsersTable} WHERE gru_groupid = " . COT_GROUP_BANNED . '))'
+        . " OR ({$usersTablePrefix}user_banexpire > 0 OR {$usersTablePrefix}user_banexpire < " . Cot::$sys['now'] . ')'
+        . ')';
+
+    /* === Hook === */
+    foreach (cot_getextplugins('users.sqlExcludeBanned') as $pl) {
+        include $pl;
+    }
+    /* ===== */
+    
+    return $condition;
+}

@@ -24,7 +24,6 @@ if ($cleanerCache) {
     if ($cleanerLastExecuted && $cleanerLastExecuted > Cot::$sys['now'] - 86400) {
         return;
     }
-    $cleanerCache->store($cleanerCacheKey, Cot::$sys['now']);
 }
 
 if (Cot::$cfg['plugin']['cleaner']['userprune'] > 0) {
@@ -41,8 +40,8 @@ if (Cot::$cfg['plugin']['cleaner']['userprune'] > 0) {
     if (!empty($usersIds)) {
         Cot::$db->getConnection()->beginTransaction();
         try {
-            Cot::$db->delete(Cot::$db->users, 'user_id IN (' . implode(',', $usersIds) . ')');
             Cot::$db->delete(Cot::$db->groups_users, 'gru_userid IN (' . implode(',', $usersIds) . ')');
+            Cot::$db->delete(Cot::$db->users, 'user_id IN (' . implode(',', $usersIds) . ')');
             $deleted = count($usersIds);
             Cot::$db->getConnection()->commit();
         } catch (PDOException $err) {
@@ -98,4 +97,8 @@ if (cot_module_active('pm')) {
 			cot_log("Cleaner plugin deleted ".$deleted." PM older than ".Cot::$cfg['plugin']['cleaner']['pmold']." days", 'pm', 'delete', 'done');
 		}
 	}
+}
+
+if ($cleanerCache) {
+    $cleanerCache->store($cleanerCacheKey, Cot::$sys['now']);
 }

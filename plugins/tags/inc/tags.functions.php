@@ -300,7 +300,7 @@ function cot_tag_list($item, $area = 'pages', $extra = null)
 function cot_tag_parse($input)
 {
 	$result = [];
-	$tags = !empty($input) ? explode(',', $input) : '';
+	$tags = !empty($input) ? explode(',', $input) : [];
 	foreach ($tags as $tag) {
 		$tag = cot_tag_prep($tag);
 		if (!empty($tag)) {
@@ -321,56 +321,43 @@ function cot_tag_parse($input)
 function cot_tag_parse_query($qs, $join_columns)
 {
 	global $db, $db_tag_references;
-	if (is_string($join_columns))
-	{
+	if (is_string($join_columns)) {
 		$join_columns = array($join_columns);
 	}
 	$tokens1 = explode(';', $qs);
 	$tokens1 = array_map('trim', $tokens1);
 	$cnt1 = count($tokens1);
-	for ($i = 0; $i < $cnt1; $i++)
-	{
+	for ($i = 0; $i < $cnt1; $i++) {
 		$tokens2 = explode(',', $tokens1[$i]);
 		$tokens2 = array_map('trim', $tokens2);
 		$cnt2 = count($tokens2);
-		for ($j = 0; $j < $cnt2; $j++)
-		{
+		for ($j = 0; $j < $cnt2; $j++) {
 			$tag = cot_tag_prep($tokens2[$j]);
-			if (!empty($tag))
-			{
-
-				if (mb_strpos($tag, '*') !== false)
-				{
+			if (!empty($tag)) {
+				if (mb_strpos($tag, '*') !== false) {
 					$tag = str_replace('*', '%', $tag);
 					$op = 'LIKE ' . $db->quote($tag);
-				}
-				else
-				{
+				} else {
 					$op = '= ' . $db->quote($tag);
 				}
-				if ($j == 0)
-				{
+				if ($j == 0) {
 					$tokens2[$j] = 'r.tag ' . $op;
-				}
-				else
-				{
+				} else {
 					$join_conds = array();
-					foreach ($join_columns as $col)
-					{
+					foreach ($join_columns as $col) {
 						$join_conds[] = "r{$i}_{$j}.tag_item = $col";
 					}
 					$join_cond = implode(' OR ', $join_conds);
 					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_references AS r{$i}_{$j} WHERE ($join_cond) AND r{$i}_{$j}.tag $op)";
 				}
-			}
-			else
-			{
+			} else {
 				return '';
 			}
 		}
 		$tokens1[$i] = implode(' AND ', $tokens2);
 	}
 	$query = implode(' OR ', $tokens1);
+
 	return $query;
 }
 

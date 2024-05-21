@@ -55,7 +55,7 @@ $cfg['admintheme'] = '';			// Put custom administration theme name here
 // ========================
 // Performance-related settings
 // ========================
-$cfg['cache'] = false;			// Enable static site page data caching for guests
+$cfg['cache'] = false;			// Enable data caching
 $cfg['cache_drv'] = '';			// Cache driver name to use on your server (if available)
 								// Possible values: APC, Memcache, Xcache
 $cfg['cache_drv_host'] = 'localhost';
