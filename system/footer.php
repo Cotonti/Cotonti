@@ -43,12 +43,12 @@ if (!COT_AJAX) {
     }
     /* ===== */
 
-	$t->assign(array(
+	$t->assign([
 		'FOOTER_COPYRIGHT'  => Cot::$out['copyright'],
 		'FOOTER_LOGSTATUS'  => Cot::$out['logstatus'],
 		'FOOTER_PMREMINDER' => !empty(Cot::$out['pmreminder']) ? Cot::$out['pmreminder'] : '',
-		'FOOTER_ADMINPANEL' => !empty(Cot::$out['adminpanel']) ? Cot::$out['adminpanel'] : ''
-	));
+		'FOOTER_ADMINPANEL' => !empty(Cot::$out['adminpanel']) ? Cot::$out['adminpanel'] : '',
+	]);
 
 	/* === Hook === */
 	foreach (cot_getextplugins('footer.tags') as $pl) {
@@ -145,7 +145,7 @@ if (!COT_AJAX) {
 		'FOOTER_BOTTOMLINE' => Cot::$out['bottomline'],
 		'FOOTER_CREATIONTIME' => Cot::$out['creationtime'],
 		'FOOTER_SQLSTATISTICS' => Cot::$out['sqlstatistics'],
-		'FOOTER_DEVMODE' => isset(Cot::$out['devmode']) ? Cot::$out['devmode'] : ''
+		'FOOTER_DEVMODE' => isset(Cot::$out['devmode']) ? Cot::$out['devmode'] : '',
 	]);
 
 	$t->parse('FOOTER');

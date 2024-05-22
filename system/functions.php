@@ -270,14 +270,16 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
             ) {
                 $extType = $handler['pl_module'] ? 'mod' : 'pl';
                 $extUrl = cot_url('admin', ['m' => 'extensions', 'a' => 'details', $extType => $handler['pl_code']]);
-                $message = cot_rc(
-                    Cot::$L['hookFileNotFound'],
-                    ['title' => $handler['pl_title'], 'hook' => $hook, 'fileName' => $fileName, 'url' => $extUrl]
-                );
-                // @todo log one file missing only once. May be use memory cache?
-                cot_log($message, $handler['pl_code'], 'hook-include', 'error');
+
+                // Language file can be not loaded yet
+                $message = isset(Cot::$L['hookFileNotFound'])
+                    ? Cot::$L['hookFileNotFound']
+                    : '<strong>{$title}</strong>, event - {$hook}: file {$fileName} not found. Please <a href="{$url}">update the extension</a>';
+
+                $messageText = cot_rc($message, ['title' => $handler['pl_title'], 'hook' => $hook, 'fileName' => $fileName, 'url' => $extUrl]);
+                cot_log($messageText, $handler['pl_code'], 'hook-include', 'error');
                 if (!empty(Cot::$usr['isadmin'])) {
-                    cot_message($message, 'warning');
+                    cot_message($messageText, 'warning');
                 }
                 continue;
             }
