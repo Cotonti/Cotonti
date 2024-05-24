@@ -64,7 +64,9 @@
 						<!-- END: PFF_ROW -->
 					</table>
 					<!-- IF {PFF_PAGINATION} -->
-					<p class="paging">{PFF_PREVIOUS_PAGE}{PFF_PAGINATION}{PFF_NEXT_PAGE}</p>
+					<p class="paging">
+						{PFF_PREVIOUS_PAGE}{PFF_PAGINATION}{PFF_NEXT_PAGE}
+					</p>
 					<!-- ENDIF -->
 				<!-- ENDIF -->
 
@@ -87,7 +89,7 @@
 						<td class="centerall">{PFS_ROW_ICON}</td>
 						<td>
 							<p class="strong"><a href={PFS_ROW_FILE_URL}>{PFS_ROW_FILE}</a></p>
-							<p class="small">{PFS_ROW_TYPE} <!-- IF {PFS_ROW_DESC} -->/ {PFS_ROW_DESC}</p>
+							<p class="small">{PFS_ROW_TYPE} <!-- IF {PFS_ROW_DESC} -->/ {PFS_ROW_DESC}<!-- ENDIF --></p>
 						</td>
 						<td class="centerall">{PFS_ROW_COUNT}</td>
 						<td class="centerall">{PFS_ROW_SIZE}</td>
@@ -98,10 +100,12 @@
 							<br />{PFS_ROW_INSERT}
 						</td>
 					</tr>
-				<!-- END: PFS_ROW -->
+					<!-- END: PFS_ROW -->
 				</table>
 				<!-- IF {PAGINATION} -->
-				<p class="paging">{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}</p>
+				<p class="paging">
+					{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}
+				</p>
 				<!-- ENDIF -->
 				<!-- ENDIF -->
 
