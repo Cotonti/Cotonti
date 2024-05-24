@@ -23,19 +23,19 @@ require_once cot_incfile('polls', 'module', 'resources');
 
 $t = new XTemplate(cot_tplfile('polls.admin', 'module', true));
 
-$adminPath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
-$adminPath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
-$adminPath[] = array(cot_url('admin', 'm='.$m), Cot::$L['Administration']);
+$adminPath[] = [cot_url('admin', 'm=extensions'), Cot::$L['Extensions']];
+$adminPath[] = [cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']];
+$adminPath[] = [cot_url('admin', 'm='.$m), Cot::$L['Administration']];
 $adminHelp = Cot::$L['adm_help_polls'];
 $adminTitle = Cot::$L['Polls'];
 
 list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['maxrowsperpage']);
 $filter = cot_import('filter', 'G', 'TXT');
 
-//$variant[key]=array("Caption", "filter", "page", "page_get", "sql", "sqlfield")
-$variants[0] = array(Cot::$L['All'], "");
-$variants['index'] = array(Cot::$L['Main'], "index");
-$variants['forum'] = array(Cot::$L['Forums'], "forum");
+//$variant[key]=["Caption", "filter", "page", "page_get", "sql", "sqlfield"]
+$variants[0] = [Cot::$L['All'], ""];
+$variants['index'] = [Cot::$L['Main'], "index"];
+$variants['forum'] = [Cot::$L['Forums'], "forum"];
 
 $id = cot_import('id', 'G', 'INT');
 
@@ -188,72 +188,75 @@ while ($row = $sql_polls->fetch()) {
 }
 $sql_polls->closeCursor();
 
-if ($ii == 0) {
-	$t->parse('MAIN.POLLS_ROW_EMPTY');
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.25
+	if ($ii == 0) {
+		$t->parse('MAIN.POLLS_ROW_EMPTY');
+	}
 }
 
 if ($n == 'options') {
 	$poll_id = cot_import('id', 'G', 'INT');
-	$adminPath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");
+	$adminPath[] = [cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)"];
 	$formname = $L['editdeleteentries'];
 	$send_button = $L['Update'];
 } elseif (cot_error_found()) {
-	if ((int)$poll_id > 0)
-	{
-		$adminPath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)");
+	if ((int)$poll_id > 0) {
+		$adminPath[] = [cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.(int)$poll_id.'&d='.$durl), $L['Options']." (#$poll_id)"];
 		$formname = $L['editdeleteentries'];
 		$send_button = $L['Update'];
-	}
-	else
-	{
+	} else {
 		$formname = $L['Add'];
 		$send_button = $L['Create'];
 	}
-}
-else
-{
+} else {
 	$poll_id = 0;
 	$formname = $L['Add'];
 	$send_button = $L['Create'];
 }
 
-foreach($variants as $val)
-{
+foreach ($variants as $val) {
 	$checked = ($filter == $val[1]) ? " selected='selected'" : "";
-	if($val[1])
-	{
+	if ($val[1]) {
 		$val[1] = '&filter='.$val[1];
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_POLLS_ROW_FILTER_VALUE' => cot_url('admin', 'm=polls'.$val[1]),
 		'ADMIN_POLLS_ROW_FILTER_CHECKED' => $checked,
 		'ADMIN_POLLS_ROW_FILTER_NAME' => $val[0]
-	));
+	]);
 	$t->parse('MAIN.POLLS_ROW_FILTER');
 }
 
 cot_poll_edit_form($poll_id, $t, 'MAIN');
 
-$t->assign(array(
+$t->assign([
 	'ADMIN_POLLS_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=module&p=polls'),
-	'ADMIN_POLLS_ADMINWARNINGS' => !empty($adminwarnings) ? $adminwarnings : '',//TODO: May by need deprecate adminwarnings ?
-	'ADMIN_POLLS_PAGINATION_PREV' => $pagenav['prev'],
-	'ADMIN_POLLS_PAGNAV' => $pagenav['main'],
-	'ADMIN_POLLS_PAGINATION_NEXT' => $pagenav['next'],
-	'ADMIN_POLLS_TOTALITEMS' => $totalitems,
-	'ADMIN_POLLS_ON_PAGE' => $ii,
 	'ADMIN_POLLS_FORMNAME' => $formname,
 	'ADMIN_POLLS_FORM_URL' => ((int) $poll_id > 0) ? cot_url('admin', 'm=polls'.$poll_filter.'&d='.$durl) : cot_url('admin', 'm=polls'),
 	'ADMIN_POLLS_EDIT_FORM' => $poll_text,
-	'ADMIN_POLLS_SEND_BUTTON' => $send_button
-));
+	'ADMIN_POLLS_SEND_BUTTON' => $send_button,
+	'ADMIN_POLLS_ON_PAGE' => $ii,
+]);
+
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.25
+	$t->assign([
+		'ADMIN_POLLS_ADMINWARNINGS' => !empty($adminwarnings) ? $adminwarnings : '',
+		'ADMIN_POLLS_PAGINATION_PREV' => $pagenav['prev'],
+		'ADMIN_POLLS_PAGNAV' => $pagenav['main'],
+		'ADMIN_POLLS_PAGINATION_NEXT' => $pagenav['next'],
+		'ADMIN_POLLS_TOTALITEMS' => $totalitems,
+	]);
+}
+
+$t->assign(cot_generatePaginationTags($pagenav));
 
 cot_display_messages($t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('polls.admin.tags') as $pl)
-{
+foreach (cot_getextplugins('polls.admin.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

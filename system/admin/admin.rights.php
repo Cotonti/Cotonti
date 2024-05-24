@@ -173,6 +173,8 @@ $sql = Cot::$db->query('SELECT a.*, u.user_name FROM ' . Cot::$db->auth . ' AS a
 'ORDER BY auth_code ASC', $g);
 
 while ($row = $sql->fetch()) {
+    // @deprecated
+    $legacyIcon = null;
     if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
         /** @deprecated For backward compatibility. Will be removed in future releases */
         $legacyIcon = '';
@@ -198,8 +200,6 @@ while ($row = $sql->fetch()) {
 		$title = $extPrams[$row['auth_code']]['name'];
 		$ico = $extPrams[$row['auth_code']]['icon'];
 
-        // @deprecated
-        $legacyIcon = null;
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
             $legacyIcon = $extPrams[$row['auth_code']]['legacyIcon'];
         }

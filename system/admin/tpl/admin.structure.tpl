@@ -28,73 +28,61 @@
 <!-- END: LIST -->
 
 <!-- BEGIN: MAIN -->
-{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 <div class="button-toolbar">
 	<a href="{ADMIN_STRUCTURE_URL_EXTRAFIELDS}" class="button">{PHP.L.adm_extrafields}</a>
-	<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax button special" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>
+	<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="button ajax special" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>
 	<!-- IF {ADMIN_STRUCTURE_I18N_URL} -->
 	<a href="{ADMIN_STRUCTURE_I18N_URL}" class="button">{PHP.L.i18n_structure}</a>
 	<!-- ENDIF -->
 </div>
 
+{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
+
 <!-- BEGIN: DEFAULT -->
 <!-- IF {ADMIN_STRUCTURE_TOTALITEMS} > 0 -->
 <div class="block">
-	<h2>{PHP.L.editdeleteentries}:</h2>
-	<div class="wrapper">
-		<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post" class="ajax" enctype="multipart/form-data" >
-			<table class="cells">
-				<thead>
-					<tr>
-						<th class="">{PHP.L.Path}</th>
-						<th class="w-10">{PHP.L.Code}</th>
-						<th class="w-25">{PHP.L.Title}</th>
-						<th class="">{PHP.L.TPL}</th>
-						<th class="w-5">{PHP.L.Pages}</th>
-						<th class="w-25">{PHP.L.Action}</th>
-					</tr>
-				</thead>
-				<tfoot>
-				<tr>
-					<td colspan="8">
-						<input type="submit" class="submit" value="{PHP.L.Update}" />
-					</td>
-				</tr>
-				</tfoot>
-				<tbody>
-					<!-- BEGIN: ROW -->
-					<tr>
-						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_PATH}</td>
-						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
-						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
-						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_CODE}</td>
-						<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
-						<td class="action {ADMIN_STRUCTURE_ODDEVEN}">
-							<a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax button">{PHP.L.Config}</a>
-							<!-- IF {ADMIN_STRUCTURE_RIGHTS_URL} -->
-							<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}" class="button">{PHP.L.Rights}</a>
-							<!-- ENDIF -->
-							<!-- IF {ADMIN_STRUCTURE_CAN_DELETE} -->
-							<a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_DELETE_CONFIRM_URL}" class="confirmLink button">{PHP.L.Delete}</a>
-							<!-- ENDIF -->
-							<a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" class="button special">{PHP.L.Open}</a>
-						</td>
-					</tr>
-					<!-- END: ROW -->
-				</tbody>
-				</table>
-			</form>
-			<p class="pagination-info">
-				{PHP.L.Total}: {ADMIN_STRUCTURE_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_STRUCTURE_COUNTER_ROW}
-			</p>
-			<!-- IF {ADMIN_STRUCTURE_PAGNAV} -->
-			<nav class="pagination" aria-label="Structure Pagination">
-				<ul>
-					{ADMIN_STRUCTURE_PAGINATION_PREV}{ADMIN_STRUCTURE_PAGNAV}{ADMIN_STRUCTURE_PAGINATION_NEXT}
-				</ul>
-			</nav>
-			<!-- ENDIF -->
-	</div>
+	<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post" class="ajax" enctype="multipart/form-data" >
+		<table class="cells">
+			<tr>
+				<td class="coltop">{PHP.L.Path}</td>
+				<td class="coltop w-10">{PHP.L.Code}</td>
+				<td class="coltop w-25">{PHP.L.Title}</td>
+				<td class="coltop">{PHP.L.TPL}</td>
+				<td class="coltop w-5">{PHP.L.Pages}</td>
+				<td class="coltop w-25">{PHP.L.Action}</td>
+			</tr>
+			<!-- BEGIN: ROW -->
+			<tr>
+				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_PATH}</td>
+				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
+				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
+				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_CODE}</td>
+				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
+				<td class="action {ADMIN_STRUCTURE_ODDEVEN}">
+					<a href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="button ajax" title="{PHP.L.Options}">{PHP.L.Config}</a>
+					<!-- IF {ADMIN_STRUCTURE_RIGHTS_URL} -->
+					<a href="{ADMIN_STRUCTURE_RIGHTS_URL}" class="button">{PHP.L.Rights}</a>
+					<!-- ENDIF -->
+					<!-- IF {ADMIN_STRUCTURE_CAN_DELETE} -->
+					<a href="{ADMIN_STRUCTURE_DELETE_CONFIRM_URL}" class="button confirmLink">{PHP.L.Delete}</a>
+					<!-- ENDIF -->
+					<a href="{ADMIN_STRUCTURE_JUMPTO_URL}" class="button special" title="{PHP.L.Pages}">{PHP.L.Open}</a>
+				</td>
+			</tr>
+			<!-- END: ROW -->
+			<tr>
+				<td colspan="8">
+					<input type="submit" class="submit" value="{PHP.L.Update}" />
+				</td>
+			</tr>
+			</table>
+		</form>
+		<!-- IF {ADMIN_STRUCTURE_TOTALITEMS} -->
+		<p class="paging">
+			{ADMIN_STRUCTURE_PAGINATION_PREV}{ADMIN_STRUCTURE_PAGNAV}{ADMIN_STRUCTURE_PAGINATION_NEXT}
+			<span>{PHP.L.Total}: {ADMIN_STRUCTURE_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_STRUCTURE_COUNTER_ROW}</span>
+		</p>
+		<!-- ENDIF -->
 </div>
 <!-- ENDIF -->
 <!-- END: DEFAULT -->
@@ -143,7 +131,7 @@
 		</div>
 	</div>
 
-<!-- BEGIN: CONFIG -->
+	<!-- BEGIN: CONFIG -->
 	<div class="block">
 		<h2>{PHP.L.Options}</h2>
 		{CONFIG_HIDDEN}
@@ -155,15 +143,15 @@
 					<td class="w-60">{PHP.L.Value}</td>
 					<td class="w-5">{PHP.L.Reset}</td>
 				</tr>
-<!-- BEGIN: ADMIN_CONFIG_ROW -->
-<!-- BEGIN: ADMIN_CONFIG_FIELDSET_BEGIN -->
+				<!-- BEGIN: ADMIN_CONFIG_ROW -->
+				<!-- BEGIN: ADMIN_CONFIG_FIELDSET_BEGIN -->
 				<tr>
 					<td class="group_begin" colspan="3">
 						<h4>{ADMIN_CONFIG_FIELDSET_TITLE}</h4>
 					</td>
 				</tr>
-<!-- END: ADMIN_CONFIG_FIELDSET_BEGIN -->
-<!-- BEGIN: ADMIN_CONFIG_ROW_OPTION -->
+				<!-- END: ADMIN_CONFIG_FIELDSET_BEGIN -->
+				<!-- BEGIN: ADMIN_CONFIG_ROW_OPTION -->
 				<tr>
 					<td>{ADMIN_CONFIG_ROW_CONFIG_TITLE}:</td>
 					<td>
@@ -174,17 +162,16 @@
 						<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="ajax button">{PHP.L.Reset}</a>
 					</td>
 				</tr>
-<!-- END: ADMIN_CONFIG_ROW_OPTION -->
-<!-- END: ADMIN_CONFIG_ROW -->
+				<!-- END: ADMIN_CONFIG_ROW_OPTION -->
+				<!-- END: ADMIN_CONFIG_ROW -->
 			</table>
 		</div>
 	</div>
-<!-- END: CONFIG -->
+	<!-- END: CONFIG -->
 
 	<div class="button-toolbar">
 		<input type="submit" class="submit" value="{PHP.L.Update}" />
 	</div>
-
 </form>
 <!-- END: OPTIONS -->
 

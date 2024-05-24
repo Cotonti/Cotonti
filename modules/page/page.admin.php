@@ -22,9 +22,9 @@ $t = new XTemplate(cot_tplfile('page.admin', 'module', true));
 
 require_once cot_incfile('page', 'module');
 
-$adminPath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
-$adminPath[] = array(cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']);
-$adminPath[] = array(cot_url('admin', 'm='.$m), Cot::$L['Administration']);
+$adminPath[] = [cot_url('admin', 'm=extensions'), Cot::$L['Extensions']];
+$adminPath[] = [cot_url('admin', 'm=extensions&a=details&mod='.$m), $cot_modules[$m]['title']];
+$adminPath[] = [cot_url('admin', 'm='.$m), Cot::$L['Administration']];
 $adminHelp = Cot::$L['adm_help_page'];
 $adminTitle = Cot::$L['Pages'];
 
@@ -43,21 +43,21 @@ $sort_type = cot_page_config_order(true);
 
 $sortway = cot_import('sortway', 'R', 'ALP');
 $sortway = empty($sortway) ? 'desc' : $sortway;
-$sort_way = array(
+$sort_way = [
 	'asc' => Cot::$L['Ascending'],
 	'desc' => Cot::$L['Descending']
-);
+];
 $sqlsortway = $sortway;
 
 $filter = cot_import('filter', 'R', 'ALP');
 $filter = empty($filter) ? 'valqueue' : $filter;
-$filter_type = array(
+$filter_type = [
 	'all' => Cot::$L['All'],
 	'valqueue' => Cot::$L['adm_valqueue'],
 	'validated' => Cot::$L['adm_validated'],
 	'expired' => Cot::$L['adm_expired'],
 	'drafts' => Cot::$L['page_drafts'],
-);
+];
 
 $urlParams = ['m' => 'page'];
 if ($sorttype != 'id') {
@@ -165,7 +165,6 @@ if ($a == 'validate') {
 	}
 
     cot_redirect($backUrl);
-
 } elseif ($a == 'unvalidate') {
 	cot_check_xg();
 
@@ -215,7 +214,6 @@ if ($a == 'validate') {
 	}
 
     cot_redirect($backUrl);
-
 } elseif ($a == 'delete') {
 	cot_check_xg();
 
@@ -234,13 +232,11 @@ if ($a == 'validate') {
 		/* ===== */
 
         cot_message('#' . $id . ' - ' . Cot::$L['adm_queue_deleted']);
-
     } else {
         cot_error('#' . $id . ' - ' . Cot::$L['adm_failed']);
     }
 
     cot_redirect(cot_url('admin', $urlParams, '', true));
-
 } elseif ($a == 'update_checked') {
 	$paction = cot_import('paction', 'P', 'TXT');
 	$s = cot_import('s', 'P', 'ARR');
@@ -306,7 +302,6 @@ if ($a == 'validate') {
 		}
 
         cot_redirect(cot_url('admin', $urlParams, '', true));
-
 	} elseif ($paction == 'delete' && is_array($s)) {
 		cot_check_xp();
 
@@ -348,14 +343,23 @@ if ($a == 'validate') {
 }
 
 $totalitems = $db->query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere)->fetchColumn();
-$pagenav = cot_pagenav('admin', $common_params, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav(
+	'admin',
+	$common_params,
+	$d,
+	$totalitems,
+	Cot::$cfg['maxrowsperpage'],
+	'd',
+	'',
+	Cot::$cfg['jquery'] && Cot::$cfg['turnajax']
+);
 
 $sql_page = $db->query("SELECT p.*, u.user_name
 	FROM $db_pages as p
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 	WHERE $sqlwhere
 		ORDER BY $sqlsorttype $sqlsortway
-		LIMIT $d, ".$cfg['maxrowsperpage']);
+		LIMIT $d, ".Cot::$cfg['maxrowsperpage']);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
@@ -370,7 +374,7 @@ foreach ($sql_page->fetchAll() as $row) {
     }
 	$row['page_file'] = intval($row['page_file']);
 	$t->assign(cot_generate_pagetags($row, 'ADMIN_PAGE_', 200));
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_PAGE_ID_URL' => cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']),
 		'ADMIN_PAGE_OWNER' => cot_build_user($row['page_ownerid'], $row['user_name']),
 		'ADMIN_PAGE_FILE_BOOL' => $row['page_file'],
@@ -379,8 +383,8 @@ foreach ($sql_page->fetchAll() as $row) {
 		'ADMIN_PAGE_URL_FOR_DELETED' => cot_confirm_url(cot_url('admin', $common_params.'&a=delete&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()), 'page', 'page_confirm_delete'),
 		'ADMIN_PAGE_URL_FOR_EDIT' => cot_url('page', 'm=edit&id='.$row['page_id']),
 		'ADMIN_PAGE_ODDEVEN' => cot_build_oddeven($ii),
-		'ADMIN_PAGE_CAT_COUNT' => $sub_count
-	));
+		'ADMIN_PAGE_CAT_COUNT' => $sub_count,
+	]);
 	$t->assign(cot_generate_usertags($row['page_ownerid'], 'ADMIN_PAGE_OWNER_'), htmlspecialchars($row['user_name']));
 
 	/* === Hook - Part2 : Include === */
@@ -392,8 +396,6 @@ foreach ($sql_page->fetchAll() as $row) {
 	$t->parse('MAIN.PAGE_ROW');
 	$ii++;
 }
-
-$is_row_empty = ($sql_page->rowCount() == 0) ? true : false ;
 
 $totaldbpages = Cot::$db->countRows($db_pages);
 $sql_page_queued = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->pages . ' WHERE page_state=' .
@@ -413,6 +415,8 @@ $t->assign([
     'ADMIN_PAGE_ON_PAGE' => $ii,
 ]);
 if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.25
+    $is_row_empty = $sql_page->rowCount() == 0 ? true : false;
     // @deprecated in 0.9.24
     $t->assign([
         'ADMIN_PAGE_PAGINATION_PREV' => $pagenav['prev'],

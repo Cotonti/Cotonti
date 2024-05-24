@@ -21,26 +21,26 @@
 		<ul>
 			<li>
 				<a href="{PHP|cot_url('users','m=profile')}">{PHP.usr.name}</a>
-<!-- IF {PHP.cot_modules.pm} -->
+				<!-- IF {PHP.cot_modules.pm} -->
 				<span class="spaced">{PHP.cfg.separator}</span>
 				<a href="{PHP|cot_url('pm')}">
-<!-- IF {PHP.usr.messages} == 0 -->
+					<!-- IF {PHP.usr.messages} == 0 -->
 					{PHP.L.Private_Messages}
-<!-- ELSE -->
+					<!-- ELSE -->
 					{PHP.L.home_newpms}: {PHP.usr.messages}
-<!-- ENDIF -->
+					<!-- ENDIF -->
 				</a>
-<!-- ENDIF -->
+				<!-- ENDIF -->
 				<span class="spaced">{PHP.cfg.separator}</span>
 				{PHP.out.loginout}
 			</li>
 			<li>
 				<a href="{PHP.cfg.mainurl}" title="{PHP.L.hea_viewsite}">
-				<!-- IF {PHP.cfg.maintitle} && {PHP.cfg.maintitle|mb_strlen} < 50 -->
+					<!-- IF {PHP.cfg.maintitle} && {PHP.cfg.maintitle|mb_strlen} < 50 -->
 					{PHP.cfg.maintitle}
-				<!-- ELSE -->
+					<!-- ELSE -->
 					{PHP.L.hea_viewsite}
-				<!-- ENDIF -->
+					<!-- ENDIF -->
 				</a>
 			</li>
 		</ul>

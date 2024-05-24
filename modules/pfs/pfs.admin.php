@@ -25,9 +25,9 @@ if ($s == 'allpfs') {
 } else {
 	$t = new XTemplate(cot_tplfile('pfs.admin', 'module', true));
 
-	$adminPath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
-	$adminPath[] = array(cot_url('admin', 'm=extensions&a=details&mod=' . $m), $cot_modules[$m]['title']);
-	$adminPath[] = array(cot_url('admin', 'm='.$m), Cot::$L['Administration']);
+	$adminPath[] = [cot_url('admin', 'm=extensions'), Cot::$L['Extensions']];
+	$adminPath[] = [cot_url('admin', 'm=extensions&a=details&mod=' . $m), $cot_modules[$m]['title']];
+	$adminPath[] = [cot_url('admin', 'm='.$m), Cot::$L['Administration']];
 	//$adminHelp = $L['adm_help_pfs'];
 	$adminTitle = Cot::$L['pfs_title'];
 
@@ -38,26 +38,30 @@ if ($s == 'allpfs') {
 	/* ===== */
 
 	if (!function_exists('gd_info')) {
-		$is_adminwarnings = true;//TODO: May by need deprecate adminwarnings ?
+		if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+			// @deprecated in 0.9.25
+			$is_adminwarnings = true;
+		}
+		cot_error('adm_nogd');
 	} else {
 		$gd_datas = gd_info();
 		foreach ($gd_datas as $k => $i) {
 			if (mb_strlen($i) < 2) {
 				$i = $cot_yesno[$i];
 			}
-			$t->assign(array(
+			$t->assign([
 				'ADMIN_PFS_DATAS_NAME' => $k,
-				'ADMIN_PFS_DATAS_ENABLE_OR_DISABLE' => $i
-			));
+				'ADMIN_PFS_DATAS_ENABLE_OR_DISABLE' => $i,
+			]);
 			$t->parse('MAIN.PFS_ROW');
 		}
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_PFS_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=module&p=pfs'),
 		'ADMIN_PFS_URL_ALLPFS' => cot_url('admin', 'm=pfs&s=allpfs'),
-		'ADMIN_PFS_URL_SFS' => cot_url('pfs', 'userid=0')
-	));
+		'ADMIN_PFS_URL_SFS' => cot_url('pfs', 'userid=0'),
+	]);
 
 	/* === Hook  === */
 	foreach (cot_getextplugins('pfs.admin.tags') as $pl) {

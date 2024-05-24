@@ -53,6 +53,11 @@ $R['link_pagenav_next'] = '<span class="pagenav pagenav_next"><a href="{$url}" c
 $R['link_pagenav_prev'] = '<span class="pagenav pagenav_prev"><a href="{$url}" class="{$class}" {$rel}>'.$L['pagenav_prev'].'</a></span>';
 
 /**
+ * Sort
+ */
+$R['link_list_sort'] = '<a href="{$asc_url}" rel="nofollow">{$icon_down}</a> <a href="{$desc_url}" rel="nofollow">{$icon_up}</a> {$text}';
+
+/**
  * Header
  */
 $R['code_basehref'] = '<base href="'.$cfg['mainurl'].'/" />';
