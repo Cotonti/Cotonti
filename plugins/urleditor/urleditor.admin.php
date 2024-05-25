@@ -24,8 +24,8 @@ $t = new XTemplate(cot_tplfile('urleditor.admin', 'plug', true));
 require_once cot_incfile('forms');
 require_once cot_langfile('urleditor', 'plug');
 
-$adminhelp = $L['adm_help_urls'];
-$adminTitle = $L['adm_urls'];
+$adminHelp = Cot::$L['adm_help_urls'];
+$adminTitle = Cot::$L['adm_urls'];
 
 $a = cot_import('a', 'G', 'ALP');
 
@@ -418,4 +418,4 @@ foreach (cot_getextplugins('admin.urls.tags') as $pl)
 /* ===== */
 
 $t->parse('MAIN');
-$adminmain = $t->text('MAIN');
+$adminMain = $t->text('MAIN');

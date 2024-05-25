@@ -48,7 +48,7 @@ if (!file_exists($inc_file)) {
 	cot_die();
 }
 
-$adminPath = array(array(cot_url('admin'), Cot::$L['Adminpanel']));
+$adminPath = [[cot_url('admin'), Cot::$L['Adminpanel']]];
 $adminTitle = isset($adminTitle) ? $adminTitle : '';
 $adminHelp = isset($adminHelp) ? $adminHelp : '';
 $adminMain = isset($adminMain) ? $adminMain : '';
