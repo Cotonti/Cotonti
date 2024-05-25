@@ -141,9 +141,11 @@ if ($regenerate) {
 
 		foreach ($category_list as $c => $cat) {
 			$auth_cache[$c] = cot_auth('forums', $c, 'R');
-			if (!$auth_cache[$c] || substr_count($cat['path'], '.') == 0) continue;
+			if (!$auth_cache[$c] || substr_count($cat['path'], '.') == 0) {
+                continue;
+            }
 			// Pagination support
-			$count = $cat_top[$c]['fs_topiccount'];
+			$count = isset($cat_top[$c]['fs_topiccount']) ? (int) $cat_top[$c]['fs_topiccount'] : 0;
 			$subs = floor($count / $maxrowsperpage) + 1;
 			// Pages starting from second
 			foreach (range(1, $subs) as $pg) {

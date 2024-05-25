@@ -69,7 +69,11 @@ switch($a) {
 	/* =============== */
 	case 'details':
 	/* =============== */
-		$ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
+        $extDir = $dir . '/' . $code;
+        if (!file_exists($extDir)) {
+            cot_die_message(907);
+        }
+		$ext_info = $extDir . '/' . $code . '.setup.php';
         $info = false;
 		$exists = file_exists($ext_info);
 		if ($exists) {
