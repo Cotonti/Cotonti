@@ -7,8 +7,6 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
-$cot_extensions = [];
-
 $cot_extensions = [
 	['rar', 'Archive', 'rar'],
 	['zip', 'Archive', 'zip'],
