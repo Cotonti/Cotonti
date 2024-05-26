@@ -22,12 +22,10 @@ $t = new XTemplate(cot_tplfile('autoalias2.admin', 'plug', true));
 
 $adminTitle = Cot::$L['AutoAlias2'];
 
-if ($a == 'create')
-{
+if ($a == 'create') {
 	$count = 0;
-	$res = $db->query("SELECT page_id, page_title FROM $db_pages WHERE page_alias = ''");
-	foreach ($res->fetchAll() as $row)
-	{
+	$res = Cot::$db->query("SELECT page_id, page_title FROM $db_pages WHERE page_alias = ''");
+	foreach ($res->fetchAll() as $row) {
 		autoalias2_update($row['page_title'], $row['page_id']);
 		$count++;
 	}

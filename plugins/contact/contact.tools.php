@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Hooks=tools
 [END_COT_EXT]
-  ==================== */
+==================== */
 
 /**
  * Admin interface for Contact plugin
@@ -12,6 +12,7 @@ Hooks=tools
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
+
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('contact', 'plug');
@@ -22,7 +23,7 @@ list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['maxrowsperpage']);
 $rtext = cot_import('rtext', 'P', 'TXT');
 
 if ($a == 'del') {
-	$sql_contact_delete = Cot::$db->query("SELECT * FROM $db_contact WHERE contact_id=$id LIMIT 1");
+	$sql_contact_delete = Cot::$db->query("SELECT * FROM $db_contact WHERE contact_id = $id LIMIT 1");
 
 	if ($row_contact_delete = $sql_contact_delete->fetch()) {
 		Cot::$db->delete(Cot::$db->contact, "contact_id = $id");
@@ -31,29 +32,41 @@ if ($a == 'del') {
 			cot_extrafield_unlinkfiles($row_contact_delete['contact_' . $exfld['field_name']], $exfld);
 		}
 		cot_message('Deleted');
+		cot_redirect(cot_url('admin', 'm=other&p=contact', '', true));
 	}
 } elseif ($a == 'val') {
-	Cot::$db->update(Cot::$db->contact, array('contact_val' => 1), "contact_id = $id");
+	Cot::$db->update(Cot::$db->contact, ['contact_val' => 1], "contact_id = $id");
 	cot_message('Updated');
-    
+	cot_redirect(cot_url('admin', 'm=other&p=contact', '', true));
 } elseif ($a == 'unval') {
-	Cot::$db->update(Cot::$db->contact, array('contact_val' => 0), "contact_id = $id");
+	Cot::$db->update(Cot::$db->contact, ['contact_val' => 0], "contact_id = $id");
 	cot_message('Updated');
-
+	cot_redirect(cot_url('admin', 'm=other&p=contact', '', true));
 } elseif ($a == 'send' && $rtext != '') {
 	$row = Cot::$db->query("SELECT contact_email FROM $db_contact WHERE contact_id = $id")->fetch();
 	cot_mail($row['contact_email'], Cot::$cfg['mainurl'], $rtext);
-	Cot::$db->update(Cot::$db->contact, array('contact_reply' => $rtext), "contact_id = $id");
+	Cot::$db->update(Cot::$db->contact, ['contact_reply' => $rtext], "contact_id = $id");
 	cot_message('Done');
+	cot_redirect(cot_url('admin', 'm=other&p=contact', '', true));
 }
 
 $adminTitle = Cot::$L['contact_title'];
 
 $tuman = new XTemplate(cot_tplfile('contact.tools', 'plug', true));
+
 $totallines = Cot::$db->query("SELECT COUNT(*) FROM $db_contact")->fetchColumn();
 $sql = Cot::$db->query("SELECT * FROM $db_contact ORDER BY contact_val ASC, contact_id DESC LIMIT $d, " . Cot::$cfg['maxrowsperpage']);
 
-$pagenav = cot_pagenav('admin', 'm=other&p=contact', $d, $totallines, Cot::$cfg['maxrowsperpage'], 'd', '', Cot::$cfg['jquery'] && Cot::$cfg['turnajax']);
+$pagenav = cot_pagenav(
+	'admin',
+	'm=other&p=contact',
+	$d,
+	$totallines,
+	Cot::$cfg['maxrowsperpage'],
+	'd',
+	'',
+	Cot::$cfg['jquery'] && Cot::$cfg['turnajax']
+);
 
 $i = 0;
 foreach ($sql->fetchAll() as $row) {
@@ -62,7 +75,7 @@ foreach ($sql->fetchAll() as $row) {
 	$shorttext = cot_string_truncate($shorttext, 150);
 	$shorttext .= '...';
 	$val = ($row['contact_val'] == 1) ? 'unval' : 'val';
-	$urlParams = array('m' => 'other', 'p' => 'contact');
+	$urlParams = ['m' => 'other', 'p' => 'contact'];
 
 	$tmp = $urlParams;
 	$tmp['id'] = $row['contact_id'];
@@ -99,14 +112,14 @@ foreach ($sql->fetchAll() as $row) {
 			$exfld_val = cot_build_extrafields_data('contact', $exfld, $row['contact_'.$exfld['field_name']]);
 			$exfld_title = cot_extrafield_title($exfld, 'contact_');
 
-			$tuman->assign(array(
+			$tuman->assign([
 				'CONTACT_' . $tag . '_TITLE' => $exfld_title,
 				'CONTACT_' . $tag => $exfld_val,
 				'CONTACT_' . $tag . '_VALUE' => $row['contact_'.$exfld['field_name']],
 				'CONTACT_EXTRAFLD_TITLE' => $exfld_title,
 				'CONTACT_EXTRAFLD' => $exfld['field_type'] == 'file' ? cot_rc_link(Cot::$cfg['extrafield_files_dir'] . '/' . $exfld_val, $exfld_val) : $exfld_val,
-				'CONTACT_EXTRAFLD_VALUE' => $row['contact_'.$exfld['field_name']]
-			));
+				'CONTACT_EXTRAFLD_VALUE' => $row['contact_'.$exfld['field_name']],
+			]);
 			$tuman->parse('MAIN.DATA.EXTRAFLD');
 		}
 	}
@@ -144,14 +157,14 @@ if (($a == '') && !empty($id)) {
 			$exfld_val = cot_build_extrafields_data('contact', $exfld, $row['contact_'.$exfld['field_name']]);
             $exfld_title = cot_extrafield_title($exfld, 'contact_');
 
-			$tuman->assign(array(
+			$tuman->assign([
 				'CONTACT_' . $tag . '_TITLE' => $exfld_title,
 				'CONTACT_' . $tag => $exfld_val,
 				'CONTACT_' . $tag . '_VALUE' => $row['contact_'.$exfld['field_name']],
 				'CONTACT_EXTRAFLD_TITLE' => $exfld_title,
 				'CONTACT_EXTRAFLD' => $exfld['field_type'] == 'file' ? cot_rc_link(Cot::$cfg['extrafield_files_dir'] . '/' . $exfld_val, $exfld_val) : $exfld_val,
-				'CONTACT_EXTRAFLD_VALUE' => $row['contact_'.$exfld['field_name']]
-			));
+				'CONTACT_EXTRAFLD_VALUE' => $row['contact_'.$exfld['field_name']],
+			]);
 			$tuman->parse('MAIN.VIEW.EXTRAFLD');
 		}
 	}
@@ -159,20 +172,21 @@ if (($a == '') && !empty($id)) {
 	$tuman->parse('MAIN.VIEW');
 }
 
-cot_display_messages($tuman);
-
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprected in 0.9.24
+    $tuman->assign([
+        'CONTACT_PAGINATION' => $pagenav['main'],
+        'CONTACT_PREV' => $pagenav['prev'],
+        'CONTACT_NEXT' => $pagenav['next'],
+        'CONTACT_CURRENTPAGE' => $pagenav['current'],
+        'CONTACT_TOTALLINES' => $pagenav['entries'],
+        'CONTACT_PERPAGE' => $pagenav['onpage'],
+        'CONTACT_TOTALPAGES' => $pagenav['total'],
+    ]);
+}
 $tuman->assign(cot_generatePaginationTags($pagenav));
 
-// @deprected in 0.9.24
-$tuman->assign([
-	'CONTACT_PAGINATION' => $pagenav['main'],
-	'CONTACT_PREV' => $pagenav['prev'],
-	'CONTACT_NEXT' => $pagenav['next'],
-    'CONTACT_CURRENTPAGE' => $pagenav['current'],
-    'CONTACT_TOTALLINES' => $pagenav['entries'],
-    'CONTACT_PERPAGE' => $pagenav['onpage'],
-    'CONTACT_TOTALPAGES' => $pagenav['total'],
-]);
+cot_display_messages($tuman);
 
 $tuman->parse('MAIN');
 $plugin_body .= $tuman->text('MAIN');

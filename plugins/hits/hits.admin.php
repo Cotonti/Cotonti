@@ -4,6 +4,7 @@
 Hooks=tools
 [END_COT_EXT]
 ==================== */
+
 /**
  * Administration panel - Hits
  *
@@ -34,7 +35,7 @@ foreach (cot_getextplugins('hits.admin.first') as $pl) {
 /* ===== */
 
 if ($f == 'year' || $f == 'month') {
-	$adminPath[] = array(cot_url('admin', 'm=other&p=hits&f=' . $f . '&v=' . $v), '(' . $v . ')');
+	$adminPath[] = [cot_url('admin', 'm=other&p=hits&f=' . $f . '&v=' . $v), '(' . $v . ')'];
 	$sql = Cot::$db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '" . Cot::$db->prep($v) . "%' ORDER BY stat_name DESC");
 	
 	while ($row = $sql->fetch()) {
@@ -52,23 +53,21 @@ if ($f == 'year' || $f == 'month') {
 	/* ===== */
 	foreach ($hits_d as $day => $hits) {
 		$percentbar = floor(($hits / $hits_d_max) * 100);
-		$tt->assign(
-			array(
-				'ADMIN_HITS_ROW_DAY' => $day,
-				'ADMIN_HITS_ROW_HITS' => $hits,
-				'ADMIN_HITS_ROW_PERCENTBAR' => $percentbar,
-				'ADMIN_HITS_ROW_ODDEVEN' => cot_build_oddeven($ii)
-			));
+		$tt->assign([
+			'ADMIN_HITS_ROW_DAY' => $day,
+			'ADMIN_HITS_ROW_HITS' => $hits,
+			'ADMIN_HITS_ROW_PERCENTBAR' => $percentbar,
+			'ADMIN_HITS_ROW_ODDEVEN' => cot_build_oddeven($ii),
+		]);
 		
 		/* === Hook - Part2 : Include === */
-		foreach ($extp as $pl)
-		{
+		foreach ($extp as $pl) {
 			include $pl;
 		}
 		/* ===== */
 		
 		$tt->parse('MAIN.YEAR_OR_MONTH.ROW');
-		$ii ++;
+		$ii++;
 	}
 	
 	$tt->parse('MAIN.YEAR_OR_MONTH');
@@ -87,8 +86,8 @@ if ($f == 'year' || $f == 'month') {
 		$max_hits = $rowmax['stat_value'];
 
 		$ii = 0;
-		$hits_m = array();
-		$hits_w = array();
+		$hits_m = [];
+		$hits_w = [];
 
 		while ($row = $sql->fetch()) {
 			$y = mb_substr($row['stat_name'], 0, 4);
@@ -121,12 +120,12 @@ if ($f == 'year' || $f == 'month') {
 		$ii = 0;
 		foreach ($hits_y as $year => $hits) {
 			$percentbar = floor(($hits / $hits_y_max) * 100);
-			$tt->assign(array(
+			$tt->assign([
 				'ADMIN_HITS_ROW_YEAR_URL' => cot_url('admin', 'm=other&p=hits&f=year&v=' . $year),
 				'ADMIN_HITS_ROW_YEAR' => $year,
 				'ADMIN_HITS_ROW_YEAR_HITS' => $hits,
-				'ADMIN_HITS_ROW_YEAR_PERCENTBAR' => $percentbar
-			));
+				'ADMIN_HITS_ROW_YEAR_PERCENTBAR' => $percentbar,
+			]);
 			/* === Hook - Part2 : Include === */
 			foreach ($extp as $pl) {
 				include $pl;
@@ -138,12 +137,12 @@ if ($f == 'year' || $f == 'month') {
 		$ii = 0;
 		foreach ($hits_m as $month => $hits) {
 			$percentbar = floor(($hits / $hits_m_max) * 100);
-			$tt->assign(array(
+			$tt->assign([
 				'ADMIN_HITS_ROW_MONTH_URL' => cot_url('admin', 'm=other&p=hits&f=month&v=' . $month),
 				'ADMIN_HITS_ROW_MONTH' => $month,
 				'ADMIN_HITS_ROW_MONTH_HITS' => $hits,
-				'ADMIN_HITS_ROW_MONTH_PERCENTBAR' => $percentbar
-			));
+				'ADMIN_HITS_ROW_MONTH_PERCENTBAR' => $percentbar,
+			]);
 			/* === Hook - Part2 : Include === */
 			foreach ($extp as $pl) {
 				include $pl;
@@ -156,11 +155,11 @@ if ($f == 'year' || $f == 'month') {
 		foreach ($hits_w as $week => $hits) {
 			$ex = explode('-W', $week);
 			$percentbar = floor(($hits / $hits_w_max) * 100);
-			$tt->assign(array(
+			$tt->assign([
 				'ADMIN_HITS_ROW_WEEK' => $week,
 				'ADMIN_HITS_ROW_WEEK_HITS' => $hits,
-				'ADMIN_HITS_ROW_WEEK_PERCENTBAR' => $percentbar
-			));
+				'ADMIN_HITS_ROW_WEEK_PERCENTBAR' => $percentbar,
+			]);
 			/* === Hook - Part2 : Include === */
 			foreach ($extp as $pl) {
 				include $pl;
@@ -170,16 +169,15 @@ if ($f == 'year' || $f == 'month') {
 			$ii++;
 		}
 
-		$tt->assign(array(
-			'ADMIN_HITS_MAXHITS' => sprintf(Cot::$L['hits_maxhits'], $max_date, $max_hits)
-		));
+		$tt->assign([
+			'ADMIN_HITS_MAXHITS' => sprintf(Cot::$L['hits_maxhits'], $max_date, $max_hits),
+		]);
 	}
 	$tt->parse('MAIN.DEFAULT');
 }
 
 /* === Hook  === */
-foreach (cot_getextplugins('hits.admin.tags') as $pl)
-{
+foreach (cot_getextplugins('hits.admin.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

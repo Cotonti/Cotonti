@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-
 		<div class="block">
 			<h2 class="stats">{PHP.L.plu_title}</h2>
 			<h3>{PHP.L.Main}:</h3>
@@ -8,8 +7,8 @@
 					<td colspan="2">{PHP.L.plu_maxwasreached} {STATISTICS_MAX_DATE}, {STATISTICS_MAX_HITS} {PHP.L.plu_pagesdisplayedthisday}</td>
 				</tr>
 				<tr>
-					<td class="width80">{PHP.L.plu_totalpagessince} {STATISTICS_SINCE}</td>
-					<td class="textright width20">{STATISTICS_TOTALPAGES}</td>
+					<td class="w-80">{PHP.L.plu_totalpagessince} {STATISTICS_SINCE}</td>
+					<td class="w-20 textright">{STATISTICS_TOTALPAGES}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.plu_registeredusers}</td>
@@ -32,8 +31,8 @@
 			<h3>{PHP.L.Private_Messages}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="width80">{PHP.L.plu_totalpms}</td>
-					<td class="textright width20">{STATISTICS_TOTALPMSENT}</td>
+					<td class="w-80">{PHP.L.plu_totalpms}</td>
+					<td class="w-20 textright">{STATISTICS_TOTALPMSENT}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.plu_totalactivepms}</td>
@@ -48,8 +47,8 @@
 			<h3>{PHP.L.Forums}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="width80">{PHP.L.plu_viewsforums}</td>
-					<td class="textright width20">{STATISTICS_TOTALDBVIEWS}</td>
+					<td class="w-80">{PHP.L.plu_viewsforums}</td>
+					<td class="w-20 textright">{STATISTICS_TOTALDBVIEWS}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.plu_postsforums}</td>
@@ -64,8 +63,8 @@
 			<h3>{PHP.L.plu_pollsratings}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="width80">{PHP.L.plu_pagesrated}</td>
-					<td class="textright width20">{STATISTICS_TOTALDBRATINGS}</td>
+					<td class="w-80">{PHP.L.plu_pagesrated}</td>
+					<td class="w-20 textright">{STATISTICS_TOTALDBRATINGS}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.plu_votesratings}</td>
@@ -84,8 +83,8 @@
 			<h3>{PHP.L.PFS}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="width80">{PHP.L.plu_pfsspace}</td>
-					<td class="textright width20">{STATISTICS_TOTALDBFILES}</td>
+					<td class="w-80">{PHP.L.plu_pfsspace}</td>
+					<td class="w-20 textright">{STATISTICS_TOTALDBFILES}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.plu_pfssize}, {PHP.L.kb}</td>
@@ -95,10 +94,10 @@
 
 			<h3>{PHP.L.plu_contributions}:</h3>
 			<table class="cells">
-<!-- BEGIN: IS_USER -->
+				<!-- BEGIN: IS_USER -->
 				<tr>
-					<td class="width80">{PHP.L.forums_posts}</td>
-					<td class="textright width20">{STATISTICS_USER_POSTSCOUNT}</td>
+					<td class="w-80">{PHP.L.forums_posts}</td>
+					<td class="w-20 textright">{STATISTICS_USER_POSTSCOUNT}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.forums_topics}</td>
@@ -108,28 +107,28 @@
 					<td>{PHP.L.comments_comments}</td>
 					<td class="textright">{STATISTICS_USER_COMMENTS}</td>
 				</tr>
-<!-- END: IS_USER -->
-<!-- BEGIN: IS_NOT_USER -->
+				<!-- END: IS_USER -->
+				<!-- BEGIN: IS_NOT_USER -->
 				<tr>
 					<td>{PHP.L.plu_notloggedin}</td>
 				</tr>
-<!-- END: IS_NOT_USER -->
+				<!-- END: IS_NOT_USER -->
 			</table>
 
 			<h3>{PHP.L.plu_membersbycountry}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="coltop width10">{PHP.L.plu_flag}</td>
-					<td class="coltop width70"><a href="{STATISTICS_PLU_URL}">{PHP.cot_img_down}</a> {PHP.L.Country}</td>
-					<td class="coltop width20"><a href="{STATISTICS_SORT_BY_USERCOUNT}" rel="nofollow">{PHP.cot_img_down}</a> {PHP.L.Users}</td>
+					<td class="coltop w-10">{PHP.L.plu_flag}</td>
+					<td class="coltop w-70"><a href="{STATISTICS_PLU_URL}">{PHP.cot_img_down}</a> {PHP.L.Country}</td>
+					<td class="coltop w-20"><a href="{STATISTICS_SORT_BY_USERCOUNT}" rel="nofollow">{PHP.cot_img_down}</a> {PHP.L.Users}</td>
 				</tr>
-<!-- BEGIN: ROW_COUNTRY -->
+				<!-- BEGIN: ROW_COUNTRY -->
 				<tr>
 					<td class="textcenter">{STATISTICS_COUNTRY_FLAG}</td>
 					<td>{STATISTICS_COUNTRY_NAME}</td>
 					<td class="textright">{STATISTICS_COUNTRY_COUNT}</td>
 				</tr>
-<!-- END: ROW_COUNTRY -->
+				<!-- END: ROW_COUNTRY -->
 				<tr>
 					<td class="textcenter"><img src="images/flags/f-00.png" alt="" /></td>
 					<td>{PHP.L.plu_unknown}</td>
@@ -141,5 +140,4 @@
 				</tr>
 			</table>
 		</div>
-
 <!-- END: MAIN -->

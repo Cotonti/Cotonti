@@ -5,6 +5,14 @@ Hooks=tools
 [END_COT_EXT]
 ==================== */
 
+/**
+ * Administration panel - Tags manager
+ *
+ * @package Tags
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ */
+
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('plug', 'tags');
@@ -28,11 +36,11 @@ list($pg, $d, $durl) = cot_import_pagenav('d', $perPage);
 $sortTypes = [
     'tag' => Cot::$L['Code'],
     'tag_cnt' => Cot::$L['Count'],
-    'length' => Cot::$L['tags_length']
+    'length' => Cot::$L['tags_length'],
 ];
 $sortWays = [
     'asc' => Cot::$L['Ascending'],
-    'desc' => Cot::$L['Descending']
+    'desc' => Cot::$L['Descending'],
 ];
 
 $queryJoinFields = '';
@@ -211,7 +219,7 @@ foreach ($tags  as $row) {
     if (isset($cot_extrafields[Cot::$db->tag_references])) {
         foreach ($cot_extrafields[Cot::$db->tag_references] as $extraField) {
             $tag = mb_strtoupper($extraField['field_name']);
-            $tt->assign(array(
+            $tt->assign([
                 'ADMIN_TAGS_' . $tag . '_TITLE' => isset(Cot::$L['tags_' . $extraField['field_name'] . '_title'])
                     ? Cot::$L['tags_' . $extraField['field_name'] . '_title']
                     : $extraField['field_description'],
@@ -221,7 +229,7 @@ foreach ($tags  as $row) {
                     $row['tag_' . $extraField['field_name']]
                 ),
                 'ADMIN_TAGS_' . $tag . '_VALUE' => $row['tag_' . $extraField['field_name']],
-            ));
+            ]);
         }
     }
 
@@ -365,6 +373,7 @@ $tt->assign([
     ),
 	'ADMIN_TAGS_COUNTER_ROW' => $ii,
 ]);
+
 if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
     $tt->assign([
         // @deprecated in 0.9.24
@@ -378,7 +387,6 @@ if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
         'ADMIN_TAGS_TOTALITEMS' => $totalItems,
     ]);
 }
-
 $tt->assign(cot_generatePaginationTags($pageNav));
 
 /* === Hook  === */

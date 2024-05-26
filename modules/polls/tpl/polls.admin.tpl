@@ -61,48 +61,50 @@
 </div>
 <div class="block">
 	<h2>{ADMIN_POLLS_FORMNAME}:</h2>
-	<form id="addpoll" action="{ADMIN_POLLS_FORM_URL}" method="post">
-		<!-- IF {PHP.cfg.jquery} -->
-		<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/polls.js"></script>
-		<script type="text/javascript">
-			var ansMax = {PHP.cfg.polls.max_options_polls};
-		</script>
-		<!-- ENDIF -->
-		<table class="cells">
-			<tr>
-				<td class="w-15">{PHP.L.poll}:</td>
-				<td class="w-85">{EDIT_POLL_IDFIELD}{EDIT_POLL_TEXT}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Options}:</td>
-				<td>
-					<!-- BEGIN: OPTIONS -->
-					<div class="polloptiondiv">
-						{EDIT_POLL_OPTION_TEXT}
-						<input name="deloption" value="x" type="button" class="deloption" style="display:none;" />
-					</div>
-					<!-- END: OPTIONS -->
-					<input id="addoption" name="addoption" value="{PHP.L.Add}" type="button" style="display:none;" />
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>
-					{EDIT_POLL_MULTIPLE}
-					<!-- BEGIN: EDIT -->
-					<br />
-					{EDIT_POLL_LOCKED}
-					<br />
-					{EDIT_POLL_RESET}
-					<br />
-					{EDIT_POLL_DELETE}
-					<!-- END: EDIT -->
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2"><button type="submit" class="confirm">{ADMIN_POLLS_SEND_BUTTON}</button></td>
-			</tr>
-		</table>
-	</form>
+	<div class="wrapper">
+		<form id="addpoll" action="{ADMIN_POLLS_FORM_URL}" method="post">
+			<!-- IF {PHP.cfg.jquery} -->
+			<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/polls.js"></script>
+			<script type="text/javascript">
+				var ansMax = {PHP.cfg.polls.max_options_polls};
+			</script>
+			<!-- ENDIF -->
+			<table class="cells">
+				<tr>
+					<td class="w-15">{PHP.L.poll}:</td>
+					<td class="w-85">{EDIT_POLL_IDFIELD}{EDIT_POLL_TEXT}</td>
+				</tr>
+				<tr>
+					<td>{PHP.L.Options}:</td>
+					<td>
+						<!-- BEGIN: OPTIONS -->
+						<div class="polloptiondiv">
+							{EDIT_POLL_OPTION_TEXT}
+							<input name="deloption" value="x" type="button" class="deloption" style="display:none;" />
+						</div>
+						<!-- END: OPTIONS -->
+						<input id="addoption" name="addoption" value="{PHP.L.Add}" type="button" style="display:none;" />
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						{EDIT_POLL_MULTIPLE}
+						<!-- BEGIN: EDIT -->
+						<br />
+						{EDIT_POLL_LOCKED}
+						<br />
+						{EDIT_POLL_RESET}
+						<br />
+						{EDIT_POLL_DELETE}
+						<!-- END: EDIT -->
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2"><button type="submit" class="confirm">{ADMIN_POLLS_SEND_BUTTON}</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
 </div>
 <!-- END: MAIN -->

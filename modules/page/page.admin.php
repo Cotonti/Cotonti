@@ -45,7 +45,7 @@ $sortway = cot_import('sortway', 'R', 'ALP');
 $sortway = empty($sortway) ? 'desc' : $sortway;
 $sort_way = [
 	'asc' => Cot::$L['Ascending'],
-	'desc' => Cot::$L['Descending']
+	'desc' => Cot::$L['Descending'],
 ];
 $sqlsortway = $sortway;
 
@@ -83,11 +83,11 @@ if ($pg > 1) {
 if ($filter == 'all') {
 	$sqlwhere = "1 ";
 } elseif ($filter == 'valqueue') {
-	$sqlwhere = "page_state=1";
+	$sqlwhere = "page_state = 1";
 } elseif ($filter == 'validated') {
-	$sqlwhere = "page_state=0";
+	$sqlwhere = "page_state = 0";
 } elseif ($filter == 'drafts') {
-	$sqlwhere = "page_state=2";
+	$sqlwhere = "page_state = 2";
 } elseif ($filter == 'expired') {
 	$sqlwhere = "page_begin > {$sys['now']} OR (page_expire <> 0 AND page_expire < {$sys['now']})";
 }
@@ -142,7 +142,7 @@ if ($a == 'validate') {
 		/* ===== */
 
 		cot_log(
-            \Cot::$L['Page'].' #' . $id . ' - ' . \Cot::$L['adm_queue_validated'],
+            Cot::$L['Page'].' #' . $id . ' - ' . Cot::$L['adm_queue_validated'],
             'page',
             'validate',
             'done'
@@ -184,33 +184,33 @@ if ($a == 'validate') {
             cot_redirect($backUrl);
         }
 
-		\Cot::$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
+		Cot::$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
-		$sql_page = \Cot::$db->update(
-            \Cot::$db->pages,
+		$sql_page = Cot::$db->update(
+            Cot::$db->pages,
             ['page_state' => COT_PAGE_STATE_PENDING],
             'page_id = ?',
             $id
         );
 
-		cot_log(Cot::$L['Page'] . ' #' . $id . ' - ' . \Cot::$L['adm_queue_unvalidated'], 'page', 'unvalidated', 'done');
+		cot_log(Cot::$L['Page'] . ' #' . $id . ' - ' . Cot::$L['adm_queue_unvalidated'], 'page', 'unvalidated', 'done');
 
-		if (\Cot::$cache) {
-            \Cot::$cache->db->remove('structure', 'system');
+		if (Cot::$cache) {
+            Cot::$cache->db->remove('structure', 'system');
 			if (Cot::$cfg['cache_page']) {
-                \Cot::$cache->static->clearByUri(cot_page_url($row));
-                \Cot::$cache->static->clearByUri(cot_url('page', ['c' => $row['page_cat']]));
+                Cot::$cache->static->clearByUri(cot_page_url($row));
+                Cot::$cache->static->clearByUri(cot_url('page', ['c' => $row['page_cat']]));
 			}
-			if (\Cot::$cfg['cache_index']) {
-                \Cot::$cache->static->clear('index');
+			if (Cot::$cfg['cache_index']) {
+                Cot::$cache->static->clear('index');
 			}
 		}
 
-		cot_message('#' . $id . ' - ' . \Cot::$L['adm_queue_unvalidated']);
+		cot_message('#' . $id . ' - ' . Cot::$L['adm_queue_unvalidated']);
 
     } else {
-        cot_error('#' . $id . ' - ' . \Cot::$L['nf']);
+        cot_error('#' . $id . ' - ' . Cot::$L['nf']);
 	}
 
     cot_redirect($backUrl);
@@ -254,39 +254,39 @@ if ($a == 'validate') {
 				}
 				/* ===== */
 
-				$sql_page = \Cot::$db->query('SELECT * FROM ' . \Cot::$db->pages . ' WHERE page_id = ?', $i);
+				$sql_page = Cot::$db->query('SELECT * FROM ' . Cot::$db->pages . ' WHERE page_id = ?', $i);
 				if ($row = $sql_page->fetch()) {
 					$id = $row['page_id'];
 					$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 					cot_block($usr['isadmin_local']);
 
-					$sql_page = \Cot::$db->update(
-                        \Cot::$db->pages,
+					$sql_page = Cot::$db->update(
+                        Cot::$db->pages,
                         ['page_state' => COT_PAGE_STATE_PUBLISHED],
                         'page_id= ?',
                         $id
                     );
 
 					cot_log(
-                        \Cot::$L['Page'] . ' #' . $id . ' - ' . \Cot::$L['adm_queue_validated'],
+                        Cot::$L['Page'] . ' #' . $id . ' - ' . Cot::$L['adm_queue_validated'],
                         'page',
                         'validate',
                         'done'
                     );
 
-					if (\Cot::$cache && \Cot::$cfg['cache_page']) {
-                        \Cot::$cache->static->clearByUri(cot_page_url($row));
-                        \Cot::$cache->static->clearByUri(cot_url('page', ['c' => $row['page_cat']]));
+					if (Cot::$cache && Cot::$cfg['cache_page']) {
+                        Cot::$cache->static->clearByUri(cot_page_url($row));
+                        Cot::$cache->static->clearByUri(cot_url('page', ['c' => $row['page_cat']]));
 					}
 
-					$perelik .= '#' . $id.', ';
+					$perelik .= '#' . $id . ', ';
 				} else {
-					$notfoundet .= '#' . $id . ' - ' . \Cot::$L['Error'] . '<br  />';
+					$notfoundet .= '#' . $id . ' - ' . Cot::$L['Error'] . '<br  />';
 				}
 			}
 		}
 
-        if (\Cot::$cache) {
+        if (Cot::$cache) {
             Cot::$cache->db->remove('structure', 'system');
             if (Cot::$cfg['cache_index']) {
                 Cot::$cache->static->clear('index');
@@ -342,7 +342,7 @@ if ($a == 'validate') {
 	}
 }
 
-$totalitems = $db->query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere)->fetchColumn();
+$totalitems = Cot::$db->query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere)->fetchColumn();
 $pagenav = cot_pagenav(
 	'admin',
 	$common_params,
@@ -354,9 +354,9 @@ $pagenav = cot_pagenav(
 	Cot::$cfg['jquery'] && Cot::$cfg['turnajax']
 );
 
-$sql_page = $db->query("SELECT p.*, u.user_name
+$sql_page = Cot::$db->query("SELECT p.*, u.user_name
 	FROM $db_pages as p
-	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+	LEFT JOIN $db_users AS u ON u.user_id = p.page_ownerid
 	WHERE $sqlwhere
 		ORDER BY $sqlsorttype $sqlsortway
 		LIMIT $d, ".Cot::$cfg['maxrowsperpage']);
@@ -375,13 +375,13 @@ foreach ($sql_page->fetchAll() as $row) {
 	$row['page_file'] = intval($row['page_file']);
 	$t->assign(cot_generate_pagetags($row, 'ADMIN_PAGE_', 200));
 	$t->assign([
-		'ADMIN_PAGE_ID_URL' => cot_url('page', 'c='.$row['page_cat'].'&id='.$row['page_id']),
+		'ADMIN_PAGE_ID_URL' => cot_url('page', 'c=' . $row['page_cat'] . '&id=' . $row['page_id']),
 		'ADMIN_PAGE_OWNER' => cot_build_user($row['page_ownerid'], $row['user_name']),
 		'ADMIN_PAGE_FILE_BOOL' => $row['page_file'],
-		'ADMIN_PAGE_URL_FOR_VALIDATED' => cot_confirm_url(cot_url('admin', $common_params.'&a=validate&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()), 'page', 'page_confirm_validate'),
-		'ADMIN_PAGE_URL_FOR_UNVALIDATE' => cot_confirm_url(cot_url('admin', $common_params.'&a=unvalidate&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()), 'page', 'page_confirm_unvalidate'),
-		'ADMIN_PAGE_URL_FOR_DELETED' => cot_confirm_url(cot_url('admin', $common_params.'&a=delete&id='.$row['page_id'].'&d='.$durl.'&'.cot_xg()), 'page', 'page_confirm_delete'),
-		'ADMIN_PAGE_URL_FOR_EDIT' => cot_url('page', 'm=edit&id='.$row['page_id']),
+		'ADMIN_PAGE_URL_FOR_VALIDATED' => cot_confirm_url(cot_url('admin', $common_params . '&a=validate&id=' . $row['page_id'] . '&d=' . $durl . '&' . cot_xg()), 'page', 'page_confirm_validate'),
+		'ADMIN_PAGE_URL_FOR_UNVALIDATE' => cot_confirm_url(cot_url('admin', $common_params . '&a=unvalidate&id=' . $row['page_id'] . '&d=' . $durl . '&' . cot_xg()), 'page', 'page_confirm_unvalidate'),
+		'ADMIN_PAGE_URL_FOR_DELETED' => cot_confirm_url(cot_url('admin', $common_params . '&a=delete&id=' . $row['page_id'] . '&d=' . $durl . '&' . cot_xg()), 'page', 'page_confirm_delete'),
+		'ADMIN_PAGE_URL_FOR_EDIT' => cot_url('page', 'm=edit&id=' . $row['page_id']),
 		'ADMIN_PAGE_ODDEVEN' => cot_build_oddeven($ii),
 		'ADMIN_PAGE_CAT_COUNT' => $sub_count,
 	]);
@@ -398,16 +398,16 @@ foreach ($sql_page->fetchAll() as $row) {
 }
 
 $totaldbpages = Cot::$db->countRows($db_pages);
-$sql_page_queued = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->pages . ' WHERE page_state=' .
+$sql_page_queued = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->pages . ' WHERE page_state = ' .
     COT_PAGE_STATE_PENDING);
 $sys['pagesqueued'] = $sql_page_queued->fetchColumn();
 
 $t->assign([
 	'ADMIN_PAGE_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=module&p=page'),
 	'ADMIN_PAGE_URL_ADD' => cot_url('page', 'm=add'),
-	'ADMIN_PAGE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n='.$db_pages),
+	'ADMIN_PAGE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n=' . $db_pages),
 	'ADMIN_PAGE_URL_STRUCTURE' => cot_url('admin', 'm=structure&n=page'),
-	'ADMIN_PAGE_FORM_URL' => cot_url('admin', $common_params.'&a=update_checked&d='.$durl),
+	'ADMIN_PAGE_FORM_URL' => cot_url('admin', $common_params.'&a=update_checked&d=' . $durl),
 	'ADMIN_PAGE_ORDER' => cot_selectbox($sorttype, 'sorttype', array_keys($sort_type), array_values($sort_type), false),
 	'ADMIN_PAGE_WAY' => cot_selectbox($sortway, 'sortway', array_keys($sort_way), array_values($sort_way), false),
 	'ADMIN_PAGE_FILTER' => cot_selectbox($filter, 'filter', array_keys($filter_type), array_values($filter_type), false),

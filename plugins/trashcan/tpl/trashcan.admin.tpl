@@ -1,41 +1,47 @@
 <!-- BEGIN: MAIN -->
-{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
 <div class="block button-toolbar">
-	<a title="{PHP.L.Configuration}" href="{ADMIN_TRASHCAN_CONF_URL}" class="button">{PHP.L.Configuration}</a>
-	<!-- IF {ADMIN_TRASHCAN_TOTALITEMS} > 0 -->
-	<a title="{PHP.L.Wipeall}" href="{ADMIN_TRASHCAN_WIPEALL_URL}" class="confirmLink button">{PHP.L.Wipeall}</a>
+	<a href="{ADMIN_TRASHCAN_CONF_URL}" class="button">{PHP.L.Configuration}</a>
+	<!-- IF {TOTAL_ENTRIES} > 0 -->
+	<a href="{ADMIN_TRASHCAN_WIPEALL_URL}" class="button confirmLink">{PHP.L.Wipeall}</a>
 	<!-- ENDIF -->
 </div>
-<table class="cells">
-	<tr>
-		<td class="coltop w-5">{PHP.L.Type}</td>
-		<td class="coltop w-15">{PHP.L.Date}</td>
-		<td class="coltop w-45">{PHP.L.Title}</td>
-		<td class="coltop w-20">{PHP.L.adm_setby}</td>
-		<td class="coltop w-15">{PHP.L.Action}</td>
-	</tr>
-	<!-- BEGIN: TRASHCAN_EMPTY -->
-	<tr>
-		<td class="centerall" colspan="5">{PHP.L.None}</td>
-	</tr>
-	<!-- END: TRASHCAN_EMPTY -->
-	<!-- BEGIN: TRASHCAN_ROW -->
-	<tr>
-		<td class="centerall">{ADMIN_TRASHCAN_TYPESTR_ICON}</td>
-		<td class="centerall">{ADMIN_TRASHCAN_DATE}</td>
-		<td class="centerall"><a href="{ADMIN_TRASHCAN_ROW_INFO_URL}">{ADMIN_TRASHCAN_TITLE}</a></td>
-		<td class="centerall">{ADMIN_TRASHCAN_TRASHEDBY}</td>
-		<td class="centerall action">
-			<!-- IF {ADMIN_TRASHCAN_ROW_RESTORE_ENABLED} -->
-			<a title="{PHP.L.Restore}" href="{ADMIN_TRASHCAN_ROW_RESTORE_URL}" class="button">{PHP.R.icon_undo} {PHP.L.Restore}</a>
-			<!-- ENDIF -->
-			<a title="{PHP.L.Wipe}" href="{ADMIN_TRASHCAN_ROW_WIPE_URL}" class="confirmLink button">{PHP.R.icon_delete} {PHP.L.Wipe}</a>
-		</td>
-	</tr>
-	<!-- END: TRASHCAN_ROW -->
-</table>
-<p class="paging">
-	{ADMIN_TRASHCAN_PAGINATION_PREV}{ADMIN_TRASHCAN_PAGNAV}{ADMIN_TRASHCAN_PAGINATION_NEXT}
-	<span>{PHP.L.Total}: {ADMIN_TRASHCAN_TOTALITEMS}, {PHP.L.Onpage}: {ADMIN_TRASHCAN_COUNTER_ROW}</span>
-</p>
+
+{FILE "{PHP.cfg.system_dir}/admin/tpl/warnings.tpl"}
+
+<div class="block">
+	<table class="cells">
+		<tr>
+			<td class="coltop w-5">{PHP.L.Type}</td>
+			<td class="coltop w-15">{PHP.L.Date}</td>
+			<td class="coltop w-45">{PHP.L.Title}</td>
+			<td class="coltop w-20">{PHP.L.adm_setby}</td>
+			<td class="coltop w-15">{PHP.L.Action}</td>
+		</tr>
+		<!-- BEGIN: TRASHCAN_ROW -->
+		<tr>
+			<td class="centerall">{ADMIN_TRASHCAN_TYPESTR_ICON}</td>
+			<td class="centerall">{ADMIN_TRASHCAN_DATE}</td>
+			<td class="centerall"><a href="{ADMIN_TRASHCAN_ROW_INFO_URL}">{ADMIN_TRASHCAN_TITLE}</a></td>
+			<td class="centerall">{ADMIN_TRASHCAN_TRASHEDBY}</td>
+			<td class="centerall action">
+				<!-- IF {ADMIN_TRASHCAN_ROW_RESTORE_ENABLED} -->
+				<a href="{ADMIN_TRASHCAN_ROW_RESTORE_URL}" class="button">{PHP.R.icon_undo} {PHP.L.Restore}</a>
+				<!-- ENDIF -->
+				<a href="{ADMIN_TRASHCAN_ROW_WIPE_URL}" class="button confirmLink">{PHP.R.icon_delete} {PHP.L.Wipe}</a>
+			</td>
+		</tr>
+		<!-- END: TRASHCAN_ROW -->
+		<!-- IF !{TOTAL_ENTRIES} -->
+		<tr>
+			<td class="centerall" colspan="5">{PHP.L.None}</td>
+		</tr>
+		<!-- ENDIF -->
+	</table>
+	<!-- IF {TOTAL_ENTRIES} -->
+	<p class="paging">
+		{PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}
+		<span>{PHP.L.Total}: {TOTAL_ENTRIES}, {PHP.L.Onpage}: {ENTRIES_ON_CURRENT_PAGE}</span>
+	</p>
+	<!-- ENDIF -->
+</div>
 <!-- END: MAIN -->

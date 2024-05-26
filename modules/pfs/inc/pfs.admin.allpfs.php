@@ -27,7 +27,7 @@ foreach (cot_getextplugins('admin.pfs.allpfs.first') as $pl) {
 
 unset($disp_list);
 
-$totalitems = $db->query("SELECT COUNT(DISTINCT pfs_userid) FROM $db_pfs WHERE pfs_folderid>=0")->fetchColumn();
+$totalitems = Cot::$db->query("SELECT COUNT(DISTINCT pfs_userid) FROM $db_pfs WHERE pfs_folderid >= 0")->fetchColumn();
 $pagenav = cot_pagenav(
 	'admin',
 	'm=pfs&s=allpfs',
@@ -39,9 +39,9 @@ $pagenav = cot_pagenav(
 	Cot::$cfg['jquery'] && Cot::$cfg['turnajax']
 );
 
-$sql_pfs = $db->query("SELECT DISTINCT p.pfs_userid, u.user_name, u.user_id, COUNT(*) FROM $db_pfs AS p
-	LEFT JOIN $db_users AS u ON p.pfs_userid=u.user_id
-	WHERE pfs_folderid>=0 GROUP BY p.pfs_userid ORDER BY u.user_name ASC LIMIT $d, ".Cot::$cfg['maxrowsperpage']);
+$sql_pfs = Cot::$db->query("SELECT DISTINCT p.pfs_userid, u.user_name, u.user_id, COUNT(*) FROM $db_pfs AS p
+	LEFT JOIN $db_users AS u ON p.pfs_userid = u.user_id
+	WHERE pfs_folderid >= 0 GROUP BY p.pfs_userid ORDER BY u.user_name ASC LIMIT $d, ".Cot::$cfg['maxrowsperpage']);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */

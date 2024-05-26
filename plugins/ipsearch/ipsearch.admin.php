@@ -19,10 +19,10 @@ $adminHelp = $L['ipsearch_help'];
 $adminTitle = $L['ipsearch_title'];
 
 $t = new XTemplate(cot_tplfile('ipsearch', 'plug', true));
-$t->assign(array(
-	'IPSEARCH_FORM_URL' => cot_url('admin', 'm=other&p=ipsearch&a=search&'.cot_xg()),
-	'IPSEARCH_ID' => ''
-));
+$t->assign([
+	'IPSEARCH_FORM_URL' => cot_url('admin', 'm=other&p=ipsearch&a=search&' . cot_xg()),
+	'IPSEARCH_ID' => '',
+]);
 
 if ($a == 'search') {
 	cot_check_xg();
@@ -44,43 +44,43 @@ if ($a == 'search') {
 	$res_host = @gethostbyaddr($id);
 	$res_dns = ($res_host == $id) ? 'Unknown' : $res_host;
 
-	$sql = $db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip='$ipmask1' ");
+	$sql = Cot::$db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip = '$ipmask1'");
 	$totalmatches1 = $sql->rowCount();
 
 	while ($row = $sql->fetch()) {
-		$t->assign(array(
+		$t->assign([
 			'IPSEARCH_USER_IPMASK1' => cot_build_user($row['user_id'], $row['user_name']),
-			'IPSEARCH_USER_LASTIP_IPMASK1' => cot_build_ipsearch($row['user_lastip'])
-		));
+			'IPSEARCH_USER_LASTIP_IPMASK1' => cot_build_ipsearch($row['user_lastip']),
+		]);
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK1');
 	}
 	$sql->closeCursor();
 
-	$sql = $db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask2.%' ");
+	$sql = Cot::$db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask2.%'");
 	$totalmatches2 = $sql->rowCount();
 
 	while ($row = $sql->fetch()) {
-		$t->assign(array(
+		$t->assign([
 			'IPSEARCH_USER_IPMASK2' => cot_build_user($row['user_id'], $row['user_name']),
-			'IPSEARCH_USER_LASTIP_IPMASK2' => cot_build_ipsearch($row['user_lastip'])
-		));
+			'IPSEARCH_USER_LASTIP_IPMASK2' => cot_build_ipsearch($row['user_lastip']),
+		]);
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK2');
 	}
 	$sql->closeCursor();
 
-	$sql = $db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask3.%.%' ");
+	$sql = Cot::$db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask3.%.%'");
 	$totalmatches3 = $sql->rowCount();
 
-	while($row = $sql->fetch()) {
-		$t->assign(array(
+	while ($row = $sql->fetch()) {
+		$t->assign([
 			'IPSEARCH_USER_IPMASK3' => cot_build_user($row['user_id'], $row['user_name']),
-			'IPSEARCH_USER_LASTIP_IPMASK3' => cot_build_ipsearch($row['user_lastip'])
-		));
+			'IPSEARCH_USER_LASTIP_IPMASK3' => cot_build_ipsearch($row['user_lastip']),
+		]);
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK3');
 	}
 	$sql->closeCursor();
 
-	$t->assign(array(
+	$t->assign([
 		'IPSEARCH_ID' => $id,
 		'IPSEARCH_RES_DNS' => $res_dns,
 		'IPSEARCH_TOTALMATCHES1' => $totalmatches1,
@@ -88,9 +88,10 @@ if ($a == 'search') {
 		'IPSEARCH_TOTALMATCHES2' => $totalmatches2,
 		'IPSEARCH_IPMASK2' => $ipmask2,
 		'IPSEARCH_TOTALMATCHES3' => $totalmatches3,
-		'IPSEARCH_IPMASK3' => $ipmask3
-	));
+		'IPSEARCH_IPMASK3' => $ipmask3,
+	]);
 	$t->parse('MAIN.IPSEARCH_RESULTS');
 }
+
 $t->parse('MAIN');
 $plugin_body .= $t->text('MAIN');

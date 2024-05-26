@@ -26,12 +26,12 @@ function cot_userimages_config_get($ignorecache = false)
     }
 
     $cotCfg = cot_config_load('userimages');
-    foreach($cotCfg as $entry) {
+    foreach ($cotCfg as $entry) {
         $imageSettings = explode('x', $entry['value']);
         $config[$entry['name']] = [
             'width' => $imageSettings[0],
             'height' => $imageSettings[1],
-            'crop' => isset($imageSettings[2]) ? $imageSettings[2] : ''
+            'crop' => isset($imageSettings[2]) ? $imageSettings[2] : '',
         ];
     }
 
@@ -51,26 +51,28 @@ function cot_userimages_config_get($ignorecache = false)
  * @global CotDB $db
  * @global Cache $cache
  */
-function cot_userimages_config_add($code, $width, $height, $crop='', $force=false)
+function cot_userimages_config_add($code, $width, $height, $crop = '', $force = false)
 {
 	global $cache, $db, $db_users;
 
 	if (empty($code)) {
 		return FALSE;
 	}
-	$exists = $db->query("SHOW COLUMNS FROM $db_users LIKE 'user_" . $db->prep($code)."'")->rowCount() > 0;
+	$exists = Cot::$db->query("SHOW COLUMNS FROM $db_users LIKE 'user_" . Cot::$db->prep($code)."'")->rowCount() > 0;
 	if (!$exists) {
-		$db->query("ALTER TABLE $db_users ADD `user_" . $db->prep($code) . "` varchar(255) NOT NULL default ''");
+		Cot::$db->query("ALTER TABLE $db_users ADD `user_" . Cot::$db->prep($code) . "` varchar(255) NOT NULL default ''");
 	}
 	if (!$exists || $force) {
-		$cfg = array(strval($width), strval($height));
-		if ($crop) $cfg[] = $crop;
-		$options = array(array(
+		$cfg = [strval($width), strval($height)];
+		if ($crop) {
+			$cfg[] = $crop;
+		}
+		$options = [[
 			'name' => strtolower($code),
 			'type' => COT_CONFIG_TYPE_HIDDEN,
 			'default' => implode('x', $cfg),
-			'text' => $code
-		));
+			'text' => $code,
+		]];
 		$result = cot_config_add('userimages', $options);
 		$cache && $cache->db->remove('cot_userimages_config', 'users');
 		return $result;
@@ -88,16 +90,17 @@ function cot_userimages_config_add($code, $width, $height, $crop='', $force=fals
  * @return Entries modified
  * @global Cache $cache
  */
-function cot_userimages_config_edit($code, $width, $height, $crop='')
+function cot_userimages_config_edit($code, $width, $height, $crop = '')
 {
 	global $cache;
-	if (empty($code))
-	{
+	if (empty($code)) {
 		return FALSE;
 	}
-	$cfg = array(strval($width), strval($height));
-	if($crop) $cfg[] = $crop;
-	$options = array(strtolower($code) => implode('x', $cfg));
+	$cfg = [strval($width), strval($height)];
+	if ($crop) {
+		$cfg[] = $crop;
+	}
+	$options = [strtolower($code) => implode('x', $cfg)];
 	$result = cot_config_set('userimages', $options);
 	$cache && $cache->db->remove('cot_userimages_config', 'users');
 	return $result;
@@ -111,17 +114,15 @@ function cot_userimages_config_edit($code, $width, $height, $crop='')
  * @global CotDB $db
  * @global Cache $cache
  */
-function cot_userimages_config_remove($code, $dropcolumn=true)
+function cot_userimages_config_remove($code, $dropcolumn = true)
 {
 	global $cache, $db, $db_users;
-	if (empty($code))
-	{
+	if (empty($code)) {
 		return FALSE;
 	}
 	$result = cot_config_remove('userimages', false, strtolower($code));
-	if($result && $dropcolumn)
-	{
-		$db->query("ALTER TABLE $db_users DROP `user_".$db->prep($code)."`");
+	if ($result && $dropcolumn) {
+		Cot::$db->query("ALTER TABLE $db_users DROP `user_".Cot::$db->prep($code)."`");
 	}
 	$cache && $cache->db->remove('cot_userimages_config', 'users');
 	return $result;
@@ -140,16 +141,16 @@ function cot_userimages_build($src, $code = '')
 
 	if ($src && $code && isset(Cot::$R["userimg_img_$code"])) {
         $alt =  isset(Cot::$L[$code]) ? Cot::$L[$code] : '';
-		return cot_rc("userimg_img_$code", array('src' => $src, 'alt' => $alt, 'class' => $code));
+		return cot_rc("userimg_img_$code", ['src' => $src, 'alt' => $alt, 'class' => $code]);
 	}
 
 	if ($src && $code) {
         $alt =  isset(Cot::$L[$code]) ? Cot::$L[$code] : '';
-		return cot_rc('userimg_img', array('src' => $src, 'alt' => $alt, 'class' => $code));
+		return cot_rc('userimg_img', ['src' => $src, 'alt' => $alt, 'class' => $code]);
 	}
 
 	if ($src) {
-		return cot_rc('userimg_img', array('src' => $src, 'alt' => '', 'class' => ''));
+		return cot_rc('userimg_img', ['src' => $src, 'alt' => '', 'class' => '']);
 	}
 
 	if (isset(Cot::$R["userimg_default_$code"]) && Cot::$R["userimg_default_$code"] != '') {
@@ -166,42 +167,38 @@ function cot_userimages_build($src, $code = '')
  * @param string $tag_prefix Prefix for tags
  * @return array
  */
-function cot_userimages_tags($user_data, $tag_prefix='')
+function cot_userimages_tags($user_data, $tag_prefix = '')
 {
 	global $m;
 
-	$temp_array = array();
+	$temp_array = [];
 	$userimages = cot_userimages_config_get();
 	$uid = $user_data['user_id'];
 	$usermode = $m == 'edit' || ($uid != Cot::$usr['id']);
 
-	foreach($userimages as $code => $settings)
-	{
-		if (!empty($user_data['user_'.$code]))
-		{
+	foreach ($userimages as $code => $settings) {
+		if (!empty($user_data['user_'.$code])) {
 			$delete_params = 'r=userimages'
 				.'&a=delete'
 				.'&uid='.($usermode ? $uid : '')
 				.'&m='.$m
 				.'&code='.$code
 				.'&'.cot_xg();
-			$userimg_existing = cot_rc('userimg_existing', array(
+			$userimg_existing = cot_rc('userimg_existing', [
 				'url_file' => $user_data['user_'.$code],
-				'url_delete' => cot_url('plug', $delete_params)
-			));
-		}
-		else
-		{
+				'url_delete' => cot_url('plug', $delete_params),
+			]);
+		} else {
 			$userimg_existing = '';
 		}
-		$userimg_selectfile = cot_rc('userimg_selectfile', array(
-			'form_input' => cot_inputbox('file', $usermode ? $code.':'.$uid : $code, '', array('size' => 24))
-		));
-		$userimg_html = cot_rc('userimg_html', array(
+		$userimg_selectfile = cot_rc('userimg_selectfile', [
+			'form_input' => cot_inputbox('file', $usermode ? $code.':'.$uid : $code, '', ['size' => 24])
+		]);
+		$userimg_html = cot_rc('userimg_html', [
 			'code' => $usermode ? $code.' uid_'.$uid: $code,
 			'existing' => $userimg_existing,
-			'selectfile' => $userimg_selectfile
-		));
+			'selectfile' => $userimg_selectfile,
+		]);
 
 		$temp_array[$tag_prefix . strtoupper($code)] = $userimg_html;
 		$temp_array[$tag_prefix . strtoupper($code) . '_SELECT'] = $userimg_selectfile;
@@ -250,7 +247,7 @@ function cot_userimages_process_uploads($uid = null)
             }
 
 			if (!empty($file['tmp_name']) && $file['size'] > 0 && is_uploaded_file($file['tmp_name'])) {
-				$gd_supported = array('jpg', 'jpeg', 'png', 'gif');
+				$gd_supported = ['jpg', 'jpeg', 'png', 'gif'];
 				$var = explode(".", $file['name']);
 				$file_ext = strtolower(array_pop($var));
 				$fcheck = cot_file_check($file['tmp_name'], $file['name'], $file_ext);
@@ -281,7 +278,7 @@ function cot_userimages_process_uploads($uid = null)
 						}
 					}
 
-					$sql = Cot::$db->update(Cot::$db->users, array("user_" . $code => $filepath), "user_id='" .
+					$sql = Cot::$db->update(Cot::$db->users, ["user_" . $code => $filepath], "user_id = '" .
                         $uid . "'");
 					$files++;
 

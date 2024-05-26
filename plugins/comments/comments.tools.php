@@ -31,25 +31,44 @@ $admin_comments_join_tables = '';
 $admin_comments_join_where = '';
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.comments.first') as $pl)
-{
+foreach (cot_getextplugins('admin.comments.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if ($a == 'delete')
-{
+if ($a == 'delete') {
 	cot_check_xg();
-	$db->delete($db_com, "com_id=$id");
 
-	$adminwarnings = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];//TODO: May by need deprecate adminwarnings ?
+	if (Cot::$db->delete($db_com, "com_id = $id")) {
+		cot_message('adm_comm_already_del');
+	} else {
+		cot_error('Error');
+	}
+
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.25
+        $adminwarnings = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];
+    }
+    cot_redirect(cot_url('admin', 'm=other&p=comments', '', true));
 }
 
-$is_adminwarnings = isset($adminwarnings);//TODO: May by need deprecate adminwarnings ?
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.25
+    $is_adminwarnings = isset($adminwarnings);
+}
 
-$totalitems = $db->countRows($db_com);
+$totalitems = Cot::$db->countRows($db_com);
 
-$pagenav = cot_pagenav('admin', 'm=other&p=comments', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav(
+	'admin',
+	'm=other&p=comments',
+	$d,
+	$totalitems,
+	$cfg['maxrowsperpage'],
+	'd',
+	'',
+	$cfg['jquery'] && $cfg['turnajax']
+);
 
 if (cot_module_active('page')) {
 	require_once cot_incfile('page', 'module');
@@ -58,7 +77,7 @@ if (cot_module_active('page')) {
 		"ON c.com_area = 'page' AND c.com_code = p.page_id";
 }
 
-$sql = Cot:: $db->query(
+$sql = Cot::$db->query(
     "SELECT c.*, u.* $admin_comments_join_fields " .
 	'FROM ' . Cot::$db->com . ' AS c ' .
 	'LEFT JOIN ' . Cot::$db->users . ' AS u ON u.user_id = c.com_authorid ' .
@@ -77,32 +96,26 @@ foreach ($sql->fetchAll() as $row) {
 
 	switch ($row['com_area']) {
 		case 'page':
-			$row['com_url'] = cot_url('page', "c=".$row['page_cat']."&id=".$row['com_code'], "#c".$row['com_id']);
-		break;
-
+			$row['com_url'] = cot_url('page', "c=" . $row['page_cat'] . "&id=" . $row['com_code'], "#c" . $row['com_id']);
+			break;
 		case 'weblogs':
-			$row['com_url'] = cot_url('plug', 'e=weblogs&m=page&id='.$row['com_value'], '#c'.$row['com_id']);
-		break;
-
+			$row['com_url'] = cot_url('plug', 'e=weblogs&m=page&id=' . $row['com_value'], '#c' . $row['com_id']);
+			break;
 		case 'gal':
-			$row['com_url'] = cot_url('plug', 'e=gal&pic='.$row['com_value'], '#c'.$row['com_id']);
-		break;
-
+			$row['com_url'] = cot_url('plug', 'e=gal&pic=' . $row['com_value'], '#c' . $row['com_id']);
+			break;
 		case 'users':
-			$row['com_url'] = cot_url('users', 'm=details&id='.$row['com_value'], '#c'.$row['com_id']);
-		break;
-
+			$row['com_url'] = cot_url('users', 'm=details&id=' . $row['com_value'], '#c' . $row['com_id']);
+			break;
 		case 'polls':
-			$row['com_url'] = cot_url('polls', 'id='.$row['com_value']."&comments=1", '#c'.$row['com_id']);
-		break;
-
+			$row['com_url'] = cot_url('polls', 'id=' . $row['com_value'] . "&comments=1", '#c' . $row['com_id']);
+			break;
 		case 'e_shop':
-			$row['com_url'] = cot_url('plug', 'e=e_shop&sh=product&productID='.$row['com_value'], '#c'.$row['com_id']);
-		break;
-
+			$row['com_url'] = cot_url('plug', 'e=e_shop&sh=product&productID=' . $row['com_value'], '#c' . $row['com_id']);
+			break;
 		default:
 			$row['com_url'] = '';
-		break;
+			break;
 	}
 	
 	if (!empty($row['user_id']) && !empty($row['user_name'])) {
@@ -111,10 +124,10 @@ foreach ($sql->fetchAll() as $row) {
 		// Comment from guest
 		$author = htmlspecialchars($row['com_author']);
 	} else {
-		$author = \Cot::$L['Deleted'];
+		$author = Cot::$L['Deleted'];
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_COMMENTS_ITEM_DEL_URL' => cot_url(
             'admin',
             ['m' => 'other', 'p' => 'comments', 'a' => 'delete', 'id' => $row['com_id'], 'x' => Cot::$sys['xk']]
@@ -129,19 +142,19 @@ foreach ($sql->fetchAll() as $row) {
 		'ADMIN_COMMENTS_TEXT' => cot_parse($row['com_text'], Cot::$cfg['plugin']['comments']['markup']),
         'ADMIN_COMMENTS_TEXT_TRUNCATED' => htmlspecialchars(cot_cutstring(strip_tags($row['com_text']), 100)),
 		'ADMIN_COMMENTS_URL' => $row['com_url'],
-		'ADMIN_COMMENTS_ODDEVEN' => cot_build_oddeven($ii)
-	));
+		'ADMIN_COMMENTS_ODDEVEN' => cot_build_oddeven($ii),
+	]);
 
     if (!empty(Cot::$extrafields[Cot::$db->com])) {
         foreach (Cot::$extrafields[Cot::$db->com] as $exfld) {
 			$tag = mb_strtoupper($exfld['field_name']);
             $exfld_title = cot_extrafield_title($exfld, 'comments_');
 
-			$t->assign(array(
+			$t->assign([
 				'ADMIN_COMMENTS_' . $tag . '_TITLE' => $exfld_title,
 				'ADMIN_COMMENTS_' . $tag => cot_build_extrafields_data('comments', $exfld, $row['com_'.$exfld['field_name']]),
 				'ADMIN_COMMENTS_' . $tag . '_VALUE' => $row['com_'.$exfld['field_name']],
-			));
+			]);
 		}
 	}
 
@@ -156,19 +169,27 @@ foreach ($sql->fetchAll() as $row) {
 	$ii++;
 }
 
-$t->assign(array(
+$t->assign([
 	'ADMIN_COMMENTS_CONFIG_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p=comments'),
-	'ADMIN_COMMENTS_ADMINWARNINGS' => isset($adminwarnings) ? $adminwarnings : '',//TODO: May by need deprecate adminwarnings ?
-	'ADMIN_COMMENTS_PAGINATION_PREV' => $pagenav['prev'],
-	'ADMIN_COMMENTS_PAGNAV' => $pagenav['main'],
-	'ADMIN_COMMENTS_PAGINATION_NEXT' => $pagenav['next'],
-	'ADMIN_COMMENTS_TOTALITEMS' => $totalitems,
-	'ADMIN_COMMENTS_COUNTER_ROW' => $ii
-));
+	'ADMIN_COMMENTS_COUNTER_ROW' => $ii,
+]);
+
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.25
+    $t->assign([
+        'ADMIN_COMMENTS_ADMINWARNINGS' => isset($adminwarnings) ? $adminwarnings : '',
+        'ADMIN_COMMENTS_PAGINATION_PREV' => $pagenav['prev'],
+        'ADMIN_COMMENTS_PAGNAV' => $pagenav['main'],
+        'ADMIN_COMMENTS_PAGINATION_NEXT' => $pagenav['next'],
+        'ADMIN_COMMENTS_TOTALITEMS' => $totalitems,
+    ]);
+}
+$t->assign(cot_generatePaginationTags($pagenav));
+
+cot_display_messages($t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.comments.tags') as $pl)
-{
+foreach (cot_getextplugins('admin.comments.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
