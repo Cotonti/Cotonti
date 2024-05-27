@@ -1,5 +1,6 @@
 <!-- BEGIN: MAIN -->
 <div class="block">
+    <div class="breadcrumbs">{PAGEEDIT_BREADCRUMBS}</div>
     <h2 class="page">{PAGEEDIT_PAGETITLE} #{PAGEEDIT_FORM_ID}</h2>
     {FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
     <form action="{PAGEEDIT_FORM_SEND}" enctype="multipart/form-data" method="post" name="pageform">
@@ -24,7 +25,7 @@
                 <td>{PHP.L.Date}:</td>
                 <td>
                     {PAGEEDIT_FORM_DATE}
-                    <p class="small">{PAGEEDIT_FORM_DATENOW} {PHP.L.page_date_now}</p>
+                    <p class="small" style="margin-top: 6px">{PAGEEDIT_FORM_DATENOW} {PHP.L.page_date_now}</p>
                 </td>
             </tr>
             <tr>

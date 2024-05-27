@@ -71,7 +71,7 @@ switch($a) {
 	/* =============== */
         $extDir = $dir . '/' . $code;
         if (!file_exists($extDir)) {
-            cot_die_message(907);
+            cot_die_message(404);
         }
 		$ext_info = $extDir . '/' . $code . '.setup.php';
         $info = false;

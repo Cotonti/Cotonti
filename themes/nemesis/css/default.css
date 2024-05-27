@@ -153,7 +153,7 @@ table.main 		{ border-collapse:collapse; width:100%; }
 table.main td 	{ padding:2px 0; margin:0; border:0; }
 
 table.cells 	{ border-collapse:collapse; width:100%; }
-table.cells td	{ padding:4px 8px; border:1px solid #e7e7e7; }
+table.cells td	{ padding:6px 8px; border:1px solid #e7e7e7; }
 
 table.list 		{ border-collapse:collapse; width:100%; }
 table.list td 	{ padding:5px 5px 5px 0; border-bottom:1px dashed #ccc; }
@@ -194,8 +194,19 @@ button::-moz-focus-inner { padding:0; border:none; }
 
 .odd	{ background-color:#fff!important; }
 .even	{ background-color:#f1f1f1!important; }
-.code	{ color:#000; background:#e3e3e3; border:1px solid #ccc; padding:2px 15px; margin:5px 0; font-family:monospace; font-size:1.1em; white-space:pre-wrap; }
-
+.code {
+	color:#000;
+	background:#e3e3e3;
+	border:1px solid #ccc;
+	padding:2px 15px;
+	margin:5px 0;
+	font-family:monospace;
+	font-size:1.1em;
+	white-space:pre-wrap;
+}
+.breadcrumbs{
+	margin-bottom: 7px;
+}
 .clear	{ clear:both; }
 .lhn	{ line-height:normal; }
 .strong	{ font-weight:bold; }

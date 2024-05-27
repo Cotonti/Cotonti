@@ -126,14 +126,19 @@ foreach (cot_getextplugins('page.edit.main') as $pl) {
 require_once Cot::$cfg['system_dir'] . '/header.php';
 $t = new XTemplate($mskin);
 
+$breadcrumbs = cot_structure_buildpath('page', $pag['page_cat']);
+$breadcrumbs[] = [cot_page_url($pag), $pag['page_title']];
+$breadcrumbs[] = Cot::$L['page_edittitle'];
+
 $pageedit_array = [
 	'PAGEEDIT_PAGETITLE' => Cot::$L['page_edittitle'],
 	'PAGEEDIT_SUBTITLE' => Cot::$L['page_editsubtitle'],
-	'PAGEEDIT_FORM_SEND' => cot_url('page', "m=edit&a=update&id=".$pag['page_id']),
+    'PAGEEDIT_BREADCRUMBS' => cot_breadcrumbs($breadcrumbs, Cot::$cfg['homebreadcrumb']),
+	'PAGEEDIT_FORM_SEND' => cot_url('page', ['m' => 'edit', 'a' => 'update', 'id' => $pag['page_id']]),
 	'PAGEEDIT_FORM_ID' => $pag['page_id'],
 	'PAGEEDIT_FORM_STATE' => $pag['page_state'],
 	'PAGEEDIT_FORM_STATUS' => $pag['page_status'],
-	'PAGEEDIT_FORM_LOCAL_STATUS' => Cot::$L['page_status_'.$pag['page_status']],
+	'PAGEEDIT_FORM_LOCAL_STATUS' => Cot::$L['page_status_' . $pag['page_status']],
 	'PAGEEDIT_FORM_CAT' => cot_selectbox_structure('page', $pag['page_cat'], 'rpagecat'),
 	'PAGEEDIT_FORM_CAT_SHORT' => cot_selectbox_structure('page', $pag['page_cat'], 'rpagecat', $c),
 	'PAGEEDIT_FORM_KEYWORDS' => cot_inputbox('text', 'rpagekeywords', $pag['page_keywords'], array('maxlength' => '255')),
