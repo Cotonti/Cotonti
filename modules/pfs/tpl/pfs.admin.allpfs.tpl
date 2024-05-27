@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
 <div class="block button-toolbar">
 	<a href="{ADMIN_PFS_URL_CONFIG}" class="button">{PHP.L.Configuration}</a>
-	<a href="{ADMIN_PFS_URL_SFS}" class="button">{PHP.L.SFS}</a>
+	<a href="{PHP|cot_url('pfs', 'userid=0')}" class="button">{PHP.L.SFS}</a>
 </div>
 
 <div class="block">
