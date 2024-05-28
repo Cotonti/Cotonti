@@ -39,7 +39,7 @@ $standardAdmin = [
     'extensions',
     'home',
     'infos',
-	'log',
+    'log',
     'other',
     'phpinfo',
     'rights',
@@ -51,8 +51,9 @@ $standardAdmin = [
 
 $includeFile = (empty($m)) ? 'home' : $m;
 $includeFile = (empty($s)) ? $includeFile : $includeFile . '.' . $s;
-if (in_array($includeFile, $standardAdmin) && file_exists(cot_incfile('admin', 'module', $includeFile))) {
-	$includeFile = cot_incfile('admin', 'module', $includeFile);
+$standardIncFile = cot_incfile('admin', 'module', $includeFile);
+if (in_array($includeFile, $standardAdmin) && file_exists($standardIncFile)) {
+	$includeFile = $standardIncFile;
 } else {
 	Cot::$env['ext'] = $m;
 	$adminTitle = isset($cot_modules[$m]['title']) ? $cot_modules[$m]['title'] : '';
