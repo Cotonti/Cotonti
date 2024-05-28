@@ -31,20 +31,35 @@ foreach (cot_getextplugins('admin.main') as $pl) {
 }
 /* ===== */
 
-$standard_admin = ['cache.disk', 'cache', 'config', 'extrafields', 'extensions', 'home', 'infos',
-	'log', 'other', 'phpinfo', 'rights', 'rightsbyitem', 'structure', 'urls', 'users'];
+$standardAdmin = [
+    'cache.disk',
+    'cache',
+    'config',
+    'extrafields',
+    'extensions',
+    'home',
+    'infos',
+	'log',
+    'other',
+    'phpinfo',
+    'rights',
+    'rightsbyitem',
+    'structure',
+    'urls',
+    'users'
+];
 
-$inc_file = (empty($m)) ? 'home' : $m;
-$inc_file = (empty($s)) ? $inc_file : $inc_file.'.'.$s;
-if (in_array($inc_file, $standard_admin) && file_exists(cot_incfile('admin', 'module', $inc_file))) {
-	$inc_file = cot_incfile('admin', 'module', $inc_file);
+$includeFile = (empty($m)) ? 'home' : $m;
+$includeFile = (empty($s)) ? $includeFile : $includeFile . '.' . $s;
+if (in_array($includeFile, $standardAdmin) && file_exists(cot_incfile('admin', 'module', $includeFile))) {
+	$includeFile = cot_incfile('admin', 'module', $includeFile);
 } else {
 	Cot::$env['ext'] = $m;
 	$adminTitle = isset($cot_modules[$m]['title']) ? $cot_modules[$m]['title'] : '';
-	$inc_file = Cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
+	$includeFile = Cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
 }
 
-if (!file_exists($inc_file)) {
+if (!file_exists($includeFile)) {
 	cot_die();
 }
 
@@ -52,6 +67,8 @@ $adminPath = [[cot_url('admin'), Cot::$L['Adminpanel']]];
 $adminTitle = isset($adminTitle) ? $adminTitle : '';
 $adminHelp = isset($adminHelp) ? $adminHelp : '';
 $adminMain = isset($adminMain) ? $adminMain : '';
+
+require $includeFile;
 
 // @deprecated in 0.9.24 (for backward compatibility)
 if (!empty($adminhelp)) {
@@ -65,9 +82,7 @@ if (!empty($adminpath)) {
 }
 // /@deprecated in 0.9.24
 
-require $inc_file;
-
-$title_params = [
+$titleParams = [
 	'ADMIN' => Cot::$L['Administration'],
 	'SUBTITLE' => $adminTitle,
 ];
@@ -76,19 +91,19 @@ if (!isset(Cot::$out['head'] )) {
 }
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 Cot::$out['subtitle'] = empty($adminTitle)
-    ? cot_title('{ADMIN}', $title_params)
-    : cot_title('{SUBTITLE} - {ADMIN}', $title_params);
+    ? cot_title('{ADMIN}', $titleParams)
+    : cot_title('{SUBTITLE} - {ADMIN}', $titleParams);
 
 require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate(cot_tplfile('admin', 'core'));
 
-$t->assign(array(
+$t->assign([
 	'ADMIN_BREADCRUMBS' => cot_breadcrumbs($adminPath, false),
 	'ADMIN_TITLE' => $adminTitle,
 	'ADMIN_MAIN' => $adminMain,
-	'ADMIN_HELP' => $adminHelp
-));
+	'ADMIN_HELP' => $adminHelp,
+]);
 
 /* === Hook for the plugins === */
 foreach (cot_getextplugins('admin.tags') as $pl) {
