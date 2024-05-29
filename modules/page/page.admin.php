@@ -16,7 +16,7 @@ Hooks=admin
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', 'any');
-cot_block($usr['isadmin']);
+cot_block(Cot::$usr['isadmin']);
 
 $t = new XTemplate(cot_tplfile('page.admin', 'module', true));
 
@@ -83,11 +83,11 @@ if ($pg > 1) {
 if ($filter == 'all') {
 	$sqlwhere = "1 ";
 } elseif ($filter == 'valqueue') {
-	$sqlwhere = "page_state = 1";
+	$sqlwhere = 'page_state = ' . COT_PAGE_STATE_PENDING ;
 } elseif ($filter == 'validated') {
-	$sqlwhere = "page_state = 0";
+	$sqlwhere = 'page_state = ' . COT_PAGE_STATE_PUBLISHED ;
 } elseif ($filter == 'drafts') {
-	$sqlwhere = "page_state = 2";
+	$sqlwhere = 'page_state = ' . COT_PAGE_STATE_DRAFT;
 } elseif ($filter == 'expired') {
 	$sqlwhere = "page_begin > {$sys['now']} OR (page_expire <> 0 AND page_expire < {$sys['now']})";
 }

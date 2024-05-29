@@ -12,7 +12,7 @@ Cot::$db->update(
 
 $exists = (int) Cot::$db->query(
     'SELECT COUNT(*) FROM ' . Cot::$db->quoteTableName(Cot::$db->config)
-        . " WHERE `config_owner` = 'core' AND `config_cat` = 'security' AND `config_name` = 'logwronginput'"
+        . " WHERE `config_owner` = 'core' AND `config_cat` = 'security' AND `config_name` = 'logWrongInput'"
 )->fetchColumn();
 if (!$exists) {
     Cot::$db->query(
@@ -20,6 +20,6 @@ if (!$exists) {
         . ' (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, '
             . '`config_default`, `config_variants`, `config_text`) '
         . " VALUES "
-        . "('core', 'security', '40', 'logwronginput', 3, '1', '1', '', '')"
+        . "('core', 'security', '40', 'logWrongInput', 3, '0', '0', '', '')"
     );
 }
