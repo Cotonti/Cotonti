@@ -3913,9 +3913,11 @@ function cot_log($text, $group = 'adm', $type = '', $status = '', $extra_data = 
  */
 function cot_log_import($s, $e, $v, $o)
 {
-	if ($e == 'PSW') $o = str_repeat('*', mb_strlen($o));
-	$text = "A variable type check failed, expecting ".$s."/".$e." for '".$v."' : ".$o;
-	cot_log($text, 'sec', 'input', 'error');
+	if (isset(Cot::$cfg['logwronginput']) && Cot::$cfg['logwronginput']) {
+		if ($e == 'PSW') $o = str_repeat('*', mb_strlen($o));
+		$text = "A variable type check failed, expecting ".$s."/".$e." for '".$v."' : ".$o;
+		cot_log($text, 'sec', 'input', 'error');
+	}
 }
 
 /**

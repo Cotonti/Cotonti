@@ -120,6 +120,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','security','23','shieldzhammer',2,'25','25','5,10,15,20,25,30,40,50,100',''),
 ('core','security','31','captchamain',4,'mcaptcha','mcaptcha','cot_captcha_list()',''),
 ('core','security','32','captcharandom',3,'0','0','',''),
+('core','security','40','logwronginput',3,'1','1','',''),
 ('core','security','41','referercheck',3,'1','1','',''),
 ('core','security','42','hashfunc',4,'sha256','sha256','cot_hash_funcs()',''),
 ('core','security','97','devmode',3,'0','0','',''),
