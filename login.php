@@ -177,7 +177,7 @@ if ($a === 'check') {
     if (!$row) {
         Cot::$env['status'] = '401 Unauthorized';
         cot_shield_update(7, "Log in");
-        cot_log("Log in failed, user : " . $rusername, 'users', 'login', 'error');
+        cot_log('Log in failed, user: ' . $rusername, 'users', 'login', 'error');
 
         /* === Hook === */
         foreach (cot_getextplugins('users.auth.check.fail') as $pl) {
@@ -192,7 +192,6 @@ if ($a === 'check') {
     $row['user_maingrp'] = (int) $row['user_maingrp'];
 
     $authResult = cot_user_authorize($row, $rremember);
-    $authResult = [];
     if (!empty($authResult['error'])) {
         switch ($authResult['error']) {
             case COT_USER_AUTH_ERROR_FORBIDDEN:
