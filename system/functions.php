@@ -5207,6 +5207,41 @@ function cot_wraptext($str, $wrap = 80)
 	return $str;
 }
 
+if (!function_exists('mb_ucfirst')) {
+    /**
+     * Make a string's first character uppercase (Multibyte)
+     * @param string $str
+     * @param ?string $encoding
+     * @return string
+     * @see https://wiki.php.net/rfc/mb_ucfirst
+     */
+    function mb_ucfirst($str, $encoding = null)
+    {
+        if ($encoding) {
+            return mb_convert_case(mb_substr($str, 0, 1, $encoding), MB_CASE_TITLE, $encoding)
+                . mb_substr($str, 1, null, $encoding);
+        }
+        return mb_convert_case(mb_substr($str, 0, 1), MB_CASE_TITLE) . mb_substr($str, 1, null);
+    }
+}
+
+if (!function_exists('mb_lcfirst')) {
+    /**
+     * Make a string's first character lowercase (Multibyte)
+     * @param string $str
+     * @param ?string $encoding
+     * @return string
+     * @see https://wiki.php.net/rfc/mb_ucfirst
+     */
+    function mb_lcfirst($str, $encoding = null)
+    {
+        if ($encoding) {
+            return mb_strtolower(mb_substr($str, 0, 1, $encoding), $encoding) . mb_substr($str, 1, null, $encoding);
+        }
+        return mb_strtolower(mb_substr($str, 0, 1)) . mb_substr($str, 1, null);
+    }
+}
+
 /*
  * ============================== Resource Strings ============================
  */
@@ -6019,37 +6054,55 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialcharsBypass = fals
 }
 
 /**
- * Constructs a modified version of a current URL.
- * @param  array   $params                  Modified params
- * @param  string  $tail                    URL postfix, e.g. anchor
- * @param  bool    $htmlspecialchars_bypass If TRUE, will not convert & to &amp; and so on.
- * @param  bool    $ignore_appendix         If TRUE, $cot_url_appendix will be ignored for this URL
- * @return string                           Valid HTTP URL
+ * Transforms parameters into absolute URL by following user-defined rules.
+ * @see cot_url()
+ *
+ * @param string $name Module or script name
+ * @param array|string $params URL parameters as array or parameter string
+ * @param string $tail URL postfix, e.g. anchor
+ * @param bool $htmlspecialcharsBypass If TRUE, will not convert & to &amp; and so on.
+ * @param bool $ignoreAppendix If TRUE, $cot_url_appendix will be ignored for this URL
+ * @return string Valid HTTP URL
  */
-function cot_url_modify($params = array(), $tail = '', $htmlspecialchars_bypass = false, $ignore_appendix = false)
+function cot_absoluteUrl($name, $params = '', $tail = '', $htmlspecialcharsBypass = false, $ignoreAppendix = false)
+{
+    $result = cot_url($name, $params, $tail, $htmlspecialcharsBypass, $ignoreAppendix);
+    if (!cot_url_check($result)) {
+        $result = COT_ABSOLUTE_URL . $result;
+    }
+    return $result;
+}
+
+/**
+ * Constructs a modified version of a current URL.
+ * @param array $params Modified params
+ * @param string $tail URL postfix, e.g. anchor
+ * @param bool $htmlspecialcharsBypass If TRUE, will not convert & to &amp; and so on.
+ * @param bool $ignoreAppendix If TRUE, $cot_url_appendix will be ignored for this URL
+ * @return string Valid HTTP URL
+ */
+function cot_url_modify($params = [], $tail = '', $htmlspecialcharsBypass = false, $ignoreAppendix = false)
 {
 	// Preprocess arguments
-	if (is_string($params))
-	{
+	if (is_string($params)) {
 		$params = cot_parse_str($params);
 	}
-	if (!is_array($params))
-	{
-		$params = array();
+	if (!is_array($params)) {
+		$params = [];
 	}
 	$area = defined('COT_PLUG') ? 'plug' : Cot::$env['ext'];
 	$params = array_merge($_GET, $params);
-	if (!defined('COT_PLUG'))
-	{
+	if (!defined('COT_PLUG')) {
 		unset($params['e']);
 	}
 	unset($params['rwr']);
+
 	return cot_url(
 		$area,
 		$params,
 		$tail,
-		$htmlspecialchars_bypass,
-		$ignore_appendix
+		$htmlspecialcharsBypass,
+        $ignoreAppendix
 	);
 }
 

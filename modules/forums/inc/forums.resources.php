@@ -36,18 +36,18 @@ $R['forums_code_topic_pages'] = Cot::$L['Pages'].': <span class="pagenav_small">
  */
 
 
-$R['forums_code_bottom'] = '<a name="bottom" id="bottom"></a>';
-$R['forums_code_newpost_mark'] = '<a name="np" id="np"></a>';
+$R['forums_code_bottom'] = '<a id="bottom"></a>';
+$R['forums_code_newpost_mark'] = '<a id="np"></a>';
 
-$R['forums_rowquote'] = '<a href="{$url}">'.Cot::$L['Quote'].'</a>';
-$R['forums_rowedit'] = '<a href="{$url}">'.Cot::$L['Edit'].'</a>';
-$R['forums_rowdelete'] = '<a href="{$url}" class="confirmLink">'.Cot::$L['Delete'].'</a>';
+$R['forums_rowquote'] = '<a href="{$url}">' . Cot::$L['Quote'] . '</a>';
+$R['forums_rowedit'] = '<a href="{$url}">' . Cot::$L['Edit'] . '</a>';
+$R['forums_rowdelete'] = '<a href="{$url}" class="confirmLink">' . Cot::$L['Delete'] . '</a>';
 
-$R['forums_code_post_anchor'] = '<a name="post{$id}" id="post{$id}"></a>';
+$R['forums_code_post_anchor'] = '<a id="post{$id}"></a>';
 
 $R['forums_code_quote'] = "{\$postername}:\n{\$text}\n\n";
 
-$R['forums_code_unread'] = '<a name="unread" id="unread"></a>';
+$R['forums_code_unread'] = '<a id="unread"></a>';
 $R['forums_code_update'] = "\n\n{\$updated}\n\n";
 
 $R['forums_noavatar'] = '<img src="datas/defaultav/blank.png" alt="" />';

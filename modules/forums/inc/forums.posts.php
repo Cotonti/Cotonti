@@ -591,29 +591,28 @@ if (Cot::$usr['id'] > 0 && $rowt['ft_firstposterid'] == Cot::$usr['id']) {
 	$rowt['ft_icon_type_ex'] .= '_posted';
 }
 
-$t->assign(array(
+$t->assign([
 	'FORUMS_POSTS_ICON' => $rowt['ft_icon'],
 	'FORUMS_POSTS_ICON_TYPE' => $rowt['ft_icon_type'],
-	'FORUMS_POSTS_ICON_TYPE_EX' => $rowt['ft_icon_type_ex']
-));
+	'FORUMS_POSTS_ICON_TYPE_EX' => $rowt['ft_icon_type_ex'],
+]);
 
 
-if(!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
+if (!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
     foreach (Cot::$extrafields[Cot::$db->forum_topics] as $exfld) {
         $tag = mb_strtoupper($exfld['field_name']);
         $exfld_title = cot_extrafield_title($exfld, 'forums_topic_');
-        $t->assign(array(
+        $t->assign([
             'FORUMS_POSTS_TOPIC_' . $tag . '_TITLE' => $exfld_title,
             'FORUMS_POSTS_TOPIC_' . $tag => cot_build_extrafields_data('forums', $exfld, $rowt['ft_' . $exfld['field_name']],
                 (Cot::$cfg['forums']['markup'] && Cot::$cfg['forums']['cat_' . $s]['allowbbcodes'])),
-            'FORUMS_POSTS_TOPIC_' . $tag . '_VALUE' => $rowt['ft_' . $exfld['field_name']]
-        ));
+            'FORUMS_POSTS_TOPIC_' . $tag . '_VALUE' => $rowt['ft_' . $exfld['field_name']],
+        ]);
     }
 }
 
 /* === Hook  === */
-foreach (cot_getextplugins('forums.posts.tags') as $pl)
-{
+foreach (cot_getextplugins('forums.posts.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

@@ -42,19 +42,23 @@
 <!-- IF !{COMMENTS_IS_AJAX} -->
 <div id="comments">
 <!-- ENDIF -->
-    <a name="comments"></a>
     <div class="block" <!-- IF {COMMENTS_DISPLAY} == 'none' -->style="display:none;"<!-- ENDIF -->>
         <!-- BEGIN: COMMENTS_ROW -->
-        <div class="comments1">
-            <p>{COMMENTS_ROW_AUTHOR_AVATAR}</p>
-            <p><a href="{COMMENTS_ROW_URL}" id="com{COMMENTS_ROW_ID}">{COMMENTS_ROW_ORDER}.</a> {COMMENTS_ROW_AUTHOR}</p>
-            <p>{COMMENTS_ROW_DATE}</p>
+        <div id="com{COMMENTS_ROW_ID}" class="comment-row">
+            <div class="comments1">
+                <p>{COMMENTS_ROW_AUTHOR_AVATAR}</p>
+                <p><a href="{COMMENTS_ROW_URL}">{COMMENTS_ROW_ORDER}.</a> {COMMENTS_ROW_AUTHOR}</p>
+                <p>{COMMENTS_ROW_DATE}</p>
+            </div>
+            <div class="comments2">
+                {COMMENTS_ROW_TEXT}
+                <!-- IF {COMMENTS_ROW_ADMIN} OR {COMMENTS_ROW_EDIT} -->
+                <div class="margintop10" style="text-align: right">
+                {COMMENTS_ROW_ADMIN} {COMMENTS_ROW_EDIT}
+                </div>
+            </div>
+            <hr class="clear marginbottom10"/>
         </div>
-        <div class="comments2">
-            <p>{COMMENTS_ROW_TEXT}</p>
-            {COMMENTS_ROW_ADMIN}{COMMENTS_ROW_EDIT}
-        </div>
-        <hr class="clear marginbottom10"/>
         <!-- END: COMMENTS_ROW -->
 
         <!-- IF {COMMENTS_PAGINATION} -->

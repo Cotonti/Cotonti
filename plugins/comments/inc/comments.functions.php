@@ -498,19 +498,21 @@ function cot_comments_enabled($ext_name, $cat = '', $item = '')
  * @see cot_comments_count()
  * @global CotDB $db
  */
-function cot_comments_link($link_area, $link_params, $ext_name, $code, $cat = '', $row = array())
+function cot_comments_link($link_area, $link_params, $ext_name, $code, $cat = '', $row = [])
 {
 	global $cfg, $db, $R, $L, $db_com;
 
-	if (!cot_comments_enabled($ext_name, $cat, $code))
-	{
+	if (!cot_comments_enabled($ext_name, $cat, $code)) {
 		return '';
 	}
 
-	$res = cot_rc('comments_link', array(
-		'url' => cot_url($link_area, $link_params, '#comments'),
-		'count' => $cfg['plugin']['comments']['countcomments'] ? cot_comments_count($ext_name, $code, $row) : ''
-	));
+	$res = cot_rc(
+        'comments_link',
+        [
+            'url' => cot_url($link_area, $link_params, '#comments'),
+            'count' => $cfg['plugin']['comments']['countcomments'] ? cot_comments_count($ext_name, $code, $row) : '',
+	    ]
+    );
 	return $res;
 }
 
