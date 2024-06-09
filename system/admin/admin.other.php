@@ -52,14 +52,24 @@ if (!empty($p)) {
 	// $adminHelp = Cot::$L['Description'].' : '.$info['Description'].'<br />'.Cot::$L['Version'].' : '.$info['Version'].'<br />'.Cot::$L['Date'].' : '.$info['Date'].'<br />'.Cot::$L['Author'].' : '.$info['Author'].'<br />'.Cot::$L['Copyright'].' : '.$info['Copyright'].'<br />'.Cot::$L['Notes'].' : '.$info['Notes'];
 
     $adminMain = '';
+    $legacyMode = isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode'];
     foreach ($extp as $k => $pl) {
-        $plugin_body = '';
-        include_once Cot::$cfg['plugins_dir'] . '/' . $pl['pl_file'];
-        $adminMain .= $plugin_body;
-    }
+        if ($legacyMode) {
+            /** @deprecated in 0.9.25 */
+            $plugin_body = '';
+        }
 
+        $pluginContent = '';
+        include_once Cot::$cfg['plugins_dir'] . '/' . $pl['pl_file'];
+        $adminMain .= $pluginContent;
+
+        if ($legacyMode) {
+            // @deprecated in 0.9.25
+            $adminMain .= $plugin_body;
+        }
+    }
 } else {
-	$adminPath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
+	$adminPath[] = [cot_url('admin', ['m' => 'other']), Cot::$L['Other']];
 	$adminTitle = Cot::$L['Other'];
 	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'a');
 	cot_block(Cot::$usr['auth_read']);

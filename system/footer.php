@@ -8,13 +8,12 @@
 defined('COT_CODE') or die('Wrong URL');
 
 /* === Hook === */
-foreach (cot_getextplugins('footer.first') as $pl)
-{
+foreach (cot_getextplugins('footer.first') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-if (!COT_AJAX) {
+if (Cot::$sys['displayFooter']) {
 	$mtpl_type = (
         defined('COT_ADMIN')
         || (

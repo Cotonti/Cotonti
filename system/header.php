@@ -17,67 +17,71 @@ foreach (cot_getextplugins('header.first') as $pl) {
 }
 /* ===== */
 
-Cot::$out['logstatus'] = (Cot::$usr['id'] > 0) ?
-    Cot::$L['hea_youareloggedas'] . ' ' . Cot::$usr['name'] : Cot::$L['hea_youarenotlogged'];
-Cot::$out['userlist'] = (cot_auth('users', 'a', 'R')) ?
-    cot_rc_link(cot_url('users'), Cot::$L['Users']) : '';
-
-unset($title_tags, $title_data);
-
-Cot::$out['subtitle'] = isset(Cot::$out['subtitle']) ? Cot::$out['subtitle'] : '';
-Cot::$out['head'] = isset(Cot::$out['head']) ? Cot::$out['head'] : '';
-Cot::$out['head_head'] = isset(Cot::$out['head_head']) ? Cot::$out['head_head'] : '';
-
-$title_page_num = '';
-if (!empty($pg) && is_numeric($pg) && $pg > 1) {
-	// Appending page number to subtitle and meta description
-	$title_page_num = htmlspecialchars(cot_rc('code_title_page_num', ['num' => $pg]));
-	Cot::$out['subtitle'] .= $title_page_num;
-}
-
-$title_params = [
-	'MAINTITLE' => Cot::$cfg['maintitle'],
-	'DESCRIPTION' => Cot::$cfg['subtitle'],
-	'SUBTITLE' => Cot::$out['subtitle'],
-];
-if (defined('COT_INDEX')) {
-	Cot::$out['fulltitle'] = cot_title('title_header_index', $title_params);
-
-} else {
-	Cot::$out['fulltitle'] = cot_title('title_header', $title_params);
-}
-
-if (Cot::$cfg['jquery'] && Cot::$cfg['jquery_cdn']) {
-	Resources::linkFile(Cot::$cfg['jquery_cdn'], 'js', 30);
-}
-$html = Resources::render();
-if ($html) {
-    Cot::$out['head_head'] = $html . Cot::$out['head_head'];
-}
-
 if (empty(Cot::$out['meta_contenttype'])) {
     Cot::$out['meta_contenttype'] = Cot::$cfg['xmlclient'] ? 'application/xml' : 'text/html';
 }
-Cot::$out['basehref'] = Cot::$R['code_basehref'];
-Cot::$out['meta_charset'] = 'UTF-8';
-Cot::$out['meta_desc'] = (empty(Cot::$out['desc'])
-    ? Cot::$cfg['subtitle']
-    : htmlspecialchars(Cot::$out['desc'])) . $title_page_num;
-Cot::$out['meta_keywords'] = empty(Cot::$out['keywords'])
-    ? Cot::$cfg['metakeywords']
-    : htmlspecialchars(Cot::$out['keywords']);
-Cot::$out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
-Cot::$out['head_head'] .= Cot::$out['head'];
 
 if (!headers_sent()) {
     $lastModified = !empty(Cot::$env['last_modified']) ? Cot::$env['last_modified'] : 0;
-	cot_sendheaders(
+    cot_sendheaders(
         Cot::$out['meta_contenttype'],
         isset(Cot::$env['status']) ? Cot::$env['status'] : '200 OK'
         , $lastModified
     );
 }
-if (!COT_AJAX) {
+if (Cot::$sys['displayHeader']) {
+    Cot::$out['logstatus'] = (Cot::$usr['id'] > 0)
+        ? Cot::$L['hea_youareloggedas'] . ' ' . Cot::$usr['name']
+        : Cot::$L['hea_youarenotlogged'];
+    Cot::$out['userlist'] = (cot_auth('users', 'a', 'R'))
+        ? cot_rc_link(cot_url('users'), Cot::$L['Users'])
+        : '';
+
+    unset($title_tags, $title_data);
+
+    Cot::$out['subtitle'] = isset(Cot::$out['subtitle']) ? Cot::$out['subtitle'] : '';
+    Cot::$out['head'] = isset(Cot::$out['head']) ? Cot::$out['head'] : '';
+    Cot::$out['head_head'] = isset(Cot::$out['head_head']) ? Cot::$out['head_head'] : '';
+
+    $title_page_num = '';
+    if (!empty($pg) && is_numeric($pg) && $pg > 1) {
+        // Appending page number to subtitle and meta description
+        $title_page_num = htmlspecialchars(cot_rc('code_title_page_num', ['num' => $pg]));
+        Cot::$out['subtitle'] .= $title_page_num;
+    }
+
+    $title_params = [
+        'MAINTITLE' => Cot::$cfg['maintitle'],
+        'DESCRIPTION' => Cot::$cfg['subtitle'],
+        'SUBTITLE' => Cot::$out['subtitle'],
+    ];
+    if (defined('COT_INDEX')) {
+        Cot::$out['fulltitle'] = cot_title('title_header_index', $title_params);
+
+    } else {
+        Cot::$out['fulltitle'] = cot_title('title_header', $title_params);
+    }
+
+    if (Cot::$cfg['jquery'] && Cot::$cfg['jquery_cdn']) {
+        Resources::linkFile(Cot::$cfg['jquery_cdn'], 'js', 30);
+    }
+
+    $html = Resources::render();
+    if ($html) {
+        Cot::$out['head_head'] = $html . Cot::$out['head_head'];
+    }
+
+    Cot::$out['basehref'] = Cot::$R['code_basehref'];
+    Cot::$out['meta_charset'] = 'UTF-8';
+    Cot::$out['meta_desc'] = (empty(Cot::$out['desc'])
+            ? Cot::$cfg['subtitle']
+            : htmlspecialchars(Cot::$out['desc'])) . $title_page_num;
+    Cot::$out['meta_keywords'] = empty(Cot::$out['keywords'])
+        ? Cot::$cfg['metakeywords']
+        : htmlspecialchars(Cot::$out['keywords']);
+    Cot::$out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
+    Cot::$out['head_head'] .= Cot::$out['head'];
+
     Cot::$out['canonical_uri'] = !empty(Cot::$out['canonical_uri']) ? Cot::$out['canonical_uri'] : '';
 
     if (!empty(Cot::$out['canonical_uri']) && !preg_match("#^https?://.+#", Cot::$out['canonical_uri'])) {
@@ -96,14 +100,13 @@ if (!COT_AJAX) {
         Cot::$out['head_head'] .= Cot::$R['code_noindex'];
     }
 
-
     $mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R') ? 'core' : 'module';
 	if (Cot::$cfg['enablecustomhf']) {
 		$mtpl_base = (defined('COT_PLUG') && !empty($e)) ? array('header', $e) : array('header', Cot::$env['location']);
-
 	} else {
 		$mtpl_base = 'header';
 	}
+
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 
 	/* === Hook === */
@@ -214,5 +217,11 @@ if (!COT_AJAX) {
 	$t->parse('HEADER');
 	$t->out('HEADER');
 }
+
+/* === Hook === */
+foreach (cot_getextplugins('header.last') as $pl) {
+    include $pl;
+}
+/* ===== */
 
 define('COT_HEADER_COMPLETE', TRUE);

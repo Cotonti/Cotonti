@@ -1375,20 +1375,25 @@ function cot_setcookie($name, $value = '', $expire = '', $path = '', $domain = '
  */
 function cot_shutdown()
 {
-	global $cache, $db;
+    /* === Hook === */
+    foreach (cot_getextplugins('shutdown.first') as $pl) {
+        include $pl;
+    }
+    /* ===== */
+
 	// Clear import buffer if everything's OK on POST
-	if ($_SERVER['REQUEST_METHOD'] == 'POST' && !cot_error_found())
-	{
+	if ($_SERVER['REQUEST_METHOD'] == 'POST' && !cot_error_found()) {
 		unset($_SESSION['cot_buffer']);
 	}
-	while (ob_get_level() > 0)
-	{
+
+	while (ob_get_level() > 0) {
 		ob_end_flush();
 	}
+
 	// Need to destroy cache before DB connection is lost
-	$cache && $cache->db && $cache->db->flush();
-	$cache = null;
-	$db = null;
+	Cot::$cache && Cot::$cache->db && Cot::$cache->db->flush();
+    Cot::$cache = null;
+    Cot::$db = null;
 }
 
 /**

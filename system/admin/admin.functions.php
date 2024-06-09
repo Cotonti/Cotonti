@@ -15,11 +15,13 @@ require_once cot_incfile('forms');
 require_once cot_incfile('extensions');
 
 /* ======== Defaulting the admin variables ========= */
-unset($adminMain, $adminHelp, $admin_icon, $plugin_body, $plugin_title, $plugin_help);
+$adminTitle = $adminMain = $adminHelp = $pluginContent = '';
+$adminPath = [];
 
 Cot::$usr['admin_config'] = cot_auth('admin', 'a', 'A');
 Cot::$usr['admin_structure'] = cot_auth('structure', 'a', 'A');
-Cot::$usr['admin_users'] = cot_auth('users', 'a', 'A') || Cot::$usr['maingrp'] == COT_GROUP_SUPERADMINS;
+Cot::$usr['admin_users'] = cot_auth('users', 'a', 'A')
+    || in_array(COT_GROUP_SUPERADMINS, Cot::$usr['maingrp'], true);
 
 /**
  * Returns $url as an HTML link if $cond is TRUE or just plain $text otherwise

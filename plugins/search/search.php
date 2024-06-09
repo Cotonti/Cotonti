@@ -581,27 +581,32 @@ if (!empty($sq)) {
 			$rs_url_path['rs[' . $k . ']'] = $v;
 		}
 	}
-	$pagenav = cot_pagenav('plug', ['e' => 'search', 'sq' => $sq, 'tab' => $tab] + $rs_url_path, $d, array_sum($totalitems), $cfg_maxitems);
+	$pagenav = cot_pagenav(
+        'plug',
+        ['e' => 'search', 'sq' => $sq, 'tab' => $tab] + $rs_url_path,
+        $d,
+        array_sum($totalitems),
+        $cfg_maxitems
+    );
 }
 
 // Search title
-$crumbs = [[cot_url('plug', 'e=search'), Cot::$L['plu_search']]];
+$title = Cot::$L['plu_search'];
+$crumbs = [[cot_url('plug', 'e=search'), $title]];
+$areaTitle = '';
 if (!empty($tab)) {
-	$crumbs[] = [
-        cot_url('plug', 'e=search&tab=' . $tab),
-        !empty(Cot::$L['plu_tabs_' . $tab]) ? Cot::$L['plu_tabs_'.$tab] : '',
-    ];
+    $areaTitle = !empty(Cot::$L['plu_tabs_' . $tab]) ? Cot::$L['plu_tabs_' . $tab] : $tab;
+    $title .= $areaTitle . ' - ' . Cot::$L['plu_search'];
+	$crumbs[] = [cot_url('plug', ['e' => 'search', 'tab' => $tab]), $areaTitle];
 }
 Cot::$out['head'] .= Cot::$R['code_noindex'];
-$search_subtitle = (empty($tab) || empty(Cot::$L['plu_tabs_' . $tab]))
-    ? Cot::$L['plu_search']
-    : Cot::$L['plu_tabs_' . $tab] . ' - ' . Cot::$L['plu_search'];
-Cot::$out['subtitle'] = empty($sq) ? $search_subtitle : htmlspecialchars(strip_tags($sq)) . ' - ' . Cot::$L['plu_result'];
+Cot::$out['subtitle'] = empty($sq) ? $title : htmlspecialchars(strip_tags($sq)) . ' - ' . Cot::$L['plu_result'];
 
 $resultsCount = array_sum($totalitems);
 $resultsCount = $resultsCount > 0 ? $resultsCount : 0;
 $t->assign([
-	'PLUGIN_TITLE' => cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb'], true),
+    'PLUGIN_TITLE' => htmlspecialchars($title),
+	'PLUGIN_BREADCRUMBS' => cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb'], true),
 	'PLUGIN_SEARCH_ACTION' => cot_url('search', ['tab' => $tab]),
 	'PLUGIN_SEARCH_TEXT' => cot_inputbox(
         'text',
@@ -618,6 +623,13 @@ $t->assign([
 	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rto', (int) cot_date('Y', Cot::$sys['now']) + 1),
 	'PLUGIN_SEARCH_FOUND' => $resultsCount,
 ]);
+
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.25
+    $t->assign([
+        'PLUGIN_TITLE' => cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb'], true),
+    ]);
+}
 
 if (!empty($pagenav)) {
     $t->assign(cot_generatePaginationTags($pagenav));

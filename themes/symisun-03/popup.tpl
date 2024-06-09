@@ -1,13 +1,19 @@
 <!-- BEGIN: MAIN -->
-
-{POPUP_HEADER1}
-
-<link href="themes/{PHP.theme}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
-
-{POPUP_HEADER2}
-
-{POPUP_BODY}
-
-{POPUP_FOOTER}
-
+<!DOCTYPE html>
+<html lang="{PHP.cfg.defaultlang}">
+<head>
+    <base href="{PHP.cfg.mainurl}/" />
+    <script type="text/javascript">
+        //<![CDATA[
+        function add(text) {
+            insertText(document, "{POPUP_C2}", text);
+        }
+        //]]>
+    </script>
+    <link href="{PHP.cfg.themes_dir}/{PHP.theme}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+{CONTENT}
+</body>
+</html>
 <!-- END: MAIN -->

@@ -259,10 +259,11 @@ $out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
 define(
     'COT_AJAX',
-    (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
-    || (!empty($_SERVER['X-Requested-With']) && strtolower($_SERVER['X-Requested-With']) == 'xmlhttprequest')
+    (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+    || (!empty($_SERVER['X-Requested-With']) && strtolower($_SERVER['X-Requested-With']) === 'xmlhttprequest')
     || (isset($_GET['_ajax']) && $_GET['_ajax'] == 1)
 );
+$sys['displayHeader'] = $sys['displayFooter'] = !COT_AJAX;
 
 // Other system variables
 $sys['parser'] = $cfg['parser'];
@@ -273,12 +274,13 @@ if (
     (empty($cot_plugins) && !defined('COT_INSTALL'))
     || empty($cot_modules)
 ) {
-    $extensions = Cot::$db->query("SELECT * FROM " . Cot::$db->core . " WHERE ct_state = 1 AND ct_lock = 0")->fetchAll();
+    $extensions = Cot::$db->query('SELECT * FROM ' . Cot::$db->core . ' WHERE ct_state = 1 AND ct_lock = 0')->fetchAll();
 }
 if (empty($cot_plugins) && !defined('COT_INSTALL')) {
-	$sql = Cot::$db->query("SELECT pl_code, pl_file, pl_hook, pl_module, pl_title FROM " . Cot::$db->plugins .
-	" WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
-
+	$sql = Cot::$db->query(
+        'SELECT pl_code, pl_file, pl_hook, pl_module, pl_title FROM ' . Cot::$db->plugins
+        . ' WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC'
+    );
 	$cot_plugins = [];
 
 	/**

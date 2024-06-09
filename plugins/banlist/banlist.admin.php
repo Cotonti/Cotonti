@@ -22,10 +22,15 @@ $tt = new XTemplate(cot_tplfile('banlist.admin', 'plug', true));
 require_once cot_langfile('banlist', 'plug');
 
 Cot::$db->registerTable('banlist');
-$adminHelp = $L['banlist_help'];
-$adminTitle = $L['banlist_title'];
+$adminHelp = Cot::$L['banlist_help'];
+$adminTitle = Cot::$L['banlist_title'];
 
-$maxperpage = ($cfg['maxrowsperpage'] && is_numeric($cfg['maxrowsperpage']) && $cfg['maxrowsperpage'] > 0) ? $cfg['maxrowsperpage'] : 15;
+$maxperpage = (
+    isset(Cot::$cfg['maxrowsperpage'])
+    && is_numeric(Cot::$cfg['maxrowsperpage'])
+    && Cot::$cfg['maxrowsperpage'] > 0
+) ? Cot::$cfg['maxrowsperpage'] : 15;
+
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxperpage);
 
 /* === Hook === */
@@ -167,5 +172,4 @@ foreach (cot_getextplugins('banlist.admin.tags') as $pl) {
 /* ===== */
 
 $tt->parse('MAIN');
-
-$plugin_body = $tt->text('MAIN');
+$pluginContent = $tt->text('MAIN');

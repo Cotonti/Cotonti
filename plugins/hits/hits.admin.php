@@ -183,4 +183,4 @@ foreach (cot_getextplugins('hits.admin.tags') as $pl) {
 /* ===== */
 
 $tt->parse('MAIN');
-$plugin_body = $tt->text('MAIN');
+$pluginContent = $tt->text('MAIN');

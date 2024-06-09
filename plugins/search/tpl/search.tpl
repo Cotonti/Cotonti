@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 <div class="block">
-    <h2 class="stats">{PLUGIN_TITLE}</h2>
+    <h2 class="stats">{PLUGIN_BREADCRUMBS}</h2>
     <div>
         <p class="search-areas">
             <a href="{PHP.sq|cot_url('search','sq=$this')}"

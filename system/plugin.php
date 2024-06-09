@@ -16,36 +16,33 @@ $r = (isset($_POST['r'])) ? cot_import('r','P','ALP') : cot_import('r','G','ALP'
 $c1 = cot_import('c1', 'G', 'ALP');
 $c2 = cot_import('c2', 'G', 'ALP');
 
-
+$autoAssignTags = false;
+$templateFile = '';
 if (!empty($o)) {
-	$extname = $o;
-    $exthook = 'popup';
-    $ext_display_header = false;
-    $path_skin = cot_tplfile(array('popup', $extname));
-    $autoassigntags = true;
+	$extensionCode = $o;
+    $hook = 'popup';
+    Cot::$sys['displayHeader'] = Cot::$sys['displayFooter'] = false;
+    $templateFile = cot_tplfile(['popup', $extensionCode]);
+    $autoAssignTags = true;
 
 } elseif (!empty($r)) {
-	$extname = $r;
-    $exthook = 'ajax';
-    $ext_display_header = false;
-    $path_skin = '';
-    $autoassigntags = false;
+	$extensionCode = $r;
+    $hook = 'ajax';
+    Cot::$sys['displayHeader'] = Cot::$sys['displayFooter'] = false;
 
 } elseif (!empty($e)) {
-	$extname = $e;
-    $exthook = 'standalone';
-    $ext_display_header = true;
-    $path_skin = cot_tplfile($extname, 'plug');
-    $autoassigntags = false;
-    if (!file_exists($path_skin)) {
-        $path_skin = cot_tplfile(array('plugin', $extname));
-        $autoassigntags = true;
+	$extensionCode = $e;
+    $hook = 'standalone';
+    $templateFile = cot_tplfile($extensionCode, 'plug');
+    if (!file_exists($templateFile)) {
+        $templateFile = cot_tplfile(['plugin', $extensionCode]);
+        $autoAssignTags = true;
     }
 } else {
 	cot_die_message(404);
 }
 
-if (!file_exists(Cot::$cfg['plugins_dir'] . '/' . $extname)) {
+if (!file_exists(Cot::$cfg['plugins_dir'] . '/' . $extensionCode)) {
 	cot_die_message(404);
 }
 
@@ -53,34 +50,40 @@ if (!file_exists(Cot::$cfg['plugins_dir'] . '/' . $extname)) {
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('plug', Cot::$env['ext']);
 cot_block(Cot::$usr['auth_read']);
 
-// Plugin requirements autoloading
-$req_files = array();
-$req_files[] = cot_langfile($extname, 'plug');
-$req_files[] = cot_incfile($extname, 'plug', 'resources');
-$req_files[] = cot_incfile($extname, 'plug', 'functions');
-
-foreach ($req_files as $req_file) {
-	if (file_exists($req_file)) {
-		require_once $req_file;
+// Plugin requirements autoload
+$requiredFiles = [
+    cot_langfile($extensionCode, 'plug'),
+    cot_incfile($extensionCode, 'plug', 'resources'),
+    cot_incfile($extensionCode, 'plug', 'functions'),
+];
+foreach ($requiredFiles as $requiredFile) {
+	if (file_exists($requiredFile)) {
+		require_once $requiredFile;
 	}
 }
 
 // Display
-$pltitle = array();
-$plugin_subtitle = '';
-$plugin_body = '';
-$popup_body = '';
+$pluginBreadCrumbs = [];
+$pluginTitle = '';
+$pluginSubtitle = '';
+$pluginContent = '';
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.25
+    $plugin_subtitle = '';
+    $plugin_body = '';
+    $popup_body = '';
+}
 
-if (!empty($path_skin)) {
-	$t = new XTemplate($path_skin);
+if (!empty($templateFile)) {
+	$t = new XTemplate($templateFile);
 }
 
 $empty = true;
 
-if (is_array($cot_plugins[$exthook])) {
-	foreach ($cot_plugins[$exthook] as $k) {
-		if ($k['pl_code'] == $extname)
-		{
+if (is_array($cot_plugins[$hook])) {
+    // @todo https://github.com/Cotonti/Cotonti/issues/1487
+	foreach ($cot_plugins[$hook] as $k) {
+		if ($k['pl_code'] == $extensionCode) {
 			$out['plu_title'] = $k['pl_title'];
 			include Cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
 			$empty = false;
@@ -93,35 +96,65 @@ if ($empty) {
 }
 
 if (empty($out['subtitle'])) {
-	if (empty(Cot::$L['plu_title']) && isset(Cot::$L[$extname . '_title'])) {
-        Cot::$L['plu_title'] = Cot::$L[$extname . '_title'];
+	if (empty(Cot::$L['plu_title']) && isset(Cot::$L[$extensionCode . '_title'])) {
+        Cot::$L['plu_title'] = Cot::$L[$extensionCode . '_title'];
 	}
     Cot::$out['subtitle'] = empty(Cot::$L['plu_title']) ? Cot::$out['plu_title'] : Cot::$L['plu_title'];
 }
 Cot::$sys['sublocation'] = Cot::$out['subtitle'];
 
-if ($ext_display_header) {
-	$t_plug = $t;
-	require_once Cot::$cfg['system_dir'] . '/header.php';
-	$t = $t_plug;
-}
+$pluginTemplate = $t;
+require_once Cot::$cfg['system_dir'] . '/header.php';
+$t = $pluginTemplate;
+unset($pluginTemplate);
 
-if ($autoassigntags) {
-	array_unshift($pltitle, array(cot_url('plug', "e=$e"), $out['subtitle']));
+if ($autoAssignTags) {
+	array_unshift($pluginBreadCrumbs, [cot_url($e), Cot::$out['subtitle']]);
 	if (empty($o)) {
-		$t->assign(array(
-			'PLUGIN_TITLE' => cot_breadcrumbs($pltitle, Cot::$cfg['homebreadcrumb']),
-			'PLUGIN_SUBTITLE' => $plugin_subtitle,
-			'PLUGIN_BODY' => $plugin_body
-		));
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.25
+            if (!empty($plugin_subtitle)) {
+                $pluginTitle = $plugin_subtitle;
+            }
+            if (!empty($plugin_body)) {
+                $pluginContent = $plugin_body;
+            }
+        }
+		$t->assign([
+			'BREADCRUMBS' => cot_breadcrumbs($pluginBreadCrumbs, Cot::$cfg['homebreadcrumb']),
+			'TITLE' => $pluginTitle,
+            'SUBTITLE' => $pluginSubtitle,
+			'CONTENT' => $pluginContent,
+		]);
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.25
+            $t->assign([
+                'PLUGIN_TITLE' => cot_breadcrumbs($pluginBreadCrumbs, Cot::$cfg['homebreadcrumb']),
+                'PLUGIN_SUBTITLE' => $pluginTitle,
+                'PLUGIN_BODY' => $pluginContent,
+            ]);
+        }
 	} else {
-		cot_sendheaders();
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.25
+            if (!empty($popup_body)) {
+                $pluginContent = $popup_body;
+            }
+        }
 
-		$t->assign(array(
+		cot_sendheaders();
+		$t->assign([
 			'POPUP_C1' => $c1,
 			'POPUP_C2' => $c2,
-			'POPUP_BODY' => $popup_body
-		));
+			'CONTENT' => $pluginContent,
+		]);
+
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.25
+            $t->assign([
+                'POPUP_BODY' => $pluginContent,
+            ]);
+        }
 	}
 }
 
@@ -130,6 +163,4 @@ if (isset($t) && is_object($t)) {
 	$t->out('MAIN');
 }
 
-if ($ext_display_header) {
-	require_once Cot::$cfg['system_dir'] . '/footer.php';
-}
+require_once Cot::$cfg['system_dir'] . '/footer.php';
