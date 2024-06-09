@@ -29,12 +29,13 @@ if ($cfg['display_errors']) {
 	ini_set('display_errors', 0);
 }
 
+$sys['baseDir'] = realpath(dirname(__DIR__));
+
 if ($cfg['debug_mode']) {
 	require_once $cfg['system_dir'] . '/debug.php';
 }
 
-
-require_once './lib/vendor/autoload.php';
+require_once $sys['baseDir'] . '/lib/vendor/autoload.php';
 
 register_shutdown_function('cot_shutdown');
 

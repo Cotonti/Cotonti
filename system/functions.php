@@ -35,7 +35,6 @@ const COT_GROUP_MODERATORS = 6;
 /* ======== Pre-sets ========= */
 
 $out = [];
-$plu = []; // @todo Not used anywhere
 $sys = [];
 $usr = [];
 $env = [];
@@ -235,11 +234,6 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
 {
     global $cot_plugins, $cotHooksFired;
 
-    static $applicationDir = null;
-    if ($applicationDir === null) {
-        $applicationDir = realpath(dirname(__DIR__)) . '/';
-    }
-
     if (Cot::$cfg['debug_mode']) {
         $cotHooksFired[] = $hook;
     }
@@ -262,7 +256,7 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
             }
 
             $fileName = $dir . '/' . $handler['pl_file'];
-            $fullFileName = $applicationDir . $fileName;
+            $fullFileName = Cot::$sys['baseDir'] . '/' . $fileName;
             if (
                 $checkExistence
                 && (!isset(Cot::$cfg['checkHookFileExistence']) || Cot::$cfg['checkHookFileExistence'])
@@ -1372,7 +1366,7 @@ function cot_setcookie($name, $value = '', $expire = '', $path = '', $domain = '
 function cot_shutdown()
 {
     /* === Hook === */
-    foreach (cot_getextplugins('shutdown.first') as $pl) {
+    foreach (cot_getextplugins('shutdown') as $pl) {
         include $pl;
     }
     /* ===== */

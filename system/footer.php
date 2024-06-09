@@ -93,6 +93,7 @@ if (Cot::$sys['displayFooter']) {
 	if (Cot::$cfg['debug_mode']) {
 		$cotHooksFired[] = 'footer.last';
 		$cotHooksFired[] = 'output';
+        $cotHooksFired[] = 'shutdown';
         Cot::$out['hooks'] = '<ol>';
 		foreach ($cotHooksFired as $hook) {
             Cot::$out['hooks'] .= '<li>' . $hook . '</li>';
