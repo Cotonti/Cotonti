@@ -346,7 +346,7 @@ if ($cfg['gzip']) {
 	ob_start();
 }
 
-ob_start('cot_outputfilters');
+ob_start('cot_outputFilters');
 
 /* ======== Groups ======== */
 

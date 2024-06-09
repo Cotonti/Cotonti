@@ -700,7 +700,7 @@ class Page_cache
         if (!file_exists($this->dir . '/' . $this->path)) {
             mkdir($this->dir . '/' . $this->path, $this->perms, true);
         }
-        file_put_contents($this->dir . '/' . $this->filename, gzencode(cot_outputfilters(ob_get_contents())));
+        file_put_contents($this->dir . '/' . $this->filename, gzencode(cot_outputFilters(ob_get_contents())));
 	}
 
 	/**

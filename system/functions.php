@@ -233,7 +233,7 @@ function cot_get_caller()
  */
 function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
 {
-    global $cot_plugins, $cot_hooks_fired;
+    global $cot_plugins, $cotHooksFired;
 
     static $applicationDir = null;
     if ($applicationDir === null) {
@@ -241,7 +241,7 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
     }
 
     if (Cot::$cfg['debug_mode']) {
-        $cot_hooks_fired[] = $hook;
+        $cotHooksFired[] = $hook;
     }
 
     $extPlugins = [];
@@ -1246,7 +1246,7 @@ function cot_module_active($name)
  * @param string $output
  * @return string
  */
-function cot_outputfilters($output)
+function cot_outputFilters($output)
 {
 	/* === Hook === */
 	foreach (cot_getextplugins('output') as $pl) {
@@ -1256,23 +1256,19 @@ function cot_outputfilters($output)
 
 	$output = preg_replace_callback(
         '#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i',
-        'cot_outputfilters_callback',
+        function($match)
+        {
+            return $match[0]
+                . (
+                    preg_match('/class\s*=\s*["\']?.*?[\s"\']xp-off[\s"\'].*?["\']?/i', $match[0])
+                        ? ''
+                        : cot_xp()
+                );
+        },
         $output
     );
 
 	return $output;
-}
-
-/**
- * Used with cot_outputfilters
- *   It is needed because php 5.2 does not support anonymous functions. So during the installation we can not even show
- *   an error message.
- * @param $m
- * @return string
- */
-function cot_outputfilters_callback($m)
-{
-	return $m[0] . (preg_match('/class\s*=\s*["\']?.*?[\s"\']xp-off[\s"\'].*?["\']?/i', $m[0]) ? '' : cot_xp());
 }
 
 /**

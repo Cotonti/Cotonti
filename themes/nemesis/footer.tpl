@@ -26,13 +26,13 @@
 		</div>
 		<div class="col4-2">
 		<ul id="account" class="block">
-<!-- BEGIN: GUEST -->
+			<!-- BEGIN: GUEST -->
 			<li><strong>{PHP.L.hea_youarenotlogged}</strong></li>
 			<li><a href="{PHP|cot_url('login')}">{PHP.L.Login}</a></li>
 			<li><a href="{PHP|cot_url('users','m=register')}">{PHP.L.Register}</a></li>
 			<li><a href="{PHP|cot_url('users','m=passrecover')}">{PHP.L.users_lostpass}</a></li>
-<!-- END: GUEST -->
-<!-- BEGIN: USER -->
+			<!-- END: GUEST -->
+			<!-- BEGIN: USER -->
 			<li><strong>Hello, {PHP.usr.name} <!-- IF {PHP.usr.maingrp} == 5 --> &nbsp; [ <a href="{PHP|cot_url('admin')}" class="lower">{PHP.L.Adminpanel}</a> ]<!-- ENDIF --></strong></li>
 			<!-- IF {PHP.usr.profile.user_avatar} --><li class="floatleft marginright10"><img src="{PHP.usr.profile.user_avatar}" alt="{PHP.L.Avatar}" /></li><!-- ELSE --><li class="floatleft marginright10"><img src="datas/defaultav/blank.png" alt="{PHP.L.Avatar}" /></li><!-- ENDIF -->
 			<!-- IF {PHP.out.notices} -->
@@ -46,7 +46,7 @@
 			<li><a href="{PHP|cot_url('pfs')}" title="{PHP.L.PFS}">{PHP.L.PFS}</a></li>
 			<!-- ENDIF -->
 			<li>{PHP.out.loginout}</li>
-<!-- END: USER -->
+			<!-- END: USER -->
 		</ul>
 		</div>
 		<hr />
@@ -74,7 +74,16 @@
 	<!-- ENDIF -->
 	<!-- IF {FOOTER_DEVMODE} -->
 	<div class="body">
-		{FOOTER_CREATIONTIME} {FOOTER_SQLSTATISTICS} {FOOTER_DEVMODE}
+		<p>{FOOTER_CREATIONTIME}</p>
+		<div class="marginbottom10">
+		Hooks fired: {FOOTER_HOOKS}
+		</div>
+		<!-- IF {FOOTER_SQLSTATISTICS} -->
+		<div class="marginbottom10">
+			{FOOTER_SQLSTATISTICS}
+		</div>
+		<!-- ENDIF -->
+		{FOOTER_DEVMODE}
 	</div>
 	<!-- ENDIF -->
 {FOOTER_RC}

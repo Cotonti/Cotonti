@@ -21,10 +21,14 @@ foreach (cot_getextplugins('admin.other.first') as $pl) {
 
 if (!empty($p)) {
     $extp = [];
-    if (is_array($cot_plugins['tools'])) {
-        foreach ($cot_plugins['tools'] as $k) {
-            if ($k['pl_code'] == $p) {
-                $extp[] = $k;
+    $hook = 'tools';
+    if (!empty($cot_plugins[$hook]) && is_array($cot_plugins[$hook])) {
+        if (Cot::$cfg['debug_mode']) {
+            $cotHooksFired[] = $hook;
+        }
+        foreach ($cot_plugins[$hook] as $extensionRow) {
+            if ($extensionRow['pl_code'] === $p) {
+                $extp[] = $extensionRow;
             }
         }
     }
@@ -45,9 +49,11 @@ if (!empty($p)) {
     $extInfo = cot_get_extensionparams($p, false);
     $adminTitle = $extInfo['name'];
 
-	$adminPath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
-	$adminPath[] = array(cot_url('admin', 'm=extensions&a=details&pl='.$p), $adminTitle);
-	$adminPath[] = array(cot_url('admin', 'm=other&p='.$p), Cot::$L['Administration']);
+    $adminPath = [
+        [cot_url('admin', ['m' => 'extensions']), Cot::$L['Extensions']],
+        [cot_url('admin', ['m' => 'extensions', 'a' => 'details', 'pl' => $p]), $adminTitle],
+        [cot_url('admin', ['m' => 'other', 'p' => $p]), Cot::$L['Administration']],
+    ];
 
 	// $adminHelp = Cot::$L['Description'].' : '.$info['Description'].'<br />'.Cot::$L['Version'].' : '.$info['Version'].'<br />'.Cot::$L['Date'].' : '.$info['Date'].'<br />'.Cot::$L['Author'].' : '.$info['Author'].'<br />'.Cot::$L['Copyright'].' : '.$info['Copyright'].'<br />'.Cot::$L['Notes'].' : '.$info['Notes'];
 
@@ -74,7 +80,7 @@ if (!empty($p)) {
 	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'a');
 	cot_block(Cot::$usr['auth_read']);
 
-	$target = array();
+	$target = [];
 
 	function cot_admin_other_cmp($pl_a, $pl_b) {
 		if($pl_a['pl_code'] == $pl_b['pl_code']) {
@@ -83,8 +89,8 @@ if (!empty($p)) {
 		return ($pl_a['pl_code'] < $pl_b['pl_code']) ? -1 : 1;
 	}
 
-	foreach (array('module', 'plug') as $type) {
-		if ($type == 'module') {
+	foreach (['module', 'plug'] as $type) {
+		if ($type === 'module') {
 			$target = $cot_plugins['admin'];
 			$title = Cot::$L['Modules'];
 		} else {
@@ -125,7 +131,6 @@ if (!empty($p)) {
 		'ADMIN_OTHER_URL_DISKCACHE' => cot_url('admin', 'm=cache&s=disk'),
 		'ADMIN_OTHER_URL_EXFLDS' => cot_url('admin', 'm=extrafields'),
 		'ADMIN_OTHER_URL_STRUCTURE' => cot_url('admin', 'm=structure'),
-		'ADMIN_OTHER_URL_BBCODE' => cot_url('admin', 'm=bbcode'),
 		'ADMIN_OTHER_URL_LOG' => cot_url('admin', 'm=log'),
 		'ADMIN_OTHER_URL_INFOS' => cot_url('admin', 'm=infos'),
         'ADMIN_OTHER_URL_PHPINFO' => cot_url('admin', 'm=phpinfo'),

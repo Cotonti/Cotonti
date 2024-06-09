@@ -91,12 +91,11 @@ if (Cot::$sys['displayFooter']) {
 	}
 
 	if (Cot::$cfg['debug_mode']) {
-		$cot_hooks_fired[] = 'footer.last';
-		$cot_hooks_fired[] = 'output';
+		$cotHooksFired[] = 'footer.last';
+		$cotHooksFired[] = 'output';
         Cot::$out['hooks'] = '<ol>';
-		foreach ($cot_hooks_fired as $hook)
-		{
-            Cot::$out['hooks'] .= '<li>'.$hook.'</li>';
+		foreach ($cotHooksFired as $hook) {
+            Cot::$out['hooks'] .= '<li>' . $hook . '</li>';
 		}
         Cot::$out['hooks'] .= '</ol>';
 		$t->assign('FOOTER_HOOKS', Cot::$out['hooks']);
@@ -109,10 +108,18 @@ if (Cot::$sys['displayFooter']) {
 
 	Cot::$out['creationtime'] = (!Cot::$cfg['disablesysinfos']) ? Cot::$L['foo_created'].' '.cot_declension(Cot::$sys['creationtime'],
             $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
-	Cot::$out['sqlstatistics'] = (Cot::$cfg['showsqlstats']) ? Cot::$L['foo_sqltotal'].': '.cot_declension(round(Cot::$db->timeCount, 3),
-            $Ls['Seconds'], $onlyword = false, $canfrac = true).' - '.Cot::$L['foo_sqlqueries'].': '.Cot::$db->count.
-            ' - '.Cot::$L['foo_sqlaverage'].': '.cot_declension(round((Cot::$db->timeCount / Cot::$db->count), 5),
-            $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
+	Cot::$out['sqlstatistics'] = (Cot::$cfg['showsqlstats'])
+        ? Cot::$L['foo_sqltotal'] . ': '
+        . cot_declension(round(Cot::$db->timeCount, 3), $Ls['Seconds'], $onlyword = false, $canfrac = true)
+        . ' - ' . Cot::$L['foo_sqlqueries'] . ': ' . Cot::$db->count
+        . ' - ' . Cot::$L['foo_sqlaverage'] . ': '
+        . cot_declension(
+            round((Cot::$db->timeCount / Cot::$db->count), 5),
+            $Ls['Seconds'],
+            $onlyword = false,
+            $canfrac = true
+        )
+        : '';
 	Cot::$out['bottomline'] = Cot::$cfg['bottomline'];
 	Cot::$out['bottomline'] .= (Cot::$cfg['keepcrbottom']) ? Cot::$out['copyright'] : '';
 

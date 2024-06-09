@@ -57,11 +57,24 @@ if (in_array($includeFile, $standardAdmin) && file_exists($standardIncFile)) {
 } else {
 	Cot::$env['ext'] = $m;
 	$adminTitle = isset($cot_modules[$m]['title']) ? $cot_modules[$m]['title'] : '';
+    $hook = 'admin';
+    if (!empty($cot_plugins[$hook]) && is_array($cot_plugins[$hook])) {
+        if (Cot::$cfg['debug_mode']) {
+            $cotHooksFired[] = $hook;
+        }
+        foreach ($cot_plugins[$hook] as $extensionRow) {
+            if ($extensionRow['pl_code'] === $m) {
+                $extensionDirectory = $extensionRow['pl_module'] ? Cot::$cfg['modules_dir'] : Cot::$cfg['plugins_dir'];
+                $includeFile = $extensionDirectory . "/{$extensionRow['pl_file']}";
+                break;
+            }
+        }
+    }
 	$includeFile = Cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
 }
 
 if (!file_exists($includeFile)) {
-	cot_die();
+	cot_die_message(404);
 }
 
 $adminPath = [[cot_url('admin'), Cot::$L['Adminpanel']]];
@@ -71,17 +84,18 @@ $adminMain = isset($adminMain) ? $adminMain : '';
 
 require $includeFile;
 
-// @deprecated in 0.9.24 (for backward compatibility)
-if (!empty($adminhelp)) {
-    $adminHelp = $adminhelp;
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.24 (for backward compatibility)
+    if (!empty($adminhelp)) {
+        $adminHelp = $adminhelp;
+    }
+    if (!empty($adminmain)) {
+        $adminMain = $adminmain;
+    }
+    if (!empty($adminpath)) {
+        $adminPath = $adminpath;
+    }
 }
-if (!empty($adminmain)) {
-    $adminMain = $adminmain;
-}
-if (!empty($adminpath)) {
-    $adminPath = $adminpath;
-}
-// /@deprecated in 0.9.24
 
 $titleParams = [
 	'ADMIN' => Cot::$L['Administration'],

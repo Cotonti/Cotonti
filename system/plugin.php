@@ -78,21 +78,25 @@ if (!empty($templateFile)) {
 	$t = new XTemplate($templateFile);
 }
 
-$empty = true;
-
-if (is_array($cot_plugins[$hook])) {
-    // @todo https://github.com/Cotonti/Cotonti/issues/1487
-	foreach ($cot_plugins[$hook] as $k) {
-		if ($k['pl_code'] == $extensionCode) {
-			$out['plu_title'] = $k['pl_title'];
-			include Cot::$cfg['plugins_dir'] . '/' . $k['pl_file'];
-			$empty = false;
+$found = false;
+if (!empty($cot_plugins[$hook]) && is_array($cot_plugins[$hook])) {
+    if (Cot::$cfg['debug_mode']) {
+        $cotHooksFired[] = $hook;
+    }
+	foreach ($cot_plugins[$hook] as $extensionRow) {
+		if ($extensionRow['pl_code'] == $extensionCode) {
+			$out['plu_title'] = $extensionRow['pl_title']; // @todo is it needed?
+            $filename = Cot::$cfg['plugins_dir'] . '/' . $extensionRow['pl_file'];
+            if (is_readable($filename)) {
+                include Cot::$cfg['plugins_dir'] . '/' . $extensionRow['pl_file'];
+                $found = true;
+                break;
+            }
 		}
 	}
 }
-
-if ($empty) {
-	cot_die_message(907, TRUE);
+if (!$found) {
+	cot_die_message(404);
 }
 
 if (empty($out['subtitle'])) {
