@@ -212,4 +212,4 @@ foreach (cot_getextplugins('trashcan.admin.tags') as $pl) {
 /* ===== */
 
 $tr_t->parse('MAIN');
-$pluginContent = $tr_t->text('MAIN');
+$pluginBody = $tr_t->text('MAIN');

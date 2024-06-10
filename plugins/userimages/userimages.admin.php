@@ -90,4 +90,4 @@ foreach (cot_getextplugins('userimages.admin.tags') as $pl) {
 /* ===== */
 
 $tt->parse('MAIN');
-$pluginContent = $tt->text('MAIN');
+$pluginBody = $tt->text('MAIN');

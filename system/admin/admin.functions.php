@@ -15,7 +15,7 @@ require_once cot_incfile('forms');
 require_once cot_incfile('extensions');
 
 /* ======== Defaulting the admin variables ========= */
-$adminTitle = $adminMain = $adminHelp = $pluginContent = '';
+$adminTitle = $adminMain = $adminHelp = $pluginBody = '';
 $adminPath = [];
 
 Cot::$usr['admin_config'] = cot_auth('admin', 'a', 'A');

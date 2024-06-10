@@ -4,7 +4,7 @@
 		<!-- IF {BREADCRUMBS} --><h2 class="plugin">{BREADCRUMBS}</h2><!-- ENDIF -->
 		<!-- IF {TITLE} --><h1>{TITLE}</h1><!-- ENDIF -->
 		<!-- IF {SUBTITLE} --><p>{SUBTITLE}</p><!-- ENDIF -->
-		{CONTENT}
+		{BODY}
 	</div>
 </div>
 <!-- END: MAIN -->

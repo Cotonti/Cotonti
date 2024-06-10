@@ -3,7 +3,7 @@
 	<!-- IF {BREADCRUMBS} --><div class="breadcrumb">{BREADCRUMBS}</div><!-- ENDIF -->
 	<!-- IF {TITLE} --><h1>{TITLE}</h1><!-- ENDIF -->
 	<!-- IF {SUBTITLE} --><p class="details">{SUBTITLE}</p><!-- ENDIF -->
-	{CONTENT}
+	{BODY}
 </div>
 <br class="clear"/>
 <!-- END: MAIN -->

@@ -66,7 +66,7 @@ foreach ($requiredFiles as $requiredFile) {
 $pluginBreadCrumbs = [];
 $pluginTitle = '';
 $pluginSubtitle = '';
-$pluginContent = '';
+$pluginBody = '';
 if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
     // @deprecated in 0.9.25
     $plugin_subtitle = '';
@@ -121,28 +121,28 @@ if ($autoAssignTags) {
                 $pluginTitle = $plugin_subtitle;
             }
             if (!empty($plugin_body)) {
-                $pluginContent = $plugin_body;
+                $pluginBody = $plugin_body;
             }
         }
 		$t->assign([
 			'BREADCRUMBS' => cot_breadcrumbs($pluginBreadCrumbs, Cot::$cfg['homebreadcrumb']),
 			'TITLE' => $pluginTitle,
             'SUBTITLE' => $pluginSubtitle,
-			'CONTENT' => $pluginContent,
+			'BODY' => $pluginBody,
 		]);
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
             // @deprecated in 0.9.25
             $t->assign([
                 'PLUGIN_TITLE' => cot_breadcrumbs($pluginBreadCrumbs, Cot::$cfg['homebreadcrumb']),
                 'PLUGIN_SUBTITLE' => $pluginTitle,
-                'PLUGIN_BODY' => $pluginContent,
+                'PLUGIN_BODY' => $pluginBody,
             ]);
         }
 	} else {
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
             // @deprecated in 0.9.25
             if (!empty($popup_body)) {
-                $pluginContent = $popup_body;
+                $pluginBody = $popup_body;
             }
         }
 
@@ -150,13 +150,13 @@ if ($autoAssignTags) {
 		$t->assign([
 			'POPUP_C1' => $c1,
 			'POPUP_C2' => $c2,
-			'CONTENT' => $pluginContent,
+			'BODY' => $pluginBody,
 		]);
 
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
             // @deprecated in 0.9.25
             $t->assign([
-                'POPUP_BODY' => $pluginContent,
+                'POPUP_BODY' => $pluginBody,
             ]);
         }
 	}

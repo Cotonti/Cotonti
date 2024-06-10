@@ -13,7 +13,7 @@
     <link href="{PHP.cfg.themes_dir}/{PHP.theme}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-{CONTENT}
+{BODY}
 </body>
 </html>
 <!-- END: MAIN -->

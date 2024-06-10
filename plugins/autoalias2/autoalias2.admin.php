@@ -39,4 +39,4 @@ $t->assign('AUTOALIAS_CREATE', cot_url('admin', 'm=other&p=autoalias2&a=create')
 cot_display_messages($t);
 
 $t->parse();
-$pluginContent = $t->text('MAIN');
+$pluginBody = $t->text('MAIN');

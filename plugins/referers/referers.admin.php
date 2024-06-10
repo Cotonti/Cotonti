@@ -121,4 +121,4 @@ foreach (cot_getextplugins('referers.admin.tags') as $pl) {
 /* ===== */
 
 $tt->parse('MAIN');
-$pluginContent = $tt->text('MAIN');
+$pluginBody = $tt->text('MAIN');

@@ -189,4 +189,4 @@ $tuman->assign(cot_generatePaginationTags($pagenav));
 cot_display_messages($tuman);
 
 $tuman->parse('MAIN');
-$pluginContent = $tuman->text('MAIN');
+$pluginBody = $tuman->text('MAIN');

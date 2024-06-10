@@ -94,4 +94,4 @@ if ($a == 'search') {
 }
 
 $t->parse('MAIN');
-$pluginContent = $t->text('MAIN');
+$pluginBody = $t->text('MAIN');

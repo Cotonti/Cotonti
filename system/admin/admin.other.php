@@ -65,9 +65,9 @@ if (!empty($p)) {
             $plugin_body = '';
         }
 
-        $pluginContent = '';
+        $pluginBody = '';
         include_once Cot::$cfg['plugins_dir'] . '/' . $pl['pl_file'];
-        $adminMain .= $pluginContent;
+        $adminMain .= $pluginBody;
 
         if ($legacyMode) {
             // @deprecated in 0.9.25
