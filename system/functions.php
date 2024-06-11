@@ -4155,7 +4155,9 @@ function cot_tplfile($base, $type = 'module', $admin = null)
     }
 
 	if (is_null($admin)) {
-		$admin = ($extensionCode === 'admin') || (isset($base[1]) && $base[1] === 'admin') || (isset($baseParts[1]) && $baseParts[1] === 'admin');
+		$admin = ($extensionCode === 'admin')
+            || (isset($base[1]) && $base[1] === 'admin')
+            || (isset($baseParts[1]) && $baseParts[1] === 'admin');
 	}
 
 	$directoriesToScan = [];
@@ -4167,7 +4169,7 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 		// Plugin template paths
 		if ($admin) {
             if ($adminTheme !== '') {
-                $directoriesToScan[] = "{$themesDir}/admin/{$adminTheme}/plugins/{$extensionCode}";
+                $directoriesToScan[] = "{$themesDir}/admin/{$adminTheme}/plugins/{$extensionCode}/";
                 $directoriesToScan[] = "{$themesDir}/admin/{$adminTheme}/plugins/";
             }
             $directoriesToScan[] = "{$themesDir}/{$theme}/admin/plugins/{$extensionCode}/";
@@ -4191,7 +4193,7 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 		// Module template paths
         if ($admin) {
             if ($adminTheme !== '') {
-                $directoriesToScan[] = "{$themesDir}/admin/{$adminTheme}/modules/{$extensionCode}";
+                $directoriesToScan[] = "{$themesDir}/admin/{$adminTheme}/modules/{$extensionCode}/";
                 $directoriesToScan[] = "{$themesDir}/admin/{$adminTheme}/modules/";
             }
             $directoriesToScan[] = "{$themesDir}/{$theme}/admin/modules/{$extensionCode}/";
