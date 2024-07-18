@@ -74,6 +74,7 @@ if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
     $popup_body = '';
 }
 
+$t = null;
 if (!empty($templateFile)) {
 	$t = new XTemplate($templateFile);
 }
@@ -106,11 +107,6 @@ if (empty($out['subtitle'])) {
     Cot::$out['subtitle'] = empty(Cot::$L['plu_title']) ? Cot::$out['plu_title'] : Cot::$L['plu_title'];
 }
 Cot::$sys['sublocation'] = Cot::$out['subtitle'];
-
-$pluginTemplate = $t;
-require_once Cot::$cfg['system_dir'] . '/header.php';
-$t = $pluginTemplate;
-unset($pluginTemplate);
 
 if ($autoAssignTags) {
 	array_unshift($pluginBreadCrumbs, [cot_url($e), Cot::$out['subtitle']]);
@@ -161,6 +157,13 @@ if ($autoAssignTags) {
         }
 	}
 }
+
+$pluginTemplate = $t;
+require_once Cot::$cfg['system_dir'] . '/header.php';
+if (!empty($pluginTemplate)) {
+    $t = $pluginTemplate;
+}
+unset($pluginTemplate);
 
 if (isset($t) && is_object($t)) {
 	$t->parse('MAIN');
