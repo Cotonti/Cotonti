@@ -35,8 +35,8 @@ $R['icon_folder'] = '<img src="' . $cfg['icons_dir'] . '/default/16/folder.png" 
 $R['icon_follow'] = '<img src="' . $cfg['icons_dir'] . '/default/16/arrow-follow.png" alt="" />';
 $R['icon_forums'] = '<img src="' . $cfg['icons_dir'] . '/default/16/forums.png" alt="" />';
 $R['icon_lock'] = '<img src="' . $cfg['icons_dir'] . '/default/16/lock.png" alt="" />';
-$R['icon_order_asc'] = $R['icon_down'];
-$R['icon_order_desc'] = $R['icon_up'];
+$R['icon_order_asc'] = $R['icon_up'];
+$R['icon_order_desc'] = $R['icon_down'];
 $R['icon_page'] = '<img src="' . $cfg['icons_dir'] . '/default/16/page.png" alt="" />';
 $R['icon_prefs'] = '<img src="' . $cfg['icons_dir'] . '/default/16/prefs.png" alt="" />';
 $R['icon_subfolder'] = '<img src="' . $cfg['icons_dir'] . '/default/16/subfolder.png" alt="" />';

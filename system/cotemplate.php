@@ -865,14 +865,16 @@ class Cotpl_block
  */
 class Cotpl_data
 {
-	/**
-	 * @var array Block data consisting of strings and Cotpl_vars
-	 */
-	protected $chunks = [];
-	/**
-	 * @var bool Enables space removal for compact output
-	 */
-	protected static $cleanup_enabled = false;
+    /**
+     * @var array Block data consisting of strings and Cotpl_vars
+     */
+    protected $chunks = [];
+    /**
+     * @var bool Enables space removal for compact output
+     * @deprecated
+     * @see \Cotpl_data::cleanup()
+     */
+    protected static $cleanup_enabled = false;
 
 	/**
 	 * Block constructor
@@ -995,20 +997,32 @@ class Cotpl_data
 		return $data;
 	}
 
-	/**
-	 * Trims spaces before and after tags
-	 *
-	 * @param string $html Source HTML
-	 * @return string Cleaned HTML
-	 */
-	private function cleanup($html)
-	{
-		$html = preg_replace('#\n\s+#', ' ', $html);
-		$html = preg_replace('#[\r\n\t]+<#', '<', $html);
-		$html = preg_replace('#>[\r\n\t]+#', '>', $html);
-		$html = preg_replace('# {2,}#', ' ', $html);
-		return $html;
-	}
+    /**
+     * Trims spaces before and after tags
+     *
+     * @param string $html Source HTML
+     * @return string Cleaned HTML
+     *
+     * @todo move to functions.php (HtmlHelper in future)
+     * @todo call from cot_shutdown() if $cfg['html_cleanup'] is TRUE
+     * @todo remove JS,CSS and HTML comments. Regexp for HTML: '/<!--(.|\s)*?-->/'
+     */
+    private function cleanup($html)
+    {
+        // We need to minify inline JavaScript first.
+        // It may contain comments, the code after which will also become a comment
+        // Example:
+        // ... modalContent.html('').attr('src', url); //let's use the anchor "title" attribute as modal window title $('#attModalTitleText').text(title); ...
+        //$html = preg_replace('#\n\s+#', ' ', $html);
+
+        $html = preg_replace('/^\s+/m', '', $html);
+
+        $html = preg_replace('#[\r\n\t]+<#', '<', $html);
+        $html = preg_replace('#>[\r\n\t]+#', '>', $html);
+        $html = preg_replace('# {2,}#', ' ', $html);
+
+        return $html;
+    }
 }
 
 // Integer keys are faster on evaluation
@@ -1636,10 +1650,10 @@ class Cotpl_var
                      * taking into account tokenization
                      */
 					//&& preg_match('`(?<functionName>\w+)\s*\((?<argumetns>.*)\)`', $cbk, $mt)
-                    && preg_match('/(?<functionName>\w+)\s*\((?<argumetns>(?>.|\n)*)\)/', $cbk, $mt)
+                    && preg_match('/(?<functionName>\w+)\s*\((?<arguments>(?>.|\n)*)\)/', $cbk, $mt)
                 ) {
                     // Don't trim quotes from arguments to we can parse them types
-                    $args = cotpl_tokenize(trim($mt['argumetns']), [',', ' ', "\n", "\r", "\t"], false);
+                    $args = cotpl_tokenize(trim($mt['arguments']), [',', ' ', "\n", "\r", "\t"], false);
                     $args = array_map('cotpl_parseArgument', $args);
 
 					$this->callbacks[] = [
@@ -1820,7 +1834,7 @@ class Cotpl_var
 							$val = $f($a[0], $a[1]);
 							break;
 						case 3:
-							$val =$f($a[0], $a[1], $a[2]);
+							$val = $f($a[0], $a[1], $a[2]);
 							break;
 						case 4:
 							$val = $f($a[0], $a[1], $a[2], $a[3]);

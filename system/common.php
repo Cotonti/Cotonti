@@ -198,9 +198,10 @@ try {
 		'collate' => !empty($cfg['mysqlcollate']) ? $cfg['mysqlcollate'] : null,
 	]);
 } catch (PDOException $e) {
-	cot_diefatal('Could not connect to database !<br />
-		Please check your settings in the file datas/config.php<br />
-		MySQL error : '.$e->getMessage());
+    cot_diefatal(
+        'Could not connect to database!<br /> Please check your settings in the file datas/config.php<br />'
+        . 'MySQL error: ' . $e->getMessage()
+    );
 }
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $dbc_port);
 
@@ -217,22 +218,31 @@ if ($cache && $cot_cfg) {
 	$cfg = cot_arrayMergeRecursive($cot_cfg, $cfg);
 } else {
 	// Part 1: Load main configuration
-	$sql_config = $db->query("SELECT * FROM $db_config");
-	while ($row = $sql_config->fetch()) {
-		if ($row['config_owner'] == 'core') {
-			$cfg[$row['config_name']] = $row['config_value'];
-		} elseif ($row['config_owner'] == 'module') {
-			if (empty($row['config_subcat'])) {
-				$cfg[$row['config_cat']][$row['config_name']] = $row['config_value'];
-			} else {
-				$cfg[$row['config_cat']]['cat_' . $row['config_subcat']][$row['config_name']] = $row['config_value'];
-			}
-		} else {
-			$cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value'];
-		}
-	}
-	$sql_config->closeCursor();
+    try {
+	    $sqlConfig = $db->query("SELECT * FROM $db_config");
+    } catch (PDOException $e) {
+        cot_diefatal(
+            'Could not execute SQL query to database!<br /> Please check your settings in the file datas/config.php<br />'
+            . 'MySQL error: ' . $e->getMessage()
+        );
+    }
+    while ($row = $sqlConfig->fetch()) {
+        if ($row['config_owner'] == 'core') {
+            $cfg[$row['config_name']] = $row['config_value'];
+        } elseif ($row['config_owner'] == 'module') {
+            if (empty($row['config_subcat'])) {
+                $cfg[$row['config_cat']][$row['config_name']] = $row['config_value'];
+            } else {
+                $cfg[$row['config_cat']]['cat_' . $row['config_subcat']][$row['config_name']] = $row['config_value'];
+            }
+        } else {
+            $cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value'];
+        }
+    }
+    $sqlConfig->closeCursor();
+    unset($sqlConfig);
 }
+
 // Mbstring options
 mb_internal_encoding('UTF-8');
 

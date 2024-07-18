@@ -232,9 +232,12 @@ function cot_get_caller()
  */
 function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
 {
+    // Class Cot may be not initialized yet
+    global $cfg, $sys, $L, $cache;
+
     global $cot_plugins, $cotHooksFired;
 
-    if (Cot::$cfg['debug_mode']) {
+    if ($cfg['debug_mode']) {
         $cotHooksFired[] = $hook;
     }
 
@@ -242,11 +245,11 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
     if (isset($cot_plugins[$hook]) && is_array($cot_plugins[$hook])) {
         foreach ($cot_plugins[$hook] as $handler) {
             if ($handler['pl_module']) {
-                $dir = Cot::$cfg['modules_dir'];
+                $dir = $cfg['modules_dir'];
                 $cat = $handler['pl_code'];
                 $opt = 'a';
             } else {
-                $dir = Cot::$cfg['plugins_dir'];
+                $dir = $cfg['plugins_dir'];
                 $cat = 'plug';
                 $opt = $handler['pl_code'];
             }
@@ -256,23 +259,26 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
             }
 
             $fileName = $dir . '/' . $handler['pl_file'];
-            $fullFileName = Cot::$sys['baseDir'] . '/' . $fileName;
+            $fullFileName = $sys['baseDir'] . '/' . $fileName;
             if (
                 $checkExistence
-                && (!isset(Cot::$cfg['checkHookFileExistence']) || Cot::$cfg['checkHookFileExistence'])
+                && (!isset($cfg['checkHookFileExistence']) || $cfg['checkHookFileExistence'])
                 && !is_readable($fullFileName)
             ) {
                 $extType = $handler['pl_module'] ? 'mod' : 'pl';
                 $extUrl = cot_url('admin', ['m' => 'extensions', 'a' => 'details', $extType => $handler['pl_code']]);
 
                 // Language file can be not loaded yet
-                $message = isset(Cot::$L['hookFileNotFound'])
-                    ? Cot::$L['hookFileNotFound']
+                $message = isset($L['hookFileNotFound'])
+                    ? $L['hookFileNotFound']
                     : '<strong>{$title}</strong>, event - {$hook}: file {$fileName} not found. Please <a href="{$url}">update the extension</a>';
 
-                $messageText = cot_rc($message, ['title' => $handler['pl_title'], 'hook' => $hook, 'fileName' => $fileName, 'url' => $extUrl]);
+                $messageText = cot_rc(
+                    $message,
+                    ['title' => $handler['pl_title'], 'hook' => $hook, 'fileName' => $fileName, 'url' => $extUrl]
+                );
                 cot_log($messageText, $handler['pl_code'], 'hook-include', 'error');
-                if (!empty(Cot::$usr['isadmin'])) {
+                if (!empty($usr['isadmin'])) {
                     cot_message($messageText, 'warning');
                 }
                 continue;
@@ -282,7 +288,9 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
     }
 
     // Trigger cache handlers
-    Cot::$cache && Cot::$cache->trigger($hook);
+    if (!empty($cache)) {
+        $cache->trigger($hook);
+    }
 
     return $extPlugins;
 }
@@ -1372,7 +1380,7 @@ function cot_shutdown()
     /* ===== */
 
 	// Clear import buffer if everything's OK on POST
-	if ($_SERVER['REQUEST_METHOD'] == 'POST' && !cot_error_found()) {
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && !cot_error_found()) {
 		unset($_SESSION['cot_buffer']);
 	}
 
@@ -4106,7 +4114,7 @@ function cot_rmdir($dir)
  */
 function cot_schemeFile()
 {
-    // cot class can be not initialised yet
+    // Class Cot can be not initialised yet
     global $cfg, $usr;
 
     $scheme = isset($usr['scheme']) ? $usr['scheme'] : $cfg['defaultscheme'];
@@ -4138,6 +4146,9 @@ function cot_schemeFile()
  */
 function cot_tplfile($base, $type = 'module', $admin = null)
 {
+    // Class Cot may be not initialized yet
+    global $cfg, $usr;
+
 	// Get base name parts
 	if (is_string($base) && mb_strpos($base, '.') !== false) {
 		$base = explode('.', $base);
@@ -4161,9 +4172,9 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 	}
 
 	$directoriesToScan = [];
-    $themesDir = Cot::$cfg['themes_dir'];
-    $theme = !empty(Cot::$usr['theme']) ? Cot::$usr['theme'] : '';
-    $adminTheme = !empty(Cot::$cfg['admintheme']) ? Cot::$cfg['admintheme'] : '';
+    $themesDir = $cfg['themes_dir'];
+    $theme = !empty($usr['theme']) ? $usr['theme'] : '';
+    $adminTheme = !empty($cfg['admintheme']) ? $cfg['admintheme'] : '';
 	// Possible search directories depending on extension type
 	if ($type === 'plug') {
 		// Plugin template paths
@@ -4177,7 +4188,7 @@ function cot_tplfile($base, $type = 'module', $admin = null)
         }
         $directoriesToScan[] = "{$themesDir}/{$theme}/plugins/{$extensionCode}/";
         $directoriesToScan[] = "{$themesDir}/{$theme}/plugins/";
-		$directoriesToScan[] = Cot::$cfg['plugins_dir'] . "/{$extensionCode}/tpl/";
+		$directoriesToScan[] = $cfg['plugins_dir'] . "/{$extensionCode}/tpl/";
 
     } elseif ($type === 'core' && in_array($extensionCode, ['admin', 'header', 'footer', 'message'])) {
 		// Built-in core modules
@@ -4187,7 +4198,7 @@ function cot_tplfile($base, $type = 'module', $admin = null)
         if ($theme !== '') {
             $directoriesToScan[] = "{$themesDir}/{$theme}/admin/";
         }
-		$directoriesToScan[] = Cot::$cfg['system_dir'] . '/admin/tpl/';
+		$directoriesToScan[] = $cfg['system_dir'] . '/admin/tpl/';
 
     } else {
 		// Module template paths
@@ -4202,7 +4213,7 @@ function cot_tplfile($base, $type = 'module', $admin = null)
         $directoriesToScan[] = "{$themesDir}/{$theme}/modules/{$extensionCode}/";
         $directoriesToScan[] = "{$themesDir}/{$theme}/modules/";
         $directoriesToScan[] = "{$themesDir}/{$theme}/";
-        $directoriesToScan[] = Cot::$cfg['modules_dir'] . "/{$extensionCode}/tpl/";
+        $directoriesToScan[] = $cfg['modules_dir'] . "/{$extensionCode}/tpl/";
 	}
 
 	// Build template file name from base parts glued with dots
@@ -4226,6 +4237,25 @@ function cot_tplfile($base, $type = 'module', $admin = null)
 /*
  * ============================ Date and Time Functions =======================
 */
+
+/**
+ * @return DateTimeZone
+ */
+function cot_getUserTimeZone()
+{
+    $result = null;
+    $defaultTimeZone = !empty(Cot::$cfg['defaulttimezone']) ? Cot::$cfg['defaulttimezone'] : 'UTC';
+    if (!empty(Cot::$usr['timezonename']) && Cot::$usr['timezonename'] != $defaultTimeZone) {
+        try {
+            $result = new DateTimeZone(Cot::$usr['timezonename']);
+        } catch (Exception $e) {
+        }
+    }
+    if (empty($result)) {
+        $result = new DateTimeZone($defaultTimeZone);
+    }
+    return $result;
+}
 
 /**
  * Localized version of PHP date()

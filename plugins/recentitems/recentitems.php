@@ -58,21 +58,7 @@ if (empty($days) || is_numeric($days)) {
 
     if ($days === 0) {
         // Today. From 00:00 in user timezone
-        $timeZone = null;
-        $defaultTimeZone = !empty(Cot::$cfg['defaulttimezone']) ? Cot::$cfg['defaulttimezone'] : 'UTC';
-        if (
-            Cot::$usr['timezone'] != 0 // May be it is not needed
-            && !empty(Cot::$usr['timezonename'])
-            && Cot::$usr['timezonename'] != $defaultTimeZone
-        ) {
-            try {
-                $timeZone = new DateTimeZone(Cot::$usr['timezonename']);
-            } catch (Exception $e) {
-            }
-        }
-        if (empty($timeZone)) {
-            $timeZone = new DateTimeZone($defaultTimeZone);
-        }
+        $timeZone = cot_getUserTimeZone();
         $date = new DateTime('today midnight', $timeZone);
         $timeBack = $date->getTimestamp();
         $periodToShow = Cot::$L['Today'];
