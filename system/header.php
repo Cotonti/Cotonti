@@ -25,10 +25,11 @@ if (!headers_sent()) {
     $lastModified = !empty(Cot::$env['last_modified']) ? Cot::$env['last_modified'] : 0;
     cot_sendheaders(
         Cot::$out['meta_contenttype'],
-        isset(Cot::$env['status']) ? Cot::$env['status'] : '200 OK'
-        , $lastModified
+        isset(Cot::$env['status']) ? Cot::$env['status'] : '200 OK',
+        $lastModified
     );
 }
+
 if (Cot::$sys['displayHeader']) {
     Cot::$out['logstatus'] = (Cot::$usr['id'] > 0)
         ? Cot::$L['hea_youareloggedas'] . ' ' . Cot::$usr['name']
@@ -190,14 +191,14 @@ if (Cot::$sys['displayHeader']) {
 		Cot::$out['guest_cookiettl'] = Cot::$cfg['forcerememberme'] ? Cot::$R['form_guest_remember_forced']
 			: Cot::$R['form_guest_remember'];
 
-		$t->assign(array (
+		$t->assign([
 			'HEADER_GUEST_SEND' => cot_url('login', 'a=check&' . Cot::$sys['url_redirect']),
 			'HEADER_GUEST_USERNAME' => Cot::$out['guest_username'],
 			'HEADER_GUEST_PASSWORD' => Cot::$out['guest_password'],
 			'HEADER_GUEST_REGISTER' => Cot::$out['guest_register'],
 			'HEADER_GUEST_REGISTER_URL' => cot_url('users', 'm=register'),
-			'HEADER_GUEST_COOKIETTL' => Cot::$out['guest_cookiettl']
-		));
+			'HEADER_GUEST_COOKIETTL' => Cot::$out['guest_cookiettl'],
+		]);
 
 		/* === Hook === */
 		foreach (cot_getextplugins('header.guest.tags') as $pl) {

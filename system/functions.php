@@ -1296,34 +1296,43 @@ function cot_plugin_active($name)
  */
 function cot_sendheaders($contentType = 'text/html', $responseCode = '200 OK', $lastModified = 0)
 {
-	$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
-	$lastModified = max((int) $lastModified, 0);
-	if ($lastModified > 0) {
-		$modifiedSince = isset($_ENV['HTTP_IF_MODIFIED_SINCE'])
+    $protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+    $lastModified = max((int) $lastModified, 0);
+    if ($lastModified > 0) {
+        $modifiedSince = isset($_ENV['HTTP_IF_MODIFIED_SINCE'])
             ? strtotime(substr($_ENV['HTTP_IF_MODIFIED_SINCE'], 5))
             : false;
-		$modifiedSince = isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
+        $modifiedSince = isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
             ? strtotime(substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 5))
             : $modifiedSince;
 
-		if ($modifiedSince && $modifiedSince >= $lastModified) {
-			header($protocol . ' 304 Not Modified');
-			exit;
-		}
-	} else {
-		$lastModified = time() - 3600 * 12;
-	}
+        if ($modifiedSince && $modifiedSince >= $lastModified) {
+            header($protocol . ' 304 Not Modified');
+            exit;
+        }
+    } else {
+        $lastModified = time() - 3600 * 12;
+    }
 
-	header($protocol . ' ' . $responseCode);
+    $contentTypeSent = false;
+    foreach (headers_list() as $header) {
+        $header = mb_strtolower($header);
+        if (mb_strpos($header, 'content-type') !== false) {
+            $contentTypeSent = true;
+        }
+    }
 
-	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
-	header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
-	header('Content-Type: ' . $contentType . '; charset=UTF-8');
-	header('Cache-Control: no-store,no-cache,must-revalidate');
-	header('Cache-Control: post-check=0,pre-check=0', false);
-	header('Pragma: no-cache');
+    header($protocol . ' ' . $responseCode);
+    header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
+    if (!$contentTypeSent) {
+        header('Content-Type: ' . $contentType . '; charset=UTF-8');
+    }
+    header('Cache-Control: no-store,no-cache,must-revalidate');
+    header('Cache-Control: post-check=0,pre-check=0', false);
+    header('Pragma: no-cache');
 
-	return true;
+    return true;
 }
 
 /**
