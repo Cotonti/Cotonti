@@ -17,16 +17,34 @@ foreach (cot_getextplugins('header.first') as $pl) {
 }
 /* ===== */
 
-if (empty(Cot::$out['meta_contenttype'])) {
-    Cot::$out['meta_contenttype'] = Cot::$cfg['xmlclient'] ? 'application/xml' : 'text/html';
+$contentTypeSent = '';
+foreach (headers_list() as $header) {
+    $header = mb_strtolower($header);
+    if (mb_strpos($header, 'content-type') !== false) {
+        $parts = explode(';', $header);
+        $parts = array_map('trim', $parts);
+        if (!empty($parts[0])) {
+            $contentTypeParts = explode(':', $parts[0]);
+            $contentTypeSent = trim($contentTypeParts[1]);
+        }
+        unset($parts, $contentTypeParts);
+        break;
+    }
+}
+
+if (empty(Cot::$out['contentType'])) {
+    if ($contentTypeSent !== '') {
+        Cot::$out['contentType'] = $contentTypeSent;
+    } else {
+        Cot::$out['contentType'] = Cot::$cfg['xmlclient'] ? 'application/xml' : 'text/html';
+    }
 }
 
 if (!headers_sent()) {
-    $lastModified = !empty(Cot::$env['last_modified']) ? Cot::$env['last_modified'] : 0;
     cot_sendheaders(
-        Cot::$out['meta_contenttype'],
-        isset(Cot::$env['status']) ? Cot::$env['status'] : '200 OK',
-        $lastModified
+        Cot::$out['contentType'] !== $contentTypeSent ? Cot::$out['contentType'] : '',
+        !empty(Cot::$env['status']) ? Cot::$env['status'] : '200 OK',
+        !empty(Cot::$env['last_modified']) ? Cot::$env['last_modified'] : 0
     );
 }
 
@@ -141,7 +159,7 @@ if (Cot::$sys['displayHeader']) {
 		'HEADER_NOTICES' => Cot::$out['notices'],
 		'HEADER_NOTICES_ARRAY' => !empty(Cot::$out['notices_array']) ? Cot::$out['notices_array'] : [],
 		'HEADER_BASEHREF' => Cot::$out['basehref'],
-		'HEADER_META_CONTENTTYPE' => Cot::$out['meta_contenttype'],
+		'HEADER_META_CONTENTTYPE' => Cot::$out['contentType'],
 		'HEADER_META_CHARSET' => Cot::$out['meta_charset'],
 		'HEADER_META_DESCRIPTION' => Cot::$out['meta_desc'],
 		'HEADER_META_KEYWORDS' => Cot::$out['meta_keywords'],

@@ -266,7 +266,6 @@ $redirect = cot_import('redirect','G','TXT');
 if (!empty($redirect)) {
     $redirect = preg_replace('/[^a-zA-Z0-9_=\/]/', '', $redirect);
 }
-$out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
 define(
     'COT_AJAX',
@@ -749,13 +748,13 @@ if (!COT_AJAX) {
 
 // Cotonti-specific XTemplate initialization
 if (class_exists('XTemplate')) {
-	XTemplate::init(array(
+	XTemplate::init([
 		'cache'        => $cfg['xtpl_cache'],
 		'cache_dir'    => $cfg['cache_dir'],
 		'cleanup'      => $cfg['html_cleanup'],
 		'debug'        => $cfg['debug_mode'],
-		'debug_output' => isset($_GET['tpl_debug']) ? (bool) $_GET['tpl_debug'] : false
-	));
+		'debug_output' => isset($_GET['tpl_debug']) ? (bool) $_GET['tpl_debug'] : false,
+	]);
 }
 
 /* ======== Global hook ======== */

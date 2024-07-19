@@ -34,10 +34,46 @@ const COT_GROUP_MODERATORS = 6;
 
 /* ======== Pre-sets ========= */
 
-$out = [];
-$sys = [];
+$out = [
+    'basehref' => '',
+    'contentType' => '',
+    'desc' => '', // Meta description
+    'head' => '',
+    'keywords' => '', // Meta keywords
+    'canonical_uri' => '',
+    'subtitle' => '',
+];
+$sys = [
+    'abs_url' => null,
+    'baseDir' => null,
+    'displayHeader' => true,
+    'displayFooter' => true,
+    'domain' => null,
+    'host' => null,
+    'now' => null,
+    'parser' => null,
+    'port' => null,
+    'query' => null, // Request query after the question mark '?'
+    'scheme' => null,
+    'secure' => null,
+    'site_id' => null,
+    'site_uri' => null,
+    'sublocation' => null, // @todo move to $env?
+    'uri' => null, // Request URI relative to $sys['abs_url']
+    'uri_curr' => null,
+    'uri_redir' => null,
+    'url_redirect' => null,
+    'xk' => null,
+
+];
 $usr = [];
-$env = [];
+$env = [
+    'ext' => null, // extension code
+    'location' => null,
+    'last_modified' => 0,
+    'status' => null, // response status. 200 OK
+    'type' => null, // extension type
+];
 $L = [];
 $R = [];
 
@@ -1314,18 +1350,10 @@ function cot_sendheaders($contentType = 'text/html', $responseCode = '200 OK', $
         $lastModified = time() - 3600 * 12;
     }
 
-    $contentTypeSent = false;
-    foreach (headers_list() as $header) {
-        $header = mb_strtolower($header);
-        if (mb_strpos($header, 'content-type') !== false) {
-            $contentTypeSent = true;
-        }
-    }
-
     header($protocol . ' ' . $responseCode);
     header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
     header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
-    if (!$contentTypeSent) {
+    if (!empty($contentType)) {
         header('Content-Type: ' . $contentType . '; charset=UTF-8');
     }
     header('Cache-Control: no-store,no-cache,must-revalidate');
@@ -3584,11 +3612,11 @@ function cot_die_message($code, $header = true, $message_title = '', $message_bo
 		951 => '503 Service Unavailable',
 	];
 
-	if (empty($out['meta_contenttype'])) {
-        $out['meta_contenttype'] = 'text/html';
+	if (empty($out['contentType'])) {
+        $out['contentType'] = 'text/html';
 	}
     if (isset($msg_status[$code])) {
-        cot_sendheaders($out['meta_contenttype'], $msg_status[$code]);
+        cot_sendheaders($out['contentType'], $msg_status[$code]);
     }
 
 	// Determine message title and body
