@@ -871,7 +871,6 @@ class Cotpl_data
     protected $chunks = [];
     /**
      * @var bool Enables space removal for compact output
-     * @deprecated
      * @see \Cotpl_data::cleanup()
      */
     protected static $cleanup_enabled = false;
@@ -1002,10 +1001,6 @@ class Cotpl_data
      *
      * @param string $html Source HTML
      * @return string Cleaned HTML
-     *
-     * @todo move to functions.php (HtmlHelper in future)
-     * @todo call from cot_shutdown() if $cfg['html_cleanup'] is TRUE
-     * @todo remove JS,CSS and HTML comments. Regexp for HTML: '/<!--(.|\s)*?-->/'
      */
     private function cleanup($html)
     {
