@@ -6,9 +6,7 @@
 			<tbody>
 				<tr>
 					<td class="start">
-						<figure>
-							{PHP.R.admin_icon_core}
-						</figure>
+						<figure>{PHP.R.admin_icon_core}</figure>
 						<div>
 							<a href="{ADMIN_OTHER_URL_CACHE}">{PHP.L.adm_internalcache}</a>
 							<p>{PHP.L.adm_internalcache_desc}</p>
@@ -17,9 +15,7 @@
 				</tr>
 				<tr>
 					<td class="start">
-						<figure>
-							{PHP.R.admin_icon_core}
-						</figure>
+						<figure>{PHP.R.admin_icon_core}</figure>
 						<div>
 							<a href="{ADMIN_OTHER_URL_DISKCACHE}">{PHP.L.adm_diskcache}</a>
 							<p>{PHP.L.adm_diskcache_desc}</p>
@@ -28,9 +24,7 @@
 				</tr>
 				<tr>
 					<td class="start">
-						<figure>
-							{PHP.R.admin_icon_core}
-						</figure>
+						<figure>{PHP.R.admin_icon_core}</figure>
 						<div>
 							<a href="{ADMIN_OTHER_URL_EXFLDS}">{PHP.L.adm_extrafields}</a>
 							<p>{PHP.L.adm_extrafields_desc}</p>
@@ -39,9 +33,7 @@
 				</tr>
 				<tr>
 					<td class="start">
-						<figure>
-							{PHP.R.icon_cfg_info}
-						</figure>
+						<figure>{PHP.R.icon_cfg_info}</figure>
 						<div>
 							<a href="{ADMIN_OTHER_URL_LOG}">{PHP.L.adm_log}</a>
 							<p>{PHP.L.adm_log_desc}</p>
@@ -50,9 +42,7 @@
 				</tr>
 				<tr>
 					<td class="start">
-						<figure>
-							{PHP.R.icon_cfg_info}
-						</figure>
+						<figure>{PHP.R.icon_cfg_info}</figure>
 						<div>
 							<a href="{ADMIN_OTHER_URL_INFOS}">{PHP.L.adm_infos}</a>
 							<p>{PHP.L.adm_infos_desc}</p>
@@ -61,9 +51,7 @@
 				</tr>
 				<tr>
 					<td class="start">
-						<figure>
-							{PHP.R.icon_cfg_info}
-						</figure>
+						<figure>{PHP.R.icon_cfg_phpinfo}</figure>
 						<div>
 							<a href="{ADMIN_OTHER_URL_PHPINFO}">{PHP.L.adm_phpinfo}</a>
 							<p>{PHP.L.adm_phpinfo_desc}</p>
@@ -83,9 +71,7 @@
 			<!-- BEGIN: ROW -->
 			<tr>
 				<td class="start">
-					<figure>
-						{ADMIN_OTHER_EXT_ICON}
-					</figure>
+					<figure>{ADMIN_OTHER_EXT_ICON}</figure>
 					<div>
 						<a href="{ADMIN_OTHER_EXT_URL}">{ADMIN_OTHER_EXT_NAME}</a>
 						<p>{ADMIN_OTHER_EXT_DESC}</p>

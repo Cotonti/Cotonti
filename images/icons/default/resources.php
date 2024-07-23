@@ -91,16 +91,16 @@ $R['admin_icon_usergroup1'] = '<img src="'.$cfg['icons_dir'].'/default/32/users.
 
 // Core Config
 
-$R['icon_cfg_info'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/info.png" alt="" />';
-$R['icon_cfg_locale'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/locale.png" alt="" />';
-$R['icon_cfg_main'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/main.png" alt="" />';
-$R['icon_cfg_menus'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/menus.png" alt="" />';
-$R['icon_cfg_performance'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/performance.png" alt="" />';
-$R['icon_cfg_phpinfo'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/info.png" alt="" />';
-$R['icon_cfg_security'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/security.png" alt="" />';
-$R['icon_cfg_sessions'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/sessions.png" alt="" />';
-$R['icon_cfg_theme'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/theme.png" alt="" />';
-$R['icon_cfg_title'] = '<img src="'.$cfg['icons_dir'].'/default/cfg/title.png" alt="" />';
+$R['icon_cfg_info'] = '<img src="' . $cfg['icons_dir'] . '/default/cfg/info.png" alt="" />';
+$R['icon_cfg_locale'] = '<img src="' . $cfg['icons_dir'] . '/default/cfg/locale.png" alt="" />';
+$R['icon_cfg_main'] = '<img src="' . $cfg['icons_dir'] . '/default/cfg/main.png" alt="" />';
+$R['icon_cfg_menus'] = '<img src="' . $cfg['icons_dir'] . '/default/cfg/menus.png" alt="" />';
+$R['icon_cfg_performance'] = '<img src="' . $cfg['icons_dir'] . '/default/cfg/performance.png" alt="" />';
+$R['icon_cfg_phpinfo'] = '<img src="' . $cfg['icons_dir'] . '/default/cfg/php.png" alt="" />';
+$R['icon_cfg_security'] = '<img src="' . $cfg['icons_dir'] . '/default/cfg/security.png" alt="" />';
+$R['icon_cfg_sessions'] = '<img src="' . $cfg['icons_dir'] . '/default/cfg/sessions.png" alt="" />';
+$R['icon_cfg_theme'] = '<img src="' . $cfg['icons_dir'] . '/default/cfg/theme.png" alt="" />';
+$R['icon_cfg_title'] = '<img src="' . $cfg['icons_dir'] . '/default/cfg/title.png" alt="" />';
 
 
 $R['admin_icon_cache'] = '<img src="'.$cfg['icons_dir'].'/default/default.png" alt="" />';
