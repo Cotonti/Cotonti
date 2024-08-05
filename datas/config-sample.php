@@ -18,7 +18,7 @@ $cfg['mysqluser'] = 'root';			// Database user
 $cfg['mysqlpassword'] = '';			// Database password
 $cfg['mysqldb'] = 'cotonti';		// Database name
 // MySQL database charset and collate. Very useful when MySQL server uses different charset rather than site
-// See the list of valid values here: https://dev.mysql.com/doc/refman/8.4/en/charset-charsets.html
+// See the list of valid values here: https://dev.mysql.com/doc/refman/9.0/en/charset-charsets.html
 $cfg['mysqlcharset'] = 'utf8mb4';
 $cfg['mysqlcollate'] = 'utf8mb4_unicode_ci';
 

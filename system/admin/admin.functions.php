@@ -21,7 +21,7 @@ $adminPath = [];
 Cot::$usr['admin_config'] = cot_auth('admin', 'a', 'A');
 Cot::$usr['admin_structure'] = cot_auth('structure', 'a', 'A');
 Cot::$usr['admin_users'] = cot_auth('users', 'a', 'A')
-    || in_array(COT_GROUP_SUPERADMINS, Cot::$usr['maingrp'], true);
+    || in_array(COT_GROUP_SUPERADMINS, Cot::$usr['groups'], true);
 
 /**
  * Returns $url as an HTML link if $cond is TRUE or just plain $text otherwise
