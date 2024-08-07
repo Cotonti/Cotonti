@@ -749,11 +749,11 @@ if (!COT_AJAX) {
 // Cotonti-specific XTemplate initialization
 if (class_exists('XTemplate')) {
 	XTemplate::init([
-		'cache'        => $cfg['xtpl_cache'],
-		'cache_dir'    => $cfg['cache_dir'],
-		'cleanup'      => $cfg['html_cleanup'],
-		'debug'        => $cfg['debug_mode'],
-		'debug_output' => isset($_GET['tpl_debug']) ? (bool) $_GET['tpl_debug'] : false,
+		'cache' => $cfg['xtpl_cache'],
+		'cacheDir' => $cfg['cache_dir'],
+		'cleanup' => $cfg['html_cleanup'],
+		'debug' => $cfg['debug_mode'],
+		'debugOutput' => isset($_GET['tpl_debug']) && (bool) $_GET['tpl_debug'],
 	]);
 }
 

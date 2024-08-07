@@ -45,23 +45,23 @@ class XTemplate
 	/**
 	 * @var bool Enables disk caching of precompiled templates
 	 */
-	protected static $cache_enabled = false;
+	protected static $cacheEnabled = false;
 	/**
 	 * @var string Cache directory path
 	 */
-	protected static $cache_dir = '';
+	protected static $cacheDir = '';
 	/**
 	 * @var array Stores debug data
 	 */
-	protected static $debug_data = array();
+	protected static $debugData = [];
 	/**
 	 * @var boolean Enables debug dumping
 	 */
-	protected static $debug_mode = false;
+	protected static $debugMode = false;
 	/**
 	 * @var boolean Prints debug mode screen
 	 */
-	protected static $debug_output = false;
+	protected static $debugOutput = false;
 	/**
 	 * @var bool Indicates that root-level blocks were found during another run
 	 */
@@ -148,7 +148,7 @@ class XTemplate
 	 */
 	public static function debugData()
 	{
-		return self::$debug_data;
+		return self::$debugData;
 	}
 
 	/**
@@ -242,33 +242,33 @@ class XTemplate
 	 *
 	 * Default values:
 	 * <code>
-	 * $options = array(
-	 *		'cache'        => false,
-	 *		'cache_dir'    => '',
-	 *		'cleanup'      => false,
-	 *		'debug'        => false,
-	 *		'debug_output' => false,
-	 *	);
+	 * $options = [
+	 *		'cache' => false,
+	 *		'cacheDir' => '',
+	 *		'cleanup' => false,
+	 *		'debug' => false,
+	 *		'debugOutput' => false,
+	 *	];
 	 * </code>
 	 *
-	 * @param array $options CoTemplate options
+	 * @param array{cache: bool, cacheDir: string, cleanup: bool, debug: bool, debugOutput: bool} $options CoTemplate options
 	 */
 	public static function init($options = [])
 	{
 		$defaults = [
-			'cache'        => false,
-			'cache_dir'    => '',
-			'cleanup'      => false,
-			'debug'        => false,
-			'debug_output' => false,
+			'cache' => false,
+			'cacheDir' => '',
+			'cleanup' => false,
+			'debug' => false,
+			'debugOutput' => false,
 		];
 
 		$options = array_merge($defaults, $options);
 
-		self::$cache_enabled = $options['cache'];
-		self::$cache_dir     = $options['cache_dir'];
-		self::$debug_mode    = $options['debug'];
-		self::$debug_output  = $options['debug_output'];
+		self::$cacheEnabled = $options['cache'];
+		self::$cacheDir = $options['cacheDir'];
+		self::$debugMode = $options['debug'];
+		self::$debugOutput = $options['debugOutput'];
 		Cotpl_data::init($options['cleanup']);
 	}
 
@@ -278,14 +278,15 @@ class XTemplate
 	 * @param array $m PCRE matches
 	 * @return string
 	 */
-	private static function restart_include_files($m)
+	private static function restartIncludeFiles($m)
 	{
-		$fname = preg_replace_callback('`\{((?:[\w\.\-]+)(?:\|.+?)?)\}`', 'XTemplate::substitute_var', $m[2]);
-		if (preg_match('`\.tpl$`i', $fname) && file_exists($fname))
-		{
+		$fname = preg_replace_callback('`\{((?:[\w\.\-]+)(?:\|.+?)?)\}`', 'XTemplate::substituteVar', $m[2]);
+		if (preg_match('`\.tpl$`i', $fname) && file_exists($fname)) {
 			$code = cotpl_read_file($fname);
-			if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) $code = mb_substr($code, 0);
-			$code = preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restart_include_files', $code);
+			if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) {
+                $code = mb_substr($code, 0);
+            }
+			$code = preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restartIncludeFiles', $code);
 			return $code;
 		}
 		return $fname;
@@ -311,49 +312,82 @@ class XTemplate
 	 * Loads template file structure into memory
 	 *
 	 * @param string $path Template file path
-	 * @return XTemplate $this object for call chaining
+	 * @return ?XTemplate $this object for call chaining
 	 */
 	public function restart($path)
 	{
 		if (!file_exists($path)) {
 			throw new Exception("Template file not found: $path");
-			return false;
 		}
+
 		$this->filename = $path;
-		$this->vars = array();
-		$cache_path = self::$cache_dir . '/templates/' . str_replace(array('./', '/'), '_', $path);
-		$cache_idx = $cache_path . '.idx';
-		$cache_tags = $cache_path . '.tags';
-		if (!self::$cache_enabled || !file_exists($cache_path) || filesize($cache_path) == 0 || !file_exists($cache_idx) || filesize($cache_idx) == 0 || !file_exists($cache_tags) || filesize($cache_tags) == 0 || filemtime($path) > filemtime($cache_path))
-		{
-			$this->blocks = array();
-			$this->index = array();
-			$code = cotpl_read_file($path);
+		$this->vars = [];
+
+        $code = cotpl_read_file($path);
+        $code = $this->prepare($code);
+        $hash = md5($code);
+
+        $pathParts = pathinfo($path);
+        $fileName = $pathParts['filename'];
+        $fileExtension = !empty($pathParts['extension']) ? '.' . $pathParts['extension'] : '';
+
+        $cacheDirectory = self::$cacheDir . '/templates/';
+		$cachePath = $cacheDirectory . str_replace(['./', '/'], '_', $pathParts['dirname']) . '_' . $fileName
+            . '_' . $hash . $fileExtension;
+		$cacheIdx = $cachePath . '.idx';
+		$cacheTags = $cachePath . '.tags';
+		if (
+            !self::$cacheEnabled
+            || !file_exists($cachePath)
+            || filesize($cachePath) === 0
+            || !file_exists($cacheIdx)
+            || filesize($cacheIdx) === 0
+            || !file_exists($cacheTags)
+            || filesize($cacheTags) === 0
+            || filemtime($path) > filemtime($cachePath)
+        ) {
+			$this->blocks = [];
+			$this->index = [];
 
 			$this->compile($code);
 
-			if (self::$cache_enabled) {
-                $cache_dir = self::$cache_dir . '/templates/';
-                if (!empty(self::$cache_dir) && !file_exists($cache_dir)) mkdir($cache_dir, 0755, true);
+			if (self::$cacheEnabled) {
+                if (!empty(self::$cacheDir) && !file_exists($cacheDirectory)) {
+                    mkdir($cacheDirectory, 0755, true);
+                }
 
-				if (is_writeable($cache_dir)) {
-					file_put_contents($cache_path, serialize($this->blocks));
-					file_put_contents($cache_idx, serialize($this->index));
-					$this->getTags();
-					file_put_contents($cache_tags, serialize($this->tags));
+                if (!is_writeable($cacheDirectory)) {
+                    throw new Exception('Your "' . $cacheDirectory . '" is not writable');
+                }
 
-				} else {
-					throw new Exception('Your "' . $cache_dir . '" is not writable');
-				}
+                file_put_contents($cachePath, serialize($this->blocks));
+                file_put_contents($cacheIdx, serialize($this->index));
+                $this->getTags();
+                file_put_contents($cacheTags, serialize($this->tags));
 			}
-
 		} else {
-			$this->blocks = unserialize(cotpl_read_file($cache_path));
-			$this->index = unserialize(cotpl_read_file($cache_idx));
-			$this->tags = unserialize(cotpl_read_file($cache_tags));
+			$this->blocks = unserialize(cotpl_read_file($cachePath));
+			$this->index = unserialize(cotpl_read_file($cacheIdx));
+			$this->tags = unserialize(cotpl_read_file($cacheTags));
 		}
+
 		return $this;
 	}
+
+    /**
+     * @param string $code
+     * @return string
+     */
+    private function prepare($code)
+    {
+        // Remove BOM if present
+        if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) {
+            $code = mb_substr($code, 0);
+        }
+
+        // FILE includes
+        return preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restartIncludeFiles', $code);
+    }
 
 	/**
 	 * Compiles the template from raw TPL code. Example:
@@ -371,14 +405,6 @@ class XTemplate
 	 */
 	public function compile($code)
 	{
-		// Remove BOM if present
-		if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) {
-            $code = mb_substr($code, 0);
-        }
-
-		// FILE includes
-		$code = preg_replace_callback('`\{FILE\s+("|\')(.+?)\1\}`', 'XTemplate::restart_include_files', $code);
-
 		// Get root-level blocks
 		do {
 			$this->found = false;
@@ -398,7 +424,7 @@ class XTemplate
 	 * @param array $m PCRE matches
 	 * @return string
 	 */
-	private static function substitute_var($m)
+	private static function substituteVar($m)
 	{
 		$var = new Cotpl_var($m[1]);
 		return $var->evaluate();
@@ -412,11 +438,11 @@ class XTemplate
 	 */
 	public function out($block = 'MAIN')
 	{
-		if (self::$debug_mode && self::$debug_output) {
+		if (self::$debugMode && self::$debugOutput) {
 			// Print debug stuff for current file
 			$file = basename($this->filename);
 			echo "<h1>$file</h1>";
-			foreach (self::$debug_data[$file] as $block => $tags) {
+			foreach (self::$debugData[$file] as $block => $tags) {
 				$block_name = $file . ' / ' . str_replace('.', ' / ', $block);
 				echo "<h2>$block_name</h2>";
 				echo "<ul>";
@@ -473,7 +499,7 @@ class XTemplate
 		}
 		//else throw new Exception("Block $block is not found in " . $this->filename);
 
-		if (self::$debug_mode)
+		if (self::$debugMode)
 		{
 			if (!in_array($block, $this->displayed_blocks))
 			{
@@ -491,7 +517,7 @@ class XTemplate
 							{
 								$val2 = mb_substr($val2, 0, 60) . '...';
 							}
-							self::$debug_data[$file][$block][$key . '.' . $key2] = $val2;
+							self::$debugData[$file][$block][$key . '.' . $key2] = $val2;
 						}
 					}
 					else
@@ -500,7 +526,7 @@ class XTemplate
 						{
 							$val = mb_substr($val, 0, 60) . '...';
 						}
-						self::$debug_data[$file][$block][$key] = $val;
+						self::$debugData[$file][$block][$key] = $val;
 					}
 				}
 				unset($tags);
