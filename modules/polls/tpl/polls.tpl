@@ -25,9 +25,9 @@
         <script type="text/javascript">
             function anim() {
                 $(".bar_front").each(function () {
-                    var percentage = $(this).width();
-                    if (percentage != "") {
-						$(this).width(0).animate({ width: percentage }, "slow");
+                    let percentage = $(this).width();
+                    if (percentage !== '' && percentage > 0) {
+						$(this).width(0).animate({ width: percentage }, 'slow');
 					}
                 });
             }
@@ -59,9 +59,9 @@
 <script type="text/javascript">
     function anim() {
         $(".bar_front").each(function () {
-            var percentage = $(this).width();
-            if (percentage != "") {
-				$(this).width(0).animate({width: percentage}, "slow");
+            let percentage = $(this).width();
+            if (percentage !== '' && percentage > 0) {
+				$(this).width(0).animate({ width: percentage }, 'slow');
 			}
         });
     }

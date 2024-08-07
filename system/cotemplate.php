@@ -72,19 +72,19 @@ class XTemplate
 	 *
 	 * @param string $path Template file name
 	 */
-	public function __construct($path = NULL)
+	public function __construct($path = null)
 	{
 		// Apply theme redefinitions if necessary
 		global $theme_reload;
-		if (is_array($theme_reload))
-		{
-			foreach($theme_reload as $key_reload => $val_reload)
-			{
-				$GLOBALS[$key_reload] = (is_array($GLOBALS[$key_reload]) && is_array($val_reload)) ? array_merge($GLOBALS[$key_reload], $val_reload) : $val_reload;
+
+		if (is_array($theme_reload)) {
+			foreach($theme_reload as $keyReload => $valueReload) {
+				$GLOBALS[$keyReload] = (is_array($GLOBALS[$keyReload]) && is_array($valueReload))
+                    ? array_merge($GLOBALS[$keyReload], $valueReload)
+                    : $valueReload;
 			}
 		}
-		if (is_string($path))
-		{
+		if (is_string($path)) {
 			$this->restart($path);
 		}
 	}

@@ -321,8 +321,8 @@ span.readmore		{ display:block; }
 
 /* 9. Polls
 -------------------------------------------------- */
-.bar_front 	{ background-color:#cde8fb; border-right:0px solid #333; color:#ddd; height:8px; font-size:1px; }
-.bar_back 	{ background-color:#fff; border:1px solid #333; height:8px; }
+.bar_front 	{ background-color:#cde8fb; border-right: 0 solid #333; color:#ddd; height:8px; font-size:1px; }
+.bar_back 	{ background-color:#fff; border:1px solid #333; }
 .polloptiondiv {
 	display: flex;
 	margin-bottom: 10px;
