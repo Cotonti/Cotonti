@@ -50,7 +50,7 @@ $R['forums_code_quote'] = "{\$postername}:\n{\$text}\n\n";
 $R['forums_code_unread'] = '<a id="unread"></a>';
 $R['forums_code_update'] = "\n\n{\$updated}\n\n";
 
-$R['forums_noavatar'] = '<img src="datas/defaultav/blank.png" alt="" />';
+$R['forums_noavatar'] = '<img src="' . Cot::$R['users_defaultAvatarSrc'] . '" alt="" />';
 
 /**
  * Misc

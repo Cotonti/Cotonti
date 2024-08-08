@@ -58,7 +58,7 @@
 		<span class="commenttext"><span class="comav">
 		<!-- ENDIF -->
 		<!-- IF {COMMENTS_ROW_AUTHORID} == 0 -->
-		<img src="/datas/defaultav/blank.png" alt="Guest" /></span>
+		<img src="{PHP.R.users_defaultAvatarSrc}" alt="Guest" /></span>
 		<!-- ELSE -->
 		<a href="{COMMENTS_ROW_AUTHORID|cot_url('users','m=details&id=$this')}">{COMMENTS_ROW_AUTHOR_AVATAR}</a></span>
 		<!-- ENDIF -->

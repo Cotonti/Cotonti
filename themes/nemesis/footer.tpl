@@ -34,7 +34,12 @@
 			<!-- END: GUEST -->
 			<!-- BEGIN: USER -->
 			<li><strong>Hello, {PHP.usr.name} <!-- IF {PHP.usr.maingrp} == 5 --> &nbsp; [ <a href="{PHP|cot_url('admin')}" class="lower">{PHP.L.Adminpanel}</a> ]<!-- ENDIF --></strong></li>
-			<!-- IF {PHP.usr.profile.user_avatar} --><li class="floatleft marginright10"><img src="{PHP.usr.profile.user_avatar}" alt="{PHP.L.Avatar}" /></li><!-- ELSE --><li class="floatleft marginright10"><img src="datas/defaultav/blank.png" alt="{PHP.L.Avatar}" /></li><!-- ENDIF -->
+			<li class="floatleft marginright10">
+				<img
+					src="<!-- IF {PHP.usr.profile.user_avatar} -->{PHP.usr.profile.user_avatar}<!-- ELSE -->{PHP.R.users_defaultAvatarSrc}<!-- ENDIF -->"
+					alt="{PHP.L.Avatar}"
+				/>
+			</li>
 			<!-- IF {PHP.out.notices} -->
 			<li>{PHP.out.notices}</li>
 			<!-- ENDIF -->
