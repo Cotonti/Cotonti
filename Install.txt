@@ -41,7 +41,6 @@ INSTALLATION
 
 /datas/avatars
 /datas/cache (and all its subfolders)
-/datas/defaultav
 /datas/extflds
 /datas/photos
 /datas/thumbs

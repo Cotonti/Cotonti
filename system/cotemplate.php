@@ -20,48 +20,65 @@ class XTemplate
 	 * @var string Template file name
 	 */
 	public $filename = '';
+
 	/**
 	 * @var array Assigned template vars
 	 */
 	public $vars = [];
+
 	/**
 	 * @var Cotpl_block[] Blocks
 	 */
 	protected $blocks = [];
+
 	/**
 	 * @var array Blocks already displayed (for debug mode)
 	 */
 	protected $displayed_blocks = [];
+
 	/**
 	 * Maps block paths to actual array indices.
 	 * @var array Index for quick block search.
 	 */
 	protected $index = [];
+
 	/**
 	 * Contains a list of names of all tags present in the template
 	 * @var array
 	 */
 	protected $tags = null;
+
 	/**
 	 * @var bool Enables disk caching of precompiled templates
 	 */
 	protected static $cacheEnabled = false;
+
 	/**
 	 * @var string Cache directory path
 	 */
 	protected static $cacheDir = '';
+
 	/**
 	 * @var array Stores debug data
 	 */
 	protected static $debugData = [];
+
 	/**
-	 * @var boolean Enables debug dumping
+	 * @var bool Enables debug dumping
 	 */
 	protected static $debugMode = false;
+
 	/**
-	 * @var boolean Prints debug mode screen
+	 * @var bool Prints debug mode screen
 	 */
 	protected static $debugOutput = false;
+
+    /**
+     * Enables space removal for compact output
+     * @var bool
+     */
+    private static $cleanupEnabled = false;
+
 	/**
 	 * @var bool Indicates that root-level blocks were found during another run
 	 */
@@ -114,17 +131,14 @@ class XTemplate
 	 */
 	public function assign($name, $val = NULL, $prefix = '')
 	{
-		if (is_array($name))
-		{
-			foreach ($name as $key => $val)
-			{
+		if (is_array($name)) {
+			foreach ($name as $key => $val) {
 				$this->vars[$prefix.$key] = $val;
 			}
-		}
-		else
-		{
+		} else {
 			$this->vars[$prefix.$name] = $val;
 		}
+
 		return $this;
 	}
 
@@ -160,18 +174,12 @@ class XTemplate
 	 */
 	public static function debugVar($name, $value)
 	{
-		if (is_numeric($value))
-		{
+		if (is_numeric($value)) {
 			$val_disp = (string) $value;
-		}
-		elseif(is_object($value))
-		{
+		} elseif(is_object($value)) {
 			$val_disp = get_class ($value). ' ' . json_encode( (array)$value );;
-		}
-		else
-		{
-			if (!is_string($value))
-			{
+		} else {
+			if (!is_string($value)) {
 				$value = (string) $value;
 			}
 			$val_disp = '&quot;' . htmlspecialchars($value) . '&quot;';
@@ -198,7 +206,7 @@ class XTemplate
 	{
 		if (is_null($this->tags)) {
 			// Collect all tags
-			$this->tags = array();
+			$this->tags = [];
 			foreach ($this->blocks as $block) {
 				$this->tags = array_merge($this->tags, $block->getTags());
 			}
@@ -223,8 +231,7 @@ class XTemplate
 	 */
 	public function hasTag($name)
 	{
-		if (is_null($this->tags))
-		{
+		if (is_null($this->tags)) {
 			$this->getTags();
 		}
 		return isset($this->tags[$name]);
@@ -269,7 +276,7 @@ class XTemplate
 		self::$cacheDir = $options['cacheDir'];
 		self::$debugMode = $options['debug'];
 		self::$debugOutput = $options['debugOutput'];
-		Cotpl_data::init($options['cleanup']);
+        self::$cleanupEnabled = $options['cleanup'];
 	}
 
 	/**
@@ -313,6 +320,7 @@ class XTemplate
 	 *
 	 * @param string $path Template file path
 	 * @return ?XTemplate $this object for call chaining
+     * @todo more appropriate name
 	 */
 	public function restart($path)
 	{
@@ -405,6 +413,10 @@ class XTemplate
 	 */
 	public function compile($code)
 	{
+        if (self::$cleanupEnabled) {
+            $code = $this->cleanup($code);
+        }
+
 		// Get root-level blocks
 		do {
 			$this->found = false;
@@ -417,6 +429,38 @@ class XTemplate
 
 		return $this;
 	}
+
+    /**
+     * Trims spaces before and after tags
+     *
+     * @param string $html Source HTML
+     * @return string Cleaned HTML
+     */
+    private function cleanup($html)
+    {
+        // We need to minify inline JavaScript first.
+        // It may contain comments, the code after which will also become a comment
+        // Example:
+        // ... modalContent.html('').attr('src', url); //let's use the anchor "title" attribute as modal window title $('#attModalTitleText').text(title); ...
+        //$html = preg_replace('#\n\s+#', ' ', $html);
+
+        $html = join("\n", array_map('trim', explode("\n", $html)));
+
+        $html = preg_replace('#[\r\n\t]+<#', '<', $html);
+        $html = preg_replace('#>[\r\n\t]+#', '>', $html);
+        $html = preg_replace('/[\t\f]+/', ' ', $html);
+        $html = preg_replace('/ {2,}/', ' ', $html);
+
+        // Compress all whitespace within HTML tags (including PRE at the moment)
+        $regexp = "/<\/?\w+((\s+(\w|\w[\w-]*\w)(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)\/?>/i";
+        preg_match_all($regexp, $html, $matches);
+        foreach($matches[0] as $match) {
+            $newHtml = preg_replace('/\s+/', ' ', $match);
+            $html = str_replace($match, $newHtml, $html);
+        }
+
+        return $html;
+    }
 
 	/**
 	 * PCRE callback which immediately subsitutes a TPL var with its value
@@ -840,14 +884,13 @@ class Cotpl_block
 	 */
 	public function getTags()
 	{
-		$list = array();
-		foreach ($this->blocks as $block)
-		{
-			if ($block instanceof Cotpl_data || $block instanceof Cotpl_block)
-			{
+		$list = [];
+		foreach ($this->blocks as $block) {
+			if ($block instanceof Cotpl_data || $block instanceof Cotpl_block) {
 				$list = array_merge($list, $block->getTags());
 			}
 		}
+
 		return $list;
 	}
 
@@ -868,8 +911,8 @@ class Cotpl_block
 	/**
 	 * Clears parsed block data
 	 */
-	public function reset($path = array()) {
-		$this->data = array();
+	public function reset($path = []) {
+		$this->data = [];
 	}
 
 	/**
@@ -895,11 +938,6 @@ class Cotpl_data
      * @var array Block data consisting of strings and Cotpl_vars
      */
     protected $chunks = [];
-    /**
-     * @var bool Enables space removal for compact output
-     * @see \Cotpl_data::cleanup()
-     */
-    protected static $cleanup_enabled = false;
 
 	/**
 	 * Block constructor
@@ -908,10 +946,6 @@ class Cotpl_data
 	 */
 	public function __construct($code)
 	{
-		if (self::$cleanup_enabled) {
-			$code = $this->cleanup($code);
-		}
-
 		$chunks = $this->splitToChunks($code);
         if (!empty($chunks)) {
             foreach ($chunks as $chunk) {
@@ -937,10 +971,10 @@ class Cotpl_data
          * (\{{1,2}[\w\$](?>[^{}]|(?0))*?}{1,2}) - allows {tag} and {{tag}}
          * (\{[\w\$](?>[^{}]|(?0))*?}) - allows {tag}
          *
-         * Allowed {tag}. Only a-zA-Z0-9_$ allowed after {
+         * Allowed {TAG}. Only A-Z0-9_$ allowed after {
          */
         return preg_split(
-            '`(\{[\w\$](?>[^{}]|(?0))*?})`',
+            '`(\{[A-Z0-9_$](?>[^{}]|(?0))*?[\w)]})`',
             $code,
             -1,
             PREG_SPLIT_DELIM_CAPTURE
@@ -987,15 +1021,6 @@ class Cotpl_data
 	}
 
 	/**
-	 * Initializes static class configuration
-	 * @param bool Enables space removal for compact output
-	 */
-	public static function init($cleanup_enabled = false)
-	{
-		self::$cleanup_enabled = $cleanup_enabled;
-	}
-
-	/**
 	 * Returns parsed block contents
 	 *
 	 * @param XTemplate $tpl Reference to XTemplate object
@@ -1021,29 +1046,6 @@ class Cotpl_data
 
 		return $data;
 	}
-
-    /**
-     * Trims spaces before and after tags
-     *
-     * @param string $html Source HTML
-     * @return string Cleaned HTML
-     */
-    private function cleanup($html)
-    {
-        // We need to minify inline JavaScript first.
-        // It may contain comments, the code after which will also become a comment
-        // Example:
-        // ... modalContent.html('').attr('src', url); //let's use the anchor "title" attribute as modal window title $('#attModalTitleText').text(title); ...
-        //$html = preg_replace('#\n\s+#', ' ', $html);
-
-        $html = preg_replace('/^\s+/m', '', $html);
-
-        $html = preg_replace('#[\r\n\t]+<#', '<', $html);
-        $html = preg_replace('#>[\r\n\t]+#', '>', $html);
-        $html = preg_replace('# {2,}#', ' ', $html);
-
-        return $html;
-    }
 }
 
 // Integer keys are faster on evaluation

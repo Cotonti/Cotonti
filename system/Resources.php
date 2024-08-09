@@ -10,7 +10,6 @@ defined('COT_CODE') or die('Wrong URL');
  */
 class Resources
 {
-
 	/**
 	 * @var array predefined aliases
 	 */
@@ -34,17 +33,17 @@ class Resources
 	/**
 	 * @var array Resources Registry
 	 */
-	protected static $registry = array();
+	protected static $registry = [];
 
 	/**
 	 * @var array footer Resources Registry
 	 */
-	protected static $footerRc = array();
+	protected static $footerRc = [];
 
 	/**
 	 * @var array header Resources Registry
 	 */
-	protected static $headerRc = array();
+	protected static $headerRc = [];
 
 	protected static $addedFiles = array();
 
@@ -63,6 +62,8 @@ class Resources
 	 */
 	protected static $headerComplete = false;
 
+    private static $htmlCleanupEnabled = false;
+
 	/**
 	 * @var string $dir Resources cache dir
 	 */
@@ -70,13 +71,16 @@ class Resources
 
 	public static function __init()
 	{
-		if (defined('COT_HEADER_COMPLETE')) static::$headerComplete = true;
+		if (defined('COT_HEADER_COMPLETE')) {
+            static::$headerComplete = true;
+        }
 
 		static::$cacheOn = Cot::$cfg['cache'];
 		static::$consolidate = (bool) Cot::$cfg['headrc_consolidate'];
 		static::$dir = Cot::$cfg['cache_dir'] . '/assets/';
 		static::$isAdmin = defined('COT_ADMIN');
 		static::$minify = (bool) Cot::$cfg['headrc_minify'];
+        static::$htmlCleanupEnabled = (bool) Cot::$cfg['html_cleanup'] && !static::$isAdmin;
 
 		// Consolidate resources?
 		static::$consolidate = static::$cacheOn && static::$consolidate && !static::$isAdmin;
@@ -122,28 +126,33 @@ class Resources
 
 		if (in_array($fileName, static::$addedFiles)) return false;
 
-		if (mb_strpos($fileName, '@') === 0)
-		{
+		if (mb_strpos($fileName, '@') === 0) {
 			$fileName = static::$alias[$fileName];
-		}
-		elseif (mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0)
-		{
-			if (!file_exists($fileName))
-			{
+		} elseif (
+            mb_strpos($fileName, 'http://') === false
+            && mb_strpos($fileName, 'https://') === false
+            && mb_strpos($fileName, '//') !== 0
+        ) {
+			if (!file_exists($fileName)) {
 				throw new Exception('Resource file «' . $fileName . '» not exists');
 			}
 		}
 
-		if (empty($type)) $type = preg_match('#\.(min\.)?(js|css)$#', mb_strtolower($fileName), $m) ? $m[2] : 'js';
+		if (empty($type)) {
+            $type = preg_match('#\.(min\.)?(js|css)$#', mb_strtolower($fileName), $m) ? $m[2] : 'js';
+        }
 
 		static::$addedFiles[] = $tmp[0];
 
-		if (static::$consolidate && static::$minify && !static::$skip_minification && mb_strpos($fileName, '.min.') === false &&
-			 mb_strpos($fileName, '.pack.') === false)
-		{
+		if (
+            static::$consolidate
+            && static::$minify
+            && !static::$skip_minification
+            && mb_strpos($fileName, '.min.') === false
+            && mb_strpos($fileName, '.pack.') === false
+        ) {
 
-			if ($fileName != '')
-			{
+			if ($fileName != '') {
 				$bname = ($type == 'css') ? str_replace('/', '._.', $fileName) : basename($fileName) . '.min';
 				$content = file_get_contents($fileName);
 				if($content == '' || $content === false) return false;
@@ -153,17 +162,13 @@ class Resources
 			}
 		}
 
-		if (static::$consolidate && static::$cacheOn && !static::$isAdmin)
-		{
+		if (static::$consolidate && static::$cacheOn && !static::$isAdmin) {
 			static::$registry[$type][$scope][$order][] = $path;
-		}
-		else
-		{
+		} else {
 			static::$registry[$type]['files'][$scope][$order][] = $path;
 		}
 
-		foreach (static::additionalFiles($tmp[0]) as $file)
-		{
+		foreach (static::additionalFiles($tmp[0]) as $file) {
 			static::addFile($file, '', $order, $scope);
 		}
 
@@ -227,16 +232,17 @@ class Resources
 				file_put_contents($path, $code);
 			}
 			static::$registry[$type][$scope][$order][] = $path;
-
 		} else {
-			$separator = "\n";
-			if ($type == 'js') {
+			$separator = !static::$htmlCleanupEnabled ? "\n" : ' ';
+			if ($type === 'js') {
 				$code = trim($code);
 				$last = (substr($code, -1));
-				if ($last != ';') $separator = ";\n";
+				if ($last !== ';') {
+                    $separator = ";" . $separator;
+                }
 			}
 			if (!isset(static::$registry[$type]['embed'])) {
-                static::$registry[$type]['embed'] = array();
+                static::$registry[$type]['embed'] = [];
             }
 			if (!isset(static::$registry[$type]['embed'][$scope][$order])) {
                 static::$registry[$type]['embed'][$scope][$order] = '';
@@ -292,16 +298,21 @@ class Resources
 				foreach (static::$headerRc[$type] as $order => $htmlArr) {
 					foreach ($htmlArr as $key => $path) {
 						if (mb_strpos($type, '_embed') !== false) {
-							$ret .= $path . "\n";
+							$ret .= $path;
+                            if (!static::$htmlCleanupEnabled) {
+                                $ret .= "\n";
+                            }
 						} else {
 							if (mb_strpos($path, '@') === 0) {
 								$path = static::$alias[$path];
-								if (empty($path)) continue;
+								if (empty($path)) {
+                                    continue;
+                                }
 							}
-
-							$ret .= cot_rc("code_rc_{$type}_file", array(
-								'url' => $path
-							)) . "\n";
+							$ret .= cot_rc("code_rc_{$type}_file", ['url' => $path]);
+                            if (!static::$htmlCleanupEnabled) {
+                                $ret .= "\n";
+                            }
 						}
 					}
 				}
@@ -320,45 +331,38 @@ class Resources
 		global $cot_rc_html, $theme;
 
 		// Если нужно собирать и ужимать делаем это
-		if (!is_array(static::$registry)) return false;
+		if (!is_array(static::$registry)) {
+            return false;
+        }
 
 		// CSS should go first
 		ksort(static::$registry);
 
 		// Build the header outputs
-		$cot_rc_html[$theme] = array();
+		$cot_rc_html[$theme] = [];
 
 		// Consolidate resources
-		if (static::$cacheOn && static::$consolidate && !static::$isAdmin)
-		{
+		if (static::$cacheOn && static::$consolidate && !static::$isAdmin) {
 			clearstatcache();
 
-			foreach (static::$registry as $type => $scope_data)
-			{
+			foreach (static::$registry as $type => $scope_data) {
 				// Consolidation
-				foreach ($scope_data as $scope => $ordered_files)
-				{
+				foreach ($scope_data as $scope => $ordered_files) {
 					ksort($ordered_files);
 					$target_path = static::$dir . $scope . '.' . $theme . '.' . $type;
 
-					$files = array();
-					foreach ($ordered_files as $order => $o_files)
-					{
+					$files = [];
+					foreach ($ordered_files as $order => $o_files) {
 						$files = array_merge($files, $o_files);
 					}
 					$files = array_unique($files);
 
-					foreach ($files as $key => $file)
-					{
-						if (mb_strpos($file, '@') === 0)
-						{
+					foreach ($files as $key => $file) {
+						if (mb_strpos($file, '@') === 0) {
 							$tmp = static::$alias[$file];
-							if (empty($tmp))
-							{
+							if (empty($tmp)) {
 								unset($files[$key]);
-							}
-							else
-							{
+							} else {
 								$files[$key] = $tmp;
 							}
 						}
@@ -388,66 +392,65 @@ class Resources
 						}
 					}
 
-					if ($modified)
-					{
+					if ($modified) {
 						// Reconsolidate cache
 						$current_path = str_replace('\\', '/', realpath('.'));
-						foreach ($files as $path)
-						{
+						foreach ($files as $path) {
 							// Get file contents and remove BOM
 							$file_code = str_replace(pack('CCC', 0xef, 0xbb, 0xbf), '', file_get_contents($path));
 
-							if ($type == 'css')
-							{
-								if (strpos($path, '._.') !== false)
-								{
+							if ($type == 'css') {
+								if (strpos($path, '._.') !== false) {
 									// Restore original file path
 									$path = str_replace('._.', '/', basename($path));
 								}
-								if ($path[0] === '/')
-								{
+								if ($path[0] === '/') {
 									$path = mb_substr($path, 1);
 								}
 								$file_path = str_replace('\\', '/', dirname(realpath($path)));
 								$relative_path = str_replace($current_path, '', $file_path);
-								if ($relative_path[0] === '/')
-								{
+								if ($relative_path[0] === '/') {
 									$relative_path = mb_substr($relative_path, 1);
 								}
 								// Apply CSS imports
-								if (preg_match_all('#@import\s+url\((\'|")?([^\'")]+)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
-								{
-									foreach ($mt as $m)
-									{
-										if (preg_match('#^https?://#i', $m[2]))
-										{
+								if (
+                                    preg_match_all(
+                                        '#@import\s+url\((\'|")?([^\'")]+)\1?\);#i',
+                                        $file_code,
+                                        $mt,
+                                        PREG_SET_ORDER
+                                    )
+                                ) {
+									foreach ($mt as $m) {
+										if (preg_match('#^https?://#i', $m[2])) {
 											$filename = $m[2];
-										}
-										else
-										{
+										} else {
 											$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
 										}
 										$file_code = str_replace($m[0], file_get_contents($filename), $file_code);
 									}
 								}
 								// Fix URLs
-								if (preg_match_all('#\burl\((\'|")?([^\)"\']+)\1?\)#i', $file_code, $mt, PREG_SET_ORDER))
-								{
-									foreach ($mt as $m)
-									{
+								if (preg_match_all(
+                                    '#\burl\((\'|")?([^\)"\']+)\1?\)#i',
+                                    $file_code,
+                                    $mt,
+                                    PREG_SET_ORDER)
+                                ) {
+									foreach ($mt as $m) {
 										$fileFullName = trim(empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2]);
 										$tmp = explode('?', $fileFullName);
 										$fileName = $tmp[0];
 
 										$fileName = str_replace($current_path, '', str_replace('\\', '/', realpath($fileName)));
-										if (!$fileName) continue;
+										if (!$fileName) {
+                                            continue;
+                                        }
 
-										if ($fileName[0] === '/')
-										{
+										if ($fileName[0] === '/') {
 											$fileName = mb_substr($fileName, 1);
 										}
-										if (!empty($tmp[1]))
-										{
+										if (!empty($tmp[1])) {
 											$fileName .= '?' . $tmp[1];
 										}
 										$file_code = str_replace($m[0], 'url("' . $fileName . '")', $file_code);
@@ -455,78 +458,81 @@ class Resources
 								}
 							}
 							$separator = "\n";
-							if ($type == 'js')
-							{
+							if ($type == 'js') {
 								$file_code = trim($file_code);
 								$last = (substr($file_code, -1));
-								if ($last != ';') $separator = ";\n";
+								if ($last != ';') {
+                                    $separator = ";\n";
+                                }
 							}
 							$code .= $file_code . $separator;
 						}
 
 						file_put_contents($target_path, $code);
-						if (Cot::$cfg['gzip']) file_put_contents("$target_path.gz", gzencode($code));
+						if (Cot::$cfg['gzip']) {
+                            file_put_contents("$target_path.gz", gzencode($code));
+                        }
 						file_put_contents("$target_path.idx", serialize($files));
 
 						$fileTime = filemtime($target_path);
 					}
 
-					$rc_url = "rc.php?rc=$scope.$theme.$type&amp;nc=" . $fileTime;
+					$rcUrl = "rc.php?rc=$scope.$theme.$type&amp;nc=" . $fileTime;
 
-					if (empty($cot_rc_html[$theme][$scope])) $cot_rc_html[$theme][$scope] = '';
-					$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_file", array(
-						'url' => $rc_url
-					)) . "\n";
+					if (empty($cot_rc_html[$theme][$scope])) {
+                        $cot_rc_html[$theme][$scope] = '';
+                    }
+					$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_file", ['url' => $rcUrl]);
+                    if (!static::$htmlCleanupEnabled) {
+                        $cot_rc_html[$theme][$scope] .= "\n";
+                    }
 				}
 			}
 			// Save the output
 			static::$cacheOn && Cot::$cache && Cot::$cache->db->store('cot_rc_html', $cot_rc_html);
-		}
-		else
-		{
-
-			$log = array(); // log paths to avoid duplicates
-			foreach (static::$registry as $type => $resData)
-			{
-				if (!empty(static::$registry[$type]['files']) && is_array(static::$registry[$type]['files']))
-				{
-					foreach (static::$registry[$type]['files'] as $scope => $scope_data)
-					{
+		} else {
+			$log = []; // log paths to avoid duplicates
+			foreach (static::$registry as $type => $resData) {
+				if (!empty(static::$registry[$type]['files']) && is_array(static::$registry[$type]['files'])) {
+					foreach (static::$registry[$type]['files'] as $scope => $scope_data) {
 						ksort($scope_data);
-						foreach ($scope_data as $order => $files)
-						{
-							foreach ($files as $file)
-							{
-								if (!in_array($file, $log))
-								{
+						foreach ($scope_data as $order => $files) {
+							foreach ($files as $file) {
+								if (!in_array($file, $log)) {
 									$fileName = $file;
-									if (mb_strpos($file, '@') === 0)
-									{
+									if (mb_strpos($file, '@') === 0) {
 										$fileName = static::$alias[$file];
-										if (empty($fileName)) continue;
+										if (empty($fileName)) {
+                                            continue;
+                                        }
 									}
-									if (empty($cot_rc_html[$theme][$scope])) $cot_rc_html[$theme][$scope] = '';
-									$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_file", array(
-										'url' => $fileName
-									)) . "\n";
+									if (empty($cot_rc_html[$theme][$scope])) {
+                                        $cot_rc_html[$theme][$scope] = '';
+                                    }
+									$cot_rc_html[$theme][$scope] .= cot_rc(
+                                        "code_rc_{$type}_file",
+                                        ['url' => $fileName]
+                                    );
+                                    if (!static::$htmlCleanupEnabled) {
+                                        $cot_rc_html[$theme][$scope] .= "\n";
+                                    }
 									$log[] = $file;
 								}
 							}
 						}
 					}
 				}
-				if (!empty(static::$registry[$type]['embed']) && is_array(static::$registry[$type]['embed']))
-				{
-					foreach (static::$registry[$type]['embed'] as $scope => $scope_data)
-					{
+				if (!empty(static::$registry[$type]['embed']) && is_array(static::$registry[$type]['embed'])) {
+					foreach (static::$registry[$type]['embed'] as $scope => $scope_data) {
 						ksort($scope_data);
-						foreach ($scope_data as $order => $code)
-						{
-							if (empty($cot_rc_html[$theme][$scope])) $cot_rc_html[$theme][$scope] = '';
-
-							$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_embed", array(
-								'code' => $code
-							)) . "\n";
+						foreach ($scope_data as $order => $code) {
+							if (empty($cot_rc_html[$theme][$scope])) {
+                                $cot_rc_html[$theme][$scope] = '';
+                            }
+							$cot_rc_html[$theme][$scope] .= cot_rc("code_rc_{$type}_embed", ['code' => $code]);
+                            if (!static::$htmlCleanupEnabled) {
+                                $cot_rc_html[$theme][$scope] .= "\n";
+                            }
 						}
 					}
 				}
@@ -540,36 +546,35 @@ class Resources
 	 */
 	public static function renderFooter()
 	{
-		if (!is_array(static::$footerRc)) return false;
+		if (!is_array(static::$footerRc)) {
+            return false;
+        }
 
 		// CSS should go first
 		ksort(static::$footerRc);
 		$ret = '';
 
-		foreach (static::$footerRc as $type => $data)
-		{
-			if (!empty(static::$footerRc[$type]) && is_array(static::$footerRc[$type]))
-			{
+		foreach (static::$footerRc as $type => $data) {
+			if (!empty(static::$footerRc[$type]) && is_array(static::$footerRc[$type])) {
 				ksort(static::$footerRc[$type]);
-				foreach (static::$footerRc[$type] as $order => $htmlArr)
-				{
-					foreach ($htmlArr as $key => $path)
-					{
-						if (mb_strpos($type, '_embed') !== false)
-						{
-							$ret .= $path . "\n";
-						}
-						else
-						{
-							if (mb_strpos($path, '@') === 0)
-							{
+				foreach (static::$footerRc[$type] as $order => $htmlArr) {
+					foreach ($htmlArr as $key => $path) {
+						if (mb_strpos($type, '_embed') !== false) {
+							$ret .= $path;
+                            if (!static::$htmlCleanupEnabled) {
+                                $ret .= "\n";
+                            }
+						} else {
+							if (mb_strpos($path, '@') === 0) {
 								$path = static::$alias[$path];
-								if ($path == '') continue;
+								if ($path == '') {
+                                    continue;
+                                }
 							}
-
-							$ret .= cot_rc("code_rc_{$type}_file", array(
-								'url' => $path
-							)) . "\n";
+							$ret .= cot_rc("code_rc_{$type}_file", ['url' => $path]);
+                            if (!static::$htmlCleanupEnabled) {
+                                $ret .= "\n";
+                            }
 						}
 					}
 				}
@@ -592,32 +597,37 @@ class Resources
 	public static function linkFile($path, $type = '', $order = 50)
 	{
 		// header.php executed. Try add file to footer
-		if (static::$headerComplete) return Resources::linkFileFooter($path, $type, $order);
+		if (static::$headerComplete) {
+            return Resources::linkFileFooter($path, $type, $order);
+        }
 
 		$tmp = explode('?', $path);
 		$fileName = $tmp[0];
 
-		if (in_array($fileName, static::$addedFiles)) return false;
+		if (in_array($fileName, static::$addedFiles)) {
+            return false;
+        }
 
-		if (mb_strpos($fileName, '@') === 0)
-		{
+		if (mb_strpos($fileName, '@') === 0) {
 			$fileName = static::$alias[$fileName];
-		}
-		elseif (mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0)
-		{
-			if (!file_exists($fileName))
-			{
+		} elseif (
+            mb_strpos($fileName, 'http://') === false
+            && mb_strpos($fileName, 'https://') === false
+            && mb_strpos($fileName, '//') !== 0
+        ) {
+			if (!file_exists($fileName)) {
 				throw new Exception('Resource file «' . $fileName . '» not exists');
 			}
 		}
 
-		if (empty($type)) $type = preg_match('#\.(js|css)$#i', $fileName, $m) ? strtolower($m[1]) : 'js';
+		if (empty($type)) {
+            $type = preg_match('#\.(js|css)$#i', $fileName, $m) ? strtolower($m[1]) : 'js';
+        }
 
 		static::$addedFiles[] = $tmp[0];
 		static::$headerRc[$type][$order][] = $path;
 
-		foreach (static::additionalFiles($tmp[0]) as $file)
-		{
+		foreach (static::additionalFiles($tmp[0]) as $file) {
 			static::linkFile($file, '', $order);
 		}
 	}
@@ -636,34 +646,34 @@ class Resources
 		$tmp = explode('?', $path);
 		$fileName = $tmp[0];
 
-		if (in_array($fileName, static::$addedFiles)) return false;
+		if (in_array($fileName, static::$addedFiles)) {
+            return false;
+        }
 
-		if (mb_strpos($fileName, '@') === 0)
-		{
+		if (mb_strpos($fileName, '@') === 0) {
 			$fileName = static::$alias[$fileName];
-		}
-		elseif (mb_strpos($fileName, 'http://') === false && mb_strpos($fileName, 'https://') === false && mb_strpos($fileName, '//') !== 0)
-		{
-			if (!file_exists($fileName))
-			{
+		} elseif (
+            mb_strpos($fileName, 'http://') === false
+            && mb_strpos($fileName, 'https://') === false
+            && mb_strpos($fileName, '//') !== 0
+        ) {
+			if (!file_exists($fileName)) {
 				throw new Exception('Resource file «' . $fileName . '» not exists');
 			}
 		}
 
-		if (empty($type)) $type = preg_match('#\.(js|css)$#i', $fileName, $m) ? strtolower($m[1]) : 'js';
+		if (empty($type)) {
+            $type = preg_match('#\.(js|css)$#i', $fileName, $m) ? strtolower($m[1]) : 'js';
+        }
 
 		static::$addedFiles[] = $tmp[0];
 		static::$footerRc[$type][$order][] = $path;
 
-		foreach (static::additionalFiles($tmp[0]) as $file)
-		{
+		foreach (static::additionalFiles($tmp[0]) as $file) {
 			$type = preg_match('#\.(js|css)$#i', $file, $m) ? strtolower($m[1]) : 'js';
-			if ($type == 'css' && !static::$headerComplete)
-			{
+			if ($type == 'css' && !static::$headerComplete) {
 				static::linkFile($file, 'css', $order);
-			}
-			else
-			{
+			} else {
 				static::linkFileFooter($file, '', $order);
 			}
 		}
@@ -683,12 +693,14 @@ class Resources
 	public static function embed($code, $type = 'js', $order = 50, $attr = '')
 	{
 		// header.php executed. Try add code to footer
-		if (static::$headerComplete) Resources::embedFooter($code, $type, $order, $attr);
+		if (static::$headerComplete) {
+            Resources::embedFooter($code, $type, $order, $attr);
+        }
 
-		static::$headerRc[$type . '_embed'][$order][] = cot_rc("code_rc_{$type}_embed", array(
-			'code' => $code,
-			'attr' => $attr
-		));
+		static::$headerRc[$type . '_embed'][$order][] = cot_rc(
+            "code_rc_{$type}_embed",
+            ['code' => $code, 'attr' => $attr]
+        );
 	}
 
 	/**
@@ -719,16 +731,14 @@ class Resources
 	 */
 	public static function minify($code, $type = 'js')
 	{
-		if ($type == 'js')
-		{
+		if ($type == 'js') {
 			require_once './lib/jsmin.php';
 			$code = JSMin::minify($code);
-		}
-		elseif ($type == 'css')
-		{
+		} elseif ($type == 'css') {
 			require_once './lib/cssmin.php';
 			$code = minify_css($code);
 		}
+
 		return $code;
 	}
 
@@ -741,11 +751,17 @@ class Resources
 	 */
 	public static function setAlias($newAlias, $value = '', $canReWrite = false)
 	{
-		if ($newAlias == '') return false;
+		if ($newAlias == '') {
+            return false;
+        }
 
-		if (mb_strpos($newAlias, '@') === false) $newAlias = '@' . $newAlias;
+		if (mb_strpos($newAlias, '@') === false) {
+            $newAlias = '@' . $newAlias;
+        }
 
-        if(!$canReWrite && isset(static::$alias[$newAlias]) && static::$alias[$newAlias] !== null) return false;
+        if (!$canReWrite && isset(static::$alias[$newAlias]) && static::$alias[$newAlias] !== null) {
+            return false;
+        }
 
 		static::$alias[$newAlias] = $value;
 
@@ -754,11 +770,17 @@ class Resources
 
 	public static function getAlias($aliasName)
 	{
-		if ($aliasName == '') return null;
+		if ($aliasName == '') {
+            return null;
+        }
 
-		if (mb_strpos($aliasName, '@') === false) $aliasName = '@' . $aliasName;
+		if (mb_strpos($aliasName, '@') === false) {
+            $aliasName = '@' . $aliasName;
+        }
 
-		if (!isset(static::$alias[$aliasName])) return null;
+		if (!isset(static::$alias[$aliasName])) {
+            return null;
+        }
 
 		return static::$alias[$aliasName];
 	}
@@ -773,7 +795,9 @@ class Resources
      */
 	public static function isFileAdded($fileName)
     {
-        if (in_array($fileName, static::$addedFiles)) return true;
+        if (in_array($fileName, static::$addedFiles)) {
+            return true;
+        }
         return false;
     }
 }
