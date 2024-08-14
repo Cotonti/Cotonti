@@ -417,7 +417,7 @@ class CotDB
 	 * Performs simple SQL DELETE query and returns number of removed items.
 	 *
 	 * @param string $tableName Table name
-	 * @param string $condition Body of WHERE clause
+	 * @param string|string[] $condition Body of WHERE clause
 	 * @param array $parameters Array of statement input parameters, see http://www.php.net/manual/en/pdostatement.execute.php
 	 * @return int Number of records removed on success or FALSE on error
 	 */
@@ -425,6 +425,9 @@ class CotDB
 	{
         $query = 'DELETE FROM ' . $this->quoteTableName($tableName);
         if (!empty($condition)) {
+            if (is_array($condition)) {
+                $condition = implode(' AND ', $condition);
+            }
             $query .=  ' WHERE ' . $condition;
         }
 
@@ -691,12 +694,12 @@ class CotDB
      *
      * @param string $tableName Table name
      * @param array $data Associative array containing data for update
-     * @param string $condition Body of SQL WHERE clause
+     * @param string|string[] $condition Body of SQL WHERE clause
      * @param array $parameters Array of statement input parameters, see http://www.php.net/manual/en/pdostatement.execute.php
      * @param bool $updateNull Nullify cells which have null values in the array. By default they are skipped
      * @return int The number of affected records or FALSE on error
      */
-    public function update($tableName, $data, $condition ='', $parameters = [], $updateNull = false)
+    public function update($tableName, $data, $condition = '', $parameters = [], $updateNull = false)
     {
         if (!is_array($data)) {
             return 0;
@@ -709,7 +712,12 @@ class CotDB
             $condition = $this->_prepare($condition, $parameters);
             $parameters = [];
         }
+
+        if (!empty($condition) && is_array($condition)) {
+            $condition = implode(' AND ', $condition);
+        }
         $condition = empty($condition) ? '' : 'WHERE ' . $condition;
+
         foreach ($data as $key => $val) {
             if (is_null($val) && !$updateNull) {
                 continue;

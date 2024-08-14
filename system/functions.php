@@ -6470,26 +6470,25 @@ function cot_declension($digit, $expr, $onlyword = false, $canfrac = false)
 	}
 
 	if (!is_array($expr)) {
-		return trim(($onlyword ? '' : "$digit ").$expr);
+		return trim(($onlyword ? '' : "$digit ") . $expr);
 	}
 
-	$is_frac = false;
+	$isFrac = false;
 	if ($canfrac) {
-		if ((is_float($digit) && $digit!=floor($digit)) || mb_strpos($digit, '.') !== false)
-		{
-			$i = floatval($digit);
-			$is_frac = true;
+		if ((is_float($digit) && $digit != floor($digit)) || mb_strpos($digit, '.') !== false) {
+			$i = (float) $digit;
+			$isFrac = true;
 		} else {
-			$i = intval($digit);
+			$i = (int) $digit;
 		}
 	} else {
         $i = !empty($digit) ? intval(preg_replace('#\D+#', '', $digit)) : 0;
 	}
 
-	$plural = cot_get_plural($i, $lang, $is_frac);
+	$plural = cot_get_plural($i, $lang, $isFrac);
 	$cnt = count($expr);
 
-	return trim(($onlyword ? '' : "$digit ").(($cnt > 0 && $plural < $cnt) ? $expr[$plural] : ''));
+	return trim(($onlyword ? '' : "$digit ") . (($cnt > 0 && $plural < $cnt) ? $expr[$plural] : ''));
 }
 
 /**

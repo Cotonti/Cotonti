@@ -114,8 +114,7 @@ class XTemplate
 	public function __toString()
 	{
 		$str = '';
-		foreach ($this->blocks as $name => $block)
-		{
+		foreach ($this->blocks as $name => $block) {
 			$str .= "<!-- BEGIN: $name -->\n" . $block->__toString() . "<!-- END: $name -->\n";
 		}
 		return $str;
@@ -446,7 +445,7 @@ class XTemplate
 
         $html = join("\n", array_map('trim', explode("\n", $html)));
 
-        $html = preg_replace('#[\r\n\t]+<#', '<', $html);
+        $html = preg_replace('#[\r\n\t]+<#', ' <', $html);
         $html = preg_replace('#>[\r\n\t]+#', '>', $html);
         $html = preg_replace('/[\t\f]+/', ' ', $html);
         $html = preg_replace('/ {2,}/', ' ', $html);
