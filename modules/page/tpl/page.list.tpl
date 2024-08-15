@@ -2,6 +2,7 @@
 <div class="col3-2 first">
 	<div class="block">
 		<h2 class="folder">{LIST_BREADCRUMBS}</h2>
+		{FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 		<!-- BEGIN: LIST_CAT_ROW -->
 		<div class="list-row category-row">
 			<h3><a href="{LIST_CAT_ROW_URL}" title="{LIST_CAT_ROW_TITLE}">{LIST_CAT_ROW_TITLE}</a> ({LIST_CAT_ROW_COUNT})</h3>

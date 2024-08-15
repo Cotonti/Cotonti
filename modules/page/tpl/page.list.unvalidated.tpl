@@ -2,6 +2,7 @@
 <div class="col3-2 first">
     <div class="block">
         <h2 class="folder">{LIST_CAT_TITLE}</h2>
+        {FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
         <table>
             <thead>
             <tr>

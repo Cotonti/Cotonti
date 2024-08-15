@@ -3,6 +3,7 @@
     <div class="padding20">
         <div id="left">
             <h1>{LIST_CAT_TITLE}</h1>
+            {FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
             <p class="details">{LIST_CAT_DESCRIPTION}</p>
             <!-- IF {LIST_TOTAL_ENTRIES} != 0 -->
             <p> {PHP.themelang.list.sort} <strong>{PHP.L.Title}</strong>
