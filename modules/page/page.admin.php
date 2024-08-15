@@ -223,15 +223,15 @@ if ($a == 'validate') {
 	}
 	/* ===== */
 
-    $result = cot_page_delete($id);
-    if ($result) {
+    $resultOrMessage = cot_page_delete($id);
+    if ($resultOrMessage !== false) {
         /* === Hook === */
 		foreach (cot_getextplugins('page.admin.delete.done') as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
-        cot_message('#' . $id . ' - ' . Cot::$L['adm_queue_deleted']);
+        cot_message('#' . $id . ' - ' . $resultOrMessage);
     } else {
         cot_error('#' . $id . ' - ' . Cot::$L['adm_failed']);
     }
@@ -307,6 +307,7 @@ if ($a == 'validate') {
 
 		$perelik = '';
 		$notfoundet = '';
+        $deletedMessage = Cot::$L['page_deleted'];
 		foreach ($s as $i => $k) {
 			if ($s[$i] == '1' || $s[$i] == 'on') {
 				/* === Hook  === */
@@ -315,17 +316,17 @@ if ($a == 'validate') {
 				}
 				/* ===== */
 
-                $result = cot_page_delete($id);
-                if ($result) {
+                $resultOrMessage = cot_page_delete($id);
+                if ($resultOrMessage !== false) {
                     /* === Hook === */
                     foreach (cot_getextplugins('page.admin.delete.done') as $pl) {
                         include $pl;
                     }
                     /* ===== */
                     $perelik .= '#' . $id . ', ';
-
+                    $deletedMessage = $resultOrMessage;
                 } else {
-                    $notfoundet .= '#'. $id . ' - ' . Cot::$L['Error'].'<br  />';
+                    $notfoundet .= '#'. $id . ' - ' . Cot::$L['Error'] . '<br  />';
                 }
 			}
 		}
@@ -335,14 +336,14 @@ if ($a == 'validate') {
         }
 
         if (!empty($perelik)) {
-            cot_message($perelik . ' - ' . Cot::$L['adm_queue_deleted']);
+            cot_message($perelik . ' - ' . $deletedMessage);
         }
 
         cot_redirect(cot_url('admin', $urlParams, '', true));
 	}
 }
 
-$totalitems = Cot::$db->query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere)->fetchColumn();
+$totalitems = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->pages . ' WHERE ' . $sqlwhere)->fetchColumn();
 $pagenav = cot_pagenav(
 	'admin',
 	$common_params,

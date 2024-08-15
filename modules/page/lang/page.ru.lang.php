@@ -51,7 +51,6 @@ $L['cfg_metadesc'] = 'Meta-описание';
  * Admin Page Section
  */
 
-$L['adm_queue_deleted'] = 'Страница удалена в корзину';
 $L['adm_valqueue'] = 'В очереди на утверждение';
 $L['adm_validated'] = 'Утвержденные';
 $L['adm_expired'] = 'C истекшим сроком';
@@ -81,6 +80,8 @@ $L['page_confirm_delete'] = 'Вы действительно хотите уда
 $L['page_confirm_validate'] = 'Хотите утвердить эту страницу?';
 $L['page_confirm_unvalidate'] = 'Вы действительно хотите отправить эту страницу в очередь на утверждение?';
 $L['page_date_now'] = 'Актуализировать дату страницы';
+$L['page_deleted'] = 'Страница удалена';
+$L['page_deleted_to_trash'] = 'Страница удалена в корзину';
 $L['page_drafts'] = 'Черновики';
 $L['page_drafts_desc'] = 'Страницы, сохраненные в ваших черновиках';
 $L['page_notavailable'] = 'Страница будет опубликована через';

@@ -15,6 +15,7 @@ Order=7
  *
  * @var int $id Deleting page id
  * @var array $rpage Deleting page data row
+ * @var array $pageDeletedMessage
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -31,6 +32,8 @@ if (Cot::$cfg['plugin']['trashcan']['trash_page']) {
         Cot::$L['Page'] . " #" . $id . " " . $rpage['page_title'],
         $id, $rpage
     );
+
+    $pageDeletedMessage['deleted'] = Cot::$L['page_deleted_to_trash'];
 
     // And all it's comments
     if (cot_plugin_active('comments')) {

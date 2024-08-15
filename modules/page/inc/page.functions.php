@@ -761,9 +761,9 @@ function cot_page_add(&$rpage, $auth = [])
 
 /**
  * Removes a page from the CMS.
- * @param  int     $id    Page ID
- * @param  array   $rpage Page data
- * @return boolean        TRUE on success, FALSE on error
+ * @param int $id Page ID
+ * @param array $rpage Page data
+ * @return bool|string "deleted" message on success, FALSE on error
  */
 function cot_page_delete($id, $rpage = [])
 {
@@ -790,6 +790,8 @@ function cot_page_delete($id, $rpage = [])
 
     cot_page_updateStructureCounters($rpage['page_cat']);
 
+    $pageDeletedMessage = ['deleted' => Cot::$L['page_deleted']];
+
 	/* === Hook === */
 	foreach (cot_getextplugins('page.edit.delete.done') as $pl) {
 		include $pl;
@@ -806,7 +808,7 @@ function cot_page_delete($id, $rpage = [])
 		}
 	}
 
-	return true;
+	return is_array($pageDeletedMessage) ? implode('; ', $pageDeletedMessage) : $pageDeletedMessage;
 }
 
 /**

@@ -51,7 +51,6 @@ $L['cfg_metadesc'] = 'Meta description';
  * Admin Page Section
  */
 
-$L['adm_queue_deleted'] = 'Page was deleted in to the trash can';
 $L['adm_valqueue'] = 'Waiting for validation';
 $L['adm_validated'] = 'Already validated';
 $L['adm_expired'] = 'Expired';
@@ -81,6 +80,8 @@ $L['page_confirm_delete'] = 'Do you really want to delete this page?';
 $L['page_confirm_validate'] = 'Do you want to validate this page?';
 $L['page_confirm_unvalidate'] = 'Do you really want to put this page back to the validation queue?';
 $L['page_date_now'] = 'Update page date to current';
+$L['page_deleted'] = 'Page deleted';
+$L['page_deleted_to_trash'] = 'Page was deleted in to the trash can';
 $L['page_drafts'] = 'Drafts';
 $L['page_drafts_desc'] = 'Pages saved in your drafts';
 $L['page_notavailable'] = 'This page will be published in ';

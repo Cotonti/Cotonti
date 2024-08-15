@@ -60,8 +60,11 @@ if ($a == 'update') {
 	}
 
 	if ($rpagedelete) {
-		cot_page_delete($id, $row_page);
-		cot_redirect(cot_url('page', "c=" . $row_page['page_cat'], '', true));
+		$resultOrMessage = cot_page_delete($id, $row_page);
+        if ($resultOrMessage !== false) {
+            cot_message($resultOrMessage);
+            cot_redirect(cot_url('page', ['c' => $row_page['page_cat']], '', true));
+        }
 	}
 
 	/* === Hook === */
@@ -73,8 +76,7 @@ if ($a == 'update') {
 	cot_page_validate($rpage);
 
 	/* === Hook === */
-	foreach (cot_getextplugins('page.edit.update.error') as $pl)
-	{
+	foreach (cot_getextplugins('page.edit.update.error') as $pl) {
 		include $pl;
 	}
 	/* ===== */
