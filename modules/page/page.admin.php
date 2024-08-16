@@ -307,7 +307,6 @@ if ($a == 'validate') {
 
 		$perelik = '';
 		$notfoundet = '';
-        $deletedMessage = Cot::$L['page_deleted'];
 		foreach ($s as $i => $k) {
 			if ($s[$i] == '1' || $s[$i] == 'on') {
 				/* === Hook  === */
@@ -324,7 +323,6 @@ if ($a == 'validate') {
                     }
                     /* ===== */
                     $perelik .= '#' . $id . ', ';
-                    $deletedMessage = $resultOrMessage;
                 } else {
                     $notfoundet .= '#'. $id . ' - ' . Cot::$L['Error'] . '<br  />';
                 }
@@ -336,7 +334,7 @@ if ($a == 'validate') {
         }
 
         if (!empty($perelik)) {
-            cot_message($perelik . ' - ' . $deletedMessage);
+            cot_message($perelik . ' - ' . Cot::$L['page_deleted']);
         }
 
         cot_redirect(cot_url('admin', $urlParams, '', true));

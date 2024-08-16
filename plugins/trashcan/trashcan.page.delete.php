@@ -33,7 +33,7 @@ if (Cot::$cfg['plugin']['trashcan']['trash_page']) {
         $id, $rpage
     );
 
-    $pageDeletedMessage['deleted'] = Cot::$L['page_deleted_to_trash'];
+    $pageDeletedMessage['deleted'] = Cot::$L['page_deletedToTrash'];
 
     // And all it's comments
     if (cot_plugin_active('comments')) {
