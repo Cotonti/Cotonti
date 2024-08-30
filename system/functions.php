@@ -13,9 +13,9 @@ defined('COT_CODE') or die('Wrong URL');
 if (!defined('COT_INSTALL')) {
     if (
         !function_exists('version_compare') ||
-        !version_compare(PHP_VERSION, '5.6', '>=')
+        !version_compare(PHP_VERSION, '7.3', '>=')
     ) {
-        die('Cotonti system requirements: PHP 5.6 or above.'); // @todo: Need translate
+        die('Cotonti system requirements: PHP 7.3 or above.'); // @todo: Need translate
     }
 
     if (!extension_loaded('mbstring')) {
@@ -418,11 +418,6 @@ function cot_import($name, $source, $filter, $maxlen = 0, $dieOnError = false, $
 		if ($filter !== 'ARR') {
             return null;
         }
-	}
-
-
-	if (MQGPC && ($source === 'G' || $source === 'P' || $source === 'C') && $v !== null && $filter !== 'ARR') {
-		$v = stripslashes($v);
 	}
 
 	if (

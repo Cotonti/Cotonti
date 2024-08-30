@@ -9,18 +9,6 @@ defined('COT_CODE') or die('Wrong URL');
 
 /* ======== First... ======== */
 
-if (version_compare(PHP_VERSION, '7.0.0', '<=')) {
-	if (get_magic_quotes_gpc()) {
-		function cot_disable_mqgpc(&$value, $key) {
-			$value = stripslashes($value);
-		}
-		$gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
-		array_walk_recursive($gpc, 'cot_disable_mqgpc');
-	}
-}
-
-const MQGPC = false;
-
 if ($cfg['display_errors']) {
 	error_reporting(E_ALL ^ E_NOTICE);
 	ini_set('display_errors', 1);

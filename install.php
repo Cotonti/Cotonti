@@ -46,17 +46,6 @@ $env['location'] = 'install';
 $env['ext'] = 'install';
 
 if (isset($cfg['new_install']) && $cfg['new_install']) {
-	// A Few basics from common.php
-	if (version_compare(PHP_VERSION, '6.0.0', '<=')) {
-		if (get_magic_quotes_gpc()) {
-			function cot_disable_mqgpc(&$value, $key) {
-				$value = stripslashes($value);
-			}
-			$gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
-			array_walk_recursive($gpc, 'cot_disable_mqgpc');
-		}
-	}
-	define('MQGPC', FALSE);
 	error_reporting(E_ALL ^ E_NOTICE);
 
 	session_start();

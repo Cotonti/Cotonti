@@ -28,7 +28,7 @@ You can find latest releases and its change lists on [dedicated GitHub page](htt
 To install Cotonti you need the following server software pre-installed:
 
 * WWW Server (Apache, nginx, etc)
-* PHP 5.6.0 or higher
+* PHP 7.3.0 or higher
 * MySQL 5.0.8 or higher
 
 

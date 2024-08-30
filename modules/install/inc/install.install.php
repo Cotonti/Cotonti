@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			if (!file_exists($file['sql'])) {
 				cot_error(cot_rc('install_error_missing_file', ['file' => $file['sql']]));
 			}
-			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.6.0', '>=')) {
+			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '7.3.0', '>=')) {
 				cot_error(cot_rc('install_error_php_ver', ['ver' => PHP_VERSION]));
 			}
 			if (!extension_loaded('mbstring')) {
@@ -578,7 +578,7 @@ switch ($step) {
 			$status['sql_file'] = $R['install_code_not_found'];
 		}
 		$status['php_ver'] = (function_exists('version_compare')
-            && version_compare(PHP_VERSION, '5.6.0', '>='))
+            && version_compare(PHP_VERSION, '7.3.0', '>='))
 			? cot_rc(
                 'install_code_valid',
                 ['text' => cot_rc('install_ver_valid', ['ver' => PHP_VERSION])]

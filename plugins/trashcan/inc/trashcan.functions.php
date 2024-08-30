@@ -18,25 +18,25 @@ $GLOBALS['trash_types'] = array(
 /**
  * Sends item to trash
  *
- * @param string $type Item type
+ * @param string $source Item type
  * @param string $title Title
- * @param int $itemid Item ID
- * @param array|string $datas Item contents in array or SQL string condition for deleting records
- * @param int $parentid trashcan parent id
- * @return int|false Trash insert id
+ * @param int $sourceId Item ID
+ * @param array|string $itemData Item contents in array or SQL string condition for deleting records
+ * @param int $parentId trashcan parent id
+ * @return ?int Trash insert id
  * @global CotDB $db
  */
-function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
+function cot_trash_put($source, $title, $sourceId, $itemData, $parentId = 0)
 {
 	global $db, $db_trash, $sys, $usr, $trash_types;
 
 	$trash = [
         'tr_date' => Cot::$sys['now'],
-        'tr_type' => $type,
+        'tr_type' => $source,
         'tr_title' => $title,
-        'tr_itemid' => $itemid,
+        'tr_itemid' => $sourceId,
 		'tr_trashedby' => (int) Cot::$usr['id'],
-        'tr_parentid' => $parentid,
+        'tr_parentid' => $parentId,
     ];
 
 	/* === Hook  === */
@@ -47,14 +47,14 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 
 	$i = 0;
     $existId = 0;
-	if (is_array($datas)) {
+	if (is_array($itemData)) {
 		$i++;
-		$trash['tr_datas'] = serialize($datas);
+		$trash['tr_datas'] = serialize($itemData);
 
         $existId = (int) Cot::$db->query(
             'SELECT tr_id FROM ' . Cot::$db->quoteTableName(Cot::$db->trash) .
                 ' WHERE tr_type = :type AND tr_itemid = :id ORDER BY tr_date DESC LIMIT 1',
-            ['type' => $type, 'id' => $itemid]
+            ['type' => $source, 'id' => $sourceId]
         )->fetchColumn();
         if ($existId > 0) {
             // If for some reason the item is already in the trash (For example because of an error)
@@ -63,15 +63,15 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
                 $db_trash,
                 $trash,
                 'tr_type = :type AND tr_itemid = :id',
-                ['type' => $type, 'id' => $itemid]
+                ['type' => $source, 'id' => $sourceId]
             );
         } else {
             Cot::$db->insert($db_trash, $trash);
         }
 
-	} elseif (is_string($datas)) {
-		$tablename = isset($trash_types[$type]) ? $trash_types[$type] : $type;
-		$sql_s = Cot::$db->query("SELECT * FROM $tablename WHERE $datas");
+	} elseif (is_string($itemData)) {
+		$tablename = isset($trash_types[$source]) ? $trash_types[$source] : $source;
+		$sql_s = Cot::$db->query("SELECT * FROM $tablename WHERE $itemData");
 		while ($row_s = $sql_s->fetch()) {
 			$i++;
 			$trash['tr_datas'] = serialize($row_s);
@@ -81,17 +81,18 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 	}
 
     if ($existId > 0) {
-        $id = $existId;
+        $trashId = $existId;
     } else {
-        $id = ($i) ? $db->lastInsertId() : false;
+        $trashId = $i > 0 ? (int) Cot::$db->lastInsertId() : null;
     }
+
 	/* === Hook  === */
 	foreach (cot_getextplugins('trash.put.done') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
-	return $id;
+	return $trashId;
 }
 
 /**

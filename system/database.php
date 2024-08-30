@@ -9,6 +9,9 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\database\traits\DetectLostConnectionTrait;
+use cot\database\traits\TransactionTrait;
+
 defined('COT_CODE') or die('Wrong URL');
 
 /**
@@ -39,12 +42,15 @@ defined('COT_CODE') or die('Wrong URL');
  */
 class CotDB
 {
+    use DetectLostConnectionTrait;
+    use TransactionTrait;
+
     protected $tableQuoteCharacter = '`';
     protected $columnQuoteCharacter = '`';
 
     /**
      * The PDO connection to database
-     * @var \PDO
+     * @var PDO
      */
     protected $adapter;
 
@@ -112,7 +118,7 @@ class CotDB
 	 * Table names registry
 	 * @var array
 	 */
-	private $_tables = array();
+	private $_tables = [];
 
     /**
      * It is used in runScript() only
@@ -154,13 +160,17 @@ class CotDB
 
     /**
      * Connect to Data Base
-     * @return \PDO
+     * @return PDO
      *
      * @see http://www.php.net/manual/en/pdo.construct.php
      * @todo when multiple connections to databases will be implemented, use connection registry
      */
-    protected function connect()
+    protected function connect(): PDO
     {
+        if ($this->adapter !== null) {
+            return $this->adapter;
+        }
+
         if (!empty($this->config['charset'])) {
             $collation_query = "SET NAMES '{$this->config['charset']}'";
             if (!empty($this->config['collate'])) {
@@ -178,7 +188,7 @@ class CotDB
         }
 
         $this->config['options'] = !empty($this->config['options']) ? $this->config['options'] : null;
-        $adapter = new \PDO($dsn, $this->config['user'], $this->config['password'], $this->config['options']);
+        $adapter = new PDO($dsn, $this->config['user'], $this->config['password'], $this->config['options']);
 
         $adapter->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -187,6 +197,12 @@ class CotDB
 		}
 
         return $adapter;
+    }
+
+    public function reconnect()
+    {
+        $this->adapter = null;
+        $this->connect();
     }
 
     /**
@@ -470,7 +486,7 @@ class CotDB
     public function tableExists($tableName)
     {
         if (mb_strpos($tableName, '.') !== false) {
-            list($schema, $tableName) = explode('.', $tableName);
+            [$schema, $tableName] = explode('.', $tableName);
         } else {
             $schema = $this->config['dbName'];
         }
@@ -503,7 +519,7 @@ class CotDB
      *     columns. No column check will be preformed if left empty.
 	* @return bool TRUE if the index name or column order exists, FALSE otherwise
 	*/
-    public function indexExists($tableName, $index_name, $indexColumns = array())
+    public function indexExists($tableName, $index_name, $indexColumns = [])
 	{
 		if (empty($indexColumns)) {
 			return (bool) $this->query('SHOW INDEXES FROM ' . $this->quoteTableName($tableName) .
@@ -545,7 +561,7 @@ class CotDB
      *     columns. $indexName will be used if empty.
 	* @return int Number of rows affected
 	*/
-    public function addIndex($tableName, $indexName, $indexColumns = array())
+    public function addIndex($tableName, $indexName, $indexColumns = [])
 	{
 		if (empty($indexColumns)) {
             $indexColumns = array($indexName);
@@ -575,13 +591,14 @@ class CotDB
 	 * performs multi-row INSERT if $data is a 2D array (numeric => assoc)
 	 *
 	 * @param string $tableName Table name
-	 * @param array $data Associative or 2D array containing data for insertion.
+	 * @param array<string, int|float|string>|list<array<string, int|float|string>> $data Associative or 2D array
+     *   containing data for insertion.
 	 * @param bool $insertNull Insert SQL NULL for empty values rather than ignoring them.
 	 * @param bool $ignore Ignore duplicate key errors on insert
 	 * @param array $updateFields List of fields to be updated with ON DUPLICATE KEY UPDATE
 	 * @return int The number of affected records
 	 */
-	public function insert($tableName, $data, $insertNull = false, $ignore = false, $updateFields = array())
+	public function insert($tableName, $data, $insertNull = false, $ignore = false, $updateFields = [])
 	{
 		if (!is_array($data)) {
 			return 0;
@@ -799,6 +816,7 @@ class CotDB
      * @param bool $inTransaction
 	 * @return string Error message if an error occurs or empty string on success
      * @todo process $this->tableQuoteCharacter
+     * @todo use new transactions
 	 */
 	public function runScript($script, $inTransaction = false)
 	{
@@ -952,10 +970,12 @@ class CotDB
             $startChar = $endChar = $this->tableQuoteCharacter;
 
         } else {
-            list($startChar, $endChar) = $this->tableQuoteCharacter;
+            [$startChar, $endChar] = $this->tableQuoteCharacter;
         }
 
-        if (strpos($name, $startChar) !== false) return $name;
+        if (strpos($name, $startChar) !== false) {
+            return $name;
+        }
 
         return $startChar . $name . $endChar;
     }
@@ -978,7 +998,6 @@ class CotDB
         if (($pos = strrpos($name, '.')) !== false) {
             $prefix = $this->quoteTableName(substr($name, 0, $pos)) . '.';
             $name = substr($name, $pos + 1);
-
         } else {
             $prefix = '';
         }
@@ -1011,7 +1030,7 @@ class CotDB
             $startChar = $endChar = $this->columnQuoteCharacter;
 
         } else {
-            list($startChar, $endChar) = $this->columnQuoteCharacter;
+            [$startChar, $endChar] = $this->columnQuoteCharacter;
         }
 
         if ($name === '*' || strpos($name, $startChar) !== false) {
