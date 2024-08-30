@@ -1042,12 +1042,12 @@ function cot_plugin_add($hook_bindings, $code, $title, $isModule = false)
 		];
 	}
 
-    Cot::$db->getConnection()->beginTransaction();
+    Cot::$db->beginTransaction();
     try {
         $result = Cot::$db->insert(Cot::$db->plugins, $insertRows);
-        Cot::$db->getConnection()->commit();
+        Cot::$db->commit();
     } catch (Exception $e) {
-        Cot::$db->getConnection()->rollBack();
+        Cot::$db->rollBack();
         return 0;
     }
 

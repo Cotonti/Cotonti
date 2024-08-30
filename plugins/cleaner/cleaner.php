@@ -38,14 +38,14 @@ if (Cot::$cfg['plugin']['cleaner']['userprune'] > 0) {
 
     $deleted = 0;
     if (!empty($usersIds)) {
-        Cot::$db->getConnection()->beginTransaction();
+        Cot::$db->beginTransaction();
         try {
             Cot::$db->delete(Cot::$db->groups_users, 'gru_userid IN (' . implode(',', $usersIds) . ')');
             Cot::$db->delete(Cot::$db->users, 'user_id IN (' . implode(',', $usersIds) . ')');
             $deleted = count($usersIds);
-            Cot::$db->getConnection()->commit();
+            Cot::$db->commit();
         } catch (PDOException $err) {
-            Cot::$db->getConnection()->rollBack();
+            Cot::$db->rollBack();
         }
     }
 

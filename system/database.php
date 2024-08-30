@@ -832,7 +832,7 @@ class CotDB
 		$queries =  preg_split('#;\r?\n#', $script);
 
         if ($inTransaction) {
-            $this->adapter->beginTransaction();
+            $this->beginTransaction();
         }
         try {
             foreach ($queries as $query) {
@@ -869,11 +869,11 @@ class CotDB
             }
 
             if ($inTransaction) {
-                $this->adapter->commit();
+                $this->commit();
             }
         } catch (Exception $e) {
             if ($inTransaction) {
-                $this->adapter->rollBack();
+                $this->rollBack();
             }
             return $e->getMessage();
         }

@@ -306,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$ruserpass['user_passfunc'] = empty($cfg['hashfunc']) ? 'sha256' : $cfg['hashfunc'];
 				$ruserpass['user_password'] = cot_hash($user['pass'], $ruserpass['user_passsalt'], $ruserpass['user_passfunc']);
 
-                $db->getConnection()->beginTransaction();
+                $db->beginTransaction();
 				try {
 					$db->insert(
                         $db_x . 'users',
@@ -342,9 +342,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         "config_owner = 'core' AND config_name = 'adminemail'"
                     );
 
-                    $db->getConnection()->commit();
+                    $db->commit();
 				} catch (PDOException $err) {
-                    $db->getConnection()->rollBack();
+                    $db->rollBack();
 					cot_error(cot_rc('install_error_sql_script', ['msg' => $err->getMessage()]));
 				}
 

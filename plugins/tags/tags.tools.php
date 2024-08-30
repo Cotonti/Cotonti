@@ -147,13 +147,13 @@ if ($action === 'edit') {
         cot_redirect($redirectUrl);
 	}
 
-    Cot::$db->getConnection()->beginTransaction();
+    Cot::$db->beginTransaction();
     try {
         Cot::$db->update(Cot::$db->tags, ['tag' => $tag], 'tag = :oldTag', ['oldTag' => $oldTag]);
         Cot::$db->update(Cot::$db->tag_references, ['tag' => $tag], 'tag = :oldTag', ['oldTag' => $oldTag]);
-        Cot::$db->getConnection()->commit();
+        Cot::$db->commit();
     } catch (Exception $e) {
-        Cot::$db->getConnection()->rollBack();
+        Cot::$db->rollBack();
         cot_error(Cot::$L['Error'] . ': ' . $e->getMessage());
         cot_redirect($redirectUrl);
     }
