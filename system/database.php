@@ -653,19 +653,10 @@ class CotDB
                 $j++;
             }
         }
-        $res = 0;
+
         $this->_startTimer();
-        //try {
-            $res = $this->adapter->exec($query);
-//        } catch (\PDOException $err) {
-//            /**
-//             * @todo it should be optional. Sometimes we don't need to catch Exception here, but in another place
-//             * @see plugins/trashcan/inc/trashcan.functions.php:122
-//             */
-//            if ($this->_parseError($err, $err_code, $err_message)) {
-//                cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
-//            }
-//        }
+        $res = $this->adapter->exec($query);
+
         $this->_stopTimer($query);
 
         return $res;
@@ -741,22 +732,18 @@ class CotDB
         if (!empty($upd)) {
             $upd = mb_substr($upd, 0, -1);
             $query = 'UPDATE ' . $this->quoteTableName($tableName) . " SET $upd $condition";
-            $res = 0;
+
             $this->_startTimer();
-            //try {
-                if (count($parameters) > 0) {
-                    $stmt = $this->adapter->prepare($query);
-                    $this->_bindParams($stmt, $parameters);
-                    $stmt->execute();
-                    $res = $stmt->rowCount();
-                } else {
-                    $res = $this->adapter->exec($query);
-                }
-//            } catch (PDOException $err) {
-//                if ($this->_parseError($err, $err_code, $err_message)) {
-//                    cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
-//                }
-//            }
+
+            if (count($parameters) > 0) {
+                $stmt = $this->adapter->prepare($query);
+                $this->_bindParams($stmt, $parameters);
+                $stmt->execute();
+                $res = $stmt->rowCount();
+            } else {
+                $res = $this->adapter->exec($query);
+            }
+
             $this->_stopTimer($query);
 
             return $res;
