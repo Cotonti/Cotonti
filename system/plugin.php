@@ -158,7 +158,7 @@ if ($autoAssignTags) {
 	}
 }
 
-$pluginTemplate = $t;
+$pluginTemplate = $t ?? null;
 require_once Cot::$cfg['system_dir'] . '/header.php';
 if (!empty($pluginTemplate)) {
     $t = $pluginTemplate;
