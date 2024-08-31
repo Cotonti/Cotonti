@@ -389,28 +389,19 @@ class CotDB
             $parameters = [$parameters];
         }
         $this->_startTimer();
-        $result = null;
-        //try {
-            if (count($parameters) > 0) {
-                if ($this->_prepare_itself) {
-                    $result = $this->adapter->query($this->_prepare($query, $parameters));
-                } else {
-                    $result = $this->adapter->prepare($query);
-                    $this->_bindParams($result, $parameters);
-                    $result->execute();
-                }
+
+        if (count($parameters) > 0) {
+            if ($this->_prepare_itself) {
+                $result = $this->adapter->query($this->_prepare($query, $parameters));
             } else {
-                $result = $this->adapter->query($query, $mode);
+                $result = $this->adapter->prepare($query);
+                $this->_bindParams($result, $parameters);
+                $result->execute();
             }
-//        } catch (\PDOException $err) {
-//            /**
-//             * @todo it should be optional. Sometimes we don't need to catch Exception here, but in another place
-//             * @see plugins/trashcan/inc/trashcan.functions.php:122
-//             */
-//            if ($this->_parseError($err, $err_code, $err_message)) {
-//                cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
-//            }
-//        }
+        } else {
+            $result = $this->adapter->query($query, $mode);
+        }
+
         $this->_stopTimer($query);
         if (!empty($result)) {
             $result->setFetchMode($mode);
@@ -442,7 +433,7 @@ class CotDB
         $query = 'DELETE FROM ' . $this->quoteTableName($tableName);
         if (!empty($condition)) {
             if (is_array($condition)) {
-                $condition = implode(' AND ', $condition);
+                $condition = '(' . implode(') AND (', $condition) . ')';
             }
             $query .=  ' WHERE ' . $condition;
         }
@@ -453,25 +444,19 @@ class CotDB
 
         $res = 0;
 		$this->_startTimer();
-		//try {
-			if (count($parameters) > 0) {
-				if ($this->_prepare_itself) {
-					$res = $this->adapter->exec($this->_prepare($query, $parameters));
-				} else {
-					$stmt = $this->adapter->prepare($query);
-					$this->_bindParams($stmt, $parameters);
-					$stmt->execute();
-					$res = $stmt->rowCount();
-				}
-			} else {
-				$res = $this->adapter->exec($query);
-			}
+        if (count($parameters) > 0) {
+            if ($this->_prepare_itself) {
+                $res = $this->adapter->exec($this->_prepare($query, $parameters));
+            } else {
+                $stmt = $this->adapter->prepare($query);
+                $this->_bindParams($stmt, $parameters);
+                $stmt->execute();
+                $res = $stmt->rowCount();
+            }
+        } else {
+            $res = $this->adapter->exec($query);
+        }
 
-//        } catch (PDOException $err) {
-//			if ($this->_parseError($err, $err_code, $err_message)) {
-//				cot_diefatal('SQL error ' . $err_code . ': ' . $err_message);
-//			}
-//		}
 		$this->_stopTimer($query);
 
 		return $res;
@@ -731,7 +716,7 @@ class CotDB
         }
 
         if (!empty($condition) && is_array($condition)) {
-            $condition = implode(' AND ', $condition);
+            $condition = '(' . implode(') AND (', $condition) . ')';
         }
         $condition = empty($condition) ? '' : 'WHERE ' . $condition;
 

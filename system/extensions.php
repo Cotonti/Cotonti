@@ -1057,9 +1057,9 @@ function cot_plugin_add($hook_bindings, $code, $title, $isModule = false)
 /**
  * Suspends a plugin or one of its parts
  *
- * @param  string  $name Module or plugin name
- * @param  mixed   $part ID of the binding to supsend or 0 to suspend all; if part name is passed, then that part is suspended
- * @return integer       Number of bindings suspended
+ * @param string $name Module or plugin name
+ * @param mixed $part ID of the binding to supsend or 0 to suspend all; if part name is passed, then that part is suspended
+ * @return int Number of bindings suspended
  * @global CotDB $db
  */
 function cot_plugin_pause($name, $part = 0)

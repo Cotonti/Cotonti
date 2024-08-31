@@ -86,7 +86,7 @@ trait TransactionTrait
         }
 
         if ($this->adapter->inTransaction()) {
-            $this->createSavepoint('LEVEL' . $this->transactionLevel);
+            $this->createSavepoint('LEVEL_' . $this->transactionLevel);
         }
     }
 
@@ -114,11 +114,12 @@ trait TransactionTrait
             return;
         }
 
-        if ($this->supportsSavepoints()) {
-            if ($this->adapter->inTransaction()) {
-                $this->releaseSavepoint('LEVEL' . $this->transactionLevel);
-            }
-        }
+        // @todo is it really needed?
+//        if ($this->supportsSavepoints()) {
+//            if ($this->adapter->inTransaction()) {
+//                $this->releaseSavepoint('LEVEL_' . $this->transactionLevel);
+//            }
+//        }
     }
 
     /**
@@ -127,7 +128,6 @@ trait TransactionTrait
     public function rollBack(?int $toLevel = null): void
     {
         $toLevel = $toLevel === null ? $this->transactionLevel - 1 : $toLevel;
-
         if ($toLevel < 0 || $toLevel >= $this->transactionLevel) {
             return;
         }
@@ -151,7 +151,9 @@ trait TransactionTrait
         }
 
         if ($this->supportsSavepoints()) {
-            $this->rollBackSavepoint('LEVEL' . $toLevel);
+            if ($this->adapter->inTransaction()) {
+                $this->rollBackSavepoint('LEVEL_' . $toLevel);
+            }
         }
     }
 
@@ -162,7 +164,8 @@ trait TransactionTrait
 
     protected function releaseSavepoint(string $name): void
     {
-        $this->query("RELEASE SAVEPOINT $name")->execute();
+        // For some reason it does not work in MySQL with PDO
+        //$this->query("RELEASE SAVEPOINT $name")->execute();
     }
 
     public function rollBackSavepoint($name)
