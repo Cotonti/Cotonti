@@ -80,7 +80,7 @@ $R = [];
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.25 beta';
+$cfg['version'] = '0.9.25';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms'])) {
@@ -160,7 +160,7 @@ function cot_alphaonly($text)
  * @see array_diff()
  * @see https://php.net/manual/en/function.array-diff.php
  *
- * @todo make signature compartaible with native array_diff() function:
+ * @todo make signature compatible with native array_diff() function:
  *       array_diff(array $array, array ...$arrays): array
  */
 function cot_arrayDiff(array $array1, array $array2)

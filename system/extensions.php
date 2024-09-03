@@ -1058,7 +1058,7 @@ function cot_plugin_add($hook_bindings, $code, $title, $isModule = false)
  * Suspends a plugin or one of its parts
  *
  * @param string $name Module or plugin name
- * @param mixed $part ID of the binding to supsend or 0 to suspend all; if part name is passed, then that part is suspended
+ * @param mixed $part ID of the binding to suspend or 0 to suspend all; if part name is passed, then that part is suspended
  * @return int Number of bindings suspended
  * @global CotDB $db
  */
@@ -1067,16 +1067,13 @@ function cot_plugin_pause($name, $part = 0)
 	global $db, $db_plugins;
 
 	$condition = "pl_code = '$name'";
-	if (is_numeric($part) && $part > 0)
-	{
+	if (is_numeric($part) && $part > 0) {
 		$condition .= " AND pl_id = $part";
-	}
-	elseif (is_string($part))
-	{
+	} elseif (is_string($part)) {
 		$condition .= " AND pl_part = " . $db->quote($part);
 	}
 
-	return $db->update($db_plugins, array('pl_active' => 0), $condition);
+	return $db->update($db_plugins, ['pl_active' => 0], $condition);
 }
 
 /**
