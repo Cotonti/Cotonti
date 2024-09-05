@@ -456,63 +456,92 @@ if (Cot::$usr['isadmin']) {
 	$t->parse('MAIN.FORUMS_POSTS_ADMIN');
 }
 
-$allowreplybox = (Cot::$cfg['forums']['antibumpforums'] && $row['fp_posterid'] > 0 && $row['fp_posterid'] == Cot::$usr['id'] && Cot::$usr['auth_write']) ? FALSE : TRUE;
+$allowreplybox = !(
+    Cot::$cfg['forums']['antibumpforums']
+    && $row['fp_posterid'] > 0
+    && $row['fp_posterid'] == Cot::$usr['id']
+    && Cot::$usr['auth_write']
+);
 
-if ((Cot::$cfg['forums']['enablereplyform'] || $lastpage) && !$rowt['ft_state'] && Cot::$usr['id'] > 0 && $allowreplybox && Cot::$usr['auth_write'])
-{
+if (
+    (Cot::$cfg['forums']['enablereplyform'] || $lastpage)
+    && !$rowt['ft_state']
+    && Cot::$usr['id'] > 0
+    && $allowreplybox
+    && Cot::$usr['auth_write']
+) {
     $rmsg = null;
-	if ($quote > 0)
-	{
-		$sql_forums_quote = Cot::$db->query("SELECT fp_id, fp_text, fp_postername, fp_posterid, fp_creation FROM $db_forum_posts
-			WHERE fp_topicid = ? AND fp_cat = ? AND fp_id = ? LIMIT 1",
-			array($q, $s, $quote));
-		if ($row4 = $sql_forums_quote->fetch())
-		{
-			$rmsg['fp_text'] = cot_rc('forums_code_quote', array(
-				'url' => cot_url('forums', 'm=posts&q=' . $q . '&d=' . $durl, '#' . $row4['fp_id'], $forums_quote_htmlspecialchars_bypass),
-				'id' => $row4['fp_id'],
-				'date' => cot_date('datetime_medium', $row4['fp_creation']),
-				'postername' => $row4['fp_postername'],
-				'text' => $row4['fp_text']
-			));
-		}
-	}
+    if ($quote > 0) {
+        $sql_forums_quote = Cot::$db->query(
+            'SELECT fp_id, fp_text, fp_postername, fp_posterid, fp_creation FROM '
+            . Cot::$db->quoteTableName(Cot::$db->forum_posts)
+            . ' WHERE fp_topicid = ? AND fp_cat = ? AND fp_id = ? LIMIT 1',
+            [$q, $s, $quote]
+        );
 
-	// Extra fields
+        if ($row4 = $sql_forums_quote->fetch()) {
+            $rmsg['fp_text'] = cot_rc(
+                'forums_code_quote',
+                [
+                    'url' => cot_url(
+                        'forums',
+                        ['m' => 'posts', 'q' => $q, 'd' => $durl],
+                        '#' . $row4['fp_id'],
+                        $forums_quote_htmlspecialchars_bypass ?? false
+                    ),
+                    'id' => $row4['fp_id'],
+                    'date' => cot_date('datetime_medium', $row4['fp_creation']),
+                    'postername' => $row4['fp_postername'],
+                    'text' => $row4['fp_text'],
+                ]
+            );
+        }
+    }
+
+    // Extra fields
     if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
-        foreach (Cot::$extrafields[Cot::$db->forum_posts] as $exfld) {
-            $uname = strtoupper($exfld['field_name']);
-            $exfld_val = cot_build_extrafields('rmsg' . $exfld['field_name'], $exfld, $rmsg[$exfld['field_name']]);
-            $exfld_title = cot_extrafield_title($exfld, 'forums_post_');
+        foreach (Cot::$extrafields[Cot::$db->forum_posts] as $extraField) {
+            $uname = strtoupper($extraField['field_name']);
+            $extraFieldValue = cot_build_extrafields('rmsg' . $extraField['field_name'], $extraField, null);
+            $extraFieldTitle = cot_extrafield_title($extraField, 'forums_post_');
 
-            $t->assign(array(
-                'FORUMS_POSTS_NEWPOST_' . $uname => $exfld_val,
-                'FORUMS_POSTS_NEWPOST_' . $uname . '_TITLE' => $exfld_title,
-                'FORUMS_POSTS_NEWPOST_EXTRAFLD' => $exfld_val,
-                'FORUMS_POSTS_NEWPOST_EXTRAFLD_TITLE' => $exfld_title
-            ));
+            $t->assign([
+                'FORUMS_POSTS_NEWPOST_' . $uname => $extraFieldValue,
+                'FORUMS_POSTS_NEWPOST_' . $uname . '_TITLE' => $extraFieldTitle,
+                'FORUMS_POSTS_NEWPOST_EXTRAFLD' => $extraFieldValue,
+                'FORUMS_POSTS_NEWPOST_EXTRAFLD_TITLE' => $extraFieldTitle,
+            ]);
             $t->parse('MAIN.FORUMS_POSTS_NEWPOST.EXTRAFLD');
         }
     }
 
     $text = '';
-    if (isset($rmsg['fp_text'])) $text = $rmsg['fp_text'];
-	$t->assign(array(
-		'FORUMS_POSTS_NEWPOST_SEND' => cot_url('forums', "m=posts&a=newpost&s=" . $s . "&q=" . $q),
-		'FORUMS_POSTS_NEWPOST_TEXT' => Cot::$R['forums_code_newpost_mark'] . cot_textarea('rmsgtext', $text,
-                16, 56, '', 'input_textarea_'.$minimaxieditor),
-        'FORUMS_POSTS_NEWPOST_EDITTIMEOUT' => cot_build_timegap(0, Cot::$cfg['forums']['edittimeout'] * 3600)
-	));
+    if (isset($rmsg['fp_text'])) {
+        $text = $rmsg['fp_text'];
+    }
+    $t->assign([
+        'FORUMS_POSTS_NEWPOST_SEND' => cot_url('forums', ['m' => 'posts', 'a' => 'newpost', 's' => $s, 'q' => $q]),
+        'FORUMS_POSTS_NEWPOST_TEXT' => Cot::$R['forums_code_newpost_mark'] .
+            cot_textarea(
+                'rmsgtext',
+                $text,
+                16,
+                56,
+                '',
+                'input_textarea_' . ($minimaxieditor ?? '')
+            ),
+        'FORUMS_POSTS_NEWPOST_EDITTIMEOUT' => cot_build_timegap(0, Cot::$cfg['forums']['edittimeout'] * 3600),
+    ]);
 
-	cot_display_messages($t);
+    cot_display_messages($t);
 
-	/* === Hook  === */
-	foreach (cot_getextplugins('forums.posts.newpost.tags') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    /* === Hook  === */
+    foreach (cot_getextplugins('forums.posts.newpost.tags') as $pl) {
+        include $pl;
+    }
+    /* ===== */
 
-	$t->parse('MAIN.FORUMS_POSTS_NEWPOST');
+    $t->parse('MAIN.FORUMS_POSTS_NEWPOST');
 
 } elseif ($rowt['ft_state']) {
 	$t->assign('FORUMS_POSTS_TOPICLOCKED_BODY', Cot::$L['forums_topiclocked']);
