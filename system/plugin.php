@@ -34,7 +34,7 @@ if (!empty($o)) {
 	$extensionCode = $e;
     $hook = 'standalone';
     $templateFile = cot_tplfile($extensionCode, 'plug');
-    if (!file_exists($templateFile)) {
+    if ($templateFile === null || !file_exists($templateFile)) {
         $templateFile = cot_tplfile(['plugin', $extensionCode]);
         $autoAssignTags = true;
     }
