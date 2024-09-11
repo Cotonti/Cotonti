@@ -3851,7 +3851,12 @@ function cot_log($text, $group = 'adm', $type = '', $status = '', $extra_data = 
     global $cot_plugins_enabled, $cot_modules;
 
     // If the application has not been initialized yet
-    if (empty(Cot::$cfg) || empty(Cot::$db) || Cot::$cfg['loggerlevel'] === 'none') {
+    if (
+        empty(Cot::$cfg)
+        || empty(Cot::$db)
+        || !isset(Cot::$cfg['loggerlevel'])
+        || Cot::$cfg['loggerlevel'] === 'none'
+    ) {
         return false;
     }
 

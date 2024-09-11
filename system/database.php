@@ -199,7 +199,7 @@ class CotDB
         return $adapter;
     }
 
-    public function reconnect()
+    public function reconnect(): void
     {
         $this->adapter = null;
         $this->connect();
@@ -788,7 +788,6 @@ class CotDB
      * @param bool $inTransaction
 	 * @return string Error message if an error occurs or empty string on success
      * @todo process $this->tableQuoteCharacter
-     * @todo use new transactions
 	 */
 	public function runScript($script, $inTransaction = false)
 	{
@@ -856,7 +855,7 @@ class CotDB
     /**
      * Quotes a string value for use in a query.
      *
-     * @param string|string[] $data string or strings array for quotting
+     * @param string|string[] $data string or strings array for quoting
      * @return string|string[] the properly quoted string or array of strings
      * @see http://php.net/manual/en/pdo.quote.php
      */

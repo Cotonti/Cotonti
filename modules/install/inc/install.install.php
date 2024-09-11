@@ -8,8 +8,8 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Modules and plugins checked by default
-$default_modules = array('index', 'page', 'users', 'rss');
-$default_plugins = array('ckeditor', 'cleaner', 'html', 'htmlpurifier', 'ipsearch', 'mcaptcha', 'indexnews', 'search');
+$default_modules = ['index', 'page', 'users', 'rss'];
+$default_plugins = ['ckeditor', 'cleaner', 'html', 'htmlpurifier', 'ipsearch', 'mcaptcha', 'indexnews', 'search'];
 
 $step = empty($_SESSION['cot_inst_lang']) ? 0 : (int) $cfg['new_install'];
 
@@ -405,6 +405,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		case 5:
 			// End credits
 			break;
+
 		default:
 			// Error
             cot_installRedirect(cot_url('index'));
@@ -427,6 +428,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             "\$cfg['new_install'] = false;",
             $config_contents
         );
+        unset($_SESSION['cot_inst_lang'], $_SESSION['cot_inst_script']);
     } else {
         $config_contents = preg_replace(
             "#^\\\$cfg\['new_install'\]\s*=\s*.*?;#m",
@@ -444,9 +446,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 switch ($step) {
 	case 0:
 		// Language selection
-		$t->assign(array(
-			'INSTALL_LANG' => cot_selectbox_lang($lang, 'lang')
-		));
+		$t->assign([
+			'INSTALL_LANG' => cot_selectbox_lang($lang, 'lang'),
+		]);
 
 		$install_files = glob("*.install.php");
 
@@ -668,7 +670,6 @@ switch ($step) {
 	case 5:
 		// End credits
 		break;
-
 }
 
 $inst_func_name = "cot_install_step".$step."_tags";
@@ -679,10 +680,10 @@ $t->parse("MAIN.STEP_$step");
 // Error & message display
 cot_display_messages($t);
 
-$t->assign(array(
+$t->assign([
 	'INSTALL_STEP' => $step == 5 ? $L['Complete'] : cot_rc('install_step', array('step' => $step, 'total' => 4)),
-	'INSTALL_LANG' => cot_selectbox_lang($lang, 'lang')
-));
+	'INSTALL_LANG' => cot_selectbox_lang($lang, 'lang'),
+]);
 
 
 $t->parse('MAIN');
