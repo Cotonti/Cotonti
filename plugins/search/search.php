@@ -422,7 +422,7 @@ if (!empty($sq)) {
 			$t->assign([
 				'PLUGIN_PR_CATEGORY' => cot_rc_link($url_cat, Cot::$structure['page'][$row['page_cat']]['tpath']),
 				'PLUGIN_PR_CATEGORY_URL' => $url_cat,
-				'PLUGIN_PR_TITLE' => cot_rc_link($url_page, htmlspecialchars($row['page_title'])),
+				'PLUGIN_PR_LINK' => cot_rc_link($url_page, htmlspecialchars($row['page_title'])),
 				'PLUGIN_PR_TEXT' => cot_clear_mark($row['page_text'], $words),
 				'PLUGIN_PR_TIME' => cot_date('datetime_medium', $row['page_date']),
 				'PLUGIN_PR_TIMESTAMP' => $row['page_date'],
@@ -538,8 +538,9 @@ if (!empty($sq)) {
                     cot_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
 				$t->assign([
 					'PLUGIN_FR_CATEGORY' => cot_breadcrumbs(cot_forums_buildpath($row['ft_cat']), false, false),
-					'PLUGIN_FR_TITLE' => cot_rc_link($post_url, htmlspecialchars($row['ft_title'])),
-					'PLUGIN_FR_TITLE_URL' => $post_url,
+					'PLUGIN_FR_LINK' => cot_rc_link($post_url, htmlspecialchars($row['ft_title'])),
+					'PLUGIN_FR_TITLE' => htmlspecialchars($row['ft_title']),
+					'PLUGIN_FR_URL' => $post_url,
 					'PLUGIN_FR_TEXT' => cot_clear_mark($row['fp_text'], $words),
 					'PLUGIN_FR_TIME' => $row['ft_updated'] > 0
                         ? cot_date('datetime_medium', $row['ft_updated'])

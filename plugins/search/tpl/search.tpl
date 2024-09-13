@@ -88,7 +88,7 @@
         </tr>
         <!-- BEGIN: ITEM -->
         <tr>
-            <td colspan="2" class="{PLUGIN_PR_ODDEVEN}">{PLUGIN_PR_TITLE}</td>
+            <td colspan="2" class="{PLUGIN_PR_ODDEVEN}">{PLUGIN_PR_LINK}</td>
         </tr>
         <tr>
             <td colspan="2" class="{PLUGIN_PR_ODDEVEN}">{PLUGIN_PR_TEXT}</td>
@@ -114,7 +114,7 @@
         </tr>
         <!-- BEGIN: ITEM -->
         <tr>
-            <td colspan="2" class="{PLUGIN_FR_ODDEVEN}">{PLUGIN_FR_TITLE}</td>
+            <td colspan="2" class="{PLUGIN_FR_ODDEVEN}">{PLUGIN_FR_LINK}</td>
         </tr>
         <!-- IF {PLUGIN_FR_TEXT} -->
         <tr>
