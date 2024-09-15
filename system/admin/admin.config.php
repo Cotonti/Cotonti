@@ -168,15 +168,19 @@ switch ($n) {
 			$prev_subcat = $row['config_subcat'];
 		}
 
-		$t->assign(array(
-			'ADMIN_CONFIG_FORM_URL' => cot_url('admin', 'm=config&n=edit&o=' . $o . '&p=' . $p . '&a=update')
-		));
+		$t->assign([
+			'ADMIN_CONFIG_FORM_URL' => cot_url(
+                'admin',
+                ['m' => 'config', 'n' => 'edit', 'o' => $o, 'p' => $p, 'a' => 'update']
+            ),
+		]);
+
 		/* === Hook  === */
-		foreach (cot_getextplugins('admin.config.edit.tags') as $pl)
-		{
+		foreach (cot_getextplugins('admin.config.edit.tags') as $pl) {
 			include $pl;
 		}
 		/* ===== */
+
 		$t->parse('MAIN.EDIT');
 		break;
 

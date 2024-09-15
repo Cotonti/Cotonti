@@ -20,8 +20,8 @@ if (empty($db_pages)) {
 
 $changeCollation = false;
 if (
-    Cot::$cfg['mysqlcharset'] == 'utf8mb4'
-    && (empty(Cot::$cfg['mysqlcollate']) || Cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
+    Cot::$cfg['mysqlcharset'] === 'utf8mb4'
+    && (empty(Cot::$cfg['mysqlcollate']) || Cot::$cfg['mysqlcollate'] === 'utf8mb4_unicode_ci')
 ) {
     $changeCollation = true;
 }

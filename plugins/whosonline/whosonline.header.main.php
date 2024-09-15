@@ -28,7 +28,7 @@ if (!defined('WHOSONLINE_UPDATED')) {
         $currentUrl = '';
     }
 
-	if ($location != $onlineLocation || $subLocation != Cot::$sys['online_subloc']) {
+	if ($location !== $onlineLocation || $subLocation !== (Cot::$sys['online_subloc'] ?? null)) {
         $locationToSave = mb_substr((string) $location, 0, 128);
         $subLocationToSave = mb_substr((string) $subLocation, 0, 255);
 
@@ -48,7 +48,6 @@ if (!defined('WHOSONLINE_UPDATED')) {
                         'online_hammer' => 0,
 				    ]
                 );
-
 			} else {
 			    $onlineHummer = isset(Cot::$sys['online_hammer']) ? (int) Cot::$sys['online_hammer'] : 0;
                 Cot::$db->update(
