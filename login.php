@@ -255,10 +255,16 @@ if (!isset(Cot::$out['head'])) {
 }
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 require_once Cot::$cfg['system_dir'] . '/header.php';
-$mskin = file_exists(cot_tplfile('login', 'core'))
-    ? cot_tplfile('login', 'core')
-    : cot_tplfile('users.auth', 'module');
-$t = new XTemplate($mskin);
+
+$templateFile = cot_tplfile('login', 'core');
+if (empty($templateFile) || !is_readable($templateFile)) {
+    $templateFile = cot_tplfile('users.auth', 'module');
+}
+if (empty($templateFile) || !is_readable($templateFile)) {
+    cot_die_message(500, true, 'Template file not found');
+}
+
+$t = new XTemplate($templateFile);
 
 require_once cot_incfile('forms');
 
