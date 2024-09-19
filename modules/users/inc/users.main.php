@@ -372,16 +372,16 @@ $filtersFormCountry = cot_selectbox(
 
 $filtersGroupTitles = [Cot::$R['users_sel_def_l'] . Cot::$L['Maingroup'] . Cot::$R['users_sel_def_r']];
 $filtersGroupValues = [''];
-foreach ($cot_groups as $groupId => $group) {
+foreach ($cot_groups as $filterGroupRow) {
     if (
-        (($group['hidden'] || $group['disabled']) && !Cot::$usr['isadmin'])
-        || $group['id'] == COT_GROUP_GUESTS
+        (($filterGroupRow['hidden'] || $filterGroupRow['disabled']) && !Cot::$usr['isadmin'])
+        || $filterGroupRow['id'] == COT_GROUP_GUESTS
     ) {
         continue;
     }
 
-    $filtersGroupTitles[] = $group['name'];
-    $filtersGroupValues[] = $group['id'];
+    $filtersGroupTitles[] = $filterGroupRow['name'];
+    $filtersGroupValues[] = $filterGroupRow['id'];
 }
 
 $filtersFormMainGroup = cot_selectbox(

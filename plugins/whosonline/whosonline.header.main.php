@@ -18,19 +18,22 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (!defined('WHOSONLINE_UPDATED')) {
 	// Update online track
-    $onlineLocation = isset(Cot::$sys['online_location']) ? Cot::$sys['online_location'] : null;
-    $subLocation = isset(Cot::$sys['sublocation']) ? Cot::$sys['sublocation'] : null;
-    $location = isset(Cot::$env['location']) ? Cot::$env['location'] : null;
+    $whosOnlineOnlineLocation = isset(Cot::$sys['online_location']) ? Cot::$sys['online_location'] : null;
+    $whosOnlineSubLocation = isset(Cot::$sys['sublocation']) ? Cot::$sys['sublocation'] : null;
+    $whosOnlineLocation = isset(Cot::$env['location']) ? Cot::$env['location'] : null;
 
     // $_SERVER['HTTP_HOST'] and $_SERVER['REQUEST_URI'] are shows real url
-    $currentUrl = Cot::$sys['scheme'] . '://' . $_SERVER['HTTP_HOST'] . '/' . ltrim($_SERVER['REQUEST_URI'], '/');
-    if (mb_strlen($currentUrl) > 500) {
-        $currentUrl = '';
+    $whosOnlineCurrentUrl = Cot::$sys['scheme'] . '://' . $_SERVER['HTTP_HOST'] . '/' . ltrim($_SERVER['REQUEST_URI'], '/');
+    if (mb_strlen($whosOnlineCurrentUrl) > 500) {
+        $whosOnlineCurrentUrl = '';
     }
 
-	if ($location !== $onlineLocation || $subLocation !== (Cot::$sys['online_subloc'] ?? null)) {
-        $locationToSave = mb_substr((string) $location, 0, 128);
-        $subLocationToSave = mb_substr((string) $subLocation, 0, 255);
+	if (
+        $whosOnlineLocation !== $whosOnlineOnlineLocation
+        || $whosOnlineSubLocation !== (Cot::$sys['online_subloc'] ?? null)
+    ) {
+        $whosOnlineLocationToSave = mb_substr((string) $whosOnlineLocation, 0, 128);
+        $whosOnlineSubLocationToSave = mb_substr((string) $whosOnlineSubLocation, 0, 255);
 
 		if (Cot::$usr['id'] > 0) {
 			if (empty(Cot::$sys['online_location'])) {
@@ -40,9 +43,9 @@ if (!defined('WHOSONLINE_UPDATED')) {
                         'online_ip' => Cot::$usr['ip'],
                         'online_name' => Cot::$usr['name'],
                         'online_lastseen' => (int) Cot::$sys['now'],
-                        'online_location' => $locationToSave,
-                        'online_subloc' => $subLocationToSave,
-                        'online_url' => $currentUrl,
+                        'online_location' => $whosOnlineLocationToSave,
+                        'online_subloc' => $whosOnlineSubLocationToSave,
+                        'online_url' => $whosOnlineCurrentUrl,
                         'online_userid' => (int) Cot::$usr['id'],
                         'online_shield' => 0,
                         'online_hammer' => 0,
@@ -54,9 +57,9 @@ if (!defined('WHOSONLINE_UPDATED')) {
                     Cot::$db->online,
                     [
                         'online_lastseen' => Cot::$sys['now'],
-                        'online_location' => $locationToSave,
-                        'online_subloc' => $subLocationToSave,
-                        'online_url' => $currentUrl,
+                        'online_location' => $whosOnlineLocationToSave,
+                        'online_subloc' => $whosOnlineSubLocationToSave,
+                        'online_url' => $whosOnlineCurrentUrl,
                         'online_hammer' => $onlineHummer
                     ],
                     'online_userid = ' . Cot::$usr['id']
@@ -71,9 +74,9 @@ if (!defined('WHOSONLINE_UPDATED')) {
                         'online_ip' => Cot::$usr['ip'],
                         'online_name' => 'v',
                         'online_lastseen' => (int) Cot::$sys['now'],
-                        'online_location' => $locationToSave,
-                        'online_subloc' => $subLocationToSave,
-                        'online_url' => $currentUrl,
+                        'online_location' => $whosOnlineLocationToSave,
+                        'online_subloc' => $whosOnlineSubLocationToSave,
+                        'online_url' => $whosOnlineCurrentUrl,
                         'online_userid' => -1,
                         'online_shield' => 0,
                         'online_hammer' => 0,
@@ -84,9 +87,9 @@ if (!defined('WHOSONLINE_UPDATED')) {
                     Cot::$db->online,
                     [
                         'online_lastseen' => Cot::$sys['now'],
-                        'online_location' => $locationToSave,
-                        'online_subloc' => $subLocationToSave,
-                        'online_url' => $currentUrl,
+                        'online_location' => $whosOnlineLocationToSave,
+                        'online_subloc' => $whosOnlineSubLocationToSave,
+                        'online_url' => $whosOnlineCurrentUrl,
                         'online_hammer' => isset(Cot::$sys['online_hammer']) ? (int) Cot::$sys['online_hammer'] : 0,
                     ],
                     "online_ip = '" . Cot::$usr['ip'] . "' AND online_userid < 0"
@@ -97,5 +100,6 @@ if (!defined('WHOSONLINE_UPDATED')) {
 
 	// Assign online tag
 	$t->assign('HEADER_WHOSONLINE', Cot::$out['whosonline']);
+
 	define('WHOSONLINE_UPDATED', true);
 }
