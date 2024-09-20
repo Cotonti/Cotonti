@@ -723,11 +723,11 @@ function cot_file_phpdoc($filename)
  */
 function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
 {
-    $result = array();
+    $result = [];
 
     // Default data structure
     if ($limiter == 'COT_EXT' || $limiter == 'SED_EXTPLUGIN') {
-        $result = array(
+        $result = [
             'Code' => '',
             'Name' => '',
             'Description' => '',
@@ -741,7 +741,7 @@ function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
             'Lock_members' => '',
             'Auth_guests' => '',
             'Lock_guests' => '',
-        );
+        ];
 
         if ($limiter == 'COT_EXT') {
             $result['Requires_modules'] = '';

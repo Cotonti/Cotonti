@@ -89,10 +89,17 @@ main									{  }
 	main.aside					{ margin-right: 1rem; width: calc((100% - 1rem) * .65); float: left; }
 	aside								{ width: calc((100% - 1rem) * .35); float: left; }
 
-.block						{ line-height: 1.25; margin: 0 0  1rem; background: #f6f6f6; border-radius: 3px; overflow: hidden; }
-	.block > h2				{ padding: .5rem 1rem; background: #ddd; border-bottom: 1px solid #fff; }
-	.block  h3				{ padding: .3rem 1rem; font-size: 1.22rem; margin-bottom: 13px}
-	.block > div.wrapper	{ padding: .5rem 1rem 1rem; }
+.block { line-height: 1.25; margin: 0 0 1rem; background: #f6f6f6; border-radius: 3px; overflow: hidden; }
+.block > h2 {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: .5rem 1rem;
+	background: #ddd;
+	border-bottom: 1px solid #fff;
+}
+.block  h3 { padding: .3rem 1rem; font-size: 1.22rem; margin-bottom: 13px}
+.block > div.wrapper { padding: .5rem 1rem 1rem; }
 
 /* 3. Headings
 -------------------------------------------------- */

@@ -555,6 +555,11 @@ switch($a) {
 
         $params = cot_get_extensionparams($code, $type == COT_EXT_TYPE_MODULE);
 
+        $extensionCategoryTitle = '';
+        if (!empty($info['Category'])) {
+            $extensionCategoryTitle = Cot::$L['ext_cat_' . $info['Category']] ?? $info['Category'];
+        }
+
 		// Universal tags
 		$t->assign([
 			'ADMIN_EXTENSIONS_NAME' => htmlspecialchars($params['name']),
@@ -563,6 +568,8 @@ switch($a) {
             'ADMIN_EXTENSIONS_ICON' => $params['icon'],
 			'ADMIN_EXTENSIONS_DESCRIPTION' => $params['desc'],
 			'ADMIN_EXTENSIONS_NOTES' => $params['notes'],
+            'ADMIN_EXTENSIONS_CATEGORY' => $info['Category'],
+            'ADMIN_EXTENSIONS_CATEGORY_TITLE' => $extensionCategoryTitle,
 			'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 			'ADMIN_EXTENSIONS_VERSION_INSTALLED' => $installed_ver,
 			'ADMIN_EXTENSIONS_VERSION_COMPARE' => version_compare($info['Version'], $installed_ver),
@@ -588,8 +595,9 @@ switch($a) {
 
 		if ($exists) {
 			// Tags for existing exts
-			$t->assign(array(
-				'ADMIN_EXTENSIONS_RIGHTS' => $type == 'module' ? cot_url('admin', "m=rightsbyitem&ic=$code&io=a")
+			$t->assign([
+				'ADMIN_EXTENSIONS_RIGHTS' => $type == 'module'
+                    ? cot_url('admin', "m=rightsbyitem&ic=$code&io=a")
 					: cot_url('admin', "m=rightsbyitem&ic=$type&io=$code"),
 				'ADMIN_EXTENSIONS_ADMRIGHTS_AUTH_GUESTS' => cot_auth_getmask($info['Auth_guests']),
 				'ADMIN_EXTENSIONS_AUTH_GUESTS' => $info['Auth_guests'],
@@ -601,7 +609,7 @@ switch($a) {
 				'ADMIN_EXTENSIONS_LOCK_MEMBERS' => $info['Lock_members'],
 				'ADMIN_EXTENSIONS_AUTHOR' => $info['Author'],
 				'ADMIN_EXTENSIONS_COPYRIGHT' => $info['Copyright'],
-			));
+			]);
 
 			// Check and display dependencies
 			$dependencies_satisfied = true;
@@ -830,8 +838,7 @@ switch($a) {
 					// Render category heading
 					$t->assign(
                         'ADMIN_EXTENSIONS_CAT_TITLE',
-                        isset(Cot::$L['ext_cat_' . $info['Category']]) ?
-                            Cot::$L['ext_cat_' . $info['Category']] : $info['Category']
+                        Cot::$L['ext_cat_' . $info['Category']] ?? $info['Category']
                     );
 					$t->parse('MAIN.DEFAULT.SECTION.ROW.ROW_CAT');
 					// Assign a new one

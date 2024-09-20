@@ -100,7 +100,9 @@
 
 <!-- BEGIN: DETAILS -->
 <div class="block">
-	<h2>{ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:</h2>
+	<h2>
+		{ADMIN_EXTENSIONS_ICON} {ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:
+	</h2>
 	<div class="wrapper">
 		<!-- IF {PHP.isinstalled} AND {PHP.exists} -->
 		<div class="button-toolbar">
@@ -143,6 +145,12 @@
 					<td>{PHP.L.Date}:</td>
 					<td>{ADMIN_EXTENSIONS_DATE}</td>
 				</tr>
+				<!-- IF {ADMIN_EXTENSIONS_CATEGORY_TITLE} AND {ADMIN_EXTENSIONS_CATEGORY} != 'misc-ext' -->
+				<tr>
+					<td>{PHP.L.Category}:</td>
+					<td>{ADMIN_EXTENSIONS_CATEGORY_TITLE}</td>
+				</tr>
+				<!-- ENDIF -->
 <!--//<tr>
 <td>{PHP.L.adm_defauth_guests}:</td>
 <td>{ADMIN_EXTENSIONS_ADMRIGHTS_AUTH_GUESTS} ({ADMIN_EXTENSIONS_AUTH_GUESTS})</td>
