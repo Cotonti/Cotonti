@@ -834,7 +834,7 @@ switch($a) {
 
             $i = 1;
 			foreach ($extensions as $code => $info) {
-				if ($sort == 'cat' && $type == 'plug' && $prev_cat != $info['Category']) {
+				if ($sort === 'cat' && $type === COT_EXT_TYPE_PLUGIN && $prev_cat !== $info['Category']) {
 					// Render category heading
 					$t->assign(
                         'ADMIN_EXTENSIONS_CAT_TITLE',

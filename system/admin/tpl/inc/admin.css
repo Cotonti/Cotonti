@@ -79,15 +79,15 @@ div#user												{ margin-bottom: 1rem; padding: 0 1px 1px 1px; background: r
 	#breadcrumbs > div	{ line-height: 2rem; padding: 0 1rem; background: #fff; border-top-right-radius: 6px; border-top-left-radius: 6px; }
 	#breadcrumbs a			{ font-weight:bold; }
 
-#main									{ padding: 0 1rem; }
+#main { padding: 0 1rem; }
 
-#footer								{ padding: 2rem 0; background: #4f789f; }
-	#footer p						{ text-align: center; margin: 0; }
-	#footer p > a				{ color: #fff; }
+#footer	{ padding: 2rem 0; background: #4f789f; }
+#footer p { text-align: center; margin: 0; }
+#footer p > a { color: #fff; }
 
-main									{  }
-	main.aside					{ margin-right: 1rem; width: calc((100% - 1rem) * .65); float: left; }
-	aside								{ width: calc((100% - 1rem) * .35); float: left; }
+main {  }
+main.aside { margin-right: 1rem; width: calc((100% - 1rem) * .65); float: left; min-height: 1px }
+aside { width: calc((100% - 1rem) * .35); float: left; }
 
 .block { line-height: 1.25; margin: 0 0 1rem; background: #f6f6f6; border-radius: 3px; overflow: hidden; }
 .block > h2 {

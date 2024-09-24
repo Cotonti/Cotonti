@@ -1,12 +1,9 @@
 .clearfix:after		{ content: ''; display: block; clear: both; }
 
-.textleft, .text-start	  	{ text-align:left; }
-.textcenter, .text-center	{ text-align:center; }
-.textright, .text-end	{ text-align:right; }
-.textjustify	{ text-align:justify; }
-
-
-
+.textleft, .text-start { text-align:left; }
+.textcenter, .text-center { text-align:center; }
+.textright, .text-end { text-align:right; }
+.textjustify { text-align:justify; }
 
 .small		{ font-size:.9em; line-height:1.4em; }
 .clear		{ clear:both; }

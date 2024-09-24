@@ -304,10 +304,10 @@ if (defined('COT_UPGRADE') && !cot_error_found()) {
 		$t->parse('MAIN.COMPLETED');
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'UPDATE_FROM' => $rev,
-		'UPDATE_TO' => is_string($new_rev) ? $new_rev : $rev
-	));
+		'UPDATE_TO' => is_string($new_rev) ? $new_rev : $rev,
+	]);
 
 	// Clear cache
 	$db->query("TRUNCATE TABLE $db_cache");

@@ -60,7 +60,7 @@ if (!defined('WHOSONLINE_UPDATED')) {
                         'online_location' => $whosOnlineLocationToSave,
                         'online_subloc' => $whosOnlineSubLocationToSave,
                         'online_url' => $whosOnlineCurrentUrl,
-                        'online_hammer' => $onlineHummer
+                        'online_hammer' => $onlineHummer,
                     ],
                     'online_userid = ' . Cot::$usr['id']
                 );

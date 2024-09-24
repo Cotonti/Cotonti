@@ -19,23 +19,23 @@ require_once cot_langfile('admin', 'core');
  * A value returned by cot_extension_install() when updating and
  * there is nothing to update
  */
-define('COT_EXT_NOTHING_TO_UPDATE', 2);
+const COT_EXT_NOTHING_TO_UPDATE = 2;
 
 /**
  * Default plugin part execution priority
  */
-define('COT_PLUGIN_DEFAULT_ORDER', 10);
+const COT_PLUGIN_DEFAULT_ORDER = 10;
 
 /**
  * Extension types
  */
-define('COT_EXT_TYPE_MODULE', 'module');
-define('COT_EXT_TYPE_PLUGIN', 'plug');
+const COT_EXT_TYPE_MODULE = 'module';
+const COT_EXT_TYPE_PLUGIN = 'plug';
 
 /**
  * These parts ($name.$part.php) are reserved handlers with no hooks
  */
-$cot_ext_ignore_parts = array('configure', 'install', 'setup', 'uninstall');
+$cot_ext_ignore_parts = ['configure', 'install', 'setup', 'uninstall'];
 
 /**
  * Applies custom SQL and PHP patches in a directory. Error and success
