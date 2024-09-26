@@ -8,7 +8,7 @@
 
     <span class="title"><b><a href="{FORUM_ROW_URL}">{FORUM_ROW_TITLE}</a></b></span> 
 
-    <span class="replies">({FORUM_ROW_POSTCOUNT})</span> @ 
+    <span class="replies">({FORUM_ROW_POSTS_COUNT})</span> @
 
     <span class="cat"><b>{FORUM_ROW_PATH_SHORT}</b></span>
 

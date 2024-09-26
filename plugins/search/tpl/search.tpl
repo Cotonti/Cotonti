@@ -18,7 +18,9 @@
             <!-- IF {PHP.cfg.plugin.urleditor.preset} !== 'handy' -->
             <input type="hidden" name="e" value="search"/>
             <!-- ENDIF -->
+            <!-- IF {PHP.tab} -->
             <input type="hidden" name="tab" value="{PHP.tab}"/>
+            <!-- ENDIF -->
 
             <p class="margin10 textcenter">
 				{PHP.L.plu_search_req}: {PLUGIN_SEARCH_TEXT}

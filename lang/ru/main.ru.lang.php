@@ -374,15 +374,15 @@ $Ls['Weeks'] = "неделя,недели,недель";
 $Ls['Months'] = "месяц,месяца,месяцев";
 $Ls['Years'] = "год,года,лет";
 
-$Ls['Bytes'] = "B";
-$Ls['Kilobytes'] = "kB";
-$Ls['Megabytes'] = "MB";
-$Ls['Gigabytes'] = "GB";
-$Ls['Terabytes'] = "TB";
-$Ls['Kibibytes'] = "KiB";
-$Ls['Mebibytes'] = "MiB";
-$Ls['Gibibytes'] = "GiB";
-$Ls['Tebibytes'] = "TiB";
+$Ls['Bytes'] = 'Б';
+$Ls['Kilobytes'] = 'Кб';
+$Ls['Megabytes'] = 'Мб';
+$Ls['Gigabytes'] = 'Гб';
+$Ls['Terabytes'] = 'Тб';
+$Ls['Kibibytes'] = 'КиБ';
+$Ls['Mebibytes'] = 'МиБ';
+$Ls['Gibibytes'] = 'ГиБ';
+$Ls['Tebibytes'] = 'ТиБ';
 
 /**
  * Date / Time formats

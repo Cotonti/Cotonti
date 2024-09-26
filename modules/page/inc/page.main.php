@@ -210,29 +210,26 @@ if ($pag['page_file'] > 0) {
 			$pag['page_fileicon'] = '';
 		}
 
-		$t->assign(array(
+		$t->assign([
 			'PAGE_FILE_SIZE' => $pag['page_size'] / 1024, // in KiB; deprecated but kept for compatibility
 			'PAGE_FILE_SIZE_BYTES' => $pag['page_size'],
 			'PAGE_FILE_SIZE_READABLE' => cot_build_filesize($pag['page_size'], 1),
 			'PAGE_FILE_COUNT' => $pag['page_filecount'],
 			'PAGE_FILE_ICON' => $pag['page_fileicon'],
 			'PAGE_FILE_NAME' => basename($pag['page_url']),
-			'PAGE_FILE_COUNTTIMES' => cot_declension($pag['page_filecount'], $Ls['Times'])
-		));
+			'PAGE_FILE_COUNTTIMES' => cot_declension($pag['page_filecount'], $Ls['Times']),
+		]);
 
-		if (($pag['page_file'] === 2 && Cot::$usr['id'] == 0) || ($pag['page_file'] === 2 && !Cot::$usr['auth_download']))
-		{
-			$t->assign(array(
+		if (($pag['page_file'] === 2 && Cot::$usr['id'] == 0) || ($pag['page_file'] === 2 && !Cot::$usr['auth_download'])) {
+			$t->assign([
 				'PAGE_FILETITLE' => Cot::$L['Members_download'],
-				'PAGE_FILE_URL' => cot_url('users', 'm=register')
-			));
-		}
-		else
-		{
-			$t->assign(array(
+				'PAGE_FILE_URL' => cot_url('users', 'm=register'),
+			]);
+		} else {
+			$t->assign([
 				'PAGE_FILETITLE' => $pag['page_title'],
-				'PAGE_FILE_URL' => cot_url('page', array('c' => $pag['page_cat'], 'id' => $id, 'a' => 'dl'))
-			));
+				'PAGE_FILE_URL' => cot_url('page', array('c' => $pag['page_cat'], 'id' => $id, 'a' => 'dl')),
+			]);
 		}
 	}
 }
@@ -241,10 +238,8 @@ if ($pag['page_file'] > 0) {
 $pag['page_tabs'] = explode('[newpage]', $t->vars['PAGE_TEXT'], 99);
 $pag['page_totaltabs'] = count($pag['page_tabs']);
 
-if ($pag['page_totaltabs'] > 1)
-{
-	if (empty($pag['page_tabs'][0]))
-	{
+if ($pag['page_totaltabs'] > 1) {
+	if (empty($pag['page_tabs'][0])) {
 		$remove = array_shift($pag['page_tabs']);
 		$pag['page_totaltabs']--;
 	}
@@ -252,27 +247,21 @@ if ($pag['page_totaltabs'] > 1)
 	$pag['page_tab'] = ($pag['page_tab'] > $max_tab) ? 0 : $pag['page_tab'];
 	$pag['page_tabtitles'] = array();
 
-	for ($i = 0; $i < $pag['page_totaltabs']; $i++)
-	{
-		if (mb_strpos($pag['page_tabs'][$i], '<br />') === 0)
-		{
+	for ($i = 0; $i < $pag['page_totaltabs']; $i++) {
+		if (mb_strpos($pag['page_tabs'][$i], '<br />') === 0) {
 			$pag['page_tabs'][$i] = mb_substr($pag['page_tabs'][$i], 6);
 		}
 
 		$p1 = mb_strpos($pag['page_tabs'][$i], '[title]');
 		$p2 = mb_strpos($pag['page_tabs'][$i], '[/title]');
 
-		if ($p2 > $p1 && $p1 < 4)
-		{
+		if ($p2 > $p1 && $p1 < 4) {
 			$pag['page_tabtitle'][$i] = mb_substr($pag['page_tabs'][$i], $p1 + 7, ($p2 - $p1) - 7);
-			if ($i == $pag['page_tab'])
-			{
+			if ($i == $pag['page_tab']) {
 				$pag['page_tabs'][$i] = trim(str_replace('[title]'.$pag['page_tabtitle'][$i].'[/title]', '', $pag['page_tabs'][$i]));
 			}
-		}
-		else
-		{
-			$pag['page_tabtitle'][$i] = $i == 0 ? $pag['page_title'] : $L['Page'] . ' ' . ($i + 1);
+		} else {
+			$pag['page_tabtitle'][$i] = $i == 0 ? $pag['page_title'] : Cot::$L['Page'] . ' ' . ($i + 1);
 		}
 		$tab_url = empty($al)
             ? cot_url('page', 'c='.$pag['page_cat'].'&id='.$id.'&pg='.$i)
@@ -294,13 +283,13 @@ if ($pag['page_totaltabs'] > 1)
 	$pag['page_tabnav'] = $pn['main'];
 	Cot::$cfg['easypagenav'] = $tmp;
 
-	$t->assign(array(
+	$t->assign([
 		'PAGE_MULTI_TABNAV' => $pag['page_tabnav'],
 		'PAGE_MULTI_TABTITLES' => $pag['page_tabtitles'],
 		'PAGE_MULTI_CURTAB' => $pag['page_tab'] + 1,
 		'PAGE_MULTI_MAXTAB' => $pag['page_totaltabs'],
-		'PAGE_TEXT' => $pag['page_text']
-	));
+		'PAGE_TEXT' => $pag['page_text'],
+	]);
 	$t->parse('MAIN.PAGE_MULTI');
 }
 
@@ -312,11 +301,11 @@ foreach (cot_getextplugins('page.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
-if (\Cot::$usr['isadmin'] || \Cot::$usr['id'] == $pag['page_ownerid']) {
+if (Cot::$usr['isadmin'] || Cot::$usr['id'] == $pag['page_ownerid']) {
 	$t->parse('MAIN.PAGE_ADMIN');
 }
 
-if (($pag['page_file'] == 2 && \Cot::$usr['id'] == 0) || ($pag['page_file'] == 2 && !\Cot::$usr['auth_download'])) {
+if (($pag['page_file'] == 2 && Cot::$usr['id'] == 0) || ($pag['page_file'] == 2 && !Cot::$usr['auth_download'])) {
 	$t->parse('MAIN.PAGE_FILE.MEMBERSONLY');
 } else {
 	$t->parse('MAIN.PAGE_FILE.DOWNLOAD');
@@ -327,8 +316,8 @@ if (!empty($pag['page_url'])) {
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once \Cot::$cfg['system_dir'] . '/footer.php';
+require_once Cot::$cfg['system_dir'] . '/footer.php';
 
 if ($pageStaticCacheEnabled) {
-	\Cot::$cache->static->write();
+	Cot::$cache->static->write();
 }

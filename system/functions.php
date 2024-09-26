@@ -2690,30 +2690,28 @@ function cot_build_country($flag)
  * @param bool $hide Hide email option
  * @return string
  */
-function cot_build_email($email, $hide = false)
+function cot_build_email($email, $hide = false): string
 {
 	global $L;
-	if ($hide)
-	{
+
+	if ($hide) {
 		return $L['Hidden'];
 	}
-	elseif (!empty($email) && cot_check_email($email))
-	{
-		$link = cot_rc('link_email', array('email' => $email));
+
+    if (!empty($email) && cot_check_email($email)) {
+		$link = cot_rc('link_email', ['email' => $email]);
 		return function_exists('cot_obfuscate') ? cot_obfuscate($link) : $link;
 	}
+
+    return '';
 }
 
 /**
  * Generate human-readable filesize.
  *
- * @param float $bytes
- *	Filesize in bytes
- * @param int $decimals
- *	Number of decimals to show.
- * @param mixed $round
- *	Round up to this number of decimals.
- *	Set false to disable or null to inherit from $decimals.
+ * @param float $bytes Filesize in bytes
+ * @param int $decimals Number of decimals to show.
+ * @param ?bool $round Round up to this number of decimals. Set false to disable or null to inherit from $decimals.
  * @param bool $binary Use binary instead of decimal calculation.
  *  Set TRUE for the IEC binary standard where 1 Kibibyte = 1024 bytes
  *  Set FALSE for the SI/IEEE decimal standard where 1 Kilobyte = 1000 bytes
@@ -2721,27 +2719,39 @@ function cot_build_email($email, $hide = false)
  *  Key of the smallest unit to show. Any number smaller than this will return 'Less than 1 ...'.
  *  Effectively its a way to cut off $units at a certain key.
  * @return string
+ * @see https://en.wikipedia.org/wiki/Byte#Multiple-byte_units
  */
-function cot_build_filesize($bytes, $decimals = 0, $round = null, $binary = false, $smallestunit = null)
+function cot_build_filesize($bytes, $decimals = 0, $round = null, $binary = false, $smallestunit = null): string
 {
 	global $Ls;
-	$sc_sign = ' '; // leading space for keys index cast as string
-	$units = $binary ? array(
-		$sc_sign . 1099511627776 => $Ls['Tebibytes'],
-		$sc_sign . 1073741824 => $Ls['Gibibytes'],
-		$sc_sign . 1048576 => $Ls['Mebibytes'],
-		$sc_sign . 1024 => $Ls['Kibibytes'],
-		$sc_sign . 1 => $Ls['Bytes'],
-	) : array(
-		$sc_sign . 1000000000000 => $Ls['Terabytes'],
-		$sc_sign . 1000000000 => $Ls['Gigabytes'],
-		$sc_sign . 1000000 => $Ls['Megabytes'],
-		$sc_sign . 1000 => $Ls['Kilobytes'],
-		$sc_sign . 1 => $Ls['Bytes']
-	);
-	if ($smallestunit) $smallestunit = $sc_sign . $smallestunit;
+	$scSign = ' '; // leading space for keys index cast as string
+	$units = $binary
+        ? [
+            $scSign . 1099511627776 => $Ls['Tebibytes'],
+            $scSign . 1073741824 => $Ls['Gibibytes'],
+            $scSign . 1048576 => $Ls['Mebibytes'],
+            $scSign . 1024 => $Ls['Kibibytes'],
+            $scSign . 1 => $Ls['Bytes'],
+        ]
+        : [
+            $scSign . 1000000000000 => $Ls['Terabytes'],
+            $scSign . 1000000000 => $Ls['Gigabytes'],
+            $scSign . 1000000 => $Ls['Megabytes'],
+            $scSign . 1000 => $Ls['Kilobytes'],
+            $scSign . 1 => $Ls['Bytes']
+        ];
+
+
+	if ($smallestunit) {
+        $smallestunit = $scSign . $smallestunit;
+    }
 	$sizes = array_keys($units);
-	if ($bytes < $sizes[sizeof($units)-2]) $decimals = 0; // as byte can not be fractional
+
+    // as byte can not be fractional
+	if ($bytes < $sizes[sizeof($units)-2]) {
+        $decimals = 0;
+    }
+
 	return cot_build_friendlynumber($bytes, $units, 1, $decimals, $round, $smallestunit);
 }
 
@@ -5117,11 +5127,13 @@ function cot_parse_autourls($text)
  * @param string  $cuttext Adds text if truncated
  * @return string trimmed string.
  */
-function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact = false, $cuttext = '')
+function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact = false, $cuttext = ''): string
 {
     if (empty($text)) {
         return $text;
     }
+
+    $length = (int) $length;
 
     $truncated_by_space = false;
     $plain_mode = false;

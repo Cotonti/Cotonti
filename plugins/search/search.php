@@ -68,24 +68,27 @@ if ($rs['frmtitle'] < 1 && $rs['frmtext'] < 1) {
 }
 $rs['setuser']  = isset($rs['setuser'])  ? cot_import($rs['setuser'], 'D', 'TXT') : '';
 $rs['setlimit'] = isset($rs['setlimit']) ? cot_import($rs['setlimit'], 'D', 'INT') : '';
-$rs['setfrom']  = Cot::$sys['now'] - 31536000;
-$rs['setto']    = Cot::$sys['now'];
+$rs['setfrom'] = $rs['setto'] = null;
 
 switch ($rs['setlimit']) {
 	case 1:
 		$rs['setfrom'] = Cot::$sys['now'] - 1209600;
+        $rs['setto'] = Cot::$sys['now'];
 		break;
 
 	case 2:
 		$rs['setfrom'] = Cot::$sys['now'] - 2592000;
+        $rs['setto'] = Cot::$sys['now'];
 		break;
 
 	case 3:
 		$rs['setfrom'] = Cot::$sys['now'] - 7776000;
+        $rs['setto'] = Cot::$sys['now'];
 		break;
 
 	case 4:
 		$rs['setfrom'] = Cot::$sys['now'] - 31536000;
+        $rs['setto'] = Cot::$sys['now'];
 		break;
 
 	case 5:
@@ -605,6 +608,7 @@ Cot::$out['subtitle'] = empty($sq) ? $title : htmlspecialchars(strip_tags($sq)) 
 
 $resultsCount = array_sum($totalitems);
 $resultsCount = $resultsCount > 0 ? $resultsCount : 0;
+
 $t->assign([
     'PLUGIN_TITLE' => htmlspecialchars($title),
 	'PLUGIN_BREADCRUMBS' => cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb'], true),
@@ -619,9 +623,31 @@ $t->assign([
         ]
     ),
 	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rs[setuser]', $rs['setuser'], 'class="userinput"'),
-	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rs['setlimit'], 'rs[setlimit]', range(0, 5), array(Cot::$L['plu_any_date'], Cot::$L['plu_last_2_weeks'], Cot::$L['plu_last_1_month'], Cot::$L['plu_last_3_month'], Cot::$L['plu_last_1_year'], Cot::$L['plu_need_datas']), false),
-	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rs['setfrom'], 'short', 'rfrom', (int) cot_date('Y', Cot::$sys['now']) + 1),
-	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rs['setto'], 'short', 'rto', (int) cot_date('Y', Cot::$sys['now']) + 1),
+	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox(
+        $rs['setlimit'],
+        'rs[setlimit]',
+        range(0, 5),
+        [
+            Cot::$L['plu_any_date'],
+            Cot::$L['plu_last_2_weeks'],
+            Cot::$L['plu_last_1_month'],
+            Cot::$L['plu_last_3_month'],
+            Cot::$L['plu_last_1_year'],
+            Cot::$L['plu_need_datas'],
+        ],
+        false
+    ),
+	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date(
+        $rs['setfrom'], 'short',
+        'rfrom',
+        (int) cot_date('Y', Cot::$sys['now']) + 1
+    ),
+	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date(
+        $rs['setto'],
+        'short',
+        'rto',
+        (int) cot_date('Y', Cot::$sys['now']) + 1
+    ),
 	'PLUGIN_SEARCH_FOUND' => $resultsCount,
 ]);
 

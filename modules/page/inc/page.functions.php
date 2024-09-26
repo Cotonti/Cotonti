@@ -143,8 +143,8 @@ function cot_generate_pagetags(
 		$pagepath = cot_structure_buildpath('page', $page_data['page_cat']);
 		$catpath = cot_breadcrumbs($pagepath, $pagepath_home, false);
         $page_data['page_pageurl'] = cot_page_url($page_data);
-		$page_link[] = [$page_data['page_pageurl'], $page_data['page_title']];
-		$breadcrumbs = cot_breadcrumbs(array_merge($pagepath, $page_link), $pagepath_home);
+		$pageLink = [[$page_data['page_pageurl'], $page_data['page_title']]];
+		$breadcrumbs = cot_breadcrumbs(array_merge($pagepath, $pageLink), $pagepath_home);
 		if (!empty($page_data['page_url']) && $page_data['page_file']) {
 			$dotpos = mb_strrpos($page_data['page_url'], ".") + 1;
 			$type = mb_strtolower(mb_substr($page_data['page_url'], $dotpos, 5));
