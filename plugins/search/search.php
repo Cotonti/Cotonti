@@ -66,10 +66,8 @@ if ($rs['frmtitle'] < 1 && $rs['frmtext'] < 1) {
 	$rs['frmtitle'] = 1;
 	$rs['frmtext'] = 1;
 }
-$rs['setuser']  = isset($rs['setuser'])  ? cot_import($rs['setuser'], 'D', 'TXT') : '';
-$rs['setlimit'] = isset($rs['setlimit']) ? cot_import($rs['setlimit'], 'D', 'INT') : '';
-$rs['setfrom'] = $rs['setto'] = null;
-
+$rs['setuser']  = isset($rs['setuser'])  ? cot_import($rs['setuser'], 'D', 'TXT') : null;
+$rs['setlimit'] = isset($rs['setlimit']) ? cot_import($rs['setlimit'], 'D', 'INT') : null;
 switch ($rs['setlimit']) {
 	case 1:
 		$rs['setfrom'] = Cot::$sys['now'] - 1209600;
@@ -92,12 +90,16 @@ switch ($rs['setlimit']) {
 		break;
 
 	case 5:
+    default:
 		$rs['setfrom'] = cot_import_date('rfrom', true, false, 'G');
 		$rs['setto'] = cot_import_date('rto', true, false, 'G');
+        if (!empty($rs['setfrom']) || !empty($rs['setto'])) {
+            $rs['setlimit'] = 5;
+        } else {
+            $rs['setlimit'] = 0;
+        }
 		break;
 
-	default:
-        break;
 }
 
 /* === Hook === */
@@ -250,7 +252,7 @@ if (!empty($sq)) {
 
 	if ($searchInPages && !cot_error_found()) {
         $searchInCategories = [];
-
+        $where_and = [];
         if ($rs['pagsub'][0] != 'all' && count($rs['pagsub']) > 0) {
 			if ($rs['pagsubcat']) {
 				foreach ($rs['pagsub'] as $scat) {
@@ -291,7 +293,12 @@ if (!empty($sq)) {
 
 		$where_and['state'] = 'p.page_state = ' . COT_PAGE_STATE_PUBLISHED;
 		$where_and['date'] = 'p.page_begin <= ' . Cot::$sys['now'] . ' AND (p.page_expire = 0 OR p.page_expire > ' . Cot::$sys['now'] . ')';
-		$where_and['date2'] = ($rs['setlimit'] > 0) ? 'p.page_date >= ' . $rs['setfrom'] . ' AND p.page_date <= ' . $rs['setto'] : '';
+        if (!empty($rs['setfrom'])) {
+            $where_and['dateFrom'] = 'p.page_date >= ' . $rs['setfrom'];
+        }
+        if (!empty($rs['setto'])) {
+            $where_and['dateTo'] = 'p.page_date <= ' . $rs['setto'];
+        }
 		$where_and['file'] = ($rs['pagfile'] == 1) ? "p.page_file = '1'" : '';
         $where_and['users'] = (!empty($touser)) ? 'p.page_ownerid ' . $touser : '';
 
@@ -310,8 +317,7 @@ if (!empty($sq)) {
 
         // TODO add filter nonexisting field in db for search plugin option 'addfields' on saved config in admin panel
         $addfields = trim(Cot::$cfg['plugin']['search']['addfields']);
-        if (!empty($addfields))
-        {
+        if (!empty($addfields)) {
             $additional_fields = null;
             if (Cot::$cache) {
                 $additional_fields = Cot::$cache->db->get('search_page_additional_fields', 'search');
@@ -489,9 +495,14 @@ if (!empty($sq)) {
         }
 
 		$where_and['reply'] = ($rs['frmreply'] == '1') ? 't.ft_postcount > 1' : '';
-		$where_and['time'] = ($rs['setlimit'] > 0) ?
-            'p.fp_creation >= ' . $rs['setfrom'] . ' AND p.fp_updated <= ' . $rs['setto'] : '';
-		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid " . $touser : "";
+        if (!empty($rs['setfrom'])) {
+            $where_and['dateFrom'] = 'p.fp_creation >= ' . $rs['setfrom'];
+        }
+        if (!empty($rs['setto'])) {
+            $where_and['dateTo'] = 'p.fp_updated <= ' . $rs['setto'];
+        }
+
+		$where_and['user'] = (!empty($touser)) ? 'p.fp_posterid ' . $touser : "";
 
 		$where_or['title'] = ($rs['frmtitle'] == 1) ? "t.ft_title LIKE '".Cot::$db->prep($sqlsearch)."'" : "";
 		$where_or['text'] = (($rs['frmtext'] == 1)) ? "p.fp_text LIKE '".Cot::$db->prep($sqlsearch)."'" : "";
@@ -638,7 +649,8 @@ $t->assign([
         false
     ),
 	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date(
-        $rs['setfrom'], 'short',
+        $rs['setfrom'],
+        'short',
         'rfrom',
         (int) cot_date('Y', Cot::$sys['now']) + 1
     ),
