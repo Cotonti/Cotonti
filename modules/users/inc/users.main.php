@@ -501,7 +501,7 @@ foreach ($users_sort_tags as $k => $x) {
 }
 
 // Extra fields for users
-foreach(Cot::$extrafields[Cot::$db->users] as $extraField) {
+foreach (Cot::$extrafields[Cot::$db->users] as $extraField) {
 	$uname = strtoupper($extraField['field_name']);
 	$fieldTitle = isset(Cot::$L['user_' . $extraField['field_name'] . '_title'])
         ? Cot::$L['user_' . $extraField['field_name'] . '_title']

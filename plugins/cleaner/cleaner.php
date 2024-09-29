@@ -17,7 +17,10 @@ defined('COT_CODE') or die('Wrong URL');
 
 global $cot_plugins;
 
-$cleanerCache = Cot::$cache->mem ?: Cot::$cache->disk;
+$cleanerCache = null;
+if (!empty(Cot::$cache)) {
+    $cleanerCache = Cot::$cache->mem ?: Cot::$cache->disk;
+}
 $cleanerCacheKey = 'cleaner-last-executed';
 if ($cleanerCache) {
     $cleanerLastExecuted = $cleanerCache->get($cleanerCacheKey);

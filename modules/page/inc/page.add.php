@@ -164,7 +164,7 @@ $t = new XTemplate($mskin);
 $pageadd_array = array(
 	'PAGEADD_PAGETITLE' => Cot::$L['page_addtitle'],
 	'PAGEADD_SUBTITLE'  => Cot::$L['page_addsubtitle'],
-	'PAGEADD_ADMINEMAIL' => "mailto:".Cot::$cfg['adminemail'],
+	'PAGEADD_ADMINEMAIL' => 'mailto:' . Cot::$cfg['adminemail'],
 	'PAGEADD_FORM_SEND' => cot_url('page', 'm=add&a=add&c=' . $c),
 	'PAGEADD_FORM_CAT' => cot_selectbox_structure('page', $rpage['page_cat'], 'rpagecat'),
 	'PAGEADD_FORM_CAT_SHORT' => cot_selectbox_structure('page', $rpage['page_cat'], 'rpagecat', $c),

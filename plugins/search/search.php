@@ -217,13 +217,16 @@ if (!empty($sq)) {
 	$words = explode(' ', preg_replace("'\s+'", " ", $sq));
 	$sqlsearch = '%' . implode('%', $words) . '%';
 	if (mb_strlen($sq) < Cot::$cfg['plugin']['search']['minsigns']) {
-		cot_error(Cot::$L['plu_querytooshort'].Cot::$R['code_error_separator'], '');
+		cot_error(Cot::$L['plu_querytooshort'] . Cot::$R['code_error_separator'], '');
 	}
 	if (count($words) > Cot::$cfg['plugin']['search']['maxwords']) {
-		cot_error(Cot::$L['plu_toomanywords'].' '.Cot::$cfg['plugin']['search']['maxwords'].Cot::$R['code_error_separator']);
+		cot_error(
+            Cot::$L['plu_toomanywords'] . ' ' . Cot::$cfg['plugin']['search']['maxwords']
+            . Cot::$R['code_error_separator']
+        );
 	}
 	// Users LIST
-	$rs['setuser'] = trim($rs['setuser']);
+	$rs['setuser'] = isset($rs['setuser']) ?  trim($rs['setuser']) : null;
 	if (!empty($rs['setuser'])) {
 		$touser_src = explode(",", $rs['setuser']);
         $touser_sql = [];
