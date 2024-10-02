@@ -182,9 +182,9 @@ if (Cot::$sys['displayHeader']) {
             cot_rc_link(cot_url('admin'), Cot::$L['Administration']) : '';
 		Cot::$out['loginout_url'] = cot_url('login', 'out=1&' . cot_xg());
 		Cot::$out['loginout'] = cot_rc_link(Cot::$out['loginout_url'], Cot::$L['Logout']);
-		Cot::$out['profile'] = cot_rc_link(cot_url('users', 'm=profile'), Cot::$L['Profile']);
+		Cot::$out['profile'] = cot_rc_link(cot_url('users', 'm=profile'), Cot::$L['users_profileSettings']);
 
-		$t->assign(array(
+		$t->assign([
 			'HEADER_USER_NAME' => Cot::$usr['name'],
 			'HEADER_USER_ADMINPANEL' => Cot::$out['adminpanel'],
 			'HEADER_USER_ADMINPANEL_URL' => cot_url('admin'),
@@ -192,8 +192,8 @@ if (Cot::$sys['displayHeader']) {
 			'HEADER_USER_LOGINOUT_URL' => Cot::$out['loginout_url'],
 			'HEADER_USER_PROFILE' => Cot::$out['profile'],
 			'HEADER_USER_PROFILE_URL' => cot_url('users', 'm=profile'),
-			'HEADER_USER_MESSAGES' => Cot::$usr['messages']
-		));
+			'HEADER_USER_MESSAGES' => Cot::$usr['messages'],
+		]);
 
 		/* === Hook === */
 		foreach (cot_getextplugins('header.user.tags') as $pl) {

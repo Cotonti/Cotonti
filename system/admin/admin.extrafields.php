@@ -31,6 +31,8 @@ $extra_whitelist = [
 		'caption' => Cot::$L['Categories'],
 		'type' => 'system',
 		'code' => 'structure',
+        'icon' => '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+            . '/32/folder.png" alt="{PHP.L.Structure}" />',
 		'tags' => [
 			'page.list.tpl' => '{LIST_CAT_ROW_XXXXX}, {LIST_CAT_XXXXX}',
 			'page.list.group.tpl' => '{LIST_CAT_ROW_XXXXX}, {LIST_CAT_XXXXX}',
@@ -72,8 +74,11 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
 		$name = '';
 		$ext_info = [];
 		$type = null;
+        $icon = $extra_whitelist[$table]['icon'] ?? null;
 		if (isset($extra_whitelist[$table])) {
-            if (isset($extra_whitelist[$table]['type'])) $type = $extra_whitelist[$table]['type'];
+            if (isset($extra_whitelist[$table]['type'])) {
+                $type = $extra_whitelist[$table]['type'];
+            }
             if ($type == 'module' || $type == 'plug') {
                 $ext_info = cot_get_extensionparams($extra_whitelist[$table]['code'], $extra_whitelist[$table]['type'] == 'module');
                 $name = $ext_info['name'];
@@ -84,9 +89,21 @@ if (empty($n) || in_array($n, $extra_blacklist)) {
             $name = (empty($name)) ? $extra_whitelist[$table]['caption'] : $name;
         }
 
+        if ($icon === null) {
+            $fileNames = [
+                Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'] . '/default.png',
+                Cot::$cfg['icons_dir'] . '/default/default.png',
+            ];
+            foreach ($fileNames as $fileName) {
+                if (file_exists($fileName)) {
+                    $icon = cot_rc('img_none', ['src' => $fileName]);
+                }
+            }
+        }
+
 		$ii++;
 		$t->assign([
-			'ADMIN_EXTRAFIELDS_ROW_ICON' => isset($icon) ? $icon : '',
+			'ADMIN_EXTRAFIELDS_ROW_ICON' => $icon ?? '',
 			'ADMIN_EXTRAFIELDS_ROW_ITEMNAME' => $name,
 			'ADMIN_EXTRAFIELDS_ROW_TABLENAME' => $table . ((isset($extra_whitelist[$table])) ? " - " . $extra_whitelist[$table]['caption'] : ''),
 			'ADMIN_EXTRAFIELDS_ROW_TABLE' => $table,

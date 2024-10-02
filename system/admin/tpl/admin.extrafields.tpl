@@ -9,12 +9,15 @@
 			<!-- BEGIN: ROW -->
 			<tr>
 				<td>
+					<figure class="w-5 margin0" style="display: inline-block">{ADMIN_EXTRAFIELDS_ROW_ICON}</figure>
 					<a href="{ADMIN_EXTRAFIELDS_ROW_TABLEURL}">{ADMIN_EXTRAFIELDS_ROW_TABLENAME}</a>
 				</td>
 			</tr>
 			<!-- END: ROW -->
 		</table>
-		<a href="{ADMIN_EXTRAFIELDS_ALLTABLES}">{PHP.L.adm_extrafields_all}</a>
+		<div class="margintop10">
+			<a href="{ADMIN_EXTRAFIELDS_ALLTABLES}">{PHP.L.adm_extrafields_all}</a>
+		</div>
 	</div>
 </div>
 <!-- END: TABLELIST -->

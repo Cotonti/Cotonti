@@ -1,6 +1,7 @@
 <!-- BEGIN: MAIN -->
 <div class="block">
-    <h2 class="users">{USERS_DETAILS_BREADCRUMBS}
+    <div class="breadcrumbs">{USERS_DETAILS_BREADCRUMBS}</div>
+    <h2 class="users">{USERS_DETAILS_TITLE}
 		<!-- BEGIN: USERS_DETAILS_ADMIN --> &nbsp; [ {USERS_DETAILS_ADMIN_EDIT} ]<!-- END: USERS_DETAILS_ADMIN -->
 	</h2>
     <table class="cells">

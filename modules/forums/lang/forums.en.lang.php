@@ -69,6 +69,7 @@ $L['forums_topic'] = 'Topic';
 $L['forums_topics'] = 'Topics';
 
 $L['forums_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.';
+$L['forums_editPost'] = 'Edit post';
 $L['forums_keepmovedlink'] = 'Keep a Moved Topic link';
 $L['forums_markallasread'] = 'Mark all posts as read';
 $L['forums_mergetime'] = 'Added %1$s later:';

@@ -74,7 +74,7 @@
 					<figure>{ADMIN_OTHER_EXT_ICON}</figure>
 					<div>
 						<a href="{ADMIN_OTHER_EXT_URL}">{ADMIN_OTHER_EXT_NAME}</a>
-						<p>{ADMIN_OTHER_EXT_DESC}</p>
+						<!-- IF {ADMIN_OTHER_EXT_DESC} --><p>{ADMIN_OTHER_EXT_DESC}</p><!-- ENDIF -->
 					</div>
 				</td>
 			</tr>

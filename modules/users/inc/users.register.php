@@ -215,25 +215,31 @@ if ($a == 'add') {
 
 $mskin = cot_tplfile('users.register', 'module');
 
+$breadCrumbs = [
+    [cot_url('users', ['m' => 'register']), Cot::$L['aut_registertitle']],
+];
+
 /* === Hook === */
-foreach (cot_getextplugins('users.register.main') as $pl)
-{
+foreach (cot_getextplugins('users.register.main') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-$out['subtitle'] = Cot::$L['aut_registertitle'];
-if (!isset($out['head'])) $out['head'] = '';
-$out['head'] .= Cot::$R['code_noindex'];
+Cot::$out['subtitle'] = Cot::$L['aut_registertitle'];
+if (!isset($out['head'])) {
+    Cot::$out['head'] = '';
+}
+Cot::$out['head'] .= Cot::$R['code_noindex'];
 require_once Cot::$cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');
 
-$t->assign(array(
+$t->assign([
 	'USERS_REGISTER_TITLE' => Cot::$L['aut_registertitle'],
 	'USERS_REGISTER_SUBTITLE' => Cot::$L['aut_registersubtitle'],
+    'USERS_REGISTER_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
 	//'USERS_REGISTER_ADMINEMAIL' => $cot_adminemail, // Obsolete?
 	'USERS_REGISTER_SEND' => cot_url('users', 'm=register&a=add'),
 	'USERS_REGISTER_USER' => cot_inputbox('text', 'rusername', $ruser['user_name'], array('size' => 24, 'maxlength' => 100)),
@@ -244,7 +250,7 @@ $t->assign(array(
 	'USERS_REGISTER_TIMEZONE' => cot_selectbox_timezone($ruser['user_timezone'], 'rusertimezone'),
 	'USERS_REGISTER_GENDER' => cot_selectbox_gender($ruser['user_gender'],'rusergender'),
 	'USERS_REGISTER_BIRTHDATE' => cot_selectbox_date(0, 'short', 'ruserbirthdate', cot_date('Y', $sys['now']), cot_date('Y', $sys['now']) - 100, false),
-));
+]);
 
 // Extra fields
 if (!empty(Cot::$extrafields[Cot::$db->users])) {

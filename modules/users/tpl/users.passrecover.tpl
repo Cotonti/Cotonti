@@ -1,5 +1,8 @@
 <!-- BEGIN: MAIN -->
 <div class="block">
+	<!-- IF {PHP.cfg.homebreadcrumb} -->
+	<div class="breadcrumbs">{PASSRECOVER_BREADCRUMBS}</div>
+	<!-- ENDIF -->
 	<h2 class="users">{PASSRECOVER_TITLE}</h2>
 	<!-- IF {PHP.msg} == 'request' --><p>{PHP.L.pasrec_mailsent}</p><!-- ENDIF -->
 	<!-- IF {PHP.msg} == 'auth' --><p>{PHP.L.pasrec_mailsent2}</p><!-- ENDIF -->

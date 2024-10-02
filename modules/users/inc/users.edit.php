@@ -295,7 +295,7 @@ $breadCrumbs = [
     [cot_url('users', ['m' => 'edit', 'id' => $urr['user_id']]), Cot::$L['Edit']],
 ];
 
-$t->assign(array(
+$t->assign([
 	'USERS_EDIT_TITLE' => htmlspecialchars(cot_user_full_name($urr)),
     'USERS_EDIT_SUBTITLE' => $L['useed_subtitle'],
     'USERS_EDIT_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
@@ -328,7 +328,7 @@ $t->assign(array(
 	'USERS_EDIT_DELETE' => (Cot::$sys['user_istopadmin'])
         ? cot_radiobox(0, 'ruserdelete', [1, 0], [Cot::$L['Yes'], Cot::$L['No']]) . $delete_pfs
         : Cot::$L['na'],
-));
+]);
 if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
     // @deprecated in 0.9.24
     $t->assign([

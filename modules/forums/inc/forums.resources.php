@@ -55,5 +55,5 @@ $R['forums_noavatar'] = '<img src="' . Cot::$R['users_defaultAvatarSrc'] . '" al
 /**
  * Misc
  */
-$R['forums_code_admin_mark'] = ' *';
-$R['forums_code_post_empty'] = '&nbsp;';
+$R['forums_code_admin_mark'] = Cot::$R['forums_code_admin_mark'] ?? ' *';
+$R['forums_code_post_empty'] = Cot::$R['forums_code_post_empty'] ?? '&nbsp;';

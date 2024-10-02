@@ -15,33 +15,37 @@
 		<input type="hidden" name="m" value="page" />
 		<!-- ENDIF -->
 		<table class="cells">
-			<tr>
-				<td class="coltop w-5"></td>
-				<td class="coltop w-5"></td>
-				<td class="coltop w-15 filterSelect">{ADMIN_PAGE_FILTER}</td>
-				<td class="coltop w-50">
-					<!-- IF {TOTAL_ENTRIES} > 1 -->
-					{PHP.L.adm_sort} {ADMIN_PAGE_ORDER} {ADMIN_PAGE_WAY}
-					<!-- ENDIF -->
-				</td>
-				<td class="coltop w-25"><button type="submit">{PHP.L.Filter}</button></td>
-			</tr>
+			<thead>
+				<tr>
+					<th class="coltop w-5"></th>
+					<th class="coltop w-5"></th>
+					<th class="coltop w-15 filterSelect">{ADMIN_PAGE_FILTER}</th>
+					<th class="coltop w-60">
+						<!-- IF {TOTAL_ENTRIES} > 1 -->
+						{PHP.L.adm_sort} {ADMIN_PAGE_ORDER} {ADMIN_PAGE_WAY}
+						<!-- ENDIF -->
+					</th>
+					<td class="coltop"><button type="submit">{PHP.L.Filter}</button></td>
+				</tr>
+			</thead>
 		</table>
 	</form>
 	<!-- ENDIF -->
 	<form id="form_valqueue" name="form_valqueue" method="post" action="{ADMIN_PAGE_FORM_URL}">
 		<table class="cells">
-			<tr>
-				<td class="coltop w-5">
-					<!-- IF {PHP.cfg.jquery} -->
-					<input name="allchek" class="checkbox" type="checkbox" value="" onclick="$('.checkbox').attr('checked', this.checked);" />
-					<!-- ENDIF -->
-				</td>
-				<td class="coltop w-5">{PHP.L.Id}</td>
-				<td class="coltop w-15">{PHP.L.Status}</td>
-				<td class="coltop w-50">{PHP.L.Title}</td>
-				<td class="coltop w-25">{PHP.L.Action}</td>
+			<thead>
+				<tr>
+					<th class="coltop w-5">
+						<!-- IF {PHP.cfg.jquery} -->
+						<input name="allchek" class="checkbox" type="checkbox" value="" onclick="$('.checkbox').attr('checked', this.checked);" />
+						<!-- ENDIF -->
+					</th>
+					<th class="coltop w-5">{PHP.L.Id}</th>
+					<th class="coltop w-15">{PHP.L.Status}</th>
+					<th class="coltop w-60">{PHP.L.Title}</th>
+					<th class="coltop">{PHP.L.Action}</th>
 			</tr>
+			</thead>
 			<!-- BEGIN: PAGE_ROW -->
 			<tr>
 				<td class="centerall {ADMIN_PAGE_ODDEVEN}">
@@ -54,24 +58,20 @@
 					{ADMIN_PAGE_LOCAL_STATUS}
 				</td>
 				<td class="{ADMIN_PAGE_ODDEVEN}">
-					<div id="mor_{PHP.ii}" class='mor_info_on_off'>
-						<span class="strong" style="cursor:hand;">{ADMIN_PAGE_TITLE}</span>
+					<div id="mor_{PHP.ii}" class="mor_info_on_off" style="max-width: 675px; overflow-x: scroll">
+						<span class="strong" style="cursor: pointer;">{ADMIN_PAGE_TITLE}</span>
+						<!-- IF {ADMIN_PAGE_DESCRIPTION} -->
+						<div class="des">{ADMIN_PAGE_DESCRIPTION}</div>
+						<!-- ENDIF -->
 						<div class="moreinfo">
 							<hr />
-							<table class="flat">
-								<tr>
-									<td class="w-20">{PHP.L.Category}:</td>
-									<td class="w-80">{ADMIN_PAGE_CAT_PATH_SHORT}</td>
-								</tr>
-								<tr>
-									<td>{PHP.L.Description}:</td>
-									<td>{ADMIN_PAGE_DESCRIPTION}</td>
-								</tr>
-								<tr>
-									<td>{PHP.L.Text}:</td>
-									<td>{ADMIN_PAGE_TEXT}</td>
-								</tr>
-							</table>
+							<strong>{PHP.L.Category}:</strong> {ADMIN_PAGE_CAT_PATH_SHORT}
+							<!-- IF {ADMIN_PAGE_TEXT} -->
+							<div class="margintop10">
+								<strong>{PHP.L.Text}:</strong>
+								<div>{ADMIN_PAGE_TEXT}</div>
+							</div>
+							<!-- ENDIF -->
 						</div>
 					</div>
 				</td>
@@ -129,7 +129,7 @@
 			}
 
 			let message = 'Are you sure?';
-			switch(this.value) {
+			switch (this.value) {
 				case 'delete':
 					message = '{PHP.L.page_confirm_delete}';
 					break;

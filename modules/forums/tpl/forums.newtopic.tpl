@@ -1,32 +1,35 @@
 <!-- BEGIN: MAIN -->
 <div class="block">
-    <h2 class="forums">{FORUMS_NEWTOPIC_PAGETITLE}</h2>
+    <h2 class="forums">{FORUMS_NEWTOPIC_BREADCRUMBS}</h2>
     {FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
-    <form action="{FORUMS_NEWTOPIC_SEND}" method="post" name="newtopic">
+    <form action="{FORUMS_NEWTOPIC_FORM_ACTION}" method="post" name="newtopic">
         <table class="cells">
             <tr>
                 <td class="width20">{PHP.L.Title}:</td>
-                <td class="width80">{FORUMS_NEWTOPIC_TITLE}</td>
+                <td class="width80">{FORUMS_NEWTOPIC_FORM_TITLE}</td>
             </tr>
             <tr>
                 <td>{PHP.L.Description}:</td>
-                <td>{FORUMS_NEWTOPIC_DESC}</td>
+                <td>{FORUMS_NEWTOPIC_FORM_DESCRIPTION}</td>
             </tr>
             <!-- BEGIN: PRIVATE -->
             <tr>
                 <td>{PHP.L.forums_privatetopic1}:</td>
                 <td>
-                    {FORUMS_NEWTOPIC_ISPRIVATE}
+                    {FORUMS_NEWTOPIC_FORM_PRIVATE}
                     <span class="small">({PHP.L.forums_privatetopic2})</span>
                 </td>
             </tr>
             <!-- END: PRIVATE -->
             <tr>
                 <td colspan="2">
-					{FORUMS_NEWTOPIC_TEXT}
-					<!-- IF {FORUMS_NEWTOPIC_MYPFS} -->{FORUMS_NEWTOPIC_MYPFS}<!-- ENDIF -->
-                    <!-- IF {PHP.cfg.forums.edittimeout} != 0 -->
-                    {PHP.L.forums_edittimeoutnote} {FORUMS_NEWTOPIC_EDITTIMEOUT}
+					{FORUMS_NEWTOPIC_FORM_TEXT}
+                    <!-- IF {FORUMS_NEWTOPIC_PFS} --><span class="marginright10">{FORUMS_NEWTOPIC_PFS}</span><!-- ENDIF -->
+                    <!-- IF {FORUMS_NEWTOPIC_SFS} -->{FORUMS_NEWTOPIC_SFS}<!-- ENDIF -->
+                    <!-- IF {FORUMS_NEWTOPIC_EDIT_TIMEOUT} -->
+                    <div class="margintop10">
+                    {PHP.L.forums_edittimeoutnote} {FORUMS_NEWTOPIC_EDIT_TIMEOUT}
+                    </div>
                     <!-- ENDIF -->
                 </td>
             </tr>
@@ -56,9 +59,7 @@
             </tr>
             <tr>
                 <td></td>
-                <td>
-                    {EDIT_POLL_MULTIPLE}
-                </td>
+                <td>{EDIT_POLL_MULTIPLE}</td>
             </tr>
             <!-- END: POLL -->
             <!-- BEGIN: FORUMS_NEWTOPIC_TAGS -->

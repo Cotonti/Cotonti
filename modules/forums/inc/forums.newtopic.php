@@ -141,7 +141,9 @@ if ($a == 'newtopic') {
 	}
 }
 
-$toptitle = cot_breadcrumbs(cot_forums_buildpath($s), Cot::$cfg['homebreadcrumb'], false);
+$crumbs = cot_forums_buildpath($s);
+$crumbs[] = [cot_url('forums', ['m' => 'newtopic', 's' => $s]), Cot::$L['forums_newtopic']];
+$toptitle = cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb']);
 $toptitle .= (Cot::$usr['isadmin']) ? Cot::$R['forums_code_admin_mark'] : '';
 
 Cot::$sys['sublocation'] = Cot::$structure['forums'][$s]['title'];
@@ -162,15 +164,32 @@ require_once Cot::$cfg['system_dir'] . '/header.php';
 $mskin = cot_tplfile(array('forums', 'newtopic', Cot::$structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
 
-$t->assign(array(
-	'FORUMS_NEWTOPIC_PAGETITLE' => $toptitle ,
+$t->assign([
+    'FORUMS_NEWTOPIC_TITLE' => Cot::$L['forums_newtopic'],
+    'FORUMS_NEWTOPIC_BREADCRUMBS' => $toptitle,
 	'FORUMS_NEWTOPIC_SUBTITLE' => htmlspecialchars(cot_parse_autourls(Cot::$structure['forums'][$s]['desc'])),
-	'FORUMS_NEWTOPIC_SEND' => cot_url('forums', "m=newtopic&a=newtopic&s=".$s),
-	'FORUMS_NEWTOPIC_TITLE' => cot_inputbox('text', 'rtopictitle', $rtopic['ft_title'], array('size' => 56, 'maxlength' => 255)),
-	'FORUMS_NEWTOPIC_DESC' => cot_inputbox('text', 'rtopicdesc', $rtopic['ft_desc'], array('size' => 56, 'maxlength' => 255)),
-	'FORUMS_NEWTOPIC_TEXT' => cot_textarea('rmsgtext', $rmsg['fp_text'], 20, 56, '', 'input_textarea_'.$minimaxieditor),
-	'FORUMS_NEWTOPIC_EDITTIMEOUT' => cot_build_timegap(0, Cot::$cfg['forums']['edittimeout'] * 3600)
-));
+	'FORUMS_NEWTOPIC_FORM_ACTION' => cot_url('forums', ['m' => 'newtopic', 'a' => 'ewtopic', 's' => $s]),
+	'FORUMS_NEWTOPIC_FORM_TITLE' => cot_inputbox('text', 'rtopictitle', $rtopic['ft_title'], ['maxlength' => 255]),
+    'FORUMS_NEWTOPIC_FORM_DESCRIPTION' => cot_inputbox('text', 'rtopicdesc', $rtopic['ft_desc'], ['maxlength' => 255]),
+	'FORUMS_NEWTOPIC_FORM_TEXT' => cot_textarea('rmsgtext', $rmsg['fp_text'], 20, 56, '', 'input_textarea_' . $minimaxieditor),
+	'FORUMS_NEWTOPIC_EDIT_TIMEOUT' => Cot::$cfg['forums']['edittimeout'] > 0
+        ? cot_build_timegap(0, Cot::$cfg['forums']['edittimeout'] * 3600)
+        : '',
+]);
+
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.26
+    $t->assign([
+        'FORUMS_EDITPOST_PAGETITLE' => $toptitle,
+        'FORUMS_NEWTOPIC_SEND' => cot_url('forums', "m=newtopic&a=newtopic&s=".$s),
+        'FORUMS_NEWTOPIC_TITLE' => cot_inputbox('text', 'rtopictitle', $rtopic['ft_title'], array('maxlength' => 255)),
+        'FORUMS_NEWTOPIC_DESC' => cot_inputbox('text', 'rtopicdesc', $rtopic['ft_desc'], array('maxlength' => 255)),
+        'FORUMS_NEWTOPIC_TEXT' => cot_textarea('rmsgtext', $rmsg['fp_text'], 20, 56, '', 'input_textarea_'.$minimaxieditor),
+        'FORUMS_NEWTOPIC_EDITTIMEOUT' => Cot::$cfg['forums']['edittimeout'] > 0
+            ? cot_build_timegap(0, Cot::$cfg['forums']['edittimeout'] * 3600)
+            : '',
+    ]);
+}
 
 // Extra fields
 if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
@@ -179,12 +198,22 @@ if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
         $exfld_val = cot_build_extrafields('rmsg' . $exfld['field_name'], $exfld, $rmsg['fp_' . $exfld['field_name']]);
         $exfld_title = cot_extrafield_title($exfld, 'forums_post_');
 
-        $t->assign(array(
-            'FORUMS_NEWTOPIC_' . $uname => $exfld_val,
-            'FORUMS_NEWTOPIC_' . $uname . '_TITLE' => $exfld_title,
-            'FORUMS_NEWTOPIC_EXTRAFLD' => $exfld_val,
-            'FORUMS_NEWTOPIC_EXTRAFLD_TITLE' => $exfld_title
-        ));
+        $t->assign([
+            'FORUMS_NEWTOPIC_FORM_' . $uname => $exfld_val,
+            'FORUMS_NEWTOPIC_FORM_' . $uname . '_TITLE' => $exfld_title,
+            'FORUMS_NEWTOPIC_FORM_EXTRAFLD' => $exfld_val,
+            'FORUMS_NEWTOPIC_FORM_EXTRAFLD_TITLE' => $exfld_title,
+        ]);
+
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.26
+            $t->assign([
+                'FORUMS_NEWTOPIC_' . $uname => $exfld_val,
+                'FORUMS_NEWTOPIC_' . $uname . '_TITLE' => $exfld_title,
+                'FORUMS_NEWTOPIC_EXTRAFLD' => $exfld_val,
+                'FORUMS_NEWTOPIC_EXTRAFLD_TITLE' => $exfld_title,
+            ]);
+        }
         $t->parse('MAIN.EXTRAFLD');
     }
 }
@@ -196,18 +225,35 @@ if (!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
         $exfld_val = cot_build_extrafields('rtopic' . $exfld['field_name'], $exfld, $rtopic['ft_' . $exfld['field_name']]);
         $exfld_title = cot_extrafield_title($exfld, 'forums_topic_');
         
-        $t->assign(array(
-            'FORUMS_NEWTOPIC_TOPIC_' . $uname => $exfld_val,
-            'FORUMS_NEWTOPIC_TOPIC_' . $uname . '_TITLE' => $exfld_title,
-            'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD' => $exfld_val,
-            'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD_TITLE' => $exfld_title
-        ));
+        $t->assign([
+            'FORUMS_NEWTOPIC_FORM_TOPIC_' . $uname => $exfld_val,
+            'FORUMS_NEWTOPIC_FORM_TOPIC_' . $uname . '_TITLE' => $exfld_title,
+            'FORUMS_NEWTOPIC_FORM_TOPIC_EXTRAFLD' => $exfld_val,
+            'FORUMS_NEWTOPIC_FORM_TOPIC_EXTRAFLD_TITLE' => $exfld_title
+        ]);
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.26
+            $t->assign([
+                'FORUMS_NEWTOPIC_TOPIC_' . $uname => $exfld_val,
+                'FORUMS_NEWTOPIC_TOPIC_' . $uname . '_TITLE' => $exfld_title,
+                'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD' => $exfld_val,
+                'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD_TITLE' => $exfld_title
+            ]);
+        }
         $t->parse('MAIN.TOPIC_EXTRAFLD');
     }
 }
 
 if (Cot::$cfg['forums']['cat_' . $s]['allowprvtopics']) {
-	$t->assign('FORUMS_NEWTOPIC_ISPRIVATE', cot_checkbox($rtopic['ft_mode'], 'rtopicmode'));
+	$t->assign('FORUMS_NEWTOPIC_FORM_PRIVATE', cot_checkbox($rtopic['ft_mode'], 'rtopicmode'));
+
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.26
+        $t->assign([
+            'FORUMS_NEWTOPIC_ISPRIVATE' => cot_checkbox($rtopic['ft_mode'], 'rtopicmode'),
+        ]);
+    }
+
 	$t->parse('MAIN.PRIVATE');
 }
 

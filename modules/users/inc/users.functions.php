@@ -13,6 +13,7 @@ defined('COT_CODE') or die('Wrong URL');
 // Requirements
 require_once cot_incfile('auth');
 require_once cot_langfile('users', 'core');
+require_once cot_langfile('users', 'module');
 require_once cot_incfile('users', 'module', 'resources');
 
 require_once cot_incfile('extrafields');

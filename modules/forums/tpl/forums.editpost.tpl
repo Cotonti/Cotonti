@@ -1,26 +1,30 @@
 <!-- BEGIN: MAIN -->
 <div class="block">
-    <h2 class="forums">{FORUMS_EDITPOST_PAGETITLE}</h2>
+    <h2 class="forums">{FORUMS_EDITPOST_BREADCRUMBS}</h2>
     <!-- IF {FORUMS_EDITPOST_SUBTITLE} --><p class="marginbottom10 small">{FORUMS_EDITPOST_SUBTITLE}</p><!-- ENDIF -->
     {FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
-    <form action="{FORUMS_EDITPOST_SEND}" method="post" name="editpost">
+    <form action="{FORUMS_EDITPOST_FORM_ACTION}" method="POST" name="editpost">
         <table class="cells">
             <!-- BEGIN: FORUMS_EDITPOST_FIRSTPOST -->
             <tr>
                 <td class="width20">{PHP.L.forums_topic}:</td>
-                <td class="width80">{FORUMS_EDITPOST_TOPICTITTLE}</td>
+                <td class="width80">{FORUMS_EDITPOST_FORM_TOPIC_TITTLE}</td>
             </tr>
             <tr>
                 <td>{PHP.L.Description}:</td>
-                <td>{FORUMS_EDITPOST_TOPICDESCRIPTION}</td>
+                <td>{FORUMS_EDITPOST_FORM_TOPIC_DESCRIPTION}</td>
             </tr>
             <!-- END: FORUMS_EDITPOST_FIRSTPOST -->
             <tr>
                 <td colspan="2">
-					{FORUMS_EDITPOST_TEXT}
-                    <!-- IF {FORUMS_EDITPOST_MYPFS} -->{FORUMS_EDITPOST_MYPFS}<!-- ENDIF -->
-                    <!-- IF {PHP.cfg.forums.edittimeout} != 0 -->
-                    {PHP.L.forums_edittimeoutnote} {FORUMS_EDITPOST_EDITTIMEOUT}
+					{FORUMS_EDITPOST_FORM_TEXT}
+                    <!-- IF {FORUMS_EDITPOST_PFS} --><span class="marginright10">{FORUMS_EDITPOST_PFS}</span><!-- ENDIF -->
+                    <!-- IF {FORUMS_EDITPOST_SFS} -->{FORUMS_EDITPOST_SFS}<!-- ENDIF -->
+
+                    <!-- IF {FORUMS_EDITPOST_EDIT_TIMEOUT} -->
+                    <div class="margintop10">
+                        {PHP.L.forums_edittimeoutnote} {FORUMS_EDITPOST_EDIT_TIMEOUT}
+                    </div>
                     <!-- ENDIF -->
                 </td>
             </tr>

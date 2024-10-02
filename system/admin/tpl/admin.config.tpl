@@ -51,7 +51,6 @@
 <!-- END: EDIT -->
 
 <!-- BEGIN: DEFAULT -->
-
 <!-- BEGIN: ADMIN_CONFIG_COL -->
 <div class="block">
 	<h2>{ADMIN_CONFIG_COL_CAPTION}:</h2>
@@ -66,7 +65,5 @@
 	</div>
 </div>
 <!-- END: ADMIN_CONFIG_COL -->
-
 <!-- END: DEFAULT -->
-
 <!-- END: MAIN -->

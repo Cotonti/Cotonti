@@ -17,7 +17,7 @@ $d = cot_import('d','G','INT');
 $f = cot_import('f','G','TXT');
 $u = cot_import('u','G','TXT');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+[$usr['auth_read'], $usr['auth_write'], $usr['isadmin']] = cot_auth('users', 'a');
 cot_block($usr['auth_read']);
 
 /* === Hook === */
@@ -66,13 +66,18 @@ $t = new XTemplate($mskin);
 
 $t->assign(cot_generate_usertags($urr, 'USERS_DETAILS_', '', true));
 
-$breadCrumbs = [
-    [cot_url('users'), Cot::$L['Users']],
-    [
-        cot_url('users', ['m' => 'details', 'id' => $urr['user_id'], 'u' => $urr['user_name']]),
-        cot_user_full_name($urr),
-    ],
-];
+if ((int) $urr['user_id'] === (int) Cot::$usr['id']) {
+    $breadCrumbs = [[cot_url('users', ['m' => 'details']), Cot::$L['users_myProfile']]];
+} else {
+    $breadCrumbs = [
+        [cot_url('users'), Cot::$L['Users']],
+        [
+            cot_url('users', ['m' => 'details', 'id' => $urr['user_id'], 'u' => $urr['user_name']]),
+            cot_user_full_name($urr),
+        ],
+    ];
+}
+
 $t->assign([
     'USERS_DETAILS_TITLE' => htmlspecialchars(cot_user_full_name($urr)),
     'USERS_DETAILS_SUBTITLE' => Cot::$L['use_subtitle'],

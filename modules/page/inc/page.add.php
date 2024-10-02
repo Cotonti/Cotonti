@@ -111,6 +111,9 @@ if (empty($rpage['page_cat'])) {
     $rpage['page_cat'] = isset($c) ? $c : '';
 }
 
+$breadcrumbs = [];
+$urlParams = ['m' => 'add'];
+
 if (!empty($rpage['page_cat'])) {
     list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
     cot_block(Cot::$usr['auth_write']);
@@ -121,11 +124,12 @@ if (!empty($rpage['page_cat'])) {
 
     Cot::$sys['sublocation'] = Cot::$structure['page'][$rpage['page_cat']]['title'];
     $mskin = cot_tplfile(['page', 'add', Cot::$structure['page'][$rpage['page_cat']]['tpl']]);
-
+    $breadcrumbs = cot_structure_buildpath('page', $rpage['page_cat']);
+    $urlParams['c'] = $rpage['page_cat'];
 } else {
     if (!Cot::$usr['isadmin']) {
         // User can add page to these categories
-        $categories = array();
+        $categories = [];
         if (!empty(Cot::$structure['page'])) {
             foreach (Cot::$structure['page'] as $i => $x) {
                 $display = cot_auth('page', $i, 'W');
@@ -152,6 +156,8 @@ if (!isset(Cot::$out['head'] )) {
 }
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 
+$breadcrumbs[] = [cot_url('page', $urlParams), Cot::$L['page_addtitle']];
+
 /* === Hook === */
 foreach (cot_getextplugins('page.add.main') as $pl) {
 	include $pl;
@@ -161,8 +167,9 @@ foreach (cot_getextplugins('page.add.main') as $pl) {
 require_once Cot::$cfg['system_dir'].'/header.php';
 $t = new XTemplate($mskin);
 
-$pageadd_array = array(
+$pageadd_array = [
 	'PAGEADD_PAGETITLE' => Cot::$L['page_addtitle'],
+    'PAGEADD_BREADCRUMBS' => cot_breadcrumbs($breadcrumbs, Cot::$cfg['homebreadcrumb']),
 	'PAGEADD_SUBTITLE'  => Cot::$L['page_addsubtitle'],
 	'PAGEADD_ADMINEMAIL' => 'mailto:' . Cot::$cfg['adminemail'],
 	'PAGEADD_FORM_SEND' => cot_url('page', 'm=add&a=add&c=' . $c),
@@ -191,7 +198,7 @@ $pageadd_array = array(
 	'PAGEADD_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $rpage['page_size'], ['maxlength' => '255']),
 	'PAGEADD_FORM_TEXT' => cot_textarea('rpagetext', $rpage['page_text'], 24, 120, '', 'input_textarea_editor'),
 	'PAGEADD_FORM_PARSER' => cot_selectbox(Cot::$cfg['page']['parser'], 'rpageparser', $parser_list, $parser_list, false),
-);
+];
 if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
     // @deprecated in 0.9.24
     $t->assign([

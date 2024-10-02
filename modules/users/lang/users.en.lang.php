@@ -11,6 +11,9 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['info_desc'] = 'User management with registration, listings and profiles';
 
+/**
+ * Module Config
+ */
 $L['cfg_disablereg'] = 'Disable registration process';
 $L['cfg_disablereg_hint'] = 'Prevent users from registering new accounts';
 $L['cfg_maxusersperpage'] = 'Maximum lines in userlist';
@@ -31,6 +34,12 @@ $L['cfg_usertextmax'] = 'Maximum length for user signature';
 $L['cfg_usertextmax_hint'] = '';
 $L['cfg_usertextimg'] = 'Allow images and HTML in user signature';
 $L['cfg_usertextimg_hint'] = '\'No\' recommended, for security reasons';
+
+/**
+ * User profile & edit
+ */
+$L['users_myProfile'] = 'My profile';
+$L['users_profileSettings'] = 'Profile settings';
 
 $L['Password_updated'] = 'Password changed';
 $L['Profile_updated'] = 'Profile settings saved';

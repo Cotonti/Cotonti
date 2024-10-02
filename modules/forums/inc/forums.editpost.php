@@ -12,7 +12,7 @@ defined('COT_CODE') or die('Wrong URL');
 $s = cot_import('s', 'G', 'TXT'); // section cat
 $q = cot_import('q', 'G', 'INT');  // Topic id
 $p = cot_import('p', 'G', 'INT'); // Post id
-list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['forums']['maxpostsperpage']);
+[$pg, $d, $durl] = cot_import_pagenav('d', Cot::$cfg['forums']['maxpostsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.editpost.first') as $pl) {
@@ -30,7 +30,7 @@ $sql_forums = Cot::$db->query(
 	[$p, $q, $s]
 );
 if ($rowpost = $sql_forums->fetch()) {
-	list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('forums', $s);
+	[Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']] = cot_auth('forums', $s);
 
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.editpost.rights') as $pl) {
@@ -154,7 +154,10 @@ $crumbs[] = [
     cot_url('forums', "m=posts&p=" . $p, "#" . $p),
     (($rowt['ft_mode'] == 1) ? '# ' : '') . $rowt['ft_title']
 ];
-$crumbs[] =[cot_url('forums', "m=editpost&s=$s&q=" . $q . "&p=" . $p . "&" . cot_xg()), Cot::$L['Edit']];
+$crumbs[] = [
+    cot_url('forums', ['m' => 'editpost', 's' => $s, 'q' => $q, 'p' => $p, 'x' => Cot::$sys['xk']]),
+    Cot::$L['Edit']
+];
 $toptitle = cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb']);
 $toptitle .= Cot::$usr['isadmin'] ? Cot::$R['forums_code_admin_mark'] : '';
 
@@ -186,24 +189,53 @@ $t = new XTemplate($mskin);
 cot_display_messages($t);
 
 if (Cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p) {
-	$t->assign(array(
-		'FORUMS_EDITPOST_TOPICTITTLE' => cot_inputbox('text', 'rtopictitle', $rowt['ft_title'], array('size' => 56, 'maxlength' => 255)),
-		'FORUMS_EDITPOST_TOPICDESCRIPTION' => cot_inputbox('text', 'rtopicdesc', $rowt['ft_desc'], array('size' => 56, 'maxlength' => 255)),
-	));
+	$t->assign([
+		'FORUMS_EDITPOST_FORM_TOPIC_TITTLE' => cot_inputbox(
+            'text',
+            'rtopictitle',
+            $rowt['ft_title'],
+            ['maxlength' => 255]
+        ),
+		'FORUMS_EDITPOST_FORM_TOPIC_DESCRIPTION' => cot_inputbox(
+            'text',
+            'rtopicdesc',
+            $rowt['ft_desc'],
+            ['maxlength' => 255]
+        ),
+	]);
 
-	// Extra fields
-    if(!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.26
+        $t->assign([
+            'FORUMS_EDITPOST_TOPICTITTLE' => cot_inputbox('text', 'rtopictitle', $rowt['ft_title'], array('maxlength' => 255)),
+            'FORUMS_EDITPOST_TOPICDESCRIPTION' => cot_inputbox('text', 'rtopicdesc', $rowt['ft_desc'], array('maxlength' => 255)),
+        ]);
+    }
+
+    // Extra fields
+    if (!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
         foreach (Cot::$extrafields[Cot::$db->forum_topics] as $exfld) {
             $uname = strtoupper($exfld['field_name']);
             $exfld_val = cot_build_extrafields('rtopic' . $exfld['field_name'], $exfld, $rowt['ft_' . $exfld['field_name']]);
             $exfld_title = cot_extrafield_title($exfld, 'forums_topic_');
 
-            $t->assign(array(
-                'FORUMS_EDITPOST_TOPIC_' . $uname => $exfld_val,
-                'FORUMS_EDITPOST_TOPIC_' . $uname . '_TITLE' => $exfld_title,
-                'FORUMS_EDITPOST_TOPIC_EXTRAFLD' => $exfld_val,
-                'FORUMS_EDITPOST_TOPIC_EXTRAFLD_TITLE' => $exfld_title
-            ));
+            $t->assign([
+                'FORUMS_EDITPOST_FORM_TOPIC_' . $uname => $exfld_val,
+                'FORUMS_EDITPOST_FORM_TOPIC_' . $uname . '_TITLE' => $exfld_title,
+                'FORUMS_EDITPOST_FORM_TOPIC_EXTRAFLD' => $exfld_val,
+                'FORUMS_EDITPOST_FORM_TOPIC_EXTRAFLD_TITLE' => $exfld_title,
+            ]);
+
+            if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+                // @deprecated in 0.9.26
+                $t->assign([
+                    'FORUMS_EDITPOST_TOPIC_' . $uname => $exfld_val,
+                    'FORUMS_EDITPOST_TOPIC_' . $uname . '_TITLE' => $exfld_title,
+                    'FORUMS_EDITPOST_TOPIC_EXTRAFLD' => $exfld_val,
+                    'FORUMS_EDITPOST_TOPIC_EXTRAFLD_TITLE' => $exfld_title,
+                ]);
+            }
+
             $t->parse('MAIN.FORUMS_EDITPOST_FIRSTPOST.TOPIC_EXTRAFLD');
         }
     }
@@ -211,38 +243,61 @@ if (Cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORD
 	$t->parse('MAIN.FORUMS_EDITPOST_FIRSTPOST');
 }
 
-
-$t->assign(array(
-	'FORUMS_EDITPOST_PAGETITLE' => $toptitle,
+$t->assign([
+    'FORUMS_EDITPOST_TITLE' => Cot::$L['forums_editPost'],
+    'FORUMS_EDITPOST_BREADCRUMBS' => $toptitle,
 	'FORUMS_EDITPOST_SUBTITLE' => Cot::$L['forums_postedby'] . ": <a href=\"users.php?m=details&id=" . $rowpost['fp_posterid'] . "\">" . $rowpost['fp_postername'] . "</a> @ " . cot_date('datetime_medium', $rowpost['fp_updated']),
 	'FORUMS_EDITPOST_UPDATED' => cot_date('datetime_medium', $rowpost['fp_updated']),
 	'FORUMS_EDITPOST_UPDATED_STAMP' => $rowpost['fp_updated'],
-	'FORUMS_EDITPOST_SEND' => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . '&d=' . $durl . "&" . cot_xg()),
-	'FORUMS_EDITPOST_TEXT' => cot_textarea('rmsgtext', $rowpost['fp_text'], 20, 56, '', 'input_textarea_'.$minimaxieditor),
-	'FORUMS_EDITPOST_EDITTIMEOUT' => cot_build_timegap(0, Cot::$cfg['forums']['edittimeout'] * 3600)
-));
+	'FORUMS_EDITPOST_FORM_ACTION' => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . '&d=' . $durl . "&" . cot_xg()),
+	'FORUMS_EDITPOST_FORM_TEXT' => cot_textarea('rmsgtext', $rowpost['fp_text'], 20, 56, '', 'input_textarea_'.$minimaxieditor),
+	'FORUMS_EDITPOST_EDIT_TIMEOUT' => Cot::$cfg['forums']['edittimeout'] > 0
+        ? cot_build_timegap(0, Cot::$cfg['forums']['edittimeout'] * 3600)
+        : '',
+]);
+
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.26
+    $t->assign([
+        'FORUMS_EDITPOST_PAGETITLE' => $toptitle,
+        'FORUMS_EDITPOST_SEND' => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . '&d=' . $durl . "&" . cot_xg()),
+        'FORUMS_EDITPOST_TEXT' => cot_textarea('rmsgtext', $rowpost['fp_text'], 20, 56, '', 'input_textarea_'.$minimaxieditor),
+        'FORUMS_EDITPOST_EDITTIMEOUT' => Cot::$cfg['forums']['edittimeout'] > 0
+            ? cot_build_timegap(0, Cot::$cfg['forums']['edittimeout'] * 3600)
+            : '',
+    ]);
+}
 
 // Extra fields
-if(!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
+if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
     foreach (Cot::$extrafields[Cot::$db->forum_posts] as $exfld) {
         $uname = strtoupper($exfld['field_name']);
         $exfld_val = cot_build_extrafields('rmsg' . $exfld['field_name'], $exfld,
             $rowpost['fp_' . $exfld['field_name']]);
         $exfld_title = cot_extrafield_title($exfld, 'forums_post_');
 
-        $t->assign(array(
-            'FORUMS_EDITPOST_' . $uname => $exfld_val,
-            'FORUMS_EDITPOST_' . $uname . '_TITLE' => $exfld_title,
-            'FORUMS_EDITPOST_EXTRAFLD' => $exfld_val,
-            'FORUMS_EDITPOST_EXTRAFLD_TITLE' => $exfld_title
-        ));
+        $t->assign([
+            'FORUMS_EDITPOST_FORM_' . $uname => $exfld_val,
+            'FORUMS_EDITPOST_FORM_' . $uname . '_TITLE' => $exfld_title,
+            'FORUMS_EDITPOST_FORM_EXTRAFLD' => $exfld_val,
+            'FORUMS_EDITPOST_FORM_EXTRAFLD_TITLE' => $exfld_title,
+        ]);
+
+        if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+            // @deprecated in 0.9.26
+            $t->assign([
+                'FORUMS_EDITPOST_' . $uname => $exfld_val,
+                'FORUMS_EDITPOST_' . $uname . '_TITLE' => $exfld_title,
+                'FORUMS_EDITPOST_EXTRAFLD' => $exfld_val,
+                'FORUMS_EDITPOST_EXTRAFLD_TITLE' => $exfld_title,
+            ]);
+        }
         $t->parse('MAIN.EXTRAFLD');
     }
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.editpost.tags') as $pl)
-{
+foreach (cot_getextplugins('forums.editpost.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

@@ -1,5 +1,8 @@
 <!-- BEGIN: MAIN -->
 <div class="block">
+    <!-- IF {PHP.cfg.homebreadcrumb} -->
+    <div class="breadcrumbs">{USERS_REGISTER_BREADCRUMBS}</div>
+    <!-- ENDIF -->
     <h2 class="users">{USERS_REGISTER_TITLE}</h2>
     {FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
     <form id="user-register" name="register" action="{USERS_REGISTER_SEND}" method="post" enctype="multipart/form-data">

@@ -196,14 +196,19 @@ $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');
 
-$protected = !Cot::$cfg['users']['useremailchange'] ? array('disabled' => 'disabled') : array();
-$profile_form_email = cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)
-	+ $protected);
+$protected = !Cot::$cfg['users']['useremailchange'] ? ['disabled' => 'disabled'] : [];
+$profile_form_email = cot_inputbox(
+    'text',
+    'ruseremail',
+    $urr['user_email'],
+    ['maxlength' => 64] + $protected
+);
 
 $editor_class = Cot::$cfg['users']['usertextimg'] ? 'minieditor' : '';
 
 $breadCrumbs = [
-    [cot_url('users', ['m' => 'profile']), Cot::$L['pro_title']],
+    [cot_url('users', ['m' => 'details']), Cot::$L['users_myProfile']],
+    [cot_url('users', ['m' => 'profile']), Cot::$L['Edit']],
 ];
 
 $t->assign([

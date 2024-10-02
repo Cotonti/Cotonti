@@ -46,7 +46,9 @@
 						</figure>
 						<div>
 							<a href="{ADMIN_EXTENSIONS_DETAILS_URL}">{ADMIN_EXTENSIONS_NAME}</a>
-							<p>{ADMIN_EXTENSIONS_DESCRIPTION|cot_cutstring($this,60)}</p>
+							<!-- IF {ADMIN_EXTENSIONS_DESCRIPTION} -->
+							<p>{ADMIN_EXTENSIONS_DESCRIPTION|cot_cutstring($this, 60)}</p>
+							<!-- ENDIF -->
 						</div>
 					</td>
 					<td class="centerall">

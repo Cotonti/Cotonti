@@ -5,14 +5,10 @@
 			<!-- BEGIN: ADMIN_STRUCTURE_EXT -->
 			<tr>
 				<td class="start">
-					<figure>
-						{ADMIN_STRUCTURE_EXT_ICON}
-					</figure>
+					<figure>{ADMIN_STRUCTURE_EXT_ICON}</figure>
 					<div>
 						<a href="{ADMIN_STRUCTURE_EXT_URL}">{ADMIN_STRUCTURE_EXT_NAME}</a>
-						<p>
-							{ADMIN_STRUCTURE_EXT_DESC}
-						</p>
+						<!-- IF {ADMIN_STRUCTURE_EXT_DESC} --><p>{ADMIN_STRUCTURE_EXT_DESC}</p><!-- ENDIF -->
 					</div>
 				</td>
 			</tr>
@@ -57,7 +53,7 @@
 				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
 				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
 				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_CODE}</td>
-				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
+				<td class="{ADMIN_STRUCTURE_ODDEVEN} text-center">{ADMIN_STRUCTURE_COUNT}</td>
 				<td class="action {ADMIN_STRUCTURE_ODDEVEN}">
 					<a href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="button ajax" title="{PHP.L.Options}">{PHP.L.Config}</a>
 					<!-- IF {ADMIN_STRUCTURE_RIGHTS_URL} -->
