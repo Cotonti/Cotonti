@@ -120,14 +120,23 @@ Cot::$out['subtitle'] = Cot::$L['contact_title'];
 cot_display_messages($t);
 
 if (!$sent) {
-	$t->assign(array(
-		'CONTACT_FORM_SEND' => cot_url('plug', 'e=contact&tpl='.$tplfile),
-		'CONTACT_FORM_AUTHOR' => (Cot::$usr['id'] == 0) ? cot_inputbox('text', 'ruser', $rcontact['contact_author'], 'size="24" maxlength="24"') :
-            cot_inputbox('text', 'ruser', Cot::$usr['name'], 'size="24" maxlength="24" readonly="readonly"'),
-		'CONTACT_FORM_EMAIL' => cot_inputbox('text', 'remail', $rcontact['contact_email'], 'size="24"'),
-		'CONTACT_FORM_SUBJECT' => cot_inputbox('text', 'rsubject', $rcontact['contact_subject'], 'size="24"'),
-		'CONTACT_FORM_TEXT' => cot_textarea('rtext', $rcontact['contact_text'], 8, 50)
-	));
+	$t->assign([
+        'CONTACT_TITLE' => Cot::$L['contact_title'],
+        'CONTACT_FORM_ACTION' => cot_url('plug', ['e' => 'contact', 'tpl' => $tplfile]),
+		'CONTACT_FORM_AUTHOR' => (Cot::$usr['id'] == 0)
+            ? cot_inputbox('text', 'ruser', $rcontact['contact_author'], 'maxlength="24"')
+            : cot_inputbox('text', 'ruser', Cot::$usr['name'], 'maxlength="24" readonly="readonly"'),
+		'CONTACT_FORM_EMAIL' => cot_inputbox('text', 'remail', $rcontact['contact_email']),
+		'CONTACT_FORM_SUBJECT' => cot_inputbox('text', 'rsubject', $rcontact['contact_subject']),
+		'CONTACT_FORM_TEXT' => cot_textarea('rtext', $rcontact['contact_text'], 8, 50),
+	]);
+
+    if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+        // @deprecated in 0.9.26
+        $t->assign([
+            'CONTACT_FORM_SEND' => cot_url('plug', 'e=contact&tpl='.$tplfile),
+        ]);
+    }
 
 	// Extra fields
     if (!empty(Cot::$extrafields[Cot::$db->contact])) {

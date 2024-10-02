@@ -173,7 +173,14 @@ foreach ($tagOrders as $option => $optionTitle) {
     $formOrderOptions[$option] = $optionTitle;
 }
 
+$breadcrumbs = [[cot_url('tags'), Cot::$L['Tags']]];
+if ($qs !== '') {
+    $breadcrumbs[] = [cot_url('tags', ['t' => $qs]), $qs];
+}
+
 $t->assign([
+    'TAGS_TITLE' => Cot::$L['tags_Search_tags'],
+    'TAGS_BREADCRUMBS' => cot_breadcrumbs($breadcrumbs, Cot::$cfg['homebreadcrumb'], true),
 	'TAGS_FORM_ACTION' => $formAction,
     'TAGS_FORM_PARAMS' => $formParams,
     'TAGS_FORM_ORDER' => cot_selectbox(

@@ -61,9 +61,9 @@ cot_block(!empty($url_area));
 if (
     isset($_SESSION['cot_comments_force_admin'][$area][$item])
     && $_SESSION['cot_comments_force_admin'][$area][$item]
-    && \Cot::$usr['auth_read'] && \Cot::$usr['auth_write']
+    && Cot::$usr['auth_read'] && \Cot::$usr['auth_write']
 ) {
-    \Cot::$usr['isadmin'] = true;
+    Cot::$usr['isadmin'] = true;
 }
 
 $staticCacheIsEnabled = '';
@@ -144,6 +144,7 @@ if ($m == 'edit' && $id > 0) {
 			cot_redirect(cot_url($url_area, $url_params, '#com' . $id, true));
 		}
 	}
+
 	$t->assign([
 		'COMMENTS_TITLE' => Cot::$L['plu_title'],
 		'COMMENTS_TITLE_URL' => cot_url('plug', 'e=comments'),
@@ -186,12 +187,12 @@ if ($m == 'edit' && $id > 0) {
             $exfld_val = cot_build_extrafields('rcomments' . $exfld['field_name'], $exfld, $com[$exfld['field_name']]);
             $exfld_title = cot_extrafield_title($exfld, 'comments_');
 
-            $t->assign(array(
+            $t->assign([
                 'COMMENTS_FORM_' . $uname => $exfld_val,
                 'COMMENTS_FORM_' . $uname . '_TITLE' => $exfld_title,
                 'COMMENTS_FORM_EXTRAFLD' => $exfld_val,
                 'COMMENTS_FORM_EXTRAFLD_TITLE' => $exfld_title
-            ));
+            ]);
             $t->parse('COMMENTS.COMMENTS_FORM_EDIT.EXTRAFLD');
         }
     }
@@ -226,15 +227,15 @@ if ($a == 'send' && \Cot::$usr['auth_write']) {
 	}
 	/* ===== */
 
-	if (empty($rname) && \Cot::$usr['id'] == 0) {
-		cot_error(\Cot::$L['com_authortooshort'], 'rname');
+	if (empty($rname) && Cot::$usr['id'] == 0) {
+		cot_error(Cot::$L['com_authortooshort'], 'rname');
 	}
-	if (mb_strlen($rtext) < \Cot::$cfg['plugin']['comments']['minsize']) {
-		cot_error(\Cot::$L['com_commenttooshort'], 'rtext');
+	if (mb_strlen($rtext) < Cot::$cfg['plugin']['comments']['minsize']) {
+		cot_error(Cot::$L['com_commenttooshort'], 'rtext');
 	}
 	if (
-        \Cot::$cfg['plugin']['comments']['commentsize']
-        && mb_strlen($rtext) > \Cot::$cfg['plugin']['comments']['commentsize']
+        Cot::$cfg['plugin']['comments']['commentsize']
+        && mb_strlen($rtext) > Cot::$cfg['plugin']['comments']['commentsize']
     ) {
 		cot_error(\Cot::$L['com_commenttoolong'], 'rtext');
 	}
@@ -242,11 +243,11 @@ if ($a == 'send' && \Cot::$usr['auth_write']) {
 	if (!cot_error_found()) {
 		$comarray['com_area'] = $area;
 		$comarray['com_code'] = $item;
-		$comarray['com_author'] = (\Cot::$usr['id'] == 0) ? $rname : \Cot::$usr['name'];
-		$comarray['com_authorid'] = (int) \Cot::$usr['id'];
-		$comarray['com_authorip'] = \Cot::$usr['ip'];
+		$comarray['com_author'] = (Cot::$usr['id'] == 0) ? $rname : \Cot::$usr['name'];
+		$comarray['com_authorid'] = (int) Cot::$usr['id'];
+		$comarray['com_authorip'] = Cot::$usr['ip'];
 		$comarray['com_text'] = $rtext;
-		$comarray['com_date'] = (int) \Cot::$sys['now'];
+		$comarray['com_date'] = (int) Cot::$sys['now'];
 
 		$sql = \Cot::$db->insert($db_com, $comarray);
 		$id = \Cot::$db->lastInsertId();

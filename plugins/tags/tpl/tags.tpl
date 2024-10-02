@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
 <div class="col3-2 first">
     <div class="block">
-        <h2 class="tags">{PHP.L.tags_Search_tags}</h2>
+        <h2 class="tags">{TAGS_TITLE}</h2>
         <form id="tags-search-form" action="{TAGS_FORM_ACTION}" method="GET">
 			{TAGS_FORM_PARAMS}
             <input type="text" name="t" value="{TAGS_QUERY}"/>
