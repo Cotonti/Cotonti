@@ -38,9 +38,6 @@ $L['cfg_usertextimg_hint'] = '\'No\' recommended, for security reasons';
 /**
  * User profile & edit
  */
-$L['users_myProfile'] = 'My profile';
-$L['users_profileSettings'] = 'Profile settings';
-
 $L['Password_updated'] = 'Password changed';
 $L['Profile_updated'] = 'Profile settings saved';
 $L['User_data_updated'] = 'User data updated';

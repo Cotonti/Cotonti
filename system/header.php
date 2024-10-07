@@ -182,7 +182,9 @@ if (Cot::$sys['displayHeader']) {
             cot_rc_link(cot_url('admin'), Cot::$L['Administration']) : '';
 		Cot::$out['loginout_url'] = cot_url('login', 'out=1&' . cot_xg());
 		Cot::$out['loginout'] = cot_rc_link(Cot::$out['loginout_url'], Cot::$L['Logout']);
-		Cot::$out['profile'] = cot_rc_link(cot_url('users', 'm=profile'), Cot::$L['users_profileSettings']);
+		Cot::$out['profile'] = cot_module_active('users')
+            ? cot_rc_link(cot_url('users', ['m' => 'profile']), Cot::$L['users_profileSettings'])
+            : null;
 
 		$t->assign([
 			'HEADER_USER_NAME' => Cot::$usr['name'],

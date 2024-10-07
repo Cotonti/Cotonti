@@ -101,11 +101,12 @@ $L['users_sendpm'] = 'Send a private message';
 /**
  * User profile & edit
  */
-
 $L['users_id'] = 'User ID';
 $L['users_hideemail'] = 'Always hide email address';
+$L['users_myProfile'] = 'My profile';
 $L['users_pmnotify'] = 'PM notify';
 $L['users_pmnotifyhint'] = '(Notify by email when there\'s a new private message)';
+$L['users_profileSettings'] = 'Profile settings';
 $L['users_newpass'] = 'Set a new password';
 $L['users_newpasshint1'] = '(Leave empty to keep the current password)';
 $L['users_newpasshint2'] = '(Enter your new password twice)';

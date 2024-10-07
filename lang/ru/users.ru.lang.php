@@ -103,8 +103,10 @@ $L['users_sendpm'] = 'Отправить личное сообщение';
  */
 $L['users_id'] = 'ID пользователя';
 $L['users_hideemail'] = 'Скрывать e-mail';
+$L['users_myProfile'] = 'Мой профиль';
 $L['users_pmnotify'] = 'Уведомлять о новых личных сообщениях';
 $L['users_pmnotifyhint'] = '(получать e-mail уведомление при получении нового личного сообщения)';
+$L['users_profileSettings'] = 'Мои настройки';
 $L['users_newpass'] = 'Установить новый пароль';
 $L['users_newpasshint1'] = '(оставьте пустым чтобы сохранить текущий)';
 $L['users_newpasshint2'] = '(введите новый пароль дважды)';

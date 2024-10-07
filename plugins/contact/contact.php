@@ -15,17 +15,17 @@
 defined('COT_CODE') or die('Wrong URL');
 
 $tplfile = cot_import('tpl', 'G', 'TXT');
-$mskin = cot_tplfile(array('contact', $tplfile), 'plug');
+$mskin = cot_tplfile(['contact', $tplfile], 'plug');
 $t = new XTemplate($mskin);
 $rtext = cot_import('rtext', 'P', 'TXT');
 
 $sent = false;
-$rcontact = array(
+$rcontact = [
     'contact_text' => '',
     'contact_author' => '',
     'contact_email' => '',
     'contact_subject' => '',
-);
+];
 if (!empty($rtext)) {
 	//Import the variables
 	$rcontact['contact_text'] = $rtext;

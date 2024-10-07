@@ -793,7 +793,7 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
 
     /**
      * Try to parse textual datetime string into a Unix timestamp
-     * @see https://www.php.net/manual/en/datetime.formats.time.php
+     * @see https://www.php.net/manual/en/datetime.formats.php
      */
     if (empty($date)) {
         $date = cot_import($name, $source, 'TXT');

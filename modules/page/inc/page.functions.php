@@ -580,22 +580,20 @@ function cot_page_auth($cat = null)
 
 /**
  * Imports page data from request parameters.
- * @param  string $source Source request method for parameters
- * @param  array  $rpage  Existing page data from database
- * @param  array  $auth   Permissions array
- * @return array          Page data
+ * @param string $source Source request method for parameters
+ * @param array $rpage  Existing page data from database
+ * @param array $auth   Permissions array
+ * @return array Page data
  */
-function cot_page_import($source = 'POST', $rpage = array(), $auth = array())
+function cot_page_import($source = 'POST', $rpage = [], $auth = [])
 {
 	global $cfg, $db_pages, $cot_extrafields, $usr, $sys;
 
-	if (count($auth) == 0)
-	{
+	if (count($auth) == 0) {
 		$auth = cot_page_auth($rpage['page_cat']);
 	}
 
-	if ($source == 'D' || $source == 'DIRECT')
-	{
+	if ($source == 'D' || $source == 'DIRECT') {
 		// A trick so we don't have to affect every line below
 		global $_PATCH;
 		$_PATCH = $rpage;
@@ -612,14 +610,14 @@ function cot_page_import($source = 'POST', $rpage = array(), $auth = array())
 	$rpage['page_author']   = cot_import('rpageauthor', $source, 'TXT');
 	$rpage['page_file']     = intval(cot_import('rpagefile', $source, 'INT'));
 	$rpage['page_url']      = cot_import('rpageurl', $source, 'TXT');
-	$rpage['page_size']     = (int)cot_import('rpagesize', $source, 'INT');
+	$rpage['page_size']     = (int) cot_import('rpagesize', $source, 'INT');
 	$rpage['page_file']     = ($rpage['page_file'] == 0 && !empty($rpage['page_url'])) ? 1 : $rpage['page_file'];
 
 	$rpagedatenow           = cot_import('rpagedatenow', $source, 'BOL');
 	$rpage['page_date']     = cot_import_date('rpagedate', true, false, $source);
-	$rpage['page_date']     = ($rpagedatenow || is_null($rpage['page_date'])) ? $sys['now'] : (int)$rpage['page_date'];
-	$rpage['page_begin']    = (int)cot_import_date('rpagebegin');
-	$rpage['page_expire']   = (int)cot_import_date('rpageexpire');
+	$rpage['page_date']     = ($rpagedatenow || is_null($rpage['page_date'])) ? $sys['now'] : (int) $rpage['page_date'];
+	$rpage['page_begin']    = (int) cot_import_date('rpagebegin');
+	$rpage['page_expire']   = (int) cot_import_date('rpageexpire');
 	$rpage['page_expire']   = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
 	$rpage['page_updated']  = $sys['now'];
 
@@ -630,22 +628,22 @@ function cot_page_import($source = 'POST', $rpage = array(), $auth = array())
 	$rpublish               = cot_import('rpublish', $source, 'ALP'); // For backwards compatibility
 	$rpage['page_state']    = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', $source, 'INT');
 
-	if ($auth['isadmin'] && isset($rpage['page_ownerid']))
-	{
+	if ($auth['isadmin'] && isset($rpage['page_ownerid'])) {
 		$rpage['page_count']     = cot_import('rpagecount', $source, 'INT');
 		$rpage['page_ownerid']   = cot_import('rpageownerid', $source, 'INT');
 		$rpage['page_filecount'] = cot_import('rpagefilecount', $source, 'INT');
-	}
-	else
-	{
+	} else {
 		$rpage['page_ownerid'] = Cot::$usr['id'];
 	}
 
 	$parser_list = cot_get_parsers();
 
-	if (empty($rpage['page_parser']) || !in_array($rpage['page_parser'], $parser_list) || $rpage['page_parser'] != 'none' &&
-        !cot_auth('plug', $rpage['page_parser'], 'W'))
-	{
+	if (
+        empty($rpage['page_parser'])
+        || !in_array($rpage['page_parser'], $parser_list)
+        || $rpage['page_parser'] != 'none'
+        && !cot_auth('plug', $rpage['page_parser'], 'W')
+    ) {
 		$rpage['page_parser'] = isset(Cot::$sys['parser']) ? Cot::$sys['parser'] : Cot::$cfg['page']['parser'];
 	}
 
