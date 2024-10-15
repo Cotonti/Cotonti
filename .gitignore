@@ -14,6 +14,7 @@
 !/datas/thumbs/index.html
 /datas/users/*
 !/datas/users/index.html
+/js/source/node_modules/*
 .DS_Store
 .htaccess
 .tags

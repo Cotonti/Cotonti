@@ -1,0 +1,18 @@
+{
+  "name": "cotonti",
+  "version": "0.9.26",
+  "description": "Cotonti JS source",
+  "main": "src/index.js",
+  "author": "Cotonti team",
+  "license": "BSD",
+  "devDependencies": {
+    "gulp": "^5.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify-es": "^3.0.0"
+  },
+  "dependencies": {
+  }
+}

@@ -153,7 +153,7 @@ if (!$sent) {
                 'CONTACT_FORM_' . $uname => $exfld_val,
                 'CONTACT_FORM_' . $uname . '_TITLE' => $exfld_title,
                 'CONTACT_FORM_EXTRAFLD' => $exfld_val,
-                'CONTACT_FORM_EXTRAFLD_TITLE' => $exfld_title
+                'CONTACT_FORM_EXTRAFLD_TITLE' => $exfld_title,
             ]);
             $t->parse('MAIN.FORM.EXTRAFLD');
         }
