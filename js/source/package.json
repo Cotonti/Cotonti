@@ -5,6 +5,10 @@
   "main": "src/index.js",
   "author": "Cotonti team",
   "license": "BSD",
+  "scripts": {
+    "watch": "gulp watch",
+    "build": "gulp build"
+  },
   "devDependencies": {
     "gulp": "^5.0.0",
     "gulp-concat": "^2.6.1",
