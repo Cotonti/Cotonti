@@ -67,7 +67,7 @@
         <!-- ENDIF -->
         <!-- IF {PHP.cot_plugins_active.forumstats} --><span><a
                     href="{PHP|cot_url('plug','e=forumstats')}">{PHP.L.Statistics}</a></span><!-- ENDIF -->
-        <span><a href="{PHP|cot_url('forums','n=markall')}" rel="nofollow">{PHP.L.forums_markasread}</a></span>
+        <span><a href="{FORUMS_SECTIONS_MARKALL_URL}" rel="nofollow">{PHP.L.forums_markasread}</a></span>
 	</p>
 </div>
 <div class="block">
