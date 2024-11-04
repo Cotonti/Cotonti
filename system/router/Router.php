@@ -29,7 +29,7 @@ class Router
         $n = cot_import('n', 'G', 'ALP', 24);
         $a = cot_import('a', 'G', 'ALP', 24);
 
-        $extensionCode = $this->getExtensionCodeFromRequest();
+       // $extensionCode = $this->getExtensionCodeFromRequest();
         $controllerClass = null;
         $actionId = null;
 

@@ -90,6 +90,8 @@ echo '<pre>';
 var_dump($router->route());
 echo '</pre>';
 
+
+
 $ext = isset($_GET['e']) ? cot_import('e', 'G', 'ALP') : false;
 $ajax = cot_import('r', 'G', 'ALP');
 $popup = cot_import('o', 'G', 'ALP');
