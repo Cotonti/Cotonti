@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" >
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		<meta name="generator" content="Cotonti http://www.cotonti.com" />
+		<meta name="generator" content="Cotonti https://www.cotonti.com" />
 		<meta http-equiv="expires" content="Fri, Apr 01 1974 00:00:00 GMT" />
 		<meta http-equiv="pragma" content="no-cache" />
 		<meta http-equiv="cache-control" content="no-cache" />

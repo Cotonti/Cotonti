@@ -4,7 +4,7 @@
 <head>
 <title>{MESSAGE_TITLE}</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Cotonti http://www.cotonti.com" />
+<meta name="generator" content="Cotonti https://www.cotonti.com" />
 {MESSAGE_BASEHREF}
 {MESSAGE_STYLESHEET}
 {MESSAGE_REDIRECT}

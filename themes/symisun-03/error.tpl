@@ -32,7 +32,7 @@
 
 		<div id="bott">
 			<div id="footer">
-				<a href="http://www.cotonti.com" title="Cotonti Content Management System" id="powered">POWERED BY COTONTI</a>
+				<a href="https://www.cotonti.com" title="Cotonti Content Management System" id="powered">POWERED BY COTONTI</a>
 			</div>
 		</div>
 

@@ -1,7 +1,7 @@
 -----------------------
 Cotonti Website engine
 Copyright  Cotonti
-http://www.cotonti.com
+https://www.cotonti.com
 ----------------------
 
 For Cotonti version : 0.9.0 or newer

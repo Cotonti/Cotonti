@@ -27,7 +27,7 @@
             	<h6><span class="icon_donate">DONATE</span></h6>
 				<p class="padding5">Do you enjoy using Cotonti and wish to help out?</p>
 				<ul>
-				<li><a href="http://www.cotonti.com/donate">Donate today</a></li>
+				<li><a href="https://www.cotonti.com/donate">Donate today</a></li>
 				</ul>
             </div>
             <div class="footer_box colright">
@@ -57,7 +57,7 @@
             {PHP.cfg.freetext4}
         </div>
         {PHP.cfg.freetext9}
-		<a href="http://www.cotonti.com" title="Cotonti Content Management System" id="powered">POWERED BY COTONTI</a>
+		<a href="https://www.cotonti.com" title="Cotonti Content Management System" id="powered">POWERED BY COTONTI</a>
 
     </div>
 </div>

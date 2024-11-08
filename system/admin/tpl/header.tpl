@@ -8,7 +8,7 @@
 	<title>{HEADER_TITLE}</title>
 	<meta name="description" content="{HEADER_META_DESCRIPTION}" />
 	<meta name="keywords" content="{HEADER_META_KEYWORDS}" />
-	<meta name="generator" content="Cotonti http://www.cotonti.com" />
+	<meta name="generator" content="Cotonti https://www.cotonti.com" />
 	{HEADER_BASEHREF}
 	{HEADER_HEAD}
 	{HEADER_COMPOPUP}

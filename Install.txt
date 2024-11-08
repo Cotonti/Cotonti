@@ -60,4 +60,4 @@ to your webserver:
 /sef-urls.htaccess
 /sef-urls.nginx.conf
 
-For more information and support please visit http://www.cotonti.com
+For more information and support please visit https://www.cotonti.com
