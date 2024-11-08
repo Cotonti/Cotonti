@@ -263,11 +263,16 @@ function cot_get_caller()
  *
  * @param string $hook Hook (event) name
  * @param bool $checkExistence Check if hook file exists
+ * @param ?string $extensionCode Get hook files (event handlers) for this extension only
  * @param string $permission Permissions
  * @return string[] Hook files list
  */
-function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
-{
+function cot_getextplugins(
+    string $hook,
+    bool $checkExistence = true,
+    ?string $extensionCode = null,
+    string $permission = 'R'
+): array {
     // Class Cot may be not initialized yet
     global $cfg, $sys, $L, $cache;
 
@@ -290,7 +295,10 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
                 $opt = $handler['pl_code'];
             }
 
-            if (!cot_auth($cat, $opt, $permission)) {
+            if (
+                ($extensionCode !== null && $extensionCode !== $handler['pl_code'])
+                || !cot_auth($cat, $opt, $permission)
+            ) {
                 continue;
             }
 
@@ -305,9 +313,9 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
                 $extUrl = cot_url('admin', ['m' => 'extensions', 'a' => 'details', $extType => $handler['pl_code']]);
 
                 // Language file can be not loaded yet
-                $message = isset($L['hookFileNotFound'])
-                    ? $L['hookFileNotFound']
-                    : '<strong>{$title}</strong>, event - {$hook}: file {$fileName} not found. Please <a href="{$url}">update the extension</a>';
+                $message = $L['hookFileNotFound']
+                    ?? '<strong>{$title}</strong>, event - {$hook}: file {$fileName} not found. '
+                    . 'Please <a href="{$url}">update the extension</a>';
 
                 $messageText = cot_rc(
                     $message,
@@ -3533,21 +3541,22 @@ function cot_diefatal($text = 'Reason is unknown.', $title = 'Fatal error')
 
 	if ($cfg['display_errors']) {
         $mainTitle = isset($cfg['maintitle']) ? $cfg['maintitle'] : $cfg['mainurl'];
-		$message_body = '<p><em>'.@date('Y-m-d H:i').'</em></p>';
-		$message_body .= '<p>'.$text.'</p>';
+		$message_body = '<p><em>' . @date('Y-m-d H:i') . '</em></p>';
+		$message_body .= '<p>' . $text . '</p>';
 		ob_clean();
 		debug_print_backtrace();
 		$backtrace = ob_get_contents();
 		ob_clean();
-		$message_body .= '<pre style="overflow:auto">'.$backtrace.'</pre>';
-		$message_body .= '<hr /><a href="'.$cfg['mainurl'].'">'.$mainTitle.'</a>';
+		$message_body .= '<pre style="overflow:auto">' . $backtrace . '</pre>';
+		$message_body .= '<hr /><a href="' . $cfg['mainurl'] . '">' . $mainTitle . '</a>';
 		cot_die_message(500, true, $title, $message_body);
-
     } else {
 		$backtrace = debug_backtrace();
 		if (isset($backtrace[1])) {
-			$text .= ' in file ' . $backtrace[1]['file'] . ' at line ' . $backtrace[1]['line'] . ' function ' . $backtrace[1]['function'] . '(' . implode(', ', $backtrace[1]['args']) . ')';
+			$text .= ' in file ' . $backtrace[1]['file'] . ' at line ' . $backtrace[1]['line']
+                . ' function ' . $backtrace[1]['function'] . '(' . implode(', ', $backtrace[1]['args']) . ')';
 		}
+
 		error_log("$title: $text");
 		cot_die_message(503, true);
 	}

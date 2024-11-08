@@ -9,20 +9,22 @@ class Route
     /**
      * @var BaseController
      */
-    public $controller;
+    public $controller = null;
 
     /**
      * @var string
      */
-    public $action;
+    public $action = null;
 
-    /**
-     * @var string
-     */
-    public $extensionType;
+    public $includeFiles = [];
 
-    /**
-     * @var string
-     */
-    public $extensionCode;
+//    /**
+//     * @var string
+//     */
+//    public $extensionType;
+//
+//    /**
+//     * @var string
+//     */
+//    public $extensionCode;
 }

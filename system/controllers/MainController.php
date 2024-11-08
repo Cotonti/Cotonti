@@ -2,7 +2,7 @@
 
 namespace cot\controllers;
 
-class CotontiController extends BaseController
+class MainController extends BaseController
 {
     public function actionGetData()
     {

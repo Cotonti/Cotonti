@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\dictionaries\CotontiDictionary;
+use cot\ErrorHandler;
 use cot\router\Router;
 
 if (php_sapi_name() == 'cli-server') {
@@ -85,76 +87,100 @@ require_once $cfg['system_dir'] . '/functions.php';
 // Bootstrap
 require_once $cfg['system_dir'] . '/common.php';
 
-$router = new Router();
-echo '<pre>';
-var_dump($router->route());
-echo '</pre>';
+try {
+    $route = (new Router())->route();
 
+    // Load the requested extension
+    if (Cot::$env['type'] === CotontiDictionary::EXTENSION_TYPE_PLUGIN) {
+        require_once Cot::$cfg['system_dir'] . '/plugin.php';
+    } elseif (!empty($route->includeFiles)) {
+        foreach ($route->includeFiles as $includeFile) {
+            require_once $includeFile;
+        }
+    } elseif ($route->controller !== null && $route->action !== null) {
+        $resultContent = $route->controller->runAction($route->action);
 
+        require_once Cot::$cfg['system_dir'] . '/header.php';
 
-$ext = isset($_GET['e']) ? cot_import('e', 'G', 'ALP') : false;
-$ajax = cot_import('r', 'G', 'ALP');
-$popup = cot_import('o', 'G', 'ALP');
-if (!$ext) {
-	// Support for ajax and popup hooked plugins
-	$ext = $ajax ? $ajax : ($popup ? $popup : $ext);
+        echo $resultContent;
+        unset($resultContent);
+
+        require_once Cot::$cfg['system_dir'] . '/footer.php';
+    }
+} catch (Throwable $e) {
+    // Handle error
+    if (!(new ErrorHandler())->handle($e)) {
+        throw $e;
+    }
 }
-unset ($ajax, $popup);
 
-// Detect selected extension
-if ($ext === false) {
-	// Default environment for index module
-	define('COT_MODULE', true);
-	$env['type'] = 'module';
-	$env['ext'] = 'index';
-} else {
-	$found = false;
-	if (preg_match('`^\w+$`', $ext)) {
-		$module_found = false;
-		$plugin_found = false;
-		if (file_exists($cfg['modules_dir'] . '/' . $ext) && isset($cot_modules[$ext])) {
-			$module_found = true;
-			$found = true;
-		}
-		if (file_exists($cfg['plugins_dir'] . '/' . $ext)) {
-			$plugin_found = true;
-			$found = true;
-		}
-		if ($module_found && $plugin_found) {
-			// Need to query the db to check which one is installed
-			$res = $db->query("SELECT ct_plug FROM $db_core WHERE ct_code = ? LIMIT 1", $ext);
-			if ($res->rowCount() == 1) {
-				if ((int) $res->fetchColumn()) {
-					$module_found = false;
-				} else {
-					$plugin_found = false;
-				}
-			} else {
-				$found = false;
-			}
-		}
-		if ($module_found) {
-			$env['type'] = 'module';
-			define('COT_MODULE', true);
-		} elseif ($plugin_found) {
-			$env['type'] = 'plug';
-			$env['location'] = 'plugins';
-			define('COT_PLUG', true);
-		}
-	}
-	if ($found) {
-		$env['ext'] = $ext;
-	} else {
-		// Error page
-		cot_die_message(404);
-		exit;
-	}
-}
-unset($ext);
-
-// Load the requested extension
-if (Cot::$env['type'] == 'plug') {
-	require_once Cot::$cfg['system_dir'] . '/plugin.php';
-} else {
-	require_once Cot::$cfg['modules_dir'] . '/' . Cot::$env['ext'] . '/' . Cot::$env['ext'] . '.php';
-}
+//exit(0);
+//
+//// ============
+//
+//$ext = isset($_GET['e']) ? cot_import('e', 'G', 'ALP') : false;
+//$ajax = cot_import('r', 'G', 'ALP');
+//$popup = cot_import('o', 'G', 'ALP');
+//if (!$ext) {
+//	// Support for ajax and popup hooked plugins
+//	$ext = $ajax ? $ajax : ($popup ? $popup : $ext);
+//}
+//unset ($ajax, $popup);
+//
+//// Detect selected extension
+//if ($ext === false) {
+//	// Default environment for index module
+//	define('COT_MODULE', true);
+//	$env['type'] = 'module';
+//	$env['ext'] = 'index';
+//} else {
+//	$found = false;
+//	if (preg_match('`^\w+$`', $ext)) {
+//		$module_found = false;
+//		$plugin_found = false;
+//		if (file_exists($cfg['modules_dir'] . '/' . $ext) && isset($cot_modules[$ext])) {
+//			$module_found = true;
+//			$found = true;
+//		}
+//		if (file_exists($cfg['plugins_dir'] . '/' . $ext)) {
+//			$plugin_found = true;
+//			$found = true;
+//		}
+//		if ($module_found && $plugin_found) {
+//			// Need to query the db to check which one is installed
+//			$res = $db->query("SELECT ct_plug FROM $db_core WHERE ct_code = ? LIMIT 1", $ext);
+//			if ($res->rowCount() == 1) {
+//				if ((int) $res->fetchColumn()) {
+//					$module_found = false;
+//				} else {
+//					$plugin_found = false;
+//				}
+//			} else {
+//				$found = false;
+//			}
+//		}
+//		if ($module_found) {
+//			$env['type'] = 'module';
+//			define('COT_MODULE', true);
+//		} elseif ($plugin_found) {
+//			$env['type'] = 'plug';
+//			$env['location'] = 'plugins';
+//			define('COT_PLUG', true);
+//		}
+//	}
+//	if ($found) {
+//		$env['ext'] = $ext;
+//	} else {
+//		// Error page
+//		cot_die_message(404);
+//		exit;
+//	}
+//}
+//unset($ext);
+//
+//// Load the requested extension
+//if (Cot::$env['type'] == 'plug') {
+//	require_once Cot::$cfg['system_dir'] . '/plugin.php';
+//} else {
+//	require_once Cot::$cfg['modules_dir'] . '/' . Cot::$env['ext'] . '/' . Cot::$env['ext'] . '.php';
+//}

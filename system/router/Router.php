@@ -11,9 +11,16 @@ use cot\exceptions\NotFoundHttpException;
 
 class Router
 {
+    /**
+     * Routing for public part (front-end)
+     */
     public function route(): ?Route
     {
         $extensionCode = isset($_GET['e']) ? cot_import('e', 'G', 'ALP') : null;
+        if ($extensionCode === 'admin') {
+            throw new NotFoundHttpException();
+        }
+
         $ajax = cot_import('r', 'G', 'ALP');
         $popup = cot_import('o', 'G', 'ALP');
         if (!$extensionCode) {
@@ -25,23 +32,24 @@ class Router
             }
         }
 
+        // @todo в админке $m содержит $extensionCode
+        // @todo использовать $n для единообразия
         $m = cot_import('m', 'G', 'ALP', 24);
         $n = cot_import('n', 'G', 'ALP', 24);
         $a = cot_import('a', 'G', 'ALP', 24);
 
-       // $extensionCode = $this->getExtensionCodeFromRequest();
-        $controllerClass = null;
         $actionId = null;
 
         if ($extensionCode === null) {
             // It can be core controller or an "index" module
             if ($m !== null || $a !== null) {
-                $controllerClass = $this->getControllerClass($m ?? 'cotonti');
+                // @todo use self::getController()
+                $controllerClass = $this->getControllerClass($m ?? 'main');
                 if ($controllerClass !== null) {
                     $actionId = $this->getActionName($a, $controllerClass);
                     if ($m !== null && $actionId === null) {
                         throw new NotFoundHttpException(
-                            'Action "'. $actionId . '" not found in controller "'
+                            'Action "' . $actionId . '" not found in controller "'
                             . $controllerClass . '"'
                         );
                     } elseif ($actionId === null) {
@@ -57,16 +65,12 @@ class Router
 
                     return $route;
                 }
-
+            }
                 // 'index' module
                 $extensionCode = 'index';
-//                define('COT_MODULE', true);
-//                $env['type'] = 'module';
-//                $env['ext'] = 'index';
-            }
         }
 
-        if (!preg_match('`^\w+$`', $extensionCode)) {
+         if (!preg_match('`^\w+$`', $extensionCode)) {
             // @todo error message ?
             throw new NotFoundHttpException();
         }
@@ -78,14 +82,12 @@ class Router
             && cot_module_active($extensionCode)
         ) {
             $moduleFound = true;
-            $found = true;
         }
         if (
             file_exists(Cot::$cfg['plugins_dir'] . '/' . $extensionCode)
             && cot_plugin_active($extensionCode)
         ) {
             $pluginFound = true;
-            $found = true;
         }
         if ($moduleFound && $pluginFound) {
             // Need to query the db to check which one is installed
@@ -103,11 +105,11 @@ class Router
             }
         }
         if ($moduleFound) {
-            Cot::$env['type'] = 'module';
+            Cot::$env['type'] = CotontiDictionary::EXTENSION_TYPE_MODULE;
             Cot::$env['location'] = $extensionCode;
             define('COT_MODULE', true);
         } elseif ($pluginFound) {
-            Cot::$env['type'] = 'plug';
+            Cot::$env['type'] = CotontiDictionary::EXTENSION_TYPE_PLUGIN;
             Cot::$env['location'] = 'plugins';
             define('COT_PLUG', true);
         } else {
@@ -115,44 +117,133 @@ class Router
             throw new NotFoundHttpException("Extension '" . $extensionCode . "' not found");
         }
 
-        $env['ext'] = $extensionCode;
+        Cot::$env['ext'] = $extensionCode;
 
-        // Контроллер. Если нет - то хук и его обработчики
-        // Или так: если popup или ajax - то хук и обработчики, иначе контроллер, если нет - то хук standalone/module и его обработчики
+        if ($popup !== null) {
+            $hook = $popup;
+        } elseif ($ajax !== null) {
+            $hook = $ajax;
+        } else {
+            $hook = $moduleFound ? 'module' : 'standalone';
+        }
 
-        $hook = $moduleFound ? 'module' : 'standalone';
+        $route = new Route();
 
+        $route->includeFiles = cot_getextplugins($hook, true, $extensionCode, Cot::$env['type']);
 
-        //            echo '<pre>';
-//            var_dump($result);
-//            echo '</pre>';
-//            die;
+        if ($route->includeFiles !== []) {
+            return $route;
+        }
 
-        die('ddd');
+        $controller = $this->getController($m ?? 'index', $extensionCode);
+        if ($controller === null) {
+            // @todo error message ?
+            throw new NotFoundHttpException();
+        }
+
+        $controllerClass = get_class($controller);
+        $actionId = $this->getActionName($a, $controllerClass);
+        if ($actionId === null) {
+            throw new NotFoundHttpException(
+                // @todo translate
+                'Action "' . $a . '" not found in controller "' . $controllerClass . '"'
+            );
+        }
+
+        $route->controller = $controller;
+        $route->action = $actionId;
+
+        return $route;
     }
 
-//    public function getExtensionCodeFromRequest(): ?string
-//    {
-//        $extensionCode = isset($_GET['e']) ? cot_import('e', 'G', 'ALP') : null;
-//        $ajax = cot_import('r', 'G', 'ALP');
-//        $popup = cot_import('o', 'G', 'ALP');
-//        if (!$extensionCode) {
-//            // Support for ajax and popup hooked plugins
-//            if (!empty($ajax)) {
-//                $extensionCode = $ajax;
-//            } elseif (!empty($popup)) {
-//                $extensionCode = $popup;
-//            }
-//        }
-//        return $extensionCode;
-//    }
+    public function routeAdmin(): ?Route
+    {
+        $standardAdmin = [
+            'cache.disk',
+            'cache',
+            'config',
+            'extrafields',
+            'extensions',
+            'home',
+            'infos',
+            'log',
+            'other',
+            'phpinfo',
+            'rights',
+            'rightsbyitem',
+            'structure',
+            'urls',
+            'users'
+        ];
+
+        $extensionCode = cot_import('m', 'G', 'ALP', 24);
+        $controllerId = cot_import('n', 'G', 'ALP', 24);
+        $actionId = cot_import('a', 'G', 'ALP', 24);
+        $s = cot_import('s', 'G', 'ALP', 24);
+
+        // Standard admin include files
+        $includeFile = null;
+        if ($extensionCode !== null) {
+            $includeFile = $extensionCode;
+        } elseif ($controllerId === null && $actionId === null) {
+            $includeFile = 'home';
+        }
+        if ($includeFile !== '') {
+            if (!empty($s)) {
+                $includeFile = $includeFile . '.' . $s;
+            }
+            $standardIncFile = cot_incfile('admin', 'module', $includeFile);
+            if (in_array($includeFile, $standardAdmin) && file_exists($standardIncFile)) {
+                $route = new Route();
+                $route->includeFiles = [$standardIncFile];
+                return $route;
+            }
+        }
+
+        // Core controllers
+        if ($extensionCode === null && $controllerId !== null) {
+            $controller = $this->getController($m ?? 'main', 'admin');
+            var_dump($controller);
+        }
+
+        // Проверять права на администрирование расширения?
+        // Extensions include files
+
+        // Extensions controllers
+        die;
+    }
+
+    /**
+     * @param string $controllerName Controller name from request
+     * @param ?string $extensionCode
+     * @param ?string $extensionType
+     */
+    public function getController(
+        string $controllerName,
+        ?string $extensionCode = null,
+        ?string $extensionType = null
+    ): ?BaseController {
+        $className = $this->getControllerClass($controllerName, $extensionCode, $extensionType);
+        if ($className === null) {
+            return null;
+        }
+
+        $controller = new $className();
+        if (!($controller instanceof BaseController)) {
+            return null;
+        }
+
+        return $controller;
+    }
 
     /**
      * @param string $controller Controller name from request
-     * @param string|null $extensionCode
-     * @param string|null $extensionType
+     * @param ?string $extensionCode
+     * @param ?string $extensionType
      * @param bool $ifExists Check if class exists
      * @return ($ifExists is true ? ?string : string) Controller class name.
+     *
+     * @todo попробовать получить с фронта доступ к админ контроллеру и прикрыть лавочку
      */
     public function getControllerClass(
         string $controller,
@@ -163,11 +254,11 @@ class Router
         $result = '\\cot\\';
         if ($extensionCode !== null) {
             if ($extensionType === CotontiDictionary::EXTENSION_TYPE_PLUGIN) {
-                $result .= 'plugins';
-            } else {
-                $result .= 'modules';
+                $result .= 'plugins'. '\\';
+            } elseif ($extensionType === CotontiDictionary::EXTENSION_TYPE_MODULE) {
+                $result .= 'modules'. '\\';
             }
-            $result .= '\\' . $extensionCode . '\\';
+            $result .= $extensionCode . '\\';
         }
         $result .=  'controllers\\' . $this->prepareName($controller) . 'Controller';
 
@@ -181,44 +272,31 @@ class Router
     /**
      * @param class-string<BaseController> $controller
      */
-    public function getActionName(string $action, string $controller): ?string
+    public function getActionName(?string $action, string $controller): ?string
     {
-        $actionName = 'action' . $this->prepareName($action);
-        if (method_exists($controller, $actionName)) {
-            // or may be use $action as is?
-            return $actionName;
+        if ($action !== null) {
+            $actionName = 'action' . $this->prepareName($action);
+            if (method_exists($controller, $actionName)) {
+                return $action;
+            }
+
+            $actions = $controller::actions();
+            if (array_key_exists($action, $actions)) {
+                return $action;
+            }
+
+            return null;
         }
 
-        $actions = $controller::actions();
-        if (array_key_exists($action, $actions)) {
-            return $action;
-        }
-
-        if (!empty($controller::$defaultAction) && method_exists($controller, $controller::$defaultAction)) {
-            return $controller::$defaultAction;
+        if (!empty($controller::$defaultAction)) {
+            return $this->getActionName($controller::$defaultAction, $controller);
         }
 
         return null;
     }
 
-    private function getRote(
-        ?string $extensionCode = null,
-        ?string $controller = null,
-        ?string $action = null,
-        string $extensionType = null
-    ): ?string {
-        if ($controller === null && $action === null) {
-            return null;
-        }
-
-        if ($extensionCode === null) {
-            // Process core controllers
-
-        }
-    }
-
     private function prepareName(string $name): string
     {
-        return ucfirst(str_replace('-', '', ucwords($name, '-')));
+        return BaseController::prepareName($name);
     }
 }
