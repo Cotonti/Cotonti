@@ -7,6 +7,11 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\ErrorHandler;
+use cot\exceptions\NotFoundHttpException;
+use cot\extensions\ExtensionsDictionary;
+use cot\router\Router;
+
 if (php_sapi_name() == 'cli-server') {
 	// Embedded PHP webserver routing
 	$tmp = explode('?', $_SERVER['REQUEST_URI']);
@@ -83,69 +88,33 @@ require_once $cfg['system_dir'] . '/functions.php';
 // Bootstrap
 require_once $cfg['system_dir'] . '/common.php';
 
-$ext = isset($_GET['e']) ? cot_import('e', 'G', 'ALP') : false;
-$ajax = cot_import('r', 'G', 'ALP');
-$popup = cot_import('o', 'G', 'ALP');
-if (!$ext) {
-	// Support for ajax and popup hooked plugins
-	$ext = $ajax ? $ajax : ($popup ? $popup : $ext);
-}
-unset ($ajax, $popup);
+try {
+    Cot::$currentRoute = Router::getInstance()->route();
 
-// Detect selected extension
-if ($ext === false) {
-	// Default environment for index module
-	define('COT_MODULE', true);
-	$env['type'] = 'module';
-	$env['ext'] = 'index';
-} else {
-	$found = false;
-	if (preg_match('`^\w+$`', $ext)) {
-		$module_found = false;
-		$plugin_found = false;
-		if (file_exists($cfg['modules_dir'] . '/' . $ext) && isset($cot_modules[$ext])) {
-			$module_found = true;
-			$found = true;
-		}
-		if (file_exists($cfg['plugins_dir'] . '/' . $ext)) {
-			$plugin_found = true;
-			$found = true;
-		}
-		if ($module_found && $plugin_found) {
-			// Need to query the db to check which one is installed
-			$res = $db->query("SELECT ct_plug FROM $db_core WHERE ct_code = ? LIMIT 1", $ext);
-			if ($res->rowCount() == 1) {
-				if ((int) $res->fetchColumn()) {
-					$module_found = false;
-				} else {
-					$plugin_found = false;
-				}
-			} else {
-				$found = false;
-			}
-		}
-		if ($module_found) {
-			$env['type'] = 'module';
-			define('COT_MODULE', true);
-		} elseif ($plugin_found) {
-			$env['type'] = 'plug';
-			$env['location'] = 'plugins';
-			define('COT_PLUG', true);
-		}
-	}
-	if ($found) {
-		$env['ext'] = $ext;
-	} else {
-		// Error page
-		cot_die_message(404);
-		exit;
-	}
-}
-unset($ext);
+    if (Cot::$currentRoute === null) {
+        throw new NotFoundHttpException();
+    }
 
-// Load the requested extension
-if (Cot::$env['type'] == 'plug') {
-	require_once Cot::$cfg['system_dir'] . '/plugin.php';
-} else {
-	require_once Cot::$cfg['modules_dir'] . '/' . Cot::$env['ext'] . '/' . Cot::$env['ext'] . '.php';
+    // Load the requested extension
+    if (Cot::$env['type'] === ExtensionsDictionary::TYPE_PLUGIN) {
+        require_once Cot::$cfg['system_dir'] . '/plugin.php';
+    } elseif (!empty(Cot::$currentRoute->includeFiles)) {
+        foreach (Cot::$currentRoute->includeFiles as $includeFile) {
+            require_once $includeFile;
+        }
+    } elseif (Cot::$currentRoute->controller !== null && Cot::$currentRoute->action !== null) {
+        $resultContent = Cot::$currentRoute->controller->runAction(Cot::$currentRoute->action);
+
+        require_once Cot::$cfg['system_dir'] . '/header.php';
+
+        echo $resultContent;
+        unset($resultContent);
+
+        require_once Cot::$cfg['system_dir'] . '/footer.php';
+    }
+} catch (Throwable $e) {
+    // Handle error
+    if (!ErrorHandler::getInstance()->handle($e)) {
+        throw $e;
+    }
 }

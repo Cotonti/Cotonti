@@ -72,14 +72,14 @@
 						<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} -->
 						<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_EDIT_URL}" class="button">{PHP.L.Config}</a>
 						<!-- ENDIF -->
-						<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT} -->
-						<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}" class="button">{PHP.L.Structure}</a>
+						<!-- IF {ADMIN_EXTENSIONS_STRUCTURE_URL} -->
+						<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_STRUCTURE_URL}" class="button">{PHP.L.Structure}</a>
 						<!-- ENDIF -->
-						<!-- IF {PHP.totalinstalled} -->
+						<!-- IF {ADMIN_EXTENSIONS_RIGHTS_URL} -->
 						<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS_URL}" class="button">{PHP.L.Rights}</a>
 						<!-- ENDIF -->
-						<!-- IF {PHP.ifthistools} -->
-						<a title="{PHP.L.Administration}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}" class="button special">{PHP.L.Admin}</a>
+						<!-- IF {ADMIN_EXTENSIONS_ADMIN_URL} -->
+						<a title="{PHP.L.Administration}" href="{ADMIN_EXTENSIONS_ADMIN_URL}" class="button special">{PHP.L.Admin}</a>
 						<!-- ENDIF -->
 						<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL} -->
 						<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL}" class="button special">{PHP.L.Open}</a>
@@ -106,20 +106,22 @@
 		{ADMIN_EXTENSIONS_ICON} {ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:
 	</h2>
 	<div class="wrapper">
-		<!-- IF {PHP.isinstalled} AND {PHP.exists} -->
+		<!-- IF {PHP.isInstalled} AND {PHP.exists} -->
 		<div class="button-toolbar">
 			<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL} -->
 			<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL}" class="button special large">{PHP.L.Open}</a>
 			<!-- ENDIF -->
-			<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS} -->
-			<a title="{PHP.L.Administration}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}" class="button special large">{PHP.L.Administration}</a>
+			<!-- IF {ADMIN_EXTENSIONS_ADMIN_URL} -->
+			<a title="{PHP.L.Administration}" href="{ADMIN_EXTENSIONS_ADMIN_URL}" class="button special large">{PHP.L.Administration}</a>
 			<!-- ENDIF -->
 			<!-- IF {ADMIN_EXTENSIONS_TOTALCONFIG} > 0 -->
 			<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_CONFIG_URL}" class="button large">{PHP.L.Configuration} ({ADMIN_EXTENSIONS_TOTALCONFIG})</a>
 			<!-- ENDIF -->
-			<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS}" class="button large">{PHP.L.Rights}</a>
-			<!-- IF {ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT} -->
-			<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT}" class="button large">{PHP.L.Structure}</a>
+			<!-- IF {ADMIN_EXTENSIONS_RIGHTS_URL} -->
+			<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS_URL}" class="button large">{PHP.L.Rights}</a>
+			<!-- ENDIF -->
+			<!-- IF {ADMIN_EXTENSIONS_STRUCTURE_URL} -->
+			<a title="{PHP.L.Structure}" href="{ADMIN_EXTENSIONS_STRUCTURE_URL}" class="button large">{PHP.L.Structure}</a>
 			<!-- ENDIF -->
 		</div>
 		<!-- ENDIF -->
@@ -136,7 +138,7 @@
 				<tr>
 					<td>{PHP.L.Version}:</td>
 					<td>
-						<!-- IF {PHP.isinstalled} AND {ADMIN_EXTENSIONS_VERSION_COMPARE} > 0 -->
+						<!-- IF {PHP.isInstalled} AND {ADMIN_EXTENSIONS_VERSION_COMPARE} > 0 -->
 						<span class="highlight_red">{ADMIN_EXTENSIONS_VERSION_INSTALLED}</span> / <span class="highlight_green">{ADMIN_EXTENSIONS_VERSION}</span>
 						<!-- ELSE -->
 						{ADMIN_EXTENSIONS_VERSION}
@@ -201,10 +203,10 @@
 				<!-- END: DEPENDENCIES -->
 				<tr>
 					<td colspan="2" class="action">
-							<!-- IF !{PHP.isinstalled} AND {PHP.dependencies_satisfied} -->
+							<!-- IF !{PHP.isInstalled} AND {PHP.dependencies_satisfied} -->
 							<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_INSTALL_URL}" class="button special large">{PHP.L.adm_opt_install}</a>
 							<!-- ENDIF -->
-							<!-- IF {PHP.isinstalled} -->
+							<!-- IF {PHP.isInstalled} -->
 							<!-- IF {PHP.exists} -->
 							<a title="{PHP.L.adm_opt_install_explain}" href="{ADMIN_EXTENSIONS_UPDATE_URL}" class="button special large">{PHP.L.adm_opt_update}</a>
 							<!-- ENDIF -->

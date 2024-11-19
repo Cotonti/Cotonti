@@ -1,5 +1,7 @@
 <?php
 
+use cot\router\Route;
+
 /**
  * Main application class and facade to access key Cotonti globals regardless of scope
  */
@@ -64,6 +66,11 @@ class Cot
      * @var array
      */
     public static $usr;
+
+    /**
+     * @var ?Route
+     */
+    public static $currentRoute = null;
 
     /**
      * Initializes static members. Call this function once all globals are defined.

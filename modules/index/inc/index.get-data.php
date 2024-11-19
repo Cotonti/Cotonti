@@ -43,4 +43,3 @@ foreach (cot_getextplugins('system.get-data') as $pl) {
 
 cot_sendheaders('application/json', '200 OK', Cot::$sys['now']);
 echo json_encode($result);
-exit();

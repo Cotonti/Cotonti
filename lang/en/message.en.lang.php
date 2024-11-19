@@ -112,9 +112,6 @@ $L['msg900_body'] = 'Page not yet done, come back later please.';
 $L['msg904_title'] = 'System pages for administrator eyes only';
 $L['msg904_body'] = 'You cannot list system pages with your level.';
 
-$L['msg907_title'] = 'Plug-in not loaded';
-$L['msg907_body'] = 'An error occured while attempting to load this plug-in, file(s) missing?';
-
 $L['msg911_title'] = 'Language file missing';
 $L['msg911_body'] = 'An error occured while attempting to check this language pack.';
 

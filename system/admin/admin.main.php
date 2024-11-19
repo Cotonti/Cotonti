@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\router\Router;
+
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'any');
@@ -25,64 +27,88 @@ $w = cot_import('w', 'P', 'TXT');
 $u = cot_import('u', 'P', 'TXT');
 $s = cot_import('s', 'G', 'ALP', 24);
 
+$adminPath = [[cot_url('admin'), Cot::$L['Adminpanel']]];
+$adminTitle = '';
+$adminHelp = '';
+$adminMain =  '';
+
 /* === Hook for the plugins === */
 foreach (cot_getextplugins('admin.main') as $pl) {
 	include $pl;
 }
 /* ===== */
 
-$standardAdmin = [
-    'cache.disk',
-    'cache',
-    'config',
-    'extrafields',
-    'extensions',
-    'home',
-    'infos',
-    'log',
-    'other',
-    'phpinfo',
-    'rights',
-    'rightsbyitem',
-    'structure',
-    'urls',
-    'users'
-];
+$route = Router::getInstance()->routeAdmin();
 
-$includeFile = (empty($m)) ? 'home' : $m;
-$includeFile = (empty($s)) ? $includeFile : $includeFile . '.' . $s;
-$standardIncFile = cot_incfile('admin', 'module', $includeFile);
-if (in_array($includeFile, $standardAdmin) && file_exists($standardIncFile)) {
-	$includeFile = $standardIncFile;
-} else {
-	Cot::$env['ext'] = $m;
-	$adminTitle = isset($cot_modules[$m]['title']) ? $cot_modules[$m]['title'] : '';
-    $hook = 'admin';
-    if (!empty($cot_plugins[$hook]) && is_array($cot_plugins[$hook])) {
-        if (Cot::$cfg['debug_mode']) {
-            $cotHooksFired[] = $hook;
-        }
-        foreach ($cot_plugins[$hook] as $extensionRow) {
-            if ($extensionRow['pl_code'] === $m) {
-                $extensionDirectory = $extensionRow['pl_module'] ? Cot::$cfg['modules_dir'] : Cot::$cfg['plugins_dir'];
-                $includeFile = $extensionDirectory . "/{$extensionRow['pl_file']}";
-                break;
-            }
-        }
+if (!empty($route->extensionCode)) {
+    // Check the extension administration rights
+    list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin'])
+        = cot_auth($route->extensionCode, 'any');
+    cot_block(Cot::$usr['isadmin']);
+
+    $adminTitle = $cot_modules[$route->extensionCode]['title'] ?? '';
+}
+if (!empty($route->includeFiles)) {
+    foreach ($route->includeFiles as $includeFile) {
+        require_once $includeFile;
     }
-	$includeFile = Cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
+} elseif ($route->controller !== null && $route->action !== null) {
+    $adminMain = $route->controller->runAction($route->action);
 }
+unset($route);
 
-if (!file_exists($includeFile)) {
-	cot_die_message(404);
-}
-
-$adminPath = [[cot_url('admin'), Cot::$L['Adminpanel']]];
-$adminTitle = isset($adminTitle) ? $adminTitle : '';
-$adminHelp = isset($adminHelp) ? $adminHelp : '';
-$adminMain = isset($adminMain) ? $adminMain : '';
-
-require $includeFile;
+//$standardAdmin = [
+//    'cache.disk',
+//    'cache',
+//    'config',
+//    'extrafields',
+//    'extensions',
+//    'home',
+//    'infos',
+//    'log',
+//    'other',
+//    'phpinfo',
+//    'rights',
+//    'rightsbyitem',
+//    'structure',
+//    'urls',
+//    'users'
+//];
+//
+//$includeFile = (empty($m)) ? 'home' : $m;
+//$includeFile = (empty($s)) ? $includeFile : $includeFile . '.' . $s;
+//$standardIncFile = cot_incfile('admin', 'module', $includeFile);
+//if (in_array($includeFile, $standardAdmin) && file_exists($standardIncFile)) {
+//	$includeFile = $standardIncFile;
+//} else {
+//	Cot::$env['ext'] = $m;
+//	$adminTitle = isset($cot_modules[$m]['title']) ? $cot_modules[$m]['title'] : '';
+//    $hook = 'admin';
+//    if (!empty($cot_plugins[$hook]) && is_array($cot_plugins[$hook])) {
+//        if (Cot::$cfg['debug_mode']) {
+//            $cotHooksFired[] = $hook;
+//        }
+//        foreach ($cot_plugins[$hook] as $extensionRow) {
+//            if ($extensionRow['pl_code'] === $m) {
+//                $extensionDirectory = $extensionRow['pl_module'] ? Cot::$cfg['modules_dir'] : Cot::$cfg['plugins_dir'];
+//                $includeFile = $extensionDirectory . "/{$extensionRow['pl_file']}";
+//                break;
+//            }
+//        }
+//    }
+//	$includeFile = Cot::$cfg['modules_dir'] . "/$m/$m.admin.php";
+//}
+//
+//if (!file_exists($includeFile)) {
+//	cot_die_message(404);
+//}
+//
+//$adminPath = [[cot_url('admin'), Cot::$L['Adminpanel']]];
+//$adminTitle = isset($adminTitle) ? $adminTitle : '';
+//$adminHelp = isset($adminHelp) ? $adminHelp : '';
+//$adminMain = isset($adminMain) ? $adminMain : '';
+//
+//require $includeFile;
 
 if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
     // @deprecated in 0.9.24 (for backward compatibility)

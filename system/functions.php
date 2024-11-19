@@ -7,6 +7,9 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsDictionary;
+use cot\extensions\ExtensionsService;
+
 defined('COT_CODE') or die('Wrong URL');
 
 // System requirements check
@@ -263,11 +266,16 @@ function cot_get_caller()
  *
  * @param string $hook Hook (event) name
  * @param bool $checkExistence Check if hook file exists
+ * @param ?string $extensionCode Get hook files (event handlers) for this extension only
  * @param string $permission Permissions
  * @return string[] Hook files list
  */
-function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
-{
+function cot_getextplugins(
+    string $hook,
+    bool $checkExistence = true,
+    ?string $extensionCode = null,
+    string $permission = 'R'
+): array {
     // Class Cot may be not initialized yet
     global $cfg, $sys, $L, $cache;
 
@@ -290,7 +298,10 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
                 $opt = $handler['pl_code'];
             }
 
-            if (!cot_auth($cat, $opt, $permission)) {
+            if (
+                ($extensionCode !== null && $extensionCode !== $handler['pl_code'])
+                || !cot_auth($cat, $opt, $permission)
+            ) {
                 continue;
             }
 
@@ -305,9 +316,9 @@ function cot_getextplugins($hook, $checkExistence = true, $permission = 'R')
                 $extUrl = cot_url('admin', ['m' => 'extensions', 'a' => 'details', $extType => $handler['pl_code']]);
 
                 // Language file can be not loaded yet
-                $message = isset($L['hookFileNotFound'])
-                    ? $L['hookFileNotFound']
-                    : '<strong>{$title}</strong>, event - {$hook}: file {$fileName} not found. Please <a href="{$url}">update the extension</a>';
+                $message = $L['hookFileNotFound']
+                    ?? '<strong>{$title}</strong>, event - {$hook}: file {$fileName} not found. '
+                    . 'Please <a href="{$url}">update the extension</a>';
 
                 $messageText = cot_rc(
                     $message,
@@ -1262,14 +1273,13 @@ function cot_memory_allocate($needMemory)
 /**
  * Checks if a module is currently installed and active
  *
- * @global array $cot_modules Module registry
- * @param string $name Module name
+ * @param string $extensionCode Module code
  * @return bool
  */
-function cot_module_active($name)
+function cot_module_active($extensionCode)
 {
-	global $cot_modules;
-	return isset($cot_modules[$name]);
+	return ExtensionsService::getInstance()
+    ->isInstalled($extensionCode, ExtensionsDictionary::TYPE_MODULE);
 }
 
 /**
@@ -1308,13 +1318,13 @@ function cot_outputFilters($output)
  * Checks if a plugin is currently installed and active
  *
  * @global array $cot_plugins_active Active plugins registry
- * @param string $name Plugin name
+ * @param string $extensionCode Plugin code
  * @return bool
  */
-function cot_plugin_active($name)
+function cot_plugin_active($extensionCode)
 {
-	global $cot_plugins_enabled;
-	return is_array($cot_plugins_enabled) && isset($cot_plugins_enabled[$name]);
+	return ExtensionsService::getInstance()
+        ->isInstalled($extensionCode, ExtensionsDictionary::TYPE_PLUGIN);
 }
 
 /**
@@ -1872,10 +1882,10 @@ function cot_block($allowed)
 		global $sys, $env;
 
 		$env['status'] = '403 Forbidden';
-		cot_redirect(cot_url('message', 'msg=930&'.$sys['url_redirect'], '', true));
+		cot_redirect(cot_url('message', 'msg=930&' . $sys['url_redirect'], '', true));
 	}
 
-	return FALSE;
+	return false;
 }
 
 /**
@@ -3533,21 +3543,22 @@ function cot_diefatal($text = 'Reason is unknown.', $title = 'Fatal error')
 
 	if ($cfg['display_errors']) {
         $mainTitle = isset($cfg['maintitle']) ? $cfg['maintitle'] : $cfg['mainurl'];
-		$message_body = '<p><em>'.@date('Y-m-d H:i').'</em></p>';
-		$message_body .= '<p>'.$text.'</p>';
+		$message_body = '<p><em>' . @date('Y-m-d H:i') . '</em></p>';
+		$message_body .= '<p>' . $text . '</p>';
 		ob_clean();
 		debug_print_backtrace();
 		$backtrace = ob_get_contents();
 		ob_clean();
-		$message_body .= '<pre style="overflow:auto">'.$backtrace.'</pre>';
-		$message_body .= '<hr /><a href="'.$cfg['mainurl'].'">'.$mainTitle.'</a>';
+		$message_body .= '<pre style="overflow:auto">' . $backtrace . '</pre>';
+		$message_body .= '<hr /><a href="' . $cfg['mainurl'] . '">' . $mainTitle . '</a>';
 		cot_die_message(500, true, $title, $message_body);
-
     } else {
 		$backtrace = debug_backtrace();
 		if (isset($backtrace[1])) {
-			$text .= ' in file ' . $backtrace[1]['file'] . ' at line ' . $backtrace[1]['line'] . ' function ' . $backtrace[1]['function'] . '(' . implode(', ', $backtrace[1]['args']) . ')';
+			$text .= ' in file ' . $backtrace[1]['file'] . ' at line ' . $backtrace[1]['line']
+                . ' function ' . $backtrace[1]['function'] . '(' . implode(', ', $backtrace[1]['args']) . ')';
 		}
+
 		error_log("$title: $text");
 		cot_die_message(503, true);
 	}
@@ -3606,7 +3617,7 @@ function cot_die_message($code, $header = true, $message_title = '', $message_bo
 		603 => '403 Forbidden',
 		900 => '503 Service Unavailable',
 		904 => '403 Forbidden',
-		907 => '404 Not Found',
+//		907 => '404 Not Found',
 		911 => '404 Not Found',
 		915 => '200 OK',
 		916 => '200 OK',
@@ -4031,57 +4042,46 @@ function cot_incfile($name, $type = 'core', $part = 'functions')
  * @param string $type Part type: 'plug', 'module' or 'core'
  * @param string $default Default (fallback) language code
  * @param string $lang Set this to override global $lang
- * @return mixed       Langfile path or FALSE if no suitable files were found
+ * @return ?string Langfile path or NULL if no suitable files were found
  */
-function cot_langfile($name, $type = 'plug', $default = 'en', $lang = null)
+function cot_langfile($name, $type = ExtensionsDictionary::TYPE_PLUGIN, $default = 'en', $lang = null): ?string
 {
 	global $cfg;
-	if (!is_string($lang))
-	{
+
+	if (!is_string($lang)) {
 		global $lang;
 	}
-	if ($type == 'module')
-	{
-		if (@file_exists($cfg['lang_dir']."/$lang/modules/$name.$lang.lang.php"))
-		{
-			return $cfg['lang_dir']."/$lang/modules/$name.$lang.lang.php";
+
+	if ($type === ExtensionsDictionary::TYPE_MODULE) {
+		if (@file_exists($cfg['lang_dir'] . "/$lang/modules/$name.$lang.lang.php")) {
+			return $cfg['lang_dir'] . "/$lang/modules/$name.$lang.lang.php";
 		}
-		elseif (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
-		{
-			return $cfg['modules_dir']."/$name/lang/$name.$lang.lang.php";
+        if (@file_exists($cfg['modules_dir'] . "/$name/lang/$name.$lang.lang.php")) {
+			return $cfg['modules_dir'] . "/$name/lang/$name.$lang.lang.php";
 		}
-		elseif (@file_exists($cfg['modules_dir']."/$name/lang/$name.$default.lang.php"))
-		{
-			return $cfg['modules_dir']."/$name/lang/$name.$default.lang.php";
+        if (@file_exists($cfg['modules_dir'] . "/$name/lang/$name.$default.lang.php")) {
+			return $cfg['modules_dir'] . "/$name/lang/$name.$default.lang.php";
 		}
-	}
-	elseif ($type == 'core')
-	{
-		if (@file_exists($cfg['lang_dir']."/$lang/$name.$lang.lang.php"))
-		{
-			return $cfg['lang_dir']."/$lang/$name.$lang.lang.php";
+	} elseif ($type === ExtensionsDictionary::TYPE_CORE) {
+		if (@file_exists($cfg['lang_dir'] . "/$lang/$name.$lang.lang.php")) {
+			return $cfg['lang_dir'] . "/$lang/$name.$lang.lang.php";
 		}
-		elseif (@file_exists($cfg['lang_dir']."/$default/$name.$default.lang.php"))
-		{
-			return $cfg['lang_dir']."/$default/$name.$default.lang.php";
+		if (@file_exists($cfg['lang_dir'] . "/$default/$name.$default.lang.php")) {
+			return $cfg['lang_dir'] . "/$default/$name.$default.lang.php";
 		}
-	}
-	else
-	{
-		if (@file_exists($cfg['lang_dir']."/$lang/plugins/$name.$lang.lang.php"))
-		{
-			return $cfg['lang_dir']."/$lang/plugins/$name.$lang.lang.php";
+	} else {
+		if (@file_exists($cfg['lang_dir'] . "/$lang/plugins/$name.$lang.lang.php")) {
+			return $cfg['lang_dir'] . "/$lang/plugins/$name.$lang.lang.php";
 		}
-		elseif (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
-		{
-			return $cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php";
+		if (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php")) {
+			return $cfg['plugins_dir'] . "/$name/lang/$name.$lang.lang.php";
 		}
-		elseif (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$default.lang.php"))
-		{
-			return $cfg['plugins_dir']."/$name/lang/$name.$default.lang.php";
+		if (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$default.lang.php")) {
+			return $cfg['plugins_dir'] . "/$name/lang/$name.$default.lang.php";
 		}
 	}
-	return false;
+
+	return null;
 }
 
 /**

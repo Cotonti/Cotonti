@@ -9,10 +9,12 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+$L['comments_title'] = 'Комментарии';
+$L['info_desc'] = 'Комментарии с API и интеграцией со страницами, списками, опросами, RSS и другими расширениями';
+
 /**
  * Plugin Config
  */
-
 $L['cfg_commentsize'] = 'Макс. размер комментария, байт';
 $L['cfg_commentsize_hint'] = '0 - без ограничения размера';
 $L['cfg_countcomments'] = 'Считать комментарии';
@@ -38,12 +40,9 @@ $L['cfg_rss_commentmaxsymbols_hint'] = 'По умолчанию отключен
 $L['cfg_time'] = 'Пользователи могут редактировать комментарии в течение';
 $L['cfg_time_hint'] = 'минут';
 
-$L['info_desc'] = 'Комментарии с API и интеграцией со страницами, списками, опросами, RSS и другими расширениями';
-
 /**
  * Plugin Body
  */
-
 $L['comments_comment'] = 'Комментарий';
 $L['comments_comments'] = 'Комментарии';
 $L['comments_confirm_delete'] = 'Вы действительно хотите удалить этот комментарий?';
@@ -74,7 +73,6 @@ $L['rss_original'] = 'Комментируемая страница';
 /**
  * Admin Section
  */
-
 $L['home_newcomments'] = 'Новые комментарии';
 $L['core_comments'] = &$L['comments_comments'];
 $L['adm_comm_already_del'] = 'Комментарий удален';
@@ -82,11 +80,5 @@ $L['adm_comm_already_del'] = 'Комментарий удален';
 /**
  * cot_declension arrays
  */
-
 $Ls['Comments'] = "комментарий,комментария,комментариев";
 
-/**
- * Comedit
- */
-
-$L['plu_title'] = 'Редактирование комментария';

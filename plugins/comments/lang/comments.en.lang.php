@@ -9,10 +9,12 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+$L['comments_title'] = 'Comments';
+$L['info_desc'] = 'Comments system for Cotonti with API and integration with pages, lists, polls, RSS and other extensions';
+
 /**
  * Plugin Config
  */
-
 $L['cfg_enable_comments'] = 'Enable comments';
 $L['cfg_mail'] = 'Notify about new comments via email';
 $L['cfg_markitup'] = 'Use markitup';
@@ -38,12 +40,9 @@ $L['cfg_parsebbcodecom_hint'] = '';
 $L['cfg_parsesmiliescom'] = 'Parse smilies in comments';
 $L['cfg_parsesmiliescom_hint'] = '';
 
-$L['info_desc'] = 'Comments system for Cotonti with API and integration with pages, lists, polls, RSS and other extensions';
-
 /**
  * Plugin Body
  */
-
 $L['comments_comment'] = 'Comment';
 $L['comments_comments'] = 'Comments';
 $L['comments_confirm_delete'] = 'Do you really want to delete this comment?';
@@ -74,7 +73,6 @@ $L['rss_original'] = 'Original message';
 /**
  * Admin Section
  */
-
 $L['home_newcomments'] = 'New comments';
 $L['core_comments'] = &$L['comments_comments'];
 $L['adm_comm_already_del'] = 'Comment deleted';
@@ -82,11 +80,4 @@ $L['adm_comm_already_del'] = 'Comment deleted';
 /**
  * cot_declension Arrays
  */
-
 $Ls['Comments'] = "comments,comment";
-
-/**
- * Comedit
- */
-
-$L['plu_title'] = 'Comment Editing';

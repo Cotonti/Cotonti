@@ -257,7 +257,9 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 				} elseif (isset($params[$var])) {
 					$url = str_replace($m[0], rawurlencode($params[$var]), $url);
 					unset($params[$var]);
-				} else {
+				} elseif (isset($GLOBALS[$var])) {
+                    // @todo check if it is needed to replace when $GLOBALS[$var] is not set $url = str_replace($m[0], '', $url);
+                    // @todo don't use global var?
 					$url = str_replace($m[0], rawurlencode($GLOBALS[$var]), $url);
 				}
 			}

@@ -7,6 +7,9 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsDictionary;
+use cot\extensions\ExtensionsService;
+
 defined('COT_CODE') or die('Wrong URL');
 
 // Input import
@@ -20,19 +23,16 @@ $autoAssignTags = false;
 $templateFile = '';
 if (!empty($o)) {
 	$extensionCode = $o;
-    $hook = 'popup';
     Cot::$sys['displayHeader'] = Cot::$sys['displayFooter'] = false;
     $templateFile = cot_tplfile(['popup', $extensionCode]);
     $autoAssignTags = true;
 
 } elseif (!empty($r)) {
 	$extensionCode = $r;
-    $hook = 'ajax';
     Cot::$sys['displayHeader'] = Cot::$sys['displayFooter'] = false;
 
 } elseif (!empty($e)) {
 	$extensionCode = $e;
-    $hook = 'standalone';
     $templateFile = cot_tplfile($extensionCode, 'plug');
     if ($templateFile === null || !file_exists($templateFile)) {
         $templateFile = cot_tplfile(['plugin', $extensionCode]);
@@ -42,6 +42,7 @@ if (!empty($o)) {
 	cot_die_message(404);
 }
 
+// It may be unnecessary. The router has checked everything. But leave it just in case
 if (!file_exists(Cot::$cfg['plugins_dir'] . '/' . $extensionCode)) {
 	cot_die_message(404);
 }
@@ -52,12 +53,12 @@ cot_block(Cot::$usr['auth_read']);
 
 // Plugin requirements autoload
 $requiredFiles = [
-    cot_langfile($extensionCode, 'plug'),
-    cot_incfile($extensionCode, 'plug', 'resources'),
-    cot_incfile($extensionCode, 'plug', 'functions'),
+    cot_langfile($extensionCode, ExtensionsDictionary::TYPE_PLUGIN),
+    cot_incfile($extensionCode, ExtensionsDictionary::TYPE_PLUGIN, 'resources'),
+    cot_incfile($extensionCode, ExtensionsDictionary::TYPE_PLUGIN, 'functions'),
 ];
 foreach ($requiredFiles as $requiredFile) {
-	if (file_exists($requiredFile)) {
+	if (!empty($requiredFile) && file_exists($requiredFile)) {
 		require_once $requiredFile;
 	}
 }
@@ -79,32 +80,17 @@ if (!empty($templateFile)) {
 	$t = new XTemplate($templateFile);
 }
 
-$found = false;
-if (!empty($cot_plugins[$hook]) && is_array($cot_plugins[$hook])) {
-    if (Cot::$cfg['debug_mode']) {
-        $cotHooksFired[] = $hook;
+if (!empty(Cot::$currentRoute->includeFiles)) {
+    foreach (Cot::$currentRoute->includeFiles as $includeFile) {
+        require_once $includeFile;
     }
-	foreach ($cot_plugins[$hook] as $extensionRow) {
-		if ($extensionRow['pl_code'] == $extensionCode) {
-			$out['plu_title'] = $extensionRow['pl_title']; // @todo is it needed?
-            $filename = Cot::$cfg['plugins_dir'] . '/' . $extensionRow['pl_file'];
-            if (is_readable($filename)) {
-                include Cot::$cfg['plugins_dir'] . '/' . $extensionRow['pl_file'];
-                $found = true;
-                break;
-            }
-		}
-	}
-}
-if (!$found) {
-	cot_die_message(404);
+} elseif (Cot::$currentRoute->controller !== null && Cot::$currentRoute->action !== null) {
+    $pluginBody = Cot::$currentRoute->controller->runAction(Cot::$currentRoute->action);
 }
 
 if (empty($out['subtitle'])) {
-	if (empty(Cot::$L['plu_title']) && isset(Cot::$L[$extensionCode . '_title'])) {
-        Cot::$L['plu_title'] = Cot::$L[$extensionCode . '_title'];
-	}
-    Cot::$out['subtitle'] = empty(Cot::$L['plu_title']) ? Cot::$out['plu_title'] : Cot::$L['plu_title'];
+    Cot::$out['subtitle'] = ExtensionsService::getInstance()
+        ->getTitle($extensionCode, ExtensionsDictionary::TYPE_PLUGIN);
 }
 Cot::$sys['sublocation'] = Cot::$out['subtitle'];
 

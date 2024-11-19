@@ -8,6 +8,9 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsDictionary;
+use cot\extensions\ExtensionsService;
+
 defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
@@ -25,12 +28,6 @@ const COT_EXT_NOTHING_TO_UPDATE = 2;
  * Default plugin part execution priority
  */
 const COT_PLUGIN_DEFAULT_ORDER = 10;
-
-/**
- * Extension types
- */
-const COT_EXT_TYPE_MODULE = 'module';
-const COT_EXT_TYPE_PLUGIN = 'plug';
 
 /**
  * These parts ($name.$part.php) are reserved handlers with no hooks
@@ -607,46 +604,39 @@ function cot_extension_uninstall($code, $isModule = false)
 	}
 
 	// Run SQL script if present
-	if (file_exists($path . "/setup/$code.uninstall.sql"))
-	{
+	if (file_exists($path . "/setup/$code.uninstall.sql")) {
 		$sql_err = $db->runScript(
 			file_get_contents("$path/setup/$code.uninstall.sql"));
-		if (empty($sql_err))
-		{
-			cot_message(cot_rc('ext_executed_sql', array('ret' => 'OK')));
-		}
-		else
-		{
-			cot_error(cot_rc('ext_executed_sql', array('ret' => $sql_err)));
+		if (empty($sql_err)) {
+			cot_message(cot_rc('ext_executed_sql', ['ret' => 'OK']));
+		} else {
+			cot_error(cot_rc('ext_executed_sql', ['ret' => $sql_err]));
 		}
 	}
 
 	// Run handler part
-	if (cot_plugin_active('genoa') && cot_infoget($path . "/$code.setup.php", 'SED_EXTPLUGIN'))
-	{
+	if (cot_plugin_active('genoa') && cot_infoget($path . "/$code.setup.php", 'SED_EXTPLUGIN')) {
 		global $action;
 		$action = 'uninstall';
 		$uninstall_handler = $path . "/$code.setup.php";
-	}
-	else
-	{
+	} else {
 		$uninstall_handler = $path . "/setup/$code.uninstall.php";
 	}
 
 	if (file_exists($uninstall_handler)) {
 		$envtmp = $env;
-		$env = array(
+		$env = [
 			'ext' => $code,
 			'location' => $code,
-			'type' => ($isModule) ? 'module' : 'plug'
-		);
+			'type' => ($isModule) ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN,
+		];
 		$ret = include $uninstall_handler;
 		$env = $envtmp;
 
 		if ($ret !== false) {
-			cot_message(cot_rc('ext_executed_php', array('ret' => $ret)));
+			cot_message(cot_rc('ext_executed_php', ['ret' => $ret]));
 		} else {
-			cot_error(cot_rc('ext_executed_php', array('ret' => $L['Error'])));
+			cot_error(cot_rc('ext_executed_php', ['ret' => Cot::$L['Error']]));
 		}
 	}
 
@@ -843,16 +833,14 @@ function cot_extension_catcmp($ext1, $ext2)
 /**
  * Checks if module is already installed
  *
- * @param string $name Module code
+ * @param string $extensionCode Extension code
  * @return bool
- * @global CotDB $db
+ * @deprecated
+ * @see ExtensionsService::isInstalled()
  */
-function cot_extension_installed($name)
+function cot_extension_installed($extensionCode)
 {
-	global $db_core;
-
-	$cnt = Cot::$db->query("SELECT COUNT(*) FROM $db_core WHERE ct_code = '$name'")->fetchColumn();
-	return $cnt > 0;
+    return ExtensionsService::getInstance()->isInstalled($extensionCode, null, true);
 }
 
 /**

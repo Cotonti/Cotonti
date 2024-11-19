@@ -7,6 +7,9 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsDictionary;
+use cot\extensions\ExtensionsService;
+
 defined('COT_CODE') or die('Wrong URL.');
 
 // Requirements
@@ -116,7 +119,7 @@ function cot_stringinfile($file, $str, $maxsize=32768)
 /**
  * @param $code
  * @param $is_module
- * @return array{name: string, desc: string, notes:string, icon: string}
+ * @return array{name: string, desc: string, notes: string, icon: string}
  */
 function cot_get_extensionparams($code, $is_module = false)
 {
@@ -130,11 +133,8 @@ function cot_get_extensionparams($code, $is_module = false)
         if (isset($cot_modules[$code])) {
             $name = $cot_modules[$code]['title'];
         }
-
-	} else {
-	    if (isset($cot_plugins_enabled[$code])) {
-            $name = $cot_plugins_enabled[$code]['title'];
-        }
+	} elseif (isset($cot_plugins_enabled[$code])) {
+        $name = $cot_plugins_enabled[$code]['title'];
 	}
 
     $ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
@@ -149,7 +149,7 @@ function cot_get_extensionparams($code, $is_module = false)
         $info = ['Name' => $code];
     }
 
-    if ($name == '') {
+    if ($name === '') {
         $name = (isset($info['Name']) && $info['Name'] != '') ? $info['Name'] : $code;
     }
 
@@ -200,24 +200,31 @@ function cot_get_extensionparams($code, $is_module = false)
         }
     }
 
-	$langfile = cot_langfile($code, $is_module ? COT_EXT_TYPE_MODULE : COT_EXT_TYPE_PLUGIN);
-	if (file_exists($langfile)) {
-        $L['info_name'] = $L['info_desc'] = $L['info_notes'] = '';
-		include $langfile;
+    $tmpName = $name;
+    $name = ExtensionsService::getInstance()
+        ->getTitle($code, $is_module ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN);
+    if (empty($name)) {
+        $name = $tmpName;
+    }
+    unset($tmpName);
+
+    $langFile = cot_langfile(
+        $code, $is_module ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN
+    );
+    if (!empty($langFile) && file_exists($langFile)) {
+        $L['info_desc'] = $L['info_notes'] = '';
+        include $langFile;
         // We are including lang file, so we should use $L, not Cot::$L
-		if (!empty($L['info_name'])) {
-            $name = $L['info_name'];
-        }
-		if (!empty($L['info_desc'])) {
+        if (!empty($L['info_desc'])) {
             $desc = $L['info_desc'];
         }
-		if (!empty($L['info_notes'])) {
+        if (!empty($L['info_notes'])) {
             $notes = $L['info_notes'];
         }
-	}
+    }
 
 	$result = [
-		'name' => $name,
+        'name' => $name,
 		'desc' => $desc,
         'notes' => $notes,
 		'icon' => $icon,

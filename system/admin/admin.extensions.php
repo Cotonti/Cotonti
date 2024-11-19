@@ -7,6 +7,9 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsDictionary;
+use cot\extensions\ExtensionsService;
+
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 /**
@@ -39,7 +42,7 @@ if (empty($mod)) {
 		$code = $pl;
 		$arg = 'pl';
 		$dir = Cot::$cfg['plugins_dir'];
-		$type = 'plug';
+		$type = ExtensionsDictionary::TYPE_PLUGIN;
 	}
 
 } else {
@@ -47,7 +50,7 @@ if (empty($mod)) {
 	$code = $mod;
 	$arg = 'mod';
 	$dir = Cot::$cfg['modules_dir'];
-	$type = 'module';
+	$type = ExtensionsDictionary::TYPE_MODULE;
 }
 
 $status[0] = $R['admin_code_paused'];
@@ -58,6 +61,8 @@ $status[4] = $R['admin_code_missing'];
 $found_txt[0] = $R['admin_code_missing'];
 $found_txt[1] = $R['admin_code_present'];
 unset($disp_errors);
+
+$extensionsService = ExtensionsService::getInstance();
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.extensions.first') as $pl) {
@@ -264,7 +269,7 @@ switch($a) {
 		$ext_info = cot_get_extensionparams($code, $is_module);
 		$adminPath[] = [cot_url('admin', ['m' => 'extensions', 'a' => 'details', $arg => $code]), $ext_info['name']];
 
-		$isinstalled = cot_extension_installed($code);
+        $isInstalled = $extensionsService->isInstalled($code, $type, true);
 
 		$sql = Cot::$db->query(
             'SELECT COUNT(*) FROM ' . Cot::$db->config . ' WHERE config_owner = :type AND config_cat = :code '
@@ -353,7 +358,7 @@ switch($a) {
 					}
 				}
 
-				if ($isinstalled && (!file_exists($extplugin_file)) || sizeof($deleted) > 0 || sizeof($not_registred) > 0) {
+				if ($isInstalled && (!file_exists($extplugin_file)) || sizeof($deleted) > 0 || sizeof($not_registred) > 0) {
 					$extensionPart['Error'] = Cot::$L['adm_hook_changed'];
 					if (sizeof($not_registred)) {
 						$extensionPart['Error'] .= cot_rc('adm_hook_notregistered', array('hooks' => implode(', ', $not_registred)));
@@ -511,41 +516,10 @@ switch($a) {
 			}
 		}
 
-		Cot::$L['info_name'] = Cot::$L['info_desc'] = Cot::$L['info_notes'] = '';
-		if (file_exists(cot_langfile($code, $type))) {
-			include cot_langfile($code, $type);
-		}
-
-		// Search admin parts, standalone parts, struct
-        $standalone = null;
-		if (
-            Cot::$db->query(
-                'SELECT pl_code FROM ' . Cot::$db->plugins .
-                " WHERE (pl_hook = 'standalone' OR pl_hook = 'module') AND pl_code = :code AND pl_active = 1 LIMIT 1",
-                ['code' => $code]
-            )->rowCount() > 0
-        ) {
-			$standalone = ($type == 'module') ? cot_url($code) : cot_url('plug', 'e=' . $code);
-		}
-
-		$tool_hook = $type === 'plug' ? 'tools' : 'admin';
-        $tools = null;
-		if (
-            Cot::$db->query(
-                'SELECT pl_code FROM ' . Cot::$db->plugins .
-                " WHERE pl_hook = :hook AND pl_code = :code AND pl_active = 1 LIMIT 1",
-                ['hook' =>  $tool_hook, 'code' => $code]
-            )->rowCount() > 0
-        ) {
-            $tools = $type === 'plug'
-                ? cot_url('admin', ['m' => 'other', 'p' => $code])
-                : cot_url('admin', ['m' => $code]);
-        }
-
-        $struct = null;
+        $structurePartUrl = null;
         $extensionsWithStructure = cot_getExtensionsWithStructure();
 		if (in_array($code, $extensionsWithStructure, true)) {
-			$struct = cot_url('admin', ['m' => 'structure', 'n' => $code]);
+            $structurePartUrl = cot_url('admin', ['m' => 'structure', 'n' => $code]);
 		}
 
 		$installed_ver = Cot::$db->query(
@@ -553,7 +527,7 @@ switch($a) {
             ['code' => $code]
         )->fetchColumn();
 
-        $params = cot_get_extensionparams($code, $type == COT_EXT_TYPE_MODULE);
+        $params = cot_get_extensionparams($code, $type === ExtensionsDictionary::TYPE_MODULE);
 
         $extensionCategoryTitle = '';
         if (!empty($info['Category'])) {
@@ -563,7 +537,9 @@ switch($a) {
 		// Universal tags
 		$t->assign([
 			'ADMIN_EXTENSIONS_NAME' => htmlspecialchars($params['name']),
-			'ADMIN_EXTENSIONS_TYPE' => $type == COT_EXT_TYPE_MODULE ? Cot::$L['Module'] : Cot::$L['Plugin'],
+			'ADMIN_EXTENSIONS_TYPE' => $type === ExtensionsDictionary::TYPE_MODULE
+                ? Cot::$L['Module']
+                : Cot::$L['Plugin'],
 			'ADMIN_EXTENSIONS_CODE' => $code,
             'ADMIN_EXTENSIONS_ICON' => $params['icon'],
 			'ADMIN_EXTENSIONS_DESCRIPTION' => $params['desc'],
@@ -574,10 +550,13 @@ switch($a) {
 			'ADMIN_EXTENSIONS_VERSION_INSTALLED' => $installed_ver,
 			'ADMIN_EXTENSIONS_VERSION_COMPARE' => version_compare($info['Version'], $installed_ver),
 			'ADMIN_EXTENSIONS_DATE' => $info['Date'],
-			'ADMIN_EXTENSIONS_CONFIG_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$code"),
-			'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $tools,
-			'ADMIN_EXTENSIONS_JUMPTO_URL' => $standalone,
-			'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => $struct,
+			'ADMIN_EXTENSIONS_CONFIG_URL' => cot_url(
+                'admin',
+                ['m' => 'config', 'n' => 'edit', 'o' => $type, 'p' => $code]
+            ),
+            'ADMIN_EXTENSIONS_ADMIN_URL' => $extensionsService->getAdminPageUrl($code, $type),
+            'ADMIN_EXTENSIONS_JUMPTO_URL' => $extensionsService->getPublicPageUrl($code, $type),
+            'ADMIN_EXTENSIONS_STRUCTURE_URL' => $structurePartUrl,
 			'ADMIN_EXTENSIONS_TOTALCONFIG' => $totalConfig,
 			'ADMIN_EXTENSIONS_INSTALL_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=install"),
 			'ADMIN_EXTENSIONS_UPDATE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code&b=update"),
@@ -590,15 +569,17 @@ switch($a) {
             $t->assign([
                 // @deprecated For backward compatibility. Will be removed in future releases
                 'ADMIN_EXTENSIONS_ICO' => $params['legacyIcon'],
+
+                /** @deprecated in 0.9.26 */
+                'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $extensionsService->getAdminPageUrl($code, $type),
+                'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => $structurePartUrl,
             ]);
         }
 
 		if ($exists) {
 			// Tags for existing exts
 			$t->assign([
-				'ADMIN_EXTENSIONS_RIGHTS' => $type == 'module'
-                    ? cot_url('admin', "m=rightsbyitem&ic=$code&io=a")
-					: cot_url('admin', "m=rightsbyitem&ic=$type&io=$code"),
+				'ADMIN_EXTENSIONS_RIGHTS_URL' => $extensionsService->getRightsUrl($code, $type),
 				'ADMIN_EXTENSIONS_ADMRIGHTS_AUTH_GUESTS' => cot_auth_getmask($info['Auth_guests']),
 				'ADMIN_EXTENSIONS_AUTH_GUESTS' => $info['Auth_guests'],
 				'ADMIN_EXTENSIONS_ADMRIGHTS_LOCK_GUESTS' => cot_auth_getmask($info['Lock_guests']),
@@ -651,13 +632,13 @@ switch($a) {
                             $dependencyUrl = cot_url('admin', ['m' => 'extensions', 'a' => 'details', $arg => $ext]);
                         }
 
-						$t->assign(array(
+						$t->assign([
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_CODE' => $ext,
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_NAME' => $dep_info['Name'],
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_URL' => $dependencyUrl,
 							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_TYPE' => $dep_module ? Cot::$L['Module'] : Cot::$L['Plugin'],
-							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_CLASS' => $dep_class
-						));
+							'ADMIN_EXTENSIONS_DEPENDENCIES_ROW_CLASS' => $dep_class,
+						]);
 						$t->parse('MAIN.DETAILS.DEPENDENCIES.DEPENDENCIES_ROW');
 					}
 					$t->assign(array(
@@ -746,11 +727,11 @@ switch($a) {
 		$totalactives = [];
 		$totalinstalleds = [];
 		foreach ($db->query("SELECT SUM(pl_active) AS sum, COUNT(*) AS cnt, pl_code FROM $db_plugins GROUP BY pl_code")->fetchAll() as $row) {
-			$totalactives[$row['pl_code']] = (int)$row['sum'];
-			$totalinstalleds[$row['pl_code']] = (int)$row['cnt'];
+			$totalactives[$row['pl_code']] = (int) $row['sum'];
+			$totalinstalleds[$row['pl_code']] = (int) $row['cnt'];
 		}
 
-		$installed_vers = array();
+		$installed_vers = [];
 		foreach($db->query("SELECT ct_version, ct_code FROM $db_core")->fetchAll() as $row) {
 			$installed_vers[$row['ct_code']] = $row['ct_version'];
 		}
@@ -771,7 +752,7 @@ switch($a) {
 
 			if ($only_installed) {
 				// Filter only installed exts
-				$tmp = array();
+				$tmp = [];
 				$installed_exts = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = $ctplug")->fetchAll(PDO::FETCH_COLUMN);
 				foreach ($extensions as $key => $val) {
 					if (in_array($key, $installed_exts)) {
@@ -788,13 +769,13 @@ switch($a) {
 				if ($type ==  'module' && in_array($row['ct_code'], array('admin', 'message', 'users'))) {
 					continue;
 				}
-				$extensions[$row['ct_code']] = array(
+				$extensions[$row['ct_code']] = [
 					'Code' => $row['ct_code'],
 					'Name' => $row['ct_title'],
 					'Version' => $row['ct_version'],
 					'Category' => 'misc-ext',
-					'NotFound' => true
-				);
+					'NotFound' => true,
+				];
 			}
 
 			if ($type == 'plug' && $sort == 'cat') {
@@ -806,26 +787,6 @@ switch($a) {
 			$cnt_extp = count($extensions);
 			$cnt_parts = 0;
 
-			$standalone = [];
-			$sql3 = Cot::$db->query(
-                'SELECT pl_code, pl_module FROM ' . Cot::$db->plugins
-                . " WHERE pl_hook='standalone' OR pl_hook='module'"
-            );
-			while ($row3 = $sql3->fetch()) {
-				$standalone[$row3['pl_code']] = $row3['pl_module']
-                    ? cot_url($row3['pl_code'])
-                    : cot_url('plug', ['e' => $row3['pl_code']]);
-			}
-			$sql3->closeCursor();
-
-			$tools = [];
-			$tool_hook = $type == 'plug' ? 'tools' : 'admin';
-			$sql3 = $db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook'");
-			while ($row3 = $sql3->fetch()) {
-				$tools[$row3['pl_code']] = true;
-			}
-			$sql3->closeCursor();
-
 			$prev_cat = '';
 
 			/* === Hook - Part1 : Set === */
@@ -834,7 +795,11 @@ switch($a) {
 
             $i = 1;
 			foreach ($extensions as $code => $info) {
-				if ($sort === 'cat' && $type === COT_EXT_TYPE_PLUGIN && $prev_cat !== $info['Category']) {
+				if (
+                    $sort === 'cat'
+                    && $type === ExtensionsDictionary::TYPE_PLUGIN
+                    && $prev_cat !== $info['Category']
+                ) {
 					// Render category heading
 					$t->assign(
                         'ADMIN_EXTENSIONS_CAT_TITLE',
@@ -846,6 +811,7 @@ switch($a) {
 				}
 
 				$exists = !isset($info['NotFound']);
+                $isInstalled = $extensionsService->isInstalled($code, $type, true);
 
 				if (!empty($info['Error'])) {
 					$t->assign([
@@ -880,31 +846,34 @@ switch($a) {
 
 					$totalConfig = !empty($totalConfigs[$type][$code]) ? $totalConfigs[$type][$code] : 0;
 
-					$ifthistools = isset($tools[$code]) && $tools[$code];
 					$ent_code = isset($cfgentries[$code]) ? $cfgentries[$code] : 0;
-					$isExtensionStandalone = isset($standalone[$code]) && $standalone[$code];
 
 					$hasStructure = in_array($code, $extensionsWithStructure, true);
 
-					if ($type == COT_EXT_TYPE_MODULE) {
+					if ($type === ExtensionsDictionary::TYPE_MODULE) {
 						$arg = 'mod';
 					} else {
 						$arg = 'pl';
 					}
 
-					$installed_ver = isset($installed_vers[$code]) ? $installed_vers[$code] : '';
+					$installed_ver = $installed_vers[$code] ?? '';
 
-                    $params = cot_get_extensionparams($code, $type == COT_EXT_TYPE_MODULE);
+                    $params = cot_get_extensionparams($code, $type === ExtensionsDictionary::TYPE_MODULE);
+
+                    $rightsUrl = null;
 
 					Cot::$L['info_name'] = Cot::$L['info_desc'] = Cot::$L['info_notes'] = '';
-					if (file_exists(cot_langfile($code, $type))) {
-						include cot_langfile($code, $type);
+                    $langFile = cot_langfile($code, $type);
+					if (!empty($langFile) ?? file_exists($langFile)) {
+						include $langFile;
 					}
 
 					$t->assign([
 						'ADMIN_EXTENSIONS_DETAILS_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code"),
 						'ADMIN_EXTENSIONS_NAME' => htmlspecialchars($params['name']),
-						'ADMIN_EXTENSIONS_TYPE' => $type == COT_EXT_TYPE_MODULE ? Cot::$L['Module'] : Cot::$L['Plugin'],
+						'ADMIN_EXTENSIONS_TYPE' => $type === ExtensionsDictionary::TYPE_MODULE
+                            ? Cot::$L['Module']
+                            : Cot::$L['Plugin'],
 						'ADMIN_EXTENSIONS_CODE_X' => $code,
 						'ADMIN_EXTENSIONS_NOTES' => $params['notes'],
 						'ADMIN_EXTENSIONS_DESCRIPTION' => $params['desc'],
@@ -916,14 +885,10 @@ switch($a) {
 						'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 						'ADMIN_EXTENSIONS_VERSION_INSTALLED' => $installed_ver,
 						'ADMIN_EXTENSIONS_VERSION_COMPARE' => version_compare($info['Version'], $installed_ver),
-						'ADMIN_EXTENSIONS_RIGHTS_URL' => $type == COT_EXT_TYPE_MODULE ?
-                            cot_url('admin', "m=rightsbyitem&ic=$code&io=a") :
-                            cot_url('admin', "m=rightsbyitem&ic=$type&io=$code"),
-						'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == COT_EXT_TYPE_PLUGIN ?
-                            cot_url('admin', "m=other&p=$code") :
-                            cot_url('admin', "m=$code"),
-						'ADMIN_EXTENSIONS_JUMPTO_URL' => isset($standalone[$code]) ? $standalone[$code] : '',
-						'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => $hasStructure
+						'ADMIN_EXTENSIONS_RIGHTS_URL' => $extensionsService->getRightsUrl($code, $type),
+						'ADMIN_EXTENSIONS_ADMIN_URL' => $extensionsService->getAdminPageUrl($code, $type),
+						'ADMIN_EXTENSIONS_JUMPTO_URL' => $extensionsService->getPublicPageUrl($code, $type),
+						'ADMIN_EXTENSIONS_STRUCTURE_URL' => $hasStructure
                             ? cot_url('admin', ['m' => 'structure', 'n' => $code])
                             : '',
 						//'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i),
@@ -932,6 +897,12 @@ switch($a) {
                         $t->assign([
                             // @deprecated For backward compatibility. Will be removed in future releases
                             'ADMIN_EXTENSIONS_ICO' => $params['legacyIcon'],
+
+                            /** @deprecated in 0.9.26 */
+                            'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $extensionsService->getAdminPageUrl($code, $type),
+                            'ADMIN_EXTENSIONS_JUMPTO_URL_STRUCT' => $hasStructure
+                                ? cot_url('admin', ['m' => 'structure', 'n' => $code])
+                                : '',
                         ]);
                     }
 
@@ -955,13 +926,7 @@ switch($a) {
 		$t->parse('MAIN.DEFAULT');
 	break;
 }
-/*
-if (!empty($code) && $b == 'install' && $totalconfig > 0)
-{
-	$t->assign('ADMIN_EXTENSIONS_CONFIG_URL', cot_url('admin', 'm=config&n=edit&o=plug&p='.$code));
-	$t->parse('MAIN.CONFIG_URL');
-}
-*/
+
 cot_display_messages($t);
 
 /* === Hook  === */
