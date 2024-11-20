@@ -9,9 +9,10 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+$L['sitemap_title'] = 'XML-sitemap';
 $L['info_desc'] = 'XML-sitemap with content data for search engines';
 
-$sitemap_freqs = array(
+$sitemap_freqs = [
 	'default' => 'Default',
 	'always'  => 'Always',
 	'hourly'  => 'Hourly',
@@ -19,26 +20,30 @@ $sitemap_freqs = array(
 	'weekly'  => 'Weekly',
 	'monthly' => 'Monthly',
 	'yearly'  => 'Yearly',
-	'never'   => 'Never'
-);
+	'never'   => 'Never',
+];
 
 $L['cfg_cache_ttl']          = 'Cache time to live';
 $L['cfg_freq']               = 'Default update frequency';
 $L['cfg_freq_params']        = $sitemap_freqs;
 $L['cfg_prio']               = 'Default priority';
 $L['cfg_perpage']            = 'Max items per sitemap page';
-$L['cfg_perpage_hint']       = 'If there are more links, sitemaps will be split into parts, see http://yoursite/index.php?r=sitemap&a=index';
+$L['cfg_perpage_hint']       = 'If there are more links, sitemaps will be split into parts, see https://yoursite/index.php?r=sitemap&a=index';
+$L['cfg_indexSep'] = 'Homepage';
 $L['cfg_index_freq']         = 'Homepage update frequency';
 $L['cfg_index_freq_params']  = $sitemap_freqs;
 $L['cfg_index_prio']         = 'Homepage priority';
+$L['cfg_pageSep'] = 'Pages';
 $L['cfg_page']               = 'Enable pages';
 $L['cfg_page_freq']          = 'Page update frequency';
 $L['cfg_page_freq_params']   = $sitemap_freqs;
 $L['cfg_page_prio']          = 'Page priority';
+$L['cfg_forumsSep'] = 'Forums';
 $L['cfg_forums']             = 'Enable forums';
 $L['cfg_forums_freq']        = 'Forums update frequency';
 $L['cfg_forums_freq_params'] = $sitemap_freqs;
 $L['cfg_forums_prio']        = 'Forums priority';
+$L['cfg_usersSep'] = 'Пользователи';
 $L['cfg_users']              = 'Enable users';
 $L['cfg_users_freq']         = 'Users update frequency';
 $L['cfg_users_freq_params']  = $sitemap_freqs;

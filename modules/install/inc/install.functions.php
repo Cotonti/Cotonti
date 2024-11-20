@@ -7,6 +7,9 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsDictionary;
+use cot\extensions\ExtensionsService;
+
 /**
  * The name of the file that is used to prevent the installer from running twice
  * @return string
@@ -71,8 +74,11 @@ function cot_installConfigReplace(&$file_contents, $config_name, $config_value)
  * @param string $ext_type Extension type: 'Module' or 'Plugin'
  * @param array $default_list A list of recommended extensions (checked by default)
  * @param array $selected_list A list of previously selected extensions
+ *
+ * @todo use ExtensionsDictionary::TYPE_XXX constants as extension type
+ *
  */
-function cot_installParseExtensions($ext_type, $default_list = array(), $selected_list = array())
+function cot_installParseExtensions($ext_type, $default_list = [], $selected_list = [])
 {
     global $t, $cfg, $L;
     $ext_type_lc = strtolower($ext_type);
@@ -84,6 +90,9 @@ function cot_installParseExtensions($ext_type, $default_list = array(), $selecte
 
     $prev_cat = '';
     $block_name = $ext_type_lc == 'plugin' ? "{$ext_type_uc}_CAT.{$ext_type_uc}_ROW" : "{$ext_type_uc}_ROW";
+
+    $extensionService = ExtensionsService::getInstance();
+
     foreach ($ext_list as $f => $info) {
         if (is_array($info)) {
             $code = $f;
@@ -111,46 +120,35 @@ function cot_installParseExtensions($ext_type, $default_list = array(), $selecte
                 $requires = '';
             }
 
-            if (!empty($info['Recommends_modules']) || !empty($info['Recommends_plugins']))
-            {
+            if (!empty($info['Recommends_modules']) || !empty($info['Recommends_plugins'])) {
                 $modules_list = empty($info['Recommends_modules']) ? $L['None']
                     : implode(', ', explode(',', $info['Recommends_modules']));
                 $plugins_list = empty($info['Recommends_plugins']) ? $L['None']
                     : implode(', ', explode(',', $info['Recommends_plugins']));
                 $recommends = cot_rc('install_code_recommends',
                     array('modules_list' => $modules_list, 'plugins_list' => $plugins_list));
-            }
-            else
-            {
+            } else {
                 $recommends = '';
             }
-            if ((is_array($selected_list) && count($selected_list)) > 0)
-            {
+
+            if ((is_array($selected_list) && count($selected_list)) > 0) {
                 $checked = in_array($code, $selected_list);
-            }
-            else
-            {
+            } else {
                 $checked = in_array($code, $default_list);
             }
-            $type = $ext_type == 'Module' ? 'module' : 'plug';
-            $L['info_name'] = '';
-            $L['info_desc'] = '';
-            if (file_exists(cot_langfile($code, $type)))
-            {
-                include cot_langfile($code, $type);
-            }
-            $t->assign(array(
+
+            $extensionType = $ext_type === 'Module' ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN;
+            $t->assign([
                 "{$ext_type_uc}_ROW_CHECKBOX" => cot_checkbox($checked, "install_{$ext_type_lc}s[$code]"),
-                "{$ext_type_uc}_ROW_TITLE" => empty($L['info_name']) ? $info['Name'] : $L['info_name'],
-                "{$ext_type_uc}_ROW_DESCRIPTION" => empty($L['info_desc']) ? $info['Description'] : $L['info_desc'],
+                "{$ext_type_uc}_ROW_TITLE" => $extensionService->getTitle($code, $extensionType),
+                "{$ext_type_uc}_ROW_DESCRIPTION" => $extensionService->getDescription($code, $extensionType),
                 "{$ext_type_uc}_ROW_REQUIRES" => $requires,
-                "{$ext_type_uc}_ROW_RECOMMENDS" => $recommends
-            ));
+                "{$ext_type_uc}_ROW_RECOMMENDS" => $recommends,
+            ]);
             $t->parse("MAIN.STEP_4.$block_name");
         }
     }
-    if ($ext_type_lc == 'plugin' && $prev_cat != '')
-    {
+    if ($ext_type_lc == 'plugin' && $prev_cat != '') {
         // Render last category
         $t->parse("MAIN.STEP_4.{$ext_type_uc}_CAT");
     }

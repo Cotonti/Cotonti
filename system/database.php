@@ -585,7 +585,7 @@ class CotDB
 	 */
 	public function insert($tableName, $data, $insertNull = false, $ignore = false, $updateFields = [])
 	{
-		if (!is_array($data)) {
+		if (!is_array($data) || $data === []) {
 			return 0;
 		}
 		$keys = '';
@@ -593,7 +593,7 @@ class CotDB
 
         // Check the array type
 		$arr_keys = array_keys($data);
-		$multiline = is_numeric($arr_keys[0]);
+		$multiline = isset($arr_keys[0]) && is_numeric($arr_keys[0]);
 
         // Build the query
 		if ($multiline) {

@@ -1278,6 +1278,9 @@ function cot_memory_allocate($needMemory)
  */
 function cot_module_active($extensionCode)
 {
+    if (empty($extensionCode)) {
+        return false;
+    }
 	return ExtensionsService::getInstance()
     ->isInstalled($extensionCode, ExtensionsDictionary::TYPE_MODULE);
 }
@@ -1323,6 +1326,9 @@ function cot_outputFilters($output)
  */
 function cot_plugin_active($extensionCode)
 {
+    if (empty($extensionCode)) {
+        return false;
+    }
 	return ExtensionsService::getInstance()
         ->isInstalled($extensionCode, ExtensionsDictionary::TYPE_PLUGIN);
 }

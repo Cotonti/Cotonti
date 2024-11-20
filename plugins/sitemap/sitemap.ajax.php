@@ -42,19 +42,19 @@ if ($regenerate) {
 	$items = 0;
 
 	// Start the sitemap with index
-	sitemap_parse($t, $items, array(
+	sitemap_parse($t, $items, [
 		'url'  => '', // root
 		'date' => '', // omit
 		'freq' => Cot::$cfg['plugin']['sitemap']['index_freq'],
-		'prio' => Cot::$cfg['plugin']['sitemap']['index_prio']
-	));
+		'prio' => Cot::$cfg['plugin']['sitemap']['index_prio'],
+	]);
 
 	if (Cot::$cfg['plugin']['sitemap']['page'] && cot_module_active('page')) {
 		// Sitemap for page module
 		require_once cot_incfile('page', 'module');
 
 		// Page categories
-		$auth_cache = array();
+		$auth_cache = [];
 
 		$category_list = Cot::$structure['page'];
 
@@ -66,27 +66,35 @@ if ($regenerate) {
 
 		foreach ($category_list as $c => $cat) {
 			$auth_cache[$c] = cot_auth('page', $c, 'R');
-			if (!$auth_cache[$c] || $c === 'system') continue;
+			if (!$auth_cache[$c] || $c === 'system') {
+                continue;
+            }
 			// Pagination support
-			$maxrowsperpage = ($cfg['page']['cat_' . $c]['maxrowsperpage']) ? $cfg['page']['cat_' . $c]['maxrowsperpage'] : $cfg['page']['cat___default']['maxrowsperpage'];
-			$subs = floor($cat['count'] / $maxrowsperpage) + 1;
-			foreach (range(1, $subs) as $pg)
-			{
-				$d = $cfg['easypagenav'] ? $pg : ($pg - 1) * $maxrowsperpage;
+			$maxrowsperpage = (Cot::$cfg['page']['cat_' . $c]['maxrowsperpage'])
+                ?: Cot::$cfg['page']['cat___default']['maxrowsperpage'];
+			$subs = Cot::$cfg['plugin']['sitemap']['pageCategoryPagination']
+                ? floor($cat['count'] / $maxrowsperpage) + 1
+                : 1;
+			foreach (range(1, $subs) as $pg) {
+				$d = Cot::$cfg['easypagenav'] ? $pg : ($pg - 1) * $maxrowsperpage;
 				$urlp = $pg > 1 ? "c=$c&d=$d" : "c=$c";
-				sitemap_parse($t, $items, array(
-					'url'  => cot_url('page', $urlp),
-					'date' => '', // omit
-					'freq' => $cfg['plugin']['sitemap']['page_freq'],
-					'prio' => $cfg['plugin']['sitemap']['page_prio']
-				));
+				sitemap_parse(
+                    $t,
+                    $items,
+                    [
+                        'url'  => cot_url('page', $urlp),
+                        'date' => '', // omit
+                        'freq' => Cot::$cfg['plugin']['sitemap']['page_freq'],
+                        'prio' => Cot::$cfg['plugin']['sitemap']['page_prio'],
+                    ]
+                );
 			}
 		}
 
 		// Pages
 		$sitemap_join_columns = '';
 		$sitemap_join_tables = '';
-		$sitemap_where = array();
+		$sitemap_where = [];
 		$sitemap_where['state'] = 'page_state = 0';
 		$sitemap_where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 

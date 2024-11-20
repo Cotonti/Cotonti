@@ -23,7 +23,7 @@ class ExtensionsService
 {
     use GetInstanceTrait;
 
-    public function getTitle(string $extensionCode, ?string $extensionType = null, ? string $lang = null): ?string
+    public function getTitle(string $extensionCode, ?string $extensionType = null, ? string $lang = null): string
     {
         global $cot_modules, $cot_plugins_enabled;
 
@@ -67,7 +67,60 @@ class ExtensionsService
             return $cot_plugins_enabled[$extensionCode]['title'];
         }
 
-        return null;
+        $extensionDirectory = $extensionType === ExtensionsDictionary::TYPE_MODULE
+            ? Cot::$cfg['modules_dir']
+            : Cot::$cfg['plugins_dir'];
+
+        $setupFile = $extensionDirectory . '/' . $extensionCode . '/' . $extensionCode . '.setup.php';
+        $exists = file_exists($setupFile);
+        if ($exists) {
+            $info = cot_infoget($setupFile, 'COT_EXT');
+            if (!empty($info['Name'])) {
+                return $info['Name'];
+            }
+        }
+
+        return $extensionCode;
+    }
+
+    public function getDescription(string $extensionCode, ?string $extensionType = null, ? string $lang = null): string
+    {
+        if ($extensionType === null) {
+            $extensionType = $this->getType($extensionCode);
+        }
+
+        // Some extension files depends on main lang file. For example: PFS
+        $L = Cot::$L;
+
+        unset($L[$extensionCode . '_description'], $L['info_desc']);
+
+        $langFile = cot_langfile($extensionCode, $extensionType, 'en', $lang);
+        if (!empty($langFile) && file_exists($langFile)) {
+            include $langFile;
+        }
+
+        if (!empty($L[$extensionCode . '_description'])) {
+            return $L[$extensionCode . '_description'];
+        }
+
+        if (!empty($L['info_desc'])) {
+            return $L['info_desc'];
+        }
+
+        $extensionDirectory = $extensionType === ExtensionsDictionary::TYPE_MODULE
+            ? Cot::$cfg['modules_dir']
+            : Cot::$cfg['plugins_dir'];
+
+        $setupFile = $extensionDirectory . '/' . $extensionCode . '/' . $extensionCode . '.setup.php';
+        $exists = file_exists($setupFile);
+        if ($exists) {
+            $info = cot_infoget($setupFile, 'COT_EXT');
+            if (!empty($info['Description'])) {
+                return $info['Description'];
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -258,8 +311,7 @@ class ExtensionsService
     }
 
     /**
-     * Checks if a extension is currently installed and active
-     * @see cot_extension_installed() An alternative solution
+     * Checks if an extension is currently installed and active
      */
     public function isInstalled(string $extensionCode, ?string $extensionType = null, $refreshData = false): bool
     {
@@ -305,5 +357,23 @@ class ExtensionsService
         }
 
         return isset($cot_plugins_enabled[$extensionCode]);
+    }
+
+    /**
+     * Checks if a module is currently installed and active
+     * @see ExtensionsService::isInstalled()
+     */
+    public function isModuleActive(string $extensionCode): bool
+    {
+        return $this->isInstalled($extensionCode, ExtensionsDictionary::TYPE_MODULE);
+    }
+
+    /**
+     * Checks if a plugin is currently installed and active
+     * @see ExtensionsService::isInstalled()
+     */
+    public function isPluginActive(string $extensionCode): bool
+    {
+        return $this->isInstalled($extensionCode, ExtensionsDictionary::TYPE_PLUGIN);
     }
 }

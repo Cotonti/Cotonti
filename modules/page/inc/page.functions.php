@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsService;
+
 defined('COT_CODE') or die('Wrong URL.');
 
 // Requirements
@@ -1047,15 +1049,20 @@ function cot_page_enum(
 
 	// Render pagination
 	$url_params = $_GET;
-    if(isset($url_params['rwr'])) unset($url_params['rwr']);
+    if (isset($url_params['rwr'])) {
+        unset($url_params['rwr']);
+    }
 	$url_area = 'index';
-	$module_name = cot_import('e', 'G', 'ALP');
-	if (cot_module_active($module_name)) {
-		$url_area = $url_params['e'];
-		unset($url_params['e']);
-	}  elseif (cot_plugin_active($module_name)) {
-		$url_area = 'plug';
-	}
+    $extensionService = ExtensionsService::getInstance();
+	$extensionCode = cot_import('e', 'G', 'ALP');
+    if (!empty($extensionCode)) {
+        if ($extensionService->isModuleActive($extensionCode)) {
+            $url_area = $url_params['e'];
+            unset($url_params['e']);
+        } elseif ($extensionService->isPluginActive($extensionCode)) {
+            $url_area = 'plug';
+        }
+    }
 	unset($url_params[$pagination]);
 
     $pagenav = [

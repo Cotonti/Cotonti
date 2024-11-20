@@ -603,7 +603,7 @@ switch($a) {
 
 					foreach (explode(',', $info[$dep_type]) as $ext) {
 						$ext = trim($ext);
-						$dep_installed = cot_extension_installed($ext);
+						$dep_installed = $extensionsService->isInstalled($ext, null, true);
 						if ($dep_obligatory) {
 							$dep_class = $dep_installed ? 'highlight_green' : 'highlight_red';
 							$dependencies_satisfied &= $dep_installed;

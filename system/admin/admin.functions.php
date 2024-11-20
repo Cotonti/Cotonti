@@ -128,30 +128,7 @@ function cot_get_extensionparams($code, $is_module = false)
 
 	$dir = $is_module ? Cot::$cfg['modules_dir'] : Cot::$cfg['plugins_dir'];
 
-    $name = $desc = $notes = '';
-	if ($is_module) {
-        if (isset($cot_modules[$code])) {
-            $name = $cot_modules[$code]['title'];
-        }
-	} elseif (isset($cot_plugins_enabled[$code])) {
-        $name = $cot_plugins_enabled[$code]['title'];
-	}
-
-    $ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
-    $exists = file_exists($ext_info);
-    $info = false;
-    if ($exists) {
-        $info = cot_infoget($ext_info, 'COT_EXT');
-        $desc = !empty($info) ? $info['Description'] : '';
-    }
-
-    if ($info == false) {
-        $info = ['Name' => $code];
-    }
-
-    if ($name === '') {
-        $name = (isset($info['Name']) && $info['Name'] != '') ? $info['Name'] : $code;
-    }
+    $notes = '';
 
     $typeKey = $is_module ? 'module' : 'plug';
 
@@ -200,32 +177,29 @@ function cot_get_extensionparams($code, $is_module = false)
         }
     }
 
-    $tmpName = $name;
-    $name = ExtensionsService::getInstance()
-        ->getTitle($code, $is_module ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN);
-    if (empty($name)) {
-        $name = $tmpName;
-    }
-    unset($tmpName);
+    $extensionService = ExtensionsService::getInstance();
 
     $langFile = cot_langfile(
         $code, $is_module ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN
     );
     if (!empty($langFile) && file_exists($langFile)) {
-        $L['info_desc'] = $L['info_notes'] = '';
+        $L['info_notes'] = '';
         include $langFile;
         // We are including lang file, so we should use $L, not Cot::$L
-        if (!empty($L['info_desc'])) {
-            $desc = $L['info_desc'];
-        }
         if (!empty($L['info_notes'])) {
             $notes = $L['info_notes'];
         }
     }
 
 	$result = [
-        'name' => $name,
-		'desc' => $desc,
+        'name' => $extensionService->getTitle(
+            $code,
+            $is_module ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN
+        ),
+		'desc' => $extensionService->getDescription(
+            $code,
+            $is_module ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN
+        ),
         'notes' => $notes,
 		'icon' => $icon,
 	];

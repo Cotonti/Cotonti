@@ -840,6 +840,9 @@ function cot_extension_catcmp($ext1, $ext2)
  */
 function cot_extension_installed($extensionCode)
 {
+    if (empty($extensionCode)) {
+        return false;
+    }
     return ExtensionsService::getInstance()->isInstalled($extensionCode, null, true);
 }
 
@@ -850,6 +853,8 @@ function cot_extension_installed($extensionCode)
  * @param string $name Module code
  * @return mixed
  * @global CotDB $db
+ * @deprecated
+ * @see ExtensionsService::getType()
  */
 function cot_extension_type($name)
 {
