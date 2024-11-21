@@ -4,7 +4,7 @@
 class CotontiApplication
 {
     /**
-     * Load data from /index.php?a=get
+     * Load data from /index.php?n=main&a=get
      * Can be useful, for example when it is needed to load some dynamic content to cached page
      *
      * Example:
@@ -38,7 +38,7 @@ class CotontiApplication
 
         if (dataToLoad.length > 0) {
             // @todo change to system controller when it will be implemented
-            let params = new URLSearchParams({a: 'get',});
+            let params = new URLSearchParams({n: 'main', a: 'get'});
 
             dataToLoad.forEach((item, index, array) => {
                 params.append('data[' + index + ']', item);

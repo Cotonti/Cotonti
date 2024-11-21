@@ -172,9 +172,16 @@ table.fico td img	{ margin-right:10px; vertical-align:middle; }
 
 form { }
 input, select, textarea, button	{ font:normal 1em Georgia; padding:2px; }
-textarea { width: 99%; min-height: 100px }
+textarea {
+	/*width: 99%; */
+	min-height: 100px
+}
 input[type="text"], input[type="password"], textarea {
-	width: 100%; max-width: 100%;
+	width: 100%;
+	max-width: 100%;
+}
+input[name="rverify"] {
+	width: 130px;
 }
 input[type="radio"], input[type="checkbox"] {
 	margin-right: 5px;

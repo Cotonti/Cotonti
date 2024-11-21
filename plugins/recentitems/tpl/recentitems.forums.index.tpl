@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-
 <table class="cells">
 	<tr>
 		<td class="coltop width5">&nbsp;</td>
@@ -7,8 +6,7 @@
 		<td class="coltop width25">{PHP.L.Lastpost}</td>
 		<td class="coltop width15">{PHP.L.Posts}</td>
 	</tr>
-
-<!-- BEGIN: TOPICS_ROW -->
+	<!-- BEGIN: TOPICS_ROW -->
 	<tr>
 		<td class="centerall {FORUM_ROW_ODDEVEN}">{FORUM_ROW_ICON}</td>
 		<td class="{FORUM_ROW_ODDEVEN}">
@@ -21,12 +19,11 @@
 		</td>
 		<td class="centerall {FORUM_ROW_ODDEVEN}">{FORUM_ROW_POSTS_COUNT}</td>
 	</tr>
-<!-- END: TOPICS_ROW -->
-<!-- BEGIN: NO_TOPICS_FOUND -->
+	<!-- END: TOPICS_ROW -->
+	<!-- BEGIN: NO_TOPICS_FOUND -->
 	<tr>
 		<td class="centerall" colspan="4">{PHP.L.recentitems_nonewposts}</td>
 	</tr>
-<!-- END: NO_TOPICS_FOUND -->
+	<!-- END: NO_TOPICS_FOUND -->
 </table>
-
 <!-- END: MAIN -->

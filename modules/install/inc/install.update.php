@@ -299,7 +299,7 @@ if (defined('COT_UPGRADE') && !cot_error_found()) {
 		if ($new_rev === true) {
 			$new_rev = $rev;
 		}
-		$t->assign('UPDATE_TITLE', cot_rc('install_update_success', array('rev' => $new_rev)));
+		$t->assign('UPDATE_TITLE', cot_rc('install_update_success', ['rev' => $new_rev]));
 		$t->assign('UPDATE_COMPLETED_NOTE', $L['install_complete_note']);
 		$t->parse('MAIN.COMPLETED');
 	}
