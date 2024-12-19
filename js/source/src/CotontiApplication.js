@@ -115,4 +115,4 @@ class CotontiApplication
     }
 }
 
-let cot = new CotontiApplication();
+window.cot = new CotontiApplication();

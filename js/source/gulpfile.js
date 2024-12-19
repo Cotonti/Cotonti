@@ -1,33 +1,49 @@
 const { src, dest, series, watch } = require('gulp');
+const webpack = require('webpack-stream');
 const concat = require('gulp-concat');
 const rename = require("gulp-rename");
 const uglify = require('gulp-uglify-es').default;
-const sourcemaps = require('gulp-sourcemaps');
+const clean = require('gulp-clean');
 
-const sourceFiles = [
-    'src/_header.js',
+const modules = [
     'src/CotontiApplication.js',
-    'src/base.js',
 ];
 
+let mode = 'production'
+
+const cleanDistDirectory = () =>
+    src('./dist/', {read: false, allowEmpty: true})
+        .pipe(clean());
+
+const buildModules = () =>
+    src(modules, {sourcemaps: true})
+        .pipe(
+            webpack({
+                mode: mode,
+                devtool: 'inline-source-map'
+            })
+        )
+        .pipe(rename('modules.js'))
+        .pipe(dest('./dist', {sourcemaps: true}));
+
 const buildJs = () =>
-    src(sourceFiles)
-    .pipe(sourcemaps.init())
-    .pipe(concat('base.js'))
-    .pipe(sourcemaps.write())
-    .pipe(dest('../'))
-    .pipe(rename('base.min.js'))
-    .pipe(uglify())
-    .pipe(sourcemaps.write())
-    //.pipe(sourcemaps.write('./'))
-    .pipe(dest('../'));
+    src([
+        'src/_header.js',
+        'dist/modules.js',
+        'src/base.js'
+    ], {sourcemaps: true})
+        .pipe(concat('base.js'))
+        .pipe(dest('../', {sourcemaps: true}))
+        .pipe(rename('base.min.js'))
+        .pipe(uglify())
+        .pipe(dest('../', {sourcemaps: true}));
 
 /**
  * Build base.js
  * Use command
  * > gulp build
  */
-exports.build = series(buildJs);
+exports.build = series(cleanDistDirectory, buildModules, buildJs, cleanDistDirectory);
 
 /**
  * File watcher
@@ -35,5 +51,7 @@ exports.build = series(buildJs);
  *
  * Default delay is 200 ms
  */
-exports.watch = () => watch('src/*.js', { delay: 100 }, series(buildJs));
-
+exports.watch = () => {
+    mode = 'development';
+    return watch('src/*.js', {delay: 100}, series(buildModules, buildJs));
+}

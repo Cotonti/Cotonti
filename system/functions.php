@@ -5347,8 +5347,8 @@ if (!function_exists('mb_lcfirst')) {
 /**
  * Resource string formatter function. Takes a string with predefined variable substitution, e.g.
  * 'My {$pet} likes {$food}. And {$pet} is hungry!' and an assotiative array of substitution values, e.g.
- * array('pet' => 'rabbit', 'food' => 'carrots') and assembles a formatted result. If {$var} cannot be found
- * in $args, it will be taken from global scope. You can also use parameter strings instead of arrays, e.g.
+ * array('pet' => 'rabbit', 'food' => 'carrots') and assembles a formatted result.
+ * You can also use parameter strings instead of arrays, e.g.
  * 'pet=rabbit&food=carrots'. Or omit the second parameter in case all substitutions are globals.
  *
  * @global array $R Resource strings
@@ -5383,9 +5383,6 @@ function cot_rc($name, $params = [])
 			$val = null;
 			if (isset($args[$var])) {
                 $val = $args[$var];
-              // We should not use global vars
-//            } elseif(isset($GLOBALS[$var])) {
-//                $val = $GLOBALS[$var];
             }
 			if ($val !== null) {
                 $res = str_replace($m[0], $val, $res);
