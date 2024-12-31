@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\serverEvents\ServerEventsObserverService;
+
 // Environment
 const COT_CODE = true;
 const COT_CORE = true;
@@ -35,10 +37,13 @@ if ($logout) {
 
 	if (Cot::$usr['id'] > 0) {
 		cot_uriredir_apply(Cot::$cfg['redirbkonlogout']);
+
+        $serverEventsObserverService = ServerEventsObserverService::getInstance();
+        $serverEventsObserverService->remove(Cot::$usr['id'] , $serverEventsObserverService->getTokenForCurrentUser());
 	}
 
 	if (cot_import(Cot::$sys['site_id'], 'COOKIE', 'TXT')) {
-		cot_setcookie(Cot::$sys['site_id'], '', time()-63072000, Cot::$cfg['cookiepath'],
+		cot_setcookie(Cot::$sys['site_id'], '', time() - 63072000, Cot::$cfg['cookiepath'],
             Cot::$cfg['cookiedomain'], Cot::$sys['secure'], true);
 	}
 

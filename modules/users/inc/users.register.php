@@ -122,30 +122,24 @@ if ($a == 'add') {
 		}
 		/* ===== */
 
-		if($authorize) cot_user_authorize($userid);
+		if ($authorize) {
+            cot_user_authorize($userid);
+        }
 
-		if (Cot::$cfg['users']['regnoactivation'] || Cot::$db->countRows(Cot::$db->users) == 1)
-		{
+		if (Cot::$cfg['users']['regnoactivation'] || Cot::$db->countRows(Cot::$db->users) == 1) {
 			cot_redirect(cot_url('message', 'msg=106', '', true));
-		}
-		elseif (Cot::$cfg['users']['regrequireadmin'])
-		{
+		} elseif (Cot::$cfg['users']['regrequireadmin']) {
 			cot_redirect(cot_url('message', 'msg=118', '', true));
-		}
-		else
-		{
+		} else {
 			cot_redirect(cot_url('message', 'msg=105', '', true));
 		}
-	}
-	else
-	{
+	} else {
 		cot_redirect(cot_url('users', 'm=register', '', true));
 	}
 
 } elseif ($a == 'validate' && mb_strlen($v) == 32) {
 	/* === Hook for the plugins === */
-	foreach (cot_getextplugins('users.register.validate.first') as $pl)
-	{
+	foreach (cot_getextplugins('users.register.validate.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */

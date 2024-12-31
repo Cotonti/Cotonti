@@ -15,6 +15,17 @@ const cleanDistDirectory = () =>
     src('./dist/', {read: false, allowEmpty: true})
         .pipe(clean());
 
+const buildWorker = () =>
+    src(['src/serverEvents/driver/sharedWorkerSSE.js'], {sourcemaps: true})
+        .pipe(
+            webpack({
+                mode: mode,
+                devtool: 'inline-source-map'
+            })
+        )
+        .pipe(rename('sharedWorkerSSE.min.js'))
+        .pipe(dest('../', {sourcemaps: true}));
+
 const buildModules = () =>
     src(modules, {sourcemaps: true})
         .pipe(
@@ -43,7 +54,7 @@ const buildJs = () =>
  * Use command
  * > gulp build
  */
-exports.build = series(cleanDistDirectory, buildModules, buildJs, cleanDistDirectory);
+exports.build = series(cleanDistDirectory, buildWorker, buildModules, buildJs, cleanDistDirectory);
 
 /**
  * File watcher
@@ -53,5 +64,5 @@ exports.build = series(cleanDistDirectory, buildModules, buildJs, cleanDistDirec
  */
 exports.watch = () => {
     mode = 'development';
-    return watch('src/*.js', {delay: 100}, series(buildModules, buildJs));
+    return watch('src/**/*.js', {delay: 100}, series(buildWorker, buildModules, buildJs));
 }

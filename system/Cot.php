@@ -107,6 +107,8 @@ class Cot
             $db->registerTable('online');
             $db->registerTable('extra_fields');
             $db->registerTable('plugins');
+            $db->registerTable('server_events');
+            $db->registerTable('server_events_observers');
             $db->registerTable('structure');
             $db->registerTable('updates');
             $db->registerTable('users');

@@ -1,8 +1,23 @@
+import {ServerEvents} from './serverEvents/ServerEvents.js';
+
 /**
  * Base Cotonti class
  */
 class CotontiApplication
 {
+    #severEvents = null;
+
+    /**
+     * Get Server Events object
+     * @returns {ServerEvents}
+     */
+    getServerEvents() {
+        if (this.#severEvents === null) {
+            this.#severEvents = new ServerEvents();
+        }
+        return this.#severEvents;
+    }
+
     /**
      * Load data from /index.php?n=main&a=get
      * Can be useful, for example when it is needed to load some dynamic content to cached page

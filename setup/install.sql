@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.23
+ * Version: 0.9.26
  */
 
 DROP TABLE IF EXISTS `cot_auth`;
@@ -239,11 +239,35 @@ CREATE TABLE `cot_plugins` (
   `pl_part` varchar(255) NOT NULL DEFAULT '',
   `pl_title` varchar(255) NOT NULL DEFAULT '',
   `pl_file` varchar(255) NOT NULL,
-  `pl_order` tinyint UNSIGNED NOT NULL DEFAULT '10',
-  `pl_active` tinyint UNSIGNED NOT NULL DEFAULT '1',
-  `pl_module` tinyint UNSIGNED NOT NULL DEFAULT '0',
+  `pl_order` tinyint UNSIGNED NOT NULL DEFAULT 10,
+  `pl_active` tinyint UNSIGNED NOT NULL DEFAULT 1,
+  `pl_module` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY  (`pl_id`),
   INDEX `plugins_active_idx` (`pl_active`)
+);
+
+DROP TABLE IF EXISTS `cot_server_events`;
+CREATE TABLE `cot_server_events` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `user_id` INT UNSIGNED NOT NULL,
+    `event` VARCHAR(100) NOT NULL,
+    `data` TEXT NOT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    INDEX `server_events_user_id_idx` (`user_id`)
+);
+
+DROP TABLE IF EXISTS `cot_server_events_observers`;
+CREATE TABLE `cot_server_events_observers` (
+   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   `user_id` INT UNSIGNED NOT NULL,
+   `token` VARCHAR(255) NOT NULL,
+   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `last_event_id` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+   PRIMARY KEY (`id`),
+   INDEX `server_events_observers_user_id_idx` (`user_id`),
+   INDEX `server_events_observers_created_at_idx` (`created_at`)
 );
 
 DROP TABLE IF EXISTS `cot_structure`;

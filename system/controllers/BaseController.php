@@ -7,6 +7,12 @@ namespace cot\controllers;
 use BadMethodCallException;
 use cot\exceptions\InvalidConfigException;
 
+/**
+ * Base controller class
+ * @package Cotonti
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ */
 abstract class BaseController
 {
     /**
@@ -88,7 +94,7 @@ abstract class BaseController
             );
         }
 
-        if (isset($actions[$actionId]) && !isset($actions[$actionId]['class'])) {
+        if (isset($actions[$actionId]) && is_array($actions[$actionId]) && !isset($actions[$actionId]['class'])) {
             throw new InvalidConfigException(
                 'Action configuration must be an array containing a "class" element.'
             );

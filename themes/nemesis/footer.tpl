@@ -60,18 +60,12 @@
 	<!-- Thanks! -->
 	</div>
 
-	<!-- IF {PHP.cot_plugins_active.search} -->
+	<!-- IF {PHP|cot_plugin_active('search')} -->
 	<div id="magnifier">
 		<form id="search" action="{PHP|cot_url('search')}" method="GET">
 			<!-- IF {PHP.cfg.plugin.urleditor.preset} !== 'handy' --><input type="hidden" name="e" value="search" /><!-- ENDIF -->
 			<p>
-				<input
-					type="text"
-					name="sq"
-					value="{PHP.L.Search}..."
-					onblur="if (this.value == '') this.value = '{PHP.L.Search}...';"
-					onfocus="if (this.value == '{PHP.L.Search}...') this.value = '';"
-				/>
+				<input type="text" name="sq" value="" placeholder="{PHP.L.Search}..." />
 				<button type="submit" title="{PHP.L.Search}!">{PHP.L.Search}</button>
 			</p>
 		</form>
