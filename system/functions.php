@@ -1320,7 +1320,6 @@ function cot_outputFilters($output)
 /**
  * Checks if a plugin is currently installed and active
  *
- * @global array $cot_plugins_active Active plugins registry
  * @param string $extensionCode Plugin code
  * @return bool
  */

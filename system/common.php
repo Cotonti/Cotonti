@@ -268,11 +268,13 @@ $sys['parser'] = $cfg['parser'];
 
 /* ======== Modules and plugins ======== */
 $extensions = [];
+$extensionsHasPartEnabled = [];
 if (
     (empty($cot_plugins) && !defined('COT_INSTALL'))
     || empty($cot_modules)
 ) {
-    $extensions = Cot::$db->query('SELECT * FROM ' . Cot::$db->core . ' WHERE ct_state = 1 AND ct_lock = 0')->fetchAll();
+    $extensions = Cot::$db->query('SELECT * FROM ' . Cot::$db->core . ' WHERE ct_state = 1 AND ct_lock = 0')
+        ->fetchAll();
 }
 if (empty($cot_plugins) && !defined('COT_INSTALL')) {
 	$sql = Cot::$db->query(
@@ -281,30 +283,18 @@ if (empty($cot_plugins) && !defined('COT_INSTALL')) {
     );
 	$cot_plugins = [];
 
-	/**
-	* @var array<string, bool> $cot_plugins_active
-	* @deprecated use $cot_plugins_enabled instead
-	*/
-	$cot_plugins_active = [];
-
 	if ($sql->rowCount() > 0) {
 		while ($row = $sql->fetch()) {
 			$cot_plugins[$row['pl_hook']][] = $row;
+            $extensionsHasPartEnabled[$row['pl_code']] = [
+                'isModule' => (bool) $row['pl_module'],
+            ];
 		}
 	}
 	$sql->closeCursor();
 
-	if (!empty($extensions)) {
-		foreach ($extensions as $row) {
-			if ($row['ct_plug']) {
-				$cot_plugins_active[$row['ct_code']] = true;
-			}
-		}
-	}
-
 	if (!empty(Cot::$cache)) {
 		Cot::$cache->db->store('cot_plugins', $cot_plugins, 'system');
-		Cot::$cache->db->store('cot_plugins_active', $cot_plugins_active, 'system');
 	}
 }
 
@@ -313,18 +303,27 @@ if (empty($cot_modules)) {
 	$cot_modules = [];
 	if (!empty($extensions)) {
 		foreach ($extensions as $row) {
+            if (!isset($extensionsHasPartEnabled[$row['ct_code']])) {
+                continue;
+            }
 			if ($row['ct_plug']) {
-				$cot_plugins_enabled[$row['ct_code']] = array(
+                if ($extensionsHasPartEnabled[$row['ct_code']]['isModule']) {
+                    continue;
+                }
+				$cot_plugins_enabled[$row['ct_code']] = [
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],
-					'version' => $row['ct_version']
-				);
+					'version' => $row['ct_version'],
+				];
 			} else {
-				$cot_modules[$row['ct_code']] = array(
+                if (!$extensionsHasPartEnabled[$row['ct_code']]['isModule']) {
+                    continue;
+                }
+				$cot_modules[$row['ct_code']] = [
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],
-					'version' => $row['ct_version']
-				);
+					'version' => $row['ct_version'],
+				];
 			}
 		}
 	}
@@ -334,7 +333,7 @@ if (empty($cot_modules)) {
 		Cot::$cache->db->store('cot_plugins_enabled', $cot_plugins_enabled, 'system');
 	}
 }
-unset($extensions);
+unset($extensions, $extensionsHasPartEnabled);
 
 /* ======== Gzip and output filtering ======== */
 

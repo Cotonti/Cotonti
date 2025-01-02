@@ -6,10 +6,11 @@ defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
 
 global $db_server_events, $db_server_events_observers;
 
-if (empty($db_server_events) || empty($db_server_events_observers)) {
+if (empty($db_server_events) || empty($db_server_events_observers) || empty($db_plugins)) {
     // Registering tables
     Cot::$db->registerTable('server_events');
     Cot::$db->registerTable('server_events_observers');
+    Cot::$db->registerTable('plugins');
 }
 
 if (!Cot::$db->tableExists(Cot::$db->server_events)) {
@@ -36,4 +37,8 @@ if (!Cot::$db->tableExists(Cot::$db->server_events)) {
         . 'INDEX `server_events_observers_created_at_idx` (' . Cot::$db->quoteColumnName('updated_at') . ') '
         . ');'
     );
+}
+
+if (!Cot::$db->indexExists(Cot::$db->plugins,  'plugins_code_idx')) {
+    Cot::$db->addIndex(Cot::$db->plugins,  'plugins_code_idx', ['pl_code']);
 }

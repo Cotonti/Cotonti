@@ -573,7 +573,7 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 function cot_extension_uninstall($code, $isModule = false)
 {
 	global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db, $db_x, $db_plugins, $cot_plugins,
-           $cot_plugins_active, $cot_plugins_enabled, $cot_modules, $env, $structure, $db_structure, $L, $R;
+           $cot_plugins_enabled, $cot_modules, $env, $structure, $db_structure, $L, $R;
 
 	$path = $isModule ? $cfg['modules_dir'] . "/$code" : $cfg['plugins_dir'] . "/$code";
 
@@ -653,7 +653,6 @@ function cot_extension_uninstall($code, $isModule = false)
 		$sql->closeCursor();
 	}
 
-	$cot_plugins_active[$code] = false;
 	if (!$isModule) {
 		unset($cot_plugins_enabled[$code]);
 	} else {
@@ -1050,23 +1049,54 @@ function cot_plugin_add($hook_bindings, $code, $title, $isModule = false)
 /**
  * Suspends a plugin or one of its parts
  *
- * @param string $name Module or plugin name
+ * @param string $extensionCode Module or plugin code
  * @param mixed $part ID of the binding to suspend or 0 to suspend all; if part name is passed, then that part is suspended
- * @return int Number of bindings suspended
- * @global CotDB $db
+ * @return bool
  */
-function cot_plugin_pause($name, $part = 0)
+function cot_plugin_pause($extensionCode, $part = 0)
 {
-	global $db, $db_plugins;
+    $condition = 'pl_code = :code';
+    $params = ['code' => $extensionCode];
+    if (is_numeric($part) && $part > 0) {
+        $condition .= ' AND pl_id = :pluginId';
+        $params['pluginId'] = $part;
+    } elseif (is_string($part)) {
+        $condition .= ' AND pl_part = :part';
+        $params['part'] = $part;
+    }
 
-	$condition = "pl_code = '$name'";
-	if (is_numeric($part) && $part > 0) {
-		$condition .= " AND pl_id = $part";
-	} elseif (is_string($part)) {
-		$condition .= " AND pl_part = " . $db->quote($part);
-	}
+    Cot::$db->beginTransaction();
+    try {
+        $result = Cot::$db->update(Cot::$db->plugins, ['pl_active' => 0], $condition, $params);
+        if ($result < 1) {
+            return false;
+        }
 
-	return $db->update($db_plugins, ['pl_active' => 0], $condition);
+        $activeCount = Cot::$db->query(
+            'SELECT COUNT(*) FROM ' . Cot::$db->plugins. ' WHERE pl_code = :code AND pl_active = 1',
+            ['code' => $extensionCode]
+        )->fetchColumn();
+
+        if ($activeCount > 1) {
+            $data = ['ct_state' => 1];
+        } else {
+            $data = ['ct_state' => 0];
+        }
+
+        Cot::$db->update(
+            Cot::$db->core,
+            $data,
+            'ct_code = :code',
+            ['code' => $extensionCode]
+        ) > 0;
+
+        Cot::$db->commit();
+    } catch (Throwable $e) {
+        Cot::$db->rollBack();
+        throw $e;
+    }
+
+	return true;
 }
 
 /**
@@ -1092,24 +1122,41 @@ function cot_plugin_remove($name, $binding_id = 0)
 /**
  * Resumes a suspended plugin or one of its parts
  *
- * @param string $name Module or plugin name
- * @param mixed  $part ID of the binding to resume or 0 to resume all; if part name is passed, then that part is resumed
- * @return int Number of bindings suspended
- * @global CotDB $db
+ * @param string $extensionCode Module or plugin code
+ * @param mixed $part ID of the binding to resume or 0 to resume all; if part name is passed, then that part is resumed
+ * @return bool
  */
-function cot_plugin_resume($name, $part = 0)
+function cot_plugin_resume($extensionCode, $part = 0)
 {
-	global $db, $db_plugins;
-
-	$condition = "pl_code = '$name'";
-	if (is_numeric($part) && $part > 0)
-	{
-		$condition .= " AND pl_id = $part";
-	}
-	elseif (is_string($part))
-	{
-		$condition .= " AND pl_part = " . $db->quote($part);
+	$condition = 'pl_code = :code';
+    $params = ['code' => $extensionCode];
+	if (is_numeric($part) && $part > 0) {
+		$condition .= ' AND pl_id = :pluginId';
+        $params['pluginId'] = $part;
+	} elseif (is_string($part)) {
+		$condition .= ' AND pl_part = :part';
+        $params['part'] = $part;
 	}
 
-	return $db->update($db_plugins, array('pl_active' => 1), $condition);
+    Cot::$db->beginTransaction();
+    try {
+        $result = Cot::$db->update(Cot::$db->plugins, ['pl_active' => 1], $condition, $params) > 0;
+        if ($result < 1) {
+            return false;
+        }
+
+        Cot::$db->update(
+            Cot::$db->core,
+            ['ct_state' => 1],
+            'ct_code = :code',
+            ['code' => $extensionCode]
+        ) > 0;
+
+        Cot::$db->commit();
+    } catch (Throwable $e) {
+        Cot::$db->rollBack();
+        throw $e;
+    }
+
+	return true;
 }

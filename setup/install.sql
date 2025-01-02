@@ -243,7 +243,8 @@ CREATE TABLE `cot_plugins` (
   `pl_active` tinyint UNSIGNED NOT NULL DEFAULT 1,
   `pl_module` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY  (`pl_id`),
-  INDEX `plugins_active_idx` (`pl_active`)
+  INDEX `plugins_active_idx` (`pl_active`),
+  INDEX `plugins_code_idx` (`pl_code`)
 );
 
 DROP TABLE IF EXISTS `cot_server_events`;
