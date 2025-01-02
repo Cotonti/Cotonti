@@ -33,11 +33,21 @@ $adminTitle = Cot::$L['Structure'];
 
 $extensionsWithStructure = cot_getExtensionsWithStructure();
 
+$legacyMode = isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode'];
+if ($legacyMode) {
+    $extension_structure = [];
+}
+
 /* === Hook === */
 foreach (cot_getextplugins('admin.structure.first') as $pl) {
 	include $pl;
 }
 /* ===== */
+
+if ($legacyMode && !empty($extension_structure)) {
+    $extensionsWithStructure = array_merge($extensionsWithStructure, $extension_structure);
+    unset($extension_structure);
+}
 
 if (empty($n)) {
 	$adminPath[] = [cot_url('admin', 'm=structure'), Cot::$L['Structure'],];
