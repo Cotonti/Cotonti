@@ -25,4 +25,7 @@ class ExtensionsDictionary
      */
     public const TYPE_MODULE = 'module';
     public const TYPE_PLUGIN = 'plug';
+
+    public const DEFAULT_CONTROLLER_ID = 'index';
+    public const DEFAULT_ACTION_ID = 'index';
 }

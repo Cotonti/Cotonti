@@ -155,16 +155,12 @@ CREATE TABLE `cot_core` (
   `ct_code` varchar(64) NOT NULL,
   `ct_title` varchar(64) NOT NULL,
   `ct_version` varchar(32) NOT NULL DEFAULT '',
-  `ct_state` tinyint UNSIGNED NOT NULL DEFAULT '1',
-  `ct_lock` tinyint UNSIGNED NOT NULL DEFAULT '0',
-  `ct_plug` tinyint UNSIGNED NOT NULL DEFAULT '0',
+  `ct_state` tinyint UNSIGNED NOT NULL DEFAULT 1,
+  `ct_lock` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `ct_plug` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY  (`ct_id`),
   KEY `ct_code` (`ct_code`)
 );
-
-INSERT INTO `cot_core` (`ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_lock`) VALUES
-('admin', 'Administration panel', '0.7.0', 1, 1),
-('message', 'Messages', '0.7.0', 1, 1);
 
 DROP TABLE IF EXISTS `cot_extra_fields`;
 CREATE TABLE `cot_extra_fields` (

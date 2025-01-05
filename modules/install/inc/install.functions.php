@@ -8,6 +8,7 @@
  */
 
 use cot\extensions\ExtensionsDictionary;
+use cot\extensions\ExtensionsHelper;
 use cot\extensions\ExtensionsService;
 
 /**
@@ -91,7 +92,7 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
     $prev_cat = '';
     $block_name = $ext_type_lc == 'plugin' ? "{$ext_type_uc}_CAT.{$ext_type_uc}_ROW" : "{$ext_type_uc}_ROW";
 
-    $extensionService = ExtensionsService::getInstance();
+    $extensionHelper = ExtensionsHelper::getInstance();
 
     foreach ($ext_list as $f => $info) {
         if (is_array($info)) {
@@ -140,8 +141,8 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
             $extensionType = $ext_type === 'Module' ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN;
             $t->assign([
                 "{$ext_type_uc}_ROW_CHECKBOX" => cot_checkbox($checked, "install_{$ext_type_lc}s[$code]"),
-                "{$ext_type_uc}_ROW_TITLE" => $extensionService->getTitle($code, $extensionType),
-                "{$ext_type_uc}_ROW_DESCRIPTION" => $extensionService->getDescription($code, $extensionType),
+                "{$ext_type_uc}_ROW_TITLE" => $extensionHelper->getTitle($code, $extensionType),
+                "{$ext_type_uc}_ROW_DESCRIPTION" => $extensionHelper->getDescription($code, $extensionType),
                 "{$ext_type_uc}_ROW_REQUIRES" => $requires,
                 "{$ext_type_uc}_ROW_RECOMMENDS" => $recommends,
             ]);

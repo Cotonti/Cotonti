@@ -268,7 +268,6 @@ $sys['parser'] = $cfg['parser'];
 
 /* ======== Modules and plugins ======== */
 $extensions = [];
-$extensionsHasPartEnabled = [];
 if (
     (empty($cot_plugins) && !defined('COT_INSTALL'))
     || empty($cot_modules)
@@ -286,9 +285,6 @@ if (empty($cot_plugins) && !defined('COT_INSTALL')) {
 	if ($sql->rowCount() > 0) {
 		while ($row = $sql->fetch()) {
 			$cot_plugins[$row['pl_hook']][] = $row;
-            $extensionsHasPartEnabled[$row['pl_code']] = [
-                'isModule' => (bool) $row['pl_module'],
-            ];
 		}
 	}
 	$sql->closeCursor();
@@ -303,22 +299,13 @@ if (empty($cot_modules)) {
 	$cot_modules = [];
 	if (!empty($extensions)) {
 		foreach ($extensions as $row) {
-            if (!isset($extensionsHasPartEnabled[$row['ct_code']])) {
-                continue;
-            }
 			if ($row['ct_plug']) {
-                if ($extensionsHasPartEnabled[$row['ct_code']]['isModule']) {
-                    continue;
-                }
 				$cot_plugins_enabled[$row['ct_code']] = [
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],
 					'version' => $row['ct_version'],
 				];
 			} else {
-                if (!$extensionsHasPartEnabled[$row['ct_code']]['isModule']) {
-                    continue;
-                }
 				$cot_modules[$row['ct_code']] = [
 					'code' => $row['ct_code'],
 					'title' => $row['ct_title'],

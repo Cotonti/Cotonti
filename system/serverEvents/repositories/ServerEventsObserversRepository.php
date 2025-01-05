@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace cot\serverEvents\repositories;
 
 use Cot;
+use cot\repositories\BaseRepository;
 use cot\traits\GetInstanceTrait;
 
 /**
@@ -13,9 +14,12 @@ use cot\traits\GetInstanceTrait;
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
-class ServerEventsObserversRepository
+class ServerEventsObserversRepository extends BaseRepository
 {
-    use GetInstanceTrait;
+    public function __construct()
+    {
+        $this->tableName = Cot::$db->server_events_observers;
+    }
 
     public function getByUserId(int $userId, ?string $token = null): ?array
     {
@@ -27,7 +31,7 @@ class ServerEventsObserversRepository
             $params['token'] = $token;
         }
 
-        $result = $this->getByCondition($condition, $params);
+        $result = $this->getByCondition($condition, $params, 'created_at DESC');
         if (empty($result)) {
             return null;
         }
@@ -59,43 +63,7 @@ class ServerEventsObserversRepository
         return (int) $result;
     }
 
-    /**
-     * @return array<int, array<int|string>> Return server event observers data
-     */
-    public function getByCondition(array $condition, array $params = []): array
-    {
-        $table = Cot::$db->quoteTableName(Cot::$db->server_events_observers);
-
-        $sqlWhere = $this->prepareCondition($condition);
-
-        $sql = "SELECT {$table}.* "
-            . " FROM {$table} "
-            . $sqlWhere . " ORDER BY {$table}.created_at DESC";
-
-        $items = Cot::$db->query($sql, $params)->fetchAll();
-        if (empty($items)) {
-            return [];
-        }
-
-        $result = [];
-        foreach ($items as $item) {
-            $item = $this->castAttributes($item);
-            $result[$item['id']] = $item;
-        }
-
-        return $result;
-    }
-
-    private function prepareCondition(array $condition): string
-    {
-        if ($condition !== []) {
-            return ' WHERE (' . implode(') AND (', $condition) . ')';
-        }
-
-        return '';
-    }
-
-    private function castAttributes(array $item): array
+    protected function castAttributes(array $item): array
     {
         $item['id'] = (int) $item['id'];
         $item['user_id'] = (int) $item['user_id'];

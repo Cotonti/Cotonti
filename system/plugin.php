@@ -8,7 +8,7 @@
  */
 
 use cot\extensions\ExtensionsDictionary;
-use cot\extensions\ExtensionsService;
+use cot\extensions\ExtensionsHelper;
 
 defined('COT_CODE') or die('Wrong URL');
 
@@ -89,7 +89,7 @@ if (!empty(Cot::$currentRoute->includeFiles)) {
 }
 
 if (empty($out['subtitle'])) {
-    Cot::$out['subtitle'] = ExtensionsService::getInstance()
+    Cot::$out['subtitle'] = ExtensionsHelper::getInstance()
         ->getTitle($extensionCode, ExtensionsDictionary::TYPE_PLUGIN);
 }
 Cot::$sys['sublocation'] = Cot::$out['subtitle'];

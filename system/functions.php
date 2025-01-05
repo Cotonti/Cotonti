@@ -1282,7 +1282,7 @@ function cot_module_active($extensionCode)
         return false;
     }
 	return ExtensionsService::getInstance()
-    ->isInstalled($extensionCode, ExtensionsDictionary::TYPE_MODULE);
+    ->isActive($extensionCode, ExtensionsDictionary::TYPE_MODULE);
 }
 
 /**
@@ -1329,7 +1329,7 @@ function cot_plugin_active($extensionCode)
         return false;
     }
 	return ExtensionsService::getInstance()
-        ->isInstalled($extensionCode, ExtensionsDictionary::TYPE_PLUGIN);
+        ->isActive($extensionCode, ExtensionsDictionary::TYPE_PLUGIN);
 }
 
 /**

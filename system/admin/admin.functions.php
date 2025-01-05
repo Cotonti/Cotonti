@@ -8,6 +8,7 @@
  */
 
 use cot\extensions\ExtensionsDictionary;
+use cot\extensions\ExtensionsHelper;
 use cot\extensions\ExtensionsService;
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -178,6 +179,7 @@ function cot_get_extensionparams($code, $is_module = false)
     }
 
     $extensionService = ExtensionsService::getInstance();
+    $extensionHelper = ExtensionsHelper::getInstance();
 
     $langFile = cot_langfile(
         $code, $is_module ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN
@@ -192,11 +194,11 @@ function cot_get_extensionparams($code, $is_module = false)
     }
 
 	$result = [
-        'name' => $extensionService->getTitle(
+        'name' => $extensionHelper->getTitle(
             $code,
             $is_module ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN
         ),
-		'desc' => $extensionService->getDescription(
+		'desc' => $extensionHelper->getDescription(
             $code,
             $is_module ? ExtensionsDictionary::TYPE_MODULE : ExtensionsDictionary::TYPE_PLUGIN
         ),

@@ -7,6 +7,7 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsControlService;
 use cot\extensions\ExtensionsDictionary;
 use cot\extensions\ExtensionsService;
 
@@ -116,6 +117,8 @@ switch($a) {
             );
         }
 
+        $extensionControlService = ExtensionsControlService::getInstance();
+
 		switch($b) {
 			case 'install':
 				$installed_modules = $db->query("SELECT ct_code FROM $db_core WHERE ct_plug = 0")->fetchAll(PDO::FETCH_COLUMN);
@@ -179,22 +182,22 @@ switch($a) {
 				break;
 
 			case 'pause':
-				cot_extension_pause($code);
+                $extensionControlService->pause($code);
 				cot_message('adm_paused');
 				break;
 
 			case 'unpause':
-				cot_extension_resume($code);
+                $extensionControlService->resume($code);
 				cot_message('adm_running');
 				break;
 
 			case 'pausepart':
-				cot_plugin_pause($code, $part);
+                $extensionControlService->pause($code, $part);
 				cot_message('adm_partstopped');
 				break;
 
 			case 'unpausepart':
-				cot_plugin_resume($code, $part);
+                $extensionControlService->resume($code, $part);
 				cot_message('adm_partrunning');
 				break;
 		}

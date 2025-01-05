@@ -8,6 +8,7 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsControlService;
 use cot\extensions\ExtensionsDictionary;
 use cot\extensions\ExtensionsService;
 
@@ -176,14 +177,16 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
  * Installs or updates a Cotonti extension: module or plugin.
  * Messages emitted during installation can be received through standard
  * Cotonti messages interface.
- * @param string $code Module (or plugin) code
+ * @param string $extensionCode Module (or plugin) code
  * @param bool $isModule TRUE for modules, FALSE for plugins
  * @param bool $update Perform update rather than new install
  * @param bool $force_update Forces extension update even if version has not changed
  * @return bool Operation status
  * @global Cache $cache
+ *
+ * @todo move ExtensionControlService or to separate ExtensionSetupService
  */
-function cot_extension_install($code, $isModule = false, $update = false, $force_update = false)
+function cot_extension_install($extensionCode, $isModule = false, $update = false, $force_update = false)
 {
 	global $cfg, $L, $R, $cache, $usr, $db_auth, $db_config, $db_users,
 		$db_core, $cot_groups, $cot_ext_ignore_parts, $db, $db_x, $env;
@@ -191,25 +194,25 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
     /** @deprecated in 0.9.24 for backward compatibility */
     $is_module = $isModule;
     /** @deprecated in 0.9.24 for backward compatibility */
-    $name = $code;
+    $name = $extensionCode;
 
-	$path = $isModule ? Cot::$cfg['modules_dir'] . "/$code" : Cot::$cfg['plugins_dir'] . "/$code";
+	$path = $isModule ? Cot::$cfg['modules_dir'] . "/$extensionCode" : Cot::$cfg['plugins_dir'] . "/$extensionCode";
 
 	// Emit initial message
 	if ($update) {
 		cot_message(cot_rc('ext_updating', array(
 			'type' => $isModule ? Cot::$L['Module'] : Cot::$L['Plugin'],
-			'name' => $code
+			'name' => $extensionCode,
 		)));
 	} else {
 		cot_message(cot_rc('ext_installing', array(
 			'type' => $isModule ? $L['Module'] : $L['Plugin'],
-			'name' => $code
+			'name' => $extensionCode,
 		)));
 	}
 
 	// Check setup file and tags
-	$setup_file = $path . "/$code.setup.php";
+	$setup_file = $path . "/$extensionCode.setup.php";
 	if (!file_exists($setup_file)) {
 		cot_error(cot_rc('ext_setup_not_found', array('path' => $setup_file)));
 		return false;
@@ -232,7 +235,7 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 	}
 
 	// Check versions
-	$res = Cot::$db->query('SELECT ct_version FROM ' . Cot::$db->core . ' WHERE ct_code = ?', $code);
+	$res = Cot::$db->query('SELECT ct_version FROM ' . Cot::$db->core . ' WHERE ct_code = ?', $extensionCode);
 	if ($res->rowCount() == 1) {
 		$current_ver = $res->fetchColumn();
 		$res->closeCursor();
@@ -242,14 +245,14 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 				// Nothing to update
 				cot_message(cot_rc('ext_up2date', array(
 					'type' => $isModule ? Cot::$L['Module'] :Cot::$L['Plugin'],
-					'name' => $code
+					'name' => $extensionCode
 				)));
 
 				return COT_EXT_NOTHING_TO_UPDATE;
 			}
 		} else {
 			cot_clear_messages();
-			cot_error(cot_rc('ext_already_installed', array('name' => $code)));
+			cot_error(cot_rc('ext_already_installed', array('name' => $extensionCode)));
 			return false;
 		}
 	}
@@ -258,7 +261,7 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 	if ($update) {
         $query = $query = Cot::$db->query(
             'SELECT * FROM ' . Cot::$db->plugins . ' WHERE pl_code = :code',
-            ['code' => $code]
+            ['code' => $extensionCode]
         );
         while ($row = $query->fetch()) {
             if (!isset($registeredParts[$row['pl_part']]['hooks'])) {
@@ -274,7 +277,7 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
         $query->closeCursor();
 
 		// Safely drop existing bindings
-		$bindings_cnt = cot_plugin_remove($code);
+		$bindings_cnt = cot_plugin_remove($extensionCode);
 		cot_message(cot_rc('ext_bindings_uninstalled', array('cnt' => $bindings_cnt)));
 	}
 
@@ -283,7 +286,7 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 	$dp = opendir($path);
 	while ($f = readdir($dp)) {
 		if (
-            preg_match("#^$code(\.([\w\.]+))?.php$#", $f, $mt)
+            preg_match("#^$extensionCode(\.([\w\.]+))?.php$#", $f, $mt)
 			&& (!isset($mt[2]) || !in_array($mt[2], $cot_ext_ignore_parts))
         ) {
 			$part_info = cot_infoget($path . "/$f", 'COT_EXT');
@@ -326,7 +329,7 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 	}
 
 	closedir($dp);
-	$bindings_cnt = cot_plugin_add($hookBindings, $code, $info['Name'], $isModule);
+	$bindings_cnt = cot_plugin_add($hookBindings, $extensionCode, $info['Name'], $isModule);
 	cot_message(cot_rc('ext_bindings_installed', ['cnt' => $bindings_cnt]));
 
 	// Install config
@@ -339,11 +342,11 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 
 	if ($update) {
 		// Get differential config
-		if (cot_config_update($code, $options, $isModule) > 0) {
+		if (cot_config_update($extensionCode, $options, $isModule) > 0) {
 			cot_message('ext_config_updated');
 		}
 	} elseif (count($options) > 0) {
-		if (cot_config_add($code, $options, $isModule)) {
+		if (cot_config_add($extensionCode, $options, $isModule)) {
 			cot_message('ext_config_installed');
 		} else {
 			cot_error('ext_config_error');
@@ -356,20 +359,20 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 	if ($info_cfg) {
 		$options = cot_config_parse($info_cfg, $isModule);
 		if ($update) {
-			if (cot_config_update($code, $options, $isModule, '__default') > 0) {
+			if (cot_config_update($extensionCode, $options, $isModule, '__default') > 0) {
 				// Update all nested categories
 				$type = $isModule ? 'module' : 'plug';
 				$res = $db->query("SELECT DISTINCT config_subcat FROM $db_config
-					WHERE config_owner = '$type' AND config_cat = '$code'
+					WHERE config_owner = '$type' AND config_cat = '$extensionCode'
 						AND config_subcat != '' AND config_subcat != '__default'");
 				$cat_list = $res->fetchAll(PDO::FETCH_COLUMN, 0);
 				foreach ($cat_list as $cat) {
-					cot_config_update($code, $options, $isModule, $cat);
+					cot_config_update($extensionCode, $options, $isModule, $cat);
 				}
 				cot_message('ext_config_struct_updated');
 			}
 		} elseif (count($options) > 0) {
-			if (cot_config_add($code, $options, $isModule, '__default')) {
+			if (cot_config_add($extensionCode, $options, $isModule, '__default')) {
 				cot_message('ext_config_struct_installed');
 			} else {
 				cot_error('ext_config_struct_error');
@@ -394,11 +397,11 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 	if ($update) {
 		// Only update auth locks
 		if ($isModule) {
-			$auth_code = $code;
+			$auth_code = $extensionCode;
 			$auth_option = 'a';
 		} else {
 			$auth_code = 'plug';
-			$auth_option = $code;
+			$auth_option = $extensionCode;
 		}
 
 		$lock_guests = cot_auth_getvalue($info['Lock_guests']);
@@ -449,7 +452,7 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 				if ($isModule) {
 					$insert_rows[] = array(
 						'auth_groupid' => $v['id'],
-						'auth_code' => $code,
+						'auth_code' => $extensionCode,
 						'auth_option' => 'a',
 						'auth_rights' => $ins_auth,
 						'auth_rights_lock' => $ins_lock,
@@ -459,7 +462,7 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 					$insert_rows[] = array(
 						'auth_groupid' => $v['id'],
 						'auth_code' => 'plug',
-						'auth_option' => $code,
+						'auth_option' => $extensionCode,
 						'auth_rights' => $ins_auth,
 						'auth_rights_lock' => $ins_lock,
 						'auth_setbyuserid' => $usr['id']
@@ -485,10 +488,10 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 			$new_ver = $info['Version'];
 		}
 	} else {
-		if (file_exists($path . "/setup/$code.install.sql")) {
+		if (file_exists($path . "/setup/$extensionCode.install.sql")) {
 			// Run SQL install script
 			$sql_err = $db->runScript(
-				file_get_contents("$path/setup/$code.install.sql"));
+				file_get_contents("$path/setup/$extensionCode.install.sql"));
 			if (empty($sql_err)) {
 				cot_message(cot_rc('ext_executed_sql', array('ret' => 'OK')));
 			} else {
@@ -497,7 +500,7 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 			}
 		}
 
-		$install_handler = $old_ext_format ? $setup_file : $path . "/setup/$code.install.php";
+		$install_handler = $old_ext_format ? $setup_file : $path . "/setup/$extensionCode.install.php";
 
 		if ($old_ext_format)
 		{
@@ -510,8 +513,8 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 			// Run PHP install handler
 			$envtmp = $env;
 			$env = array(
-				'ext' => $code,
-				'location' => $code,
+				'ext' => $extensionCode,
+				'location' => $extensionCode,
 				'type' => ($isModule) ? 'module' : 'plug'
 			);
 			$ret = include $install_handler;
@@ -533,10 +536,13 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
 
 	// Register version information
 	if ($update) {
-		cot_extension_update($code, $new_ver, !$isModule);
+		cot_extension_update($extensionCode, $new_ver, !$isModule);
+
+        ExtensionsControlService::getInstance()->checkIsActive($extensionCode);
+
 		cot_message(cot_rc('ext_updated', array(
 			'type' => $isModule ? $L['Module'] : $L['Plugin'],
-			'name' => $code,
+			'name' => $extensionCode,
 			'ver' => $new_ver
 		)));
 
@@ -547,7 +553,7 @@ function cot_extension_install($code, $isModule = false, $update = false, $force
         /* ===== */
 
 	} else {
-		cot_extension_add($code, $info['Name'], $info['Version'], !$isModule);
+		cot_extension_add($extensionCode, $info['Name'], $info['Version'], !$isModule);
 
         /* === Hook  === */
         foreach (cot_getextplugins('extension.install.done') as $pl) {
@@ -842,7 +848,7 @@ function cot_extension_installed($extensionCode)
     if (empty($extensionCode)) {
         return false;
     }
-    return ExtensionsService::getInstance()->isInstalled($extensionCode, null, true);
+    return ExtensionsService::getInstance()->isInstalled($extensionCode);
 }
 
 /**
@@ -927,20 +933,6 @@ function cot_extension_list_info($dir)
 }
 
 /**
- * Suspends (temporarily disables) a module
- *
- * @param string $name Module name
- * @return bool
- * @global CotDB $db
- */
-function cot_extension_pause($name)
-{
-	global $db, $db_core;
-	cot_plugin_pause($name);
-	return $db->update($db_core, array('ct_state' => 0), "ct_code = '$name'") == 1;
-}
-
-/**
  * Unregisters a module from the core
  *
  * @param string $name Module name
@@ -952,20 +944,6 @@ function cot_extension_remove($name)
 	global $db, $db_core;
 
 	return $db->delete($db_core, "ct_code = '$name'");
-}
-
-/**
- * Resumes a paused module
- *
- * @param string $name Module name
- * @return bool
- * @global CotDB $db
- */
-function cot_extension_resume($name)
-{
-	global $db, $db_core;
-	cot_plugin_resume($name);
-	return $db->update($db_core, array('ct_state' => 1), "ct_code = '$name'") == 1;
 }
 
 /**
@@ -1047,59 +1025,6 @@ function cot_plugin_add($hook_bindings, $code, $title, $isModule = false)
 }
 
 /**
- * Suspends a plugin or one of its parts
- *
- * @param string $extensionCode Module or plugin code
- * @param mixed $part ID of the binding to suspend or 0 to suspend all; if part name is passed, then that part is suspended
- * @return bool
- */
-function cot_plugin_pause($extensionCode, $part = 0)
-{
-    $condition = 'pl_code = :code';
-    $params = ['code' => $extensionCode];
-    if (is_numeric($part) && $part > 0) {
-        $condition .= ' AND pl_id = :pluginId';
-        $params['pluginId'] = $part;
-    } elseif (is_string($part)) {
-        $condition .= ' AND pl_part = :part';
-        $params['part'] = $part;
-    }
-
-    Cot::$db->beginTransaction();
-    try {
-        $result = Cot::$db->update(Cot::$db->plugins, ['pl_active' => 0], $condition, $params);
-        if ($result < 1) {
-            return false;
-        }
-
-        $activeCount = Cot::$db->query(
-            'SELECT COUNT(*) FROM ' . Cot::$db->plugins. ' WHERE pl_code = :code AND pl_active = 1',
-            ['code' => $extensionCode]
-        )->fetchColumn();
-
-        if ($activeCount > 1) {
-            $data = ['ct_state' => 1];
-        } else {
-            $data = ['ct_state' => 0];
-        }
-
-        Cot::$db->update(
-            Cot::$db->core,
-            $data,
-            'ct_code = :code',
-            ['code' => $extensionCode]
-        ) > 0;
-
-        Cot::$db->commit();
-    } catch (Throwable $e) {
-        Cot::$db->rollBack();
-        throw $e;
-    }
-
-	return true;
-}
-
-/**
  * Removes a plugin or one of its parts from hook registry
  *
  * @param string $name Module or plugin name
@@ -1117,46 +1042,4 @@ function cot_plugin_remove($name, $binding_id = 0)
 	}
 
 	return $db->delete($db_plugins, $condition);
-}
-
-/**
- * Resumes a suspended plugin or one of its parts
- *
- * @param string $extensionCode Module or plugin code
- * @param mixed $part ID of the binding to resume or 0 to resume all; if part name is passed, then that part is resumed
- * @return bool
- */
-function cot_plugin_resume($extensionCode, $part = 0)
-{
-	$condition = 'pl_code = :code';
-    $params = ['code' => $extensionCode];
-	if (is_numeric($part) && $part > 0) {
-		$condition .= ' AND pl_id = :pluginId';
-        $params['pluginId'] = $part;
-	} elseif (is_string($part)) {
-		$condition .= ' AND pl_part = :part';
-        $params['part'] = $part;
-	}
-
-    Cot::$db->beginTransaction();
-    try {
-        $result = Cot::$db->update(Cot::$db->plugins, ['pl_active' => 1], $condition, $params) > 0;
-        if ($result < 1) {
-            return false;
-        }
-
-        Cot::$db->update(
-            Cot::$db->core,
-            ['ct_state' => 1],
-            'ct_code = :code',
-            ['code' => $extensionCode]
-        ) > 0;
-
-        Cot::$db->commit();
-    } catch (Throwable $e) {
-        Cot::$db->rollBack();
-        throw $e;
-    }
-
-	return true;
 }

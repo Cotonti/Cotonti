@@ -23,104 +23,40 @@ class ExtensionsService
 {
     use GetInstanceTrait;
 
-    public function getTitle(string $extensionCode, ?string $extensionType = null, ? string $lang = null): string
-    {
-        global $cot_modules, $cot_plugins_enabled;
+    /**
+     * Get default action for extension if exists
+     * @return ?array{controller: class-string, action: string}
+     */
+    public function getDefaultAction(
+        string $extensionCode,
+        ?string $extensionType = null,
+        bool $isAdminPart = false
+    ): ?array {
+        $router = Router::getInstance();
 
         if ($extensionType === null) {
             $extensionType = $this->getType($extensionCode);
         }
 
-        // Some extension files depends on main lang file. For example: PFS
-        $L = Cot::$L;
+        $result = [
+            'controller' => $router->getControllerClass(
+                ExtensionsDictionary::DEFAULT_CONTROLLER_ID,
+                $extensionCode,
+                $extensionType,
+                $isAdminPart
+            ),
+        ];
 
-        unset($L[$extensionCode . '_title'], $L['plu_title'], $L['info_name']);
-
-        $langFile = cot_langfile($extensionCode, $extensionType, 'en', $lang);
-        if (!empty($langFile) && file_exists($langFile)) {
-            include $langFile;
+        if ($result['controller'] === null) {
+            return null;
         }
 
-        if (!empty($L[$extensionCode . '_title'])) {
-            return $L[$extensionCode . '_title'];
+        $result['action'] = $router->getActionName(null, $result['controller']);
+        if ($result['action'] === null) {
+            return null;
         }
 
-        if (!empty($L['plu_title'])) {
-            return $L['plu_title'];
-        }
-
-        if (!empty($L['info_name'])) {
-            return $L['info_name'];
-        }
-
-        if (
-            $extensionType === ExtensionsDictionary::TYPE_MODULE
-            && isset($cot_modules[$extensionCode])
-        ) {
-            return $cot_modules[$extensionCode]['title'];
-        }
-
-        if (
-            $extensionType === ExtensionsDictionary::TYPE_PLUGIN
-            && isset($cot_plugins_enabled[$extensionCode])
-        ) {
-            return $cot_plugins_enabled[$extensionCode]['title'];
-        }
-
-        $extensionDirectory = $extensionType === ExtensionsDictionary::TYPE_MODULE
-            ? Cot::$cfg['modules_dir']
-            : Cot::$cfg['plugins_dir'];
-
-        $setupFile = $extensionDirectory . '/' . $extensionCode . '/' . $extensionCode . '.setup.php';
-        $exists = file_exists($setupFile);
-        if ($exists) {
-            $info = cot_infoget($setupFile, 'COT_EXT');
-            if (!empty($info['Name'])) {
-                return $info['Name'];
-            }
-        }
-
-        return $extensionCode;
-    }
-
-    public function getDescription(string $extensionCode, ?string $extensionType = null, ? string $lang = null): string
-    {
-        if ($extensionType === null) {
-            $extensionType = $this->getType($extensionCode);
-        }
-
-        // Some extension files depends on main lang file. For example: PFS
-        $L = Cot::$L;
-
-        unset($L[$extensionCode . '_description'], $L['info_desc']);
-
-        $langFile = cot_langfile($extensionCode, $extensionType, 'en', $lang);
-        if (!empty($langFile) && file_exists($langFile)) {
-            include $langFile;
-        }
-
-        if (!empty($L[$extensionCode . '_description'])) {
-            return $L[$extensionCode . '_description'];
-        }
-
-        if (!empty($L['info_desc'])) {
-            return $L['info_desc'];
-        }
-
-        $extensionDirectory = $extensionType === ExtensionsDictionary::TYPE_MODULE
-            ? Cot::$cfg['modules_dir']
-            : Cot::$cfg['plugins_dir'];
-
-        $setupFile = $extensionDirectory . '/' . $extensionCode . '/' . $extensionCode . '.setup.php';
-        $exists = file_exists($setupFile);
-        if ($exists) {
-            $info = cot_infoget($setupFile, 'COT_EXT');
-            if (!empty($info['Description'])) {
-                return $info['Description'];
-            }
-        }
-
-        return '';
+        return $result;
     }
 
     /**
@@ -153,14 +89,14 @@ class ExtensionsService
         $pluginFound = false;
         if (
             file_exists(Cot::$cfg['modules_dir'] . '/' . $extensionCode)
-            && $this->isInstalled($extensionCode, ExtensionsDictionary::TYPE_MODULE)
+            && ($this->isModuleActive($extensionCode) || $this->isInstalled($extensionCode))
         ) {
             $moduleFound = true;
         }
 
         if (
             file_exists(Cot::$cfg['plugins_dir'] . '/' . $extensionCode)
-            && $this->isInstalled($extensionCode, ExtensionsDictionary::TYPE_PLUGIN)
+            && ($this->isPluginActive($extensionCode) || $this->isInstalled($extensionCode))
         ) {
             $pluginFound = true;
         }
@@ -202,7 +138,7 @@ class ExtensionsService
         }
 
         // Hook handler can set it to NULL or STRING
-        $result = false;
+        $result = '__default__';
 
         /* === Hook === */
         foreach (cot_getextplugins('extensionService.getPublicPageUrl') as $pl) {
@@ -210,11 +146,14 @@ class ExtensionsService
         }
         /* ===== */
 
-        if ($result !== false) {
+        if ($result !== '__default__') {
+            if ($result === false) {
+                return null;
+            }
             return $result;
         }
 
-        if (!$this->isInstalled($extensionCode, $extensionType)) {
+        if (!$this->isActive($extensionCode, $extensionType)) {
             return null;
         }
 
@@ -224,14 +163,7 @@ class ExtensionsService
             return cot_url($extensionCode);
         }
 
-        $router = Router::getInstance();
-
-        $defaultControllerClass = $router->getControllerClass('index', $extensionCode, $extensionType);
-        if ($defaultControllerClass === null) {
-            return null;
-        }
-
-        if ($router->getActionName(null, $defaultControllerClass) !== null) {
+        if ($this->getDefaultAction($extensionCode, $extensionType) !== null) {
             return cot_url($extensionCode);
         }
 
@@ -248,7 +180,7 @@ class ExtensionsService
         }
 
         // Hook handler can set it to NULL or STRING
-        $result = false;
+        $result = '__default__';
 
         /* === Hook === */
         foreach (cot_getextplugins('extensionService.hasPublicPage') as $pl) {
@@ -256,11 +188,14 @@ class ExtensionsService
         }
         /* ===== */
 
-        if ($result !== false) {
+        if ($result !== '__default__') {
+            if ($result === false) {
+                return null;
+            }
             return $result;
         }
 
-        if (!$this->isInstalled($extensionCode, $extensionType)) {
+        if (!$this->isActive($extensionCode, $extensionType)) {
             return null;
         }
 
@@ -277,14 +212,7 @@ class ExtensionsService
             }
         }
 
-        $router = Router::getInstance();
-
-        $defaultControllerClass = $router->getControllerClass('index', $extensionCode, $extensionType, true);
-        if ($defaultControllerClass === null) {
-            return null;
-        }
-
-        if ($router->getActionName(null, $defaultControllerClass) !== null) {
+        if ($this->getDefaultAction($extensionCode, $extensionType, true) !== null) {
             return cot_url('admin', ['m' => $extensionCode]);
         }
 
@@ -296,7 +224,7 @@ class ExtensionsService
      */
     public function getRightsUrl(string $extensionCode, ?string $extensionType = null): ?string
     {
-        if (!$this->isInstalled($extensionCode, $extensionType)) {
+        if (!$this->isActive($extensionCode, $extensionType)) {
             return null;
         }
 
@@ -311,21 +239,31 @@ class ExtensionsService
     }
 
     /**
+     * Checks if an extension is currently installed
+     * @todo to ExtensionsControlService
+     */
+    public function isInstalled(string $extensionCode): bool
+    {
+        $cnt = cot::$db->query(
+            'SELECT COUNT(*) FROM ' . Cot::$db->core . ' WHERE ct_code = :code',
+            ['code' => $extensionCode]
+        )->fetchColumn();
+
+        return $cnt > 0;
+    }
+
+    /**
      * Checks if an extension is currently installed and active
      */
-    public function isInstalled(string $extensionCode, ?string $extensionType = null, $refreshData = false): bool
+    public function isActive(string $extensionCode, ?string $extensionType = null, $refreshData = false): bool
     {
         global $cot_modules, $cot_plugins_enabled;
 
         if ($refreshData) {
-            $data = Cot::$db->query(
-                'SELECT ct_code, ct_plug, ct_title, ct_version FROM ' . Cot::$db->core .  ' WHERE ct_code = :code ',
-                ['code' => $extensionCode]
-            )->fetch();
+            $data = ExtensionsRepository::getInstance()->getByCode($extensionCode, $extensionType, true);
+            $active = !empty($data);
 
-            $installed = !empty($data);
-
-            if (!$installed) {
+            if (!$active) {
                 unset($cot_modules[$extensionCode], $cot_plugins_enabled[$extensionCode]);
             } elseif ($data['ct_plug']) {
                 $cot_plugins_enabled[$data['ct_code']] = [
@@ -341,7 +279,7 @@ class ExtensionsService
                 ];
             }
 
-            return $installed;
+            return $active;
         }
 
         if ($extensionType === null) {
@@ -361,19 +299,19 @@ class ExtensionsService
 
     /**
      * Checks if a module is currently installed and active
-     * @see ExtensionsService::isInstalled()
+     * @see ExtensionsService::isActive()
      */
     public function isModuleActive(string $extensionCode): bool
     {
-        return $this->isInstalled($extensionCode, ExtensionsDictionary::TYPE_MODULE);
+        return $this->isActive($extensionCode, ExtensionsDictionary::TYPE_MODULE);
     }
 
     /**
      * Checks if a plugin is currently installed and active
-     * @see ExtensionsService::isInstalled()
+     * @see ExtensionsService::isActive()
      */
     public function isPluginActive(string $extensionCode): bool
     {
-        return $this->isInstalled($extensionCode, ExtensionsDictionary::TYPE_PLUGIN);
+        return $this->isActive($extensionCode, ExtensionsDictionary::TYPE_PLUGIN);
     }
 }

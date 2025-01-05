@@ -12,6 +12,9 @@ trait GetInstanceTrait
 {
     private static $classInstance = null;
 
+    /**
+     * @return static
+     */
     public static function getInstance(): self
     {
         if (static::$classInstance === null) {

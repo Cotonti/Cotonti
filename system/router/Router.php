@@ -194,7 +194,7 @@ class Router
         if ($controllerId === null) {
             if ($extensionCode !== null) {
                 // Extensions can have a default IndexController
-                $controllerId = 'index';
+                $controllerId = ExtensionsDictionary::DEFAULT_CONTROLLER_ID;
             } elseif (!$isAdmin) {
                 // Site's amin area core have a default MainController
                 $controllerId = 'main';

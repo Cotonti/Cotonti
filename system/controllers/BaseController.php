@@ -6,6 +6,7 @@ namespace cot\controllers;
 
 use BadMethodCallException;
 use cot\exceptions\InvalidConfigException;
+use cot\extensions\ExtensionsDictionary;
 
 /**
  * Base controller class
@@ -16,10 +17,10 @@ use cot\exceptions\InvalidConfigException;
 abstract class BaseController
 {
     /**
-     * @var ?string the ID of the action that is used when the action ID is not specified
-     * in the request. Defaults to 'index'.
+     * @var ?string the ID of the action that is used when the action ID is not specified in the request.
+     * Defaults to 'index'.
      */
-    public static $defaultAction = 'index';
+    public static $defaultAction = ExtensionsDictionary::DEFAULT_ACTION_ID;
 
     /**
      * Declares external actions for the controller.
@@ -29,9 +30,9 @@ abstract class BaseController
      * names of the action classes. For example:
      * ```php
      * return [
-     *   'action1' => 'cot\modules\someext\controllers\Action1',
+     *   'action1' => 'cot\modules\someExt\controllers\Action1',
      *   'action2' => [
-     *     'class' => 'cot\modules\someext\controllers\Action1',
+     *     'class' => 'cot\modules\someExt\controllers\Action2',
      *     'argument1' => 'value1',
      *     'argument2' => 'value2',
      *   ],

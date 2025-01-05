@@ -26,12 +26,14 @@ defined('COT_CODE') or die('Wrong URL');
  * @property-read string $cache_bindings 'cot_cache_bindings' table name
  * @property-read string $core 'cot_core' table name
  * @property-read string $config 'cot_config' table name
+ * @property-read string $extra_fields 'cot_extra_fields' table name
  * @property-read string $groups 'cot_groups' table name
  * @property-read string $groups_users 'cot_groups_users' table name
  * @property-read string $logger 'cot_logger' table name
  * @property-read string $online 'cot_online' table name
- * @property-read string $extra_fields 'cot_extra_fields' table name
  * @property-read string $plugins 'cot_plugins' table name
+ * @property-read string $server_events 'cot_server_events' table name
+ * @property-read string $server_events_observers 'cot_server_events_observers' table name
  * @property-read string $structure 'cot_structure' table name
  * @property-read string $updates 'cot_updates' table name
  * @property-read string $users 'cot_users' table name
@@ -433,7 +435,7 @@ class CotDB
         $query = 'DELETE FROM ' . $this->quoteTableName($tableName);
         if (!empty($condition)) {
             if (is_array($condition)) {
-                $condition = '(' . implode(') AND (', $condition) . ')';
+                $condition = $this->prepareCondition($condition);
             }
             $query .=  ' WHERE ' . $condition;
         }
@@ -707,7 +709,7 @@ class CotDB
         }
 
         if (!empty($condition) && is_array($condition)) {
-            $condition = '(' . implode(') AND (', $condition) . ')';
+            $condition = $this->prepareCondition($condition);
         }
         $condition = empty($condition) ? '' : 'WHERE ' . $condition;
 
@@ -750,6 +752,22 @@ class CotDB
         }
 
         return 0;
+    }
+
+    /**
+     * @param array|string $condition
+     * @return string
+     */
+    public function prepareCondition($condition): string
+    {
+        if (is_array($condition)) {
+            if ($condition === []) {
+                return '';
+            }
+            return '(' . implode(') AND (', $condition) . ')';
+        }
+
+        return $condition;
     }
 
 	/**

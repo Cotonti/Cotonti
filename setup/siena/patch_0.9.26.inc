@@ -4,13 +4,14 @@
  */
 defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
 
-global $db_server_events, $db_server_events_observers;
+global $db_server_events, $db_server_events_observers, $db_plugins, $db_core;
 
-if (empty($db_server_events) || empty($db_server_events_observers) || empty($db_plugins)) {
+if (empty($db_server_events) || empty($db_server_events_observers) || empty($db_plugins) || empty($db_core)) {
     // Registering tables
     Cot::$db->registerTable('server_events');
     Cot::$db->registerTable('server_events_observers');
     Cot::$db->registerTable('plugins');
+    Cot::$db->registerTable('core');
 }
 
 if (!Cot::$db->tableExists(Cot::$db->server_events)) {
@@ -42,3 +43,5 @@ if (!Cot::$db->tableExists(Cot::$db->server_events)) {
 if (!Cot::$db->indexExists(Cot::$db->plugins,  'plugins_code_idx')) {
     Cot::$db->addIndex(Cot::$db->plugins,  'plugins_code_idx', ['pl_code']);
 }
+
+Cot::$db->delete(Cot::$db->core, "ct_code IN ('admin',  'message')");
