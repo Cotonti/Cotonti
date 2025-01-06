@@ -9,7 +9,6 @@
 
 use cot\extensions\ExtensionsDictionary;
 use cot\extensions\ExtensionsHelper;
-use cot\extensions\ExtensionsService;
 
 /**
  * The name of the file that is used to prevent the installer from running twice

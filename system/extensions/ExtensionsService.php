@@ -87,21 +87,23 @@ class ExtensionsService
     {
         $moduleFound = false;
         $pluginFound = false;
-        if (
-            file_exists(Cot::$cfg['modules_dir'] . '/' . $extensionCode)
-            && ($this->isModuleActive($extensionCode) || $this->isInstalled($extensionCode))
-        ) {
+        if (file_exists(Cot::$cfg['modules_dir'] . '/' . $extensionCode)) {
             $moduleFound = true;
         }
 
-        if (
-            file_exists(Cot::$cfg['plugins_dir'] . '/' . $extensionCode)
-            && ($this->isPluginActive($extensionCode) || $this->isInstalled($extensionCode))
-        ) {
+        if (file_exists(Cot::$cfg['plugins_dir'] . '/' . $extensionCode)) {
             $pluginFound = true;
         }
 
         if ($moduleFound && $pluginFound) {
+            if ($this->isModuleActive($extensionCode)) {
+                return ExtensionsDictionary::TYPE_MODULE;
+            }
+
+            if ($this->isPluginActive($extensionCode)) {
+                return ExtensionsDictionary::TYPE_PLUGIN;
+            }
+
             // Need to query the db to check which one is installed
             $result = Cot::$db->query(
                 'SELECT ct_plug FROM ' . Cot::$db->core . ' WHERE ct_code = ? LIMIT 1',
