@@ -5612,7 +5612,11 @@ function cot_rc_add_standard()
 		Resources::addFile('js/jqModal.min.js');
 	}
 
-	Resources::addFile('js/base.js');
+    if (Cot::$cfg['debug_mode'] || Cot::$cfg['devmode']) {
+        Resources::addFile('js/base.js');
+    } else {
+        Resources::addFile('js/base.min.js');
+    }
 
 	if ($cfg['jquery'] && $cfg['turnajax']) {
 		Resources::addFile('js/ajax_on.js');
