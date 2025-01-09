@@ -9,6 +9,14 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+// Bootstrap is needed to use the Model, Toast, etc. components.
+Resources::addFile('lib/bootstrap/css/bootstrap.min.css');
+if (Cot::$cfg['headrc_consolidate']) {
+    Resources::addFile('lib/bootstrap/js/bootstrap.bundle.min.js');
+} else {
+    Resources::linkFileFooter('lib/bootstrap/js/bootstrap.bundle.min.js');
+}
+
 Resources::addFile(Cot::$cfg['themes_dir'] . '/' . Cot::$usr['theme'] . '/css/reset.css');
 Resources::addFile(Cot::$cfg['themes_dir'] . '/' . Cot::$usr['theme'] . '/css/extras.css');
 Resources::addFile(Cot::$cfg['themes_dir'] . '/' . Cot::$usr['theme'] . '/css/default.css');

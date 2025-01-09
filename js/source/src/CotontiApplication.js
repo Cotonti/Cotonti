@@ -1,4 +1,6 @@
 import {ServerEvents} from './serverEvents/ServerEvents.js';
+import {Toast} from "./Toast";
+import {Modal} from "./Modal";
 
 /**
  * Base Cotonti class
@@ -17,6 +19,90 @@ class CotontiApplication
         }
         return this.#severEvents;
     }
+
+    /**
+     * Show Confirm dialog modal
+     * @param {String} title
+     * @param {String} content
+     * @param {function} callback
+     * @param {String} okLabel
+     * @param {String} cancelLabel
+     * @todo translated default labels
+     */
+    confirm(title, content, callback, okLabel = 'Ok', cancelLabel = 'Cancel') {
+        this.modal(title, content, [
+            {label: okLabel, onClick: (event) => {return callback(event)}, type: 'primary', closeOnClick: true},
+            {label: cancelLabel, closeOnClick: true, type: 'secondary'}
+        ]);
+    }
+
+    /**
+     * Get the Modal instance
+     * @param {String} title
+     * @param {String} content
+     * @param {({
+     *    label: String,
+     *    onClick: function|undefined,
+     *    closeOnClick: bool|undefined,
+     *    type: string|undefined,
+     *    btnType: string|undefined
+     *  }|string)[]|null} buttons
+     *  @returns Modal
+     */
+    getModal(title, content, buttons= null) {
+        return new Modal(title, content, buttons);
+    }
+
+    /**
+     * Show Modal programmatically
+     * @param {String} title
+     * @param {String} content
+     * @param {({
+     *    label: String,
+     *    onClick: function|undefined,
+     *    closeOnClick: bool|undefined,
+     *    type: string|undefined,
+     *    btnType: string|undefined
+     *  }|string)[]|null} buttons
+     *  @returns Modal
+     */
+    modal(title, content, buttons= null) {
+        const modal = this.getModal(title, content, buttons);
+        modal.show();
+        return modal;
+    }
+
+    /**
+     * Show Toasts programmatically
+     * @param {String} title
+     * @param {String} message
+     * @param {String} hint
+     * @param {String} type
+     * @returns Toast
+     */
+    getToast(title, message, hint = '', type = '') {
+        return new Toast(title, message, hint, type);
+    }
+
+    /**
+     * Show Toasts programmatically
+     * @param {String} title
+     * @param {String} message
+     * @param {String} hint
+     * @param {String} type
+     * @param {Number} delay
+     */
+    toast(title, message, hint = '', type = '', delay = 5000) {
+        const toast = this.getToast(title, message, hint, type);
+
+        if (delay !== null) {
+            toast.delay = delay
+        }
+
+        toast.show();
+        return toast;
+    }
+
 
     /**
      * Load data from /index.php?n=main&a=get
