@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\users\UsersRepository;
+
 defined('COT_CODE') or die('Wrong URL');
 
 $f = cot_import('f','G','INT');
@@ -30,7 +32,7 @@ if ($userid != Cot::$usr['id']) {
 
 $standalone = FALSE;
 $uid = ($userid > 0) ? $userid : Cot::$usr['id'];
-$user_info = cot_user_data($uid);
+$user_info = UsersRepository::getInstance()->getById($uid);
 $maingroup = ($userid == 0) ? COT_GROUP_SUPERADMINS : $user_info['user_maingrp'];
 
 $pfs_dir_user = cot_pfs_path($userid);

@@ -51,13 +51,13 @@ if (Cot::$usr['id'] > 0) {
             cot_declension(Cot::$usr['messages'], $Ls['Privatemessages']) : Cot::$L['hea_noprivatemessages']
 	);
 
-	$t->assign(array(
+	$t->assign([
 		'HEADER_USER_PM_URL' => cot_url('pm'),
 		'HEADER_USER_PMS' => Cot::$out['pms'],
-		'HEADER_USER_PMREMINDER' => Cot::$out['pmreminder']
-	));
+		'HEADER_USER_PMREMINDER' => Cot::$out['pmreminder'],
+	]);
 }
 
-if (Cot::$cfg['pm']['css'] && Cot::$env['ext'] == 'pm') {
+if (Cot::$cfg['pm']['css'] && Cot::$env['ext'] === 'pm') {
 	Resources::linkFile(Cot::$cfg['modules_dir'] . '/pm/tpl/pm.css');
 }

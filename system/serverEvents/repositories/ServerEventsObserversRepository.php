@@ -6,7 +6,8 @@ namespace cot\serverEvents\repositories;
 
 use Cot;
 use cot\repositories\BaseRepository;
-use cot\traits\GetInstanceTrait;
+
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Server Event observers repository
@@ -54,7 +55,7 @@ class ServerEventsObserversRepository extends BaseRepository
             $params['token'] = $token;
         }
 
-        $sqlWhere = $this->prepareCondition($condition);
+        $sqlWhere = 'WHERE ' . $this->prepareCondition($condition);
 
         $sql = "SELECT COUNT(*) FROM $table $sqlWhere";
 

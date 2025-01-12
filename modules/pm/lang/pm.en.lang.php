@@ -9,12 +9,16 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+$L['pm_title'] = 'Private Messages';
+
 /**
  * Module Config
  */
 
 $L['cfg_allownotifications'] = 'Allow PM notifications by email';
 $L['cfg_allownotifications_hint'] = '';
+$L['cfg_allowPopUpNotifications'] = 'Pop-up notifications';
+$L['cfg_allowPopUpNotifications_hint'] = 'Show pop-up notifications for new private messages';
 $L['cfg_maxsize'] = 'Maximum length for messages';
 $L['cfg_maxsize_hint'] = '';
 $L['cfg_maxpmperpage'] = 'Max. messages per page';
@@ -40,8 +44,10 @@ $L['pmsend_subtitle'] = 'New private message submission form';
 
 $L['pm_bodytoolong'] = 'The body of the private message is too long, {$size} chars maximum';
 $L['pm_bodytooshort'] = 'The body of the private message is too short or missing';
+$L['pm_from'] = 'from';
 $L['pm_inbox'] = 'Inbox';
 $L['pm_inboxsubtitle'] = 'Private messages, newest is at top';
+$L['pm_newMessage'] = 'New private message';
 $L['pm_norecipient'] = 'No recipient specified';
 $L['pm_notifytitle'] = 'New private message';
 $Ls['Privatemessages'] = "new private messages,new private message";

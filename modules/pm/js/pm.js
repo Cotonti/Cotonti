@@ -1,6 +1,5 @@
 /**
- * PM module
- *
+ * Private Messages module
  * @package PM
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
@@ -43,3 +42,11 @@ $( document ).on( "click", ".pm-star", function(e) {
     }
 });
 
+if (window.pmNotifications === true) {
+    cot.getServerEvents().addObserver('pmObserver', 'newPm', (data) => {
+        let title = `<a href="${data.url}">${data.L.newMessage}</a><br>${data.L.from}: `
+            + `<a href="${data.fromUser.url}">${data.fromUser.fullName}</a>`;
+        let text = `<a href="${data.url}">${data.text}</a>`;
+        cot.toast(title, text);
+    });
+}

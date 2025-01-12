@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace cot\serverEvents;
 
 use Cot;
 use cot\serverEvents\repositories\ServerEventsObserversRepository;
 use cot\traits\GetInstanceTrait;
 use BadMethodCallException;
+
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Server Event observer service

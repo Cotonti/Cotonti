@@ -5,6 +5,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\users\UsersRepository;
+
 defined('COT_CODE') or die('Wrong URL');
 
 /* ======== First... ======== */
@@ -393,8 +395,8 @@ if (!empty($csid) || !empty($_SESSION[$sys['site_id']])) {
 	$u_id = (int) cot_import($u[0], 'D', 'INT');
 	$u_sid = $u[1];
 	if ($u_id > 0) {
-		$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $u_id");
-		if ($row = $sql->fetch()) {
+        $row = UsersRepository::getInstance()->getById($u_id);
+		if ($row !== null) {
             cot_fillGroupsForUser($row);
 
 			if (

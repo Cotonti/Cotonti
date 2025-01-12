@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\pm\services\PrivateMessageService;
+
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('forms');
@@ -117,8 +119,9 @@ if ($a == 'send') {
 		}
 
 		if (!cot_error_found()) {
+            $pmService  = PrivateMessageService::getInstance();
 			foreach ($touser_ids as $k => $userid) {
-                $pmId = cot_send_pm($userid, $newpmtitle, $newpmtext, Cot::$usr['id'], $fromstate);
+                $pmId = $pmService->send($userid, $newpmtitle, $newpmtext, Cot::$usr['id'], $fromstate);
 			}
 
 			/* === Hook === */
@@ -127,7 +130,7 @@ if ($a == 'send') {
 			}
 			/* ===== */
 
-			cot_shield_update(30, "New private message (".$totalrecipients.")");
+			cot_shield_update(30, "New private message ({$totalrecipients})");
 			cot_redirect(cot_url('pm', 'f=sentbox', '', true));
 		}
 	}

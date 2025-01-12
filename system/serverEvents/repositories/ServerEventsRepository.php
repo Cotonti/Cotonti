@@ -8,6 +8,8 @@ use Cot;
 use cot\serverEvents\ServerEventMessageDto;
 use cot\traits\GetInstanceTrait;
 
+defined('COT_CODE') or die('Wrong URL');
+
 /**
  * Server Events repository
  * @package Cotonti

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace cot\serverEvents;
 
+defined('COT_CODE') or die('Wrong URL');
+
 /**
  * Server Event message DTO
  * @package Cotonti

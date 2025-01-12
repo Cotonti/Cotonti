@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\users\UsersRepository;
+
 defined('COT_CODE') or die('Wrong URL');
 
 $id = cot_import('id', 'G', 'INT');					// id (delete file(folder) id
@@ -15,7 +17,7 @@ $f = (int) cot_import('f', 'G', 'INT');				// folder id
 $c1 = cot_import('c1', 'G', 'ALP');					// form name
 $c2 = cot_import('c2', 'G', 'ALP');					// input name
 $parser = cot_import('parser', 'G', 'ALP');			// custom parser
-$userid = cot_import('userid', 'G', 'INT');			// User ID or 0
+$userid = cot_import('userid', 'G', 'INT');			// User ID or NULL
 $gd_supported = ['jpg', 'jpeg', 'png', 'gif'];
 
 list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['pfs']['maxpfsperpage']);// Page number files
@@ -38,7 +40,7 @@ if (!Cot::$usr['isadmin'] || $userid === null) {
 
 $standalone = false;
 
-$user_info = cot_user_data($userid);
+$user_info = !empty($userid) ? UsersRepository::getInstance()->getById($userid) : null;
 if (!$user_info && !Cot::$usr['isadmin']) {
     cot_die_message(404);
 }

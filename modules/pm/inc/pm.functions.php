@@ -1,11 +1,13 @@
 <?php
 /**
- * PM function library.
+ * Private Messages function library.
  *
  * @package PM
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
+
+use cot\modules\pm\services\PrivateMessageService;
 
 defined('COT_CODE') or die('Wrong URL');
 
@@ -15,6 +17,8 @@ defined('COT_CODE') or die('Wrong URL');
  * 1 - read message
  * 2 - starred message
  * 3 - deleted message
+ *
+ * @todo move to PM dictionary
 */
 const COT_PM_STATE_UNREAD = 0;
 const COT_PM_STATE_READ = 1;
@@ -45,93 +49,14 @@ Cot::$cfg['pm']['turnajax'] =
  * @param int $from From user ID
  * @param int $fromState
  * @return int|false Message ID or FALSE in fail
+ *
+ * @deprecated in 0.9.26
+ * @see PrivateMessageService::send
  */
 function cot_send_pm($to, $subject, $text, $from = null, $fromState = 0)
 {
-    if (empty($to)) {
-        return false;
-    }
-
-    if (empty($from)) {
-        $from = Cot::$usr['id'];
-    }
-
-    $fromName = cot_user_full_name($from);
-
-    $pm['pm_title'] = $subject;
-    $pm['pm_date'] = Cot::$sys['now'];
-    $pm['pm_text'] = $text;
-    $pm['pm_fromstate'] = $fromState;
-    $pm['pm_fromuserid'] = (int) $from;
-    $pm['pm_fromuser'] = $fromName;
-    $pm['pm_touserid'] = $to;
-    $pm['pm_tostate'] = 0;
-
-    /* === Hook === */
-    foreach (cot_getextplugins('pm.send.query') as $pl) {
-        include $pl;
-    }
-    /* ===== */
-
-    $result = Cot::$db->insert(Cot::$db->pm, $pm);
-    if (!$result) {
-        return false;
-    }
-    $id = Cot::$db->lastInsertId();
-
-    Cot::$db->update(Cot::$db->users, ['user_newpm' => '1'], "user_id=:userId", ['userId' => $to]);
-
-    $stats_enabled = function_exists('cot_stat_inc');
-    if (Cot::$cfg['pm']['allownotifications']) {
-        $pmsql = Cot::$db->query('SELECT user_email, user_name, user_lang FROM ' . Cot::$db->users .
-            ' WHERE user_id = ? AND user_pmnotify = 1 AND user_maingrp > 3', $to);
-
-        if ($row = $pmsql->fetch()) {
-            cot_send_translated_mail($row['user_lang'], $row['user_email'], htmlspecialchars($row['user_name']));
-            // Total email PM notifications sent
-            if ($stats_enabled) {
-                cot_stat_inc('totalmailpmnot');
-            }
-        }
-    }
-
-    if ($stats_enabled) {
-        // Total private messages in DB
-        cot_stat_inc('totalpms');
-    }
-
-    /* === Hook === */
-    foreach (cot_getextplugins('pm.send.done') as $pl) {
-        include $pl;
-    }
-    /* ===== */
-
-    return $id;
-}
-
-/**
- * Send an email in the recipient's language
- *
- * @param string $rlang Recipient language
- * @param string $remail Recipient email
- * @param string $rusername Recipient name
- * @todo $L should not be global. It will rewriten by cot_langfile()
- */
-function cot_send_translated_mail($rlang, $remail, $rusername)
-{
-	global $cfg, $usr, $L;
-
-	require_once cot_langfile('pm', 'module', Cot::$cfg['defaultlang'], $rlang);
-	if (!$L || !isset($L['pm_notify']))
-	{
-		global $L;
-	}
-
-	$rsubject = $L['pm_notifytitle'];
-	$rbody = sprintf($L['pm_notify'], $rusername, htmlspecialchars($usr['name']), Cot::$cfg['mainurl'] . '/' .
-        cot_url('pm', '', '', true));
-
-	cot_mail($remail, $rsubject, $rbody);
+    $from = $from !== null ? $from : null;
+    return PrivateMessageService::getInstance()->send((int) $to, $subject, $text, $from, $fromState);
 }
 
 /**

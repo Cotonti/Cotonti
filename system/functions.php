@@ -9,6 +9,8 @@
 
 use cot\extensions\ExtensionsDictionary;
 use cot\extensions\ExtensionsService;
+use cot\users\UsersHelper;
+use cot\users\UsersRepository;
 
 defined('COT_CODE') or die('Wrong URL');
 
@@ -2039,7 +2041,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
                     ['m' => 'details', 'id' => $user_data['user_id'], 'u' => $user_data['user_name']]
                 ),
                 'DETAILS_URL_SHORT' => cot_url('users', ['m' => 'details', 'id' => $user_data['user_id']]),
-                'FULL_NAME' => htmlspecialchars(cot_user_full_name($user_data)),
+                'FULL_NAME' => htmlspecialchars(UsersHelper::getInstance()->getFullName($user_data)),
                 'TITLE' => $cot_groups[$user_data['user_maingrp']]['title'],
                 'MAIN_GROUP' => cot_build_group($user_data['user_maingrp']),
                 'MAIN_GROUP_ID' => $user_data['user_maingrp'],
@@ -2425,56 +2427,13 @@ function cot_user_authorize($id, $remember = null)
  * @param int $uid User ID
  * @param bool $cacheItem Use one time session cache
  * @return ?array
+ *
+ * @deprecated in 0.9.26
+ * @see UsersRepository::getById()
  */
 function cot_user_data($uid = 0, $cacheItem = true)
 {
-    $user = null;
-
-    if (!$uid && Cot::$usr['id'] > 0) {
-        $uid = Cot::$usr['id'];
-        $user = Cot::$usr['profile'];
-    }
-    if (!$uid) {
-        return null;
-    }
-
-    static $userCache = [];
-
-    if ($cacheItem && isset($userCache[$uid])) {
-        return $userCache[$uid] !== false ? $userCache[$uid] : null;
-    }
-
-    if (!$user) {
-        if (is_array($uid)) {
-            $user = $uid;
-            $uid = $user['user_id'];
-        } else {
-            if ($uid > 0 && $uid == Cot::$usr['id']) {
-                $user = Cot::$usr['profile'];
-            } else {
-                $uid = (int) $uid;
-                if (!$uid) {
-                    return null;
-                }
-                $sql = Cot::$db->query('SELECT * FROM ' . Cot::$db->users . ' WHERE user_id = ? LIMIT 1', $uid);
-                $user = $sql->fetch();
-                if (empty($user)) {
-                    $user = null;
-                } else {
-                    // In PHP below version 8, all fields are fetching as strings
-                    $user['user_id'] = (int) $user['user_id'];
-                    $user['user_maingrp'] = (int) $user['user_maingrp'];
-                    $user['user_banexpire'] = (int) $user['user_banexpire'];
-                }
-            }
-        }
-    }
-
-    if ($cacheItem) {
-        $userCache[$uid] = !empty($user) ? $user : false;
-    }
-
-    return $user;
+    return UsersRepository::getInstance()->getById((int) $uid, $cacheItem);
 }
 
 /**
@@ -2485,63 +2444,13 @@ function cot_user_data($uid = 0, $cacheItem = true)
  *
  * @param array|int $user User Data or User ID
  * @return string
+ *
+ * @deprecated in 0.9.26
+ * @see UsersHelper::getFullName()
  */
 function cot_user_full_name($user)
 {
-    if (empty($user)) {
-        return '';
-    }
-
-    if (function_exists('cot_user_full_name_custom')) {
-        return cot_user_full_name_custom($user);
-    }
-
-    if (is_numeric($user)) {
-        $userId = (int) $user;
-        $user = cot_user_data($userId);
-    }
-
-    if (empty($user) || !is_array($user) || empty($user['user_name'])) {
-        return '';
-    }
-
-    $user_fname = '';
-    if (!empty($user['user_firstname'])) {
-        $user_fname = $user['user_firstname'];
-    } elseif (!empty($user['user_first_name'])) {
-        $user_fname = $user['user_first_name'];
-    }
-
-    $user_mname = '';
-    if (!empty($user['user_middlename'])) {
-        $user_mname = $user['user_middlename'];
-    } elseif (!empty($user['user_middle_name'])) {
-        $user_mname = $user['user_middle_name'];
-    }
-
-    $user_lname = '';
-    if (!empty($user['user_lastname'])) {
-        $user_lname = $user['user_lastname'];
-    } elseif (!empty($user['user_last_name'])) {
-        $user_lname = $user['user_last_name'];
-    }
-
-    if ($user_fname != '' || $user_mname != '' || $user_lname != '') {
-        $full_name = trim(
-            cot_rc('users_full_name',
-                array(
-                    'firstname' => $user_fname,
-                    'middlename' => $user_mname,
-                    'lastname' => $user_lname,
-                    'name' => $user['user_name']
-                )
-            )
-        );
-    } else {
-        $full_name = $user['user_name'];
-    }
-
-    return $full_name;
+    return UsersHelper::getInstance()->getFullName($user);
 }
 
 /*

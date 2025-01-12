@@ -9,6 +9,8 @@
  * @var string $a
  */
 
+use cot\users\UsersHelper;
+
 defined('COT_CODE') or die('Wrong URL');
 
 $v = cot_import('v', 'G', 'TXT');
@@ -98,7 +100,7 @@ if ($a === 'request' && $email !== '') {
 
         $mailBody = sprintf(
             Cot::$L['pasrec_email1'],
-            cot_user_full_name($user),
+            UsersHelper::getInstance()->getFullName($user),
             $changePasswordUrl,
             Cot::$usr['ip'],
             cot_date('datetime_medium')
@@ -174,8 +176,8 @@ if ($a === 'request' && $email !== '') {
 
     Cot::$db->update(Cot::$db->users, $updateData, 'user_id = ?', $user['user_id']);
 
-    $mailBody = Cot::$L['Hi'] . ' ' . cot_user_full_name($user) . ",\n\n" . Cot::$L['pasrec_email2'] . "\n\n"
-        . $newPassword . "\n\n" . Cot::$L['aut_contactadmin'];
+    $mailBody = Cot::$L['Hi'] . ' ' . UsersHelper::getInstance()->getFullName($user) . ",\n\n"
+        . Cot::$L['pasrec_email2'] . "\n\n" . $newPassword . "\n\n" . Cot::$L['aut_contactadmin'];
 
     cot_mail($user['user_email'], Cot::$L['pasrec_title'], $mailBody);
 

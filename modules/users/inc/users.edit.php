@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\users\UsersHelper;
+
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('auth');
@@ -286,17 +288,19 @@ $editor_class = $cfg['users']['usertextimg'] ? 'minieditor' : '';
 
 $delete_pfs = cot_module_active('pfs') ? cot_checkbox(false, 'ruserdelpfs', $L['PFS']) : '';
 
+$usersHelper = UsersHelper::getInstance();
+
 $breadCrumbs = [
     [cot_url('users'), Cot::$L['Users']],
     [
         cot_url('users', ['m' => 'details', 'id' => $urr['user_id'], 'u' => $urr['user_name']]),
-        cot_user_full_name($urr),
+        $usersHelper->getFullName($urr),
     ],
     [cot_url('users', ['m' => 'edit', 'id' => $urr['user_id']]), Cot::$L['Edit']],
 ];
 
 $t->assign([
-	'USERS_EDIT_TITLE' => htmlspecialchars(cot_user_full_name($urr)),
+	'USERS_EDIT_TITLE' => htmlspecialchars($usersHelper->getFullName($urr)),
     'USERS_EDIT_SUBTITLE' => $L['useed_subtitle'],
     'USERS_EDIT_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
     'USERS_EDIT_DETAILS_URL' => cot_url(

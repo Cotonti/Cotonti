@@ -81,8 +81,6 @@ $title_params = array(
 Cot::$out['subtitle'] = cot_title('{BOX} ({COUNT}) - {PM}', $title_params);
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 
-Resources::linkFileFooter(Cot::$cfg['modules_dir'].'/pm/js/pm.js');
-
 /* === Hook === */
 foreach (cot_getextplugins('pm.main') as $pl)
 {

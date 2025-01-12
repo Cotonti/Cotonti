@@ -387,6 +387,10 @@ class XTemplate
      */
     private function prepare($code)
     {
+        if (empty($code)) {
+            return '';
+        }
+
         // Remove BOM if present
         if ($code[0] == chr(0xEF) && $code[1] == chr(0xBB) && $code[2] == chr(0xBF)) {
             $code = mb_substr($code, 0);

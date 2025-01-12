@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace cot\serverEvents;
 
 use Cot;
 use cot\serverEvents\repositories\ServerEventsObserversRepository;
 use cot\traits\GetInstanceTrait;
 use BadMethodCallException;
+
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Server Event service
@@ -66,7 +70,7 @@ class ServerEventService
             $condition = "{$table}.user_id = :userId OR ({$expiredCondition})";
         } else {
             $lastData = Cot::$db->query(
-                "SELECT MIN(last_event_id) as last_event_id, MIN(created_at) as min_created_at "
+                "SELECT MIN(last_event_id) as last_event_id, MIN(updated_at) as min_created_at "
                 . " FROM {$observersTable} WHERE user_id = :userId GROUP BY user_id",
                 ['userId' => $userId]
             )->fetch();
@@ -79,7 +83,7 @@ class ServerEventService
                 "{$table}.created_at <= '{$lastData['min_created_at']}'",
             ];
             if ($lastData['last_event_id'] > 0) {
-                $deleteConditions[] = "{$table}.last_event_id <= {$lastData['last_event_id']}";
+                $deleteConditions[] = "{$table}.id <= {$lastData['last_event_id']}";
             }
 
             $condition = "({$table}.user_id = :userId AND (" . implode(' OR ', $deleteConditions) . ")) "

@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 if (Cot::$cfg['jquery'] && Cot::$cfg['turnajax'] && Cot::$cfg['plugin']['autocomplete']['autocomplete'] > 0) {
     Resources::addFile(Cot::$cfg['plugins_dir'] . '/autocomplete/lib/jquery.autocomplete.min.js');
 
-	if(Cot::$cfg['plugin']['autocomplete']['css']) {
+	if (Cot::$cfg['plugin']['autocomplete']['css']) {
         Resources::addFile(Cot::$cfg['plugins_dir'] . '/autocomplete/lib/jquery.autocomplete.css');
 	}
 

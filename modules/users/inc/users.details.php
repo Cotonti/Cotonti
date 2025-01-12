@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\users\UsersHelper;
+
 defined('COT_CODE') or die('Wrong URL');
 
 $y = cot_import('y','P','TXT');
@@ -66,6 +68,8 @@ $t = new XTemplate($mskin);
 
 $t->assign(cot_generate_usertags($urr, 'USERS_DETAILS_', '', true));
 
+$usersHelper = UsersHelper::getInstance();
+
 if ((int) $urr['user_id'] === (int) Cot::$usr['id']) {
     $breadCrumbs = [[cot_url('users', ['m' => 'details']), Cot::$L['users_myProfile']]];
 } else {
@@ -73,13 +77,13 @@ if ((int) $urr['user_id'] === (int) Cot::$usr['id']) {
         [cot_url('users'), Cot::$L['Users']],
         [
             cot_url('users', ['m' => 'details', 'id' => $urr['user_id'], 'u' => $urr['user_name']]),
-            cot_user_full_name($urr),
+            $usersHelper->getFullName($urr),
         ],
     ];
 }
 
 $t->assign([
-    'USERS_DETAILS_TITLE' => htmlspecialchars(cot_user_full_name($urr)),
+    'USERS_DETAILS_TITLE' => htmlspecialchars($usersHelper->getFullName($urr)),
     'USERS_DETAILS_SUBTITLE' => Cot::$L['use_subtitle'],
     'USERS_DETAILS_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
 ]);
@@ -91,10 +95,10 @@ foreach (cot_getextplugins('users.details.tags') as $pl) {
 /* ===== */
 
 if ($usr['isadmin']) {
-	$t-> assign(array(
+	$t-> assign([
 		'USERS_DETAILS_ADMIN_EDIT' => cot_rc_link(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit']),
-		'USERS_DETAILS_ADMIN_EDIT_URL' => cot_url('users', 'm=edit&id='.$urr['user_id'])
-	));
+		'USERS_DETAILS_ADMIN_EDIT_URL' => cot_url('users', 'm=edit&id='.$urr['user_id']),
+	]);
 
 	$t->parse('MAIN.USERS_DETAILS_ADMIN');
 }

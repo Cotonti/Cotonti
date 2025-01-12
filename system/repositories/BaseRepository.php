@@ -24,6 +24,9 @@ class BaseRepository
         $table = Cot::$db->quoteTableName($this->tableName);
 
         $sqlWhere = is_array($condition) ? $this->prepareCondition($condition) : $condition;
+        if (!empty($sqlWhere)) {
+            $sqlWhere = ' WHERE ' . $sqlWhere;
+        }
 
         $sqlOrderBy = '';
         if (!empty($orderBy)) {
@@ -53,6 +56,10 @@ class BaseRepository
         return Cot::$db->prepareCondition($condition);
     }
 
+    /**
+     * In PHP below version 8, all fields are fetching as strings
+     * So it can be needed to cast some attributes
+     */
     protected function castAttributes(array $item): array
     {
         return $item;

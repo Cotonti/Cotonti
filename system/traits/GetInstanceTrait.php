@@ -10,17 +10,17 @@ namespace cot\traits;
 
 trait GetInstanceTrait
 {
-    private static $classInstance = null;
+    private static $classInstances = [];
 
     /**
      * @return static
      */
     public static function getInstance(): self
     {
-        if (static::$classInstance === null) {
-            static::$classInstance = new static();
+        $class = static::class;
+        if (!isset(self::$classInstances[$class])) {
+            self::$classInstances[$class] = new static();
         }
-
-        return static::$classInstance;
+        return self::$classInstances[$class];
     }
 }
