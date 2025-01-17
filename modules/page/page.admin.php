@@ -307,8 +307,9 @@ if ($a == 'validate') {
 
 		$perelik = '';
 		$notfoundet = '';
-		foreach ($s as $i => $k) {
-			if ($s[$i] == '1' || $s[$i] == 'on') {
+		foreach ($s as $id => $k) {
+			if ($s[$id] == '1' || $s[$id] == 'on') {
+
 				/* === Hook  === */
 				foreach (cot_getextplugins('page.admin.checked_delete') as $pl) {
 					include $pl;
@@ -322,7 +323,10 @@ if ($a == 'validate') {
                         include $pl;
                     }
                     /* ===== */
-                    $perelik .= '#' . $id . ', ';
+                    if ($perelik !== '') {
+                        $perelik .= ', ';
+                    }
+                    $perelik .= '#' . $id;
                 } else {
                     $notfoundet .= '#'. $id . ' - ' . Cot::$L['Error'] . '<br  />';
                 }
