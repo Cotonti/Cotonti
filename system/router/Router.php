@@ -247,7 +247,7 @@ class Router
     /**
      * @param string $controllerId Controller id
      * @param ?string $extensionCode
-     * @param ?string $extensionType ExtensionsDictionary::EXTENSION_TYPE_MODULE or ExtensionsDictionary::EXTENSION_TYPE_PLUGIN,
+     * @param ?string $extensionType ExtensionsDictionary::TYPE_MODULE or ExtensionsDictionary::TYPE_PLUGIN,
      *    NULL for core
      */
     public function getController(
@@ -272,7 +272,7 @@ class Router
     /**
      * @param string $controllerId Controller Id
      * @param ?string $extensionCode
-     * @param ?string $extensionType ExtensionsDictionary ::EXTENSION_TYPE_MODULE or ExtensionsDictionary::EXTENSION_TYPE_PLUGIN,
+     * @param ?string $extensionType ExtensionsDictionary::TYPE_MODULE or ExtensionsDictionary::TYPE_PLUGIN,
      *     NULL for core
      * @param bool $ifExists Check if class exists
      * @return ($ifExists is true ? ?class-string<BaseController> : class-string<BaseController>) Controller class name.

@@ -67,7 +67,7 @@ export class ServerEvents {
                 observer.event === eventData.event
                 && typeof observer.onEvent === 'function'
             ) {
-                observer.onEvent(eventData.data);
+                observer.onEvent(eventData);
             }
         });
     }

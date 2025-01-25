@@ -13,6 +13,7 @@
 	{HEADER_HEAD}
 	{HEADER_COMPOPUP}
 	<link href="{PHP.cfg.system_dir}/admin/tpl/inc/bootstrap-reboot.min.css" type="text/css" rel="stylesheet" />
+	<link href="lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 	<link href="{PHP.cfg.system_dir}/admin/tpl/inc/admin.css" type="text/css" rel="stylesheet" />
 	<link rel="shortcut icon" href="favicon.ico" />
 </head>

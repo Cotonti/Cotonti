@@ -18,12 +18,12 @@ export class Toast {
     #container = null;
 
     /**
-     * @param {String} title
      * @param {String} message
+     * @param {String} title
      * @param {String} hint
      * @param {String} type
      */
-    constructor(title, message, hint = '', type = '') {
+    constructor(message, title = '', hint = '', type = '') {
         if (window.bootstrap === undefined) {
             console.error('Bootstrap is not found. It is required for use "Toast" component');
             return;
@@ -44,7 +44,7 @@ export class Toast {
             this.#container = container;
         }
 
-        const toastTitle = this.title !== '' ? `<strong class="me-auto">${this.title}</strong>` : '';
+        const toastTitle = `<strong class="me-auto">${this.title}</strong>`;
         const toastHint = this.hint !== '' ? `<small>${this.hint}</small>` : '';
         const backGround = this.type !== '' ? ` text-bg-${this.type}` : '';
 

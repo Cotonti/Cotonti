@@ -38,8 +38,8 @@ class CotontiApplication
 
     /**
      * Get the Modal instance
-     * @param {String} title
      * @param {String} content
+     * @param {String} title
      * @param {({
      *    label: String,
      *    onClick: function|undefined,
@@ -49,14 +49,14 @@ class CotontiApplication
      *  }|string)[]|null} buttons
      *  @returns Modal
      */
-    getModal(title, content, buttons= null) {
-        return new Modal(title, content, buttons);
+    getModal(content, title = '', buttons= null) {
+        return new Modal(content, title, buttons);
     }
 
     /**
      * Show Modal programmatically
-     * @param {String} title
      * @param {String} content
+     * @param {String} title
      * @param {({
      *    label: String,
      *    onClick: function|undefined,
@@ -66,34 +66,34 @@ class CotontiApplication
      *  }|string)[]|null} buttons
      *  @returns Modal
      */
-    modal(title, content, buttons= null) {
-        const modal = this.getModal(title, content, buttons);
+    modal(content, title = '', buttons= null) {
+        const modal = this.getModal(content, title, buttons);
         modal.show();
         return modal;
     }
 
     /**
      * Show Toasts programmatically
-     * @param {String} title
      * @param {String} message
+     * @param {String} title
      * @param {String} hint
      * @param {String} type
      * @returns Toast
      */
-    getToast(title, message, hint = '', type = '') {
-        return new Toast(title, message, hint, type);
+    getToast(message, title = '', hint = '', type = '') {
+        return new Toast(message, title, hint, type);
     }
 
     /**
      * Show Toasts programmatically
-     * @param {String} title
      * @param {String} message
+     * @param {String} title
      * @param {String} hint
      * @param {String} type
      * @param {Number} delay
      */
-    toast(title, message, hint = '', type = '', delay = 5000) {
-        const toast = this.getToast(title, message, hint, type);
+    toast(message, title = '', hint = '', type = '', delay = 5000) {
+        const toast = this.getToast(message, title, hint, type);
 
         if (delay !== null) {
             toast.delay = delay

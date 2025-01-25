@@ -6,6 +6,7 @@
 		</p>
 	</div>
 </div>
+<script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
 {FOOTER_RC}
 </body>
 </html>

@@ -9,7 +9,7 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-// Bootstrap is needed to use the Model, Toast, etc. components.
+// Bootstrap is needed to use the Modal, Toast, etc. components.
 Resources::addFile('lib/bootstrap/css/bootstrap.min.css');
 if (Cot::$cfg['headrc_consolidate']) {
     Resources::addFile('lib/bootstrap/js/bootstrap.bundle.min.js');

@@ -29,8 +29,8 @@ export class Modal {
     #element = null;
 
     /**
-     * @param {String} title
      * @param {String} content
+     * @param {String} title
      * @param {({
      *    label: String,
      *    onClick: function|undefined,
@@ -39,7 +39,7 @@ export class Modal {
      *    btnType: string|undefined
      *  }|string)[]|null} buttons
      */
-    constructor(title, content, buttons) {
+    constructor(content, title = '', buttons = null) {
         if (window.bootstrap === undefined) {
             console.error('Bootstrap is not found. It is required for use "Modal" component');
             return;

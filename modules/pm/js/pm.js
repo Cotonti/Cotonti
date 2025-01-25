@@ -42,11 +42,65 @@ $( document ).on( "click", ".pm-star", function(e) {
     }
 });
 
-if (window.pmNotifications === true) {
-    cot.getServerEvents().addObserver('pmObserver', 'newPm', (data) => {
-        let title = `<a href="${data.url}">${data.L.newMessage}</a><br>${data.L.from}: `
-            + `<a href="${data.fromUser.url}">${data.fromUser.fullName}</a>`;
-        let text = `<a href="${data.url}">${data.text}</a>`;
-        cot.toast(title, text);
-    });
-}
+(function () {
+    class PrivateMessages {
+        /**
+         * @type {String}
+         */
+        notificationSound = 'modules/pm/inc/new-message.mp3';
+
+        #played = [];
+
+        /**
+         * @type {BroadcastChannel|null}
+         */
+        #broadcastChannel = null;
+
+        initNotificationHandler() {
+            cot.getServerEvents().addObserver('pmObserver', 'newPm', (data) => {
+                this.handleNewMessage(data);
+            });
+
+            // Connection to a broadcast channel
+            this.#broadcastChannel = new BroadcastChannel('privateMessages');
+            this.#broadcastChannel.onmessage = (event) => {
+                if (event.data.event === 'notificationSoundPlayed') {
+                    if (!this.#played.includes(event.data.data.id)) {
+                        this.#played.push(event.data.data.id);
+                    }
+                }
+            };
+        }
+
+        handleNewMessage(event) {
+            if (
+                !this.#played.includes(event.eventId)
+                && this.notificationSound !== ''
+                && this.notificationSound !== null
+            ) {
+                // Tell other tabs that the notification sound will be played in this one.
+                this.#broadcastChannel.postMessage(
+                    {event: 'notificationSoundPlayed', data: {id: event.eventId}},
+                );
+                this.#playNotificationSound(event)
+            }
+
+            const data = event.data;
+
+            let title = `<a href="${data.url}">${data.L.newMessage}</a><br>${data.L.from}: `
+                + `<a href="${data.fromUser.url}">${data.fromUser.fullName}</a>`;
+            let text = `<a href="${data.url}">${data.text}</a>`;
+
+            cot.toast(text, title);
+        }
+
+        #playNotificationSound(event) {
+            this.#played.push(event.eventId);
+
+            const audio = new Audio(this.notificationSound);
+            audio.play();
+        }
+    }
+
+    window.cot.pm = new PrivateMessages();
+})();

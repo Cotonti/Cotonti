@@ -48,7 +48,7 @@ export class ServerSentEventsClient {
             if (eventData.data !== undefined && (typeof eventData.data === 'string') && eventData.data !== '') {
                 eventData.data = JSON.parse(eventData.data);
             }
-            eventData.id = event.lastEventId;
+            eventData.eventId = event.lastEventId;
             this.#onEventTriggered(eventData);
         };
 

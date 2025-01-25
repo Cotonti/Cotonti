@@ -1,5 +1,7 @@
 <?php
-/* Private Message Icons */
+/**
+ * Private Message Icons
+ */
 
 if (!isset(Cot::$L['pm_sendnew'])) {
     global $L;
@@ -14,4 +16,6 @@ $R['pm_icon_edit'] = '<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/' .C
 $R['pm_icon_star'] = '<div class="pm-star"><a href="{$link}" title="'.Cot::$L['pm_putinstarred'].'">'.'<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/24/error.png" /></a></div>';
 $R['pm_icon_unstar'] = '<div class="pm-star pm-star-on"><a href="{$link}" title="'.Cot::$L['pm_deletefromstarred'].'">'.'<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/24/error.png" /></a></div>';
 
-$R['pm_link'] = '<a href="{$url}">'.$R['pm_icon'].'</a>';
+$R['pm_link'] = '<a href="{$url}">' . $R['pm_icon'] . '</a>';
+
+$R['pm_newMessageSound'] = Cot::$cfg['modules_dir'] . '/pm/inc/new-message.mp3'; ;

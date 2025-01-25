@@ -80,7 +80,7 @@ class ExtensionsService
 
     /**
      * Get extension type: module or plugin
-     * @return string ExtensionsDictionary::EXTENSION_TYPE_MODULE or ExtensionsDictionary::EXTENSION_TYPE_PLUGIN
+     * @return string ExtensionsDictionary::TYPE_MODULE or ExtensionsDictionary::TYPE_PLUGIN
      *   or NULL if extension is not found or not installed
      */
     public function getType(string $extensionCode): ?string

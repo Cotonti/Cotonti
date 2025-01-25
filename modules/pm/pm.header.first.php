@@ -14,6 +14,8 @@ declare(strict_types=1);
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsDictionary;
+
 defined('COT_CODE') or die('Wrong URL.');
 
 if (Cot::$usr['id'] <= 0) {
@@ -21,9 +23,15 @@ if (Cot::$usr['id'] <= 0) {
 }
 
 if (Cot::$cfg['pm']['allowPopUpNotifications'] || Cot::$env['ext'] === 'pm') {
+    if (empty(Cot::$R['pm_newMessageSound'])) {
+        require_once cot_incfile('pm', ExtensionsDictionary::TYPE_MODULE, 'resources');
+    }
+
     Resources::linkFileFooter(Cot::$cfg['modules_dir'] . '/pm/js/pm.js');
 
     if (Cot::$cfg['pm']['allowPopUpNotifications']) {
-        Resources::addEmbed('window.pmNotifications = true');
+        Resources::embedFooter(
+            "cot.pm.notificationSound = '" . Cot::$R['pm_newMessageSound'] . "'; cot.pm.initNotificationHandler();"
+        );
     }
 }
