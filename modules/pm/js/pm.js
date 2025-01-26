@@ -73,17 +73,7 @@ $( document ).on( "click", ".pm-star", function(e) {
         }
 
         handleNewMessage(event) {
-            if (
-                !this.#played.includes(event.eventId)
-                && this.notificationSound !== ''
-                && this.notificationSound !== null
-            ) {
-                // Tell other tabs that the notification sound will be played in this one.
-                this.#broadcastChannel.postMessage(
-                    {event: 'notificationSoundPlayed', data: {id: event.eventId}},
-                );
-                this.#playNotificationSound(event)
-            }
+            this.#playNotificationSound(event);
 
             const data = event.data;
 
@@ -95,10 +85,42 @@ $( document ).on( "click", ".pm-star", function(e) {
         }
 
         #playNotificationSound(event) {
-            this.#played.push(event.eventId);
+            if (this.#played.includes(event.eventId)
+                || this.notificationSound === ''
+                || this.notificationSound === null
+            ) {
+                return;
+            }
 
             const audio = new Audio(this.notificationSound);
-            audio.play();
+
+            if (navigator.getAutoplayPolicy !== undefined) {
+                if (navigator.getAutoplayPolicy(audio) !== 'allowed') {
+                    return;
+                }
+
+                // Tell other tabs that the notification sound will be played in this one.
+                this.#broadcastChannel.postMessage(
+                    {event: 'notificationSoundPlayed', data: {id: event.eventId}},
+                );
+                this.#played.push(event.eventId);
+
+                audio.play();
+
+                return;
+            }
+
+            audio.play()
+                .then(() => {
+                    // Tell other tabs that the notification sound has been played in this one.
+                    this.#broadcastChannel.postMessage(
+                        {event: 'notificationSoundPlayed', data: {id: event.eventId}},
+                    );
+                    this.#played.push(event.eventId);
+                })
+                .catch((error) => {
+
+                });
         }
     }
 

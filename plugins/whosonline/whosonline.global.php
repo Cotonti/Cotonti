@@ -8,10 +8,13 @@ Order=8
 
 defined('COT_CODE') or die('Wrong URL');
 
-Cot::$sys['whosonline_all_count'] = Cot::$sys['whosonline_reg_count'] + Cot::$sys['whosonline_vis_count'];
-Cot::$out['whosonline'] = cot_declension(Cot::$sys['whosonline_reg_count'], $Ls['Members'])
+$whosonlineRegisteredCount = Cot::$sys['whosonline_reg_count'] ?? 0;
+$whosonlineVisitorsCount = Cot::$sys['whosonline_vis_count'] ?? 0;
+
+Cot::$sys['whosonline_all_count'] = $whosonlineRegisteredCount + $whosonlineVisitorsCount;
+Cot::$out['whosonline'] = cot_declension($whosonlineRegisteredCount, $Ls['Members'])
     . (
         !Cot::$cfg['plugin']['whosonline']['disable_guests']
-            ? ', ' . cot_declension(Cot::$sys['whosonline_vis_count'], $Ls['Guests'])
+            ? ', ' . cot_declension($whosonlineVisitorsCount, $Ls['Guests'])
             : ''
     );
