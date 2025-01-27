@@ -76,12 +76,19 @@ class IndexAction extends BaseAction
 
         // Disable the time limit
         set_time_limit(0);
+        // This sets the maximum time in seconds a script is allowed to run before it is terminated by the parser.
+        // 0 - unlimited
+        ini_set('max_execution_time', '0');
+        // This sets the maximum time in seconds a script is allowed to parse input data, like POST and GET.
+        // -1 means that max_execution_time is used instead.
+        //  0 allow unlimited time
+        ini_set('max_input_time', '3600');
 
         // Disable output buffering
         for ($i = 0; $i <= ob_get_level(); $i++) {
             ob_end_clean();
         }
-        ob_end_flush();
+        ob_end_clean();
         ob_implicit_flush();
 
         // Set headers for stream
