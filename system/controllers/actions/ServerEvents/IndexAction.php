@@ -82,7 +82,7 @@ class IndexAction extends BaseAction
         // This sets the maximum time in seconds a script is allowed to parse input data, like POST and GET.
         // -1 means that max_execution_time is used instead.
         //  0 allow unlimited time
-        ini_set('max_input_time', '3600');
+        ini_set('max_input_time', '-1');
 
         // Disable output buffering
         for ($i = 0; $i <= ob_get_level(); $i++) {
