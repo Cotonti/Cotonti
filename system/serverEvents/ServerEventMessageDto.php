@@ -15,9 +15,9 @@ defined('COT_CODE') or die('Wrong URL');
 class ServerEventMessageDto
 {
     /**
-     * @var int The event ID to set the EventSource object's last event ID value.
+     * @var ?int The event ID to set the EventSource object's last event ID value.
      */
-    public $id;
+    public $id = null;
 
     /**
      * @var int
@@ -48,8 +48,12 @@ class ServerEventMessageDto
     /**
      * @var int The reconnection time to use when attempting to send the event. This must be an integer,
      *   specifying the reconnection time in milliseconds. If a non-integer value is specified, the field is ignored.
+     *
+     * It’s a client instruction: the browser will wait the specified time after it detects a broken connection
+     * (because the server closes the connection after a message perhaps) before re-establishing a connection to the
+     * SSE resource url.
      */
-    public $retry;
+    public $retry = 10000;
 
     /**
      * @var string This is just a comment, since it starts with a colon character. As mentioned previously,
@@ -73,7 +77,7 @@ class ServerEventMessageDto
         if ($this->comment !== '') {
             $event[] = sprintf(': %s', $this->comment);
         }
-        if ($this->id !== '') {
+        if ($this->id !== null) {
             $event[] = sprintf('id: %s', $this->id);
         }
         if ($this->retry > 0) {

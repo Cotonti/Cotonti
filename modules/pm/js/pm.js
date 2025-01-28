@@ -57,7 +57,9 @@ $( document ).on( "click", ".pm-star", function(e) {
         #broadcastChannel = null;
 
         initNotificationHandler() {
-            cot.getServerEvents().addObserver('pmObserver', 'newPm', (data) => {
+            const serverEvents = cot.getServerEvents();
+            // serverEvents.mode = 'develop';
+            serverEvents.addObserver('pmObserver', 'newPm', (data) => {
                 this.handleNewMessage(data);
             });
 

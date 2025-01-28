@@ -425,10 +425,10 @@ switch($a) {
 							}
 							$tags = explode(',', $line[1]);
 							$tpl_file = cot_tplfile($tplbase, $tpltype);
-							$listtags = $tpl_file.' :<br />';
+							$listtags = $tpl_file . ' :<br />';
 							if (Cot::$cfg['xtpl_cache']) {
 							    // clears cache if exists
-								$cache_file = str_replace(array('./', '/'), '_', $tpl_file);
+								$cache_file = str_replace(['./', '/'], '_', $tpl_file ?? '');
 								$cache_path = Cot::$cfg['cache_dir'] . '/templates/' .
                                     pathinfo($cache_file, PATHINFO_FILENAME );
 								$cache_files_ext = array('.tpl','.idx','.tags');

@@ -16,7 +16,7 @@ defined('COT_CODE') or die('Wrong URL');
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
- * @todo use more fast adapters then MySQL. Redis?
+ * @todo use more fast adapters then MySQL. Redis? RabbitMq?
  */
 class ServerEventsRepository
 {
@@ -40,7 +40,9 @@ class ServerEventsRepository
             return [];
         }
 
-        $condition = "{$table}.user_id = :userId AND {$table}.created_at >= '{$observer['updated_at']}'";
+        $dateTo = date('Y-m-d H:i:s', strtotime($observer['updated_at']) - 120);
+
+        $condition = "{$table}.user_id = :userId AND {$table}.created_at >= '{$dateTo}'";
         if ($observer['last_event_id'] > 0) {
             $condition .= " AND {$table}.id > {$observer['last_event_id']}";
         }

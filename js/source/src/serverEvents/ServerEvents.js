@@ -38,7 +38,7 @@ export class ServerEvents {
     }
 
     #initDriver() {
-        const url = getBaseHref() + 'index.php?n=server-events';
+        const url = getBaseHref() + '?n=server-events';
         if (typeof SharedWorker !== undefined) {
             if (this.mode !== 'production') {
                 console.log('creating ServerSentEventsSharedWorker driver');

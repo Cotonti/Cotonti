@@ -91,11 +91,27 @@ class IndexAction extends BaseAction
         ob_end_clean();
         ob_implicit_flush();
 
+        ini_set('output_buffering', 'Off');
+
         // Set headers for stream
+        header('X-Accel-Buffering: no');
         header('Content-Type: text/event-stream');
         header('Cache-Control: no-cache');
         header('Connection: keep-alive');
         header('Transfer-Encoding: chunked');
+        flush();
+
+//        $event = new \cot\serverEvents\ServerEventMessageDto();
+//        $event->id = 0;
+//        $event->event = 'connection';
+//        $event->userId = 0;
+//        $event->comment = 'connected';
+//        $event->data = json_encode(['connection' => 'connected']);
+//        echo $event;
+//        if (ob_get_level() > 0) {
+//            ob_flush();
+//        }
+//        flush();
 
         while (true) {
             $currentTime = time();
