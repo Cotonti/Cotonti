@@ -16,14 +16,14 @@ const cleanDistDirectory = () =>
         .pipe(clean());
 
 const buildWorker = () =>
-    src(['src/serverEvents/driver/sharedWorkerSSE.js'], {sourcemaps: true})
+    src(['src/serverEvents/sharedWorker.js'], {sourcemaps: true})
         .pipe(
             webpack({
                 mode: mode,
                 devtool: 'inline-source-map'
             })
         )
-        .pipe(rename('sharedWorkerSSE.min.js'))
+        .pipe(rename('sharedWorkerServerEvents.min.js'))
         .pipe(dest('../', {sourcemaps: true}));
 
 const buildModules = () =>

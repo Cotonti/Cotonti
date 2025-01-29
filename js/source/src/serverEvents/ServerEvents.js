@@ -1,5 +1,8 @@
-import {ServerSentEventsSharedWorker} from "./driver/ServerSentEventsSharedWorker";
-import {ServerSentEvents} from "./driver/ServerSentEvents";
+//import {BaseServerEventsDriver} from "./driver/BaseServerEventsDriver";
+import {ServerEventsAjaxDriver} from "./driver/ServerEventsAjaxDriver";
+import {ServerEventsSSEDriver} from "./driver/ServerEventsSSEDriver";
+import {ServerEventsClient} from "./client/ServerEventsClient";
+import {ServerEventsSharedWorkerClient} from "./client/ServerEventsSharedWorkerClient";
 
 /**
  * Server events
@@ -7,14 +10,24 @@ import {ServerSentEvents} from "./driver/ServerSentEvents";
  * @copyright (c) Cotonti Team
  */
 export class ServerEvents {
+    mode = 'production';
+
     /**
-     * @type {null|ServerSentEventsSharedWorker|ServerSentEvents}
+     * @type {null|ServerEventsSharedWorkerClient|ServerEventsClient}
      */
-    #driver = null;
+    #client = null;
+
+    /**
+     * @type {string}
+     */
+    #clientType = 'sharedWorker';
+
+    /**
+     * @type {string} 'serverSentEvents', 'ajax' or 'websocket' (not implemented yet)
+     */
+    #driverType = 'serverSentEvents';
 
     #observersRegistry = null;
-
-    mode = 'production';
 
     constructor() {
         this.#observersRegistry = new Map();
@@ -32,32 +45,53 @@ export class ServerEvents {
             onEvent: callback
         });
 
-        if (this.#driver === null) {
-            this.#initDriver();
+        if (this.#client === null) {
+            this.#initClient();
         }
     }
 
-    #initDriver() {
-        const url = getBaseHref() + '?n=server-events';
-        if (typeof SharedWorker !== undefined) {
+    #initClient() {
+        if (this.#clientType === 'sharedWorker' && (typeof SharedWorker !== undefined)) {
             if (this.mode !== 'production') {
-                console.log('creating ServerSentEventsSharedWorker driver');
+                console.log('creating ServerEventsSharedWorkerClient');
             }
-            this.#driver = new ServerSentEventsSharedWorker(url, this.mode);
+            this.#client = new ServerEventsSharedWorkerClient(this.#driverType, this.mode);
         } else {
             if (this.mode !== 'production') {
-                console.log('creating ServerSentEvents driver');
+                console.log('creating ServerEventsClient');
             }
-            this.#driver = new ServerSentEvents(url, this.mode);
+            this.#client = new ServerEventsClient(this.#driverType, this.mode);
         }
 
-        this.#driver.onEvent = (eventData) => {
-            this.#eventTriggered(eventData);
-        }
-        this.#driver.mode = this.mode;
+        this.#client.addEventListener('event', (event) => {
+            this.#onEventTriggered(event.detail);
+        });
     }
 
-    #eventTriggered(eventData) {
+    /**
+     * @returns {ServerEventsSSEDriver|ServerEventsAjaxDriver}
+     */
+    // #getDriver() {
+    //     let driver = null;
+    //     switch (this.#driverType) {
+    //         case 'serverSentEvents':
+    //             driver = new ServerEventsSSEDriver(this.#serverSentEventsUrl, this.mode);
+    //             if (this.mode !== 'production') {
+    //                 console.log('using ServerEventsSSEDriver');
+    //             }
+    //             break;
+    //
+    //         default:
+    //             driver = new ServerEventsAjaxDriver(this.#serverSentEventsUrl, this.mode);
+    //             if (this.mode !== 'production') {
+    //                 console.log('using ServerEventsAjaxDriver');
+    //             }
+    //     }
+    //
+    //     return driver;
+    // }
+
+    #onEventTriggered(eventData) {
         if (this.mode !== 'production') {
             console.log('Server triggered event', eventData);
         }

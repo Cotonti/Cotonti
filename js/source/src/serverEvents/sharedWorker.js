@@ -1,15 +1,16 @@
+import {ServerEventsDriverFactory} from "./driver/ServerEventsDriverFactory";
+
 /**
  * Shared worker for Server Sent Events
+ * @package Cotonti
+ * @copyright (c) Cotonti Team
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
- * @link https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker
  */
-import {ServerSentEventsClient} from "../ServerSentEventsClient";
-
 class ServerSentEvents {
     /**
-     * @type {ServerSentEventsClient|null}
+     * @type {ServerEventsAjaxDriver|ServerEventsSSEDriver|null}
      */
-    #client = null;
+    #driver = null;
 
     /**
      * @type {string|null}
@@ -19,7 +20,12 @@ class ServerSentEvents {
     /**
      * @type {string|null}
      */
-    eventsUrl = null;
+    driverType = null;
+
+    /**
+     * @type {string}
+     */
+    baseUrl = '/';
 
     /**
      * @type {function|null}
@@ -27,21 +33,25 @@ class ServerSentEvents {
     onEvent = null;
 
     init() {
-        if (this.#client !== null) {
+        if (this.#driver !== null) {
             return;
         }
 
         if (this.mode !== 'production') {
-            console.log('init Shared worker SSE');
+            console.log('init server events Shared worker');
         }
 
-        this.#client = new ServerSentEventsClient(this.eventsUrl, this.mode);
-        this.#client.onEvent = (eventData) => {
+        const factory = new ServerEventsDriverFactory(this.baseUrl, this.mode);
+
+        this.#driver = factory.getByType(this.driverType);
+
+        this.#driver.addEventListener('event', (event) => {
             if (typeof this.onEvent !== 'function') {
                 console.error(this.constructor.name + '.onEvent is not defined');
             }
-            this.onEvent(eventData);
-        }
+            this.onEvent(event.detail);
+        });
+        this.#driver.init();
     }
 }
 
@@ -61,8 +71,6 @@ self.onconnect = (event) => {
 
     ports.push(port);
 
-    // console.log('Shared worker connected');
-
     if (events === null) {
         events = new ServerSentEvents();
         events.onEvent = (event) => {
@@ -80,9 +88,11 @@ self.onconnect = (event) => {
         const message = e.data;
 
         if (message.config !== undefined) {
-            events.eventsUrl = message.config.url;
+            if (events.driverType === null) {
+                events.driverType = message.config.driver;
+            }
             events.mode = message.config.mode;
-
+            events.baseUrl = message.config.baseUrl;
             events.init();
         }
 

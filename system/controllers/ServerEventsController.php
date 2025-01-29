@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace cot\controllers;
 
-use cot\controllers\actions\ServerEvents\IndexAction;
+use cot\controllers\actions\ServerEvents\ServerSentEventsAction;
 
 defined('COT_CODE') or die('Wrong URL.');
 
@@ -20,7 +20,7 @@ class ServerEventsController extends BaseController
     public static function actions(): array
     {
         return [
-            'index' => IndexAction::class,
+            'sse' => ServerSentEventsAction::class,
         ];
     }
 }

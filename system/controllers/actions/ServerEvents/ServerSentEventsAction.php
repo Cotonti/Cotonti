@@ -21,7 +21,7 @@ use Temporary_cache_driver;
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
  */
-class IndexAction extends BaseAction
+class ServerSentEventsAction extends BaseAction
 {
     private const OLD_OBSERVERS_CHECK_KEY = 'SEOldObserversKey';
     private const CHECK_CONNECTION_KEY = 'SECheckConnectionKey';

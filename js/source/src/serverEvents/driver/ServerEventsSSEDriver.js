@@ -1,30 +1,16 @@
+import {BaseServerEventsDriver} from "./BaseServerEventsDriver";
+
 /**
- * Server Sent Events client
+ * Server sent events driver
+ * @package Cotonti
+ * @copyright (c) Cotonti Team
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
  */
-export class ServerSentEventsClient {
-    /**
-     * @type {string|null}
-     */
-    eventsUrl = null;
-
+export class ServerEventsSSEDriver extends BaseServerEventsDriver {
     /**
      * @type {EventSource|null}
      */
     #eventSource = null;
-
-    /**
-     * @type {function|null}
-     */
-    onEvent = null;
-
-    constructor(eventsUrl, mode = null) {
-        this.eventsUrl = eventsUrl;
-        if (mode !== null) {
-            this.mode = mode;
-        }
-        this.init();
-    }
 
     init() {
         if (this.#eventSource !== null) {
@@ -32,14 +18,14 @@ export class ServerSentEventsClient {
         }
 
         if (this.mode !== 'production') {
-            console.log('init ServerSentEventsClient');
+            console.log('init ServerEventsSSEDriver. ', this.eventsUrl);
         }
 
         this.#eventSource = new EventSource(this.eventsUrl);
 
         if (this.mode !== 'production') {
             this.#eventSource.onopen = function (event) {
-                console.log('ServerSentEventsClient connection is open');
+                console.log('ServerEventsSSEDriver connection is open');
             };
         }
 
@@ -49,24 +35,13 @@ export class ServerSentEventsClient {
                 eventData.data = JSON.parse(eventData.data);
             }
             eventData.eventId = event.lastEventId;
-            this.#onEventTriggered(eventData);
+            this.onEventTriggered(eventData);
         };
 
         if (this.mode !== 'production') {
             this.#eventSource.onerror = function (event) {
-                console.log('ServerSentEventsClient connection error');
+                console.log('ServerEventsSSEDriver connection error');
             }
         }
-    }
-
-    #onEventTriggered(eventData) {
-        if (this.mode !== 'production') {
-            console.log('ServerSentEventsClient: Server triggered event', eventData);
-        }
-
-        if (typeof this.onEvent !== 'function') {
-            console.error(this.constructor.name + '.onEvent is not defined');
-        }
-        this.onEvent(eventData);
     }
 }

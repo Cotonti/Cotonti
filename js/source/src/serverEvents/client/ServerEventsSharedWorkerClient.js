@@ -1,22 +1,22 @@
-import {ServerSentEvents} from './ServerSentEvents';
+import {BaseServerEventsClient} from "./BaseServerEventsClient";
 
 /**
- * Server Sent Events driver implementation via SharedWorker.
- *
- * @link https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
+ * Shared worker server events client
+ * @package Cotonti
+ * @copyright (c) Cotonti Team
  * @link https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker
  */
-export class ServerSentEventsSharedWorker extends ServerSentEvents {
+export class ServerEventsSharedWorkerClient extends BaseServerEventsClient {
     init() {
         if (this.mode !== 'production') {
-            console.log('init ServerSentEventsSharedWorker driver');
+            console.log('init ServerEventsSharedWorkerClient');
         }
 
         try {
-            const worker = new SharedWorker('/js/sharedWorkerSSE.min.js');
+            const worker = new SharedWorker('/js/sharedWorkerServerEvents.min.js');
             const port = worker.port;
 
-            port.postMessage({config: {url: this.eventsUrl, mode: this.mode}});
+            port.postMessage({config: {mode: this.mode, driver: this.driverType, baseUrl: getBaseHref()}});
 
             port.onmessage = (event) => {
                 if (this.mode !== 'production') {
