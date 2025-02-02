@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace cot\controllers;
 
+defined('COT_CODE') or die('Wrong URL.');
+
 /**
  * @method run();
  */

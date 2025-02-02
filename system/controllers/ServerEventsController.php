@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace cot\controllers;
 
+use cot\controllers\actions\ServerEvents\ServerEventsAjaxAction;
 use cot\controllers\actions\ServerEvents\ServerSentEventsAction;
-
-defined('COT_CODE') or die('Wrong URL.');
 
 /**
  * Server Event controller
@@ -20,6 +19,7 @@ class ServerEventsController extends BaseController
     public static function actions(): array
     {
         return [
+            'ajax' => ServerEventsAjaxAction::class,
             'sse' => ServerSentEventsAction::class,
         ];
     }

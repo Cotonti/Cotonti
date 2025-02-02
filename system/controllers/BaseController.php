@@ -8,6 +8,8 @@ use BadMethodCallException;
 use cot\exceptions\InvalidConfigException;
 use cot\extensions\ExtensionsDictionary;
 
+defined('COT_CODE') or die('Wrong URL.');
+
 /**
  * Base controller class
  * @package Cotonti

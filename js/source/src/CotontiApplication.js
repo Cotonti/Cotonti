@@ -7,7 +7,20 @@ import {Modal} from "./Modal";
  */
 class CotontiApplication
 {
+    cfg = {};
+    L = {};
+
     #severEvents = null;
+
+    init(data) {
+        if (data.config !== undefined) {
+            this.cfg = data.config;
+        }
+
+        if (data.lang !== undefined) {
+            this.L = data.lang;
+        }
+    }
 
     /**
      * Get Server Events object

@@ -28,10 +28,11 @@ export class ServerEventsDriverFactory {
         let driver = null;
 
         const serverSentEventsUrl = this.#baseUrl + '?n=server-events&a=sse';
-        const ajaxEventsUrl = this.#baseUrl + '?n=server-events&a=ajax';
+        const ajaxEventsUrl = this.#baseUrl + '?n=server-events&a=ajax&_ajax=1';
 
         switch (driverType) {
-            case 'serverSentEvents':
+            case 'sse':
+                // Server-Sent events driver
                 driver = new ServerEventsSSEDriver(serverSentEventsUrl);
                 if (this.#mode !== 'production') {
                     console.log('using ServerEventsSSEDriver', serverSentEventsUrl);

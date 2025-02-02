@@ -11,10 +11,10 @@ export class BaseServerEventsDriver extends EventTarget {
      */
     eventsUrl = null;
 
-    constructor(eventsUrl, mode = '') {
+    constructor(eventsUrl, mode = null) {
         super();
 
-        if (mode !== null) {
+        if (mode !== null && mode !== '') {
             this.mode = mode;
         }
         this.eventsUrl = eventsUrl;
@@ -27,10 +27,7 @@ export class BaseServerEventsDriver extends EventTarget {
             console.log('ServerEventsDriver: Server triggered event', eventData);
         }
 
-        const event = new CustomEvent('event', {
-            detail: eventData,
-            data: {bar: 'baz'}
-        });
+        const event = new CustomEvent('event', {detail: eventData});
         this.dispatchEvent(event);
     }
 }

@@ -67,7 +67,24 @@ class ServerEventMessageDto
         $event->id = (int) $data['id'];
         $event->userId = (int) $data['user_id'];
         $event->event = $data['event'];
-        $event->data = $data['data'];
+        $event->data = is_string($data['data']) ? json_decode($data['data'], true) : $data['data'];
+        return $event;
+    }
+
+    public function toArray(): array
+    {
+        $event = [];
+        if ($this->id !== null) {
+            $event['id'] = $this->id;
+        }
+        if ($this->comment !== '') {
+            $event['comment'] = $this->comment;
+        }
+        $event['event'] = empty($this->event) ? null : $this->event;
+        $event['data'] = empty($this->data)
+            ? null
+            : (is_array($this->data) ? $this->data : json_decode($this->data));
+
         return $event;
     }
 
@@ -94,7 +111,9 @@ class ServerEventMessageDto
 
         $data = [
             'event' => empty($this->event) ? null : $this->event,
-            'data' => empty($this->data) ? null : $this->data,
+            'data' => empty($this->data)
+                ? null
+                : (is_array($this->data) ? $this->data : json_decode($this->data)),
         ];
 
         $event[] = sprintf('data: %s', json_encode($data, JSON_FORCE_OBJECT));

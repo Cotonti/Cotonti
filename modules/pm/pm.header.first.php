@@ -29,7 +29,10 @@ if (Cot::$cfg['pm']['allowPopUpNotifications'] || Cot::$env['ext'] === 'pm') {
 
     Resources::linkFileFooter(Cot::$cfg['modules_dir'] . '/pm/js/pm.js');
 
-    if (Cot::$cfg['pm']['allowPopUpNotifications']) {
+    if (
+        (Cot::$cfg['serverEvents'] ?? 'none') !== 'none'
+        && Cot::$cfg['pm']['allowPopUpNotifications']
+    ) {
         Resources::embedFooter(
             "cot.pm.notificationSound = '" . Cot::$R['pm_newMessageSound'] . "'; cot.pm.initNotificationHandler();"
         );

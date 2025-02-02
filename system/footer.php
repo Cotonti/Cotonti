@@ -36,6 +36,14 @@ if (Cot::$sys['displayFooter']) {
 
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 
+    // @todo pass develop mode
+    $frontConfig = [
+        'config' => [
+            'serverEvents' => Cot::$cfg['serverEvents'] ?? 'none',
+        ],
+        'lang' => [],
+    ];
+
     /* === Hook === */
     foreach (cot_getextplugins('footer.main') as $pl) {
         include $pl;
@@ -79,6 +87,9 @@ if (Cot::$sys['displayFooter']) {
 	if (empty(Cot::$out['footer_rc'])) {
         Cot::$out['footer_rc'] = '';
     }
+
+    Resources::embedFooter('cot.init(' . json_encode($frontConfig) . ');', 'js', 30);
+
     Cot::$out['footer_rc'] .= Resources::renderFooter();
 
 	$t->assign('FOOTER_RC', Cot::$out['footer_rc']);

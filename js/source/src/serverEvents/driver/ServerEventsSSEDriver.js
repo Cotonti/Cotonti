@@ -1,7 +1,7 @@
 import {BaseServerEventsDriver} from "./BaseServerEventsDriver";
 
 /**
- * Server sent events driver
+ * Server - Sent events driver
  * @package Cotonti
  * @copyright (c) Cotonti Team
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events

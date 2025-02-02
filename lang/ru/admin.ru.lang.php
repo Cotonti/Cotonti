@@ -83,8 +83,18 @@ $L['cfg_maxrowsperpage'] = 'Макс. количество элементов н
 $L['cfg_maxrowsperpage_hint'] = 'Стандартный лимит элементов для паджинации';
 $L['cfg_parser'] = 'Парсер разметки';
 $L['cfg_parser_hint'] = 'HTML по умолчанию';
+$L['cfg_serverEvents'] = 'Серверные события';
+$L['cfg_serverEvents_hint'] = "Уведомления для фронт-энд'а о событиях на сервере (новые сообщения и т.п.)<br />"
+    . '<strong>Server-Sent Events</strong> см.: '
+    . '<a href="https://developer.mozilla.org/ru-RU/docs/Web/API/Server-sent_events/Using_server-sent_events" '
+    . 'target="blank">MDN Documentation</a>. Может потребоваться дополнительная настройка сервера.<br>'
+    . '<strong>Ajax</strong> вызовет дополнительную нагрузку на сервер';
+$L['cfg_serverEvents_params'] = $L['Disabled'] . ', Server sent events, Ajax';
 $L['cfg_loggerlevel'] = 'Уровень протоколирования';
-$L['cfg_loggerlevel_params'] = 'Disabled,'.$L['Security'].','.$L['Administration'].','.$L['Extensions'].','.$L['Security'].'+'.$L['Administration'].','.$L['Security'].'+'.$L['Extensions'].','.$L['Administration'].'+'.$L['Extensions'].','.$L['Security'].'+'.$L['Administration'].'+'.$L['Extensions'].',All';
+$L['cfg_loggerlevel_params'] = $L['Disabled'] . ',' . $L['Security'] . ',' . $L['Administration'] . ',' . $L['Extensions'] . ','
+    . $L['Security'] . '+' . $L['Administration'] . ',' . $L['Security'] . '+' . $L['Extensions'] . ','
+    . $L['Administration'] . '+' . $L['Extensions'] . ',' . $L['Security'] . '+' . $L['Administration'] . '+'
+    . $L['Extensions'] . ',All';
 $L['cfg_loggerlevel_hint'] = 'Все: протоколируются все действия без исключения<br />Отключено: протоколирование отключается полностью для всех уровней<br />При выборе "Отключено" или "Всё" индивидуальные настройки уровня протоколирования расширений игнорируются';
 
 /**

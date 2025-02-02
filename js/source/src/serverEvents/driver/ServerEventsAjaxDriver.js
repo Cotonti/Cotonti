@@ -1,5 +1,50 @@
 import {BaseServerEventsDriver} from "./BaseServerEventsDriver";
 
+/**
+ * Server events ajax driver
+ * @package Cotonti
+ * @copyright (c) Cotonti Team
+ */
 export class ServerEventsAjaxDriver extends BaseServerEventsDriver {
+    #timeOutPeriod = 3000; // 3 sec.
 
+    #timerId = null;
+
+    #inited = false;
+
+    init() {
+        if (this.#inited) {
+            return;
+        }
+
+        this.#inited = true;
+
+        if (this.mode !== 'production') {
+            console.log('init ServerEventsAjaxDriver ', this.eventsUrl);
+        }
+
+        this.#timerId = setTimeout(() => this.#getEvents(), 500);
+    }
+
+    async #getEvents() {
+        try {
+            const response = await fetch(this.eventsUrl);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            if (result.events !== undefined) {
+                result.events.forEach((event) => {
+                    event.eventId = event.id !== undefined ? event.id : null;
+                    this.onEventTriggered(event);
+                });
+            }
+
+            this.#timerId = setTimeout(() => this.#getEvents(), this.#timeOutPeriod);
+        } catch (error) {
+            console.log('ServerEventsAjaxDriver get events error: ' + error.message);
+            this.#timerId = setTimeout(() => this.#getEvents(), this.#timeOutPeriod);
+        }
+    }
 }

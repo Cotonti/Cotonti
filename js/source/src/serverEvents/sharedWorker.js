@@ -55,7 +55,6 @@ class ServerSentEvents {
     }
 }
 
-
 /**
  * @type {MessagePort[]}
  */

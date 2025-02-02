@@ -1,6 +1,3 @@
-//import {BaseServerEventsDriver} from "./driver/BaseServerEventsDriver";
-import {ServerEventsAjaxDriver} from "./driver/ServerEventsAjaxDriver";
-import {ServerEventsSSEDriver} from "./driver/ServerEventsSSEDriver";
 import {ServerEventsClient} from "./client/ServerEventsClient";
 import {ServerEventsSharedWorkerClient} from "./client/ServerEventsSharedWorkerClient";
 
@@ -23,14 +20,15 @@ export class ServerEvents {
     #clientType = 'sharedWorker';
 
     /**
-     * @type {string} 'serverSentEvents', 'ajax' or 'websocket' (not implemented yet)
+     * @type {string} 'sse' (for Server-Sent events) , 'ajax' or 'websocket' (not implemented yet)
      */
-    #driverType = 'serverSentEvents';
+    #driverType = 'sse';
 
     #observersRegistry = null;
 
     constructor() {
         this.#observersRegistry = new Map();
+        this.#driverType = cot.cfg.serverEvents;
     }
 
     /**
@@ -39,6 +37,10 @@ export class ServerEvents {
      * @param {function} callback
      */
     addObserver(name, event, callback) {
+        if (cot.cfg.serverEvents === 'none') {
+            return;
+        }
+
         this.#observersRegistry.set(name, {
             name: name,
             event: event,
@@ -51,6 +53,10 @@ export class ServerEvents {
     }
 
     #initClient() {
+        if (cot.cfg.serverEvents === 'none') {
+            return;
+        }
+
         if (this.#clientType === 'sharedWorker' && (typeof SharedWorker !== undefined)) {
             if (this.mode !== 'production') {
                 console.log('creating ServerEventsSharedWorkerClient');
@@ -67,29 +73,6 @@ export class ServerEvents {
             this.#onEventTriggered(event.detail);
         });
     }
-
-    /**
-     * @returns {ServerEventsSSEDriver|ServerEventsAjaxDriver}
-     */
-    // #getDriver() {
-    //     let driver = null;
-    //     switch (this.#driverType) {
-    //         case 'serverSentEvents':
-    //             driver = new ServerEventsSSEDriver(this.#serverSentEventsUrl, this.mode);
-    //             if (this.mode !== 'production') {
-    //                 console.log('using ServerEventsSSEDriver');
-    //             }
-    //             break;
-    //
-    //         default:
-    //             driver = new ServerEventsAjaxDriver(this.#serverSentEventsUrl, this.mode);
-    //             if (this.mode !== 'production') {
-    //                 console.log('using ServerEventsAjaxDriver');
-    //             }
-    //     }
-    //
-    //     return driver;
-    // }
 
     #onEventTriggered(eventData) {
         if (this.mode !== 'production') {

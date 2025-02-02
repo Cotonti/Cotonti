@@ -8,12 +8,14 @@ import {BaseServerEventsClient} from "./BaseServerEventsClient";
  */
 export class ServerEventsSharedWorkerClient extends BaseServerEventsClient {
     init() {
+        let workerUrl = '/js/sharedWorkerServerEvents.min.js';
+
         if (this.mode !== 'production') {
-            console.log('init ServerEventsSharedWorkerClient');
+            console.log('init ServerEventsSharedWorkerClient: ' + workerUrl);
         }
 
         try {
-            const worker = new SharedWorker('/js/sharedWorkerServerEvents.min.js');
+            const worker = new SharedWorker(workerUrl);
             const port = worker.port;
 
             port.postMessage({config: {mode: this.mode, driver: this.driverType, baseUrl: getBaseHref()}});

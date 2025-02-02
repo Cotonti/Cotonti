@@ -83,6 +83,12 @@ $L['cfg_maxrowsperpage'] = 'Max. items per page';
 $L['cfg_maxrowsperpage_hint'] = 'Default item limit for pagination';
 $L['cfg_parser'] = 'Markup parser';
 $L['cfg_parser_hint'] = 'HTML by default';
+$L['cfg_serverEvents'] = 'Server events';
+$L['cfg_serverEvents_hint'] = 'Notifications for the front-end about server-side events (such as new messages, etc.).<br />'
+    . 'See <strong>Server-Sent Events</strong>: '
+    . '<a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events" '
+    . 'target="blank">MDN Documentation</a>. Additional server configuration may be required.<br>'
+    . '<strong>Ajax</strong> will cause additional load on the server';
 $L['cfg_loggerlevel'] = 'Logger level';
 $L['cfg_loggerlevel_params'] = 'Disabled,'.$L['Security'].','.$L['Administration'].','.$L['Extensions'].','.$L['Security'].'+'.$L['Administration'].','.$L['Security'].'+'.$L['Extensions'].','.$L['Administration'].'+'.$L['Extensions'].','.$L['Security'].'+'.$L['Administration'].'+'.$L['Extensions'].',All';
 $L['cfg_loggerlevel_hint'] = 'All: all actions are logged<br />Disabled: logging is disabled completely for all user levels<br />"Disabled" and "All" modes overide individual settings for extension logging';
