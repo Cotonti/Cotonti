@@ -6,7 +6,7 @@ import {BaseServerEventsDriver} from "./BaseServerEventsDriver";
  * @copyright (c) Cotonti Team
  */
 export class ServerEventsAjaxDriver extends BaseServerEventsDriver {
-    #timeOutPeriod = 3000; // 3 sec.
+    #timeOutPeriod = 5000; // 5 sec.
 
     #timerId = null;
 
