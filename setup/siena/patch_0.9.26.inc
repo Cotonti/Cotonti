@@ -48,18 +48,18 @@ Cot::$db->delete(Cot::$db->core, "ct_code IN ('admin',  'message')");
 
 $exists = (int) Cot::$db->query(
     'SELECT COUNT(*) FROM ' . Cot::$db->quoteTableName(Cot::$db->config)
-    . " WHERE `config_owner` = 'core' AND `config_cat` = 'main' AND `config_name` = 'serverEvents'"
+    . " WHERE config_owner = 'core' AND config_cat = 'main' AND config_name = 'serverEvents'"
 )->fetchColumn();
 if (!$exists) {
     Cot::$db->update(
         Cot::$db->config,
         ['config_order' => 11],
-        "config_owner = 'core' AND `config_cat` = 'main' AND `config_name` = 'loggerlevel'"
+        "config_owner = 'core' AND config_cat = 'main' AND config_name = 'loggerlevel'"
     );
     Cot::$db->query(
         'INSERT INTO ' . Cot::$db->quoteTableName(Cot::$db->config)
-        . ' (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, '
-        . '`config_default`, `config_variants`, `config_text`) '
+        . ' (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, '
+        . 'config_variants, config_text) '
         . " VALUES "
         . "('core', 'main', '09', 'serverEvents', 2, 'sse', 'sse', 'none,sse,ajax', '')"
     );
