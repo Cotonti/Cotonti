@@ -168,7 +168,7 @@ $t->assign([
     'FORUMS_NEWTOPIC_TITLE' => Cot::$L['forums_newtopic'],
     'FORUMS_NEWTOPIC_BREADCRUMBS' => $toptitle,
 	'FORUMS_NEWTOPIC_SUBTITLE' => htmlspecialchars(cot_parse_autourls(Cot::$structure['forums'][$s]['desc'])),
-	'FORUMS_NEWTOPIC_FORM_ACTION' => cot_url('forums', ['m' => 'newtopic', 'a' => 'ewtopic', 's' => $s]),
+	'FORUMS_NEWTOPIC_FORM_ACTION' => cot_url('forums', ['m' => 'newtopic', 'a' => 'newtopic', 's' => $s]),
 	'FORUMS_NEWTOPIC_FORM_TITLE' => cot_inputbox('text', 'rtopictitle', $rtopic['ft_title'], ['maxlength' => 255]),
     'FORUMS_NEWTOPIC_FORM_DESCRIPTION' => cot_inputbox('text', 'rtopicdesc', $rtopic['ft_desc'], ['maxlength' => 255]),
 	'FORUMS_NEWTOPIC_FORM_TEXT' => cot_textarea('rmsgtext', $rmsg['fp_text'], 20, 56, '', 'input_textarea_' . $minimaxieditor),
