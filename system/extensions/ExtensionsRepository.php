@@ -9,9 +9,9 @@ use cot\repositories\BaseRepository;
 
 class ExtensionsRepository extends BaseRepository
 {
-    public function __construct()
+    public static function getTableName(): string
     {
-        $this->tableName = Cot::$db->core;
+        return Cot::$db->core;
     }
 
     /**
@@ -46,7 +46,7 @@ class ExtensionsRepository extends BaseRepository
         return array_shift($result);
     }
 
-    protected function castAttributes(array $item): array
+    protected function afterFetch(array $item): array
     {
         $item['ct_id'] = (int) $item['ct_id'];
         $item['ct_state'] = (int) $item['ct_state'];

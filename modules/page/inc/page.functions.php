@@ -8,6 +8,8 @@
  */
 
 use cot\extensions\ExtensionsService;
+use cot\modules\page\inc\PageDictionary;
+use cot\services\ItemService;
 
 defined('COT_CODE') or die('Wrong URL.');
 
@@ -17,15 +19,12 @@ require_once cot_incfile('page', 'module', 'resources');
 require_once cot_incfile('forms');
 require_once cot_incfile('extrafields');
 
-/*
- * Page States
- * 0 - published
- * 1 - waiting for approve by admin (moderator)
- * 2 - draft
-*/
-const COT_PAGE_STATE_PUBLISHED = 0;
-const COT_PAGE_STATE_PENDING = 1;
-const COT_PAGE_STATE_DRAFT = 2;
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.26
+    define('COT_PAGE_STATE_PUBLISHED', PageDictionary::STATE_PUBLISHED);
+    define('COT_PAGE_STATE_PENDING', PageDictionary::STATE_PENDING);
+    define('COT_PAGE_STATE_DRAFT', PageDictionary::STATE_DRAFT);
+}
 
 // Tables and extras
 Cot::$db->registerTable('pages');
@@ -324,9 +323,9 @@ function cot_generate_pagetags(
 			$delete_confirm_url = cot_confirm_url($delete_url, 'page', 'page_confirm_delete');
 			$temp_array['ADMIN_EDIT'] = cot_rc_link($edit_url, Cot::$L['Edit']);
 			$temp_array['ADMIN_EDIT_URL'] = $edit_url;
-			$temp_array['ADMIN_UNVALIDATE'] = $page_data['page_state'] == COT_PAGE_STATE_PENDING ?
-				cot_rc_link($validate_confirm_url, Cot::$L['Validate'], 'class="confirmLink"') :
-				cot_rc_link($unvalidate_confirm_url, Cot::$L['Putinvalidationqueue'], 'class="confirmLink"');
+			$temp_array['ADMIN_UNVALIDATE'] = $page_data['page_state'] == PageDictionary::STATE_PENDING
+                ? cot_rc_link($validate_confirm_url, Cot::$L['Validate'], 'class="confirmLink"')
+                : cot_rc_link($unvalidate_confirm_url, Cot::$L['Putinvalidationqueue'], 'class="confirmLink"');
 			$temp_array['ADMIN_UNVALIDATE_URL'] = $page_data['page_state'] == 1 ?
 				$validate_confirm_url : $unvalidate_confirm_url;
 			$temp_array['ADMIN_DELETE'] = cot_rc_link($delete_confirm_url, $L['Delete'], 'class="confirmLink"');
@@ -576,7 +575,7 @@ function cot_page_auth($cat = null)
 		$cat = 'any';
 	}
 	$auth = array();
-	list($auth['auth_read'], $auth['auth_write'], $auth['isadmin'], $auth['auth_download']) = cot_auth('page', $cat, 'RWA1');
+	[$auth['auth_read'], $auth['auth_write'], $auth['isadmin'], $auth['auth_download']] = cot_auth('page', $cat, 'RWA1');
 	return $auth;
 }
 
@@ -668,10 +667,10 @@ function cot_page_import($source = 'POST', $rpage = [], $auth = [])
  */
 function cot_page_validate($rpage)
 {
-	global $cfg, $structure;
+	global $structure;
+
 	cot_check(empty($rpage['page_cat']), 'page_catmissing', 'rpagecat');
-	if ($structure['page'][$rpage['page_cat']]['locked'])
-	{
+	if ($structure['page'][$rpage['page_cat']]['locked']) {
 		global $L;
 		require_once cot_langfile('message', 'core');
 		cot_error('msg602_body', 'rpagecat');
@@ -680,8 +679,9 @@ function cot_page_validate($rpage)
 
 	cot_check(!empty($rpage['page_alias']) && preg_match('`[+/?%#&]`', $rpage['page_alias']), 'page_aliascharacters', 'rpagealias');
 
-	$allowemptytext = isset($cfg['page']['cat_' . $rpage['page_cat']]['allowemptytext']) ?
-							$cfg['page']['cat_' . $rpage['page_cat']]['allowemptytext'] : $cfg['page']['cat___default']['allowemptytext'];
+	$allowemptytext = Cot::$cfg['page']['cat_' . $rpage['page_cat']]['allowemptytext']
+        ?? Cot::$cfg['page']['cat___default']['allowemptytext'];
+
 	cot_check(!$allowemptytext && empty($rpage['page_text']), 'page_textmissing', 'rpagetext');
 
 	return !cot_error_found();
@@ -717,10 +717,10 @@ function cot_page_add(&$rpage, $auth = [])
 	}
 
 	if (
-        $rpage['page_state'] == COT_PAGE_STATE_PUBLISHED
+        $rpage['page_state'] == PageDictionary::STATE_PUBLISHED
         && !($auth['isadmin'] && Cot::$cfg['page']['autovalidate'])
     ) {
-        $rpage['page_state'] = COT_PAGE_STATE_PENDING;
+        $rpage['page_state'] = PageDictionary::STATE_PENDING;
 	}
 
 	/* === Hook === */
@@ -743,7 +743,7 @@ function cot_page_add(&$rpage, $auth = [])
 	}
 	/* ===== */
 
-	if ($rpage['page_state'] == COT_PAGE_STATE_PUBLISHED && Cot::$cache) {
+	if ($rpage['page_state'] == PageDictionary::STATE_PUBLISHED && Cot::$cache) {
 		if (Cot::$cfg['cache_page']) {
             Cot::$cache->static->clearByUri(cot_page_url($rpage));
             Cot::$cache->static->clearByUri(cot_url('page', ['c' => $rpage['page_cat']]));
@@ -757,58 +757,6 @@ function cot_page_add(&$rpage, $auth = [])
 	cot_log('Add page #' . $id, 'page', 'add', 'done');
 
 	return $id;
-}
-
-/**
- * Removes a page from the CMS.
- * @param int $id Page ID
- * @param array $rpage Page data
- * @return bool|string "deleted" message on success, FALSE on error
- */
-function cot_page_delete($id, $rpage = [])
-{
-    // $L, $Ls, $R are needed for hook includes
-    global $L, $Ls, $R;
-
-	if (!is_numeric($id) || $id <= 0) {
-		return false;
-	}
-	$id = (int) $id;
-	if (empty($rpage)) {
-		$rpage = Cot::$db->query('SELECT * FROM ' . Cot::$db->pages . " WHERE page_id = ?", $id)->fetch();
-		if (!$rpage) {
-			return false;
-		}
-	}
-
-	foreach (Cot::$extrafields[Cot::$db->pages] as $exfld) {
-		cot_extrafield_unlinkfiles($rpage['page_' . $exfld['field_name']], $exfld);
-	}
-
-    Cot::$db->delete(Cot::$db->pages, 'page_id = ?', $id);
-	cot_log("Deleted page #" . $id, 'page', 'delete', 'done');
-
-    cot_page_updateStructureCounters($rpage['page_cat']);
-
-    $pageDeletedMessage = ['deleted' => Cot::$L['page_deleted']];
-
-	/* === Hook === */
-	foreach (cot_getextplugins('page.edit.delete.done') as $pl) {
-		include $pl;
-	}
-	/* ===== */
-
-	if (Cot::$cache) {
-		if (Cot::$cfg['cache_page']) {
-            Cot::$cache->static->clearByUri(cot_page_url($rpage));
-            Cot::$cache->static->clearByUri(cot_url('page', ['c' => $rpage['page_cat']]));
-		}
-		if (Cot::$cfg['cache_index']) {
-            Cot::$cache->static->clear('index');
-		}
-	}
-
-	return is_array($pageDeletedMessage) ? implode('; ', $pageDeletedMessage) : $pageDeletedMessage;
 }
 
 /**
@@ -842,10 +790,10 @@ function cot_page_update($id, &$rpage, $auth = [])
 	$row_page = \Cot::$db->query('SELECT * FROM ' . \Cot::$db->pages . ' WHERE page_id = ?', $id)->fetch();
 
     if (
-        $rpage['page_state'] == COT_PAGE_STATE_PUBLISHED
+        $rpage['page_state'] == PageDictionary::STATE_PUBLISHED
         && !($auth['isadmin'] && \Cot::$cfg['page']['autovalidate'])
     ) {
-        $rpage['page_state'] = COT_PAGE_STATE_PENDING;
+        $rpage['page_state'] = PageDictionary::STATE_PENDING;
     }
 
     Cot::$cache && Cot::$cache->db->remove('structure', 'system');
@@ -864,7 +812,7 @@ function cot_page_update($id, &$rpage, $auth = [])
 	/* ===== */
 
 	if (
-        ($rpage['page_state'] == COT_PAGE_STATE_PUBLISHED  || $rpage['page_cat'] != $row_page['page_cat'])
+        ($rpage['page_state'] == PageDictionary::STATE_PUBLISHED  || $rpage['page_cat'] != $row_page['page_cat'])
         && Cot::$cache
     ) {
 		if (Cot::$cfg['cache_page']) {
@@ -960,13 +908,13 @@ function cot_page_enum(
         }
 	}
 	if ($active_only) {
-		$where['state'] = 'page_state = ' . COT_PAGE_STATE_PUBLISHED;
+		$where['state'] = 'page_state = ' . PageDictionary::STATE_PUBLISHED;
 		$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
 	}
 
 	// Get pagination number if necessary
 	if (!empty($pagination)) {
-		list($pg, $d, $durl) = cot_import_pagenav($pagination, $count);
+		[$pg, $d, $durl] = cot_import_pagenav($pagination, $count);
 	} else {
 		$d = 0;
 	}

@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', 'any');
@@ -64,8 +66,8 @@ $pag['page_pageurl'] = cot_url('page', $urlParams, '', true);
 
 if (
     (
-        $pag['page_state'] == COT_PAGE_STATE_PENDING
-	    || $pag['page_state'] == COT_PAGE_STATE_DRAFT
+        $pag['page_state'] == PageDictionary::STATE_PENDING
+	    || $pag['page_state'] == PageDictionary::STATE_DRAFT
 	    || $pag['page_begin'] > Cot::$sys['now']
 	    || ($pag['page_expire'] > 0 && Cot::$sys['now'] > $pag['page_expire'])
     )

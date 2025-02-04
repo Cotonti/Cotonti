@@ -17,9 +17,12 @@ defined('COT_CODE') or die('Wrong URL');
  */
 class ServerEventsObserversRepository extends BaseRepository
 {
-    public function __construct()
+    public static function getTableName(): string
     {
-        $this->tableName = Cot::$db->server_events_observers;
+        if (empty(Cot::$db->server_events_observers)) {
+            Cot::$db->registerTable('server_events_observers');
+        }
+        return Cot::$db->server_events_observers;
     }
 
     public function getByUserId(int $userId, ?string $token = null): ?array
@@ -64,7 +67,7 @@ class ServerEventsObserversRepository extends BaseRepository
         return (int) $result;
     }
 
-    protected function castAttributes(array $item): array
+    protected function afterFetch(array $item): array
     {
         $item['id'] = (int) $item['id'];
         $item['user_id'] = (int) $item['user_id'];

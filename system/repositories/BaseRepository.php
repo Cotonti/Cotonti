@@ -7,11 +7,11 @@ namespace cot\repositories;
 use Cot;
 use cot\traits\GetInstanceTrait;
 
-class BaseRepository
+abstract class BaseRepository
 {
     use GetInstanceTrait;
 
-    protected $tableName = null;
+    abstract public static function getTableName(): string;
 
     /**
      * @param array|string $condition
@@ -19,9 +19,14 @@ class BaseRepository
      * @return array<int, array<int|string>> Requested items data
      * @todo joins, index by
      */
-    public function getByCondition($condition, array $params = [], $orderBy = null): array
-    {
-        $table = Cot::$db->quoteTableName($this->tableName);
+    public function getByCondition(
+        $condition,
+        array $params = [],
+        $orderBy = null,
+        ?int $limit = null,
+        ?int $offset = null
+    ): array {
+        $table = Cot::$db->quoteTableName(static::getTableName());
 
         $sqlWhere = is_array($condition) ? $this->prepareCondition($condition) : $condition;
         if (!empty($sqlWhere)) {
@@ -33,9 +38,19 @@ class BaseRepository
             $sqlOrderBy = ' ORDER BY ' . (is_array($orderBy) ? implode(', ', $orderBy) : $orderBy);
         }
 
+        $sqlLimit = '';
+        if ($limit !== null) {
+            $sqlLimit = " LIMIT $limit";
+        }
+
+        $sqlOffset = '';
+        if ($offset !== null) {
+            $sqlOffset = " OFFSET $offset";
+        }
+
         $sql = "SELECT {$table}.* "
             . " FROM {$table} "
-            . $sqlWhere . $sqlOrderBy;
+            . $sqlWhere . $sqlOrderBy . $sqlLimit . $sqlOffset;
 
         $items = Cot::$db->query($sql, $params)->fetchAll();
         if (empty($items)) {
@@ -44,7 +59,7 @@ class BaseRepository
 
         $result = [];
         foreach ($items as $item) {
-            $item = $this->castAttributes($item);
+            $item = $this->afterFetch($item);
             $result[] = $item;
         }
 
@@ -57,10 +72,11 @@ class BaseRepository
     }
 
     /**
-     * In PHP below version 8, all fields are fetching as strings
-     * So it can be needed to cast some attributes
+     * This method allows to perform additional actions on the fetched data.
+     * For example: in PHP below version 8, all fields are fetching as strings. So it can be needed to cast some
+     * attributes
      */
-    protected function castAttributes(array $item): array
+    protected function afterFetch(array $item): array
     {
         return $item;
     }

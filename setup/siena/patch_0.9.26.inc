@@ -35,7 +35,7 @@ if (!Cot::$db->tableExists(Cot::$db->server_events)) {
         . Cot::$db->quoteColumnName('last_event_id') . ' BIGINT UNSIGNED NOT NULL DEFAULT 0, '
         . 'PRIMARY KEY (' . Cot::$db->quoteColumnName('id') . '), '
         . 'INDEX server_events_observers_user_id_idx (' . Cot::$db->quoteColumnName('user_id') . '), '
-        . 'INDEX `server_events_observers_created_at_idx` (' . Cot::$db->quoteColumnName('updated_at') . ') '
+        . 'INDEX server_events_observers_updated_at_idx (' . Cot::$db->quoteColumnName('updated_at') . ') '
         . ');'
     );
 }

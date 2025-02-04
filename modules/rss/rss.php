@@ -13,6 +13,8 @@ Hooks=module
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die('Wrong URL.');
 
 // Environment setup
@@ -293,7 +295,7 @@ if ($m === 'topics') {
         $where['categories'] = 'p.page_cat IN (' . implode(', ', $categories) . ')';
     }
 
-    $where['state'] = 'p.page_state = ' . COT_PAGE_STATE_PUBLISHED;
+    $where['state'] = 'p.page_state = ' . PageDictionary::STATE_PUBLISHED;
     $where['date'] = 'p.page_begin <= ' . Cot::$sys['now'] . ' AND (p.page_expire = 0 OR p.page_expire > ' . Cot::$sys['now'] . ')';
 
     $sqlWhere = implode(" \nAND ", $where);

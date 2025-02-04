@@ -13,19 +13,21 @@ Hooks=tools
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsService;
+
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('plug', 'trashcan');
 cot_block(Cot::$usr['isadmin']);
 
 require_once cot_incfile('users', 'module');
-if (cot_module_active('page')) {
+if (ExtensionsService::getInstance()->isModuleActive('page')) {
     require_once cot_incfile('page', 'module');
 }
-if (cot_module_active('forums')) {
+if (ExtensionsService::getInstance()->isModuleActive('forums')) {
     require_once cot_incfile('forums', 'module');
 }
-if (cot_plugin_active('comments')) {
+if (ExtensionsService::getInstance()->isPluginActive('comments')) {
     require_once cot_incfile('comments', 'plug');
 }
 
@@ -113,22 +115,22 @@ foreach ($sql->fetchAll() as $row) {
 		case 'comment':
 			$icon = Cot::$R['admin_icon_comments'];
 			$typestr = Cot::$L['comments_comment'];
-			$enabled = cot_plugin_active('comments') ? 1 : 0;
+			$enabled = ExtensionsService::getInstance()->isPluginActive('comments') ? 1 : 0;
 			break;
 		case 'forumpost':
 			$icon = Cot::$R['admin_icon_forums_posts'];
 			$typestr = Cot::$L['forums_post'];
-			$enabled = cot_module_active('forums') ? 1 : 0;
+			$enabled = ExtensionsService::getInstance()->isModuleActive('forums') ? 1 : 0;
 			break;
 		case 'forumtopic':
 			$icon = Cot::$R['admin_icon_forums_topics'];
 			$typestr = Cot::$L['Topic'];
-			$enabled = cot_module_active('forums') ? 1 : 0;
+			$enabled = ExtensionsService::getInstance()->isModuleActive('forums') ? 1 : 0;
 			break;
 		case 'page':
 			$icon = Cot::$R['admin_icon_page'];
 			$typestr = Cot::$L['Page'];
-			$enabled = cot_module_active('page') ? 1 : 0;
+			$enabled = ExtensionsService::getInstance()->isModuleActive('page') ? 1 : 0;
 			break;
 		case 'user':
 			$icon = Cot::$R['admin_icon_user'];
@@ -137,7 +139,7 @@ foreach ($sql->fetchAll() as $row) {
 			break;
 		default:
 			$icon = Cot::$R['admin_icon_tools'];
-			$typestr = Cot::$row['tr_type'];
+			$typestr = $row['tr_type'];
 			$enabled = 1;
 			break;
 	}

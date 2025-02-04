@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 // Environment setup
@@ -95,7 +97,7 @@ $where_state = Cot::$usr['isadmin'] ? '1' : 'page_ownerid = ' . Cot::$usr['id'];
 $where['state'] = "(page_state=0 AND $where_state)";
 if ($c === 'unvalidated') {
 	$cat['tpl'] = 'unvalidated';
-	$where['state'] = 'page_state = ' . COT_PAGE_STATE_PENDING;
+	$where['state'] = 'page_state = ' . PageDictionary::STATE_PENDING;
 	$where['ownerid'] = Cot::$usr['isadmin'] ? '1' : 'page_ownerid = ' . Cot::$usr['id'];
 	$cat['title'] = Cot::$L['page_validation'];
 	$cat['desc'] = Cot::$L['page_validation_desc'];
@@ -103,7 +105,7 @@ if ($c === 'unvalidated') {
 	$w = 'desc';
 } elseif ($c === 'saved_drafts') {
 	$cat['tpl'] = 'unvalidated';
-	$where['state'] = 'page_state = ' . COT_PAGE_STATE_DRAFT;
+	$where['state'] = 'page_state = ' . PageDictionary::STATE_DRAFT;
 	$where['ownerid'] = Cot:: $usr['isadmin'] ? '1' : 'page_ownerid = ' . Cot::$usr['id'];
 	$cat['title'] = Cot::$L['page_drafts'];
 	$cat['desc'] = Cot::$L['page_drafts_desc'];
@@ -116,7 +118,7 @@ if ($c === 'unvalidated') {
 
 } else {
 	$where['cat'] = 'page_cat = ' . Cot::$db->quote($c);
-	$where['state'] = 'page_state = ' . COT_PAGE_STATE_PUBLISHED;
+	$where['state'] = 'page_state = ' . PageDictionary::STATE_PUBLISHED;
 }
 
 Cot::$sys['sublocation'] = $cat['title'];

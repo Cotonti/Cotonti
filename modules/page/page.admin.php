@@ -13,6 +13,9 @@ Hooks=admin
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\page\inc\PageDictionary;
+use cot\modules\page\inc\PageService;
+
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', 'any');
@@ -83,11 +86,11 @@ if ($pg > 1) {
 if ($filter == 'all') {
 	$sqlwhere = "1 ";
 } elseif ($filter == 'valqueue') {
-	$sqlwhere = 'page_state = ' . COT_PAGE_STATE_PENDING ;
+	$sqlwhere = 'page_state = ' . PageDictionary::STATE_PENDING ;
 } elseif ($filter == 'validated') {
-	$sqlwhere = 'page_state = ' . COT_PAGE_STATE_PUBLISHED ;
+	$sqlwhere = 'page_state = ' . PageDictionary::STATE_PUBLISHED ;
 } elseif ($filter == 'drafts') {
-	$sqlwhere = 'page_state = ' . COT_PAGE_STATE_DRAFT;
+	$sqlwhere = 'page_state = ' . PageDictionary::STATE_DRAFT;
 } elseif ($filter == 'expired') {
 	$sqlwhere = "page_begin > {$sys['now']} OR (page_expire <> 0 AND page_expire < {$sys['now']})";
 }
@@ -122,14 +125,14 @@ if ($a == 'validate') {
         $id
     )->fetch();
 	if ($row) {
-        if ($row['page_state'] == COT_PAGE_STATE_PUBLISHED) {
+        if ($row['page_state'] == PageDictionary::STATE_PUBLISHED) {
             cot_message('#' . $id . ' - ' . Cot::$L['adm_already_updated']);
             cot_redirect($backUrl);
         }
 
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
-        $data = ['page_state' => COT_PAGE_STATE_PUBLISHED];
+        $data = ['page_state' => PageDictionary::STATE_PUBLISHED];
 		if ($row['page_begin'] < Cot::$sys['now']) {
             $data['page_begin'] = Cot::$sys['now'];
 		}
@@ -179,7 +182,7 @@ if ($a == 'validate') {
         $id
     )->fetch();
     if ($row) {
-        if ($row['page_state'] == COT_PAGE_STATE_PENDING) {
+        if ($row['page_state'] == PageDictionary::STATE_PENDING) {
             cot_message('#' . $id . ' - ' . Cot::$L['adm_already_updated']);
             cot_redirect($backUrl);
         }
@@ -189,7 +192,7 @@ if ($a == 'validate') {
 
 		$sql_page = Cot::$db->update(
             Cot::$db->pages,
-            ['page_state' => COT_PAGE_STATE_PENDING],
+            ['page_state' => PageDictionary::STATE_PENDING],
             'page_id = ?',
             $id
         );
@@ -223,7 +226,7 @@ if ($a == 'validate') {
 	}
 	/* ===== */
 
-    $resultOrMessage = cot_page_delete($id);
+    $resultOrMessage = PageService::getInstance()->delete($id);
     if ($resultOrMessage !== false) {
         /* === Hook === */
 		foreach (cot_getextplugins('page.admin.delete.done') as $pl) {
@@ -262,7 +265,7 @@ if ($a == 'validate') {
 
 					$sql_page = Cot::$db->update(
                         Cot::$db->pages,
-                        ['page_state' => COT_PAGE_STATE_PUBLISHED],
+                        ['page_state' => PageDictionary::STATE_PUBLISHED],
                         'page_id= ?',
                         $id
                     );
@@ -307,6 +310,7 @@ if ($a == 'validate') {
 
 		$perelik = '';
 		$notfoundet = '';
+        $pageService = PageService::getInstance();
 		foreach ($s as $id => $k) {
 			if ($s[$id] == '1' || $s[$id] == 'on') {
 
@@ -316,7 +320,7 @@ if ($a == 'validate') {
 				}
 				/* ===== */
 
-                $resultOrMessage = cot_page_delete($id);
+                $resultOrMessage = $pageService->delete((int) $id);
                 if ($resultOrMessage !== false) {
                     /* === Hook === */
                     foreach (cot_getextplugins('page.admin.delete.done') as $pl) {
@@ -401,8 +405,9 @@ foreach ($sql_page->fetchAll() as $row) {
 }
 
 $totaldbpages = Cot::$db->countRows($db_pages);
-$sql_page_queued = Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->pages . ' WHERE page_state = ' .
-    COT_PAGE_STATE_PENDING);
+$sql_page_queued = Cot::$db->query(
+    'SELECT COUNT(*) FROM ' . Cot::$db->pages . ' WHERE page_state = ' . PageDictionary::STATE_PENDING
+);
 $sys['pagesqueued'] = $sql_page_queued->fetchColumn();
 
 $t->assign([

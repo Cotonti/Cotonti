@@ -1330,8 +1330,7 @@ function cot_plugin_active($extensionCode)
     if (empty($extensionCode)) {
         return false;
     }
-	return ExtensionsService::getInstance()
-        ->isActive($extensionCode, ExtensionsDictionary::TYPE_PLUGIN);
+	return ExtensionsService::getInstance()->isPluginActive($extensionCode);
 }
 
 /**

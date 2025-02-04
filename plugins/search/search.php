@@ -12,6 +12,9 @@ Hooks=standalone
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
+
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
 if (cot_module_active('page')) {
@@ -294,7 +297,7 @@ if (!empty($sq)) {
             $where_and['notcat'] = 'p.page_cat NOT IN (' . implode(', ', $systemCategories) . ')';
         }
 
-		$where_and['state'] = 'p.page_state = ' . COT_PAGE_STATE_PUBLISHED;
+		$where_and['state'] = 'p.page_state = ' . PageDictionary::STATE_PUBLISHED;
 		$where_and['date'] = 'p.page_begin <= ' . Cot::$sys['now'] . ' AND (p.page_expire = 0 OR p.page_expire > ' . Cot::$sys['now'] . ')';
         if (!empty($rs['setfrom'])) {
             $where_and['dateFrom'] = 'p.page_date >= ' . $rs['setfrom'];

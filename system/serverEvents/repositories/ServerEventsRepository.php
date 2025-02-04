@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace cot\serverEvents\repositories;
 
 use Cot;
+use cot\repositories\BaseRepository;
 use cot\serverEvents\ServerEventMessageDto;
 use cot\traits\GetInstanceTrait;
 
@@ -16,11 +17,17 @@ defined('COT_CODE') or die('Wrong URL');
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
- * @todo use more fast adapters then MySQL. Redis? RabbitMq?
+ * @todo use more fast storage then MySQL. Redis? RabbitMq?
  */
-class ServerEventsRepository
+class ServerEventsRepository extends BaseRepository
 {
-    use GetInstanceTrait;
+    public static function getTableName(): string
+    {
+        if (empty(Cot::$db->server_events)) {
+            Cot::$db->registerTable('server_events');
+        }
+        return Cot::$db->server_events;
+    }
 
     /**
      * @return ServerEventMessageDto[]

@@ -13,6 +13,8 @@ Hooks=standalone
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
 $urlParams = [];
@@ -295,7 +297,7 @@ function cot_tag_search_pages($query)
 		return 0;
 	}
 
-    $where['pageState'] = 'p.page_state = ' . COT_PAGE_STATE_PUBLISHED;
+    $where['pageState'] = 'p.page_state = ' . PageDictionary::STATE_PUBLISHED;
 
     if (!empty($searchInCategories)) {
         $searchInCategories = array_map(function ($value) {return Cot::$db->quote($value);}, $searchInCategories);

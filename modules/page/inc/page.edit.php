@@ -7,6 +7,11 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\exceptions\NotFoundHttpException;
+use cot\modules\page\inc\PageDictionary;
+use cot\modules\page\inc\PageRepository;
+use cot\modules\page\inc\PageService;
+
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('forms');
@@ -25,16 +30,12 @@ foreach (cot_getextplugins('page.edit.first') as $pl) {
 cot_block(Cot::$usr['auth_read']);
 
 if (!$id || $id < 0) {
-	cot_die_message(404);
+    throw new NotFoundHttpException();
 }
-$sql_page = Cot::$db->query(
-    'SELECT * FROM ' . Cot::$db->pages . ' WHERE page_id = :pageId LIMIT 1',
-    ['pageId' => $id]
-);
-if ($sql_page->rowCount() == 0) {
-	cot_die_message(404);
+$row_page = PageRepository::getInstance()->getById($id);
+if ($row_page === null) {
+    throw new NotFoundHttpException();
 }
-$row_page = $sql_page->fetch();
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('page', $row_page['page_cat']);
 
@@ -60,7 +61,7 @@ if ($a == 'update') {
 	}
 
 	if ($rpagedelete) {
-		$resultOrMessage = cot_page_delete($id, $row_page);
+		$resultOrMessage = PageService::getInstance()->delete($id, $row_page);
         if ($resultOrMessage !== false) {
             cot_message($resultOrMessage);
             cot_redirect(cot_url('page', ['c' => $row_page['page_cat']], '', true));
@@ -85,15 +86,15 @@ if ($a == 'update') {
 		cot_page_update($id, $rpage);
 
 		switch ($rpage['page_state']) {
-			case COT_PAGE_STATE_PUBLISHED:
+			case PageDictionary::STATE_PUBLISHED:
                 $r_url = cot_page_url($rpage, [], '', true);
 				break;
 
-			case COT_PAGE_STATE_PENDING:
+			case PageDictionary::STATE_PENDING:
 				$r_url = cot_url('message', 'msg=300', '', true);
 				break;
 
-			case COT_PAGE_STATE_DRAFT:
+			case PageDictionary::STATE_DRAFT:
 				cot_message(Cot::$L['page_savedasdraft']);
 				$r_url = cot_url('page', 'm=edit&id=' . $id, '', true);
 				break;

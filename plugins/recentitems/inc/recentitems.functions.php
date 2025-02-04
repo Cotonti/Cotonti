@@ -7,6 +7,9 @@
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
+
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die("Wrong URL.");
 
 require_once cot_incfile('extrafields');
@@ -316,7 +319,7 @@ function cot_build_recentpages(
     $where = [];
     $params = [];
 
-    $where['state'] = 'page_state = ' . COT_PAGE_STATE_PUBLISHED;
+    $where['state'] = 'page_state = ' . PageDictionary::STATE_PUBLISHED;
     $where['begin'] = 'page_begin <= ' . Cot::$sys['now'];
     $where['notExpire'] = '(page_expire = 0 OR page_expire > ' . Cot::$sys['now'] . ')';
 

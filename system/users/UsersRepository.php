@@ -19,9 +19,9 @@ class UsersRepository extends BaseRepository
 {
     private static $cacheById = [];
 
-    public function __construct()
+    public static function getTableName(): string
     {
-        $this->tableName = Cot::$db->users;
+        return Cot::$db->users;
     }
 
     /**
@@ -58,7 +58,7 @@ class UsersRepository extends BaseRepository
         return $result;
     }
 
-    protected function castAttributes(array $item): array
+    protected function afterFetch(array $item): array
     {
         $item['user_id'] = (int) $item['user_id'];
         $item['user_maingrp'] = (int) $item['user_maingrp'];
