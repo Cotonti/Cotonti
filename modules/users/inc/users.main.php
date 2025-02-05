@@ -109,11 +109,26 @@ if ($sq !== null && $sq !== '') {
 
     if (!empty(Cot::$extrafields[Cot::$db->users])) {
         $searchFields = ['first_name', 'firstname', 'last_name', 'lastname', 'middle_name', 'middlename'];
+        $searchExtraFields = trim(Cot::$cfg['users']['filterFields']);
+        if ($searchExtraFields !== '') {
+            $searchExtraFields = explode(',', $searchExtraFields);
+            foreach ($searchExtraFields as $extraField) {
+                $extraField = trim($extraField);
+                if ($extraField !== '' && !in_array($extraField, $searchFields)) {
+                    $searchFields[] = $extraField;
+                }
+            }
+        }
+
         foreach ($searchFields as $searchField) {
-            if (!isset(Cot::$extrafields[Cot::$db->users][$searchField])) {
+            if (
+                mb_strpos($searchField, 'user_') !== 0
+                && !isset(Cot::$extrafields[Cot::$db->users][$searchField])
+            ) {
                 continue;
             }
-            $searchCondition[$searchField] =  "user_{$searchField} LIKE :search";
+            $field = mb_strpos($searchField, 'user_') === 0 ? $searchField : 'user_' . $searchField;
+            $searchCondition[$searchField] =  "{$field} LIKE :search";
         }
     }
     $where['namelike'] = '(' . implode(' OR ', $searchCondition) . ')';

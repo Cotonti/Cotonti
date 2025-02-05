@@ -18,6 +18,12 @@ $L['cfg_disablereg'] = 'Disable registration process';
 $L['cfg_disablereg_hint'] = 'Prevent users from registering new accounts';
 $L['cfg_maxusersperpage'] = 'Maximum lines in userlist';
 $L['cfg_maxusersperpage_hint'] = '';
+$L['cfg_filterFields'] = 'Filter Fields';
+$L['cfg_filterFields_hint'] = 'By default, in the users list, the name filter filters by the field '
+    . '<strong>user_name</strong> and by extra fields <strong>first_name</strong>, <strong>firstname</strong>, '
+    . '<strong>last_name</strong>, <strong>lastname</strong>, <strong>middle_name</strong>, <strong>middlename</strong> '
+    . '(if they exist).<br>'
+    . 'You can specify additional extra field for the filter, separated by commas, without the <strong>user_</strong> prefix.';
 $L['cfg_regnoactivation'] = 'Skip email check for new users';
 $L['cfg_regnoactivation_hint'] = '\'No\' recommended, for security reasons';
 $L['cfg_register_auto_login'] = 'Auto login after registration';

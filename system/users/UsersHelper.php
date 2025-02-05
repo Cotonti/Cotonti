@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace cot\users;
 
+use cot\extensions\ExtensionsService;
 use cot\traits\GetInstanceTrait;
 
 defined('COT_CODE') or die('Wrong URL');
@@ -82,5 +83,24 @@ class UsersHelper
         }
 
         return $user['user_name'];
+    }
+
+    public function getUrl(
+        array $user,
+        string $tail = '',
+        bool $htmlspecialcharsBypass = false,
+        bool $absolute = false
+    ): string {
+        if (!ExtensionsService::getInstance()->isModuleActive('users')) {
+            return '';
+        }
+
+        $params = ['m' => 'details', 'id' => $user['user_id'], 'u' => $user['user_name']];
+
+        if ($absolute) {
+            return cot_absoluteUrl('users', $params, $tail, $htmlspecialcharsBypass);
+        }
+
+        return cot_url('users', $params, $tail, $htmlspecialcharsBypass);
     }
 }

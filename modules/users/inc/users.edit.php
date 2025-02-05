@@ -7,7 +7,10 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\exceptions\NotFoundHttpException;
+use cot\modules\users\inc\UsersService;
 use cot\users\UsersHelper;
+use cot\users\UsersRepository;
 
 defined('COT_CODE') or die('Wrong URL');
 
@@ -31,11 +34,14 @@ foreach (cot_getextplugins('users.edit.first') as $pl) {
 }
 /* ===== */
 
-cot_die(empty($id), true);
+if (empty($id)) {
+    throw new NotFoundHttpException();
+}
 
-$sql = Cot::$db->query("SELECT * FROM $db_users WHERE user_id = ?", $id);
-cot_die($sql->rowCount()==0, true);
-$urr = $sql->fetch();
+$urr = UsersRepository::getInstance()->getById($id);
+if ($urr === null) {
+    throw new NotFoundHttpException();
+}
 
 $sql1 = Cot::$db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$id and gru_groupid=".COT_GROUP_SUPERADMINS);
 $sys['edited_istopadmin'] = ($sql1->rowCount()>0) ? TRUE : FALSE;
@@ -47,43 +53,30 @@ if ($sys['protecttopadmin'])
 	cot_die_message(930, TRUE);
 }
 
-if ($a == 'update')
-{
+if ($a === 'update') {
 	cot_check_xg();
 
 	/* === Hook === */
-	foreach (cot_getextplugins('users.edit.update.first') as $pl)
-	{
+	foreach (cot_getextplugins('users.edit.update.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 
 	$ruserdelete = cot_import('ruserdelete','P','BOL');
-	if ($ruserdelete)
-	{
-		Cot::$db->delete($db_users, "user_id=$id");
-		Cot::$db->delete($db_groups_users, "gru_userid=$id");
-
-		foreach($cot_extrafields[$db_users] as $exfld)
-		{
-			cot_extrafield_unlinkfiles($urr['user_'.$exfld['field_name']], $exfld);
-		}
-
-		if (cot_module_active('pfs') && cot_import('ruserdelpfs','P','BOL'))
-		{
-			require_once cot_incfile('pfs', 'module');
-			cot_pfs_deleteall($id);
-		}
+	if ($ruserdelete) {
+        UsersService::getInstance()->delete(
+            $id,
+            cot_import('ruserdelpfs','P','BOL') ?? true,
+            $urr
+        );
 
 		/* === Hook === */
-		foreach (cot_getextplugins('users.edit.update.delete') as $pl)
-		{
+		foreach (cot_getextplugins('users.edit.update.delete') as $pl) {
 			include $pl;
 		}
 		/* ===== */
 
-		cot_log("Deleted user #".$id, 'users', 'delete', 'done');
-		cot_redirect(cot_url('message', "msg=109&rc=200&id=".$id, '', true));
+		cot_redirect(cot_url('message', "msg=109&rc=200&id=" . $id, '', true));
 	}
 
 	$ruser['user_name'] = cot_import('rusername','P','TXT');

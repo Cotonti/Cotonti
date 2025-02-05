@@ -42,10 +42,11 @@ class PageService
 
         if (empty($pageData)) {
             $pageData = PageRepository::getInstance()->getById($id);
-            if (!$pageData) {
-                return false;
-            }
         }
+        if (empty($pageData)) {
+            return false;
+        }
+
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
             // @deprecated in 0.9.26
             $rpage = $pageData;

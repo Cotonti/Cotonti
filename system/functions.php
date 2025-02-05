@@ -2031,16 +2031,15 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
             $enableMarkup = isset(Cot::$cfg['users']['usertextimg']) ? Cot::$cfg['users']['usertextimg'] : false;
             $user_data['user_text'] = cot_parse($user_data['user_text'], $enableMarkup);
 
+            $usersHelper = UsersHelper::getInstance();
+
             $temp_array = [
                 'ID' => $user_data['user_id'],
                 'NAME' => cot_build_user($user_data['user_id'], $user_data['user_name']),
                 'NICKNAME' => htmlspecialchars($user_data['user_name']),
-                'DETAILS_URL' => cot_url(
-                    'users',
-                    ['m' => 'details', 'id' => $user_data['user_id'], 'u' => $user_data['user_name']]
-                ),
+                'DETAILS_URL' => $usersHelper->getUrl($user_data),
                 'DETAILS_URL_SHORT' => cot_url('users', ['m' => 'details', 'id' => $user_data['user_id']]),
-                'FULL_NAME' => htmlspecialchars(UsersHelper::getInstance()->getFullName($user_data)),
+                'FULL_NAME' => htmlspecialchars($usersHelper->getFullName($user_data)),
                 'TITLE' => $cot_groups[$user_data['user_maingrp']]['title'],
                 'MAIN_GROUP' => cot_build_group($user_data['user_maingrp']),
                 'MAIN_GROUP_ID' => $user_data['user_maingrp'],

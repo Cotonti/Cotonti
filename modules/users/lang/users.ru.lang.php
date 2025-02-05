@@ -18,6 +18,12 @@ $L['cfg_disablereg'] = 'Отключить регистрацию';
 $L['cfg_disablereg_hint'] = 'Запретить регистрацию новых пользователей';
 $L['cfg_maxusersperpage'] = 'Максимальное количество записей на страницу в списке пользователей';
 $L['cfg_maxusersperpage_hint'] = ' ';
+$L['cfg_filterFields'] = 'Поля для фильтра';
+$L['cfg_filterFields_hint'] = 'По умолчанию, в списке пользователей, фильтр по имени фильтрует по полю '
+ . '<strong>user_name</strong> и экстраполям <strong>first_name</strong>, <strong>firstname</strong>, '
+ . '<strong>last_name</strong>, <strong>lastname</strong>, <strong>middle_name</strong>, <strong>middlename</strong> '
+ . 'если они есть.<br>'
+ . 'Вы можете указать дополнительные экстраполя для фильтра. Через запятую. Без префикса <strong>user_</strong>.';
 $L['cfg_regnoactivation'] = 'Отменить проверку e-mail при регистрации';
 $L['cfg_regnoactivation_hint'] = 'По причине безопасности рекомендуется &laquo;Нет&raquo;!';
 $L['cfg_register_auto_login'] = 'Автовход после регистрации';

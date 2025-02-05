@@ -1,9 +1,13 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=users.edit.update.delete
+Hooks=users.delete
 [END_COT_EXT]
 ==================== */
+
+declare(strict_types=1);
+
+use cot\modules\users\inc\UsersDictionary;
 
 /**
  * Trashcan delete user
@@ -13,12 +17,20 @@ Hooks=users.edit.update.delete
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
  * @var int $id User id for delete
- * @var array<string, mixed> $urr User data
+ * @var array<string, mixed> $userData User data
  */
 
 defined('COT_CODE') or die('Wrong URL');
+
 require_once cot_incfile('trashcan', 'plug');
 
-if (Cot::$cfg['plugin']['trashcan']['trash_user']) {
-	cot_trash_put('user', Cot::$L['User'] . ' #' . $id . ' ' . $urr['user_name'], $id, $urr);
+if (!Cot::$cfg['plugin']['trashcan']['trash_user']) {
+    return;
 }
+
+$trashcanId = cot_trash_put(
+    UsersDictionary::SOURCE_USER,
+    Cot::$L['User'] . ' #' . $id . ' ' . $userData['user_name'],
+    $id,
+    $userData
+);
