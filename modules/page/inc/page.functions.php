@@ -9,7 +9,6 @@
 
 use cot\extensions\ExtensionsService;
 use cot\modules\page\inc\PageDictionary;
-use cot\services\ItemService;
 
 defined('COT_CODE') or die('Wrong URL.');
 

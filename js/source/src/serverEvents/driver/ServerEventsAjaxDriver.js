@@ -6,7 +6,7 @@ import {BaseServerEventsDriver} from "./BaseServerEventsDriver";
  * @copyright (c) Cotonti Team
  */
 export class ServerEventsAjaxDriver extends BaseServerEventsDriver {
-    #timeOutPeriod = 5000; // 5 sec.
+    #timeOutPeriod = 6000; // 6 sec.
 
     #timerId = null;
 
@@ -28,7 +28,8 @@ export class ServerEventsAjaxDriver extends BaseServerEventsDriver {
 
     async #getEvents() {
         try {
-            const response = await fetch(this.eventsUrl);
+            const url = this.eventsUrl + '&ts=' + Date.now();
+            const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`);
             }

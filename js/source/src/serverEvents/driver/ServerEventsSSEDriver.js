@@ -21,7 +21,8 @@ export class ServerEventsSSEDriver extends BaseServerEventsDriver {
             console.log('init ServerEventsSSEDriver. ', this.eventsUrl);
         }
 
-        this.#eventSource = new EventSource(this.eventsUrl);
+        const url = this.eventsUrl + '&ts=' + Date.now();
+        this.#eventSource = new EventSource(url);
 
         if (this.mode !== 'production') {
             this.#eventSource.onopen = function (event) {
