@@ -86,8 +86,8 @@ if ($a === 'update') {
 	$ruser['user_text'] = cot_import('rusertext','P','HTM');
     $rtheme = cot_import('rusertheme','P','TXT');
     $rtheme = !empty($rtheme) ? explode(':', $rtheme) : [];
-	$ruser['user_theme'] = $rtheme[0];
-	$ruser['user_scheme'] = $rtheme[1];
+	$ruser['user_theme'] = $rtheme[0] ?? '';
+	$ruser['user_scheme'] = $rtheme[1] ?? '';
 	$ruser['user_email'] = cot_import('ruseremail','P','TXT');
 	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','INT');
 	$ruser['user_lang'] = cot_import('ruserlang','P','ALP');

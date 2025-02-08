@@ -979,7 +979,7 @@ function cot_mail(
     $additionalParameters = '',
     $html = false
 ) {
-	global $cfg, $cot_mail_senders;
+	global $cot_mail_senders;
 
 	if (function_exists('cot_mail_custom')) {
 		return cot_mail_custom(
@@ -1051,55 +1051,58 @@ function cot_mail(
         $from = Cot::$cfg['adminemail'];
     }
 
-    $headers = 'From: ' . $fromHeaderName . ' <' . $fromHeaderEmail . ">\r\n";
+    $bodyType = $html ? 'html' : 'plain';
+
+    $headers = [
+        'MIME-Version: 1.0',
+        'Content-type: text/' . $bodyType . ' charset=UTF-8',
+        'From: ' . $fromHeaderName . ' <' . $fromHeaderEmail . '>',
+    ];
+
     if (!empty($from)) {
         if (!empty($fromName)) {
             $fromName = mb_encode_mimeheader($fromName, 'UTF-8', 'B', "\n");
-            $headers .= 'Reply-To: ' . $fromName . ' <' . $from . ">\r\n";
+            $headers[] = 'Reply-To: ' . $fromName . ' <' . $from . '>';
         } else {
-            $headers .= 'Reply-To: ' . $from . "\r\n";
+            $headers[] = 'Reply-To: ' . $from;
         }
     }
     if (!empty($cc)) {
-        $headers .= 'Cc: ' . $cc . "\r\n";
+        $headers[] = 'Cc: ' . $cc;
     }
     if (!empty($bcc)) {
-        $headers .= 'Bcc: ' . $bcc . "\r\n";
+        $headers[] = 'Bcc: ' . $bcc;
     }
 
-    $headers .= 'Message-ID: ' . md5(uniqid(microtime())) . '@' . $_SERVER['SERVER_NAME'] . "\r\n";
-
-    $type_body = $html ? 'html' : 'plain';
-    $headers .= 'Content-Type: text/' . $type_body . "; charset=UTF-8\r\n";
-    $headers .= "Content-Transfer-Encoding: base64\r\n";
+    $headers[] = 'Message-ID: <' . md5(uniqid(microtime())) . '@' . $_SERVER['SERVER_NAME'] . '>';
 
     if (!empty($additionalHeaders)) {
         if (is_array($additionalHeaders)) {
             foreach ($additionalHeaders as $key => $header) {
-                $headers .= $key . ': ' . $header . "\r\n";
+                $headers[] = $key . ': ' . $header;
             }
         } else {
-            $headers .= $additionalHeaders . "\r\n";
+            $headers[] = $additionalHeaders;
         }
     }
 
-    $headers .= 'X-Mailer: Cotonti v.' .  Cot::$cfg['version'];
+    $headers[] = 'X-Mailer: Cotonti v.' .  Cot::$cfg['version'];
 
     if (!$customTemplate) {
-        $body_params = array(
-            'SITE_TITLE' => $cfg['maintitle'],
-            'SITE_URL' => $cfg['mainurl'],
-            'SITE_DESCRIPTION' => $cfg['subtitle'],
-            'ADMIN_EMAIL' => $cfg['adminemail'],
+        $body_params = [
+            'SITE_TITLE' => Cot::$cfg['maintitle'],
+            'SITE_URL' => Cot::$cfg['mainurl'],
+            'SITE_DESCRIPTION' => Cot::$cfg['subtitle'],
+            'ADMIN_EMAIL' => Cot::$cfg['adminemail'],
             'MAIL_SUBJECT' => $subject,
-            'MAIL_BODY' => $body
-        );
+            'MAIL_BODY' => $body,
+        ];
 
-        $subject_params = array(
+        $subject_params = [
             'SITE_TITLE' => Cot::$cfg['maintitle'],
             'SITE_DESCRIPTION' => Cot::$cfg['subtitle'],
-            'MAIL_SUBJECT' => $subject
-        );
+            'MAIL_SUBJECT' => $subject,
+        ];
 
         $subjectPrepared = cot_title(Cot::$cfg['subject_mail'], $subject_params, false);
 
@@ -1115,25 +1118,35 @@ function cot_mail(
         $bodyPrepared = $body;
     }
 
-    // Message body line should be separated with a CRLF (\r\n). Lines should not be larger than 70 characters.
-    // (RFC 2822) http://www.faqs.org/rfcs/rfc2822.html
+    /**
+     * RFC 2822: Message body line should be separated with a CRLF (\r\n).
+     * @link http://www.faqs.org/rfcs/rfc2822.html
+     */
     // Normalise to \n
     $bodyPrepared = str_replace(["\r\n", "\r"], "\n", $bodyPrepared);
     // Now convert LE as needed
     $bodyPrepared = str_replace("\n", "\r\n", $bodyPrepared);
-    //$bodyPrepared = wordwrap($bodyPrepared, 70, "\r\n");
-    $bodyPrepared = base64_encode($bodyPrepared);
+
+
+    // RFC 2822: Each line of characters MUST be no more than 998 characters, and SHOULD be no more than 78 characters,
+    // excluding the CRLF.
+    if ($html) {
+        $bodyPrepared = "<html>\r\n<body>\r\n"
+            . wordwrap($bodyPrepared, 70, "\r\n", true)
+            . "\r\n</body>\r\n</html>\r\n";
+    } else {
+        $bodyPrepared = wordwrap($bodyPrepared, 70, "\r\n");
+    }
 
     $subjectPrepared = mb_encode_mimeheader($subjectPrepared, 'UTF-8', 'B', "\n");
 
     if (ini_get('safe_mode')) {
-        mail($to, $subjectPrepared, $bodyPrepared, $headers);
-
+        mail($to, $subjectPrepared, $bodyPrepared, implode("\r\n", $headers));
     } else {
         if (empty($additionalParameters)) {
             $additionalParameters = '';
         }
-        mail($to, $subjectPrepared, $bodyPrepared, $headers, $additionalParameters);
+        mail($to, $subjectPrepared, $bodyPrepared, implode("\r\n", $headers), $additionalParameters);
     }
 
     if (function_exists('cot_stat_inc')) {

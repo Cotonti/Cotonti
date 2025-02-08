@@ -20,18 +20,22 @@ include_once cot_langfile('mcaptcha', 'plug');
 
 /**
  * Generates new math captcha and returns question output
- *
  * @return string
  */
-function mcaptcha_generate()
+function mcaptcha_generate(): string
 {
-	global $cfg, $L;
+    if (!isset($_SESSION['mcaptcha_attempts'])) {
+        $_SESSION['mcaptcha_attempts'] = 0;
+    }
 
-	if($cfg['plugin']['mcaptcha']['attempts'] > 0 && $_SESSION['mcaptcha_attempts'] > $cfg['plugin']['mcaptcha']['attempts'])
-	{
+	if (
+        Cot::$cfg['plugin']['mcaptcha']['attempts'] > 0
+        && $_SESSION['mcaptcha_attempts'] > Cot::$cfg['plugin']['mcaptcha']['attempts']
+    ) {
 		// The captcha has been called too much times this session
-		return $L['mcaptcha_error'];
+		return Cot::$L['mcaptcha_error'];
 	}
+
 	$n1 = mt_rand(1, 99);
 	$n2 = mt_rand(1, 99);
 	$salt = md5(mt_rand());
@@ -39,9 +43,9 @@ function mcaptcha_generate()
 	$_SESSION['mcaptcha_time'] = time();
 	$_SESSION['mcaptcha_salt'] = $salt;
 	$_SESSION['mcaptcha_count'] = 0;
-    if (!isset($_SESSION['mcaptcha_attempts'])) $_SESSION['mcaptcha_attempts'] = 0;
 	$_SESSION['mcaptcha_attempts']++;
 	$html = $n1 . ' + ' . $n2 . ' = ?';
+
 	return mcaptcha_obfuscate($html) . '<input type="hidden" name="mcaptcha_salt" value="' . $salt . '" />';
 }
 

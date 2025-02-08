@@ -157,9 +157,7 @@ if ($a === 'check') {
         cot_redirect(cot_url('message', 'msg=151', '', true));
     }
 
-    /** @see cot_user_authorize() */
-    $query = 'SELECT user_id,user_name, user_password, user_maingrp, user_banexpire, user_sid, user_sidtime, '
-        . 'user_passsalt, user_passfunc FROM ' . Cot::$db->users . ' WHERE ';
+    $query = 'SELECT * FROM ' . Cot::$db->users . ' WHERE ';
 
 	$sql = Cot::$db->query($query . $userSelectCondition, $userSelectParams);
 
