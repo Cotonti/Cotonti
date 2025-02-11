@@ -1296,8 +1296,7 @@ function cot_module_active($extensionCode)
     if (empty($extensionCode)) {
         return false;
     }
-	return ExtensionsService::getInstance()
-    ->isActive($extensionCode, ExtensionsDictionary::TYPE_MODULE);
+	return ExtensionsService::getInstance()->isModuleActive($extensionCode);
 }
 
 /**

@@ -28,7 +28,7 @@
 				<span>Start here</span>
 			</a>
 		</li>
-		<!-- IF {PHP.cot_modules.forums} -->
+		<!-- IF {PHP|cot_module_active('forums')} -->
 		<li>
 			<a href="{PHP|cot_url('forums')}" title="{PHP.L.Forums}">
 				{PHP.L.Forums}
@@ -42,7 +42,7 @@
 				<span>Our updates</span>
 			</a>
 		</li>
-		<!-- IF {PHP.cot_modules.rss} -->
+		<!-- IF {PHP|cot_module_active('rss')} -->
 		<li>
 			<a href="{PHP|cot_url('rss')}" title="{PHP.L.RSS_Feeds}">
 				RSS

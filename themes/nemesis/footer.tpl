@@ -4,7 +4,7 @@
 		<div class="col4-1">
 			<ul class="block">
 				<li><strong>Stay tuned!</strong></li>
-				<!-- IF {PHP.cot_modules.rss} -->
+				<!-- IF {PHP|cot_module_active('rss')} -->
 				<li>{PHP.R.icon_rss} <a href="{PHP|cot_url('rss')}" title="{PHP.L.RSS_Feeds}">RSS</a></li>
 				<!-- IF {PHP.cfg.forums} -->
 				<li>{PHP.R.icon_rss} <a href="{PHP|cot_url('rss','m=forums')}" title="{PHP.L.RSS_Feeds} {PHP.cfg.separator} {PHP.L.Forums}"> RSS (<span class="lower">{PHP.L.Forums}</span>)</a></li>
@@ -17,7 +17,7 @@
 			<ul class="block">
 				<li><strong>{PHP.L.Navigation}</strong></li>
 				<li><a href="{PHP.cfg.mainurl}" title="{PHP.L.Home}">{PHP.L.Home}</a></li>
-				<!-- IF {PHP.cot_modules.forums} -->
+				<!-- IF {PHP|cot_module_active('forums')} -->
 				<li><a href="{PHP|cot_url('forums')}" title="{PHP.L.Forums}">{PHP.L.Forums}</a></li>
 				<!-- ENDIF -->
 				<li><a href="{PHP|cot_url('page','c=news')}" title="{PHP.L.News}">{PHP.L.News}</a></li>
@@ -44,10 +44,10 @@
 			<li>{PHP.out.notices}</li>
 			<!-- ENDIF -->
 			<li><a href="{PHP|cot_url('users','m=profile')}" title="{PHP.L.Profile}">{PHP.L.Profile}</a></li>
-			<!-- IF {PHP.cot_modules.pm} -->
+			<!-- IF {PHP|cot_module_active('pm')} -->
 			<li><a href="{PHP|cot_url('pm')}" title="{PHP.L.Private_messages}">{PHP.L.Private_Messages}</a></li>
 			<!-- ENDIF -->
-			<!-- IF {PHP.cot_modules.pfs} -->
+			<!-- IF {PHP|cot_module_active('pfs')} -->
 			<li><a href="{PHP|cot_url('pfs')}" title="{PHP.L.PFS}">{PHP.L.PFS}</a></li>
 			<!-- ENDIF -->
 			<li>{PHP.out.loginout}</li>

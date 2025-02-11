@@ -22,7 +22,7 @@
 		<ul>
 			<li>
 				<a href="{PHP|cot_url('users','m=profile')}">{PHP.usr.name}</a>
-				<!-- IF {PHP.cot_modules.pm} -->
+				<!-- IF {PHP|cot_module_active('pm')} -->
 				<span class="spaced">{PHP.cfg.separator}</span>
 				<a href="{PHP|cot_url('pm')}">
 					<!-- IF {PHP.usr.messages} == 0 -->
