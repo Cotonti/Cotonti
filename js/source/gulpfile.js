@@ -1,9 +1,10 @@
 const { src, dest, series, watch } = require('gulp');
-const webpack = require('webpack-stream');
+const clean = require('gulp-clean');
 const concat = require('gulp-concat');
 const rename = require("gulp-rename");
+const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify-es').default;
-const clean = require('gulp-clean');
+const webpack = require('webpack-stream');
 
 const modules = [
     'src/CotontiApplication.js',
@@ -17,14 +18,18 @@ const cleanDistDirectory = () =>
 
 const buildWorker = () =>
     src(['src/serverEvents/sharedWorker.js'], {sourcemaps: true})
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(
             webpack({
                 mode: mode,
-                devtool: 'inline-source-map'
+                devtool: 'source-map',
+                output: {
+                    filename: 'sharedWorkerServerEvents.min.js',
+                }
             })
         )
-        .pipe(rename('sharedWorkerServerEvents.min.js'))
-        .pipe(dest('../', {sourcemaps: true}));
+        .pipe(sourcemaps.write('./'))
+        .pipe(dest('../'));
 
 const buildModules = () =>
     src(modules, {sourcemaps: true})
@@ -43,11 +48,13 @@ const buildJs = () =>
         'dist/modules.js',
         'src/base.js'
     ], {sourcemaps: true})
+        .pipe(sourcemaps.init())
         .pipe(concat('base.js'))
         .pipe(dest('../', {sourcemaps: true}))
         .pipe(rename('base.min.js'))
         .pipe(uglify())
-        .pipe(dest('../', {sourcemaps: true}));
+        .pipe(sourcemaps.write('./'))
+        .pipe(dest('../'));
 
 /**
  * Build base.js

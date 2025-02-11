@@ -1055,7 +1055,7 @@ function cot_mail(
 
     $headers = [
         'MIME-Version: 1.0',
-        'Content-type: text/' . $bodyType . ' charset=UTF-8',
+        'Content-type: text/' . $bodyType . '; charset=UTF-8',
         'From: ' . $fromHeaderName . ' <' . $fromHeaderEmail . '>',
     ];
 
