@@ -1131,9 +1131,7 @@ function cot_mail(
     // RFC 2822: Each line of characters MUST be no more than 998 characters, and SHOULD be no more than 78 characters,
     // excluding the CRLF.
     if ($html) {
-        $bodyPrepared = "<html>\r\n<body>\r\n"
-            . wordwrap($bodyPrepared, 70, "\r\n", true)
-            . "\r\n</body>\r\n</html>\r\n";
+        $bodyPrepared = "<html>\r\n<body>\r\n" . $bodyPrepared . "\r\n</body>\r\n</html>\r\n";
     } else {
         $bodyPrepared = wordwrap($bodyPrepared, 70, "\r\n");
     }
