@@ -56,7 +56,9 @@ class PageService
             Cot::$db->beginTransaction();
 
             foreach (Cot::$extrafields[Cot::$db->pages] as $exfld) {
-                cot_extrafield_unlinkfiles($pageData['page_' . $exfld['field_name']], $exfld);
+                if (isset($pageData['page_' . $exfld['field_name']])) {
+                    cot_extrafield_unlinkfiles($pageData['page_' . $exfld['field_name']], $exfld);
+                }
             }
 
             $trashcanId = 0; // If trashcan plugin puts the page into trashcan, it should fill this var

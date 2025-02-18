@@ -19,9 +19,8 @@ class Resources
 		'@ckeditor' => 'plugins/ckeditor/lib/ckeditor.js',
 		'@ckeditorPreset.js' => 'plugins/ckeditor/presets/ckeditor.default.set.js',
 
-		'@bootstrap.js' => 'lib/bootstrap/js/bootstrap.min.js',
+		'@bootstrap.js' => 'lib/bootstrap/js/bootstrap.bundle.min.jss',
 		'@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
-		'@bootstrapTheme.css' => null  // Undefined value. You can set to: lib/bootstrap/css/bootstrap-theme.min.css
 	);
 
 	// ==== predefined alias constants ====
@@ -177,13 +176,11 @@ class Resources
 
 	protected static function additionalFiles($file)
 	{
-		$ret = array();
+		$ret = [];
 
-		switch ($file)
-		{
+		switch ($file) {
 			case '@bootstrap.js':
 				$ret[] = '@bootstrap.css';
-				$ret[] = '@bootstrapTheme.css';
 				break;
 
 			case '@ckeditor':
@@ -638,7 +635,7 @@ class Resources
 	 * @param string $path JavaScript or CSS file path
 	 * @param string $type
 	 * @param int $order
-	 * @return bool
+	 * @return void
 	 * @throws Exception
 	 */
 	public static function linkFileFooter($path, $type = '', $order = 50)
@@ -647,7 +644,7 @@ class Resources
 		$fileName = $tmp[0];
 
 		if (in_array($fileName, static::$addedFiles)) {
-            return false;
+            return;
         }
 
 		if (mb_strpos($fileName, '@') === 0) {

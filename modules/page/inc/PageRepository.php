@@ -29,7 +29,7 @@ class PageRepository extends BaseRepository
     }
 
     /**
-     * Fetches user entry from DB
+     * Fetches page entry from DB
      * @param int $id Page ID
      * @param bool $useCache Use one time session cache
      * @return ?array

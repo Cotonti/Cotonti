@@ -64,67 +64,6 @@ function cot_structure_add($extension, $data, $is_module = true)
 }
 
 /**
- * Removes a category
- *
- * @global Cache $cache
- * @global CotDB $db
- * @global string $db_structure
- * @global array $structure
- * @param string $extension Extension code
- * @param string $code Category code
- * @param bool $is_module TRUE for modules, FALSE for plugins
- * @return bool
- * @global CotDB $db
- * @global Cache $cache
- */
-function cot_structure_delete($extension, $code, $is_module = true)
-{
-    // $L, $Ls, $R are needed for hook includes
-    global $L, $Ls, $R;
-
-	global $db, $structure;
-
-	/* === Hook === */
-	foreach (cot_getextplugins('structure.delete') as $pl) {
-		include $pl;
-	}
-	/* ===== */
-
-    $data = Cot::$db->query(
-        'SELECT structure_code, structure_count FROM ' . Cot::$db->structure .
-        ' WHERE structure_area = :area AND structure_code = :code',
-        ['area' => $extension, 'code' => $code]
-    )->fetch();
-
-    if (empty($data)) {
-        return false;
-    }
-
-    if (
-        $data['structure_count'] > 0
-        || !empty(cot_structure_children($extension, $code, true, false, false))
-    ) {
-        return false;
-    }
-
-    Cot::$db->delete(Cot::$db->structure, "structure_area=? AND structure_code=?", [$extension, $code]);
-    Cot::$db->delete(Cot::$db->config, "config_cat=? AND config_subcat=? AND config_owner='module'", [$extension, $code]);
-	$is_module && cot_auth_remove_item($extension, $code);
-	$area_deletecat = 'cot_'.$extension.'_deletecat';
-	(function_exists($area_deletecat)) ? $area_deletecat($code) : FALSE;
-
-    cot_log("Structure. Deleted category: '$extension' - '$code'", 'adm', 'structure', 'delete');
-
-	unset(Cot::$structure[$extension][$code]);
-	if (Cot::$cache) {
-        // @todo it is not efficient to flush the entire cache
-        Cot::$cache->clear();
-	}
-
-	return true;
-}
-
-/**
  * Updates an existing category in the database
  *
  * @global Cache $cache

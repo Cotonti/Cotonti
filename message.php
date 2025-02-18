@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsDictionary;
+
 const COT_CODE = true;
 const COT_MESSAGE = true;
 const COT_CORE = true;
@@ -30,7 +32,6 @@ if (defined('COT_ADMIN')) {
 }
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('message', 'a');
-//cot_block($usr['auth_read']);
 
 $msg = cot_import('msg', 'G', 'INT');
 $num = cot_import('num', 'G', 'INT');
@@ -90,10 +91,12 @@ switch ($msg) {
 	case '920':
 		if (!empty($m)) {
 			// Load module or plugin langfile
-			if (file_exists(cot_langfile($m, 'module'))) {
-				include cot_langfile($m, 'module');
-			} elseif (file_exists(cot_langfile($m, 'plug'))) {
-				include cot_langfile($m, 'plug');
+            $moduleLangFile = cot_langfile($m, ExtensionsDictionary::TYPE_MODULE);
+            $pluginLangFile = cot_langfile($m, ExtensionsDictionary::TYPE_PLUGIN);
+			if (!empty($moduleLangFile) && file_exists($moduleLangFile)) {
+				include $moduleLangFile;
+			} elseif (!empty($pluginLangFile) && file_exists($pluginLangFile)) {
+				include $pluginLangFile;
 			}
 		}
 		$lng = cot_import('lng', 'G', 'TXT');

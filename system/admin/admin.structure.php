@@ -8,6 +8,9 @@
  *
  * @var string $n Extension code
  */
+
+use cot\structure\StructureControlService;
+
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('admin', 'a');
@@ -345,7 +348,7 @@ if (empty($n)) {
 		cot_check_xg();
 
         $data = Cot::$db->query(
-            'SELECT structure_code, structure_count FROM ' . Cot::$db->structure .
+            'SELECT structure_id, structure_code, structure_count FROM ' . Cot::$db->structure .
             ' WHERE structure_area = :area AND structure_code = :code',
             ['area' => $n, 'code' => $c]
         )->fetch();
@@ -361,7 +364,14 @@ if (empty($n)) {
         }
 
         if (!cot_error_found()) {
-            if (cot_structure_delete($n, $c, $is_module)) {
+            try {
+                $result = StructureControlService::getInstance()->delete((int) $data['structure_id']);
+            } catch (Throwable $e) {
+                $result = false;
+                cot_error($c . ': ' . $e->getMessage());
+            }
+
+            if ($result) {
                 /* === Hook === */
                 foreach (cot_getextplugins('admin.structure.delete.done') as $pl) {
                     include $pl;
