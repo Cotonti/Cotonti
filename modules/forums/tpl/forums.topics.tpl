@@ -5,6 +5,9 @@
         <a href="{FORUMS_TOPICS_SECTION_RSS}" style="float: right"><img
                     src="{PHP.cfg.themes_dir}/nemesis/img/rss.png" alt="RSS" style="vertical-align: middle"></a>
     </h2>
+
+    {FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
+
     <!-- BEGIN: FORUMS_SECTIONS -->
     <table class="cells">
         <tr>
@@ -81,7 +84,7 @@
         <!-- BEGIN: FORUMS_SECTIONS_VIEWERS -->
         <span>{PHP.L.forums_viewers}: {FORUMS_TOPICS_VIEWERS} {FORUMS_TOPICS_VIEWER_NAMES}</span>
         <!-- END: FORUMS_SECTIONS_VIEWERS -->
-        {FORUMS_TOPICS_PAGEPREV}{FORUMS_TOPICS_PAGES}{FORUMS_TOPICS_PAGENEXT}
+        {PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}
     </p>
 </div>
 <div class="block">

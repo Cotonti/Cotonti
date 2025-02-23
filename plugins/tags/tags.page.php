@@ -14,29 +14,24 @@ Tags=page.tpl:{PAGE_TAGS_ROW_TAG},{PAGE_TAGS_ROW_URL}
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['pages'])
-{
-	if (!isset($tags))
-	{
+if (Cot::$cfg['plugin']['tags']['pages']) {
+	if (!isset($tags)) {
 		require_once cot_incfile('tags', 'plug');
-		if (cot_plugin_active('i18n') && $i18n_enabled && $i18n_notmain)
-		{
+		if (cot_plugin_active('i18n') && $i18n_enabled && $i18n_notmain) {
 			$tags_extra = array('tag_locale' => $i18n_locale);
-		}
-		else
-		{
+		} else {
 			$tags_extra = null;
 		}
 		$item_id = $pag['page_id'];
-		$tags = cot_tag_list($item_id, 'pages', $tags_extra);
+		$tags = cot_tag_list($item_id, PageDictionary::SOURCE_PAGE, $tags_extra);
 	}
-	if (count($tags) > 0)
-	{
+	if (count($tags) > 0) {
 		$tag_i = 0;
-		foreach ($tags as $tag)
-		{
+		foreach ($tags as $tag) {
 			$tag_u = $cfg['plugin']['tags']['translit'] ? cot_translit_encode($tag) : $tag;
 			$tl = $lang != 'en' && $tag_u != $tag ? 1 : null;
 			$t->assign(array(
@@ -46,12 +41,10 @@ if ($cfg['plugin']['tags']['pages'])
 			$t->parse('MAIN.PAGE_TAGS_ROW');
 			$tag_i++;
 		}
-	}
-	else
-	{
-		$t->assign(array(
-			'PAGE_NO_TAGS' => $L['tags_Tag_cloud_none']
-		));
+	} else {
+		$t->assign([
+			'PAGE_NO_TAGS' => $L['tags_Tag_cloud_none'],
+		]);
 		$t->parse('MAIN.PAGE_NO_TAGS');
 	}
 }

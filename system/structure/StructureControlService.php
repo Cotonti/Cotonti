@@ -71,8 +71,6 @@ class StructureControlService
                 }
             }
 
-            $trashcanId = 0; // If trashcan plugin puts the category into trashcan, it should fill this var
-
             Cot::$db->delete(Cot::$db->structure, 'structure_id = ?', [$category['structure_id']]);
             Cot::$db->delete(
                 Cot::$db->config,
@@ -103,7 +101,7 @@ class StructureControlService
             }
             /* ===== */
 
-            ItemService::getInstance()->onDelete(StructureDictionary::SOURCE_CATEGORY, $id, $trashcanId);
+            ItemService::getInstance()->onDelete(StructureDictionary::SOURCE_CATEGORY, $id);
 
             Cot::$db->commit();
         } catch (Throwable $e) {

@@ -14,12 +14,13 @@ Order=7
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
  * @var int $id Deleting page id
- * @var array $pageData Deleting page data row. See \cot\modules\page\inc\PageService::delete()
+ * @var array $pageData Deleting page data row. See \cot\modules\page\inc\PageControlService::delete()
  * @var array $pageDeletedMessage
  */
 
 use cot\extensions\ExtensionsService;
 use cot\modules\page\inc\PageDictionary;
+use cot\plugins\trashcan\inc\TrashcanService;
 
 defined('COT_CODE') or die('Wrong URL');
 
@@ -31,6 +32,7 @@ global $lang;
 
 require_once cot_incfile('trashcan', 'plug');
 
+// @todo for pages.
 $tmpLang = null;
 if (!Cot::$cfg['forcedefaultlang'] && Cot::$cfg['defaultlang'] !== $lang) {
     $tmpLang = Cot::$L;
@@ -44,11 +46,14 @@ if (!Cot::$cfg['forcedefaultlang'] && Cot::$cfg['defaultlang'] !== $lang) {
     }
 }
 
+$trashcan = TrashcanService::getInstance();
+
 // Add page to trash
-$trashcanId = cot_trash_put(
+$trashcanId = $trashcan->put(
     PageDictionary::SOURCE_PAGE,
     Cot::$L['Page'] . " #" . $id . " " . $pageData['page_title'],
-    $id, $pageData
+    (string) $id,
+    $pageData
 );
 
 $pageDeletedMessage['deleted'] = Cot::$L['page_deletedToTrash'];
@@ -65,10 +70,10 @@ if (ExtensionsService::getInstance()->isPluginActive('comments')) {
         [$id]
     );
     while ($comment = $sql->fetch()) {
-        cot_trash_put(
+        $trashcan->put(
             'comment',
             Cot::$L['comments_comment'] . " #" . $comment['com_id'] . " from page #" . $id,
-            $comment['com_id'],
+            (string) $comment['com_id'],
             $comment,
             $trashcanId
         );
@@ -86,10 +91,10 @@ if (ExtensionsService::getInstance()->isPluginActive('i18n')) {
         [$id]
     );
     while ($row = $sql->fetch()) {
-        cot_trash_put(
+        $trashcan->put(
             'i18n_page',
             Cot::$L['i18n_translation'] . " #" . $row['ipage_id'] . " for page #" . $id,
-            $row['ipage_id'],
+            (string) $row['ipage_id'],
             $row,
             $trashcanId
         );

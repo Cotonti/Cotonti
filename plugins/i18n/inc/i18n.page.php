@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use \cot\plugins\trashcan\inc\TrashcanService;
+
 defined('COT_CODE') or die('Wrong URL.');
 
 require_once cot_incfile('page', 'module');
@@ -184,8 +186,12 @@ if ($id > 0 && $stmt->rowCount() == 1) {
 			$row = Cot::$db->query('SELECT * FROM ' . Cot::$db->i18n_pages .
                 ' WHERE ipage_id = ? AND ipage_locale = ?', [$id, $i18n_locale])->fetch();
 
-			cot_trash_put('i18n_page', Cot::$L['i18n_translation']." #$id ($i18n_locale) " .
-                $row['ipage_title'], $id, $row);
+			TrashcanService::getInstance()->put(
+                'i18n_page',
+                Cot::$L['i18n_translation'] . " #$id ($i18n_locale) " . $row['ipage_title'],
+                (string) $id,
+                $row
+            );
 		}
 
         Cot::$db->delete(Cot::$db->i18n_pages, "ipage_id = $id AND ipage_locale = '$i18n_locale'");

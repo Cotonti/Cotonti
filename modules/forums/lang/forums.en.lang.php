@@ -81,6 +81,7 @@ $L['forums_topiclocked'] = 'This topic is locked, new posts are not allowed.';
 $L['forums_topicoptions'] = 'Topic options';
 $L['forums_updatedby'] = 'This post was edited by %1$s (%2$s, %3$s ago)';
 $L['forums_postedby'] = 'Posted by';
+$L['forums_postInTopic'] = 'Post in topic';
 $L['forums_edittimeoutnote'] = 'Timeout for editing or deleting own post is ';
 $L['forums_moveToSameSection'] = 'Can\'t move topic to the same section. Please choose another one.';
 

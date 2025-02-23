@@ -13,16 +13,18 @@ Hooks=trashcan.api
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('forums', 'module');
 
 // Register restoration table
-$trash_types['forumpost'] = Cot::$db->forum_posts;
-$trash_types['forumtopic'] = Cot::$db->forum_topics;
+$trash_types[ForumsDictionary::SOURCE_POST] = Cot::$db->forum_posts;
+$trash_types[ForumsDictionary::SOURCE_TOPIC] = Cot::$db->forum_topics;
 
 /**
- * Check forumpost action
+ * Check forum post action
  *
  * @param array $data trashcan item data
  * @return bool
@@ -61,7 +63,7 @@ function cot_trash_forumpost_sync($data)
 function cot_trash_forumtopic_sync($data)
 {
 	cot_forums_resyncTopic($data['ft_id']);
-    cot_forums_updateStructureCounters($data['fp_cat']);
+    cot_forums_updateStructureCounters($data['ft_cat']);
 
     if (Cot::$cache && Cot::$cfg['cache_forums']) {
         Cot::$cache->static->clearByUri(cot_url('forums'));

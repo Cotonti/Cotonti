@@ -14,6 +14,8 @@ Tags=forums.sections.tpl:{FORUMS_SECTIONS_TAG_CLOUD},{FORUMS_SECTIONS_TAG_CLOUD_
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['forums'])
@@ -21,7 +23,7 @@ if ($cfg['plugin']['tags']['forums'])
 	require_once cot_incfile('tags', 'plug');
 	// Get all subcategories
 	$limit = $cfg['plugin']['tags']['lim_forums'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_forums'];
-	$tcloud = cot_tag_cloud('forums', $cfg['plugin']['tags']['order'], $limit);
+	$tcloud = cot_tag_cloud(ForumsDictionary::SOURCE_TOPIC, $cfg['plugin']['tags']['order'], $limit);
 	$tc_html = $R['tags_code_cloud_open'];
 	$tag_count = 0;
 	foreach ($tcloud as $tag => $cnt)

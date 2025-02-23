@@ -53,6 +53,9 @@
 			<!-- IF {PAGE_I18N_TRANSLATE} -->
 			<li>{PAGE_I18N_TRANSLATE}</li>
 			<!-- ENDIF -->
+			<!-- IF {PAGE_I18N_DELETE} -->
+			<li>{PAGE_I18N_DELETE}</li>
+			<!-- ENDIF -->
 		</ul>
 	</div>
 	<!-- END: PAGE_ADMIN -->

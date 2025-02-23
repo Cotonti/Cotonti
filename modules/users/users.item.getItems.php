@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=itemService.getItems
+Hooks=item.getItems
 [END_COT_EXT]
 ==================== */
 
@@ -63,7 +63,7 @@ foreach ($users as $row) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('users.itemService.getItems') as $pl) {
+foreach (cot_getextplugins('users.item.getItems') as $pl) {
     include $pl;
 }
 /* ===== */

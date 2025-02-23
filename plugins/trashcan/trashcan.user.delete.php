@@ -8,6 +8,7 @@ Hooks=users.delete
 declare(strict_types=1);
 
 use cot\modules\users\inc\UsersDictionary;
+use cot\plugins\trashcan\inc\TrashcanService;
 
 /**
  * Trashcan delete user
@@ -28,9 +29,9 @@ if (!Cot::$cfg['plugin']['trashcan']['trash_user']) {
     return;
 }
 
-$trashcanId = cot_trash_put(
+$trashcanId = TrashcanService::getInstance()->put(
     UsersDictionary::SOURCE_USER,
     Cot::$L['User'] . ' #' . $id . ' ' . $userData['user_name'],
-    $id,
+    (string) $id,
     $userData
 );

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Forums posts display.
  *
@@ -7,6 +6,14 @@
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
+
+use cot\exceptions\ForbiddenHttpException;
+use cot\exceptions\NotFoundHttpException;
+use cot\modules\forums\inc\ForumsPostsControlService;
+use cot\modules\forums\inc\ForumsPostsRepository;
+use cot\modules\forums\inc\ForumsPostsService;
+use cot\modules\forums\inc\ForumsTopicsControlService;
+
 defined('COT_CODE') or die('Wrong URL');
 
 $id = cot_import('id', 'G', 'INT'); // post id
@@ -171,83 +178,68 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
         );
 	}
 } elseif (
-    $a == 'delete'
+    $a === 'delete'
     && Cot::$usr['id'] > 0
-    && !empty($s)
-    && !empty($q)
-    && !empty($p)
-    && (
-        Cot::$usr['isadmin']
-        || (
-            $fp_posterid == Cot::$usr['id']
-            && (
-                Cot::$cfg['forums']['edittimeout'] == '0'
-                || Cot::$sys['now'] - $row['fp_creation'] < Cot::$cfg['forums']['edittimeout'] * 3600
-            )
-        )
-    )
+    && !empty($id)
 ) {
 	cot_check_xg();
 
-	/* === Hook === */
-	foreach (cot_getextplugins('forums.posts.delete.first') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    $postsRepository = ForumsPostsRepository::getInstance();
 
-	$row = Cot::$db->query("SELECT * FROM $db_forum_posts WHERE fp_id = ? AND fp_topicid = ? AND fp_cat = ? LIMIT 1",
-		array($p, $q, $s))->fetch();
-	is_array($row) || cot_die();
+    $post = $postsRepository->getById($id);
+
+    if ($post === null) {
+        throw new NotFoundHttpException();
+    }
+    if (!ForumsPostsService::getInstance()->canEdit($post, Cot::$usr['isadmin'])) {
+        throw new ForbiddenHttpException();
+    }
 
 	// If the post is first in the topic, then delete entire topic or show an error
-	$first_id = Cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = ? LIMIT 1", array($q))->fetchColumn();
-	if ($p == $first_id)
-	{
-		if (Cot::$usr['isadmin'])
-		{
+    $firstPost = $postsRepository->getFirstPostInTopic($post['fp_topicid']);
+	if ($post['fp_id'] === $firstPost['fp_id']) {
+		if (Cot::$usr['isadmin']) {
 			// Redirect to topic removal confirmation
-			cot_redirect(str_replace('&amp;', '&', cot_confirm_url(cot_url('forums', 'm=topics&a=delete&s='.$s.'&q='.$q.'&x='.$sys['xk'], '', true), 'forums', 'forums_confirm_delete_topic')));
-		}
-		else
-		{
+			cot_redirect(
+                str_replace(
+                    '&amp;',
+                    '&',
+                    cot_confirm_url(
+                        cot_url(
+                            'forums',
+                            'm=topics&a=delete&s=' . $s . '&q=' . $post['fp_topicid'] . '&x=' . Cot::$sys['xk'],
+                            '',
+                            true
+                        ),
+                        'forums',
+                        'forums_confirm_delete_topic'
+                    )
+                )
+            );
+		} else {
 			// Users can't delete topics
-			cot_die();
+            throw new ForbiddenHttpException();
 		}
 	}
 
-	foreach($cot_extrafields[$db_forum_posts] as $exfld) {
-		cot_extrafield_unlinkfiles($row['fp_'.$exfld['field_name']], $exfld);
-	}
-
-	Cot::$db->delete($db_forum_posts, 'fp_id = ? AND fp_topicid = ? AND fp_cat = ?', array($p, $q, $s));
-
-    cot_forums_resyncTopic($q, $fp_posterid);
-
-	cot_log("Deleted post #" . $p, 'forums', 'delete post', 'done');
-
-	/* === Hook === */
-	foreach (cot_getextplugins('forums.posts.delete.done') as $pl) {
-		include $pl;
-	}
-	/* ===== */
+    ForumsPostsControlService::getInstance()->delete($id);
 
 	if (
-        Cot::$db->query('SELECT COUNT(*) FROM ' . Cot::$db->forum_posts . ' WHERE fp_topicid = ?', $q)
-            ->fetchColumn() == 0
+        Cot::$db->query(
+            'SELECT COUNT(*) FROM ' . Cot::$db->forum_posts . ' WHERE fp_topicid = ?',
+            $post['fp_topicid']
+        )
+        ->fetchColumn() == 0
     ) {
-        // There is no posts left, delete topic
-        $sqlTopic = Cot::$db->query('SELECT * FROM ' . Cot::$db->forum_topics . ' WHERE ft_id = ?', $q);
-		if ($row = $sqlTopic->fetch()) {
-            cot_forums_prunetopics('single', $s, $q);
+        // There is no posts left, delete topic. This case is unlikely since we do not delete the only post in a
+        // topic separately.
+        ForumsTopicsControlService::getInstance()->delete($post['fp_topicid'], 'no post left');
 
-			/* === Hook === */
-			foreach (cot_getextplugins('forums.posts.emptytopicdel') as $pl) {
-				include $pl;
-			}
-			/* ===== */
-
-			cot_log('Delete topic #' . $q . " (no post left)", 'forums', 'delete topic', 'done');
-		}
+        /* === Hook === */
+        foreach (cot_getextplugins('forums.posts.emptytopicdel') as $pl) {
+            include $pl;
+        }
+        /* ===== */
 
         cot_forums_updateStructureCounters($s);
 		cot_redirect(cot_url('forums', ['m' => 'topics', 's' => $s], '', true));
@@ -257,8 +249,8 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
         cot_redirect(
             cot_url(
                 'forums',
-                ['m' => 'posts', 'q' => $q, 'd' => $durl,],
-                '#' . $row['fp_id'],
+                ['m' => 'posts', 'q' => $post['fp_topicid'], 'd' => $durl],
+                '', //'#' . $row['fp_id'],
                 true
             )
         );
@@ -266,15 +258,11 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 }
 
 $sql_forums = Cot::$db->query("SELECT * FROM $db_forum_topics WHERE ft_id= $q");
-if ($rowt = $sql_forums->fetch())
-{
-	if ($rowt['ft_mode'] == 1 && !(Cot::$usr['isadmin'] || $rowt['ft_firstposterid'] == Cot::$usr['id']))
-	{
+if ($rowt = $sql_forums->fetch()) {
+	if ($rowt['ft_mode'] == 1 && !(Cot::$usr['isadmin'] || $rowt['ft_firstposterid'] == Cot::$usr['id'])) {
 		cot_die();
 	}
-}
-else
-{
+} else {
 	cot_die(true, true);
 }
 
@@ -286,22 +274,19 @@ $order = 'fp_id ASC';
 $join_columns = '';
 $join_condition = '';
 
-if (!empty($p))
-{
+if (!empty($p)) {
 	$p_id = $p;
 	$postsbefore = Cot::$db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE " . implode(' AND ', $where) . " AND fp_id < $p_id")->fetchColumn();
 	$d = Cot::$cfg['forums']['maxpostsperpage'] * floor($postsbefore / Cot::$cfg['forums']['maxpostsperpage']);
 	$durl = Cot::$cfg['easypagenav'] ? floor($d / Cot::$cfg['forums']['maxpostsperpage']) + 1 : $d;
 }
 
-if (!empty($id))
-{
+if (!empty($id)) {
 	$where['id'] = "fp_id = $id";
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.posts.query') as $pl)
-{
+foreach (cot_getextplugins('forums.posts.query') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -348,6 +333,7 @@ require_once Cot::$cfg['system_dir'] . '/header.php';
 $mskin = cot_tplfile(array('forums', 'posts', Cot::$structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
 
+$forumsPostsService = ForumsPostsService::getInstance();
 
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('forums.posts.loop');
@@ -360,10 +346,32 @@ foreach ($sql_forums->fetchAll() as $row) {
 
 	$rowquote_url = (Cot::$usr['id'] > 0) ? cot_url('forums', 'm=posts&s=' . $s . '&q=' . $q . '&quote=' . $row['fp_id'] . '&d=' . $durl . '&n=last', '#np') : '';
 	$rowquote = (Cot::$usr['id'] > 0) ? cot_rc('forums_rowquote', array('url' => $rowquote_url)) : '';
-	$rowedit_url = ((Cot::$usr['isadmin'] || ($row['fp_posterid'] == Cot::$usr['id'] && (Cot::$cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < Cot::$cfg['forums']['edittimeout'] * 3600))) && Cot::$usr['id'] > 0) ? cot_url('forums', 'm=editpost&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&d=' . $durl . '&' . cot_xg()) : '';
-	$rowedit = ((Cot::$usr['isadmin'] || ($row['fp_posterid'] == Cot::$usr['id'] && (Cot::$cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < Cot::$cfg['forums']['edittimeout'] * 3600))) && Cot::$usr['id'] > 0) ? cot_rc('forums_rowedit', array('url' => $rowedit_url)) : '';
-	$rowdelete_url = (Cot::$usr['id'] > 0 && (Cot::$usr['isadmin'] || ($row['fp_posterid'] == Cot::$usr['id'] && (Cot::$cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < Cot::$cfg['forums']['edittimeout'] * 3600)))) ? cot_confirm_url(cot_url('forums', 'm=posts&a=delete&' . cot_xg() . '&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&d=' . $durl), 'forums', 'forums_confirm_delete_post') : '';
-	$rowdelete = (Cot::$usr['id'] > 0 && (Cot::$usr['isadmin'] || ($row['fp_posterid'] == Cot::$usr['id'] && (Cot::$cfg['forums']['edittimeout'] == '0' || $sys['now'] - $row['fp_creation'] < Cot::$cfg['forums']['edittimeout'] * 3600)) && $fp_num > 1)) ? cot_rc('forums_rowdelete', array('url' => $rowdelete_url)) : '';
+
+    $canEditPost = $forumsPostsService->canEdit($row, Cot::$usr['isadmin']);
+
+	$rowedit_url = $canEditPost
+        ? cot_url('forums', 'm=editpost&s=' . $s . '&q=' . $q . '&p=' . $row['fp_id'] . '&d=' . $durl . '&' . cot_xg())
+        : '';
+	$rowedit = $rowedit_url !== ''
+        ? cot_rc('forums_rowedit', ['url' => $rowedit_url])
+        : '';
+
+    $canDeletePost = $canEditPost && $fp_num > 1;
+
+	$rowdelete_url = $canDeletePost
+        ? cot_confirm_url(
+            cot_url(
+                'forums',
+                ['m' => 'posts', 'a' => 'delete', 'id' => $row['fp_id'], 'd' => $durl, 'x' => Cot::$sys['xk']]
+            ),
+            'forums',
+            'forums_confirm_delete_post'
+        )
+        : '';
+
+	$rowdelete = $rowdelete_url !== ''
+        ? cot_rc('forums_rowdelete', ['url' => $rowdelete_url])
+        : '';
 
 	if (!empty($row['fp_updater'])) {
 		$row['fp_updatedby'] = sprintf(Cot::$L['forums_updatedby'], htmlspecialchars($row['fp_updater']), cot_date('datetime_medium', $row['fp_updated']), cot_build_timegap($row['fp_updated'], $sys['now']));
@@ -449,7 +457,11 @@ if (Cot::$usr['isadmin']) {
 		'FORUMS_POSTS_ANNOUNCE_URL' => cot_url('forums', 'm=topics&a=announcement&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_PRIVATE_URL' => cot_url('forums', 'm=topics&a=private&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_CLEAR_URL' => cot_url('forums', 'm=topics&a=clear&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
-		'FORUMS_POSTS_DELETE_URL' => cot_confirm_url(cot_url('forums', 'm=topics&a=delete&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']), 'forums', 'forums_confirm_delete_topic'),
+		'FORUMS_POSTS_DELETE_URL' => cot_confirm_url(
+            cot_url('forums', ['m' => 'topics', 'a' => 'delete', 's' => $s, 'q' => $q, 'x' => $sys['xk']]),
+            'forums',
+            'forums_confirm_delete_topic'
+        ),
 		'FORUMS_POSTS_MOVEBOX_SELECT' => cot_selectbox('', 'ns', array_keys($movebox), array_values($movebox), false),
 		'FORUMS_POSTS_MOVEBOX_KEEP' => cot_checkbox('0', 'ghost'),
 	]);

@@ -15,6 +15,8 @@ use cot\extensions\ExtensionsDictionary;
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
  * @var int $id Deleting page id
+ *
+ * Translation will be put to trashcan here: plugins/trashcan/trashcan.page.delete.php
  */
 
 defined('COT_CODE') or die('Wrong URL');

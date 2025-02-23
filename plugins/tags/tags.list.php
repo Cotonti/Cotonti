@@ -16,6 +16,8 @@ Tags=page.list.tpl:{LIST_TAG_CLOUD},{LIST_TAG_CLOUD_ALL_LINK}
  * @var string $c
  */
 
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if (
@@ -62,7 +64,7 @@ if (
 	$tc_res = Cot::$db->query("SELECT r.tag AS tag, COUNT(r.tag_item) AS cnt
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 		ON r.tag_item = p.page_id
-		WHERE r.tag_area = 'pages' $tags_where AND p.page_cat IN ($tc_cats) AND p.page_state = 0
+		WHERE r.tag_area = '" . PageDictionary::SOURCE_PAGE . "' $tags_where AND p.page_cat IN ($tc_cats) AND p.page_state = 0
 		GROUP BY r.tag
 		ORDER BY $order $limit");
 	$tc_html = Cot::$R['tags_code_cloud_open'];

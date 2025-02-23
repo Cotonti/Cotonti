@@ -7,6 +7,9 @@
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
+
+use cot\modules\forums\inc\ForumsHelper;
+
 defined('COT_CODE') or die('Wrong URL.');
 
 // Requirements
@@ -63,108 +66,6 @@ function cot_forums_buildpath($cat, $forumslink = true)
 	}
 
 	return $tmp;
-}
-
-/**
- * Deletes (outdated) topics
- *
- * @param string $mode Selection criteria
- * @param string $section Section
- * @param int $param Selection parameter value
- * @return int
- * @global CotDB $db
- *
- * @todo To delete single topic we don't need section. Just TopicID
- */
-function cot_forums_prunetopics($mode, $section, $param)
-{
-	global $cfg, $L, $Ls, $R; // For hooks include
-
-    $topicsDeleted = 0;
-	if (!is_int($param)) {
-		$param = (int) $param;
-	}
-
-	switch ($mode) {
-		case 'updated':
-			$limit = Cot::$sys['now'] - ($param * 86400);
-			$sql1 = Cot::$db->query(
-                'SELECT * FROM ' . Cot::$db->forum_topics .
-                    " WHERE ft_cat = :cat AND ft_updated < $limit AND ft_sticky = 0",
-                ['cat' => $section]
-            );
-			break;
-
-		case 'single':
-			$sql1 = Cot::$db->query(
-                'SELECT * FROM ' . Cot::$db->forum_topics . ' WHERE ft_cat = :cat  AND ft_id = :topicId',
-                ['cat' => $section, 'topicId' => $param]
-            );
-			break;
-	}
-
-    if ($sql1->rowCount() < 1) {
-        $sql1->closeCursor();
-        return 0;
-    }
-
-    $posterIds = [];
-    foreach ($sql1->fetchAll() as $topic) {
-        $topicId = $topic['ft_id'];
-
-        /** @todo For backward compatibility. Remove after 1.1.6 release  */
-        $q = $topic['ft_id'];
-
-        /* === Hook === */
-        foreach (cot_getextplugins('forums.functions.prunetopics') as $pl) {
-            include $pl;
-        }
-        /* ===== */
-
-        $posts = Cot::$db->query(
-            'SELECT * FROM ' . Cot::$db->forum_posts . ' WHERE fp_topicid = ?',
-            $topic['ft_id']
-        )->fetchAll();
-        if (!empty($posts)) {
-            foreach ($posts as $post) {
-                foreach(Cot::$extrafields[Cot::$db->forum_posts] as $exfld) {
-                    if (isset($post['fp_' . $exfld['field_name']])) {
-                        cot_extrafield_unlinkfiles($post['fp_' . $exfld['field_name']], $exfld);
-                    }
-                }
-            }
-        }
-
-        $topicPosterIds = Cot::$db->query(
-            'SELECT DISTINCT (fp_posterid) FROM ' . Cot::$db->forum_posts . ' WHERE fp_topicid = :topicId',
-            ['topicId' => $topic['ft_id']]
-        )->fetchAll(PDO::FETCH_COLUMN);
-        if (!empty($topicPosterIds)) {
-            $posterIds = array_merge($posterIds, $topicPosterIds);
-        }
-
-        Cot::$db->delete(Cot::$db->forum_posts, 'fp_topicid = ?', $topic['ft_id']);
-        Cot::$db->delete(Cot::$db->forum_topics, 'ft_movedto = ?', $topic['ft_id']);
-
-        foreach (Cot::$extrafields[Cot::$db->forum_topics] as $exfld) {
-            if (isset($topic['ft_' . $exfld['field_name']])) {
-                cot_extrafield_unlinkfiles($topic['ft_' . $exfld['field_name']], $exfld);
-            }
-        }
-
-        $topicsDeleted += Cot::$db->delete(Cot::$db->forum_topics, 'ft_id = ?', $topic['ft_id']);
-    }
-
-    cot_forums_updateStructureCounters($section);
-
-    // Decrease postcount for users
-    if (!empty($posterIds)) {
-        foreach ($posterIds as $posterId) {
-            cot_forums_updateUserPostCount($posterId);
-        }
-    }
-
-	return $topicsDeleted;
 }
 
 /**
@@ -289,6 +190,8 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 
 	$new_elems = (Cot::$usr['id'] > 0 && $statLtDate > Cot::$usr['lastvisit'] && $statLtPosterId != Cot::$usr['id']);
 
+    $helper = ForumsHelper::getInstance();
+
 	$sections = [
 		$tag_prefix . 'CAT' => $cat,
 		$tag_prefix . 'LOCKED' => Cot::$structure['forums'][$cat]['locked'],
@@ -305,7 +208,7 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
                     'desc' => htmlspecialchars(Cot::$structure['forums'][$cat]['desc']),
                 ]
             ),
-		$tag_prefix . 'URL' => cot_url('forums', 'm=topics&s=' . $cat),
+		$tag_prefix . 'URL' => $helper->getSectionUrl($cat),
 		$tag_prefix . 'SECTIONSURL' => cot_url('forums', 'c=' . $cat),
 		$tag_prefix . 'NEWPOSTS' => $new_elems,
 		$tag_prefix . 'CAT_DEFSTATE' => htmlspecialchars(Cot::$cfg['forums']['cat_' . $cat]['defstate']),
@@ -429,7 +332,7 @@ function cot_forums_sync($category)
         $insertData['fs_cat'] = $category;
         try {
             Cot::$db->insert(Cot::$db->forum_stats, $insertData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // May be record was just created by another process. Let's try to update
             Cot::$db->update(Cot::$db->forum_stats, $statData, 'fs_cat = :cat', ['cat' => $category]);
         }
@@ -461,19 +364,19 @@ function cot_forums_updateStructureCounters($category)
 
     $count = cot_forums_sync($category);
     Cot::$db->query(
-        'UPDATE ' . \Cot::$db->quoteTableName(\Cot::$db->structure) . ' SET structure_count = ' . $count .
+        'UPDATE ' . Cot::$db->quoteTableName(Cot::$db->structure) . ' SET structure_count = ' . $count .
         " WHERE structure_area='forums' AND structure_code = :category",
         ['category' => $category]
     );
 
-    if (\Cot::$cache) {
-        \Cot::$cache->db->remove('structure', 'system');
-        if (\Cot::$cfg['cache_forums']) {
+    if (Cot::$cache) {
+        Cot::$cache->db->remove('structure', 'system');
+        if (Cot::$cfg['cache_forums']) {
             //\Cot::$cache->page->clearByUri(cot_url('forums', ['m' => 'topics', 's' => $category]));
-            \Cot::$cache->static->clearByUri(cot_url('forums'));
+            Cot::$cache->static->clearByUri(cot_url('forums'));
         }
-        if (\Cot::$cfg['cache_index']) {
-            \Cot::$cache->static->clear('index');
+        if (Cot::$cfg['cache_index']) {
+            Cot::$cache->static->clear('index');
         }
     }
 }

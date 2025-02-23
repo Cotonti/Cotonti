@@ -14,6 +14,8 @@ Tags=page.list.tpl:{LIST_ROW_TAGS_ROW_TAG},{LIST_ROW_TAGS_ROW_URL},{LIST_ROW_NO_
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['pages'])
@@ -40,10 +42,10 @@ if ($cfg['plugin']['tags']['pages'])
 			$tag_items[] = $t_row['page_id'];
 		}
 		unset($rowset_copy);
-		$tags_rowset_list = cot_tag_list($tag_items, 'pages', $tags_extra);
+		$tags_rowset_list = cot_tag_list($tag_items, PageDictionary::SOURCE_PAGE, $tags_extra);
 	}
 
-	$tags = isset($tags_rowset_list[$item_id]) ? $tags_rowset_list[$item_id] : array();
+	$tags = $tags_rowset_list[$item_id] ?? [];
 	if (count($tags) > 0)
 	{
 		$tag_i = 0;

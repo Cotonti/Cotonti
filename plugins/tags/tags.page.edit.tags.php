@@ -18,6 +18,8 @@ Tags=page.edit.tpl:{PAGEEDIT_FORM_TAGS},{PAGEEDIT_TOP_TAGS},{PAGEEDIT_TOP_TAGS_H
  * @var int $id
  */
 
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if (Cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
@@ -29,7 +31,7 @@ if (Cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
 	} else {
 		$tags_extra = null;
 	}
-	$tags = cot_tag_list($id, 'pages', $tags_extra);
+	$tags = cot_tag_list($id, PageDictionary::SOURCE_PAGE, $tags_extra);
 	$tags = implode(', ', $tags);
 	$t->assign([
 		'PAGEEDIT_TOP_TAGS' => Cot::$L['Tags'],
@@ -38,7 +40,7 @@ if (Cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
 	]);
 	if ($tags_caller == 'i18n.page') {
 		$t->assign([
-			'I18N_PAGE_TAGS' => implode(', ', cot_tag_list($id)),
+			'I18N_PAGE_TAGS' => implode(', ', cot_tag_list($id, PageDictionary::SOURCE_PAGE)),
 			'I18N_IPAGE_TAGS' => cot_rc('tags_input_editpage', ['tags' => $tags]),
 		]);
 	}

@@ -16,6 +16,8 @@ Hooks=forums.editpost.update.done
  * @var bool $isFirstPost
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if (Cot::$cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $isFirstPost) {
@@ -23,7 +25,7 @@ if (Cot::$cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $i
 
 	$rtags = cot_import('rtags', 'P', 'TXT');
 	$tags = cot_tag_parse($rtags);
-	$old_tags = cot_tag_list($q, 'forums');
+	$old_tags = cot_tag_list($q, ForumsDictionary::SOURCE_TOPIC);
 	$kept_tags = [];
 	$new_tags = [];
 	// Find new tags, count old tags that have been left
@@ -41,7 +43,7 @@ if (Cot::$cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $i
 	$rem_tags = array_diff($old_tags, $kept_tags);
 
 	foreach ($rem_tags as $tag) {
-		cot_tag_remove($tag, $q, 'forums');
+		cot_tag_remove($tag, $q, ForumsDictionary::SOURCE_TOPIC);
 	}
 	// Add new tags
 	$ncnt = count($new_tags);
@@ -51,6 +53,6 @@ if (Cot::$cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $i
 		$lim = $ncnt;
 	}
 	for($i = 0; $i < $lim; $i++) {
-		cot_tag($new_tags[$i], $q, 'forums');
+		cot_tag($new_tags[$i], $q, ForumsDictionary::SOURCE_TOPIC);
 	}
 }

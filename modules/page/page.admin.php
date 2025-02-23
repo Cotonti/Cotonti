@@ -14,7 +14,7 @@ Hooks=admin
  */
 
 use cot\modules\page\inc\PageDictionary;
-use cot\modules\page\inc\PageService;
+use cot\modules\page\inc\PageControlService;
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
@@ -226,7 +226,7 @@ if ($a == 'validate') {
 	}
 	/* ===== */
 
-    $resultOrMessage = PageService::getInstance()->delete($id);
+    $resultOrMessage = PageControlService::getInstance()->delete($id);
     if ($resultOrMessage !== false) {
         /* === Hook === */
 		foreach (cot_getextplugins('page.admin.delete.done') as $pl) {
@@ -310,7 +310,7 @@ if ($a == 'validate') {
 
 		$perelik = '';
 		$notfoundet = '';
-        $pageService = PageService::getInstance();
+        $pageService = PageControlService::getInstance();
 		foreach ($s as $id => $k) {
 			if ($s[$id] == '1' || $s[$id] == 'on') {
 

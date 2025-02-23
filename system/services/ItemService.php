@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace cot\services;
 
 use cot\dto\ItemDto;
+use cot\extensions\ExtensionsService;
+use cot\plugins\trashcan\inc\TrashcanService;
 use cot\traits\GetInstanceTrait;
 
 defined('COT_CODE') or die('Wrong URL');
@@ -28,7 +30,7 @@ class ItemService
         $result = [];
 
         /* === Hook === */
-        foreach (cot_getextplugins('itemService.getItems') as $pl) {
+        foreach (cot_getextplugins('item.getItems') as $pl) {
             include $pl;
         }
         /* ===== */
@@ -45,13 +47,15 @@ class ItemService
     /**
      * Delete item event
      * @var string $source Deleting source code
-     * @var int $sourceId Deleting source item ID
-     * @var int $deletedToTrashcanId If item deleted to trashcan - trashcan record ID
+     * @var int|string $sourceId Deleting source item ID
      */
-    public function onDelete(string $source, int $sourceId, int $deletedToTrashcanId = 0): void
+    public function onDelete(string $source, $sourceId): void
     {
+        // If Trashcan plugin is installed and item deleted to trashcan - trashcan record ID
+        $deletedToTrashcanId = 0;
+
         /* === Hook === */
-        foreach (cot_getextplugins('itemService.deleteItem') as $pl) {
+        foreach (cot_getextplugins('item.delete') as $pl) {
             include $pl;
         }
         /* ===== */

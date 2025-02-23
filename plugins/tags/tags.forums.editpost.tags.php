@@ -18,11 +18,13 @@ Tags=forums.editpost.tpl:{FORUMS_EDITPOST_FORM_TAGS},{FORUMS_EDITPOST_TOP_TAGS},
  * @var bool $isFirstPost
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if (Cot::$cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $isFirstPost) {
 	require_once cot_incfile('tags', 'plug');
-	$tags = cot_tag_list($q, 'forums');
+	$tags = cot_tag_list($q, ForumsDictionary::SOURCE_TOPIC);
 	$tags = implode(', ', $tags);
 	$t->assign([
 		'FORUMS_EDITPOST_TOP_TAGS' => Cot::$L['Tags'],

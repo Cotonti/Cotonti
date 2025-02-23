@@ -81,6 +81,7 @@ $L['forums_topiclocked'] = 'Тема заблокирована, новые со
 $L['forums_topicoptions'] = 'Опции темы';
 $L['forums_updatedby'] = 'Отредактировано: %1$s (%2$s, %3$s назад)';
 $L['forums_postedby'] = 'Опубликовал(а)';
+$L['forums_postInTopic'] = 'Сообщение в теме';
 $L['forums_edittimeoutnote'] = 'Время для редактирования или удаления собственного сообщения: ';
 $L['forums_moveToSameSection'] = 'Вы переносите тему в тот же самый раздел. Пожалуйста выберите другой.';
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Users service
+ * Users control service
  *
  * @package Users
  * @copyright (c) Cotonti Team
@@ -20,7 +20,7 @@ use cot\services\ItemService;
 use cot\traits\GetInstanceTrait;
 use Throwable;
 
-class UsersService
+class UsersControlService
 {
     use GetInstanceTrait;
 
@@ -50,8 +50,6 @@ class UsersService
         try {
             Cot::$db->beginTransaction();
 
-            $trashcanId = 0; // If trashcan plugin puts the user into trashcan, it should fill this var
-
             /* === Hook === */
             foreach (cot_getextplugins('users.delete') as $pl) {
                 include $pl;
@@ -76,7 +74,7 @@ class UsersService
             }
             /* ===== */
 
-            ItemService::getInstance()->onDelete(PageDictionary::SOURCE_PAGE, $id, $trashcanId);
+            ItemService::getInstance()->onDelete(PageDictionary::SOURCE_PAGE, $id);
 
             Cot::$db->commit();
         } catch (Throwable $e) {

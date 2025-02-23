@@ -16,6 +16,8 @@ Tags=news.tpl:{PAGE_TAGS_ROW_TAG},{PAGE_TAGS_ROW_URL},{PAGE_TAGS_ROW_TAG_COUNT}
  * @var XTemplate $t
  */
 
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if (Cot::$cfg['plugin']['tags']['pages']) {
@@ -38,7 +40,7 @@ if (Cot::$cfg['plugin']['tags']['pages']) {
 			$tag_items[] = $t_row['page_id'];
 		}
 		unset($rowset_copy);
-		$tags_rowset_list = cot_tag_list($tag_items, 'pages', $tags_extra);
+		$tags_rowset_list = cot_tag_list($tag_items, PageDictionary::SOURCE_PAGE, $tags_extra);
 	}
 
 	$tags = isset($tags_rowset_list[$item_id]) ? $tags_rowset_list[$item_id] : array();

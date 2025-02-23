@@ -146,7 +146,7 @@ if ($m == 'edit' && $id > 0) {
 	}
 
 	$t->assign([
-		'COMMENTS_TITLE' => Cot::$L['plu_title'],
+		'COMMENTS_TITLE' => Cot::$L['comments_title'],
 		'COMMENTS_TITLE_URL' => cot_url('plug', 'e=comments'),
 	]);
 	$t->parse('MAIN.COMMENTS_TITLE');

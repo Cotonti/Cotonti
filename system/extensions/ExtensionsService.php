@@ -143,7 +143,7 @@ class ExtensionsService
         $result = '__default__';
 
         /* === Hook === */
-        foreach (cot_getextplugins('extensionService.getPublicPageUrl') as $pl) {
+        foreach (cot_getextplugins('extension.getPublicPageUrl') as $pl) {
             include $pl;
         }
         /* ===== */

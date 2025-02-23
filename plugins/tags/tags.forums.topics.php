@@ -12,27 +12,28 @@ Tags=forums.topics.tpl:{FORUMS_TOPICS_ROW_TAGS}
  * @package Tags
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var array $row Topic data
  */
+
+use cot\modules\forums\inc\ForumsDictionary;
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['forums'])
-{
+if (Cot::$cfg['plugin']['tags']['forums']) {
 	require_once cot_incfile('tags', 'plug');
 	$item_id = $row['ft_id'];
 
-	if (!isset($tags_rowset_list))
-	{
+	if (!isset($tags_rowset_list)) {
 		// Load tags for all entries with 1 query
 		$rowset_copy = $sql_forums_rowset;
 		reset($rowset_copy);
-		$tag_items = array();
-		foreach ($rowset_copy as $t_row)
-		{
+		$tag_items = [];
+		foreach ($rowset_copy as $t_row) {
 			$tag_items[] = $t_row['ft_id'];
 		}
 		unset($rowset_copy);
-		$tags_rowset_list = cot_tag_list($tag_items, 'forums');
+		$tags_rowset_list = cot_tag_list($tag_items, ForumsDictionary::SOURCE_TOPIC);
 	}
 
 	$tags = isset($tags_rowset_list[$item_id]) ? $tags_rowset_list[$item_id] : array();

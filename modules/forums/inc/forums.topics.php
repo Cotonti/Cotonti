@@ -7,6 +7,10 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\forums\inc\ForumsHelper;
+use cot\modules\forums\inc\ForumsTopicsControlService;
+use cot\modules\forums\inc\ForumsTopicsHelper;
+
 defined('COT_CODE') or die('Wrong URL');
 
 $s = cot_import('s','G','TXT'); // Section CODE
@@ -29,23 +33,17 @@ foreach (cot_getextplugins('forums.topics.rights') as $pl) {
 	include $pl;
 }
 /* ===== */
+
 cot_block(Cot::$usr['auth_read']);
 
 if (Cot::$usr['isadmin'] && !empty($q) && !empty($a)) {
 	cot_check_xg();
 	switch($a) {
 		case 'delete':
-			cot_forums_prunetopics('single', $s, $q);
-			cot_log("Deleted topic #" . $q, 'forums', 'delete topic', 'done');
-
-			/* === Hook === */
-			foreach (cot_getextplugins('forums.topics.delete.done') as $pl) {
-				include $pl;
-			}
-			/* ===== */
+            ForumsTopicsControlService::getInstance()->delete($q);
 
             cot_message(Cot::$L['Deleted']);
-            cot_redirect(cot_url('forums', ['m' => 'topics', 's' => $s,], '', true));
+            cot_redirect(ForumsHelper::getInstance()->getSectionUrl($s, true));
 			break;
 
 		case 'move':
@@ -126,6 +124,12 @@ if (Cot::$usr['isadmin'] && !empty($q) && !empty($a)) {
                 'move topic',
                 'done'
             );
+
+            /* === Hook === */
+            foreach (cot_getextplugins('forums.topic.move.done') as $pl) {
+                include $pl;
+            }
+            /* ===== */
 
             cot_message(Cot::$L['forums_movedoutofthissection']);
 			break;
@@ -211,8 +215,7 @@ if (!empty(Cot::$cfg['forums']['cat_' . $s]['metatitle'])) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.topics.main') as $pl)
-{
+foreach (cot_getextplugins('forums.topics.main') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -295,6 +298,8 @@ $sql_forums = Cot::$db->query("SELECT t.* $join_columns
 $extp = cot_getextplugins('forums.topics.loop');
 /* ===== */
 
+$topicsHelper = ForumsTopicsHelper::getInstance();
+
 $ft_num = 0;
 $sql_forums_rowset = $sql_forums->fetchAll();
 foreach ($sql_forums_rowset as $row) {
@@ -305,9 +310,9 @@ foreach ($sql_forums_rowset as $row) {
 	$ft_num++;
 
 	$row['ft_title'] = ($row['ft_mode'] == 1) ? "# ". $row['ft_title'] : $row['ft_title'];
+    $row['ft_url'] = $topicsHelper->getUrl($row);
 
 	if ($row['ft_movedto'] > 0) {
-		$row['ft_url'] = cot_url('forums', "m=posts&q=".$row['ft_movedto']);
 		$row['ft_icon_type'] = 'posts_moved';
 		$row['ft_icon'] = Cot::$R['forums_icon_posts_moved'];
 		$row['ft_title'] = Cot::$L['Moved'] . ": " . $row['ft_title'];
@@ -319,13 +324,12 @@ foreach ($sql_forums_rowset as $row) {
 		$row['ft_lastpostlink'] = cot_rc_link($row['ft_lastposturl'], Cot::$R['icon_follow'], 'rel="nofollow"') .Cot::$L['Moved'];
 
     } else {
-		$row['ft_url'] = cot_url('forums', "m=posts&q=".$row['ft_id']);
 		$row['ft_lastposturl'] = (Cot::$usr['id'] > 0 && $row['ft_updated'] > Cot::$usr['lastvisit']) ? cot_url('forums', "m=posts&q=".$row['ft_id']."&n=unread", "#unread") : cot_url('forums', "m=posts&q=".$row['ft_id']."&n=last", "#bottom");
 		$row['ft_lastpostlink'] = cot_rc_link($row['ft_lastposturl'], Cot::$R['icon_unread'], 'rel="nofollow"').cot_date('datetime_short', $row['ft_updated']);
 
 		$row['ft_replycount'] = $row['ft_postcount'] - 1;
 
-		if ($row['ft_updated'] > Cot::$usr['lastvisit'] && Cot::$usr['id']>0) {
+		if ($row['ft_updated'] > Cot::$usr['lastvisit'] && Cot::$usr['id'] > 0) {
 			$row['ft_icon'] .= '_new';
 			$row['ft_postisnew'] = TRUE;
 		}
@@ -354,16 +358,7 @@ foreach ($sql_forums_rowset as $row) {
 		$row['ft_icon_type_ex'] .= '_posted';
 	}
 
-    $topicPreview = '';
-    if (!empty($row['ft_preview'])) {
-        $allowBBCodes = isset(Cot::$cfg['forums']['cat_' . $s])
-            ? Cot::$cfg['forums']['cat_' . $s]['allowbbcodes']
-            : Cot::$cfg['forums']['cat___default']['allowbbcodes'];
-        $topicPreview = trim(cot_parse($row['ft_preview'], $allowBBCodes));
-        if (!empty($topicPreview)) {
-            $topicPreview .= '...';
-        }
-    }
+    $topicPreview = $topicsHelper->preview($row);
 
 	$t->assign([
 		'FORUMS_TOPICS_ROW_ID' => $row['ft_id'],
@@ -409,8 +404,7 @@ foreach ($sql_forums_rowset as $row) {
 	}
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -430,8 +424,7 @@ foreach(Cot::$structure['forums'] as $key => $val) {
 	}
 }
 
-function rev($sway)
-{
+function rev($sway) {
 	return ($sway == 'desc') ? 'asc' : 'desc';
 }
 
@@ -455,14 +448,6 @@ $t->assign([
 	'FORUMS_TOPICS_SHORTTITLE' => htmlspecialchars(Cot::$structure['forums'][$s]['title']),
 	'FORUMS_TOPICS_SUBTITLE' => Cot::$structure['forums'][$s]['desc'],
 	'FORUMS_TOPICS_NEWTOPICURL' => cot_url('forums', "m=newtopic&s=".$s),
-	'FORUMS_TOPICS_PAGES' => $pagenav['main'],
-	'FORUMS_TOPICS_PAGEPREV' => $pagenav['prev'],
-	'FORUMS_TOPICS_PAGENEXT' => $pagenav['next'],
-	'FORUMS_TOPICS_PAGELAST' => $pagenav['last'],
-	'FORUMS_TOPICS_PAGECURRENT' => $pagenav['current'],
-	'FORUMS_TOPICS_PAGETOTAL' => $pagenav['total'],
-	'FORUMS_TOPICS_PAGEONPAGE' => $pagenav['onpage'],
-	'FORUMS_TOPICS_PAGEENTRIES' => $pagenav['entries'],
 	'FORUMS_TOPICS_PRVTOPICS' => $prvtopics,
 	'FORUMS_TOPICS_JUMPBOX' => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"'),
 	'FORUMS_TOPICS_TITLE_TOPICS' => cot_rc_link($title_urls['title'], Cot::$L['forums_topics'].' '.cursort($o == 'title', $w), 'rel="nofollow"'),
@@ -479,10 +464,26 @@ $t->assign([
 	'FORUMS_TOPICS_TITLE_LASTPOST_URL' => $title_urls['updated'],
 ]);
 
+$t->assign(cot_generatePaginationTags($pagenav));
+
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.26
+    $t->assign([
+        'FORUMS_TOPICS_PAGES' => $pagenav['main'],
+        'FORUMS_TOPICS_PAGEPREV' => $pagenav['prev'],
+        'FORUMS_TOPICS_PAGENEXT' => $pagenav['next'],
+        'FORUMS_TOPICS_PAGELAST' => $pagenav['last'],
+        'FORUMS_TOPICS_PAGECURRENT' => $pagenav['current'],
+        'FORUMS_TOPICS_PAGETOTAL' => $pagenav['total'],
+        'FORUMS_TOPICS_PAGEONPAGE' => $pagenav['onpage'],
+        'FORUMS_TOPICS_PAGEENTRIES' => $pagenav['entries'],
+    ]);
+}
+
+cot_display_messages($t);
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.topics.tags') as $pl)
-{
+foreach (cot_getextplugins('forums.topics.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

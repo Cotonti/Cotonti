@@ -10,7 +10,7 @@
 use cot\exceptions\NotFoundHttpException;
 use cot\modules\page\inc\PageDictionary;
 use cot\modules\page\inc\PageRepository;
-use cot\modules\page\inc\PageService;
+use cot\modules\page\inc\PageControlService;
 
 defined('COT_CODE') or die('Wrong URL');
 
@@ -61,7 +61,7 @@ if ($a == 'update') {
 	}
 
 	if ($rpagedelete) {
-		$resultOrMessage = PageService::getInstance()->delete($id, $row_page);
+		$resultOrMessage = PageControlService::getInstance()->delete($id, $row_page);
         if ($resultOrMessage !== false) {
             cot_message($resultOrMessage);
             cot_redirect(cot_url('page', ['c' => $row_page['page_cat']], '', true));

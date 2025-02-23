@@ -47,6 +47,7 @@
 {FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
 
 <div class="block">
+	{FORUMS_POSTS_TAGS}
 	<table class="cells">
 		<tr>
 			<td class="coltop width20">{PHP.L.Author}</td>

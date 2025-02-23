@@ -13,6 +13,8 @@ Hooks=standalone
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
+use cot\modules\forums\inc\ForumsTopicsHelper;
 use cot\modules\page\inc\PageDictionary;
 
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
@@ -206,7 +208,7 @@ $entriesCount = [];
 if ($area == 'pages' && cot_module_active('page')) {
 	if (empty($qs)) {
 		// Form and cloud
-		cot_tag_search_form('pages');
+		cot_tag_search_form(PageDictionary::SOURCE_PAGE);
 	} else {
 		// Search results
         $entriesCount['pages'] = cot_tag_search_pages($qs);
@@ -214,7 +216,7 @@ if ($area == 'pages' && cot_module_active('page')) {
 } elseif ($area == 'forums' && cot_module_active('forums')) {
 	if (empty($qs)) {
 		// Form and cloud
-		cot_tag_search_form('forums');
+		cot_tag_search_form(ForumsDictionary::SOURCE_TOPIC);
 	} else {
 		// Search results
         $entriesCount['forums'] = cot_tag_search_forums($qs);
@@ -287,7 +289,7 @@ function cot_tag_search_pages($query)
     }
 
     $where = [
-        'area' => "r.tag_area = 'pages'",
+        'area' => "r.tag_area = '" . PageDictionary::SOURCE_PAGE . "'",
         'itemId' => "p.page_id IS NOT NULL", // Only existing pages
     ];
     $queryParams = [];
@@ -468,7 +470,7 @@ function cot_tag_search_forums($query)
     }
 
     $where = [
-        'area' => "r.tag_area = 'forums'",
+        'area' => "r.tag_area = '" . ForumsDictionary::SOURCE_TOPIC . "'",
         'notMoved' => 't.ft_movedto = 0',
         'itemId' => "t.ft_id IS NOT NULL", // Only existing topics
     ];
@@ -550,7 +552,7 @@ function cot_tag_search_forums($query)
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
 	if ($sql->rowCount() > 0) {
 		while ($row = $sql->fetch()) {
-			$tags = cot_tag_list($row['ft_id'], 'forums');
+			$tags = cot_tag_list($row['ft_id'], ForumsDictionary::SOURCE_TOPIC);
 			$tag_list = '';
 			$tag_i = 0;
 			foreach ($tags as $tag) {
@@ -575,16 +577,7 @@ function cot_tag_search_forums($query)
             // Not using anywhere
 			// $master = (isset($row['fs_masterid']) && $row['fs_masterid'] > 0) ? array($row['fs_masterid'], $row['fs_mastername']) : false;
 
-            $topicPreview = '';
-            if (!empty($row['ft_preview'])) {
-                $allowBBCodes = isset(Cot::$cfg['forums']['cat_' . $row['ft_cat']])
-                    ? Cot::$cfg['forums']['cat_' . $row['ft_cat']]['allowbbcodes']
-                    : Cot::$cfg['forums']['cat___default']['allowbbcodes'];
-                $topicPreview = trim(cot_parse($row['ft_preview'], $allowBBCodes));
-                if (!empty($topicPreview)) {
-                    $topicPreview .= '...';
-                }
-            }
+            $topicPreview = ForumsTopicsHelper::getInstance()->preview($row);
 
             $description = htmlspecialchars($row['ft_desc']);
 

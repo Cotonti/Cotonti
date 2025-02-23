@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=page.itemService.getItems
+Hooks=page.item.getItems
 [END_COT_EXT]
 ==================== */
 

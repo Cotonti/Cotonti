@@ -8,7 +8,7 @@
  */
 
 use cot\exceptions\NotFoundHttpException;
-use cot\modules\users\inc\UsersService;
+use cot\modules\users\inc\UsersControlService;
 use cot\users\UsersHelper;
 use cot\users\UsersRepository;
 
@@ -64,7 +64,7 @@ if ($a === 'update') {
 
 	$ruserdelete = cot_import('ruserdelete','P','BOL');
 	if ($ruserdelete) {
-        UsersService::getInstance()->delete(
+        UsersControlService::getInstance()->delete(
             $id,
             cot_import('ruserdelpfs','P','BOL') ?? true,
             $urr

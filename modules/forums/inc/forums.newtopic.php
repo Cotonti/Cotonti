@@ -8,6 +8,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\forums\inc\ForumsTopicsService;
+
 defined('COT_CODE') or die('Wrong URL');
 
 $s = cot_import('s','G','TXT'); // section cat
@@ -121,9 +123,9 @@ if ($a == 'newtopic') {
 
 		$p = Cot::$db->lastInsertId();
 
-		if (Cot::$cfg['forums']['cat_' . $s]['autoprune'] > 0) {
-			cot_forums_prunetopics('updated', $s, Cot::$cfg['forums']['cat_' . $s]['autoprune']);
-		}
+        if (Cot::$cfg['forums']['cat_' . $s]['autoprune'] > 0) {
+            ForumsTopicsService::getInstance()->prune($s);
+        }
 
 		cot_extrafield_movefiles();
 

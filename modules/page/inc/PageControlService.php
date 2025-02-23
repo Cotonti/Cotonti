@@ -1,6 +1,6 @@
 <?php
 /**
- * Page service
+ * Page control service
  *
  * @package Page
  * @copyright (c) Cotonti Team
@@ -18,7 +18,7 @@ use Throwable;
 
 defined('COT_CODE') or die('Wrong URL.');
 
-class PageService
+class PageControlService
 {
     use GetInstanceTrait;
 
@@ -61,8 +61,6 @@ class PageService
                 }
             }
 
-            $trashcanId = 0; // If trashcan plugin puts the page into trashcan, it should fill this var
-
             Cot::$db->delete(Cot::$db->pages, 'page_id = ?', $id);
             cot_log("Deleted page #" . $id, 'page', 'delete', 'done');
 
@@ -85,7 +83,7 @@ class PageService
             }
             /* ===== */
 
-            ItemService::getInstance()->onDelete(PageDictionary::SOURCE_PAGE, $id, $trashcanId);
+            ItemService::getInstance()->onDelete(PageDictionary::SOURCE_PAGE, $id);
 
             Cot::$db->commit();
         } catch (Throwable $e) {

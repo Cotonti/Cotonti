@@ -9,7 +9,7 @@
  * Replace table engine MyISAM to InnoDB
  * Some DB tables updates
  */
-defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 global $db_tags, $db_tag_references;
 
@@ -21,8 +21,8 @@ if (empty($db_tags)) {
 
 $changeCollation = false;
 if (
-    Cot::$cfg['mysqlcharset'] == 'utf8mb4' &&
-    (empty(Cot::$cfg['mysqlcollate']) || Cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
+    Cot::$cfg['mysqlcharset'] == 'utf8mb4'
+    && (empty(Cot::$cfg['mysqlcollate']) || Cot::$cfg['mysqlcollate'] == 'utf8mb4_unicode_ci')
 ) {
     $changeCollation = true;
 }

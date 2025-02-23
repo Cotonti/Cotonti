@@ -253,7 +253,7 @@ class CotDB
 				return $this->_tcount;
 				break;
 			default:
-				return isset($this->_tables[$name]) ? $this->_tables[$name] : null;
+				return $this->_tables[$name] ?? null;
 		}
 	}
 

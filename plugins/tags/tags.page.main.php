@@ -13,6 +13,8 @@ Hooks=page.main
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['pages'])
@@ -28,10 +30,9 @@ if ($cfg['plugin']['tags']['pages'])
 		$tags_extra = null;
 	}
 	$item_id = $pag['page_id'];
-	$tags = cot_tag_list($item_id, 'pages', $tags_extra);
+	$tags = cot_tag_list($item_id, PageDictionary::SOURCE_PAGE, $tags_extra);
 	$tag_keywords = implode(', ', $tags);
-	if (!empty($tag_keywords) && empty($pag['page_keywords']))
-	{
-		$out['keywords'] = $tag_keywords;
+	if (!empty($tag_keywords) && empty($pag['page_keywords'])) {
+		Cot::$out['keywords'] = $tag_keywords;
 	}
 }

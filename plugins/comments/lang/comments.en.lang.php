@@ -10,7 +10,7 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 $L['comments_title'] = 'Comments';
-$L['info_desc'] = 'Comments system for Cotonti with API and integration with pages, lists, polls, RSS and other extensions';
+$L['comments_description'] = 'Comments system for Cotonti with API and integration with pages, lists, polls, RSS and other extensions';
 
 /**
  * Plugin Config

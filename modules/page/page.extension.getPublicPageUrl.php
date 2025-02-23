@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=extensionService.getPublicPageUrl
+Hooks=extension.getPublicPageUrl
 [END_COT_EXT]
 ==================== */
 

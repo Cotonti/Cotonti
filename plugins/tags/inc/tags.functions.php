@@ -28,12 +28,12 @@ Cot::$db->registerTable('tag_references');
  *
  * @param string $tag The tag (keyword)
  * @param int $item Item ID
- * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
+ * @param string $area Site area code (source) e.g. 'page', 'forumTopic', 'blog'
  * @param mixed $extra Extra condition (name => value) for plugins
  * @return bool
  * @global CotDB $db
  */
-function cot_tag($tag, $item, $area = 'pages', $extra = null)
+function cot_tag($tag, $item, $area, $extra = null)
 {
 	global $db, $db_tag_references;
 	$item = (int) $item;
@@ -230,12 +230,12 @@ function cot_tag_exists($tag)
  *
  * @param string $tag The tag (keyword)
  * @param int $item Item ID
- * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
+ * @param string $area Site area code (source) e.g. 'page', 'forumTopic', 'blog'
  * @param mixed $extra Extra condition (name => value) for plugins
  * @return bool
  * @global CotDB $db
  */
-function cot_tag_isset($tag, $item, $area = 'pages', $extra = null)
+function cot_tag_isset($tag, $item, $area, $extra = null)
 {
 	global $db, $db_tag_references;
 	$item = (int) $item;
@@ -256,12 +256,12 @@ function cot_tag_isset($tag, $item, $area = 'pages', $extra = null)
  * Returns an array containing tags which have been set on an item / items
  *
  * @param mixed $item Item ID or an array of item IDs
- * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
+ * @param string $area Site area code (source) e.g. 'page', 'forumTopic', 'blog'
  * @param mixed $extra Extra condition (name => value) for plugins
  * @return array
  * @global CotDB $db
  */
-function cot_tag_list($item, $area = 'pages', $extra = null)
+function cot_tag_list($item, $area, $extra = null)
 {
 	global $db, $db_tag_references;
 	$res = array();
@@ -393,16 +393,16 @@ function cot_tag_register($tag)
  *
  * @param string $tag The tag (keyword)
  * @param int $item Item ID
- * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
+ * @param string $area Site area code (source) e.g. 'page', 'forumTopic', 'blog'
  * @param mixed $extra Extra condition (name => value) for plugins
  * @return bool
  * @global CotDB $db
  */
-function cot_tag_remove($tag, $item, $area = 'pages', $extra = null)
+function cot_tag_remove($tag, $item, $area, $extra = null)
 {
 	global $db, $db_tag_references;
-	if (cot_tag_isset($tag, $item, $area, $extra))
-	{
+
+    if (cot_tag_isset($tag, $item, $area, $extra)) {
 		$query = "DELETE FROM $db_tag_references
 			WHERE `tag` = " . $db->quote($tag) . " AND tag_item = $item AND tag_area = '$area'";
 		if (!is_null($extra))
@@ -415,6 +415,7 @@ function cot_tag_remove($tag, $item, $area = 'pages', $extra = null)
 		$db->query($query);
 		return true;
 	}
+
 	return false;
 }
 
@@ -428,24 +429,21 @@ function cot_tag_remove($tag, $item, $area = 'pages', $extra = null)
  * @return int
  * @global CotDB $db
  */
-function cot_tag_remove_all($item = 0, $area = 'pages', $extra = null)
+function cot_tag_remove_all($item = 0, $area = 'page', $extra = null)
 {
 	global $db, $db_tag_references;
-	if ($item == 0)
-	{
+	if ($item == 0) {
 		$query = "DELETE FROM $db_tag_references WHERE tag_area = '$area'";
-	}
-	else
-	{
+	} else {
 		$query = "DELETE FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'";
 	}
-	if (!is_null($extra))
-	{
-		foreach ($extra as $key => $val)
-		{
+
+	if (!is_null($extra)) {
+		foreach ($extra as $key => $val) {
 			$query .= " AND $key = " . $db->quote($val);
 		}
 	}
+
 	return $db->query($query)->rowCount();
 }
 

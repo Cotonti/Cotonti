@@ -79,7 +79,7 @@ if ($i18n_enabled) {
                 ['e' => 'i18n', 'm' => 'page', 'a' => 'delete', 'id' => $id, 'l' => $i18n_locale]);
             $i18nDeleteConfirmUrl = cot_confirm_url($i18nDeleteUrl, 'i18n', 'i18n_confirm_delete');
 			$t->assign([
-				'PAGE_I18N_DELETE' => cot_rc_link($i18nDeleteConfirmUrl, Cot::$L['Delete'], 'class="confirmLink"'),
+				'PAGE_I18N_DELETE' => cot_rc_link($i18nDeleteConfirmUrl, Cot::$L['i18n_delete'], 'class="confirmLink"'),
 				'PAGE_I18N_DELETE_URL' => $i18nDeleteConfirmUrl,
 			]);
 		}

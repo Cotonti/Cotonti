@@ -13,6 +13,8 @@ Hooks=page.edit.update.done,i18n.page.edit.update
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if (Cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
@@ -27,7 +29,7 @@ if (Cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
 	}
 	$rtags = cot_import('rtags', 'P', 'TXT');
 	$tags = cot_tag_parse($rtags);
-	$old_tags = cot_tag_list($id, 'pages', $tags_extra);
+	$old_tags = cot_tag_list($id, PageDictionary::SOURCE_PAGE, $tags_extra);
 	$kept_tags = array();
 	$new_tags = array();
 	// Find new tags, count old tags that have been left
@@ -45,7 +47,7 @@ if (Cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
 	// Remove old tags that have been removed
 	$rem_tags = array_diff($old_tags, $kept_tags);
 	foreach ($rem_tags as $tag) {
-		cot_tag_remove($tag, $id, 'pages', $tags_extra);
+		cot_tag_remove($tag, $id, PageDictionary::SOURCE_PAGE, $tags_extra);
 	}
 
 	// Add new tags
@@ -56,6 +58,6 @@ if (Cot::$cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W')) {
 		$lim = $ncnt;
 	}
 	for ($i = 0; $i < $lim; $i++) {
-		cot_tag($new_tags[$i], $id, 'pages', $tags_extra);
+		cot_tag($new_tags[$i], $id, PageDictionary::SOURCE_PAGE, $tags_extra);
 	}
 }

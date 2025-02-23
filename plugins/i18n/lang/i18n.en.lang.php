@@ -26,6 +26,7 @@ $L['info_desc'] = 'Localization tool for pages, categories, tags, etc. enabling 
 
 $L['i18n_adding'] = 'Adding new translation';
 $L['i18n_confirm_delete'] = 'Are you sure you want to delete the translation?';
+$L['i18n_delete'] = 'Delete translation';
 $L['i18n_editing'] = 'Editing a translation';
 $L['i18n_incorrect_locale'] = 'Incorrect locale';
 $L['i18n_items_added'] = '{$cnt} items added';

@@ -12,16 +12,19 @@ Tags=admin.page.inc.tpl:{ADMIN_TAGS_ROW_TAG},{ADMIN_TAGS_ROW_URL}
  * @package Tags
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @todo there is no such hook 'admin.page.loop'
  */
+
+use cot\modules\page\inc\PageDictionary;
 
 defined('COT_CODE') or die('Wrong URL');
 
 if (Cot::$cfg['plugin']['tags']['pages']) {
 	require_once cot_incfile('tags', 'plug');
 	$item_id = $row['page_id'];
-	$tags = cot_tag_list($item_id);
-	if (count($tags) > 0)
-	{
+	$tags = cot_tag_list($item_id, PageDictionary::SOURCE_PAGE);
+	if (count($tags) > 0) {
 		$tag_i = 0;
 		foreach ($tags as $tag)
 		{
