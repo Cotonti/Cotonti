@@ -19,10 +19,13 @@ declare(strict_types=1);
  */
 
 use cot\extensions\ExtensionsDictionary;
+use cot\plugins\tags\inc\TagsService;
 
 defined('COT_CODE') or die('Wrong URL');
 
-// @todo Maybe we need to check if calling the function is necessary to avoid unnecessary database queries.
+if (!TagsService::getInstance()->isNeedToProcessItemDelete($source)) {
+    return;
+}
 
 require_once cot_incfile('tags', ExtensionsDictionary::TYPE_PLUGIN);
 
