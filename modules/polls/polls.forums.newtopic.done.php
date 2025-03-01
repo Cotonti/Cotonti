@@ -14,8 +14,10 @@ Tags=
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if (!empty($poll)) {
-	cot_poll_save('forum', $q);
+	cot_poll_save(ForumsDictionary::SOURCE_TOPIC, $q);
 }

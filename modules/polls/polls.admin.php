@@ -13,6 +13,9 @@ Hooks=admin
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
+use \cot\modules\polls\inc\PollsControlService;
+
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('polls', 'a');
@@ -32,10 +35,10 @@ $adminTitle = Cot::$L['Polls'];
 list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['maxrowsperpage']);
 $filter = cot_import('filter', 'G', 'TXT');
 
-//$variant[key]=["Caption", "filter", "page", "page_get", "sql", "sqlfield"]
+//$variant[source]=["Caption", "filter", "page", "page_get", "sql", "sqlfield"]
 $variants[0] = [Cot::$L['All'], ''];
 $variants['index'] = [Cot::$L['Main'], 'index'];
-$variants['forum'] = [Cot::$L['Forums'], 'forum'];
+$variants[ForumsDictionary::SOURCE_TOPIC] = [Cot::$L['Forums'], 'forum'];
 
 $id = cot_import('id', 'G', 'INT');
 
@@ -56,7 +59,7 @@ if (!empty($durl)) {
 if ($id > 0) {
     if ($a == 'delete') {
         cot_check_xg();
-        cot_poll_delete($id);
+        PollsControlService::getInstance()->delete($id);
         cot_message('adm_polls_msg916_deleted');
         cot_redirect(cot_url('admin', $urlParams, '', true));
 
@@ -103,7 +106,16 @@ if (!$filter) {
     $poll_type = '1';
     $poll_filter = '';
 } else {
-    $poll_type = 'poll_type = "'.$filter.'"';
+    $source = null;
+    $poll_type = '';
+    foreach ($variants as $key => $variant) {
+        if (isset($variant[1]) && $variant[1] === $filter) {
+            $source = $key;
+        }
+    }
+    if (!empty($source)) {
+        $poll_type = 'poll_type = "' . $source . '"';
+    }
     $poll_filter = '"&filter = '.$filter;
 }
 
@@ -154,7 +166,9 @@ while ($row = $sql_polls->fetch()) {
 	$t->assign([
 		'ADMIN_POLLS_ROW_POLL_CREATIONDATE' => cot_date('date_full', $row['poll_creationdate']),
 		'ADMIN_POLLS_ROW_POLL_CREATIONDATE_STAMP' => $row['poll_creationdate'],
-		'ADMIN_POLLS_ROW_POLL_TYPE' => $variants[htmlspecialchars($row['poll_type'])][0],
+		'ADMIN_POLLS_ROW_POLL_TYPE' => !empty($variants[$row['poll_type']])
+            ? $variants[$row['poll_type']][0]
+            : $row['poll_type'],
 		'ADMIN_POLLS_ROW_POLL_URL' => cot_url('admin', 'm=polls' . $poll_filter . '&n=options&d=' . $durl . '&id=' . $row['poll_id']),
 		'ADMIN_POLLS_ROW_POLL_TEXT' => htmlspecialchars($row['poll_text']),
 		'ADMIN_POLLS_ROW_POLL_TOTALVOTES' => $totalvotes,

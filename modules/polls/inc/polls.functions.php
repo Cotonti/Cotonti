@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Polls functions
  *
@@ -7,6 +6,9 @@
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
+
+use cot\modules\polls\inc\PollsControlService;
+
 defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
@@ -149,7 +151,7 @@ function cot_poll_check()
 
 	if ($poll_id > 0) {
         if ($poll_delete) {
-            cot_poll_delete($poll_id);
+            PollsControlService::getInstance()->delete($poll_id);
             $poll_id = 0;
             $poll_text = null;
             $poll_options = null;
@@ -463,44 +465,6 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
     /* ===== */
 
 	return($row);
-}
-
-/**
- * Delete Poll
- *
- * @param int $id Poll ID or Poll Code if $type is not epmty
- * @param string $type Poll type
- * @return bool
- * @global CotDB $db
- */
-function cot_poll_delete($id, $type = '')
-{
-	global $db, $db_polls, $db_polls_options, $db_polls_voters;
-
-	if ($type)
-	{
-		$sql = $db->query("SELECT poll_id FROM $db_polls WHERE poll_type = '" . $db->prep($type) . "' AND poll_code = '$id' LIMIT 1");
-		$id = ($row = $sql->fetch()) ? $row['poll_id'] : 0;
-	}
-	if ((int) $id > 0)
-	{
-		$db->delete($db_polls, "poll_id = " . $id);
-		$db->delete($db_polls_options, "po_pollid = " . $id);
-		$db->delete($db_polls_voters, "pv_pollid = " . $id);
-
-		/* === Hook === */
-		foreach (cot_getextplugins('polls.functions.delete') as $pl)
-		{
-			include $pl;
-		}
-		/* ===== */
-
-		return (true);
-	}
-	else
-	{
-		return (false);
-	}
 }
 
 /**

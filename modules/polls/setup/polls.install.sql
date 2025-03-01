@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `cot_polls` (
   `poll_text` varchar(255) NOT NULL,
   `poll_multiple` tinyint UNSIGNED NOT NULL default '0',
   PRIMARY KEY  (`poll_id`),
+  KEY `poll_type_idx` (`poll_type`),
   KEY `poll_creationdate` (`poll_creationdate`)
 );
 

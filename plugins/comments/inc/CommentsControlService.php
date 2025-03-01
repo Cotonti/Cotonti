@@ -103,9 +103,11 @@ class CommentsControlService
                     $commentIds[] = $comment['com_id'];
                     $deletedCount++;
 
-                    foreach (Cot::$extrafields[Cot::$db->com] as $exfld) {
-                        if (isset($comment['com_' . $exfld['field_name']])) {
-                            cot_extrafield_unlinkfiles($comment['com_' . $exfld['field_name']], $exfld);
+                    if (!empty(Cot::$extrafields[Cot::$db->com])) {
+                        foreach (Cot::$extrafields[Cot::$db->com] as $exfld) {
+                            if (isset($comment['com_' . $exfld['field_name']])) {
+                                cot_extrafield_unlinkfiles($comment['com_' . $exfld['field_name']], $exfld);
+                            }
                         }
                     }
 

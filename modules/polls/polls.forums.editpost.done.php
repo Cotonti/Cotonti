@@ -16,8 +16,10 @@ Hooks=forums.editpost.update.done
  * @var int $q topic ID
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if (!empty($poll) && $isFirstPost && !cot_error_found()) {
-	$number = cot_poll_save('forum', $q);
+	$number = cot_poll_save(ForumsDictionary::SOURCE_TOPIC, $q);
 }

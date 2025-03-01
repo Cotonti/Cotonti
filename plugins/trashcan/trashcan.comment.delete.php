@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 use cot\extensions\ExtensionsDictionary;
 use cot\plugins\trashcan\inc\TrashcanService;
+use cot\services\ItemService;
 
 defined('COT_CODE') or die('Wrong URL');
 
@@ -32,11 +33,18 @@ if (empty($trashcan)) {
     $trashcan = TrashcanService::getInstance();
 }
 
-if (!isset($commentTrashcanId) || !isset($commentTrashcanId[$comment['com_id']])) {
-    $commentTrashcanId[$comment['com_id']] = $trashcan->getRecentlyPlacedId(
+$isParentItemDeleted = ItemService::getInstance()->isRecentlyDeleted($comment['com_area'], $comment['com_code']);
+
+if (!isset($commentParentTrashcanId) || !isset($commentParentTrashcanId[$comment['com_id']])) {
+    $commentParentTrashcanId[$comment['com_id']] = $trashcan->getRecentlyPlacedId(
         $comment['com_area'],
         $comment['com_code']
     ) ?: 0;
+}
+
+// If the parent element is not removed to the trash, do not put the comment in the trash.
+if ($isParentItemDeleted && $commentParentTrashcanId[$comment['com_id']] === 0) {
+    return;
 }
 
 // @todo title on site's default language
@@ -45,6 +53,6 @@ TrashcanService::getInstance()->put(
     Cot::$L['comments_comment'] . " #" . $comment['com_id'] . " (" . $comment['com_author'] . ")",
     (string) $comment['com_id'],
     $comment,
-    $commentTrashcanId[$comment['com_id']]
+    $commentParentTrashcanId[$comment['com_id']]
 );
 

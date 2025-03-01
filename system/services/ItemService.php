@@ -22,6 +22,11 @@ class ItemService
     use GetInstanceTrait;
 
     /**
+     * @var array Objects recently placed in the trash
+     */
+    private static $recentlyDeleted = [];
+
+    /**
      * @param list<int> $sourceIds
      * @return array<int, ItemDto>
      */
@@ -45,12 +50,24 @@ class ItemService
     }
 
     /**
+     * @param string $source
+     * @param int|string $sourceId
+     * @return bool
+     */
+    public function isRecentlyDeleted(string $source, $sourceId): bool
+    {
+        return in_array($sourceId, self::$recentlyDeleted[$source]);
+    }
+
+    /**
      * Delete item event
      * @var string $source Deleting source code
      * @var int|string $sourceId Deleting source item ID
      */
     public function onDelete(string $source, $sourceId): void
     {
+        self::$recentlyDeleted[$source][] = $sourceId;
+
         // If Trashcan plugin is installed and item deleted to trashcan - trashcan record ID
         $deletedToTrashcanId = 0;
 

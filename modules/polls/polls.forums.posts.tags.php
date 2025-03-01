@@ -18,10 +18,12 @@ Hooks=forums.posts.tags
  * @var array<string, bool|int|float|string|null> $rowt Topic row
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 cot_poll_vote();
-$poll_form = cot_poll_form($q, cot_url('forums', ['m' => 'posts', 'q' => $q]), '', 'forum');
+$poll_form = cot_poll_form($q, cot_url('forums', ['m' => 'posts', 'q' => $q]), '', ForumsDictionary::SOURCE_TOPIC);
 if ($poll_form) {
 	$t->assign([
 		'POLLS_TITLE' => cot_parse($poll_form['poll_text'], Cot::$cfg['polls']['markup']),

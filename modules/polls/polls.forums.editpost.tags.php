@@ -18,12 +18,14 @@ Tags=
  * @var XTemplate $t
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if (
     $isFirstPost
     && Cot::$usr['isadmin']
-    && cot_poll_edit_form($q, $t, 'MAIN.POLL', 'forum')
+    && cot_poll_edit_form($q, $t, 'MAIN.POLL', ForumsDictionary::SOURCE_TOPIC)
 ) {
     $t->parse('MAIN.POLL');
 }

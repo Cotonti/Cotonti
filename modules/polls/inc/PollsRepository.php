@@ -16,6 +16,7 @@ use cot\repositories\BaseRepository;
 class PollsRepository extends BaseRepository
 {
     private static $cacheById = [];
+    private static $cacheCount = [];
 
     public static function getTableName(): string
     {
@@ -50,6 +51,37 @@ class PollsRepository extends BaseRepository
         self::$cacheById[$id] = !empty($result) ? $result : false;
 
         return $result;
+    }
+
+    public function getCountBySource(string $source, bool $useCache = true): int
+    {
+        if ($source === '') {
+            return 0;
+        }
+
+        if ($useCache && isset(self::$cacheCount[$source])) {
+            return self::$cacheCount[$source];
+        }
+
+        $query = 'SELECT COUNT(*) FROM ' . Cot::$db->quoteTableName(self::getTableName()) . ' WHERE poll_type = :source';
+        $params = ['source' => $source];
+
+        $result = Cot::$db->query($query, $params)->fetchColumn();
+
+        self::$cacheCount[$source] = $result;
+
+        return $result;
+    }
+
+    /**
+     * @return list<array>
+     */
+    public function getBySourceId(string $source, string $sourceId): ?array
+    {
+        $condition = 'poll_type = :source AND poll_code = :sourceId';
+        $params = ['source' => $source, 'sourceId' => $sourceId];
+
+        return $this->getByCondition($condition, $params);
     }
 
     protected function afterFetch(array $item): array
