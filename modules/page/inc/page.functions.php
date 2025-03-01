@@ -7,14 +7,15 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsDictionary;
 use cot\extensions\ExtensionsService;
 use cot\modules\page\inc\PageDictionary;
 
 defined('COT_CODE') or die('Wrong URL.');
 
 // Requirements
-require_once cot_langfile('page', 'module');
-require_once cot_incfile('page', 'module', 'resources');
+require_once cot_langfile('page', ExtensionsDictionary::TYPE_MODULE);
+require_once cot_incfile('page', ExtensionsDictionary::TYPE_MODULE, 'resources');
 require_once cot_incfile('forms');
 require_once cot_incfile('extrafields');
 

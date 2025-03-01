@@ -5,24 +5,39 @@
 
 $R['forums_icon'] = '<img src="{$src}" alt="{$alt}" />';
 
-$R['forums_icon_posts'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts.png" alt="'.Cot::$L['forums_nonewposts'].'" />';
-$R['forums_icon_posts_hot'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts_hot.png" alt="'.Cot::$L['forums_nonewpostspopular'].'" />';
-$R['forums_icon_posts_locked'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts_locked.png" alt="'.Cot::$L['forums_locked'].'" />';
-$R['forums_icon_posts_moved'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts_moved.png" alt="'.Cot::$L['forums_movedoutofthissection'].'" />';
-$R['forums_icon_posts_new'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts_new.png" alt="'.Cot::$L['forums_newposts'].'" />';
-$R['forums_icon_posts_new_hot'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'].'/modules/forums/posts_new_hot.png" alt="'.Cot::$L['forums_newpostspopular'].'" />';
-$R['forums_icon_posts_new_locked'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts_new_locked.png" alt="'.Cot::$L['forums_newpostslocked'].'" />';
-$R['forums_icon_posts_new_sticky'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts_new_sticky.png" alt="'.Cot::$L['forums_newpostssticky'].'" />';
-$R['forums_icon_posts_new_sticky_locked'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts_new_sticky_locked.png" alt="'.Cot::$L['forums_newannouncment'].'" />';
-$R['forums_icon_posts_sticky'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts_sticky.png" alt="'.Cot::$L['forums_sticky'].'" />';
-$R['forums_icon_posts_sticky_locked'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/posts_sticky_locked.png" alt="'.Cot::$L['forums_announcment'].'" />';
+$R['forums_icon_posts'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/posts.png" alt="' . (Cot::$L['forums_nonewposts'] ?? '') . '" />';
+$R['forums_icon_posts_hot'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/posts_hot.png" alt="' . (Cot::$L['forums_nonewpostspopular'] ?? '') . '" />';
+$R['forums_icon_posts_locked'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons']
+    . '/modules/forums/posts_locked.png" alt="' . (Cot::$L['forums_locked'] ?? '') . '" />';
+$R['forums_icon_posts_moved'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/posts_moved.png" alt="'. (Cot::$L['forums_movedoutofthissection'] ?? '') . '" />';
+$R['forums_icon_posts_new'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/posts_new.png" alt="' . (Cot::$L['forums_newposts'] ?? '') . '" />';
+$R['forums_icon_posts_new_hot'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/posts_new_hot.png" alt="' . (Cot::$L['forums_newpostspopular'] ?? '') . '" />';
+$R['forums_icon_posts_new_locked'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/posts_new_locked.png" alt="' . (Cot::$L['forums_newpostslocked'] ?? '') . '" />';
+$R['forums_icon_posts_new_sticky'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/posts_new_sticky.png" alt="' . (Cot::$L['forums_newpostssticky'] ?? '') . '" />';
+$R['forums_icon_posts_new_sticky_locked'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/posts_new_sticky_locked.png" alt="' . (Cot::$L['forums_newannouncment'] ?? '') . '" />';
+$R['forums_icon_posts_sticky'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/posts_sticky.png" alt="' . (Cot::$L['forums_sticky'] ?? '') . '" />';
+$R['forums_icon_posts_sticky_locked'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/posts_sticky_locked.png" alt="' . (Cot::$L['forums_announcment'] ?? '') . '" />';
 
-$R['forums_icon_subforum'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'] . '/modules/forums/subforum.png" alt="' . Cot::$L['Subforum'] . '" />';
+$R['forums_icon_subforum'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/subforum.png" alt="' . (Cot::$L['Subforum'] ?? '') . '" />';
 
-$R['forums_icon_section_activity'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/activity{$secact_num}.png" alt="'.Cot::$L['Activity'].' {$secact_num}" />';
+$R['forums_icon_section_activity'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/activity{$secact_num}.png" alt="' . (Cot::$L['Activity'] ?? '') . ' {$secact_num}" />';
 
-$R['forums_icon_topic'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/{$icon}.png" alt="'.Cot::$L['forums_topic'].'" />';
-$R['forums_icon_topic_t'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' .Cot::$cfg['defaulticons'].'/modules/forums/{$icon}.png" alt="'.Cot::$L['forums_topic'].'" title="{$title}" />';
+$R['forums_icon_topic'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/{$icon}.png" alt="' . (Cot::$L['forums_topic'] ?? '') .'" />';
+$R['forums_icon_topic_t'] = '<img src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons']
+    . '/modules/forums/{$icon}.png" alt="' . (Cot::$L['forums_topic'] ?? '') .'" title="{$title}" />';
 
 /**
  * Forums Topics

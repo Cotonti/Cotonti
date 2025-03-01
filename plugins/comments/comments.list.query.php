@@ -13,10 +13,12 @@ Hooks=page.list.query
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 global $db_com;
 
-require_once cot_incfile('comments', 'plug');
+require_once cot_incfile('comments', ExtensionsDictionary::TYPE_PLUGIN);
 
 $join_columns .= ", (SELECT COUNT(*) FROM `$db_com` WHERE com_area = 'page' AND com_code = p.page_id) AS com_count";

@@ -14,11 +14,18 @@ Tags=polls.index.tpl:{IPOLLS_COMMENTS}
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\polls\inc\PollsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('comments', 'plug');
 
-$indexpolls->assign(array(
-	'IPOLLS_COMMENTS' => cot_comments_link('polls', 'id='.$row_p['poll_id'], 'polls', $row_p['poll_id']),
-	'IPOLLS_COMMENTS_COUNT' => cot_comments_count('polls', $row_p['poll_id'])
-));
+$indexpolls->assign([
+	'IPOLLS_COMMENTS' => cot_comments_link(
+        'polls',
+        'id=' . $row_p['poll_id'],
+        PollsDictionary::SOURCE_POLL,
+        $row_p['poll_id'],
+    ),
+	'IPOLLS_COMMENTS_COUNT' => cot_comments_count(PollsDictionary::SOURCE_POLL, $row_p['poll_id'])
+]);

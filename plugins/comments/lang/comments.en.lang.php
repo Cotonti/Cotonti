@@ -45,6 +45,9 @@ $L['cfg_parsesmiliescom_hint'] = '';
  */
 $L['comments_comment'] = 'Comment';
 $L['comments_comments'] = 'Comments';
+$L['comments_commentOn'] = 'Comment on';
+$L['comments_commentOnPage'] = 'Comment on a page';
+$L['comments_commentOnPoll'] = 'Comment on a poll';
 $L['comments_confirm_delete'] = 'Do you really want to delete this comment?';
 $L['Newcomment'] = 'New comment';
 

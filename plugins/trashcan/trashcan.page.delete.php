@@ -18,6 +18,7 @@ Order=7
  * @var array $pageDeletedMessage
  */
 
+use cot\extensions\ExtensionsDictionary;
 use cot\extensions\ExtensionsService;
 use cot\modules\page\inc\PageDictionary;
 use cot\plugins\trashcan\inc\TrashcanService;
@@ -32,13 +33,17 @@ global $lang;
 
 require_once cot_incfile('trashcan', 'plug');
 
-// @todo for pages.
 $tmpLang = null;
 if (!Cot::$cfg['forcedefaultlang'] && Cot::$cfg['defaultlang'] !== $lang) {
     $tmpLang = Cot::$L;
-    $langFile = cot_langfile('comments', 'plug', Cot::$cfg['defaultlang'], Cot::$cfg['defaultlang']);
+    $langFile = cot_langfile(
+        'page',
+        ExtensionsDictionary::TYPE_MODULE,
+        Cot::$cfg['defaultlang'],
+        Cot::$cfg['defaultlang']
+    );
     if (!$langFile)  {
-        $langFile = cot_langfile('comments', 'plug', 'en', 'en');
+        $langFile = cot_langfile('page', ExtensionsDictionary::TYPE_MODULE, 'en', 'en');
     }
     if ($langFile)  {
         include $langFile;
@@ -58,30 +63,6 @@ $trashcanId = $trashcan->put(
 
 $pageDeletedMessage['deleted'] = Cot::$L['page_deletedToTrash'];
 
-// ==============
-// @todo remove after implement https://github.com/Cotonti/Cotonti/issues/1826 for comments
-// And all it's comments
-if (ExtensionsService::getInstance()->isPluginActive('comments')) {
-    require_once cot_incfile('comments', 'plug');
-
-    $sql = Cot::$db->query(
-        'SELECT * FROM ' . Cot::$db->quoteTableName(Cot::$db->com) .
-        " WHERE com_area = '" . PageDictionary::SOURCE_PAGE . "' AND com_code = ?",
-        [$id]
-    );
-    while ($comment = $sql->fetch()) {
-        $trashcan->put(
-            'comment',
-            Cot::$L['comments_comment'] . " #" . $comment['com_id'] . " from page #" . $id,
-            (string) $comment['com_id'],
-            $comment,
-            $trashcanId
-        );
-    }
-    $sql->closeCursor();
-}
-// /==============
-
 // And all it's translations
 if (ExtensionsService::getInstance()->isPluginActive('i18n')) {
     require_once cot_incfile('i18n', 'plug');
@@ -91,6 +72,7 @@ if (ExtensionsService::getInstance()->isPluginActive('i18n')) {
         [$id]
     );
     while ($row = $sql->fetch()) {
+        // @todo title on site's default language
         $trashcan->put(
             'i18n_page',
             Cot::$L['i18n_translation'] . " #" . $row['ipage_id'] . " for page #" . $id,
@@ -100,4 +82,8 @@ if (ExtensionsService::getInstance()->isPluginActive('i18n')) {
         );
     }
     $sql->closeCursor();
+}
+
+if ($tmpLang !== null) {
+    Cot::$L = $tmpLang;
 }

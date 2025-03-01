@@ -13,6 +13,10 @@ Hooks=tools
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\page\inc\PageDictionary;
+use cot\modules\polls\inc\PollsDictionary;
+use cot\plugins\comments\inc\CommentsControlService;
+
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'comments');
@@ -36,10 +40,13 @@ foreach (cot_getextplugins('admin.comments.first') as $pl) {
 }
 /* ===== */
 
-if ($a == 'delete') {
+if ($a === 'delete') {
 	cot_check_xg();
 
-	if (Cot::$db->delete($db_com, "com_id = $id")) {
+    $id = cot_import('id', 'G', 'INT');
+
+    $result = $id > 0 ? CommentsControlService::getInstance()->delete($id) : false;
+    if ($result) {
 		cot_message('adm_comm_already_del');
 	} else {
 		cot_error('Error');
@@ -47,7 +54,7 @@ if ($a == 'delete') {
 
     if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
         // @deprecated in 0.9.25
-        $adminwarnings = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];
+        $adminwarnings = $result ? Cot::$L['adm_comm_already_del'] : Cot::$L['Error'];
     }
     cot_redirect(cot_url('admin', 'm=other&p=comments', '', true));
 }
@@ -57,17 +64,17 @@ if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
     $is_adminwarnings = isset($adminwarnings);
 }
 
-$totalitems = Cot::$db->countRows($db_com);
+$totalitems = Cot::$db->countRows(Cot::$db->com);
 
 $pagenav = cot_pagenav(
 	'admin',
 	'm=other&p=comments',
 	$d,
 	$totalitems,
-	$cfg['maxrowsperpage'],
+    Cot::$cfg['maxrowsperpage'],
 	'd',
 	'',
-	$cfg['jquery'] && $cfg['turnajax']
+    Cot::$cfg['jquery'] && Cot::$cfg['turnajax']
 );
 
 if (cot_module_active('page')) {
@@ -94,8 +101,9 @@ foreach ($sql->fetchAll() as $row) {
 	$row['com_type'] = mb_substr($row['com_code'], 0, 1);
 	$row['com_value'] = $row['com_code'];
 
+    // @todo use \cot\services\ItemService::getInstance()->getItems()
 	switch ($row['com_area']) {
-		case 'page':
+		case PageDictionary::SOURCE_PAGE:
 			$row['com_url'] = cot_url('page', "c=" . $row['page_cat'] . "&id=" . $row['com_code'], "#c" . $row['com_id']);
 			break;
 		case 'weblogs':
@@ -107,7 +115,7 @@ foreach ($sql->fetchAll() as $row) {
 		case 'users':
 			$row['com_url'] = cot_url('users', 'm=details&id=' . $row['com_value'], '#c' . $row['com_id']);
 			break;
-		case 'polls':
+		case PollsDictionary::SOURCE_POLL:
 			$row['com_url'] = cot_url('polls', 'id=' . $row['com_value'] . "&comments=1", '#c' . $row['com_id']);
 			break;
 		case 'e_shop':

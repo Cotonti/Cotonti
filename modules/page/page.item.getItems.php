@@ -78,7 +78,7 @@ foreach ($pages as $row) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('page.item.getItems') as $pl) {
+foreach (cot_getextplugins('page.item.getItems.done') as $pl) {
     include $pl;
 }
 /* ===== */

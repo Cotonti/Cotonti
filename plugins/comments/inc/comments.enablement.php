@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Parameters for comments config implantation into modules
  *

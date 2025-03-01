@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\plugins\comments\inc\CommentsControlService;
+
 defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
@@ -303,7 +305,7 @@ function cot_comments_display($ext_name, $code, $cat = '', $force_admin = false)
                     )
                     : '';
 
-                $row['user_id'] = (int)$row['user_id'];
+                $row['user_id'] = (int) $row['user_id'];
 
                 $com_text = cot_parse($row['com_text'], Cot::$cfg['plugin']['comments']['markup']);
 
@@ -532,16 +534,17 @@ function cot_comments_newcount($timeback)
 	return $newcomments;
 }
 
-/**
- * Removes comments associated with an item
- *
- * @param string $area Item area code
- * @param string $code Item identifier
- * @global CotDB $db
- */
-function cot_comments_remove($area, $code)
-{
-	global $db, $db_com;
-
-	$db->delete($db_com, 'com_area = ? AND com_code = ?', array($area, $code));
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.26
+    /**
+     * Removes comments associated with an item
+     * @param string $area Item area code
+     * @param string $code Item identifier
+     * @deprecated
+     * @see CommentsControlService::deleteBySourceId()
+     */
+    function cot_comments_remove($area, $code)
+    {
+        CommentsControlService::getInstance()->deleteBySourceId((string) $area, (string) $code);
+    }
 }

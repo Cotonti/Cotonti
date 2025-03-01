@@ -1,18 +1,18 @@
 <?php
 /**
- * Comments system for Cotonti
- * @package Comments
+ * Polls dictionary
+ * @package Polls
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
- */
+  */
 
 declare(strict_types=1);
 
-namespace cot\plugins\comments\inc;
+namespace cot\modules\polls\inc;
 
 defined('COT_CODE') or die('Wrong URL');
 
-class CommentsDictionary
+class PollsDictionary
 {
-    public const SOURCE_COMMENT = 'comment';
+    public const SOURCE_POLL = 'poll';
 }

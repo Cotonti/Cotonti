@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace cot\modules\page\inc;
 
+defined('COT_CODE') or die('Wrong URL');
+
 class PageDictionary
 {
     public const SOURCE_PAGE = 'page';

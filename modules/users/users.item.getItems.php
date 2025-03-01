@@ -63,7 +63,7 @@ foreach ($users as $row) {
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('users.item.getItems') as $pl) {
+foreach (cot_getextplugins('users.item.getItems.done') as $pl) {
     include $pl;
 }
 /* ===== */

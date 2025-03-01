@@ -15,7 +15,6 @@ declare(strict_types=1);
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
  * @var array $forumPost Forums post data
- * @var int $trashcanId
  */
 
 use cot\modules\forums\inc\ForumsDictionary;
@@ -37,7 +36,8 @@ if (Cot::$cfg['plugin']['trashcan']['trash_forum']) {
         ) ?: 0;
     }
 
-    $trashcanId = TrashcanService::getInstance()->put(
+    // @todo title on site's default language
+    TrashcanService::getInstance()->put(
         ForumsDictionary::SOURCE_POST,
         Cot::$L['forums_post'] . " #" . $forumPost['fp_id'] . " from topic #" . $forumPost['fp_topicid'],
         (string) $forumPost['fp_id'],

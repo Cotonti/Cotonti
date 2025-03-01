@@ -1,5 +1,4 @@
 <?php
-
 /* ====================
  * [BEGIN_COT_EXT]
  * Hooks=standalone
@@ -13,6 +12,9 @@
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
+
+use cot\plugins\comments\inc\CommentsControlService;
+
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
 require_once cot_incfile('comments', 'plug');
@@ -28,11 +30,9 @@ $area = cot_import('area', 'G', 'ALP');
 Cot::$out['subtitle'] = Cot::$L['comments_comments'];
 
 // Get area/item/cat by id
-if ($id > 0)
-{
+if ($id > 0) {
 	$res = Cot::$db->query("SELECT com_code, com_area FROM $db_com WHERE com_id = $id");
-	if ($res->rowCount() == 1)
-	{
+	if ($res->rowCount() == 1) {
 		$row = $res->fetch();
 		$area = $row['com_area'];
 		$item = $row['com_code'];
@@ -61,7 +61,7 @@ cot_block(!empty($url_area));
 if (
     isset($_SESSION['cot_comments_force_admin'][$area][$item])
     && $_SESSION['cot_comments_force_admin'][$area][$item]
-    && Cot::$usr['auth_read'] && \Cot::$usr['auth_write']
+    && Cot::$usr['auth_read'] && Cot::$usr['auth_write']
 ) {
     Cot::$usr['isadmin'] = true;
 }
@@ -104,7 +104,7 @@ if ($m == 'edit' && $id > 0) {
         }
 
 		if (!cot_error_found()) {
-			$sql = \Cot::$db->update(\Cot::$db->com, $comarray, 'com_id = ? AND com_code = ?', [$id, $item]);
+			$sql = Cot::$db->update(Cot::$db->com, $comarray, 'com_id = ? AND com_code = ?', [$id, $item]);
 
 			cot_extrafield_movefiles();
 
@@ -207,7 +207,7 @@ if ($m == 'edit' && $id > 0) {
 	$t->parse('MAIN.COMMENTS_FORM_EDIT');
 }
 
-if ($a == 'send' && \Cot::$usr['auth_write']) {
+if ($a == 'send' && Cot::$usr['auth_write']) {
 	cot_shield_protect();
 	$rtext = cot_import('rtext', 'P', 'HTM');
 	$rname = cot_import('rname', 'P', 'TXT');
@@ -237,29 +237,29 @@ if ($a == 'send' && \Cot::$usr['auth_write']) {
         Cot::$cfg['plugin']['comments']['commentsize']
         && mb_strlen($rtext) > Cot::$cfg['plugin']['comments']['commentsize']
     ) {
-		cot_error(\Cot::$L['com_commenttoolong'], 'rtext');
+		cot_error(Cot::$L['com_commenttoolong'], 'rtext');
 	}
 
 	if (!cot_error_found()) {
 		$comarray['com_area'] = $area;
 		$comarray['com_code'] = $item;
-		$comarray['com_author'] = (Cot::$usr['id'] == 0) ? $rname : \Cot::$usr['name'];
+		$comarray['com_author'] = (Cot::$usr['id'] == 0) ? $rname : Cot::$usr['name'];
 		$comarray['com_authorid'] = (int) Cot::$usr['id'];
 		$comarray['com_authorip'] = Cot::$usr['ip'];
 		$comarray['com_text'] = $rtext;
 		$comarray['com_date'] = (int) Cot::$sys['now'];
 
-		$sql = \Cot::$db->insert($db_com, $comarray);
-		$id = \Cot::$db->lastInsertId();
+		$sql = Cot::$db->insert($db_com, $comarray);
+		$id = Cot::$db->lastInsertId();
 
 
-        if (\Cot::$cache) {
-            if ($staticCacheIsEnabled === '' || !empty(\Cot::$cfg[$staticCacheIsEnabled])) {
-                \Cot::$cache->static->clearByUri(cot_url($url_area, $url_params));
+        if (Cot::$cache) {
+            if ($staticCacheIsEnabled === '' || !empty(Cot::$cfg[$staticCacheIsEnabled])) {
+                Cot::$cache->static->clearByUri(cot_url($url_area, $url_params));
 
             }
-            if (\Cot::$cfg['cache_index']) {
-                \Cot::$cache->static->clear('index');
+            if (Cot::$cfg['cache_index']) {
+                Cot::$cache->static->clear('index');
             }
         }
 
@@ -267,8 +267,8 @@ if ($a == 'send' && \Cot::$usr['auth_write']) {
 
 		$_SESSION['cot_comments_edit'][$id] = Cot::$sys['now'];
 
-		if (\Cot::$cfg['plugin']['comments']['mail']) {
-            $sql = \Cot::$db->query(
+		if (Cot::$cfg['plugin']['comments']['mail']) {
+            $sql = Cot::$db->query(
                 'SELECT * FROM ' . Cot::$db->users . ' WHERE user_maingrp = ' . COT_GROUP_SUPERADMINS
             );
 
@@ -295,9 +295,9 @@ if ($a == 'send' && \Cot::$usr['auth_write']) {
 	}
 
     // Clear static page cache to show alerts
-	if (\Cot::$usr['id'] === 0 && \Cot::$cache) {
-        if ($staticCacheIsEnabled === '' || !empty(\Cot::$cfg[$staticCacheIsEnabled])) {
-            \Cot::$cache->static->clearByUri(cot_url($url_area, $url_params));
+	if (Cot::$usr['id'] === 0 && Cot::$cache) {
+        if ($staticCacheIsEnabled === '' || !empty(Cot::$cfg[$staticCacheIsEnabled])) {
+            Cot::$cache->static->clearByUri(cot_url($url_area, $url_params));
 
         }
 	}
@@ -305,19 +305,8 @@ if ($a == 'send' && \Cot::$usr['auth_write']) {
 
 } elseif ($a == 'delete' && Cot::$usr['isadmin']) {
 	cot_check_xg();
-	$sql = Cot::$db->query(
-        'SELECT * FROM ' . Cot::$db->com . ' WHERE com_id = :id AND com_area = :area LIMIT 1',
-        ['id' => $id, 'area' => $area]
-    );
 
-	if ($row = $sql->fetch()) {
-		$sql->closeCursor();
-		$sql = Cot::$db->delete(Cot::$db->com, 'com_id = ?', $id);
-
-		foreach (Cot::$extrafields[$db_com] as $exfld) {
-			cot_extrafield_unlinkfiles($row['com_' . $exfld['field_name']], $exfld);
-		}
-
+    if (CommentsControlService::getInstance()->delete($id)) {
         if (Cot::$cache) {
             if ($staticCacheIsEnabled === '' || !empty(Cot::$cfg[$staticCacheIsEnabled])) {
                 Cot::$cache->static->clearByUri(cot_url($url_area, $url_params));
@@ -327,18 +316,8 @@ if ($a == 'send' && \Cot::$usr['auth_write']) {
                 Cot::$cache->static->clear('index');
             }
         }
+    }
 
-		/* == Hook == */
-		foreach (cot_getextplugins('comments.delete') as $pl) {
-			include $pl;
-		}
-		/* ===== */
-
-		cot_log(
-            'Deleted comment #' . $id . ' in &quot;' . $item . '&quot;', 'comments', 'delete',
-            'done'
-        );
-	}
 	cot_redirect(cot_url($url_area, $url_params, '#comments', true));
 
 } elseif ($a == 'enable' && Cot::$usr['isadmin']) {

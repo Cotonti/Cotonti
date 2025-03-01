@@ -45,6 +45,9 @@ $L['cfg_time_hint'] = 'минут';
  */
 $L['comments_comment'] = 'Комментарий';
 $L['comments_comments'] = 'Комментарии';
+$L['comments_commentOn'] = 'Комментарий к';
+$L['comments_commentOnPage'] = 'Комментарий к странице';
+$L['comments_commentOnPoll'] = 'Комментарий к опросу';
 $L['comments_confirm_delete'] = 'Вы действительно хотите удалить этот комментарий?';
 $L['Newcomment'] = 'Новый комментарий';
 
