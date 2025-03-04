@@ -61,6 +61,6 @@ if (!$exists) {
         . ' (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, '
         . 'config_variants, config_text) '
         . " VALUES "
-        . "('core', 'main', '09', 'serverEvents', 2, 'sse', 'sse', 'none,sse,ajax', '')"
+        . "('core', 'main', '09', 'serverEvents', 2, 'none', 'none', 'none,sse,ajax', '')"
     );
 }
