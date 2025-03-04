@@ -19,13 +19,13 @@ class Resources
 		'@ckeditor' => 'plugins/ckeditor/lib/ckeditor.js',
 		'@ckeditorPreset.js' => 'plugins/ckeditor/presets/ckeditor.default.set.js',
 
-		'@bootstrap.js' => 'lib/bootstrap/js/bootstrap.bundle.min.js',
+		'@bootstrap' => 'lib/bootstrap/js/bootstrap.bundle.min.js',
 		'@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
 	);
 
 	// ==== predefined alias constants ====
 	const jQuery = '@jQuery';
-	const bootstrap = '@bootstrap.js';
+	const bootstrap = '@bootstrap';
 	const ckeditor = '@ckeditor';
 	// ==== /predefined alias constants ====
 
@@ -179,7 +179,7 @@ class Resources
 		$ret = [];
 
 		switch ($file) {
-			case '@bootstrap.js':
+			case '@bootstrap':
 				$ret[] = '@bootstrap.css';
 				break;
 
