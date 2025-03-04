@@ -19,7 +19,7 @@ class Resources
 		'@ckeditor' => 'plugins/ckeditor/lib/ckeditor.js',
 		'@ckeditorPreset.js' => 'plugins/ckeditor/presets/ckeditor.default.set.js',
 
-		'@bootstrap.js' => 'lib/bootstrap/js/bootstrap.bundle.min.jss',
+		'@bootstrap.js' => 'lib/bootstrap/js/bootstrap.bundle.min.js',
 		'@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
 	);
 

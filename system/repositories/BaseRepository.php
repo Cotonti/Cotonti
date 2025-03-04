@@ -15,6 +15,7 @@ abstract class BaseRepository
 
     /**
      * @param array|string $condition
+     * @param array<string, int|float|string>|list<int|float|string>|string|int|float $params
      * @param array|string $orderBy
      * @return array<int, array<int|string>> Requested items data
      * @todo joins, index by
@@ -64,6 +65,25 @@ abstract class BaseRepository
         }
 
         return $result;
+    }
+
+    /**
+     * @param array|string $condition
+     * @param array<string, int|float|string>|list<int|float|string>|string|int|float $params
+     * @todo joins
+     */
+    public function getCountByCondition($condition, array $params = []): int
+    {
+        $table = Cot::$db->quoteTableName(static::getTableName());
+
+        $sqlWhere = is_array($condition) ? $this->prepareCondition($condition) : $condition;
+        if (!empty($sqlWhere)) {
+            $sqlWhere = ' WHERE ' . $sqlWhere;
+        }
+
+        $sql = "SELECT COUNT(*) FROM {$table} $sqlWhere";
+
+        return (int) Cot::$db->query($sql, $params)->fetchColumn();
     }
 
     protected function prepareCondition(array $condition): string

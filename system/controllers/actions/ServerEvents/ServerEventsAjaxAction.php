@@ -11,6 +11,13 @@ use cot\serverEvents\ServerEventService;
 use cot\serverEvents\ServerEventsObserverService;
 use Temporary_cache_driver;
 
+/**
+ * @todo If AJAX transport is not enabled in the settings, but the controller is called, it is likely that the setting
+ * has changed and some shared worker using AJAX transport may still be running.
+ * A message needs to be sent to them so they shut down and stop sending requests.
+ *
+ * Consider the case where this setting might be enabled again.
+ */
 class ServerEventsAjaxAction extends BaseAction
 {
     private const OLD_OBSERVERS_CHECK_KEY = 'SEOldObserversKey';
