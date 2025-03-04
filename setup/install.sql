@@ -250,7 +250,7 @@ CREATE TABLE `cot_server_events` (
     `user_id` INT UNSIGNED NOT NULL,
     `event` VARCHAR(100) NOT NULL,
     `data` TEXT NOT NULL,
-    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `created_at` DATETIME NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `server_events_user_id_idx` (`user_id`)
 );
@@ -260,8 +260,8 @@ CREATE TABLE `cot_server_events_observers` (
    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
    `user_id` INT UNSIGNED NOT NULL,
    `token` VARCHAR(255) NOT NULL,
-   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `created_at` DATETIME NOT NULL,
+   `updated_at` DATETIME NOT NULL,
    `last_event_id` BIGINT UNSIGNED NOT NULL DEFAULT 0,
    PRIMARY KEY (`id`),
    INDEX `server_events_observers_user_id_idx` (`user_id`),
