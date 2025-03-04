@@ -15,6 +15,11 @@ class ServerSentEvents {
     /**
      * @type {string|null}
      */
+    #usingDriverType = null;
+
+    /**
+     * @type {string|null}
+     */
     mode = 'production';
 
     /**
@@ -32,6 +37,11 @@ class ServerSentEvents {
      */
     onEvent = null;
 
+    /**
+     * @todo Save the initialized driverType.
+     * When changing the driver type, remove the old one and initialize the new one.
+     * This may be unnecessary, but it could be useful during configuration.
+     */
     init() {
         if (this.#driver !== null) {
             return;
@@ -44,6 +54,7 @@ class ServerSentEvents {
         const factory = new ServerEventsDriverFactory(this.baseUrl, this.mode);
 
         this.#driver = factory.getByType(this.driverType);
+        this.#usingDriverType = this.driverType;
 
         this.#driver.addEventListener('event', (event) => {
             if (typeof this.onEvent !== 'function') {

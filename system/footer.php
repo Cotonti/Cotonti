@@ -5,6 +5,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\serverEvents\ServerEventsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 /* === Hook === */
@@ -39,7 +41,7 @@ if (Cot::$sys['displayFooter']) {
     // @todo pass develop mode
     $frontConfig = [
         'config' => [
-            'serverEvents' => Cot::$cfg['serverEvents'] ?? 'none',
+            'serverEvents' => Cot::$cfg['serverEvents'] ?? ServerEventsDictionary::DRIVER_DISABLED,
         ],
         'lang' => [],
     ];

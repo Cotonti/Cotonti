@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 
 use cot\extensions\ExtensionsDictionary;
+use cot\serverEvents\ServerEventsDictionary;
 
 defined('COT_CODE') or die('Wrong URL.');
 
@@ -30,7 +31,7 @@ if (Cot::$cfg['pm']['allowPopUpNotifications'] || Cot::$env['ext'] === 'pm') {
     Resources::linkFileFooter(Cot::$cfg['modules_dir'] . '/pm/js/pm.js');
 
     if (
-        (Cot::$cfg['serverEvents'] ?? 'none') !== 'none'
+        (Cot::$cfg['serverEvents'] ?? ServerEventsDictionary::DRIVER_DISABLED) !== ServerEventsDictionary::DRIVER_DISABLED
         && Cot::$cfg['pm']['allowPopUpNotifications']
     ) {
         Resources::embedFooter(

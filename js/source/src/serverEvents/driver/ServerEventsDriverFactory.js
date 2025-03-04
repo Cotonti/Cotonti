@@ -33,14 +33,14 @@ export class ServerEventsDriverFactory {
         switch (driverType) {
             case 'sse':
                 // Server-Sent events driver
-                driver = new ServerEventsSSEDriver(serverSentEventsUrl);
+                driver = new ServerEventsSSEDriver(serverSentEventsUrl, this.#mode);
                 if (this.#mode !== 'production') {
                     console.log('using ServerEventsSSEDriver', serverSentEventsUrl);
                 }
                 break;
 
             default:
-                driver = new ServerEventsAjaxDriver(ajaxEventsUrl);
+                driver = new ServerEventsAjaxDriver(ajaxEventsUrl, this.#mode);
                 if (this.#mode !== 'production') {
                     console.log('using ServerEventsAjaxDriver', ajaxEventsUrl);
                 }

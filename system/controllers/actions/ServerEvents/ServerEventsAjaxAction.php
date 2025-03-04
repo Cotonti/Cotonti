@@ -52,6 +52,10 @@ class ServerEventsAjaxAction extends BaseAction
 
         $this->clearOldObservers();
 
+        if (Cot::$cfg['serverEvents'] !== ServerEventsDictionary::DRIVER_AJAX) {
+            return $this->result(['error' => ['code' =>'driverDisabled', 'message' => 'Ajax driver is not active.']]);
+        }
+
         $token = $this->observerService->register(Cot::$usr['id']);
 
         $result = ['events' => []];

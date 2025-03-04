@@ -35,6 +35,17 @@ export class ServerEventsAjaxDriver extends BaseServerEventsDriver {
             }
 
             const result = await response.json();
+
+            if (result.error !== undefined) {
+                if (result.error.code === 'driverDisabled') {
+                    if (this.mode !== 'production') {
+                        console.error(result.error.message);
+                    }
+                    // Do not send more requests
+                    return;
+                }
+            }
+
             if (result.events !== undefined) {
                 result.events.forEach((event) => {
                     event.eventId = event.id !== undefined ? event.id : null;

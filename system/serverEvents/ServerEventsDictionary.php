@@ -15,6 +15,15 @@ defined('COT_CODE') or die('Wrong URL');
 class ServerEventsDictionary
 {
     /**
+     * Driver Server-sent events
+     */
+    public const DRIVER_SERVER_SENT_EVENTS = 'sse';
+
+    public const DRIVER_AJAX = 'ajax';
+
+    public const DRIVER_DISABLED = 'none';
+
+    /**
      * Clear old observers every
      * 1 hour
      */
