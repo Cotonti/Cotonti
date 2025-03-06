@@ -226,8 +226,8 @@ if (Cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORD
             $t->assign([
                 'FORUMS_EDITPOST_FORM_TOPIC_' . $uname => $fieldFormElement,
                 'FORUMS_EDITPOST_FORM_TOPIC_' . $uname . '_TITLE' => $fieldTitle,
-                'FORUMS_EDITPOST_FORM_TOPIC_EXTRAFLD' => $fieldFormElement,
-                'FORUMS_EDITPOST_FORM_TOPIC_EXTRAFLD_TITLE' => $fieldTitle,
+                'FORUMS_EDITPOST_FORM_TOPIC_EXTRA_FILED' => $fieldFormElement,
+                'FORUMS_EDITPOST_FORM_TOPIC_EXTRA_FILED_TITLE' => $fieldTitle,
             ]);
 
             if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
@@ -240,7 +240,7 @@ if (Cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORD
                 ]);
             }
 
-            $t->parse('MAIN.FORUMS_EDITPOST_FIRSTPOST.TOPIC_EXTRAFLD');
+            $t->parse('MAIN.FORUMS_EDITPOST_FIRSTPOST.TOPIC_EXTRA_FILED');
         }
     }
 
@@ -283,8 +283,8 @@ if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
         $t->assign([
             'FORUMS_EDITPOST_FORM_' . $uname => $fieldFormElement,
             'FORUMS_EDITPOST_FORM_' . $uname . '_TITLE' => $fieldTitle,
-            'FORUMS_EDITPOST_FORM_EXTRAFLD' => $fieldFormElement,
-            'FORUMS_EDITPOST_FORM_EXTRAFLD_TITLE' => $fieldTitle,
+            'FORUMS_EDITPOST_FORM_EXTRA_FILED' => $fieldFormElement,
+            'FORUMS_EDITPOST_FORM_EXTRA_FILED_TITLE' => $fieldTitle,
         ]);
 
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
@@ -296,7 +296,7 @@ if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
                 'FORUMS_EDITPOST_EXTRAFLD_TITLE' => $fieldTitle,
             ]);
         }
-        $t->parse('MAIN.EXTRAFLD');
+        $t->parse('MAIN.EXTRA_FILED');
     }
 }
 

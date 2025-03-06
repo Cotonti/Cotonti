@@ -218,8 +218,8 @@ if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
         $t->assign([
             'FORUMS_NEWTOPIC_FORM_' . $uname => $fieldFormElement,
             'FORUMS_NEWTOPIC_FORM_' . $uname . '_TITLE' => $fieldTitle,
-            'FORUMS_NEWTOPIC_FORM_EXTRAFLD' => $fieldFormElement,
-            'FORUMS_NEWTOPIC_FORM_EXTRAFLD_TITLE' => $fieldTitle,
+            'FORUMS_NEWTOPIC_FORM_EXTRA_FILED' => $fieldFormElement,
+            'FORUMS_NEWTOPIC_FORM_EXTRA_FILED_TITLE' => $fieldTitle,
         ]);
 
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
@@ -231,7 +231,7 @@ if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
                 'FORUMS_NEWTOPIC_EXTRAFLD_TITLE' => $fieldTitle,
             ]);
         }
-        $t->parse('MAIN.EXTRAFLD');
+        $t->parse('MAIN.EXTRA_FILED');
     }
 }
 
@@ -249,8 +249,8 @@ if (!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
         $t->assign([
             'FORUMS_NEWTOPIC_FORM_TOPIC_' . $uname => $fieldFormElement,
             'FORUMS_NEWTOPIC_FORM_TOPIC_' . $uname . '_TITLE' => $fieldTitle,
-            'FORUMS_NEWTOPIC_FORM_TOPIC_EXTRAFLD' => $fieldFormElement,
-            'FORUMS_NEWTOPIC_FORM_TOPIC_EXTRAFLD_TITLE' => $fieldTitle
+            'FORUMS_NEWTOPIC_FORM_TOPIC_EXTRA_FILED' => $fieldFormElement,
+            'FORUMS_NEWTOPIC_FORM_TOPIC_EXTRA_FILED_TITLE' => $fieldTitle
         ]);
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
             // @deprecated in 0.9.26
@@ -261,7 +261,7 @@ if (!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
                 'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD_TITLE' => $fieldTitle
             ]);
         }
-        $t->parse('MAIN.TOPIC_EXTRAFLD');
+        $t->parse('MAIN.TOPIC_EXTRA_FILED');
     }
 }
 
