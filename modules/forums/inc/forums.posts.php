@@ -520,10 +520,10 @@ if (
             $t->assign([
                 'FORUMS_POSTS_NEWPOST_' . $uname => $extraFieldValue,
                 'FORUMS_POSTS_NEWPOST_' . $uname . '_TITLE' => $extraFieldTitle,
-                'FORUMS_POSTS_NEWPOST_EXTRAFLD' => $extraFieldValue,
-                'FORUMS_POSTS_NEWPOST_EXTRAFLD_TITLE' => $extraFieldTitle,
+                'FORUMS_POSTS_NEWPOST_EXTRA_FIELD' => $extraFieldValue,
+                'FORUMS_POSTS_NEWPOST_EXTRA_FIELD_TITLE' => $extraFieldTitle,
             ]);
-            $t->parse('MAIN.FORUMS_POSTS_NEWPOST.EXTRAFLD');
+            $t->parse('MAIN.FORUMS_POSTS_NEWPOST.EXTRA_FIELD');
         }
     }
 
