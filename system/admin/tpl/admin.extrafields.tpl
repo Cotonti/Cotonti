@@ -125,7 +125,7 @@
 				</tbody>
 				<tfoot>
 				<tr>
-					<td colspan="3">
+					<td colspan="3" class="valid">
 						<input type="checkbox" name="field_noalter" /> {PHP.L.adm_extrafield_noalter}
 						<input type="submit" class="confirm" value="{PHP.L.Add}" />
 					</td>

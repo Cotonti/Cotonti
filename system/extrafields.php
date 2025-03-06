@@ -401,17 +401,21 @@ function cot_extrafield_title($extrafield, $titlePrefix = '')
     $title = $extrafield['field_description'];
 
     $fieldLocation = '';
-    if (isset($extrafield['field_location'])) $fieldLocation = $extrafield['field_location'];
-
-    if ($titlePrefix != '' && isset(Cot::$L[$titlePrefix.$extrafield['field_name'].'_title'])) {
-        $title = Cot::$L[$titlePrefix.$extrafield['field_name'].'_title'];
-    } elseif ($fieldLocation != '' && isset(Cot::$L[$fieldLocation.'_'.$extrafield['field_name'].'_title'])) {
-        $title = Cot::$L[$fieldLocation.'_'.$extrafield['field_name'].'_title'];
-    } elseif (isset(Cot::$L[$extrafield['field_name'].'_title'])) {
-        $title = Cot::$L[$extrafield['field_name'].'_title'];
+    if (isset($extrafield['field_location'])) {
+        $fieldLocation = $extrafield['field_location'];
     }
 
-    if ($title == '') $title = $extrafield['field_name'];
+    if ($titlePrefix != '' && isset(Cot::$L[$titlePrefix.$extrafield['field_name'] . '_title'])) {
+        $title = Cot::$L[$titlePrefix.$extrafield['field_name'] . '_title'];
+    } elseif ($fieldLocation != '' && isset(Cot::$L[$fieldLocation.'_' . $extrafield['field_name'] . '_title'])) {
+        $title = Cot::$L[$fieldLocation.'_'.$extrafield['field_name'] . '_title'];
+    } elseif (isset(Cot::$L[$extrafield['field_name'] . '_title'])) {
+        $title = Cot::$L[$extrafield['field_name'] . '_title'];
+    }
+
+    if ($title === '') {
+        $title = $extrafield['field_name'];
+    }
 
     return $title;
 }

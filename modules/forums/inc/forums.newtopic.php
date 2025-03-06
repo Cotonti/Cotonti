@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Forums posts display.
  *
@@ -79,14 +78,26 @@ if ($a == 'newtopic') {
 	}
 
 	if (!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
-		foreach (Cot::$extrafields[Cot::$db->forum_topics] as $exfld) {
-			$rtopic['ft_' . $exfld['field_name']] = cot_import_extrafields('rtopic' . $exfld['field_name'], $exfld, 'P', '', 'forums_topic_');
+		foreach (Cot::$extrafields[Cot::$db->forum_topics] as $extraField) {
+            $rtopic['ft_' . $extraField['field_name']] = cot_import_extrafields(
+                'rtopic' . $extraField['field_name'],
+                $extraField,
+                'P',
+                '',
+                'forums_topic_'
+            );
 		}
 	}
 
 	if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
-		foreach (Cot::$extrafields[Cot::$db->forum_posts] as $exfld) {
-			$rmsg['fp_' . $exfld['field_name']] = cot_import_extrafields('rmsg' . $exfld['field_name'], $exfld, 'P', '', 'forums_post_');
+		foreach (Cot::$extrafields[Cot::$db->forum_posts] as $extraField) {
+            $rmsg['fp_' . $extraField['field_name']] = cot_import_extrafields(
+                'rmsg' . $extraField['field_name'],
+                $extraField,
+                'P',
+                '',
+                'forums_post_'
+            );
 		}
 	}
 
@@ -195,25 +206,29 @@ if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
 
 // Extra fields
 if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
-    foreach (Cot::$extrafields[Cot::$db->forum_posts] as $exfld) {
-        $uname = strtoupper($exfld['field_name']);
-        $exfld_val = cot_build_extrafields('rmsg' . $exfld['field_name'], $exfld, $rmsg['fp_' . $exfld['field_name']]);
-        $exfld_title = cot_extrafield_title($exfld, 'forums_post_');
+    foreach (Cot::$extrafields[Cot::$db->forum_posts] as $extraField) {
+        $uname = strtoupper($extraField['field_name']);
+        $fieldFormElement = cot_build_extrafields(
+            'rmsg' . $extraField['field_name'],
+            $extraField,
+            $rmsg['fp_' . $extraField['field_name']] ?? null,
+        );
+        $fieldTitle = cot_extrafield_title($extraField, 'forums_post_');
 
         $t->assign([
-            'FORUMS_NEWTOPIC_FORM_' . $uname => $exfld_val,
-            'FORUMS_NEWTOPIC_FORM_' . $uname . '_TITLE' => $exfld_title,
-            'FORUMS_NEWTOPIC_FORM_EXTRAFLD' => $exfld_val,
-            'FORUMS_NEWTOPIC_FORM_EXTRAFLD_TITLE' => $exfld_title,
+            'FORUMS_NEWTOPIC_FORM_' . $uname => $fieldFormElement,
+            'FORUMS_NEWTOPIC_FORM_' . $uname . '_TITLE' => $fieldTitle,
+            'FORUMS_NEWTOPIC_FORM_EXTRAFLD' => $fieldFormElement,
+            'FORUMS_NEWTOPIC_FORM_EXTRAFLD_TITLE' => $fieldTitle,
         ]);
 
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
             // @deprecated in 0.9.26
             $t->assign([
-                'FORUMS_NEWTOPIC_' . $uname => $exfld_val,
-                'FORUMS_NEWTOPIC_' . $uname . '_TITLE' => $exfld_title,
-                'FORUMS_NEWTOPIC_EXTRAFLD' => $exfld_val,
-                'FORUMS_NEWTOPIC_EXTRAFLD_TITLE' => $exfld_title,
+                'FORUMS_NEWTOPIC_' . $uname => $fieldFormElement,
+                'FORUMS_NEWTOPIC_' . $uname . '_TITLE' => $fieldTitle,
+                'FORUMS_NEWTOPIC_EXTRAFLD' => $fieldFormElement,
+                'FORUMS_NEWTOPIC_EXTRAFLD_TITLE' => $fieldTitle,
             ]);
         }
         $t->parse('MAIN.EXTRAFLD');
@@ -222,24 +237,28 @@ if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
 
 // Extra fields
 if (!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
-    foreach (Cot::$extrafields[Cot::$db->forum_topics] as $exfld) {
-        $uname = strtoupper($exfld['field_name']);
-        $exfld_val = cot_build_extrafields('rtopic' . $exfld['field_name'], $exfld, $rtopic['ft_' . $exfld['field_name']]);
-        $exfld_title = cot_extrafield_title($exfld, 'forums_topic_');
-        
+    foreach (Cot::$extrafields[Cot::$db->forum_topics] as $extraField) {
+        $uname = strtoupper($extraField['field_name']);
+        $fieldFormElement = cot_build_extrafields(
+            'rtopic' . $extraField['field_name'],
+            $extraField,
+            $rtopic['ft_' . $extraField['field_name']] ?? null
+        );
+        $fieldTitle = cot_extrafield_title($extraField, 'forums_topic_');
+
         $t->assign([
-            'FORUMS_NEWTOPIC_FORM_TOPIC_' . $uname => $exfld_val,
-            'FORUMS_NEWTOPIC_FORM_TOPIC_' . $uname . '_TITLE' => $exfld_title,
-            'FORUMS_NEWTOPIC_FORM_TOPIC_EXTRAFLD' => $exfld_val,
-            'FORUMS_NEWTOPIC_FORM_TOPIC_EXTRAFLD_TITLE' => $exfld_title
+            'FORUMS_NEWTOPIC_FORM_TOPIC_' . $uname => $fieldFormElement,
+            'FORUMS_NEWTOPIC_FORM_TOPIC_' . $uname . '_TITLE' => $fieldTitle,
+            'FORUMS_NEWTOPIC_FORM_TOPIC_EXTRAFLD' => $fieldFormElement,
+            'FORUMS_NEWTOPIC_FORM_TOPIC_EXTRAFLD_TITLE' => $fieldTitle
         ]);
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
             // @deprecated in 0.9.26
             $t->assign([
-                'FORUMS_NEWTOPIC_TOPIC_' . $uname => $exfld_val,
-                'FORUMS_NEWTOPIC_TOPIC_' . $uname . '_TITLE' => $exfld_title,
-                'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD' => $exfld_val,
-                'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD_TITLE' => $exfld_title
+                'FORUMS_NEWTOPIC_TOPIC_' . $uname => $fieldFormElement,
+                'FORUMS_NEWTOPIC_TOPIC_' . $uname . '_TITLE' => $fieldTitle,
+                'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD' => $fieldFormElement,
+                'FORUMS_NEWTOPIC_TOPIC_EXTRAFLD_TITLE' => $fieldTitle
             ]);
         }
         $t->parse('MAIN.TOPIC_EXTRAFLD');
