@@ -13,15 +13,15 @@ Hooks=extension.install.done
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  *
  * @var bool $isModule
- * @var string $code
+ * @var string $extensionCode
  */
 
 defined('COT_CODE') or die('Wrong URL');
 
 require cot_incfile('comments', 'plug', 'enablement');
 
-if ($isModule && in_array($code, $commentsModulesList) && !cot_config_implanted($code, 'comments')) {
-    cot_config_implant($code, $commentsOptions, false, 'comments');
-} elseif ($isModule && in_array($code, $commentsModulesStructList) && !cot_config_implanted($code, 'comments')) {
-    cot_config_implant($code, $commentsOptions, true, 'comments');
+if ($isModule && in_array($extensionCode, $commentsModulesList) && !cot_config_implanted($extensionCode, 'comments')) {
+    cot_config_implant($extensionCode, $commentsOptions, false, 'comments');
+} elseif ($isModule && in_array($extensionCode, $commentsModulesStructList) && !cot_config_implanted($extensionCode, 'comments')) {
+    cot_config_implant($extensionCode, $commentsOptions, true, 'comments');
 }

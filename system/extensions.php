@@ -502,14 +502,12 @@ function cot_extension_install($extensionCode, $isModule = false, $update = fals
 
 		$install_handler = $old_ext_format ? $setup_file : $path . "/setup/$extensionCode.install.php";
 
-		if ($old_ext_format)
-		{
+		if ($old_ext_format) {
 			global $action;
 			$action = 'install';
 		}
 
-		if (file_exists($install_handler))
-		{
+		if (file_exists($install_handler)) {
 			// Run PHP install handler
 			$envtmp = $env;
 			$env = array(
