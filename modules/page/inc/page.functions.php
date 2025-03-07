@@ -44,25 +44,20 @@ if (empty(Cot::$structure['page'])) {
 function cot_cut_more($html)
 {
 	$mpos = mb_strpos($html, '<!--more-->');
-	if ($mpos === false)
-	{
+	if ($mpos === false) {
 		$mpos = mb_strpos($html, '[more]');
 	}
-	if ($mpos === false)
-	{
+	if ($mpos === false) {
 		$mpos = mb_strpos($html, '<hr class="more" />');
 	}
-	if ($mpos !== false)
-	{
+	if ($mpos !== false) {
 		$html = mb_substr($html, 0, $mpos);
 	}
 	$mpos = mb_strpos($html, '[newpage]');
-	if ($mpos !== false)
-	{
+	if ($mpos !== false) {
 		$html = mb_substr($html, 0, $mpos);
 	}
-	if (mb_strpos($html, '[title]'))
-	{
+	if (mb_strpos($html, '[title]')) {
 		$html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
 	}
 	return $html;
@@ -408,7 +403,7 @@ function cot_page_config_order($adminpart = false)
 {
 	global $cot_extrafields, $L, $db_pages;
 
-	$options_sort = array(
+	$options_sort = [
 		'id' => $L['Id'],
 		'title' => $L['Title'],
 		'desc' => $L['Description'],
@@ -425,19 +420,15 @@ function cot_page_config_order($adminpart = false)
 		'count' => $L['Count'],
 		'updated' => $L['Updated'],
 		'cat' => $L['Category']
-	);
+	];
 
-	foreach($cot_extrafields[$db_pages] as $exfld)
-	{
+	foreach($cot_extrafields[$db_pages] as $exfld) {
 		$options_sort[$exfld['field_name']] = isset($L['page_'.$exfld['field_name'].'_title']) ? $L['page_'.$exfld['field_name'].'_title'] : $exfld['field_description'];
 	}
 
-	if ($adminpart || version_compare('0.9.19', Cot::$cfg['version']) < 1)
-	{
+	if ($adminpart || version_compare('0.9.19', Cot::$cfg['version']) < 1) {
 		return $options_sort;
-	}
-	else
-	{
+	} else {
 		// old style trick, will be removed in next versions
 		$L['cfg_order_params'] = array_values($options_sort);
 		return array_keys($options_sort);
@@ -456,20 +447,15 @@ function cot_page_status($page_state, $page_begin, $page_expire)
 {
 	global $sys;
 
-	if ($page_state == 0)
-	{
-		if ($page_expire > 0 && $page_expire <= $sys['now'])
-		{
+	if ($page_state == 0) {
+		if ($page_expire > 0 && $page_expire <= $sys['now']) {
 			return 'expired';
-		}
-		elseif ($page_begin > $sys['now'])
-		{
+		} elseif ($page_begin > $sys['now']) {
 			return 'approved';
 		}
 		return 'published';
 	}
-	elseif ($page_state == 2)
-	{
+	elseif ($page_state == 2) {
 		return 'draft';
 	}
 	return 'pending';
@@ -570,11 +556,10 @@ function cot_page_url($data, $params = [], $tail = '', $htmlspecialcharsBypass =
  */
 function cot_page_auth($cat = null)
 {
-	if (empty($cat))
-	{
+	if (empty($cat)) {
 		$cat = 'any';
 	}
-	$auth = array();
+	$auth = [];
 	[$auth['auth_read'], $auth['auth_write'], $auth['isadmin'], $auth['auth_download']] = cot_auth('page', $cat, 'RWA1');
 	return $auth;
 }
@@ -601,16 +586,15 @@ function cot_page_import($source = 'POST', $rpage = [], $auth = [])
 		$source = 'PATCH';
 	}
 
-	$rpage['page_cat']      = cot_import('rpagecat', $source, 'TXT');
-	$rpage['page_keywords'] = cot_import('rpagekeywords', $source, 'TXT');
-	$rpage['page_alias']    = cot_import('rpagealias', $source, 'TXT');
-	$rpage['page_title']    = cot_import('rpagetitle', $source, 'TXT');
-	$rpage['page_desc']     = cot_import('rpagedesc', $source, 'TXT');
+	$rpage['page_cat']      = cot_import('rpagecat', $source, 'TXT', 255);
+	$rpage['page_alias']    = cot_import('rpagealias', $source, 'TXT', 255);
+	$rpage['page_title']    = cot_import('rpagetitle', $source, 'TXT', 255);
+	$rpage['page_desc']     = cot_import('rpagedesc', $source, 'TXT', 255);
 	$rpage['page_text']     = cot_import('rpagetext', $source, 'HTM');
-	$rpage['page_parser']   = cot_import('rpageparser', $source, 'ALP');
-	$rpage['page_author']   = cot_import('rpageauthor', $source, 'TXT');
+	$rpage['page_parser']   = cot_import('rpageparser', $source, 'ALP', 64);
+	$rpage['page_author']   = cot_import('rpageauthor', $source, 'TXT', 100);
 	$rpage['page_file']     = intval(cot_import('rpagefile', $source, 'INT'));
-	$rpage['page_url']      = cot_import('rpageurl', $source, 'TXT');
+	$rpage['page_url']      = cot_import('rpageurl', $source, 'TXT', 255);
 	$rpage['page_size']     = (int) cot_import('rpagesize', $source, 'INT');
 	$rpage['page_file']     = ($rpage['page_file'] == 0 && !empty($rpage['page_url'])) ? 1 : $rpage['page_file'];
 
@@ -622,9 +606,9 @@ function cot_page_import($source = 'POST', $rpage = [], $auth = [])
 	$rpage['page_expire']   = ($rpage['page_expire'] <= $rpage['page_begin']) ? 0 : $rpage['page_expire'];
 	$rpage['page_updated']  = $sys['now'];
 
-	$rpage['page_keywords'] = cot_import('rpagekeywords', $source, 'TXT');
-	$rpage['page_metatitle'] = cot_import('rpagemetatitle', $source, 'TXT');
-	$rpage['page_metadesc'] = cot_import('rpagemetadesc', $source, 'TXT');
+	$rpage['page_keywords'] = cot_import('rpagekeywords', $source, 'TXT', 255);
+	$rpage['page_metatitle'] = cot_import('rpagemetatitle', $source, 'TXT', 255);
+	$rpage['page_metadesc'] = cot_import('rpagemetadesc', $source, 'TXT', 255);
 
 	$rpublish               = cot_import('rpublish', $source, 'ALP'); // For backwards compatibility
 	$rpage['page_state']    = ($rpublish == 'OK') ? 0 : cot_import('rpagestate', $source, 'INT');
@@ -889,8 +873,6 @@ function cot_page_enum(
 		}
 		$categories = (count($blacklist) > 0 ) ? array_diff($categories, $blacklist) : $categories;
 		$where['cat'] = "page_cat IN ('" . implode("','", $categories) . "')";
-
-
 	} elseif (count($blacklist)) {
 		$where['cat_black'] = "page_cat NOT IN ('" . implode("','", $blacklist) . "')";
 	}
@@ -1053,8 +1035,7 @@ function cot_page_enum(
 	$t->parse("MAIN");
 	$page_query_html = $t->text("MAIN");
 
-	if ($cache && (int) $cache_ttl > 0)
-	{
+	if ($cache && (int) $cache_ttl > 0) {
 		$cache->disk->store($md5hash, $page_query_html, 'page');
 	}
 	return $page_query_html;
