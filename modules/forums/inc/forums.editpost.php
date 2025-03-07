@@ -1,12 +1,15 @@
 <?php
-
 /**
- * Forums posts display.
+ * Forums edit post.
  *
  * @package Forums
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
+
+use cot\exceptions\NotFoundHttpException;
+use cot\modules\forums\inc\ForumsTopicsRepository;
+
 defined('COT_CODE') or die('Wrong URL');
 
 $s = cot_import('s', 'G', 'TXT'); // section cat
@@ -55,20 +58,23 @@ if ($rowpost = $sql_forums->fetch()) {
 
 $isFirstPost = $p == Cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = ? ORDER BY fp_id ASC LIMIT 1", [$q])->fetchColumn();
 
-$sql_forums = Cot::$db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id = $q LIMIT 1");
+$topic = ForumsTopicsRepository::getInstance()->getById($q);
+if ($topic === null) {
+    throw new NotFoundHttpException();
+}
 
-if ($rowt = $sql_forums->fetch()) {
-	if ($rowt['ft_state'] && !Cot::$usr['isadmin']) {
-		cot_die_message(603, true);
-	}
-} else {
-	cot_die(true, true);
+if ($topic['ft_state'] && !Cot::$usr['isadmin']) {
+    cot_die_message(603, true);
+}
+
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.26
+    $rowt = $topic;
 }
 
 if ($a == 'update') {
 	/* === Hook === */
-	foreach (cot_getextplugins('forums.editpost.update.first') as $pl)
-	{
+	foreach (cot_getextplugins('forums.editpost.update.first') as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -152,7 +158,7 @@ require_once cot_incfile('forms');
 $crumbs = cot_forums_buildpath($s);
 $crumbs[] = [
     cot_url('forums', "m=posts&p=" . $p, "#" . $p),
-    (($rowt['ft_mode'] == 1) ? '# ' : '') . $rowt['ft_title']
+    (($topic['ft_mode'] == 1) ? '# ' : '') . $topic['ft_title']
 ];
 $crumbs[] = [
     cot_url('forums', ['m' => 'editpost', 's' => $s, 'q' => $q, 'p' => $p, 'x' => Cot::$sys['xk']]),
@@ -165,7 +171,7 @@ $sys['sublocation'] = Cot::$structure['forums'][$s]['title'];
 $title_params = array(
 	'FORUM' => Cot::$L['Forums'],
 	'SECTION' => Cot::$structure['forums'][$s]['title'],
-	'TOPIC' => $rowt['ft_title'],
+	'TOPIC' => $topic['ft_title'],
 	'EDIT' => Cot::$L['Edit']
 );
 Cot::$out['subtitle'] = cot_title('{EDIT} - {TOPIC}', $title_params);
@@ -175,8 +181,7 @@ if (!isset(Cot::$out['head'])) {
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.editpost.main') as $pl)
-{
+foreach (cot_getextplugins('forums.editpost.main') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -193,13 +198,13 @@ if (Cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORD
 		'FORUMS_EDITPOST_FORM_TOPIC_TITTLE' => cot_inputbox(
             'text',
             'rtopictitle',
-            $rowt['ft_title'],
+            $topic['ft_title'],
             ['maxlength' => 255]
         ),
 		'FORUMS_EDITPOST_FORM_TOPIC_DESCRIPTION' => cot_inputbox(
             'text',
             'rtopicdesc',
-            $rowt['ft_desc'],
+            $topic['ft_desc'],
             ['maxlength' => 255]
         ),
 	]);
@@ -207,8 +212,8 @@ if (Cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORD
     if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
         // @deprecated in 0.9.26
         $t->assign([
-            'FORUMS_EDITPOST_TOPICTITTLE' => cot_inputbox('text', 'rtopictitle', $rowt['ft_title'], array('maxlength' => 255)),
-            'FORUMS_EDITPOST_TOPICDESCRIPTION' => cot_inputbox('text', 'rtopicdesc', $rowt['ft_desc'], array('maxlength' => 255)),
+            'FORUMS_EDITPOST_TOPICTITTLE' => cot_inputbox('text', 'rtopictitle', $topic['ft_title'], array('maxlength' => 255)),
+            'FORUMS_EDITPOST_TOPICDESCRIPTION' => cot_inputbox('text', 'rtopicdesc', $topic['ft_desc'], array('maxlength' => 255)),
         ]);
     }
 
@@ -219,7 +224,7 @@ if (Cot::$db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORD
             $fieldFormElement = cot_build_extrafields(
                 'rtopic' . $extraField['field_name'],
                 $extraField,
-                $rowt['ft_' . $extraField['field_name']] ?? null
+                $topic['ft_' . $extraField['field_name']] ?? null
             );
             $fieldTitle = cot_extrafield_title($extraField, 'forums_topic_');
 

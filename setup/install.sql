@@ -4,7 +4,7 @@
 
 DROP TABLE IF EXISTS `cot_auth`;
 CREATE TABLE `cot_auth` (
-  `auth_id` int UNSIGNED NOT NULL auto_increment,
+  `auth_id` INT UNSIGNED NOT NULL auto_increment,
   `auth_groupid` mediumint UNSIGNED NOT NULL,
   `auth_code` varchar(255) NOT NULL,
   `auth_option` varchar(255) NOT NULL default '',
