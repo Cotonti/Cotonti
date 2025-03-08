@@ -94,7 +94,7 @@ if (empty($out['subtitle'])) {
 }
 Cot::$sys['sublocation'] = Cot::$out['subtitle'];
 
-if ($autoAssignTags) {
+if ($autoAssignTags && !empty($t)) {
 	array_unshift($pluginBreadCrumbs, [cot_url($e), Cot::$out['subtitle']]);
 	if (empty($o)) {
         if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
@@ -154,6 +154,8 @@ unset($pluginTemplate);
 if (isset($t) && is_object($t)) {
 	$t->parse('MAIN');
 	$t->out('MAIN');
+} else {
+    echo $pluginBody;
 }
 
 require_once Cot::$cfg['system_dir'] . '/footer.php';

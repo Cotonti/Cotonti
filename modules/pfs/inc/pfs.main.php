@@ -39,6 +39,7 @@ if (!Cot::$usr['isadmin'] || $userid === null) {
 }
 
 $standalone = false;
+$isSiteFileStorage = $userid === 0;
 
 $user_info = !empty($userid) ? UsersRepository::getInstance()->getById($userid) : null;
 if (!$user_info && !Cot::$usr['isadmin']) {
@@ -62,8 +63,8 @@ if ($user_info) {
 $maxfile = min((int) $sql_pfs_max['maxfile'], cot_get_uploadmax()) * 1024; // KiB -> Bytes
 $maxtotal = (int) $sql_pfs_max['maxtotal'] * 1024; // KiB -> Bytes
 
-
 cot_block(($maxfile > 0 && $maxtotal > 0) || Cot::$usr['isadmin']);
+
 if (!empty($c1) || !empty($c2)) {
     if (!empty($c1)) {
         $more .= (($more != '') ? '&' : '') . 'c1=' . $c1;
@@ -114,7 +115,7 @@ $pfs_totalsize = Cot::$db->query(
 
 $err_msg = [];
 
-if ($a == 'upload') {
+if ($a === 'upload') {
 	$ndesc = cot_import('ndesc','P','ARR');
 
 	/* === Hook === */
@@ -167,9 +168,9 @@ if ($a == 'upload') {
 			if (
                 is_uploaded_file($u_tmp_name)
                 && $u_size > 0
-                && $u_size < $maxfile
+                && ($isSiteFileStorage || ($u_size < $maxfile))
                 && $f_extension_ok
-                && ($pfs_totalsize + $u_size) < $maxtotal
+                && ($isSiteFileStorage || (($pfs_totalsize + $u_size) < $maxtotal))
             ) {
 				$fcheck = cot_file_check($u_tmp_name, $u_name, $f_extension);
 				if ($fcheck == 1) {
@@ -267,7 +268,7 @@ if ($a == 'upload') {
 			$err_msg[] = $disp_errors;
 		}
 	}
-} elseif ($a=='delete') {
+} elseif ($a === 'delete') {
 	cot_check_xg();
 	$sql_pfs_delete = Cot::$db->query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid = $userid AND pfs_id = $id LIMIT 1");
 
