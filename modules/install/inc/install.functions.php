@@ -11,7 +11,8 @@ use cot\extensions\ExtensionsDictionary;
 use cot\extensions\ExtensionsHelper;
 
 /**
- * The name of the file that is used to prevent the installer from running twice
+ * Returns the name (path) of the file that prevents the installer from running twice.
+ *
  * @return string
  */
 function cot_installProcessFile()
@@ -21,10 +22,10 @@ function cot_installProcessFile()
 }
 
 /**
- * Same as cot_redirect() but with process file deletion
- * @param $url
+ * Redirects to a given URL after deleting the process file if it exists.
+ *
+ * @param string $url Target URL
  * @return void
- * @see cot_redirect()
  */
 function cot_installRedirect($url)
 {
@@ -36,6 +37,12 @@ function cot_installRedirect($url)
     cot_redirect($url);
 }
 
+/**
+ * Reads a configuration file and returns an array of $cfg and $db_* variables.
+ *
+ * @param string $file Path to the config file
+ * @return array [ array of $cfg options, array of $db_* variables ]
+ */
 function cot_get_config($file)
 {
     include $file;
@@ -55,34 +62,36 @@ function cot_get_config($file)
 }
 
 /**
- * Replaces a sample config with its actual value
+ * Replaces a specific config line in $file_contents with a new value,
+ * properly escaping special characters to avoid issues with preg_replace.
  *
- * @param string $file_contents Config file contents (by reference)
- * @param string $config_name   Config option name, e.g. 'mysqlpassword'
- * @param string $config_value  Actual value to set, e.g. user-supplied password
+ * @param string &$file_contents The full config file content (by reference)
+ * @param string $config_name    The name/key of the config option (e.g., 'mysqlpassword')
+ * @param string $config_value   The new value (e.g., user-supplied DB password)
  * @return void
  */
 function cot_installConfigReplace(&$file_contents, $config_name, $config_value)
 {
-    // Burada özel karakterleri kaçışlıyoruz:
-    $config_value_escaped = str_replace(
+    // Escape special characters (\, $, and ') to prevent regex backreference or syntax errors
+    $configValueEscaped = str_replace(
         ['\\', '$', "'"],
         ['\\\\', '\\$', "\\'"],
         $config_value
     );
 
     $pattern = "#^\\\$cfg\\['$config_name'\\]\\s*=\\s*'.*?';#m";
-    $replacement = "\$cfg['$config_name'] = '$config_value_escaped';";
+    $replacement = "\$cfg['$config_name'] = '$configValueEscaped';";
 
     $file_contents = preg_replace($pattern, $replacement, $file_contents);
 }
 
 /**
- * Parses extensions selection section
+ * Renders a list of extensions (modules or plugins) on the installer page,
+ * allowing the user to select which ones to install.
  *
- * @param string $ext_type      'Module' veya 'Plugin'
- * @param array  $default_list  Tavsiye edilen eklentiler (varsayılan işaretli)
- * @param array  $selected_list Kullanıcı tarafından seçili eklentiler
+ * @param string $ext_type      'Module' or 'Plugin'
+ * @param array  $default_list  Recommended extensions that are checked by default
+ * @param array  $selected_list Extensions previously selected by the user
  */
 function cot_installParseExtensions($ext_type, $default_list = [], $selected_list = [])
 {
@@ -106,10 +115,10 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
             $code = $f;
             if ($ext_type_lc == 'plugin' && $prev_cat != $info['Category']) {
                 if ($prev_cat != '') {
-                    // Önceki kategoriyi çıkartalım
+                    // Parse the previous category section
                     $t->parse("MAIN.STEP_4.{$ext_type_uc}_CAT");
                 }
-                // Yeni kategori
+                // Assign the new category
                 $prev_cat = $info['Category'];
                 $catTitle = !empty($L['ext_cat_' . $info['Category']])
                     ? $L['ext_cat_' . $info['Category']]
@@ -118,7 +127,7 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
                 $t->assign('PLUGIN_CAT_TITLE', $catTitle);
             }
 
-            // Requires
+            // Requires dependencies
             if (!empty($info['Requires_modules']) || !empty($info['Requires_plugins'])) {
                 $modules_list = empty($info['Requires_modules'])
                     ? $L['None']
@@ -136,7 +145,7 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
                 $requires = '';
             }
 
-            // Recommends
+            // Recommended dependencies
             if (!empty($info['Recommends_modules']) || !empty($info['Recommends_plugins'])) {
                 $modules_list = empty($info['Recommends_modules'])
                     ? $L['None']
@@ -154,7 +163,7 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
                 $recommends = '';
             }
 
-            // Hangi eklentiler varsayılan seçili veya kullanıcı seçimi
+            // Determine if the extension is checked by default or selected by the user
             if ((is_array($selected_list) && count($selected_list)) > 0) {
                 $checked = in_array($code, $selected_list);
             } else {
@@ -173,22 +182,22 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
                 "{$ext_type_uc}_ROW_RECOMMENDS" => $recommends,
             ]);
 
-            // Parse et
+            // Parse each extension row
             $t->parse("MAIN.STEP_4.$block_name");
         }
     }
     if ($ext_type_lc == 'plugin' && $prev_cat != '') {
-        // Son kategoriyi parse et
+        // Parse the last category
         $t->parse("MAIN.STEP_4.{$ext_type_uc}_CAT");
     }
 }
 
 /**
- * Sorts selected extensions by their setup order if present
+ * Sorts selected extensions based on their 'Order' property if provided.
  *
- * @param array $selected_extensions Eklenti isimleri (sıralanmamış)
- * @param bool  $is_module TRUE ise modüller, FALSE ise eklentiler
- * @return array Sıralı liste
+ * @param array $selected_extensions List of extension names (unsorted)
+ * @param bool  $is_module           TRUE for modules, FALSE for plugins
+ * @return array                     Sorted list of extension names
  */
 function cot_installSortExtensions($selected_extensions, $is_module = false)
 {
@@ -196,20 +205,19 @@ function cot_installSortExtensions($selected_extensions, $is_module = false)
     $path = $is_module ? $cfg['modules_dir'] : $cfg['plugins_dir'];
     $ret = [];
 
-    // Order değerine göre gruplara ayır
+    // Group extensions by their 'Order' value
     $extensions = [];
     foreach ($selected_extensions as $name) {
         $info = cot_infoget("$path/$name/$name.setup.php", 'COT_EXT');
         $order = isset($info['Order']) ? (int) $info['Order'] : COT_PLUGIN_DEFAULT_ORDER;
 
-        // Kategori 'post-install' ise ve order < 999 ise 999 yap
         if (isset($info['Category']) && $info['Category'] == 'post-install' && $order < 999) {
             $order = 999;
         }
         $extensions[$order][] = $name;
     }
 
-    // Grupları sırayla yeniden birleştir
+    // Merge groups in ascending order of 'Order'
     foreach ($extensions as $grp) {
         foreach ($grp as $name) {
             $ret[] = $name;
