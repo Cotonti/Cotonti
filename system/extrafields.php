@@ -163,17 +163,17 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
 
             $min = $max = null;
             if (!empty($extrafield['field_params'])) {
-                $tmp = explode(",", $extrafield['field_params'], 2);
+                $tmp = explode(',', $extrafield['field_params'], 2);
                 if (isset($tmp[0]) && is_numeric($tmp[0])) {
-                    $min = (int)trim($tmp[0]);
+                    $min = (int) trim($tmp[0]);
                 }
 
                 if (isset($tmp[1]) && is_numeric($tmp[1])) {
-                    $min = (int)trim($tmp[1]);
+                    $max = (int) trim($tmp[1]);
                 }
 
                 if (!is_null($import)) {
-                    if ( (!is_null($min) && ($import < $min)) || (!is_null($max) && ($import > $max)) ) {
+                    if ((!is_null($min) && ($import < $min)) || (!is_null($max) && ($import > $max))) {
                         $errMsg = (isset(Cot::$L['field_range_' . $extrafield['field_name']])) ?
                             Cot::$L['field_range_' . $extrafield['field_name']] : $exfld_title . ': ' . Cot::$L['field_range'];
                         cot_error($errMsg, $inputname);
@@ -182,10 +182,17 @@ function cot_import_extrafields($inputname, $extrafield, $source = 'P', $oldvalu
             }
 
             if (is_null($import)) {
-				$import = ($extrafield['field_type'] == 'inputint' || !empty($extrafield['field_default'])) ? (int)$extrafield['field_default'] : '';
+                if ($extrafield['field_default'] !== '' && is_numeric($extrafield['field_default'])) {
+                    $import = (int) $extrafield['field_default'];
+                }
+
 				if (is_numeric($import) && !empty($extrafield['field_params'])) {
-					if (!is_null($min) && ($import < $min)) $import = $min;
-					if (!is_null($max) && ($import > $max)) $import = $max;
+					if (!is_null($min) && ($import < $min)) {
+                        $import = $min;
+                    }
+					if (!is_null($max) && ($import > $max)) {
+                        $import = $max;
+                    }
 				}
             }
 			break;

@@ -734,7 +734,7 @@ function cot_import_buffer_save()
  */
 function cot_import_buffered($name, $value, $default = null)
 {
-    if (!empty($value)) {
+    if ($value !== null && $value !== '') {
         return $value;
     }
 
