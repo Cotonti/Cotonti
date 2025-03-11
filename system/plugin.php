@@ -20,6 +20,7 @@ $c1 = cot_import('c1', 'G', 'ALP');
 $c2 = cot_import('c2', 'G', 'ALP');
 
 $autoAssignTags = false;
+$usingController = Cot::$currentRoute->controller !== null && Cot::$currentRoute->action !== null;
 $templateFile = '';
 if (!empty($o)) {
 	$extensionCode = $o;
@@ -33,10 +34,12 @@ if (!empty($o)) {
 
 } elseif (!empty($e)) {
 	$extensionCode = $e;
-    $templateFile = cot_tplfile($extensionCode, 'plug');
-    if ($templateFile === null || !file_exists($templateFile)) {
-        $templateFile = cot_tplfile(['plugin', $extensionCode]);
-        $autoAssignTags = true;
+    if (!$usingController) {
+        $templateFile = cot_tplfile($extensionCode, ExtensionsDictionary::TYPE_PLUGIN);
+        if ($templateFile === null || !file_exists($templateFile)) {
+            $templateFile = cot_tplfile(['plugin', $extensionCode]);
+            $autoAssignTags = true;
+        }
     }
 } else {
 	cot_die_message(404);

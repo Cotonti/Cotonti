@@ -117,6 +117,7 @@ abstract class BaseController
 
         /** @var BaseAction $action */
         $action = new $actionClassName();
+        $action->controller = $this; // @todo or pass to constructor?
 
         if ($action->beforeRun()) {
             $result = call_user_func_array([$action, 'run'], $arguments);

@@ -3387,16 +3387,27 @@ function cot_check_messages($src = '', $class = '')
  */
 function cot_clear_messages($src = '', $class = '')
 {
-	global $error_string, $sys;
+	global $error_string;
 
 	if (empty($src) && empty($class)) {
 		unset($_SESSION['cot_messages'][Cot::$sys['site_id']]);
 		unset($error_string);
 	}
 
-    if(empty($_SESSION['cot_messages'][Cot::$sys['site_id']])) return;
+    if (empty($_SESSION['cot_messages'][Cot::$sys['site_id']])) {
+        return;
+    }
 
-	if (!is_array($_SESSION['cot_messages'][Cot::$sys['site_id']]) || (!empty($src) && !is_array($_SESSION['cot_messages'][Cot::$sys['site_id']][$src]))) {
+	if (
+        !is_array($_SESSION['cot_messages'][Cot::$sys['site_id']])
+        || (
+            !empty($src)
+            && (
+                empty($_SESSION['cot_messages'][Cot::$sys['site_id']][$src])
+                || !is_array($_SESSION['cot_messages'][Cot::$sys['site_id']][$src])
+            )
+        )
+    ) {
 		return;
 	}
 

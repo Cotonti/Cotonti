@@ -12,6 +12,11 @@ defined('COT_CODE') or die('Wrong URL.');
 abstract class BaseAction
 {
     /**
+     * @var BaseController the controller that owns this action
+     */
+    public $controller;
+
+    /**
      * This method is called before executing `run()`.
      *  You can override this method to do preparation work for the action run.
      *  If the method returns false, action will be canceled.
