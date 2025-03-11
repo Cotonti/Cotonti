@@ -136,11 +136,12 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
                 $plugins_list = empty($info['Requires_plugins'])
                     ? $L['None']
                     : implode(', ', explode(',', $info['Requires_plugins']));
-
+                    
                 $requires = cot_rc('install_code_requires', [
-                    'modules_list' => $modules_list,
-                    'plugins_list' => $plugins_list
-                ]);
+                        'modules_list' => $modules_list,
+                        'plugins_list' => $plugins_list,
+                    ]);
+
             } else {
                 $requires = '';
             }
@@ -182,22 +183,21 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
                 "{$ext_type_uc}_ROW_RECOMMENDS" => $recommends,
             ]);
 
-            // Parse each extension row
+            // Render each extension row
             $t->parse("MAIN.STEP_4.$block_name");
         }
     }
     if ($ext_type_lc == 'plugin' && $prev_cat != '') {
-        // Parse the last category
+        // Render the last category
         $t->parse("MAIN.STEP_4.{$ext_type_uc}_CAT");
     }
 }
 
 /**
  * Sorts selected extensions based on their 'Order' property if provided.
- *
  * @param array $selected_extensions List of extension names (unsorted)
- * @param bool  $is_module           TRUE for modules, FALSE for plugins
- * @return array                     Sorted list of extension names
+ * @param bool $is_module TRUE for modules, FALSE for plugins
+ * @return array Sorted list of extension names
  */
 function cot_installSortExtensions($selected_extensions, $is_module = false)
 {
