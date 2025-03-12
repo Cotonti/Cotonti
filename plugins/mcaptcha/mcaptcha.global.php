@@ -57,6 +57,10 @@ function mcaptcha_generate(): string
  */
 function mcaptcha_validate($res)
 {
+    if (empty($_SESSION['mcaptcha_time']) || empty($_SESSION['mcaptcha_salt'])) {
+        return false;
+    }
+
 	// Check anti-hammer
 	if (time() - $_SESSION['mcaptcha_time'] > Cot::$cfg['plugin']['mcaptcha']['delay']) {
 		// Check salt (form-to-session tie)
