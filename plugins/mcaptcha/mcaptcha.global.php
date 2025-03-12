@@ -52,31 +52,28 @@ function mcaptcha_generate(): string
 /**
  * Validates captcha input
  *
- * @param int $res User result
+ * @param int|numeric-string $res User result
  * @return bool
  */
 function mcaptcha_validate($res)
 {
-	global $cfg;
 	// Check anti-hammer
-	if(time() - $_SESSION['mcaptcha_time'] > $cfg['plugin']['mcaptcha']['delay'])
-	{
+	if (time() - $_SESSION['mcaptcha_time'] > Cot::$cfg['plugin']['mcaptcha']['delay']) {
 		// Check salt (form-to-session tie)
-		if(cot_import('mcaptcha_salt', 'POST', 'ALP') == $_SESSION['mcaptcha_salt'])
-		{
+		if (cot_import('mcaptcha_salt', 'POST', 'ALP') == $_SESSION['mcaptcha_salt']) {
 			// Check per-result counter
-			if($_SESSION['mcaptcha_count'] == 0)
-			{
+			if ($_SESSION['mcaptcha_count'] < 10) {
 				// Check the result
-				if($res == $_SESSION['mcaptcha_res'])
-				{
-					return TRUE;
+				if ($res == $_SESSION['mcaptcha_res']) {
+					return true;
 				}
 			}
 		}
 	}
+
 	$_SESSION['mcaptcha_count']++;
-	return FALSE;
+
+	return false;
 }
 
 /**
