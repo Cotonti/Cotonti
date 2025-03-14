@@ -7,6 +7,7 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\controllers\MainController;
 use cot\extensions\ExtensionsDictionary;
 use cot\extensions\ExtensionsService;
 use cot\users\UsersHelper;
@@ -6150,21 +6151,30 @@ function cot_url_check($url)
 function cot_uriredir_store()
 {
 	$m = cot_import('m', 'G', 'ALP');
-	if (
-        $_SERVER['REQUEST_METHOD'] !== 'POST' // not form action/POST
-		&& empty($_GET['x']) // not xg, hence not form action/GET and not command from GET
-		&& !defined('COT_MESSAGE') // not message location
-		&& !defined('COT_AUTH') // not login/logout location
 
-        // @todo move to users module
-		&&	(
-            !defined('COT_USERS')
-			|| is_null($m)
-			|| !in_array($m, ['register', 'passrecover'])
-		)
-	) {
-		$_SESSION['s_uri_redir'] = Cot::$sys['uri_redir'];
-	}
+    if (
+        $_SERVER['REQUEST_METHOD'] === 'POST' // not form action/POST
+        || !empty($_GET['x']) // not xg, hence not form action/GET and not command from GET
+        || defined('COT_MESSAGE') // not message location
+        || defined('COT_AUTH') // not login/logout location
+
+        // System controller
+        || (
+            !empty(Cot::$currentRoute)
+            && !empty(Cot::$currentRoute->controller)
+            && Cot::$currentRoute->controller instanceof MainController
+        )
+
+        || (
+            defined('COT_USERS')
+            && !empty($m)
+            && in_array($m, ['register', 'passrecover'])
+        )
+    ) {
+        return;
+    }
+
+    $_SESSION['s_uri_redir'] = Cot::$sys['uri_redir'];
 }
 
 /**
