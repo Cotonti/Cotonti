@@ -46,7 +46,7 @@ if (is_array($msg) && count($msg) > 0) {
 
 list($totalsentbox, $totalinbox) = cot_message_count(Cot::$usr['id']);
 
-$title[] = array(cot_url('pm'), Cot::$L['Private_Messages']);
+$title[] = [cot_url('pm'), Cot::$L['Private_Messages']];
 
 if ($f == 'sentbox') {
 	$sqlfilter = 'pm_fromuserid = ' . Cot::$usr['id'] . ' AND pm_fromstate <> ' . COT_PM_STATE_DELETED;
@@ -79,11 +79,11 @@ foreach (cot_getextplugins('pm.list.main') as $pl) {
 /* ===== */
 
 /* === Title === */
-$title_params = array(
+$title_params = [
 	'PM' => Cot::$L['Private_Messages'],
 	'COUNT' => $totalcount,
 	'BOX' => $subtitle
-);
+];
 Cot::$out['subtitle'] = cot_title('{BOX} ({COUNT}) - {PM}', $title_params);
 Cot::$out['head'] .= Cot::$R['code_noindex'];
 
@@ -103,7 +103,7 @@ require_once Cot::$cfg['system_dir'] . '/header.php';
 if (!isset($pmalttpl)) {
     $pmalttpl = null;
 }
-$t = new XTemplate(cot_tplfile(array('pm', 'list', $pmalttpl)));
+$t = new XTemplate(cot_tplfile(['pm', 'list', $pmalttpl]));
 
 $jj = 0;
 
@@ -114,8 +114,8 @@ $extp = cot_getextplugins('pm.list.loop');
 foreach ($pm_sql->fetchAll() as $row) {
 	$jj++;
 	$row['pm_icon_readstatus'] = ($row['pm_tostate'] == '0') ?
-			cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), Cot::$R['pm_icon_new'], array('title' => Cot::$L['pm_unread'], 'class' => Cot::$cfg['pm']['turnajax'] ? 'ajax' : ''))
-			: cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), Cot::$R['pm_icon'], array('title' => Cot::$L['pm_read'], 'class' => Cot::$cfg['pm']['turnajax'] ? 'ajax' : ''));
+			cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), Cot::$R['pm_icon_new'], ['title' => Cot::$L['pm_unread'], 'class' => Cot::$cfg['pm']['turnajax'] ? 'ajax' : ''])
+			: cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), Cot::$R['pm_icon'], ['title' => Cot::$L['pm_read'], 'class' => Cot::$cfg['pm']['turnajax'] ? 'ajax' : '']);
 
 	$pm_data = cot_parse($row['pm_text'], Cot::$cfg['pm']['markup']);
 	$pm_desc = cot_string_truncate($pm_data , 100 , true, false, '...');
@@ -133,19 +133,19 @@ foreach ($pm_sql->fetchAll() as $row) {
     }
 	$url_delete = cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f.'&d='.$durl);
 
-	$t->assign(array(
+	$t->assign([
 		'PM_ROW_ID' => $row['pm_id'],
 		'PM_ROW_STATE' => $row['pm_tostate'],
-		'PM_ROW_STAR' => cot_rc($star_class ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => $url_star)),
+		'PM_ROW_STAR' => cot_rc($star_class ? 'pm_icon_unstar' : 'pm_icon_star', ['link' => $url_star]),
         'PM_ROW_STARED' => $star_class,
 		'PM_ROW_STAR_URL' => $url_star,
 		'PM_ROW_DATE' => cot_date('datetime_medium', $row['pm_date']),
 		'PM_ROW_DATE_STAMP' => $row['pm_date'],
-		'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), htmlspecialchars($row['pm_title']), array('class'=>Cot::$cfg['pm']['turnajax'] ? 'ajax' : '')),
+		'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), htmlspecialchars($row['pm_title']), ['class'=>Cot::$cfg['pm']['turnajax'] ? 'ajax' : '']),
 		'PM_ROW_URL' => cot_url('pm', 'm=message&id='.$row['pm_id']),
 		'PM_ROW_TEXT' => $pm_data,
 		'PM_ROW_ICON_STATUS' => $row['pm_icon_readstatus'],
-		'PM_ROW_ICON_DELETE' => cot_rc_link($url_delete, Cot::$R['pm_icon_trashcan'], array('title' => Cot::$L['Delete'], 'class'=>Cot::$cfg['pm']['turnajax'] ? 'ajax' : '')),
+		'PM_ROW_ICON_DELETE' => cot_rc_link($url_delete, Cot::$R['pm_icon_trashcan'], ['title' => Cot::$L['Delete'], 'class'=>Cot::$cfg['pm']['turnajax'] ? 'ajax' : '']),
         // @todo confirmLink and ajax
 		'PM_ROW_ICON_DELETE_CONFIRM' => cot_rc_link(
             cot_confirm_url($url_delete),
@@ -165,7 +165,7 @@ foreach ($pm_sql->fetchAll() as $row) {
 		'PM_ROW_DESC' => $pm_desc,
 		'PM_ROW_ODDEVEN' => cot_build_oddeven($jj),
 		'PM_ROW_NUM' => $jj
-	));
+	]);
 	$t->assign(cot_generate_usertags($row, 'PM_ROW_USER_'));
 
 	/* === Hook - Part2 : Include === */
@@ -192,23 +192,23 @@ $url_all = cot_url('pm', 'f='.$f);
 $url_unread = cot_url('pm', 'f='.$f.'&filter=unread');
 $url_starred = cot_url('pm', 'f='.$f.'&filter=starred');
 
-$t->assign(array(
+$t->assign([
 	'PM_PAGETITLE' => cot_breadcrumbs($title, Cot::$cfg['homebreadcrumb']),
 	'PM_SUBTITLE' => $subtitle,
 	'PM_FORM_UPDATE' => cot_url('pm', cot_xg().'&f='.$f.'&filter='.$filter.'&d='.$durl),
-	'PM_SENDNEWPM' => (Cot::$usr['auth_write']) ? cot_rc_link($url_newpm, Cot::$L['pm_sendnew'], Cot::$cfg['pm']['turnajax'] ? array('class'=>'ajax') : '') : '',
+	'PM_SENDNEWPM' => (Cot::$usr['auth_write']) ? cot_rc_link($url_newpm, Cot::$L['pm_sendnew'], Cot::$cfg['pm']['turnajax'] ? ['class' => 'ajax'] : '') : '',
 	'PM_SENDNEWPM_URL' => (Cot::$usr['auth_write']) ? $url_newpm : '',
-	'PM_INBOX' => cot_rc_link($url_inbox, Cot::$L['pm_inbox'], Cot::$cfg['pm']['turnajax'] ? array('class'=>'ajax') : ''),
+	'PM_INBOX' => cot_rc_link($url_inbox, Cot::$L['pm_inbox'], Cot::$cfg['pm']['turnajax'] ? ['class' => 'ajax'] : ''),
 	'PM_INBOX_URL' => $url_inbox,
 	'PM_INBOX_COUNT' => $totalinbox,
-	'PM_SENTBOX' => cot_rc_link($url_sentbox, Cot::$L['pm_sentbox'], Cot::$cfg['pm']['turnajax'] ? array('class'=>'ajax') : ''),
+	'PM_SENTBOX' => cot_rc_link($url_sentbox, Cot::$L['pm_sentbox'], Cot::$cfg['pm']['turnajax'] ? ['class' => 'ajax'] : ''),
 	'PM_SENTBOX_URL' => $url_sentbox,
 	'PM_SENTBOX_COUNT' => $totalsentbox,
-	'PM_FILTER_ALL' => cot_rc_link($url_all, Cot::$L['pm_all'], Cot::$cfg['pm']['turnajax'] ? array('class'=>'ajax') : ''),
+	'PM_FILTER_ALL' => cot_rc_link($url_all, Cot::$L['pm_all'], Cot::$cfg['pm']['turnajax'] ? ['class' => 'ajax'] : ''),
 	'PM_FILTER_ALL_URL' => $url_all,
-	'PM_FILTER_UNREAD' => cot_rc_link($url_unread, Cot::$L['pm_unread'], Cot::$cfg['pm']['turnajax'] ? array('class'=>'ajax') : ''),
+	'PM_FILTER_UNREAD' => cot_rc_link($url_unread, Cot::$L['pm_unread'], Cot::$cfg['pm']['turnajax'] ? ['class' => 'ajax'] : ''),
 	'PM_FILTER_UNREAD_URL' => $url_unread,
-	'PM_FILTER_STARRED' => cot_rc_link($url_starred, Cot::$L['pm_starred'], Cot::$cfg['pm']['turnajax'] ? array('class'=>'ajax') : ''),
+	'PM_FILTER_STARRED' => cot_rc_link($url_starred, Cot::$L['pm_starred'], Cot::$cfg['pm']['turnajax'] ? ['class' => 'ajax'] : ''),
 	'PM_FILTER_STARRED_URL' => $url_starred,
 
     // deprecated in 0.9.24
@@ -218,7 +218,7 @@ $t->assign(array(
 	'PM_CURRENTPAGE' => $pagenav['current'],
 	'PM_TOTALPAGES' => $pagenav['total'],
 	'PM_SENT_TYPE' => ($f == 'sentbox') ? Cot::$L['Recipient'] : Cot::$L['Sender']
-));
+]);
 
 $t->assign(cot_generatePaginationTags($pagenav));
 

@@ -72,14 +72,14 @@ if (Cot::$cfg['check_updates']) {
 				$updateInfo_message = $updateInfo['update_message_lng']['en'];
 			}
 		}
-		$t->assign(array(
+		$t->assign([
 			'ADMIN_HOME_UPDATE_REVISION' => sprintf(
                 Cot::$L['home_update_revision'],
                 Cot::$cfg['version'],
                 htmlspecialchars($updateInfo['update_ver'])
             ),
 			'ADMIN_HOME_UPDATE_MESSAGE' => cot_parse($updateInfo_message),
-		));
+		]);
 		$t->parse('MAIN.UPDATE');
 
 		cot_log(

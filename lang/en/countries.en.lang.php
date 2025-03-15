@@ -3,7 +3,7 @@
  * Countries
  * ISO 3166-1 publication 2009-05-08
  */
-$cot_countries = array(
+$cot_countries = [
 	'af' => 'Afghanistan',
 	'ax' => 'Åland Islands',
 	'al' => 'Albania',
@@ -252,7 +252,7 @@ $cot_countries = array(
 	'ye' => 'Yemen',
 	'zm' => 'Zambia',
 	'zw' => 'Zimbabwe'
-);
+];
 
 $Ltz['Africa/Abidjan']                 = "Africa/Abidjan";
 $Ltz['Africa/Accra']                   = "Africa/Accra";

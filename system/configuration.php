@@ -63,11 +63,11 @@ function cot_config_type_int($cfg_var, $min='', $max='')
 	if (!empty($min) && !empty($max)){
 		$placeholder = "$min - $max";
 	} elseif(!empty($min)) {
-		$placeholder = cot_rc('adm_int_min', array('value'=>$min));
+		$placeholder = cot_rc('adm_int_min', ['value'=>$min]);
 	} elseif(!empty($min)) {
-		$placeholder = cot_rc('adm_int_max', array('value'=>$max));
+		$placeholder = cot_rc('adm_int_max', ['value'=>$max]);
 	}
-	return cot_inputbox('text', $name, $value, array('placeholder' => $placeholder ));
+	return cot_inputbox('text', $name, $value, ['placeholder' => $placeholder]);
 }
 
 /**
@@ -97,15 +97,15 @@ function cot_config_type_int_filter($new_value, $cfg_var, $min = '', $max = '', 
 		$new_value = floor($new_value);
 		if (!empty($min) && $new_value < $min) {
 			$new_value = $min;
-			$fix_msg = '. '.cot_rc('adm_set') . cot_rc('adm_int_min', array('value' => $min));
+			$fix_msg = '. '.cot_rc('adm_set') . cot_rc('adm_int_min', ['value' => $min]);
 		}
 		if (!empty($max) && $new_value > $max) {
 			$new_value = $max;
-			$fix_msg = '. ' . cot_rc('adm_set') . cot_rc('adm_int_max', array('value' => $max));
+			$fix_msg = '. ' . cot_rc('adm_set') . cot_rc('adm_int_max', ['value' => $max]);
 		}
 	}
 	// user friendly notification
-	$invalid_value_msg = cot_rc('adm_invalid_input', array('value' => $not_filtered, 'field_name' => $title ));
+	$invalid_value_msg = cot_rc('adm_invalid_input', ['value' => $not_filtered, 'field_name' => $title]);
 	if (!$skip_warnings && ($fix_msg || $not_num)) {
         cot_message($invalid_value_msg . $fix_msg, $not_num ? 'error' : 'warning', $var_name);
     }
@@ -118,29 +118,29 @@ function cot_config_type_int_filter($new_value, $cfg_var, $min = '', $max = '', 
  *
  * Example:
  * <code>
- * $config_options = array(
- *     array(
+ * $config_options = [
+ *     [
  *         'name' => 'disable_test',
  *         'type' => COT_CONFIG_TYPE_RADIO,
  *         'default' => '0'
- *     ),
- *     array(
+ *     ],
+ *     [
  *         'name' => 'test_selection',
  *         'type' => COT_CONFIG_TYPE_SELECT,
  *         'default' => '20',
  *         'variants' => '5,10,15,20,25,30,35,40,50'
- *     ),
- *     array(
+ *     ],
+ *     [
  *         'name' => 'test_value',
  *         'type' => COT_CONFIG_TYPE_STRING,
  *         'default' => 'something'
- *     ),
- *     array(
+ *     ],
+ *     [
  *         'name' => 'not_visible',
  *         'type' => COT_CONFIG_TYPE_HIDDEN,
  *         'default' => 'test23'
- *     )
- * );
+ *     ]
+ * ];
  *
  * cot_config_add('test', $config_options, 'module');
  * </code>
@@ -172,7 +172,7 @@ function cot_config_add($name, $options, $is_module = false, $category = '', $do
 	}
 	else
 	{
-		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+		$type = !in_array($is_module, ['plug', 'core']) ? 'module' : $is_module;
 	}
 	// Check the arguments
 	if (!$cnt)
@@ -180,11 +180,11 @@ function cot_config_add($name, $options, $is_module = false, $category = '', $do
 		return false;
 	}
 	// Build the SQL query
-	$option_set = array();
+	$option_set = [];
 	for ($i = 0; $i < $cnt; $i++)
 	{
 		$opt = $options[$i];
-		$option_set[] = array(
+		$option_set[] = [
 			'config_owner' => $type,
 			'config_cat' => $name,
 			'config_subcat' => $category,
@@ -196,7 +196,7 @@ function cot_config_add($name, $options, $is_module = false, $category = '', $do
 			'config_variants' => isset($opt['variants']) ? $opt['variants'] : '',
 			'config_text' => isset($opt['text']) ? $opt['text'] : '',
 			'config_donor' => $donor
-		);
+		];
 	}
 
 	$ins_cnt = $db->insert($db_config, $option_set);
@@ -222,7 +222,7 @@ function cot_config_implant($module_name, $options, $into_struct, $donor)
 	global $cfg;
 
 	$category = $into_struct ? '__default' : '';
-	$add_options = array();
+	$add_options = [];
 	foreach ($options as $opt)
 	{
 		if (!$into_struct && !isset($cfg[$module_name][$opt['name']]) || $into_struct && !isset($cfg[$module_name]['cat___default'][$opt['name']]))
@@ -245,7 +245,7 @@ function cot_config_implant($module_name, $options, $into_struct, $donor)
 function cot_config_implanted($acceptor, $donor)
 {
 	global $db, $db_config;
-	return $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner = 'module' AND config_cat = ? AND config_donor = ?", array($acceptor, $donor))->fetchColumn() > 0;
+	return $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner = 'module' AND config_cat = ? AND config_donor = ?", [$acceptor, $donor])->fetchColumn() > 0;
 }
 
 /**
@@ -262,32 +262,32 @@ function cot_config_implanted($acceptor, $donor)
 function cot_config_load($name, $is_module = false, $category = '', $donor = '')
 {
 	global $db, $db_config;
-	$options = array();
+	$options = [];
 	if (is_bool($is_module))
 	{
 		$type = $is_module ? 'module' : 'plug';
 	}
 	else
 	{
-		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+		$type = !in_array($is_module, ['plug', 'core']) ? 'module' : $is_module;
 	}
 
 	$query = "SELECT config_name, config_type, config_value,
 			config_default, config_variants, config_order
 		FROM $db_config WHERE config_owner = ? AND config_cat = ? AND config_subcat = ? AND config_donor = ?";
-	$params = array($type, $name, $category, $donor);
+	$params = [$type, $name, $category, $donor];
 
 	$res = $db->query($query, $params);
 	while ($row = $res->fetch())
 	{
-		$options[] = array(
+		$options[] = [
 			'name' => $row['config_name'],
 			'type' => $row['config_type'],
 			'order' => $row['config_order'],
 			'value' => $row['config_value'],
 			'default' => $row['config_default'],
 			'variants' => $row['config_variants']
-		);
+		];
 	}
 	$res->closeCursor();
 
@@ -312,7 +312,7 @@ function cot_config_modify($name, $options, $isModule = false, $category = '', $
 	if (is_bool($isModule)) {
 		$type = $isModule ? 'module' : 'plug';
 	} else {
-		$type = !in_array($isModule, array('plug', 'core')) ? 'module' : $isModule;
+		$type = !in_array($isModule, ['plug', 'core']) ? 'module' : $isModule;
 	}
 	$affected = 0;
 
@@ -325,12 +325,12 @@ function cot_config_modify($name, $options, $isModule = false, $category = '', $
 	foreach ($options as $opt) {
 		$config_name = (string) $opt['name'];
 		unset($opt['name']);
-		$opt_row = array();
+		$opt_row = [];
 		foreach ($opt as $key => $val) {
 			$opt_row['config_' . $key] = $val;
 		}
 		$params = empty($category) ?
-            array($type, $name, $config_name, $donor) : array($type, $name, $config_name, $donor, $category);
+            [$type, $name, $config_name, $donor] : [$type, $name, $config_name, $donor, $category];
 
 		$affected += Cot::$db->update($db_config, $opt_row, $where, $params);
 	}
@@ -346,7 +346,7 @@ function cot_config_modify($name, $options, $isModule = false, $category = '', $
  */
 function cot_config_parse($info_cfg)
 {
-	$options = array();
+	$options = [];
 	if (is_array($info_cfg))
 	{
 		foreach ($info_cfg as $i => $x)
@@ -385,14 +385,14 @@ function cot_config_parse($info_cfg)
 						$line['Type'] = COT_CONFIG_TYPE_TEXT;
 						break;
 				}
-				$options[] = array(
+				$options[] = [
 					'name' => $i,
 					'order' => trim($line[0]),
 					'type' => $line['Type'],
 					'variants' => $line[2],
 					'default' => $line[3],
 					'text' => trim($line[4])
-				);
+				];
 			}
 		}
 	}
@@ -422,7 +422,7 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
 	}
 	else
 	{
-		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+		$type = !in_array($is_module, ['plug', 'core']) ? 'module' : $is_module;
 	}
 	$where = "config_owner = '$type' AND config_cat = " . $db->quote($name);
 	if (!empty($category))
@@ -466,10 +466,10 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
  *
  * Example:
  * <code>
- * $config_values = array(
+ * $config_values = [
  *     'disable_test' => '0',
  *     'hidden_test' => 'test45',
- * );
+ * ];
  *
  * cot_config_set('test', $config_values, true);
  * </code>
@@ -488,7 +488,7 @@ function cot_config_set($name, $options, $isModule = false, $category = '')
 	if (is_bool($isModule)) {
 		$type = $isModule ? 'module' : 'plug';
 	} else {
-		$type = !in_array($isModule, array('plug', 'core')) ? 'module' : $isModule;
+		$type = !in_array($isModule, ['plug', 'core']) ? 'module' : $isModule;
 	}
 	$upd_cnt = 0;
 
@@ -498,7 +498,7 @@ function cot_config_set($name, $options, $isModule = false, $category = '')
 		if ($category != '__default') {
 			$default_options = cot_config_load($name, $isModule, '__default');
 		}
-		$structure_val = array();
+		$structure_val = [];
 	} else {
 		$structure_val = cot_config_list($type, $name, '__default');
 	}
@@ -539,7 +539,7 @@ function cot_config_update($name, $options, $is_module = false, $category = '', 
 	$old_options = cot_config_load($name, $is_module, $category, $donor);
 
 	// Find and remove options which no longer exist
-	$remove_opts = array();
+	$remove_opts = [];
 	foreach ($old_options as $old_opt)
 	{
 		$keep = false;
@@ -562,8 +562,8 @@ function cot_config_update($name, $options, $is_module = false, $category = '', 
 	}
 
 	// Find new options and options which have been modified
-	$new_options = array();
-	$upd_options = array();
+	$new_options = [];
+	$upd_options = [];
 	foreach ($options as $opt)
 	{
 		$existed = false;
@@ -622,17 +622,17 @@ function cot_config_reset($name, $option, $is_module = false, $category = '')
 	}
 	else
 	{
-		$type = !in_array($is_module, array('plug', 'core')) ? 'module' : $is_module;
+		$type = !in_array($is_module, ['plug', 'core']) ? 'module' : $is_module;
 	}
 	if (!empty($category))
 	{
 		$db->delete($db_config, "config_name = ? AND config_owner = ? AND config_cat = ?
-					AND config_subcat = ?", array($option, $type, $name, $category));
+					AND config_subcat = ?", [$option, $type, $name, $category]);
 	}
 	else
 	{
 		$db->query("UPDATE $db_config SET config_value = config_default
-			WHERE config_name = ? AND config_owner = ? AND config_cat = ? AND (config_subcat = '' OR config_subcat IS NULL OR config_subcat = '__default')", array($option, $type, $name));
+			WHERE config_name = ? AND config_owner = ? AND config_cat = ? AND (config_subcat = '' OR config_subcat IS NULL OR config_subcat = '__default')", [$option, $type, $name]);
 	}
 }
 
@@ -647,20 +647,20 @@ function cot_config_list($owner, $cat, $subcat = "")
 {
 	global $db, $db_config;
 
-	$where = array(
+	$where = [
 		'type' => "config_type != '" . COT_CONFIG_TYPE_HIDDEN . "'",
 		'owner' => "config_owner = '" . $db->prep($owner) . "'",
 		'cat' => "config_cat = '" . $db->prep($cat) . "'",
 		'subcat' => empty($subcat) ? "(config_subcat = '' OR config_subcat IS NULL OR config_subcat = '__default')" : "(config_subcat = '" . $db->prep($subcat) . "' OR config_subcat = '__default')"
-	);
+	];
 
 	$where_query = implode(" AND ", $where);
 
 	// Attempt to fetch the entire rowset indexed by config_name
 	$sql = $db->query("SELECT * FROM $db_config WHERE $where_query ORDER BY config_subcat ASC, config_order ASC, config_name ASC");
 	$rs = $sql->fetchAll(PDO::FETCH_ASSOC);
-	$rowset = array();
-	$rowset_default = array();
+	$rowset = [];
+	$rowset_default = [];
 	foreach ($rs as $row)
 	{
 		$keyx = $row['config_name'];
@@ -712,10 +712,10 @@ function cot_config_import($name, $source = 'POST', $filter = 'NOC', $defvalue =
         return null;
     }
 	if (!is_array($name)) {
-		$name = array($name);
+		$name = [$name];
 		$single_value = true;
 	}
-	$res = array();
+	$res = [];
 	foreach ($name as $idx => $var_name) {
 		$filter_type = (is_array($filter)) ? ($filter[$var_name] ? $filter[$var_name] : ($filter[$idx] ? $filter[$idx] : 'NOC')) : $filter;
 
@@ -732,11 +732,11 @@ function cot_config_import($name, $source = 'POST', $filter = 'NOC', $defvalue =
 
 		// if invalid value is used
 		if (is_null($value)) {
-			$value_to_show = (in_array($filter_type, array('INT', 'NUM', 'TXT', 'ALP')))
+			$value_to_show = (in_array($filter_type, ['INT', 'NUM', 'TXT', 'ALP']))
 				? htmlspecialchars(cot_cutstring(strip_tags($not_filtered), 15))
 				: '';
 			list($field_title) = cot_config_titles($var_name);
-			$error_msg = cot_rc('adm_invalid_input', array('value' => $value_to_show, 'field_name' => $field_title));
+			$error_msg = cot_rc('adm_invalid_input', ['value' => $value_to_show, 'field_name' => $field_title]);
 			if (!is_null($defvalue)) {
 				$value = !is_array($defvalue) ? $defvalue : (isset($defvalue[$var_name]) ? $defvalue[$var_name] : (isset($defvalue[$idx]) ? $defvalue[$idx] : null));
 				$error_msg .= $value_to_show ? '. '.cot_rc('adm_set_default', htmlspecialchars(strip_tags($value))) : '';
@@ -762,7 +762,7 @@ function cot_config_update_options($name, &$optionslist, $is_module=false, $upda
 {
 	global $cot_import_filters;
 	if (!is_array($optionslist)) return false;
-	$new_options = array();
+	$new_options = [];
 
 	foreach ($optionslist as $cfg_name => $cfg_var)
 	{
@@ -789,7 +789,7 @@ function cot_config_update_options($name, &$optionslist, $is_module=false, $upda
 				{
 					for ($i = 0; $i < count($callback_params); $i++)
 					{
-						$callback_params[$i] = str_replace(array("'", '"'), array('', ''), $callback_params[$i]);
+						$callback_params[$i] = str_replace(["'", '"'], ['', ''], $callback_params[$i]);
 					}
 				}
 				/**
@@ -802,14 +802,14 @@ function cot_config_update_options($name, &$optionslist, $is_module=false, $upda
 				*/
 				$filtered = call_user_func_array(
 					$custom_filter_func,
-					array_merge(array(&$raw_input, $cfg_var), $callback_params)
+					array_merge([&$raw_input, $cfg_var], $callback_params)
 				);
 			}
 			else // try built-in filters
 			{
 				// last part of custom function name may treats as built-in filter type
 				list($base_filter) = array_reverse(explode('_', strtoupper($custom_func)));
-				if (in_array(strtoupper($base_filter), array('INT', 'BOL', 'PSW', 'ALP', 'TXT', 'NUM'))
+				if (in_array(strtoupper($base_filter), ['INT', 'BOL', 'PSW', 'ALP', 'TXT', 'NUM'])
 					|| sizeof($cot_import_filters[$base_filter])
 					)
 				{
@@ -869,8 +869,8 @@ function cot_config_input($cfg_var)
 				if (empty($value)) $value = $cfg_var['config_default'];
 			} else {
 				// old style definition
-				$params = array(1, 0);
-				$params_titles = array(Cot::$L['Yes'], Cot::$L['No']);
+				$params = [1, 0];
+				$params_titles = [Cot::$L['Yes'], Cot::$L['No']];
 			}
 			$config_input = cot_radiobox($value, $name, $params, $params_titles, '', ' ');
 			break;
@@ -889,10 +889,10 @@ function cot_config_input($cfg_var)
 				{
 					for ($i = 0; $i < count($callback_params); $i++)
 					{
-						$callback_params[$i] = str_replace(array("'", '"'), array('', ''), $callback_params[$i]);
+						$callback_params[$i] = str_replace(["'", '"'], ['', ''], $callback_params[$i]);
 					}
 				}
-				$config_input = call_user_func_array($mt[1], array_merge(array($cfg_var), $callback_params));
+				$config_input = call_user_func_array($mt[1], array_merge([$cfg_var], $callback_params));
 			}
 			else
 			{
@@ -964,7 +964,7 @@ function cot_config_titles($name, $text = '')
 	$text = !empty($text) ? htmlspecialchars($text) : $name;
 	$title = isset(Cot::$L['cfg_' . $name]) ? Cot::$L['cfg_' . $name] : $text;
 
-	return array($title, Cot::$L['cfg_' . $name . '_hint']);
+	return [$title, Cot::$L['cfg_' . $name . '_hint']];
 }
 
 /**

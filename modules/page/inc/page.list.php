@@ -355,41 +355,38 @@ if (isset(Cot::$extrafields[Cot::$db->structure])) {
     }
 }
 $arrows = [];
-foreach (Cot::$extrafields[Cot::$db->pages] + array('title' => 'title', 'key' => 'key', 'date' => 'date', 'author' => 'author',
-    'owner' => 'owner', 'count' => 'count', 'filecount' => 'filecount') as $row_k => $row_p)
+foreach (Cot::$extrafields[Cot::$db->pages] + ['title' => 'title', 'key' => 'key', 'date' => 'date', 'author' => 'author',
+    'owner' => 'owner', 'count' => 'count', 'filecount' => 'filecount'] as $row_k => $row_p)
 {
 	$uname = strtoupper($row_k);
-	$url_asc = cot_url('page',  array('s' => $row_k, 'w' => 'asc') + $list_url_path);
-	$url_desc = cot_url('page', array('s' => $row_k, 'w' => 'desc') + $list_url_path);
+	$url_asc = cot_url('page',  ['s' => $row_k, 'w' => 'asc'] + $list_url_path);
+	$url_desc = cot_url('page', ['s' => $row_k, 'w' => 'desc'] + $list_url_path);
 	$arrows[$row_k]['asc']  = Cot::$R['icon_down'];
 	$arrows[$row_k]['desc'] = Cot::$R['icon_up'];
-	if ($s == $row_k)
-	{
+	if ($s == $row_k) {
 		$arrows[$s][$w] = Cot::$R['icon_vert_active'][$w];
 	}
-	if(in_array($row_k, array('title', 'key', 'date', 'author', 'owner', 'count', 'filecount')))
-	{
-		$t->assign(array(
-		'LIST_TOP_'.$uname => cot_rc("list_link_$row_k", array(
+	if (in_array($row_k, ['title', 'key', 'date', 'author', 'owner', 'count', 'filecount'])) {
+		$t->assign([
+		  'LIST_TOP_'.$uname => cot_rc("list_link_$row_k", [
 			'cot_img_down' => $arrows[$row_k]['asc'], 'cot_img_up' => $arrows[$row_k]['desc'],
 			'list_link_url_down' => $url_asc, 'list_link_url_up' => $url_desc
-		))));
-	}
-	else
-	{
+    		])
+        ]);
+	} else {
 		$extratitle = isset($L['page_'.$row_k.'_title']) ?	$L['page_'.$row_k.'_title'] : $row_p['field_description'];
-		$t->assign(array(
-			'LIST_TOP_'.$uname => cot_rc('list_link_field_name', array(
+		$t->assign([
+			'LIST_TOP_'.$uname => cot_rc('list_link_field_name', [
 				'cot_img_down' => $arrows[$row_k]['asc'],
 				'cot_img_up' => $arrows[$row_k]['desc'],
 				'list_link_url_down' => $url_asc,
 				'list_link_url_up' => $url_desc
-		))));
+		])]);
 	}
-	$t->assign(array(
+	$t->assign([
 		'LIST_TOP_'.$uname.'_URL_ASC' => $url_asc,
 		'LIST_TOP_'.$uname.'_URL_DESC' => $url_desc
-	));
+	]);
 }
 
 $kk = 0;

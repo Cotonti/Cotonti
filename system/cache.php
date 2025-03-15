@@ -129,11 +129,11 @@ abstract class Writeback_cache_driver extends Dynamic_cache_driver
 	 * Values for delayed writeback to persistent cache
 	 * @var array
 	 */
-	protected $writeback_data = array();
+	protected $writeback_data = [];
 	/**
 	 * Keys that are to be removed
 	 */
-	protected $removed_data = array();
+	protected $removed_data = [];
 
 	/**
 	 * Writes modified entries back to persistent storage
@@ -147,7 +147,7 @@ abstract class Writeback_cache_driver extends Dynamic_cache_driver
 	 */
 	public function remove($id, $realm = COT_DEFAULT_REALM)
 	{
-		$this->removed_data[] = array('id' => $id, 'realm' => $realm);
+		$this->removed_data[] = ['id' => $id, 'realm' => $realm];
 	}
 
 	/**
@@ -170,7 +170,7 @@ abstract class Writeback_cache_driver extends Dynamic_cache_driver
 	 */
 	public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = 0)
 	{
-		$this->writeback_data[] = array('id' => $id, 'data' => $data, 'realm' =>  $realm, 'ttl' => $ttl);
+		$this->writeback_data[] = ['id' => $id, 'data' => $data, 'realm' =>  $realm, 'ttl' => $ttl];
 		return true;
 	}
 
@@ -740,7 +740,7 @@ class MySQL_cache extends Db_cache_driver
 	 * Prefetched data to avoid duplicate queries
 	 * @var array
 	 */
-	private $buffer = array();
+	private $buffer = [];
 
 	/**
 	 * Performs pre-load actions
@@ -780,7 +780,7 @@ class MySQL_cache extends Db_cache_driver
 				$q .= $or." (c_name = $c_name AND c_realm = $c_realm)";
 				$i++;
 			}
-			$this->removed_data = array();
+			$this->removed_data = [];
 			$db->query($q);
 		}
 		if (count($this->writeback_data) > 0)
@@ -797,7 +797,7 @@ class MySQL_cache extends Db_cache_driver
 				$q .= $comma."($c_name, $c_realm, $c_expire, $c_value)";
 				$i++;
 			}
-			$this->writeback_data = array();
+			$this->writeback_data = [];
 			$q .= " ON DUPLICATE KEY UPDATE c_value=VALUES(c_value), c_expire=VALUES(c_expire)";
 			$db->query($q);
 		}
@@ -1062,17 +1062,17 @@ if (extension_loaded('memcache'))
 		{
 			$info = $this->memcache->getstats();
 			if(empty($info)) {
-			    return array(
+			    return [
                     'available' => 0,
                     'max' => 0,
                     'occupied' => 0
-                );
+                ];
             }
-			return array(
+			return [
 				'available' => $info['limit_maxbytes'] - $info['bytes'],
 				'max' => $info['limit_maxbytes'],
 				'occupied' => $info['bytes']
-			);
+			];
 		}
 
 		/**
@@ -1155,11 +1155,11 @@ if (extension_loaded('apc'))
 			$info = apc_sma_info();
 			$max = ini_get('apc.shm_segments') * ini_get('apc.shm_size') * 1024 * 1024;
 			$occupied = $max - $info['avail_mem'];
-			return array(
+			return [
 				'available' => $info['avail_mem'],
 				'max' => $max,
 				'occupied' => $occupied
-			);
+			];
 		}
 
 		/**
@@ -1248,11 +1248,11 @@ if (extension_loaded('xcache'))
 		 */
 		public function get_info()
 		{
-			return array(
+			return [
 				'available' => -1,
 				'max' => $this->get_ini_size('xcache.var_size'),
 				'occupied' => -1
-			);
+			];
 		}
 
 		/**
@@ -1430,7 +1430,7 @@ class Cache
 		// $sql = $db->query("SELECT * FROM `$db_cache_bindings`");
 		// while ($row = $sql->fetch())
 		// {
-		// 	$this->bindings[$row['c_event']][] = array('id' => $row['c_id'], 'realm' => $row['c_realm']);
+		// 	$this->bindings[$row['c_event']][] = ['id' => $row['c_id'], 'realm' => $row['c_realm']];
 		// }
 		// $sql->closeCursor();
 		// $this->db->store('cot_cache_bindings', $this->bindings, 'system');
@@ -1590,7 +1590,7 @@ class Cache
 		}
 		else
 		{
-			return array();
+			return [];
 		}
 	}
 

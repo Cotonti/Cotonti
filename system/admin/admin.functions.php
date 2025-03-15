@@ -36,12 +36,9 @@ Cot::$usr['admin_users'] = cot_auth('users', 'a', 'A')
  */
 function cot_linkif($url, $text, $cond)
 {
-	if ($cond)
-	{
+	if ($cond) {
 		$res = '<a href="'.$url.'">'.$text.'</a>';
-	}
-	else
-	{
+	} else {
 		$res = $text;
 	}
 
@@ -63,13 +60,11 @@ function cot_selectbox_groups($chosen, $name, $skip = null, $add_empty = false, 
 {
 	global $cot_groups;
 
-	$opts = array();
-	if(empty($skip)) $skip = array();
-	if(!is_array($skip)) $skip = array($skip);
-	foreach($cot_groups as $k => $i)
-	{
-		if (!$i['skiprights'] && !in_array($k, $skip))
-		{
+	$opts = [];
+	if (empty($skip)) $skip = [];
+	if (!is_array($skip)) $skip = [$skip];
+	foreach ($cot_groups as $k => $i) {
+		if (!$i['skiprights'] && !in_array($k, $skip)) {
 			$opts[$k] = $cot_groups[$k]['name'];
 		}
 	}
@@ -84,8 +79,7 @@ function cot_config_timezones()
 {
 	global $L;
 	$timezonelist = cot_timezone_list(true, false);
-	foreach($timezonelist as $timezone)
-	{
+	foreach ($timezonelist as $timezone) {
 		$names[] = $timezone['identifier'];
 		$titles[] = $timezone['description'];
 	}
@@ -101,16 +95,13 @@ function cot_config_timezones()
  * @param int $maxsize Search limit
  * @return int
  */
-function cot_stringinfile($file, $str, $maxsize=32768)
+function cot_stringinfile($file, $str, $maxsize = 32768)
 {
-	if ($fp = @fopen($file, 'r'))
-	{
+	if ($fp = @fopen($file, 'r')) {
 		$data = fread($fp, $maxsize);
 		$pos = mb_strpos($data, $str);
 		$result = !($pos === FALSE);
-	}
-	else
-	{
+	} else {
 		$result = FALSE;
 	}
 	@fclose($fp);
@@ -248,7 +239,7 @@ function cot_generate_infotags($tag_prefix = '')
 	$totalplugins = Cot::$db->query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code")->rowCount();
 	$totalhooks = Cot::$db->query("SELECT COUNT(*) FROM $db_plugins")->fetchColumn();
 
-	$temp_array = array(
+	$temp_array = [
 		'DB_TOTAL_ROWS' => $total_rows,
 		'DB_INDEXSIZE' => number_format(($total_index_length / 1024), 1, '.', ' '),
 		'DB_DATASSIZE' => number_format(($total_data_length / 1024), 1, '.', ' '),
@@ -257,7 +248,7 @@ function cot_generate_infotags($tag_prefix = '')
 		'TOTALHOOKS' => $totalhooks,
 		'VERSION' => Cot::$cfg['version'],
 		'DB_VERSION' => htmlspecialchars(Cot::$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'")->fetchColumn())
-	);
+	];
 
 	$returnArray = [];
 	foreach ($temp_array as $key => $val) {

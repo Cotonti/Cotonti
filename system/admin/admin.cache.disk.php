@@ -16,8 +16,8 @@ cot_block($usr['isadmin']);
 
 $t = new XTemplate(cot_tplfile('admin.cache.disk', 'core'));
 
-$adminPath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminPath[] = array(cot_url('admin', 'm=cache&s=disk'), $L['adm_diskcache']);
+$adminPath[] = [cot_url('admin', 'm=other'), $L['Other']];
+$adminPath[] = [cot_url('admin', 'm=cache&s=disk'), $L['adm_diskcache']];
 $adminTitle = $L['adm_diskcache'];
 
 /* === Hook === */
@@ -63,21 +63,19 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.cache.disk.loop');
 /* ===== */
-foreach ($row as $i => $x)
-{
+foreach ($row as $i => $x) {
 	$cachefiles += $x[0];
 	$cachesize += $x[1];
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_DISKCACHE_ITEM_DEL_URL' => cot_url('admin', 'm=cache&s=disk&a=delete&id=' . $i . '&' . cot_xg()),
 		'ADMIN_DISKCACHE_ITEM_NAME' => $i,
 		'ADMIN_DISKCACHE_FILES' => $x[0],
 		'ADMIN_DISKCACHE_SIZE' => $x[1],
 		'ADMIN_DISKCACHE_ROW_ODDEVEN' => cot_build_oddeven($ii)
-	));
+	]);
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -86,18 +84,17 @@ foreach ($row as $i => $x)
 	$ii++;
 }
 
-$t->assign(array(
+$t->assign([
 	'ADMIN_DISKCACHE_URL_REFRESH' => cot_url('admin', 'm=cache&s=disk'),
 	'ADMIN_DISKCACHE_URL_PURGE' => cot_url('admin', 'm=cache&s=disk&a=purge&' . cot_xg()),
 	'ADMIN_DISKCACHE_CACHEFILES' => $cachefiles,
 	'ADMIN_DISKCACHE_CACHESIZE' => $cachesize
-));
+]);
 
 cot_display_messages($t);
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.cache.disk.tags') as $pl)
-{
+foreach (cot_getextplugins('admin.cache.disk.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -147,7 +144,7 @@ function cot_diskcache_list()
 {
 	global $cfg;
 
-	$dir_a = array();
+	$dir_a = [];
 
 	$a = cot_diskcache_calc($cfg['cache_dir'], false);
 	if ($a[0])

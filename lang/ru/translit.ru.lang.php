@@ -4,7 +4,7 @@
  * в порядке убывания приоритета при обработке
  */
 global $cot_translit,$cot_translitb;
-$cot_translit = array(
+$cot_translit = [
 	'ци' => 'ci',
 	'Ци' => 'Ci',
 	'ЦИ' => 'CI',
@@ -80,7 +80,7 @@ $cot_translit = array(
 	'Ъ' => '``',
 	'ь' => '`',
 	'Ь' => '`'
-);
+];
 
 /**
  * Обратное преобразование (backwards transition)

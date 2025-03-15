@@ -14,12 +14,12 @@ cot_block(Cot::$usr['auth_read']);
 
 $t = new XTemplate(cot_tplfile('admin.log', 'core'));
 
-$adminPath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
-$adminPath[] = array(cot_url('admin', 'm=log'), Cot::$L['Log']);
+$adminPath[] = [cot_url('admin', 'm=other'), Cot::$L['Other']];
+$adminPath[] = [cot_url('admin', 'm=log'), Cot::$L['Log']];
 $adminHelp = Cot::$L['adm_log_desc'];
 $adminTitle = Cot::$L['Log'];
 
-$log_groups = array(
+$log_groups = [
 	'all' => Cot::$L['All'],
 	'def' => Cot::$L['Default'],
 	'adm' => Cot::$L['Administration'],
@@ -27,7 +27,7 @@ $log_groups = array(
 	'sec' => Cot::$L['Security'],
 	'usr' => Cot::$L['Users'],
 	'plg' => Cot::$L['Plugins']
-);
+];
 
 $maxrowsperpage = (is_int(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperpage'] > 0 || ctype_digit(Cot::$cfg['maxrowsperpage'])) ?
     Cot::$cfg['maxrowsperpage'] : 15;
@@ -60,11 +60,11 @@ foreach($log_groups as $grp_code => $grp_name)
 {
 	$selected = ($grp_code == $n) ? " selected=\"selected\"" : "";
 
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_LOG_OPTION_VALUE_URL' => cot_url('admin', 'm=log&n='.$grp_code),
 		'ADMIN_LOG_OPTION_GRP_NAME' => $grp_name,
 		'ADMIN_LOG_OPTION_SELECTED' => $selected
-	));
+	]);
 	$t->parse('MAIN.GROUP_SELECT_OPTION');
 }
 

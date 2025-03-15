@@ -29,9 +29,9 @@ $result = preg_replace('/\s?<head[^>]*?>.*?<\/head>\s?/si', '', $result);
 $result = preg_replace('/\s?<html[^>]*?>\s?/si', '', $result);
 $result = str_replace(['<body>', '</body>', '</html>'], '', $result);
 
-$t->assign(array(
+$t->assign([
 	'ADMIN_PHPINFO' => $result,
-));
+]);
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.infos.tags') as $pl) {

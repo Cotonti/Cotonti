@@ -14,27 +14,27 @@ defined('COT_CODE') or die('Wrong URL');
  * Default allowed permissions map. If some value is missing in user-defined
  * permission map, it will be taken from this one.
  */
-$cot_auth_default_permit = array(
+$cot_auth_default_permit = [
 	COT_GROUP_DEFAULT => 'RW',
 	COT_GROUP_GUESTS => 'R',
 	COT_GROUP_INACTIVE => 'R',
 	COT_GROUP_BANNED => '0',
 	COT_GROUP_MEMBERS => 'RW',
 	COT_GROUP_SUPERADMINS => 'RW12345A'
-);
+];
 
 /**
  * Default disabled (locked) permissions map. If some value is missing
  * in user-defined permission lock map, it will be taken from this one.
  */
-$cot_auth_default_lock = array(
+$cot_auth_default_lock = [
 	COT_GROUP_DEFAULT => '0',
 	COT_GROUP_GUESTS => 'A',
 	COT_GROUP_INACTIVE => 'A',
 	COT_GROUP_BANNED => 'RW12345A',
 	COT_GROUP_MEMBERS => '0',
 	COT_GROUP_SUPERADMINS => 'RW12345A'
-);
+];
 
 /**
  * Registers a user group in auth table
@@ -47,12 +47,10 @@ $cot_auth_default_lock = array(
 function cot_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
 {
 	global $db, $db_auth, $usr;
-	if ($group_id <= COT_GROUP_SUPERADMINS)
-	{
+	if ($group_id <= COT_GROUP_SUPERADMINS) {
 		return false;
 	}
-	if ($base_group_id <= 0)
-	{
+	if ($base_group_id <= 0) {
 		$base_group_id = COT_GROUP_MEMBERS;
 	}
 	$db->query("INSERT INTO $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid)
@@ -67,19 +65,19 @@ function cot_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
  *
  * Usage example:
  * <code>
- * $auth_permit = array(
+ * $auth_permit = [
  *     COT_GROUP_DEFAULT => 'R',
  *     COT_GROUP_GUESTS => '0',,
  *     COT_GROUP_MEMBERS => 'R',
  *     12 => 'RW', // allows Read & Write for group with ID = 12
- * );
+ * ];
  *
- * $auth_lock = array(
+ * $auth_lock = [
  *     COT_GROUP_DEFAULT => 'A',
  *     COT_GROUP_GUESTS => 'W12345A',
  *     COT_GROUP_MEMBERS => 'A',
  *     12 => 'R', // cannot change Read for group with ID = 12
- * );
+ * ];
  *
  * cot_auth_add_item('test', 'item123', $auth_permit, $auth_lock);
  * </code>
@@ -101,14 +99,14 @@ function cot_auth_add_item($module_name, $item_id, $auth_permit = [], $auth_lock
 	foreach ($cot_groups as $k => $v) {
         if (empty($v['skiprights'])) {
 			$base_grp = $k > COT_GROUP_SUPERADMINS ? COT_GROUP_DEFAULT : $k;
-			$ins_array[] = array(
+			$ins_array[] = [
 				'auth_groupid' => $k,
 				'auth_code' => $module_name,
 				'auth_option' => $item_id,
 				'auth_rights' => cot_auth_getvalue($auth_permit[$base_grp]),
 				'auth_rights_lock' => cot_auth_getvalue($auth_lock[$base_grp]),
 				'auth_setbyuserid' => Cot::$usr['id']
-			);
+			];
 		}
 	}
 
@@ -134,13 +132,10 @@ function cot_auth_clear($id = 'all')
 {
 	global $db, $db_users, $cache;
 
-	if (is_numeric($id))
-	{
-		$db->update($db_users, array('user_auth' => ''), "user_id=$id");
-	}
-	else
-	{
-		$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
+	if (is_numeric($id)) {
+		$db->update($db_users, ['user_auth' => ''], "user_id=$id");
+	} else {
+		$db->update($db_users, ['user_auth' => ''], "user_auth != ''");
 		$cache && $cache->db->remove('cot_guest_auth', 'system');
 	}
 	return $db->affectedRows;
@@ -165,7 +160,7 @@ function cot_auth_getlevel($userid, $maingroup = false)
 			INNER JOIN $db_users
 			ON user_maingrp = grp_id
 			WHERE user_id = ?
-		", array($userid))->fetchColumn();
+		", [$userid])->fetchColumn();
 	}
 	else
 	{
@@ -176,7 +171,7 @@ function cot_auth_getlevel($userid, $maingroup = false)
 				FROM $db_groups_users
 				WHERE gru_userid = ?
 			)
-		", array($userid))->fetchColumn();
+		", [$userid])->fetchColumn();
 	}
 }
 

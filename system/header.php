@@ -121,7 +121,7 @@ if (Cot::$sys['displayHeader']) {
 
     $mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] && cot_auth('admin', 'any', 'R') ? 'core' : 'module';
 	if (Cot::$cfg['enablecustomhf']) {
-		$mtpl_base = (defined('COT_PLUG') && !empty($e)) ? array('header', $e) : array('header', Cot::$env['location']);
+		$mtpl_base = (defined('COT_PLUG') && !empty($e)) ? ['header', $e] : ['header', Cot::$env['location']];
 	} else {
 		$mtpl_base = 'header';
 	}
@@ -140,12 +140,12 @@ if (Cot::$sys['displayHeader']) {
 	if (!empty(Cot::$out['notices_array']) && is_array(Cot::$out['notices_array'])) {
 		$notices = '';
 		foreach (Cot::$out['notices_array'] as $noticeRow) {
-			$notice = (is_array($noticeRow)) ? cot_rc('notices_link', array('url' => $noticeRow[0], 'title' => $noticeRow[1])) :
-				cot_rc('notices_plain', array('title' => $noticeRow));
-			$notices .= cot_rc('notices_notice', array('notice' => $notice));
+			$notice = (is_array($noticeRow)) ? cot_rc('notices_link', ['url' => $noticeRow[0], 'title' => $noticeRow[1]]) :
+				cot_rc('notices_plain', ['title' => $noticeRow]);
+			$notices .= cot_rc('notices_notice', ['notice' => $notice]);
 
 		}
-		Cot::$out['notices'] .= cot_rc('notices_container', array('notices' => $notices));
+		Cot::$out['notices'] .= cot_rc('notices_container', ['notices' => $notices]);
 	}
 
 	$t->assign([

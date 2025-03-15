@@ -26,7 +26,7 @@ function cot_file_check($path, $name, $ext)
     require './datas/mimetype.php';
 
     $fcheck = false;
-    if (in_array($ext, array('jpg', 'jpeg', 'png', 'gif'))) {
+    if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
         $img_size = @getimagesize($path);
         switch($ext) {
             case 'gif':

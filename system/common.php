@@ -341,7 +341,7 @@ if (empty($cot_groups )) {
 
 	if ($sql->rowCount() > 0) {
 		while ($row = $sql->fetch()) {
-			$cot_groups[$row['grp_id']] = array(
+			$cot_groups[$row['grp_id']] = [
 				'id' => $row['grp_id'],
 				'alias' => $row['grp_alias'],
 				'level' => $row['grp_level'],
@@ -356,7 +356,7 @@ if (empty($cot_groups )) {
 				'pfs_maxtotal' => isset($row['grp_pfs_maxtotal']) ? $row['grp_pfs_maxtotal'] : null,
 				'ownerid' => $row['grp_ownerid'],
 				'skiprights' => isset($row['grp_skiprights']) ? $row['grp_skiprights'] : false
-			);
+			];
 		}
 		$sql->closeCursor();
 	} else {
