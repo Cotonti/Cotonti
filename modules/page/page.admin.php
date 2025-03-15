@@ -97,7 +97,7 @@ if ($filter == 'all') {
 
 $catsub = cot_structure_children('page', '');
 if (count($catsub) < count(Cot::$structure['page'])) {
-	$sqlwhere .= " AND page_cat IN ('" . join("','", $catsub) . "')";
+	$sqlwhere .= " AND page_cat IN ('" . implode("','", $catsub) . "')";
 }
 
 $backUrl = cot_import('back', 'G', 'HTM');
