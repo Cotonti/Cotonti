@@ -45,10 +45,10 @@ if (empty($i18n_locale) || $i18n_locale == Cot::$cfg['defaultlang']) {
 
 	foreach ($i18n_locales as $lc => $title) {
 		if ($lc != Cot::$cfg['defaultlang']) {
-			$t->assign(array(
+			$t->assign([
 				'I18N_LOCALE_ROW_URL' => cot_url('plug', "e=i18n&m=structure&l=$lc", false, true),
 				'I18N_LOCALE_ROW_TITLE' => $title
-			));
+			]);
 			$t->parse('MAIN.I18N_LOCALE_ROW');
 		}
 	}
@@ -65,11 +65,9 @@ if (empty($i18n_locale) || $i18n_locale == Cot::$cfg['defaultlang']) {
 		$inserted_cnt = 0;
 		$removed_cnt = 0;
 		$updated_cnt = 0;
-		for ($i = 0; $i < $cnt; $i++)
-		{
+		for ($i = 0; $i < $cnt; $i++) {
 			$code = cot_import($codes[$i], 'D', 'TXT');
-			if (isset($titles[$i]))
-			{
+			if (isset($titles[$i])) {
 				// Updating a translation
 				$title = cot_import($titles[$i], 'D', 'TXT');
 				$desc = cot_import($descs[$i], 'D', 'TXT');
@@ -78,29 +76,24 @@ if (empty($i18n_locale) || $i18n_locale == Cot::$cfg['defaultlang']) {
 					|| $desc != $i18n_structure[$code][$i18n_locale]['title'])
 				{
 					// Something has been changed
-					if (empty($title))
-					{
+					if (empty($title)) {
 						// Remove
 						$removed_cnt += $db->delete($db_i18n_structure,
 							"istructure_code = ".$db->quote($code)." AND istructure_locale = '$i18n_locale'");
-					}
-					elseif (empty($i18n_structure[$code][$i18n_locale]['title']))
-					{
+					} elseif (empty($i18n_structure[$code][$i18n_locale]['title'])) {
 						// Insert
-						$inserted_cnt += $db->insert($db_i18n_structure, array(
+						$inserted_cnt += $db->insert($db_i18n_structure, [
 							'istructure_code' => $code,
 							'istructure_locale' => $i18n_locale,
 							'istructure_title' => $title,
 							'istructure_desc' => $desc
-						));
-					}
-					else
-					{
+						]);
+					} else {
 						// Update
-						$updated_cnt += $db->update($db_i18n_structure, array(
+						$updated_cnt += $db->update($db_i18n_structure, [
 							'istructure_title' => $title,
 							'istructure_desc' => $desc
-						), "istructure_code = ".$db->quote($code)." AND istructure_locale = '$i18n_locale'");
+						], "istructure_code = ".$db->quote($code)." AND istructure_locale = '$i18n_locale'");
 					}
 				}
 			}
@@ -114,13 +107,16 @@ if (empty($i18n_locale) || $i18n_locale == Cot::$cfg['defaultlang']) {
 		/* =============*/
 
 		if ($inserted_cnt > 0) {
-			cot_message(cot_rc('i18n_items_added', array('cnt' => $inserted_cnt)));
+			cot_message(cot_rc('i18n_items_added', ['cnt' => $inserted_cnt]));
+			cot_log('Add translate for ' . $inserted_cnt . ' categories', 'i18n', 'structure', 'add');
 		}
 		if ($updated_cnt > 0) {
-			cot_message(cot_rc('i18n_items_updated', array('cnt' => $updated_cnt)));
+			cot_message(cot_rc('i18n_items_updated', ['cnt' => $updated_cnt]));
+			cot_log('Edited translate for ' . $updated_cnt . ' categories', 'i18n', 'structure', 'edit');
 		}
 		if ($removed_cnt > 0) {
-			cot_message(cot_rc('i18n_items_removed', array('cnt' => $removed_cnt)));
+			cot_message(cot_rc('i18n_items_removed', ['cnt' => $removed_cnt]));
+        	cot_log('Deleted translate for ' . $removed_cnt . ' categories', 'i18n', 'structure', 'delete');
 		}
 
 		cot_redirect(
@@ -173,7 +169,7 @@ if (empty($i18n_locale) || $i18n_locale == Cot::$cfg['defaultlang']) {
 	$pagenav = cot_pagenav('plug', 'e=i18n&m=structure&l='.$i18n_locale, $d, $totalitems,
 	$maxperpage, 'd', '', Cot::$cfg['jquery'] && Cot::$cfg['turnajax']);
 
-	$t->assign(array(
+	$t->assign([
 		'I18N_ACTION' => cot_url('plug', 'e=i18n&m=structure&l='.$i18n_locale.'&a=update&d='.$durl),
 		'I18N_ORIGINAL_LANG' => isset($i18n_locales[Cot::$cfg['defaultlang']]) ?
             $i18n_locales[Cot::$cfg['defaultlang']] : Cot::$cfg['defaultlang'],
@@ -181,7 +177,7 @@ if (empty($i18n_locale) || $i18n_locale == Cot::$cfg['defaultlang']) {
 		'I18N_PAGINATION_PREV' => $pagenav['prev'],
 		'I18N_PAGNAV' => $pagenav['main'],
 		'I18N_PAGINATION_NEXT' => $pagenav['next']
-	));
+	]);
 
 	cot_display_messages($t);
 

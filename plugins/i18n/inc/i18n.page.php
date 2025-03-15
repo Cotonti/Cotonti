@@ -70,6 +70,7 @@ if ($id > 0 && $stmt->rowCount() == 1) {
 			/* =============*/
 
 			cot_message('Added');
+			cot_log('Add translate for page #' . $id, 'i18n', 'page', 'add');
 			$page_urlp = empty($pag['page_alias']) ? "c={$pag['page_cat']}&id=$id&l=" . $pag_i18n['ipage_locale']
 				: 'c='.$pag['page_cat'] . '&al=' . $pag['page_alias'] . '&l=' . $pag_i18n['ipage_locale'];
 			cot_redirect(cot_url('page', $page_urlp, '', true, false, true));
@@ -95,7 +96,7 @@ if ($id > 0 && $stmt->rowCount() == 1) {
 			$pag_i18n['ipage_text'] = isset($pag['page_text']) && $pag['page_text'] != '' ? $pag['page_text'] : '';
 		}
 
-		$t->assign(array(
+		$t->assign([
 			'I18N_ACTION' => cot_url('plug', "e=i18n&m=page&a=add&id=$id"),
 			'I18N_TITLE' => Cot::$L['i18n_adding'],
 			'I18N_ORIGINAL_LANG' => $i18n_locales[Cot::$cfg['defaultlang']],
@@ -109,7 +110,7 @@ if ($id > 0 && $stmt->rowCount() == 1) {
                 ? htmlspecialchars($pag_i18n['ipage_desc']) : '',
 			'I18N_IPAGE_TEXT' => cot_textarea('translate_text', $pag_i18n['ipage_text'], 32, 80, '',
                 'input_textarea_editor')
-		));
+		]);
 
 		cot_display_messages($t);
 
@@ -140,7 +141,7 @@ if ($id > 0 && $stmt->rowCount() == 1) {
 			}
 
             Cot::$db->update(Cot::$db->i18n_pages, $pag_i18n, "ipage_id = ? AND ipage_locale = ?",
-                array($id, $i18n_locale));
+                [$id, $i18n_locale]);
 
 			/* === Hook === */
 			foreach (cot_getextplugins('i18n.page.edit.update') as $pl) {
@@ -149,6 +150,7 @@ if ($id > 0 && $stmt->rowCount() == 1) {
 			/* =============*/
 
 			cot_message('Updated');
+			cot_log("Edited translate for page #" . $id, 'i18n', 'page', 'edit');
 			$page_urlp = empty($pag['page_alias']) ? 'c=' . $pag['page_cat'] . "&id=$id&l=$i18n_locale"
 				: 'c=' . $pag['page_cat'] . '&al=' . $pag['page_alias'] . '&l=' . $i18n_locale;
 			cot_redirect(cot_url('page', $page_urlp, '', true, false, true));
@@ -157,7 +159,7 @@ if ($id > 0 && $stmt->rowCount() == 1) {
         Cot::$out['subtitle'] = Cot::$L['i18n_editing'];
 
 		$t = new XTemplate(cot_tplfile('i18n.page', 'plug'));
-		$t->assign(array(
+		$t->assign([
 			'I18N_ACTION' => cot_url('plug', "e=i18n&m=page&a=edit&id=$id&l=$i18n_locale"),
 			'I18N_TITLE' => Cot::$L['i18n_editing'],
 			'I18N_ORIGINAL_LANG' => $i18n_locales[Cot::$cfg['defaultlang']],
@@ -169,7 +171,7 @@ if ($id > 0 && $stmt->rowCount() == 1) {
 			'I18N_IPAGE_DESC' => htmlspecialchars($pag_i18n['ipage_desc']),
 			'I18N_IPAGE_TEXT' => cot_textarea('translate_text', $pag_i18n['ipage_text'], 32, 80, '',
                 'input_textarea_editor')
-		));
+		]);
 
 		cot_display_messages($t);
 
@@ -205,6 +207,7 @@ if ($id > 0 && $stmt->rowCount() == 1) {
 		/* =============*/
 
 		cot_message(Cot::$L['Deleted']);
+        cot_log("Deleted translate for page #" . $id, 'i18n', 'page', 'delete');
 
         if (empty($urlParams)) {
             $urlParams = ['c' => $pag['page_cat']];
