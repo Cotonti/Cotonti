@@ -54,6 +54,12 @@ class PageControlService
         try {
             Cot::$db->beginTransaction();
 
+            /* === Hook === */
+            foreach (cot_getextplugins('page.delete.first') as $pl) {
+                include $pl;
+            }
+            /* ===== */
+
             foreach (Cot::$extrafields[Cot::$db->pages] as $exfld) {
                 if (isset($pageData['page_' . $exfld['field_name']])) {
                     cot_extrafield_unlinkfiles($pageData['page_' . $exfld['field_name']], $exfld);

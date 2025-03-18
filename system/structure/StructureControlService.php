@@ -65,6 +65,12 @@ class StructureControlService
         try {
             Cot::$db->beginTransaction();
 
+            /* === Hook === */
+            foreach (cot_getextplugins('structure.delete.first') as $pl) {
+                include $pl;
+            }
+            /* ===== */
+
             foreach (Cot::$extrafields[Cot::$db->structure] as $exfld) {
                 if (isset($category['structure_' . $exfld['field_name']])) {
                     cot_extrafield_unlinkfiles($category['structure_' . $exfld['field_name']], $exfld);

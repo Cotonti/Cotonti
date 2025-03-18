@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=page.delete.done
+Hooks=page.delete.first
 [END_COT_EXT]
 ==================== */
 

@@ -82,6 +82,7 @@ function cot_structure_add($extension, $data, $is_module = true)
 function cot_structure_update($extension, $id, $old_data, $new_data, $is_module = true)
 {
 	global $cache, $db, $db_auth, $db_config, $db_structure;
+
 	/* === Hook === */
 	foreach (cot_getextplugins('structure.update') as $pl) {
 		include $pl;
@@ -110,7 +111,9 @@ function cot_structure_update($extension, $id, $old_data, $new_data, $is_module 
 
 	$updated = $sql1 > 0;
 
-	if ($updated) cot_log("Structure. Edited category: '$extension' - '".$new_data['structure_code']."'", 'adm', 'structure', 'update');
+	if ($updated) {
+        cot_log("Structure. Edited category: '$extension' - '".$new_data['structure_code']."'", 'adm', 'structure', 'update');
+    }
 
 	/* === Hook === */
 	foreach (cot_getextplugins('structure.update.done') as $pl) {
