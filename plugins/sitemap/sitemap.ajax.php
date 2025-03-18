@@ -104,7 +104,7 @@ if ($regenerate) {
 		}
 		/* ===== */
 
-		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . join(' AND ', $sitemap_where) : '';
+		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . implode(' AND ', $sitemap_where) : '';
 		$res = Cot::$db->query("SELECT p.page_id, p.page_alias, p.page_cat, p.page_updated $sitemap_join_columns
 			FROM " . Cot::$db->pages . " AS p $sitemap_join_tables
 			$sitemap_where
@@ -113,14 +113,14 @@ if ($regenerate) {
 			if (empty($auth_cache[$row['page_cat']])) {
                 continue;
             }
-			$urlp = array('c' => $row['page_cat']);
+			$urlp = ['c' => $row['page_cat']];
 			empty($row['page_alias']) ? $urlp['id'] = $row['page_id'] : $urlp['al'] = $row['page_alias'];
-			sitemap_parse($t, $items, array(
+			sitemap_parse($t, $items, [
 				'url'  => cot_url('page', $urlp),
 				'date' => $row['page_updated'],
 				'freq' => $cfg['plugin']['sitemap']['page_freq'],
 				'prio' => $cfg['plugin']['sitemap']['page_prio']
-			));
+			]);
 		}
 	}
 
@@ -129,14 +129,14 @@ if ($regenerate) {
 		require_once cot_incfile('forums', 'module');
 
 		// Get forum stats
-		$cat_top = array();
+		$cat_top = [];
 		$res = Cot::$db->query('SELECT * FROM ' . Cot::$db->forum_stats . ' ORDER by fs_cat DESC');
 		foreach ($res->fetchAll() as $row) {
 			$cat_top[$row['fs_cat']] = $row;
 		}
 
 		// Forums categories
-		$auth_cache = array();
+		$auth_cache = [];
 		$maxrowsperpage = Cot::$cfg['forums']['maxtopicsperpage'];
 
 		$category_list = Cot::$structure['forums'];
@@ -159,19 +159,19 @@ if ($regenerate) {
 			foreach (range(1, $subs) as $pg) {
 				$d = $cfg['easypagenav'] ? $pg : ($pg - 1) * $maxrowsperpage;
 				$urlp = $pg > 1 ? "m=topics&s=$c&d=$d" : "m=topics&s=$c";
-				sitemap_parse($t, $items, array(
+				sitemap_parse($t, $items, [
 					'url'  => cot_url('forums', $urlp),
 					'date' => $cat_top[$c]['fs_lt_date'],
 					'freq' => $cfg['plugin']['sitemap']['forums_freq'],
 					'prio' => $cfg['plugin']['sitemap']['forums_prio']
-				));
+				]);
 			}
 		}
 
 		// Topics
 		$sitemap_join_columns = '';
 		$sitemap_join_tables = '';
-		$sitemap_where = array();
+		$sitemap_where = [];
 
 		/* === Hook === */
 		foreach (cot_getextplugins('sitemap.forums.query') as $pl)
@@ -180,7 +180,7 @@ if ($regenerate) {
 		}
 		/* ===== */
 
-		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . join(' AND ', $sitemap_where) : '';
+		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . implode(' AND ', $sitemap_where) : '';
 		$res = $db->query("SELECT t.ft_id, t.ft_cat, t.ft_updated, t.ft_postcount $sitemap_join_columns
 			FROM $db_forum_topics t $sitemap_join_tables
 				LEFT JOIN $db_structure s ON (s.structure_area = 'forums' AND t.ft_cat = s.structure_code)
@@ -199,12 +199,12 @@ if ($regenerate) {
 			{
 				$d = $cfg['easypagenav'] ? $pg : ($pg - 1) * $maxrowsperpage;
 				$urlp = $pg > 1 ? "m=posts&q=$q&d=$d" : "m=posts&q=$q";
-				sitemap_parse($t, $items, array(
+				sitemap_parse($t, $items, [
 					'url'  => cot_url('forums', $urlp),
 					'date' => $row['ft_updated'],
 					'freq' => $cfg['plugin']['sitemap']['forums_freq'],
 					'prio' => $cfg['plugin']['sitemap']['forums_prio']
-				));
+				]);
 			}
 		}
 
@@ -219,7 +219,7 @@ if ($regenerate) {
 		// User profiles
 		$sitemap_join_columns = '';
 		$sitemap_join_tables = '';
-		$sitemap_where = array();
+		$sitemap_where = [];
 
 		/* === Hook === */
 		foreach (cot_getextplugins('sitemap.users.query') as $pl)
@@ -228,19 +228,19 @@ if ($regenerate) {
 		}
 		/* ===== */
 
-		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . join(' AND ', $sitemap_where) : '';
+		$sitemap_where = count($sitemap_where) > 0 ? 'WHERE ' . implode(' AND ', $sitemap_where) : '';
 		$res = $db->query("SELECT u.user_id, u.user_name $sitemap_join_columns
 			FROM $db_users AS u $sitemap_join_tables
 			$sitemap_where
 			ORDER BY user_id");
 		foreach ($res->fetchAll() as $row)
 		{
-			sitemap_parse($t, $items, array(
-				'url'  => cot_url('users', array('m' => 'details', 'id' => $row['user_id'], 'u' => $row['user_name'])),
+			sitemap_parse($t, $items, [
+				'url'  => cot_url('users', ['m' => 'details', 'id' => $row['user_id'], 'u' => $row['user_name']]),
 				'date' => '', // omit
 				'freq' => $cfg['plugin']['sitemap']['users_freq'],
 				'prio' => $cfg['plugin']['sitemap']['users_prio']
-			));
+			]);
 		}
 	}
 
@@ -267,10 +267,10 @@ if ($a == 'index')
 	{
 		$durl = $pg > 0 ? "&d=$pg" : '';
 		$filename = $pg > 0 ? $cfg['cache_dir'] . "/sitemap/sitemap.$pg.xml" : $cfg['cache_dir'] . "/sitemap/sitemap.xml";
-		$t->assign(array(
+		$t->assign([
 			'SITEMAP_ROW_URL' => COT_ABSOLUTE_URL . cot_url('plug', 'r=sitemap'.$durl),
 			'SITEMAP_ROW_DATE' => sitemap_date(filemtime($filename))
-		));
+		]);
 		$t->parse('MAIN.SITEMAP_ROW');
 	}
 	$t->parse();

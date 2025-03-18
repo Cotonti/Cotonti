@@ -87,9 +87,9 @@ function cot_apply_patches(
             $executed[] = $val['sql'];
 			if (empty($error)) {
 				cot_message(cot_rc('ext_patch_applied',
-					array('f' => $val['sql'], 'msg' => 'OK')));
+					['f' => $val['sql'], 'msg' => 'OK']));
 			} else {
-				cot_error(cot_rc('ext_patch_error', array('f' => $val['sql'], 'msg' => $error)));
+				cot_error(cot_rc('ext_patch_error', ['f' => $val['sql'], 'msg' => $error]));
 				return false;
 			}
 		}
@@ -98,9 +98,9 @@ function cot_apply_patches(
             $executed[] = $val['php'];
 			if ($ret !== false) {
 				$msg = $ret == 1 ? 'OK' : $ret;
-				cot_message(cot_rc('ext_patch_applied', array('f' => $val['php'], 'msg' => $msg)));
+				cot_message(cot_rc('ext_patch_applied', ['f' => $val['php'], 'msg' => $msg]));
 			} else {
-				cot_error(cot_rc('ext_patch_error', array('f' => $val['php'], 'msg' => $L['Error'])));
+				cot_error(cot_rc('ext_patch_error', ['f' => $val['php'], 'msg' => $L['Error']]));
 				return false;
 			}
 		}
@@ -124,7 +124,7 @@ function cot_apply_patches(
  * @return bool TRUE if all dependencies are satisfied, or FALSE otherwise
  */
 function cot_extension_dependencies_statisfied($name, $is_module = false,
-	$selected_modules = array(), $selected_plugins = array())
+	$selected_modules = [], $selected_plugins = [])
 {
 	global $cfg, $L;
 	$path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
@@ -132,40 +132,38 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
 
 	// Get the dependency list
 	$info = cot_infoget("$path/$name.setup.php", 'COT_EXT');
-	$required_modules = empty($info['Requires_modules']) ? array()
+	$required_modules = empty($info['Requires_modules']) ? []
 		: explode(',', $info['Requires_modules']);
 	$required_modules = array_map('trim', $required_modules);
-	$required_plugins = empty($info['Requires_plugins']) ? array()
+	$required_plugins = empty($info['Requires_plugins']) ? []
 		: explode(',', $info['Requires_plugins']);
 	$required_plugins = array_map('trim', $required_plugins);
 
 	// Check each dependency
-	foreach ($required_modules as $req_ext)
-	{
+	foreach ($required_modules as $req_ext) {
 		if (!empty($req_ext) && !in_array($req_ext, $selected_modules)
 			&& !cot_extension_installed($req_ext))
 		{
-			cot_error(cot_rc('ext_dependency_error', array(
+			cot_error(cot_rc('ext_dependency_error', [
 				'name' => $name,
 				'type' => $is_module ? $L['Module'] : $L['Plugin'],
 				'dep_type' => $L['Module'],
 				'dep_name' => $req_ext
-			)));
+			]));
 			$ret = false;
 		}
 	}
 
-	foreach ($required_plugins as $req_ext)
-	{
+	foreach ($required_plugins as $req_ext) {
 		if (!empty($req_ext) && !in_array($req_ext, $selected_plugins)
 			&& !cot_extension_installed($req_ext))
 		{
-			cot_error(cot_rc('ext_dependency_error', array(
+			cot_error(cot_rc('ext_dependency_error', [
 				'name' => $name,
 				'type' => $is_module ? $L['Module'] : $L['Plugin'],
 				'dep_type' => $L['Plugin'],
 				'dep_name' => $req_ext
-			)));
+			]));
 			$ret = false;
 		}
 	}
@@ -200,21 +198,21 @@ function cot_extension_install($extensionCode, $isModule = false, $update = fals
 
 	// Emit initial message
 	if ($update) {
-		cot_message(cot_rc('ext_updating', array(
+		cot_message(cot_rc('ext_updating', [
 			'type' => $isModule ? Cot::$L['Module'] : Cot::$L['Plugin'],
 			'name' => $extensionCode,
-		)));
+		]));
 	} else {
-		cot_message(cot_rc('ext_installing', array(
+		cot_message(cot_rc('ext_installing', [
 			'type' => $isModule ? $L['Module'] : $L['Plugin'],
 			'name' => $extensionCode,
-		)));
+		]));
 	}
 
 	// Check setup file and tags
 	$setup_file = $path . "/$extensionCode.setup.php";
 	if (!file_exists($setup_file)) {
-		cot_error(cot_rc('ext_setup_not_found', array('path' => $setup_file)));
+		cot_error(cot_rc('ext_setup_not_found', ['path' => $setup_file]));
 		return false;
 	}
 
@@ -243,16 +241,16 @@ function cot_extension_install($extensionCode, $isModule = false, $update = fals
 		if ($update) {
 			if (version_compare($current_ver, $info['Version']) == 0 && !$force_update) {
 				// Nothing to update
-				cot_message(cot_rc('ext_up2date', array(
+				cot_message(cot_rc('ext_up2date', [
 					'type' => $isModule ? Cot::$L['Module'] :Cot::$L['Plugin'],
 					'name' => $extensionCode
-				)));
+				]));
 
 				return COT_EXT_NOTHING_TO_UPDATE;
 			}
 		} else {
 			cot_clear_messages();
-			cot_error(cot_rc('ext_already_installed', array('name' => $extensionCode)));
+			cot_error(cot_rc('ext_already_installed', ['name' => $extensionCode]));
 			return false;
 		}
 	}
@@ -278,7 +276,7 @@ function cot_extension_install($extensionCode, $isModule = false, $update = fals
 
 		// Safely drop existing bindings
 		$bindings_cnt = cot_plugin_remove($extensionCode);
-		cot_message(cot_rc('ext_bindings_uninstalled', array('cnt' => $bindings_cnt)));
+		cot_message(cot_rc('ext_bindings_uninstalled', ['cnt' => $bindings_cnt]));
 	}
 
 	// Install hook parts and bindings
@@ -299,7 +297,7 @@ function cot_extension_install($extensionCode, $isModule = false, $update = fals
 					$hooks = $isModule ? ['module'] : ['standalone'];
 				} else {
 					$hooks = explode(',', $part_info['Hooks']);
-					$hooks = is_array($hooks) ? array_map('trim', $hooks) : array();
+					$hooks = is_array($hooks) ? array_map('trim', $hooks) : [];
 				}
 				if (empty($part_info['Order'])) {
 					$order = COT_PLUGIN_DEFAULT_ORDER;
@@ -405,26 +403,26 @@ function cot_extension_install($extensionCode, $isModule = false, $update = fals
 		}
 
 		$lock_guests = cot_auth_getvalue($info['Lock_guests']);
-		$db->update($db_auth, array('auth_rights_lock' => $lock_guests), "
+		$db->update($db_auth, ['auth_rights_lock' => $lock_guests], "
 			auth_code = '$auth_code' AND auth_option = '$auth_option'
 			AND (auth_groupid = " . COT_GROUP_GUESTS
 				. ' OR auth_groupid = ' . COT_GROUP_INACTIVE . ')');
 
 		$lock_members = cot_auth_getvalue($info['Lock_members']);
-		$ingore_groups = implode(',', array(
+		$ingore_groups = implode(',', [
 			COT_GROUP_GUESTS,
 			COT_GROUP_INACTIVE,
 			COT_GROUP_BANNED,
 			COT_GROUP_SUPERADMINS
-		));
-		$db->update($db_auth, array('auth_rights_lock' => $lock_members),
+		]);
+		$db->update($db_auth, ['auth_rights_lock' => $lock_members],
 			"auth_code = '$auth_code' AND auth_option = '$auth_option' AND auth_groupid NOT IN ($ingore_groups)");
 
 		cot_message('ext_auth_locks_updated');
 
     } else {
 		// Install auth
-		$insert_rows = array();
+		$insert_rows = [];
 		foreach ($cot_groups as $v) {
             $v['skiprights'] = isset($v['skiprights']) ? $v['skiprights'] : false;
 			if (!$v['skiprights']) {
@@ -450,29 +448,29 @@ function cot_extension_install($extensionCode, $isModule = false, $update = fals
 				}
 
 				if ($isModule) {
-					$insert_rows[] = array(
+					$insert_rows[] = [
 						'auth_groupid' => $v['id'],
 						'auth_code' => $extensionCode,
 						'auth_option' => 'a',
 						'auth_rights' => $ins_auth,
 						'auth_rights_lock' => $ins_lock,
 						'auth_setbyuserid' => $usr['id']
-					);
+					];
 				} else {
-					$insert_rows[] = array(
+					$insert_rows[] = [
 						'auth_groupid' => $v['id'],
 						'auth_code' => 'plug',
 						'auth_option' => $extensionCode,
 						'auth_rights' => $ins_auth,
 						'auth_rights_lock' => $ins_lock,
 						'auth_setbyuserid' => $usr['id']
-					);
+					];
 				}
 			}
 		}
 
 		if ($db->insert($db_auth, $insert_rows)) {
-			$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
+			$db->update($db_users, ['user_auth' => ''], "user_auth != ''");
 			cot_message('ext_auth_installed');
 		}
 	}
@@ -493,9 +491,9 @@ function cot_extension_install($extensionCode, $isModule = false, $update = fals
 			$sql_err = $db->runScript(
 				file_get_contents("$path/setup/$extensionCode.install.sql"));
 			if (empty($sql_err)) {
-				cot_message(cot_rc('ext_executed_sql', array('ret' => 'OK')));
+				cot_message(cot_rc('ext_executed_sql', ['ret' => 'OK']));
 			} else {
-				cot_error(cot_rc('ext_executed_sql', array('ret' => $sql_err)));
+				cot_error(cot_rc('ext_executed_sql', ['ret' => $sql_err]));
 				return false;
 			}
 		}
@@ -510,23 +508,20 @@ function cot_extension_install($extensionCode, $isModule = false, $update = fals
 		if (file_exists($install_handler)) {
 			// Run PHP install handler
 			$envtmp = $env;
-			$env = array(
+			$env = [
 				'ext' => $extensionCode,
 				'location' => $extensionCode,
-				'type' => ($isModule) ? 'module' : 'plug'
-			);
+				'type' => ($isModule) ? 'module' : 'plug',
+			];
 			$ret = include $install_handler;
 			$env = $envtmp;
 
-			if ($ret !== false)
-			{
+			if ($ret !== false) {
 				$msg = $ret == 1 ? 'OK' : $ret;
-				cot_message(cot_rc('ext_executed_php', array('ret' => $msg)));
-			}
-			else
-			{
+				cot_message(cot_rc('ext_executed_php', ['ret' => $msg]));
+			} else {
 				cot_error(cot_rc('ext_executed_php',
-					array('ret' => $msg ? $msg : $L['Error'])));
+					['ret' => $msg ? $msg : $L['Error']]));
 				return false;
 			}
 		}
@@ -538,11 +533,11 @@ function cot_extension_install($extensionCode, $isModule = false, $update = fals
 
         ExtensionsControlService::getInstance()->checkIsActive($extensionCode);
 
-		cot_message(cot_rc('ext_updated', array(
+		cot_message(cot_rc('ext_updated', [
 			'type' => $isModule ? $L['Module'] : $L['Plugin'],
 			'name' => $extensionCode,
 			'ver' => $new_ver
-		)));
+		]));
 
         /* === Hook  === */
         foreach (cot_getextplugins('extension.update.done') as $pl) {
@@ -582,10 +577,10 @@ function cot_extension_uninstall($code, $isModule = false)
 	$path = $isModule ? $cfg['modules_dir'] . "/$code" : $cfg['plugins_dir'] . "/$code";
 
 	// Emit initial message
-	cot_message(cot_rc('ext_uninstalling', array(
+	cot_message(cot_rc('ext_uninstalling', [
 		'type' => $isModule ? Cot::$L['Module'] : Cot::$L['Plugin'],
 		'name' => $code
-	)));
+	]));
 
 	// Remove bindings
 	cot_plugin_remove($code);
@@ -649,7 +644,7 @@ function cot_extension_uninstall($code, $isModule = false)
 
 	$sql = $db->query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
 		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
-	$cot_plugins = array();
+	$cot_plugins = [];
 	if ($sql->rowCount() > 0) {
 		while ($row = $sql->fetch()) {
 			$cot_plugins[$row['pl_hook']][] = $row;
@@ -670,7 +665,7 @@ function cot_extension_uninstall($code, $isModule = false)
     /* ===== */
 
 	// Clear cache
-	$db->update($db_users, array('user_auth' => ''), "user_auth != ''");
+	$db->update($db_users, ['user_auth' => ''], "user_auth != ''");
 	$cache && $cache->clear();
 }
 
@@ -683,18 +678,15 @@ function cot_extension_uninstall($code, $isModule = false)
  */
 function cot_file_phpdoc($filename)
 {
-	$res = array();
+	$res = [];
 	$data = file_get_contents($filename);
-	if (preg_match('#^/\*\*(.*?)^\s\*/#ms', $data, $mt))
-	{
+	if (preg_match('#^/\*\*(.*?)^\s\*/#ms', $data, $mt)) {
 		$phpdoc = preg_split('#\r?\n\s\*\s@#', $mt[1]);
 		$cnt = count($phpdoc);
-		if ($cnt > 0)
-		{
+		if ($cnt > 0) {
 			$res['description'] = trim(preg_replace('#\r?\n\s\*\s?#', '',
 				$phpdoc[0]));
-			for ($i = 1; $i < $cnt; $i++)
-			{
+			for ($i = 1; $i < $cnt; $i++) {
 				$delim = mb_strpos($phpdoc[$i], ' ');
 				$key = mb_substr($phpdoc[$i], 0, $delim);
 				$contents = trim(preg_replace('#\r?\n\s\*\s?#', '',
@@ -790,8 +782,8 @@ function cot_extension_add($name, $title, $version = '1.0.0', $is_plug = false)
 {
 	global $db, $db_core;
 
-	$res = $db->insert($db_core, array('ct_code' => $name, 'ct_title' => $title,
-		'ct_version' => $version, 'ct_plug' => (int) $is_plug));
+	$res = $db->insert($db_core, ['ct_code' => $name, 'ct_title' => $title,
+		'ct_version' => $version, 'ct_plug' => (int) $is_plug]);
 
 	return $res > 0;
 }
@@ -807,28 +799,20 @@ function cot_extension_add($name, $title, $version = '1.0.0', $is_plug = false)
 function cot_extension_catcmp($ext1, $ext2)
 {
 	global $L;
-	if (isset($L['ext_cat_' . $ext1['Category']]))
-	{
+	if (isset($L['ext_cat_' . $ext1['Category']])) {
 		$ext1['Category'] = $L['ext_cat_' . $ext1['Category']];
 	}
-	if (isset($L['ext_cat_' . $ext2['Category']]))
-	{
+	if (isset($L['ext_cat_' . $ext2['Category']])) {
 		$ext2['Category'] = $L['ext_cat_' . $ext2['Category']];
 	}
-	if ($ext1['Category'] == $ext2['Category'])
-	{
+	if ($ext1['Category'] == $ext2['Category']) {
 		// Compare by name
-		if ($ext1['Name'] == $ext2['Name'])
-		{
+		if ($ext1['Name'] == $ext2['Name']) {
 			return 0;
-		}
-		else
-		{
+		} else {
 			return ($ext1['Name'] > $ext2['Name']) ? 1 : -1;
 		}
-	}
-	else
-	{
+	} else {
 		return ($ext1['Category'] > $ext2['Category'] || $ext1['Category'] == 'post-install') ? 1 : -1;
 	}
 }
@@ -864,8 +848,7 @@ function cot_extension_type($name)
 	global $db, $db_core;
 
 	$res = $db->query("SELECT ct_plug FROM $db_core WHERE ct_code = ?", $name);
-	if ($res->rowCount() == 0)
-	{
+	if ($res->rowCount() == 0) {
 		return false;
 	}
 	$is_plug = (int) $res->fetchColumn();
@@ -880,7 +863,7 @@ function cot_extension_type($name)
  */
 function cot_extension_list_info($dir)
 {
-	$ext_list = array();
+	$ext_list = [];
 	clearstatcache();
 	$dp = opendir($dir);
 	while ($f = readdir($dp))
@@ -897,7 +880,7 @@ function cot_extension_list_info($dir)
 			if ($info == false) {
                 // Failed to load info block
                 // Lets use default data
-                $info = array(
+                $info = [
                     'Code' => $f,
                     'Name' => $f,
                     'Description' => '',
@@ -915,7 +898,7 @@ function cot_extension_list_info($dir)
                     'Requires_plugins' => '',
                     'Recommends_modules' => '',
                     'Recommends_plugins' => ''
-                );
+                ];
             }
 
 			if (empty($info['Category'])) {
@@ -956,7 +939,7 @@ function cot_extension_update($name, $version)
 {
 	global $db, $db_core;
 
-	return $db->update($db_core, array('ct_version' => $version), "ct_code = '$name'");
+	return $db->update($db_core, ['ct_version' => $version], "ct_code = '$name'");
 }
 
 /**
@@ -964,17 +947,17 @@ function cot_extension_update($name, $version)
  *
  * Example:
  * <code>
- * $hook_bindings = array(
- *     array(
+ * $hook_bindings = [
+ *     [
  *         'part' => 'rss',
  *         'hook' => 'rss.main',
  *         'order' => 20
- *     ),
- *     array(
+ *     ],
+ *     [
  *         'part' => 'header',
  *         'hook' => 'header.tags',
- *     )
- * );
+ *     ]
+ * ];
  *
  * cot_plugin_add($hook_bindings, 'test', 'Test plugin', false);
  * </code>

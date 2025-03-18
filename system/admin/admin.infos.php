@@ -14,14 +14,13 @@ cot_block(Cot::$usr['auth_read']);
 
 $t = new XTemplate(cot_tplfile('admin.infos', 'core'));
 
-$adminPath[] = array(cot_url('admin', 'm=other'), Cot::$L['Other']);
-$adminPath[] = array(cot_url('admin', 'm=infos'), Cot::$L['adm_infos']);
+$adminPath[] = [cot_url('admin', 'm=other'), Cot::$L['Other']];
+$adminPath[] = [cot_url('admin', 'm=infos'), Cot::$L['adm_infos']];
 $adminHelp = Cot::$L['adm_help_versions'];
 $adminTitle = Cot::$L['adm_infos'];
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.infos.first') as $pl)
-{
+foreach (cot_getextplugins('admin.infos.first') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -30,7 +29,7 @@ foreach (cot_getextplugins('admin.infos.first') as $pl)
 
 $t->assign(cot_generate_infotags('ADMIN_INFOS_'));
 
-$t->assign(array(
+$t->assign([
 	'ADMIN_INFOS_PHPVER' => (function_exists('phpversion')) ? phpversion() : Cot::$L['adm_help_config'],
 	'ADMIN_INFOS_ZENDVER' => (function_exists('zend_version')) ? zend_version() : Cot::$L['adm_help_config'],
 	'ADMIN_INFOS_INTERFACE' => (function_exists('php_sapi_name')) ? php_sapi_name() : Cot::$L['adm_help_config'],
@@ -41,11 +40,10 @@ $t->assign(array(
 	'ADMIN_INFOS_GMTTIME' => Cot::$usr['gmttime'],
 	'ADMIN_INFOS_USRTIME' => Cot::$usr['localtime'],
 	'ADMIN_INFOS_TIMETEXT' => Cot::$usr['timetext']
-));
+]);
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.infos.tags') as $pl)
-{
+foreach (cot_getextplugins('admin.infos.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

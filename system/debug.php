@@ -22,8 +22,7 @@ function cot_print()
 {
 	ob_end_clean();
 	$vars = func_get_args();
-	foreach ($vars as $name => $var)
-	{
+	foreach ($vars as $name => $var) {
 		var_dump($var);
 	}
 	die();
@@ -43,8 +42,7 @@ function cot_watch()
 	$btrace = debug_backtrace();
 	fputs($fp, $btrace[0]['file'].', '.$btrace[0]['line'].":\n");
 	$vars = func_get_args();
-	foreach ($vars as $name => $var)
-	{
+	foreach ($vars as $name => $var) {
 		fputs($fp, "arg #$name = ".print_r($var, TRUE)."\n");
 	}
 	fputs($fp, "----------------\n");
@@ -59,14 +57,12 @@ function cot_watch()
  */
 function cot_backtrace($clear_screen = TRUE)
 {
-	if ($clear_screen)
-	{
+	if ($clear_screen) {
 		ob_end_clean();
 		cot_sendheaders('text/plain');
 	}
 	debug_print_backtrace();
-	if ($clear_screen)
-	{
+	if ($clear_screen) {
 		die();
 	}
 }
@@ -79,20 +75,16 @@ function cot_backtrace($clear_screen = TRUE)
  */
 function cot_vardump($clear_screen = TRUE)
 {
-	if ($clear_screen)
-	{
+	if ($clear_screen) {
 		ob_end_clean();
 	}
-	foreach ($GLOBALS as $key => $val)
-	{
-		if ($key != 'GLOBALS')
-		{
+	foreach ($GLOBALS as $key => $val) {
+		if ($key != 'GLOBALS') {
 			echo "<br /><em>$key</em><br />";
 			var_dump($val);
 		}
 	}
-	if ($clear_screen)
-	{
+	if ($clear_screen) {
 		die();
 	}
 }
@@ -127,10 +119,8 @@ function cot_checkpoint()
 	$fp = fopen($cfg['debug_logpath'] . '/cot_debug_' . date('Ymd_His') . '.log', 'a');
 	$btrace = debug_backtrace();
 	fputs($fp, $btrace[1]['file'] . ', ' . $btrace[1]['line'] . ":\n");
-	foreach ($GLOBALS as $key => $val)
-	{
-		if ($key != 'GLOBALS')
-		{
+	foreach ($GLOBALS as $key => $val) {
+		if ($key != 'GLOBALS') {
 			fputs($fp, "$key = " .print_r($val, TRUE) ."\n");
 		}
 	}

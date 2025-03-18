@@ -14,13 +14,12 @@ cot_block($usr['isadmin']);
 
 $t = new XTemplate(cot_tplfile('admin.cache', 'core'));
 
-$adminPath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminPath[] = array(cot_url('admin', 'm=cache'), $L['adm_internalcache']);
+$adminPath[] = [cot_url('admin', 'm=other'), $L['Other']];
+$adminPath[] = [cot_url('admin', 'm=cache'), $L['adm_internalcache']];
 $adminTitle = $L['adm_internalcache'];
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.cache.first') as $pl)
-{
+foreach (cot_getextplugins('admin.cache.first') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -47,19 +46,17 @@ if ($a == 'purge' && $cache) {
 	$db->delete($db_cache, "c_name = '$name'") ? cot_message('adm_delcacheitem') : cot_error('Error');
 }
 
-if ($cache && $cache->mem)
-{
+if ($cache && $cache->mem) {
 	$info = $cache->get_info();
-	if ($info['available'] < 0)
-	{
+	if ($info['available'] < 0) {
 		$info['available'] = '?';
 	}
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_CACHE_MEMORY_DRIVER' => str_replace('_driver', '', $cache->mem_driver),
 		'ADMIN_CACHE_MEMORY_PERCENTBAR' => ceil(($info['occupied'] / $info['max']) * 100),
 		'ADMIN_CACHE_MEMORY_AVAILABLE' => $info['available'],
 		'ADMIN_CACHE_MEMORY_MAX' => $info['max']
-	));
+	]);
 	$t->parse('MAIN.ADMIN_CACHE_MEMORY');
 }
 
@@ -70,12 +67,11 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.cache.loop');
 /* ===== */
-foreach ($sql->fetchAll() as $row)
-{
+foreach ($sql->fetchAll() as $row) {
 	$row['c_value'] = htmlspecialchars($row['c_value']);
 	$row['size'] = mb_strlen($row['c_value']);
 	$cachesize += $row['size'];
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_CACHE_ITEM_DEL_URL' => cot_url('admin', 'm=cache&a=delete&name='.$row['c_name'].'&'.cot_xg()),
 		'ADMIN_CACHE_ITEM_NAME' => $row['c_name'],
 		'ADMIN_CACHE_REALM' => $row['c_realm'],
@@ -83,11 +79,10 @@ foreach ($sql->fetchAll() as $row)
 		'ADMIN_CACHE_SIZE' => $row['size'],
 		'ADMIN_CACHE_VALUE' => ($a == 'showall') ? $row['c_value'] : cot_cutstring($row['c_value'], 80),
 		'ADMIN_CACHE_ROW_ODDEVEN' => cot_build_oddeven($ii)
-	));
+	]);
 
 	/* === Hook - Part2 : Include === */
-	foreach ($extp as $pl)
-	{
+	foreach ($extp as $pl) {
 		include $pl;
 	}
 	/* ===== */
@@ -96,18 +91,17 @@ foreach ($sql->fetchAll() as $row)
 	$ii++;
 }
 
-$t->assign(array(
+$t->assign([
 	'ADMIN_CACHE_URL_REFRESH' => cot_url('admin', 'm=cache'),
 	'ADMIN_CACHE_URL_PURGE' => cot_url('admin', 'm=cache&a=purge&'.cot_xg()),
 	'ADMIN_CACHE_URL_SHOWALL' => cot_url('admin', 'm=cache&a=showall'),
 	'ADMIN_CACHE_CACHESIZE' => $cachesize
-));
+]);
 
 cot_display_messages($t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.cache.tags') as $pl)
-{
+foreach (cot_getextplugins('admin.cache.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

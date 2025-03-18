@@ -145,16 +145,16 @@ class XTemplate
 	 * Returns debug data dumped by CoTemplate if debug option is on.
 	 * Debug data has the following format:
 	 * <code>
-	 * array(
-	 * 	'filename.tpl' => array(
-	 * 		'BLOCK.NAME' => array(
+	 * [
+	 * 	'filename.tpl' => [
+	 * 		'BLOCK.NAME' => [
 	 * 			'TAG_NAME' => 'tag value',
 	 * 			// ...
-	 * 		),
+	 * 		],
 	 * 		// ...
-	 * 	),
+	 * 	],
 	 * 	// ...
-	 * );
+	 * ];
 	 * </code>
 	 *
 	 * @return array Debug dump
@@ -447,7 +447,7 @@ class XTemplate
         // ... modalContent.html('').attr('src', url); //let's use the anchor "title" attribute as modal window title $('#attModalTitleText').text(title); ...
         //$html = preg_replace('#\n\s+#', ' ', $html);
 
-        $html = join("\n", array_map('trim', explode("\n", $html)));
+        $html = implode("\n", array_map('trim', explode("\n", $html)));
 
         $html = preg_replace('#[\r\n\t]+<#', ' <', $html);
         $html = preg_replace('#>[\r\n\t]+#', '>', $html);
@@ -1012,7 +1012,7 @@ class Cotpl_data
 	 */
 	public function getTags()
 	{
-		$list = array();
+		$list = [];
 		foreach ($this->chunks as $chunk)
 		{
 			if ($chunk instanceof Cotpl_var)
@@ -1462,7 +1462,7 @@ class Cotpl_logical extends Cotpl_block
 	 */
 	public function getTags()
 	{
-		$list = array();
+		$list = [];
 		for ($i = 0; $i < 2; $i++) {
 			if (isset($this->blocks[$i]) && is_array($this->blocks[$i])) {
 				foreach ($this->blocks[$i] as $block) {

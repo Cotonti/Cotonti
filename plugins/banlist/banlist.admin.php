@@ -46,11 +46,11 @@ if ($a == 'update') {
 	$rbanlistreason = $db->prep(cot_import('rbanlistreason', 'P', 'TXT'));
 
 	$sql = (!empty($rbanlistip) || !empty($rbanlistemail))
-		? $db->update($db_banlist, array(
+		? $db->update($db_banlist, [
 			'banlist_ip' => $rbanlistip,
 			'banlist_email' => $rbanlistemail,
 			'banlist_reason' => $rbanlistreason
-			), "banlist_id=$id")
+			], "banlist_id=$id")
 		: '';
 
 	($sql) ? cot_message('alreadyupdatednewentry') : cot_message('Error');

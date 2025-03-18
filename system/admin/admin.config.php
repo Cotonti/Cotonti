@@ -92,22 +92,22 @@ switch ($n) {
 			/* ===== */
 			Cot::$cache && Cot::$cache->clear();
 
-			cot_redirect(cot_url('admin', array('m'=>'config', 'n'=>'edit', 'o'=>$o, 'p'=>$p), '', true));
+			cot_redirect(cot_url('admin', ['m' => 'config', 'n' => 'edit', 'o' => $o, 'p' => $p], '', true));
 		}
 
 
 		if ($o == 'core') {
-			$adminPath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
+			$adminPath[] = [cot_url('admin', 'm=config'), $L['Configuration']];
 			$adminPath[] = [
                 cot_url('admin', 'm=config&n=edit&o=' . $o . '&p=' . $p),
                 isset(Cot::$L['core_' . $p]) ? Cot::$L['core_' . $p] : $p,
             ];
 		} else {
-			$adminPath[] = array(cot_url('admin', 'm=extensions'), $L['Extensions']);
+			$adminPath[] = [cot_url('admin', 'm=extensions'), $L['Extensions']];
 			$plmod = $o == 'module' ? 'mod' : 'pl';
 			$ext_info = cot_get_extensionparams($p, $o == 'module');
-			$adminPath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $ext_info['name']);
-			$adminPath[] = array(cot_url('admin', 'm=config&n=edit&o=' . $o . '&p=' . $p), $L['Configuration']);
+			$adminPath[] = [cot_url('admin', "m=extensions&a=details&$plmod=$p"), $ext_info['name']];
+			$adminPath[] = [cot_url('admin', 'm=config&n=edit&o=' . $o . '&p=' . $p), $L['Configuration']];
 		}
 
 		/* === Hook  === */
@@ -185,7 +185,7 @@ switch ($n) {
 		break;
 
 	default:
-		$adminPath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
+		$adminPath[] = [cot_url('admin', 'm=config'), $L['Configuration']];
 		$sql = Cot::$db->query(
 			'SELECT DISTINCT(config_cat) FROM ' . Cot::$db->quoteTableName(Cot::$db->config) . ' '
 			. "WHERE config_owner = 'core' AND config_type <> '" . COT_CONFIG_TYPE_HIDDEN . "' "

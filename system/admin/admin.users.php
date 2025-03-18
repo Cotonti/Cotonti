@@ -23,7 +23,7 @@ require_once cot_incfile('uploads');
 
 $t = new XTemplate(cot_tplfile('admin.users', 'core'));
 
-$adminPath[] = array(cot_url('admin', 'm=users'), $L['Users']);
+$adminPath[] = [cot_url('admin', 'm=users'), $L['Users']];
 $adminTitle = $L['Users'];
 
 $g = cot_import('g', 'G', 'INT');
@@ -130,7 +130,7 @@ elseif($n == 'edit')
 
 			cot_message('Updated');
 		}
-        cot_redirect(cot_url('admin', array('m' => 'users', 'n'=>'edit', 'g'=>$g), '', true));
+        cot_redirect(cot_url('admin', ['m' => 'users', 'n'=>'edit', 'g'=>$g], '', true));
 
 	}
 	elseif($a == 'delete' && $g > 5)
@@ -166,9 +166,9 @@ elseif($n == 'edit')
 		$row['grp_name'] = htmlspecialchars($row['grp_name']);
 		$row['grp_title'] = htmlspecialchars($row['grp_title']);
 
-		$adminPath[] = array (cot_url('admin', 'm=users&n=edit&g='.$g), $row['grp_name']);
+		$adminPath[] = [cot_url('admin', 'm=users&n=edit&g='.$g), $row['grp_name']];
 
-		$t->assign(array(
+		$t->assign([
             'ADMIN_USERS_GRP_NAME' => $row['grp_name'],
             'ADMIN_USERS_GRP_TITLE' => $row['grp_title'],
 			'ADMIN_USERS_EDITFORM_URL' => cot_url('admin', 'm=users&n=edit&a=update&g='.$g),
@@ -177,9 +177,9 @@ elseif($n == 'edit')
 			'ADMIN_USERS_EDITFORM_GRP_DESC' => cot_inputbox('text', 'rdesc', htmlspecialchars($row['grp_desc']), 'size="40" maxlength="64"'),
 			'ADMIN_USERS_EDITFORM_GRP_ICON' => cot_inputbox('text', 'ricon', htmlspecialchars($row['grp_icon']), 'size="40" maxlength="128"'),
 			'ADMIN_USERS_EDITFORM_GRP_ALIAS' => cot_inputbox('text', 'ralias', htmlspecialchars($row['grp_alias']), 'size="40" maxlength="24"'),
-			'ADMIN_USERS_EDITFORM_GRP_DISABLED' => ($g <= 5) ? $L['No'] : cot_radiobox($row['grp_disabled'], 'rdisabled', array(1, 0), array($L['Yes'], $L['No'])),
-			'ADMIN_USERS_EDITFORM_GRP_MAINTENANCE' => cot_radiobox($row['grp_maintenance'], 'rmtmode', array(1, 0), array($L['Yes'], $L['No'])),
-			'ADMIN_USERS_EDITFORM_GRP_SKIPRIGHTS' => cot_radiobox($row['grp_skiprights'], 'rskiprights', array(1, 0), array($L['Yes'], $L['No'])),
+			'ADMIN_USERS_EDITFORM_GRP_DISABLED' => ($g <= 5) ? $L['No'] : cot_radiobox($row['grp_disabled'], 'rdisabled', [1, 0], [$L['Yes'], $L['No']]),
+			'ADMIN_USERS_EDITFORM_GRP_MAINTENANCE' => cot_radiobox($row['grp_maintenance'], 'rmtmode', [1, 0], [$L['Yes'], $L['No']]),
+			'ADMIN_USERS_EDITFORM_GRP_SKIPRIGHTS' => cot_radiobox($row['grp_skiprights'], 'rskiprights', [1, 0], [$L['Yes'], $L['No']]),
 			'ADMIN_USERS_EDITFORM_GRP_RLEVEL' => cot_selectbox($row['grp_level'], 'rlevel', range(0, 99), range(0, 99), false),
 			'ADMIN_USERS_EDITFORM_GRP_MEMBERSCOUNT' => $row['grp_memberscount'],
 			'ADMIN_USERS_EDITFORM_GRP_MEMBERSCOUNT_URL' => cot_url('users', 'g='.$g),
@@ -190,7 +190,7 @@ elseif($n == 'edit')
                 cot_url('admin', 'm=users&n=edit&a=delete&g='.$g.'&'.cot_xg()),
                 'admin'
             ),
-		));
+		]);
 
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.users.edit.tags') as $pl) {
@@ -203,25 +203,22 @@ elseif($n == 'edit')
 
 if (!isset($showdefault) || $showdefault == true) {
 	$sql = $db->query("SELECT DISTINCT(gru_groupid), COUNT(*) FROM $db_groups_users WHERE 1 GROUP BY gru_groupid");
-	while($row = $sql->fetch())
-	{
+	while ($row = $sql->fetch()) {
 		$members[$row['gru_groupid']] = $row['COUNT(*)'];
 	}
 	$sql->closeCursor();
 
 	$sql = $db->query("SELECT * FROM $db_groups WHERE 1 ORDER BY grp_level DESC, grp_id DESC");
 
-	if($sql->rowCount() > 0)
-	{
+	if ($sql->rowCount() > 0) {
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('admin.users.row.tags');
 		/* ===== */
-		foreach ($sql->fetchAll() as $row)
-		{
+		foreach ($sql->fetchAll() as $row) {
 			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
 			$grp_title = isset($L['users_grp_' . $row['grp_id'] . '_title']) ? $L['users_grp_' . $row['grp_id'] . '_title'] : htmlspecialchars($row['grp_title']);
 			$grp_desc = isset($L['users_grp_' . $row['grp_id'] . '_desc']) ? $L['users_grp_' . $row['grp_id'] . '_desc'] : htmlspecialchars($row['grp_desc']);
-			$t->assign(array(
+			$t->assign([
 				'ADMIN_USERS_ROW_GRP_TITLE_URL' => cot_url('admin', 'm=users&n=edit&g='.$row['grp_id']),
 				'ADMIN_USERS_ROW_GRP_NAME' => htmlspecialchars($row['grp_name']),
 				'ADMIN_USERS_ROW_GRP_TITLE' => $grp_title,
@@ -232,10 +229,9 @@ if (!isset($showdefault) || $showdefault == true) {
 				'ADMIN_USERS_ROW_GRP_SKIPRIGHTS' => $row['grp_skiprights'],
 				'ADMIN_USERS_ROW_GRP_RIGHTS_URL' => cot_url('admin', 'm=rights&g='.$row['grp_id']),
 				'ADMIN_USERS_ROW_GRP_JUMPTO_URL' => cot_url('users', 'g='.$row['grp_id'])
-			));
+			]);
 			/* === Hook - Part2 : Include === */
-			foreach ($extp as $pl)
-			{
+			foreach ($extp as $pl) {
 				include $pl;
 			}
 			/* ===== */
@@ -243,40 +239,38 @@ if (!isset($showdefault) || $showdefault == true) {
 		}
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_USERS_FORM_URL' => cot_url('admin', 'm=users&n=add'),
 		'ADMIN_USERS_NGRP_NAME' => cot_inputbox('text', 'rname', '', 'size="40" maxlength="64"'),
 		'ADMIN_USERS_NGRP_TITLE' => cot_inputbox('text', 'rtitle', '', 'size="40" maxlength="64"'),
 		'ADMIN_USERS_NGRP_DESC' => cot_inputbox('text', 'rdesc', '', 'size="40" maxlength="64"'),
 		'ADMIN_USERS_NGRP_ICON' => cot_inputbox('text', 'ricon', '', 'size="40" maxlength="128"'),
 		'ADMIN_USERS_NGRP_ALIAS' => cot_inputbox('text', 'ralias', '', 'size="40" maxlength="24"'),
-		'ADMIN_USERS_NGRP_DISABLED' => cot_radiobox(0, 'rdisabled', array(1, 0), array($L['Yes'], $L['No'])),
-		'ADMIN_USERS_NGRP_MAINTENANCE' => cot_radiobox(0, 'rmtmode', array(1, 0), array($L['Yes'], $L['No'])),
-		'ADMIN_USERS_NGRP_SKIPRIGHTS' => cot_radiobox(0, 'rskiprights', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_USERS_NGRP_DISABLED' => cot_radiobox(0, 'rdisabled', [1, 0], [$L['Yes'], $L['No']]),
+		'ADMIN_USERS_NGRP_MAINTENANCE' => cot_radiobox(0, 'rmtmode', [1, 0], [$L['Yes'], $L['No']]),
+		'ADMIN_USERS_NGRP_SKIPRIGHTS' => cot_radiobox(0, 'rskiprights', [1, 0], [$L['Yes'], $L['No']]),
 		'ADMIN_USERS_NGRP_RLEVEL' => cot_selectbox(50, 'rlevel', range(0, 99), range(0, 99), false),
-		'ADMIN_USERS_FORM_SELECTBOX_GROUPS' => cot_selectbox_groups(4, 'rcopyrightsfrom', array('5'))
-	));
+		'ADMIN_USERS_FORM_SELECTBOX_GROUPS' => cot_selectbox_groups(4, 'rcopyrightsfrom', ['5'])
+	]);
 
 	/* === Hook === */
-	foreach (cot_getextplugins('admin.users.add.tags') as $pl)
-	{
+	foreach (cot_getextplugins('admin.users.add.tags') as $pl) {
 		include $pl;
 	}
 	/* ===== */
 	$t->parse('MAIN.ADMIN_USERS_DEFAULT');
 }
 
-$t->assign(array(
+$t->assign([
 	'ADMIN_USERS_URL' => cot_url('admin', 'm=config&n=edit&o=module&p=users'),
 	'ADMIN_USERS_EXTRAFIELDS_URL' => cot_url('admin', 'm=extrafields&n='.$db_users)
-));
+]);
 
 
 cot_display_messages($t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.users.tags') as $pl)
-{
+foreach (cot_getextplugins('admin.users.tags') as $pl) {
 	include $pl;
 }
 /* ===== */

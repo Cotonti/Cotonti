@@ -13,7 +13,7 @@ class Resources
 	/**
 	 * @var array predefined aliases
 	 */
-	protected static $alias = array (
+	protected static $alias = [
 		'@jQuery' => 'js/jquery.min.js',
 
 		'@ckeditor' => 'plugins/ckeditor/lib/ckeditor.js',
@@ -21,7 +21,7 @@ class Resources
 
 		'@bootstrap' => 'lib/bootstrap/js/bootstrap.bundle.min.js',
 		'@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
-	);
+	];
 
 	// ==== predefined alias constants ====
 	const jQuery = '@jQuery';
@@ -44,7 +44,7 @@ class Resources
 	 */
 	protected static $headerRc = [];
 
-	protected static $addedFiles = array();
+	protected static $addedFiles = [];
 
 	protected static $skip_minification = false;
 
@@ -712,10 +712,10 @@ class Resources
 	 */
 	public static function embedFooter($code, $type = 'js', $order = 50, $attr = '')
 	{
-		static::$footerRc[$type . '_embed'][$order][] = cot_rc("code_rc_{$type}_embed", array(
+		static::$footerRc[$type . '_embed'][$order][] = cot_rc("code_rc_{$type}_embed", [
 			'code' => $code,
-			'attr' => $attr
-		));
+			'attr' => $attr,
+		]);
 	}
 
 	/**

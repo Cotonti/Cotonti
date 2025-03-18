@@ -34,14 +34,14 @@ function cot_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1', $c
 	$checked = $chosen ? ' checked="checked"' : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$rc = empty($R["input_checkbox_{$rc_name}"]) ? (empty($custom_rc) ? 'input_checkbox' : $custom_rc) : "input_checkbox_{$rc_name}";
-	return cot_rc($rc, array(
+	return cot_rc($rc, [
 		'value' => htmlspecialchars(cot_import_buffered($name, $value)),
 		'value_off' => $value_off,
 		'name' => $name,
 		'checked' => $checked,
 		'title' => $title,
-		'attrs' => $input_attrs
-	));
+		'attrs' => $input_attrs,
+	]);
 }
 
 /**
@@ -194,11 +194,11 @@ function cot_selectbox(
     $options = '';
 
 	if ($add_empty) {
-		$options .= cot_rc($rc, array(
+		$options .= cot_rc($rc, [
 			'value' => '',
 			'selected' => $selected,
 			'title' => $R['code_option_empty']
-		));
+		]);
 	}
 	foreach ($values as $k => $x) {
 		$x = trim($x);
@@ -207,21 +207,21 @@ function cot_selectbox(
         if (!$htmlspecialcharsBypass) {
             $title = htmlspecialchars($title);
         }
-		$options .= cot_rc($rc, array(
+		$options .= cot_rc($rc, [
 			'value' => $htmlspecialcharsBypass ? $x : htmlspecialchars($x),
 			'selected' => $selected,
 			'title' => $title
-		));
+		]);
 	}
 
 	$rc = empty($R["input_select_{$rc_name}"]) ? (empty($custom_rc) ? 'input_select' : $custom_rc) : "input_select_{$rc_name}";
 
-	$result = cot_rc($rc, array(
+	$result = cot_rc($rc, [
 		'name' => $name,
 		'attrs' => $input_attrs,
 		'error' => $error,
 		'options' => $options
-	));
+	]);
 	return $result;
 }
 
@@ -291,24 +291,20 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 
 	$utime = ($usertimezone && $utime > 0) ? ($utime + $usr['timezone'] * 3600) : $utime;
 
-	if ($utime == 0)
-	{
-		list($s_year, $s_month, $s_day, $s_hour, $s_minute) = array(null, null, null, null, null);
+	if ($utime == 0) {
+		list($s_year, $s_month, $s_day, $s_hour, $s_minute) = [null, null, null, null, null];
 		$buffered = cot_import_buffered($name, null);
-		if (is_array($buffered))
-		{
+		if (is_array($buffered)) {
 			$s_year   = $buffered['year'];
 			$s_month  = $buffered['month'];
 			$s_day    = $buffered['day'];
 			$s_hour   = ($buffered['hour'] ?? 0) > 0 ? $buffered['hour'] : 1;
 			$s_minute = $buffered['minute'] ?? 0;
 		}
-	}
-	else
-	{
+	} else {
 		list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $utime));
 	}
-	$months = array();
+	$months = [];
 	$months[1] = $L['January'];
 	$months[2] = $L['February'];
 	$months[3] = $L['March'];
@@ -326,16 +322,14 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 	$month = cot_selectbox($s_month, $name.'[month]', array_keys($months), array_values($months));
 	$day = cot_selectbox($s_day, $name.'[day]', range(1, 31));
 
-	$range = array();
-	for ($i = 0; $i < 24; $i++)
-	{
+	$range = [];
+	for ($i = 0; $i < 24; $i++) {
 		$range[] = sprintf('%02d', $i);
 	}
 	$hour = cot_selectbox($s_hour, $name.'[hour]', $range);
 
-	$range = array();
-	for ($i = 0; $i < 60; $i++)
-	{
+	$range = [];
+	for ($i = 0; $i < 60; $i++) {
 		$range[] = sprintf('%02d', $i);
 	}
 
@@ -345,13 +339,13 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 	$rc = empty($R["input_date_{$rc_name}"]) ? $rc : "input_date_{$rc_name}";
 	$rc = empty($custom_rc) ? $rc : $custom_rc;
 
-	$result = cot_rc($rc, array(
+	$result = cot_rc($rc, [
 		'day' => $day,
 		'month' => $month,
 		'year' => $year,
 		'hour' => $hour,
 		'minute' => $minute
-	));
+	]);
 
 	return $result;
 }
@@ -371,10 +365,8 @@ function cot_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '', $cu
 	global $cot_languages, $cot_countries, $cfg;
 
 	$handle = opendir($cfg['lang_dir'] . '/');
-	while ($f = readdir($handle))
-	{
-		if ($f[0] != '.' && is_dir($cfg['lang_dir'] . '/' . $f))
-		{
+	while ($f = readdir($handle)) {
+		if ($f[0] != '.' && is_dir($cfg['lang_dir'] . '/' . $f)) {
 			$langlist[] = $f;
 		}
 	}
@@ -384,10 +376,9 @@ function cot_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '', $cu
 	if (!$cot_countries)
 		include_once cot_langfile('countries', 'core');
 
-	$vals = array();
-	$titles = array();
-	foreach ($langlist as $lang)
-	{
+	$vals = [];
+	$titles = [];
+	foreach ($langlist as $lang) {
 		$vals[] = $lang;
 		$titles[] = (empty($cot_languages[$lang]) ? $cot_countries[$lang] : $cot_languages[$lang]) . " ($lang)";
 	}
@@ -518,7 +509,7 @@ function cot_textarea($name, $value, $rows = null, $cols = null, $attrs = '', $c
  * @param string $custom_rc Custom resource string name
  * @return string
  */
-function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '', $separator = '', $addnull = true, $custom_rc = '')
+function cot_checklistbox($chosen, $name, $values, $titles = [], $attrs = '', $separator = '', $addnull = true, $custom_rc = '')
 {
 	global $R;
 	if (!is_array($values))
@@ -558,13 +549,13 @@ function cot_checklistbox($chosen, $name, $values, $titles = array(), $attrs = '
 		{
 			$result .= $separator;
 		}
-		$result .= cot_rc($rc, array(
+		$result .= cot_rc($rc, [
 			'value' => htmlspecialchars($x),
 			'name' => $name.'['.$i.']',
 			'checked' => $checked,
 			'title' => $title,
-			'attrs' => $input_attrs
-		));
+			'attrs' => $input_attrs,
+		]);
 
 	}
 	return $result;
@@ -602,12 +593,12 @@ function cot_filebox($name, $value = '', $filepath = '', $delname ='', $attrs = 
 	$delname = empty($delname) ? 'del'.$name : $delname;
     $msgSeparate = isset($cfg['msg_separate']) ? $cfg['msg_separate'] : false;
 	$error = $msgSeparate ? cot_implode_messages($name, 'error') : '';
-	return cot_rc($rc, array(
+	return cot_rc($rc, [
 		'name' => $name,
 		'filepath' => $filepath,
 		'delname' => $delname,
 		'value' => $value,
 		'attrs' => $input_attrs,
-		'error' => $error
-	));
+		'error' => $error,
+	]);
 }

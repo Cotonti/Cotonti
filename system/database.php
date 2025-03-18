@@ -302,7 +302,7 @@ class CotDB
 	 * @param array $parameters Associative or numeric array of parameters
 	 * @return string Array with placeholders substituted
 	 */
-	private function _prepare($query, $parameters = array())
+	private function _prepare($query, $parameters = [])
 	{
 		if (count($parameters) > 0) {
 			foreach ($parameters as $key => $val) {
@@ -443,7 +443,7 @@ class CotDB
         }
 
 		if (!is_array($parameters)) {
-			$parameters = array($parameters);
+			$parameters = [$parameters];
 		}
 
         $res = 0;
@@ -517,10 +517,10 @@ class CotDB
 
 		$existing_indexes = $this->query('SHOW INDEXES FROM ' . $this->quoteTableName($tableName))->fetchAll();
 		if (!is_array($indexColumns)) {
-            $indexColumns = array($indexColumns);
+            $indexColumns = [$indexColumns];
 		}
 		$exists = false;
-		$index_list = array();
+		$index_list = [];
 		foreach ($existing_indexes as $existing_index) {
 			$index_list[$existing_index['Key_name']][$existing_index['Seq_in_index'] - 1] = $existing_index['Column_name'];
 		}
@@ -553,10 +553,10 @@ class CotDB
     public function addIndex($tableName, $indexName, $indexColumns = [])
 	{
 		if (empty($indexColumns)) {
-            $indexColumns = array($indexName);
+            $indexColumns = [$indexName];
 		}
 		if (!is_array($indexColumns)) {
-            $indexColumns = array($indexColumns);
+            $indexColumns = [$indexColumns];
 		}
 
         $quotedColumns = [];

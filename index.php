@@ -26,7 +26,7 @@ if (php_sapi_name() == 'cli-server') {
         function ($dir) { return str_replace("lang/", "", $dir); },
 		glob('lang/??', GLOB_ONLYDIR)
 	);
-	if (preg_match('#^(' . join('|', $langs) . ')/(.*)$#', $REQUEST_FILENAME, $mt)) {
+	if (preg_match('#^(' . implode('|', $langs) . ')/(.*)$#', $REQUEST_FILENAME, $mt)) {
 		$REQUEST_FILENAME = $mt[2];
 		$_GET['l'] = $mt[1];
 	}

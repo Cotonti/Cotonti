@@ -30,7 +30,7 @@ $maxrowsperpage = (is_int(Cot::$cfg['maxrowsperpage']) && Cot::$cfg['maxrowsperp
 list($pg, $d, $durl) = cot_import_pagenav('d', $maxrowsperpage);
 $mode = cot_import('mode', 'G', 'ALP');
 
-$t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
+$t = new XTemplate(cot_tplfile(['admin', 'structure', $n], 'core'));
 
 $adminTitle = Cot::$L['Structure'];
 
@@ -98,9 +98,9 @@ if (empty($n)) {
 		$t->parse('LIST.ADMIN_STRUCTURE_EMPTY');
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_STRUCTURE_EXFLDS_URL' => cot_url('admin', 'm=extrafields')
-	));
+	]);
 	$t->parse('LIST');
 	$adminMain = $t->text('LIST');
 } else {
@@ -150,9 +150,9 @@ if (empty($n)) {
 					} else {
                         Cot::$db->update(
                             $db_config,
-                            array('config_value' => $data),
+                            ['config_value' => $data],
                             "config_name = ? AND config_owner = ? AND config_cat = ?  AND config_subcat = ?",
-                            array($key, $owner, $n, $editconfig)
+                            [$key, $owner, $n, $editconfig]
                         );
 					}
 				}
@@ -420,8 +420,8 @@ if (empty($n)) {
 	}
 
 	$ext_info = cot_get_extensionparams($n, true);
-	$adminPath[] = array(cot_url('admin', 'm=extensions'), Cot::$L['Extensions']);
-    $urlParams = array('m' => 'extensions', 'a' => 'details');
+	$adminPath[] = [cot_url('admin', 'm=extensions'), Cot::$L['Extensions']];
+    $urlParams = ['m' => 'extensions', 'a' => 'details'];
     if ($is_module) {
         $urlParams['mod'] = $n;
     } else {
@@ -449,11 +449,11 @@ if (empty($n)) {
 		$pagenav = cot_pagenav('admin', 'm=structure&n='.$n, $d, $totalitems, $maxrowsperpage, 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 	}
 
-	$t->assign(array(
+	$t->assign([
 		'ADMIN_STRUCTURE_UPDATE_FORM_URL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=update&d='.$durl),
 		'ADMIN_PAGE_STRUCTURE_RESYNCALL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=resyncall&'.cot_xg().'&d='.$durl),
 		'ADMIN_STRUCTURE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n='.$db_structure)
-	));
+	]);
 
     $categoryList = [];
 
@@ -599,12 +599,12 @@ if (empty($n)) {
                     $row['structure_' . $exfld['field_name']]);
                 $exfld_title = cot_extrafield_title($exfld, 'structure_');
 
-                $t->assign(array(
+                $t->assign([
                     'ADMIN_STRUCTURE_' . strtoupper($exfld['field_name']) => $exfld_val,
                     'ADMIN_STRUCTURE_' . strtoupper($exfld['field_name']) . '_TITLE' => $exfld_title,
                     'ADMIN_STRUCTURE_EXTRAFLD' => $exfld_val,
                     'ADMIN_STRUCTURE_EXTRAFLD_TITLE' => $exfld_title
-                ));
+                ]);
                 $t->parse(($id || !empty($al)) ? 'MAIN.OPTIONS.EXTRAFLD' : 'MAIN.DEFAULT.ROW.EXTRAFLD');
             }
         }
@@ -680,13 +680,13 @@ if (empty($n)) {
     unset($row);
 
 	if (!$id && empty($al)) {
-		$t->assign(array(
+		$t->assign([
 			'ADMIN_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],
 			'ADMIN_STRUCTURE_PAGNAV' => $pagenav['main'],
 			'ADMIN_STRUCTURE_PAGINATION_NEXT' => $pagenav['next'],
 			'ADMIN_STRUCTURE_TOTALITEMS' => $totalitems,
 			'ADMIN_STRUCTURE_COUNTER_ROW' => $ii,
-		));
+		]);
 		$t->parse('MAIN.DEFAULT');
 
 		// flush post buffer if it contains Update Table data

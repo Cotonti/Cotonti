@@ -15,4 +15,5 @@ Hooks=admin.structure.delete.done
 
 defined('COT_CODE') or die('Wrong URL');
 
-$db->delete($db_i18n_structure, "istructure_code = ?", array($c));
+$db->delete($db_i18n_structure, "istructure_code = ?", $c);
+cot_log('Deleted translate for category "' . $c . '"', 'i18n', 'structure', 'delete');
