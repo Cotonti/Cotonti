@@ -7,10 +7,12 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsService;
+
 defined('COT_CODE') or die('Wrong URL');
 
 // Tags integration
-if (cot_extension_installed('tags')) {
+if (ExtensionsService::getInstance()->isInstalled('tags')) {
     global $L, $R; // for included file
 
     require_once cot_incfile('i18n', 'plug');

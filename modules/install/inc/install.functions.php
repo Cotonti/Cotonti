@@ -65,24 +65,21 @@ function cot_get_config($file)
  * Replaces a specific config line in $file_contents with a new value,
  * properly escaping special characters to avoid issues with preg_replace.
  *
- * @param string &$file_contents The full config file content (by reference)
- * @param string $config_name    The name/key of the config option (e.g., 'mysqlpassword')
- * @param string $config_value   The new value (e.g., user-supplied DB password)
- * @return void
+ * @param string &$fileContents The full config file content (by reference)
+ * @param string $configName The name/key of the config option (e.g., 'mysqlpassword')
+ * @param mixed $configValue The new value (e.g., user-supplied DB password)
  */
-function cot_installConfigReplace(&$file_contents, $config_name, $config_value)
+function cot_installConfigReplace(&$fileContents, $configName, $configValue): void
 {
     // Escape special characters (\, $, and ') to prevent regex backreference or syntax errors
-    $configValueEscaped = str_replace(
-        ['\\', '$', "'"],
-        ['\\\\', '\\$', "\\'"],
-        $config_value
-    );
+    $configValuePrepared = is_string($configValue)
+        ? "'" . str_replace(['\\', '$', "'"], ['\\\\', '\\$', "\\'"],  $configValue) . "'"
+        : var_export($configValue, true);
 
-    $pattern = "#^\\\$cfg\\['$config_name'\\]\\s*=\\s*'.*?';#m";
-    $replacement = "\$cfg['$config_name'] = '$configValueEscaped';";
+    $pattern = "/^\\\$cfg\\['$configName'\\]\\s*=\\s*'?.*?'?;/m";
+    $replacement = "\$cfg['$configName'] = " . $configValuePrepared . ';';
 
-    $file_contents = preg_replace($pattern, $replacement, $file_contents);
+    $fileContents = preg_replace($pattern, $replacement, $fileContents);
 }
 
 /**

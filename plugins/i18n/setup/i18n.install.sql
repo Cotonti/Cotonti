@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS `cot_i18n_structure` (
 	KEY `istructure_code` (`istructure_code`)
 );
 
-
 -- Page translations
 CREATE TABLE IF NOT EXISTS `cot_i18n_pages` (
 	`ipage_id` INT UNSIGNED NOT NULL REFERENCES `cot_pages` (`page_id`),
