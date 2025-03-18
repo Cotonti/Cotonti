@@ -265,7 +265,7 @@ function cot_tag_list($item, $area, $extra = null)
 {
 	global $db, $db_tag_references;
 	$res = array();
-	$item_cond = is_array($item) ? 'IN('.implode(',', $item).')' : "= $item";
+	$item_cond = is_array($item) ? 'IN ('.implode(',', $item).')' : "= $item";
 	$query = "SELECT `tag`, `tag_item` FROM $db_tag_references
 		WHERE tag_item $item_cond AND tag_area = '$area'";
 	if (!is_null($extra))

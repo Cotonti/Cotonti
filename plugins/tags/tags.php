@@ -380,7 +380,7 @@ function cot_tag_search_pages($query)
 				continue;
 			}
 
-			$tags = cot_tag_list($row['page_id']);
+			$tags = cot_tag_list($row['page_id'], PageDictionary::SOURCE_PAGE);
 			$tag_list = '';
 			$tag_i = 0;
 			foreach ($tags as $tag) {
