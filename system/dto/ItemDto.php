@@ -27,6 +27,11 @@ final class ItemDto
     /**
      * @var string
      */
+    public $extensionCode;
+
+    /**
+     * @var string
+     */
     public $typeTitle;
 
     /**
@@ -77,6 +82,7 @@ final class ItemDto
     public function __construct(
         string $source,
         int $sourceId,
+        string $extensionCode,
         string $typeTitle,
         string $title,
         string $description,
@@ -85,6 +91,7 @@ final class ItemDto
     ) {
         $this->source = $source;
         $this->sourceId = $sourceId;
+        $this->extensionCode = $extensionCode;
         $this->typeTitle = $typeTitle;
         $this->title = $title;
         $this->description = $description;

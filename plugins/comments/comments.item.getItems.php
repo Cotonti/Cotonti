@@ -94,6 +94,7 @@ foreach ($comments as $comment) {
     $dto = new ItemDto(
         CommentsDictionary::SOURCE_COMMENT,
         $comment['com_id'],
+        'comments',
         Cot::$L['comments_comment'],
         "$titlePrefix \"{$title}\"",
         $item ? $item->description : '',

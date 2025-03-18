@@ -61,6 +61,7 @@ foreach ($forumTopics as $topic) {
     $dto = new ItemDto(
         ForumsDictionary::SOURCE_TOPIC,
         $topic['ft_id'],
+        'forums',
         Cot::$L['forums_topic'],
         $topic['ft_movedto'] > 0
             ? Cot::$L['Moved'] . ': ' . $topic['ft_title']

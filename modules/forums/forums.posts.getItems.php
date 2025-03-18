@@ -82,6 +82,7 @@ foreach ($forumPosts as $post) {
     $dto = new ItemDto(
         ForumsDictionary::SOURCE_TOPIC,
         $post['fp_id'],
+        'forums',
         Cot::$L['forums_post'],
         $L['forums_postInTopic'] . ': "' . $post['ft_title'] . '"',
         cot_string_truncate(strip_tags($post['fp_text']), 120, false),

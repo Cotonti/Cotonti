@@ -49,6 +49,7 @@ foreach ($users as $row) {
     $dto = new ItemDto(
         UsersDictionary::SOURCE_USER,
         $row['user_id'],
+        'users',
         Cot::$L['User'],
         $usersHelper->getFullName($row),
         '',

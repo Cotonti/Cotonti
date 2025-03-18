@@ -57,6 +57,7 @@ foreach ($pages as $row) {
     $dto = new ItemDto(
         PageDictionary::SOURCE_PAGE,
         $row['page_id'],
+        'page',
         Cot::$L['Page'],
         $row['page_title'],
         $row['page_desc'],

@@ -27,7 +27,7 @@ class ItemService
     private static $recentlyDeleted = [];
 
     /**
-     * @param list<int> $sourceIds
+     * @param list<int|string> $sourceIds
      * @return array<int, ItemDto>
      */
     public function getItems(string $source, array $sourceIds, bool $withFullItemData = false): array
@@ -43,7 +43,10 @@ class ItemService
         return $result;
     }
 
-    public function get(string $source, int $sourceId, bool $withFullItemData = false): ?ItemDto
+    /**
+     * @param int|string $sourceId
+     */
+    public function get(string $source, $sourceId, bool $withFullItemData = false): ?ItemDto
     {
         $item = $this->getItems($source, [$sourceId], $withFullItemData);
         return $item[$sourceId] ?? null;

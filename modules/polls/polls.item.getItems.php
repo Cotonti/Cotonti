@@ -49,6 +49,7 @@ foreach ($polls as $poll) {
     $dto = new ItemDto(
         PollsDictionary::SOURCE_POLL,
         $poll['poll_id'],
+        'polls',
         Cot::$L['Poll'],
         $poll['poll_text'],
         '',
