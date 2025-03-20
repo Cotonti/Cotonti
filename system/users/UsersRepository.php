@@ -58,6 +58,22 @@ class UsersRepository extends BaseRepository
         return $result;
     }
 
+    /**
+     * @param int $groupId
+     * @param $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return list<array<string, int|string>> Requested items data
+     */
+    public function getByGroup(int $groupId, $orderBy = null, ?int $limit = 1000, ?int $offset = null): array
+    {
+        $condition = 'user_maingrp = :groupId OR user_id IN (SELECT gru_userid FROM '
+            . Cot::$db->quoteT(Cot::$db->groups_users) . ' WHERE gru_groupid = :groupId)';
+        $params = ['groupId' => $groupId];
+
+        return $this->getByCondition($condition, $params, $orderBy, $limit, $offset);
+    }
+
     protected function afterFetch(array $item): array
     {
         $item['user_id'] = (int) $item['user_id'];

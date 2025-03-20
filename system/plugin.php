@@ -148,10 +148,10 @@ if ($autoAssignTags && !empty($t)) {
 }
 
 $pluginTemplate = $t ?? null;
+
 require_once Cot::$cfg['system_dir'] . '/header.php';
-if (!empty($pluginTemplate)) {
-    $t = $pluginTemplate;
-}
+
+$t = $pluginTemplate;
 unset($pluginTemplate);
 
 if (isset($t) && is_object($t)) {

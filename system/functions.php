@@ -4120,7 +4120,7 @@ function cot_schemeFile()
  * 2) Default theme folder (if current is not default)
  * 3) tpl subdir in module/plugin folder (fallback template)
  *
- * @param mixed $base Item name (string), or base names (array)
+ * @param string|array $base Item name (string), or base names (array)
  * @param string $type Extension type: 'plug', 'module' or 'core'
  * @param bool $admin Use admin theme file if present. Tries to determine from base string by default.
  * @return ?string
@@ -6197,9 +6197,9 @@ function cot_parse_url($url)
 
 	// check for URL with auth credentials (user[:pass]@site.com/)
 	if (
-        empty($urlp['host']) &&
-        isset($urlp['path']) &&
-        preg_match('#^(([^@:]+)|([^@:]+:[^@:]+?))@.+/#', $urlp['path'])
+        empty($urlp['host'])
+        && isset($urlp['path'])
+        && preg_match('#^(([^@:]+)|([^@:]+:[^@:]+?))@.+/#', $urlp['path'])
     ) {
         $needfix = true;
     }
@@ -6226,12 +6226,15 @@ function cot_http_build_url($urlp)
 {
 	$url = '';
     $port = '';
-    if(!empty($urlp['port'])) {
+
+    if (!empty($urlp['port'])) {
         $port = (string)intval($urlp['port']);
         if($urlp['port'] != $port) $port = '';
     }
 
-	if (!empty($urlp['scheme'])) $url .= $urlp['scheme'] . '://';
+	if (!empty($urlp['scheme'])) {
+        $url .= $urlp['scheme'] . '://';
+    }
 	if (!empty($urlp['user'])) {
 		if (!empty($urlp['pass'])) {
 			$url .= $urlp['user'] . ':' . $urlp['pass'] . '@';
@@ -6239,18 +6242,27 @@ function cot_http_build_url($urlp)
 			$url .= $urlp['user'] . '@';
 		}
 	}
-
-    if (!empty($urlp['host'])) $url .= $urlp['host'];
-
-	if ($port && $port != '80' && preg_match('/^\d+$/', $port)) $url .=  ':' . $port;
-
-    if ( (empty($urlp['path']) && ( !empty($urlp['query']) || !empty($urlp['fragment']) ))
-        || ((!empty($urlp['path'])) && substr($urlp['path'], 0, 1) != '/') ) $urlp['path'] = '/' . $urlp['path'];
-
-    if (!empty($urlp['path'])) $url .=  $urlp['path'];
-
-	if (!empty($urlp['query'])) $url .=  '?' . $urlp['query'];
-	if (!empty($urlp['fragment'])) $url .=  '#' . $urlp['fragment'];
+    if (!empty($urlp['host'])) {
+        $url .= $urlp['host'];
+    }
+	if ($port && $port != '80' && preg_match('/^\d+$/', $port)) {
+        $url .=  ':' . $port;
+    }
+    if (
+        (empty($urlp['path']) && (!empty($urlp['query']) || !empty($urlp['fragment'])))
+        || ((!empty($urlp['path'])) && substr($urlp['path'], 0, 1) != '/')
+    ){
+        $urlp['path'] = '/' . $urlp['path'];
+    }
+    if (!empty($urlp['path'])) {
+        $url .=  $urlp['path'];
+    }
+	if (!empty($urlp['query'])) {
+        $url .=  '?' . $urlp['query'];
+    }
+	if (!empty($urlp['fragment'])) {
+        $url .=  '#' . $urlp['fragment'];
+    }
 
 	return $url;
 }
