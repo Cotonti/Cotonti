@@ -59,7 +59,9 @@ class ItemService
      */
     public function isRecentlyDeleted(string $source, $sourceId): bool
     {
-        return in_array($sourceId, self::$recentlyDeleted[$source]);
+        return isset(self::$recentlyDeleted[$source])
+            && is_array(self::$recentlyDeleted[$source])
+            && in_array($sourceId, self::$recentlyDeleted[$source]);
     }
 
     /**

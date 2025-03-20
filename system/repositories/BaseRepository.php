@@ -17,7 +17,7 @@ abstract class BaseRepository
      * @param array|string $condition
      * @param array<string, int|float|string>|list<int|float|string>|string|int|float $params
      * @param array|string $orderBy
-     * @return array<int, array<int|string>> Requested items data
+     * @return list<array<string, int|float|string>> Requested items data
      * @todo joins, index by
      */
     public function getByCondition(
