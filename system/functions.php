@@ -1744,7 +1744,7 @@ function cot_auth($area, $option = null, $mask = 'RWA')
 			Cot::$sys['auth_log'][] = $logOption . '=0';
 			$res[] = false;
 
-		} elseif ($option == 'any') {
+		} elseif ($option === 'any') {
 			$cnt = 0;
 			if (isset(Cot::$usr['auth']) && is_array(Cot::$usr['auth'])) {
                 if (isset(Cot::$usr['auth'][$area]) && is_array(Cot::$usr['auth'][$area])) {
@@ -1753,7 +1753,14 @@ function cot_auth($area, $option = null, $mask = 'RWA')
                     }
                 }
 
-                $cnt = ($cnt == 0 && Cot::$usr['auth']['admin']['a'] && $ml == 'A') ? 1 : $cnt;
+                $cnt = (
+                    $cnt === 0
+                    && isset(Cot::$usr['auth']['admin']['a'])
+                    && Cot::$usr['auth']['admin']['a']
+                    && $ml == 'A'
+                )
+                    ? 1
+                    : $cnt;
             }
             Cot::$sys['auth_log'][] = ($cnt > 0) ? $logOption . '=1' : $logOption . '=0';
 			$res[] = ($cnt > 0);
