@@ -1753,7 +1753,15 @@ function cot_auth($area, $option = null, $mask = 'RWA')
                     }
                 }
 
-                $cnt = ($cnt == 0 && Cot::$usr['auth']['admin']['a'] && $ml == 'A') ? 1 : $cnt;
+			    $cnt = (
+                    $cnt === 0
+                    && isset(Cot::$usr['auth']['admin']['a'])
+                    && Cot::$usr['auth']['admin']['a'] === 'A'
+                    && $ml == 'A'
+                )
+                    ? 1
+                    : $cnt;
+
             }
             Cot::$sys['auth_log'][] = ($cnt > 0) ? $logOption . '=1' : $logOption . '=0';
 			$res[] = ($cnt > 0);
