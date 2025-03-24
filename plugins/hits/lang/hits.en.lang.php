@@ -25,7 +25,7 @@ $L['cfg_hit_precision_hint'] = '(bigger values minimizes server load)';
 /**
  * Plugin Title & Subtitle
  */
-$L['hits'] = isset($L['hits']) ? $L['hits'] : 'Hits'; // see lang/ru/main.en.lang.php
+$L['hits'] = isset($L['hits']) ? $L['hits'] : 'Hits'; // see lang/en/main.en.lang.php
 $L['info_desc'] = 'Simple hit statistic recommended for small sites';
 
 /**
