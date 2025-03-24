@@ -16,7 +16,7 @@
 				<tr>
 					<td class="coltop width5">
 						<!-- IF {PHP.cfg.jquery} -->
-						<input class="checkbox" type="checkbox" value="{PHP.themelang.pm.Selectall}/{PHP.themelang.pm.Unselectall}" onclick="$('.checkbox').attr('checked', this.checked);" />
+						<input class="checkbox" type="checkbox" value="" onclick="$('.checkbox').attr('checked', this.checked);" />
 						<!-- ENDIF -->
 					</td>
 					<td class="coltop width5">{PHP.L.Status}</td>

@@ -73,7 +73,7 @@
 			<!-- IF {PHP|cot_module_active('pm')} -->
 			<tr>
 				<td>{PHP.L.users_pmnotify}:</td>
-				<td>{USERS_EDIT_PMNOTIFY}<br />{PHP.themelang.usersedit.PMnotifyhint}</td>
+				<td>{USERS_EDIT_PMNOTIFY}<br />{PHP.L.users_pmnotifyhint}</td>
 			</tr>
 			<!-- ENDIF -->
 			<tr>

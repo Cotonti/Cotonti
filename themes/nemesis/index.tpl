@@ -18,7 +18,6 @@
 			<li><a href="{PHP|cot_url('users')}">{PHP.L.Users}</a></li>
 			<li><a href="{PHP|cot_url('users','m=profile')}">{PHP.L.Profile}</a></li>
 			<li><a href="{PHP|cot_url('pfs')}">{PHP.L.PFS}</a></li>
-			<li><a href="{PHP|cot_url('plug','e=whosonline')}">{PHP.themelang.index.Online}</a></li>
 		</ul>
 	</div>
 	<!-- ENDIF -->
