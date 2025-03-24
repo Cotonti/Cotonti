@@ -21,10 +21,6 @@
 					{USERS_EDIT_GROUPS}
 				</td>
 			</tr>
-			<tr id="users-ban-expire">
-				<td>{PHP.L.Country}:</td>
-				<td>{USERS_EDIT_COUNTRY}</td>
-			</tr>
 			<tr>
 				<td>{PHP.L.Country}:</td>
 				<td>{USERS_EDIT_COUNTRY}</td>
