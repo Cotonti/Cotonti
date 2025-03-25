@@ -18,9 +18,9 @@
             <tr>
                 <td colspan="2">
 					{FORUMS_EDITPOST_FORM_TEXT}
-                    <!-- IF {FORUMS_EDITPOST_PFS} --><span class="marginright10">{FORUMS_EDITPOST_PFS}</span><!-- ENDIF -->
-                    <!-- IF {FORUMS_EDITPOST_SFS} -->{FORUMS_EDITPOST_SFS}<!-- ENDIF -->
-
+                    <!-- IF {FORUMS_EDITPOST_PFS} -->{FORUMS_EDITPOST_PFS}<!-- ENDIF -->
+                    <!-- IF {FORUMS_EDITPOST_SFS} --><span class="spaced">{PHP.cfg.separator}</span>
+                    {FORUMS_EDITPOST_SFS}<!-- ENDIF -->
                     <!-- IF {FORUMS_EDITPOST_EDIT_TIMEOUT} -->
                     <div class="margintop10">
                         {PHP.L.forums_edittimeoutnote} {FORUMS_EDITPOST_EDIT_TIMEOUT}

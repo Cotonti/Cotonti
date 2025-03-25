@@ -112,7 +112,9 @@
 		<tr>
 			<td>
 				{FORUMS_POSTS_NEWPOST_TEXT}
-				<!-- IF {FORUMS_POSTS_NEWPOST_MYPFS} -->{FORUMS_POSTS_NEWPOST_MYPFS}<!-- ENDIF -->
+				<!-- IF {FORUMS_POSTS_NEWPOST_PFS} -->{FORUMS_POSTS_NEWPOST_PFS}<!-- ENDIF -->
+				<!-- IF {FORUMS_POSTS_NEWPOST_SFS} --><span class="spaced">{PHP.cfg.separator}</span>
+				{FORUMS_POSTS_NEWPOST_SFS}<!-- ENDIF -->
 				<!-- IF {PHP.cfg.forums.edittimeout} != 0 -->
 				{PHP.L.forums_edittimeoutnote} {FORUMS_POSTS_NEWPOST_EDITTIMEOUT}
 				<!-- ENDIF -->

@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=forums.editpost.tags, forums.posts.newpost.tags, forums.newtopic.tags
-Tags=forums.editpost.tpl:{FORUMS_EDITPOST_MYPFS};forums.posts.tpl:{FORUMS_POSTS_NEWPOST_MYPFS};forums.newtopic.tpl:{FORUMS_NEWTOPIC_MYPFS}
+Tags=forums.editpost.tpl:{FORUMS_EDITPOST_PFS},{FORUMS_EDITPOST_SFS};forums.posts.tpl:{FORUMS_POSTS_NEWPOST_PFS},{FORUMS_POSTS_NEWPOST_SFS};forums.newtopic.tpl:{FORUMS_NEWTOPIC_PFS},{FORUMS_NEWTOPIC_SFS}
 [END_COT_EXT]
 ==================== */
 
@@ -12,6 +12,8 @@ Tags=forums.editpost.tpl:{FORUMS_EDITPOST_MYPFS};forums.posts.tpl:{FORUMS_POSTS_
  * @package PFS
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ *
+ * @var XTemplate $t
  */
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -20,22 +22,31 @@ require_once cot_incfile('pfs', 'module');
 
 $pfs_caller = cot_get_caller();
 if ($pfs_caller == 'forums.posts') {
-	$pfs_src = 'newpost';
-	$pfs_name = 'rmsgtext';
-	$pfs_tag = 'POSTS_NEWPOST';
+    $pfsSrc = 'newpost';
+    $pfsName = 'rmsgtext';
+    $pfsTag = 'POSTS_NEWPOST';
 } elseif ($pfs_caller == 'forums.newtopic') {
-	$pfs_src = 'newtopic';
-	$pfs_name = 'rmsgtext';
-	$pfs_tag = 'NEWTOPIC';
+    $pfsSrc = 'newtopic';
+    $pfsName = 'rmsgtext';
+    $pfsTag = 'NEWTOPIC';
 } else {
-	$pfs_src = 'editpost';
-	$pfs_name = 'rmsgtext';
-	$pfs_tag = 'EDITPOST';
+    $pfsSrc = 'editpost';
+    $pfsName = 'rmsgtext';
+    $pfsTag = 'EDITPOST';
 }
 
-$pfs = cot_build_pfs(Cot::$usr['id'], $pfs_src, $pfs_name, Cot::$L['Mypfs'], Cot::$sys['parser']);
-$pfs .= (cot_auth('pfs', 'a', 'A'))
-    ? ' &nbsp; ' . cot_build_pfs(0, $pfs_src, $pfs_name, Cot::$L['SFS'], Cot::$sys['parser'])
-    : '';
+$t->assign([
+    'FORUMS_' . $pfsTag . '_PFS' => cot_build_pfs(Cot::$usr['id'], $pfsSrc, $pfsName, Cot::$L['Mypfs'], Cot::$sys['parser']),
+    'FORUMS_' . $pfsTag . '_SFS' => (cot_auth('pfs', 'a', 'A'))
+        ? cot_build_pfs(0, $pfsSrc, $pfsName, Cot::$L['SFS'], Cot::$sys['parser'])
+        : '',
+]);
 
-$t->assign('FORUMS_' . $pfs_tag . '_MYPFS', $pfs);
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.26
+    $pfs = cot_build_pfs(Cot::$usr['id'], $pfsSrc, $pfsName, Cot::$L['Mypfs'], Cot::$sys['parser']);
+    $pfs .= (cot_auth('pfs', 'a', 'A'))
+        ? ' &nbsp; ' . cot_build_pfs(0, $pfsSrc, $pfsName, Cot::$L['SFS'], Cot::$sys['parser'])
+        : '';
+    $t->assign('FORUMS_' . $pfsTag . '_MYPFS', $pfs);
+}

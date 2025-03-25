@@ -24,8 +24,9 @@
             <tr>
                 <td colspan="2">
 					{FORUMS_NEWTOPIC_FORM_TEXT}
-                    <!-- IF {FORUMS_NEWTOPIC_PFS} --><span class="marginright10">{FORUMS_NEWTOPIC_PFS}</span><!-- ENDIF -->
-                    <!-- IF {FORUMS_NEWTOPIC_SFS} -->{FORUMS_NEWTOPIC_SFS}<!-- ENDIF -->
+                    <!-- IF {FORUMS_NEWTOPIC_PFS} -->{FORUMS_NEWTOPIC_PFS}<!-- ENDIF -->
+                    <!-- IF {FORUMS_NEWTOPIC_SFS} --><span class="spaced">{PHP.cfg.separator}</span>
+                    {FORUMS_NEWTOPIC_SFS}<!-- ENDIF -->
                     <!-- IF {FORUMS_NEWTOPIC_EDIT_TIMEOUT} -->
                     <div class="margintop10">
                     {PHP.L.forums_edittimeoutnote} {FORUMS_NEWTOPIC_EDIT_TIMEOUT}
