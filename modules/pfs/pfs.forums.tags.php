@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=forums.editpost.tags, forums.posts.newpost.tags, forums.newtopic.tags
-Tags=forums.editpost.tpl:{FORUMS_EDITPOST_MYPFS};forums.editpost.tpl:{FORUMS_POSTS_NEWPOST_MYPFS};forums.newtopic.tpl:{FORUMS_NEWTOPIC_MYPFS}
+Tags=forums.editpost.tpl:{FORUMS_EDITPOST_MYPFS};forums.posts.tpl:{FORUMS_POSTS_NEWPOST_MYPFS};forums.newtopic.tpl:{FORUMS_NEWTOPIC_MYPFS}
 [END_COT_EXT]
 ==================== */
 
