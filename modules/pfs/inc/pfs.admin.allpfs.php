@@ -67,6 +67,7 @@ foreach ($sql_pfs->fetchAll() as $row) {
 }
 
 $t->assign([
+    'ADMIN_PFS_URL_CONFIG' => cot_url('admin', ['m' => 'config', 'n' => 'edit', 'o' => 'module', 'p' => 'pfs']),
 	'ADMIN_ALLPFS_ON_PAGE' => $ii,
 ]);
 

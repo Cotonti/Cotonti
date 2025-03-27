@@ -58,7 +58,7 @@ if ($s == 'allpfs') {
 	}
 
 	$t->assign([
-		'ADMIN_PFS_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=module&p=pfs'),
+		'ADMIN_PFS_URL_CONFIG' => cot_url('admin', ['m' => 'config', 'n' => 'edit', 'o' => 'module', 'p' => 'pfs']),
 		'ADMIN_PFS_URL_ALLPFS' => cot_url('admin', 'm=pfs&s=allpfs'),
 		'ADMIN_PFS_URL_SFS' => cot_url('pfs', 'userid=0'),
 	]);
