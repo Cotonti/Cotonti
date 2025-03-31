@@ -31,6 +31,9 @@
 	<div class="block">
 		<h2 class="tags">{PHP.L.Tags}</h2>
 		{INDEX_TAG_CLOUD}
+		<!-- IF {INDEX_TAG_CLOUD_ALL_LINK} -->
+		<p class="small textcenter">{INDEX_TAG_CLOUD_ALL_LINK}</p>
+		<!-- ENDIF -->
 	</div>
 	<!-- ENDIF -->
 	<!-- IF {PHP.out.whosonline} -->
