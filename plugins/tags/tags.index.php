@@ -14,13 +14,31 @@ Tags=index.tpl:{INDEX_TAG_CLOUD},{INDEX_TAG_CLOUD_ALL_LINK}
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsService;
+use cot\modules\forums\inc\ForumsDictionary;
+use cot\modules\page\inc\PageDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if (Cot::$cfg['plugin']['tags']['pages'] || Cot::$cfg['plugin']['tags']['forums']) {
 	require_once cot_incfile('tags', 'plug');
 
 	$limit = Cot::$cfg['plugin']['tags']['lim_index'] == 0 ? null : (int) Cot::$cfg['plugin']['tags']['lim_index'];
-	$tcloud = cot_tag_cloud(Cot::$cfg['plugin']['tags']['index'], Cot::$cfg['plugin']['tags']['order'], $limit);
+
+    $extensionsService = ExtensionsService::getInstance();
+
+    $source = 'all';
+    if (Cot::$cfg['plugin']['tags']['index'] === 'pages') {
+        if ($extensionsService->isModuleActive('page')) {
+            $source = PageDictionary::SOURCE_PAGE;
+        }
+    } elseif (Cot::$cfg['plugin']['tags']['index'] === 'forums') {
+        if ($extensionsService->isModuleActive('forums')) {
+            $source = ForumsDictionary::SOURCE_TOPIC;
+        }
+    }
+
+	$tcloud = cot_tag_cloud($source, Cot::$cfg['plugin']['tags']['order'], $limit);
 	$tc_html = Cot::$R['tags_code_cloud_open'];
 	$tag_count = 0;
 	foreach ($tcloud as $tag => $cnt) {
