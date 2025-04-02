@@ -11,6 +11,15 @@ use cot\extensions\ExtensionsDictionary;
 use cot\extensions\ExtensionsService;
 use cot\traits\GetInstanceTrait;
 
+/**
+ * Default controller for extension:
+ *   request: index.php?e=<extension code>
+ *   controller class: \cot\<modules or plugins (folder name)>\<extension code>\controllers\IndexController
+ *
+ * Default admin controller for extension:
+ *   request: admin.php?m=<extension code>
+ *   controller class: \cot\<modules or plugins (folder name)>\<extension code>\controllers\admin\IndexController
+ */
 class Router
 {
     use GetInstanceTrait;
@@ -118,7 +127,7 @@ class Router
             throw new NotFoundHttpException();
         }
 
-        // Module's controller
+        // Extension's controller
         $route = $this->processController(
             $extensionCode,
             $requestControllerId,
@@ -143,6 +152,7 @@ class Router
 
     /**
      * Route for "admin.other" admin part (https://domain.tld/admin.php?m=other)
+     * We don't use controllers here. Only the "tools" hook.
      * Plugins only
      */
     public function routeAdminOther(?string $extensionCode): Route
@@ -156,19 +166,7 @@ class Router
 
         $extensionType = ExtensionsDictionary::TYPE_PLUGIN;
 
-        $requestControllerId = cot_import('n', 'G', 'ALP', 24);
-        $requestActionId = cot_import('a', 'G', 'ALP', 24);
-
-        $route = $this->processController(
-            $extensionCode,
-            $requestControllerId,
-            $requestActionId,
-            $extensionType,
-            true
-        );
-        if ($route === null) {
-            $route = $this->processAdminExtensionIncludeFiles($extensionCode, $extensionType, 'tools');
-        }
+        $route = $this->processAdminExtensionIncludeFiles($extensionCode, $extensionType, 'tools');
 
         if ($route === null) {
             throw new NotFoundHttpException();
@@ -194,7 +192,9 @@ class Router
         if ($controllerId === null) {
             if ($extensionCode !== null) {
                 // Extensions can have a default IndexController
-                $controllerId = ExtensionsDictionary::DEFAULT_CONTROLLER_ID;
+                $controllerId = $isAdmin
+                    ? ExtensionsDictionary::DEFAULT_ADMIN_CONTROLLER_ID
+                    : ExtensionsDictionary::DEFAULT_CONTROLLER_ID;
             } elseif (!$isAdmin) {
                 // Site's amin area core have a default MainController
                 $controllerId = 'main';

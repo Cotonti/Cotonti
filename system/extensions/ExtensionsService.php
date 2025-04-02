@@ -40,7 +40,9 @@ class ExtensionsService
 
         $result = [
             'controller' => $router->getControllerClass(
-                ExtensionsDictionary::DEFAULT_CONTROLLER_ID,
+                $isAdminPart
+                    ? ExtensionsDictionary::DEFAULT_ADMIN_CONTROLLER_ID
+                    : ExtensionsDictionary::DEFAULT_CONTROLLER_ID,
                 $extensionCode,
                 $extensionType,
                 $isAdminPart
@@ -131,7 +133,7 @@ class ExtensionsService
     }
 
     /**
-     * Get extension's admin page url if exists
+     * Get extension's public page url if exists
      */
     public function getPublicPageUrl(string $extensionCode, ?string $extensionType = null): ?string
     {
@@ -143,7 +145,7 @@ class ExtensionsService
         $result = '__default__';
 
         /* === Hook === */
-        foreach (cot_getextplugins('extension.getPublicPageUrl') as $pl) {
+        foreach (cot_getextplugins('extension.getPublicUrl') as $pl) {
             include $pl;
         }
         /* ===== */
@@ -185,7 +187,7 @@ class ExtensionsService
         $result = '__default__';
 
         /* === Hook === */
-        foreach (cot_getextplugins('extensionService.hasPublicPage') as $pl) {
+        foreach (cot_getextplugins('extensionService.getAdminUrl') as $pl) {
             include $pl;
         }
         /* ===== */
