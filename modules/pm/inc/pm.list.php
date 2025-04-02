@@ -38,7 +38,7 @@ if (is_array($msg) && count($msg) > 0) {
 
 	} elseif (!empty($a)) {
 		cot_star_pm($msg);
-		if (COT_AJAX && (int) $id > 0) {
+		if (COT_AJAX && isset($id) && (int) $id > 0) {
 			die();
 		}
 	}
