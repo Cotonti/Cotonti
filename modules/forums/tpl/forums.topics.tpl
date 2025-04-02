@@ -43,9 +43,6 @@
 
     <ul id="newf">
         <li><a href="{FORUMS_TOPICS_NEWTOPICURL}" rel="nofollow">{PHP.L.forums_newtopic}</a></li>
-        <!-- BEGIN: FORUMS_SECTIONS_POLLS -->
-        <li><a href="{FORUMS_TOPICS_NEWPOLLURL}" rel="nofollow">{PHP.L.forums_newpoll}</a></li>
-        <!-- END: FORUMS_SECTIONS_POLLS -->
     </ul>
 
     <table class="cells">

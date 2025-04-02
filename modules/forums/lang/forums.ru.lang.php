@@ -75,7 +75,6 @@ $L['forums_markallasread'] = 'Отметить все сообщения как 
 $L['forums_mergetime'] = 'Добавлено %1$s спустя:';
 $L['forums_messagetooshort'] = 'Сообщение слишком короткое';
 $L['forums_newtopic'] = 'Новая тема';
-$L['forums_newpoll'] = 'Новый опрос';
 $L['forums_titletooshort'] = 'Название темы слишком короткое или отсутствует';
 $L['forums_topiclocked'] = 'Тема заблокирована, новые сообщения запрещены';
 $L['forums_topicoptions'] = 'Опции темы';

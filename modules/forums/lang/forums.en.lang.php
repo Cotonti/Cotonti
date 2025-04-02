@@ -75,7 +75,6 @@ $L['forums_markallasread'] = 'Mark all posts as read';
 $L['forums_mergetime'] = 'Added %1$s later:';
 $L['forums_messagetooshort'] = 'Topic message is too short';
 $L['forums_newtopic'] = 'New topic';
-$L['forums_newpoll'] = 'New poll';
 $L['forums_titletooshort'] = 'Topic title is too short or missing';
 $L['forums_topiclocked'] = 'This topic is locked, new posts are not allowed.';
 $L['forums_topicoptions'] = 'Topic options';
