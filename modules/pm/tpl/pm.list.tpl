@@ -22,7 +22,7 @@
 					<td class="coltop width5">{PHP.L.Status}</td>
 					<td class="coltop width5">
 						<div class="pm-star pm-star-readonly">
-							<a href="#" title ="{PHP.L.pm_starred}"> &nbsp; </a>
+							<span title="{PHP.L.pm_starred}"> &nbsp; </span>
 						</div>
 					</td>
 					<td class="coltop width40">{PHP.L.Subject}</td>

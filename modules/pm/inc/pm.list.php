@@ -210,15 +210,19 @@ $t->assign([
 	'PM_FILTER_UNREAD_URL' => $url_unread,
 	'PM_FILTER_STARRED' => cot_rc_link($url_starred, Cot::$L['pm_starred'], Cot::$cfg['pm']['turnajax'] ? ['class' => 'ajax'] : ''),
 	'PM_FILTER_STARRED_URL' => $url_starred,
-
-    // deprecated in 0.9.24
-	'PM_PAGEPREV' => $pagenav['prev'],
-	'PM_PAGENEXT' => $pagenav['next'],
-	'PM_PAGES' => $pagenav['main'],
-	'PM_CURRENTPAGE' => $pagenav['current'],
-	'PM_TOTALPAGES' => $pagenav['total'],
-	'PM_SENT_TYPE' => ($f == 'sentbox') ? Cot::$L['Recipient'] : Cot::$L['Sender']
+    'PM_SENT_TYPE' => ($f == 'sentbox') ? Cot::$L['Recipient'] : Cot::$L['Sender'],
 ]);
+
+if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
+    // @deprecated in 0.9.24
+    $t->assign([
+        'PM_PAGEPREV' => $pagenav['prev'],
+        'PM_PAGENEXT' => $pagenav['next'],
+        'PM_PAGES' => $pagenav['main'],
+        'PM_CURRENTPAGE' => $pagenav['current'],
+        'PM_TOTALPAGES' => $pagenav['total'],
+    ]);
+}
 
 $t->assign(cot_generatePaginationTags($pagenav));
 
