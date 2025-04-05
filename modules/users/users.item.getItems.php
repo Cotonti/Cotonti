@@ -60,7 +60,7 @@ foreach ($users as $row) {
         $dto->data = $row;
     }
 
-    $result[$dto->sourceId] = $dto;
+    $result[$dto->id] = $dto;
 }
 
 /* === Hook === */

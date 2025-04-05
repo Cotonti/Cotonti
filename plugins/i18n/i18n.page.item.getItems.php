@@ -49,18 +49,18 @@ foreach ($data as $row) {
 unset($data);
 
 foreach ($result as $row) {
-    if (empty($i18nData[$row->sourceId])) {
+    if (empty($i18nData[$row->id])) {
         continue;
     }
-    if (!empty($i18nData[$row->sourceId]['ipage_title'])) {
-        $row->title = $i18nData[$row->sourceId]['ipage_title'];
+    if (!empty($i18nData[$row->id]['ipage_title'])) {
+        $row->title = $i18nData[$row->id]['ipage_title'];
     }
-    if (!empty($i18nData[$row->sourceId]['ipage_desc'])) {
-        $row->description = $i18nData[$row->sourceId]['ipage_desc'];
+    if (!empty($i18nData[$row->id]['ipage_desc'])) {
+        $row->description = $i18nData[$row->id]['ipage_desc'];
     }
 
     if ($withFullItemData) {
-        $row->data = array_merge($row->data, $i18nData[$row->sourceId]);
+        $row->data = array_merge($row->data, $i18nData[$row->id]);
     }
 
     $catI18n = cot_i18n_get_cat($row->categoryCode, $i18n_locale);

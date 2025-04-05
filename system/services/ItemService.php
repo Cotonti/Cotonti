@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace cot\services;
 
 use cot\dto\ItemDto;
-use cot\extensions\ExtensionsService;
-use cot\plugins\trashcan\inc\TrashcanService;
 use cot\traits\GetInstanceTrait;
 
 defined('COT_CODE') or die('Wrong URL');

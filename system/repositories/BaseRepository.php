@@ -14,7 +14,7 @@ abstract class BaseRepository
     abstract public static function getTableName(): string;
 
     /**
-     * @param array|string $condition
+     * @param array|string|null $condition
      * @param array<string, int|float|string>|list<int|float|string>|string|int|float $params
      * @param array|string $orderBy
      * @return list<array<string, int|float|string>> Requested items data

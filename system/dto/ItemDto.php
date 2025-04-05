@@ -20,9 +20,9 @@ final class ItemDto
     public $source;
 
     /**
-     * @var int
+     * @var int|string
      */
-    public $sourceId;
+    public $id;
 
     /**
      * @var string
@@ -90,7 +90,7 @@ final class ItemDto
         ?int $authorId = null
     ) {
         $this->source = $source;
-        $this->sourceId = $sourceId;
+        $this->id = $sourceId;
         $this->extensionCode = $extensionCode;
         $this->typeTitle = $typeTitle;
         $this->title = $title;

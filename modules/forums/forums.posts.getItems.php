@@ -101,7 +101,7 @@ foreach ($forumPosts as $post) {
         $dto->categoryTitle = Cot::$structure['forums'][$post['ft_cat']]['title'];
     }
 
-    $result[$dto->sourceId] = $dto;
+    $result[$dto->id] = $dto;
 }
 
 /* === Hook === */

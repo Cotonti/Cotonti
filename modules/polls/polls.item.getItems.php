@@ -59,7 +59,7 @@ foreach ($polls as $poll) {
     if ($withFullItemData) {
         $dto->data = $poll;
     }
-    $result[$dto->sourceId] = $dto;
+    $result[$dto->id] = $dto;
 }
 
 

@@ -75,7 +75,7 @@ foreach ($pages as $row) {
         $dto->categoryTitle = Cot::$structure['page'][$row['page_cat']]['title'];
     }
 
-    $result[$dto->sourceId] = $dto;
+    $result[$dto->id] = $dto;
 }
 
 /* === Hook === */

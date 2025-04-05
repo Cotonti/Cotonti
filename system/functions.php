@@ -4537,7 +4537,7 @@ function cot_timezone_transitions($tz)
  * ['last'] - last page with number
  *
  * @param string $module Site area or script name
- * @param mixed $params URL parameters as array or parameter string
+ * @param string|array<string, string> $params URL parameters as array or parameter string
  * @param int $currentOffset Current page offset
  * @param int $entries Total rows
  * @param int $perPage Rows per page
