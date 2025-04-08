@@ -3,7 +3,7 @@
     <h2 class="users">{USERS_BREADCRUMBS}</h2>
 
     <div class="marginbottom10">
-        <h2 class="prefs">{PHP.L.Filters}</h2>
+        <h2 class="prefs">{PHP.L.Filters}<!-- IF {USERS_ACTIVE_FILTERS} -->: {USERS_ACTIVE_FILTERS}<!-- ENDIF --></h2>
         <form id="filter-form" action="{USERS_FILTERS_ACTION}" method="GET">
             {USERS_FILTERS_PARAMS}
             <table class="marginbottom10">

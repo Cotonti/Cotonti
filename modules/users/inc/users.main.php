@@ -89,7 +89,7 @@ if (empty($d)) {
 	$d = 0;
 }
 
-$title = [];
+$activeFiltersList = [];
 $metaTitle = [];
 $metaDesc = [];
 $localskin = cot_tplfile('users', 'module');
@@ -100,7 +100,7 @@ if ($s === 'grplevel' || $s === 'grpname' || $gm > 1) {
 
 if ($sq !== null && $sq !== '') {
     $titleString = Cot::$L['Search'] . " '{$sq}'";
-	$title[] = htmlspecialchars($titleString);
+	$activeFiltersList[] = htmlspecialchars($titleString);
     $metaTitle[] = $titleString;
     $metaDesc[] = $titleString;
 
@@ -167,7 +167,7 @@ if ($g > 1) {
     if (!empty($grpTitleDesc)) {
         $grpTitle .= ' (' . implode(', ', $grpTitleDesc) . ')';
     }
-    $title[] = $grpTitle;
+    $activeFiltersList[] = $grpTitle;
     $titleString = strip_tags($grpTitle);
     $metaTitle[] = $titleString;
     $metaDesc[] = $titleString
@@ -191,7 +191,7 @@ if ($gm > 1) {
     if (!empty($grpTitleDesc)) {
         $grpTitle .= ' (' . implode(', ', $grpTitleDesc) . ')';
     }
-    $title[] = $grpTitle;
+    $activeFiltersList[] = $grpTitle;
     $titleString = strip_tags($grpTitle);
     $metaTitle[] = $titleString;
     $metaDesc[] = $titleString
@@ -207,7 +207,7 @@ if ($country !== null && $country !== '') {
         cot_die_message(404);
     }
     $titleString = Cot::$L['Country'] . ": '" . ($country === '00' ? Cot::$L['None'] : $cot_countries[$country]) . "'";
-    $title[] = htmlspecialchars($titleString);
+    $activeFiltersList[] = htmlspecialchars($titleString);
     $metaTitle[] = $titleString;
     $metaDesc[] = $titleString;
 
@@ -324,8 +324,8 @@ if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
 $pagenav = cot_pagenav('users', $users_url_path, $d, $totalusers, Cot::$cfg['users']['maxusersperpage']);
 
 $titleAddon = '';
-if (!empty($title)) {
-    $titleAddon = implode(', ', $title);
+if (!empty($activeFiltersList)) {
+    $titleAddon = implode(', ', $activeFiltersList);
     if ($titleAddon !== '') {
         $titleAddon = ', ' . $titleAddon;
     }
@@ -450,14 +450,12 @@ foreach (cot_getextplugins('users.filters') as $pl) {
 /* ===== */
 
 $breadCrumbs = [[cot_url('users'), Cot::$L['Users']]];
-if (!empty($title)) {
-    $breadCrumbs[] = implode(', ', $title);
-}
 
 $t->assign([
 	'USERS_TITLE' => Cot::$L['use_title'] . $titleAddon,
 	'USERS_SUBTITLE' => Cot::$L['use_subtitle'],
     'USERS_BREADCRUMBS' => cot_breadcrumbs($breadCrumbs, Cot::$cfg['homebreadcrumb']),
+    'USERS_ACTIVE_FILTERS' => !empty($activeFiltersList) ? implode(', ', $activeFiltersList) : null,
     'USERS_FILTERS_ACTION' => $filtersFormAction,
     'USERS_FILTERS_PARAMS' => $filtersFormParams,
     'USERS_FILTERS_COUNTRY' => $filtersFormCountry,

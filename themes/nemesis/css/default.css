@@ -211,7 +211,7 @@ button::-moz-focus-inner { padding:0; border:none; }
 	font-size:1.1em;
 	white-space:pre-wrap;
 }
-.breadcrumbs{
+.breadcrumbs {
 	margin-bottom: 7px;
 }
 .clear	{ clear:both; }
