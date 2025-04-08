@@ -19,12 +19,13 @@ defined('COT_CODE') or die('Wrong URL');
  * Arrow Icons
  */
 
-$R['icon_down'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-down.png" alt="" />';
-$R['icon_right'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-right.png" alt="" />';
-$R['icon_left'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-left.png" alt="" />';
-$R['icon_up'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-up.png" alt="" />';
-$R['icon_vert_active']['desc'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-up-active.png" alt="" />';
-$R['icon_vert_active']['asc'] = '<img src="'.$cfg['icons_dir'].'/default/16/arrow-down-active.png" alt="" />';;
+$R['icon_down'] = '<img src="' . $cfg['icons_dir'] . '/default/16/arrow-down.png" alt="" />';
+$R['icon_right'] = '<img src="' . $cfg['icons_dir'] . '/default/16/arrow-right.png" alt="" />';
+$R['icon_left'] = '<img src="' . $cfg['icons_dir'] . '/default/16/arrow-left.png" alt="" />';
+$R['icon_up'] = '<img src="' . $cfg['icons_dir'] . '/default/16/arrow-up.png" alt="" />';
+$R['icon_up_active'] = '<img src="' . $cfg['icons_dir'] . '/default/16/arrow-up-active.png" alt="" />';
+$R['icon_vert_active']['desc'] = $R['icon_up_active'];
+$R['icon_vert_active']['asc'] = '<img src="' . $cfg['icons_dir'] . '/default/16/arrow-down-active.png" alt="" />';
 
 /**
  * Main Icons

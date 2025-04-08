@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\extensions\ExtensionsDictionary;
+use cot\extensions\ExtensionsHelper;
 use cot\router\Router;
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
@@ -42,11 +44,8 @@ $route = Router::getInstance()->routeAdmin();
 
 if (!empty($route->extensionCode)) {
     // Check the extension administration rights
-    list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin'])
-        = cot_auth($route->extensionCode, 'any');
+    [Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']] = cot_auth($route->extensionCode, 'any');
     cot_block(Cot::$usr['isadmin']);
-
-    $adminTitle = $cot_modules[$route->extensionCode]['title'] ?? '';
 }
 if (!empty($route->includeFiles)) {
     foreach ($route->includeFiles as $includeFile) {
@@ -55,6 +54,26 @@ if (!empty($route->includeFiles)) {
 } elseif ($route->controller !== null && $route->action !== null) {
     $adminMain = $route->controller->runAction($route->action);
 }
+
+if (!empty($route->extensionCode)) {
+    if (empty($adminTitle)) {
+        $adminTitle = ExtensionsHelper::getInstance()->getTitle($route->extensionCode, $route->extensionType);
+    }
+    if (empty($adminPath) || count($adminPath) < 2) {
+        if (empty($adminPath)) {
+            $adminPath = [[cot_url('admin'), Cot::$L['Adminpanel']]];
+        }
+
+        $arg = $route->extensionCode === ExtensionsDictionary::TYPE_MODULE ? 'mod' : 'pl';
+        $adminPath[] = [cot_url('admin', ['m' => 'extensions']), Cot::$L['Extensions']];
+        $adminPath[] = [
+            cot_url('admin', ['m' => 'extensions', 'a' => 'details', $arg => $route->extensionCode]),
+            $adminTitle
+        ];
+        $adminPath[] = [cot_url('admin', ['m' => $route->extensionCode]), Cot::$L['Administration']];
+    }
+}
+
 unset($route);
 
 if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
