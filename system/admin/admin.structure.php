@@ -10,6 +10,7 @@
  */
 
 use cot\structure\StructureControlService;
+use cot\structure\StructureHelper;
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
@@ -457,6 +458,8 @@ if (empty($n)) {
 
     $categoryList = [];
 
+    $structureHelper = StructureHelper::getInstance();
+
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('admin.structure.loop');
@@ -576,7 +579,7 @@ if (empty($n)) {
 			'ADMIN_STRUCTURE_LOCKED' => cot_checkbox($row['structure_locked'], 'rstructurelocked['.$row['structure_id'].']'),
 			'ADMIN_STRUCTURE_COUNT' => $row['structure_count'],
             'ADMIN_STRUCTURE_CAN_DELETE' => $row['structure_count'] < 1 && empty($children),
-			/* TODO */ 'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url($n, 'c='.$row['structure_code']),
+			'ADMIN_STRUCTURE_JUMPTO_URL' => $structureHelper->getUrl($row['structure_area'], $row['structure_code']),
 			'ADMIN_STRUCTURE_RIGHTS_URL' => $is_module ? cot_url('admin', 'm=rightsbyitem&ic='.$n.'&io='.$row['structure_code']) : '',
 			'ADMIN_STRUCTURE_OPTIONS_URL' => cot_url('admin', 'm=structure&n='.$n.'&d='.$durl.'&id='.$row['structure_id'].'&'.cot_xg()),
             'ADMIN_STRUCTURE_DELETE_URL' => $deleteUrl,

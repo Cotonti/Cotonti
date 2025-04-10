@@ -1,4 +1,11 @@
 <?php
+/**
+ * Structure manipulation API
+ *
+ * @package Structure
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ */
 
 declare(strict_types=1);
 
@@ -14,12 +21,6 @@ use Throwable;
 
 defined('COT_CODE') or die('Wrong URL');
 
-/**
- * Structure manipulation API
- * @package Structure
- * @copyright (c) Cotonti Team
- * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
- */
 class StructureControlService
 {
     use GetInstanceTrait;

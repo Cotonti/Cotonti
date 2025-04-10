@@ -109,6 +109,6 @@ final class ItemDto
             return cot_rc_link($this->url, htmlspecialchars($this->title));
         }
 
-        return '';
+        return $this->title;
     }
 }

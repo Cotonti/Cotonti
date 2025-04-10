@@ -1,4 +1,11 @@
 <?php
+/**
+ * Structure repository
+ *
+ * @package Structure
+ * @copyright (c) Cotonti Team
+ * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
+ */
 
 declare(strict_types=1);
 
@@ -10,12 +17,6 @@ use cot\traits\GetInstanceTrait;
 
 defined('COT_CODE') or die('Wrong URL');
 
-/**
- * Structure repository
- * @package Structure
- * @copyright (c) Cotonti Team
- * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
- */
 class StructureRepository extends BaseRepository
 {
     use GetInstanceTrait;

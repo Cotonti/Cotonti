@@ -1580,7 +1580,7 @@ function cot_load_structure()
 
 	foreach ($sql->fetchAll() as $row) {
 		$last_dot = mb_strrpos($row['structure_path'], '.');
-
+        // @todo use structure helper to prepare data
 		$row['structure_tpl'] = empty($row['structure_tpl']) ? $row['structure_code'] : $row['structure_tpl'];
 
 		if ($last_dot > 0) {

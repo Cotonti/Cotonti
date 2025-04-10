@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace cot\services;
 
 use cot\dto\ItemDto;
+use cot\structure\StructureDictionary;
+use cot\structure\StructureDtoRepository;
 use cot\traits\GetInstanceTrait;
 
 defined('COT_CODE') or die('Wrong URL');
@@ -30,6 +32,10 @@ class ItemService
      */
     public function getItems(string $source, array $sourceIds, bool $withFullItemData = false): array
     {
+        if ($source === StructureDictionary::SOURCE_CATEGORY) {
+            return $this->getStructureItems($sourceIds, $withFullItemData);
+        }
+
         $result = [];
 
         /* === Hook === */
@@ -48,6 +54,47 @@ class ItemService
     {
         $item = $this->getItems($source, [$sourceId], $withFullItemData);
         return $item[$sourceId] ?? null;
+    }
+
+    /**
+     * Get categories DTOs
+     * @param list<int|string> $sourceIds
+     * @return array<int, ItemDto>
+     */
+    private function getStructureItems(array $sourceIds, bool $withFullItemData = false): array
+    {
+        $categoryIds = [];
+        foreach ($sourceIds as $id) {
+            $id = (int) $id;
+            if ($id > 0) {
+                $categoryIds[] = $id;
+            }
+        }
+        $categoryIds = array_unique($categoryIds);
+
+        $condition = 'structure_id IN (' . implode(',', $categoryIds) . ')';
+
+        $dtoList = StructureDtoRepository::getInstance()->getDtoByCondition(
+            $condition,
+            [], 'structure_id DESC',
+            null,
+            null,
+            $withFullItemData
+        );
+
+        $result = [];
+
+        foreach ($dtoList as $dto) {
+            $result[$dto->id] = $dto;
+        }
+
+        /* === Hook === */
+        foreach (cot_getextplugins('structure.item.getItems.done') as $pl) {
+            include $pl;
+        }
+        /* ===== */
+
+        return $result;
     }
 
     /**
