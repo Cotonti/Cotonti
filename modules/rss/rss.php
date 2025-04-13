@@ -30,7 +30,7 @@ $c = cot_import('c', 'G', 'TXT');
 $m = empty($m) ? 'pages' : $m;
 
 ob_clean();
-header('Content-type: text/xml; charset=UTF-8');
+
 Cot::$sys['now'] = time();
 
 if (Cot::$usr['id'] === 0 && Cot::$cache) {
@@ -47,6 +47,8 @@ $rss_description = Cot::$cfg['subtitle'];
 
 $domain = Cot::$sys['domain'];
 $default_mode = true;
+
+$items = [];
 
 /* === Hook === */
 foreach (cot_getextplugins('rss.create') as $pl) {
@@ -398,6 +400,9 @@ $out_rss = $t->text('MAIN');
 if (Cot::$usr['id'] === 0 && Cot::$cache) {
     Cot::$cache->db->store($m . $c, $out_rss, 'rss', Cot::$cfg['rss']['rss_timetolive']);
 }
+
+header('Content-type: text/xml; charset=UTF-8');
+
 echo $out_rss;
 
 function cot_parse_page_text($pag_text, $pag_pageurl, $pag_parser)

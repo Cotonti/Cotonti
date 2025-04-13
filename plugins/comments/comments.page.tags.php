@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=page.tags
-Tags=page.tpl:{PAGE_COMMENTS},{PAGE_COMMENTS_DISPLAY},{PAGE_COMMENTS_COUNT},{PAGE_COMMENTS_RSS}
+Tags=page.tpl:{PAGE_COMMENTS},{PAGE_COMMENTS_LINK},{PAGE_COMMENTS_COUNT},{PAGE_COMMENTS_RSS}
 [END_COT_EXT]
 ==================== */
 
@@ -17,16 +17,34 @@ Tags=page.tpl:{PAGE_COMMENTS},{PAGE_COMMENTS_DISPLAY},{PAGE_COMMENTS_COUNT},{PAG
  * @var array $pag Page data
  */
 
+use cot\modules\page\inc\PageDictionary;
+use cot\plugins\comments\inc\CommentsService;
+use cot\plugins\comments\inc\CommentsWidget;
+
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('comments', 'plug');
 
-//$rowe_urlp = empty($pag['page_alias']) ? array('c' => $pag['page_cat'], 'id' => $pag['page_id']) : array('c' => $pag['page_cat'], 'al' => $pag['page_alias']);
-if ($t->hasTag('PAGE_COMMENTS') || $t->hasTag('PAGE_COMMENTS_DISPLAY')) {
+if ($t->hasTag('PAGE_COMMENTS') || $t->hasTag('PAGE_COMMENTS_LINK')) {
     $t->assign([
-        'PAGE_COMMENTS' => cot_comments_link('page', $pageurl_params, 'page', $pag['page_id'], $pag['page_cat'], $pag),
-        'PAGE_COMMENTS_DISPLAY' => cot_comments_display('page', $pag['page_id'], $pag['page_cat']),
-        'PAGE_COMMENTS_COUNT' => cot_comments_count('page', $pag['page_id'], $pag),
+        'PAGE_COMMENTS_LINK' => cot_commentsLink(
+            'page',
+            $pageurl_params,
+            PageDictionary::SOURCE_PAGE,
+            $pag['page_id'],
+            $pag['page_cat'],
+            $pag
+        ),
+        'PAGE_COMMENTS' => (new CommentsWidget(
+            [
+                'source' => PageDictionary::SOURCE_PAGE,
+                'sourceId' => $pag['page_id'],
+                'extensionCode' => 'page',
+                'categoryCode' => $pag['page_cat'],
+            ]
+        ))->run(),
+        'PAGE_COMMENTS_COUNT' => CommentsService::getInstance()
+            ->getCount(PageDictionary::SOURCE_PAGE, $pag['page_id'], $pag),
         'PAGE_COMMENTS_RSS' => cot_url('rss', ['m' => 'comments', 'id' => $pag['page_id']]),
     ]);
 }

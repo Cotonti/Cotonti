@@ -7,14 +7,16 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
-$R['comments_code_admin'] = Cot::$L['Ip'] . ': {$ipsearch}<span class="spaced">' . Cot::$cfg['separator'] .
-    '</span><a href="{$delete_url}" class="confirmLink">' . Cot::$L['Delete'] . '</a>';
 $R['comments_code_edit'] = '<a href="{$edit_url}">' . Cot::$L['Edit'] . '</a> {$allowed_time}';
-$R['comments_code_pages_info'] = Cot::$L['Total'] . ': {$totalitems}, ' . Cot::$L['comm_on_page'] . ': {$onpage}';
-$R['comments_link'] = '<a href="{$url}" class="comments_link" title="' . Cot::$L['comments_comments'] . '">' .
-    Cot::$R['icon_comments'] . ' ({$count})</a>';
 
-$R['icon_comments'] = '<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/'  . Cot::$cfg['defaulticons'] .
-    '/24/comments.png" alt="'. Cot::$L['comments_comments'] . '" />';
-$R['icon_comments_cnt'] = '<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/'  . Cot::$cfg['defaulticons'] .
-    '/24/comments.png" alt="' . Cot::$L['comments_comments'] . '" /> ({$cnt})';
+if (empty($R['icon_comments'])) {
+    $R['icon_comments'] = '<img class="icon" src="' . Cot::$cfg['icons_dir'] . '/' . Cot::$cfg['defaulticons'] .
+        '/16/comments.png" alt="' . Cot::$L['comments_comments'] . '" />';
+}
+
+$R['icon_comments_cnt'] = $R['icon_comments'] . ' ({$count})';
+
+$R['comments_link'] = '<a href="{$url}" class="comments_link" title="' . Cot::$L['comments_comments'] . '">' .
+    $R['icon_comments_cnt'] . '</a>';
+
+

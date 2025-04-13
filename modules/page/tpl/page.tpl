@@ -34,7 +34,8 @@
 		</div>
 		<!-- END: PAGE_FILE -->
 	</div>
-	{PAGE_COMMENTS_DISPLAY}
+
+	{PAGE_COMMENTS}
 </div>
 
 <div class="col3-1">

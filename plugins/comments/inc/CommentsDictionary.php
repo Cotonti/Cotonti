@@ -15,4 +15,7 @@ defined('COT_CODE') or die('Wrong URL');
 class CommentsDictionary
 {
     public const SOURCE_COMMENT = 'comment';
+
+    public const EVENT_CREATE = 'create';
+    public const EVENT_UPDATE = 'update';
 }

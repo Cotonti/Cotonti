@@ -14,7 +14,7 @@ namespace cot\plugins\comments\inc;
 use Cot;
 use cot\services\ItemService;
 use cot\traits\GetInstanceTrait;
-use PDO;
+use Exception;
 use Throwable;
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -23,7 +23,161 @@ class CommentsControlService
 {
     use GetInstanceTrait;
 
-    public function delete(int $id): bool
+    /**
+     * @param ?int $id
+     * @param array $data
+     * @param ?string $ciExtensionCode Commented item extension code (To clear static cache)
+     * @param ?array $ciUrlParams Commented item url params (To clear static cache)
+     * @param ?string $ciUrl Commented item url (To clear static cache)
+     *
+     * You can use $ciExtensionCode and $ciUrlParams, or instead of these parameters, $ciUrl.
+     *
+     * @return int|false CommentID
+     */
+    public function save(
+        ?int $id,
+        array $data,
+        ?string $ciExtensionCode = null,
+        ?array $ciUrlParams = null,
+        ?string $ciUrl = null
+    ) {
+        $isNew = $id === null || $id < 1;
+
+        unset($data['com_id']);
+
+        /* == Hook == */
+        foreach (cot_getextplugins('comment.save.first') as $pl) {
+            include $pl;
+        }
+        /* ===== */
+
+        if ($isNew) {
+            if ($data['com_authorid'] === null || $data['com_authorid'] === '') {
+                $data['com_authorid'] = Cot::$usr['id'];
+            }
+            if (empty($data['com_authorip'])) {
+                $data['com_authorip'] = Cot::$usr['ip'];
+            }
+            if (empty($data['com_date'])) {
+                $data['com_date'] = Cot::$sys['now'];
+            }
+        }
+
+        $service = CommentsService::getInstance();
+
+        $errors = $service->validate($data, true);
+        if (!empty($errors)) {
+            throw new Exception(implode(" \n", $errors));
+        }
+
+        $savedId = null;
+        if ($isNew) {
+            $savedId = $this->create($data);
+        } else {
+            $savedId = $this->update($id, $data) ? $id : null; ;
+        }
+
+        /* == Hook == */
+        foreach (cot_getextplugins('comment.save.done') as $pl) {
+            include $pl;
+        }
+        /* ===== */
+
+        // Clear related cache
+        $service->clearRelatedCache($data, $ciExtensionCode, $ciUrlParams, $ciUrl);
+
+        return $savedId ?: false;
+    }
+
+    private function create(array $comment): ?int
+    {
+        unset($comment['com_id']);
+
+        /* == Hook == */
+        foreach (cot_getextplugins('comment.create.first') as $pl) {
+            include $pl;
+        }
+        /* ===== */
+
+        try {
+            Cot::$db->beginTransaction();
+            $sql = Cot::$db->insert(Cot::$db->com, $comment);
+            $id = (int) Cot::$db->lastInsertId();
+
+            cot_extrafield_movefiles();
+
+            /* == Hook == */
+            foreach (cot_getextplugins('comment.create.done') as $pl) {
+                include $pl;
+            }
+            /* ===== */
+
+            Cot::$db->commit();
+        } catch (Throwable $e) {
+            Cot::$db->rollBack();
+            throw $e;
+        }
+
+        return $id;
+    }
+
+    /**
+     * Update comment ID
+     * @param int $id Comment ID
+     * @param array $comment Comment data
+     * @throws Throwable
+     */
+    private function update(int $id, array $comment): bool
+    {
+        unset($comment['com_id']);
+
+        /* == Hook == */
+        foreach (cot_getextplugins('comment.update.first') as $pl) {
+            include $pl;
+        }
+        /* ===== */
+
+        try {
+            Cot::$db->beginTransaction();
+
+            $result = Cot::$db->update(Cot::$db->com, $comment, 'com_id = :commentId', ['commentId' => $id]);
+
+            cot_extrafield_movefiles();
+
+            /* == Hook == */
+            foreach (cot_getextplugins('comment.update.done') as $pl) {
+                include $pl;
+            }
+            /* ===== */
+
+            Cot::$db->commit();
+        } catch (Throwable $e) {
+            Cot::$db->rollBack();
+            throw $e;
+        }
+
+        if ($result > 0) {
+            cot_log(
+                'Edited comment #' . $id . ' in "' . $comment['com_area'] . ' : '. $comment['com_code'] . '"',
+                'comments',
+                'edit',
+                'done'
+            );
+        }
+
+        return $result > 0;
+    }
+
+    /**
+     * Delete comment by ID
+     * @param int $id
+     * @param ?string $ciExtensionCode Commented item extension code (To clear static cache)
+     * @param ?array $ciUrlParams Commented item url params (To clear static cache)
+     *    if $ciExtensionCode is empty, \cot\services\ItemService::get() will be used
+     * @return bool
+     * @throws Throwable
+     */
+    public function delete(int $id, ?string $ciExtensionCode = null, ?array $ciUrlParams = null): bool
     {
         $comment = CommentsRepository::getInstance()->getById($id);
 
@@ -49,6 +203,9 @@ class CommentsControlService
                 /* ===== */
             }
 
+            // Clear related cache
+            CommentsService::getInstance()->clearRelatedCache($comment, $ciExtensionCode, $ciUrlParams);
+
             cot_log(
                 'Deleted comment #' . $id . ' in "' . $comment['com_area'] . ' : '. $comment['com_code'] . '"',
                 'comments',
@@ -72,7 +229,11 @@ class CommentsControlService
         $condition = 'com_area = :source AND com_code = :sourceId';
         $params = ['source' => $source, 'sourceId' => $sourceId];
 
-        return $this->deleteByCondition($condition, $params);
+        $result = $this->deleteByCondition($condition, $params);
+
+        // Clear related cache ?
+
+        return $result;
     }
 
     /**

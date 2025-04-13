@@ -20,17 +20,12 @@ defined('COT_CODE') or die('Wrong URL.');
 
 require_once cot_incfile('pfs', 'module');
 
-if (cot_get_caller() === 'comments.functions') {
-	$form_name = 'newcomment';
-	$input_name = 'rtext';
-} else {
-	$form_name = 'comments';
-	$input_name = 'comtext';
-}
+$formName = 'comment-form';
+$inputName = 'comment_text';
 
 $t->assign([
-	'COMMENTS_FORM_PFS' => cot_build_pfs(Cot::$usr['id'], $form_name, $input_name, Cot::$L['Mypfs'], Cot::$sys['parser']),
-	'COMMENTS_FORM_SFS' => cot_auth('pfs', 'a', 'A')
-        ? cot_build_pfs(0, $form_name, $input_name, Cot::$L['SFS'], Cot::$sys['parser'])
+	'COMMENT_FORM_PFS' => cot_build_pfs(Cot::$usr['id'], $formName, $inputName, Cot::$L['Mypfs'], Cot::$sys['parser']),
+	'COMMENT_FORM_SFS' => cot_auth('pfs', 'a', 'A')
+        ? cot_build_pfs(0, $formName, $inputName, Cot::$L['SFS'], Cot::$sys['parser'])
         : '',
 ]);

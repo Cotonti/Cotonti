@@ -10,6 +10,7 @@
 use cot\extensions\ExtensionsDictionary;
 use cot\extensions\ExtensionsService;
 use cot\modules\page\inc\PageDictionary;
+use cot\plugins\comments\inc\CommentsService;
 
 defined('COT_CODE') or die('Wrong URL.');
 
@@ -965,12 +966,20 @@ function cot_page_enum(
 		/* ===== */
 
 		if (cot_plugin_active('comments')) {
-			$rowe_urlp = empty($pag['page_alias'])
+			$pageUrlParams = empty($pag['page_alias'])
                 ? ['c' => $pag['page_cat'], 'id' => $pag['page_id']]
                 : ['c' => $pag['page_cat'], 'al' => $pag['page_alias']];
 			$t->assign([
-				'PAGE_ROW_COMMENTS' => cot_comments_link('page', $rowe_urlp, 'page', $pag['page_id'], $pag['page_cat'], $pag),
-				'PAGE_ROW_COMMENTS_COUNT' => cot_comments_count('page', $pag['page_id'], $pag),
+				'PAGE_ROW_COMMENTS_LINK' => cot_commentsLink(
+                    'page',
+                    $pageUrlParams,
+                    PageDictionary::SOURCE_PAGE,
+                    $pag['page_id'],
+                    $pag['page_cat'],
+                    $pag
+                ),
+				'PAGE_ROW_COMMENTS_COUNT' => CommentsService::getInstance()
+                    ->getCount(PageDictionary::SOURCE_PAGE, $pag['page_id'], $pag),
 			]);
 		}
 

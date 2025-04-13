@@ -1,98 +1,101 @@
 <!-- BEGIN: MAIN -->
-<div class="block">
-    <!-- BEGIN: COMMENTS_TITLE -->
-    <h2><a href="{COMMENTS_TITLE_URL}">{COMMENTS_TITLE}</a></h2>
-    <!-- END: COMMENTS_TITLE -->
-    {FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
-    <!-- BEGIN: COMMENTS_FORM_EDIT -->
-    <form id="comments" name="comments" action="{COMMENTS_FORM_POST}" method="post">
-        <table class="cells">
-            <tr>
-                <td class="width20"><b>{COMMENTS_POSTER_TITLE}:</b></td>
-                <td class="width80">{COMMENTS_POSTER}</td>
-            </tr>
-            <tr>
-                <td><b>{COMMENTS_IP_TITLE}:</b></td>
-                <td>{COMMENTS_IP}</td>
-            </tr>
-            <tr>
-                <td><b>{COMMENTS_DATE_TITLE}:</b></td>
-                <td>{COMMENTS_DATE}</td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    {COMMENTS_FORM_TEXT}
-                    <!-- IF {COMMENTS_FORM_PFS} -->{COMMENTS_FORM_PFS}<!-- ENDIF -->
-                    <!-- IF {COMMENTS_FORM_SFS} --><span class="spaced">{PHP.cfg.separator}</span>
-                    {COMMENTS_FORM_SFS}<!-- ENDIF -->
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="valid">
-                    <input type="submit" class="submit" value="{COMMENTS_FORM_UPDATE_BUTTON}">
-                </td>
-            </tr>
-        </table>
-    </form>
-    <!-- END: COMMENTS_FORM_EDIT -->
-</div>
-<!-- END: MAIN -->
-
-<!-- BEGIN: COMMENTS -->
 <!-- IF !{COMMENTS_IS_AJAX} -->
-<div id="comments">
+<!-- IF {COMMENTS_DISPLAY} === 'none' -->
+<div class="textright marginbottom10">
+    <a
+        href="#"
+        onclick="toggleblock('comments'); return false"
+        style="display: inline-flex; align-items: center; gap: 5px"
+    >{PHP.R.icon_comments} {PHP.L.comments_comments}: {TOTAL_ENTRIES}</a>
+</div>
 <!-- ENDIF -->
-    <div class="block" <!-- IF {COMMENTS_DISPLAY} == 'none' -->style="display:none;"<!-- ENDIF -->>
+<div
+    id="comments"
+    class="comments-container"
+    {COMMENTS_CONTAINER_PARAMS}
+    <!-- IF {COMMENTS_DISPLAY} == 'none' -->style="display:none;"<!-- ENDIF -->
+>
+<!-- ENDIF -->
+    <div id="comments-block" class="block comments-block" {COMMENTS_BLOCK_PARAMS}>
         <!-- BEGIN: COMMENTS_ROW -->
         <div id="com{COMMENTS_ROW_ID}" class="comment-row">
             <div class="comments1">
                 <p>{COMMENTS_ROW_AUTHOR_AVATAR}</p>
-                <p><a href="{COMMENTS_ROW_URL}">{COMMENTS_ROW_ORDER}.</a> {COMMENTS_ROW_AUTHOR}</p>
+                <p>
+                    <a href="{COMMENTS_ROW_URL}">{COMMENTS_ROW_ORDER}.</a>
+                    <!-- IF {COMMENTS_ROW_AUTHOR_DETAILS_URL} --><a href="{COMMENTS_ROW_AUTHOR_DETAILS_URL}"><!-- ENDIF -->
+                        {COMMENTS_ROW_AUTHOR_FULL_NAME}
+                    <!-- IF {COMMENTS_ROW_AUTHOR_DETAILS_URL} --></a><!-- ENDIF -->
+                </p>
                 <p>{COMMENTS_ROW_DATE}</p>
             </div>
             <div class="comments2">
                 {COMMENTS_ROW_TEXT}
-                <!-- IF {COMMENTS_ROW_ADMIN} OR {COMMENTS_ROW_EDIT} -->
+                <!-- IF {COMMENTS_ROW_DELETE} OR {COMMENTS_ROW_EDIT} -->
                 <div class="margintop10" style="text-align: right">
-                {COMMENTS_ROW_ADMIN} {COMMENTS_ROW_EDIT}
+                    <!-- IF {COMMENTS_ROW_AUTHOR_IP} -->{PHP.L.Ip}: {COMMENTS_ROW_AUTHOR_IP}<!-- ENDIF -->
+                    {COMMENTS_ROW_EDIT} {COMMENTS_ROW_DELETE}
                 </div>
+                <!-- ENDIF -->
             </div>
             <hr class="clear marginbottom10"/>
         </div>
         <!-- END: COMMENTS_ROW -->
 
-        <!-- IF {COMMENTS_PAGINATION} -->
-        <p class="paging">{COMMENTS_PREVIOUS_PAGE}{COMMENTS_PAGINATION}{COMMENTS_NEXT_PAGE}</p>
-        <p class="paging"><span>{COMMENTS_PAGES_INFO}</span></p>
+        <!-- IF {PAGINATION} -->
+        <p class="paging clear">
+            {PREVIOUS_PAGE}{PAGINATION}{NEXT_PAGE}
+            <span>{PHP.L.Total}: {TOTAL_ENTRIES}, {PHP.L.Onpage}: {ENTRIES_ON_CURRENT_PAGE}</span>
+        </p>
         <!-- ENDIF -->
 
-        <!-- BEGIN: COMMENTS_NEWCOMMENT -->
-        <h2 class="comments">{PHP.L.Newcomment}</h2>
-        {FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
-        <form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
+        <!-- IF {TOTAL_ENTRIES} === 0 -->
+        <div class="warning">{PHP.L.comments_noYet}</div>
+        <!-- ENDIF -->
+
+        <!-- BEGIN: NEW_COMMENT -->
+        <h2 class="comments">{PHP.L.comments_newComment}</h2>
+
+        <div class="comments-warnings">
+            {FILE "{PHP.cfg.themes_dir}/{PHP.usr.theme}/warnings.tpl"}
+        </div>
+
+        <div class="error comments-error" style="display: none">
+            <h4>{PHP.L.Error}</h4>
+            <div class="comments-message"></div>
+        </div>
+
+        <div class="done comments-success" style="display: none">
+            <h4>{PHP.L.Done}</h4>
+            <div class="comments-message"></div>
+        </div>
+
+        <form action="{COMMENT_FORM_ACTION}" method="post" name="comment-form">
             <!-- BEGIN: GUEST -->
-            <div class="marginbottom10">{PHP.L.Name}: {COMMENTS_FORM_AUTHOR}</div>
+            <div class="marginbottom10">{PHP.L.Name}: {COMMENT_FORM_AUTHOR}</div>
             <!-- END: GUEST -->
+
+            <!-- BEGIN: EXTRA_FILED -->
+            <div class="marginbottom10">{COMMENT_FORM_EXTRA_FILED_TITLE}: {COMMENT_FORM_EXTRA_FILED}</div>
+            <!-- END: EXTRA_FILED -->
+
             <div>
-                {COMMENTS_FORM_TEXT}
-                <!-- IF {COMMENTS_FORM_PFS} -->{COMMENTS_FORM_PFS}<!-- ENDIF -->
-                <!-- IF {COMMENTS_FORM_SFS} --><span class="spaced">{PHP.cfg.separator}</span>
-                {COMMENTS_FORM_SFS}<!-- ENDIF -->
+                {COMMENT_FORM_TEXT}
+                <!-- IF {COMMENT_FORM_PFS} -->{COMMENT_FORM_PFS}<!-- ENDIF -->
+                <!-- IF {COMMENT_FORM_SFS} --><span class="spaced">{PHP.cfg.separator}</span> {COMMENT_FORM_SFS}<!-- ENDIF -->
             </div>
 
-            <!-- IF {PHP.usr.id} == 0 AND {COMMENTS_FORM_VERIFY_IMG} -->
-            <div>{COMMENTS_FORM_VERIFY_IMG}: {COMMENTS_FORM_VERIFY_INPUT}</div>
+            <!-- IF {PHP.usr.id} == 0 AND {COMMENT_FORM_VERIFY_IMG} -->
+            <div>{COMMENT_FORM_VERIFY_IMG}: {COMMENT_FORM_VERIFY_INPUT}</div>
+            <!-- ENDIF -->
+            <!-- IF {COMMENT_FORM_HINT} -->
+            <div class="help">{COMMENT_FORM_HINT}</div>
             <!-- ENDIF -->
             <div class="margin10 textcenter">
                 <button type="submit">{PHP.L.Submit}</button>
             </div>
         </form>
-        <div class="help">{COMMENTS_FORM_HINT}</div>
-        <!-- END: COMMENTS_NEWCOMMENT -->
-
-        <!-- BEGIN: COMMENTS_EMPTY -->
-        <div class="warning">{COMMENTS_EMPTYTEXT}</div>
-        <!-- END: COMMENTS_EMPTY -->
+        <!-- END: NEW_COMMENT -->
 
         <!-- BEGIN: COMMENTS_CLOSED -->
         <div class="error">{COMMENTS_CLOSED}</div>
@@ -101,4 +104,4 @@
 <!-- IF !{COMMENTS_IS_AJAX} -->
 </div>
 <!-- ENDIF -->
-<!-- END: COMMENTS -->
+<!-- END: MAIN -->

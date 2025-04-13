@@ -110,8 +110,8 @@
 <div class="block">
     <h2 class="polls">{POLLS_TITLE}</h2>
     {POLLS_FORM}
-	<h3 class="marginbottom10">{PHP.L.comments_comments}: {POLLS_COMMENTS}</h3>
-    {POLLS_COMMENTS_DISPLAY}
+	<h3 class="marginbottom10">{PHP.L.comments_comments}: {POLLS_COMMENTS_LINK}</h3>
+    {POLLS_COMMENTS}
 </div>
 <!-- END: POLLS_VIEW -->
 
@@ -123,7 +123,7 @@
         <tr>
             <td class="width15">{POLL_DATE}</td>
             <td class="width75"><a href="{POLL_HREF}">{POLL_TEXT}</a></td>
-            <td class="width10">{POLLS_COMMENTS}</td>
+            <td class="width10">{POLLS_COMMENTS_LINK}</td>
         </tr>
         <!-- END: POLL_ROW -->
         <!-- BEGIN: POLL_NONE -->

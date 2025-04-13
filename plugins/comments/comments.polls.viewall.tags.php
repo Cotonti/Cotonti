@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=polls.viewall.tags
-Tags=polls.tpl:{POLLS_COMMENTS}
+Tags=polls.tpl:{POLLS_COMMENTS},{POLLS_COMMENTS_COUNT}
 [END_COT_EXT]
 ==================== */
 
@@ -15,17 +15,19 @@ Tags=polls.tpl:{POLLS_COMMENTS}
  */
 
 use cot\modules\polls\inc\PollsDictionary;
+use cot\plugins\comments\inc\CommentsService;
 
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('comments', 'plug');
 
 $t->assign([
-	'POLLS_COMMENTS' => cot_comments_link(
+    'POLLS_COMMENTS_LINK' => cot_commentsLink(
         'polls',
-        'id=' . $row['poll_id'],
+        ['id' => $row['poll_id']],
         PollsDictionary::SOURCE_POLL,
-        $row['poll_id']
+        $row['poll_id'],
     ),
-	'POLLS_COMMENTS_COUNT' => cot_comments_count(PollsDictionary::SOURCE_POLL, $row['poll_id'])
+    'POLLS_COMMENTS_COUNT' => CommentsService::getInstance()
+        ->getCount(PollsDictionary::SOURCE_POLL, $row['poll_id']),
 ]);

@@ -5,8 +5,8 @@ Code=comments
 Name=Comments system
 Category=community-social
 Description=Comments system for Cotonti
-Version=1.2.2
-Date=2025-02-27
+Version=2.0.0
+Date=2025-04-08
 Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2025
 Notes=BSD License
@@ -18,18 +18,17 @@ Recommends_modules=page,polls,rss
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-time=01:select:1,2,3,4,5,6,7,8,9,10,15,30,60,90,120,180:10:Comments editable timeout for users, minutes
-mail=02:radio::0:Notify about new comments by email?
-rss_commentmaxsymbols=05:string:::Comments. Cut element description longer than N symbols, Disabled by default
+time=02:select:1,2,3,4,5,6,7,8,9,10,15,30,60,90,120,180:10:Comments editable timeout for users, minutes
+mail=04:radio::0:Notify about new comments by email?
 expand_comments=06:radio::1:Expand comments, Show comments expanded by default
-maxcommentsperpage=07:string::15:Max. comments on page
-commentsize=08:string::0:Max. size of comment, In bytes (zero for unlimited size). Default - 0
-countcomments=09:radio::1:Count comments, Display the count of comments near the icon
-parsebbcodecom=10:radio::1:Parse BBcode in comments
-parsesmiliescom=11:radio::1:Parse smilies in comments
-markup=12:radio::1:Enable markup in comments
-minsize=13:string::2:Min. comment size
-order=14:select:Chronological,Recent:Recent:Comment sorting order
+maxcommentsperpage=08:string::15:Max. comments on page
+commentsize=10:string::0:Max. size of comment, In bytes (zero for unlimited size). Default - 0
+countcomments=12:radio::1:Count comments, Display the count of comments near the icon
+adminHomeCount=14:string::5:
+markup=22:radio::1:Enable markup in comments
+minsize=24:string::2:Min. comment size
+order=26:select:Chronological,Recent:Recent:Comment sorting order
+rss_commentMaxSymbols=28:string:::Comments. Cut element description longer than N symbols, Disabled by default
 [END_COT_EXT_CONFIG]
 ==================== */
 

@@ -54,27 +54,58 @@ class CommentsRepository extends BaseRepository
         return $result;
     }
 
-    public function getCountBySource(string $source, bool $useCache = true): int
+    /**
+     * @return list<array>
+     */
+    public function getBySourceId(
+        string $source,
+        ?string $sourceId,
+        $orderBy = null,
+        ?int $limit = null,
+        ?int $offset = null
+    ): ?array {
+        $condition = ['com_area = :source'];
+        $params = ['source' => $source];
+        if ($sourceId !== null) {
+            $condition[] = 'com_code = :sourceId';
+            $params['sourceId'] = $sourceId;
+        }
+
+        return $this->getByCondition($condition, $params, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * @param int|string|null $sourceId
+     */
+    public function getCountBySourceId(string $source, $sourceId = null, bool $useCache = true): int
     {
         if ($source === '') {
             return 0;
         }
 
-        if ($useCache && isset(self::$cacheCount[$source])) {
-            return self::$cacheCount[$source];
+        $key = $source . '_' . ((string) $sourceId);
+
+        if ($useCache && isset(self::$cacheCount[$key])) {
+            return self::$cacheCount[$key];
         }
 
-        $query = 'SELECT COUNT(*) FROM ' . Cot::$db->quoteTableName(self::getTableName()) . ' WHERE com_area = :source';
+        $condition = ' WHERE com_area = :source';
         $params = ['source' => $source];
+        if ($sourceId !== null) {
+            $condition .= ' AND com_code = :sourceId';
+            $params['sourceId'] = $sourceId;
+        }
+
+        $query = 'SELECT COUNT(*) FROM ' . Cot::$db->quoteTableName(self::getTableName()) . $condition;
 
         $result = Cot::$db->query($query, $params)->fetchColumn();
 
-        self::$cacheCount[$source] = $result;
+        self::$cacheCount[$key] = $result;
 
         return $result;
     }
 
-    protected function afterFetch(array $item): array
+    public function afterFetch(array $item): array
     {
         $item['com_id'] = (int) $item['com_id'];
         $item['com_authorid'] = (int) $item['com_authorid'];

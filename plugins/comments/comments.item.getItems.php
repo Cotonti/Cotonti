@@ -9,17 +9,15 @@ declare(strict_types = 1);
 
 use cot\dto\ItemDto;
 use cot\extensions\ExtensionsDictionary;
-use cot\modules\page\inc\PageDictionary;
-use cot\modules\polls\inc\PollsDictionary;
 use cot\plugins\comments\inc\CommentsDictionary;
-use cot\plugins\comments\inc\CommentsRepository;
-use cot\services\ItemService;
+use cot\plugins\comments\inc\CommentsDtoRepository;
 
 defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Comments system for Cotonti
  * Get items
+ *
  * @package Comments
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
@@ -34,7 +32,7 @@ if ($source !== CommentsDictionary::SOURCE_COMMENT || empty($sourceIds)) {
     return;
 }
 
-// for include file
+// for include files
 global $L, $R, $Ls, $db_com;
 
 require_once cot_incfile('comments', ExtensionsDictionary::TYPE_PLUGIN);
@@ -49,37 +47,6 @@ foreach ($sourceIds as $id) {
 $commentsIds = array_unique($commentsIds);
 
 $condition = 'com_id IN (' . implode(',', $commentsIds) . ')';
-$comments = CommentsRepository::getInstance()->getByCondition($condition);
-
-$dataForQuery = [];
-foreach ($comments as $comment) {
-    // Impossible case, but anyway
-    if ($comment['com_area'] === CommentsDictionary::SOURCE_COMMENT) {
-        continue;
-    }
-    if (
-        empty($dataForQuery[$comment['com_area']]) ||
-        !in_array($comment['com_code'], $dataForQuery[$comment['com_area']], true)
-    ) {
-        $dataForQuery[$comment['com_area']][] = $comment['com_code'];
-    }
-}
-
-$itemService = ItemService::getInstance();
-
-$relatedItems = [];
-foreach ($dataForQuery as $source => $ids) {
-    $relatedItems[$source] = $itemService->getItems($source, $ids);
-}
-
-$commentTypes = [];
-
-if (class_exists(PageDictionary::class)) {
-    $commentTypes[PageDictionary::SOURCE_PAGE] = Cot::$L['comments_commentOnPage'];
-}
-if (class_exists(PollsDictionary::class)) {
-    $commentTypes[PollsDictionary::SOURCE_POLL] = Cot::$L['comments_commentOnPoll'];
-}
 
 /* === Hook === */
 foreach (cot_getextplugins('comments.item.getItems.main') as $pl) {
@@ -87,36 +54,15 @@ foreach (cot_getextplugins('comments.item.getItems.main') as $pl) {
 }
 /* ===== */
 
-foreach ($comments as $comment) {
-    $item = $relatedItems[$comment['com_area']][$comment['com_code']] ?? null;
-    $titlePrefix = $commentTypes[$comment['com_area']] ?? Cot::$L['comments_commentOn'];
-    $title = $item ? $item->title : $comment['com_area'] . ' #' . $comment['com_code'];
-    $dto = new ItemDto(
-        CommentsDictionary::SOURCE_COMMENT,
-        $comment['com_id'],
-        'comments',
-        Cot::$L['comments_comment'],
-        "$titlePrefix \"{$title}\"",
-        $item ? $item->description : '',
-        $item ? $item->url : '',
-        (int) $comment['com_authorid']
-    );
-
-    if ($withFullItemData) {
-        $dto->data = $comment;
-    }
-
-    if ($dto->url !== '') {
-        $dto->url .= '#com' . $comment['com_id'];
-        $dto->titleHtml = $titlePrefix . ': "' . cot_rc_link($dto->url, $title) . '"';
-    }
-    if ($item) {
-        $dto->categoryCode = $item->categoryCode;
-        $dto->categoryTitle = $item->categoryTitle;
-        $dto->categoryUrl = $item->categoryUrl;
-    }
-
-    $result[$comment['com_id']] = $dto;
+$dtoList = CommentsDtoRepository::getInstance()->getDtoByCondition(
+    $condition,
+    [], 'com_id DESC',
+    null,
+    null,
+    $withFullItemData
+);
+foreach ($dtoList as $dto) {
+    $result[$dto->id] = $dto;
 }
 
 /* === Hook === */

@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=recentitems.recentpages.tags
-Tags=recentitems.tpl:{PAGE_ROW_COMMENTS}
+Tags=recentitems.tpl:{PAGE_ROW_COMMENTS_LINK},{PAGE_ROW_COMMENTS_COUNT}
 [END_COT_EXT]
 ==================== */
 
@@ -17,17 +17,22 @@ Tags=recentitems.tpl:{PAGE_ROW_COMMENTS}
  * @var array<string, mixed> $pag Page data
  */
 
+use cot\plugins\comments\inc\CommentsService;
+
 defined('COT_CODE') or die('Wrong URL');
 
-$page_urlp = empty($pag['page_alias']) ? 'id=' . $pag['page_id'] : 'al=' . $pag['page_alias'];
+$commentsPageUrlParams = empty($pag['page_alias'])
+    ? ['c' => $pag['page_cat'], 'id' => $pag['page_id']]
+    : ['c' => $pag['page_cat'], 'al' => $pag['page_alias']];
+
 $recentItems->assign([
-	'PAGE_ROW_COMMENTS' => cot_comments_link(
+    'PAGE_ROW_COMMENTS_LINK' => cot_commentsLink(
         'page',
-        $page_urlp,
+        $commentsPageUrlParams,
         'page',
         $pag['page_id'],
         $pag['page_cat'],
         $pag
     ),
-	'PAGE_ROW_COMMENTS_COUNT' => cot_comments_count('page', $pag['page_id'], $pag),
+    'PAGE_ROW_COMMENTS_COUNT' => CommentsService::getInstance()->getCount('page', $pag['page_id'], $pag),
 ]);
