@@ -14,6 +14,10 @@ Hooks=tools
  */
 
 use cot\extensions\ExtensionsService;
+use cot\modules\forums\inc\ForumsDictionary;
+use cot\modules\page\inc\PageDictionary;
+use cot\modules\users\inc\UsersDictionary;
+use cot\plugins\comments\inc\CommentsDictionary;
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
@@ -105,6 +109,26 @@ $sql = Cot::$db->query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby = u.user_id
 	WHERE tr_parentid = 0 $sql_query");
 
+$sourceComment = class_exists(CommentsDictionary::class)
+    ? CommentsDictionary::SOURCE_COMMENT
+    : 'comment';
+
+$sourceForumTopic = class_exists(ForumsDictionary::class)
+    ? ForumsDictionary::SOURCE_TOPIC
+    : 'forumTopic';
+
+$sourceForumPost = class_exists(ForumsDictionary::class)
+    ? ForumsDictionary::SOURCE_POST
+    : 'forumPost';
+
+$sourcePage = class_exists(PageDictionary::class)
+    ? PageDictionary::SOURCE_PAGE
+    : 'page';
+
+$sourceUser = class_exists(UsersDictionary::class)
+    ? UsersDictionary::SOURCE_USER
+    : 'user';
+
 $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('trashcan.admin.loop');
@@ -112,31 +136,36 @@ $extp = cot_getextplugins('trashcan.admin.loop');
 foreach ($sql->fetchAll() as $row) {
 	$ii++;
 	switch($row['tr_type']) {
-		case 'comment':
+		case $sourceComment:
 			$icon = Cot::$R['admin_icon_comments'];
 			$typestr = Cot::$L['comments_comment'];
 			$enabled = ExtensionsService::getInstance()->isPluginActive('comments') ? 1 : 0;
 			break;
-		case 'forumpost':
+
+		case $sourceForumPost:
 			$icon = Cot::$R['admin_icon_forums_posts'];
 			$typestr = Cot::$L['forums_post'];
 			$enabled = ExtensionsService::getInstance()->isModuleActive('forums') ? 1 : 0;
 			break;
-		case 'forumtopic':
+
+		case $sourceForumTopic:
 			$icon = Cot::$R['admin_icon_forums_topics'];
 			$typestr = Cot::$L['Topic'];
 			$enabled = ExtensionsService::getInstance()->isModuleActive('forums') ? 1 : 0;
 			break;
-		case 'page':
+
+		case $sourcePage:
 			$icon = Cot::$R['admin_icon_page'];
 			$typestr = Cot::$L['Page'];
 			$enabled = ExtensionsService::getInstance()->isModuleActive('page') ? 1 : 0;
 			break;
-		case 'user':
+
+		case $sourceUser:
 			$icon = Cot::$R['admin_icon_user'];
 			$typestr = Cot::$L['User'];
 			$enabled = 1;
 			break;
+
 		default:
 			$icon = Cot::$R['admin_icon_tools'];
 			$typestr = $row['tr_type'];
