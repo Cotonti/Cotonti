@@ -249,10 +249,10 @@ class EditAction extends BaseAction
                 $t->assign([
                     'COMMENT_FORM_' . $uname => $fieldFormElement,
                     'COMMENT_FORM_' . $uname . '_TITLE' => $fieldTitle,
-                    'COMMENT_FORM_EXTRA_FILED' => $fieldFormElement,
-                    'COMMENT_FORM_EXTRA_FILED_TITLE' => $fieldTitle
+                    'COMMENT_FORM_EXTRA_FIELD' => $fieldFormElement,
+                    'COMMENT_FORM_EXTRA_FIELD_TITLE' => $fieldTitle
                 ]);
-                $t->parse('MAIN.EXTRA_FILED');
+                $t->parse('MAIN.EXTRA_FIELD');
             }
         }
 

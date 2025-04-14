@@ -32,12 +32,12 @@
                 <td><label><strong>{PHP.L.Date}:</strong></label></td>
                 <td>{COMMENT_DATE}</td>
             </tr>
-            <!-- BEGIN: EXTRA_FILED -->
+            <!-- BEGIN: EXTRA_FIELD -->
             <tr>
-                <td><label><strong>{COMMENT_FORM_EXTRA_FILED_TITLE}:</strong></label></td>
-                <td>{COMMENT_FORM_EXTRA_FILED}</td>
+                <td><label><strong>{COMMENT_FORM_EXTRA_FIELD_TITLE}:</strong></label></td>
+                <td>{COMMENT_FORM_EXTRA_FIELD}</td>
             </tr>
-            <!-- END: EXTRA_FILED -->
+            <!-- END: EXTRA_FIELD -->
             <tr>
                 <td colspan="2">
                     {COMMENT_FORM_TEXT}

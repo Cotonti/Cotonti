@@ -75,9 +75,9 @@
             <div class="marginbottom10">{PHP.L.Name}: {COMMENT_FORM_AUTHOR}</div>
             <!-- END: GUEST -->
 
-            <!-- BEGIN: EXTRA_FILED -->
-            <div class="marginbottom10">{COMMENT_FORM_EXTRA_FILED_TITLE}: {COMMENT_FORM_EXTRA_FILED}</div>
-            <!-- END: EXTRA_FILED -->
+            <!-- BEGIN: EXTRA_FIELD -->
+            <div class="marginbottom10">{COMMENT_FORM_EXTRA_FIELD_TITLE}: {COMMENT_FORM_EXTRA_FIELD}</div>
+            <!-- END: EXTRA_FIELD -->
 
             <div>
                 {COMMENT_FORM_TEXT}
