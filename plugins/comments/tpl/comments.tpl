@@ -49,7 +49,7 @@
         </p>
         <!-- ENDIF -->
 
-        <!-- IF {TOTAL_ENTRIES} === 0 -->
+        <!-- IF {TOTAL_ENTRIES} == 0 -->
         <div class="warning">{PHP.L.comments_noYet}</div>
         <!-- ENDIF -->
 
