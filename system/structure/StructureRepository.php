@@ -19,8 +19,6 @@ defined('COT_CODE') or die('Wrong URL');
 
 class StructureRepository extends BaseRepository
 {
-    use GetInstanceTrait;
-
     private static $cacheById = [];
 
     public static function getTableName(): string

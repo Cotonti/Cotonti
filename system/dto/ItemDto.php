@@ -79,9 +79,12 @@ final class ItemDto
      */
     public $data = [];
 
+    /**
+     * @param int|string $sourceId
+     */
     public function __construct(
         string $source,
-        int $sourceId,
+        $sourceId,
         string $extensionCode,
         string $typeTitle,
         string $title,

@@ -98,7 +98,7 @@ class CommentsRepository extends BaseRepository
 
         $query = 'SELECT COUNT(*) FROM ' . Cot::$db->quoteTableName(self::getTableName()) . $condition;
 
-        $result = Cot::$db->query($query, $params)->fetchColumn();
+        $result = (int) Cot::$db->query($query, $params)->fetchColumn();
 
         self::$cacheCount[$key] = $result;
 

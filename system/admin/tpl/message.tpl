@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 <!-- IF !{AJAX_MODE} -->
-<div class="body message">
+<div class="body">
 	<h1>{MESSAGE_TITLE}</h1>
 <!-- ENDIF -->
 	<div class="alert warning">

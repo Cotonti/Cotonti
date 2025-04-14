@@ -56,7 +56,8 @@ foreach (cot_getextplugins('comments.item.getItems.main') as $pl) {
 
 $dtoList = CommentsDtoRepository::getInstance()->getDtoByCondition(
     $condition,
-    [], 'com_id DESC',
+    [],
+    'com_id DESC',
     null,
     null,
     $withFullItemData

@@ -78,7 +78,7 @@ class CommentsDtoRepository extends BaseRepository
         // for include files
         global $L, $R, $Ls, $db_com;
 
-        $comments = parent::getByCondition(
+        $comments = CommentsRepository::getInstance()->getByCondition(
             $condition,
             $params,
             $orderBy,

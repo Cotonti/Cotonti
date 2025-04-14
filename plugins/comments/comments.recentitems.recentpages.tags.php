@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=recentitems.recentpages.tags
-Tags=recentitems.tpl:{PAGE_ROW_COMMENTS_LINK},{PAGE_ROW_COMMENTS_COUNT}
+Tags=recentitems.pages.tpl:{PAGE_ROW_COMMENTS_LINK},{PAGE_ROW_COMMENTS_COUNT}
 [END_COT_EXT]
 ==================== */
 

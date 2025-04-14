@@ -70,7 +70,7 @@ class StructureDtoRepository extends BaseRepository
         // for include files
         global $L, $R, $Ls;
 
-        $categories = parent::getByCondition(
+        $categories = StructureRepository::getInstance()->getByCondition(
             $condition,
             $params,
             $orderBy,

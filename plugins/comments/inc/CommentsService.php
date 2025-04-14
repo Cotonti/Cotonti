@@ -60,12 +60,12 @@ class CommentsService
                 return (bool) Cot::$cfg[$extensionCode]['cat_' . $categoryCode]['enable_comments'];
             }
 
-            if (Cot::$cfg[$extensionCode]['cat___default']['enable_comments']) {
+            if (isset(Cot::$cfg[$extensionCode]['cat___default']['enable_comments'])) {
                 return (bool) Cot::$cfg[$extensionCode]['cat___default']['enable_comments'];
             }
 
             // Check the extension's configuration
-            if (Cot::$cfg[$extensionCode]['enable_comments']) {
+            if (isset(Cot::$cfg[$extensionCode]['enable_comments'])) {
                 return (bool) Cot::$cfg[$extensionCode]['enable_comments'];
             }
         } else {
