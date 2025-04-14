@@ -86,7 +86,7 @@
             </div>
 
             <!-- IF {PHP.usr.id} == 0 AND {COMMENT_FORM_VERIFY_IMG} -->
-            <div>{COMMENT_FORM_VERIFY_IMG}: {COMMENT_FORM_VERIFY_INPUT}</div>
+            <div>{COMMENT_FORM_VERIFY_IMG}<!-- IF {COMMENT_FORM_VERIFY_INPUT} -->: {COMMENT_FORM_VERIFY_INPUT}<!-- ENDIF --></div>
             <!-- ENDIF -->
             <!-- IF {COMMENT_FORM_HINT} -->
             <div class="help">{COMMENT_FORM_HINT}</div>
