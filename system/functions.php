@@ -5678,12 +5678,28 @@ function cot_captcha_validate($value)
  */
 function cot_generateCaptchaTags($captcha = null, $inputName = 'rverify', $prefix = '')
 {
-    return [
-        $prefix . 'VERIFY_IMG' => cot_captcha_generate($captcha),
-        $prefix . 'VERIFY_INPUT' => !empty($inputName)
+    $captchaTags = [
+        'VERIFY_IMG' => cot_captcha_generate($captcha),
+        'VERIFY_INPUT' => !empty($inputName)
             ? cot_inputbox('text', $inputName, '', 'id="' . $inputName . '" maxlength="20"')
             : '',
     ];
+
+    /* == Hook == */
+    foreach (cot_getextplugins('generateCaptchaTags') as $pl) {
+        include $pl;
+    }
+    /* ===== */
+
+    $result = [];
+    if (isset($captchaTags['VERIFY_IMG'])) {
+        $result[$prefix . 'VERIFY_IMG'] = $captchaTags['VERIFY_IMG'];
+    }
+    if (isset($captchaTags['VERIFY_INPUT'])) {
+        $result[$prefix . 'VERIFY_INPUT'] = $captchaTags['VERIFY_INPUT'];
+    }
+
+    return $result;
 }
 
 /**

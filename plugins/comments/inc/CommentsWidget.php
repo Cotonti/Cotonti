@@ -244,11 +244,11 @@ class CommentsWidget extends BaseCommentsWidget
 
         // @todo group by, having
         // @todo move query to repository
-        $sql = "SELECT COUNT(*) $sqlColumns "
+        $sql = "SELECT COUNT(*) "
             . "FROM $table "
             . $sqlJoinTables . $sqlWhere . $sqlOrder;
 
-        $totalItems = Cot::$db->query($sql, $queryParams)->fetchColumn();
+        $totalItems = (int) Cot::$db->query($sql, $queryParams)->fetchColumn();
 
         $currentRouteParams = base64_encode(serialize([$this->currentUrlExtension, $this->currentUrlParams]));
 
