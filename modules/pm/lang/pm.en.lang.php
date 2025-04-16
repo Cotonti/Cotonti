@@ -18,7 +18,9 @@ $L['pm_title'] = 'Private Messages';
 $L['cfg_allownotifications'] = 'Allow PM notifications by email';
 $L['cfg_allownotifications_hint'] = '';
 $L['cfg_allowPopUpNotifications'] = 'Pop-up notifications';
-$L['cfg_allowPopUpNotifications_hint'] = 'Show pop-up notifications for new private messages';
+$L['cfg_allowPopUpNotifications_hint'] = 'Show pop-up notifications for new private messages<br>'
+    . '"<a href="' . cot_url('admin', ['m' => 'config', 'n' => 'edit', 'o' => 'core', 'p' => 'main']) . '">'
+    . 'Server events</a>" must be enabled.';
 $L['cfg_maxsize'] = 'Maximum length for messages';
 $L['cfg_maxsize_hint'] = '';
 $L['cfg_maxpmperpage'] = 'Max. messages per page';

@@ -8,7 +8,7 @@ import {BaseServerEventsClient} from "./BaseServerEventsClient";
  */
 export class ServerEventsSharedWorkerClient extends BaseServerEventsClient {
     init() {
-        let workerUrl = '/js/sharedWorkerServerEvents.min.js';
+        let workerUrl = '/js/sharedWorkerServerEvents.min.js?v=1';
 
         if (this.mode !== 'production') {
             console.log('init ServerEventsSharedWorkerClient: ' + workerUrl);

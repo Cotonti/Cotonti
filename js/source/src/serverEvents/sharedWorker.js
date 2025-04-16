@@ -37,32 +37,62 @@ class ServerSentEvents {
      */
     onEvent = null;
 
+    #initialisationInProgress = false;
+
     /**
      * @todo Save the initialized driverType.
      * When changing the driver type, remove the old one and initialize the new one.
      * This may be unnecessary, but it could be useful during configuration.
      */
     init() {
-        if (this.#driver !== null) {
+        if (this.mode !== 'production') {
+            console.log('Shared worker: ');
+            console.log('Running driver: ', this.#usingDriverType);
+            console.log('New driver: ', this.driverType);
+        }
+
+        if (this.#usingDriverType === this.driverType) {
+            if (this.mode !== 'production') {
+                console.log('Shared worker: драйвер "' + this.#usingDriverType, + '"уже инициализирован. действий не требуется');
+            }
+            return
+        }
+
+        if (this.#initialisationInProgress) {
             return;
         }
 
+        this.#initialisationInProgress = true;
+
         if (this.mode !== 'production') {
-            console.log('init server events Shared worker');
+            console.log('Shared worker: ServerSentEvents initialization.');
         }
 
-        const factory = new ServerEventsDriverFactory(this.baseUrl, this.mode);
-
-        this.#driver = factory.getByType(this.driverType);
-        this.#usingDriverType = this.driverType;
-
-        this.#driver.addEventListener('event', (event) => {
-            if (typeof this.onEvent !== 'function') {
-                console.error(this.constructor.name + '.onEvent is not defined');
+        if (this.#driver !== null) {
+            if (this.mode !== 'production') {
+                console.log('Shared worker: отключаем старый драйвер: ', this.#usingDriverType);
             }
-            this.onEvent(event.detail);
-        });
-        this.#driver.init();
+            this.#driver = null;
+        }
+
+        try {
+            const factory = new ServerEventsDriverFactory(this.baseUrl, this.mode);
+
+            this.#driver = factory.getByType(this.driverType);
+            this.#usingDriverType = this.driverType;
+
+            this.#driver.addEventListener('event', (event) => {
+                if (typeof this.onEvent !== 'function') {
+                    console.error(this.constructor.name + '.onEvent is not defined');
+                }
+                this.onEvent(event.detail);
+            });
+            this.#driver.init();
+        } catch (error) {
+            console.error(error);
+        }
+
+        this.#initialisationInProgress = false;
     }
 }
 
@@ -97,17 +127,17 @@ self.onconnect = (event) => {
     port.onmessage = (e) => {
         const message = e.data;
 
-        if (message.config !== undefined) {
-            if (events.driverType === null) {
-                events.driverType = message.config.driver;
-            }
-            events.mode = message.config.mode;
-            events.baseUrl = message.config.baseUrl;
-            events.init();
-        }
-
         if (events.mode !== 'production') {
             console.log('Shared worker message', message);
+        }
+
+        if (message.config !== undefined) {
+            if (events.driverType !== message.config.driver) {
+                events.driverType = message.config.driver;
+                events.mode = message.config.mode;
+                events.baseUrl = message.config.baseUrl;
+                events.init();
+            }
         }
     }
 }

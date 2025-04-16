@@ -55,7 +55,7 @@ export class ServerEventsAjaxDriver extends BaseServerEventsDriver {
 
             this.#timerId = setTimeout(() => this.#getEvents(), this.#timeOutPeriod);
         } catch (error) {
-            console.log('ServerEventsAjaxDriver get events error: ' + error.message);
+            console.error('ServerEventsAjaxDriver get events error: ' + error.message);
             this.#timerId = setTimeout(() => this.#getEvents(), this.#timeOutPeriod);
         }
     }

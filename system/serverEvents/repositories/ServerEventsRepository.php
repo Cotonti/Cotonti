@@ -55,7 +55,7 @@ class ServerEventsRepository extends BaseRepository
         }
 
         $sql = 'SELECT * FROM ' . Cot::$db->server_events . " WHERE {$condition} ORDER BY {$table}.created_at ASC";
-        $data = Cot::$db->query($sql, [':userId' => $userId]);
+        $data = Cot::$db->query($sql, [':userId' => $userId])->fetchAll();
         if (empty($data)) {
             return [];
         }

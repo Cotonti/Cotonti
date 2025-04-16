@@ -7,6 +7,10 @@ import {ServerEventsSharedWorkerClient} from "./client/ServerEventsSharedWorkerC
  * @copyright (c) Cotonti Team
  */
 export class ServerEvents {
+    /**
+     * Mode: 'production' or 'development'
+     * @type {string}
+     */
     mode = 'production';
 
     /**
