@@ -2,7 +2,7 @@
   "name": "cotonti/cotonti",
   "description": "Cotonti CMF",
   "homepage": "https://www.cotonti.com/",
-  "license": "BSD 3-Clause",
+  "license": "BSD-3-Clause",
   "support": {
     "source": "https://github.com/Cotonti/Cotonti",
     "wiki": "https://www.cotonti.com/docs/"
