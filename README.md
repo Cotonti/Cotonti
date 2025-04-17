@@ -1,7 +1,7 @@
 # Cotonti Siena
 
 <p align="center">
-<a href="https://packagist.org/packages/cotonti/cotonti"><img src="https://img.shields.io/packagist/dt/cotonti/cotonti" alt="Total Downloads"></a>
+<!-- <a href="https://packagist.org/packages/cotonti/cotonti"><img src="https://img.shields.io/packagist/dt/cotonti/cotonti" alt="Total Downloads"></a> -->
 <a href="https://packagist.org/packages/cotonti/cotonti"><img src="https://img.shields.io/packagist/v/cotonti/cotonti" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/cotonti/cotonti"><img src="https://img.shields.io/packagist/l/cotonti/cotonti" alt="License"></a>
 </p>
