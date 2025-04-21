@@ -321,8 +321,7 @@ span.readmore		{ display:block; }
 /* 8. Comments
 -------------------------------------------------- */
 
-.comments1,
-.comments2	{ margin-bottom:10px; float:left; position:relative; }
+.comments1, .comments2	{ margin-bottom: 10px; float: left; position: relative; overflow-x: hidden; }
 .comments1	{ width:20%; }
 .comments2	{ width:80%; }
 

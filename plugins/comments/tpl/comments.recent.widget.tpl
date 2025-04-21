@@ -15,7 +15,7 @@
         <div id="com{COMMENTS_ROW_ID}" class="comment-row card mb-3">
             <div class="card-body d-flex gap-3 align-items-start">
                 {COMMENTS_ROW_AUTHOR_AVATAR}
-                <div class="d-flex flex-grow-1 flex-column">
+                <div class="d-flex flex-grow-1 flex-column" style="overflow-x: hidden">
                     <div class="flex-grow-1">
                         <h6 class="mb-1"><!-- IF {COMMENTS_AUTH_ADMIN} -->#{COMMENTS_ROW_ID}.<!-- ENDIF --> {COMMENTS_ROW_TITLE}</h6>
                         <div class="mb-2">
