@@ -158,7 +158,7 @@ switch($a) {
 								$dep_info = cot_infoget($dep_ext_info, 'SED_EXTPLUGIN');
 							}
 							$dep_field = $is_module ? 'Requires_modules' : 'Requires_plugins';
-							if (in_array($code, explode(',', $dep_info[$dep_field])))
+							if (in_array($code, explode(',', $dep_info[$dep_field] ?? '')))
 							{
 								cot_error(cot_rc('ext_dependency_uninstall_error', [
 									'type' => $row['ct_plug'] ? Cot::$L['Plugin'] : Cot::$L['Module'],
@@ -242,7 +242,7 @@ switch($a) {
                     'order' => (int) $row['pl_order'],
                 ];
                 unset($row['pl_hook'], $row['pl_order']);
-                $registeredParts[$row['pl_part']] = array_merge($registeredParts[$row['pl_part']], $row);
+                $registeredParts[$row['pl_part']] = array_merge($registeredParts[$row['pl_part']] ?? [], $row);
             }
             $query->closeCursor();
 
@@ -294,7 +294,7 @@ switch($a) {
 				$extensionPart = [];
 				if (file_exists($extplugin_file)) {
 					$extensionPart = cot_infoget($extplugin_file, 'COT_EXT');
-                    $hooks = explode(',', $extensionPart['Hooks']);
+                    $hooks = !empty($extensionPart['Hooks']) ? explode(',', $extensionPart['Hooks']) : [];
                     $extensionPart['Hooks'] = [];
                     $hookOrders = (isset($extensionPart['Order']) && $extensionPart['Order'] !== '')
                         ? explode(',', $extensionPart['Order'])
@@ -466,21 +466,23 @@ switch($a) {
                     $order = array_column($extensionPart['Hooks'], 'order');
                     $installedOrder = !empty($registeredParts[$info_part]) ?
                         array_column($registeredParts[$info_part]['hooks'], 'order')
-                        : '';
-                    if (empty($installedOrder) || count($order) === count($installedOrder)) {
-                        if (min($order) === max($order)) {
+                        : [];
+                    
+                    // Fix for min/max on empty arrays
+                    if (!empty($order) && !empty($installedOrder) && count($order) === count($installedOrder)) {
+                        if (!empty($order) && min($order) === max($order)) {
                             $order = $order[0];
                         }
                         if (!empty($installedOrder) && min($installedOrder) === max($installedOrder)) {
                             $installedOrder = $installedOrder[0];
                         }
-
                     }
+                    
                     if (is_array($order)) {
-                        $order = implode(', ', $order);
+                        $order = !empty($order) ? implode(', ', $order) : '';
                     }
                     if (is_array($installedOrder)) {
-                        $installedOrder = !empty($installedOrder) ? implode(', ', $installedOrder) : null;
+                        $installedOrder = !empty($installedOrder) ? implode(', ', $installedOrder) : '';
                     }
 
 					$t->assign([
