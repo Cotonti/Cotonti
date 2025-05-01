@@ -27,6 +27,17 @@ $trash_types['page'] = Cot::$db->pages;
  */
 function cot_trash_page_sync($data)
 {
+    // Check if alias exists
+    $page_count = Cot::$db->query(
+        'SELECT COUNT(*) FROM ' . Cot::$db->pages . ' WHERE page_alias = ? AND page_id != ?',
+        [$data['page_alias'], $data['page_id']]
+    )->fetchColumn();
+    
+    if ($page_count > 0) {
+        // If alias exists, generate a new one
+        $data['page_alias'] = $data['page_alias'] . '_restored_' . $data['page_id'];
+    }
+
     cot_page_updateStructureCounters($data['page_cat']);
     if (\Cot::$cache) {
         if (\Cot::$cfg['cache_page']) {
