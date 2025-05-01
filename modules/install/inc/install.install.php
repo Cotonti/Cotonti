@@ -661,8 +661,8 @@ switch ($step) {
 
 	case 4:
 		// Extensions
-        $selected_modules = isset($selected_modules) ? $selected_modules : '';
-        $selected_plugins = isset($selected_plugins) ? $selected_plugins : '';
+        $selected_modules = isset($_SESSION['selected_modules']) ? $_SESSION['selected_modules'] : '';
+        $selected_plugins = isset($_SESSION['selected_plugins']) ? $_SESSION['selected_plugins'] : '';
 		cot_installParseExtensions('Module', $default_modules, $selected_modules);
 		cot_installParseExtensions('Plugin', $default_plugins, $selected_plugins);
 		break;
