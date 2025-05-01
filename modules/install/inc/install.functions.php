@@ -34,6 +34,14 @@ function cot_installRedirect($url)
         unlink($processFile);
     }
 
+    // Clear session data for selected extensions
+    if (isset($_SESSION['selected_modules'])) {
+        unset($_SESSION['selected_modules']);
+    }
+    if (isset($_SESSION['selected_plugins'])) {
+        unset($_SESSION['selected_plugins']);
+    }
+
     cot_redirect($url);
 }
 
