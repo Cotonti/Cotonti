@@ -54,6 +54,7 @@ if (!Cot::$cfg['forcedefaultlang'] && Cot::$cfg['defaultlang'] !== $lang) {
 $trashcan = TrashcanService::getInstance();
 
 // Add page to trash
+$pageData['page_alias'] = $pageData['page_alias'] . '_deleted_' . $id;
 $trashcanId = $trashcan->put(
     PageDictionary::SOURCE_PAGE,
     Cot::$L['Page'] . " #" . $id . " " . $pageData['page_title'],
