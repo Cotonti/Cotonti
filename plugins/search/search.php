@@ -375,7 +375,14 @@ if (!empty($sq)) {
             }
         }
 
-		if (!Cot::$db->fieldExists(Cot::$db->pages, 'page_' . $rs['pagsort'])) {
+		// Allowed sort fields
+		$allowedSortFields = ['date', 'title', 'count', 'cat'];
+		if (!empty(Cot::$cfg['plugin']['search']['allowed_sort_fields'])) {
+			$extra = explode(',', Cot::$cfg['plugin']['search']['allowed_sort_fields']);
+			$allowedSortFields = array_merge($allowedSortFields, array_map('trim', $extra));
+		}
+
+		if (!in_array($rs['pagsort'], $allowedSortFields)) {
 			$rs['pagsort'] = 'date';
 		}
 
