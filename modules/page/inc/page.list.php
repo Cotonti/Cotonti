@@ -15,6 +15,9 @@ defined('COT_CODE') or die('Wrong URL');
 const COT_LIST = true;
 Cot::$env['location'] = 'list';
 
+// Cache control
+$pageListCacheEnabled = (bool)Cot::$cfg['page']['list_cache_enabled'];
+
 $s = cot_import('s', 'G', 'ALP'); // order field name without 'page_'
 $w = cot_import('w', 'G', 'ALP', 4); // order way (asc, desc)
 $c = cot_import('c', 'G', 'TXT'); // cat code
