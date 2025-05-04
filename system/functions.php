@@ -6524,3 +6524,29 @@ function cot_get_plural($plural, $lang, $is_frac = false)
 if (isset($cfg['customfuncs']) && $cfg['customfuncs']) {
 	require_once $cfg['system_dir'] . '/functions.custom.php';
 }
+
+/**
+ * Static cache key generator
+ *
+ * @param string $url
+ * @param string|null $lang
+ * @return string
+ */
+function cot_static_cache_key($url, $lang = null)
+{
+    $parsed = parse_url($url);
+    parse_str($parsed['query'] ?? '', $params);
+
+    // Only important parameters
+    $whitelist = ['c', 'id', 'al', 'page', 's', 'w'];
+    $filtered = array_intersect_key($params, array_flip($whitelist));
+
+    // Add language to the beginning
+    if ($lang && $lang !== Cot::$cfg['defaultlang']) {
+        $filtered = array_merge(['lang' => $lang], $filtered);
+    }
+
+    // Build the key
+    $key = ($parsed['path'] ?? '') . '?' . http_build_query($filtered);
+    return md5($key);
+}
