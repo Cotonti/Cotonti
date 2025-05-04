@@ -652,12 +652,20 @@ class Page_cache
 	 */
 	public function read()
 	{
+        global $cfg;
         $fileFullName = $this->dir. '/' . $this->filename;
-		if (file_exists($fileFullName)) {
-			// Browser cache headers
+        // TTL check
+        $ttl = isset($cfg['cache']['static_ttl']) ? (int)$cfg['cache']['static_ttl'] : 3600;
+        if (file_exists($fileFullName)) {
             $filemtime = filemtime($fileFullName);
-			$etag = md5($fileFullName . filesize($fileFullName) . $filemtime);
-			if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+            if ($ttl > 0 && (time() - $filemtime > $ttl)) {
+                // Delete expired cache file
+                unlink($fileFullName);
+                return;
+            }
+            // Browser cache headers
+            $etag = md5($fileFullName . filesize($fileFullName) . $filemtime);
+            if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
                 // convert to unix timestamp
                 $if_modified_since = strtotime(preg_replace('#;.*$#', '',
                     stripslashes($_SERVER['HTTP_IF_MODIFIED_SINCE'])));
@@ -673,20 +681,20 @@ class Page_cache
                     exit;
                 }
             }
-			header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', $filemtime));
-			header("ETag: $etag");
-			header('Expires: Mon, 01 Apr 1974 00:00:00 GMT');
-			header('Cache-Control: must-revalidate, proxy-revalidate');
-			// Page output
-			header('Content-Type: text/html; charset=UTF-8');
-			if (@strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') === FALSE) {
-				readgzfile($fileFullName);
-			} else {
-				header('Content-Encoding: gzip');
-				echo file_get_contents($fileFullName);
-			}
-			exit;
-		}
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', $filemtime));
+            header("ETag: $etag");
+            header('Expires: Mon, 01 Apr 1974 00:00:00 GMT');
+            header('Cache-Control: must-revalidate, proxy-revalidate');
+            // Page output
+            header('Content-Type: text/html; charset=UTF-8');
+            if (@strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') === FALSE) {
+                readgzfile($fileFullName);
+            } else {
+                header('Content-Encoding: gzip');
+                echo file_get_contents($fileFullName);
+            }
+            exit;
+        }
 	}
 
 	/**
