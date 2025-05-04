@@ -838,13 +838,20 @@ function cot_page_enum(
     $template = '',
     $order = '',
     $condition = '',
-	$active_only = true,
+    $active_only = true,
     $use_subcat = true,
     $exclude_current = false,
     $blacklist = '',
     $pagination = '',
     $cache_ttl = null
 ) {
+    global $pageListCacheEnabled;
+    
+    // Cache control
+    if (isset($pageListCacheEnabled) && !$pageListCacheEnabled) {
+        $cache_ttl = 0;
+    }
+    
     // $L, $Ls, $R are needed for hook includes
     global $L, $Ls, $R;
 
@@ -1049,4 +1056,3 @@ function cot_page_enum(
 	}
 	return $page_query_html;
 }
-
