@@ -69,7 +69,7 @@ $cfg['html_cleanup'] = false;	// Wipe extra spaces and breaks from HTML to get s
 $cfg['cache_index'] = false;    // Static site page cache for guests on index
 $cfg['cache_page'] = false;     // Static site page cache for guests on pages and page lists
 $cfg['cache_forums'] = false;   // Static site page cache for guests on forums
-
+$cfg['cache']['static_ttl'] = 3600; // Static cache ttl
 // ========================
 // More settings
 // Should work fine in most of cases.
