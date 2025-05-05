@@ -89,6 +89,11 @@ function cot_structure_update($extension, $id, $old_data, $new_data, $is_module 
 	}
 	/* ===== */
 
+	// Check for required fields
+	if (empty($new_data['structure_title']) || empty($new_data['structure_code']) || empty($new_data['structure_path']) || $new_data['structure_code'] == 'all') {
+		return false;
+	}
+
 	if ($old_data['structure_code'] != $new_data['structure_code']) {
 		if ($db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area=? AND structure_code=?", [$extension, $new_data['structure_code']])->fetchColumn() == 0) {
 			$is_module && $db->update($db_auth, ['auth_option' => $new_data['structure_code']],
