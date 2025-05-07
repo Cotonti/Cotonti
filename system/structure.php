@@ -29,7 +29,7 @@ function cot_structure_add($extension, $data, $is_module = true)
     // $L, $Ls, $R are needed for hook includes
     global $L, $Ls, $R;
 
-	global $db, $db_structure;
+	global $db, $db_structure, $db_pages;
 
 	/* === Hook === */
 	foreach (cot_getextplugins('structure.add') as $pl) {
@@ -39,7 +39,19 @@ function cot_structure_add($extension, $data, $is_module = true)
 
 	if (!empty($data['structure_title']) && !empty($data['structure_code']) && !empty($data['structure_path']) && $data['structure_code'] != 'all') {
 		$sql = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area=? AND structure_code=?", [$extension, $data['structure_code']]);
+		
 		if ($sql->fetchColumn() == 0) {
+			// Check if the category code conflicts with any existing page alias 
+			// This is especially important for SEF URLs
+			if ($extension == 'page' && isset($db_pages)) {
+				$aliasConflict = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_alias=?", 
+					[$data['structure_code']])->fetchColumn();
+				
+				if ($aliasConflict > 0) {
+					return ['adm_structure_alias_conflict', 'default'];
+				}
+			}
+			
 			$sql = $db->insert($db_structure, $data);
 			$auth_permit = [COT_GROUP_DEFAULT => 'RW', COT_GROUP_GUESTS => 'R', COT_GROUP_MEMBERS => 'RW'];
 			$auth_lock = [COT_GROUP_DEFAULT => '0', COT_GROUP_GUESTS => 'A', COT_GROUP_MEMBERS => '0'];
@@ -88,6 +100,11 @@ function cot_structure_update($extension, $id, $old_data, $new_data, $is_module 
 		include $pl;
 	}
 	/* ===== */
+
+	// Check for required fields
+	if (empty($new_data['structure_title']) || empty($new_data['structure_code']) || empty($new_data['structure_path']) || $new_data['structure_code'] == 'all') {
+		return false;
+	}
 
 	if ($old_data['structure_code'] != $new_data['structure_code']) {
 		if ($db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area=? AND structure_code=?", [$extension, $new_data['structure_code']])->fetchColumn() == 0) {
