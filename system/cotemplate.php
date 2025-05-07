@@ -1792,98 +1792,104 @@ class Cotpl_var
 	 */
 	public function evaluate($tpl = null)
 	{
-        $var = null;
-		if ($this->name === 'PHP') {
-            // As of PHP 8.1.0, $GLOBALS is now a read-only copy of the global symbol table.
-            // Cannot acquire reference to $GLOBALS in
-            // @todo may be we need another solution
-			$var = $GLOBALS;
+		$full_name = $this->fullName;
+		$var = $this->var;
 
-		} elseif (!empty($tpl)) {
-            if (!isset($tpl->vars[$this->name])) {
-                $tpl->vars[$this->name] = null;
-            }
-			$val = $tpl->vars[$this->name];
-			if ($this->keys && (is_array($val) || is_object($val))) {
-				$var =& $tpl->vars[$this->name];
-			}
+		if(is_null($var) || $var === '') {
+			return '';
 		}
 
-		if ($this->keys) {
-			$keys = $this->keys;
-			$last_key = array_pop($keys);
-			foreach ($keys as $key) {
-				if (is_object($var)) {
-					$var =& $var->{$key};
-
-				} elseif (is_array($var)) {
-					$var =& $var[$key];
-
-				} else {
-					break;
-				}
-			}
-			if (is_object($var) && isset($var->{$last_key})) {
-				$val = $var->{$last_key};
-
-			} elseif (is_array($var) && isset($var[$last_key]))  {
-				$val = $var[$last_key];
-
+		// Simple var
+		if (count($this->keys) === 0) {
+			if (isset($tpl) && isset($tpl->vars[$full_name])) {
+				// Try TPL vars first
+				$res = $tpl->vars[$full_name];
+			} elseif (isset($GLOBALS[$var]) && !is_array($GLOBALS[$var]) && !is_object($GLOBALS[$var])) {
+				// Then non-array globals
+				$res = $GLOBALS[$var];
 			} else {
-				$val = null;
+				// Or check in files since 0.7.0
+				if (!is_array($var) && !is_object($var)) {
+                    $res = cot_import_buffered($var, $var, '');
+                } else {
+                    $res = '';
+                }
 			}
+		} else {
+			// Arrays and objects
+			$t = null;
+			if (isset($tpl) && isset($tpl->vars[$var])) {
+				// Look for TPL name first
+				$t = $tpl->vars[$var];
+                if (is_object($t) && !method_exists($t, '__get')) {
+                    $t = (array) $t;
+                }
+			} elseif (isset($GLOBALS[$var])) {
+				// Then in globals
+				$t = $GLOBALS[$var];
+                if (is_object($t) && !method_exists($t, '__get')) {
+                    $t = (array) $t;
+                }
+			} elseif ($var == 'PHP' && isset($this->keys[0])) {
+				// Special case for PHP.key1.key2...
+				$var1 = $this->keys[0];
+				if (isset($GLOBALS[$var1])) {
+					$t = $GLOBALS[$var1];
+                    if (is_object($t) && !method_exists($t, '__get')) {
+                        $t = (array) $t;
+                    }
+				}
+				array_shift($this->keys);
+			}
+
+            // Safely navigate through the keys, handling null values
+            foreach ($this->keys as $key) {
+                if (is_array($t) && isset($t[$key])) {
+                    $t = $t[$key];
+                    if (is_object($t) && !method_exists($t, '__get')) {
+                        $t = (array) $t;
+                    }
+                } elseif (is_object($t) && isset($t->$key)) {
+                    $t = $t->$key;
+                    if (is_object($t) && !method_exists($t, '__get')) {
+                        $t = (array) $t;
+                    }
+                } else {
+                    // Key doesn't exist, return empty string
+                    return '';
+                }
+            }
+            
+			$res = $t;
 		}
-		if ($this->callbacks) {
-			foreach ($this->callbacks as $func) {
-				if (is_array($func)) {
-                    array_walk(
-                        $func['args'],
-                        [$this, 'processCallbackArgument'],
-                        ['value' => isset($val) ? $val : null, 'tpl' => $tpl]
-                    );
 
-					$f = $func['name'];
-					$a = $func['args'];
-
-					if (!function_exists($f)) {
-						return $this->__toString();
-					}
-
-					switch (count($a)) {
-						case 0:
-							$val = $f();
-							break;
-						case 1:
-							$val = $f($a[0]);
-							break;
-						case 2:
-							$val = $f($a[0], $a[1]);
-							break;
-						case 3:
-							$val = $f($a[0], $a[1], $a[2]);
-							break;
-						case 4:
-							$val = $f($a[0], $a[1], $a[2], $a[3]);
-							break;
-						default:
-							$val = call_user_func_array($f, $a);
-							break;
-					}
-
-				} elseif ($func == 'dump') {
-					$val = $this->dump(isset($val) ? $val : null);
-
+		// Modifiers
+		$cnt = count($this->modifiers);
+		for ($i = 0; $i < $cnt; $i++) {
+			$callback = $this->modifiers[$i]['callback'];
+			$params = $this->modifiers[$i]['params'];
+			$params_cnt = count($params);
+			if ($params_cnt > 0) {
+				// Process params
+				for ($j = 0; $j < $params_cnt; $j++) {
+                    $this->processCallbackArgument($params[$j], $j, $params);
+				}
+				// Prepend $res to callback arguments
+				array_unshift($params, $res);
+				// Call the function with multiple arguments
+				$res = call_user_func_array($callback, $params);
+			} else {
+				// Just one argument
+				if (strpos($callback, '::')) {
+					list($c, $m) = explode('::', $callback);
+					$res = $c::$m($res);
 				} else {
-					if (!function_exists($func)) {
-						return $this->__toString();
-					}
-
-                    $val = (array_key_exists('val', get_defined_vars())) ? $func($val) : $func();
+					$res = $callback($res);
 				}
 			}
 		}
 
-		return isset($val) ? $val : null;
+		return $res;
 	}
 
     /**
