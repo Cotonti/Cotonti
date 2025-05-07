@@ -329,6 +329,8 @@ $L['adm_tpl_code'] = 'Custom category or template code';
 $L['adm_tpl_resyncalltitle'] = 'Resync all page counters';
 $L['adm_tpl_resynctitle'] = 'Resync category page counters';
 $L['adm_help_structure'] = 'The pages that belong to the category &quot;system&quot; are not displayed in the public listings, it\'s to make standalone pages.';
+$L['adm_structure_alias_conflict'] = 'The category code conflicts with an existing page alias';
+$L['adm_structure_help1'] = '';
 
 /**
  * Structure Section
