@@ -30,10 +30,10 @@ $R['input_radio_separator'] = ' ';
 $R['input_select'] = '<select name="{$name}"{$attrs}>{$options}</select>{$error}';
 $R['input_submit'] = '<button type="submit" name="{$name}" {$attrs}>{$value}</button>';
 $R['input_text'] = '<input type="text" name="{$name}" value="{$value}" {$attrs} />{$error}';
-$R['input_textarea'] = '<textarea name="{$name}" rows="{$rows}" cols="{$cols}" {$attrs}>{$value}</textarea>{$error}';
-$R['input_textarea_editor'] =  '<textarea class="editor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
-$R['input_textarea_medieditor'] =  '<textarea class="medieditor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
-$R['input_textarea_minieditor'] =  '<textarea class="minieditor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
+$R['input_textarea'] = '<textarea name="{$name}"' . (!empty($rows) ? ' rows="{$rows}"' : '') . (!empty($cols) ? ' cols="{$cols}"' : '') . ' {$attrs}>{$value}</textarea>{$error}';
+$R['input_textarea_editor'] =  '<textarea class="editor" name="{$name}"' . (!empty($rows) ? ' rows="{$rows}"' : '') . (!empty($cols) ? ' cols="{$cols}"' : '') . '{$attrs}>{$value}</textarea>{$error}';
+$R['input_textarea_medieditor'] =  '<textarea class="medieditor" name="{$name}"' . (!empty($rows) ? ' rows="{$rows}"' : '') . (!empty($cols) ? ' cols="{$cols}"' : '') . '{$attrs}>{$value}</textarea>{$error}';
+$R['input_textarea_minieditor'] =  '<textarea class="minieditor" name="{$name}"' . (!empty($rows) ? ' rows="{$rows}"' : '') . (!empty($cols) ? ' cols="{$cols}"' : '') . '{$attrs}>{$value}</textarea>{$error}';
 $R['input_filebox'] = '<a href="{$filepath}">{$value}</a><br /><input type="file" name="{$name}" {$attrs} /><br /><label><input type="checkbox" name="{$delname}" value="1" /> '.$L['Delete'].'</label>{$error}';
 $R['input_filebox_empty'] = '<input type="file" name="{$name}" {$attrs} />{$error}';
 
