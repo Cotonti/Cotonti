@@ -474,7 +474,6 @@ switch($a) {
                         if (!empty($installedOrder) && min($installedOrder) === max($installedOrder)) {
                             $installedOrder = $installedOrder[0];
                         }
-
                     }
                     if (is_array($order)) {
                         $order = implode(', ', $order);

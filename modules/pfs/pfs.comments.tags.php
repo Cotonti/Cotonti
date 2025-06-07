@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=comments.newcomment.tags,comments.edit.tags
-Tags=comments.tpl:{COMMENTS_FORM_PFS},{COMMENTS_FORM_SFS}
+Tags=comments.tpl:{COMMENT_FORM_PFS},{COMMENT_FORM_SFS}
 [END_COT_EXT]
 ==================== */
 
