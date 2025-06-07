@@ -6,11 +6,8 @@
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
-
 defined('COT_CODE') or die('Wrong URL');
-
 require_once cot_incfile('page', 'module');
-
 /**
  * Converts a title into an alias
  *
@@ -22,7 +19,6 @@ require_once cot_incfile('page', 'module');
 function autoalias2_convert($title, $id = 0, $duplicate = false)
 {
 	global $cfg, $cot_translit, $cot_translit_custom;
-
 	if($cfg['plugin']['autoalias2']['translit'] && file_exists(cot_langfile('translit', 'core')))
 	{
 		include cot_langfile('translit', 'core');
@@ -37,13 +33,17 @@ function autoalias2_convert($title, $id = 0, $duplicate = false)
 	}
 	$title = preg_replace('#[^\p{L}0-9\-_ ]#u', '', $title);
 	$title = str_replace(' ', $cfg['plugin']['autoalias2']['sep'], $title);
-
 	if ($cfg['plugin']['autoalias2']['lowercase'])
 	{
 		$title = mb_strtolower($title);
 	}
-
-	if ($cfg['plugin']['autoalias2']['prepend_id'] && !empty($id))
+	
+	// Check if alias contains only digits and prepend ID if it does
+	if (preg_match("/^\d+$/", $title) && !empty($id))
+	{
+		$title = $id . $cfg['plugin']['autoalias2']['sep'] . $title;
+	}
+	elseif ($cfg['plugin']['autoalias2']['prepend_id'] && !empty($id))
 	{
 		$title = $id . $cfg['plugin']['autoalias2']['sep'] . $title;
 	}
@@ -62,15 +62,14 @@ function autoalias2_convert($title, $id = 0, $duplicate = false)
 				break;
 		}
 	}
-
 	return $title;
 }
-
 /**
  * Updates an alias for a specific page
  *
  * @param string $title Page title
  * @param int $id Page ID
+ * @return string Generated alias
  */
 function autoalias2_update($title, $id)
 {
@@ -81,7 +80,7 @@ function autoalias2_update($title, $id)
 		$alias = autoalias2_convert($title, $id, $duplicate);
 		if (!$cfg['plugin']['autoalias2']['prepend_id']
 			&& $db->query("SELECT COUNT(*) FROM $db_pages
-				WHERE page_alias = '$alias' AND page_id != $id")->fetchColumn() > 0)
+				WHERE page_alias = " . $db->quote($alias) . " AND page_id != $id")->fetchColumn() > 0)
 		{
 			$duplicate = true;
 		}
@@ -92,5 +91,6 @@ function autoalias2_update($title, $id)
 		}
 	}
 	while ($duplicate && !$cfg['plugin']['autoalias2']['prepend_id']);
+	
 	return $alias;
 }
