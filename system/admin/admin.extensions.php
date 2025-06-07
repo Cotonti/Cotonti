@@ -468,22 +468,16 @@ switch($a) {
                         array_column($registeredParts[$info_part]['hooks'], 'order')
                         : [];
                     
-                    // Fix for min/max on empty arrays
-                    if (!empty($order) && !empty($installedOrder) && count($order) === count($installedOrder)) {
-                        if (!empty($order) && min($order) === max($order)) {
-                            $order = $order[0];
-                        }
-                        if (!empty($installedOrder) && min($installedOrder) === max($installedOrder)) {
-                            $installedOrder = $installedOrder[0];
-                        }
+                    if (!empty($order) && min($order) === max($order)) {
+                        $order = $order[0];
                     }
                     
-                    if (is_array($order)) {
-                        $order = !empty($order) ? implode(', ', $order) : '';
+                    if (!empty($installedOrder) && min($installedOrder) === max($installedOrder)) {
+                        $installedOrder = $installedOrder[0];
                     }
-                    if (is_array($installedOrder)) {
-                        $installedOrder = !empty($installedOrder) ? implode(', ', $installedOrder) : '';
-                    }
+                    
+                    $order = is_array($order) ? implode(', ', $order) : $order;
+                    $installedOrder = is_array($installedOrder) ? implode(', ', $installedOrder) : $installedOrder;
 
 					$t->assign([
 						'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i + 1,
