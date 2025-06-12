@@ -22,27 +22,32 @@ $editor = Cot::$cfg['plugin'][$parser]['editor'];
 
 if ($parser === 'html' && $editor === 'ckeditor') {
 	Cot::$R['pfs_code_header_javascript'] = '
+    function addHtmlToCKEditor(editor, html) {
+        const viewFragment = editor.data.processor.toView(html);
+        const modelFragment = editor.data.toModel(viewFragment);
+        editor.model.insertContent(modelFragment, editor.model.document.selection);
+    }
 	function addfile(gfile, c2, gdesc) {
-		if (opener.CKEDITOR.instances.{$c2} !== undefined) {
-			opener.CKEDITOR.instances.{$c2}.insertHtml(\'{$pfs_code_addfile}\');
+	    if (opener.editors[c2] !== undefined) {
+            addHtmlToCKEditor(opener.editors[c2], \'{$pfs_code_addfile}\');
 		} else {
-			insertText(opener.document, \'{$c2}\', \'{$pfs_code_addfile}\');
+			insertText(opener.document, c2, \'{$pfs_code_addfile}\');
 		}
-		{$winclose}
+	    {$winclose}
 	}
 	function addthumb(gfile, c2, gdesc) {
-		if (opener.CKEDITOR.instances.{$c2} !== undefined) {
-			opener.CKEDITOR.instances.{$c2}.insertHtml(\'{$pfs_code_addthumb}\');
+	    if (opener.editors[c2] !== undefined) {
+	        addHtmlToCKEditor(opener.editors[c2], \'{$pfs_code_addthumb}\');
 		} else {
-			insertText(opener.document, \'{$c2}\', \'{$pfs_code_addthumb}\');
+			insertText(opener.document, c2, \'{$pfs_code_addthumb}\');
 		}
-		{$winclose}
+	    {$winclose}
 	}
 	function addpix(gfile, c2, gdesc) {
-		if (opener.CKEDITOR.instances.{$c2} !== undefined) {
-			opener.CKEDITOR.instances.{$c2}.insertHtml(\'{$pfs_code_addpix}\');
+		if (opener.editors[c2] !== undefined) {
+			addHtmlToCKEditor(opener.editors[c2], \'{$pfs_code_addpix}\');
 		} else {
-			insertText(opener.document, \'{$c2}\', \'{$pfs_code_addpix}\');
+			insertText(opener.document, c2, \'{$pfs_code_addpix}\');
 		}
 		{$winclose}
 	}';
