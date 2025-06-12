@@ -298,9 +298,19 @@ span.readmore		{ display:block; }
 
 .hidefromguests	{ text-align: center; margin: 3px 0; padding: 3px 10px; background: #ededed; border: 3px ridge #fff; box-shadow: 0 0 4px #222; }
 
-
 .list-row {
 	margin-bottom: 25px;
+}
+
+hr.more {
+	display: none;
+}
+
+div.ck.ck-editor hr.more {
+	background: none;
+	border: none;
+	border-top: 1px dashed  #FF0000;
+	display: block;
 }
 
 /* 7. Pagination

@@ -49,7 +49,9 @@ function cot_cut_more($html)
 		$mpos = mb_strpos($html, '[more]');
 	}
 	if ($mpos === false) {
-		$mpos = mb_strpos($html, '<hr class="more" />');
+        if (preg_match('#<hr *class="more" */?>#', $html, $matches, PREG_OFFSET_CAPTURE)) {
+            $mpos = $matches[0][1];
+        }
 	}
 	if ($mpos !== false) {
 		$html = mb_substr($html, 0, $mpos);
