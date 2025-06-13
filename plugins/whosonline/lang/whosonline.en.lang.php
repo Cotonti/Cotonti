@@ -23,8 +23,8 @@ $L['cfg_maxusersperpage_hint'] = 'Set to 0 for no limitations';
  * Plugin Title & Subtitle
  */
 
-$L['info_name'] = $L['WhosOnline'];
-$L['info_desc'] = 'Outputs online visitors on index and as standalone page with user activity tracking on site';
+$L['whosonline_title'] = $L['WhosOnline'];
+$L['whosonline_description'] = 'Outputs online visitors on index and as standalone page with user activity tracking on site';
 
 $L['whosonline_metaTitle'] = 'Now online';
 $L['whosonline_metaDesc'] = 'List of registered users and guests viewing site right now';

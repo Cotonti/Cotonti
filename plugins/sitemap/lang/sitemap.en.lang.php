@@ -10,7 +10,7 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 $L['sitemap_title'] = 'XML-sitemap';
-$L['info_desc'] = 'XML-sitemap with content data for search engines';
+$L['sitemap_description'] = 'XML-sitemap with content data for search engines';
 
 $sitemap_freqs = [
 	'default' => 'Default',

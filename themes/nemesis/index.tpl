@@ -47,7 +47,7 @@
 
 <!-- IF {PHP|cot_plugin_active('recentitems')} -->
 <div class="clear block">
-	<h2 class="warning"><a href="{PHP|cot_url('plug','e=recentitems')}">{PHP.L.recentitems_title}</a></h2>
+	<h2 class="warning"><a href="{PHP|cot_url('plug','e=recentitems')}">{PHP.L.recentitems_new}</a></h2>
 	<!-- IF {RECENT_PAGES} -->
 	<h3>{PHP.L.recentitems_pages}</h3>
 	{RECENT_PAGES}

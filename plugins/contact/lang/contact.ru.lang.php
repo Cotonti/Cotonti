@@ -21,7 +21,6 @@ $L['cfg_save'] = 'Метод хранения сообщений';
 $L['cfg_save_params'] = 'e-mail,база данных,e-mail + база данных';
 $L['cfg_template'] = 'Шаблон письма';
 $L['cfg_template_hint'] = 'Используемые переменные: {$sitetitle}, {$siteurl}, {$author}, {$email}, {$subject}, {$text}, {$extra}, {$extraXXXX}, {$extraXXXX_title}';
-$L['info_desc'] = 'Форма обратной связи с отправкой на E-mail и записью сообщений в базу данных';
 
 /**
  * Plugin Admin
@@ -41,13 +40,15 @@ $L['contact_nosubject'] = 'Без темы';
  * Plugin Title & Subtitle
  */
 
-$L['contact_title'] = 'Обратная связь';
+$L['contact_title'] = 'Contact us';
 $L['contact_subtitle'] = 'Контактная информация';
+$L['contact_description'] = 'Форма обратной связи с отправкой на E-mail и записью сообщений в базу данных';
 
 /**
  * Plugin Body
  */
 
+$L['contact_contactUs'] = 'Обратная связь';
 $L['contact_headercontact'] = 'Обратная связь';
 $Ls['contact_headercontact'] = "контакт-сообщение,контакт-сообщения,контакт-сообщений";
 $L['contact_entrytooshort'] = 'Сообщение слишком короткое или отсутствует';

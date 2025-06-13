@@ -9,9 +9,10 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['userimages_title'] = 'Пользовательские изображения';
-$L['info_desc'] = 'Поддержка аватаров, фото и изображений-подписей для пользователей';
+$L['userimages_title'] = 'User Images';
+$L['userimages_description'] = 'Поддержка аватаров, фото и изображений-подписей для пользователей';
 
+$L['userimages_userImages'] = 'Пользовательские изображения';
 $L['userimages_width'] = 'Ширина';
 $L['userimages_height'] = 'Высота';
 $L['userimages_cropratio'] = 'Отношение обрезки';

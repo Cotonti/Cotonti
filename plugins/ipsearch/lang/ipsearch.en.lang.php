@@ -9,13 +9,14 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['info_desc'] = 'Administration tool for IP search in the user database';
+$L['ipsearch_title'] = 'IP Search';
+$L['ipsearch_description'] = 'Administration tool for IP search in the user database';
 
 /**
  * Plugin Body
  */
 
-$L['ipsearch_title'] = 'IP Search';
+$L['ipsearch_searchByIP '] = 'IP Search';
 $L['ipsearch_dnsrecord'] = 'DNS record for this address';
 $L['ipsearch_searchthisuser'] = 'Search for this IP in the user database';
 

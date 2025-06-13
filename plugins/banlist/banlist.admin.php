@@ -23,7 +23,7 @@ require_once cot_langfile('banlist', 'plug');
 
 Cot::$db->registerTable('banlist');
 $adminHelp = Cot::$L['banlist_help'];
-$adminTitle = Cot::$L['banlist_title'];
+$adminTitle = Cot::$L['banlist_banlist'];
 
 $maxperpage = (
     isset(Cot::$cfg['maxrowsperpage'])

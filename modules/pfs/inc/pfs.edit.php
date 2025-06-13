@@ -52,9 +52,9 @@ if (!empty($c1) || !empty($c2)) {
 
 /* ============= */
 
-$L['pfs_title'] = ($userid==0) ? Cot::$L['SFS'] : Cot::$L['pfs_title'];
+$pfsTitle = ($userid == 0) ? Cot::$L['SFS'] : Cot::$L['pfs_myFiles'];
 $breadcrumbs = [
-    [cot_url('pfs', $more), Cot::$L['pfs_title']],
+    [cot_url('pfs', $more), $pfsTitle],
 ];
 
 /* === Hook === */
@@ -109,7 +109,7 @@ if ($a === 'update' && !empty($id)) {
 
 /* ============= */
 
-$out['subtitle'] = $L['pfs_title'];
+Cot::$out['subtitle'] = $pfsTitle;
 
 if (!$standalone) {
 	require_once Cot::$cfg['system_dir'] . '/header.php';

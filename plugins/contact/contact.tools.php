@@ -50,7 +50,7 @@ if ($a == 'del') {
 	cot_redirect(cot_url('admin', 'm=other&p=contact', '', true));
 }
 
-$adminTitle = Cot::$L['contact_title'];
+$adminTitle = Cot::$L['contact_contactUs'];
 
 $tuman = new XTemplate(cot_tplfile('contact.tools', 'plug', true));
 

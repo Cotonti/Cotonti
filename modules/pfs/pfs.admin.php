@@ -29,7 +29,7 @@ if ($s == 'allpfs') {
 	$adminPath[] = [cot_url('admin', 'm=extensions&a=details&mod=' . $m), $cot_modules[$m]['title']];
 	$adminPath[] = [cot_url('admin', 'm='.$m), Cot::$L['Administration']];
 	//$adminHelp = $L['adm_help_pfs'];
-	$adminTitle = Cot::$L['pfs_title'];
+	$adminTitle = Cot::$L['pfs_myFiles'];
 
 	/* === Hook === */
 	foreach (cot_getextplugins('pfs.admin.first') as $pl) {

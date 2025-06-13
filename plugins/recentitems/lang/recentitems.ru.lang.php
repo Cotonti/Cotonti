@@ -12,7 +12,8 @@ defined('COT_CODE') or die('Wrong URL.');
 /**
  * Plugin Info
  */
-$L['info_desc'] = 'Вывод обновленного контента (страницы, темы) на главной странице сайта';
+$L['recentitems_title'] = 'Recent Items';
+$L['recentitems_description'] = 'Вывод обновленного контента (страницы, темы) на главной странице сайта';
 
 /**
  * Plugin Config
@@ -53,8 +54,7 @@ $L['cfg_cache_ttl_hint'] = '0 - кеш отключен';
  * Plugin Body
  */
 
-$L['recentitems_title'] = 'Новое на сайте';
-
+$L['recentitems_new'] = 'Новое на сайте';
 $L['recentitems_forums'] = 'Новое на форумах';
 $L['recentitems_pages'] = 'Новое в разделах';
 

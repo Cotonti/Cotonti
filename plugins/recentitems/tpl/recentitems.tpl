@@ -1,6 +1,6 @@
 <!-- BEGIN: MAIN -->
 <div class="block">
-	<h2 class="stats">{PHP.L.recentitems_title}</h2>
+	<h2 class="stats">{PHP.L.recentitems_new}</h2>
 	<p class="small">
 		{PHP.L.recentitems_shownew}:
 		<!-- IF {PHP.days} == 0 --><strong><!-- ENDIF -->

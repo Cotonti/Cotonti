@@ -145,7 +145,7 @@ if (
 	$t->assign('RECENT_FORUMS', $res);
 }
 
-$titleParams = [Cot::$L['recentitems_title']];
+$titleParams = [Cot::$L['recentitems_new']];
 if ($mode === 'pages') {
     $titleParams[] = Cot::$L['Pages'];
 } elseif ($mode === 'forums') {

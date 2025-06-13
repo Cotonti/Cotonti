@@ -9,13 +9,14 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['info_desc'] = 'Блокировка пользователей администратором по IP/адресу эл.почты/имени учетной записи';
+$L['banlist_title'] = 'Banlist';
+$L['banlist_description'] = 'Блокировка пользователей администратором по IP/адресу эл.почты/имени учетной записи';
 
 /**
  * Plugin Body
  */
 
-$L['banlist_title'] = 'Банлист';
+$L['banlist_banlist'] = 'Банлист';
 $L['banlist_ipmask'] = 'IP маска';
 $L['banlist_emailmask'] = 'E-mail маска или имя пользователя (login)';
 $L['banlist_reason'] = 'Причина';

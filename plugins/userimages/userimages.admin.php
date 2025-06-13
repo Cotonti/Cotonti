@@ -25,7 +25,7 @@ require_once cot_langfile('userimages');
 require_once cot_incfile('configuration');
 
 $adminHelp = $L['userimages_help'];
-$adminTitle = $L['userimages_title'];
+$adminTitle = $L['userimages_userImages'];
 
 /* === Hook === */
 foreach (cot_getextplugins('userimages.admin.first') as $pl) {

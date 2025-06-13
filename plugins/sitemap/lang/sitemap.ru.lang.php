@@ -9,8 +9,8 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['sitemap_title'] = 'XML-карта сайта';
-$L['info_desc'] = 'XML-карта сайта с данными для поисковых систем';
+$L['sitemap_title'] = 'XML-sitemap';
+$L['sitemap_description'] = 'XML-карта сайта с данными для поисковых систем';
 
 $sitemap_freqs = [
 	'default' => 'По умолчанию',

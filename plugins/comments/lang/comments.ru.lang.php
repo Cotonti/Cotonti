@@ -9,7 +9,7 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['comments_title'] = 'Комментарии';
+$L['comments_title'] = 'Comments';
 $L['comments_description'] = 'Комментарии с API и интеграцией со страницами, списками, опросами, RSS и другими расширениями';
 
 /**

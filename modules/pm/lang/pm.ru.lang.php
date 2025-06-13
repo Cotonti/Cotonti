@@ -9,7 +9,7 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['pm_title'] = 'Личные сообщения';
+$L['pm_title'] = 'Private Messages';
 
 /**
  * Admin

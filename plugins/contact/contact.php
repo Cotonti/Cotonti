@@ -115,13 +115,13 @@ if (!empty($rtext)) {
 	}
 }
 
-Cot::$out['subtitle'] = Cot::$L['contact_title'];
+Cot::$out['subtitle'] = Cot::$L['contact_contactUs'];
 
 cot_display_messages($t);
 
 if (!$sent) {
 	$t->assign([
-        'CONTACT_TITLE' => Cot::$L['contact_title'],
+        'CONTACT_TITLE' => Cot::$L['contact_contactUs'],
         'CONTACT_FORM_ACTION' => cot_url('plug', ['e' => 'contact', 'tpl' => $tplfile]),
 		'CONTACT_FORM_AUTHOR' => (Cot::$usr['id'] == 0)
             ? cot_inputbox('text', 'ruser', $rcontact['contact_author'], 'maxlength="24"')

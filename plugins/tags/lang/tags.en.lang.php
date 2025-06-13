@@ -10,16 +10,11 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
- * Plugin Info
- */
-
-$L['info_desc'] = 'Enables tags - site content keywords, tag clouds, tag search and API';
-
-/**
  * Plugin Title & Subtitle
  */
 
-$L['plu_title'] = 'Tags';
+$L['tags_title'] = 'Tags';
+$L['tags_description'] = 'Enables tags - site content keywords, tag clouds, tag search and API';
 
 /**
  * Plugin Body

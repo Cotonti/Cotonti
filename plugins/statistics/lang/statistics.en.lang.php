@@ -9,13 +9,12 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['info_desc'] = 'Simple site statistics recommended for small sites';
-
 /**
  * Plugin Title & Subtitle
  */
 
-$L['plu_title'] = 'Statistics';
+$L['statistics_title'] = 'Statistics';
+$L['statistics_description'] = 'Simple site statistics recommended for small sites';
 $L['Statistics'] = 'Statistics';
 
 /**

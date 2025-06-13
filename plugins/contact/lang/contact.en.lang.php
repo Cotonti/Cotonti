@@ -21,7 +21,6 @@ $L['cfg_save'] = 'Save method';
 $L['cfg_save_params'] = 'e-mail,database,e-mail + database';
 $L['cfg_template'] = 'Email template';
 $L['cfg_template_hint'] = 'Using variables: {$sitetitle}, {$siteurl}, {$author}, {$email}, {$subject}, {$text}, {$extra}, {$extraXXXX}, {$extraXXXX_title}';
-$L['info_desc'] = 'Contact form for user feedback delivered via email and recorded in database';
 
 /**
  * Plugin Admin
@@ -43,11 +42,13 @@ $L['contact_nosubject'] = 'No subject';
 
 $L['contact_title'] = 'Contact us';
 $L['contact_subtitle'] = 'Contact info';
+$L['contact_description'] = 'Contact form for user feedback delivered via email and recorded in database';
 
 /**
  * Plugin Body
  */
 
+$L['contact_contactUs'] = 'Contact us';
 $L['contact_headercontact'] = 'Contact';
 $Ls['contact_headercontact'] = "contact message,contact messages";
 $L['contact_entrytooshort'] = 'Message too short or missing';

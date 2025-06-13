@@ -9,13 +9,14 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['info_desc'] = 'Administration tool to ban users by IP/E-mail/login';
+$L['banlist_title'] = 'Banlist';
+$L['banlist_description'] = 'Administration tool to ban users by IP/E-mail/login';
 
 /**
  * Plugin Body
  */
 
-$L['banlist_title'] = 'Banlist';
+$L['banlist_banlist'] = 'Banlist';
 $L['banlist_ipmask'] = 'IP mask';
 $L['banlist_emailmask'] = 'Email mask or user login';
 $L['banlist_reason'] = 'Reason';

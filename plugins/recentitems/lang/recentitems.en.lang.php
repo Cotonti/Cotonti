@@ -12,7 +12,8 @@ defined('COT_CODE') or die('Wrong URL.');
 /**
  * Plugin Info
  */
-$L['info_desc'] = 'Displays recent site additions (pages, topics) on index page';
+$L['recentitems_title'] = 'Recent Items';
+$L['recentitems_description'] = 'Displays recent site additions (pages, topics) on index page';
 
 /**
  * Plugin Config
@@ -52,7 +53,7 @@ $L['cfg_cache_ttl_hint'] = '0 - cache off';
  * Plugin Body
  */
 
-$L['recentitems_title'] = 'Recent Items';
+$L['recentitems_new'] = 'Recent Items';
 $L['recentitems_forums'] = 'New in forums';
 $L['recentitems_pages'] = 'New pages';
 

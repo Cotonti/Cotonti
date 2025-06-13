@@ -10,16 +10,11 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
- * Plugin Info
- */
-
-$L['info_desc'] = 'Теги &mdash; метки для контента с облаком, поиском и API';
-
-/**
  * Plugin Title & Subtitle
  */
 
-$L['plu_title'] = 'Теги';
+$L['tags_title'] = 'Tags';
+$L['tags_description'] = 'Теги &mdash; метки для контента с облаком, поиском и API';
 
 /**
  * Plugin Body

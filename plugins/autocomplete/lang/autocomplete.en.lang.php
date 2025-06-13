@@ -12,8 +12,8 @@ defined('COT_CODE') or die('Wrong URL.');
 /**
  * Plugin Info
  */
-
-$L['info_desc'] = 'Autocomplete for usernames in forms';
+$L['autocomplete_title'] = 'Autocomplete';
+$L['autocomplete_description'] = 'Autocomplete for usernames in forms';
 
 /**
  * Plugin Config
@@ -22,9 +22,3 @@ $L['info_desc'] = 'Autocomplete for usernames in forms';
 $L['cfg_autocomplete'] = 'Min. chars for autocomplete';
 $L['cfg_autocomplete_hint'] = '0 - disable autocomplete';
 $L['cfg_css'] = 'Use plugin CSS';
-
-/**
- * Plugin Title & Subtitle
- */
-
-$L['plu_title'] = 'Autocomplete';

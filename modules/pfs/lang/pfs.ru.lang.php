@@ -9,6 +9,8 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+$L['pfs_title'] = 'Personal File Space';
+
 /**
  * Module Config
  */
@@ -91,6 +93,7 @@ $L['pfs_isgallery'] = 'Галерея?';
 $L['pfs_ispublic'] = 'Открытый доступ?';
 $L['pfs_maxsize'] = 'Максимальный размер файла';
 $L['pfs_maxspace'] = 'Максимальный разрешенный объем';
+$L['pfs_myFiles'] = 'Мои файлы';
 $L['pfs_newfile'] = 'Загрузить файл';
 $L['pfs_newfolder'] = 'Создать новый каталог';
 $L['pfs_onpage'] = 'На этой странице';
@@ -99,7 +102,6 @@ $L['pfs_pastefile'] = 'Вставить как ссылку на файл';
 $L['pfs_pasteimage'] = 'Вставить как изображение';
 $L['pfs_pastethumb'] = 'Вставить миниатюру';
 $L['pfs_resizeimages'] = 'Масштабировать изображение?';
-$L['pfs_title'] = 'Мои файлы';
 $L['pfs_totalsize'] = 'Общий объем';
 $L['pfs_uploadfiles'] = 'Загрузить файлы';
 

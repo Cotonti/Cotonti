@@ -83,8 +83,8 @@ foreach ($cot_extensions as $k => $line) {
 	$filedesc[$line[0]] = $line[1];
 }
 
-Cot::$L['pfs_title'] = ($userid == 0) ? Cot::$L['SFS'] : Cot::$L['pfs_title'];
-$title[] = [cot_url('pfs', $more), Cot::$L['pfs_title']];
+$pfsTitle = ($userid == 0) ? Cot::$L['SFS'] : Cot::$L['pfs_myFiles'];
+$title[] = [cot_url('pfs', $more), $pfsTitle];
 
 if ($userid > 0 && $userid != Cot::$usr['id']) {
     if ($user_info) {
@@ -325,7 +325,7 @@ if ($a === 'upload') {
 }
 
 // Title parameter
-Cot::$out['subtitle'] = Cot::$L['pfs_title'];
+Cot::$out['subtitle'] = $pfsTitle;
 
 if (!$standalone) {
     require_once Cot::$cfg['system_dir'] . '/header.php';
