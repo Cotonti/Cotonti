@@ -67,6 +67,12 @@ function ckeditorReplace() {
                         const editorContainer = editor.ui.view.element;
                         editorContainer.style.maxWidth = '99%';
 
+                        const css = '.ck.ck-content { min-height: ' + editorHeight + '; }',
+                            head = document.head || document.getElementsByTagName('head')[0],
+                            style = document.createElement('style');
+                        head.appendChild(style);
+                        style.appendChild(document.createTextNode(css));
+
                         if (window.editors === undefined) {
                             window.editors = {};
                         }
