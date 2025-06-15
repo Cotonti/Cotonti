@@ -27,7 +27,7 @@
 					<tr>
 						<th class="" rowspan="2"></th>
 						<th class="" rowspan="2">{PHP.L.Section}</th>
-						<th class="" colspan="{ADMIN_RIGHTS_ADV_COLUMNS}">{PHP.L.Section}</th>
+						<th class="" colspan="{ADMIN_RIGHTS_ADV_COLUMNS}">{PHP.L.Rights}</th>
 						<th class="" rowspan="2">{PHP.L.adm_rightspergroup}</th>
 						<th class="" rowspan="2">{PHP.L.adm_setby}</th>
 					</tr>

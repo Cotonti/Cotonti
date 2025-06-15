@@ -9,6 +9,9 @@
  * @todo don't update locked elements. Don't use form elements for them.
  */
 
+use cot\extensions\ExtensionsDictionary;
+use cot\extensions\ExtensionsHelper;
+
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('users', 'a');
@@ -149,8 +152,9 @@ if ($advanced) {
 
 // Preload module langfiles
 foreach ($cot_modules as $code => $mod) {
-	if (file_exists(cot_langfile($code, 'module'))) {
-		require_once cot_langfile($code, 'module');
+    $langFile = cot_langfile($code, ExtensionsDictionary::TYPE_MODULE);
+	if (!empty($langFile) && file_exists($langFile)) {
+		require_once $langFile;
 	}
 }
 
@@ -250,16 +254,19 @@ while ($row = $sql->fetch()) {
 if (!empty($area)) {
 	$t->assign(
         'RIGHTS_SECTION_TITLE',
-        Cot::$L['Module'].' '.$cot_modules[$area]['title'].' '.mb_strtolower(Cot::$L['Structure']));
+        Cot::$L['Module'] . ' ' . ExtensionsHelper::getInstance()->getTitle($area) . ' ' . mb_strtolower(Cot::$L['Structure']));
 	$t->parse('MAIN.RIGHTS_SECTION');
 }
 $sql->closeCursor();
 
 // Plugin permissions
-$sql = Cot::$db->query('SELECT a.*, u.user_name FROM '. Cot::$db->auth . ' AS a ' .
-'LEFT JOIN ' . Cot::$db->users . ' AS u ON u.user_id=a.auth_setbyuserid ' .
-"WHERE auth_groupid=? AND auth_code='plug' ".
-'ORDER BY auth_option ASC', $g);
+$sql = Cot::$db->query(
+    'SELECT a.*, u.user_name FROM ' . Cot::$db->auth . ' AS a '
+    . 'LEFT JOIN ' . Cot::$db->users . ' AS u ON u.user_id = a.auth_setbyuserid '
+    . "WHERE auth_groupid = ? AND auth_code = '" . ExtensionsDictionary::TYPE_PLUGIN . "' "
+    . 'ORDER BY auth_option ASC',
+    $g
+);
 
 while ($row = $sql->fetch()) {
 	$link = cot_url('admin', 'm=extensions&a=details&pl='.$row['auth_option']);
