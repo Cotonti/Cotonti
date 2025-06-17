@@ -112,10 +112,12 @@ if ($a == 'newpost' && !empty($s) && !empty($q)) {
 		cot_redirect(cot_url('forums', ['m' => 'posts', 'q' => $q, 'n' => 'last'], '#bottom', true));
 	}
 
-    $postTextToCount = strip_tags($rmsg['fp_text']);
-    if (mb_strlen($postTextToCount) > Cot::$cfg['forums']['maxPostLength']) {
-        cot_error(Cot::$L['forums_messageTooLong'], 'rmsgtext');
-        cot_redirect(cot_url('forums', ['m' => 'posts', 'q' => $q, 'n' => 'last'], '#bottom', true));
+    if (!empty(Cot::$cfg['forums']['maxPostLength'])) {
+        $postTextToCount = strip_tags($rmsg['fp_text']);
+        if (mb_strlen($postTextToCount) > Cot::$cfg['forums']['maxPostLength']) {
+            cot_error(Cot::$L['forums_messageTooLong'], 'rmsgtext');
+            cot_redirect(cot_url('forums', ['m' => 'posts', 'q' => $q, 'n' => 'last'], '#bottom', true));
+        }
     }
 
 	// Extra fields
@@ -154,10 +156,12 @@ if ($a == 'newpost' && !empty($s) && !empty($q)) {
 
 			$rmsg['fp_text'] = $row['fp_text'] . cot_rc('forums_code_update', ['updated' => $updated]) . $rmsg['fp_text'];
 
-            $postTextToCount = strip_tags($rmsg['fp_text']);
-            if (mb_strlen($postTextToCount) > Cot::$cfg['forums']['maxPostLength']) {
-                cot_error(Cot::$L['forums_messageTooLong'], 'rmsgtext');
-                cot_redirect(cot_url('forums', ['m' => 'posts', 'q' => $q, 'n' => 'last'], '#bottom', true));
+            if (!empty(Cot::$cfg['forums']['maxPostLength'])) {
+                $postTextToCount = strip_tags($rmsg['fp_text']);
+                if (mb_strlen($postTextToCount) > Cot::$cfg['forums']['maxPostLength']) {
+                    cot_error(Cot::$L['forums_messageTooLong'], 'rmsgtext');
+                    cot_redirect(cot_url('forums', ['m' => 'posts', 'q' => $q, 'n' => 'last'], '#bottom', true));
+                }
             }
 
 			$rmsg['fp_updater'] = ($row['fp_posterid'] == Cot::$usr['id'] && ($sys['now'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : Cot::$usr['name'];
