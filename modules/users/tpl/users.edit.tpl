@@ -43,12 +43,6 @@
 				<td>{USERS_EDIT_AVATAR}</td>
 			</tr>
 			<!-- ENDIF -->
-			<!-- IF {USERS_EDIT_SIGNATURE} -->
-			<tr>
-				<td>{PHP.L.Signature}:</td>
-				<td>{USERS_EDIT_SIGNATURE}</td>
-			</tr>
-			<!-- ENDIF -->
 			<!-- IF {USERS_EDIT_PHOTO} -->
 			<tr>
 				<td>{PHP.L.Photo}:</td>
