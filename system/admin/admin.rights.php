@@ -145,7 +145,7 @@ if ($advanced) {
 $adminTitle = Cot::$L['Rights'];
 
 $adv_columns = ($advanced) ? 8 : 4;
-$urlParams = ['m' => 'rights', 'g' => $g, 'a' => 'update',];
+$urlParams = ['m' => 'rights', 'g' => $g, 'a' => 'update'];
 if ($advanced) {
     $urlParams['advanced'] = 1;
 }

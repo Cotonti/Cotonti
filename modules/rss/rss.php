@@ -13,6 +13,7 @@ Hooks=module
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
 use cot\modules\page\inc\PageDictionary;
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -69,7 +70,10 @@ if ($m === 'topics') {
     $postsTable = Cot::$db->forum_posts;
     $topicsTable = Cot::$db->forum_topics;
 
-    $topic = Cot::$db->query("SELECT * FROM $topicsTable WHERE ft_id = ? AND ft_mode = " . COT_FORUMS_TOPIC_MODE_NORMAL, $topicId)->fetch();
+    $topic = Cot::$db->query(
+        "SELECT * FROM $topicsTable WHERE ft_id = ? AND ft_mode = " . ForumsDictionary::TOPIC_MODE_NORMAL,
+        $topicId
+    )->fetch();
     if (!$topic) {
         cot_die_message(404);
     }
@@ -146,7 +150,7 @@ if ($m === 'topics') {
     $topicsTable = Cot::$db->forum_topics;
 
     $join['topics'] = "LEFT JOIN $topicsTable  ON {$postsTable}.fp_topicid = {$topicsTable}.ft_id";
-    $where['notPrivate'] = "({$topicsTable}.ft_mode = " . COT_FORUMS_TOPIC_MODE_NORMAL . ')';
+    $where['notPrivate'] = "({$topicsTable}.ft_mode = " . ForumsDictionary::TOPIC_MODE_NORMAL . ')';
 
     $sqlJoin = !empty($join) ? "\n" . implode ("\n", $join) : '';
 
@@ -211,7 +215,7 @@ if ($m === 'topics') {
     }
 
     $join['topics'] = "LEFT JOIN $topicsTable AS t ON p.fp_topicid = t.ft_id";
-    $where['notPrivate'] = '(t.ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL . ')';
+    $where['notPrivate'] = '(t.ft_mode = ' . ForumsDictionary::TOPIC_MODE_NORMAL . ')';
 
     /* === Hook === */
     foreach (cot_getextplugins('rss.forums.query') as $pl) {

@@ -7,6 +7,7 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
 use cot\modules\forums\inc\ForumsHelper;
 use cot\modules\forums\inc\ForumsTopicsControlService;
 use cot\modules\forums\inc\ForumsTopicsHelper;
@@ -19,14 +20,14 @@ list($pg, $d, $durl) = cot_import_pagenav('d', Cot::$cfg['forums']['maxtopicsper
 $o = cot_import('ord','G','ALP',16); //order
 $w = cot_import('w','G','ALP',4); // way
 
-if (empty($o) || !Cot::$db->fieldExists($db_forum_topics, "ft_$o")) {
+if (empty($o) || !Cot::$db->fieldExists(Cot::$db->forum_topics, "ft_$o")) {
 	$o = 'updated';
 }
-$w = (empty($w) || !in_array($w, array('asc', 'desc'))) ? 'desc' : $w;
+$w = (empty($w) || !in_array($w, ['asc', 'desc'])) ? 'desc' : $w;
 
 cot_die(empty($s) || !isset(Cot::$structure['forums'][$s]), true);
 
-list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('forums', $s);
+[Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']] = cot_auth('forums', $s);
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.topics.rights') as $pl) {
@@ -251,8 +252,7 @@ if (count($arraychilds) > 0)  {
 		));
 
 		/* === Hook - Part2 : Include === */
-		foreach ($extp as $pl)
-		{
+		foreach ($extp as $pl) {
 			include $pl;
 		}
 		/* ===== */
@@ -261,16 +261,19 @@ if (count($arraychilds) > 0)  {
 	}
 	$t->parse('MAIN.FORUMS_SECTIONS');
 }
-$where = (isset($where) && is_array($where)) ? $where : array();
-$where['cat'] = 'ft_cat='.Cot::$db->quote($s);
-$where['admin'] = (Cot::$usr['isadmin']) ? '' : "(ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".(int)Cot::$usr['id']."))";
+$where = (isset($where) && is_array($where)) ? $where : [];
+$where['cat'] = 'ft_cat=' . Cot::$db->quote($s);
+if (!Cot::$usr['isadmin'] && Cot::$cfg['forums']['hideprivateforums']) {
+    $where['private'] = '(ft_mode = ' . ForumsDictionary::TOPIC_MODE_NORMAL
+        . ' OR (ft_mode = ' . ForumsDictionary::TOPIC_MODE_PRIVATE . ' AND ft_firstposterid = ' . Cot::$usr['id'] . '))';
+}
+
 $order = "ft_sticky DESC, ft_$o $w";
 $join_columns = '';
 $join_condition = '';
 
 /* === Hook === */
-foreach (cot_getextplugins('forums.topics.query') as $pl)
-{
+foreach (cot_getextplugins('forums.topics.query') as $pl) {
 	include $pl;
 }
 /* ===== */
@@ -287,7 +290,8 @@ if ($totaltopics > 0 && $d > $totaltopics) {
 
 if (Cot::$usr['id'] > 0) {
 	// Check if the user has posted in the topic
-	$join_columns .= ", (SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid = t.ft_id AND fp_posterid = ".Cot::$usr['id'].") AS ft_user_posted";
+	$join_columns .= ", (SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid = t.ft_id AND fp_posterid = "
+        . Cot::$usr['id'] . ") AS ft_user_posted";
 }
 
 $sql_forums = Cot::$db->query("SELECT t.* $join_columns

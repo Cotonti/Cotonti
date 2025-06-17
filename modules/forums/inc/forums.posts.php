@@ -9,6 +9,7 @@
 
 use cot\exceptions\ForbiddenHttpException;
 use cot\exceptions\NotFoundHttpException;
+use cot\modules\forums\inc\ForumsDictionary;
 use cot\modules\forums\inc\ForumsPostsControlService;
 use cot\modules\forums\inc\ForumsPostsRepository;
 use cot\modules\forums\inc\ForumsPostsService;
@@ -68,17 +69,18 @@ if ((!empty($n) && !empty($q)) || !empty($p) || !empty($id)) {
 isset(Cot::$structure['forums'][$s]) || cot_die(true, true);
 
 list(Cot::$usr['auth_read'], Cot::$usr['auth_write'], Cot::$usr['isadmin']) = cot_auth('forums', $s);
+
 /* === Hook === */
 foreach (cot_getextplugins('forums.posts.rights') as $pl) {
 	include $pl;
 }
 /* ===== */
+
 cot_block(Cot::$usr['auth_read']);
 
 $sys['sublocation'] = Cot::$structure['forums'][$s]['title'];
 
-if ($a == 'newpost' && !empty($s) && !empty($q))
-{
+if ($a == 'newpost' && !empty($s) && !empty($q)) {
 	cot_shield_protect();
 
 	Cot::$db->query("SELECT ft_state FROM $db_forum_topics WHERE ft_id = $q")->fetchColumn() && cot_die();
@@ -259,9 +261,16 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 
 $sql_forums = Cot::$db->query("SELECT * FROM $db_forum_topics WHERE ft_id= $q");
 if ($rowt = $sql_forums->fetch()) {
-	if ($rowt['ft_mode'] == 1 && !(Cot::$usr['isadmin'] || $rowt['ft_firstposterid'] == Cot::$usr['id'])) {
-		cot_die();
-	}
+    if (
+        $rowt['ft_mode'] == ForumsDictionary::TOPIC_MODE_PRIVATE
+        && !(Cot::$usr['isadmin'] || $rowt['ft_firstposterid'] == Cot::$usr['id'])
+    ) {
+        if (Cot::$cfg['forums']['hideprivateforums']) {
+            cot_die();
+        } else {
+            cot_die_message(403, true, Cot::$L['forums_privatetopic1'], Cot::$L['forums_privatetopic']);
+        }
+    }
 } else {
 	cot_die(true, true);
 }

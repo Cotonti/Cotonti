@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Forums API
  *
@@ -8,6 +7,7 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\modules\forums\inc\ForumsDictionary;
 use cot\modules\forums\inc\ForumsHelper;
 
 defined('COT_CODE') or die('Wrong URL.');
@@ -24,14 +24,6 @@ Cot::$db->registerTable('forum_stats');
 
 cot_extrafields_register_table('forum_posts');
 cot_extrafields_register_table('forum_topics');
-
-/*
- * Topic modes
- * 0 - Normal. Available for all
- * 1 - Private. Only moderators and the starter of the topic can read and reply
- */
-const COT_FORUMS_TOPIC_MODE_NORMAL = 0;
-const COT_FORUMS_TOPIC_MODE_PRIVATE = 1;
 
 // @todo constants for topic states
 // LOCKED: ft_state == 1,  ft_sticky == 0
@@ -105,7 +97,7 @@ function cot_forums_sqlExcludePrivateTopics($tableAlias = null)
         }
     }
 
-    return '(' . Cot::$db->quoteC($tableAlias . 'ft_mode') . ' = ' . COT_FORUMS_TOPIC_MODE_NORMAL
+    return '(' . Cot::$db->quoteC($tableAlias . 'ft_mode') . ' = ' . ForumsDictionary::TOPIC_MODE_NORMAL
         . $sqlFirstPosterId . $sqlAdminCats . ')';
 }
 
@@ -284,7 +276,7 @@ function cot_forums_sync($category)
         return 0;
     }
 
-    $topicWhere = 'ft_cat = :cat AND ft_movedto = 0 AND ft_mode = ' . COT_FORUMS_TOPIC_MODE_NORMAL;
+    $topicWhere = 'ft_cat = :cat AND ft_movedto = 0 AND ft_mode = ' . ForumsDictionary::TOPIC_MODE_NORMAL;
 
     $data = Cot::$db->query(
         'SELECT COUNT(*) as topics_count, SUM(ft_viewcount) as views_count, ' .
@@ -411,7 +403,7 @@ function cot_forums_updateUserPostCount($id)
         'SELECT COUNT(*) FROM ' . Cot::$db->forum_posts .
         ' WHERE fp_posterid = :posterId ' .
         'AND fp_topicid NOT IN (SELECT ft_id FROM ' . Cot::$db->forum_topics .' WHERE ft_mode = ' .
-            COT_FORUMS_TOPIC_MODE_PRIVATE . $countPostsDisabled . ')' .
+            ForumsDictionary::TOPIC_MODE_PRIVATE . $countPostsDisabled . ')' .
     ') ' .
     'WHERE user_id = :posterId';
 
