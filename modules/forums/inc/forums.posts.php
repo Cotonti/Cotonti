@@ -102,15 +102,21 @@ if ($a == 'newpost' && !empty($s) && !empty($q)) {
 	} else {
 		cot_die();
 	}
-	$rmsg = array();
+	$rmsg = [];
 	$rmsg['fp_text'] = cot_import('rmsgtext', 'P', 'HTM');
-	$rmsg['fp_updated'] = (int)$sys['now'];
+	$rmsg['fp_updated'] = Cot::$sys['now'];
 	$rmsg['fp_posterip'] = Cot::$usr['ip'];
 
 	if (mb_strlen($rmsg['fp_text']) < Cot::$cfg['forums']['minpostlength']) {
 		cot_error('forums_messagetooshort', 'rmsgtext');
-		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
+		cot_redirect(cot_url('forums', ['m' => 'posts', 'q' => $q, 'n' => 'last'], '#bottom', true));
 	}
+
+    $postTextToCount = strip_tags($rmsg['fp_text']);
+    if (mb_strlen($postTextToCount) > Cot::$cfg['forums']['maxPostLength']) {
+        cot_error(Cot::$L['forums_messageTooLong'], 'rmsgtext');
+        cot_redirect(cot_url('forums', ['m' => 'posts', 'q' => $q, 'n' => 'last'], '#bottom', true));
+    }
 
 	// Extra fields
 	if (!empty(Cot::$extrafields[Cot::$db->forum_posts])) {
@@ -130,9 +136,9 @@ if ($a == 'newpost' && !empty($s) && !empty($q)) {
 		if (!$merge) {
 			$rmsg['fp_topicid'] = (int) $q;
 			$rmsg['fp_cat'] = $s;
-			$rmsg['fp_posterid'] = (int) Cot::$usr['id'];
+			$rmsg['fp_posterid'] = Cot::$usr['id'];
 			$rmsg['fp_postername'] = Cot::$usr['name'];
-			$rmsg['fp_creation'] = (int) $sys['now'];
+			$rmsg['fp_creation'] = Cot::$sys['now'];
 			$rmsg['fp_updater'] = 0;
 
 			Cot::$db->insert($db_forum_posts, $rmsg);
@@ -146,7 +152,14 @@ if ($a == 'newpost' && !empty($s) && !empty($q)) {
 			$gap_base = empty($row['fp_updated']) ? $row['fp_creation'] : $row['fp_updated'];
 			$updated = sprintf(Cot::$L['forums_mergetime'], cot_build_timegap($gap_base, Cot::$sys['now']));
 
-			$rmsg['fp_text'] = $row['fp_text'] . cot_rc('forums_code_update', array('updated' => $updated)) . $rmsg['fp_text'];
+			$rmsg['fp_text'] = $row['fp_text'] . cot_rc('forums_code_update', ['updated' => $updated]) . $rmsg['fp_text'];
+
+            $postTextToCount = strip_tags($rmsg['fp_text']);
+            if (mb_strlen($postTextToCount) > Cot::$cfg['forums']['maxPostLength']) {
+                cot_error(Cot::$L['forums_messageTooLong'], 'rmsgtext');
+                cot_redirect(cot_url('forums', ['m' => 'posts', 'q' => $q, 'n' => 'last'], '#bottom', true));
+            }
+
 			$rmsg['fp_updater'] = ($row['fp_posterid'] == Cot::$usr['id'] && ($sys['now'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : Cot::$usr['name'];
 
 			Cot::$db->update($db_forum_posts, $rmsg, 'fp_id=' . $row['fp_id']);

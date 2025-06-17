@@ -3,8 +3,8 @@
 [BEGIN_COT_EXT]
 Name=Forums
 Description=Cotonti Bulletin Board Module
-Version=1.1.12
-Date=2025-06-16
+Version=1.1.13
+Date=2025-06-17
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2025
 Notes=BSD License
@@ -28,8 +28,9 @@ mergetimeout=07:select:0,1,2,3,6,12,24,36,48,72:0:
 maxpostsperpage=08:string::15:
 mintitlelength=09:string::5:
 minpostlength=10:string::2:
-enablereplyform=11:radio::0:
-edittimeout=12:select:0,0.25,1,2,4,12,24,48,72,168:0:
+maxPostLength=11:string:::
+enablereplyform=13:radio::0:
+edittimeout=15:select:0,0.25,1,2,4,12,24,48,72,168:0:
 title_posts=31:string::{TITLE} - {SECTION} - {FORUM}:
 title_topics=32:string::{SECTION} - {FORUM}:
 minimaxieditor=33:select:minieditor,medieditor,editor:medieditor:
