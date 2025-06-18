@@ -29,9 +29,10 @@
     <!-- END: TAGS_CLOUD -->
     <!-- BEGIN: TAGS_RESULT -->
     <div class="block">
-        <h2 class="search">{TAGS_RESULT_TITLE}</h2>
+        <!-- BEGIN: PAGES -->
+        <h2 class="search">{PHP.L.tags_Found_in_pages}</h2>
         <ol>
-            <!-- BEGIN: TAGS_RESULT_ROW -->
+            <!-- BEGIN: ITEM -->
             <li class="marginbottom10">
                 <span class="strong"><a href="{TAGS_RESULT_ROW_URL}">{TAGS_RESULT_ROW_TITLE}</a></span><br/>
                 <span class="small">{PHP.L.Sections}: {TAGS_RESULT_ROW_PATH}<br/>
@@ -40,8 +41,24 @@
                 <p>{TAGS_RESULT_ROW_PREVIEW}</p>
                 <!-- ENDIF -->
             </li>
-            <!-- END: TAGS_RESULT_ROW -->
+            <!-- END: ITEM -->
         </ol>
+        <!-- END: PAGES -->
+        <!-- BEGIN: FORUMS -->
+        <h2 class="search">{PHP.L.tags_Found_in_forums}</h2>
+        <ol>
+            <!-- BEGIN: ITEM -->
+            <li class="marginbottom10">
+                <span class="strong"><a href="{TAGS_RESULT_ROW_URL}">{TAGS_RESULT_ROW_TITLE}</a></span><br/>
+                <span class="small">{PHP.L.Sections}: {TAGS_RESULT_ROW_PATH}<br/>
+						{PHP.L.Tags}: {TAGS_RESULT_ROW_TAGS}</span>
+                <!-- IF {TAGS_RESULT_ROW_PREVIEW} -->
+                <p>{TAGS_RESULT_ROW_PREVIEW}</p>
+                <!-- ENDIF -->
+            </li>
+            <!-- END: ITEM -->
+        </ol>
+        <!-- END: FORUMS -->
         <!-- BEGIN: TAGS_RESULT_NONE -->
         <div class="error">
             {PHP.L.Noitemsfound}
