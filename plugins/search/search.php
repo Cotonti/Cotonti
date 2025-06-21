@@ -13,6 +13,7 @@ Hooks=standalone
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\exceptions\NotFoundHttpException;
 use cot\modules\page\inc\PageDictionary;
 
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
@@ -323,50 +324,58 @@ if (!empty($sq)) {
 
         // TODO add filter nonexisting field in db for search plugin option 'addfields' on saved config in admin panel
         $addfields = trim(Cot::$cfg['plugin']['search']['addfields']);
+        $additionalFields = [];
         if (!empty($addfields)) {
-            $additional_fields = null;
             if (Cot::$cache) {
-                $additional_fields = Cot::$cache->db->get('search_page_additional_fields', 'search');
+                $additionalFields = Cot::$cache->db->get('search_page_additional_fields', 'search');
             }
 
-            if (!$additional_fields) {
-                $additional_fields = explode(',', $addfields);
-                array_walk($additional_fields, 'trim');
-                $additional_fields = array_unique($additional_fields);
+            if (!$additionalFields) {
+                $additionalFields = explode(',', $addfields);
+                foreach ($additionalFields as $key => $field) {
+                    $field = trim($field);
+                    if ($field === '') {
+                        unset($additionalFields[$key]);
+                        continue;
+                    }
+                    $additionalFields[$key] = $field;
+                }
+                $additionalFields = array_unique($additionalFields);
 
-                $count_addfields = count($additional_fields);
+                $count_addfields = count($additionalFields);
                 if ($count_addfields == 1) {
-                    if (!Cot::$db->fieldExists(Cot::$db->pages, $additional_fields[0])) {
-                        if ($usr['isadmin']) {
-                            $field_eer_msg = 'Field ' . $additional_fields[0] . ' in page table not found';
+                    if (!Cot::$db->fieldExists(Cot::$db->pages, $additionalFields[0])) {
+                        if (Cot::$usr['isadmin']) {
+                            $field_eer_msg = 'Field ' . $additionalFields[0] . ' in page table not found';
                             cot_error($field_eer_msg);
                             cot_log($field_eer_msg, 'ext', 'search', 'error');
                         }
-                        unset($additional_fields[0]);
+                        unset($additionalFields[0]);
                     }
                 } elseif ($count_addfields > 1) {
                     $sql_pf = Cot::$db->query("SHOW COLUMNS FROM " . Cot::$db->pages);
                     foreach ($sql_pf->fetchAll() as $field) {
                         $exists_field[] = $field['Field'];
                     }
-                    foreach ($additional_fields as $k => $field) {
+
+                    foreach ($additionalFields as $k => $field) {
                         if (!in_array($field, $exists_field)) {
-                            if ($usr['isadmin']) {
-                                $field_eer_msg = 'Field ' . $additional_fields[$k] . ' in page table not found';
+                            if (Cot::$usr['isadmin']) {
+                                $field_eer_msg = 'Field ' . $additionalFields[$k] . ' in page table not found';
                                 cot_error($field_eer_msg);
                                 cot_log($field_eer_msg, 'ext', 'search', 'error');
                             }
-                            unset($additional_fields[$k]);
+                            unset($additionalFields[$k]);
                         }
                     }
                 }
 
-                count($additional_fields) && Cot::$cache && Cot::$cache->db->store('search_page_additional_fields', $additional_fields, 'search');
+                count($additionalFields) && Cot::$cache && Cot::$cache->db->store('search_page_additional_fields', $additionalFields, 'search');
             }
 
-            if (!empty($additional_fields)) {
+            if (!empty($additionalFields)) {
                 // String query for addition pages fields.
-                foreach ($additional_fields as $addfields_el) {
+                foreach ($additionalFields as $addfields_el) {
                     if (!isset($where_or[$addfields_el])) {
                         $where_or[$addfields_el] = '';
                     }
@@ -375,9 +384,19 @@ if (!empty($sq)) {
             }
         }
 
-		if (!Cot::$db->fieldExists(Cot::$db->pages, 'page_' . $rs['pagsort'])) {
-			$rs['pagsort'] = 'date';
-		}
+        $allowedSortFields = ['date', 'title', 'count', 'cat'];
+        if (!empty($additionalFields)) {
+            foreach ($additionalFields as $field) {
+                $allowedSortFields[] = str_replace('page_', '', $field);
+            }
+        }
+
+        if (
+            !in_array($rs['pagsort'], $allowedSortFields)
+            || !Cot::$db->fieldExists(Cot::$db->pages, 'page_' . $rs['pagsort'])
+        ) {
+            throw new NotFoundHttpException();
+        }
 
 		$orderby = 'p.page_' . $rs['pagsort'] . ' ' . $rs['pagsort2'];
 
@@ -527,9 +546,14 @@ if (!empty($sq)) {
 		$maxitems = $cfg_maxitems; // - $items;
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
 
-		if (!Cot::$db->fieldExists(Cot::$db->forum_topics, "ft_{$rs['frmsort']}")) {
-			$rs['frmsort'] = 'updated';
-		}
+        $allowedForumsSortFields = ['updated', 'creationdate', 'title', 'postcount', 'viewcount', 'sectionid'];
+
+        if (
+            !in_array($rs['frmsort'], $allowedForumsSortFields)
+            || !Cot::$db->fieldExists(Cot::$db->forum_topics, "ft_{$rs['frmsort']}")
+        ) {
+            throw new NotFoundHttpException();
+        }
 
 		// We need to show only one last post from each found topic
         $queryBody = ' FROM ' . Cot::$db->forum_posts . ' AS p ' .
