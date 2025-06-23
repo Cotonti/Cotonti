@@ -32,7 +32,7 @@ foreach (cot_getextplugins('forums.newtopic.rights') as $pl) {
 /* ===== */
 cot_block(Cot::$usr['auth_write']);
 
-if (Cot::$structure['forums'][$s]['locked']) {
+if (Cot::$structure['forums'][$s]['locked'] && !Cot::$usr['isadmin']) {
 	cot_die_message(602, true);
 }
 
