@@ -503,7 +503,7 @@ $allowreplybox = !(
 
 if (
     (Cot::$cfg['forums']['enablereplyform'] || $lastpage)
-    && !$rowt['ft_state']
+    && (!$rowt['ft_state'] || Cot::$usr['isadmin'])
     && Cot::$usr['id'] > 0
     && $allowreplybox
     && Cot::$usr['auth_write']
@@ -581,7 +581,7 @@ if (
 
     $t->parse('MAIN.FORUMS_POSTS_NEWPOST');
 
-} elseif ($rowt['ft_state']) {
+} elseif ($rowt['ft_state'] && !Cot::$usr['isadmin']) {
 	$t->assign('FORUMS_POSTS_TOPICLOCKED_BODY', Cot::$L['forums_topiclocked']);
 	$t->parse('MAIN.FORUMS_POSTS_TOPICLOCKED');
 
