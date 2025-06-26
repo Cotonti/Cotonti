@@ -244,8 +244,20 @@ if ($area == 'pages' && cot_module_active('page')) {
 
 // Pagination for search results
 if (!empty($qs)) {
-    $pagination = cot_pagenav('tags', $urlParams, $d, !empty($entriesCount) ? max($entriesCount) : 0, $maxPerPage);
+    $totalEntries = 0;
+    if (!empty($entriesCount)) {
+        $totalEntries = array_sum($entriesCount);
+    }
+    $pagination = cot_pagenav('tags', $urlParams, $d, $totalEntries, $maxPerPage);
     $t->assign(cot_generatePaginationTags($pagination));
+
+    if ($totalEntries > 0) {
+        $t->parse('MAIN.TAGS_RESULT');
+
+    } else {
+        $t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
+        $t->parse('MAIN.TAGS_RESULT');
+    }
 }
 
 $resultsCount = array_sum($entriesCount);
@@ -362,8 +374,6 @@ function cot_tag_search_pages($query)
 
 	$dbQuery = Cot::$db->query($sql, $queryParams);
 
-	$t->assign('TAGS_RESULT_TITLE', Cot::$L['tags_Found_in_pages']);
-
 	$pcount = $dbQuery->rowCount();
 
 	/* == Hook : Part 1 == */
@@ -421,7 +431,7 @@ function cot_tag_search_pages($query)
 			}
 			/* ===== */
 
-			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
+			$t->parse('MAIN.TAGS_RESULT.PAGES.ITEM');
 		}
         $dbQuery->closeCursor();
 
@@ -430,13 +440,8 @@ function cot_tag_search_pages($query)
 			include $pl;
 		}
 		/* ===== */
+        $t->parse('MAIN.TAGS_RESULT.PAGES');
 	}
-
-	if ($pcount == 0) {
-		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
-	}
-
-	$t->parse('MAIN.TAGS_RESULT');
 
     return $totalItems;
 }
@@ -549,7 +554,6 @@ function cot_tag_search_forums($query)
         $queryParams
     );
 
-	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
 	if ($sql->rowCount() > 0) {
 		while ($row = $sql->fetch()) {
 			$tags = cot_tag_list($row['ft_id'], ForumsDictionary::SOURCE_TOPIC);
@@ -592,14 +596,11 @@ function cot_tag_search_forums($query)
                 'TAGS_RESULT_ROW_DESCRIPTION_OR_PREVIEW' => $description !== '' ? $description : $topicPreview,
 
 			]);
-			$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
+			$t->parse('MAIN.TAGS_RESULT.FORUMS.ITEM');
 		}
 		$sql->closeCursor();
-	} else {
-		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_NONE');
+        $t->parse('MAIN.TAGS_RESULT.FORUMS');
 	}
-
-	$t->parse('MAIN.TAGS_RESULT');
 
     return $totalItems;
 }
