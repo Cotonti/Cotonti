@@ -14,6 +14,7 @@ use cot\modules\forums\inc\ForumsPostsControlService;
 use cot\modules\forums\inc\ForumsPostsRepository;
 use cot\modules\forums\inc\ForumsPostsService;
 use cot\modules\forums\inc\ForumsTopicsControlService;
+use cot\modules\forums\inc\ForumsTopicsRepository;
 
 defined('COT_CODE') or die('Wrong URL');
 
@@ -276,20 +277,20 @@ if ($a == 'newpost' && !empty($s) && !empty($q)) {
 	}
 }
 
-$sql_forums = Cot::$db->query("SELECT * FROM $db_forum_topics WHERE ft_id= $q");
-if ($rowt = $sql_forums->fetch()) {
-    if (
-        $rowt['ft_mode'] == ForumsDictionary::TOPIC_MODE_PRIVATE
-        && !(Cot::$usr['isadmin'] || $rowt['ft_firstposterid'] == Cot::$usr['id'])
-    ) {
-        if (Cot::$cfg['forums']['hideprivateforums']) {
-            cot_die();
-        } else {
-            cot_die_message(403, true, Cot::$L['forums_privatetopic1'], Cot::$L['forums_privatetopic']);
-        }
+$rowt = ForumsTopicsRepository::getInstance()->getById($q);
+if (empty($rowt)) {
+    throw new NotFoundHttpException();
+}
+
+if (
+    $rowt['ft_mode'] == ForumsDictionary::TOPIC_MODE_PRIVATE
+    && !(Cot::$usr['isadmin'] || $rowt['ft_firstposterid'] == Cot::$usr['id'])
+) {
+    if (Cot::$cfg['forums']['hideprivateforums']) {
+        cot_die();
+    } else {
+        cot_die_message(403, true, Cot::$L['forums_privatetopic1'], Cot::$L['forums_privatetopic']);
     }
-} else {
-	cot_die(true, true);
 }
 
 $sql_forums = Cot::$db->query("UPDATE $db_forum_topics SET ft_viewcount=ft_viewcount+1 WHERE ft_id = $q");
@@ -479,6 +480,7 @@ if (Cot::$usr['isadmin']) {
 		'FORUMS_POSTS_MOVE_URL' => cot_url('forums', 'm=topics&a=move&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_BUMP_URL' => cot_url('forums', 'm=topics&a=bump&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_LOCK_URL' => cot_url('forums', 'm=topics&a=lock&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
+        'FORUMS_POSTS_LOCK_LABEL' => $rowt['ft_state'] === 0 ? Cot::$L['Lock'] : Cot::$L['Unlock'],
 		'FORUMS_POSTS_STICKY_URL' => cot_url('forums', 'm=topics&a=sticky&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_ANNOUNCE_URL' => cot_url('forums', 'm=topics&a=announcement&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
 		'FORUMS_POSTS_PRIVATE_URL' => cot_url('forums', 'm=topics&a=private&s=' . $s . '&q=' . $q . '&x=' . $sys['xk']),
@@ -571,8 +573,6 @@ if (
         'FORUMS_POSTS_NEWPOST_EDITTIMEOUT' => cot_build_timegap(0, Cot::$cfg['forums']['edittimeout'] * 3600),
     ]);
 
-    cot_display_messages($t);
-
     /* === Hook  === */
     foreach (cot_getextplugins('forums.posts.newpost.tags') as $pl) {
         include $pl;
@@ -590,7 +590,7 @@ if (
 	$t->parse('MAIN.FORUMS_POSTS_ANTIBUMP');
 }
 
-if ($rowt['ft_mode'] == 1) {
+if ($rowt['ft_mode'] === ForumsDictionary::TOPIC_MODE_PRIVATE) {
 	$t->parse('MAIN.FORUMS_POSTS_TOPICPRIVATE');
 }
 
@@ -664,7 +664,6 @@ $t->assign([
 	'FORUMS_POSTS_ICON_TYPE_EX' => $rowt['ft_icon_type_ex'],
 ]);
 
-
 if (!empty(Cot::$extrafields[Cot::$db->forum_topics])) {
     foreach (Cot::$extrafields[Cot::$db->forum_topics] as $exfld) {
         $tag = mb_strtoupper($exfld['field_name']);
@@ -683,6 +682,8 @@ foreach (cot_getextplugins('forums.posts.tags') as $pl) {
 	include $pl;
 }
 /* ===== */
+
+cot_display_messages($t);
 
 $t->parse('MAIN');
 $t->out('MAIN');

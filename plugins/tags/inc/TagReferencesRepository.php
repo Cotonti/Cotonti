@@ -38,7 +38,7 @@ class TagReferencesRepository extends BaseRepository
         $query = 'SELECT COUNT(*) FROM ' . Cot::$db->quoteTableName(self::getTableName()) . ' WHERE tag_area = :source';
         $params = ['source' => $source];
 
-        $result = Cot::$db->query($query, $params)->fetchColumn();
+        $result = (int) Cot::$db->query($query, $params)->fetchColumn();
 
         self::$cacheCount[$source] = $result;
 

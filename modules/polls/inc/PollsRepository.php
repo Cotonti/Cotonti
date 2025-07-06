@@ -66,7 +66,7 @@ class PollsRepository extends BaseRepository
         $query = 'SELECT COUNT(*) FROM ' . Cot::$db->quoteTableName(self::getTableName()) . ' WHERE poll_type = :source';
         $params = ['source' => $source];
 
-        $result = Cot::$db->query($query, $params)->fetchColumn();
+        $result = (int) Cot::$db->query($query, $params)->fetchColumn();
 
         self::$cacheCount[$source] = $result;
 

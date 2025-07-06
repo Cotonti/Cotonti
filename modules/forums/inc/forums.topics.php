@@ -7,6 +7,7 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+use cot\exceptions\NotFoundHttpException;
 use cot\modules\forums\inc\ForumsDictionary;
 use cot\modules\forums\inc\ForumsHelper;
 use cot\modules\forums\inc\ForumsTopicsControlService;
@@ -136,9 +137,30 @@ if (Cot::$usr['isadmin'] && !empty($q) && !empty($a)) {
 			break;
 
 		case 'lock':
-			Cot::$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 0 ), "ft_id=$q");
+            $currentState = Cot::$db->query(
+                'SELECT ft_state FROM ' . Cot::$db->forum_topics . ' WHERE ft_id = :topicId',
+                ['topicId' => $q]
+            )->fetchColumn();
+
+            if ($currentState === false || $currentState === null) {
+                throw new NotFoundHttpException("Topic #$q not found");
+            }
+            $currentState = (int) $currentState;
+
+            if ($currentState === 1) {
+                Cot::$db->update(Cot::$db->forum_topics, ['ft_state' => 0], 'ft_id = :topicId', ['topicId' => $q]);
+                cot_log('Unlocked topic #' . $q, 'forums', 'lock topic', 'done');
+            } else {
+                Cot::$db->update(
+                    Cot::$db->forum_topics,
+                    ['ft_state' => 1, 'ft_sticky' => 0],
+                    'ft_id = :topicId',
+                    ['topicId' => $q]
+                );
+                cot_log('Locked topic #' . $q, 'forums', 'lock topic', 'done');
+            }
+
             cot_message(Cot::$L['Done']);
-			cot_log("Locked topic #".$q, 'forums', 'lock topic', 'done');
 			break;
 
 		case 'sticky':

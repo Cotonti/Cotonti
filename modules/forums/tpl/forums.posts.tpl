@@ -22,7 +22,7 @@
 			<td class="textright width10">{PHP.L.forums_topicoptions}:</td>
 			<td class="width90">
 				<a href="{FORUMS_POSTS_BUMP_URL}" title="{PHP.L.forums_explainbump}">{PHP.L.forums_bump}</a> {PHP.cfg.separator}
-				<a href="{FORUMS_POSTS_LOCK_URL}" title="{PHP.L.forums_explainlock}">{PHP.L.Lock}</a> {PHP.cfg.separator}
+				<a href="{FORUMS_POSTS_LOCK_URL}" title="{PHP.L.forums_explainlock}">{FORUMS_POSTS_LOCK_LABEL}</a> {PHP.cfg.separator}
 				<a href="{FORUMS_POSTS_STICKY_URL}" title="{PHP.L.forums_explainsticky}">{PHP.L.forums_makesticky}</a> {PHP.cfg.separator}
 				<a href="{FORUMS_POSTS_ANNOUNCE_URL}" title="{PHP.L.forums_explainannounce}">{PHP.L.forums_announcement}</a> {PHP.cfg.separator}
 				<a href="{FORUMS_POSTS_PRIVATE_URL}" title="{PHP.L.forums_explainprivate}">{PHP.L.forums_private} (#)</a> {PHP.cfg.separator}
