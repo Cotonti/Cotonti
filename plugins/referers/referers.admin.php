@@ -59,6 +59,9 @@ $ii = 0;
 if ($sql->rowCount() > 0) {
 	while($row = $sql->fetch()) {
 		preg_match("#//([^/]+)/#", $row['ref_url'], $a);
+        if (!isset($a[1])) {
+            continue;
+        }
 		$host = preg_replace('#^www\.#i', '', $a[1]);
 		$referers[$host][$row['ref_url']] = $row['ref_count'];
 	}
