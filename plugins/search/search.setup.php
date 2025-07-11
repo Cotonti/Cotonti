@@ -5,16 +5,17 @@ Code=search
 Name=Search
 Category=navigation-structure
 Description=Search with extended features
-Version=4.0.12
-Date=2024-01-23
+Version=4.0.13
+Date=2025-07-11
 Author=Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2024
+Copyright=Partial copyright (c) Cotonti Team 2008-2025
 Notes=BSD License
 Auth_guests=R
 Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
 Recommends_modules=page,forums
+Recommends_plugins=comments
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
@@ -24,9 +25,10 @@ minsigns=03:select:2,3,4,5:3:Min. signs in query
 maxitems=04:string::50:Maximum results lines for general search
 pagesearch=05:radio::1:Enable pages search
 forumsearch=06:radio::1:Enable forums search
-searchurl=07:select:Normal,Single:Normal:Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link
-addfields=08:string:::Additional pages fields for search, separated by commas. Example "page_extra1,page_extra2,page_key"
-extrafilters=09:radio::1:Show extrafilters on main search page
+commentssearch=07:radio::1:Enable comments search
+searchurl=08:select:Normal,Single:Normal:Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link
+addfields=09:string:::Additional pages fields for search, separated by commas. Example "page_extra1,page_extra2,page_key"
+extrafilters=10:radio::1:Show extrafilters on main search page
 [END_COT_EXT_CONFIG]
 ==================== */
 

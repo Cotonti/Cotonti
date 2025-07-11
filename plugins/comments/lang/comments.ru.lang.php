@@ -77,6 +77,10 @@ $L['comments_rssFrom'] = 'от';
 $L['comments_rssFromUser'] = 'Комментарий от пользователя';
 $L['comments_rssOriginal'] = 'Комментируемая страница';
 
+$L['plu_tabs_com'] = 'Комментарии';
+$L['plu_area_polls'] = 'Опросы';
+$L['plu_area_category'] = 'Разделы';
+
 /**
  * cot_declension arrays
  */

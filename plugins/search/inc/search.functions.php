@@ -17,7 +17,7 @@ defined('COT_CODE') || die('Wrong URL.');
  */
 function cot_clear_mark($text, $words)
 {
-	$text = trim($text);
+    $text = trim($text);
 
     if ($text == '') {
         return '';
@@ -71,7 +71,7 @@ function cot_clear_mark($text, $words)
             if ($pos_beg <= $last_pos) {
                 $arOtr[count($arOtr)-1][1] = $pos_end;
             } else {
-                $arOtr[] = array($pos_beg, $pos_end);
+                $arOtr[] = [$pos_beg, $pos_end];
             }
             $last_pos = $pos_end;
         }
@@ -103,5 +103,4 @@ function cot_clear_mark($text, $words)
         '<span class="search-highlight">$1</span>',
         $text_result
     );
-
 }

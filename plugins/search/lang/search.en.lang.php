@@ -34,6 +34,7 @@ $L['plu_tabs_pag'] = 'Pages';
 $L['plu_ctrl_list'] = 'Hold CTRL to select multiple sections';
 $L['plu_allsections'] = 'All sections';
 $L['plu_allcategories'] = 'All categories';
+$L['plu_allarea'] = 'All area';
 $L['plu_res_sort'] = 'Order results by';
 $L['plu_sort_desc'] = 'Descending';
 $L['plu_sort_asc'] = 'Ascending';
@@ -74,6 +75,12 @@ $L['plu_pag_search_text'] = 'Search in page text';
 $L['plu_pag_search_file'] = 'Show pages with files only';
 $L['plu_pag_set_subsec'] = 'Include subcategories';
 
+// Parameters - comments.
+$L['plu_com_set_area'] = 'Select location';
+$L['plu_com_res_sort1'] = 'Date published';
+$L['plu_com_res_sort2'] = 'Location';
+$L['plu_com_res_sort3'] = 'Author';
+
 // Error messages
 $L['plu_querytooshort'] = 'The query string is too short';
 $L['plu_toomanywords'] = 'Too many words, limit is set to';
@@ -97,6 +104,7 @@ $L['cfg_maxitems'] = 'Max. entries in normal search results';
 $L['cfg_minsigns'] = 'Min. signs in query';
 $L['cfg_pagesearch'] = 'Enable pages search';
 $L['cfg_forumsearch'] = 'Enable forums search';
+$L['cfg_commentssearch'] = 'Enable comments search';
 $L['cfg_searchurl'] = 'Type of forum post link to use';
 $L['cfg_searchurl_hint'] = 'Single uses a Single post view, while Normal uses the traditional thread/jump-to link';
 $L['cfg_addfields'] = 'Additional pages fields for search, separated by commas';

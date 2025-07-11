@@ -77,6 +77,10 @@ $L['comments_rssFrom'] = 'from';
 $L['comments_rssFromUser'] = 'Comment from';
 $L['comments_rssOriginal'] = 'Original message';
 
+$L['plu_tabs_com'] = 'Comments';
+$L['plu_area_polls'] = 'Polls';
+$L['plu_area_category'] = 'Categories';
+
 /**
  * cot_declension Arrays
  */
