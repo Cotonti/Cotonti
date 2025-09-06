@@ -131,7 +131,7 @@
                     'sourceEditing',
                     'showBlocks',
                 ],
-                shouldNotGroupWhenFull: false
+                shouldNotGroupWhenFull: true
             },
             plugins: [
                 Alignment,
