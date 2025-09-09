@@ -161,31 +161,6 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 }
 
 /**
- * Gets an array of autocomplete options for a given tag
- *
- * @param string $tag Beginning of a tag
- * @param int $min_length Minimal length of the beginning
- * @return array
- * @global CotDB $db
- */
-function cot_tag_complete($tag, $min_length = 3)
-{
-	global $db, $db_tags;
-	if (mb_strlen($tag) < $min_length)
-	{
-		return false;
-	}
-	$res = array();
-	$sql = $db->query("SELECT `tag` FROM $db_tags WHERE `tag` LIKE ?", array($tag . '%'));
-	while ($row = $sql->fetch())
-	{
-		$res[] = $row['tag'];
-	}
-	$sql->closeCursor();
-	return $res;
-}
-
-/**
  * Returns number of items tagged with a specific keyword
  *
  * @param string $tag The tag (keyword)
@@ -294,19 +269,23 @@ function cot_tag_list($item, $area, $extra = null)
 /**
  * Parses user input into array of valid and safe tags
  *
- * @param string $input Comma separated user input
+ * @param array|string $input Array or comma separated user input
  * @return array
  */
-function cot_tag_parse($input)
+function cot_tag_parse($input): array
 {
-	$result = [];
-	$tags = !empty($input) ? explode(',', $input) : [];
-	foreach ($tags as $tag) {
-		$tag = cot_tag_prep($tag);
-		if (!empty($tag)) {
-			$result[] = $tag;
-		}
-	}
+    $result = [];
+    if (is_string($input)) {
+        $tags = !empty($input) ? explode(',', $input) : [];
+    } else {
+        $tags = $input;
+    }
+    foreach ($tags as $tag) {
+        $tag = cot_tag_prep($tag);
+        if (!empty($tag)) {
+            $result[] = $tag;
+        }
+    }
     return array_unique($result);
 }
 

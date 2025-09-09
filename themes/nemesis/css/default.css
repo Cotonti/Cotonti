@@ -173,12 +173,20 @@ table.fico td img	{ margin-right:10px; vertical-align:middle; }
 form { }
 input, select, textarea, button	{ font:normal 1em Georgia; padding:2px; }
 textarea {
-	/*width: 99%; */
 	min-height: 100px
 }
-input[type="text"], input[type="password"], textarea {
+input[type="text"], input[type="password"], textarea, select {
 	width: 100%;
 	max-width: 100%;
+}
+select[name^="rpagedate"],
+select[name^="rpagebegin"],
+select[name^="rpageexpire"],
+select[name="locale"],
+select[name="rs[setlimit]"],
+select[name^="rfrom"],
+select[name^="rto"] {
+	width: auto;
 }
 input[name="rverify"] {
 	width: 130px;
@@ -349,7 +357,6 @@ div.ck.ck-editor hr.more {
 
 /* 10. Forums
 -------------------------------------------------- */
-
 .b1 img			{ margin:0 5px 0 0; vertical-align:-5px!important; }
 .userstatus		{ margin-top:2px; float:right; }
 .forumssection	{ font-weight:bold; background:#eee; }
@@ -369,6 +376,9 @@ div.ck.ck-editor hr.more {
 form#search #search-query {width: 59%}
 form#search .userinput {width: 53%}
 form#search select[multiple] {min-width: 60%; max-width: 100%}
+select[name="rs[pagsort]"], select[name="rs[frmsort]"] {
+	width: auto;
+}
 
 /* 12. Lists
 -------------------------------------------------- */
@@ -383,17 +393,19 @@ ol				{ margin-left:20px; list-style-type:decimal; }
 
 /* 13. Users
 -------------------------------------------------- */
+#filter-form select.filter-submit {
+	width: auto;
+}
 #user-register input[type="text"], #user-register input[type="password"],
 #password-recover input[type="text"],
 #login input[type="text"], #login input[type="password"] {
 	width: 50%;
 }
-
 #change-password input {
 	width: 45%;
 }
 
-/* 13. Tags
+/* 14. Tags
 -------------------------------------------------- */
 #tags-search-form input[type="text"] {
 	width: 64%;

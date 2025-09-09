@@ -6,6 +6,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+declare(strict_types=1);
+
 namespace cot\modules\users\inc;
 
 use cot\users\UsersRepository as BaseUsersRepository;

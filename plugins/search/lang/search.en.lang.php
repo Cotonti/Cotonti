@@ -31,9 +31,6 @@ $L['plu_tabs_frm'] = 'Forums';
 $L['plu_tabs_pag'] = 'Pages';
 
 // Parameters - common
-$L['plu_ctrl_list'] = 'Hold CTRL to select multiple sections';
-$L['plu_allsections'] = 'All sections';
-$L['plu_allcategories'] = 'All categories';
 $L['plu_allarea'] = 'All area';
 $L['plu_res_sort'] = 'Order results by';
 $L['plu_sort_desc'] = 'Descending';
@@ -41,6 +38,7 @@ $L['plu_sort_asc'] = 'Ascending';
 $L['plu_other_opt'] = 'Optional parameters';
 $L['plu_other_date'] = 'Including date';
 $L['plu_other_userfilter'] = 'Filter users';
+$L['search_allCategories'] = 'Leave it blank for searching in all sections';
 
 // Parameters - dates
 $L['plu_any_date'] = 'Any date';

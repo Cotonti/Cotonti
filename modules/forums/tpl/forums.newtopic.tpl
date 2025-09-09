@@ -63,12 +63,12 @@
                 <td>{EDIT_POLL_MULTIPLE}</td>
             </tr>
             <!-- END: POLL -->
-            <!-- BEGIN: FORUMS_NEWTOPIC_TAGS -->
+            <!-- IF {FORUMS_NEWTOPIC_FORM_TAGS} -->
             <tr>
                 <td>{PHP.L.Tags}:</td>
-                <td>{FORUMS_NEWTOPIC_FORM_TAGS} ({FORUMS_NEWTOPIC_TOP_TAGS_HINT})</td>
+                <td>{FORUMS_NEWTOPIC_FORM_TAGS}</td>
             </tr>
-            <!-- END: FORUMS_NEWTOPIC_TAGS -->
+            <!-- ENDIF -->
             <tr>
                 <td colspan="2" class="valid">
                     <button type="submit">{PHP.L.Submit}</button>

@@ -34,9 +34,11 @@
 			<td class="textright">{PHP.L.Move}:</td>
 			<td>
 				<form id="movetopic" action="{FORUMS_POSTS_MOVE_URL}" method="post">
-					{FORUMS_POSTS_MOVEBOX_SELECT}
-					<span class="small spaced">{FORUMS_POSTS_MOVEBOX_KEEP} {PHP.L.forums_keepmovedlink}</span>
-					<button type="submit">{PHP.L.Move}</button>
+					<div style="display: flex; gap: 5px; align-items: center">
+						<div style="flex-grow: 1">{FORUMS_POSTS_MOVEBOX_SELECT}</div>
+						<span class="small">{FORUMS_POSTS_MOVEBOX_KEEP} {PHP.L.forums_keepmovedlink}</span>
+						<button type="submit">{PHP.L.Move}</button>
+					</div>
 				</form>
 			</td>
 		</tr>

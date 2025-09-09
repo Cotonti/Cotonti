@@ -1,6 +1,6 @@
 <?php
 /* ====================
-[BEGIN_COT_EXT]x
+[BEGIN_COT_EXT]
 Hooks=ajax
 [END_COT_EXT]
 ==================== */
@@ -16,20 +16,35 @@ Hooks=ajax
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('tags', 'plug');
+
+$result = ['results' => []];
+
 $q = mb_strtolower(cot_import('q', 'G', 'TXT'));
-$q = Cot::$db->prep(urldecode($q));
-if (!$q) return;
-
-$tagslist = null;
-$minLegth = 3;
-if(isset(Cot::$cfg['plugin']['autocomplete']['autocomplete'])) {
-    $minLegth = Cot::$cfg['plugin']['autocomplete']['autocomplete'];
+if ($q === null || $q === '') {
+    echo json_encode($result);
+    return;
 }
-$tagslist = cot_tag_complete($q, $minLegth);
-$tagstring = '';
-if (is_array($tagslist)) {
-	$tagstring = implode("\n", $tagslist);
+$term = mb_strtolower($q);
+$term = urldecode($term);
+
+$minLength = 1;
+
+if (!$term || mb_strlen($term) < $minLength) {
+    echo json_encode($result);
+    return;
 }
 
-cot_sendheaders();
-echo $tagstring;
+$tags = [];
+$sql = Cot::$db->query('SELECT tag FROM ' . Cot::$db->tags . ' WHERE tag LIKE ?', [$term . '%']);
+while ($row = $sql->fetch()) {
+    $tags[] = ['id' => $row['tag'], 'text' => $row['tag']];
+}
+$sql->closeCursor();
+
+if (!empty($tags)) {
+    $result['results'] = $tags;
+}
+
+cot_sendheaders('application/json');
+echo json_encode($result);
+

@@ -490,9 +490,19 @@ if (Cot::$usr['isadmin']) {
             'forums',
             'forums_confirm_delete_topic'
         ),
-		'FORUMS_POSTS_MOVEBOX_SELECT' => cot_selectbox('', 'ns', array_keys($movebox), array_values($movebox), false),
+		'FORUMS_POSTS_MOVEBOX_SELECT' => cot_selectbox(
+            '',
+            'ns',
+            array_keys($movebox),
+            array_values($movebox),
+            false,
+            ['class' => 'select2']
+        ),
 		'FORUMS_POSTS_MOVEBOX_KEEP' => cot_checkbox('0', 'ghost'),
 	]);
+
+    Resources::linkFileFooter(Resources::SELECT2);
+
 	$t->parse('MAIN.FORUMS_POSTS_ADMIN');
 }
 

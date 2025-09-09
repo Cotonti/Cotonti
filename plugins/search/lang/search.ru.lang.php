@@ -31,9 +31,6 @@ $L['plu_tabs_frm'] = 'Форумы';
 $L['plu_tabs_pag'] = 'Страницы';
 
 // Параметры - Общие.
-$L['plu_ctrl_list'] = 'Удерживайте CTRL чтобы выделить несколько разделов';
-$L['plu_allsections'] = 'Все разделы';
-$L['plu_allcategories'] = 'Все разделы';
 $L['plu_allarea'] = 'Все локации';
 $L['plu_res_sort'] = 'Сортировать результаты по';
 $L['plu_sort_desc'] = 'Убывание';
@@ -41,6 +38,7 @@ $L['plu_sort_asc'] = 'Возрастание';
 $L['plu_other_opt'] = 'Параметры поиска';
 $L['plu_other_date'] = 'Учитывать дату';
 $L['plu_other_userfilter'] = 'Фильтр по пользователям';
+$L['search_allCategories'] = 'Оставьте пустым для поиска во всех разделах';
 
 // Параметры - Даты.
 $L['plu_any_date'] = 'Любая дата';

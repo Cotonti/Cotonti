@@ -14,16 +14,27 @@ Hooks=standalone
  */
 
 use cot\exceptions\NotFoundHttpException;
+use cot\extensions\ExtensionsDictionary;
+use cot\extensions\ExtensionsService;
 use cot\modules\page\inc\PageDictionary;
+use cot\modules\users\inc\UsersHelper;
+use cot\modules\users\inc\UsersRepository;
 
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
-if (cot_module_active('page')) {
-    require_once cot_incfile('page', 'module');
+$extensionService = ExtensionsService::getInstance();
+
+if ($extensionService->isModuleActive('page')) {
+    require_once cot_incfile('page', ExtensionsDictionary::TYPE_MODULE);
 }
-if (cot_module_active('forums')) {
-    require_once cot_incfile('forums', 'module');
+if ($extensionService->isModuleActive('forums')) {
+    require_once cot_incfile('forums', ExtensionsDictionary::TYPE_MODULE);
 }
+
+if ($extensionService->isPluginActive('comments')) {
+    require_once cot_incfile('comments', ExtensionsDictionary::TYPE_PLUGIN);
+}
+
 require_once cot_incfile('search', 'plug');
 require_once cot_incfile('forms');
 
@@ -70,7 +81,7 @@ if ($rs['frmtitle'] < 1 && $rs['frmtext'] < 1) {
     $rs['frmtitle'] = 1;
     $rs['frmtext'] = 1;
 }
-$rs['setuser']  = isset($rs['setuser'])  ? cot_import($rs['setuser'], 'D', 'TXT') : null;
+$rs['setuser']  = isset($rs['setuser'])  ? cot_import($rs['setuser'], 'D', 'ARR') : null;
 $rs['setlimit'] = isset($rs['setlimit']) ? cot_import($rs['setlimit'], 'D', 'INT') : null;
 switch ($rs['setlimit']) {
     case 1:
@@ -122,7 +133,6 @@ if ($searchInPages) {
 
 if ($searchInPages) {
     // Making the category list
-    $pages_cat_list['all'] = Cot::$L['plu_allcategories'];
     if (!empty(Cot::$structure['page'])) {
         foreach (Cot::$structure['page'] as $code => $cat) {
             if (in_array($code, ['all', 'system',])) {
@@ -152,7 +162,7 @@ if ($searchInPages) {
             array_keys($pages_cat_list),
             array_values($pages_cat_list),
             false,
-            'multiple="multiple"'
+            ['multiple' => 'multiple', 'class' => 'select2']
         ),
         'PLUGIN_PAGE_RES_SORT' => cot_selectbox($rs['pagsort'], 'rs[pagsort]', ['date', 'title', 'count', 'cat'], [Cot::$L['plu_pag_res_sort1'], Cot::$L['plu_pag_res_sort2'], Cot::$L['plu_pag_res_sort3'], Cot::$L['plu_pag_res_sort4']], false),
         'PLUGIN_PAGE_RES_SORT_WAY' => cot_radiobox($rs['pagsort2'], 'rs[pagsort2]', ['DESC', 'ASC'], [Cot::$L['plu_sort_desc'], Cot::$L['plu_sort_asc']]),
@@ -178,7 +188,6 @@ if ($searchInForums) {
 }
 
 if ($searchInForums) {
-    $forum_cat_list['all'] = Cot::$L['plu_allsections'];
     if (!empty(Cot::$structure['forums'])) {
         foreach (Cot::$structure['forums'] as $code => $cat) {
             if (in_array($code, ['all', 'system',])) {
@@ -201,7 +210,7 @@ if ($searchInForums) {
             array_keys($forum_cat_list),
             array_values($forum_cat_list),
             false,
-            'multiple="multiple"'
+            ['multiple' => 'multiple', 'class' => 'select2']
         ),
         'PLUGIN_FORUM_RES_SORT' => cot_selectbox($rs['frmsort'], 'rs[frmsort]', ['updated', 'creationdate', 'title', 'postcount', 'viewcount', 'sectionid'], [Cot::$L['plu_frm_res_sort1'], Cot::$L['plu_frm_res_sort2'], Cot::$L['plu_frm_res_sort3'], Cot::$L['plu_frm_res_sort4'], Cot::$L['plu_frm_res_sort5'], Cot::$L['plu_frm_res_sort6']], false),
         'PLUGIN_FORUM_RES_SORT_WAY' => cot_radiobox($rs['frmsort2'], 'rs[frmsort2]', ['DESC', 'ASC'], [Cot::$L['plu_sort_desc'], Cot::$L['plu_sort_asc']]),
@@ -229,29 +238,18 @@ if (!empty($sq)) {
         );
     }
     // Users LIST
-    $rs['setuser'] = isset($rs['setuser']) ?  trim($rs['setuser']) : null;
+    $authorUsers = [];
+    $touser_ids = [];
     if (!empty($rs['setuser'])) {
-        $touser_src = explode(",", $rs['setuser']);
-        $touser_sql = [];
-        foreach ($touser_src as $k => $i) {
-            $user_name = trim(cot_import($i, 'D', 'TXT'));
-            if (!empty($user_name)) {
-                $touser_sql[] = "'" . Cot::$db->prep($user_name) . "'";
-            }
-        }
-        $touser_sql = '('.implode(',', $touser_sql).')';
-        $sql = Cot::$db->query('SELECT user_id, user_name FROM ' . Cot::$db->users .
-            " WHERE user_name IN $touser_sql");
-        $totalusers = $sql->rowCount();
-        $touser_ids = [];
-        while ($row = $sql->fetch()) {
-            $touser_ids[] = $row['user_id'];
-        }
-        $sql->closeCursor();
+        $authorUsers = UsersRepository::getInstance()->getByIds($rs['setuser']);
+        $totalusers = count($authorUsers);
         if ($totalusers == 0) {
-            cot_error(Cot::$L['plu_usernotexist'].Cot::$R['code_error_separator'], 'rs[setuser]');
+            cot_error(Cot::$L['plu_usernotexist'] . Cot::$R['code_error_separator'], 'rs[setuser][]');
         }
-        $touser = ($totalusers > 0 && !cot_error_found()) ? 'IN ('.implode(',', $touser_ids).')' : '';
+        foreach ($authorUsers as $user) {
+            $touser_ids[] = $user['user_id'];
+        }
+        $touser = ($totalusers > 0 && !cot_error_found()) ? 'IN (' . implode(',', $touser_ids) . ')' : '';
     }
 
     $items = 0;
@@ -665,7 +663,7 @@ $t->assign([
             'maxlength' => Cot::$cfg['plugin']['search']['maxsigns'],
         ]
     ),
-    'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rs[setuser]', $rs['setuser'], 'class="userinput"'),
+    'PLUGIN_SEARCH_USER' => UsersHelper::getInstance()->usersSelect('rs[setuser][]', $touser_ids, [], true),
     'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox(
         $rs['setlimit'],
         'rs[setlimit]',

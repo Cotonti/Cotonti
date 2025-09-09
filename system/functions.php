@@ -2707,7 +2707,8 @@ function cot_build_flag($flag)
 	if (!$cot_countries) include_once cot_langfile('countries', 'core');
 	$flag = (empty($flag)) ? '00' : $flag;
 	$country = isset($cot_countries[$flag]) ? $cot_countries[$flag] : Cot::$R['code_option_empty'];
-	return cot_rc_link(cot_url('users', 'f=country_'.$flag),
+	return cot_rc_link(
+        cot_url('users', ['country' => $flag]),
 		cot_rc('icon_flag', array('code' => $flag, 'alt' => $flag)),
 		array('title' => $country)
 	);
@@ -5333,7 +5334,7 @@ function cot_rc($name, $params = [])
 /**
  * Converts custom attributes to a string if necessary
  *
- * @param mixed $attrs A string or associative array
+ * @param array|string $attrs A string or associative array
  * @return string
  */
 function cot_rc_attr_string($attrs)
@@ -5541,7 +5542,7 @@ function cot_rc_add_standard()
 	global $cfg;
 
 	if ($cfg['jquery'] && !$cfg['jquery_cdn']) {
-		Resources::addFile(Resources::jQuery, 'js', 30);
+		Resources::addFile(Resources::JQUERY, 'js', 30);
 	}
 
 	if ($cfg['jquery']) {

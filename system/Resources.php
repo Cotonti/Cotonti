@@ -21,12 +21,16 @@ class Resources
 
 		'@bootstrap' => 'lib/bootstrap/js/bootstrap.bundle.min.js',
 		'@bootstrap.css' => 'lib/bootstrap/css/bootstrap.min.css',
+
+        '@select2' => 'lib/select2/js/select2.full.min.js',
+        '@select2.css' => 'lib/select2/css/select2.min.css',
 	];
 
 	// ==== predefined alias constants ====
-	const jQuery = '@jQuery';
-	const bootstrap = '@bootstrap';
-	const ckeditor = '@ckeditor';
+    public const JQUERY = '@jQuery';
+    public const BOOTSTRAP = '@bootstrap';
+    public const CKEDITOR = '@ckeditor';
+    public const SELECT2 = '@select2';
 	// ==== /predefined alias constants ====
 
 	/**
@@ -123,7 +127,9 @@ class Resources
 		$tmp = explode('?', $path);
 		$fileName = $tmp[0];
 
-		if (in_array($fileName, static::$addedFiles)) return false;
+		if (in_array($fileName, static::$addedFiles)) {
+            return false;
+        }
 
 		if (mb_strpos($fileName, '@') === 0) {
 			$fileName = static::$alias[$fileName];
@@ -174,21 +180,29 @@ class Resources
 		return true;
 	}
 
-	protected static function additionalFiles($file)
+	protected static function additionalFiles(string $file): array
 	{
-		$ret = [];
+		$result = [];
 
 		switch ($file) {
 			case '@bootstrap':
-				$ret[] = '@bootstrap.css';
+				$result[] = '@bootstrap.css';
 				break;
 
 			case '@ckeditor':
-				$ret[] = '@ckeditorPreset.js';
+				$result[] = '@ckeditorPreset.js';
 				break;
+
+            case static::SELECT2:
+                $result[] = '@select2.css';
+                $select2i18n = 'lib/select2/js/i18n/' . Cot::$usr['lang'] . '.js';
+                if (file_exists($select2i18n)) {
+                    $result[] = $select2i18n;
+                }
+                break;
 		}
 
-		return $ret;
+		return $result;
 	}
 
 	/**

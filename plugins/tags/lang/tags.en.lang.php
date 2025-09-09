@@ -20,7 +20,6 @@ $L['tags_description'] = 'Enables tags - site content keywords, tag clouds, tag 
  * Plugin Body
  */
 $L['tags_All'] = 'All tags';
-$L['tags_comma_separated'] = 'comma separated';
 $L['tags_delete_confirm'] = '"{$tag}" tag has {$count} associated with it. Please confirm deletion.';
 $L['tags_tag_deleted'] = 'Tag "{$tag}" removed';
 $L['tags_Found_in_forums'] = 'Found in forums';

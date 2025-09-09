@@ -20,7 +20,6 @@ $L['tags_description'] = 'Теги &mdash; метки для контента с
  * Plugin Body
  */
 $L['tags_All'] = 'Все теги';
-$L['tags_comma_separated'] = 'разделяя запятой';
 $L['tags_delete_confirm'] = 'К тегу "{$tag}" привязано: {$count}. Подтвердите удаление.';
 $L['tags_tag_deleted'] = 'Тег "{$tag}" удален';
 $L['tags_Found_in_forums'] = 'Найдено в форумах';

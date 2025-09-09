@@ -37,12 +37,12 @@
                 <td>{PHP.L.page_metadesc}:</td>
                 <td>{PAGEADD_FORM_METADESC}</td>
             </tr>
-            <!-- BEGIN: TAGS -->
+            <!-- IF {PAGEADD_FORM_TAGS} -->
             <tr>
-                <td>{PAGEADD_TOP_TAGS}:</td>
-                <td>{PAGEADD_FORM_TAGS} ({PAGEADD_TOP_TAGS_HINT})</td>
+                <td>{PHP.L.Tags}:</td>
+                <td>{PAGEADD_FORM_TAGS}</td>
             </tr>
-            <!-- END: TAGS -->
+            <!-- ENDIF -->
             <tr>
                 <td>{PHP.L.Owner}:</td>
                 <td>{PAGEADD_FORM_OWNER}</td>

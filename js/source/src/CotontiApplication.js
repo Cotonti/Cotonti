@@ -20,6 +20,26 @@ class CotontiApplication
         if (data.lang !== undefined) {
             this.L = data.lang;
         }
+
+        this.#initSelect2();
+    }
+
+    #initSelect2() {
+        if (typeof window.jQuery === 'undefined' || typeof window.jQuery.fn.select2 === 'undefined') {
+            return;
+        }
+        const elements = document.querySelectorAll('.select2');
+        if (elements.length === 0) {
+            return;
+        }
+
+        elements.forEach((element) => {
+            if (element.dataset.inited !== undefined) {
+                return;
+            }
+            $(element).select2();
+            element.dataset.inited = 'true';
+        });
     }
 
     /**

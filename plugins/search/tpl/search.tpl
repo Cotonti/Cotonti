@@ -38,17 +38,19 @@
                 {PHP.L.plu_other_date}: {PLUGIN_SEARCH_DATE_SELECT} 
                 {PLUGIN_SEARCH_DATE_FROM} - {PLUGIN_SEARCH_DATE_TO}
             </p>
-            <p class="margin10 textcenter">{PHP.L.plu_other_userfilter}: {PLUGIN_SEARCH_USER}</p>
+            <div class="margin10 textcenter" style="display: flex; gap: 10px; align-items: center;">
+                {PHP.L.plu_other_userfilter}: <div style="flex-grow: 1">{PLUGIN_SEARCH_USER}</div>
+            </div>
 
             <!-- BEGIN: PAGES_OPTIONS -->
             <h3>{PHP.L.Pages}</h3>
             <table class="main">
                 <tr>
-                    <td class="width50">
+                    <td class="width50" style="padding-right: 10px">
                         <p class="strong">{PHP.L.plu_pag_set_sec}:</p>
                         <p>{PLUGIN_PAGE_SEC_LIST}</p>
                         <p>{PLUGIN_PAGE_SEARCH_SUBCAT}</p>
-                        <p class="small">{PHP.L.plu_ctrl_list}</p>
+                        <p class="small">{PHP.L.search_allCategories}</p>
                     </td>
                     <td class="width50">
                         <p class="strong">{PHP.L.plu_other_opt}:</p>
@@ -67,11 +69,11 @@
             <h3>{PHP.L.Forums}</h3>
             <table class="main">
                 <tr>
-                    <td class="width50">
+                    <td class="width50" style="padding-right: 10px">
                         <p class="strong">{PHP.L.plu_frm_set_sec}:</p>
                         <p>{PLUGIN_FORUM_SEC_LIST}</p>
                         <p>{PLUGIN_FORUM_SEARCH_SUBCAT}</p>
-                        <div class="small">{PHP.L.plu_ctrl_list}</div>
+                        <div class="small">{PHP.L.search_allCategories}</div>
                     </td>
                     <td class="width50">
                         <p class="strong">{PHP.L.plu_other_opt}:</p>

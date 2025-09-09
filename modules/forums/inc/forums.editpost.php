@@ -112,27 +112,33 @@ if ($a == 'update') {
             $rmsg['fp_'.$extraField['field_name']] = cot_import_extrafields('rmsg'.$extraField['field_name'], $extraField, 'P', '', 'forums_post_');
         }
     }
-	if (!cot_error_found()) {
-        Cot::$db->update(Cot::$db->forum_posts, $rmsg, "fp_id=$p");
 
-		if (
-            !empty($rtopic['ft_title'])
-            && Cot::$db->query("SELECT fp_id FROM " . Cot::$db->forum_posts . " WHERE fp_topicid = $q ORDER BY fp_id ASC LIMIT 1")
-                ->fetchColumn() == $p
-        ) {
-			if (mb_substr($rtopic['ft_title'], 0, 1) == "#") {
-				$rtopic['ft_title'] = str_replace('#', '', $rtopic['ft_title']);
-			}
-            $rtopic['ft_preview'] = !empty($rmsg['fp_text']) ? cot_string_truncate($rmsg['fp_text'], 120) : '';
-            // If preview string is still too long, let's strip tags and try again
-            if (mb_strlen($rtopic['ft_preview']) > 128) {
-                $rtopic['ft_preview'] = cot_string_truncate(strip_tags($rmsg['fp_text']), 120, false);
-            }
-            Cot::$db->update(Cot::$db->forum_topics, $rtopic, "ft_id = $q");
-		}
+    if (cot_error_found()) {
+        cot_redirect(
+            cot_url('forums', ['m' => 'editpost', 's' => 'general', 'q' => $q, 'p' => $p, 'd' => $d, 'x' => Cot::$sys['xk']], '', true)
+        );
+    }
 
-		cot_extrafield_movefiles();
-	}
+
+    Cot::$db->update(Cot::$db->forum_posts, $rmsg, "fp_id=$p");
+
+    if (
+        !empty($rtopic['ft_title'])
+        && Cot::$db->query("SELECT fp_id FROM " . Cot::$db->forum_posts . " WHERE fp_topicid = $q ORDER BY fp_id ASC LIMIT 1")
+            ->fetchColumn() == $p
+    ) {
+        if (mb_substr($rtopic['ft_title'], 0, 1) == "#") {
+            $rtopic['ft_title'] = str_replace('#', '', $rtopic['ft_title']);
+        }
+        $rtopic['ft_preview'] = !empty($rmsg['fp_text']) ? cot_string_truncate($rmsg['fp_text'], 120) : '';
+        // If preview string is still too long, let's strip tags and try again
+        if (mb_strlen($rtopic['ft_preview']) > 128) {
+            $rtopic['ft_preview'] = cot_string_truncate(strip_tags($rmsg['fp_text']), 120, false);
+        }
+        Cot::$db->update(Cot::$db->forum_topics, $rtopic, "ft_id = $q");
+    }
+
+	cot_extrafield_movefiles();
 
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.editpost.update.done') as $pl) {

@@ -63,12 +63,12 @@
             </tr>
             <!-- END: EDIT -->
             <!-- END: POLL -->
-            <!-- BEGIN: FORUMS_EDITPOST_TAGS -->
+            <!-- IF {FORUMS_EDITPOST_FORM_TAGS} -->
             <tr>
                 <td>{PHP.L.Tags}:</td>
-                <td>{FORUMS_EDITPOST_FORM_TAGS} ({FORUMS_EDITPOST_TOP_TAGS_HINT})</td>
+                <td>{FORUMS_EDITPOST_FORM_TAGS}</td>
             </tr>
-            <!-- END: FORUMS_EDITPOST_TAGS -->
+            <!-- ENDIF -->
             <tr>
                 <td colspan="2" class="valid">
                     <button type="submit">{PHP.L.Update}</button>

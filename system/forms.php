@@ -150,12 +150,12 @@ function cot_radiobox(
 /**
  * Renders a dropdown
  *
- * @param mixed $chosen Seleced value (or values array for mutli-select)
+ * @param string|string[] $chosen Selected value (or values array for mutli-select)
  * @param string $name Dropdown name
- * @param array $values Options available
- * @param array $titles Titles for options
+ * @param string[] $values Options available
+ * @param string[] $titles Titles for options
  * @param bool $add_empty Allow empty choice
- * @param mixed $attrs Additional attributes as an associative array or a string
+ * @param string|array<string, string> $attrs Additional attributes as an associative array or a string
  * @param string $custom_rc Custom resource string name
  * @param bool $htmlspecialcharsBypass Bypass htmlspecialchars() for option titles and values
  * @return string
@@ -417,7 +417,7 @@ function cot_selectbox_timezone($chosen, $name, $add_gmt = true, $dst = false, $
  * @param bool $hidePrivate Hide private categories
  * @param bool $isModule TRUE for modules, FALSE for plugins
  * @param bool $addEmpty Allow empty choice
- * @param mixed $attrs Additional attributes as an associative array or a string
+ * @param array|string $attrs Additional attributes as an associative array or a string
  * @param string $customRC Custom resource string name
  * @return string
  */
@@ -429,7 +429,7 @@ function cot_selectbox_structure(
     $hidePrivate = true,
     $isModule = true,
     $addEmpty = false,
-    $attrs = '',
+    $attrs = 'class="select2"',
     $customRC = ''
 ) {
 	$categories = is_array(Cot::$structure[$extension]) ? Cot::$structure[$extension] : [];

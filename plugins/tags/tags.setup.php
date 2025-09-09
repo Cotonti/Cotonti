@@ -5,8 +5,8 @@ Code=tags
 Name=Tags
 Category=navigation-structure
 Description=Provides tags - site content keywords, tag clouds, tag search and API
-Version=1.0.9
-Date=2025-02-04
+Version=1.1.0
+Date=2025-09-07
 Author=Trustmaster & Cotonti Team
 Copyright=Copyright (c) Cotonti Team 2010-2025
 Notes=BSD License.
@@ -16,7 +16,7 @@ Lock_guests=W12345A
 Auth_members=RW
 Lock_members=12345
 Recommends_modules=page,forums
-Recommends_plugins=autocomplete
+Recommends_plugins=
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]

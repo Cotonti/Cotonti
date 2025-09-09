@@ -10,7 +10,7 @@ use cot\traits\GetInstanceTrait;
 defined('COT_CODE') or die('Wrong URL');
 
 /**
- * Users repository
+ * Users helper
  * @package Cotonti
  * @copyright (c) Cotonti Team
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
