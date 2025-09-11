@@ -84,7 +84,7 @@ $sys['sublocation'] = Cot::$structure['forums'][$s]['title'];
 if ($a == 'newpost' && !empty($s) && !empty($q)) {
 	cot_shield_protect();
 
-	Cot::$db->query("SELECT ft_state FROM $db_forum_topics WHERE ft_id = $q")->fetchColumn() && cot_die();
+	Cot::$db->query("SELECT ft_state FROM $db_forum_topics WHERE ft_id = $q")->fetchColumn() && !Cot::$usr['isadmin'] && cot_die();
 
 	$sql_forums = Cot::$db->query("SELECT fp_id, fp_text, fp_posterid, fp_creation, fp_updated, fp_updater FROM $db_forum_posts
 		WHERE fp_topicid = $q ORDER BY fp_creation DESC LIMIT 1");
@@ -515,7 +515,7 @@ $allowreplybox = !(
 
 if (
     (Cot::$cfg['forums']['enablereplyform'] || $lastpage)
-    && !$rowt['ft_state']
+    && (!$rowt['ft_state'] || Cot::$usr['isadmin'])
     && Cot::$usr['id'] > 0
     && $allowreplybox
     && Cot::$usr['auth_write']
@@ -591,7 +591,7 @@ if (
 
     $t->parse('MAIN.FORUMS_POSTS_NEWPOST');
 
-} elseif ($rowt['ft_state']) {
+} elseif ($rowt['ft_state'] && !Cot::$usr['isadmin']) {
 	$t->assign('FORUMS_POSTS_TOPICLOCKED_BODY', Cot::$L['forums_topiclocked']);
 	$t->parse('MAIN.FORUMS_POSTS_TOPICLOCKED');
 
