@@ -79,9 +79,11 @@ class CommentsWidget extends BaseCommentsWidget
         if (COT_AJAX && Cot::$env['ext'] === 'comments' && isset($_GET['ci'])) {
             $ci = cot_import('ci', 'G', 'TXT');
             if (!empty($ci)) {
-                $ci = unserialize(base64_decode($ci));
-                $this->currentUrlExtension = $ci[0];
-                $this->currentUrlParams = $ci[1];
+                $ci = @unserialize(base64_decode($ci));
+                if (!empty($ci)) {
+                    $this->currentUrlExtension = $ci[0];
+                    $this->currentUrlParams = $ci[1];
+                }
             }
         } elseif (
             Cot::$env['ext'] !== 'comments'
@@ -162,7 +164,6 @@ class CommentsWidget extends BaseCommentsWidget
 
             $blockParams = [
                 'data-refresh' => base64_encode(cot_url('comments', $refreshUrlParams, '', true)),
-
             ];
 
             $blockParamsPrepared = ' ';

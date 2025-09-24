@@ -15,6 +15,8 @@ Hooks=forums.newtopic.newtopic.first,forums.editpost.update.first
 
 declare(strict_types=1);
 
+use cot\extensions\ExtensionsDictionary;
+
 defined('COT_CODE') or die('Wrong URL');
 
 if (
@@ -24,6 +26,8 @@ if (
 ) {
     return;
 }
+
+require_once cot_incfile('tags', ExtensionsDictionary::TYPE_PLUGIN);
 
 $tags = cot_import('rtags', 'P', 'ARR');
 $tags = cot_tag_parse($tags);
