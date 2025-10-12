@@ -66,7 +66,7 @@ $sqlWhere = implode(' AND ', $condition);
 
 $sqlSelect = $withFullItemData
     ? "{$postsTable}.*, {$topicTable}.ft_title, {$topicTable}.ft_desc, {$topicTable}.ft_cat"
-    : "{$postsTable}.fp_id, {$postsTable}.fp_text, {$postsTable}.fp_posterid, {$topicTable}.ft_title";
+    : "{$postsTable}.fp_id, {$postsTable}.fp_text, {$postsTable}.fp_posterid, {$topicTable}.ft_title, {$topicTable}.ft_cat";
 
 $query = "SELECT $sqlSelect FROM $postsTable LEFT JOIN $topicTable ON {$postsTable}.fp_topicid = {$topicTable}.ft_id "
  . " WHERE $sqlWhere";
