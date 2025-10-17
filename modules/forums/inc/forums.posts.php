@@ -383,7 +383,7 @@ foreach ($sql_forums->fetchAll() as $row) {
         ? cot_rc('forums_rowedit', ['url' => $rowedit_url])
         : '';
 
-    $canDeletePost = $canEditPost && $fp_num > 1;
+    $canDeletePost = $canEditPost && ($fp_num > 1 || $pg > 1);
 
 	$rowdelete_url = $canDeletePost
         ? cot_confirm_url(
