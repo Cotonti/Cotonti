@@ -81,11 +81,15 @@ class UsersHelper
 
         if (!empty($chosen) && empty($data)) {
             $usersIds = [];
-            foreach ($chosen as $userId) {
-                $userId = (int) $userId;
-                if ($userId > 0 && !in_array($userId, $usersIds)) {
-                    $usersIds[] = $userId;
+            if (is_array($chosen)) {
+                foreach ($chosen as $userId) {
+                    $userId = (int)$userId;
+                    if ($userId > 0 && !in_array($userId, $usersIds)) {
+                        $usersIds[] = $userId;
+                    }
                 }
+            } else {
+                $usersIds[] = $chosen;
             }
             $users = UsersRepository::getInstance()->getByIds($usersIds);
             $helper = \cot\users\UsersHelper::getInstance();
