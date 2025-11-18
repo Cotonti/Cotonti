@@ -52,9 +52,9 @@ if ($searchInComments && !cot_error_found()) {
 
     $orderby = 'c.com_' . $rs['comsort'] . ' ' . $rs['comsort2'];
 
-    $search_join_columns = isset($search_join_columns) ? $search_join_columns : '';
-    $searchJoinTables = isset($searchJoinTables) ? $searchJoinTables : [];
-    $search_union_query = isset($search_union_query) ? $search_union_query : '';
+    $searchCommentsJoinColumns = $searchCommentsJoinColumns ?? '';
+    $searchCommentsJoinTables = $searchCommentsJoinTables ?? [];
+    $searchCommentsUnionQuery = $searchCommentsUnionQuery ?? '';
 
     /* === Hook === */
     foreach (cot_getextplugins('search.comments.query') as $pl) {
@@ -71,13 +71,14 @@ if ($searchInComments && !cot_error_found()) {
 
     if (empty($sqlCommentsString)) {
         $sqlJoinTables = '';
-        if (!empty($searchJoinTables)) {
-            $sqlJoinTables = "\n" . implode("\n", $searchJoinTables);
+        if (!empty($searchCommentsJoinTables)) {
+            $sqlJoinTables = "\n" . implode("\n", $searchCommentsJoinTables);
         }
 
         $queryBody = ' FROM ' . Cot::$db->com . ' AS c ' . $sqlJoinTables . ' WHERE ' . $where;
-        $sqlCommentsString = "SELECT c.* $search_join_columns $queryBody ORDER BY $orderby LIMIT $d, " . $cfg_maxitems . $search_union_query;
-        $sqlCount = 'SELECT COUNT(*) ' . $queryBody . $search_union_query;
+        $sqlCommentsString = "SELECT c.* $searchCommentsJoinColumns $queryBody ORDER BY $orderby LIMIT $d, "
+            . $cfg_maxitems . $searchCommentsUnionQuery;
+        $sqlCount = 'SELECT COUNT(*) ' . $queryBody . $searchCommentsUnionQuery;
     }
 
     $sql = Cot::$db->query($sqlCommentsString);
