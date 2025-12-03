@@ -126,6 +126,7 @@ $L['Hits'] = 'Hits';
 $L['Home'] = 'Home';
 $L['Hook'] = 'Hook';
 $L['Hooks'] = 'Hooks';
+$L['Host'] = 'Host';
 $L['Hours'] = 'Hours';
 $L['Icon'] = 'Icon (URL)';
 $L['ICQ'] = 'ICQ Number';
