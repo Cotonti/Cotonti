@@ -314,6 +314,7 @@ $L['Theme'] = 'Theme';
 $L['Themes'] = 'Themes';
 $L['Thumbnail'] = 'Thumbnail';
 $L['Thumbnails'] = 'Thumbnails';
+$L['Time'] = 'Time';
 $L['Timezone'] = 'Timezone';
 $L['Title'] = 'Title';
 $L['Today'] = 'Today';
