@@ -156,7 +156,7 @@ foreach ($comments as $comment) {
     }
 
     $commentsLink = !empty($commentedPage)
-        ? cot_page_url($commentedPage, [], '#c' . $comment['com_id'], true)
+        ? cot_page_url($commentedPage, [], '#com' . $comment['com_id'], true)
         : '';
     if (!cot_url_check($commentsLink)) {
         $commentsLink = COT_ABSOLUTE_URL . $commentsLink;

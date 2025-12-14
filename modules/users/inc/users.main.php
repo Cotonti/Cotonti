@@ -506,8 +506,8 @@ foreach ($users_sort_tags as $k => $x) {
 				'asc_url' => implode($k, $asc),
 				'desc_url' => implode($k, $desc),
 				'text' => $x[1],
-				'icon_down' => $k == $s && $w == 'asc' ? Cot::$R['icon_vert_active']['asc'] : Cot::$R['icon_down'],
-				'icon_up' => $k == $s && $w == 'desc' ? Cot::$R['icon_vert_active']['desc'] : Cot::$R['icon_up']
+				'icon_down' => $k == $s && $w == 'desc' ? Cot::$R['icon_vert_active']['desc'] : Cot::$R['icon_down'],
+				'icon_up' => $k == $s && $w == 'asc' ? Cot::$R['icon_vert_active']['asc'] : Cot::$R['icon_up']
 			])
 		    : $x[1]
 	);
@@ -541,12 +541,8 @@ foreach (Cot::$extrafields[Cot::$db->users] as $extraField) {
                     array_merge($users_url_path, ['s' => $extraField['field_name'], 'w'=> 'desc'])
                 ),
 				'text' => $fieldTitle,
-				'icon_down' => $s === $extraField['field_name'] && $w === 'asc'
-                    ? Cot::$R['icon_vert_active']['asc']
-                    : Cot::$R['icon_down'],
-				'icon_up' => $s === $extraField['field_name'] && $w === 'desc'
-                    ? Cot::$R['icon_vert_active']['desc']
-                    : Cot::$R['icon_up']
+				'icon_down' => $s === $extraField['field_name'] && $w === 'desc' ? Cot::$R['icon_vert_active']['desc'] : Cot::$R['icon_down'],
+				'icon_up' => $s === $extraField['field_name'] && $w === 'asc' ? Cot::$R['icon_vert_active']['asc'] : Cot::$R['icon_up']
 			])
 		    : $fieldTitle
 	);
