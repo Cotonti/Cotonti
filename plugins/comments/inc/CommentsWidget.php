@@ -141,7 +141,7 @@ class CommentsWidget extends BaseCommentsWidget
         $t->assign([
             'COMMENTS_SOURCE' => $this->source,
             'COMMENTS_SOURCE_ID' => $this->sourceId,
-            'COMMENTS_IS_AJAX' => COT_AJAX,
+            'COMMENTS_IS_AJAX' => COT_AJAX && (Cot::$env['ext'] === 'comments'),
             'COMMENTS_DISPLAY' => Cot::$cfg['plugin']['comments']['expand_comments'] ? '' : 'none',
         ]);
 

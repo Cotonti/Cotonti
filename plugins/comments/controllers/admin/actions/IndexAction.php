@@ -82,7 +82,7 @@ class IndexAction extends BaseAction
             'COMMENTS_CONFIG_URL' => cot_url(
                 'admin',
                 ['m' => 'config', 'n' => 'edit', 'o' => ExtensionsDictionary::TYPE_PLUGIN, 'p' => 'comments']),
-            'COMMENTS_IS_AJAX' => COT_AJAX,
+            'COMMENTS_IS_AJAX' => COT_AJAX && (Cot::$env['ext'] === 'comments'),
         ]);
         $t->assign(cot_generatePaginationTags($pagination));
 
