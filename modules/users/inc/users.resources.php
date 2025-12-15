@@ -14,7 +14,7 @@ $R['users_input_grplist_radio'] = '<input type="radio" class="radio" name="{$nam
  * Users main resources
  */
 
-$R['users_link_sort'] = '<a href="{$asc_url}" rel="nofollow">{$icon_down}</a> <a href="{$desc_url}" rel="nofollow">{$icon_up}</a> {$text}';
+$R['users_link_sort'] = '<a href="{$asc_url}" rel="nofollow">{$icon_up}</a> <a href="{$desc_url}" rel="nofollow">{$icon_down}</a> {$text}';
 
 /*
  * User's profile resources
