@@ -139,6 +139,12 @@ foreach ($sql_users->fetchAll() as $row) {
 }
 $sql_users->closeCursor();
 
+/* === Hook === */
+foreach (cot_getextplugins('whosonline.main') as $pl) {
+	include $pl;
+}
+/* ===== */
+
 $t->assign([
 	'STAT_MAXUSERS' => $maxusers,
 	'STAT_COUNT_USERS' => $who_users,
@@ -148,6 +154,12 @@ $t->assign([
 ]);
 
 $t->assign(cot_generatePaginationTags($pagenav));
+
+/* === Hook === */
+foreach (cot_getextplugins('whosonline.tags') as $pl) {
+	include $pl;
+}
+/* ===== */
 
 if (isset(Cot::$cfg['legacyMode']) && Cot::$cfg['legacyMode']) {
     // @deprecated in 0.9.25
