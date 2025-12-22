@@ -7,6 +7,8 @@
  * @license https://github.com/Cotonti/Cotonti/blob/master/License.txt
  */
 
+include_once cot_langfile('tags', 'plug');
+
 $R['tags_code_cloud_close'] = '</ul>';
 $R['tags_code_cloud_more'] = '<a class="more" href="{$url}">' . Cot::$L['tags_All'] . '</a>';
 $R['tags_code_cloud_open'] = '<ul class="tag_cloud">';
