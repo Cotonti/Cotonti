@@ -2701,7 +2701,7 @@ function cot_build_filesize($bytes, $decimals = 0, $round = null, $binary = fals
  * @param string $flag Country code
  * @return string
  */
-function cot_build_flag($flag)
+function cot_build_flag($flag, $flag_rc = 'icon_flag', $flag_size = null)
 {
 	global $cot_countries;
 	if (!$cot_countries) include_once cot_langfile('countries', 'core');
@@ -2709,7 +2709,7 @@ function cot_build_flag($flag)
 	$country = isset($cot_countries[$flag]) ? $cot_countries[$flag] : Cot::$R['code_option_empty'];
 	return cot_rc_link(
         cot_url('users', ['country' => $flag]),
-		cot_rc('icon_flag', array('code' => $flag, 'alt' => $flag)),
+		cot_rc($flag_rc, array('code' => $flag, 'alt' => $country)),
 		array('title' => $country)
 	);
 }
