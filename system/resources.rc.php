@@ -107,7 +107,7 @@ $R['code_rc_js_file'] = '<script src="{$url}"></script>';
 /**
  * Misc
  */
-$R['icon_flag'] = '<img class="flag" src="images/flags/{$code}.svg" alt="{$alt}" />';
+$R['icon_flag'] = '<a href="{$link}"><img class="flag" src="images/flags/{$code}.svg" alt="{$country}" width="20" height="15" /></a>';
 $R['icon_group'] = '<img src="{$src}" alt="' . $L['Group'] . '" />';
 $R['icon_group'] = '<img src="{$src}" alt="' . $L['Group'] . '" />';
 $R['img_none'] = '<img src="{$src}" alt="' . $L['Image'] . '" />';

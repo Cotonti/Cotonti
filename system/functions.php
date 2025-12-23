@@ -2696,22 +2696,19 @@ function cot_build_filesize($bytes, $decimals = 0, $round = null, $binary = fals
 }
 
 /**
- * Returns country flag button
+ * Returns country flag as per specified resource name
  *
- * @param string $flag Country code
+ * @param string $flag      Country code
+ * @param string $flag_rc   Resource string name
  * @return string
  */
-function cot_build_flag($flag, $flag_rc = 'icon_flag', $flag_size = null)
+function cot_build_flag($flag = null, $flag_rc = 'icon_flag')
 {
 	global $cot_countries;
 	if (!$cot_countries) include_once cot_langfile('countries', 'core');
 	$flag = (empty($flag)) ? '00' : $flag;
 	$country = isset($cot_countries[$flag]) ? $cot_countries[$flag] : Cot::$R['code_option_empty'];
-	return cot_rc_link(
-        cot_url('users', ['country' => $flag]),
-		cot_rc($flag_rc, array('code' => $flag, 'alt' => $country)),
-		array('title' => $country)
-	);
+	return cot_rc($flag_rc, ['code' => $flag, 'country' => $country, 'link' => cot_url('users', ['country' => $flag])]);
 }
 
 /**
