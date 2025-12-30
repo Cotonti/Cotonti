@@ -14,15 +14,15 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="modules/install/tpl/styles.css" />
+		<style media="screen">.container{max-width:567px;}</style>
 	</head>
 
 	<body>
 		<div class="container my-3 my-sm-5">
 
 			<header class="text-primary-emphasis bg-primary-subtle border border-primary rounded py-2 px-4 py-sm-3 px-sm-5">
-				<h1 class="fs-5 fw-semibold mb-1">{PHP.L.install_body_title} <br class="d-sm-none" /> ver. {PHP.cfg.version}</h1>
-				<p class="fw-semibold m-0 opacity-50">{INSTALL_STEP}: Step Description</p>
+				<h1 class="fs-5 fw-semibold mb-1">{PHP.L.install_title} <br class="d-sm-none" /> ver. {PHP.cfg.version}</h1>
+				<p class="fw-semibold m-0 opacity-50">{INSTALL_STEP}</p>
 			</header>
 
 			<main class="bg-light border-light border border-light rounded my-4 py-2 px-4 py-sm-3 px-sm-5">
@@ -32,6 +32,7 @@
 
 					<!-- BEGIN: STEP_0 -->
 					<input type="hidden" name="step" value="0" />
+					<h2 class="fs-5">{PHP.L.install_language}:</h2>
 					<ul class="list-unstyled">
 						<li>
 							<label class="mb-1 d-block opacity-75">{PHP.L.Language}:</label>
@@ -52,7 +53,7 @@
 					<p class="lh-sm opacity-75">
 						{PHP.L.install_body_message1}
 					</p>
-					<h2>{PHP.L.install_ver}:</h2>
+					<h2 class="fs-5">{PHP.L.install_ver}:</h2>
 
 					<ul class="list-unstyled d-flex flex-column gap-1">
 						<li class="pb-1 border-bottom d-flex justify-content-between">
@@ -76,7 +77,7 @@
 					<p class="lh-sm opacity-75">
 						{PHP.L.install_body_message2}
 					</p>
-					<h2>{PHP.L.install_permissions}:</h2>
+					<h2 class="fs-5">{PHP.L.install_permissions}:</h2>
 
 					<ul class="list-unstyled d-flex flex-column gap-1">
 						<li class="py-1 border-bottom d-flex justify-content-between">
@@ -123,7 +124,7 @@
 				<!-- BEGIN: STEP_2 -->
 					<input type="hidden" name="step" value="2" />
 
-					<h2>{PHP.L.install_db}:</h2>
+					<h2 class="fs-5">{PHP.L.install_db}:</h2>
 
 					<ul class="list-unstyled d-flex flex-column gap-2">
 						<li>
@@ -162,7 +163,7 @@
 
 				<!-- BEGIN: STEP_3 -->
 					<input type="hidden" name="step" value="3" />
-					<h2>{PHP.L.install_misc}:</h2>
+					<h2 class="fs-5">{PHP.L.install_misc}:</h2>
 
 					<ul class="list-unstyled d-flex flex-column gap-2">
 						<li>
@@ -179,7 +180,7 @@
 						</li>
 					</ul>
 
-					<h2>{PHP.L.install_adminacc}:</h2>
+					<h2 class="fs-5">{PHP.L.install_adminacc}:</h2>
 
 					<ul class="list-unstyled d-flex flex-column gap-2">
 						<li>
@@ -254,7 +255,7 @@
 
 			<footer class="text-success-emphasis bg-success-subtle border border-success rounded py-2 px-4 py-sm-3 px-sm-5">
 				<span class="fw-semibold d-block mb-1">Important Notes:</span>
-				<p class="lh-sm m-0">Support for PHP 5.x has been discontinued. The minimum PHP version is now 7.3.</p>
+				<p class="lh-sm m-0 opacity-75">Support for PHP 5.x has been discontinued. The minimum PHP version is now 7.3.</p>
 			</footer>
 
 		</div>

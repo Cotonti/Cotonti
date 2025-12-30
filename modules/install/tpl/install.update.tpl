@@ -14,7 +14,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="modules/install/tpl/styles.css" />
+		<style media="screen">.container{max-width:567px;}</style>
 	</head>
 
 	<body>
@@ -27,15 +27,13 @@
 
 			<main class="bg-light border-light border border-light rounded my-4 py-2 px-4 py-sm-3 px-sm-5">
 				{FILE "./{PHP.cfg.modules_dir}/install/tpl/warnings.tpl"}
-
 				<h2 class="mb-1 pb-1 border-bottom">{UPDATE_TITLE}</h2>
 				<!-- BEGIN: COMPLETED -->
 				<div>
-					<p class="mb-2 opacity-75">{UPDATE_COMPLETED_NOTE}</p>
+					<p class="mb-3 opacity-75">{UPDATE_COMPLETED_NOTE}</p>
 					<a href="{PHP.cfg.mainurl}" class="btn btn-primary">{PHP.L.install_view_site}</a>
 				</div>
 				<!-- END: COMPLETED -->
-
 			</main>
 
 		</div>
