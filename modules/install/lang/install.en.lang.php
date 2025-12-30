@@ -63,6 +63,7 @@ $L['install_update_config_error'] = 'Cannot update datas/config.php. Please set 
 $L['install_update_config_success'] = 'Successfully updated datas/config.php';
 $L['install_update_error'] = 'Update Failed';
 $L['install_update_nothing'] = 'Nothing to update';
+$L['install_update_nothing_hint'] = 'Core and extensions actualized';
 $L['install_update_patch_applied'] = 'Applied patch {$f}: {$msg}';
 $L['install_update_patch_error'] = 'Error applying patch {$f}: {$msg}';
 $L['install_update_patches'] = 'Applied patches:';
@@ -73,7 +74,9 @@ $L['install_upgrade_error'] = 'Failed upgrading Cotonti to {$ver}';
 $L['install_upgrade_success'] = 'Successfully upgraded Cotonti to {$ver}';
 $L['install_upgrade_success_note'] = 'All Genoa plugins have been uninstalled to avoid compatibility problems. You can update them manually later.';
 $L['install_ver'] = 'Server Info';
+
 $L['install_ver_invalid'] = '{$ver} &mdash; invalid!';
 $L['install_ver_valid'] = '{$ver} &mdash; valid!';
+
 $L['install_view_site'] = 'View the site';
 $L['install_writable'] = 'Writable';

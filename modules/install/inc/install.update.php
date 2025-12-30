@@ -293,7 +293,7 @@ if (defined('COT_UPGRADE') && !cot_error_found()) {
 		$t->assign('UPDATE_TITLE', $L['install_update_error']);
 	} elseif ($new_rev === true && !$updated_config && !$updated_ext) {
 		$t->assign('UPDATE_TITLE', $L['install_update_nothing']);
-		$t->assign('UPDATE_COMPLETED_NOTE', '');
+		$t->assign('UPDATE_COMPLETED_NOTE', $L['install_update_nothing_hint']);
 		$t->parse('MAIN.COMPLETED');
 	} else {
 		if ($new_rev === true) {
@@ -317,5 +317,3 @@ cot_display_messages($t);
 
 $t->parse('MAIN');
 $t->out('MAIN');
-
-

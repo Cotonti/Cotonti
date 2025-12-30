@@ -20,10 +20,10 @@ $L['install_adminacc'] = 'Данные администратора';
 $L['install_body_title'] = 'Установщик Cotonti';
 $L['install_body_message1'] = 'Этот скрипт поможет вам осуществить первичную установку и настройку Cotonti.';
 $L['install_body_message2'] = 'Рекомендуем создать в папке datas файл config.php, скопировать в него содержимое файла config-sample.php и установить на него права CHMOD 666.';
-$L['install_body_message3'] = 'Вам необходимо <strong>предварительно создать пустую базу данных</strong> с указанным выше именем на вашем сервере, если у данного пользователя нет прав на создание новых БД.';
+$L['install_body_message3'] = 'При отсутствии у данного пользователя прав на создание новых БД, Вам необходимо предварительно создать на удаленном сервере пустую базу данных с указанным выше именем.';
 $L['install_chmod_value'] = 'CHMOD {$chmod}';
 $L['install_complete'] = 'Установка Cotonti успешно завершена!';
-$L['install_complete_note'] = 'Удалите install.php и установите на datas/config.php права CHMOD 644. Это необходимо для повышения безопасности вашего сайта.';
+$L['install_complete_note'] = 'Удалите <code>install.php</code> и установите на <code>datas/config.php</code> права CHMOD 644. Это необходимо для повышения безопасности вашего сайта.';
 $L['install_db'] = 'Настройки базы данных MySQL';
 $L['install_db_host'] = 'Сервер СУБД';
 $L['install_db_user'] = 'Пользователь';
@@ -63,6 +63,7 @@ $L['install_update_config_error'] = 'Невозможно обновить datas
 $L['install_update_config_success'] = 'Файл datas/config.php обновлен';
 $L['install_update_error'] = 'Обновление не выполнено';
 $L['install_update_nothing'] = 'Обновление не требуется';
+$L['install_update_nothing_hint'] = 'Ядро и все расширения имеют актуальные версии';
 $L['install_update_patch_applied'] = 'Установить патч {$f}: {$msg}';
 $L['install_update_patch_error'] = 'Ошибка установки патча {$f}: {$msg}';
 $L['install_update_patches'] = 'Установленные патчи:';
@@ -73,7 +74,9 @@ $L['install_upgrade_error'] = 'Ошибка обновления Cotonti до в
 $L['install_upgrade_success'] = 'Успешное обновление Cotonti до версии {$ver}';
 $L['install_upgrade_success_note'] = 'Во избежание проблем с совместимостью все плагины Genoa были деинсталлированы. Вы можете обновить их позже самостоятельно.';
 $L['install_ver'] = 'Информация о сервере';
-$L['install_ver_invalid'] = '{$ver} &mdash; неудачно!';
-$L['install_ver_valid'] = '{$ver} &mdash; успешно!';
+
+$L['install_ver_invalid'] = '{$ver} &ndash; неудачно!';
+$L['install_ver_valid'] = '<span class="fw-semibold text-success">{$ver} &ndash; успешно!</span>';
+
 $L['install_view_site'] = 'Открыть сайт';
 $L['install_writable'] = 'Доступно';

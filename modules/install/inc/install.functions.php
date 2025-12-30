@@ -101,7 +101,7 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
     $ext_type_lc == 'plugin' ? uasort($ext_list, 'cot_extension_catcmp') : ksort($ext_list);
 
     $prev_cat = '';
-    $block_name = $ext_type_lc == 'plugin' 
+    $block_name = $ext_type_lc == 'plugin'
         ? "{$ext_type_uc}_CAT.{$ext_type_uc}_ROW"
         : "{$ext_type_uc}_ROW";
 
@@ -133,7 +133,7 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
                 $plugins_list = empty($info['Requires_plugins'])
                     ? $L['None']
                     : implode(', ', explode(',', $info['Requires_plugins']));
-                    
+
                 $requires = cot_rc('install_code_requires', [
                         'modules_list' => $modules_list,
                         'plugins_list' => $plugins_list,
@@ -173,7 +173,7 @@ function cot_installParseExtensions($ext_type, $default_list = [], $selected_lis
                 : ExtensionsDictionary::TYPE_PLUGIN;
 
             $t->assign([
-                "{$ext_type_uc}_ROW_CHECKBOX" => cot_checkbox($checked, "install_{$ext_type_lc}s[$code]"),
+                "{$ext_type_uc}_ROW_CHECKBOX" => cot_checkbox($checked, "install_{$ext_type_lc}s[$code]", '', ['class' => 'form-check-input'], 1, 'install_checkbox'),
                 "{$ext_type_uc}_ROW_TITLE" => $extensionHelper->getTitle($code, $extensionType),
                 "{$ext_type_uc}_ROW_DESCRIPTION" => $extensionHelper->getDescription($code, $extensionType),
                 "{$ext_type_uc}_ROW_REQUIRES" => $requires,

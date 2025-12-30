@@ -1,7 +1,7 @@
 <!-- BEGIN: ERROR -->
-<div class="error">
-	<h4>{PHP.L.Error}</h4>
-	<ul>
+<div class="alert alert-danger py-2">
+	<span class="fs-5 fw-semibold mb-1 d-block">{PHP.L.Error}</span>
+	<ul class="small lh-sm list-unstyled m-0 d-flex flex-column gap-1 opacity-75">
 		<!-- BEGIN: ERROR_ROW -->
 		<li>{ERROR_ROW_MSG}</li>
 		<!-- END: ERROR_ROW -->
@@ -10,9 +10,9 @@
 <!-- END: ERROR -->
 
 <!-- BEGIN: WARNING -->
-<div class="warning">
-	<h4>{PHP.L.Warning}</h4>
-	<ul>
+<div class="alert alert-warning py-2">
+	<span class="fs-5 fw-semibold mb-1 d-block">{PHP.L.Warning}</span>
+	<ul class="small lh-sm list-unstyled m-0 d-flex flex-column gap-1 opacity-75">
 		<!-- BEGIN: WARNING_ROW -->
 		<li>{WARNING_ROW_MSG}</li>
 		<!-- END: WARNING_ROW -->
@@ -21,9 +21,9 @@
 <!-- END: WARNING -->
 
 <!-- BEGIN: DONE -->
-<div class="done">
-	<h4>{PHP.L.Done}</h4>
-	<ul>
+<div class="alert alert-success py-2">
+	<span class="fs-5 fw-semibold mb-1 d-block">{PHP.L.Done}</span>
+	<ul class="small lh-sm list-unstyled m-0 d-flex flex-column gap-1 opacity-75">
 		<!-- BEGIN: DONE_ROW -->
 		<li>{DONE_ROW_MSG}</li>
 		<!-- END: DONE_ROW -->

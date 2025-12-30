@@ -447,7 +447,7 @@ switch ($step) {
 	case 0:
 		// Language selection
 		$t->assign([
-			'INSTALL_LANG' => cot_selectbox_lang($lang, 'lang'),
+			'INSTALL_LANG' => cot_selectbox_lang($lang, 'lang', false, ['class' => 'form-select']),
 		]);
 
 		$install_files = glob("*.install.php");
@@ -628,12 +628,12 @@ switch ($step) {
 			'INSTALL_DB_USER' => $db_user,
 			'INSTALL_DB_NAME' => $db_name,
 			'INSTALL_DB_X' => $db_x,
-			'INSTALL_DB_HOST_INPUT' => cot_inputbox('text', 'db_host', $db_host, 'size="32"'),
-			'INSTALL_DB_PORT_INPUT' => cot_inputbox('text', 'db_port', $db_port, 'size="32"'),
-			'INSTALL_DB_USER_INPUT' => cot_inputbox('text', 'db_user',  $db_user, 'size="32"'),
-			'INSTALL_DB_NAME_INPUT' => cot_inputbox('text', 'db_name',  $db_name, 'size="32"'),
-			'INSTALL_DB_PASS_INPUT' => cot_inputbox('password', 'db_pass', '', 'size="32"'),
-			'INSTALL_DB_X_INPUT' => cot_inputbox('text', 'db_x',  $db_x, 'size="32"'),
+			'INSTALL_DB_HOST_INPUT' => cot_inputbox('text', 'db_host', $db_host, ['class' => 'form-control']),
+			'INSTALL_DB_PORT_INPUT' => cot_inputbox('text', 'db_port', $db_port, ['class' => 'form-control']),
+			'INSTALL_DB_USER_INPUT' => cot_inputbox('text', 'db_user',  $db_user, ['class' => 'form-control']),
+			'INSTALL_DB_NAME_INPUT' => cot_inputbox('text', 'db_name',  $db_name, ['class' => 'form-control']),
+			'INSTALL_DB_PASS_INPUT' => cot_inputbox('password', 'db_pass', '', ['class' => 'form-control']),
+			'INSTALL_DB_X_INPUT' => cot_inputbox('text', 'db_x',  $db_x, ['class' => 'form-control']),
 		));
 		break;
 
@@ -649,13 +649,13 @@ switch ($step) {
 
 		$t->assign(array(
 			'INSTALL_THEME_SELECT' => cot_selectbox_theme($rtheme, $rscheme, 'theme'),
-			'INSTALL_LANG_SELECT' => cot_selectbox_lang($rlang, 'lang'),
+			'INSTALL_LANG_SELECT' => cot_selectbox_lang($rlang, 'lang', false, ['class' => 'form-select']),
 			'INSTALL_COUNTRY_SELECT' => cot_selectbox_countries($user['country'], 'user_country'),
-			'INSTALL_MAINURL' => cot_inputbox('text', 'mainurl', $rurl, 'size="32"'),
-			'INSTALL_USERNAME' => cot_inputbox('text', 'user_name', $user['name'], 'size="32"'),
-			'INSTALL_PASS1' => cot_inputbox('password', 'user_pass', '', 'size="32"'),
-			'INSTALL_PASS2' => cot_inputbox('password', 'user_pass2', '', 'size="32"'),
-			'INSTALL_EMAIL' => cot_inputbox('text', 'user_email', $user['email'], 'size="32"'),
+			'INSTALL_MAINURL' => cot_inputbox('text', 'mainurl', $rurl, ['class' => 'form-control']),
+			'INSTALL_USERNAME' => cot_inputbox('text', 'user_name', $user['name'], ['class' => 'form-control']),
+			'INSTALL_PASS1' => cot_inputbox('password', 'user_pass', '', ['class' => 'form-control']),
+			'INSTALL_PASS2' => cot_inputbox('password', 'user_pass2', '', ['class' => 'form-control']),
+			'INSTALL_EMAIL' => cot_inputbox('text', 'user_email', $user['email'], ['class' => 'form-control']),
 		));
         break;
 
