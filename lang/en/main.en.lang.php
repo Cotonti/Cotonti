@@ -52,6 +52,7 @@ $L['bytes'] = 'bytes';
 $L['Cancel'] = 'Cancel';
 $L['Categories'] = 'Categories';
 $L['Category'] = 'Category';
+$L['Clear'] = 'Clear';
 $L['Clearstatus'] = 'Clear status';
 $L['Clickhere'] = 'Click here to continue...';
 $L['Close'] = 'Close';
