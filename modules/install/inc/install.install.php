@@ -459,7 +459,7 @@ switch ($step) {
 				$install_scripts[$filename] = $mtch[2];
 			}
 			$t->assign(array(
-				'INSTALL_SCRIPT' => cot_selectbox('', 'script', array_keys($install_scripts), array_values($install_scripts))
+				'INSTALL_SCRIPT' => cot_selectbox('', 'script', array_keys($install_scripts), array_values($install_scripts), true, ['class' => 'form-control'])
 			));
 			$t->parse("MAIN.STEP_$step.SCRIPT");
 		}

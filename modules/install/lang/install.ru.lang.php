@@ -26,6 +26,7 @@ $L['install_step'] = 'Шаг {$step} из {$total}';
 // Step 0
 
 $L['install_language'] = 'Выбор языка';
+$L['install_custom_script'] = 'Установочный скрипт';
 
 // Step 1
 

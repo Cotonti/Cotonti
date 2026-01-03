@@ -26,6 +26,7 @@ $L['install_step'] = 'Step {$step} of {$total}';
 // Step 0
 
 $L['install_language'] = 'Select language';
+$L['install_custom_script'] = 'Custom install script';
 
 // Step 1
 

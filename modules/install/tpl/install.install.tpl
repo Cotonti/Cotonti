@@ -33,14 +33,14 @@
 					<!-- BEGIN: STEP_0 -->
 					<input type="hidden" name="step" value="0" />
 					<h2 class="fs-5">{PHP.L.install_language}:</h2>
-					<ul class="list-unstyled">
+					<ul class="list-unstyled d-flex flex-column gap-2">
 						<li>
 							<label class="mb-1 d-block opacity-75">{PHP.L.Language}:</label>
 							{INSTALL_LANG}
 						</li>
 						<!-- BEGIN: SCRIPT -->
 						<li>
-							<label class="mb-1 d-block opacity-75">Install script</label>
+							<label class="mb-1 d-block opacity-75">{PHP.L.install_custom_script}:</label>
 							{INSTALL_SCRIPT}
 						</li>
 						<!-- END: SCRIPT -->
