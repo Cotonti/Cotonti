@@ -303,9 +303,11 @@ $L['ext_cat_intranet-groupware'] = 'Intranet &amp; Groupware';
 $L['ext_cat_misc-ext'] = 'Miscellaneous';
 $L['ext_cat_mobile-geolocation'] = 'Mobile &amp; Geolocation';
 $L['ext_cat_navigation-structure'] = 'Navigation &amp; Structure';
-$L['ext_cat_performance-seo'] = 'Performance &amp; SEO';
+$L['ext_cat_performance'] = 'Performance';
 $L['ext_cat_publications-events'] = 'Publications &amp; Events';
 $L['ext_cat_security-authentication'] = 'Security &amp; Authentication';
+$L['ext_cat_seo'] = 'SEO';
+$L['ext_cat_stats'] = 'Stats';
 $L['ext_cat_utilities-tools'] = 'Utilities &amp; Tools';
 $L['ext_cat_post-install'] = 'Post-install Scripts';
 

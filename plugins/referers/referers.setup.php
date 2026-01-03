@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=referers
 Name=Referers
-Category=performance-seo
+Category=seo
 Description=Referers
 Version=1.0.3
 Date=2022-07-15

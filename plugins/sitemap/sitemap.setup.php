@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=sitemap
 Name=SiteMap
-Category=performance-seo
+Category=seo
 Description=Simple XML sitemap for the site
 Version=1.0.2
 Date=2024-11-20

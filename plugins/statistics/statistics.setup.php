@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=statistics
 Name=Statistics
-Category=performance-seo
+Category=stats
 Description=All kind of statistics about the site
 Version=1.0.8
 Date=2021-09-06

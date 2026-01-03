@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=urleditor
 Name=URL Editor
-Category=performance-seo
+Category=seo
 Description=Advanced URL customizer for your site
 Version=1.2.2
 Date=2022-05-14

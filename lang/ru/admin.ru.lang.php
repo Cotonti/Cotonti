@@ -307,9 +307,11 @@ $L['ext_cat_intranet-groupware'] = 'Корпоративный сектор';
 $L['ext_cat_misc-ext'] = 'Прочее';
 $L['ext_cat_mobile-geolocation'] = 'Мобильность и геолокация';
 $L['ext_cat_navigation-structure'] = 'Навигация и структура';
-$L['ext_cat_performance-seo'] = 'Производительность и SEO';
+$L['ext_cat_performance'] = 'Производительность';
 $L['ext_cat_publications-events'] = 'Публикации и события';
 $L['ext_cat_security-authentication'] = 'Безопасность и аутентификация';
+$L['ext_cat_seo'] = 'SEO';
+$L['ext_cat_stats'] = 'Статистика';
 $L['ext_cat_utilities-tools'] = 'Инструменты';
 $L['ext_cat_post-install'] = 'Пост-установочные скрипты';
 
