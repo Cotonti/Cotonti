@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=i18n
 Name=Content Internationalization
-Category=customization-i18n
+Category=i18n
 Description=Enables site contents translation into multiple languages
 Version=1.0.13
 Date=2025-03-18

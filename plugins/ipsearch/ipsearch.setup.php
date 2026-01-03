@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=ipsearch
 Name=IP search
-Category=utilities-tools
+Category=administration-management
 Description=Search for an IP in the user database
 Version=1.7.1
 Date=2015-jan-30

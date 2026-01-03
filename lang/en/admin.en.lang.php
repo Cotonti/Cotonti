@@ -292,24 +292,26 @@ $L['ext_updating'] = 'Updating {$type} &quot;{$name}&quot;';
 $L['ext_cat_administration-management'] = 'Administration &amp; Management';
 $L['ext_cat_commerce'] = 'Commerce &amp; Shopping';
 $L['ext_cat_community-social'] = 'Community &amp; Social';
-$L['ext_cat_customization-i18n'] = 'Customization &amp; I18n';
+$L['ext_cat_customization'] = 'Customization';
 $L['ext_cat_data-apis'] = 'Data Feeds &amp; APIs';
 $L['ext_cat_development-maintenance'] = 'Development &amp; Maintenance';
 $L['ext_cat_editor-parser'] = 'Editors &amp; Markup';
 $L['ext_cat_files-media'] = 'Files &amp; Media';
 $L['ext_cat_forms-feedback'] = 'Forms &amp; Feedback';
 $L['ext_cat_gaming-clans'] = 'Gaming &amp; Clans';
+$L['ext_cat_i18n'] = 'Content Internationalisation';
 $L['ext_cat_intranet-groupware'] = 'Intranet &amp; Groupware';
 $L['ext_cat_misc-ext'] = 'Miscellaneous';
 $L['ext_cat_mobile-geolocation'] = 'Mobile &amp; Geolocation';
 $L['ext_cat_navigation-structure'] = 'Navigation &amp; Structure';
 $L['ext_cat_performance'] = 'Performance';
+$L['ext_cat_post-install'] = 'Post-install Scripts';
 $L['ext_cat_publications-events'] = 'Publications &amp; Events';
 $L['ext_cat_security-authentication'] = 'Security &amp; Authentication';
 $L['ext_cat_seo'] = 'SEO';
 $L['ext_cat_stats'] = 'Stats';
 $L['ext_cat_utilities-tools'] = 'Utilities &amp; Tools';
-$L['ext_cat_post-install'] = 'Post-install Scripts';
+$L['ext_cat_widgets'] = 'Widgets';
 
 /**
  * Structure Section

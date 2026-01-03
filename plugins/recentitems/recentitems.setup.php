@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=recentitems
 Name=Recent Items
-Category=publications-events
+Category=widgets
 Description=Recent pages, topics in forums, users, comments
 Version=1.0.4
 Date=2024-01-16

@@ -296,7 +296,7 @@ $L['ext_updating'] = 'Обновление {$type} &quot;{$name}&quot;';
 $L['ext_cat_administration-management'] = 'Администрирование и управление';
 $L['ext_cat_commerce'] = 'Электронная коммерция';
 $L['ext_cat_community-social'] = 'Сообщества и социальное';
-$L['ext_cat_customization-i18n'] = 'Тонкая настройка и I18n';
+$L['ext_cat_customization'] = 'Тонкая настройка';
 $L['ext_cat_data-apis'] = 'Потоки данных и API';
 $L['ext_cat_development-maintenance'] = 'Разработка и поддержка';
 $L['ext_cat_editor-parser'] = 'Редакторы и разметка';
@@ -304,16 +304,18 @@ $L['ext_cat_files-media'] = 'Файлы и медиа';
 $L['ext_cat_forms-feedback'] = 'Формы и обратная связь';
 $L['ext_cat_gaming-clans'] = 'Игры и кланы';
 $L['ext_cat_intranet-groupware'] = 'Корпоративный сектор';
+$L['ext_cat_i18n'] = 'Локализация контента';
 $L['ext_cat_misc-ext'] = 'Прочее';
 $L['ext_cat_mobile-geolocation'] = 'Мобильность и геолокация';
 $L['ext_cat_navigation-structure'] = 'Навигация и структура';
 $L['ext_cat_performance'] = 'Производительность';
+$L['ext_cat_post-install'] = 'Пост-установочные скрипты';
 $L['ext_cat_publications-events'] = 'Публикации и события';
 $L['ext_cat_security-authentication'] = 'Безопасность и аутентификация';
 $L['ext_cat_seo'] = 'SEO';
 $L['ext_cat_stats'] = 'Статистика';
 $L['ext_cat_utilities-tools'] = 'Инструменты';
-$L['ext_cat_post-install'] = 'Пост-установочные скрипты';
+$L['ext_cat_widgets'] = 'Виджеты';
 
 /**
  * Structure Section

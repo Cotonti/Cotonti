@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=autoalias2
 Name=AutoAlias 2
-Category=navigation-structure
+Category=seo
 Description=Creates page alias from title if a user leaves it empty
 Version=2.1.3
 Date=2015-01-13

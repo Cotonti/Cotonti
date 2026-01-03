@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Code=indexnews
 Name=Index News
-Category=publications-events
+Category=widgets
 Description=Pick up pages from a category and display the newest in the home page
 Version=1.0.1
 Date=2024-02-20
