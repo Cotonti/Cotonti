@@ -15,6 +15,7 @@ Hooks=standalone
 
 (defined('COT_CODE') || defined('COT_PLUG')) or die('Wrong URL.');
 
+Cot::$out['head'] .= Cot::$R['code_noindex'];
 Cot::$sys['sublocation'] = Cot::$L['WhosOnline'];
 
 // to update first
