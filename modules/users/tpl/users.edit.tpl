@@ -15,7 +15,7 @@
 			</tr>
 			<tr>
 				<td>{PHP.L.Groupsmembership}:</td>
-				<td class=user-groups">
+				<td class="user-groups">
 					{PHP.L.Maingroup}:<br />
 					{PHP.R.icon_vert_active.asc}<br />
 					{USERS_EDIT_GROUPS}
