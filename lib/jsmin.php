@@ -189,7 +189,7 @@ class JSMin {
   */
   protected function isAlphaNum($c)
   {
-    if ($c === null || $c === false) {
+    if ($c === null || $c === false || $c === '') {
         return false;
     }
     return ord($c) > 126 || $c === '\\' || preg_match('/^[\w\$]$/', $c) === 1;
@@ -288,7 +288,7 @@ class JSMin {
           for (;;) {
             $c = (string) $this->get();
 
-            if (ord($c) <= self::ORD_LF) {
+            if ($c === '' || ord($c) <= self::ORD_LF) {
               return $c;
             }
           }
