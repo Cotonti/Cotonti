@@ -178,7 +178,11 @@ class CotDB
             if (!empty($this->config['collate'])) {
                 $collation_query .= " COLLATE '{$this->config['collate']}'";
             }
-            $this->config['options'][PDO::MYSQL_ATTR_INIT_COMMAND] = $collation_query;
+            if (version_compare(PHP_VERSION, 8.5) >= 0) {
+                $this->config['options'][Pdo\Mysql::ATTR_INIT_COMMAND] = $collation_query;
+            } else {
+                $this->config['options'][PDO::MYSQL_ATTR_INIT_COMMAND] = $collation_query;
+            }
         }
 
         $this->config['adapter'] = !empty($this->config['adapter']) ? $this->config['adapter'] : 'mysql';

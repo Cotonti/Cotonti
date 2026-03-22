@@ -2735,70 +2735,62 @@ function cot_build_flag($flag = null, $flag_rc = 'icon_flag')
  *  Effectively its a way to cut off $units at a certain key.
  * @return string
  */
-function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $round = null, $smallestunit = null)
+function cot_build_friendlynumber($number, $units, $levels = 1, $decimals = 0, $round = null, $smallestunit = '')
 {
 	global $L;
-	if (!is_array($units)) return '';
-	$pieces = array();
+	if (!is_array($units)) {
+        return '';
+    }
+	$pieces = [];
 
 	// First sort from big to small
 	ksort($units, SORT_NUMERIC);
 	$units = array_reverse($units, true);
 
 	// Trim units after $smallestunit
-	if (array_key_exists($smallestunit, $units))
-	{
+	if (!empty($smallestunit) && array_key_exists($smallestunit, $units)) {
 		$offset = array_search($smallestunit, array_keys($units));
 		$units = array_slice($units, 0, $offset+1, true);
 	}
 
-	if ($number == 0)
-	{
+	if ($number == 0) {
 		// Return smallest possible unit
 		$units = array_reverse(array_values($units));
 		return cot_declension(0, $units[0]);
 	}
 
-	foreach ($units as $size => $expr)
-	{
+	foreach ($units as $size => $expr) {
 		$size = floatval($size);
-		if ($number >= $size)
-		{
+		if ($number >= $size) {
 			$levels--;
 			$num = $number / $size;
 			$number -= floor($num) * $size;
-			if ($number > 0 && $levels > 0)
-			{
+			if ($number > 0 && $levels > 0) {
 				// There's more to come, so no decimals yet.
 				$pieces[] = cot_declension(floor($num), $expr);
-			}
-			else
-			{
+			} else {
 				// Last item gets decimals and rounding.
-				if($decimals > 0)
-				{
+				if($decimals > 0) {
 					$pieces[] = cot_build_number($num, $decimals, $round). ' ' .
 					cot_declension($num, $expr, true, true);
-				}
-				else
-				{
+				} else {
 					$pieces[] = floor($num). ' ' .
 					cot_declension(floor($num), $expr, true, true);
 				}
 				break;
 			}
-			if ($levels == 0)
-			{
+			if ($levels == 0) {
 				break;
 			}
 		}
 	}
-	if (count($pieces) == 0)
-	{
+
+	if (count($pieces) === 0) {
 		// Smaller than smallest possible unit
 		$expr = array_reverse(array_values($units));
 		return $L['LessThan'] . ' ' . cot_declension(1, $expr[0]);
 	}
+
 	return implode(' ', $pieces);
 }
 
