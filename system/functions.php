@@ -4582,7 +4582,6 @@ function cot_pagenav(
     if (Cot::$cfg['easypagenav']) {
         $num = floor($lastPageOffset / $perPage) + 1;
         $args[$character] = $num == 1 ? null : $num;
-
     } else {
         $args[$character] = $lastPageOffset;
     }
@@ -4677,7 +4676,6 @@ function cot_pagenav(
 		} elseif ($i == $cur_left - 2) {
 			if (Cot::$cfg['easypagenav']) {
                 $args[$character] = $i + 1;
-
 			} else {
                 $args[$character] = $i * $perPage;
             }
@@ -4699,23 +4697,16 @@ function cot_pagenav(
 		$i *= ($n % 2) ? 2 : 5;
 		$n++;
 	}
-	for ($j = $cur_left; $j <= $cur_right; $j++)
-	{
-		if (Cot::$cfg['easypagenav'])
-		{
+	for ($j = $cur_left; $j <= $cur_right; $j++) {
+		if (Cot::$cfg['easypagenav']) {
 			$args[$character] = $j == 1 ? null : $j;
-		}
-		else
-		{
+		} else {
 			$args[$character] = ($j - 1) * $perPage;
 		}
-        if ($ajax_rel)
-		{
+        if ($ajax_rel) {
 			$ajax_args[$character] = $args[$character];
 			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
-		}
-		else
-		{
+		} else {
 			$rel = $base_rel;
 		}
 		$rc = $j == $currentPage ? 'current' : 'main';
@@ -4726,34 +4717,23 @@ function cot_pagenav(
 			'num' => $j
 		));
 	}
-	while ($i <= $cur_right)
-	{
+	while ($i <= $cur_right) {
 		$i *= ($n % 2) ? 2 : 5;
 		$n++;
 	}
-	while ($i < $totalPages)
-	{
-		if ($i > $cur_right + 2)
-		{
+	while ($i < $totalPages) {
+		if ($i > $cur_right + 2) {
 			$after .= Cot::$R['link_pagenav_gap'];
-		}
-		elseif ($i == $cur_right + 2)
-		{
-			if (Cot::$cfg['easypagenav'])
-			{
+		} elseif ($i == $cur_right + 2) {
+			if (Cot::$cfg['easypagenav']) {
 				$args[$character] = $i == 2 ? null : $i - 1;
-			}
-			else
-			{
+			} else {
 				$args[$character] = ($i - 2) * $perPage;
             }
-            if ($ajax_rel)
-			{
+            if ($ajax_rel) {
 				$ajax_args[$character] = $args[$character];
 				$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
-			}
-			else
-			{
+			} else {
 				$rel = $base_rel;
 			}
 			$after .= cot_rc('link_pagenav_main', array(
@@ -4763,21 +4743,15 @@ function cot_pagenav(
 				'num' => $i - 1
 			));
 		}
-		if (Cot::$cfg['easypagenav'])
-		{
+		if (Cot::$cfg['easypagenav']) {
 			$args[$character] = $i == 1 ? null : $i;
-		}
-		else
-		{
+		} else {
 			$args[$character] = ($i - 1) * $perPage;
 		}
-        if ($ajax_rel)
-		{
+        if ($ajax_rel) {
 			$ajax_args[$character] = $args[$character];
-			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
-		}
-		else
-		{
+			$rel = $base_rel . str_replace('?', ';', cot_url($ajax_module, $ajax_args)) . '"';
+		} else {
 			$rel = $base_rel;
 		}
 		$after .= cot_rc('link_pagenav_main', array(
@@ -4826,7 +4800,7 @@ function cot_pagenav(
 		$args[$character] = 0;
 		if ($ajax_rel) {
 			$ajax_args[$character] = $args[$character];
-			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
+			$rel = $base_rel . str_replace('?', ';', cot_url($ajax_module, $ajax_args)) . '"';
 		} else {
 			$rel = $base_rel;
 		}
@@ -4847,15 +4821,13 @@ function cot_pagenav(
 		if (Cot::$cfg['easypagenav']) {
 			$num = floor($next_n / $perPage) + 1;
             $args[$character] = $num == 1 ? null : $num;
-
 		} else {
 			$args[$character] = $next_n;
 		}
 
 		if ($ajax_rel) {
 			$ajax_args[$character] = $args[$character];
-			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
-
+			$rel = $base_rel . str_replace('?', ';', cot_url($ajax_module, $ajax_args)) . '"';
 		} else {
 			$rel = $base_rel;
 		}
@@ -4868,9 +4840,13 @@ function cot_pagenav(
 		]);
 
 		if ($ajax_rel) {
-			$ajax_args[$character] = $args[$character];
-			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
-
+            if (Cot::$cfg['easypagenav']) {
+                $num = floor($lastPageOffset / $perPage) + 1;
+                $ajax_args[$character] = $num == 1 ? null : $num;
+            } else {
+                $ajax_args[$character] = $lastPageOffset;
+            }
+			$rel = $base_rel . str_replace('?', ';', cot_url($ajax_module, $ajax_args)) . '"';
 		} else {
 			$rel = $base_rel;
 		}
