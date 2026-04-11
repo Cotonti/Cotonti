@@ -143,7 +143,7 @@ if ($o && $p) {
 	empty($where['filter']) || $where['filter'] = implode(' AND ', $where['filter']);
 }
 if (!Cot::$usr['isadmin'] && $c !== 'unvalidated' && $c !== 'saved_drafts') {
-	$where['date'] = "page_begin <= {$sys['now']} AND (page_expire = 0 OR page_expire > {$sys['now']})";
+	$where['date'] = "page_begin <= {$sys['now']} AND (page_expire == 0 OR page_expire > {$sys['now']})";
 }
 
 if (!Cot::$db->fieldExists(Cot::$db->pages, "page_$s")) {
