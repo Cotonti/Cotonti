@@ -6,6 +6,11 @@ Disallow: /datas
 # Disallow: /lib
 # Disallow: /themes
 # Disallow: /system
+
+Disallow: /message
+Disallow: /tags
+
+Disallow: /*user=
 Disallow: /*?*w=*
 Disallow: /*?*ord=*
 Disallow: /*?*m=add
