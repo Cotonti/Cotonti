@@ -1,5 +1,5 @@
 /**
- * Version: 0.9.26
+ * Version: 1.0.0
  */
 
 DROP TABLE IF EXISTS `cot_auth`;

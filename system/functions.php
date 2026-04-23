@@ -86,7 +86,7 @@ $R = [];
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-$cfg['version'] = '0.9.26 beta';
+$cfg['version'] = '1.0.0';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms'])) {

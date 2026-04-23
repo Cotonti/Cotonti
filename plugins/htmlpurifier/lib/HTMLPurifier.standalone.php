@@ -18861,7 +18861,7 @@ class HTMLPurifier_Injector_RemoveSpansWithoutAttributes extends HTMLPurifier_In
      */
     public function handleEnd(&$token)
     {
-        if ($this->markForDeletion->contains($token)) {
+        if ($this->markForDeletion->offsetExists($token)) {
             $this->markForDeletion->detach($token);
             $token = false;
         }
